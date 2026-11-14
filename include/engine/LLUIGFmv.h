@@ -6,8 +6,8 @@
 #include "engine/UIGLibraries.h"
 #include "engine/UIGTextureNode.h"
 
-/* 60-byte member at +0x48 of Object_802268D4. */
-typedef struct Sub_802268D4 {
+/* 60-byte member at +0x48 of LLUIGFmvMovie_t. */
+typedef struct LLUIGFmvStream_t {
     Int32 unk_00;   /* 0x00 */
     Int32 unk_04;   /* 0x04 */
     void *unk_08;   /* 0x08 */
@@ -22,38 +22,38 @@ typedef struct Sub_802268D4 {
     Int32 unk_30;   /* 0x30 */
     Int32 unk_34;   /* 0x34 */
     struct RcmpFrame_t *pFrame; /* 0x38 */
-} Sub_802268D4;
+} LLUIGFmvStream_t;
 
-/* 132-byte object allocated by fn_802268D4. */
-typedef struct Object_802268D4 {
-    Node_802215F0 Node; /* 0x00 */
+/* 132-byte object allocated by LLUIGFmvAddInstance. */
+typedef struct LLUIGFmvMovie_t {
+    UIGTexNode_t Node; /* 0x00 */
     Int32 unk_3C;   /* 0x3C */
     Int32 unk_40;   /* 0x40 */
     Int16 unk_44;   /* 0x44 */
     Uint16 Flags;   /* 0x46 */
-    Sub_802268D4 Sub; /* 0x48 */
-} Object_802268D4;
+    LLUIGFmvStream_t Sub; /* 0x48 */
+} LLUIGFmvMovie_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* src/engine/LLUIGFmv.c */
-void fn_80226498(Object_8021E688 *pObject, Object_802268D4 *pMovie);
-void fn_802264A4(Sub_802268D4 *pSub);
-void fn_802264E8(Sub_802268D4 *pSub, Int32 a);
-Int32 fn_80226570(Object_8021E688 *pObject, Object_802268D4 *pMovie, Sub_802268D4 *pSub);
-void fn_8022666C(Object_8021E688 *pObject, Object_802268D4 *pMovie);
-void fn_802267D0(void);
-void fn_802267D4(void);
-void fn_802267D8(Object_802268D4 *pMovie, Int32 a, Int32 b);
-Object_802268D4 *fn_802268D4(Object_8021E688 *pObject, Int16 a, Int16 b);
-void fn_802269C8(Object_8021E688 *pObject, Object_802268D4 *pMovie);
-void fn_80226A68(Object_8021E688 *pObject, Object_802268D4 *pMovie);
-void fn_80226C40(Object_8021E688 *pObject, Object_802268D4 *pMovie);
-void fn_80226D20(Int32 Width, Int32 Height, Uint8 *pData);
-void fn_80226E4C(Uint8 *pSrc, Int32 x, Int32 y, Uint8 *pTile, Int32 Width, Int32 Height);
-void fn_80226F34(Object_8021E688 *pObject, Int16 a, Int16 b, Object_802268D4 *pMovie);
+void LLUIGFmvProcess(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie);
+void LLUIGDumpImage(LLUIGFmvStream_t *pSub);
+void LLUIGFmvDecompressFrame(LLUIGFmvStream_t *pSub, Int32 a);
+Int32 LLUIGFmvNextFrame(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie, LLUIGFmvStream_t *pSub);
+void LLUIGFmvUpdate(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie);
+void LLUIGFmvInit(void);
+void LLUIGFmvShutdown(void);
+void LLUIGFmvInitTexture(LLUIGFmvMovie_t *pMovie, Int32 a, Int32 b);
+LLUIGFmvMovie_t *LLUIGFmvAddInstance(UIGLibrary_t *pObject, Int16 a, Int16 b);
+void LLUIGFmvDeleteInstance(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie);
+void LLUIGFmvStartInstance(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie);
+void LLUIGFmvStopInstance(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie);
+void LLUIGFMVSizzle32to32(Int32 Width, Int32 Height, Uint8 *pData);
+void _PackTile_RGBA8(Uint8 *pSrc, Int32 x, Int32 y, Uint8 *pTile, Int32 Width, Int32 Height);
+void LLUIGFmvSwapInstance(UIGLibrary_t *pObject, Int16 a, Int16 b, LLUIGFmvMovie_t *pMovie);
 
 #ifdef __cplusplus
 }

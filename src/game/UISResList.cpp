@@ -15,12 +15,12 @@ extern "C" {
 int MainFEGroupIsFirstStart(void *p);
 int DbCursorGetValue(DbCursor *pObject, int key);
 void fn_80083E1C(DbCursor *pObject, int a);
-void *fn_8021DEFC(UISResListDesc *pDesc);
-void fn_8021E050(void *pList, int index, const char *pName, int a, int b);
-void fn_8021E0B0(void *pList, int index, const char *pName, int a, int b, int c);
-int fn_8021E504(void *pList, int index, int value);
-void fn_8021EA34(int index, void *p);
-void *fn_8021EA44(int index);
+void *UIGLibraryInit(UISResListDesc *pDesc);
+void UIGLibrarySetDevice(void *pList, int index, const char *pName, int a, int b);
+void UIGLibrarySet(void *pList, int index, const char *pName, int a, int b, int c);
+int UIGLibraryPreloadItem(void *pList, int index, int value);
+void UIGLibrarySetGlobal(int index, void *p);
+void *UIGLibraryGetGlobal(int index);
 }
 
 extern char lbl_802EBE68[];
@@ -45,39 +45,39 @@ extern char gMainFEGroup[];
 extern "C" {
 void UISResListAddCommon(void)
 {
-    void *pList = fn_8021EA44(1);
+    void *pList = UIGLibraryGetGlobal(1);
 
-    fn_8021E050(pList, 0, lbl_802EBE68, 1, 16);
-    fn_8021E0B0(pList, 3, lbl_802EBEA8, 1, 0, 196);
-    fn_8021E0B0(pList, 2, lbl_802EBE98, 1, 0, 200);
-    fn_8021E0B0(pList, 5, lbl_802EBEC8, 1, 0, 65);
+    UIGLibrarySetDevice(pList, 0, lbl_802EBE68, 1, 16);
+    UIGLibrarySet(pList, 3, lbl_802EBEA8, 1, 0, 196);
+    UIGLibrarySet(pList, 2, lbl_802EBE98, 1, 0, 200);
+    UIGLibrarySet(pList, 5, lbl_802EBEC8, 1, 0, 65);
 }
 
 void UISResListAddFrontEnd(void)
 {
     int flag = MainFEGroupIsFirstStart(gMainFEGroup);
-    void *pList = fn_8021EA44(1);
+    void *pList = UIGLibraryGetGlobal(1);
 
     if (flag == 0) {
-        fn_8021E0B0(pList, 1, lbl_802EBE88, 1, 0, 196);
-        fn_8021E0B0(pList, 6, lbl_802EBED8, 1, 0, 212);
-        fn_8021E0B0(pList, 7, lbl_802EBEE8, 1, 0, 212);
-        fn_8021E0B0(pList, 4, lbl_802EBEB8, 1, 0, 84);
+        UIGLibrarySet(pList, 1, lbl_802EBE88, 1, 0, 196);
+        UIGLibrarySet(pList, 6, lbl_802EBED8, 1, 0, 212);
+        UIGLibrarySet(pList, 7, lbl_802EBEE8, 1, 0, 212);
+        UIGLibrarySet(pList, 4, lbl_802EBEB8, 1, 0, 84);
     } else {
-        fn_8021E0B0(pList, 1, lbl_802EBE88, 1, 0, 132);
-        fn_8021E0B0(pList, 6, lbl_802EBED8, 1, 0, 132);
-        fn_8021E0B0(pList, 7, lbl_802EBEE8, 1, 0, 132);
-        fn_8021E0B0(pList, 4, lbl_802EBEB8, 1, 0, 4);
+        UIGLibrarySet(pList, 1, lbl_802EBE88, 1, 0, 132);
+        UIGLibrarySet(pList, 6, lbl_802EBED8, 1, 0, 132);
+        UIGLibrarySet(pList, 7, lbl_802EBEE8, 1, 0, 132);
+        UIGLibrarySet(pList, 4, lbl_802EBEB8, 1, 0, 4);
     }
-    fn_8021E0B0(pList, 10, lbl_802EBF08, 1, 0, 52);
-    fn_8021E0B0(pList, 8, lbl_802EBEF8, 1, 0, 180);
-    fn_8021E0B0(pList, 11, lbl_802EBF18, 1, 0, 132);
-    fn_8021E0B0(pList, 12, lbl_802EBF28, 1, 0, 52);
-    fn_8021E0B0(pList, 14, lbl_802EBF38, 1, 0, 180);
-    fn_8021E0B0(pList, 16, lbl_802EBF48, 1, 0, 180);
-    fn_8021E0B0(pList, 17, lbl_802EBF58, 1, 0, 180);
-    fn_8021E0B0(pList, 19, lbl_802EBF68, 1, 0, 180);
-    fn_8021E0B0(pList, 20, lbl_802EBF78, 1, 0, 180);
+    UIGLibrarySet(pList, 10, lbl_802EBF08, 1, 0, 52);
+    UIGLibrarySet(pList, 8, lbl_802EBEF8, 1, 0, 180);
+    UIGLibrarySet(pList, 11, lbl_802EBF18, 1, 0, 132);
+    UIGLibrarySet(pList, 12, lbl_802EBF28, 1, 0, 52);
+    UIGLibrarySet(pList, 14, lbl_802EBF38, 1, 0, 180);
+    UIGLibrarySet(pList, 16, lbl_802EBF48, 1, 0, 180);
+    UIGLibrarySet(pList, 17, lbl_802EBF58, 1, 0, 180);
+    UIGLibrarySet(pList, 19, lbl_802EBF68, 1, 0, 180);
+    UIGLibrarySet(pList, 20, lbl_802EBF78, 1, 0, 180);
 }
 
 void UISResListAddInGame(void)
@@ -85,31 +85,31 @@ void UISResListAddInGame(void)
     DbCursor cursor;
     int first = 0;
     int second = 0;
-    void *pList = fn_8021EA44(1);
+    void *pList = UIGLibraryGetGlobal(1);
 
-    fn_8021E0B0(pList, 1, lbl_802EBE88, 1, 0, 180);
-    fn_8021E0B0(pList, 6, lbl_802EBED8, 1, 0, 132);
-    fn_8021E0B0(pList, 7, lbl_802EBEE8, 1, 0, 132);
-    fn_8021E0B0(pList, 4, lbl_802EBEB8, 1, 0, 20);
-    fn_8021E0B0(pList, 10, lbl_802EBF08, 1, 0, 52);
-    fn_8021E0B0(pList, 8, lbl_802EBEF8, 1, 0, 132);
-    fn_8021E0B0(pList, 11, lbl_802EBF18, 1, 0, 196);
-    fn_8021E0B0(pList, 12, lbl_802EBF28, 1, 0, 4);
-    fn_8021E0B0(pList, 14, lbl_802EBF38, 1, 0, 132);
-    fn_8021E0B0(pList, 16, lbl_802EBF48, 1, 0, 132);
-    fn_8021E0B0(pList, 17, lbl_802EBF58, 1, 0, 132);
-    fn_8021E0B0(pList, 19, lbl_802EBF68, 1, 0, 132);
-    fn_8021E0B0(pList, 20, lbl_802EBF78, 1, 0, 132);
-    fn_8021E504(pList, 1, 0);
-    fn_8021E504(pList, 1, 1);
-    fn_8021E504(pList, 1, 2);
-    fn_8021E504(pList, 1, 10);
-    fn_8021E504(pList, 1, 11);
-    fn_8021E504(pList, 1, 12);
-    fn_8021E504(pList, 1, 13);
-    fn_8021E504(pList, 1, 14);
-    fn_8021E504(pList, 1, 15);
-    fn_8021E504(pList, 7, 4);
+    UIGLibrarySet(pList, 1, lbl_802EBE88, 1, 0, 180);
+    UIGLibrarySet(pList, 6, lbl_802EBED8, 1, 0, 132);
+    UIGLibrarySet(pList, 7, lbl_802EBEE8, 1, 0, 132);
+    UIGLibrarySet(pList, 4, lbl_802EBEB8, 1, 0, 20);
+    UIGLibrarySet(pList, 10, lbl_802EBF08, 1, 0, 52);
+    UIGLibrarySet(pList, 8, lbl_802EBEF8, 1, 0, 132);
+    UIGLibrarySet(pList, 11, lbl_802EBF18, 1, 0, 196);
+    UIGLibrarySet(pList, 12, lbl_802EBF28, 1, 0, 4);
+    UIGLibrarySet(pList, 14, lbl_802EBF38, 1, 0, 132);
+    UIGLibrarySet(pList, 16, lbl_802EBF48, 1, 0, 132);
+    UIGLibrarySet(pList, 17, lbl_802EBF58, 1, 0, 132);
+    UIGLibrarySet(pList, 19, lbl_802EBF68, 1, 0, 132);
+    UIGLibrarySet(pList, 20, lbl_802EBF78, 1, 0, 132);
+    UIGLibraryPreloadItem(pList, 1, 0);
+    UIGLibraryPreloadItem(pList, 1, 1);
+    UIGLibraryPreloadItem(pList, 1, 2);
+    UIGLibraryPreloadItem(pList, 1, 10);
+    UIGLibraryPreloadItem(pList, 1, 11);
+    UIGLibraryPreloadItem(pList, 1, 12);
+    UIGLibraryPreloadItem(pList, 1, 13);
+    UIGLibraryPreloadItem(pList, 1, 14);
+    UIGLibraryPreloadItem(pList, 1, 15);
+    UIGLibraryPreloadItem(pList, 7, 4);
     fn_80083E1C(&cursor, 0);
     if (fn_80084034(&cursor, GameInfoGet(0), 0)) {
         first = DbCursorGetValue(&cursor, 0x4C474C54);
@@ -118,11 +118,11 @@ void UISResListAddInGame(void)
         second = DbCursorGetValue(&cursor, 0x4C474C54);
     }
     fn_80083F68(&cursor);
-    fn_8021E504(pList, 4, first);
+    UIGLibraryPreloadItem(pList, 4, first);
     if (second != first) {
-        fn_8021E504(pList, 4, second);
+        UIGLibraryPreloadItem(pList, 4, second);
     }
-    fn_8021E504(pList, 4, 0);
+    UIGLibraryPreloadItem(pList, 4, 0);
 }
 
 void UISResListSetup(void)
@@ -132,7 +132,7 @@ void UISResListSetup(void)
     desc.mUnknown0 = 21;
     desc.mUnknown4 = 21;
     desc.mUnknown8 = 1;
-    fn_8021EA34(1, fn_8021DEFC(&desc));
+    UIGLibrarySetGlobal(1, UIGLibraryInit(&desc));
     UISResListAddCommon();
     if (FELoopIsMainFEActive()) {
         UISResListAddFrontEnd();

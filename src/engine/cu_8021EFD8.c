@@ -48,7 +48,7 @@ extern Uint32 lbl_803ECFF4;
 extern Int32 lbl_803ECFF8;
 extern Int32 lbl_803ECFFC;
 extern Int32 lbl_803ED000;
-extern Object_8021E688 *lbl_803ED004;
+extern UIGLibrary_t *lbl_803ED004;
 extern Int32 lbl_803ED008;
 extern Int32 lbl_803ED00C;
 
@@ -69,12 +69,12 @@ void fn_80221294(void *p);
 
 void fn_8021F550(Node_80223874 *pNode)
 {
-    Object_8021E688 *pObject;
+    UIGLibrary_t *pObject;
 
     if (pNode->Flags & 2) {
-        pObject = fn_8021EA44(1);
+        pObject = UIGLibraryGetGlobal(1);
         if (pNode->unk_06 != -1 && pNode->unk_04 != -1) {
-            fn_8021E2B4(pObject, pNode->unk_06, pNode->unk_04);
+            UIGLibraryLoadItem(pObject, pNode->unk_06, pNode->unk_04);
         }
     }
     pNode->unk_0C = pNode->unk_04;
@@ -84,21 +84,21 @@ void fn_8021F550(Node_80223874 *pNode)
 
 void fn_8021F5C0(Node_80223874 *pNode)
 {
-    Object_8021E688 *pObject;
+    UIGLibrary_t *pObject;
     Int32 Item = 0;
 
     if ((pNode->Flags & 2) && pNode->unk_06 != -1 && pNode->unk_04 != -1) {
-        pObject = fn_8021EA44(1);
-        if (fn_8021E924(pObject, pNode->unk_06) & 2) {
-            fn_80226320(pObject, pNode->unk_06, pNode->unk_04);
+        pObject = UIGLibraryGetGlobal(1);
+        if (UIGLibraryGetType(pObject, pNode->unk_06) & 2) {
+            UIGFmvUpdate(pObject, pNode->unk_06, pNode->unk_04);
         }
         if (pNode->unk_0C != -1 && pNode->unk_0E != -1 &&
-            fn_8021EE10(pObject, pNode->unk_06, pNode->unk_04) == 0) {
-            fn_802213F8(pObject, &pNode->unk_06, &pNode->unk_04, pNode->unk_0E, pNode->unk_0C);
+            UIGLibraryIsItemLoading(pObject, pNode->unk_06, pNode->unk_04) == 0) {
+            UIGTexNodeSwap(pObject, &pNode->unk_06, &pNode->unk_04, pNode->unk_0E, pNode->unk_0C);
             pNode->unk_0C = -1;
             pNode->unk_0E = -1;
         }
-        Item = fn_8021EA54(pObject, pNode->unk_06, pNode->unk_04);
+        Item = UIGLibraryIsItemDataAvailable(pObject, pNode->unk_06, pNode->unk_04);
     }
     if (Item != 0 && (pNode->Flags & 0x10) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
         fn_80220C4C(pNode->unk_0A, pNode->unk_08, Item);
@@ -111,12 +111,12 @@ void fn_8021F5C0(Node_80223874 *pNode)
 
 void fn_8021F71C(Node_80223874 *pNode)
 {
-    Object_8021E688 *pObject;
+    UIGLibrary_t *pObject;
 
     if (pNode->Flags & 2) {
-        pObject = fn_8021EA44(1);
+        pObject = UIGLibraryGetGlobal(1);
         if (pNode->unk_06 != -1 && pNode->unk_04 != -1) {
-            fn_8021E72C(pObject, pNode->unk_06, pNode->unk_04);
+            UIGLibraryUnLoadItem(pObject, pNode->unk_06, pNode->unk_04);
         }
     }
     fn_8021F954(pNode);
@@ -127,7 +127,7 @@ void fn_8021F8DC(Node_80223874 *pNode)
     Int32 i;
 
     if (pNode->Flags & 0x8000) {
-        fn_802260B0(&pNode->u.List);
+        UIGDispListRelocate(&pNode->u.List);
     } else if ((pNode->Flags & 3) == 2) {
         pNode->Flags |= 1;
         for (i = 0; i < 4; i++) {
@@ -141,7 +141,7 @@ void fn_8021F8DC(Node_80223874 *pNode)
 void fn_8021F954(Node_80223874 *pNode)
 {
     if (pNode->Flags & 0x8000) {
-        fn_802260C0(&pNode->u.List);
+        UIGDispListUnrelocate(&pNode->u.List);
     }
 }
 
@@ -163,24 +163,24 @@ void fn_8021F984(Node_80223874 *pNode, Int32 Item)
     fn_80220988();
     if (Mode != lbl_803ECFF8) {
         bTexture = Flags & 2;
-        fn_802218D4(Mode == 2 ? 0 : 1);
-        fn_80221924(bTexture);
+        LLUIGSetColorChannel(Mode == 2 ? 0 : 1);
+        LLUIGSetTexturing(bTexture);
         lbl_803ECFF8 = Mode;
     }
     GXSetCullMode((Flags & 4) ? GX_CULL_BACK : GX_CULL_NONE);
     GXLoadPosMtxImm((f32 (*)[4])fn_801D0444(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     if (pNode->Flags & 2) {
-        lbl_802F9FA0[0][0] = ((Node_802215F0 *)Item)->unk_30;
-        lbl_802F9FA0[1][1] = ((Node_802215F0 *)Item)->unk_34;
+        lbl_802F9FA0[0][0] = ((UIGTexNode_t *)Item)->unk_30;
+        lbl_802F9FA0[1][1] = ((UIGTexNode_t *)Item)->unk_34;
         GXLoadTexMtxImm(lbl_802F9FA0, GX_TEXMTX0, GX_MTX2x4);
         if (!(pNode->Flags & 0x8000)) {
             fn_80220AD0(pNode, 0, Item);
         }
-        bTex = fn_8022179C(Item);
+        bTex = LLUIGTexNodeRegisterObj(Item);
     }
     if (pNode->Flags & 0x8000) {
-        fn_802260D0(&pNode->u.List);
+        UIGDispListCall(&pNode->u.List);
     } else {
         if (pNode->Flags & 8) {
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 10);
@@ -252,20 +252,20 @@ void fn_80220AD0(Node_80223874 *pNode, Int32 a, Int32 Item)
             }
         }
     }
-    fn_802219F0(First, Second);
+    LLUIGSetClamp(First, Second);
 }
 
 Int32 fn_80220B4C(Int32 a, Int32 b)
 {
-    Object_8021E688 *pObject;
+    UIGLibrary_t *pObject;
 
     Int32 Result;
 
-    pObject = fn_8021EA44(1);
+    pObject = UIGLibraryGetGlobal(1);
     Result = 0;
     if (pObject != NULL) {
         if (lbl_803ED008 == 0 || lbl_803ED004 != pObject || lbl_803ECFFC != a || lbl_803ED000 != b) {
-            lbl_803ED008 = fn_8021E2B4(pObject, a, b);
+            lbl_803ED008 = UIGLibraryLoadItem(pObject, a, b);
             lbl_803ED004 = pObject;
             lbl_803ECFFC = a;
             lbl_803ED000 = b;
@@ -285,30 +285,30 @@ void fn_80220BE0(void)
 
 Int32 fn_80220BFC(Int32 a, Int32 b)
 {
-    Object_8021E688 *pObject;
+    UIGLibrary_t *pObject;
 
-    pObject = fn_8021EA44(1);
+    pObject = UIGLibraryGetGlobal(1);
     if (pObject == NULL) {
         return 0;
     }
-    return fn_8021E2B4(pObject, a, b);
+    return UIGLibraryLoadItem(pObject, a, b);
 }
 
 void fn_80220C4C(Int32 a, Int32 b, Int32 c)
 {
     Int32 p;
 
-    lbl_803EBF48 = fn_80221570((struct Node_802215F0 *)c);
+    lbl_803EBF48 = UIGTexNodeGetPalette((struct UIGTexNode_t *)c);
     p = fn_80220BFC(a, b);
     if (p != 0) {
-        fn_80221590((struct Node_802215F0 *)c, (unsigned short *)p);
+        UIGTexNodeSetPalette((struct UIGTexNode_t *)c, (unsigned short *)p);
     }
 }
 
 void fn_80220CA4(Int32 a, Int32 b, Int32 c)
 {
     if (lbl_803EBF48 != NULL) {
-        fn_80221590((struct Node_802215F0 *)c, lbl_803EBF48);
+        UIGTexNodeSetPalette((struct UIGTexNode_t *)c, lbl_803EBF48);
     }
     lbl_803EBF48 = NULL;
 }

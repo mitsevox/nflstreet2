@@ -8,61 +8,61 @@
 
 void fn_801CE910(void);
 
-void fn_80221314(Object_8021E688 *pObject, Int16 a, Int16 b)
+void UIGTexNodeUnLoad(UIGLibrary_t *pObject, Int16 a, Int16 b)
 {
-    Node_802215F0 *pNode = (Node_802215F0 *)fn_8021E688(pObject, a, b);
+    UIGTexNode_t *pNode = (UIGTexNode_t *)UIGLibraryGetItemData(pObject, a, b);
 
     if (pNode != NULL) {
-        fn_80221738(a, b, pNode);
-        fn_8021E6A8(pObject, a, b, 0);
+        LLUIGTexNodeFreeImage(a, b, pNode);
+        UIGLibrarySetItemData(pObject, a, b, 0);
     }
 }
 
-void fn_80221374(Object_8021E688 *pObject, Int16 a, Int32 b, Int32 c)
+void UIGTexNodeLoad(UIGLibrary_t *pObject, Int16 a, Int32 b, Int32 c)
 {
-    Int32 Item = fn_8021E688(pObject, a, b);
+    Int32 Item = UIGLibraryGetItemData(pObject, a, b);
 
     if (c != 0 && Item == 0) {
-        Item = (Int32)fn_802215F0(a, b, c, 0, fn_8021E93C(pObject, a));
-        fn_8021E6A8(pObject, a, b, Item);
+        Item = (Int32)LLUIGTexNodeSetImage(a, b, c, 0, UIGLibraryGetVramHeapID(pObject, a));
+        UIGLibrarySetItemData(pObject, a, b, Item);
     }
 }
 
-void fn_802213F8(Object_8021E688 *pObject, Int16 *pA, Int16 *pB, Int16 c, Int16 d)
+void UIGTexNodeSwap(UIGLibrary_t *pObject, Int16 *pA, Int16 *pB, Int16 c, Int16 d)
 {
     if (*pA == c && *pB == d) {
         return;
     }
     if (*pA != -1 && *pB != -1 && c != -1 && d != -1) {
-        if ((fn_8021E924(pObject, *pA) & 2) && (fn_8021E924(pObject, c) & 2)) {
-            fn_8022623C(pObject, c, d, *pA, *pB);
+        if ((UIGLibraryGetType(pObject, *pA) & 2) && (UIGLibraryGetType(pObject, c) & 2)) {
+            UIGFmvSwapInstance(pObject, c, d, *pA, *pB);
         } else {
             fn_801CE910();
-            fn_8021E72C(pObject, *pA, *pB);
-            fn_8021E2B4(pObject, c, d);
+            UIGLibraryUnLoadItem(pObject, *pA, *pB);
+            UIGLibraryLoadItem(pObject, c, d);
         }
     } else if (*pA != -1 && *pB != -1) {
-        fn_8021E72C(pObject, *pA, *pB);
+        UIGLibraryUnLoadItem(pObject, *pA, *pB);
     } else if (c != -1 && d != -1) {
-        fn_8021E2B4(pObject, c, d);
+        UIGLibraryLoadItem(pObject, c, d);
     }
     *pA = c;
     *pB = d;
 }
 
-void fn_80221528(Object_8021E688 *pObject, Int32 a, Int32 b, Int32 c)
+void UIGTexNodeUpdate(UIGLibrary_t *pObject, Int32 a, Int32 b, Int32 c)
 {
     if (a != -1 && b != -1) {
-        fn_802215EC(c, fn_8021E688(pObject, a, b));
+        LLUIGTexNodeUpdate(c, UIGLibraryGetItemData(pObject, a, b));
     }
 }
 
-unsigned short *fn_80221570(Node_802215F0 *pNode)
+unsigned short *UIGTexNodeGetPalette(UIGTexNode_t *pNode)
 {
-    return fn_80221BD8(pNode);
+    return LLUIGTexNodeGetPalette(pNode);
 }
 
-void fn_80221590(Node_802215F0 *pNode, unsigned short *pPalette)
+void UIGTexNodeSetPalette(UIGTexNode_t *pNode, unsigned short *pPalette)
 {
-    fn_80221BE0(pNode, pPalette);
+    LLUIGTexNodeSetPalette(pNode, pPalette);
 }

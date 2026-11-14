@@ -33410,47 +33410,47 @@
       ],
       "functions": [
         {
-          "symbol": "fn_802215B0",
+          "symbol": "LLUIGTexNodeRoundToPowerOf2",
           "start": "0x802215B0",
           "end": "0x802215EC"
         },
         {
-          "symbol": "fn_802215EC",
+          "symbol": "LLUIGTexNodeUpdate",
           "start": "0x802215EC",
           "end": "0x802215F0"
         },
         {
-          "symbol": "fn_80221738",
+          "symbol": "LLUIGTexNodeFreeImage",
           "start": "0x80221738",
           "end": "0x8022179C"
         },
         {
-          "symbol": "fn_802218D4",
+          "symbol": "LLUIGSetColorChannel",
           "start": "0x802218D4",
           "end": "0x80221924"
         },
         {
-          "symbol": "fn_80221924",
+          "symbol": "LLUIGSetTexturing",
           "start": "0x80221924",
           "end": "0x802219F0"
         },
         {
-          "symbol": "fn_80221BAC",
+          "symbol": "LLUIGTexNodeGet",
           "start": "0x80221BAC",
           "end": "0x80221BD8"
         },
         {
-          "symbol": "fn_80221BD8",
+          "symbol": "LLUIGTexNodeGetPalette",
           "start": "0x80221BD8",
           "end": "0x80221BE0"
         },
         {
-          "symbol": "fn_80221BE0",
+          "symbol": "LLUIGTexNodeSetPalette",
           "start": "0x80221BE0",
           "end": "0x80221BE8"
         },
         {
-          "symbol": "fn_80221BE8",
+          "symbol": "LLUIGTexNodeSetCreateCallback",
           "start": "0x80221BE8",
           "end": "0x80221BF0"
         }
@@ -33470,77 +33470,77 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80226498",
+          "symbol": "LLUIGFmvProcess",
           "start": "0x80226498",
           "end": "0x802264A4"
         },
         {
-          "symbol": "fn_802264A4",
+          "symbol": "LLUIGDumpImage",
           "start": "0x802264A4",
           "end": "0x802264E8"
         },
         {
-          "symbol": "fn_802264E8",
+          "symbol": "LLUIGFmvDecompressFrame",
           "start": "0x802264E8",
           "end": "0x80226570"
         },
         {
-          "symbol": "fn_80226570",
+          "symbol": "LLUIGFmvNextFrame",
           "start": "0x80226570",
           "end": "0x8022666C"
         },
         {
-          "symbol": "fn_8022666C",
+          "symbol": "LLUIGFmvUpdate",
           "start": "0x8022666C",
           "end": "0x802267D0"
         },
         {
-          "symbol": "fn_802267D0",
+          "symbol": "LLUIGFmvInit",
           "start": "0x802267D0",
           "end": "0x802267D4"
         },
         {
-          "symbol": "fn_802267D4",
+          "symbol": "LLUIGFmvShutdown",
           "start": "0x802267D4",
           "end": "0x802267D8"
         },
         {
-          "symbol": "fn_802268D4",
+          "symbol": "LLUIGFmvAddInstance",
           "start": "0x802268D4",
           "end": "0x802269C8"
         },
         {
-          "symbol": "fn_802269C8",
+          "symbol": "LLUIGFmvDeleteInstance",
           "start": "0x802269C8",
           "end": "0x80226A68"
         },
         {
-          "symbol": "fn_80226A68",
+          "symbol": "LLUIGFmvStartInstance",
           "start": "0x80226A68",
           "end": "0x80226C40"
         },
         {
-          "symbol": "fn_80226C40",
+          "symbol": "LLUIGFmvStopInstance",
           "start": "0x80226C40",
           "end": "0x80226D20"
         },
         {
-          "symbol": "fn_80226D20",
+          "symbol": "LLUIGFMVSizzle32to32",
           "start": "0x80226D20",
           "end": "0x80226E00"
         },
         {
-          "symbol": "fn_80226E00",
+          "symbol": "_GetLayerValue",
           "start": "0x80226E00",
           "end": "0x80226E4C"
         },
         {
-          "symbol": "fn_80226E4C",
+          "symbol": "_PackTile_RGBA8",
           "start": "0x80226E4C",
           "end": "0x80226F34"
         },
         {
-          "symbol": "fn_80226F34",
+          "symbol": "LLUIGFmvSwapInstance",
           "start": "0x80226F34",
           "end": "0x80226F9C"
         }

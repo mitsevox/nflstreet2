@@ -36,7 +36,7 @@ typedef struct Node_80223874 {
     Int16 unk_0C;   /* 0x0C */
     Int16 unk_0E;   /* 0x0E */
     union {
-        DisplayList_802260D0 List;
+        UIGDispList_t List;
         struct {
             Uint8 unk_00[0x04];
             GXColor Colors[4];     /* 0x14 */

@@ -114,7 +114,7 @@ void fn_80221BF0(Text_80221BF0 *pText, Int32 Offset, Int32 *pA, Int32 *pB)
     Int32 j;
     Int32 End;
 
-    ppFont = (Font_801CCA64 **)fn_8021E688(fn_8021EA44(1), pText->unk_03, pText->unk_02);
+    ppFont = (Font_801CCA64 **)UIGLibraryGetItemData(UIGLibraryGetGlobal(1), pText->unk_03, pText->unk_02);
     if (pText->Flags & 0x8000) {
         fn_80221DB0(pText);
     }
@@ -176,7 +176,7 @@ void fn_80221DB0(Text_80221BF0 *pText)
 
     i = 0;
     NumLines = 0;
-    ppFont = (Font_801CCA64 **)fn_8021E688(fn_8021EA44(1), pText->unk_03, pText->unk_02);
+    ppFont = (Font_801CCA64 **)UIGLibraryGetItemData(UIGLibraryGetGlobal(1), pText->unk_03, pText->unk_02);
     LineStart = 0;
     pLine = NULL;
     fn_80221D5C(pText);
@@ -292,9 +292,9 @@ void fn_80221DB0(Text_80221BF0 *pText)
         }
     }
     if (NumLines > 1) {
-        fn_8021EF04(pText->unk_03, pText->unk_02);
+        UIGLibrarySetMemInfo(pText->unk_03, pText->unk_02);
         pText->u.pRanges = fn_801D2B7C(NumLines * sizeof(Range_80221D30), 0, 0);
-        fn_8021EF34();
+        UIGLibraryClearMemInfo();
     }
     pText->NumRanges = NumLines;
     for (Line = 0; Line < NumLines; Line++) {
@@ -308,14 +308,14 @@ void fn_80221DB0(Text_80221BF0 *pText)
 
 void fn_80222764(Text_80221BF0 *pText)
 {
-    fn_8021E2B4(fn_8021EA44(1), pText->unk_03, pText->unk_02);
+    UIGLibraryLoadItem(UIGLibraryGetGlobal(1), pText->unk_03, pText->unk_02);
     fn_80221DB0(pText);
 }
 
 void fn_80222E0C(Text_80221BF0 *pText)
 {
     fn_80221D5C(pText);
-    fn_8021E72C(fn_8021EA44(1), pText->unk_03, pText->unk_02);
+    UIGLibraryUnLoadItem(UIGLibraryGetGlobal(1), pText->unk_03, pText->unk_02);
 }
 
 void fn_80222E54(Buffer_80222E54 *pDst, Buffer_80222E54 *pSrc)
@@ -334,21 +334,21 @@ void fn_80222E54(Buffer_80222E54 *pDst, Buffer_80222E54 *pSrc)
 
 void fn_80223874(Node_80223874 *pNode)
 {
-    Object_8021E688 *pObject;
+    UIGLibrary_t *pObject;
     Int32 Item = 0;
 
     if ((pNode->Flags & 2) && pNode->unk_06 != -1 && pNode->unk_04 != -1) {
-        pObject = fn_8021EA44(1);
-        if (fn_8021E924(pObject, pNode->unk_06) & 2) {
-            fn_80226320(pObject, pNode->unk_06, pNode->unk_04);
+        pObject = UIGLibraryGetGlobal(1);
+        if (UIGLibraryGetType(pObject, pNode->unk_06) & 2) {
+            UIGFmvUpdate(pObject, pNode->unk_06, pNode->unk_04);
         }
         if (pNode->unk_0C != -1 && pNode->unk_0E != -1 &&
-            fn_8021EE10(pObject, pNode->unk_06, pNode->unk_04) == 0) {
-            fn_802213F8(pObject, &pNode->unk_06, &pNode->unk_04, pNode->unk_0E, pNode->unk_0C);
+            UIGLibraryIsItemLoading(pObject, pNode->unk_06, pNode->unk_04) == 0) {
+            UIGTexNodeSwap(pObject, &pNode->unk_06, &pNode->unk_04, pNode->unk_0E, pNode->unk_0C);
             pNode->unk_0C = -1;
             pNode->unk_0E = -1;
         }
-        Item = fn_8021EA54(pObject, pNode->unk_06, pNode->unk_04);
+        Item = UIGLibraryIsItemDataAvailable(pObject, pNode->unk_06, pNode->unk_04);
     }
     if (Item != 0 && (pNode->Flags & 0x10) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
         fn_80220C4C(pNode->unk_0A, pNode->unk_08, Item);
@@ -361,12 +361,12 @@ void fn_80223874(Node_80223874 *pNode)
 
 void fn_802239D0(Node_80223874 *pNode)
 {
-    Object_8021E688 *pObject;
+    UIGLibrary_t *pObject;
 
     if (pNode->Flags & 2) {
-        pObject = fn_8021EA44(1);
+        pObject = UIGLibraryGetGlobal(1);
         if (pNode->unk_06 != -1 && pNode->unk_04 != -1) {
-            fn_8021E2B4(pObject, pNode->unk_06, pNode->unk_04);
+            UIGLibraryLoadItem(pObject, pNode->unk_06, pNode->unk_04);
         }
     }
     pNode->unk_0C = pNode->unk_04;
@@ -376,12 +376,12 @@ void fn_802239D0(Node_80223874 *pNode)
 
 void fn_80223A40(Node_80223874 *pNode)
 {
-    Object_8021E688 *pObject;
+    UIGLibrary_t *pObject;
 
     if (pNode->Flags & 2) {
-        pObject = fn_8021EA44(1);
+        pObject = UIGLibraryGetGlobal(1);
         if (pNode->unk_06 != -1 && pNode->unk_04 != -1) {
-            fn_8021E72C(pObject, pNode->unk_06, pNode->unk_04);
+            UIGLibraryUnLoadItem(pObject, pNode->unk_06, pNode->unk_04);
         }
     }
     fn_80223AD0(pNode);
@@ -390,14 +390,14 @@ void fn_80223A40(Node_80223874 *pNode)
 void fn_80223AA0(Node_80223874 *pNode)
 {
     if (pNode->Flags & 0x8000) {
-        fn_802260B0(&pNode->u.List);
+        UIGDispListRelocate(&pNode->u.List);
     }
 }
 
 void fn_80223AD0(Node_80223874 *pNode)
 {
     if (pNode->Flags & 0x8000) {
-        fn_802260C0(&pNode->u.List);
+        UIGDispListUnrelocate(&pNode->u.List);
     }
 }
 
@@ -426,8 +426,8 @@ void fn_80223CB8(Uint32 Flags)
     bTex = Flags & 2;
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    fn_802218D4(bColor);
-    fn_80221924(bTex);
+    LLUIGSetColorChannel(bColor);
+    LLUIGSetTexturing(bTex);
     fn_80223C4C();
     if (Flags & 0x8000) {
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 4);
@@ -449,12 +449,12 @@ void fn_80223CB8(Uint32 Flags)
 
 void fn_8022479C(Node_80223874 *pNode)
 {
-    Object_8021E688 *pObject;
+    UIGLibrary_t *pObject;
 
     if (pNode->Flags & 4) {
-        pObject = fn_8021EA44(1);
+        pObject = UIGLibraryGetGlobal(1);
         if (pNode->unk_06 != -1 && pNode->unk_04 != -1) {
-            fn_8021E2B4(pObject, pNode->unk_06, pNode->unk_04);
+            UIGLibraryLoadItem(pObject, pNode->unk_06, pNode->unk_04);
         }
     }
     pNode->unk_0C = pNode->unk_04;
@@ -469,21 +469,21 @@ void fn_8022480C(Node_80223874 *pNode)
 
 void fn_802254F8(Node_80223874 *pNode)
 {
-    Object_8021E688 *pObject;
+    UIGLibrary_t *pObject;
     Int32 Item = 0;
 
     if ((pNode->Flags & 4) && pNode->unk_06 != -1 && pNode->unk_04 != -1) {
-        pObject = fn_8021EA44(1);
-        if (fn_8021E924(pObject, pNode->unk_06) & 2) {
-            fn_80226320(pObject, pNode->unk_06, pNode->unk_04);
+        pObject = UIGLibraryGetGlobal(1);
+        if (UIGLibraryGetType(pObject, pNode->unk_06) & 2) {
+            UIGFmvUpdate(pObject, pNode->unk_06, pNode->unk_04);
         }
         if (pNode->unk_0C != -1 && pNode->unk_0E != -1 &&
-            fn_8021EE10(pObject, pNode->unk_06, pNode->unk_04) == 0) {
-            fn_802213F8(pObject, &pNode->unk_06, &pNode->unk_04, pNode->unk_0E, pNode->unk_0C);
+            UIGLibraryIsItemLoading(pObject, pNode->unk_06, pNode->unk_04) == 0) {
+            UIGTexNodeSwap(pObject, &pNode->unk_06, &pNode->unk_04, pNode->unk_0E, pNode->unk_0C);
             pNode->unk_0C = -1;
             pNode->unk_0E = -1;
         }
-        Item = fn_8021EA54(pObject, pNode->unk_06, pNode->unk_04);
+        Item = UIGLibraryIsItemDataAvailable(pObject, pNode->unk_06, pNode->unk_04);
     }
     if (Item != 0 && (pNode->Flags & 0x100) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
         fn_80220C4C(pNode->unk_0A, pNode->unk_08, Item);
@@ -566,13 +566,13 @@ void fn_80225654(Node_80223874 *pNode, Uint32 Action, Int32 a, void *pData)
                 pNode->unk_0C = pNode->unk_04;
             }
             if (pNode->unk_0C != pNode->unk_04 || pNode->unk_0E != pNode->unk_06) {
-                fn_802213F8(fn_8021EA44(1), &pNode->unk_06, &pNode->unk_04, pNode->unk_0E,
+                UIGTexNodeSwap(UIGLibraryGetGlobal(1), &pNode->unk_06, &pNode->unk_04, pNode->unk_0E,
                             pNode->unk_0C);
             }
             break;
         case 10:
             if (pNode->unk_02 != ((Int32 *)pData)[0]) {
-                fn_80221528(fn_8021EA44(1), pNode->unk_06, pNode->unk_04,
+                UIGTexNodeUpdate(UIGLibraryGetGlobal(1), pNode->unk_06, pNode->unk_04,
                             (Int16)((Int32 *)pData)[0]);
             }
             break;
@@ -597,14 +597,14 @@ void fn_80225654(Node_80223874 *pNode, Uint32 Action, Int32 a, void *pData)
 void fn_802258F8(Node_80223874 *pNode)
 {
     if (pNode->Flags & 0x8000) {
-        fn_802260C0(&pNode->u.List);
+        UIGDispListUnrelocate(&pNode->u.List);
     }
 }
 
 void fn_80225928(Node_80223874 *pNode)
 {
     if (pNode->Flags & 0x8000) {
-        fn_802260B0(&pNode->u.List);
+        UIGDispListRelocate(&pNode->u.List);
     }
 }
 
@@ -619,14 +619,14 @@ void fn_80225958(Node_80223874 *pNode, Int32 Item)
         if (Item == 0) {
             return;
         }
-        lbl_802F9FE0[0][0] = ((Node_802215F0 *)Item)->unk_30;
-        lbl_802F9FE0[1][1] = ((Node_802215F0 *)Item)->unk_34;
+        lbl_802F9FE0[0][0] = ((UIGTexNode_t *)Item)->unk_30;
+        lbl_802F9FE0[1][1] = ((UIGTexNode_t *)Item)->unk_34;
         GXLoadTexMtxImm(lbl_802F9FE0, GX_TEXMTX0, GX_MTX2x4);
         fn_80225AAC(pNode, 0, Item);
-        bTex = fn_8022179C(Item);
+        bTex = LLUIGTexNodeRegisterObj(Item);
     }
     if (pNode->Flags & 0x8000) {
-        fn_802260D0(&pNode->u.List);
+        UIGDispListCall(&pNode->u.List);
     } else {
         Size = 512;
         if (!(pNode->Flags & 4) && !(pNode->Flags & 1)) {
@@ -655,7 +655,7 @@ void fn_80225AAC(Node_80223874 *pNode, Int32 a, Int32 Item)
         First = 1;
         Second = 1;
     }
-    fn_802219F0(First, Second);
+    LLUIGSetClamp(First, Second);
 }
 
 void fn_80225AE4(void)
@@ -683,8 +683,8 @@ void fn_80225B50(Uint32 Flags)
     bTex = Flags & 4;
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    fn_802218D4(bColor);
-    fn_80221924(bTex);
+    LLUIGSetColorChannel(bColor);
+    LLUIGSetTexturing(bTex);
     fn_80225AE4();
     if (Flags & 0x8000) {
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 4);

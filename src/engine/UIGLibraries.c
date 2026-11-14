@@ -25,14 +25,14 @@ int ResGetNumResources(ResFile_t *pRes);
 int ResGetAlignment(ResFile_t *pRes);
 void fn_80220BE0(void);
 
-static Object_8021E688 *lbl_803EBF38[2] = { 0 };
-static Callback_803EBF40 *lbl_803EBF40 = 0;
-static Callback_803EBF44 *lbl_803EBF44 = 0;
+static UIGLibrary_t *_pLibraryInfo[2] = { 0 };
+static UIGLibraryMemInfoFunc_t *_UIGLibraryMemInfoFunc = 0;
+static UIGLibraryLoadFlagsFunc_t *_UIGLibraryLoadFlagsFunc = 0;
 
-Int32 fn_8021DE9C(Entry_8021E688 *pEntry, Int32 Item)
+Int32 UIGLibraryIsItemLoaded(UIGLibraryType_t *pEntry, Int32 Item)
 {
     Int32 Result;
-    Item_8021E688 *pItem;
+    UIGLibraryItem_t *pItem;
 
     Result = 0;
     if (ResIsLoaded(pEntry->pData, Item) != 0) {
@@ -46,26 +46,26 @@ Int32 fn_8021DE9C(Entry_8021E688 *pEntry, Int32 Item)
     return Result;
 }
 
-Object_8021E688 *fn_8021DEFC(UISResListDesc *pDesc)
+UIGLibrary_t *UIGLibraryInit(UISResListDesc *pDesc)
 {
     Int32 Size;
-    Object_8021E688 *pObject;
+    UIGLibrary_t *pObject;
 
     fn_80220BE0();
-    Size = pDesc->NumA * sizeof(Entry_8021E688) + sizeof(Object_8021E688) +
-           pDesc->NumB * sizeof(Entry_8021E688);
+    Size = pDesc->NumA * sizeof(UIGLibraryType_t) + sizeof(UIGLibrary_t) +
+           pDesc->NumB * sizeof(UIGLibraryType_t);
     pObject = fn_801D2B7C(Size, pDesc->unk_08, 0);
     memset(pObject, 0, Size);
     if (pDesc->NumB != 0) {
-        pObject->pB = (Entry_8021E688 *)(pObject + 1);
+        pObject->pB = (UIGLibraryType_t *)(pObject + 1);
     }
-    pObject->pA = (Entry_8021E688 *)(pObject + 1) + pDesc->NumB;
+    pObject->pA = (UIGLibraryType_t *)(pObject + 1) + pDesc->NumB;
     pObject->NumA = pDesc->NumA;
     pObject->NumB = pDesc->NumB;
     return pObject;
 }
 
-void fn_8021DF9C(Object_8021E688 *pObject)
+void UIGLibraryShutdown(UIGLibrary_t *pObject)
 {
     Int32 i;
     Int32 Count;
@@ -74,20 +74,20 @@ void fn_8021DF9C(Object_8021E688 *pObject)
     if (pObject != NULL) {
         Count = pObject->NumA;
         for (i = 0; i < Count; i++) {
-            fn_8021E72C(pObject, i, -2);
+            UIGLibraryUnLoadItem(pObject, i, -2);
         }
         Count = pObject->NumB;
         for (i = 0; i < Count; i++) {
-            fn_8021E9AC(pObject, i, &pObject->pB[i]);
+            _UIGLibraryClose(pObject, i, &pObject->pB[i]);
         }
-        memset(pObject, 0, sizeof(Object_8021E688));
+        memset(pObject, 0, sizeof(UIGLibrary_t));
         fn_801D2BD0(pObject);
     }
 }
 
-void fn_8021E050(Object_8021E688 *pObject, Int32 Index, const char *pName, Int32 a, Int32 b)
+void UIGLibrarySetDevice(UIGLibrary_t *pObject, Int32 Index, const char *pName, Int32 a, Int32 b)
 {
-    Entry_8021E688 *pEntry;
+    UIGLibraryType_t *pEntry;
 
     pEntry = &pObject->pB[Index];
     pEntry->Flags = 0x80000000;
@@ -97,10 +97,10 @@ void fn_8021E050(Object_8021E688 *pObject, Int32 Index, const char *pName, Int32
     pEntry->unk_04 = b;
 }
 
-void fn_8021E0B0(Object_8021E688 *pObject, Int32 Index, Int32 Name, Int32 a, Int32 b,
+void UIGLibrarySet(UIGLibrary_t *pObject, Int32 Index, Int32 Name, Int32 a, Int32 b,
                  Uint32 Flags)
 {
-    Entry_8021E688 *pEntry;
+    UIGLibraryType_t *pEntry;
 
     pEntry = &pObject->pA[Index];
     pEntry->Flags = Flags;
@@ -116,19 +116,19 @@ void fn_8021E0B0(Object_8021E688 *pObject, Int32 Index, Int32 Name, Int32 a, Int
         pEntry->u.unk_0C = Name;
     }
     if (pEntry->Flags & 0x20) {
-        fn_8021E160(pObject, Index, pEntry);
+        _UIGLibraryOpen(pObject, Index, pEntry);
     }
     if (pEntry->Flags & 0x40) {
-        fn_8021E504(pObject, Index, -1);
+        UIGLibraryPreloadItem(pObject, Index, -1);
     }
 }
 
-void fn_8021E160(Object_8021E688 *pObject, Int32 Index, Entry_8021E688 *pEntry)
+void _UIGLibraryOpen(UIGLibrary_t *pObject, Int32 Index, UIGLibraryType_t *pEntry)
 {
-    Entry_8021E688 *pParent;
+    UIGLibraryType_t *pParent;
     Int32 Size;
 
-    fn_8021EF04(Index, -1);
+    UIGLibrarySetMemInfo(Index, -1);
     if (!(pEntry->Flags & 10)) {
         if (pEntry->Flags & 0x80000000) {
             pParent = &pObject->pB[pEntry->u.Ref.Index];
@@ -138,33 +138,33 @@ void fn_8021E160(Object_8021E688 *pObject, Int32 Index, Entry_8021E688 *pEntry)
             pEntry->pData = ResOpenDevice((const char *)pEntry->u.unk_0C, 44);
         }
         pEntry->NumItems = ResGetNumResources(pEntry->pData);
-        Size = pEntry->NumItems * sizeof(Item_8021E688);
+        Size = pEntry->NumItems * sizeof(UIGLibraryItem_t);
         pEntry->pItems = fn_801D2B7C(Size, pObject->unk_00, 0);
         memset(pEntry->pItems, 0, Size);
         pEntry->bItems = 1;
     }
-    fn_8021ECB0(pObject, pEntry->Flags, Index);
+    UIGLibraryInitType(pObject, pEntry->Flags, Index);
     fn_80220BE0();
-    fn_8021EF34();
+    UIGLibraryClearMemInfo();
 }
 
-void fn_8021E244(Object_8021E688 *pObject, Int32 Index, Int32 Count)
+void UIGLibrarySelfManagedInit(UIGLibrary_t *pObject, Int32 Index, Int32 Count)
 {
-    Entry_8021E688 *pEntry;
+    UIGLibraryType_t *pEntry;
     Int32 Size;
 
     pEntry = &pObject->pA[Index];
     pEntry->NumItems = Count;
-    Size = pEntry->NumItems * sizeof(Item_8021E688);
+    Size = pEntry->NumItems * sizeof(UIGLibraryItem_t);
     pEntry->pItems = fn_801D2B7C(Size, pObject->unk_00, 0);
     memset(pEntry->pItems, 0, Size);
     pEntry->bItems = 1;
 }
 
-Int32 fn_8021E2B4(Object_8021E688 *pObject, Int32 Index, Int32 Item)
+Int32 UIGLibraryLoadItem(UIGLibrary_t *pObject, Int32 Index, Int32 Item)
 {
-    Entry_8021E688 *pEntry;
-    Item_8021E688 *pItem;
+    UIGLibraryType_t *pEntry;
+    UIGLibraryItem_t *pItem;
     Int32 Result;
     Int32 First;
     Int32 End;
@@ -176,7 +176,7 @@ Int32 fn_8021E2B4(Object_8021E688 *pObject, Int32 Index, Int32 Item)
         return 0;
     }
     if (pEntry->bItems == 0) {
-        fn_8021E160(pObject, Index, pEntry);
+        _UIGLibraryOpen(pObject, Index, pEntry);
     }
     if (Item == -1) {
         First = 0;
@@ -196,17 +196,17 @@ Int32 fn_8021E2B4(Object_8021E688 *pObject, Int32 Index, Int32 Item)
                     pItem->unk_02 = 1;
                 }
                 if (ResIsLoading(pEntry->pData, Item) == 0) {
-                    fn_8021EF04(Index, Item);
-                    fn_8021EF74(pEntry->Flags);
-                    Result = ResLoadAsync(pEntry->pData, Item, pEntry->unk_00, 100, fn_8021E950, pItem);
-                    fn_8021EFA4();
-                    fn_8021EF34();
+                    UIGLibrarySetMemInfo(Index, Item);
+                    UIGLibrarySetLoadFlags(pEntry->Flags);
+                    Result = ResLoadAsync(pEntry->pData, Item, pEntry->unk_00, 100, _UIGLibraryAsyncCallback, pItem);
+                    UIGLibraryClearLoadFlags();
+                    UIGLibraryClearMemInfo();
                 }
             }
             if (pItem->unk_02 == 1) {
                 Result = 0;
             } else {
-                fn_8021EBB4(pObject, pEntry->Flags, Index, Item, Result);
+                UIGLibraryLoadType(pObject, pEntry->Flags, Index, Item, Result);
             }
         }
     } else {
@@ -216,23 +216,23 @@ Int32 fn_8021E2B4(Object_8021E688 *pObject, Int32 Index, Int32 Item)
                 pItem->unk_00++;
             } else {
                 if (!(pEntry->Flags & 10) && ResGetSize(pEntry->pData, i) != 0) {
-                    fn_8021EF04(Index, i);
-                    fn_8021EF74(pEntry->Flags);
+                    UIGLibrarySetMemInfo(Index, i);
+                    UIGLibrarySetLoadFlags(pEntry->Flags);
                     Result = ResLoad(pEntry->pData, i, pEntry->unk_00);
-                    fn_8021EFA4();
-                    fn_8021EF34();
+                    UIGLibraryClearLoadFlags();
+                    UIGLibraryClearMemInfo();
                 }
                 pItem->unk_00++;
-                fn_8021EBB4(pObject, pEntry->Flags, Index, i, Result);
+                UIGLibraryLoadType(pObject, pEntry->Flags, Index, i, Result);
             }
         }
     }
     return Result;
 }
 
-Int32 fn_8021E504(Object_8021E688 *pObject, Int32 Index, Int32 Item)
+Int32 UIGLibraryPreloadItem(UIGLibrary_t *pObject, Int32 Index, Int32 Item)
 {
-    Entry_8021E688 *pEntry;
+    UIGLibraryType_t *pEntry;
     Int32 Result;
     Int32 bAll;
     Int32 First;
@@ -242,7 +242,7 @@ Int32 fn_8021E504(Object_8021E688 *pObject, Int32 Index, Int32 Item)
     Result = 0;
     bAll = 0;
     if (pEntry->bItems == 0) {
-        fn_8021E160(pObject, Index, pEntry);
+        _UIGLibraryOpen(pObject, Index, pEntry);
     }
     if (Item == -1) {
         First = 0;
@@ -261,19 +261,19 @@ Int32 fn_8021E504(Object_8021E688 *pObject, Int32 Index, Int32 Item)
         }
     }
     if (bAll) {
-        fn_8021EF04(Index, 0);
-        fn_8021EF74(pEntry->Flags);
+        UIGLibrarySetMemInfo(Index, 0);
+        UIGLibrarySetLoadFlags(pEntry->Flags);
         ResLoadAll(pEntry->pData, pEntry->unk_00, 1);
-        fn_8021EFA4();
-        fn_8021EF34();
+        UIGLibraryClearLoadFlags();
+        UIGLibraryClearMemInfo();
     } else if (!(pEntry->Flags & 10)) {
         for (Item = First; Item < End; Item++) {
             if (ResGetSize(pEntry->pData, Item) != 0) {
-                fn_8021EF04(Index, Item);
-                fn_8021EF74(pEntry->Flags);
+                UIGLibrarySetMemInfo(Index, Item);
+                UIGLibrarySetLoadFlags(pEntry->Flags);
                 Result = ResLoad(pEntry->pData, Item, pEntry->unk_00);
-                fn_8021EFA4();
-                fn_8021EF34();
+                UIGLibraryClearLoadFlags();
+                UIGLibraryClearMemInfo();
             }
         }
     }
@@ -283,20 +283,20 @@ Int32 fn_8021E504(Object_8021E688 *pObject, Int32 Index, Int32 Item)
     return Result;
 }
 
-Int32 fn_8021E688(Object_8021E688 *pObject, Int32 Index, Int32 Item)
+Int32 UIGLibraryGetItemData(UIGLibrary_t *pObject, Int32 Index, Int32 Item)
 {
-    Entry_8021E688 *pEntry;
-    Item_8021E688 *pItem;
+    UIGLibraryType_t *pEntry;
+    UIGLibraryItem_t *pItem;
 
     pEntry = &pObject->pA[Index];
     pItem = &pEntry->pItems[Item];
     return pItem->unk_04;
 }
 
-void fn_8021E6A8(Object_8021E688 *pObject, Int32 Index, Int32 Item, Int32 Value)
+void UIGLibrarySetItemData(UIGLibrary_t *pObject, Int32 Index, Int32 Item, Int32 Value)
 {
-    Entry_8021E688 *pEntry;
-    Item_8021E688 *pItem;
+    UIGLibraryType_t *pEntry;
+    UIGLibraryItem_t *pItem;
 
     pEntry = &pObject->pA[Index];
     pItem = &pEntry->pItems[Item];
@@ -306,23 +306,23 @@ void fn_8021E6A8(Object_8021E688 *pObject, Int32 Index, Int32 Item, Int32 Value)
     }
 }
 
-Int16 fn_8021E6D8(Object_8021E688 *pObject, Int32 Index, Int32 Item)
+Int16 UIGLibraryReferenceCount(UIGLibrary_t *pObject, Int32 Index, Int32 Item)
 {
-    Entry_8021E688 *pEntry;
-    Item_8021E688 *pItem;
+    UIGLibraryType_t *pEntry;
+    UIGLibraryItem_t *pItem;
 
     pEntry = &pObject->pA[Index];
     if (pEntry->bItems == 0) {
-        fn_8021E160(pObject, Index, pEntry);
+        _UIGLibraryOpen(pObject, Index, pEntry);
     }
     pItem = &pEntry->pItems[Item];
     return pItem->unk_00;
 }
 
-void fn_8021E72C(Object_8021E688 *pObject, Int32 Index, Int32 Item)
+void UIGLibraryUnLoadItem(UIGLibrary_t *pObject, Int32 Index, Int32 Item)
 {
-    Entry_8021E688 *pEntry;
-    Item_8021E688 *pItem;
+    UIGLibraryType_t *pEntry;
+    UIGLibraryItem_t *pItem;
     Int32 bInUse;
     Int32 i;
 
@@ -341,7 +341,7 @@ void fn_8021E72C(Object_8021E688 *pObject, Int32 Index, Int32 Item)
                     pItem->unk_00--;
                 }
                 if (pItem->unk_00 == 0) {
-                    fn_8021EB54(pObject, pEntry->Flags, Index, i);
+                    UIGLibraryUnLoadType(pObject, pEntry->Flags, Index, i);
                 } else {
                     bInUse = 1;
                 }
@@ -351,7 +351,7 @@ void fn_8021E72C(Object_8021E688 *pObject, Int32 Index, Int32 Item)
             if (!(pEntry->Flags & 10)) {
                 ResUnLoadAll(pEntry->pData);
             }
-            fn_8021E9AC(pObject, Index, pEntry);
+            _UIGLibraryClose(pObject, Index, pEntry);
             if (Item == -2) {
                 pEntry->Flags = 0;
             }
@@ -361,13 +361,13 @@ void fn_8021E72C(Object_8021E688 *pObject, Int32 Index, Int32 Item)
         pItem->unk_00--;
         if ((pEntry->Flags & 0x10) && pItem->unk_00 < 0) {
             pItem->unk_00 = 0;
-            if (!(pEntry->Flags & 10) && pItem->unk_03 == 0 && fn_8021DE9C(pEntry, Item) != 0) {
+            if (!(pEntry->Flags & 10) && pItem->unk_03 == 0 && UIGLibraryIsItemLoaded(pEntry, Item) != 0) {
                 ResUnLoad(pEntry->pData, Item);
                 pItem->unk_02 = 0;
             }
         } else if (pItem->unk_00 <= 0) {
-            fn_8021EB54(pObject, pEntry->Flags, Index, Item);
-            if (!(pEntry->Flags & 10) && pItem->unk_03 == 0 && fn_8021DE9C(pEntry, Item) != 0) {
+            UIGLibraryUnLoadType(pObject, pEntry->Flags, Index, Item);
+            if (!(pEntry->Flags & 10) && pItem->unk_03 == 0 && UIGLibraryIsItemLoaded(pEntry, Item) != 0) {
                 ResUnLoad(pEntry->pData, Item);
                 pItem->unk_02 = 0;
             }
@@ -375,55 +375,55 @@ void fn_8021E72C(Object_8021E688 *pObject, Int32 Index, Int32 Item)
     }
 }
 
-Uint32 fn_8021E924(Object_8021E688 *pObject, Int32 Index)
+Uint32 UIGLibraryGetType(UIGLibrary_t *pObject, Int32 Index)
 {
-    Entry_8021E688 *pEntry;
+    UIGLibraryType_t *pEntry;
 
     pEntry = &pObject->pA[Index];
     return pEntry->Flags & 0x7FFFFFFF;
 }
 
-Int32 fn_8021E93C(Object_8021E688 *pObject, Int32 Index)
+Int32 UIGLibraryGetVramHeapID(UIGLibrary_t *pObject, Int32 Index)
 {
-    Entry_8021E688 *pEntry;
+    UIGLibraryType_t *pEntry;
 
     pEntry = &pObject->pA[Index];
     return pEntry->unk_08;
 }
 
-void fn_8021E950(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser)
+void _UIGLibraryAsyncCallback(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser)
 {
-    fn_8021EE54(pRes, index, pBuffer, err, pUser);
+    _UIGLibraryFlushCache(pRes, index, pBuffer, err, pUser);
 }
 
-Int32 fn_8021E970(Object_8021E688 *pObject, Int32 Index)
+Int32 UIGLibraryGetFilename(UIGLibrary_t *pObject, Int32 Index)
 {
-    Entry_8021E688 *pEntry;
+    UIGLibraryType_t *pEntry;
 
     pEntry = &pObject->pA[Index];
     return pEntry->u.unk_0C;
 }
 
-void *fn_8021E984(Object_8021E688 *pObject, Int32 Index)
+void *UIGLibraryGetResFile(UIGLibrary_t *pObject, Int32 Index)
 {
-    Entry_8021E688 *pEntry;
+    UIGLibraryType_t *pEntry;
 
     pEntry = &pObject->pA[Index];
     return pEntry->pData;
 }
 
-void fn_8021E998(Object_8021E688 *pObject, Int32 Index, void *pData)
+void UIGLibrarySetResFile(UIGLibrary_t *pObject, Int32 Index, void *pData)
 {
-    Entry_8021E688 *pEntry;
+    UIGLibraryType_t *pEntry;
 
     pEntry = &pObject->pA[Index];
     pEntry->pData = pData;
 }
 
-void fn_8021E9AC(Object_8021E688 *pObject, Int32 Index, Entry_8021E688 *pEntry)
+void _UIGLibraryClose(UIGLibrary_t *pObject, Int32 Index, UIGLibraryType_t *pEntry)
 {
     if (pEntry->Flags != 0) {
-        fn_8021ECFC(pObject, pEntry->Flags, Index);
+        UIGLibraryShutdownType(pObject, pEntry->Flags, Index);
         if (!(pEntry->Flags & 10) && pEntry->pData != NULL) {
             ResClose(pEntry->pData);
             pEntry->pData = NULL;
@@ -438,20 +438,20 @@ void fn_8021E9AC(Object_8021E688 *pObject, Int32 Index, Entry_8021E688 *pEntry)
     }
 }
 
-void fn_8021EA34(Int32 Index, Object_8021E688 *pObject)
+void UIGLibrarySetGlobal(Int32 Index, UIGLibrary_t *pObject)
 {
-    lbl_803EBF38[Index] = pObject;
+    _pLibraryInfo[Index] = pObject;
 }
 
-Object_8021E688 *fn_8021EA44(Int32 Index)
+UIGLibrary_t *UIGLibraryGetGlobal(Int32 Index)
 {
-    return lbl_803EBF38[Index];
+    return _pLibraryInfo[Index];
 }
 
-Int32 fn_8021EA54(Object_8021E688 *pObject, Int32 Index, Int32 Item)
+Int32 UIGLibraryIsItemDataAvailable(UIGLibrary_t *pObject, Int32 Index, Int32 Item)
 {
-    Entry_8021E688 *pEntry;
-    Item_8021E688 *pItem;
+    UIGLibraryType_t *pEntry;
+    UIGLibraryItem_t *pItem;
     Int32 Result;
 
     pEntry = &pObject->pA[Index];
@@ -459,104 +459,104 @@ Int32 fn_8021EA54(Object_8021E688 *pObject, Int32 Index, Int32 Item)
     Result = 0;
     if ((pEntry->Flags & 0x10) && pItem->unk_04 == 0 && !(pEntry->Flags & 10) &&
         ResIsLoaded(pEntry->pData, Item) != 0) {
-        fn_8021EF04(Index, Item);
-        fn_8021EF74(pEntry->Flags);
+        UIGLibrarySetMemInfo(Index, Item);
+        UIGLibrarySetLoadFlags(pEntry->Flags);
         Result = ResLoad(pEntry->pData, Item, pEntry->unk_00);
-        fn_8021EFA4();
-        fn_8021EF34();
+        UIGLibraryClearLoadFlags();
+        UIGLibraryClearMemInfo();
     }
     if (pItem->unk_00 != 0) {
-        fn_8021EBB4(pObject, pEntry->Flags, Index, Item, Result);
+        UIGLibraryLoadType(pObject, pEntry->Flags, Index, Item, Result);
     }
     return pItem->unk_04;
 }
 
-void fn_8021EB2C(Object_8021E688 *pObject, Int32 Index, Int32 Value)
+void UIGLibrarySetData(UIGLibrary_t *pObject, Int32 Index, Int32 Value)
 {
-    Entry_8021E688 *pEntry;
+    UIGLibraryType_t *pEntry;
 
     pEntry = &pObject->pA[Index];
     pEntry->unk_18 = Value;
 }
 
-Int32 fn_8021EB40(Object_8021E688 *pObject, Int32 Index)
+Int32 UIGLibraryGetData(UIGLibrary_t *pObject, Int32 Index)
 {
-    Entry_8021E688 *pEntry;
+    UIGLibraryType_t *pEntry;
 
     pEntry = &pObject->pA[Index];
     return pEntry->unk_18;
 }
 
-void fn_8021EB54(Object_8021E688 *pObject, Uint32 Flags, Int32 a, Int32 b)
+void UIGLibraryUnLoadType(UIGLibrary_t *pObject, Uint32 Flags, Int32 a, Int32 b)
 {
     if (Flags & 4) {
-        fn_80221314(pObject, a, b);
+        UIGTexNodeUnLoad(pObject, a, b);
     } else if (Flags & 8) {
-        fn_80225F10(pObject, a, b);
+        UIGFontDestroyFont(pObject, a, b);
     } else if (Flags & 2) {
-        fn_802262C4(pObject, a, b);
+        UIGFmvDeleteInstance(pObject, a, b);
     }
 }
 
-void fn_8021EBB4(Object_8021E688 *pObject, Uint32 Flags, Int32 Index, Int32 Item, Int32 Value)
+void UIGLibraryLoadType(UIGLibrary_t *pObject, Uint32 Flags, Int32 Index, Int32 Item, Int32 Value)
 {
-    fn_8021EF04(Index, Item);
+    UIGLibrarySetMemInfo(Index, Item);
     if (Flags & 4) {
-        fn_80221374(pObject, Index, Item, Value);
+        UIGTexNodeLoad(pObject, Index, Item, Value);
     } else if (Flags & 8) {
-        fn_80225E64(pObject, Index, Item, Value);
+        UIGFontCreateFont(pObject, Index, Item, Value);
     } else if (Flags & 2) {
-        fn_802261D4(pObject, Index, Item);
+        UIGFmvAddInstance(pObject, Index, Item);
     }
     if ((Flags & 0x8A) == 0x80 && Value != 0 && pObject->pA[Index].pItems[Item].unk_03 == 0) {
         ResUnLoad(pObject->pA[Index].pData, Item);
         pObject->pA[Index].pItems[Item].unk_02 = 0;
     }
-    fn_8021EF34();
+    UIGLibraryClearMemInfo();
 }
 
-void fn_8021ECB0(Object_8021E688 *pObject, Uint32 Flags, Int32 a)
+void UIGLibraryInitType(UIGLibrary_t *pObject, Uint32 Flags, Int32 a)
 {
     if (!(Flags & 4)) {
         if (Flags & 8) {
-            fn_80225D90(pObject, a);
+            UIGFontCreateFontLibrary(pObject, a);
         } else if (Flags & 2) {
-            fn_802260F8(pObject, a);
+            UIGFmvInit(pObject, a);
         }
     }
     fn_80220BE0();
 }
 
-void fn_8021ECFC(Object_8021E688 *pObject, Uint32 Flags, Int32 a)
+void UIGLibraryShutdownType(UIGLibrary_t *pObject, Uint32 Flags, Int32 a)
 {
     if (!(Flags & 4)) {
         if (Flags & 8) {
-            fn_80225E10(pObject, a);
+            UIGFontDestroyFontLibrary(pObject, a);
         } else if (Flags & 2) {
-            fn_8022615C(pObject, a);
+            UIGFmvShutdown(pObject, a);
         }
     }
     fn_80220BE0();
 }
 
-void fn_8021ED48(Object_8021E688 *pObject, Uint32 Flags, Int32 a, Int32 b)
+void UIGLibraryProcessType(UIGLibrary_t *pObject, Uint32 Flags, Int32 a, Int32 b)
 {
     if (!(Flags & 4)) {
         if (!(Flags & 8)) {
             if (Flags & 2) {
-                fn_8022618C(pObject, a, b);
+                UIGFmvProcess(pObject, a, b);
             }
         }
     }
 }
 
-void fn_8021ED88(Object_8021E688 *pObject)
+void UIGLibraryProcess(UIGLibrary_t *pObject)
 {
     Int32 Index;
     Int32 NumA;
     Int32 Item;
     Int32 NumItems;
-    Entry_8021E688 *pEntry;
+    UIGLibraryType_t *pEntry;
 
     if (pObject != 0) {
         NumA = pObject->NumA;
@@ -564,15 +564,15 @@ void fn_8021ED88(Object_8021E688 *pObject)
             pEntry = &pObject->pA[Index];
             NumItems = pEntry->NumItems;
             for (Item = 0; Item < NumItems; Item++) {
-                fn_8021ED48(pObject, pEntry->Flags, Index, Item);
+                UIGLibraryProcessType(pObject, pEntry->Flags, Index, Item);
             }
         }
     }
 }
 
-Int32 fn_8021EE10(Object_8021E688 *pObject, Int32 Index, Int32 Item)
+Int32 UIGLibraryIsItemLoading(UIGLibrary_t *pObject, Int32 Index, Int32 Item)
 {
-    Entry_8021E688 *pEntry;
+    UIGLibraryType_t *pEntry;
 
     pEntry = &pObject->pA[Index];
     if (pEntry->Flags & 0x10) {
@@ -581,58 +581,58 @@ Int32 fn_8021EE10(Object_8021E688 *pObject, Int32 Index, Int32 Item)
     return 0;
 }
 
-void fn_8021EE54(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser)
+void _UIGLibraryFlushCache(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser)
 {
 }
 
-void fn_8021EE58(Object_8021E688 *pObject, Int32 a, Int32 b, Int32 c, Int32 d)
+void UIGLibraryMoveItem(UIGLibrary_t *pObject, Int32 a, Int32 b, Int32 c, Int32 d)
 {
-    Entry_8021E688 *pDst;
-    Entry_8021E688 *pSrc;
-    Item_8021E688 *pDstItem;
-    Item_8021E688 *pSrcItem;
+    UIGLibraryType_t *pDst;
+    UIGLibraryType_t *pSrc;
+    UIGLibraryItem_t *pDstItem;
+    UIGLibraryItem_t *pSrcItem;
     Int32 Value;
 
     pDst = &pObject->pA[a];
     pSrc = &pObject->pA[c];
-    Value = fn_8021E688(pObject, c, d);
-    fn_8021E6A8(pObject, c, d, 0);
-    fn_8021E6A8(pObject, a, b, Value);
+    Value = UIGLibraryGetItemData(pObject, c, d);
+    UIGLibrarySetItemData(pObject, c, d, 0);
+    UIGLibrarySetItemData(pObject, a, b, Value);
     pSrcItem = &pSrc->pItems[d];
     pDstItem = &pDst->pItems[b];
     pSrcItem->unk_00--;
     pDstItem->unk_00++;
 }
 
-void fn_8021EF04(Int32 a, Int32 b)
+void UIGLibrarySetMemInfo(Int32 a, Int32 b)
 {
-    if (lbl_803EBF40 != 0) {
-        lbl_803EBF40(a, b);
+    if (_UIGLibraryMemInfoFunc != 0) {
+        _UIGLibraryMemInfoFunc(a, b);
     }
 }
 
-void fn_8021EF34(void)
+void UIGLibraryClearMemInfo(void)
 {
-    if (lbl_803EBF40 != 0) {
-        lbl_803EBF40(-1, -1);
+    if (_UIGLibraryMemInfoFunc != 0) {
+        _UIGLibraryMemInfoFunc(-1, -1);
     }
 }
 
-void fn_8021EF6C(Callback_803EBF44 *pCallback)
+void UIGLibrarySetLoadFlagsFunc(UIGLibraryLoadFlagsFunc_t *pCallback)
 {
-    lbl_803EBF44 = pCallback;
+    _UIGLibraryLoadFlagsFunc = pCallback;
 }
 
-void fn_8021EF74(Int32 a)
+void UIGLibrarySetLoadFlags(Int32 a)
 {
-    if (lbl_803EBF44 != 0) {
-        lbl_803EBF44(a);
+    if (_UIGLibraryLoadFlagsFunc != 0) {
+        _UIGLibraryLoadFlagsFunc(a);
     }
 }
 
-void fn_8021EFA4(void)
+void UIGLibraryClearLoadFlags(void)
 {
-    if (lbl_803EBF44 != 0) {
-        lbl_803EBF44(0);
+    if (_UIGLibraryLoadFlagsFunc != 0) {
+        _UIGLibraryLoadFlagsFunc(0);
     }
 }

@@ -3,16 +3,16 @@
 
 #include "types.h"
 
-/* 8-byte item of an Entry_8021E688 item array. */
-typedef struct Item_8021E688 {
+/* 8-byte item of an UIGLibraryType_t item array. */
+typedef struct UIGLibraryItem_t {
     Int16 unk_00;     /* 0x00 */
     Uint8 unk_02;     /* 0x02 */
     signed char unk_03; /* 0x03 */
     Int32 unk_04;     /* 0x04 */
-} Item_8021E688;
+} UIGLibraryItem_t;
 
-/* 36-byte entry of the arrays at Object_8021E688 +0x08 and +0x0C. */
-typedef struct Entry_8021E688 {
+/* 36-byte entry of the arrays at UIGLibrary_t +0x08 and +0x0C. */
+typedef struct UIGLibraryType_t {
     Int32 unk_00;  /* 0x00 */
     Int32 unk_04;  /* 0x04 */
     Int32 unk_08;  /* 0x08 */
@@ -28,74 +28,74 @@ typedef struct Entry_8021E688 {
     Int32 unk_18;  /* 0x18 */
     Uint16 bItems; /* 0x1C: set once pItems is allocated */
     Int16 NumItems;            /* 0x1E */
-    Item_8021E688 *pItems;     /* 0x20 */
-} Entry_8021E688;
+    UIGLibraryItem_t *pItems;     /* 0x20 */
+} UIGLibraryType_t;
 
-/* 16-byte header allocated by fn_8021DEFC, followed by its two entry
+/* 16-byte header allocated by UIGLibraryInit, followed by its two entry
    arrays. */
-typedef struct Object_8021E688 {
+typedef struct UIGLibrary_t {
     Int32 unk_00;              /* 0x00 */
     Uint16 NumA;               /* 0x04: number of entries at pA */
     Uint16 NumB;               /* 0x06: number of entries at pB */
-    Entry_8021E688 *pB;        /* 0x08 */
-    Entry_8021E688 *pA;        /* 0x0C */
-} Object_8021E688;
+    UIGLibraryType_t *pB;        /* 0x08 */
+    UIGLibraryType_t *pA;        /* 0x0C */
+} UIGLibrary_t;
 
-/* 12-byte argument of fn_8021DEFC. */
+/* 12-byte argument of UIGLibraryInit. */
 typedef struct UISResListDesc {
     Int32 NumA;     /* 0x00 */
     Int32 NumB;     /* 0x04 */
     Int32 unk_08;   /* 0x08 */
 } UISResListDesc;
 
-typedef void Callback_803EBF40(Int32, Int32);
-typedef void Callback_803EBF44(Int32);
+typedef void UIGLibraryMemInfoFunc_t(Int32, Int32);
+typedef void UIGLibraryLoadFlagsFunc_t(Int32);
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* src/engine/UIGLibraries.c */
-Int32 fn_8021DE9C(Entry_8021E688 *pEntry, Int32 Item);
-Object_8021E688 *fn_8021DEFC(UISResListDesc *pDesc);
-void fn_8021DF9C(Object_8021E688 *pObject);
-void fn_8021E050(Object_8021E688 *pObject, Int32 Index, const char *pName, Int32 a, Int32 b);
-void fn_8021E0B0(Object_8021E688 *pObject, Int32 Index, Int32 Name, Int32 a, Int32 b,
+Int32 UIGLibraryIsItemLoaded(UIGLibraryType_t *pEntry, Int32 Item);
+UIGLibrary_t *UIGLibraryInit(UISResListDesc *pDesc);
+void UIGLibraryShutdown(UIGLibrary_t *pObject);
+void UIGLibrarySetDevice(UIGLibrary_t *pObject, Int32 Index, const char *pName, Int32 a, Int32 b);
+void UIGLibrarySet(UIGLibrary_t *pObject, Int32 Index, Int32 Name, Int32 a, Int32 b,
                  Uint32 Flags);
-void fn_8021E160(Object_8021E688 *pObject, Int32 Index, Entry_8021E688 *pEntry);
-void fn_8021E244(Object_8021E688 *pObject, Int32 Index, Int32 Count);
-Int32 fn_8021E2B4(Object_8021E688 *pObject, Int32 Index, Int32 Item);
-Int32 fn_8021E504(Object_8021E688 *pObject, Int32 Index, Int32 Item);
-Int32 fn_8021E688(Object_8021E688 *pObject, Int32 Index, Int32 Item);
-void fn_8021E6A8(Object_8021E688 *pObject, Int32 Index, Int32 Item, Int32 Value);
-Int16 fn_8021E6D8(Object_8021E688 *pObject, Int32 Index, Int32 Item);
-void fn_8021E72C(Object_8021E688 *pObject, Int32 Index, Int32 Item);
-Uint32 fn_8021E924(Object_8021E688 *pObject, Int32 Index);
-Int32 fn_8021E93C(Object_8021E688 *pObject, Int32 Index);
-void fn_8021E950(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser);
-Int32 fn_8021E970(Object_8021E688 *pObject, Int32 Index);
-void *fn_8021E984(Object_8021E688 *pObject, Int32 Index);
-void fn_8021E998(Object_8021E688 *pObject, Int32 Index, void *pData);
-void fn_8021E9AC(Object_8021E688 *pObject, Int32 Index, Entry_8021E688 *pEntry);
-void fn_8021EA34(Int32 Index, Object_8021E688 *pObject);
-Object_8021E688 *fn_8021EA44(Int32 Index);
-Int32 fn_8021EA54(Object_8021E688 *pObject, Int32 Index, Int32 Item);
-void fn_8021EB2C(Object_8021E688 *pObject, Int32 Index, Int32 Value);
-Int32 fn_8021EB40(Object_8021E688 *pObject, Int32 Index);
-void fn_8021EB54(Object_8021E688 *pObject, Uint32 Flags, Int32 a, Int32 b);
-void fn_8021EBB4(Object_8021E688 *pObject, Uint32 Flags, Int32 Index, Int32 Item, Int32 Value);
-void fn_8021ECB0(Object_8021E688 *pObject, Uint32 Flags, Int32 a);
-void fn_8021ECFC(Object_8021E688 *pObject, Uint32 Flags, Int32 a);
-void fn_8021ED48(Object_8021E688 *pObject, Uint32 Flags, Int32 a, Int32 b);
-void fn_8021ED88(Object_8021E688 *pObject);
-Int32 fn_8021EE10(Object_8021E688 *pObject, Int32 Index, Int32 Item);
-void fn_8021EE54(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser);
-void fn_8021EE58(Object_8021E688 *pObject, Int32 a, Int32 b, Int32 c, Int32 d);
-void fn_8021EF04(Int32 a, Int32 b);
-void fn_8021EF34(void);
-void fn_8021EF6C(Callback_803EBF44 *pCallback);
-void fn_8021EF74(Int32 a);
-void fn_8021EFA4(void);
+void _UIGLibraryOpen(UIGLibrary_t *pObject, Int32 Index, UIGLibraryType_t *pEntry);
+void UIGLibrarySelfManagedInit(UIGLibrary_t *pObject, Int32 Index, Int32 Count);
+Int32 UIGLibraryLoadItem(UIGLibrary_t *pObject, Int32 Index, Int32 Item);
+Int32 UIGLibraryPreloadItem(UIGLibrary_t *pObject, Int32 Index, Int32 Item);
+Int32 UIGLibraryGetItemData(UIGLibrary_t *pObject, Int32 Index, Int32 Item);
+void UIGLibrarySetItemData(UIGLibrary_t *pObject, Int32 Index, Int32 Item, Int32 Value);
+Int16 UIGLibraryReferenceCount(UIGLibrary_t *pObject, Int32 Index, Int32 Item);
+void UIGLibraryUnLoadItem(UIGLibrary_t *pObject, Int32 Index, Int32 Item);
+Uint32 UIGLibraryGetType(UIGLibrary_t *pObject, Int32 Index);
+Int32 UIGLibraryGetVramHeapID(UIGLibrary_t *pObject, Int32 Index);
+void _UIGLibraryAsyncCallback(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser);
+Int32 UIGLibraryGetFilename(UIGLibrary_t *pObject, Int32 Index);
+void *UIGLibraryGetResFile(UIGLibrary_t *pObject, Int32 Index);
+void UIGLibrarySetResFile(UIGLibrary_t *pObject, Int32 Index, void *pData);
+void _UIGLibraryClose(UIGLibrary_t *pObject, Int32 Index, UIGLibraryType_t *pEntry);
+void UIGLibrarySetGlobal(Int32 Index, UIGLibrary_t *pObject);
+UIGLibrary_t *UIGLibraryGetGlobal(Int32 Index);
+Int32 UIGLibraryIsItemDataAvailable(UIGLibrary_t *pObject, Int32 Index, Int32 Item);
+void UIGLibrarySetData(UIGLibrary_t *pObject, Int32 Index, Int32 Value);
+Int32 UIGLibraryGetData(UIGLibrary_t *pObject, Int32 Index);
+void UIGLibraryUnLoadType(UIGLibrary_t *pObject, Uint32 Flags, Int32 a, Int32 b);
+void UIGLibraryLoadType(UIGLibrary_t *pObject, Uint32 Flags, Int32 Index, Int32 Item, Int32 Value);
+void UIGLibraryInitType(UIGLibrary_t *pObject, Uint32 Flags, Int32 a);
+void UIGLibraryShutdownType(UIGLibrary_t *pObject, Uint32 Flags, Int32 a);
+void UIGLibraryProcessType(UIGLibrary_t *pObject, Uint32 Flags, Int32 a, Int32 b);
+void UIGLibraryProcess(UIGLibrary_t *pObject);
+Int32 UIGLibraryIsItemLoading(UIGLibrary_t *pObject, Int32 Index, Int32 Item);
+void _UIGLibraryFlushCache(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser);
+void UIGLibraryMoveItem(UIGLibrary_t *pObject, Int32 a, Int32 b, Int32 c, Int32 d);
+void UIGLibrarySetMemInfo(Int32 a, Int32 b);
+void UIGLibraryClearMemInfo(void);
+void UIGLibrarySetLoadFlagsFunc(UIGLibraryLoadFlagsFunc_t *pCallback);
+void UIGLibrarySetLoadFlags(Int32 a);
+void UIGLibraryClearLoadFlags(void);
 
 #ifdef __cplusplus
 }

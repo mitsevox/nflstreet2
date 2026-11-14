@@ -5,17 +5,17 @@
 #include <dolphin/gx/GXDispList.h>
 #include "engine/uigdisplist.h"
 
-void fn_802260B0(DisplayList_802260D0 *pList)
+void UIGDispListRelocate(UIGDispList_t *pList)
 {
     pList->Offset += (Int32)pList;
 }
 
-void fn_802260C0(DisplayList_802260D0 *pList)
+void UIGDispListUnrelocate(UIGDispList_t *pList)
 {
     pList->Offset -= (Int32)pList;
 }
 
-void fn_802260D0(DisplayList_802260D0 *pList)
+void UIGDispListCall(UIGDispList_t *pList)
 {
     GXCallDisplayList((void *)pList->Offset, pList->Size);
 }

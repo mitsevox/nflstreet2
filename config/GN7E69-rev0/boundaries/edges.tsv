@@ -131,9 +131,8 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x80215C14	0x80215C14	0x80215C14	alignment	0	0	tmdebuginfo.c	TmInstance.c
 .text	0x80215DA4	0x80215DA4	0x80215DA4	alignment	0	0	TmInstance.c	TMMorphAnim.c
 .text	0x80215E5C	0x80215E5C	0x80215E5C	alignment	0	0	TMMorphAnim.c	tmskeleton.c
-.text	-	0x802160A0	0x802260F8	open	-	-	tmskeleton.c	UIGFmv.c
-.text	0x80226498	0x80226498	0x80226498	alignment	0	14	UIGFmv.c	LLUIGFmv.c
-.text	-	0x80226F34	0x80227F14	open	-	-	LLUIGFmv.c	viewport.c
+.text	-	0x802160A0	0x80221374	open	-	-	tmskeleton.c	UIGTextureNode.c
+.text	-	0x802213F8	0x80227F14	open	-	-	UIGTextureNode.c	viewport.c
 .text	-	0x802287D4	0x8025E210	open	-	-	viewport.c	libgcc2.c
 .text	0x8025E250	0x8025E250	0x8025E250	alignment	0	0	libgcc2.c	libgcc2.c
 .text	0x8025E290	0x8025E290	0x8025E290	alignment	0	0	libgcc2.c	libgcc2.c
@@ -212,7 +211,6 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .sdata	-	0x803EBE70	0x803EBE70	data	0	9/5	llsystem.c	t3db.c
 .sdata	-	0x803EBEE8	0x803EBEE8	thin	0	1/1	tmmaterial.c	tmmateriallist.c
 .sdata	-	0x803EBEF0	0x803EBEF0	thin	0	1/5	tmmateriallist.c	tmrender.c
-.sdata	-	0x803EBF80	0x803EBF80	data	0	4/2	UIGFmv.c	LLUIGFmv.c
 .sdata	-	0x803EC550	0x803EC550	data	0	2/3	vfprintf.c	vfprintf.c
 .sdata	-	0x803EC584	0x803EC584	thin	0	2/1	lzm.c	lzh.c
 .sbss	-	0x803ECF70	0x803ECF70	data	0	6/4	remap.c	Resource.c

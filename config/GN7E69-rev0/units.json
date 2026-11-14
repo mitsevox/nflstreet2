@@ -2267,6 +2267,90 @@
     "PerJoyDriverPollPADs": {
       "address": "0x801E26FC",
       "evidence": "evidence.tsv function and name rows for 0x801E26FC (PerJoyDriverPollPADs in src/engine/PJoyDrvr.c, a comparison-only file); the linked src/engine/llperiph.c calls it and registers it as a callback, so it resolves to the original bytes."
+    },
+    "LLUIGTexNodeUpdate": {
+      "address": "0x802215EC",
+      "evidence": "evidence.tsv function and name rows for 0x802215EC (LLUIGTexNodeUpdate, src/engine/LLUIGTextureNode.c, comparison-only; original bytes)."
+    },
+    "LLUIGTexNodeSetImage": {
+      "address": "0x802215F0",
+      "evidence": "evidence.tsv function and name rows for 0x802215F0 (LLUIGTexNodeSetImage, src/engine/LLUIGTextureNode.c, comparison-only; original bytes)."
+    },
+    "LLUIGTexNodeFreeImage": {
+      "address": "0x80221738",
+      "evidence": "evidence.tsv function and name rows for 0x80221738 (LLUIGTexNodeFreeImage, src/engine/LLUIGTextureNode.c, comparison-only; original bytes)."
+    },
+    "LLUIGTexNodeRegisterObj": {
+      "address": "0x8022179C",
+      "evidence": "evidence.tsv function and name rows for 0x8022179C (LLUIGTexNodeRegisterObj, src/engine/LLUIGTextureNode.c, comparison-only; original bytes)."
+    },
+    "LLUIGSetColorChannel": {
+      "address": "0x802218D4",
+      "evidence": "evidence.tsv function and name rows for 0x802218D4 (LLUIGSetColorChannel, src/engine/LLUIGTextureNode.c, comparison-only; original bytes)."
+    },
+    "LLUIGSetTexturing": {
+      "address": "0x80221924",
+      "evidence": "evidence.tsv function and name rows for 0x80221924 (LLUIGSetTexturing, src/engine/LLUIGTextureNode.c, comparison-only; original bytes)."
+    },
+    "LLUIGSetClamp": {
+      "address": "0x802219F0",
+      "evidence": "evidence.tsv function and name rows for 0x802219F0 (LLUIGSetClamp, src/engine/LLUIGTextureNode.c, comparison-only; original bytes)."
+    },
+    "LLUIGTexNodeGet": {
+      "address": "0x80221BAC",
+      "evidence": "evidence.tsv function and name rows for 0x80221BAC (LLUIGTexNodeGet, src/engine/LLUIGTextureNode.c, comparison-only; original bytes)."
+    },
+    "LLUIGTexNodeGetPalette": {
+      "address": "0x80221BD8",
+      "evidence": "evidence.tsv function and name rows for 0x80221BD8 (LLUIGTexNodeGetPalette, src/engine/LLUIGTextureNode.c, comparison-only; original bytes)."
+    },
+    "LLUIGTexNodeSetPalette": {
+      "address": "0x80221BE0",
+      "evidence": "evidence.tsv function and name rows for 0x80221BE0 (LLUIGTexNodeSetPalette, src/engine/LLUIGTextureNode.c, comparison-only; original bytes)."
+    },
+    "LLUIGTexNodeSetCreateCallback": {
+      "address": "0x80221BE8",
+      "evidence": "evidence.tsv function and name rows for 0x80221BE8 (LLUIGTexNodeSetCreateCallback, src/engine/LLUIGTextureNode.c, comparison-only; original bytes)."
+    },
+    "LLUIGFmvProcess": {
+      "address": "0x80226498",
+      "evidence": "evidence.tsv function and name rows for 0x80226498 (LLUIGFmvProcess, src/engine/LLUIGFmv.c, comparison-only; original bytes)."
+    },
+    "LLUIGFmvUpdate": {
+      "address": "0x8022666C",
+      "evidence": "evidence.tsv function and name rows for 0x8022666C (LLUIGFmvUpdate, src/engine/LLUIGFmv.c, comparison-only; original bytes)."
+    },
+    "LLUIGFmvInit": {
+      "address": "0x802267D0",
+      "evidence": "evidence.tsv function and name rows for 0x802267D0 (LLUIGFmvInit, src/engine/LLUIGFmv.c, comparison-only; original bytes)."
+    },
+    "LLUIGFmvShutdown": {
+      "address": "0x802267D4",
+      "evidence": "evidence.tsv function and name rows for 0x802267D4 (LLUIGFmvShutdown, src/engine/LLUIGFmv.c, comparison-only; original bytes)."
+    },
+    "LLUIGFmvAddInstance": {
+      "address": "0x802268D4",
+      "evidence": "evidence.tsv function and name rows for 0x802268D4 (LLUIGFmvAddInstance, src/engine/LLUIGFmv.c, comparison-only; original bytes)."
+    },
+    "LLUIGFmvDeleteInstance": {
+      "address": "0x802269C8",
+      "evidence": "evidence.tsv function and name rows for 0x802269C8 (LLUIGFmvDeleteInstance, src/engine/LLUIGFmv.c, comparison-only; original bytes)."
+    },
+    "LLUIGFmvStartInstance": {
+      "address": "0x80226A68",
+      "evidence": "evidence.tsv function and name rows for 0x80226A68 (LLUIGFmvStartInstance, src/engine/LLUIGFmv.c, comparison-only; original bytes)."
+    },
+    "LLUIGFmvStopInstance": {
+      "address": "0x80226C40",
+      "evidence": "evidence.tsv function and name rows for 0x80226C40 (LLUIGFmvStopInstance, src/engine/LLUIGFmv.c, comparison-only; original bytes)."
+    },
+    "LLUIGFmvSwapInstance": {
+      "address": "0x80226F34",
+      "evidence": "evidence.tsv function and name rows for 0x80226F34 (LLUIGFmvSwapInstance, src/engine/LLUIGFmv.c, comparison-only; original bytes)."
+    },
+    "LLUIGFmvInitTexture": {
+      "address": "0x802267D8",
+      "evidence": "evidence.tsv function and name rows for 0x802267D8 (LLUIGFmvInitTexture, src/engine/LLUIGFmv.c, comparison-only without a body; original bytes)."
     }
   },
   "units": [

@@ -86,9 +86,9 @@ void HudShowAlert(const char *);
 void MsgGameGetPlayerStatus(int, int *, int *);
 int fn_80186F7C(unsigned char);
 int TeamLogoGetSlot(int);
-void *fn_8021EA44(int);
+void *UIGLibraryGetGlobal(int);
 unsigned char *fn_80220BFC(int, int);
-void *fn_80221BAC(void *, int, int);
+void *LLUIGTexNodeGet(void *, int, int);
 void TMTexLibReplaceClut(void *, TexFilePalette_t *, int, void *);
 void TMTexLibReplaceTexture(void *, void *, int, TexFileImage_t *, int, int);
 int fn_8022F358(int);
@@ -220,7 +220,7 @@ void HotspotLoadTeamLogos(BigObj_t *)
         unsigned char *pPalette = 0;
         fn_80084034(&cursor, i, 0);
         int value = fn_80084438(&cursor);
-        Texture_t *pTexture = (Texture_t *)fn_80221BAC(fn_8021EA44(1), 4, id);
+        Texture_t *pTexture = (Texture_t *)LLUIGTexNodeGet(UIGLibraryGetGlobal(1), 4, id);
         if (value == 0) {
             int slot;
             if (i == 0) slot = 0; else slot = 1;

@@ -5,19 +5,19 @@
 
 /* Display-list reference: the list address is kept relative to the
    reference itself while stored. */
-typedef struct DisplayList_802260D0 {
+typedef struct UIGDispList_t {
     Uint32 Size;    /* 0x00 */
     Int32 Offset;   /* 0x04 */
-} DisplayList_802260D0;
+} UIGDispList_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* src/engine/uigdisplist.c */
-void fn_802260B0(DisplayList_802260D0 *pList);
-void fn_802260C0(DisplayList_802260D0 *pList);
-void fn_802260D0(DisplayList_802260D0 *pList);
+void UIGDispListRelocate(UIGDispList_t *pList);
+void UIGDispListUnrelocate(UIGDispList_t *pList);
+void UIGDispListCall(UIGDispList_t *pList);
 
 #ifdef __cplusplus
 }

@@ -125,8 +125,8 @@ void fn_8018EF6C(int a);
 int GauntletGetCurrentTeam(int a);
 void GauntletReset(int a);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-void *fn_8021EA44(int index);
-unsigned int fn_80225F88(void *a, int b, int c, const char *pText);
+void *UIGLibraryGetGlobal(int index);
+unsigned int UIGFontGetStringWidth(void *a, int b, int c, const char *pText);
 int fn_8022F384(int a);
 int fn_8022F4BC(void);
 }
@@ -1214,13 +1214,13 @@ void EditMenuSetChanged(void)
 
 void EditMenuGetPlayerName(char *pText, int size)
 {
-    void *pFont = fn_8021EA44(1);
+    void *pFont = UIGLibraryGetGlobal(1);
     unsigned int limit;
     unsigned int width;
 
     PlayerDbGetFullName(EditMenuGetPlayerCursor(), pText, size);
-    limit = fn_80225F88(pFont, 2, 3, "WWWWWWWWWW");
-    width = fn_80225F88(pFont, 2, 3, pText);
+    limit = UIGFontGetStringWidth(pFont, 2, 3, "WWWWWWWWWW");
+    width = UIGFontGetStringWidth(pFont, 2, 3, pText);
     if (strlen(pText) > 20 || width > limit) {
         PlayerDbGetShortName(EditMenuGetPlayerCursor(), pText, size);
     }
@@ -1277,7 +1277,7 @@ void EditMenuBegin(int mode, int value)
     desc.mUnknown4 = 1;
     desc.mUnknown0 = 1;
     fn_8008044C(&gEditMenuPlayerCursor, &desc, 0x54415453);
-    fn_8021EA44(1);
+    UIGLibraryGetGlobal(1);
     CreatePlayerResetOriginals();
 }
 

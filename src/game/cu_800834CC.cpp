@@ -27,9 +27,9 @@ void fn_800828FC(void);
 void fn_800829D8(void);
 int fn_80082A64(int a, int b);
 int fn_80082AB0(int a, int b, int c);
-void *fn_8021EA44(int index);
-int fn_8021E2B4(void *pObject, int a, int b);
-int fn_8021E72C(void *pObject, int a, int b);
+void *UIGLibraryGetGlobal(int index);
+int UIGLibraryLoadItem(void *pObject, int a, int b);
+int UIGLibraryUnLoadItem(void *pObject, int a, int b);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
@@ -768,12 +768,12 @@ int fn_80084F50(int id, int half, int *pList)
 
 void fn_80084FA8(int value)
 {
-    fn_8021E2B4(fn_8021EA44(1), 4, value);
+    UIGLibraryLoadItem(UIGLibraryGetGlobal(1), 4, value);
 }
 
 void fn_80084FE4(int value)
 {
-    fn_8021E72C(fn_8021EA44(1), 4, value);
+    UIGLibraryUnLoadItem(UIGLibraryGetGlobal(1), 4, value);
 }
 
 void fn_80085020(DbCursor *pObject)

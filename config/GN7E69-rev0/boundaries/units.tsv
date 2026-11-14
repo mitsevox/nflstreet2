@@ -131,8 +131,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x80215C14	0x80215DA4	TmInstance.c	2	2	4	2	0	-	-
 0x80215DA4	0x80215E5C	TMMorphAnim.c	2	2	2	2	0	-	-
 0x80215E5C	0x802160A0	tmskeleton.c	3	3	3	3	0	-	-
-0x802260F8	0x80226498	UIGFmv.c	12	11	15	0	6	-	-
-0x80226498	0x80226F34	LLUIGFmv.c	14	14	16	0	14	-	-
+0x80221374	0x802213F8	UIGTextureNode.c	1	1	2	1	0	-	-
 0x80227F14	0x802287D4	viewport.c	27	20	23	20	0	-	-
 0x8025E210	0x8025E250	libgcc2.c	1	1	1	1	0	-	-
 0x8025E250	0x8025E290	libgcc2.c	1	1	1	1	0	-	-

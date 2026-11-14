@@ -12,126 +12,126 @@
 int ResGetNumResources(ResFile_t *pRes);
 unsigned char SndEnabled(void);
 
-static Uint8 lbl_803EBF78 = 0;
-static Uint8 lbl_803EBF79 = 1;
-static Uint8 lbl_803EBF7A = 0;
-static Int32 lbl_803EBF7C = 1;
+static Uint8 UIGFMV_bPlay = 0;
+static Uint8 UIGFMV_AlphaMap = 1;
+static Uint8 UIGFMV_Sound = 0;
+static Int32 _UIGFMV_HeapId = 1;
 
-void fn_802260F8(Object_8021E688 *pObject, Int32 a)
+void UIGFmvInit(UIGLibrary_t *pObject, Int32 a)
 {
-    void *p = ResOpenDevice((const char *)fn_8021E970(pObject, a), 44);
+    void *p = ResOpenDevice((const char *)UIGLibraryGetFilename(pObject, a), 44);
 
-    fn_8021E244(pObject, a, ResGetNumResources(p));
-    fn_8021E998(pObject, a, p);
-    fn_802267D0();
+    UIGLibrarySelfManagedInit(pObject, a, ResGetNumResources(p));
+    UIGLibrarySetResFile(pObject, a, p);
+    LLUIGFmvInit();
 }
 
-void fn_8022615C(Object_8021E688 *pObject, Int32 a)
+void UIGFmvShutdown(UIGLibrary_t *pObject, Int32 a)
 {
-    void *p = fn_8021E984(pObject, a);
+    void *p = UIGLibraryGetResFile(pObject, a);
 
     if (p != NULL) {
         ResClose(p);
-        fn_802267D4();
+        LLUIGFmvShutdown();
     }
 }
 
-void fn_8022618C(Object_8021E688 *pObject, Int32 a, Int32 b)
+void UIGFmvProcess(UIGLibrary_t *pObject, Int32 a, Int32 b)
 {
-    Object_802268D4 *pMovie = (Object_802268D4 *)fn_8021E688(pObject, a, b);
+    LLUIGFmvMovie_t *pMovie = (LLUIGFmvMovie_t *)UIGLibraryGetItemData(pObject, a, b);
 
-    if (pMovie != NULL && lbl_803EBF78) {
-        fn_80226498(pObject, pMovie);
+    if (pMovie != NULL && UIGFMV_bPlay) {
+        LLUIGFmvProcess(pObject, pMovie);
     }
 }
 
-void fn_802261D4(Object_8021E688 *pObject, Int32 a, Int32 b)
+void UIGFmvAddInstance(UIGLibrary_t *pObject, Int32 a, Int32 b)
 {
-    Object_802268D4 *pMovie = (Object_802268D4 *)fn_8021E688(pObject, a, b);
+    LLUIGFmvMovie_t *pMovie = (LLUIGFmvMovie_t *)UIGLibraryGetItemData(pObject, a, b);
 
     if (pMovie == NULL) {
-        pMovie = fn_802268D4(pObject, a, b);
-        fn_8021E6A8(pObject, a, b, (Int32)pMovie);
-        lbl_803EBF78 = 0;
+        pMovie = LLUIGFmvAddInstance(pObject, a, b);
+        UIGLibrarySetItemData(pObject, a, b, (Int32)pMovie);
+        UIGFMV_bPlay = 0;
     }
 }
 
-void fn_8022623C(Object_8021E688 *pObject, Int32 a, Int32 b, Int32 c, Int32 d)
+void UIGFmvSwapInstance(UIGLibrary_t *pObject, Int32 a, Int32 b, Int32 c, Int32 d)
 {
-    Object_802268D4 *pMovie;
+    LLUIGFmvMovie_t *pMovie;
 
     if (c == -1) {
         pMovie = NULL;
     } else {
-        pMovie = (Object_802268D4 *)fn_8021E688(pObject, c, d);
+        pMovie = (LLUIGFmvMovie_t *)UIGLibraryGetItemData(pObject, c, d);
     }
     if (pMovie != NULL) {
-        fn_80226F34(pObject, a, b, pMovie);
+        LLUIGFmvSwapInstance(pObject, a, b, pMovie);
     } else {
-        fn_802261D4(pObject, a, b);
+        UIGFmvAddInstance(pObject, a, b);
     }
-    lbl_803EBF78 = 0;
+    UIGFMV_bPlay = 0;
 }
 
-void fn_802262C4(Object_8021E688 *pObject, Int32 a, Int32 b)
+void UIGFmvDeleteInstance(UIGLibrary_t *pObject, Int32 a, Int32 b)
 {
-    Object_802268D4 *pMovie = (Object_802268D4 *)fn_8021E688(pObject, a, b);
+    LLUIGFmvMovie_t *pMovie = (LLUIGFmvMovie_t *)UIGLibraryGetItemData(pObject, a, b);
 
     if (pMovie != NULL) {
-        fn_802269C8(pObject, pMovie);
-        fn_8021E6A8(pObject, a, b, 0);
+        LLUIGFmvDeleteInstance(pObject, pMovie);
+        UIGLibrarySetItemData(pObject, a, b, 0);
     }
 }
 
-void fn_80226320(Object_8021E688 *pObject, Int32 a, Int32 b)
+void UIGFmvUpdate(UIGLibrary_t *pObject, Int32 a, Int32 b)
 {
-    Object_802268D4 *pMovie = (Object_802268D4 *)fn_8021E688(pObject, a, b);
+    LLUIGFmvMovie_t *pMovie = (LLUIGFmvMovie_t *)UIGLibraryGetItemData(pObject, a, b);
 
-    if (pMovie != NULL && lbl_803EBF78) {
-        fn_8021EF04(a, b);
-        fn_8022666C(pObject, pMovie);
-        fn_8021EF34();
+    if (pMovie != NULL && UIGFMV_bPlay) {
+        UIGLibrarySetMemInfo(a, b);
+        LLUIGFmvUpdate(pObject, pMovie);
+        UIGLibraryClearMemInfo();
     }
 }
 
-Uint8 fn_80226384(void)
+Uint8 UIGFmvHaveAlphaMap(void)
 {
-    return lbl_803EBF79;
+    return UIGFMV_AlphaMap;
 }
 
-Int32 fn_8022638C(void)
+Int32 UIGFmvHaveSound(void)
 {
     Int32 Result = 0;
 
-    if (lbl_803EBF7A && SndEnabled()) {
+    if (UIGFMV_Sound && SndEnabled()) {
         Result = 1;
     }
     return Result;
 }
 
-Int32 fn_802263D4(void)
+Int32 UIGFmvGetHeap(void)
 {
-    return lbl_803EBF7C;
+    return _UIGFMV_HeapId;
 }
 
-void fn_802263DC(Object_8021E688 *pObject, Int32 a, Int32 b)
+void UIGFmvStart(UIGLibrary_t *pObject, Int32 a, Int32 b)
 {
-    Object_802268D4 *pMovie = (Object_802268D4 *)fn_8021E688(pObject, a, b);
+    LLUIGFmvMovie_t *pMovie = (LLUIGFmvMovie_t *)UIGLibraryGetItemData(pObject, a, b);
 
-    if (pMovie != NULL && !lbl_803EBF78) {
-        fn_8021EF04(a, b);
-        fn_80226A68(pObject, pMovie);
-        fn_8021EF34();
-        lbl_803EBF78 = 1;
+    if (pMovie != NULL && !UIGFMV_bPlay) {
+        UIGLibrarySetMemInfo(a, b);
+        LLUIGFmvStartInstance(pObject, pMovie);
+        UIGLibraryClearMemInfo();
+        UIGFMV_bPlay = 1;
     }
 }
 
-void fn_80226448(Object_8021E688 *pObject, Int32 a, Int32 b)
+void UIGFmvStop(UIGLibrary_t *pObject, Int32 a, Int32 b)
 {
-    Object_802268D4 *pMovie = (Object_802268D4 *)fn_8021E688(pObject, a, b);
+    LLUIGFmvMovie_t *pMovie = (LLUIGFmvMovie_t *)UIGLibraryGetItemData(pObject, a, b);
 
-    if (pMovie != NULL && lbl_803EBF78) {
-        fn_80226C40(pObject, pMovie);
-        lbl_803EBF78 = 0;
+    if (pMovie != NULL && UIGFMV_bPlay) {
+        LLUIGFmvStopInstance(pObject, pMovie);
+        UIGFMV_bPlay = 0;
     }
 }
