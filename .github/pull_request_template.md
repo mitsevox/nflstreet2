@@ -19,6 +19,8 @@ One row per active target. A shared change is safe for a target only when its ro
 
 Evidence records and the test and build commands with their results, per target. Identify what was checked; a baseline relink does not validate reconstructed source. For a file with a new `#if VERSION_` block, the `python3 tools/versions.py diff` output was read.
 
+Fake matches: `none`, or each `// FAKEMATCH:` site this PR adds (function and what is fake), so reviewers can check that each is labeled in source and in `evidence.tsv` and leaves the logic unchanged (CONTRIBUTING.md, Matching integrity).
+
 ## Review
 
 - Reviewed revision: full commit SHA
