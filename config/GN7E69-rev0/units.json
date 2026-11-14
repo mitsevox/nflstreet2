@@ -2157,6 +2157,10 @@
       "address": "0x801CC054",
       "evidence": "evidence.tsv external row for 0x801CC054 (SetVerboseFlags__12FlowManagerCi) and the name row of FlowManagerC::SetVerboseFlags."
     },
+    "g_FsResult": {
+      "address": "0x802CC5C0",
+      "evidence": "evidence.tsv data and name rows for 0x802CC5C0: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol; its end edge is provisional (the target accesses reach only +0xB), so the storage map, which requires exact edges, does not place it. The file declares it extern, its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
+    },
     "madinit__Fv": {
       "address": "0x801DA52C",
       "evidence": "evidence.tsv function/name rows for 0x801DA52C; the documented holdout 0x801DA52C-0x801DA7E8 at the start of src/engine/maddec.cpp, which keeps its original bytes until its draft in comparisons.json is linked; called by 0x801DABE0."
@@ -17728,7 +17732,7 @@
     {
       "source": "src/engine/FSasync.c",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AD57C-0x801ADDB4 (src/engine/FSasync.c), its function, name, data, compiler and source-form rows; every function exact, promoted from comparison-only. The .data range 0x802CC580-0x802CC590 holds the four initialized state words; the zero-filled storage 0x802CC5A0-0x802CC5CC is the file's eight uninitialized (COMMON) globals, which the storage map places at the extents of their exact data rows.",
+      "evidence": "evidence.tsv unit row 0x801AD57C-0x801ADDB4 (src/engine/FSasync.c), its function, name, data, compiler and source-form rows; every function exact, promoted from comparison-only. The .data range 0x802CC580-0x802CC590 holds the four initialized state words; the zero-filled storage 0x802CC5A0-0x802CC5CC is the file's eight uninitialized (COMMON) globals: the storage map places the first seven at the extents of their exact data rows, and g_FsResult (end edge provisional) stays an external.",
       "sections": [
         {
           "section": ".text",
@@ -17778,11 +17782,6 @@
           "symbol": "g_nFSLastError",
           "start": "0x802CC5B8",
           "end": "0x802CC5BC"
-        },
-        {
-          "symbol": "g_FsResult",
-          "start": "0x802CC5C0",
-          "end": "0x802CC5CC"
         }
       ]
     },

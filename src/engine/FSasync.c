@@ -42,7 +42,7 @@ volatile u32 g_nRemainderCnt;
 volatile u32 g_nTotalBytesRemaining;
 int g_bDoFSACK;
 int g_nFSLastError;
-FSResult_t g_FsResult;
+extern FSResult_t g_FsResult;
 
 extern int fn_801ACB9C(void);
 extern int fn_801ACC24(void *buf, int size);

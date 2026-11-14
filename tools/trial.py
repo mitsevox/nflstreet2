@@ -155,7 +155,7 @@ def main():
     storage = fc.storage_symbols(sections, symbols, unit['storage'])
     if not comparison and unit.get('linked_storage'):
         storage = linked_storage(sections, symbols, placements, unit['linked_storage'])
-    targets ={f['symbol']: (int(f['address'], 16), int(f['address'], 16) + f['size'])
+    targets = {f['symbol']: (int(f['address'], 16), int(f['address'], 16) + f['size'])
                for u in accepted if u['source'] == source for f in u['functions']}
     targets.update({r['symbol']: (sb.address(r['start']), sb.address(r['end'])) for r in unit['functions']})
     target = json.loads((ROOT / f'config/{TARGET}/baseline.json').read_text())
