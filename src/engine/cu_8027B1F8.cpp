@@ -11,7 +11,7 @@ void fn_8027B328(Node_80279D90 *node, Params_80275F80 *params)
 
     decoder = (Decoder_8027B328 *)node;
     node->m0 = fn_8027B1F8;
-    decoder->m28 = fn_802789E0(fn_80274304(params->m1C));
+    decoder->m28 = SNDPKTPLAYI_voicetopackethandle(fn_80274304(params->m1C));
     decoder->m31 = fn_80274334(params->m1C);
     decoder->m20 = -1;
     decoder->m1C = 0;
@@ -128,7 +128,7 @@ void fn_8027BA6C(Node_80279D90 *node, Params_80275F80 *params)
     decoder = (Decoder_8027BA6C *)node;
     node->m0 = fn_8027B888;
     node->m4 = fn_8027BA40;
-    decoder->m30 = fn_802789E0(fn_80274304(params->m1C));
+    decoder->m30 = SNDPKTPLAYI_voicetopackethandle(fn_80274304(params->m1C));
     decoder->m38 = fn_80274334(params->m1C);
     decoder->m2C = params->m24;
     decoder->m20 = 0;

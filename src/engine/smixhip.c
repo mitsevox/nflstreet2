@@ -15,14 +15,14 @@ void MIX_sethighpass(int index, int value)
             record->m58->m4 = 0;
             record->m58->m18 = 80;
             record->m58->m1A = 0;
-            fn_80279CB8(record->m58);
-            fn_80279D90(&record->m40, record->m58);
+            SFILTER_createHPFFIR8(record->m58);
+            SFILTER_add(&record->m40, record->m58);
         }
         params.m0 = value << 8;
         params.m4 = lbl_803A6C24.m1C.mA << 8;
         fn_80279D0C(record->m58, &params);
     } else if (record->m58 != 0) {
-        fn_80279DF8(&record->m40, record->m58);
+        SFILTER_remove(&record->m40, record->m58);
         SNDMEMI_free(record->m58);
         record->m58 = 0;
     }

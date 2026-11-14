@@ -22,7 +22,7 @@ void MIX_setpitch(int index, int value)
         record->m50->m18 = 160;
         record->m50->m1A = 0;
         fn_8027A7A0(record->m50, lbl_803A6C24.m16F, flag);
-        fn_80279D90(&record->m40, record->m50);
+        SFILTER_add(&record->m40, record->m50);
     }
-    fn_8027A4C0(record->m50, value);
+    SFILTER_rsfsetpitch(record->m50, value);
 }

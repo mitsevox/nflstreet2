@@ -577,7 +577,7 @@ void fn_802739F8(void)
         if (half != stream->m2599) {
             if (stream->m25B8[stream->m2599] != 0) {
                 for (j = 0; j < record->m23; j++) {
-                    fn_8027952C(i, j, stream->m25B8[stream->m2599]);
+                    SNDPKTPLAYI_freeframes(i, j, stream->m25B8[stream->m2599]);
                 }
                 stream->m25B8[stream->m2599] = 0;
             }

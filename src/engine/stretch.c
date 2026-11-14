@@ -154,7 +154,7 @@ int SFILTER_timestretch(Node_80279D90 *node, int count, float *a, float *b, int 
         return node->m8->m0(node->m8, 200, b, a, node->m1A);
     }
     n = stretchframesneeded(p, count);
-    if (p->m20 >= 0 && n > fn_802791D0(p->m20)) {
+    if (p->m20 >= 0 && n > SNDPKTPLAY_framesoutstanding(p->m20)) {
         return 0;
     }
     if (n > 0) {

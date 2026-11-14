@@ -66,23 +66,23 @@ void MIX_create(Setup_80272EC4 *setup)
         }
     }
     SNDSYS_leavecritical();
-    fn_8027A7FC();
-    fn_8027A8A4();
-    fn_8027A844();
+    MIXI_initunpack16();
+    MIXI_initunpackxa();
+    MIXI_initunpackmt();
     MIX_reset();
     for (i = 0; i < lbl_803B4E34.m0.m9; i++) {
         lbl_803B4E34.m104[i] = 0;
-        fn_80279C20(&lbl_803B4E34.m134[i]);
+        SFILTER_ft24_32init(&lbl_803B4E34.m134[i]);
         lbl_803B4E34.m134[i].m18 = 0;
         lbl_803B4E34.m134[i].m1A = 0;
-        fn_80279D90(&lbl_803B4E34.m104[i], &lbl_803B4E34.m134[i]);
+        SFILTER_add(&lbl_803B4E34.m104[i], &lbl_803B4E34.m134[i]);
         memset(lbl_803B4E34.mD0[i], 0, 640);
     }
 }
 
 void MIX_reset(void)
 {
-    lbl_803B4E34.m1E0 = fn_8027A8EC;
+    lbl_803B4E34.m1E0 = mixc;
     lbl_803B4E34.m1E4 = decode16x87;
     lbl_803B4E34.mC = 320;
 }
@@ -140,7 +140,7 @@ void MIX_playinit(int index, int type, int mode, int a, int b, void *data, int c
         record->m48->m1A = slot;
         lbl_803B4E34.m18[kind][table](record->m48, &params);
         record->m44 = params.m28;
-        fn_80279D90(&record->m40, record->m48);
+        SFILTER_add(&record->m40, record->m48);
     }
     if (data != 0) {
         if (mode != 0) {
@@ -151,7 +151,7 @@ void MIX_playinit(int index, int type, int mode, int a, int b, void *data, int c
         record->m4C->m18 = 200;
         record->m4C->m1A = slot;
         fn_80277404(record->m4C, data, index);
-        fn_80279D90(&record->m40, record->m4C);
+        SFILTER_add(&record->m40, record->m4C);
     }
     record->m0 = 1;
 }

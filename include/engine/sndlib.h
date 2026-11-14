@@ -277,7 +277,7 @@ void MIX_sethighpass(int index, int value);
 void *fn_80279960(int size);
 void fn_80279B24(void *p);
 void fn_80279D0C(Node_80279D90 *node, Params_80279D0C *params);
-void fn_80279DF8(Node_80279D90 **list, Node_80279D90 *node);
+void SFILTER_remove(Node_80279D90 **list, Node_80279D90 *node);
 void fn_8027A7A0(Node_80279D90 *node, int a, int b);
 void fn_80277240(Node_80279D90 *node);
 void MIX_reset(void);

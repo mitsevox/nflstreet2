@@ -7,7 +7,7 @@
 
 void SNDMEMI_constrain(unsigned int *start, int *size)
 {
-    Struct_80278894 *heap = lbl_803A6C24.m1D4;
+    SndMemPool_t *heap = lbl_803A6C24.m1D4;
 
     if (*start + *size > heap->mC) {
         *size = heap->mC - *start;
@@ -16,7 +16,7 @@ void SNDMEMI_constrain(unsigned int *start, int *size)
 
 void SNDMEMI_init(void *memory, int size)
 {
-    lbl_803A6C24.m1D4 = (Struct_80278894 *)memory;
+    lbl_803A6C24.m1D4 = (SndMemPool_t *)memory;
     lbl_803A6C24.m1D4->m8 = size;
     lbl_803A6C24.m1D4->m4 = (SndMemEntry_t *)((char *)memory + size - 8);
     lbl_803A6C24.m1D4->m0 = (char *)memory + 24;
@@ -80,7 +80,7 @@ found:
     lbl_803A6C24.m1D4->m14--;
     lbl_803A6C24.m1D4->mC -= 8;
     {
-        Struct_80278894 *heap = lbl_803A6C24.m1D4;
+        SndMemPool_t *heap = lbl_803A6C24.m1D4;
         int left = heap->mC - (start + need);
         char *p = heap->m0 + start;
 

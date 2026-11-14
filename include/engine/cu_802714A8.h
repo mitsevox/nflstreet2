@@ -115,7 +115,7 @@ typedef struct Struct_803A6C24 {
     unsigned char mUnknown1C4[8];
     Record_803A6DF0 *m1CC;
     struct SndBankSlot_t *m1D0;
-    struct Struct_80278894 *m1D4;
+    struct SndMemPool_t *m1D4;
     unsigned char mUnknown1D8[0x48];
     void (*m220)(void);
     void (*m224)(void);
@@ -231,20 +231,20 @@ int fn_802750B8(int index, Desc_80276798 *desc);
 
 void decode16x87(int count, short *src, float *dst);
 unsigned char *fn_802792F0(int index, int channel, int *length, int *b);
-void fn_8027952C(int index, int channel, int value);
+void SNDPKTPLAYI_freeframes(int index, int channel, int value);
 void fn_802797F4(void *(*alloc)(int size));
 void fn_80279800(void (*release)(void *p));
 int fn_8027980C(int (*copy)(void *dst, void *src, int size));
 void fn_8027986C(unsigned int start, unsigned int length);
 void fn_802798C0(void);
-void fn_80279C20(Node_80279D90 *node);
-int fn_80279CB8(Node_80279D90 *node);
-void fn_80279D90(Node_80279D90 **list, Node_80279D90 *node);
-void fn_8027A4C0(Node_80279D90 *node, int value);
-void fn_8027A7FC(void);
-void fn_8027A844(void);
-void fn_8027A8A4(void);
-void fn_8027A8EC(int count, float *src, float *dst, float gain);
+void SFILTER_ft24_32init(Node_80279D90 *node);
+int SFILTER_createHPFFIR8(Node_80279D90 *node);
+void SFILTER_add(Node_80279D90 **list, Node_80279D90 *node);
+void SFILTER_rsfsetpitch(Node_80279D90 *node, int value);
+void MIXI_initunpack16(void);
+void MIXI_initunpackmt(void);
+void MIXI_initunpackxa(void);
+void mixc(int count, float *src, float *dst, float gain);
 
 #ifdef __cplusplus
 }

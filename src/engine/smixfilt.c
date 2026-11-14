@@ -13,5 +13,5 @@ void MIX_filteradd(int index, int slot, Desc_80276798 *desc)
     node->m0 = desc->m10;
     node->m4 = desc->m14;
     node->m1A = 0;
-    fn_80279D90(&record->m40, node);
+    SFILTER_add(&record->m40, node);
 }
