@@ -391,12 +391,12 @@ void CreateTeamLoadUserTeams()
         }
     }
 }
-void CreateTeamLoadToStats(int index, int rumt)
+int CreateTeamLoadToStats(int index, int rumt)
 {
     int ids[16];
     fn_8018C48C(0x54415453);
     CreateTeamSyncCreatedPlayers(index);
-    CreateTeamLoadAll(0x54415453, rumt, index, ids, 1);
+    return CreateTeamLoadAll(0x54415453, rumt, index, ids, 1);
 }
 void CreateTeamStoreFromStats(int index, int team)
 {

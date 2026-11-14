@@ -1,3 +1,4 @@
+/* Dolphin GX lighting: light objects and the colour channel setup the game's lit models use. */
 #include <dolphin/gx.h>
 #include <dolphin/os.h>
 

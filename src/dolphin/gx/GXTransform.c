@@ -1,3 +1,4 @@
+/* Dolphin GX transforms: projection, position/normal/texture matrices, viewport and scissor for the game's rendering. */
 #include <dolphin/gx.h>
 #include <dolphin/gx/GXGet.h>
 #include <dolphin/gx/GXTransform.h>
