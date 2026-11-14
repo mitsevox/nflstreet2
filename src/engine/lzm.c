@@ -1,3 +1,4 @@
+/* LZM1 resource compression: a sliding-window dictionary and byte/bit token streams. */
 #include "engine/GCmp.h"
 #include "game/fn_801D2B7C.h"
 
