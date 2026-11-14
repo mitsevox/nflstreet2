@@ -1,5 +1,5 @@
-/* Partial source for vfprintf.c (C library): the formatted-output engine and its number
-   conversion helpers. */
+/* Formats runtime text, including floating-point values, and stages output for
+   file or bounded-string destinations. */
 
 #include "engine/fn_80266AD8.h"
 #include "engine/math_support.h"
