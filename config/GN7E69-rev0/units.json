@@ -4680,6 +4680,31 @@
       ]
     },
     {
+      "source": "src/game/AnimPoseDecode.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019D994-0x8019E530 (src/game/AnimPoseDecode.cpp), its data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019D994",
+          "end": "0x8019E530"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADF40",
+          "end": "0x802ADF80"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F26FC",
+          "end": "0x802F2714"
+        }
+      ]
+    },
+    {
       "source": "src/game/SndgHandles.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801AA24C-0x801AA2FC (src/game/SndgHandles.cpp) and its data rows.",

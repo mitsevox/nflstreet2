@@ -10662,42 +10662,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8019D994.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv frame decoding target access/type/data rows; code and generated literal pool unlinked, original executable retained.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8019D994",
-          "end": "0x8019E530"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802ADF40",
-          "end": "0x802ADF80"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8019D994",
-          "start": "0x8019D994",
-          "end": "0x8019DF38"
-        },
-        {
-          "symbol": "fn_8019DF38",
-          "start": "0x8019DF38",
-          "end": "0x8019E00C"
-        },
-        {
-          "symbol": "fn_8019E00C",
-          "start": "0x8019E00C",
-          "end": "0x8019E530"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_8013FF84.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional camera grouping, exact function extents, direct type/field observations and bounded rodata/sdata/sbss accesses. External initialized mode/jitter tables remain original and unclaimed. Partial comparison only.",
