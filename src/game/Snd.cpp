@@ -1,8 +1,8 @@
 #include "game/Module.h"
 #include "game/SndgPathfinder.h"
 
-/* Argument of fn_801F393C. */
-struct Desc_801F393C {
+/* Argument of SndInit. */
+struct SndInitDesc_t {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
@@ -27,10 +27,10 @@ extern "C" {
 void fn_801F76E8(void);
 void fn_801F7710(void);
 unsigned long fn_8023CEE0(void);
-void fn_801F4AEC(int a, int b);
+void SndSetOutputMode(int a, int b);
 void SndSetAllocHeap(int a);
-int fn_801F393C(Desc_801F393C *pDesc);
-int fn_801F3D2C(void);
+int SndInit(SndInitDesc_t *pDesc);
+int SndShutdown(void);
 void fn_80071790(void);
 }
 
@@ -43,7 +43,7 @@ const char *Snd::GetName() { return "Snd"; }
 
 int Snd::Init()
 {
-    Desc_801F393C desc;
+    SndInitDesc_t desc;
 
     fn_801F76E8();
     desc.mUnknown0 = 0x90301;
@@ -64,17 +64,17 @@ int Snd::Init()
     desc.mUnknown53 = 1;
     desc.mUnknown54 = 1;
     if (fn_8023CEE0()) {
-        fn_801F4AEC(3, 0);
+        SndSetOutputMode(3, 0);
     }
     SndSetAllocHeap(256);
-    fn_801F393C(&desc);
+    SndInit(&desc);
     fn_80071790();
     return 1;
 }
 
 int Snd::Shutdown()
 {
-    fn_801F3D2C();
+    SndShutdown();
     fn_801F7710();
     return 1;
 }

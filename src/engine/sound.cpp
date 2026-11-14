@@ -1,7 +1,13 @@
+/* Sound module of the engine: starts and shuts down the sound driver with its heap and
+   allocator, loads and unloads sample banks (synchronously or in the background), sequences and
+   AEMS banks, plays and controls patches and streams, and services pending loads each frame. */
+
 #include "engine/sound.h"
 #include "game/fn_801D2B7C.h"
+#include "game/fn_801C68FC.h"
+#include "engine/IAllocator.h"
 
-struct SndSeqInfo_801F438C {
+struct SndSeqInfo_t {
     ResFile_t *pRes;
     unsigned int mIndex;
     int mUnk8;
@@ -9,20 +15,20 @@ struct SndSeqInfo_801F438C {
     unsigned char mLoaded;
 };
 
-struct SndStream_801F44B0 {
+struct SndStream_t {
     int mHandle;
     void *pBuffer;
 };
 
-struct SndAemsBankInfo_801F4D00 {
+struct SndAemsBankInfo_t {
     int mHandle;
     int mSize;
     void *pData;
     int mBank;
-    StreamFile_801F6D54 mFile;
+    SndFileDesc_t mFile;
 };
 
-struct Desc_801F393C {
+struct SndInitDesc_t {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
@@ -34,7 +40,7 @@ struct Desc_801F393C {
     unsigned short mUnknown24;
     char mUnknown26[6];
     void *mUnknown32;
-    int mUnknown36;
+    void (*mUnknown36)(int a, int b);
     int mUnknown40;
     int mUnknown44;
     int mUnknown48;
@@ -43,7 +49,7 @@ struct Desc_801F393C {
     unsigned char mUnknown54;
 };
 
-struct SndPatchOpts_801F40F4 {
+struct SndPatchOpts_t {
     signed char mVolume;
     unsigned char mUnk1[7];
     unsigned short mPan;
@@ -52,7 +58,7 @@ struct SndPatchOpts_801F40F4 {
     char mUnkE[10];
 };
 
-union SndStatus_8039AEC4 {
+union SndStatus_t {
     unsigned int mWord;
     struct {
         unsigned char mNoLock;
@@ -62,7 +68,7 @@ union SndStatus_8039AEC4 {
     } mFlags;
 };
 
-struct SndState_8039AE8C {
+struct SndModuleInfo_t {
     int mUnk0;
     void *pHeap;
     int mHeapSize;
@@ -77,31 +83,31 @@ struct SndState_8039AE8C {
     void (*pServiceCallback)(int a, int b);
     int mUnk30;
     void (*pMemLabelCallback)(unsigned char label);
-    SndStatus_8039AEC4 mStatus;
+    SndStatus_t mStatus;
     unsigned char mUnk3C;
-    StreamFile_801F6D54 *apFileDesc[4];
+    SndFileDesc_t *apFileDesc[4];
     int mUnk50;
 };
 
 /* The active and enabled bytes tested together as one word. */
-#define SND_READY() ((lbl_8039AE8C.mStatus.mWord & 0x00FFFF00) == 0x00010100)
-#define SND_LOCK() if (lbl_8039AE8C.mStatus.mFlags.mNoLock == 0) fn_8026D0AC()
-#define SND_UNLOCK() if (lbl_8039AE8C.mStatus.mFlags.mNoLock == 0) fn_8026D0EC()
+#define SND_READY() ((_Snd_ModuleInfo.mStatus.mWord & 0x00FFFF00) == 0x00010100)
+#define SND_LOCK() if (_Snd_ModuleInfo.mStatus.mFlags.mNoLock == 0) fn_8026D0AC()
+#define SND_UNLOCK() if (_Snd_ModuleInfo.mStatus.mFlags.mNoLock == 0) fn_8026D0EC()
 
-typedef int (*SndTraverse_801C6D34)(void *pNode, void *pKey, void *pOut);
+typedef int (*SndTraverseFn_t)(void *pNode, void *pKey, void *pOut);
+
+static IAllocator *pIAllocator;
+
+static SndModuleInfo_t _Snd_ModuleInfo;
 
 extern "C" {
-extern SndState_8039AE8C lbl_8039AE8C;
-extern char lbl_803ECF80[8];
-extern char lbl_802B1A28[];
-
 int sprintf(char *s, const char *format, ...);
 void DCFlushRange(void *addr, unsigned long nBytes);
 void *fn_801C6A20(void *pList);
 void *fn_801C6AA4(void *pPool, void *pItem, int c);
 void *fn_801C6B4C(void *pList, int where);
 void fn_801C6C0C(void *pList, void *pNode);
-int fn_801C6D34(void *pPool, int start, void *pKey, void *pOut, SndTraverse_801C6D34 pFunc, int count);
+int fn_801C6D34(void *pPool, int start, void *pKey, void *pOut, SndTraverseFn_t pFunc, int count);
 int FileHostCheckActive(void);
 void FileDebugProcess(void);
 void *fn_801D310C(void *pAddr, int size, int ident, int flags);
@@ -129,10 +135,10 @@ void fn_8026B250(void);
 void fn_8026C280(void);
 int fn_8026C3BC(int handle);
 int fn_8026C9BC(int handle, int value);
-void fn_8026CA50(SndPatchOpts_801F40F4 *pOpts);
+void fn_8026CA50(SndPatchOpts_t *pOpts);
 void fn_8026D0AC(void);
 void fn_8026D0EC(void);
-int fn_8026E280(SndPatchOpts_801F40F4 *pOpts, int a, int b, void *pBuffer, int size);
+int fn_8026E280(SndPatchOpts_t *pOpts, int a, int b, void *pBuffer, int size);
 void fn_8026E2A8(int handle);
 int fn_8026E364(int handle, int a, void *b);
 int fn_8026E388(int handle);
@@ -150,59 +156,72 @@ void fn_8026F1E8(int handle, int *pStatus);
 void fn_802703A0(void);
 int fn_802714A8(int handle, int value);
 
-int fn_801F3B4C(Desc_801F393C *pDesc);
-void fn_801F3C14(void);
-unsigned char fn_801F3E28(void);
-unsigned char fn_801F3E34(void);
-SndBankInfo_801F3524 *fn_801F3E40(ResFile_t *pRes, unsigned int index, unsigned int bank);
-void fn_801F3ED8(ResFile_t *pRes, SndBankInfo_801F3524 **ppBank, unsigned int index, unsigned int bank,
-                 void (*pCallback)(SndBankInfo_801F3524 *pBank));
-void fn_801F3F74(SndBankInfo_801F3524 *pBank);
-unsigned char fn_801F4024(SndBankInfo_801F3524 *pBank);
-int fn_801F4050(SndBankInfo_801F3524 *pBank, int patch, void *pOpts);
-void fn_801F40F4(SndPatchOpts_801F40F4 *pOpts);
-void fn_801F4130(int handle);
-int fn_801F41A0(int handle);
-void fn_801F421C(int handle, int value);
-void fn_801F4294(int handle, int a, int value);
-void fn_801F4314(int handle, int value);
-SndSeqInfo_801F438C *fn_801F438C(ResFile_t *pRes, unsigned int index);
-void fn_801F4448(SndSeqInfo_801F438C *pSeq);
-SndStream_801F44B0 *fn_801F44B0(int extra, int a, int b, int bank);
-int fn_801F4580(SndStream_801F44B0 *pStream, void *pFile, int a, int b);
-void fn_801F45D4(SndStream_801F44B0 *pStream);
-void fn_801F4638(SndStream_801F44B0 *pStream);
-void fn_801F4678(SndStream_801F44B0 *pStream, int a, int b);
-void fn_801F46F8(SndStream_801F44B0 *pStream, int a);
-int fn_801F4770(SndStream_801F44B0 *pStream, unsigned int angle);
-void fn_801F4834(SndStream_801F44B0 *pStream, int *pStatus);
-int fn_801F48B8(SndStream_801F44B0 *pStream);
-int fn_801F4934(int a, int b);
-void fn_801F49B8(SndStream_801F44B0 *pStream, int a, int b);
-void fn_801F4A38(SndStream_801F44B0 *pStream, int a);
-void fn_801F4AB0(int a, int b);
-void fn_801F4AEC(int a, int b);
-void fn_801F4AF8(void (*pCallback)(int a, int b));
-void fn_801F4B20(void);
-int fn_801F4B88(ResFile_t *pRes, unsigned int index, int bank);
-int fn_801F4C5C(void);
-SndAemsBankInfo_801F4D00 *fn_801F4DAC(ResFile_t *pRes, unsigned int index, int bank);
-SndAemsBankInfo_801F4D00 *fn_801F4DD8(ResFile_t *pRes, unsigned int index, ResFile_t *pStreamRes,
+void _StreamMUTEX_init(void);
+void fn_8026C39C(int a);
+int fn_801B90BC(void *pAllocator);
+int fn_801B90F0(void);
+int fn_801B9134(void);
+void fn_80270458(void);
+void fn_8026F97C(int a);
+void fn_8026C18C(void);
+void fn_8026C23C(void);
+void fn_8026FBCC(void);
+
+int SndInit(SndInitDesc_t *pDesc);
+int SndShutdown(void);
+int SndInitParms(SndInitDesc_t *pDesc);
+void SndUnloadAll(void);
+unsigned char SndEnabled(void);
+unsigned char SndIsActive(void);
+SndBankInfo_t *SndLoadBank(ResFile_t *pRes, unsigned int index, unsigned int bank);
+void SndALoadBank(ResFile_t *pRes, SndBankInfo_t **ppBank, unsigned int index, unsigned int bank,
+                 void (*pCallback)(SndBankInfo_t *pBank));
+void SndUnloadBank(SndBankInfo_t *pBank);
+unsigned char SndIsBankLoaded(SndBankInfo_t *pBank);
+int SndPlayPatch(SndBankInfo_t *pBank, int patch, void *pOpts);
+void SndFillPatchOpts(SndPatchOpts_t *pOpts);
+void SndStopPatch(int handle);
+int SndPatchOver(int handle);
+void SndSetPatchPitchMult(int handle, int value);
+void SndSetPatchParam(int handle, int a, int value);
+void SndSetPatchRate(int handle, int value);
+SndSeqInfo_t *SndLoadSeq(ResFile_t *pRes, unsigned int index);
+void SndUnloadSeq(SndSeqInfo_t *pSeq);
+SndStream_t *SndCreateStream(int extra, int a, int b, int bank);
+int SndStreamQueueFile(SndStream_t *pStream, void *pFile, int a, int b);
+void SndDestroyStream(SndStream_t *pStream);
+void SndPurgeStream(SndStream_t *pStream);
+void SndStreamAutoVol(SndStream_t *pStream, int a, int b);
+void SndStreamSetPitchMult(SndStream_t *pStream, int a);
+int SndStreamSetPan(SndStream_t *pStream, unsigned int angle);
+void SndStreamGetStatus(SndStream_t *pStream, int *pStatus);
+int SndStreamGetVol(SndStream_t *pStream);
+int SndStreamGetPosition(int a, int b);
+void SndStreamSetParam(SndStream_t *pStream, int a, int b);
+void SndStreamSetControl(SndStream_t *pStream, int a);
+void SndSetMasterVol(int a, int b);
+void SndSetOutputMode(int a, int b);
+void SndSetServiceCallback(void (*pCallback)(int a, int b));
+void SndService(void);
+int SndAemsLoadSystem(ResFile_t *pRes, unsigned int index, int bank);
+int SndAemsUnloadSystem(void);
+SndAemsBankInfo_t *SndAemsLoadBank(ResFile_t *pRes, unsigned int index, int bank);
+SndAemsBankInfo_t *SndAemsLoadBankWithStream(ResFile_t *pRes, unsigned int index, ResFile_t *pStreamRes,
                                       unsigned int streamIndex, int bank);
-int fn_801F4F28(SndAemsBankInfo_801F4D00 *pBank);
-char *fn_801F4F98(StreamFile_801F6D54 *pFile);
+int SndAemsUnloadBank(SndAemsBankInfo_t *pBank);
+char *SndAemsAllocFileDesc(SndFileDesc_t *pFile);
 }
 
-static int fn_801F3524(void *pNode, void *pState, void *pOut)
+static int _SndBankTraverseFindState(void *pNode, void *pState, void *pOut)
 {
-    if (((SndBankInfo_801F3524 *)pNode)->mState == (int)pState) {
-        *(SndBankInfo_801F3524 **)pOut = (SndBankInfo_801F3524 *)pNode;
+    if (((SndBankInfo_t *)pNode)->mState == (int)pState) {
+        *(SndBankInfo_t **)pOut = (SndBankInfo_t *)pNode;
         return 0;
     }
     return 1;
 }
 
-static void fn_801F3544(SndBankInfo_801F3524 *pBank)
+static void _SndBankFinishDMA(SndBankInfo_t *pBank)
 {
     pBank->mState = 0;
     if (!(pBank->mFlags & 2)) {
@@ -214,55 +233,55 @@ static void fn_801F3544(SndBankInfo_801F3524 *pBank)
     }
 }
 
-static void fn_801F35A8(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser)
+static void _SndALoadBankCallback(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser)
 {
-    ((SndBankInfo_801F3524 *)pUser)->mState = 2;
+    ((SndBankInfo_t *)pUser)->mState = 2;
 }
 
-static void fn_801F35B4(void)
+static void _SndProcessBanks(void)
 {
-    SndBankInfo_801F3524 *pBank;
+    SndBankInfo_t *pBank;
     char *pData;
     int busy;
 
     busy = 0;
     pBank = 0;
-    fn_801C6D34(lbl_8039AE8C.pBankList, 0, (void *)3, &pBank, fn_801F3524, 1);
+    fn_801C6D34(_Snd_ModuleInfo.pBankList, 0, (void *)3, &pBank, _SndBankTraverseFindState, 1);
     if (pBank != 0 && pBank->mState == 3) {
         busy = 1;
         if (fn_8026A96C() != 0) {
-            fn_801F3544(pBank);
+            _SndBankFinishDMA(pBank);
         }
     }
     if (!busy) {
         pBank = 0;
-        fn_801C6D34(lbl_8039AE8C.pBankList, 0, (void *)2, &pBank, fn_801F3524, 1);
+        fn_801C6D34(_Snd_ModuleInfo.pBankList, 0, (void *)2, &pBank, _SndBankTraverseFindState, 1);
         if (pBank != 0 && pBank->mState == 2) {
             pBank->mState = 3;
             pData = (char *)pBank->pData;
             if (pData[0] != 'B' || pData[1] != 'N' || pData[2] != 'K' || pData[3] != 'b') {
                 ResUnLoad(pBank->pRes, pBank->mIndex);
                 pBank->mState = 1;
-                ResLoadAsyncToBuffer(pBank->pRes, pBank->mIndex, 1, pData, 100, fn_801F35A8, pBank);
+                ResLoadAsyncToBuffer(pBank->pRes, pBank->mIndex, 1, pData, 100, _SndALoadBankCallback, pBank);
             } else {
-                SndSetHeap(lbl_8039AE8C.pBankTable, pBank->mBank);
+                SndSetHeap(_Snd_ModuleInfo.pBankTable, pBank->mBank);
                 fn_8026A870(&pBank->mHandle, pBank->pData);
             }
         }
     }
 }
 
-static SndBankInfo_801F3524 *fn_801F3728(void *pRes, unsigned int index, unsigned int bank, void *pData, unsigned int size,
+static SndBankInfo_t *_SndLoadBank(void *pRes, unsigned int index, unsigned int bank, void *pData, unsigned int size,
                                           unsigned int flags)
 {
-    SndBankInfo_801F3524 *pBank;
+    SndBankInfo_t *pBank;
     int length;
 
-    if (!lbl_8039AE8C.mStatus.mFlags.mActive || !lbl_8039AE8C.mStatus.mFlags.mEnabled) {
+    if (!_Snd_ModuleInfo.mStatus.mFlags.mActive || !_Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         return 0;
     }
-    pBank = (SndBankInfo_801F3524 *)fn_801C6A20(lbl_8039AE8C.pBankList);
-    fn_801C6AA4(lbl_8039AE8C.pBankList, pBank, 0);
+    pBank = (SndBankInfo_t *)fn_801C6A20(_Snd_ModuleInfo.pBankList);
+    fn_801C6AA4(_Snd_ModuleInfo.pBankList, pBank, 0);
     pBank->mBank = bank;
     pBank->mFlags = flags;
     pBank->pRes = (ResFile_t *)pRes;
@@ -271,7 +290,7 @@ static SndBankInfo_801F3524 *fn_801F3728(void *pRes, unsigned int index, unsigne
     pBank->pData = pData;
     DCFlushRange(pData, length);
     ResCopyToBuffer((ResFile_t *)pRes, index, pData);
-    SndSetHeap(lbl_8039AE8C.pBankTable, pBank->mBank);
+    SndSetHeap(_Snd_ModuleInfo.pBankTable, pBank->mBank);
     DCFlushRange(pData, length);
     fn_8026A4D4(&pBank->mHandle, pData);
     pBank->mLoaded = 1;
@@ -282,14 +301,14 @@ static SndBankInfo_801F3524 *fn_801F3728(void *pRes, unsigned int index, unsigne
     return pBank;
 }
 
-static void fn_801F3834(void *pRes, SndBankInfo_801F3524 **ppBank, unsigned int index, unsigned int bank, void *pData,
-                        unsigned int size, unsigned int flags, void (*pCallback)(SndBankInfo_801F3524 *pBank))
+static void _SndALoadBank(void *pRes, SndBankInfo_t **ppBank, unsigned int index, unsigned int bank, void *pData,
+                        unsigned int size, unsigned int flags, void (*pCallback)(SndBankInfo_t *pBank))
 {
-    SndBankInfo_801F3524 *pBank;
+    SndBankInfo_t *pBank;
 
-    if (lbl_8039AE8C.mStatus.mFlags.mActive && lbl_8039AE8C.mStatus.mFlags.mEnabled) {
-        pBank = (SndBankInfo_801F3524 *)fn_801C6A20(lbl_8039AE8C.pBankList);
-        fn_801C6AA4(lbl_8039AE8C.pBankList, pBank, 0);
+    if (_Snd_ModuleInfo.mStatus.mFlags.mActive && _Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
+        pBank = (SndBankInfo_t *)fn_801C6A20(_Snd_ModuleInfo.pBankList);
+        fn_801C6AA4(_Snd_ModuleInfo.pBankList, pBank, 0);
         // FAKEMATCH: store order found by trying the 120 orders of the first five stores
         pBank->mBank = bank;
         pBank->mLoaded = 0;
@@ -300,28 +319,83 @@ static void fn_801F3834(void *pRes, SndBankInfo_801F3524 **ppBank, unsigned int 
         pBank->mIndex = index;
         pBank->pData = pData;
         *ppBank = pBank;
-        ResLoadAsyncToBuffer((ResFile_t *)pRes, index, 1, pData, 100, fn_801F35A8, pBank);
+        ResLoadAsyncToBuffer((ResFile_t *)pRes, index, 1, pData, 100, _SndALoadBankCallback, pBank);
     }
 }
 
-static void fn_801F3904(const char *pMessage)
+static void _SndAbort(const char *pMessage)
 {
 }
 
-static void fn_801F3908(unsigned char label)
+static void _SndIAllocatorMemLabelCB(unsigned char label)
 {
-    if (lbl_8039AE8C.pMemLabelCallback != 0) {
-        lbl_8039AE8C.pMemLabelCallback(label);
+    if (_Snd_ModuleInfo.pMemLabelCallback != 0) {
+        _Snd_ModuleInfo.pMemLabelCallback(label);
     }
 }
 
-int fn_801F3B4C(Desc_801F393C *pDesc)
+int SndInit(SndInitDesc_t *pDesc)
+{
+    int result;
+    int i;
+    void *pHeap;
+
+    _StreamMUTEX_init();
+    if (pDesc == 0) {
+        _Snd_ModuleInfo.mStatus.mFlags.mActive = 1;
+        _Snd_ModuleInfo.mStatus.mFlags.mEnabled = 0;
+        return 0;
+    }
+    result = 0;
+    SndInitParms(pDesc);
+    if (!_Snd_ModuleInfo.mStatus.mFlags.mActive) {
+        _Snd_ModuleInfo.mStatus.mFlags.mActive = 1;
+        _Snd_ModuleInfo.mStatus.mFlags.mEnabled = 1;
+        _Snd_ModuleInfo.mStatus.mFlags.mNoLock = pDesc->mUnknown52;
+        _Snd_ModuleInfo.mStatus.mFlags.mUnk3B = pDesc->mUnknown53;
+        _Snd_ModuleInfo.mUnk3C = pDesc->mUnknown54;
+        // FAKEMATCH: store order chosen to match (the label callback cleared after the heap id)
+        _Snd_ModuleInfo.pServiceCallback = pDesc->mUnknown36;
+        _Snd_ModuleInfo.mUnk30 = pDesc->mUnknown48;
+        _Snd_ModuleInfo.pMemLabelCallback = 0;
+        for (i = 3; i >= 0; i--) {
+            _Snd_ModuleInfo.apFileDesc[i] = 0;
+        }
+        pHeap = fn_801D2BB0(1, pDesc->mUnknown4, 0, 0);
+        _Snd_ModuleInfo.pHeap = pHeap;
+        _Snd_ModuleInfo.mHeapSize = pDesc->mUnknown4;
+        fn_8026C39C(4);
+        pIAllocator = new TiburonIAllocator13Impl(_Snd_ModuleInfo.mUnk30, (void (*)(int))_SndIAllocatorMemLabelCB);
+        fn_801B90BC(pIAllocator);
+        fn_801B90F0();
+        fn_80270458();
+        fn_8026FBFC(0, (int)pHeap, pDesc->mUnknown4);
+        fn_8026F97C(pDesc->mUnknown0);
+        _Snd_ModuleInfo.mUnk0 = pDesc->mUnknown0;
+        fn_8026C18C();
+        _Snd_ModuleInfo.pBankList = fn_801C68FC(1, 0, pDesc->mUnknown16, sizeof(SndBankInfo_t), 0, 0);
+        _Snd_ModuleInfo.pSeqList = fn_801C68FC(1, 0, pDesc->mUnknown20, sizeof(SndSeqInfo_t), 0, 0);
+        _Snd_ModuleInfo.pStreamList = fn_801C68FC(1, 0, pDesc->mUnknown22, sizeof(SndStream_t), 0, 0);
+        if (pDesc->mUnknown18 != 0) {
+            _Snd_ModuleInfo.pAemsBankList =
+                fn_801C68FC(1, 0, pDesc->mUnknown18, sizeof(SndAemsBankInfo_t), 0, 0);
+        }
+        _Snd_ModuleInfo.pBankTable = (SndBankHeap_t *)pDesc->mUnknown32;
+        _Snd_ModuleInfo.pAemsSystem = 0;
+        _Snd_ModuleInfo.pAemsStreams = 0;
+    } else {
+        result = 0x1C0001;
+    }
+    return result;
+}
+
+int SndInitParms(SndInitDesc_t *pDesc)
 {
     fn_8027555C();
     if (fn_8023CEE0() == 0) {
         fn_8026F710(0);
     } else {
-        switch (lbl_8039AE8C.mUnk50) {
+        switch (_Snd_ModuleInfo.mUnk50) {
         case 1:
         case 2:
         default:
@@ -336,94 +410,126 @@ int fn_801F3B4C(Desc_801F393C *pDesc)
     fn_8026F894(0);
     fn_8026F788(0, pDesc->mUnknown24);
     fn_8026F5F8(pDesc->mUnknown16);
-    fn_8026F908(fn_801F3904);
+    fn_8026F908(_SndAbort);
     if (pDesc->mUnknown40 != 0) {
         fn_8026FCAC(pDesc->mUnknown40, pDesc->mUnknown44);
     }
     return 0;
 }
 
-void fn_801F3C14(void)
+void SndUnloadAll(void)
 {
     void *pNode;
     int i;
 
-    if (lbl_8039AE8C.mStatus.mFlags.mEnabled) {
+    if (_Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         SND_LOCK();
         fn_8026C280();
         SND_UNLOCK();
-        for (;;) {
-            pNode = fn_801C6B4C(lbl_8039AE8C.pSeqList, 0);
-            if (pNode == 0) {
-                break;
+        // FAKEMATCH: node tested twice per pass (target keeps the loop test at the top)
+        do {
+            pNode = fn_801C6B4C(_Snd_ModuleInfo.pSeqList, 0);
+            if (pNode != 0) {
+                SndUnloadSeq((SndSeqInfo_t *)pNode);
             }
-            fn_801F4448((SndSeqInfo_801F438C *)pNode);
-        }
-        for (;;) {
-            pNode = fn_801C6B4C(lbl_8039AE8C.pBankList, 0);
-            if (pNode == 0) {
-                break;
+        } while (pNode != 0);
+        // FAKEMATCH: node tested twice per pass (target keeps the loop test at the top)
+        do {
+            pNode = fn_801C6B4C(_Snd_ModuleInfo.pBankList, 0);
+            if (pNode != 0) {
+                SndUnloadBank((SndBankInfo_t *)pNode);
             }
-            fn_801F3F74((SndBankInfo_801F3524 *)pNode);
-        }
-        if (lbl_8039AE8C.pAemsBankList != 0) {
-            for (;;) {
-                pNode = fn_801C6B4C(lbl_8039AE8C.pAemsBankList, 0);
-                if (pNode == 0) {
-                    break;
+        } while (pNode != 0);
+        if (_Snd_ModuleInfo.pAemsBankList != 0) {
+            // FAKEMATCH: node tested twice per pass (target keeps the loop test at the top)
+            do {
+                pNode = fn_801C6B4C(_Snd_ModuleInfo.pAemsBankList, 0);
+                if (pNode != 0) {
+                    SndAemsUnloadBank((SndAemsBankInfo_t *)pNode);
                 }
-                fn_801F4F28((SndAemsBankInfo_801F4D00 *)pNode);
-            }
+            } while (pNode != 0);
         }
-        if (lbl_8039AE8C.pAemsSystem != 0 || lbl_8039AE8C.pAemsStreams != 0) {
-            fn_801F4C5C();
+        if (_Snd_ModuleInfo.pAemsSystem != 0 || _Snd_ModuleInfo.pAemsStreams != 0) {
+            SndAemsUnloadSystem();
         }
         for (i = 3; i >= 0; i--) {
-            lbl_8039AE8C.apFileDesc[i] = 0;
+            _Snd_ModuleInfo.apFileDesc[i] = 0;
         }
     }
 }
 
-unsigned char fn_801F3E28(void)
+int SndShutdown(void)
 {
-    return lbl_8039AE8C.mStatus.mFlags.mEnabled;
+    int result;
+
+    result = 0;
+    if (_Snd_ModuleInfo.mStatus.mFlags.mActive) {
+        if (_Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
+            SND_LOCK();
+            fn_8026C280();
+            SND_UNLOCK();
+            SndUnloadAll();
+            fn_801C69E4(_Snd_ModuleInfo.pSeqList);
+            fn_801C69E4(_Snd_ModuleInfo.pBankList);
+            if (_Snd_ModuleInfo.pAemsBankList != 0) {
+                fn_801C69E4(_Snd_ModuleInfo.pAemsBankList);
+                _Snd_ModuleInfo.pAemsBankList = 0;
+            }
+            fn_8026C23C();
+            fn_8026FBCC();
+            fn_801B9134();
+            delete pIAllocator;
+            fn_801C69E4(_Snd_ModuleInfo.pStreamList);
+            fn_801D2BD0(_Snd_ModuleInfo.pHeap);
+        }
+    } else {
+        result = 0x1C0002;
+    }
+    _Snd_ModuleInfo.mStatus.mFlags.mActive = 0;
+    _Snd_ModuleInfo.mStatus.mFlags.mEnabled = 0;
+    return result;
 }
 
-unsigned char fn_801F3E34(void)
+unsigned char SndEnabled(void)
 {
-    return lbl_8039AE8C.mStatus.mFlags.mActive;
+    return _Snd_ModuleInfo.mStatus.mFlags.mEnabled;
 }
 
-SndBankInfo_801F3524 *fn_801F3E40(ResFile_t *pRes, unsigned int index, unsigned int bank)
+unsigned char SndIsActive(void)
+{
+    return _Snd_ModuleInfo.mStatus.mFlags.mActive;
+}
+
+SndBankInfo_t *SndLoadBank(ResFile_t *pRes, unsigned int index, unsigned int bank)
 {
     unsigned int size;
 
-    if (!lbl_8039AE8C.mStatus.mFlags.mActive || !lbl_8039AE8C.mStatus.mFlags.mEnabled) {
+    if (!_Snd_ModuleInfo.mStatus.mFlags.mActive || !_Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         return 0;
     }
     size = ResGetSize(pRes, index);
-    return fn_801F3728(pRes, index, bank, fn_801D2BB0(1, size, 0, 0), size, 0);
+    return _SndLoadBank(pRes, index, bank, fn_801D2BB0(1, size, 0, 0), size, 0);
 }
 
-void fn_801F3ED8(ResFile_t *pRes, SndBankInfo_801F3524 **ppBank, unsigned int index, unsigned int bank,
-                 void (*pCallback)(SndBankInfo_801F3524 *pBank))
+void SndALoadBank(ResFile_t *pRes, SndBankInfo_t **ppBank, unsigned int index, unsigned int bank,
+                 void (*pCallback)(SndBankInfo_t *pBank))
 {
     unsigned int size;
 
-    if (lbl_8039AE8C.mStatus.mFlags.mActive && lbl_8039AE8C.mStatus.mFlags.mEnabled) {
+    if (_Snd_ModuleInfo.mStatus.mFlags.mActive && _Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         size = ResGetSize(pRes, index);
-        fn_801F3834(pRes, ppBank, index, bank, fn_801D2BB0(1, size, 0, 0), size, 0, pCallback);
+        _SndALoadBank(pRes, ppBank, index, bank, fn_801D2BB0(1, size, 0, 0), size, 0, pCallback);
     }
 }
 
-void fn_801F3F74(SndBankInfo_801F3524 *pBank)
+void SndUnloadBank(SndBankInfo_t *pBank)
 {
-    if (lbl_8039AE8C.mStatus.mFlags.mActive && lbl_8039AE8C.mStatus.mFlags.mEnabled) {
+    if (_Snd_ModuleInfo.mStatus.mFlags.mActive && _Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         while (!pBank->mLoaded) {
             if (FileHostCheckActive() != 0) {
                 FileDebugProcess();
             }
-            fn_801F4B20();
+            SndService();
         }
         fn_8026AB88(pBank->mHandle);
         if (pBank->mFlags & 1) {
@@ -432,11 +538,11 @@ void fn_801F3F74(SndBankInfo_801F3524 *pBank)
         if (!(pBank->mFlags & 2)) {
             fn_801D2BD0(pBank->pData);
         }
-        fn_801C6C0C(lbl_8039AE8C.pBankList, pBank);
+        fn_801C6C0C(_Snd_ModuleInfo.pBankList, pBank);
     }
 }
 
-unsigned char fn_801F4024(SndBankInfo_801F3524 *pBank)
+unsigned char SndIsBankLoaded(SndBankInfo_t *pBank)
 {
     if (SND_READY()) {
         return pBank->mLoaded;
@@ -444,11 +550,11 @@ unsigned char fn_801F4024(SndBankInfo_801F3524 *pBank)
     return 1;
 }
 
-int fn_801F4050(SndBankInfo_801F3524 *pBank, int patch, void *pOpts)
+int SndPlayPatch(SndBankInfo_t *pBank, int patch, void *pOpts)
 {
     int handle;
 
-    if (!lbl_8039AE8C.mStatus.mFlags.mActive || !lbl_8039AE8C.mStatus.mFlags.mEnabled) {
+    if (!_Snd_ModuleInfo.mStatus.mFlags.mActive || !_Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         return 0;
     }
     if (pBank->mLoaded) {
@@ -461,14 +567,14 @@ int fn_801F4050(SndBankInfo_801F3524 *pBank, int patch, void *pOpts)
     return handle;
 }
 
-void fn_801F40F4(SndPatchOpts_801F40F4 *pOpts)
+void SndFillPatchOpts(SndPatchOpts_t *pOpts)
 {
     if (SND_READY()) {
         fn_8026CA50(pOpts);
     }
 }
 
-void fn_801F4130(int handle)
+void SndStopPatch(int handle)
 {
     if (SND_READY()) {
         SND_LOCK();
@@ -477,7 +583,7 @@ void fn_801F4130(int handle)
     }
 }
 
-int fn_801F41A0(int handle)
+int SndPatchOver(int handle)
 {
     int result;
 
@@ -490,7 +596,7 @@ int fn_801F41A0(int handle)
     return result;
 }
 
-void fn_801F421C(int handle, int value)
+void SndSetPatchPitchMult(int handle, int value)
 {
     if (SND_READY()) {
         SND_LOCK();
@@ -499,7 +605,7 @@ void fn_801F421C(int handle, int value)
     }
 }
 
-void fn_801F4294(int handle, int a, int value)
+void SndSetPatchParam(int handle, int a, int value)
 {
     if (SND_READY()) {
         SND_LOCK();
@@ -508,7 +614,7 @@ void fn_801F4294(int handle, int a, int value)
     }
 }
 
-void fn_801F4314(int handle, int value)
+void SndSetPatchRate(int handle, int value)
 {
     if (SND_READY()) {
         SND_LOCK();
@@ -517,16 +623,16 @@ void fn_801F4314(int handle, int value)
     }
 }
 
-SndSeqInfo_801F438C *fn_801F438C(ResFile_t *pRes, unsigned int index)
+SndSeqInfo_t *SndLoadSeq(ResFile_t *pRes, unsigned int index)
 {
-    SndSeqInfo_801F438C *pSeq;
+    SndSeqInfo_t *pSeq;
     void *pData;
 
-    if (!lbl_8039AE8C.mStatus.mFlags.mActive || !lbl_8039AE8C.mStatus.mFlags.mEnabled) {
+    if (!_Snd_ModuleInfo.mStatus.mFlags.mActive || !_Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         return 0;
     }
-    pSeq = (SndSeqInfo_801F438C *)fn_801C6A20(lbl_8039AE8C.pSeqList);
-    fn_801C6AA4(lbl_8039AE8C.pSeqList, pSeq, 0);
+    pSeq = (SndSeqInfo_t *)fn_801C6A20(_Snd_ModuleInfo.pSeqList);
+    fn_801C6AA4(_Snd_ModuleInfo.pSeqList, pSeq, 0);
     pSeq->pRes = pRes;
     pSeq->mIndex = index;
     pData = fn_801D2B7C(ResGetSize(pRes, index), 0, 0);
@@ -537,31 +643,31 @@ SndSeqInfo_801F438C *fn_801F438C(ResFile_t *pRes, unsigned int index)
     return pSeq;
 }
 
-void fn_801F4448(SndSeqInfo_801F438C *pSeq)
+void SndUnloadSeq(SndSeqInfo_t *pSeq)
 {
     if (SND_READY()) {
         fn_801D2BD0(pSeq->pData);
-        fn_801C6C0C(lbl_8039AE8C.pSeqList, pSeq);
+        fn_801C6C0C(_Snd_ModuleInfo.pSeqList, pSeq);
     }
 }
 
-void *fn_801F44A4(void)
+void *SndGetBankTable(void)
 {
-    return lbl_8039AE8C.pBankTable;
+    return _Snd_ModuleInfo.pBankTable;
 }
 
-SndStream_801F44B0 *fn_801F44B0(int extra, int a, int b, int bank)
+SndStream_t *SndCreateStream(int extra, int a, int b, int bank)
 {
-    SndStream_801F44B0 *pStream;
-    SndPatchOpts_801F40F4 opts;
+    SndStream_t *pStream;
+    SndPatchOpts_t opts;
     int size;
 
-    if (!lbl_8039AE8C.mStatus.mFlags.mActive || !lbl_8039AE8C.mStatus.mFlags.mEnabled) {
+    if (!_Snd_ModuleInfo.mStatus.mFlags.mActive || !_Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         return 0;
     }
-    SndSetHeap(lbl_8039AE8C.pBankTable, bank);
-    pStream = (SndStream_801F44B0 *)fn_801C6A20(lbl_8039AE8C.pStreamList);
-    fn_801C6AA4(lbl_8039AE8C.pStreamList, pStream, 0);
+    SndSetHeap(_Snd_ModuleInfo.pBankTable, bank);
+    pStream = (SndStream_t *)fn_801C6A20(_Snd_ModuleInfo.pStreamList);
+    fn_801C6AA4(_Snd_ModuleInfo.pStreamList, pStream, 0);
     fn_8026CA50(&opts);
     size = fn_8026EE6C(a, b) + extra;
     pStream->pBuffer = fn_801D2BB0(1, size, 0, 0);
@@ -569,7 +675,7 @@ SndStream_801F44B0 *fn_801F44B0(int extra, int a, int b, int bank)
     return pStream;
 }
 
-int fn_801F4580(SndStream_801F44B0 *pStream, void *pFile, int a, int b)
+int SndStreamQueueFile(SndStream_t *pStream, void *pFile, int a, int b)
 {
     int result;
 
@@ -580,23 +686,23 @@ int fn_801F4580(SndStream_801F44B0 *pStream, void *pFile, int a, int b)
     return result;
 }
 
-void fn_801F45D4(SndStream_801F44B0 *pStream)
+void SndDestroyStream(SndStream_t *pStream)
 {
     if (SND_READY()) {
         fn_8026E2A8(pStream->mHandle);
         fn_801D2BD0(pStream->pBuffer);
-        fn_801C6C0C(lbl_8039AE8C.pStreamList, pStream);
+        fn_801C6C0C(_Snd_ModuleInfo.pStreamList, pStream);
     }
 }
 
-void fn_801F4638(SndStream_801F44B0 *pStream)
+void SndPurgeStream(SndStream_t *pStream)
 {
     if (SND_READY()) {
         fn_8026E388(pStream->mHandle);
     }
 }
 
-void fn_801F4678(SndStream_801F44B0 *pStream, int a, int b)
+void SndStreamAutoVol(SndStream_t *pStream, int a, int b)
 {
     if (SND_READY()) {
         SND_LOCK();
@@ -605,7 +711,7 @@ void fn_801F4678(SndStream_801F44B0 *pStream, int a, int b)
     }
 }
 
-void fn_801F46F8(SndStream_801F44B0 *pStream, int a)
+void SndStreamSetPitchMult(SndStream_t *pStream, int a)
 {
     if (SND_READY()) {
         SND_LOCK();
@@ -614,7 +720,7 @@ void fn_801F46F8(SndStream_801F44B0 *pStream, int a)
     }
 }
 
-int fn_801F4770(SndStream_801F44B0 *pStream, unsigned int angle)
+int SndStreamSetPan(SndStream_t *pStream, unsigned int angle)
 {
     int result;
     float degrees;
@@ -622,7 +728,7 @@ int fn_801F4770(SndStream_801F44B0 *pStream, unsigned int angle)
     degrees = angle / 65536.0f;
     degrees *= 360.0f;
     result = 0;
-    if (lbl_8039AE8C.mStatus.mFlags.mActive && lbl_8039AE8C.mStatus.mFlags.mEnabled) {
+    if (_Snd_ModuleInfo.mStatus.mFlags.mActive && _Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         SND_LOCK();
         result = fn_8026E4C0(pStream->mHandle, degrees, -1);
         SND_UNLOCK();
@@ -630,7 +736,7 @@ int fn_801F4770(SndStream_801F44B0 *pStream, unsigned int angle)
     return result;
 }
 
-void fn_801F4834(SndStream_801F44B0 *pStream, int *pStatus)
+void SndStreamGetStatus(SndStream_t *pStream, int *pStatus)
 {
     if (SND_READY()) {
         SND_LOCK();
@@ -641,7 +747,7 @@ void fn_801F4834(SndStream_801F44B0 *pStream, int *pStatus)
     }
 }
 
-int fn_801F48B8(SndStream_801F44B0 *pStream)
+int SndStreamGetVol(SndStream_t *pStream)
 {
     int result;
 
@@ -654,7 +760,7 @@ int fn_801F48B8(SndStream_801F44B0 *pStream)
     return result;
 }
 
-int fn_801F4934(int a, int b)
+int SndStreamGetPosition(int a, int b)
 {
     int result;
 
@@ -667,7 +773,7 @@ int fn_801F4934(int a, int b)
     return result;
 }
 
-void fn_801F49B8(SndStream_801F44B0 *pStream, int a, int b)
+void SndStreamSetParam(SndStream_t *pStream, int a, int b)
 {
     if (SND_READY()) {
         SND_LOCK();
@@ -676,7 +782,7 @@ void fn_801F49B8(SndStream_801F44B0 *pStream, int a, int b)
     }
 }
 
-void fn_801F4A38(SndStream_801F44B0 *pStream, int a)
+void SndStreamSetControl(SndStream_t *pStream, int a)
 {
     if (SND_READY()) {
         SND_LOCK();
@@ -685,117 +791,117 @@ void fn_801F4A38(SndStream_801F44B0 *pStream, int a)
     }
 }
 
-void fn_801F4AB0(int a, int b)
+void SndSetMasterVol(int a, int b)
 {
     if (SND_READY()) {
         fn_8026ED1C(a, b);
     }
 }
 
-void fn_801F4AEC(int a, int b)
+void SndSetOutputMode(int a, int b)
 {
-    lbl_8039AE8C.mUnk50 = a;
+    _Snd_ModuleInfo.mUnk50 = a;
 }
 
-void fn_801F4AF8(void (*pCallback)(int a, int b))
+void SndSetServiceCallback(void (*pCallback)(int a, int b))
 {
     if (SND_READY()) {
-        lbl_8039AE8C.pServiceCallback = pCallback;
+        _Snd_ModuleInfo.pServiceCallback = pCallback;
     }
 }
 
-void fn_801F4B20(void)
+void SndService(void)
 {
     if (SND_READY()) {
         fn_802703A0();
-        fn_801F35B4();
-        if (lbl_8039AE8C.pServiceCallback != 0) {
-            lbl_8039AE8C.pServiceCallback(0, 0);
+        _SndProcessBanks();
+        if (_Snd_ModuleInfo.pServiceCallback != 0) {
+            _Snd_ModuleInfo.pServiceCallback(0, 0);
         }
     }
 }
 
-int fn_801F4B88(ResFile_t *pRes, unsigned int index, int bank)
+int SndAemsLoadSystem(ResFile_t *pRes, unsigned int index, int bank)
 {
     int result;
 
     result = 0;
     if (SND_READY()) {
-        SndSetHeap(lbl_8039AE8C.pBankTable, bank);
-        lbl_8039AE8C.pAemsSystem = fn_801D2B7C(ResGetSize(pRes, index), 0, 0);
-        ResLoadToBuffer(pRes, index, lbl_8039AE8C.pAemsSystem);
-        result = fn_801B91A0(lbl_8039AE8C.pAemsSystem);
-        lbl_8039AE8C.pAemsStreams = fn_801D2B7C(ResGetSize(pRes, index + 1), 0, 0);
-        ResLoadToBuffer(pRes, index + 1, lbl_8039AE8C.pAemsStreams);
-        fn_8026B124(lbl_8039AE8C.pAemsStreams);
+        SndSetHeap(_Snd_ModuleInfo.pBankTable, bank);
+        _Snd_ModuleInfo.pAemsSystem = fn_801D2B7C(ResGetSize(pRes, index), 0, 0);
+        ResLoadToBuffer(pRes, index, _Snd_ModuleInfo.pAemsSystem);
+        result = fn_801B91A0(_Snd_ModuleInfo.pAemsSystem);
+        _Snd_ModuleInfo.pAemsStreams = fn_801D2B7C(ResGetSize(pRes, index + 1), 0, 0);
+        ResLoadToBuffer(pRes, index + 1, _Snd_ModuleInfo.pAemsStreams);
+        fn_8026B124(_Snd_ModuleInfo.pAemsStreams);
     }
     return result;
 }
 
-int fn_801F4C5C(void)
+int SndAemsUnloadSystem(void)
 {
     int result;
 
     result = 0;
     if (SND_READY()) {
-        if (lbl_8039AE8C.pAemsStreams != 0) {
+        if (_Snd_ModuleInfo.pAemsStreams != 0) {
             fn_8026B250();
-            fn_801D2BD0(lbl_8039AE8C.pAemsStreams);
-            lbl_8039AE8C.pAemsStreams = 0;
+            fn_801D2BD0(_Snd_ModuleInfo.pAemsStreams);
+            _Snd_ModuleInfo.pAemsStreams = 0;
         }
-        if (lbl_8039AE8C.pAemsSystem != 0) {
-            fn_801B9328(lbl_8039AE8C.pAemsSystem);
-            fn_801D2BD0(lbl_8039AE8C.pAemsSystem);
-            lbl_8039AE8C.pAemsSystem = 0;
+        if (_Snd_ModuleInfo.pAemsSystem != 0) {
+            fn_801B9328(_Snd_ModuleInfo.pAemsSystem);
+            fn_801D2BD0(_Snd_ModuleInfo.pAemsSystem);
+            _Snd_ModuleInfo.pAemsSystem = 0;
         }
     }
     return result;
 }
 
-static int fn_801F4CE0(void *pNode, void *pData, void *pOut)
+static int _SndAemsBankTraverseFindPointer(void *pNode, void *pData, void *pOut)
 {
-    if (((SndAemsBankInfo_801F4D00 *)pNode)->pData == pData) {
-        *(SndAemsBankInfo_801F4D00 **)pOut = (SndAemsBankInfo_801F4D00 *)pNode;
+    if (((SndAemsBankInfo_t *)pNode)->pData == pData) {
+        *(SndAemsBankInfo_t **)pOut = (SndAemsBankInfo_t *)pNode;
         return 0;
     }
     return 1;
 }
 
-static void *fn_801F4D00(void *pData, int size, int c)
+static void *_SndAemsBankAlloc(void *pData, int size, int c)
 {
-    SndAemsBankInfo_801F4D00 *pBank;
+    SndAemsBankInfo_t *pBank;
 
     pBank = 0;
-    fn_801C6D34(lbl_8039AE8C.pAemsBankList, 0, pData, &pBank, fn_801F4CE0, 1);
+    fn_801C6D34(_Snd_ModuleInfo.pAemsBankList, 0, pData, &pBank, _SndAemsBankTraverseFindPointer, 1);
     if (pBank != 0) {
         pBank->mSize = size;
     }
     return pData;
 }
 
-static void fn_801F4D6C(SndAemsBankInfo_801F4D00 *pBank)
+static void _SndAemsBankRealloc(SndAemsBankInfo_t *pBank)
 {
     pBank->pData = fn_801D310C(pBank->pData, pBank->mSize, 0, 0);
 }
 
-SndAemsBankInfo_801F4D00 *fn_801F4DAC(ResFile_t *pRes, unsigned int index, int bank)
+SndAemsBankInfo_t *SndAemsLoadBank(ResFile_t *pRes, unsigned int index, int bank)
 {
-    return fn_801F4DD8(pRes, index, (ResFile_t *)-1, (unsigned int)-1, bank);
+    return SndAemsLoadBankWithStream(pRes, index, (ResFile_t *)-1, (unsigned int)-1, bank);
 }
 
-SndAemsBankInfo_801F4D00 *fn_801F4DD8(ResFile_t *pRes, unsigned int index, ResFile_t *pStreamRes,
+SndAemsBankInfo_t *SndAemsLoadBankWithStream(ResFile_t *pRes, unsigned int index, ResFile_t *pStreamRes,
                                       unsigned int streamIndex, int bank)
 {
-    SndAemsBankInfo_801F4D00 *pBank;
+    SndAemsBankInfo_t *pBank;
     unsigned int size;
     char *pName;
 
     pBank = 0;
-    if (SND_READY() && lbl_8039AE8C.pAemsBankList != 0) {
-        pBank = (SndAemsBankInfo_801F4D00 *)fn_801C6A20(lbl_8039AE8C.pAemsBankList);
-        fn_801C6AA4(lbl_8039AE8C.pAemsBankList, pBank, 0);
+    if (SND_READY() && _Snd_ModuleInfo.pAemsBankList != 0) {
+        pBank = (SndAemsBankInfo_t *)fn_801C6A20(_Snd_ModuleInfo.pAemsBankList);
+        fn_801C6AA4(_Snd_ModuleInfo.pAemsBankList, pBank, 0);
         pBank->mBank = bank;
-        SndSetHeap(lbl_8039AE8C.pBankTable, bank);
+        SndSetHeap(_Snd_ModuleInfo.pBankTable, bank);
         size = ResGetSize(pRes, index);
         pBank->pData = fn_801D2BB0(1, size, 0, 0);
         DCFlushRange(pBank->pData, size);
@@ -804,18 +910,18 @@ SndAemsBankInfo_801F4D00 *fn_801F4DD8(ResFile_t *pRes, unsigned int index, ResFi
         if (pStreamRes != (ResFile_t *)-1 && streamIndex != (unsigned int)-1) {
             pBank->mFile.pRes = pStreamRes;
             pBank->mFile.mIndex = streamIndex;
-            pName = fn_801F4F98(&pBank->mFile);
-            pBank->mHandle = fn_802697D8(pBank->pData, pName, 0, fn_801F4D00);
-            fn_801F4D6C(pBank);
+            pName = SndAemsAllocFileDesc(&pBank->mFile);
+            pBank->mHandle = fn_802697D8(pBank->pData, pName, 0, _SndAemsBankAlloc);
+            _SndAemsBankRealloc(pBank);
         } else {
-            pBank->mHandle = fn_802697D8(pBank->pData, 0, 0, fn_801F4D00);
-            fn_801F4D6C(pBank);
+            pBank->mHandle = fn_802697D8(pBank->pData, 0, 0, _SndAemsBankAlloc);
+            _SndAemsBankRealloc(pBank);
         }
     }
     return pBank;
 }
 
-int fn_801F4F28(SndAemsBankInfo_801F4D00 *pBank)
+int SndAemsUnloadBank(SndAemsBankInfo_t *pBank)
 {
     int result;
 
@@ -823,30 +929,31 @@ int fn_801F4F28(SndAemsBankInfo_801F4D00 *pBank)
     if (SND_READY()) {
         result = fn_802692B8(pBank->mHandle);
         fn_801D2BD0(pBank->pData);
-        fn_801C6C0C(lbl_8039AE8C.pAemsBankList, pBank);
+        fn_801C6C0C(_Snd_ModuleInfo.pAemsBankList, pBank);
     }
     return result;
 }
 
-char *fn_801F4F98(StreamFile_801F6D54 *pFile)
+char *SndAemsAllocFileDesc(SndFileDesc_t *pFile)
 {
+    static char outStr[8];
     int i;
 
     for (i = 0; i <= 3; i++) {
-        if (lbl_8039AE8C.apFileDesc[i] == 0) {
-            lbl_8039AE8C.apFileDesc[i] = pFile;
-            sprintf(lbl_803ECF80, lbl_802B1A28, i);
-            return lbl_803ECF80;
+        if (_Snd_ModuleInfo.apFileDesc[i] == 0) {
+            _Snd_ModuleInfo.apFileDesc[i] = pFile;
+            sprintf(outStr, "AEMS%02d", i);
+            return outStr;
         }
     }
-    return lbl_803ECF80;
+    return outStr;
 }
 
-StreamFile_801F6D54 *fn_801F5000(const char *pName)
+SndFileDesc_t *SndAemsDerefrenceFileDesc(const char *pName)
 {
     int i;
 
     i = (pName[4] - '0') * 10;
     i += pName[5] - '0';
-    return lbl_8039AE8C.apFileDesc[i];
+    return _Snd_ModuleInfo.apFileDesc[i];
 }

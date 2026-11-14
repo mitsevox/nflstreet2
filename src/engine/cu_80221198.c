@@ -129,14 +129,14 @@ int fn_801CD63C(Font_801CCA64 *pFont, const char *pText, unsigned int flags);
 int fn_801CD750(Font_801CCA64 *pFont, unsigned char c);
 int fn_801CD790(Font_801CCA64 *pFont);
 int ResGetNumResources(ResFile_t *pRes);
-unsigned char fn_801F3E28(void);
+unsigned char SndEnabled(void);
 struct StreamTap_801F5DA4 *fn_801F687C(int numRequests, int numFilters, int numTaps, void *pMem,
                                        int memSize);
 void fn_801F6AC8(struct StreamTap_801F5DA4 *h, int index, unsigned int mask, unsigned int value,
                  int tap);
 void fn_801F6B84(struct StreamTap_801F5DA4 *h);
 struct StreamTap_801F5DA4 *fn_801F6CE8(struct StreamTap_801F5DA4 *h, int tap);
-int fn_801F6D54(struct StreamTap_801F5DA4 *h, StreamFile_801F6D54 *pFile, int offset,
+int fn_801F6D54(struct StreamTap_801F5DA4 *h, SndFileDesc_t *pFile, int offset,
                 unsigned int endMarker);
 int fn_801DC86C(Uint8 *pY, Uint8 *pU, Uint8 *pV, Int32 a, Int32 b, Int32 c, void *pDst,
                  Int32 Stride, Int32 d);
@@ -1160,7 +1160,7 @@ Int32 fn_8022638C(void)
 {
     Int32 Result = 0;
 
-    if (lbl_803EBF7A && fn_801F3E28()) {
+    if (lbl_803EBF7A && SndEnabled()) {
         Result = 1;
     }
     return Result;
@@ -1344,7 +1344,7 @@ void fn_80226A68(Object_8021E688 *pObject, Object_802268D4 *pMovie)
 {
     Int32 Heap = fn_802263D4();
     Sub_802268D4 *pSub = &pMovie->Sub;
-    StreamFile_801F6D54 File;
+    SndFileDesc_t File;
     Int32 Queued;
 
     if (pSub->unk_1C == NULL) {

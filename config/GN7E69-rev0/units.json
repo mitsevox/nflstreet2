@@ -2155,10 +2155,6 @@
       "address": "0x8020E7EC",
       "evidence": "evidence.tsv function and name rows for 0x8020E7EC (documented holdout 0x8020E7EC-0x8020E9D0 at the start of src/engine/lltextur.c: draft registered in comparisons.json, original bytes). Called by ResTexture.cpp."
     },
-    "CurveListEvaluate": {
-      "address": "0x801C5278",
-      "evidence": "evidence.tsv function and name rows for 0x801C5278 (src/engine/CurveList.c, a comparison-only file: draft registered in comparisons.json, original bytes). Called by camcurve.cpp and cu_800913E8.cpp."
-    },
     "CodecReadSamples": {
       "address": "0x8027D05C",
       "evidence": "evidence.tsv function/name rows for 0x8027D05C; exact but unlinked in the comparison-only src/engine/cu_8027CF9C.cpp, which keeps its original bytes until the whole file can be linked; called here by name."
@@ -14717,6 +14713,99 @@
       ]
     },
     {
+      "source": "src/engine/sound.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x801F3524-0x801F5034 (src/engine/sound.cpp), its compiler, function and name rows, the data rows for .rodata 0x802B1A18-0x802B1AA8, .bss 0x8039AE8C-0x8039AEE0 and .sbss 0x803ECF80-0x803ECF8C, and the linker row for the folded allocator copies. All functions and the file's data are linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F3524",
+          "end": "0x801F5034"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1A18",
+          "end": "0x802B1AA8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF80",
+          "end": "0x803ECF8C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039AE8C",
+          "end": "0x8039AEE0"
+        }
+      ],
+      "link_roots": {
+        "symbols": [
+          "SndInit",
+          "SndInitParms",
+          "SndUnloadAll",
+          "SndShutdown",
+          "SndEnabled",
+          "SndIsActive",
+          "SndLoadBank",
+          "SndALoadBank",
+          "SndUnloadBank",
+          "SndIsBankLoaded",
+          "SndPlayPatch",
+          "SndFillPatchOpts",
+          "SndStopPatch",
+          "SndPatchOver",
+          "SndSetPatchPitchMult",
+          "SndSetPatchParam",
+          "SndSetPatchRate",
+          "SndLoadSeq",
+          "SndUnloadSeq",
+          "SndGetBankTable",
+          "SndCreateStream",
+          "SndStreamQueueFile",
+          "SndDestroyStream",
+          "SndPurgeStream",
+          "SndStreamAutoVol",
+          "SndStreamSetPitchMult",
+          "SndStreamSetPan",
+          "SndStreamGetStatus",
+          "SndStreamGetVol",
+          "SndStreamGetPosition",
+          "SndStreamSetParam",
+          "SndStreamSetControl",
+          "SndSetMasterVol",
+          "SndSetOutputMode",
+          "SndSetServiceCallback",
+          "SndService",
+          "SndAemsLoadSystem",
+          "SndAemsUnloadSystem",
+          "SndAemsLoadBank",
+          "SndAemsLoadBankWithStream",
+          "SndAemsUnloadBank",
+          "SndAemsAllocFileDesc",
+          "SndAemsDerefrenceFileDesc"
+        ],
+        "discarded": [],
+        "evidence": "evidence.tsv linker row sound.cpp allocator folds: the target keeps every public function of the file, and the only local bodies it drops are the inline allocator methods listed under folded."
+      },
+      "folded": {
+        "symbols": {
+          "Alloc__23TiburonIAllocator13ImplUi": "0x801E10F0",
+          "Free__23TiburonIAllocator13ImplPv": "0x801E1168",
+          "AddRef__23TiburonIAllocator13Impl": "0x801E118C",
+          "Release__23TiburonIAllocator13Impl": "0x801E1194",
+          "_._23TiburonIAllocator13Impl": "0x801E10BC",
+          "_._10IAllocator": "0x801E119C",
+          "_vt.23TiburonIAllocator13Impl": "0x802B1150",
+          "_vt.10IAllocator": "0x802B1188"
+        },
+        "evidence": "evidence.tsv linker row sound.cpp allocator folds and data row 0x802B1A18-0x802B1AA8: the inline TiburonIAllocator13Impl and IAllocator methods and tables (include/engine/IAllocator.h) are local to both this file and src/engine/pathfinder.cpp; the target keeps only pathfinder.cpp's bodies 0x801E10BC-0x801E11D0, SndInit installs pathfinder.cpp's table 0x802B1150, and this file's table copies at 0x802B1A38-0x802B1AA8 stay unreferenced in place with slots that point to pathfinder.cpp's bodies."
+      }
+    },
+    {
       "source": "src/engine/pathfinder.cpp",
       "profile": "game_cpp",
       "evidence": "Complete bounded inferred handler, pool state and allocator-vtable grouping; evidence.tsv unit/function/data/type/field rows. Both code-file edges remain provisional; historical shared-file alternatives and other target table users are disclosed.",
@@ -14745,7 +14834,20 @@
           "start": "0x8039ADB8",
           "end": "0x8039ADC4"
         }
-      ]
+      ],
+      "kept_locals": {
+        "symbols": {
+          "_._23TiburonIAllocator13Impl": "0x801E10BC",
+          "Alloc__23TiburonIAllocator13ImplUi": "0x801E10F0",
+          "Free__23TiburonIAllocator13ImplPv": "0x801E1168",
+          "AddRef__23TiburonIAllocator13Impl": "0x801E118C",
+          "Release__23TiburonIAllocator13Impl": "0x801E1194",
+          "_._10IAllocator": "0x801E119C",
+          "_vt.23TiburonIAllocator13Impl": "0x802B1150",
+          "_vt.10IAllocator": "0x802B1188"
+        },
+        "evidence": "evidence.tsv linker row sound.cpp allocator folds: the inline TiburonIAllocator13Impl and IAllocator bodies and the TiburonIAllocator13Impl table are local to this file and to src/engine/sound.cpp; the target keeps this file's copies, which SndInit (0x801F3AB8) and sound.cpp's unreferenced table copy 0x802B1A38 point to."
+      }
     },
     {
       "source": "src/engine/animseqncr.c",
@@ -14883,6 +14985,25 @@
           "placement": ".data3",
           "start": "0x802B1570",
           "end": "0x802B15F8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/CurveList.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional whole-file unit row 0x801C5008-0x801C53A8, five function/name rows, compiler row engine_c_fastmath (tested against engine_c), source-form row for the evaluators, type/field rows for CurveList_t and its two key types, and the exact 48-byte .rodata row 0x802AF100-0x802AF130. Complete native text and rodata; no writable section.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C5008",
+          "end": "0x801C53A8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF100",
+          "end": "0x802AF130"
         }
       ]
     },

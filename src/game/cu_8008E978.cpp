@@ -8951,7 +8951,7 @@ void fn_80092F98(int handle);
 void fn_80093348(int handle);
 void fn_800940F0(int handle);
 void fn_800CC560(int a);
-int fn_801F3E28(void);
+int SndEnabled(void);
 
 extern Block_800BC538 *lbl_803EC98C;
 extern int lbl_803EC990[2];
@@ -9028,9 +9028,9 @@ extern "C" int fn_800BB050(int value)
 {
     int result = 0;
 
-    if (fn_801F3E28() && SpchIGIsEnabled() && value == 0) {
+    if (SndEnabled() && SpchIGIsEnabled() && value == 0) {
         result = 1;
-    } else if (!(fn_801F3E28() && SpchIGIsEnabled()) && value == 0) {
+    } else if (!(SndEnabled() && SpchIGIsEnabled()) && value == 0) {
         result = 1;
     }
     return result;

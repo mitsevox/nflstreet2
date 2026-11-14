@@ -9,6 +9,7 @@
 #include "engine/sound.h"
 #include "engine/pathfinder.h"
 #include "engine/fn_801B3234.h"
+#include "engine/IAllocator.h"
 
 extern "C" {
 #include "engine/list.h"
@@ -42,44 +43,6 @@ struct TagValuePair {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
-};
-
-/* Abstract allocator interface handed to fn_801B2C18. */
-class IAllocator {
-public:
-    virtual void *Alloc(unsigned int size) = 0;
-    virtual void Free(void *p) = 0;
-    virtual int AddRef() = 0;
-    virtual int Release() = 0;
-    virtual ~IAllocator() {}
-};
-
-/* Allocator on an engine heap, with an optional lock callback. */
-class TiburonIAllocator13Impl : public IAllocator {
-public:
-    TiburonIAllocator13Impl(int heap) : mHeap(heap), mpLock(0) {}
-    virtual void *Alloc(unsigned int size)
-    {
-        void *p;
-
-        if (mpLock) {
-            mpLock(1);
-        }
-        p = fn_801D2BB0(mHeap, size, 0, 0);
-        if (mpLock) {
-            mpLock(0);
-        }
-        return p;
-    }
-    virtual void Free(void *p) { fn_801D2BD0(p); }
-    virtual int AddRef() { return 0; }
-    virtual int Release() { return 0; }
-
-    void *operator new(unsigned int size) { return fn_801D2BB0(1, size, 0, 0); }
-    void operator delete(void *p) { fn_801D2BD0(p); }
-
-    int mHeap;
-    void (*mpLock)(int lock);
 };
 
 extern "C" {
@@ -244,7 +207,7 @@ int PathfinderCreateTrack(PathfinderTrackDesc_t *pDesc)
     if (pItem) {
         fn_801C1F94(pItem, 0, sizeof(PathfinderTrack_t));
         pItem->mUnknown8 = pDesc->mUnknown24;
-        SndSetHeap((SndBankHeap_t *)fn_801F44A4(), pDesc->mUnknown10);
+        SndSetHeap((SndBankHeap_t *)SndGetBankTable(), pDesc->mUnknown10);
         if (pDesc->mUnknown24) {
             result = fn_801B3D28(pDesc->mId, &pDesc->mUnknown14, pDesc->mUnknown20);
             if (result >= 0) {
