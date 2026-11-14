@@ -1,7 +1,7 @@
 #include "game/FEPlyrModel.h"
 #include "game/Object_8008044C.h"
 #include "game/Object_801BBD5C.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/fn_802372EC.h"
 #include "game/Table_80089904.h"
 #include "game/fn_801BE60C.h"
@@ -21,7 +21,7 @@ extern "C" {
 void FEPlyrSetPose(int index, unsigned int value);
 unsigned char PlayerLocoGetRunCategory(unsigned short index);
 Object_8008044C *EditMenuGetPlayerCursor(void);
-Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
+Object_801BBD5C *AnimFileGetStateData(unsigned short a, unsigned short b);
 int fn_8008A20C(unsigned int value);
 }
 
@@ -45,20 +45,20 @@ int fn_8008977C(FEPlyrModel_t *pRecord, Table_80089904 *pTable, unsigned int val
     unsigned short id;
     Object_801BBD5C *pObject;
 
-    fn_801BBC3C(((Header_8008977C *)pRecord->mUnknown796)->mUnknown2, 74, pTable);
+    AnimFileGetStateAnimList(((Header_8008977C *)pRecord->mUnknown796)->mUnknown2, 74, pTable);
     memset(values, 255, sizeof(values));
     values[0] = 1;
     id = pTable->mEntries[fn_8009C56C(pTable, values)].mUnknown2 & 0x7FFF;
-    fn_801BBC3C(((Header_8008977C *)pRecord->mUnknown796)->mUnknown2, id, pTable);
+    AnimFileGetStateAnimList(((Header_8008977C *)pRecord->mUnknown796)->mUnknown2, id, pTable);
     memset(values, 255, sizeof(values));
     values[0] = PlayerLocoGetRunCategory(value - 31);
     id = pTable->mEntries[fn_8009C56C(pTable, values)].mUnknown2 & 0x7FFF;
-    fn_801BBC3C(((Header_8008977C *)pRecord->mUnknown796)->mUnknown2, id, pTable);
+    AnimFileGetStateAnimList(((Header_8008977C *)pRecord->mUnknown796)->mUnknown2, id, pTable);
     memset(values, 255, sizeof(values));
     values[0] = 1;
     id = pTable->mEntries[fn_8009C56C(pTable, values)].mUnknown2 & 0x7FFF;
-    fn_801BBC3C(((Header_8008977C *)pRecord->mUnknown796)->mUnknown2, id, pTable);
-    pObject = fn_801BBD5C(id, ((Header_8008977C *)pRecord->mUnknown796)->mUnknown2);
+    AnimFileGetStateAnimList(((Header_8008977C *)pRecord->mUnknown796)->mUnknown2, id, pTable);
+    pObject = AnimFileGetStateData(id, ((Header_8008977C *)pRecord->mUnknown796)->mUnknown2);
     if (pObject->mCount != 0) {
         best = 0;
         for (unsigned char i = 1; i < pObject->mCount; i++) {
@@ -228,7 +228,7 @@ int fn_80089E70(Table_80089904 *pTable, unsigned short event, void *a, void *b,
 
     switch (phase) {
     case 0:
-        fn_801BBC3C(((Header_8008977C *)pRecord->mUnknown796)->mUnknown2, 214, pTable);
+        AnimFileGetStateAnimList(((Header_8008977C *)pRecord->mUnknown796)->mUnknown2, 214, pTable);
         fn_801BE760(pRecord->mUnknown792, event, 1);
         if (sTop[index] != -1) {
             choice = fn_80089904(pRecord, pTable, sTransitions[index][sTop[index]].mValue,
@@ -248,7 +248,7 @@ int fn_80089E70(Table_80089904 *pTable, unsigned short event, void *a, void *b,
             choice = fn_80089904(pRecord, pTable, sCurrent[index], 2);
         }
         if (choice >= 0) {
-            fn_801BA2A8(a, b, pTable->mEntries[choice].mUnknown0,
+            AnimChanStartAnim(a, b, pTable->mEntries[choice].mUnknown0,
                        pTable->mEntries[choice].mUnknown2, event, pRecord, 1.0f);
         }
         break;

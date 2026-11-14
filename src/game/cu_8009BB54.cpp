@@ -1,7 +1,7 @@
 #include "game/Table_80089904.h"
 #include "game/fn_801C1F94.h"
 #include "engine/llquat.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/Item_80097440.h"
 
 extern "C" {
@@ -107,7 +107,7 @@ extern "C" int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, Object_8003
     int index = fn_8009C4B0(pTable, (unsigned char *)&pRecord->mUnknown1008);
 
     if (index >= 0) {
-        fn_801BA2A8(a, b, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, c, pRecord, 1.0f);
+        AnimChanStartAnim(a, b, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, c, pRecord, 1.0f);
     }
     return 0;
 }

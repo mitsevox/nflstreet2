@@ -3,7 +3,7 @@
 
 #include "game/Block_801BE60C.h"
 
-/* Records of the table fn_801BBD5C returns. */
+/* Records of the table AnimFileGetStateData returns. */
 
 struct Entry_800DE51C {
     unsigned short mUnknown0;

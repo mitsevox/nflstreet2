@@ -5,7 +5,7 @@
 #include "game/fn_80178D18.h"
 #include "game/Block_801BE60C.h"
 #include "game/fn_802372EC.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/fn_80238174.h"
 #include "game/fn_801248D4.h"
 #include "game/Item_80097440.h"
@@ -35,7 +35,7 @@ int fn_80178308(void);
 int fn_800B65A0(int team);
 }
 
-extern "C" int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+extern "C" int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
                            Object_80039F5C *p, unsigned int phase)
 {
     Block_8009A344 *pBlock = (Block_8009A344 *)fn_801BE60C(p->mpUnknown792, key);
@@ -48,7 +48,7 @@ extern "C" int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRe
         *pBlock = lbl_803EC92C->mUnknown4;
         animation = p->mUnknown1008.mUnknown0 | p->mUnknown1008.mUnknown1 << 8;
         value = p->mUnknown1008.mUnknown2 | p->mUnknown1011 << 8;
-        pBlock->mUnknown20 = fn_801BA2A8(pRecord, pEntries, value, animation, key, p, 1.0f);
+        pBlock->mUnknown20 = AnimChanStartAnim(pRecord, pEntries, value, animation, key, p, 1.0f);
         fn_801BE760(p->mpUnknown792, key, 1);
         AnimMomentumInit(&pBlock->mUnknown24, p, lbl_803EC92C->mUnknown4.mUnknown20);
         break;

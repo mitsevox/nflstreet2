@@ -1,4 +1,4 @@
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/fn_801248D4.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
@@ -48,8 +48,8 @@ struct State_8010D80C {
 };
 
 extern "C" {
-int fn_801BA6B0(Entry_800EAC9C *pEntry);
-void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
+int AnimChanIsMirrored(Entry_800EAC9C *pEntry);
+void AnimChanSetMirrored(Entry_800EAC9C *pEntry, int flag);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 }
 
@@ -61,10 +61,10 @@ extern "C" void fn_8010D434(Object_80039F5C *p, State_8010D80C *pState) {
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 37, 1.0f, p);
     }
     if (pState->mUnknown27) {
-        Record_800D81C8 *pEntries = p->mpUnknown800;
-        Record_800D81C8 *pEntry = &pEntries[fn_801BA5A8(p->mpUnknown796, pEntries, 37, 0)];
+        AnimChannel_t *pEntries = p->mpUnknown800;
+        AnimChannel_t *pEntry = &pEntries[AnimChanGetStateChannelByIndex(p->mpUnknown796, pEntries, 37, 0)];
 
-        fn_801BA6BC(pEntry, !fn_801BA6B0(pEntry));
+        AnimChanSetMirrored(pEntry, !AnimChanIsMirrored(pEntry));
     }
     pState->mUnknown26 = 1;
 }

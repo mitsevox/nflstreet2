@@ -1,4 +1,4 @@
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/fn_801248D4.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
@@ -85,11 +85,11 @@ extern "C" void fn_8010D508(Object_80039F5C *p) {
     fn_8009BD60(p);
     pCarrier = BallGetHolder(BallGetCurrent());
     if (fn_8022781C(&p->mMotion.mPos, &pCarrier->mMotion.mPos) < 2.5f) {
-        fn_801BBC3C(1, 0x25, &lbl_80319ED8);
+        AnimFileGetStateAnimList(1, 0x25, &lbl_80319ED8);
         p->mUnknown1008.mUnknown0 = 1;
         close = 1;
     } else {
-        fn_801BBC3C(1, 0xB0, &lbl_80319ED8);
+        AnimFileGetStateAnimList(1, 0xB0, &lbl_80319ED8);
         p->mUnknown1008.mUnknown0 = 2;
     }
     p->mUnknown1008.mUnknown1 = pState->mUnknown1;

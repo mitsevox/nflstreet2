@@ -12,7 +12,7 @@
 #include "game/BigObjInst.h"
 #include "game/ParticleSys.h"
 #include "game/AudmonEvent.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 
 struct Entry_802D71D8 {
     int mId;
@@ -44,11 +44,11 @@ extern float gPlyrMoveSideSpeed;
 extern float gPlyrMoveBackSpeed;
 int PlayerMoveAnimCheckReverse(Object_80039F5C *, unsigned short);
 int MathAngleDiff(int, int);
-int fn_801BB608(void *, void *);
-int fn_801BB638(int, void *);
-int fn_801BB65C(int, void *);
+int AnimFileLoadResidentData(void *, void *);
+int AnimFileLoadResident(int, void *);
+int AnimFileLoadResidentAsync(int, void *);
 int AnimSeqGetOpcodeParameter(void);
-int fn_801BB994(int id);
+int AnimFileUnloadFile(int id);
 void AnimCacheInit(int, int);
 void AnimCacheSetUpObjectType(int, int, int);
 void AnimFrameCacheSetCustomFunc(void (*)(AnimFileFormat_t *,int,unsigned char *,unsigned int,unsigned int,int));
@@ -64,10 +64,10 @@ void FlowModuleStart(void *, int);
 void FlowModuleStop(void *, int);
 void AnimSetUserOpcodeCallbacks(int (*)(void *,int,unsigned int), int (*)(void *,int,unsigned int));
 void AnimFileSetCustomRelocateFunc(void (*)(AnimFileFormat_t *));
-void fn_801BAEA4(void (*)(AnimFileFormat_t *));
+void AnimFileSetFreeFunc(void (*)(AnimFileFormat_t *));
 void ResSync(int);
-void *fn_801BB570(int, int, int, int);
-void fn_801BB480(void);
+void *AnimFileLoadAllocated(int, int, int, int);
+void AnimFileStop(void);
 int AnimSequencerShutdown(void);
 int AnimShutdown(void);
 void AnimWgtInit(int);
@@ -83,8 +83,8 @@ extern int lbl_802D7154[];
 extern int lbl_802D71CC[];
 extern float lbl_803EA8B4,lbl_803EA8B8;
 BigObjInst *BallModelGetLinkedObj(Block_80170E64 *);
-int fn_801BA5A8(AnimHeader_t *,Record_800D81C8 *,unsigned short,int);
-int fn_801BA6B0(Record_800D81C8 *);
+int AnimChanGetStateChannelByIndex(AnimHeader_t *,AnimChannel_t *,unsigned short,int);
+int AnimChanIsMirrored(AnimChannel_t *);
 void fn_800518E0(Object_80039F5C *);
 void fn_800C8688(Object_80039F5C *,Object_80039F5C *,int,int);
 int fn_800C8694(Object_80039F5C *);
@@ -147,9 +147,9 @@ extern "C" void fn_8008EB18(int id,int flag,void *data)
 {
     int i=0;
     while(lbl_802D71D8[i].mId!=-1 && lbl_802D71D8[i].mId!=id) ++i;
-    if(lbl_802D71D8[i].mId==id) fn_801BB608(lbl_802D71D8[i].mHandle,data);
-    else if(flag) fn_801BB65C(id,data);
-    else fn_801BB638(id,data);
+    if(lbl_802D71D8[i].mId==id) AnimFileLoadResidentData(lbl_802D71D8[i].mHandle,data);
+    else if(flag) AnimFileLoadResidentAsync(id,data);
+    else AnimFileLoadResident(id,data);
 }
 
 extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
@@ -191,9 +191,9 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
         case 0xC00F:
             if(AnimSeqGetOpcodeParameter()==2) p->mFlags|=0x80000;else p->mFlags&=~0x80000;return 1;
         case 0xC010: {
-            int index=fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,10,0);
-            if(index==0xFFFF) index=fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
-            if(index!=0xFFFF) mode=fn_801BA6B0(&p->mpUnknown800[index]);
+            int index=AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,10,0);
+            if(index==0xFFFF) index=AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
+            if(index!=0xFFFF) mode=AnimChanIsMirrored(&p->mpUnknown800[index]);
             fn_800ADBFC(p,mode);return 1;
         }
         case 0xC011:fn_800ADD04(p);return 1;
@@ -202,8 +202,8 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
         case 0xC014:p->mUnknown1240.mUnknown3=(unsigned char)AnimSeqGetOpcodeParameter();return 1;
         case 0xC015: {
             int selection=2;
-            int index=fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
-            mode=fn_801BA6B0(&p->mpUnknown800[index]);
+            int index=AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
+            mode=AnimChanIsMirrored(&p->mpUnknown800[index]);
             if(AnimSeqGetOpcodeParameter()==2) selection=1;
             if(mode) selection=selection==2?1:2;
             if(!fn_800DBAF0(p)) fn_800D7A0C(p,selection);
@@ -212,8 +212,8 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
         case 0xC016:case 0xC01B:case 0xC021:case 0xD004:
             AnimSeqGetOpcodeParameter();return 1;
         case 0xC017: {
-            int index=fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
-            if(index!=0xFFFF) mode=fn_801BA6B0(&p->mpUnknown800[index]);
+            int index=AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
+            if(index!=0xFFFF) mode=AnimChanIsMirrored(&p->mpUnknown800[index]);
             else mode=p->mUnknown776==1;
             int selection=AnimSeqGetOpcodeParameter();int *record;
             switch(selection) {
@@ -225,7 +225,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
         }
         case 0xC018:p->mFlags|=0x2000;return 1;
         case 0xC019:fn_800ADD00(p);return 1;
-        case 0xC01A:fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);return 1;
+        case 0xC01A:AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);return 1;
         case 0xC01C: {
             short bone=(short)(AnimSeqGetOpcodeParameter()-1);
             short effect=(short)(AnimSeqGetOpcodeParameter()-1);
@@ -236,8 +236,8 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             return 1;
         }
         case 0xC01E:
-            fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
-            fn_8003145C(p,AnimSeqGetOpcodeParameter());return 1;
+            AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
+            ReplayEventAddForCode(p,AnimSeqGetOpcodeParameter());return 1;
         case 0xC01F:
             if(AnimSeqGetOpcodeParameter()==1) AudmonEventPostId(43,&p->mMotion.mPos,p->mId,0,0,0);
             else AudmonEventPostId(35,&p->mMotion.mPos,p->mId,(int)p,(int)p,0);
@@ -358,12 +358,12 @@ extern "C" void fn_8008FBA0(void)
     FlowModulePreStart(pModule);FlowModuleStart(pModule,0);
     lbl_802D713C.mpArchive=pModule->GetArchive();
     AnimSetUserOpcodeCallbacks(fn_8008EBBC,fn_8008F78C);
-    AnimFileSetCustomRelocateFunc(AnimExtnRelocateFile);fn_801BAEA4(AnimExtnFreeFile);
-    fn_801BB2D8(&lbl_802D713C);ResSync(0);
+    AnimFileSetCustomRelocateFunc(AnimExtnRelocateFile);AnimFileSetFreeFunc(AnimExtnFreeFile);
+    AnimFileStart(&lbl_802D713C);ResSync(0);
     if(lbl_803EA8B0) {fn_801D2BD0(lbl_803EA8B0);lbl_803EA8B0=0;}
     for(int i=0;lbl_802D71D8[i].mId!=-1;++i)
-        lbl_802D71D8[i].mHandle=fn_801BB570(lbl_802D71D8[i].mId,1,2,lbl_802D71D8[i].mUnknown7);
-    fn_801BB480();AnimSequencerShutdown();AnimShutdown();FlowModuleStop(&gAnimData,0);
+        lbl_802D71D8[i].mHandle=AnimFileLoadAllocated(lbl_802D71D8[i].mId,1,2,lbl_802D71D8[i].mUnknown7);
+    AnimFileStop();AnimSequencerShutdown();AnimShutdown();FlowModuleStop(&gAnimData,0);
 }
 extern "C" void fn_8008FCB4(int flag)
 {
@@ -371,14 +371,14 @@ extern "C" void fn_8008FCB4(int flag)
     else lbl_802D70D0.mpArchive=gAnimData.GetArchive();
     AnimInit(1);AnimSequencerInit(60.0f);
     AnimSetUserOpcodeCallbacks(fn_8008EBBC,fn_8008F78C);
-    AnimFileSetCustomRelocateFunc(AnimExtnRelocateFile);fn_801BAEA4(AnimExtnFreeFile);
+    AnimFileSetCustomRelocateFunc(AnimExtnRelocateFile);AnimFileSetFreeFunc(AnimExtnFreeFile);
     fn_8008F978();AnimWgtInit(4);
-    if(flag) fn_801BB2D8(&lbl_802D713C);else fn_801BB2D8(&lbl_802D70D0);
+    if(flag) AnimFileStart(&lbl_802D713C);else AnimFileStart(&lbl_802D70D0);
     fn_801BDF90(11);fn_8008F940();
 }
 extern "C" void fn_8008FD88(void)
 {
-    fn_801BDFF8();AnimCacheShutdown();fn_8008F9C0();fn_801BB480();
+    fn_801BDFF8();AnimCacheShutdown();fn_8008F9C0();AnimFileStop();
     AnimWgtShutdown();AnimShutdown();AnimSequencerShutdown();
 }
 extern "C" void fn_8008FDC0(void)
@@ -391,14 +391,14 @@ extern "C" void fn_8008FDC0(void)
 extern "C" void fn_8008FE5C(void) {}
 extern "C" void fn_8008FE60(void)
 {
-    fn_801BB638(71,0);fn_801BB638(81,0);fn_801BB638(76,0);
-    fn_801BB638(77,0);fn_801BB638(80,0);fn_801BB638(83,0);
+    AnimFileLoadResident(71,0);AnimFileLoadResident(81,0);AnimFileLoadResident(76,0);
+    AnimFileLoadResident(77,0);AnimFileLoadResident(80,0);AnimFileLoadResident(83,0);
     fn_8008EB18(72,0,lbl_803EC91C);
 }
 extern "C" void fn_8008FED4(void)
 {
-    fn_801BB994(71);fn_801BB994(81);fn_801BB994(76);
-    fn_801BB994(77);fn_801BB994(80);fn_801BB994(83);fn_801BB994(72);
+    AnimFileUnloadFile(71);AnimFileUnloadFile(81);AnimFileUnloadFile(76);
+    AnimFileUnloadFile(77);AnimFileUnloadFile(80);AnimFileUnloadFile(83);AnimFileUnloadFile(72);
 }
 extern "C" int fn_8008FF28(Object_8008FF28 *p,Record_8008FF28 *record)
 {

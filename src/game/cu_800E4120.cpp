@@ -1,4 +1,4 @@
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/Object_80039F5C.h"
 #include "game/AnimMomentumActor.h"
 #include "game/Object_8017886C.h"
@@ -33,8 +33,8 @@ extern "C" void fn_800E4120(Object_80039F5C *p, State_800E4120 *pState, int head
     }
     p->mFlags &= ~4;
     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 28, 1.0f, p);
-    if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 28)) {
-        int index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 28, 0);
+    if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 28)) {
+        int index = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 28, 0);
         float rate = speed * 1.025641f;
         if (rate > 1.4f) {
             rate = 1.4f;

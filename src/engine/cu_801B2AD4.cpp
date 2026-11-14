@@ -1,5 +1,5 @@
 #include "engine/fn_801B3234.h"
-#include "engine/cu_801B8C18.h"
+#include "engine/csis.h"
 
 struct Data_801B4548 {
     unsigned char mUnknown0[4];

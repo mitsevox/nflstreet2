@@ -2,7 +2,7 @@
    animation, then hands over to the next state or keeps running on his facing. Also holds
    the lookups other code uses to read the cut table and the cut in progress. */
 
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/StyleTracker.h"
 #include "game/OptionRunControl.h"
 #include "game/Message_800F01CC.h"
@@ -13,7 +13,7 @@
 #include "game/Table_80089904.h"
 #include "engine/AnimStateAnimList.h"
 #include "game/AudmonEvent.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/GameOptions.h"
@@ -77,8 +77,8 @@ struct PlayerCutState_t {
     int mUnknown20;
 };
 
-/* The list fn_801BBC3C fills with the cut animations (object type 1, state 153). The game
-   declaration of fn_801BBC3C takes the Table_80089904 view, and the entries' +4 words are
+/* The list AnimFileGetStateAnimList fills with the cut animations (object type 1, state 153). The game
+   declaration of AnimFileGetStateAnimList takes the Table_80089904 view, and the entries' +4 words are
    Info_80089904 pointers. */
 static AnimStateAnimList_t _PlayerCut_sAnimList;
 
@@ -111,7 +111,7 @@ extern "C" Info_80089904 *PlayerCutFindAnimInfo(int a, int b)
 {
     unsigned int i;
 
-    fn_801BBC3C(1, 153, (Table_80089904 *)&_PlayerCut_sAnimList);
+    AnimFileGetStateAnimList(1, 153, (Table_80089904 *)&_PlayerCut_sAnimList);
     for (i = 0; i < _PlayerCut_sAnimList.mCount; i++) {
         Info_80089904 *pInfo = (Info_80089904 *)_PlayerCut_sAnimList.mEntries[i].mpUnknown4;
 
@@ -368,8 +368,8 @@ extern "C" int PlayerCutGetAnimTime(Object_80039F5C *p)
 {
     int result = 0;
 
-    if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 153)) {
-        int index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 153, 0);
+    if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 153)) {
+        int index = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 153, 0);
         float start = AnimSeqGetTimeToOpcode(&p->mpUnknown800[index].mUnknown4C, 0xC004);
 
         result = (int)(AnimSeqGetOpcodeTime(p->mpUnknown800[index].mUnknown4C.mpUnknown0, 0xC004) - start);

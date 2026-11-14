@@ -5,7 +5,7 @@
    next to a wall, otherwise one of the open-field moves), and runs that
    state: its start, each frame, its end and its button input. */
 
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/Command_800CEE74.h"
 #include "game/LevelData.h"
 #include "game/Record_800DB60C.h"
@@ -93,9 +93,9 @@ extern "C" void CarrierMoveStartWallAnim(Object_80039F5C *p) {
     }
     if (index != -1) {
         fn_800C39E0(p, kind, index, value, flag);
-        if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 228)) {
-            Record_800D81C8 *pRecords = p->mpUnknown800;
-            int entry = fn_801BA5A8(p->mpUnknown796, pRecords, 228, 0);
+        if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 228)) {
+            AnimChannel_t *pRecords = p->mpUnknown800;
+            int entry = AnimChanGetStateChannelByIndex(p->mpUnknown796, pRecords, 228, 0);
             float speed;
             if (fn_800A7EF4(p->mIdBytes[2]) == 0) {
                 speed = _CarrierMove_fBaseAnimTime;
@@ -108,7 +108,7 @@ extern "C" void CarrierMoveStartWallAnim(Object_80039F5C *p) {
             }
             if (fn_800CA5CC(p, 11, 1))
                 speed *= fn_800CA9B4(12, p);
-            Record_800D81C8 *pEntry = &pRecords[entry];
+            AnimChannel_t *pEntry = &pRecords[entry];
             AnimSeqSetSpeed(&pEntry->mUnknown4C, MathInverse(speed));
             pEntry->mUnknown2C = _CarrierMove_fAnimWeight;
             PlayerMoveSetResult(p, 0);
@@ -174,13 +174,13 @@ extern "C" void CarrierMoveStartAnim(Object_80039F5C *p) {
         PlayerMoveSetResult(p, 0);
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 24, 1.0f, p);
     }
-    if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 24) || fn_801BA568(p->mpUnknown796, p->mpUnknown800, 180)) {
-        Record_800D81C8 *pRecords = p->mpUnknown800;
+    if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 24) || AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 180)) {
+        AnimChannel_t *pRecords = p->mpUnknown800;
         int index;
         if (mode)
-            index = fn_801BA5A8(p->mpUnknown796, pRecords, 180, 0);
+            index = AnimChanGetStateChannelByIndex(p->mpUnknown796, pRecords, 180, 0);
         else
-            index = fn_801BA5A8(p->mpUnknown796, pRecords, 24, 0);
+            index = AnimChanGetStateChannelByIndex(p->mpUnknown796, pRecords, 24, 0);
         float speed;
         if (fn_800A7EF4(p->mIdBytes[2]) == 0) {
             speed = _CarrierMove_fBaseAnimTime;
@@ -193,7 +193,7 @@ extern "C" void CarrierMoveStartAnim(Object_80039F5C *p) {
         }
         if (fn_800CA5CC(p, 11, 1))
             speed *= fn_800CA9B4(12, p);
-        Record_800D81C8 *pRecord = &pRecords[index];
+        AnimChannel_t *pRecord = &pRecords[index];
         AnimSeqSetSpeed(&pRecord->mUnknown4C, MathInverse(speed));
         pRecord->mUnknown2C = _CarrierMove_fAnimWeight;
     }

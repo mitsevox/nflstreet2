@@ -4,6 +4,7 @@
 /* Declarations shared by the files of the sound range 0x802714A8-0x80276DE4:
    cu_802714A8.cpp, sdspmix.c, snddrv.c and cu_802753F0.cpp. */
 
+#include <dolphin/ai.h>
 #include <dolphin/ar.h>
 #include <dolphin/ax.h>
 #include <dolphin/os.h>
@@ -98,7 +99,7 @@ struct SndDrvMixChannel_t {
 };
 
 struct Channel_803A8D60 {
-    unsigned char mUnknown0[0x18];
+    float m0[6];
     int m18;
     signed char m1C;
     unsigned char mUnknown1D[2];
@@ -111,7 +112,8 @@ struct Channel_803A8D60 {
 };
 
 struct Transfer_803B2B90 {
-    int m0;
+    // FAKEMATCH: volatile only for the target's repeated load of the key in fn_80275288
+    volatile int m0;
     ARQRequest m4;
     unsigned int m24;
     unsigned int m28;
@@ -138,15 +140,19 @@ struct Stream_802743A0 {
 
 struct State_803A8D60 {
     Channel_803A8D60 m0[48];
-    unsigned char mUnknownC00[0x808];
+    unsigned char mUnknownC00[0x800];
+    float m1400;
+    void *m1404;
     u32 m1408;
     u32 m140C;
     Stream_802743A0 *m1410[32];
-    unsigned char mUnknown1490[0x630];
+    unsigned char mUnknown1490[0x10];
+    unsigned char m14A0[0x620];
     unsigned char *m1AC0;
     unsigned char mUnknown1AC4[4];
     OSThread m1AC8;
-    unsigned char mUnknown1DE0[0x8008];
+    OSThreadQueue m1DE0;
+    unsigned char m1DE8[0x8000];
     int m9DE8;
     int m9DEC;
     unsigned char mUnknown9DF0[0x40];
@@ -236,6 +242,26 @@ extern int lbl_80300E98;
 extern OSMutex lbl_803B4B90;
 extern Node_803B4E20 **lbl_803B4E20;
 extern float **lbl_803B4E24;
+extern void (*lbl_802FFDF0)(void);
+extern void (*lbl_802FFDF4)(void);
+extern int lbl_80300850;
+extern float lbl_80300854;
+extern int lbl_80300858;
+extern int lbl_803A7640;
+extern float lbl_803A7644;
+extern unsigned char lbl_803A7728;
+extern int lbl_803A772C;
+extern float *lbl_803A8D40;
+
+void fn_8026CDA0(void);
+void fn_8026CE0C(void);
+void fn_80272D34(void **buffers, void *unused);
+void *fn_80273264(void *arg);
+int fn_80273648(int mode);
+void fn_80274924(int index);
+void fn_80276938(int index, float value);
+void fn_80277A60(unsigned short angle, float *levels);
+void fn_8027981C(int count);
 
 void fn_8026A0E8(int value);
 void *fn_8026B5D4(int size);

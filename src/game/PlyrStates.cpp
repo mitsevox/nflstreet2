@@ -5,7 +5,7 @@
 #include <math.h>
 #include <string.h>
 
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/Directions_8012430C.h"
 #include "game/fn_80177FE0.h"
@@ -161,7 +161,7 @@ int PlyrEngageEnter(Object_80039F5C *p)
     unsigned short index;
     do {
         PlyrEngageKey_t *key = &_PlyrEngage_aAnimKeys[n];
-        index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, key->mKey, 0);
+        index = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, key->mKey, 0);
         ++n;
     } while (n <= 42 && index == 0xFFFF);
     s->mUnknown6 = index;

@@ -8,12 +8,8 @@
 /* Defined with C++ linkage in src/game/MainLoop.cpp. */
 void MainLoopRun(void);
 
-extern "C" {
+extern "C" void GlibSetTvMode(int value);
 
-void GlibSetTvMode(int value);
-void _MainInitFastCast(void);
-
-#if defined(DECOMP_COMPARE)
 void _MainInitFastCast(void)
 {
     asm volatile("li 3,4\n\toris 3,3,4\n\tmtspr GQR2,3\n\t"
@@ -24,9 +20,8 @@ void _MainInitFastCast(void)
                  "li 3,7\n\toris 3,3,7\n\tmtspr GQR7,3"
                  : : : "r3");
 }
-#endif
 
-void MainInitPlatform(void)
+extern "C" void MainInitPlatform(void)
 {
     OSInit();
     _MainInitFastCast();
@@ -34,8 +29,6 @@ void MainInitPlatform(void)
     VIInit();
     VMInit(0x41000, 0xAFC000, 0x104000);
     VMSetPageReplacementPolicy(0);
-}
-
 }
 
 int main(void)

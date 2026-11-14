@@ -165,7 +165,7 @@
       "include_dirs": [
         "include/libc"
       ],
-      "evidence": "evidence.tsv compiler row 0x801B8C18-0x801B9D00 (engine_cpp_nosda_nosr), the one file src/engine/cu_801B8C18.cpp: engine_cpp_nosda's -O2 -G0 (absolute lis/load/store pairs for its scalar globals, no SDA) plus -fno-strength-reduce (owner ruling of 2026-11-14, per-file profile): the target recomputes index*12 and index*16 with mulli inside each lookup loop. The flag is not given to engine_cpp_nosda because it changes FSasync.c (DoFSReadHeader) and src/engine/cu_8025E148.c (fn_8025E148)."
+      "evidence": "evidence.tsv compiler row 0x801B8C18-0x801B9D00 (engine_cpp_nosda_nosr), the one file src/engine/csis.cpp: engine_cpp_nosda's -O2 -G0 (absolute lis/load/store pairs for its scalar globals, no SDA) plus -fno-strength-reduce (owner ruling of 2026-11-14, per-file profile): the target recomputes index*12 and index*16 with mulli inside each lookup loop. The flag is not given to engine_cpp_nosda because it changes FSasync.c (DoFSReadHeader) and src/engine/cu_8025E148.c (fn_8025E148)."
     },
     "speech_cxx": {
       "flags": [
@@ -1280,10 +1280,6 @@
       "address": "0x803EBE80",
       "evidence": "evidence.tsv data/name rows for _tDbMemAllocInfoCallback: optional three-word memory-event callback; original-owned storage."
     },
-    "MemInitExternHeap": {
-      "address": "0x801D3B0C",
-      "evidence": "evidence.tsv function/name/source-form rows at 0x801D3B0C: Sys::Init calls the original external-region initializer at 0x8019A7F4; MemExtern.c remains comparison-only."
-    },
     "__udivdi3": {
       "address": "0x8025F0A8",
       "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long /10 in integer formatter resolves __udivdi3; corresponding target call at0x80265404 reaches0x8025F0A8 with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
@@ -2172,9 +2168,9 @@
       "address": "0x80056560",
       "evidence": "evidence.tsv function/name rows for 0x80056560; GameStatsUpdateRecords is defined in src/game/InGameScreens.cpp, which is comparison-only, and is called by the comparison src/game/cu_80155F48.cpp (bl at 0x80155F60)."
     },
-    "_MainInitFastCast": {
-      "address": "0x80088F2C",
-      "evidence": "evidence.tsv function and name rows for 0x80088F2C (comparison-only function of src/game/Main.cpp, inline asm start holdout, original bytes)."
+    "gDefPred": {
+      "address": "0x8030C070",
+      "evidence": "evidence.tsv external row for 0x8030C070 (gDefPred, defined in the comparison-only src/game/cu_8008E978.cpp); the linked src/game/InGameGroup.cpp module tables point to it."
     },
     "FormationLineupSwapAllUser": {
       "address": "0x8008593C",
@@ -2259,6 +2255,14 @@
     "spchlibauthor": {
       "address": "0x802F4794",
       "evidence": "evidence.tsv data/name rows for 0x802F4794 (target extent, related name); speech-library storage, original-owned."
+    },
+    "Init_GFLink": {
+      "address": "0x802856D8",
+      "evidence": "evidence.tsv function/name rows for 0x802856D8 (target extent, related name); src/engine/gflink.c is comparison-only, so src/engine/llperiph.c calls the original bytes."
+    },
+    "GBAFanServiceLink": {
+      "address": "0x802857D8",
+      "evidence": "evidence.tsv function/name rows for 0x802857D8 (target extent, related name); src/engine/gbafan.c is comparison-only, so src/engine/PJoyDrvr.c calls the original bytes."
     }
   },
   "units": [
@@ -2445,6 +2449,31 @@
       ]
     },
     {
+      "source": "src/engine/MemExtern.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801D36E8-0x801D3BD0 (src/engine/MemExtern.c), its function, name, type, field and source-form rows and its two data rows; every function and data placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D36E8",
+          "end": "0x801D3BD0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AFCA0",
+          "end": "0x802AFCC4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7B40",
+          "end": "0x802F7B64"
+        }
+      ]
+    },
+    {
       "source": "src/engine/TibNew.cpp",
       "profile": "engine_cpp_nosda",
       "evidence": "evidence.tsv unit row 0x801D3BD0-0x801D3C68 (src/engine/TibNew.cpp) and its function rows; every function exact, promoted from comparison-only.",
@@ -2524,6 +2553,25 @@
           "placement": ".text",
           "start": "0x801DC9C8",
           "end": "0x801DCA10"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/resquickload.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801F284C-0x801F2E54 (src/engine/resquickload.c), its compiler, function, name, data, type and source-form rows; all eleven functions exact (two through labeled fake-match forms), promoted from comparison-only, with the file's .sdata words 0x803EBDD8-0x803EBDE0 (_ResQuickload_pFileList, _aFilenameRemappings).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F284C",
+          "end": "0x801F2E54"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBDD8",
+          "end": "0x803EBDE0"
         }
       ]
     },
@@ -4458,6 +4506,55 @@
           "placement": ".data2",
           "start": "0x80289B94",
           "end": "0x80289B98"
+        }
+      ]
+    },
+    {
+      "source": "src/game/InGameGroup.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800325E8-0x80032EE8 (src/game/InGameGroup.cpp) and its function and data rows; every function and data placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800325E8",
+          "end": "0x80032EE8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028ACE0",
+          "end": "0x8028AD70"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCBBC",
+          "end": "0x802CCBF4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803068B4",
+          "end": "0x80306B34"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC680",
+          "end": "0x803EC688"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A5C",
+          "end": "0x80289A60"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B9C",
+          "end": "0x80289BA0"
         }
       ]
     },
@@ -9415,6 +9512,25 @@
           "placement": ".data5",
           "start": "0x803EA398",
           "end": "0x803EA39C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/ReplayEvent.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8003108C-0x800314E0 (src/game/ReplayEvent.cpp), its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003108C",
+          "end": "0x800314E0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCA34",
+          "end": "0x802CCB18"
         }
       ]
     },
@@ -15294,9 +15410,9 @@
       "evidence": "evidence.tsv unit row 0x801B1A3C-0x801B1CFC (src/engine/spchrand.c), its function, name and source-form rows, the data rows of its own storage (seedX .data 0x802F477C-0x802F4794, gRandArray .bss 0x8037E794-0x8037E814, gRandArrayIndex .sdata 0x803EBB20-0x803EBB24) and the speech_cxx compiler row; all five functions match the target, promoted from comparison-only."
     },
     {
-      "source": "src/engine/cu_801B8C18.cpp",
+      "source": "src/engine/csis.cpp",
       "profile": "engine_cpp_nosda_nosr",
-      "evidence": "evidence.tsv unit row 0x801B8C18-0x801B9D00 (src/engine/cu_801B8C18.cpp), its compiler row (engine_cpp_nosda_nosr), function and source-form rows, the .bss data row 0x8037E820-0x8037E824 and the .ctors data row 0x80289B44-0x80289B48; all 42 functions exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801B8C18-0x801B9D00 (src/engine/csis.cpp), its compiler row (engine_cpp_nosda_nosr), function, name, type and source-form rows, the .data rows 0x802F4838 and 0x802F483C, the .bss data rows 0x8037E820, 0x8037E824 and 0x8037E828 and the .ctors data row 0x80289B44-0x80289B48; all 42 functions exact and all of the file's storage defined.",
       "sections": [
         {
           "section": ".text",
@@ -15305,10 +15421,16 @@
           "end": "0x801B9D00"
         },
         {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4838",
+          "end": "0x802F4840"
+        },
+        {
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8037E820",
-          "end": "0x8037E824"
+          "end": "0x8037E840"
         },
         {
           "section": ".ctors",
@@ -18262,6 +18384,25 @@
       ]
     },
     {
+      "source": "src/engine/tdbiofio.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80285808-0x80285A24 (src/engine/tdbiofio.c), its compiler, function, name, type and data rows; all six callbacks and the 28-byte callback table tdbiofioCallback match the target under unchanged engine_c, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80285808",
+          "end": "0x80285A24"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x8030199C",
+          "end": "0x803019B8"
+        }
+      ]
+    },
+    {
       "source": "src/engine/periph.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x801E11D0-0x801E1A20 (src/engine/periph.c), its compiler, function, name, data and type rows; every function exact and the file-owned .sdata, .sbss and .bss linked; the file defines the Per_ COMMON globals and the unit's storage map places each at its exact data row.",
@@ -18398,13 +18539,57 @@
     {
       "source": "src/game/Main.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80088F2C-0x80088FFC (src/game/Main.cpp) and its source-form row; .text links 0x80088F78-0x80088FFC, and the inline-asm start function 0x80088F2C is a comparison-only holdout.",
+      "evidence": "evidence.tsv unit row 0x80088F2C-0x80088FFC (src/game/Main.cpp) and its source-form row; .text links the whole range, including the hand-written assembly body of 0x80088F2C.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80088F78",
+          "start": "0x80088F2C",
           "end": "0x80088FFC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/animfile.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BAD98-0x801BC65C (src/engine/animfile.c), its compiler, function, name, data, type and source-form rows; all 35 functions exact (two through labeled fake-match forms), promoted from comparison-only, with the file's .sdata 0x803EBB88-0x803EBB98 (_AnimFile_ResFile, _AnimFile_RelocateBigFileFunc, _AnimFile_FreeFunc, _AnimFile_bResSync) and its .sbss 0x803ED5F0-0x803ED610 (the eight buffer-table statics).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BAD98",
+          "end": "0x801BC65C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBB88",
+          "end": "0x803EBB98"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED5F0",
+          "end": "0x803ED610"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/animchan.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801B9F00-0x801BA818 (src/engine/animchan.c), its compiler, function, name, data, type and source-form rows; all 18 functions exact (AnimChanStartAnimPerState through a labeled fake-match form), promoted from comparison-only, with the file's .rodata 0x802AED98-0x802AEDB8.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B9F00",
+          "end": "0x801BA818"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AED98",
+          "end": "0x802AEDB8"
         }
       ]
     }

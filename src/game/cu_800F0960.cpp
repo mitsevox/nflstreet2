@@ -1,6 +1,6 @@
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/StyleTracker.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include <math.h>
 #include "game/fn_801248D4.h"
 #include <string.h>
@@ -756,8 +756,8 @@ int fn_800B83F4(Object_80039F5C *p);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 int PlayerMoveGetKind(Object_80039F5C *p);
 void PlayerMoveSetResult(Object_80039F5C *p, int a);
-int fn_801BA6B0(Entry_800EAC9C *pEntry);
-void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
+int AnimChanIsMirrored(Entry_800EAC9C *pEntry);
+void AnimChanSetMirrored(Entry_800EAC9C *pEntry, int flag);
 void AnimSeqSetSpeed(void *p, float value);
 float MathInverse(float value);
 int fn_800B83A0(Object_80039F5C *p);
@@ -1099,18 +1099,18 @@ extern "C" void fn_800F1858(Object_80039F5C *p) {
         PlayerMoveSetResult(p, 0);
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 22, 1.0f, p);
     }
-    if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 22) != 0 || fn_801BA568(p->mpUnknown796, p->mpUnknown800, 179) != 0) {
+    if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 22) != 0 || AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 179) != 0) {
         Entry_800EAC9C *pEntries = p->mpUnknown800;
         Entry_800EAC9C *pEntry;
         float speed;
 
-        if (fn_801BA568(p->mpUnknown796, pEntries, 179) != 0) {
-            index = fn_801BA5A8(p->mpUnknown796, pEntries, 179, 0);
-        } else if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 22) != 0) {
-            index = fn_801BA5A8(p->mpUnknown796, pEntries, 22, 0);
+        if (AnimChanGetNumActiveByState(p->mpUnknown796, pEntries, 179) != 0) {
+            index = AnimChanGetStateChannelByIndex(p->mpUnknown796, pEntries, 179, 0);
+        } else if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 22) != 0) {
+            index = AnimChanGetStateChannelByIndex(p->mpUnknown796, pEntries, 22, 0);
         }
         if (p->mUnknown776 == 1) {
-            fn_801BA6BC(&pEntries[index], fn_801BA6B0(&pEntries[index]) == 0);
+            AnimChanSetMirrored(&pEntries[index], AnimChanIsMirrored(&pEntries[index]) == 0);
         }
         speed = 1.0f;
         if (fn_800CA5CC(p, 1, 1) != 0) {
@@ -1131,12 +1131,12 @@ extern "C" void fn_800F1858(Object_80039F5C *p) {
             speed += excess / 170.0f * b;
         }
         pEntry->mUnknown2C = speed;
-    } else if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 240) != 0) {
+    } else if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 240) != 0) {
         Entry_800EAC9C *pEntries = p->mpUnknown800;
 
-        index = fn_801BA5A8(p->mpUnknown796, pEntries, 240, 0);
+        index = AnimChanGetStateChannelByIndex(p->mpUnknown796, pEntries, 240, 0);
         if (p->mUnknown776 == 1) {
-            fn_801BA6BC(&pEntries[index], fn_801BA6B0(&pEntries[index]) == 0);
+            AnimChanSetMirrored(&pEntries[index], AnimChanIsMirrored(&pEntries[index]) == 0);
         }
     }
 }
@@ -1164,10 +1164,10 @@ extern "C" void fn_800F1C68(Object_80039F5C *p) {
             pBlock->mUnknown8 = 6;
         }
         fn_800C39E0(p, 229, index, value, flag);
-        if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 229) != 0) {
+        if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 229) != 0) {
             Entry_800EAC9C *pEntries = p->mpUnknown800;
             Entry_800EAC9C *pEntry;
-            int entry = fn_801BA5A8(p->mpUnknown796, pEntries, 229, 0);
+            int entry = AnimChanGetStateChannelByIndex(p->mpUnknown796, pEntries, 229, 0);
             short *pRatings = p->mRatings;
             float a = 0.4f;
             float b = 0.05f;
@@ -1562,7 +1562,7 @@ extern "C" int fn_800F2CB4(Table_80089904 *pTable, unsigned short event, void *a
         } else {
             p->mpState->mUnknown2 = 0;
         }
-        fn_801BA2A8(a, b, pTable->mEntries[best].mUnknown0, pTable->mEntries[best].mUnknown2, event, p, 1.0f);
+        AnimChanStartAnim(a, b, pTable->mEntries[best].mUnknown0, pTable->mEntries[best].mUnknown2, event, p, 1.0f);
     }
     return 0;
 }

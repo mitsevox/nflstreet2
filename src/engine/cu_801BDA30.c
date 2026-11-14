@@ -8,12 +8,12 @@ extern int lbl_803ECEBC;
 extern AnimStateAnimList_t lbl_8037EC7C;
 
 int fn_801BDA30(unsigned short type, unsigned short key, void *pOwner, int event, AnimHeader_t *pObject,
-                Record_800D81C8 *pRecords)
+                AnimChannel_t *pRecords)
 {
     if (key & 0x8000) {
         return 0;
     }
-    fn_801BBC3C(type, key, &lbl_8037EC7C);
+    AnimFileGetStateAnimList(type, key, &lbl_8037EC7C);
     return lbl_803EBB98[type]->mpUnknown4[key](&lbl_8037EC7C, key, pObject, pRecords, pOwner, event);
 }
 
@@ -45,15 +45,15 @@ void fn_801BDAC0(Collection_801BE594 *p)
     }
 }
 
-void fn_801BDBD4(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, int index,
+void fn_801BDBD4(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, int index,
                  void *pOwner)
 {
     fn_801BDA30(pObject->mUnknown2, p->mUnknown4[index].mUnknown0, pOwner, 3, pObject, pRecords);
-    fn_801BA398(pObject, pRecords, p->mUnknown4[index].mUnknown0);
+    AnimChanStopByStateIndex(pObject, pRecords, p->mUnknown4[index].mUnknown0);
     p->mUnknown4[index].mUnknown2 = 0;
 }
 
-unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, void *pOwner,
+unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, void *pOwner,
                            unsigned short key)
 {
     int slot = -1;
@@ -79,7 +79,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, Record
         if (!freed) {
             for (i = 0; i < 4; i++) {
                 if (p->mUnknown4[i].mUnknown2 == 1 && p->mUnknown4[i].mUnknown4C.mUnknown0 <= 1e-07f && (p->mUnknown4[i].mUnknown0 & 0x8000) &&
-                    p->mUnknown4[i].mUnknown0 != 0xFFFF && fn_801BA568(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
+                    p->mUnknown4[i].mUnknown0 != 0xFFFF && AnimChanGetNumActiveByState(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
                     fn_801BDBD4(p, pObject, pRecords, i, pOwner);
                     freed = 1;
                     fn_801BDAC0(p);
@@ -90,7 +90,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, Record
         if (!freed) {
             for (i = 0; i < 4; i++) {
                 if (p->mUnknown4[i].mUnknown2 == 1 && p->mUnknown4[i].mUnknown0 != 0xFFFF &&
-                    fn_801BA568(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
+                    AnimChanGetNumActiveByState(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
                     fn_801BDBD4(p, pObject, pRecords, i, pOwner);
                     freed = 1;
                     fn_801BDAC0(p);
@@ -189,7 +189,7 @@ void fn_801BE040(Collection_801BE594 *p)
     }
 }
 
-int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, unsigned short key,
+int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, unsigned short key,
                 float frames, void *pOwner)
 {
     unsigned short previous = fn_801BE648(p);
@@ -207,8 +207,8 @@ int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *
                 if (p->mUnknown4[i].mUnknown0 == 0xFFFF) {
                     p->mUnknown4[i].mUnknown0 = fn_801BDF38(p);
                     AnimWgtSetLinear(&p->mUnknown4[i].mUnknown4C, 10, -1.0f, 0.0f);
-                    while (fn_801BA568(pObject, pRecords, 0xFFFF)) {
-                        pRecords[fn_801BA5A8(pObject, pRecords, 0xFFFF, 0)].mUnknown8 = p->mUnknown4[i].mUnknown0;
+                    while (AnimChanGetNumActiveByState(pObject, pRecords, 0xFFFF)) {
+                        pRecords[AnimChanGetStateChannelByIndex(pObject, pRecords, 0xFFFF, 0)].mUnknown8 = p->mUnknown4[i].mUnknown0;
                     }
                 }
             }
@@ -222,8 +222,8 @@ int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *
             if (old == key || old == 0xFFFF) {
                 p->mUnknown4[i].mUnknown0 = fn_801BDF38(p);
                 p->mUnknown4[i].mUnknown4 &= ~1;
-                while (fn_801BA568(pObject, pRecords, old)) {
-                    pRecords[fn_801BA5A8(pObject, pRecords, old, 0)].mUnknown8 = p->mUnknown4[i].mUnknown0;
+                while (AnimChanGetNumActiveByState(pObject, pRecords, old)) {
+                    pRecords[AnimChanGetStateChannelByIndex(pObject, pRecords, old, 0)].mUnknown8 = p->mUnknown4[i].mUnknown0;
                 }
             }
         }
@@ -263,7 +263,7 @@ void fn_801BE3C0(Collection_801BE594 *p, float from, float to, unsigned short ke
     }
 }
 
-void fn_801BE420(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, void *pOwner, float step)
+void fn_801BE420(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, void *pOwner, float step)
 {
     int i;
 
@@ -279,7 +279,7 @@ void fn_801BE420(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
                 if (p->mUnknown4[i].mUnknown4 & 1) {
                     fn_801BDA30(pObject->mUnknown2, p->mUnknown4[i].mUnknown0, pOwner, 2, pObject, pRecords);
                 }
-                if (fn_801BA568(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
+                if (AnimChanGetNumActiveByState(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
                     if (p->mUnknown4[i].mUnknown2 == 3) {
                         fn_801BDA30(pObject->mUnknown2, p->mUnknown4[i].mUnknown0, pOwner, 1, pObject, pRecords);
                     } else {
@@ -343,7 +343,7 @@ unsigned short fn_801BE648(Collection_801BE594 *p)
     return key;
 }
 
-void fn_801BE67C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, void *pOwner)
+void fn_801BE67C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, void *pOwner)
 {
     int i;
 
@@ -361,7 +361,7 @@ void fn_801BE67C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
 
 void *fn_801BE72C(unsigned short type, unsigned short key)
 {
-    fn_801BBC3C(type, key, &lbl_8037EC7C);
+    AnimFileGetStateAnimList(type, key, &lbl_8037EC7C);
     return &lbl_8037EC7C;
 }
 

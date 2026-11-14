@@ -1,7 +1,7 @@
 #ifndef ENGINE_CU_801BDA30_H
 #define ENGINE_CU_801BDA30_H
 
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "engine/animemot.h"
 
 /* 64-byte per-slot payload; its layout is the caller's (see fn_801BE60C). */
@@ -25,7 +25,7 @@ typedef struct Collection_801BE594 {
 } Collection_801BE594;
 
 typedef int (*Handler_801BDA30)(AnimStateAnimList_t *pList, unsigned short key, AnimHeader_t *pObject,
-                                Record_800D81C8 *pChannels, void *pOwner, int event);
+                                AnimChannel_t *pChannels, void *pOwner, int event);
 
 typedef struct Handlers_801BDA30 {
     unsigned short mUnknown0;
@@ -48,19 +48,19 @@ extern AnimStateTransList_t lbl_803D4F50;
 extern "C" {
 #endif
 int fn_801BDA30(unsigned short type, unsigned short key, void *pOwner, int event, AnimHeader_t *pObject,
-                Record_800D81C8 *pChannels);
+                AnimChannel_t *pChannels);
 void fn_801BDAC0(Collection_801BE594 *p);
-void fn_801BDBD4(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pChannels, int index,
+void fn_801BDBD4(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pChannels, int index,
                  void *pOwner);
 unsigned short fn_801BDF38(Collection_801BE594 *p);
-int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pChannels, unsigned short key,
+int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pChannels, unsigned short key,
                 float frames, void *pOwner);
 struct Block_801BE60C *fn_801BE60C(Collection_801BE594 *p, unsigned short key);
 unsigned short fn_801BE648(Collection_801BE594 *p);
 void fn_801BE760(Collection_801BE594 *p, unsigned short key, unsigned short flags);
 void fn_801BE798(Collection_801BE594 *p, unsigned short key, float value);
 int fn_801BE82C(unsigned short type, unsigned short key);
-void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pChannels, unsigned short key,
+void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pChannels, unsigned short key,
                  unsigned short previous, int state, void *pOwner);
 #ifdef __cplusplus
 }

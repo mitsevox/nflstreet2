@@ -18,7 +18,7 @@
 #include "game/Ball.h"
 #include "game/cammain.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/fn_800AD9B4.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/MemCardUtil.h"
@@ -490,7 +490,7 @@ extern "C" void fn_8002BAF4(Type_8002B960 *p)
 extern "C" int fn_8002BC80(Type_803EA368 *p)
 {
     if (p->mUnknownD90 == 2) {
-        fn_800312DC(p);
+        ReplayEventClearAll(p);
         p->mUnknownD90 = 0;
         memset(p->mUnknown148C, 0, sizeof(p->mUnknown148C));
     }
@@ -514,7 +514,7 @@ extern "C" int fn_8002BCD4(Type_803EA368 *p)
 extern "C" int fn_8002BD44(Type_803EA368 *p)
 {
     if (p->mUnknownD90 == 1) {
-        fn_800310C0(p, 0x34, 0, 0, 0);
+        ReplayEventAdd(p, 0x34, 0, 0, 0);
         p->mUnknownD80 = p->mUnknownD7C = fn_8023790C();
         fn_80030828(p);
         p->mUnknownD90 = 2;
@@ -1325,7 +1325,7 @@ extern "C" void fn_8002D2EC(void) {}
 
 extern "C" void fn_8002D2F0(Type_803EA368 *p, int id, int value, int index)
 {
-    p->mUnknown148C[index].mUnknown0 = fn_800311E4(p, id);
+    p->mUnknown148C[index].mUnknown0 = ReplayEventGetTime(p, id);
     p->mUnknown148C[index].mUnknown4 = value;
 }
 
@@ -1335,8 +1335,8 @@ extern "C" void fn_8002D338(Type_803EA368 *p, Timer_8002E7C0 *pTimer)
     pTimer->mUnknown08 = fn_8002D0D0(p);
     pTimer->mUnknown0C = 45;
     pTimer->mUnknown04 = 0;
-    if (fn_800312FC(p, 0x25)) {
-        int end = fn_800311E4(p, 0x25) + 150;
+    if (ReplayEventExists(p, 0x25)) {
+        int end = ReplayEventGetTime(p, 0x25) + 150;
 
         pTimer->mUnknown08 = end - fn_8002D158(p);
     }
@@ -1359,9 +1359,9 @@ extern "C" float fn_8002D414(int a, int b)
     float vb[3];
     float result;
 
-    if (fn_80031328(lbl_803EA368, a) && fn_80031328(lbl_803EA368, b)) {
-        fn_8003122C(lbl_803EA368, a, va);
-        fn_8003122C(lbl_803EA368, b, vb);
+    if (ReplayEventInWindow(lbl_803EA368, a) && ReplayEventInWindow(lbl_803EA368, b)) {
+        ReplayEventGetPos(lbl_803EA368, a, va);
+        ReplayEventGetPos(lbl_803EA368, b, vb);
         result = vb[1] - va[1];
     } else {
         result = 0.0f;
@@ -1407,12 +1407,12 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
             }
             needMatch = 0;
             matched = 0;
-            if (!fn_80031328(lbl_803EA368, pCond->mArg)) {
+            if (!ReplayEventInWindow(lbl_803EA368, pCond->mArg)) {
                 ok = 0;
                 break;
             }
             if (last != -1) {
-                if (ordered && fn_800311E4(lbl_803EA368, last) > fn_800311E4(lbl_803EA368, pCond->mArg)) {
+                if (ordered && ReplayEventGetTime(lbl_803EA368, last) > ReplayEventGetTime(lbl_803EA368, pCond->mArg)) {
                     ok = 0;
                 }
                 if (minDy > fn_8002D414(last, pCond->mArg)) {
@@ -1421,17 +1421,17 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
                 if (maxDy < fn_8002D414(last, pCond->mArg)) {
                     ok = 0;
                 }
-                if (minGap > ABS(fn_800311E4(lbl_803EA368, last) - fn_800311E4(lbl_803EA368, pCond->mArg))) {
+                if (minGap > ABS(ReplayEventGetTime(lbl_803EA368, last) - ReplayEventGetTime(lbl_803EA368, pCond->mArg))) {
                     ok = 0;
                 }
-                if (maxGap < ABS(fn_800311E4(lbl_803EA368, last) - fn_800311E4(lbl_803EA368, pCond->mArg))) {
+                if (maxGap < ABS(ReplayEventGetTime(lbl_803EA368, last) - ReplayEventGetTime(lbl_803EA368, pCond->mArg))) {
                     ok = 0;
                 }
             }
             last = pCond->mArg;
             break;
         case 4:
-            if (fn_80031328(lbl_803EA368, pCond->mArg)) {
+            if (ReplayEventInWindow(lbl_803EA368, pCond->mArg)) {
                 ok = 0;
             }
             break;
@@ -1442,7 +1442,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
                 Object_80039F5C *pObject;
 
                 needMatch = 1;
-                pObject = fn_80031294(lbl_803EA368, last);
+                pObject = ReplayEventGetObject(lbl_803EA368, last);
                 if (pObject == 0) {
                     ok = 0;
                 } else if (pObject->mUnknown2914 == pCond->mArg) {
@@ -1456,7 +1456,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (fn_8003122C(lbl_803EA368, last, pos) == -1 || pos[0] < pCond->mArg) {
+                if (ReplayEventGetPos(lbl_803EA368, last, pos) == -1 || pos[0] < pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1467,7 +1467,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (fn_8003122C(lbl_803EA368, last, pos) == -1 || pos[0] > pCond->mArg) {
+                if (ReplayEventGetPos(lbl_803EA368, last, pos) == -1 || pos[0] > pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1478,7 +1478,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (fn_8003122C(lbl_803EA368, last, pos) == -1 || pos[1] < pCond->mArg) {
+                if (ReplayEventGetPos(lbl_803EA368, last, pos) == -1 || pos[1] < pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1489,7 +1489,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (fn_8003122C(lbl_803EA368, last, pos) == -1 || pos[1] > pCond->mArg) {
+                if (ReplayEventGetPos(lbl_803EA368, last, pos) == -1 || pos[1] > pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1574,7 +1574,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
             break;
         case 32:
             needMatch = 1;
-            if (fn_80031294(lbl_803EA368, pCond->mArg)) {
+            if (ReplayEventGetObject(lbl_803EA368, pCond->mArg)) {
                 ok = 0;
             }
             break;
@@ -1649,7 +1649,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
             pRecord->mUnknown5C.mUnknown1C[2] = origin.mZ;
             break;
         case 2:
-            pRecord->mUnknown1C.mUnknown38 = fn_80031294(p, pCmd->mArg);
+            pRecord->mUnknown1C.mUnknown38 = ReplayEventGetObject(p, pCmd->mArg);
             break;
         case 3:
             if (pCmd->mArg <= 4) {
@@ -1663,7 +1663,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
             lbl_803EA375 = 0;
             break;
         case 9:
-            fn_8003122C(p, pCmd->mArg, pRecord->mUnknown1C.mUnknown1C);
+            ReplayEventGetPos(p, pCmd->mArg, pRecord->mUnknown1C.mUnknown1C);
             break;
         case 0xA:
             *(Vector_80039F5C *)pRecord->mUnknown1C.mUnknown1C = origin;
@@ -1687,7 +1687,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
             pRecord->mUnknown1C.mUnknown1C[2] += pCmd->mArg;
             break;
         case 0x11:
-            fn_8003122C(p, pCmd->mArg, pRecord->mUnknown1C.mUnknown28);
+            ReplayEventGetPos(p, pCmd->mArg, pRecord->mUnknown1C.mUnknown28);
             break;
         case 0x12:
             pRecord->mUnknown1C.mUnknown28[0] = pCmd->mArg;
@@ -1716,7 +1716,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
             pRecord->mUnknown1C.mUnknown3C = pCmd->mArg;
             break;
         case 0x18:
-            fn_8003122C(p, pCmd->mArg, pRecord->mUnknown1C.mUnknown00);
+            ReplayEventGetPos(p, pCmd->mArg, pRecord->mUnknown1C.mUnknown00);
             break;
         case 0x19:
             *(Vector_80039F5C *)pRecord->mUnknown1C.mUnknown00 = origin;
@@ -1741,7 +1741,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
             break;
         case 7: {
             float limit;
-            fn_8003122C(p, pCmd->mArg, range);
+            ReplayEventGetPos(p, pCmd->mArg, range);
             limit = lbl_803EA37C;
             if (limit > fn_800A32B4() - (float)fabs(range[0])) {
                 switch (pRecord->mUnknown1C.mUnknown34) {
@@ -1782,7 +1782,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
         case 0x40:
             break;
         case 0x24:
-            pTimer->mUnknown00 = fn_800311E4(p, pCmd->mArg);
+            pTimer->mUnknown00 = ReplayEventGetTime(p, pCmd->mArg);
             break;
         case 0x25:
             pTimer->mUnknown00 += pCmd->mArg;
@@ -1793,7 +1793,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
             pTimer->mUnknown0C = pCmd->mArg;
             break;
         case 0x27:
-            pTimer->mUnknown08 = fn_800311E4(p, pCmd->mArg) - pTimer->mUnknown00;
+            pTimer->mUnknown08 = ReplayEventGetTime(p, pCmd->mArg) - pTimer->mUnknown00;
             break;
         case 0x28:
             pTimer->mUnknown08 += pCmd->mArg;
@@ -1810,10 +1810,10 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
             last = pCmd->mArg;
             break;
         case 0x2D:
-            pRecord->mUnknown5C.mUnknown38 = fn_80031294(p, pCmd->mArg);
+            pRecord->mUnknown5C.mUnknown38 = ReplayEventGetObject(p, pCmd->mArg);
             break;
         case 0x2E:
-            fn_8003122C(p, pCmd->mArg, pRecord->mUnknown5C.mUnknown1C);
+            ReplayEventGetPos(p, pCmd->mArg, pRecord->mUnknown5C.mUnknown1C);
             break;
         case 0x2F:
             *(Vector_80039F5C *)pRecord->mUnknown5C.mUnknown1C = origin;
@@ -1845,7 +1845,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
             lbl_803EA375 = 0;
             break;
         case 0x38:
-            fn_8003122C(p, pCmd->mArg, pRecord->mUnknown5C.mUnknown00);
+            ReplayEventGetPos(p, pCmd->mArg, pRecord->mUnknown5C.mUnknown00);
             break;
         case 0x39:
             *(Vector_80039F5C *)pRecord->mUnknown5C.mUnknown00 = origin;

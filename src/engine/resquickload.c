@@ -1,55 +1,56 @@
+/* Quickload archives: a resource file opened whole, its FILS (file names) and DTLS (resource offsets)
+   chunks parsed once, so resource lookups can find a resource's offset without seeking the archive. */
 #include "engine/Resource.h"
 #include "engine/bsearch.h"
 #include "game/fn_801C68FC.h"
 #include "game/fn_801D2B7C.h"
 
-typedef struct ResQuickloadChunk_801F284C {
+typedef struct ResQuickloadChunk_t {
     unsigned int mID;
     int mSize;
-    int mCount;
-} ResQuickloadChunk_801F284C;
+} ResQuickloadChunk_t;
 
-typedef struct ResQuickloadKey_801F29F0 {
+typedef struct ResQuickloadKey_t {
     unsigned short mFile;
     unsigned short mType;
     unsigned int mID;
     unsigned int mOffset;
-} ResQuickloadKey_801F29F0;
+} ResQuickloadKey_t;
 
-typedef struct ResQuickloadEntry_801F2A4C {
+typedef struct ResQuickloadEntry_t {
     int mKey;
     int mID;
     unsigned int mOffset;
-} ResQuickloadEntry_801F2A4C;
+} ResQuickloadEntry_t;
 
-typedef struct ResQuickloadDetails_801F2A4C {
+typedef struct ResQuickloadDetails_t {
     unsigned int mID;
     int mSize;
     int mCount;
-    ResQuickloadEntry_801F2A4C mEntries[1];
-} ResQuickloadDetails_801F2A4C;
+    ResQuickloadEntry_t mEntries[1];
+} ResQuickloadDetails_t;
 
-typedef struct ResQuickloadFiles_801F2954 {
+typedef struct ResQuickloadFiles_t {
     unsigned int mID;
     int mSize;
     int mCount;
     char mEntries[1][0x30];
-} ResQuickloadFiles_801F2954;
+} ResQuickloadFiles_t;
 
-typedef struct ResQuickload_801F284C {
+typedef struct ResQuickload_t {
     int mHandle;
     char *pName;
     char *pData;
-    ResQuickloadFiles_801F2954 *pFiles;
-    ResQuickloadDetails_801F2A4C *pDetails;
+    ResQuickloadFiles_t *pFiles;
+    ResQuickloadDetails_t *pDetails;
     int mDataOffset;
     int mPosition;
-} ResQuickload_801F284C;
+} ResQuickload_t;
 
-typedef struct ResQuickloadAlias_801F2D60 {
+typedef struct ResQuickloadAlias_t {
     char *pFrom;
     char *pTo;
-} ResQuickloadAlias_801F2D60;
+} ResQuickloadAlias_t;
 
 extern int strcmp(const char *a, const char *b);
 extern void *fn_801C6A20(void *pPool);
@@ -62,16 +63,16 @@ extern int FileSeek(int handle, int offset, unsigned int whence);
 extern int FileReadCallback(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
 extern int FileGetPosition(int handle);
 
-extern void *lbl_803EBDD8;
-extern ResQuickloadAlias_801F2D60 *lbl_803EBDDC;
+static void *_ResQuickload_pFileList = 0;
+static ResQuickloadAlias_t *_aFilenameRemappings = 0;
 
-int fn_801F2CD4(char *pName);
+int ResQuickloadClose(char *pName);
 
-static void fn_801F284C(int handle, ResQuickload_801F284C *pQuickload)
+static void _ResQuickloadReadFileInfo(int handle, ResQuickload_t *pQuickload)
 {
     int header[3];
     int size;
-    ResQuickloadChunk_801F284C *pChunk;
+    ResQuickloadChunk_t *pChunk;
 
     FileReadCallback(handle, header, sizeof(header), 0);
     size = header[2];
@@ -80,33 +81,39 @@ static void fn_801F284C(int handle, ResQuickload_801F284C *pQuickload)
     pQuickload->pData = fn_801D2BB0(1, size, ResGetMemAllocFlags(), 0);
     FileSeek(handle, 0, 0);
     FileReadCallback(handle, pQuickload->pData, size, 0);
-    for (pChunk = (ResQuickloadChunk_801F284C *)pQuickload->pData; (char *)pChunk < pQuickload->pData + size;
-         pChunk = (ResQuickloadChunk_801F284C *)((char *)pChunk + pChunk->mSize)) {
+    for (pChunk = (ResQuickloadChunk_t *)pQuickload->pData; (char *)pChunk < pQuickload->pData + size;
+         pChunk = (ResQuickloadChunk_t *)((char *)pChunk + pChunk->mSize)) {
         switch (pChunk->mID) {
         case 0x46494C53:
-            pQuickload->pFiles = (ResQuickloadFiles_801F2954 *)pChunk;
+            pQuickload->pFiles = (ResQuickloadFiles_t *)pChunk;
             break;
         case 0x44544C53:
-            pQuickload->pDetails = (ResQuickloadDetails_801F2A4C *)pChunk;
+            pQuickload->pDetails = (ResQuickloadDetails_t *)pChunk;
+            break;
+        // FAKEMATCH: an empty third case above 'FILS' (any such value) gives the target's case tree;
+        // it adds no behaviour
+        case 0x7FFFFFFF:
             break;
         }
     }
 }
 
-static int fn_801F2934(const void *pKey, const void *pEntry)
+static int _ResQuickloadCompareFile1T(const void *pKey, const void *pEntry)
 {
     return strcmp(pKey, pEntry);
 }
 
-static ResQuickload_801F284C *fn_801F2954(char *pName, int *pIndex)
+static ResQuickload_t *_ResQuickloadGetFile(char *pName, int *pIndex)
 {
-    ResQuickload_801F284C *pQuickload;
-    ResQuickloadFiles_801F2954 *pFiles;
+    ResQuickload_t *pQuickload;
+    ResQuickloadFiles_t *pFiles;
     char *pFound;
 
-    for (pQuickload = fn_801C6B4C(lbl_803EBDD8, 0); pQuickload != 0; pQuickload = fn_801C6C84(lbl_803EBDD8, pQuickload)) {
+    for (pQuickload = fn_801C6B4C(_ResQuickload_pFileList, 0); pQuickload != 0;
+         pQuickload = fn_801C6C84(_ResQuickload_pFileList, pQuickload)) {
         pFiles = pQuickload->pFiles;
-        pFound = bsearch(pName, pFiles->mEntries, pFiles->mCount, sizeof(pFiles->mEntries[0]), fn_801F2934);
+        pFound = bsearch(pName, pFiles->mEntries, pFiles->mCount, sizeof(pFiles->mEntries[0]),
+                         _ResQuickloadCompareFile1T);
         if (pFound != 0) {
             *pIndex = (pFound - (char *)pFiles->mEntries) / sizeof(pFiles->mEntries[0]);
             break;
@@ -115,10 +122,10 @@ static ResQuickload_801F284C *fn_801F2954(char *pName, int *pIndex)
     return pQuickload;
 }
 
-static int fn_801F29F0(const void *pKey, const void *pEntry)
+static int _ResQuickloadCompareDataEntry(const void *pKey, const void *pEntry)
 {
-    const ResQuickloadKey_801F29F0 *a = pKey;
-    const ResQuickloadKey_801F29F0 *b = pEntry;
+    const ResQuickloadKey_t *a = pKey;
+    const ResQuickloadKey_t *b = pEntry;
     int result;
 
     if (a->mFile > b->mFile) {
@@ -139,33 +146,40 @@ static int fn_801F29F0(const void *pKey, const void *pEntry)
     return result;
 }
 
-#define DISTANCE(a, b) ((a) > (b) ? (a) - (b) : (b) - (a))
+// FAKEMATCH: the distance as an inline helper (not an expression macro) and the separate pPrev walk pointer
+// below were found by search for the target's registers; the logic is the plain absolute difference.
+static inline unsigned int _ResQuickloadDistance(unsigned int a, unsigned int b)
+{
+    return a > b ? a - b : b - a;
+}
 
-static ResQuickloadEntry_801F2A4C *fn_801F2A4C(ResQuickloadDetails_801F2A4C *pDetails, int file, int type,
+static ResQuickloadEntry_t *_ResQuickloadGetData(ResQuickloadDetails_t *pDetails, int file, int type,
                                                unsigned int id, unsigned int offset)
 {
-    ResQuickloadKey_801F29F0 key;
-    ResQuickloadEntry_801F2A4C *pEntry;
-    ResQuickloadEntry_801F2A4C *pNext;
+    ResQuickloadKey_t key;
+    ResQuickloadEntry_t *pEntry;
+    ResQuickloadEntry_t *pNext;
+    ResQuickloadEntry_t *pPrev;
 
     key.mFile = file;
     key.mType = type;
     key.mID = id;
     key.mOffset = offset;
-    pEntry = bsearch(&key, pDetails->mEntries, pDetails->mCount, sizeof(ResQuickloadEntry_801F2A4C), fn_801F29F0);
+    pEntry = bsearch(&key, pDetails->mEntries, pDetails->mCount, sizeof(ResQuickloadEntry_t),
+                     _ResQuickloadCompareDataEntry);
     if (pEntry != 0) {
         while (pEntry > pDetails->mEntries) {
-            pNext = pEntry - 1;
-            if (pEntry->mKey != pNext->mKey || pEntry->mID != pNext->mID ||
-                DISTANCE(offset, pNext->mOffset) >= DISTANCE(offset, pEntry->mOffset)) {
+            pPrev = pEntry - 1;
+            if (pEntry->mKey != pPrev->mKey || pEntry->mID != pPrev->mID ||
+                _ResQuickloadDistance(offset, pPrev->mOffset) >= _ResQuickloadDistance(offset, pEntry->mOffset)) {
                 break;
             }
-            pEntry = pNext;
+            pEntry = pPrev;
         }
         while (pEntry < &pDetails->mEntries[pDetails->mCount - 1]) {
             pNext = pEntry + 1;
             if (pEntry->mKey != pNext->mKey || pEntry->mID != pNext->mID ||
-                DISTANCE(offset, pNext->mOffset) >= DISTANCE(offset, pEntry->mOffset)) {
+                _ResQuickloadDistance(offset, pNext->mOffset) >= _ResQuickloadDistance(offset, pEntry->mOffset)) {
                 break;
             }
             pEntry = pNext;
@@ -174,46 +188,47 @@ static ResQuickloadEntry_801F2A4C *fn_801F2A4C(ResQuickloadDetails_801F2A4C *pDe
     return pEntry;
 }
 
-static int fn_801F2B94(void)
+static int _ResQuickloadIsActive(void)
 {
-    if (lbl_803EBDD8 == 0) {
+    if (_ResQuickload_pFileList == 0) {
         return 0;
     }
     return 1;
 }
 
-void fn_801F2BAC(int count)
+void ResQuickloadInit(int count)
 {
-    lbl_803EBDD8 = fn_801C68FC(1, 0, count, sizeof(ResQuickload_801F284C), 0, 0);
-    lbl_803EBDDC = 0;
+    _ResQuickload_pFileList = fn_801C68FC(1, 0, count, sizeof(ResQuickload_t), 0, 0);
+    _aFilenameRemappings = 0;
 }
 
-void fn_801F2BF0(void)
+void ResQuickloadShutdown(void)
 {
-    ResQuickload_801F284C *pQuickload;
+    ResQuickload_t *pQuickload;
 
-    for (pQuickload = fn_801C6B4C(lbl_803EBDD8, 0); pQuickload != 0; pQuickload = fn_801C6C84(lbl_803EBDD8, pQuickload)) {
-        fn_801F2CD4(pQuickload->pName);
+    for (pQuickload = fn_801C6B4C(_ResQuickload_pFileList, 0); pQuickload != 0;
+         pQuickload = fn_801C6C84(_ResQuickload_pFileList, pQuickload)) {
+        ResQuickloadClose(pQuickload->pName);
     }
-    fn_801C69E4(lbl_803EBDD8);
-    lbl_803EBDD8 = 0;
+    fn_801C69E4(_ResQuickload_pFileList);
+    _ResQuickload_pFileList = 0;
 }
 
-int fn_801F2C54(char *pName, int mode)
+int ResQuickloadOpenDevice(char *pName, int mode)
 {
     int result = 0;
     int handle;
-    ResQuickload_801F284C *pQuickload;
+    ResQuickload_t *pQuickload;
 
     handle = FileOpenFileDevice(pName, mode);
     if (handle >= 0) {
-        pQuickload = fn_801C6A20(lbl_803EBDD8);
+        pQuickload = fn_801C6A20(_ResQuickload_pFileList);
         if (pQuickload != 0) {
             pQuickload->pName = pName;
             pQuickload->mHandle = handle;
             result = 1;
-            fn_801F284C(handle, pQuickload);
-            fn_801C6AA4(lbl_803EBDD8, pQuickload, 0);
+            _ResQuickloadReadFileInfo(handle, pQuickload);
+            fn_801C6AA4(_ResQuickload_pFileList, pQuickload, 0);
         } else {
             FileClose(handle);
         }
@@ -221,16 +236,17 @@ int fn_801F2C54(char *pName, int mode)
     return result;
 }
 
-int fn_801F2CD4(char *pName)
+int ResQuickloadClose(char *pName)
 {
     int result = 0;
-    ResQuickload_801F284C *pQuickload;
+    ResQuickload_t *pQuickload;
 
-    for (pQuickload = fn_801C6B4C(lbl_803EBDD8, 0); pQuickload != 0; pQuickload = fn_801C6C84(lbl_803EBDD8, pQuickload)) {
+    for (pQuickload = fn_801C6B4C(_ResQuickload_pFileList, 0); pQuickload != 0;
+         pQuickload = fn_801C6C84(_ResQuickload_pFileList, pQuickload)) {
         if (strcmp(pQuickload->pName, pName) == 0) {
             fn_801D2BD0(pQuickload->pData);
             FileClose(pQuickload->mHandle);
-            fn_801C6C0C(lbl_803EBDD8, pQuickload);
+            fn_801C6C0C(_ResQuickload_pFileList, pQuickload);
             result = 1;
             break;
         }
@@ -238,26 +254,26 @@ int fn_801F2CD4(char *pName)
     return result;
 }
 
-int fn_801F2D60(int file, char *pName, unsigned int id, int *pHandle, int *pOffset)
+int ResQuickloadIsInFile(int file, char *pName, unsigned int id, int *pHandle, int *pOffset)
 {
     int result = 0;
     int index = 0;
-    ResQuickloadAlias_801F2D60 *pAlias;
-    ResQuickload_801F284C *pQuickload;
-    ResQuickloadEntry_801F2A4C *pEntry;
+    ResQuickloadAlias_t *pAlias;
+    ResQuickload_t *pQuickload;
+    ResQuickloadEntry_t *pEntry;
 
-    if (fn_801F2B94()) {
-        if (lbl_803EBDDC != 0) {
-            for (pAlias = lbl_803EBDDC; pAlias->pFrom != 0; pAlias++) {
+    if (_ResQuickloadIsActive()) {
+        if (_aFilenameRemappings != 0) {
+            for (pAlias = _aFilenameRemappings; pAlias->pFrom != 0; pAlias++) {
                 if (strcmp(pName, pAlias->pFrom) == 0) {
                     pName = pAlias->pTo;
                     break;
                 }
             }
         }
-        pQuickload = fn_801F2954(pName, &index);
+        pQuickload = _ResQuickloadGetFile(pName, &index);
         if (pQuickload != 0) {
-            pEntry = fn_801F2A4C(pQuickload->pDetails, file, index, id,
+            pEntry = _ResQuickloadGetData(pQuickload->pDetails, file, index, id,
                                  FileGetPosition(pQuickload->mHandle) - pQuickload->mDataOffset);
             if (pEntry != 0) {
                 result = 1;

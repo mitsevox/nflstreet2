@@ -6,6 +6,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801C68FC.h"
 #include "engine/IAllocator.h"
+#include "engine/csis.h"
 
 struct SndSeqInfo_t {
     ResFile_t *pRes;
@@ -111,8 +112,6 @@ int fn_801C6D34(void *pPool, int start, void *pKey, void *pOut, SndTraverseFn_t 
 int FileHostCheckActive(void);
 void FileDebugProcess(void);
 void *fn_801D310C(void *pAddr, int size, int ident, int flags);
-int fn_801B91A0(void *p);
-void fn_801B9328(void *p);
 unsigned long OSGetSoundMode(void);
 void fn_8027555C(void);
 void fn_8026F5F8(int a);
@@ -158,9 +157,6 @@ int fn_802714A8(int handle, int value);
 
 void _StreamMUTEX_init(void);
 void fn_8026C39C(int a);
-int fn_801B90BC(void *pAllocator);
-int fn_801B90F0(void);
-int fn_801B9134(void);
 void fn_80270458(void);
 void fn_8026F97C(int a);
 void fn_8026C18C(void);
@@ -366,8 +362,8 @@ int SndInit(SndInitDesc_t *pDesc)
         _Snd_ModuleInfo.mHeapSize = pDesc->mUnknown4;
         fn_8026C39C(4);
         pIAllocator = new TiburonIAllocator13Impl(_Snd_ModuleInfo.mUnk30, (void (*)(int))_SndIAllocatorMemLabelCB);
-        fn_801B90BC(pIAllocator);
-        fn_801B90F0();
+        Csis::System::SetAllocator((Allocator *)pIAllocator);
+        Csis::System::Init();
         fn_80270458();
         fn_8026FBFC(0, (int)pHeap, pDesc->mUnknown4);
         fn_8026F97C(pDesc->mUnknown0);
@@ -477,7 +473,7 @@ int SndShutdown(void)
             }
             fn_8026C23C();
             fn_8026FBCC();
-            fn_801B9134();
+            Csis::System::Restore();
             delete pIAllocator;
             fn_801C69E4(_Snd_ModuleInfo.pStreamList);
             fn_801D2BD0(_Snd_ModuleInfo.pHeap);
@@ -830,7 +826,7 @@ int SndAemsLoadSystem(ResFile_t *pRes, unsigned int index, int bank)
         SndSetHeap(_Snd_ModuleInfo.pBankTable, bank);
         _Snd_ModuleInfo.pAemsSystem = fn_801D2B7C(ResGetSize(pRes, index), 0, 0);
         ResLoadToBuffer(pRes, index, _Snd_ModuleInfo.pAemsSystem);
-        result = fn_801B91A0(_Snd_ModuleInfo.pAemsSystem);
+        result = Csis::System::Subscribe(_Snd_ModuleInfo.pAemsSystem);
         _Snd_ModuleInfo.pAemsStreams = fn_801D2B7C(ResGetSize(pRes, index + 1), 0, 0);
         ResLoadToBuffer(pRes, index + 1, _Snd_ModuleInfo.pAemsStreams);
         fn_8026B124(_Snd_ModuleInfo.pAemsStreams);
@@ -850,7 +846,7 @@ int SndAemsUnloadSystem(void)
             _Snd_ModuleInfo.pAemsStreams = 0;
         }
         if (_Snd_ModuleInfo.pAemsSystem != 0) {
-            fn_801B9328(_Snd_ModuleInfo.pAemsSystem);
+            Csis::System::Unsubscribe(_Snd_ModuleInfo.pAemsSystem);
             fn_801D2BD0(_Snd_ModuleInfo.pAemsSystem);
             _Snd_ModuleInfo.pAemsSystem = 0;
         }

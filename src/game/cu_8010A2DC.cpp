@@ -1,4 +1,4 @@
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/fn_801248D4.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
@@ -118,8 +118,8 @@ extern "C" int fn_8010A4E8(Object_80039F5C *p) {
 
     fn_801C1F94(pBlock, 0, 64);
     pBlock->mUnknown50 = -1;
-    if (p->mpUnknown800 != (Record_800D81C8 *)(p->mUnknown1244 + 12)) {
-        p->mpUnknown800 = (Record_800D81C8 *)(p->mUnknown1244 + 12);
+    if (p->mpUnknown800 != (AnimChannel_t *)(p->mUnknown1244 + 12)) {
+        p->mpUnknown800 = (AnimChannel_t *)(p->mUnknown1244 + 12);
     }
     if (fn_801486A0() == 0) {
         return 1;

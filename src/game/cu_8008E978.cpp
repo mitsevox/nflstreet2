@@ -24,7 +24,7 @@
 #include "game/bitstream.h"
 
 #include "engine/vptmanager.h"
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/GameCamera.h"
 #include "game/Class_80148A58.h"
 #include "game/Entry_800B206C.h"
@@ -51,7 +51,7 @@
 #include "game/PlayBookTeam.h"
 #include "game/cu_8002B8F8.h"
 #include "game/BigObjInst.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/FeatAwards.h"
 #include "game/StevTable.h"
 #include "game/fn_80061AD4.h"
@@ -188,8 +188,8 @@ void PassIconObjSetEnabled(int value);
 void fn_8015C254(int a);
 int fn_80092830(int index);
 float fn_80094454(int handle);
-unsigned char fn_801BC044(unsigned short index);
-unsigned char fn_801BC060(unsigned short index);
+unsigned char AnimFileGetDynamicLoadStatus(unsigned short index);
+unsigned char AnimFileGetVirtualLoadStatus(unsigned short index);
 int fn_80094374(int index);
 Object_80039F5C *PlyrFindByPoid(int id);
 int fn_801485D4(void);
@@ -549,9 +549,9 @@ extern "C" void fn_8009036C(int *p)
     fn_80094454(*p);
 }
 
-extern "C" int fn_801BB74C(unsigned short slot, int id, Actor_801C009C *pActor);
+extern "C" int AnimFileLoadSeqDynamicAsync(unsigned short slot, int id, Actor_801C009C *pActor);
 extern "C" int fn_8009439C(int index);
-extern "C" void fn_801BC440(Actor_801C009C *pActor, Actor_801C009C *pSource);
+extern "C" void AnimFileCopyBigFileInfo(Actor_801C009C *pActor, Actor_801C009C *pSource);
 
 extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot)
 {
@@ -567,7 +567,7 @@ extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot)
                 lbl_8030C164[i].mUnknown4++;
             } else {
                 load = 0;
-                fn_801BC440(pActor, fn_80093BAC(lbl_8030C164[i].mUnknown8, lbl_8030C164[i].mUnknownC));
+                AnimFileCopyBigFileInfo(pActor, fn_80093BAC(lbl_8030C164[i].mUnknown8, lbl_8030C164[i].mUnknownC));
                 lbl_8030C164[i].mUnknown4++;
             }
             pRequest->mUnknownD8.mWord = i;
@@ -577,7 +577,7 @@ extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot)
     if (load) {
         for (i = 0; i < 2; i++) {
             if (lbl_8030C164[i].mUnknown4 == 0) {
-                fn_801BB74C(i, id, pActor);
+                AnimFileLoadSeqDynamicAsync(i, id, pActor);
                 lbl_8030C164[i].mUnknown0 = id;
                 lbl_8030C164[i].mUnknown8 = pRequest->mUnknown0;
                 lbl_8030C164[i].mUnknownC = pRequest->mUnknown4;
@@ -593,12 +593,12 @@ extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot)
     return i < 2;
 }
 
-extern "C" unsigned short fn_801BB878(int id, void *pData, int size, Actor_801C009C *pActor, int flag);
+extern "C" unsigned short AnimFileLoadSeqVirtualAsync(int id, void *pData, int size, Actor_801C009C *pActor, int flag);
 
 extern "C" int fn_800904D4(Params_80092E54 *pRequest, void *pData, int size)
 {
     Actor_801C009C *pActor = fn_80093BAC(pRequest->mUnknown0, pRequest->mUnknown4);
-    int handle = fn_801BB878(fn_8009439C(pRequest->mUnknown4) + pActor->mUnknown2, pData, size, pActor, 0);
+    int handle = AnimFileLoadSeqVirtualAsync(fn_8009439C(pRequest->mUnknown4) + pActor->mUnknown2, pData, size, pActor, 0);
 
     pRequest->mUnknownD8.mWord = handle | 0x80000000;
     return handle != 0xFFFF;
@@ -777,7 +777,7 @@ extern "C" void fn_800917A4(int index)
             if (pBlock->mUnknown680 != 0xFFFF) {
                 BigObjPhysics_t *pExtra = pBlock->mpUnknown676->mUnknown428;
 
-                fn_801BA384((AnimHeader_t *)pExtra->mUnknown48, (Record_800D81C8 *)pExtra->mUnknown60,
+                AnimChanStopAnim((AnimHeader_t *)pExtra->mUnknown48, (AnimChannel_t *)pExtra->mUnknown60,
                             pBlock->mUnknown680);
                 pBlock->mUnknown680 = 0xFFFF;
             }
@@ -1039,8 +1039,8 @@ extern "C" int fn_800927BC(unsigned char index)
     int result = 0;
 
     if (pCharacter->mUnknownD8.mWord < 0) {
-        result = fn_801BC060(pCharacter->mUnknownD8.mParts[1]) == 1;
-    } else if (fn_801BC044(pCharacter->mUnknownD8.mParts[1]) == 1) {
+        result = AnimFileGetVirtualLoadStatus(pCharacter->mUnknownD8.mParts[1]) == 1;
+    } else if (AnimFileGetDynamicLoadStatus(pCharacter->mUnknownD8.mParts[1]) == 1) {
         result = 1;
     }
     return result;
@@ -1399,7 +1399,7 @@ extern "C" void fn_800940F0(int handle)
             Object_80039F5C *p = pCharacter->mUnknown14[i];
 
             if (p->mIdBytes[3] == 1 || p->mIdBytes[3] == 3) {
-                fn_801BA398((AnimHeader_t *)p->mUnknown1244, (Record_800D81C8 *)(p->mUnknown1244 + 12), 10);
+                AnimChanStopByStateIndex((AnimHeader_t *)p->mUnknown1244, (AnimChannel_t *)(p->mUnknown1244 + 12), 10);
                 fn_800A3B5C(p);
             }
         }
@@ -1553,14 +1553,14 @@ extern "C" int fn_80094564(unsigned int a, unsigned int b)
     return result;
 }
 
-extern "C" int fn_801BC654(void);
+extern "C" int AnimFileGetResFile(void);
 
 extern "C" void fn_80094598(int index)
 {
     Character_80093BCC *pCharacter = &lbl_803EC924->mUnknown80.mCharacters[index];
     Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
     int id = fn_8009439C(pCharacter->mUnknown4) + pActor->mUnknown2;
-    int handle = fn_801BC654();
+    int handle = AnimFileGetResFile();
 
     while (ResIsLoading((void *)handle, id) != 0) {
     }
@@ -1935,8 +1935,8 @@ extern "C" void fn_80095304(int id, Object_80039F5C **ppObject, unsigned short *
 {
     int found = 0;
 
-    if (fn_800312FC(lbl_803EA368, id) != 0) {
-        Object_80039F5C *p = fn_80031294(lbl_803EA368, id);
+    if (ReplayEventExists(lbl_803EA368, id) != 0) {
+        Object_80039F5C *p = ReplayEventGetObject(lbl_803EA368, id);
 
         if (p->mUnknown9[2] != 0) {
             *ppObject = p;
@@ -2183,12 +2183,12 @@ extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_
         fn_80095304(7, ppOut, &count);
         break;
     case 0x544E4F52: /* 'TNOR' */
-        if (fn_800312FC(lbl_803EA368, 4) && fn_80178348() != fn_80178308()) {
+        if (ReplayEventExists(lbl_803EA368, 4) && fn_80178348() != fn_80178308()) {
             fn_80095304(4, ppOut, &count);
         } else {
-            if (fn_800312FC(lbl_803EA368, 7)) {
+            if (ReplayEventExists(lbl_803EA368, 7)) {
                 fn_80095304(7, ppOut, &count);
-            } else if (fn_800312FC(lbl_803EA368, 38)) {
+            } else if (ReplayEventExists(lbl_803EA368, 38)) {
                 fn_80095304(38, ppOut, &count);
             } else {
                 fn_80095304(5, ppOut, &count);
@@ -2215,7 +2215,7 @@ extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_
         fn_80095304(8, ppOut, &count);
         break;
     case 0x50444546: /* 'PDEF' */
-        if (fn_800312FC(lbl_803EA368, 38)) {
+        if (ReplayEventExists(lbl_803EA368, 38)) {
             fn_80095304(38, ppOut, &count);
         } else {
             fn_80095304(5, ppOut, &count);
@@ -2447,7 +2447,7 @@ extern "C" int fn_800965E8(Playback_80096DA8 *pPlayback, int *pSlot)
     if (load) {
         for (i = 0; i < 2; i++) {
             if (lbl_8030C2A8[i].mUnknown4 == 0) {
-                fn_801BB74C(i + 5, id, pActor);
+                AnimFileLoadSeqDynamicAsync(i + 5, id, pActor);
                 lbl_8030C2A8[i].mUnknown0 = id;
                 lbl_8030C2A8[i].mUnknown4++;
                 pPlayback->mUnknown8.mWord = i + 5;
@@ -2543,7 +2543,7 @@ extern "C" int fn_80096B1C(int index)
 
     switch (pPlayback->mUnknown10) {
     case 0:
-        if (fn_801BC044(pPlayback->mUnknown8.mParts[1]) != 1) {
+        if (AnimFileGetDynamicLoadStatus(pPlayback->mUnknown8.mParts[1]) != 1) {
             break;
         }
         pPlayback->mUnknown10 = 1;
@@ -2758,7 +2758,7 @@ extern "C" void fn_800975EC(int id, int flag, int index)
 {
     if (lbl_8030C2B8[index].mUnknown0 != id) {
         lbl_8030C2B8[index].mUnknown0 = id;
-        fn_801BBC3C(1, id, (Table_80089904 *)&lbl_8030C2B8[index].mUnknown4);
+        AnimFileGetStateAnimList(1, id, (Table_80089904 *)&lbl_8030C2B8[index].mUnknown4);
         if (flag != 0) {
             unsigned char groups[11];
             unsigned short i;
@@ -8307,62 +8307,62 @@ extern "C" void fn_800B4A18(int index, char *pDest, int size)
 }
 
 typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void *pRecord,
-                                Record_800D81C8 *pEntries, Object_80039F5C *p, unsigned int phase);
+                                AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int phase);
 
 extern "C" {
-int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int PlayerLocoCyclePhase(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int PlayerLocoCyclePhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_80089E70(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_80089E70(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800A44C0(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800A44C0(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int PlayerLocoHandleMomentumState(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+int PlayerLocoHandleMomentumState(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
                                   Object_80039F5C *p, unsigned int phase);
-int PlayerLocoMoveCmdPhase(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int PlayerLocoMoveCmdPhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int PlayerActionAnimFacingCallback(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int PlayerActionAnimFacingCallback(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int LooseBallAnimEvent(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int LooseBallAnimEvent(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800F2CB4(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800F2CB4(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_80102A78(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_80102A78(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_8010680C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_8010680C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_8010BC90(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_8010BC90(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_8010D834(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_8010D834(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_80110C70(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_80110C70(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 
 extern Handler_800B4D7C lbl_8030FB60[248];
@@ -11110,7 +11110,7 @@ struct Clip_800ADE6C {
     unsigned short mKeys[11];
 };
 
-/* Table filled by fn_801BBC3C with the room the largest listing needs. */
+/* Table filled by AnimFileGetStateAnimList with the room the largest listing needs. */
 struct Listing_800ADE6C {
     Table_80089904 mTable;
     unsigned char mUnknown12[3032];
@@ -11132,10 +11132,10 @@ extern "C" void fn_800ADE6C(void)
     Object_801BC084 *pRecord;
     Clip_800ADE6C *pClip;
 
-    fn_801BBC3C(4, 1, &listing.mTable);
+    AnimFileGetStateAnimList(4, 1, &listing.mTable);
     handle = listing.mTable.mEntries[0].mUnknown0;
     key = listing.mTable.mEntries[0].mUnknown2;
-    pRecord = fn_801BC084(handle);
+    pRecord = AnimFileGetPtrFromSlot(handle);
     pClip = (Clip_800ADE6C *)AnimFileGetAnimation(pRecord, key);
     for (i = 0; i <= 10; i++) {
         lbl_8030F958[i] = AnimFileGetFrame(pRecord, pClip->mUnknown2, handle, pClip->mKeys[i]);
@@ -11163,19 +11163,19 @@ extern "C" void fn_800A3C14(void)
     Clip_800ADE6C *pClip;
 
     lbl_803EC948 = 0;
-    fn_801BBC3C(3, 2, &listing.mTable);
+    AnimFileGetStateAnimList(3, 2, &listing.mTable);
     for (i = 0; i < listing.mTable.mCount; i++) {
         if (listing.mTable.mEntries[i].mpInfo->mValue == 1) {
             int handle = listing.mTable.mEntries[i].mUnknown0;
             int key = listing.mTable.mEntries[i].mUnknown2;
-            pRecord = fn_801BC084(handle);
+            pRecord = AnimFileGetPtrFromSlot(handle);
             pClip = (Clip_800ADE6C *)AnimFileGetAnimation(pRecord, key);
             for (unsigned int j = 0; j < 1; j++)
                 lbl_803EC938 = AnimFileGetFrame(pRecord, pClip->mUnknown2, handle, pClip->mKeys[j]);
         } else {
             lbl_803EC93C = listing.mTable.mEntries[i].mUnknown0;
             lbl_803EC940 = listing.mTable.mEntries[i].mUnknown2;
-            pRecord = fn_801BC084(lbl_803EC93C);
+            pRecord = AnimFileGetPtrFromSlot(lbl_803EC93C);
             pClip = (Clip_800ADE6C *)AnimFileGetAnimation(pRecord, lbl_803EC940);
             Keys_800A3C14 *pKeys =
                 (Keys_800A3C14 *)AnimFileGetFrame(pRecord, pClip->mUnknown2, lbl_803EC93C, pClip->mKeys[0]);
@@ -11227,7 +11227,7 @@ struct Block_800AEB1C {
 };
 
 extern "C" {
-int fn_800ADA1C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+int fn_800ADA1C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
                 PlyrSlot_t *p, unsigned int phase);
 void fn_800AE138(unsigned int index);
 int fn_800B6644(int index);
@@ -11251,7 +11251,7 @@ void fn_8011E240(Object_80039F5C *p);
 Object_80039F5C *fn_800AEBA0(void);
 
 extern int (*lbl_8030F51C[6])(Table_80089904 *pTable, unsigned short key, void *pRecord,
-                              Record_800D81C8 *pEntries, PlyrSlot_t *p, unsigned int phase);
+                              AnimChannel_t *pEntries, PlyrSlot_t *p, unsigned int phase);
 extern unsigned char lbl_8030F9DC[15];
 extern unsigned char lbl_8030F9EC[15];
 extern Record_802D82E0 lbl_802D82E0[15];
@@ -17271,16 +17271,16 @@ extern "C" int fn_800C4184(Object_80039F5C *p)
 
 extern "C" void fn_800C432C(void)
 {
-    fn_801BBC3C(1, 196, &lbl_803103F0[0].mTable);
-    fn_801BBC3C(1, 197, &lbl_803103F0[1].mTable);
-    fn_801BBC3C(1, 195, &lbl_803103F0[2].mTable);
-    fn_801BBC3C(1, 210, &lbl_803103F0[3].mTable);
-    fn_801BBC3C(1, 224, &lbl_803103F0[4].mTable);
-    fn_801BBC3C(1, 228, &lbl_803103F0[5].mTable);
-    fn_801BBC3C(1, 230, &lbl_803103F0[6].mTable);
-    fn_801BBC3C(1, 229, &lbl_803103F0[7].mTable);
-    fn_801BBC3C(1, 235, &lbl_803103F0[8].mTable);
-    fn_801BBC3C(1, 237, &lbl_803103F0[9].mTable);
+    AnimFileGetStateAnimList(1, 196, &lbl_803103F0[0].mTable);
+    AnimFileGetStateAnimList(1, 197, &lbl_803103F0[1].mTable);
+    AnimFileGetStateAnimList(1, 195, &lbl_803103F0[2].mTable);
+    AnimFileGetStateAnimList(1, 210, &lbl_803103F0[3].mTable);
+    AnimFileGetStateAnimList(1, 224, &lbl_803103F0[4].mTable);
+    AnimFileGetStateAnimList(1, 228, &lbl_803103F0[5].mTable);
+    AnimFileGetStateAnimList(1, 230, &lbl_803103F0[6].mTable);
+    AnimFileGetStateAnimList(1, 229, &lbl_803103F0[7].mTable);
+    AnimFileGetStateAnimList(1, 235, &lbl_803103F0[8].mTable);
+    AnimFileGetStateAnimList(1, 237, &lbl_803103F0[9].mTable);
 }
 
 extern "C" void fn_800C4410(int value)
@@ -18179,7 +18179,7 @@ struct Candidate_800CD3C0 {
 
 extern "C" {
 Table_80089904 *fn_801BE72C(unsigned short,unsigned short);
-Object_801BBD5C *fn_801BBD5C(unsigned short,unsigned short);
+Object_801BBD5C *AnimFileGetStateData(unsigned short,unsigned short);
 int fn_800CEA7C(Group_800CC98C *, Command_800CEE74 *, Vector_80039F5C *, int *);
 }
 
@@ -18218,7 +18218,7 @@ extern "C" Play_800CCEBC *fn_800CD3C0(Group_800CC98C *p, Play_800CCEBC *pOut, un
         }
         key = pTable->mEntries[i].mUnknown0;
         id = pTable->mEntries[i].mUnknown2 & 0x7FFF;
-        pPlay = (Play_800CCEBC *)fn_801BBD5C(id, pA->mpUnknown796->mUnknown2);
+        pPlay = (Play_800CCEBC *)AnimFileGetStateData(id, pA->mpUnknown796->mUnknown2);
         size = fn_800CCBA0(&pPlay->mSet, 0);
         if (size > 1) {
             fn_800CCB04(&pPlay->mSet, &pOut->mpUnknown16, 1, 1);
@@ -18361,7 +18361,7 @@ extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
 {
     Record_800C432C table;
     int result = 0;
-    fn_801BBC3C(1, pRecord->mUnknown60, &table.mTable);
+    AnimFileGetStateAnimList(1, pRecord->mUnknown60, &table.mTable);
     fn_800CE804(pRecord, &table.mTable, 0);
     int direction = fn_801CFE40(pRecord->mVector0.mY, pRecord->mVector0.mX);
     unsigned int count = (unsigned short)LevelGetData()->mUnknown136;
@@ -18425,7 +18425,7 @@ extern "C" void fn_800CEED8(unsigned short key, int index, Command_800CEE74 *pRe
                             Vector_80039F5C *pPoint, int angle, Vector_80039F5C *pOut, int *pAngle, unsigned char *pValue)
 {
     Record_800C432C table;
-    fn_801BBC3C(1, key, &table.mTable);
+    AnimFileGetStateAnimList(1, key, &table.mTable);
     Info_80089904 *pInfo = table.mTable.mEntries[index].mpInfo;
     *pAngle = (int)(pInfo->mUnknown16Float * 46603.37890625f);
     pOut->mX = pInfo->mUnknown4Float;
@@ -18468,9 +18468,9 @@ extern "C" int fn_800CCF68(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
     unsigned char i;
     int result = 0;
 
-    fn_801BBC3C(1, pRecord->mUnknown60, &table.mTable);
+    AnimFileGetStateAnimList(1, pRecord->mUnknown60, &table.mTable);
     pA = p->mpUnknown0;
-    pPlay = (Play_800CCEBC *)fn_801BBD5C(pRecord->mUnknown60, pA->mpUnknown796->mUnknown2);
+    pPlay = (Play_800CCEBC *)AnimFileGetStateData(pRecord->mUnknown60, pA->mpUnknown796->mUnknown2);
     for (index = 0; index < pPlay->mSet.mCount; index++) {
         if (table.mTable.mEntries[index].mpInfo->mUnknown52 == 1) {
             break;

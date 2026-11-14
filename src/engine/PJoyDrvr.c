@@ -23,7 +23,7 @@ unsigned long PerSizeofPerDataT(void);
 unsigned long PADRead(void *pStatus);
 void fn_802465BC(void *pStatus);
 void PADControlMotor(int port, unsigned long command);
-void fn_802857D8(void);
+void GBAFanServiceLink(void);
 
 int fn_801E1D44(PerDevice_t *pDevice, unsigned char *pPort)
 {
@@ -104,5 +104,5 @@ void fn_801E26FC(void)
     MemFill(lbl_803E92CC, sizeof(lbl_803E92CC), 0, 1);
     PADRead(lbl_803E92CC);
     fn_802465BC(lbl_803E92CC);
-    fn_802857D8();
+    GBAFanServiceLink();
 }

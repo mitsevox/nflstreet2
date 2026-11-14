@@ -1,7 +1,7 @@
 #ifndef GAME_ANIMMOMENTUMACTOR_H
 #define GAME_ANIMMOMENTUMACTOR_H
 
-#include "engine/Record_800D81C8.h"
+#include "engine/AnimChannel.h"
 
 /* Partial view of the player whose momentum src/game/AnimMomentum.cpp carries
    into an animation; fn_8009BCE8 decodes its packed partner reference. */
@@ -21,7 +21,7 @@ struct AnimMomentumActor_t {
     char mUnknown310[8];
     void *mpUnknown318;
     char mUnknown31C[4];
-    Record_800D81C8 *mpUnknown320;
+    AnimChannel_t *mpUnknown320;
 };
 
 #endif
