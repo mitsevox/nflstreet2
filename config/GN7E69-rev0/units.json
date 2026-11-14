@@ -18552,7 +18552,7 @@
     {
       "source": "src/engine/animfile.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BAD98-0x801BC65C (src/engine/animfile.c), its compiler, function, name, data, type and source-form rows; all 35 functions exact (three through labeled fake-match forms), promoted from comparison-only, with the file's .sdata 0x803EBB88-0x803EBB98 (_AnimFile_ResFile, _AnimFile_RelocateBigFileFunc, _AnimFile_FreeFunc, _AnimFile_bResSync) and its .sbss 0x803ED5F0-0x803ED610 (the eight buffer-table statics).",
+      "evidence": "evidence.tsv unit row 0x801BAD98-0x801BC65C (src/engine/animfile.c), its compiler, function, name, data, type and source-form rows; all 35 functions exact (two through labeled fake-match forms), promoted from comparison-only, with the file's .sdata 0x803EBB88-0x803EBB98 (_AnimFile_ResFile, _AnimFile_RelocateBigFileFunc, _AnimFile_FreeFunc, _AnimFile_bResSync) and its .sbss 0x803ED5F0-0x803ED610 (the eight buffer-table statics).",
       "sections": [
         {
           "section": ".text",
