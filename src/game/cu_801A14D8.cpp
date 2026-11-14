@@ -297,9 +297,9 @@ void fn_8024FC84(int chan, int enable, int amb, int mat, int lights, int diff, i
 void fn_80252034(int type, int src, int dst, int op);
 void fn_802520E0(int enable, int func, int update);
 void fn_80252114(int a);
-void fn_8025251C(float (*pMatrix)[4], int id);
-void fn_802525BC(int id);
-void fn_802525F0(float (*pMatrix)[4], int id, int type);
+void GXLoadPosMtxImm(float (*pMatrix)[4], int id);
+void GXSetCurrentMtx(int id);
+void GXLoadTexMtxImm(float (*pMatrix)[4], int id, int type);
 
 int fn_801A1C10(Object_8003DEC4 *pPlayer);
 void fn_801A1D80(Object_8003DEC4 *pPlayer, int flag);
@@ -1029,7 +1029,7 @@ void fn_801A32AC(int id, float sx, float sy, float tx, float ty)
     m[1][1] = sy;
     m[1][2] = 0.0f;
     m[1][3] = ty;
-    fn_802525F0(m, id, 1);
+    GXLoadTexMtxImm(m, id, 1);
 }
 
 /* Texture offsets of the two eyes from the X and Y angles of pose bones 28
@@ -1327,8 +1327,8 @@ void fn_801A3FFC(void)
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     TMRenderBindTexture(0, lbl_803ECC08, lbl_803ECC0C);
     fn_801D0F80(m);
-    fn_8025251C(m, 0);
-    fn_802525BC(0);
+    GXLoadPosMtxImm(m, 0);
+    GXSetCurrentMtx(0);
     for (; i < fn_8003DEB4(); i++) {
         Object_8003DEC4 *pPlayer = fn_8003DEC4(i);
         Projection_8003BA10 *pShadow = &pPlayer->mUnknown4256;
@@ -1387,8 +1387,8 @@ void fn_801A42D4(void)
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     TMRenderBindTexture(0, lbl_803ECC08, lbl_803ECC0C);
     fn_801D0F80(m);
-    fn_8025251C(m, 0);
-    fn_802525BC(0);
+    GXLoadPosMtxImm(m, 0);
+    GXSetCurrentMtx(0);
     for (; i < fn_8003DEB4(); i++) {
         Projection_8003BA10 *pShadow = &fn_8003DEC4(i)->mUnknown4256;
         unsigned char k;

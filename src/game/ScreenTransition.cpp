@@ -61,13 +61,13 @@ int fn_801CEC74(void);
 void fn_8024FC48(int);
 void fn_8024FB58(int, GXColor);
 void fn_8024FC84(int, int, int, int, int, int, int);
-void fn_802528B0(int);
+void GXSetClipMode(int);
 extern "C" void GXLoadTexObj(GXTexObj *, int);
-void fn_802524D4(float *);
-void fn_802523A4(Mtx44, int);
+void GXGetProjectionv(float *);
+void GXSetProjection(Mtx44, int);
 void fn_801D03D0(Mtx44);
-void fn_8025251C(Mtx44, int);
-void fn_802525BC(int);
+void GXLoadPosMtxImm(Mtx44, int);
+void GXSetCurrentMtx(int);
 void *fn_801D2BB0(int, int, int, int);
 extern "C" void GXInitTexObj(GXTexObj *, void *, int, int, int, int, int, int);
 void _ScreenTransSetupDraw(int, unsigned int, float);
@@ -325,7 +325,7 @@ void _ScreenTransSetupDraw(int textured, unsigned int value, float alpha) {
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
         GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
         GXSetCullMode(GX_CULL_NONE);
-        fn_802528B0(1);
+        GXSetClipMode(1);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
         GXLoadTexObj(&_ScreenTrans_TexObj, 0);
     } else {
@@ -339,21 +339,21 @@ void _ScreenTransSetupDraw(int textured, unsigned int value, float alpha) {
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 4);
         GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
         GXSetCullMode(GX_CULL_NONE);
-        fn_802528B0(1);
+        GXSetClipMode(1);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
     }
-    fn_802524D4(_ScreenTrans_afSavedProjection[0]);
+    GXGetProjectionv(_ScreenTrans_afSavedProjection[0]);
     C_MTXOrtho(projection, 0.0f, 448.0f, 0.0f, 640.0f, 1.0f, 2.0f);
-    fn_802523A4(projection, 1);
+    GXSetProjection(projection, 1);
     fn_801D03D0(view);
-    fn_8025251C(view, 0);
-    fn_802525BC(0);
+    GXLoadPosMtxImm(view, 0);
+    GXSetCurrentMtx(0);
 }
 void _ScreenTransRestoreDraw(void) {
     GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
-    fn_802523A4(_ScreenTrans_afSavedProjection, 0);
+    GXSetProjection(_ScreenTrans_afSavedProjection, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
-    fn_802528B0(0);
+    GXSetClipMode(0);
 }
 void _ScreenTransDrawCallback(Viewport_t *) {
     ScreenTransModeFn callback = _ScreenTrans_apModeFns[_ScreenTrans_State.mMode];

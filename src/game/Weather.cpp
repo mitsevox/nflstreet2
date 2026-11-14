@@ -81,7 +81,7 @@ void fn_801D0C58(void *);
 void fn_801D0ADC(int);
 void fn_80227CC0(void *, void *);
 float *fn_801D0444(void);
-void fn_8025251C(float *, int);
+void GXLoadPosMtxImm(float *, int);
 float *fn_801D0EE4(void);
 int fn_801784C4(void);
 int fn_800A33E8(void);
@@ -209,7 +209,7 @@ void WeatherLoadCornerMatrices(int mode) {
       matrix[3] = saved[0] + offset[i].mX;
       matrix[7] = saved[1] + offset[i].mY;
       matrix[11] = saved[2] + offset[i].mZ;
-      fn_8025251C(matrix, slot);
+      GXLoadPosMtxImm(matrix, slot);
       slot += 3;
     }
     matrix[3] = saved[0];
@@ -219,11 +219,11 @@ void WeatherLoadCornerMatrices(int mode) {
     offset = _Weather_avLineEnds;
     fn_801D04C4();
     fn_801D0C58(&offset[0]);
-    fn_8025251C(fn_801D0444(), 3);
+    GXLoadPosMtxImm(fn_801D0444(), 3);
     fn_801D0544();
     fn_801D04C4();
     fn_801D0C58(&offset[1]);
-    fn_8025251C(fn_801D0444(), 6);
+    GXLoadPosMtxImm(fn_801D0444(), 6);
     fn_801D0544();
   }
 }

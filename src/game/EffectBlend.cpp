@@ -12,10 +12,10 @@ void TMRenderReset(void);
 int fn_80236EC0(int a);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_80252448(float *p);
-void fn_802524D4(float *p);
-void fn_8025251C(Mtx44 m, int a);
-void fn_802525BC(int a);
+void GXSetProjectionv(float *p);
+void GXGetProjectionv(float *p);
+void GXLoadPosMtxImm(Mtx44 m, int a);
+void GXSetCurrentMtx(int a);
 }
 
 static float _EffectBlend_afProjection[7];
@@ -27,10 +27,10 @@ void EffectBlendBegin(void *p, int value)
     Mtx44 mtx;
 
     TMRenderReset();
-    fn_802525BC(0);
+    GXSetCurrentMtx(0);
     fn_801D0508();
     fn_801D0F80(mtx);
-    fn_8025251C(mtx, 0);
+    GXLoadPosMtxImm(mtx, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
@@ -45,7 +45,7 @@ void EffectBlendBegin(void *p, int value)
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_ONE, GX_LO_NOOP);
-    fn_802524D4(_EffectBlend_afProjection);
+    GXGetProjectionv(_EffectBlend_afProjection);
     _EffectBlend_bFog = fn_80236EC0(0);
 }
 
@@ -55,9 +55,9 @@ void EffectBlendEnd(void *p, int value)
 
     fn_801D0544();
     fn_801D0F80(mtx);
-    fn_8025251C(mtx, 0);
+    GXLoadPosMtxImm(mtx, 0);
     GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
-    fn_80252448(_EffectBlend_afProjection);
+    GXSetProjectionv(_EffectBlend_afProjection);
     fn_80236EC0(_EffectBlend_bFog);
 }
 }

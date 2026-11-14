@@ -43,7 +43,7 @@ extern "C" int GXGetTlutObjData(void *p);
 extern "C" int GXGetTlutObjFmt(void *p);
 extern "C" int GXGetTlutObjNumEntries(void *p);
 extern "C" void GXLoadTlut(GXTlutObj *pObject, int a);
-void fn_8025251C(Mtx44 m, int a);
+void GXLoadPosMtxImm(Mtx44 m, int a);
 }
 
 static PassIconTexLib _PassIconTex_TexLib;
@@ -102,7 +102,7 @@ void PassIconTexDraw(PassIconObj_t *pInstance)
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     GXSetNumTevStages(1);
-    fn_8025251C(fn_801D0444(), 0);
+    GXLoadPosMtxImm(fn_801D0444(), 0);
     GXSetZCompLoc(GX_DISABLE);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
     GXSetAlphaCompare(GX_GREATER, 32, GX_AOP_AND, GX_GREATER, 32);

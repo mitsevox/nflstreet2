@@ -26,12 +26,12 @@ void fn_8024FA68(int a, GXColor color);
 void fn_8024FB58(int a, GXColor color);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_802523A4(Mtx44 m, int a);
-void fn_80252448(float *p);
-void fn_802524D4(float *p);
-void fn_8025251C(Mtx44 m, int a);
-void fn_802525BC(int a);
-void fn_802528B0(int a);
+void GXSetProjection(Mtx44 m, int a);
+void GXSetProjectionv(float *p);
+void GXGetProjectionv(float *p);
+void GXLoadPosMtxImm(Mtx44 m, int a);
+void GXSetCurrentMtx(int a);
+void GXSetClipMode(int a);
 
 void FxParticleDrawBegin(void)
 {
@@ -102,7 +102,7 @@ void FxTintDraw(unsigned int color, int mode, float alpha)
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 4);
     GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
     GXSetCullMode(GX_CULL_NONE);
-    fn_802528B0(1);
+    GXSetClipMode(1);
     switch (mode) {
     case 1:
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCCLR, GX_BL_SRCALPHA, GX_LO_NOOP);
@@ -115,26 +115,26 @@ void FxTintDraw(unsigned int color, int mode, float alpha)
     {
         float saved[7];
 
-        fn_802524D4(saved);
+        GXGetProjectionv(saved);
         C_MTXOrtho(projection, 0.0f, 448.0f, 0.0f, 640.0f, 1.0f, 2.0f);
-        fn_802523A4(projection, 1);
+        GXSetProjection(projection, 1);
         fn_801D04C4();
         fn_801D03D0(view);
-        fn_8025251C(view, 0);
-        fn_802525BC(0);
+        GXLoadPosMtxImm(view, 0);
+        GXSetCurrentMtx(0);
         fn_801D0544();
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
         GXPosition3f32(0.0f, 0.0f, -1.0f);
         GXPosition3f32(640.0f, 0.0f, -1.0f);
         GXPosition3f32(0.0f, 448.0f, -1.0f);
         GXPosition3f32(640.0f, 448.0f, -1.0f);
-        fn_80252448(saved);
+        GXSetProjectionv(saved);
     }
     fn_801D0F80(view);
-    fn_8025251C(view, 0);
+    GXLoadPosMtxImm(view, 0);
     GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
-    fn_802528B0(0);
+    GXSetClipMode(0);
 }
 
 void FxTintDrawAlpha(int unused, unsigned int color, float alpha)

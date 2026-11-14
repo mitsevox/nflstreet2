@@ -25,7 +25,7 @@ void fn_801D0508(void);
 void fn_801D0544(void);
 void fn_801D131C(int a);
 Mtx44Ptr fn_801D0444(void);
-void fn_8025251C(Mtx44 m, int a);
+void GXLoadPosMtxImm(Mtx44 m, int a);
 void fn_80227490(float *pOut, float *pIn, int a, int b, int c);
 void fn_8022765C(float *pOut, float *pA, float *pB);
 int fn_801CEA08(void);
@@ -174,7 +174,7 @@ void FieldMarkerDrawBeams(void)
     fn_801D0470(VptGetMatrixStack());
     fn_801D0508();
     fn_801D131C(3);
-    fn_8025251C(fn_801D0444(), 0);
+    GXLoadPosMtxImm(fn_801D0444(), 0);
     fn_801D0544();
     if (_FieldMarker_BeamTextureInfo.mUnknown0 == 1)
         GXLoadTlut(&_FieldMarker_BeamTexture.mTlutObj, 0);
@@ -216,7 +216,7 @@ void FieldMarkerDrawArrows(void)
     fn_801D0470(VptGetMatrixStack());
     fn_801D0508();
     fn_801D131C(3);
-    fn_8025251C(fn_801D0444(), 0);
+    GXLoadPosMtxImm(fn_801D0444(), 0);
     fn_801D0544();
     if (_FieldMarker_ArrowTextureInfo.mUnknown0 == 1)
         GXLoadTlut(&_FieldMarker_ArrowTexture.mTlutObj, 0);

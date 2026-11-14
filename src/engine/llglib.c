@@ -30,7 +30,7 @@ extern GXRenderModeObj lbl_802F7A88;
 void *fn_801C1F94();
 void *fn_801C1FBC();
 void fn_801F7B04(void);
-void fn_802523A4(float (*pMtx)[4], int type);
+void GXSetProjection(float (*pMtx)[4], int type);
 void GlibRenderBegin(GlibState_801CE1F8 *pMode);
 void TMRenderBeginFrame(void);
 void TMRenderEndFrame(void);
@@ -338,7 +338,7 @@ int fn_801CEA14(void)
 
 void fn_801CEA20(float (*pMatrix)[4])
 {
-    fn_802523A4(pMatrix, 0);
+    GXSetProjection(pMatrix, 0);
 }
 
 void fn_801CEA44(GXBool enable)

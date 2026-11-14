@@ -75,8 +75,8 @@ void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 void fn_80252034(int a, int b, int c, int d);
 void fn_802520E0(int a, int b, int c);
 void fn_80252114(int a);
-void fn_8025251C(float (*matrix)[4], int a);
-void fn_802525BC(int a);
+void GXLoadPosMtxImm(float (*matrix)[4], int a);
+void GXSetCurrentMtx(int a);
 extern Bounds_80234D00 lbl_802CEFF0;
 extern float lbl_803EA4B8;
 
@@ -143,8 +143,8 @@ int fn_800469EC(Item_800469EC *p)
             fn_801D04C4();
             fn_801D0C58(&p->mUnknown4);
             fn_801D0F80(matrix);
-            fn_8025251C(matrix, 0);
-            fn_802525BC(0);
+            GXLoadPosMtxImm(matrix, 0);
+            GXSetCurrentMtx(0);
             fn_801D0544();
             fn_8024E908(0x98, 0, 4);
             GXPosition3f32(fn_80178A08(), scale * (1.0f - lbl_803EA4B8) * 0.55556f, zero);

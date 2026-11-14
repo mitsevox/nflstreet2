@@ -345,10 +345,6 @@
       "address": "0x80239CEC",
       "evidence": "evidence.tsv AXSPB cache external; actual REL24 from PrintStudio and pinned OSCache signature."
     },
-    "GXSetViewport": {
-      "address": "0x8025278C",
-      "evidence": "evidence.tsv external row GXSetViewport: target REL24 branch at 0x80228C90 and SDK GXTransform.c body."
-    },
     "GetItem__14MenuListScreeniP11MenuEntry_t": {
       "address": "0x80182CC8",
       "evidence": "evidence.tsv external row 0x80182CC8 (GetItem__14MenuListScreeniP14MenuEntry_t) and type row MenuListScreen."
@@ -793,10 +789,6 @@
       "address": "0x803ED358",
       "evidence": "Actual target operands and canonical accepted API signatures in GXFifo, relatedSDK identity."
     },
-    "__GXSetMatrixIndex": {
-      "address": "0x802528D8",
-      "evidence": "GXAttr actualoriginalTexCoordGen2REL24 binds sharedhelper; genuine internalGXAttrmatIdxAttr prototype/currenttypedGXData fields."
-    },
     "__CARDPermMask": {
       "address": "0x803EC2C2",
       "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
@@ -947,38 +939,6 @@
     },
     "GXClearGPMetric": {
       "address": "0x8025334C",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXLoadPosMtxImm": {
-      "address": "0x8025251C",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXLoadNrmMtxImm": {
-      "address": "0x8025256C",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetCurrentMtx": {
-      "address": "0x802525BC",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXLoadTexMtxImm": {
-      "address": "0x802525F0",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetProjectionv": {
-      "address": "0x80252448",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetClipMode": {
-      "address": "0x802528B0",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetScissor": {
-      "address": "0x802527F8",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetScissorBoxOffset": {
-      "address": "0x80252870",
       "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
     },
     "GXSetNumChans": {
@@ -1585,10 +1545,6 @@
       "address": "0x8024AF70",
       "evidence": "evidence.tsv external row GXInit: target REL24 call at 0x801CE558 and the SDK GXInit.c comparison unit."
     },
-    "GXSetViewportJitter": {
-      "address": "0x80252734",
-      "evidence": "evidence.tsv external row GXSetViewportJitter: target REL24 call at 0x801CEDCC and the SDK GXTransform.c comparison unit."
-    },
     "LCStoreData": {
       "address": "0x80239F20",
       "evidence": "evidence.tsv external row LCStoreData: SDK OSCache body inside the provisional sdk.json OSCache.c range; REL24 calls from 0x80213748 and 0x80213A08."
@@ -1600,14 +1556,6 @@
     "LCQueueWait": {
       "address": "0x80239FD8",
       "evidence": "evidence.tsv external row LCQueueWait: SDK OSCache body (HID2 queue-length spin against r3); REL24 calls from 0x80213580 and 0x802137C8."
-    },
-    "PSMTXConcat": {
-      "address": "0x8024AA18",
-      "evidence": "evidence.tsv external row PSMTXConcat: SDK mtx.c paired-single body inside the provisional sdk.json mtx.c range; REL24 calls from 0x80213720 and 0x802139D0."
-    },
-    "GXGetViewportv": {
-      "address": "0x802527D4",
-      "evidence": "evidence.tsv external row GXGetViewportv: SDK GXTransform.c body copying the six viewport floats from gx+0x4F4; REL24 call from 0x80210620."
     },
     "_vt.14Class_802A2A40": {
       "address": "0x802A2A40",
@@ -5211,6 +5159,77 @@
           "placement": ".data5",
           "start": "0x803EC260",
           "end": "0x803EC26C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXTransform.c",
+      "profile": "dolphin_release",
+      "evidence": "sdk.json unit src/dolphin/gx/GXTransform.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "GXSetCurrentMtx",
+          "__GXSetMatrixIndex",
+          "__GXSetViewport",
+          "GXSetViewportJitter",
+          "GXSetViewport",
+          "GXSetScissor",
+          "GXSetScissorBoxOffset",
+          "GXSetClipMode",
+          "GXSetProjection",
+          "GXSetProjectionv",
+          "GXGetProjectionv",
+          "GXLoadPosMtxImm",
+          "GXLoadNrmMtxImm",
+          "GXLoadTexMtxImm",
+          "GXGetViewportv"
+        ],
+        "evidence": "The target keeps this file's 15 exact function(s) at the placed range; the global ones are the roots. The file's other function, the out-of-line __GXSetProjection, has no code anywhere in the target's .init/.text, so the linker drops it as the original link did."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802523A4",
+          "end": "0x8025295C"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED9B0",
+          "end": "0x803ED9C0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/mtx/mtx.c",
+      "profile": "dolphin_release",
+      "evidence": "sdk.json unit src/dolphin/mtx/mtx.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "PSMTXIdentity",
+          "PSMTXConcat"
+        ],
+        "evidence": "The target keeps this file's 2 exact function(s) at the placed range (PSMTXIdentity 0x8024A9EC, PSMTXConcat 0x8024AA18), both global roots. C_MTXIdentity, which the file defines first, has no code anywhere in the target's .init/.text, so the linker drops it as the original link did; its 1.0f/0.0f literals stay at the head of the constant pool."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024A9EC",
+          "end": "0x8024AAE4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC250",
+          "end": "0x803EC258"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED778",
+          "end": "0x803ED780"
         }
       ]
     },

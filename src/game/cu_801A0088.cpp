@@ -57,7 +57,7 @@ void fn_802520E0(int, int, int);
 extern "C" void GXInitTexObjTlut(GXTexObj *, int);
 extern "C" void GXLoadTlut(GXTlutObj *, int);
 extern "C" void GXLoadTexObj(GXTexObj *, int);
-void fn_8025251C(Mtx44, int);
+void GXLoadPosMtxImm(Mtx44, int);
 void fn_80252034(int, int, int, int);
 }
 
@@ -231,18 +231,18 @@ extern "C" void fn_801A0E2C(void)
 }
 extern "C" void fn_801A0FAC(int a,PlayArtState_t *s,unsigned char mirror)
 {
-    Mtx44 m;fn_801D04C4();if(mirror)fn_801D0664(lbl_802F28F4);fn_801D0F80(m);fn_8025251C(m,0);
+    Mtx44 m;fn_801D04C4();if(mirror)fn_801D0664(lbl_802F28F4);fn_801D0F80(m);GXLoadPosMtxImm(m,0);
     a=fn_801A09B0(a,s,0);a=fn_801A0CA0(a,s,0);a=fn_801A085C(a,s,0);
-    fn_801D0544();fn_801D0F80(m);fn_8025251C(m,0);fn_801A0B1C(a,s,mirror);
+    fn_801D0544();fn_801D0F80(m);GXLoadPosMtxImm(m,0);fn_801A0B1C(a,s,mirror);
 }
 extern "C" void fn_801A105C(float x,float y,void *input,unsigned char mirror)
 {
     PlayArtState_t *s=(PlayArtState_t *)input;GXColor c={255,255,255,255};float pos[3]={x,y,0.0f};Mtx44 m;
     fn_801A0E2C();Point_8017886C point=fn_80177FE0();
     if(fn_80177F70()!=0&&fn_80177F70()!=6){float v=fn_80178298();if(v<fn_80178A2C()&&!fn_800BA6F8()&&!FELoopIsMainFEActive())fn_80178298();}
-    fn_8024FA68(4,c);fn_801D0470(VptGetMatrixStack());fn_801D04C4();fn_801D0D94(1.0f,1.0f,0.0f);fn_801D0C58(pos);fn_801D0F80(m);fn_8025251C(m,0);
+    fn_8024FA68(4,c);fn_801D0470(VptGetMatrixStack());fn_801D04C4();fn_801D0D94(1.0f,1.0f,0.0f);fn_801D0C58(pos);fn_801D0F80(m);GXLoadPosMtxImm(m,0);
     GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);fn_80252034(0,0,0,5);int a=fn_801A07A8(0,&point);GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);fn_80252034(1,4,5,5);
-    fn_801D0F80(m);fn_8025251C(m,0);fn_8024FA68(4,c);fn_801A0FAC(a,s,mirror);fn_80252034(0,0,0,5);fn_801D0544();fn_801D0F80(m);fn_8025251C(m,0);
+    fn_801D0F80(m);GXLoadPosMtxImm(m,0);fn_8024FA68(4,c);fn_801A0FAC(a,s,mirror);fn_80252034(0,0,0,5);fn_801D0544();fn_801D0F80(m);GXLoadPosMtxImm(m,0);
 }
 extern "C" void fn_801A1240(int resource)
 {

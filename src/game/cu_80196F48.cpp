@@ -27,8 +27,8 @@ void fn_801D131C(int);
 void fn_801D12BC(int);
 Mtx44Ptr fn_801D0444(void);
 void fn_801D0F80(Mtx44);
-void fn_802523A4(Mtx44, int);
-void fn_802524D4(float *);
+void GXSetProjection(Mtx44, int);
+void GXGetProjectionv(float *);
 void fn_8022765C(void *, void *, void *);
 float fn_80227704(void *, void *);
 void fn_80227904(float *, float *, float *, float);
@@ -193,7 +193,7 @@ void fn_80197680(Glow_t *p)
     float screen[2], center[2];
     float angle = 1.0f;
     float size = 0.0f;
-    fn_802524D4(saved);
+    GXGetProjectionv(saved);
     float visibility = fn_80197D08(projected, &p->mUnknown18);
     screen[0] = projected[0];
     screen[1] = projected[1];
@@ -277,7 +277,7 @@ void fn_80197680(Glow_t *p)
                 projection[0][3] = 0.0f;
                 projection[1][3] = 0.0f;
                 projection[2][3] = 0.0f;
-                fn_802523A4(projection, 1);
+                GXSetProjection(projection, 1);
                 center[0] *= 320.0f;
                 center[1] *= 240.0f;
                 corners[0].mX = center[0] - size;

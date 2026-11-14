@@ -84,11 +84,11 @@ void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXInitTexObj(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
 extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
-void fn_802523A4(PortraitMtx44_t m, int a);
-void fn_802524D4(float *p);
-void fn_8025251C(PortraitMtx44_t m, int a);
-void fn_802525BC(int a);
-void fn_802528B0(int a);
+void GXSetProjection(PortraitMtx44_t m, int a);
+void GXGetProjectionv(float *p);
+void GXLoadPosMtxImm(PortraitMtx44_t m, int a);
+void GXSetCurrentMtx(int a);
+void GXSetClipMode(int a);
 }
 
 static PortraitVec3_t _PortraitRender_vTranslate = {0.0f, -0.7f, -1.6f};
@@ -227,8 +227,8 @@ void PortraitRenderPoseModels(PortraitJob_t *pObject)
                 (int)(_PortraitRender_vRotate.mUnknown0 * 46603.379f));
     fn_801D0CFC(_PortraitRender_fScale);
     fn_801D0F80(_PortraitRender_ModelMtx);
-    fn_8025251C(_PortraitRender_ModelMtx, 0);
-    fn_802525BC(0);
+    GXLoadPosMtxImm(_PortraitRender_ModelMtx, 0);
+    GXSetCurrentMtx(0);
     fn_801D0544();
 
     pData0 = PortraitGetSkeleton(0);
@@ -348,7 +348,7 @@ void PortraitRenderBegin2D(int textured, unsigned int color, GXTexObj *pTexture,
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
         GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
         GXSetCullMode(GX_CULL_NONE);
-        fn_802528B0(1);
+        GXSetClipMode(1);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
         GXLoadTexObj(pTexture, 0);
     } else {
@@ -362,23 +362,23 @@ void PortraitRenderBegin2D(int textured, unsigned int color, GXTexObj *pTexture,
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 4);
         GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
         GXSetCullMode(GX_CULL_NONE);
-        fn_802528B0(1);
+        GXSetClipMode(1);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
     }
-    fn_802524D4(_PortraitRender_afProjection[0]);
+    GXGetProjectionv(_PortraitRender_afProjection[0]);
     C_MTXOrtho(projection, 0.0f, 448.0f, 0.0f, 640.0f, 1.0f, 2.0f);
-    fn_802523A4(projection, 1);
+    GXSetProjection(projection, 1);
     fn_801D03D0(view);
-    fn_8025251C(view, 0);
-    fn_802525BC(0);
+    GXLoadPosMtxImm(view, 0);
+    GXSetCurrentMtx(0);
 }
 
 void PortraitRenderEnd2D(void)
 {
     GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
-    fn_802523A4(_PortraitRender_afProjection, 0);
+    GXSetProjection(_PortraitRender_afProjection, 0);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
-    fn_802528B0(0);
+    GXSetClipMode(0);
 }
 
 void PortraitRenderClearBackground(void)
@@ -398,9 +398,9 @@ void PortraitRenderAfterCapture(void)
 
 void PortraitRenderSetCamera(void)
 {
-    fn_802524D4(_PortraitRender_afProjection[0]);
+    GXGetProjectionv(_PortraitRender_afProjection[0]);
     VptPerspective(_PortraitRender_ProjMtx, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
-    fn_802523A4(_PortraitRender_ProjMtx, 0);
+    GXSetProjection(_PortraitRender_ProjMtx, 0);
     VptGetMatrixStack();
     fn_801D0470();
     fn_801D04C4();

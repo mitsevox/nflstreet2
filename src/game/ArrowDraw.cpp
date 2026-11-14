@@ -52,8 +52,8 @@ void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB
 int fn_80236EC0(int a);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_8025251C(Mtx44 m, int a);
-void fn_802525BC(int a);
+void GXLoadPosMtxImm(Mtx44 m, int a);
+void GXSetCurrentMtx(int a);
 
 float ArrowGetWidth(ArrowPath *pTrail, unsigned int index)
 {
@@ -300,8 +300,8 @@ void ArrowDraw(ArrowPath *pTrail)
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     fn_801D0F80(view);
-    fn_802525BC(0);
-    fn_8025251C(view, 0);
+    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(view, 0);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetCullMode(GX_CULL_NONE);

@@ -64,12 +64,12 @@ extern "C" void GXLoadTexObjPreLoaded(LoadingTexture_t *, GXTexRegion *, int);
 void fn_8024FB58(int, GXColor);
 void fn_8024FC48(int);
 void fn_8024FC84(int,int,int,int,int,int,int);
-void fn_802528B0(int);
-void fn_802524D4(float *);
-void fn_802523A4(Mtx44,int);
+void GXSetClipMode(int);
+void GXGetProjectionv(float *);
+void GXSetProjection(Mtx44,int);
 void fn_801D03D0(Mtx44);
-void fn_8025251C(Mtx44,int);
-void fn_802525BC(int);
+void GXLoadPosMtxImm(Mtx44,int);
+void GXSetCurrentMtx(int);
 void fn_801CE720(void);
 void fn_801CE774(void);
 extern "C" void GXInitTexPreLoadRegion(GXTexRegion *,int,int,int,int);
@@ -225,21 +225,21 @@ void LoadingBeginDraw(int alpha)
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
     GXSetCullMode(GX_CULL_NONE);
-    fn_802528B0(1);
+    GXSetClipMode(1);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
-    fn_802524D4(_Loading_MatOldProj[0]);
+    GXGetProjectionv(_Loading_MatOldProj[0]);
     C_MTXOrtho(projection,0.0f, 480.0f, 0.0f, 640.0f, 1.0f, 2.0f);
-    fn_802523A4(projection,1);
+    GXSetProjection(projection,1);
     fn_801D03D0(view);
-    fn_8025251C(view,0);
-    fn_802525BC(0);
+    GXLoadPosMtxImm(view,0);
+    GXSetCurrentMtx(0);
 }
 void LoadingEndDraw(void)
 {
     GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
-    fn_802523A4(_Loading_MatOldProj,0);
+    GXSetProjection(_Loading_MatOldProj,0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
-    fn_802528B0(0);
+    GXSetClipMode(0);
 }
 void LoadingDrawScreen(void)
 {
