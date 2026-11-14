@@ -104,13 +104,13 @@ typedef struct Struct_803A6C24 {
     unsigned char m168;
     unsigned char m169;
     signed char m16A;
-    unsigned char mUnknown16B;
+    signed char m16B;
     short m16C;
     unsigned char mUnknown16E;
     unsigned char m16F;
     volatile unsigned int m170;
-    void (*m174[12])(void);
-    unsigned char mUnknown1A4[0x1C];
+    void (*m174[6])(void);
+    void (*m18C[13])(void);
     int (*m1C0)(int bank);
     unsigned char mUnknown1C4[8];
     Record_803A6DF0 *m1CC;

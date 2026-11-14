@@ -16,9 +16,9 @@ void fn_801F74D4(void *pStream, void *pHeader);
 int fn_801F7644(void *pStream);
 int SndEnabled(void);
 void SNDplaysetdef(void *pConfig);
-int fn_8026EE24(int a, int b);
-int fn_8026EA80(void *pStream, void *pConfig, int a, int b, void *pBuffer, int size);
-int fn_8026EF0C(int voice, int a, int b);
+int SNDSTRM_overheadtap(int a, int b);
+int SNDSTRM_createtap(void *pStream, void *pConfig, int a, int b, void *pBuffer, int size);
+int SNDSTRM_queuerequestid(int voice, int a, int b);
 void fn_8026E2A8(int voice);
 void SNDSYS_entercritical(void);
 void fn_8026EF88(int handle, void *pStatus);
@@ -197,10 +197,10 @@ int MovieRcmpInitAudio(MovieRcmpInfo_t *pInfo, void *pStream, int volume)
         int size;
 
         SNDplaysetdef(config);
-        size = fn_8026EE24(1, 0x1E);
+        size = SNDSTRM_overheadtap(1, 0x1E);
         pAudio->mpBuffer = fn_801D2B7C(size, 0, 0);
-        pAudio->mVoice = fn_8026EA80(pAudio->mpStream, config, 1, 0x1E, pAudio->mpBuffer, size);
-        handle = fn_8026EF0C(pAudio->mVoice, 0, volume);
+        pAudio->mVoice = SNDSTRM_createtap(pAudio->mpStream, config, 1, 0x1E, pAudio->mpBuffer, size);
+        handle = SNDSTRM_queuerequestid(pAudio->mVoice, 0, volume);
     } else {
         handle = -1;
     }

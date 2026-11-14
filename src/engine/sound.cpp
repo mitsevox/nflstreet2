@@ -101,6 +101,13 @@ static IAllocator *pIAllocator;
 
 static SndModuleInfo_t _Snd_ModuleInfo;
 
+namespace Snd {
+class System {
+public:
+    static int VectorToCsisMutex(void);
+};
+}
+
 extern "C" {
 int sprintf(char *s, const char *format, ...);
 void DCFlushRange(void *addr, unsigned long nBytes);
@@ -142,22 +149,21 @@ void fn_8026E2A8(int handle);
 int fn_8026E364(int handle, int a, void *b);
 int fn_8026E388(int handle);
 void fn_8026E8FC(int handle, int a, int b);
-int fn_8026EAC0(int handle, int a, int b);
-int fn_8026EBBC(int handle);
+int SNDSTRM_fxlevel(int handle, int a, int b);
+int SNDSTRM_getprogvol(int handle);
 int fn_8026E4C0(int handle, float degrees, int a);
-int fn_8026ED1C(int a, int b);
-int fn_8026EDC4(int handle);
-int fn_8026EE6C(int a, int b);
-int fn_8026EEB0(int handle, int a);
-int fn_8026EF38(int handle, int a);
+int SNDSTRM_modifyhold(int a, int b);
+int SNDstop(int handle);
+int SNDSTRM_overhead(int a, int b);
+int SNDSTRM_pitchmult(int handle, int a);
+int SNDSTRM_drylevel(int handle, int a);
 int fn_8026EF88(int a, int b);
-void fn_8026F1E8(int handle, int *pStatus);
-void fn_802703A0(void);
+void SNDSTRM_status(int handle, int *pStatus);
+void SNDSYS_service(void);
 int fn_802714A8(int handle, int value);
 
 void _StreamMUTEX_init(void);
 void fn_8026C39C(int a);
-void fn_80270458(void);
 void fn_8026F97C(int a);
 void fn_8026C18C(void);
 void fn_8026C23C(void);
@@ -364,7 +370,7 @@ int SndInit(SndInitDesc_t *pDesc)
         pIAllocator = new TiburonIAllocator13Impl(_Snd_ModuleInfo.mUnk30, (void (*)(int))_SndIAllocatorMemLabelCB);
         Csis::System::SetAllocator((Allocator *)pIAllocator);
         Csis::System::Init();
-        fn_80270458();
+        Snd::System::VectorToCsisMutex();
         fn_8026FBFC(0, (int)pHeap, pDesc->mUnknown4);
         fn_8026F97C(pDesc->mUnknown0);
         _Snd_ModuleInfo.mUnk0 = pDesc->mUnknown0;
@@ -574,7 +580,7 @@ void SndStopPatch(int handle)
 {
     if (SND_READY()) {
         SND_LOCK();
-        fn_8026EDC4(handle);
+        SNDstop(handle);
         SND_UNLOCK();
     }
 }
@@ -665,7 +671,7 @@ SndStream_t *SndCreateStream(int extra, int a, int b, int bank)
     pStream = (SndStream_t *)fn_801C6A20(_Snd_ModuleInfo.pStreamList);
     fn_801C6AA4(_Snd_ModuleInfo.pStreamList, pStream, 0);
     SNDplaysetdef(&opts);
-    size = fn_8026EE6C(a, b) + extra;
+    size = SNDSTRM_overhead(a, b) + extra;
     pStream->pBuffer = fn_801D2BB0(1, size, 0, 0);
     pStream->mHandle = fn_8026E280(&opts, a, b, pStream->pBuffer, size);
     return pStream;
@@ -711,7 +717,7 @@ void SndStreamSetPitchMult(SndStream_t *pStream, int a)
 {
     if (SND_READY()) {
         SND_LOCK();
-        fn_8026EEB0(pStream->mHandle, a);
+        SNDSTRM_pitchmult(pStream->mHandle, a);
         SND_UNLOCK();
     }
 }
@@ -736,7 +742,7 @@ void SndStreamGetStatus(SndStream_t *pStream, int *pStatus)
 {
     if (SND_READY()) {
         SND_LOCK();
-        fn_8026F1E8(pStream->mHandle, pStatus);
+        SNDSTRM_status(pStream->mHandle, pStatus);
         SND_UNLOCK();
     } else {
         pStatus[0] = 0;
@@ -750,7 +756,7 @@ int SndStreamGetVol(SndStream_t *pStream)
     result = 0;
     if (SND_READY()) {
         SND_LOCK();
-        result = fn_8026EBBC(pStream->mHandle);
+        result = SNDSTRM_getprogvol(pStream->mHandle);
         SND_UNLOCK();
     }
     return result;
@@ -773,7 +779,7 @@ void SndStreamSetParam(SndStream_t *pStream, int a, int b)
 {
     if (SND_READY()) {
         SND_LOCK();
-        fn_8026EAC0(pStream->mHandle, a, b);
+        SNDSTRM_fxlevel(pStream->mHandle, a, b);
         SND_UNLOCK();
     }
 }
@@ -782,7 +788,7 @@ void SndStreamSetControl(SndStream_t *pStream, int a)
 {
     if (SND_READY()) {
         SND_LOCK();
-        fn_8026EF38(pStream->mHandle, a);
+        SNDSTRM_drylevel(pStream->mHandle, a);
         SND_UNLOCK();
     }
 }
@@ -790,7 +796,7 @@ void SndStreamSetControl(SndStream_t *pStream, int a)
 void SndSetMasterVol(int a, int b)
 {
     if (SND_READY()) {
-        fn_8026ED1C(a, b);
+        SNDSTRM_modifyhold(a, b);
     }
 }
 
@@ -809,7 +815,7 @@ void SndSetServiceCallback(void (*pCallback)(int a, int b))
 void SndService(void)
 {
     if (SND_READY()) {
-        fn_802703A0();
+        SNDSYS_service();
         _SndProcessBanks();
         if (_Snd_ModuleInfo.pServiceCallback != 0) {
             _Snd_ModuleInfo.pServiceCallback(0, 0);

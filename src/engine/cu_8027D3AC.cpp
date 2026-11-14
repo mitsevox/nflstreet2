@@ -154,10 +154,10 @@ void *fn_801B2C40(int size);
 void fn_801B3A88(void);
 void SNDSYS_entercritical(void);
 void SNDSYS_leavecritical(void);
-int fn_8026EEB0(int handle, int value);
-int fn_8026EF38(int handle, int value);
-int fn_8026EAC0(int handle, int a, int b);
-int fn_8026ED1C(int handle, int value);
+int SNDSTRM_pitchmult(int handle, int value);
+int SNDSTRM_drylevel(int handle, int value);
+int SNDSTRM_fxlevel(int handle, int a, int b);
+int SNDSTRM_modifyhold(int handle, int value);
 int fn_801F685C(int count, int filters, int taps);
 int fn_802714A8(int handle, int value);
 int SNDCTRL_drylevel(int handle, int value);
@@ -168,7 +168,7 @@ int SNDBANK_asyncloadmemdone(void);
 int SNDbankremove(int handle);
 int SNDbankheadersize(int handle);
 int SNDbankheadercopy(void *dest, int handle);
-int fn_8026EDC4(int handle);
+int SNDstop(int handle);
 int fn_8026E388(int handle);
 void fn_801B2C94(void *p);
 
@@ -349,7 +349,7 @@ int Object_8027DAE4::vfn_04(void)
 {
     int result;
     SNDSYS_entercritical();
-    result = fn_8026EDC4(m0);
+    result = SNDstop(m0);
     SNDSYS_leavecritical();
     m38 = 1;
     m124 = -1;
@@ -477,7 +477,7 @@ int Object_8027E518::vfn_15(int value)
     int result = 0;
     if (fn_8027D9EC(this) == 0) {
         SNDSYS_entercritical();
-        result = fn_8026EF38(m0, value);
+        result = SNDSTRM_drylevel(m0, value);
         SNDSYS_leavecritical();
         mC = value;
     }
@@ -489,7 +489,7 @@ int Object_8027E518::vfn_17(int a, int b)
     int result = 0;
     if (fn_8027D9F4(this) == 0) {
         SNDSYS_entercritical();
-        result = fn_8026EAC0(m0, a, b);
+        result = SNDSTRM_fxlevel(m0, a, b);
         SNDSYS_leavecritical();
         m8 = b;
     }
@@ -498,14 +498,14 @@ int Object_8027E518::vfn_17(int a, int b)
 
 int Object_8027E518::vfn_25(int value)
 {
-    return fn_8026ED1C(m120->m4, value);
+    return SNDSTRM_modifyhold(m120->m4, value);
 }
 
 int Object_8027E518::vfn_19(int value)
 {
     int result;
     SNDSYS_entercritical();
-    result = fn_8026EEB0(m0, value);
+    result = SNDSTRM_pitchmult(m0, value);
     SNDSYS_leavecritical();
     m108 = value;
     m114 = value;

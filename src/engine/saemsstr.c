@@ -4,14 +4,14 @@
 
 extern "C" {
 int fn_8026D610(int handle, int value);
-int fn_8026E4C0(int handle, float azimuth, int time);
-int fn_8026EAC0(int handle, int a, int b);
-int fn_8026ECCC(int handle, int value);
-int fn_8026ED74(int handle, int value);
-int fn_8026EEB0(int handle, int value);
-int fn_8026EF38(int handle, int value);
-int fn_8026F2C8(int handle, int value);
-int fn_8026F334(int handle, float volume, int time);
+int SNDSTRM_setazimuth(int handle, float azimuth, int time);
+int SNDSTRM_fxlevel(int handle, int a, int b);
+int SNDSTRM_highpass(int handle, int value);
+int SNDSTRM_lowpass(int handle, int value);
+int SNDSTRM_pitchmult(int handle, int value);
+int SNDSTRM_drylevel(int handle, int value);
+int SNDSTRM_timemult(int handle, int value);
+int SNDSTRM_setvol(int handle, float volume, int time);
 }
 
 void SNDAEMSI_streampitchmult(int handle, int value)
@@ -22,7 +22,7 @@ void SNDAEMSI_streampitchmult(int handle, int value)
         value = 0;
     else if (value > max)
         value = max;
-    fn_8026EEB0(handle, value);
+    SNDSTRM_pitchmult(handle, value);
 }
 
 void SNDAEMSI_streamtimemult(int handle, int value)
@@ -31,7 +31,7 @@ void SNDAEMSI_streamtimemult(int handle, int value)
         value = 8192;
     else if (value < 2048)
         value = 2048;
-    fn_8026F2C8(handle, value);
+    SNDSTRM_timemult(handle, value);
 }
 
 void SNDAEMSI_streamvol(int handle, int value)
@@ -44,13 +44,13 @@ void SNDAEMSI_streamvol(int handle, int value)
         clamped = 32767;
     else
         clamped = value;
-    fn_8026F334(handle, (float)clamped * (1.0f / 32767.0f), -1);
+    SNDSTRM_setvol(handle, (float)clamped * (1.0f / 32767.0f), -1);
 }
 
 void SNDAEMSI_streamazimuth(int handle, int value)
 {
     fn_8026D610(handle, value);
-    fn_8026E4C0(handle, (float)(value & 0xFFFF) * (360.0f / 65535.0f), -1);
+    SNDSTRM_setazimuth(handle, (float)(value & 0xFFFF) * (360.0f / 65535.0f), -1);
 }
 
 void SNDAEMSI_streamfxwet0(int handle, int value)
@@ -63,7 +63,7 @@ void SNDAEMSI_streamfxwet0(int handle, int value)
         clamped = 32767;
     else
         clamped = value;
-    fn_8026EAC0(handle, 0, clamped >> 8);
+    SNDSTRM_fxlevel(handle, 0, clamped >> 8);
 }
 
 void SNDAEMSI_streamlowpass(int handle, int value)
@@ -74,7 +74,7 @@ void SNDAEMSI_streamlowpass(int handle, int value)
         value = 0;
     else if (value > max)
         value = max;
-    fn_8026ED74(handle, value);
+    SNDSTRM_lowpass(handle, value);
 }
 
 void SNDAEMSI_streamhighpass(int handle, int value)
@@ -85,7 +85,7 @@ void SNDAEMSI_streamhighpass(int handle, int value)
         value = 0;
     else if (value > max)
         value = max;
-    fn_8026ECCC(handle, value);
+    SNDSTRM_highpass(handle, value);
 }
 
 void SNDAEMSI_streamdrylevel(int handle, int value)
@@ -98,7 +98,7 @@ void SNDAEMSI_streamdrylevel(int handle, int value)
         clamped = 32767;
     else
         clamped = value;
-    fn_8026EF38(handle, clamped >> 8);
+    SNDSTRM_drylevel(handle, clamped >> 8);
 }
 
 void SNDAEMSI_streamstub(int handle, int value)

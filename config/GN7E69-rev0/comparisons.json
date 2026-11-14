@@ -42437,6 +42437,115 @@
           "end": "0x8026B898"
         }
       ]
+    },
+    {
+      "source": "src/engine/sstrstat.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row for src/engine/sstrstat.c; draft comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026EF88",
+          "end": "0x8026F19C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7980",
+          "end": "0x802B79A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SNDSTRM_requeststatus",
+          "start": "0x8026EF88",
+          "end": "0x8026F19C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sst3dpos.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row for src/engine/sst3dpos.c; draft comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026E4C0",
+          "end": "0x8026E774"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7938",
+          "end": "0x802B7948"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SNDSTRM_setazimuth",
+          "start": "0x8026E4C0",
+          "end": "0x8026E774"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sstautov.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row for src/engine/sstautov.c; draft comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026E774",
+          "end": "0x8026EA80"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7948",
+          "end": "0x802B7960"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "StreamFader__3SndPv",
+          "start": "0x8026E774",
+          "end": "0x8026E8FC"
+        },
+        {
+          "symbol": "SNDSTRM_autovol",
+          "start": "0x8026E8FC",
+          "end": "0x8026EA80"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sstvol.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row for src/engine/sstvol.c; draft comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026F334",
+          "end": "0x8026F5F8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B79A0",
+          "end": "0x802B79C8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SNDSTRM_setvol",
+          "start": "0x8026F334",
+          "end": "0x8026F5F8"
+        }
+      ]
     }
   ]
 }

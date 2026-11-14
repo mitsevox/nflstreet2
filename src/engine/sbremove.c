@@ -24,7 +24,7 @@ int SNDbankremove(int bank)
     hdr = lbl_803A6C24.m1D0[bank].m0;
     for (i = 0; i < lbl_803A6C24.m16C; i++) {
         if (lbl_803A6C24.m1CC[i].m4[7] == bank) {
-            fn_8026EDC4(lbl_803A6C24.m1CC[i].m0);
+            SNDstop(lbl_803A6C24.m1CC[i].m0);
         }
     }
     for (i = 0; i < hdr->m6; i++) {

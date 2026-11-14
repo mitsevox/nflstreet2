@@ -91,7 +91,7 @@ void SNDSYSI_100hzserver(void)
                 voice->m30 = 0.0f;
             }
             if (voice->m38 < 0.0f) {
-                fn_8026EDC4(voice->m0);
+                SNDstop(voice->m0);
                 continue;
             }
         }
@@ -105,7 +105,7 @@ void SNDSYSI_100hzserver(void)
             SndEnvStage_t *env;
 
             if (stage >= voice->m5C) {
-                fn_8026EDC4(voice->m0);
+                SNDstop(voice->m0);
                 continue;
             }
             env = &voice->m70[stage];

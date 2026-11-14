@@ -185,7 +185,7 @@ extern int SNDBANK_play(int a, int b, Object_80268480 *params);
 extern void SNDplaysetdef(Object_80268480 *params);
 extern unsigned int iSNDrandom(void);
 extern int SNDpitchmult(int handle, int value);
-extern int fn_8026EDC4(int handle);
+extern int SNDstop(int handle);
 extern int fn_802714A8(int handle, int value);
 extern int fn_80274B50(int voice, int value);
 extern int fn_80274CA8(int voice, int value);
@@ -659,7 +659,7 @@ Result_802685B8 fn_802685B8(Object_802685B8 *p, int *q)
 
 int fn_80268668(Object_802686CC *p)
 {
-    return fn_8026EDC4(p->mUnknown8);
+    return SNDstop(p->mUnknown8);
 }
 
 int fn_8026868C(int *p)
