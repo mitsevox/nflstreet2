@@ -38,9 +38,9 @@ struct Pair_803EA368 {
     int mUnknown4;
 };
 
-/* One of the 60 28-byte event slots at +0xDFC, filled by fn_800310C0 and
-   looked up by mId (fn_8003108C); fn_800312DC sets every mId to -1. */
-struct Event_803EA368 {
+/* One of the 60 28-byte event slots at +0xDFC, filled by ReplayEventAdd and
+   looked up by mId (ReplayEventFind); ReplayEventClearAll sets every mId to -1. */
+struct ReplayEvent_t {
     int mId;
     int mUnknown04;
     Vector_80039F5C mPos;
@@ -69,7 +69,7 @@ struct Type_803EA368 {
     char mPadDA4[4];
     void *mUnknownDA8[20];
     char mPadDF8[4];
-    Event_803EA368 mEvents[60];
+    ReplayEvent_t mEvents[60];
     Pair_803EA368 mUnknown148C[5];
     unsigned char mUnknown14B4;
     unsigned char mUnknown14B5;

@@ -40,7 +40,7 @@
 #include "game/PlayBookTeam.h"
 #include "game/cu_8002B8F8.h"
 #include "game/BigObjInst.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/PauseMenu.h"
 #include "game/AudmonEvent.h"
 #include "game/Block_801BE60C.h"

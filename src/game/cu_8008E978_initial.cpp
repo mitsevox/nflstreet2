@@ -12,7 +12,7 @@
 #include "game/BigObjInst.h"
 #include "game/ParticleSys.h"
 #include "game/AudmonEvent.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 
 struct Entry_802D71D8 {
     int mId;
@@ -237,7 +237,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
         }
         case 0xC01E:
             fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
-            fn_8003145C(p,AnimSeqGetOpcodeParameter());return 1;
+            ReplayEventAddForCode(p,AnimSeqGetOpcodeParameter());return 1;
         case 0xC01F:
             if(AnimSeqGetOpcodeParameter()==1) AudmonEventPostId(43,&p->mMotion.mPos,p->mId,0,0,0);
             else AudmonEventPostId(35,&p->mMotion.mPos,p->mId,(int)p,(int)p,0);

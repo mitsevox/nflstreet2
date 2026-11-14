@@ -9,7 +9,7 @@
 #include "game/PostPlayPhase.h"
 #include "game/Step_800C4460.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/PauseMenu.h"
 #include "game/AudmonEvent.h"
 #include "game/InGame.h"
@@ -572,7 +572,7 @@ void PostPlayPhase::OnEnter(float dt)
     PassIconsHide();
     PassIconsClearReplayFlag();
     if (fn_8002D0AC(lbl_803EA368)) {
-        fn_800310C0(lbl_803EA368, 37, 0, &pos, 0);
+        ReplayEventAdd(lbl_803EA368, 37, 0, &pos, 0);
     }
     lbl_803EAB78->mUnknown148 = 0;
     lbl_803EAB78->mUnknown14C = 0;

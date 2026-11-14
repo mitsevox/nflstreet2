@@ -12,7 +12,7 @@
 #include "game/Plan_80121264.h"
 #include "game/Table_80089904.h"
 #include "game/AudmonEvent.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/GameOptions.h"
@@ -1261,7 +1261,7 @@ extern "C" int CarrierRunEnter(Object_80039F5C *p)
     OptionRunControl_t *pControl = (OptionRunControl_t *)&p->mUnknown336;
 
     CarrierRunResetControl(p, pControl);
-    fn_80031404(p);
+    ReplayEventAddPlayer(p);
     if (fn_800AD9B4() == 3) {
         pControl->mUnknown0 = CarrierRunFindLeadBlocker(p);
         if (BallGetCurrentHolder() == p) {

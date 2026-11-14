@@ -14,7 +14,7 @@
 #include "game/AudmonEvent.h"
 #include "game/GameInfo.h"
 #include "game/Ball.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/GameOptions.h"
 #include "game/fn_800AD9B4.h"
 #include "game/PlayBookGetPlay.h"
@@ -1845,7 +1845,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                         Object_80039F5C *p = fn_8009BCE8(&receiver);
 
                         fn_80093C3C(1, 5, fn_8009BCE8(&receiver));
-                        fn_800310C0(lbl_803EA368, 0x16, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                        ReplayEventAdd(lbl_803EA368, 0x16, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                         if (!scored) {
                             fn_8017937C(receiver, 0x6B736C67, 1);
                             fn_801794B4(receiver, 0x6B737374, 1);

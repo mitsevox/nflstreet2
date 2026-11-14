@@ -51,7 +51,7 @@
 #include "game/PlayBookTeam.h"
 #include "game/cu_8002B8F8.h"
 #include "game/BigObjInst.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/FeatAwards.h"
 #include "game/StevTable.h"
 #include "game/fn_80061AD4.h"
@@ -1935,8 +1935,8 @@ extern "C" void fn_80095304(int id, Object_80039F5C **ppObject, unsigned short *
 {
     int found = 0;
 
-    if (fn_800312FC(lbl_803EA368, id) != 0) {
-        Object_80039F5C *p = fn_80031294(lbl_803EA368, id);
+    if (ReplayEventExists(lbl_803EA368, id) != 0) {
+        Object_80039F5C *p = ReplayEventGetObject(lbl_803EA368, id);
 
         if (p->mUnknown9[2] != 0) {
             *ppObject = p;
@@ -2183,12 +2183,12 @@ extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_
         fn_80095304(7, ppOut, &count);
         break;
     case 0x544E4F52: /* 'TNOR' */
-        if (fn_800312FC(lbl_803EA368, 4) && fn_80178348() != fn_80178308()) {
+        if (ReplayEventExists(lbl_803EA368, 4) && fn_80178348() != fn_80178308()) {
             fn_80095304(4, ppOut, &count);
         } else {
-            if (fn_800312FC(lbl_803EA368, 7)) {
+            if (ReplayEventExists(lbl_803EA368, 7)) {
                 fn_80095304(7, ppOut, &count);
-            } else if (fn_800312FC(lbl_803EA368, 38)) {
+            } else if (ReplayEventExists(lbl_803EA368, 38)) {
                 fn_80095304(38, ppOut, &count);
             } else {
                 fn_80095304(5, ppOut, &count);
@@ -2215,7 +2215,7 @@ extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_
         fn_80095304(8, ppOut, &count);
         break;
     case 0x50444546: /* 'PDEF' */
-        if (fn_800312FC(lbl_803EA368, 38)) {
+        if (ReplayEventExists(lbl_803EA368, 38)) {
             fn_80095304(38, ppOut, &count);
         } else {
             fn_80095304(5, ppOut, &count);

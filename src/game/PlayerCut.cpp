@@ -13,7 +13,7 @@
 #include "game/Table_80089904.h"
 #include "engine/AnimStateAnimList.h"
 #include "game/AudmonEvent.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/GameOptions.h"

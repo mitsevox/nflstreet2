@@ -9497,6 +9497,25 @@
       ]
     },
     {
+      "source": "src/game/ReplayEvent.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8003108C-0x800314E0 (src/game/ReplayEvent.cpp), its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003108C",
+          "end": "0x800314E0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCA34",
+          "end": "0x802CCB18"
+        }
+      ]
+    },
+    {
       "source": "src/game/ExpLevel.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80085D7C-0x80086194 (src/game/ExpLevel.cpp) and its data rows.",

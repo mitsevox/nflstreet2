@@ -137,7 +137,7 @@ struct Type_803EA368;
 
 extern Type_803EA368 *lbl_803EA368;
 
-extern "C" void fn_800310C0(Type_803EA368 *p, int id, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
+extern "C" void ReplayEventAdd(Type_803EA368 *p, int id, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
 extern "C" {
 Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, int a, int team);
 void SpchIGSetPassTarget(int id);
@@ -451,10 +451,10 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         {
             Object_80039F5C *pNearest = PlyrFindNearest(&pTarget->mMotion.mPos, 0, fn_80178320());
 
-            fn_800310C0(lbl_803EA368, 5, pNearest, &pNearest->mMotion.mPos, &pNearest->mMotion.mFacing);
+            ReplayEventAdd(lbl_803EA368, 5, pNearest, &pNearest->mMotion.mPos, &pNearest->mMotion.mFacing);
         }
-        fn_800310C0(lbl_803EA368, 18, p, pPos, &p->mMotion.mFacing);
-        fn_800310C0(lbl_803EA368, 17, pTarget, &pTarget->mMotion.mPos, &pTarget->mMotion.mFacing);
+        ReplayEventAdd(lbl_803EA368, 18, p, pPos, &p->mMotion.mFacing);
+        ReplayEventAdd(lbl_803EA368, 17, pTarget, &pTarget->mMotion.mPos, &pTarget->mMotion.mFacing);
         fn_80099568(1);
         if (fn_800A7F1C(p->mIdBytes[2]) == 0) {
             speed *= lbl_803EAECC;
@@ -584,7 +584,7 @@ extern "C" void fn_801039D8(Object_80039F5C *p)
     StyleTrackerMarkCatchOpportunity(p->mIdBytes[2]);
     fn_800B1584(56, 0);
     fn_801783D0(23, 1);
-    fn_800310C0(lbl_803EA368, 18, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+    ReplayEventAdd(lbl_803EA368, 18, p, &p->mMotion.mPos, &p->mMotion.mFacing);
     BallGetVelocity(pBall, &velocity);
     velocity.mX = velocity.mX < -0.2f ? -0.2f : (velocity.mX > 0.2f ? 0.2f : velocity.mX);
     velocity.mY = velocity.mY < -0.1f ? -0.1f : (velocity.mY > 0.15f ? 0.15f : velocity.mY);
