@@ -21,7 +21,7 @@ What protects matching integrity, in order: CI proves the complete executable of
 1. **Claim.** Check open PRs and branches. Open a draft PR early with the unit names and target ids in its title; that is the reservation, and it ends when the PR closes.
 2. **Establish boundaries and types.** Inspect the target and the reference evidence before reconstructing. Search existing headers and accepted units before declaring a shared address. A related build is corroboration, not proof of the target layout.
 3. **Reconstruct and match.** Recover source in the original codebase's style. Compile, compare instructions and data with objdiff, and investigate the remaining uncertainty with controlled experiments. Keep discarded variants local; retain useful partial reconstruction as a `NonMatching` object so CI measures it. Promotion to `Matching` does not move the source file.
-4. **Name and explain.** Record provenance for recovered names, types, fields and boundaries in `config/<target id>/evidence.tsv` using the [evidence format](config/README.md). Cite the actual loads, stores and caller or callee behavior for inferred widths and signatures. Keep readable names distinct from claims of original names; unresolved functions keep the tool's address label. Comments explain intent and invariants, never scores, compiler notes or process.
+4. **Name and explain.** Record provenance for recovered names, types, fields and boundaries in `config/<target id>/evidence.tsv` using the [evidence format](config/README.md). Cite the actual loads, stores and caller or callee behavior for inferred widths and signatures. Keep readable names distinct from claims of original names; unresolved functions keep the tool's address label. Comments explain intent and invariants, never scores, compiler notes or process; the one exception is the `// FAKEMATCH:` label (Matching integrity).
 5. **Check every target.** Build every active target and confirm `build.sha1` on each; run objdiff per target for each touched unit; run `python3 tools/versions.py diff` on every file you added a version block to; add evidence rows to each affected target's `evidence.tsv`. Fill the Targets table of the PR template from these results.
 6. **Review.** Tier A: an independent reviewer interprets the scoped functions with the proposed names and comments withheld, reconciles that interpretation with the submission and posts an `Accuracy:` record; then a fresh reviewer applies the hostile checklist and posts a `Hostile:` record. Tier B: the hostile record only. Tier C: none. Resolve every finding by fixing it or providing evidence.
 7. **Submit for the owner's decision.** Required CI passes on the final revision with no unexplained regression; the records cover that revision and name the targets they checked.
@@ -34,19 +34,33 @@ A version difference lives in the shared file under `#if VERSION_<DEFINE>` (`inc
 
 ## Matching integrity
 
-Do not manufacture a match through unsupported compiler or comparison manipulation:
+Nobody will know exactly what the original source looked like, and there is rarely direct evidence for it. The working test for every source form, compiler profile and build choice is the owner's (2026-11-14): the developers could reasonably, in theory, have written or built it this way, and it gives the best result available. Reviewers accept what passes that test and keep the lines below.
 
-- No per-function flags, optimization pragmas or compiler attributes introduced to force code generation.
-- No inline assembly, embedded instruction bytes or patched compiler output substituting for originally compiled source.
-- No invented helpers, casts, volatile qualifiers, padding or control flow whose only justification is obtaining matching bytes.
-- No altered symbol boundaries, excluded comparisons or progress categories that conceal mismatches.
-- No behavioral changes made to satisfy the compiler.
+**Accepted.** These need an evidence row that gives the reasoning; best-evidence hunches are accepted when nothing in the target contradicts them.
 
-Compiler versions and flags need evidence at the original compilation-unit or library level. A function-specific exception requires evidence that the original used it and the project owner's explicit approval. Originally handwritten assembly likewise requires provenance.
+- Compiler choices at the file or library level: a file or library that builds with its own flags gets its own named profile (for example `-fno-strength-reduce` for the speech, sound and CSIS code, or fast math for `CurveList.c`), and a separately built library may use another compiler version (CodeWarrior GC/1.3 for the VM library). Real builds made these choices per file and per library.
+- Source forms that 2004 game code plausibly contains even when nothing else shows them: a dead store, accessor definitions that inline away, an unused static, an extern that only a discarded function reads. A form like these that is present only to reproduce the bytes, such as an unused stack object for the frame size, a repeated test or a flag that is never set, is a fake match and needs both labels below.
+- Labeled fake matches, under the conditions below.
 
-A suspected fake match remains a local experiment, outside accepted source, unless the project owner explicitly authorizes a documented exception. A `fake match` label is not permission. Otherwise leave the original assembly linked and the recovery unresolved.
+**Fake matches.** A fake match is a form that is in the source only to reproduce the bytes and that nothing in the target or a related build shows the original had: an unused stack object that sets the frame size, an unreachable repeated test, a never-set flag that keeps strings referenced. It is accepted only when all four hold:
 
-Put compiler reasoning, exception evidence and matching experiments in metadata or the PR, not explanatory matching comments in reconstructed source. Preserve original assertions and diagnostics when the target requires them.
+1. The function is truly stuck: natural forms were tried within the time box and none matches.
+2. It does not change the logic. The function and its file do exactly what the target does on every path, so a port built from this source behaves the same.
+3. It is not egregious (see below).
+4. It is labeled twice: a `// FAKEMATCH: <what is fake and why>` comment on the line or block it affects (`/* FAKEMATCH: ... */` where a compiler rejects `//`), and a `source-form` evidence row at the function whose evidence column starts with `FAKEMATCH:` and says what was tried. `git grep -n "FAKEMATCH:"` lists every site, in source and in `evidence.tsv`. This comment is the one exception to keeping matching notes out of source.
+
+A fake match that meets these conditions is not a review failure; one that is unlabeled, changes logic or is egregious is.
+
+**Still banned.** These are egregious, and a function that needs one stays a registered partial:
+
+- Per-function flags, `#pragma`s (optimization, scheduling, peephole and the like) or compiler attributes that steer one function's code generation. The only exception is a form the original source is shown to have used, with the owner's approval; a guess that the SDK might have had one is not that (`GXPerf.c`, ruled on #1334).
+- Inline assembly, embedded instruction bytes or patched compiler output standing in for compiled source. Originally handwritten assembly needs provenance.
+- Altered symbol boundaries, excluded comparisons or progress categories that conceal mismatches.
+- Any change to behavior made to satisfy the compiler.
+
+A declaration or statement order found by trying variants is an ordinary source form when it reads naturally, otherwise a labeled fake match. Reviewers judge what is egregious; when a form is in doubt, the PR asks the owner. Build-tool mechanisms that link a derived object instead of the untouched compiler object (the `folded` map, and the COMMON storage map and `kept_locals` that #1338 adds) are owner exceptions, each use named in AGENTS.md, and a new use needs the owner's approval. A new compiler version, such as CodeWarrior GC/1.3, is a tool and pin change made in its own PR.
+
+Outside `// FAKEMATCH:` comments, put compiler reasoning, exception evidence and matching experiments in metadata or the PR, not in reconstructed source. Preserve original assertions and diagnostics when the target requires them.
 
 ## Evidence
 
@@ -60,12 +74,12 @@ Review all submitted reconstructed functions, including partial ones:
 
 | Check | Required result |
 | --- | --- |
-| Source fidelity | Behavior and source structure are supported by the target and references; no unsupported matching tricks. |
-| Compiler settings | Compiler and flags have evidence at the appropriate scope. Inspect per-function overrides and verify evidence and owner approval for any exception. |
+| Source fidelity | Behavior and source structure are supported by the target and references and pass the Matching integrity test. Every fake-match form carries its `// FAKEMATCH:` comment and `source-form` row and leaves the logic unchanged; nothing on the banned list is used. A labeled, logic-preserving fake match is not a failure. |
+| Compiler settings | Compiler and flags are chosen per file or per library through named profiles, each with an evidence row that gives its reasoning; a plausible, uncontradicted profile is accepted. Per-function overrides fail unless the original is shown to have used them and the owner approved. |
 | Types and layouts | Declarations reflect available evidence, including sizes, offsets, signatures and shared ownership. Unknowns are explicit; no fabricated layouts or match-only substitutes. |
 | Provenance and licence | Imported code names its source repository, pinned commit and licence in `CREDITS.md` ("no licence" is stated, not omitted); a licence that requires its text has it under `licenses/`; copyright and licence notices in imported files are intact. Check the source repository itself, not only the PR's claim. |
 | Names | Provenance supports original-name claims. Inferred names are reasoned in their evidence rows, uncontradicted by the target and not presented as recovered facts, to the target's declared evidence regime; a rejection names a contradicting observation, a better-supported name, or a row that gives no reason. |
-| Comments | Comments clarify meaning and readability without obvious narration, speculation, compiler explanations or process notes. Absence of an unnecessary comment is not a failure. |
+| Comments | Comments clarify meaning and readability without obvious narration, speculation, compiler explanations or process notes; `// FAKEMATCH:` labels are required where they apply and are not a failure. Absence of an unnecessary comment is not a failure. |
 | Unit boundaries | Splits and code/data ownership are supported to the target's declared evidence regime. Provisional boundaries are identified; no artificial fragmentation or grouping to inflate progress; a rejection names a contradicting observation, a better-supported edge, a row that gives no reason, or an `exact` grade its evidence does not establish. |
 | Comparison integrity | No patched output, excluded comparisons, altered symbol ranges or misleading categories conceal mismatches. Partial and linked results remain distinct. |
 | Validation | Required checks cover the reviewed revision, complete target output, unit code/data and regressions against the base revision. No substituted scores or unverified success claims. |
