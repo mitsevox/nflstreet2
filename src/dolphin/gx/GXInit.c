@@ -1,3 +1,6 @@
+/* Nintendo SDK GX start-up: sets up the graphics FIFO, the register shadows and texture memory
+   regions, and the default render state the game draws with; also the reset callback that drains
+   the GPU before the console resets. */
 #include <string.h>
 
 #include <dolphin/base/PPCArch.h>
@@ -95,6 +98,7 @@ static int __GXShutdown(int final);
 
 static OSResetFunctionInfo GXResetFuncInfo = { __GXShutdown, 0x7F, NULL, NULL };
 
+#pragma peephole off
 
 
 inline void EnableWriteGatherPipe(void)
@@ -324,6 +328,8 @@ GXFifoObj* GXInit(void* base, u32 size)
 
     for (i = GX_VTXFMT0; i < GX_MAX_VTXFMT; i++)
     {
+        s32 regAddr;
+
         SET_REG_FIELD(0, __GXData->vatA[i], 1, 30, 1);
         SET_REG_FIELD(0, __GXData->vatB[i], 1, 31, 1);
         do
@@ -332,6 +338,7 @@ GXFifoObj* GXInit(void* base, u32 size)
             GX_WRITE_U8(i | 0x80);
             GX_WRITE_U32(__GXData->vatB[i]);
         } while (0);
+        regAddr = i - 12;
     }
     {
         u32 reg1 = 0;
@@ -572,7 +579,7 @@ void __GXInitGX(void)
     GXSetPixelFmt(GX_PF_RGB8_Z24, GX_ZC_LINEAR);
     GXSetFieldMask(GX_ENABLE, GX_ENABLE);
     GXSetFieldMode(rmode->field_rendering,
-                   ((rmode->viHeight == 2 * rmode->xfbHeight) ? GX_ENABLE : 0));
+                   ((rmode->viHeight == 2 * rmode->xfbHeight) ? GX_ENABLE : GX_DISABLE));
 
     GXSetDispCopySrc(0, 0, rmode->fbWidth, rmode->efbHeight);
     GXSetDispCopyDst(rmode->fbWidth, rmode->efbHeight);

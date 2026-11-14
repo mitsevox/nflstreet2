@@ -273,10 +273,6 @@
       "address": "0x801B8D9C",
       "evidence": "evidence.tsv external row for 0x801B8D9C (__15CsisClassHandle); descriptive name."
     },
-    "__GXData": {
-      "address": "0x803ED840",
-      "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
-    },
     "cosf": {
       "address": "0x80260EE8",
       "evidence": "evidence.tsv GXLight external cosf: target branch at 0x8024F6B0 and related SDK source call/prototype."
@@ -585,10 +581,6 @@
       "address": "0x801AD424",
       "evidence": "evidence.tsv external row for GXPixel resolved caller and related SDK/runtime callee identity."
     },
-    "DVDGetCurrentDiskID": {
-      "address": "0x80241974",
-      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
-    },
     "memmove": {
       "address": "0x801C2030",
       "evidence": "evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
@@ -601,49 +593,9 @@
       "address": "0x803EE4C0",
       "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; exactly the end of .sdata2, so the linked source build resolves it as the end of the last original piece there; no object storage claimed."
     },
-    "__cpReg": {
-      "address": "0x803ED35C",
-      "evidence": "evidence.tsv GXPerf original counter access operands establish shared register pointer; genuine pinned SDK declaration."
-    },
-    "DVDCancel": {
-      "address": "0x802418A4",
-      "evidence": "evidence.tsv DVDfs actual retained branch operands and canonical shared declaration; target implementation remains original bytes."
-    },
-    "DVDReadAbsAsyncPrio": {
-      "address": "0x80241080",
-      "evidence": "evidence.tsv DVDfs actual retained branch operands and canonical shared declaration; target implementation remains original bytes."
-    },
-    "DVDReadAbsAsyncForBS": {
-      "address": "0x8024115C",
-      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
-    },
-    "DVDReset": {
-      "address": "0x8024148C",
-      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
-    },
-    "DVDReadDiskID": {
-      "address": "0x8024122C",
-      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
-    },
-    "DVDGetDriveStatus": {
-      "address": "0x8024151C",
-      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
-    },
-    "__piReg": {
-      "address": "0x803ED358",
-      "evidence": "Actual target operands and canonical accepted API signatures in GXFifo, relatedSDK identity."
-    },
     "__CARDPermMask": {
       "address": "0x803EC2C2",
       "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
-    },
-    "__memReg": {
-      "address": "0x803ED364",
-      "evidence": "Actual original GXMisc complete-body operand proof, current established canonical signature reused; related API identity."
-    },
-    "__peReg": {
-      "address": "0x803ED360",
-      "evidence": "Actual original GXMisc complete-body operand proof, current established canonical signature reused; related API identity."
     },
     "OSRegisterResetFunction": {
       "address": "0x8023BFBC",
@@ -669,37 +621,9 @@
       "address": "0x81780000",
       "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
     },
-    "DVDInit": {
-      "address": "0x8023F498",
-      "evidence": "Original complete OSInit call instruction0x80238E88 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "DVDSetAutoInvalidation": {
-      "address": "0x802415C8",
-      "evidence": "Original complete __OSReboot call instruction0x8023E9A0 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "DVDResume": {
-      "address": "0x802415D8",
-      "evidence": "Original complete __OSReboot call instruction0x8023E9A4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "__DVDPrepareResetAsync": {
-      "address": "0x80241A74",
-      "evidence": "Original complete __OSReboot call instruction0x8023E9B4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "DVDCheckDisk": {
-      "address": "0x8024197C",
-      "evidence": "Original complete __OSReboot call instruction0x8023EC00 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
     "__OSDoHotReset": {
       "address": "0x8023C0B0",
       "evidence": "Original complete __OSReboot call instruction0x8023EC38 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "DVDCancelStreamAsync": {
-      "address": "0x80241300",
-      "evidence": "Original complete __OSReboot call instruction0x8023EA80 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "DVDGetCommandBlockStatus": {
-      "address": "0x802414D0",
-      "evidence": "Original complete __OSReboot call instruction0x8023EC40 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
     "Reset": {
       "address": "0x8023C040",
@@ -720,10 +644,6 @@
     "EnableMetroTRKInterrupts": {
       "address": "0x801AA7B8",
       "evidence": "Original complete OSInit call instruction0x80238E70 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "DVDInquiryAsync": {
-      "address": "0x802413BC",
-      "evidence": "Original complete OSInit call instruction0x80238EC8 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
     "GXSetGPMetric": {
       "address": "0x8025295C",
@@ -1280,10 +1200,6 @@
     "OSResetSystem": {
       "address": "0x8023C0F8",
       "evidence": "evidence.tsv function/name rows for 0x8023C0F8 (target extent, related SDK name)."
-    },
-    "GXInit": {
-      "address": "0x8024AF70",
-      "evidence": "evidence.tsv external row GXInit: target REL24 call at 0x801CE558 and the SDK GXInit.c comparison unit."
     },
     "_vt.14Class_802A2A40": {
       "address": "0x802A2A40",
@@ -4959,6 +4875,64 @@
       ]
     },
     {
+      "source": "src/dolphin/dvd/dvd.c",
+      "profile": "dolphin_dvd_release",
+      "evidence": "evidence.tsv dvd.c unit, linker, source-form, function and data rows; every function exact, promoted from comparison-only; the small-data block 0x803ED118-0x803ED170 is the file's 22 words in declaration order.",
+      "link_roots": {
+        "symbols": [
+          "DVDInit",
+          "DVDReadAbsAsyncPrio",
+          "DVDReadAbsAsyncForBS",
+          "DVDReadDiskID",
+          "DVDCancelStreamAsync",
+          "DVDInquiryAsync",
+          "DVDReset",
+          "DVDGetCommandBlockStatus",
+          "DVDGetDriveStatus",
+          "DVDSetAutoInvalidation",
+          "DVDResume",
+          "DVDCancelAsync",
+          "DVDCancel",
+          "DVDGetCurrentDiskID",
+          "DVDCheckDisk",
+          "__DVDPrepareResetAsync"
+        ],
+        "evidence": "evidence.tsv dvd.c linker row 0x8023F494-0x80241B90: the target keeps the 46 functions from defaultOptionalCommandChecker to __DVDPrepareResetAsync; DVDSeekAbsAsyncPrio, DVDCancelAllAsync, DVDCancelAll, cbForCancelAllSync, __DVDSetImmCommand and __DVDSetDmaCommand have no code in the target and are removed by ordinary SN retention."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023F494",
+          "end": "0x80241B90"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FD0F8",
+          "end": "0x802FD278"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC180",
+          "end": "0x803EC198"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5540",
+          "end": "0x803A55D8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED118",
+          "end": "0x803ED170"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/dvd/dvdfs.c",
       "profile": "dolphin_dvd_release",
       "evidence": "sdk.json unit src/dolphin/dvd/dvdfs.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
@@ -5097,6 +5071,49 @@
           "placement": ".data5",
           "start": "0x803EC260",
           "end": "0x803EC26C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXInit.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv GXInit.c unit, source-form, function and data rows; every function exact under the file-wide #pragma peephole off, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024ACC0",
+          "end": "0x8024C038"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDE40",
+          "end": "0x802FE07C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC258",
+          "end": "0x803EC25C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5900",
+          "end": "0x803A5F30"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED358",
+          "end": "0x803ED380"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED840",
+          "end": "0x803ED868"
         }
       ]
     },

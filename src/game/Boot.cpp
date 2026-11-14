@@ -60,7 +60,6 @@ void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 int fn_8023CF60(void);
 void fn_8023CFD0(int a);
-int fn_8024151C(void);
 }
 
 /* Filled by PerGetDeviceData; the byte array at +8 is indexed by Per_MaxAxis + 1. */
@@ -299,7 +298,7 @@ static void _BootCheckMovieAbort(int a)
             }
         }
     }
-    status = fn_8024151C();
+    status = DVDGetDriveStatus();
     if ((unsigned int)(status - 4) <= 2 || status == 11 || status == -1) {
         _Boot_bMovieAbort = 1;
     }

@@ -880,7 +880,7 @@
       "name": "src/dolphin/dvd/dvd.c",
       "source": "src/dolphin/dvd/dvd.c",
       "library": "DVD",
-      "evidence": "Complete coherent BFBB 50-body source with 46 target bodies across 9,980 bytes; normal comparisons retain exact and partial results. Four extra source bodies remain unassigned. Small-global target placement differs from full native packing; original archive membership remains provisional.",
+      "evidence": "Complete coherent BFBB source plus the dolsdk2004 ResetCount declaration and __DVDSetImmCommand/__DVDSetDmaCommand setters; 46 target bodies across 9,980 bytes, all exact and linked. Six source bodies are removed by SN retention. Original archive membership remains provisional.",
       "sections": [
         {
           "section": ".text",
@@ -897,7 +897,7 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. No source storage credit for unlinked NOBITS."
+          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. Linked in the source build."
         },
         {
           "section": ".data4",
@@ -906,7 +906,7 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": false,
-          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. No source storage credit for unlinked NOBITS. Ownership-only extent: preserve the genuine inferred jump-table objects within this initialized pool."
+          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. Linked in the source build. Ownership-only extent: preserve the genuine inferred jump-table objects within this initialized pool."
         },
         {
           "section": ".bss",
@@ -915,34 +915,16 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. No source storage credit for unlinked NOBITS."
+          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. Linked in the source build."
         },
         {
           "section": ".sbss",
           "start": "0x803ED118",
-          "end": "0x803ED154",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true,
-          "evidence": "Fifteen actual four-byte small globals established by retained target operands; intervening unused cells remain unassigned. Native diagnostic 76-byte packing is not an original target allocation and is not promoted."
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED15C",
-          "end": "0x803ED164",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true,
-          "evidence": "Original boot/init flag cells established by retained target operands; intervening unused cells remain unassigned. Native diagnostic 76-byte packing is not an original target allocation and is not promoted."
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED16C",
           "end": "0x803ED170",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "Original LastState pointer cell established by retained target operands; intervening unused cells remain unassigned. Native diagnostic 76-byte packing is not an original target allocation and is not promoted."
+          "evidence": "The file's 22 four-byte small globals in declaration order (evidence.tsv data row 0x803ED118 DVD core complete .sbss); 18 are loaded or stored by retained code, the other four belong to removed functions. NASCAR 2005 symbols.tsv dvd.c has the same sequence."
         }
       ]
     },
@@ -1817,6 +1799,15 @@
           "end_boundary": "provisional",
           "object_seed": true,
           "evidence": "peCount: stw at 0x8024AE38 accesses 0x803ED368; lwz at 0x8024AED0 accesses 0x803ED368; stw at 0x8024AEE8 accesses 0x803ED368. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration and complete native allocation establish4-byte typed cell; CP/PE/MI pointees use16-bit access, PI32-bit. Time is a 64-bit pair. Alignment hole0x803ED36C..0x803ED370 remains unclaimed. No NOBITS progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED36C",
+          "end": "0x803ED370",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Alignment word of the file's .sbss: the native object places the 8-byte OSTime time on an 8-byte boundary after the 4-byte peCount at 0x803ED368, leaving this word unused; no code references 0x803ED36C."
         },
         {
           "section": ".sbss",
