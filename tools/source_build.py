@@ -810,7 +810,10 @@ def retained_layout(unit, compiler, wrapper):
     native = unit["object"]
     sections, symbols = read_elf(native.read_bytes())
     allocated = [section for section in sections if section["flags"] & SHF_ALLOC and section["size"]]
-    allowed = {".text", ".rodata", ".data", ".bss", ".sdata", ".sdata2", ".sbss", ".sbss2", ".ctors", ".dtors"}
+    # Code may sit in .text and, for the SDK's startup routines, in .init; each is laid out
+    # by the same strip-unused link and checked the same way.
+    code = {".text", ".init"}
+    allowed = code | {".rodata", ".data", ".bss", ".sdata", ".sdata2", ".sbss", ".sbss2", ".ctors", ".dtors"}
     native_sections = {section["name"]: section for section in allocated}
     native_text = native_sections.get(".text")
     if native_text is None or not native_text["flags"] & SHF_EXECINSTR \
@@ -819,14 +822,15 @@ def retained_layout(unit, compiler, wrapper):
     for section in allocated:
         expected_type = SHT_NOBITS if section["name"] in {".bss", ".sbss", ".sbss2"} else SHT_PROGBITS
         if section["type"] != expected_type \
-                or bool(section["flags"] & SHF_EXECINSTR) != (section["name"] == ".text"):
+                or bool(section["flags"] & SHF_EXECINSTR) != (section["name"] in code):
             raise ValueError(f"{unit['source']}: unsupported native section type for link_roots")
+    native_code = {section["index"]: section["name"] for section in allocated if section["name"] in code}
     functions = {symbol["name"]: symbol for symbol in symbols if symbol["type"] == 2}
     roots = unit["link_roots"]["symbols"]
     # SDK files define some entry points weak (e.g. OSReport) so a game can replace them;
     # the target kept the SDK copy, so a weak definition is a valid root too.
     if any(name not in functions or functions[name]["bind"] not in (STB_GLOBAL, STB_WEAK)
-           or functions[name]["shndx"] != native_text["index"] for name in roots):
+           or functions[name]["shndx"] not in native_code for name in roots):
         raise ValueError(f"{unit['source']}: retention root is not a defined global function")
     keep = native.with_suffix(".keep")
     keep.write_text("\n".join(roots) + "\n")
@@ -844,24 +848,29 @@ def retained_layout(unit, compiler, wrapper):
     if sha256(native) != before or not partial.is_file() or not partial.stat().st_size:
         raise RuntimeError("Retained-layout linker changed its compiler input or produced no fresh object")
     linked_sections, linked_symbols = read_elf(partial.read_bytes())
-    text = next((section for section in linked_sections if section["name"] == ".text"), None)
+    linked_code = {section["name"]: section for section in linked_sections
+                   if section["name"] in code and section["flags"] & SHF_ALLOC and section["size"]}
+    text = linked_code.get(".text")
     retained = [symbol for symbol in linked_symbols if symbol["type"] == 2]
     if text is None or not retained or not set(roots) <= {symbol["name"] for symbol in retained}:
         raise ValueError("Retained-layout linker omitted required functions")
     for symbol in retained:
         original = functions.get(symbol["name"])
         if original is None or symbol["size"] != original["size"] \
-                or symbol["shndx"] != text["index"]:
+                or original["shndx"] not in native_code \
+                or linked_code.get(native_code[original["shndx"]], {}).get("index") != symbol["shndx"]:
             raise ValueError("Retained-layout linker changed a function's identity or size")
     check_retention(unit, {symbol["name"] for symbol in symbols if symbol["type"] == 2
-                           and symbol["shndx"] == native_text["index"] and symbol["size"] > 0},
+                           and symbol["shndx"] in native_code and symbol["size"] > 0},
                     {symbol["name"] for symbol in retained})
-    mapped = [text]
+    if set(linked_code) - set(native_sections):
+        raise ValueError("Unexpected allocated section from retained-layout linker")
+    mapped = list(linked_code.values())
     by_index = {section["index"]: section for section in allocated}
     tag = next((symbol for symbol in linked_symbols
                 if symbol["name"] == "__sn__bss__tag__address__"), None)
     for section in linked_sections:
-        if not section["flags"] & SHF_ALLOC or not section["size"] or section is text:
+        if not section["flags"] & SHF_ALLOC or not section["size"] or section["name"] in code:
             continue
         original = native_sections.get(section["name"])
         native_size = original["size"] if original else 0
@@ -888,7 +897,7 @@ def retained_layout(unit, compiler, wrapper):
     linked_by_name = {section["name"]: section for section in mapped}
     for symbol in symbols:
         original = by_index.get(symbol["shndx"])
-        if original is None or original["name"] == ".text" or symbol["type"] not in {1, 2}:
+        if original is None or original["name"] in code or symbol["type"] not in {1, 2}:
             continue
         retained_symbol = next((other for other in linked_symbols
                                 if other["name"] == symbol["name"]), None)
