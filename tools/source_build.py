@@ -213,7 +213,7 @@ def load_manifest(manifest, sections, compiler_version):
     by_name = {section["name"]: section for section in sections}
     units, ranges, sources, followed = [], [], set(), []
     for unit in manifest.get("units", []):
-        if set(unit) - {"link_roots", "folded", "storage"} != {"source", "profile", "evidence", "sections"} \
+        if set(unit) - {"link_roots", "folded", "storage", "kept_locals"} != {"source", "profile", "evidence", "sections"} \
                 or not unit["evidence"].strip():
             raise ValueError("Each unit needs exactly source, profile, evidence and sections; "
                              "flags belong to a profile")
@@ -276,6 +276,9 @@ def load_manifest(manifest, sections, compiler_version):
         storage = storage_symbols(unit.get("storage"), sections, unit["source"])
         for name, (start, end) in (storage or {}).items():
             ranges.append((start, end, f"{unit['source']} storage {name}"))
+        kept = kept_symbols(unit.get("kept_locals"), placed, unit["source"])
+        if folded and kept and set(folded) & set(kept):
+            raise ValueError(f"{unit['source']}: a symbol cannot be both folded and kept")
         root = profiles[unit["profile"]].get("source_root")
         compile_path = None
         if root:
@@ -291,7 +294,7 @@ def load_manifest(manifest, sections, compiler_version):
                       "compiler": profiles[unit["profile"]].get("compiler", "prodg"),
                       "include_dirs": profiles[unit["profile"]].get("include_dirs", []),
                       "source_root": root, "compile_path": compile_path, "link_roots": roots,
-                      "folded": folded, "storage": storage})
+                      "folded": folded, "storage": storage, "kept_locals": kept})
     ranges.sort()
     for left, right in zip(ranges, ranges[1:]):
         if right[0] < left[1]:
@@ -407,6 +410,78 @@ def check_storage(units, data, sections):
                                  "in the target")
 
 
+def kept_symbols(kept, placed, source):
+    """Validate a unit's kept local copies; return {name: address} or None.
+
+    `kept_locals` is {"symbols": {name: address}, "evidence": locator}. Each name is a local
+    function the unit defines at that address in its own code, the one copy the original linker
+    kept for the same-named references of other files; keep_object checks the compiled object and
+    plan() the placed address."""
+    if kept is None:
+        return None
+    if not isinstance(kept, dict) or set(kept) != {"symbols", "evidence"} \
+            or not isinstance(kept["evidence"], str) or not kept["evidence"].strip() \
+            or not isinstance(kept["symbols"], dict) or not kept["symbols"]:
+        raise ValueError(f"{source}: kept_locals needs a non-empty symbols map and evidence")
+    result = {}
+    for name, value in kept["symbols"].items():
+        if not name or NEUTRAL.fullmatch(name) or name in LINKER_SYMBOLS:
+            raise ValueError(f"{source}: kept local {name!r} must be a descriptive name")
+        result[name] = address(value)
+        if not any(entry["kind"] == "code" and entry["follows"] is None
+                   and entry["start"] <= result[name] < entry["end"] for entry in placed):
+            raise ValueError(f"{source}: kept local {name} lies outside the unit's code")
+    return result
+
+
+def keep_object(native, kept, output):
+    """Model the original linker keeping one file's local copy for other files' references.
+
+    For each kept name, which must be exactly one local function the compiled object defines, a
+    global symbol with the same name, value, size and section is appended, so other units'
+    undefined references to the name resolve to this copy. Section bytes, relocations and the
+    existing symbols are unchanged. Writes the derived object and returns {name: (symbol, section)}."""
+    data = bytearray(native)
+    sections, symbols = read_elf(bytes(data))
+    tables = [section for section in sections if section["type"] == SHT_SYMTAB]
+    if len(tables) != 1:
+        raise ValueError("Keeping a local requires exactly one symbol table")
+    symtab, strtab = tables[0], sections[tables[0]["link"]]
+    result, added, names = {}, [], b""
+    for name in kept:
+        found = [symbol for symbol in symbols if symbol["name"] == name]
+        symbol = found[0] if len(found) == 1 else None
+        section = sections[symbol["shndx"]] if symbol and 0 < symbol["shndx"] < len(sections) else None
+        if symbol is None or symbol["bind"] != STB_LOCAL or symbol["type"] != STT_FUNC \
+                or section is None or section["type"] != SHT_PROGBITS or not section["flags"] & SHF_ALLOC \
+                or not section["flags"] & SHF_EXECINSTR \
+                or not symbol["size"] or symbol["value"] + symbol["size"] > section["size"]:
+            raise ValueError(f"Kept local {name} is not one local function defined in the unit")
+        result[name] = (symbol, section)
+        added.append(struct.pack(">IIIBBH", strtab["size"] + len(names), symbol["value"], symbol["size"],
+                                 STB_GLOBAL << 4 | STT_FUNC, 0, symbol["shndx"]))
+        names += name.encode("ascii") + b"\0"
+    append_symbols(data, symtab, strtab, added, names, output)
+    return result
+
+
+def append_symbols(data, symtab, strtab, added, names, output):
+    """Write `data` to `output` with symbol entries `added` and strings `names` appended to its
+    symbol and string tables, which move to the end together with a new section header table."""
+    shoff = struct.unpack_from(">I", data, 32)[0]
+    _, shnum = struct.unpack_from(">HH", data, 46)
+    headers = [bytearray(data[shoff + index * 40:shoff + index * 40 + 40]) for index in range(shnum)]
+    for header, content in ((symtab, data[symtab["offset"]:symtab["offset"] + symtab["size"]] + b"".join(added)),
+                            (strtab, data[strtab["offset"]:strtab["offset"] + strtab["size"]] + names)):
+        data += b"\0" * (-len(data) % 4)
+        struct.pack_into(">II", headers[header["index"]], 16, len(data), len(content))
+        data += content
+    data += b"\0" * (-len(data) % 4)
+    struct.pack_into(">I", data, 32, len(data))
+    data += b"".join(headers)
+    Path(output).write_bytes(bytes(data))
+
+
 def folded_reference(name):
     return f"__folded_{name}"
 
@@ -463,19 +538,7 @@ def fold_object(native, folded, output):
                     shndx == symbols[index - 1]["shndx"] and start <= symbols[index - 1]["value"] + addend < end
                     for shndx, start, end in extents):
                 raise ValueError("A relocation reaches a folded extent through another symbol")
-    # Append the extended symbol and string tables and a new section header table.
-    shoff = struct.unpack_from(">I", data, 32)[0]
-    _, shnum = struct.unpack_from(">HH", data, 46)
-    headers = [bytearray(data[shoff + index * 40:shoff + index * 40 + 40]) for index in range(shnum)]
-    for header, content in ((symtab, data[symtab["offset"]:symtab["offset"] + symtab["size"]] + b"".join(added)),
-                            (strtab, data[strtab["offset"]:strtab["offset"] + strtab["size"]] + names)):
-        data += b"\0" * (-len(data) % 4)
-        struct.pack_into(">II", headers[header["index"]], 16, len(data), len(content))
-        data += content
-    data += b"\0" * (-len(data) % 4)
-    struct.pack_into(">I", data, 32, len(data))
-    data += b"".join(headers)
-    Path(output).write_bytes(bytes(data))
+    append_symbols(data, symtab, strtab, added, names, output)
     return {name: (symbol, section) for name, symbol, section, _ in folds.values()}
 
 
@@ -624,6 +687,9 @@ def plan(sections, units, objects, externals):
             if match and int(match[1], 16) != final:
                 raise ValueError(f"{unit['source']}: neutral label {name} would be placed at 0x{final:08X}")
             defined[name] = (final, unit["source"])
+        for name, value in (unit.get("kept_locals") or {}).items():
+            if defined.get(name) != (value, unit["source"]):
+                raise ValueError(f"{unit['source']}: kept local {name} is not placed at 0x{value:08X}")
     ranges = sorted((entry["start"], entry["end"], unit["source"], entry)
                     for unit in units for entry in unit["sections"])
     pieces = {section["name"]: [] for section in sections}
@@ -892,7 +958,7 @@ def check_retention(unit, native, retained):
 
 
 def link_object(unit):
-    """Set the object the unit links: the native object, or its folded derivative."""
+    """Set the object the unit links: the native object, or its folded and/or kept derivative."""
     unit["link_object"], unit["folds"] = unit["object"], {}
     if unit["folded"]:
         unit["link_object"] = unit["object"].with_suffix(".folded.o")
@@ -902,6 +968,10 @@ def link_object(unit):
     if unit.get("storage"):
         derived = unit["object"].with_suffix(".common.o")
         common_object(unit["link_object"].read_bytes(), unit["storage"], derived, unit["source"])
+        unit["link_object"] = derived
+    if unit.get("kept_locals"):
+        derived = unit["link_object"].with_suffix(".kept.o")
+        keep_object(unit["link_object"].read_bytes(), unit["kept_locals"], derived)
         unit["link_object"] = derived
     unit["link_object_sha256"] = sha256(unit["link_object"])
 
@@ -1259,10 +1329,15 @@ def dol_bytes(binary, start, end):
 def compiled_functions(unit, obj):
     """Inventory retained compiler functions, including local and generated symbols."""
     placements = {entry["index"]: entry for entry in unit["sections"]}
-    functions = []
+    functions, seen = [], set()
     for symbol in obj[1]:
         if symbol["type"] != STT_FUNC or symbol["shndx"] == SHN_UNDEF or symbol["size"] <= 0:
             continue
+        # A kept local's global copy (keep_object) names the same function once more.
+        identity = (symbol["name"], symbol["shndx"], symbol["value"], symbol["size"])
+        if identity in seen:
+            continue
+        seen.add(identity)
         entry = placements.get(symbol["shndx"])
         if entry is None or entry["kind"] != "code" or entry.get("executable") is False:
             raise ValueError(f"{unit['source']}: compiler function {symbol['name']} has no code placement")
@@ -1313,6 +1388,8 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                          if unit.get("folded") else None,
                          "storage": {name: f"0x{start:08X}" for name, (start, _) in unit["storage"].items()}
                          if unit.get("storage") else None,
+                         "kept_locals": {name: f"0x{value:08X}" for name, value in unit["kept_locals"].items()}
+                         if unit.get("kept_locals") else None,
                          "native_object_sha256": unit.get("native_object_sha256"),
                          "link_object_sha256": unit.get("link_object_sha256"),
                          "status": "matched" if identical else "unverified", "sections": entries,

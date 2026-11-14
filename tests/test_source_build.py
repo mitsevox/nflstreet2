@@ -596,6 +596,118 @@ class CommonStorage(Fixture):
         sb.check_storage(units, {(0x80004010, 0x80004014)}, sb.target_sections(bytes(binary), TARGET, {}))
 
 
+class KeptLocals(Fixture):
+    """A local copy the original linker kept for other files' same-named references."""
+
+    SYMBOLS = [{"name": "Unit_Function", "value": 0, "size": 4, "shndx": 1, "type": sb.STT_FUNC},
+               {"name": "Inline", "value": 4, "size": 4, "shndx": 1, "type": sb.STT_FUNC, "bind": sb.STB_LOCAL},
+               {"name": "Table", "value": 0, "size": 4, "shndx": 2, "type": sb.STT_OBJECT, "bind": sb.STB_LOCAL}]
+
+    def setUp(self):
+        super().setUp()
+        self.manifest["units"].append(
+            {"source": "src/other.c", "profile": "library", "evidence": "other locator",
+             "sections": [{"section": ".text", "placement": ".init", "start": "0x80003120", "end": "0x80003124"}]})
+
+    def kept_manifest(self, symbols=None, evidence="linker evidence"):
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"][0]["kept_locals"] = {"symbols": {"Inline": "0x80003114"} if symbols is None else symbols,
+                                               "evidence": evidence}
+        return manifest
+
+    def native(self, symbols=None):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        path = Path(temporary.name) / "unit.o"
+        sb.write_object(path, [dict(text(8), data=bytes(range(8))), rodata(4)],
+                        self.SYMBOLS if symbols is None else symbols)
+        with_relocations(path, 2, ((0, 4, 1, 0),))
+        return path.read_bytes(), Path(temporary.name) / "kept.o"
+
+    def test_manifest_kept_locals_need_evidence_and_own_code(self):
+        units, _, _ = self.load(self.kept_manifest())
+        self.assertEqual(units[0]["kept_locals"], {"Inline": 0x80003114})
+        self.assertIsNone(self.load()[0][0]["kept_locals"])
+        with self.assertRaisesRegex(ValueError, "symbols map and evidence"):
+            self.load(self.kept_manifest(evidence=" "))
+        with self.assertRaisesRegex(ValueError, "symbols map and evidence"):
+            self.load(self.kept_manifest(symbols={}))
+        with self.assertRaisesRegex(ValueError, "descriptive name"):
+            self.load(self.kept_manifest(symbols={"fn_80003114": "0x80003114"}))
+        # Another file's code or the unit's own data is not a kept copy of this unit's code.
+        for value in ("0x80003120", "0x80004008"):
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, "outside the unit's code"):
+                self.load(self.kept_manifest(symbols={"Inline": value}))
+        manifest = self.kept_manifest()
+        manifest["units"][0]["folded"] = {"symbols": {"Inline": "0x80003124"}, "evidence": "x"}
+        with self.assertRaisesRegex(ValueError, "both folded and kept"):
+            self.load(manifest)
+
+    def test_only_a_global_copy_of_the_kept_symbol_is_added(self):
+        native, output = self.native()
+        kept = sb.keep_object(native, {"Inline": 0x80003114}, output)
+        self.assertEqual({name: (symbol["value"], section["name"]) for name, (symbol, section) in kept.items()},
+                         {"Inline": (4, ".text")})
+        derived = output.read_bytes()
+        self.assertEqual(relocations(derived), relocations(native))
+        sections, symbols = sb.read_elf(derived)
+        before_sections, before_symbols = sb.read_elf(native)
+        self.assertEqual([s.get("data") for s in sections], [s.get("data") for s in before_sections])
+        self.assertEqual(symbols[:len(before_symbols)], before_symbols)
+        self.assertEqual(symbols[len(before_symbols):],
+                         [{"name": "Inline", "value": 4, "size": 4, "bind": sb.STB_GLOBAL,
+                           "type": sb.STT_FUNC, "shndx": 1}])
+
+    def test_kept_names_must_be_unique_local_functions(self):
+        native, output = self.native()
+        for name in ("Missing", "Unit_Function", "Table"):
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, "not one local function"):
+                sb.keep_object(native, {name: 0x80003114}, output)
+        twice = self.SYMBOLS + [dict(self.SYMBOLS[1], value=0)]
+        with self.assertRaisesRegex(ValueError, "not one local function"):
+            sb.keep_object(self.native(twice)[0], {"Inline": 0x80003114}, output)
+        self.assertFalse(output.exists())
+
+    def test_other_units_resolve_to_the_kept_copy_only_with_kept_locals(self):
+        native, output = self.native()
+        sb.keep_object(native, {"Inline": 0x80003114}, output)
+        other = compiled([text(4)], [{"name": "Inline", "value": 0, "shndx": 0}])
+        objects = {"src/unit.c": sb.read_elf(output.read_bytes()), "src/other.c": other}
+        _, defined, resolved = self.plan(objects, self.kept_manifest())
+        self.assertEqual(defined["Inline"], (0x80003114, "src/unit.c"))
+        self.assertNotIn("Inline", resolved)
+        # Without the kept copy the local cannot be reached: by name it is unresolved, and an
+        # external at its address lies inside the source unit.
+        plain = {"src/unit.c": sb.read_elf(native), "src/other.c": other}
+        with self.assertRaisesRegex(ValueError, "unresolved symbol Inline"):
+            self.plan(plain)
+        manifest = copy.deepcopy(self.manifest)
+        manifest["externals"] = {"Inline": {"address": "0x80003114", "evidence": "x"}}
+        with self.assertRaisesRegex(ValueError, "inside source unit"):
+            self.plan(plain, manifest)
+        # The configured address must be where the copy is placed.
+        with self.assertRaisesRegex(ValueError, "kept local Inline is not placed at 0x80003110"):
+            self.plan(objects, self.kept_manifest(symbols={"Inline": "0x80003110"}))
+
+    def test_kept_link_object_and_inventory(self):
+        native, output = self.native()
+        path = output.with_name("native.o")
+        path.write_bytes(native)
+        unit = {"source": "src/unit.c", "object": path, "link_roots": None, "folded": None,
+                "kept_locals": {"Inline": 0x80003114}}
+        sb.link_object(unit)
+        self.assertEqual(unit["link_object"], path.with_suffix(".kept.o"))
+        self.assertEqual(unit["link_object_sha256"], sb.sha256(unit["link_object"]))
+        self.assertEqual(path.read_bytes(), native)
+        # The inventory lists the kept function once.
+        units, _, _ = self.load(self.kept_manifest())
+        units[0]["sections"][0].update(index=1, compiled=8, executable=True)
+        units[0]["sections"][1].update(index=2, compiled=4, executable=False)
+        functions = sb.compiled_functions(units[0], sb.read_elf(unit["link_object"].read_bytes()))
+        self.assertEqual(functions, [{"symbol": "Unit_Function", "address": "0x80003110", "size": 4},
+                                     {"symbol": "Inline", "address": "0x80003114", "size": 4}])
+
+
 class ReadOnlyDataAfterCode(Fixture):
     """A unit's read-only data may be configured directly after its own code in a code section."""
 
