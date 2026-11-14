@@ -181,6 +181,38 @@
     }
   },
   "externals": {
+    "File_RequestListCS": {
+      "address": "0x803D5168",
+      "evidence": "evidence.tsv data and name rows for 0x803D5168: an uninitialized global of src/engine/fileio.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .bss keeps the original bytes and the linked code reaches it at this address."
+    },
+    "File_AsyncRequestListCS": {
+      "address": "0x803D5188",
+      "evidence": "evidence.tsv data and name rows for 0x803D5188: an uninitialized global of src/engine/fileio.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .bss keeps the original bytes and the linked code reaches it at this address."
+    },
+    "File_InitParms": {
+      "address": "0x803D51A8",
+      "evidence": "evidence.tsv data and name rows for 0x803D51A8: an uninitialized global of src/engine/fileio.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .bss keeps the original bytes and the linked code reaches it at this address."
+    },
+    "File_AsyncThreadActive": {
+      "address": "0x803D55B4",
+      "evidence": "evidence.tsv data and name rows for 0x803D55B4: an uninitialized global of src/engine/fileio.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .bss keeps the original bytes and the linked code reaches it at this address."
+    },
+    "File_AsyncThreadActiveCS": {
+      "address": "0x803D55C0",
+      "evidence": "evidence.tsv data and name rows for 0x803D55C0: an uninitialized global of src/engine/fileio.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .bss keeps the original bytes and the linked code reaches it at this address."
+    },
+    "File_pFileRequestList": {
+      "address": "0x803ED628",
+      "evidence": "evidence.tsv data and name rows for 0x803ED628: an uninitialized global of src/engine/fileio.c. The compiler emits it as a small COMMON symbol, which the source build cannot place, so its zero storage in .sbss keeps the original bytes and the linked code reaches it at this address."
+    },
+    "File_pAsyncRequestList": {
+      "address": "0x803ED62C",
+      "evidence": "evidence.tsv data and name rows for 0x803ED62C: an uninitialized global of src/engine/fileio.c. The compiler emits it as a small COMMON symbol, which the source build cannot place, so its zero storage in .sbss keeps the original bytes and the linked code reaches it at this address."
+    },
+    "File_AsyncFileCopy": {
+      "address": "0x803ED630",
+      "evidence": "evidence.tsv data and name rows for 0x803ED630: an uninitialized global of src/engine/fileio.c. The compiler emits it as a small COMMON symbol, which the source build cannot place, so its zero storage in .sbss keeps the original bytes and the linked code reaches it at this address."
+    },
     "gPlayerLooks": {
       "address": "0x803078E8",
       "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
@@ -13044,6 +13076,37 @@
           "placement": ".text",
           "start": "0x801C735C",
           "end": "0x801C7684"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/fileio.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C8F14-0x801C9DD8 (src/engine/fileio.c), its compiler, type, function, name, data and source-form rows; all 28 functions exact, promoted from comparison-only, with the file's .rodata empty string, its .sdata run 0x803EBC10-0x803EBC38 and its .data device tables 0x802F4A0C-0x802F4A74. The eight uninitialized globals (locks, init parameters, request pools) are COMMON symbols the source build cannot place; they stay named externals over their original storage.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C8F14",
+          "end": "0x801C9DD8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF198",
+          "end": "0x802AF19C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4A0C",
+          "end": "0x802F4A74"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBC10",
+          "end": "0x803EBC38"
         }
       ]
     },

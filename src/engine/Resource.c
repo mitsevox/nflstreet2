@@ -73,9 +73,9 @@ typedef struct ResTrackLoadDone_t {
 } ResTrackLoadDone_t;
 
 extern int fn_801F2D60(int file, char *pName, unsigned int id, int *pHandle, int *pOffset);
-extern int fn_801C9844(int handle, int offset, unsigned int whence);
-extern int fn_801C9D2C(int handle);
-extern int fn_801C9D18(int handle);
+extern int FileSeek(int handle, int offset, unsigned int whence);
+extern int FileGetPosition(int handle);
+extern int FileGetLength(int handle);
 extern int FileGetSize(int handle);
 extern void AuxRamUpload(unsigned int dest, void *pSrc, unsigned int size);
 extern void *fn_801D310C(void *pAddr, int size, int ident, int flags);
@@ -91,7 +91,7 @@ extern char _Res_szNameFormat[];
 extern char _Res_szAramLabelByHandle[];
 extern char _Res_szAramLabelByName[];
 
-extern void *fn_801C9B18(int handle, void *pBuffer, int size, int priority,
+extern void *FileReadAsync(int handle, void *pBuffer, int size, int priority,
                          void (*pDone)(int, int, void *), void *pArg);
 extern int ResLooseFileExists(ResFile_t *pRes, int index);
 extern void *memmove(void *pDst, const void *pSrc, unsigned int size);
@@ -135,15 +135,15 @@ extern int fn_801C6DCC(void *pPool, void *pStart, void *pKey, void *pFound, int 
 extern int FilePerformWrite(int file, int offset, void *pBuffer, int size);
 extern void FileAsyncWaitStream(int handle);
 extern int FileHostCheckActive(void);
-extern int fn_801C96E4(const char *pName, int device);
-extern int fn_801C97F0(int handle);
-extern int fn_801C9960(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
+extern int FileOpenFileDevice(const char *pName, int device);
+extern int FileClose(int handle);
+extern int FileReadCallback(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
 void fn_801D3318(int ident, const char *pLabel);
 void fn_801D339C(int ident);
 void fn_801D342C(int ident);
 void fn_801D3470(void *pAddr, char *pOut, int size);
 int strcmp(const char *pA, const char *pB);
-void *fn_801C9B94(int file, char *pBuffer, int size, int priority, void (*pDone)(int, int, void *), void *pArg,
+void *FileReadAsyncCyclic(int file, char *pBuffer, int size, int priority, void (*pDone)(int, int, void *), void *pArg,
                   void (*pBlock)(int, char *, int, void *), int blockSize);
 ResBlockDecoder_t *GCmpBlockStart(int codec, int mode, ResCodecBuffer_t *pIn, ResCodecBuffer_t *pOut);
 unsigned int GCmpBlockProcess(ResBlockDecoder_t *pDecomp);
@@ -206,7 +206,7 @@ static unsigned int _ResGetBlockOffset(ResFile_t *pRes, int index)
 
 static void *_ResBlockLoadCompFileAsync(int file, int unused, int priority, void (*pDone)(int, int, void *), ResRequest_t *pReq)
 {
-    return fn_801C9B94(file, _Res_pBlockLoadBuffer, pReq->mDiskSize, priority, pDone, pReq, _ResBlockLoadCompFileAsyncBlockCallback, 0x8000);
+    return FileReadAsyncCyclic(file, _Res_pBlockLoadBuffer, pReq->mDiskSize, priority, pDone, pReq, _ResBlockLoadCompFileAsyncBlockCallback, 0x8000);
 }
 
 static void _ResBlockLoadCompFileAsyncBlockCallback(int size, char *pData, int unused, void *pArg)
@@ -428,10 +428,10 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
         if (file < 0) {
             err = fn_801F7C88();
         } else {
-            if (fn_801C9960(file, (void *)*pBuffer, size, 0) != (int)size) {
+            if (FileReadCallback(file, (void *)*pBuffer, size, 0) != (int)size) {
                 err = fn_801F7C88();
             }
-            fn_801C97F0(file);
+            FileClose(file);
         }
         return err;
     }
@@ -469,7 +469,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
         track.mFullSize = size;
         track.mMode = quick ? 'Q' : '-';
         ResTrackResource(2, &track);
-        fn_801C9844(file, offset, 0);
+        FileSeek(file, offset, 0);
         if (codec != 0) {
             if (GCmpIsBlockCodec(codec)) {
                 if (_Res_bCachingEnabled != 0 && cache != 0) {
@@ -486,7 +486,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
                     dst.mSize = size;
                     dst.pData = (void *)*pBuffer;
                     dst.mDone = 1;
-                    if (fn_801C9960(file, pCompressed, compressedSize, 0) < (int)compressedSize) {
+                    if (FileReadCallback(file, pCompressed, compressedSize, 0) < (int)compressedSize) {
                         return fn_801F7C88();
                     }
                     fn_801F318C(pRes, index, originalOffset, src.pData, compressedSize);
@@ -532,7 +532,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
                 src.pData = fn_801D2BB0(1, src.mSize, _Res_uMemAllocFlags, 0);
                 dst.mSize = size;
                 dst.pData = (void *)*pBuffer;
-                if (fn_801C9960(file, src.pData, compressedSize, 0) < (int)compressedSize) {
+                if (FileReadCallback(file, src.pData, compressedSize, 0) < (int)compressedSize) {
                     return fn_801F7C88();
                 }
                 if (_Res_bCachingEnabled != 0 && cache != 0) {
@@ -556,7 +556,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
             }
             result = size;
         } else {
-            result = fn_801C9960(file, (void *)*pBuffer, size, 0);
+            result = FileReadCallback(file, (void *)*pBuffer, size, 0);
         }
         if (result < (int)size) {
             err = fn_801F7C88();
@@ -704,7 +704,7 @@ static int _ResLoadResAsync(ResFile_t *pRes, unsigned int index, void *pBuffer, 
             pReq->mRaw = 1;
             file = ResLooseFileOpen(pRes, index);
             if (file >= 0) {
-                if (fn_801C9B18(file, pBuffer, size, priority, _ResAsyncCallbackFunc, pReq) == 0) {
+                if (FileReadAsync(file, pBuffer, size, priority, _ResAsyncCallbackFunc, pReq) == 0) {
                     err = fn_801F7C88();
                 }
             } else {
@@ -773,7 +773,7 @@ static int _ResLoadResAsync(ResFile_t *pRes, unsigned int index, void *pBuffer, 
         } else {
             file = pRes->mFile;
         }
-        fn_801C9844(file, offset, 0);
+        FileSeek(file, offset, 0);
         if (pRes->pBlocks != 0) {
             codec = pRes->pBlocks[index].mOffsetOrCodec;
         } else {
@@ -802,13 +802,13 @@ static int _ResLoadResAsync(ResFile_t *pRes, unsigned int index, void *pBuffer, 
                 pReq->mCache = 0;
                 pRead = _ResBlockLoadCompFileAsync(file, prevSize, priority, _ResAsyncCallbackFunc, pReq);
             } else {
-                pRead = fn_801C9B18(file, pBuffer, prevSize, priority, _ResAsyncCallbackFunc, pReq);
+                pRead = FileReadAsync(file, pBuffer, prevSize, priority, _ResAsyncCallbackFunc, pReq);
             }
         } else {
             pReq->pBuffer = pBuffer;
             pReq->mDiskSize = size;
             pReq->mFullSize = size;
-            pRead = fn_801C9B18(file, pBuffer, size, priority, _ResAsyncCallbackFunc, pReq);
+            pRead = FileReadAsync(file, pBuffer, size, priority, _ResAsyncCallbackFunc, pReq);
         }
         if (pRead == 0) {
             err = fn_801F7C88();
@@ -860,7 +860,7 @@ static int _ResReadTerfBlock(int file, void *pBuffer)
     int err;
 
     err = 0;
-    if (fn_801C9960(file, pBuffer, 8, 0) < 8) {
+    if (FileReadCallback(file, pBuffer, 8, 0) < 8) {
         err = fn_801F7C88();
     }
     return err;
@@ -871,7 +871,7 @@ static int _ResReadBlock(int file, void *pBuffer, int size)
     int err;
 
     err = 0;
-    if (fn_801C9960(file, pBuffer, size, 0) < size) {
+    if (FileReadCallback(file, pBuffer, size, 0) < size) {
         err = fn_801F7C88();
     }
     return err;
@@ -897,12 +897,12 @@ static int _ResInitResourceFile(ResFile_t *pRes, char *pName)
     quickload = 0;
     if (fn_801F2D60(0, pName, 0, &file, &position) != 0) {
         quickload = 1;
-        fn_801C9844(file, position, 0);
+        FileSeek(file, position, 0);
     }
     trackOpen.pName = pName;
     trackOpen.mMode = quickload ? 'Q' : '-';
     ResTrackResource(0, &trackOpen);
-    position = fn_801C9D2C(file);
+    position = FileGetPosition(file);
     err = _ResReadTerfBlock(file, &block);
     if (err != 0) {
         goto done;
@@ -915,7 +915,7 @@ static int _ResInitResourceFile(ResFile_t *pRes, char *pName)
     if (err != 0) {
         goto done;
     }
-    fn_801C9844(file, position + block.mSize, 0);
+    FileSeek(file, position + block.mSize, 0);
     headerSize = block.mSize;
     header.unk_0x3 = 6;
     memset(&pRes->mEndPad, 0, 0x38);
@@ -951,8 +951,8 @@ static int _ResInitResourceFile(ResFile_t *pRes, char *pName)
         goto done;
     }
     memset((void *)pRes->pFlags, 0, size);
-    position = fn_801C9D2C(file);
-    fileSize = fn_801C9D18(file);
+    position = FileGetPosition(file);
+    fileSize = FileGetLength(file);
     while ((unsigned int)position < fileSize) {
         err = _ResReadTerfBlock(file, &block);
         if (err != 0) {
@@ -1017,7 +1017,7 @@ static int _ResInitResourceFile(ResFile_t *pRes, char *pName)
                 if (quickload != 0) {
                     pRes->mBaseOffset = headerSize;
                 } else {
-                    pRes->mBaseOffset = fn_801C9D2C(file) - sizeof(block);
+                    pRes->mBaseOffset = FileGetPosition(file) - sizeof(block);
                 }
                 pRes->mDataSize = block.mSize;
                 if (quickload != 0) {
@@ -1032,8 +1032,8 @@ static int _ResInitResourceFile(ResFile_t *pRes, char *pName)
         case 0x54455246:
             break;
         }
-        fn_801C9844(file, position + block.mSize, 0);
-        position = fn_801C9D2C(file);
+        FileSeek(file, position + block.mSize, 0);
+        position = FileGetPosition(file);
         if (tag != 0x44415441) {
             headerSize += block.mSize;
         }
@@ -1346,14 +1346,14 @@ ResFile_t *ResOpenDevice(char *pName, int mode)
                 goto done;
             }
             memset(pRes, 0, sizeof(ResFile_t));
-            pRes->mFile = fn_801C96E4(pName, mode);
+            pRes->mFile = FileOpenFileDevice(pName, mode);
             if (pRes->mFile < 0) {
                 err = fn_801F7C88();
                 goto done;
             }
             err = _ResInitResourceFile(pRes, pName);
             if (err != 0) {
-                fn_801C97F0(pRes->mFile);
+                FileClose(pRes->mFile);
                 goto done;
             }
             if (_Res_bCachingEnabled != 0) {
@@ -1577,7 +1577,7 @@ int ResClose(ResFile_t *pRes)
                         fn_801D2BD0((void *)pRes->pFlags);
                         pRes->pFlags = 0;
                     }
-                    fn_801C97F0(pRes->mFile);
+                    FileClose(pRes->mFile);
                 }
             }
             if (close) {
@@ -1992,8 +1992,8 @@ int ResLoadAll(ResFile_t *pRes, int heap, int bulk)
                 track.mMode = result != 0 ? 'Q' : '-';
                 ResTrackResource(2, &track);
             }
-            fn_801C9844(file, offset, 0);
-            result = fn_801C9960(file, pBuffer, pRes->mDataSize, 0);
+            FileSeek(file, offset, 0);
+            result = FileReadCallback(file, pBuffer, pRes->mDataSize, 0);
             {
                 ResTrackLoadDone_t track;
                 track.pRes = pRes;

@@ -76,12 +76,12 @@ typedef struct Stream_801F5DA4 {
     int mBlockSize;
 } Stream_801F5DA4;
 
-extern int fn_801C9844(int handle, int offset, unsigned int whence);
-extern int fn_801C9B18(int handle, char *pBuffer, int size, int priority,
+extern int FileSeek(int handle, int offset, unsigned int whence);
+extern int FileReadAsync(int handle, char *pBuffer, int size, int priority,
                        void (*pCallback)(int, int, void *), void *pContext);
-extern int fn_801C9C88(int readHandle, int priority);
-extern void fn_801C9D78(void);
-extern void fn_801C9DA0(void);
+extern int FileRePrioritizeAsync(int readHandle, int priority);
+extern void FileLockAsyncRequestList(void);
+extern void FileUnlockAsyncRequestList(void);
 extern void FileDebugProcess(void);
 extern int FileHostCheckActive(void);
 
@@ -138,7 +138,7 @@ static void fn_801F5E24(Stream_801F5DA4 *s, int size)
     if (used >= s->mGreedyLevel && newUsed < s->mGreedyLevel) {
         s->mGreedyState = 1;
         if (s->mState == 1) {
-            s->mReadHandle = fn_801C9C88(s->mReadHandle, s->mGreedyPriority);
+            s->mReadHandle = FileRePrioritizeAsync(s->mReadHandle, s->mGreedyPriority);
         }
     }
 }
@@ -461,12 +461,12 @@ static void fn_801F6540(Stream_801F5DA4 *s, int priority)
         if ((unsigned int)(s->mFilePos + s->mBlockSize) > s->mFileSize) {
             s->mReadSize = s->mFileSize - s->mFilePos;
         }
-        fn_801C9D78();
+        FileLockAsyncRequestList();
         fn_801F8014(&lbl_8039B3D8);
-        fn_801C9844(s->mFileHandle, s->mFileOffset + s->mFilePos, 0);
-        s->mReadHandle = fn_801C9B18(s->mFileHandle, s->pWrite, s->mReadSize, priority, fn_801F63EC, s);
+        FileSeek(s->mFileHandle, s->mFileOffset + s->mFilePos, 0);
+        s->mReadHandle = FileReadAsync(s->mFileHandle, s->pWrite, s->mReadSize, priority, fn_801F63EC, s);
         fn_801F809C(&lbl_8039B3D8);
-        fn_801C9DA0();
+        FileUnlockAsyncRequestList();
     }
 }
 
@@ -607,7 +607,7 @@ void fn_801F6C78(StreamTap_801F5DA4 *h, int state)
     if (fn_801F5DA4(h, &s, &t) == 0) {
         s->mGreedyState = state;
         if (state && s->mState == 1) {
-            s->mReadHandle = fn_801C9C88(s->mReadHandle, s->mGreedyPriority);
+            s->mReadHandle = FileRePrioritizeAsync(s->mReadHandle, s->mGreedyPriority);
         }
     }
 }

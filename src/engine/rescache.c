@@ -10,12 +10,12 @@ typedef struct ResCacheWrite_801F2E54 {
 
 extern int sprintf(char *buffer, const char *format, ...);
 extern void *memset(void *dest, int value, unsigned int count);
-extern int fn_801C96E4(const char *pName, int device);
-extern int fn_801C97F0(int handle);
-extern int fn_801C9844(int handle, int offset, unsigned int whence);
-extern int fn_801C9960(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
-extern int fn_801C9A3C(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
-extern int fn_801C9C0C(int handle, void *pBuffer, int size, int priority,
+extern int FileOpenFileDevice(const char *pName, int device);
+extern int FileClose(int handle);
+extern int FileSeek(int handle, int offset, unsigned int whence);
+extern int FileReadCallback(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
+extern int FileWriteCallback(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
+extern int FileWriteAsync(int handle, void *pBuffer, int size, int priority,
                        void (*pCallback)(int, int, void *), void *pContext);
 extern void FileAsyncWaitStream(int handle);
 extern int FileGetSize(char handle);
@@ -56,19 +56,19 @@ void fn_801F2EE0(ResFile_t *pFile, char *pName)
         pFile->mCacheHandle = -1;
         return;
     }
-    handle = fn_801C96E4(pName, lbl_803EBDE4);
+    handle = FileOpenFileDevice(pName, lbl_803EBDE4);
     pFile->mCacheHandle = handle;
     if (handle < 0) {
         invalid = 1;
     } else if (FileCompareModificationTime(pFile->mFile) == 1) {
         invalid = 1;
-        fn_801C97F0(pFile->mCacheHandle);
+        FileClose(pFile->mCacheHandle);
         pFile->mCacheHandle = -1;
     } else if (FileGetSize(pFile->mFile) != FileGetSize(pFile->mCacheHandle)) {
         invalid = 1;
     }
     if (invalid) {
-        handle = fn_801C96E4(pName, lbl_803EBDE4 | 0x20);
+        handle = FileOpenFileDevice(pName, lbl_803EBDE4 | 0x20);
         pFile->mCacheHandle = handle;
         if (handle < 0) {
             return;
@@ -86,26 +86,26 @@ void fn_801F2EE0(ResFile_t *pFile, char *pName)
         if (pFile->pCache != 0) {
             sprintf(name, lbl_802B19A4, pName);
             name[127] = 0;
-            file = fn_801C96E4(name, lbl_803EBDE4);
+            file = FileOpenFileDevice(name, lbl_803EBDE4);
             if (file < 0) {
                 memset(pFile->pCache, 0, size);
             } else {
-                if (fn_801C9960(file, pFile->pCache, size, 0) != size) {
+                if (FileReadCallback(file, pFile->pCache, size, 0) != size) {
                     memset(pFile->pCache, 0, size);
                 }
-                fn_801C97F0(file);
+                FileClose(file);
             }
             return;
         }
     }
-    fn_801C97F0(pFile->mCacheHandle);
+    FileClose(pFile->mCacheHandle);
     pFile->mCacheHandle = -1;
 }
 
 void fn_801F30CC(ResFile_t *pFile)
 {
     fn_801D2BD0(pFile->pCache);
-    fn_801C97F0(pFile->mCacheHandle);
+    FileClose(pFile->mCacheHandle);
 }
 
 void fn_801F3104(ResFile_t *pFile)
@@ -116,10 +116,10 @@ void fn_801F3104(ResFile_t *pFile)
     FileAsyncWaitStream(pFile->mCacheHandle);
     sprintf(name, lbl_802B19A4, pFile->pName);
     name[127] = 0;
-    handle = fn_801C96E4(name, lbl_803EBDE4 | 0x20);
+    handle = FileOpenFileDevice(name, lbl_803EBDE4 | 0x20);
     if (handle >= 0) {
-        fn_801C9A3C(handle, pFile->pCache, pFile->mNumRes * 4, 0);
-        fn_801C97F0(handle);
+        FileWriteCallback(handle, pFile->pCache, pFile->mNumRes * 4, 0);
+        FileClose(handle);
     }
 }
 
@@ -130,8 +130,8 @@ void fn_801F318C(ResFile_t *pFile, int index, int offset, void *pData, int size)
     int error;
 
     if (lbl_803EBDE0) {
-        error = fn_801C9844(pFile->mCacheHandle, offset, 0);
-        if (error == 0 && fn_801C9A3C(pFile->mCacheHandle, pData, size, 0) == size) {
+        error = FileSeek(pFile->mCacheHandle, offset, 0);
+        if (error == 0 && FileWriteCallback(pFile->mCacheHandle, pData, size, 0) == size) {
             pFile->pCache[index] = size;
         } else {
             pFile->pCache[index] = 0;
@@ -146,8 +146,8 @@ void fn_801F318C(ResFile_t *pFile, int index, int offset, void *pData, int size)
                 pWrite->mIndex = index;
                 pWrite->pBuffer = pBuffer;
                 pWrite->mSize = size;
-                if (fn_801C9844(pFile->mCacheHandle, offset, 0) != 0 ||
-                    fn_801C9C0C(pFile->mCacheHandle, pBuffer, size, 100, fn_801F2E54, pWrite) == 0) {
+                if (FileSeek(pFile->mCacheHandle, offset, 0) != 0 ||
+                    FileWriteAsync(pFile->mCacheHandle, pBuffer, size, 100, fn_801F2E54, pWrite) == 0) {
                     fn_801D2BD0(pWrite);
                     fn_801D2BD0(pBuffer);
                     pFile->pCache[index] = 0;

@@ -5,10 +5,10 @@
 #include <engine/fn_801F8014.h>
 #include "engine/cu_802821E8.h"
 
-extern int fn_801C96E4(const char *pName, int device);
-extern int fn_801C97F0(int handle);
-extern int fn_801C9844(int handle, int offset, unsigned int whence);
-extern int fn_801C9960(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
+extern int FileOpenFileDevice(const char *pName, int device);
+extern int FileClose(int handle);
+extern int FileSeek(int handle, int offset, unsigned int whence);
+extern int FileReadCallback(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
 extern int FilePerformWrite(int handle, int pos, void *pBuffer, int size);
 void *fn_801C1F94();
 
@@ -1119,9 +1119,9 @@ int fn_80285808(File_80285808 *pFile, const void *pValue, const char *pName, int
     int handle;
 
     if (write)
-        handle = fn_801C96E4(pName, 44);
+        handle = FileOpenFileDevice(pName, 44);
     else
-        handle = fn_801C96E4(pName, 36);
+        handle = FileOpenFileDevice(pName, 36);
     if (handle < 0)
         return 36;
     pFile->mHandle = handle;
@@ -1134,7 +1134,7 @@ int fn_80285878(File_80285808 *pFile)
 {
     if (pFile->mHandle < 0)
         return 3;
-    if (fn_801C97F0(pFile->mHandle) != 0)
+    if (FileClose(pFile->mHandle) != 0)
         return 36;
     return 0;
 }
@@ -1162,7 +1162,7 @@ int fn_80285940(File_80285808 *pFile, void *pBuffer, int size, int *pCount)
 
     if (pFile->mHandle < 0)
         return 3;
-    count = fn_801C9960(pFile->mHandle, pBuffer, size, 0);
+    count = FileReadCallback(pFile->mHandle, pBuffer, size, 0);
     if (count < 0)
     {
         *pCount = 0;
@@ -1177,7 +1177,7 @@ int fn_802859B4(File_80285808 *pFile, int offset)
 {
     if (pFile->mHandle < 0)
         return 3;
-    if (fn_801C9844(pFile->mHandle, offset, 1) != 0)
+    if (FileSeek(pFile->mHandle, offset, 1) != 0)
         return 36;
     pFile->mPosition += offset;
     return 0;

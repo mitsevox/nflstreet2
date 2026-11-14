@@ -1,7 +1,7 @@
 #include "game/Module.h"
 
-/* Copied whole by fn_801C93D0, which sizes two per-entry allocations by mCount;
-   fn_801C92B8 copies a string from offset 0, 128, 512 or 640, chosen by its fourth argument. */
+/* Copied whole by FileInit, which sizes two per-entry allocations by mCount;
+   FileCreateAbsoluteFileName copies a string from offset 0, 128, 512 or 640, chosen by its fourth argument. */
 struct FileIOConfig {
     char mUnknown0[1024];
     int mUnknown1024;
@@ -9,14 +9,14 @@ struct FileIOConfig {
     unsigned char mUnknown1032;
 };
 
-/* fn_801C96E4 passes each mUnknown0[i], mUnknown32[i] pair to FileOpenhDevice. */
+/* FileOpenFileDevice passes each mUnknown0[i], mUnknown32[i] pair to FileOpenhDevice. */
 struct FileIOList {
     int mUnknown0[8];
     const char *mUnknown32[8];
     int mCount;
 };
 
-/* Argument of fn_801C9D40, which falls back to a default table when given null. */
+/* Argument of FileSetDeviceList, which falls back to a default table when given null. */
 struct FileIOListTable {
     FileIOList *mpLists[8];
     int mUnknown32;
@@ -24,11 +24,11 @@ struct FileIOListTable {
 
 extern "C" {
 
-int fn_801C9D40(FileIOListTable *pTable);
-int fn_801C9D6C(int unknown);
-int fn_801C93D0(FileIOConfig *pConfig);
+int FileSetDeviceList(FileIOListTable *pTable);
+int FileSetDefaultDevice(int unknown);
+int FileInit(FileIOConfig *pConfig);
 void FileAsyncSetErrorGameName(const char *pTitle);
-int fn_801C95C4(void);
+int FileShutdown(void);
 }
 
 static FileIOConfig sConfig = { "", 80, 42, 1 };
@@ -46,15 +46,15 @@ static const char *sTitle = "NFL STREET 2";
 
 int FileIO::Init()
 {
-    fn_801C9D40(&sListTable);
-    fn_801C9D6C(0);
-    fn_801C93D0(&sConfig);
+    FileSetDeviceList(&sListTable);
+    FileSetDefaultDevice(0);
+    FileInit(&sConfig);
     FileAsyncSetErrorGameName(sTitle);
     return 1;
 }
 
 int FileIO::Shutdown()
 {
-    fn_801C95C4();
+    FileShutdown();
     return 1;
 }

@@ -49,7 +49,7 @@ void ResStreamClose(int loader);
 void fn_801C1FBC(void *pDest, void *pSrc, unsigned int size);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 char *strchr(const char *pString, int c);
-int fn_801C9DC8(int value);
+int FileSetMemAllocFlags(int value);
 void *fn_801D2BB0(int a, int size, int c, int d);
 int ResCopyToBuffer(void *pArchive, int id, void *pDest);
 int ResFindIndexByName(void *pArchive, char *pName);
@@ -300,12 +300,12 @@ void PlaTexCacheOpenArchive(int mode)
 
     if (FELoopIsMainFEActive() == 0) {
         saved0 = ResSetMemFlags(mode);
-        saved1 = fn_801C9DC8(mode);
+        saved1 = FileSetMemAllocFlags(mode);
     }
     _PlaTexCache_pArchive = ResOpenDevice(lbl_802EC080, 44);
     if (FELoopIsMainFEActive() == 0) {
         ResSetMemFlags(saved0);
-        fn_801C9DC8(saved1);
+        FileSetMemAllocFlags(saved1);
     }
 }
 
@@ -361,10 +361,10 @@ void PlaTexCacheInit(unsigned int count)
     }
 
     saved0 = ResSetMemFlags(4);
-    saved1 = fn_801C9DC8(4);
+    saved1 = FileSetMemAllocFlags(4);
     BmFontLoad(&_PlaTexCache_Font, &_PlaTexCache_FontDesc, _PlaTexCache_pArchive, 1);
     ResSetMemFlags(saved0);
-    fn_801C9DC8(saved1);
+    FileSetMemAllocFlags(saved1);
 }
 
 void PlaTexCacheLoadDefaults(void)

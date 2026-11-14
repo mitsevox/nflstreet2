@@ -9,7 +9,7 @@ extern "C" {
 extern char lbl_802EBDE8[];
 
 char *strchr(const char *pString, int c);
-int fn_801C9DC8(int value);
+int FileSetMemAllocFlags(int value);
 int ResLoadAll(void *pData, int a, int b);
 int ResUnLoadAll(void *pData);
 int ResFindIndexByName(void *pData, char *pName);
@@ -45,10 +45,10 @@ void PlaDynClutApply(void *p, PlaDynClutEntry_t *pEntry, PlaDynClutPalettes_t *p
 void PlaDynClutOpen(void)
 {
     int saved0 = ResSetMemFlags(4);
-    int saved1 = fn_801C9DC8(4);
+    int saved1 = FileSetMemAllocFlags(4);
     _PlaDynClut_pFile = ResOpenDevice(lbl_802EBDE8, 44);
     ResSetMemFlags(saved0);
-    fn_801C9DC8(saved1);
+    FileSetMemAllocFlags(saved1);
 }
 
 void PlaDynClutLoad(void)

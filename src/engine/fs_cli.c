@@ -22,7 +22,7 @@ typedef struct CdInfo_t {
 
 CdInfo_t Cdinfo;
 unsigned char _CDVDAlignedBuffer[0x8000];
-extern int lbl_803EBC34;
+extern int File_uMemFlags;
 
 static OSThread _CdReadCompleteThread;
 static unsigned char CdReadCompleteThreadStack[0x2000] __attribute__((aligned(64)));
@@ -68,7 +68,7 @@ int CDVD_init(int unused, int numFiles, int unused2, void (*pReadDone)(int))
     int size = numFiles * sizeof(DVDFileInfo);
     DVDFileInfo *pFiles;
 
-    pFiles = fn_801D2BB0(1, size, lbl_803EBC34, 0);
+    pFiles = fn_801D2BB0(1, size, File_uMemFlags, 0);
     MemFill(&Cdinfo, sizeof(CdInfo_t), 0, 4);
     Cdinfo.mpFiles = pFiles;
     MemFill(pFiles, size, 0, 4);

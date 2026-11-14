@@ -52,7 +52,7 @@ void fn_800504EC(void);
 void fn_80051308(void);
 void HotspotReset(void);
 void fn_800B2A14(float *pPos, unsigned char *pAngles);
-int fn_801C9DC8(int value);
+int FileSetMemAllocFlags(int value);
 int ObjNewType_(int type, int size, int count, void (*pInit)(BigObj_t *, BigObjDesc_t *),
                 void (*pRelease)(BigObj_t *));
 int ObjDelType(int type);
@@ -381,11 +381,11 @@ void BigObjCreateAnimBall(int handle)
 
     {
         int saved0 = ResSetMemFlags(4);
-        int saved1 = fn_801C9DC8(4);
+        int saved1 = FileSetMemAllocFlags(4);
 
         desc.mUnknown160 = ResOpenDevice("objdefs.dat", 44);
         ResSetMemFlags(saved0);
-        fn_801C9DC8(saved1);
+        FileSetMemAllocFlags(saved1);
     }
     desc.mUnknown164 = _BigObj_pModelFile;
     fn_8004D798();
@@ -416,11 +416,11 @@ void BigObjAddAllObjects(int handle)
 
     {
         int saved0 = ResSetMemFlags(4);
-        int saved1 = fn_801C9DC8(4);
+        int saved1 = FileSetMemAllocFlags(4);
 
         desc.mUnknown160 = ResOpenDevice("objdefs.dat", 44);
         ResSetMemFlags(saved0);
-        fn_801C9DC8(saved1);
+        FileSetMemAllocFlags(saved1);
     }
     desc.mUnknown164 = _BigObj_pModelFile;
     fn_8004D798();
