@@ -98,7 +98,7 @@ int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, void *pBlock
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
 int fn_8009A1A8(Object_80039F5C *p, int a, int b, int c, int index);
 int fn_8009A6EC(Object_80039F5C *p);
-int fn_8009A77C(Object_80039F5C *p);
+int PlyrRollContestedCatch(Object_80039F5C *p);
 void fn_8009A8D4(void *p);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
@@ -243,7 +243,7 @@ extern "C" void fn_80108DF8(Object_80039F5C *p, Points_800F3A6C *pInfo, int quic
         handle = fn_800997F4(p, BallGet(pBlock->mUnknown64), range, pBlock, 3, 0, 0, &outA, &outB);
     }
     if (handle == 0x1FFFFFFF) {
-        handle = fn_80099734(p, BallGet(pBlock->mUnknown64), 0, mode, pBlock, 1, 0, 0, fn_8009A77C(p), range);
+        handle = fn_80099734(p, BallGet(pBlock->mUnknown64), 0, mode, pBlock, 1, 0, 0, PlyrRollContestedCatch(p), range);
         if (handle == 0x1FFFFFFF) {
             return;
         }

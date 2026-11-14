@@ -193,7 +193,7 @@ void fn_8009BC38(Object_80039F5C *p, Object_8003DEC4 *pObject);
 void fn_8009BD48(int *pRef, int a, int b, int c);
 void PlyrMoveCmdClear(PlyrMoveCmd_t *pObject);
 void fn_800AF804(void *p);
-void fn_800C3130(Object_8003DEC4 *pObject, short a, unsigned short b, int index);
+void SortListAdd(Object_8003DEC4 *pObject, short a, unsigned short b, int index);
 int fn_8009C328(Object_80039F5C *pA, Object_80039F5C *pB);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
@@ -482,7 +482,7 @@ extern "C" void PlyrInit(Object_80039F5C *p, PlyrSlot_t *pPlayer, unsigned char 
     fn_800CE674(pReset);
     fn_800CE684(pReset);
     PlyrCollideClearExempt(p);
-    fn_800C3130(pObject, 1, team * fn_8003DEBC() + index, 2);
+    SortListAdd(pObject, 1, team * fn_8003DEBC() + index, 2);
 }
 
 extern "C" void PlyrContactCallback(CollideObject_t *pA, CollideObject_t *pB, CollideContactList_t *pContacts)

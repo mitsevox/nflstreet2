@@ -29,7 +29,7 @@ int PlayerMoveGetKind(Object_80039F5C *p);
 int PlayerMoveGetRunVariant(Object_80039F5C *p);
 int PlayerLocoUseAltCategory(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag);
 int PlayerLocoUseSpecialCategory(Object_80039F5C *p);
-int fn_800DC080(Object_80039F5C *p);
+int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int PlayerLocoIsEngaged(Object_80039F5C *p, int flag);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
@@ -110,7 +110,7 @@ int PlayerLocoGetSecondaryCategory(Object_80039F5C *p, Object_80039F5C *pOther, 
             if (PlayerLocoUseSpecialCategory(p)) result = 38;
             if (p->mUnknown2914 != 0 && p->mUnknown2914 != 20 &&
                 p->mUnknown2914 != 1 && p->mUnknown2914 != 3) goto finish;
-            if (fn_800DC080(p)) {
+            if (PlayerActionAnimIsPassReady(p)) {
                 int direction = fn_801CFE40(p->mMotion.mUnknown44, p->mMotion.mUnknown40) & 0xFFFFFF;
                 Block_801BE60C *block = fn_801BE60C(p->mpUnknown792, 74);
                 int angle;

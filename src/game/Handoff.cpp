@@ -110,7 +110,7 @@ extern unsigned char _Handoff_auTurnDirections[8];
 void HuddleSetSpot(HuddleBlock_t *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value);
 void HuddleArrive(Object_80039F5C *p, HuddleBlock_t *pState);
 float fn_801CFB94(int angle);
-void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
+void PlayerActionAnimSteerPassReady(Object_80039F5C *p, int angle, float value);
 int PassIconsAreShown(void);
 int fn_8011F2C4(void);
 void fn_800A5A8C(int a, void *pA, void *pB);
@@ -122,7 +122,7 @@ int fn_800CB580(Object_80039F5C *p, int *pOut, Point_8017886C point, int angle, 
 void fn_800CBB00(Object_80039F5C *p, int value, Point_8017886C point, int angle, int a);
 void HuddleGetSpot(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value);
 int HuddleMoveUpdate(Object_80039F5C *p);
-int fn_800DC080(Object_80039F5C *p);
+int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 Point_8017886C fn_8017808C(void);
 float fn_80178A2C(void);
 void fn_800FF598(HuddleBlock_t *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value, float scale);
@@ -711,7 +711,7 @@ extern "C" int HandoffSteer(Object_80039F5C *p, Object_80039F5C *pOther, Handoff
         unsigned int kind = state->mUnknown8;
         if (kind == 15 || kind == 12) {
             if (distance > 4.0f && kind == 12) {
-                fn_800DBC4C(p, angle, speed);
+                PlayerActionAnimSteerPassReady(p, angle, speed);
             } else {
                 speed = distance * 0.25f;
                 p->mUnknown512.mUnknown0 = speed;
@@ -745,7 +745,7 @@ extern "C" void HandoffSteerClear(Object_80039F5C *p, Object_80039F5C *pOther, H
             unsigned int kind = state->mUnknown8;
             if (kind == 15 || kind == 12) {
                 if (distance > 4.0f && kind == 12) {
-                    fn_800DBC4C(p, (p->mMotion.mFacing + turn) & 0xFFFFFF, speed);
+                    PlayerActionAnimSteerPassReady(p, (p->mMotion.mFacing + turn) & 0xFFFFFF, speed);
                 } else {
                     int angle = (p->mMotion.mFacing + turn) & 0xFFFFFF;
                     p->mUnknown512.mUnknown0 = speed;
@@ -817,7 +817,7 @@ extern "C" int HandoffEnter(Object_80039F5C *p) {
         BallSetCurrentTarget(pOther);
         if (p->mUnknown2914 != 0)
             state->mUnknown8 = 15;
-        if (fn_800DC080(p)) {
+        if (PlayerActionAnimIsPassReady(p)) {
             state->mUnknown8 = 12;
             if (p->mMotion.mPos.mY < pOther->mMotion.mPos.mY
                 || fn_80177FE0().mY - p->mMotion.mPos.mY > 3.0f)

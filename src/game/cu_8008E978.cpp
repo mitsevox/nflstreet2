@@ -5063,9 +5063,9 @@ extern "C" int fn_8009B718(void *p)
     return sizeof(Block_8009B720);
 }
 
-extern "C" void fn_8009B720(void *pData)
+extern "C" void CelebrationBlocksInit(void *pData)
 {
-    Block_8009B720 *pBlock;
+    Block_8009B720 *pBlock = 0;
     unsigned int i;
 
     lbl_803EA98C = 0;
@@ -8334,7 +8334,7 @@ int PlayerLocoMoveCmdPhase(Table_80089904 *pTable, unsigned short key, void *pRe
               unsigned int phase);
 int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DC36C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int PlayerActionAnimFacingCallback(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
 int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
@@ -8374,7 +8374,7 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[74] = PlayerLocoCyclePhase;
     lbl_8030FB60[77] = PlayerLocoMoveCmdPhase;
     lbl_8030FB60[73] = fn_800DC6F4;
-    lbl_8030FB60[84] = fn_800DC36C;
+    lbl_8030FB60[84] = PlayerActionAnimFacingCallback;
     lbl_8030FB60[91] = fn_800DD69C;
     lbl_8030FB60[203] = fn_800DDD24;
     lbl_8030FB60[193] = PlayerLocoHandleMomentumState;
@@ -17168,12 +17168,11 @@ extern "C" void fn_800C310C(void)
     }
 }
 
-extern "C" void fn_800C3130(Item_800C2F94 *pItem, short a, unsigned short b, int index)
+extern "C" void SortListAdd(Item_800C2F94 *pItem, short a, unsigned short b, int index)
 {
     lbl_8030FF40[index][lbl_802D9E90[index]].mpUnknown0 = pItem;
     lbl_8030FF40[index][lbl_802D9E90[index]].mUnknown4 = a;
-    lbl_8030FF40[index][lbl_802D9E90[index]].mUnknown6 = b;
-    lbl_802D9E90[index]++;
+    lbl_8030FF40[index][lbl_802D9E90[index]++].mUnknown6 = b;
 }
 
 extern "C" void fn_800C3170(void)

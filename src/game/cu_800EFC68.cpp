@@ -665,8 +665,8 @@ float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
 float fn_80178A08(void);
 float fn_80178A44(void);
 int fn_801784E8(void);
-int fn_800DC080(Object_80039F5C *p);
-void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
+int PlayerActionAnimIsPassReady(Object_80039F5C *p);
+void PlayerActionAnimSteerPassReady(Object_80039F5C *p, int angle, float value);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8022710C(void *pV);
 PlayBookFormation_t *PlayBookGetFormation(int team);
@@ -712,7 +712,7 @@ extern unsigned char lbl_803EAE20[8];
 extern const float lbl_803ED6CC;
 int fn_800AC3FC(Object_80039F5C *p, int value);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
-void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_801528E0(void *pSet, Point_8017886C *pOut);
 int fn_800AC3A0(Object_80039F5C *p);
@@ -2535,13 +2535,13 @@ extern "C" int fn_800FD41C(Object_80039F5C *p) {
         Point_8017886C direction;
 
         fn_800FD178(p, pBlock);
-        if (!fn_800DC080(p)) {
+        if (!PlayerActionAnimIsPassReady(p)) {
             p->mUnknown512.mUnknown14 = 1;
             p->mUnknown512.mUnknown8 = pBlock->mUnknown16;
             p->mUnknown512.mUnknown4 = pBlock->mUnknown16;
             p->mUnknown512.mUnknown0 = pBlock->mUnknown12;
         } else {
-            fn_800DBC4C(p, pBlock->mUnknown16, pBlock->mUnknown12);
+            PlayerActionAnimSteerPassReady(p, pBlock->mUnknown16, pBlock->mUnknown12);
             if (fn_800FCFC0(p)) {
                 result = 1;
             }
@@ -3007,7 +3007,7 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
             || (PassIconsWereShown() == 0 && (input.mUnknown93 & 0x40) && fn_800A61E0() == 0)) {
             PassIconsShow(0);
             CamGameSetModeAll(2);
-        } else if (fn_800DC080(p) == 0) {
+        } else if (PlayerActionAnimIsPassReady(p) == 0) {
             return fn_800B76E8(p);
         }
     } else if (fn_800FFFB0(p) != 0) {

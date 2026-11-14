@@ -233,6 +233,11 @@ extern "C" void fn_800DB7A4(Record_800DB074 *pRecord, Object_80039F5C *p)
     }
 }
 
+extern "C" void PlayerActionAnimSetSpeedRatio(Record_800DB074 *pRecord, float value)
+{
+    pRecord->mUnknown16 = value / (gPlyrMoveFwdSpeed * 100621.12f);
+}
+
 extern "C" void fn_800DB8B4(Record_800DB60C *pRecord, Object_80039F5C *p)
 {
     int allow = 1;
@@ -355,7 +360,7 @@ extern "C" int fn_800DBB74(Object_80039F5C *p, unsigned char *pOut)
     return result;
 }
 
-extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
+extern "C" void PlayerActionAnimSteerPassReady(Object_80039F5C *p, int angle, float value)
 {
     int dir = 0x755555;
     int result;
@@ -403,7 +408,7 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
         } else {
             lbl_803EAD1C = 0;
         }
-        result = fn_800DC080(p);
+        result = PlayerActionAnimIsPassReady(p);
         if (result == 1 && p->mUnknown512.mUnknown15 != 1) {
             if (MathAngleDiff(angle, -0x38E38E) <= 0x155554) {
                 if (p->mUnknown2913 == 0) {
@@ -477,7 +482,7 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
     }
 }
 
-extern "C" int fn_800DC080(Object_80039F5C *p)
+extern "C" int PlayerActionAnimIsPassReady(Object_80039F5C *p)
 {
     int result = 0;
     unsigned char flag;
@@ -528,7 +533,7 @@ extern "C" int fn_800DC21C(Object_80039F5C *p)
                 && (PassIconsAreShown() || !(p->mFlags & 0x400))))
         && fn_8011F1CC() && mode == 3 && p->mpState->mId != 1 && p->mpState->mId != 91) {
         if (!fn_800DBB74(p, &flag)) {
-            if (!fn_800DC080(p)) {
+            if (!PlayerActionAnimIsPassReady(p)) {
                 result = 1;
             }
         } else {
@@ -544,7 +549,7 @@ extern "C" int fn_800DC21C(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_800DC36C(List_800DC36C *pList, unsigned short key, void *pA,
+extern "C" int PlayerActionAnimFacingCallback(List_800DC36C *pList, unsigned short key, void *pA,
                            Record_800D81C8 *pRecords, Object_80039F5C *p, unsigned int phase)
 {
     Block_801BE60C *pBlock = fn_801BE60C(p->mpUnknown792, key);

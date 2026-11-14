@@ -81,7 +81,7 @@ void fn_80227690(void *, void *, void *);
 int fn_80104688(Object_80039F5C *);
 void fn_801024FC(Object_80039F5C *, int, int, int, int);
 int QbPassHoldOrRun(Object_80039F5C *, float *, float *, unsigned char *);
-void fn_800DBC4C(Object_80039F5C *, int, float);
+void PlayerActionAnimSteerPassReady(Object_80039F5C *, int, float);
 int fn_801783AC(int);
 void fn_800A02B4(void);
 void fn_800A02FC(void);
@@ -583,9 +583,9 @@ int QbPassUpdate(Object_80039F5C *player) {
         }
         if (state->mUnknown3 == 1) {
             player->mUnknown512.mUnknown15 = 1;
-            fn_800DBC4C(player, state->mUnknown8, 1.0f);
+            PlayerActionAnimSteerPassReady(player, state->mUnknown8, 1.0f);
         } else
-            fn_800DBC4C(player, state->mUnknown8, 0.0f);
+            PlayerActionAnimSteerPassReady(player, state->mUnknown8, 0.0f);
         --state->mUnknown6;
     } else if (fn_801783AC(0) == 1) {
 

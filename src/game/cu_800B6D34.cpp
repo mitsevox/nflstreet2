@@ -7,8 +7,8 @@
 extern "C" {
 int fn_800B5FEC(Object_80039F5C *p);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
-void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
-int fn_800DC080(Object_80039F5C *p);
+void PlayerActionAnimSteerPassReady(Object_80039F5C *p, int angle, float value);
+int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_800DC21C(Object_80039F5C *p);
 void fn_800F177C(int index, Input_800B6D34 *pOut);
 int BallStateGet(Ball_t *pBall, int *pOut);
@@ -98,7 +98,7 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
             angle -= 0x800000;
         }
         angle &= 0xFFFFFF;
-        if (fn_800DC080(p) == 0) {
+        if (PlayerActionAnimIsPassReady(p) == 0) {
             if (fn_800DC21C(p) == 1 && p->mUnknown512.mUnknown15 != 1) {
                 speed *= 0.75f;
             }
@@ -134,10 +134,10 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
             }
             fn_800C89F0(p, angle, 0, 0, 0.5f);
         } else if (PassIconsAreShown() != 0) {
-            fn_800DBC4C(p, angle, speed);
+            PlayerActionAnimSteerPassReady(p, angle, speed);
         }
     } else {
-        int mode = fn_800DC080(p);
+        int mode = PlayerActionAnimIsPassReady(p);
 
         if (mode == 1) {
             if (fn_801BE648(p->mpUnknown792) != 0x4A && fn_801BE648(p->mpUnknown792) != 0x54
@@ -147,10 +147,10 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
                 p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
                 p->mUnknown512.mUnknown0 = 0.0f;
             } else {
-                fn_800DBC4C(p, p->mMotion.mFacing, 0.0f);
+                PlayerActionAnimSteerPassReady(p, p->mMotion.mFacing, 0.0f);
             }
         } else if (fn_800DC21C(p) == 1 && PassIconsAreShown() != 0) {
-            fn_800DBC4C(p, p->mMotion.mFacing, 0.0f);
+            PlayerActionAnimSteerPassReady(p, p->mMotion.mFacing, 0.0f);
         }
     }
 }

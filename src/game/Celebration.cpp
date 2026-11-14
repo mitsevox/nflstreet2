@@ -4,7 +4,7 @@
 extern "C" {
 extern char lbl_80306DFC[];
 
-void fn_8009B720(void *);
+void CelebrationBlocksInit(void *);
 void fn_8009B7E0(void);
 }
 
@@ -18,7 +18,7 @@ const char *Celebration::GetName() { return "Celebration"; }
 
 int Celebration::Init()
 {
-    fn_8009B720(gAnimData.GetArchive());
+    CelebrationBlocksInit(gAnimData.GetArchive());
     return 1;
 }
 

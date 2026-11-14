@@ -26,8 +26,8 @@ void SpchIGSetBallCarrier(int id);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_800C47C4(void);
 void fn_8013A440(Ball_t *pBall);
-void fn_8013A6A8(Ball_t *pBall, float step);
-void fn_8013A72C(Ball_t *pBall, float value);
+void BallStepGroundContact(Ball_t *pBall, float step);
+void BallFollowHolder(Ball_t *pBall, float value);
 void fn_8013AB24(Ball_t *pBall);
 void fn_8013ABE0(Ball_t *pBall);
 void BallStateUpdate(Ball_t *pBall, float step);
@@ -423,7 +423,7 @@ void BallsProcessCollision(float step)
     pRecords = _Ball_pSet->mHeader.mpRecords;
     CollideSetTest(pRecords, StatcollGetSet());
     for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
-        fn_8013A6A8(&_Ball_pSet->mEntries[i], step);
+        BallStepGroundContact(&_Ball_pSet->mEntries[i], step);
     }
 }
 
@@ -487,7 +487,7 @@ void BallGiveToPlayer(Ball_t *pBall, Object_80039F5C *p)
         SpchIGSetBallCarrier(p->mId);
     }
     pBall->mState.mUnknownD0 = 0;
-    fn_8013A72C(pBall, 0.0f);
+    BallFollowHolder(pBall, 0.0f);
     {
         Vector_80039F5C *pVector = &pBall->mState.mUnknown54;
 

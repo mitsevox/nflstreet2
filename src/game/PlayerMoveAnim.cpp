@@ -8,7 +8,7 @@
 extern "C" {
 int fn_800C4B6C(Object_80039F5C *p);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
-int fn_800DC080(Object_80039F5C *p);
+int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_80178320(void);
 int MathAngleDiff(int a, int b);
 }
@@ -230,7 +230,7 @@ extern "C" void PlayerMoveAnimUpdateMove(Object_80039F5C *p)
         pNext->mUnknown4 = pCur->mUnknown4;
         pNext->mUnknown8 = pCur->mUnknown4;
         pNext->mUnknown0 = pCur->mUnknown0;
-    } else if (fn_800DC080(p)) {
+    } else if (PlayerActionAnimIsPassReady(p)) {
         changed = PlayerMoveAnimSelectByHeading(p, diff, &key);
     } else {
         int flag = pCur->mUnknown15 == 4 || pCur->mUnknown15 == 5;

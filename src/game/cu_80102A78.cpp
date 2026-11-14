@@ -148,7 +148,7 @@ void fn_80100BF8(Object_80039F5C *p, Vector_80039F5C *pPos, int *pOut, float spe
 void fn_80101130(Object_80039F5C *pTarget, Object_80039F5C *p, short *pCount);
 void fn_80103F80(Ball_t *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, float speed, int angle,
                  float ballSpeed, Vector_80039F5C *pOut, Object_80039F5C *p);
-void fn_8013AC28(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
+void BallLaunchToTarget(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
 void fn_80152068(int index, Vector_80039F5C *pOut);
 int TutorialAreMovesDone(unsigned long long mask);
 float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short *pCount, float scale);
@@ -473,7 +473,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         }
         target.mX = target.mX < 1.0f - fn_80178A08() ? 1.0f - fn_80178A08()
             : (target.mX > fn_80178A08() - 1.0f ? fn_80178A08() - 1.0f : target.mX);
-        fn_8013AC28(pBall, &target, 1, speed, spin, side);
+        BallLaunchToTarget(pBall, &target, 1, speed, spin, side);
         BallSetTarget(pBall, pTarget);
         SpchIGSetPassTarget(pTarget->mId);
         BallGetVelocity(pBall, &velocity);
@@ -514,7 +514,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         }
         target.mZ = 0.0f;
         fn_80099568(1);
-        fn_8013AC28(pBall, &target, 1, speed, spin, side);
+        BallLaunchToTarget(pBall, &target, 1, speed, spin, side);
         BallSetTarget(pBall, 0);
         fn_80101064(p);
         PenaltyCheckGrounding(p);
@@ -531,7 +531,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         if (fn_801486A0() == 1) {
             fn_80152068(BallGetIndex(pBall), &target);
         }
-        fn_8013AC28(pBall, &target, 1, speed, spin, side);
+        BallLaunchToTarget(pBall, &target, 1, speed, spin, side);
         BallSetTarget(pBall, 0);
         fn_80101064(p);
         fn_801783D0(13, 1);

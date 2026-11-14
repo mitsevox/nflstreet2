@@ -55,7 +55,7 @@ void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc);
 int fn_800BAAB8(void);
 void fn_8011DF90(void);
 void BallPrimeKickUp(Ball_t *pBall);
-void fn_8013A910(Ball_t *pBall, int *pAngles);
+void BallRestAtAngles(Ball_t *pBall, int *pAngles);
 void fn_8013AD9C(Ball_t *pBall, int a);
 void CamGameSelectCamera(int a);
 void CamGameSetFocusAll(int a, int b);
@@ -121,7 +121,7 @@ extern "C" void fn_800BAAE4(void)
         angles[0] = 0;
         angles[1] = 0xFFC00000;
         angles[2] = 0xFFC00000;
-        fn_8013A910(pBall, angles);
+        BallRestAtAngles(pBall, angles);
         fn_8013AD9C(pBall, 0);
         BallPrimeKickUp(pBall);
         CamGameSetModeAll(1);

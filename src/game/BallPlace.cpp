@@ -6,7 +6,7 @@
 #include "game/Object_8017886C.h"
 
 extern "C" {
-void fn_8013A910(Ball_t *pBall, int *pAngles);
+void BallRestAtAngles(Ball_t *pBall, int *pAngles);
 void fn_8013AD9C(Ball_t *pBall, int a);
 Point_8017886C fn_80177FE0(void);
 void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
@@ -27,7 +27,7 @@ void BallPlaceAt(Ball_t *pBall, Vector_80039F5C *pPos)
     BallReleaseStill(pBall, 6, 0);
     BallSetPosition(pBall, pPos);
     BallSetVelocity(pBall, &v);
-    fn_8013A910(pBall, angles);
+    BallRestAtAngles(pBall, angles);
     fn_8013AD9C(pBall, 0);
 }
 

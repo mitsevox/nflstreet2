@@ -341,7 +341,7 @@ void fn_800C87CC(int a, int b);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_8011DF90(void);
 void BallPrimeKickUp(Ball_t *pBall);
-void fn_8013A910(Ball_t *pBall, int *pAngles);
+void BallRestAtAngles(Ball_t *pBall, int *pAngles);
 void fn_8013AD9C(Ball_t *pBall, int a);
 int BallStateGet(Ball_t *pBall, int *pOut);
 void CamMainWarpToDest(GameCamera_t *pCamera);
@@ -1893,7 +1893,7 @@ void TutorialPreSnap::OnEnter(float dt)
     angles[0] = 0;
     angles[1] = 0xFFC00000;
     angles[2] = 0xFFC00000;
-    fn_8013A910(pBall, angles);
+    BallRestAtAngles(pBall, angles);
     fn_8013AD9C(pBall, 0);
     BallPrimeKickUp(pBall);
     PreSnapPhase::OnEnter(dt);
@@ -2144,7 +2144,7 @@ void TutorialPostPlay::OnExit()
     angles[0] = 0;
     angles[1] = 0xFFC00000;
     angles[2] = 0xFFC00000;
-    fn_8013A910(pBall, angles);
+    BallRestAtAngles(pBall, angles);
     fn_8013AD9C(pBall, 0);
     BallPrimeKickUp(pBall);
     CamGameSetModeAll(1);

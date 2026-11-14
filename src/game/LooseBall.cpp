@@ -62,13 +62,13 @@ static float _LooseBall_fThreatRange = 2.0f;
 static float _LooseBall_fThreatAngle = 15.0f;
 static AnimStateAnimList_t _LooseBall_AnimTable;
 extern float gPlyrMoveFwdSpeed;
-int fn_8009A77C(Object_80039F5C *p);
+int PlyrRollContestedCatch(Object_80039F5C *p);
 float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
                 float f);
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
 Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
-void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 int CharSkelGetJointByName(void *p, const char *pName);
 int BallStateCheckPlayerHit(Ball_t *pBall, void *pData, int value);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -471,10 +471,10 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
     BallGetPosition(pBall, &ballPos);
     BallGetVelocity(pBall, &velocity);
     if (ballPos.mZ > 3.15f) {
-        fn_8013AA00(pBall, 2.65f, 0, &target);
+        BallSolveFallToHeight(pBall, 2.65f, 0, &target);
         target.mZ = 2.65f;
     } else {
-        fn_8013AA00(pBall, 0.0f, 0, &ballPos);
+        BallSolveFallToHeight(pBall, 0.0f, 0, &ballPos);
         ballPos.mZ = 0.0f;
         distance = fn_8022785C(&ballPos, &p->mMotion.mPos);
         LooseBallPredictPos(&target, pBall, distance * _LooseBall_fLeadScale);
@@ -551,7 +551,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
     if (state->mUnknown42 == 0) {
         if (kind == 4 || kind == 5) {
             if (!fn_801787A0() && velocity.mZ < 0.0f) {
-                int handle = fn_80099734(p, pBall, 0, 3, state->mUnknown48, 1, 0, 0, fn_8009A77C(p), 120.0f);
+                int handle = fn_80099734(p, pBall, 0, 3, state->mUnknown48, 1, 0, 0, PlyrRollContestedCatch(p), 120.0f);
                 if (handle != 0x1FFFFFFF && fn_80099F04(p, handle, BallGetIndex(pBall)) == 1) {
                     result = 0;
                     goto done;

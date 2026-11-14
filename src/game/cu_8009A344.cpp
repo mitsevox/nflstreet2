@@ -97,7 +97,7 @@ extern "C" int fn_8009A6EC(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_8009A77C(Object_80039F5C *p)
+extern "C" int PlyrRollContestedCatch(Object_80039F5C *p)
 {
     float distance = 1000.0f;
     int result = 0;
@@ -119,7 +119,8 @@ extern "C" int fn_8009A77C(Object_80039F5C *p)
     } else {
         rating = p->mRatings[8];
     }
-    chance = chance + (signed char)((rating - 128) * 0.25f);
+    signed char adjust = (rating - 128) * 0.25f;
+    chance = chance + adjust;
     if (chance > (signed char)fn_802372EC(0, 100)) {
         result = 1;
     }

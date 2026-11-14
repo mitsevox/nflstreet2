@@ -51,7 +51,7 @@ int fn_80178320(void);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 float fn_80178A08(void);
 void *fn_8023816C(void *pHandle);
-void fn_8013A910(Ball_t *pBall, int *pAngles);
+void BallRestAtAngles(Ball_t *pBall, int *pAngles);
 
 extern Block_800BA3F0 *lbl_803EAB88;
 }
@@ -373,7 +373,7 @@ extern "C" void fn_800BA3F0(void)
         angles[0] = 0;
         angles[1] = 0xFFC00000;
         angles[2] = 0xFFC00000;
-        fn_8013A910(pBall, angles);
+        BallRestAtAngles(pBall, angles);
     }
     fn_802381E0(pHandle);
 }
