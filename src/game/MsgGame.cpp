@@ -50,10 +50,10 @@ int fn_801486A0(void);
 void fn_80152940(Class_80148A58 *pObject, int index, MiniGameSlotInfo_t *pInfo);
 int fn_80178AE0(void);
 void PerCheckConnectAll(void);
-void fn_8007AEE8(DbCursor *pObject);
-void fn_8007AF14(DbCursor *pObject);
-int fn_8007AF34(DbCursor *pObject);
-int fn_8007AF5C(DbCursor *pObject);
+void PortDbOpenSides(DbCursor *pObject);
+void PortDbCloseSides(DbCursor *pObject);
+int PortDbGetPort(DbCursor *pObject);
+int PortDbGetSide(DbCursor *pObject);
 int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
 int fn_800B81A4(void);
@@ -96,7 +96,7 @@ unsigned char GameTextGetBootFinished(void);
 void GameTextSetBootFinished(unsigned char a);
 void TutorialGetHudPosition(float *pX, float *pY, float *pZ);
 int fn_8005902C(void);
-int fn_8007B324(void);
+int PortDbHasSides(void);
 int TeamLogoGetHandle(int a);
 int fn_8022E558(void);
 int fn_8022E560(void);
@@ -230,13 +230,13 @@ int MsgGameFindActivePort(void)
         int searching = 1;
 
         PerCheckConnectAll();
-        fn_8007AEE8(&cursor);
+        PortDbOpenSides(&cursor);
         for (int found = DbCursorFirst(&cursor); found && searching; found = DbCursorNext(&cursor)) {
-            result = fn_8007AF34(&cursor);
-            fn_8007AF5C(&cursor);
+            result = PortDbGetPort(&cursor);
+            PortDbGetSide(&cursor);
             searching = fn_801E195C(ConGetChannelInfo(result, 0)) == 2;
         }
-        fn_8007AF14(&cursor);
+        PortDbCloseSides(&cursor);
         if (searching) {
             result = -1;
         }
@@ -566,15 +566,15 @@ void MsgGameFillPortStates(int *pValues)
 {
     DbCursor cursor;
 
-    if (fn_8007B324()) {
+    if (PortDbHasSides()) {
         for (int i = 3; i >= 0; i--) {
             pValues[i] = -1;
         }
-        fn_8007AEE8(&cursor);
+        PortDbOpenSides(&cursor);
         if (DbCursorFirst(&cursor)) {
             do {
-                int key = fn_8007AF34(&cursor);
-                int value = fn_8007AF5C(&cursor);
+                int key = PortDbGetPort(&cursor);
+                int value = PortDbGetSide(&cursor);
                 int index = GameTextGetPadPlayer(key);
 
                 if (index != -1) {
@@ -583,7 +583,7 @@ void MsgGameFillPortStates(int *pValues)
                 }
             } while (DbCursorNext(&cursor));
         }
-        fn_8007AF14(&cursor);
+        PortDbCloseSides(&cursor);
     }
 }
 

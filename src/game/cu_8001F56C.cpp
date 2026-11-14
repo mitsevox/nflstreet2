@@ -29,13 +29,13 @@ void SndgMusicPlaySong(int a, int b, int c);
 int SndgMusicIsPaused(void);
 void SndgMusicResume(void);
 void SndgMusicStop(void);
-void fn_8007B358(DbCursor *pObject);
-void fn_8007B3AC(DbCursor *pObject);
-void fn_8007B3CC(DbCursor *pObject, int key, int *pResult);
-int fn_8007B404(DbCursor *pObject);
-void fn_8007B42C(DbCursor *pObject, char *pText, int length);
-void fn_8007B460(DbCursor *pObject, char *pText, int length);
-void fn_8007B494(DbCursor *pObject, char *pText, int length);
+void EATraxDbOpen(DbCursor *pObject);
+void EATraxDbClose(DbCursor *pObject);
+void EATraxDbFindSong(DbCursor *pObject, int key, int *pResult);
+int EATraxDbGetSongId(DbCursor *pObject);
+void EATraxDbGetArtist(DbCursor *pObject, char *pText, int length);
+void EATraxDbGetTitle(DbCursor *pObject, char *pText, int length);
+void EATraxDbGetAlbum(DbCursor *pObject, char *pText, int length);
 void fn_8008352C(DbCursor *pObject, void *pQuery);
 void fn_800835D0(DbCursor *pObject);
 void fn_80083644(DbCursor *pObject);
@@ -68,7 +68,7 @@ void fn_8001F56C(void)
     fn_8008352C(&cursor, 0);
     i = 0;
     fn_800835D0(&cursor);
-    fn_8007B358(&table);
+    EATraxDbOpen(&table);
     lbl_803EBA94->mCount = 40;
     if (fn_80083664(&cursor)) {
         do {
@@ -80,13 +80,13 @@ void fn_8001F56C(void)
                 lbl_803EBA94->mEntries[i].mUnknown4 = 0;
             } else {
                 lbl_803EBA94->mEntries[i].mUnknown0 = 0;
-                fn_8007B3CC(&table, fn_8008382C(&cursor), &lbl_803EBA94->mEntries[i].mUnknown4);
+                EATraxDbFindSong(&table, fn_8008382C(&cursor), &lbl_803EBA94->mEntries[i].mUnknown4);
             }
             i++;
             lbl_803EBA94->mCount--;
         } while (fn_80083684(&cursor));
     }
-    fn_8007B3AC(&table);
+    EATraxDbClose(&table);
     fn_80083644(&cursor);
 }
 
@@ -98,7 +98,7 @@ void fn_8001F704(void)
     unsigned char i;
 
     fn_8008352C(&cursor, 0);
-    fn_8007B358(&table);
+    EATraxDbOpen(&table);
     for (i = 0; i <= 20; i++) {
         int state = lbl_803EBA94->mEntries[i].mState;
 
@@ -109,7 +109,7 @@ void fn_8001F704(void)
             if (lbl_803EBA94->mEntries[i].mUnknown0 == 0) {
                 found = 1;
                 DbCursorSeek(&table, lbl_803EBA94->mEntries[i].mUnknown4);
-                value = fn_8007B404(&table);
+                value = EATraxDbGetSongId(&table);
             } else {
                 found = 0;
                 value = 0;
@@ -123,7 +123,7 @@ void fn_8001F704(void)
             changed = 1;
         }
     }
-    fn_8007B3AC(&table);
+    EATraxDbClose(&table);
     fn_80083644(&cursor);
     if (changed) {
         SndgMusicReshuffle();
@@ -137,10 +137,10 @@ void fn_8001F850(int mode, int *pResult, Params_80005284 *pText)
     if (mode == 0) {
         DbCursor table;
 
-        fn_8007B358(&table);
+        EATraxDbOpen(&table);
         count = DbCursorGetRowCount(&table);
         *pResult = count;
-        fn_8007B3AC(&table);
+        EATraxDbClose(&table);
         fn_801C3284(pText->mpText, "EA TRAX", pText->mLength);
     } else if (mode - 1 < 0) {
         *pResult = count;
@@ -163,12 +163,12 @@ int fn_8001F90C(int mode, int key, Params_80005284 **ppTexts)
     if (mode == 0) {
         DbCursor table;
 
-        fn_8007B358(&table);
+        EATraxDbOpen(&table);
         if (DbCursorSeek(&table, key)) {
-            fn_8007B460(&table, ppTexts[0]->mpText, ppTexts[0]->mLength);
-            fn_8007B42C(&table, ppTexts[1]->mpText, ppTexts[1]->mLength);
-            fn_8007B494(&table, ppTexts[2]->mpText, ppTexts[2]->mLength);
-            fn_8007B404(&table);
+            EATraxDbGetTitle(&table, ppTexts[0]->mpText, ppTexts[0]->mLength);
+            EATraxDbGetArtist(&table, ppTexts[1]->mpText, ppTexts[1]->mLength);
+            EATraxDbGetAlbum(&table, ppTexts[2]->mpText, ppTexts[2]->mLength);
+            EATraxDbGetSongId(&table);
             for (i = 0; i <= 20; i++) {
                 if (lbl_803EBA94->mEntries[i].mUnknown0 == mode && lbl_803EBA94->mEntries[i].mUnknown4 == key) {
                     int state = lbl_803EBA94->mEntries[i].mState;
@@ -180,7 +180,7 @@ int fn_8001F90C(int mode, int key, Params_80005284 **ppTexts)
                 }
             }
         }
-        fn_8007B3AC(&table);
+        EATraxDbClose(&table);
     } else if (mode - 1 < 0) {
         for (i = 0; i <= 20; i++) {
             if (lbl_803EBA94->mEntries[i].mUnknown0 == mode && lbl_803EBA94->mEntries[i].mUnknown4 == key) {
@@ -201,13 +201,13 @@ void fn_8001FA90(int mode, int key, Params_80005284 *pText1, Params_80005284 *pT
     if (mode == 0) {
         DbCursor table;
 
-        fn_8007B358(&table);
+        EATraxDbOpen(&table);
         if (DbCursorSeek(&table, key)) {
-            fn_8007B42C(&table, pText1->mpText, pText1->mLength);
-            fn_8007B460(&table, pText2->mpText, pText2->mLength);
-            fn_8007B494(&table, pText3->mpText, pText3->mLength);
+            EATraxDbGetArtist(&table, pText1->mpText, pText1->mLength);
+            EATraxDbGetTitle(&table, pText2->mpText, pText2->mLength);
+            EATraxDbGetAlbum(&table, pText3->mpText, pText3->mLength);
         }
-        fn_8007B3AC(&table);
+        EATraxDbClose(&table);
     }
 }
 
@@ -217,10 +217,10 @@ void fn_8001FB3C(int mode, int key)
         DbCursor table;
         int value;
 
-        fn_8007B358(&table);
+        EATraxDbOpen(&table);
         DbCursorSeek(&table, key);
-        value = fn_8007B404(&table);
-        fn_8007B3AC(&table);
+        value = EATraxDbGetSongId(&table);
+        EATraxDbClose(&table);
         SndgPathResumeTrack(0x11000001);
         SndgMusicPlaySong(1, 0, value);
     } else if (mode - 1 < 0) {

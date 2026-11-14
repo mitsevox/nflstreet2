@@ -52,7 +52,7 @@ void SndgReplayShutdown(void);
 void SndgReplayRegister(void);
 void SndgIGInitAudio(void);
 void SndgIGShutdownAudio(void);
-unsigned char fn_8007AFDC(int a);
+unsigned char PortDbCountSidePlayers(int a);
 void fn_8008FCB4(int a);
 void fn_8008FD88(int a);
 void fn_8008FDC0(void);
@@ -1342,7 +1342,7 @@ static void fn_80035DA0(unsigned char *pA, unsigned char *pB)
         a = b = fn_80178D70(0);
         break;
     default:
-        b = fn_8007AFDC(0) > fn_8007AFDC(1) ? fn_8007AFDC(0) : fn_8007AFDC(1);
+        b = PortDbCountSidePlayers(0) > PortDbCountSidePlayers(1) ? PortDbCountSidePlayers(0) : PortDbCountSidePlayers(1);
         if (b <= 2) {
             a = b = 2;
         } else {

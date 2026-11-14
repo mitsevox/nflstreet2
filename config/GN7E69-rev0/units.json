@@ -7828,6 +7828,44 @@
       ]
     },
     {
+      "source": "src/game/PortDb.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007AEE8-0x8007B358 (src/game/PortDb.cpp), its function, name and data rows; every function and data placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007AEE8",
+          "end": "0x8007B358"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6518",
+          "end": "0x802D6538"
+        }
+      ]
+    },
+    {
+      "source": "src/game/EATraxDb.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007B358-0x8007B4C8 (src/game/EATraxDb.cpp), its function, name and data rows; every function and data placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007B358",
+          "end": "0x8007B4C8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6538",
+          "end": "0x802D6558"
+        }
+      ]
+    },
+    {
       "source": "src/game/EnvDb.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8007B4C8-0x8007BA48 (src/game/EnvDb.cpp) and its data rows.",

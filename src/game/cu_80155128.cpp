@@ -14,7 +14,7 @@ public:
 };
 
 extern "C" {
-unsigned char fn_8007AFDC(int team);
+unsigned char PortDbCountSidePlayers(int team);
 
 Rules_801531C4 *fn_80155128(Class_80148A58 *p)
 {
@@ -26,7 +26,7 @@ int fn_80155130(Class_80148A58 *p, int team, unsigned char index)
     int color = 255;
 
     if (fn_800B65A0(team) != 255) {
-        if (fn_8007AFDC(team) == 2) {
+        if (PortDbCountSidePlayers(team) == 2) {
             Object_80039F5C *pPlayer = PlyrGet(team, index);
             Rules_801531C4 *pRules = static_cast<Class_802A27F0 *>(p)->mpUnknown1C;
 

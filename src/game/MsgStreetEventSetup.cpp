@@ -46,9 +46,9 @@ extern "C" {
 void MsgTeamPickSetMode(int a, int b);
 void MsgTeamPickSetSources(int a);
 void MsgTeamPickRequestTeamSave(void);
-void fn_8007AEE8(DbCursor *pObject);
-void fn_8007AF14(DbCursor *pObject);
-unsigned char fn_8007AFDC(int a);
+void PortDbOpenSides(DbCursor *pObject);
+void PortDbCloseSides(DbCursor *pObject);
+unsigned char PortDbCountSidePlayers(int a);
 int fn_80082414(int index);
 int fn_801486A0(void);
 void fn_8014F3DC(int ticks);
@@ -251,10 +251,10 @@ void MsgStreetEventSetupInit(void)
     {
         DbCursor object;
 
-        fn_8007AEE8(&object);
-        _MsgStreetEventSetup_pState->mUnknown324 = fn_8007AFDC(0);
-        _MsgStreetEventSetup_pState->mUnknown325 = fn_8007AFDC(1);
-        fn_8007AF14(&object);
+        PortDbOpenSides(&object);
+        _MsgStreetEventSetup_pState->mUnknown324 = PortDbCountSidePlayers(0);
+        _MsgStreetEventSetup_pState->mUnknown325 = PortDbCountSidePlayers(1);
+        PortDbCloseSides(&object);
     }
     _MsgStreetEventSetup_iMinPool = 14;
     MsgStreetEventSetupCountPool();
