@@ -1076,7 +1076,8 @@ int fn_8013B5EC(Ball_t *pBall, void *pData, unsigned int type)
 int fn_8013B6A0(Ball_t *pBall, void *pData, unsigned int type)
 {
     Object_80039F5C *p = (Object_80039F5C *)pData;
-    int result;
+    // FAKEMATCH: redundant zero initializer, only to keep the target branch layout
+    int result = 0;
 
     if (fn_8009BCE8(&pBall->mState.mUnknownB8) == p && pBall->mState.mUnknownC0 + 5 >= fn_8023790C()) {
         result = 1;
