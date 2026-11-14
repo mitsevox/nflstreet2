@@ -11,7 +11,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801B1A3C	0x801B1CFC	spchrand.c	5	5	5	0	5	-	-
 0x801B8C18	0x801B9CAC	smemhigh.cpp	40	40	42	38	2	-	sdata.c
 0x801B9D00	0x801B9F00	anim.c	11	11	11	11	0	-	-
-0x801B9F00	0x801BA784	animchan.c	17	13	13	0	9	-	-
+0x801B9F00	0x801BA784	animchan.c	17	13	13	13	0	-	-
 0x801BA784	0x801BAD70	animemot.c	14	10	10	10	0	-	-
 0x801BE82C	0x801BF090	animtran.c	5	5	5	0	5	-	-
 0x801BF090	0x801BF8DC	animwgt.c	17	13	13	13	0	-	animcache.c
@@ -73,7 +73,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801EC650	0x801F1538	Resource.c	50	48	48	47	1	-	-
 0x801F1538	0x801F17E0	terfhash.c	3	3	3	3	0	-	-
 0x801F17E0	0x801F2310	reswrite.c	14	14	15	0	14	-	-
-0x801F284C	0x801F2E54	resquickload.c	11	11	11	0	11	-	-
+0x801F284C	0x801F2E54	resquickload.c	11	11	11	11	0	-	-
 0x801F2E54	0x801F3308	rescache.c	6	6	6	0	6	-	-
 0x801F3308	0x801F34C0	resloosefile.c	4	4	4	4	0	-	-
 0x801F3524	0x801F5034	sound.cpp	54	44	59	33	11	-	-
