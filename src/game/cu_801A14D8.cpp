@@ -30,7 +30,7 @@ struct Slot_801A3284 {
     char mUnknown45[3];
 };
 
-/* Four colour bytes passed by value to fn_8024FB58. */
+/* Four colour bytes passed by value to GXSetChanMatColor. */
 struct Color_8024FB58 {
     unsigned char r;
     unsigned char g;
@@ -291,9 +291,9 @@ void fn_80236C10(int a, Vector_801A1650 *pScale, void *p);
 int fn_80236EC0(int a);
 void fn_8024E908(int type, int fmt, int count);
 void fn_8024EB28(int a);
-void fn_8024FB58(int chan, Color_8024FB58 color);
-void fn_8024FC48(int n);
-void fn_8024FC84(int chan, int enable, int amb, int mat, int lights, int diff, int attn);
+void GXSetChanMatColor(int chan, Color_8024FB58 color);
+void GXSetNumChans(int n);
+void GXSetChanCtrl(int chan, int enable, int amb, int mat, int lights, int diff, int attn);
 void fn_80252034(int type, int src, int dst, int op);
 void fn_802520E0(int enable, int func, int update);
 void fn_80252114(int a);
@@ -449,11 +449,11 @@ void fn_801A1978(Object_8003DEC4 *pPlayer, unsigned int flags)
         depth = 1.0f - pPlayer->mUnknown4216.mUnknown16 * lbl_803EB800;
     }
     light = fn_801A1650(pPlayer);
-    fn_8024FB58(0, color);
-    fn_8024FB58(4, color);
-    fn_8024FC48(1);
-    fn_8024FC84(0, 1, 0, 0, light, 2, 2);
-    fn_8024FC84(2, 0, 0, 0, light, 0, 2);
+    GXSetChanMatColor(0, color);
+    GXSetChanMatColor(4, color);
+    GXSetNumChans(1);
+    GXSetChanCtrl(0, 1, 0, 0, light, 2, 2);
+    GXSetChanCtrl(2, 0, 0, 0, light, 0, 2);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     fn_8024EB28(1);
     TMRenderSetBlendMode(1);
@@ -550,17 +550,17 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
     color.a = 255;
     fn_80227930(&v, lbl_802F29B0, lbl_802F29BC, StyleTrackerGetMeterFraction(pPlayer->mUnknown4968));
     light = fn_80236B98(1, v.x, v.y, v.z);
-    fn_8024FB58(0, color);
-    fn_8024FC48(1);
-    fn_8024FC84(0, 1, 0, 0, light, 2, 2);
-    fn_8024FC84(2, 0, 0, 0, light, 0, 2);
+    GXSetChanMatColor(0, color);
+    GXSetNumChans(1);
+    GXSetChanCtrl(0, 1, 0, 0, light, 2, 2);
+    GXSetChanCtrl(2, 0, 0, 0, light, 0, 2);
     TMRenderSetBlendMode(2);
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
     fn_8024EB28(1);
     index = pPlayer->mUnknown5188.mUnknown554;
     for (i = 0; i < pPlayer->mUnknown5188.mUnknown558; i++) {
         color.a = (pPlayer->mUnknown5188.mUnknown558 - i) * 51 + 25;
-        fn_8024FB58(4, color);
+        GXSetChanMatColor(4, color);
         if (i < count) {
             fn_801A209C(pPlayer, 0, pPlayer->mUnknown5188.mUnknown260[index], &pPlayer->mUnknown5188, index,
                         pSlot->mpUnknown12, pSlot->mpUnknown36, pSlot->mUnknown8);
@@ -1316,8 +1316,8 @@ void fn_801A3FFC(void)
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    fn_8024FC48(1);
-    fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 1, 1, 0, 0, 2);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
@@ -1376,8 +1376,8 @@ void fn_801A42D4(void)
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    fn_8024FC48(1);
-    fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 1, 1, 0, 0, 2);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);

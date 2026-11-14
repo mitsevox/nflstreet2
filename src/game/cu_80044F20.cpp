@@ -9,7 +9,7 @@ extern "C" {
 void *fn_80216BFC(void *pNode, const char *pName);
 void *fn_80216E34(void *pNode);
 int fn_80217070(void *pNode, const char *pName, int value);
-void fn_80239D1C(void *p, int size);
+void DCStoreRange(void *p, int size);
 }
 
 static inline void UnpackColor(const unsigned short *pData, int index, PaletteColor *pColor, int format)
@@ -155,7 +155,7 @@ void fn_80045084(void *p, State_80045084 *pState)
 
 void fn_800450A8(void *p, State_80045084 *pState)
 {
-    fn_80239D1C(pState->mpData, pState->mSize);
+    DCStoreRange(pState->mpData, pState->mSize);
     GXFlush();
 }
 

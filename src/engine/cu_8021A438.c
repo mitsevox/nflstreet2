@@ -95,7 +95,7 @@ void fn_80220A08(void);
 void fn_80220AD0(Node_80223874 *pNode, Int32 a, Int32 Item);
 Int32 fn_80220BFC(Int32 a, Int32 b);
 void fn_80220D3C(void);
-void fn_8024F9EC(GXLightObj *pLight, GXLightID Light);
+void GXLoadLightObjImm(GXLightObj *pLight, GXLightID Light);
 void TMRenderReset(void);
 
 extern Float32 lbl_8039F858[4];
@@ -1552,7 +1552,7 @@ void fn_80220988(void)
     if (Mat.Value != lbl_803ECFF0 || Light.Value != lbl_803ECFF4) {
         GXSetChanMatColor(GX_COLOR0A0, Mat.Color);
         GXInitLightColor(&lbl_803E9880, Light.Color);
-        fn_8024F9EC(&lbl_803E9880, GX_LIGHT7);
+        GXLoadLightObjImm(&lbl_803E9880, GX_LIGHT7);
         lbl_803ECFF0 = Mat.Value;
         lbl_803ECFF4 = Light.Value;
     }

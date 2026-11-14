@@ -39,9 +39,9 @@ void fn_802271A4(Vector_80039F5C *pOut, Vector_80039F5C *p);
 void fn_80227384(Vector_80039F5C *pOut, Vector_80039F5C *p, int a);
 void *fn_80236384(int a);
 void fn_80236408(int a, Vector_80039F5C *pOut);
-void fn_8024FB58(int a, GXColor color);
-void fn_8024FC48(int a);
-void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
+void GXSetChanMatColor(int a, GXColor color);
+void GXSetNumChans(int a);
+void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXInitTexObj(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
 extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
 void GXLoadPosMtxImm(Mtx44 m, int a);
@@ -171,8 +171,8 @@ void SimpShadowDrawAll(void)
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
         GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-        fn_8024FC48(1);
-        fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
+        GXSetNumChans(1);
+        GXSetChanCtrl(4, 0, 1, 1, 0, 0, 2);
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
         GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
@@ -211,7 +211,7 @@ void SimpShadowDrawAll(void)
         }
         lbl_803EBC98 = cursor;
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
-        fn_8024FB58(4, color);
+        GXSetChanMatColor(4, color);
     }
 }
 

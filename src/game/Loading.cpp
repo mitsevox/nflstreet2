@@ -61,9 +61,9 @@ extern "C" void GXPreLoadEntireTexture(LoadingTexture_t *, GXTexRegion *);
 extern "C" void GXLoadTlut(GXTlutObj *, int);
 extern "C" void GXInitTexObjTlut(LoadingTexture_t *, int);
 extern "C" void GXLoadTexObjPreLoaded(LoadingTexture_t *, GXTexRegion *, int);
-void fn_8024FB58(int, GXColor);
-void fn_8024FC48(int);
-void fn_8024FC84(int,int,int,int,int,int,int);
+void GXSetChanMatColor(int, GXColor);
+void GXSetNumChans(int);
+void GXSetChanCtrl(int,int,int,int,int,int,int);
 void GXSetClipMode(int);
 void GXGetProjectionv(float *);
 void GXSetProjection(Mtx44,int);
@@ -185,7 +185,7 @@ void LoadingDrawMarker(void)
     color.g = 0;
     color.b = 0;
     color.a = 255;
-    fn_8024FB58(4, color);
+    GXSetChanMatColor(4, color);
     GXLoadTexObjPreLoaded(_Loading_BackgroundPoly.mpTexture, _Loading_BackgroundPoly.mpTexture->mpRegion, 0);
     GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
     GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
@@ -201,7 +201,7 @@ void LoadingDrawMarker(void)
     color.g = 255;
     color.b = 255;
     color.a = 255;
-    fn_8024FB58(4, color);
+    GXSetChanMatColor(4, color);
 }
 /* Sets up GX for flat 2D drawing over a 640x480 orthographic projection,
    saving the game's projection first. `alpha` 128 is fully opaque. */
@@ -210,9 +210,9 @@ void LoadingBeginDraw(int alpha)
     Mtx44 view;
     Mtx44 projection;
     GXColor color = {255,255,255,(unsigned char)(alpha * 2 - 1)};
-    fn_8024FC48(1);
-    fn_8024FB58(4, color);
-    fn_8024FC84(4,0,0,0,1,0,2);
+    GXSetNumChans(1);
+    GXSetChanMatColor(4, color);
+    GXSetChanCtrl(4,0,0,0,1,0,2);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);

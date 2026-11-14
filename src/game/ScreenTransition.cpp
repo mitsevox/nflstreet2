@@ -58,9 +58,9 @@ static int _ScreenTrans_bDrawOnce;
 
 void fn_801CEA44(int);
 int fn_801CEC74(void);
-void fn_8024FC48(int);
-void fn_8024FB58(int, GXColor);
-void fn_8024FC84(int, int, int, int, int, int, int);
+void GXSetNumChans(int);
+void GXSetChanMatColor(int, GXColor);
+void GXSetChanCtrl(int, int, int, int, int, int, int);
 void GXSetClipMode(int);
 extern "C" void GXLoadTexObj(GXTexObj *, int);
 void GXGetProjectionv(float *);
@@ -309,9 +309,9 @@ void _ScreenTransSetupDraw(int textured, unsigned int value, float alpha) {
         color.b = blue > 255 ? 255 : blue;
     }
     color.a = (int)(alpha * 255.0f);
-    fn_8024FC48(1);
-    fn_8024FB58(4, color);
-    fn_8024FC84(4, 0, 0, 0, 1, 0, 2);
+    GXSetNumChans(1);
+    GXSetChanMatColor(4, color);
+    GXSetChanCtrl(4, 0, 0, 0, 1, 0, 2);
     if (textured) {
         GXSetNumTevStages(1);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);

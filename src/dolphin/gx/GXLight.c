@@ -224,7 +224,6 @@ void GXGetLightColor(const GXLightObj* lt_obj, GXColor* color) {
     *(u32*)color = *(u32*)&obj->Color;
 }
 
-#if defined(DECOMP_COMPARE)
 
 static inline void PushLight(register GXLightObj* lt_obj, register void* dest) {
     register u32 zero, color;
@@ -300,53 +299,6 @@ void GXLoadLightObjImm(GXLightObj* lt_obj, GXLightID light) {
 
     __GXData->bpSentNot = 1;
 }
-
-void GXSetChanCtrl(GXChannelID chan, GXBool enable, GXColorSrc amb_src, GXColorSrc mat_src, u32 light_mask, GXDiffuseFn diff_fn, GXAttnFn attn_fn) {
-    u32 reg;
-    u32 idx;
-
-    CHECK_GXBEGIN(892, "GXSetChanCtrl");
-
-    ASSERTMSGLINE(895, chan >= GX_COLOR0 && chan <= GX_COLOR1A1, "GXSetChanCtrl: Invalid Channel Id");
-
-    idx = chan & 0x3;
-
-    reg = 0;
-    SET_REG_FIELD(907, reg, 1, 1, enable);
-    SET_REG_FIELD(908, reg, 1, 0, mat_src);
-    SET_REG_FIELD(909, reg, 1, 6, amb_src);
-
-    SET_REG_FIELD(911, reg, 2, 7, (attn_fn == 0) ? 0 : diff_fn);
-    SET_REG_FIELD(912, reg, 1, 9, (attn_fn != 2));
-    SET_REG_FIELD(913, reg, 1, 10, (attn_fn != 0));
-
-    reg = (reg & ~(0xf << 2)) | ((light_mask & 0xf) << 2);
-
-    reg = (reg & ~(0xf << 11)) | (((light_mask >> 4) & 0xf) << 11);
-
-    GX_WRITE_XF_REG(idx + 14, reg);
-
-    if (chan == GX_COLOR0A0) {
-        GX_WRITE_XF_REG(16, reg);
-    } else if (chan == GX_COLOR1A1) {
-        GX_WRITE_XF_REG(17, reg);
-    }
-
-    __GXData->bpSentNot = 1;
-}
-
-
-
-void GXSetNumChans(u8 nChans) {
-    CHECK_GXBEGIN(857, "GXSetNumChans");
-    ASSERTMSGLINE(858, nChans <= 2, "GXSetNumChans: nChans > 2");
-
-    SET_REG_FIELD(860, __GXData->genMode, 3, 4, nChans);
-    GX_WRITE_XF_REG(9, nChans);
-    __GXData->dirtyState |= 4;
-}
-
-
 
 void GXSetChanAmbColor(GXChannelID chan, GXColor amb_color)
 {
@@ -443,4 +395,45 @@ void GXSetChanMatColor(GXChannelID chan, GXColor mat_color) {
     __GXData->matColor[colIdx] = reg;
 }
 
-#endif
+void GXSetNumChans(u8 nChans) {
+    CHECK_GXBEGIN(857, "GXSetNumChans");
+    ASSERTMSGLINE(858, nChans <= 2, "GXSetNumChans: nChans > 2");
+
+    SET_REG_FIELD(860, __GXData->genMode, 3, 4, nChans);
+    GX_WRITE_XF_REG(9, nChans);
+    __GXData->dirtyState |= 4;
+}
+
+void GXSetChanCtrl(GXChannelID chan, GXBool enable, GXColorSrc amb_src, GXColorSrc mat_src, u32 light_mask, GXDiffuseFn diff_fn, GXAttnFn attn_fn) {
+    u32 reg;
+    u32 idx;
+
+    CHECK_GXBEGIN(892, "GXSetChanCtrl");
+
+    ASSERTMSGLINE(895, chan >= GX_COLOR0 && chan <= GX_COLOR1A1, "GXSetChanCtrl: Invalid Channel Id");
+
+    idx = chan & 0x3;
+
+    reg = 0;
+    SET_REG_FIELD(907, reg, 1, 1, enable);
+    SET_REG_FIELD(908, reg, 1, 0, mat_src);
+    SET_REG_FIELD(909, reg, 1, 6, amb_src);
+
+    SET_REG_FIELD(911, reg, 2, 7, (attn_fn == 0) ? 0 : diff_fn);
+    SET_REG_FIELD(912, reg, 1, 9, (attn_fn != 2));
+    SET_REG_FIELD(913, reg, 1, 10, (attn_fn != 0));
+
+    reg = (reg & ~(0xf << 2)) | ((light_mask & 0xf) << 2);
+
+    reg = (reg & ~(0xf << 11)) | (((light_mask >> 4) & 0xf) << 11);
+
+    GX_WRITE_XF_REG(idx + 14, reg);
+
+    if (chan == GX_COLOR0A0) {
+        GX_WRITE_XF_REG(16, reg);
+    } else if (chan == GX_COLOR1A1) {
+        GX_WRITE_XF_REG(17, reg);
+    }
+
+    __GXData->bpSentNot = 1;
+}

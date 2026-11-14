@@ -62,7 +62,6 @@ void fn_801F87FC(int a);
 int fn_80219044(void *p, int a, int b, int c, struct Entry_80219044 **ppEntries);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-void fn_80239CEC(int a, int b);
 int fn_8023CF60(void);
 void fn_8023CFD0(int a);
 int fn_8024151C(void);
@@ -345,7 +344,7 @@ static unsigned char _BootPlayMovie(int index, int a, int b, int c, int d, void 
     }
     frameBuffer = fn_801CE944(1);
     height = fn_801CEC84();
-    fn_80239CEC(frameBuffer, height * (unsigned short)((fn_801CEA08() + 15) & ~15) * 4);
+    DCFlushRange((void *)frameBuffer, height * (unsigned short)((fn_801CEA08() + 15) & ~15) * 4);
     _Boot_bMovieAbort = 0;
     fn_801D9360(handle, unknown0, unknown1, _BootMovieCallback, a == 1);
     fn_801CEA84();

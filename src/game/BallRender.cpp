@@ -74,8 +74,8 @@ unsigned int fn_80234D4C(float *pBox, void *m, void *p, void *q);
 void *fn_80236384(int a);
 int fn_80236B98(int a, float x, float y, float z);
 void fn_80236C10(int a, float *p, float *q);
-void fn_8024FB58(int a, GXColor color);
-void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
+void GXSetChanMatColor(int a, GXColor color);
+void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
 }
 
 static float _BallRender_afCullBox[8] = { -0.5f, -0.5f, -0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 0.0f };
@@ -162,9 +162,9 @@ void BallRenderDraw(BallRenderObj *pObject)
         unknown38[2] *= z;
         fn_80236C10(0, unknown38, unknown28);
     }
-    fn_8024FB58(4, color);
-    fn_8024FC84(0, 1, 0, 0, mask, 2, 2);
-    fn_8024FC84(2, 0, 0, 0, mask, 2, 2);
+    GXSetChanMatColor(4, color);
+    GXSetChanCtrl(0, 1, 0, 0, mask, 2, 2);
+    GXSetChanCtrl(2, 0, 0, 0, mask, 2, 2);
     if (!(pObject->mUnknown14 & 8)) {
         fn_80234D4C(_BallRender_afCullBox, pObject->mUnknown20, pUnknown, 0);
         result = fn_80234D4C(_BallRender_afCullBox, pObject->mUnknown20, 0, buffer);

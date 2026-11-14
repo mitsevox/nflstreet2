@@ -66,8 +66,8 @@ void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_8022765C(float *pOut, float *pA, float *pB);
 void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void fn_80227CC0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
-void fn_8024FC48(int a);
-void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
+void GXSetNumChans(int a);
+void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
 
 static Vector_80039F5C _ParticleRender_aCorners[4] = {
     { -1.0f, -1.0f, 0.0f },
@@ -108,8 +108,8 @@ void ParticleRenderSetBlend(int mode)
 
 void ParticleRenderSetupTexturedPass(void)
 {
-    fn_8024FC48(1);
-    fn_8024FC84(4, 0, 0, 1, 0, 0, 2);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_RASC, GX_CC_ZERO);
@@ -120,8 +120,8 @@ void ParticleRenderSetupTexturedPass(void)
 
 void ParticleRenderSetupFlatPass(void)
 {
-    fn_8024FC48(1);
-    fn_8024FC84(4, 0, 0, 1, 0, 0, 2);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);

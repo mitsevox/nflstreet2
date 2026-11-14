@@ -119,7 +119,7 @@ typedef struct Transform_80221198 {
 void TMRenderReset(void);
 void fn_80221198(void *p);
 void fn_801CE910(void);
-void fn_8024F9EC(GXLightObj *pLight, GXLightID Light);
+void GXLoadLightObjImm(GXLightObj *pLight, GXLightID Light);
 int fn_801CCDA4(const char *pName, int mode);
 int fn_801CCE10(int handle);
 int fn_801CCE60(void *pFile, int id);
@@ -670,7 +670,7 @@ void fn_80223C4C(void)
 
     GXSetChanMatColor(GX_COLOR0A0, MatColor);
     GXInitLightColor(&lbl_803E9880, LightColor);
-    fn_8024F9EC(&lbl_803E9880, GX_LIGHT7);
+    GXLoadLightObjImm(&lbl_803E9880, GX_LIGHT7);
     lbl_803EBF68 = MatColor;
     lbl_803EBF6C = LightColor;
 }
@@ -927,7 +927,7 @@ void fn_80225AE4(void)
 
     GXSetChanMatColor(GX_COLOR0A0, MatColor);
     GXInitLightColor(&lbl_803E9880, LightColor);
-    fn_8024F9EC(&lbl_803E9880, GX_LIGHT7);
+    GXLoadLightObjImm(&lbl_803E9880, GX_LIGHT7);
     lbl_803EBF70 = MatColor;
     lbl_803EBF74 = LightColor;
 }

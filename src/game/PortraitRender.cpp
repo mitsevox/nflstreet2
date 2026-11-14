@@ -79,9 +79,9 @@ void fn_80234CAC(ModelDrawObject_t *pObject, void *p);
 void fn_80234CF0(ModelDrawObject_t *pObject, int a, ModelPartBinding_t *p);
 void fn_80234DC0(ModelDrawObject_t *pObject, int a);
 int fn_80236B98(int a, float x, float y, float z);
-void fn_8024FB58(int a, GXColor color);
-void fn_8024FC48(int a);
-void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
+void GXSetChanMatColor(int a, GXColor color);
+void GXSetNumChans(int a);
+void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXInitTexObj(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
 extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
 void GXSetProjection(PortraitMtx44_t m, int a);
@@ -332,9 +332,9 @@ void PortraitRenderBegin2D(int textured, unsigned int color, GXTexObj *pTexture,
         fill.b = b > 255 ? 255 : b;
     }
     fill.a = alpha * 255.0f;
-    fn_8024FC48(1);
-    fn_8024FB58(4, fill);
-    fn_8024FC84(4, 0, 0, 0, 1, 0, 2);
+    GXSetNumChans(1);
+    GXSetChanMatColor(4, fill);
+    GXSetChanCtrl(4, 0, 0, 0, 1, 0, 2);
     if (textured) {
         GXSetNumTevStages(1);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
@@ -419,9 +419,9 @@ void PortraitRenderDrawModels(PortraitJob_t *pObject)
     TMRenderReset();
     GXColor white = {255, 255, 255, 255};
     mask = fn_80236B98(2, 1.0f, 1.0f, 1.0f);
-    fn_8024FB58(4, white);
-    fn_8024FC48(1);
-    fn_8024FC84(4, 1, 0, 0, mask, 2, 2);
+    GXSetChanMatColor(4, white);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 1, 0, 0, mask, 2, 2);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetCullMode(GX_CULL_FRONT);
     TMRenderSetBlendMode(1);

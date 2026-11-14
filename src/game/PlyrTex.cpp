@@ -12,7 +12,7 @@ extern "C" {
 ModelTexSlot_t *PlaTexCacheGetDescs(int player);
 ModelTexSlot_t *fn_802345F8(ModelTexSlot_t *pDescs, const char *pName);
 void fn_80234844(ModelTexSlot_t *pDesc);
-void fn_80239D1C(void *p, unsigned int size);
+void DCStoreRange(void *p, unsigned int size);
 }
 
 #define TEXTURE_ENTRY(name, flag) { name, flag, { 3, 1, -1.3f, 0, 0, 0 } }
@@ -83,13 +83,13 @@ void PlyrTexCopy(void *pDest, void *pSrc, unsigned int size)
         TexFileImage_t *pDestImage = TexGetTextureByIndex(pDest, pDestHeader->mUnknown4 + i);
 
         memcpy(pDestImage->mpUnknownC, pSrcImage->mpUnknownC, pDestImage->mUnknown8);
-        fn_80239D1C(pDestImage->mpUnknownC, pDestImage->mUnknown8);
+        DCStoreRange(pDestImage->mpUnknownC, pDestImage->mUnknown8);
     }
 
     pSrcBlock = TexGetPaletteByIndex(pSrc, pSrcHeader->mUnknown8);
     pDestBlock = TexGetPaletteByIndex(pDest, pDestHeader->mUnknown8);
     memcpy(pDestBlock->mpUnknown8, pSrcBlock->mpUnknown8, pDestBlock->mUnknown4);
-    fn_80239D1C(pDestBlock->mpUnknown8, pDestBlock->mUnknown4);
+    DCStoreRange(pDestBlock->mpUnknown8, pDestBlock->mUnknown4);
 }
 
 /* Applies each entry of pEntries (_PlyrTex_aPartFilters when null) to the texture of

@@ -10,7 +10,7 @@ typedef int (*SysResetCallback_801F8868)(void);
 
 extern void fn_801CE2B8(int a);
 extern void FileAsyncCheckError(void);
-extern void fn_80239ED4(void);
+extern void LCDisable(void);
 extern int GlibGetTvMode(void);
 extern int DateIsYearLeap(int year);
 extern int DateGetNumDaysInYear(int year);
@@ -42,7 +42,7 @@ static void fn_801F7DF4(u32 retraceCount)
 static void fn_801F7E18(void)
 {
     fn_801CE2B8(0);
-    fn_80239ED4();
+    LCDisable();
     PADRecalibrate(0xF0000000);
     PADControlMotor(0, 2);
     PADControlMotor(1, 2);
