@@ -190,9 +190,8 @@ void fn_8007BF60(int id)
 {
     int index = fn_8022F384(fn_8022F4BC());
     int handle = fn_8022F3D4(fn_8022F4BC());
-    DbTableCursor cursor;
+    DbTableCursor cursor(0x4C504947, 0x49544947, 0, 0, handle);
 
-    cursor.OpenTable(0x4C504947, 0x49544947, 0, 0, handle);
     if (cursor.FindColumnValue(0x49544947, id, 0, 0)) {
         int count = cursor.GetColumnValue(0x4C504947);
         int next = count + 1;
@@ -218,9 +217,8 @@ void fn_8007BF60(int id)
         second.Set(6, 0x504952474C504947LL, 2);
         second.mUnknown16.mValue.mInt = count;
         {
-            DbTableCursor rows;
+            DbTableCursor rows(0x50495247, 0x594B5047, keys, &both, 0x54415453);
 
-            rows.OpenTable(0x50495247, 0x594B5047, keys, &both, 0x54415453);
             for (i = 0; i < 2; i++) {
                 oldKeys[i] = rows.GetColumnValue(0x594B5047);
                 fresh[i] = !GearIsLocked(oldKeys[i]);
@@ -233,9 +231,8 @@ void fn_8007BF60(int id)
         second.Set(6, 0x504952474C504947LL, 2);
         second.mUnknown16.mValue.mInt = next;
         {
-            DbTableCursor rows;
+            DbTableCursor rows(0x50495247, 0x594B5047, keys, &both, 0x54415453);
 
-            rows.OpenTable(0x50495247, 0x594B5047, keys, &both, 0x54415453);
             for (i = 0; i < 2; i++) {
                 newKeys[i] = rows.GetColumnValue(0x594B5047);
                 if (fresh[i]) {
@@ -245,9 +242,8 @@ void fn_8007BF60(int id)
             }
         }
         for (i = 0; i < 2; i++) {
-            DbTableCursor rows;
+            DbTableCursor rows(0x52414547, 0x594B5047, 0, 0, 0x54415453);
 
-            rows.OpenTable(0x52414547, 0x594B5047, 0, 0, 0x54415453);
             rows.FindColumnValue(0x594B5047, oldKeys[i], 0, 0);
             types[i] = rows.GetColumnValue(0x49545247);
             oldIds[i] = rows.GetColumnValue(0x44494547);
@@ -311,10 +307,9 @@ int fn_8007C538(int id)
     GearLockOpen(&keys, fn_8022F384(fn_8022F4BC()));
     arg.Set(6, 0x5049524749544947LL, 2, id);
     {
-        DbTableCursor rows;
+        DbTableCursor rows(0x50495247, 0x594B5047, 0, &arg, 0x54415453);
         int more;
 
-        rows.OpenTable(0x50495247, 0x594B5047, 0, &arg, 0x54415453);
         for (more = rows.MoveFirst(); more; more = rows.MoveNext()) {
             if (!GearLockIsLocked(&keys, rows.GetColumnInt(0x594B5047))) {
                 result = 1;
@@ -339,9 +334,8 @@ int fn_8007C690(DbCursor *pCursor, short *pOut)
 
     arg.Set(6, 0x50495247594B5047LL, 2, fn_8007BB24(pCursor));
     {
-        DbTableCursor rows;
+        DbTableCursor rows(0x50495247, 0x594B5047, 0, &arg, 0x54415453);
 
-        rows.OpenTable(0x50495247, 0x594B5047, 0, &arg, 0x54415453);
         if (rows.GetRowCount() > 0 && rows.GetColumnValue(0x49544947) > 0) {
             if (pOut) {
                 for (i = 0; i < 10; i++) {

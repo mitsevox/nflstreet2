@@ -36,6 +36,7 @@ public:
 class DbTableCursor : public DbTableCursorBase {
 public:
     DbTableCursor();
+    DbTableCursor(int a, int b, void *c, void *d, int e);
     void OpenTable(int a, int b, void *c, void *d, int e);
 
     virtual int GetRowCount();
