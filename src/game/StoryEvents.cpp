@@ -630,13 +630,12 @@ void fn_8005E4A8(void)
             break;
         case 1: {
             fn_801485EC(1);
-            StevRow_t *pRow = lbl_803EA5C8;
             // FAKEMATCH: reused local; value holds mPes[2], then mPes[1], then mPes[3]
-            int value = pRow->mPes[2];
+            int value = lbl_803EA5C8->mPes[2];
             lbl_8031BDD4.mUnknown40 = value == 1;
-            value = pRow->mPes[1];
+            value = lbl_803EA5C8->mPes[1];
             if (value < 0) {
-                value = pRow->mPes[3];
+                value = lbl_803EA5C8->mPes[3];
                 if (value < 0) {
                     lbl_8031BDD4.mUnknown32 = 1;
                     lbl_8031BDD4.mUnknown36 = 0;

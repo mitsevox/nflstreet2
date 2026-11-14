@@ -14894,7 +14894,7 @@
           "_vt.23TiburonIAllocator13Impl": "0x802B1150",
           "_vt.10IAllocator": "0x802B1188"
         },
-        "evidence": "evidence.tsv linker row sound.cpp allocator folds: the inline TiburonIAllocator13Impl and IAllocator bodies and the two tables _vt.23TiburonIAllocator13Impl and _vt.10IAllocator are local to this file and to src/engine/sound.cpp; the target keeps this file's copies. SndInit forms the TiburonIAllocator13Impl table address 0x802B1150 (addi r9,r9,0x1150 at 0x801F3A48) and stores it at 0x801F3A50, and the slots of sound.cpp's unreferenced table copies 0x802B1A38-0x802B1AA8 point to this file's bodies. Second kept_locals use, under the owner's ruling of 2026-11-14 on #1338 question (4) (open owner question on #1347)."
+        "evidence": "evidence.tsv linker row sound.cpp allocator folds: the inline TiburonIAllocator13Impl and IAllocator bodies and the two tables _vt.23TiburonIAllocator13Impl and _vt.10IAllocator are local to this file and to src/engine/sound.cpp; the target keeps this file's copies. SndInit forms the TiburonIAllocator13Impl table address 0x802B1150 (addi r9,r9,0x1150 at 0x801F3A48) and stores it at 0x801F3A50, and the slots of sound.cpp's unreferenced table copies 0x802B1A38-0x802B1AA8 point to this file's bodies. Second kept_locals use. The owner's ruling of 2026-11-14 on #1338 question (4) approves folded for sound.cpp's allocator vtable copies; this map and the six body folds go beyond those words (open owner question on #1347)."
       }
     },
     {

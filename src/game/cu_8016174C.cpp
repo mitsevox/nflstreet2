@@ -510,16 +510,15 @@ void fn_80162794(void) {
                 other->mUnknown4.mZ = item->mUnknown4.mZ;
                 if (player == current) {
                     lbl_803EB396 = (unsigned char)item->mUnknown2C;
-                    Object_801618D8 *global = lbl_803EB38C;
-                    global->mUnknown30 = item->mUnknown30;
-                    global->mUnknown20 |= 2;
-                    global->mUnknown4.mX = item->mUnknown4.mX;
-                    global->mUnknown4.mY = item->mUnknown4.mY;
-                    global->mUnknown4.mZ = 0.0f;
-                    if (global->mUnknown20 & 0x10)
-                        global->mUnknown14 = (global->mUnknown14 - 0x16C16) & 0xFFFFFF;
+                    lbl_803EB38C->mUnknown30 = item->mUnknown30;
+                    lbl_803EB38C->mUnknown20 |= 2;
+                    lbl_803EB38C->mUnknown4.mX = item->mUnknown4.mX;
+                    lbl_803EB38C->mUnknown4.mY = item->mUnknown4.mY;
+                    lbl_803EB38C->mUnknown4.mZ = 0.0f;
+                    if (lbl_803EB38C->mUnknown20 & 0x10)
+                        lbl_803EB38C->mUnknown14 = (lbl_803EB38C->mUnknown14 - 0x16C16) & 0xFFFFFF;
                     else
-                        global->mUnknown14 = 0;
+                        lbl_803EB38C->mUnknown14 = 0;
                     fn_80161A88(lbl_803EB390, lbl_803EB38C);
                 }
             } else {
