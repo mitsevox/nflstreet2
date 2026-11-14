@@ -181,15 +181,27 @@ def load_manifest(manifest, sections, compiler_version):
     for directory in manifest.get("include_dirs", []):
         repository_path(directory)
     profiles = manifest.get("profiles", {})
+    versions = {}
     for name, profile in profiles.items():
-        if set(profile) - {"source_root", "compiler", "include_dirs", "language"} != {"flags", "evidence"} \
-                or not profile["evidence"].strip():
+        if set(profile) - {"source_root", "compiler", "compiler_version", "include_dirs", "language"} \
+                != {"flags", "evidence"} or not profile["evidence"].strip():
             raise ValueError(f"Profile {name} needs flags, an evidence locator and optionally source_root")
         if "source_root" in profile:
             source_root(profile["source_root"])
         compiler = profile.get("compiler", "prodg")
         if compiler not in {"prodg", "mwcc"}:
             raise ValueError(f"Profile {name} uses an unsupported compiler")
+        # An SDK profile may select another pinned CodeWarrior version for a whole library; the
+        # versions it may name are listed in tools/compiler-tools.json.
+        if compiler == "mwcc":
+            default, extra = setup_compiler.sdk_versions()
+            versions[name] = profile.get("compiler_version", default)
+            if "compiler_version" in profile and profile["compiler_version"] not in extra:
+                raise ValueError(f"Profile {name} selects an SDK compiler that is not pinned")
+        elif "compiler_version" in profile:
+            raise ValueError(f"Profile {name}: compiler_version applies only to SDK profiles")
+        else:
+            versions[name] = compiler_version
         # "language" sets the front end for every unit of the profile (ProDG -x), for files whose
         # name does not give it, such as a .c file the original build compiled as C++.
         if "language" in profile and (compiler != "prodg" or profile["language"] not in prodg_cc.CPP_LANG):
@@ -292,6 +304,7 @@ def load_manifest(manifest, sections, compiler_version):
                       "flags": language_flags(profiles[unit["profile"]]) + profiles[unit["profile"]]["flags"],
                       "sections": placed,
                       "compiler": profiles[unit["profile"]].get("compiler", "prodg"),
+                      "compiler_version": versions[unit["profile"]],
                       "include_dirs": profiles[unit["profile"]].get("include_dirs", []),
                       "source_root": root, "compile_path": compile_path, "link_roots": roots,
                       "folded": folded, "storage": storage, "kept_locals": kept})
@@ -855,7 +868,8 @@ class CompileCache:
     def key(self, unit, includes, workdir, source, comparison):
         material = {"schema": 1, "tools": self.tools, "links": self.links, "comparison": comparison,
                     "source": unit["source"],
-                    "source_sha256": sha256(unit["path"]), "compiler": unit["compiler"], "flags": unit["flags"],
+                    "source_sha256": sha256(unit["path"]), "compiler": unit["compiler"],
+                    "compiler_version": unit.get("compiler_version"), "flags": unit["flags"],
                     "includes": [Path(d).resolve().relative_to(ROOT.resolve()).as_posix() for d in includes],
                     "workdir": Path(workdir).resolve().relative_to(ROOT.resolve()).as_posix(),
                     "compile_source": str(Path(source).relative_to(ROOT)) if Path(source).is_absolute() else source}
@@ -1116,7 +1130,8 @@ def compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs, compariso
         unit["dependencies"] = dependencies(unit["depfile"], workdir)
         return
     if unit["compiler"] == "mwcc":
-        sdk_cc.compile(sdk_directory, wrapper, source, unit["object"], unit["depfile"],
+        # sdk_directory is setup_compiler.setup_sdks(): one directory per pinned SDK version.
+        sdk_cc.compile(sdk_directory[unit["compiler_version"]], wrapper, source, unit["object"], unit["depfile"],
                        unit["flags"], includes, workdir, comparison=comparison)
     else:
         command = [sys.executable, str(ROOT / "tools/prodg_cc.py"), "--dir", str(compiler),
@@ -1160,7 +1175,7 @@ def build(original, manifest_path, report_path, cache=None):
     objects = {}
     strip_unused = any(unit["link_roots"] is not None for unit in units)
     original_roots = []
-    sdk_directory = setup_compiler.setup_sdk() if any(u["compiler"] == "mwcc" for u in units) else None
+    sdk_directory = setup_compiler.setup_sdks(u["compiler_version"] for u in units if u["compiler"] == "mwcc")
     for index, unit in enumerate(units):
         stem = re.sub(r"[^A-Za-z0-9]+", "_", unit["source"]).strip("_")
         unit["object"] = BUILD / "obj" / f"unit{index:03d}_{stem}.o"
@@ -1353,11 +1368,15 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
     totals = {kind: {"linked": 0, "matched": 0} for kind in ("code", "data")}
     measured = []
     lock = json.loads((ROOT / "tools/compiler-tools.json").read_text())
-    compilers = {}
+    compilers, profile_compilers = {}, {}
     for unit in units:
         family = unit["compiler"]
-        version = lock["sdk_compiler_version"] if family == "mwcc" else lock["compiler_version"]
-        compilers[family] = version
+        pinned = lock["sdk_compiler_version"] if family == "mwcc" else lock["compiler_version"]
+        # A unit's own version is its profile's (an SDK profile may select another pinned one).
+        version = unit.get("compiler_version") or pinned
+        compilers[family] = pinned
+        if version != pinned:
+            profile_compilers[unit["profile"]] = version
         entries = []
         for entry in unit["sections"]:
             size = entry["end"] - entry["start"]
@@ -1397,6 +1416,7 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
     return {"schema": 1, "target": "GN7E69-rev0", "target_sha1": target["sha1"],
             "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
             "compilers": dict(sorted(compilers.items())),
+            "profile_compilers": dict(sorted(profile_compilers.items())),
             "linker": "ngcld (ProDG) via wibo", "complete": "identical" if identical else "mismatch",
             "output_sha1": hashlib.sha1(result).hexdigest(),
             "tools": {path: sha256(ROOT / path) if (ROOT / path).is_file() else None
