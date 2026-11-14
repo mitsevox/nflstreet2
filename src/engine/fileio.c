@@ -31,14 +31,14 @@ static FilevDeviceList_t _File_DefaultvDeviceList = { { &_File_DefaultvDevicePat
 static FilevDeviceList_t *_File_CurrentvDeviceList = &_File_DefaultvDeviceList;
 int File_uMemFlags = 0;
 
-extern void *File_pFileRequestList;
-extern void *File_pAsyncRequestList;
-extern unsigned char File_AsyncFileCopy;
-extern Lock_801F8014 File_RequestListCS;
-extern Lock_801F8014 File_AsyncRequestListCS;
-extern FileInitParms_t File_InitParms;
-extern unsigned char File_AsyncThreadActive[9];
-extern Lock_801F8014 File_AsyncThreadActiveCS;
+void *File_pFileRequestList;
+void *File_pAsyncRequestList;
+unsigned char File_AsyncFileCopy;
+Lock_801F8014 File_RequestListCS;
+Lock_801F8014 File_AsyncRequestListCS;
+FileInitParms_t File_InitParms;
+unsigned char File_AsyncThreadActive[9];
+Lock_801F8014 File_AsyncThreadActiveCS;
 
 void fn_801F81AC(void);
 int MemFill(void *pDest, int size, int value, int width);
