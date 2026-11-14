@@ -65,7 +65,7 @@ void fn_801BA03C(AnimHeader_t *pList, Record_800D81C8 *pChannels, float time, vo
             if (pChannels[i].mUnknown48 < 0.0f) {
                 pChannels[i].mUnknown48 = 0.0f;
                 active = pChannels[i].mUnknown30.mUnknown8;
-                fn_801BF46C(&pChannels[i].mUnknown30, time);
+                AnimWgtProcess(&pChannels[i].mUnknown30, time);
                 if (pChannels[i].mUnknown30.mUnknown0 < 1e-7f && active != 0)
                     pChannels[i].mUnknown1 = 1;
                 if (pChannels[i].mUnknown1 != 0 && fn_801BA650(&pChannels[i], time, pUser) == 1)
