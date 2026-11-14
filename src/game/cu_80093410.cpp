@@ -1,5 +1,5 @@
 #include "game/cu_8008E978.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/Frame_800DF7CC.h"
 
 extern "C" {
@@ -84,10 +84,10 @@ extern "C" void fn_80093410(int handle)
         fn_800921E8(handle, 0);
         if (pCharacter->mUnknownD8.mWord & 0x80000000) {
             fn_801BB948(pCharacter->mUnknownD8.mParts[1]);
-            fn_801C1F94(&lbl_803EC924->mUnknown80.mCharacters[handle], 0, sizeof(Character_80093BCC));
+            memset(&lbl_803EC924->mUnknown80.mCharacters[handle], 0, sizeof(Character_80093BCC));
             lbl_803EC924->mUnknown80.mCharacters[handle].mUnknown0 = -1;
         } else if (--lbl_8030C164[pCharacter->mUnknownD8.mWord].mUnknown4 == 0) {
-            fn_801C1F94(&lbl_803EC924->mUnknown80.mCharacters[handle], 0, sizeof(Character_80093BCC));
+            memset(&lbl_803EC924->mUnknown80.mCharacters[handle], 0, sizeof(Character_80093BCC));
             lbl_803EC924->mUnknown80.mCharacters[handle].mUnknown0 = -1;
         } else {
             (lbl_803EC924->mUnknown80.mCharacters + handle)->mUnknown38C = 0;

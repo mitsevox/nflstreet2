@@ -13,7 +13,6 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/DbCursor.h"
 #include "game/PlayBookDb.h"
-#include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/fn_800B65A0.h"
@@ -1790,7 +1789,7 @@ void PlayTrackInit(void)
     // FAKEMATCH: never-set flag; keeps the PNIG/STPG query strings in .rodata (owner-accepted 2026-11-14)
     int resume = 0;
     void *pHandle = fn_80238174(0, (void **)&_PlayTrack_pData, sizeof(PlayTrack_t), 0, 0x7074726B);
-    fn_801C1F94(fn_8023816C(), 0, sizeof(PlayTrack_t));
+    memset(fn_8023816C(), 0, sizeof(PlayTrack_t));
     if (resume) {
         int found;
 
@@ -1827,7 +1826,7 @@ void PlayTrackPushPlay(int team, int value)
 
     for (unsigned char i = 23; i != 0; i--)
         pEntries[i] = pEntries[i - 1];
-    fn_801C1F94(pEntries, 0, sizeof(PlayTrackEntry_t));
+    memset(pEntries, 0, sizeof(PlayTrackEntry_t));
     pEntries[0].mUnknown0 = value;
     pEntries[0].mUnknownC = -1;
 
@@ -2137,7 +2136,7 @@ void PlayTrackGetOffenseTendency(unsigned char *pOut)
 
 void PlayTrackReset(void)
 {
-    fn_801C1F94(_PlayTrack_pData, 0, sizeof(PlayTrack_t));
+    memset(_PlayTrack_pData, 0, sizeof(PlayTrack_t));
 }
 
 void PlayTrackRegister(void)
@@ -2400,7 +2399,7 @@ void PlayBookBuildRoute(unsigned char *pScript, PlayRoute_t *pRoute, int toArt)
 {
     unsigned char more;
 
-    fn_801C1F94(pRoute, 0, sizeof(PlayRoute_t));
+    memset(pRoute, 0, sizeof(PlayRoute_t));
     pRoute->mCur.mY = pRoute->mCur.mX = 0.0f;
     do {
         PlayRouteCmd_t cmd = *(PlayRouteCmd_t *)pScript;

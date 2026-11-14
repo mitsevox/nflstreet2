@@ -2,7 +2,7 @@
    the 53 morph target weights. */
 #include "game/FaceFeatures.h"
 #include "game/FMCAPPORT.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 struct FaceMorphWeight_t {
     int mIndex;
@@ -179,7 +179,7 @@ void FaceMorphApplyBodyType(int type, float *pValues) {
 void FaceMorphBuildWeights(FaceFeatures_t *pBlock, FMCAPPORTValues *pValues) {
     int i;
 
-    fn_801C1F94(pValues, 0, sizeof(FMCAPPORTValues));
+    memset(pValues, 0, sizeof(FMCAPPORTValues));
     for (i = 0; i < 10; i++) {
         if (i == 3) {
             FaceMorphApplyHeadType(pBlock->mUnknown0[3], pValues->mValues);

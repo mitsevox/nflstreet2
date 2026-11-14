@@ -12,7 +12,7 @@
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "game/fn_8022781C.h"
@@ -465,7 +465,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
             Object_80039F5C *pOther = fn_800FB9D4(p);
 
             if (pOther != 0) {
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 24;
                 message.mUnknown1[0] = 2;
                 fn_800F053C(0, pOther->mpState, &message, pOther);
@@ -477,7 +477,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
         flag = 0;
     }
     if (BallStateGet(pBall, 0) != 4) {
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         if (BallGetHolder(pBall) == p) {
             message.mId = 1;
             fn_800F053C(0, p->mpState, &message, p);
@@ -673,7 +673,7 @@ extern "C" int fn_80112928(Object_80039F5C *p)
             }
         }
         if (fn_80237260(0) <= chance) {
-            fn_801C1F94(&message, 0, sizeof(message));
+            memset(&message, 0, sizeof(message));
             message.mId = 23;
             message.mUnknown1[0] = BallGetIndex(pBall);
             fn_800F053C(0, p->mpState, &message, p);
@@ -836,12 +836,12 @@ extern "C" int fn_8011380C(Object_80039F5C *p)
         PlyrCollideRemoveExempt(p, fn_8009BCE8(&state->mRef));
         state->mUnknown21 = 1;
         if ((unsigned int)state->mUnknown4 <= 10) {
-            fn_801C1F94(&message, 0, sizeof(message));
+            memset(&message, 0, sizeof(message));
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
             fn_800F05E4(0, p->mpState, &message, p);
         } else {
-            fn_801C1F94(&message, 0, sizeof(message));
+            memset(&message, 0, sizeof(message));
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
             fn_800F05E4(0, p->mpState, &message, p);
@@ -1127,12 +1127,12 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
         PlyrCollideRemoveExempt(p, fn_8009BCE8(&state->mRef));
         state->mUnknown31 = 1;
         if (state->mUnknown20 <= 10) {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
             fn_800F05E4(0, p->mpState, &message, p);
         } else {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
             fn_800F05E4(0, p->mpState, &message, p);

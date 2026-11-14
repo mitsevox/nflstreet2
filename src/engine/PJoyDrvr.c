@@ -14,8 +14,8 @@ typedef struct JoyData_801E1D44 {
 extern int lbl_8039ADE4[4];
 extern char lbl_803E92CC[0x30];
 
-void *fn_801C1F94();
-void *fn_801C1FBC();
+void *memset();
+void *memcpy();
 int MemFill(void *p, unsigned int size, int value, int flags);
 int fn_8025D574(unsigned int port);
 void *PerSystemGetLLDriverData(unsigned int port);
@@ -38,7 +38,7 @@ int fn_801E1D44(PerDevice_t *pDevice, unsigned char *pPort)
     status = fn_8025D574(port);
     if (status != 8 && status != 0x80 && status != 0x40) {
         pJoy = PerSystemGetLLDriverData(port);
-        fn_801C1F94(pJoy, 0, sizeof(JoyData_801E1D44));
+        memset(pJoy, 0, sizeof(JoyData_801E1D44));
         pJoy->mPort = port;
         pJoy->mUnknown02 = 0;
         pJoy->mUnknown04 = 0;
@@ -73,7 +73,7 @@ int fn_801E25DC(PerDevice_t *pDevice, void *pBuffer)
         MemFill(pDevice->mpData, PerSizeofPerDataT(), 0, 4);
     } else {
         result = 1;
-        fn_801C1FBC(pBuffer, pDevice->mpData, PerSizeofPerDataT());
+        memcpy(pBuffer, pDevice->mpData, PerSizeofPerDataT());
     }
     return result;
 }

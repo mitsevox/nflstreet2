@@ -16,7 +16,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802372EC.h"
 #include "game/PlayAlign.h"
 #include "game/PlaySet.h"
@@ -166,8 +166,8 @@ extern "C" void fn_8016DBE4(Object_80039F5C *p)
     Message_800F01CC message;
     Message_800F01CC ballMessage;
 
-    fn_801C1F94(&message, 0, 4);
-    fn_801C1F94(&ballMessage, 0, 4);
+    memset(&message, 0, 4);
+    memset(&ballMessage, 0, 4);
     message.mId = p->mIdBytes[2] == fn_80178308() ? 13 : 14;
     p->mFlags &= ~0x40000;
     ballMessage.mId = 49;
@@ -268,20 +268,20 @@ extern "C" void fn_8016DF34(Object_80039F5C *p)
             if ((p->mId >> 16 & 0xFF) == 0) {
                 Message_800F01CC message;
 
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 70;
                 fn_800F03D8(0, p->mpState, &message, p);
             } else {
                 Message_800F01CC message;
 
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 69;
                 fn_800F03D8(0, p->mpState, &message, p);
             }
         } else {
             Message_800F01CC message;
 
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 42;
             fn_800F03D8(0, p->mpState, &message, p);
         }
@@ -348,20 +348,20 @@ extern "C" void fn_8016E15C(void)
         BallGiveToPlayer(pBall, pCarrier);
         pPasser = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
         if (pCarrier->mMotion.mPos.mY - pPasser->mMotion.mPos.mY < 2.5f) {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 26;
             message.mUnknown1[0] = pPasser->mIdBytes[1];
             message.mUnknown1[1] = 14;
             message.mUnknown1[2] = 0;
             fn_800F00D4(0, pCarrier->mpState, &message, pCarrier);
         } else {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 25;
             message.mUnknown1[0] = pPasser->mIdBytes[1];
             message.mUnknown1[1] = 8;
             fn_800F00D4(0, pCarrier->mpState, &message, pCarrier);
         }
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 56;
         message.mUnknown1[0] = fn_8016E154(pCarrier);
         fn_800F00D4(0, pPasser->mpState, &message, pPasser);
@@ -385,7 +385,7 @@ extern "C" void fn_8016E15C(void)
                     } else {
                         delay += 0.025f;
                     }
-                    fn_801C1F94(&message, 0, 4);
+                    memset(&message, 0, 4);
                     message.mId = 51;
                     message.mUnknown1[0] = (int)(delay * 32.0f);
                     fn_800F00D4(0, p->mpState, &message, p);

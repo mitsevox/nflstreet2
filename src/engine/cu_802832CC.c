@@ -10,7 +10,7 @@ extern int FileClose(int handle);
 extern int FileSeek(int handle, int offset, unsigned int whence);
 extern int FileReadCallback(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
 extern int FilePerformWrite(int handle, int pos, void *pBuffer, int size);
-void *fn_801C1F94();
+void *memset();
 
 typedef struct Node_803B795C
 {
@@ -1084,7 +1084,7 @@ void fn_802856D8(void)
 
     GBAInit();
     for (i = 0; i < 4; i++)
-        fn_801C1F94(&lbl_803E990C[i], 0, sizeof(Struct_803E990C));
+        memset(&lbl_803E990C[i], 0, sizeof(Struct_803E990C));
 }
 
 int fn_8028572C(int channel)

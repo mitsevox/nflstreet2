@@ -3,7 +3,7 @@
    front-end draw callback; the PlayArtMem module loads and frees their textures. */
 
 #include "game/PlayArtState.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/PlayBookTeam.h"
 #include "game/fn_800B65A0.h"
 
@@ -79,7 +79,7 @@ void PlayArtBuild(void *p, PlayArtPlay_t *object, int, int, int, int group, int 
         unsigned char value = PlayBookGetTeam((unsigned char)group)->mUnknown20.mUnknown10;
         fn_80166BE8(object, state, record, group, i, value);
         state->mUnknown2134[i] = record->mUnknown10;
-        fn_801C1F94(state->mUnknown19F0[i], 0, 0x30);
+        memset(state->mUnknown19F0[i], 0, 0x30);
         int size = fn_8016631C(record, remaining, state->mUnknown0 + used * 8,
             state->mUnknown970[i], state->mUnknown19F0[i], state->mUnknown1E10[i], flag);
         used += size;
@@ -125,15 +125,15 @@ void PlayArtDraw(int code, float x, float y, float, float)
 
 void PlayArtStart(void)
 {
-    fn_801C1F94(_PlayArt_aFlip[0], PlayBookGetTeam(0)->mUnknown20.mUnknown10, 9);
-    fn_801C1F94(_PlayArt_aFlip[1], PlayBookGetTeam(1)->mUnknown20.mUnknown10, 9);
-    fn_801C1F94(_PlayArt_aFlip[2], 0, 9);
+    memset(_PlayArt_aFlip[0], PlayBookGetTeam(0)->mUnknown20.mUnknown10, 9);
+    memset(_PlayArt_aFlip[1], PlayBookGetTeam(1)->mUnknown20.mUnknown10, 9);
+    memset(_PlayArt_aFlip[2], 0, 9);
     UISViewObjSetDrawFunc(PlayArtDraw);
 }
 void PlayArtSetFlip(signed char group, int value, int index)
 {
     if (index == -1) {
-        fn_801C1F94(_PlayArt_aFlip[group], value, 9);
+        memset(_PlayArt_aFlip[group], value, 9);
     } else {
         _PlayArt_aFlip[group][index] = value;
     }
@@ -155,11 +155,11 @@ void PlayArtMemShutdown(void)
 }
 void PlayArtResetAll(void)
 {
-    fn_801C1F94(_PlayArt_aPlayers, 0, sizeof(_PlayArt_aPlayers));
-    fn_801C1F94(_PlayArt_aStates, 0, sizeof(_PlayArt_aStates));
+    memset(_PlayArt_aPlayers, 0, sizeof(_PlayArt_aPlayers));
+    memset(_PlayArt_aStates, 0, sizeof(_PlayArt_aStates));
 }
 void PlayArtResetTeam(int group)
 {
-    fn_801C1F94(_PlayArt_aStates[group], 0, sizeof(_PlayArt_aStates[group]));
+    memset(_PlayArt_aStates[group], 0, sizeof(_PlayArt_aStates[group]));
 }
 }

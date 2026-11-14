@@ -19,7 +19,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801C0E04	0x801C10E0	llanimtexlib.c	8	8	8	8	0	-	-
 0x801C1D54	0x801C1F54	auxram.c	5	4	4	4	0	-	-
 0x801C1F54	0x801C1F94	ctype.c	2	2	2	2	0	-	-
-0x801C1F94	0x801C20A0	memory.c	4	4	4	0	4	-	printf.c
+0x801C1F94	0x801C20A0	memory.c	4	4	4	4	0	-	printf.c
 0x801C2EB4	0x801C32CC	string.c	13	11	11	11	0	-	-
 0x801C33E8	0x801C3A44	camera.c	16	14	15	14	0	-	-
 0x801C3A44	0x801C3CE8	camfocus.c	8	8	8	8	0	-	-

@@ -11,7 +11,7 @@
 #include "game/Ball.h"
 #include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_8022781C.h"
 #include "game/fn_80178D18.h"
 
@@ -263,7 +263,7 @@ extern "C" int OptionRunThrow(Object_80039F5C *p, int kind, int arg)
 
             result = 1;
             PlayerMoveBegin(pCurrent, arg, 25);
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 25;
             message.mUnknown1[0] = pTarget->mIdBytes[1];
             message.mUnknown1[1] = kind;
@@ -325,7 +325,7 @@ extern "C" void OptionRunEnd(Object_80039F5C *p, int a, int b)
 {
     Message_800F01CC message;
 
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 1;
     fn_800F053C(0, p->mpState, &message, p);
 }
@@ -336,7 +336,7 @@ extern "C" void OptionRunGiveUp(Object_80039F5C *p)
 
     fn_8011E1BC(p, 0, 0, 1);
     fn_8011E3EC(p, 2);
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 33;
     message.mUnknown1[0] = 0;
     fn_800F053C(0, p->mpState, &message, p);

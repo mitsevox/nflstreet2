@@ -14,7 +14,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Ball.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
@@ -390,7 +390,7 @@ extern "C" void LooseBallBroadcast(int id) {
         for (int i = 0; i < count; i++) {
             pOther = PlyrGet(team, (unsigned char)i);
             fn_802276B4(&delta, &pos, &pOther->mMotion.mPos);
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 57;
             message.mUnknown1[0] = id;
             int value = fn_8009F0B8(pOther, 0x3C71C7) ? _LooseBall_iPriorityFacing : _LooseBall_iPriorityBase;
@@ -514,7 +514,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
             if (kind == 5 && LooseBallFindAnim(p, state, pBall, 3, 0))
                 state->mUnknown40 = LooseBallStartAnim(p, 0, 0, 0);
             if (state->mUnknown40 == 0xFFFF) {
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 11;
                 message.mUnknown1[0] = p->mUnknown9[0];
                 fn_800F00D4(0, p->mpState, &message, p);
@@ -540,7 +540,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
     }
     if (p->mFlags & 0x800) {
         if (p->mUnknown9[0] != 1 && p->mUnknown9[0] != 8) {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
             fn_800F00D4(0, p->mpState, &message, p);
@@ -606,30 +606,30 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
                 if (pHolder != p) {
                     if (fn_801486A0()) {
                     if (pHolder->mIdBytes[2] == p->mIdBytes[2]) {
-                        fn_801C1F94(&message, 0, 4);
+                        memset(&message, 0, 4);
                         message.mId = 33;
                         fn_800F053C(0, p->mpState, &message, p);
                     } else {
-                        fn_801C1F94(&message, 0, 4);
+                        memset(&message, 0, 4);
                         message.mId = 2;
                         fn_800F053C(0, p->mpState, &message, p);
                     }
                     } else {
-                        fn_801C1F94(&message, 0, 4);
+                        memset(&message, 0, 4);
                         message.mId = 97;
                         fn_800F053C(0, p->mpState, &message, p);
                     }
                 } else {
-                    fn_801C1F94(&message, 0, 4);
+                    memset(&message, 0, 4);
                     message.mId = 1;
                     fn_800F053C(0, p->mpState, &message, p);
                 }
             } else if (fn_801486A0()) {
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 2;
                 fn_800F053C(0, p->mpState, &message, p);
             } else {
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 97;
                 fn_800F053C(0, p->mpState, &message, p);
             }

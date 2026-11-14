@@ -27,7 +27,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
@@ -1363,7 +1363,7 @@ extern "C" int fn_800F24D8(Object_80039F5C *p) {
                 Message_800F01CC message;
 
                 p->mFlags &= ~0x80000;
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 11;
                 message.mUnknown1[0] = p->mUnknown9[0];
                 fn_800F05E4(0, p->mpState, &message, p);

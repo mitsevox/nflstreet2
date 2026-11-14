@@ -46,7 +46,7 @@ void ResStreamHoldBuffer(int loader, void *pData);
 void ResStreamReleaseBuffer(int loader, void *pData);
 void ResStreamReleaseAllBuffers(int loader);
 void ResStreamClose(int loader);
-void fn_801C1FBC(void *pDest, void *pSrc, unsigned int size);
+void memcpy(void *pDest, void *pSrc, unsigned int size);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 char *strchr(const char *pString, int c);
 int FileSetMemAllocFlags(int value);
@@ -379,7 +379,7 @@ void PlaTexCacheLoadDefaults(void)
 
         ResCopyToBuffer(_PlaTexCache_pArchive, id, pDest);
         for (player = 1; player < _PlaTexCache_uPlayerCount; player++) {
-            fn_801C1FBC(_PlaTexCache_apTextures[player][i], pDest, size);
+            memcpy(_PlaTexCache_apTextures[player][i], pDest, size);
         }
         for (player = 0; player < _PlaTexCache_uPlayerCount; player++) {
             TexMipmapRelocate(_PlaTexCache_apTextures[player][i]);

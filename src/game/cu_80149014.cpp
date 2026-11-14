@@ -3,7 +3,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/fn_801FCE10.h"
 #include "game/GameModeType.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include <string.h>
 
 struct TextChoices_802DDC20 {
@@ -58,8 +58,8 @@ void fn_80149040(Object_80039F5C *p)
 
 void fn_80149154(Class_80148A58 *p, const int *pKinds)
 {
-    fn_801C1F94(lbl_8031BE04,0,168);
-    fn_801C1F94(lbl_8031BEAC,0,54);
+    memset(lbl_8031BE04,0,168);
+    memset(lbl_8031BEAC,0,54);
     fn_800C8704(&lbl_803ECA24[0],&lbl_803ECA24[1]);
     for(unsigned char k=0;pKinds[k]!=0;k++) {
         for(unsigned char i=0;i<14;i++) {
@@ -78,8 +78,8 @@ void fn_80149154(Class_80148A58 *p, const int *pKinds)
 
 void fn_801492C4(Class_80148A58 *p,const int *pKinds)
 {
-    fn_801C1F94(lbl_8031BE04,0,168);
-    fn_801C1F94(lbl_8031BEAC,0,54);
+    memset(lbl_8031BE04,0,168);
+    memset(lbl_8031BEAC,0,54);
     fn_800C8704(&lbl_803ECA24[0],&lbl_803ECA24[1]);
     for(unsigned char k=0;pKinds[k]!=0;k++) {
         for(unsigned char team=0;team<2;team++) {

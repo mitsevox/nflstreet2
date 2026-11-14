@@ -11,7 +11,7 @@
 #include "game/BigObj.h"
 #include "game/BigObjInst.h"
 #include "game/BigObjNode.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
 #include "game/Record_8011F4F8.h"
@@ -316,7 +316,7 @@ void HotspotQueuePlay(HotspotPlay_t *pPlay)
 void HotspotInitQueue(void)
 {
     for (int i = 0; i <= 14; i++) {
-        fn_801C1F94(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
+        memset(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
     }
     _Hotspot_iPendingNext = 0;
 }
@@ -324,7 +324,7 @@ void HotspotInitQueue(void)
 void HotspotClearQueue(void)
 {
     for (int i = 0; i <= 14; i++) {
-        fn_801C1F94(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
+        memset(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
     }
     _Hotspot_iPendingNext = 0;
 }
@@ -465,11 +465,11 @@ void HotspotResolvePending(Object_80039F5C *pPlayer)
                 if (_PlayerRefTeam(_Hotspot_aPending[i].mRef) == pPlayer->mIdBytes[2]) {
                     HotspotCapture(&_Hotspot_aPending[i]);
                 }
-                fn_801C1F94(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
+                memset(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
             }
             if (_Hotspot_aPending[i].mKind == 4 && fn_8009BCE8(&_Hotspot_aPending[i].mRef) == pPlayer) {
                 HotspotCapture(&_Hotspot_aPending[i]);
-                fn_801C1F94(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
+                memset(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
             }
         }
     }

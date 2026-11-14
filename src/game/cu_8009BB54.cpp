@@ -1,5 +1,5 @@
 #include "game/Table_80089904.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "engine/llquat.h"
 #include "game/fn_801BA2A8.h"
 #include "game/Item_80097440.h"
@@ -44,7 +44,7 @@ extern "C" float fn_8009BB54(int index)
 
 extern "C" void fn_8009BC38(Object_80039F5C *p, Block_80170E64 *pBlock)
 {
-    fn_801C1F94(p, 0, 0x408);
+    memset(p, 0, 0x408);
     fn_800B267C(&p->mMotion);
     p->mUnknown768 = 1.0f;
     p->mpUnknown4 = pBlock;

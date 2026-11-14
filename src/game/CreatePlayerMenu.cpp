@@ -14,7 +14,7 @@
 #include "game/PlayerLook.h"
 #include "game/FEPlyrLoad.h"
 #include "game/EditMenu.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include <string.h>
 #include "game/fn_801FCE10.h"
 
@@ -708,8 +708,8 @@ static void _CreatePlayerQueuePortrait(int id)
     PlaTexCacheGetHairTexture(value6E, &unknown52, &unknown56);
     unknown8 = PlaTexCacheGetCapFaceId(value72 + 1);
     unknown12 = value73 * 3 + value74 + 0x33BA;
-    fn_801C1F94(&text60, 0, sizeof(text60));
-    fn_801C1F94(&text20, 0, sizeof(text20));
+    memset(&text60, 0, sizeof(text60));
+    memset(&text20, 0, sizeof(text20));
     text60.mChars[18] = color18 + 0x80;
     text20.mChars[19] = color19 + 0x80;
     gFMCAPPORT.SetEntry(entryId, 0xFFFF, unknown8, unknown12, 0xA7, &text20, ids[0], unknown52, unknown56, &text60,

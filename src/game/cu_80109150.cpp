@@ -26,7 +26,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
@@ -75,7 +75,7 @@ void fn_80106A60(Object_80039F5C *p);
 extern "C" int fn_80109150(Object_80039F5C *p) {
     Block_80109150 *pBlock = (Block_80109150 *)&p->mUnknown336;
 
-    fn_801C1F94(pBlock, 0, 88);
+    memset(pBlock, 0, 88);
     pBlock->mUnknown51 = pBlock->mUnknown49 = p->mpState->mUnknown1;
     pBlock->mUnknown58 = 0;
     pBlock->mUnknown50 = 4;

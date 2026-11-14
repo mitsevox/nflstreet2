@@ -7,7 +7,7 @@
 #include "game/DepthChart.h"
 #include "game/AutoDepth.h"
 #include "game/DepthChartSide.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 extern "C" {
 int PlayerDbGetId(Object_8008044C *pObject);
@@ -274,8 +274,8 @@ void DepthChartLoad(int reset)
                 *p = 7;
                 p++;
             } while (p <= &_DepthChart_aPending[1]);
-            fn_801C1F94(_DepthChart_aWorking, 0, sizeof(_DepthChart_aWorking));
-            fn_801C1F94(_DepthChart_aCommitted, 0, sizeof(_DepthChart_aCommitted));
+            memset(_DepthChart_aWorking, 0, sizeof(_DepthChart_aWorking));
+            memset(_DepthChart_aCommitted, 0, sizeof(_DepthChart_aCommitted));
         }
     } else {
         fn_8008040C(&_DepthChart_sPlayerCursor, 0);

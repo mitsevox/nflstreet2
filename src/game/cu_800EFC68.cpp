@@ -31,7 +31,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
@@ -1362,7 +1362,7 @@ extern "C" int fn_800F62A4(Object_80039F5C *p) {
     Message_800F01CC message;
 
     if (fn_800F5AD4(p)) {
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         if (fn_8011F1CC() && !fn_801783AC(0)) {
             message.mId = 31;
         } else {
@@ -1371,7 +1371,7 @@ extern "C" int fn_800F62A4(Object_80039F5C *p) {
         fn_800F053C(0, p->mpState, &message, p);
         return 0;
     } else {
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 47;
         message.mUnknown1[1] = p->mpState->mUnknown2;
         message.mUnknown1[0] = p->mpState->mUnknown1;
@@ -2389,19 +2389,19 @@ extern "C" int fn_800FCC24(Object_80039F5C *p) {
     }
     if (result == 1) {
         if (MathAngleDiff(p->mMotion.mFacing, pBlock->mUnknown20) > 0x200000) {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 6;
             message.mUnknown1[0] = pBlock->mUnknown20 >> 16;
             message.mUnknown1[1] = 1;
             fn_800F03D8(0, p->mpState, &message, p);
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 9;
             message.mUnknown1[0] = pBlock->mUnknown33;
             message.mUnknown1[1] = 0;
             message.mUnknown1[2] = 255;
             fn_800F03D8(0, p->mpState, &message, p);
         } else {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 87;
             message.mUnknown1[0] = pBlock->mUnknown33;
             message.mUnknown1[1] = pBlock->mUnknown20 >> 16;
@@ -2729,7 +2729,7 @@ extern "C" int fn_800FFE30(Object_80039F5C *p)
     }
     if (pOther != 0) {
         if (p == pOther) {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 1;
             fn_800F053C(0, p->mpState, &message, p);
             return 1;
@@ -2903,7 +2903,7 @@ extern "C" void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d)
 
     p->mUnknown512.mUnknown14 = 0;
     PlayerMoveBegin(p, d, 15);
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 15;
     message.mUnknown1[0] = kind;
     message.mUnknown1[1] = b;
@@ -2932,7 +2932,7 @@ extern "C" void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d)
         StyleTrackerSetStylePassPending(PlayerMoveGetKind(p));
         CamGameSetModeAll(3);
         fn_800F053C(0, p->mpState, &message, p);
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 33;
         fn_800F01CC(0, p->mpState, &message, p);
         break;
@@ -3203,7 +3203,7 @@ extern "C" int fn_8010A254(Object_80039F5C *p, int kind) {
 
     if (BallFindHeldBy(p) == 0 && (kind == 5 || kind == 9)) {
         result = 1;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 62;
         message.mUnknown1[0] = 9;
         message.mUnknown1[2] = kind;
@@ -3458,14 +3458,14 @@ extern "C" void fn_8010BE54(Object_80039F5C *p)
 {
     Message_800F01CC message;
 
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 93;
     PlyrSetPendingMsg(p, &message, 0);
 }
 
 extern "C" void fn_8010BEA4(void)
 {
-    fn_801C1F94(lbl_802DABBC, 0, 100);
+    memset(lbl_802DABBC, 0, 100);
 }
 
 extern "C" int fn_8010BED4(Object_80039F5C *p)
@@ -3896,7 +3896,7 @@ extern "C" int fn_80110824(Object_80039F5C *p, int a, int b, int c)
         }
         result = 1;
         PlayerMoveBegin(p, c, 35);
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 35;
         message.mUnknown1[0] = a;
         message.mUnknown1[1] = b;
@@ -4002,7 +4002,7 @@ extern "C" int fn_80111090(Object_80039F5C *p, int a)
 
     if (fn_80110FE4(p)) {
         result = 1;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 43;
         message.mUnknown1[0] = a;
         fn_800F00D4(0, p->mpState, &message, p);
@@ -4325,7 +4325,7 @@ extern "C" int fn_801133FC(Object_80039F5C *p, int a, int b)
     if (fn_80113088(p) != 0) {
         Message_800F01CC message;
         result = 1;
-        fn_801C1F94(&message, 0, sizeof(message));
+        memset(&message, 0, sizeof(message));
         message.mId = 88;
         message.mUnknown1[0] = a;
         message.mUnknown1[1] = b;
@@ -5242,7 +5242,7 @@ void fn_8011DF90(void)
     unsigned char side;
     int team;
 
-    fn_801C1F94(lbl_803EB028->mUnknown4, 0, sizeof(lbl_803EB028->mUnknown4));
+    memset(lbl_803EB028->mUnknown4, 0, sizeof(lbl_803EB028->mUnknown4));
     lbl_803EB028->mUnknown84 = 0;
     lbl_803EB028->mUnknown90 = 0;
     fn_8011E938(0);
@@ -5254,7 +5254,7 @@ void fn_8011DF90(void)
         for (i = 0; i < count; i++) {
             Object_80039F5C *p = PlyrGet(team, i);
 
-            fn_801C1F94(&p->mBlock1032, 0, sizeof(p->mBlock1032));
+            memset(&p->mBlock1032, 0, sizeof(p->mBlock1032));
             fn_8011DBC8(p, &p->mUnknown1072);
             p->mUnknown1139 = 5;
             p->mUnknown1138 = 0;
@@ -5697,13 +5697,13 @@ void fn_8011F5CC(Lookup_8012078C *pLookup)
     short count = pLookup->mUnknown16;
 
     pLookup->mpUnknown0 = (unsigned char *)fn_801D2B7C(count, 0, 0);
-    fn_801C1F94(pLookup->mpUnknown0, 0, count);
+    memset(pLookup->mpUnknown0, 0, count);
     pLookup->mpUnknown4 = (unsigned char *)fn_801D2B7C(count, 0, 0);
-    fn_801C1F94(pLookup->mpUnknown4, 0, count);
+    memset(pLookup->mpUnknown4, 0, count);
     pLookup->mpUnknown8 = (Entry_8011FBE0 *)fn_801D2B7C(pLookup->mUnknown16 * sizeof(Entry_8011FBE0), 0, 0);
-    fn_801C1F94(pLookup->mpUnknown8, 0, pLookup->mUnknown16 * sizeof(Entry_8011FBE0));
+    memset(pLookup->mpUnknown8, 0, pLookup->mUnknown16 * sizeof(Entry_8011FBE0));
     pLookup->mpUnknown12 = (int *)fn_801D2B7C(pLookup->mUnknown16 * sizeof(int), 0, 0);
-    fn_801C1F94(pLookup->mpUnknown12, 0, pLookup->mUnknown16 * sizeof(int));
+    memset(pLookup->mpUnknown12, 0, pLookup->mUnknown16 * sizeof(int));
 }
 
 int fn_8011F698(void *p, int value)
@@ -6176,7 +6176,7 @@ int fn_80125510(Object_80039F5C *p, Message_800F01CC *pIn)
         Message_800F01CC message;
 
         result = 1;
-        fn_801C1F94(&message, 0, sizeof(message));
+        memset(&message, 0, sizeof(message));
         message.mId = 96;
         message.mUnknown1[0] = value;
         fn_800F00D4(0, p->mpState, &message, p);
@@ -6186,7 +6186,7 @@ int fn_80125510(Object_80039F5C *p, Message_800F01CC *pIn)
 
 int fn_80125DF0(Object_80039F5C *p)
 {
-    fn_801C1F94(&p->mUnknown336, 0, 12);
+    memset(&p->mUnknown336, 0, 12);
     return 0;
 }
 

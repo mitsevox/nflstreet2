@@ -24,7 +24,7 @@
 #include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_801BA2A8.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_802270D4.h"
@@ -363,7 +363,7 @@ void fn_8004A908(BigObjInst *pObject, int index)
         int size = count * 64;
 
         pPlaced->mUnknown228 = fn_801D2B7C(size, 0, 0);
-        fn_801C1F94(pPlaced->mUnknown228, 0, size);
+        memset(pPlaced->mUnknown228, 0, size);
         if (pPlaced) {
             pPlaced->mUnknown172.mUnknown4 = count + 1;
             pPlaced->mUnknown172.mUnknown0 = 0x100;
@@ -871,7 +871,7 @@ void fn_8004BD20(int handle, BigObjInst *pObject)
     int position = fn_8004D84C(handle);
     BigObjNode_t *pNode = (BigObjNode_t *)fn_801D2B7C(sizeof(BigObjNode_t), 0, 0);
 
-    fn_801C1F94(pNode, 0, sizeof(BigObjNode_t));
+    memset(pNode, 0, sizeof(BigObjNode_t));
     pNode->mpNext = pObject->mUnknown312;
     pNode->mUnknown108 = -1;
     pNode->mUnknown112 = 0.0f;
@@ -910,7 +910,7 @@ void fn_8004BD20(int handle, BigObjInst *pObject)
         do {
             Emitter_8004BD20 *pEmitter = (Emitter_8004BD20 *)fn_801D2B7C(sizeof(Emitter_8004BD20), 0, 0);
 
-            fn_801C1F94(pEmitter, 0, sizeof(Emitter_8004BD20));
+            memset(pEmitter, 0, sizeof(Emitter_8004BD20));
             pEmitter->mpNext = pNode->mUnknown128;
             pNode->mUnknown128 = pEmitter;
             pEmitter->mUnknown4 = -1;
@@ -1442,7 +1442,7 @@ void fn_8004CFCC(int handle, int count)
     ObjNewType_(31, 112, count, 0, 0);
     if (handle) ObjSetListObjFunc(handle, 31, 0, fn_8004D2F8);
     lbl_803EA4F4 = (DynObjChild **)fn_801D2B7C(count * 4, 0, 0);
-    fn_801C1F94(lbl_803EA4F4, 0, count * 4);
+    memset(lbl_803EA4F4, 0, count * 4);
     fn_801F7C88();
     lbl_803EC7D0 = 0;
     lbl_803EC7D2 = count;
@@ -1559,9 +1559,9 @@ int fn_8004D728(int handle, const char *pKey, float *pValues) {
 void fn_8004D798(void) {
     lbl_803EC7D4 = 0;
     lbl_803EA4F8 = (Parser_8004D3A8 *)fn_801D2B7C(0x4B60, 4, 0);
-    fn_801C1F94(lbl_803EA4F8, 0, 0x4B60);
+    memset(lbl_803EA4F8, 0, 0x4B60);
     lbl_803EC7D8 = fn_801D2B7C(0x18000, 4, 0);
-    fn_801C1F94(lbl_803EC7D8, 0, 0x18000);
+    memset(lbl_803EC7D8, 0, 0x18000);
     lbl_803EC7DC = (char *)lbl_803EC7D8;
     fn_8004CBB0();
 }
@@ -1605,11 +1605,11 @@ void fn_8004DA0C(void *pData, int handle, BigObj_t *pObject)
     fn_8004D5B8(handle, "tideRef", name, 256);
     int index = fn_8004D994(name);
     p->mpRender12C = (Instance_8004DA0C *)fn_801D2B7C(196, 0, 0);
-    fn_801C1F94(p->mpRender12C, 0, 196);
+    memset(p->mpRender12C, 0, 196);
     Instance_8004DA0C *pInstance = p->mpRender12C;
     if (index == -1) {
         lbl_8030869C[lbl_803EA4FC] = (Cache_8004DA0C *)fn_801D2B7C(320, 0, 0);
-        fn_801C1F94(lbl_8030869C[lbl_803EA4FC], 0, 320);
+        memset(lbl_8030869C[lbl_803EA4FC], 0, 320);
         pInstance->mpCache = lbl_8030869C[lbl_803EA4FC++];
         pInstance->mpCache->mReferences = 1;
         strcpy(pInstance->mpCache->mName, name);
@@ -1810,14 +1810,14 @@ void fn_8004DF68(BigObj_t *pObject)
 void fn_8004DFDC(void)
 {
     lbl_803EA4FC = 0;
-    fn_801C1F94(lbl_8030869C, 0, 0x1A0);
+    memset(lbl_8030869C, 0, 0x1A0);
     DynObjCacheReset();
 }
 void fn_8004E018(void)
 {
     DynObjCacheFree();
     for (unsigned int i = 0; i < lbl_803EA4FC; i++) fn_801D2BD0(lbl_8030869C[i]);
-    fn_801C1F94(lbl_8030869C, 0, 0x1A0);
+    memset(lbl_8030869C, 0, 0x1A0);
     lbl_803EA4FC = 0;
 }
 void fn_8004E090(BigObj_t *p, int index, int value)
@@ -1845,7 +1845,7 @@ void fn_8004E16C(void *pData, int handle, BigObj_t *pObject)
         int index = fn_8004E0F4(name);
         if (index == -1) {
             lbl_802D4974[lbl_803EA4FE] = (Cache_8004E16C *)fn_801D2B7C(272, 0, 0);
-            fn_801C1F94(lbl_802D4974[lbl_803EA4FE], 0, 272);
+            memset(lbl_802D4974[lbl_803EA4FE], 0, 272);
             Cache_8004E16C *pCache = lbl_802D4974[lbl_803EA4FE++];
             p->mpSkeleton130 = pCache;
             strcpy(pCache->mName, name);
@@ -1877,12 +1877,12 @@ void fn_8004E2B4(BigObj_t *pObject)
 void fn_8004E320(void)
 {
     lbl_803EA4FE = 0;
-    fn_801C1F94(lbl_802D4974, 0, 0x1A0);
+    memset(lbl_802D4974, 0, 0x1A0);
 }
 void fn_8004E358(void)
 {
     for (unsigned int i = 0; i < lbl_803EA4FE; i++) fn_801D2BD0(lbl_802D4974[i]);
-    fn_801C1F94(lbl_802D4974, 0, 0x1A0);
+    memset(lbl_802D4974, 0, 0x1A0);
     lbl_803EA4FE = 0;
 }
 void fn_8004E3CC(BigObj_t *pObject, int *pAngles)

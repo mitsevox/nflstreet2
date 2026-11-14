@@ -12,7 +12,6 @@
 
 extern "C" {
 void fn_8003DE74(unsigned char side, int *pList);
-void *fn_801C2030(void *dst, const void *src, unsigned int n);
 int fn_801F967C(int handle, int table);
 void fn_801F9718(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
 int fn_801F9980(int handle, int *pTable);
@@ -641,7 +640,7 @@ void fn_80084908(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned
         excluded[i] = category;
         for (j = 0; j < size; j++) {
             if (id == pList[j]) {
-                fn_801C2030(&pList[j], &pList[j + 1], (size - j) * 4);
+                memmove(&pList[j], &pList[j + 1], (size - j) * 4);
                 size--;
             }
         }

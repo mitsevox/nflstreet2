@@ -3,7 +3,7 @@
    the game's SndgPathfinder module. */
 
 #include "game/fn_801C68FC.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "engine/Resource.h"
 #include "engine/sound.h"
@@ -156,7 +156,7 @@ int PathfinderInit(PathfinderInitDesc_t *pDesc)
     fn_801B2C18(_Pathfinder_pAllocator, &config);
     fn_8027ED6C();
     fn_8027D3AC();
-    fn_801C1F94(&_Pathfinder_State, 0, sizeof(_Pathfinder_State));
+    memset(&_Pathfinder_State, 0, sizeof(_Pathfinder_State));
     _Pathfinder_State.mpPool0 = (List_801C68FC *)fn_801C68FC(pDesc->mHeap, 0, 4, sizeof(PathfinderMap_t), 0, 0);
     _Pathfinder_State.mpPool8 = (List_801C68FC *)fn_801C68FC(pDesc->mHeap, 0, pDesc->mCount, sizeof(PathfinderTrack_t), 0, 0);
     if (_Pathfinder_State.mpPool0 && _Pathfinder_State.mpPool8) {
@@ -242,7 +242,7 @@ int PathfinderCreateTrack(PathfinderTrackDesc_t *pDesc)
 
     pItem = (PathfinderTrack_t *)fn_801C6A20(_Pathfinder_State.mpPool8);
     if (pItem) {
-        fn_801C1F94(pItem, 0, sizeof(PathfinderTrack_t));
+        memset(pItem, 0, sizeof(PathfinderTrack_t));
         pItem->mUnknown8 = pDesc->mUnknown24;
         SndSetHeap((SndBankHeap_t *)fn_801F44A4(), pDesc->mUnknown10);
         if (pDesc->mUnknown24) {

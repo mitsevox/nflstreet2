@@ -2,7 +2,7 @@
 #include "game/Input_800B6D34.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 extern "C" {
 int fn_800B5FEC(Object_80039F5C *p);
@@ -18,7 +18,6 @@ void PlyrMoveStartHold(Object_80039F5C *p);
 int fn_80178308(void);
 int fn_801784C4(void);
 unsigned short fn_801BE648(void *p);
-int fn_801C1FEC(const void *pA, const void *pB, int size);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
 float fn_802270A4(void *pV);
@@ -32,8 +31,8 @@ extern "C" void fn_800B6D34(Object_80039F5C *p, Input_800B6D34 *pInput)
 
     if (p->mUnknown8 != 0xFF) {
         fn_800F177C(p->mUnknown8, pInput);
-        fn_801C1F94(&empty, 0, sizeof(empty));
-        if (fn_801C1FEC(pInput, &empty, sizeof(empty)) != 0) {
+        memset(&empty, 0, sizeof(empty));
+        if (memcmp(pInput, &empty, sizeof(empty)) != 0) {
             if (fn_800AD9B4() == 3) {
                 mask = 0x7FFF0;
                 if (p->mIdBytes[2] == fn_80178308() || BallStateGet(BallGetCurrent(), 0) != 4) {
@@ -51,7 +50,7 @@ extern "C" void fn_800B6D34(Object_80039F5C *p, Input_800B6D34 *pInput)
             }
         }
     } else {
-        fn_801C1F94(pInput, 0, sizeof(*pInput));
+        memset(pInput, 0, sizeof(*pInput));
     }
 }
 

@@ -3,7 +3,7 @@
 #include "game/PlayBookTeam.h"
 #include "game/Ball.h"
 #include "game/Message_800F01CC.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_8022781C.h"
 #include "game/fn_802372EC.h"
 
@@ -135,7 +135,7 @@ extern "C" int fn_8009FB60(Object_80039F5C *p)
                 short rating = p->mRatings[8];
 
                 if (fn_802372EC(0, (unsigned int)(lbl_803EA9C8 * 255.0f)) < rating) {
-                    fn_801C1F94(&message, 0, sizeof(message));
+                    memset(&message, 0, sizeof(message));
                     sent = 1;
                     message.mId = 24;
                     message.mUnknown1[0] = 0;
@@ -146,7 +146,7 @@ extern "C" int fn_8009FB60(Object_80039F5C *p)
                 float chance = ((1.0f - (lbl_803EA9C4 - distance) / lbl_803EA9C4) * lbl_803EA9CC + 1.0f) * 255.0f;
 
                 if (fn_802372EC(0, (unsigned int)chance) < rating) {
-                    fn_801C1F94(&message, 0, sizeof(message));
+                    memset(&message, 0, sizeof(message));
                     sent = 1;
                     message.mId = 23;
                     message.mUnknown1[0] = BallGetIndex(pBall);

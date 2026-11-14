@@ -2,7 +2,7 @@
    sets forward, side and backpedal speed and turn rate from the player's ratings, and runs the movement mode handler. */
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/Object_80039F5C.h"
 
 extern "C" {
@@ -320,7 +320,7 @@ void PlyrMoveLatchRequest(Object_80039F5C *p)
 
 void PlyrMoveCmdClear(PlyrMoveCmd_t *pObject)
 {
-    fn_801C1F94(pObject, 0, sizeof(*pObject));
+    memset(pObject, 0, sizeof(*pObject));
     pObject->mUnknown14 = 0;
     pObject->mUnknown15 = 0;
 }

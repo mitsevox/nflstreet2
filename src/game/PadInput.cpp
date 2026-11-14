@@ -1,7 +1,7 @@
 /* Controller input: reads each pad into 34 remapped stick and button values per frame and saves or restores the pad handlers. */
 
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/PadInput.h"
 
 struct PerDeviceData_t;
@@ -132,7 +132,7 @@ void PadInputRead(int slot, InputValues *pPrevious, InputValues *pCurrent)
     if (ready) {
         PerGetDeviceData(handle, (PerDeviceData_t *)pState);
     } else {
-        fn_801C1F94(pState, 0, 12);
+        memset(pState, 0, 12);
     }
     if (ready) {
         if (!_PadInput_abResetSlot[slot]) {
@@ -153,7 +153,7 @@ void PadInputRead(int slot, InputValues *pPrevious, InputValues *pCurrent)
         }
     } else {
         *pPrevious = *pCurrent;
-        fn_801C1F94(pCurrent, 0, sizeof(InputValues));
+        memset(pCurrent, 0, sizeof(InputValues));
     }
 }
 

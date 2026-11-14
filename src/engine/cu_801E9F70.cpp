@@ -1,4 +1,4 @@
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #define NONE_801E9F70 0xFFFF
 
 void *operator new[](unsigned int size, int unknown);
@@ -467,7 +467,7 @@ Pair_801E9F70 *Class_801E9F70::fn_801EAC98()
         return 0;
     }
     mpFreePair = pPair->mpNext;
-    fn_801C1F94(pPair, 0, sizeof(Pair_801E9F70));
+    memset(pPair, 0, sizeof(Pair_801E9F70));
     return pPair;
 }
 
@@ -482,7 +482,7 @@ unsigned short Class_801E9F70::fn_801EAD00()
     unsigned short endpoint = mFreeEndpoint;
 
     mFreeEndpoint = mpEndpoints[endpoint].mNext;
-    fn_801C1F94(&mpEndpoints[endpoint], 0, sizeof(Endpoint_801E9F70));
+    memset(&mpEndpoints[endpoint], 0, sizeof(Endpoint_801E9F70));
     return endpoint;
 }
 
@@ -497,7 +497,7 @@ unsigned short Class_801E9F70::fn_801EAD6C()
     unsigned short object = mFreeObject;
 
     mFreeObject = mpObjects[object].mNext;
-    fn_801C1F94(&mpObjects[object], 0, sizeof(Object_801E9F70));
+    memset(&mpObjects[object], 0, sizeof(Object_801E9F70));
     return object;
 }
 

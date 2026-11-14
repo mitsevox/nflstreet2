@@ -4,7 +4,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
@@ -51,10 +51,10 @@ void PlayAlignPlayer(Object_80039F5C *p, PlayBookPosition_t *pEntry, int side)
         fn_80227638(&delta, side == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10, &delta);
         fn_80227690(&delta, &p->mMotion.mPos, &delta);
         if (fn_802270A4(&delta) > 0.5f) {
-            fn_801C1F94(&msg, 0, 4);
+            memset(&msg, 0, 4);
             msg.mId = 7;
             fn_800F03D8(0, p->mpState, &msg, p);
-            fn_801C1F94(&msg, 0, 4);
+            memset(&msg, 0, 4);
             msg.mId = 6;
             msg.mUnknown1[0] = (side == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20) >> 16;
             msg.mUnknown1[1] = 1;
@@ -62,7 +62,7 @@ void PlayAlignPlayer(Object_80039F5C *p, PlayBookPosition_t *pEntry, int side)
             fn_800F03D8(0, p->mpState, &msg, p);
         } else if (MathAngleDiff(side == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20,
                        p->mMotion.mFacing) > 0xAAAAA) {
-            fn_801C1F94(&msg, 0, 4);
+            memset(&msg, 0, 4);
             msg.mId = 6;
             msg.mUnknown1[0] = (side == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20) >> 16;
             msg.mUnknown1[1] = 1;
@@ -70,7 +70,7 @@ void PlayAlignPlayer(Object_80039F5C *p, PlayBookPosition_t *pEntry, int side)
             fn_800F03D8(0, p->mpState, &msg, p);
         }
         PlaySetPointToRoleMate(p);
-        fn_801C1F94(&msg, 0, 4);
+        memset(&msg, 0, 4);
         msg.mId = 9;
         msg.mUnknown1[0] = side == 1 ? pEntry->mUnknownA : pEntry->mUnknown9;
         msg.mUnknown1[1] = 0;
@@ -106,15 +106,15 @@ void PlayAlignTeam(PlayBookFormation_t *pObject, int team, const char **ppNames)
         fn_800EFE60(0, p->mpState, p);
         PlyrClearPendingMsg(p, 0);
         if (p == BallGetCurrentHolder()) {
-            fn_801C1F94(&msg, 0, 4);
+            memset(&msg, 0, 4);
             msg.mId = 49;
             fn_800F03D8(0, p->mpState, &msg, p);
         }
-        fn_801C1F94(&msg, 0, 4);
+        memset(&msg, 0, 4);
         msg.mId = 7;
         fn_800F03D8(0, p->mpState, &msg, p);
         PlaySetPointToRoleMate(p);
-        fn_801C1F94(&msg, 0, 4);
+        memset(&msg, 0, 4);
         msg.mId = 87;
         msg.mUnknown1[0] = pObject->mUnknown8.mUnknownF == 1 ? pEntry->mUnknownA : pEntry->mUnknown9;
         msg.mUnknown1[1] = (pObject->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20) >> 16;
@@ -176,7 +176,7 @@ void PlayAlignPostStartDelays(int team)
                 float value;
 
                 fn_800FF6D8(p);
-                fn_801C1F94(&msg, 0, 4);
+                memset(&msg, 0, 4);
                 msg.mId = 51;
                 value = fn_80237260(0);
                 if (fn_80177F70() == 0) {

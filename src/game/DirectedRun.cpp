@@ -7,7 +7,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Ball.h"
 #include "game/fn_80177FE0.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_800B65A0.h"
@@ -58,7 +58,7 @@ extern "C" int DirectedRunEnter(Object_80039F5C *p)
         default: {
             Message_800F01CC message;
 
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 85;
             message.mUnknown1[0] = 96;
             message.mUnknown1[1] = 180;
@@ -128,7 +128,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
                     chance <<= 2;
                 }
                 if (fn_802372EC(0, 100) < chance) {
-                    fn_801C1F94(&message, 0, 4);
+                    memset(&message, 0, 4);
                     message.mId = 2;
                     fn_800F053C(0, p->mpState, &message, p);
                     return 1;
@@ -142,7 +142,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
                     chance <<= 2;
                 }
                 if (fn_802372EC(0, 100) < chance) {
-                    fn_801C1F94(&message, 0, 4);
+                    memset(&message, 0, 4);
                     message.mId = 2;
                     fn_800F053C(0, p->mpState, &message, p);
                     return 1;
@@ -152,7 +152,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
             && fn_8009BCE8(&pBlock->mUnknown4)->mUnknown1052 == 1) {
             chance = p->mRatings[5] >> 2;
             if (fn_802372EC(0, 100) < chance) {
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 2;
                 fn_800F053C(0, p->mpState, &message, p);
                 return 1;

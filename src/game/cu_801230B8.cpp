@@ -9,7 +9,7 @@
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_8017886C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include <math.h>
 
 struct State_80125304 {
@@ -593,13 +593,13 @@ void fn_80123F48(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
 
 void fn_8012430C(Directions_8012430C *pOut, int kind, Object_80039F5C *p)
 {
-    fn_801C1F94(pOut, 0, 32);
+    memset(pOut, 0, 32);
     if (lbl_8029F584[kind]) lbl_8029F584[kind](pOut, p, 0);
 }
 
 void fn_80124374(Directions_8012430C *pOut, int kind, Object_80039F5C *p, Object_80039F5C *a)
 {
-    fn_801C1F94(pOut, 0, 32);
+    memset(pOut, 0, 32);
     if (lbl_8029F584[kind]) lbl_8029F584[kind](pOut, p, a);
 }
 
@@ -1089,7 +1089,7 @@ int fn_80125E20(Object_80039F5C *p)
     State_80125594 *pState = (State_80125594 *)&p->mUnknown336;
     if (!BallGetCurrentHolder()) {
         Message_800F01CC message;
-        fn_801C1F94(&message, 0, sizeof(message));
+        memset(&message, 0, sizeof(message));
         message.mId = 57;
         message.mUnknown1[0] = BallGetCurrentIndex();
         fn_800F053C(0, p->mpState, &message, p);

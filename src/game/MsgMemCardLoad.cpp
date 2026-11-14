@@ -6,7 +6,7 @@
 #include "game/MemCardUI.h"
 #include "game/MsgGame.h"
 #include "game/TextRecord.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include <string.h>
 
 struct MemCardLoadEntry_t {
@@ -67,7 +67,7 @@ extern "C" void MsgMemCardLoadClose()
 extern "C" void MsgMemCardLoadResetList(int value, int *pCount)
 {
     *pCount = 16;
-    fn_801C1F94(_MsgMemCardLoad_aEntries, 0, 320);
+    memset(_MsgMemCardLoad_aEntries, 0, 320);
 }
 
 extern "C" void MsgMemCardLoadRewind()

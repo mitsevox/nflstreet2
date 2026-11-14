@@ -91,7 +91,7 @@ void fn_8022765C(void *, void *, void *);
 void fn_80227690(void *, void *, void *);
 int fn_801CFE40(float, float);
 int MathAngleDiff(int, int);
-void *fn_801C1F94(void *, int, unsigned int);
+void *memset(void *, int, unsigned int);
 void PlayerCutGetAnimOffset(int, unsigned char, int, void *);
 int PlayerCutGetMessageTurn(void *);
 int ObjNewType_(int, int, int, void (*)(Object_8015C244 *), void (*)(Object_8015C244 *));
@@ -196,12 +196,12 @@ void fn_8015A818(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
     case 254:
         return;
     case 253:
-        fn_801C1F94(command, 0, 4);
+        memset(command, 0, 4);
         command[0] = 3; command[1] = 24; command[2] = 96;
         fn_8015A588(p, command, pPoint, 0, 0);
         return;
     case 0:
-        fn_801C1F94(command, 0, 4);
+        memset(command, 0, 4);
         command[0] = 3; command[1] = 24; command[2] = 32;
         fn_8015A588(p, command, pPoint, 0, 0);
         return;
@@ -321,7 +321,7 @@ void fn_8015AF48(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
         PlayerCutGetAnimOffset(pCommand[1], pCommand[0], 0x400000, &delta);
         float length = fn_802270A4(&delta) * 0.5f;
         unsigned char command[4];
-        fn_801C1F94(command, 0, 4);
+        memset(command, 0, 4);
         command[0] = 20; command[1] = pCommand[0]; command[2] = pCommand[1];
         int angle = PlayerCutGetMessageTurn(command);
         if (pCommand[1] != 7) {
@@ -374,7 +374,7 @@ int fn_8015B344(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pP
         if (p->mUnknown84 == 7) fn_8015A3EC(p, pPoint, pCommand[2] << 17);
         else if (p->mUnknown84 == 8 || p->mUnknown84 == 9) {
             unsigned char command[4];
-            fn_801C1F94(command, 0, 4);
+            memset(command, 0, 4);
             command[0] = 3; command[1] = 8;
             command[2] = p->mUnknown68 > fn_80177FE0().mX ? 64 : 0;
             fn_8015A588(p, command, pPoint, 0, 0);

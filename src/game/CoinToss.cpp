@@ -1,7 +1,7 @@
 /* Pre-game coin toss: allocates the 'ctos' state, lines up three players per side through a scripted camera shot, runs the call / result / choice state machine and applies the outcome (offense team and field direction). */
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802372EC.h"
 #include "game/fn_80238174.h"
 #include "game/fn_800B65A0.h"
@@ -251,7 +251,7 @@ void CoinTossSendPlayersToSpots(unsigned char *pUnused, CoinTossSpot_t *pA, Coin
             fn_80227690(&dir, &dir, &pTable[i].mPos);
             angle = fn_801CFE40(dir.mY, dir.mX);
 
-            fn_801C1F94(&message, 0, sizeof(message));
+            memset(&message, 0, sizeof(message));
             angle >>= 16;
             message.mUnknown1[0] = (int)(pTable[i].mPos.mX * 4.0f);
             message.mUnknown1[1] = (int)(pTable[i].mPos.mY + pTable[i].mPos.mY);
@@ -259,12 +259,12 @@ void CoinTossSendPlayersToSpots(unsigned char *pUnused, CoinTossSpot_t *pA, Coin
             message.mUnknown1[2] = angle;
             fn_800F053C(0, p->mQueue, &message, p);
 
-            fn_801C1F94(&message, 0, sizeof(message));
+            memset(&message, 0, sizeof(message));
             message.mId = 6;
             message.mUnknown1[0] = angle;
             fn_800F03D8(0, p->mQueue, &message, p);
 
-            fn_801C1F94(&message, 0, sizeof(message));
+            memset(&message, 0, sizeof(message));
             message.mId = 9;
             message.mUnknown1[0] = 0xCB;
             message.mUnknown1[1] = 0;
@@ -356,7 +356,7 @@ void CoinTossAllocState(void)
 {
     void *pHandle = fn_80238174(0, (void **)&_CoinToss_pState, sizeof(CoinTossState_t), 0, 0x63746F73);
 
-    fn_801C1F94(fn_8023816C(pHandle), 0, sizeof(CoinTossState_t));
+    memset(fn_8023816C(pHandle), 0, sizeof(CoinTossState_t));
     fn_802381E0(pHandle);
 }
 

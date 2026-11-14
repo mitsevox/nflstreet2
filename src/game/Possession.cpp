@@ -12,7 +12,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/PostPlayPhase.h"
 #include "game/Point2.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "game/Message_800F01CC.h"
@@ -1324,7 +1324,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
     if (fn_801486A0() == 1) {
         resolved = 0;
         if (fn_800F06F4(0, p->mpState, 0x5F, 0xFFFF) == 0xFFFF) {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 0x5F;
             if (p->mpState->mId == 0x1C) {
                 fn_800F01CC(0, p->mpState, &message, p);
@@ -1339,7 +1339,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
         for (i = 0, count = fn_80178D70(p->mId >> 8 & 0xFF); i < count; i++) {
             Object_80039F5C *pMate = PlyrGet(p->mId >> 8 & 0xFF, i);
             PlyrClearPendingMsg(pMate, 0);
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             if (pMate == p) {
                 message.mId = 1;
             } else if (fn_801486A0()) {
@@ -2080,7 +2080,7 @@ void DriveLogInit(void)
     int resume = 0;
 
     _DriveLog_iCurrent = 0;
-    fn_801C1F94(_DriveLog_aLogs, 0, sizeof(_DriveLog_aLogs));
+    memset(_DriveLog_aLogs, 0, sizeof(_DriveLog_aLogs));
     if (resume) {
         int found;
 
@@ -2095,8 +2095,8 @@ void DriveLogInit(void)
 
 void DriveLogClearSaved(void)
 {
-    fn_801C1F94(&_DriveLog_aLogs[1], 0, sizeof(DriveLog_t));
-    fn_801C1F94(&_DriveLog_aLogs[2], 0, sizeof(DriveLog_t));
+    memset(&_DriveLog_aLogs[1], 0, sizeof(DriveLog_t));
+    memset(&_DriveLog_aLogs[2], 0, sizeof(DriveLog_t));
 }
 
 int DriveLogGetElapsed(void)

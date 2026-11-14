@@ -7,7 +7,7 @@
 #include "game/AudmonEvent.h"
 #include "game/GameEventFlags.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_80218FC4.h"
@@ -198,7 +198,7 @@ void PauseCameraStart(void)
     _Pause_State.mUnknown136 = -1;
     _Pause_State.mUnknown140 = CamGameGetCurrentSlot();
     _Pause_State.mUnknown144 = CamMainGetMode(CamGameGetCamera(5));
-    fn_801C1F94(&params, 0, sizeof(params));
+    memset(&params, 0, sizeof(params));
     params.mUnknown40 = 0xFFFF;
     params.mUnknown42 = 0xFFFF;
     switch (fn_800A3444()) {
@@ -337,7 +337,7 @@ void PauseInit(void)
     int i;
 
     _Pause_apfnRequest = (PauseRequestFn_t *)fn_801D2B7C(sizeof(PauseRequestFn_t), 0, 0);
-    fn_801C1F94(_Pause_apfnRequest, 0, sizeof(PauseRequestFn_t));
+    memset(_Pause_apfnRequest, 0, sizeof(PauseRequestFn_t));
     _Pause_State.mUnknown132 = 0;
     PauseResetState();
     PauseInstallRequests();

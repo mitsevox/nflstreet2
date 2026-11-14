@@ -1,6 +1,6 @@
 #include "engine/list.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 
 typedef int (*VisitFn_801C7684)(void *, int, int);
@@ -162,7 +162,7 @@ static SplayNode_801C7684 *fn_801C7A98(SplayTree_801C7684 *pTree, SplayNode_801C
 
 static void fn_801C7C1C(SplayNode_801C7684 *pNode, int size)
 {
-    fn_801C1F94(pNode, 0, size);
+    memset(pNode, 0, size);
 }
 
 static SplayNode_801C7684 *fn_801C7C44(SplayTree_801C7684 *pTree, SplayNode_801C7684 *pNode, unsigned int mode)

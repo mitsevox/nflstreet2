@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Ball.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 extern "C" {
 int BallStateGet(Ball_t *pBall, int *pOut);
@@ -21,7 +21,7 @@ int fn_800E705C(Object_80039F5C *p)
     Ball_t *ball = BallGetCurrent();
     if (BallStateGet(ball, 0) == 4 && p == BallGetTarget(ball)) {
         Message_800F01CC message;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 23;
         message.mUnknown1[0] = BallGetIndex(ball);
         fn_800F053C(0, p->mpState, &message, p);
@@ -30,7 +30,7 @@ int fn_800E705C(Object_80039F5C *p)
     if (!fn_801787A0() && BallGetCurrentHolder() && fn_801783AC(0) &&
         fn_801486A0() != 0 && fn_801486A0() != 1 && fn_801486A0() != 2) {
         Message_800F01CC message;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 33;
         fn_800F053C(0, p->mpState, &message, p);
         return 1;

@@ -7,7 +7,7 @@
 #include "engine/viewport.h"
 #include "engine/vptmanager.h"
 #include "game/Object_80039F5C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/mtx.h>
 #include <math.h>
@@ -434,7 +434,7 @@ void WeatherInit(void) {
     }
     WeatherInitParticles(_Weather_aParticles, 96);
   }
-  fn_801C1F94(_Weather_aSplashes, 0, 0x600);
+  memset(_Weather_aSplashes, 0, 0x600);
   _Weather_vDrift.mX = _Weather_vDrift.mY = _Weather_vDrift.mZ = 0.0f;
 }
 void WeatherShutdown(void) { _Weather_iMode = 0; }

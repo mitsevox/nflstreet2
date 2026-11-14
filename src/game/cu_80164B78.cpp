@@ -8,7 +8,7 @@
 #include "game/State_803EB098.h"
 #include "game/PlayArtState.h"
 #include "game/PlayArtPlayer.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/DbQueryTable.h"
 #include "game/fn_801FCE10.h"
 
@@ -262,7 +262,7 @@ int fn_80165890(void *handle, PlayArtPlayer_t *records, int first, unsigned char
     for (unsigned int i = first; i < count; ++i) {
         PlayArtPlayer_t *record = &records[i];
         int steps = record->mUnknown4Word;
-        fn_801C1F94(record->mUnknown1C, 0, 0x1B0);
+        memset(record->mUnknown1C, 0, 0x1B0);
         for (int j = 0; j < steps; ++j) {
             char ax[8], ay[8], au[8], av[8], at[8], sp[8], ct[8], lt[8], ls[8];
             fn_801C2E18(ax, "ax%02d", j+1);
@@ -397,10 +397,10 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
     PlayArtVertex_t (*arrows)[4] = (PlayArtVertex_t (*)[4])arrowBuffer;
     int *kinds = (int *)kindBuffer, *colors = (int *)colorBuffer;
     PlayArtVertex_t starts[12], ends[13], controls[3], strip[20];
-    fn_801C1F94(controls, 0, 24);
+    memset(controls, 0, 24);
     int drawn = 0;
     int count = 0;
-    fn_801C1F94(strip, 0, 160);
+    memset(strip, 0, 160);
     for (int i = 0; i <= 11; ++i) {
         PlayArtStep_t *step = &record->mUnknown1C[i];
         int arrowKind = step->mUnknown14;

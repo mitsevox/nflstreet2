@@ -2,7 +2,7 @@
    rebalancing of the tree when it grows too deep, registered with the generic list module. */
 #include "engine/list.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 
 typedef int (*BinVisitFn_t)(void *, int, int);
@@ -404,7 +404,7 @@ static BinNode_t *_DSListAddBinaryNode(BinTree_t *pTree, BinNode_t *pNode, int m
 
 static void _DSListInitBinaryNode(BinNode_t *pNode, int size)
 {
-    fn_801C1F94(pNode, 0, size);
+    memset(pNode, 0, size);
 }
 
 static BinNode_t *_DSListGetBinaryNode(BinTree_t *pTree, BinNode_t *pNode, unsigned int mode)

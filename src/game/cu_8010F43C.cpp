@@ -11,7 +11,7 @@
 #include "game/fn_800AD9B4.h"
 #include "game/PlaySet.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_801BE60C.h"
@@ -242,11 +242,11 @@ extern "C" int fn_8010F654(Object_80039F5C *p)
         fn_8011E3EC(p, 0);
         result = 1;
         fn_8011E240(p);
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 1;
         fn_800F053C(0, p->mpState, &message, p);
     } else if (fn_8010D8F4(p)) {
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 90;
         message.mUnknown1[0] = pCarrier->mMotion.mPos.mX > 0.0f ? lbl_803EAF50 : -lbl_803EAF50;
         message.mUnknown1[1] = lbl_803EAF51;
@@ -258,7 +258,7 @@ extern "C" int fn_8010F654(Object_80039F5C *p)
         if (BallStateGet(pBall, 0) == 5 && fn_800AD9B4() == 3) {
             BallGetPosition(BallGetCurrent(), &ballPos);
             if (fn_8022785C(&ballPos, &p->mMotion.mPos) < 3.0f) {
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 57;
                 message.mUnknown1[0] = BallGetCurrentIndex();
                 fn_800F053C(0, p->mpState, &message, p);
@@ -270,7 +270,7 @@ extern "C" int fn_8010F654(Object_80039F5C *p)
             fn_8011E3EC(p, 0);
             result = 0;
             fn_8011E240(p);
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 31;
             fn_800F053C(0, p->mpState, &message, p);
         } else {
@@ -292,7 +292,7 @@ extern "C" int fn_8010F654(Object_80039F5C *p)
                         fn_8011E3EC(p, 0);
                         result = 1;
                         fn_8011E240(p);
-                        fn_801C1F94(&message, 0, 4);
+                        memset(&message, 0, 4);
                         message.mId = 2;
                         fn_800F053C(0, p->mpState, &message, p);
                     } else {
@@ -859,7 +859,7 @@ extern "C" int fn_8011168C(Object_80039F5C *p)
         }
     }
     if (result) {
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 59;
         fn_800F00D4(0, p->mpState, &message, p);
     }

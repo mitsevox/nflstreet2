@@ -26259,7 +26259,7 @@
     {
       "source": "src/game/cu_80153700.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #894; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 11 of the table 0x802A1930 of src/game/cu_801531C4.cpp (derived from the rule-set table 0x802A56E8, include/game/ScrmRuleSet.h; 0x80153700-0x801537A0, word 0x802A198C). Calls the base slot 0x80177768 through its declaration ScrmRuleSet::ResetGame, fn_80148A58 and fn_801C1F94 through their headers, 0x80155128 (src/game/cu_80155128.cpp) and 0x800D7520 (src/game/StyleTracker.cpp) as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; slot 10 (0x801534D4) before the range is src/game/cu_801534D4.cpp and 0x801537A0 is src/game/cu_801537A0.cpp; original bytes stay linked.",
+      "evidence": "Issue #894; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 11 of the table 0x802A1930 of src/game/cu_801531C4.cpp (derived from the rule-set table 0x802A56E8, include/game/ScrmRuleSet.h; 0x80153700-0x801537A0, word 0x802A198C). Calls the base slot 0x80177768 through its declaration ScrmRuleSet::ResetGame, fn_80148A58 through its header and memset through <string.h>, 0x80155128 (src/game/cu_80155128.cpp) and 0x800D7520 (src/game/StyleTracker.cpp) as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; slot 10 (0x801534D4) before the range is src/game/cu_801534D4.cpp and 0x801537A0 is src/game/cu_801537A0.cpp; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -34959,41 +34959,6 @@
           "symbol": "fn_802233DC",
           "start": "0x802233DC",
           "end": "0x80223460"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801C1D84.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C1F94-0x801C20A0 (src/engine/cu_801C1D84.c, memory.c), its compiler row and function rows and the memmove source-form row. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C1F94",
-          "end": "0x801C20A0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801C1F94",
-          "start": "0x801C1F94",
-          "end": "0x801C1FBC"
-        },
-        {
-          "symbol": "fn_801C1FBC",
-          "start": "0x801C1FBC",
-          "end": "0x801C1FEC"
-        },
-        {
-          "symbol": "fn_801C1FEC",
-          "start": "0x801C1FEC",
-          "end": "0x801C2030"
-        },
-        {
-          "symbol": "fn_801C2030",
-          "start": "0x801C2030",
-          "end": "0x801C20A0"
         }
       ]
     },

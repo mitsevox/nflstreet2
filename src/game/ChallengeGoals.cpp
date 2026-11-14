@@ -5,7 +5,7 @@
 #include "game/Challenge.h"
 #include "game/AudmonEvent.h"
 #include "game/GameOptions.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_8021D7B8.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
@@ -360,7 +360,7 @@ int ChallengeEvaluateGoals(void)
         int side = fn_800B65A0(0) == 0xFF;
         int i;
 
-        fn_801C1F94(counts, 0, sizeof(counts));
+        memset(counts, 0, sizeof(counts));
         for (i = 0; i < 4; i++) {
             counts[ChallengeEvaluateGoal(side, pRecord, i)]++;
         }

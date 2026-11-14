@@ -19,7 +19,7 @@
 #include "game/GameModeType.h"
 #include "game/StoryTeam.h"
 #include "game/StevTable.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
@@ -932,10 +932,10 @@ static inline void _MsgTeamPickResetState(int size)
     unsigned char i;
 
     for (i = 0; i < _MsgTeamPick_pState->mCount; i++) {
-        fn_801C1F94(_MsgTeamPick_pState->mppLists[i], 0xFF, _MsgTeamPick_pState->mSize * 4);
+        memset(_MsgTeamPick_pState->mppLists[i], 0xFF, _MsgTeamPick_pState->mSize * 4);
     }
-    fn_801C1F94(_MsgTeamPick_pState->mpCounts, 0, _MsgTeamPick_pState->mCount);
-    fn_801C1F94(_MsgTeamPick_pState->mUnknown0C, 0, size);
+    memset(_MsgTeamPick_pState->mpCounts, 0, _MsgTeamPick_pState->mCount);
+    memset(_MsgTeamPick_pState->mUnknown0C, 0, size);
     _MsgTeamPick_pState->mUnknown17 = 0;
     _MsgTeamPick_pState->mUnknown18 = 0;
 }

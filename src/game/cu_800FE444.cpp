@@ -14,7 +14,7 @@
 #include "game/Ball.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "game/fn_8022781C.h"
@@ -636,7 +636,7 @@ int fn_800FFA10(Object_80039F5C *p, Object_80039F5C *other)
                 Message_800F01CC message;
 
                 result = 0;
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 33;
                 fn_800F053C(0, p->mpState, &message, p);
             }
@@ -646,7 +646,7 @@ int fn_800FFA10(Object_80039F5C *p, Object_80039F5C *other)
         if (state->mUnknown2 == 9) {
             Message_800F01CC message;
 
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             if (state->mUnknown1 == p->mIdBytes[1]) {
                 fn_8010CEB8(p, 9);
             } else {

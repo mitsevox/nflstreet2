@@ -2,7 +2,7 @@
 
 #include "game/Challenge.h"
 #include "game/Object_8017886C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801FCE10.h"
 
 extern "C" {
@@ -30,7 +30,7 @@ void GameSetupInit(void)
         fn_801FCE10(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n",
                     ChalGetCurrent()->mUnknown1A8, ChalGetCurrent()->mUnknown1AC);
         fn_8017885C();
-        fn_801C1F94(&info, 0, sizeof(info));
+        memset(&info, 0, sizeof(info));
         fn_80178878(&info);
         fn_80177F88(ChalGetCurrent()->mUnknown1C1);
         if (ChalGetCurrent()->mUnknown1B8 == 0) {
@@ -56,7 +56,7 @@ void GameSetupInit(void)
         fn_801787FC(1, 0);
         fn_8017885C();
         fn_801FCE10(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n", 0, 0);
-        fn_801C1F94(&info, 0, sizeof(info));
+        memset(&info, 0, sizeof(info));
         fn_80178878(&info);
         fn_80177F88(1);
         fn_8017833C(1);

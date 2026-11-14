@@ -16,7 +16,7 @@
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include "game/PlayBookGetPlay.h"
@@ -178,7 +178,7 @@ extern unsigned int lbl_803EAD80;
 extern "C" int fn_800E4494(Object_80039F5C *p) {
     State_800E4494 *state = (State_800E4494 *)&p->mUnknown336;
     p->mFlags &= ~4;
-    fn_801C1F94(state, 0, sizeof(State_800E4494));
+    memset(state, 0, sizeof(State_800E4494));
     state->mUnknown49 = state->mUnknown3 = state->mUnknown51 = state->mUnknown50 = 0;
     state->mUnknown36 = 0;
     state->mUnknown0 = 0;
@@ -719,7 +719,7 @@ extern "C" void fn_800E9024(Object_80039F5C *p, int id) {
         Message_800F01CC message;
         int difference;
         int relative;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = id;
         message.mUnknown1[1] = 8;
         Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
@@ -754,11 +754,11 @@ extern "C" void fn_800E9024(Object_80039F5C *p, int id) {
             fn_800CE674(&p->mUnknown1240);
             fn_800CE684(&p->mUnknown1240);
             if (previous == 0xFFFF) {
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 1;
                 fn_800F03D8(0, p->mpState, &message, p);
             } else {
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 18;
                 fn_800F03D8(0, p->mpState, &message, p);
             }
@@ -873,7 +873,7 @@ extern "C" void fn_800E954C(Object_80039F5C *p, int id, int *pAngle, int value, 
         int heading = p->mMotion.mUnknown32;
         Message_800F01CC message;
         int difference;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = id;
         message.mUnknown1[1] = lbl_803EADA4[((((*pAngle - p->mMotion.mFacing) & 0xFFFFFF) + 0x100000) >> 21) & 7];
         if (pHeading) {
@@ -929,7 +929,7 @@ extern "C" int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther) {
             away = (away - difference) & 0xFFFFFF;
         difference = MathAngleDiff(pMotion->mFacing, angle);
         angle = (angle - pMotion->mFacing) & 0xFFFFFF;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 10;
         message.mUnknown1[1] = fn_800E9010(angle, difference);
         difference = MathAngleDiff(pMotion->mFacing, away);
@@ -958,7 +958,7 @@ extern "C" int fn_800E98A4(Object_80039F5C *p, Object_80039F5C *pOther) {
     int angle = fn_801CFE40(delta.mY, delta.mX);
     int away = (angle - 0x800000) & 0xFFFFFF;
     int difference = MathAngleDiff(angle, away);
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 10;
     message.mUnknown1[1] = fn_800E9010(angle, difference);
     difference = MathAngleDiff(pMotion->mFacing, away);
@@ -976,7 +976,7 @@ extern "C" void fn_800E99A8(Object_80039F5C *p, int kind) {
         Object_800B26B0 *pMotion = &p->mMotion;
         float angle;
         unsigned char value;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 58;
         message.mUnknown1[1] = 8;
         if (kind == 4) {
@@ -1014,7 +1014,7 @@ extern "C" int fn_800E9B84(Object_80039F5C *p, int kind) {
         unsigned char value;
         AudmonEventPostId(38, &pMotion->mPos, p->mId, 0, 0, 0);
         StyleTrackerOnCarrierActionTwo(p);
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 10;
         if (kind == 3) {
             value = p->mUnknown1008.mUnknown1;
@@ -1117,7 +1117,7 @@ extern "C" int fn_800E9FD8(Object_80039F5C *p) {
         p->mFlags &= ~0x80000;
         if (p->mUnknown9[0] != 8) {
             Message_800F01CC message;
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
             fn_800F05E4(0, p->mpState, &message, p);
@@ -1316,7 +1316,7 @@ extern "C" void fn_800EA6F0(Object_80039F5C *p) {
     int id;
     int kind;
     float chance;
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     if (BallGetCurrentHolder() == p) {
         chance = p->mRatings[0] / 510.0f + 0.5f;
         if (fn_80237260(0) < chance && !index) {
@@ -1395,10 +1395,10 @@ extern "C" void fn_800EA6F0(Object_80039F5C *p) {
         fn_800CE684(&p->mUnknown1240);
         StyleTrackerOnActionThree();
         if (previous == 0xFFFF) {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 1;
         } else {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 18;
         }
         fn_800F03D8(0, p->mpState, &message, p);
