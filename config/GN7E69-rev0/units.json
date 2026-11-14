@@ -2449,6 +2449,14 @@
     "SNDPKTPLAYI_freeframes": {
       "address": "0x8027952C",
       "evidence": "evidence.tsv function/name rows for 0x8027952C (SNDPKTPLAYI_freeframes in src/engine/spktplay.c, comparison only until linked); the linked src/engine/supmutpf.c calls it by name."
+    },
+    "SFILTER_unpackxalfinit": {
+      "address": "0x8027B7B0",
+      "evidence": "evidence.tsv function/name rows for 0x8027B7B0; exact but unlinked in the comparison-only src/engine/supxalf.cpp, which keeps its original bytes until the whole file can be linked; stored in the constructor table by src/engine/cu_80279BC0.cpp by name."
+    },
+    "SFILTER_unpackxapfinit": {
+      "address": "0x8027BA6C",
+      "evidence": "evidence.tsv function/name rows for 0x8027BA6C; exact but unlinked in the comparison-only src/engine/supxapf.cpp, which keeps its original bytes until the whole file can be linked; stored in the constructor table by src/engine/cu_80279BC0.cpp by name."
     }
   },
   "units": [

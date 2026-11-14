@@ -41989,17 +41989,17 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8027B77C",
+          "symbol": "SFILTER_unpackgetframexalf",
           "start": "0x8027B77C",
           "end": "0x8027B784"
         },
         {
-          "symbol": "fn_8027B784",
+          "symbol": "SFILTER_unpackxalfrestore",
           "start": "0x8027B784",
           "end": "0x8027B7B0"
         },
         {
-          "symbol": "fn_8027B7B0",
+          "symbol": "SFILTER_unpackxalfinit",
           "start": "0x8027B7B0",
           "end": "0x8027B888"
         }
@@ -42008,23 +42008,34 @@
     {
       "source": "src/engine/supxapf.cpp",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8027B888-0x8027BAFC (src/engine/supxapf.cpp), its compiler and source-form rows, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8027B888-0x8027BAFC (src/engine/supxapf.cpp), its compiler and source-form rows, and the function and name rows of every registered function; the exact .rodata data row 0x802C2250-0x802C2258. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8027B888",
           "end": "0x8027BAFC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2250",
+          "end": "0x802C2258"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_8027BA40",
+          "symbol": "SFILTER_unpackxapf",
+          "start": "0x8027B888",
+          "end": "0x8027BA40"
+        },
+        {
+          "symbol": "SFILTER_unpackxapfrestore",
           "start": "0x8027BA40",
           "end": "0x8027BA6C"
         },
         {
-          "symbol": "fn_8027BA6C",
+          "symbol": "SFILTER_unpackxapfinit",
           "start": "0x8027BA6C",
           "end": "0x8027BAFC"
         }

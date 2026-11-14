@@ -257,12 +257,14 @@ void fn_8027BD94(void *p);
 Struct_8027BE24 *fn_8027BDC0(void *memory);
 int fn_8027BDE8(Struct_8027BE24 *p, char *data, int size, int count);
 int fn_8027BE24(Struct_8027BE24 *p, float **dst, int count);
+Pair_8027BFDC fn_8027BFDC(Struct_8027BE24 *p);
+void fn_8027C00C(Struct_8027BE24 *p, Pair_8027BFDC *pair);
 void *fn_8027C020(int size);
 void fn_8027C04C(void *p);
 void SNDI_fir8init(SndFirState_t *state);
 void SNDI_fir8(SndFirState_t *state, int count, float *in, float *out);
 int fn_8027B4F4(Node_80279D90 *node, int count, float *a, float *b, int flag);
-int fn_8027B888(Node_80279D90 *node, int count, float *a, float *b, int flag);
+int SFILTER_unpackxapf(Node_80279D90 *node, int count, float *a, float *b, int flag);
 int SFILTER_unpackpf(Node_80279D90 *node, int count, float *a, float *b, int flag);
 
 /* Defined in another file of the library. */
@@ -274,8 +276,8 @@ void SFILTER_unpackmtfinit(Node_80279D90 *node, Params_80275F80 *params);
 void SFILTER_unpackmtlfinit(Node_80279D90 *node, Params_80275F80 *params);
 void SFILTER_unpackpfinit(Node_80279D90 *node, Params_80275F80 *params);
 void SFILTER_unpackxafinit(Node_80279D90 *node, Params_80275F80 *params);
-void fn_8027B7B0(Node_80279D90 *node, Params_80275F80 *params);
-void fn_8027BA6C(Node_80279D90 *node, Params_80275F80 *params);
+void SFILTER_unpackxalfinit(Node_80279D90 *node, Params_80275F80 *params);
+void SFILTER_unpackxapfinit(Node_80279D90 *node, Params_80275F80 *params);
 
 }
 
