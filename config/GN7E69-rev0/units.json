@@ -2263,6 +2263,10 @@
     "GBAFanServiceLink": {
       "address": "0x802857D8",
       "evidence": "evidence.tsv function/name rows for 0x802857D8 (target extent, related name); src/engine/gbafan.c is comparison-only, so src/engine/PJoyDrvr.c calls the original bytes."
+    },
+    "PerJoyDriverPollPADs": {
+      "address": "0x801E26FC",
+      "evidence": "evidence.tsv function and name rows for 0x801E26FC (PerJoyDriverPollPADs in src/engine/PJoyDrvr.c, a comparison-only file); the linked src/engine/llperiph.c calls it and registers it as a callback, so it resolves to the original bytes."
     }
   },
   "units": [

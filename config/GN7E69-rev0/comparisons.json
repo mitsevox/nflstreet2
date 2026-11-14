@@ -34744,39 +34744,50 @@
     },
     {
       "source": "src/engine/PJoyDrvr.c",
-      "profile": "engine_c",
-      "evidence": "E3 lane draft of PJoyDrvr.c over 0x801E1D44-0x801E274C (NASCAR 2005 symbol-table size/order match; see the PJoyDrvr.c name rows); evidence.tsv function rows and the compiler row for this range. Draft comparisons only; original assembly remains linked.",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801E1D44-0x801E274C (src/engine/PJoyDrvr.c), the engine_c_fastmath compiler row, the function and name rows of all six functions, the source-form row of the partial _PerJoyDriverPoll 0x801E1E50 and the literal data row 0x802B11C0-0x802B1200. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801E1D44",
           "end": "0x801E274C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B11C0",
+          "end": "0x802B1200"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801E1D44",
+          "symbol": "_PerJoyDriverInit",
           "start": "0x801E1D44",
           "end": "0x801E1E34"
         },
         {
-          "symbol": "fn_801E1E34",
+          "symbol": "_PerJoyDriverShutdown",
           "start": "0x801E1E34",
           "end": "0x801E1E50"
         },
         {
-          "symbol": "fn_801E25DC",
+          "symbol": "_PerJoyDriverPoll",
+          "start": "0x801E1E50",
+          "end": "0x801E25DC"
+        },
+        {
+          "symbol": "_PerJoyDriverGetData",
           "start": "0x801E25DC",
           "end": "0x801E2658"
         },
         {
-          "symbol": "fn_801E2658",
+          "symbol": "_PerJoyDriverSendData",
           "start": "0x801E2658",
           "end": "0x801E26FC"
         },
         {
-          "symbol": "fn_801E26FC",
+          "symbol": "PerJoyDriverPollPADs",
           "start": "0x801E26FC",
           "end": "0x801E274C"
         }

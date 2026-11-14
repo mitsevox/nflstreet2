@@ -69,7 +69,8 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x801E052C	0x801E052C	0x801E052C	alignment	0	0	psysCollision.c	colorRamp.c
 .text	-	0x801E0A1C	0x801E11D0	open	-	-	colorRamp.c	periph.c
 .text	0x801E1A20	0x801E1A20	0x801E1A20	alignment	4	5	periph.c	llperiph.c
-.text	-	0x801E1D44	0x801EC1B4	open	-	-	llperiph.c	remap.c
+.text	0x801E1D44	0x801E1D44	0x801E1D44	alignment	0	2	llperiph.c	PJoyDrvr.c
+.text	-	0x801E274C	0x801EC1B4	open	-	-	PJoyDrvr.c	remap.c
 .text	0x801EC650	0x801EC650	0x801EC650	alignment	0	0	remap.c	Resource.c
 .text	0x801F1538	0x801F1538	0x801F1538	alignment	0	2	Resource.c	terfhash.c
 .text	0x801F17E0	0x801F17E0	0x801F17E0	at-or-before	0	1	terfhash.c	reswrite.c
@@ -216,4 +217,4 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .sdata	-	0x803EC584	0x803EC584	thin	0	2/1	lzm.c	lzh.c
 .sbss	-	0x803ECF70	0x803ECF70	data	0	6/4	remap.c	Resource.c
 .sbss	-	0x803ED420	0x803ED420	data	0	3/45	lzm.c	lzh.c
-.sbss	-	0x803ED660	0x803ED664	thin	0	3/1	periph.c	llperiph.c
+.sbss	-	0x803ED660	0x803ED664	thin	0	2/1	periph.c	llperiph.c

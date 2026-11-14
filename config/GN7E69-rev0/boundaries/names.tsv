@@ -1022,8 +1022,12 @@ address	size	sibling_name	how	sibling_file	unit
 0x801E1CE0	36	PerIsDeviceConnected	name	llperiph.c	llperiph.c
 0x801E1D04	56	PerSystemGetLLDriverData	name	llperiph.c	llperiph.c
 0x801E1D3C	8	PerSystemGetDriverDataSize	name	llperiph.c	llperiph.c
-0x801E1D44	240	_PerJoyDriverInit	size	PJoyDrvr.c	-
-0x801E1E34	28	_PerJoyDriverShutdown	size	PJoyDrvr.c	-
+0x801E1D44	240	_PerJoyDriverInit	name	PJoyDrvr.c	PJoyDrvr.c
+0x801E1E34	28	_PerJoyDriverShutdown	name	PJoyDrvr.c	PJoyDrvr.c
+0x801E1E50	1932	_PerJoyDriverPoll	name	PJoyDrvr.c	PJoyDrvr.c
+0x801E25DC	124	_PerJoyDriverGetData	name	PJoyDrvr.c	PJoyDrvr.c
+0x801E2658	164	_PerJoyDriverSendData	name	PJoyDrvr.c	PJoyDrvr.c
+0x801E26FC	80	PerJoyDriverPollPADs	name	PJoyDrvr.c	PJoyDrvr.c
 0x801EB660	160	QuatMultiply	name	PLGWheelDrvr.c	-
 0x801EB814	160	QuatToMatrix	name	PLGWheelDrvr.c	-
 0x801EB8B4	432	QuatFromMatrix	name	PLGWheelDrvr.c	-

@@ -69,6 +69,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801E052C	0x801E0A1C	colorRamp.c	10	10	10	0	10	-	-
 0x801E11D0	0x801E1A20	periph.c	18	18	18	18	0	-	-
 0x801E1A20	0x801E1D44	llperiph.c	10	10	11	10	0	-	-
+0x801E1D44	0x801E274C	PJoyDrvr.c	6	6	6	6	0	-	-
 0x801EC1B4	0x801EC650	remap.c	5	4	4	4	0	-	-
 0x801EC650	0x801F1538	Resource.c	50	48	48	47	1	-	-
 0x801F1538	0x801F17E0	terfhash.c	3	3	3	3	0	-	-
