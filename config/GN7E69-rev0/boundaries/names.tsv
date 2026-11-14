@@ -816,7 +816,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x801D399C	288	_Free	size	MemExtern.c	MemExtern.c
 0x801D3ABC	8	_Resize	size	MemExtern.c	MemExtern.c
 0x801D3AC4	72	_Sizeof	size	MemExtern.c	MemExtern.c
-0x801D3B0C	196	MemInitExternHeap	size	MemExtern.c	MemExtern.c
+0x801D3B0C	196	MemInitExternHeap	name	MemExtern.c	MemExtern.c
 0x801D3BD0	36	__nw__FUiUi	size	TibNew.cpp	TibNew.cpp
 0x801D3BF4	36	__vn__FUiUi	size	TibNew.cpp	TibNew.cpp
 0x801D3C18	40	__builtin_delete	name	TibNew.cpp	TibNew.cpp
