@@ -42,7 +42,7 @@ int fn_800A5DD0(Object_80039F5C *p);
 int fn_800AC980(Object_80039F5C *p, int value);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
 int PlayerMoveGetKind(Object_80039F5C *p);
-int fn_800DC080(Object_80039F5C *p);
+int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_800E1584(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
@@ -415,7 +415,7 @@ extern "C" void PursueCloseOnTarget(Object_80039F5C *p, PursueState_t *pState, f
 {
     if (p->mUnknown1032 != 4 && pOther != 0 && distance < 4.0f && fn_801BE648(pOther->mpUnknown792) != 69
         && fn_801BE648(pOther->mpUnknown792) != 178
-        && (MathAngleDiff(p->mMotion.mFacing, pOther->mMotion.mFacing) > 0x355555 || fn_800DC080(pOther) != 0)) {
+        && (MathAngleDiff(p->mMotion.mFacing, pOther->mMotion.mFacing) > 0x355555 || PlayerActionAnimIsPassReady(pOther) != 0)) {
         Vec2_t delta;
         int angle;
 
@@ -434,7 +434,7 @@ extern "C" void PursueCloseOnTarget(Object_80039F5C *p, PursueState_t *pState, f
         } else if (pState->mUnknown12 == (255 - p->mRatings[5]) >> 4) {
             angle += 0x800000;
             angle &= 0xFFFFFF;
-            if (!(p->mFlags & 0x4000) && fn_800DC080(pOther) != 0
+            if (!(p->mFlags & 0x4000) && PlayerActionAnimIsPassReady(pOther) != 0
                 && MathAngleDiff(p->mMotion.mFacing, pOther->mMotion.mUnknown32) <= 0x1FFFFF) {
                 int diff;
 
@@ -491,7 +491,7 @@ extern "C" int PursueSteerKind0(Object_80039F5C *p, Object_80039F5C *pOther, Pur
     turn = 0;
     if (pOther != 0) {
         if (pMotion->mPos.mY < fn_80177FE0().mY) {
-            if ((pOther->mFlags & 0x200000) || fn_800DC080(pOther) != 0) {
+            if ((pOther->mFlags & 0x200000) || PlayerActionAnimIsPassReady(pOther) != 0) {
                 turn = 1;
             }
         }
@@ -556,7 +556,7 @@ extern "C" int PursueSteerKind2(Object_80039F5C *p, Object_80039F5C *pOther, Pur
     if (pOther != 0) {
         Vec2_t delta;
 
-        if ((distance > 3.0f && pMotion->mPos.mY < fn_80177FE0().mY && fn_800DC080(pOther) != 0 && mode != 2)
+        if ((distance > 3.0f && pMotion->mPos.mY < fn_80177FE0().mY && PlayerActionAnimIsPassReady(pOther) != 0 && mode != 2)
             || (mode == 2 && distance < 8.0f)) {
             int target;
             int diff;
@@ -612,7 +612,7 @@ extern "C" int PursueSteerKind3(Object_80039F5C *p, Object_80039F5C *pOther, Pur
         target = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
         if (distance > 3.0f) {
             if (pMotion->mPos.mY < fn_80177FE0().mY + 2.0f) {
-                if ((pOther->mFlags & 0x200000) || fn_800DC080(pOther) != 0) {
+                if ((pOther->mFlags & 0x200000) || PlayerActionAnimIsPassReady(pOther) != 0) {
                     turn = 1;
                 }
             }
@@ -682,7 +682,7 @@ extern "C" int PursueSteerKind4(Object_80039F5C *p, Object_80039F5C *pOther, Pur
     turn = 0;
     if (pOther != 0 && distance > 3.0f) {
         if (pMotion->mPos.mY < fn_80177FE0().mY + 2.0f) {
-            if ((pOther->mFlags & 0x200000) || fn_800DC080(pOther) != 0) {
+            if ((pOther->mFlags & 0x200000) || PlayerActionAnimIsPassReady(pOther) != 0) {
                 turn = 1;
             }
         }
@@ -881,7 +881,7 @@ extern "C" void PursueUpdateSpeed(Object_80039F5C *p, PursueState_t *pState, Obj
     Vec2_t delta;
 
     if (diff > 0x177777) {
-        if (pOther != 0 && !(pOther->mFlags & 0x200000) && fn_800DC080(pOther) == 0) {
+        if (pOther != 0 && !(pOther->mFlags & 0x200000) && PlayerActionAnimIsPassReady(pOther) == 0) {
             if (distance < 4.0f) {
                 pState->mUnknown0 = fn_801CFB94(diff / 2) * 0.4f;
             } else if (p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {

@@ -92,7 +92,7 @@ float fn_800C495C(Object_80039F5C *p, float value);
 void fn_800C89F0(Object_80039F5C *p, int a, int b, int c, float value);
 void fn_800CABF4(Object_80039F5C *p, unsigned char *pOut, int a);
 int PlayerMoveGetKind(Object_80039F5C *p);
-int fn_800DC080(Object_80039F5C *p);
+int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_8011F1CC(void);
 int fn_8011F1F4(void);
 int fn_8011F2C4(void);

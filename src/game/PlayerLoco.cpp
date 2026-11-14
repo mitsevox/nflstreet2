@@ -28,7 +28,7 @@ int fn_800C0464(void *p);
 int PlayerLocoFindSampleIndex(Object_801BBD5C *pObject, float value);
 float PlayerLocoUpdateBlendWeights(int index, Block_801BE60C *pBlock, LocoBlendSet_t *pObject, Record_800D81C8 *pEntries,
                   float value);
-int fn_800DC080(Object_80039F5C *p);
+int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
 void AnimSeqSetDuration(AnimSeq_t *p, float value);
 int fn_801CFE40(float y, float x);
@@ -292,7 +292,7 @@ extern "C" int PlayerLocoGetPrimaryCategory(Object_80039F5C *p, int team, int a,
                 if (*pOut) {
                     *pOut = 1;
                     result = 7;
-                } else if (p->mpState->mId == 18 || fn_800DC080(p)) {
+                } else if (p->mpState->mId == 18 || PlayerActionAnimIsPassReady(p)) {
                     *pOut = 0;
                     result = 3;
                 } else {

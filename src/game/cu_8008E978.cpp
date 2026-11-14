@@ -8335,7 +8335,7 @@ int PlayerLocoMoveCmdPhase(Table_80089904 *pTable, unsigned short key, void *pRe
               unsigned int phase);
 int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DC36C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int PlayerActionAnimFacingCallback(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
 int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
@@ -8375,7 +8375,7 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[74] = PlayerLocoCyclePhase;
     lbl_8030FB60[77] = PlayerLocoMoveCmdPhase;
     lbl_8030FB60[73] = fn_800DC6F4;
-    lbl_8030FB60[84] = fn_800DC36C;
+    lbl_8030FB60[84] = PlayerActionAnimFacingCallback;
     lbl_8030FB60[91] = fn_800DD69C;
     lbl_8030FB60[203] = fn_800DDD24;
     lbl_8030FB60[193] = PlayerLocoHandleMomentumState;

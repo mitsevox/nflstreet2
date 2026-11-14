@@ -198,7 +198,7 @@ void fn_800D7A18(Object_80039F5C *p);
 void fn_800DB520(void *pBlock, Object_80039F5C *p, Object_80039F5C *pOther, float value);
 void fn_800DB7A4(void *pBlock, Object_80039F5C *p);
 void fn_800DB8B4(void *pBlock, Object_80039F5C *p);
-int fn_800DC080(Object_80039F5C *p);
+int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_800DC21C(Object_80039F5C *p);
 void fn_800DF134(Object_80039F5C *p, Point_8017886C offset, int angle, int key);
 int fn_800E1554(Object_80039F5C *p);
@@ -1504,7 +1504,7 @@ extern "C" void fn_8011569C(Object_80039F5C *p)
                     || (pCarrier->mMotion.mPos.mX > ball.mX && p->mMotion.mPos.mX > ball.mX))) {
                 float gap = ball.mY - pCarrier->mMotion.mPos.mY;
                 int a = fn_800DC21C(pCarrier);
-                int b = fn_800DC080(pCarrier);
+                int b = PlayerActionAnimIsPassReady(pCarrier);
                 if ((a != 0 || b != 0 || fn_801783AC(0) != 0) && gap < 8.0f) {
                     pState->mUnknown20 = 1;
                 }

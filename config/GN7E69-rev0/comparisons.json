@@ -25004,7 +25004,7 @@
           "end": "0x801339E4"
         },
         {
-          "symbol": "fn_801339E4",
+          "symbol": "PlyrSteerAroundBlocker",
           "start": "0x801339E4",
           "end": "0x80133BB4"
         },
@@ -46622,7 +46622,7 @@
     {
       "source": "src/game/PlayerActionAnim.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800DAEE4-0x800DF6EC for src/game/PlayerActionAnim.cpp (the first part of the former cu_800DAEE4.cpp, split at 0x800DF6EC), its function extents, .rodata 0x8029D8A8-0x8029D9F0 and the initialized word 0x803EAD1C-0x803EAD20. The unreferenced 100621.12f word at 0x8029D908 belongs to a function the GameCube linker discarded (Xbox prototype 0x94410); it is not rebuilt, so the literals after it compare 4 bytes low. Draft comparisons only; the original bytes remain linked.",
+      "evidence": "evidence.tsv unit row 0x800DAEE4-0x800DF6EC for src/game/PlayerActionAnim.cpp (the first part of the former cu_800DAEE4.cpp, split at 0x800DF6EC), its function extents, .rodata 0x8029D8A8-0x8029D9F0 and the initialized word 0x803EAD1C-0x803EAD20. The unreferenced 100621.12f word at 0x8029D908 belongs to a function the GameCube linker discarded (Xbox prototype 0x94410); it is rebuilt from that body as the discarded PlayerActionAnimSetSpeedRatio (evidence.tsv linker row 0x8029D908), so the literals after it compare at their native offsets. Draft comparisons only; the original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -46715,12 +46715,12 @@
           "end": "0x800DBC4C"
         },
         {
-          "symbol": "fn_800DBC4C",
+          "symbol": "PlayerActionAnimSteerPassReady",
           "start": "0x800DBC4C",
           "end": "0x800DC080"
         },
         {
-          "symbol": "fn_800DC080",
+          "symbol": "PlayerActionAnimIsPassReady",
           "start": "0x800DC080",
           "end": "0x800DC21C"
         },
@@ -46730,7 +46730,7 @@
           "end": "0x800DC36C"
         },
         {
-          "symbol": "fn_800DC36C",
+          "symbol": "PlayerActionAnimFacingCallback",
           "start": "0x800DC36C",
           "end": "0x800DC578"
         },
@@ -46894,6 +46894,9 @@
           "start": "0x800DF654",
           "end": "0x800DF6EC"
         }
+      ],
+      "discarded": [
+        "PlayerActionAnimSetSpeedRatio"
       ]
     },
     {

@@ -2420,6 +2420,18 @@
     "SortListAdd": {
       "address": "0x800C3130",
       "evidence": "evidence.tsv function and name rows for 0x800C3130 (unlinked; called from linked src/game/PlyrMgr.cpp)."
+    },
+    "PlayerActionAnimIsPassReady": {
+      "address": "0x800DC080",
+      "evidence": "evidence.tsv function and name rows for 0x800DC080 (unlinked; called from linked src/game/PlayerLoco.cpp, Handoff.cpp, PlayerMoveAnim.cpp, Pursue.cpp, PlyrMove.cpp and PlayerLocoAnim.cpp)."
+    },
+    "PlayerActionAnimSteerPassReady": {
+      "address": "0x800DBC4C",
+      "evidence": "evidence.tsv function and name rows for 0x800DBC4C (unlinked; called from linked src/game/Handoff.cpp and src/game/QbPass.cpp)."
+    },
+    "PlayerActionAnimFacingCallback": {
+      "address": "0x800DC36C",
+      "evidence": "evidence.tsv function and name rows for 0x800DC36C (unlinked; its address is stored by the comparison source src/game/cu_8008E978.cpp)."
     }
   },
   "units": [
