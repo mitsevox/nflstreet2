@@ -38,7 +38,7 @@ typedef struct TDbParseInfo_801FC9D4 {
     TDbExpr_t *mWhere;
     unsigned int mExprCount;
     TDbExpr_t *mExprs;
-    TDbLexer_801FCE10 mLexer;
+    TDbLexer_t mLexer;
 } TDbParseInfo_801FC9D4;
 
 extern TDbSQLPool_801FC9D4 lbl_8039B43C[5];
@@ -70,10 +70,10 @@ extern int fn_801FA844(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *p
 extern void TDbUtilFillTableColRefsForTableColLits(TDbLitRef_t *pLits, unsigned long long *pOut);
 
 void fn_801FD0A4(TDbParseInfo_801FC9D4 *pInfo);
-int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbExpr_t **ppExpr);
+int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbExpr_t **ppExpr);
 void fn_801FFEE4(TDbParseInfo_801FC9D4 *pInfo);
-void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, struct QueryResult *pResult);
-int fn_802004CC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbIdxColumnDef_t *pOrder,
+void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, struct QueryResult *pResult);
+int fn_802004CC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbIdxColumnDef_t *pOrder,
                 int count);
 void fn_8020071C(int db, TDbParseInfo_801FC9D4 *pInfo, struct QueryResult *pResult);
 
@@ -86,7 +86,7 @@ static inline int TDbSQLPoolInit_801FC9D4(TDbSQLPool_801FC9D4 *pPool, unsigned i
     pPool->mCount = count;
     if (count != 0) {
         _TDbMemNotify(0, -1, -1);
-        err = TDbExtMemAlloc(lbl_803EBE8C, count * itemSize, &pPool->mItems);
+        err = TDbExtMemAlloc(_tDbGlobalMemoryHeapID, count * itemSize, &pPool->mItems);
         _TDbMemNotify(4, -1, -1);
         return err;
     }
@@ -96,7 +96,7 @@ static inline int TDbSQLPoolInit_801FC9D4(TDbSQLPool_801FC9D4 *pPool, unsigned i
 static inline void TDbSQLPoolFree_801FCD04(TDbSQLPool_801FC9D4 *pPool)
 {
     if (pPool->mCount != 0 && pPool->mItemSize != 0) {
-        TDbExtMemFree(lbl_803EBE8C, pPool->mItems, pPool->mItemSize * pPool->mCount);
+        TDbExtMemFree(_tDbGlobalMemoryHeapID, pPool->mItems, pPool->mItemSize * pPool->mCount);
     }
 }
 
@@ -132,14 +132,14 @@ static inline void TDbParseInfoRelease_801FCE10(TDbParseInfo_801FC9D4 *pInfo)
     TDbSQLPoolPut_801FCE10(&lbl_8039B43C[0], 1);
 }
 
-static inline void TDbLexNext_801FD3C0(TDbLexer_801FCE10 *pLexer)
+static inline void TDbLexNext_801FD3C0(TDbLexer_t *pLexer)
 {
-    TDbToken_801FD2E8 *pNext = &pLexer->mTokens[1];
+    TDbToken_t *pNext = &pLexer->mTokens[1];
 
     pLexer->mTokens[0].mType = pNext->mType;
     pLexer->mTokens[0].mSrc = pNext->mSrc;
     pLexer->mTokens[0].mValue = pNext->mValue;
-    fn_802009B0(pLexer, 1);
+    T3DB_Lexer_GetTokens(pLexer, 1);
 }
 
 int fn_801FC9D4(int parseCount, int colRefCount, int countC, int tableRefCount, int countE)
@@ -175,7 +175,7 @@ int fn_801FCE10(void *pResult, const char *pQuery, ...)
 {
     struct QueryResult local;
     TDbParseInfo_801FC9D4 *pInfo;
-    TDbLexer_801FCE10 *pLexer;
+    TDbLexer_t *pLexer;
 
     pInfo = TDbSQLPoolGet_801FCE10(&lbl_8039B43C[0]);
     pLexer = &pInfo->mLexer;
@@ -189,7 +189,7 @@ int fn_801FCE10(void *pResult, const char *pQuery, ...)
     ((struct QueryResult *)pResult)->mUnknown2 = 0;
     pLexer->mSrc = (char *)pQuery;
     pLexer->mBufUsed = 0;
-    fn_802009B0(pLexer, 0);
+    T3DB_Lexer_GetTokens(pLexer, 0);
     va_start(pInfo->mArgs, pQuery);
     fn_801FFFC4(pInfo, pLexer, -1, pResult);
     if (pInfo->mState != 2) {
@@ -292,7 +292,7 @@ void fn_801FD200(int db, TDbParseInfo_801FC9D4 *pInfo, void *pOrder, struct Quer
     }
 }
 
-unsigned int fn_801FD2E8(TDbParseInfo_801FC9D4 *pInfo, TDbToken_801FD2E8 *pToken)
+unsigned int fn_801FD2E8(TDbParseInfo_801FC9D4 *pInfo, TDbToken_t *pToken)
 {
     unsigned int value;
 
@@ -311,10 +311,10 @@ unsigned int fn_801FD2E8(TDbParseInfo_801FC9D4 *pInfo, TDbToken_801FD2E8 *pToken
     return value;
 }
 
-int fn_801FD3C0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbToken_801FD2E8 *pToken,
+int fn_801FD3C0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbToken_t *pToken,
                 unsigned int *pTable, unsigned int *pColumn)
 {
-    TDbToken_801FD2E8 *pNext = &pLexer->mTokens[1];
+    TDbToken_t *pNext = &pLexer->mTokens[1];
 
     *pTable = fn_801FD2E8(pInfo, pToken);
     if (pNext->mType == 0x3E) {
@@ -328,7 +328,7 @@ int fn_801FD3C0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FD47C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbSQLVar_801FD47C *pVar)
+int fn_801FD47C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbSQLVar_801FD47C *pVar)
 {
     TDbLexNext_801FD3C0(pLexer);
     TDbLexNext_801FD3C0(pLexer);
@@ -385,7 +385,7 @@ int fn_801FD47C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FD97C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbLitRef_t *pRef,
+int fn_801FD97C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbLitRef_t *pRef,
                 TDbSQLVar_801FD47C *pVar, int mode)
 {
     unsigned int table;
@@ -410,7 +410,7 @@ int fn_801FD97C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FDA78(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, int mode)
+int fn_801FDA78(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, int mode)
 {
     unsigned int n;
 
@@ -435,7 +435,7 @@ int fn_801FDA78(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FDC18(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result)
+int fn_801FDC18(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     TDbSQLTableRef_801FDC18 *pRef;
     TDbExpr_t *pExpr;
@@ -463,7 +463,7 @@ int fn_801FDC18(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FDDC8(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, unsigned int *pOp)
+int fn_801FDDC8(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, unsigned int *pOp)
 {
     TDbLexNext_801FD3C0(pLexer);
     switch (pLexer->mTokens[0].mType) {
@@ -492,7 +492,7 @@ int fn_801FDDC8(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FDF28(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbValue_t *pValue)
+int fn_801FDF28(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbValue_t *pValue)
 {
     unsigned int table;
     unsigned int column;
@@ -508,15 +508,15 @@ int fn_801FDF28(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     switch (pLexer->mTokens[0].mType) {
     case 0x30:
         pValue->mType = TDB_TYPE_INT;
-        pValue->mValue.i = (int)pLexer->mTokens[0].mValue;
+        pValue->mValue.i = pLexer->mTokens[0].mValue.i;
         break;
     case 0x31:
         pValue->mType = TDB_TYPE_FLOAT;
-        pValue->mValue.f = *(float *)&pLexer->mTokens[0].mValue;
+        pValue->mValue.f = pLexer->mTokens[0].mValue.f;
         break;
     case 0x32:
         pValue->mType = TDB_TYPE_STRING;
-        pValue->mValue.s = pLexer->mTokens[0].mValue;
+        pValue->mValue.s = pLexer->mTokens[0].mValue.s;
         break;
     case 0:
         pValue->mValue.i = va_arg(pInfo->mArgs, int);
@@ -569,9 +569,9 @@ int fn_801FDF28(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FE484(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, int *pOp)
+int fn_801FE484(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, int *pOp)
 {
-    TDbToken_801FD2E8 *pNext = &pLexer->mTokens[1];
+    TDbToken_t *pNext = &pLexer->mTokens[1];
 
     switch (pNext->mType) {
     case 0x38:
@@ -589,7 +589,7 @@ int fn_801FE484(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FE534(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbExpr_t *pExpr)
+int fn_801FE534(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbExpr_t *pExpr)
 {
     result = fn_801FDF28(pInfo, pLexer, result, &pExpr->mLeft);
     result = fn_801FDDC8(pInfo, pLexer, result, (unsigned int *)&pExpr->mOp);
@@ -605,9 +605,9 @@ int fn_801FE534(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbExpr_t **ppExpr)
+int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbExpr_t **ppExpr)
 {
-    TDbToken_801FD2E8 *pNext = &pLexer->mTokens[1];
+    TDbToken_t *pNext = &pLexer->mTokens[1];
     TDbExpr_t *pExpr;
     TDbExpr_t *pRight;
     TDbExpr_t *pAnd;
@@ -653,9 +653,9 @@ int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FE840(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result)
+int fn_801FE840(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
-    TDbToken_801FD2E8 *pNext = &pLexer->mTokens[1];
+    TDbToken_t *pNext = &pLexer->mTokens[1];
 
     if (pNext->mType == 0x14) {
         TDbLexNext_801FD3C0(pLexer);
@@ -665,7 +665,7 @@ int fn_801FE840(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FE8DC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result)
+int fn_801FE8DC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     TDbSQLTableRef_801FDC18 *pRef;
     unsigned int joinType;
@@ -690,7 +690,7 @@ int fn_801FE8DC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FEA04(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbLitRef_t *pRef,
+int fn_801FEA04(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbLitRef_t *pRef,
                 TDbSQLVar_801FD47C *pVar)
 {
     unsigned int table;
@@ -754,17 +754,17 @@ int fn_801FEA04(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
         pVar->mType = TDB_TYPE_STRING;
         break;
     case 0x30:
-        value = (unsigned int)pLexer->mTokens[0].mValue;
+        value = pLexer->mTokens[0].mValue.u;
         pVar->mType = TDB_TYPE_INT;
         pVar->mSize = 4;
         break;
     case 0x31:
-        value = (unsigned int)pLexer->mTokens[0].mValue;
+        value = pLexer->mTokens[0].mValue.u;
         pVar->mType = TDB_TYPE_FLOAT;
         pVar->mSize = 4;
         break;
     case 0x32:
-        value = (unsigned int)pLexer->mTokens[0].mValue;
+        value = pLexer->mTokens[0].mValue.u;
         pVar->mType = TDB_TYPE_STRING;
         pVar->mSize = 4;
         break;
@@ -775,7 +775,7 @@ int fn_801FEA04(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FEF44(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result)
+int fn_801FEF44(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     unsigned int n;
 
@@ -800,13 +800,13 @@ int fn_801FEF44(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FF0D4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result)
+int fn_801FF0D4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     TDbLexNext_801FD3C0(pLexer);
     return fn_801FEF44(pInfo, pLexer, result);
 }
 
-int fn_801FF13C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result)
+int fn_801FF13C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     TDbLitRef_t *pRef;
     unsigned int n;
@@ -850,7 +850,7 @@ int fn_801FF13C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FF390(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result)
+int fn_801FF390(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     unsigned int id;
     unsigned int type = pLexer->mTokens[1].mType;
@@ -886,7 +886,7 @@ int fn_801FF390(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return fn_801FE840(pInfo, pLexer, result);
 }
 
-int fn_801FF544(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, unsigned char *pFlag)
+int fn_801FF544(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, unsigned char *pFlag)
 {
     TDbSQLTableRef_801FDC18 *pRef;
     struct QueryCursor *pCursor;
@@ -941,13 +941,13 @@ int fn_801FF544(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FF8BC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result)
+int fn_801FF8BC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     result = fn_801FE8DC(pInfo, pLexer, result);
     return fn_801FE840(pInfo, pLexer, result);
 }
 
-int fn_801FF8FC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result)
+int fn_801FF8FC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     struct QueryCursor *pCursor;
     TDbParseInfo_801FC9D4 *pOther;
@@ -972,7 +972,7 @@ int fn_801FF8FC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FFA6C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result)
+int fn_801FFA6C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     TDbSQLTableRef_801FDC18 *pRef;
 
@@ -993,7 +993,7 @@ int fn_801FFA6C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return fn_801FE840(pInfo, pLexer, result);
 }
 
-int fn_801FFB68(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result)
+int fn_801FFB68(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     TDbSQLTableRef_801FDC18 *pRef;
     unsigned int id;
@@ -1118,7 +1118,7 @@ void fn_801FFEE4(TDbParseInfo_801FC9D4 *pInfo)
     fn_801FFE88(pInfo);
 }
 
-void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, struct QueryResult *pResult)
+void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, struct QueryResult *pResult)
 {
     TDbIdxColumnDef_t order[8];
     unsigned char unique;
@@ -1236,10 +1236,10 @@ void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int re
     }
 }
 
-int fn_802004CC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbIdxColumnDef_t *pOrder,
+int fn_802004CC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbIdxColumnDef_t *pOrder,
                 int count)
 {
-    TDbToken_801FD2E8 *pNext = &pLexer->mTokens[1];
+    TDbToken_t *pNext = &pLexer->mTokens[1];
     int more;
 
     if (pNext->mType == 0x20) {

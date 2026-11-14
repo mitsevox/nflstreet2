@@ -67,7 +67,7 @@ int fn_802075F4(TDbStmt_80205754 *pStmt, unsigned int t)
                 if (pStmt->mRows[t] >= pStmt->mTables[t]->mRowCount) {
                     break;
                 }
-                if (TDbRowBit_801FAAF8(pStmt->mTables[t], pStmt->mRows[t])) {
+                if (_TDbRowIsDeleted(pStmt->mTables[t], pStmt->mRows[t])) {
                     pStmt->mRows[t]++;
                     continue;
                 }
@@ -117,7 +117,7 @@ int fn_80207988(TDbStmt_80205754 *pStmt, unsigned int t)
                 for (;;) {
                     pStmt->mRows[t]++;
                     if (pStmt->mRows[t] >= pStmt->mTables[t]->mRowCount ||
-                        !TDbRowBit_801FAAF8(pStmt->mTables[t], pStmt->mRows[t])) {
+                        !_TDbRowIsDeleted(pStmt->mTables[t], pStmt->mRows[t])) {
                         break;
                     }
                 }
@@ -289,7 +289,7 @@ int fn_80207E24(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_t *pCols, int create)
             if (err == 0) {
                 if (pBest == 0) {
                     for (row = 0; row < pStmt->mTables[0]->mRowCount; row++) {
-                        if (!TDbRowBit_801FAAF8(pStmt->mTables[0], row)) {
+                        if (!_TDbRowIsDeleted(pStmt->mTables[0], row)) {
                             err = _TDbIndexRowAdd(pIndex, row);
                             if (err != 0) {
                                 break;
@@ -377,7 +377,7 @@ int fn_80208094(TDbStmt_80205754 *pStmt)
     return 0;
 }
 
-int fn_80208204(void *pUnused, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pResult)
+int fn_80208204(int dbId, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pResult)
 {
     int err = 0;
     TDbValue_t value;
@@ -416,7 +416,7 @@ int fn_80208204(void *pUnused, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pRes
                         pResult->mCount++;
                     }
                     if (pStmt->mRows[0] < pStmt->mTables[0]->mRowCount &&
-                        TDbRowBit_801FAAF8(pStmt->mTables[0], pStmt->mRows[0])) {
+                        _TDbRowIsDeleted(pStmt->mTables[0], pStmt->mRows[0])) {
                         err = fn_80207988(pStmt, 0);
                     } else {
                         err = fn_80207988(pStmt, pStmt->mTableCount - 1);
@@ -431,10 +431,10 @@ int fn_80208204(void *pUnused, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pRes
         if (err == 0x17) {
             err = 0;
         }
-        if (pStmt->mTables[0]->mUnknown46 == pStmt->mTables[0]->mRowCount) {
-            pStmt->mTables[0]->mUnknown46 = 0;
+        if (pStmt->mTables[0]->mDeletedCount == pStmt->mTables[0]->mRowCount) {
+            pStmt->mTables[0]->mDeletedCount = 0;
             pStmt->mTables[0]->mRowCount = 0;
-            pStmt->mTables[0]->mUnknown48 = 0xFFFF;
+            pStmt->mTables[0]->mFirstDeletedRow = 0xFFFF;
         }
     }
     pResult->mErr = err;

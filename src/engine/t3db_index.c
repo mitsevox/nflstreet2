@@ -539,9 +539,9 @@ int _TDbIndexCreate(TDbTable_t *pTable, int id, TDbIdxColumnDef_t *pDefs,
     while (pDefs[i].mId != -1) {
         i++;
     }
-    _TDbMemNotify(2, (int)pTable->mDb->mUnknown8, pTable->mUnknown1C);
+    _TDbMemNotify(2, (int)pTable->mDb->mId, pTable->mId);
     if (i <= 2) {
-        err = __TDbMemPoolAlloc(&lbl_803E96A8, &pIndex);
+        err = __TDbMemPoolAlloc(&_tDbIndexPool, &pIndex);
         pIndex->mFlags = 4;
     } else {
         err =
@@ -584,7 +584,7 @@ int _TDbIndexCreate(TDbTable_t *pTable, int id, TDbIdxColumnDef_t *pDefs,
                 }
                 if (err == 0) {
                     for (row = 0; row < pTable->mRowCount; row++) {
-                        if (!TDbRowBit_801FAAF8(pTable, row)) {
+                        if (!_TDbRowIsDeleted(pTable, row)) {
                             err = _TDbIndexRowAdd(pIndex, row);
                             if (err != 0) {
                                 break;
@@ -611,7 +611,7 @@ int _TDbIndexCreate(TDbTable_t *pTable, int id, TDbIdxColumnDef_t *pDefs,
         pIndex->mNext = 0;
     } else if (pIndex != 0) {
         if (pIndex->mFlags & 4) {
-            __TDbMemPoolFree(&lbl_803E96A8, pIndex);
+            __TDbMemPoolFree(&_tDbIndexPool, pIndex);
         } else {
             TDbExtMemFree(pTable->mDb->mHeap, pIndex, sizeof(TDbIndex_t) + (i - 1) * sizeof(TDbIdxPart_t));
         }
@@ -674,7 +674,7 @@ int _TDbIndexDestroy(TDbIndex_t *pIndex)
                 _TDbExprFree(pIndex->mFilter);
             }
             if (pIndex->mFlags & 4) {
-                __TDbMemPoolFree(&lbl_803E96A8, pIndex);
+                __TDbMemPoolFree(&_tDbIndexPool, pIndex);
             } else {
                 TDbExtMemFree(pTable->mDb->mHeap, pIndex,
                             sizeof(TDbIndex_t) + (pIndex->mTree.mPartCount - 1) * sizeof(TDbIdxPart_t));

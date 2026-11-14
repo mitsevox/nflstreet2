@@ -16,7 +16,7 @@ int fn_80205754(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLits, unsigned int *pMask
         }
         for (i = 0; i < pStmt->mTableCount; i++) {
             for (lit = 0; pLits[lit].mId != -1; lit++) {
-                if (pStmt->mTableCount == 1 || pLits[lit].mTableId == pStmt->mTables[i]->mUnknown1C ||
+                if (pStmt->mTableCount == 1 || pLits[lit].mTableId == pStmt->mTables[i]->mId ||
                     (pLits[lit].mTableId == 0 && i == 0)) {
                     if (pMask[lit >> 5] & (1 << (lit & 31))) {
                         if (fn_80205880(pStmt->mTables[i], pLits[lit].mColumn, pQuery->mSource.mQIdx)) {

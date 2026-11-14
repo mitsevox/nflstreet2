@@ -2408,6 +2408,62 @@
     "gPlayerPositionAbbrevs": {
       "address": "0x802EA294",
       "evidence": "evidence.tsv data and name rows for 0x802EA294 (26 position-name pointers in the .data of a file that is not yet a unit, used here only by the discarded GameTextShowRosterFill of src/game/GameText.cpp; storage not claimed by any unit)."
+    },
+    "_TDbIOReadTableNew": {
+      "address": "0x801FB0F8",
+      "evidence": "evidence.tsv function/name rows at0x801FB0F8; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOReadIndex": {
+      "address": "0x801FB5C0",
+      "evidence": "evidence.tsv function/name rows at0x801FB5C0; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOReadExprNode": {
+      "address": "0x801FB9D0",
+      "evidence": "evidence.tsv function/name rows at0x801FB9D0; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOWriteExprNode": {
+      "address": "0x801FBAC4",
+      "evidence": "evidence.tsv function/name rows at0x801FBAC4; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOWriteIndex": {
+      "address": "0x801FBC2C",
+      "evidence": "evidence.tsv function/name rows at0x801FBC2C; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOWriteTable": {
+      "address": "0x801FBD2C",
+      "evidence": "evidence.tsv function/name rows at0x801FBD2C; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOLoadDatabase": {
+      "address": "0x801FBFEC",
+      "evidence": "evidence.tsv function/name rows at0x801FBFEC; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOSaveDatabase": {
+      "address": "0x801FC5FC",
+      "evidence": "evidence.tsv function/name rows at0x801FC5FC; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOCRC32": {
+      "address": "0x801FC950",
+      "evidence": "evidence.tsv function/name rows at0x801FC950; complete measured comparison in its original file; original target code remains linked."
+    },
+    "T3DB_Lexer_Number": {
+      "address": "0x80200DD4",
+      "evidence": "evidence.tsv function/name rows at0x80200DD4; complete measured comparison in its original file; original target code remains linked."
+    },
+    "T3DB_Lexer_Identifier": {
+      "address": "0x80201030",
+      "evidence": "evidence.tsv function/name rows at0x80201030; complete measured comparison in its original file; original target code remains linked."
+    },
+    "T3DB_Lexer_StringLiteral": {
+      "address": "0x80201C70",
+      "evidence": "evidence.tsv function/name rows at0x80201C70; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_tDbIndexPool": {
+      "address": "0x803E96A8",
+      "evidence": "evidence.tsv data/name rows: shared database state remains externally owned; IO consumer does not claim its native storage."
+    },
+    "_tDbGlobalMemoryHeapID": {
+      "address": "0x803EBE8C",
+      "evidence": "evidence.tsv data/name rows: shared database state remains externally owned; IO consumer does not claim its native storage."
     }
   },
   "units": [
@@ -17278,6 +17334,38 @@
           "end": "0x80362F64"
         }
       ]
+    },
+    {
+      "source": "src/engine/t3db_io.c",
+      "profile": "engine_c_fastmath",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801FA870",
+          "end": "0x801FB0F8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9548",
+          "end": "0x802F9948"
+        }
+      ],
+      "evidence": "evidence.tsv whole-file provisional unit and Database file partial linking source-form rows. Native exact prefix only; all remaining complete functions retained in full comparisons."
+    },
+    {
+      "source": "src/engine/T3DB_Lexer.c",
+      "profile": "engine_c_fastmath",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802009B0",
+          "end": "0x80200DD4"
+        }
+      ],
+      "evidence": "evidence.tsv whole-file provisional unit and Database file partial linking source-form rows. Native exact prefix only; all remaining complete functions retained in full comparisons."
     }
   ]
 }
