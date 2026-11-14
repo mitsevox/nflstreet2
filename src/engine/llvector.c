@@ -215,6 +215,8 @@ float fn_80227704(float *pA, float *pB)
     return pA[0] * pB[0] + pA[1] * pB[1] + pA[2] * pB[2];
 }
 
+#if defined(DECOMP_COMPARE)
+
 void fn_802277DC(float *pOut, float *pA, float *pB)
 {
     float x = pA[1] * pB[2] - pA[2] * pB[1];
@@ -328,3 +330,5 @@ void fn_80227E40(float *pOut, float *p)
     pOut[2] = m[2][0] * x + m[2][1] * y + m[2][2] * z + m[2][3] * w;
     pOut[3] = m[3][0] * x + m[3][1] * y + m[3][2] * z + m[3][3] * w;
 }
+
+#endif

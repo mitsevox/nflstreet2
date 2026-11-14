@@ -1185,14 +1185,6 @@
       "address": "0x801E2C64",
       "evidence": "evidence.tsv external row for 0x801E2C64 (fn_801E2C64__14Class_801E27A4PP13Node_801E2878) and function row 0x801E2C64 (comparison unit; original assembly remains linked)."
     },
-    "fn_801E90A8__14Class_801E8E04P14Class_801E27A4P14Class_801E2878": {
-      "address": "0x801E90A8",
-      "evidence": "evidence.tsv external row for 0x801E90A8 (fn_801E90A8__14Class_801E8E04P14Class_801E27A4P14Class_801E2878) and function row 0x801E90A8 (comparison unit; original assembly remains linked)."
-    },
-    "fn_801E90CC__14Class_801E8E04P14Class_801E27A4P14Class_801E2878": {
-      "address": "0x801E90CC",
-      "evidence": "evidence.tsv external row for 0x801E90CC (fn_801E90CC__14Class_801E8E04P14Class_801E27A4P14Class_801E2878) and function row 0x801E90CC (comparison unit; original assembly remains linked)."
-    },
     "OSResetSystem": {
       "address": "0x8023C0F8",
       "evidence": "evidence.tsv function/name rows for 0x8023C0F8 (target extent, related SDK name)."
@@ -18281,6 +18273,77 @@
           "placement": ".text",
           "start": "0x80088F78",
           "end": "0x80088FFC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3db_query.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv linker row 0x80205754-0x80205DB8 for the unchanged native contribution from src/engine/t3db_query.c; existing function/type/compiler evidence and larger-file ownership remain in force. This is a linked native range, not a claim that its original source file is complete or closed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80205754",
+          "end": "0x80205DB8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802075F4.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv linker row 0x802075F4-0x8020840C for the unchanged native contribution from src/engine/cu_802075F4.c; existing function/type/compiler evidence and larger-file ownership remain in force. This is a linked native range, not a claim that its original source file is complete or closed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802075F4",
+          "end": "0x8020840C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801E8E04.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv linker row 0x801E8E04-0x801E92D0 for the unchanged native contribution from src/engine/cu_801E8E04.cpp; existing function/type/compiler evidence and larger-file ownership remain in force. This is a linked native range, not a claim that its original source file is complete or closed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E8E04",
+          "end": "0x801E92D0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1660",
+          "end": "0x802B1678"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BC65C.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv linker row 0x801BC65C-0x801BC7C0 for the unchanged native contribution from src/engine/cu_801BC65C.c; existing function/type/compiler evidence and larger-file ownership remain in force. This is a linked native range, not a claim that its original source file is complete or closed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BC65C",
+          "end": "0x801BC7C0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/llvector.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv linker row 0x802270A4-0x8022772C for the unchanged native contribution from src/engine/llvector.c; existing function/type/compiler evidence and larger-file ownership remain in force. This is a linked native range, not a claim that its original source file is complete or closed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802270A4",
+          "end": "0x8022772C"
         }
       ]
     }
