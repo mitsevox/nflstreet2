@@ -250,7 +250,7 @@ void fn_80272EC4(void)
     Setup_80272EC4 setup;
     int i;
 
-    fn_8027555C();
+    SNDSYS_linkmaincpumixer();
     setup.m8 = lbl_803A6C24.m1C.mE;
     if (lbl_803A6C24.m1C.m23 != 1) {
         setup.m9 = lbl_803A6C24.m1C.m23;
@@ -729,7 +729,7 @@ int fn_80273DF8(Header_80273DF8 *header, int base, int index, int a, int b, int 
         }
     } else {
         for (i = 0; i < record->m23; i++) {
-            fn_80275F80(record->m4[i] - lbl_803A6C24.m1C.m12, header->m13, 1, base + header->m68[i],
+            MIX_playinit(record->m4[i] - lbl_803A6C24.m1C.m12, header->m13, 1, base + header->m68[i],
                         base + header->m68[0] + header->m80[i], header->m98[i], record->m23, record->m14, header->m5C,
                         header->m60, 0, 0, header->m2, i);
             fn_80274960(record->m4[i]);
@@ -980,7 +980,7 @@ int fn_80274CA8(int index, int value)
 
     if (record->m24 & 4) {
         for (i = 0; i < record->m23; i++) {
-            fn_80276B40(record->m4[i] - lbl_803A6C24.m1C.m12, value);
+            MIX_settimemult(record->m4[i] - lbl_803A6C24.m1C.m12, value);
         }
     }
     return 0;
@@ -1007,7 +1007,7 @@ void fn_80274E24(int index, int value)
 
     if (record->m24 & 4) {
         for (i = 0; i < record->m23; i++) {
-            fn_80276868(record->m4[i] - lbl_803A6C24.m1C.m12, value);
+            MIX_sethighpass(record->m4[i] - lbl_803A6C24.m1C.m12, value);
         }
     }
 }
@@ -1030,7 +1030,7 @@ int fn_80274EAC(int index)
         }
         return position - channel->m18;
     }
-    return fn_80276820(index - lbl_803A6C24.m1C.m12);
+    return MIX_getframe(index - lbl_803A6C24.m1C.m12);
 }
 
 int fn_80274F5C(int index)
@@ -1070,7 +1070,7 @@ int fn_802750B8(int index, Desc_80276798 *desc)
 
     if (record->m24 & 4) {
         for (i = 0; i < record->m23; i++) {
-            fn_80276798(record->m4[i] - lbl_803A6C24.m1C.m12, i, desc);
+            MIX_filteradd(record->m4[i] - lbl_803A6C24.m1C.m12, i, desc);
         }
         return 0;
     }

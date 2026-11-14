@@ -1,8 +1,9 @@
 #ifndef ENGINE_SNDLIB_H
 #define ENGINE_SNDLIB_H
 
-/* Declarations shared by the files of the sound range 0x802714A8-0x80276DE4:
-   cu_802714A8.cpp, sdspmix.c, snddrv.c and cu_802753F0.cpp. */
+/* Declarations shared by the files of the sound range 0x802714A8-0x80276B7C:
+   cu_802714A8.cpp, sdspmix.c, snddrv.c, sfxrevc.c, slinkmix.c, smixer.c, smixfilt.c, smixfram.c,
+   smixhip.c, smixptch.c and smixtmul.c. */
 
 #include <dolphin/ai.h>
 #include <dolphin/ar.h>
@@ -241,7 +242,6 @@ extern void (*lbl_803B5038)(int index);
 extern void (*lbl_803B503C)(int index);
 extern void (*lbl_803B5040)(int index, int value);
 extern int lbl_8030002C;
-extern int lbl_80300E98;
 extern OSMutex lbl_803B4B90;
 extern Node_803B4E20 **lbl_803B4E20;
 extern float **lbl_803B4E24;
@@ -271,16 +271,16 @@ void *SNDMEMI_allocz(int size);
 void SNDMEMI_free(void *p);
 void SNDSYS_entercritical(void);
 void SNDSYS_leavecritical(void);
-void fn_8027555C(void);
-int fn_80276820(int index);
-void fn_80276868(int index, int value);
+void SNDSYS_linkmaincpumixer(void);
+int MIX_getframe(int index);
+void MIX_sethighpass(int index, int value);
 void *fn_80279960(int size);
 void fn_80279B24(void *p);
 void fn_80279D0C(Node_80279D90 *node, Params_80279D0C *params);
 void fn_80279DF8(Node_80279D90 **list, Node_80279D90 *node);
 void fn_8027A7A0(Node_80279D90 *node, int a, int b);
 void fn_80277240(Node_80279D90 *node);
-void fn_80275F54(void);
+void MIX_reset(void);
 void fn_802747D8(int index);
 void fn_80279598(void);
 int fn_8027271C(int index);
@@ -333,25 +333,25 @@ void fn_80275358(void);
 void fn_8027535C(void);
 void fn_80275384(void);
 int fn_802753AC(Struct_802753AC *p, int mode);
-float *fn_802753F0(int index);
-void fn_80275404(void);
-void fn_802754A8(void);
-void fn_8027555C(void);
-void fn_80275F80(int index, int type, int mode, int a, int b, void *data, int c, int d, int e, int f, int g, int h,
+float *MIX_getwetbuffer(int index);
+void MIX_createFxglobals(void);
+void MIX_destroyFxglobals(void);
+void SNDSYS_linkmaincpumixer(void);
+void MIX_playinit(int index, int type, int mode, int a, int b, void *data, int c, int d, int e, int f, int g, int h,
                  int k, int slot);
-void fn_80275948(float value);
-void *fn_80275B7C(int size);
-void fn_80275B9C(void *p);
-void fn_80275BBC(Setup_80272EC4 *setup);
-void fn_80276238(int index);
-void fn_80276278(int index);
-void fn_80276378(int index, int channel, float value);
-void fn_802763AC(int index, int slot, float value);
-void fn_80276798(int index, int slot, Desc_80276798 *desc);
-int fn_80276820(int index);
-void fn_80276868(int index, int value);
-void fn_80276A84(int index, int value);
-void fn_80276B40(int index, int value);
+void SNDMIX_setmasterlowpass(float value);
+void *SNDI_New(int size);
+void SNDI_Delete(void *p);
+void MIX_create(Setup_80272EC4 *setup);
+void MIXI_stop(int index);
+void MIX_stop(int index);
+void SNDMIX_setdrygain(int index, int channel, float value);
+void SNDMIX_setwetgain(int index, int slot, float value);
+void MIX_filteradd(int index, int slot, Desc_80276798 *desc);
+int MIX_getframe(int index);
+void MIX_sethighpass(int index, int value);
+void MIX_setpitch(int index, int value);
+void MIX_settimemult(int index, int value);
 }
 
 

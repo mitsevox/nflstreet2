@@ -229,7 +229,7 @@ void fn_80274E24(int index, int value);
 int fn_8027474C(int index);
 int fn_802750B8(int index, Desc_80276798 *desc);
 
-void fn_802774C8(int count, short *src, float *dst);
+void decode16x87(int count, short *src, float *dst);
 unsigned char *fn_802792F0(int index, int channel, int *length, int *b);
 void fn_8027952C(int index, int channel, int value);
 void fn_802797F4(void *(*alloc)(int size));

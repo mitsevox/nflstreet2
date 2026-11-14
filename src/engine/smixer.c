@@ -1,86 +1,32 @@
-/* Sound mixer set-up (neutral file name): the mixer tables and the callbacks the driver installs,
-   then each voice's play, stop and gain records. */
+/* Software mixer (smixer.c): creates and destroys the main-CPU mixer, starts, plays and stops voices
+   through their filter chains, sets their dry and wet gains and mixes each audio slice. */
 
 #include "engine/sndlib.h"
 
-
-float *fn_802753F0(int index)
-{
-    return lbl_803B4E24[index];
-}
-
-void fn_80275404(void)
-{
-    int size = lbl_8030002C * sizeof(float *) + lbl_8030002C * sizeof(int) + lbl_8030002C * sizeof(float);
-    float **buffer = (float **)SNDMEMI_allocz(size);
-
-    lbl_803B4E24 = buffer;
-    lbl_803B4E34.m14 = (int *)(buffer + lbl_8030002C);
-    lbl_803B4E34.m100 = (float *)(lbl_803B4E34.m14 + lbl_8030002C);
-    memset(buffer, 0, size);
-    lbl_803B4E20 = (Node_803B4E20 **)SNDMEMI_allocz(lbl_8030002C * 4);
-    memset(lbl_803B4E20, 0, lbl_8030002C * 4);
-    lbl_80300E98 = 1;
-}
-
-void fn_802754A8(void)
-{
-    int i;
-
-    if (lbl_80300E98 != 0) {
-        SNDMEMI_free(lbl_803B4E24);
-        for (i = 0; i < lbl_8030002C; i++) {
-            if (lbl_803B4E20[i] != 0) {
-                Node_803B4E20 *node = lbl_803B4E20[i];
-
-                do {
-                    Node_803B4E20 *next = node->m0;
-
-                    SNDMEMI_free(node);
-                    node = next;
-                } while (node != 0);
-            }
-        }
-        SNDMEMI_free(lbl_803B4E20);
-        lbl_80300E98 = 0;
-    }
-}
-
-void fn_8027555C(void)
-{
-    lbl_803B5028 = fn_80275BBC;
-    lbl_803B502C = fn_80275E7C;
-    lbl_803B5030 = fn_802763E0;
-    lbl_803B5034 = fn_80275F80;
-    lbl_803B5038 = fn_80276194;
-    lbl_803B503C = fn_80276278;
-    lbl_803B5040 = fn_80276A84;
-}
-
-void fn_80275948(float value)
+void SNDMIX_setmasterlowpass(float value)
 {
 }
 
-void *fn_80275B7C(int size)
+void *SNDI_New(int size)
 {
     return SNDMEMI_allocz(size);
 }
 
-void fn_80275B9C(void *p)
+void SNDI_Delete(void *p)
 {
     SNDMEMI_free(p);
 }
 
-void fn_80275BBC(Setup_80272EC4 *setup)
+void MIX_create(Setup_80272EC4 *setup)
 {
     int i;
 
-    fn_802797F4(fn_80275B7C);
-    fn_80279800(fn_80275B9C);
+    fn_802797F4(SNDI_New);
+    fn_80279800(SNDI_Delete);
     fn_8027980C(SNDI_memcpy);
     lbl_803B4E34.m0 = *setup;
     SNDSYS_entercritical();
-    fn_80275404();
+    MIX_createFxglobals();
     for (i = 0; i < lbl_8030002C; i++) {
         lbl_803B4E34.m14[i] = 0;
     }
@@ -123,7 +69,7 @@ void fn_80275BBC(Setup_80272EC4 *setup)
     fn_8027A7FC();
     fn_8027A8A4();
     fn_8027A844();
-    fn_80275F54();
+    MIX_reset();
     for (i = 0; i < lbl_803B4E34.m0.m9; i++) {
         lbl_803B4E34.m104[i] = 0;
         fn_80279C20(&lbl_803B4E34.m134[i]);
@@ -134,14 +80,14 @@ void fn_80275BBC(Setup_80272EC4 *setup)
     }
 }
 
-void fn_80275F54(void)
+void MIX_reset(void)
 {
     lbl_803B4E34.m1E0 = fn_8027A8EC;
-    lbl_803B4E34.m1E4 = fn_802774C8;
+    lbl_803B4E34.m1E4 = decode16x87;
     lbl_803B4E34.mC = 320;
 }
 
-void fn_80275F80(int index, int type, int mode, int a, int b, void *data, int c, int d, int e, int f, int g, int h,
+void MIX_playinit(int index, int type, int mode, int a, int b, void *data, int c, int d, int e, int f, int g, int h,
                  int k, int slot)
 {
     Record_803B5010 *record = &lbl_803B4E34.m1DC[index];
@@ -210,13 +156,13 @@ void fn_80275F80(int index, int type, int mode, int a, int b, void *data, int c,
     record->m0 = 1;
 }
 
-void fn_80276238(int index)
+void MIXI_stop(int index)
 {
-    fn_80276278(index);
+    MIX_stop(index);
     lbl_803B4E34.m0.m4(index);
 }
 
-void fn_80276278(int index)
+void MIX_stop(int index)
 {
     Record_803B5010 *record = &lbl_803B4E34.m1DC[index];
     Node_80279D90 *next;
@@ -239,96 +185,14 @@ void fn_80276278(int index)
     record->m0 = 0;
 }
 
-void fn_80276378(int index, int channel, float value)
+void SNDMIX_setdrygain(int index, int channel, float value)
 {
     lbl_803B4E34.m1DC[index].m1C[channel] = value;
     lbl_803B4E34.m1DC[index].m1 = 1;
 }
 
-void fn_802763AC(int index, int slot, float value)
+void SNDMIX_setwetgain(int index, int slot, float value)
 {
     lbl_803B4E34.m1DC[index].m38[slot] = value;
     lbl_803B4E34.m1DC[index].m1 = 1;
-}
-
-void fn_80276798(int index, int slot, Desc_80276798 *desc)
-{
-    Record_803B5010 *record = &lbl_803B4E34.m1DC[index];
-    Node_80279D90 *node = (Node_80279D90 *)SNDMEMI_allocz(desc->m4);
-
-    desc->mC(node, desc->m0, slot);
-    node->m18 = desc->mA;
-    node->m0 = desc->m10;
-    node->m4 = desc->m14;
-    node->m1A = 0;
-    fn_80279D90(&record->m40, node);
-}
-
-int fn_80276820(int index)
-{
-    Record_803B5010 *record = &lbl_803B4E34.m1DC[index];
-
-    if (record->m44 != 0) {
-        return record->m44(record->m48);
-    }
-    return -1;
-}
-
-void fn_80276868(int index, int value)
-{
-    Record_803B5010 *record = &lbl_803B4E34.m1DC[index];
-    Node_80279D90 *node;
-    Params_80279D0C params;
-
-    if (value > 0) {
-        node = record->m58;
-        if (node == 0) {
-            record->m58 = (Node_80279D90 *)SNDMEMI_allocz(88);
-            record->m58->m4 = 0;
-            record->m58->m18 = 80;
-            record->m58->m1A = 0;
-            fn_80279CB8(record->m58);
-            fn_80279D90(&record->m40, record->m58);
-        }
-        params.m0 = value << 8;
-        params.m4 = lbl_803A6C24.m1C.mA << 8;
-        fn_80279D0C(record->m58, &params);
-    } else if (record->m58 != 0) {
-        fn_80279DF8(&record->m40, record->m58);
-        SNDMEMI_free(record->m58);
-        record->m58 = 0;
-    }
-}
-
-void fn_80276A84(int index, int value)
-{
-    Record_803B5010 *record = &lbl_803B4E34.m1DC[index];
-    Node_80279D90 *node;
-    int flag = 0;
-
-    if (value > 0x40000) {
-        value = 0x40000;
-    }
-    node = record->m50;
-    if (node == 0) {
-        record->m50 = (Node_80279D90 *)SNDMEMI_allocz(60);
-        if (lbl_803B4E34.mE > 49) {
-            flag = 1;
-        }
-        record->m50->m4 = 0;
-        record->m50->m18 = 160;
-        record->m50->m1A = 0;
-        fn_8027A7A0(record->m50, lbl_803A6C24.m16F, flag);
-        fn_80279D90(&record->m40, record->m50);
-    }
-    fn_8027A4C0(record->m50, value);
-}
-
-void fn_80276B40(int index, int value)
-{
-    Record_803B5010 *record = &lbl_803B4E34.m1DC[index];
-
-    if (record->m4C != 0) {
-        fn_80277240(record->m4C);
-    }
 }

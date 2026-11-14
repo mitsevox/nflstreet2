@@ -1,8 +1,9 @@
 #ifndef ENGINE_SNDSYS_H
 #define ENGINE_SNDSYS_H
 
-/* Declarations shared by the files of the sound range 0x80276DE4-0x8027CF9C: cu_80276DE4.cpp,
-   slinklst.c, cu_8027882C.cpp, saramman.c, cu_80279BC0.cpp, supmutpf.c and cu_8027B1F8.cpp. */
+/* Declarations shared by the files of the sound range 0x80276B7C-0x8027CF9C: stretch.c, s3dlow.c,
+   sattrdef.c, sbend.c, sclcptch.c, sctlfilt.c, sgetdata.c, sgettag.c, shipass.c, slinklst.c,
+   cu_8027882C.cpp, saramman.c, cu_80279BC0.cpp, supmutpf.c and cu_8027B1F8.cpp. */
 
 #include <string.h>
 
@@ -232,7 +233,7 @@ extern "C" {
 
 extern Struct_803B5060 lbl_803B5060;
 extern Struct_803B53EC lbl_803B53EC;
-extern unsigned char lbl_80300EDC[];
+extern unsigned char sndcents[];
 extern unsigned int lbl_80301428[];
 extern int lbl_803A772C;
 
@@ -246,7 +247,8 @@ int fn_802789E0(int handle);
 int fn_80276C98(int count, unsigned char **data, float *value, float scale);
 void fn_80279648(void **buffer, int *capacity, int size, int elementSize);
 int fn_802791D0(int index);
-void fn_80277EC4(int index);
+void iSNDcalcpitch(int index);
+int SNDI_getb(unsigned char *p, int size);
 void *fn_8027BD68(int size);
 void fn_8027BD94(void *p);
 Struct_8027BE24 *fn_8027BDC0(void *memory);

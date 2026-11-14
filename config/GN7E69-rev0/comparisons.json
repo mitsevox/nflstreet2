@@ -26815,202 +26815,192 @@
       ]
     },
     {
-      "source": "src/engine/cu_802753F0.cpp",
+      "source": "src/engine/smixer.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x802753F0-0x80276DE4 (src/engine/cu_802753F0.cpp), the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802755E0-0x80276798 (src/engine/smixer.c), the sound_cxx compiler rows and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x802753F0",
-          "end": "0x80276DE4"
+          "start": "0x802755E0",
+          "end": "0x80276798"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_802753F0",
-          "start": "0x802753F0",
-          "end": "0x80275404"
-        },
-        {
-          "symbol": "fn_80275404",
-          "start": "0x80275404",
-          "end": "0x802754A8"
-        },
-        {
-          "symbol": "fn_802754A8",
-          "start": "0x802754A8",
-          "end": "0x8027555C"
-        },
-        {
-          "symbol": "fn_80275948",
+          "symbol": "SNDMIX_setmasterlowpass",
           "start": "0x80275948",
           "end": "0x8027594C"
         },
         {
-          "symbol": "fn_80275B7C",
+          "symbol": "SNDI_New",
           "start": "0x80275B7C",
           "end": "0x80275B9C"
         },
         {
-          "symbol": "fn_80275B9C",
+          "symbol": "SNDI_Delete",
           "start": "0x80275B9C",
           "end": "0x80275BBC"
         },
         {
-          "symbol": "fn_80275BBC",
+          "symbol": "MIX_create",
           "start": "0x80275BBC",
           "end": "0x80275E7C"
         },
         {
-          "symbol": "fn_80276238",
-          "start": "0x80276238",
-          "end": "0x80276278"
-        },
-        {
-          "symbol": "fn_80276278",
-          "start": "0x80276278",
-          "end": "0x80276378"
-        },
-        {
-          "symbol": "fn_80276378",
-          "start": "0x80276378",
-          "end": "0x802763AC"
-        },
-        {
-          "symbol": "fn_802763AC",
-          "start": "0x802763AC",
-          "end": "0x802763E0"
-        },
-        {
-          "symbol": "fn_80276798",
-          "start": "0x80276798",
-          "end": "0x80276820"
-        },
-        {
-          "symbol": "fn_80276820",
-          "start": "0x80276820",
-          "end": "0x80276868"
-        },
-        {
-          "symbol": "fn_80276868",
-          "start": "0x80276868",
-          "end": "0x80276938"
-        },
-        {
-          "symbol": "fn_80276A84",
-          "start": "0x80276A84",
-          "end": "0x80276B40"
-        },
-        {
-          "symbol": "fn_80276B40",
-          "start": "0x80276B40",
-          "end": "0x80276B7C"
-        },
-        {
-          "symbol": "fn_8027555C",
-          "start": "0x8027555C",
-          "end": "0x802755E0"
-        },
-        {
-          "symbol": "fn_80275F54",
+          "symbol": "MIX_reset",
           "start": "0x80275F54",
           "end": "0x80275F80"
         },
         {
-          "symbol": "fn_80275F80",
+          "symbol": "MIX_playinit",
           "start": "0x80275F80",
           "end": "0x80276194"
+        },
+        {
+          "symbol": "MIXI_stop",
+          "start": "0x80276238",
+          "end": "0x80276278"
+        },
+        {
+          "symbol": "MIX_stop",
+          "start": "0x80276278",
+          "end": "0x80276378"
+        },
+        {
+          "symbol": "SNDMIX_setdrygain",
+          "start": "0x80276378",
+          "end": "0x802763AC"
+        },
+        {
+          "symbol": "SNDMIX_setwetgain",
+          "start": "0x802763AC",
+          "end": "0x802763E0"
         }
       ]
     },
     {
-      "source": "src/engine/cu_80276DE4.cpp",
+      "source": "src/engine/stretch.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80276DE4-0x80278700 (src/engine/cu_80276DE4.cpp), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80276B7C-0x802774C8 (src/engine/stretch.c), the sound_cxx compiler rows and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80276DE4",
-          "end": "0x80278700"
+          "start": "0x80276B7C",
+          "end": "0x802774C8"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_80276DE4",
+          "symbol": "applyaction",
           "start": "0x80276DE4",
           "end": "0x80276F38"
         },
         {
-          "symbol": "fn_80276F38",
+          "symbol": "transferframes",
           "start": "0x80276F38",
           "end": "0x80276FD4"
         },
         {
-          "symbol": "fn_80276FD4",
+          "symbol": "stretchframesneeded",
           "start": "0x80276FD4",
           "end": "0x802770F8"
         },
         {
-          "symbol": "fn_802770F8",
+          "symbol": "stretch",
           "start": "0x802770F8",
           "end": "0x80277240"
         },
         {
-          "symbol": "fn_80277280",
+          "symbol": "SFILTER_timestretch",
           "start": "0x80277280",
           "end": "0x802773C0"
         },
         {
-          "symbol": "fn_802773C0",
+          "symbol": "SFILTER_timestretchrestore",
           "start": "0x802773C0",
           "end": "0x80277404"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/s3dlow.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x80277520-0x802775EC (src/engine/s3dlow.c), the sound_cxx compiler rows and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "sections": [
         {
-          "symbol": "fn_80277520",
+          "section": ".text",
+          "placement": ".text",
           "start": "0x80277520",
           "end": "0x802775EC"
-        },
+        }
+      ],
+      "functions": [
         {
-          "symbol": "fn_80277D88",
-          "start": "0x80277D88",
-          "end": "0x80277E38"
-        },
+          "symbol": "SND3dpos",
+          "start": "0x80277520",
+          "end": "0x802775EC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/satospkr.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x802775EC-0x80277CF0 (src/engine/satospkr.c), the sound_cxx compiler rows and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "sections": [
         {
-          "symbol": "fn_80277E38",
-          "start": "0x80277E38",
-          "end": "0x80277EC4"
-        },
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802775EC",
+          "end": "0x80277CF0"
+        }
+      ],
+      "functions": [
         {
-          "symbol": "fn_80277EC4",
-          "start": "0x80277EC4",
-          "end": "0x80277F98"
-        },
+          "symbol": "SNDI_freespkrtable",
+          "start": "0x80277AFC",
+          "end": "0x80277B3C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sattrdef.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x80277CF0-0x80277D88 (src/engine/sattrdef.c), the sound_cxx compiler rows and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "sections": [
         {
-          "symbol": "fn_80277F98",
-          "start": "0x80277F98",
-          "end": "0x80278000"
-        },
-        {
-          "symbol": "fn_80278128",
-          "start": "0x80278128",
-          "end": "0x802781A8"
-        },
-        {
-          "symbol": "fn_8027823C",
-          "start": "0x8027823C",
-          "end": "0x80278328"
-        },
-        {
-          "symbol": "fn_80278530",
-          "start": "0x80278530",
-          "end": "0x80278598"
-        },
-        {
-          "symbol": "fn_80277CF0",
+          "section": ".text",
+          "placement": ".text",
           "start": "0x80277CF0",
           "end": "0x80277D88"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SND_attrsetdef",
+          "start": "0x80277CF0",
+          "end": "0x80277D88"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sdownmix.cpp",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x80278000-0x80278070 (src/engine/sdownmix.cpp), the sound_cxx compiler rows and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80278000",
+          "end": "0x80278070"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SetDefaultAzimuths",
+          "start": "0x80278000",
+          "end": "0x80278070"
         }
       ]
     },

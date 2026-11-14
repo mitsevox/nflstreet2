@@ -2399,6 +2399,18 @@
     "SNDSTRM_setazimuth": {
       "address": "0x8026E4C0",
       "evidence": "evidence.tsv function/name rows for 0x8026E4C0 (src/engine/sst3dpos.c, comparison only until linked); the linked src/engine/saemsstr.c calls it by name (integration of c16a and c16c)."
+    },
+    "MIX_create": {
+      "address": "0x80275BBC",
+      "evidence": "evidence.tsv function and name rows for 0x80275BBC (MIX_create, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks."
+    },
+    "MIX_playinit": {
+      "address": "0x80275F80",
+      "evidence": "evidence.tsv function and name rows for 0x80275F80 (MIX_playinit, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks."
+    },
+    "MIX_stop": {
+      "address": "0x80276278",
+      "evidence": "evidence.tsv function and name rows for 0x80276278 (MIX_stop, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks."
     }
   },
   "units": [
@@ -19451,6 +19463,206 @@
           "placement": ".text",
           "start": "0x80270418",
           "end": "0x80270494"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sfxrevc.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x802753F0-0x8027555C (src/engine/sfxrevc.c), its three function and name rows and the data and name rows of its .data word 0x80300E98-0x80300E9C (fxGlobalsCreated), and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802753F0",
+          "end": "0x8027555C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300E98",
+          "end": "0x80300E9C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/slinkmix.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8027555C-0x802755E0 (src/engine/slinkmix.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027555C",
+          "end": "0x802755E0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/smixfilt.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80276798-0x80276820 (src/engine/smixfilt.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80276798",
+          "end": "0x80276820"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/smixfram.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80276820-0x80276868 (src/engine/smixfram.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80276820",
+          "end": "0x80276868"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/smixhip.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80276868-0x80276938 (src/engine/smixhip.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80276868",
+          "end": "0x80276938"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/smixptch.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80276A84-0x80276B40 (src/engine/smixptch.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80276A84",
+          "end": "0x80276B40"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/smixtmul.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80276B40-0x80276B7C (src/engine/smixtmul.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80276B40",
+          "end": "0x80276B7C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sx87d16.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x802774C8-0x80277520 (src/engine/sx87d16.c), its function and name row, the data row of its .rodata double 0x802C1F08-0x802C1F10, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; its one function exact, written in the c16 wave and linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802774C8",
+          "end": "0x80277520"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C1F08",
+          "end": "0x802C1F10"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sbend.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80277D88-0x80277E38 (src/engine/sbend.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80277D88",
+          "end": "0x80277E38"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sclcptch.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80277E38-0x80277F98 (src/engine/sclcptch.c), its two function and name rows and the data and name rows of its .data table 0x80300EDC-0x80300FDC (sndcents), and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80277E38",
+          "end": "0x80277F98"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300EDC",
+          "end": "0x80300FDC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sctlfilt.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80277F98-0x80278000 (src/engine/sctlfilt.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80277F98",
+          "end": "0x80278000"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sgetdata.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80278128-0x802781A8 (src/engine/sgetdata.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80278128",
+          "end": "0x802781A8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sgettag.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8027823C-0x80278328 (src/engine/sgettag.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027823C",
+          "end": "0x80278328"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/shipass.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80278530-0x80278598 (src/engine/shipass.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80278530",
+          "end": "0x80278598"
         }
       ]
     }

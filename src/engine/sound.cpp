@@ -120,7 +120,7 @@ int FileHostCheckActive(void);
 void FileDebugProcess(void);
 void *fn_801D310C(void *pAddr, int size, int ident, int flags);
 unsigned long OSGetSoundMode(void);
-void fn_8027555C(void);
+void SNDSYS_linkmaincpumixer(void);
 void fn_8026F5F8(int a);
 void fn_8026F710(int mode);
 void fn_8026F788(int a, int b);
@@ -393,7 +393,7 @@ int SndInit(SndInitDesc_t *pDesc)
 
 int SndInitParms(SndInitDesc_t *pDesc)
 {
-    fn_8027555C();
+    SNDSYS_linkmaincpumixer();
     if (OSGetSoundMode() == 0) {
         fn_8026F710(0);
     } else {
