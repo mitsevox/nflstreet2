@@ -17525,6 +17525,25 @@
           "end": "0x803A6B4C"
         }
       ]
+    },
+    {
+      "source": "src/engine/kf_cos.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit/function/name/type/field/data/compiler/source-form rows for kf_cos.c; complete cosine kernel and observed scalar factors.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80261328",
+          "end": "0x80261414"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC480",
+          "end": "0x803EC4A4"
+        }
+      ]
     }
   ]
 }
