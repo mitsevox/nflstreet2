@@ -2395,6 +2395,10 @@
     "SNDSTRM_setvol": {
       "address": "0x8026F334",
       "evidence": "evidence.tsv function/name rows for 0x8026F334 (src/engine/sstvol.c, comparison only until linked)."
+    },
+    "SNDSTRM_setazimuth": {
+      "address": "0x8026E4C0",
+      "evidence": "evidence.tsv function/name rows for 0x8026E4C0 (src/engine/sst3dpos.c, comparison only until linked); the linked src/engine/saemsstr.c calls it by name (integration of c16a and c16c)."
     }
   },
   "units": [

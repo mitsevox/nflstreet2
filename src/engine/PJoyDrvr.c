@@ -27,7 +27,7 @@ int fn_8025D574(unsigned int port);
 void *PerSystemGetLLDriverData(unsigned int port);
 unsigned long PerSizeofPerDataT(void);
 unsigned long PerGetDataSize(void);
-int GetState_GFLink(int port);
+int fn_8028572C(int port);
 void fn_802465BC(void *pStatus);
 void GBAFanServiceLink(void);
 
@@ -114,7 +114,7 @@ int _PerJoyDriverPoll(PerDevice_t *pDevice, int (*pCounter)(unsigned int))
             }
         }
         if (lbl_803E92CC[port].err == PAD_ERR_NO_CONTROLLER) {
-            if (pJoy->mUnknown08 == RES_WIRELESS_LITE && GetState_GFLink(port) != 0) {
+            if (pJoy->mUnknown08 == RES_WIRELESS_LITE && fn_8028572C(port) != 0) {
                 pDevice->mStatus = 1;
                 typeLo |= 0x800;
                 state = 2;

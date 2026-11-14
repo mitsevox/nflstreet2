@@ -17,7 +17,7 @@ int SNDSTRM_pitchmult(int stream, int mult)
         mult = 16384;
     }
     channel->mPitchMult = mult;
-    fn_8026C9BC(channel->mVoice, mult);
+    SNDpitchmult(channel->mVoice, mult);
     return 0;
 }
 

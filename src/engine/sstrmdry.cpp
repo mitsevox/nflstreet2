@@ -14,7 +14,7 @@ int SNDSTRM_drylevel(int stream, int level)
         return -8;
     }
     channel->mDryLevel = level;
-    fn_8026AEAC(channel->mVoice, level);
+    SNDCTRL_drylevel(channel->mVoice, level);
     return 0;
 }
 

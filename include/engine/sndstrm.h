@@ -93,7 +93,7 @@ extern "C" {
 
 extern int lbl_8030002C;
 extern float lbl_80300028;
-extern SndStreamFader_t *lbl_803A763C;
+extern SndStreamFader_t *SNDSYSI_timerclients;
 extern float lbl_803A7644;
 extern const signed char lbl_802B79A0[6][6];
 
@@ -102,10 +102,10 @@ int SNDSTRM_setvol(int stream, int speaker, float vol);
 SndStreamChannel_t *fn_8026D610(int index);
 int fn_8026DE00(void *opts, int a, int b, void *data, int c, int d, int tap);
 
-void fn_8026D0AC(void);
-void fn_8026D0EC(void);
-int fn_8026AEAC(int voice, int level);
-int fn_8026C9BC(int voice, int mult);
+void SNDSYS_entercritical(void);
+void SNDSYS_leavecritical(void);
+int SNDCTRL_drylevel(int voice, int level);
+int SNDpitchmult(int voice, int mult);
 int fn_80270D6C(int voice, int mult);
 int fn_80274F5C(int index);
 void fn_802747D8(int index);

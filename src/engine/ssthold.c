@@ -10,14 +10,14 @@ int SNDSTRM_modifyhold(int id, int hold)
     SndStreamRequest_t *request;
     int result;
 
-    fn_8026D0AC();
+    SNDSYS_entercritical();
     result = -8;
     request = SNDSTRMI_getrequestptr(id);
     if (request != 0) {
         request->mHold = (short)hold;
         result = 0;
     }
-    fn_8026D0EC();
+    SNDSYS_leavecritical();
     return result;
 }
 

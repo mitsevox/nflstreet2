@@ -2,14 +2,12 @@
    unlock vector at the CSIS mutex, so sound calls share the CSIS critical section. */
 
 #include "engine/sndstrm.h"
+#include "engine/csis.h"
 
 extern "C" {
 
-int fn_801B9148(void);
-int fn_801B9174(void);
-
-extern void (*lbl_802FFDF0)(void);
-extern void (*lbl_802FFDF4)(void);
+extern void (*SNDSYSI_mutexlockfn)(void);
+extern void (*SNDSYSI_mutexunlockfn)(void);
 
 }
 
@@ -17,12 +15,12 @@ namespace Snd {
 
 void CsisMutexLock(void)
 {
-    fn_801B9148();
+    Csis::System::Lock();
 }
 
 void CsisMutexUnlock(void)
 {
-    fn_801B9174();
+    Csis::System::Unlock();
 }
 
 class System {
@@ -32,11 +30,11 @@ public:
 
 int System::VectorToCsisMutex(void)
 {
-    if (lbl_802FFDF0 == CsisMutexLock) {
+    if (SNDSYSI_mutexlockfn == CsisMutexLock) {
         return 0;
     }
-    lbl_802FFDF0 = CsisMutexLock;
-    lbl_802FFDF4 = CsisMutexUnlock;
+    SNDSYSI_mutexlockfn = CsisMutexLock;
+    SNDSYSI_mutexunlockfn = CsisMutexUnlock;
     return 0;
 }
 

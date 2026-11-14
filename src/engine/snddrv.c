@@ -231,13 +231,13 @@ void fn_80272D34(void **buffers, void *unused)
             }
         }
         if (lbl_803A6C24.m1C.m23 <= 3) {
-            fn_8026B2E0(buffers[1], lbl_803A8D60.mC068[0], 640);
-            fn_8026B2E0(buffers[0], lbl_803A8D60.mC068[1], 640);
+            SNDI_memcpy(buffers[1], lbl_803A8D60.mC068[0], 640);
+            SNDI_memcpy(buffers[0], lbl_803A8D60.mC068[1], 640);
         } else {
-            fn_8026B2E0(buffers[1], lbl_803A8D60.mC068[0], 640);
-            fn_8026B2E0(buffers[2], lbl_803A8D60.mC068[2], 640);
-            fn_8026B2E0(buffers[0], lbl_803A8D60.mC068[3], 640);
-            fn_8026B2E0(buffers[3], lbl_803A8D60.mC068[1], 640);
+            SNDI_memcpy(buffers[1], lbl_803A8D60.mC068[0], 640);
+            SNDI_memcpy(buffers[2], lbl_803A8D60.mC068[2], 640);
+            SNDI_memcpy(buffers[0], lbl_803A8D60.mC068[3], 640);
+            SNDI_memcpy(buffers[3], lbl_803A8D60.mC068[1], 640);
         }
     }
     OSWakeupThread(&lbl_803A8D60.m1DE0);
@@ -369,7 +369,7 @@ void fn_80273040(int index, Stream_802743A0 *stream, Record_803A6DF0 *record)
 void *fn_80273264(void *arg)
 {
     for (;;) {
-        lbl_802FFDF0();
+        SNDSYSI_mutexlockfn();
         if (lbl_803A6C24.m220 != 0) {
             lbl_803A6C24.m220();
         }
@@ -378,18 +378,18 @@ void *fn_80273264(void *arg)
             fn_80279598();
         }
         if (lbl_80300850 & 1) {
-            fn_8026CE0C();
+            SNDSYSI_100hzserver();
             lbl_80300854 += lbl_803A8D60.m1400;
-            lbl_803A7640 = (int)(lbl_80300854 < 0.0f ? lbl_80300854 - 0.5f : lbl_80300854 + 0.5f);
+            SNDSYSI_timertick = (int)(lbl_80300854 < 0.0f ? lbl_80300854 - 0.5f : lbl_80300854 + 0.5f);
             if (lbl_80300854 > 30.0f) {
                 lbl_80300854 -= 30.0f;
             }
-            fn_8026CDA0();
+            SNDSYSI_variabletimerservice();
         }
         if (lbl_803A6C24.m224 != 0) {
             lbl_803A6C24.m224();
         }
-        lbl_802FFDF4();
+        SNDSYSI_mutexunlockfn();
         OSSleepThread(&lbl_803A8D60.m1DE0);
     }
 }

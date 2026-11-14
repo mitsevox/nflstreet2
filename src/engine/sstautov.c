@@ -51,8 +51,8 @@ void StreamFader(void *context)
     }
     if (sp->mStep == 0.0f) {
         fader = &sp->mFader;
-        if (fader == lbl_803A763C) {
-            lbl_803A763C = fader->mpNext;
+        if (fader == SNDSYSI_timerclients) {
+            SNDSYSI_timerclients = fader->mpNext;
         }
         if (fader->mpPrev != 0) {
             fader->mpPrev->mpNext = fader->mpNext;
@@ -87,8 +87,8 @@ int SNDSTRM_autovol(int stream, int time, int vol)
         sp = &channel->mSpeakers[i];
         if (sp->mStep != 0.0f) {
             fader = &sp->mFader;
-            if (fader == lbl_803A763C) {
-                lbl_803A763C = fader->mpNext;
+            if (fader == SNDSYSI_timerclients) {
+                SNDSYSI_timerclients = fader->mpNext;
             }
             if (fader->mpPrev != 0) {
                 fader->mpPrev->mpNext = fader->mpNext;
@@ -103,12 +103,12 @@ int SNDSTRM_autovol(int stream, int time, int vol)
             sp->mFader.mpCallback = Snd::StreamFader;
             sp->mFader.mpContext = sp;
             fader = &sp->mFader;
-            fader->mpNext = lbl_803A763C;
+            fader->mpNext = SNDSYSI_timerclients;
             fader->mpPrev = 0;
-            if (lbl_803A763C != 0) {
-                lbl_803A763C->mpPrev = fader;
+            if (SNDSYSI_timerclients != 0) {
+                SNDSYSI_timerclients->mpPrev = fader;
             }
-            lbl_803A763C = fader;
+            SNDSYSI_timerclients = fader;
         }
     }
     return 0;
