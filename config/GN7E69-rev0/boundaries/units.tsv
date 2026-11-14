@@ -146,7 +146,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x802622DC	0x80262310	vprintf.c	1	1	1	1	0	-	-
 0x80262310	0x802623A8	src/engine/atexit.c	1	0	-	0	0	provisional	-
 0x802623A8	0x80262440	bsearch.c	1	1	1	1	0	-	sn_malloc.c
-0x8026247C	0x802645AC	vfprintf.c	7	7	8	0	7	-	-
+0x8026247C	0x802645AC	vfprintf.c	8	8	8	7	1	-	-
 0x802645AC	0x80265D2C	vfprintf.c	4	4	4	3	1	-	locale.c
 0x80265D2C	0x80266640	math_support.c	4	4	4	0	4	-	impure.c
 0x80266640	0x8026696C	mbtowc_r.c	1	1	1	1	0	-	-

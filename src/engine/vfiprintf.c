@@ -64,7 +64,7 @@ typedef unsigned long u_long;
 typedef unsigned short u_short;
 typedef unsigned int u_int;
 extern int lbl_803EC558;
-extern char *fn_80264424(char *dst, char *start, char *end, int *pLen);
+extern char *add_separators(char *dst, char *start, char *end, int *pLen);
 
 static char _VFI_acBuffer[128];
 static int _VFI_iBuffered = 0;
@@ -121,7 +121,7 @@ _vfwrite (int a, const char *s, unsigned int n, int flush)
 
 /* Consumes the format and advances the supplied argument list. */
 int
-_vfiprintf_r(void *data, File_80262B5C *fp, const char *fmt0, va_list ap)
+_vfiprintf_r(void *data, RuntimeFile_t *fp, const char *fmt0, va_list ap)
 {
 	char *fmt;	/* format string */
 	int ch;	/* character from fmt */
@@ -463,7 +463,7 @@ number:			if ((dprec = prec) >= 0)
 			}
 
 			if (base == DEC && (flags & GROUP))
-				cp = fn_80264424(buf, cp, buf + BUF, &size);
+				cp = add_separators(buf, cp, buf + BUF, &size);
 			else
 				size = buf + BUF - cp;
 		skipsize:

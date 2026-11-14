@@ -22993,7 +22993,7 @@
     {
       "source": "src/engine/vfprintf.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8026247C-0x802645AC (src/engine/vfprintf.c), the compiler rows 0x802622DC-0x80264424 and 0x80264424-0x80266A2C, the source-form, function and name rows and the exact .rodata data row 0x802B7538-0x802B7578. 0x80262C34 is not registered. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional whole-file unit row 0x8026247C-0x802645AC, complete function rows, unchanged engine_c compiler profile and full readonly constant pool. Every original body is measured at its full extent.",
       "sections": [
         {
           "section": ".text",
@@ -23005,42 +23005,65 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B7538",
-          "end": "0x802B7578"
+          "end": "0x802B7608"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF4B0",
+          "end": "0x802FF4D8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC548",
+          "end": "0x803EC550"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6A28",
+          "end": "0x803A6B4C"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_8026247C",
+          "symbol": "strround",
           "start": "0x8026247C",
           "end": "0x802624D8"
         },
         {
-          "symbol": "fn_802624D8",
+          "symbol": "strrev",
           "start": "0x802624D8",
           "end": "0x80262524"
         },
         {
-          "symbol": "fn_80262524",
+          "symbol": "itoa",
           "start": "0x80262524",
           "end": "0x802625A0"
         },
         {
-          "symbol": "fn_802625A0",
+          "symbol": "fftoa",
           "start": "0x802625A0",
           "end": "0x80262A88"
         },
         {
-          "symbol": "fn_80262A88",
+          "symbol": "_vfwrite",
           "start": "0x80262A88",
           "end": "0x80262B5C"
         },
         {
-          "symbol": "fn_80262B5C",
+          "symbol": "vfprintf",
           "start": "0x80262B5C",
           "end": "0x80262C34"
         },
         {
-          "symbol": "fn_80264424",
+          "symbol": "_vfprintf_r",
+          "start": "0x80262C34",
+          "end": "0x80264424"
+        },
+        {
+          "symbol": "add_separators",
           "start": "0x80264424",
           "end": "0x802645AC"
         }
