@@ -13441,7 +13441,7 @@
     {
       "source": "src/engine/lltextur.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8020E7EC-0x8020EA18 (src/engine/lltextur.c), its function, name and source-form rows; 0x8020E9D0-0x8020EA18 is linked (no data); the documented holdout fn_8020E7EC 0x8020E7EC-0x8020E9D0 at the start of .text keeps its original bytes and stays a comparison.",
+      "evidence": "evidence.tsv unit row 0x8020E7EC-0x8020EA18 (src/engine/lltextur.c), its function, name and source-form rows; 0x8020E9D0-0x8020EA18 is linked (no data); the documented holdout LLTexPadToPow2 0x8020E7EC-0x8020E9D0 at the start of .text keeps its original bytes and stays a comparison.",
       "sections": [
         {
           "section": ".text",
