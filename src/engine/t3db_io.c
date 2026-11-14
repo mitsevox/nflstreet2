@@ -1,3 +1,4 @@
+/* Reads and writes game database tables, indexes and checksummed file records. */
 #include <string.h>
 #include "engine/t3db.h"
 

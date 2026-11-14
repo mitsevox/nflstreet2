@@ -1,3 +1,4 @@
+/* Tokenizes database queries into a two-token lookahead buffer. */
 #include "engine/t3db.h"
 
 #define TDB_LEX_TOKEN(TYPE, ADVANCE, LENGTH)         \
