@@ -174,13 +174,13 @@ extern TDbDefault_803E944C lbl_803E95DC[15];
 extern TDbPool_803E9654 lbl_803E9654;
 extern TDbPool_803E9654 lbl_803E9670;
 extern TDbPool_803E9654 lbl_803E968C;
-extern TDbPool_803E9654 lbl_803E96A8;
+extern TDbPool_803E9654 _tDbIndexPool;
 extern unsigned int (*lbl_803EBE70)(const char *s);
 extern int (*lbl_803EBE74)(const char *a, const char *b, unsigned int n);
 extern char *(*lbl_803EBE78)(char *dst, const char *src);
 extern char *(*lbl_803EBE7C)(char *dst, const char *src, unsigned int n);
 extern void (*_tDbMemAllocInfoCallback)(TDbEvent_801F8A54 *pEvent);
-extern int lbl_803EBE8C;
+extern int _tDbGlobalMemoryHeapID;
 
 extern unsigned int strlen(const char *s);
 extern int strncmp(const char *a, const char *b, unsigned int n);
@@ -193,7 +193,7 @@ extern void TDbExtMemShutdown(int heap);
 extern int TDbExtMemAlloc(int heap, int size, void *ppOut);
 extern int fn_801F9014(int db);
 extern int fn_801F95C8(void);
-extern int fn_801FC5FC(TDbDb_801F88F0 *pDb, int a, int b);
+extern int _TDbIOSaveDatabase(TDbDb_801F88F0 *pDb, int a, int b);
 extern TDbTbl_801F88F0 *fn_8020BA48(TDbDb_801F88F0 *pDb, int tbl);
 void fn_801F93AC(TDbAsync_801F9228 *pReq);
 extern int _TDbExprPrepare(TDbTerm_801FA4B0 *pTerm, int *pOut, TDbTbl_801F88F0 **ppTbl, int b, int c);
@@ -221,7 +221,7 @@ extern int fn_80207B8C(int a, int b, int c, TDbQryBuf_801F9858 *pQry);
 extern void fn_80207DB4(TDbQryBuf_801F9858 *pQry);
 extern int fn_80208204(int a, TDbQryBuf_801F9858 *pQry, TDbResult_801F9718 *pRes);
 extern int fn_8020A908(int a, TDbQryBuf_801F9858 *pQry, int d, TDbTbl_801F88F0 *pTbl, TDbResult_801F9718 *pRes);
-extern int fn_801FBFEC(TDbDb_801F88F0 *pDb, void *pFile, int a, int b, int c);
+extern int _TDbIOLoadDatabase(TDbDb_801F88F0 *pDb, void *pFile, int a, int b, int c);
 extern int fn_802087D4(TDbQry_801F89B8 *pQry);
 extern int fn_8020BD90(TDbTbl_801F88F0 *pTbl);
 extern void TDbExtMemFree(int heap, void *p, int size);
@@ -366,23 +366,23 @@ int fn_801F8A54(TDbInitParms_801F8A0C *pParms)
     }
     lbl_803EBE84 = 0;
     lbl_803EBE88 = 0;
-    err = TDbExtMemInit(-1, pParms->mHeapSize, &lbl_803EBE8C);
+    err = TDbExtMemInit(-1, pParms->mHeapSize, &_tDbGlobalMemoryHeapID);
     if (err == 0) {
         Notify_801F8A54(err, -1, -1);
-        err = _TDbMemPoolInit(&lbl_803E9654, lbl_803EBE8C, 0x28, pParms->mPool0Max, pParms->mPool0Grow);
+        err = _TDbMemPoolInit(&lbl_803E9654, _tDbGlobalMemoryHeapID, 0x28, pParms->mPool0Max, pParms->mPool0Grow);
         if (err == 0) {
-            if (_TDbMemPoolInit(&lbl_803E9670, lbl_803EBE8C, 0x1C, pParms->mPool1Max, pParms->mPool1Grow) == 0) {
-                if (_TDbMemPoolInit(&lbl_803E968C, lbl_803EBE8C, 0x134, pParms->mPool2Max, pParms->mPool2Grow) == 0) {
+            if (_TDbMemPoolInit(&lbl_803E9670, _tDbGlobalMemoryHeapID, 0x1C, pParms->mPool1Max, pParms->mPool1Grow) == 0) {
+                if (_TDbMemPoolInit(&lbl_803E968C, _tDbGlobalMemoryHeapID, 0x134, pParms->mPool2Max, pParms->mPool2Grow) == 0) {
                     goto pools_done;
                 }
                 _TDbMemPoolDeinit(&lbl_803E9670);
             }
             _TDbMemPoolDeinit(&lbl_803E9654);
         pools_done:
-            err = _TDbMemPoolInit(&lbl_803E96A8, lbl_803EBE8C, 0x54, pParms->mIdxMax, pParms->mIdxGrow);
+            err = _TDbMemPoolInit(&_tDbIndexPool, _tDbGlobalMemoryHeapID, 0x54, pParms->mIdxMax, pParms->mIdxGrow);
         }
         if (err != 0) {
-            TDbExtMemShutdown(lbl_803EBE8C);
+            TDbExtMemShutdown(_tDbGlobalMemoryHeapID);
         }
         Notify_801F8A54(4, -1, -1);
         pFuncs = pParms->pStrFuncs;
@@ -409,9 +409,9 @@ void fn_801F8C64(void)
         }
         _TDbMemPoolDeinit(&lbl_803E9670);
         _TDbMemPoolDeinit(&lbl_803E9654);
-        _TDbMemPoolDeinit(&lbl_803E96A8);
+        _TDbMemPoolDeinit(&_tDbIndexPool);
         _TDbMemPoolDeinit(&lbl_803E968C);
-        TDbExtMemShutdown(lbl_803EBE8C);
+        TDbExtMemShutdown(_tDbGlobalMemoryHeapID);
         lbl_803EBE84 = -1;
     }
 }
@@ -554,7 +554,7 @@ int fn_801F9064(int db, int file, int a, int b, int c)
     } else {
         desc.mFile = file;
         desc.mUnk4 = -1;
-        err = fn_801FBFEC(pDb, &desc, a, b, c);
+        err = _TDbIOLoadDatabase(pDb, &desc, a, b, c);
     }
     return err;
 }
@@ -570,7 +570,7 @@ int fn_801F9134(int db, int a, int b, int c)
         }
     }
     if (pDb != 0) {
-        err = fn_801FBFEC(pDb, 0, a, b, c);
+        err = _TDbIOLoadDatabase(pDb, 0, a, b, c);
         pDb->mState = 0;
     } else {
         err = 5;
@@ -585,7 +585,7 @@ int fn_801F91AC(int db, int a, int b)
 
     pDb = FindDb_801F88F0(db);
     if (pDb != 0) {
-        err = fn_801FC5FC(pDb, a, b);
+        err = _TDbIOSaveDatabase(pDb, a, b);
         pDb->mState = 0;
     } else {
         err = 5;

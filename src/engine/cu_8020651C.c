@@ -117,7 +117,7 @@ unsigned int fn_802067D4(TDbIndex_t *pIndex, TDbExpr_t *pExpr, TDbIdxColumnDef_t
             if (!pIndex->mTree.mAllowDuplicates) {
                 score = 2;
             }
-        } else if ((unsigned int)((pIndex->mTable->mRowCount - pIndex->mTable->mUnknown46) / 2) >= pIndex->mCount) {
+        } else if ((unsigned int)((pIndex->mTable->mRowCount - pIndex->mTable->mDeletedCount) / 2) >= pIndex->mCount) {
             score = pIndex->mCount + 0xFFFF;
         } else {
             score = -1;
@@ -135,7 +135,7 @@ int fn_802069BC(TDbTable_t *pTable, TDbIdxColumnDef_t *pCols, TDbExpr_t *pFilter
     TDbIndex_t *pIndex;
 
     memset(&rowDef, 0, sizeof(rowDef));
-    _TDbMemNotify(3, (int)pTable->mDb->mUnknown8, pTable->mUnknown1C);
+    _TDbMemNotify(3, (int)pTable->mDb->mId, pTable->mId);
     if (pCols == 0 || pCols[0].mId == -1) {
         rowDef.mColumn = TDB_COLUMN_ROW;
         pCols = &rowDef;
@@ -147,7 +147,7 @@ int fn_802069BC(TDbTable_t *pTable, TDbIdxColumnDef_t *pCols, TDbExpr_t *pFilter
         } while (pCols[count].mId != -1);
     }
     if (count <= 2) {
-        err = __TDbMemPoolAlloc(&lbl_803E96A8, ppIndex);
+        err = __TDbMemPoolAlloc(&_tDbIndexPool, ppIndex);
         (*ppIndex)->mFlags = 4;
     } else {
         err = TDbExtMemAlloc(pTable->mDb->mHeap, count * sizeof(TDbIdxPart_t) + 0x3C, ppIndex);
@@ -186,7 +186,7 @@ int fn_802069BC(TDbTable_t *pTable, TDbIdxColumnDef_t *pCols, TDbExpr_t *pFilter
             }
             pIndex->mNext = 0;
         } else if (pIndex->mFlags & 4) {
-            __TDbMemPoolFree(&lbl_803E96A8, pIndex);
+            __TDbMemPoolFree(&_tDbIndexPool, pIndex);
         } else {
             TDbExtMemFree(pTable->mDb->mHeap, pIndex, count * sizeof(TDbIdxPart_t) + 0x3C);
         }
@@ -258,7 +258,7 @@ void fn_80206E4C(TDbQIdx_80205880 *pQIdx)
 int fn_80206EB8(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_t *pCols, TDbQIdx_80205880 **ppQIdx)
 {
     TDbIdxColumnDef_t rowDef[2] = {{0, TDB_COLUMN_ROW, 0, 0}, {-1, -1, 3, 0}};
-    TDbDatabase_801FAA00 *pDb;
+    TDbDatabase_t *pDb;
     unsigned int count;
     unsigned int t;
     int err;
@@ -274,7 +274,7 @@ int fn_80206EB8(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_t *pCols, TDbQIdx_80205
             count++;
         } while (pCols[count].mId != -1);
     }
-    _TDbMemNotify(3, (int)pDb->mUnknown8, -1);
+    _TDbMemNotify(3, (int)pDb->mId, -1);
     err = TDbExtMemAlloc(pDb->mHeap, count * sizeof(TDbIdxPart_t) + 0x4C, ppQIdx);
     _TDbMemNotify(4, -1, -1);
     (*ppQIdx)->mCount = 0;
@@ -290,7 +290,7 @@ int fn_80206EB8(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_t *pCols, TDbQIdx_80205
                 (*ppQIdx)->mTree.mRoot = 0;
                 for (count = 0; count < (*ppQIdx)->mTree.mPartCount; count++) {
                     for (t = 0; t < pStmt->mTableCount; t++) {
-                        if (pCols[count].mTableId == pStmt->mTables[t]->mUnknown1C || pCols[count].mTableId == 0) {
+                        if (pCols[count].mTableId == pStmt->mTables[t]->mId || pCols[count].mTableId == 0) {
                             (*ppQIdx)->mTree.mParts[count].mTable = pStmt->mTables[t];
                             (*ppQIdx)->mTree.mParts[count].mUnknown4 = t;
                             (*ppQIdx)->mTree.mParts[count].mAscending = pCols[count].mDescending == 0;

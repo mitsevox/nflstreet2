@@ -2480,6 +2480,70 @@
     "BallStatePlacedUpdate": {
       "address": "0x8013B734",
       "evidence": "evidence.tsv function and name rows for 0x8013B734 (unlinked; referenced from linked src/game/BallState.cpp)."
+    },
+    "_TDbIOReadTableNew": {
+      "address": "0x801FB0F8",
+      "evidence": "evidence.tsv function/name rows at0x801FB0F8; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOReadIndex": {
+      "address": "0x801FB5C0",
+      "evidence": "evidence.tsv function/name rows at0x801FB5C0; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOReadExprNode": {
+      "address": "0x801FB9D0",
+      "evidence": "evidence.tsv function/name rows at0x801FB9D0; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOWriteExprNode": {
+      "address": "0x801FBAC4",
+      "evidence": "evidence.tsv function/name rows at0x801FBAC4; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOWriteIndex": {
+      "address": "0x801FBC2C",
+      "evidence": "evidence.tsv function/name rows at0x801FBC2C; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOWriteTable": {
+      "address": "0x801FBD2C",
+      "evidence": "evidence.tsv function/name rows at0x801FBD2C; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOLoadDatabase": {
+      "address": "0x801FBFEC",
+      "evidence": "evidence.tsv function/name rows at0x801FBFEC; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOSaveDatabase": {
+      "address": "0x801FC5FC",
+      "evidence": "evidence.tsv function/name rows at0x801FC5FC; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_TDbIOCRC32": {
+      "address": "0x801FC950",
+      "evidence": "evidence.tsv function/name rows at0x801FC950; complete measured comparison in its original file; original target code remains linked."
+    },
+    "T3DB_Lexer_Number": {
+      "address": "0x80200DD4",
+      "evidence": "evidence.tsv function/name rows at0x80200DD4; complete measured comparison in its original file; original target code remains linked."
+    },
+    "T3DB_Lexer_Identifier": {
+      "address": "0x80201030",
+      "evidence": "evidence.tsv function/name rows at0x80201030; complete measured comparison in its original file; original target code remains linked."
+    },
+    "T3DB_Lexer_StringLiteral": {
+      "address": "0x80201C70",
+      "evidence": "evidence.tsv function/name rows at0x80201C70; complete measured comparison in its original file; original target code remains linked."
+    },
+    "_tDbIndexPool": {
+      "address": "0x803E96A8",
+      "evidence": "evidence.tsv data/name rows: shared database state remains externally owned; IO consumer does not claim its native storage."
+    },
+    "_tDbGlobalMemoryHeapID": {
+      "address": "0x803EBE8C",
+      "evidence": "evidence.tsv data/name rows: shared database state remains externally owned; IO consumer does not claim its native storage."
+    },
+    "vfprintf": {
+      "address": "0x80262B5C",
+      "evidence": "evidence.tsv function and related name rows at 0x80262B5C; complete source remains measured in vfprintf.c while original bytes provide the public entry."
+    },
+    "add_separators": {
+      "address": "0x80264424",
+      "evidence": "evidence.tsv function and related name rows at 0x80264424; complete source remains measured in vfprintf.c while original bytes provide the public entry."
     }
   },
   "units": [
@@ -17396,6 +17460,88 @@
           "placement": ".data5",
           "start": "0x803EC4A4",
           "end": "0x803EC4C0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3db_io.c",
+      "profile": "engine_c_fastmath",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801FA870",
+          "end": "0x801FB0F8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9548",
+          "end": "0x802F9948"
+        }
+      ],
+      "evidence": "evidence.tsv whole-file provisional unit and Database file partial linking source-form rows. Native exact prefix only; all remaining complete functions retained in full comparisons."
+    },
+    {
+      "source": "src/engine/T3DB_Lexer.c",
+      "profile": "engine_c_fastmath",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802009B0",
+          "end": "0x80200DD4"
+        }
+      ],
+      "evidence": "evidence.tsv whole-file provisional unit and Database file partial linking source-form rows. Native exact prefix only; all remaining complete functions retained in full comparisons."
+    },
+    {
+      "source": "src/engine/vfprintf.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional whole-file grouping and exact function rows; native first-three-function prefix plus complete digit alphabet, scratch allocations and staging state. Later full bodies remain measured behind DECOMP_COMPARE; no whole-file closure.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026247C",
+          "end": "0x802625A0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF4B0",
+          "end": "0x802FF4D8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC548",
+          "end": "0x803EC550"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6A28",
+          "end": "0x803A6B4C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/kf_cos.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit/function/name/type/field/data/compiler/source-form rows for kf_cos.c; complete cosine kernel and observed scalar factors.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80261328",
+          "end": "0x80261414"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC480",
+          "end": "0x803EC4A4"
         }
       ]
     }

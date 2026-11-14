@@ -87,7 +87,7 @@ void fn_8020B710(TDbTable_t *pTable, int record)
                 pValue->mId = -1;
                 bDecoded = 1;
             }
-            pTable->mCallbacks[k]((int)pTable->mDb->mUnknown8, pTable->mUnknown1C, 0, 0, pTable->mUnknown10);
+            pTable->mCallbacks[k]((int)pTable->mDb->mId, pTable->mId, 0, 0, pTable->mUnknown10);
         }
     }
 }
@@ -150,19 +150,19 @@ unsigned char fn_8020B97C(TDbTable_t *pTable, int id)
     return result;
 }
 
-TDbTable_t *fn_8020BA48(TDbDatabase_801FAA00 *pDb, int id)
+TDbTable_t *fn_8020BA48(TDbDatabase_t *pDb, int id)
 {
     TDbTable_t *pTable;
 
     for (pTable = pDb->mTables; pTable != 0; pTable = pTable->mNext) {
-        if (id == pTable->mUnknown1C) {
+        if (id == pTable->mId) {
             break;
         }
     }
     return pTable;
 }
 
-int fn_8020BA7C(TDbDatabase_801FAA00 *pOwner, int tableId, TDbColumn_t *pDefs, int capacity)
+int fn_8020BA7C(TDbDatabase_t *pOwner, int tableId, TDbColumn_t *pDefs, int capacity)
 {
     TDbTable_t *pTable;
     int err = 0;
@@ -192,23 +192,23 @@ int fn_8020BA7C(TDbDatabase_801FAA00 *pOwner, int tableId, TDbColumn_t *pDefs, i
         }
         words = (recBits + 32) >> 5;
         recBits = words * 4;
-        _TDbMemNotify(2, (int)pOwner->mUnknown8, tableId);
+        _TDbMemNotify(2, (int)pOwner->mId, tableId);
         err = TDbExtMemAlloc(pOwner->mHeap, n * sizeof(TDbColumn_t) + 0x4C, &pTable);
         if (err == 0) {
             pTable->mRowSize = recBits;
             pTable->mCapacity = capacity;
-            pTable->mUnknown40 = capacity;
+            pTable->mNominalCapacity = capacity;
             pTable->mRowCount = 0;
-            pTable->mUnknown46 = 0;
-            pTable->mUnknown48 = 0xFFFF;
+            pTable->mDeletedCount = 0;
+            pTable->mFirstDeletedRow = 0xFFFF;
             pTable->mColumnCount = n;
             pTable->mDeletedBit = words * 32 - 1;
             pTable->mDb = pOwner;
-            pTable->mUnknown1C = tableId;
+            pTable->mId = tableId;
             pTable->mFlags = 2;
             pTable->mIndexes = 0;
-            pTable->mUnknown18 = 0;
-            pTable->mUnknown2C = 0;
+            pTable->mExtraData = 0;
+            pTable->mExtraSize = 0;
             pTable->mUnknownC = pTable->mUnknown10 = 0;
             if (bBlob) {
                 pTable->mFlags |= 0x20;
@@ -306,8 +306,8 @@ int fn_8020BD90(TDbTable_t *pTable)
     if (pTable->mCapacity != 0) {
         TDbExtMemFree(pTable->mDb->mHeap, pTable->mRows, pTable->mRowSize * pTable->mCapacity);
     }
-    if ((pTable->mFlags & 0x60) && pTable->mUnknown2C != 0 && pTable->mUnknown18 != 0) {
-        TDbExtMemFree(pTable->mDb->mHeap, pTable->mUnknown18, pTable->mUnknown2C);
+    if ((pTable->mFlags & 0x60) && pTable->mExtraSize != 0 && pTable->mExtraData != 0) {
+        TDbExtMemFree(pTable->mDb->mHeap, pTable->mExtraData, pTable->mExtraSize);
     }
     TDbExtMemFree(pTable->mDb->mHeap, pTable, pTable->mColumnCount * sizeof(TDbColumn_t) + 0x4C);
     return 0;
@@ -333,13 +333,13 @@ int fn_8020BFA4(TDbTable_t *pTable, TDbLitRef_t *pValues, TDbResult_8020AD1C *pR
     }
     pTable->mFlags |= 1;
     if ((pTable->mFlags & 8) && pTable->mCapacity == 0) {
-        fn_8020C5C8(pTable, pTable->mUnknown40);
+        fn_8020C5C8(pTable, pTable->mNominalCapacity);
     }
-    if (pTable->mUnknown46 != 0) {
-        record = pTable->mUnknown48;
+    if (pTable->mDeletedCount != 0) {
+        record = pTable->mFirstDeletedRow;
         bReused = 1;
-        pTable->mUnknown46--;
-        pTable->mUnknown48 = *(unsigned short *)(pTable->mRows + pTable->mRowSize * record);
+        pTable->mDeletedCount--;
+        pTable->mFirstDeletedRow = *(unsigned short *)(pTable->mRows + pTable->mRowSize * record);
     } else if (pTable->mRowCount < pTable->mCapacity) {
         record = pTable->mRowCount++;
     } else {
@@ -376,9 +376,9 @@ int fn_8020BFA4(TDbTable_t *pTable, TDbLitRef_t *pValues, TDbResult_8020AD1C *pR
             pFlags = pTable->mRows + pTable->mRowSize * record;
             pFlags += pTable->mDeletedBit >> 3;
             *pFlags |= 1 << (7 - (pTable->mDeletedBit & 7));
-            *(unsigned short *)(pTable->mRows + pTable->mRowSize * record) = pTable->mUnknown48;
-            pTable->mUnknown48 = record;
-            pTable->mUnknown46++;
+            *(unsigned short *)(pTable->mRows + pTable->mRowSize * record) = pTable->mFirstDeletedRow;
+            pTable->mFirstDeletedRow = record;
+            pTable->mDeletedCount++;
         } else {
             pTable->mRowCount--;
         }
@@ -401,7 +401,7 @@ int fn_8020BFA4(TDbTable_t *pTable, TDbLitRef_t *pValues, TDbResult_8020AD1C *pR
                         pValue->mId = -1;
                         bDecoded = 1;
                     }
-                    pTable->mCallbacks[k]((int)pTable->mDb->mUnknown8, pTable->mUnknown1C, 0, 0, pTable->mUnknown10);
+                    pTable->mCallbacks[k]((int)pTable->mDb->mId, pTable->mId, 0, 0, pTable->mUnknown10);
                 }
             }
         }
@@ -446,16 +446,16 @@ void fn_8020C3E4(TDbTable_t *pTable, int record)
         pFlags += pTable->mDeletedBit >> 3;
         *pFlags |= 1 << (7 - (pTable->mDeletedBit & 7));
     }
-    *(unsigned short *)(pTable->mRows + pTable->mRowSize * record) = pTable->mUnknown48;
-    pTable->mUnknown48 = record;
+    *(unsigned short *)(pTable->mRows + pTable->mRowSize * record) = pTable->mFirstDeletedRow;
+    pTable->mFirstDeletedRow = record;
     pTable->mFlags |= 4;
-    pTable->mUnknown46++;
+    pTable->mDeletedCount++;
     for (k = 0; k <= 3; k++) {
         if (pTable->mCallbacks[k] != 0) {
-            pTable->mCallbacks[k]((int)pTable->mDb->mUnknown8, pTable->mUnknown1C, 1, pTable->mUnknownC, 0);
+            pTable->mCallbacks[k]((int)pTable->mDb->mId, pTable->mId, 1, pTable->mUnknownC, 0);
         }
     }
-    if ((pTable->mFlags & 8) && pTable->mRowCount == pTable->mUnknown46) {
+    if ((pTable->mFlags & 8) && pTable->mRowCount == pTable->mDeletedCount) {
         fn_8020C6C8(pTable);
     }
 }
@@ -467,7 +467,7 @@ int fn_8020C5C8(TDbTable_t *pTable, int count)
     if (pTable->mFlags & 0x60) {
         return 0x31;
     }
-    _TDbMemNotify(2, (int)pTable->mDb->mUnknown8, pTable->mUnknown1C);
+    _TDbMemNotify(2, (int)pTable->mDb->mId, pTable->mId);
     if (pTable->mCapacity == 0) {
         err = TDbExtMemAlloc(pTable->mDb->mHeap, pTable->mRowSize * count, &pTable->mRows);
     } else {
@@ -476,7 +476,7 @@ int fn_8020C5C8(TDbTable_t *pTable, int count)
     }
     if (err == 0) {
         pTable->mCapacity = count;
-        pTable->mUnknown40 = count;
+        pTable->mNominalCapacity = count;
     }
     if (_tDbMemAllocInfoCallback != 0) {
         TDbMemEvent_t event;
@@ -503,9 +503,9 @@ int fn_8020C6C8(TDbTable_t *pTable)
         TDbExtMemFree(pTable->mDb->mHeap, pTable->mRows, pTable->mRowSize * pTable->mCapacity);
     }
     pTable->mCapacity = 0;
-    pTable->mUnknown46 = 0;
+    pTable->mDeletedCount = 0;
     pTable->mRowCount = 0;
-    pTable->mUnknown48 = 0xFFFF;
+    pTable->mFirstDeletedRow = 0xFFFF;
     return 0;
 }
 
@@ -546,8 +546,8 @@ int fn_8020C764(TDbTable_t *pSrc, TDbTable_t *pDst, TDbResult_8020AD1C *pResult)
         }
     }
     if (maxBits != 0) {
-        int dbId = (int)pSrc->mDb->mUnknown8;
-        int tableId = pSrc->mUnknown1C;
+        int dbId = (int)pSrc->mDb->mId;
+        int tableId = pSrc->mId;
 
         pEvent = &event;
         if (_tDbMemAllocInfoCallback != 0) {
@@ -571,18 +571,18 @@ int fn_8020C764(TDbTable_t *pSrc, TDbTable_t *pDst, TDbResult_8020AD1C *pResult)
     for (rec = 0; rec < pSrc->mRowCount; rec++) {
         int bReused;
 
-        if (TDbRowBit_801FAAF8(pSrc, rec)) {
+        if (_TDbRowIsDeleted(pSrc, rec)) {
             continue;
         }
         if (pDst->mCapacity == 0 && (pDst->mFlags & 8)) {
-            fn_8020C5C8(pDst, pDst->mUnknown40);
+            fn_8020C5C8(pDst, pDst->mNominalCapacity);
         }
         bReused = 0;
-        if (pDst->mUnknown46 != 0) {
-            record = pDst->mUnknown48;
+        if (pDst->mDeletedCount != 0) {
+            record = pDst->mFirstDeletedRow;
             bReused = 1;
-            pDst->mUnknown46--;
-            pDst->mUnknown48 = *(unsigned short *)(pDst->mRows + pDst->mRowSize * record);
+            pDst->mDeletedCount--;
+            pDst->mFirstDeletedRow = *(unsigned short *)(pDst->mRows + pDst->mRowSize * record);
         } else if (pDst->mRowCount < pDst->mCapacity) {
             record = pDst->mRowCount++;
         } else {
@@ -626,9 +626,9 @@ int fn_8020C764(TDbTable_t *pSrc, TDbTable_t *pDst, TDbResult_8020AD1C *pResult)
 
             pFlags += pDst->mDeletedBit >> 3;
             *pFlags |= 1 << (7 - (pDst->mDeletedBit & 7));
-            *(unsigned short *)(pDst->mRows + pDst->mRowSize * record) = pDst->mUnknown48;
-            pDst->mUnknown48 = record;
-            pDst->mUnknown46++;
+            *(unsigned short *)(pDst->mRows + pDst->mRowSize * record) = pDst->mFirstDeletedRow;
+            pDst->mFirstDeletedRow = record;
+            pDst->mDeletedCount++;
         } else {
             pDst->mRowCount--;
         }

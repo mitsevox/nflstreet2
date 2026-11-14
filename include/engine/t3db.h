@@ -47,32 +47,33 @@ typedef struct TDbColumn_t {
     unsigned int mBitCount;
 } TDbColumn_t;
 
-typedef struct TDbDatabase_801FAA00 {
-    unsigned char mUnknown0[0x4];
+typedef struct TDbDatabase_t {
+    struct TDbDatabase_t *mNext;
     struct TDbTable_t *mTables;
-    void *mUnknown8;
+    int mId;
     void *mHeap;
-} TDbDatabase_801FAA00;
+    unsigned char unk_0x10;
+} TDbDatabase_t;
 
 typedef struct TDbTable_t {
-    TDbDatabase_801FAA00 *mDb;
+    TDbDatabase_t *mDb;
     struct TDbTable_t *mNext;
     struct TDbIndex_t *mIndexes;
     void *mUnknownC;
     void *mUnknown10;
     unsigned char *mRows;
-    unsigned char *mUnknown18;
-    unsigned int mUnknown1C;
+    unsigned char *mExtraData;
+    unsigned int mId;
     unsigned int mRowSize;
     unsigned int mDeletedBit;
     unsigned int mFlags;
-    unsigned int mUnknown2C;
+    unsigned int mExtraSize;
     void (*mCallbacks[4])(int dbId, int tableId, int op, void *pOld, void *pNew);
-    unsigned short mUnknown40;
+    unsigned short mNominalCapacity;
     unsigned short mCapacity;
     unsigned short mRowCount;
-    unsigned short mUnknown46;
-    unsigned short mUnknown48;
+    unsigned short mDeletedCount;
+    unsigned short mFirstDeletedRow;
     unsigned char mColumnCount;
     unsigned char mUnknown4B;
     TDbColumn_t mColumns[1];
@@ -182,7 +183,7 @@ typedef struct TDbQIdx_80205880 {
 } TDbQIdx_80205880;
 
 typedef struct TDbQuery_t {
-    TDbDatabase_801FAA00 *mDb;
+    TDbDatabase_t *mDb;
     struct TDbQuery_t *mNext;
     void (*mCallback)(int arg);
     int mCallbackArg;
@@ -201,20 +202,27 @@ typedef struct TDbResult_8020AD1C {
     int mUnknown08;
 } TDbResult_8020AD1C;
 
-typedef struct TDbToken_801FD2E8 {
-    unsigned int mType;
-    void *mValue;
-    char *mSrc;
-    int mUnknownC;
-} TDbToken_801FD2E8;
+typedef union TDbTokenValue_t {
+    int i;
+    unsigned int u;
+    float f;
+    char *s;
+} TDbTokenValue_t;
 
-typedef struct TDbLexer_801FCE10 {
-    TDbToken_801FD2E8 mTokens[2];
+typedef struct TDbToken_t {
+    unsigned int mType;
+    TDbTokenValue_t mValue;
+    char *mSrc;
+    unsigned char unk_0xC[4];
+} TDbToken_t;
+
+typedef struct TDbLexer_t {
+    TDbToken_t mTokens[2];
     unsigned int mCount;
     char *mSrc;
     char mBuffer[0x64];
     unsigned int mBufUsed;
-} TDbLexer_801FCE10;
+} TDbLexer_t;
 
 typedef struct TDbIODevice_t {
     int (*mOpen)(void *pHandle, unsigned int size, void *pName, int mode);
@@ -226,7 +234,7 @@ typedef struct TDbIODevice_t {
     unsigned int mUnknown18;
 } TDbIODevice_t;
 
-typedef struct TDbIOStream_801FA8C8 {
+typedef struct TDbIOStream_t {
     unsigned int mCrcA;
     unsigned int mCrcB;
     TDbIODevice_t *mDevice;
@@ -234,53 +242,52 @@ typedef struct TDbIOStream_801FA8C8 {
     unsigned int mSize;
     unsigned int mEnd;
     unsigned int mOffset;
-    unsigned char mHandle[4];
-    unsigned char mUnknown20[0x80];
-} TDbIOStream_801FA8C8;
+    unsigned char mHandle[0x84];
+} TDbIOStream_t;
 
-typedef struct TDbIOTableHdr_801FAAF8 {
+typedef struct TDbIOTableHdr_t {
     unsigned int mFlags;
     unsigned int mRowSize;
     unsigned int mDeletedBit;
     unsigned int mDataSize;
-    unsigned short mUnknown10;
+    unsigned short mCapacity;
     unsigned short mRowCount;
-    unsigned short mUnknown14;
-    unsigned short mUnknown16;
+    unsigned short mDeletedCount;
+    unsigned short mFirstDeletedRow;
     unsigned char mColumnCount;
     unsigned char mIndexCount;
     unsigned char mUnknown1A[6];
-} TDbIOTableHdr_801FAAF8;
+} TDbIOTableHdr_t;
 
-typedef struct TDbIOIndexHdr_801FBC2C {
+typedef struct TDbIOIndexHdr_t {
     int mId;
     unsigned char mPartCount;
     unsigned char mAllowDuplicates;
     unsigned char mHasFilter;
     unsigned char mUnknown7;
-} TDbIOIndexHdr_801FBC2C;
+} TDbIOIndexHdr_t;
 
-typedef struct TDbIOIndexPart_801FBC2C {
+typedef struct TDbIOIndexPart_t {
     unsigned int mColumn;
     unsigned int mAscending;
-} TDbIOIndexPart_801FBC2C;
+} TDbIOIndexPart_t;
 
 extern void (*_tDbMemAllocInfoCallback)(TDbMemEvent_t *pEvent);
-extern unsigned int lbl_802F9548[256];
+extern unsigned int crc32_table[256];
 extern TDbMemPool_t lbl_803E9654;
-extern TDbMemPool_t lbl_803E96A8;
+extern TDbMemPool_t _tDbIndexPool;
 extern int (*lbl_803EBE74)(const char *a, const char *b, int size);
-extern void *lbl_803EBE8C;
+extern void *_tDbGlobalMemoryHeapID;
 extern TDbQuery_t *lbl_803EBE90;
 
-void fn_801FA870(void);
-int fn_801FA8C8(TDbIOStream_801FA8C8 *pStream, void *pData, unsigned int size);
-int fn_801FA964(TDbIOStream_801FA8C8 *pStream, void *pData, unsigned int size);
-unsigned int fn_801FAA00(TDbDatabase_801FAA00 *pDb, unsigned int *pOut);
-int fn_801FBD2C(TDbTable_t *pTable, TDbIOStream_801FA8C8 *pStream);
-unsigned int fn_801FC950(void *pData, unsigned int size, unsigned int crc);
-void fn_802009B0(TDbLexer_801FCE10 *pLexer, unsigned int start);
-char *fn_80201C70(TDbLexer_801FCE10 *pLexer, char *p);
+void _TDbIOInitCRCTable(void);
+int _TDbIOWriteBuffer(TDbIOStream_t *pStream, void *pData, unsigned int size);
+int _TDbIOReadBuffer(TDbIOStream_t *pStream, void *pData, unsigned int size);
+unsigned int _TDbIODatabaseSaveSize(TDbDatabase_t *pDb, unsigned int *pOut);
+int _TDbIOWriteTable(TDbTable_t *pTable, TDbIOStream_t *pStream);
+unsigned int _TDbIOCRC32(void *pData, unsigned int size, unsigned int crc);
+void T3DB_Lexer_GetTokens(TDbLexer_t *pLexer, unsigned int start);
+char *T3DB_Lexer_StringLiteral(TDbLexer_t *pLexer, char *p);
 void _TDbDataGetBitData(unsigned int *pData, unsigned int bitOffset, unsigned int bitCount, unsigned int *pValue,
                  int isSigned);
 TDbIdxNode_t *_TDbIdxSeekClosest(TDbIdxTree_t *pTree, unsigned int *pKey);
@@ -336,7 +343,7 @@ static inline void _TDbMemNotify(int type, int a, int b)
     }
 }
 
-static inline unsigned char TDbRowBit_801FAAF8(TDbTable_t *pTable, unsigned int row)
+static inline unsigned char _TDbRowIsDeleted(TDbTable_t *pTable, unsigned int row)
 {
     unsigned char *pRow = pTable->mRows + pTable->mRowSize * row;
     unsigned int bit = pTable->mDeletedBit;

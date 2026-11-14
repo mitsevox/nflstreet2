@@ -141,13 +141,14 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x8025FAF8	0x8025FAF8	0x8025FAF8	alignment	0	0	libgcc2.c	libgcc2.c
 .text	-	0x8025FBD4	0x80260FC4	open	-	-	libgcc2.c	sf_fabs.c
 .text	-	0x80260FE8	0x8026120C	open	-	-	sf_fabs.c	sf_scalbn.c
-.text	-	0x80261328	0x80261414	open	-	-	sf_scalbn.c	kf_sin.c
+.text	-	0x80261328	0x80261328	open	-	-	sf_scalbn.c	kf_cos.c
+.text	0x80261414	0x80261414	0x80261414	alignment	0	0	kf_cos.c	kf_sin.c
 .text	-	0x802614C0	0x80261A24	open	-	-	kf_sin.c	sf_copysign.c
 .text	-	0x80261A58	0x802622DC	open	-	-	sf_copysign.c	vprintf.c
 .text	0x80262310	0x80262310	0x80262310	alignment	1	0	vprintf.c	src/engine/atexit.c
 .text	0x802623A8	0x802623A8	0x802623A8	alignment	0	0	src/engine/atexit.c	bsearch.c
 .text	0x8026247C	0x8026247C	0x8026247C	alignment	0	0	bsearch.c	vfprintf.c
-.text	0x802645AC	0x802645AC	0x802645AC	alignment	0	2	vfprintf.c	vfprintf.c
+.text	0x802645AC	0x802645AC	0x802645AC	alignment	2	3	vfprintf.c	vfprintf.c
 .text	0x80265D2C	0x80265D2C	0x80265D2C	alignment	0	0	vfprintf.c	math_support.c
 .text	0x80266640	0x80266640	0x80266640	alignment	0	0	math_support.c	mbtowc_r.c
 .text	0x8026696C	0x8026696C	0x8026696C	alignment	0	0	mbtowc_r.c	memchr.c
@@ -189,7 +190,7 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .rodata	-	0x802B1C38	0x802B1C38	thin	0	5/1	tmtexture.c	tmname.c
 .rodata	-	0x802B7280	0x802B7280	data	0	3/3	libgcc2.c	libgcc2.c
 .rodata	-	0x802B7298	0x802B7298	data	0	3/3	libgcc2.c	libgcc2.c
-.rodata	-	0x802B7578	0x802B7608	data	0	9/3	vfprintf.c	vfprintf.c
+.rodata	-	0x802B7608	0x802B7608	data	0	15/3	vfprintf.c	vfprintf.c
 .rodata	-	0x802B76A4	0x802B76C8	data	0	3/27	vfprintf.c	math_support.c
 .data	-	0x802CC5E0	0x802CC5E0	data	0	11/9	FSasync.c	sndvd.c
 .data	-	0x802F4A74	0x802F4A74	thin	0	1/2	fileio.c	llfileio.c
@@ -207,7 +208,8 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .sdata	-	0x803EBEE8	0x803EBEE8	thin	0	1/1	tmmaterial.c	tmmateriallist.c
 .sdata	-	0x803EBEF0	0x803EBEF0	thin	0	1/5	tmmateriallist.c	tmrender.c
 .sdata	-	0x803EBF80	0x803EBF80	data	0	4/2	UIGFmv.c	LLUIGFmv.c
-.sdata	-	0x803EC550	0x803EC550	data	0	2/3	vfprintf.c	vfprintf.c
+.sdata	-	0x803EC4A4	0x803EC4A4	data	0	9/7	kf_cos.c	kf_sin.c
+.sdata	-	0x803EC550	0x803EC550	data	0	2/2	vfprintf.c	vfprintf.c
 .sdata	-	0x803EC584	0x803EC584	thin	0	2/1	lzm.c	lzh.c
 .sbss	-	0x803ECF70	0x803ECF70	data	0	6/4	remap.c	Resource.c
 .sbss	-	0x803ED420	0x803ED420	data	0	3/45	lzm.c	lzh.c
