@@ -141,6 +141,7 @@ Object_80039F5C *fn_8016174C(int index, unsigned char *enabled) {
 }
 void fn_801618D8(Object_801618D8 *item, Desc_801618D8 *desc) {
     int kind = desc->mUnknown8;
+    // FAKEMATCH: store order of the field initializers below was found by permutation search
     item->mUnknown34 = kind;
     item->mUnknown4.mX = 0.0f;
     item->mUnknown4.mY = 0.0f;
