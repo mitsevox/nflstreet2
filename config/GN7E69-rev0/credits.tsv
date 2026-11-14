@@ -304,3 +304,6 @@
 0x800D1788	lifewillbeokay	First exact body (StyleTrackerCalculateAward) in original PR #1317, landed through this integration PR.
 0x801EE38C	lifewillbeokay	First exact body (_ResInitRamResourceFile) in original PR #1319, landed through this integration PR.
 0x801F02AC	lifewillbeokay	First exact body (ResLoadAll) in original PR #1319, landed through this integration PR.
+0x801FB5C0	lifewillbeokay	First exact body (_TDbIOReadIndex) in original PR #1333, landed through this integration PR.
+0x80201030	lifewillbeokay	First exact body (T3DB_Lexer_Identifier) in original PR #1333, landed through this integration PR.
+0x80261328	adampreddy	First exact body (__kernel_cosf) in original PR #1342, landed through this integration PR.
