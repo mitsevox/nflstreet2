@@ -1,3 +1,10 @@
+/* Created team: the team a user builds on the create-a-team screens, kept in
+   the created-team tables of each user's save database. Stores the team and
+   its players from the game's team and player tables and loads them back,
+   creates a new team row and fills it with the players of a team style,
+   computes the team's offence, defence and overall ratings from its players,
+   adds and removes players, backs the tables up and restores them, and clears
+   the team. */
 #include "game/fn_801FCE10.h"
 #include "game/fn_801F9908.h"
 #include "game/fn_801C1F94.h"
@@ -13,8 +20,8 @@ extern "C" {
 int fn_8022F358(int);
 int fn_8022F4BC(void);
 int fn_8022F3D4(int);
-void fn_8018CA80(int);
-void fn_8018CA14(int);
+void CreateTeamClearTables(int);
+void CreateTeamUpdateRatings(int);
 int fn_801F9980(int, int *);
 int fn_801F967C(int, int);
 void fn_801F9718(int, int, DbColumnValue *, int *, int);
@@ -45,20 +52,106 @@ int GauntletGetCurrentTeam(int);
 void GauntletReset(int);
 int fn_8022EF8C(int, int);
 int fn_8022EFBC(int, int);
+void CreateTeamPlayerCursorOpen(DbCursor *pCursor, int index);
+void CreateTeamPlayerCursorClose(DbCursor *pCursor);
 }
 
-static int lbl_802EAE74[16] = {
+static int _CreateTeamDb_aTeamTags[16] = {
     0x44494754, 0x44494F54, 0x50595454, 0x44524F54, 0x45445254, 0x464F5254, 0x564F5254, 0x4C474C54, 0x49524454, 0x31434D54, 0x32434D54, 0x33434D54, 0x4C445443, 0x414E5354, 0x414E4C54, 0x414E4454
 };
-static int lbl_802EAEB4[13] = {
+static int _CreateTeamDb_aDefaultValues[13] = {
     0x00000000, 0x00000000, 0x00000005, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000066, 0x00000000, 0x00000035, 0x0000003C, 0x00000075, 0x00000001
 };
-static int lbl_802EAEE8[3] = {
-    0x802AA338, 0x802AA33C, 0x802AA33C
+static char *_CreateTeamDb_apNames[3] = {"NEW", "New Team", "New Team"};
+
+static float _CreateTeamDb_afOffenseWeights[10] = {
+    0.16f, 0.12f, 0.10f, 0.14f, 0.20f, 0.0f, 0.06f, 0.08f, 0.0f, 0.0f
+};
+static float _CreateTeamDb_afDefenseWeights[10] = {
+    0.12f, 0.0f, 0.0f, 0.0f, 0.11f, 0.26f, 0.0f, 0.0f, 0.23f, 0.23f
+};
+static float _CreateTeamDb_afOverallWeights[10] = {
+    0.27f, 0.10f, 0.06f, 0.12f, 0.28f, 0.18f, 0.05f, 0.06f, 0.14f, 0.14f
 };
 
 extern "C" {
-void fn_8018CA80(int source)
+void CreateTeamCalcPlayerRatings(int *pRatings, float *pOffense, float *pDefense, float *pOverall)
+{
+    float offenseWeight = 0.0f;
+    float defenseWeight = 0.0f;
+    float overallWeight = 0.0f;
+    *pOffense = 0.0f;
+    *pDefense = 0.0f;
+    *pOverall = 0.0f;
+    for (int i = 0; i < 10; i++) {
+        *pOffense += pRatings[i] * _CreateTeamDb_afOffenseWeights[i];
+        offenseWeight += _CreateTeamDb_afOffenseWeights[i];
+        *pDefense += pRatings[i] * _CreateTeamDb_afDefenseWeights[i];
+        defenseWeight += _CreateTeamDb_afDefenseWeights[i];
+        *pOverall += pRatings[i] * _CreateTeamDb_afOverallWeights[i];
+        overallWeight += _CreateTeamDb_afOverallWeights[i];
+    }
+    *pOffense /= offenseWeight;
+    *pDefense /= defenseWeight;
+    *pOverall /= overallWeight;
+}
+
+void CreateTeamCalcRatings(int index, int *pOffense, int *pDefense, int *pOverall)
+{
+    DbCursor cursor;
+    CreateTeamPlayerCursorOpen(&cursor, index);
+    int count = DbCursorGetRowCount(&cursor);
+    float offenseTotal = 0.0f;
+    float defenseTotal = 0.0f;
+    float overallTotal = 0.0f;
+    if (DbCursorFirst(&cursor)) {
+        do {
+            int ratings[10];
+            float offense;
+            float defense;
+            float overall;
+            PlayerGetGearRatings((Object_8008044C *)&cursor, ratings);
+            CreateTeamCalcPlayerRatings(ratings, &offense, &defense, &overall);
+            offenseTotal += offense;
+            defenseTotal += defense;
+            overallTotal += overall;
+        } while (DbCursorNext(&cursor));
+    }
+    double offense = offenseTotal * 1.6 / count;
+    if (offense >= 1.0) {
+        *pOffense = (int)(offense <= 99.0 ? offense : 99.0);
+    } else {
+        *pOffense = 1;
+    }
+    double defense = defenseTotal * 1.6 / count;
+    if (defense >= 1.0) {
+        *pDefense = (int)(defense <= 99.0 ? defense : 99.0);
+    } else {
+        *pDefense = 1;
+    }
+    double overall = overallTotal * 1.6 / count;
+    if (overall >= 1.0) {
+        *pOverall = (int)(overall <= 99.0 ? overall : 99.0);
+    } else {
+        *pOverall = 1;
+    }
+    CreateTeamPlayerCursorClose(&cursor);
+}
+
+void CreateTeamUpdateRatings(int index)
+{
+    int handle = fn_8022F3D4(fn_8022F358(index));
+    int offense;
+    int defense;
+    int overall;
+    QueryResult result;
+    CreateTeamCalcRatings(index, &offense, &defense, &overall);
+    fn_801FCE10(&result,
+        "use \x8c update 'MTRC' set 'FORT' = \x82 and 'EDRT' = \x82 and 'VORT' = \x82\n",
+        handle, offense, defense, overall);
+}
+
+void CreateTeamClearTables(int source)
 {
     QueryResult result;
     DbQueryTable tables[2];
@@ -70,14 +163,14 @@ void fn_8018CA80(int source)
     tables[1].Set(-1);
     fn_801F9908(source, tables, 0, &result, 0);
 }
-void fn_8018CB28(int source, int team, int index)
+void CreateTeamStore(int source, int team, int index)
 {
     QueryResult result;
     int table = -1;
     QueryCursor cursor = {0, 0, -1, 0};
     int player;
     int destination = fn_8022F3D4(fn_8022F358(index));
-    fn_8018CA80(destination);
+    CreateTeamClearTables(destination);
     fn_801F9980(destination, &table);
     fn_801FCE10(0, "use \x8c select into \x8c.\x8c * from 'MAET' where ('DIGT' = \x82)\n", source, destination, table, 0);
     fn_801FCE10(0, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIOT' = \x85\n", destination, table, 0, 0);
@@ -96,10 +189,10 @@ void fn_8018CB28(int source, int team, int index)
         fn_801F967C(destination, table);
     }
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
-    fn_8018CA14(index);
+    CreateTeamUpdateRatings(index);
 }
 
-int fn_8018CD1C(int source, int teamTable, int playerTable, int destination,
+int CreateTeamLoad(int source, int teamTable, int playerTable, int destination,
                 int rumt, int *pOriginalIds, int preserveOriginal)
 {
     QueryResult result;
@@ -146,13 +239,13 @@ int fn_8018CD1C(int source, int teamTable, int playerTable, int destination,
     return team;
 }
 
-int fn_8018D018(int destination, int rumt, int index, int *pOriginalIds, int preserveOriginal)
+int CreateTeamLoadAll(int destination, int rumt, int index, int *pOriginalIds, int preserveOriginal)
 {
     int source = fn_8022F3D4(fn_8022F358(index));
-    return fn_8018CD1C(source, 0x4D545243, 0x59505243, destination, rumt, pOriginalIds, preserveOriginal);
+    return CreateTeamLoad(source, 0x4D545243, 0x59505243, destination, rumt, pOriginalIds, preserveOriginal);
 }
 
-void fn_8018D07C(int index)
+void CreateTeamSyncCreatedPlayers(int index)
 {
     QueryResult result;
     int player, ytrp, oldPxsp;
@@ -183,19 +276,19 @@ void fn_8018D07C(int index)
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
 }
 
-int fn_8018D23C()
+int CreateTeamInsertNew()
 {
     DbColumnValue list[17];
     unsigned short count = 1;
     int team;
     fn_8022C628(0x54415453, 0x4D414554, &team, &count);
     for (unsigned int i = 0; i < 13; i++) {
-        list[i].Set(0x4D414554, lbl_802EAE74[i]);
-        list[i].mValue = lbl_802EAEB4[i];
+        list[i].Set(0x4D414554, _CreateTeamDb_aTeamTags[i]);
+        list[i].mValue = _CreateTeamDb_aDefaultValues[i];
     }
     for (unsigned int i = 0; i < 3; i++) {
-        list[i + 13].mValue = lbl_802EAEE8[i];
-        list[i + 13].Set(0x4D414554, lbl_802EAE74[i + 13]);
+        list[i + 13].mValue = (int)_CreateTeamDb_apNames[i];
+        list[i + 13].Set(0x4D414554, _CreateTeamDb_aTeamTags[i + 13]);
     }
     list[0].mValue = team;
     list[16].SetEnd();
@@ -203,7 +296,7 @@ int fn_8018D23C()
     return team;
 }
 
-void fn_8018D358(int index, int team, int rumt)
+void CreateTeamCopyStylePlayers(int index, int team, int rumt)
 {
     DbFilter arg;
     QueryResult result;
@@ -263,12 +356,12 @@ void fn_8018D358(int index, int team, int rumt)
     fn_8022F478(saved);
 }
 
-int fn_8018D70C(int value)
+int CreateTeamGetStylePoints(int value)
 {
     if (value == 5) return 8000;
     return 200;
 }
-int fn_8018D720(int index)
+int CreateTeamExists(int index)
 {
     unsigned short count = 0;
     int found = 0;
@@ -276,7 +369,7 @@ int fn_8018D720(int index)
     if (count) found = 1;
     return found;
 }
-int fn_8018D780(int index)
+int CreateTeamHasPlayers(int index)
 {
     unsigned short count = 0;
     int found = 0;
@@ -284,32 +377,32 @@ int fn_8018D780(int index)
     if (count) found = 1;
     return found;
 }
-void fn_8018D7E0()
+void CreateTeamLoadUserTeams()
 {
     int ids[16];
     fn_8018C48C(0x54415453);
     fn_8018C48C(0x454D4147);
     for (unsigned char i = 0; i <= 1; i++) {
         int index = fn_80186F7C(i);
-        if (index != -1 && fn_8018D720(index)) {
-            fn_8018D07C(index);
-            fn_8018D018(0x54415453, i, index, ids, 0);
-            fn_8018D018(0x454D4147, i, index, ids, 0);
+        if (index != -1 && CreateTeamExists(index)) {
+            CreateTeamSyncCreatedPlayers(index);
+            CreateTeamLoadAll(0x54415453, i, index, ids, 0);
+            CreateTeamLoadAll(0x454D4147, i, index, ids, 0);
         }
     }
 }
-void fn_8018D890(int index, int rumt)
+void CreateTeamLoadToStats(int index, int rumt)
 {
     int ids[16];
     fn_8018C48C(0x54415453);
-    fn_8018D07C(index);
-    fn_8018D018(0x54415453, rumt, index, ids, 1);
+    CreateTeamSyncCreatedPlayers(index);
+    CreateTeamLoadAll(0x54415453, rumt, index, ids, 1);
 }
-void fn_8018D8EC(int index, int team)
+void CreateTeamStoreFromStats(int index, int team)
 {
-    fn_8018CB28(0x54415453, team, index);
+    CreateTeamStore(0x54415453, team, index);
 }
-void fn_8018D918()
+void CreateTeamClear()
 {
     int source = fn_8022F3D4(fn_8022F4BC());
     if (!GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC())))
@@ -332,7 +425,7 @@ void fn_8018D918()
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
     if (fn_801FCE10(&result, "use \x8c select 'PXSP' into \x85 from 'YPRC' where 'DIOP' = \x85\n", source, &selected, 0x7FF4) == 0)
         fn_801FCE10(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", source, 8, selected);
-    fn_8018CA80(source);
+    CreateTeamClearTables(source);
     tables[0].Set(0x4E494843);
     tables[1].Set(-1);
     fn_801F9908(source, tables, 0, &result, 0);
@@ -352,7 +445,7 @@ void fn_8018D918()
         fn_801FCE10(0, "use \x8c insert into \x8c.'GPTC' set 'MGTC' = \x82 and '1STC' = 0 and '2STC' = 0\n", source, source, i);
     fn_801FCE10(&result, "use \x8c update 'REGL' set 'KCLG' = 1 where 'KLCG' = 1\n", source);
 }
-void fn_8018DC18(int unused, int player)
+void CreateTeamDeletePlayer(int unused, int player)
 {
     QueryResult result;
     DbQueryTable tables[2];
@@ -362,20 +455,20 @@ void fn_8018DC18(int unused, int player)
     tables[1].Set(-1);
     fn_801F9908(0x54415453, tables, &arg, &result, 0);
 }
-int fn_8018DCBC(int id)
+int CreateTeamDeleteStandIn(int id)
 {
     QueryResult result;
     fn_801FCE10(&result, "use 'TATS' delete from 'YALP' where 'DIOP' = \x82 and 'DIGT' = \x85\n", 0x7FF4, id);
     return result.mUnknown0 == 1;
 }
-int fn_8018DD04(int id)
+int CreateTeamCountStandIns(int id)
 {
     QueryResult result;
     int selected = 0;
     fn_801FCE10(&result, "use 'TATS' select count(*) into \x82 from 'YALP' where ('DIOP' = \x82 and 'DIGT' = \x85 )\n", &selected, 0x7FF4, id);
     return selected;
 }
-void fn_8018DD4C(int team, int player, int useDefault)
+void CreateTeamAddPlayer(int team, int player, int useDefault)
 {
     QueryResult result;
     int table = -1;
@@ -389,26 +482,26 @@ void fn_8018DD4C(int team, int player, int useDefault)
     fn_801FCE10(0, "use 'TATS' insert into 'YALP' * select * from \x8c\n", table);
     fn_801F967C(0x54415453, table);
 }
-void fn_8018DE40(int *pFirstCopy, int *pSecondCopy, int database)
+void CreateTeamBackup(int *pFirstCopy, int *pSecondCopy, int database)
 {
     fn_8018C344(database, 0x4D545243, 0x59505243, pFirstCopy, pSecondCopy);
 }
-void fn_8018DE7C(int firstTable, int secondTable)
+void CreateTeamFreeBackup(int firstTable, int secondTable)
 {
     fn_8018C3EC(firstTable, secondTable);
 }
-void fn_8018DE9C(int first, int second)
+void CreateTeamRestore(int first, int second)
 {
     int handle = fn_8022F3D4(fn_8022F4BC());
-    fn_8018CA80(handle);
+    CreateTeamClearTables(handle);
     fn_801FCE10(0, "use \x8c insert into \x8c.'MTRC' * select * from \x8c\n", 0x54415453, handle, first);
     fn_801FCE10(0, "use \x8c insert into \x8c.'YPRC' * select * from \x8c\n", 0x54415453, handle, second);
 }
-void fn_8018DF20(DbCursor *pCursor, int index)
+void CreateTeamPlayerCursorOpen(DbCursor *pCursor, int index)
 {
     DbCursorOpen(pCursor, 0x59505243, 0x44494750, 0, 0, fn_8022F3D4(fn_8022F358(index)));
 }
-void fn_8018DF78(DbCursor *pCursor)
+void CreateTeamPlayerCursorClose(DbCursor *pCursor)
 {
     DbCursorClose(pCursor);
 }

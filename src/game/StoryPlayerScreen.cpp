@@ -54,12 +54,12 @@ void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pC
 void StoryTeamClear(void);
 int StoryTeamGetId(int a, int *p);
 void fn_8018C48C(int tag);
-int fn_8018D780(int a);
-int fn_8018D890(int a, int b);
-void fn_8018D8EC(int a, int b);
-void fn_8018DCBC(int a);
-int fn_8018DD04(int a);
-void fn_8018DD4C(int a, int b, int c);
+int CreateTeamHasPlayers(int a);
+int CreateTeamLoadToStats(int a, int b);
+void CreateTeamStoreFromStats(int a, int b);
+void CreateTeamDeleteStandIn(int a);
+int CreateTeamCountStandIns(int a);
+void CreateTeamAddPlayer(int a, int b, int c);
 int StoryTestIndexedFlag(int a, int b);
 void StorySetIndexedFlag(int a, int b, int c);
 int fn_8022F358(int index);
@@ -123,13 +123,13 @@ void StoryPlayerScreenRevert(void)
     int handle;
 
     MemCardUISetScriptFlag(_StoryPlayerScreen_bSavedFlag);
-    handle = fn_8018D890(_StoryPlayerScreen_iProfile, 0);
-    if (fn_8018DD04(handle) > 0) {
-        fn_8018DCBC(handle);
+    handle = CreateTeamLoadToStats(_StoryPlayerScreen_iProfile, 0);
+    if (CreateTeamCountStandIns(handle) > 0) {
+        CreateTeamDeleteStandIn(handle);
     }
     StoryTeamAddOneToStats(_StoryPlayerScreen_iProfile, 0, &result);
-    fn_8018DD4C(handle, result.mUnknown0, 1);
-    fn_8018D8EC(_StoryPlayerScreen_iProfile, handle);
+    CreateTeamAddPlayer(handle, result.mUnknown0, 1);
+    CreateTeamStoreFromStats(_StoryPlayerScreen_iProfile, handle);
     fn_8018C48C(0x54415453);
     StoryPlayerScreenCopyToSlot8();
     StoryPlayerScreenLoadModel();
@@ -194,7 +194,7 @@ int StoryPlayerScreenCheckFlags(int which)
         }
         break;
     case 1:
-        if (StoryTestIndexedFlag(_StoryPlayerScreen_iProfile, 1) == 0 && fn_8018D780(_StoryPlayerScreen_iProfile) != 0) {
+        if (StoryTestIndexedFlag(_StoryPlayerScreen_iProfile, 1) == 0 && CreateTeamHasPlayers(_StoryPlayerScreen_iProfile) != 0) {
             result = 0;
         }
         break;

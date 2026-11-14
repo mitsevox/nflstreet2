@@ -8456,48 +8456,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8018C688.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded cu_8018C688 unit, existing exact function extents, float/query-pool and weight-table data rows, shared types, source forms and compiler row. Complete comparison bodies remain unlinked; the native rodata size mismatch is retained.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018C688",
-          "end": "0x8018CA80"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AA348",
-          "end": "0x802AA3C4"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802EAEF4",
-          "end": "0x802EAF6C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8018C688",
-          "start": "0x8018C688",
-          "end": "0x8018C7B8"
-        },
-        {
-          "symbol": "fn_8018C7B8",
-          "start": "0x8018C7B8",
-          "end": "0x8018CA14"
-        },
-        {
-          "symbol": "fn_8018CA14",
-          "start": "0x8018CA14",
-          "end": "0x8018CA80"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_8001D0F4.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row src/game/cu_8001D0F4.cpp, the function rows 0x8001D0F4-0x8001D1BC, the data row 0x8001D1BC-0x8001D2D8 (data_8001D1BC) and the data rows 0x802F4504-0x802F4598. Draft comparison only: the source does not reproduce the unreferenced tail 0x8001D2AC-0x8001D2D8 (six strings of functions discarded from this build, whose Xbox prototype counterparts 0x179250 and 0x179310 (the users of \"/\", \"%d_%d\" and \"%s %d\") call Xbox library code, and one zero word), so the .rodata from 0x8001D2AC differs (see the source-form row cu_8001D0F4 unreproduced strings), and the unit stays unlinked.",
@@ -9168,7 +9126,7 @@
     {
       "source": "src/game/cu_8004A2F4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0–0x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/cu_8004A2F4.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names. Static initializer 0x80051D0C and its .ctors/.dtors stubs 0x80051DBC/0x80051DE8 are registered from the file's definition of the Time_801E8C78 object 0x803084B8 (.bss 0x803084B8-0x803084C4) with the .ctors word 0x80289A84 and .dtors word 0x80289BC4.",
+      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/cu_8004A2F4.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names. Static initializer 0x80051D0C and its .ctors/.dtors stubs 0x80051DBC/0x80051DE8 are registered from the file's definition of the Time_801E8C78 object 0x803084B8 (.bss 0x803084B8-0x803084C4) with the .ctors word 0x80289A84 and .dtors word 0x80289BC4.",
       "sections": [
         {
           "section": ".text",
@@ -12308,148 +12266,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8018CB28.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv open-edge unit cu_8018CB28 source row, exact function extents, measured data placements and source-form/type rows. Normal partial source; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018CA80",
-          "end": "0x8018DF98"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AA3C4",
-          "end": "0x802AAD8C"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802EAE74",
-          "end": "0x802EAEF4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8018CB28",
-          "start": "0x8018CB28",
-          "end": "0x8018CD1C"
-        },
-        {
-          "symbol": "fn_8018CD1C",
-          "start": "0x8018CD1C",
-          "end": "0x8018D018"
-        },
-        {
-          "symbol": "fn_8018D018",
-          "start": "0x8018D018",
-          "end": "0x8018D07C"
-        },
-        {
-          "symbol": "fn_8018D07C",
-          "start": "0x8018D07C",
-          "end": "0x8018D23C"
-        },
-        {
-          "symbol": "fn_8018D23C",
-          "start": "0x8018D23C",
-          "end": "0x8018D358"
-        },
-        {
-          "symbol": "fn_8018D358",
-          "start": "0x8018D358",
-          "end": "0x8018D70C"
-        },
-        {
-          "symbol": "fn_8018D70C",
-          "start": "0x8018D70C",
-          "end": "0x8018D720"
-        },
-        {
-          "symbol": "fn_8018D720",
-          "start": "0x8018D720",
-          "end": "0x8018D780"
-        },
-        {
-          "symbol": "fn_8018D780",
-          "start": "0x8018D780",
-          "end": "0x8018D7E0"
-        },
-        {
-          "symbol": "fn_8018D7E0",
-          "start": "0x8018D7E0",
-          "end": "0x8018D890"
-        },
-        {
-          "symbol": "fn_8018D890",
-          "start": "0x8018D890",
-          "end": "0x8018D8EC"
-        },
-        {
-          "symbol": "fn_8018D8EC",
-          "start": "0x8018D8EC",
-          "end": "0x8018D918"
-        },
-        {
-          "symbol": "fn_8018D918",
-          "start": "0x8018D918",
-          "end": "0x8018DC18"
-        },
-        {
-          "symbol": "fn_8018DC18",
-          "start": "0x8018DC18",
-          "end": "0x8018DCBC"
-        },
-        {
-          "symbol": "fn_8018DCBC",
-          "start": "0x8018DCBC",
-          "end": "0x8018DD04"
-        },
-        {
-          "symbol": "fn_8018DD04",
-          "start": "0x8018DD04",
-          "end": "0x8018DD4C"
-        },
-        {
-          "symbol": "fn_8018DD4C",
-          "start": "0x8018DD4C",
-          "end": "0x8018DE40"
-        },
-        {
-          "symbol": "fn_8018DE40",
-          "start": "0x8018DE40",
-          "end": "0x8018DE7C"
-        },
-        {
-          "symbol": "fn_8018DE7C",
-          "start": "0x8018DE7C",
-          "end": "0x8018DE9C"
-        },
-        {
-          "symbol": "fn_8018DE9C",
-          "start": "0x8018DE9C",
-          "end": "0x8018DF20"
-        },
-        {
-          "symbol": "fn_8018DF20",
-          "start": "0x8018DF20",
-          "end": "0x8018DF78"
-        },
-        {
-          "symbol": "fn_8018DF78",
-          "start": "0x8018DF78",
-          "end": "0x8018DF98"
-        },
-        {
-          "symbol": "fn_8018CA80",
-          "start": "0x8018CA80",
-          "end": "0x8018CB28"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_8003BA10.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8003BA00-0x8003E214 (src/game/cu_8003BA10.cpp), projected geometry and resource group rows; original assembly linked.",
@@ -12683,7 +12499,7 @@
     {
       "source": "src/game/cu_80086C10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10–80087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u201380087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
         {
           "section": ".text",
@@ -26569,7 +26385,7 @@
     {
       "source": "src/game/cu_8014AB64.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The widened provisional comparison hull includes only explicit whole functions; shared target literal |^Done at802A0B74 gives the source-grouping reason. Existing readonly target context802A0B50–802A0CE0 remains unchanged. Complete natural native pool grows84 to104 bytes and is compared without clipping against400 target bytes. Done pools correctly at native+0x24; new Jump Ball Battle native+0x54 resolves802A0BA4, differing from actual802A130C. No data exactness, original-unit or adjacent-storage ownership claim.",
+      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The widened provisional comparison hull includes only explicit whole functions; shared target literal |^Done at802A0B74 gives the source-grouping reason. Existing readonly target context802A0B50\u2013802A0CE0 remains unchanged. Complete natural native pool grows84 to104 bytes and is compared without clipping against400 target bytes. Done pools correctly at native+0x24; new Jump Ball Battle native+0x54 resolves802A0BA4, differing from actual802A130C. No data exactness, original-unit or adjacent-storage ownership claim.",
       "sections": [
         {
           "section": ".text",
@@ -43651,7 +43467,7 @@
     {
       "source": "src/game/cu_8014FFC4.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #1021; complete coordinate helper at existing whole-function extent. Original source grouping unresolved; natural constants 6,20,40 map to target readonly 802A12BC–802A12C8. Partial comparison only; original bytes remain linked.",
+      "evidence": "Issue #1021; complete coordinate helper at existing whole-function extent. Original source grouping unresolved; natural constants 6,20,40 map to target readonly 802A12BC\u2013802A12C8. Partial comparison only; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -43744,7 +43560,7 @@
     {
       "source": "src/game/cu_800E55B8.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue1021 bounded fragment; full natural48byte native pool measured against earlier unclaimed contextDC34–DCD8; natural mismatches retained. Original source boundaries unresolved; no linked promotion. fn_800E586C, fn_800E5C00 and fn_800E5EA4 (PR 1123) are added in address order; their literals 0x8029DC3C-0x8029DC70 follow the pool of fn_800E55B8 inside the same context.",
+      "evidence": "Issue1021 bounded fragment; full natural48byte native pool measured against earlier unclaimed contextDC34\u2013DCD8; natural mismatches retained. Original source boundaries unresolved; no linked promotion. fn_800E586C, fn_800E5C00 and fn_800E5EA4 (PR 1123) are added in address order; their literals 0x8029DC3C-0x8029DC70 follow the pool of fn_800E55B8 inside the same context.",
       "sections": [
         {
           "section": ".text",

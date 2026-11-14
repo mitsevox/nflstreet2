@@ -214,8 +214,8 @@ void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pC
 int StoryTeamExists(int a);
 void StoryTeamLoadUserTeams(int a, int b);
 void fn_8018C48C(int tag);
-int fn_8018D720(int a);
-void fn_8018D7E0(void);
+int CreateTeamExists(int a);
+void CreateTeamLoadUserTeams(void);
 int GauntletGetCurrentTeam(int a);
 int GauntletSetCurrentTeam(int a, int b);
 int GauntletGetTeamsLeft(int a);
@@ -640,12 +640,12 @@ int fn_8000FE60(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
             *pResult = StoryTeamExists(fn_8022F384(fn_8022F4BC()));
             break;
         case 752:
-            *pResult = fn_8018D720(fn_8022F384(fn_8022F4BC()));
+            *pResult = CreateTeamExists(fn_8022F384(fn_8022F4BC()));
             break;
         }
         break;
     case 0x80000009:
-        *pResult = fn_8018D720(fn_8022F384(fn_8022F4BC()));
+        *pResult = CreateTeamExists(fn_8022F384(fn_8022F4BC()));
         break;
     default:
         return 0;
@@ -2648,10 +2648,10 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
     if (MsgGameGetSetupState() == 1) {
         if (GameModeTypeGet() == 6) {
             if (!ChalGameHasGeneratedOpponent() || lbl_803EB9A8 != 0x6B) {
-                fn_8018D7E0();
+                CreateTeamLoadUserTeams();
             }
         } else {
-            fn_8018D7E0();
+            CreateTeamLoadUserTeams();
         }
     }
 
@@ -3547,7 +3547,7 @@ int fn_80016730(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 void fn_800167D0(void)
 {
     lbl_803EB9F4 = GameOptionsGet(1);
-    fn_8018D7E0();
+    CreateTeamLoadUserTeams();
     StoryTeamLoadUserTeams(0, 1);
 }
 

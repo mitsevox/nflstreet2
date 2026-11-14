@@ -102,14 +102,14 @@ void StoryTeamBackup(int *pA, int *pB, int c);
 void StoryTeamFreeBackup(int a, int b);
 void StoryTeamRestore(int a, int b);
 void fn_8018C48C(int tag);
-int fn_8018D23C(int a);
-int fn_8018D720(int a);
-int fn_8018D890(int a, int b);
-void fn_8018D8EC(int a, int b);
-void fn_8018D918(void);
-void fn_8018DE40(int *pA, int *pB, int c);
-void fn_8018DE7C(int a, int b);
-void fn_8018DE9C(int a, int b);
+int CreateTeamInsertNew(int a);
+int CreateTeamExists(int a);
+int CreateTeamLoadToStats(int a, int b);
+void CreateTeamStoreFromStats(int a, int b);
+void CreateTeamClear(void);
+void CreateTeamBackup(int *pA, int *pB, int c);
+void CreateTeamFreeBackup(int a, int b);
+void CreateTeamRestore(int a, int b);
 int StoryGetDevPoints(int a);
 void StorySetDevPoints(int a, int b);
 int StoryStartNew(void);
@@ -243,7 +243,7 @@ void fn_80181330(void)
         break;
     default:
         lbl_803ECB7C = ChalGetDevPoints();
-        fn_8018DE40(&lbl_803ECB74, &lbl_803ECB78, fn_8022F4BC());
+        CreateTeamBackup(&lbl_803ECB74, &lbl_803ECB78, fn_8022F4BC());
         break;
     }
 }
@@ -260,7 +260,7 @@ void fn_801813F4(void)
     case 5:
         break;
     default:
-        fn_8018DE7C(lbl_803ECB74, lbl_803ECB78);
+        CreateTeamFreeBackup(lbl_803ECB74, lbl_803ECB78);
         break;
     }
 }
@@ -274,7 +274,7 @@ void fn_80181458(void)
     if (fn_80183950()) {
         StoryTeamRestore(lbl_803ECB74, lbl_803ECB78);
     } else {
-        fn_8018DE9C(lbl_803ECB74, lbl_803ECB78);
+        CreateTeamRestore(lbl_803ECB74, lbl_803ECB78);
     }
     fn_8018196C();
     CreatePlayerSetPoints(lbl_803ECB7C);
@@ -460,8 +460,8 @@ void fn_8018196C(void)
         fn_80082558(lbl_803ECB68, lbl_803EB55C);
     } else {
         fn_8018C48C(0x54415453);
-        if (fn_8018D720(lbl_803EB55C)) {
-            lbl_803ECB68 = fn_8018D890(lbl_803EB55C, 0);
+        if (CreateTeamExists(lbl_803EB55C)) {
+            lbl_803ECB68 = CreateTeamLoadToStats(lbl_803EB55C, 0);
         }
     }
     fn_80084034(&lbl_80362A2C, lbl_803ECB68, 0);
@@ -863,7 +863,7 @@ void fn_80182964(void)
     } else if (fn_8018397C()) {
         fn_80082534(lbl_803ECB68, lbl_803EB55C);
     } else if (fn_80183948() != 2) {
-        fn_8018D8EC(lbl_803EB55C, lbl_803ECB68);
+        CreateTeamStoreFromStats(lbl_803EB55C, lbl_803ECB68);
         if (ChalGetDevPoints() != CreatePlayerGetPoints()) {
             ChalSetDevPoints(CreatePlayerGetPoints());
         }
@@ -1256,15 +1256,15 @@ void fn_80183368(int mode, int value)
         lbl_803ECB68 = value;
         break;
     case 0:
-        lbl_803ECB68 = fn_8018D23C(lbl_803EB55C);
+        lbl_803ECB68 = CreateTeamInsertNew(lbl_803EB55C);
         fn_801832A4();
         break;
     case 2:
         lbl_803ECB68 = fn_8008775C();
         break;
     default:
-        if (fn_8018D720(lbl_803EB55C)) {
-            lbl_803ECB68 = fn_8018D890(lbl_803EB55C, 0);
+        if (CreateTeamExists(lbl_803EB55C)) {
+            lbl_803ECB68 = CreateTeamLoadToStats(lbl_803EB55C, 0);
         }
         break;
     }
@@ -1552,7 +1552,7 @@ int fn_8018399C(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg_t *pResul
         if (pArgs[0].i == 7) {
             pResult->i = StoryTeamExists(fn_8022F384(fn_8022F4BC()));
         } else if (pArgs[0].i == 6) {
-            pResult->i = fn_8018D720(fn_8022F384(fn_8022F4BC()));
+            pResult->i = CreateTeamExists(fn_8022F384(fn_8022F4BC()));
         } else if (pArgs[0].i == 8) {
             pResult->i = GauntletGetCurrentTeam(fn_8022F384(fn_8022F4BC())) != 0x3FF;
         }
@@ -1563,7 +1563,7 @@ int fn_8018399C(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg_t *pResul
         } else if (pArgs[0].i == 6) {
             int team;
 
-            fn_8018D918();
+            CreateTeamClear();
             team = fn_80186B38(fn_8022F4BC());
             if (StoryTeamExists(team)) {
                 StorySetIndexedFlag(team, 1, 0);
