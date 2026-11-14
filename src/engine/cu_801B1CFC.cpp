@@ -283,7 +283,7 @@ void fn_801B2944(RowBank_801AFE90 *p)
     unsigned char *bits = (unsigned char *)fn_801B23C4(p);
     int count = bits[0];
     if (count > 0) {
-        unsigned int time = (unsigned int)lbl_803ECEA0 % count;
+        unsigned int time = (unsigned int)gGameNum % count;
         int size = p->mUnknown5;
         unsigned int start = fn_801B2918(time, size, count);
         int length = fn_801B2918(time + 1, size, count) - start;

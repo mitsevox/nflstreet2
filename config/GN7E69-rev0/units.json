@@ -171,13 +171,14 @@
       "flags": [
         "-O2",
         "-fno-weak",
-        "-ffast-math"
+        "-ffast-math",
+        "-fno-strength-reduce"
       ],
       "include_dirs": [
         "include/libc"
       ],
       "language": "c++",
-      "evidence": "evidence.tsv compiler row 0x801AE3E4-0x801B2AD4 (speech_cxx): the speech library files carry NASCAR 2005's .c names (spchevnt.c, spchpick.c, spchrand.c), and NASCAR's symbols for those files are C++-mangled for 11 of 46, 36 of 67 and 3 of 5 functions, the rest unmangled as extern \"C\" declarations would be (iSPCH_SearchEventDat__FP7VoxDatai in spchevnt.c, iSPCH_EACseedrandom__FUi in spchrand.c), so the original build compiled them as C++. The flags are game_cpp's, measured on the former single file src/engine/cu_801AE3E4.cpp (evidence.tsv compiler row 0x801AE3E4-0x801B2AD4, game_cpp): C++ front end for its gcc 2.95 virtual calls, default -G 8 for its r13 small-data accesses."
+      "evidence": "evidence.tsv compiler row 0x801AE3E4-0x801B2AD4 (speech_cxx): the speech library files carry NASCAR 2005's .c names (spchevnt.c, spchpick.c, spchrand.c), and NASCAR's symbols for those files are C++-mangled for 11 of 46, 36 of 67 and 3 of 5 functions, the rest unmangled as extern \"C\" declarations would be (iSPCH_SearchEventDat__FP7VoxDatai in spchevnt.c, iSPCH_EACseedrandom__FUi in spchrand.c), so the original build compiled them as C++; the two neutral .cpp files of the range use it too. -O2 -fno-weak -ffast-math are game_cpp's, measured on the former single file src/engine/cu_801AE3E4.cpp: C++ front end for its gcc 2.95 virtual calls, default -G 8 for its r13 small-data accesses. -fno-strength-reduce (owner-approved per-profile flag, 2026-11-14): the target's speech loops index arrays afresh each iteration (slwi/lwzx, bottom test) where -O2 forms pointer increments or CTR counters; with the flag 13 more registered functions of the five files compile exact and none of the others changes."
     },
     "sound_cxx": {
       "flags": [
@@ -1323,29 +1324,13 @@
       "address": "0x803ECEB8",
       "evidence": "evidence.tsv data/name rows for 0x803ECEB8 (target extent, related name)."
     },
-    "gSpchRandomState": {
+    "seedX": {
       "address": "0x802F477C",
       "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x802F477C; original-owned provider, no added storage or body."
-    },
-    "_SpchRandom_aHistory": {
-      "address": "0x8037E794",
-      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x8037E794; original-owned provider, no added storage or body."
-    },
-    "_SpchRandom_iHistoryIndex": {
-      "address": "0x803EBB20",
-      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x803EBB20; original-owned provider, no added storage or body."
     },
     "iSPCH_EACrandom": {
       "address": "0x801B1934",
       "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x801B1934; original-owned provider, no added storage or body."
-    },
-    "iSPCH_Rand": {
-      "address": "0x801B1C1C",
-      "evidence": "evidence.tsv function extent and inferred name row at 0x801B1C1C; original-owned comparison body called by other speech files."
-    },
-    "iSPCH_InitRandom": {
-      "address": "0x801B1B70",
-      "evidence": "evidence.tsv function extent and inferred name row at 0x801B1B70; original-owned comparison body called by other speech files."
     },
     "_tDbMemAllocInfoCallback": {
       "address": "0x803EBE80",
@@ -2298,6 +2283,46 @@
     "SNDDRV_dolbypl2balances": {
       "address": "0x80300050",
       "evidence": "evidence.tsv data and name rows for 0x80300050 (2048-byte balance table read by src/engine/sdspmix.c and by snddrv.c code; storage not claimed by either unit)."
+    },
+    "gRandArray": {
+      "address": "0x8037E794",
+      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x8037E794; original-owned provider, no added storage or body."
+    },
+    "gRandArrayIndex": {
+      "address": "0x803EBB20",
+      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x803EBB20; original-owned provider, no added storage or body."
+    },
+    "gCallbacks": {
+      "address": "0x8037E0A0",
+      "evidence": "evidence.tsv data/name rows for 0x8037E0A0 (target extent, related name); speech-library storage, original-owned."
+    },
+    "gFilterSetting": {
+      "address": "0x8037E274",
+      "evidence": "evidence.tsv data/name rows for 0x8037E274 (target extent, related name); speech-library storage, original-owned."
+    },
+    "gSPCH_Allocator": {
+      "address": "0x803EBAF8",
+      "evidence": "evidence.tsv data/name rows for 0x803EBAF8 (target extent, related name); speech-library storage, original-owned."
+    },
+    "gSPCH_Initialized": {
+      "address": "0x803EBAFC",
+      "evidence": "evidence.tsv data/name rows for 0x803EBAFC (target extent, related name); speech-library storage, original-owned."
+    },
+    "gSPCH_AddEvent": {
+      "address": "0x803EBB10",
+      "evidence": "evidence.tsv data/name rows for 0x803EBB10 (target extent, related name); speech-library storage, original-owned."
+    },
+    "gGameNum": {
+      "address": "0x803ECEA0",
+      "evidence": "evidence.tsv data/name rows for 0x803ECEA0 (target extent, related name); speech-library storage, original-owned."
+    },
+    "gDataRate": {
+      "address": "0x803ECEA4",
+      "evidence": "evidence.tsv data/name rows for 0x803ECEA4 (target extent, related name); speech-library storage, original-owned."
+    },
+    "spchlibauthor": {
+      "address": "0x802F4794",
+      "evidence": "evidence.tsv data/name rows for 0x802F4794 (target extent, related name); speech-library storage, original-owned."
     }
   },
   "units": [
@@ -15214,6 +15239,19 @@
       ]
     },
     {
+      "source": "src/engine/spchinit.c",
+      "profile": "speech_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x801AF60C-0x801AF75C (src/engine/spchinit.c), its function and name rows and the speech_cxx compiler row; all four functions match the target, promoted from comparison-only. The file defines no data; the speech-library state it initializes is referenced through externals (external row 0x801AE3E4-0x801B2AD4).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AF60C",
+          "end": "0x801AF75C"
+        }
+      ]
+    },
+    {
       "source": "src/engine/spchrand.c",
       "profile": "speech_cxx",
       "sections": [
@@ -15221,10 +15259,10 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801B1A3C",
-          "end": "0x801B1A90"
+          "end": "0x801B1CFC"
         }
       ],
-      "evidence": "evidence.tsv whole-file provisional unit row, seed function/name/return rows and partial-linking source-form row. Exact native 84-byte prefix only; remaining complete functions are comparison-only."
+      "evidence": "evidence.tsv unit row 0x801B1A3C-0x801B1CFC (src/engine/spchrand.c), its function, name and source-form rows and the speech_cxx compiler row; all five functions match the target, promoted from comparison-only. The file defines no data: the history and cursor it uses are speech-library globals (data rows), referenced as externals."
     },
     {
       "source": "src/engine/cu_801B8C18.cpp",

@@ -8494,7 +8494,7 @@
     {
       "source": "src/game/cu_8004A2F4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0–0x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/cu_8004A2F4.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names. Static initializer 0x80051D0C and its .ctors/.dtors stubs 0x80051DBC/0x80051DE8 are registered from the file's definition of the Time_801E8C78 object 0x803084B8 (.bss 0x803084B8-0x803084C4) with the .ctors word 0x80289A84 and .dtors word 0x80289BC4.",
+      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/cu_8004A2F4.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names. Static initializer 0x80051D0C and its .ctors/.dtors stubs 0x80051DBC/0x80051DE8 are registered from the file's definition of the Time_801E8C78 object 0x803084B8 (.bss 0x803084B8-0x803084C4) with the .ctors word 0x80289A84 and .dtors word 0x80289BC4.",
       "sections": [
         {
           "section": ".text",
@@ -11831,7 +11831,7 @@
     {
       "source": "src/game/cu_80086C10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10–80087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u201380087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
         {
           "section": ".text",
@@ -24011,7 +24011,7 @@
     {
       "source": "src/game/cu_8014AB64.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The widened provisional comparison hull includes only explicit whole functions; shared target literal |^Done at802A0B74 gives the source-grouping reason. Existing readonly target context802A0B50–802A0CE0 remains unchanged. Complete natural native pool grows84 to104 bytes and is compared without clipping against400 target bytes. Done pools correctly at native+0x24; new Jump Ball Battle native+0x54 resolves802A0BA4, differing from actual802A130C. No data exactness, original-unit or adjacent-storage ownership claim.",
+      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The widened provisional comparison hull includes only explicit whole functions; shared target literal |^Done at802A0B74 gives the source-grouping reason. Existing readonly target context802A0B50\u2013802A0CE0 remains unchanged. Complete natural native pool grows84 to104 bytes and is compared without clipping against400 target bytes. Done pools correctly at native+0x24; new Jump Ball Battle native+0x54 resolves802A0BA4, differing from actual802A130C. No data exactness, original-unit or adjacent-storage ownership claim.",
       "sections": [
         {
           "section": ".text",
@@ -32996,41 +32996,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801AF60C.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801AF60C-0x801AF75C (src/engine/cu_801AF60C.cpp), the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801AF60C",
-          "end": "0x801AF75C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801AF60C",
-          "start": "0x801AF60C",
-          "end": "0x801AF630"
-        },
-        {
-          "symbol": "fn_801AF630",
-          "start": "0x801AF630",
-          "end": "0x801AF650"
-        },
-        {
-          "symbol": "fn_801AF650",
-          "start": "0x801AF650",
-          "end": "0x801AF718"
-        },
-        {
-          "symbol": "fn_801AF718",
-          "start": "0x801AF718",
-          "end": "0x801AF75C"
-        }
-      ]
-    },
-    {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx",
       "evidence": "evidence.tsv provisional unit row 0x801AF75C-0x801B1A3C (src/engine/spchpick.c), the speech_cxx compiler row and the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
@@ -33326,43 +33291,8 @@
       ]
     },
     {
-      "source": "src/engine/spchrand.c",
-      "profile": "speech_cxx",
-      "evidence": "evidence.tsv spchrand.c provisional whole-file unit row and documented-holdout/source-form rows. The seed prefix is linked; the four complete remaining bodies stay compared, including two exact bodies separated by loop holdouts. Full native text placement retained for relocation; no data definitions or hidden output.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B1A3C",
-          "end": "0x801B1CFC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "iSPCH_FindRandInQueue",
-          "start": "0x801B1A90",
-          "end": "0x801B1B34"
-        },
-        {
-          "symbol": "iSPCH_AddRandToQueue",
-          "start": "0x801B1B34",
-          "end": "0x801B1B70"
-        },
-        {
-          "symbol": "iSPCH_InitRandom",
-          "start": "0x801B1B70",
-          "end": "0x801B1C1C"
-        },
-        {
-          "symbol": "iSPCH_Rand",
-          "start": "0x801B1C1C",
-          "end": "0x801B1CFC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801B1CFC.cpp",
-      "profile": "game_cpp",
+      "profile": "speech_cxx",
       "evidence": "evidence.tsv provisional unit row 0x801B1CFC-0x801B2AD4 (src/engine/cu_801B1CFC.cpp), the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
       "sections": [
         {
@@ -39365,7 +39295,7 @@
     {
       "source": "src/game/cu_8014FFC4.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #1021; complete coordinate helper at existing whole-function extent. Original source grouping unresolved; natural constants 6,20,40 map to target readonly 802A12BC–802A12C8. Partial comparison only; original bytes remain linked.",
+      "evidence": "Issue #1021; complete coordinate helper at existing whole-function extent. Original source grouping unresolved; natural constants 6,20,40 map to target readonly 802A12BC\u2013802A12C8. Partial comparison only; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -39458,7 +39388,7 @@
     {
       "source": "src/game/cu_800E55B8.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue1021 bounded fragment; full natural48byte native pool measured against earlier unclaimed contextDC34–DCD8; natural mismatches retained. Original source boundaries unresolved; no linked promotion. fn_800E586C, fn_800E5C00 and fn_800E5EA4 (PR 1123) are added in address order; their literals 0x8029DC3C-0x8029DC70 follow the pool of fn_800E55B8 inside the same context.",
+      "evidence": "Issue1021 bounded fragment; full natural48byte native pool measured against earlier unclaimed contextDC34\u2013DCD8; natural mismatches retained. Original source boundaries unresolved; no linked promotion. fn_800E586C, fn_800E5C00 and fn_800E5EA4 (PR 1123) are added in address order; their literals 0x8029DC3C-0x8029DC70 follow the pool of fn_800E55B8 inside the same context.",
       "sections": [
         {
           "section": ".text",

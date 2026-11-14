@@ -92,7 +92,7 @@ int fn_801AE53C(Item_801AE3F4 *item, List_801AEDA4 *list)
 
 int fn_801AE5D4(int a, int b, int c)
 {
-    Key_801AE658 key;
+    SpchEventKey_t key;
 
     key.mUnknown2 = b;
     key.mId = c;
@@ -114,7 +114,7 @@ Item_801AE3F4 *fn_801AE5F0(Bank_801AE444 *bank, int id)
     return 0;
 }
 
-int fn_801AE658(Key_801AE658 *key, Slot_8037E0B4 **out)
+int fn_801AE658(SpchEventKey_t *key, Slot_8037E0B4 **out)
 {
     int found = 0;
     int i;
@@ -132,7 +132,7 @@ int fn_801AE658(Key_801AE658 *key, Slot_8037E0B4 **out)
     return found;
 }
 
-Item_801AE3F4 *fn_801AE6BC(Key_801AE658 *key)
+Item_801AE3F4 *fn_801AE6BC(SpchEventKey_t *key)
 {
     Slot_8037E0B4 *slot;
     Item_801AE3F4 *item = 0;
@@ -143,7 +143,7 @@ Item_801AE3F4 *fn_801AE6BC(Key_801AE658 *key)
     return item;
 }
 
-int fn_801AE710(Key_801AE658 *key, int *out)
+int fn_801AE710(SpchEventKey_t *key, int *out)
 {
     Slot_8037E0B4 *slot;
     int found = 0;
@@ -155,7 +155,7 @@ int fn_801AE710(Key_801AE658 *key, int *out)
     return found;
 }
 
-int fn_801AE760(Key_801AE658 *key, int *out)
+int fn_801AE760(SpchEventKey_t *key, int *out)
 {
     Slot_8037E0B4 *slot;
     int found = 0;
@@ -167,7 +167,7 @@ int fn_801AE760(Key_801AE658 *key, int *out)
     return found;
 }
 
-int fn_801AE7B4(Key_801AE658 *key, char **out)
+int fn_801AE7B4(SpchEventKey_t *key, char **out)
 {
     Slot_8037E0B4 *slot;
     int found = 0;
@@ -189,7 +189,7 @@ void fn_801AE808(void)
     }
 }
 
-int fn_801AE838(Key_801AE658 *key)
+int fn_801AE838(SpchEventKey_t *key)
 {
     Slot_8037E0B4 *slot;
     int value = 0;
@@ -200,7 +200,7 @@ int fn_801AE838(Key_801AE658 *key)
     return value;
 }
 
-int fn_801AE880(Key_801AE658 *key, Item_801AE3F4 *item)
+int fn_801AE880(SpchEventKey_t *key, Item_801AE3F4 *item)
 {
     Slot_8037E0B4 *slot;
     int result = 0;
@@ -277,11 +277,11 @@ int fn_801AEAEC(int *event)
     if (lbl_803EBB18 == 0) {
         lbl_803EBB18 = 1;
         if (event) {
-            Key_801AE658 key;
+            SpchEventKey_t key;
             int channel;
             Item_801AE3F4 *item;
 
-            key = *(Key_801AE658 *)event;
+            key = *(SpchEventKey_t *)event;
             item = fn_801AE6BC(&key);
             if (item && fn_801AE710(&key, &channel)) {
                 int level = item->mUnknown9;
@@ -385,8 +385,8 @@ int fn_801AEE04(List_801AEDA4 *list, int channel)
             if (item->mUnknown2 != 0 && age > item->mUnknown2) {
                 expired = 1;
             }
-            if (lbl_8037E274[channel] == 1 && fn_801AE408(item)) {
-                Key_801AE658 key = *(Key_801AE658 *)lbl_8037E0F4.mVoices[i].mEvent;
+            if (gFilterSetting[channel] == 1 && fn_801AE408(item)) {
+                SpchEventKey_t key = *(SpchEventKey_t *)lbl_8037E0F4.mVoices[i].mEvent;
                 blocked = fn_801AE880(&key, item);
             }
             if (expired) {
@@ -500,12 +500,12 @@ void fn_801AF1C8(int voice)
     }
 }
 
-int fn_801AF28C(Key_801AE658 *key)
+int fn_801AF28C(SpchEventKey_t *key)
 {
     int result = 1;
 
-    if (lbl_8037E0A0.mCallback) {
-        result = lbl_8037E0A0.mCallback(key);
+    if (gCallbacks.mCallback) {
+        result = gCallbacks.mCallback(key);
     }
     return result;
 }
@@ -549,13 +549,13 @@ int fn_801AF3D8(unsigned int channel)
 
     if (channel <= 7 && lbl_8037E0F4.mCount[channel]) {
         do {
-            Key_801AE658 key;
+            SpchEventKey_t key;
             int voice = fn_801AEFA0(channel);
 
             if (voice < 0) {
                 break;
             }
-            key = *(Key_801AE658 *)lbl_8037E0F4.mVoices[voice].mEvent;
+            key = *(SpchEventKey_t *)lbl_8037E0F4.mVoices[voice].mEvent;
             if (fn_801AF28C(&key) == 1) {
                 fn_801B10D8(channel);
                 started = fn_801B1864(voice);
@@ -573,25 +573,25 @@ int fn_801AF3D8(unsigned int channel)
     return started;
 }
 
-void fn_801AF4A0(Class_803EBAF8 *allocator)
+void fn_801AF4A0(SpchAllocator *allocator)
 {
-    lbl_803EBAF8 = allocator;
+    gSPCH_Allocator = allocator;
 }
 
 void *fn_801AF4A8(int size)
 {
     void *p = 0;
 
-    if (lbl_803EBAF8) {
-        p = lbl_803EBAF8->vfn_01(size, 4, -1);
+    if (gSPCH_Allocator) {
+        p = gSPCH_Allocator->vfn_01(size, 4, -1);
     }
     return p;
 }
 
 void fn_801AF500(void *p)
 {
-    if (lbl_803EBAF8) {
-        lbl_803EBAF8->vfn_02(p);
+    if (gSPCH_Allocator) {
+        gSPCH_Allocator->vfn_02(p);
     }
 }
 
@@ -624,9 +624,9 @@ int fn_801AF578(int a, int b, int mode)
 
 void fn_801AF5E4(int a, int b)
 {
-    if (lbl_803EBAFC == 0x01789A34) {
-        lbl_8037E0A0.mUnknown4 = a;
-        lbl_8037E0A0.mUnknown8 = b;
+    if (gSPCH_Initialized == 0x01789A34) {
+        gCallbacks.mUnknown4 = a;
+        gCallbacks.mUnknown8 = b;
     }
 }
 

@@ -115,9 +115,9 @@ address	size	sibling_name	how	sibling_file	unit
 0x801AF544	52	iSPCH_InitInGame	size	spchevnt.c	spchevnt.c
 0x801AF578	108	SPCH_GetSampleDataRate	size	spchevnt.c	spchevnt.c
 0x801AF5E4	40	SPCH_InitRuleCallbacks	size	spchevnt.c	spchevnt.c
-0x801AF60C	36	iSPCH_InitCallbacks__Fv	size	spchinit.c	-
-0x801AF650	200	SPCH_Init	size	spchinit.c	-
-0x801AF718	68	SPCH_Deinit	size	spchinit.c	-
+0x801AF60C	36	iSPCH_InitCallbacks__Fv	size	spchinit.c	spchinit.c
+0x801AF650	200	SPCH_Init	name	spchinit.c	spchinit.c
+0x801AF718	68	SPCH_Deinit	name	spchinit.c	spchinit.c
 0x801AF75C	36	BANKHDR_GetValidParmMask	size	spchpick.c	spchpick.c
 0x801AF780	56	BANKHDR_GetCycleBitsAddr	size	spchpick.c	spchpick.c
 0x801AF7B8	84	BANKHDR_GetSampleRepeatAddr	size	spchpick.c	spchpick.c
