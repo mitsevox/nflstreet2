@@ -1,9 +1,10 @@
-#ifndef GAME_CLASS_800325E8_H
-#define GAME_CLASS_800325E8_H
+#ifndef GAME_INGAMEGROUP_H
+#define GAME_INGAMEGROUP_H
 
 #include "game/FlowGroupC.h"
 
-class Class_800325E8 : public FlowGroupC {
+/* The in-game flow group (GSGetGroupName returns "InGame Group"). */
+class InGameGroup : public FlowGroupC {
 public:
     virtual void GSProcess();
     virtual int GSTransition(int a, int id);
@@ -13,6 +14,6 @@ public:
     virtual ModuleDependency *GSGetStageModuleList(int id);
 };
 
-extern Class_800325E8 lbl_803068B4;
+extern InGameGroup gInGameGroup;
 
 #endif
