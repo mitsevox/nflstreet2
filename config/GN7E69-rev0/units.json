@@ -1280,10 +1280,6 @@
       "address": "0x803EBE80",
       "evidence": "evidence.tsv data/name rows for _tDbMemAllocInfoCallback: optional three-word memory-event callback; original-owned storage."
     },
-    "MemInitExternHeap": {
-      "address": "0x801D3B0C",
-      "evidence": "evidence.tsv function/name/source-form rows at 0x801D3B0C: Sys::Init calls the original external-region initializer at 0x8019A7F4; MemExtern.c remains comparison-only."
-    },
     "__udivdi3": {
       "address": "0x8025F0A8",
       "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long /10 in integer formatter resolves __udivdi3; corresponding target call at0x80265404 reaches0x8025F0A8 with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
@@ -2441,6 +2437,31 @@
           "placement": ".bss",
           "start": "0x80364F58",
           "end": "0x803650A8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/MemExtern.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801D36E8-0x801D3BD0 (src/engine/MemExtern.c), its function, name, type, field and source-form rows and its two data rows; every function and data placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D36E8",
+          "end": "0x801D3BD0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AFCA0",
+          "end": "0x802AFCC4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7B40",
+          "end": "0x802F7B64"
         }
       ]
     },
