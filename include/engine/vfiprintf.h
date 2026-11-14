@@ -27,7 +27,7 @@ struct RuntimeLocaleConv_t {
 
 #ifdef __cplusplus
 extern "C" {
-int _vfiprintf_r(void *data, File_80262B5C *fp, const char *fmt, va_list ap);
+int _vfiprintf_r(void *data, RuntimeFile_t *fp, const char *fmt, va_list ap);
 #else
 int _vfiprintf_r();
 #endif
