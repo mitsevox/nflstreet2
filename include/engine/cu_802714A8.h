@@ -2,13 +2,16 @@
 #define ENGINE_CU_802714A8_H
 
 typedef struct Params_803A6C40 {
-    unsigned char mUnknown0[0xA];
+    unsigned char mUnknown0[8];
+    unsigned short m8;
     unsigned short mA;
     unsigned char mUnknownC[2];
     unsigned char mE;
     unsigned char mUnknownF[3];
     unsigned char m12;
-    unsigned char mUnknown13[0xE];
+    unsigned char mUnknown13;
+    float m14;
+    unsigned char mUnknown18[9];
     unsigned char m21;
     unsigned char m22;
     unsigned char m23;
@@ -17,8 +20,7 @@ typedef struct Params_803A6C40 {
     unsigned char mUnknown26[2];
     unsigned char m28;
     unsigned char mUnknown29;
-    unsigned short m2A;
-    unsigned short m2C;
+    unsigned short m2A[2];
     unsigned char mUnknown2E[0xA];
     unsigned int m38;
     unsigned int m3C;
@@ -38,11 +40,17 @@ typedef struct Record_803A6DF0 {
     unsigned short m24;
     unsigned char mUnknown26[2];
     short m28;
-    unsigned char mUnknown2A[0x22];
+    unsigned char m2A;
+    unsigned char mUnknown2B[0x1D];
+    float m48;
     unsigned short m4C;
-    unsigned char mUnknown4E[2];
+    unsigned char m4E;
+    unsigned char mUnknown4F;
     unsigned short m50;
-    unsigned char mUnknown52[0x16];
+    unsigned char mUnknown52[0xD];
+    signed char m5F;
+    unsigned char mUnknown60[4];
+    float *m64;
     signed char m68;
     unsigned char mUnknown69[3];
     unsigned char m6C;
@@ -76,7 +84,8 @@ typedef struct Struct_803A6C24 {
     unsigned char mUnknown12[0xA];
     Params_803A6C40 m1C;
     void *(*mB8)(int size);
-    void (*mBC)(void *p);
+    // FAKEMATCH: volatile only for the target's reload of the release callback in fn_80275194
+    void (*volatile mBC)(void *p);
     unsigned char mUnknownC0[0xC];
     Params_803A6C40 mCC;
     unsigned char m168;
@@ -90,6 +99,9 @@ typedef struct Struct_803A6C24 {
     Record_803A6DF0 *m1CC;
     unsigned char mUnknown1D0[4];
     struct Struct_80278894 *m1D4;
+    unsigned char mUnknown1D8[0x48];
+    void (*m220)(void);
+    void (*m224)(void);
 } Struct_803A6C24;
 
 typedef struct Setup_80272EC4 {
@@ -194,7 +206,7 @@ int fn_80274304(int index);
 int fn_80274334(int index);
 int fn_80274398(void);
 void fn_80274960(int index);
-void fn_80274B50(int index);
+int fn_80274B50(int index);
 void fn_80274D34(int index, int value);
 void fn_80274E24(int index, int value);
 int fn_8027474C(int index);

@@ -155,7 +155,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x80266640	0x8026696C	mbtowc_r.c	1	1	1	1	0	-	-
 0x8026696C	0x80266A2C	memchr.c	1	1	1	1	0	-	-
 0x80271D34	0x8027257C	sdspmix.c	8	8	8	0	8	-	-
-0x8027257C	0x802753F0	snddrv.c	40	38	49	0	30	-	-
+0x8027257C	0x802753F0	snddrv.c	49	47	49	0	47	-	-
 0x80278700	0x8027882C	slinklst.c	5	5	5	0	5	-	-
 0x8027EFAC	0x8027F0DC	date.c	3	3	3	3	0	-	-
 0x8027F0DC	0x8027FB2C	GCmp.c	16	16	16	16	0	-	-
