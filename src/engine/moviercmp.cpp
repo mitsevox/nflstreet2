@@ -10,11 +10,11 @@
 extern "C" {
 int GlibGetTvMode(void);
 void FileDebugProcess(void);
-void fn_801F4B20(void);
+void SndService(void);
 void *fn_801F73D4(void *pStream);
 void fn_801F74D4(void *pStream, void *pHeader);
 int fn_801F7644(void *pStream);
-int fn_801F3E28(void);
+int SndEnabled(void);
 void fn_8026CA50(void *pConfig);
 int fn_8026EE24(int a, int b);
 int fn_8026EA80(void *pStream, void *pConfig, int a, int b, void *pBuffer, int size);
@@ -53,7 +53,7 @@ void _MovieRcmpProcessAudio(MovieRcmpAudioInfo_t *pAudio)
     FileDebugProcess();
     if (pAudio != 0 && pAudio->mActive != 0) {
         if (pAudio->mHandle >= 0) {
-            fn_801F4B20();
+            SndService();
         } else {
             while ((pHeader = fn_801F73D4(pAudio->mpStream)) != 0) {
                 fn_801F74D4(pAudio->mpStream, pHeader);
@@ -193,7 +193,7 @@ int MovieRcmpInitAudio(MovieRcmpInfo_t *pInfo, void *pStream, int volume)
     int config[6];
 
     pAudio->mpStream = pStream;
-    if (fn_801F3E28() != 0) {
+    if (SndEnabled() != 0) {
         int size;
 
         fn_8026CA50(config);

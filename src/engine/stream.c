@@ -17,7 +17,7 @@ typedef struct StreamRequest_801F5EA4 {
     struct StreamRequest_801F5EA4 *pPrev;
     struct StreamRequest_801F5EA4 *pNext;
     int mType;
-    StreamFile_801F6D54 mFile;
+    SndFileDesc_t mFile;
     unsigned int mFileSize;
     unsigned int mFileOffset;
     int mFileHandle;
@@ -66,7 +66,7 @@ typedef struct Stream_801F5DA4 {
     StreamRequest_801F5EA4 *pCurrent;
     StreamRequest_801F5EA4 *pLast;
     StreamRequest_801F5EA4 *pFree;
-    StreamFile_801F6D54 mFile;
+    SndFileDesc_t mFile;
     unsigned int mFileSize;
     int mFileOffset;
     int mFileHandle;
@@ -623,7 +623,7 @@ StreamTap_801F5DA4 *fn_801F6CE8(StreamTap_801F5DA4 *h, int tap)
     return &s->pTaps[tap - 1];
 }
 
-int fn_801F6D54(StreamTap_801F5DA4 *h, StreamFile_801F6D54 *pFile, int offset, unsigned int endMarker)
+int fn_801F6D54(StreamTap_801F5DA4 *h, SndFileDesc_t *pFile, int offset, unsigned int endMarker)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
@@ -632,7 +632,7 @@ int fn_801F6D54(StreamTap_801F5DA4 *h, StreamFile_801F6D54 *pFile, int offset, u
 
     /* The sound code passes an "AEMSnn" descriptor name here in place of a file entry. */
     if (((char *)pFile)[0] == 'A' && ((char *)pFile)[1] == 'E' && ((char *)pFile)[2] == 'M' && ((char *)pFile)[3] == 'S') {
-        pFile = fn_801F5000((const char *)pFile);
+        pFile = SndAemsDerefrenceFileDesc((const char *)pFile);
     }
     if (fn_801F5DA4(h, &s, &t) != 0) {
         return 0;

@@ -1,3 +1,6 @@
+/* Nintendo SDK virtual memory: lets the game address more memory than main RAM holds by keeping
+ * 4 KB pages in ARAM and swapping them into a main-memory page cache on a page fault. The game
+ * calls VMInit once at start-up. */
 #include <dolphin/os.h>
 #include <dolphin/base/PPCArch.h>
 #include <libc/stdio.h>
@@ -38,15 +41,15 @@ void VMSetLogStatsCallback(VMLogStatsCallback callback) {
     sLogStatsCallback = callback;
 }
 
-u32 __VMGetMRAMPages(void) {
+u32 __VMGetNumPagesInMRAM(void) {
     return sMRAMPages;
 }
 
-u32 __VMGetARAMSize(void) {
+u32 VMGetARAMSize(void) {
     return sARAMSize;
 }
 
-u32 __VMGetARAMStart(void) {
+u32 VMGetARAMBase(void) {
     return sARAMStart;
 }
 
@@ -81,7 +84,7 @@ void __VMSwapPageIn(u32 virtualAddr) {
     arInterrupt = __ARGetInterruptStatus();
     if (oldVirtualAddr) {
         if (__VMBASEIsPageChanged(oldVirtualAddr)) {
-            __VMSetPageInARAM(oldVirtualAddr);
+            __VMSetARAMPageAsDirty(oldVirtualAddr);
             swappedOut = TRUE;
             DCFlushRange((void*)physAddr, 0x1000);
             ARStartDMA(ARAM_DIR_MRAM_TO_ARAM, physAddr, __VMTranslateVMPageToARAMPage(oldVirtualAddr), 0x1000);
@@ -89,12 +92,12 @@ void __VMSwapPageIn(u32 virtualAddr) {
         }
         VMBASEClearPageTableEntry(oldVirtualAddr, physPage);
     }
-    if (__VMIsPageInARAM(page)) {
+    if (__VMIsARAMPageDirty(page)) {
         ARStartDMA(ARAM_DIR_ARAM_TO_MRAM, physAddr, __VMTranslateVMPageToARAMPage(page), 0x1000);
         while (ARGetDMAStatus()) {}
         DCInvalidateRange((void*)physAddr, 0x1000);
         ICInvalidateRange((void*)physAddr, 0x1000);
-    } else if (!__VMIsPageMapped(page)) {
+    } else if (!__VMDoesMappingExist(page)) {
         __VMMappingErrorAlert(page);
     }
     if (!arInterrupt) {
@@ -125,7 +128,7 @@ void __VMSwapPageOut(u32 virtualAddr) {
         __ARClearInterrupt();
     }
     OSRestoreInterrupts(enabled);
-    __VMSetPageInARAM(virtualAddr);
+    __VMSetARAMPageAsDirty(virtualAddr);
 }
 
 /* Writes every changed resident page back to ARAM: vmbase walks the page table, calls

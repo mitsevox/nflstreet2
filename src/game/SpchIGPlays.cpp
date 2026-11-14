@@ -17,9 +17,9 @@ extern "C" void SpchIGSayCatch(int value)
 
     SpchIGGetPlayerCategory(&result, value);
     if (fn_80178308() == 0) {
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x2023), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x2023), 1, result);
     } else {
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x4023), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x4023), 1, result);
     }
 }
 
@@ -29,9 +29,9 @@ extern "C" void SpchIGSayInterception(int value)
 
     SpchIGGetPlayerCategory(&result, value);
     if (fn_80178320() == 0) {
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x2024), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x2024), 1, result);
     } else {
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x4024), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x4024), 1, result);
     }
 }
 
@@ -41,9 +41,9 @@ extern "C" void SpchIGSayWallHurdle(int value)
 
     SpchIGGetPlayerCategory(&result, value);
     if (fn_80178308() == 0) {
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x2025), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x2025), 1, result);
     } else {
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x4025), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x4025), 1, result);
     }
 }
 
@@ -53,10 +53,10 @@ extern "C" void SpchIGSayStiffArm(int value)
 
     if (fn_80178308() == 0) {
         SpchIGGetPlayerCategory(&result, value);
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x2026), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x2026), 1, result);
     } else {
         SpchIGGetPlayerCategory(&result, value);
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x4026), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x4026), 1, result);
     }
 }
 
@@ -66,10 +66,10 @@ extern "C" void SpchIGSayJukeSpin(int value)
 
     if (fn_80178308() == 0) {
         SpchIGGetPlayerCategory(&result, value);
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x2027), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x2027), 1, result);
     } else {
         SpchIGGetPlayerCategory(&result, value);
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x4027), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x4027), 1, result);
     }
 }
 
@@ -79,10 +79,10 @@ extern "C" void SpchIGSayWallHurdleMiss(int value)
 
     if (fn_80178308() == 0) {
         SpchIGGetPlayerCategory(&result, value);
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x2028), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x2028), 1, result);
     } else {
         SpchIGGetPlayerCategory(&result, value);
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x4028), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x4028), 1, result);
     }
 }
 
@@ -92,10 +92,10 @@ extern "C" void SpchIGSayPassThrown(int)
 
     if (fn_80178320() == 0) {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(0));
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x2029), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x2029), 1, result);
     } else {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(1));
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x4029), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x4029), 1, result);
     }
 }
 
@@ -105,10 +105,10 @@ extern "C" void SpchIGSayBallStrip(int)
 
     if (fn_80178320() == 0) {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(0));
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x202A), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x202A), 1, result);
     } else {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(1));
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x402A), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x402A), 1, result);
     }
 }
 
@@ -118,9 +118,9 @@ extern "C" void SpchIGSayFumble(void)
 
     if (fn_80178308() == 0) {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(0));
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x201B), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x201B), 1, result);
     } else {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(1));
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x401B), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x401B), 1, result);
     }
 }

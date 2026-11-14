@@ -135,7 +135,7 @@ def main():
         unit['flags'] = unit['flags'] + dump
     manifest = json.loads((ROOT / f'config/{TARGET}/units.json').read_text())
     compiler, wrapper = sb.setup_compiler.setup()
-    sdk = sb.setup_compiler.setup_sdk() if unit['compiler'] == 'mwcc' else None
+    sdk = sb.setup_compiler.setup_sdks([unit['compiler_version']]) if unit['compiler'] == 'mwcc' else None
     if unit['compile_path']:
         sb.stage(unit)
     sb.compile_unit(unit, compiler, wrapper, sdk, manifest['include_dirs'], comparison=comparison)

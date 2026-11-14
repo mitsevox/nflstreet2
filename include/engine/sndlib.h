@@ -68,7 +68,7 @@ public:
     virtual ~Class_80271B74();
 };
 
-struct Voice_803A7734 {
+struct SndDrvMixChannel_t {
     AXVPB *m0;
     unsigned int m4;
     int m8;
@@ -221,9 +221,7 @@ extern "C" {
 extern int lbl_80300044;
 extern const unsigned short lbl_802B7A98[];
 extern const short lbl_802B7AF0[2][3][16];
-extern Voice_803A7734 lbl_803A7734[64];
-extern int lbl_803A8D34;
-extern unsigned short lbl_80300050[256][4];
+extern unsigned short SNDDRV_dolbypl2balances[256][4];
 extern State_803A8D60 lbl_803A8D60;
 extern void (*lbl_803B5028)(Setup_80272EC4 *setup);
 extern void (*lbl_803B502C)(void);
@@ -264,15 +262,15 @@ void fn_802763E0(void **buffers, int count);
 void fn_80277404(Node_80279D90 *node, void *data, int index);
 
 int fn_80271A04(void);
-void fn_80271D34(Voice_803A7734 *voice);
-void fn_80271D78(AXVPB *vpb, float *p, unsigned int a, int b);
-void fn_80271E50(AXVPB *vpb, unsigned short value, int which);
-void fn_80271EC4(int mode);
-void fn_80271F18(AXVPB *vpb, unsigned int flags, int volume, unsigned short aux, int unused, float *p,
-                 unsigned int a, int b);
-void fn_8027210C(AXVPB *vpb);
-void fn_80272128(AXVPB *vpb, int value);
-void fn_80272150(void);
+void SNDDRV_DSPMixerResetChannel(SndDrvMixChannel_t *voice);
+void SNDDRV_DSPMixerSetPan(AXVPB *vpb, float *p, unsigned short a, int b);
+void SNDDRV_DSPMixerSetAuxBus(AXVPB *vpb, unsigned short value, int which);
+void SNDDRV_DSPMixerInit(int mode);
+void SNDDRV_DSPMixerInitChannel(AXVPB *vpb, unsigned long flags, int volume, unsigned short aux, unsigned short unused,
+                 float *p, unsigned short a, int b);
+void SNDDRV_DSPMixerReleaseChannel(AXVPB *vpb);
+void SNDDRV_DSPMixerSetVol(AXVPB *vpb, int value);
+void SNDDRV_DSPMixerUpdate(void);
 void fn_8027257C(void);
 void fn_80272618(int value);
 void fn_80272644(AXVPB *vpb);

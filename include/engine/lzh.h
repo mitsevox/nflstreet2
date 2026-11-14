@@ -1,5 +1,5 @@
-#ifndef ENGINE_CU_802821E8_H
-#define ENGINE_CU_802821E8_H
+#ifndef ENGINE_LZH_H
+#define ENGINE_LZH_H
 
 typedef struct Struct_803ED474
 {

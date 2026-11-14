@@ -85,7 +85,7 @@ void MsgTeamPickRequestTeamSave(void);
 void fn_80010150(int a);
 void SndgMusicPumpFrame(int a);
 Object_80039F5C *PlyrFindByPoid(int id);
-int DepthChartAutoFillEx(int group, int *list, int value, int a, int b);
+void DepthChartAutoFillEx(int group, int *list, int value, int a, int b);
 unsigned char PortDbGetSidePort(int a);
 void EnvSelect(int id);
 void EnvRelease(void);
@@ -379,7 +379,8 @@ int fn_8005DC10(void)
     int list[14];
     QueryResult result;
     int digp = 0;
-    unsigned int count;
+    // FAKEMATCH: dead initializer; count is set from the query result before its use
+    unsigned int count = 0;
     unsigned int i;
 
     MemFill(list, sizeof(list), 0x7FFF, 4);
@@ -414,12 +415,12 @@ int fn_8005DD6C(int *pTeam, int *pCopy)
 {
     int ids[21];
     int list[14];
-    char name[33] = {0};
-    int count = 0;
-    int full = 0;
+    unsigned int count;
+    int full;
     int team;
     int etnr;
 
+    full = count = 0;
     if (lbl_803EA5C8->mItes == 1 && fn_801485D4()) {
         switch (fn_801486A0()) {
         case 1:
@@ -431,11 +432,13 @@ int fn_8005DD6C(int *pTeam, int *pCopy)
         case 4:
             count = 4;
             break;
+        case 5:
         default:
             count = 7;
             break;
         }
     }
+    char name[33] = {0};
     etnr = -1;
     if (lbl_803EA5C8->mItes == 2) {
         etnr = SstlGetEntryTag(lbl_803EA5C8->mNets, name, sizeof(name));
@@ -511,13 +514,17 @@ int fn_8005E014(int *pTeam, int *pCopy, int *pCount)
         fn_80084808(*pTeam, lbl_802D4DE4, counts, 7, ids2, 21);
         fn_80084908(0, 0, list, 7, ids2, 21);
         lbl_802D4D40.mUnknown2 = ids[0];
-        int mode = fn_801486A0();
-        if (mode >= 0 && mode <= 1) {
+        switch (fn_801486A0()) {
+        case 0:
+        case 1:
             fn_8005DB9C(team, list, lbl_802D4D40.mUnknown2, 7, fn_8005DB3C());
             fn_8005DFE8(list, ids, 1);
-        } else {
+            break;
+        case 2:
+        default:
             fn_8005DB9C(team, list, lbl_802D4D40.mUnknown2, 7, 1.0f);
             fn_8005DFE8(list, ids, count);
+            break;
         }
         list[7] = 0x7FFF;
         fn_80060410(1, list);
@@ -600,8 +607,8 @@ void fn_8005E4A8(void)
         MsgTeamPickSetMode(0, 0);
         MsgTeamPickSetSources(4);
         lbl_8030A1A0.mAway = 0;
-        lbl_8030A1A0.mUnknown8 = 0;
         lbl_8030A1A0.mHome = 1;
+        lbl_8030A1A0.mUnknown8 = 0;
         break;
     case 1: {
         fn_8006088C(0);
@@ -623,16 +630,21 @@ void fn_8005E4A8(void)
             break;
         case 1: {
             fn_801485EC(1);
-            StevRow_t *pRow = lbl_803EA5C8;
-            lbl_8031BDD4.mUnknown40 = pRow->mPes[2] == 1;
-            if (pRow->mPes[1] >= 0) {
-                lbl_8031BDD4.mUnknown32 = pRow->mPes[1];
-                lbl_8031BDD4.mUnknown36 = 0;
-            } else if (pRow->mPes[3] >= 0) {
-                lbl_8031BDD4.mUnknown32 = 0;
-                lbl_8031BDD4.mUnknown36 = pRow->mPes[3] * 60;
+            // FAKEMATCH: reused local; value holds mPes[2], then mPes[1], then mPes[3]
+            int value = lbl_803EA5C8->mPes[2];
+            lbl_8031BDD4.mUnknown40 = value == 1;
+            value = lbl_803EA5C8->mPes[1];
+            if (value < 0) {
+                value = lbl_803EA5C8->mPes[3];
+                if (value < 0) {
+                    lbl_8031BDD4.mUnknown32 = 1;
+                    lbl_8031BDD4.mUnknown36 = 0;
+                } else {
+                    lbl_8031BDD4.mUnknown32 = 0;
+                    lbl_8031BDD4.mUnknown36 = value * 60;
+                }
             } else {
-                lbl_8031BDD4.mUnknown32 = 1;
+                lbl_8031BDD4.mUnknown32 = value;
                 lbl_8031BDD4.mUnknown36 = 0;
             }
             break;
@@ -640,11 +652,14 @@ void fn_8005E4A8(void)
         case 2: {
             int enable = 1;
             fn_801485EC(2);
-            if (lbl_803EA5C8->mPes[2] == 2) {
+            // FAKEMATCH: reused local; the outer switch's type holds mPes[2], then mPes[3]
+            type = lbl_803EA5C8->mPes[2];
+            if (type == 2) {
                 enable = 0;
             }
             fn_80148A58()->vfn_07(0, enable);
-            fn_80148A58()->vfn_07(1, lbl_803EA5C8->mPes[3]);
+            type = lbl_803EA5C8->mPes[3];
+            fn_80148A58()->vfn_07(1, type);
             break;
         }
         }
@@ -706,13 +721,13 @@ void fn_8005E798(void)
 
 void fn_8005E7E4(void)
 {
-    int total;
-
     if (lbl_802D4D40.mUnknown1 < 0) {
         fn_8005E798();
     }
     StoryAddCompletedEvent(lbl_802D4D40.mIndex, lbl_803EA5C8->mNets);
-    total = 0;
+    int total = 0;
+    // FAKEMATCH: dead initializer; base is set again before its use
+    int base = 0;
     fn_8005D990(&total);
     total += lbl_803EA5C8->mPdwr;
     if (lbl_803EA5C8->mItes == 1) {
@@ -734,9 +749,10 @@ void fn_8005E7E4(void)
     lbl_802D4D40.mUnknown14 = total;
     total += lbl_802D4D40.mUnknownC;
     StorySetDevPoints(lbl_802D4D40.mIndex, total);
-    int base = lbl_802D4D40.mUnknown8;
-    lbl_802D4D40.mUnknown18 = lbl_803EA5C8->mCswr;
-    UserStatsSet(lbl_803EA5D0, 14, base + lbl_803EA5C8->mCswr);
+    base = lbl_802D4D40.mUnknown8;
+    int credits = lbl_803EA5C8->mCswr;
+    lbl_802D4D40.mUnknown18 = credits;
+    UserStatsSet(lbl_803EA5D0, 14, base + credits);
     UserInfoAddPoints(fn_8022F358(lbl_802D4D40.mIndex), lbl_803EA5C8->mCswr);
     lbl_8030A2AC.mDone[lbl_803EA5C8->mDive] = StoryAreGroupEventsCompleted(lbl_802D4D40.mIndex, lbl_803EA5C8->mDive);
     fn_8005D6EC();
@@ -852,11 +868,15 @@ int fn_8005EC14(int dive)
 void fn_8005ECA0(void)
 {
     char hero[40];
-    const char *pName = "Story task";
-    int completed = 0;
+    // FAKEMATCH: local that only aliases the global buffer lbl_8030A1E4
+    char *pText = lbl_8030A1E4;
+    const char *pName;
+    int completed;
     int length;
 
-    lbl_8030A1E4[0] = 0;
+    pText[0] = 0;
+    pName = "Story task";
+    completed = 0;
     switch (lbl_803EA5C8->mItes) {
     case 0:
         pName = "a Pickup Game";
@@ -890,21 +910,27 @@ void fn_8005ECA0(void)
         pName = "an Exhibition Game";
         break;
     }
-    if (lbl_802D4D40.mUnknown20 >= 1 && lbl_802D4D40.mUnknown20 <= 2) {
-        fn_801C2E18(lbl_8030A1E4, "You have completed %s!", pName);
+    switch (lbl_802D4D40.mUnknown20) {
+    case 1:
+    case 2:
+        fn_801C2E18(pText, "You have completed %s!", pName);
         completed = 1;
+        break;
+    // FAKEMATCH: empty case for a result value nothing stores; it sets the target's range-test order
+    case 3:
+        break;
     }
-    length = strlen(lbl_8030A1E4);
+    length = strlen(pText);
     if (completed && (lbl_802D4D40.mUnknown14 || lbl_802D4D40.mUnknown18)) {
-        fn_801C2E18(lbl_8030A1E4 + length, "\nYou are rewarded");
-        length = strlen(lbl_8030A1E4);
+        fn_801C2E18(pText + length, "\nYou are rewarded");
+        length = strlen(pText);
         if (lbl_802D4D40.mUnknown14) {
-            fn_801C2E18(lbl_8030A1E4 + length, "\n%d Dev Points", lbl_802D4D40.mUnknown14);
-            length = strlen(lbl_8030A1E4);
+            fn_801C2E18(pText + length, "\n%d Dev Points", lbl_802D4D40.mUnknown14);
+            length = strlen(pText);
         }
         if (lbl_802D4D40.mUnknown18) {
-            fn_801C2E18(lbl_8030A1E4 + length, "\n%d Credits", lbl_802D4D40.mUnknown18);
-            length = strlen(lbl_8030A1E4);
+            fn_801C2E18(pText + length, "\n%d Credits", lbl_802D4D40.mUnknown18);
+            length = strlen(pText);
         }
     }
     if (fn_8005EBF0(lbl_803EA5C8->mDive)) {
@@ -913,7 +939,7 @@ void fn_8005ECA0(void)
             EnvSelect(dive);
             EnvGetUIName(hero, 33);
             EnvRelease();
-            length = strlen(lbl_8030A1E4);
+            length = strlen(pText);
         }
     }
 }
@@ -978,18 +1004,22 @@ void fn_8005EEC4(int *pState, int *pScreen)
             }
             dive = fn_8005EB20(1);
             if (dive != lbl_803EA5C8->mDive && fn_8005EBF0(lbl_803EA5C8->mDive)) {
-                *pState = 2;
+                // FAKEMATCH: the *pState = 2 store is repeated in both arms instead of once before the test
                 if (dive == 12) {
+                    *pState = 2;
                     *pScreen = fn_8005D804(0);
                 } else {
+                    *pState = 2;
                     *pScreen = fn_8005D804(dive);
                 }
             } else {
                 *pState = 3;
-                *pScreen = fn_8005D804(lbl_803EA5C8->mDive);
+                // FAKEMATCH: goto shares the screen store below; it sets the target's register choice
+                goto current;
             }
         } else if (lbl_803EA5C8) {
             *pState = 3;
+        current:
             *pScreen = fn_8005D804(lbl_803EA5C8->mDive);
         }
     }
@@ -1057,14 +1087,15 @@ void fn_8005F29C(void)
     fn_8005D660();
     fn_8005D6EC();
     for (dive = 0;; dive++) {
-        if (dive > 11) {
+        if (dive <= 11) {
+            StevGetRow(dive, 0, &row);
+            if (row.mQrxe != 0) {
+                continue;
+            }
+        } else {
             dive = 5;
-            break;
         }
-        StevGetRow(dive, 0, &row);
-        if (row.mQrxe == 0) {
-            break;
-        }
+        break;
     }
     fn_8005F24C(dive, 0);
     FELoopSetResume(1);
@@ -1104,15 +1135,15 @@ int fn_8005F394(int screen)
 
 int fn_8005F3E4(int *pResult)
 {
-    DbCursor cursor;
-    unsigned char color[4];
     int value = 0;
 
     *pResult = TeamLogoGetHandle(-1);
+    DbCursor cursor;
     StoryTeamCursorOpen(&cursor, lbl_802D4D40.mIndex);
     if (DbCursorGetRowCount(&cursor) > 0) {
         value = StoryTeamGetLogo(&cursor);
         if (DbCursorGetInt(&cursor, 0x4C445443) == 0) {
+            unsigned char color[3];
             color[0] = DbCursorGetInt(&cursor, 0x31434D54);
             color[1] = DbCursorGetInt(&cursor, 0x32434D54);
             color[2] = DbCursorGetInt(&cursor, 0x33434D54);
@@ -1126,12 +1157,12 @@ int fn_8005F3E4(int *pResult)
 
 void fn_8005F4EC(char *pName, int size)
 {
+    unsigned int last = size - 1;
+    *pName = 0;
     DbCursor cursor;
     char buffer[64];
-    unsigned int last = size - 1;
     unsigned int length;
 
-    *pName = 0;
     StoryPlayerCursorOpen(&cursor, lbl_802D4D40.mIndex);
     buffer[0] = 0;
     if (!StoryPlayerGetLastName(&cursor, 0, buffer, sizeof(buffer))) {
@@ -1145,7 +1176,7 @@ void fn_8005F4EC(char *pName, int size)
     } else {
         buffer[last] = 0;
         unsigned int first = strlen(buffer);
-        length += first + 1;
+        length = length + first + 1;
         if (length < last - 1) {
             buffer[first] = ' ';
             first++;
@@ -1168,10 +1199,10 @@ done:
 
 void fn_8005F664(char *pName, int size)
 {
-    DbCursor cursor;
-    int last = size - 1;
-
     *pName = 0;
+    int last = size - 1;
+    DbCursor cursor;
+
     StoryTeamCursorOpen(&cursor, lbl_802D4D40.mIndex);
     if (DbCursorGetRowCount(&cursor) > 0) {
         DbCursorSeek(&cursor, 0);
@@ -1199,7 +1230,8 @@ float fn_8005F754(void)
     float scale;
 
     if (lbl_803EA5B8) {
-        scale = lbl_803EA5D4 = ExpLevelGetScft(lbl_802D4D40.mUnknown1C) * 0.001f;
+        scale = ExpLevelGetScft(lbl_802D4D40.mUnknown1C) * 0.001f;
+        lbl_803EA5D4 = scale;
     } else {
         scale = lbl_803EA5D4;
     }
@@ -1218,9 +1250,7 @@ void fn_8005F7C4(Object_8008044C *pObject, int id, float scale)
             if (value > 100) {
                 value = 100;
             }
-            if (value < 5) {
-                value = 5;
-            }
+            value = value < 5 ? 5 : value;
             PlayerDbSetRating(pObject, lbl_802D4E00[i], value);
         }
     }
@@ -1253,8 +1283,6 @@ int fn_8005F910(void)
 
 int fn_8005F938(unsigned int id, int *pArgs, int unused, int *pResult)
 {
-    int dive;
-
     switch (id) {
     case 0x80000001:
         fn_8005EEC4((int *)pArgs[0], (int *)pArgs[1]);
@@ -1264,7 +1292,7 @@ int fn_8005F938(unsigned int id, int *pArgs, int unused, int *pResult)
         break;
     case 0x80000003: {
         int *pCount = (int *)pArgs[1];
-        dive = fn_8005D7F0(pArgs[0]);
+        int dive = fn_8005D7F0(pArgs[0]);
         if (dive == 12) {
             *pCount = 0;
         } else {
@@ -1273,7 +1301,7 @@ int fn_8005F938(unsigned int id, int *pArgs, int unused, int *pResult)
         break;
     }
     case 0x80000004: {
-        dive = fn_8005D7F0(pArgs[0]);
+        int dive = fn_8005D7F0(pArgs[0]);
         int droe = pArgs[1];
         int *pLevel = (int *)pArgs[2];
         int *pDone = (int *)pArgs[4];
@@ -1283,29 +1311,47 @@ int fn_8005F938(unsigned int id, int *pArgs, int unused, int *pResult)
             *pDone = 1;
             *pLocked = 1;
         } else {
+            int count = StevCountDiveRows(dive);
             Text_8005F8B4 *pText = (Text_8005F8B4 *)pArgs[3];
-            fn_8005E980(dive, droe, pLevel, pDone, pLocked, StevCountDiveRows(dive), pText->mpText, pText->mSize);
+            fn_8005E980(dive, droe, pLevel, pDone, pLocked, count, pText->mpText, pText->mSize);
         }
         break;
     }
-    case 0x80000005:
-        dive = fn_8005D7F0(pArgs[0]);
+    case 0x80000005: {
+        int dive = fn_8005D7F0(pArgs[0]);
         if (dive == 12) {
             *pResult = 1;
         } else {
             *pResult = fn_8005EBF0(dive);
         }
         break;
-    case 0x80000006:
-        dive = fn_8005D7F0(pArgs[0]);
+    }
+    case 0x80000006: {
+        int dive = fn_8005D7F0(pArgs[0]);
         if (dive == 12) {
             *pResult = 100;
         } else {
             *pResult = fn_8005F24C(dive, pArgs[1]);
         }
         break;
+    }
+    case 0x8000000C:
+        *pResult = lbl_803EA5E4;
+        break;
+    case 0x182: {
+        int found = ExpLevelGetName(lbl_802D4D40.mUnknown1C, ((Text_8005F8B4 *)pArgs[0])->mpText,
+                                    ((Text_8005F8B4 *)pArgs[0])->mSize);
+        *pResult = lbl_802D4D40.mUnknown1C;
+        if (!found) {
+            strncpy(((Text_8005F8B4 *)pArgs[0])->mpText, "", ((Text_8005F8B4 *)pArgs[0])->mSize);
+        }
+        break;
+    }
     case 0x80000007:
         fn_8005F324(pArgs[0]);
+        break;
+    case 0x11A:
+        fn_8005F324(113);
         break;
     case 0x80000008:
         *pResult = fn_8005F394(pArgs[0]);
@@ -1325,29 +1371,12 @@ int fn_8005F938(unsigned int id, int *pArgs, int unused, int *pResult)
             *pResult = 0;
         }
         break;
-    case 0x8000000B:
-        dive = fn_8005D7F0(pArgs[0]);
-        if (dive == 12) {
-            *pResult = 1;
-        } else {
-            *pResult = fn_8005EC14(dive);
-        }
-        break;
-    case 0x8000000C:
-        *pResult = lbl_803EA5E4;
-        break;
-    case 0x182: {
-        Text_8005F8B4 *pText = (Text_8005F8B4 *)pArgs[0];
-        int found = ExpLevelGetName(lbl_802D4D40.mUnknown1C, pText->mpText, pText->mSize);
-        *pResult = lbl_802D4D40.mUnknown1C;
-        if (!found) {
-            strncpy(pText->mpText, "", pText->mSize);
-        }
+    case 0x17B:
+    {
+        int *pLogo = (int *)pArgs[0];
+        *pResult = *pLogo = fn_8005F3E4((int *)pArgs[1]);
         break;
     }
-    case 0x17B:
-        *pResult = *(int *)pArgs[0] = fn_8005F3E4((int *)pArgs[1]);
-        break;
     case 0x16E: {
         Text_8005F8B4 *pText = (Text_8005F8B4 *)pArgs[0];
         fn_8005F4EC(pText->mpText, pText->mSize);
@@ -1358,9 +1387,15 @@ int fn_8005F938(unsigned int id, int *pArgs, int unused, int *pResult)
         fn_8005F664(pText->mpText, pText->mSize);
         break;
     }
-    case 0x11A:
-        fn_8005F324(113);
+    case 0x8000000B: {
+        int dive = fn_8005D7F0(pArgs[0]);
+        if (dive == 12) {
+            *pResult = 1;
+        } else {
+            *pResult = fn_8005EC14(dive);
+        }
         break;
+    }
     default:
         return 0;
     }
@@ -1379,13 +1414,14 @@ int fn_8005FC84(void)
     if (!lbl_803EA5C8) {
         active = 0;
     } else {
+        int result = fn_80178AE0();
         active = 1;
-        switch (fn_80178AE0()) {
+        switch (result) {
         case 0:
             lbl_8030A1A0.mUnknown8 = 2;
             break;
         case 1:
-            lbl_8030A1A0.mUnknown8 = active;
+            lbl_8030A1A0.mUnknown8 = 1;
             break;
         default:
             lbl_8030A1A0.mUnknown8 = 3;
@@ -1401,22 +1437,23 @@ void fn_8005FCF8(int *pFirst, int *pSecond)
     int itgt[13];
     int count;
     int i;
-    int secondSide;
-    int firstSide;
+    unsigned char secondSide;
+    unsigned char firstSide;
 
-    for (i = 0; i < 6; i++) {
-        ids[i] = pSecond[i + 1];
+    int n = 0;
+    for (i = 1; i <= 6; i++) {
+        ids[n++] = pSecond[i];
     }
     for (i = 0; i < 7; i++) {
-        ids[i + 6] = pFirst[i];
+        ids[n++] = pFirst[i];
     }
     {
         Object_8008044C object;
-        int *pOut = itgt;
+        int found = 0;
         fn_8008044C(&object, 0, 0x54415453);
         for (i = 0; i <= 12; i++) {
             if (PlayerDbSeekId(&object, ids[i], 0)) {
-                *pOut++ = DbCursorGetInt(&object, 0x49544754);
+                itgt[found++] = DbCursorGetInt(&object, 0x49544754);
             }
         }
         fn_8008056C(&object);
@@ -1494,6 +1531,7 @@ void fn_80060044(int team, int id, int *pList)
         fn_801FCE10(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1], pList[2],
                     pList[3]);
         break;
+    case 5:
     default:
         fn_801FCE10(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1], pList[2],
                     pList[3], pList[4], pList[5], pList[6]);
@@ -1589,8 +1627,8 @@ int *fn_80060444(int index)
 
 void fn_80060458(int index, int level)
 {
-    StevRow_t row;
     int ppxe[4] = {16, 39, 63, 72};
+    StevRow_t row;
     unsigned int mask = 0;
     StevRow_t *pSaved;
     int dive;
@@ -1698,10 +1736,6 @@ Object_80039F5C *fn_800606CC(int type, int position)
         case 2:
             id = pList[0];
             break;
-        case 3:
-        case 9:
-            id = pList[6];
-            break;
         case 4:
             id = pList[2];
             break;
@@ -1714,6 +1748,10 @@ Object_80039F5C *fn_800606CC(int type, int position)
         case 7:
         case 8:
             id = pList[5];
+            break;
+        case 3:
+        case 9:
+            id = pList[6];
             break;
         default:
             pList = 0;

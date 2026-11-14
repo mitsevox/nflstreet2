@@ -6,6 +6,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801AD57C	0x801ADDB4	FSasync.c	13	13	13	13	0	-	-
 0x801ADDB4	0x801AE3E4	sndvd.c	12	10	11	0	10	-	spchdata.c
 0x801AE3E4	0x801AF60C	spchevnt.c	46	46	46	0	44	-	-
+0x801AF60C	0x801AF75C	spchinit.c	4	3	3	2	1	-	-
 0x801AF75C	0x801B1A3C	spchpick.c	56	56	67	0	47	-	-
 0x801B1A3C	0x801B1CFC	spchrand.c	5	5	5	0	5	-	-
 0x801B8C18	0x801B9CAC	smemhigh.cpp	40	40	42	0	39	-	sdata.c
@@ -75,7 +76,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801F284C	0x801F2E54	resquickload.c	11	11	11	0	11	-	-
 0x801F2E54	0x801F3308	rescache.c	6	6	6	0	6	-	-
 0x801F3308	0x801F34C0	resloosefile.c	4	4	4	4	0	-	-
-0x801F3524	0x801F5034	sound.cpp	52	42	59	0	27	-	-
+0x801F3524	0x801F5034	sound.cpp	54	44	59	33	11	-	-
 0x801F5034	0x801F5100	llsound.c	3	2	2	2	0	-	-
 0x801F5100	0x801F524C	sort.c	5	5	5	5	0	-	-
 0x801F524C	0x801F5458	bubble.c	3	3	3	3	0	-	-

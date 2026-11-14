@@ -11,7 +11,7 @@ extern void fn_8026B4D8(int a, int b);
 
 extern int lbl_803EBE18;
 
-void SndllResolveBank(SndBankInfo_801F3524 *pBank, int move)
+void SndllResolveBank(SndBankInfo_t *pBank, int move)
 {
     void *pData;
 

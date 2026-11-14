@@ -16,9 +16,9 @@ extern "C" void SpchIGSayReceiverOpen(void)
 
     SpchIGGetPlayerCategory(&result, _SpchIG_iReceiverOpenPlayer);
     if (fn_80178308() == 0) {
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x2004), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x2004), 1, result);
     } else {
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x4004), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x4004), 1, result);
     }
 }
 

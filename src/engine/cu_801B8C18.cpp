@@ -32,11 +32,10 @@ retry:
         int count = bank->mCountA;
         if (bank->mUnknown10 == (short)(desc->mHash >> 16) || pass) {
             for (int i = 0; i < count; i++) {
-                Entry_801B8C60 *entry = &entries[i];
-                if ((short)desc->mHash == (short)(entry->mValue >> 16) &&
-                    strcmp(desc->mName, entry->mName) == 0) {
-                    out->mEntry = entry;
-                    out->mValue = entry->mValue;
+                if ((short)desc->mHash == (short)(entries[i].mValue >> 16) &&
+                    strcmp(desc->mName, entries[i].mName) == 0) {
+                    out->mEntry = &entries[i];
+                    out->mValue = entries[i].mValue;
                     return 0;
                 }
             }
@@ -92,11 +91,10 @@ retry:
         int count = bank->mCountB;
         if (bank->mUnknown10 == (short)(desc->mHash >> 16) || pass) {
             for (int i = 0; i < count; i++) {
-                Entry_801B8DF0 *entry = &entries[i];
-                if ((short)desc->mHash == (short)(entry->mValue >> 16) &&
-                    strcmp(desc->mName, entry->mName) == 0) {
-                    out->mEntry = entry;
-                    out->mValue = entry->mValue;
+                if ((short)desc->mHash == (short)(entries[i].mValue >> 16) &&
+                    strcmp(desc->mName, entries[i].mName) == 0) {
+                    out->mEntry = &entries[i];
+                    out->mValue = entries[i].mValue;
                     return 0;
                 }
             }
@@ -135,11 +133,10 @@ retry:
         int count = bank->mCountC;
         if (bank->mUnknown10 == (short)(desc->mHash >> 16) || pass) {
             for (int i = 0; i < count; i++) {
-                Entry_801B8F2C *entry = &entries[i];
-                if ((short)desc->mHash == (short)(entry->mValue >> 16) &&
-                    strcmp(desc->mName, entry->mName) == 0) {
-                    out->mEntry = entry;
-                    out->mValue = entry->mValue;
+                if ((short)desc->mHash == (short)(entries[i].mValue >> 16) &&
+                    strcmp(desc->mName, entries[i].mName) == 0) {
+                    out->mEntry = &entries[i];
+                    out->mValue = entries[i].mValue;
                     return 0;
                 }
             }
@@ -234,32 +231,33 @@ int fn_801B91A0(Bank_801B8C18 *bank)
     bank->mEntriesC = (Entry_801B8F2C *)(bank->mEntriesB + bank->mCountB);
 
     for (i = 0; i < bank->mCountA; i++) {
-        bank->mEntriesA[i].mName = (int)bank->mEntriesA[i].mName + (const char *)bank;
+        bank->mEntriesA[i].mName += (int)bank;
         lbl_802F483C++;
-        if (lbl_802F483C & 0x8000)
+        if (lbl_802F483C > 0x7FFF)
             lbl_802F483C = 1;
         bank->mEntriesA[i].mParts.mId = lbl_802F483C;
     }
     for (i = 0; i < bank->mCountB; i++) {
-        bank->mEntriesB[i].mName = (int)bank->mEntriesB[i].mName + (const char *)bank;
+        bank->mEntriesB[i].mName += (int)bank;
         lbl_802F483C++;
-        if (lbl_802F483C & 0x8000)
+        if (lbl_802F483C > 0x7FFF)
             lbl_802F483C = 1;
         bank->mEntriesB[i].mParts.mId = lbl_802F483C;
     }
     for (i = 0; i < bank->mCountC; i++) {
-        bank->mEntriesC[i].mName = (int)bank->mEntriesC[i].mName + (const char *)bank;
+        bank->mEntriesC[i].mName += (int)bank;
         lbl_802F483C++;
-        if (lbl_802F483C & 0x8000)
+        if (lbl_802F483C > 0x7FFF)
             lbl_802F483C = 1;
         bank->mEntriesC[i].mParts.mId = lbl_802F483C;
     }
 
-    bank->mLink.mNext = lbl_8037E820.mHead;
-    bank->mLink.mPrevious = 0;
+    Link_801B8C18 *link = &bank->mLink;
+    link->mNext = lbl_8037E820.mHead;
+    link->mPrevious = 0;
     if (lbl_8037E820.mHead)
-        lbl_8037E820.mHead->mPrevious = &bank->mLink;
-    lbl_8037E820.mHead = &bank->mLink;
+        lbl_8037E820.mHead->mPrevious = link;
+    lbl_8037E820.mHead = link;
     return 0;
 }
 
@@ -274,12 +272,13 @@ int fn_801B9328(Bank_801B8C18 *bank)
     for (i = 0; i < bank->mCountC; i++)
         bank->mEntriesC[i].mValue = -1;
 
-    if (lbl_8037E820.mHead == &bank->mLink)
-        lbl_8037E820.mHead = bank->mLink.mNext;
-    if (bank->mLink.mPrevious)
-        bank->mLink.mPrevious->mNext = bank->mLink.mNext;
-    if (bank->mLink.mNext)
-        bank->mLink.mNext->mPrevious = bank->mLink.mPrevious;
+    Link_801B8C18 *link = &bank->mLink;
+    if (link == lbl_8037E820.mHead)
+        lbl_8037E820.mHead = link->mNext;
+    if (link->mPrevious)
+        link->mPrevious->mNext = link->mNext;
+    if (link->mNext)
+        link->mNext->mPrevious = link->mPrevious;
     return 0;
 }
 

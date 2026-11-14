@@ -10,23 +10,23 @@ extern "C" {
 /* One entry of an open resource file (8 bytes). stream.c copies it into a
    stream request; sound.cpp keeps up to four of them as AEMS stream file
    descriptors and passes the stream code their "AEMSnn" names instead. */
-typedef struct StreamFile_801F6D54 {
+typedef struct SndFileDesc_t {
     ResFile_t *pRes;
     unsigned int mIndex;
-} StreamFile_801F6D54;
+} SndFileDesc_t;
 
 /* Sound bank list item; +0x14 is the sound library's bank index. */
-typedef struct SndBankInfo_801F3524 {
+typedef struct SndBankInfo_t {
     unsigned int mFlags;
     ResFile_t *pRes;
     unsigned int mIndex;
     void *pData;
     unsigned int mBank;
     int mHandle;
-    void (*pCallback)(struct SndBankInfo_801F3524 *pBank);
+    void (*pCallback)(struct SndBankInfo_t *pBank);
     unsigned char mLoaded;
     int mState;
-} SndBankInfo_801F3524;
+} SndBankInfo_t;
 
 /* Bank table entry (12 bytes). */
 typedef struct SndBankHeap_t {
@@ -36,11 +36,11 @@ typedef struct SndBankHeap_t {
 } SndBankHeap_t;
 
 /* sound.cpp */
-void *fn_801F44A4(void);
-StreamFile_801F6D54 *fn_801F5000(const char *pName);
+void *SndGetBankTable(void);
+SndFileDesc_t *SndAemsDerefrenceFileDesc(const char *pName);
 
 /* llsound.c */
-void SndllResolveBank(SndBankInfo_801F3524 *pBank, int move);
+void SndllResolveBank(SndBankInfo_t *pBank, int move);
 void SndSetHeap(SndBankHeap_t *pEntries, int index);
 
 #ifdef __cplusplus

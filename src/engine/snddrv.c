@@ -61,7 +61,7 @@ void fn_80272990(int channel, int mode)
     AXVPB *vpb = state->m3C;
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[channel];
 
-    fn_8027210C(vpb);
+    SNDDRV_DSPMixerReleaseChannel(vpb);
     state->m18 = -1;
     if (record->m6D != 0) {
         fn_8026A0E8(channel);
@@ -410,7 +410,7 @@ void fn_802739F8(void)
         }
     }
     fn_8027257C();
-    fn_80272150();
+    SNDDRV_DSPMixerUpdate();
 }
 
 void fn_80273D7C(u32 flags, int *a, int *b)

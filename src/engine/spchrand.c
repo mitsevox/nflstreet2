@@ -4,32 +4,37 @@
 
 extern "C" {
 
+// Generator state: iSPCH_EACseedrandom(0) expanded, so drawing works before any seeding.
+unsigned int seedX[6] = {0xF22D0E56U, 0x883126E9U, 0xC624DD2FU, 0x0702C49CU, 0x9E353F7DU, 0x6FDF3B64U};
+// Recent choices as value/category pairs, and the index of the newest one.
+unsigned short gRandArray[32][2];
+int gRandArrayIndex = 0;
+
 // The six state words advance together from the supplied seed.
 void iSPCH_EACseedrandom(unsigned int seed)
 {
-    gSpchRandomState[0] = seed + 0xF22D0E56U;
-    gSpchRandomState[1] = gSpchRandomState[0] + 0x96041893U;
-    gSpchRandomState[2] = gSpchRandomState[1] + 0x3DF3B646U;
-    gSpchRandomState[3] = gSpchRandomState[2] + 0x40DDE76DU;
-    gSpchRandomState[4] = gSpchRandomState[3] + 0x97327AE1U;
-    gSpchRandomState[5] = gSpchRandomState[4] + 0xD1A9FBE7U;
+    seedX[0] = seed + 0xF22D0E56U;
+    seedX[1] = seedX[0] + 0x96041893U;
+    seedX[2] = seedX[1] + 0x3DF3B646U;
+    seedX[3] = seedX[2] + 0x40DDE76DU;
+    seedX[4] = seedX[3] + 0x97327AE1U;
+    seedX[5] = seedX[4] + 0xD1A9FBE7U;
 }
 
-#if defined(DECOMP_COMPARE)
 // Recency counts entries from this category, starting with the newest choice.
 int iSPCH_FindRandInQueue(int value, int count, int id)
 {
     int result = -1;
     if (count > 32) count = 32;
-    int index = _SpchRandom_iHistoryIndex;
+    int index = gRandArrayIndex;
     int matched = 0;
     int scanned = 0;
     int done = 0;
     do {
         if (matched < count) {
-            if (_SpchRandom_aHistory[index][1] == id) {
+            if (gRandArray[index][1] == id) {
                 matched++;
-                if (_SpchRandom_aHistory[index][0] == value) {
+                if (gRandArray[index][0] == value) {
                     done = 1;
                     result = matched - 1;
                 }
@@ -46,23 +51,24 @@ int iSPCH_FindRandInQueue(int value, int count, int id)
 // Advance before storing so the index always identifies the newest entry.
 void iSPCH_AddRandToQueue(int value, int id)
 {
-    if (++_SpchRandom_iHistoryIndex > 31) _SpchRandom_iHistoryIndex = 0;
-    _SpchRandom_aHistory[_SpchRandom_iHistoryIndex][0] = value;
-    _SpchRandom_aHistory[_SpchRandom_iHistoryIndex][1] = id;
+    if (++gRandArrayIndex > 31) gRandArrayIndex = 0;
+    gRandArray[gRandArrayIndex][0] = value;
+    gRandArray[gRandArrayIndex][1] = id;
 }
 
 // Empty the history, expand the seed, and advance the generator without recording choices.
 void iSPCH_InitRandom(int seed)
 {
-    for (int i = 0; i <= 31; i++) {
-        _SpchRandom_aHistory[i][1] = 65535;
-        _SpchRandom_aHistory[i][0] = 65535;
+    int i;
+    for (i = 0; i <= 31; i++) {
+        gRandArray[i][0] = 65535;
+        gRandArray[i][1] = 65535;
     }
     seed += seed << 16;
-    _SpchRandom_iHistoryIndex = 0;
+    gRandArrayIndex = 0;
     iSPCH_EACseedrandom(seed);
     int count = 32 - seed % 32;
-    for (int i = 0; i < count; i++) {
+    for (i = 0; i < count; i++) {
         iSPCH_Rand(10, -1);
     }
 }
@@ -95,6 +101,5 @@ int iSPCH_Rand(int count, int id)
     }
     return value;
 }
-#endif
 
 }

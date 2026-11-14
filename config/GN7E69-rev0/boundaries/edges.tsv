@@ -6,7 +6,8 @@
 section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x801ADDB4	0x801ADDB4	0x801ADDB4	alignment	0	1	FSasync.c	sndvd.c
 .text	0x801AE3E4	0x801AE3E4	0x801AE3E4	alignment	0	0	sndvd.c	spchevnt.c
-.text	-	0x801AF60C	0x801AF75C	open	-	-	spchevnt.c	spchpick.c
+.text	0x801AF60C	0x801AF60C	0x801AF60C	at-or-before	5	5	spchevnt.c	spchinit.c
+.text	0x801AF75C	0x801AF75C	0x801AF75C	alignment	1	2	spchinit.c	spchpick.c
 .text	0x801B1A3C	0x801B1A3C	0x801B1A3C	at-or-before	1	4	spchpick.c	spchrand.c
 .text	-	0x801B1CFC	0x801B8C18	open	-	-	spchrand.c	smemhigh.cpp
 .text	-	0x801B9CAC	0x801B9D00	open	-	-	smemhigh.cpp	anim.c
@@ -195,6 +196,7 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .rodata	-	0x802B7578	0x802B7608	data	0	9/3	vfprintf.c	vfprintf.c
 .rodata	-	0x802B76A4	0x802B76C8	data	0	3/27	vfprintf.c	math_support.c
 .data	-	0x802CC5E0	0x802CC5E0	data	0	11/9	FSasync.c	sndvd.c
+.data	-	-	0x802F475C	mixed	1	1/1	spchinit.c	spchpick.c
 .data	-	0x802F4A74	0x802F4A74	thin	0	1/2	fileio.c	llfileio.c
 .data	-	0x802F9B78	0x802F9B78	thin	0	1/1	t3db_expr.c	t3db_query.c
 .data	-	0x802F9D7C	0x802F9D7C	thin	0	5/1	tmshaderstock.c	tmshaderparm.c

@@ -1,3 +1,6 @@
+/* Nintendo SDK virtual memory, page replacement: when a page fault needs a free main-memory page,
+ * these routines choose which resident page to give up, by the policy the game sets (the game sets
+ * LRU at start-up). */
 #include <dolphin/os.h>
 #include <dolphin/base/PPCArch.h>
 #include <libc/stdio.h>
@@ -8,6 +11,11 @@
 static u32 sCurrentPage;
 static BOOL sFirstPass = TRUE;
 static s32 sPolicy = 1;
+
+/* Selects the replacement policy __VMGetPageToReplace uses: 0 LRU, 1 random, anything else FIFO. */
+void VMSetPageReplacementPolicy(s32 policy) {
+    sPolicy = policy;
+}
 
 /* Picks the main-memory page to reuse, by the current policy: 0 LRU, 1 random (the default),
  * anything else FIFO. */
@@ -76,7 +84,7 @@ u32 __VMPageReplacementLRU(void) {
                     break;
                 }
                 sCurrentPage++;
-                if (sCurrentPage >= __VMGetMRAMPages()) {
+                if (sCurrentPage >= __VMGetNumPagesInMRAM()) {
                     sCurrentPage = 0;
                 }
             } else {
@@ -88,7 +96,7 @@ u32 __VMPageReplacementLRU(void) {
         page = start;
     }
     sCurrentPage++;
-    if (sCurrentPage >= __VMGetMRAMPages()) {
+    if (sCurrentPage >= __VMGetNumPagesInMRAM()) {
         sFirstPass = FALSE;
         sCurrentPage = 0;
     }
@@ -103,12 +111,12 @@ u32 __VMPageReplacementRandom(void) {
     do {
         if (sFirstPass) {
             page = sCurrentPage++;
-            if (sCurrentPage >= __VMGetMRAMPages()) {
+            if (sCurrentPage >= __VMGetNumPagesInMRAM()) {
                 sFirstPass = FALSE;
                 sCurrentPage = 0;
             }
         } else {
-            page = OSGetTick() % __VMGetMRAMPages();
+            page = OSGetTick() % __VMGetNumPagesInMRAM();
         }
     } while (__VMBASEIsPageLocked(page));
     return page;
@@ -120,7 +128,7 @@ u32 __VMPageReplacementFIFO(void) {
 
     do {
         page = sCurrentPage++;
-        if (sCurrentPage >= __VMGetMRAMPages()) {
+        if (sCurrentPage >= __VMGetNumPagesInMRAM()) {
             sFirstPass = FALSE;
             sCurrentPage = 0;
         }

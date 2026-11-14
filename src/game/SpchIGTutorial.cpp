@@ -14,26 +14,26 @@ extern "C" void SpchIGSayTutorialIntro(int a, int b)
     int value = SpchIGGetTutorialDrillIndex(a, b);
 
     _SpchIG_iTutorialDrill = value;
-    lbl_803EBB10(fn_801AE5D4(3, 0, 0x6000), 2, value, 1);
+    gSPCH_AddEvent(fn_801AE5D4(3, 0, 0x6000), 2, value, 1);
 }
 
 extern "C" void SpchIGSayTutorialPassed(void)
 {
     int value = _SpchIG_iTutorialDrill;
 
-    lbl_803EBB10(fn_801AE5D4(3, 0, 0x6000), 2, value, 4);
+    gSPCH_AddEvent(fn_801AE5D4(3, 0, 0x6000), 2, value, 4);
 }
 
 extern "C" void SpchIGSayTutorialFailed(void)
 {
     int value = _SpchIG_iTutorialDrill;
 
-    lbl_803EBB10(fn_801AE5D4(3, 0, 0x6000), 2, value, 2);
+    gSPCH_AddEvent(fn_801AE5D4(3, 0, 0x6000), 2, value, 2);
 }
 
 extern "C" void SpchIGSayTutorialAdvance(void)
 {
     int value = _SpchIG_iTutorialDrill;
 
-    lbl_803EBB10(fn_801AE5D4(3, 0, 0x6000), 2, value, 8);
+    gSPCH_AddEvent(fn_801AE5D4(3, 0, 0x6000), 2, value, 8);
 }

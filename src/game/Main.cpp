@@ -11,7 +11,6 @@ void MainLoopRun(void);
 extern "C" {
 
 void GlibSetTvMode(int value);
-void fn_802451F8(int value);
 void _MainInitFastCast(void);
 
 #if defined(DECOMP_COMPARE)
@@ -34,7 +33,7 @@ void MainInitPlatform(void)
     DVDInit();
     VIInit();
     VMInit(0x41000, 0xAFC000, 0x104000);
-    fn_802451F8(0);
+    VMSetPageReplacementPolicy(0);
 }
 
 }

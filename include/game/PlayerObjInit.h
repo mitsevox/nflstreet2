@@ -6,7 +6,8 @@
 
 /* Creation argument of PlayerObjCreate. */
 struct PlayerObjInit_t {
-    int mUnknown00;
+    short mUnknown00;
+    short mUnknown02;
     int mUnknown04;
     char mUnknown08[8];
     int mUnknown10;

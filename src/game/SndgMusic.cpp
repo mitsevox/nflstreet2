@@ -98,7 +98,7 @@ int fn_801B3084(int flags, const char *pName, int value);
 void fn_801CE7D0(int a);
 void *ResOpenDevice(const char *pName, int flags);
 void ResClose(void *p);
-int fn_801F3E28(void);
+int SndEnabled(void);
 unsigned long long fn_801F7D34(SndgMusicClock_t *p);
 void fn_801F81F4(SndgMusicClock_t *p);
 void fn_80219650(void *p, unsigned short *a, unsigned short *b);
@@ -476,7 +476,7 @@ void SndgMusicInit(void)
         _SndgMusic_pState->mUnknown121 = 1;
     }
     fn_80083644(&cursor);
-    if (fn_801F3E28()) {
+    if (SndEnabled()) {
         _SndgMusic_pState->mpUnknown20 = ResOpenDevice(lbl_802EBF88, 44);
         _SndgMusic_pState->mUnknown24 = SndgPathLoadMap(_SndgMusic_pState->mpUnknown20, 1);
         SndgPathCreateTrack(_SndgMusic_pState->mpUnknown20, 2, 0x11000001, 2.0f);
@@ -489,7 +489,7 @@ void SndgMusicInit(void)
 
 void SndgMusicShutdown(void)
 {
-    if (fn_801F3E28()) {
+    if (SndEnabled()) {
         SndgPathRemoveCallback(SndgMusicTrackCallback);
         SndgPathDestroyTrack(0x11000001);
         SndgPathUnloadMap(_SndgMusic_pState->mUnknown24);
@@ -501,7 +501,7 @@ void SndgMusicShutdown(void)
 
 void SndgMusicUpdate(void)
 {
-    if (fn_801F3E28()) {
+    if (SndEnabled()) {
         SndgMusicClock_t calendar;
         fn_801F81F4(&calendar);
         unsigned long long now = fn_801F7D34(&calendar);
@@ -599,7 +599,7 @@ void SndgMusicSetVolume(unsigned int value)
 
 void SndgMusicFadeOut(unsigned int delay, int wait)
 {
-    if (fn_801F3E28() && _SndgMusic_pState->mUnknown123 && !_SndgMusic_pState->mUnknown124) {
+    if (SndEnabled() && _SndgMusic_pState->mUnknown123 && !_SndgMusic_pState->mUnknown124) {
         SndgMusicExitMode(0);
         SndgMusicClock_t calendar;
         fn_801F81F4(&calendar);
@@ -620,7 +620,7 @@ void SndgMusicFadeOut(unsigned int delay, int wait)
 
 void SndgMusicFadeIn(unsigned int delay)
 {
-    if (fn_801F3E28()) {
+    if (SndEnabled()) {
         SndgMusicExitMode(1);
         SndgMusicPumpFrame(1);
         if (_SndgMusic_pState->mUnknown123 &&
@@ -671,7 +671,7 @@ unsigned char SndgMusicIsPlaying(void) { return _SndgMusic_pState->mUnknown123; 
 
 void SndgMusicContinue(void)
 {
-    if (fn_801F3E28() && _SndgMusic_pState) {
+    if (SndEnabled() && _SndgMusic_pState) {
         _SndgMusic_pState->mUnknown125 = 0;
         if (_SndgMusic_pState->mUnknown121 && _SndgMusic_uVolume) {
             SndgMusicResume();
@@ -747,7 +747,7 @@ void SndgMusicWaitForStart(int frames)
 {
     PathfinderStatus_t info;
     PathfinderGetStatus(0x11000001, &info);
-    if (_SndgMusic_pState && fn_801F3E28() && info.mUnknown0 >= 0 && _SndgMusic_pState->mUnknown122) {
+    if (_SndgMusic_pState && SndEnabled() && info.mUnknown0 >= 0 && _SndgMusic_pState->mUnknown122) {
         int count = 0;
         int previous = info.mUnknown30;
         if (frames <= 0) {
