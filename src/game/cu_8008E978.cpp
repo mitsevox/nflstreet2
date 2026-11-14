@@ -88,7 +88,7 @@
 #include "game/PlaySet.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C68FC.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/Block_800B0CFC.h"
 #include "engine/llquat.h"
@@ -315,7 +315,6 @@ void fn_800937CC(void);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 void fn_8009D924(int index);
 void fn_8009D944(int index);
-unsigned int fn_801C3180(const char *pText);
 void fn_8009B87C(int index, Entry_8009B87C *pEntry);
 void fn_8009B8C4(int index);
 unsigned int fn_8009B910(int index);
@@ -5169,7 +5168,7 @@ extern "C" void fn_8009BA10(int value)
     lbl_8030E6D0.mpText = lbl_803EA994;
     args[1] = value;
     args[3] = (int)&lbl_8030E6D0;
-    lbl_8030E6D0.mLength = fn_801C3180(lbl_803EA994);
+    lbl_8030E6D0.mLength = strlen(lbl_803EA994);
     if (VptManagerGetPassIcons()) {
         fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
     }
@@ -8304,7 +8303,7 @@ extern "C" const char *lbl_802D87A4[];
 
 extern "C" void fn_800B4A18(int index, char *pDest, int size)
 {
-    fn_801C3284(pDest, lbl_802D87A4[index], size);
+    strnzcpy(pDest, lbl_802D87A4[index], size);
 }
 
 typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void *pRecord,
@@ -10204,9 +10203,9 @@ extern "C" int fn_800AB1B8(void *p, float dt)
         result = 1;
         FeatGetAwarded(lbl_803EAA9C, &lbl_8030F45C);
         lbl_8030F504.mpText = lbl_8030F45C.mName;
-        lbl_8030F504.mLength = fn_801C3180(lbl_8030F45C.mName);
+        lbl_8030F504.mLength = strlen(lbl_8030F45C.mName);
         lbl_8030F510.mpText = lbl_8030F45C.mText;
-        lbl_8030F510.mLength = fn_801C3180(lbl_8030F45C.mText);
+        lbl_8030F510.mLength = strlen(lbl_8030F45C.mText);
         args[0] = (int)&lbl_8030F504;
         args[1] = (int)&lbl_8030F510;
         args[2] = lbl_8030F45C.mCredits;

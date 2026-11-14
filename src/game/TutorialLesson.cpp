@@ -388,8 +388,8 @@ void RumbleStopAll(void);
 void RumbleEnable(unsigned char enabled);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-char * fn_801C2EF0(char *pDest, const char *pSource, int count);
-unsigned int fn_801C3180(const char *pText);
+char * strncpy(char *pDest, const char *pSource, int count);
+unsigned int strlen(const char *pText);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 void TutorialPostPrompt(int index, int value);
@@ -1552,150 +1552,150 @@ void TutorialShowTitles(int show)
 {
     if (show) {
         if (TutorialGetLesson() == 0) {
-            fn_801C2EF0(_Tutorial_szCategoryTitle, "Running the Ball", 25);
+            strncpy(_Tutorial_szCategoryTitle, "Running the Ball", 25);
             switch (TutorialGetStep()) {
             case 0:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Turbo", 30);
+                strncpy(_Tutorial_szStepTitle, "Turbo", 30);
                 break;
             case 1:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Stiff Arm", 30);
+                strncpy(_Tutorial_szStepTitle, "Stiff Arm", 30);
                 break;
             case 2:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Juke", 30);
+                strncpy(_Tutorial_szStepTitle, "Juke", 30);
                 break;
             case 3:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Spin", 30);
+                strncpy(_Tutorial_szStepTitle, "Spin", 30);
                 break;
             case 4:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Hurdle", 30);
+                strncpy(_Tutorial_szStepTitle, "Hurdle", 30);
                 break;
             case 5:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Dive", 30);
+                strncpy(_Tutorial_szStepTitle, "Dive", 30);
                 break;
             case 6:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Pitch", 30);
+                strncpy(_Tutorial_szStepTitle, "Pitch", 30);
                 break;
             }
         } else if (TutorialGetLesson() == 1) {
-            fn_801C2EF0(_Tutorial_szCategoryTitle, "Passing", 25);
+            strncpy(_Tutorial_szCategoryTitle, "Passing", 25);
             switch (TutorialGetStep()) {
             case 0:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Turbo Roll Out", 30);
+                strncpy(_Tutorial_szStepTitle, "Turbo Roll Out", 30);
                 break;
             case 1:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Touch Pass to B Button", 30);
+                strncpy(_Tutorial_szStepTitle, "Touch Pass to B Button", 30);
                 break;
             case 2:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Touch Pass to X Button", 30);
+                strncpy(_Tutorial_szStepTitle, "Touch Pass to X Button", 30);
                 break;
             case 3:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Touch Pass to A Button", 30);
+                strncpy(_Tutorial_szStepTitle, "Touch Pass to A Button", 30);
                 break;
             case 4:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Bullet Pass to B Button", 30);
+                strncpy(_Tutorial_szStepTitle, "Bullet Pass to B Button", 30);
                 break;
             case 5:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Bullet Pass to X Button", 30);
+                strncpy(_Tutorial_szStepTitle, "Bullet Pass to X Button", 30);
                 break;
             case 6:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Bullet Pass to A Button", 30);
+                strncpy(_Tutorial_szStepTitle, "Bullet Pass to A Button", 30);
                 break;
             case 7:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Pump Fake", 30);
+                strncpy(_Tutorial_szStepTitle, "Pump Fake", 30);
                 break;
             case 8:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Drop Passing Icons", 30);
+                strncpy(_Tutorial_szStepTitle, "Drop Passing Icons", 30);
                 break;
             }
         } else if (TutorialGetLesson() == 2) {
-            fn_801C2EF0(_Tutorial_szCategoryTitle, "Styling", 25);
+            strncpy(_Tutorial_szCategoryTitle, "Styling", 25);
             switch (TutorialGetStep()) {
             case 0:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Styling", 30);
+                strncpy(_Tutorial_szStepTitle, "Styling", 30);
                 break;
             case 1:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Signature Style", 30);
+                strncpy(_Tutorial_szStepTitle, "Signature Style", 30);
                 break;
             case 2:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Juke", 30);
+                strncpy(_Tutorial_szStepTitle, "Juke", 30);
                 break;
             case 3:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Spin", 30);
+                strncpy(_Tutorial_szStepTitle, "Spin", 30);
                 break;
             case 4:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Hurdle", 30);
+                strncpy(_Tutorial_szStepTitle, "Hurdle", 30);
                 break;
             case 5:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Dive", 30);
+                strncpy(_Tutorial_szStepTitle, "Dive", 30);
                 break;
             case 6:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Pass", 30);
+                strncpy(_Tutorial_szStepTitle, "Pass", 30);
                 break;
             case 7:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Catch", 30);
+                strncpy(_Tutorial_szStepTitle, "Catch", 30);
                 break;
             }
         } else if (TutorialGetLesson() == 3) {
-            fn_801C2EF0(_Tutorial_szCategoryTitle, "Defense", 25);
+            strncpy(_Tutorial_szCategoryTitle, "Defense", 25);
             switch (TutorialGetStep()) {
             case 0:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Turbo", 30);
+                strncpy(_Tutorial_szStepTitle, "Turbo", 30);
                 break;
             case 1:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Switch Players", 30);
+                strncpy(_Tutorial_szStepTitle, "Switch Players", 30);
                 break;
             case 2:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Line Moves", 30);
+                strncpy(_Tutorial_szStepTitle, "Line Moves", 30);
                 break;
             case 3:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Dive Tackle", 30);
+                strncpy(_Tutorial_szStepTitle, "Dive Tackle", 30);
                 break;
             case 4:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Interception", 30);
+                strncpy(_Tutorial_szStepTitle, "Interception", 30);
                 break;
             case 5:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Power Tackle", 30);
+                strncpy(_Tutorial_szStepTitle, "Power Tackle", 30);
                 break;
             }
         } else if (TutorialGetLesson() == 4) {
-            fn_801C2EF0(_Tutorial_szCategoryTitle, "New Stuff", 25);
+            strncpy(_Tutorial_szCategoryTitle, "New Stuff", 25);
             switch (TutorialGetStep()) {
             case 0:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Wall Juke", 30);
+                strncpy(_Tutorial_szStepTitle, "Wall Juke", 30);
                 break;
             case 1:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Wall Hurdle", 30);
+                strncpy(_Tutorial_szStepTitle, "Wall Hurdle", 30);
                 break;
             case 2:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Wall Dive", 30);
+                strncpy(_Tutorial_szStepTitle, "Wall Dive", 30);
                 break;
             case 3:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Wall Pass", 30);
+                strncpy(_Tutorial_szStepTitle, "Wall Pass", 30);
                 break;
             case 4:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Wall Catch", 30);
+                strncpy(_Tutorial_szStepTitle, "Wall Catch", 30);
                 break;
             case 5:
-                fn_801C2EF0(_Tutorial_szStepTitle, "GameBreaker on Offense", 30);
+                strncpy(_Tutorial_szStepTitle, "GameBreaker on Offense", 30);
                 break;
             case 6:
-                fn_801C2EF0(_Tutorial_szStepTitle, "GameBreaker on Defense", 30);
+                strncpy(_Tutorial_szStepTitle, "GameBreaker on Defense", 30);
                 break;
             case 7:
-                fn_801C2EF0(_Tutorial_szStepTitle, "GameBreaker 2", 30);
+                strncpy(_Tutorial_szStepTitle, "GameBreaker 2", 30);
                 break;
             case 8:
-                fn_801C2EF0(_Tutorial_szStepTitle, "Hot Spots", 30);
+                strncpy(_Tutorial_szStepTitle, "Hot Spots", 30);
                 break;
             }
         }
         _Tutorial_CategoryText.mUnknown0 = 0;
         _Tutorial_CategoryText.mpText = _Tutorial_szCategoryTitle;
-        _Tutorial_CategoryText.mSize = fn_801C3180(_Tutorial_szCategoryTitle) + 1;
+        _Tutorial_CategoryText.mSize = strlen(_Tutorial_szCategoryTitle) + 1;
         _Tutorial_pCategoryText = &_Tutorial_CategoryText;
         _Tutorial_StepText.mUnknown0 = 0;
         _Tutorial_StepText.mpText = _Tutorial_szStepTitle;
-        _Tutorial_StepText.mSize = fn_801C3180(_Tutorial_szStepTitle) + 1;
+        _Tutorial_StepText.mSize = strlen(_Tutorial_szStepTitle) + 1;
         _Tutorial_pStepText = &_Tutorial_StepText;
         fn_8021D7B8(gUISMainInfo, 0x80000080, 1, &_Tutorial_pCategoryText);
         fn_8021D7B8(gUISMainInfo, 0x80000081, 1, &_Tutorial_pStepText);

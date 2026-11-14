@@ -152,7 +152,6 @@ extern void *gUISMainInfo;
 
 void fn_80152940(char *pObject, int index, MiniGameSlotInfo_t *pInfo);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 void GameTextFormatInitialAndName(Object_80056584 *pObject, char *pOut, int b);
 int MsgGameGetPlayerPortrait(int id);
 int HudLookupColor(int key, unsigned char *pRed, unsigned char *pGreen, unsigned char *pBlue);
@@ -177,7 +176,6 @@ void PlayArtReadRoutes(int tag, PlayBookPlay_t *pRecord, int a, int b, int team,
 void PlayArtBuild(int tag, PlayBookPlay_t *pRecord, int a, int b, int c, int team, int index, int first,
                  unsigned char count, Info_8006719C *pInfo);
 void PlayArtSetFlip(signed char team, int value, int index);
-int fn_801C3180(const char *pString);
 void fn_8021D7B8(void *p, int id, int count, void *pArgs);
 int fn_80178320(void);
 int fn_80177F7C(void);
@@ -213,9 +211,7 @@ void *fn_801D2BB0(int a, int size, int c, int d);
 int fn_80186F7C(int index);
 int fn_8022F358(int index);
 int fn_8022F488(int a);
-int fn_801C302C(const char *s1, const char *s2, int n);
 int fn_800BA6F8(void);
-char *fn_801C3284(char *pDest, const char *pSource, int size);
 void fn_800588F8(int a, int b);
 int PauseGetValue(void);
 int ConGetChannelInfo(int a, int b);
@@ -331,8 +327,8 @@ int fn_800566F0(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
                     pArgs[7].pParams->mpText, pArgs[7].pParams->mLength,
                     (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4), pArgs[1].pi[1], pArgs[8].pParams->mpText,
                     pArgs[8].pParams->mLength, pResult);
-        fn_801C2EF0(pArgs[4].pParams->mpText, "Street Balls", pArgs[4].pParams->mLength);
-        fn_801C2EF0(pArgs[6].pParams->mpText, "Normal Balls", pArgs[6].pParams->mLength);
+        strncpy(pArgs[4].pParams->mpText, "Street Balls", pArgs[4].pParams->mLength);
+        strncpy(pArgs[6].pParams->mpText, "Normal Balls", pArgs[6].pParams->mLength);
         break;
     case 0x80000002:
         *pResult = 4;
@@ -528,7 +524,7 @@ void fn_80056ED8(int team, int a, int b)
     args.mColumn = b % (lbl_803EA58C->mUnknown4E * 2) % lbl_803EA58C->mUnknown4E;
     args.mpEntry = &lbl_803EA58C->mpEntries[team][b];
     args.mpEntry->mpText = lbl_803EA58C->mpTexts[team][b];
-    args.mpEntry->mUnknown4 = fn_801C3180(lbl_803EA58C->mpTexts[team][b]);
+    args.mpEntry->mUnknown4 = strlen(lbl_803EA58C->mpTexts[team][b]);
     if (fn_80178308() == team) {
         limit = lbl_803EA594->mUnknown40[team][lbl_803EA58C->mUnknown46[team]];
     } else {
@@ -917,7 +913,7 @@ void fn_80057C58(unsigned char team, int index, int flag)
             fn_801C2E18(text, "%02d", number);
             for (unsigned int j = 0; j < count; j++) {
                 PlayBookDbLoadPlay(tag, handle, j, &record);
-                if (fn_801C302C(record.mUnknown1F0, text, 2) == 0) {
+                if (strncmp(record.mUnknown1F0, text, 2) == 0) {
                     pList[i] = j;
                     i++;
                     break;
@@ -1146,7 +1142,7 @@ void fn_80058798(char *pDest, int size, int number, int flag)
         fn_801C2E18(text, "%02d", number);
         for (; j < count; j++) {
             PlayBookDbLoadPlay(tag, handle, j, &record);
-            if (fn_801C302C(record.mUnknown1F0, text, 2) == 0) {
+            if (strncmp(record.mUnknown1F0, text, 2) == 0) {
                 found = 1;
                 break;
             }
@@ -1156,9 +1152,9 @@ void fn_80058798(char *pDest, int size, int number, int flag)
         }
     }
     if (found) {
-        fn_801C3284(pDest, record.mUnknown1F3, size);
+        strnzcpy(pDest, record.mUnknown1F3, size);
     } else {
-        fn_801C3284(pDest, "Unknown Play", size);
+        strnzcpy(pDest, "Unknown Play", size);
     }
 }
 
@@ -1206,49 +1202,49 @@ void fn_800589D8(int *pCount, char *pTitle, int titleSize, char *pLine1, int siz
 {
     switch (fn_801486A0()) {
     case 4:
-        fn_801C3284(pTitle, "4 on 4", titleSize);
-        fn_801C3284(pLine1, "- Ball starts on the 5 yard line", size1);
-        fn_801C3284(pLine2, "- First down at midfield", size2);
-        fn_801C3284(pLine3, "- Turnovers are worth 3 points", size3);
-        fn_801C3284(pLine4, "- Play ends after a turnover", size4);
-        fn_801C3284(pLine5, "- QB must pass within 5 seconds", size5);
-        fn_801C3284(pLine6, "- QB cannot run with the ball", size6);
+        strnzcpy(pTitle, "4 on 4", titleSize);
+        strnzcpy(pLine1, "- Ball starts on the 5 yard line", size1);
+        strnzcpy(pLine2, "- First down at midfield", size2);
+        strnzcpy(pLine3, "- Turnovers are worth 3 points", size3);
+        strnzcpy(pLine4, "- Play ends after a turnover", size4);
+        strnzcpy(pLine5, "- QB must pass within 5 seconds", size5);
+        strnzcpy(pLine6, "- QB cannot run with the ball", size6);
         *pCount = 6;
         break;
     case 3:
-        fn_801C3284(pTitle, "2 Minute Challenge", titleSize);
-        fn_801C3284(pLine1, "- Using only passing plays, score as many times as you can in two minutes", size1);
-        fn_801C3284(pLine2, "", size2);
-        fn_801C3284(pLine3,
+        strnzcpy(pTitle, "2 Minute Challenge", titleSize);
+        strnzcpy(pLine1, "- Using only passing plays, score as many times as you can in two minutes", size1);
+        strnzcpy(pLine2, "", size2);
+        strnzcpy(pLine3,
                     "- Interceptions, fumble recoveries and safeties by the defense will cause you to lose points",
                     size3);
         *pCount = 3;
         break;
     case 0:
-        fn_801C3284(pTitle, "Crush the Carrier", titleSize);
-        fn_801C3284(pLine1, "- Score more points than your opponents to win the game", size1);
-        fn_801C3284(pLine2, "- You'll earn the most points by Stylin' and holding onto the ball", size2);
-        fn_801C3284(pLine3, "- Keep in mind that tackles are worth big points too", size3);
+        strnzcpy(pTitle, "Crush the Carrier", titleSize);
+        strnzcpy(pLine1, "- Score more points than your opponents to win the game", size1);
+        strnzcpy(pLine2, "- You'll earn the most points by Stylin' and holding onto the ball", size2);
+        strnzcpy(pLine3, "- Keep in mind that tackles are worth big points too", size3);
         *pCount = 3;
         break;
     case 5:
-        fn_801C3284(pTitle, "Quick Strike", titleSize);
-        fn_801C3284(pLine1, "- Each team puts the ball in play from their opponent's end of the field", size1);
-        fn_801C3284(pLine2, "", size2);
-        fn_801C3284(pLine3, "- Each team retains the ball until they score or run out of downs", size3);
-        fn_801C3284(pLine4, "- The game continues until the tie is broken", size4);
+        strnzcpy(pTitle, "Quick Strike", titleSize);
+        strnzcpy(pLine1, "- Each team puts the ball in play from their opponent's end of the field", size1);
+        strnzcpy(pLine2, "", size2);
+        strnzcpy(pLine3, "- Each team retains the ball until they score or run out of downs", size3);
+        strnzcpy(pLine4, "- The game continues until the tie is broken", size4);
         *pCount = 4;
         break;
     case 1:
-        fn_801C3284(pTitle, "Jump Ball Battle", titleSize);
-        fn_801C3284(pLine1, "- Catch as many passes as possible", size1);
-        fn_801C3284(pLine2, "- The NFL STREET ball is worth double points", size2);
+        strnzcpy(pTitle, "Jump Ball Battle", titleSize);
+        strnzcpy(pLine1, "- Catch as many passes as possible", size1);
+        strnzcpy(pLine2, "- The NFL STREET ball is worth double points", size2);
         *pCount = 2;
         break;
     case 2:
-        fn_801C3284(pTitle, "Open Field Showdown", titleSize);
-        fn_801C3284(pLine1, "- Score against your opponent in an open field situation", size1);
-        fn_801C3284(pLine2, "- Try to prevent your opponent from scoring in the very same situation", size2);
+        strnzcpy(pTitle, "Open Field Showdown", titleSize);
+        strnzcpy(pLine1, "- Score against your opponent in an open field situation", size1);
+        strnzcpy(pLine2, "- Try to prevent your opponent from scoring in the very same situation", size2);
         *pCount = 2;
         break;
     }
@@ -1347,11 +1343,11 @@ void fn_80058EFC(int *pCount, Params_80005284 *pName, Params_80005284 *pText0, P
     int results[4];
     char names[4][64];
 
-    fn_801C2EF0(pName->mpText, pRecord->mUnknownCB, pName->mLength);
-    fn_801C2EF0(pTeam->mpText, pRecord->mUnknown1, pTeam->mLength);
+    strncpy(pName->mpText, pRecord->mUnknownCB, pName->mLength);
+    strncpy(pTeam->mpText, pRecord->mUnknown1, pTeam->mLength);
     *pCount = ChallengeGetGoalTexts(results, names);
     for (unsigned char i = 0; i <= 3; i++) {
-        fn_801C3284(texts[i]->mpText, names[i], texts[i]->mLength);
+        strnzcpy(texts[i]->mpText, names[i], texts[i]->mLength);
         pResults[i] = results[i];
     }
     ChallengeSendGoalList(0);
@@ -1598,8 +1594,8 @@ int fn_8005993C(int *pId1, int *pId0, char *pName1, int size1, char *pName0, int
     *pId0 = id0;
     *pValue1 = value1;
     *pValue0 = value0;
-    fn_801C2EF0(pName1, name1, size1);
-    fn_801C2EF0(pName0, name0, size0);
+    strncpy(pName1, name1, size1);
+    strncpy(pName0, name0, size0);
     return ok;
 }
 
@@ -1857,15 +1853,15 @@ void fn_8005A1C0(unsigned int team, int *pEnabled, Params_80005284 **pNames, int
         pEnabled[i] = fn_801486A0() != 2 || i < 2;
         if (pEnabled[i] == 1) {
             PlayBookPlay_t *pRecord = PlayBookGetAudiblePlay((unsigned char)team, i);
-            fn_801C2EF0(pNames[i]->mpText, pRecord->mUnknown1F3, pNames[i]->mLength);
+            strncpy(pNames[i]->mpText, pRecord->mUnknown1F3, pNames[i]->mLength);
         }
     }
     if ((unsigned int)fn_80178308() == team) {
         *pMode = fn_800AEBA0() != 0;
-        if (*pMode == 1) fn_801C2EF0(pText->mpText, "Max Protect", pText->mLength);
+        if (*pMode == 1) strncpy(pText->mpText, "Max Protect", pText->mLength);
     } else {
         *pMode = fn_80178E4C();
-        fn_801C2EF0(pText->mpText, "Prediction", pText->mLength);
+        strncpy(pText->mpText, "Prediction", pText->mLength);
     }
 }
 
@@ -2000,7 +1996,7 @@ void fn_8005AB04(int team, MenuArg_t *pNames, int *pValues)
         const Category_8005AB04 *pCategory=&lbl_8028EB78[lbl_80309FC4[team].mIndices[i++]];
         if(pCategory->mEnabled) {
             Params_80005284 *pText=((Params_80005284 **)pNames[0].pi)[*pNames[0].pi+count+1];
-            fn_801C2EF0(pText->mpText,pCategory->mName,pText->mLength);
+            strncpy(pText->mpText,pCategory->mName,pText->mLength);
             int value=0;
             for(unsigned int j=0;j<pCategory->mCount;j++) {
                 int index=pCategory->mIndices[j];
@@ -2017,8 +2013,8 @@ void fn_8005AC18(int team,int *pId,char *pFirst,int firstSize,char *pLast,int la
     PlayerDbSeekId(&lbl_80309F98,lbl_80309FC4[team].mUnknown4,&key);
     *pId=fn_800C8744(team);
     char first[16],last[16];
-    PlayerDbGetFirstName(&lbl_80309F98,first,12); fn_801C2EF0(pFirst,first,firstSize);
-    PlayerDbGetLastName(&lbl_80309F98,last,15); fn_801C2EF0(pLast,last,lastSize);
+    PlayerDbGetFirstName(&lbl_80309F98,first,12); strncpy(pFirst,first,firstSize);
+    PlayerDbGetLastName(&lbl_80309F98,last,15); strncpy(pLast,last,lastSize);
 }
 void fn_8005ACC8(void) {fn_8008056C(&lbl_80309F98);}
 void fn_8005ACF0(int team)
@@ -2063,17 +2059,17 @@ void fn_8005AEC8(int *pEnabled,int *pCount,Params_80005284 *pFirst,Params_800052
     else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
     *pAllowed=!((score1<score0 && fn_800B65A0(1)!=255)||(score0<score1 && fn_800B65A0(0)!=255));
     if(GameModeTypeGet()==8) {
-        if(score1>score0) {*pCount=1;fn_801C2EF0(pFirst->mpText,"Continue",pFirst->mLength);lbl_803EA5A0[0]=3;}
-        else {*pCount=2;fn_801C2EF0(pFirst->mpText,"Rematch",pFirst->mLength);lbl_803EA5A0[0]=2;
-              fn_801C2EF0(pSecond->mpText,"Exit",pSecond->mLength);lbl_803EA5A0[1]=1;}
+        if(score1>score0) {*pCount=1;strncpy(pFirst->mpText,"Continue",pFirst->mLength);lbl_803EA5A0[0]=3;}
+        else {*pCount=2;strncpy(pFirst->mpText,"Rematch",pFirst->mLength);lbl_803EA5A0[0]=2;
+              strncpy(pSecond->mpText,"Exit",pSecond->mLength);lbl_803EA5A0[1]=1;}
         return;
     }
     const char *pLabel=GameModeTypeGet()==11?"Continue":"Exit";
     if(*pEnabled==1) {
-        *pCount=2;fn_801C2EF0(pFirst->mpText,"Rematch",pFirst->mLength);lbl_803EA5A0[0]=2;
-        fn_801C2EF0(pSecond->mpText,pLabel,pSecond->mLength);lbl_803EA5A0[1]=1;
+        *pCount=2;strncpy(pFirst->mpText,"Rematch",pFirst->mLength);lbl_803EA5A0[0]=2;
+        strncpy(pSecond->mpText,pLabel,pSecond->mLength);lbl_803EA5A0[1]=1;
     } else {
-        *pCount=1;fn_801C2EF0(pFirst->mpText,pLabel,pSecond->mLength);lbl_803EA5A0[0]=1;lbl_803EA5A0[1]=0;
+        *pCount=1;strncpy(pFirst->mpText,pLabel,pSecond->mLength);lbl_803EA5A0[0]=1;lbl_803EA5A0[1]=0;
     }
 }
 
@@ -2093,8 +2089,8 @@ void fn_8005B128(int *pResult,int *pId,Params_80005284 *pText)
         } else *pResult=0;
         DbCursor query;
         fn_80083E40(&query,0,0x54415453);
-        if(fn_80084034(&query,*pId,0)) {char name[36];fn_80083F88(&query,name,32);fn_801C3284(pText->mpText,name,pText->mLength);}
-        else fn_801C3284(pText->mpText,"",pText->mLength);
+        if(fn_80084034(&query,*pId,0)) {char name[36];fn_80083F88(&query,name,32);strnzcpy(pText->mpText,name,pText->mLength);}
+        else strnzcpy(pText->mpText,"",pText->mLength);
         fn_80083F68(&query);
     } else *pResult=-1;
 }
@@ -2160,9 +2156,9 @@ int fn_8005B730(char *pText,int size,int kind,int value)
     case 3:fn_8005B6AC(text,255,value,1);break;
     case 5:fn_8005B610(text,255,value);break;
     case 7:fn_8005B6AC(text,255,value,0);break;
-    default:fn_801C3284(text,lbl_802D4D1C[kind],255);break;
+    default:strnzcpy(text,lbl_802D4D1C[kind],255);break;
     }
-    if(fn_801C3180(text)>0) fn_801C2EF0(pText,text,size);
+    if(strlen(text)>0) strncpy(pText,text,size);
     return result;
 }
 void fn_8005B838(int kind,int value)
@@ -2186,7 +2182,7 @@ int fn_8005B908(Params_80005284 **pText)
             if(p->mUnknown1F4[i].mId) {
                 result+=fn_8005B730((*pText)->mpText,(*pText)->mLength,p->mUnknown1F4[i].mId,p->mUnknown1F4[i].mUnknown4);
                 fn_8005B838(p->mUnknown1F4[i].mId,p->mUnknown1F4[i].mUnknown4);
-                if(fn_801C3180((*pText)->mpText)) pText++;
+                if(strlen((*pText)->mpText)) pText++;
             }
         }
     } else {
@@ -2200,7 +2196,7 @@ int fn_8005B908(Params_80005284 **pText)
 }
 void fn_8005B9FC(int *pResult,Params_80005284 **pNames)
 {
-    for(int i=0;i<4;i++) fn_801C3284(pNames[i]->mpText,"",pNames[i]->mLength);
+    for(int i=0;i<4;i++) strnzcpy(pNames[i]->mpText,"",pNames[i]->mLength);
     *pResult=fn_8005B908(pNames);ChalCloseCursors();
 }
 
@@ -2266,8 +2262,8 @@ void fn_80155CF0(Class_80148A58 *,int,int *,int *);
 void fn_80155C44(Class_80148A58 *,int,int,Record_8005CE10 *);
 int fn_80155D38(Class_80148A58 *,int);
 
-void fn_8005BA64(MenuArg_t *p) {fn_801C2EF0(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
-void fn_8005BA98(MenuArg_t *p) {fn_801C2EF0(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
+void fn_8005BA64(MenuArg_t *p) {strncpy(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
+void fn_8005BA98(MenuArg_t *p) {strncpy(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
 void fn_8005BACC(MenuArg_t *p,int *pValue,MenuArg_t *pOther) {fn_8005BA64(p);fn_8005BA98(pOther);*pValue=0;}
 void fn_8005BB0C(MenuArg_t *p,int *a,int *b,int *c) {fn_8005BA64(p);*a=0;*b=0;*c=0;}
 void fn_8005BB50(MenuArg_t *p,int *a,int *b) {fn_8005BA64(p);*a=0;*b=0;}
@@ -2383,7 +2379,7 @@ void fn_8005C4A4(int team,char *name,int nameSize,char *first,int firstSize,char
 }
 int fn_8005C6EC(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
-    case 0x80000001:fn_8005C4A4((unsigned char)p[0].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength,p[5].pParams->mpText,p[5].pParams->mLength,p[7].pParams->mpText,p[7].pParams->mLength,(int *)(p[1].i+(*p[1].pi+1)*4),p[1].pi[1],p[8].pParams->mpText,(unsigned char)p[8].pParams->mLength,result);fn_801C2EF0(p[4].pParams->mpText,"Time of Possession",p[4].pParams->mLength);fn_801C2EF0(p[6].pParams->mpText,"Tackles",p[6].pParams->mLength);break;
+    case 0x80000001:fn_8005C4A4((unsigned char)p[0].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength,p[5].pParams->mpText,p[5].pParams->mLength,p[7].pParams->mpText,p[7].pParams->mLength,(int *)(p[1].i+(*p[1].pi+1)*4),p[1].pi[1],p[8].pParams->mpText,(unsigned char)p[8].pParams->mLength,result);strncpy(p[4].pParams->mpText,"Time of Possession",p[4].pParams->mLength);strncpy(p[6].pParams->mpText,"Tackles",p[6].pParams->mLength);break;
     case 0x80000002:*result=6;break;
     case 0x80000003:GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
     case 0x80000004:break;
@@ -2401,7 +2397,7 @@ int fn_8005C994(unsigned int id,MenuArg_t *p,int unused,int *result) {
         int n=*p[3].pi;Params_80005284 **texts=(Params_80005284 **)p[3].pi;
         fn_8005C844((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,texts[n+1]->mpText,texts[n+2]->mpText,texts[n+3]->mpText,(int *)(p[4].i+(*p[4].pi+1)*4),(unsigned char)p[2].pParams->mLength,(unsigned char)texts[n+1]->mLength);
         n=*p[5].pi;texts=(Params_80005284 **)p[5].pi;
-        fn_801C2EF0(texts[n+1]->mpText,"TDs",texts[n+1]->mLength);fn_801C2EF0(texts[n+2]->mpText,"Fumble Recs",texts[n+2]->mLength);fn_801C2EF0(texts[n+3]->mpText,"INTs",texts[n+3]->mLength);
+        strncpy(texts[n+1]->mpText,"TDs",texts[n+1]->mLength);strncpy(texts[n+2]->mpText,"Fumble Recs",texts[n+2]->mLength);strncpy(texts[n+3]->mpText,"INTs",texts[n+3]->mLength);
     }else if(id==0x80000004) {GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();}else if(id!=0x80000001)return 0;
     return 1;
 }
@@ -2417,7 +2413,7 @@ int fn_8005CC50(unsigned int id,MenuArg_t *p,int unused,int *result) {
     if(id==0x80000003) {
         fn_8005CAE4((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[3].pParams->mpText,p[4].pParams->mpText,p[5].pParams->mpText,(unsigned char)p[2].pParams->mLength,(unsigned char)p[3].pParams->mLength,(int *)(p[6].i+(*p[6].pi+1)*4));
         int n=*p[7].pi;Params_80005284 **texts=(Params_80005284 **)p[7].pi;
-        fn_801C2EF0(texts[n+1]->mpText,"TDs",texts[n+1]->mLength);fn_801C2EF0(texts[n+2]->mpText,"Tackles",texts[n+2]->mLength);fn_801C2EF0(texts[n+3]->mpText,"INTs",texts[n+3]->mLength);
+        strncpy(texts[n+1]->mpText,"TDs",texts[n+1]->mLength);strncpy(texts[n+2]->mpText,"Tackles",texts[n+2]->mLength);strncpy(texts[n+3]->mpText,"INTs",texts[n+3]->mLength);
     }else if(id==0x80000004) {GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();}else if(id!=0x80000001)return 0;
     return 1;
 }

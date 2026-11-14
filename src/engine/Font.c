@@ -8,7 +8,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/ResLoad.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 
 typedef struct FontParams_801CCA64 {
     int mMaxFonts;
@@ -423,7 +423,7 @@ void fn_801CD3E4(Font_801CCA64 *pFont, const char *pText, unsigned int flags, fl
     } else {
         kern = (flags & 4) == 0;
         lineHeight = pFont->mpHeader->mHeight;
-        len = fn_801C3180(pText);
+        len = strlen(pText);
         if (len > 354) {
             return;
         }
@@ -495,7 +495,7 @@ int fn_801CD63C(Font_801CCA64 *pFont, const char *pText, unsigned int flags)
     } else {
         kern = (flags & 4) == 0;
         i = 0;
-        len = fn_801C3180(pText);
+        len = strlen(pText);
         while (i < len) {
             prev = -1;
             width = 0;

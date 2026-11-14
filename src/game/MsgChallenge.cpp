@@ -6,7 +6,7 @@
 #include "game/DbCursor.h"
 #include "game/Challenge.h"
 #include "game/cu_80181330.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/GameOptions.h"
 
 extern "C" {
@@ -123,7 +123,7 @@ void MsgChallengeGetEntryStatus(int index, MenuArg_t text, int *pA, int *pB)
         ChalFindRecord(pObject, id, 0);
         ChalReadRecord(pObject, &record, GameOptionsGet(0));
         kind = ChalGetProgress(record.mUnknown0, &a, &b);
-        fn_801C3284(text.pParams->mpText, record.mUnknown1, text.pParams->mLength);
+        strnzcpy(text.pParams->mpText, record.mUnknown1, text.pParams->mLength);
         switch (kind) {
         case 0:
             *pB = 1;
@@ -170,12 +170,12 @@ int MsgChallengeGetEntryInfo(int index, int *pValue, MenuArg_t textA, int *pFlag
         ChalReadRecord(pObject, &record, b);
         pInfo = &record.mUnknown20C;
         result = ChalHasMedalGoal(&record);
-        fn_801C3284(textA.pParams->mpText, record.mUnknown1, textA.pParams->mLength);
-        fn_801C3284(textB.pParams->mpText, record.mUnknownCB, textB.pParams->mLength);
+        strnzcpy(textA.pParams->mpText, record.mUnknown1, textA.pParams->mLength);
+        strnzcpy(textB.pParams->mpText, record.mUnknownCB, textB.pParams->mLength);
         if (result) {
             for (i = 0; i <= 2; i++) {
                 if (pInfo->mUnknown10[i]) {
-                    fn_801C3284(pTexts2[i].pParams->mpText, pInfo->mUnknown10[i],
+                    strnzcpy(pTexts2[i].pParams->mpText, pInfo->mUnknown10[i],
                                 pTexts2[i].pParams->mLength);
                 }
             }
@@ -198,22 +198,22 @@ int MsgChallengeGetEntryInfo(int index, int *pValue, MenuArg_t textA, int *pFlag
         }
         switch (record.mUnknown208) {
         case 0:
-            fn_801C3284(textC.pParams->mpText, "No Skills", textC.pParams->mLength);
+            strnzcpy(textC.pParams->mpText, "No Skills", textC.pParams->mLength);
             break;
         case 1:
-            fn_801C3284(textC.pParams->mpText, "Weak Skills", textC.pParams->mLength);
+            strnzcpy(textC.pParams->mpText, "Weak Skills", textC.pParams->mLength);
             break;
         case 2:
-            fn_801C3284(textC.pParams->mpText, "Got Skills", textC.pParams->mLength);
+            strnzcpy(textC.pParams->mpText, "Got Skills", textC.pParams->mLength);
             break;
         case 3:
-            fn_801C3284(textC.pParams->mpText, "Mad Skills", textC.pParams->mLength);
+            strnzcpy(textC.pParams->mpText, "Mad Skills", textC.pParams->mLength);
             break;
         case 4:
-            fn_801C3284(textC.pParams->mpText, "Legendary Skills", textC.pParams->mLength);
+            strnzcpy(textC.pParams->mpText, "Legendary Skills", textC.pParams->mLength);
             break;
         default:
-            fn_801C3284(textC.pParams->mpText, "It's a Mystery", textC.pParams->mLength);
+            strnzcpy(textC.pParams->mpText, "It's a Mystery", textC.pParams->mLength);
             break;
         }
     }

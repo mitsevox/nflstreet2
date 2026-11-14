@@ -1,6 +1,6 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/memorycard.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 
 typedef struct Struct_803EBD20 {
     int mMaxFiles;
@@ -86,10 +86,6 @@ extern const char lbl_802AFF14[];
 extern const char lbl_802AFF18[];
 
 extern void *memset();
-extern unsigned int strlen(const char *pString);
-extern char *strcpy(char *pDst, const char *pSrc);
-extern int strcmp(const char *pA, const char *pB);
-extern int strncmp(const char *pA, const char *pB, unsigned int count);
 extern int memcmp(const void *pA, const void *pB, unsigned int count);
 extern int sprintf(char *pBuffer, const char *pFormat, ...);
 extern void fn_801F8758(int value);
@@ -450,7 +446,7 @@ void fn_801D6B4C(char *pDst, int size)
 
 int fn_801D6C70(int slot, int type, char *pDst, int count)
 {
-    return (int)fn_801C3284(pDst, lbl_803EBD2C[type].mSlots[slot].mEntry->mName, count);
+    return (int)strnzcpy(pDst, lbl_803EBD2C[type].mSlots[slot].mEntry->mName, count);
 }
 
 unsigned int fn_801D6CB8(int slot, int type)

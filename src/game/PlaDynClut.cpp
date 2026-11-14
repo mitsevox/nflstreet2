@@ -8,7 +8,7 @@
 extern "C" {
 extern char lbl_802EBDE8[];
 
-char *fn_801C3084(const char *pString, int c);
+char *strchr(const char *pString, int c);
 int fn_801C9DC8(int value);
 int ResLoadAll(void *pData, int a, int b);
 int ResUnLoadAll(void *pData);
@@ -95,7 +95,7 @@ int PlaDynClutFind(char *pName)
 {
     char *pSpace;
 
-    if ((pSpace = fn_801C3084(pName, ' ')) != 0) {
+    if ((pSpace = strchr(pName, ' ')) != 0) {
         *pSpace = 0;
     }
     return ResFindIndexByName(_PlaDynClut_pFile, pName);

@@ -201,17 +201,9 @@
       "address": "0x801C1FBC",
       "evidence": "evidence.tsv external row: system-call installation target call and inspected callee behavior, with SDK reference provenance."
     },
-    "strlen": {
-      "address": "0x801C3180",
-      "evidence": "evidence.tsv CARD external row strlen: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
     "memcmp": {
       "address": "0x801C1FEC",
       "evidence": "evidence.tsv CARD external row memcmp: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
-    "strncpy": {
-      "address": "0x801C2EF0",
-      "evidence": "evidence.tsv CARD external row strncpy: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "memset": {
       "address": "0x801C1F94",
@@ -336,14 +328,6 @@
     "sprintf": {
       "address": "0x801C2E18",
       "evidence": "evidence.tsv external row sprintf: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
-    },
-    "strcmp": {
-      "address": "0x801C2FE4",
-      "evidence": "evidence.tsv external row strcmp: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
-    },
-    "strcpy": {
-      "address": "0x801C2EB4",
-      "evidence": "evidence.tsv external row strcpy: target byte-copy loop and preserved destination; conventional library interface, original symbol not recovered."
     },
     "Highlight__14MenuListScreeni": {
       "address": "0x80182BC4",
@@ -709,10 +693,6 @@
       "address": "0x8024151C",
       "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
     },
-    "strncmp": {
-      "address": "0x801C302C",
-      "evidence": "Actual original248body REL24 at80241F60/80241F98 length4/2; callee801C302C..3084 bounded NUL stopping byte comparison. Relatedlibc spelling, no originalsource/debugname claim."
-    },
     "__piReg": {
       "address": "0x803ED358",
       "evidence": "Actual target operands and canonical accepted API signatures in GXFifo, relatedSDK identity."
@@ -916,14 +896,6 @@
     "__VMBASEInvalidateEntireTLB": {
       "address": "0x80245EDC",
       "evidence": "Original target provider retained for calls from measured VMBase C. Complete target instructions at 0x80245EDC and pinned MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c declarations support the accessed contract; no body or original handwritten assembly provenance claimed. See VMBase external evidence."
-    },
-    "strcat": {
-      "address": "0x801C2F2C",
-      "evidence": "evidence.tsv external row strcat: target NUL scan of r3 then byte copy of r4 with the destination preserved; conventional library interface, original symbol not recovered."
-    },
-    "strrchr": {
-      "address": "0x801C30C0",
-      "evidence": "evidence.tsv external row strrchr: target scan keeping the last position whose byte equals the second argument; conventional library interface, original symbol not recovered."
     },
     "OpenBitStream__FP11BitStream_tPv15BitStreamMode_t": {
       "address": "0x80190ED4",
@@ -17823,6 +17795,19 @@
           "placement": ".bss",
           "start": "0x8039ADC4",
           "end": "0x8039ADE4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/string.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C2EB4-0x801C333C (src/engine/string.c), its compiler, function and name rows; all fourteen functions exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C2EB4",
+          "end": "0x801C333C"
         }
       ]
     }

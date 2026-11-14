@@ -31,7 +31,7 @@ void UISGameInit(void);
 void UISGameShutdown(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
+char *strncpy(char *pDest, const char *pSource, int count);
 void ResTrackLabel(const char *pText);
 int fn_801F2C54(const char *pName, int unknown);
 int fn_801F2CD4(const char *pName);
@@ -165,7 +165,7 @@ int Qkl::Init()
     }
 
     if (MainFEGroupIsStarted(&gMainFEGroup)) {
-        fn_801C2EF0(mFileName.mText, lbl_803EB6F0, sizeof(mFileName.mText));
+        strncpy(mFileName.mText, lbl_803EB6F0, sizeof(mFileName.mText));
     } else {
         fn_801C2D88(mFileName.mText, sizeof(mFileName.mText), "%s%d.qkl", lbl_803EB6F8, fn_800A3444());
     }

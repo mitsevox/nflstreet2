@@ -4,7 +4,7 @@
 
 #include "game/DbCursor.h"
 #include "game/cu_80181330.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802372EC.h"
@@ -302,14 +302,14 @@ extern "C" void TournBracketGetGameInfo(int index, int *pIdA, int *pIdB, Bracket
         int team = p->mUnknown0[i];
         if (team == -1) {
             *ids[i] = team;
-            fn_801C3284(names[i].mUnknown0->mpText, "TBD", names[i].mUnknown0->mLength);
+            strnzcpy(names[i].mUnknown0->mpText, "TBD", names[i].mUnknown0->mLength);
         } else {
             *ids[i] = TournBracketGetTeam(team);
             DbCursor object;
             fn_80083E40(&object, 0, 0x54415453);
             fn_80084034(&object, *ids[i], 0);
             fn_80083F88(&object, name, 18);
-            fn_801C3284(names[i].mUnknown0->mpText, name, names[i].mUnknown0->mLength);
+            strnzcpy(names[i].mUnknown0->mpText, name, names[i].mUnknown0->mLength);
             fn_80083F68(&object);
         }
     }

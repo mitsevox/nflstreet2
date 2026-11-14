@@ -132,7 +132,6 @@ extern void *fn_801C6C84(void *pPool, void *pItem);
 extern void *fn_801C6A20(void *pPool);
 extern void fn_801C6C0C(void *pPool, void *pItem);
 extern int fn_801C6DCC(void *pPool, void *pStart, void *pKey, void *pFound, int (*pMatch)(void *, void *, void *));
-extern char *fn_801C3284(char *pDst, const char *pSrc, int n);
 extern int FilePerformWrite(int file, int offset, void *pBuffer, int size);
 extern void FileAsyncWaitStream(int handle);
 extern int FileHostCheckActive(void);
@@ -143,7 +142,7 @@ void fn_801D3318(int ident, const char *pLabel);
 void fn_801D339C(int ident);
 void fn_801D342C(int ident);
 void fn_801D3470(void *pAddr, char *pOut, int size);
-int fn_801C2FE4(const char *pA, const char *pB);
+int strcmp(const char *pA, const char *pB);
 void *fn_801C9B94(int file, char *pBuffer, int size, int priority, void (*pDone)(int, int, void *), void *pArg,
                   void (*pBlock)(int, char *, int, void *), int blockSize);
 ResBlockDecoder_t *GCmpBlockStart(int codec, int mode, ResCodecBuffer_t *pIn, ResCodecBuffer_t *pOut);
@@ -262,14 +261,14 @@ static int _ResFileInsertFunc(void *pA, void *pB)
     ResFile_t *pResA = pA;
     ResFile_t *pResB = pB;
 
-    return fn_801C2FE4(pResA->pName, pResB->pName);
+    return strcmp(pResA->pName, pResB->pName);
 }
 
 static int _ResFileSearchByFileNameFunc(void *pItem, void *pKey, void *pFound)
 {
     ResFile_t *pRes = pItem;
     ResFile_t **ppFound = pFound;
-    int cmp = fn_801C2FE4(pRes->pName, pKey);
+    int cmp = strcmp(pRes->pName, pKey);
 
     if (cmp == 0) {
         *ppFound = pRes;
@@ -1219,7 +1218,7 @@ static void *_ResGetResourceBuffer(ResFile_t *pRes, unsigned int index, int heap
     *pBuffer = 0;
     if (_Res_bLooseFileSupport != 0 && ResLooseFileGetSize(pRes, index, &size) != 0) {
         if (pRes->pDir[index].mSize < size) {
-            fn_801C3284(name, pRes->pName, 0xB);
+            strnzcpy(name, pRes->pName, 0xB);
             sprintf(name + strlen(name), _Res_szIndexFormat, index);
             if (noFlags != 0) {
                 p = fn_801D2BB0(heap, size, 0, 0);
@@ -1243,7 +1242,7 @@ static void *_ResGetResourceBuffer(ResFile_t *pRes, unsigned int index, int heap
         *pBuffer = pRes->mBaseAddr + pRes->mBaseOffset + _ResGetBlockOffset(pRes, index);
     } else {
         _ResGetDirInfo(pRes, index, &offset, &prevSize, &size);
-        fn_801C3284(name, pRes->pName, 0xB);
+        strnzcpy(name, pRes->pName, 0xB);
         sprintf(name + strlen(name), _Res_szIndexFormat, index);
         if (noFlags != 0) {
             p = fn_801D2BB0(heap, size, 0, 0);

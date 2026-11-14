@@ -52,7 +52,6 @@ void fn_800504EC(void);
 void fn_80051308(void);
 void HotspotReset(void);
 void fn_800B2A14(float *pPos, unsigned char *pAngles);
-char *fn_801C310C(char *pText, const char *pPattern);
 int fn_801C9DC8(int value);
 int ObjNewType_(int type, int size, int count, void (*pInit)(BigObj_t *, BigObjDesc_t *),
                 void (*pRelease)(BigObj_t *));
@@ -332,7 +331,7 @@ void BigObjCreate(BigObjDesc_t *pDesc, int handle)
     _BigObj_apObjects[_BigObj_uCount] = ObjNewInList(handle, 28, 0, pDesc);
     ObjSetPriority(handle, _BigObj_apObjects[_BigObj_uCount], 6);
     fn_8004DC88(pDesc->mUnknown164, pDesc->mUnknown168, _BigObj_apObjects[_BigObj_uCount]);
-    if (fn_801C310C(pDesc->mName, "CROWD") != 0) {
+    if (strstr(pDesc->mName, "CROWD") != 0) {
         _BigObj_apObjects[_BigObj_uCount]->mUnknown232_27 = 1;
     }
     _BigObj_apObjects[_BigObj_uCount]->mUnknown472 = BigObjInstCreate((void *)pDesc->mUnknown168, &pDesc->mUnknown132);

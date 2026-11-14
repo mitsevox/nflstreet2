@@ -40,7 +40,7 @@ extern "C" {
 extern LevelData_t *gLevelData;
 extern const Vector_80039F5C gParticleSys_vUp;
 unsigned int fn_802372EC(int, unsigned int);
-int fn_801C2FE4(const char *, const char *);
+int strcmp(const char *, const char *);
 void *fn_801D2B7C(unsigned int, int, int);
 void fn_801D2BD0(void *);
 void MemFill(void *, unsigned int, int, int);
@@ -147,7 +147,7 @@ void GlowFlickerUpdate(GlowFlicker_t *p)
 }
 unsigned int GlowFindPreset(const char *name)
 {
-    for (unsigned int i = 0; i <= 10; ++i) if (fn_801C2FE4(name, _Glow_aPresetNames[i]) == 0) return i;
+    for (unsigned int i = 0; i <= 10; ++i) if (strcmp(name, _Glow_aPresetNames[i]) == 0) return i;
     return 12;
 }
 GlowDesc_t *GlowGetPreset(const char *name)

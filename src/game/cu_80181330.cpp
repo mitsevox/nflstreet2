@@ -4,7 +4,7 @@
 #include "game/Object_8008044C.h"
 #include "game/PaletteColor.h"
 #include "game/cu_80181330.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/fn_8021D7B8.h"
 #include "game/UISGameMsg.h"
 
@@ -119,9 +119,6 @@ void fn_8018EF6C(int a);
 int GauntletGetCurrentTeam(int a);
 void GauntletReset(int a);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
-int fn_801C302C(const char *s1, const char *s2, int n);
-unsigned int fn_801C3180(const char *pText);
 void *fn_8021EA44(int index);
 unsigned int fn_80225F88(void *a, int b, int c, const char *pText);
 int fn_8022F384(int a);
@@ -564,7 +561,7 @@ void fn_80181D48(MenuEntry_t *pEntry, int id)
     pEntry->mUnknown30 = 1;
     pEntry->mUnknown32 = 0xC0000;
     pEntry->mUnknown41 = 0;
-    fn_801C3284(pEntry->mName, "NO TEXT!", 22);
+    strnzcpy(pEntry->mName, "NO TEXT!", 22);
 }
 
 void fn_80181DA8(int a, int *pResult, MenuArg_t text0, MenuArg_t text1, MenuArg_t text2)
@@ -582,9 +579,9 @@ void fn_80181DA8(int a, int *pResult, MenuArg_t text0, MenuArg_t text1, MenuArg_
         entry.mUnknown36 = 0;
     }
     fn_80181588(entry.mUnknown36);
-    fn_801C3284(p0->mpText, lbl_80362A84.mName0, p0->mLength + 1);
-    fn_801C3284(p1->mpText, lbl_80362A84.mName1, p1->mLength + 1);
-    fn_801C3284(p2->mpText, lbl_80362A84.mName2, p2->mLength + 1);
+    strnzcpy(p0->mpText, lbl_80362A84.mName0, p0->mLength + 1);
+    strnzcpy(p1->mpText, lbl_80362A84.mName1, p1->mLength + 1);
+    strnzcpy(p2->mpText, lbl_80362A84.mName2, p2->mLength + 1);
     *pResult = lbl_803EB550;
 }
 
@@ -629,9 +626,9 @@ void fn_80181F60(int a, int *pValues, int *pResult, MenuArg_t text0, MenuArg_t t
                         lbl_80362A84.mUnknown68 % 12);
             fn_801C2D88(p2->mpText, p2->mLength + 1, "%d lbs", lbl_80362A84.mUnknown72);
         } else {
-            fn_801C3284(p0->mpText, "", p0->mLength + 1);
-            fn_801C3284(p1->mpText, "", p1->mLength + 1);
-            fn_801C3284(p2->mpText, "", p2->mLength + 1);
+            strnzcpy(p0->mpText, "", p0->mLength + 1);
+            strnzcpy(p1->mpText, "", p1->mLength + 1);
+            strnzcpy(p2->mpText, "", p2->mLength + 1);
         }
         *pResult = 1;
     }
@@ -656,7 +653,7 @@ void fn_801820A0(int a, int *p1, int *p2, int *p3, MenuArg_t text, int *p5, int 
     }
     *p5 = 0;
     *p6 = 0;
-    fn_801C3284(p4->mpText, entry.mName, p4->mLength + 1);
+    strnzcpy(p4->mpText, entry.mName, p4->mLength + 1);
 }
 
 void fn_80182170(int a, int *pB, int *pC)
@@ -802,7 +799,7 @@ void fn_8018275C(int *pCount, MenuArg_t *pList)
 
     *pCount = 0;
     for (i = 0; i < 10; i++) {
-        fn_801C3284(pList[i].pParams->mpText, "", pList[i].pParams->mLength);
+        strnzcpy(pList[i].pParams->mpText, "", pList[i].pParams->mLength);
     }
     if (CreatePlayerGetPlayerId() != 0x7FFF) {
         PlayerGear_t info;
@@ -821,7 +818,7 @@ void fn_8018275C(int *pCount, MenuArg_t *pList)
             if (fn_8007C690(&query, 0)) {
                 if ((type != 6 || !seen) && *pCount < 10) {
                     fn_8007BE20(&query, buffer, 32);
-                    fn_801C3284(pList[*pCount].pParams->mpText, buffer, pList[*pCount].pParams->mLength);
+                    strnzcpy(pList[*pCount].pParams->mpText, buffer, pList[*pCount].pParams->mLength);
                     (*pCount)++;
                 }
                 if (type == 6) {
@@ -839,9 +836,9 @@ void fn_801828E0(int a, int *pFlag, MenuArg_t text, int *pOut)
 
     *pFlag = lbl_803EB589;
     if (lbl_803EB589) {
-        fn_801C3284(pParams->mpText, lbl_80362B54, pParams->mLength);
+        strnzcpy(pParams->mpText, lbl_80362B54, pParams->mLength);
     } else {
-        fn_801C3284(pParams->mpText, "", pParams->mLength);
+        strnzcpy(pParams->mpText, "", pParams->mLength);
     }
     *pOut = lbl_803EB58B;
 }
@@ -1002,7 +999,7 @@ void MenuListScreen::GetItem(int id, MenuEntry_t *pEntry)
     pEntry->mId = pEntries[i].mId;
     pEntry->mUnknown36 = i;
     pEntry->mUnknown40 = 0;
-    fn_801C3284(pEntry->mName, pEntries[i].mName, 22);
+    strnzcpy(pEntry->mName, pEntries[i].mName, 22);
 }
 
 extern "C" {
@@ -1019,17 +1016,17 @@ Object_8008044C *fn_80182DC8(void)
 
 void fn_80182DD4(const char *pText)
 {
-    fn_801C3284(lbl_80362A84.mName0, pText, 21);
+    strnzcpy(lbl_80362A84.mName0, pText, 21);
 }
 
 void fn_80182E04(const char *pText)
 {
-    fn_801C3284(lbl_80362A84.mName1, pText, 21);
+    strnzcpy(lbl_80362A84.mName1, pText, 21);
 }
 
 void fn_80182E34(char *pText)
 {
-    fn_801C3284(lbl_80362A84.mName2, pText, 21);
+    strnzcpy(lbl_80362A84.mName2, pText, 21);
 }
 
 void fn_80182E64(int a)
@@ -1111,10 +1108,10 @@ void fn_80183034(const char *pText)
     static Params_80005284 sText;
 
     if (pText) {
-        if (fn_801C302C(pText, lbl_802EAA24, 28)) {
+        if (strncmp(pText, lbl_802EAA24, 28)) {
             MenuArg_t args[2];
 
-            fn_801C2EF0(lbl_802EAA24, pText, 28);
+            strncpy(lbl_802EAA24, pText, 28);
             args[0].i = 1;
             sText.mUnknown0 = 0;
             sText.mLength = 27;
@@ -1125,7 +1122,7 @@ void fn_80183034(const char *pText)
     } else {
         MenuArg_t args[2];
 
-        fn_801C2EF0(lbl_802EAA24, "", 28);
+        strncpy(lbl_802EAA24, "", 28);
         args[0].i = 0;
         sText.mUnknown0 = 0;
         sText.mLength = 27;
@@ -1150,7 +1147,7 @@ void fn_80183130(int a)
 void fn_801831A4(void)
 {
     lbl_803EB589 = 0;
-    fn_801C3284(lbl_80362B54, "", 28);
+    strnzcpy(lbl_80362B54, "", 28);
     fn_80183034(0);
 }
 
@@ -1218,7 +1215,7 @@ void fn_801832B0(char *pText, int size)
     PlayerDbGetFullName(fn_80182DC8(), pText, size);
     limit = fn_80225F88(pFont, 2, 3, "WWWWWWWWWW");
     width = fn_80225F88(pFont, 2, 3, pText);
-    if (fn_801C3180(pText) > 20 || width > limit) {
+    if (strlen(pText) > 20 || width > limit) {
         PlayerDbGetShortName(fn_80182DC8(), pText, size);
     }
 }
@@ -1542,9 +1539,9 @@ int fn_8018399C(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg_t *pResul
     case 0x18F:
         pResult->i = 0;
         if (lbl_803EB548 == 0 || lbl_803EB548 == 3) {
-            fn_801C3284(pArgs[0].pParams->mpText, "Exit and lose changes?", pArgs[0].pParams->mLength);
+            strnzcpy(pArgs[0].pParams->mpText, "Exit and lose changes?", pArgs[0].pParams->mLength);
         } else {
-            fn_801C3284(pArgs[0].pParams->mpText, "", pArgs[0].pParams->mLength);
+            strnzcpy(pArgs[0].pParams->mpText, "", pArgs[0].pParams->mLength);
             pResult->i = 1;
         }
         break;

@@ -6,7 +6,7 @@
  */
 #include "engine/fn_801F8D60.h"
 #include "game/ResOpenDevice.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 #include "engine/dbteams.h"
 #include "engine/fn_8022C938.h"
 #include "engine/fn_801F9134.h"
@@ -21,8 +21,8 @@ static int _DbTeams_iDbId = -1;
 
 int DbTeamsInit(const char *pName)
 {
-    _DbTeams_pFileName = fn_8022C938(fn_801C3180(pName) + 1, 1);
-    fn_801C2EB4(_DbTeams_pFileName, pName);
+    _DbTeams_pFileName = fn_8022C938(strlen(pName) + 1, 1);
+    strcpy(_DbTeams_pFileName, pName);
     return 0;
 }
 

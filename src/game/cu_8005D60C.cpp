@@ -147,8 +147,6 @@ int StoryIsNew(int index);
 void StorySetLkss(int index, int value);
 int SstlGetEntryTag(unsigned int index, char *pEtnr, int size);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-unsigned int fn_801C3180(const char *pText);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int MemFill(void *pDest, int size, int value, int width);
 int fn_801F967C(int handle, int table);
 int fn_801F9980(int handle, int *pTable);
@@ -753,7 +751,7 @@ int fn_8005E980(int dive, int droe, int *pLevel, int *pDone, int *pLocked, int c
     if (StevGetRow(dive, droe, &row)) {
         ites = row.mItes;
         if (pName) {
-            fn_801C2EF0(pName, row.mIuve, size);
+            strncpy(pName, row.mIuve, size);
         }
         *pLevel = ExpLevelGetForPoints(row.mQrxe);
         if (StoryIsEventCompleted(lbl_802D4D40.mIndex, row.mNets)) {
@@ -890,17 +888,17 @@ void fn_8005ECA0(void)
         fn_801C2E18(lbl_8030A1E4, "You have completed %s!", pName);
         completed = 1;
     }
-    length = fn_801C3180(lbl_8030A1E4);
+    length = strlen(lbl_8030A1E4);
     if (completed && (lbl_802D4D40.mUnknown14 || lbl_802D4D40.mUnknown18)) {
         fn_801C2E18(lbl_8030A1E4 + length, "\nYou are rewarded");
-        length = fn_801C3180(lbl_8030A1E4);
+        length = strlen(lbl_8030A1E4);
         if (lbl_802D4D40.mUnknown14) {
             fn_801C2E18(lbl_8030A1E4 + length, "\n%d Dev Points", lbl_802D4D40.mUnknown14);
-            length = fn_801C3180(lbl_8030A1E4);
+            length = strlen(lbl_8030A1E4);
         }
         if (lbl_802D4D40.mUnknown18) {
             fn_801C2E18(lbl_8030A1E4 + length, "\n%d Credits", lbl_802D4D40.mUnknown18);
-            length = fn_801C3180(lbl_8030A1E4);
+            length = strlen(lbl_8030A1E4);
         }
     }
     if (fn_8005EBF0(lbl_803EA5C8->mDive)) {
@@ -909,7 +907,7 @@ void fn_8005ECA0(void)
             EnvSelect(dive);
             EnvGetUIName(hero, 33);
             EnvRelease();
-            length = fn_801C3180(lbl_8030A1E4);
+            length = strlen(lbl_8030A1E4);
         }
     }
 }
@@ -1134,13 +1132,13 @@ void fn_8005F4EC(char *pName, int size)
         *pName = 0;
     }
     buffer[last] = 0;
-    length = fn_801C3180(buffer);
+    length = strlen(buffer);
     buffer[0] = 0;
     if (!StoryPlayerGetFirstName(&cursor, 0, buffer, sizeof(buffer))) {
         *pName = 0;
     } else {
         buffer[last] = 0;
-        unsigned int first = fn_801C3180(buffer);
+        unsigned int first = strlen(buffer);
         length += first + 1;
         if (length < last - 1) {
             buffer[first] = ' ';
@@ -1152,11 +1150,11 @@ void fn_8005F4EC(char *pName, int size)
     if (*pName == 0) {
         StoryPlayerGetShortName(&cursor, 0, pName, last);
         if (*pName == 0) {
-            fn_801C2EF0(pName, "your hero", last);
+            strncpy(pName, "your hero", last);
             goto done;
         }
     }
-    fn_801C2EF0(pName, buffer, last);
+    strncpy(pName, buffer, last);
 done:
     pName[last] = 0;
     StoryPlayerCursorClose(&cursor);
@@ -1229,7 +1227,7 @@ void fn_8005F8B4(Args_8005F8B4 *pArgs)
     int size = pDest->mSize;
 
     *pText = 0;
-    fn_801C2EF0(pText, lbl_8030A1E4, size);
+    strncpy(pText, lbl_8030A1E4, size);
 }
 
 void fn_8005F8F0(void)
@@ -1337,7 +1335,7 @@ int fn_8005F938(unsigned int id, int *pArgs, int unused, int *pResult)
         int found = ExpLevelGetName(lbl_802D4D40.mUnknown1C, pText->mpText, pText->mSize);
         *pResult = lbl_802D4D40.mUnknown1C;
         if (!found) {
-            fn_801C2EF0(pText->mpText, "", pText->mSize);
+            strncpy(pText->mpText, "", pText->mSize);
         }
         break;
     }

@@ -25,7 +25,7 @@ typedef struct FileFontPos_t {
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 #include "engine/llglib.h"
 #include "engine/llmatrix.h"
 #include "engine/viewport.h"
@@ -135,10 +135,10 @@ static int _FileOpenStream(int device, const char *pName, int mode)
         found = 0;
         for (i = 0; error == 0 && i < lbl_803D51A8.mNumFiles && !found; i++) {
             if (!lbl_803EBC24[i].mInUse) {
-                if (!(pCopy = fn_801D2BB0(1, fn_801C3180(pName) + 1, lbl_803EBC34, 0))) {
+                if (!(pCopy = fn_801D2BB0(1, strlen(pName) + 1, lbl_803EBC34, 0))) {
                     error = fn_801F7C88();
                 } else {
-                    fn_801C2EB4(pCopy, pName);
+                    strcpy(pCopy, pName);
                     lbl_803EBC24[i].mInUse = 1;
                     lbl_803EBC24[i].mDevHandle = handle;
                     lbl_803EBC24[i].mAsyncPos = 0;

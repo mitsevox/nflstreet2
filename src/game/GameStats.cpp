@@ -46,7 +46,7 @@ void RecordsSeekRow(int type, int row);
 int RecordsGetValue(int column);
 int RecordsGetText(int type, int row, int column, char *text, int size);
 int fn_800A3444(void);
-int fn_801C31B0(char *first, char *second);
+int stricmp(char *first, char *second);
 int fn_801485D4(void);
 int fn_8022B7A4(int handle, int tag, void *pValue);
 int GameTextGetAwayTeam(void);
@@ -175,7 +175,7 @@ extern "C" void GameStatsCheckRecords(unsigned char *anyExceeded)
                         lbl_802D4B14[i].exceeded = lbl_802D4B14[i].value[lbl_802D4B14[i].side] > current;
                     } else {
                         lbl_802D4B14[i].exceeded = lbl_802D4B14[i].value[lbl_802D4B14[i].side] > current &&
-                                                   (fn_801C31B0(holder, names[lbl_802D4B14[i].side]) || current == other);
+                                                   (stricmp(holder, names[lbl_802D4B14[i].side]) || current == other);
                     }
                 }
                 if (lbl_802D4B14[i].exceeded && i <= 15 && !fn_801485D4())

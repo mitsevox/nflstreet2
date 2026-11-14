@@ -15,7 +15,7 @@
 #include "game/FEPlyrLoad.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C1F94.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/fn_801FCE10.h"
 
 /* Range of one face feature: its values start at mOffset in the
@@ -988,7 +988,7 @@ void CreatePlayerList::GetItem(int index, MenuEntry_t *pEntry)
         pEntry->mUnknown4 = 0;
         pEntry->mUnknown32 = value | 0xA0000;
         fn_801832B0(buffer, 27);
-        fn_801C3284(pEntry->mName, buffer, 22);
+        strnzcpy(pEntry->mName, buffer, 22);
     } else {
         pEntry->mId = index;
         pEntry->mUnknown36 = 0;
@@ -996,7 +996,7 @@ void CreatePlayerList::GetItem(int index, MenuEntry_t *pEntry)
         pEntry->mUnknown32 = 0xC0000;
         if (_CreatePlayerHasContinue()) {
             pEntry->mUnknown4 = 8;
-            fn_801C3284(pEntry->mName, "Continue", 22);
+            strnzcpy(pEntry->mName, "Continue", 22);
         }
     }
     FEPlyrPlayPairAnim();
@@ -1290,16 +1290,16 @@ void CreatePlayerInfoOptionList::GetItem(int index, MenuEntry_t *pOut)
 {
     switch (mUnknown8) {
     case 2:
-        fn_801C3284(pOut->mName, _CreatePlayer_aPositionNames[index], 22);
+        strnzcpy(pOut->mName, _CreatePlayer_aPositionNames[index], 22);
         break;
     case 3:
         fn_801C2D88(pOut->mName, 22, "%02d", index);
         break;
     case 5:
-        fn_801C3284(pOut->mName, _CreatePlayer_aCelebrationNames[index], 22);
+        strnzcpy(pOut->mName, _CreatePlayer_aCelebrationNames[index], 22);
         break;
     case 4:
-        fn_801C3284(pOut->mName, _CreatePlayer_aHandNames[index], 22);
+        strnzcpy(pOut->mName, _CreatePlayer_aHandNames[index], 22);
         break;
     }
 }
@@ -1314,12 +1314,12 @@ void CreatePlayerNameEditor::GetText(int a, int *pResult, MenuArg_t text)
     case 0:
         *pResult = 1;
         PlayerDbGetFirstName(fn_80182DC8(), buffer, 12);
-        fn_801C3284(pParams->mpText, buffer, pParams->mLength + 1);
+        strnzcpy(pParams->mpText, buffer, pParams->mLength + 1);
         break;
     case 1:
         *pResult = 2;
         PlayerDbGetLastName(fn_80182DC8(), buffer2, 15);
-        fn_801C3284(pParams->mpText, buffer2, pParams->mLength + 1);
+        strnzcpy(pParams->mpText, buffer2, pParams->mLength + 1);
         break;
     }
 }
@@ -1334,14 +1334,14 @@ void CreatePlayerNameEditor::SetText(int a, MenuArg_t text)
 
     switch (a) {
     case 0:
-        fn_801C3284(buffer, pParams->mpText, 12);
+        strnzcpy(buffer, pParams->mpText, 12);
         fn_80081E64(fn_80182DC8(), buffer, 12);
         fn_801832B0(label, 27);
         fn_80182E34(label);
         PlayerDbSeekId(fn_80182DC8(), _CreatePlayer_iPlayerId, 0);
         break;
     case 1:
-        fn_801C3284(buffer, pParams->mpText, 15);
+        strnzcpy(buffer, pParams->mpText, 15);
         fn_80081E98(fn_80182DC8(), buffer, 15);
         fn_801832B0(label2, 27);
         fn_80182E34(label2);
@@ -1484,17 +1484,17 @@ void CreatePlayerHairOptionList::GetItem(int index, MenuEntry_t *pOut)
         fn_80087938(0x12, &_CreatePlayer_sHairCursor, index, 0);
         pOut->mUnknown40 = fn_800879E8(0x12, &_CreatePlayer_sHairCursor);
         HairListGetName(&_CreatePlayer_sHairCursor, name, 26);
-        fn_801C3284(pOut->mName, name, 22);
+        strnzcpy(pOut->mName, name, 22);
         break;
     case 1:
     case 3:
         DbColPalGetPaletteName(index, name, 21);
-        fn_801C3284(pOut->mName, name, 22);
+        strnzcpy(pOut->mName, name, 22);
         break;
     case 2:
         _CreatePlayer_sFacialHairCursor.MoveToRow(index);
         _CreatePlayer_sFacialHairCursor.GetFchrFhdcText(name, 21);
-        fn_801C3284(pOut->mName, name, 22);
+        strnzcpy(pOut->mName, name, 22);
         break;
     case 4:
         fn_801C2D88(pOut->mName, 22, "EyeBrow %d", index + 1);
@@ -1567,15 +1567,15 @@ void CreatePlayerFaceOptionList::GetItem(int index, MenuEntry_t *pOut)
     char name[32];
 
     if (mUnknown8 == 8) {
-        fn_801C3284(pOut->mName, _CreatePlayer_aExpressionNames[index], 22);
+        strnzcpy(pOut->mName, _CreatePlayer_aExpressionNames[index], 22);
     } else {
         const FaceFeatureRange_t *pRange = _CreatePlayerGetFaceMenu()->GetRange(mUnknown8);
 
         if (mUnknown8 == 0) {
-            fn_801C3284(pOut->mName, _CreatePlayer_aHeadShapeNames[index + pRange->mOffset], 22);
+            strnzcpy(pOut->mName, _CreatePlayer_aHeadShapeNames[index + pRange->mOffset], 22);
         } else {
             mUnknown12->GetItemName(index + pRange->mOffset, (int)name, 31);
-            fn_801C3284(pOut->mName, name, 22);
+            strnzcpy(pOut->mName, name, 22);
         }
     }
 }

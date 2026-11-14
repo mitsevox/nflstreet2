@@ -34,7 +34,7 @@ int fn_801D6B14(int a);
 unsigned int fn_801D85A8(int a);
 int fn_801D4400(int *pA, int *pB);
 int fn_801D46E8(int slot);
-char *fn_801C2EF0(char *pDst, const char *pSrc, int size);
+char *strncpy(char *pDst, const char *pSrc, int size);
 int fn_801F7ABC(void);
 void fn_801F8838(void);
 void FeatClearEAGameSaves(void);
@@ -478,7 +478,7 @@ void MemCardUIGetTitle(TextRecord_t *pRecord)
     char name[32];
 
     fn_801D6B24(name, 32);
-    fn_801C2EF0(pRecord->mUnknown8, name, pRecord->mUnknown4);
+    strncpy(pRecord->mUnknown8, name, pRecord->mUnknown4);
 }
 
 void MemCardUIProbeSlot(int slot)

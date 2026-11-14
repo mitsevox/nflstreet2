@@ -16,7 +16,7 @@ extern void *gUISMainInfo;
 extern const int lbl_802DEB78[];
 
 int fn_800A2178(void);
-char *fn_801C2EB4(char *pDest, const char *pSource);
+char *strcpy(char *pDest, const char *pSource);
 void ClockRuleClearFlags(unsigned int mask);
 void fn_8009D8CC(int index);
 void fn_800AAD58(void *p, float dt);
@@ -32,11 +32,11 @@ int fn_80154050(Class_802A1A58 *p, char *pText)
     if (kind == 0) {
         StyleTrackerOnTouchdown();
         result = 1;
-        fn_801C2EB4(pText, touchdown);
+        strcpy(pText, touchdown);
     } else if (kind == 14) {
         StyleTrackerOnTouchdown();
         result = 1;
-        fn_801C2EB4(pText, defensive);
+        strcpy(pText, defensive);
     }
     return result;
 }

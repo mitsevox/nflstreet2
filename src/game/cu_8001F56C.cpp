@@ -1,6 +1,6 @@
 #include "game/DbCursor.h"
 #include "game/cu_80181330.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/SndgMusic.h"
@@ -141,12 +141,12 @@ void fn_8001F850(int mode, int *pResult, Params_80005284 *pText)
         count = DbCursorGetRowCount(&table);
         *pResult = count;
         EATraxDbClose(&table);
-        fn_801C3284(pText->mpText, "EA TRAX", pText->mLength);
+        strnzcpy(pText->mpText, "EA TRAX", pText->mLength);
     } else if (mode - 1 < 0) {
         *pResult = count;
     } else {
         *pResult = count;
-        fn_801C3284(pText->mpText, " ", pText->mLength);
+        strnzcpy(pText->mpText, " ", pText->mLength);
     }
 }
 

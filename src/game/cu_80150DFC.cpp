@@ -1,4 +1,4 @@
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 #include "game/LivePlayPhase.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
@@ -109,7 +109,7 @@ void RefreshFourPlayerScoreRows(Class_802A1D20 *p)
         if (fn_801530FC()->mEntries[i].mUnknown13 == 0) {
             char score[16];
             char name[20];
-            fn_801C2EF0(name, PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0)->mUnknown2927 + 21, sizeof(name));
+            strncpy(name, PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0)->mUnknown2927 + 21, sizeof(name));
             Entry_8015005C *pEntries = fn_801530FC()->mEntries;
             fn_801C2D88(score, sizeof(score), lbl_802A0DDC,
                         pEntries[i].mUnknown10 + pEntries[i].mUnknown8 * 2);

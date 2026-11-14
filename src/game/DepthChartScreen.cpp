@@ -12,7 +12,7 @@ int fn_80082414(int index);
 int FormationSlotGetInfo(int a, int b, float *pX, float *pY, int *pValue, char *pLabel, int labelSize);
 void fn_80183920(int mode, int value);
 int CreateTeamExists(int a);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
+char *strncpy(char *pDest, const char *pSource, int count);
 int fn_8022F384(int a);
 int fn_8022F4BC(void);
 
@@ -98,9 +98,9 @@ int DepthChartScreenIsSideShown(unsigned char side)
 void DepthChartScreenGetSideName(unsigned char side, int unused, char *pText, int size)
 {
     if (side) {
-        fn_801C2EF0(pText, "Offense", size);
+        strncpy(pText, "Offense", size);
     } else {
-        fn_801C2EF0(pText, "Defense", size);
+        strncpy(pText, "Defense", size);
     }
 }
 

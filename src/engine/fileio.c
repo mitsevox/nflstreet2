@@ -4,7 +4,7 @@
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 
 typedef struct FileWaitResult_801C8F14 {
     int mCount;
@@ -175,28 +175,28 @@ void fn_801C92B8(char *pDst, const char *pPath, const char *pName, int flags)
 
     switch (flags & 0xF) {
     case 1:
-        fn_801C2EB4(prefix, lbl_803D51A8.mPath1);
+        strcpy(prefix, lbl_803D51A8.mPath1);
         break;
     case 4:
-        fn_801C2EB4(prefix, lbl_803D51A8.mPath0);
+        strcpy(prefix, lbl_803D51A8.mPath0);
         break;
     case 3:
-        fn_801C2EB4(prefix, lbl_803D51A8.mPath3);
+        strcpy(prefix, lbl_803D51A8.mPath3);
         break;
     case 8:
-        fn_801C2EB4(prefix, lbl_803D51A8.mPath8);
+        strcpy(prefix, lbl_803D51A8.mPath8);
         break;
     default:
-        fn_801C2EB4(prefix, lbl_803D51A8.mPath0);
+        strcpy(prefix, lbl_803D51A8.mPath0);
         break;
     }
-    len = fn_801C3180(pPath);
-    len += fn_801C3180(pName);
-    len += fn_801C3180(prefix);
+    len = strlen(pPath);
+    len += strlen(pName);
+    len += strlen(prefix);
     if (len != -1 && pDst) {
-        fn_801C2EB4(pDst, prefix);
-        fn_801C2F2C(pDst, pPath);
-        fn_801C2F2C(pDst, pName);
+        strcpy(pDst, prefix);
+        strcat(pDst, pPath);
+        strcat(pDst, pName);
     }
 }
 

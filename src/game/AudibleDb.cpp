@@ -10,7 +10,7 @@
 extern "C" {
 int DbCursorGetValue(DbCursor *pObject, int key);
 int PlayCallGetPlaybookId(int a);
-int fn_801C302C(const char *s1, const char *s2, int n);
+int strncmp(const char *s1, const char *s2, int n);
 
 void AudibleDbOpen(DbCursor *pCursor);
 void AudibleDbClose(DbCursor *pCursor);
@@ -87,7 +87,7 @@ unsigned char AudibleDbGetPlayIndex(DbCursor *pCursor, int column)
         count = PlayBookDbCountPlays(tag, handle);
         for (i = 0; i < count; i++) {
             PlayBookDbLoadPlay(tag, handle, i, &record);
-            if (fn_801C302C(record.mUnknown1F0, text, 2) == 0) {
+            if (strncmp(record.mUnknown1F0, text, 2) == 0) {
                 break;
             }
         }

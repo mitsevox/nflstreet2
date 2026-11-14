@@ -20,7 +20,7 @@ LevelSurface_t *LevelMeshFindArea(float *pPos, int value);
 int fn_801784C4(void);
 void *fn_801D2BB0(int a, int size, int c, int d);
 int fn_801CFE40(float y, float x);
-unsigned int fn_801C3180(const char *pText);
+unsigned int strlen(const char *pText);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 
@@ -178,13 +178,13 @@ void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons)
 {
     _MsgBox_aText[0].mUnknown0 = 0;
     _MsgBox_aText[0].mpUnknown8 = pTitle;
-    _MsgBox_aText[0].mUnknown4 = fn_801C3180(pTitle) + 1;
+    _MsgBox_aText[0].mUnknown4 = strlen(pTitle) + 1;
     _MsgBox_aText[1].mUnknown0 = 0;
     _MsgBox_aText[1].mpUnknown8 = pText;
-    _MsgBox_aText[1].mUnknown4 = fn_801C3180(pText) + 1;
+    _MsgBox_aText[1].mUnknown4 = strlen(pText) + 1;
     _MsgBox_aText[2].mUnknown0 = 0;
     _MsgBox_aText[2].mpUnknown8 = pButtons;
-    _MsgBox_aText[2].mUnknown4 = fn_801C3180(pButtons) + 1;
+    _MsgBox_aText[2].mUnknown4 = strlen(pButtons) + 1;
     _MsgBox_apText[0] = &_MsgBox_aText[0];
     _MsgBox_apText[1] = &_MsgBox_aText[1];
     _MsgBox_apText[2] = &_MsgBox_aText[2];

@@ -1,7 +1,7 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/Memory.h"
 #include "engine/llmemory.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "engine/fn_801F8014.h"
 
 typedef struct MemRange_801D134C {
@@ -56,7 +56,6 @@ extern const char lbl_802AF628[];
 
 extern void *memset(void *pDst, int value, unsigned int size);
 extern void *memcpy();
-extern char *strcpy(char *pDst, const char *pSrc);
 extern int sprintf(char *pDst, const char *pFormat, ...);
 
 extern void *fn_801D28A8(int a, int size, int ident, int flags);
@@ -916,6 +915,6 @@ void fn_801D3470(void *pAddr, char *pOut, int size)
         pDebug = 0;
     }
     if (pDebug != 0) {
-        fn_801C3284(pOut, pDebug + 0x3C, size);
+        strnzcpy(pOut, pDebug + 0x3C, size);
     }
 }

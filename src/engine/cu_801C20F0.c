@@ -1,6 +1,6 @@
 /* The integer, float, scientific, hex and string field writers used by vsnprintf. */
 
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 
 
 static char *fn_801C20F0(unsigned int value, char *pOut, char *pEnd, char pad, int width, int isSigned)
@@ -202,7 +202,7 @@ static char *fn_801C27D0(const char *pString, char *pOut, char *pEnd, int width,
     int length;
 
     width = width < 0 ? -width : width;
-    length = fn_801C3180(pString);
+    length = strlen(pString);
     if (!leftAlign) {
         for (; count < width - length; count++) {
             *pOut++ = ' ';

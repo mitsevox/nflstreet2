@@ -4,7 +4,7 @@
 
 #include "game/DbCursor.h"
 #include "game/cu_80181330.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 
 extern "C" {
 MenuScreen *CreatePlayerGetMenu(void);
@@ -306,16 +306,16 @@ void CreateTeamOptionList::GetItem(int index, MenuEntry_t *pEntry)
 
     switch (mUnknown8) {
     case 6:
-        fn_801C3284(pEntry->mName, _CreateTeam_aLogoColorNames[index], 22);
+        strnzcpy(pEntry->mName, _CreateTeam_aLogoColorNames[index], 22);
         break;
     case 1:
         DbCursorSeek(&_CreateTeam_sLogoCursor, index);
         pEntry->mUnknown40 = LogoIsNew(LogoListGetId(&_CreateTeam_sLogoCursor) - 45);
         LogoListGetName(&_CreateTeam_sLogoCursor, buffer, 21);
-        fn_801C3284(pEntry->mName, buffer, 22);
+        strnzcpy(pEntry->mName, buffer, 22);
         break;
     case 7:
-        fn_801C3284(pEntry->mName, _CreateTeam_aTeamTypeNames[index], 22);
+        strnzcpy(pEntry->mName, _CreateTeam_aTeamTypeNames[index], 22);
         break;
     }
 }
@@ -363,7 +363,7 @@ void CreateTeamEditor::GetText(int a, int *pResult, MenuArg_t text)
 
     if (a == 2) {
         fn_80083F88(fn_80182DBC(), buffer, 18);
-        fn_801C3284(pParams->mpText, buffer, pParams->mLength + 1);
+        strnzcpy(pParams->mpText, buffer, pParams->mLength + 1);
         *pResult = 3;
     }
 }

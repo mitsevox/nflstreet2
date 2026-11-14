@@ -4,7 +4,7 @@
 #include <string.h>
 
 #include "game/TextRecord.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 
 static char _MsgNameEntry_szName[20];
 
@@ -15,7 +15,7 @@ extern "C" void MsgNameEntrySetName(const char *pText)
 
 extern "C" void MsgNameEntryGetName(char *pDest, int length)
 {
-    fn_801C3284(pDest, _MsgNameEntry_szName, length + 1);
+    strnzcpy(pDest, _MsgNameEntry_szName, length + 1);
 }
 
 extern "C" int MsgNameEntryHandleMessage(int id, TextRecord_t **ppRecord, int c, int *pResult)

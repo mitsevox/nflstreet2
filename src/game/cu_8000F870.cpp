@@ -15,7 +15,7 @@
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
 #include "game/fn_801C1F94.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_802372EC.h"
@@ -221,9 +221,6 @@ int GauntletSetCurrentTeam(int a, int b);
 int GauntletGetTeamsLeft(int a);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
-char *fn_801C3084(const char *pString, int c);
-unsigned int fn_801C3180(const char *pText);
 int ConGetChannelInfo(int a, int b);
 int PerPollSingleDevice(int a);
 unsigned int PerGetNumDevices(void);
@@ -624,7 +621,7 @@ int fn_8000FE60(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
         *pResult = 0;
         break;
     case 0x80000000:
-        fn_801C2EF0(pArgs[0].pParams->mpText, "", pArgs[0].pParams->mLength);
+        strncpy(pArgs[0].pParams->mpText, "", pArgs[0].pParams->mLength);
         break;
     case 0x8000000F:
         FELoopCheckDemoLaunch(0);
@@ -1210,7 +1207,7 @@ void fn_80010E68(int index, int dir, MenuArg_t arg)
         if (lbl_803EB96C[index] <= 1) {
             UserRecGetName(lbl_803ECE48.mIndex[lbl_803EB96C[index]], pParams->mpText);
         } else {
-            fn_801C2EF0(pParams->mpText, lbl_802F41BC[lbl_803EB96C[index] - 3], pParams->mLength);
+            strncpy(pParams->mpText, lbl_802F41BC[lbl_803EB96C[index] - 3], pParams->mLength);
         }
         break;
     }
@@ -1265,7 +1262,7 @@ void fn_80010E68(int index, int dir, MenuArg_t arg)
         if (lbl_803EB96C[index] == 2) {
             fn_80187A78(index, pParams->mpText, pParams->mLength);
         } else {
-            fn_801C2EF0(pParams->mpText, lbl_802F41BC[lbl_803EB96C[index] - 3], pParams->mLength);
+            strncpy(pParams->mpText, lbl_802F41BC[lbl_803EB96C[index] - 3], pParams->mLength);
         }
         break;
     default:
@@ -1781,8 +1778,8 @@ void fn_80012310(int side, int direction, int *pId, char *pName, int nameSize, i
     } else {
         *pId = -1;
         *pFlag = 0;
-        fn_801C3284(pName, "Auto Pick Players", nameSize);
-        fn_801C3284(pRole, "", roleSize);
+        strnzcpy(pName, "Auto Pick Players", nameSize);
+        strnzcpy(pRole, "", roleSize);
         pPosition[0] = -1;
         pPosition[1] = -1;
         for (int i = 0; i < 10; i++) {
@@ -2972,7 +2969,7 @@ void fn_800150FC(int team, int index, char *pBuffer, int size)
         DbCursorSeek((DbCursor *)&lbl_8036AE08[side], index);
         fn_800127E4(side, pBuffer, size, 1);
     } else {
-        fn_801C3284(pBuffer, " ", size + 1);
+        strnzcpy(pBuffer, " ", size + 1);
     }
 }
 
@@ -3128,19 +3125,19 @@ void fn_800156B4(int index, char *pName, int nameSize, char *pTeam, int teamSize
         } else {
             *pFlag = lbl_802F43D8[index];
         }
-        fn_801C3284(lbl_803EB9DC[index].mText0, pName, sizeof(lbl_803EB9DC[index].mText0));
-        fn_801C3284(lbl_803EB9DC[index].mText21, pTeam, sizeof(lbl_803EB9DC[index].mText21));
+        strnzcpy(lbl_803EB9DC[index].mText0, pName, sizeof(lbl_803EB9DC[index].mText0));
+        strnzcpy(lbl_803EB9DC[index].mText21, pTeam, sizeof(lbl_803EB9DC[index].mText21));
         *pValue = lbl_803EB9DC[index].mUnknownA8;
-        fn_801C3284(lbl_803EB9DC[index].mText42, pText, sizeof(lbl_803EB9DC[index].mText42));
+        strnzcpy(lbl_803EB9DC[index].mText42, pText, sizeof(lbl_803EB9DC[index].mText42));
         lbl_803EB9DC[index].mUnknownB4 = *pFlag;
         *pA = lbl_803EB9DC[index].mUnknownAC;
         *pB = lbl_803EB9DC[index].mUnknownB0;
         lbl_803EB9DC[index].mValid = 1;
     } else {
-        fn_801C3284(pName, lbl_803EB9DC[index].mText0, nameSize + 1);
-        fn_801C3284(pTeam, lbl_803EB9DC[index].mText21, teamSize + 1);
+        strnzcpy(pName, lbl_803EB9DC[index].mText0, nameSize + 1);
+        strnzcpy(pTeam, lbl_803EB9DC[index].mText21, teamSize + 1);
         *pValue = lbl_803EB9DC[index].mUnknownA8;
-        fn_801C3284(pText, lbl_803EB9DC[index].mText42, textSize + 1);
+        strnzcpy(pText, lbl_803EB9DC[index].mText42, textSize + 1);
         *pFlag = lbl_803EB9DC[index].mUnknownB4;
         *pA = lbl_803EB9DC[index].mUnknownAC;
         *pB = lbl_803EB9DC[index].mUnknownB0;
@@ -3375,7 +3372,7 @@ void fn_80016038(void)
         lbl_803EB9E8->mUnknown34 = 0;
         lbl_803EB9E8->mUnknown38 = 0;
         lbl_803EB9E8->mStreak = 0;
-        fn_801C3284(lbl_803EB9E8->mName, "None", 14);
+        strnzcpy(lbl_803EB9E8->mName, "None", 14);
     }
 }
 
@@ -3406,18 +3403,18 @@ void fn_800162E8(int control, Params_80005284 *pName, int *pUnknown34, int *pUnk
     if (fn_80015F90(control) != lbl_803EB9E7) {
         fn_80016038();
     }
-    fn_801C3284(pName->mpText, lbl_803EB9E8->mName, pName->mLength);
+    strnzcpy(pName->mpText, lbl_803EB9E8->mName, pName->mLength);
     *pUnknown34 = lbl_803EB9E8->mUnknown34;
     *pUnknown38 = lbl_803EB9E8->mUnknown38;
     int streak = lbl_803EB9E8->mStreak;
     if (streak >= 0) {
         if (streak == 1) {
-            fn_801C3284(pStreak->mpText, "1 Win", pStreak->mLength);
+            strnzcpy(pStreak->mpText, "1 Win", pStreak->mLength);
         } else {
             fn_801C2E18(pStreak->mpText, "%d Wins", streak);
         }
     } else if (streak == -1) {
-        fn_801C3284(pStreak->mpText, "1 Loss", pStreak->mLength);
+        strnzcpy(pStreak->mpText, "1 Loss", pStreak->mLength);
     } else {
         fn_801C2E18(pStreak->mpText, "%d Losses", -streak);
     }
@@ -3459,7 +3456,7 @@ int fn_8001642C(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
    and replaces curly quotes with plain ones. */
 void fn_800164F0(char *pText)
 {
-    signed char length = fn_801C3180(pText);
+    signed char length = strlen(pText);
     for (signed char i = 0; i < length; i++) {
         switch (pText[i]) {
         case '\x99':
@@ -3692,7 +3689,7 @@ void fn_80016C60(int index, char *pText, int *pUnknown94, int *pFlag)
     DbCursorSeek(lbl_803EBA00, index);
     UnlockListReadItem(lbl_803EBA00, &record);
     fn_801C2E18(pText, record.mName);
-    char *pDot = fn_801C3084(pText, '.');
+    char *pDot = strchr(pText, '.');
     if (pDot) {
         pDot[1] = 0;
     }
@@ -3724,7 +3721,7 @@ void fn_80016D14(int control, char *pText, int size, int *pResult)
         UnlockListClose(lbl_803EBA00);
     }
     UnlockListOpen(lbl_803EBA00, 1, lbl_803EB9FD);
-    fn_801C3284(pText, lbl_802F43E4[lbl_803EB9FD], size);
+    strnzcpy(pText, lbl_802F43E4[lbl_803EB9FD], size);
     *pResult = DbCursorGetRowCount(lbl_803EBA00);
 }
 

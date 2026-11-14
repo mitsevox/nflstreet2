@@ -81,7 +81,7 @@ int MsgGameGetSetupState(void);
 void fn_80186F30(signed char a, int b);
 void fn_8018C48C(int tag);
 int StoryGetLkss(int a);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
+char *strncpy(char *pDest, const char *pSource, int count);
 int fn_8022C8F0(unsigned int low, unsigned int high);
 int fn_8022F358(int index);
 int fn_8022F384(int a);
@@ -135,11 +135,11 @@ void fn_80060948(int id, char *pName, int size)
         return;
     }
     if (fn_80084034(&lbl_8030A314, id, 0) == 0) {
-        fn_801C2EF0(pName, "NFL Draft Team", size);
+        strncpy(pName, "NFL Draft Team", size);
     } else {
         DbCursorGetString(&lbl_8030A314, 0x414E4454, (int)name, sizeof(name));
         name[17] = 0;
-        fn_801C2EF0(pName, name, size);
+        strncpy(pName, name, size);
     }
 }
 

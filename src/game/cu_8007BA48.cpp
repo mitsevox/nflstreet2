@@ -19,7 +19,6 @@ void GearUnlock(int key);
 void GearLock(int key);
 void CreateTeamPlayerCursorOpen(DbCursor *pCursor, int index);
 void CreateTeamPlayerCursorClose(DbCursor *pCursor);
-char *fn_801C3084(const char *pString, int c);
 }
 
 extern "C" {
@@ -127,7 +126,7 @@ void fn_8007BC34(DbCursor *pCursor, Row_8007BC34 *pOut)
     pOut->mUnknown76 = list[32].mValue != 0;
     pOut->mUnknown6C = 0;
 
-    pSpace = fn_801C3084(pOut->mName, ' ');
+    pSpace = strchr(pOut->mName, ' ');
     if (pSpace) {
         *pSpace = 0;
     }

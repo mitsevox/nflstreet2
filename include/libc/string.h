@@ -22,6 +22,12 @@ char *strcat(char *dest, const char *src);
 char *strncat(char *dest, const char *src, size_t n);
 char *strchr(const char *str, int c);
 char *strrchr(const char *str, int c);
+char *strstr(const char *str, const char *find);
+
+int stricmp(const char *s1, const char *s2);
+int strnicmp(const char *s1, const char *s2, size_t n);
+char *strnzcpy(char *dest, const char *src, size_t num);
+char *strupr(char *str);
 
 #ifdef __cplusplus
 }

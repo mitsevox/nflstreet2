@@ -28,7 +28,6 @@ void PlyrModelLodBindSkeleton(ModelLod_802DF190 *pLod, AnimSkeleton_t *pSkeleton
 void fn_801A4690(int a);
 void fn_801A46BC(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-char *fn_801C3084(const char *pString, int c);
 int fn_801C9DC8(int value);
 void fn_801CE910(void);
 int fn_801D3148(int a, void *p);
@@ -1122,7 +1121,7 @@ int fn_8015F5BC(const char *pName)
     char *p;
     int id;
 
-    p = fn_801C3084(pName, ' ');
+    p = strchr(pName, ' ');
     if (p) {
         *p = 0;
     }
@@ -1159,7 +1158,7 @@ void fn_8015F6E8(const char *pName, int style, int shape, int hat, PlayerHeadIds
 
     fn_8015F638(style, shape, hat, &pIds->mUnknown0);
     if (pName) {
-        p = fn_801C3084(pName, ' ');
+        p = strchr(pName, ' ');
         if (p) {
             *p = 0;
         }

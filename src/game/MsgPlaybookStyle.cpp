@@ -2,7 +2,7 @@
    Rush Defense, Pass Offense, Pass Defense, Custom) and shows the chosen name. */
 
 #include "game/cu_80181330.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 
 struct PlaybookStyleArgs_t {
     int mUnknown0;
@@ -41,7 +41,7 @@ char *MsgPlaybookStyleCycle(int action, Params_80005284 **ppParams)
         _MsgPlaybookStyle_iSelection = 0;
         break;
     }
-    return fn_801C3284(pParams->mpText, _MsgPlaybookStyle_pszNames[_MsgPlaybookStyle_iSelection], pParams->mLength);
+    return strnzcpy(pParams->mpText, _MsgPlaybookStyle_pszNames[_MsgPlaybookStyle_iSelection], pParams->mLength);
 }
 
 int MsgPlaybookStyleHandleMessage(unsigned int id, PlaybookStyleArgs_t *pArgs)

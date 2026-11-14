@@ -141,8 +141,8 @@ void DivotRenderOnRefresh(Divot *p);
 void DivotRenderOnDraw(Divot *p);
 void DivotRenderBeginType(int type);
 void DivotRenderEndType(int type);
-char *fn_801C3084(const char *pString, int c);
-int fn_801C3214(const char *pA, const char *pB, int n);
+char *strchr(const char *pString, int c);
+int strnicmp(const char *pA, const char *pB, int n);
 int atoi(const char *pString);
 void fn_801CE910(void);
 void fn_801D0470(int a);
@@ -1105,7 +1105,7 @@ unsigned char PlaDynClutFindColorName(void *pNode)
 
     if (fn_80216F3C(pNode, "colorname", name, 15, 0) > 0) {
         for (int i = 0; i < 25; i++) {
-            if (fn_801C3214(name, _PlaDynClut_aszColorNames[i], 15) == 0) {
+            if (strnicmp(name, _PlaDynClut_aszColorNames[i], 15) == 0) {
                 color = i;
                 break;
             }
@@ -1121,7 +1121,7 @@ unsigned char PlaDynClutFindLevelName(void *pNode)
 
     if (fn_80216F3C(pNode, "levelname", name, 15, 0) > 0) {
         for (int i = 0; i < 4; i++) {
-            if (fn_801C3214(name, _PlaDynClut_aszLevelNames[i], 15) == 0) {
+            if (strnicmp(name, _PlaDynClut_aszLevelNames[i], 15) == 0) {
                 level = i;
                 break;
             }
@@ -1145,7 +1145,7 @@ void PlaDynClutParseEntry(void *pNode, ColorEntry *pEntry)
         pEntry->mLevel = PlaDynClutFindLevelName(pNode);
     }
     fn_80216F3C(pNode, "range", text, 15, 0);
-    if ((pTo = fn_801C3084(text, '-')) != 0) {
+    if ((pTo = strchr(text, '-')) != 0) {
         *pTo = 0;
         pTo++;
     } else {
@@ -1154,30 +1154,30 @@ void PlaDynClutParseEntry(void *pNode, ColorEntry *pEntry)
     pEntry->mFrom = atoi(text);
     pEntry->mTo = atoi(pTo);
     fn_80216F3C(pNode, "type", text, 15, 0);
-    if (fn_801C3214(text, "set", 15) == 0) {
+    if (strnicmp(text, "set", 15) == 0) {
         if (pEntry->mColor == 0xFF) {
             pEntry->mColor = fn_80217070(pNode, "palindex", 0xFF);
             pEntry->mMode = 1;
         } else {
             pEntry->mMode = 0;
         }
-    } else if (fn_801C3214(text, "blendfrom", 15) == 0) {
+    } else if (strnicmp(text, "blendfrom", 15) == 0) {
         if (pEntry->mColor == 0xFF) {
             pEntry->mColor = fn_80217070(pNode, "palindex", 0xFF);
             pEntry->mMode = 5;
         } else {
             pEntry->mMode = 3;
         }
-    } else if (fn_801C3214(text, "blendto", 15) == 0) {
+    } else if (strnicmp(text, "blendto", 15) == 0) {
         if (pEntry->mColor == 0xFF) {
             pEntry->mColor = fn_80217070(pNode, "palindex", 0xFF);
             pEntry->mMode = 6;
         } else {
             pEntry->mMode = 4;
         }
-    } else if (fn_801C3214(text, "blend", 15) == 0) {
+    } else if (strnicmp(text, "blend", 15) == 0) {
         pEntry->mMode = 2;
-    } else if (fn_801C3214(text, "mult", 15) == 0) {
+    } else if (strnicmp(text, "mult", 15) == 0) {
         pEntry->mMode = 7;
     }
     if (pEntry->mFrom > pEntry->mTo) {

@@ -8,7 +8,7 @@
 #include "game/Row_8007BC34.h"
 #include "game/FEPlyrLoad.h"
 #include "game/cu_80181330.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 
 /* One selectable gear row of the current category, built by _GearBuildItemList. */
 struct GearItem_t {
@@ -83,7 +83,6 @@ int fn_80183948(void);
 int fn_80183950(void);
 int fn_80183968(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-int fn_801C302C(const char *s1, const char *s2, int n);
 int fn_8022F384(int a);
 int fn_8022F4BC(void);
 }
@@ -608,7 +607,7 @@ static int _GearGetHatKind(unsigned char *pFlag, unsigned char *pSkullcap)
         *pFlag = row.mUnknown76;
     }
     if (pSkullcap) {
-        if (fn_801C302C(row.mName, "SKULLCAP_BLACK_L", 16) == 0 || fn_801C302C(row.mName, "SKULLCAP_WHITE_L", 16) == 0) {
+        if (strncmp(row.mName, "SKULLCAP_BLACK_L", 16) == 0 || strncmp(row.mName, "SKULLCAP_WHITE_L", 16) == 0) {
             *pSkullcap = 1;
         } else {
             *pSkullcap = 0;
@@ -895,14 +894,14 @@ void GearPlayerList::GetItem(int index, MenuEntry_t *pOut)
         pOut->mUnknown4 = 0;
         pOut->mUnknown32 = value | 0xA0000;
         fn_801832B0(buffer, 27);
-        fn_801C3284(pOut->mName, buffer, 22);
+        strnzcpy(pOut->mName, buffer, 22);
     } else {
         pOut->mUnknown36 = DbCursorGetRowCount((DbCursor *)fn_80182DC8());
         pOut->mId = index;
         pOut->mUnknown30 = 1;
         pOut->mUnknown4 = 4;
         pOut->mUnknown32 = 0xC0034;
-        fn_801C3284(pOut->mName, "Undo Changes", 22);
+        strnzcpy(pOut->mName, "Undo Changes", 22);
     }
 }
 
@@ -1355,7 +1354,7 @@ void GearItemList::GetItem(int index, MenuEntry_t *pOut)
     if (side != -1) {
         fn_801C2D88(pOut->mName, 22, "%s-%s", _Gear_aSideNames[side], name);
     } else {
-        fn_801C3284(pOut->mName, name, 22);
+        strnzcpy(pOut->mName, name, 22);
     }
 }
 
@@ -1451,7 +1450,7 @@ void GearDecalTeamList::GetItem(int index, MenuEntry_t *pOut)
 
     DbCursorSeek(&_Gear_sTeamCursor, index);
     fn_80083F88(&_Gear_sTeamCursor, name, 18);
-    fn_801C3284(pOut->mName, name, 22);
+    strnzcpy(pOut->mName, name, 22);
 }
 
 static int _GearDecalOptionCount()
@@ -1554,12 +1553,12 @@ void GearHeadwearOptionList::GetItem(int index, MenuEntry_t *pOut)
     switch (mUnknown8) {
     case 1:
         if (_GearHatStyleCount()) {
-            fn_801C3284(pOut->mName, _Gear_aHatStyleNames[_GearHatStyleAt(index)], 22);
+            strnzcpy(pOut->mName, _Gear_aHatStyleNames[_GearHatStyleAt(index)], 22);
         }
         break;
     case 2:
         if (index < _GearDecalOptionCount()) {
-            fn_801C3284(pOut->mName, _Gear_aDecalOptionNames[_GearDecalOptionAt(index)], 22);
+            strnzcpy(pOut->mName, _Gear_aDecalOptionNames[_GearDecalOptionAt(index)], 22);
         } else {
             int id = DecalGetIdAt(fn_80183354(), index - _GearDecalOptionCount());
 
@@ -1667,7 +1666,7 @@ void GearShirtDecalList::GetItem(int index, MenuEntry_t *pOut)
     switch (mUnknown8) {
     case 1:
         if (index < _GearDecalOptionCount()) {
-            fn_801C3284(pOut->mName, _Gear_aDecalOptionNames[_GearDecalOptionAt(index)], 22);
+            strnzcpy(pOut->mName, _Gear_aDecalOptionNames[_GearDecalOptionAt(index)], 22);
         } else {
             int id = DecalGetIdAt(fn_80183354(), index - _GearDecalOptionCount());
 
@@ -1677,7 +1676,7 @@ void GearShirtDecalList::GetItem(int index, MenuEntry_t *pOut)
         break;
     case 2:
         if (index < _GearDecalOptionCount()) {
-            fn_801C3284(pOut->mName, _Gear_aDecalOptionNames[_GearDecalOptionAt(index)], 22);
+            strnzcpy(pOut->mName, _Gear_aDecalOptionNames[_GearDecalOptionAt(index)], 22);
         } else {
             int id = DecalGetIdAt(fn_80183354(), index - _GearDecalOptionCount());
 

@@ -12,7 +12,6 @@ int fn_8022EF8C(int a, int tag);
 int fn_8022EFBC(int a, int tag);
 int fn_8022F3D4(int a);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-int fn_801C302C(const char *s1, const char *s2, int n);
 int TutorialIsComplete(int id);
 void TutorialMarkComplete(int id);
 }
@@ -202,7 +201,7 @@ unsigned int TutorialGetPlayIndex(int a, int b, int flag)
     fn_801C2E18(key, "%02d", id);
     for (i = 0; i < count; i++) {
         PlayBookDbLoadPlay(tag, handle, i, &record);
-        if (fn_801C302C(record.mUnknown1F0, key, 2) == 0) {
+        if (strncmp(record.mUnknown1F0, key, 2) == 0) {
             break;
         }
     }
@@ -236,7 +235,7 @@ unsigned int TutorialGetOtherPlayIndex(int a, int b, int flag)
     fn_801C2E18(key, "%02d", id);
     for (i = 0; i < count; i++) {
         PlayBookDbLoadPlay(tag, handle, i, &record);
-        if (fn_801C302C(record.mUnknown1F0, key, 2) == 0) {
+        if (strncmp(record.mUnknown1F0, key, 2) == 0) {
             break;
         }
     }

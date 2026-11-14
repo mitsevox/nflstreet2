@@ -11,7 +11,7 @@
 #include "game/MsgGame.h"
 #include "game/GameOptions.h"
 #include "game/GameModeType.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/UISGameMsg.h"
 #include "game/fn_800B65A0.h"
 
@@ -73,8 +73,6 @@ unsigned char MemCardScreenGetFlag(void);
 int UserStringGet(char *pDest, int count);
 void UserStringSet(const char *pSource, int count);
 int TextEntryGetCharSet(int a, char *pText, int length);
-int fn_801C2FE4(char *pText0, char *pText1);
-int fn_801C31B0(char *pText0, char *pText1);
 int ChallengeIsActive(void);
 int ChallengeIsPairingGame(void);
 int GameModeTypeIsSpecial(void);
@@ -413,10 +411,10 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         pResult->i = TextEntryGetCharSet(pArgs[0].i, pArgs[1].pParams->mpText, pArgs[1].pParams->mLength);
         break;
     case 0x109:
-        pResult->i = fn_801C2FE4(pArgs[0].pParams->mpText, pArgs[1].pParams->mpText);
+        pResult->i = strcmp(pArgs[0].pParams->mpText, pArgs[1].pParams->mpText);
         break;
     case 0x12A:
-        pResult->i = fn_801C31B0(pArgs[0].pParams->mpText, pArgs[1].pParams->mpText);
+        pResult->i = stricmp(pArgs[0].pParams->mpText, pArgs[1].pParams->mpText);
         break;
     case 0x104:
         pResult->i = ChallengeIsActive();
@@ -434,9 +432,9 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         fn_80083E1C(&cursor, 0);
         if (fn_80084034(&cursor, pArgs[0].i, 0)) {
             fn_80083F88(&cursor, name, sizeof(name));
-            fn_801C3284(pArgs[1].pParams->mpText, name, pArgs[1].pParams->mLength);
+            strnzcpy(pArgs[1].pParams->mpText, name, pArgs[1].pParams->mLength);
         } else {
-            fn_801C3284(pArgs[1].pParams->mpText, "", pArgs[1].pParams->mLength);
+            strnzcpy(pArgs[1].pParams->mpText, "", pArgs[1].pParams->mLength);
         }
         fn_80083F68(&cursor);
         break;

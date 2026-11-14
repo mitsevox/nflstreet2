@@ -2,7 +2,7 @@
 
 #include "engine/tmlib.h"
 
-extern int fn_801C31B0(const char *pA, const char *pB);
+extern int stricmp(const char *pA, const char *pB);
 
 extern TMTexXformDef_t *lbl_803EBF18;
 
@@ -29,7 +29,7 @@ int TMTexXformFind(const char *pName)
     i = pDef->mNumEntries;
     pEntries = pDef->maEntries;
     while (i-- > 0) {
-        if (fn_801C31B0(pEntries[i].mpName, pName) == 0) {
+        if (stricmp(pEntries[i].mpName, pName) == 0) {
             return i;
         }
     }

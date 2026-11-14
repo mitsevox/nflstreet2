@@ -48,7 +48,7 @@ void ResStreamReleaseAllBuffers(int loader);
 void ResStreamClose(int loader);
 void fn_801C1FBC(void *pDest, void *pSrc, unsigned int size);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-char *fn_801C3084(const char *pString, int c);
+char *strchr(const char *pString, int c);
 int fn_801C9DC8(int value);
 void *fn_801D2BB0(int a, int size, int c, int d);
 int ResCopyToBuffer(void *pArchive, int id, void *pDest);
@@ -527,7 +527,7 @@ ModelTexSlot_t *PlaTexCacheGetDescs(int player)
 
 int PlaTexCacheFindTexture(char *pName)
 {
-    char *pSpace = fn_801C3084(pName, ' ');
+    char *pSpace = strchr(pName, ' ');
 
     if (pSpace) {
         *pSpace = 0;

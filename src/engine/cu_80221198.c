@@ -9,7 +9,7 @@
 #include <dolphin/gx/GXTransform.h>
 #include <dolphin/os/OSCache.h>
 #include "engine/MovieRcmpInfo.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 #include "engine/Font.h"
 #include "engine/llmatrix.h"
 #include "engine/cu_8021A438.h"
@@ -379,7 +379,7 @@ void fn_80221BF0(Text_80221BF0 *pText, Int32 Offset, Int32 *pA, Int32 *pB)
     if (pText->Flags & 0x8000) {
         fn_80221DB0(pText);
     }
-    Length = fn_801C3180(pText->pBuffer->pText);
+    Length = strlen(pText->pBuffer->pText);
     if (Offset >= Length && Offset != 0) {
         Offset = Length - 1;
     }
@@ -445,7 +445,7 @@ void fn_80221DB0(Text_80221BF0 *pText)
         pText->unk_14 = 0;
     }
     pString = pText->pBuffer->pText;
-    Length = fn_801C3180(pString);
+    Length = strlen(pString);
     for (Pos = 0; Pos <= Length; Pos++) {
         c = pString[Pos];
         if (pLine == NULL) {
@@ -586,7 +586,7 @@ void fn_80222E54(Buffer_80222E54 *pDst, Buffer_80222E54 *pSrc)
     Uint32 Size = pDst->Size;
     Uint32 Length;
 
-    if (Size + 1 < (Length = fn_801C3180(pText) + 1)) {
+    if (Size + 1 < (Length = strlen(pText) + 1)) {
         memcpy(pDstText, pText, Size);
     } else {
         memcpy(pDstText, pText, Length);
