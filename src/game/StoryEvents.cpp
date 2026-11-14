@@ -1,3 +1,9 @@
+/* Story-mode events: lists the story's events with their completion flags,
+   sets up the chosen event's teams and street-event settings, records the
+   completed event and builds its reward text ("You have completed %s!",
+   points and credits), and handles the event screen's messages. Also builds
+   the stat table of the event's players and sets the story progress that
+   the cheats ask for. */
 #include <string.h>
 
 #include "game/DbCursor.h"

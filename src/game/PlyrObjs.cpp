@@ -1,3 +1,8 @@
+/* Player objects: creates the on-field player objects from the player and
+   gear tables and loads their skeletons and bone tables, keeps the player
+   list and its counts, writes and reads the list in the save-state bit
+   stream, finds players by index, side or distance, and projects each
+   player's drop shadow onto the level ground every frame. */
 #include "game/fn_8022781C.h"
 #include "game/FaceFeatures.h"
 #include "game/PlayerObjInit.h"

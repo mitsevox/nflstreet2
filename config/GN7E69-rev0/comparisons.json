@@ -1933,9 +1933,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8005D60C.cpp",
+      "source": "src/game/StoryEvents.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8005D60C-0x80060948 (src/game/cu_8005D60C.cpp), its 69 exact function extents, the exact data rows 0x8028ED08-0x8028F4C8, 0x802D4D40-0x802D4E28 and 0x803EA5B8-0x803EA5E8, the .ctors/.dtors words 0x80289A8C/0x80289BCC, the .bss and .sbss rows and its source-form rows. Wholly unlinked draft source: the original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x8005D60C-0x80060948 (src/game/StoryEvents.cpp), its 69 exact function extents, the exact data rows 0x8028ED08-0x8028F4C8, 0x802D4D40-0x802D4E28 and 0x803EA5B8-0x803EA5E8, the .ctors/.dtors words 0x80289A8C/0x80289BCC, the .bss and .sbss rows and its source-form rows. Wholly unlinked draft source: the original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -11634,9 +11634,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8003BA10.cpp",
+      "source": "src/game/PlyrObjs.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8003BA00-0x8003E214 (src/game/cu_8003BA10.cpp), projected geometry and resource group rows; original assembly linked.",
+      "evidence": "evidence.tsv unit row 0x8003BA00-0x8003E214 (src/game/PlyrObjs.cpp), projected geometry and resource group rows; original assembly linked.",
       "sections": [
         {
           "section": ".text",
