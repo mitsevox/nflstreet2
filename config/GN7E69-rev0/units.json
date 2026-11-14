@@ -17350,6 +17350,35 @@
           "end": "0x80362F64"
         }
       ]
+    },
+    {
+      "source": "src/dolphin/os/__ppc_eabi_init.c",
+      "profile": "dolphin_release",
+      "evidence": "sdk.json unit src/dolphin/os/__ppc_eabi_init.c and its evidence.tsv unit, function, name and source-form rows; all six functions exact (__init_hardware in .init, the C runtime glue in .text), promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "__init_hardware",
+          "__init_user",
+          "abort",
+          "exit",
+          "_ExitProcess"
+        ],
+        "evidence": "The target keeps this file's 6 exact functions at the placed ranges: the five global ones are the roots (__start calls __init_hardware at 0x80003120 and __init_user at 0x800031E8 and branches to exit at 0x80003250; 0x8025FB04 calls abort), and the file-local __init_cpp stays through __init_user. The file-local __fini_cpp has no code of its own in the target: exit inlines its loop (0x8023E8AC-0x8023E900), so the linker drops the out-of-line copy as the original link did."
+      },
+      "sections": [
+        {
+          "section": ".init",
+          "placement": ".init",
+          "start": "0x80003468",
+          "end": "0x8000348C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023E818",
+          "end": "0x8023E920"
+        }
+      ]
     }
   ]
 }

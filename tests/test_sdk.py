@@ -188,6 +188,26 @@ class LinkerRetention(unittest.TestCase):
             sections, symbols = source_build.retained_layout(unit, self.compiler, self.wrapper)
             self.assertEqual([s["name"] for s in symbols if s["type"] == 2], ["Keep"])
 
+    def test_init_code_is_kept_beside_text(self):
+        # __ppc_eabi_init.c puts __init_hardware in .init and must still drop a dead static.
+        with tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
+            root = Path(temporary)
+            unit = self.fixture(root)
+            source = root / "retention.c"
+            source.write_text(source.read_text() +
+                              "void Start(void);\n"
+                              "__declspec(section \".init\") asm void Start(void)\n"
+                              "{\n    nofralloc\n    blr\n}\n")
+            sdk_cc.compile(self.sdk, self.wrapper, source, unit["object"],
+                           unit["object"].with_suffix(".d"), FLAGS, [], ROOT)
+            unit["link_roots"]["symbols"] = ["Keep", "Start"]
+            before = unit["object"].read_bytes()
+            sections, symbols = source_build.retained_layout(unit, self.compiler, self.wrapper)
+            self.assertEqual(unit["object"].read_bytes(), before)
+            self.assertEqual({s["name"]: s["size"] for s in sections}, {".text": 8, ".init": 4})
+            self.assertEqual(sorted(s["name"] for s in symbols if s["type"] == 2), ["Keep", "Start"])
+            self.assertNotIn("Missing", [s["name"] for s in symbols])
+
     def test_absent_roots_are_rejected(self):
         with tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
             root = Path(temporary)

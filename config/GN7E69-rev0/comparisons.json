@@ -19855,57 +19855,6 @@
       ]
     },
     {
-      "source": "src/dolphin/os/__ppc_eabi_init.c",
-      "profile": "dolphin_release",
-      "evidence": "sdk.json unit src/dolphin/os/__ppc_eabi_init.c and its evidence.tsv unit, function, name and source-form rows. All six functions are exact (__init_hardware in .init, the C runtime glue in .text); comparison-only because the linked build's retained-layout step does not take a .init section in a file whose dead static __fini_cpp must be dropped, so the original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".init",
-          "placement": ".init",
-          "start": "0x80003468",
-          "end": "0x8000348C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8023E818",
-          "end": "0x8023E920"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__init_hardware",
-          "start": "0x80003468",
-          "end": "0x8000348C"
-        },
-        {
-          "symbol": "__init_user",
-          "start": "0x8023E818",
-          "end": "0x8023E838"
-        },
-        {
-          "symbol": "_ExitProcess",
-          "start": "0x8023E900",
-          "end": "0x8023E920"
-        },
-        {
-          "symbol": "__init_cpp",
-          "start": "0x8023E838",
-          "end": "0x8023E88C"
-        },
-        {
-          "symbol": "abort",
-          "start": "0x8023E88C",
-          "end": "0x8023E8AC"
-        },
-        {
-          "symbol": "exit",
-          "start": "0x8023E8AC",
-          "end": "0x8023E900"
-        }
-      ]
-    },
-    {
       "source": "src/dolphin/vmbase/VMBase.c",
       "profile": "dolphin_release",
       "evidence": "Six existing complete C helpers retain their exact comparisons; fifteen additional complete donor-guided C bodies from MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c remain measured partials under the unchanged dolphin_release profile. Target reverse-table arena increment is0x4000. Native20-byte .sbss consists of four established pointer cells16 bytes plus the accessed32-bit initialization guard4 bytes; original declaration order is not uniquely established. NOBITS allocation gives no initialized-data or linked credit. Four original-provider helpers remain external and receive no source credit; original instructions remain linked for all comparison-only bodies.",
