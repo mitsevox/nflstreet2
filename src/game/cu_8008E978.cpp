@@ -5066,7 +5066,7 @@ extern "C" int fn_8009B718(void *p)
 
 extern "C" void fn_8009B720(void *pData)
 {
-    Block_8009B720 *pBlock;
+    Block_8009B720 *pBlock = 0;
     unsigned int i;
 
     lbl_803EA98C = 0;
@@ -17173,8 +17173,7 @@ extern "C" void fn_800C3130(Item_800C2F94 *pItem, short a, unsigned short b, int
 {
     lbl_8030FF40[index][lbl_802D9E90[index]].mpUnknown0 = pItem;
     lbl_8030FF40[index][lbl_802D9E90[index]].mUnknown4 = a;
-    lbl_8030FF40[index][lbl_802D9E90[index]].mUnknown6 = b;
-    lbl_802D9E90[index]++;
+    lbl_8030FF40[index][lbl_802D9E90[index]++].mUnknown6 = b;
 }
 
 extern "C" void fn_800C3170(void)
