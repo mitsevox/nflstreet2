@@ -33291,15 +33291,15 @@
       ]
     },
     {
-      "source": "src/engine/cu_801B1CFC.cpp",
+      "source": "src/engine/spchrule.c",
       "profile": "speech_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x801B1CFC-0x801B2AD4 (src/engine/cu_801B1CFC.cpp), the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
+      "evidence": "evidence.tsv provisional unit row 0x801B1CFC-0x801B23A0 (src/engine/spchrule.c), the speech_cxx compiler row and the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through external labels.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B1CFC",
-          "end": "0x801B2AD4"
+          "end": "0x801B23A0"
         }
       ],
       "functions": [
@@ -33362,7 +33362,22 @@
           "symbol": "fn_801B22E0",
           "start": "0x801B22E0",
           "end": "0x801B2368"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/spchbank.c",
+      "profile": "speech_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x801B23A0-0x801B2AD4 (src/engine/spchbank.c), the speech_cxx compiler row and the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B23A0",
+          "end": "0x801B2AD4"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801B23A0",
           "start": "0x801B23A0",

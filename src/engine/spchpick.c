@@ -38,7 +38,9 @@ char *fn_801AF80C(RowBank_801AFE90 *p)
 
 Entry_801AF84C *fn_801AF84C(Record_801AF75C *p, int i)
 {
-    return p->mEntries + i;
+    // FAKEMATCH: the base-pointer local keeps the target's add order (base + 8 first)
+    Entry_801AF84C *entries = p->mEntries;
+    return entries + i;
 }
 
 int fn_801AF85C(unsigned char *p)
