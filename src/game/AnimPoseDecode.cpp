@@ -21,6 +21,7 @@ extern "C" void AnimDecodePoseMirrored(AnimPose_t *pose, AnimBlendEntry *entry, 
     int special = entry->mUnknown8 & 4;
     short *samples;
     if (context) {
+        // FAKEMATCH: block-local alias of frame, only for the target register and frame layout
         AnimFrameHeader *pHeader = &frame;
         samples = pose->mUnknown48;
         short *encodedSamples = AnimReadFrameHeader(pHeader, entry->mpUnknown40);
@@ -130,6 +131,7 @@ extern "C" void AnimDecodePose(AnimPose_t *pose, AnimBlendEntry *entry, float sc
         samples = AnimReadFrameHeader(&frame, entry->mpUnknown40);
     }
     unsigned int count = frame.count;
+    // FAKEMATCH: alias of frame set after the count read, only for the target register layout
     AnimFrameHeader *pFrame = &frame;
     if (count > 64)
         count = 64;

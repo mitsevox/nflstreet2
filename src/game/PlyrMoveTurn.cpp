@@ -36,6 +36,7 @@ void PlyrMoveTurnLimited(Object_80039F5C *p)
     int limit;
 
     if (pMotion->mUnknown36 != 0.0f && pMotion->mUnknown28 <= pMotion->mUnknown36) {
+        // FAKEMATCH: repeated test; its else arms are unreachable, but the target emits them
         if (pMotion->mUnknown36 != 0.0f) {
             limit = _PlyrMoveTurnScaledLimit(p, 1.0f - pMotion->mUnknown28 / pMotion->mUnknown36 * 0.5f);
         } else if (p->mIdBytes[3] == 1) {
@@ -80,6 +81,7 @@ void PlyrMoveTurnLimited(Object_80039F5C *p)
                                   ? p->mUnknown512.mUnknown0 : pControl->mUnknown0;
     } else {
         pControl->mUnknown0 -= step;
+        // FAKEMATCH: same field as pControl->mUnknown0, spelled through p to force the reload
         pControl->mUnknown0 = p->mUnknown528.mUnknown0 < p->mUnknown512.mUnknown0
                                   ? p->mUnknown512.mUnknown0 : p->mUnknown528.mUnknown0;
     }
@@ -137,6 +139,7 @@ void PlyrMoveTurnWithAnim(Object_80039F5C *p)
                                   ? p->mUnknown512.mUnknown0 : pControl->mUnknown0;
     } else {
         pControl->mUnknown0 -= step;
+        // FAKEMATCH: same field as pControl->mUnknown0, spelled through p to force the reload
         pControl->mUnknown0 = p->mUnknown528.mUnknown0 < p->mUnknown512.mUnknown0
                                   ? p->mUnknown512.mUnknown0 : p->mUnknown528.mUnknown0;
     }

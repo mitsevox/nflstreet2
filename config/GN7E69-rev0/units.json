@@ -2157,18 +2157,6 @@
       "address": "0x801CC054",
       "evidence": "evidence.tsv external row for 0x801CC054 (SetVerboseFlags__12FlowManagerCi) and the name row of FlowManagerC::SetVerboseFlags."
     },
-    "g_FsResult": {
-      "address": "0x802CC5C0",
-      "evidence": "evidence.tsv data and name rows for 0x802CC5C0: an uninitialized global of src/engine/FSasync.c. The file declares it extern rather than defining it, because its data row's end edge is provisional and the storage map requires exact edges (storage end rule, config/GN7E69-rev0/README.md). Its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
-    },
-    "g_nFSLastError": {
-      "address": "0x802CC5B8",
-      "evidence": "evidence.tsv data and name rows for 0x802CC5B8: an uninitialized global of src/engine/FSasync.c. The file declares it extern rather than defining it, because its data row's end edge is provisional and the storage map requires exact edges (storage end rule, config/GN7E69-rev0/README.md). Its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
-    },
-    "File_AsyncFileCopy": {
-      "address": "0x803ED630",
-      "evidence": "evidence.tsv data and name rows for 0x803ED630: an uninitialized global of src/engine/fileio.c. The file declares it extern rather than defining it, because its data row's end edge is provisional and the storage map requires exact edges (storage end rule, config/GN7E69-rev0/README.md). Its zero storage in .sbss keeps the original bytes and the linked code reaches it at this address."
-    },
     "madinit__Fv": {
       "address": "0x801DA52C",
       "evidence": "evidence.tsv function/name rows for 0x801DA52C; the documented holdout 0x801DA52C-0x801DA7E8 at the start of src/engine/maddec.cpp, which keeps its original bytes until its draft in comparisons.json is linked; called by 0x801DABE0."
@@ -13062,7 +13050,7 @@
     {
       "source": "src/engine/fileio.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C8F14-0x801C9DD8 (src/engine/fileio.c), its compiler, type, function, name, data and source-form rows; all 28 functions exact, promoted from comparison-only, with the file's .rodata empty string, its .sdata run 0x803EBC10-0x803EBC38 and its .data device tables 0x802F4A0C-0x802F4A74. Seven of the eight uninitialized globals (locks, init parameters, request pools) are COMMON symbols the storage map places at their evidenced extents (data rows 0x803D5168-0x803D55E0 and 0x803ED628-0x803ED630); File_AsyncFileCopy 0x803ED630 (end edge provisional) is declared extern and stays an external.",
+      "evidence": "evidence.tsv unit row 0x801C8F14-0x801C9DD8 (src/engine/fileio.c), its compiler, type, function, name, data and source-form rows; all 28 functions exact, promoted from comparison-only, with the file's .rodata empty string, its .sdata run 0x803EBC10-0x803EBC38 and its .data device tables 0x802F4A0C-0x802F4A74. The eight uninitialized globals (locks, init parameters, request pools) are COMMON symbols; the storage map places them at their evidenced extents (data rows 0x803D5168-0x803D55E0 and 0x803ED628-0x803ED631).",
       "sections": [
         {
           "section": ".text",
@@ -13124,6 +13112,11 @@
           "symbol": "File_pAsyncRequestList",
           "start": "0x803ED62C",
           "end": "0x803ED630"
+        },
+        {
+          "symbol": "File_AsyncFileCopy",
+          "start": "0x803ED630",
+          "end": "0x803ED631"
         }
       ]
     },
@@ -17735,7 +17728,7 @@
     {
       "source": "src/engine/FSasync.c",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AD57C-0x801ADDB4 (src/engine/FSasync.c), its function, name, data, compiler and source-form rows; every function exact, promoted from comparison-only. The .data range 0x802CC580-0x802CC590 holds the four initialized state words; the zero-filled storage 0x802CC5A0-0x802CC5CC is the file's eight uninitialized (COMMON) globals: the storage map places the first six at the extents of their exact data rows, and g_nFSLastError and g_FsResult (end edges provisional) stay externals.",
+      "evidence": "evidence.tsv unit row 0x801AD57C-0x801ADDB4 (src/engine/FSasync.c), its function, name, data, compiler and source-form rows; every function exact, promoted from comparison-only. The .data range 0x802CC580-0x802CC590 holds the four initialized state words; the zero-filled storage 0x802CC5A0-0x802CC5CC is the file's eight uninitialized (COMMON) globals, which the storage map places at the extents of their exact data rows.",
       "sections": [
         {
           "section": ".text",
@@ -17780,6 +17773,16 @@
           "symbol": "g_bDoFSACK",
           "start": "0x802CC5B4",
           "end": "0x802CC5B8"
+        },
+        {
+          "symbol": "g_nFSLastError",
+          "start": "0x802CC5B8",
+          "end": "0x802CC5BC"
+        },
+        {
+          "symbol": "g_FsResult",
+          "start": "0x802CC5C0",
+          "end": "0x802CC5CC"
         }
       ]
     },

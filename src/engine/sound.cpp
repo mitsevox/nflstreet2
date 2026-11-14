@@ -290,6 +290,7 @@ static void fn_801F3834(void *pRes, SndBankInfo_801F3524 **ppBank, unsigned int 
     if (lbl_8039AE8C.mStatus.mFlags.mActive && lbl_8039AE8C.mStatus.mFlags.mEnabled) {
         pBank = (SndBankInfo_801F3524 *)fn_801C6A20(lbl_8039AE8C.pBankList);
         fn_801C6AA4(lbl_8039AE8C.pBankList, pBank, 0);
+        // FAKEMATCH: store order found by trying the 120 orders of the first five stores
         pBank->mBank = bank;
         pBank->mLoaded = 0;
         pBank->pCallback = pCallback;

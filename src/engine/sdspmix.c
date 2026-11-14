@@ -21,6 +21,7 @@ void fn_80271D78(AXVPB *vpb, float *p, unsigned int a, int b)
     if (lbl_803A8D34 == 4) {
         unsigned int index = a >> 8;
 
+        // FAKEMATCH: both store orders below found by trying all 24 orders of each block
         if (b == 0) {
             voice->m3A = lbl_80300050[index][1];
             voice->m52 = lbl_80300050[index][3];

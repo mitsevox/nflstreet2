@@ -33,7 +33,7 @@ int File_uMemFlags = 0;
 
 void *File_pFileRequestList;
 void *File_pAsyncRequestList;
-extern unsigned char File_AsyncFileCopy;
+unsigned char File_AsyncFileCopy;
 Lock_801F8014 File_RequestListCS;
 Lock_801F8014 File_AsyncRequestListCS;
 FileInitParms_t File_InitParms;
@@ -220,6 +220,7 @@ int FileInit(FileInitParms_t *pConfig)
 
     if (!File_ModuleActive) {
         File_InitParms = *pConfig;
+        // FAKEMATCH: i holds the allocation sizes and then counts the clear loop, only for the target registers
         File_StreamInfo = fn_801D2B7C(i = File_InitParms.mNumFiles * sizeof(FileStreamInfo_t), 0, 0);
         MemFill(File_StreamInfo, i, 0, 1);
         File_HandleInUseCS = fn_801D2B7C(i = File_InitParms.mNumFiles * 0x20, 0, 0);

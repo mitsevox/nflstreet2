@@ -23,6 +23,7 @@ int fn_801B8C18(Handle_801B8C60 *out, Struct_803EB878 *desc)
 int fn_801B8C60(Handle_801B8C60 *out, Struct_803EB878 *desc)
 {
     int pass = 0;
+// FAKEMATCH: goto instead of a loop, so the head address is reloaded on every pass as in the target
 retry:
     Link_801B8C18 *link = lbl_8037E820.mHead;
     while (link) {
@@ -82,6 +83,7 @@ int fn_801B8DA8(CsisClassHandle *out, Struct_803EB878 *desc)
 int fn_801B8DF0(CsisClassHandle *out, Struct_803EB878 *desc)
 {
     int pass = 0;
+// FAKEMATCH: goto instead of a loop, so the head address is reloaded on every pass as in the target
 retry:
     Link_801B8C18 *link = lbl_8037E820.mHead;
     while (link) {
@@ -124,6 +126,7 @@ int fn_801B8EDC(CsisClassHandle *handle)
 int fn_801B8F2C(Handle_801B8F2C *out, Struct_803EB878 *desc)
 {
     int pass = 0;
+// FAKEMATCH: goto instead of a loop, so the head address is reloaded on every pass as in the target
 retry:
     Link_801B8C18 *link = lbl_8037E820.mHead;
     while (link) {
