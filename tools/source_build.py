@@ -238,18 +238,19 @@ def load_manifest(manifest, sections, compiler_version):
         roots = unit.get("link_roots")
         if roots is not None:
             # SDK libraries discard unknown library code; any other unit names each function
-            # the linker discards, and retained_layout checks that list exactly.
+            # the linker discards, and retained_layout checks that list exactly. A unit whose
+            # roots exist only so the linker drops its folded functions may discard nothing else.
             keys = {"symbols", "evidence"}
             if profiles[unit["profile"]].get("compiler", "prodg") != "mwcc":
                 keys = keys | {"discarded"}
-            def names(values):
-                return isinstance(values, list) and bool(values) and len(set(values)) == len(values) \
+            def names(values, empty=False):
+                return isinstance(values, list) and (empty or bool(values)) and len(set(values)) == len(values) \
                     and all(isinstance(n, str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", n)
                             and n not in LINKER_SYMBOLS and not n.startswith("__original_") for n in values)
             if not isinstance(roots, dict) or set(roots) != keys \
                     or not isinstance(roots["evidence"], str) or not roots["evidence"].strip() \
                     or not names(roots["symbols"]) \
-                    or ("discarded" in keys and (not names(roots["discarded"])
+                    or ("discarded" in keys and (not names(roots["discarded"], empty="folded" in unit)
                                                  or set(roots["discarded"]) & set(roots["symbols"]))):
                 raise ValueError("link_roots need distinct symbol names and retention evidence"
                                  + ("" if "discarded" not in keys else
@@ -427,9 +428,9 @@ def kept_symbols(kept, placed, source):
     """Validate a unit's kept local copies; return {name: address} or None.
 
     `kept_locals` is {"symbols": {name: address}, "evidence": locator}. Each name is a local
-    function the unit defines at that address in its own code, the one copy the original linker
-    kept for the same-named references of other files; keep_object checks the compiled object and
-    plan() the placed address."""
+    function (or table) the unit defines at that address in its own code (or data), the one copy
+    the original linker kept for the same-named references of other files; keep_object checks the
+    compiled object and plan() the placed address."""
     if kept is None:
         return None
     if not isinstance(kept, dict) or set(kept) != {"symbols", "evidence"} \
@@ -441,19 +442,21 @@ def kept_symbols(kept, placed, source):
         if not name or NEUTRAL.fullmatch(name) or name in LINKER_SYMBOLS:
             raise ValueError(f"{source}: kept local {name!r} must be a descriptive name")
         result[name] = address(value)
-        if not any(entry["kind"] == "code" and entry["follows"] is None
-                   and entry["start"] <= result[name] < entry["end"] for entry in placed):
-            raise ValueError(f"{source}: kept local {name} lies outside the unit's code")
+        if not any(entry["follows"] is None and entry["start"] <= result[name] < entry["end"]
+                   for entry in placed):
+            raise ValueError(f"{source}: kept local {name} lies outside the unit's sections")
     return result
 
 
-def keep_object(native, kept, output):
+def keep_object(native, kept, output, aliases=()):
     """Model the original linker keeping one file's local copy for other files' references.
 
-    For each kept name, which must be exactly one local function the compiled object defines, a
-    global symbol with the same name, value, size and section is appended, so other units'
-    undefined references to the name resolve to this copy. Section bytes, relocations and the
-    existing symbols are unchanged. Writes the derived object and returns {name: (symbol, section)}."""
+    For each kept name, which must be exactly one local function (in code) or object (in data)
+    the compiled object defines, a global symbol with the same name, value, size and section is
+    appended, so other units' undefined references to the name resolve to this copy. A name in
+    `aliases` is also another unit's folded duplicate of this copy and gets a second global,
+    `__folded_<name>`, the name that unit's folded references use. Section bytes, relocations and
+    the existing symbols are unchanged. Writes the derived object and returns {name: (symbol, section)}."""
     data = bytearray(native)
     sections, symbols = read_elf(bytes(data))
     tables = [section for section in sections if section["type"] == SHT_SYMTAB]
@@ -465,15 +468,16 @@ def keep_object(native, kept, output):
         found = [symbol for symbol in symbols if symbol["name"] == name]
         symbol = found[0] if len(found) == 1 else None
         section = sections[symbol["shndx"]] if symbol and 0 < symbol["shndx"] < len(sections) else None
-        if symbol is None or symbol["bind"] != STB_LOCAL or symbol["type"] != STT_FUNC \
+        if symbol is None or symbol["bind"] != STB_LOCAL or symbol["type"] not in (STT_FUNC, STT_OBJECT) \
                 or section is None or section["type"] != SHT_PROGBITS or not section["flags"] & SHF_ALLOC \
-                or not section["flags"] & SHF_EXECINSTR \
+                or bool(section["flags"] & SHF_EXECINSTR) != (symbol["type"] == STT_FUNC) \
                 or not symbol["size"] or symbol["value"] + symbol["size"] > section["size"]:
-            raise ValueError(f"Kept local {name} is not one local function defined in the unit")
+            raise ValueError(f"Kept local {name} is not one local function or object defined in the unit")
         result[name] = (symbol, section)
-        added.append(struct.pack(">IIIBBH", strtab["size"] + len(names), symbol["value"], symbol["size"],
-                                 STB_GLOBAL << 4 | STT_FUNC, 0, symbol["shndx"]))
-        names += name.encode("ascii") + b"\0"
+        for alias in [name] + ([folded_reference(name)] if name in aliases else []):
+            added.append(struct.pack(">IIIBBH", strtab["size"] + len(names), symbol["value"], symbol["size"],
+                                     STB_GLOBAL << 4 | symbol["type"], 0, symbol["shndx"]))
+            names += alias.encode("ascii") + b"\0"
     append_symbols(data, symtab, strtab, added, names, output)
     return result
 
@@ -506,7 +510,8 @@ def fold_object(native, folded, output):
     relocations that target it are redirected to a new undefined symbol `__folded_<name>`, which
     the link resolves to the configured address; nothing else changes (ngcld rejects relocations
     against absolute symbols). A reference into a folded extent through any other symbol
-    (a section symbol or an alias) is ambiguous and fails. The folded function's body is left
+    (a section symbol or an alias) is ambiguous and fails, except a branch from inside a folded
+    function to its own body, which goes with that body. The folded function's body is left
     unreferenced for the linker's retention to drop; the folded object's bytes stay in place.
     Writes the derived object and returns {name: (symbol, section)}."""
     data = bytearray(native)
@@ -543,10 +548,19 @@ def fold_object(native, folded, output):
         if section["type"] != 4:
             continue
         for at in range(section["offset"], section["offset"] + section["size"], 12):
-            info, addend = struct.unpack_from(">Ii", data, at + 4)
+            site, info, addend = struct.unpack_from(">IIi", data, at)
             index = info >> 8
+            # A branch inside a folded function's own body goes when the linker drops the body.
+            inside = any(symbol["type"] == STT_FUNC and symbol["shndx"] == section["info"]
+                         and symbol["value"] <= site < symbol["value"] + symbol["size"]
+                         and 0 < index <= len(symbols) and symbols[index - 1]["shndx"] == symbol["shndx"]
+                         and symbol["value"] <= symbols[index - 1]["value"] + addend
+                         < symbol["value"] + symbol["size"]
+                         for _, symbol, _, _ in folds.values())
             if index in folds:
                 struct.pack_into(">I", data, at + 4, folds[index][3] << 8 | info & 255)
+            elif inside:
+                continue
             elif 0 < index <= len(symbols) and any(
                     shndx == symbols[index - 1]["shndx"] and start <= symbols[index - 1]["value"] + addend < end
                     for shndx, start, end in extents):
@@ -736,6 +750,10 @@ def plan(sections, units, objects, externals):
                 continue
             if name in folds:
                 value = folds[name]
+                if kept_fold(units, unit, name, value, defined, externals):
+                    # The copy folded into is another linked unit's kept local; that unit's
+                    # object defines the folded reference (keep_object), so the link resolves it.
+                    continue
                 if name in defined or name in externals or resolved.get(name, value) != value:
                     raise ValueError(f"{unit['source']}: folded reference {name} is ambiguous")
             elif name in defined:
@@ -770,6 +788,15 @@ def plan(sections, units, objects, externals):
                              "reference that unit's symbol instead")
         owner["symbols"].append({"name": name, "value": value - owner["start"]})
     return pieces, defined, resolved
+
+
+def kept_fold(units, unit, name, value, defined, externals):
+    """Whether folded reference `name` of `unit` resolves to another unit's kept local at `value`."""
+    owner = defined.get(name)
+    if owner is None or owner[0] != value or owner[1] == unit["source"] or name in externals:
+        return False
+    other = next(other for other in units if other["source"] == owner[1])
+    return (other.get("kept_locals") or {}).get(name[len(folded_reference("")):]) == value
 
 
 def outside_image(sections, value):
@@ -971,7 +998,7 @@ def check_retention(unit, native, retained):
         raise ValueError(f"{unit['source']}: discarded functions differ from link_roots discarded")
 
 
-def link_object(unit):
+def link_object(unit, aliases=()):
     """Set the object the unit links: the native object, or its folded and/or kept derivative."""
     unit["link_object"], unit["folds"] = unit["object"], {}
     if unit["folded"]:
@@ -985,7 +1012,7 @@ def link_object(unit):
         unit["link_object"] = derived
     if unit.get("kept_locals"):
         derived = unit["link_object"].with_suffix(".kept.o")
-        keep_object(unit["link_object"].read_bytes(), unit["kept_locals"], derived)
+        keep_object(unit["link_object"].read_bytes(), unit["kept_locals"], derived, aliases)
         unit["link_object"] = derived
     unit["link_object_sha256"] = sha256(unit["link_object"])
 
@@ -1200,11 +1227,12 @@ def build(original, manifest_path, report_path, cache=None):
             failures[unit["source"]] = error
     with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count() or 1) as pool:
         list(pool.map(attempt, units))
+    folded_names = {name for unit in units for name in (unit.get("folded") or ())}
     for unit in units:
         if unit["source"] in failures:
             raise failures[unit["source"]]
         unit["native_object_sha256"] = sha256(unit["object"])
-        link_object(unit)
+        link_object(unit, folded_names & set(unit.get("kept_locals") or ()))
         objects[unit["source"]] = (retained_layout(dict(unit, object=unit["link_object"]), compiler, wrapper)
                                    if unit["link_roots"] else read_elf(unit["link_object"].read_bytes()))
     pieces, defined, resolved = plan(sections, units, objects, externals)
@@ -1348,9 +1376,10 @@ def compiled_functions(unit, obj):
     for symbol in obj[1]:
         if symbol["type"] != STT_FUNC or symbol["shndx"] == SHN_UNDEF or symbol["size"] <= 0:
             continue
-        # A kept local's global copy (keep_object) names the same function once more.
+        # A kept local's global copy (keep_object) names the same function once more, and its
+        # alias for another unit's folded references (`__folded_<name>`) once again.
         identity = (symbol["name"], symbol["shndx"], symbol["value"], symbol["size"])
-        if identity in seen:
+        if identity in seen or symbol["name"].startswith(folded_reference("")):
             continue
         seen.add(identity)
         entry = placements.get(symbol["shndx"])
