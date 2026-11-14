@@ -85,13 +85,13 @@ void fn_8005FCF8(int *pA, int *pB);
 void fn_80060330(int a, int *pList, int count, Object_8008044C *pObject);
 void fn_80061B90(int team, int *pDigp);
 int DbCursorGetValue(DbCursor *pObject, int key);
-void fn_8007AEE8(DbCursor *pObject);
-void fn_8007AF14(DbCursor *pObject);
-int fn_8007AF34(DbCursor *pObject);
-int fn_8007AF5C(DbCursor *pObject);
-int fn_8007AF84(int team);
-unsigned char fn_8007B090(int a);
-void fn_8007B14C(int pad, int id);
+void PortDbOpenSides(DbCursor *pObject);
+void PortDbCloseSides(DbCursor *pObject);
+int PortDbGetPort(DbCursor *pObject);
+int PortDbGetSide(DbCursor *pObject);
+int PortDbSideHasPlayers(int team);
+unsigned char PortDbGetSidePort(int a);
+void PortDbSetControlledPlayer(int pad, int id);
 void GameInfoSet(int index, int value);
 int fn_8008058C(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
 void fn_8008079C(int which);
@@ -211,8 +211,8 @@ void MsgTeamPickBuildAutoDepth(void)
 {
     int n = 0;
     int side = 2;
-    if (fn_8007AF84(0) == 0) side = 0;
-    if (fn_8007AF84(1) == 0) side = 1;
+    if (PortDbSideHasPlayers(0) == 0) side = 0;
+    if (PortDbSideHasPlayers(1) == 0) side = 1;
     switch (fn_801486A0()) {
     case 0:
     case 1:
@@ -1019,8 +1019,8 @@ void MsgTeamPickInitTwoTeams(unsigned char size)
     MsgTeamPickAllocState(2, size);
     team = GameInfoGet(2);
     other = team == 0;
-    _MsgTeamPick_pState->mpUnknown08[0] = fn_8007B090(other);
-    _MsgTeamPick_pState->mpUnknown08[1] = fn_8007B090(team);
+    _MsgTeamPick_pState->mpUnknown08[0] = PortDbGetSidePort(other);
+    _MsgTeamPick_pState->mpUnknown08[1] = PortDbGetSidePort(team);
     _MsgTeamPick_pState->mUnknown15 = 0;
     _MsgTeamPick_pState->mUnknown19 = other;
     _MsgTeamPickResetState(2);
@@ -1037,20 +1037,20 @@ void MsgTeamPickInitTournamentTeams(void)
         DbCursor cursor;
         int found;
 
-        fn_8007AEE8(&cursor);
+        PortDbOpenSides(&cursor);
         found = DbCursorFirst(&cursor);
         for (i = 0; i < 8; i++) {
             unsigned char id;
 
             if (found) {
-                id = fn_8007AF34(&cursor);
+                id = PortDbGetPort(&cursor);
                 found = DbCursorNext(&cursor);
             } else {
                 id = 0xFF;
             }
             _MsgTeamPick_pState->mpUnknown08[i] = id;
         }
-        fn_8007AF14(&cursor);
+        PortDbCloseSides(&cursor);
     }
     _MsgTeamPickResetState(8);
 }
@@ -1066,20 +1066,20 @@ void MsgTeamPickInitSixCaptains(void)
         DbCursor cursor;
         int found;
 
-        fn_8007AEE8(&cursor);
+        PortDbOpenSides(&cursor);
         found = DbCursorFirst(&cursor);
         for (i = 0; i < 6; i++) {
             unsigned char id;
 
             if (found) {
-                id = fn_8007AF34(&cursor);
+                id = PortDbGetPort(&cursor);
                 found = DbCursorNext(&cursor);
             } else {
                 id = 0xFF;
             }
             _MsgTeamPick_pState->mpUnknown08[i] = id;
         }
-        fn_8007AF14(&cursor);
+        PortDbCloseSides(&cursor);
     }
     if (!GameModeTypeIsSpecial()) {
         for (i = 0; i < 6; i++) {
@@ -1102,8 +1102,8 @@ void MsgTeamPickInitPairedCaptains(void)
     MsgTeamPickAllocState(count, 1);
     _MsgTeamPick_pState->mUnknown15 = 0;
     _MsgTeamPick_pState->mUnknown19 = other;
-    _MsgTeamPick_pState->mpUnknown08[0] = fn_8007B090(other);
-    _MsgTeamPick_pState->mpUnknown08[1] = fn_8007B090(team);
+    _MsgTeamPick_pState->mpUnknown08[0] = PortDbGetSidePort(other);
+    _MsgTeamPick_pState->mpUnknown08[1] = PortDbGetSidePort(team);
     if (count > 2) {
         _MsgTeamPick_pState->mpUnknown08[2] = _MsgTeamPick_pState->mpUnknown08[0];
         _MsgTeamPick_pState->mpUnknown08[3] = _MsgTeamPick_pState->mpUnknown08[1];
@@ -1111,24 +1111,24 @@ void MsgTeamPickInitPairedCaptains(void)
             DbCursor cursor;
             int found;
 
-            fn_8007AEE8(&cursor);
+            PortDbOpenSides(&cursor);
             for (found = DbCursorFirst(&cursor); found; found = DbCursorNext(&cursor)) {
-                unsigned char id = fn_8007AF34(&cursor);
+                unsigned char id = PortDbGetPort(&cursor);
 
-                if (fn_8007AF5C(&cursor) == other && id != _MsgTeamPick_pState->mpUnknown08[0]) {
+                if (PortDbGetSide(&cursor) == other && id != _MsgTeamPick_pState->mpUnknown08[0]) {
                     _MsgTeamPick_pState->mpUnknown08[2] = id;
                     break;
                 }
             }
             for (found = DbCursorFirst(&cursor); found; found = DbCursorNext(&cursor)) {
-                unsigned char id = fn_8007AF34(&cursor);
+                unsigned char id = PortDbGetPort(&cursor);
 
-                if (fn_8007AF5C(&cursor) == team && id != _MsgTeamPick_pState->mpUnknown08[1]) {
+                if (PortDbGetSide(&cursor) == team && id != _MsgTeamPick_pState->mpUnknown08[1]) {
                     _MsgTeamPick_pState->mpUnknown08[3] = id;
                     break;
                 }
             }
-            fn_8007AF14(&cursor);
+            PortDbCloseSides(&cursor);
         }
     }
     _MsgTeamPickResetState(2);
@@ -1145,20 +1145,20 @@ void MsgTeamPickInitSevenCaptains(void)
         DbCursor cursor;
         int found;
 
-        fn_8007AEE8(&cursor);
+        PortDbOpenSides(&cursor);
         found = DbCursorFirst(&cursor);
         for (i = 0; i < 7; i++) {
             unsigned char id;
 
             if (found) {
-                id = fn_8007AF34(&cursor);
+                id = PortDbGetPort(&cursor);
                 found = DbCursorNext(&cursor);
             } else {
                 id = 0xFF;
             }
             _MsgTeamPick_pState->mpUnknown08[i] = id;
         }
-        fn_8007AF14(&cursor);
+        PortDbCloseSides(&cursor);
     }
     if (!GameModeTypeIsSpecial()) {
         for (i = 0; i < 4; i++) {
@@ -1333,7 +1333,7 @@ void MsgTeamPickShutdown(void)
             if (_MsgTeamPick_pState->mSize == 1) {
                 for (unsigned char k = 0; k < _MsgTeamPick_pState->mCount; k++) {
                     if (_MsgTeamPick_pState->mpUnknown08[k] != 0xFF) {
-                        fn_8007B14C(_MsgTeamPick_pState->mpUnknown08[k], *_MsgTeamPick_pState->mppLists[k]);
+                        PortDbSetControlledPlayer(_MsgTeamPick_pState->mpUnknown08[k], *_MsgTeamPick_pState->mppLists[k]);
                     }
                 }
             }

@@ -80,11 +80,11 @@ void fn_80010150(int a);
 void SndgMusicPumpFrame(int a);
 Object_80039F5C *PlyrFindByPoid(int id);
 int DepthChartAutoFillEx(int group, int *list, int value, int a, int b);
-unsigned char fn_8007B090(int a);
+unsigned char PortDbGetSidePort(int a);
 void EnvSelect(int id);
 void EnvRelease(void);
 void EnvGetUIName(char *pDest, int count);
-void fn_8007B14C(int pad, int id);
+void PortDbSetControlledPlayer(int pad, int id);
 void SndgMusicWaitForStart(int frames);
 void GameInfoSet(int index, int value);
 int GameInfoGet(int index);
@@ -535,7 +535,7 @@ int fn_8005E014(int *pTeam, int *pCopy, int *pCount)
             *pCount = copied;
         }
         if (first || second) {
-            fn_8007B14C(fn_8007B090(1), lbl_802D4D40.mUnknown2);
+            PortDbSetControlledPlayer(PortDbGetSidePort(1), lbl_802D4D40.mUnknown2);
         }
     }
     return team;

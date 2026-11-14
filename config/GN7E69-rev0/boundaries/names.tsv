@@ -5,6 +5,7 @@
 # (paired between anchors by equal size only). unit: the proposed unit holding it, or -; only rows
 # inside a proposed unit are naming candidates, and a gap pair needs its own check.
 address	size	sibling_name	how	sibling_file	unit
+0x80003468	36	__init_hardware	name	-	-
 0x80020ED0	72	AIRPGetRatingDirectlyFromDb__Fii	size	airespect.cpp	-
 0x80020F18	56	AIRPSetRatingDirectlyIntoDb__FiiUc	size	airespect.cpp	-
 0x80020F50	12	AIRPIsEnabled__Fv	size	airespect.cpp	-
