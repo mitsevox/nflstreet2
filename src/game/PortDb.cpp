@@ -1,5 +1,5 @@
 /* Game-database access for the controller ports: the 'OCMT' table that says which side (team 0
-   or 1) each port plays for, and the 'CTRL' table that holds the player each port controls.
+   or 1) each port plays for, and the 'LRTC' table that holds the player each port controls.
    Opens and walks the port rows, counts the ports with a player on a side, finds a side's port,
    and sets or reads a port's controlled player. */
 #include "game/DbCursor.h"
