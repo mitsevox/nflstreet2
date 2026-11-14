@@ -1272,10 +1272,6 @@
       "address": "0x803ECEB8",
       "evidence": "evidence.tsv data/name rows for 0x803ECEB8 (target extent, related name)."
     },
-    "seedX": {
-      "address": "0x802F477C",
-      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x802F477C; original-owned provider, no added storage or body."
-    },
     "iSPCH_EACrandom": {
       "address": "0x801B1934",
       "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x801B1934; original-owned provider, no added storage or body."
@@ -2231,14 +2227,6 @@
     "SNDDRV_dolbypl2balances": {
       "address": "0x80300050",
       "evidence": "evidence.tsv data and name rows for 0x80300050 (2048-byte balance table read by src/engine/sdspmix.c and by snddrv.c code; storage not claimed by either unit)."
-    },
-    "gRandArray": {
-      "address": "0x8037E794",
-      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x8037E794; original-owned provider, no added storage or body."
-    },
-    "gRandArrayIndex": {
-      "address": "0x803EBB20",
-      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x803EBB20; original-owned provider, no added storage or body."
     },
     "gCallbacks": {
       "address": "0x8037E0A0",
@@ -4922,9 +4910,9 @@
       "link_roots": {
         "symbols": [
           "VMInit",
-          "__VMGetMRAMPages",
-          "__VMGetARAMSize",
-          "__VMGetARAMStart",
+          "__VMGetNumPagesInMRAM",
+          "VMGetARAMSize",
+          "VMGetARAMBase",
           "__VMAllocMRAMSwapSpace",
           "__VMSwapPageIn"
         ],
@@ -11712,7 +11700,7 @@
     {
       "source": "src/dolphin/os/OSReset.c",
       "profile": "dolphin_release",
-      "evidence": "evidence.tsv unit row 0x8023BFBC-0x8023C3E0 (src/dolphin/os/OSReset.c) and its function, data and source-form rows; CREDITS.md for the source; all 5 target functions exact, promoted from comparison-only. OSResetSystem carries a labeled FAKEMATCH unused stack object (source-form row 0x8023C0F8).",
+      "evidence": "evidence.tsv unit row 0x8023BFBC-0x8023C3E0 (src/dolphin/os/OSReset.c) and its function, data and source-form rows; CREDITS.md for the source; all 5 target functions exact, promoted from comparison-only. OSResetSystem carries a labeled FAKEMATCH unused stack object (source-form row 0x8023BFBC).",
       "link_roots": {
         "symbols": [
           "OSRegisterResetFunction",
@@ -14906,7 +14894,7 @@
           "_vt.23TiburonIAllocator13Impl": "0x802B1150",
           "_vt.10IAllocator": "0x802B1188"
         },
-        "evidence": "evidence.tsv linker row sound.cpp allocator folds: the inline TiburonIAllocator13Impl and IAllocator bodies and the TiburonIAllocator13Impl table are local to this file and to src/engine/sound.cpp; the target keeps this file's copies, which SndInit (0x801F3AB8) and sound.cpp's unreferenced table copy 0x802B1A38 point to."
+        "evidence": "evidence.tsv linker row sound.cpp allocator folds: the inline TiburonIAllocator13Impl and IAllocator bodies and the two tables _vt.23TiburonIAllocator13Impl and _vt.10IAllocator are local to this file and to src/engine/sound.cpp; the target keeps this file's copies. SndInit forms the TiburonIAllocator13Impl table address 0x802B1150 (addi r9,r9,0x1150 at 0x801F3A48) and stores it at 0x801F3A50, and the slots of sound.cpp's unreferenced table copies 0x802B1A38-0x802B1AA8 point to this file's bodies. Second kept_locals use, under the owner's ruling of 2026-11-14 on #1338 question (4) (open owner question on #1347)."
       }
     },
     {
@@ -15264,7 +15252,7 @@
     {
       "source": "src/engine/spchinit.c",
       "profile": "speech_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x801AF60C-0x801AF75C (src/engine/spchinit.c), its function and name rows and the speech_cxx compiler row; all four functions match the target, promoted from comparison-only. The file defines no data; the speech-library state it initializes is referenced through externals (external row 0x801AE3E4-0x801B2AD4).",
+      "evidence": "evidence.tsv provisional unit row 0x801AF60C-0x801AF75C (src/engine/spchinit.c), its function and name rows and the speech_cxx compiler row; all four functions match the target, promoted from comparison-only. The file defines no data; the speech-library state it initializes (the leading speech data runs, taken to be a data-only spchdata.c's) and the SPCHAUTHOR string spchlibauthor (owned by a file linked after spchrand.c) are referenced through externals (external row 0x801AE3E4-0x801B2AD4, spchlibauthor data row).",
       "sections": [
         {
           "section": ".text",
@@ -15283,9 +15271,27 @@
           "placement": ".text",
           "start": "0x801B1A3C",
           "end": "0x801B1CFC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F477C",
+          "end": "0x802F4794"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037E794",
+          "end": "0x8037E814"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBB20",
+          "end": "0x803EBB24"
         }
       ],
-      "evidence": "evidence.tsv unit row 0x801B1A3C-0x801B1CFC (src/engine/spchrand.c), its function, name and source-form rows and the speech_cxx compiler row; all five functions match the target, promoted from comparison-only. The file defines no data: the history and cursor it uses are speech-library globals (data rows), referenced as externals."
+      "evidence": "evidence.tsv unit row 0x801B1A3C-0x801B1CFC (src/engine/spchrand.c), its function, name and source-form rows, the data rows of its own storage (seedX .data 0x802F477C-0x802F4794, gRandArray .bss 0x8037E794-0x8037E814, gRandArrayIndex .sdata 0x803EBB20-0x803EBB24) and the speech_cxx compiler row; all five functions match the target, promoted from comparison-only."
     },
     {
       "source": "src/engine/cu_801B8C18.cpp",

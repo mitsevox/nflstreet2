@@ -410,6 +410,7 @@ void fn_80162404(void) {
 }
 Object_801618D8 *fn_80162434(void *arg, int index, Object_801618D8 *shared, void *data, int mode) {
     Desc_801618D8 desc;
+    // FAKEMATCH: store order +0, +0xC, +8, +4 chosen to reproduce the target schedule
     desc.mUnknown0 = data;
     desc.mUnknownC = shared;
     desc.mUnknown8 = index;

@@ -84,7 +84,7 @@ u32 __VMPageReplacementLRU(void) {
                     break;
                 }
                 sCurrentPage++;
-                if (sCurrentPage >= __VMGetMRAMPages()) {
+                if (sCurrentPage >= __VMGetNumPagesInMRAM()) {
                     sCurrentPage = 0;
                 }
             } else {
@@ -96,7 +96,7 @@ u32 __VMPageReplacementLRU(void) {
         page = start;
     }
     sCurrentPage++;
-    if (sCurrentPage >= __VMGetMRAMPages()) {
+    if (sCurrentPage >= __VMGetNumPagesInMRAM()) {
         sFirstPass = FALSE;
         sCurrentPage = 0;
     }
@@ -111,12 +111,12 @@ u32 __VMPageReplacementRandom(void) {
     do {
         if (sFirstPass) {
             page = sCurrentPage++;
-            if (sCurrentPage >= __VMGetMRAMPages()) {
+            if (sCurrentPage >= __VMGetNumPagesInMRAM()) {
                 sFirstPass = FALSE;
                 sCurrentPage = 0;
             }
         } else {
-            page = OSGetTick() % __VMGetMRAMPages();
+            page = OSGetTick() % __VMGetNumPagesInMRAM();
         }
     } while (__VMBASEIsPageLocked(page));
     return page;
@@ -128,7 +128,7 @@ u32 __VMPageReplacementFIFO(void) {
 
     do {
         page = sCurrentPage++;
-        if (sCurrentPage >= __VMGetMRAMPages()) {
+        if (sCurrentPage >= __VMGetNumPagesInMRAM()) {
             sFirstPass = FALSE;
             sCurrentPage = 0;
         }

@@ -193,9 +193,9 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
   if (!(length >= 0.4f)) {
     if (!(length <= 0.2f)) {
       fn_80227264(delta, delta, 1.0f / length);
-      length = (length - 0.2f) * 5.0f;
-      float f = width + length * -width + length * 0.4f;
-      float b = width + length * (0.85f - width);
+      float t = (length - 0.2f) * 5.0f;
+      float f = width + t * -width + t * 0.4f;
+      float b = width + t * (0.85f - width);
       forward.mX = delta[0] * f;
       forward.mY = delta[1] * f;
       backward.mX = -delta[0] * b;
@@ -218,6 +218,7 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
     backward.mX = -(delta[0] * 0.85f);
     backward.mY = -(delta[1] * 0.85f);
   }
+  // FAKEMATCH: reused local; the side vector reuses direction instead of a local of its own
   direction.mX = delta[1];
   direction.mY = -delta[0];
   fn_80227248(&direction, &direction, width);
@@ -648,6 +649,7 @@ static inline void ZeroRoot(AnimSkeleton_t *skeleton) {
   root[0] = root[1] = root[2] = 0.0f;
 }
 void fn_8003D12C() {
+  // FAKEMATCH: local that only aliases the global gAnimData
   AnimData *anim = &gAnimData;
   lbl_803EA41C = ResLoad(anim->GetArchive(), 57, 1);
   CharRelocateSkeleton(lbl_803EA41C);
@@ -681,6 +683,7 @@ void fn_8003D2E0() {
   fn_800AF790(2, lbl_803EA41C, "rshoulder", "rwrist", 1);
 }
 int fn_8003D378(int owner, int mode) {
+  // FAKEMATCH: dead initializer; result is set from fn_801F7C88 before any read
   int result = 0;
   Object_8008044C object;
   ResTrackPause();
@@ -767,6 +770,7 @@ int fn_8003D378(int owner, int mode) {
         PlayerLookGetHeadIds(init.mUnknown5A, 0, &ids);
         key = 65535;
       }
+      // FAKEMATCH: call results held in locals so the stores below come out in field order
       int accessory = PlayerLookGetAccessoryModel(i);
       int hat = PlayerLookGetHatModel(init.mUnknown5A);
       int slot1 = PlayerLookGetSlot1Model(init.mUnknown5A);
@@ -884,6 +888,7 @@ int fn_8003DA94(int count, int owner, int mode) {
   return result;
 }
 int fn_8003DCC0(int owner) {
+  // FAKEMATCH: dead initializer; result is set from ObjDelType(27) before any read
   int result = 0;
   if (lbl_803EA410) {
     ObjRemoveFromList(owner, lbl_803EA410);
@@ -917,6 +922,7 @@ int fn_8003DCC0(int owner) {
   }
   PlayerObjRenderShutdown();
   fn_800AF71C();
+  // FAKEMATCH: local that only aliases the global gAnimData
   AnimData *anim = &gAnimData;
   ResUnLoad(anim->GetArchive(), 57);
   ResUnLoad(anim->GetArchive(), 58);

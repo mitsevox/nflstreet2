@@ -11,9 +11,9 @@ typedef void (*VMLogStatsCallback)(u32 virtualAddr, u32 physicalAddr, u32 pageNu
 
 void VMInit(u32 mramSize, u32 aramStart, u32 aramSize);
 void VMSetLogStatsCallback(VMLogStatsCallback callback);
-u32 __VMGetMRAMPages(void);
-u32 __VMGetARAMSize(void);
-u32 __VMGetARAMStart(void);
+u32 __VMGetNumPagesInMRAM(void);
+u32 VMGetARAMSize(void);
+u32 VMGetARAMBase(void);
 void __VMAllocMRAMSwapSpace(void);
 void __VMSwapPageIn(u32 virtualAddr);
 void __VMSwapPageOut(u32 virtualAddr);
@@ -27,10 +27,10 @@ u32 __VMPageReplacementFIFO(void);
 
 BOOL VMAlloc(u32 virtualAddr, u32 size);
 u32 __VMTranslateVMPageToARAMPage(u32 virtualAddr);
-BOOL __VMIsPageMapped(u32 virtualAddr);
+BOOL __VMDoesMappingExist(u32 virtualAddr);
 void __VMMappingErrorAlert(u32 virtualAddr);
-void __VMSetPageInARAM(u32 virtualAddr);
-BOOL __VMIsPageInARAM(u32 virtualAddr);
+void __VMSetARAMPageAsDirty(u32 virtualAddr);
+BOOL __VMIsARAMPageDirty(u32 virtualAddr);
 void __VMAllocVirtualToARAMLUT(void);
 void __VMAllocARAMToVirtualLUT(void);
 

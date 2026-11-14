@@ -26,7 +26,7 @@ BOOL DBGEXIImm(void *pData, s32 size, u32 write);
 
 static MTRCallbackType MTRCallback;
 static DBGCallbackType DBGCallback;
-static u32 RecvMailData;
+static u32 SendMailData;
 static s32 RecvDataLeng;
 static u8 *pEXIInputFlag;
 static u8 EXIInputFlag;
@@ -134,7 +134,7 @@ BOOL DBWrite(const void *pData, u32 size)
 BOOL DBRead(u32 *pData, s32 size)
 {
     BOOL enabled = OSDisableInterrupts();
-    u32 bank = RecvMailData & 0x10000 ? 0x1000 : 0;
+    u32 bank = SendMailData & 0x10000 ? 0x1000 : 0;
 
     DBGRead(bank + 0x1E000, pData, (size + 3) & ~3);
     RecvDataLeng = 0;
@@ -152,7 +152,7 @@ static inline void CheckMailbox(void)
         DBGReadMailbox(&value);
         value &= 0x1FFFFFFF;
         if ((value & 0x1F000000) == 0x1F000000) {
-            RecvMailData = value;
+            SendMailData = value;
             RecvDataLeng = value & 0x7FFF;
             EXIInputFlag = 1;
         }

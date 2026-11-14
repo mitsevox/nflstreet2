@@ -630,29 +630,30 @@ void fn_8005E4A8(void)
             break;
         case 1: {
             fn_801485EC(1);
-            MiniGameSettings_t *pSettings = &lbl_8031BDD4;
             StevRow_t *pRow = lbl_803EA5C8;
+            // FAKEMATCH: reused local; value holds mPes[2], then mPes[1], then mPes[3]
             int value = pRow->mPes[2];
-            pSettings->mUnknown40 = value == 1;
+            lbl_8031BDD4.mUnknown40 = value == 1;
             value = pRow->mPes[1];
             if (value < 0) {
                 value = pRow->mPes[3];
                 if (value < 0) {
-                    pSettings->mUnknown32 = 1;
-                    pSettings->mUnknown36 = 0;
+                    lbl_8031BDD4.mUnknown32 = 1;
+                    lbl_8031BDD4.mUnknown36 = 0;
                 } else {
-                    pSettings->mUnknown32 = 0;
-                    pSettings->mUnknown36 = value * 60;
+                    lbl_8031BDD4.mUnknown32 = 0;
+                    lbl_8031BDD4.mUnknown36 = value * 60;
                 }
             } else {
-                pSettings->mUnknown32 = value;
-                pSettings->mUnknown36 = 0;
+                lbl_8031BDD4.mUnknown32 = value;
+                lbl_8031BDD4.mUnknown36 = 0;
             }
             break;
         }
         case 2: {
             int enable = 1;
             fn_801485EC(2);
+            // FAKEMATCH: reused local; the outer switch's type holds mPes[2], then mPes[3]
             type = lbl_803EA5C8->mPes[2];
             if (type == 2) {
                 enable = 0;
@@ -868,6 +869,7 @@ int fn_8005EC14(int dive)
 void fn_8005ECA0(void)
 {
     char hero[40];
+    // FAKEMATCH: local that only aliases the global buffer lbl_8030A1E4
     char *pText = lbl_8030A1E4;
     const char *pName;
     int completed;
@@ -1003,6 +1005,7 @@ void fn_8005EEC4(int *pState, int *pScreen)
             }
             dive = fn_8005EB20(1);
             if (dive != lbl_803EA5C8->mDive && fn_8005EBF0(lbl_803EA5C8->mDive)) {
+                // FAKEMATCH: the *pState = 2 store is repeated in both arms instead of once before the test
                 if (dive == 12) {
                     *pState = 2;
                     *pScreen = fn_8005D804(0);

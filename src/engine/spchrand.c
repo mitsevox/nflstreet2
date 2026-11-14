@@ -4,6 +4,12 @@
 
 extern "C" {
 
+// Generator state: iSPCH_EACseedrandom(0) expanded, so drawing works before any seeding.
+unsigned int seedX[6] = {0xF22D0E56U, 0x883126E9U, 0xC624DD2FU, 0x0702C49CU, 0x9E353F7DU, 0x6FDF3B64U};
+// Recent choices as value/category pairs, and the index of the newest one.
+unsigned short gRandArray[32][2];
+int gRandArrayIndex = 0;
+
 // The six state words advance together from the supplied seed.
 void iSPCH_EACseedrandom(unsigned int seed)
 {

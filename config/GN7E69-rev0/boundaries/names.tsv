@@ -2114,9 +2114,9 @@ address	size	sibling_name	how	sibling_file	unit
 0x8024306C	28	DVDLowClearCallback	name	dvdlow.c	-
 0x80243088	68	__DVDLowSetWAType	name	dvdlow.c	-
 0x80244F18	156	VMInit	name	dvdlow.c	-
-0x80244FB4	8	__VMGetNumPagesInMRAM	size	dvdlow.c	-
-0x80244FBC	8	VMGetARAMSize	size	dvdlow.c	-
-0x80244FC4	8	VMGetARAMBase	size	dvdlow.c	-
+0x80244FB4	8	__VMGetNumPagesInMRAM	name	dvdlow.c	-
+0x80244FBC	8	VMGetARAMSize	name	dvdlow.c	-
+0x80244FC4	8	VMGetARAMBase	name	dvdlow.c	-
 0x80244FCC	48	__VMAllocMRAMSwapSpace	name	dvdlow.c	-
 0x80244FFC	508	__VMSwapPageIn	name	dvdlow.c	-
 0x802451F8	8	VMSetPageReplacementPolicy	name	dvdlow.c	-
@@ -2126,10 +2126,10 @@ address	size	sibling_name	how	sibling_file	unit
 0x802454A8	108	__VMPageReplacementFIFO	name	dvdlow.c	-
 0x80245514	256	VMAlloc	name	dvdlow.c	-
 0x80245614	64	__VMTranslateVMPageToARAMPage	name	dvdlow.c	-
-0x80245654	32	__VMDoesMappingExist	size	dvdlow.c	-
+0x80245654	32	__VMDoesMappingExist	name	dvdlow.c	-
 0x80245674	56	__VMMappingErrorAlert	name	dvdlow.c	-
-0x802456AC	24	__VMSetARAMPageAsDirty	size	dvdlow.c	-
-0x802456C4	20	__VMIsARAMPageDirty	size	dvdlow.c	-
+0x802456AC	24	__VMSetARAMPageAsDirty	name	dvdlow.c	-
+0x802456C4	20	__VMIsARAMPageDirty	name	dvdlow.c	-
 0x802456D8	168	__VMAllocVirtualToARAMLUT	name	dvdlow.c	-
 0x80245780	160	__VMAllocARAMToVirtualLUT	name	dvdlow.c	-
 0x80245820	204	VMBASEInit	name	dvdlow.c	-
