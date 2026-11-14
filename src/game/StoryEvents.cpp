@@ -641,7 +641,9 @@ void fn_8005E4A8(void)
                     lbl_8031BDD4.mUnknown36 = 0;
                 } else {
                     lbl_8031BDD4.mUnknown32 = 0;
-                    lbl_8031BDD4.mUnknown36 = value * 60;
+                    // FAKEMATCH: the product goes back into value; it sets the target's register choice
+                    value *= 60;
+                    lbl_8031BDD4.mUnknown36 = value;
                 }
             } else {
                 lbl_8031BDD4.mUnknown32 = value;
