@@ -139,6 +139,7 @@ static int _FileOpenStream(int device, const char *pName, int mode)
                     error = fn_801F7C88();
                 } else {
                     strcpy(pCopy, pName);
+                    // FAKEMATCH: field order found by compiling all 120 orders of the first five stores
                     File_StreamInfo[i].mInUse = 1;
                     File_StreamInfo[i].mDevHandle = handle;
                     File_StreamInfo[i].mAsyncPos = 0;

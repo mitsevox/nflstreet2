@@ -70,6 +70,7 @@ void DoFSReadHeader(int handle, u8 *buf, u32 size, int offset)
     int i;
     u16 len;
 
+    // FAKEMATCH: local set before the loop only so the swap is not constant-folded
     len = 0x10;
     p = (u8 *)&packet;
     for (i = 0; i < sizeof(packet); i++)
