@@ -16,8 +16,8 @@ struct Glow_t;
 
 extern "C" {
 void TMRenderReset(void);
-void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_8024FC48(int a);
+void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
+void GXSetNumChans(int a);
 void TMRenderSetBlendMode(int a);
 void TMRenderSetZRange(float a, float b);
 void fn_801D0470(int a);
@@ -25,7 +25,7 @@ void fn_801D0508(void);
 void fn_801D0544(void);
 void fn_801D131C(int a);
 Mtx44Ptr fn_801D0444(void);
-void fn_8025251C(Mtx44 m, int a);
+void GXLoadPosMtxImm(Mtx44 m, int a);
 void fn_80227490(float *pOut, float *pIn, int a, int b, int c);
 void fn_8022765C(float *pOut, float *pA, float *pB);
 int fn_801CEA08(void);
@@ -163,8 +163,8 @@ void FieldMarkerDrawBeams(void)
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
-    fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
-    fn_8024FC48(1);
+    GXSetChanCtrl(4, 0, 1, 1, 0, 0, 2);
+    GXSetNumChans(1);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     TMRenderSetBlendMode(2);
@@ -174,7 +174,7 @@ void FieldMarkerDrawBeams(void)
     fn_801D0470(VptGetMatrixStack());
     fn_801D0508();
     fn_801D131C(3);
-    fn_8025251C(fn_801D0444(), 0);
+    GXLoadPosMtxImm(fn_801D0444(), 0);
     fn_801D0544();
     if (_FieldMarker_BeamTextureInfo.mUnknown0 == 1)
         GXLoadTlut(&_FieldMarker_BeamTexture.mTlutObj, 0);
@@ -201,8 +201,8 @@ void FieldMarkerDrawArrows(void)
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
-    fn_8024FC48(1);
+    GXSetChanCtrl(4, 0, 1, 1, 0, 0, 2);
+    GXSetNumChans(1);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
@@ -216,7 +216,7 @@ void FieldMarkerDrawArrows(void)
     fn_801D0470(VptGetMatrixStack());
     fn_801D0508();
     fn_801D131C(3);
-    fn_8025251C(fn_801D0444(), 0);
+    GXLoadPosMtxImm(fn_801D0444(), 0);
     fn_801D0544();
     if (_FieldMarker_ArrowTextureInfo.mUnknown0 == 1)
         GXLoadTlut(&_FieldMarker_ArrowTexture.mTlutObj, 0);

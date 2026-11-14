@@ -201,18 +201,6 @@
       "address": "0x801C1FBC",
       "evidence": "evidence.tsv external row: system-call installation target call and inspected callee behavior, with SDK reference provenance."
     },
-    "DCFlushRangeNoSync": {
-      "address": "0x80239D4C",
-      "evidence": "evidence.tsv external row: system-call installation target call and inspected callee behavior, with SDK reference provenance."
-    },
-    "ICInvalidateRange": {
-      "address": "0x80239D78",
-      "evidence": "evidence.tsv external row: system-call installation target call and inspected callee behavior, with SDK reference provenance."
-    },
-    "DCStoreRange": {
-      "address": "0x80239D1C",
-      "evidence": "evidence.tsv CARD external row DCStoreRange: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
     "__div2i": {
       "address": "0x801AD470",
       "evidence": "evidence.tsv CARD external row __div2i: target relocation fields, independently inspected callee behavior and SDK source signature."
@@ -252,10 +240,6 @@
     "__OSUnlockSram": {
       "address": "0x8023CE88",
       "evidence": "evidence.tsv retained CARD external __OSUnlockSram: branch or address-load operands and reference signature."
-    },
-    "DCInvalidateRange": {
-      "address": "0x80239CC0",
-      "evidence": "evidence.tsv retained CARD external DCInvalidateRange: branch or address-load operands and reference signature."
     },
     "__DSP_curr_task": {
       "address": "0x803ED508",
@@ -340,14 +324,6 @@
     "cosf": {
       "address": "0x80260EE8",
       "evidence": "evidence.tsv GXLight external cosf: target branch at 0x8024F6B0 and related SDK source call/prototype."
-    },
-    "DCFlushRange": {
-      "address": "0x80239CEC",
-      "evidence": "evidence.tsv AXSPB cache external; actual REL24 from PrintStudio and pinned OSCache signature."
-    },
-    "GXSetViewport": {
-      "address": "0x8025278C",
-      "evidence": "evidence.tsv external row GXSetViewport: target REL24 branch at 0x80228C90 and SDK GXTransform.c body."
     },
     "GetItem__14MenuListScreeniP11MenuEntry_t": {
       "address": "0x80182CC8",
@@ -793,10 +769,6 @@
       "address": "0x803ED358",
       "evidence": "Actual target operands and canonical accepted API signatures in GXFifo, relatedSDK identity."
     },
-    "__GXSetMatrixIndex": {
-      "address": "0x802528D8",
-      "evidence": "GXAttr actualoriginalTexCoordGen2REL24 binds sharedhelper; genuine internalGXAttrmatIdxAttr prototype/currenttypedGXData fields."
-    },
     "__CARDPermMask": {
       "address": "0x803EC2C2",
       "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
@@ -849,14 +821,6 @@
       "address": "0x8023BBA0",
       "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
     },
-    "ICEnable": {
-      "address": "0x80239DBC",
-      "evidence": "Original complete __OSCacheInit call instruction0x8023A210 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "DCEnable": {
-      "address": "0x80239CAC",
-      "evidence": "Original complete __OSCacheInit call instruction0x8023A230 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
     "DVDInit": {
       "address": "0x8023F498",
       "evidence": "Original complete OSInit call instruction0x80238E88 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
@@ -889,10 +853,6 @@
       "address": "0x802414D0",
       "evidence": "Original complete __OSReboot call instruction0x8023EC40 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
-    "ICFlashInvalidate": {
-      "address": "0x80239DAC",
-      "evidence": "Original complete OSResetSystem call instruction0x8023C264 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
     "Reset": {
       "address": "0x8023C040",
       "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
@@ -909,17 +869,9 @@
       "address": "0x8023CED0",
       "evidence": "Original complete OSResetSystem call instruction0x8023C240 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
-    "LCDisable": {
-      "address": "0x80239ED4",
-      "evidence": "Original complete OSResetSystem call instruction0x8023C244 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
     "OSGetResetCode": {
       "address": "0x8023C3B0",
       "evidence": "Original complete ClearArena call instruction0x802389BC identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "__OSCacheInit": {
-      "address": "0x8023A1E4",
-      "evidence": "Original complete OSInit call instruction0x80238CB4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
     "__OSInitSram": {
       "address": "0x8023C958",
@@ -947,54 +899,6 @@
     },
     "GXClearGPMetric": {
       "address": "0x8025334C",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXLoadPosMtxImm": {
-      "address": "0x8025251C",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXLoadNrmMtxImm": {
-      "address": "0x8025256C",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetCurrentMtx": {
-      "address": "0x802525BC",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXLoadTexMtxImm": {
-      "address": "0x802525F0",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetProjectionv": {
-      "address": "0x80252448",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetClipMode": {
-      "address": "0x802528B0",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetScissor": {
-      "address": "0x802527F8",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetScissorBoxOffset": {
-      "address": "0x80252870",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetNumChans": {
-      "address": "0x8024FC48",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetChanCtrl": {
-      "address": "0x8024FC84",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetChanAmbColor": {
-      "address": "0x8024FA68",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXSetChanMatColor": {
-      "address": "0x8024FB58",
       "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
     },
     "__VMGetMRAMPages": {
@@ -1585,37 +1489,9 @@
       "address": "0x8024AF70",
       "evidence": "evidence.tsv external row GXInit: target REL24 call at 0x801CE558 and the SDK GXInit.c comparison unit."
     },
-    "GXSetViewportJitter": {
-      "address": "0x80252734",
-      "evidence": "evidence.tsv external row GXSetViewportJitter: target REL24 call at 0x801CEDCC and the SDK GXTransform.c comparison unit."
-    },
-    "LCStoreData": {
-      "address": "0x80239F20",
-      "evidence": "evidence.tsv external row LCStoreData: SDK OSCache body inside the provisional sdk.json OSCache.c range; REL24 calls from 0x80213748 and 0x80213A08."
-    },
-    "LCQueueLength": {
-      "address": "0x80239FCC",
-      "evidence": "evidence.tsv external row LCQueueLength: SDK OSCache body (mfspr HID2, rlwinm 8,28,31, blr); REL24 calls from 0x80213570 and 0x802137B8."
-    },
-    "LCQueueWait": {
-      "address": "0x80239FD8",
-      "evidence": "evidence.tsv external row LCQueueWait: SDK OSCache body (HID2 queue-length spin against r3); REL24 calls from 0x80213580 and 0x802137C8."
-    },
-    "PSMTXConcat": {
-      "address": "0x8024AA18",
-      "evidence": "evidence.tsv external row PSMTXConcat: SDK mtx.c paired-single body inside the provisional sdk.json mtx.c range; REL24 calls from 0x80213720 and 0x802139D0."
-    },
-    "GXGetViewportv": {
-      "address": "0x802527D4",
-      "evidence": "evidence.tsv external row GXGetViewportv: SDK GXTransform.c body copying the six viewport floats from gx+0x4F4; REL24 call from 0x80210620."
-    },
     "_vt.14Class_802A2A40": {
       "address": "0x802A2A40",
       "evidence": "evidence.tsv external row for 0x802A2A40 (_vt.14Class_802A2A40)."
-    },
-    "LCEnable": {
-      "address": "0x80239E9C",
-      "evidence": "evidence.tsv external row LCEnable: SDK OSCache body inside the provisional sdk.json OSCache.c range; REL24 call from 0x80236F18."
     },
     "__13Time_801E8C78": {
       "address": "0x801E8C78",
@@ -1632,10 +1508,6 @@
     "fn_800C02EC__12PreSnapPhases": {
       "address": "0x800C02EC",
       "evidence": "Issue #1116; evidence.tsv external row for the canonical PreSnapPhase short setter at 0x800C02EC."
-    },
-    "GXLoadLightObjImm": {
-      "address": "0x8024F9EC",
-      "evidence": "evidence.tsv external row GXLoadLightObjImm: REL24 calls from 0x80236850, 0x8023686C and 0x80236DC0 reach the light loader body 0x8024F9EC registered for comparison in src/dolphin/gx/GXLight.c."
     },
     "_ctors": {
       "address": "0x802CC668",
@@ -5215,6 +5087,118 @@
       ]
     },
     {
+      "source": "src/dolphin/os/OSCache.c",
+      "profile": "dolphin_release",
+      "evidence": "sdk.json unit src/dolphin/os/OSCache.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "L2GlobalInvalidate",
+          "DMAErrorHandler",
+          "__OSCacheInit",
+          "DCEnable",
+          "DCInvalidateRange",
+          "DCFlushRange",
+          "DCStoreRange",
+          "DCFlushRangeNoSync",
+          "ICInvalidateRange",
+          "ICFlashInvalidate",
+          "ICEnable",
+          "LCEnable",
+          "LCDisable",
+          "LCStoreBlocks",
+          "LCStoreData",
+          "LCQueueLength",
+          "LCQueueWait"
+        ],
+        "evidence": "The target keeps all 18 functions of this file at the placed range; the global ones are the roots and the file-local __LCEnable stays through its caller LCEnable."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80239CAC",
+          "end": "0x8023A2D8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FBCC8",
+          "end": "0x802FBEF2"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXTransform.c",
+      "profile": "dolphin_release",
+      "evidence": "sdk.json unit src/dolphin/gx/GXTransform.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "GXSetCurrentMtx",
+          "__GXSetMatrixIndex",
+          "__GXSetViewport",
+          "GXSetViewportJitter",
+          "GXSetViewport",
+          "GXSetScissor",
+          "GXSetScissorBoxOffset",
+          "GXSetClipMode",
+          "GXSetProjection",
+          "GXSetProjectionv",
+          "GXGetProjectionv",
+          "GXLoadPosMtxImm",
+          "GXLoadNrmMtxImm",
+          "GXLoadTexMtxImm",
+          "GXGetViewportv"
+        ],
+        "evidence": "The target keeps this file's 15 exact function(s) at the placed range; the global ones are the roots. The file's other function, the out-of-line __GXSetProjection, has no code anywhere in the target's .init/.text, so the linker drops it as the original link did."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802523A4",
+          "end": "0x8025295C"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED9B0",
+          "end": "0x803ED9C0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/mtx/mtx.c",
+      "profile": "dolphin_release",
+      "evidence": "sdk.json unit src/dolphin/mtx/mtx.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "PSMTXIdentity",
+          "PSMTXConcat"
+        ],
+        "evidence": "The target keeps this file's 2 exact function(s) at the placed range (PSMTXIdentity 0x8024A9EC, PSMTXConcat 0x8024AA18), both global roots. C_MTXIdentity, which the file defines first, has no code anywhere in the target's .init/.text, so the linker drops it as the original link did; its 1.0f/0.0f literals stay at the head of the constant pool."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024A9EC",
+          "end": "0x8024AAE4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC250",
+          "end": "0x803EC258"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED778",
+          "end": "0x803ED780"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/gx/GXMisc.c",
       "profile": "dolphin_release",
       "evidence": "sdk.json unit src/dolphin/gx/GXMisc.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
@@ -6709,7 +6693,7 @@
     {
       "source": "src/dolphin/gx/GXLight.c",
       "profile": "dolphin_release",
-      "evidence": "evidence.tsv GXLight function/type/source/data rows and CREDITS.md; original file ownership remains provisional.",
+      "evidence": "evidence.tsv GXLight function/type/source/data rows, its unit row and CREDITS.md; every function exact, the loader and channel tail promoted from comparison-only; original file ownership remains provisional.",
       "link_roots": {
         "symbols": [
           "GXInitLightAttn",
@@ -6719,16 +6703,21 @@
           "GXInitLightDir",
           "GXInitSpecularDir",
           "GXInitLightColor",
-          "GXGetLightColor"
+          "GXGetLightColor",
+          "GXLoadLightObjImm",
+          "GXSetChanAmbColor",
+          "GXSetChanMatColor",
+          "GXSetNumChans",
+          "GXSetChanCtrl"
         ],
-        "evidence": "evidence.tsv GXLight linker row: eight contiguous prefix functions; unused GXInitLightAttnA removed by ordinary SN retention; full following tail remains original."
+        "evidence": "evidence.tsv GXLight linker row: the thirteen functions of the file from GXInitLightAttn 0x8024F648 to GXSetChanCtrl (ending 0x8024FD3C) are all kept; the unused GXInitLightAttnA is removed by ordinary SN retention."
       },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8024F648",
-          "end": "0x8024F9EC"
+          "end": "0x8024FD3C"
         },
         {
           "section": ".data",
@@ -15140,6 +15129,31 @@
           "placement": ".data4",
           "start": "0x802EADE4",
           "end": "0x802EAE74"
+        }
+      ]
+    },
+    {
+      "source": "src/game/CreateTeamDb.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018C688-0x8018DF98 (src/game/CreateTeamDb.cpp), its function, name and data rows; every function and data placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018C688",
+          "end": "0x8018DF98"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AA338",
+          "end": "0x802AAD90"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EAE74",
+          "end": "0x802EAF6C"
         }
       ]
     },

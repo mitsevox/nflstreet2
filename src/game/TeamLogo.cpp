@@ -46,7 +46,7 @@ void *fn_8021EA44(int index);
 int fn_8021E2B4(void *pObject, int a, int b);
 char *fn_80220BFC(int a, int b);
 TexPaletteInfo_t *fn_80221BAC(void *pObject, int a, int b);
-void fn_80239D1C(char *p, int size);
+void DCStoreRange(char *p, int size);
 }
 
 static TeamLogoPending_t _TeamLogo_aPending[2];
@@ -58,7 +58,7 @@ int TeamLogoGetSlot(int index);
 
 void TeamLogoFlushPalette(int id, char *p)
 {
-    fn_80239D1C(p, 0x200);
+    DCStoreRange(p, 0x200);
     GXFlush();
 }
 

@@ -35,8 +35,8 @@ int fn_80183360(void);
 void fn_801835C0(int a);
 int fn_80183948(void);
 void fn_80183990(void);
-void fn_8018D358(int a, int b, int c);
-int fn_8018D70C(int a);
+void CreateTeamCopyStylePlayers(int a, int b, int c);
+int CreateTeamGetStylePoints(int a);
 }
 
 class CreateTeamMenu : public MenuListScreen {
@@ -147,8 +147,8 @@ int CreateTeamMenu::Leave(int a, int b, void **ppResult)
         case 0:
             switch (fn_80183948()) {
             case 0:
-                fn_8018D358(fn_80183354(), fn_80183360(), _CreateTeam_aTeamTypeStyles[_CreateTeam_iTeamType]);
-                CreatePlayerSetPoints(fn_8018D70C(_CreateTeam_aTeamTypeStyles[_CreateTeam_iTeamType]));
+                CreateTeamCopyStylePlayers(fn_80183354(), fn_80183360(), _CreateTeam_aTeamTypeStyles[_CreateTeam_iTeamType]);
+                CreatePlayerSetPoints(CreateTeamGetStylePoints(_CreateTeam_aTeamTypeStyles[_CreateTeam_iTeamType]));
                 break;
             case 3:
                 fn_80183990();

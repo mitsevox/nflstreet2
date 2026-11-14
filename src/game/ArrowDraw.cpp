@@ -50,10 +50,10 @@ int fn_802275D8(Vector_80039F5C *pA, Vector_80039F5C *pB, float epsilon);
 void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 int fn_80236EC0(int a);
-void fn_8024FC48(int a);
-void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_8025251C(Mtx44 m, int a);
-void fn_802525BC(int a);
+void GXSetNumChans(int a);
+void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
+void GXLoadPosMtxImm(Mtx44 m, int a);
+void GXSetCurrentMtx(int a);
 
 float ArrowGetWidth(ArrowPath *pTrail, unsigned int index)
 {
@@ -295,13 +295,13 @@ void ArrowDraw(ArrowPath *pTrail)
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
-    fn_8024FC48(1);
-    fn_8024FC84(4, 0, 0, 1, 1, 2, 1);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 1, 2, 1);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     fn_801D0F80(view);
-    fn_802525BC(0);
-    fn_8025251C(view, 0);
+    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(view, 0);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetCullMode(GX_CULL_NONE);

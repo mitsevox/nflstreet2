@@ -55,11 +55,11 @@ void TMRenderReset(void);
 void TMRenderBindTexture(int a, int b, int c);
 void TMRenderSetZRange(float a, float b);
 int fn_80236EC0(int a);
-void fn_8024FB58(int a, GXColor color);
-void fn_8024FC48(int a);
-void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_8025251C(Mtx44 m, int a);
-void fn_802525BC(int a);
+void GXSetChanMatColor(int a, GXColor color);
+void GXSetNumChans(int a);
+void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
+void GXLoadPosMtxImm(Mtx44 m, int a);
+void GXSetCurrentMtx(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D0ADC(int a);
@@ -134,9 +134,9 @@ void DivotRenderBegin(int index)
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    fn_8024FB58(4, color);
-    fn_8024FC48(1);
-    fn_8024FC84(4, 0, 0, 0, 1, 2, 1);
+    GXSetChanMatColor(4, color);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 1, 2, 1);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
@@ -160,15 +160,15 @@ void DivotRenderDrawOne(DivotDrawView *pObject)
 
     if (pObject->mpUnknown50 == 0 || pObject->mpUnknown50->mUnknownB != 0) {
         color.a = pObject->mUnknown34 * 255.0f;
-        fn_8024FB58(4, color);
+        GXSetChanMatColor(4, color);
         TMRenderBindTexture(0, pObject->mpUnknown60->mUnknown28, pObject->mpUnknown60->mUnknown2C);
         fn_801D04C4();
         fn_801D0C58(pObject);
         fn_801D0ADC(pObject->mUnknown30);
         fn_801D0D94(pObject->mUnknownC, pObject->mUnknown10, pObject->mUnknown14);
         fn_801D0F80(mtx);
-        fn_8025251C(mtx, 0);
-        fn_802525BC(0);
+        GXLoadPosMtxImm(mtx, 0);
+        GXSetCurrentMtx(0);
         fn_801D0544();
         GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, 4);
         GXWGFifo.f32 = -0.16f;

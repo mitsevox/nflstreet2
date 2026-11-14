@@ -33,8 +33,8 @@ void TMTexLibUnload(PassIconTexLib *pElement);
 PassIconTexture *TMTexLibGetTexture(PassIconTexLib *pElement, int a);
 PassIconClut *TMTexLibGetClut(PassIconTexLib *pElement, int a, int b);
 int fn_80236EC0(int a);
-void fn_8024FC48(int a);
-void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
+void GXSetNumChans(int a);
+void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXInitTexObjCI(GXTexObj *pObject, void *pData, int width, int height, int a, int b, int c, int d, int e);
 extern "C" void *GXGetTexObjData(void *p);
 extern "C" void GXLoadTexObj(GXTexObj *pObject, int a);
@@ -43,7 +43,7 @@ extern "C" int GXGetTlutObjData(void *p);
 extern "C" int GXGetTlutObjFmt(void *p);
 extern "C" int GXGetTlutObjNumEntries(void *p);
 extern "C" void GXLoadTlut(GXTlutObj *pObject, int a);
-void fn_8025251C(Mtx44 m, int a);
+void GXLoadPosMtxImm(Mtx44 m, int a);
 }
 
 static PassIconTexLib _PassIconTex_TexLib;
@@ -94,15 +94,15 @@ void PassIconTexDraw(PassIconObj_t *pInstance)
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
-    fn_8024FC48(1);
+    GXSetChanCtrl(4, 0, 1, 1, 0, 0, 2);
+    GXSetNumChans(1);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     GXSetNumTevStages(1);
-    fn_8025251C(fn_801D0444(), 0);
+    GXLoadPosMtxImm(fn_801D0444(), 0);
     GXSetZCompLoc(GX_DISABLE);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
     GXSetAlphaCompare(GX_GREATER, 32, GX_AOP_AND, GX_GREATER, 32);

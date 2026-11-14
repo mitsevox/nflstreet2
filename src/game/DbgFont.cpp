@@ -14,13 +14,13 @@
 extern "C" {
 void fn_801D0F80(Mtx44 m);
 void TMRenderReset(void);
-void fn_8024FC48(int a);
-void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
+void GXSetNumChans(int a);
+void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXInitTexObj(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
 extern "C" void GXInitTexObjLOD(GXTexObj *pObj, int a, int b, float c, float d, float e, int f, int g, int h);
 extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
-void fn_8025251C(Mtx44 m, int a);
-void fn_802525BC(int a);
+void GXLoadPosMtxImm(Mtx44 m, int a);
+void GXSetCurrentMtx(int a);
 }
 
 static unsigned char _DbgFont_aTexels[1652] ATTRIBUTE_ALIGN(32) = {
@@ -215,8 +215,8 @@ int DbgFontPrint(int x, unsigned short y, int c, char *pText, int e)
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-        fn_8024FC48(1);
-        fn_8024FC84(4, 0, 1, 0, 1, 0, 2);
+        GXSetNumChans(1);
+        GXSetChanCtrl(4, 0, 1, 0, 1, 0, 2);
         GXSetNumTevStages(1);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
         GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
@@ -230,8 +230,8 @@ int DbgFontPrint(int x, unsigned short y, int c, char *pText, int e)
         GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
         GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_GREATER, 0);
         fn_801D0F80(m);
-        fn_8025251C(m, 0);
-        fn_802525BC(0);
+        GXLoadPosMtxImm(m, 0);
+        GXSetCurrentMtx(0);
         DbgFontLoadTexture();
         for (;;) {
             ch = *p++;

@@ -162,7 +162,7 @@ extern int GCmpInit(int a);
 extern int GCmpIsBlockCodec(int codec);
 extern void GCmpSetLabel(const char *pName);
 extern void GCmpDecompress(int codec, ResCodecBuffer_t *pSrc, ResCodecBuffer_t *pDst);
-extern void fn_80239CEC(void *p, unsigned int size);
+extern void DCFlushRange(void *p, unsigned int size);
 extern char _Res_szModuleID[];
 extern int GCmpShutdown(void);
 extern int GCmpIsActive(void);
@@ -337,7 +337,7 @@ static void _ResAsyncCallbackFunc(int result, int arg, void *pArg)
         }
         pRes->pFlags[index] &= ~0x10;
         _ResGetDirInfo(pRes, index, &offset, &prevSize, &size);
-        fn_80239CEC(pReq->pBuffer, size);
+        DCFlushRange(pReq->pBuffer, size);
         if (pReq->pCallback != 0 && pReq->mTime == 0) {
             pReq->pCallback(pRes, index, pReq->pBuffer, 0, pReq->pUser);
         }
@@ -664,7 +664,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
             }
         }
     }
-    fn_80239CEC((void *)*pBuffer, size);
+    DCFlushRange((void *)*pBuffer, size);
     return err;
 }
 

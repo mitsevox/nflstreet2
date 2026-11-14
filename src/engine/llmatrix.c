@@ -6,7 +6,7 @@
 
 extern MatStack_t *lbl_803EBCC0;
 
-void fn_8024AA18(float *pA, float *pB, float *pDst);
+void PSMTXConcat(float *pA, float *pB, float *pDst);
 void QuatToMatrix(float *pMatrix, float *pQuat);
 float fn_80260B1C(float x);
 void fn_801CFC14(int angle, float *pSin, float *pCos);
@@ -96,7 +96,7 @@ void fn_801D0558(void)
 
 void fn_801D058C(float *pDst, float *pA, float *pB)
 {
-    fn_8024AA18(pA, pB, pDst);
+    PSMTXConcat(pA, pB, pDst);
 }
 
 void fn_801D05BC(float *pDst, float *pA, float *pB)

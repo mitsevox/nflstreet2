@@ -78,8 +78,8 @@ int FileHostGetSize(int handle);
 void fn_801CEA7C(unsigned char clear);
 void fn_801CE908(unsigned char enable);
 void fn_801CE82C(void);
-void fn_8024A9EC(float (*pMtx)[4]);
-void fn_802523A4(float (*pMtx)[4], int type);
+void PSMTXIdentity(float (*pMtx)[4]);
+void GXSetProjection(float (*pMtx)[4], int type);
 
 static int _FileStartIO(int devType);
 int FilePerformRead(int handle, int pos, void *pBuffer, int size);
@@ -515,8 +515,8 @@ void FileAsyncCheckError(void)
         PADControlMotor(1, 2);
         PADControlMotor(2, 2);
         PADControlMotor(3, 2);
-        fn_8024A9EC(mtx);
-        fn_802523A4(mtx, 0);
+        PSMTXIdentity(mtx);
+        GXSetProjection(mtx, 0);
         GXLoadPosMtxImm(mtx, 0);
         GXLoadNrmMtxImm(mtx, 0);
         GXSetCurrentMtx(0);

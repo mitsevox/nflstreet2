@@ -1,3 +1,4 @@
+/* Dolphin CPU cache control: flushing and invalidating data and instruction cache ranges, the locked cache and its DMA, and cache setup at boot. */
 #include "__os.h"
 #include "dolphin/base/PPCArch.h"
 #include "dolphin/os.h"

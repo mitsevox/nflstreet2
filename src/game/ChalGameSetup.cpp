@@ -37,7 +37,7 @@ void ChalLoadCurrent(unsigned char id, int level);
 void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery);
 int ChalHasReward(Challenge_t *pRecord, int id);
 int fn_80084388(void);
-void fn_8018D7E0(void);
+void CreateTeamLoadUserTeams(void);
 int fn_8008406C(DbCursor *pObject, int id, int *pResult);
 int fn_80083FBC(DbCursor *pObject);
 void fn_8001441C(int team, int id);
@@ -150,7 +150,7 @@ void ChalGameStart(unsigned char id)
         _ChalGame_iCachedTeam = team;
         _ChalGame_iCachedUser = fn_8022F4BC();
     }
-    fn_8018D7E0();
+    CreateTeamLoadUserTeams();
     fn_8008406C(&cursor, 1, 0);
     int otherTeam = fn_80083FBC(&cursor);
     fn_80083F68(&cursor);
@@ -191,7 +191,7 @@ void ChalGameStartTournament(int team, int value)
     MsgChallengeSetFlowState(6);
     fn_80186F30(fn_80186B38(fn_8022F4BC()), 1);
     fn_80186F30(-1, 0);
-    fn_8018D7E0();
+    CreateTeamLoadUserTeams();
     fn_80083E1C(&cursor, 0);
     fn_8008406C(&cursor, 1, 0);
     int otherTeam = fn_80083FBC(&cursor);

@@ -1,3 +1,4 @@
+/* Dolphin 3x4 matrix library: the identity and multiply routines the game's rendering uses. */
 #include <dolphin/os.h>
 #include <dolphin/mtx.h>
 

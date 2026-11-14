@@ -50,10 +50,10 @@ void StoryTeamStoreFromStats(int a, int b);
 void StoryPlayerMoveToTeam(int a, int b);
 void StoryPlayerDelete(int a, int b);
 void fn_8018C48C(int tag);
-int fn_8018D890(int a, int b);
-void fn_8018D8EC(int a, int b);
-void fn_8018DC18(int a, int b);
-void fn_8018DD4C(int a, int b, int c);
+int CreateTeamLoadToStats(int a, int b);
+void CreateTeamStoreFromStats(int a, int b);
+void CreateTeamDeletePlayer(int a, int b);
+void CreateTeamAddPlayer(int a, int b, int c);
 int StoryGetFlag100(int a);
 void StorySetFlag100(int index, int value);
 int StoryGetFlag200(int a);
@@ -374,7 +374,7 @@ unsigned char MsgPlayerPickupInit(void)
         int i;
 
         _MsgPlayerPickup_bCopyMode = 0;
-        _MsgPlayerPickup_iTeam = fn_8018D890(_MsgPlayerPickup_cProfile, 0);
+        _MsgPlayerPickup_iTeam = CreateTeamLoadToStats(_MsgPlayerPickup_cProfile, 0);
         desc.mUnknown8 = TeamFilterGet();
         desc.mUnknown4 = 1;
         desc.mUnknown0 = 2;
@@ -442,7 +442,7 @@ void MsgPlayerPickupApplyDrop(void)
                 StorySetFlag200(_MsgPlayerPickup_cProfile, 0);
             }
         } else {
-            fn_8018DC18(_MsgPlayerPickup_iTeam, _MsgPlayerPickup_iDropPlayer);
+            CreateTeamDeletePlayer(_MsgPlayerPickup_iTeam, _MsgPlayerPickup_iDropPlayer);
         }
     }
 }
@@ -462,7 +462,7 @@ void MsgPlayerPickupApplyAdd(void)
                     StorySetFlag100(_MsgPlayerPickup_cProfile, 0);
                 }
             } else {
-                fn_8018DD4C(_MsgPlayerPickup_iTeam, _MsgPlayerPickup_iAddPlayer, 0);
+                CreateTeamAddPlayer(_MsgPlayerPickup_iTeam, _MsgPlayerPickup_iAddPlayer, 0);
             }
         }
     }
@@ -484,7 +484,7 @@ void MsgPlayerPickupShutdown(void)
         _MsgPlayerPickup_bCopyMode = 0;
         fn_80060278();
     } else {
-        fn_8018D8EC(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);
+        CreateTeamStoreFromStats(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);
         fn_8018C48C(0x54415453);
     }
     TeamFilterSet(1023);

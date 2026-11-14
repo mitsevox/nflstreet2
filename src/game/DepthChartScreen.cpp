@@ -11,14 +11,14 @@ void ChalCloseCursors(void);
 int fn_80082414(int index);
 int FormationSlotGetInfo(int a, int b, float *pX, float *pY, int *pValue, char *pLabel, int labelSize);
 void fn_80183920(int mode, int value);
-int fn_8018D720(int a);
+int CreateTeamExists(int a);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_8022F384(int a);
 int fn_8022F4BC(void);
 
 void FeTeamChooseScreen(int *pResult)
 {
-    if (fn_8018D720(fn_8022F384(fn_8022F4BC()))) {
+    if (CreateTeamExists(fn_8022F384(fn_8022F4BC()))) {
         if (TeamFilterGet() != 0x3FF) {
             *pResult = 401;
         } else if (MsgChallengeGetFlowState() == 6) {

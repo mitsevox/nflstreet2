@@ -71,8 +71,8 @@ static unsigned char _Weather_auSplashColor[4];
 static AnimTex_t *_Weather_pAnimTex;
 static int _Weather_iDrawPass;
 float fn_80237260(int);
-void fn_80239CEC(void *, int);
-void fn_80239D1C(void *, int);
+void DCFlushRange(void *, int);
+void DCStoreRange(void *, int);
 void fn_801D0470(int);
 void fn_801D0508(void);
 void fn_801D0544(void);
@@ -81,7 +81,7 @@ void fn_801D0C58(void *);
 void fn_801D0ADC(int);
 void fn_80227CC0(void *, void *);
 float *fn_801D0444(void);
-void fn_8025251C(float *, int);
+void GXLoadPosMtxImm(float *, int);
 float *fn_801D0EE4(void);
 int fn_801784C4(void);
 int fn_800A33E8(void);
@@ -100,8 +100,8 @@ void fn_801D1288(int, void *);
 void fn_80214140(int);
 void fn_801D131C(int);
 void fn_801D0F80(void *);
-void fn_8024FC48(int);
-void fn_8024FC84(int, int, int, int, int, int, int);
+void GXSetNumChans(int);
+void GXSetChanCtrl(int, int, int, int, int, int, int);
 
 void WeatherInitParticles(WeatherParticle_t *entry, unsigned int count) {
   unsigned char *color = _Weather_auFlakeColor;
@@ -125,7 +125,7 @@ void WeatherInitParticles(WeatherParticle_t *entry, unsigned int count) {
   _Weather_afTexCoords[5] = _Weather_pAnimTex->mGX.mFrames[0].mV1;
   _Weather_afTexCoords[6] = _Weather_pAnimTex->mGX.mFrames[0].mU1;
   _Weather_afTexCoords[7] = _Weather_pAnimTex->mGX.mFrames[0].mV0;
-  fn_80239CEC(_Weather_afTexCoords, 32);
+  DCFlushRange(_Weather_afTexCoords, 32);
 }
 void WeatherUpdateParticles(WeatherParticle_t *entries, unsigned int count, float speed,
                  float step) {
@@ -163,8 +163,8 @@ void WeatherUpdateParticles(WeatherParticle_t *entries, unsigned int count, floa
     }
   }
   fn_801D0544();
-  fn_80239D1C(_Weather_aParticles, _Weather_uParticleCount * 16);
-  fn_80239D1C(_Weather_aSplashes, _Weather_uParticleCount * 16);
+  DCStoreRange(_Weather_aParticles, _Weather_uParticleCount * 16);
+  DCStoreRange(_Weather_aSplashes, _Weather_uParticleCount * 16);
 }
 void WeatherSetDrawPass(int mode) {
   if (_Weather_iDrawPass == mode)
@@ -209,7 +209,7 @@ void WeatherLoadCornerMatrices(int mode) {
       matrix[3] = saved[0] + offset[i].mX;
       matrix[7] = saved[1] + offset[i].mY;
       matrix[11] = saved[2] + offset[i].mZ;
-      fn_8025251C(matrix, slot);
+      GXLoadPosMtxImm(matrix, slot);
       slot += 3;
     }
     matrix[3] = saved[0];
@@ -219,11 +219,11 @@ void WeatherLoadCornerMatrices(int mode) {
     offset = _Weather_avLineEnds;
     fn_801D04C4();
     fn_801D0C58(&offset[0]);
-    fn_8025251C(fn_801D0444(), 3);
+    GXLoadPosMtxImm(fn_801D0444(), 3);
     fn_801D0544();
     fn_801D04C4();
     fn_801D0C58(&offset[1]);
-    fn_8025251C(fn_801D0444(), 6);
+    GXLoadPosMtxImm(fn_801D0444(), 6);
     fn_801D0544();
   }
 }
@@ -498,8 +498,8 @@ void WeatherRender(void) {
   GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
   GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
   GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-  fn_8024FC48(1);
-  fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
+  GXSetNumChans(1);
+  GXSetChanCtrl(4, 0, 1, 1, 0, 0, 2);
   GXSetNumTexGens(1);
   GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
   for (int z = range[2][0]; z <= range[2][1]; ++z)

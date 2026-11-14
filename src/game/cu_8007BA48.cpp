@@ -17,8 +17,8 @@ int GearLockIsLocked(DbCursor *pCursor, int key);
 int GearIsLocked(int key);
 void GearUnlock(int key);
 void GearLock(int key);
-void fn_8018DF20(DbCursor *pCursor, int index);
-void fn_8018DF78(DbCursor *pCursor);
+void CreateTeamPlayerCursorOpen(DbCursor *pCursor, int index);
+void CreateTeamPlayerCursorClose(DbCursor *pCursor);
 char *fn_801C3084(const char *pString, int c);
 }
 
@@ -259,7 +259,7 @@ void fn_8007BF60(int id)
             DbCursor teams;
             PlayerGear_t record;
 
-            fn_8018DF20(&teams, index);
+            CreateTeamPlayerCursorOpen(&teams, index);
             if (DbCursorFirst(&teams)) {
                 do {
                     fn_800817CC((Object_8008044C *)&teams, &record);
@@ -275,7 +275,7 @@ void fn_8007BF60(int id)
                     fn_8008199C((Object_8008044C *)&teams, &record);
                 } while (DbCursorNext(&teams));
             }
-            fn_8018DF78(&teams);
+            CreateTeamPlayerCursorClose(&teams);
         }
     }
 }

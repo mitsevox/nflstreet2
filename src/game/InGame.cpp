@@ -117,7 +117,6 @@ void fn_802345C4(struct EngineParamWords *pDesc, int count);
 void fn_80236F34(void);
 void fn_80237830(int a);
 unsigned int fn_802378C8(void);
-void fn_80239CEC(int a, int b);
 }
 
 /* Argument of fn_802345C4. */
@@ -307,7 +306,7 @@ int InGame::Init()
         ConSetChannelInfo(-1, 2, (void *)_InGameDemoPadRead);
     }
     LoadingEnd(0);
-    fn_80239CEC(0x80000000, (u32)OSGetArenaHi() + 0x80000000);
+    DCFlushRange((void *)0x80000000, (u32)OSGetArenaHi() + 0x80000000);
     EngineParamWords desc = { 4, 14 };
     fn_802345C4(&desc, 2);
     UISGameLoadKeyItem(1, 3);
