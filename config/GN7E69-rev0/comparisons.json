@@ -22742,243 +22742,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801B8C18.cpp",
-      "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit rows 0x801B8C18-0x801B91A0 and 0x801B91A0-0x801B9D00 (one translation unit, src/engine/cu_801B8C18.cpp), function rows, data rows for the .ctors word 0x80289B44 and the registry object 0x8037E820, compiler and type rows. Shared types live in include/engine/cu_801B8C18.h. Comparison only; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B8C18",
-          "end": "0x801B9D00"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8037E820",
-          "end": "0x8037E824"
-        },
-        {
-          "section": ".ctors",
-          "placement": ".data2",
-          "start": "0x80289B44",
-          "end": "0x80289B48"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801B8C18",
-          "start": "0x801B8C18",
-          "end": "0x801B8C60"
-        },
-        {
-          "symbol": "fn_801B8C60",
-          "start": "0x801B8C60",
-          "end": "0x801B8D4C"
-        },
-        {
-          "symbol": "fn_801B8D4C",
-          "start": "0x801B8D4C",
-          "end": "0x801B8D9C"
-        },
-        {
-          "symbol": "__15CsisClassHandle",
-          "start": "0x801B8D9C",
-          "end": "0x801B8DA8"
-        },
-        {
-          "symbol": "fn_801B8DA8",
-          "start": "0x801B8DA8",
-          "end": "0x801B8DF0"
-        },
-        {
-          "symbol": "fn_801B8DF0",
-          "start": "0x801B8DF0",
-          "end": "0x801B8EDC"
-        },
-        {
-          "symbol": "fn_801B8EDC",
-          "start": "0x801B8EDC",
-          "end": "0x801B8F2C"
-        },
-        {
-          "symbol": "fn_801B8F2C",
-          "start": "0x801B8F2C",
-          "end": "0x801B9018"
-        },
-        {
-          "symbol": "fn_801B9018",
-          "start": "0x801B9018",
-          "end": "0x801B9068"
-        },
-        {
-          "symbol": "fn_801B9068",
-          "start": "0x801B9068",
-          "end": "0x801B90BC"
-        },
-        {
-          "symbol": "fn_801B90BC",
-          "start": "0x801B90BC",
-          "end": "0x801B90CC"
-        },
-        {
-          "symbol": "fn_801B90CC",
-          "start": "0x801B90CC",
-          "end": "0x801B90F0"
-        },
-        {
-          "symbol": "fn_801B90F0",
-          "start": "0x801B90F0",
-          "end": "0x801B9134"
-        },
-        {
-          "symbol": "fn_801B9134",
-          "start": "0x801B9134",
-          "end": "0x801B9148"
-        },
-        {
-          "symbol": "fn_801B9148",
-          "start": "0x801B9148",
-          "end": "0x801B9174"
-        },
-        {
-          "symbol": "fn_801B9174",
-          "start": "0x801B9174",
-          "end": "0x801B91A0"
-        },
-        {
-          "symbol": "fn_801B91A0",
-          "start": "0x801B91A0",
-          "end": "0x801B9328"
-        },
-        {
-          "symbol": "fn_801B9328",
-          "start": "0x801B9328",
-          "end": "0x801B9410"
-        },
-        {
-          "symbol": "fn_801B9410",
-          "start": "0x801B9410",
-          "end": "0x801B9484"
-        },
-        {
-          "symbol": "fn_801B9484",
-          "start": "0x801B9484",
-          "end": "0x801B94CC"
-        },
-        {
-          "symbol": "fn_801B94CC",
-          "start": "0x801B94CC",
-          "end": "0x801B9530"
-        },
-        {
-          "symbol": "fn_801B9530",
-          "start": "0x801B9530",
-          "end": "0x801B95AC"
-        },
-        {
-          "symbol": "fn_801B95AC",
-          "start": "0x801B95AC",
-          "end": "0x801B95FC"
-        },
-        {
-          "symbol": "fn_801B95FC",
-          "start": "0x801B95FC",
-          "end": "0x801B96E4"
-        },
-        {
-          "symbol": "fn_801B96E4",
-          "start": "0x801B96E4",
-          "end": "0x801B9724"
-        },
-        {
-          "symbol": "fn_801B9724",
-          "start": "0x801B9724",
-          "end": "0x801B97B8"
-        },
-        {
-          "symbol": "fn_801B97B8",
-          "start": "0x801B97B8",
-          "end": "0x801B97C8"
-        },
-        {
-          "symbol": "fn_801B97C8",
-          "start": "0x801B97C8",
-          "end": "0x801B97E0"
-        },
-        {
-          "symbol": "fn_801B97E0",
-          "start": "0x801B97E0",
-          "end": "0x801B983C"
-        },
-        {
-          "symbol": "fn_801B983C",
-          "start": "0x801B983C",
-          "end": "0x801B9884"
-        },
-        {
-          "symbol": "fn_801B9884",
-          "start": "0x801B9884",
-          "end": "0x801B98A8"
-        },
-        {
-          "symbol": "fn_801B98A8",
-          "start": "0x801B98A8",
-          "end": "0x801B990C"
-        },
-        {
-          "symbol": "fn_801B990C",
-          "start": "0x801B990C",
-          "end": "0x801B9988"
-        },
-        {
-          "symbol": "fn_801B9988",
-          "start": "0x801B9988",
-          "end": "0x801B99C4"
-        },
-        {
-          "symbol": "fn_801B99C4",
-          "start": "0x801B99C4",
-          "end": "0x801B9A5C"
-        },
-        {
-          "symbol": "fn_801B9A5C",
-          "start": "0x801B9A5C",
-          "end": "0x801B9A98"
-        },
-        {
-          "symbol": "fn_801B9A98",
-          "start": "0x801B9A98",
-          "end": "0x801B9B30"
-        },
-        {
-          "symbol": "fn_801B9B30",
-          "start": "0x801B9B30",
-          "end": "0x801B9BB8"
-        },
-        {
-          "symbol": "fn_801B9BB8",
-          "start": "0x801B9BB8",
-          "end": "0x801B9C30"
-        },
-        {
-          "symbol": "fn_801B9C30",
-          "start": "0x801B9C30",
-          "end": "0x801B9CAC"
-        },
-        {
-          "symbol": "__static_initialization_and_destruction_0",
-          "start": "0x801B9CAC",
-          "end": "0x801B9CD4"
-        },
-        {
-          "symbol": "_GLOBAL_.I.fn_801B8C18",
-          "start": "0x801B9CD4",
-          "end": "0x801B9D00"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_80196F48.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit80196F48-801981D8 and source-form/shared type/external/compiler rows. Nine complete functions and full212-byte readonly interval measured; all partials retained. Original bytes remain linked.",
@@ -27160,7 +26923,7 @@
     },
     {
       "source": "src/engine/cu_802714A8.cpp",
-      "profile": "engine_cpp_nosda",
+      "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x802714A8-0x80271D34 (src/engine/cu_802714A8.cpp), the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function; the two class vtables are this file's. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
@@ -27242,67 +27005,6 @@
           "symbol": "_._14Class_80271B74",
           "start": "0x80271B74",
           "end": "0x80271BD4"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/sdspmix.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80271D34-0x8027257C (src/engine/sdspmix.c), the sound_cxx compiler row and the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function and the data row 0x802C1D88-0x802C1D8C. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80271D34",
-          "end": "0x8027257C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802C1D88",
-          "end": "0x802C1D8C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80271D34",
-          "start": "0x80271D34",
-          "end": "0x80271D78"
-        },
-        {
-          "symbol": "fn_80271D78",
-          "start": "0x80271D78",
-          "end": "0x80271E50"
-        },
-        {
-          "symbol": "fn_80271E50",
-          "start": "0x80271E50",
-          "end": "0x80271EC4"
-        },
-        {
-          "symbol": "fn_80271EC4",
-          "start": "0x80271EC4",
-          "end": "0x80271F18"
-        },
-        {
-          "symbol": "fn_80271F18",
-          "start": "0x80271F18",
-          "end": "0x8027210C"
-        },
-        {
-          "symbol": "fn_8027210C",
-          "start": "0x8027210C",
-          "end": "0x80272128"
-        },
-        {
-          "symbol": "fn_80272128",
-          "start": "0x80272128",
-          "end": "0x80272150"
-        },
-        {
-          "symbol": "fn_80272150",
-          "start": "0x80272150",
-          "end": "0x8027257C"
         }
       ]
     },
@@ -27523,7 +27225,7 @@
     },
     {
       "source": "src/engine/cu_802753F0.cpp",
-      "profile": "engine_cpp_nosda",
+      "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x802753F0-0x80276DE4 (src/engine/cu_802753F0.cpp), the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
@@ -27633,7 +27335,7 @@
     },
     {
       "source": "src/engine/cu_80276DE4.cpp",
-      "profile": "engine_cpp_nosda",
+      "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x80276DE4-0x80278700 (src/engine/cu_80276DE4.cpp), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
@@ -27723,7 +27425,7 @@
     },
     {
       "source": "src/engine/cu_8027882C.cpp",
-      "profile": "engine_cpp_nosda",
+      "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x8027882C-0x8027981C (src/engine/cu_8027882C.cpp), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
@@ -27853,7 +27555,7 @@
     },
     {
       "source": "src/engine/cu_80279BC0.cpp",
-      "profile": "engine_cpp_nosda",
+      "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x80279BC0-0x8027AEE4 (src/engine/cu_80279BC0.cpp), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function; the exact .rodata data row 0x802C21F0-0x802C21F4 (used by 0x8027A21C). Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
@@ -28009,7 +27711,7 @@
     },
     {
       "source": "src/engine/cu_8027B1F8.cpp",
-      "profile": "engine_cpp_nosda",
+      "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x8027B1F8-0x8027CF9C (src/engine/cu_8027B1F8.cpp), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {

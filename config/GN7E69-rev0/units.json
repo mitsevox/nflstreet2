@@ -156,6 +156,17 @@
       ],
       "evidence": "evidence.tsv compiler row 0x801B8C18-0x801B91A0: bounded C++ lookup/synchronization group. ProDG 3.9.3 -O2 -G0 reproduces ten functions, including all scalar-global access helpers. Original references to 8037E820/824 and 802F4838 use absolute lis/load/store pairs rather than SDA; the globals lie outside SDA range. Default -G8 and -G4 emit incompatible SDA relocations for these scalar declarations. -O1 changes wrapper/dispatch bodies; -Os changes lookup body sizes. -O3 is indistinguishable on this candidate, and the exact original compiler version and small-data threshold below four bytes are unresolved. One profile applies to the entire source; no per-function override or changes to accepted profiles."
     },
+    "engine_cpp_nosda_nosr": {
+      "flags": [
+        "-O2",
+        "-G0",
+        "-fno-strength-reduce"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler row 0x801B8C18-0x801B9D00 (engine_cpp_nosda_nosr), the one file src/engine/cu_801B8C18.cpp: engine_cpp_nosda's -O2 -G0 (absolute lis/load/store pairs for its scalar globals, no SDA) plus -fno-strength-reduce (owner ruling of 2026-11-14, per-file profile): the target recomputes index*12 and index*16 with mulli inside each lookup loop. The flag is not given to engine_cpp_nosda because it changes FSasync.c (DoFSReadHeader) and src/engine/cu_8025E148.c (fn_8025E148)."
+    },
     "speech_cxx": {
       "flags": [
         "-O2",
@@ -171,13 +182,14 @@
     "sound_cxx": {
       "flags": [
         "-O2",
-        "-G0"
+        "-G0",
+        "-fno-strength-reduce"
       ],
       "include_dirs": [
         "include/libc"
       ],
       "language": "c++",
-      "evidence": "evidence.tsv compiler row 0x802714A8-0x8027CF9C (sound_cxx): the sound files sdspmix.c, snddrv.c, slinklst.c, saramman.c and supmutpf.c carry NASCAR 2005's .c names, and NASCAR's symbols for every function of those files are C++-mangled (SNDDRV_DSPMixerSetAuxBus__FP6_AXVPBUsi in sdspmix.c, SNDPLATFORM_stop__Fi in snddrv.c, SNDLINKI_push__FP11SNDLINKLISTP11SNDLINKNODE in slinklst.c, SNDARAM_alloc__Fi in saramman.c, SFILTER_unpackmtpf__FPviT0T0i in supmutpf.c), so the original build compiled them as C++. The flags are engine_cpp_nosda's, measured on the former files src/engine/cu_802714A8.cpp and src/engine/cu_80276DE4.cpp (their compiler rows): no r13 or r2 access in the range, and default -G8 would turn absolute word accesses into SDA relocations."
+      "evidence": "evidence.tsv compiler rows 0x802714A8-0x8027CF9C (sound_cxx): the sound files sdspmix.c, snddrv.c, slinklst.c, saramman.c and supmutpf.c carry NASCAR 2005's .c names, and NASCAR's symbols for every function of those files are C++-mangled (SNDDRV_DSPMixerSetAuxBus__FP6_AXVPBUsi in sdspmix.c, SNDPLATFORM_stop__Fi in snddrv.c, SNDLINKI_push__FP11SNDLINKLISTP11SNDLINKNODE in slinklst.c, SNDARAM_alloc__Fi in saramman.c, SFILTER_unpackmtpf__FPviT0T0i in supmutpf.c), so the original build compiled them as C++. -O2 -G0 are measured on the former files src/engine/cu_802714A8.cpp and src/engine/cu_80276DE4.cpp (their compiler rows): no r13 or r2 access in the range, and default -G8 would turn absolute word accesses into SDA relocations. -fno-strength-reduce (owner ruling of 2026-11-14, per-profile flag): the target recomputes loop indexes on every pass (mulli r3,r31,88 in 0x80271EC4; slwi/lfsx at 0x80279BD4/0x80279BD8) and the flag turns no exact function of the range inexact. The neutral .cpp files of the same range use this profile too."
     },
     "dolphin_vm_release": {
       "compiler": "mwcc",
@@ -302,10 +314,6 @@
     "__12FlowManagerC": {
       "address": "0x801CBC50",
       "evidence": "evidence.tsv external row for 0x801CBC50 (__12FlowManagerC); descriptive name."
-    },
-    "__15CsisClassHandle": {
-      "address": "0x801B8D9C",
-      "evidence": "evidence.tsv external row for 0x801B8D9C (__15CsisClassHandle); descriptive name."
     },
     "cosf": {
       "address": "0x80260EE8",
@@ -2286,6 +2294,10 @@
     "_restgpr_24": {
       "address": "0x8025FA98",
       "evidence": "evidence.tsv external row for 0x8025FA98 (_restgpr_24)."
+    },
+    "SNDDRV_dolbypl2balances": {
+      "address": "0x80300050",
+      "evidence": "evidence.tsv data and name rows for 0x80300050 (2048-byte balance table read by src/engine/sdspmix.c and by snddrv.c code; storage not claimed by either unit)."
     }
   },
   "units": [
@@ -15215,6 +15227,31 @@
       "evidence": "evidence.tsv whole-file provisional unit row, seed function/name/return rows and partial-linking source-form row. Exact native 84-byte prefix only; remaining complete functions are comparison-only."
     },
     {
+      "source": "src/engine/cu_801B8C18.cpp",
+      "profile": "engine_cpp_nosda_nosr",
+      "evidence": "evidence.tsv unit row 0x801B8C18-0x801B9D00 (src/engine/cu_801B8C18.cpp), its compiler row (engine_cpp_nosda_nosr), function and source-form rows, the .bss data row 0x8037E820-0x8037E824 and the .ctors data row 0x80289B44-0x80289B48; all 42 functions exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B8C18",
+          "end": "0x801B9D00"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037E820",
+          "end": "0x8037E824"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B44",
+          "end": "0x80289B48"
+        }
+      ]
+    },
+    {
       "source": "src/engine/vprintf.c",
       "profile": "engine_c",
       "evidence": "Complete 52-byte vprintf wrapper; existing related unit evidence and target calls at 0x8023ABB4/0x8023AC60. Both file edges provisional.",
@@ -15390,6 +15427,31 @@
           "placement": ".text",
           "start": "0x8026696C",
           "end": "0x80266A2C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sdspmix.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80271D34-0x8027257C (src/engine/sdspmix.c), its eight function and name rows, the data rows of its .rodata constant 0x802C1D88-0x802C1D8C and its .bss 0x803A7734-0x803A8D38 (__MIXChannel, numoutputchannels), and the sound_cxx compiler row 0x802714A8-0x8027CF9C; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80271D34",
+          "end": "0x8027257C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C1D88",
+          "end": "0x802C1D8C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A7734",
+          "end": "0x803A8D38"
         }
       ]
     },
