@@ -7114,6 +7114,83 @@
       ]
     },
     {
+      "source": "src/engine/UIGLibraries.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8021DE9C-0x8021EFD8 (src/engine/UIGLibraries.c), its compiler, function, name and data rows; every function exact, promoted from comparison-only together with its .sdata 0x803EBF38-0x803EBF48.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021DE9C",
+          "end": "0x8021EFD8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF38",
+          "end": "0x803EBF48"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/UIGTextureNode.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80221314-0x802215B0 (src/engine/UIGTextureNode.c), its compiler, function and name rows; every function exact, promoted from comparison-only; the file has no data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80221314",
+          "end": "0x802215B0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/UIGFont.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80225D90-0x802260B0 (src/engine/UIGFont.c), its compiler, function and name rows; every function exact, promoted from comparison-only; the file has no data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80225D90",
+          "end": "0x802260B0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/uigdisplist.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802260B0-0x802260F8 (src/engine/uigdisplist.c), its compiler, function and name rows; every function exact, promoted from comparison-only; the file has no data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802260B0",
+          "end": "0x802260F8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/UIGFmv.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802260F8-0x80226498 (src/engine/UIGFmv.c), its compiler, function, name and data rows; every function exact, promoted from comparison-only together with its .sdata 0x803EBF78-0x803EBF80.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802260F8",
+          "end": "0x80226498"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF78",
+          "end": "0x803EBF80"
+        }
+      ]
+    },
+    {
       "source": "src/engine/vector.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x80226F9C-0x802270A4 (src/engine/vector.c), its compiler, function, name and data rows; every function exact, promoted from comparison-only together with its .sdata byte 0x803EBF88.",
