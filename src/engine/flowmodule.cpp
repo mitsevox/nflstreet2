@@ -6,9 +6,7 @@
 
 unsigned char FlowModuleC::s_bLockModuleList = 0;
 unsigned int FlowModuleC::s_uNumModules = 0;
-/* FlowModuleC::s_aModuleList, the 500-entry module list, is an uninitialized class static that the
-   original linker allocated as COMMON (0x803D4780). The source build cannot place COMMON storage
-   yet, so its definition is left out and the symbol resolves through units.json externals. */
+FlowModuleC *FlowModuleC::s_aModuleList[500];
 
 FlowModuleC::FlowModuleC()
 {

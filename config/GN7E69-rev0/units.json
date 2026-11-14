@@ -2309,38 +2309,6 @@
       "address": "0x801CC054",
       "evidence": "evidence.tsv external row for 0x801CC054 (SetVerboseFlags__12FlowManagerCi) and the name row of FlowManagerC::SetVerboseFlags."
     },
-    "g_hHandle": {
-      "address": "0x802CC5A0",
-      "evidence": "evidence.tsv data and name rows for 0x802CC5A0: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
-    },
-    "g_pBuffer": {
-      "address": "0x802CC5A4",
-      "evidence": "evidence.tsv data and name rows for 0x802CC5A4: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
-    },
-    "g_nBlockCnt": {
-      "address": "0x802CC5A8",
-      "evidence": "evidence.tsv data and name rows for 0x802CC5A8: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
-    },
-    "g_nRemainderCnt": {
-      "address": "0x802CC5AC",
-      "evidence": "evidence.tsv data and name rows for 0x802CC5AC: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
-    },
-    "g_nTotalBytesRemaining": {
-      "address": "0x802CC5B0",
-      "evidence": "evidence.tsv data and name rows for 0x802CC5B0: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
-    },
-    "g_bDoFSACK": {
-      "address": "0x802CC5B4",
-      "evidence": "evidence.tsv data and name rows for 0x802CC5B4: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
-    },
-    "g_nFSLastError": {
-      "address": "0x802CC5B8",
-      "evidence": "evidence.tsv data and name rows for 0x802CC5B8: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
-    },
-    "g_FsResult": {
-      "address": "0x802CC5C0",
-      "evidence": "evidence.tsv data and name rows for 0x802CC5C0: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
-    },
     "madinit__Fv": {
       "address": "0x801DA52C",
       "evidence": "evidence.tsv function/name rows for 0x801DA52C; the documented holdout 0x801DA52C-0x801DA7E8 at the start of src/engine/maddec.cpp, which keeps its original bytes until its draft in comparisons.json is linked; called by 0x801DABE0."
@@ -2353,57 +2321,13 @@
       "address": "0x8020E7EC",
       "evidence": "evidence.tsv function and name rows for 0x8020E7EC (documented holdout 0x8020E7EC-0x8020E9D0 at the start of src/engine/lltextur.c: draft registered in comparisons.json, original bytes). Called by ResTexture.cpp."
     },
-    "_11FlowModuleC.s_aModuleList": {
-      "address": "0x803D4780",
-      "evidence": "evidence.tsv data/name rows for 0x803D4780: the 500-entry module list of src/engine/flowmodule.cpp, the uninitialized class static FlowModuleC::s_aModuleList, which the original linker allocated as COMMON after the .bss of every file; the source build rejects common symbols, so the storage stays in the original bytes."
-    },
     "CurveListEvaluate": {
       "address": "0x801C5278",
       "evidence": "evidence.tsv function and name rows for 0x801C5278 (src/engine/CurveList.c, a comparison-only file: draft registered in comparisons.json, original bytes). Called by camcurve.cpp and cu_800913E8.cpp."
     },
-    "Cdinfo": {
-      "address": "0x803D55E0",
-      "evidence": "evidence.tsv data/name rows for 0x803D55E0: the 28-byte disc client record of src/engine/fs_cli.c, a public uninitialized definition the original linker allocated as COMMON after the .bss of every file; the source build rejects common symbols, so the storage stays in the original bytes."
-    },
-    "_CDVDAlignedBuffer": {
-      "address": "0x803D5600",
-      "evidence": "evidence.tsv data/name rows for 0x803D5600: the 32 KB disc read buffer of src/engine/fs_cli.c, a public uninitialized definition the original linker allocated as COMMON after the .bss of every file; the source build rejects common symbols, so the storage stays in the original bytes."
-    },
     "CodecReadSamples": {
       "address": "0x8027D05C",
       "evidence": "evidence.tsv function/name rows for 0x8027D05C; exact but unlinked in the comparison-only src/engine/cu_8027CF9C.cpp, which keeps its original bytes until the whole file can be linked; called here by name."
-    },
-    "Per_MaxAxis": {
-      "address": "0x803ED5EC",
-      "evidence": "evidence.tsv data/name rows for 0x803ED5EC (linker-allocated COMMON word of periph.c; storage not in a unit)."
-    },
-    "Per_NumDrivers": {
-      "address": "0x803ED648",
-      "evidence": "evidence.tsv data/name rows for 0x803ED648 (linker-allocated COMMON word of periph.c; storage not in a unit)."
-    },
-    "Per_DriverArray": {
-      "address": "0x803ED64C",
-      "evidence": "evidence.tsv data/name rows for 0x803ED64C (linker-allocated COMMON word of periph.c; storage not in a unit)."
-    },
-    "Per_MaxButtons": {
-      "address": "0x803ED650",
-      "evidence": "evidence.tsv data/name rows for 0x803ED650 (linker-allocated COMMON word of periph.c; storage not in a unit)."
-    },
-    "Per_MaxDevices": {
-      "address": "0x803ED654",
-      "evidence": "evidence.tsv data/name rows for 0x803ED654 (linker-allocated COMMON word of periph.c; storage not in a unit)."
-    },
-    "Per_DeviceArray": {
-      "address": "0x803ED658",
-      "evidence": "evidence.tsv data/name rows for 0x803ED658 (linker-allocated COMMON word of periph.c; storage not in a unit)."
-    },
-    "Per_DeviceDataBuffer": {
-      "address": "0x803ED65C",
-      "evidence": "evidence.tsv data/name rows for 0x803ED65C (linker-allocated COMMON word of periph.c; storage not in a unit)."
-    },
-    "Per_NumDevices": {
-      "address": "0x803ED660",
-      "evidence": "evidence.tsv data/name rows for 0x803ED660 (linker-allocated COMMON word of periph.c; storage not in a unit)."
     },
     "PlyrRollContestedCatch": {
       "address": "0x8009A77C",
@@ -17656,7 +17580,7 @@
     {
       "source": "src/engine/flowmodule.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801CC700-0x801CCA64 (src/engine/flowmodule.cpp), its compiler, function and name rows, the virtual-table rows 0x802AF410-0x802AF490 and the .sdata rows 0x803EBC50-0x803EBC58. All 13 functions and the file's .rodata and .sdata are linked; the class static FlowModuleC::s_aModuleList (0x803D4780) is COMMON storage and resolves as an external.",
+      "evidence": "evidence.tsv unit row 0x801CC700-0x801CCA64 (src/engine/flowmodule.cpp), its compiler, function and name rows, the virtual-table rows 0x802AF410-0x802AF490 and the static data rows 0x803EBC50-0x803EBC58 and the class static FlowModuleC::s_aModuleList 0x803D4780-0x803D4F50, a COMMON symbol its storage map places. All 13 functions and the file's initialized data are linked.",
       "sections": [
         {
           "section": ".text",
@@ -17676,12 +17600,19 @@
           "start": "0x803EBC50",
           "end": "0x803EBC58"
         }
+      ],
+      "storage": [
+        {
+          "symbol": "_11FlowModuleC.s_aModuleList",
+          "start": "0x803D4780",
+          "end": "0x803D4F50"
+        }
       ]
     },
     {
       "source": "src/engine/FSasync.c",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AD57C-0x801ADDB4 (src/engine/FSasync.c), its function, name, data, compiler and source-form rows; every function exact, promoted from comparison-only. The .data range 0x802CC580-0x802CC590 holds the four initialized state words; the zero-filled storage 0x802CC5A0-0x802CC5CC is the file's uninitialized (COMMON) globals, which keep their original bytes and are named externals.",
+      "evidence": "evidence.tsv unit row 0x801AD57C-0x801ADDB4 (src/engine/FSasync.c), its function, name, data, compiler and source-form rows; every function exact, promoted from comparison-only. The .data range 0x802CC580-0x802CC590 holds the four initialized state words; the zero-filled storage 0x802CC5A0-0x802CC5CC is the file's eight uninitialized (COMMON) globals, which the storage map places at the extents of their exact data rows.",
       "sections": [
         {
           "section": ".text",
@@ -17694,6 +17625,48 @@
           "placement": ".data4",
           "start": "0x802CC580",
           "end": "0x802CC590"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "g_hHandle",
+          "start": "0x802CC5A0",
+          "end": "0x802CC5A4"
+        },
+        {
+          "symbol": "g_pBuffer",
+          "start": "0x802CC5A4",
+          "end": "0x802CC5A8"
+        },
+        {
+          "symbol": "g_nBlockCnt",
+          "start": "0x802CC5A8",
+          "end": "0x802CC5AC"
+        },
+        {
+          "symbol": "g_nRemainderCnt",
+          "start": "0x802CC5AC",
+          "end": "0x802CC5B0"
+        },
+        {
+          "symbol": "g_nTotalBytesRemaining",
+          "start": "0x802CC5B0",
+          "end": "0x802CC5B4"
+        },
+        {
+          "symbol": "g_bDoFSACK",
+          "start": "0x802CC5B4",
+          "end": "0x802CC5B8"
+        },
+        {
+          "symbol": "g_nFSLastError",
+          "start": "0x802CC5B8",
+          "end": "0x802CC5BC"
+        },
+        {
+          "symbol": "g_FsResult",
+          "start": "0x802CC5C0",
+          "end": "0x802CC5CC"
         }
       ]
     },
@@ -17787,7 +17760,7 @@
     {
       "source": "src/engine/fs_cli.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CB1BC-0x801CB5D4 (src/engine/fs_cli.c), its compiler, type, function, name, data and source-form rows; all eight functions and the 0x2380-byte .bss (reader thread, its stack and the two semaphores) match the target under unchanged engine_c, promoted from comparison-only. The two public globals Cdinfo and _CDVDAlignedBuffer are uninitialized definitions the original linker allocated as COMMON; they stay externals because the source build rejects common symbols.",
+      "evidence": "evidence.tsv provisional unit row 0x801CB1BC-0x801CB5D4 (src/engine/fs_cli.c), its compiler, type, function, name, data and source-form rows; all eight functions and the 0x2380-byte .bss (reader thread, its stack and the two semaphores) match the target under unchanged engine_c, promoted from comparison-only. The two public globals Cdinfo and _CDVDAlignedBuffer are uninitialized definitions the original linker allocated as COMMON; the file defines them and the unit's storage map places each COMMON symbol at its exact data row.",
       "sections": [
         {
           "section": ".text",
@@ -17800,6 +17773,18 @@
           "placement": ".bss",
           "start": "0x8037F8C0",
           "end": "0x80381C40"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "Cdinfo",
+          "start": "0x803D55E0",
+          "end": "0x803D55FC"
+        },
+        {
+          "symbol": "_CDVDAlignedBuffer",
+          "start": "0x803D5600",
+          "end": "0x803DD600"
         }
       ]
     },
@@ -17825,7 +17810,7 @@
     {
       "source": "src/engine/periph.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801E11D0-0x801E1A20 (src/engine/periph.c), its compiler, function, name, data and type rows; every function exact and the file-owned .sdata, .sbss and .bss linked; the Per_ COMMON globals resolve through externals.",
+      "evidence": "evidence.tsv unit row 0x801E11D0-0x801E1A20 (src/engine/periph.c), its compiler, function, name, data and type rows; every function exact and the file-owned .sdata, .sbss and .bss linked; the file defines the Per_ COMMON globals and the unit's storage map places each at its exact data row.",
       "sections": [
         {
           "section": ".text",
@@ -17850,6 +17835,48 @@
           "placement": ".bss",
           "start": "0x8039ADC4",
           "end": "0x8039ADE4"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "Per_MaxAxis",
+          "start": "0x803ED5EC",
+          "end": "0x803ED5F0"
+        },
+        {
+          "symbol": "Per_NumDrivers",
+          "start": "0x803ED648",
+          "end": "0x803ED64C"
+        },
+        {
+          "symbol": "Per_DriverArray",
+          "start": "0x803ED64C",
+          "end": "0x803ED650"
+        },
+        {
+          "symbol": "Per_MaxButtons",
+          "start": "0x803ED650",
+          "end": "0x803ED654"
+        },
+        {
+          "symbol": "Per_MaxDevices",
+          "start": "0x803ED654",
+          "end": "0x803ED658"
+        },
+        {
+          "symbol": "Per_DeviceArray",
+          "start": "0x803ED658",
+          "end": "0x803ED65C"
+        },
+        {
+          "symbol": "Per_DeviceDataBuffer",
+          "start": "0x803ED65C",
+          "end": "0x803ED660"
+        },
+        {
+          "symbol": "Per_NumDevices",
+          "start": "0x803ED660",
+          "end": "0x803ED664"
         }
       ]
     },

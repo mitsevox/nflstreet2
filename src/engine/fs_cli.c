@@ -20,8 +20,8 @@ typedef struct CdInfo_t {
     int mReadSize;
 } CdInfo_t;
 
-extern CdInfo_t Cdinfo;
-extern unsigned char _CDVDAlignedBuffer[];
+CdInfo_t Cdinfo;
+unsigned char _CDVDAlignedBuffer[0x8000];
 extern int lbl_803EBC34;
 
 static OSThread _CdReadCompleteThread;

@@ -9,6 +9,14 @@
 
 unsigned char Per_ModuleActive = 0;
 unsigned char Per_BtnMask[8] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
+unsigned int Per_MaxAxis;
+unsigned int Per_NumDrivers;
+PerDriver_t *Per_DriverArray;
+unsigned int Per_MaxButtons;
+unsigned int Per_MaxDevices;
+PerDevice_t *Per_DeviceArray;
+unsigned char *Per_DeviceDataBuffer;
+unsigned int Per_NumDevices;
 
 static int (*_Per_SeqFunction)();
 static unsigned long _Per_DataTSize;

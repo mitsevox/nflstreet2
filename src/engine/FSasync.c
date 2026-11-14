@@ -35,14 +35,14 @@ FSCallback_t g_FSCBFunc = 0;
 int g_nEXI2TCCnt = 0;
 int g_nDbgFsAsyncCnt = 0;
 
-extern int g_hHandle;
-extern u8 *g_pBuffer;
-extern volatile int g_nBlockCnt;
-extern volatile u32 g_nRemainderCnt;
-extern volatile u32 g_nTotalBytesRemaining;
-extern int g_bDoFSACK;
-extern int g_nFSLastError;
-extern FSResult_t g_FsResult;
+int g_hHandle;
+u8 *g_pBuffer;
+volatile int g_nBlockCnt;
+volatile u32 g_nRemainderCnt;
+volatile u32 g_nTotalBytesRemaining;
+int g_bDoFSACK;
+int g_nFSLastError;
+FSResult_t g_FsResult;
 
 extern int fn_801ACB9C(void);
 extern int fn_801ACC24(void *buf, int size);
