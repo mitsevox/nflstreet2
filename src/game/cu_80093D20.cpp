@@ -4,7 +4,7 @@
 #include "engine/Record_800D81C8.h"
 
 extern "C" {
-int fn_801BBE5C(int objectType, int fileNum);
+int AnimFileGetSlotFromFileNum(int objectType, int fileNum);
 int fn_801BA2A8(AnimHeader_t *pList, Record_800D81C8 *pChannels, unsigned short slot, int anim, int state,
                 void *pUser, float weight);
 void fn_801BA6BC(Record_800D81C8 *pChannel, int enable);
@@ -30,7 +30,7 @@ extern "C" int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pA,
         Record_800D81C8 *pChannels = (Record_800D81C8 *)pB;
 
         pState->mChannel = fn_801BA2A8((AnimHeader_t *)pA, pChannels,
-                                       fn_801BBE5C(pC->mpUnknown796->mUnknown2 | 0x4000, pFrame->mUnknown14), anim,
+                                       AnimFileGetSlotFromFileNum(pC->mpUnknown796->mUnknown2 | 0x4000, pFrame->mUnknown14), anim,
                                        key, pC, 1.0f);
         if (pFrame->mUnknown19 != 0) {
             pChannels[pState->mChannel].mUnknown7 |= 0x20;

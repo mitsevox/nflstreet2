@@ -14,9 +14,9 @@ void fn_800941EC(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 void fn_800A3B5C(Object_80039F5C *p);
 int fn_801784C4(void);
-int fn_801BBE5C(int objectType, int fileNum);
-unsigned int fn_801BBEC0(unsigned int id, int flags);
-void fn_801BB948(unsigned short id);
+int AnimFileGetSlotFromFileNum(int objectType, int fileNum);
+unsigned int AnimFileGetSiblingSlot(unsigned int id, int flags);
+void AnimFileUnloadSlotVirtual(unsigned short id);
 void BallsSetVisible(int on);
 int FELoopIsMainFEActive(void);
 }
@@ -69,9 +69,9 @@ extern "C" void fn_80093410(int handle)
                     }
                 }
                 Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(pActor, i);
-                int id = fn_801BBE5C(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14);
+                int id = AnimFileGetSlotFromFileNum(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14);
 
-                if (id != 0xFFFFFF && fn_801BBEC0(id, 0x400) != 0xFFFFFF) {
+                if (id != 0xFFFFFF && AnimFileGetSiblingSlot(id, 0x400) != 0xFFFFFF) {
                     fn_800A3B5C(p);
                     fn_800A3B58(p, 2, 0);
                 }
@@ -83,7 +83,7 @@ extern "C" void fn_80093410(int handle)
         fn_80091E44(handle);
         fn_800921E8(handle, 0);
         if (pCharacter->mUnknownD8.mWord & 0x80000000) {
-            fn_801BB948(pCharacter->mUnknownD8.mParts[1]);
+            AnimFileUnloadSlotVirtual(pCharacter->mUnknownD8.mParts[1]);
             fn_801C1F94(&lbl_803EC924->mUnknown80.mCharacters[handle], 0, sizeof(Character_80093BCC));
             lbl_803EC924->mUnknown80.mCharacters[handle].mUnknown0 = -1;
         } else if (--lbl_8030C164[pCharacter->mUnknownD8.mWord].mUnknown4 == 0) {

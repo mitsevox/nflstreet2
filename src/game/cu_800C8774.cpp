@@ -591,8 +591,8 @@ extern "C" int fn_800CB228(Object_80039F5C *p, Info_80089904 *pInfo, int angle, 
 
 extern "C" void fn_800CB504(void)
 {
-    fn_801BBC3C(1, 143, &lbl_80317AF4);
-    fn_801BBC3C(1, 144, &lbl_803186D8);
+    AnimFileGetStateAnimList(1, 143, &lbl_80317AF4);
+    AnimFileGetStateAnimList(1, 144, &lbl_803186D8);
     lbl_803EAC44 = 0;
     lbl_803EAC48 = 0;
     lbl_803EAC4C = 0;

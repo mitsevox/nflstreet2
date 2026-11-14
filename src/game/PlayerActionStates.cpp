@@ -78,8 +78,8 @@ extern "C" int fn_800DFA00(Object_80039F5C *p, float *pValue)
     Character_800DF7CC *pView = (Character_800DF7CC *)pCharacter;
     Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4), pBlock->mUnknown9);
     p->mpUnknown4->mUnknown20 |= 0x1000;
-    unsigned int handle = fn_801BBE5C(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14);
-    void *pData = fn_801BC084(handle);
+    unsigned int handle = AnimFileGetSlotFromFileNum(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14);
+    void *pData = AnimFileGetPtrFromSlot(handle);
     if (!pData) return 1;
     float value;
     pBlock->mUnknown13 = AnimSeqHasOpcode(&value, AnimFileGetAnimation(pData, 0), 0x8003) || AnimSeqHasOpcode(&value, AnimFileGetAnimation(pData, 0), 0x8001);
@@ -103,10 +103,10 @@ extern "C" int fn_800DFA00(Object_80039F5C *p, float *pValue)
         p->mpUnknown800[fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 10, 0)].mUnknown2C = 1.0f / p->mUnknown768;
     }
     if (handle != 0xFFFFFF) {
-        unsigned int other = fn_801BBEC0(handle, 1024);
+        unsigned int other = AnimFileGetSiblingSlot(handle, 1024);
         if (other != 0xFFFFFF) {
             fn_8009BD60(p);
-            unsigned int key = fn_801BBCC8(0, other);
+            unsigned int key = AnimFileGetStateQueryIndex(0, other);
             p->mUnknown1012[1] = key >> 8;
             p->mUnknown1012[0] = key;
             fn_801BE068(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, 0, 1.0f, p);

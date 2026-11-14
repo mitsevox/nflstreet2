@@ -44,11 +44,11 @@ extern float gPlyrMoveSideSpeed;
 extern float gPlyrMoveBackSpeed;
 int PlayerMoveAnimCheckReverse(Object_80039F5C *, unsigned short);
 int MathAngleDiff(int, int);
-int fn_801BB608(void *, void *);
-int fn_801BB638(int, void *);
-int fn_801BB65C(int, void *);
+int AnimFileLoadResidentData(void *, void *);
+int AnimFileLoadResident(int, void *);
+int AnimFileLoadResidentAsync(int, void *);
 int AnimSeqGetOpcodeParameter(void);
-int fn_801BB994(int id);
+int AnimFileUnloadFile(int id);
 void AnimCacheInit(int, int);
 void AnimCacheSetUpObjectType(int, int, int);
 void AnimFrameCacheSetCustomFunc(void (*)(AnimFileFormat_t *,int,unsigned char *,unsigned int,unsigned int,int));
@@ -64,10 +64,10 @@ void FlowModuleStart(void *, int);
 void FlowModuleStop(void *, int);
 void AnimSetUserOpcodeCallbacks(int (*)(void *,int,unsigned int), int (*)(void *,int,unsigned int));
 void AnimFileSetCustomRelocateFunc(void (*)(AnimFileFormat_t *));
-void fn_801BAEA4(void (*)(AnimFileFormat_t *));
+void AnimFileSetFreeFunc(void (*)(AnimFileFormat_t *));
 void ResSync(int);
-void *fn_801BB570(int, int, int, int);
-void fn_801BB480(void);
+void *AnimFileLoadAllocated(int, int, int, int);
+void AnimFileStop(void);
 int AnimSequencerShutdown(void);
 int AnimShutdown(void);
 void AnimWgtInit(int);
@@ -147,9 +147,9 @@ extern "C" void fn_8008EB18(int id,int flag,void *data)
 {
     int i=0;
     while(lbl_802D71D8[i].mId!=-1 && lbl_802D71D8[i].mId!=id) ++i;
-    if(lbl_802D71D8[i].mId==id) fn_801BB608(lbl_802D71D8[i].mHandle,data);
-    else if(flag) fn_801BB65C(id,data);
-    else fn_801BB638(id,data);
+    if(lbl_802D71D8[i].mId==id) AnimFileLoadResidentData(lbl_802D71D8[i].mHandle,data);
+    else if(flag) AnimFileLoadResidentAsync(id,data);
+    else AnimFileLoadResident(id,data);
 }
 
 extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
@@ -358,12 +358,12 @@ extern "C" void fn_8008FBA0(void)
     FlowModulePreStart(pModule);FlowModuleStart(pModule,0);
     lbl_802D713C.mpArchive=pModule->GetArchive();
     AnimSetUserOpcodeCallbacks(fn_8008EBBC,fn_8008F78C);
-    AnimFileSetCustomRelocateFunc(AnimExtnRelocateFile);fn_801BAEA4(AnimExtnFreeFile);
-    fn_801BB2D8(&lbl_802D713C);ResSync(0);
+    AnimFileSetCustomRelocateFunc(AnimExtnRelocateFile);AnimFileSetFreeFunc(AnimExtnFreeFile);
+    AnimFileStart(&lbl_802D713C);ResSync(0);
     if(lbl_803EA8B0) {fn_801D2BD0(lbl_803EA8B0);lbl_803EA8B0=0;}
     for(int i=0;lbl_802D71D8[i].mId!=-1;++i)
-        lbl_802D71D8[i].mHandle=fn_801BB570(lbl_802D71D8[i].mId,1,2,lbl_802D71D8[i].mUnknown7);
-    fn_801BB480();AnimSequencerShutdown();AnimShutdown();FlowModuleStop(&gAnimData,0);
+        lbl_802D71D8[i].mHandle=AnimFileLoadAllocated(lbl_802D71D8[i].mId,1,2,lbl_802D71D8[i].mUnknown7);
+    AnimFileStop();AnimSequencerShutdown();AnimShutdown();FlowModuleStop(&gAnimData,0);
 }
 extern "C" void fn_8008FCB4(int flag)
 {
@@ -371,14 +371,14 @@ extern "C" void fn_8008FCB4(int flag)
     else lbl_802D70D0.mpArchive=gAnimData.GetArchive();
     AnimInit(1);AnimSequencerInit(60.0f);
     AnimSetUserOpcodeCallbacks(fn_8008EBBC,fn_8008F78C);
-    AnimFileSetCustomRelocateFunc(AnimExtnRelocateFile);fn_801BAEA4(AnimExtnFreeFile);
+    AnimFileSetCustomRelocateFunc(AnimExtnRelocateFile);AnimFileSetFreeFunc(AnimExtnFreeFile);
     fn_8008F978();AnimWgtInit(4);
-    if(flag) fn_801BB2D8(&lbl_802D713C);else fn_801BB2D8(&lbl_802D70D0);
+    if(flag) AnimFileStart(&lbl_802D713C);else AnimFileStart(&lbl_802D70D0);
     fn_801BDF90(11);fn_8008F940();
 }
 extern "C" void fn_8008FD88(void)
 {
-    fn_801BDFF8();AnimCacheShutdown();fn_8008F9C0();fn_801BB480();
+    fn_801BDFF8();AnimCacheShutdown();fn_8008F9C0();AnimFileStop();
     AnimWgtShutdown();AnimShutdown();AnimSequencerShutdown();
 }
 extern "C" void fn_8008FDC0(void)
@@ -391,14 +391,14 @@ extern "C" void fn_8008FDC0(void)
 extern "C" void fn_8008FE5C(void) {}
 extern "C" void fn_8008FE60(void)
 {
-    fn_801BB638(71,0);fn_801BB638(81,0);fn_801BB638(76,0);
-    fn_801BB638(77,0);fn_801BB638(80,0);fn_801BB638(83,0);
+    AnimFileLoadResident(71,0);AnimFileLoadResident(81,0);AnimFileLoadResident(76,0);
+    AnimFileLoadResident(77,0);AnimFileLoadResident(80,0);AnimFileLoadResident(83,0);
     fn_8008EB18(72,0,lbl_803EC91C);
 }
 extern "C" void fn_8008FED4(void)
 {
-    fn_801BB994(71);fn_801BB994(81);fn_801BB994(76);
-    fn_801BB994(77);fn_801BB994(80);fn_801BB994(83);fn_801BB994(72);
+    AnimFileUnloadFile(71);AnimFileUnloadFile(81);AnimFileUnloadFile(76);
+    AnimFileUnloadFile(77);AnimFileUnloadFile(80);AnimFileUnloadFile(83);AnimFileUnloadFile(72);
 }
 extern "C" int fn_8008FF28(Object_8008FF28 *p,Record_8008FF28 *record)
 {

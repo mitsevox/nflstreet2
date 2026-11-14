@@ -29,7 +29,7 @@ int PlayerLocoFindSampleIndex(Object_801BBD5C *pObject, float value);
 float PlayerLocoUpdateBlendWeights(int index, Block_801BE60C *pBlock, LocoBlendSet_t *pObject, Record_800D81C8 *pEntries,
                   float value);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
-Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
+Object_801BBD5C *AnimFileGetStateData(unsigned short a, unsigned short b);
 void AnimSeqSetDuration(AnimSeq_t *p, float value);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
@@ -58,7 +58,7 @@ extern "C" int PlayerLocoHandleMomentumState(Table_80089904 *pTable, unsigned sh
         fn_801BE760(p->mpUnknown792, key, 1);
         unsigned char side = p == BallGetCurrentHolder() ? 1 : 2;
         int i = fn_8009C56C(pTable, &side);
-        fn_801BBC3C(p->mpUnknown796->mUnknown2, pTable->mEntries[i].mUnknown2 & 0x7FFF, pTable);
+        AnimFileGetStateAnimList(p->mpUnknown796->mUnknown2, pTable->mEntries[i].mUnknown2 & 0x7FFF, pTable);
         int index = fn_8009C4B0(pTable, &p->mUnknown1008);
         if (index >= 0) {
             pPayload->mEntry = fn_801BA2A8(pRecord, pEntries, pTable->mEntries[index].mUnknown0,
@@ -92,15 +92,15 @@ extern "C" void PlayerLocoSetupBlendSets(Table_80089904 *pTable, Block_801BE60C 
         unsigned short id = pTable->mEntries[i].mUnknown0;
         switch (type) {
         case 1:
-            pBlock->mpUnknown10 = fn_801BBD5C(key, p->mpUnknown796->mUnknown2);
+            pBlock->mpUnknown10 = AnimFileGetStateData(key, p->mpUnknown796->mUnknown2);
             pBlock->mUnknown20.mUnknown17 = id;
             break;
         case 3:
-            pBlock->mpUnknown14 = fn_801BBD5C(key, p->mpUnknown796->mUnknown2);
+            pBlock->mpUnknown14 = AnimFileGetStateData(key, p->mpUnknown796->mUnknown2);
             pBlock->mUnknown38 = id;
             break;
         case 2:
-            pBlock->mpUnknown18 = fn_801BBD5C(key, p->mpUnknown796->mUnknown2);
+            pBlock->mpUnknown18 = AnimFileGetStateData(key, p->mpUnknown796->mUnknown2);
             pBlock->mUnknown39 = id;
             break;
         }
@@ -143,7 +143,7 @@ extern "C" void PlayerLocoSelectSecondaryState(Table_80089904 *pTable, Block_801
     int index = fn_8009C56C(pTable, values);
     unsigned short id = pTable->mEntries[index].mUnknown2 & 0x7FFF;
     PlayerLocoSetPoseElements(pTable, p, index, swap);
-    fn_801BBC3C(p->mpUnknown796->mUnknown2, id, pTable);
+    AnimFileGetStateAnimList(p->mpUnknown796->mUnknown2, id, pTable);
     PlayerLocoSetupBlendSets(pTable, pBlock, p);
 }
 
@@ -154,7 +154,7 @@ extern "C" void PlayerLocoSelectStates(Table_80089904 *pTable, Block_801BE60C *p
     memset(values, 255, sizeof(values));
     values[0] = pBlock->mUnknown3C;
     int index = fn_8009C56C(pTable, values);
-    fn_801BBC3C(p->mpUnknown796->mUnknown2, pTable->mEntries[index].mUnknown2 & 0x7FFF, pTable);
+    AnimFileGetStateAnimList(p->mpUnknown796->mUnknown2, pTable->mEntries[index].mUnknown2 & 0x7FFF, pTable);
     PlayerLocoSelectSecondaryState(pTable, pBlock, p, swap);
 }
 

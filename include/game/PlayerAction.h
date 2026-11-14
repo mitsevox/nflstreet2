@@ -357,7 +357,7 @@ struct Record_800DCC14 {
     signed char mUnknown16;
 };
 extern "C" {
-Object_801BBD5C *fn_801BBD5C(unsigned short key, unsigned short id);
+Object_801BBD5C *AnimFileGetStateData(unsigned short key, unsigned short id);
 int fn_801BA2D0(void *pA, Record_800D81C8 *pEntries, Record_800D81C8 *pEntry);
 void fn_801BA418(void *pA, Record_800D81C8 *pEntries, int index, unsigned short a, int b, unsigned short key, Object_80039F5C *p);
 void PlayerLocoStartBlendPair(LocoBlendSet_t *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, int key, FEPlyrModel_t *pA, Record_800D81C8 *pEntries);
@@ -457,15 +457,15 @@ float AnimSequencerGetTicksPerSecond(Object_80039F5C *);
 Attachment_800DF7CC *fn_80093C08(unsigned short);
 int fn_800943B0(unsigned short);
 void fn_8009134C(unsigned short);
-int fn_801BBE5C(int objectType, int fileNum);
-void *fn_801BC084(unsigned int);
+int AnimFileGetSlotFromFileNum(int objectType, int fileNum);
+void *AnimFileGetPtrFromSlot(unsigned int);
 AnimScript_t *AnimFileGetAnimation(void *, int);
 int AnimSeqHasOpcode(float *, void *, unsigned short);
 int fn_801BA6B0(Record_800D81C8 *);
 void fn_801BA6BC(Record_800D81C8 *, int);
 void fn_800D7A0C(Object_80039F5C *, int);
-unsigned int fn_801BBEC0(unsigned int, int);
-int fn_801BBCC8(int state, unsigned int slot);
+unsigned int AnimFileGetSiblingSlot(unsigned int, int);
+int AnimFileGetStateQueryIndex(int state, unsigned int slot);
 }
 extern "C" int BallStateGet(Ball_t *, int);
 extern "C" void fn_800ADBC0(Object_80039F5C *, int, int, int);

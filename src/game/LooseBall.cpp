@@ -263,7 +263,7 @@ extern "C" int LooseBallFindAnim(Object_80039F5C *p, LooseBallBlock_t *state, Ba
         BallGetVelocity(pCurrent, &velocity);
         if (!force && (fn_802270D4(&velocity) >= 100.0f || !LooseBallCanReach(p, pCurrent)))
             goto done;
-        fn_801BBC3C(1, 48, (Table_80089904 *)&_LooseBall_AnimTable);
+        AnimFileGetStateAnimList(1, 48, (Table_80089904 *)&_LooseBall_AnimTable);
         for (signed char i = 0; i < _LooseBall_AnimTable.mCount; i++) {
             Info_80089904 *pInfo = (Info_80089904 *)_LooseBall_AnimTable.mEntries[i].mpUnknown4;
             if (type != pInfo->mType)

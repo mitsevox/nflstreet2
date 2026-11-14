@@ -82,14 +82,14 @@ int fn_801BA154(AnimHeader_t *pList, Record_800D81C8 *pChannels, int slot, int a
 
     if (index != -1) {
         fn_801BA360(&pChannels[index], 0, weight, 0, weight);
-        pChannels[index].mUnknown4 = AnimFileGetFileNum(fn_801BC084(slot));
+        pChannels[index].mUnknown4 = AnimFileGetFileNum(AnimFileGetPtrFromSlot(slot));
         pChannels[index].mUnknown6 = slot;
         pChannels[index].mUnknown2 = anim;
         pChannels[index].mUnknown8 = state;
         if (stateRef != 0xFFFF)
-            pChannels[index].mUnknownA = AnimFileGetStateRef(fn_801BC084(pChannels[index].mUnknown6), stateRef);
+            pChannels[index].mUnknownA = AnimFileGetStateRef(AnimFileGetPtrFromSlot(pChannels[index].mUnknown6), stateRef);
         else if (!(state & 0x8000))
-            pChannels[index].mUnknownA = AnimFileGetStateRef(fn_801BC084(pChannels[index].mUnknown6), state);
+            pChannels[index].mUnknownA = AnimFileGetStateRef(AnimFileGetPtrFromSlot(pChannels[index].mUnknown6), state);
         else
             pChannels[index].mUnknownA = stateRef;
         pChannels[index].mUnknownC = pList->mUnknown8;
@@ -99,7 +99,7 @@ int fn_801BA154(AnimHeader_t *pList, Record_800D81C8 *pChannels, int slot, int a
         pChannels[index].mUnknown2C = 1.0f;
         pChannels[index].mUnknown20 = 0x01000000;
         pChannels[index].mUnknown48 = 0.0f;
-        if (fn_801BA720(&pChannels[index], AnimFileGetAnimation(fn_801BC084(slot), anim), pUser) == 0)
+        if (fn_801BA720(&pChannels[index], AnimFileGetAnimation(AnimFileGetPtrFromSlot(slot), anim), pUser) == 0)
             pChannels[index].mUnknown1 = 2;
     }
     return index;
@@ -148,7 +148,7 @@ void fn_801BA418(AnimHeader_t *pList, Record_800D81C8 *pChannels, int index, uns
     int result;
 
     if (pChannels[index].mUnknown1 == 2) {
-        pChannels[index].mUnknown4 = AnimFileGetFileNum(fn_801BC084(slot));
+        pChannels[index].mUnknown4 = AnimFileGetFileNum(AnimFileGetPtrFromSlot(slot));
         pChannels[index].mUnknown8 = state;
         pChannels[index].mUnknown6 = slot;
         pChannels[index].mUnknown2 = anim;
@@ -156,7 +156,7 @@ void fn_801BA418(AnimHeader_t *pList, Record_800D81C8 *pChannels, int index, uns
             pChannels[index].mUnknown4C.mUnknown1A = AnimSeqGetNumFrames(pChannels[index].mUnknown4C.mpUnknown0);
         length = pChannels[index].mUnknown4C.mUnknown4 * (unsigned int)pChannels[index].mUnknown4C.mUnknown1A;
         time = fn_80260260(pChannels[index].mUnknown4C.mUnknown8, length);
-        result = fn_801BA720(&pChannels[index], AnimFileGetAnimation(fn_801BC084(slot), anim), pUser);
+        result = fn_801BA720(&pChannels[index], AnimFileGetAnimation(AnimFileGetPtrFromSlot(slot), anim), pUser);
         if (result != 1) {
             pChannels[index].mUnknown4C.mUnknown1A = AnimSeqGetNumFrames(pChannels[index].mUnknown4C.mpUnknown0);
             AnimSeqSetRate(&pChannels[index].mUnknown4C, length / (unsigned int)pChannels[index].mUnknown4C.mUnknown1A);
@@ -256,5 +256,5 @@ int fn_801BA720(Record_800D81C8 *pChannel, AnimScript_t *pAnim, void *pUser)
 void fn_801BA784(Record_800D81C8 *pDest, Record_800D81C8 *pSource)
 {
     *pDest = *pSource;
-    pDest->mUnknown4C.mpUnknown0 = AnimFileGetAnimation(fn_801BC084(pSource->mUnknown6), pSource->mUnknown2);
+    pDest->mUnknown4C.mpUnknown0 = AnimFileGetAnimation(AnimFileGetPtrFromSlot(pSource->mUnknown6), pSource->mUnknown2);
 }

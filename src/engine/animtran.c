@@ -7,7 +7,7 @@ Transition_801BEFA4 *fn_801BEFA4(AnimStateTransList_t *pTable, AnimHeader_t *pOb
 
 int fn_801BE82C(unsigned short type, unsigned short key)
 {
-    fn_801BBDCC(type, key, &lbl_803D4F50);
+    AnimFileGetTransList(type, key, &lbl_803D4F50);
     return lbl_803D4F50.mCount;
 }
 
@@ -50,7 +50,7 @@ void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
 
     for (i = 0; i < 4; i++) {
         if (p->mUnknown4[i].mUnknown0 == 0xFFFF) {
-            p->mUnknown4[i].mUnknown6 = fn_801BBF44(pObject->mUnknown2);
+            p->mUnknown4[i].mUnknown6 = AnimFileGetTransitionStateFromObjType(pObject->mUnknown2);
             continue;
         }
         if (p->mUnknown4[i].mUnknown2 != state) {
@@ -108,8 +108,8 @@ void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
                         int file;
                         int index;
 
-                        p->mUnknown4[i].mUnknown6 = fn_801BBF44(pObject->mUnknown2);
-                        file = fn_801BBE5C(pObject->mUnknown2, pTransition->mUnknownC);
+                        p->mUnknown4[i].mUnknown6 = AnimFileGetTransitionStateFromObjType(pObject->mUnknown2);
+                        file = AnimFileGetSlotFromFileNum(pObject->mUnknown2, pTransition->mUnknownC);
                         if (file != 0xFFFFFF &&
                             (index = fn_801BA154(pObject, pRecords, (unsigned short)file, pTransition->mUnknownE, 1.0f,
                                                  0xFFFF, pOwner, p->mUnknown4[i].mUnknown6)) != -1) {

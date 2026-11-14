@@ -750,7 +750,7 @@ extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA,
     switch (mode) {
     case 0: {
         fn_801BE760(p->mpUnknown792, key, 1);
-        pObject = fn_801BBD5C(key, p->mpUnknown796->mUnknown2);
+        pObject = AnimFileGetStateData(key, p->mpUnknown796->mUnknown2);
         int index = fn_800DC674(pObject, p);
         pRecord->mUnknown4 = 1.0f;
         unsigned char *pEntry = (unsigned char *)&pTable->mEntries[index];
@@ -764,7 +764,7 @@ extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA,
         if (fn_801BE648(p->mpUnknown792) != key) {
             break;
         }
-        pObject = fn_801BBD5C(key, p->mpUnknown796->mUnknown2);
+        pObject = AnimFileGetStateData(key, p->mpUnknown796->mUnknown2);
         if (pRecord->mUnknown16 <= 0) {
             int index = fn_800DC674(pObject, p);
             if (index != pRecord->mUnknown12) {
@@ -1065,7 +1065,7 @@ extern "C" void fn_800DD92C(Table_80089904 *pTable, unsigned short a, unsigned c
     values[1] = 255;
     values[2] = 255;
     values[3] = 255;
-    fn_801BBC3C(a, pTable->mEntries[fn_8009C56C(pTable, values)].mUnknown2 & 0x7FFF, pTable);
+    AnimFileGetStateAnimList(a, pTable->mEntries[fn_8009C56C(pTable, values)].mUnknown2 & 0x7FFF, pTable);
 }
 
 extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, void *pA, void *pB,
@@ -1355,7 +1355,7 @@ extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
     pBlock->mUnknown3F = pBlock->mUnknown3E = -1;
     for (unsigned int i = 0; i < pTable->mCount; i++) {
         int key = pTable->mEntries[i].mUnknown2 & 0x7FFF;
-        Table_800DE51C *pRecords = (Table_800DE51C *)fn_801BBD5C(key, p->mpUnknown796->mUnknown2);
+        Table_800DE51C *pRecords = (Table_800DE51C *)AnimFileGetStateData(key, p->mpUnknown796->mUnknown2);
         for (unsigned int j = 0; j < pRecords->mCount; j++) {
             Entry_800DE51C *pEntry = &pRecords->mEntries[j];
             if (!pEntry->mUnknown2) {
@@ -1453,13 +1453,13 @@ extern "C" void fn_800DEAB0(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key,
     union { Command_800CEE74 command; Command_800DE3B0 view; } command;
     switch (active) {
     case 181: case 186:
-        fn_801BBC3C(1, key, (Table_80089904 *)table);
+        AnimFileGetStateAnimList(1, key, (Table_80089904 *)table);
         fn_800CEE74(&command.command, p, fn_8009BCE8(&p->mUnknown336), pData, angle, (unsigned short)key, pBlock->mUnknown1F);
         fn_800CE804(&command.command, (Table_80089904 *)table, 0);
         fn_800DE3B0(pBlock, p, &command.view);
         break;
     case 195: case 196: case 197: case 210: case 224: case 228: case 229: case 230: case 235: case 237:
-        fn_801BBC3C(1, key, (Table_80089904 *)table);
+        AnimFileGetStateAnimList(1, key, (Table_80089904 *)table);
         fn_800CEE74(&command.command, p, 0, 0, 0, (unsigned short)key, pBlock->mUnknown1F);
         fn_800CE804(&command.command, (Table_80089904 *)table, pRecord->mUnknown0);
         fn_800DE3B0(pBlock, p, &command.view);
@@ -1591,7 +1591,7 @@ extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pDa
         if (key == 172 || key == 173) {
             for (unsigned short i = 0; i < pTable->mCount; i++) {
                 if (pTable->mEntries[i].mUnknown0 == second) {
-                    Table_800DE51C *pRecords = (Table_800DE51C *)fn_801BBD5C(pTable->mEntries[i].mUnknown2 & 0x7FFF, p->mpUnknown796->mUnknown2);
+                    Table_800DE51C *pRecords = (Table_800DE51C *)AnimFileGetStateData(pTable->mEntries[i].mUnknown2 & 0x7FFF, p->mpUnknown796->mUnknown2);
                     if (pRecords->mEntries[0].mUnknown0 == first || pRecords->mEntries[1].mUnknown0 == first) {
                         pBlock->mUnknown3C = ((unsigned char *)pTable->mEntries[i].mpInfo)[4];
                         break;

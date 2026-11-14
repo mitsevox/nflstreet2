@@ -21,7 +21,7 @@ float AnimSeqncrGetLength(AnimSeqncrBank_t *bank)
 
     for (i = 0; i < bank->mFrameCount; i++) {
         AnimSeqncrPlayer_t *frame = AnimSeqncrGetPlayerPtr(bank, i);
-        AnimFileFormat_t *file = fn_801BC084(fn_801BBE5C(frame->mUnknown2A | 0x4000, frame->mUnknownE));
+        AnimFileFormat_t *file = AnimFileGetPtrFromSlot(AnimFileGetSlotFromFileNum(frame->mUnknown2A | 0x4000, frame->mUnknownE));
         if (file != 0) {
             float length = AnimSeqGetLife(AnimFileGetAnimation(file, 0)) / AnimSequencerGetTicksPerSecond();
             if (length > result)

@@ -60,11 +60,11 @@ int AnimInit(unsigned int mode)
     AnimFileSetCustomRelocateFunc(0);
     switch (mode) {
     case 0:
-        fn_801BC64C(fn_801BC57C);
+        AnimFileSetRelocateBigFileFunc(AnimFileProcessBigFile);
         break;
     case 1:
     case 2:
-        fn_801BC64C(fn_801BC0E8);
+        AnimFileSetRelocateBigFileFunc(AnimFileNewProcessBigFile);
         break;
     }
     _Anim_SeqVersion = mode;

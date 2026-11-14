@@ -42,7 +42,7 @@ extern "C" void fn_800D760C(BitStream_t *pStream)
             unsigned int id = fn_801BE648(pPlayer->mpUnknown792);
             for (unsigned char k = 0; k < pPlayer->mpUnknown796->mUnknown4; k++) {
                 if (pPlayer->mpUnknown800[k].mUnknown8 == id) {
-                    Object_801BC084 *pInfo = fn_801BC084(pPlayer->mpUnknown800[k].mUnknown6);
+                    Object_801BC084 *pInfo = AnimFileGetPtrFromSlot(pPlayer->mpUnknown800[k].mUnknown6);
                     anim = pPlayer->mpUnknown800[k].mUnknown2 + pInfo->mUnknown3 * 1000;
                     break;
                 }

@@ -13,7 +13,7 @@ int fn_801BDA30(unsigned short type, unsigned short key, void *pOwner, int event
     if (key & 0x8000) {
         return 0;
     }
-    fn_801BBC3C(type, key, &lbl_8037EC7C);
+    AnimFileGetStateAnimList(type, key, &lbl_8037EC7C);
     return lbl_803EBB98[type]->mpUnknown4[key](&lbl_8037EC7C, key, pObject, pRecords, pOwner, event);
 }
 
@@ -361,7 +361,7 @@ void fn_801BE67C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
 
 void *fn_801BE72C(unsigned short type, unsigned short key)
 {
-    fn_801BBC3C(type, key, &lbl_8037EC7C);
+    AnimFileGetStateAnimList(type, key, &lbl_8037EC7C);
     return &lbl_8037EC7C;
 }
 

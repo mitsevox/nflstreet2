@@ -77,8 +77,8 @@ struct PlayerCutState_t {
     int mUnknown20;
 };
 
-/* The list fn_801BBC3C fills with the cut animations (object type 1, state 153). The game
-   declaration of fn_801BBC3C takes the Table_80089904 view, and the entries' +4 words are
+/* The list AnimFileGetStateAnimList fills with the cut animations (object type 1, state 153). The game
+   declaration of AnimFileGetStateAnimList takes the Table_80089904 view, and the entries' +4 words are
    Info_80089904 pointers. */
 static AnimStateAnimList_t _PlayerCut_sAnimList;
 
@@ -111,7 +111,7 @@ extern "C" Info_80089904 *PlayerCutFindAnimInfo(int a, int b)
 {
     unsigned int i;
 
-    fn_801BBC3C(1, 153, (Table_80089904 *)&_PlayerCut_sAnimList);
+    AnimFileGetStateAnimList(1, 153, (Table_80089904 *)&_PlayerCut_sAnimList);
     for (i = 0; i < _PlayerCut_sAnimList.mCount; i++) {
         Info_80089904 *pInfo = (Info_80089904 *)_PlayerCut_sAnimList.mEntries[i].mpUnknown4;
 

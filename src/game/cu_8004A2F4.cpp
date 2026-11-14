@@ -77,7 +77,7 @@ struct StateNameId_8004C270 {
     int mId;
 };
 
-/* Record of AnimSeqncrGetStaticPtr; its halfwords +42 and +14 are passed to fn_801BBE5C. */
+/* Record of AnimSeqncrGetStaticPtr; its halfwords +42 and +14 are passed to AnimFileGetSlotFromFileNum. */
 struct Frame_801C02CC {
     char mUnknown0[14];
     unsigned short mUnknown14;
@@ -182,8 +182,8 @@ void BigObjAnimBlendPose(BigObjPhysics_t *pExtra, BigObj_t *pItem, int a, int b)
 void BigObjAnimBlendRootAngles(BigObj_t *pItem, void *a, int b, void *c);
 short *BigObjAnimAllocSamples(int count);
 void fn_801B9FEC(void *p, void *q);
-int fn_801BB638(int id, int a);
-int fn_801BBE5C(int a, int b);
+int AnimFileLoadResident(int id, int a);
+int AnimFileGetSlotFromFileNum(int a, int b);
 void fn_801BE030(int type, Table_803EA4D0 *pTable);
 void fn_801BE040(void *p);
 Frame_801C02CC *AnimSeqncrGetStaticPtr(Actor_801C009C *pActor, int index);
@@ -268,7 +268,7 @@ int fn_8004A5EC(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *
         unsigned char b3 = pExtra->mUnknown1707;
         Frame_801C02CC *pFrame = AnimSeqncrGetStaticPtr(fn_80093BAC(b0, b1), b2);
 
-        fn_801BA2A8(a, b, fn_801BBE5C(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14), b3, c, pObject, 1.0f);
+        fn_801BA2A8(a, b, AnimFileGetSlotFromFileNum(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14), b3, c, pObject, 1.0f);
     }
     return 0;
 }
@@ -450,58 +450,58 @@ void fn_8004AD3C(int a)
 {
     switch (fn_800A3444()) {
     case 4:
-        fn_801BB638(0x66, a);
-        fn_801BB638(0x67, a);
-        fn_801BB638(0x68, a);
+        AnimFileLoadResident(0x66, a);
+        AnimFileLoadResident(0x67, a);
+        AnimFileLoadResident(0x68, a);
         break;
     case 0:
-        fn_801BB638(0x69, a);
-        fn_801BB638(0x6A, a);
-        fn_801BB638(0x6B, a);
+        AnimFileLoadResident(0x69, a);
+        AnimFileLoadResident(0x6A, a);
+        AnimFileLoadResident(0x6B, a);
         break;
     case 3:
-        fn_801BB638(0x6C, a);
-        fn_801BB638(0x6D, a);
-        fn_801BB638(0x6E, a);
+        AnimFileLoadResident(0x6C, a);
+        AnimFileLoadResident(0x6D, a);
+        AnimFileLoadResident(0x6E, a);
         break;
     case 5:
-        fn_801BB638(0x6F, a);
-        fn_801BB638(0x70, a);
-        fn_801BB638(0x71, a);
+        AnimFileLoadResident(0x6F, a);
+        AnimFileLoadResident(0x70, a);
+        AnimFileLoadResident(0x71, a);
         break;
     case 7:
-        fn_801BB638(0x72, a);
-        fn_801BB638(0x73, a);
+        AnimFileLoadResident(0x72, a);
+        AnimFileLoadResident(0x73, a);
         break;
     case 10:
-        fn_801BB638(0x74, a);
-        fn_801BB638(0x75, a);
-        fn_801BB638(0x76, a);
+        AnimFileLoadResident(0x74, a);
+        AnimFileLoadResident(0x75, a);
+        AnimFileLoadResident(0x76, a);
         break;
     case 6:
-        fn_801BB638(0x7A, a);
-        fn_801BB638(0x7B, a);
-        fn_801BB638(0x7C, a);
+        AnimFileLoadResident(0x7A, a);
+        AnimFileLoadResident(0x7B, a);
+        AnimFileLoadResident(0x7C, a);
         break;
     case 2:
-        fn_801BB638(0x77, a);
-        fn_801BB638(0x78, a);
-        fn_801BB638(0x79, a);
+        AnimFileLoadResident(0x77, a);
+        AnimFileLoadResident(0x78, a);
+        AnimFileLoadResident(0x79, a);
         break;
     case 1:
-        fn_801BB638(0x7D, a);
-        fn_801BB638(0x7E, a);
-        fn_801BB638(0x7F, a);
+        AnimFileLoadResident(0x7D, a);
+        AnimFileLoadResident(0x7E, a);
+        AnimFileLoadResident(0x7F, a);
         break;
     case 8:
-        fn_801BB638(0x80, a);
-        fn_801BB638(0x81, a);
-        fn_801BB638(0x82, a);
+        AnimFileLoadResident(0x80, a);
+        AnimFileLoadResident(0x81, a);
+        AnimFileLoadResident(0x82, a);
         break;
     case 11:
-        fn_801BB638(0x74, a);
-        fn_801BB638(0x75, a);
-        fn_801BB638(0x76, a);
+        AnimFileLoadResident(0x74, a);
+        AnimFileLoadResident(0x75, a);
+        AnimFileLoadResident(0x76, a);
         break;
     }
 }
