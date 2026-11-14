@@ -179,11 +179,11 @@ void *fn_801C6C84(List_801C68FC *pList, void *item)
     pNode = pNode ? (Node_801C6A20 *)((char *)pNode - lbl_803D4FB8[pList->mType].mNodeSize) : 0;
     if (pNode->mFlags & 0x80000000) {
         pNode = lbl_803D4FB8[pList->mType].mGet(pList, pNode, 4);
-        if (pNode) {
-            return (char *)pNode + lbl_803D4FB8[pList->mType].mNodeSize;
-        }
+        pNode = pNode ? (Node_801C6A20 *)((char *)pNode + lbl_803D4FB8[pList->mType].mNodeSize) : 0;
+    } else {
+        pNode = 0;
     }
-    return 0;
+    return pNode;
 }
 
 /* pStart is a get selector (0-4: first, last, ...) or an item, as for the type's get function. */
