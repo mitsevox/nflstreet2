@@ -69,8 +69,8 @@ int fn_801783AC(int bit);
 float fn_800AC004(int team, float value);
 float fn_800AD204(int team, int value);
 int fn_800B65A0(int team);
-float fn_8016B938(void);
-float fn_8016B974(void);
+float PlayTrackGetPlayIdRate(void);
+float PlayTrackGetResult5Rate(void);
 Object_80039F5C *BallGetCurrentHolder(void);
 void fn_800ABF00(int team, Block_80119DB4 *p);
 int fn_800CA5CC(Object_80039F5C *p, int kind, int value);
@@ -115,10 +115,10 @@ extern "C" void fn_80119DB4(Object_80039F5C *p, Object_80039F5C *pOther, int app
     }
     pCarrier = BallGetCurrentHolder();
     if (pCarrier != 0 && fn_800B65A0(pCarrier->mIdBytes[2]) != 0xFF && fn_800B65A0(pOther->mIdBytes[2]) == 0xFF) {
-        float bonus = fn_8016B938();
+        float bonus = PlayTrackGetPlayIdRate();
 
         if (first && (pCarrier->mFlags & 0x8000)) {
-            float other = fn_8016B974();
+            float other = PlayTrackGetResult5Rate();
 
             if (bonus < other) {
                 bonus = other;

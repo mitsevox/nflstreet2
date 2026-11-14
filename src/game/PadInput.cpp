@@ -1,7 +1,7 @@
 /* Controller input: reads each pad into 34 remapped stick and button values per frame and saves or restores the pad handlers. */
 
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/PadInput.h"
 
 struct PerDeviceData_t;
@@ -13,11 +13,11 @@ extern char lbl_802EC330[];
 
 int ConSetChannelInfo(int a, int b, void *p);
 int ConGetChannelInfo(int a, int b);
-int fn_801E15D0(int a);
-int fn_801E17D0(int a, PerDeviceData_t *pState);
-int fn_801E194C(void);
-int fn_801E195C(int a);
-unsigned int fn_801E19B4(int a);
+int PerPollSingleDevice(int a);
+int PerGetDeviceData(int a, PerDeviceData_t *pState);
+int PerSizeofPerDataT(void);
+int PerGetDeviceStatus(int a);
+unsigned int PerGetDeviceTypeT(int a);
 void PerCheckConnectSingle(unsigned char a);
 int PerIsDeviceConnected(unsigned char a);
 int RemapSetupEntries(int a, int b, int count, char *p);
@@ -93,9 +93,9 @@ int PadInputIsDeviceReady(int handle)
 
     PerCheckConnectSingle(handle);
     if (PerIsDeviceConnected(handle)) {
-        ready = fn_801E15D0(handle) == 0;
+        ready = PerPollSingleDevice(handle) == 0;
     }
-    if (!ready || fn_801E195C(handle) != 2 || !(fn_801E19B4(handle) >> 16)) {
+    if (!ready || PerGetDeviceStatus(handle) != 2 || !(PerGetDeviceTypeT(handle) >> 16)) {
         return 0;
     }
     return 1;
@@ -105,7 +105,7 @@ int PadInputInit(void)
 {
     int i;
 
-    _PadInput_pDeviceData = (char *)fn_801D2B7C(fn_801E194C(), 0, 0);
+    _PadInput_pDeviceData = (char *)fn_801D2B7C(PerSizeofPerDataT(), 0, 0);
     for (i = 0; i < 10; i++) {
         _PadInput_abResetSlot[i] = 0;
     }
@@ -130,9 +130,9 @@ void PadInputRead(int slot, InputValues *pPrevious, InputValues *pCurrent)
     handle = ConGetChannelInfo(slot, 0);
     ready = PadInputIsDeviceReady(handle);
     if (ready) {
-        fn_801E17D0(handle, (PerDeviceData_t *)pState);
+        PerGetDeviceData(handle, (PerDeviceData_t *)pState);
     } else {
-        fn_801C1F94(pState, 0, 12);
+        memset(pState, 0, 12);
     }
     if (ready) {
         if (!_PadInput_abResetSlot[slot]) {
@@ -153,13 +153,13 @@ void PadInputRead(int slot, InputValues *pPrevious, InputValues *pCurrent)
         }
     } else {
         *pPrevious = *pCurrent;
-        fn_801C1F94(pCurrent, 0, sizeof(InputValues));
+        memset(pCurrent, 0, sizeof(InputValues));
     }
 }
 
 void PadInputSetupRemap(int slot, int index)
 {
-    switch (fn_801E19B4(ConGetChannelInfo(slot, 0)) >> 16) {
+    switch (PerGetDeviceTypeT(ConGetChannelInfo(slot, 0)) >> 16) {
     case 2:
         RemapSetupEntries(slot, 0, 34, _PadInput_apRemapType2[index]);
         break;

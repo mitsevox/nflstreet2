@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Ball.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802372EC.h"
 
 extern "C" {
@@ -24,7 +24,7 @@ int fn_800E815C(Object_80039F5C *p, int unused, int mode)
 {
     if (!fn_800E7C84(p) || !PlayerIsFreeOfBall(p)) return 0;
     Message_800F01CC message;
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 12;
     Object_80039F5C *carrier = BallGetCurrentHolder();
     unsigned char choice;

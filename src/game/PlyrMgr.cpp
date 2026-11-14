@@ -15,7 +15,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/LightTracker.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
@@ -198,7 +198,6 @@ int fn_8009C328(Object_80039F5C *pA, Object_80039F5C *pB);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 int fn_800ABDA4(int team);
-void *fn_801C1FBC(void *pDest, const void *pSrc, int size);
 void *fn_8023816C(void *pHandle);
 int PlyrMgrCompareSnapshot(PlyrMgr_t *pA, PlyrMgr_t *pB);
 int PlyrMgrSaveSnapshot(PlyrMgr_t *pManager, char *pBuffer);
@@ -268,7 +267,7 @@ extern "C" int PlyrMgrCreate(PlyrMgr_t *pManager)
     int i;
 
     pManager->mpPlayers = (PlyrSlot_t *)fn_801D2B7C(pManager->mCount * sizeof(PlyrSlot_t), 0, 0);
-    fn_801C1F94(pManager->mpPlayers, 0, pManager->mCount * sizeof(PlyrSlot_t));
+    memset(pManager->mpPlayers, 0, pManager->mCount * sizeof(PlyrSlot_t));
     pManager->mpUnknown4 = (PlyrMgrCollideSet_t *)CollideSetCreate(pManager->mCount, pManager->mCount * 11);
     for (i = 0; i < pManager->mCount; i++) {
         PlyrSlot_t *pPlayers = pManager->mpPlayers;
@@ -370,22 +369,25 @@ extern "C" int PlyrMgrCompareSnapshot(PlyrMgr_t *pA, PlyrMgr_t *pB)
     return result;
 }
 
+// FAKEMATCH: memcpy called through a cast stays an ordinary call instead of the builtin copy
+#define PLYRMGR_COPY ((void *(*)(void *, const void *, int))memcpy)
+
 extern "C" int PlyrMgrSaveSnapshot(PlyrMgr_t *pManager, char *pBuffer)
 {
     PlyrMgrCollideSet_t *pBlock;
     short i;
 
-    fn_801C1FBC(pBuffer, pManager, sizeof(PlyrMgr_t));
+    PLYRMGR_COPY(pBuffer, pManager, sizeof(PlyrMgr_t));
     pBuffer += sizeof(PlyrMgr_t);
-    fn_801C1FBC(pBuffer, pManager->mpPlayers, pManager->mCount * sizeof(PlyrSlot_t));
+    PLYRMGR_COPY(pBuffer, pManager->mpPlayers, pManager->mCount * sizeof(PlyrSlot_t));
     pBuffer += pManager->mCount * sizeof(PlyrSlot_t);
     pBlock = pManager->mpUnknown4;
-    fn_801C1FBC(pBuffer, pBlock, sizeof(PlyrMgrCollideSet_t));
+    PLYRMGR_COPY(pBuffer, pBlock, sizeof(PlyrMgrCollideSet_t));
     pBuffer += sizeof(PlyrMgrCollideSet_t);
-    fn_801C1FBC(pBuffer, pBlock->mpUnknown0, pBlock->mUnknown4 * 48);
+    PLYRMGR_COPY(pBuffer, pBlock->mpUnknown0, pBlock->mUnknown4 * 48);
     pBuffer += pBlock->mUnknown4 * 48;
     for (i = 0; i <= 1; i++) {
-        fn_801C1FBC(pBuffer, pBlock->mpUnknown20[i], pBlock->mUnknown12 * 48);
+        PLYRMGR_COPY(pBuffer, pBlock->mpUnknown20[i], pBlock->mUnknown12 * 48);
         pBuffer += pBlock->mUnknown12 * 48;
     }
     return 1;
@@ -429,10 +431,10 @@ extern "C" int PlyrMgrLoadSnapshot(PlyrMgr_t *pManager, char *pBuffer)
         pSrc++;
     }
     pData = (char *)pSrc + sizeof(PlyrMgrCollideSet_t);
-    fn_801C1FBC(pManager->mpUnknown4->mpUnknown0, pData, pManager->mpUnknown4->mUnknown4 * 48);
+    memcpy(pManager->mpUnknown4->mpUnknown0, pData, pManager->mpUnknown4->mUnknown4 * 48);
     pData += pManager->mpUnknown4->mUnknown4 * 48;
     for (i = 0; i <= 1; i++) {
-        fn_801C1FBC(pManager->mpUnknown4->mpUnknown20[i], pData, pManager->mpUnknown4->mUnknown12 * 48);
+        memcpy(pManager->mpUnknown4->mpUnknown20[i], pData, pManager->mpUnknown4->mUnknown12 * 48);
         pData += pManager->mpUnknown4->mUnknown12 * 48;
     }
     return 1;

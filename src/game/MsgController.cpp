@@ -28,7 +28,7 @@ int SndgSfxPlay(int index, Vector_80039F5C *pPos);
 int MsgGameFindActivePort(void);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 int ConGetChannelInfo(int a, int b);
-int fn_801E195C(int a);
+int PerGetDeviceStatus(int a);
 }
 
 static unsigned char _CtrlSel_bAltSounds = 0;
@@ -76,7 +76,7 @@ int CtrlSelAlwaysFalse(int a)
 
 int CtrlSelIsConnected(int a)
 {
-    return fn_801E195C(ConGetChannelInfo(a, 0)) == 2;
+    return PerGetDeviceStatus(ConGetChannelInfo(a, 0)) == 2;
 }
 
 unsigned char CtrlSelIsOpen(void)

@@ -1,11 +1,13 @@
+/* Threaded binary search tree list type (list type 1): ordered insert, remove, lookup, in-order traversal and
+   rebalancing of the tree when it grows too deep, registered with the generic list module. */
 #include "engine/list.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 
-typedef int (*VisitFn_801C7F70)(void *, int, int);
+typedef int (*BinVisitFn_t)(void *, int, int);
 
-/* Node flag bits (low byte of BinNode_801C7F70.mFlags). */
+/* Node flag bits (low byte of BinNode_t.mFlags). */
 #define BIN_LEFT_THREAD 0x1
 #define BIN_RIGHT_THREAD 0x2
 #define BIN_FIRST 0x4
@@ -16,26 +18,24 @@ typedef int (*VisitFn_801C7F70)(void *, int, int);
 #define BIN_NODE_SIZE (lbl_803D4FB8[1].mNodeSize)
 #define BIN_ITEM(pNode) ((pNode) ? (char *)(pNode) + BIN_NODE_SIZE : 0)
 
-extern BinNode_801C7F70 lbl_8037F880;
+static void _DSListResetBinaryTree(BinTree_t *pTree, BinNode_t **ppNodes, int count);
+static void _DSListInitBinaryTree(BinTree_t *pTree);
+static BinNode_t *_DSListGetBinaryPrev(BinNode_t *pNode);
+static BinNode_t *_DSListGetBinaryNext(BinNode_t *pNode);
+static BinNode_t *_DSListAddBinaryNode(BinTree_t *pTree, BinNode_t *pNode, int mode);
+static BinNode_t *_DSListGetBinaryNode(BinTree_t *pTree, BinNode_t *pNode, unsigned int mode);
+static int _DSListTraverseBinaryTree(BinTree_t *pTree, BinNode_t *pNode, int a, int b,
+                       BinVisitFn_t callback, int direction);
+static int _DSListOptimizeBinaryTree(BinTree_t *pTree, float avgLimit, int force, float depthLimit, int enable);
 
-void fn_801C8298(BinTree_801C7F70 *pTree, BinNode_801C7F70 **ppNodes, int count);
-void fn_801C87C0(BinTree_801C7F70 *pTree);
-static BinNode_801C7F70 *fn_801C819C(BinNode_801C7F70 *pNode);
-static BinNode_801C7F70 *fn_801C81E0(BinNode_801C7F70 *pNode);
-static BinNode_801C7F70 *fn_801C8834(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, int mode);
-static BinNode_801C7F70 *fn_801C89D4(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, unsigned int mode);
-static int fn_801C8C44(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, int a, int b,
-                       VisitFn_801C7F70 callback, int direction);
-static int fn_801C8D38(BinTree_801C7F70 *pTree, float avgLimit, int force, float depthLimit, int enable);
-
-static int fn_801C7F70(BinNode_801C7F70 *pNode, int a, int b, VisitFn_801C7F70 callback)
+static int _DSListTraverseBinaryTreeRight(BinNode_t *pNode, int a, int b, BinVisitFn_t callback)
 {
-    BinNode_801C7F70 *pNext;
+    BinNode_t *pNext;
     int done = 0;
     int result;
 
     do {
-        pNext = fn_801C81E0(pNode);
+        pNext = _DSListGetBinaryNext(pNode);
         result = callback(BIN_ITEM(pNode), a, b);
         if (result == 0 || (pNode->mFlags & BIN_LAST)) {
             done = 1;
@@ -45,14 +45,14 @@ static int fn_801C7F70(BinNode_801C7F70 *pNode, int a, int b, VisitFn_801C7F70 c
     return result == 0 ? 4 : 0;
 }
 
-static int fn_801C8014(BinNode_801C7F70 *pNode, int a, int b, VisitFn_801C7F70 callback)
+static int _DSListTraverseBinaryTreeLeft(BinNode_t *pNode, int a, int b, BinVisitFn_t callback)
 {
-    BinNode_801C7F70 *pNext;
+    BinNode_t *pNext;
     int done = 0;
     int result;
 
     do {
-        pNext = fn_801C819C(pNode);
+        pNext = _DSListGetBinaryPrev(pNode);
         result = callback(BIN_ITEM(pNode), a, b);
         if (result == 0 || (pNode->mFlags & BIN_FIRST)) {
             done = 1;
@@ -62,7 +62,7 @@ static int fn_801C8014(BinNode_801C7F70 *pNode, int a, int b, VisitFn_801C7F70 c
     return result == 0 ? 4 : 0;
 }
 
-static void fn_801C80B8(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pParent, BinNode_801C7F70 *pNode, int cmp)
+static void _DSListInsertBinaryNode(BinTree_t *pTree, BinNode_t *pParent, BinNode_t *pNode, int cmp)
 {
     pNode->mFlags = 0x80000000;
     if (pParent) {
@@ -93,9 +93,9 @@ static void fn_801C80B8(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pParent, BinN
     pTree->mBase.mCount++;
 }
 
-static BinNode_801C7F70 *fn_801C819C(BinNode_801C7F70 *pNode)
+static BinNode_t *_DSListGetBinaryPrev(BinNode_t *pNode)
 {
-    BinNode_801C7F70 *pPrev;
+    BinNode_t *pPrev;
 
     if (!(pNode->mFlags & BIN_FIRST)) {
         pPrev = pNode->mpLeft;
@@ -109,9 +109,9 @@ static BinNode_801C7F70 *fn_801C819C(BinNode_801C7F70 *pNode)
     return 0;
 }
 
-static BinNode_801C7F70 *fn_801C81E0(BinNode_801C7F70 *pNode)
+static BinNode_t *_DSListGetBinaryNext(BinNode_t *pNode)
 {
-    BinNode_801C7F70 *pNext;
+    BinNode_t *pNext;
 
     if (!(pNode->mFlags & BIN_LAST)) {
         pNext = pNode->mpRight;
@@ -125,9 +125,10 @@ static BinNode_801C7F70 *fn_801C81E0(BinNode_801C7F70 *pNode)
     return 0;
 }
 
-static BinNode_801C7F70 *fn_801C8224(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode)
+static BinNode_t *_DSListGetBinaryParent(BinTree_t *pTree, BinNode_t *pNode)
 {
-    BinNode_801C7F70 *pParent;
+    static BinNode_t _FakeNode;
+    BinNode_t *pParent;
 
     if (pNode != pTree->mpRoot) {
         pParent = pNode;
@@ -143,15 +144,15 @@ static BinNode_801C7F70 *fn_801C8224(BinTree_801C7F70 *pTree, BinNode_801C7F70 *
             pParent = pParent->mpLeft;
         }
     } else {
-        lbl_8037F880.mFlags = 0;
-        lbl_8037F880.mpLeft = pNode;
-        lbl_8037F880.mpRight = pNode;
-        pParent = &lbl_8037F880;
+        _FakeNode.mFlags = 0;
+        _FakeNode.mpLeft = pNode;
+        _FakeNode.mpRight = pNode;
+        pParent = &_FakeNode;
     }
     return pParent;
 }
 
-void fn_801C8298(BinTree_801C7F70 *pTree, BinNode_801C7F70 **ppNodes, int count)
+static void _DSListResetBinaryTree(BinTree_t *pTree, BinNode_t **ppNodes, int count)
 {
     int i;
 
@@ -166,38 +167,38 @@ void fn_801C8298(BinTree_801C7F70 *pTree, BinNode_801C7F70 **ppNodes, int count)
     }
 }
 
-static int fn_801C82E0(void *pItem, BinNode_801C7F70 **ppNodes, int *pIndex)
+static int _DSListOptTrvFunc(void *pItem, BinNode_t **ppNodes, int *pIndex)
 {
-    ppNodes[*pIndex] = pItem ? (BinNode_801C7F70 *)((char *)pItem - lbl_803D4FB8[1].mNodeSize) : 0;
+    ppNodes[*pIndex] = pItem ? (BinNode_t *)((char *)pItem - lbl_803D4FB8[1].mNodeSize) : 0;
     (*pIndex)++;
     return 1;
 }
 
-static void fn_801C831C(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode)
+static void _DSListAddBinNodeOpt(BinTree_t *pTree, BinNode_t *pNode)
 {
-    fn_801C8834(pTree, pNode, 0);
+    _DSListAddBinaryNode(pTree, pNode, 0);
 }
 
-static void fn_801C8340(BinTree_801C7F70 *pTree, BinNode_801C7F70 **ppNodes, unsigned int lo, unsigned int hi)
+static void _DSListAddBinTreeOpt(BinTree_t *pTree, BinNode_t **ppNodes, unsigned int lo, unsigned int hi)
 {
     unsigned int span = hi - lo;
     unsigned int mid = span / 2 + lo;
 
     if (span > 1) {
-        fn_801C831C(pTree, ppNodes[mid]);
-        fn_801C8340(pTree, ppNodes, lo, mid - 1);
-        fn_801C8340(pTree, ppNodes, mid + 1, hi);
+        _DSListAddBinNodeOpt(pTree, ppNodes[mid]);
+        _DSListAddBinTreeOpt(pTree, ppNodes, lo, mid - 1);
+        _DSListAddBinTreeOpt(pTree, ppNodes, mid + 1, hi);
     } else if (span == 1) {
-        fn_801C831C(pTree, ppNodes[lo]);
-        fn_801C831C(pTree, ppNodes[hi]);
+        _DSListAddBinNodeOpt(pTree, ppNodes[lo]);
+        _DSListAddBinNodeOpt(pTree, ppNodes[hi]);
     } else {
-        fn_801C831C(pTree, ppNodes[lo]);
+        _DSListAddBinNodeOpt(pTree, ppNodes[lo]);
     }
 }
 
-static int fn_801C83FC(BinTree_801C7F70 *pTree)
+static int _DSListDoOptBinaryTree(BinTree_t *pTree)
 {
-    BinNode_801C7F70 **ppNodes;
+    BinNode_t **ppNodes;
     int count;
     int index = 0;
     int result = 0;
@@ -210,11 +211,11 @@ static int fn_801C83FC(BinTree_801C7F70 *pTree)
         ppNodes = pTree->mppScratch;
     }
     if (ppNodes) {
-        fn_801C8C44(pTree, fn_801C89D4(pTree, 0, 0), (int)ppNodes, (int)&index,
-                    (VisitFn_801C7F70)fn_801C82E0, 1);
+        _DSListTraverseBinaryTree(pTree, _DSListGetBinaryNode(pTree, 0, 0), (int)ppNodes, (int)&index,
+                    (BinVisitFn_t)_DSListOptTrvFunc, 1);
         autoOptimize = pTree->mAutoOptimize;
-        fn_801C8298(pTree, ppNodes, count);
-        fn_801C8340(pTree, ppNodes, 0, index - 1);
+        _DSListResetBinaryTree(pTree, ppNodes, count);
+        _DSListAddBinTreeOpt(pTree, ppNodes, 0, index - 1);
         pTree->mAutoOptimize = autoOptimize;
         if (pTree->mppScratch == 0) {
             result = fn_801D2BD0(ppNodes) == 0;
@@ -225,7 +226,7 @@ static int fn_801C83FC(BinTree_801C7F70 *pTree)
     return result;
 }
 
-static unsigned int fn_801C84EC(unsigned int count)
+static unsigned int _DSListCalcOptimalDepth(unsigned int count)
 {
     unsigned int depth = 1;
 
@@ -235,10 +236,10 @@ static unsigned int fn_801C84EC(unsigned int count)
     return depth;
 }
 
-static BinNode_801C7F70 *fn_801C850C(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, BinNode_801C7F70 *pParent,
-                                     BinNode_801C7F70 *pPrev, BinNode_801C7F70 *pNext)
+static BinNode_t *_DSListRemoveBinaryNodeLeft(BinTree_t *pTree, BinNode_t *pNode, BinNode_t *pParent,
+                                     BinNode_t *pPrev, BinNode_t *pNext)
 {
-    BinNode_801C7F70 *pPrevParent = fn_801C8224(pTree, pPrev);
+    BinNode_t *pPrevParent = _DSListGetBinaryParent(pTree, pPrev);
 
     if (pNode->mFlags & BIN_IS_LEFT) {
         pParent->mpLeft = pPrev;
@@ -275,10 +276,10 @@ static BinNode_801C7F70 *fn_801C850C(BinTree_801C7F70 *pTree, BinNode_801C7F70 *
     return pPrev;
 }
 
-static BinNode_801C7F70 *fn_801C8650(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, BinNode_801C7F70 *pParent,
-                                     BinNode_801C7F70 *pPrev, BinNode_801C7F70 *pNext)
+static BinNode_t *_DSListRemoveBinaryNodeRight(BinTree_t *pTree, BinNode_t *pNode, BinNode_t *pParent,
+                                     BinNode_t *pPrev, BinNode_t *pNext)
 {
-    BinNode_801C7F70 *pNextParent = fn_801C8224(pTree, pNext);
+    BinNode_t *pNextParent = _DSListGetBinaryParent(pTree, pNext);
 
     if (pNode->mFlags & BIN_IS_LEFT) {
         pParent->mpLeft = pNext;
@@ -290,13 +291,16 @@ static BinNode_801C7F70 *fn_801C8650(BinTree_801C7F70 *pTree, BinNode_801C7F70 *
             pNextParent->mpLeft = pNext->mpRight;
             pNextParent->mpLeft->mFlags &= ~BIN_IS_RIGHT;
             pNextParent->mpLeft->mFlags |= BIN_IS_LEFT;
+            pNext->mFlags = pNode->mFlags;
+            pNext->mpLeft = pNode->mpLeft;
+            pNext->mpRight = pNode->mpRight;
         } else {
             pNextParent->mFlags |= BIN_LEFT_THREAD;
             pNextParent->mpLeft = pNext;
+            pNext->mFlags = pNode->mFlags;
+            pNext->mpLeft = pNode->mpLeft;
+            pNext->mpRight = pNode->mpRight;
         }
-        pNext->mFlags = pNode->mFlags;
-        pNext->mpLeft = pNode->mpLeft;
-        pNext->mpRight = pNode->mpRight;
     } else {
         if (pNext->mFlags & BIN_IS_LEFT) {
             pNext->mpRight = pNode->mpRight;
@@ -312,7 +316,7 @@ static BinNode_801C7F70 *fn_801C8650(BinTree_801C7F70 *pTree, BinNode_801C7F70 *
     return pNext;
 }
 
-static BinNode_801C7F70 *fn_801C8770(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, BinNode_801C7F70 *pParent)
+static BinNode_t *_DSListRemoveBinaryLeaf(BinTree_t *pTree, BinNode_t *pNode, BinNode_t *pParent)
 {
     if (pNode->mFlags & BIN_IS_LEFT) {
         pParent->mpLeft = pNode->mpLeft;
@@ -325,7 +329,7 @@ static BinNode_801C7F70 *fn_801C8770(BinTree_801C7F70 *pTree, BinNode_801C7F70 *
     return pParent;
 }
 
-void fn_801C87C0(BinTree_801C7F70 *pTree)
+static void _DSListInitBinaryTree(BinTree_t *pTree)
 {
     pTree->mpRoot = 0;
     pTree->mMaxDepth = 0;
@@ -334,7 +338,7 @@ void fn_801C87C0(BinTree_801C7F70 *pTree)
     pTree->mppScratch = 0;
 }
 
-static int fn_801C87DC(BinTree_801C7F70 *pTree)
+static int _DSListDelBinaryTree(BinTree_t *pTree)
 {
     int result = 0;
 
@@ -347,10 +351,10 @@ static int fn_801C87DC(BinTree_801C7F70 *pTree)
     return result;
 }
 
-static BinNode_801C7F70 *fn_801C8834(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, int mode)
+static BinNode_t *_DSListAddBinaryNode(BinTree_t *pTree, BinNode_t *pNode, int mode)
 {
-    BinNode_801C7F70 *pResult = pNode;
-    BinNode_801C7F70 *pCur;
+    BinNode_t *pResult = pNode;
+    BinNode_t *pCur;
     void *pItem;
     void *pCurItem;
     int cmp = 1;
@@ -383,14 +387,14 @@ static BinNode_801C7F70 *fn_801C8834(BinTree_801C7F70 *pTree, BinNode_801C7F70 *
     }
     if (mode != 1 || cmp != 0) {
         depth++;
-        fn_801C80B8(pTree, pCur, pNode, cmp);
+        _DSListInsertBinaryNode(pTree, pCur, pNode, cmp);
         pNode->mDepth = depth;
         if (depth > pTree->mMaxDepth) {
             pTree->mMaxDepth = depth;
         }
         pTree->mTotalDepth += depth;
         if (pTree->mAutoOptimize) {
-            fn_801C8D38(pTree, pTree->mAvgLimit, 0, pTree->mDepthLimit, 1);
+            _DSListOptimizeBinaryTree(pTree, pTree->mAvgLimit, 0, pTree->mDepthLimit, 1);
         }
     } else {
         pResult = pCur;
@@ -398,14 +402,14 @@ static BinNode_801C7F70 *fn_801C8834(BinTree_801C7F70 *pTree, BinNode_801C7F70 *
     return pResult;
 }
 
-static void fn_801C89AC(BinNode_801C7F70 *pNode, int size)
+static void _DSListInitBinaryNode(BinNode_t *pNode, int size)
 {
-    fn_801C1F94(pNode, 0, size);
+    memset(pNode, 0, size);
 }
 
-static BinNode_801C7F70 *fn_801C89D4(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, unsigned int mode)
+static BinNode_t *_DSListGetBinaryNode(BinTree_t *pTree, BinNode_t *pNode, unsigned int mode)
 {
-    BinNode_801C7F70 *pResult = pNode;
+    BinNode_t *pResult = pNode;
 
     if (pTree->mpRoot) {
         switch (mode) {
@@ -425,13 +429,13 @@ static BinNode_801C7F70 *fn_801C89D4(BinTree_801C7F70 *pTree, BinNode_801C7F70 *
             }
             break;
         case 3:
-            pResult = fn_801C819C(pResult);
+            pResult = _DSListGetBinaryPrev(pResult);
             break;
         case 4:
-            pResult = fn_801C81E0(pResult);
+            pResult = _DSListGetBinaryNext(pResult);
             break;
         default:
-            pResult = pNode ? (BinNode_801C7F70 *)((char *)pNode - lbl_803D4FB8[1].mNodeSize) : 0;
+            pResult = pNode ? (BinNode_t *)((char *)pNode - lbl_803D4FB8[1].mNodeSize) : 0;
             break;
         }
     } else {
@@ -440,28 +444,28 @@ static BinNode_801C7F70 *fn_801C89D4(BinTree_801C7F70 *pTree, BinNode_801C7F70 *
     return pResult;
 }
 
-static void fn_801C8AB4(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode)
+static void _DSListRemoveBinaryNode(BinTree_t *pTree, BinNode_t *pNode)
 {
-    BinNode_801C7F70 *pPrev = fn_801C819C(pNode);
-    BinNode_801C7F70 *pNext = fn_801C81E0(pNode);
-    BinNode_801C7F70 *pParent = fn_801C8224(pTree, pNode);
+    BinNode_t *pPrev = _DSListGetBinaryPrev(pNode);
+    BinNode_t *pNext = _DSListGetBinaryNext(pNode);
+    BinNode_t *pParent = _DSListGetBinaryParent(pTree, pNode);
 
     /* pNext becomes the replacement node, or the parent when a leaf is removed; pPrev is reused for the
        first node only when the root is removed. */
     if (!(pNode->mFlags & BIN_LEFT_THREAD)) {
-        pNext = fn_801C850C(pTree, pNode, pParent, pPrev, pNext);
+        pNext = _DSListRemoveBinaryNodeLeft(pTree, pNode, pParent, pPrev, pNext);
     } else if (!(pNode->mFlags & BIN_RIGHT_THREAD)) {
-        pNext = fn_801C8650(pTree, pNode, pParent, pPrev, pNext);
+        pNext = _DSListRemoveBinaryNodeRight(pTree, pNode, pParent, pPrev, pNext);
     } else if (pNode != pTree->mpRoot) {
-        pNext = fn_801C8770(pTree, pNode, pParent);
+        pNext = _DSListRemoveBinaryLeaf(pTree, pNode, pParent);
     } else {
         pNext = 0;
     }
     if (pNode == pTree->mpRoot) {
         pTree->mpRoot = pNext;
         if (pNext) {
-            pPrev = fn_801C89D4(pTree, pNode, 0);
-            pParent = fn_801C89D4(pTree, pNode, 1);
+            pPrev = _DSListGetBinaryNode(pTree, pNode, 0);
+            pParent = _DSListGetBinaryNode(pTree, pNode, 1);
             pPrev->mpLeft = pNext;
             pParent->mpRight = pNext;
             pNext->mFlags |= pNode->mFlags & (BIN_FIRST | BIN_LAST);
@@ -475,27 +479,27 @@ static void fn_801C8AB4(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode)
         pTree->mTotalDepth--;
     }
     if (pTree->mAutoOptimize) {
-        fn_801C8D38(pTree, pTree->mAvgLimit, 0, pTree->mDepthLimit, 1);
+        _DSListOptimizeBinaryTree(pTree, pTree->mAvgLimit, 0, pTree->mDepthLimit, 1);
     }
 }
 
-static int fn_801C8C44(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, int a, int b,
-                       VisitFn_801C7F70 callback, int direction)
+static int _DSListTraverseBinaryTree(BinTree_t *pTree, BinNode_t *pNode, int a, int b,
+                       BinVisitFn_t callback, int direction)
 {
     int result;
 
     if (direction < 0) {
-        result = fn_801C8014(pNode, a, b, callback);
+        result = _DSListTraverseBinaryTreeLeft(pNode, a, b, callback);
     } else {
-        result = fn_801C7F70(pNode, a, b, callback);
+        result = _DSListTraverseBinaryTreeRight(pNode, a, b, callback);
     }
     return result;
 }
 
-static int fn_801C8C84(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, int a, int b,
-                       VisitFn_801C7F70 callback)
+static int _DSListSearchBinaryTree(BinTree_t *pTree, BinNode_t *pNode, int a, int b,
+                       BinVisitFn_t callback)
 {
-    BinNode_801C7F70 *pCur = pTree->mpRoot;
+    BinNode_t *pCur = pTree->mpRoot;
     int result = -1;
     int cmp;
 
@@ -518,7 +522,7 @@ static int fn_801C8C84(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, int a, 
     return result;
 }
 
-static int fn_801C8D38(BinTree_801C7F70 *pTree, float avgLimit, int force, float depthLimit, int enable)
+static int _DSListOptimizeBinaryTree(BinTree_t *pTree, float avgLimit, int force, float depthLimit, int enable)
 {
     int result = 5;
     unsigned int count;
@@ -535,11 +539,11 @@ static int fn_801C8D38(BinTree_801C7F70 *pTree, float avgLimit, int force, float
     if (count > 3) {
         maxDepth = pTree->mMaxDepth;
         avgDepth = (float)pTree->mTotalDepth / (float)count;
-        optimal = fn_801C84EC(count);
+        optimal = _DSListCalcOptimalDepth(count);
         avgDepth = avgDepth - optimal + 1.0f;
         maxDepth = maxDepth - optimal;
         if (force || avgDepth >= avgLimit || !(maxDepth < depthLimit)) {
-            if (fn_801C83FC(pTree)) {
+            if (_DSListDoOptBinaryTree(pTree)) {
                 result = 0;
             }
         }
@@ -549,14 +553,14 @@ static int fn_801C8D38(BinTree_801C7F70 *pTree, float avgLimit, int force, float
     return result;
 }
 
-void fn_801C8E88(void)
+void DSListInitBinTreeModule(void)
 {
-    fn_801C67AC(1, (void (*)(List_801C68FC *))fn_801C87C0, (int (*)(List_801C68FC *))fn_801C87DC,
-                (void (*)(Node_801C6A20 *, int))fn_801C89AC,
-                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C8834,
-                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C89D4,
-                (void (*)(List_801C68FC *, Node_801C6A20 *))fn_801C8AB4,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListVisitFn_801C6D34, int))fn_801C8C44,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC))fn_801C8C84,
-                (void (*)(List_801C68FC *))fn_801C8D38, sizeof(BinTree_801C7F70), sizeof(BinNode_801C7F70));
+    fn_801C67AC(1, (void (*)(List_801C68FC *))_DSListInitBinaryTree, (int (*)(List_801C68FC *))_DSListDelBinaryTree,
+                (void (*)(Node_801C6A20 *, int))_DSListInitBinaryNode,
+                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) _DSListAddBinaryNode,
+                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) _DSListGetBinaryNode,
+                (void (*)(List_801C68FC *, Node_801C6A20 *))_DSListRemoveBinaryNode,
+                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListVisitFn_801C6D34, int))_DSListTraverseBinaryTree,
+                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC))_DSListSearchBinaryTree,
+                (void (*)(List_801C68FC *))_DSListOptimizeBinaryTree, sizeof(BinTree_t), sizeof(BinNode_t));
 }

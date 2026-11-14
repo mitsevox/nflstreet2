@@ -42,7 +42,7 @@ extern void *fn_801D2BB0(int a, int size, int c, int d);
 extern int fn_801D2BD0(void *p);
 extern void *fn_801D310C(void *allocation, int size, int c, int d);
 extern void fn_801F7BD4(int err);
-extern char *fn_801C3284(char *pDest, const char *pSource, int size);
+extern char *strnzcpy(char *pDest, const char *pSource, int size);
 extern int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 
 static unsigned char _GCmpModuleActive = 0;
@@ -339,7 +339,7 @@ int GCmpWrite(GCmpBuffer_t *pBuffer, void *pIn, unsigned int size)
 void GCmpSetLabel(const char *pName)
 {
     if (pName == 0) {
-        fn_801C3284(lbl_803018A8, "GCMP.LIB", 32);
+        strnzcpy(lbl_803018A8, "GCMP.LIB", 32);
     } else {
         fn_801C2D88(lbl_803018A8, 32, "%s", pName);
         lbl_803018A8[31] = 0;

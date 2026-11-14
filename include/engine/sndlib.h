@@ -223,6 +223,7 @@ extern const unsigned short lbl_802B7A98[];
 extern const short lbl_802B7AF0[2][3][16];
 extern Voice_803A7734 lbl_803A7734[64];
 extern int lbl_803A8D34;
+extern unsigned short lbl_80300050[256][4];
 extern State_803A8D60 lbl_803A8D60;
 extern void (*lbl_803B5028)(Setup_80272EC4 *setup);
 extern void (*lbl_803B502C)(void);

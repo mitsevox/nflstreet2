@@ -1,8 +1,8 @@
 #ifndef ENGINE_FILEIO_H
 #define ENGINE_FILEIO_H
 
-/* Open-file record, 0x24 bytes each in the table at r13-0x667C. */
-typedef struct FileEntry_801C8F14 {
+/* Open-file record, one per file handle. */
+typedef struct FileStreamInfo_t {
     int mDevHandle;
     int mDevType;
     int mLength;
@@ -12,41 +12,41 @@ typedef struct FileEntry_801C8F14 {
     char *mpName;
     int mMode;
     int mUnk20;
-} FileEntry_801C8F14;
+} FileStreamInfo_t;
 
 /* Queued asynchronous transfer, 0x24-byte list nodes. */
-typedef struct FileAsync_801C8F14 {
+typedef struct FileAsyncRequest_t {
     int mType;
     int mState;
     int (*mpStep)(int, int, void *);
-    struct FileReq_801C8F14 *mpReq;
+    struct FileRequest_t *mpReq;
     int mHandle;
     int mPos;
     char *mpBuffer;
     int mSize;
     int mPriority;
-} FileAsync_801C8F14;
+} FileAsyncRequest_t;
 
-typedef void (*FileBlockFn_801C8F14)(int, char *, int, void *);
-typedef void (*FileDoneFn_801C8F14)(int, int, void *);
+typedef void (*FileBlockFn_t)(int, char *, int, void *);
+typedef void (*FileDoneFn_t)(int, int, void *);
 
 /* Read/write request, 0x2C-byte nodes. */
-typedef struct FileReq_801C8F14 {
+typedef struct FileRequest_t {
     int mHandle;
     char *mpBuffer;
     int mSize;
     int mBlockSize;
     int mPriority;
-    FileBlockFn_801C8F14 mpBlockFn;
-    FileDoneFn_801C8F14 mpDoneFn;
+    FileBlockFn_t mpBlockFn;
+    FileDoneFn_t mpDoneFn;
     void *mpArg;
-    FileAsync_801C8F14 *mpAsync;
+    FileAsyncRequest_t *mpAsync;
     int mDone;
     unsigned char mCyclic;
-} FileReq_801C8F14;
+} FileRequest_t;
 
-/* Configuration copied by FileInit (0x40C bytes at 0x803D51A8). */
-typedef struct FileConfig_801C8F14 {
+/* Start-up parameters the file module keeps a copy of: path prefixes, file count, host flag. */
+typedef struct FileInitParms_t {
     char mPath0[0x80];
     char mPath1[0x80];
     char mUnk100[0x100];
@@ -56,18 +56,19 @@ typedef struct FileConfig_801C8F14 {
     int mUnk400;
     unsigned int mNumFiles;
     unsigned char mHostEnabled;
-} FileConfig_801C8F14;
+} FileInitParms_t;
 
-typedef struct FileDevList_801C8F14 {
+/* A list of devices and path prefixes that an open tries in order. */
+typedef struct FilevDevicePath_t {
     int mDevice[8];
     char *mpPrefix[8];
     int mCount;
-} FileDevList_801C8F14;
+} FilevDevicePath_t;
 
-/* Device search table (default at 0x802F4A50): device lists tried in order. */
-typedef struct FileDevTable_801C8F14 {
-    FileDevList_801C8F14 *mpList[8];
+/* Table of device lists: opening on device -n searches list n. */
+typedef struct FilevDeviceList_t {
+    FilevDevicePath_t *mpList[8];
     int mCount;
-} FileDevTable_801C8F14;
+} FilevDeviceList_t;
 
 #endif

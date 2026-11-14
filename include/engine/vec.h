@@ -14,7 +14,7 @@ typedef struct Vec4_801DE1E0 {
     float w;
 } Vec4_801DE1E0;
 
-/* Vector helpers of src/engine/cu_80226F9C.c, which defines them with float *
+/* Vector helpers of src/engine/llvector.c, which defines them with float *
    parameters; they are declared with void * here, as game/fn_802270D4.h
    declares fn_802270A4, fn_802270D4 and fn_802276B4 of the same file. */
 #ifdef __cplusplus

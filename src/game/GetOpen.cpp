@@ -19,7 +19,7 @@
 #include "game/GameOptions.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_80227638.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
@@ -182,7 +182,7 @@ extern "C" int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, floa
     Point_8017886C point;
     int x, y;
 
-    fn_801C1F94(grid, 0, sizeof(grid));
+    memset(grid, 0, sizeof(grid));
     out->mY = out->mX = 0.0f;
     float left = p->mMotion.mPos.mX - 27.0f;
     float right = p->mMotion.mPos.mX + 27.0f;
@@ -317,7 +317,7 @@ extern "C" void GetOpenRunOn(Object_80039F5C *p, float distance)
     Point_8017886C point;
 
     GetOpenGetRunOnPoint(p, &point);
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 19;
     fn_800FD68C(&message, &p->mMotion, &point);
     message.mUnknown1[2] = 255;
@@ -400,7 +400,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
         }
         Message_800F01CC message;
         if (BallGetCurrentHolder() && fn_801783AC(0)) {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 33;
             fn_800F053C(0, p->mpState, &message, p);
             return 1;
@@ -455,7 +455,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
             if (GetOpenFindOpenSpot(&point, p, b, a)) {
                 fn_80227690(&delta, &point, &p->mMotion.mPos);
                 PlayerCutPostTurn(p, fn_801CFE40(delta.mY, delta.mX));
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 19;
                 fn_800FD68C(&message, &p->mMotion, &point);
                 message.mUnknown1[2] = 255;
@@ -464,7 +464,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
                 } else {
                     fn_800F03D8(0, p->mpState, &message, p);
                 }
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 21;
                 fn_800F03D8(0, p->mpState, &message, p);
                 return 0;

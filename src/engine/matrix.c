@@ -11,7 +11,7 @@ extern unsigned int lbl_803EBCBC;
 
 void fn_802277DC(float *pOut, float *pA, float *pB);
 void fn_802271F0(float *pOut, float *p);
-int fn_80227040(float *pA, float *pB);
+int Vec3GetAngle(float *pA, float *pB);
 
 int MatDelStack(unsigned int index);
 
@@ -111,5 +111,5 @@ void MatRotVecToVec(float *pFrom, float *pTo)
 
     fn_802277DC(axis, pFrom, pTo);
     fn_802271F0(axis, axis);
-    fn_801D0710(axis, fn_80227040(pFrom, pTo));
+    fn_801D0710(axis, Vec3GetAngle(pFrom, pTo));
 }

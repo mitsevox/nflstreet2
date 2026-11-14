@@ -4,8 +4,8 @@
    offers. */
 
 #include "game/PauseMenu.h"
-#include "game/cu_80181330.h"
-#include "game/fn_801C3284.h"
+#include "game/EditMenu.h"
+#include <string.h>
 
 extern "C" {
 int fn_8000F870(int module, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
@@ -44,21 +44,21 @@ extern "C" int TextEntryGetCharSet(int type, char *pText, int length)
 {
     unsigned int count;
 
-    fn_801C3284(pText, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ", length);
+    strnzcpy(pText, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ", length);
     count = 63;
     switch (type) {
     case 0:
     case 0x204:
-        fn_801C3284(pText, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ", length);
+        strnzcpy(pText, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ", length);
         count = 63;
         break;
     case 0x201:
-        fn_801C3284(pText, "1234567890", length);
+        strnzcpy(pText, "1234567890", length);
         count = 10;
         break;
     case 1:
     case 2:
-        fn_801C3284(pText, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789. ", length);
+        strnzcpy(pText, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789. ", length);
         count = 64;
         break;
     }

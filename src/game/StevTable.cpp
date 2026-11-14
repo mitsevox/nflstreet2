@@ -10,7 +10,6 @@
 
 extern "C" {
 void SndgMusicPumpFrame(int a);
-char *fn_801C310C(char *pText, const char *pPattern);
 int fn_8022EF8C(int a, int tag);
 int fn_8022EFBC(int a, int tag);
 int fn_8022F3D4(int a);
@@ -102,7 +101,7 @@ int StevReadRow(int nets, StevRow_t *pRow)
                              &pRow->mPdwr, &pRow->mCswr, pRow->mIuve, nets);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
-        pTag = fn_801C310C(pRow->mIuve, "<T>");
+        pTag = strstr(pRow->mIuve, "<T>");
         if (pTag) {
             SstlFetchEntry(nets, 0, pTag, sizeof(pRow->mIuve) - 1 - (pTag - pRow->mIuve));
         }

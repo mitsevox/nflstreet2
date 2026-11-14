@@ -22,7 +22,7 @@
 #include "game/fn_800AD9B4.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/MemCardUtil.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801C68FC.h"
 #include "game/fn_80227638.h"
 
@@ -1913,7 +1913,7 @@ extern "C" void fn_8002E7EC(Type_803EA368 *p, RecordList_8002E7C0 *pList)
 
 extern "C" void fn_8002E890(RecordList_8002E7C0 *pList)
 {
-    fn_801C1F94(pList, 0, sizeof(RecordList_8002E7C0));
+    memset(pList, 0, sizeof(RecordList_8002E7C0));
 }
 
 extern "C" void fn_8002E8B8(Type_803EA368 *p, RecordList_8002E7C0 *pList)

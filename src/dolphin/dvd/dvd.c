@@ -1,3 +1,6 @@
+/* Nintendo SDK DVD driver core: starts the drive at boot, runs the drive state machine that issues
+   each queued read, seek or inquiry and recovers from cover-open, disk-change and drive errors, and
+   provides the read, reset and cancel calls the game's file loading goes through. */
 #include "__dvd.h"
 #include <dolphin/dvd.h>
 #include <dolphin/hw_regs.h>
@@ -28,6 +31,7 @@ static volatile u32 LastError;
 static volatile s32 NumInternalRetry = 0;
 static volatile BOOL ResetRequired;
 static volatile BOOL CancelAllSyncComplete = FALSE;
+static volatile u32 ResetCount;
 static volatile BOOL FirstTimeInBootrom = FALSE;
 
 static DVDCommandBlock DummyCommandBlock;
@@ -829,6 +833,20 @@ static u32 ImmCommand[] = { 0xffffffff, 0xffffffff, 0xffffffff };
 static char string_DVDChangeDiskAsyncMsg[] =
     "DVDChangeDiskAsync(): You can't specify NULL to company name.  \n";
 static u32 DmaCommand[] = { 0xffffffff };
+
+void __DVDSetImmCommand(u32 command)
+{
+    static u32 immCount;
+
+    ImmCommand[immCount++] = command;
+}
+
+void __DVDSetDmaCommand(u32 command)
+{
+    static u32 dmaCount;
+
+    DmaCommand[dmaCount++] = command;
+}
 
 inline static BOOL IsImmCommandWithResult(u32 command)
 {

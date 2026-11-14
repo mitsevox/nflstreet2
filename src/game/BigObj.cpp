@@ -13,7 +13,7 @@
 #include "game/BigObj.h"
 #include "game/BigObjInst.h"
 #include "game/Ball.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/LevelSurface.h"
@@ -52,8 +52,7 @@ void fn_800504EC(void);
 void fn_80051308(void);
 void HotspotReset(void);
 void fn_800B2A14(float *pPos, unsigned char *pAngles);
-char *fn_801C310C(char *pText, const char *pPattern);
-int fn_801C9DC8(int value);
+int FileSetMemAllocFlags(int value);
 int ObjNewType_(int type, int size, int count, void (*pInit)(BigObj_t *, BigObjDesc_t *),
                 void (*pRelease)(BigObj_t *));
 int ObjDelType(int type);
@@ -332,7 +331,7 @@ void BigObjCreate(BigObjDesc_t *pDesc, int handle)
     _BigObj_apObjects[_BigObj_uCount] = ObjNewInList(handle, 28, 0, pDesc);
     ObjSetPriority(handle, _BigObj_apObjects[_BigObj_uCount], 6);
     fn_8004DC88(pDesc->mUnknown164, pDesc->mUnknown168, _BigObj_apObjects[_BigObj_uCount]);
-    if (fn_801C310C(pDesc->mName, "CROWD") != 0) {
+    if (strstr(pDesc->mName, "CROWD") != 0) {
         _BigObj_apObjects[_BigObj_uCount]->mUnknown232_27 = 1;
     }
     _BigObj_apObjects[_BigObj_uCount]->mUnknown472 = BigObjInstCreate((void *)pDesc->mUnknown168, &pDesc->mUnknown132);
@@ -382,11 +381,11 @@ void BigObjCreateAnimBall(int handle)
 
     {
         int saved0 = ResSetMemFlags(4);
-        int saved1 = fn_801C9DC8(4);
+        int saved1 = FileSetMemAllocFlags(4);
 
         desc.mUnknown160 = ResOpenDevice("objdefs.dat", 44);
         ResSetMemFlags(saved0);
-        fn_801C9DC8(saved1);
+        FileSetMemAllocFlags(saved1);
     }
     desc.mUnknown164 = _BigObj_pModelFile;
     fn_8004D798();
@@ -417,11 +416,11 @@ void BigObjAddAllObjects(int handle)
 
     {
         int saved0 = ResSetMemFlags(4);
-        int saved1 = fn_801C9DC8(4);
+        int saved1 = FileSetMemAllocFlags(4);
 
         desc.mUnknown160 = ResOpenDevice("objdefs.dat", 44);
         ResSetMemFlags(saved0);
-        fn_801C9DC8(saved1);
+        FileSetMemAllocFlags(saved1);
     }
     desc.mUnknown164 = _BigObj_pModelFile;
     fn_8004D798();

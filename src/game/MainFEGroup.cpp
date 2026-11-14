@@ -182,31 +182,31 @@ void MainFEGroup::GSProcess()
 {
     GSFlowManagerC *p = &gGSFlowManager;
 
-    if (p->fn_801CBE9C(3) == 0) {
-        switch (p->fn_801CBEC8(2)) {
+    if (p->IsGroupStarted(3) == 0) {
+        switch (p->GetActiveStage(2)) {
         case 7:
             gFELoop.Boot();
-            p->fn_801CBEF4(2, 8);
+            p->QueueTransition(2, 8);
             break;
         case 8:
             GameTextSetBootFinished(1);
-            p->fn_801CBEF4(2, 9);
+            p->QueueTransition(2, 9);
             break;
         case 9:
             BootInstallResetCallback();
-            p->fn_801CBEF4(2, 10);
+            p->QueueTransition(2, 10);
             break;
         case 10:
             if (!gFELoop.Update()) {
                 BootRemoveResetCallback();
-                if (!fn_801CBFA0(p)) {
-                    p->fn_801CBEF4(2, 14);
+                if (!p->GetNumQueuedTransitions()) {
+                    p->QueueTransition(2, 14);
                 }
             }
             break;
         case 12:
-            p->fn_801CBE24(2);
-            p->fn_801CBD80(1, -1);
+            p->StopGroup(2);
+            p->StartGroup(1, -1);
             break;
         case 14:
             MainLoopQuit();
@@ -228,12 +228,12 @@ int MainFEGroup::GSTransition(int a, int b)
     return 1;
 }
 
-extern "C" int MainFEGroupIsStarted(FlowGroupC *pGroup) { return fn_801CC4F4(pGroup); }
+extern "C" int MainFEGroupIsStarted(FlowGroupC *pGroup) { return pGroup->IsStarted(); }
 
 extern "C" int MainFEGroupIsFirstStart(FlowGroupC *pGroup)
 {
     int result = 0;
-    int stage = fn_801CC4FC(pGroup);
+    int stage = pGroup->GetActiveStage();
 
     if (MainFEGroupIsStarted(pGroup) && (stage == 7 || stage == 8)) {
         result = 1;

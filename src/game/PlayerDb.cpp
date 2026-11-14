@@ -9,8 +9,6 @@
 extern "C" {
 
 extern const int lbl_80293968[];
-char *fn_801C2F88(char *pDest, const char *pSource, unsigned int count);
-char *fn_801C32CC(char *pText);
 
 static int _PlayerDb_aSgtColumns[4] = { 0x31544753, 0x32544753, 0x33544753, 0x34544753 };
 
@@ -65,7 +63,7 @@ void PlayerDbGetNickname(Object_8008044C *pObject, char *pBuffer, int size)
     DbCursorGetString((DbCursor *)pObject, 0x4E4B4E50, (int)pBuffer, size);
     if (strlen(pBuffer) == 0) {
         PlayerDbGetLastName(pObject, pBuffer, size);
-        fn_801C32CC(pBuffer);
+        strupr(pBuffer);
     }
 }
 
@@ -159,8 +157,8 @@ int PlayerDbGetNameKey(Object_8008044C *pObject, char *pBuffer, int size)
         pBuffer[0] = 0;
         PlayerDbGetLastName(pObject, pBuffer, 15);
         PlayerDbGetFirstName(pObject, first, 12);
-        fn_801C2F88(pBuffer, first, size);
-        fn_801C32CC(pBuffer);
+        strncat(pBuffer, first, size);
+        strupr(pBuffer);
         pDest = pBuffer;
         for (pSource = pBuffer; *pSource; pSource++) {
             while ((*pSource < 'A' || *pSource > 'Z') && *pSource) pSource++;

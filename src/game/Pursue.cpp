@@ -17,7 +17,7 @@
 #include "game/fn_801BE60C.h"
 #include "game/Lookup_8012078C.h"
 #include "game/Message_800F01CC.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_800B65A0.h"
 #include "game/Record_8011F4F8.h"
 #include "game/Record_8011F518.h"
@@ -65,8 +65,8 @@ Object_80039F5C *PursueGetTarget(void);
 int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance, int *pOut);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
-float fn_8016B938(void);
-float fn_8016B974(void);
+float PlayTrackGetPlayIdRate(void);
+float PlayTrackGetResult5Rate(void);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 int PlyrMoveIsFacingHeading(Object_80039F5C *p);
 int fn_80177C38(void);
@@ -1293,7 +1293,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
     pMotion = &p->mMotion;
     pState = (PursueState_t *)&p->mUnknown336;
     if (fn_801486A0() == 0) {
-        fn_801C1F94(&message, 0, sizeof(message));
+        memset(&message, 0, sizeof(message));
         message.mId = 97;
         fn_800F053C(0, p->mpState, &message, p);
         return 0;
@@ -1347,7 +1347,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
                             intercept = fn_802372EC(0, 255) < (unsigned int)p->mRatings[8];
                         }
                         if (intercept) {
-                            fn_801C1F94(&message, 0, sizeof(message));
+                            memset(&message, 0, sizeof(message));
                             message.mId = 57;
                             message.mUnknown1[0] = BallGetIndex(pBall);
                             fn_800F053C(0, p->mpState, &message, p);
@@ -1367,7 +1367,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
     pLookup = fn_8012078C();
     if ((p->mFlags & 0x4000) == 0 && (fn_801486A0() != 0 || p->mUnknown8 == 0xFF)) {
         if (fn_800A5DD0(p) == 0 && pOther != 0 && p->mIdBytes[2] == fn_80178308()) {
-            fn_801C1F94(&message, 0, sizeof(message));
+            memset(&message, 0, sizeof(message));
             message.mId = 33;
             fn_800F053C(0, p->mpState, &message, p);
             return 0;
@@ -1391,9 +1391,9 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
             }
             if (pOther != 0 && fn_800B65A0(p->mIdBytes[2]) != 0xFF && fn_800B65A0(pOther->mIdBytes[2]) == 0xFF
                 && fn_80177C38() == 0) {
-                pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * fn_8016B938());
+                pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * PlayTrackGetPlayIdRate());
                 if (fn_8011F1CC() != 0 && (pOther->mFlags & 0x8000) != 0) {
-                    pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * fn_8016B974());
+                    pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * PlayTrackGetResult5Rate());
                 }
             }
             speed = pMotion->mUnknown28;
@@ -1525,7 +1525,7 @@ extern "C" int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther
                 int boosted = 0;
 
                 if (fn_8011F1CC() != 0 && (pOther->mUnknown2914 == 0 || pOther->mpState->mId == 18)) {
-                    odds += (unsigned int)(odds * fn_8016B974());
+                    odds += (unsigned int)(odds * PlayTrackGetResult5Rate());
                     boosted = 1;
                 }
                 if (fn_802372EC(0, 100) < odds) {
@@ -1541,7 +1541,7 @@ extern "C" int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther
                             odds = _Pursue_uLaneOdds;
                         }
                         if (boosted) {
-                            odds += (unsigned int)(odds * fn_8016B974());
+                            odds += (unsigned int)(odds * PlayTrackGetResult5Rate());
                         }
                         if (fn_802372EC(0, 100) < odds) {
                             result = 1;

@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Plan_80121264.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 extern "C" {
 
@@ -28,8 +28,8 @@ void fn_80121264(Object_80039F5C *p, Plan_80121264 *pPlan)
     Object_80039F5C *pPlayer;
     Entry_80120E98 *pLast;
 
-    fn_801C1F94(pPlan, 0, sizeof(Plan_80121264));
-    fn_801C1F94(players, 0, sizeof(players));
+    memset(pPlan, 0, sizeof(Plan_80121264));
+    memset(players, 0, sizeof(players));
     if (fn_8011F1A4() && fn_8011F1A4() && fn_8011F4C8() <= 3 && !fn_801783AC(0)) {
         range = 5.0f;
     } else {

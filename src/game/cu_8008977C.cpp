@@ -20,7 +20,7 @@ struct Transition_80089A84 {
 extern "C" {
 void FEPlyrSetPose(int index, unsigned int value);
 unsigned char PlayerLocoGetRunCategory(unsigned short index);
-Object_8008044C *fn_80182DC8(void);
+Object_8008044C *EditMenuGetPlayerCursor(void);
 Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
 int fn_8008A20C(unsigned int value);
 }
@@ -82,7 +82,7 @@ int fn_80089904(FEPlyrModel_t *pRecord, Table_80089904 *pTable,
             result = fn_8008977C(pRecord, pTable, value);
             sLast = result;
         } else {
-            int current = PlayerDbGetPybt(fn_80182DC8());
+            int current = PlayerDbGetPybt(EditMenuGetPlayerCursor());
             for (int i = 0; i < pTable->mCount; i++) {
                 unsigned short score = 0;
                 Info_80089904 *pInfo = pTable->mEntries[i].mpInfo;

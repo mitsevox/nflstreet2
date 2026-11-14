@@ -39,7 +39,7 @@ Point_8017886C fn_80177FE0(void);
 float fn_80178A08(void);
 int fn_800A7F58(int team);
 int fn_800AC074(int team, int value);
-float fn_8016B938(void);
+float PlayTrackGetPlayIdRate(void);
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
@@ -262,7 +262,7 @@ int fn_800E5EA4(Object_80039F5C *p, Object_80039F5C *pOther, Record_800E5EA4 *pA
     }
     offense = fn_800AC074(p->mIdBytes[2], offense);
     if (fn_800B65A0(p->mIdBytes[2]) == 255) {
-        offense += (int)(offense * (fn_8016B938() * 0.5f));
+        offense += (int)(offense * (PlayTrackGetPlayIdRate() * 0.5f));
     }
     if (offense < 0) {
         offense = 0;

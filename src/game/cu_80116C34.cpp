@@ -4,7 +4,7 @@
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802372EC.h"
 #include <math.h>
 
@@ -46,8 +46,8 @@ void fn_8011569C(Object_80039F5C *p);
 int MathAngleDiff(int a, int b);
 int fn_800A5C04(Object_80039F5C *p, int a, int b);
 int fn_8009E180(Object_80039F5C *p);
-float fn_8016B938(void);
-float fn_8016B974(void);
+float PlayTrackGetPlayIdRate(void);
+float PlayTrackGetResult5Rate(void);
 int fn_8009F258(Object_80039F5C *p);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -145,12 +145,12 @@ int fn_80116C34(Object_80039F5C *p)
                 if (kind != 4) {
                     unsigned short odds = p->mRatings[8] >> 1;
                     if (fn_800B65A0(p->mIdBytes[2]) == 255) {
-                        odds += (int)(odds * fn_8016B938());
+                        odds += (int)(odds * PlayTrackGetPlayIdRate());
                     }
                     Vector_80039F5C ball;
                     BallGetPosition(BallGetCurrent(), &ball);
                     if (fn_802372EC(0, 255) < odds || IsBallAway(ball)) {
-                        fn_801C1F94(&message, 0, 4);
+                        memset(&message, 0, 4);
                         message.mId = 2;
                         fn_800F053C(0, p->mpState, &message, p);
                         return 1;
@@ -158,7 +158,7 @@ int fn_80116C34(Object_80039F5C *p)
                 } else {
                     BallGetLandingPoint(BallGetCurrent(), &target);
                     if (fn_8009F258(p)) {
-                        fn_801C1F94(&message, 0, 4);
+                        memset(&message, 0, 4);
                         message.mId = 24;
                         if (!BallGetTarget(BallGetCurrent())) {
                             message.mUnknown1[0] = 0;
@@ -251,7 +251,7 @@ int fn_801170E8(Object_80039F5C *p)
     else if (found || blocked) result = 0;
     if (result) {
         Message_800F01CC message;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 2;
         fn_800F053C(0, p->mpState, &message, p);
         *lbl_803EC9F0 = 1;
@@ -282,7 +282,7 @@ int fn_80117494(Object_80039F5C *p, Point_8017886C *out)
                 if (!(distance >= lbl_803EAFEC)) {
                     float half = lbl_803EAFF0 * 0.5f;
                     out->mY = half * (distance / lbl_803EAFEC) + centerY;
-                    float threshold = fn_8016B974() * lbl_803EAFF8 + lbl_803EAFF4;
+                    float threshold = PlayTrackGetResult5Rate() * lbl_803EAFF8 + lbl_803EAFF4;
                     if (!(distance >= threshold) && carrier->mUnknown8 != 255) state->mUnknown24 = 1;
                     result = 1;
                 }

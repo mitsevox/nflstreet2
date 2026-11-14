@@ -2,14 +2,14 @@
 
 extern "C" {
 
-int fn_801D9720(Decoder_801D86B4 *pDecoder, Codec_801D9634 *pCodec, Chunk_801D86B4 *pChunk)
+int fn_801D9720(RcmpDecoder *pDecoder, RcmpCodec *pCodec, RcmpChunk_t *pChunk)
 {
     pDecoder->mpChunk = pChunk;
     pDecoder->mpCodec = pCodec;
     return pCodec->fn_801D9DA4(pDecoder, pChunk);
 }
 
-void fn_801D9768(Decoder_801D86B4 *pDecoder)
+void fn_801D9768(RcmpDecoder *pDecoder)
 {
     if (pDecoder->mpCodec != 0) {
         delete pDecoder->mpCodec;
@@ -17,7 +17,7 @@ void fn_801D9768(Decoder_801D86B4 *pDecoder)
     }
 }
 
-unsigned int fn_801D97C0(Decoder_801D86B4 *pDecoder)
+unsigned int fn_801D97C0(RcmpDecoder *pDecoder)
 {
     if (pDecoder->mpCodec == 0) {
         return 0;
@@ -25,7 +25,7 @@ unsigned int fn_801D97C0(Decoder_801D86B4 *pDecoder)
     return pDecoder->mpCodec->fn_801D9DC0();
 }
 
-Frame_801D86B4 *fn_801D9808(Decoder_801D86B4 *pDecoder, unsigned int frame)
+RcmpFrame_t *fn_801D9808(RcmpDecoder *pDecoder, unsigned int frame)
 {
     if (pDecoder->mpCodec == 0) {
         if (pDecoder->mpChunk == 0) {
@@ -38,14 +38,14 @@ Frame_801D86B4 *fn_801D9808(Decoder_801D86B4 *pDecoder, unsigned int frame)
     return pDecoder->mpCodec->fn_801DA20C(frame);
 }
 
-void fn_801D9894(Decoder_801D86B4 *pDecoder, Frame_801D86B4 *pFrame)
+void fn_801D9894(RcmpDecoder *pDecoder, RcmpFrame_t *pFrame)
 {
     pDecoder->mpCodec->fn_801DA418(pFrame);
 }
 
-Chunk_801D86B4 *fn_801D98CC(Decoder_801D86B4 *pDecoder)
+RcmpChunk_t *fn_801D98CC(RcmpDecoder *pDecoder)
 {
-    Chunk_801D86B4 *pChunk;
+    RcmpChunk_t *pChunk;
 
     if (pDecoder->mpChunk != 0) {
         pChunk = pDecoder->mpChunk;
@@ -56,12 +56,12 @@ Chunk_801D86B4 *fn_801D98CC(Decoder_801D86B4 *pDecoder)
     return pChunk;
 }
 
-void fn_801D9924(Decoder_801D86B4 *pDecoder, Chunk_801D86B4 *pChunk)
+void fn_801D9924(RcmpDecoder *pDecoder, RcmpChunk_t *pChunk)
 {
     pDecoder->mIData.mRelease(pDecoder, pDecoder->mIData.mpStreamer, pChunk);
 }
 
-Chunk_801D86B4 *fn_801D9958(Chunk_801D86B4 *pChunk)
+RcmpChunk_t *fn_801D9958(RcmpChunk_t *pChunk)
 {
     pChunk->mpData = 0;
     pChunk->mSize = 0;
@@ -69,7 +69,7 @@ Chunk_801D86B4 *fn_801D9958(Chunk_801D86B4 *pChunk)
     return pChunk;
 }
 
-CodecIData_801D9634 *fn_801D9970(CodecIData_801D9634 *pIData)
+RcmpCodecIData_t *fn_801D9970(RcmpCodecIData_t *pIData)
 {
     pIData->mCount = 2;
     pIData->mpStreamer = 0;
@@ -78,8 +78,8 @@ CodecIData_801D9634 *fn_801D9970(CodecIData_801D9634 *pIData)
     return pIData;
 }
 
-CodecIData_801D9634 *fn_801D9990(CodecIData_801D9634 *pIData, void *pStreamer, GetChunkFunc_801D9634 get,
-                                 ReleaseChunkFunc_801D9634 release, int count)
+RcmpCodecIData_t *fn_801D9990(RcmpCodecIData_t *pIData, void *pStreamer, RcmpGetChunkFunc_t get,
+                                 RcmpReleaseChunkFunc_t release, int count)
 {
     pIData->mCount = count;
     pIData->mpStreamer = pStreamer;

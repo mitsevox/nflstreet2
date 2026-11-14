@@ -10,7 +10,6 @@ extern "C" {
 int fn_8022F358(int index);
 int fn_8022F3D4(int handle);
 int DbCursorGetValue(DbCursor *pObject, int key);
-char *fn_801C2F88(char *pDest, const char *pSource, unsigned int count);
 }
 
 static signed char _Cheat_iSlot = -1;
@@ -132,7 +131,7 @@ int CheatGetUnlockedInfo(int index, int *pId, char *pName, int count, int *pEnab
     if (found) {
         if (fn_801FCE10(0, "use 'TATS' select 'ANHC' into \x88 and 'GQHC' into \x82 from 'DCHC' where 'XIHC' = \x82\n", name, &marked, id) == 0) {
             strncpy(pName, name, count);
-            if (marked) fn_801C2F88(pName, " *", 2);
+            if (marked) strncat(pName, " *", 2);
         } else {
             found = 0;
         }

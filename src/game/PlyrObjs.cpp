@@ -1,3 +1,8 @@
+/* Player objects: creates the on-field player objects from the player and
+   gear tables and loads their skeletons and bone tables, keeps the player
+   list and its counts, writes and reads the list in the save-state bit
+   stream, finds players by index, side or distance, and projects each
+   player's drop shadow onto the level ground every frame. */
 #include "game/fn_8022781C.h"
 #include "game/FaceFeatures.h"
 #include "game/PlayerObjInit.h"
@@ -37,7 +42,7 @@ void fn_80227CC0(void *, void *);
 void fn_802271F0(void *, void *);
 void fn_80227C2C(void *, void *);
 float fn_802276E8(void *, void *);
-int fn_80227040(void *, void *);
+int Vec3GetAngle(void *, void *);
 void fn_801CFC14(int, float *, float *);
 float fn_801CFD28(int);
 Region_8003BDF0 *LevelGetData();
@@ -433,7 +438,7 @@ void fn_8003CA20() {
     length = 1.0f;
   }
   float angleVector[4] = {vector[0], vector[1], 1.0f};
-  int angle = fn_80227040(angleVector, vector);
+  int angle = Vec3GetAngle(angleVector, vector);
   fn_80227264(vector, vector, 1.0f / length);
   for (int i = 0; i < lbl_803EA434; ++i)
     fn_8003BA10(lbl_803EA430[i], color, (Point2_t *)vector, angle);

@@ -156,8 +156,8 @@ void PlayBookLoadAudibleTable(void);
 void PlayBookOpenAndRegister(int a, int b, int c, int d, int e, int f, int g, int h);
 void PlayBookReopen(int a, int b, int c, int d, int e, int f, int g);
 void PlayBookCloseDatabases(int a);
-void fn_8016B04C(void);
-void fn_8016B0AC(void);
+void PlayTrackInit(void);
+void PlayTrackShutdown(void);
 void fn_80178B5C(void);
 int fn_80178C60(void);
 void SubDepthInit(void);
@@ -894,13 +894,13 @@ const char *PlayTrack::GetName() { return "PlayTrack"; }
 
 int PlayTrack::Init()
 {
-    fn_8016B04C();
+    PlayTrackInit();
     return 1;
 }
 
 int PlayTrack::Shutdown()
 {
-    fn_8016B0AC();
+    PlayTrackShutdown();
     return 1;
 }
 

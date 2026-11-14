@@ -2,7 +2,7 @@
 #include "game/Block_800B0CFC.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802270D4.h"
 
 extern "C" {
@@ -25,7 +25,7 @@ extern "C" void fn_800B0090(void)
     unsigned int group;
 
     names[1] = 0;
-    fn_801C1F94(lbl_803EAB14, 0, sizeof(lbl_803EAB14->mEntries));
+    memset(lbl_803EAB14, 0, sizeof(lbl_803EAB14->mEntries));
     for (group = 0; group <= 1; group++) {
         unsigned int slot;
 

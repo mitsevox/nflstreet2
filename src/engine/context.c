@@ -3,7 +3,7 @@
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 typedef struct ConEntry_t {
     unsigned int mId;
@@ -41,8 +41,8 @@ int MemFill(void *pDest, int size, int value, int width);
 static void _ConClearChannel(unsigned int channel)
 {
     if (lbl_803EBBEC && lbl_803EBBF0) {
-        fn_801C1F94(lbl_803EBBF0[channel].mpCur, 0, lbl_803ECEDC);
-        fn_801C1F94(lbl_803EBBF0[channel].mpPrev, 0, lbl_803ECEDC);
+        memset(lbl_803EBBF0[channel].mpCur, 0, lbl_803ECEDC);
+        memset(lbl_803EBBF0[channel].mpPrev, 0, lbl_803ECEDC);
     }
 }
 

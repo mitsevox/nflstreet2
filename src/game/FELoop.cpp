@@ -317,7 +317,7 @@ void FELoopStartGame()
         GameInfoRead();
         fn_8021956C(gUISSubInfo, 1, 5, 1);
         SndgMusicPumpFrame(1);
-        gGSFlowManager.fn_801CBEF4(2, 12);
+        gGSFlowManager.QueueTransition(2, 12);
     }
 }
 

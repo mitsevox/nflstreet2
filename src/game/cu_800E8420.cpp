@@ -2,7 +2,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Ball.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 /* Player block at +336 as used by fn_800E8420 and fn_800E8554. */
 struct State_800E8420 {
@@ -111,7 +111,7 @@ extern "C" int fn_800E8554(Object_80039F5C *p)
         }
         if (p->mUnknown9[0] != 1 && (p->mFlags & 0x800)) {
             Message_800F01CC message;
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
             fn_800F05E4(0, p->mpState, &message, p);

@@ -6,7 +6,7 @@ extern "C" {
 GameCamera_t *CamGameGetCamera(int index);
 AnimSeqCamSample_t *AnimSeqCamFindFirstCamera(Actor_801C009C *);
 AnimSeqCamSample_t *AnimSeqCamFindCamera(Actor_801C009C *bank, unsigned short id, unsigned short subId, unsigned short index);
-float fn_801C5278(float, AnimSeqCamCurve_t *, int);
+float CurveListEvaluate(float, CurveList_t *, int);
 void fn_80227384(void *pOut, void *pIn, int angle);
 }
 
@@ -34,8 +34,8 @@ extern "C" int fn_800913E8(Vector_80039F5C *pOut, Character_80093BCC *pCharacter
             pSample = AnimSeqCamFindCamera(pActor, 1, pSelection->mUnknown4.mParts[1], pSelection->mUnknown8.mParts[1]);
         }
         if (pSample != 0) {
-            pOut->mX = fn_801C5278(time, &pSample->mCurves[0], 0) * scale;
-            pOut->mY = -fn_801C5278(time, &pSample->mCurves[2], 0) * scale;
+            pOut->mX = CurveListEvaluate(time, &pSample->mCurves[0], 0) * scale;
+            pOut->mY = -CurveListEvaluate(time, &pSample->mCurves[2], 0) * scale;
             pOut->mX -= pActor->mUnknown18->mUnknown34;
             pOut->mY += pActor->mUnknown18->mUnknown3C;
             fn_80227384(pOut, pOut,

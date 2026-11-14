@@ -57,9 +57,9 @@
 #include "game/ScreenTransition.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801C68FC.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/ResLoad.h"

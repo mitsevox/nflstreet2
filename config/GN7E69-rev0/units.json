@@ -61,6 +61,18 @@
       ],
       "evidence": "evidence.tsv compiler row game_cpp: ProDG 3.9.3 cc1plus -O2 -fno-weak reproduces every instruction of the module units 0x8008BB30-0x8008BCF0 and 0x8008B974-0x8008BB30. -O1, -O3, -Os, -fno-schedule-insns, -fno-schedule-insns2, -G0, -fexceptions and -frtti change the output; without -fno-weak the class functions and vtable move to linkonce sections, while the target keeps the destructor 0x8008BC68 inside the contiguous .text run and the vtable in rodata; -fvtable-thunks changes the vtable layout. -ffast-math: evidence.tsv compiler row 0x800034A0-0x801AA640 (game_cpp). Every floating-point compare in game code 0x800034A0-0x801AA640 branches in the ordered form -ffast-math emits; none uses the unordered form ProDG emits without it (cror+bns, or ble/bge after fcmpu). Every earlier game_cpp unit compiles to an identical native object with or without the flag. Open item: the flag turns division by a constant into a reciprocal multiply, while ParticleTrailUpdate divides by the literal 35.0f at 0x80147440 and 0x801474AC; see that row."
     },
+    "game_cpp_nobuiltin": {
+      "flags": [
+        "-O2",
+        "-fno-weak",
+        "-ffast-math",
+        "-fno-builtin"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler rows for src/game/animextn.cpp (0x80190A7C-0x80190ED4) and src/game/PlaTexCache.cpp (0x8016014C-0x801614D0) (game_cpp_nobuiltin): game_cpp's ProDG 3.9.3 cc1plus -O2 -fno-weak -ffast-math plus the per-file flag -fno-builtin, so their memcpy calls compile as the ordinary calls of the target instead of the builtin copy (an inline copy for a constant size, a block move with crclr for a variable one). Per-file flag, owner ruling of 2026-11-14."
+    },
     "engine_c": {
       "flags": [
         "-O2"
@@ -197,37 +209,9 @@
       "address": "0x8021C8B4",
       "evidence": "evidence.tsv function/name rows for 0x8021C8B4 (target extent, related name)."
     },
-    "memcpy": {
-      "address": "0x801C1FBC",
-      "evidence": "evidence.tsv external row: system-call installation target call and inspected callee behavior, with SDK reference provenance."
-    },
-    "__div2i": {
-      "address": "0x801AD470",
-      "evidence": "evidence.tsv CARD external row __div2i: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
-    "strlen": {
-      "address": "0x801C3180",
-      "evidence": "evidence.tsv CARD external row strlen: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
-    "memcmp": {
-      "address": "0x801C1FEC",
-      "evidence": "evidence.tsv CARD external row memcmp: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
-    "strncpy": {
-      "address": "0x801C2EF0",
-      "evidence": "evidence.tsv CARD external row strncpy: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
-    "memset": {
-      "address": "0x801C1F94",
-      "evidence": "evidence.tsv CARD external row memset: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
     "__OSLockSramEx": {
       "address": "0x8023CAF0",
       "evidence": "evidence.tsv retained CARD external __OSLockSramEx: branch or address-load operands and reference signature."
-    },
-    "__shr2i": {
-      "address": "0x801AD47C",
-      "evidence": "evidence.tsv retained CARD external __shr2i: branch or address-load operands and reference signature."
     },
     "__OSUnlockSramEx": {
       "address": "0x8023CEAC",
@@ -253,14 +237,6 @@
       "address": "0x803ED500",
       "evidence": "Target SDA-relative instructions and pinned SDK global layouts; original storage remains linked because native alignment not accepted."
     },
-    "__10ModuleNode": {
-      "address": "0x801CC700",
-      "evidence": "evidence.tsv external row for 0x801CC700 (__10ModuleNode); descriptive name."
-    },
-    "_._10ModuleNode": {
-      "address": "0x801CC740",
-      "evidence": "evidence.tsv external row for 0x801CC740 (_._10ModuleNode); descriptive name."
-    },
     "__pure_virtual": {
       "address": "0x8025F088",
       "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
@@ -285,26 +261,6 @@
       "address": "0x803ED4F4",
       "evidence": "evidence.tsv DSP init external records: target operands and pinned BFBB reference role."
     },
-    "fn_801CC96C__10ModuleNode": {
-      "address": "0x801CC96C",
-      "evidence": "evidence.tsv external row for 0x801CC96C (fn_801CC96C__10ModuleNode); neutral address label of a ModuleNode member."
-    },
-    "fn_801CC6FC__10FlowGroupCi": {
-      "address": "0x801CC6FC",
-      "evidence": "evidence.tsv external row for 0x801CC6FC (fn_801CC6FC__10FlowGroupCi); descriptive name."
-    },
-    "_._10FlowGroupC": {
-      "address": "0x801CC38C",
-      "evidence": "evidence.tsv external row for 0x801CC38C (_._10FlowGroupC); descriptive name."
-    },
-    "fn_801CC6F8__10FlowGroupC": {
-      "address": "0x801CC6F8",
-      "evidence": "evidence.tsv external row for 0x801CC6F8 (fn_801CC6F8__10FlowGroupC); descriptive name."
-    },
-    "__10FlowGroupC": {
-      "address": "0x801CC350",
-      "evidence": "evidence.tsv external row for 0x801CC350 (__10FlowGroupC); descriptive name."
-    },
     "_._12FlowManagerC": {
       "address": "0x801CBC9C",
       "evidence": "evidence.tsv external row for 0x801CBC9C (_._12FlowManagerC); descriptive name."
@@ -317,73 +273,13 @@
       "address": "0x801B8D9C",
       "evidence": "evidence.tsv external row for 0x801B8D9C (__15CsisClassHandle); descriptive name."
     },
-    "__GXData": {
-      "address": "0x803ED840",
-      "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
-    },
     "cosf": {
       "address": "0x80260EE8",
       "evidence": "evidence.tsv GXLight external cosf: target branch at 0x8024F6B0 and related SDK source call/prototype."
     },
-    "GetItem__14MenuListScreeniP11MenuEntry_t": {
-      "address": "0x80182CC8",
-      "evidence": "evidence.tsv external row 0x80182CC8 (GetItem__14MenuListScreeniP14MenuEntry_t) and type row MenuListScreen."
-    },
-    "GetCycle__14MenuItemEditoriPiT2": {
-      "address": "0x80182A88",
-      "evidence": "evidence.tsv external row 0x80182A88 (GetCycle__14MenuItemEditoriPiT2) and type row MenuItemEditor."
-    },
-    "EndCycle__14MenuItemEditoriii": {
-      "address": "0x80182A8C",
-      "evidence": "evidence.tsv external row 0x80182A8C (EndCycle__14MenuItemEditoriii) and type row MenuItemEditor."
-    },
-    "EndSlider__14MenuItemEditoriii": {
-      "address": "0x80182AA0",
-      "evidence": "evidence.tsv external row 0x80182AA0 (EndSlider__14MenuItemEditoriii) and type row MenuItemEditor."
-    },
-    "Leave__14MenuListScreeniiPPv": {
-      "address": "0x80182B84",
-      "evidence": "evidence.tsv external row 0x80182B84 (Leave__14MenuListScreeniiPPv) and type row MenuListScreen."
-    },
-    "GetEditor__10MenuScreen": {
-      "address": "0x80184190",
-      "evidence": "evidence.tsv external row 0x80184190 (GetEditor__14MenuScreen) and type row MenuScreen."
-    },
-    "Enter__14MenuListScreeniPiT2": {
-      "address": "0x80182B40",
-      "evidence": "evidence.tsv external row 0x80182B40 (Enter__14MenuListScreeniPiT2) and type row MenuListScreen."
-    },
-    "BeginSlider__14MenuItemEditoriiiPiT4G9MenuArg_tN26": {
-      "address": "0x80182A94",
-      "evidence": "evidence.tsv external row 0x80182A94 (BeginSlider__14MenuItemEditoriiiPiT4G12MenuArg_tN26) and type row MenuItemEditor."
-    },
-    "GetCycleText__14MenuItemEditoriiG9MenuArg_t": {
-      "address": "0x80182A90",
-      "evidence": "evidence.tsv external row 0x80182A90 (GetCycleText__14MenuItemEditoriiG12MenuArg_t) and type row MenuItemEditor."
-    },
-    "MoveSlider__14MenuItemEditoriiG9MenuArg_t": {
-      "address": "0x80182A98",
-      "evidence": "evidence.tsv external row 0x80182A98 (MoveSlider__14MenuItemEditoriiG12MenuArg_t) and type row MenuItemEditor."
-    },
-    "GetItemId__14MenuListScreeniPi": {
-      "address": "0x80182C78",
-      "evidence": "evidence.tsv external row 0x80182C78 (GetItemId__14MenuListScreeniPi) and type row MenuListScreen."
-    },
     "sprintf": {
       "address": "0x801C2E18",
       "evidence": "evidence.tsv external row sprintf: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
-    },
-    "strcmp": {
-      "address": "0x801C2FE4",
-      "evidence": "evidence.tsv external row strcmp: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
-    },
-    "strcpy": {
-      "address": "0x801C2EB4",
-      "evidence": "evidence.tsv external row strcpy: target byte-copy loop and preserved destination; conventional library interface, original symbol not recovered."
-    },
-    "Highlight__14MenuListScreeni": {
-      "address": "0x80182BC4",
-      "evidence": "evidence.tsv external row 0x80182BC4 (Highlight__14MenuListScreeni) and type row MenuListScreen."
     },
     "VMInit": {
       "address": "0x80244F18",
@@ -416,14 +312,6 @@
     "__OSBusClock": {
       "address": "0x800000F8",
       "evidence": "evidence.tsv external row for 0x800000F8 (__OSBusClock)."
-    },
-    "fn_801DABE0__FPCUsii": {
-      "address": "0x801DABE0",
-      "evidence": "evidence.tsv external row for 0x801DABE0 (fn_801DABE0__FPCUsii)."
-    },
-    "fn_801DAD20__FPCUcN20PUcN23i": {
-      "address": "0x801DAD20",
-      "evidence": "evidence.tsv external row for 0x801DAD20 (fn_801DAD20__FPCUcN20PUcN23i)."
     },
     "__lshrdi3": {
       "address": "0x8025EB14",
@@ -677,22 +565,6 @@
       "address": "0x800BCA00",
       "evidence": "evidence.tsv external row for 0x800BCA00 (UpdateIntroEnd__12PreGamePhasef)."
     },
-    "GetColor__14MenuItemEditoriPi": {
-      "address": "0x80182A80",
-      "evidence": "evidence.tsv external row 0x80182A80 (GetColor__14MenuItemEditoriPi) and type row MenuItemEditor."
-    },
-    "EndColor__14MenuItemEditoriii": {
-      "address": "0x80182A84",
-      "evidence": "evidence.tsv external row 0x80182A84 (EndColor__14MenuItemEditoriii) and type row MenuItemEditor."
-    },
-    "GetText__14MenuItemEditoriPiG9MenuArg_t": {
-      "address": "0x80182AA4",
-      "evidence": "evidence.tsv external row 0x80182AA4 (GetText__14MenuItemEditoriPiG12MenuArg_t) and type row MenuItemEditor."
-    },
-    "SetText__14MenuItemEditoriG9MenuArg_t": {
-      "address": "0x80182AA8",
-      "evidence": "evidence.tsv external row 0x80182AA8 (SetText__14MenuItemEditoriG12MenuArg_t) and type row MenuItemEditor."
-    },
     "__fixunssfdi": {
       "address": "0x8025E850",
       "evidence": "evidence.tsv external row for 0x8025E850 (__fixunssfdi)."
@@ -709,22 +581,6 @@
       "address": "0x801AD424",
       "evidence": "evidence.tsv external row for GXPixel resolved caller and related SDK/runtime callee identity."
     },
-    "DVDGetCurrentDiskID": {
-      "address": "0x80241974",
-      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
-    },
-    "memmove": {
-      "address": "0x801C2030",
-      "evidence": "evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
-    },
-    "__shr2u": {
-      "address": "0x801AD46C",
-      "evidence": "evidence.tsv actual target retained relocation and pinned donor declaration rows."
-    },
-    "__shl2i": {
-      "address": "0x801AD474",
-      "evidence": "evidence.tsv actual target retained relocation and pinned donor declaration rows."
-    },
     "_stack_addr": {
       "address": "0x803FE4C0",
       "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; outside the image, so the linked source build defines it as an absolute link-script symbol; no object storage claimed."
@@ -733,53 +589,9 @@
       "address": "0x803EE4C0",
       "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; exactly the end of .sdata2, so the linked source build resolves it as the end of the last original piece there; no object storage claimed."
     },
-    "__cpReg": {
-      "address": "0x803ED35C",
-      "evidence": "evidence.tsv GXPerf original counter access operands establish shared register pointer; genuine pinned SDK declaration."
-    },
-    "DVDCancel": {
-      "address": "0x802418A4",
-      "evidence": "evidence.tsv DVDfs actual retained branch operands and canonical shared declaration; target implementation remains original bytes."
-    },
-    "DVDReadAbsAsyncPrio": {
-      "address": "0x80241080",
-      "evidence": "evidence.tsv DVDfs actual retained branch operands and canonical shared declaration; target implementation remains original bytes."
-    },
-    "DVDReadAbsAsyncForBS": {
-      "address": "0x8024115C",
-      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
-    },
-    "DVDReset": {
-      "address": "0x8024148C",
-      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
-    },
-    "DVDReadDiskID": {
-      "address": "0x8024122C",
-      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
-    },
-    "DVDGetDriveStatus": {
-      "address": "0x8024151C",
-      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
-    },
-    "strncmp": {
-      "address": "0x801C302C",
-      "evidence": "Actual original248body REL24 at80241F60/80241F98 length4/2; callee801C302C..3084 bounded NUL stopping byte comparison. Relatedlibc spelling, no originalsource/debugname claim."
-    },
-    "__piReg": {
-      "address": "0x803ED358",
-      "evidence": "Actual target operands and canonical accepted API signatures in GXFifo, relatedSDK identity."
-    },
     "__CARDPermMask": {
       "address": "0x803EC2C2",
       "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
-    },
-    "__memReg": {
-      "address": "0x803ED364",
-      "evidence": "Actual original GXMisc complete-body operand proof, current established canonical signature reused; related API identity."
-    },
-    "__peReg": {
-      "address": "0x803ED360",
-      "evidence": "Actual original GXMisc complete-body operand proof, current established canonical signature reused; related API identity."
     },
     "OSRegisterResetFunction": {
       "address": "0x8023BFBC",
@@ -805,65 +617,13 @@
       "address": "0x81780000",
       "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
     },
-    "__PADSpec": {
-      "address": "0x803ED2B0",
-      "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
-    },
-    "RealMode": {
-      "address": "0x8023BC20",
-      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
-    },
-    "Config24MB": {
-      "address": "0x8023BB20",
-      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
-    },
-    "Config48MB": {
-      "address": "0x8023BBA0",
-      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
-    },
-    "DVDInit": {
-      "address": "0x8023F498",
-      "evidence": "Original complete OSInit call instruction0x80238E88 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "DVDSetAutoInvalidation": {
-      "address": "0x802415C8",
-      "evidence": "Original complete __OSReboot call instruction0x8023E9A0 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "DVDResume": {
-      "address": "0x802415D8",
-      "evidence": "Original complete __OSReboot call instruction0x8023E9A4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "__DVDPrepareResetAsync": {
-      "address": "0x80241A74",
-      "evidence": "Original complete __OSReboot call instruction0x8023E9B4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "DVDCheckDisk": {
-      "address": "0x8024197C",
-      "evidence": "Original complete __OSReboot call instruction0x8023EC00 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
     "__OSDoHotReset": {
       "address": "0x8023C0B0",
       "evidence": "Original complete __OSReboot call instruction0x8023EC38 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
-    "DVDCancelStreamAsync": {
-      "address": "0x80241300",
-      "evidence": "Original complete __OSReboot call instruction0x8023EA80 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "DVDGetCommandBlockStatus": {
-      "address": "0x802414D0",
-      "evidence": "Original complete __OSReboot call instruction0x8023EC40 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
     "Reset": {
       "address": "0x8023C040",
       "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
-    },
-    "__OSStopAudioSystem": {
-      "address": "0x80239BD4",
-      "evidence": "Original complete OSResetSystem call instruction0x8023C118 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "__PADDisableRecalibration": {
-      "address": "0x80248124",
-      "evidence": "Original complete OSResetSystem call instruction0x8023C398 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
     "__OSSyncSram": {
       "address": "0x8023CED0",
@@ -877,21 +637,9 @@
       "address": "0x8023C958",
       "evidence": "Original complete OSInit call instruction0x80238CC0 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
-    "__OSInitAudioSystem": {
-      "address": "0x80239A18",
-      "evidence": "Original complete OSInit call instruction0x80238CC8 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "__OSInitMemoryProtection": {
-      "address": "0x8023BC38",
-      "evidence": "Original complete OSInit call instruction0x80238CE4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
     "EnableMetroTRKInterrupts": {
       "address": "0x801AA7B8",
       "evidence": "Original complete OSInit call instruction0x80238E70 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "DVDInquiryAsync": {
-      "address": "0x802413BC",
-      "evidence": "Original complete OSInit call instruction0x80238EC8 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
     "GXSetGPMetric": {
       "address": "0x8025295C",
@@ -1001,14 +749,6 @@
       "address": "0x80245EDC",
       "evidence": "Original target provider retained for calls from measured VMBase C. Complete target instructions at 0x80245EDC and pinned MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c declarations support the accessed contract; no body or original handwritten assembly provenance claimed. See VMBase external evidence."
     },
-    "strcat": {
-      "address": "0x801C2F2C",
-      "evidence": "evidence.tsv external row strcat: target NUL scan of r3 then byte copy of r4 with the destination preserved; conventional library interface, original symbol not recovered."
-    },
-    "strrchr": {
-      "address": "0x801C30C0",
-      "evidence": "evidence.tsv external row strrchr: target scan keeping the last position whose byte equals the second argument; conventional library interface, original symbol not recovered."
-    },
     "OpenBitStream__FP11BitStream_tPv15BitStreamMode_t": {
       "address": "0x80190ED4",
       "evidence": "evidence.tsv external row 0x80190ED4 (OpenBitStream__FP11BitStream_tPv15BitStreamMode_t), name row 0x80190ED4 and type row BitStream_t."
@@ -1024,26 +764,6 @@
     "fn_800C02E0__12PreSnapPhase": {
       "address": "0x800C02E0",
       "evidence": "evidence.tsv external row for 0x800C02E0 (fn_800C02E0__12PreSnapPhase); descriptive mangled member name."
-    },
-    "fn_801CBD80__12FlowManagerCii": {
-      "address": "0x801CBD80",
-      "evidence": "evidence.tsv external row for 0x801CBD80 (fn_801CBD80__12FlowManagerCii) and FlowManagerC type row."
-    },
-    "fn_801CBE24__12FlowManagerCi": {
-      "address": "0x801CBE24",
-      "evidence": "evidence.tsv external row for 0x801CBE24 (fn_801CBE24__12FlowManagerCi) and FlowManagerC type row."
-    },
-    "fn_801CBE9C__12FlowManagerCi": {
-      "address": "0x801CBE9C",
-      "evidence": "evidence.tsv external row for 0x801CBE9C (fn_801CBE9C__12FlowManagerCi) and FlowManagerC type row."
-    },
-    "fn_801CBEC8__12FlowManagerCi": {
-      "address": "0x801CBEC8",
-      "evidence": "evidence.tsv external row for 0x801CBEC8 (fn_801CBEC8__12FlowManagerCi) and FlowManagerC type row."
-    },
-    "fn_801CBEF4__12FlowManagerCii": {
-      "address": "0x801CBEF4",
-      "evidence": "evidence.tsv external row for 0x801CBEF4 (fn_801CBEF4__12FlowManagerCii) and FlowManagerC type row."
     },
     "__14Block_80156400": {
       "address": "0x80156400",
@@ -1476,18 +1196,6 @@
     "OSResetSystem": {
       "address": "0x8023C0F8",
       "evidence": "evidence.tsv function/name rows for 0x8023C0F8 (target extent, related SDK name)."
-    },
-    "PADRecalibrate": {
-      "address": "0x80247030",
-      "evidence": "evidence.tsv function row for 0x80247030 (target extent, related SDK name)."
-    },
-    "PADControlMotor": {
-      "address": "0x802476F8",
-      "evidence": "evidence.tsv function row for 0x802476F8 (target extent, related SDK name). evidence.tsv external row PADControlMotor: target REL24 calls at 0x801CABC0, 0x801CABD0, 0x801CABE0, 0x801CABEC and the SDK Pad.c comparison unit."
-    },
-    "GXInit": {
-      "address": "0x8024AF70",
-      "evidence": "evidence.tsv external row GXInit: target REL24 call at 0x801CE558 and the SDK GXInit.c comparison unit."
     },
     "_vt.14Class_802A2A40": {
       "address": "0x802A2A40",
@@ -2341,10 +2049,6 @@
       "address": "0x8007F19C",
       "evidence": "evidence.tsv function/name rows for 0x8007F19C; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
     },
-    "GameStatsGather": {
-      "address": "0x80055584",
-      "evidence": "evidence.tsv function/name/source-form rows for 0x80055584; the documented holdout of src/game/GameStats.cpp keeps its original bytes until its draft in comparisons.json is linked."
-    },
     "PlyrSwapStateData": {
       "address": "0x80148424",
       "evidence": "evidence.tsv function/name/source-form rows for 0x80148424; src/game/cu_80148424.cpp is exact but stays a comparison (probable fragment of the cu_801485B4 grouping), so its original bytes stay linked and the comparison of src/game/cu_801485B4.cpp resolves the call here."
@@ -2544,6 +2248,106 @@
     "add_separators": {
       "address": "0x80264424",
       "evidence": "evidence.tsv function and related name rows at 0x80264424; complete source remains measured in vfprintf.c while original bytes provide the public entry."
+    },
+    "_TDbTblFillColHeader": {
+      "address": "0x8020B564",
+      "evidence": "evidence.tsv function/name/source-form rows for 0x8020B564; the documented holdout at the start of src/engine/t3db_table.c keeps its original bytes until its draft in comparisons.json is linked; _TDbTblCreate calls it (bl at 0x8020BCD4)."
+    },
+    "StartGroup__12FlowManagerCii": {
+      "address": "0x801CBD80",
+      "evidence": "evidence.tsv external row for 0x801CBD80 (fn_801CBD80__12FlowManagerCii) and FlowManagerC type row."
+    },
+    "StopGroup__12FlowManagerCi": {
+      "address": "0x801CBE24",
+      "evidence": "evidence.tsv external row for 0x801CBE24 (fn_801CBE24__12FlowManagerCi) and FlowManagerC type row."
+    },
+    "IsGroupStarted__12FlowManagerCi": {
+      "address": "0x801CBE9C",
+      "evidence": "evidence.tsv external row for 0x801CBE9C (fn_801CBE9C__12FlowManagerCi) and FlowManagerC type row."
+    },
+    "GetActiveStage__12FlowManagerCi": {
+      "address": "0x801CBEC8",
+      "evidence": "evidence.tsv external row for 0x801CBEC8 (fn_801CBEC8__12FlowManagerCi) and FlowManagerC type row."
+    },
+    "QueueTransition__12FlowManagerCii": {
+      "address": "0x801CBEF4",
+      "evidence": "evidence.tsv external row for 0x801CBEF4 (fn_801CBEF4__12FlowManagerCii) and FlowManagerC type row."
+    },
+    "Init__12FlowManagerC": {
+      "address": "0x801CBCD0",
+      "evidence": "evidence.tsv external row for 0x801CBCD0 (Init__12FlowManagerC) and the name row of FlowManagerC::Init."
+    },
+    "GetNumQueuedTransitions__12FlowManagerC": {
+      "address": "0x801CBFA0",
+      "evidence": "evidence.tsv external row for 0x801CBFA0 (GetNumQueuedTransitions__12FlowManagerC) and the name row of FlowManagerC::GetNumQueuedTransitions."
+    },
+    "Process__12FlowManagerC": {
+      "address": "0x801CBFA8",
+      "evidence": "evidence.tsv external row for 0x801CBFA8 (Process__12FlowManagerC) and the name row of FlowManagerC::Process."
+    },
+    "SetVerboseFlags__12FlowManagerCi": {
+      "address": "0x801CC054",
+      "evidence": "evidence.tsv external row for 0x801CC054 (SetVerboseFlags__12FlowManagerCi) and the name row of FlowManagerC::SetVerboseFlags."
+    },
+    "madinit__Fv": {
+      "address": "0x801DA52C",
+      "evidence": "evidence.tsv function/name rows for 0x801DA52C; the documented holdout 0x801DA52C-0x801DA7E8 at the start of src/engine/maddec.cpp, which keeps its original bytes until its draft in comparisons.json is linked; called by 0x801DABE0."
+    },
+    "AnimWgtSetLinearInAndOut": {
+      "address": "0x801BF530",
+      "evidence": "evidence.tsv function and name rows for 0x801BF530 (documented holdout 0x801BF530-0x801BF5E8 at the end of src/engine/animwgt.c: draft registered in comparisons.json, original bytes; its pool 0x802AEED0-0x802AEEE0 stays original bytes with it). Called by animtran.c."
+    },
+    "LLTexPadToPow2": {
+      "address": "0x8020E7EC",
+      "evidence": "evidence.tsv function and name rows for 0x8020E7EC (documented holdout 0x8020E7EC-0x8020E9D0 at the start of src/engine/lltextur.c: draft registered in comparisons.json, original bytes). Called by ResTexture.cpp."
+    },
+    "CurveListEvaluate": {
+      "address": "0x801C5278",
+      "evidence": "evidence.tsv function and name rows for 0x801C5278 (src/engine/CurveList.c, a comparison-only file: draft registered in comparisons.json, original bytes). Called by camcurve.cpp and cu_800913E8.cpp."
+    },
+    "CodecReadSamples": {
+      "address": "0x8027D05C",
+      "evidence": "evidence.tsv function/name rows for 0x8027D05C; exact but unlinked in the comparison-only src/engine/cu_8027CF9C.cpp, which keeps its original bytes until the whole file can be linked; called here by name."
+    },
+    "GameStatsUpdateRecords": {
+      "address": "0x80056560",
+      "evidence": "evidence.tsv function/name rows for 0x80056560; GameStatsUpdateRecords is defined in src/game/InGameScreens.cpp, which is comparison-only, and is called by the comparison src/game/cu_80155F48.cpp (bl at 0x80155F60)."
+    },
+    "_MainInitFastCast": {
+      "address": "0x80088F2C",
+      "evidence": "evidence.tsv function and name rows for 0x80088F2C (comparison-only function of src/game/Main.cpp, inline asm start holdout, original bytes)."
+    },
+    "FormationLineupSwapAllUser": {
+      "address": "0x8008593C",
+      "evidence": "evidence.tsv function and name rows for 0x8008593C (comparison-only function of src/game/FormationLineupEdit.cpp, documented partial, original bytes)."
+    },
+    "FormationLineupApplyUser": {
+      "address": "0x80085A34",
+      "evidence": "evidence.tsv function and name rows for 0x80085A34 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+    },
+    "FormationLineupClearAll": {
+      "address": "0x80085A7C",
+      "evidence": "evidence.tsv function and name rows for 0x80085A7C (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+    },
+    "FormationLineupRemapTeams": {
+      "address": "0x80085AA0",
+      "evidence": "evidence.tsv function and name rows for 0x80085AA0 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+    },
+    "FormationLineupCommitTeam": {
+      "address": "0x80085BE4",
+      "evidence": "evidence.tsv function and name rows for 0x80085BE4 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+    },
+    "FormationLineupRevertTeam": {
+      "address": "0x80085C3C",
+      "evidence": "evidence.tsv function and name rows for 0x80085C3C (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+    },
+    "FormationLineupFillTeam": {
+      "address": "0x80085C94",
+      "evidence": "evidence.tsv function and name rows for 0x80085C94 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+    },
+    "FormationLineupReset": {
+      "address": "0x80085D54",
+      "evidence": "evidence.tsv function and name rows for 0x80085D54 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
     }
   },
   "units": [
@@ -8597,7 +8401,7 @@
     {
       "source": "src/game/PlayBook.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80167910-0x80168ED0 (src/game/PlayBook.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80167910-0x8016BD54 (src/game/PlayBook.cpp), its data, linker, type, compiler and source-form rows.",
       "link_roots": {
         "symbols": [
           "PlayBookOffsetSpots",
@@ -8647,31 +8451,128 @@
           "PlayBookGetReceiver",
           "PlayBookSetReceiverOption",
           "PlayBookGetDatabase",
-          "PlayBookGetTeam"
+          "PlayBookGetTeam",
+          "PlayCallGetPlaybookId",
+          "PlayCallApplyPlay",
+          "PlayCallFillOffenseExtra",
+          "PlayCallFillDefenseExtra",
+          "PlayCallFillSituation",
+          "PlayCallFillOffenseSituation",
+          "PlayCallFillDefenseSituation",
+          "PlayCallOffenseCommand",
+          "PlayCallDefenseCommand",
+          "PlayCallScriptReadValue",
+          "PlayCallScriptGetStream",
+          "PlayCallScriptRelocate",
+          "PlayCallScriptIsEqual",
+          "PlayCallScriptIsLess",
+          "PlayCallScriptIsGreater",
+          "PlayCallScriptIsLessEqual",
+          "PlayCallScriptIsGreaterEqual",
+          "PlayCallScriptIsNotEqual",
+          "PlayCallScriptExecute",
+          "PlayCallScriptHandleEndCode",
+          "PlayCallScriptApplyOffenseResult",
+          "PlayCallScriptApplyDefenseResult",
+          "PlayCallScriptInit",
+          "PlayCallScriptRunOffense",
+          "PlayCallScriptRunDefense",
+          "PlayTrackGetKindGroup",
+          "PlayTrackGetCallTendency",
+          "PlayTrackScoreTendencyMatch",
+          "PlayTrackRateResult5",
+          "PlayTrackRateResult6",
+          "PlayTrackRateFlag10",
+          "PlayTrackRateFlag11",
+          "PlayTrackScaleByMask",
+          "PlayTrackScoreRepeatedPlay",
+          "PlayTrackScoreFlagMatch",
+          "PlayTrackWeightOffense",
+          "PlayTrackWeightDefense",
+          "PlayTrackFilterByMode",
+          "PlayTrackFilterByChallenge",
+          "PlayTrackClassifyPlay",
+          "PlayTrackGetRatingBias",
+          "PlayTrackInit",
+          "PlayTrackShutdown",
+          "PlayTrackUpdateSummary",
+          "PlayTrackPushPlay",
+          "PlayTrackSetEntryWord4",
+          "PlayTrackSetEntryByteC",
+          "PlayTrackSetDirection",
+          "PlayTrackSetGain",
+          "PlayTrackSetResult",
+          "PlayTrackSetKind",
+          "PlayTrackSetFlag10",
+          "PlayTrackSetFlag11",
+          "PlayTrackWeightCandidates",
+          "PlayTrackGetGainTendency",
+          "PlayTrackMatchesGainFlags",
+          "PlayTrackGetPlayTendency",
+          "PlayTrackRatePlayId",
+          "PlayTrackGetPlayIdRate",
+          "PlayTrackGetResult5Rate",
+          "PlayTrackGetFlag10Rate",
+          "PlayTrackGetFlag11Rate",
+          "PlayTrackGetOffenseTendency",
+          "PlayTrackReset",
+          "PlayTrackRegister",
+          "PlayAutoFlip"
         ],
         "discarded": [
-          "GetPlayerPosition"
+          "GetPlayerPosition",
+          "PlayBookTurnPage",
+          "GetTrackerFloat8",
+          "SumKind1WeightsBit28",
+          "SumKind1WeightsBit30",
+          "PlayBookGetZoneCenter",
+          "PlayBookRouteApplyTurn",
+          "PlayBookRouteAddStep",
+          "PlayBookRouteAddZoneStep",
+          "PlayBookRouteAddShift",
+          "PlayBookRouteCommand",
+          "PlayBookBuildRoute",
+          "PlayBookRouteToArt",
+          "PlayBookPointToArt"
         ],
-        "evidence": "evidence.tsv linker row 0x802A498C-0x802A4990: the target keeps every listed function, all reached from outside the unit or from each other; the point accessor GetPlayerPosition, rebuilt from its Xbox prototype counterpart 0x11DBA0, has no code in the target, while its 9.0f constant remains in the unit's rodata."
+        "evidence": "evidence.tsv linker rows 0x802A498C-0x802A4990, 0x802A4990-0x802A49A4, 0x802A4B88-0x802A4BA0 and 0x802A4BA4-0x802A4BF8: the target keeps every listed function; the listed discarded functions, rebuilt from their Xbox prototype counterparts, have no code in the target while their constants remain in the unit's .rodata."
       },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80167910",
-          "end": "0x80168ED0"
+          "end": "0x8016BD54"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A4908",
-          "end": "0x802A4990"
+          "end": "0x802A4C18"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E9970",
+          "end": "0x802E99C4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB40C",
+          "end": "0x803EB414"
         },
         {
           "section": ".sbss",
           "placement": ".sbss",
           "start": "0x803ECAF4",
           "end": "0x803ECAF8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036167C",
+          "end": "0x80361694"
         }
       ]
     },
@@ -9163,7 +9064,7 @@
     },
     {
       "source": "src/game/PlaTexCache.cpp",
-      "profile": "game_cpp",
+      "profile": "game_cpp_nobuiltin",
       "evidence": "evidence.tsv unit row 0x8016014C-0x801614D0 (src/game/PlaTexCache.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
         {
@@ -9601,25 +9502,6 @@
           "placement": ".bss",
           "start": "0x8030BCA8",
           "end": "0x8030BCE0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800857D0.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded record-update group and exact linked prefix/data rows; remaining eight functions are preserved in-place for comparison. Original-file edges remain open.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800857D0",
-          "end": "0x8008593C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x80294150",
-          "end": "0x802943DC"
         }
       ]
     },
@@ -12048,19 +11930,6 @@
       ]
     },
     {
-      "source": "src/game/cu_80088F2C.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80088F2C-0x80089330 (src/game/cu_80088F2C.cpp) and its source-form rows; .text links 0x80088F78-0x80088FFC, fn_80088F2C (inline asm) and fn_80088FFC are comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80088F78",
-          "end": "0x80088FFC"
-        }
-      ]
-    },
-    {
       "source": "src/game/PlyrModelParts.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801A13A8-0x801A14D8 (src/game/PlyrModelParts.cpp) and its type and source-form rows.",
@@ -12361,25 +12230,6 @@
       ]
     },
     {
-      "source": "src/game/PlayAutoFlip.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8016BAD8-0x8016BD54 (src/game/PlayAutoFlip.cpp) and its data and source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8016BAD8",
-          "end": "0x8016BD54"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A4BA0",
-          "end": "0x802A4BA4"
-        }
-      ]
-    },
-    {
       "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80164568-0x801660A0 (src/game/PlayAlign.cpp), its function rows and data rows 0x802A4610-0x802A4624 and 0x803EB3B0-0x803EB3B8.",
@@ -12432,19 +12282,6 @@
           "placement": ".data5",
           "start": "0x803EB3A4",
           "end": "0x803EB3A8"
-        }
-      ]
-    },
-    {
-      "source": "src/game/PlayCallAI.cpp",
-      "profile": "game_cpp",
-      "evidence": "Target function extents 0x80168ED0-0x801695D4 (evidence.tsv function rows) and callback producer 0x80168324. Provisional grouping.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80168ED0",
-          "end": "0x801695D4"
         }
       ]
     },
@@ -12730,7 +12567,7 @@
     },
     {
       "source": "src/game/animextn.cpp",
-      "profile": "game_cpp",
+      "profile": "game_cpp_nobuiltin",
       "evidence": "evidence.tsv unit row 0x80190A7C-0x80190ED4 (animextn.cpp), its storage and source-form rows, and the related NASCAR 2005 name rows.",
       "sections": [
         {
@@ -12898,6 +12735,19 @@
           "placement": ".text",
           "start": "0x801C1F54",
           "end": "0x801C1F94"
+        }
+      ]
+    },
+    {
+      "source": "src/Common/c/memory.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C1F94-0x801C20A0 (src/Common/c/memory.c), its compiler, function and name rows; all four functions exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C1F94",
+          "end": "0x801C20A0"
         }
       ]
     },
@@ -16309,25 +16159,6 @@
       ]
     },
     {
-      "source": "src/game/GameStats.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80055584-0x80056584 (src/game/GameStats.cpp), its function, name and data rows; 0x80055B2C-0x80056584 and its .rodata literal are linked, the documented holdout 0x80055584-0x80055B2C (with its query literal 0x8028E008-0x8028E164) keeps its original bytes and stays a comparison.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80055B2C",
-          "end": "0x80056584"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8028E164",
-          "end": "0x8028E16C"
-        }
-      ]
-    },
-    {
       "source": "src/game/Pursue.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80125F3C-0x8012A6B0 (src/game/Pursue.cpp) and its data rows.",
@@ -17276,31 +17107,6 @@
       ]
     },
     {
-      "source": "src/game/PlayCallScript.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801695D4-0x80169F80 (src/game/PlayCallScript.cpp), its function rows, data rows 0x802A4BF8-0x802A4C14 and 0x8036167C-0x80361694, and its type, compiler and source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801695D4",
-          "end": "0x80169F80"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A4BF8",
-          "end": "0x802A4C14"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8036167C",
-          "end": "0x80361694"
-        }
-      ]
-    },
-    {
       "source": "src/game/BigObjAnim.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801A980C-0x801AA24C (src/game/BigObjAnim.cpp), its 8 exact function extents and its .rodata data row 0x802AE958-0x802AE978; every function exact.",
@@ -17542,6 +17348,939 @@
           "placement": ".data5",
           "start": "0x803EC480",
           "end": "0x803EC4A4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/moviercmp.cpp",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801D86B4-0x801D94A0 (src/engine/moviercmp.cpp), its function rows and its data rows (.rodata pool 0x802AFF40-0x802AFF68, .sdata codec hooks 0x803EBD44-0x803EBD4C); every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D86B4",
+          "end": "0x801D94A0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AFF40",
+          "end": "0x802AFF68"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD44",
+          "end": "0x803EBD4C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/AnimPoseDecode.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019D994-0x8019E530 (src/game/AnimPoseDecode.cpp), its data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019D994",
+          "end": "0x8019E530"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADF40",
+          "end": "0x802ADF80"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F26FC",
+          "end": "0x802F2714"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/dvd/dvd.c",
+      "profile": "dolphin_dvd_release",
+      "evidence": "evidence.tsv dvd.c unit, linker, source-form, function and data rows; every function exact, promoted from comparison-only; the small-data block 0x803ED118-0x803ED170 is the file's 22 words in declaration order.",
+      "link_roots": {
+        "symbols": [
+          "DVDInit",
+          "DVDReadAbsAsyncPrio",
+          "DVDReadAbsAsyncForBS",
+          "DVDReadDiskID",
+          "DVDCancelStreamAsync",
+          "DVDInquiryAsync",
+          "DVDReset",
+          "DVDGetCommandBlockStatus",
+          "DVDGetDriveStatus",
+          "DVDSetAutoInvalidation",
+          "DVDResume",
+          "DVDCancelAsync",
+          "DVDCancel",
+          "DVDGetCurrentDiskID",
+          "DVDCheckDisk",
+          "__DVDPrepareResetAsync"
+        ],
+        "evidence": "evidence.tsv dvd.c linker row 0x8023F494-0x80241B90: the target keeps the 46 functions from defaultOptionalCommandChecker to __DVDPrepareResetAsync; DVDSeekAbsAsyncPrio, DVDCancelAllAsync, DVDCancelAll, cbForCancelAllSync, __DVDSetImmCommand and __DVDSetDmaCommand have no code in the target and are removed by ordinary SN retention."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023F494",
+          "end": "0x80241B90"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FD0F8",
+          "end": "0x802FD278"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC180",
+          "end": "0x803EC198"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5540",
+          "end": "0x803A55D8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED118",
+          "end": "0x803ED170"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXInit.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv GXInit.c unit, source-form, function and data rows; every function exact under the file-wide #pragma peephole off, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024ACC0",
+          "end": "0x8024C038"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDE40",
+          "end": "0x802FE07C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC258",
+          "end": "0x803EC25C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5900",
+          "end": "0x803A5F30"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED358",
+          "end": "0x803ED380"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED840",
+          "end": "0x803ED868"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/odemuexi2/DebuggerDriver.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit, function, name, type, data and source-form rows for src/dolphin/odemuexi2/DebuggerDriver.c; the eleven functions 0x8025D930-0x8025E148 are exact and linked with the file's .sbss; the start holdout 0x8025D6C8-0x8025D930 is registered in comparisons.json.",
+      "link_roots": {
+        "symbols": [
+          "DBRead",
+          "DBQueryData",
+          "DBInitInterrupts",
+          "DBInitComm",
+          "DBGWrite"
+        ],
+        "evidence": "DBRead, DBQueryData, DBInitInterrupts and DBInitComm are the linked entries of the .data table 0x802C2A8C-0x802C2AA8 (words at 0x802C2A98, 0x802C2A94, 0x802C2A90 and 0x802C2A8C); no instruction calls them. DBGWrite's only caller is the holdout DBWrite (bl at 0x8025D7AC), which stays original bytes, so it is a root too. The other six linked functions stay through their callers in this file."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025D930",
+          "end": "0x8025E148"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3F8",
+          "end": "0x803ED40D"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/pad/Pad.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit row 0x802466D0-0x802481A0 (src/dolphin/pad/Pad.c) and its function, name, data and source-form rows; CREDITS.md for the source; all 19 functions exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802466D0",
+          "end": "0x802481A0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC218",
+          "end": "0x803EC238"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5880",
+          "end": "0x803A58D0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDD00",
+          "end": "0x802FDD58"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED288",
+          "end": "0x803ED2B4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/bintree.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C7F70-0x801C8F14 (src/engine/bintree.c), its compiler, source-form, type, function, name and data rows; every function exact, promoted from comparison-only together with its .rodata pool 0x802AF188-0x802AF198 and its .bss parent node 0x8037F880-0x8037F894.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C7F70",
+          "end": "0x801C8F14"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF188",
+          "end": "0x802AF198"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037F880",
+          "end": "0x8037F894"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/vector.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80226F9C-0x802270A4 (src/engine/vector.c), its compiler, function, name and data rows; every function exact, promoted from comparison-only together with its .sdata byte 0x803EBF88.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80226F9C",
+          "end": "0x802270A4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF88",
+          "end": "0x803EBF8C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlyrMoveTurn.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8016C70C-0x8016CEEC (src/game/PlyrMoveTurn.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016C70C",
+          "end": "0x8016CEEC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4D00",
+          "end": "0x802A4D68"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/auxram.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional whole-file unit row 0x801C1D54-0x801C1F54 (auxram.c), five function/name rows, compiler rows engine_c_fastmath 0x801B9D00-0x801C1D84, 0x801C1D84-0x801C1D98 and 0x801C1D98-0x801C1F54, the transfer-function source-form row, and data/name rows for its two .sbss words 0x803ECEC4-0x803ECECC. Complete native text and small data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C1D54",
+          "end": "0x801C1F54"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEC4",
+          "end": "0x803ECECC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/fileio.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C8F14-0x801C9DD8 (src/engine/fileio.c), its compiler, type, function, name, data and source-form rows; all 28 functions exact, promoted from comparison-only, with the file's .rodata empty string, its .sdata run 0x803EBC10-0x803EBC38 and its .data device tables 0x802F4A0C-0x802F4A74. The eight uninitialized globals (locks, init parameters, request pools) are COMMON symbols; the storage map places them at their evidenced extents (data rows 0x803D5168-0x803D55E0 and 0x803ED628-0x803ED631).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C8F14",
+          "end": "0x801C9DD8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF198",
+          "end": "0x802AF19C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4A0C",
+          "end": "0x802F4A74"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBC10",
+          "end": "0x803EBC38"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "File_RequestListCS",
+          "start": "0x803D5168",
+          "end": "0x803D5188"
+        },
+        {
+          "symbol": "File_AsyncRequestListCS",
+          "start": "0x803D5188",
+          "end": "0x803D51A8"
+        },
+        {
+          "symbol": "File_InitParms",
+          "start": "0x803D51A8",
+          "end": "0x803D55B4"
+        },
+        {
+          "symbol": "File_AsyncThreadActive",
+          "start": "0x803D55B4",
+          "end": "0x803D55BD"
+        },
+        {
+          "symbol": "File_AsyncThreadActiveCS",
+          "start": "0x803D55C0",
+          "end": "0x803D55E0"
+        },
+        {
+          "symbol": "File_pFileRequestList",
+          "start": "0x803ED628",
+          "end": "0x803ED62C"
+        },
+        {
+          "symbol": "File_pAsyncRequestList",
+          "start": "0x803ED62C",
+          "end": "0x803ED630"
+        },
+        {
+          "symbol": "File_AsyncFileCopy",
+          "start": "0x803ED630",
+          "end": "0x803ED631"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/lltextur.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020E7EC-0x8020EA18 (src/engine/lltextur.c), its function, name and source-form rows; 0x8020E9D0-0x8020EA18 is linked (no data); the documented holdout LLTexPadToPow2 0x8020E7EC-0x8020E9D0 at the start of .text keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020E9D0",
+          "end": "0x8020EA18"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmclip.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213BCC-0x80214554 (src/engine/tmclip.c), its compiler, function, name, data and type rows and the linker row 0x802B1C78-0x802B1C88 for the discarded TMClipVertexList; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "TMClipProjection",
+          "TMClipMatrix",
+          "TMClipMatrixWorld",
+          "TMClipProjVertexList",
+          "TMClipVertex",
+          "TMClipBBox",
+          "TMClipResetExtent",
+          "TMClipExtentAddPoint"
+        ],
+        "discarded": [
+          "TMClipVertexList"
+        ],
+        "evidence": "evidence.tsv linker row 0x802B1C78-0x802B1C88: the target keeps every listed function, all reached from outside the unit, and the file-static helpers they call; TMClipVertexList, rebuilt from its Xbox prototype counterpart 0x2244B0, has no code in the target, while its three constants remain in the unit's .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213BCC",
+          "end": "0x80214554"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1C58",
+          "end": "0x802B1C98"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9D8C",
+          "end": "0x802F9D98"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039B580",
+          "end": "0x8039B600"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dblock.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80229084-0x80229094 (src/engine/dblock.c), its compiler, function and name rows; both functions exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80229084",
+          "end": "0x80229094"
+        }
+      ]
+    },
+    {
+      "source": "src/game/EditMenu.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80181330-0x8018422C (src/game/EditMenu.cpp), its data rows and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80181330",
+          "end": "0x8018422C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A6AC0",
+          "end": "0x802A6C10"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EA988",
+          "end": "0x802EAA40"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB548",
+          "end": "0x803EB590"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80362A20",
+          "end": "0x80362B7C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB54",
+          "end": "0x803ECB80"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AF8",
+          "end": "0x80289AFC"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C24",
+          "end": "0x80289C28"
+        }
+      ],
+      "kept_locals": {
+        "symbols": {
+          "GetEditor__10MenuScreen": "0x80184190"
+        },
+        "evidence": "evidence.tsv source-form row EditMenu GetEditor kept copy: the deferred inline MenuScreen::GetEditor is local to this file under -fno-weak; the target has one copy, 0x80184190 in this file's .text, and the vtable entries of the other menu files resolve to it."
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSAudioSystem.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit, function, name and data rows for src/dolphin/os/OSAudioSystem.c; both functions exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80239A18",
+          "end": "0x80239CAC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FBC48",
+          "end": "0x802FBCC8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSMemory.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit, function, name, data and source-form rows for src/dolphin/os/OSMemory.c; every retained function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "__OSInitMemoryProtection",
+          "Config24MB",
+          "Config48MB",
+          "RealMode"
+        ],
+        "evidence": "The target keeps this file's 6 exact functions at the placed range; the global ones are the roots and the file-local OnReset and MEMIntrruptHandler stay through their references. The accessors OSGetPhysicalMemSize and OSGetConsoleSimulatedMemSize are inlined into __OSInitMemoryProtection and have no standalone code in the target (byte search of main.dol for lis r3,0x8000 followed by lwz r3,0x28(r3) or lwz r3,0xF0(r3) finds none), so the linker drops them as the original link did."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023BA78",
+          "end": "0x8023BD50"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FC470",
+          "end": "0x802FC480"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3db_table.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler and source-form rows and the function and name rows; 0x8020B710-0x8020CCBC is linked (eleven exact functions, no data of its own); the documented holdout _TDbTblFillColHeader 0x8020B564-0x8020B710 at the start of .text keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020B710",
+          "end": "0x8020CCBC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/flowgroup.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801CC350-0x801CC700 (src/engine/flowgroup.cpp), its compiler, function and name rows and the FlowGroupC virtual-table data row 0x802AF3B8-0x802AF410. All 16 functions and the table are linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CC350",
+          "end": "0x801CC700"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF3B8",
+          "end": "0x802AF410"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/flowmodule.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801CC700-0x801CCA64 (src/engine/flowmodule.cpp), its compiler, function and name rows, the virtual-table rows 0x802AF410-0x802AF490 and the static data rows 0x803EBC50-0x803EBC58 and the class static FlowModuleC::s_aModuleList 0x803D4780-0x803D4F50, a COMMON symbol its storage map places. All 13 functions and the file's initialized data are linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CC700",
+          "end": "0x801CCA64"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF410",
+          "end": "0x802AF490"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBC50",
+          "end": "0x803EBC58"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_11FlowModuleC.s_aModuleList",
+          "start": "0x803D4780",
+          "end": "0x803D4F50"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/FSasync.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x801AD57C-0x801ADDB4 (src/engine/FSasync.c), its function, name, data, compiler and source-form rows; every function exact, promoted from comparison-only. The .data range 0x802CC580-0x802CC590 holds the four initialized state words; the zero-filled storage 0x802CC5A0-0x802CC5CC is the file's eight uninitialized (COMMON) globals, which the storage map places at the extents of their exact data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AD57C",
+          "end": "0x801ADDB4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC580",
+          "end": "0x802CC590"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "g_hHandle",
+          "start": "0x802CC5A0",
+          "end": "0x802CC5A4"
+        },
+        {
+          "symbol": "g_pBuffer",
+          "start": "0x802CC5A4",
+          "end": "0x802CC5A8"
+        },
+        {
+          "symbol": "g_nBlockCnt",
+          "start": "0x802CC5A8",
+          "end": "0x802CC5AC"
+        },
+        {
+          "symbol": "g_nRemainderCnt",
+          "start": "0x802CC5AC",
+          "end": "0x802CC5B0"
+        },
+        {
+          "symbol": "g_nTotalBytesRemaining",
+          "start": "0x802CC5B0",
+          "end": "0x802CC5B4"
+        },
+        {
+          "symbol": "g_bDoFSACK",
+          "start": "0x802CC5B4",
+          "end": "0x802CC5B8"
+        },
+        {
+          "symbol": "g_nFSLastError",
+          "start": "0x802CC5B8",
+          "end": "0x802CC5BC"
+        },
+        {
+          "symbol": "g_FsResult",
+          "start": "0x802CC5C0",
+          "end": "0x802CC5CC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/maddec.cpp",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801DA52C-0x801DB058 (src/engine/maddec.cpp), its function, name and data rows; 0x801DA7E8-0x801DB058 and the file's data are linked except the two code tables 0x802B0060-0x802B0E50, which only the holdout reads, the documented holdout 0x801DA52C-0x801DA7E8 (the table initializer) keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801DA7E8",
+          "end": "0x801DB058"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B0E50",
+          "end": "0x802B0F50"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7BA0",
+          "end": "0x802F7CA0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80399110",
+          "end": "0x8039AC10"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF1C",
+          "end": "0x803ECF30"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/animwgt.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BF090-0x801BF5E8 (src/engine/animwgt.c), its function, name and data rows; 0x801BF090-0x801BF530 is linked with the .rodata 0x802AEEA8-0x802AEED0, the .data 0x802F484C-0x802F485C, the .sdata 0x803EBB9C-0x803EBBA8 and the .sbss 0x803ED614-0x803ED618; the documented holdout AnimWgtSetLinearInAndOut 0x801BF530-0x801BF5E8 at the end of .text (with its pool 0x802AEED0-0x802AEEE0) keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BF090",
+          "end": "0x801BF530"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEEA8",
+          "end": "0x802AEED0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F484C",
+          "end": "0x802F485C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBB9C",
+          "end": "0x803EBBA8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED614",
+          "end": "0x803ED618"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sn_cwhelpers.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x801AD424-0x801AD488 (src/engine/sn_cwhelpers.c), its function, name and source-form rows; the seven branch stubs 0x801AD46C-0x801AD488 are linked (no data); the documented holdout __cvt_fp2unsigned 0x801AD424-0x801AD46C at the start of .text (with its double 0x802AE9F8-0x802AEA00) keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AD46C",
+          "end": "0x801AD488"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/fs_cli.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801CB1BC-0x801CB5D4 (src/engine/fs_cli.c), its compiler, type, function, name, data and source-form rows; all eight functions and the 0x2380-byte .bss (reader thread, its stack and the two semaphores) match the target under unchanged engine_c, promoted from comparison-only. The two public globals Cdinfo and _CDVDAlignedBuffer are uninitialized definitions the original linker allocated as COMMON; the file defines them and the unit's storage map places each COMMON symbol at its exact data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CB1BC",
+          "end": "0x801CB5D4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037F8C0",
+          "end": "0x80381C40"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "Cdinfo",
+          "start": "0x803D55E0",
+          "end": "0x803D55FC"
+        },
+        {
+          "symbol": "_CDVDAlignedBuffer",
+          "start": "0x803D5600",
+          "end": "0x803DD600"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tdbiomem.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8020D388-0x8020D534 (src/engine/tdbiomem.c), its compiler, function, name, type/field, data and source-form rows; all six callbacks and the 28-byte callback table match the target under unchanged engine_c, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020D388",
+          "end": "0x8020D534"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9B90",
+          "end": "0x802F9BAC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/periph.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801E11D0-0x801E1A20 (src/engine/periph.c), its compiler, function, name, data and type rows; every function exact and the file-owned .sdata, .sbss and .bss linked; the file defines the Per_ COMMON globals and the unit's storage map places each at its exact data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E11D0",
+          "end": "0x801E1A20"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD68",
+          "end": "0x803EBD74"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF50",
+          "end": "0x803ECF58"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039ADC4",
+          "end": "0x8039ADE4"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "Per_MaxAxis",
+          "start": "0x803ED5EC",
+          "end": "0x803ED5F0"
+        },
+        {
+          "symbol": "Per_NumDrivers",
+          "start": "0x803ED648",
+          "end": "0x803ED64C"
+        },
+        {
+          "symbol": "Per_DriverArray",
+          "start": "0x803ED64C",
+          "end": "0x803ED650"
+        },
+        {
+          "symbol": "Per_MaxButtons",
+          "start": "0x803ED650",
+          "end": "0x803ED654"
+        },
+        {
+          "symbol": "Per_MaxDevices",
+          "start": "0x803ED654",
+          "end": "0x803ED658"
+        },
+        {
+          "symbol": "Per_DeviceArray",
+          "start": "0x803ED658",
+          "end": "0x803ED65C"
+        },
+        {
+          "symbol": "Per_DeviceDataBuffer",
+          "start": "0x803ED65C",
+          "end": "0x803ED660"
+        },
+        {
+          "symbol": "Per_NumDevices",
+          "start": "0x803ED660",
+          "end": "0x803ED664"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/string.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C2EB4-0x801C333C (src/engine/string.c), its compiler, function and name rows; all fourteen functions exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C2EB4",
+          "end": "0x801C333C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/FormationLineupEdit.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv bounded record-update group and exact linked prefix/data rows; remaining eight functions are preserved in-place for comparison. Original-file edges remain open.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800857D0",
+          "end": "0x8008593C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80294150",
+          "end": "0x802943DC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Main.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80088F2C-0x80088FFC (src/game/Main.cpp) and its source-form row; .text links 0x80088F78-0x80088FFC, and the inline-asm start function 0x80088F2C is a comparison-only holdout.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80088F78",
+          "end": "0x80088FFC"
         }
       ]
     }

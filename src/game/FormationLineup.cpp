@@ -10,7 +10,7 @@
 extern "C" {
 int PlayCallGetPlaybookId(int a);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-int fn_80085810(int formation, int team, int *pValues);
+int FormationLineupStoreUser(int formation, int team, int *pValues);
 }
 
 static int _FormationLineup_aSlots[14];
@@ -86,7 +86,7 @@ int FormationLineupRemapBase(int formation, int team, int *pKeys, int *pValues)
         for (int i = 0; i < 14; i++) {
             pRecord[i] = _FormationLineupLookup(pRecord[i], pKeys, pValues);
         }
-        result = fn_80085810(formation, team, pRecord);
+        result = FormationLineupStoreUser(formation, team, pRecord);
     }
     return result;
 }

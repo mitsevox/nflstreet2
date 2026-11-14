@@ -204,7 +204,6 @@ ModelTexSlot_t *PlaTexCacheGetDescs(int player);
 void PlaTexCacheCloseArchive(void);
 void fn_8019723C(ParticleTrailSet_t *p);
 void PlyrModelDrawNameplate(Object_8003DEC4 *pPlayer);
-char *fn_801C2EF0(char *pDst, const char *pSrc, int n);
 void ConGetCurrentContext(void);
 void fn_801D0470(void);
 void fn_801D04C4(void);
@@ -1108,7 +1107,7 @@ void fn_801A3588(Object_8003DEC4 *pPlayer, Creation_8003D378 *pInit)
     pPlayer->mUnknown4972 = pInit->mUnknown5B;
     LightTrackerReset(&pPlayer->mUnknown4960);
     pPlayer->mUnknown4976 = pInit->mUnknown5C;
-    fn_801C2EF0(pPlayer->mUnknown4184, pInit->mUnknown38, 31);
+    strncpy(pPlayer->mUnknown4184, pInit->mUnknown38, 31);
     pPlayer->mUnknown1020 = fn_8015E440(0, pPlayer->mUnknown1016);
     pPlayer->mUnknown4060 = PlaTexCacheGetDescs(pInit->mUnknown5A);
     pModel = (Model_8015E2FC *)fn_8015E2FC(0, pPlayer->mUnknown1016, 0);

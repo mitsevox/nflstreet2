@@ -595,7 +595,7 @@ void fn_801F4C5C(void);
 int fn_801F4DAC(void *pData, int b, int c);
 void fn_801F4F28(int handle);
 int fn_801F7ABC(void);
-int fn_80227040(Vector_80039F5C *a, Vector_80039F5C *b);
+int Vec3GetAngle(Vector_80039F5C *a, Vector_80039F5C *b);
 int fn_802275D8(Vector_80039F5C *a, Vector_80039F5C *b, float eps);
 void fn_80227690(void *pOut, void *a, void *b);
 float fn_8022785C(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
@@ -2190,7 +2190,7 @@ extern "C" void SndgCalcPan(Vector_80039F5C *a, Vector_80039F5C *b, int angle, u
     flat.mX = dir.mX;
     flat.mY = dir.mY;
     flat.mZ = 0.0f;
-    rot = fn_80227040(&flat, &dir);
+    rot = Vec3GetAngle(&flat, &dir);
     if (rot > 0x800000) {
         rot = 0x1000000 - rot;
     }
@@ -2741,7 +2741,7 @@ extern "C" void SndgPathStopTrack(int a)
 
 extern "C" void SndgPathAddCallback(int value)
 {
-    if (gSndgPathfinder.fn_801CC96C()) {
+    if (gSndgPathfinder.IsStarted()) {
         SndgPathCallbackKey_t *pItem = (SndgPathCallbackKey_t *)fn_801C6A20(_SndgPathfinder_pState->mpPool[0]);
         if (pItem) {
             pItem->mKey = value;
@@ -2752,7 +2752,7 @@ extern "C" void SndgPathAddCallback(int value)
 
 extern "C" void SndgPathRemoveCallback(int value)
 {
-    if (gSndgPathfinder.fn_801CC96C()) {
+    if (gSndgPathfinder.IsStarted()) {
         SndgPathCallbackKey_t *pFound = 0;
         fn_801C6DCC(_SndgPathfinder_pState->mpPool[0], 0, value, &pFound, SndgPathMatchCallback);
         if (pFound) {

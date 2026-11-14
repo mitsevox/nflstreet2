@@ -10,7 +10,7 @@
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
 #include "game/ScreenTransition.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
 
@@ -272,10 +272,10 @@ extern "C" void fn_800BCF7C(void)
     Params_80096A58 crowd;
     Params_80096A58 ambience;
 
-    fn_801C1F94(&crowd, 0, sizeof(crowd));
+    memset(&crowd, 0, sizeof(crowd));
     crowd.mUnknown40 = 0xFFFF;
     crowd.mUnknown42 = 0xFFFF;
-    fn_801C1F94(&ambience, 0, sizeof(ambience));
+    memset(&ambience, 0, sizeof(ambience));
     ambience.mUnknown40 = 0xFFFF;
     ambience.mUnknown42 = 0xFFFF;
     switch (fn_800A3444()) {

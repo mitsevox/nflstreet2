@@ -259,7 +259,7 @@ struct Block_8011DBC8 {
 };
 
 /* View of the 108 bytes at player +1032 as one block: fn_8011DF90 clears
-   them with one 108-byte fn_801C1F94 call, and fn_8011E194, fn_8011E1A8,
+   them with one 108-byte memset call, and fn_8011E194, fn_8011E1A8,
    fn_8011E1BC, fn_8011E240, fn_8011E33C and fn_8011E3A4 address them
    through a register holding player +1032. The per-field view is the
    mUnknown1032-mUnknown1139 members; this view declares the bytes the

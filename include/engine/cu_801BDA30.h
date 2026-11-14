@@ -16,7 +16,7 @@ typedef struct Slot_801BE594 {
     short mUnknown6;
     float mUnknown8;
     unsigned char mUnknownC[64];
-    Block_801BF3C8 mUnknown4C;
+    AnimWgt_t mUnknown4C;
 } Slot_801BE594;
 
 typedef struct Collection_801BE594 {

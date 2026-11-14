@@ -467,7 +467,7 @@ extern "C" int fn_800E0AD8(Object_80039F5C *p)
         p->mFlags &= ~4;
         if (p->mUnknown9[0] != 8 && p->mUnknown9[0] != 1) {
             Message_800F01CC message;
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
             fn_800F00D4(0, p->mpState, &message, p);
@@ -610,7 +610,7 @@ extern "C" int fn_800E1350(Object_80039F5C *p)
     if (p && fn_800E12D4(p)) {
         Message_800F01CC message;
         result = 1;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 94;
         fn_800F00D4(0, p->mpState, &message, p);
         fn_800AE7F0(13, p->mIdBytes[2], p);
@@ -657,7 +657,7 @@ extern "C" int fn_800E1438(Object_80039F5C *p)
     }
     if (p->mUnknown9[0] != 1 && (p->mFlags & 0x800)) {
         Message_800F01CC message;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 11;
         message.mUnknown1[0] = p->mUnknown9[0];
         fn_800F05E4(0, p->mpState, &message, p);

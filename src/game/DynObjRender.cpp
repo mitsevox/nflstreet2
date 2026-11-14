@@ -9,7 +9,7 @@
 #include "engine/texfile.h"
 #include "game/Object_80233EAC.h"
 #include "game/LightTracker.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/ResLoad.h"
 #include "game/fn_802270D4.h"
@@ -98,7 +98,7 @@ void fn_80227C2C(void *, void *); void fn_802271F0(void *, void *); float fn_802
 int fn_8004D5B8(int, const char *, char *, int); void fn_8004D498(int);
 int fn_8004D4B0(int, const char *); int fn_8004D508(int, const char *);
 void fn_8004E090(DynObj *, int, int);
-int ResFindIndexByName(void *, const char *); char *fn_801C310C(char *, const char *);
+int ResFindIndexByName(void *, const char *);
 int DynObjIsFacingAway(DynObj *); int DynObjChildIsFacingAway(DynObjChild *);
 int DynObjDrawChild(DynObjChild *, int);
 }
@@ -230,14 +230,14 @@ void DynObjRenderInit(void *data,int handle,DynObj *p)
     fn_8004D5B8(handle,"tideRef",name,256);
     int index=DynObjFindCache(name),hasBehavior=0;
     p->mpUnknown12C=static_cast<DynObjInstance *>(fn_801D2B7C(0x110,0,0));
-    fn_801C1F94(p->mpUnknown12C,0,0x110);
+    memset(p->mpUnknown12C,0,0x110);
     DynObjInstance *s=p->mpUnknown12C;DynObjSkeletonRef *skel=p->mpUnknown130;
     fn_8004D498(handle);fn_8004D4B0(handle,"render");
     if(fn_8004D508(handle,"clut"))hasBehavior=fn_8004D5B8(handle,"tideRef",behavior,128);
     if(index!=-1) {s->mpUnknown0=_DynObj_apCaches[index];s->mpUnknown0->mUnknown138++;}
     else {
         _DynObj_apCaches[_DynObj_uNumCaches]=static_cast<DynObjCache *>(fn_801D2B7C(0x174,0,0));
-        fn_801C1F94(_DynObj_apCaches[_DynObj_uNumCaches],0,0x174);
+        memset(_DynObj_apCaches[_DynObj_uNumCaches],0,0x174);
         s->mpUnknown0=_DynObj_apCaches[_DynObj_uNumCaches++];s->mpUnknown0->mUnknown138=1;
         strcpy(s->mpUnknown0->mUnknown38,name);s->mpUnknown0->mpUnknown13C=data;
         s->mpUnknown0->mUnknown140=ResFindIndexByName(data,name);
@@ -260,7 +260,7 @@ void DynObjRenderInit(void *data,int handle,DynObj *p)
     }
     TMTexLibRegistryReset();TMTexLibRegister("model",&s->mpUnknown0->mUnknown14C);
     TMMaterialListAllocDefs(&s->mUnknown4,s->mpUnknown0->mpUnknown148);TMTexLibRegistryReset();
-    if(fn_801C310C(p->mUnknown158,"CROWDGROUP"))fn_80234A30(&s->mUnknownC,0x80);else fn_80234A30(&s->mUnknownC,0x40);
+    if(strstr(p->mUnknown158,"CROWDGROUP"))fn_80234A30(&s->mUnknownC,0x80);else fn_80234A30(&s->mUnknownC,0x40);
     fn_80234CF0(&s->mUnknownC,0,&s->mUnknown4);fn_80234DC0(&s->mUnknownC,8);
     fn_80234A94(&s->mUnknownC,&s->mpUnknown0->mUnknown4);
     if(skel) {
@@ -284,11 +284,11 @@ void DynObjRenderShutdown(DynObj *p)
     }
     fn_801D2BD0(s);p->mpUnknown12C=0;
 }
-void DynObjCacheReset(void) {_DynObj_uNumCaches=0;fn_801C1F94(_DynObj_apCaches,0,sizeof(_DynObj_apCaches));}
+void DynObjCacheReset(void) {_DynObj_uNumCaches=0;memset(_DynObj_apCaches,0,sizeof(_DynObj_apCaches));}
 void DynObjCacheFree(void)
 {
     for(unsigned int i=0;i<_DynObj_uNumCaches;i++)fn_801D2BD0(_DynObj_apCaches[i]);
-    fn_801C1F94(_DynObj_apCaches,0,sizeof(_DynObj_apCaches));_DynObj_uNumCaches=0;
+    memset(_DynObj_apCaches,0,sizeof(_DynObj_apCaches));_DynObj_uNumCaches=0;
 }
 void DynObjLoadAnimPal(void *data,DynObj *p)
 {

@@ -2,7 +2,7 @@
    the debug font. */
 #include <dolphin/gx/GXStruct.h>
 #include "game/DbgFont.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 extern "C" {
 /* Text screen of 24 rows of 80 columns plus a terminator; a row is drawn only while its flag is set. */
@@ -13,7 +13,7 @@ static unsigned char _DbgScreen_bVisible;
 
 void DbgScreenClearLine(unsigned short row)
 {
-    fn_801C1F94(&_DbgScreen_aszLines[row * 81], ' ', 80);
+    memset(&_DbgScreen_aszLines[row * 81], ' ', 80);
     _DbgScreen_aszLines[row * 81 + 80] = 0;
     _DbgScreen_abLineOn[row] = 0;
 }

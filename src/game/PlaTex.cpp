@@ -19,8 +19,6 @@ int fn_8007C67C(Row_8007BC34 *pRow);
 int PlaDynClutFind(char *pName);
 int PlaTexCacheFindTexture(char *pName);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-char *fn_801C2F88(char *pDest, const char *pSource, unsigned int count);
-int fn_801C31B0(char *pText0, char *pText1);
 
 void PlaTexRemapColors(unsigned char *pColors)
 {
@@ -86,18 +84,18 @@ void PlaTexBuildPartIds(Row_8007BC34 *pRow, PlayerLook_t *pRecord, int *pIds, in
             }
             fn_801C2D88(name, sizeof(name), "PLATEX_%s", pRow->mName);
             if (pRow->mUnknown74 && !pRecord->mUnknown93) {
-                fn_801C2F88(name, "_AWAY", sizeof(name) - 1 - strlen(name));
+                strncat(name, "_AWAY", sizeof(name) - 1 - strlen(name));
             }
             if (pRow->mUnknown75) {
-                fn_801C2F88(name, "_", sizeof(name) - 1 - strlen(name));
-                fn_801C2F88(name, lbl_802CF010[pRecord->mUnknown78], sizeof(name) - 1 - strlen(name));
+                strncat(name, "_", sizeof(name) - 1 - strlen(name));
+                strncat(name, lbl_802CF010[pRecord->mUnknown78], sizeof(name) - 1 - strlen(name));
             }
             if (pRow->mUnknown73) {
                 fn_801C2D88(number, sizeof(number), "_%02d", pRecord->mUnknown72);
-                fn_801C2F88(name, number, sizeof(name) - 1 - strlen(name));
+                strncat(name, number, sizeof(name) - 1 - strlen(name));
             }
-            fn_801C2F88(name, "_", sizeof(name) - 1 - strlen(name));
-            fn_801C2F88(name, lbl_802CF280[part], sizeof(name) - 1 - strlen(name));
+            strncat(name, "_", sizeof(name) - 1 - strlen(name));
+            strncat(name, lbl_802CF280[part], sizeof(name) - 1 - strlen(name));
             pIds[i] = PlaTexCacheFindTexture(name);
             pPalettes[i] = palette;
         }
@@ -164,7 +162,7 @@ int PlaTexFindDynClut(Row_8007BC34 *pRow)
     char name[47];
     int palette = -1;
 
-    if (pRow->mUnknown68 && fn_801C31B0(pRow->mName, "NONE")) {
+    if (pRow->mUnknown68 && stricmp(pRow->mName, "NONE")) {
         fn_801C2D88(name, sizeof(name), "PLADYNCLUT_%s", pRow->mName);
         palette = PlaDynClutFind(name);
     }

@@ -1,3 +1,8 @@
+/* Main-memory setup for the operating system layer: at boot OSInit sets the memory
+   interface's protection interrupts to report bad accesses, maps the cached and uncached
+   address windows to the console's 24 MB (or 48 MB on development hardware), and on reset
+   masks those interrupts again. */
+
 #include <dolphin/os.h>
 #include <dolphin/os/OSMemory.h>
 
@@ -137,11 +142,23 @@ asm void RealMode(register u32 addr)
     rfi
 }
 
+u32 OSGetPhysicalMemSize(void)
+{
+    u32 size = *(u32*)(OSPhysicalToCached(0x0028));
+    return size;
+}
+
+u32 OSGetConsoleSimulatedMemSize(void)
+{
+    u32 size = *(u32*)(OSPhysicalToCached(0x00F0));
+    return size;
+}
+
 void __OSInitMemoryProtection(void)
 {
     u32 simulatedSize;
     BOOL enabled;
-    simulatedSize = *(u32*)(OSPhysicalToCached(0x00F0));
+    simulatedSize = OSGetConsoleSimulatedMemSize();
     enabled = OSDisableInterrupts();
 
     __MEMRegs[16] = 0;
@@ -156,8 +173,8 @@ void __OSInitMemoryProtection(void)
     __OSSetInterruptHandler(__OS_INTERRUPT_MEM_ADDRESS, MEMIntrruptHandler);
     OSRegisterResetFunction(&ResetFunctionInfo);
 
-    if (*(u32*)(OSPhysicalToCached(0x00F0)) < *(u32*)(OSPhysicalToCached(0x0028)) &&
-        *(u32*)(OSPhysicalToCached(0x00F0)) == 0x1800000)
+    if (OSGetConsoleSimulatedMemSize() < OSGetPhysicalMemSize() &&
+        OSGetConsoleSimulatedMemSize() == 0x1800000)
     {
         DCInvalidateRange((void*)0x81800000, 0x1800000);
         __MEMRegs[20] = 2;

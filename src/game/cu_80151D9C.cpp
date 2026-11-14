@@ -7,6 +7,7 @@
 #include "game/ScrmRuleSet.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_8009D990.h"
+#include <string.h>
 
 class Class_802A1DC8 : public PreGamePhase {
 public:
@@ -88,10 +89,7 @@ public:
 extern "C" {
 int fn_80151B20(Class_802A2918 *p);
 void HudShowCallout(const char *pText);
-char *fn_801C2EF0(char *pDest, const char *pSource, unsigned int count);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-int fn_801C3180(const char *pString);
-char *fn_801C2F88(char *pDest, const char *pSource, unsigned int count);
 Object_80039F5C *PlyrFindById(int id);
 void fn_80151CCC(Class_802A2918 *p, unsigned int index, unsigned char value);
 void fn_801502B4(void *p);
@@ -141,13 +139,13 @@ void fn_80151D9C(Class_802A2918 *p)
         fn_801502B4(&p->mpUnknown1C->mUnknown32);
         return;
     }
-    fn_801C2EF0(text, "Starting next round.\n", sizeof(text));
+    strncpy(text, "Starting next round.\n", sizeof(text));
     for (i = 3; i != 0; i--) {
         if (p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown12[1] == 0) {
             pPlayer = PlyrFindById(p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown0);
             fn_801C2D88(line, sizeof(line), "Eliminated %s %s.\n", pPlayer->mUnknown2927,
                         pPlayer->mUnknown2927 + 21);
-            fn_801C2F88(text, line, sizeof(text) - fn_801C3180(text));
+            strncat(text, line, sizeof(text) - strlen(text));
             pEntries = p->mpUnknown1C->mpUnknown36->mEntries;
             if (pEntries[i].mUnknown10 + pEntries[i].mUnknown8 * 2 !=
                 pEntries[i - 1].mUnknown10 + pEntries[i - 1].mUnknown8 * 2) {

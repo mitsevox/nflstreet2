@@ -47,8 +47,8 @@ void SndgUpdate(int a);
 void SndgMusicFlushSongText(void);
 void SndgMusicUpdate(void);
 void SndgMusicFadeOut(int a, int b);
-void fn_80085A7C(void);
-void fn_80085AA0(int a, DepthChartSide_t *pRecord0, int b, DepthChartSide_t *pRecord1);
+void FormationLineupClearAll(void);
+void FormationLineupRemapTeams(int a, DepthChartSide_t *pRecord0, int b, DepthChartSide_t *pRecord1);
 void PlaybookSideClearAll(void);
 void fn_8008FE5C(int a);
 void fn_80099568(int a);
@@ -107,8 +107,8 @@ void FileDebugProcess(void);
 void fn_801CE82C(void);
 void fn_801CE910(void);
 void fn_801D6F58(void);
-int fn_801E15D0(int a);
-int fn_801E17D0(int a, char *p);
+int PerPollSingleDevice(int a);
+int PerGetDeviceData(int a, char *p);
 void PerCheckConnectSingle(unsigned char a);
 int PerIsDeviceConnected(unsigned char a);
 float RemapCheckEntry(int a, int b, char *p);
@@ -191,8 +191,8 @@ static void _InGameDemoPadRead(int a, InputValues *pPrevious, InputValues *pCurr
     handle = ConGetChannelInfo(a, 0);
     PerCheckConnectSingle(handle);
     if (PerIsDeviceConnected(handle)) {
-        fn_801E15D0(handle);
-        fn_801E17D0(handle, p);
+        PerPollSingleDevice(handle);
+        PerGetDeviceData(handle, p);
         _InGameDemoPadHook();
         if (_InGame_bDemo && PadInputIsDeviceReady(handle)) {
             done = 0;
@@ -272,7 +272,7 @@ int InGame::Init()
     fn_800C8704(&a, &b);
     DepthChartGetSide(0, &record0);
     DepthChartGetSide(1, &record1);
-    fn_80085AA0(a, &record0, b, &record1);
+    FormationLineupRemapTeams(a, &record0, b, &record1);
     DriveLogInit();
     DriveLogEndDrive();
     ScoringLogInit();
@@ -411,7 +411,7 @@ int InGame::Shutdown()
     fn_8021956C(gUISSubInfo, 1, 5, 0);
     EngineParamWords desc = { 6, 14 };
     fn_802345C4(&desc, 2);
-    fn_80085A7C();
+    FormationLineupClearAll();
     GameOptionsSetDeferWrites(0);
     PadInputSetAxisCallback(0);
     ScreenTransFinish();
@@ -475,8 +475,8 @@ int InGameIsPlaying()
     int result = 0;
     GSFlowManagerC *p = &gGSFlowManager;
 
-    if (p->fn_801CBE9C(1)) {
-        result = !p->fn_801CBE9C(3);
+    if (p->IsGroupStarted(1)) {
+        result = !p->IsGroupStarted(3);
     }
     return result;
 }

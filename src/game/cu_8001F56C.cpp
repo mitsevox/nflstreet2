@@ -1,6 +1,6 @@
 #include "game/DbCursor.h"
-#include "game/cu_80181330.h"
-#include "game/fn_801C3284.h"
+#include "game/EditMenu.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/SndgMusic.h"
@@ -130,7 +130,7 @@ void fn_8001F704(void)
     }
 }
 
-void fn_8001F850(int mode, int *pResult, Params_80005284 *pText)
+void fn_8001F850(int mode, int *pResult, MenuText_t *pText)
 {
     int count = 0;
 
@@ -141,12 +141,12 @@ void fn_8001F850(int mode, int *pResult, Params_80005284 *pText)
         count = DbCursorGetRowCount(&table);
         *pResult = count;
         EATraxDbClose(&table);
-        fn_801C3284(pText->mpText, "EA TRAX", pText->mLength);
+        strnzcpy(pText->mpText, "EA TRAX", pText->mLength);
     } else if (mode - 1 < 0) {
         *pResult = count;
     } else {
         *pResult = count;
-        fn_801C3284(pText->mpText, " ", pText->mLength);
+        strnzcpy(pText->mpText, " ", pText->mLength);
     }
 }
 
@@ -155,7 +155,7 @@ int fn_8001F900(void)
     return lbl_803EBA94->mCount;
 }
 
-int fn_8001F90C(int mode, int key, Params_80005284 **ppTexts)
+int fn_8001F90C(int mode, int key, MenuText_t **ppTexts)
 {
     int result = 0;
     unsigned char i;
@@ -196,7 +196,7 @@ int fn_8001F90C(int mode, int key, Params_80005284 **ppTexts)
     return result;
 }
 
-void fn_8001FA90(int mode, int key, Params_80005284 *pText1, Params_80005284 *pText2, Params_80005284 *pText3)
+void fn_8001FA90(int mode, int key, MenuText_t *pText1, MenuText_t *pText2, MenuText_t *pText3)
 {
     if (mode == 0) {
         DbCursor table;
@@ -313,7 +313,7 @@ int fn_8001FE10(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
         break;
     case 0x80000004:
         *pResult = fn_8001F90C(pArgs[0].i, pArgs[1].i,
-                               (Params_80005284 **)(pArgs[2].i + (*pArgs[2].pi + 1) * 4));
+                               (MenuText_t **)(pArgs[2].i + (*pArgs[2].pi + 1) * 4));
         break;
     case 0x80000005:
         fn_8001FA90(pArgs[0].i, pArgs[1].i, pArgs[2].pParams, pArgs[3].pParams, pArgs[4].pParams);

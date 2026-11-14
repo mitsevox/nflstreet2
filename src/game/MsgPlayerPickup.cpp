@@ -5,8 +5,8 @@
 
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_80181330.h"
-#include "game/fn_801C3284.h"
+#include "game/EditMenu.h"
+#include <string.h>
 #include "game/fn_801FCE10.h"
 
 struct PlayerPickupModelLayout_t {
@@ -108,7 +108,7 @@ void MsgPlayerPickupGetTeamInfo(int *pCount, int *pId, MenuArg_t text)
     fn_80084034(&cursor, _MsgPlayerPickup_iTeam, 0);
     fn_80083F88(&cursor, name, 18);
     fn_80083F68(&cursor);
-    fn_801C3284(text.pParams->mpText, name, text.pParams->mLength + 1);
+    strnzcpy(text.pParams->mpText, name, text.pParams->mLength + 1);
 }
 
 void MsgPlayerPickupGetRosterRow(int index, int *pId, MenuArg_t text, MenuArg_t label)
@@ -118,7 +118,7 @@ void MsgPlayerPickupGetRosterRow(int index, int *pId, MenuArg_t text, MenuArg_t 
     if (DbCursorSeek((DbCursor *)&_MsgPlayerPickup_RosterCursor, index)) {
         *pId = PlayerDbGetId(&_MsgPlayerPickup_RosterCursor);
         PlayerDbGetShortName(&_MsgPlayerPickup_RosterCursor, name, 27);
-        fn_801C3284(text.pParams->mpText, name, text.pParams->mLength + 1);
+        strnzcpy(text.pParams->mpText, name, text.pParams->mLength + 1);
         PositionAbbrevFormat(PlayerDbGetPbpo(&_MsgPlayerPickup_RosterCursor), label.pParams->mpText);
     } else {
         *pId = -1;

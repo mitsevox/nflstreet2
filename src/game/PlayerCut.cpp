@@ -19,7 +19,7 @@
 #include "game/GameOptions.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_80227638.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
@@ -139,7 +139,7 @@ extern "C" void PlayerCutPostChainedCut(Object_80039F5C *p, int value)
 
     AudmonEventPostId(38, &p->mMotion.mPos, p->mId, 0, 0, 0);
     StyleTrackerOnCarrierActionTwo(p);
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 20;
     kind = p->mpState->mUnknown2;
     if (kind == 4) {
@@ -157,7 +157,7 @@ extern "C" void PlayerCutPostTurn(Object_80039F5C *p, int angle)
 {
     Message_800F01CC message;
 
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     if (((angle - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000) {
         message.mUnknown1[0] = 1;
     } else {
@@ -237,7 +237,7 @@ extern "C" int PlayerCutUpdate(Object_80039F5C *p)
         if (!p->mpState[1].mId) {
             Message_800F01CC message;
 
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 21;
             fn_800F00D4(0, p->mpState, &message, p);
         }

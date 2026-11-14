@@ -9,7 +9,7 @@
 #include "game/Request_802329F0.h"
 #include "game/DbQueryTable.h"
 #include "game/StoryTeam.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801F9908.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_8022F478.h"
@@ -188,7 +188,7 @@ void StoryTeamSyncCreatedPlayer(int index)
 }
 
 int fn_8008454C(int type, int logo, const char *pName);
-unsigned int fn_801C3180(const char *pText);
+unsigned int strlen(const char *pText);
 void fn_8018C48C(int handle);
 void fn_8018C344(int database, int firstTable, int secondTable,
                  int *pFirstCopy, int *pSecondCopy);
@@ -258,7 +258,7 @@ int StoryTeamCreate(void)
     if (fn_80084034(&cursor, id, 0)) {
         for (int i = 0; i < 3; i++) {
             char *pText = _StoryTeam_apNames[i];
-            int length = fn_801C3180(pText);
+            int length = strlen(pText);
             DbCursorSetString(&cursor, _StoryTeam_aTeamTags[i + 13], pText, length);
         }
     }
@@ -311,8 +311,8 @@ void StoryTeamCreatePlayer(int index, int value)
     PlaTexCacheGetHairTexture(value6E, &unknown52, &unknown56);
     int unknown8 = PlaTexCacheGetCapFaceId(value72 + 1);
     int unknown12 = value73 * 3 + value74 + 0x33BA;
-    fn_801C1F94(&text60, 0, sizeof(text60));
-    fn_801C1F94(&text20, 0, sizeof(text20));
+    memset(&text60, 0, sizeof(text60));
+    memset(&text20, 0, sizeof(text20));
     text60.mChars[18] = color18 + 0x80;
     text20.mChars[19] = color19 + 0x80;
     FMCAPPORT *pPort = &gFMCAPPORT;
@@ -368,8 +368,8 @@ void CopyRdrcPlayersToTeam(int index, int team, int rumt)
         PlaTexCacheGetHairTexture(value6E, &unknown52, &unknown56);
         int unknown8 = PlaTexCacheGetCapFaceId(value72 + 1);
         int unknown12 = value73 * 3 + value74 + 0x33BA;
-        fn_801C1F94(&text60, 0, sizeof(text60));
-        fn_801C1F94(&text20, 0, sizeof(text20));
+        memset(&text60, 0, sizeof(text60));
+        memset(&text20, 0, sizeof(text20));
         text60.mChars[18] = color18 + 0x80;
         text20.mChars[19] = color19 + 0x80;
         gFMCAPPORT.SetEntry(i, 0xFFFF, unknown8, unknown12, 0xA7, &text20,

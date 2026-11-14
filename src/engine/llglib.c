@@ -27,8 +27,8 @@ extern int lbl_803ED63C;
 extern GXRenderModeObj lbl_802F7A4C;
 extern GXRenderModeObj lbl_802F7A88;
 
-void *fn_801C1F94();
-void *fn_801C1FBC();
+void *memset();
+void *memcpy();
 void fn_801F7B04(void);
 void GXSetProjection(float (*pMtx)[4], int type);
 void GlibRenderBegin(GlibState_801CE1F8 *pMode);
@@ -149,7 +149,7 @@ int fn_801CE2F4(GlibConfig_801CE1F8 *pConfig)
         pSrcMode = &lbl_802F7A88;
         break;
     }
-    fn_801C1F94(pMode, 0, 0x3C);
+    memset(pMode, 0, 0x3C);
     if (pCfg->mTvMode == 7) {
         GXAdjustForOverscan(pSrcMode, &pMode->mMode, 0, 16);
     } else if (pCfg->mTvMode == 8) {
@@ -162,7 +162,7 @@ int fn_801CE2F4(GlibConfig_801CE1F8 *pConfig)
     pMode->mFrame = 0;
     lbl_803ECF04 = 0;
     VIConfigure(&pMode->mMode);
-    VISetNextFrameBuffer(pMode->mpXfb[pMode->mFrame]);
+    VISetNextFrameBuffer(lbl_803E9224.mpXfb[pMode->mFrame]);
     pMode->mLog2Width = fn_801CE1F8(pCfg->mWidth);
     pMode->mLog2Height = fn_801CE1F8(pCfg->mHeight);
     pFifo = fn_801D2B7C(pCfg->mFifoSize, 0, 0);
@@ -184,9 +184,9 @@ int fn_801CE2F4(GlibConfig_801CE1F8 *pConfig)
     }
     VISetBlack(1);
     VIFlush();
-    GXCopyDisp(lbl_803E9224.mpXfb[pMode->mFrame], 1);
+    GXCopyDisp(pMode->mpXfb[pMode->mFrame], 1);
     VIFlush();
-    GXCopyDisp(lbl_803E9224.mpXfb[pMode->mFrame], 1);
+    GXCopyDisp(pMode->mpXfb[pMode->mFrame], 1);
     VIFlush();
     fn_801CE7D0(0);
     if (pMode->mMode.viTVmode & 1) {
@@ -371,7 +371,7 @@ void fn_801CEADC(int skipSwap)
         fn_801CE82C();
     }
     lbl_803E9224.mpXfb[1] = fn_801D2B7C(lbl_803ECF00, 0, 0);
-    fn_801C1FBC(lbl_803E9224.mpXfb[1], lbl_803E9224.mpXfb[0], lbl_803ECF00);
+    memcpy(lbl_803E9224.mpXfb[1], lbl_803E9224.mpXfb[0], lbl_803ECF00);
     lbl_803ECF04 = 1;
 }
 

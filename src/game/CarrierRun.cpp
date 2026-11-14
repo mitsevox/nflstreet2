@@ -18,7 +18,7 @@
 #include "game/GameOptions.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_80227638.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
@@ -155,8 +155,8 @@ extern "C" unsigned char fn_800C13A0(Object_80039F5C *p, unsigned char *pA, unsi
 
 extern "C" int fn_8009FB60(Object_80039F5C *p);
 extern "C" int fn_800A5C04(Object_80039F5C *p, int a, int b);
-extern "C" float fn_8016B938(void);
-extern "C" float fn_8016B974(void);
+extern "C" float PlayTrackGetPlayIdRate(void);
+extern "C" float PlayTrackGetResult5Rate(void);
 extern "C" int fn_800E1584(Object_80039F5C *p);
 extern "C" int fn_8009E180(Object_80039F5C *p);
 extern "C" int fn_800F2C1C(Object_80039F5C *p, int a);
@@ -1296,7 +1296,7 @@ extern "C" int CarrierRunUpdate(Object_80039F5C *p)
         StyleTrackerUpdateRun(0, 0, 0);
         fn_800A3B58(p, 2, 0);
     } else {
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         if (fn_801486A0() == 0) {
             message.mId = 57;
             message.mUnknown1[0] = BallGetCurrentIndex();

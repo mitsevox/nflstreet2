@@ -4,7 +4,7 @@
  * mode; it then creates the database and fills it from that file, and destroys it at shutdown.
  */
 #include "engine/fn_8022C938.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 #include "engine/dbtats.h"
 #include "engine/fn_801F8D60.h"
 #include "engine/tdbext.h"
@@ -16,8 +16,8 @@ static int _DbTats_iMode = -1;
 
 int DbTatsInit(int a, const char *pName, int b)
 {
-    _DbTats_pFileName = fn_8022C938(fn_801C3180(pName) + 1, 1);
-    fn_801C2EB4(_DbTats_pFileName, pName);
+    _DbTats_pFileName = fn_8022C938(strlen(pName) + 1, 1);
+    strcpy(_DbTats_pFileName, pName);
     _DbTats_iSize = a;
     _DbTats_iMode = b;
     return 0;

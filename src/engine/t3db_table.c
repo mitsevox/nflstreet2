@@ -1,11 +1,16 @@
+/* T3DB tables: creating and destroying a table of the in-game database, laying out its columns,
+   inserting, deleting and copying rows, growing and truncating the row storage, and calling the
+   table's insert and delete triggers. */
 #include <string.h>
 #include "engine/t3db.h"
 #include "engine/t3db_table.h"
 
-int fn_8020C6C8(TDbTable_t *pTable);
-int fn_8020C5C8(TDbTable_t *pTable, int count);
+int _TDbTblRowTruncate(TDbTable_t *pTable);
+int _TDbTblRowGrow(TDbTable_t *pTable, int count);
+void _TDbTblFillColHeader(TDbTable_t *pTable, TDbColumn_t *pFields);
 
-static void fn_8020B564(TDbTable_t *pTable, TDbColumn_t *pFields)
+#if defined(DECOMP_COMPARE)
+void _TDbTblFillColHeader(TDbTable_t *pTable, TDbColumn_t *pFields)
 {
     unsigned int i;
     unsigned int numFields = pTable->mColumnCount;
@@ -63,8 +68,9 @@ static void fn_8020B564(TDbTable_t *pTable, TDbColumn_t *pFields)
         }
     }
 }
+#endif
 
-void fn_8020B710(TDbTable_t *pTable, int record)
+void _TDbTblCallInsertTriggers(TDbTable_t *pTable, int record)
 {
     int bDecoded = 0;
     unsigned int k;
@@ -92,7 +98,7 @@ void fn_8020B710(TDbTable_t *pTable, int record)
     }
 }
 
-void fn_8020B878(TDbTable_t *pTable, int record, TDbLitRef_t *pValue)
+void _TDbTblGetFullRow(TDbTable_t *pTable, int record, TDbLitRef_t *pValue)
 {
     unsigned char *pRecord = pTable->mRows + record * pTable->mRowSize;
     unsigned char i = 0;
@@ -109,7 +115,7 @@ void fn_8020B878(TDbTable_t *pTable, int record, TDbLitRef_t *pValue)
     pValue->mId = -1;
 }
 
-unsigned char fn_8020B97C(TDbTable_t *pTable, int id)
+unsigned char _TDbTblResolveColRef(TDbTable_t *pTable, int id)
 {
     unsigned char result;
 
@@ -150,7 +156,7 @@ unsigned char fn_8020B97C(TDbTable_t *pTable, int id)
     return result;
 }
 
-TDbTable_t *fn_8020BA48(TDbDatabase_t *pDb, int id)
+TDbTable_t *_TDbTblFindTable(TDbDatabase_t *pDb, int id)
 {
     TDbTable_t *pTable;
 
@@ -162,7 +168,7 @@ TDbTable_t *fn_8020BA48(TDbDatabase_t *pDb, int id)
     return pTable;
 }
 
-int fn_8020BA7C(TDbDatabase_t *pOwner, int tableId, TDbColumn_t *pDefs, int capacity)
+int _TDbTblCreate(TDbDatabase_t *pOwner, int tableId, TDbColumn_t *pDefs, int capacity)
 {
     TDbTable_t *pTable;
     int err = 0;
@@ -233,7 +239,7 @@ int fn_8020BA7C(TDbDatabase_t *pOwner, int tableId, TDbColumn_t *pDefs, int capa
             _tDbMemAllocInfoCallback(&event);
         }
         if (err == 0) {
-            fn_8020B564(pTable, pDefs);
+            _TDbTblFillColHeader(pTable, pDefs);
             if (pOwner->mTables == 0) {
                 pOwner->mTables = pTable;
             } else {
@@ -252,7 +258,7 @@ int fn_8020BA7C(TDbDatabase_t *pOwner, int tableId, TDbColumn_t *pDefs, int capa
     return err;
 }
 
-int fn_8020BD90(TDbTable_t *pTable)
+int _TDbTblDestroy(TDbTable_t *pTable)
 {
     TDbQuery_t *pQuery;
 
@@ -313,7 +319,7 @@ int fn_8020BD90(TDbTable_t *pTable)
     return 0;
 }
 
-int fn_8020BFA4(TDbTable_t *pTable, TDbLitRef_t *pValues, TDbResult_8020AD1C *pResult)
+int _TDbTblInsertRow(TDbTable_t *pTable, TDbLitRef_t *pValues, TDbResult_8020AD1C *pResult)
 {
     int err = 0;
     unsigned int record = 0;
@@ -333,7 +339,7 @@ int fn_8020BFA4(TDbTable_t *pTable, TDbLitRef_t *pValues, TDbResult_8020AD1C *pR
     }
     pTable->mFlags |= 1;
     if ((pTable->mFlags & 8) && pTable->mCapacity == 0) {
-        fn_8020C5C8(pTable, pTable->mNominalCapacity);
+        _TDbTblRowGrow(pTable, pTable->mNominalCapacity);
     }
     if (pTable->mDeletedCount != 0) {
         record = pTable->mFirstDeletedRow;
@@ -416,7 +422,7 @@ int fn_8020BFA4(TDbTable_t *pTable, TDbLitRef_t *pValues, TDbResult_8020AD1C *pR
     return err;
 }
 
-void fn_8020C3E4(TDbTable_t *pTable, int record)
+void _TDbTblDeleteSingleRow(TDbTable_t *pTable, int record)
 {
     int k;
     unsigned char *pRecord;
@@ -456,11 +462,11 @@ void fn_8020C3E4(TDbTable_t *pTable, int record)
         }
     }
     if ((pTable->mFlags & 8) && pTable->mRowCount == pTable->mDeletedCount) {
-        fn_8020C6C8(pTable);
+        _TDbTblRowTruncate(pTable);
     }
 }
 
-int fn_8020C5C8(TDbTable_t *pTable, int count)
+int _TDbTblRowGrow(TDbTable_t *pTable, int count)
 {
     int err;
 
@@ -489,7 +495,7 @@ int fn_8020C5C8(TDbTable_t *pTable, int count)
     return err;
 }
 
-int fn_8020C6C8(TDbTable_t *pTable)
+int _TDbTblRowTruncate(TDbTable_t *pTable)
 {
     TDbIndex_t *pIndex;
 
@@ -509,7 +515,7 @@ int fn_8020C6C8(TDbTable_t *pTable)
     return 0;
 }
 
-int fn_8020C764(TDbTable_t *pSrc, TDbTable_t *pDst, TDbResult_8020AD1C *pResult)
+int _TDbTblRowCopyTrig(TDbTable_t *pSrc, TDbTable_t *pDst, TDbResult_8020AD1C *pResult)
 {
     int err = 0;
     unsigned int record = 0;
@@ -534,7 +540,7 @@ int fn_8020C764(TDbTable_t *pSrc, TDbTable_t *pDst, TDbResult_8020AD1C *pResult)
     }
     pDst->mFlags |= 1;
     for (i = 0; i < pDst->mColumnCount; i++) {
-        map[i] = fn_8020B97C(pSrc, pDst->mColumns[i].mUnknown8);
+        map[i] = _TDbTblResolveColRef(pSrc, pDst->mColumns[i].mUnknown8);
         if (map[i] != 0xFF) {
             unsigned int type = pSrc->mColumns[map[i]].mType;
 
@@ -546,13 +552,14 @@ int fn_8020C764(TDbTable_t *pSrc, TDbTable_t *pDst, TDbResult_8020AD1C *pResult)
         }
     }
     if (maxBits != 0) {
+        int type = 2;
         int dbId = (int)pSrc->mDb->mId;
         int tableId = pSrc->mId;
 
         pEvent = &event;
         if (_tDbMemAllocInfoCallback != 0) {
+            event.mType = type;
             event.mUnknown4 = dbId;
-            event.mType = 2;
             event.mUnknown8 = tableId;
             _tDbMemAllocInfoCallback(pEvent);
         }
@@ -575,7 +582,7 @@ int fn_8020C764(TDbTable_t *pSrc, TDbTable_t *pDst, TDbResult_8020AD1C *pResult)
             continue;
         }
         if (pDst->mCapacity == 0 && (pDst->mFlags & 8)) {
-            fn_8020C5C8(pDst, pDst->mNominalCapacity);
+            _TDbTblRowGrow(pDst, pDst->mNominalCapacity);
         }
         bReused = 0;
         if (pDst->mDeletedCount != 0) {
@@ -620,7 +627,7 @@ int fn_8020C764(TDbTable_t *pSrc, TDbTable_t *pDst, TDbResult_8020AD1C *pResult)
             *pFlags &= ~(1 << (7 - (pDst->mDeletedBit & 7)));
             pDst->mFlags |= 4;
             pResult->mCount++;
-            fn_8020B710(pDst, record);
+            _TDbTblCallInsertTriggers(pDst, record);
         } else if (bReused) {
             unsigned char *pFlags = pDst->mRows + pDst->mRowSize * record;
 

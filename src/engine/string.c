@@ -1,12 +1,15 @@
+/* C string library: copy, append, compare (also without case), search, length, bounded copy that
+   always terminates, and in-place upper-casing. */
+
+#include <string.h>
 #include "engine/ctype.h"
-#include "engine/cu_801C2EB4.h"
 
 extern const unsigned char lbl_802AEF10[];
 
 #define CTYPE(c) ((lbl_802AEF10 + 1)[(unsigned char)(c)])
 
 
-char *fn_801C2EB4(char *pDest, const char *pSource)
+char *strcpy(char *pDest, const char *pSource)
 {
     char *pOut = pDest;
 
@@ -18,7 +21,7 @@ char *fn_801C2EB4(char *pDest, const char *pSource)
     return pDest;
 }
 
-char *fn_801C2EF0(char *pDest, const char *pSource, int size)
+char *strncpy(char *pDest, const char *pSource, size_t size)
 {
     char *pOut = pDest;
 
@@ -30,7 +33,7 @@ char *fn_801C2EF0(char *pDest, const char *pSource, int size)
     return pDest;
 }
 
-char *fn_801C2F2C(char *pDest, const char *pSource)
+char *strcat(char *pDest, const char *pSource)
 {
     char *pOut = pDest;
 
@@ -45,7 +48,7 @@ char *fn_801C2F2C(char *pDest, const char *pSource)
     return pDest;
 }
 
-char *fn_801C2F88(char *pDest, const char *pSource, int size)
+char *strncat(char *pDest, const char *pSource, size_t size)
 {
     char *pStart = pDest;
 
@@ -63,7 +66,7 @@ char *fn_801C2F88(char *pDest, const char *pSource, int size)
     return pStart;
 }
 
-int fn_801C2FE4(const char *pString1, const char *pString2)
+int strcmp(const char *pString1, const char *pString2)
 {
     if (pString1 == pString2) {
         return 0;
@@ -76,7 +79,7 @@ int fn_801C2FE4(const char *pString1, const char *pString2)
     return *pString1 - pString2[-1];
 }
 
-int fn_801C302C(const char *pString1, const char *pString2, int size)
+int strncmp(const char *pString1, const char *pString2, size_t size)
 {
     if (size == 0 || pString1 == pString2) {
         return 0;
@@ -92,7 +95,7 @@ int fn_801C302C(const char *pString1, const char *pString2, int size)
     return *pString1 - pString2[-1];
 }
 
-char *fn_801C3084(const char *pString, int c)
+char *strchr(const char *pString, int c)
 {
     while (*pString) {
         if (*pString++ == (char)c) {
@@ -102,7 +105,7 @@ char *fn_801C3084(const char *pString, int c)
     return 0;
 }
 
-char *fn_801C30C0(const char *pString, int c)
+char *strrchr(const char *pString, int c)
 {
     char ch = c;
     const char *pLast = 0;
@@ -119,7 +122,7 @@ char *fn_801C30C0(const char *pString, int c)
     return (char *)pLast;
 }
 
-char *fn_801C310C(const char *pString, const char *pFind)
+char *strstr(const char *pString, const char *pFind)
 {
     const char *p;
     const char *f;
@@ -138,7 +141,7 @@ char *fn_801C310C(const char *pString, const char *pFind)
     return 0;
 }
 
-int fn_801C3180(const char *pString)
+size_t strlen(const char *pString)
 {
     const char *p = pString;
 
@@ -147,7 +150,7 @@ int fn_801C3180(const char *pString)
     return p - pString - 1;
 }
 
-int fn_801C31B0(const char *pString1, const char *pString2)
+int stricmp(const char *pString1, const char *pString2)
 {
     char c1;
     char c2;
@@ -168,7 +171,7 @@ int fn_801C31B0(const char *pString1, const char *pString2)
     return 0;
 }
 
-int fn_801C3214(const char *pString1, const char *pString2, int size)
+int strnicmp(const char *pString1, const char *pString2, size_t size)
 {
     const char *pEnd = pString1 + size;
     char c1;
@@ -193,7 +196,27 @@ int fn_801C3214(const char *pString1, const char *pString2, int size)
     return 0;
 }
 
-char *fn_801C32CC(char *pString)
+char *strnzcpy(char *pDest, const char *pSource, size_t size)
+{
+    char *pOut;
+
+    if (size == 0 || pSource == pDest) {
+        return pDest;
+    }
+    pOut = pDest;
+    for (;;) {
+        if (--size) {
+            if ((*pOut++ = *pSource++) == 0) {
+                return pDest;
+            }
+        } else {
+            *pOut = 0;
+            return pDest;
+        }
+    }
+}
+
+char *strupr(char *pString)
 {
     char *p;
 

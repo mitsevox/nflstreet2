@@ -56,11 +56,11 @@ extern void *fn_801C6A20(void *pPool);
 extern void *fn_801C6B4C(void *pPool, int mode);
 extern void fn_801C6C0C(void *pPool, void *pItem);
 extern void *fn_801C6C84(void *pPool, void *pItem);
-extern int fn_801C96E4(const char *pName, int device);
-extern int fn_801C97F0(int handle);
-extern int fn_801C9844(int handle, int offset, unsigned int whence);
-extern int fn_801C9960(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
-extern int fn_801C9D2C(int handle);
+extern int FileOpenFileDevice(const char *pName, int device);
+extern int FileClose(int handle);
+extern int FileSeek(int handle, int offset, unsigned int whence);
+extern int FileReadCallback(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
+extern int FileGetPosition(int handle);
 
 extern void *lbl_803EBDD8;
 extern ResQuickloadAlias_801F2D60 *lbl_803EBDDC;
@@ -73,13 +73,13 @@ static void fn_801F284C(int handle, ResQuickload_801F284C *pQuickload)
     int size;
     ResQuickloadChunk_801F284C *pChunk;
 
-    fn_801C9960(handle, header, sizeof(header), 0);
+    FileReadCallback(handle, header, sizeof(header), 0);
     size = header[2];
     pQuickload->mDataOffset = size;
     pQuickload->mPosition = size;
     pQuickload->pData = fn_801D2BB0(1, size, ResGetMemAllocFlags(), 0);
-    fn_801C9844(handle, 0, 0);
-    fn_801C9960(handle, pQuickload->pData, size, 0);
+    FileSeek(handle, 0, 0);
+    FileReadCallback(handle, pQuickload->pData, size, 0);
     for (pChunk = (ResQuickloadChunk_801F284C *)pQuickload->pData; (char *)pChunk < pQuickload->pData + size;
          pChunk = (ResQuickloadChunk_801F284C *)((char *)pChunk + pChunk->mSize)) {
         switch (pChunk->mID) {
@@ -205,7 +205,7 @@ int fn_801F2C54(char *pName, int mode)
     int handle;
     ResQuickload_801F284C *pQuickload;
 
-    handle = fn_801C96E4(pName, mode);
+    handle = FileOpenFileDevice(pName, mode);
     if (handle >= 0) {
         pQuickload = fn_801C6A20(lbl_803EBDD8);
         if (pQuickload != 0) {
@@ -215,7 +215,7 @@ int fn_801F2C54(char *pName, int mode)
             fn_801F284C(handle, pQuickload);
             fn_801C6AA4(lbl_803EBDD8, pQuickload, 0);
         } else {
-            fn_801C97F0(handle);
+            FileClose(handle);
         }
     }
     return result;
@@ -228,10 +228,10 @@ int fn_801F2CD4(char *pName)
 
     for (pQuickload = fn_801C6B4C(lbl_803EBDD8, 0); pQuickload != 0; pQuickload = fn_801C6C84(lbl_803EBDD8, pQuickload)) {
         if (strcmp(pQuickload->pName, pName) == 0) {
-            result = 1;
             fn_801D2BD0(pQuickload->pData);
-            fn_801C97F0(pQuickload->mHandle);
+            FileClose(pQuickload->mHandle);
             fn_801C6C0C(lbl_803EBDD8, pQuickload);
+            result = 1;
             break;
         }
     }
@@ -258,7 +258,7 @@ int fn_801F2D60(int file, char *pName, unsigned int id, int *pHandle, int *pOffs
         pQuickload = fn_801F2954(pName, &index);
         if (pQuickload != 0) {
             pEntry = fn_801F2A4C(pQuickload->pDetails, file, index, id,
-                                 fn_801C9D2C(pQuickload->mHandle) - pQuickload->mDataOffset);
+                                 FileGetPosition(pQuickload->mHandle) - pQuickload->mDataOffset);
             if (pEntry != 0) {
                 result = 1;
                 *pHandle = pQuickload->mHandle;

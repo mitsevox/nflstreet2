@@ -1,8 +1,8 @@
 #include "game/Module.h"
 
 extern "C" {
-int fn_80226F9C(void);
-int fn_80226FF0(void);
+int VecInit(void);
+int VecShutdown(void);
 }
 
 static void *sDependencies[] = { 0 };
@@ -14,12 +14,12 @@ const char *Vec::GetName() { return "Vec"; }
 
 int Vec::Init()
 {
-    fn_80226F9C();
+    VecInit();
     return 1;
 }
 
 int Vec::Shutdown()
 {
-    fn_80226FF0();
+    VecShutdown();
     return 1;
 }

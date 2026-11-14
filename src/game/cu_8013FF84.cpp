@@ -1,7 +1,7 @@
 #include "game/fn_80177FE0.h"
 #include "game/GameCamera.h"
 #include "game/GameOptions.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "game/PlayBookTeam.h"

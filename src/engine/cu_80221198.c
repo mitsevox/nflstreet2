@@ -8,8 +8,8 @@
 #include <dolphin/gx/GXTexture.h>
 #include <dolphin/gx/GXTransform.h>
 #include <dolphin/os/OSCache.h>
-#include "engine/Info_801D86B4.h"
-#include "engine/cu_801C2EB4.h"
+#include "engine/MovieRcmpInfo.h"
+#include <string.h>
 #include "engine/Font.h"
 #include "engine/llmatrix.h"
 #include "engine/cu_8021A438.h"
@@ -68,10 +68,10 @@ typedef struct Sub_802268D4 {
     void *unk_18;   /* 0x18 */
     void *unk_1C;   /* 0x1C */
     struct StreamTap_801F5DA4 *pTap; /* 0x20: -1 when none */
-    Info_801D86B4 Info; /* 0x24 */
+    MovieRcmpInfo_t Info; /* 0x24 */
     Int32 unk_30;   /* 0x30 */
     Int32 unk_34;   /* 0x34 */
-    struct Frame_801D86B4 *pFrame; /* 0x38 */
+    struct RcmpFrame_t *pFrame; /* 0x38 */
 } Sub_802268D4;
 
 /* 132-byte object allocated by fn_802268D4. */
@@ -379,7 +379,7 @@ void fn_80221BF0(Text_80221BF0 *pText, Int32 Offset, Int32 *pA, Int32 *pB)
     if (pText->Flags & 0x8000) {
         fn_80221DB0(pText);
     }
-    Length = fn_801C3180(pText->pBuffer->pText);
+    Length = strlen(pText->pBuffer->pText);
     if (Offset >= Length && Offset != 0) {
         Offset = Length - 1;
     }
@@ -445,7 +445,7 @@ void fn_80221DB0(Text_80221BF0 *pText)
         pText->unk_14 = 0;
     }
     pString = pText->pBuffer->pText;
-    Length = fn_801C3180(pString);
+    Length = strlen(pString);
     for (Pos = 0; Pos <= Length; Pos++) {
         c = pString[Pos];
         if (pLine == NULL) {
@@ -586,7 +586,7 @@ void fn_80222E54(Buffer_80222E54 *pDst, Buffer_80222E54 *pSrc)
     Uint32 Size = pDst->Size;
     Uint32 Length;
 
-    if (Size + 1 < (Length = fn_801C3180(pText) + 1)) {
+    if (Size + 1 < (Length = strlen(pText) + 1)) {
         memcpy(pDstText, pText, Size);
     } else {
         memcpy(pDstText, pText, Length);
@@ -1201,7 +1201,7 @@ void fn_80226498(Object_8021E688 *pObject, Object_802268D4 *pMovie)
 void fn_802264A4(Sub_802268D4 *pSub)
 {
     if (pSub->pFrame != NULL) {
-        fn_801D9290(&pSub->Info, pSub->pFrame);
+        MovieRcmpReleaseFrame(&pSub->Info, pSub->pFrame);
         pSub->pFrame = NULL;
     }
 }
@@ -1213,27 +1213,27 @@ void fn_802264E8(Sub_802268D4 *pSub, Int32 a)
     Uint8 *pV;
 
     if (pSub->pFrame != NULL) {
-        fn_801D92B8(pSub->pFrame, &pY, &pU, &pV);
+        MovieRcmpGetDataFromFrame(pSub->pFrame, &pY, &pU, &pV);
         fn_801DC86C(pY, pU, pV, pSub->unk_30, pSub->unk_30, pSub->unk_34, pSub->unk_1C,
                     pSub->unk_00 * 4, a);
-        fn_801D9290(&pSub->Info, pSub->pFrame);
+        MovieRcmpReleaseFrame(&pSub->Info, pSub->pFrame);
         pSub->pFrame = NULL;
     }
 }
 
 Int32 fn_80226570(Object_8021E688 *pObject, Object_802268D4 *pMovie, Sub_802268D4 *pSub)
 {
-    struct Frame_801D86B4 *pFrame = NULL;
+    struct RcmpFrame_t *pFrame = NULL;
 
     if (pSub->pStream != NULL) {
         if (pSub->pFrame != NULL) {
-            fn_801D9290(&pSub->Info, pSub->pFrame);
+            MovieRcmpReleaseFrame(&pSub->Info, pSub->pFrame);
             pSub->pFrame = NULL;
         }
-        pFrame = fn_801D923C(&pSub->Info, fn_801D9224(&pSub->Info));
+        pFrame = MovieRcmpGetFrame(&pSub->Info, MovieRcmpGetGoalFrame(&pSub->Info));
         pSub->pFrame = pFrame;
         if (pFrame != NULL && pSub->unk_34 == 0 && pSub->unk_30 == 0) {
-            fn_801D9320(pFrame, &pSub->unk_30, &pSub->unk_34);
+            MovieRcmpGetSizeFromFrame(pFrame, &pSub->unk_30, &pSub->unk_34);
         }
     }
     if (pFrame == NULL) {
@@ -1258,9 +1258,9 @@ void fn_8022666C(Object_8021E688 *pObject, Object_802268D4 *pMovie)
         if (pSub->Info.mpAudio != NULL && pSub->Info.mpVideo != NULL) {
             pMovie->unk_44 = 0;
             pSub->unk_14++;
-            if (fn_801D900C(&pSub->Info)) {
+            if (MovieRcmpIsDecodeTime(&pSub->Info)) {
                 if (pSub->unk_16 != 0) {
-                    if (!(fn_801D9230(&pSub->Info) & 1)) {
+                    if (!(MovieRcmpGetCurFrame(&pSub->Info) & 1)) {
                         fn_802264A4(pSub);
                         fn_80226570(pObject, pMovie, pSub);
                     } else {
@@ -1364,15 +1364,15 @@ void fn_80226A68(Object_8021E688 *pObject, Object_802268D4 *pMovie)
     File.pRes = fn_8021E984(pObject, pMovie->unk_3C);
     File.mIndex = pMovie->unk_40;
     Queued = fn_801F6D54(pSub->pStream, &File, 0, 0);
-    fn_801D8A2C(&pSub->Info, pSub->pStream);
+    MovieRcmpInitVideo(&pSub->Info, pSub->pStream);
     pSub->unk_30 = 0;
     pSub->unk_34 = 0;
-    pSub->pFrame = fn_801D923C(&pSub->Info, 0);
+    pSub->pFrame = MovieRcmpGetFrame(&pSub->Info, 0);
     if (pSub->pFrame != NULL) {
-        fn_801D9320(pSub->pFrame, &pSub->unk_30, &pSub->unk_34);
+        MovieRcmpGetSizeFromFrame(pSub->pFrame, &pSub->unk_30, &pSub->unk_34);
     }
     if (fn_8022638C()) {
-        fn_801D8BC8(&pSub->Info, pSub->pTap, Queued);
+        MovieRcmpInitAudio(&pSub->Info, pSub->pTap, Queued);
     }
     pMovie->unk_44 = 1;
     pSub->unk_14 = 0;
@@ -1392,9 +1392,9 @@ void fn_80226C40(Object_8021E688 *pObject, Object_802268D4 *pMovie)
     pSub = &pMovie->Sub;
     if (pSub->pStream != NULL) {
         if (fn_8022638C() && pSub->pTap != (struct StreamTap_801F5DA4 *)-1) {
-            fn_801D8C84(&pSub->Info);
+            MovieRcmpShutdownAudio(&pSub->Info);
         }
-        fn_801D8B54(&pSub->Info);
+        MovieRcmpShutdownVideo(&pSub->Info);
         fn_801F6B84(pSub->pStream);
         pSub->pStream = NULL;
         pSub->Info.mpAudio = NULL;

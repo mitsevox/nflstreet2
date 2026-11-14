@@ -8,7 +8,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/ResLoad.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 
 typedef struct FontParams_801CCA64 {
     int mMaxFonts;
@@ -38,7 +38,7 @@ extern FontState_801CCA64 lbl_80383CF0;
 extern FontRenderState_801CCA64 lbl_803E7600;
 extern unsigned char lbl_803EBC58;
 
-void *fn_801C1F94();
+void *memset();
 
 
 static int fn_801CCAB8(FontEntry_801CCA64 *pEntry, int *pId, FontEntry_801CCA64 **ppResult);
@@ -161,7 +161,7 @@ int fn_801CCD0C(void)
         fn_801F80D0(&lbl_80383CD0);
         lbl_803EBC58 = 0;
         fn_801D2BD0(lbl_80383CF0.mpBuffer);
-        fn_801C1F94(&lbl_80383CF0, 0, sizeof(FontState_801CCA64));
+        memset(&lbl_80383CF0, 0, sizeof(FontState_801CCA64));
     } else {
         error = 0x110002;
     }
@@ -300,7 +300,7 @@ Font_801CCA64 *fn_801CD130(int id)
         error = 0x110002;
     } else if (pEntry = fn_801CCA64(id)) {
         pFont = fn_801D2BB0(lbl_80383CF0.mHeap, sizeof(Font_801CCA64), 0, 0);
-        fn_801C1F94(pFont, 0, sizeof(Font_801CCA64));
+        memset(pFont, 0, sizeof(Font_801CCA64));
         pFont->mpEntry = pEntry;
         pData = pEntry->mpData;
         pFont->mpHeader = pData;
@@ -423,7 +423,7 @@ void fn_801CD3E4(Font_801CCA64 *pFont, const char *pText, unsigned int flags, fl
     } else {
         kern = (flags & 4) == 0;
         lineHeight = pFont->mpHeader->mHeight;
-        len = fn_801C3180(pText);
+        len = strlen(pText);
         if (len > 354) {
             return;
         }
@@ -495,7 +495,7 @@ int fn_801CD63C(Font_801CCA64 *pFont, const char *pText, unsigned int flags)
     } else {
         kern = (flags & 4) == 0;
         i = 0;
-        len = fn_801C3180(pText);
+        len = strlen(pText);
         while (i < len) {
             prev = -1;
             width = 0;

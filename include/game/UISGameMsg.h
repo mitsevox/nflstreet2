@@ -1,7 +1,7 @@
 #ifndef GAME_UISGAMEMSG_H
 #define GAME_UISGAMEMSG_H
 
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 
 /* Message handlers called in turn by UISGameMsgDispatch. Each takes the message id,
    an argument record, an unused word and a result pointer; the handlers
@@ -21,7 +21,7 @@ int UISGameQueryHandleMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pR
 int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGameArg_t *pResult);
 int FEMiscHandleStatsFunction(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int FEMiscHandleFunction(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8018399C(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg_t *pResult);
+int EditMenuHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg_t *pResult);
 int MemCardUIEmptyHandler(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int MemCardUIHandleFunction(unsigned int id, MemCardUIArgs_t *pParams, int c, int *pResult);
 

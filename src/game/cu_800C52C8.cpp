@@ -57,9 +57,9 @@
 #include "game/ScreenTransition.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801C68FC.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/ResLoad.h"
@@ -130,8 +130,8 @@ int fn_8011F1CC(void);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **ppBlocker);
 int fn_801486A0(void);
 void TutorialSetMoveDone(int id, int value);
-float fn_8016B938(void);
-float fn_8016B974(void);
+float PlayTrackGetPlayIdRate(void);
+float PlayTrackGetResult5Rate(void);
 void fn_8016F6F4(Object_80039F5C *p, int *pValue);
 void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler);
 int fn_80177C38(void);
@@ -542,10 +542,10 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
                     chance = fn_800AC584(pTarget->mIdBytes[2], chance);
                     chance = fn_800C5418(p, pTarget, chance);
                     if (fn_800B65A0(p->mIdBytes[2]) != 255 && fn_800B65A0(pTarget->mIdBytes[2]) == 255) {
-                        bonus = fn_8016B938() * 0.25f;
+                        bonus = PlayTrackGetPlayIdRate() * 0.25f;
                         chance += (int)(chance * bonus);
                         if (!fn_80177C38() && fn_8011F1CC() && (p->mFlags & 0x8000)) {
-                            bonus = fn_8016B974() * 0.25f;
+                            bonus = PlayTrackGetResult5Rate() * 0.25f;
                             chance += (int)(chance * bonus);
                         }
                     }
@@ -1208,7 +1208,7 @@ extern "C" void fn_800C845C(void)
 {
     Object_80039F5C *pCarrier;
 
-    fn_801C1F94(lbl_80317AD8, 0, sizeof(lbl_80317AD8));
+    memset(lbl_80317AD8, 0, sizeof(lbl_80317AD8));
     pCarrier = BallGetCurrentHolder();
     if (pCarrier != 0) {
         unsigned short i = 0;

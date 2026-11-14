@@ -3,8 +3,8 @@
 #include "game/fn_801D2B7C.h"
 
 extern "C" {
-void fn_801C1D98(void *pDst, char *pSrc, int size);
-void fn_801C1E78(char *pDst, void *pSrc, int size);
+void AuxRamUpload(void *pDst, char *pSrc, int size);
+void AuxRamDownload(char *pDst, void *pSrc, int size);
 void *fn_801D2BB0(int a, int size, int c, int d);
 }
 
@@ -14,7 +14,7 @@ static char *_ReplayAuxRam_pFrames;
 
 extern "C" void ReplayAuxRamStoreFrame(char *pSrc, int index, int size)
 {
-    fn_801C1D98(_ReplayAuxRam_pFrames + index * size, pSrc, size);
+    AuxRamUpload(_ReplayAuxRam_pFrames + index * size, pSrc, size);
 }
 
 extern "C" char *ReplayAuxRamGetScratch(int a, int size)
@@ -36,7 +36,7 @@ extern "C" char *ReplayAuxRamLoadFrame(int index, int size)
         _ReplayAuxRam_iScratchSlot = 0;
     }
     pDst = _ReplayAuxRam_pScratch + slot * size;
-    fn_801C1E78(pDst, _ReplayAuxRam_pFrames + index * size, size);
+    AuxRamDownload(pDst, _ReplayAuxRam_pFrames + index * size, size);
     return pDst;
 }
 

@@ -1,14 +1,14 @@
 #include "engine/filemc.h"
 #include "engine/fn_801F7BD4.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 
 extern MCFile_801CB5D4 lbl_80381C40;
 extern unsigned char lbl_803DD600[];
 
 void fn_801F8758(int a);
 void fn_801F8768(void);
-void *fn_801C1F94();
-void *fn_801C1FBC();
+void *memset();
+void *memcpy();
 
 int fn_801CBBAC(void);
 
@@ -89,12 +89,12 @@ int fn_801CB698(int chan, int unused, const char *pName, int unused2, int create
                     lbl_80381C40.mStat.commentAddr = 0;
                     lbl_80381C40.mSector = 0;
                     lbl_80381C40.mPos = 0;
-                    fn_801C1F94(lbl_80381C40.mBuffer, 0, 0x2000);
+                    memset(lbl_80381C40.mBuffer, 0, 0x2000);
                 }
             } else {
                 if (CARDFreeBlocks(chan, &bytesFree, &filesFree) == 0) {
                     for (fileNo = 0; fileNo < 127; fileNo++) {
-                        if (CARDGetStatus(chan, fileNo, &stat) == 0 && fn_801C2FE4(stat.fileName, pName) == 0) {
+                        if (CARDGetStatus(chan, fileNo, &stat) == 0 && strcmp(stat.fileName, pName) == 0) {
                             break;
                         }
                     }
@@ -108,7 +108,7 @@ int fn_801CB698(int chan, int unused, const char *pName, int unused2, int create
                         lbl_80381C40.mDirty = 0;
                         lbl_80381C40.mSector = 0;
                         lbl_80381C40.mPos = 0;
-                        fn_801C1F94(lbl_80381C40.mBuffer, 0, 0x2000);
+                        memset(lbl_80381C40.mBuffer, 0, 0x2000);
                     }
                 }
             }
@@ -176,7 +176,7 @@ unsigned int fn_801CBA0C(int fileNo, unsigned char *pDst, unsigned int size)
         if (count > size) {
             count = size;
         }
-        fn_801C1FBC(pDst, lbl_80381C40.mBuffer + offset, count);
+        memcpy(pDst, lbl_80381C40.mBuffer + offset, count);
         total += count;
         size -= count;
         pDst += count;
@@ -209,7 +209,7 @@ unsigned int fn_801CBAD8(int fileNo, unsigned char *pSrc, unsigned int size)
         if (count > size) {
             count = size;
         }
-        fn_801C1FBC(lbl_80381C40.mBuffer + offset, pSrc, count);
+        memcpy(lbl_80381C40.mBuffer + offset, pSrc, count);
         total += count;
         size -= count;
         pSrc += count;

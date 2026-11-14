@@ -34,7 +34,7 @@ void fn_8017833C(int value);
 int fn_80178348(void);
 int fn_80178360(void);
 void fn_80177E6C(int a, int b);
-int fn_8008593C(int a, int b, int c, int d);
+int FormationLineupSwapAllUser(int a, int b, int c, int d);
 void fn_80178CD8(int a);
 
 void fn_801534D4(Class_802A1930 *p)
@@ -79,7 +79,7 @@ void fn_801534D4(Class_802A1930 *p)
 
         int team = fn_80178308();
         if (fn_80178D70(team) == 2) {
-            fn_8008593C(1, team, 0, 2);
+            FormationLineupSwapAllUser(1, team, 0, 2);
         }
         fn_80178CD8(1);
     }

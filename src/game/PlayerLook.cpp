@@ -15,8 +15,8 @@
 #include "game/PlaTex.h"
 #include "game/StoryPlayerScreen.h"
 #include "game/GameModeType.h"
-#include "game/fn_801C1F94.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
+#include <string.h>
 #include "game/fn_802372EC.h"
 
 /* Four bytes copied as one word from lbl_802CFB1C and passed by value. */
@@ -92,7 +92,7 @@ void PlaTexCacheSetSlot(int index, int slot, int id, int palette, int d);
 int PlaTexCacheFindTexture(char *pName);
 void PlaTexCacheSetColors(int index, unsigned char *pColors);
 void PlaTexCacheGetHairTexture(int a, int *pId, int *pPalette);
-int fn_801835A0(void);
+int EditMenuIsOpen(void);
 void fn_801A34B0(int a, int b, int c, int d);
 void fn_801A3520(void);
 void fn_801A3588(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit);
@@ -101,7 +101,6 @@ void fn_801A3F48(Object_8003DEC4 *pPlayer);
 void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 int fn_801486A0(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-int fn_801C302C(const char *s1, const char *s2, int n);
 int ObjNewType_(int a, int b, int c, void (*pA)(Object_8003DEC4 *, PlayerObjInit_t *), void (*pB)(Object_8003DEC4 *));
 int ObjDelType(int a);
 void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(Object_8003DEC4 *, int));
@@ -350,7 +349,7 @@ extern "C" void PlayerLookSetHeadDecal(Row_8007BC34 *pRow, int offset, int playe
     fn_801C2D88(name, sizeof(name), "PLATEX_DECAL_%s_CHICAGO", pRow->mName);
     id = PlaTexCacheFindTexture(name);
     if (id >= 0) {
-        if (fn_801C302C(pRow->mName, "REEBOK_T045Z", 33) == 0 || fn_801C302C(pRow->mName, "REEBOK_BO04A381", 33) == 0) {
+        if (strncmp(pRow->mName, "REEBOK_T045Z", 33) == 0 || strncmp(pRow->mName, "REEBOK_BO04A381", 33) == 0) {
             pIds[3] = 3;
             pPalettes[2] = -1;
         } else {
@@ -635,7 +634,7 @@ extern "C" void PlayerLookClose(void)
 
 extern "C" void PlayerLookSetName(int index, const char *pName)
 {
-    fn_801C3284(gPlayerLooks[index].mName, pName, 31);
+    strnzcpy(gPlayerLooks[index].mName, pName, 31);
 }
 
 extern "C" void PlayerLookSetHeadDecalColors(int index, int value)
@@ -751,11 +750,11 @@ extern "C" void PlayerLookApply(int player)
                 PlayerLookSetHeadDecal(&row, gPlayerLooks[index].mInfo.mUnknown0D, key, ids, palettes);
                 PlayerLookLoadHeadDecalColors(gPlayerLooks[index].mInfo.mUnknown0D, gPlayerLooks[index].mUnknown7A, gPlayerLooks[index].mUnknown93);
             } else {
-                if (fn_801C302C(row.mName, "SKULLCAP_BLACK_L", 16) == 0) {
+                if (strncmp(row.mName, "SKULLCAP_BLACK_L", 16) == 0) {
                     ids[2] = 0x3216;
                     palettes[2] = -1;
                     PlyrSwitchSet(key, 25, colors.mUnknown1);
-                } else if (fn_801C302C(row.mName, "SKULLCAP_WHITE_L", 16) == 0) {
+                } else if (strncmp(row.mName, "SKULLCAP_WHITE_L", 16) == 0) {
                     ids[2] = 0x3215;
                     palettes[2] = -1;
                     PlyrSwitchSet(key, 25, colors.mUnknown1);
@@ -805,7 +804,7 @@ extern "C" void PlayerLookApply(int player)
         PlaTexCacheSetSlot(index, 7, id2, -1, 0);
         PlaTexCacheSetSlot(index, 8, palette2, -1, 0);
     }
-    fn_801C3284(pPlayer->mUnknown4184, gPlayerLooks[index].mName, 31);
+    strnzcpy(pPlayer->mUnknown4184, gPlayerLooks[index].mName, 31);
     PlyrTexRequestNameplate(pPlayer);
 }
 
@@ -821,7 +820,7 @@ extern "C" void PlayerLookLoadForPlayer(unsigned int mode, int index, int unused
             flag = fn_80081FD4((Object_8008044C *)&cursor, 1) == 0;
         }
         DbCursorClose(&cursor);
-    } else if ((FELoopIsMainFEActive() && (fn_801835A0() || StoryPlayerScreenIsActive())) || !fn_801486A0()) {
+    } else if ((FELoopIsMainFEActive() && (EditMenuIsOpen() || StoryPlayerScreenIsActive())) || !fn_801486A0()) {
         flag = 1;
     } else if (GameInfoGet(2) == 0) {
         flag = mode <= 6;
@@ -1130,7 +1129,7 @@ extern "C" void PlayerLookSetFeatures(int index, FaceFeatures_t *pBlock)
     if (pBlock) {
         gPlayerLooks[index].mBlock = *pBlock;
     } else {
-        fn_801C1F94(&gPlayerLooks[index].mBlock, 0, sizeof(FaceFeatures_t));
+        memset(&gPlayerLooks[index].mBlock, 0, sizeof(FaceFeatures_t));
     }
 }
 
@@ -1141,7 +1140,7 @@ extern "C" void PlayerLookGetFeatures(int index, FaceFeatures_t *pBlock)
 
 extern "C" void PlayerObjCreate(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit)
 {
-    fn_801C1F94(pPlayer, 0x19F0, 0);
+    memset(pPlayer, 0x19F0, 0);
     PlyrPoseInit(pPlayer, pInit->mUnknown04, pInit->mUnknown08, pInit->mUnknown10, pInit->mUnknown14);
     pPlayer->mUnknown4956 = pInit->mUnknown18;
     ParticleTrailReset(&pPlayer->mUnknown5188);

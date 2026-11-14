@@ -1,7 +1,7 @@
 /* Writes an integer as decimal text with commas between groups of three digits. */
 extern "C" {
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-unsigned int fn_801C3180(const char *pText);
+unsigned int strlen(const char *pText);
 }
 
 // Formats value in decimal with a comma between each group of three digits
@@ -17,7 +17,7 @@ extern "C" void CommaFormatInt(int value, char *pOut, int size)
     int count;
 
     fn_801C2D88(digits, sizeof(digits), "%d", value);
-    length = fn_801C3180(digits);
+    length = strlen(digits);
     lead = length % 3;
     count = 0;
     for (i = 0; i < length; i++) {

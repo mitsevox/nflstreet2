@@ -13,7 +13,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
 #include "game/PlayBookTeam.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_800B65A0.h"
@@ -275,7 +275,7 @@ int QbPassEnter(Object_80039F5C *player) {
     unsigned int count = 0;
     if (BallGetCurrentHolder() != player && !(player->mFlags & 0x4000)) {
         Message_800F01CC message;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 33;
         fn_800F053C(0, player->mpState, &message, player);
         return 1;
@@ -541,7 +541,7 @@ int QbPassUpdate(Object_80039F5C *player) {
                             offset.mX += selected->mMotion.mPos.mX;
                             offset.mY += selected->mMotion.mPos.mY;
                             Message_800F01CC message;
-                            fn_801C1F94(&message, 0, 4);
+                            memset(&message, 0, 4);
                             message.mId = 19;
                             fn_800FD68C(&message, &selected->mMotion.mPos, &offset);
                             message.mUnknown1[2] = 255;
@@ -559,7 +559,7 @@ int QbPassUpdate(Object_80039F5C *player) {
                 } else if (QbPassHoldOrRun(player, weights, values.mCost, indices))
                     return 0;
                 } else {
-                    fn_801C1F94(&message, 0, 4);
+                    memset(&message, 0, 4);
                     message.mId = 1;
                     fn_800F053C(0, player->mpState, &message, player);
                     return 1;
@@ -591,7 +591,7 @@ int QbPassUpdate(Object_80039F5C *player) {
 
         fn_800A02B4();
         fn_800A02FC();
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 1;
         fn_800F053C(0, player->mpState, &message, player);
         return 1;
@@ -637,7 +637,7 @@ int QbPassHoldOrRun(Object_80039F5C *p, float *values, float *costs, unsigned ch
     if (fn_801486A0() != 4 && fn_801486A0() != 3 && (s->mUnknown18 || QbPassShouldRun(p))) {
         if (!(p->mMotion.mPos.mY <= fn_80177FE0().mY - _QbPass_fRunLineMargin)) {
             Message_800F01CC m;
-            fn_801C1F94(&m, 0, 4);
+            memset(&m, 0, 4);
             m.mId = 1;
             fn_800F053C(0, p->mpState, &m, p);
             return 1;

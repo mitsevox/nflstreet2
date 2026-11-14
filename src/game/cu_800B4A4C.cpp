@@ -56,8 +56,6 @@ struct Record_800B4DE4 {
 
 extern "C" {
 unsigned char CheatFlagsIsSet(int index);
-char *fn_801C2EB4(char *pDest, const char *pSource);
-char *fn_801C32CC(char *pString);
 float fn_80237260(int stream);
 void PlyrNameTagSetText(PlyrNameTag_t *p, const char *name);
 void fn_8009BD88(Object_80039F5C *p, float scale);
@@ -124,7 +122,7 @@ extern "C" void fn_800B4DE4(QueryCursor cursor, int index, void *pData)
         &cursor, pOut->mUnknown27, pOut->mUnknown48, pOut->mUnknown69,
         &values[0], &values[1], &values[2], &values[3], &values[4], &values[5], &values[6], &values[7],
         &values[8], &values[9], &values[10], &values[11], &values[12], &values[13], &values[14], &values[15]);
-    fn_801C2EB4(pOut->mUnknown69, pOut->mUnknown48);
+    strcpy(pOut->mUnknown69, pOut->mUnknown48);
     pOut->mUnknown20 = values[13];
     if (GameModeTypeGet() == 0) {
         if (CheatFlagsIsSet(30) || CheatFlagsIsSet(34)) {
@@ -160,8 +158,8 @@ extern "C" void fn_800B5150(Object_80039F5C *p)
     if (p) {
         Object_8003DEC4 *model = (Object_8003DEC4 *)p->mpUnknown4;
         char name[48];
-        fn_801C2EB4(name, p->mUnknown2927 + 21);
-        fn_801C32CC(name);
+        strcpy(name, p->mUnknown2927 + 21);
+        strupr(name);
         PlyrNameTagSetText(model->mUnknown988, p->mUnknown2927 + 42);
         float scale = p->mUnknown2900;
         scale *= 0.013888889f;

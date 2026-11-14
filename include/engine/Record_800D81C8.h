@@ -56,36 +56,36 @@ typedef struct AnimSeq_t {
     AnimSeqLoop_t mUnknown20[2];
 } AnimSeq_t;
 
-typedef struct Data1_801BF4A8 {
+typedef struct AnimWgtLinear_t {
     float mUnknown0;
     unsigned int mUnknown4;
-} Data1_801BF4A8;
+} AnimWgtLinear_t;
 
-typedef struct Data2_801BF11C {
+typedef struct AnimWgtWaitToStop_t {
     float mUnknown0;
-} Data2_801BF11C;
+} AnimWgtWaitToStop_t;
 
-typedef struct Data3_801BF530 {
+typedef struct AnimWgtLinearInAndOut_t {
     float mUnknown0;
     float mUnknown4;
     unsigned char mUnknown8;
     signed char mUnknown9;
     unsigned short mUnknownA;
-} Data3_801BF530;
+} AnimWgtLinearInAndOut_t;
 
-typedef union Data_801BF3C8 {
-    Data1_801BF4A8 mType1;
-    Data2_801BF11C mType2;
-    Data3_801BF530 mType3;
-} Data_801BF3C8;
+typedef union AnimWgtTypeData_t {
+    AnimWgtLinear_t mType1;
+    AnimWgtWaitToStop_t mType2;
+    AnimWgtLinearInAndOut_t mType3;
+} AnimWgtTypeData_t;
 
 /* Weight fade: current and target value, update type and its parameters. */
-typedef struct Block_801BF3C8 {
+typedef struct AnimWgt_t {
     float mUnknown0;
     float mUnknown4;
     int mUnknown8;
-    Data_801BF3C8 mUnknownC;
-} Block_801BF3C8;
+    AnimWgtTypeData_t mUnknownC;
+} AnimWgt_t;
 
 /* 124-byte animation channel. */
 typedef struct Record_800D81C8 {
@@ -103,7 +103,7 @@ typedef struct Record_800D81C8 {
     int mUnknown20;
     Pair_802270A4 mUnknown24;
     float mUnknown2C;
-    Block_801BF3C8 mUnknown30;
+    AnimWgt_t mUnknown30;
     float mUnknown48;
     AnimSeq_t mUnknown4C;
 } Record_800D81C8;

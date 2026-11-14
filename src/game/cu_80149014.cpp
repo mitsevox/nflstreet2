@@ -3,7 +3,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/fn_801FCE10.h"
 #include "game/GameModeType.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include <string.h>
 
 struct TextChoices_802DDC20 {
@@ -28,7 +28,6 @@ int fn_800C8744(int team);
 int fn_8022B414(int handle, unsigned int tag, int *pValue);
 int fn_8022B7A4(int handle, unsigned int tag, int *pValue);
 int fn_801C2D88(char *pText, int capacity, const char *pFormat, ...);
-char *fn_801C2EF0(char *pText, const char *pSource, unsigned int capacity);
 int fn_802372EC(int first, int last);
 int fn_801486A0(void);
 void fn_8017767C(void);
@@ -59,8 +58,8 @@ void fn_80149040(Object_80039F5C *p)
 
 void fn_80149154(Class_80148A58 *p, const int *pKinds)
 {
-    fn_801C1F94(lbl_8031BE04,0,168);
-    fn_801C1F94(lbl_8031BEAC,0,54);
+    memset(lbl_8031BE04,0,168);
+    memset(lbl_8031BEAC,0,54);
     fn_800C8704(&lbl_803ECA24[0],&lbl_803ECA24[1]);
     for(unsigned char k=0;pKinds[k]!=0;k++) {
         for(unsigned char i=0;i<14;i++) {
@@ -79,8 +78,8 @@ void fn_80149154(Class_80148A58 *p, const int *pKinds)
 
 void fn_801492C4(Class_80148A58 *p,const int *pKinds)
 {
-    fn_801C1F94(lbl_8031BE04,0,168);
-    fn_801C1F94(lbl_8031BEAC,0,54);
+    memset(lbl_8031BE04,0,168);
+    memset(lbl_8031BEAC,0,54);
     fn_800C8704(&lbl_803ECA24[0],&lbl_803ECA24[1]);
     for(unsigned char k=0;pKinds[k]!=0;k++) {
         for(unsigned char team=0;team<2;team++) {
@@ -104,7 +103,7 @@ void fn_801493E0(Class_80148A58 *p,int team,unsigned char index,char *text,unsig
             if(i) {
                 text[0]=',';text[1]=' ';text+=2;capacity-=2;length-=2;
             }
-            fn_801C2EF0(text,name,capacity);
+            strncpy(text,name,capacity);
             text+=length;
             capacity-=length;
         }

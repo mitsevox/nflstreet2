@@ -11,7 +11,7 @@
 #include "game/DbCursor.h"
 #include "game/Challenge.h"
 #include "game/Object_8017886C.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/fn_801FCE10.h"
 
 extern "C" {
@@ -184,9 +184,6 @@ int fn_801787DC(int team);
 int fn_80186B38(int a);
 void fn_8018787C(int index);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
-char *fn_801C2F88(char *pDest, const char *pSource, unsigned int count);
-unsigned int fn_801C3180(const char *pText);
 int fn_8022B7A4(int handle, int tag, void *pValue);
 int fn_8022F358(int index);
 int fn_8022F3D4(int handle);
@@ -418,7 +415,7 @@ void ChalFormatDevPoints(char *pBuffer, int size, unsigned int value)
 
 void ChalFormatPlayerChoice(char *pBuffer, int size, int value)
 {
-    fn_801C3284(pBuffer, "Choose a player from any NFL team.", size);
+    strnzcpy(pBuffer, "Choose a player from any NFL team.", size);
 }
 
 void ChalCloseCursors(void)
@@ -537,7 +534,7 @@ void ChalReadRecord(DbCursor *pObject, Challenge_t *pRecord, int level)
     for (p = name; *p != 0; p++) {
         if (*p == ' ' && p[1] == '-' && p[2] == ' ') {
             *p = 0;
-            fn_801C3284(pRecord->mUnknown1, name, 201);
+            strnzcpy(pRecord->mUnknown1, name, 201);
             pRest = p + 3;
             *p = ' ';
             break;
@@ -841,7 +838,7 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
     int tag = _Chal_aGoalTypes[type].mTag;
     const char *pFormat = _Chal_aGoalTypes[type].mpFormat;
 
-    if (tag != -1 && fn_801C3180(pFormat) != 0) {
+    if (tag != -1 && strlen(pFormat) != 0) {
         int side = !_Chal_aGoalTypes[type].mFlag;
 
         fn_8022B7A4(side, tag, &a);
@@ -854,12 +851,12 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             }
         }
         fn_801C2D88(text, 128, pFormat, a);
-        fn_801C2EF0(pText, text, size);
+        strncpy(pText, text, size);
     } else {
         switch (type) {
         case 3:
             fn_801C2D88(text, 128, pFormat, StyleTrackerGetTotal(1));
-            fn_801C2EF0(pText, text, size);
+            strncpy(pText, text, size);
             break;
         case 6:
             fn_8022B7A4(1, 0x6E737374, &a);
@@ -881,33 +878,33 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
                 fn_801C2D88(text, 128, pFormat, a + b);
                 break;
             }
-            fn_801C2EF0(pText, text, size);
+            strncpy(pText, text, size);
             break;
         case 0x1F:
             fn_801C2D88(text, 128, pFormat, fn_800A7E40(1));
-            fn_801C2EF0(pText, text, size);
+            strncpy(pText, text, size);
             break;
         case 0x29:
             fn_8022B7A4(1, 0x74727374, &a);
             fn_8022B7A4(1, 0x74507374, &b);
             fn_8022B7A4(1, 0x64647374, &c);
             fn_801C2D88(text, 128, pFormat, a + b + c);
-            fn_801C2EF0(pText, text, size);
+            strncpy(pText, text, size);
             break;
         case 0x2A:
             fn_801C2D88(text, 128, pFormat, fn_801787DC(1));
-            fn_801C2EF0(pText, text, size);
+            strncpy(pText, text, size);
             break;
         case 0x2D:
             fn_8022B7A4(0, 0x74727374, &a);
             fn_8022B7A4(0, 0x74507374, &b);
             fn_8022B7A4(0, 0x64647374, &c);
             fn_801C2D88(text, 128, pFormat, a + b + c);
-            fn_801C2EF0(pText, text, size);
+            strncpy(pText, text, size);
             break;
         case 0x2E:
             fn_801C2D88(text, 128, pFormat, fn_801787DC(0));
-            fn_801C2EF0(pText, text, size);
+            strncpy(pText, text, size);
             break;
         case 0x31:
             fn_8022B7A4(1, 0x43637374, &a);
@@ -916,7 +913,7 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             } else {
                 fn_801C2D88(text, 128, "Current Completion Streak: %d", StyleTrackerGetCatchStreak(1));
             }
-            fn_801C2EF0(pText, text, size);
+            strncpy(pText, text, size);
             break;
         case 0x35:
             fn_8022B7A4(1, 0x6E737374, &a);
@@ -938,13 +935,13 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
                 fn_801C2D88(text, 128, pFormat, a + b);
                 break;
             }
-            fn_801C2EF0(pText, text, size);
+            strncpy(pText, text, size);
             break;
         case 0x3A:
             fn_8022B7A4(1, 0x61707374, &a);
             fn_8022B7A4(1, 0x6E737374, &b);
             fn_801C2D88(text, 128, pFormat, b != 0 ? (unsigned int)((float)a / (float)b * 100.0f) : 0);
-            fn_801C2EF0(pText, text, size);
+            strncpy(pText, text, size);
             break;
         case 0x3E:
             fn_8022B7A4(1, 0x43737374, &a);
@@ -953,7 +950,7 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             } else {
                 fn_801C2D88(text, 128, "Current Stylin' Completion Streak: %d", StyleTrackerGetStyleCatchStreak(1));
             }
-            fn_801C2EF0(pText, text, size);
+            strncpy(pText, text, size);
             break;
         case 0x42:
             fn_8022B7A4(1, 0x50637374, &a);
@@ -962,13 +959,13 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             } else {
                 fn_801C2D88(text, 128, "Consecutive Pitches Last Play: %d", a);
             }
-            fn_801C2EF0(pText, text, size);
+            strncpy(pText, text, size);
             break;
         case 0x4A:
             fn_8022B7A4(1, 0x61707374, &a);
             fn_8022B7A4(1, 0x63707374, &b);
             fn_801C2D88(text, 128, "Incomplete Passes: %d", a - b);
-            fn_801C2EF0(pText, text, size);
+            strncpy(pText, text, size);
             break;
         }
     }
@@ -985,7 +982,7 @@ void ChalFormatGearReward(char *pBuffer, int size, int id)
     int separate = 0;
     int gear;
 
-    fn_801C3284(pBuffer, "", size);
+    strnzcpy(pBuffer, "", size);
     gear = ChalGetGearReward(id);
     if (gear) {
         fn_8007BA48(&cursor);
@@ -994,15 +991,15 @@ void ChalFormatGearReward(char *pBuffer, int size, int id)
 
             fn_8007BE20(&cursor, name, 64);
             count = fn_8007C690(&cursor, modifiers);
-            fn_801C2F88(pBuffer, name, size);
+            strncat(pBuffer, name, size);
             if (count) {
                 signed char i;
 
-                fn_801C2F88(pBuffer, ": (", size);
+                strncat(pBuffer, ": (", size);
                 for (i = 0; i <= 9; i++) {
                     if (modifiers[i] != 0) {
                         if (separate) {
-                            fn_801C2F88(pBuffer, ", ", size);
+                            strncat(pBuffer, ", ", size);
                         } else {
                             separate = 1;
                         }
@@ -1011,19 +1008,19 @@ void ChalFormatGearReward(char *pBuffer, int size, int id)
                         } else {
                             fn_801C2D88(number, 8, "+%d ", (short)(modifiers[i] / 5));
                         }
-                        fn_801C2F88(pBuffer, number, size);
+                        strncat(pBuffer, number, size);
                         fn_800B4A18(i, stat, 32);
-                        fn_801C2F88(pBuffer, stat, size);
+                        strncat(pBuffer, stat, size);
                     }
                 }
-                fn_801C2F88(pBuffer, ")", size);
+                strncat(pBuffer, ")", size);
             }
         } else {
-            fn_801C2F88(pBuffer, "Unknown Gear Type", size);
+            strncat(pBuffer, "Unknown Gear Type", size);
         }
         fn_8007BB04(&cursor);
     } else {
-        fn_801C2F88(pBuffer, "Unknown Gear Type", size);
+        strncat(pBuffer, "Unknown Gear Type", size);
     }
 }
 
@@ -1048,7 +1045,7 @@ void ChalFormatReward(int type, unsigned short value, char *pBuffer, unsigned sh
     case 7:
         break;
     case 8:
-        fn_801C3284(pBuffer, "Impact Gear Modifier", size);
+        strnzcpy(pBuffer, "Impact Gear Modifier", size);
         break;
     }
 }
@@ -1067,18 +1064,18 @@ void ChalFormatRewards(Challenge_t *pRecord, char *pBuffer, unsigned short size)
         for (i = 0; i <= 2; i++) {
             ChalFormatReward(pInfo->mUnknown1C, pInfo->mUnknown20[i], value, 200);
             fn_801C2D88(p, left, "%s - %s\n", _Chal_aszMedalNames[i], value);
-            p += fn_801C3180(p);
-            left -= fn_801C3180(p);
+            p += strlen(p);
+            left -= strlen(p);
         }
     } else {
         for (i = 0; i <= 1 && pRecord->mUnknown1F4[i].mId != 0; i++) {
             ChalFormatReward(pRecord->mUnknown1F4[i].mId, pRecord->mUnknown1F4[i].mUnknown4, value, 200);
             fn_801C2D88(p, left, "%s\n", value);
-            p += fn_801C3180(p);
-            left -= fn_801C3180(p);
+            p += strlen(p);
+            left -= strlen(p);
         }
     }
-    fn_801C3284(pBuffer, text, size);
+    strnzcpy(pBuffer, text, size);
 }
 
 int ChalCheckGoal(int side, Challenge_t *pRecord, int index, int *pResult)

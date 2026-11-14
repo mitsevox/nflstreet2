@@ -14,10 +14,10 @@ extern unsigned int lbl_803ECF60;
 extern unsigned int lbl_803ECF64;
 extern unsigned int lbl_803ECF68;
 extern unsigned char *lbl_803ECF6C;
-extern unsigned int lbl_803ED5EC;
-extern unsigned char lbl_803EBD6C[8];
+extern unsigned int Per_MaxAxis;
+extern unsigned char Per_BtnMask[8];
 
-void *fn_801C1FBC();
+void *memcpy();
 int MemFill(void *p, unsigned int size, int value, int flags);
 
 int RemapInit(unsigned int numTables, unsigned int numEntries, unsigned int numInputs)
@@ -76,7 +76,8 @@ int RemapSetupEntries(unsigned int table, unsigned int start, unsigned int count
     int err = 0;
 
     if (start + count <= lbl_803ECF5C && table < lbl_803ECF58 && count != 0) {
-        fn_801C1FBC((unsigned short *)(lbl_803ECF6C + table * lbl_803ECF64) + start * lbl_803ECF60, pData,
+        // FAKEMATCH: called through an unprototyped type, as a call with no prototype in scope compiles
+        ((void *(*)())memcpy)((unsigned short *)(lbl_803ECF6C + table * lbl_803ECF64) + start * lbl_803ECF60, pData,
                     count * lbl_803ECF60 * sizeof(unsigned short));
     } else {
         err = 0x180003;
@@ -119,7 +120,7 @@ float RemapCheckEntry(unsigned int table, unsigned int entry, unsigned char *pIn
                 value = (float)(signed char)pInputs[code & 0xFF] * (1.0f / 127.0f);
             } else {
                 index = code & 0xFF;
-                if (lbl_803EBD6C[index & 7] & pInputs[lbl_803ED5EC + (index >> 3)]) {
+                if (Per_BtnMask[index & 7] & pInputs[Per_MaxAxis + (index >> 3)]) {
                     value = 1.0f;
                 } else {
                     value = 0.0f;

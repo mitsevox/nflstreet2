@@ -28,7 +28,7 @@ void PlayBookSetFormationType(int team, int kind);
 void PlayBookSetIndices(int team, unsigned int a, unsigned int b, unsigned int c);
 void PlayBookLoadCurrentPlay(int team);
 PlaybookTeamView *PlayBookGetTeam(int team);
-int fn_80085A34(int formation, int team);
+int FormationLineupApplyUser(int formation, int team);
 void fn_800B3EFC(int team);
 void PlayBookLoadAudibles(int team);
 void fn_800AD910(int a, float b);
@@ -57,7 +57,7 @@ void fn_80153DBC(Class_802A1B18 *p, float dt)
     PlayBookSetFormationType(other, 11);
     PlayBookSetIndices(team, 0, 0, fn_800B65A0(team) == 255 ? flag : 0);
     PlayBookLoadCurrentPlay(team);
-    fn_80085A34(PlayBookGetTeam(team)->mUnknown40, team);
+    FormationLineupApplyUser(PlayBookGetTeam(team)->mUnknown40, team);
     PlayBookSetIndices(other, 0, 0, 0);
     PlayBookLoadCurrentPlay(other);
     fn_800B3EFC(team);

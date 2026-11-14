@@ -29,10 +29,10 @@ int AnimSeqGrow(AnimSeq_t *p, float step);
 float AnimSeqGetLife(AnimScript_t *pScript);
 unsigned short AnimSeqGetNumFrames(AnimScript_t *pScript);
 void AnimSeqSetRate(AnimSeq_t *p, float rate);
-void fn_801BF3C8(Block_801BF3C8 *p, int type, float a, void *pSource, float b);
-void fn_801BF46C(Block_801BF3C8 *p, float step);
-void fn_801BF4A8(Block_801BF3C8 *p, unsigned int frames, float from, float to);
-void fn_801BF530(Block_801BF3C8 *p, unsigned char frames, unsigned char hold, float from, float to);
+void AnimWgtSet(AnimWgt_t *p, int type, float a, void *pSource, float b);
+void AnimWgtProcess(AnimWgt_t *p, float step);
+void AnimWgtSetLinear(AnimWgt_t *p, unsigned int frames, float from, float to);
+void AnimWgtSetLinearInAndOut(AnimWgt_t *p, unsigned char frames, unsigned char hold, float from, float to);
 #ifdef __cplusplus
 }
 #endif

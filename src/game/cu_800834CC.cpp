@@ -12,9 +12,6 @@
 
 extern "C" {
 void fn_8003DE74(unsigned char side, int *pList);
-void *fn_801C2030(void *dst, const void *src, unsigned int n);
-unsigned int fn_801C3180(const char *pText);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_801F967C(int handle, int table);
 void fn_801F9718(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
 int fn_801F9980(int handle, int *pTable);
@@ -530,8 +527,8 @@ int fn_8008454C(int type, int logo, const char *pName)
     if (logo != -1) {
         values[0] = logo;
     }
-    if (pName && fn_801C3180(pName)) {
-        fn_801C2EF0(name, pName, 33);
+    if (pName && strlen(pName)) {
+        strncpy(name, pName, 33);
     } else {
         fn_800846F4(values[0], name, 33);
     }
@@ -583,7 +580,7 @@ void fn_800846F4(int logo, char *pName, int size)
         cursor.mUnknown4 = fn_80237390(1, 0, count - 1);
         fn_801FCE10(0, "fetch from \x8a 'ETNR' into \x88\n", &cursor, pName);
     } else {
-        fn_801C2EF0(pName, "Playaz", size);
+        strncpy(pName, "Playaz", size);
     }
     if (cursor.mUnknown0) {
         fn_801FCFA0(&cursor);
@@ -643,7 +640,7 @@ void fn_80084908(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned
         excluded[i] = category;
         for (j = 0; j < size; j++) {
             if (id == pList[j]) {
-                fn_801C2030(&pList[j], &pList[j + 1], (size - j) * 4);
+                memmove(&pList[j], &pList[j + 1], (size - j) * 4);
                 size--;
             }
         }

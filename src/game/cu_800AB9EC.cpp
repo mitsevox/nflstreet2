@@ -3,7 +3,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_800B65A0.h"
 
 extern "C" {
@@ -38,7 +38,7 @@ extern "C" void fn_800ABAF0(void)
     Object_80039F5C *pObject1;
     unsigned int i;
 
-    fn_801C1F94(&message, 0, sizeof(message));
+    memset(&message, 0, sizeof(message));
     message.mId = 9;
     message.mUnknown1[0] = 203;
     message.mUnknown1[1] = 0;

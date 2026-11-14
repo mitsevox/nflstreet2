@@ -7,7 +7,7 @@
 #include "game/DepthChart.h"
 #include "game/AutoDepth.h"
 #include "game/DepthChartSide.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 extern "C" {
 int PlayerDbGetId(Object_8008044C *pObject);
@@ -16,11 +16,11 @@ int PlayerDbGetPortraitId(Object_8008044C *pObject);
 int PlayerDbGetBoostedRating(Object_8008044C *pObject, int a);
 int FormationGetByIndex(int a, int b);
 int *FormationLineupFetchUser(int a, int b);
-int fn_8008593C(int a, int b, int c, int d);
-int fn_80085BE4(int a);
-int fn_80085C3C(int a);
-int fn_80085C94(int a, int *values);
-int fn_80085D54(void);
+int FormationLineupSwapAllUser(int a, int b, int c, int d);
+int FormationLineupCommitTeam(int a);
+int FormationLineupRevertTeam(int a);
+int FormationLineupFillTeam(int a, int *values);
+int FormationLineupReset(void);
 int fn_800B4A18(int a, int b, int c);
 int fn_801485D4(void);
 int GameTextGetAwayTeam(void);
@@ -90,7 +90,7 @@ void DepthChartGetSpotPlayer(int a, int kind, int index, int key, int e, DepthCh
 
 int DepthChartCanSwapSpots(int a, int kind, int index0, int index1, int unused)
 {
-    return fn_8008593C(kind == 1, a, _DepthChart_aSpotSlot[kind][index0], _DepthChart_aSpotSlot[kind][index1]);
+    return FormationLineupSwapAllUser(kind == 1, a, _DepthChart_aSpotSlot[kind][index0], _DepthChart_aSpotSlot[kind][index1]);
 }
 
 void DepthChartCyclePending(int group, int kind, int slot, int code, int a, int b)
@@ -164,7 +164,7 @@ int DepthChartCommit(int group)
     for (i = 0; i < 14; i++) {
         _DepthChart_aCommitted[group][i] = _DepthChart_aWorking[group][i];
     }
-    return fn_80085BE4(group);
+    return FormationLineupCommitTeam(group);
 }
 
 int DepthChartCancel(int group)
@@ -174,7 +174,7 @@ int DepthChartCancel(int group)
     for (i = 0; i < 14; i++) {
         _DepthChart_aWorking[group][i] = _DepthChart_aCommitted[group][i];
     }
-    return fn_80085C3C(group);
+    return FormationLineupRevertTeam(group);
 }
 
 void DepthChartAutoFill(int group, int *list, int value)
@@ -184,8 +184,8 @@ void DepthChartAutoFill(int group, int *list, int value)
     } else {
         AutoDepthFillChart(value, list, _DepthChart_aCommitted[group]);
     }
-    fn_80085C94(group, _DepthChart_aCommitted[group]);
-    fn_80085BE4(group);
+    FormationLineupFillTeam(group, _DepthChart_aCommitted[group]);
+    FormationLineupCommitTeam(group);
 }
 
 int DepthChartAutoFillEx(int group, int *list, int value, int a, int b)
@@ -195,8 +195,8 @@ int DepthChartAutoFillEx(int group, int *list, int value, int a, int b)
     } else {
         AutoDepthFillChart(value, list, _DepthChart_aCommitted[group]);
     }
-    fn_80085C94(group, _DepthChart_aCommitted[group]);
-    return fn_80085BE4(group);
+    FormationLineupFillTeam(group, _DepthChart_aCommitted[group]);
+    return FormationLineupCommitTeam(group);
 }
 
 unsigned char DepthChartGetEntry(int group, int index, int *pValue)
@@ -268,14 +268,14 @@ void DepthChartLoad(int reset)
         fn_8008044C(&_DepthChart_sPlayerCursor, &desc, 0x54415453);
         _DepthChart_bNeedsLoad = 1;
         if (reset) {
-            fn_80085D54();
+            FormationLineupReset();
             p = _DepthChart_aPending;
             do {
                 *p = 7;
                 p++;
             } while (p <= &_DepthChart_aPending[1]);
-            fn_801C1F94(_DepthChart_aWorking, 0, sizeof(_DepthChart_aWorking));
-            fn_801C1F94(_DepthChart_aCommitted, 0, sizeof(_DepthChart_aCommitted));
+            memset(_DepthChart_aWorking, 0, sizeof(_DepthChart_aWorking));
+            memset(_DepthChart_aCommitted, 0, sizeof(_DepthChart_aCommitted));
         }
     } else {
         fn_8008040C(&_DepthChart_sPlayerCursor, 0);
@@ -301,8 +301,8 @@ void DepthChartLoad(int reset)
             }
         }
         _DepthChart_bNeedsLoad = 0;
-        fn_80085BE4(0);
-        fn_80085BE4(1);
+        FormationLineupCommitTeam(0);
+        FormationLineupCommitTeam(1);
     }
 }
 

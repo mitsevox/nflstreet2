@@ -20,7 +20,7 @@ extern u8 lbl_802CC651;
 extern int lbl_802C2A5C;
 
 extern void fn_801ADF64(__OSException exception, OSContext *context);
-extern int fn_801AD6F8(int handle, u8 *buf, u32 size, void (*callback)(int result), int offset, int mode);
+extern int PCreadAsyncInit(int handle, u8 *buf, u32 size, void (*callback)(int result), int offset, int mode);
 
 void fn_801ADDB4(void)
 {
@@ -165,7 +165,7 @@ void fn_801AE018(int unused, OSContext *context, u32 dsisr, u32 dar)
                 lbl_802CC640 = fn_801ADF44(offset);
                 if (lbl_802CC640 == 0) {
                     lbl_802CC648 = regs[6];
-                    if (fn_801AD6F8(lbl_802CC5E0, (u8 *)regs[5], regs[6], fn_801ADEC4, offset, 1) == -1)
+                    if (PCreadAsyncInit(lbl_802CC5E0, (u8 *)regs[5], regs[6], fn_801ADEC4, offset, 1) == -1)
                         lbl_802CC640 = 0x31100;
                 }
             }

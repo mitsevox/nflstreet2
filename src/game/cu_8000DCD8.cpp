@@ -3,7 +3,7 @@
 #include "game/Object_8008044C.h"
 #include "game/FEPlyrLoad.h"
 #include "game/fn_8021D7B8.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 
 /* lbl_8036AD78: fourteen words copied from the record filled by fn_800817CC. */
 struct Record_8036AD78 {
@@ -240,13 +240,13 @@ int fn_80087704(void);
 int fn_80087BA0(int index);
 unsigned int UserInfoGetPoints(int a);
 void UserInfoSpendPoints(int a, int b);
-Object_8008044C *fn_80182DC8(void);
-void fn_80182DD4(const char *pText);
-void fn_80182E04(const char *pText);
-void fn_80182E34(char *pText);
-void fn_801835C0(int a);
-void fn_801835C8(void);
-void fn_80183704(void);
+Object_8008044C *EditMenuGetPlayerCursor(void);
+void EditMenuSetHeading(const char *pText);
+void EditMenuSetItemName(const char *pText);
+void EditMenuSetName(char *pText);
+void EditMenuSetView(int a);
+void EditMenuShowPlayers(void);
+void EditMenuHidePlayers(void);
 int fn_8022F4BC(void);
 }
 
@@ -254,7 +254,7 @@ static const int lbl_8000F590[] = {
     10, 0, 10, 8, 1, 11, 11, 2, 3, 4, 5, 6, 9, 10, 14, 14, 12, 13, 14, 14, 14, 14, 14,
 };
 
-static const Layout_802EA9E0 lbl_8000F5EC[] = {
+static const PlayerLayout_t lbl_8000F5EC[] = {
     { 0.0f, 255.0f, 0.0f, 348.0f, 0.9f, 15, 0 },
     { 23.0f, 975.0f, 0.0f, 338.0f, 3.1f, 15, 0 },
     { 0.0f, 255.0f, 0.0f, 348.0f, 0.9f, 15, 0 },
@@ -308,7 +308,7 @@ void Class_8000F500::Enter(int a, int *pCount, int *pOut)
     }
     *pOut = 0;
     lbl_803EB948 = -1;
-    fn_80183740(&lbl_8000F5EC[mUnknown8]);
+    EditMenuMovePlayers(&lbl_8000F5EC[mUnknown8]);
 }
 
 int Class_8000F500::Leave(int a, int b, void **pOut)
@@ -320,7 +320,7 @@ int Class_8000F500::Leave(int a, int b, void **pOut)
     FEPlyrRequestSwap();
     fn_800876C0();
     fn_8000EC44()->mUnknown0 = 0;
-    fn_80183740(0);
+    EditMenuMovePlayers(0);
     lbl_803EB948 = result;
     return result;
 }
@@ -385,12 +385,12 @@ void Class_8000F540::Enter(int a, int *pCount, int *pOut)
         int value;
 
         fn_8000EC44()->mUnknown8 = 0;
-        fn_801835C8();
+        EditMenuShowPlayers();
         HairListOpen(&fn_8000EC44()->mUnknown16);
-        DbCursorFirst((DbCursor *)fn_80182DC8());
-        value = PlayerDbGetId(fn_80182DC8());
+        DbCursorFirst((DbCursor *)EditMenuGetPlayerCursor());
+        value = PlayerDbGetId(EditMenuGetPlayerCursor());
         fn_8000EC44()->mUnknown12 = value;
-        PlayerDbSeekId(fn_80182DC8(), value, 0);
+        PlayerDbSeekId(EditMenuGetPlayerCursor(), value, 0);
         FEPlyrSetPlayer(FEPlyrGetBackIndex(), value, 1);
         FEPlyrSetPlayer(FEPlyrGetFrontIndex(), value, 1);
         FEPlyrLoadSetScaleRamp(0);
@@ -452,7 +452,7 @@ int Class_8000F540::Leave(int a, int b, void **pOut)
     int result = MenuListScreen::Leave(a, b, pOut);
 
     if (b) {
-        fn_80183704();
+        EditMenuHidePlayers();
         result = -1;
         HairListClose(&fn_8000EC44()->mUnknown16);
         fn_8000EC44()->mUnknown12 = result;
@@ -711,22 +711,22 @@ int Class_8000F370::Leave(int a, int b, void **pOut)
 
 static void fn_8000E70C()
 {
-    fn_801835C0(900);
+    EditMenuSetView(900);
     fn_8000E744("", "", "");
 }
 
 static void fn_8000E744(char *a, const char *b, const char *c)
 {
-    fn_80182E34(a);
-    fn_80182DD4(b);
-    fn_80182E04(c);
+    EditMenuSetName(a);
+    EditMenuSetHeading(b);
+    EditMenuSetItemName(c);
 }
 
 static void fn_8000E784(Record_8036AD78 *pOut)
 {
     PlayerGear_t record;
 
-    fn_800817CC(fn_80182DC8(), &record);
+    fn_800817CC(EditMenuGetPlayerCursor(), &record);
     pOut->mUnknown0[0] = record.mValues[0];
     pOut->mUnknown0[1] = record.mValues[1];
     pOut->mUnknown0[2] = record.mValues[2];
@@ -741,7 +741,7 @@ static void fn_8000E784(Record_8036AD78 *pOut)
     pOut->mUnknown0[11] = record.mValues[11];
     pOut->mUnknown0[12] = record.mValues[12];
     pOut->mUnknown0[13] = record.mValues[13];
-    lbl_803ECE30 = PlayerDbGetHairStyle(fn_80182DC8());
+    lbl_803ECE30 = PlayerDbGetHairStyle(EditMenuGetPlayerCursor());
 }
 
 static void fn_8000E834(Record_8036AD78 *pRecord)

@@ -9,7 +9,7 @@
 #include "game/fn_80238174.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80096A58.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_80218FC4.h"
 #include "game/fn_800B65A0.h"
 
@@ -167,7 +167,7 @@ void QuarterEndLoadClip(int a, void *pBuffer, int size)
     Params_80092E54 params;
     int index;
 
-    fn_801C1F94(&params, 0, sizeof(params));
+    memset(&params, 0, sizeof(params));
     params.mUnknown0 = a;
     params.mUnknown8 = 36;
     index = fn_802372EC(0, 3);
@@ -290,7 +290,7 @@ void QuarterEndStartVenueEffect(void)
     Params_80096A58 params;
 
     fn_800B43C8();
-    fn_801C1F94(&params, 0, sizeof(params));
+    memset(&params, 0, sizeof(params));
     params.mUnknown40 = 0xFFFF;
     params.mUnknown42 = 0xFFFF;
     switch (fn_800A3444()) {

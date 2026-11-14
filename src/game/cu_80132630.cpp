@@ -2,7 +2,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Input_800B6D34.h"
 #include "game/fn_80177FE0.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/Ball.h"
 
 struct Aim_801327F4 {
@@ -484,7 +484,7 @@ int fn_80133EE8(Object_80039F5C *p)
     }
     if (post) {
         Message_800F01CC message;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = post;
         fn_800F053C(0, p->mpState, &message, p);
         return 1;

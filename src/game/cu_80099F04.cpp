@@ -1,6 +1,6 @@
 #include "engine/cu_801B9F00.h"
 #include "game/Ball.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/Block_801BE60C.h"
 #include "game/Item_80097440.h"
 
@@ -73,7 +73,7 @@ extern "C" int fn_80099F04(Object_80039F5C *p, int handle, int kind)
         pRecords[entry].mUnknown2C = duration;
         AnimSeqSetSpeed(&pRecords[entry].mUnknown4C, blend);
         p->mpUnknown800[entry].mUnknownC = lbl_803EC92C->mUnknown4.mUnknown0;
-        fn_801C1F94(&message, 0, sizeof(Message_800F01CC));
+        memset(&message, 0, sizeof(Message_800F01CC));
         message.mId = 28;
         fn_800975A4(kind, handle, &high, &low);
         message.mUnknown1[0] = high;

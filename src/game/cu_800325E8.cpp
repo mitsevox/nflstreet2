@@ -208,20 +208,20 @@ void Class_800325E8::GSProcess()
 {
     GSFlowManagerC *p = &gGSFlowManager;
 
-    if (p->fn_801CBE9C(3) == 0) {
-        switch (p->fn_801CBEC8(1)) {
+    if (p->IsGroupStarted(3) == 0) {
+        switch (p->GetActiveStage(1)) {
         case 4:
-            p->fn_801CBEF4(1, 5);
+            p->QueueTransition(1, 5);
             break;
         case 5:
             if (!gInGame.Update()) {
-                p->fn_801CBEF4(1, 6);
+                p->QueueTransition(1, 6);
             }
             break;
         case 6:
-            p->fn_801CBE24(1);
+            p->StopGroup(1);
             MemPoolRelease(1);
-            p->fn_801CBD80(2, -1);
+            p->StartGroup(2, -1);
             break;
         }
     }

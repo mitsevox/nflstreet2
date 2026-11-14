@@ -7,7 +7,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Ball.h"
 #include "game/fn_80177FE0.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_800B65A0.h"
@@ -36,8 +36,8 @@ int fn_80177C38(void);
 int BallStateGet(Ball_t *p, int *pOut);
 int fn_8009FB60(Object_80039F5C *p);
 int fn_800A5C04(Object_80039F5C *p, int a, int b);
-float fn_8016B938(void);
-float fn_8016B974(void);
+float PlayTrackGetPlayIdRate(void);
+float PlayTrackGetResult5Rate(void);
 int fn_800E1584(Object_80039F5C *p);
 int fn_8009E180(Object_80039F5C *p);
 int fn_800F2C1C(Object_80039F5C *p, int a);
@@ -58,7 +58,7 @@ extern "C" int DirectedRunEnter(Object_80039F5C *p)
         default: {
             Message_800F01CC message;
 
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 85;
             message.mUnknown1[0] = 96;
             message.mUnknown1[1] = 180;
@@ -107,10 +107,10 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
         if (carrier && fn_800B65A0(p->mIdBytes[2]) != 255
             && fn_800B65A0(carrier->mIdBytes[2]) == 255 && !fn_80177C38()) {
             state->mUnknown16 -= (int)MIN((float)state->mUnknown16,
-                                          (float)state->mUnknown16 * fn_8016B938());
+                                          (float)state->mUnknown16 * PlayTrackGetPlayIdRate());
             if (fn_8011F1CC() && (carrier->mFlags & 0x8000)) {
                 state->mUnknown16 -= (int)MIN((float)state->mUnknown16,
-                                              (float)state->mUnknown16 * fn_8016B974());
+                                              (float)state->mUnknown16 * PlayTrackGetResult5Rate());
             }
         }
         if (fn_800E1584(p)) {
@@ -128,7 +128,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
                     chance <<= 2;
                 }
                 if (fn_802372EC(0, 100) < chance) {
-                    fn_801C1F94(&message, 0, 4);
+                    memset(&message, 0, 4);
                     message.mId = 2;
                     fn_800F053C(0, p->mpState, &message, p);
                     return 1;
@@ -142,7 +142,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
                     chance <<= 2;
                 }
                 if (fn_802372EC(0, 100) < chance) {
-                    fn_801C1F94(&message, 0, 4);
+                    memset(&message, 0, 4);
                     message.mId = 2;
                     fn_800F053C(0, p->mpState, &message, p);
                     return 1;
@@ -152,7 +152,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
             && fn_8009BCE8(&pBlock->mUnknown4)->mUnknown1052 == 1) {
             chance = p->mRatings[5] >> 2;
             if (fn_802372EC(0, 100) < chance) {
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 2;
                 fn_800F053C(0, p->mpState, &message, p);
                 return 1;

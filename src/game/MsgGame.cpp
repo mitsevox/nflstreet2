@@ -6,12 +6,12 @@
 #include "game/InGame.h"
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/GameInfo.h"
 #include "game/MsgGame.h"
 #include "game/GameOptions.h"
 #include "game/GameModeType.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/UISGameMsg.h"
 #include "game/fn_800B65A0.h"
 
@@ -35,7 +35,7 @@ union MsgGameArg_t {
     float f;
     int *pi;
     float *pf;
-    Params_80005284 *pParams;
+    MenuText_t *pParams;
 };
 
 extern "C" {
@@ -55,7 +55,7 @@ void PortDbCloseSides(DbCursor *pObject);
 int PortDbGetPort(DbCursor *pObject);
 int PortDbGetSide(DbCursor *pObject);
 int ConGetChannelInfo(int a, int b);
-int fn_801E195C(int a);
+int PerGetDeviceStatus(int a);
 int fn_800B81A4(void);
 float fn_80237260(int stream);
 int GameTextGetPadPlayer(int a);
@@ -73,8 +73,6 @@ unsigned char MemCardScreenGetFlag(void);
 int UserStringGet(char *pDest, int count);
 void UserStringSet(const char *pSource, int count);
 int TextEntryGetCharSet(int a, char *pText, int length);
-int fn_801C2FE4(char *pText0, char *pText1);
-int fn_801C31B0(char *pText0, char *pText1);
 int ChallengeIsActive(void);
 int ChallengeIsPairingGame(void);
 int GameModeTypeIsSpecial(void);
@@ -234,7 +232,7 @@ int MsgGameFindActivePort(void)
         for (int found = DbCursorFirst(&cursor); found && searching; found = DbCursorNext(&cursor)) {
             result = PortDbGetPort(&cursor);
             PortDbGetSide(&cursor);
-            searching = fn_801E195C(ConGetChannelInfo(result, 0)) == 2;
+            searching = PerGetDeviceStatus(ConGetChannelInfo(result, 0)) == 2;
         }
         PortDbCloseSides(&cursor);
         if (searching) {
@@ -413,10 +411,10 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         pResult->i = TextEntryGetCharSet(pArgs[0].i, pArgs[1].pParams->mpText, pArgs[1].pParams->mLength);
         break;
     case 0x109:
-        pResult->i = fn_801C2FE4(pArgs[0].pParams->mpText, pArgs[1].pParams->mpText);
+        pResult->i = strcmp(pArgs[0].pParams->mpText, pArgs[1].pParams->mpText);
         break;
     case 0x12A:
-        pResult->i = fn_801C31B0(pArgs[0].pParams->mpText, pArgs[1].pParams->mpText);
+        pResult->i = stricmp(pArgs[0].pParams->mpText, pArgs[1].pParams->mpText);
         break;
     case 0x104:
         pResult->i = ChallengeIsActive();
@@ -434,9 +432,9 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         fn_80083E1C(&cursor, 0);
         if (fn_80084034(&cursor, pArgs[0].i, 0)) {
             fn_80083F88(&cursor, name, sizeof(name));
-            fn_801C3284(pArgs[1].pParams->mpText, name, pArgs[1].pParams->mLength);
+            strnzcpy(pArgs[1].pParams->mpText, name, pArgs[1].pParams->mLength);
         } else {
-            fn_801C3284(pArgs[1].pParams->mpText, "", pArgs[1].pParams->mLength);
+            strnzcpy(pArgs[1].pParams->mpText, "", pArgs[1].pParams->mLength);
         }
         fn_80083F68(&cursor);
         break;
@@ -474,7 +472,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         pResult->i = MsgGameFindActivePort();
         break;
     case 0x13A:
-        pResult->i = fn_801E195C(ConGetChannelInfo(pArgs[0].i, 0)) == 2;
+        pResult->i = PerGetDeviceStatus(ConGetChannelInfo(pArgs[0].i, 0)) == 2;
         break;
     case 0x19C:
         pResult->i = 0xFF;

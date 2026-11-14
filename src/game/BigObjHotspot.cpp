@@ -11,13 +11,13 @@
 #include "game/BigObj.h"
 #include "game/BigObjInst.h"
 #include "game/BigObjNode.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
 #include "game/Record_8011F4F8.h"
 #include "game/Ball.h"
 #include "game/fn_80177FE0.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 #include "engine/texture.h"
 #include "engine/texfile.h"
 
@@ -316,7 +316,7 @@ void HotspotQueuePlay(HotspotPlay_t *pPlay)
 void HotspotInitQueue(void)
 {
     for (int i = 0; i <= 14; i++) {
-        fn_801C1F94(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
+        memset(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
     }
     _Hotspot_iPendingNext = 0;
 }
@@ -324,7 +324,7 @@ void HotspotInitQueue(void)
 void HotspotClearQueue(void)
 {
     for (int i = 0; i <= 14; i++) {
-        fn_801C1F94(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
+        memset(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
     }
     _Hotspot_iPendingNext = 0;
 }
@@ -385,7 +385,7 @@ int BigObjHotspotFrameUpdate(BigObjInst *pInst, BigObj_t *pOwner, int mode)
         BigObjNode_t *pNode = pInst->mUnknown312;
         pInst->mUnknown380 = 0;
         while (pNode) {
-            if (fn_801C2FE4(pNode->mName, pInst->mUnknown316) == 0 && pInst->mUnknown376 != 0) {
+            if (strcmp(pNode->mName, pInst->mUnknown316) == 0 && pInst->mUnknown376 != 0) {
                 HotspotPlay_t play;
                 play.mpObject = pOwner;
                 play.mRef = pInst->mUnknown376;
@@ -415,7 +415,7 @@ void HotspotFrameTouch(BigObj_t *pObject, Object_80039F5C *pPlayer)
     int ref;
     fn_8009BD2C(pPlayer, &ref);
     BigObjNode_t *pNode = pObject->mUnknown472->mUnknown312;
-    while (pNode && fn_801C2FE4(pNode->mName, "Obj_Hotspot_Sponsor") != 0) {
+    while (pNode && strcmp(pNode->mName, "Obj_Hotspot_Sponsor") != 0) {
         pNode = pNode->mpNext;
     }
     HotspotPlay_t play;
@@ -465,11 +465,11 @@ void HotspotResolvePending(Object_80039F5C *pPlayer)
                 if (_PlayerRefTeam(_Hotspot_aPending[i].mRef) == pPlayer->mIdBytes[2]) {
                     HotspotCapture(&_Hotspot_aPending[i]);
                 }
-                fn_801C1F94(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
+                memset(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
             }
             if (_Hotspot_aPending[i].mKind == 4 && fn_8009BCE8(&_Hotspot_aPending[i].mRef) == pPlayer) {
                 HotspotCapture(&_Hotspot_aPending[i]);
-                fn_801C1F94(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
+                memset(&_Hotspot_aPending[i], 0, sizeof(HotspotPlay_t));
             }
         }
     }
@@ -478,7 +478,7 @@ void HotspotResolvePending(Object_80039F5C *pPlayer)
 void HotspotFramePlayEffect(BigObj_t *pObject, int index, int apply)
 {
     BigObjNode_t *pNode = pObject->mUnknown472->mUnknown312;
-    while (pNode && fn_801C2FE4(pNode->mName, "Obj_Hotspot_Sponsor") != 0) {
+    while (pNode && strcmp(pNode->mName, "Obj_Hotspot_Sponsor") != 0) {
         pNode = pNode->mpNext;
     }
     if (apply) {

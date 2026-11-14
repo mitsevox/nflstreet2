@@ -1,22 +1,32 @@
+/* Controller peripherals: keeps the list of input drivers and the array of device slots with
+   their data records, and polls, reads, writes and releases each connected controller through
+   its driver. */
+
 #include "engine/periph.h"
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
 
-extern Lock_801F8014 lbl_8039ADC4;
-extern unsigned char lbl_803EBD68;
-extern int (*lbl_803ECF50)();
-extern unsigned long lbl_803ECF54;
-extern unsigned int lbl_803ED5EC;
-extern unsigned int lbl_803ED650;
-extern unsigned int lbl_803ED654;
-extern unsigned char *lbl_803ED65C;
+unsigned char Per_ModuleActive = 0;
+unsigned char Per_BtnMask[8] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
+unsigned int Per_MaxAxis;
+unsigned int Per_NumDrivers;
+PerDriver_t *Per_DriverArray;
+unsigned int Per_MaxButtons;
+unsigned int Per_MaxDevices;
+PerDevice_t *Per_DeviceArray;
+unsigned char *Per_DeviceDataBuffer;
+unsigned int Per_NumDevices;
+
+static int (*_Per_SeqFunction)();
+static unsigned long _Per_DataTSize;
+static Lock_801F8014 _Per_CS;
 
 int MemFill(void *p, unsigned int size, int value, int flags);
-int fn_801E15B8(void);
-int fn_801E173C(void);
+int PerIsActive(void);
+int PerReleaseDevices(void);
 
-static unsigned int fn_801E11D0(unsigned int size, unsigned int align)
+static unsigned int _PerCalcPad(unsigned int size, unsigned int align)
 {
     unsigned int pad = size % align;
 
@@ -26,24 +36,24 @@ static unsigned int fn_801E11D0(unsigned int size, unsigned int align)
     return pad;
 }
 
-static int fn_801E11E8(Driver_801E11E8 **ppDrivers)
+static int _PerCreateDriverList(PerDriver_t **ppDrivers)
 {
     int err = 0;
     unsigned int count = 0;
-    Driver_801E11E8 **ppDriver;
-    Driver_801E11E8 *pDst;
+    PerDriver_t **ppDriver;
+    PerDriver_t *pDst;
 
     if (ppDrivers) {
         for (ppDriver = ppDrivers; *ppDriver; ppDriver++) {
             count++;
         }
     }
-    lbl_803ED648 = count;
-    lbl_803ED64C = fn_801D2BB0(1, count * sizeof(Driver_801E11E8), 0, 0);
-    if (lbl_803ED64C == 0) {
+    Per_NumDrivers = count;
+    Per_DriverArray = fn_801D2BB0(1, count * sizeof(PerDriver_t), 0, 0);
+    if (Per_DriverArray == 0) {
         err = fn_801F7C88();
     } else if (ppDrivers) {
-        pDst = lbl_803ED64C;
+        pDst = Per_DriverArray;
         for (ppDriver = ppDrivers; *ppDriver; ppDriver++) {
             *pDst++ = **ppDriver;
         }
@@ -52,86 +62,84 @@ static int fn_801E11E8(Driver_801E11E8 **ppDrivers)
     return err;
 }
 
-static void fn_801E12CC(void)
+static void _PerDestroyDriverList(void)
 {
-    if (lbl_803ED64C) {
-        fn_801D2BD0(lbl_803ED64C);
+    if (Per_DriverArray) {
+        fn_801D2BD0(Per_DriverArray);
     }
 }
 
-static int fn_801E12F8(unsigned int numDevices, unsigned int numBits, unsigned int dataSize)
+static int _PerCreateDeviceArray(unsigned int numDevices, unsigned int numBits, unsigned int dataSize)
 {
     int err;
     unsigned int i;
-    Device_801E12F8 *pDevice;
+    PerDevice_t *pDevice;
     unsigned char *pData;
-    unsigned long size;
 
-    lbl_803ED650 = numBits;
-    lbl_803ED5EC = dataSize;
-    lbl_803ED654 = numDevices;
-    lbl_803ECF54 = dataSize + ((numBits + 7) >> 3) + 8;
-    lbl_803ECF54 += fn_801E11D0(lbl_803ECF54, 4);
+    Per_MaxButtons = numBits;
+    Per_MaxAxis = dataSize;
+    Per_MaxDevices = numDevices;
+    _Per_DataTSize = dataSize + ((numBits + 7) >> 3) + 8;
+    _Per_DataTSize += _PerCalcPad(_Per_DataTSize, 4);
     err = 0;
-    lbl_803ED658 = fn_801D2BB0(1, numDevices * sizeof(Device_801E12F8), 0, 0);
-    if (lbl_803ED658 == 0) {
+    Per_DeviceArray = fn_801D2BB0(1, numDevices * sizeof(PerDevice_t), 0, 0);
+    if (Per_DeviceArray == 0) {
         err = fn_801F7C88();
     } else {
-        lbl_803ED65C = fn_801D2BB0(1, numDevices * lbl_803ECF54, 0, 0);
-        if (lbl_803ED65C == 0) {
+        Per_DeviceDataBuffer = fn_801D2BB0(1, numDevices * _Per_DataTSize, 0, 0);
+        if (Per_DeviceDataBuffer == 0) {
             err = fn_801F7C88();
-            fn_801D2BD0(lbl_803ED658);
+            fn_801D2BD0(Per_DeviceArray);
         }
     }
     if (err == 0) {
-        MemFill(lbl_803ED658, numDevices * sizeof(Device_801E12F8), 0, 4);
-        MemFill(lbl_803ED65C, numDevices * lbl_803ECF54, 0, 4);
-        lbl_803ED660 = 0;
-        pDevice = lbl_803ED658;
-        pData = lbl_803ED65C;
-        size = lbl_803ECF54;
+        MemFill(Per_DeviceArray, numDevices * sizeof(PerDevice_t), 0, 4);
+        MemFill(Per_DeviceDataBuffer, numDevices * _Per_DataTSize, 0, 4);
+        Per_NumDevices = 0;
+        pDevice = Per_DeviceArray;
+        pData = Per_DeviceDataBuffer;
         for (i = 0; i < numDevices; i++) {
             pDevice->mpData = pData;
             pDevice->mIndex = i;
-            *(unsigned int *)pData = i;
+            ((PerData_t *)pData)->mIndex = i;
             pDevice->mStatus = 0;
             pDevice++;
-            pData += size;
+            pData += _Per_DataTSize;
         }
     }
     fn_801F7BD4(err);
     return err;
 }
 
-static void fn_801E1444(void)
+static void _PerDestroyDeviceArray(void)
 {
-    if (lbl_803ED658) {
-        fn_801D2BD0(lbl_803ED658);
-        fn_801D2BD0(lbl_803ED65C);
+    if (Per_DeviceArray) {
+        fn_801D2BD0(Per_DeviceArray);
+        fn_801D2BD0(Per_DeviceDataBuffer);
     }
 }
 
-int fn_801E1478(Desc_801E1478 *pDesc)
+int PerInit(PerInitParms_t *pDesc)
 {
     int err;
 
-    if (lbl_803EBD68 == 0) {
-        fn_801F7FA8(&lbl_8039ADC4);
-        fn_801F8014(&lbl_8039ADC4);
-        err = fn_801E12F8(pDesc->mNumDevices, pDesc->mUnknown04, pDesc->mUnknown08);
+    if (Per_ModuleActive == 0) {
+        fn_801F7FA8(&_Per_CS);
+        fn_801F8014(&_Per_CS);
+        err = _PerCreateDeviceArray(pDesc->mNumDevices, pDesc->mUnknown04, pDesc->mUnknown08);
         if (err == 0) {
-            err = fn_801E11E8(pDesc->mppDrivers);
+            err = _PerCreateDriverList(pDesc->mppDrivers);
             if (err == 0) {
-                lbl_803ED660 = pDesc->mNumDevices;
+                Per_NumDevices = pDesc->mNumDevices;
                 err = PerSystemInit(pDesc->mpUnknown14);
                 if (err == 0) {
-                    lbl_803ECF50 = pDesc->mpUnknown0C;
-                    lbl_803EBD68 = 1;
+                    _Per_SeqFunction = pDesc->mpUnknown0C;
+                    Per_ModuleActive = 1;
                     err = PerRegisterDevices();
                 }
             }
         }
-        fn_801F809C(&lbl_8039ADC4);
+        fn_801F809C(&_Per_CS);
     } else {
         err = 0x180001;
     }
@@ -139,19 +147,19 @@ int fn_801E1478(Desc_801E1478 *pDesc)
     return err;
 }
 
-int fn_801E153C(void)
+int PerShutdown(void)
 {
     int err = 0;
 
-    if (lbl_803EBD68) {
-        fn_801F8014(&lbl_8039ADC4);
-        fn_801E173C();
+    if (Per_ModuleActive) {
+        fn_801F8014(&_Per_CS);
+        PerReleaseDevices();
         PerSystemShutdown();
-        fn_801E1444();
-        fn_801E12CC();
-        fn_801F809C(&lbl_8039ADC4);
-        fn_801F80D0(&lbl_8039ADC4);
-        lbl_803EBD68 = 0;
+        _PerDestroyDeviceArray();
+        _PerDestroyDriverList();
+        fn_801F809C(&_Per_CS);
+        fn_801F80D0(&_Per_CS);
+        Per_ModuleActive = 0;
     } else {
         err = 0x180002;
     }
@@ -159,25 +167,25 @@ int fn_801E153C(void)
     return err;
 }
 
-int fn_801E15B8(void)
+int PerIsActive(void)
 {
-    return lbl_803EBD68 != 0;
+    return Per_ModuleActive != 0;
 }
 
-int fn_801E15D0(unsigned int index)
+int PerPollSingleDevice(unsigned int index)
 {
     int err = 0;
-    int connected;
-    Device_801E12F8 *pDevice;
+    unsigned char connected;
+    PerDevice_t *pDevice;
 
-    if (lbl_803EBD68 == 0) {
+    if (Per_ModuleActive == 0) {
         err = 0x180002;
     } else {
         connected = 0;
-        if (index < lbl_803ED660) {
-            pDevice = &lbl_803ED658[index];
+        if (index < Per_NumDevices) {
+            pDevice = &Per_DeviceArray[index];
             connected = pDevice->mStatus ? 1 : 0;
-            if (connected && !pDevice->mpDriver->mpPoll(pDevice, lbl_803ECF50)) {
+            if (connected && !pDevice->mpDriver->mpPoll(pDevice, _Per_SeqFunction)) {
                 err = 0x180004;
             }
         }
@@ -189,18 +197,18 @@ int fn_801E15D0(unsigned int index)
     return err;
 }
 
-int fn_801E1688(unsigned int index)
+int PerReleaseSingleDevice(unsigned int index)
 {
     int err = 0;
-    int connected;
-    Device_801E12F8 *pDevice;
+    unsigned char connected;
+    PerDevice_t *pDevice;
 
-    if (lbl_803EBD68 == 0) {
+    if (Per_ModuleActive == 0) {
         err = 0x180002;
     } else {
         connected = 0;
-        if (index < lbl_803ED660) {
-            pDevice = &lbl_803ED658[index];
+        if (index < Per_NumDevices) {
+            pDevice = &Per_DeviceArray[index];
             connected = pDevice->mStatus ? 1 : 0;
             if (connected && !pDevice->mpDriver->mpRelease(pDevice)) {
                 err = 0x180005;
@@ -214,17 +222,17 @@ int fn_801E1688(unsigned int index)
     return err;
 }
 
-int fn_801E173C(void)
+int PerReleaseDevices(void)
 {
     int err = 0;
     unsigned int i;
 
-    if (lbl_803EBD68 == 0) {
+    if (Per_ModuleActive == 0) {
         err = 0x180002;
     } else {
-        for (i = 0; i < lbl_803ED660; i++) {
-            if (lbl_803ED658[i].mStatus) {
-                err = fn_801E1688(i);
+        for (i = 0; i < Per_NumDevices; i++) {
+            if (Per_DeviceArray[i].mStatus) {
+                err = PerReleaseSingleDevice(i);
             }
         }
     }
@@ -232,17 +240,17 @@ int fn_801E173C(void)
     return err;
 }
 
-int fn_801E17D0(unsigned int index, void *pBuffer)
+int PerGetDeviceData(unsigned int index, void *pBuffer)
 {
     int err = 0;
     int connected;
-    Device_801E12F8 *pDevice;
+    PerDevice_t *pDevice;
 
-    if (lbl_803EBD68 == 0) {
+    if (Per_ModuleActive == 0) {
         err = 0x180002;
     } else if (pBuffer != 0) {
-        if (index < lbl_803ED660) {
-            pDevice = &lbl_803ED658[index];
+        if (index < Per_NumDevices) {
+            pDevice = &Per_DeviceArray[index];
             connected = pDevice->mStatus ? 1 : 0;
             if (connected && !pDevice->mpDriver->mpGetData(pDevice, pBuffer)) {
                 err = 0x180006;
@@ -257,17 +265,17 @@ int fn_801E17D0(unsigned int index, void *pBuffer)
     return err;
 }
 
-int fn_801E1884(unsigned int index, void *pBuffer)
+int PerSendDeviceData(unsigned int index, void *pBuffer)
 {
     int err = 0;
     int connected;
-    Device_801E12F8 *pDevice;
+    PerDevice_t *pDevice;
 
-    if (lbl_803EBD68 == 0) {
+    if (Per_ModuleActive == 0) {
         err = 0x180002;
     } else if (pBuffer != 0) {
-        if (index < lbl_803ED660) {
-            pDevice = &lbl_803ED658[index];
+        if (index < Per_NumDevices) {
+            pDevice = &Per_DeviceArray[index];
             connected = pDevice->mStatus ? 1 : 0;
             if (connected && pDevice->mpDriver->mpSendData && !pDevice->mpDriver->mpSendData(pDevice, pBuffer)) {
                 err = 0x180006;
@@ -282,37 +290,37 @@ int fn_801E1884(unsigned int index, void *pBuffer)
     return err;
 }
 
-unsigned long fn_801E1940(void)
+unsigned long PerGetDataSize(void)
 {
-    return lbl_803ECF54 - 8;
+    return _Per_DataTSize - 8;
 }
 
-unsigned long fn_801E194C(void)
+unsigned long PerSizeofPerDataT(void)
 {
-    return lbl_803ECF54;
+    return _Per_DataTSize;
 }
 
-unsigned int fn_801E1954(void)
+unsigned int PerGetNumDevices(void)
 {
-    return lbl_803ED660;
+    return Per_NumDevices;
 }
 
-int fn_801E195C(unsigned int index)
+int PerGetDeviceStatus(unsigned int index)
 {
-    if (index < lbl_803ED660 && fn_801E15B8()) {
-        return lbl_803ED658[index].mStatus;
+    if (index < Per_NumDevices && PerIsActive()) {
+        return Per_DeviceArray[index].mStatus;
     }
     return 0;
 }
 
-unsigned int fn_801E19B4(unsigned int index)
+unsigned int PerGetDeviceTypeT(unsigned int index)
 {
     int err = 0;
     unsigned int type = 0;
-    Device_801E12F8 *pDevice;
+    PerDevice_t *pDevice;
 
-    if (index < lbl_803ED660) {
-        pDevice = &lbl_803ED658[index];
+    if (index < Per_NumDevices) {
+        pDevice = &Per_DeviceArray[index];
         if (pDevice->mStatus) {
             type = pDevice->mType;
         }

@@ -1,6 +1,6 @@
 #include "game/fn_801FCE10.h"
 #include "game/StyleTracker.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_8022F478.h"
 #include "game/GameModeType.h"
 #include "game/Cheat.h"
@@ -162,7 +162,7 @@ void fn_80186EF4(void)
 {
     lbl_803ECB88[0] = -1;
     lbl_803ECB88[1] = -1;
-    fn_801C1F94(lbl_80362B7C, 0, sizeof(lbl_80362B7C));
+    memset(lbl_80362B7C, 0, sizeof(lbl_80362B7C));
 }
 void fn_80186F30(signed char index, unsigned char pad)
 {

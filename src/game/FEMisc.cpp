@@ -2,7 +2,7 @@
 // a few UI script queries about the current team and profile, such as its stats.
 #include <string.h>
 #include "game/DbCursor.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/fn_8021D7B8.h"
 #include "game/UISGameMsg.h"
 
@@ -21,9 +21,9 @@ int GauntletGetCurrentTeam(int a);
 void GauntletStatsOpen(DbCursor *pObject, int a);
 void GauntletStatsClose(DbCursor *pObject);
 int GauntletStatsGet(DbCursor *pObject, int index);
-void fn_80183368(int mode, int value);
-int fn_801835A0(void);
-int fn_80183948(void);
+void EditMenuBegin(int mode, int value);
+int EditMenuIsOpen(void);
+int EditMenuGetMode(void);
 int fn_8022F384(int a);
 int fn_8022F4BC(void);
 
@@ -31,7 +31,7 @@ int fn_8022F4BC(void);
    text posted. */
 void FEMiscSetHelpText(const char *pText)
 {
-    static Params_80005284 sText;
+    static MenuText_t sText;
 
     if (strncmp(pText, _FEMisc_szHelpText, 81)) {
         MenuArg_t args[1];
@@ -101,10 +101,10 @@ int FEMiscHandleFunction(unsigned int id, MenuArg_t *pArgs, int unused, int *pRe
     case 0x173:
         if (fn_8005F910()) {
             *pResult = 1;
-            if (!fn_801835A0()) {
-                fn_80183368(3, 0x3FF);
+            if (!EditMenuIsOpen()) {
+                EditMenuBegin(3, 0x3FF);
             }
-        } else if (fn_801835A0() && fn_80183948() == 3) {
+        } else if (EditMenuIsOpen() && EditMenuGetMode() == 3) {
             *pResult = 1;
         } else {
             *pResult = 0;

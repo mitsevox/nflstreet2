@@ -46,7 +46,7 @@ extern "C" int UISGameMsgDispatch(unsigned int id, MenuArg_t *pArgs, int unused,
     if (result != 0) {
         return result;
     }
-    result = fn_8018399C(id, pArgs, unused, (MenuArg_t *)pResult);
+    result = EditMenuHandleMessage(id, pArgs, unused, (MenuArg_t *)pResult);
     if (result != 0) {
         return result;
     }

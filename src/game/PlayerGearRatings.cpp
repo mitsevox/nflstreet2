@@ -2,7 +2,7 @@
    gear a player wears in the gear database tables, sums them, and gives
    them on their own, rescaled to 0..255, or added to the player's ratings
    and clamped to the 1..99 rating range. */
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
@@ -52,7 +52,7 @@ void PlayerGearSumBonuses(PlayerGear_t *pInfo, short *pValues)
     int i;
     int j;
 
-    fn_801C1F94(pValues, 0, 10 * sizeof(short));
+    memset(pValues, 0, 10 * sizeof(short));
     tables[0].Set(0x52414547, 0, &filter);
     tables[1].Set(0x50495247, 0, &join);
     tables[2].Set(-1);

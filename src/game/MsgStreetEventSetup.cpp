@@ -6,8 +6,8 @@
 
 #include "game/Class_80148A58.h"
 #include "game/DbCursor.h"
-#include "game/cu_80181330.h"
-#include "game/fn_801C1F94.h"
+#include "game/EditMenu.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 
 struct StreetEventPoolToggle_t {
@@ -56,8 +56,7 @@ int MsgGameGetSetupState(void);
 void StoryTeamLoadUserTeams(int a, int b);
 void fn_8018C48C(int handle);
 void CreateTeamLoadUserTeams(void);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
-char *fn_801C3084(const char *pString, int c);
+char *strchr(const char *pString, int c);
 
 extern MiniGameSettings_t lbl_8031BDD4;
 extern int lbl_802A11F4[];
@@ -245,7 +244,7 @@ void MsgStreetEventSetupApplyOptions(StreetEventSetup_t *pState)
 void MsgStreetEventSetupInit(void)
 {
     _MsgStreetEventSetup_pState = (StreetEventSetup_t *)fn_801D2B7C(sizeof(StreetEventSetup_t), 0, 0);
-    fn_801C1F94(_MsgStreetEventSetup_pState, 0, sizeof(StreetEventSetup_t));
+    memset(_MsgStreetEventSetup_pState, 0, sizeof(StreetEventSetup_t));
     CreateTeamLoadUserTeams();
     StoryTeamLoadUserTeams(0, 1);
     {
@@ -299,7 +298,7 @@ void MsgStreetEventSetupGetRow(int index, int *pEnabled, MenuArg_t text, int *pS
     if (index >= 1 && index <= 3) {
         *pEnabled = _MsgStreetEventSetup_pState->mOptions[index - 1].mUnknown5;
         if (_MsgStreetEventSetup_pState->mOptions[index - 1].mUnknown5 != 0) {
-            fn_801C2EF0(text.pParams->mpText, _MsgStreetEventSetup_pState->mOptions[index - 1].mName, text.pParams->mLength);
+            strncpy(text.pParams->mpText, _MsgStreetEventSetup_pState->mOptions[index - 1].mName, text.pParams->mLength);
         }
         selectable = _MsgStreetEventSetup_pState->mOptions[index - 1].mCount > 1;
     } else if (index >= 4 && index <= 7) {
@@ -311,7 +310,7 @@ void MsgStreetEventSetupGetRow(int index, int *pEnabled, MenuArg_t text, int *pS
                                 : index == 7 ? "Randomized"
                                              : "Unknown";
 
-            fn_801C2EF0(text.pParams->mpText, pName, text.pParams->mLength);
+            strncpy(text.pParams->mpText, pName, text.pParams->mLength);
         }
     }
     *pState = 0;
@@ -323,7 +322,7 @@ void MsgStreetEventSetupGetRow(int index, int *pEnabled, MenuArg_t text, int *pS
 int MsgStreetEventSetupChangeRow(int index, int direction, MenuArg_t text)
 {
     int changed = 0;
-    Params_80005284 *pText = text.pParams;
+    MenuText_t *pText = text.pParams;
 
     if (index >= 1 && index <= 3 ? _MsgStreetEventSetup_pState->mOptions[index - 1].mUnknown5 != 0
                                  : index >= 4 && index <= 7 && _MsgStreetEventSetup_pState->mToggles[index - 4].mUnknown5 != 0) {
@@ -359,7 +358,7 @@ int MsgStreetEventSetupChangeRow(int index, int direction, MenuArg_t text)
                 changed = 1;
                 MsgStreetEventSetupBuildOptions(_MsgStreetEventSetup_pState);
             }
-            fn_801C2EF0(pText->mpText, _MsgStreetEventSetup_pState->mOptions[index - 1].mppItems[_MsgStreetEventSetup_pState->mOptions[index - 1].mSelection],
+            strncpy(pText->mpText, _MsgStreetEventSetup_pState->mOptions[index - 1].mppItems[_MsgStreetEventSetup_pState->mOptions[index - 1].mSelection],
                         pText->mLength);
             if (fn_801486A0() == 2 && index == 1) {
                 switch (_MsgStreetEventSetup_pState->mOptions[0].mSelection) {
@@ -374,7 +373,7 @@ int MsgStreetEventSetupChangeRow(int index, int direction, MenuArg_t text)
         } else if (index >= 4 && index <= 7) {
             const char *pValue = _MsgStreetEventSetup_pState->mToggles[index - 4].mUnknown4 ? "On" : "Off";
 
-            fn_801C2EF0(pText->mpText, pValue, pText->mLength);
+            strncpy(pText->mpText, pValue, pText->mLength);
         }
     }
     return changed;
@@ -383,7 +382,7 @@ int MsgStreetEventSetupChangeRow(int index, int direction, MenuArg_t text)
 void MsgStreetEventSetupGetHelp(int index, MenuArg_t text)
 {
     if (index >= 1 && index <= 3) {
-        fn_801C2EF0(text.pParams->mpText, _MsgStreetEventSetup_pState->mOptions[index - 1].mDescription, text.pParams->mLength);
+        strncpy(text.pParams->mpText, _MsgStreetEventSetup_pState->mOptions[index - 1].mDescription, text.pParams->mLength);
     } else if (index >= 4 && index <= 7) {
         const char *pDescription = index == 4   ? "Allow/Disallow NFL Players in the Selection Pool."
                                    : index == 5 ? "Allow/Disallow NFL Legends in the Selection Pool."
@@ -391,7 +390,7 @@ void MsgStreetEventSetupGetHelp(int index, MenuArg_t text)
                                    : index == 7 ? "Allow/Disallow Randomly Generated Characters in the Selection Pool."
                                                 : "";
 
-        fn_801C2EF0(text.pParams->mpText, pDescription, text.pParams->mLength);
+        strncpy(text.pParams->mpText, pDescription, text.pParams->mLength);
     }
 }
 
@@ -399,12 +398,12 @@ void MsgStreetEventSetupSetOption(StreetEventOption_t *pOption, const char *pNam
                  unsigned char flag)
 {
     if (pName != 0) {
-        fn_801C2EF0(pOption->mName, pName, 12);
+        strncpy(pOption->mName, pName, 12);
     } else {
         pOption->mName[0] = 0;
     }
     if (pName != 0) {
-        fn_801C2EF0(pOption->mDescription, pDescription, 70);
+        strncpy(pOption->mDescription, pDescription, 70);
     } else {
         pOption->mDescription[0] = 0;
     }
@@ -430,12 +429,12 @@ void MsgStreetEventSetupSetOption(StreetEventOption_t *pOption, const char *pNam
                 pOption->mSelection = i;
                 p++;
             }
-            fn_801C2EF0(pOption->mppItems[i], p, 13);
-            pBar = fn_801C3084(pOption->mppItems[i], '|');
+            strncpy(pOption->mppItems[i], p, 13);
+            pBar = strchr(pOption->mppItems[i], '|');
             if (pBar != 0) {
                 *pBar = 0;
             }
-            p = fn_801C3084(p + 1, '|') + 1;
+            p = strchr(p + 1, '|') + 1;
         }
     } else {
         pOption->mUnknown5 = 0;

@@ -7,7 +7,7 @@
 #include "game/Query_8008352C.h"
 #include "game/SndgPathfinder.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_8021D7B8.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_800AD9B4.h"
@@ -459,7 +459,7 @@ void SndgMusicFlushSongText(void)
 void SndgMusicInit(void)
 {
     _SndgMusic_pState = (SndgMusicState_t *)fn_801D2B7C(0x130, 0, 0);
-    fn_801C1F94(_SndgMusic_pState, 0, 0x130);
+    memset(_SndgMusic_pState, 0, 0x130);
     _SndgMusic_pState->mUnknown18 = 20000;
     _SndgMusic_pState->mpUnknown20 = (void *)-1;
     _SndgMusic_pState->mUnknown24 = -1;

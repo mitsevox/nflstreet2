@@ -13,7 +13,7 @@ extern float gFrameTimeScale;
 void fn_800B26D0(Object_800B26B0 *pMotion, int a, int b, float c);
 void fn_800B2D88(Object_800B26B0 *pMotion, float scale);
 void PlyrMoveSteerByHeading(Object_80039F5C *pObject);
-void fn_8016C70C(Object_80039F5C *pObject);
+void PlyrMoveTurnLimited(Object_80039F5C *pObject);
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
@@ -34,7 +34,7 @@ static float _PlyrMoveModes_fSpeedScale = 1.35f * gFrameTimeScale;
 
 /* Indexed by the byte +15 of the record at +528 in PlyrMoveModeByType. */
 static void (*const _PlyrMoveModes_apTypeHandlers[31])(Object_80039F5C *) = {
-    PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, fn_8016C70C, fn_8016C70C,
+    PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveTurnLimited, PlyrMoveTurnLimited,
     PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading,
     PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading,
     PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading,
