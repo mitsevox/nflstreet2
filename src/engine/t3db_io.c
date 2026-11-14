@@ -3,7 +3,7 @@
 
 unsigned int lbl_802F9548[256] = { 0 };
 
-extern int fn_8020C5C8(TDbTable_t *pTable, int count);
+extern int _TDbTblRowGrow(TDbTable_t *pTable, int count);
 int fn_801FAEDC(TDbTable_t *pTable, TDbIOStream_801FA8C8 *pStream, int skip);
 int fn_801FB5C0(TDbTable_t *pTable, TDbIOStream_801FA8C8 *pStream, int mode);
 
@@ -133,7 +133,7 @@ int fn_801FAAF8(TDbTable_t *pTable, TDbIOTableHdr_801FAAF8 *pHdr, int unused, TD
         return 0x31;
     }
     if (count != 0 && (pTable->mFlags & 8) && pTable->mCapacity == 0 && pTable->mUnknown40 != 0) {
-        fn_8020C5C8(pTable, pTable->mUnknown40);
+        _TDbTblRowGrow(pTable, pTable->mUnknown40);
     }
     if (count > (unsigned short)(TDbTableFree_801FAAF8(pTable) + pTable->mUnknown46)) {
         return 0x13;

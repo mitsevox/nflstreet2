@@ -2368,6 +2368,10 @@
     "gPlayerPositionAbbrevs": {
       "address": "0x802EA294",
       "evidence": "evidence.tsv data and name rows for 0x802EA294 (26 position-name pointers in the .data of a file that is not yet a unit, used here only by the discarded GameTextShowRosterFill of src/game/GameText.cpp; storage not claimed by any unit)."
+    },
+    "_TDbTblFillColHeader": {
+      "address": "0x8020B564",
+      "evidence": "evidence.tsv function/name/source-form rows for 0x8020B564; the documented holdout at the start of src/engine/t3db_table.c keeps its original bytes until its draft in comparisons.json is linked; _TDbTblCreate calls it (bl at 0x8020BCD4)."
     }
   },
   "units": [
@@ -17453,6 +17457,19 @@
           "placement": ".data4",
           "start": "0x802FC470",
           "end": "0x802FC480"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3db_table.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler and source-form rows and the function and name rows; 0x8020B710-0x8020CCBC is linked (eleven exact functions, no data of its own); the documented holdout _TDbTblFillColHeader 0x8020B564-0x8020B710 at the start of .text keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020B710",
+          "end": "0x8020CCBC"
         }
       ]
     }

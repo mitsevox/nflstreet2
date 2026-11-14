@@ -194,7 +194,7 @@ extern int TDbExtMemAlloc(int heap, int size, void *ppOut);
 extern int fn_801F9014(int db);
 extern int fn_801F95C8(void);
 extern int fn_801FC5FC(TDbDb_801F88F0 *pDb, int a, int b);
-extern TDbTbl_801F88F0 *fn_8020BA48(TDbDb_801F88F0 *pDb, int tbl);
+extern TDbTbl_801F88F0 *_TDbTblFindTable(TDbDb_801F88F0 *pDb, int tbl);
 void fn_801F93AC(TDbAsync_801F9228 *pReq);
 extern int _TDbExprPrepare(TDbTerm_801FA4B0 *pTerm, int *pOut, TDbTbl_801F88F0 **ppTbl, int b, int c);
 extern void _TDbExprTest(int a, TDbRowInfo_801FA290 *pInfo, TDbQrySel_801F9858 *pSel, TDbQryRow_801F9858 *pRow);
@@ -214,16 +214,16 @@ extern int fn_802088FC(TDbQry_801F89B8 *pQry);
 extern int fn_8020925C(TDbDb_801F88F0 *pDb, int tbl, TDbQry_801F89B8 *pQry, int a, int b);
 extern int fn_8020A660(int a, TDbQryBuf_801F9858 *pQry, int d, int e, int f, TDbResult_801F9718 *pRes);
 extern int fn_8020B094(int a, int b, int c, int d, int e, int f, int g, TDbResult_801F9718 *pRes);
-extern int fn_8020B97C(TDbTbl_801F88F0 *pTbl, int col);
-extern int fn_8020BFA4(TDbTbl_801F88F0 *pTbl, TDbCol_801F9718 *pCols, TDbResult_801F9718 *pRes);
-extern int fn_8020C764(TDbTbl_801F88F0 *pSrc, TDbTbl_801F88F0 *pDst, TDbResult_801F9718 *pRes);
+extern int _TDbTblResolveColRef(TDbTbl_801F88F0 *pTbl, int col);
+extern int _TDbTblInsertRow(TDbTbl_801F88F0 *pTbl, TDbCol_801F9718 *pCols, TDbResult_801F9718 *pRes);
+extern int _TDbTblRowCopyTrig(TDbTbl_801F88F0 *pSrc, TDbTbl_801F88F0 *pDst, TDbResult_801F9718 *pRes);
 extern int fn_80207B8C(int a, int b, int c, TDbQryBuf_801F9858 *pQry);
 extern void fn_80207DB4(TDbQryBuf_801F9858 *pQry);
 extern int fn_80208204(int a, TDbQryBuf_801F9858 *pQry, TDbResult_801F9718 *pRes);
 extern int fn_8020A908(int a, TDbQryBuf_801F9858 *pQry, int d, TDbTbl_801F88F0 *pTbl, TDbResult_801F9718 *pRes);
 extern int fn_801FBFEC(TDbDb_801F88F0 *pDb, void *pFile, int a, int b, int c);
 extern int fn_802087D4(TDbQry_801F89B8 *pQry);
-extern int fn_8020BD90(TDbTbl_801F88F0 *pTbl);
+extern int _TDbTblDestroy(TDbTbl_801F88F0 *pTbl);
 extern void TDbExtMemFree(int heap, void *p, int size);
 extern int lbl_803EBE84;
 extern TDbDb_801F88F0 *lbl_803EBE88;
@@ -503,7 +503,7 @@ int fn_801F8EEC(int db)
         }
         while ((pTbl = pDb->pTables) != 0) {
             pNextTbl = pTbl->pNext;
-            err = fn_8020BD90(pTbl);
+            err = _TDbTblDestroy(pTbl);
             if (err != 0) {
                 break;
             }
@@ -777,9 +777,9 @@ int fn_801F967C(int db, int tbl)
     }
     pDb = FindDb_801F88F0(db);
     if (pDb != 0) {
-        pTbl = fn_8020BA48(pDb, tbl);
+        pTbl = _TDbTblFindTable(pDb, tbl);
         if (pTbl != 0) {
-            err = fn_8020BD90(pTbl);
+            err = _TDbTblDestroy(pTbl);
         } else {
             err = 7;
         }
@@ -806,12 +806,12 @@ int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, TDbResult_801F9718 *pRe
     err = fn_801F88F0(db, tbl, &pDb, &pTbl);
     if (err == 0) {
         for (pCol = pCols; pCol->mCol != -1; pCol++) {
-            pCol->mIdx = fn_8020B97C(pTbl, pCol->mCol);
+            pCol->mIdx = _TDbTblResolveColRef(pTbl, pCol->mCol);
             if (pCol->mIdx == 0xFF) {
                 return 9;
             }
         }
-        err = fn_8020BFA4(pTbl, pCols, pRes);
+        err = _TDbTblInsertRow(pTbl, pCols, pRes);
     } else {
         pRes->mErr = err;
         pRes->mRows = 0;
@@ -837,7 +837,7 @@ int fn_801F97D0(int db, int tbl, int dstDb, int dstTbl, TDbResult_801F9718 *pRes
         err = fn_801F88F0(dstDb, dstTbl, &pDstDb, &pDstTbl);
         pRes->mErr = err;
         if (err == 0) {
-            err = fn_8020C764(pTbl, pDstTbl, pRes);
+            err = _TDbTblRowCopyTrig(pTbl, pDstTbl, pRes);
         }
     }
     return err;
@@ -976,7 +976,7 @@ int fn_801F9BB4(int db, int tbl, int col, TDbColInfo_801F9AB8 *pInfo)
     err = fn_801F88F0(db, tbl, &pDb, &pTbl);
     if (err == 0) {
         if (pInfo != 0) {
-            idx = fn_8020B97C(pTbl, col);
+            idx = _TDbTblResolveColRef(pTbl, col);
             if (idx == 0xFF) {
                 err = 9;
             } else {
@@ -1004,7 +1004,7 @@ int fn_801F9C68(int db, int tbl, int col)
 
     err = fn_801F88F0(db, tbl, &pDb, &pTbl);
     if (err == 0) {
-        if (fn_8020B97C(pTbl, col) == 0xFF) {
+        if (_TDbTblResolveColRef(pTbl, col) == 0xFF) {
             err = 9;
         }
     }
@@ -1110,7 +1110,7 @@ int fn_801F9E84(int db, int tbl, int idx, TDbIdxCol_801F9E84 *pCols, struct TDbE
         }
         if (err == 0) {
             for (i = 0; pCols[i].mCol != -1; i++) {
-                pCols[i].mIdx = fn_8020B97C(pTbl, pCols[i].mCol);
+                pCols[i].mIdx = _TDbTblResolveColRef(pTbl, pCols[i].mCol);
                 if (pCols[i].mIdx == 0xFF) {
                     return 9;
                 }

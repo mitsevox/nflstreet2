@@ -67,7 +67,7 @@ int fn_80209E40(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLit)
                 return 7;
             }
         }
-        pLit->mColumn = fn_8020B97C(pStmt->mTables[j], pLit->mId);
+        pLit->mColumn = _TDbTblResolveColRef(pStmt->mTables[j], pLit->mId);
         if (pLit->mColumn == 0xFF) {
             return 9;
         }

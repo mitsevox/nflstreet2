@@ -320,7 +320,7 @@ int fn_802075F4(TDbStmt_80205754 *pStmt, unsigned int t);
 int fn_80207988(TDbStmt_80205754 *pStmt, unsigned int t);
 void fn_80207DB4(TDbStmt_80205754 *pStmt);
 int fn_80208094(TDbStmt_80205754 *pStmt);
-unsigned char fn_8020B97C(TDbTable_t *pTable, int id);
+unsigned char _TDbTblResolveColRef(TDbTable_t *pTable, int id);
 int TDbExtMemAlloc(void *pHeap, int size, void *ppMem);
 void TDbExtMemFree(void *pHeap, void *pMem, int size);
 

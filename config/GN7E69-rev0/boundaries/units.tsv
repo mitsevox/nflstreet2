@@ -90,7 +90,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x80203444	0x80203754	t3db_mem.c	5	5	5	0	5	-	-
 0x80203754	0x80205754	t3db_expr.c	78	78	78	76	2	-	-
 0x80205754	0x8020AE88	t3db_query.c	33	32	38	0	25	-	-
-0x8020B564	0x8020CD2C	t3db_table.c	13	13	13	1	12	-	t3dbUtil.c
+0x8020B564	0x8020CD2C	t3db_table.c	13	13	13	13	0	-	t3dbUtil.c
 0x8020CD2C	0x8020CEC4	t3db_blob.c	2	2	2	2	0	-	-
 0x8020CEC4	0x8020CFA0	t3db_data.c	2	2	2	2	0	-	-
 0x8020D0CC	0x8020D2D0	tdbext.c	8	8	10	8	0	-	-
