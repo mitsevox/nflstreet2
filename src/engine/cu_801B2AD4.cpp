@@ -211,8 +211,8 @@ int fn_801B7880(Sequence_801B84E4 *p, Event_801B845C *entry);
 extern unsigned int lbl_802F481C[6];
 extern Class_803EBB64 *lbl_803EBB64;
 int fn_801B2F28(int flags);
-void fn_8026D0AC(void);
-void fn_8026D0EC(void);
+void SNDSYS_entercritical(void);
+void SNDSYS_leavecritical(void);
 int fn_801B2AD4(void);
 int fn_801B2B58(void);
 void *fn_801B2C40(int size);
@@ -286,10 +286,10 @@ extern "C" int fn_801B2B58(void)
         return -14;
     fn_801B2F28(0x0F000000);
     if (fn_801B42C0(0x0F000000) == 0) {
-        fn_8026D0AC();
+        SNDSYS_entercritical();
         delete lbl_803EBB64;
         delete lbl_803EBB60;
-        fn_8026D0EC();
+        SNDSYS_leavecritical();
         lbl_803EBB60 = 0;
         lbl_803EBB68 = 0;
         lbl_803EBB64 = 0;

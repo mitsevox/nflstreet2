@@ -119,10 +119,10 @@ int fn_80219AF8(void *p, int a, int b, int c);
 int fn_8021A020(void *p);
 int fn_8021D828(void *p, unsigned short a, unsigned short b);
 void fn_8021D880(void (*pCallback)());
-void fn_8021DF9C(void *p);
-void *fn_8021EA44(int index);
-void fn_8021ED88(void *p);
-void fn_8021EF6C(void (*pCallback)());
+void UIGLibraryShutdown(void *p);
+void *UIGLibraryGetGlobal(int index);
+void UIGLibraryProcess(void *p);
+void UIGLibrarySetLoadFlagsFunc(void (*pCallback)());
 void fn_8021EFD8(void);
 void fn_80220CDC(int a);
 void fn_80220CFC(int a);
@@ -182,7 +182,7 @@ void UISGameObjDelete(void) {}
 
 void UISGameFreeTable(void)
 {
-    fn_8021DF9C(fn_8021EA44(1));
+    UIGLibraryShutdown(UIGLibraryGetGlobal(1));
 }
 
 void UISGameSetCallbacks(void *p)
@@ -212,7 +212,7 @@ int UISGameDrawObj(int a, int b)
     fn_801CE9E0(0);
     fn_801CD2A4();
     if (FELoopIsMainFEActive()) {
-        fn_8021ED88(fn_8021EA44(1));
+        UIGLibraryProcess(UIGLibraryGetGlobal(1));
     }
     saved = fn_80236EC0(0);
     if (a == _UISGame_pMainObj) {
@@ -590,7 +590,7 @@ void UISGameInit(void)
     desc.mUnknown4 = 15;
     desc.mUnknown8 = _UISGame_pszAllFile;
     UISResListSetup();
-    fn_8021EF6C(UISGameTableEvent);
+    UIGLibrarySetLoadFlagsFunc(UISGameTableEvent);
     if (!flag) {
         UISGameInitHook();
     }

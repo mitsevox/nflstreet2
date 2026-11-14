@@ -15,15 +15,15 @@ void *fn_801F73D4(void *pStream);
 void fn_801F74D4(void *pStream, void *pHeader);
 int fn_801F7644(void *pStream);
 int SndEnabled(void);
-void fn_8026CA50(void *pConfig);
-int fn_8026EE24(int a, int b);
-int fn_8026EA80(void *pStream, void *pConfig, int a, int b, void *pBuffer, int size);
-int fn_8026EF0C(int voice, int a, int b);
+void SNDplaysetdef(void *pConfig);
+int SNDSTRM_overheadtap(int a, int b);
+int SNDSTRM_createtap(void *pStream, void *pConfig, int a, int b, void *pBuffer, int size);
+int SNDSTRM_queuerequestid(int voice, int a, int b);
 void fn_8026E2A8(int voice);
-void fn_8026D0AC(void);
+void SNDSYS_entercritical(void);
 void fn_8026EF88(int handle, void *pStatus);
-void fn_8026D0EC(void);
-int fn_8026CAA8(void);
+void SNDSYS_leavecritical(void);
+int SNDPROFILE_outputlatency(void);
 RcmpDecoder *fn_801D9654(void *pMem, RcmpCodecIData_t *pIData);
 }
 
@@ -196,11 +196,11 @@ int MovieRcmpInitAudio(MovieRcmpInfo_t *pInfo, void *pStream, int volume)
     if (SndEnabled() != 0) {
         int size;
 
-        fn_8026CA50(config);
-        size = fn_8026EE24(1, 0x1E);
+        SNDplaysetdef(config);
+        size = SNDSTRM_overheadtap(1, 0x1E);
         pAudio->mpBuffer = fn_801D2B7C(size, 0, 0);
-        pAudio->mVoice = fn_8026EA80(pAudio->mpStream, config, 1, 0x1E, pAudio->mpBuffer, size);
-        handle = fn_8026EF0C(pAudio->mVoice, 0, volume);
+        pAudio->mVoice = SNDSTRM_createtap(pAudio->mpStream, config, 1, 0x1E, pAudio->mpBuffer, size);
+        handle = SNDSTRM_queuerequestid(pAudio->mVoice, 0, volume);
     } else {
         handle = -1;
     }
@@ -259,10 +259,10 @@ int MovieRcmpGetTime(MovieRcmpInfo_t *pInfo)
     if (pAudio->mSync != 0) {
         int played;
 
-        fn_8026D0AC();
+        SNDSYS_entercritical();
         fn_8026EF88(pAudio->mHandle, status);
-        fn_8026D0EC();
-        played = status[1] - fn_8026CAA8();
+        SNDSYS_leavecritical();
+        played = status[1] - SNDPROFILE_outputlatency();
         if (played > pAudio->mLastTime) {
             int delta = played - time;
 

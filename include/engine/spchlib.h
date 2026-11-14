@@ -3,7 +3,8 @@
 
 /* Declarations shared by the files of the speech (play-by-play commentary) library:
    spchevnt.c, the start-up file spchinit.c, spchpick.c, spchrand.c, the rules file
-   spchrule.c and the sample banks file spchbank.c. */
+   spchrule.c, the sample banks file spchbank.c, the database registration file spchrslv.c,
+   sputil.c and the Csis binding file spchcsis.cpp. */
 
 #include <stdarg.h>
 
@@ -114,13 +115,17 @@ struct Item_801AE3F4 {
     unsigned char mUnknown8;
     signed char mUnknown9;
     unsigned char mUnknownA;
+    signed char mUnknownB;
 };
 
 struct Bank_801AE444 {
-    unsigned char mUnknown0[8];
+    unsigned char mUnknown0[4];
+    int mUnknown4;
     unsigned char mUnknown8;
     unsigned char mUnknown9;
-    unsigned char mUnknownA[6];
+    unsigned char mUnknownA;
+    unsigned char mUnknownB;
+    unsigned char mUnknownC[4];
     unsigned short mUnknown10;
     unsigned char mUnknown12[2];
     unsigned short mUnknown14;
@@ -166,6 +171,11 @@ struct SpchCallbacks_t {
     int mUnknown10;
 };
 
+/* The three words the game's speech set-up stores through SPCH_GetExtVecs (0x801F5BC4). */
+struct SpchExtVecs_t {
+    void *mVecs[3];
+};
+
 class SpchAllocator {
 public:
     virtual void *vfn_01(int size, int align, int flags);
@@ -174,7 +184,7 @@ public:
 
 extern "C" {
 extern SpchCallbacks_t gCallbacks;
-extern Slot_8037E0B4 lbl_8037E0B4[8];
+extern Slot_8037E0B4 gEventDats[8];
 extern State_8037E0F4 lbl_8037E0F4;
 extern Pending_8037E234 lbl_8037E234[8];
 extern int gFilterSetting[8];
@@ -224,6 +234,11 @@ int fn_801AF3D8(unsigned int channel);
 void fn_801AF544(void);
 void iSPCH_InitCallbacks(void);
 int fn_801AEC58(int id, int count, ...);
+
+Item_801AE3F4 *fn_801AE6BC(SpchEventKey_t *key);
+int fn_801AEAEC(int *event);
+void iSPCH_InitCsis(Bank_801AE444 *bank);
+SpchExtVecs_t *SPCH_GetExtVecs(void);
 
 /* Defined in another file of the library. */
 int fn_801AE7B4(SpchEventKey_t *key, char **out);

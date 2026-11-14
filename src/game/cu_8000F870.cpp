@@ -227,9 +227,9 @@ unsigned int PerGetNumDevices(void);
 int PerGetDeviceStatus(int a);
 void PerCheckConnectAll(void);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-int fn_8021E2B4(void *pObject, int a, int b);
-void fn_8021E72C(void *pObject, int a, int b);
-void *fn_8021EA44(int index);
+int UIGLibraryLoadItem(void *pObject, int a, int b);
+void UIGLibraryUnLoadItem(void *pObject, int a, int b);
+void *UIGLibraryGetGlobal(int index);
 void fn_802293B4(int a, int b);
 void fn_802293FC(void);
 void fn_80229438(int tag, int a);
@@ -1794,13 +1794,13 @@ void fn_80012634(int side)
     Desc_8008044C desc;
 
     if (lbl_803EB97C[side] != -1) {
-        void *pList = fn_8021EA44(1);
+        void *pList = UIGLibraryGetGlobal(1);
         desc.mUnknown4 = 1;
         desc.mUnknown8 = lbl_803EB97C[side];
         fn_8008044C(&list, &desc, 0x54415453);
         if (DbCursorFirst((DbCursor *)&list)) {
             do {
-                fn_8021E72C(pList, 10, PlayerDbGetPortraitId(&list));
+                UIGLibraryUnLoadItem(pList, 10, PlayerDbGetPortraitId(&list));
             } while (DbCursorNext((DbCursor *)&list));
         }
         fn_8008056C(&list);
@@ -1811,14 +1811,14 @@ void fn_80012710(int side)
 {
     Object_8008044C list;
     Desc_8008044C desc;
-    void *pList = fn_8021EA44(1);
+    void *pList = UIGLibraryGetGlobal(1);
 
     desc.mUnknown4 = 1;
     desc.mUnknown8 = lbl_803EB97C[side];
     fn_8008044C(&list, &desc, 0x54415453);
     if (DbCursorFirst((DbCursor *)&list)) {
         do {
-            fn_8021E2B4(pList, 10, PlayerDbGetPortraitId(&list));
+            UIGLibraryLoadItem(pList, 10, PlayerDbGetPortraitId(&list));
         } while (DbCursorNext((DbCursor *)&list));
     }
     fn_8008056C(&list);
@@ -2761,9 +2761,9 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         fn_80011CEC(&lbl_8036ADB0[1]);
     }
 
-    void *pList = fn_8021EA44(1);
-    fn_8021E2B4(pList, 10, 1);
-    fn_8021E2B4(pList, 10, 1);
+    void *pList = UIGLibraryGetGlobal(1);
+    UIGLibraryLoadItem(pList, 10, 1);
+    UIGLibraryLoadItem(pList, 10, 1);
     DepthChartLoad(MsgGameGetSetupState() == 1);
     lbl_803EB9AC[0] = lbl_803EB9AC[1] = MsgGameGetSetupState() == 1;
     if (MsgGameGetSetupState() == 1) {
@@ -2823,9 +2823,9 @@ void fn_80014B98(void)
     lbl_803EB9D2 = 1;
     fn_80012634(0);
     fn_80012634(1);
-    void *pList = fn_8021EA44(1);
-    fn_8021E72C(pList, 10, 1);
-    fn_8021E72C(pList, 10, 1);
+    void *pList = UIGLibraryGetGlobal(1);
+    UIGLibraryUnLoadItem(pList, 10, 1);
+    UIGLibraryUnLoadItem(pList, 10, 1);
 
     if (MsgGameGetSetupState() == 1) {
         id0 = lbl_803EB97C[0];

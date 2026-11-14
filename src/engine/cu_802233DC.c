@@ -1,4 +1,4 @@
-/* Comparison fragment of src/engine/cu_80221198.c: fn_802233DC and its literal pool. */
+/* Comparison fragment of src/engine/cu_80221BF0.c (formerly part of cu_80221198.c): fn_802233DC and its literal pool. */
 #include "engine/cu_8021A438.h"
 
 Point_80222EC4 fn_802233DC(Point_80222EC4 *pPoints, int unused, int index)

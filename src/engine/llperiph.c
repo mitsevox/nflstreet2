@@ -22,8 +22,8 @@ int PerSystemInit(void *pData)
     lbl_803ED664 = fn_801D2BB0(1, PerSystemGetDriverDataSize() * 4, 0, 0);
     Per_NumDevices = 4;
     PerRegisterDevices();
-    fn_801E26FC();
-    fn_801CE234(fn_801E26FC);
+    PerJoyDriverPollPADs();
+    fn_801CE234(PerJoyDriverPollPADs);
     return 0;
 }
 

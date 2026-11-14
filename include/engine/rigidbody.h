@@ -28,10 +28,10 @@ typedef struct RigidBody_t {
 extern "C" {
 #endif
 void fn_801E987C(RigidBody_t *pBody);
-void fn_801E9C1C(RigidBody_t *pBody, Vec3_801DE1E0 *pVel);
-void fn_801E9D64(RigidBody_t *pBody, Vec3_801DE1E0 *pImpulse, Vec3_801DE1E0 *pPoint);
-void fn_801E9E18(RigidBody_t *pBody, Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pVel);
-void fn_801E9F0C(RigidBody_t *pBody, int state);
+void SetBodyAngularMomentum(RigidBody_t *pBody, Vec3_801DE1E0 *pMomentum);
+void ApplyBodyImpulseAtPoint(RigidBody_t *pBody, Vec3_801DE1E0 *pImpulse, Vec3_801DE1E0 *pPoint);
+void GetBodyPointVelocity(RigidBody_t *pBody, Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pVel);
+void SetBodyMotionState(RigidBody_t *pBody, int state);
 #ifdef __cplusplus
 }
 #endif

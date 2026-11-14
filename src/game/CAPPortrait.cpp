@@ -38,7 +38,7 @@ void fn_801A4690(int a);
 void fn_801A46BC(void);
 int ResCopyToBuffer(void *pArchive, int id, void *pDest);
 int ResGetSize(void *pArchive, int id);
-void fn_80221BE8(void (*pCallback)(int, unsigned int, PortraitImageRequest_t *));
+void LLUIGTexNodeSetCreateCallback(void (*pCallback)(int, unsigned int, PortraitImageRequest_t *));
 int fn_8022F358(int index);
 int fn_8022F3D4(int a);
 int fn_8022F4BC(void);
@@ -255,7 +255,7 @@ void PortraitSystemInit(void)
     PortraitInitHook();
     _Portrait_pSlots = (PortraitSlotTable_t *)fn_801D2B7C(sizeof(PortraitSlotTable_t), 4, 0);
     PortraitClearSlots();
-    fn_80221BE8(_PortraitDbCallback);
+    LLUIGTexNodeSetCreateCallback(_PortraitDbCallback);
 }
 
 void PortraitSystemShutdown(void)

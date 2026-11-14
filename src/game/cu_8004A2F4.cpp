@@ -1,6 +1,6 @@
 #include "engine/physconstraint.h"
 #include "engine/TibNew.h"
-#include "engine/Collection_801E7034.h"
+#include "engine/physcollection.h"
 #include "engine/animchan.h"
 #include "game/Object_8008044C.h"
 #include "game/fn_80233CBC.h"
@@ -1728,7 +1728,7 @@ struct RigidBody_t {
     Vector_80039F5C mUnknown264;
     char mUnknown276[36];
     int mKind;
-    Collection_801E7034 *mpShapes;
+    ShapeCollection *mpShapes;
     char mUnknown320[4];
     Metadata_8004ED44 *mpMetadata;
 };
@@ -1742,8 +1742,8 @@ struct Contact_8004ED44 {
 extern "C" {
 extern unsigned short lbl_803EA4FE;
 extern Cache_8004E16C *lbl_802D4974[];
-extern Shape_801E2CB4 *lbl_8030883C[];
-extern Shape_801E2CB4 *lbl_80308AD4[];
+extern CollisionShape *lbl_8030883C[];
+extern CollisionShape *lbl_80308AD4[];
 extern Vector_80039F5C *lbl_80308B0C[];
 extern RigidBody_t *lbl_80308D0C[];
 extern RigidBody_t *lbl_80308F0C[];
@@ -1751,7 +1751,7 @@ extern void *lbl_80308F44[];
 extern Metadata_8004ED44 lbl_80308F64[];
 extern void *lbl_803EA50C;
 extern void *lbl_803EA514;
-extern Shape_801E2CB4 *lbl_803EA51C;
+extern CollisionShape *lbl_803EA51C;
 extern int lbl_803EA520;
 extern int lbl_803EA524;
 extern int lbl_803EA528;
@@ -1765,7 +1765,7 @@ int DebugPrintf(const char *, ...);
 void CharRelocateSkeleton(int);
 int CharSkelGetJointByName(AnimSkeleton_t *, const char *);
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *);
-Shape_801E2CB4 *fn_801E71D0(Collection_801E7034 *, unsigned int);
+CollisionShape *fn_801E71D0(ShapeCollection *, unsigned int);
 void fn_801E9E18(RigidBody_t *, Vector_80039F5C *, Vector_80039F5C *);
 void fn_802273E8(void *, void *, int, int, int);
 void fn_802271A4(void *, void *);
@@ -1782,12 +1782,12 @@ void fn_801783D0(int, int);
 void fn_801E9CC4(RigidBody_t *);
 void fn_801E9CF0(RigidBody_t *, Vector_80039F5C *, Vector_80039F5C *);
 void *fn_801D3BD0(unsigned int, int);
-Shape_801E2CB4 *fn_801E3144(void *, Vector_80039F5C *, Vector_80039F5C *, float, float, float);
-Shape_801E2CB4 *fn_801E4088(void *, Vector_80039F5C *, float, float, float, float, float);
-Shape_801E2CB4 *fn_801E3DD8(void *, Vector_80039F5C *, float, float, float);
-Collection_801E7034 *fn_801E7034(void *, int, int);
-void fn_801E7120(Collection_801E7034 *, Shape_801E2CB4 *);
-RigidBody_t *fn_801E9538(void *, Vector_80039F5C *, Collection_801E7034 *, Metadata_8004ED44 *, float, float);
+CollisionShape *fn_801E3144(void *, Vector_80039F5C *, Vector_80039F5C *, float, float, float);
+CollisionShape *fn_801E4088(void *, Vector_80039F5C *, float, float, float, float, float);
+CollisionShape *fn_801E3DD8(void *, Vector_80039F5C *, float, float, float);
+ShapeCollection *fn_801E7034(void *, int, int);
+void fn_801E7120(ShapeCollection *, CollisionShape *);
+RigidBody_t *fn_801E9538(void *, Vector_80039F5C *, ShapeCollection *, Metadata_8004ED44 *, float, float);
 void fn_801E9C1C(RigidBody_t *, Vector_80039F5C *);
 void fn_801E9BDC(RigidBody_t *, Vector_80039F5C *);
 void fn_801E9C5C(RigidBody_t *, Vector_80039F5C *);
@@ -1908,7 +1908,7 @@ void fn_8004E4D0(RigidBody_t *pBody, unsigned int index, RigidBody_t *pOther,
                  unsigned int otherIndex, unsigned int count, Contact_8004ED44 *pContacts, float step)
 {
     Object_80039F5C *p = fn_8003E0C8(pBody->mpMetadata->mpBlock);
-    Shape_801E2CB4 *pShape = fn_801E71D0(pBody->mpShapes, index);
+    CollisionShape *pShape = fn_801E71D0(pBody->mpShapes, index);
     for (unsigned int i = 0; i < count; i++) {
         Vector_80039F5C velocity, delta, normal, point, direction;
         float distance;
@@ -2099,7 +2099,7 @@ void fn_8004F20C(void)
     }
 }
 
-void fn_8004F2D0(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
+void fn_8004F2D0(int handle, ShapeCollection *pSet, BigObjInst *pObject,
                  Vector_80039F5C *pA, Vector_80039F5C *pB, float friction, float bounce, float radius)
 {
     float y = pA->mY; pA->mY = -pA->mZ; pA->mZ = y;
@@ -2110,7 +2110,7 @@ void fn_8004F2D0(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
     index = lbl_803EA528++;
     fn_801E7120(pSet, lbl_8030883C[index]);
 }
-void fn_8004F3A4(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
+void fn_8004F3A4(int handle, ShapeCollection *pSet, BigObjInst *pObject,
                  Vector_80039F5C *pA, Vector_80039F5C *pB, float friction, float bounce)
 {
     float y = pA->mY; pA->mY = -pA->mZ; pA->mZ = y;
@@ -2125,7 +2125,7 @@ void fn_8004F3A4(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
     index = lbl_803EA528++;
     fn_801E7120(pSet, lbl_8030883C[index]);
 }
-void fn_8004F4B4(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
+void fn_8004F4B4(int handle, ShapeCollection *pSet, BigObjInst *pObject,
                  Vector_80039F5C *pPoint, float friction, float bounce, float radius)
 {
     float y = pPoint->mY; pPoint->mY = -pPoint->mZ; pPoint->mZ = y;
@@ -2202,7 +2202,7 @@ void fn_8004F754(int handle, BigObj_t *pObject, int objectIndex)
         int kind;
         if (mass <= 0.0f) kind = 2;
         else kind = 0;
-        Collection_801E7034 *pSet = fn_801E7034(fn_801D3BD0(76, 0), 20, kind);
+        ShapeCollection *pSet = fn_801E7034(fn_801D3BD0(76, 0), 20, kind);
         char names[20][32];
         char type[32];
         Vector_80039F5C a, b;
@@ -2331,7 +2331,7 @@ void fn_8004FF8C(void)
             inertia.mY = 15.1875f;
             inertia.mZ = inertia.mX;
             lbl_80308AD4[slot] = fn_801E3144(fn_801D3BD0(44, 0), &a, &b, 0.5f, 0.6f, 0.45f);
-            Collection_801E7034 *pSet = fn_801E7034(fn_801D3BD0(76, 0), 1, 1);
+            ShapeCollection *pSet = fn_801E7034(fn_801D3BD0(76, 0), 1, 1);
             fn_801E7120(pSet, lbl_80308AD4[slot]);
             Metadata_8004ED44 *pMetadata = &lbl_80308F64[lbl_803EA524];
             pMetadata->mpBlock = pBlock;
@@ -2367,7 +2367,7 @@ void fn_800502C0(void)
     inertia.mZ = 0.12f * 0.12f * 0.5f;
     Vector_80039F5C centers[2] = {{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}};
     lbl_803EA51C = fn_801E3DD8(fn_801D3BD0(32, 0), &centers[0], 0.1f, 1.0f, 0.15f);
-    Collection_801E7034 *pSet = fn_801E7034(fn_801D3BD0(76, 0), 1, 1);
+    ShapeCollection *pSet = fn_801E7034(fn_801D3BD0(76, 0), 1, 1);
     fn_801E7120(pSet, lbl_803EA51C);
     Metadata_8004ED44 *pMetadata = &lbl_80308F64[lbl_803EA524];
     pMetadata->mpBlock = 0;
@@ -2475,13 +2475,13 @@ int fn_802275D8(void *, void *, float);
 int QuatIsEqual(void *, void *, float);
 void fn_802271F0(void *, void *);
 float fn_8022785C(void *, void *);
-void fn_801E3610(Shape_801E2CB4 *, void *, void *, void *, void *);
-void fn_801E501C(Shape_801E2CB4 *, void *, void *, void *, void *);
-void fn_801E3710(Shape_801E2CB4 *, void *, void *, void *, void *, void *, void *);
+void fn_801E3610(CollisionShape *, void *, void *, void *, void *);
+void fn_801E501C(CollisionShape *, void *, void *, void *, void *);
+void fn_801E3710(CollisionShape *, void *, void *, void *, void *, void *, void *);
 void *fn_801E2C3C(void *);
 RigidBody_t *fn_801E2C64(void *, void **);
-void fn_801E7208(Collection_801E7034 *, void *, int, int, int);
-void fn_801E7298(Collection_801E7034 *, int, int, int, int);
+void fn_801E7208(ShapeCollection *, void *, int, int, int);
+void fn_801E7298(ShapeCollection *, int, int, int, int);
 void fn_80178370(void);
 void fn_80050960(Vec3_801DE1E0 *, Vec3_801DE1E0 *, int, int, int);
 int fn_800AD9B4(void);
@@ -2598,11 +2598,11 @@ void fn_80050F14(void)
     unsigned int index = 0;
     fn_801D0470(renderState);
     fn_801D0508();
-    lbl_803EBD78 = fn_80050960;
+    Collision_pDebugLineProc = fn_80050960;
     void *cursor = fn_801E2C3C(lbl_803EA514);
     RigidBody_t *pBody;
     while ((pBody = fn_801E2C64(lbl_803EA514, &cursor)) != 0) {
-        Collection_801E7034 *pShapes = pBody->mpShapes;
+        ShapeCollection *pShapes = pBody->mpShapes;
         if (!pShapes) continue;
         if ((unsigned int)pBody->mKind <= 1) {
             switch (index % 7) {
@@ -2680,7 +2680,7 @@ void fn_800518E0(Object_80039F5C *pPlayer)
             unsigned int count = pBody->mpShapes->mCount;
             for (unsigned int j = 0; j < count; j++) {
                 if (!(nearest <= 0.75f)) {
-                    Shape_801E2CB4 *pShape = fn_801E71D0(pBody->mpShapes, j);
+                    CollisionShape *pShape = fn_801E71D0(pBody->mpShapes, j);
                     Vector_80039F5C delta, normal, direction;
                     if (pShape->mUnknown8 == 2) {
                         fn_801E501C(pShape, &position, pBody->mTransform, &delta, &point);
