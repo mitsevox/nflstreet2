@@ -78,7 +78,7 @@
         "include/libc"
       ],
       "language": "c++",
-      "evidence": "evidence.tsv compiler rows 0x8027D3AC-0x8027ED6C (src/engine/pathsnd.c) and 0x8027ED6C-0x8027EFAC (src/engine/pathreal5.c): the PATH sound files keep GoldenEye: Rogue Agent's and Medal of Honor: European Assault's .c names, whose symbols for these files are C++-mangled (PATH_vectortosnd__Fv, __Q24Path9PathToSnd, TaskService__Q24Path11PathToReal5ii), and the code uses virtual tables and constructors; -O2 with the default -G 8 follows the r13 small-data accesses of both ranges. The flags are the ones the same sources compiled with as src/engine/cu_8027D3AC.cpp under engine_c."
+      "evidence": "evidence.tsv compiler rows 0x8027D3AC-0x8027ED6C (src/engine/pathsnd.c) and 0x8027ED6C-0x8027EFAC (src/engine/pathreal5.c): the PATH sound files keep GoldenEye: Rogue Agent's and Medal of Honor: European Assault's .c names, whose symbols for these files are C++-mangled (PATH_vectortosnd__Fv, __Q24Path9PathToSnd, TaskService__Q24Path11PathToReal5ii), and the code uses virtual tables and constructors; -O2 with the default -G 8 follows the r13 small-data accesses of both ranges. The flags are the ones the same sources compiled with as src/engine/cu_8027D3AC.cpp (now pathsnd.c and pathreal5.c) under engine_c."
     },
     "engine_c_fastmath": {
       "flags": [
