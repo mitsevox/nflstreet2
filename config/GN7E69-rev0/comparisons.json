@@ -21280,26 +21280,6 @@
       ]
     },
     {
-      "source": "src/game/Main.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80088F2C-0x80088FFC (src/game/Main.cpp), the function row 0x80088F2C-0x80088F78 and the source-form row. The inline-asm start function _MainInitFastCast is comparison-only (kept out of the linked build); 0x80088F78-0x80088FFC is linked source.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80088F2C",
-          "end": "0x80088FFC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_MainInitFastCast",
-          "start": "0x80088F2C",
-          "end": "0x80088F78"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_80088FFC.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80088FFC-0x80089330 (src/game/cu_80088FFC.cpp), the function row 0x80088FFC-0x80089330, the exact .rodata row 0x80295214-0x80295224 and the source-form row. Comparison-only draft fn_80088FFC; original bytes stay linked.",
