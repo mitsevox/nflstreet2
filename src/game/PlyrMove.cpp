@@ -25,9 +25,9 @@ void PlyrMoveModeEngage(Object_80039F5C *p);
 void PlyrMoveModeByType(Object_80039F5C *p);
 void PlyrMoveSteerByFacing(Object_80039F5C *p);
 void PlyrMoveSteerScaled(Object_80039F5C *p);
-void fn_8016C70C(Object_80039F5C *p);
-void fn_8016CA50(Object_80039F5C *p);
-int fn_8016CDD4(Object_80039F5C *p);
+void PlyrMoveTurnLimited(Object_80039F5C *p);
+void PlyrMoveTurnWithAnim(Object_80039F5C *p);
+int PlyrMoveInCappedState(Object_80039F5C *p);
 void PlyrMoveModeStop(Object_80039F5C *p);
 void PlyrMoveModeSpin(Object_80039F5C *p);
 int fn_80178308(void);
@@ -49,8 +49,8 @@ static float _PlyrMove_fTurnRateMin = gFrameTimeScale * 0.009f;
 static float _PlyrMove_fTurnRateSlow = gFrameTimeScale * 0.0036f;
 
 static void (*const _PlyrMove_apModeHandlers[])(Object_80039F5C *) = {
-    PlyrMoveModeStop, PlyrMoveModeByType, PlyrMoveSteerByFacing, fn_8016C70C, fn_8016CA50, PlyrMoveModeEngage,
-    PlyrMoveModeSpin, PlyrMoveModeSpin, fn_8016C70C, PlyrMoveSteerScaled, PlyrMoveModeByType,
+    PlyrMoveModeStop, PlyrMoveModeByType, PlyrMoveSteerByFacing, PlyrMoveTurnLimited, PlyrMoveTurnWithAnim, PlyrMoveModeEngage,
+    PlyrMoveModeSpin, PlyrMoveModeSpin, PlyrMoveTurnLimited, PlyrMoveSteerScaled, PlyrMoveModeByType,
 };
 
 extern "C" {
@@ -131,7 +131,7 @@ void PlyrMoveCalcSpeed(Object_80039F5C *p)
     }
     pMotion->mUnknown36 = fn_800C495C(p, pMotion->mUnknown36);
     pMotion->mUnknown52 = fn_800C4914(p, pMotion->mUnknown52);
-    if (fn_8016CDD4(p)) {
+    if (PlyrMoveInCappedState(p)) {
         float cap = gPlyrMoveFwdSpeed * pInput->mUnknown0;
 
         pMotion->mUnknown36 = pMotion->mUnknown36 <= cap ? pMotion->mUnknown36 : cap;

@@ -1,3 +1,6 @@
+/* Rate-limited player turning: two movement mode handlers that swing the player's facing toward
+   the requested heading by at most a rating-based turn rate and ease the move speed toward the
+   request, and the check that caps speed and turn rate in certain player states. */
 #include "engine/cu_801B9F00.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_800F06F4.h"
@@ -9,7 +12,23 @@ void fn_800B26D0(Object_800B26B0 *pMotion, int a, int b, float c);
 int MathAngleDiff(int a, int b);
 int BallStateGet(Ball_t *p, int *pArg);
 
-void fn_8016C70C(Object_80039F5C *p)
+/* Turn limit per call for a speed scale: from the first rating for players of kind 1, a fixed
+   rate for the others. */
+static inline int _PlyrMoveTurnScaledLimit(Object_80039F5C *p, float scale)
+{
+    int limit;
+
+    if (p->mIdBytes[3] == 1) {
+        float base = p->mRatings[0] * 0.0015686274273321033f + 0.6f;
+        float rate = scale * 512637.0f;
+        limit = (int)(base * rate);
+    } else {
+        limit = (int)(scale * 461373.3125f);
+    }
+    return limit;
+}
+
+void PlyrMoveTurnLimited(Object_80039F5C *p)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
     PlyrMoveCmd_t *pControl = &p->mUnknown528;
@@ -17,12 +36,12 @@ void fn_8016C70C(Object_80039F5C *p)
     int limit;
 
     if (pMotion->mUnknown36 != 0.0f && pMotion->mUnknown28 <= pMotion->mUnknown36) {
-        float scale = 1.0f - pMotion->mUnknown28 / pMotion->mUnknown36 * 0.5f;
-        if (p->mIdBytes[3] == 1) {
-            limit = (int)((p->mRatings[0] * 0.0015686274273321033f + 0.6f)
-                          * (scale * 512637.0f));
+        if (pMotion->mUnknown36 != 0.0f) {
+            limit = _PlyrMoveTurnScaledLimit(p, 1.0f - pMotion->mUnknown28 / pMotion->mUnknown36 * 0.5f);
+        } else if (p->mIdBytes[3] == 1) {
+            limit = (int)((p->mRatings[0] * 0.0015686274273321033f + 0.6f) * 512637.0f);
         } else {
-            limit = (int)(scale * 461373.3125f);
+            limit = 0x70A3D;
         }
     } else if (p->mIdBytes[3] == 1) {
         limit = (int)((p->mRatings[0] * 0.0015686274273321033f + 0.6f) * 512637.0f);
@@ -57,31 +76,23 @@ void fn_8016C70C(Object_80039F5C *p)
     }
     if (pControl->mUnknown0 < p->mUnknown512.mUnknown0) {
         pControl->mUnknown0 += step;
-        if (pControl->mUnknown0 > p->mUnknown512.mUnknown0) {
-            pControl->mUnknown0 = p->mUnknown512.mUnknown0;
-        }
+        pControl->mUnknown0 = pControl->mUnknown0 > p->mUnknown512.mUnknown0
+                                  ? p->mUnknown512.mUnknown0 : pControl->mUnknown0;
     } else {
         pControl->mUnknown0 -= step;
-        if (pControl->mUnknown0 < p->mUnknown512.mUnknown0) {
-            pControl->mUnknown0 = p->mUnknown512.mUnknown0;
-        }
+        pControl->mUnknown0 = p->mUnknown528.mUnknown0 < p->mUnknown512.mUnknown0
+                                  ? p->mUnknown512.mUnknown0 : p->mUnknown528.mUnknown0;
     }
 }
 
-void fn_8016CA50(Object_80039F5C *p)
+void PlyrMoveTurnWithAnim(Object_80039F5C *p)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
     PlyrMoveCmd_t *pControl = &p->mUnknown528;
     int limit;
 
     if (pMotion->mUnknown28 != 0.0f && pMotion->mUnknown28 < pMotion->mUnknown36) {
-        float scale = 1.0f - pMotion->mUnknown28 / pMotion->mUnknown36 * 0.5f;
-        if (p->mIdBytes[3] == 1) {
-            limit = (int)((p->mRatings[0] * 0.0015686274273321033f + 0.6f)
-                          * (scale * 512637.0f));
-        } else {
-            limit = (int)(scale * 461373.3125f);
-        }
+        limit = _PlyrMoveTurnScaledLimit(p, 1.0f - pMotion->mUnknown28 / pMotion->mUnknown36 * 0.5f);
     } else if (p->mIdBytes[3] == 1) {
         limit = (int)((p->mRatings[0] * 0.0015686274273321033f + 0.6f) * 512637.0f);
     } else {
@@ -122,18 +133,16 @@ void fn_8016CA50(Object_80039F5C *p)
     }
     if (pControl->mUnknown0 < p->mUnknown512.mUnknown0) {
         pControl->mUnknown0 += step;
-        if (pControl->mUnknown0 > p->mUnknown512.mUnknown0) {
-            pControl->mUnknown0 = p->mUnknown512.mUnknown0;
-        }
+        pControl->mUnknown0 = pControl->mUnknown0 > p->mUnknown512.mUnknown0
+                                  ? p->mUnknown512.mUnknown0 : pControl->mUnknown0;
     } else {
         pControl->mUnknown0 -= step;
-        if (pControl->mUnknown0 < p->mUnknown512.mUnknown0) {
-            pControl->mUnknown0 = p->mUnknown512.mUnknown0;
-        }
+        pControl->mUnknown0 = p->mUnknown528.mUnknown0 < p->mUnknown512.mUnknown0
+                                  ? p->mUnknown512.mUnknown0 : p->mUnknown528.mUnknown0;
     }
 }
 
-int fn_8016CDD4(Object_80039F5C *p)
+int PlyrMoveInCappedState(Object_80039F5C *p)
 {
     int first = fn_800F06F4(0, p->mpState, 26, 0xFFFF);
     int result = 0;
@@ -141,19 +150,25 @@ int fn_8016CDD4(Object_80039F5C *p)
     int third = fn_800F06F4(0, p->mpState, 25, 0xFFFF);
     int fourth = fn_800F06F4(0, p->mpState, 68, 0xFFFF);
 
-    if (first != 0xFFFF || second != 0xFFFF) {
-        result = 1;
-    } else if (third == 0xFFFF) {
-        if (fourth != 0xFFFF) {
-            if (p->mpState->mId != 68 || BallStateGet(BallGetCurrent(), 0) != 3) {
+    if (first == 0xFFFF) {
+        if (second == 0xFFFF) {
+            if (third == 0xFFFF) {
+                if (fourth != 0xFFFF) {
+                    if (p->mpState->mId != 68 || BallStateGet(BallGetCurrent(), 0) != 3) {
+                        result = 1;
+                    }
+                }
+            } else {
                 result = 1;
+                if (p->mpState->mId == 25 && (unsigned char)p->mUnknown336Block.mUnknown2[2] == 11) {
+                    result = 0;
+                }
             }
+        } else {
+            result = 1;
         }
     } else {
         result = 1;
-        if (p->mpState->mId == 25 && (unsigned char)p->mUnknown336Block.mUnknown2[2] == 11) {
-            result = 0;
-        }
     }
     return result;
 }

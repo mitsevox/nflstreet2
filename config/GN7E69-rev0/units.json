@@ -7536,6 +7536,25 @@
       ]
     },
     {
+      "source": "src/game/PlyrMoveTurn.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8016C70C-0x8016CEEC (src/game/PlyrMoveTurn.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016C70C",
+          "end": "0x8016CEEC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4D00",
+          "end": "0x802A4D68"
+        }
+      ]
+    },
+    {
       "source": "src/game/Possession.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8016FB10-0x8017419C (src/game/Possession.cpp), its linker row 0x802A50EC-0x802A5344 and its data, type, compiler and source-form rows.",
