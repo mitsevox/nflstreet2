@@ -281,57 +281,9 @@
       "address": "0x80260EE8",
       "evidence": "evidence.tsv GXLight external cosf: target branch at 0x8024F6B0 and related SDK source call/prototype."
     },
-    "GetItem__14MenuListScreeniP11MenuEntry_t": {
-      "address": "0x80182CC8",
-      "evidence": "evidence.tsv external row 0x80182CC8 (GetItem__14MenuListScreeniP14MenuEntry_t) and type row MenuListScreen."
-    },
-    "GetCycle__14MenuItemEditoriPiT2": {
-      "address": "0x80182A88",
-      "evidence": "evidence.tsv external row 0x80182A88 (GetCycle__14MenuItemEditoriPiT2) and type row MenuItemEditor."
-    },
-    "EndCycle__14MenuItemEditoriii": {
-      "address": "0x80182A8C",
-      "evidence": "evidence.tsv external row 0x80182A8C (EndCycle__14MenuItemEditoriii) and type row MenuItemEditor."
-    },
-    "EndSlider__14MenuItemEditoriii": {
-      "address": "0x80182AA0",
-      "evidence": "evidence.tsv external row 0x80182AA0 (EndSlider__14MenuItemEditoriii) and type row MenuItemEditor."
-    },
-    "Leave__14MenuListScreeniiPPv": {
-      "address": "0x80182B84",
-      "evidence": "evidence.tsv external row 0x80182B84 (Leave__14MenuListScreeniiPPv) and type row MenuListScreen."
-    },
-    "GetEditor__10MenuScreen": {
-      "address": "0x80184190",
-      "evidence": "evidence.tsv external row 0x80184190 (GetEditor__14MenuScreen) and type row MenuScreen."
-    },
-    "Enter__14MenuListScreeniPiT2": {
-      "address": "0x80182B40",
-      "evidence": "evidence.tsv external row 0x80182B40 (Enter__14MenuListScreeniPiT2) and type row MenuListScreen."
-    },
-    "BeginSlider__14MenuItemEditoriiiPiT4G9MenuArg_tN26": {
-      "address": "0x80182A94",
-      "evidence": "evidence.tsv external row 0x80182A94 (BeginSlider__14MenuItemEditoriiiPiT4G12MenuArg_tN26) and type row MenuItemEditor."
-    },
-    "GetCycleText__14MenuItemEditoriiG9MenuArg_t": {
-      "address": "0x80182A90",
-      "evidence": "evidence.tsv external row 0x80182A90 (GetCycleText__14MenuItemEditoriiG12MenuArg_t) and type row MenuItemEditor."
-    },
-    "MoveSlider__14MenuItemEditoriiG9MenuArg_t": {
-      "address": "0x80182A98",
-      "evidence": "evidence.tsv external row 0x80182A98 (MoveSlider__14MenuItemEditoriiG12MenuArg_t) and type row MenuItemEditor."
-    },
-    "GetItemId__14MenuListScreeniPi": {
-      "address": "0x80182C78",
-      "evidence": "evidence.tsv external row 0x80182C78 (GetItemId__14MenuListScreeniPi) and type row MenuListScreen."
-    },
     "sprintf": {
       "address": "0x801C2E18",
       "evidence": "evidence.tsv external row sprintf: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
-    },
-    "Highlight__14MenuListScreeni": {
-      "address": "0x80182BC4",
-      "evidence": "evidence.tsv external row 0x80182BC4 (Highlight__14MenuListScreeni) and type row MenuListScreen."
     },
     "VMInit": {
       "address": "0x80244F18",
@@ -616,22 +568,6 @@
     "UpdateIntroEnd__12PreGamePhasef": {
       "address": "0x800BCA00",
       "evidence": "evidence.tsv external row for 0x800BCA00 (UpdateIntroEnd__12PreGamePhasef)."
-    },
-    "GetColor__14MenuItemEditoriPi": {
-      "address": "0x80182A80",
-      "evidence": "evidence.tsv external row 0x80182A80 (GetColor__14MenuItemEditoriPi) and type row MenuItemEditor."
-    },
-    "EndColor__14MenuItemEditoriii": {
-      "address": "0x80182A84",
-      "evidence": "evidence.tsv external row 0x80182A84 (EndColor__14MenuItemEditoriii) and type row MenuItemEditor."
-    },
-    "GetText__14MenuItemEditoriPiG9MenuArg_t": {
-      "address": "0x80182AA4",
-      "evidence": "evidence.tsv external row 0x80182AA4 (GetText__14MenuItemEditoriPiG12MenuArg_t) and type row MenuItemEditor."
-    },
-    "SetText__14MenuItemEditoriG9MenuArg_t": {
-      "address": "0x80182AA8",
-      "evidence": "evidence.tsv external row 0x80182AA8 (SetText__14MenuItemEditoriG12MenuArg_t) and type row MenuItemEditor."
     },
     "__fixunssfdi": {
       "address": "0x8025E850",
@@ -15867,6 +15803,67 @@
           "end": "0x80362A20"
         }
       ]
+    },
+    {
+      "source": "src/game/EditMenu.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80181330-0x8018422C (src/game/EditMenu.cpp), its data rows and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80181330",
+          "end": "0x8018422C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A6AC0",
+          "end": "0x802A6C10"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EA988",
+          "end": "0x802EAA40"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB548",
+          "end": "0x803EB590"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80362A20",
+          "end": "0x80362B7C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB54",
+          "end": "0x803ECB80"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AF8",
+          "end": "0x80289AFC"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C24",
+          "end": "0x80289C28"
+        }
+      ],
+      "kept_locals": {
+        "symbols": {
+          "GetEditor__10MenuScreen": "0x80184190"
+        },
+        "evidence": "evidence.tsv source-form row EditMenu GetEditor kept copy: the deferred inline MenuScreen::GetEditor is local to this file under -fno-weak; the target has one copy, 0x80184190 in this file's .text, and the vtable entries of the other menu files resolve to it."
+      }
     },
     {
       "source": "src/engine/sf_scalbn.c",

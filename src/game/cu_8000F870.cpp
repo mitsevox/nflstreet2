@@ -8,7 +8,7 @@
 #include "game/Request_802329F0.h"
 #include "game/DepthChart.h"
 #include "game/AutoDepth.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/DepthChartSide.h"
 #include "game/SndgMusic.h"
 #include "game/GameOptions.h"
@@ -192,10 +192,10 @@ int fn_80178320(void);
 int MsgGameGetSetupState(void);
 void MsgGameIgnoreValue(int a);
 void MsgGameSetSetupState(int a);
-void fn_80183368(int mode, int value);
-void fn_801834DC(void);
-int fn_801835A0(void);
-void fn_80183934(void);
+void EditMenuBegin(int mode, int value);
+void EditMenuEnd(void);
+int EditMenuIsOpen(void);
+void EditMenuCancelRequest(void);
 int UserRecGetCount(void);
 int UserRecGetName(int index, char *pText);
 signed char fn_80186B38(int a);
@@ -388,10 +388,10 @@ void fn_8000FA0C(void)
     CheatFlagsClear();
     if (!lbl_803EB951) {
         lbl_803EB951 = 1;
-        if (fn_801835A0()) {
-            fn_801834DC();
+        if (EditMenuIsOpen()) {
+            EditMenuEnd();
         }
-        fn_80183934();
+        EditMenuCancelRequest();
         if (!FELoopWasVisited()) {
             FELoopSetVisited(1);
         }
@@ -562,7 +562,7 @@ int fn_8000FE60(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
     switch (id) {
     case 0x80000001:
         if (lbl_803EB950) {
-            fn_801834DC();
+            EditMenuEnd();
             FELoopResetIdle();
             lbl_803EB950 = 0;
         }
@@ -589,18 +589,18 @@ int fn_8000FE60(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
         switch (pArgs[0].i) {
         case 900:
             lbl_803EB950 = 1;
-            fn_80183368(2, 0x3FF);
+            EditMenuBegin(2, 0x3FF);
             break;
         case 750:
             lbl_803EB950 = 1;
             break;
         case 751:
             lbl_803EB950 = 1;
-            fn_80183368(4, 0x3FF);
+            EditMenuBegin(4, 0x3FF);
             break;
         case 752:
             lbl_803EB950 = 1;
-            fn_80183368(1, 0x3FF);
+            EditMenuBegin(1, 0x3FF);
             break;
         }
         *pResult = 1;
@@ -1138,7 +1138,7 @@ const char *lbl_802F41BC[] = { "None", "Load", "Create" };
 
 void fn_80010E68(int index, int dir, MenuArg_t arg)
 {
-    Params_80005284 *pParams = arg.pParams;
+    MenuText_t *pParams = arg.pParams;
 
     fn_800102D8();
     switch (lbl_803ECE44[index]) {
@@ -2368,8 +2368,8 @@ int fn_80013CCC(int *pCount, int *pA, int *pB, int *pC)
         fn_80229554();
     }
     *pB = 0;
-    if (fn_801835A0()) {
-        fn_801834DC();
+    if (EditMenuIsOpen()) {
+        EditMenuEnd();
     }
     TeamQuery query;
     query.mUnknown0 = 1;
@@ -2388,7 +2388,7 @@ void fn_80013D74(void)
         fn_80083F68(pQuery);
     }
     if (MsgGameGetSetupState() == 1) {
-        fn_80183368(5, lbl_803EB9D4[1]);
+        EditMenuBegin(5, lbl_803EB9D4[1]);
     } else {
         lbl_803EB9D4[1] = 0x3FF;
     }
@@ -3397,8 +3397,8 @@ void fn_800162B4(void)
     lbl_803EB9E7 = -1;
 }
 
-void fn_800162E8(int control, Params_80005284 *pName, int *pUnknown34, int *pUnknown38,
-                 Params_80005284 *pStreak, int *pValues, int *pClear)
+void fn_800162E8(int control, MenuText_t *pName, int *pUnknown34, int *pUnknown38,
+                 MenuText_t *pStreak, int *pValues, int *pClear)
 {
     if (fn_80015F90(control) != lbl_803EB9E7) {
         fn_80016038();
@@ -3492,7 +3492,7 @@ void fn_800165EC(void)
     CreditsClose();
 }
 
-void fn_8001660C(int *pCount, int *pValue, Params_80005284 *pRecord)
+void fn_8001660C(int *pCount, int *pValue, MenuText_t *pRecord)
 {
     int ok = 1;
     if (lbl_803EB9EC < 0) {

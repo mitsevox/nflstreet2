@@ -5,7 +5,7 @@
 
 #include "game/OptionsScreenMsg.h"
 #include "game/DbTableCursorInline.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/MsgCheatCodes.h"
 
 extern "C" {

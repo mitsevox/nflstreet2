@@ -3,7 +3,7 @@
    database and remembers the chosen event for the game. */
 
 #include "game/FELoop.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/fn_801FCE10.h"
 
 extern "C" {

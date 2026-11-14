@@ -2,7 +2,7 @@
    to the event list (MsgStreetEventSelect.cpp) or the event setup screen
    (MsgStreetEventSetup.cpp). */
 
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 
 extern "C" {
 int MsgStreetEventSelectHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);

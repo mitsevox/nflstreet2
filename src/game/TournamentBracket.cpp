@@ -3,14 +3,14 @@
    and answers the bracket screen's queries. */
 
 #include "game/DbCursor.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include <string.h>
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802372EC.h"
 
 struct BracketNameArg_t {
-    Params_80005284 *mUnknown0;
+    MenuText_t *mUnknown0;
 };
 
 struct BracketGame_t {
@@ -19,15 +19,15 @@ struct BracketGame_t {
 };
 
 extern "C" {
-int fn_80183360(void);
+int EditMenuGetTeam(void);
 void ChalGetTournamentScore(int, short *, short *);
 float fn_80237260(int stream);
 void ChalSetTournamentScore(int, int, int);
 void ChalSaveTournamentTeams(int *, int);
 void ChalLoadTournamentTeams(int *, int);
-void fn_801834DC();
-void fn_80183368(int, int);
-DbCursor *fn_80182DBC(void);
+void EditMenuEnd();
+void EditMenuBegin(int, int);
+DbCursor *EditMenuGetTeamCursor(void);
 int fn_800841AC(DbCursor *pObject);
 int fn_800841D8(DbCursor *pObject);
 int fn_80084204(DbCursor *pObject);
@@ -68,7 +68,7 @@ extern "C" int TournBracketGetTeam(int index)
 {
     int result;
     if (index == _TournBracket_iUserSeed) {
-        result = fn_80183360();
+        result = EditMenuGetTeam();
     } else {
         result = _TournBracket_aiSeedTeams[index];
     }
@@ -233,14 +233,14 @@ extern "C" void TournBracketLoadSeeds()
 extern "C" void TournBracketEnter(int *pIndex)
 {
     int i;
-    fn_801834DC();
-    fn_80183368(1, 1023);
-    if (fn_80084438(fn_80182DBC()) == 0) {
+    EditMenuEnd();
+    EditMenuBegin(1, 1023);
+    if (fn_80084438(EditMenuGetTeamCursor()) == 0) {
         char values[3];
-        values[0] = fn_800841AC(fn_80182DBC());
-        values[1] = fn_800841D8(fn_80182DBC());
-        values[2] = fn_80084204(fn_80182DBC());
-        TeamLogoRequestTint(0, 4, fn_80084158(fn_80182DBC()), 172, values);
+        values[0] = fn_800841AC(EditMenuGetTeamCursor());
+        values[1] = fn_800841D8(EditMenuGetTeamCursor());
+        values[2] = fn_80084204(EditMenuGetTeamCursor());
+        TeamLogoRequestTint(0, 4, fn_80084158(EditMenuGetTeamCursor()), 172, values);
     }
     _TournBracket_iUserSeed = ChalGetTournamentSlot();
     if (_TournBracket_iUserSeed == -1) {
@@ -277,7 +277,7 @@ extern "C" void TournBracketPlayNext(int value)
     }
     TournBracketDestroy();
     ChalCloseCursors();
-    fn_801834DC();
+    EditMenuEnd();
     if (active) {
         fn_8000FCD4(value);
         ChalGameStartTournament(team, 11);

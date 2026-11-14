@@ -12,7 +12,7 @@
 #include "game/DepthChart.h"
 #include "game/AutoDepth.h"
 #include "game/GameInfo.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/DepthChartSide.h"
 #include "game/fn_80061AD4.h"
 #include "game/fn_80178D18.h"
@@ -1478,7 +1478,7 @@ void MsgTeamPickGetPlayerInfo(int row, int *pId, int *pTeam, int *pValues, char 
 
 void MsgTeamPickStepGroup(int message, MenuArg_t text, int *pCount)
 {
-    Params_80005284 *pParams = text.pParams;
+    MenuText_t *pParams = text.pParams;
 
     switch (message) {
     case -1:
@@ -1565,8 +1565,8 @@ void MsgTeamPickGetCaptain(int slot, int *pId, int *pController)
 void MsgTeamPickGetRosterEntry(int slot, int *pId, MenuArg_t name, MenuArg_t position)
 {
     unsigned char team = _MsgTeamPick_pState->mUnknown1A;
-    Params_80005284 *pName = name.pParams;
-    Params_80005284 *pPosition = position.pParams;
+    MenuText_t *pName = name.pParams;
+    MenuText_t *pPosition = position.pParams;
 
     if (fn_801486A0() == 2) {
         if (slot < _MsgTeamPick_pState->mUnknown0C[team]) {
@@ -1685,7 +1685,7 @@ void MsgTeamPickStepShownTeam(int dir, int *pResult, char *pText, int length)
 
 void MsgTeamPickGetListName(int index, MenuArg_t text)
 {
-    Params_80005284 *pParams = text.pParams;
+    MenuText_t *pParams = text.pParams;
     int pick = MsgTeamPickFindListRow(_MsgTeamPick_pState->mUnknown17, index);
     int row = MsgTeamPickGroupToPoolIndex(_MsgTeamPick_pState->mUnknown17, pick);
 
@@ -1829,9 +1829,9 @@ int MsgTeamPickAutoSelect(int *pGroupDelta, int *pResult)
 
 void MsgTeamPickStepGroupTabs(int dir, int *pResult, MenuArg_t prevText, MenuArg_t groupText, MenuArg_t nextText)
 {
-    Params_80005284 *pPrev = prevText.pParams;
-    Params_80005284 *pGroup = groupText.pParams;
-    Params_80005284 *pNext = nextText.pParams;
+    MenuText_t *pPrev = prevText.pParams;
+    MenuText_t *pGroup = groupText.pParams;
+    MenuText_t *pNext = nextText.pParams;
     unsigned short prev;
     unsigned short next;
 

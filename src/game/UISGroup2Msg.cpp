@@ -1,5 +1,5 @@
 /* UIStudio message routing for screen group 2 (the replay menu and the debug window), and the roster-slot position abbreviation formatter. */
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 
 struct ReplayScreenArgs_t;
 struct DebugWindowMsg_t;

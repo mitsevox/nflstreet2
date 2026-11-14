@@ -13,7 +13,7 @@
 #include "game/Object_8008044C.h"
 #include "game/PlayerLook.h"
 #include "game/FEPlyrLoad.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/fn_801C1F94.h"
 #include <string.h>
 #include "game/fn_801FCE10.h"
@@ -111,30 +111,30 @@ void fn_8015F638(int a, int b, int c, int *pResult);
 int PlaTexCacheGetCapFaceId(int a);
 void PlaTexCacheGetHairTexture(int a, int *pId, int *pPalette);
 void FEMiscSetHelpText(const char *pText);
-DbCursor *fn_80182DBC(void);
-Object_8008044C *fn_80182DC8(void);
-void fn_80182DD4(const char *pText);
-void fn_80182E04(const char *pText);
-void fn_80182E34(char *pText);
-void fn_80182E64(int a);
-void fn_80182E70(int a);
-void fn_80182E7C(int a);
-void fn_80182ED0(void);
-void fn_80182EFC(void);
-void fn_80182F60(int index, int delta);
-void fn_80182FD4(int a, unsigned char value);
-void fn_8018300C(void);
-void fn_801831F0(unsigned char a);
-int fn_80183220(void);
-int fn_80183228(void);
-int fn_80183230(void);
-int fn_80183238(int index);
-void fn_801832B0(char *pText, int size);
-void fn_801835C0(int a);
-void fn_801835C8(void);
-void fn_80183704(void);
-int fn_80183948(void);
-int fn_80183950(void);
+DbCursor *EditMenuGetTeamCursor(void);
+Object_8008044C *EditMenuGetPlayerCursor(void);
+void EditMenuSetHeading(const char *pText);
+void EditMenuSetItemName(const char *pText);
+void EditMenuSetName(char *pText);
+void EditMenuSetPosition(int a);
+void EditMenuSetHeight(int a);
+void EditMenuSetWeight(int a);
+void EditMenuLoadRatings(void);
+void EditMenuClearRatings(void);
+void EditMenuSetRating(int index, int delta);
+void EditMenuSetRatingFlag(int a, unsigned char value);
+void EditMenuClearRatingFlags(void);
+void EditMenuSetAttributeMode(unsigned char a);
+int EditMenuGetSliderValue(void);
+int EditMenuGetSliderStart(void);
+int EditMenuGetSliderMin(void);
+int EditMenuGetSlotRating(int index);
+void EditMenuGetPlayerName(char *pText, int size);
+void EditMenuSetView(int a);
+void EditMenuShowPlayers(void);
+void EditMenuHidePlayers(void);
+int EditMenuGetMode(void);
+int EditMenuIsStoryTeam(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_8022EF8C(int a, int tag);
 int fn_8022EFBC(int a, int tag);
@@ -284,19 +284,19 @@ static int _CreatePlayer_aPositionCodes[7] = { 0, 1, 2, 4, 7, 9, 11 };
 /* Value stored to _CreatePlayer_iSkillGroup for each result of PlayerDbGetPbpo. */
 static int _CreatePlayer_aSkillGroups[] = { 0, 1, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6, 6, 6 };
 
-/* Enabled byte of each top-level entry: _CreatePlayer_aStoryEnabled while fn_80183950 is
+/* Enabled byte of each top-level entry: _CreatePlayer_aStoryEnabled while EditMenuIsStoryTeam is
    nonzero and the player id is nonzero, _CreatePlayer_aExistingEnabled while it is zero and a
    player is selected. */
 static const unsigned char _CreatePlayer_aExistingEnabled[] = { 0, 0, 0, 1 };
 static const unsigned char _CreatePlayer_aStoryEnabled[] = { 0, 0, 0, 1 };
 
-static const Layout_802EA9E0 _CreatePlayer_aAppearanceLayouts[] = {
+static const PlayerLayout_t _CreatePlayer_aAppearanceLayouts[] = {
     { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 1 },
     { 23.0f, 975.0f, 0.0f, 338.0f, 3.1f, 15, 0 },
     { 23.0f, 975.0f, 0.0f, 338.0f, 3.1f, 15, 0 },
 };
 
-static const Layout_802EA9E0 _CreatePlayer_aSkinLayouts[] = {
+static const PlayerLayout_t _CreatePlayer_aSkinLayouts[] = {
     { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 1 },
     { 0.0f, 300.0f, 0.0f, 180.0f, 1.1f, 15, 0 },
     { 0.0f, 205.0f, 0.0f, 300.0f, 0.8f, 15, 0 },
@@ -533,7 +533,7 @@ static int _CreatePlayer_iBodyType;
 
 static int _CreatePlayerHasContinue()
 {
-    int mode = fn_80183948();
+    int mode = EditMenuGetMode();
 
     return mode == 0 || mode == 3;
 }
@@ -821,14 +821,14 @@ static void _CreatePlayerSetTattoo(PlayerGear_t *pInfo, int part, unsigned char 
 void CreatePlayerAttributeMenu::Enter(int a, int *pCount, int *pValue)
 {
     MenuListScreen::Enter(a, pCount, pValue);
-    fn_801831F0(1);
+    EditMenuSetAttributeMode(1);
 }
 
 int CreatePlayerAttributeMenu::Leave(int a, int b, void **ppResult)
 {
     int result = MenuListScreen::Leave(a, b, ppResult);
 
-    fn_801831F0(0);
+    EditMenuSetAttributeMode(0);
     FEMiscSetHelpText("");
     return result;
 }
@@ -874,11 +874,11 @@ void CreatePlayerList::Enter(int a, int *pCount, int *pValue)
     if (a == 1) {
         _CreatePlayerOpen();
     }
-    fn_80083F88(fn_80182DBC(), buffer, 18);
-    fn_80182E34(buffer);
-    fn_80182DD4("");
-    fn_80182E04("");
-    *pCount = DbCursorGetRowCount((DbCursor *)fn_80182DC8());
+    fn_80083F88(EditMenuGetTeamCursor(), buffer, 18);
+    EditMenuSetName(buffer);
+    EditMenuSetHeading("");
+    EditMenuSetItemName("");
+    *pCount = DbCursorGetRowCount((DbCursor *)EditMenuGetPlayerCursor());
     if (_CreatePlayerHasContinue()) {
         (*pCount)++;
     }
@@ -887,12 +887,12 @@ void CreatePlayerList::Enter(int a, int *pCount, int *pValue)
         index--;
     }
     if (index >= 0) {
-        DbCursorSeek((DbCursor *)fn_80182DC8(), index);
-        int id = PlayerDbGetId(fn_80182DC8());
+        DbCursorSeek((DbCursor *)EditMenuGetPlayerCursor(), index);
+        int id = PlayerDbGetId(EditMenuGetPlayerCursor());
 
         if (_CreatePlayer_iPlayerId != id || a == 1) {
             if (_CreatePlayer_iPlayerId != 0x7FFF) {
-                PlayerDbSeekId(fn_80182DC8(), _CreatePlayer_iPlayerId, pValue);
+                PlayerDbSeekId(EditMenuGetPlayerCursor(), _CreatePlayer_iPlayerId, pValue);
             } else {
                 _CreatePlayer_iPlayerId = id;
             }
@@ -914,9 +914,9 @@ int CreatePlayerList::Leave(int a, int b, void **ppResult)
         char buffer[27];
 
         *ppResult = _CreatePlayerGetPlayerMenu();
-        PlayerDbSeekId(fn_80182DC8(), a, 0);
-        fn_801832B0(buffer, 27);
-        fn_80182E34(buffer);
+        PlayerDbSeekId(EditMenuGetPlayerCursor(), a, 0);
+        EditMenuGetPlayerName(buffer, 27);
+        EditMenuSetName(buffer);
     }
     return result;
 }
@@ -927,30 +927,30 @@ void CreatePlayerList::Highlight(int index)
         char buffer[27];
         int position;
 
-        PlayerDbSeekId(fn_80182DC8(), index, 0);
+        PlayerDbSeekId(EditMenuGetPlayerCursor(), index, 0);
         FEPlyrSetPlayer(FEPlyrGetFrontIndex(), index, 0);
         _CreatePlayer_iPlayerId = index;
-        position = PlayerDbGetPbpo(fn_80182DC8());
+        position = PlayerDbGetPbpo(EditMenuGetPlayerCursor());
         _CreatePlayer_iSkillGroup = _CreatePlayer_aSkillGroups[position];
-        fn_80182E64(position);
-        fn_80182E70(PlayerDbGetHeight(fn_80182DC8()));
-        fn_80182E7C(PlayerDbGetWeight(fn_80182DC8()));
-        fn_801832B0(buffer, 27);
-        fn_80182DD4(buffer);
-        fn_80182ED0();
-        fn_80082138(fn_80182DC8(), &_CreatePlayer_sFace);
+        EditMenuSetPosition(position);
+        EditMenuSetHeight(PlayerDbGetHeight(EditMenuGetPlayerCursor()));
+        EditMenuSetWeight(PlayerDbGetWeight(EditMenuGetPlayerCursor()));
+        EditMenuGetPlayerName(buffer, 27);
+        EditMenuSetHeading(buffer);
+        EditMenuLoadRatings();
+        fn_80082138(EditMenuGetPlayerCursor(), &_CreatePlayer_sFace);
     } else {
         _CreatePlayer_iPlayerId = index;
         if (_CreatePlayerHasContinue()) {
-            fn_80182DD4("Continue");
+            EditMenuSetHeading("Continue");
         }
-        fn_80182EFC();
-        fn_80182E64(0xFF);
-        fn_80182E70(-1);
-        fn_80182E7C(-1);
+        EditMenuClearRatings();
+        EditMenuSetPosition(0xFF);
+        EditMenuSetHeight(-1);
+        EditMenuSetWeight(-1);
         FEPlyrLoadInvalidate(FEPlyrGetFrontIndex());
     }
-    fn_80183740(0);
+    EditMenuMovePlayers(0);
 }
 
 void CreatePlayerList::GetItemId(int index, int *pId)
@@ -959,8 +959,8 @@ void CreatePlayerList::GetItemId(int index, int *pId)
         index--;
     }
     if (index >= 0) {
-        DbCursorSeek((DbCursor *)fn_80182DC8(), index);
-        *pId = PlayerDbGetId(fn_80182DC8());
+        DbCursorSeek((DbCursor *)EditMenuGetPlayerCursor(), index);
+        *pId = PlayerDbGetId(EditMenuGetPlayerCursor());
     } else {
         *pId = 0x7FFF;
     }
@@ -974,20 +974,20 @@ void CreatePlayerList::GetItem(int index, MenuEntry_t *pEntry)
     if (index != 0x7FFF) {
         int value;
 
-        PlayerDbSeekId(fn_80182DC8(), index, 0);
-        if (fn_80183950() && index == 0) {
+        PlayerDbSeekId(EditMenuGetPlayerCursor(), index, 0);
+        if (EditMenuIsStoryTeam() && index == 0) {
             pEntry->mUnknown41 = 1;
         }
-        value = PlayerDbGetPortraitId(fn_80182DC8());
-        pEntry->mUnknown36 = DbCursorGetRow((DbCursor *)fn_80182DC8());
+        value = PlayerDbGetPortraitId(EditMenuGetPlayerCursor());
+        pEntry->mUnknown36 = DbCursorGetRow((DbCursor *)EditMenuGetPlayerCursor());
         if (_CreatePlayerHasContinue()) {
             pEntry->mUnknown36++;
         }
         pEntry->mId = index;
-        pEntry->mUnknown30 = PlayerDbHasPlil(fn_80182DC8()) == 0;
+        pEntry->mUnknown30 = PlayerDbHasPlil(EditMenuGetPlayerCursor()) == 0;
         pEntry->mUnknown4 = 0;
         pEntry->mUnknown32 = value | 0xA0000;
-        fn_801832B0(buffer, 27);
+        EditMenuGetPlayerName(buffer, 27);
         strnzcpy(pEntry->mName, buffer, 22);
     } else {
         pEntry->mId = index;
@@ -1005,7 +1005,7 @@ void CreatePlayerList::GetItem(int index, MenuEntry_t *pEntry)
 void CreatePlayerMenu::Enter(int a, int *pCount, int *pValue)
 {
     MenuListScreen::Enter(a, pCount, pValue);
-    if (PlayerDbGetOriginalId(fn_80182DC8()) != 0x7FFF) {
+    if (PlayerDbGetOriginalId(EditMenuGetPlayerCursor()) != 0x7FFF) {
         *pValue = 3;
     }
     FEPlyrSetPlayer(FEPlyrGetBackIndex(), _CreatePlayer_iPlayerId, 1);
@@ -1049,18 +1049,18 @@ int CreatePlayerMenu::Leave(int a, int b, void **ppResult)
 
 void CreatePlayerMenu::Highlight(int id)
 {
-    fn_80182DD4(_CreatePlayer_aMenuEntries[id].mName);
+    EditMenuSetHeading(_CreatePlayer_aMenuEntries[id].mName);
 }
 
 void CreatePlayerMenu::GetItem(int index, MenuEntry_t *pEntry)
 {
     MenuListScreen::GetItem(index, pEntry);
-    if (fn_80183950()) {
-        if (PlayerDbGetId(fn_80182DC8()) != 0) {
+    if (EditMenuIsStoryTeam()) {
+        if (PlayerDbGetId(EditMenuGetPlayerCursor()) != 0) {
             pEntry->mUnknown30 = _CreatePlayer_aStoryEnabled[index];
             return;
         }
-    } else if (PlayerDbGetOriginalId(fn_80182DC8()) != 0x7FFF) {
+    } else if (PlayerDbGetOriginalId(EditMenuGetPlayerCursor()) != 0x7FFF) {
         pEntry->mUnknown30 = _CreatePlayer_aExistingEnabled[index];
         return;
     }
@@ -1142,7 +1142,7 @@ int CreatePlayerFaceMenu::Leave(int a, int b, void **ppResult)
 void CreatePlayerSkinMenu::Enter(int a, int *pCount, int *pValue)
 {
     MenuListScreen::Enter(a, pCount, pValue);
-    fn_80183740(0);
+    EditMenuMovePlayers(0);
 }
 
 int CreatePlayerSkinMenu::Leave(int a, int b, void **ppResult)
@@ -1162,16 +1162,16 @@ int CreatePlayerSkinMenu::Leave(int a, int b, void **ppResult)
         }
         switch (a) {
         case 0:
-            fn_80183740(&_CreatePlayer_aSkinLayouts[0]);
+            EditMenuMovePlayers(&_CreatePlayer_aSkinLayouts[0]);
             break;
         case 1:
-            fn_80183740(&_CreatePlayer_aSkinLayouts[1]);
+            EditMenuMovePlayers(&_CreatePlayer_aSkinLayouts[1]);
             break;
         case 2:
-            fn_80183740(&_CreatePlayer_aSkinLayouts[2]);
+            EditMenuMovePlayers(&_CreatePlayer_aSkinLayouts[2]);
             break;
         case 3:
-            fn_80183740(&_CreatePlayer_aSkinLayouts[3]);
+            EditMenuMovePlayers(&_CreatePlayer_aSkinLayouts[3]);
             break;
         }
     }
@@ -1181,7 +1181,7 @@ int CreatePlayerSkinMenu::Leave(int a, int b, void **ppResult)
 void CreatePlayerAppearanceMenu::Enter(int a, int *pCount, int *pValue)
 {
     MenuListScreen::Enter(a, pCount, pValue);
-    fn_80183740(0);
+    EditMenuMovePlayers(0);
 }
 
 int CreatePlayerAppearanceMenu::Leave(int a, int b, void **ppResult)
@@ -1192,12 +1192,12 @@ int CreatePlayerAppearanceMenu::Leave(int a, int b, void **ppResult)
         switch (a) {
         case 0:
             result = 1;
-            fn_80183740(&_CreatePlayer_aAppearanceLayouts[1]);
+            EditMenuMovePlayers(&_CreatePlayer_aAppearanceLayouts[1]);
             *ppResult = _CreatePlayerGetHairMenu();
             break;
         case 1:
             result = 1;
-            fn_80183740(&_CreatePlayer_aAppearanceLayouts[2]);
+            EditMenuMovePlayers(&_CreatePlayer_aAppearanceLayouts[2]);
             *ppResult = _CreatePlayerGetFaceMenu();
             break;
         case 2:
@@ -1220,19 +1220,19 @@ void CreatePlayerInfoOptionList::Enter(int a, int *pCount, int *pOut)
 {
     switch (mUnknown8) {
     case 2:
-        *pOut = _CreatePlayerPositionIndex(PlayerDbGetPbpo(fn_80182DC8()));
+        *pOut = _CreatePlayerPositionIndex(PlayerDbGetPbpo(EditMenuGetPlayerCursor()));
         *pCount = 7;
         break;
     case 5:
-        *pOut = _CreatePlayerFindValue(PlayerDbGetPpsn(fn_80182DC8()), _CreatePlayer_aCelebrationStyles, 3);
+        *pOut = _CreatePlayerFindValue(PlayerDbGetPpsn(EditMenuGetPlayerCursor()), _CreatePlayer_aCelebrationStyles, 3);
         *pCount = 3;
         break;
     case 3:
-        *pOut = PlayerDbGetPjen(fn_80182DC8());
+        *pOut = PlayerDbGetPjen(EditMenuGetPlayerCursor());
         *pCount = 100;
         break;
     case 4:
-        *pOut = PlayerDbGetPhan(fn_80182DC8());
+        *pOut = PlayerDbGetPhan(EditMenuGetPlayerCursor());
         *pCount = 2;
         break;
     }
@@ -1240,26 +1240,26 @@ void CreatePlayerInfoOptionList::Enter(int a, int *pCount, int *pOut)
 
 int CreatePlayerInfoOptionList::Leave(int a, int b, void **pOut)
 {
-    fn_80183740(0);
+    EditMenuMovePlayers(0);
     if (b == 0) {
         switch (mUnknown8) {
         case 2:
-            PlayerDbSetPbpo(fn_80182DC8(), _CreatePlayerPositionAt(a));
-            fn_80182E64(_CreatePlayerPositionAt(a));
+            PlayerDbSetPbpo(EditMenuGetPlayerCursor(), _CreatePlayerPositionAt(a));
+            EditMenuSetPosition(_CreatePlayerPositionAt(a));
             break;
         case 3:
-            PlayerDbSetPjen(fn_80182DC8(), a);
+            PlayerDbSetPjen(EditMenuGetPlayerCursor(), a);
             break;
         case 5:
-            PlayerDbSetPpsn(fn_80182DC8(), _CreatePlayer_aCelebrationStyles[a]);
+            PlayerDbSetPpsn(EditMenuGetPlayerCursor(), _CreatePlayer_aCelebrationStyles[a]);
             break;
         case 4:
-            PlayerDbSetPhan(fn_80182DC8(), a);
+            PlayerDbSetPhan(EditMenuGetPlayerCursor(), a);
             break;
         }
     } else if (mUnknown8 == 3) {
-        PlayerLookSetNumber(0, PlayerDbGetPjen(fn_80182DC8()));
-        PlayerLookSetNumber(1, PlayerDbGetPjen(fn_80182DC8()));
+        PlayerLookSetNumber(0, PlayerDbGetPjen(EditMenuGetPlayerCursor()));
+        PlayerLookSetNumber(1, PlayerDbGetPjen(EditMenuGetPlayerCursor()));
         FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     }
@@ -1306,19 +1306,19 @@ void CreatePlayerInfoOptionList::GetItem(int index, MenuEntry_t *pOut)
 
 void CreatePlayerNameEditor::GetText(int a, int *pResult, MenuArg_t text)
 {
-    Params_80005284 *pParams = text.pParams;
+    MenuText_t *pParams = text.pParams;
     char buffer[16];
     char buffer2[16];
 
     switch (a) {
     case 0:
         *pResult = 1;
-        PlayerDbGetFirstName(fn_80182DC8(), buffer, 12);
+        PlayerDbGetFirstName(EditMenuGetPlayerCursor(), buffer, 12);
         strnzcpy(pParams->mpText, buffer, pParams->mLength + 1);
         break;
     case 1:
         *pResult = 2;
-        PlayerDbGetLastName(fn_80182DC8(), buffer2, 15);
+        PlayerDbGetLastName(EditMenuGetPlayerCursor(), buffer2, 15);
         strnzcpy(pParams->mpText, buffer2, pParams->mLength + 1);
         break;
     }
@@ -1326,7 +1326,7 @@ void CreatePlayerNameEditor::GetText(int a, int *pResult, MenuArg_t text)
 
 void CreatePlayerNameEditor::SetText(int a, MenuArg_t text)
 {
-    Params_80005284 *pParams = text.pParams;
+    MenuText_t *pParams = text.pParams;
     char buffer[16];
     char label[27];
     char label2[27];
@@ -1335,18 +1335,18 @@ void CreatePlayerNameEditor::SetText(int a, MenuArg_t text)
     switch (a) {
     case 0:
         strnzcpy(buffer, pParams->mpText, 12);
-        fn_80081E64(fn_80182DC8(), buffer, 12);
-        fn_801832B0(label, 27);
-        fn_80182E34(label);
-        PlayerDbSeekId(fn_80182DC8(), _CreatePlayer_iPlayerId, 0);
+        fn_80081E64(EditMenuGetPlayerCursor(), buffer, 12);
+        EditMenuGetPlayerName(label, 27);
+        EditMenuSetName(label);
+        PlayerDbSeekId(EditMenuGetPlayerCursor(), _CreatePlayer_iPlayerId, 0);
         break;
     case 1:
         strnzcpy(buffer, pParams->mpText, 15);
-        fn_80081E98(fn_80182DC8(), buffer, 15);
-        fn_801832B0(label2, 27);
-        fn_80182E34(label2);
-        PlayerDbSeekId(fn_80182DC8(), _CreatePlayer_iPlayerId, 0);
-        PlayerDbGetNickname(fn_80182DC8(), name, 31);
+        fn_80081E98(EditMenuGetPlayerCursor(), buffer, 15);
+        EditMenuGetPlayerName(label2, 27);
+        EditMenuSetName(label2);
+        PlayerDbSeekId(EditMenuGetPlayerCursor(), _CreatePlayer_iPlayerId, 0);
+        PlayerDbGetNickname(EditMenuGetPlayerCursor(), name, 31);
         PlayerLookSetName(0, name);
         PlayerLookSetName(1, name);
         FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
@@ -1362,23 +1362,23 @@ void CreatePlayerHairOptionList::Enter(int a, int *pCount, int *pOut)
     _CreatePlayer_sFacialHairCursor.OpenFchrTable();
     switch (mUnknown8) {
     case 0:
-        fn_80087A78(0x12, &_CreatePlayer_sHairCursor, PlayerDbGetHairStyle(fn_80182DC8()), pOut);
+        fn_80087A78(0x12, &_CreatePlayer_sHairCursor, PlayerDbGetHairStyle(EditMenuGetPlayerCursor()), pOut);
         *pCount = fn_80087B00(0x12, &_CreatePlayer_sHairCursor);
         break;
     case 1:
-        *pOut = PlayerDbGetHairColor(fn_80182DC8());
+        *pOut = PlayerDbGetHairColor(EditMenuGetPlayerCursor());
         *pCount = 12;
         break;
     case 2:
-        _CreatePlayer_sFacialHairCursor.FindFchrRow(fn_80082280(fn_80182DC8()), pOut);
+        _CreatePlayer_sFacialHairCursor.FindFchrRow(fn_80082280(EditMenuGetPlayerCursor()), pOut);
         *pCount = _CreatePlayer_sFacialHairCursor.GetRowCount();
         break;
     case 3:
-        *pOut = PlayerDbGetFacialHairColor(fn_80182DC8());
+        *pOut = PlayerDbGetFacialHairColor(EditMenuGetPlayerCursor());
         *pCount = 12;
         break;
     case 4:
-        *pOut = fn_800822D4(fn_80182DC8());
+        *pOut = fn_800822D4(EditMenuGetPlayerCursor());
         *pCount = 3;
         break;
     }
@@ -1391,49 +1391,49 @@ int CreatePlayerHairOptionList::Leave(int a, int b, void **pOut)
         case 0:
             fn_80087938(0x12, &_CreatePlayer_sHairCursor, a, 0);
             fn_80087A30(0x12, &_CreatePlayer_sHairCursor);
-            PlayerDbSetHairStyle(fn_80182DC8(), HairListGetId(&_CreatePlayer_sHairCursor));
+            PlayerDbSetHairStyle(EditMenuGetPlayerCursor(), HairListGetId(&_CreatePlayer_sHairCursor));
             break;
         case 1:
-            PlayerDbSetHairColor(fn_80182DC8(), a);
+            PlayerDbSetHairColor(EditMenuGetPlayerCursor(), a);
             break;
         case 2:
             _CreatePlayer_sFacialHairCursor.MoveToRow(a);
-            fn_800822A8(fn_80182DC8(), _CreatePlayer_sFacialHairCursor.GetFchrPffh());
+            fn_800822A8(EditMenuGetPlayerCursor(), _CreatePlayer_sFacialHairCursor.GetFchrPffh());
             FEPlyrSetPose(0, 26);
             FEPlyrSetPose(1, 26);
             break;
         case 3:
-            PlayerDbSetFacialHairColor(fn_80182DC8(), a);
+            PlayerDbSetFacialHairColor(EditMenuGetPlayerCursor(), a);
             FEPlyrSetPose(0, 26);
             FEPlyrSetPose(1, 26);
             break;
         case 4:
-            fn_80082308(fn_80182DC8(), a);
+            fn_80082308(EditMenuGetPlayerCursor(), a);
             break;
         }
     } else {
         switch (mUnknown8) {
         case 0:
-            _CreatePlayerSetHair(PlayerDbGetHairStyle(fn_80182DC8()));
+            _CreatePlayerSetHair(PlayerDbGetHairStyle(EditMenuGetPlayerCursor()));
             break;
         case 1:
-            PlayerLookSetHairColor(0, PlayerDbGetHairColor(fn_80182DC8()));
-            PlayerLookSetHairColor(1, PlayerDbGetHairColor(fn_80182DC8()));
+            PlayerLookSetHairColor(0, PlayerDbGetHairColor(EditMenuGetPlayerCursor()));
+            PlayerLookSetHairColor(1, PlayerDbGetHairColor(EditMenuGetPlayerCursor()));
             FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
             break;
         case 2:
-            _CreatePlayerSetFacialHair(fn_80082280(fn_80182DC8()));
+            _CreatePlayerSetFacialHair(fn_80082280(EditMenuGetPlayerCursor()));
             break;
         case 3:
-            PlayerLookSetFacialHairColor(0, PlayerDbGetFacialHairColor(fn_80182DC8()));
-            PlayerLookSetFacialHairColor(1, PlayerDbGetFacialHairColor(fn_80182DC8()));
+            PlayerLookSetFacialHairColor(0, PlayerDbGetFacialHairColor(EditMenuGetPlayerCursor()));
+            PlayerLookSetFacialHairColor(1, PlayerDbGetFacialHairColor(EditMenuGetPlayerCursor()));
             FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
             break;
         case 4:
-            PlayerLookSetBrow(0, fn_800822D4(fn_80182DC8()));
-            PlayerLookSetBrow(1, fn_800822D4(fn_80182DC8()));
+            PlayerLookSetBrow(0, fn_800822D4(EditMenuGetPlayerCursor()));
+            PlayerLookSetBrow(1, fn_800822D4(EditMenuGetPlayerCursor()));
             FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
             break;
@@ -1506,7 +1506,7 @@ void CreatePlayerFaceOptionList::Enter(int a, int *pCount, int *pOut)
 {
     mUnknown12 = new (0) AppearanceNameTable;
     if (mUnknown8 == 8) {
-        *pOut = PlayerDbGetPlex(fn_80182DC8());
+        *pOut = PlayerDbGetPlex(EditMenuGetPlayerCursor());
         *pCount = 5;
     } else {
         const FaceFeatureRange_t *pRange = _CreatePlayerGetFaceMenu()->GetRange(mUnknown8);
@@ -1520,23 +1520,23 @@ int CreatePlayerFaceOptionList::Leave(int a, int b, void **pOut)
 {
     if (b == 0) {
         if (mUnknown8 == 8) {
-            PlayerDbSetPlex(fn_80182DC8(), a);
+            PlayerDbSetPlex(EditMenuGetPlayerCursor(), a);
         } else {
             const FaceFeatureRange_t *pRange = _CreatePlayerGetFaceMenu()->GetRange(mUnknown8);
 
             _CreatePlayer_sFace.mUnknown0[pRange->mSlot] = a + pRange->mOffset;
-            fn_80082334(fn_80182DC8(), &_CreatePlayer_sFace);
+            fn_80082334(EditMenuGetPlayerCursor(), &_CreatePlayer_sFace);
             PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
             PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
         }
     } else {
         if (mUnknown8 == 8) {
-            PlayerLookSetPlex(0, PlayerDbGetPlex(fn_80182DC8()));
-            PlayerLookSetPlex(1, PlayerDbGetPlex(fn_80182DC8()));
+            PlayerLookSetPlex(0, PlayerDbGetPlex(EditMenuGetPlayerCursor()));
+            PlayerLookSetPlex(1, PlayerDbGetPlex(EditMenuGetPlayerCursor()));
             FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
         } else {
-            fn_80082138(fn_80182DC8(), &_CreatePlayer_sFace);
+            fn_80082138(EditMenuGetPlayerCursor(), &_CreatePlayer_sFace);
             PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
             PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
             int slot = _CreatePlayerGetFaceMenu()->GetRange(mUnknown8)->mSlot;
@@ -1586,13 +1586,13 @@ void CreatePlayerSkinOptionList::Enter(int a, int *pCount, int *pOut)
 
     if (type == 3) {
         *pCount = 12;
-        *pOut = fn_80081E3C(fn_80182DC8());
+        *pOut = fn_80081E3C(EditMenuGetPlayerCursor());
     } else {
         DbCursor cursor;
         PlayerGear_t info;
         int key;
 
-        fn_800817CC(fn_80182DC8(), &info);
+        fn_800817CC(EditMenuGetPlayerCursor(), &info);
         TattooTableOpen(&cursor, type);
         key = fn_80087B5C(type);
         fn_80087A78(key, &cursor, _CreatePlayerGetTattoo(&info, type), pOut);
@@ -1605,12 +1605,12 @@ int CreatePlayerSkinOptionList::Leave(int a, int b, void **pOut)
 {
     PlayerGear_t info;
 
-    fn_800817CC(fn_80182DC8(), &info);
+    fn_800817CC(EditMenuGetPlayerCursor(), &info);
     int type = _CreatePlayer_aSkinParts[mUnknown8];
 
     if (b == 0) {
         if (type == 3) {
-            PlayerDbSetSkinTone(fn_80182DC8(), a);
+            PlayerDbSetSkinTone(EditMenuGetPlayerCursor(), a);
         } else {
             DbCursor cursor;
 
@@ -1619,12 +1619,12 @@ int CreatePlayerSkinOptionList::Leave(int a, int b, void **pOut)
             fn_80087A30(fn_80087B5C(type), &cursor);
             _CreatePlayerSetTattoo(&info, type, TattooTableGetId(&cursor));
             TattooTableClose(&cursor);
-            fn_8008199C(fn_80182DC8(), &info);
+            fn_8008199C(EditMenuGetPlayerCursor(), &info);
         }
     } else {
         if (type == 3) {
-            PlayerLookSetSkin(0, fn_80081E3C(fn_80182DC8()) + 1);
-            PlayerLookSetSkin(1, fn_80081E3C(fn_80182DC8()) + 1);
+            PlayerLookSetSkin(0, fn_80081E3C(EditMenuGetPlayerCursor()) + 1);
+            PlayerLookSetSkin(1, fn_80081E3C(EditMenuGetPlayerCursor()) + 1);
             FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
         } else {
@@ -1681,16 +1681,16 @@ void CreatePlayerSkinOptionList::GetItem(int index, MenuEntry_t *pOut)
 
 void CreatePlayerSignatureList::Enter(int a, int *pCount, int *pOut)
 {
-    PoseTableSeek(&_CreatePlayer_sPoseCursor, PlayerDbGetSgt(fn_80182DC8(), mUnknown8), pOut);
+    PoseTableSeek(&_CreatePlayer_sPoseCursor, PlayerDbGetSgt(EditMenuGetPlayerCursor(), mUnknown8), pOut);
     *pCount = DbCursorGetRowCount(&_CreatePlayer_sPoseCursor);
 }
 
 int CreatePlayerSignatureList::Leave(int a, int b, void **pOut)
 {
-    fn_80183740(0);
+    EditMenuMovePlayers(0);
     if (b == 0) {
         DbCursorSeek(&_CreatePlayer_sPoseCursor, a);
-        PlayerDbSetSgt(fn_80182DC8(), mUnknown8, PoseTableGetNumber(&_CreatePlayer_sPoseCursor));
+        PlayerDbSetSgt(EditMenuGetPlayerCursor(), mUnknown8, PoseTableGetNumber(&_CreatePlayer_sPoseCursor));
     }
     return -1;
 }
@@ -1711,23 +1711,23 @@ void CreatePlayerSignatureList::GetItem(int index, MenuEntry_t *pOut)
 void CreatePlayerAttributeSlider::BeginSlider(int a, int b, int c, int *pD, int *pE, MenuArg_t textF, MenuArg_t textG,
                                  MenuArg_t textH)
 {
-    Params_80005284 *pLeft = textF.pParams;
-    Params_80005284 *pRight = textG.pParams;
-    Params_80005284 *pValue = textH.pParams;
+    MenuText_t *pLeft = textF.pParams;
+    MenuText_t *pRight = textG.pParams;
+    MenuText_t *pValue = textH.pParams;
     int *pMin = (int *)b;
     int *pMax = (int *)c;
 
     _CreatePlayer_iPendingCost = 0;
     fn_801C2D88(pValue->mpText, pValue->mLength, "");
-    fn_80183740(0);
+    EditMenuMovePlayers(0);
     _CreatePlayer_bSliderOpen = 1;
     switch (a) {
     case 10:
         *pMin = 65;
         *pMax = 84;
-        *pE = PlayerDbGetHeight(fn_80182DC8());
-        _CreatePlayerSaveOriginal(PlayerDbGetId(fn_80182DC8()), 10, *pE);
-        *pD = _CreatePlayerGetOriginal(PlayerDbGetId(fn_80182DC8()), 10);
+        *pE = PlayerDbGetHeight(EditMenuGetPlayerCursor());
+        _CreatePlayerSaveOriginal(PlayerDbGetId(EditMenuGetPlayerCursor()), 10, *pE);
+        *pD = _CreatePlayerGetOriginal(PlayerDbGetId(EditMenuGetPlayerCursor()), 10);
         fn_801C2D88(pLeft->mpText, pLeft->mLength, "Shorter");
         fn_801C2D88(pRight->mpText, pRight->mLength, "Taller");
         fn_801C2D88(pValue->mpText, pValue->mLength, "%d ft %d in", *pE / 12, *pE % 12);
@@ -1740,10 +1740,10 @@ void CreatePlayerAttributeSlider::BeginSlider(int a, int b, int c, int *pD, int 
     case 11:
         *pMin = 160;
         *pMax = 380;
-        *pE = PlayerDbGetWeight(fn_80182DC8());
-        _CreatePlayerSaveOriginal(PlayerDbGetId(fn_80182DC8()), 11, *pE);
-        *pD = _CreatePlayerGetOriginal(PlayerDbGetId(fn_80182DC8()), 11);
-        _CreatePlayer_iBodyType = PlayerDbGetPybt(fn_80182DC8());
+        *pE = PlayerDbGetWeight(EditMenuGetPlayerCursor());
+        _CreatePlayerSaveOriginal(PlayerDbGetId(EditMenuGetPlayerCursor()), 11, *pE);
+        *pD = _CreatePlayerGetOriginal(PlayerDbGetId(EditMenuGetPlayerCursor()), 11);
+        _CreatePlayer_iBodyType = PlayerDbGetPybt(EditMenuGetPlayerCursor());
         fn_801C2D88(pLeft->mpText, pLeft->mLength, "Lighter");
         fn_801C2D88(pRight->mpText, pRight->mLength, "Heavier");
         fn_801C2D88(pValue->mpText, pValue->mLength, "%d lbs", *pE);
@@ -1758,7 +1758,7 @@ void CreatePlayerAttributeSlider::BeginSlider(int a, int b, int c, int *pD, int 
 
         *pMin = 0;
         *pMax = 20;
-        level = PlayerDbGetRating(fn_80182DC8(), fn_80183238(a));
+        level = PlayerDbGetRating(EditMenuGetPlayerCursor(), EditMenuGetSlotRating(a));
         *pE = level / 5;
         if (level < 100) {
             if (level == 1) {
@@ -1769,12 +1769,12 @@ void CreatePlayerAttributeSlider::BeginSlider(int a, int b, int c, int *pD, int 
         } else {
             _CreatePlayer_iNextCost = 0;
         }
-        _CreatePlayerSaveOriginal(PlayerDbGetId(fn_80182DC8()), a, *pE);
-        *pD = _CreatePlayerGetOriginal(PlayerDbGetId(fn_80182DC8()), a);
+        _CreatePlayerSaveOriginal(PlayerDbGetId(EditMenuGetPlayerCursor()), a, *pE);
+        *pD = _CreatePlayerGetOriginal(PlayerDbGetId(EditMenuGetPlayerCursor()), a);
         fn_801C2D88(pLeft->mpText, pLeft->mLength, "Worse");
         fn_801C2D88(pRight->mpText, pRight->mLength, "Better");
         fn_801C2D88(pValue->mpText, pValue->mLength, "Level %d", *pE);
-        fn_80182FD4(fn_80183238(a), 1);
+        EditMenuSetRatingFlag(EditMenuGetSlotRating(a), 1);
         break;
     }
     }
@@ -1782,21 +1782,21 @@ void CreatePlayerAttributeSlider::BeginSlider(int a, int b, int c, int *pD, int 
 
 int CreatePlayerAttributeSlider::MoveSlider(int a, int b, MenuArg_t text)
 {
-    Params_80005284 *pParams = text.pParams;
+    MenuText_t *pParams = text.pParams;
     int result = 0;
     int cost;
 
     fn_801C2D88(pParams->mpText, pParams->mLength, "");
     switch (a) {
     case 10:
-        if (b >= 65 && b <= 84 && b >= fn_80183230()) {
-            cost = _CreatePlayerHeightCost(fn_80183228(), b);
+        if (b >= 65 && b <= 84 && b >= EditMenuGetSliderMin()) {
+            cost = _CreatePlayerHeightCost(EditMenuGetSliderStart(), b);
 
             if (cost <= CreatePlayerGetPoints()) {
-                if (b > fn_80183220()) {
+                if (b > EditMenuGetSliderValue()) {
                     FEPlyrSetPose(0, 6);
                     FEPlyrSetPose(1, 6);
-                } else if (b < fn_80183220()) {
+                } else if (b < EditMenuGetSliderValue()) {
                     FEPlyrSetPose(0, 5);
                     FEPlyrSetPose(1, 5);
                 }
@@ -1812,14 +1812,14 @@ int CreatePlayerAttributeSlider::MoveSlider(int a, int b, MenuArg_t text)
             }
         }
         if (!result) {
-            b = fn_80183220();
+            b = EditMenuGetSliderValue();
         }
         fn_801C2D88(pParams->mpText, pParams->mLength, "%d ft %d in", b / 12, b % 12);
-        fn_80182E70(b);
+        EditMenuSetHeight(b);
         break;
     case 11:
-        if (b >= 160 && b <= 380 && b >= fn_80183230()) {
-            cost = _CreatePlayerWeightCost(fn_80183228(), b);
+        if (b >= 160 && b <= 380 && b >= EditMenuGetSliderMin()) {
+            cost = _CreatePlayerWeightCost(EditMenuGetSliderStart(), b);
 
             if (cost <= CreatePlayerGetPoints()) {
                 FEPlyrSetPose(0, 3);
@@ -1835,10 +1835,10 @@ int CreatePlayerAttributeSlider::MoveSlider(int a, int b, MenuArg_t text)
             }
         }
         if (!result) {
-            b = fn_80183220();
+            b = EditMenuGetSliderValue();
         }
         fn_801C2D88(pParams->mpText, pParams->mLength, "%d lbs", b);
-        fn_80182E7C(b);
+        EditMenuSetWeight(b);
         break;
     default: {
         int level = b * 5;
@@ -1847,19 +1847,19 @@ int CreatePlayerAttributeSlider::MoveSlider(int a, int b, MenuArg_t text)
         if (level == 0) {
             level = 1;
         }
-        previous = fn_80183228() * 5;
+        previous = EditMenuGetSliderStart() * 5;
         if (previous == 0) {
             previous = 1;
         }
-        if (level >= 1 && level <= 100 && b >= fn_80183230()) {
-            if (b > fn_80183228()) {
+        if (level >= 1 && level <= 100 && b >= EditMenuGetSliderMin()) {
+            if (b > EditMenuGetSliderStart()) {
                 cost = _CreatePlayerRatingCost(previous, level);
             } else {
                 cost = -_CreatePlayerRatingCost(level, previous);
             }
             if (cost <= CreatePlayerGetPoints()) {
                 result = 1;
-                fn_80182F60(fn_80183238(a), level);
+                EditMenuSetRating(EditMenuGetSlotRating(a), level);
                 _CreatePlayer_iPendingCost = cost;
                 if (level < 100) {
                     if (level == 1) {
@@ -1873,7 +1873,7 @@ int CreatePlayerAttributeSlider::MoveSlider(int a, int b, MenuArg_t text)
             }
         }
         if (!result) {
-            b = fn_80183220();
+            b = EditMenuGetSliderValue();
         }
         fn_801C2D88(pParams->mpText, pParams->mLength, "Level %d", b);
         break;
@@ -1894,7 +1894,7 @@ void CreatePlayerAttributeSlider::EndSlider(int a, int b, int c)
             _CreatePlayerSpendPoints(_CreatePlayer_iPendingCost);
             FEPlyrSetHeight(0, c);
             FEPlyrSetHeight(1, c);
-            PlayerDbSetHeight(fn_80182DC8(), c);
+            PlayerDbSetHeight(EditMenuGetPlayerCursor(), c);
             if (c == 84) {
                 FEPlyrSetPose(0, 22);
                 played = 1;
@@ -1911,8 +1911,8 @@ void CreatePlayerAttributeSlider::EndSlider(int a, int b, int c)
             CreatePlayerGetPoints();
             _CreatePlayerSpendPoints(_CreatePlayer_iPendingCost);
             build = _CreatePlayerUpdateBodyType(c);
-            PlayerDbSetPybt(fn_80182DC8(), build);
-            PlayerDbSetWeight(fn_80182DC8(), c);
+            PlayerDbSetPybt(EditMenuGetPlayerCursor(), build);
+            PlayerDbSetWeight(EditMenuGetPlayerCursor(), c);
             if (c > 379) {
                 FEPlyrSetPose(0, 21);
                 played = 1;
@@ -1930,7 +1930,7 @@ void CreatePlayerAttributeSlider::EndSlider(int a, int b, int c)
         }
         default: {
             float fraction = c * 0.05f;
-            unsigned int value = PlayerDbGetRating(fn_80182DC8(), fn_80183238(a));
+            unsigned int value = PlayerDbGetRating(EditMenuGetPlayerCursor(), EditMenuGetSlotRating(a));
             int level;
 
             if (fraction > value * 0.01f) {
@@ -1954,23 +1954,23 @@ void CreatePlayerAttributeSlider::EndSlider(int a, int b, int c)
             if (level == 0) {
                 level = 1;
             }
-            PlayerDbSetRating(fn_80182DC8(), fn_80183238(a), level);
+            PlayerDbSetRating(EditMenuGetPlayerCursor(), EditMenuGetSlotRating(a), level);
             break;
         }
         }
     } else {
         switch (a) {
         case 10:
-            FEPlyrSetHeight(0, PlayerDbGetHeight(fn_80182DC8()));
-            FEPlyrSetHeight(1, PlayerDbGetHeight(fn_80182DC8()));
+            FEPlyrSetHeight(0, PlayerDbGetHeight(EditMenuGetPlayerCursor()));
+            FEPlyrSetHeight(1, PlayerDbGetHeight(EditMenuGetPlayerCursor()));
             break;
         case 11:
-            _CreatePlayerUpdateBodyType(PlayerDbGetWeight(fn_80182DC8()));
+            _CreatePlayerUpdateBodyType(PlayerDbGetWeight(EditMenuGetPlayerCursor()));
             break;
         default: {
-            int index = fn_80183238(a);
+            int index = EditMenuGetSlotRating(a);
 
-            fn_80182F60(index, PlayerDbGetRating(fn_80182DC8(), index));
+            EditMenuSetRating(index, PlayerDbGetRating(EditMenuGetPlayerCursor(), index));
             break;
         }
         }
@@ -1978,12 +1978,12 @@ void CreatePlayerAttributeSlider::EndSlider(int a, int b, int c)
         played = 1;
         FEPlyrSetPose(1, 20);
     }
-    fn_80182E70(PlayerDbGetHeight(fn_80182DC8()));
-    fn_80182E7C(PlayerDbGetWeight(fn_80182DC8()));
-    fn_8018300C();
+    EditMenuSetHeight(PlayerDbGetHeight(EditMenuGetPlayerCursor()));
+    EditMenuSetWeight(PlayerDbGetWeight(EditMenuGetPlayerCursor()));
+    EditMenuClearRatingFlags();
     _CreatePlayer_iPendingCost = 0;
     if (!played) {
-        fn_80183740(0);
+        EditMenuMovePlayers(0);
     }
 }
 
@@ -2009,15 +2009,15 @@ static void _CreatePlayerSaveOriginal(int key, int index, int value)
 
 static void _CreatePlayerOpen()
 {
-    fn_801835C0(0x71);
+    EditMenuSetView(0x71);
     _CreatePlayer_iPlayerId = 0x7FFF;
-    fn_801835C8();
+    EditMenuShowPlayers();
     FaceTableOpen();
     HairListOpen(&_CreatePlayer_sHairCursor);
     PoseTableOpen(&_CreatePlayer_sPoseCursor);
-    DbCursorFirst((DbCursor *)fn_80182DC8());
-    if (fn_80183950()) {
-        if (fn_80183948() != 3) {
+    DbCursorFirst((DbCursor *)EditMenuGetPlayerCursor());
+    if (EditMenuIsStoryTeam()) {
+        if (EditMenuGetMode() != 3) {
             _CreatePlayer_iPlayerId = 0;
         }
         if (fn_8022EF8C(0, 0x434C4B53) == 0) {
@@ -2030,7 +2030,7 @@ static void _CreatePlayerOpen()
 
 static void _CreatePlayerClose()
 {
-    fn_80183704();
+    EditMenuHidePlayers();
     FaceTableClose();
     HairListClose(&_CreatePlayer_sHairCursor);
     PoseTableClose(&_CreatePlayer_sPoseCursor);
@@ -2113,17 +2113,17 @@ extern "C" void CreatePlayerApplyPreset(int a)
     int i;
     int value = _CreatePlayerPositionAt(a);
 
-    PlayerDbSetPbpo(fn_80182DC8(), value);
+    PlayerDbSetPbpo(EditMenuGetPlayerCursor(), value);
     for (i = 0; i <= 11; i++) {
         switch (i) {
         case 10:
-            PlayerDbSetHeight(fn_80182DC8(), _CreatePlayer_aPresets[a][i]);
+            PlayerDbSetHeight(EditMenuGetPlayerCursor(), _CreatePlayer_aPresets[a][i]);
             break;
         case 11:
-            PlayerDbSetWeight(fn_80182DC8(), _CreatePlayer_aPresets[a][i]);
+            PlayerDbSetWeight(EditMenuGetPlayerCursor(), _CreatePlayer_aPresets[a][i]);
             break;
         default:
-            PlayerDbSetRating(fn_80182DC8(), fn_80183238(i), _CreatePlayer_aPresets[a][i]);
+            PlayerDbSetRating(EditMenuGetPlayerCursor(), EditMenuGetSlotRating(i), _CreatePlayer_aPresets[a][i]);
             break;
         }
     }

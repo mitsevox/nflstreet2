@@ -4,7 +4,7 @@
    offers. */
 
 #include "game/PauseMenu.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include <string.h>
 
 extern "C" {

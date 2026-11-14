@@ -117,7 +117,7 @@ void fn_801485EC(int value);
 int fn_801486A0(void);
 void fn_80148AF8(Class_80148A58 *pObject);
 void fn_8014F3DC(int ticks);
-void fn_80183368(int mode, int value);
+void EditMenuBegin(int mode, int value);
 void fn_80186F30(signed char a, int b);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
 int TeamLogoGetHandle(int a);
@@ -1072,10 +1072,10 @@ void fn_8005F324(int id)
     case 0:
         break;
     case 113:
-        fn_80183368(4, 0x3FF);
+        EditMenuBegin(4, 0x3FF);
         break;
     case 900:
-        fn_80183368(2, 0x3FF);
+        EditMenuBegin(2, 0x3FF);
         break;
     case 603:
         fn_80061AE8();

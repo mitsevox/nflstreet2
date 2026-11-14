@@ -6,7 +6,7 @@
 #include "game/InGame.h"
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/GameInfo.h"
 #include "game/MsgGame.h"
 #include "game/GameOptions.h"
@@ -35,7 +35,7 @@ union MsgGameArg_t {
     float f;
     int *pi;
     float *pf;
-    Params_80005284 *pParams;
+    MenuText_t *pParams;
 };
 
 extern "C" {

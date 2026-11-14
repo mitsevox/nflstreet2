@@ -1,6 +1,6 @@
 /* Front-end script handlers for the depth-chart and team screens: the depth-chart messages, side
    names and formation spots, the next-screen choice for a user's created team, and record counts. */
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/DepthChart.h"
 
 extern "C" {
@@ -10,7 +10,7 @@ int TeamFilterGet(void);
 void ChalCloseCursors(void);
 int fn_80082414(int index);
 int FormationSlotGetInfo(int a, int b, float *pX, float *pY, int *pValue, char *pLabel, int labelSize);
-void fn_80183920(int mode, int value);
+void EditMenuRequest(int mode, int value);
 int CreateTeamExists(int a);
 char *strncpy(char *pDest, const char *pSource, int count);
 int fn_8022F384(int a);
@@ -29,7 +29,7 @@ void FeTeamChooseScreen(int *pResult)
         }
     } else {
         *pResult = 404;
-        fn_80183920(0, 0x3FF);
+        EditMenuRequest(0, 0x3FF);
     }
     ChalCloseCursors();
 }

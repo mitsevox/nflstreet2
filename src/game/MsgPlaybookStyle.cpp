@@ -1,12 +1,12 @@
 /* Playbook style row: steps through the playbook styles (Balanced, Rush Offense,
    Rush Defense, Pass Offense, Pass Defense, Custom) and shows the chosen name. */
 
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include <string.h>
 
 struct PlaybookStyleArgs_t {
     int mUnknown0;
-    Params_80005284 *mpUnknown4;
+    MenuText_t *mpUnknown4;
 };
 
 static const char *_MsgPlaybookStyle_pszNames[] = {
@@ -20,9 +20,9 @@ static const char *_MsgPlaybookStyle_pszNames[] = {
 static int _MsgPlaybookStyle_iSelection = 0;
 
 extern "C" {
-char *MsgPlaybookStyleCycle(int action, Params_80005284 **ppParams)
+char *MsgPlaybookStyleCycle(int action, MenuText_t **ppParams)
 {
-    Params_80005284 *pParams = *ppParams;
+    MenuText_t *pParams = *ppParams;
 
     switch (action) {
     case 3:
@@ -51,7 +51,7 @@ int MsgPlaybookStyleHandleMessage(unsigned int id, PlaybookStyleArgs_t *pArgs)
         break;
     case 0x80000002:
     {
-        Params_80005284 *pParams = pArgs->mpUnknown4;
+        MenuText_t *pParams = pArgs->mpUnknown4;
         MsgPlaybookStyleCycle(pArgs->mUnknown0, &pParams);
         break;
     }

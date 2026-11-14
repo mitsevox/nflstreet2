@@ -5,7 +5,7 @@
 
 #include "game/DbCursor.h"
 #include "game/Challenge.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include <string.h>
 #include "game/GameOptions.h"
 
@@ -28,8 +28,8 @@ int ChalHasMedalGoal(Challenge_t *pRecord);
 int ChalHasReward(Challenge_t *pRecord, int id);
 int MsgGameGetSetupState(void);
 void MsgGameSetFEStarted(int a);
-void fn_801834DC(void);
-int fn_801835A0(void);
+void EditMenuEnd(void);
+int EditMenuIsOpen(void);
 }
 
 static const int _MsgChallenge_aGroupIds[12] = { 12, 10, 11, 13, 9, 4, 8, 5, 7, 6, 14, 14 };
@@ -70,8 +70,8 @@ void MsgChallengeOpen(int *pA, int *pB, int *pC)
     *pB = _MsgChallenge_iSaved1;
     ChallengeSetMode(3);
     MsgGameSetFEStarted(1);
-    if (fn_801835A0()) {
-        fn_801834DC();
+    if (EditMenuIsOpen()) {
+        EditMenuEnd();
     }
     if (MsgChallengeGetFlowState() == 5) {
         ChalCloseCursors();

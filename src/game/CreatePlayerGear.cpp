@@ -7,7 +7,7 @@
 #include "game/Object_8008044C.h"
 #include "game/Row_8007BC34.h"
 #include "game/FEPlyrLoad.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include <string.h>
 
 /* One selectable gear row of the current category, built by _GearBuildItemList. */
@@ -63,25 +63,25 @@ int GearHasNew(int type, int a, int b);
 int PlayerDbGetId(Object_8008044C *pObject);
 int PlayerDbGetPortraitId(Object_8008044C *pObject);
 void fn_8008199C(Object_8008044C *pObject, PlayerGear_t *pInfo);
-DbCursor *fn_80182DBC(void);
-Object_8008044C *fn_80182DC8(void);
-void fn_80182DD4(const char *pText);
-void fn_80182E04(const char *pText);
-void fn_80182E34(char *pText);
-void fn_80182ED0(void);
-void fn_80182F24(PlayerGear_t *pInfo);
-void fn_80182FD4(int a, unsigned char value);
-void fn_8018300C(void);
-void fn_80183130(int a);
-void fn_801831A4(void);
-void fn_801831E8(unsigned char a);
-void fn_801832B0(char *pText, int size);
-int fn_80183354(void);
-void fn_801835C8(void);
-void fn_80183704(void);
-int fn_80183948(void);
-int fn_80183950(void);
-int fn_80183968(void);
+DbCursor *EditMenuGetTeamCursor(void);
+Object_8008044C *EditMenuGetPlayerCursor(void);
+void EditMenuSetHeading(const char *pText);
+void EditMenuSetItemName(const char *pText);
+void EditMenuSetName(char *pText);
+void EditMenuLoadRatings(void);
+void EditMenuAddGearRatings(PlayerGear_t *pInfo);
+void EditMenuSetRatingFlag(int a, unsigned char value);
+void EditMenuClearRatingFlags(void);
+void EditMenuSetOwner(int a);
+void EditMenuClearOwner(void);
+void EditMenuSetOwnerFlag(unsigned char a);
+void EditMenuGetPlayerName(char *pText, int size);
+int EditMenuGetTeamSlot(void);
+void EditMenuShowPlayers(void);
+void EditMenuHidePlayers(void);
+int EditMenuGetMode(void);
+int EditMenuIsStoryTeam(void);
+int EditMenuIsCreateTeam(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_8022F384(int a);
 int fn_8022F4BC(void);
@@ -169,7 +169,7 @@ static int _Gear_aDecalOptionsMode5[] = { 0, 1, 5, 2, 3 };
 static int _Gear_aHatStylesKind1[] = { 0, 1, 2 };
 static int _Gear_aHatStylesKind7[] = { 0, 2, 3, 5, 1 };
 
-static const Layout_802EA9E0 _Gear_aAreaLayouts[] = {
+static const PlayerLayout_t _Gear_aAreaLayouts[] = {
     { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 1 },
     { 23.0f, 975.0f, 0.0f, 338.0f, 3.1f, 15, 0 },
     { 0.0f, 255.0f, 0.0f, 348.0f, 0.9f, 15, 0 },
@@ -181,7 +181,7 @@ static const unsigned short _Gear_aCategoryPoses[] = { 2, 2, 14, 11, 11, 12, 8, 
 
 static inline bool AnyDecalFlagged()
 {
-    return DecalCountNew(fn_80183354()) != 0;
+    return DecalCountNew(EditMenuGetTeamSlot()) != 0;
 }
 
 class GearPlayerList : public MenuScreen {
@@ -350,11 +350,11 @@ static void _GearTakeFromOwner(int id, int index)
 {
     if (_Gear_iCategory != 14) {
         int type = fn_8007BF14(_Gear_iCategory);
-        int row = DbCursorGetRow((DbCursor *)fn_80182DC8());
+        int row = DbCursorGetRow((DbCursor *)EditMenuGetPlayerCursor());
         PlayerGear_t info;
 
-        PlayerDbSeekId(fn_80182DC8(), id, 0);
-        fn_800817CC(fn_80182DC8(), &info);
+        PlayerDbSeekId(EditMenuGetPlayerCursor(), id, 0);
+        fn_800817CC(EditMenuGetPlayerCursor(), &info);
         fn_8007BBFC(&_Gear_sItemCursor, 0, 0);
         if (fn_8007BF28(type) != 14) {
             info.mValues[fn_8007BF28(type)] = 0;
@@ -362,8 +362,8 @@ static void _GearTakeFromOwner(int id, int index)
             info.mValues[7] = 0;
             info.mValues[6] = 0;
         }
-        fn_8008199C(fn_80182DC8(), &info);
-        DbCursorSeek((DbCursor *)fn_80182DC8(), row);
+        fn_8008199C(EditMenuGetPlayerCursor(), &info);
+        DbCursorSeek((DbCursor *)EditMenuGetPlayerCursor(), row);
     }
 }
 
@@ -372,15 +372,15 @@ static int _GearFindOwner(int type, int value)
     int result = -1;
 
     if (_Gear_iCategory != 14) {
-        int row = DbCursorGetRow((DbCursor *)fn_80182DC8());
+        int row = DbCursorGetRow((DbCursor *)EditMenuGetPlayerCursor());
         PlayerGear_t info;
         int found;
 
-        for (found = DbCursorFirst((DbCursor *)fn_80182DC8()); found && result == -1; found = DbCursorNext((DbCursor *)fn_80182DC8())) {
+        for (found = DbCursorFirst((DbCursor *)EditMenuGetPlayerCursor()); found && result == -1; found = DbCursorNext((DbCursor *)EditMenuGetPlayerCursor())) {
             int id;
 
-            fn_800817CC(fn_80182DC8(), &info);
-            id = PlayerDbGetId(fn_80182DC8());
+            fn_800817CC(EditMenuGetPlayerCursor(), &info);
+            id = PlayerDbGetId(EditMenuGetPlayerCursor());
             if (fn_8007BF28(type) != 14) {
                 if (info.mValues[fn_8007BF28(type)] == value) {
                     result = id;
@@ -391,7 +391,7 @@ static int _GearFindOwner(int type, int value)
                 }
             }
         }
-        DbCursorSeek((DbCursor *)fn_80182DC8(), row);
+        DbCursorSeek((DbCursor *)EditMenuGetPlayerCursor(), row);
     }
     return result;
 }
@@ -401,13 +401,13 @@ static void _GearShowOwner()
     int type = fn_8007BE7C(&_Gear_sItemCursor);
     int id = fn_8007BE54(&_Gear_sItemCursor);
     int unique = fn_8007BF3C(&_Gear_sItemCursor);
-    int current = PlayerDbGetId(fn_80182DC8());
+    int current = PlayerDbGetId(EditMenuGetPlayerCursor());
     int owner = _GearFindOwner(type, id);
 
     if (unique && owner != -1 && owner != current) {
-        fn_80183130(owner);
+        EditMenuSetOwner(owner);
     } else {
-        fn_801831A4();
+        EditMenuClearOwner();
     }
 }
 
@@ -415,13 +415,13 @@ static void _GearMarkAffectedRatings()
 {
     short flags[10];
 
-    fn_8018300C();
+    EditMenuClearRatingFlags();
     if (fn_8007C690(&_Gear_sItemCursor, flags)) {
         int i;
 
         for (i = 0; i <= 9; i++) {
             if (flags[i]) {
-                fn_80182FD4(i, 1);
+                EditMenuSetRatingFlag(i, 1);
             }
         }
     }
@@ -434,7 +434,7 @@ static int _GearBuildItemList()
     int count;
     int i;
 
-    if (fn_80183950() || fn_80183948() == 5) {
+    if (EditMenuIsStoryTeam() || EditMenuGetMode() == 5) {
         showUnique = 0;
     }
     fn_8007BA88(&_Gear_sItemCursor, type);
@@ -496,7 +496,7 @@ static int _GearCategoryHasNew(int index, int a)
     if (index != 14) {
         int type = fn_8007BF14(index);
 
-        result = GearHasNew(type, a, fn_80183968());
+        result = GearHasNew(type, a, EditMenuIsCreateTeam());
     }
     return result;
 }
@@ -761,7 +761,7 @@ static unsigned int _GearFindHatStyle(int value)
 void GearAreaMenu::Enter(int a, int *pCount, int *pOut)
 {
     MenuListScreen::Enter(a, pCount, pOut);
-    fn_80183740(0);
+    EditMenuMovePlayers(0);
     if (!_Gear_bFromCreatePlayer) {
         FEPlyrSetPlayer(FEPlyrGetBackIndex(), _Gear_iPlayerId, 1);
         FEPlyrLoadSetScaleRamp(0);
@@ -776,22 +776,22 @@ int GearAreaMenu::Leave(int a, int b, void **pOut)
         switch (a) {
         case 0:
             result = 1;
-            fn_80183740(&_Gear_aAreaLayouts[1]);
+            EditMenuMovePlayers(&_Gear_aAreaLayouts[1]);
             *pOut = _GearGetHeadMenu();
             break;
         case 2:
             result = 1;
-            fn_80183740(&_Gear_aAreaLayouts[2]);
+            EditMenuMovePlayers(&_Gear_aAreaLayouts[2]);
             *pOut = _GearGetTorsoMenu();
             break;
         case 1:
             result = 1;
-            fn_80183740(&_Gear_aAreaLayouts[3]);
+            EditMenuMovePlayers(&_Gear_aAreaLayouts[3]);
             *pOut = _GearGetArmsMenu();
             break;
         case 3:
             result = 1;
-            fn_80183740(&_Gear_aAreaLayouts[4]);
+            EditMenuMovePlayers(&_Gear_aAreaLayouts[4]);
             *pOut = _GearGetLegsMenu();
             break;
         }
@@ -804,7 +804,7 @@ int GearAreaMenu::Leave(int a, int b, void **pOut)
 
 void GearAreaMenu::Highlight(int id)
 {
-    fn_80182DD4("Gear");
+    EditMenuSetHeading("Gear");
 }
 
 void GearAreaMenu::GetItem(int id, MenuEntry_t *pOut)
@@ -830,13 +830,13 @@ void GearPlayerList::Enter(int a, int *pCount, int *pOut)
 {
     char buffer[18];
 
-    fn_80083F88(fn_80182DBC(), buffer, 18);
-    fn_80182E34(buffer);
-    fn_80182DD4("");
-    fn_80182E04("");
-    *pCount = DbCursorGetRowCount((DbCursor *)fn_80182DC8()) + 1;
-    DbCursorFirst((DbCursor *)fn_80182DC8());
-    _Gear_iPlayerId = PlayerDbGetId(fn_80182DC8());
+    fn_80083F88(EditMenuGetTeamCursor(), buffer, 18);
+    EditMenuSetName(buffer);
+    EditMenuSetHeading("");
+    EditMenuSetItemName("");
+    *pCount = DbCursorGetRowCount((DbCursor *)EditMenuGetPlayerCursor()) + 1;
+    DbCursorFirst((DbCursor *)EditMenuGetPlayerCursor());
+    _Gear_iPlayerId = PlayerDbGetId(EditMenuGetPlayerCursor());
     FEPlyrSetPlayer(FEPlyrGetFrontIndex(), _Gear_iPlayerId, 1);
 }
 
@@ -845,10 +845,10 @@ int GearPlayerList::Leave(int a, int b, void **pOut)
     char buffer[27];
 
     *pOut = _GearGetAreaMenu();
-    PlayerDbSeekId(fn_80182DC8(), a, 0);
-    fn_801832B0(buffer, 27);
-    fn_80182E34(buffer);
-    fn_800817CC(fn_80182DC8(), &_Gear_sPlayerGear);
+    PlayerDbSeekId(EditMenuGetPlayerCursor(), a, 0);
+    EditMenuGetPlayerName(buffer, 27);
+    EditMenuSetName(buffer);
+    fn_800817CC(EditMenuGetPlayerCursor(), &_Gear_sPlayerGear);
     return 1;
 }
 
@@ -857,24 +857,24 @@ void GearPlayerList::Highlight(int index)
     if (index != 0x7FFF) {
         char buffer[27];
 
-        PlayerDbSeekId(fn_80182DC8(), index, 0);
+        PlayerDbSeekId(EditMenuGetPlayerCursor(), index, 0);
         _Gear_iPlayerId = index;
         FEPlyrSetPlayer(FEPlyrGetFrontIndex(), index, 0);
-        fn_801832B0(buffer, 27);
-        fn_80182DD4(buffer);
-        fn_80182ED0();
+        EditMenuGetPlayerName(buffer, 27);
+        EditMenuSetHeading(buffer);
+        EditMenuLoadRatings();
     } else {
-        fn_80182DD4("Save And Exit");
+        EditMenuSetHeading("Save And Exit");
     }
 }
 
 void GearPlayerList::GetItemId(int index, int *pOut)
 {
-    if (index >= DbCursorGetRowCount((DbCursor *)fn_80182DC8())) {
+    if (index >= DbCursorGetRowCount((DbCursor *)EditMenuGetPlayerCursor())) {
         *pOut = 0x7FFF;
     } else {
-        DbCursorSeek((DbCursor *)fn_80182DC8(), index);
-        *pOut = PlayerDbGetId(fn_80182DC8());
+        DbCursorSeek((DbCursor *)EditMenuGetPlayerCursor(), index);
+        *pOut = PlayerDbGetId(EditMenuGetPlayerCursor());
     }
 }
 
@@ -886,17 +886,17 @@ void GearPlayerList::GetItem(int index, MenuEntry_t *pOut)
     if (index != 0x7FFF) {
         int value;
 
-        PlayerDbSeekId(fn_80182DC8(), index, 0);
-        value = PlayerDbGetPortraitId(fn_80182DC8());
-        pOut->mUnknown36 = DbCursorGetRow((DbCursor *)fn_80182DC8());
+        PlayerDbSeekId(EditMenuGetPlayerCursor(), index, 0);
+        value = PlayerDbGetPortraitId(EditMenuGetPlayerCursor());
+        pOut->mUnknown36 = DbCursorGetRow((DbCursor *)EditMenuGetPlayerCursor());
         pOut->mId = index;
         pOut->mUnknown30 = 1;
         pOut->mUnknown4 = 0;
         pOut->mUnknown32 = value | 0xA0000;
-        fn_801832B0(buffer, 27);
+        EditMenuGetPlayerName(buffer, 27);
         strnzcpy(pOut->mName, buffer, 22);
     } else {
-        pOut->mUnknown36 = DbCursorGetRowCount((DbCursor *)fn_80182DC8());
+        pOut->mUnknown36 = DbCursorGetRowCount((DbCursor *)EditMenuGetPlayerCursor());
         pOut->mId = index;
         pOut->mUnknown30 = 1;
         pOut->mUnknown4 = 4;
@@ -1265,10 +1265,10 @@ int GearItemList::Leave(int a, int b, void **pOut)
             if (_Gear_iCategory == 0) {
                 _Gear_sPlayerGear.mUnknown02 = _GearValidateHatStyle(_Gear_sPlayerGear.mUnknown02);
             }
-            fn_8008199C(fn_80182DC8(), &_Gear_sPlayerGear);
+            fn_8008199C(EditMenuGetPlayerCursor(), &_Gear_sPlayerGear);
         }
     } else {
-        fn_800817CC(fn_80182DC8(), &_Gear_sPlayerGear);
+        fn_800817CC(EditMenuGetPlayerCursor(), &_Gear_sPlayerGear);
         if (fn_8007BF14(_Gear_iCategory) == 6) {
             FEPlyrSetPairSlot(6, _Gear_sPlayerGear.mValues[6]);
             FEPlyrSetPairSlot(7, _Gear_sPlayerGear.mValues[7]);
@@ -1286,10 +1286,10 @@ int GearItemList::Leave(int a, int b, void **pOut)
         FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     }
-    fn_801831A4();
-    fn_8018300C();
-    fn_801831E8(0);
-    fn_80182ED0();
+    EditMenuClearOwner();
+    EditMenuClearRatingFlags();
+    EditMenuSetOwnerFlag(0);
+    EditMenuLoadRatings();
     _GearCloseItemList();
     FEPlyrSetPose(0, 2);
     FEPlyrSetPose(1, 2);
@@ -1329,7 +1329,7 @@ void GearItemList::Highlight(int index)
         PlayerLookSetHatStyle(0, value);
         PlayerLookSetHatStyle(1, value);
     }
-    fn_80182F24(&_Gear_sPlayerGear);
+    EditMenuAddGearRatings(&_Gear_sPlayerGear);
     PlayerLookSetSwitchFlagsA(0, _Gear_sPlayerGear.mUnknown00);
     PlayerLookSetSwitchFlagsA(1, _Gear_sPlayerGear.mUnknown00);
     PlayerLookSetSwitchFlagsB(0, _Gear_sPlayerGear.mUnknown01);
@@ -1404,9 +1404,9 @@ int GearDecalTeamList::Leave(int a, int b, void **pOut)
         }
         result = -2;
         GearLockClearNew(&_Gear_sLockCursor, mUnknown12);
-        fn_8008199C(fn_80182DC8(), &_Gear_sPlayerGear);
+        fn_8008199C(EditMenuGetPlayerCursor(), &_Gear_sPlayerGear);
     } else {
-        fn_800817CC(fn_80182DC8(), &_Gear_sPlayerGear);
+        fn_800817CC(EditMenuGetPlayerCursor(), &_Gear_sPlayerGear);
         switch (mUnknown8) {
         case 0:
             PlayerLookSetHeadDecalColors(0, _Gear_sPlayerGear.mUnknown0D);
@@ -1455,12 +1455,12 @@ void GearDecalTeamList::GetItem(int index, MenuEntry_t *pOut)
 
 static int _GearDecalOptionCount()
 {
-    return fn_80183948() != 5 ? 3 : 5;
+    return EditMenuGetMode() != 5 ? 3 : 5;
 }
 
 static int _GearDecalOptionAt(int index)
 {
-    if (fn_80183948() == 5) {
+    if (EditMenuGetMode() == 5) {
         return _Gear_aDecalOptionsMode5[index];
     }
     return _Gear_aDecalOptions[index];
@@ -1468,7 +1468,7 @@ static int _GearDecalOptionAt(int index)
 
 static int *_GearDecalOptionTable()
 {
-    if (fn_80183948() == 5) {
+    if (EditMenuGetMode() == 5) {
         return _Gear_aDecalOptionsMode5;
     }
     return _Gear_aDecalOptions;
@@ -1489,9 +1489,9 @@ void GearHeadwearOptionList::Enter(int a, int *pCount, int *pOut)
         if (value <= 5) {
             *pOut = _GearFindTableIndex(value, _GearDecalOptionTable(), _GearDecalOptionCount());
         } else {
-            *pOut = DecalFindIndex(fn_80183354(), _Gear_sPlayerGear.mUnknown0B - 6) + _GearDecalOptionCount();
+            *pOut = DecalFindIndex(EditMenuGetTeamSlot(), _Gear_sPlayerGear.mUnknown0B - 6) + _GearDecalOptionCount();
         }
-        *pCount = _GearDecalOptionCount() + DecalCountUnlocked(fn_80183354());
+        *pCount = _GearDecalOptionCount() + DecalCountUnlocked(EditMenuGetTeamSlot());
         break;
     }
     }
@@ -1500,12 +1500,12 @@ void GearHeadwearOptionList::Enter(int a, int *pCount, int *pOut)
 int GearHeadwearOptionList::Leave(int a, int b, void **pOut)
 {
     if (b == 0) {
-        fn_8008199C(fn_80182DC8(), &_Gear_sPlayerGear);
+        fn_8008199C(EditMenuGetPlayerCursor(), &_Gear_sPlayerGear);
         if (mUnknown8 == 2 && _Gear_sPlayerGear.mUnknown0B > 5) {
-            DecalClearNew(fn_80183354(), _Gear_sPlayerGear.mUnknown0B - 6);
+            DecalClearNew(EditMenuGetTeamSlot(), _Gear_sPlayerGear.mUnknown0B - 6);
         }
     } else {
-        fn_800817CC(fn_80182DC8(), &_Gear_sPlayerGear);
+        fn_800817CC(EditMenuGetPlayerCursor(), &_Gear_sPlayerGear);
         switch (mUnknown8) {
         case 1:
             PlayerLookSetHatStyle(0, _Gear_sPlayerGear.mUnknown02);
@@ -1538,7 +1538,7 @@ void GearHeadwearOptionList::Highlight(int index)
         if (index < _GearDecalOptionCount()) {
             _Gear_sPlayerGear.mUnknown0B = _GearDecalOptionAt(index);
         } else {
-            _Gear_sPlayerGear.mUnknown0B = DecalGetIdAt(fn_80183354(), index - _GearDecalOptionCount()) + 6;
+            _Gear_sPlayerGear.mUnknown0B = DecalGetIdAt(EditMenuGetTeamSlot(), index - _GearDecalOptionCount()) + 6;
         }
         PlayerLookSetHeadDecalKind(0, _Gear_sPlayerGear.mUnknown0B);
         PlayerLookSetHeadDecalKind(1, _Gear_sPlayerGear.mUnknown0B);
@@ -1560,9 +1560,9 @@ void GearHeadwearOptionList::GetItem(int index, MenuEntry_t *pOut)
         if (index < _GearDecalOptionCount()) {
             strnzcpy(pOut->mName, _Gear_aDecalOptionNames[_GearDecalOptionAt(index)], 22);
         } else {
-            int id = DecalGetIdAt(fn_80183354(), index - _GearDecalOptionCount());
+            int id = DecalGetIdAt(EditMenuGetTeamSlot(), index - _GearDecalOptionCount());
 
-            pOut->mUnknown40 = DecalIsNew(fn_80183354(), id);
+            pOut->mUnknown40 = DecalIsNew(EditMenuGetTeamSlot(), id);
             DecalGetName(id, pOut->mName, 22);
         }
         break;
@@ -1580,9 +1580,9 @@ void GearShirtDecalList::Enter(int a, int *pCount, int *pOut)
         if (value <= 5) {
             *pOut = _GearFindTableIndex(value, _GearDecalOptionTable(), _GearDecalOptionCount());
         } else {
-            *pOut = DecalFindIndex(fn_80183354(), _Gear_sPlayerGear.mUnknown09 - 6) + _GearDecalOptionCount();
+            *pOut = DecalFindIndex(EditMenuGetTeamSlot(), _Gear_sPlayerGear.mUnknown09 - 6) + _GearDecalOptionCount();
         }
-        *pCount = _GearDecalOptionCount() + DecalCountUnlocked(fn_80183354());
+        *pCount = _GearDecalOptionCount() + DecalCountUnlocked(EditMenuGetTeamSlot());
         break;
     }
     case 2: {
@@ -1591,9 +1591,9 @@ void GearShirtDecalList::Enter(int a, int *pCount, int *pOut)
         if (value <= 5) {
             *pOut = _GearFindTableIndex(value, _GearDecalOptionTable(), _GearDecalOptionCount());
         } else {
-            *pOut = DecalFindIndex(fn_80183354(), _Gear_sPlayerGear.mUnknown0A - 6) + _GearDecalOptionCount();
+            *pOut = DecalFindIndex(EditMenuGetTeamSlot(), _Gear_sPlayerGear.mUnknown0A - 6) + _GearDecalOptionCount();
         }
-        *pCount = _GearDecalOptionCount() + DecalCountUnlocked(fn_80183354());
+        *pCount = _GearDecalOptionCount() + DecalCountUnlocked(EditMenuGetTeamSlot());
         break;
     }
     }
@@ -1602,21 +1602,21 @@ void GearShirtDecalList::Enter(int a, int *pCount, int *pOut)
 int GearShirtDecalList::Leave(int a, int b, void **pOut)
 {
     if (b == 0) {
-        fn_8008199C(fn_80182DC8(), &_Gear_sPlayerGear);
+        fn_8008199C(EditMenuGetPlayerCursor(), &_Gear_sPlayerGear);
         switch (mUnknown8) {
         case 1:
             if (_Gear_sPlayerGear.mUnknown09 > 5) {
-                DecalClearNew(fn_80183354(), _Gear_sPlayerGear.mUnknown09 - 6);
+                DecalClearNew(EditMenuGetTeamSlot(), _Gear_sPlayerGear.mUnknown09 - 6);
             }
             break;
         case 2:
             if (_Gear_sPlayerGear.mUnknown0A > 5) {
-                DecalClearNew(fn_80183354(), _Gear_sPlayerGear.mUnknown0A - 6);
+                DecalClearNew(EditMenuGetTeamSlot(), _Gear_sPlayerGear.mUnknown0A - 6);
             }
             break;
         }
     } else {
-        fn_800817CC(fn_80182DC8(), &_Gear_sPlayerGear);
+        fn_800817CC(EditMenuGetPlayerCursor(), &_Gear_sPlayerGear);
         switch (mUnknown8) {
         case 1:
             PlayerLookSetFrontDecalKind(0, _Gear_sPlayerGear.mUnknown09);
@@ -1640,7 +1640,7 @@ void GearShirtDecalList::Highlight(int index)
         if (index < _GearDecalOptionCount()) {
             _Gear_sPlayerGear.mUnknown09 = _GearDecalOptionAt(index);
         } else {
-            _Gear_sPlayerGear.mUnknown09 = DecalGetIdAt(fn_80183354(), index - _GearDecalOptionCount()) + 6;
+            _Gear_sPlayerGear.mUnknown09 = DecalGetIdAt(EditMenuGetTeamSlot(), index - _GearDecalOptionCount()) + 6;
         }
         PlayerLookSetFrontDecalKind(0, _Gear_sPlayerGear.mUnknown09);
         PlayerLookSetFrontDecalKind(1, _Gear_sPlayerGear.mUnknown09);
@@ -1651,7 +1651,7 @@ void GearShirtDecalList::Highlight(int index)
         if (index < _GearDecalOptionCount()) {
             _Gear_sPlayerGear.mUnknown0A = _GearDecalOptionAt(index);
         } else {
-            _Gear_sPlayerGear.mUnknown0A = DecalGetIdAt(fn_80183354(), index - _GearDecalOptionCount()) + 6;
+            _Gear_sPlayerGear.mUnknown0A = DecalGetIdAt(EditMenuGetTeamSlot(), index - _GearDecalOptionCount()) + 6;
         }
         PlayerLookSetBackDecalKind(0, _Gear_sPlayerGear.mUnknown0A);
         PlayerLookSetBackDecalKind(1, _Gear_sPlayerGear.mUnknown0A);
@@ -1668,9 +1668,9 @@ void GearShirtDecalList::GetItem(int index, MenuEntry_t *pOut)
         if (index < _GearDecalOptionCount()) {
             strnzcpy(pOut->mName, _Gear_aDecalOptionNames[_GearDecalOptionAt(index)], 22);
         } else {
-            int id = DecalGetIdAt(fn_80183354(), index - _GearDecalOptionCount());
+            int id = DecalGetIdAt(EditMenuGetTeamSlot(), index - _GearDecalOptionCount());
 
-            pOut->mUnknown40 = DecalIsNew(fn_80183354(), id);
+            pOut->mUnknown40 = DecalIsNew(EditMenuGetTeamSlot(), id);
             DecalGetName(id, pOut->mName, 22);
         }
         break;
@@ -1678,9 +1678,9 @@ void GearShirtDecalList::GetItem(int index, MenuEntry_t *pOut)
         if (index < _GearDecalOptionCount()) {
             strnzcpy(pOut->mName, _Gear_aDecalOptionNames[_GearDecalOptionAt(index)], 22);
         } else {
-            int id = DecalGetIdAt(fn_80183354(), index - _GearDecalOptionCount());
+            int id = DecalGetIdAt(EditMenuGetTeamSlot(), index - _GearDecalOptionCount());
 
-            pOut->mUnknown40 = DecalIsNew(fn_80183354(), id);
+            pOut->mUnknown40 = DecalIsNew(EditMenuGetTeamSlot(), id);
             DecalGetName(id, pOut->mName, 22);
         }
         break;
@@ -1692,17 +1692,17 @@ void GearMenuOpen(int a)
     GearLockOpen(&_Gear_sLockCursor, fn_8022F384(fn_8022F4BC()));
     _Gear_bFromCreatePlayer = a;
     if (a == 0) {
-        fn_801835C8();
+        EditMenuShowPlayers();
     } else {
-        _Gear_iPlayerId = PlayerDbGetId(fn_80182DC8());
-        fn_800817CC(fn_80182DC8(), &_Gear_sPlayerGear);
+        _Gear_iPlayerId = PlayerDbGetId(EditMenuGetPlayerCursor());
+        fn_800817CC(EditMenuGetPlayerCursor(), &_Gear_sPlayerGear);
     }
 }
 
 void GearMenuClose()
 {
     if (_Gear_bFromCreatePlayer == 0) {
-        fn_80183704();
+        EditMenuHidePlayers();
     }
     GearLockClose(&_Gear_sLockCursor);
 }

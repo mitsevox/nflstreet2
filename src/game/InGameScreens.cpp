@@ -8,7 +8,7 @@
 #include "game/Object_8008044C.h"
 #include "game/DbCursor.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/HudEvents.h"
 #include "game/Challenge.h"
 #include "game/fn_801FCE10.h"
@@ -1334,12 +1334,12 @@ int fn_80058EF4(int a)
     return 0;
 }
 
-void fn_80058EFC(int *pCount, Params_80005284 *pName, Params_80005284 *pText0, Params_80005284 *pText1,
-                 Params_80005284 *pText2, Params_80005284 *pText3, int *pResults, MenuArg_t team)
+void fn_80058EFC(int *pCount, MenuText_t *pName, MenuText_t *pText0, MenuText_t *pText1,
+                 MenuText_t *pText2, MenuText_t *pText3, int *pResults, MenuArg_t team)
 {
-    Params_80005284 *pTeam = team.pParams;
+    MenuText_t *pTeam = team.pParams;
     Challenge_t *pRecord = ChalGetCurrent();
-    Params_80005284 *texts[4] = {pText0, pText1, pText2, pText3};
+    MenuText_t *texts[4] = {pText0, pText1, pText2, pText3};
     int results[4];
     char names[4][64];
 
@@ -1729,7 +1729,7 @@ void fn_80059B64(int *pList, int *pValues, MenuArg_t *pNames, int *pScores, int 
 void fn_80059E24(float *pValues);
 void fn_80059F54(int *pA, int *pB, int *pC, int *pD);
 void fn_80059F80(char *pText, int *pRed, int *pGreen, int *pBlue);
-void fn_8005A1C0(unsigned int team, int *pEnabled, Params_80005284 **pNames, int *pMode, Params_80005284 **ppText);
+void fn_8005A1C0(unsigned int team, int *pEnabled, MenuText_t **pNames, int *pMode, MenuText_t **ppText);
 int fn_8005A2B8(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int fn_8005A630(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int fn_8005A794(int tag, int column, int id);
@@ -1743,8 +1743,8 @@ void fn_8005ACF0(int team);
 void fn_8005ACC8(void);
 void fn_8005ADCC(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize,MenuArg_t *pNames,int *pValues);
 void fn_8005AE5C(int index);
-void fn_8005AEC8(int *pEnabled,int *pCount,Params_80005284 *pFirst,Params_80005284 *pSecond,int *pAllowed);
-void fn_8005B128(int *pResult,int *pId,Params_80005284 *pText);
+void fn_8005AEC8(int *pEnabled,int *pCount,MenuText_t *pFirst,MenuText_t *pSecond,int *pAllowed);
+void fn_8005B128(int *pResult,int *pId,MenuText_t *pText);
 int fn_8005B2BC(unsigned int id,MenuArg_t *pArgs,int unused,int *pResult);
 void fn_8005B3D4(char *pFirst,int firstSize,char *pLast,int lastSize,int *pValue,char *pLabel,int labelSize,int *pResult);
 int fn_8005B4B0(unsigned int id,MenuArg_t *pArgs,int unused,int *pResult);
@@ -1753,8 +1753,8 @@ void fn_8005B610(char *pText,int size,int id);
 void fn_8005B6AC(char *pText,int size,unsigned char id,int defensive);
 int fn_8005B730(char *pText,int size,int kind,int value);
 void fn_8005B838(int kind,int value);
-int fn_8005B908(Params_80005284 **pText);
-void fn_8005B9FC(int *pResult,Params_80005284 **pNames);
+int fn_8005B908(MenuText_t **pText);
+void fn_8005B9FC(int *pResult,MenuText_t **pNames);
 
 void fn_80059B64(int *pList, int *pValues, MenuArg_t *pNames, int *pScores, int *pZero, int *pModes, int *pState, int *pFlags, int *pEnabled, int *pLast)
 {
@@ -1766,13 +1766,13 @@ void fn_80059B64(int *pList, int *pValues, MenuArg_t *pNames, int *pScores, int 
     fn_80059A9C(pList);
     pValues[0] = GameTextGetHomeTeam(); pValues[1] = GameTextGetAwayTeam();
     if (GameOptionsGet(14) != 1) {
-        Params_80005284 *pText = ((Params_80005284 **)pNames[0].pi)[*pNames[0].pi + 1];
+        MenuText_t *pText = ((MenuText_t **)pNames[0].pi)[*pNames[0].pi + 1];
         fn_801C2D88(pText->mpText, pText->mLength + 1, "%d", fn_801787DC(0));
-        pText = ((Params_80005284 **)pNames[0].pi)[*pNames[0].pi + 2];
+        pText = ((MenuText_t **)pNames[0].pi)[*pNames[0].pi + 2];
         fn_801C2D88(pText->mpText, pText->mLength + 1, "%d", fn_801787DC(1));
     } else {
-        ((Params_80005284 **)pNames[0].pi)[*pNames[0].pi + 1]->mpText[0] = 0;
-        ((Params_80005284 **)pNames[0].pi)[*pNames[0].pi + 2]->mpText[0] = 0;
+        ((MenuText_t **)pNames[0].pi)[*pNames[0].pi + 1]->mpText[0] = 0;
+        ((MenuText_t **)pNames[0].pi)[*pNames[0].pi + 2]->mpText[0] = 0;
     }
     pScores[0] = StyleTrackerGetTotal(0); pScores[1] = StyleTrackerGetTotal(1);
     pZero[1] = 0; pZero[0] = 0; pModes[1] = 0; pModes[0] = 0;
@@ -1846,9 +1846,9 @@ void fn_80059F80(char *pText, int *pRed, int *pGreen, int *pBlue)
     }
 }
 
-void fn_8005A1C0(unsigned int team, int *pEnabled, Params_80005284 **pNames, int *pMode, Params_80005284 **ppText)
+void fn_8005A1C0(unsigned int team, int *pEnabled, MenuText_t **pNames, int *pMode, MenuText_t **ppText)
 {
-    Params_80005284 *pText = *ppText;
+    MenuText_t *pText = *ppText;
     for (unsigned int i = 0; i < 4; i++) {
         pEnabled[i] = fn_801486A0() != 2 || i < 2;
         if (pEnabled[i] == 1) {
@@ -1897,9 +1897,9 @@ int fn_8005A2B8(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
         ((int *)(pArgs[5].i + (*pArgs[5].pi + 1) * 4))[1] = 0;
         break;
     case 0x80000009:
-        {Params_80005284 *pText = pArgs[4].pParams;
+        {MenuText_t *pText = pArgs[4].pParams;
         fn_8005A1C0(pArgs[0].i, (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4),
-                   (Params_80005284 **)(pArgs[2].i + (*pArgs[2].pi + 1) * 4), pArgs[3].pi, &pText);}
+                   (MenuText_t **)(pArgs[2].i + (*pArgs[2].pi + 1) * 4), pArgs[3].pi, &pText);}
         break;
     default: return 0;
     }
@@ -1914,9 +1914,9 @@ int fn_8005A630(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
     case 0x80000003: fn_80059A9C((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
     case 0x80000004: fn_80059F80(pArgs[0].pParams->mpText,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
     case 0x80000005: fn_80059E24((float *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
-    case 0x80000006: {Params_80005284 *pText=pArgs[4].pParams;
+    case 0x80000006: {MenuText_t *pText=pArgs[4].pParams;
         fn_8005A1C0(pArgs[0].i,(int *)(pArgs[1].i+(*pArgs[1].pi+1)*4),
-                   (Params_80005284 **)(pArgs[2].i+(*pArgs[2].pi+1)*4),pArgs[3].pi,&pText);} break;
+                   (MenuText_t **)(pArgs[2].i+(*pArgs[2].pi+1)*4),pArgs[3].pi,&pText);} break;
     default:return 0;
     }
     return 1;
@@ -1995,7 +1995,7 @@ void fn_8005AB04(int team, MenuArg_t *pNames, int *pValues)
     do {
         const Category_8005AB04 *pCategory=&lbl_8028EB78[lbl_80309FC4[team].mIndices[i++]];
         if(pCategory->mEnabled) {
-            Params_80005284 *pText=((Params_80005284 **)pNames[0].pi)[*pNames[0].pi+count+1];
+            MenuText_t *pText=((MenuText_t **)pNames[0].pi)[*pNames[0].pi+count+1];
             strncpy(pText->mpText,pCategory->mName,pText->mLength);
             int value=0;
             for(unsigned int j=0;j<pCategory->mCount;j++) {
@@ -2043,7 +2043,7 @@ void fn_8005AE5C(int index)
     lbl_803EA5A0[0]=0; lbl_803EA5A0[1]=0;
 }
 
-void fn_8005AEC8(int *pEnabled,int *pCount,Params_80005284 *pFirst,Params_80005284 *pSecond,int *pAllowed)
+void fn_8005AEC8(int *pEnabled,int *pCount,MenuText_t *pFirst,MenuText_t *pSecond,int *pAllowed)
 {
     fn_800C1E50();fn_80059020();
     int enabled=0;
@@ -2073,7 +2073,7 @@ void fn_8005AEC8(int *pEnabled,int *pCount,Params_80005284 *pFirst,Params_800052
     }
 }
 
-void fn_8005B128(int *pResult,int *pId,Params_80005284 *pText)
+void fn_8005B128(int *pResult,int *pId,MenuText_t *pText)
 {
     unsigned int score1,score0;
     if(GameOptionsGet(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
@@ -2174,7 +2174,7 @@ void fn_8005B838(int kind,int value)
     case 8:fn_8007BF60(value);break;
     }
 }
-int fn_8005B908(Params_80005284 **pText)
+int fn_8005B908(MenuText_t **pText)
 {
     int result=0;Challenge_t *p=ChalGetCurrent();
     if(!ChalHasMedalGoal(p)) {
@@ -2194,7 +2194,7 @@ int fn_8005B908(Params_80005284 **pText)
     }
     return result;
 }
-void fn_8005B9FC(int *pResult,Params_80005284 **pNames)
+void fn_8005B9FC(int *pResult,MenuText_t **pNames)
 {
     for(int i=0;i<4;i++) strnzcpy(pNames[i]->mpText,"",pNames[i]->mLength);
     *pResult=fn_8005B908(pNames);ChalCloseCursors();
@@ -2284,7 +2284,7 @@ int fn_8005BCA8(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
     case 0x80000001:if(!lbl_803EA5A8)fn_8005B55C(p[0].pi);else fn_8005F900(p[0].pi);break;
     case 0x80000002:if(!lbl_803EA5A8)fn_8005B5D8(p[0].i);else fn_8005F8F0();break;
-    case 0x80000003:if(!lbl_803EA5A8)fn_8005B9FC(p[0].pi,(Params_80005284 **)(p[1].i+(*p[1].pi+1)*4));break;
+    case 0x80000003:if(!lbl_803EA5A8)fn_8005B9FC(p[0].pi,(MenuText_t **)(p[1].i+(*p[1].pi+1)*4));break;
     case 0x80000004:if(!lbl_803EA5A8)fn_8005BACC(p,p[1].pi,p+2);break;
     case 0x80000005:if(!lbl_803EA5A8)fn_8005BB0C(p,p[1].pi,p[2].pi,p[3].pi);break;
     case 0x80000006:if(!lbl_803EA5A8)fn_8005BB50(p+1,p[1].pi,p[2].pi);break;
@@ -2394,9 +2394,9 @@ void fn_8005C844(int team,int *value,char *score,char *first,char *second,char *
 }
 int fn_8005C994(unsigned int id,MenuArg_t *p,int unused,int *result) {
     if(id==0x80000003) {
-        int n=*p[3].pi;Params_80005284 **texts=(Params_80005284 **)p[3].pi;
+        int n=*p[3].pi;MenuText_t **texts=(MenuText_t **)p[3].pi;
         fn_8005C844((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,texts[n+1]->mpText,texts[n+2]->mpText,texts[n+3]->mpText,(int *)(p[4].i+(*p[4].pi+1)*4),(unsigned char)p[2].pParams->mLength,(unsigned char)texts[n+1]->mLength);
-        n=*p[5].pi;texts=(Params_80005284 **)p[5].pi;
+        n=*p[5].pi;texts=(MenuText_t **)p[5].pi;
         strncpy(texts[n+1]->mpText,"TDs",texts[n+1]->mLength);strncpy(texts[n+2]->mpText,"Fumble Recs",texts[n+2]->mLength);strncpy(texts[n+3]->mpText,"INTs",texts[n+3]->mLength);
     }else if(id==0x80000004) {GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();}else if(id!=0x80000001)return 0;
     return 1;
@@ -2412,7 +2412,7 @@ void fn_8005CAE4(int team,int *value,char *score,char *first,char *second,char *
 int fn_8005CC50(unsigned int id,MenuArg_t *p,int unused,int *result) {
     if(id==0x80000003) {
         fn_8005CAE4((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[3].pParams->mpText,p[4].pParams->mpText,p[5].pParams->mpText,(unsigned char)p[2].pParams->mLength,(unsigned char)p[3].pParams->mLength,(int *)(p[6].i+(*p[6].pi+1)*4));
-        int n=*p[7].pi;Params_80005284 **texts=(Params_80005284 **)p[7].pi;
+        int n=*p[7].pi;MenuText_t **texts=(MenuText_t **)p[7].pi;
         strncpy(texts[n+1]->mpText,"TDs",texts[n+1]->mLength);strncpy(texts[n+2]->mpText,"Tackles",texts[n+2]->mLength);strncpy(texts[n+3]->mpText,"INTs",texts[n+3]->mLength);
     }else if(id==0x80000004) {GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();}else if(id!=0x80000001)return 0;
     return 1;

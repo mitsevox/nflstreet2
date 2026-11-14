@@ -1,6 +1,6 @@
 /* Passes the front end's memory card messages on to the memory card save handler. */
 
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 
 extern "C" {
 int MemCardScreenMsg(unsigned int id, int *p, int c, int *pResult);

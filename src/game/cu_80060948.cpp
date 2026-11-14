@@ -1,6 +1,6 @@
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/DepthChart.h"
 #include "game/StevTable.h"
 #include "game/fn_80061AD4.h"
@@ -37,8 +37,8 @@ struct Block_800619FC {
     int *mpGame;
     int *mpDit2;
     int *mpDit1;
-    Params_80005284 *mpName2;
-    Params_80005284 *mpName1;
+    MenuText_t *mpName2;
+    MenuText_t *mpName1;
     int *mpUnknown20;
     int *mpUnknown24;
     int *mpWinner;

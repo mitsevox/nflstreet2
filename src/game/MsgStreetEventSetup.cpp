@@ -6,7 +6,7 @@
 
 #include "game/Class_80148A58.h"
 #include "game/DbCursor.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 
@@ -323,7 +323,7 @@ void MsgStreetEventSetupGetRow(int index, int *pEnabled, MenuArg_t text, int *pS
 int MsgStreetEventSetupChangeRow(int index, int direction, MenuArg_t text)
 {
     int changed = 0;
-    Params_80005284 *pText = text.pParams;
+    MenuText_t *pText = text.pParams;
 
     if (index >= 1 && index <= 3 ? _MsgStreetEventSetup_pState->mOptions[index - 1].mUnknown5 != 0
                                  : index >= 4 && index <= 7 && _MsgStreetEventSetup_pState->mToggles[index - 4].mUnknown5 != 0) {

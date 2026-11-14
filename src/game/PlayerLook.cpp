@@ -92,7 +92,7 @@ void PlaTexCacheSetSlot(int index, int slot, int id, int palette, int d);
 int PlaTexCacheFindTexture(char *pName);
 void PlaTexCacheSetColors(int index, unsigned char *pColors);
 void PlaTexCacheGetHairTexture(int a, int *pId, int *pPalette);
-int fn_801835A0(void);
+int EditMenuIsOpen(void);
 void fn_801A34B0(int a, int b, int c, int d);
 void fn_801A3520(void);
 void fn_801A3588(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit);
@@ -820,7 +820,7 @@ extern "C" void PlayerLookLoadForPlayer(unsigned int mode, int index, int unused
             flag = fn_80081FD4((Object_8008044C *)&cursor, 1) == 0;
         }
         DbCursorClose(&cursor);
-    } else if ((FELoopIsMainFEActive() && (fn_801835A0() || StoryPlayerScreenIsActive())) || !fn_801486A0()) {
+    } else if ((FELoopIsMainFEActive() && (EditMenuIsOpen() || StoryPlayerScreenIsActive())) || !fn_801486A0()) {
         flag = 1;
     } else if (GameInfoGet(2) == 0) {
         flag = mode <= 6;

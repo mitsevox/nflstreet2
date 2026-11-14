@@ -5,7 +5,7 @@
 
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include <string.h>
 #include "game/fn_801FCE10.h"
 
