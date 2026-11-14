@@ -33,7 +33,7 @@ int File_uMemFlags = 0;
 
 void *File_pFileRequestList;
 void *File_pAsyncRequestList;
-unsigned char File_AsyncFileCopy;
+extern unsigned char File_AsyncFileCopy;
 Lock_801F8014 File_RequestListCS;
 Lock_801F8014 File_AsyncRequestListCS;
 FileInitParms_t File_InitParms;
