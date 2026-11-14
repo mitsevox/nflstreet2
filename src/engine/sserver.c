@@ -68,7 +68,7 @@ void SNDSYSI_100hzserver(void)
                 voice->m6C = 0;
             }
             voice->m8A = 0;
-            fn_80277EC4(i);
+            iSNDcalcpitch(i);
             fn_80274B50(i);
         }
         changed = 0;

@@ -7,12 +7,12 @@ extern "C" {
 
 int SFILTER_unpackpf(Node_80279D90 *node, int count, float *a, float *b, int flag)
 {
-    SndPcmUnpackFilter_t *decoder;
+    SndPcmPacketUnpackFilter_t *decoder;
     int length;
     int last;
     int n;
 
-    decoder = (SndPcmUnpackFilter_t *)node;
+    decoder = (SndPcmPacketUnpackFilter_t *)node;
     if (decoder->mPendingCount != 0) {
         SNDPKTPLAYI_freeframes(decoder->mStream, decoder->mChannel, decoder->mPendingCount);
         decoder->mPendingCount = 0;
@@ -46,9 +46,9 @@ int SFILTER_unpackpf(Node_80279D90 *node, int count, float *a, float *b, int fla
 
 void SFILTER_unpackpfinit(Node_80279D90 *node, Params_80275F80 *params)
 {
-    SndPcmUnpackFilter_t *decoder;
+    SndPcmPacketUnpackFilter_t *decoder;
 
-    decoder = (SndPcmUnpackFilter_t *)node;
+    decoder = (SndPcmPacketUnpackFilter_t *)node;
     node->m0 = SFILTER_unpackpf;
     decoder->mStream = SNDPKTPLAYI_voicetopackethandle(fn_80274304(params->m1C));
     decoder->mChannel = fn_80274334(params->m1C);

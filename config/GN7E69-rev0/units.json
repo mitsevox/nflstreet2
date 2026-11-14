@@ -2457,6 +2457,14 @@
     "SFILTER_unpackxapfinit": {
       "address": "0x8027BA6C",
       "evidence": "evidence.tsv function/name rows for 0x8027BA6C; exact but unlinked in the comparison-only src/engine/supxapf.cpp, which keeps its original bytes until the whole file can be linked; stored in the constructor table by src/engine/cu_80279BC0.cpp by name."
+    },
+    "SNDPKTPLAY_overhead": {
+      "address": "0x80278AC8",
+      "evidence": "evidence.tsv function/name rows for 0x80278AC8 (SNDPKTPLAY_overhead in src/engine/spktplay.c, comparison only until linked); the linked src/engine/sstovrhd.c calls it by name (integration of c16c and c16g)."
+    },
+    "SNDMIX_setdrygain": {
+      "address": "0x80276378",
+      "evidence": "evidence.tsv function/name rows for 0x80276378 (SNDMIX_setdrygain in src/engine/smixer.c, comparison only until linked); src/engine/snddrv.c calls it by name (integration of c15h and c16f)."
     }
   },
   "units": [
@@ -15797,7 +15805,7 @@
     {
       "source": "src/engine/suppf.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8027B1F8-0x8027B39C (src/engine/suppf.c), its two function and name rows (SFILTER_unpackpf, SFILTER_unpackpfinit), the SndPcmUnpackFilter_t type and field rows, and the sound_cxx compiler row 0x80276DE4-0x8027CF9C; every function exact, promoted from comparison-only. No owned data.",
+      "evidence": "evidence.tsv unit row 0x8027B1F8-0x8027B39C (src/engine/suppf.c), its two function and name rows (SFILTER_unpackpf, SFILTER_unpackpfinit), the SndPcmPacketUnpackFilter_t type and field rows, and the sound_cxx compiler row 0x80276DE4-0x8027CF9C; every function exact, promoted from comparison-only. No owned data.",
       "sections": [
         {
           "section": ".text",

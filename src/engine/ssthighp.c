@@ -14,7 +14,7 @@ int SNDSTRM_highpass(int stream, int value)
         return -8;
     }
     channel->mHighPass = value;
-    fn_80278530(channel->mVoice, value);
+    SNDCTRL_highpass(channel->mVoice, value);
     return 0;
 }
 

@@ -18,7 +18,7 @@ int SFILTER_unpackxapf(Node_80279D90 *node, int count, float *a, float *b, int f
     total = 0;
     seed = 0;
     if (decoder->m34 != 0) {
-        fn_8027952C(decoder->m30, decoder->m38, decoder->m34);
+        SNDPKTPLAYI_freeframes(decoder->m30, decoder->m38, decoder->m34);
         decoder->m34 = 0;
     }
     while (count > 0) {

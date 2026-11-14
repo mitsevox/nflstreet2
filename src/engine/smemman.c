@@ -29,7 +29,7 @@ void SNDMEMI_init(void *memory, int size)
 
 void SNDMEMI_restore(void)
 {
-    fn_80278894();
+    SNDMEM_gethighwater();
 }
 
 void *SNDMEMI_allocz(int size)

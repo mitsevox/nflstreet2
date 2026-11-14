@@ -17,7 +17,7 @@ int SNDpitchmult(int handle, int pitch)
                 return 0;
             }
             rec->m8C = pitch;
-            fn_80277EC4(cursor);
+            iSNDcalcpitch(cursor);
             fn_80274B50(cursor);
         }
     }

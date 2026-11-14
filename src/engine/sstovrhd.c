@@ -11,7 +11,7 @@ int SNDSTRM_overheadtap(int requests, int channels)
 
     size = lbl_8030002C * sizeof(float) + sizeof(SndStreamChannel_t);
     size += requests * sizeof(SndStreamRequest_t);
-    size += fn_80278AC8(channels);
+    size += SNDPKTPLAY_overhead(channels);
     return size;
 }
 

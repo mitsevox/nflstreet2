@@ -221,7 +221,7 @@ void fn_80272D34(void **buffers, void *unused)
     if (lbl_803A8D60.mC048 != 0) {
         for (i = 0; i < lbl_8030002C; i++) {
             if (lbl_803B4E34.m14[i] != 0) {
-                float *dst = fn_802753F0(i);
+                float *dst = MIX_getwetbuffer(i);
                 int *src = (int *)buffers[0];
 
                 lbl_803A8D40 = dst;
@@ -893,7 +893,7 @@ void fn_802747D8(int index)
             count = 2;
         }
         for (i = 0; i < count; i++) {
-            fn_80276378(index - lbl_803A6C24.m1C.m12, i, volume * channel->m0[i]);
+            SNDMIX_setdrygain(index - lbl_803A6C24.m1C.m12, i, volume * channel->m0[i]);
         }
     }
 }

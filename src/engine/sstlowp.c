@@ -14,7 +14,7 @@ int SNDSTRM_lowpass(int stream, int value)
         return -8;
     }
     channel->mLowPass = value;
-    fn_8027882C(channel->mVoice, value);
+    SNDCTRL_lowpass(channel->mVoice, value);
     return 0;
 }
 

@@ -185,7 +185,7 @@ typedef struct SndMtUnpackFilter_t {
     unsigned char mChannel;
 } SndMtUnpackFilter_t;
 
-typedef struct SndPcmUnpackFilter_t {
+typedef struct SndPcmPacketUnpackFilter_t {
     Node_80279D90 mNode;
     unsigned char *mpPacket;
     int mPacketLength;
@@ -194,7 +194,7 @@ typedef struct SndPcmUnpackFilter_t {
     int mPendingCount;
     unsigned char mConvert;
     unsigned char mChannel;
-} SndPcmUnpackFilter_t;
+} SndPcmPacketUnpackFilter_t;
 
 typedef struct SndXaUnpackFilter_t {
     Node_80279D90 mNode;
