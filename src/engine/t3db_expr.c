@@ -642,7 +642,7 @@ int _TDbExprCopy(TDbExpr_t *pSrc, TDbExpr_t **ppDst)
         } else {
             (*ppDst)->mLeft.mSize = pSrc->mLeft.mSize;
         }
-        err = TDbExtMemAlloc(lbl_803EBE8C, (*ppDst)->mLeft.mSize, &(*ppDst)->mLeft.mValue.p);
+        err = TDbExtMemAlloc(_tDbGlobalMemoryHeapID, (*ppDst)->mLeft.mSize, &(*ppDst)->mLeft.mValue.p);
         if (err == 0) {
             memcpy((*ppDst)->mLeft.mValue.p, pSrc->mLeft.mValue.p, (*ppDst)->mLeft.mSize);
         }
@@ -667,7 +667,7 @@ int _TDbExprCopy(TDbExpr_t *pSrc, TDbExpr_t **ppDst)
         } else {
             (*ppDst)->mRight.mSize = pSrc->mRight.mSize;
         }
-        err = TDbExtMemAlloc(lbl_803EBE8C, (*ppDst)->mRight.mSize, &(*ppDst)->mRight.mValue.p);
+        err = TDbExtMemAlloc(_tDbGlobalMemoryHeapID, (*ppDst)->mRight.mSize, &(*ppDst)->mRight.mValue.p);
         if (err == 0) {
             memcpy((*ppDst)->mRight.mValue.p, pSrc->mRight.mValue.p, (*ppDst)->mRight.mSize);
         }
@@ -725,14 +725,14 @@ int _TDbExprPrepare(TDbExpr_t *pSrc, TDbExpr_t **ppDst, TDbTable_t **ppTables, i
             } else {
                 (*ppDst)->mLeft.mSize = pSrc->mLeft.mSize;
             }
-            err = TDbExtMemAlloc(lbl_803EBE8C, (*ppDst)->mLeft.mSize, &(*ppDst)->mLeft.mValue.p);
+            err = TDbExtMemAlloc(_tDbGlobalMemoryHeapID, (*ppDst)->mLeft.mSize, &(*ppDst)->mLeft.mValue.p);
             memcpy((*ppDst)->mLeft.mValue.p, pSrc->mLeft.mValue.p, (*ppDst)->mLeft.mSize);
             (*ppDst)->mLeft.mType = pSrc->mLeft.mType;
             break;
         }
     case TDB_TYPE_COLUMN:
         for (i = 0; i < tableCount; i++) {
-            if ((int)(pSrc->mLeft.mValue.l >> 32) == ppTables[i]->mUnknown1C) {
+            if ((int)(pSrc->mLeft.mValue.l >> 32) == ppTables[i]->mId) {
                 column = fn_8020B97C(ppTables[i], (int)pSrc->mLeft.mValue.l);
                 if (column == 0xFF) {
                     return 9;
@@ -779,14 +779,14 @@ int _TDbExprPrepare(TDbExpr_t *pSrc, TDbExpr_t **ppDst, TDbTable_t **ppTables, i
                 } else {
                     (*ppDst)->mRight.mSize = pSrc->mRight.mSize;
                 }
-                err = TDbExtMemAlloc(lbl_803EBE8C, (*ppDst)->mRight.mSize, &(*ppDst)->mRight.mValue.p);
+                err = TDbExtMemAlloc(_tDbGlobalMemoryHeapID, (*ppDst)->mRight.mSize, &(*ppDst)->mRight.mValue.p);
                 memcpy((*ppDst)->mRight.mValue.p, pSrc->mRight.mValue.p, (*ppDst)->mRight.mSize);
                 (*ppDst)->mRight.mType = pSrc->mRight.mType;
             }
             break;
         case TDB_TYPE_COLUMN:
             for (i = 0; i < tableCount; i++) {
-                if ((int)(pSrc->mRight.mValue.l >> 32) == ppTables[i]->mUnknown1C) {
+                if ((int)(pSrc->mRight.mValue.l >> 32) == ppTables[i]->mId) {
                     column = fn_8020B97C(ppTables[i], (int)pSrc->mRight.mValue.l);
                     if (column == 0xFF) {
                         return 9;
@@ -894,13 +894,13 @@ void _TDbExprFree(TDbExpr_t *pExpr)
         if (pExpr->mLeft.mType >= TDB_TYPE_EXPR_TRUNC && pExpr->mLeft.mType <= TDB_TYPE_EXPR_FLOAT) {
             _TDbExprFree(pExpr->mLeft.mValue.p);
         } else if (pExpr->mLeft.mType <= TDB_TYPE_BINARY) {
-            TDbExtMemFree(lbl_803EBE8C, pExpr->mLeft.mValue.p, pExpr->mLeft.mSize);
+            TDbExtMemFree(_tDbGlobalMemoryHeapID, pExpr->mLeft.mValue.p, pExpr->mLeft.mSize);
         }
         if (pExpr->mOp) {
             if (pExpr->mRight.mType >= TDB_TYPE_EXPR_TRUNC && pExpr->mRight.mType <= TDB_TYPE_EXPR_FLOAT) {
                 _TDbExprFree(pExpr->mRight.mValue.p);
             } else if (pExpr->mRight.mType <= TDB_TYPE_BINARY) {
-                TDbExtMemFree(lbl_803EBE8C, pExpr->mRight.mValue.p, pExpr->mRight.mSize);
+                TDbExtMemFree(_tDbGlobalMemoryHeapID, pExpr->mRight.mValue.p, pExpr->mRight.mSize);
             }
         }
         __TDbMemPoolFree(&lbl_803E9654, pExpr);

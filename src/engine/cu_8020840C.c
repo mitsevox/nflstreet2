@@ -34,7 +34,7 @@ int fn_802088A8(TDbQuery_t *pQuery, unsigned short *pCount)
 {
     switch (pQuery->mState) {
     case 0:
-        *pCount = pQuery->mSource.mTable->mRowCount - pQuery->mSource.mTable->mUnknown46;
+        *pCount = pQuery->mSource.mTable->mRowCount - pQuery->mSource.mTable->mDeletedCount;
         break;
     case 1:
     case 2:
@@ -58,7 +58,7 @@ int fn_80209E40(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLit)
             int bFound = 0;
 
             for (j = 0; j < pStmt->mTableCount; j++) {
-                if (pLit->mTableId == pStmt->mTables[j]->mUnknown1C) {
+                if (pLit->mTableId == pStmt->mTables[j]->mId) {
                     bFound = 1;
                     break;
                 }
@@ -85,7 +85,7 @@ void fn_8020A3A0(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLit)
             j = 0;
         } else {
             for (j = 0; j <= pStmt->mTableCount; j++) {
-                if (pLit->mTableId == pStmt->mTables[j]->mUnknown1C) {
+                if (pLit->mTableId == pStmt->mTables[j]->mId) {
                     break;
                 }
             }

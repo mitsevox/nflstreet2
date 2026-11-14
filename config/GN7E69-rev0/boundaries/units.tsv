@@ -82,9 +82,9 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801F77DC	0x801F7D34	system.c	13	13	13	0	13	-	-
 0x801F7DF4	0x801F8878	llsystem.c	24	18	22	0	12	-	-
 0x801F8878	0x801FA870	t3db.c	49	30	37	0	15	-	-
-0x801FA870	0x801FC9D4	t3db_io.c	15	15	15	0	15	-	t3db_TblRaw.c
+0x801FA870	0x801FC9D4	t3db_io.c	15	15	15	15	0	-	t3db_TblRaw.c
 0x801FC9D4	0x802009B0	T3DB_Compiler.c	36	36	36	0	36	-	-
-0x802009B0	0x80201D94	T3DB_Lexer.c	4	4	4	0	4	-	-
+0x802009B0	0x80201D94	T3DB_Lexer.c	4	4	4	4	0	-	-
 0x80201D94	0x80201EC8	t3db_bitdata.c	2	2	2	2	0	-	-
 0x80201EC8	0x80203444	t3db_index.c	17	17	17	17	0	-	-
 0x80203444	0x80203754	t3db_mem.c	5	5	5	0	5	-	-

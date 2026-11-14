@@ -36883,13 +36883,13 @@
     {
       "source": "src/engine/t3db_io.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801FA870-0x801FC9D4 (src/engine/t3db_io.c): first run of the original t3db_io.c (NASCAR 2005 symbol table), _TDbIOInitCRCTable .. _TDbIOReadTableRow, and its .data CRC table 0x802F9548-0x802F9948. Stops before 0x801FB0F8 (_TDbIOReadTableNew, no source yet). Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv whole-file unit, function, data, type and source-form rows; complete bodies compared at full original extents under the unchanged engine_c_fastmath profile. Remaining partials stay measured and their original bytes linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801FA870",
-          "end": "0x801FB0F8"
+          "end": "0x801FC9D4"
         },
         {
           "section": ".data",
@@ -36900,92 +36900,77 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801FA870",
+          "symbol": "_TDbIOInitCRCTable",
           "start": "0x801FA870",
           "end": "0x801FA8C8"
         },
         {
-          "symbol": "fn_801FA8C8",
+          "symbol": "_TDbIOWriteBuffer",
           "start": "0x801FA8C8",
           "end": "0x801FA964"
         },
         {
-          "symbol": "fn_801FA964",
+          "symbol": "_TDbIOReadBuffer",
           "start": "0x801FA964",
           "end": "0x801FAA00"
         },
         {
-          "symbol": "fn_801FAA00",
+          "symbol": "_TDbIODatabaseSaveSize",
           "start": "0x801FAA00",
           "end": "0x801FAAF8"
         },
         {
-          "symbol": "fn_801FAAF8",
+          "symbol": "_TDbIOReadTableAppend",
           "start": "0x801FAAF8",
           "end": "0x801FAEDC"
         },
         {
-          "symbol": "fn_801FAEDC",
+          "symbol": "_TDbIOReadTableRow",
           "start": "0x801FAEDC",
           "end": "0x801FB0F8"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801FB9D0.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801FA870-0x801FC9D4 (src/engine/t3db_io.c; this source covers 0x801FB9D0-0x801FBFEC as src/engine/cu_801FB9D0.c): second run of the original t3db_io.c (NASCAR 2005 symbol table), _TDbIOReadExprNode .. _TDbIOWriteTable, split because 0x801FB0F8 and 0x801FB5C0 before it and 0x801FBFEC after it have no source yet. Comparison only; original assembly stays linked.",
-      "sections": [
+        },
         {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801FB9D0",
-          "end": "0x801FBFEC"
-        }
-      ],
-      "functions": [
+          "symbol": "_TDbIOReadTableNew",
+          "start": "0x801FB0F8",
+          "end": "0x801FB5C0"
+        },
         {
-          "symbol": "fn_801FB9D0",
+          "symbol": "_TDbIOReadIndex",
+          "start": "0x801FB5C0",
+          "end": "0x801FB9D0"
+        },
+        {
+          "symbol": "_TDbIOReadExprNode",
           "start": "0x801FB9D0",
           "end": "0x801FBAC4"
         },
         {
-          "symbol": "fn_801FBAC4",
+          "symbol": "_TDbIOWriteExprNode",
           "start": "0x801FBAC4",
           "end": "0x801FBC2C"
         },
         {
-          "symbol": "fn_801FBC2C",
+          "symbol": "_TDbIOWriteIndex",
           "start": "0x801FBC2C",
           "end": "0x801FBD2C"
         },
         {
-          "symbol": "fn_801FBD2C",
+          "symbol": "_TDbIOWriteTable",
           "start": "0x801FBD2C",
           "end": "0x801FBFEC"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801FC5FC.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801FA870-0x801FC9D4 (src/engine/t3db_io.c; this source covers 0x801FC5FC-0x801FC9D4 as src/engine/cu_801FC5FC.c): last run of the original t3db_io.c (NASCAR 2005 symbol table), _TDbIOSaveDatabase and _TDbIOCRC32, ending where T3DB_Compiler.c begins; split because 0x801FBFEC (_TDbIOLoadDatabase) has no source yet. Comparison only; original assembly stays linked.",
-      "sections": [
+        },
         {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801FC5FC",
-          "end": "0x801FC9D4"
-        }
-      ],
-      "functions": [
+          "symbol": "_TDbIOLoadDatabase",
+          "start": "0x801FBFEC",
+          "end": "0x801FC5FC"
+        },
         {
-          "symbol": "fn_801FC5FC",
+          "symbol": "_TDbIOSaveDatabase",
           "start": "0x801FC5FC",
           "end": "0x801FC950"
         },
         {
-          "symbol": "fn_801FC950",
+          "symbol": "_TDbIOCRC32",
           "start": "0x801FC950",
           "end": "0x801FC9D4"
         }
@@ -37189,38 +37174,39 @@
     {
       "source": "src/engine/T3DB_Lexer.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x802009B0-0x80201D94 (src/engine/T3DB_Lexer.c): first function of the original T3DB_Lexer.c (NASCAR 2005 symbol table), T3DB_Lexer_GetTokens. Stops before 0x80200DD4 (T3DB_Lexer_Number, no source yet). Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv whole-file unit, function, data, type and source-form rows; complete bodies compared at full original extents under the unchanged engine_c_fastmath profile. Remaining partials stay measured and their original bytes linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802009B0",
-          "end": "0x80200DD4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_802009B0",
-          "start": "0x802009B0",
-          "end": "0x80200DD4"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80201C70.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x802009B0-0x80201D94 (src/engine/T3DB_Lexer.c; this source covers 0x80201C70-0x80201D94 as src/engine/cu_80201C70.c): last function of the original T3DB_Lexer.c (NASCAR 2005 symbol table), T3DB_Lexer_StringLiteral, split from src/engine/T3DB_Lexer.c because 0x80200DD4 and 0x80201030 have no source yet. Comparison only; original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80201C70",
           "end": "0x80201D94"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1AF0",
+          "end": "0x802B1AF8"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_80201C70",
+          "symbol": "T3DB_Lexer_GetTokens",
+          "start": "0x802009B0",
+          "end": "0x80200DD4"
+        },
+        {
+          "symbol": "T3DB_Lexer_Number",
+          "start": "0x80200DD4",
+          "end": "0x80201030"
+        },
+        {
+          "symbol": "T3DB_Lexer_Identifier",
+          "start": "0x80201030",
+          "end": "0x80201C70"
+        },
+        {
+          "symbol": "T3DB_Lexer_StringLiteral",
           "start": "0x80201C70",
           "end": "0x80201D94"
         }

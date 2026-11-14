@@ -37,17 +37,17 @@ void _TDbBlobGetData(TDbTable_t *pTable, TDbColumn_t *pColumn, void *pRow, unsig
     if (offset != -1) {
         switch (pColumn->mType) {
         case 15:
-            len = pTable->mUnknown18[offset++] << 24;
-            len |= pTable->mUnknown18[offset++] << 16;
+            len = pTable->mExtraData[offset++] << 24;
+            len |= pTable->mExtraData[offset++] << 16;
         case 14:
-            len |= pTable->mUnknown18[offset++] << 8;
+            len |= pTable->mExtraData[offset++] << 8;
         case 13:
-            len |= pTable->mUnknown18[offset++];
+            len |= pTable->mExtraData[offset++];
         }
         if (pTable->mFlags & 0x40) {
-            _TDbBlobHuffDecode((TDbHuffNode_t *)pTable->mUnknown18, pTable->mUnknown18 + offset, len, pOut);
+            _TDbBlobHuffDecode((TDbHuffNode_t *)pTable->mExtraData, pTable->mExtraData + offset, len, pOut);
         } else {
-            memcpy(pOut, pTable->mUnknown18 + offset, len);
+            memcpy(pOut, pTable->mExtraData + offset, len);
         }
     }
     pOut[len] = 0;
