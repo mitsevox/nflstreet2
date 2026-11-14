@@ -17379,6 +17379,25 @@
           "end": "0x8023E920"
         }
       ]
+    },
+    {
+      "source": "src/engine/kf_sin.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit/function/name/type/field/data/compiler/source-form rows for kf_sin.c; complete sine kernel and observed scalar factors.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80261414",
+          "end": "0x802614C0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC4A4",
+          "end": "0x803EC4C0"
+        }
+      ]
     }
   ]
 }
