@@ -92,7 +92,7 @@ void QuatFromAxisAngle(Quat_801EB488 *pOut, Vector_80039F5C *pAxis, int angle);
 void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
 void fn_80227350(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-int fn_8013AD78(Ball_t *pBall);
+int BallIsContactRaised(Ball_t *pBall);
 void fn_8013AD9C(Ball_t *pBall, int a);
 void fn_8013AB24(Ball_t *pBall);
 void PlyrPoseGetAttachTransform(void *pObject, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
@@ -102,6 +102,7 @@ int fn_802275D8(Vector_80039F5C *pA, Vector_80039F5C *pB, float eps);
 void BallStatePreUpdate(Ball_t *pBall, float dt);
 void BallStateHitGround(Ball_t *pBall, float dt);
 void BallApplyImpulse(Ball_t *pBall, Vector_80039F5C *pA, Vector_80039F5C *pB);
+void WeatherGetWindVector(Vector_80039F5C *pOut);
 void BallTransformShapePoint(Vector_80039F5C *pPos, Quat_801EB488 *pRot, int index, Vector_80039F5C *pOut);
 void BallUpdateGroundPoint(Ball_t *pBall);
 void BallFindLowestPoint(Ball_t *pBall, Vector_80039F5C *pOut, int *pIndex);
@@ -447,7 +448,7 @@ void fn_8013A0EC(Ball_t *pBall, float dt)
     fn_80227350(&pBall->mState.mPos, &pBall->mState.mUnknown54, dt);
     fn_80139F28(pBall);
     fn_80139AF0(pBall, dt);
-    if (fn_8013AD78(pBall)) {
+    if (BallIsContactRaised(pBall)) {
         fn_8013AB24(pBall);
     }
 }
@@ -518,7 +519,40 @@ void fn_8013A440(Ball_t *pBall)
     fn_8013A048(&pBlock->mUnknown108, &pBall->mState.mUnknown18, flip);
 }
 
-void fn_8013A494(Ball_t *pBall, float dt)
+void BallGetWindDrift(Vector_80039F5C *pAccel, Vector_80039F5C *pOut, float t)
+{
+    Vector_80039F5C wind;
+
+    WeatherGetWindVector(&wind);
+    fn_80227264(pAccel, &wind, 0.0f);
+    fn_80227264(pOut, pAccel, 0.5f * t * t);
+}
+
+void BallApplyWindForce(Ball_t *pBall, float scale)
+{
+    Vector_80039F5C wind;
+    Vector_80039F5C force;
+
+    WeatherGetWindVector(&wind);
+    wind.mY *= wind.mY > 0.0f ? lbl_803EB1B4 : lbl_803EB1B8;
+    fn_80227264(&force, &wind, scale * 0.93913037f);
+    BallApplyImpulse(pBall, &force, &pBall->mState.mPos);
+}
+
+void BallApplyWindForceDamped(Ball_t *pBall, float scale)
+{
+    Vector_80039F5C wind;
+    Vector_80039F5C force;
+
+    WeatherGetWindVector(&wind);
+    if (wind.mY > 0.0f) {
+        wind.mY *= lbl_803EB1B4;
+    }
+    fn_80227264(&force, &wind, scale * 0.93913037f);
+    BallApplyImpulse(pBall, &force, &pBall->mState.mPos);
+}
+
+void BallApplyContactForce(Ball_t *pBall, float dt)
 {
     Vector_80039F5C force;
     Vector_80039F5C jitter;
@@ -547,6 +581,31 @@ void fn_8013A494(Ball_t *pBall, float dt)
     AudmonEventPostArgs(0x1F, &pBall->mState.mPos, (unsigned int)(force.mZ * 65536.0f), 0, 0);
 }
 
+void BallApplyWobble(Ball_t *pBall)
+{
+    Vector_80039F5C *pVel = &pBall->mState.mUnknown54;
+    Vector_80039F5C force;
+    Vector_80039F5C point;
+    int count = ++pBall->mState.mUnknownE4;
+
+    if ((pBall->mState.mFlags & 0x20) && count == 3) {
+        pBall->mState.mUnknownE4 = 0;
+        if (fn_802270A4(pVel) > pVel->mZ + pVel->mZ && fn_80237260(0) < 0.6f) {
+            force.mX = -pVel->mX * 440.21735f;
+            force.mY = -pVel->mY * 440.21735f;
+            force.mZ = (fn_802270D4(pVel) - pVel->mZ) * lbl_803EB1BC * 293.47824f;
+            fn_80227264(&force, &force, fn_8013A2A4(pBall, pBall->mState.mUnknownA0));
+            fn_802276B4(&point, &pBall->mState.mPos, &pBall->mState.mUnknown94);
+            fn_8022765C(&point, &point, &pBall->mState.mPos);
+            if (force.mZ > 20.543476f) {
+                pBall->mState.mFlags |= 8;
+            }
+            BallApplyImpulse(pBall, &force, &point);
+            pBall->mState.mFlags &= ~0x20;
+        }
+    }
+}
+
 void fn_8013A64C(Ball_t *pBall, float dt)
 {
     BallUpdateGroundPoint(pBall);
@@ -555,7 +614,7 @@ void fn_8013A64C(Ball_t *pBall, float dt)
     fn_80139954(pBall, dt);
 }
 
-void fn_8013A6A8(Ball_t *pBall, float dt)
+void BallStepGroundContact(Ball_t *pBall, float dt)
 {
     BallUpdateGroundPoint(pBall);
     if (fn_80139630(pBall)) {
@@ -567,7 +626,7 @@ void fn_8013A6A8(Ball_t *pBall, float dt)
     }
 }
 
-void fn_8013A72C(Ball_t *pBall, float dt)
+void BallFollowHolder(Ball_t *pBall, float dt)
 {
     Quat_801EB488 rot;
     Quat_801EB488 turn;
@@ -589,7 +648,7 @@ void fn_8013A72C(Ball_t *pBall, float dt)
     }
 }
 
-void fn_8013A844(Ball_t *pBall, float dt)
+void BallStepMotion(Ball_t *pBall, float dt)
 {
     Block_80170E64 *pBlock;
 
@@ -604,14 +663,14 @@ void fn_8013A844(Ball_t *pBall, float dt)
     if (!BallGetHolder(pBall)) {
         fn_8013A0EC(pBall, dt);
     } else {
-        fn_8013A72C(pBall, dt);
+        BallFollowHolder(pBall, dt);
     }
     ClearVector(&pBall->mState.mUnknown7C);
     ClearVector(&pBall->mState.mUnknown88);
     pBlock->mUnknown660 = LevelFindArea(&pBlock->mUnknown4.mX);
 }
 
-void fn_8013A910(Ball_t *pBall, int *pAngles)
+void BallRestAtAngles(Ball_t *pBall, int *pAngles)
 {
     Vector_80039F5C low;
     int index;
@@ -627,12 +686,25 @@ void fn_8013A910(Ball_t *pBall, int *pAngles)
     pBall->mState.mUnknown34 = pBall->mState.mUnknown18;
 }
 
+void BallAddClampedE0(Ball_t *pBall, float delta)
+{
+    float value = pBall->mState.mUnknownE0 + delta;
+
+    if (value < -1.0f) {
+        pBall->mState.mUnknownE0 = -1.0f;
+    } else if (value > 1.0f) {
+        pBall->mState.mUnknownE0 = 1.0f;
+    } else {
+        pBall->mState.mUnknownE0 = value;
+    }
+}
+
 void fn_8013A9F0(Ball_t *pBall)
 {
     pBall->mState.mFlags &= ~8;
 }
 
-void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding)
+void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding)
 {
     Point_8017886C pos;
     float vz = pBall->mState.mUnknown54.mZ;
@@ -661,11 +733,11 @@ void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLa
 
 void fn_8013AB24(Ball_t *pBall)
 {
-    fn_8013AA00(pBall, lbl_803EB1C0, &pBall->mState.mUnknown44, &pBall->mState.mUnknown48);
+    BallSolveFallToHeight(pBall, lbl_803EB1C0, &pBall->mState.mUnknown44, &pBall->mState.mUnknown48);
     pBall->mState.mUnknown48.mZ = lbl_803EB1C0;
 }
 
-float fn_8013AB64(Ball_t *pBall, float t)
+float BallGetHeightAtTime(Ball_t *pBall, float t)
 {
     Vector_80039F5C vel;
     Vector_80039F5C pos;
@@ -684,7 +756,7 @@ void fn_8013ABE0(Ball_t *pBall)
     pBall->mState.mUnknownEC = 1.35f;
 }
 
-void fn_8013AC28(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float rate)
+void BallLaunchToTarget(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float rate)
 {
     Vector_80039F5C delta;
     float time;
@@ -708,7 +780,21 @@ void fn_8013AD04(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin
     fn_8013A2F4(pBall, mode, spin, rate);
 }
 
-int fn_8013AD78(Ball_t *pBall)
+int BallIsSettled(Ball_t *pBall)
+{
+    if (BallGetHolder(pBall)) {
+        return 0;
+    }
+    if (pBall->mState.mUnknown94.mZ > 0.0f) {
+        return 0;
+    }
+    if (pBall->mState.mUnknown54.mZ > 0.0f) {
+        return 0;
+    }
+    return fn_802270D4(&pBall->mState.mUnknown54) <= 0.01f;
+}
+
+int BallIsContactRaised(Ball_t *pBall)
 {
     return pBall->mState.mUnknown94.mZ > 0.0f;
 }
@@ -831,7 +917,7 @@ void fn_8013B068(Ball_t *pBall)
     }
 }
 
-void fn_8013B0B4(Ball_t *pBall, float dt)
+void BallStateStepTimed(Ball_t *pBall, float dt)
 {
     Vector_80039F5C pos;
     int counting = 1;
@@ -848,7 +934,7 @@ void fn_8013B0B4(Ball_t *pBall, float dt)
     }
 }
 
-void fn_8013B198(Ball_t *pBall, float dt)
+void BallStateStopVelocity(Ball_t *pBall, float dt)
 {
     if (fn_802270D4(&pBall->mState.mUnknown54) != 0.0f) {
         pBall->mState.mUnknown54.mX = pBall->mState.mUnknown54.mY = pBall->mState.mUnknown54.mZ = 0.0f;
@@ -887,12 +973,12 @@ void fn_8013B2A0(Ball_t *pBall, float dt)
             PossStartFumble();
         }
     }
-    fn_8013A494(pBall, dt);
+    BallApplyContactForce(pBall, dt);
 }
 
 void fn_8013B330(Ball_t *pBall, float dt)
 {
-    fn_8013A494(pBall, dt);
+    BallApplyContactForce(pBall, dt);
 }
 
 void fn_8013B350(Ball_t *pBall, float dt)
@@ -907,7 +993,7 @@ void fn_8013B350(Ball_t *pBall, float dt)
     } else {
         BallStateChange(pBall, 5, 0);
     }
-    fn_8013A494(pBall, dt);
+    BallApplyContactForce(pBall, dt);
 }
 
 int fn_8013B3EC(Ball_t *pBall, void *pData, unsigned int type)
@@ -1006,7 +1092,7 @@ void fn_8013B730(Ball_t *pBall, float dt)
 {
 }
 
-void fn_8013B734(Ball_t *pBall, float dt)
+void BallStatePlacedUpdate(Ball_t *pBall, float dt)
 {
     Vector_80039F5C pos;
     int angles[3];

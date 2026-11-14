@@ -44,7 +44,7 @@ void HudSetScoreTableRow(int slot, const char *pText0, const char *pText1, const
 extern const char lbl_802A0DDC[];
 extern const char lbl_802A05C8[];
 void fn_801780A8(Point_8017886C point);
-void fn_8013A910(Ball_t *pBall, int *pAngles);
+void BallRestAtAngles(Ball_t *pBall, int *pAngles);
 void fn_8013AD9C(Ball_t *pBall, int value);
 void BallPrimeKickUp(Ball_t *pBall);
 void fn_8014FFC4(Point_8017886C *pPoint);
@@ -84,7 +84,7 @@ void ResetBallsAndFieldPositions(void)
         angles[0] = 0;
         angles[1] = 0xFFC00000;
         angles[2] = 0xFFC00000;
-        fn_8013A910(pBall, angles);
+        BallRestAtAngles(pBall, angles);
         fn_8013AD9C(pBall, 0);
         BallPrimeKickUp(pBall);
     }

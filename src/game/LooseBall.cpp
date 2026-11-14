@@ -68,7 +68,7 @@ int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, void *pBlock
                 float f);
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
 Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
-void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 int CharSkelGetJointByName(void *p, const char *pName);
 int BallStateCheckPlayerHit(Ball_t *pBall, void *pData, int value);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -471,10 +471,10 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
     BallGetPosition(pBall, &ballPos);
     BallGetVelocity(pBall, &velocity);
     if (ballPos.mZ > 3.15f) {
-        fn_8013AA00(pBall, 2.65f, 0, &target);
+        BallSolveFallToHeight(pBall, 2.65f, 0, &target);
         target.mZ = 2.65f;
     } else {
-        fn_8013AA00(pBall, 0.0f, 0, &ballPos);
+        BallSolveFallToHeight(pBall, 0.0f, 0, &ballPos);
         ballPos.mZ = 0.0f;
         distance = fn_8022785C(&ballPos, &p->mMotion.mPos);
         LooseBallPredictPos(&target, pBall, distance * _LooseBall_fLeadScale);

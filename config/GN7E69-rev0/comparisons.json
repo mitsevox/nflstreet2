@@ -23774,7 +23774,7 @@
     {
       "source": "src/game/cu_801394B0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801394B0-0x8013B874 for src/game/cu_801394B0.cpp (replacing candidate cu_801394B0), its 57 function extents (evidence grade exact), the exact data rows 0x8029FF28-0x802A00B8 (.rodata literal pools, including four runs no surviving code loads) and 0x803EB1B0-0x803EB1C4 (.sdata floats), and the source-form rows recording the remaining differences. Wholly unlinked draft source: the source does not reproduce the four unreferenced literal runs, so the compiled .rodata is 0x38 bytes shorter than the target and literal references after 0x8029FFF8 resolve to shifted addresses; the original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801394B0-0x8013B874 for src/game/cu_801394B0.cpp (replacing candidate cu_801394B0), its 57 function extents (evidence grade exact), the exact data rows 0x8029FF28-0x802A00B8 (.rodata literal pools, including four runs no surviving code loads) and 0x803EB1B0-0x803EB1C4 (.sdata floats), and the source-form rows recording the remaining differences. Wholly unlinked draft source: the four unreferenced literal runs are the pools of six functions the target linker discarded, rebuilt from their Xbox prototype counterparts and listed as discarded (linker rows 0x8029FFF8, 0x802A0038, 0x802A005C, 0x802A0094), so the compiled .rodata equals the target; the original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -23897,7 +23897,7 @@
           "end": "0x8013A494"
         },
         {
-          "symbol": "fn_8013A494",
+          "symbol": "BallApplyContactForce",
           "start": "0x8013A494",
           "end": "0x8013A64C"
         },
@@ -23907,22 +23907,22 @@
           "end": "0x8013A6A8"
         },
         {
-          "symbol": "fn_8013A6A8",
+          "symbol": "BallStepGroundContact",
           "start": "0x8013A6A8",
           "end": "0x8013A72C"
         },
         {
-          "symbol": "fn_8013A72C",
+          "symbol": "BallFollowHolder",
           "start": "0x8013A72C",
           "end": "0x8013A844"
         },
         {
-          "symbol": "fn_8013A844",
+          "symbol": "BallStepMotion",
           "start": "0x8013A844",
           "end": "0x8013A910"
         },
         {
-          "symbol": "fn_8013A910",
+          "symbol": "BallRestAtAngles",
           "start": "0x8013A910",
           "end": "0x8013A9F0"
         },
@@ -23932,7 +23932,7 @@
           "end": "0x8013AA00"
         },
         {
-          "symbol": "fn_8013AA00",
+          "symbol": "BallSolveFallToHeight",
           "start": "0x8013AA00",
           "end": "0x8013AB24"
         },
@@ -23942,7 +23942,7 @@
           "end": "0x8013AB64"
         },
         {
-          "symbol": "fn_8013AB64",
+          "symbol": "BallGetHeightAtTime",
           "start": "0x8013AB64",
           "end": "0x8013ABE0"
         },
@@ -23952,7 +23952,7 @@
           "end": "0x8013AC28"
         },
         {
-          "symbol": "fn_8013AC28",
+          "symbol": "BallLaunchToTarget",
           "start": "0x8013AC28",
           "end": "0x8013AD04"
         },
@@ -23962,7 +23962,7 @@
           "end": "0x8013AD78"
         },
         {
-          "symbol": "fn_8013AD78",
+          "symbol": "BallIsContactRaised",
           "start": "0x8013AD78",
           "end": "0x8013AD94"
         },
@@ -24007,12 +24007,12 @@
           "end": "0x8013B0B4"
         },
         {
-          "symbol": "fn_8013B0B4",
+          "symbol": "BallStateStepTimed",
           "start": "0x8013B0B4",
           "end": "0x8013B198"
         },
         {
-          "symbol": "fn_8013B198",
+          "symbol": "BallStateStopVelocity",
           "start": "0x8013B198",
           "end": "0x8013B1E4"
         },
@@ -24072,7 +24072,7 @@
           "end": "0x8013B734"
         },
         {
-          "symbol": "fn_8013B734",
+          "symbol": "BallStatePlacedUpdate",
           "start": "0x8013B734",
           "end": "0x8013B86C"
         },
@@ -24081,6 +24081,14 @@
           "start": "0x8013B86C",
           "end": "0x8013B874"
         }
+      ],
+      "discarded": [
+        "BallGetWindDrift",
+        "BallApplyWindForce",
+        "BallApplyWindForceDamped",
+        "BallApplyWobble",
+        "BallAddClampedE0",
+        "BallIsSettled"
       ]
     },
     {

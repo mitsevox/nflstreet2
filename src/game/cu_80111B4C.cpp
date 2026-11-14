@@ -218,8 +218,8 @@ int fn_80116AB8(Object_80039F5C *p);
 void fn_8011E8D8(Object_80039F5C *p);
 Record_8011F4E0 *fn_8011F4E0(void);
 void *fn_8011F4EC(void);
-void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
-float fn_8013AB64(Ball_t *pBall, float t);
+void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+float BallGetHeightAtTime(Ball_t *pBall, float t);
 int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_801410F4(int a);
 void PlyrCollideAddExempt(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -343,7 +343,7 @@ extern "C" int fn_80111B4C(Object_80039F5C *p)
             if (distance < maxDistance) {
                 distance = fn_8022781C(&target, &closest);
                 BallGetVelocity(pBall, &velocity);
-                height = fn_8013AB64(pBall, distance / fn_802270A4(&velocity));
+                height = BallGetHeightAtTime(pBall, distance / fn_802270A4(&velocity));
                 if (height < maxHeight * p->mUnknown768 && height > minHeight * p->mUnknown768) {
                     result = 0;
                     pState->mUnknown20 = 1;
@@ -638,7 +638,7 @@ extern "C" int fn_80112928(Object_80039F5C *p)
         float targetSpeed;
         float speed;
 
-        fn_8013AA00(pBall, 2.0f, 0, (Vector_80039F5C *)&landing);
+        BallSolveFallToHeight(pBall, 2.0f, 0, (Vector_80039F5C *)&landing);
         fn_80227690(&delta, &pTarget->mMotion.mPos, &landing);
         targetDistance = fn_802270A4(&delta) - 2.0f;
         fn_80227690(&delta, &pTarget->mMotion.mPos, &ballPos);
@@ -702,8 +702,8 @@ extern "C" int fn_80112C04(Object_80039F5C *p, Ball_t *pBall, int *pAngle, float
     playerVelocity.mX = p->mMotion.mUnknown40;
     playerVelocity.mY = p->mMotion.mUnknown44;
     playerVelocity.mZ = p->mMotion.mUnknown48;
-    fn_8013AA00(pBall, 0.8f, &lowTime, (Vector_80039F5C *)&lowLanding);
-    fn_8013AA00(pBall, 2.1f, &highTime, (Vector_80039F5C *)&highLanding);
+    BallSolveFallToHeight(pBall, 0.8f, &lowTime, (Vector_80039F5C *)&lowLanding);
+    BallSolveFallToHeight(pBall, 2.1f, &highTime, (Vector_80039F5C *)&highLanding);
     fn_80227690(&lowLanding, &lowLanding, &p->mMotion.mPos);
     lowAngle = fn_801CFE40(lowLanding.mY, lowLanding.mX);
     fn_80111A28(p, lowAngle, lowTime, (Vector_80039F5C *)&lowReach);

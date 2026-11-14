@@ -2432,6 +2432,54 @@
     "PlayerActionAnimFacingCallback": {
       "address": "0x800DC36C",
       "evidence": "evidence.tsv function and name rows for 0x800DC36C (unlinked; its address is stored by the comparison source src/game/cu_8008E978.cpp)."
+    },
+    "BallApplyContactForce": {
+      "address": "0x8013A494",
+      "evidence": "evidence.tsv function and name rows for 0x8013A494 (unlinked; referenced from linked src/game/BallState.cpp)."
+    },
+    "BallStepGroundContact": {
+      "address": "0x8013A6A8",
+      "evidence": "evidence.tsv function and name rows for 0x8013A6A8 (unlinked; referenced from linked src/game/Ball.cpp)."
+    },
+    "BallFollowHolder": {
+      "address": "0x8013A72C",
+      "evidence": "evidence.tsv function and name rows for 0x8013A72C (unlinked; referenced from linked src/game/Ball.cpp)."
+    },
+    "BallStepMotion": {
+      "address": "0x8013A844",
+      "evidence": "evidence.tsv function and name rows for 0x8013A844 (unlinked; referenced from linked src/game/BallState.cpp)."
+    },
+    "BallRestAtAngles": {
+      "address": "0x8013A910",
+      "evidence": "evidence.tsv function and name rows for 0x8013A910 (unlinked; referenced from comparison and linked src/game/cu_800B9BBC.cpp, src/game/cu_800BA7A0.cpp, src/game/cu_80150DFC.cpp, src/game/TutorialLesson.cpp, src/game/BallPlace.cpp)."
+    },
+    "BallSolveFallToHeight": {
+      "address": "0x8013AA00",
+      "evidence": "evidence.tsv function and name rows for 0x8013AA00 (unlinked; referenced from comparison and linked src/game/cu_801074B4.cpp, src/game/cu_800B4A4C.cpp, src/game/cu_80111B4C.cpp, src/game/cu_800F0960.cpp, src/game/LooseBall.cpp, src/game/cu_800EFC68.cpp)."
+    },
+    "BallGetHeightAtTime": {
+      "address": "0x8013AB64",
+      "evidence": "evidence.tsv function and name rows for 0x8013AB64 (unlinked; referenced from comparison src/game/cu_80111B4C.cpp)."
+    },
+    "BallLaunchToTarget": {
+      "address": "0x8013AC28",
+      "evidence": "evidence.tsv function and name rows for 0x8013AC28 (unlinked; referenced from comparison src/game/cu_80104C9C.cpp, src/game/cu_80102A78.cpp)."
+    },
+    "BallIsContactRaised": {
+      "address": "0x8013AD78",
+      "evidence": "evidence.tsv function and name rows for 0x8013AD78 (unlinked; referenced from linked src/game/Possession.cpp)."
+    },
+    "BallStateStepTimed": {
+      "address": "0x8013B0B4",
+      "evidence": "evidence.tsv function and name rows for 0x8013B0B4 (unlinked; referenced from linked src/game/BallState.cpp)."
+    },
+    "BallStateStopVelocity": {
+      "address": "0x8013B198",
+      "evidence": "evidence.tsv function and name rows for 0x8013B198 (unlinked; referenced from linked src/game/BallState.cpp)."
+    },
+    "BallStatePlacedUpdate": {
+      "address": "0x8013B734",
+      "evidence": "evidence.tsv function and name rows for 0x8013B734 (unlinked; referenced from linked src/game/BallState.cpp)."
     }
   },
   "units": [

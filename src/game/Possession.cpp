@@ -129,7 +129,7 @@ int BallGetTransferKind(void *pBall);
 int BallGetLastToucher(void *pBall);
 void BallKickUp(void *pBall, int a);
 void fn_8013AD04(void *pBall, Vector_80039F5C *pVelocity, int a, float b, float c);
-int fn_8013AD78(void *pBall);
+int BallIsContactRaised(void *pBall);
 void fn_8013AD9C(void *pBall, int a);
 void BallStateChange(void *pBall, int a, int b);
 int BallStateGet(void *pBall, int *pOut);
@@ -1491,7 +1491,7 @@ int PossCheckBallOut(void *pBall, Point2_t *pPos)
         zone = fn_80178508(pPos, &zoneInfo, state == 5);
         if (zone > 2) {
             done = fn_80178A68(pPos) <= -2.0f;
-            done |= !fn_8013AD78(pBall);
+            done |= !BallIsContactRaised(pBall);
             switch (state) {
             case 4:
                 if (!fn_801783AC(3) && fn_801783AC(1)) {

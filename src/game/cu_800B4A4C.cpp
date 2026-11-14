@@ -61,7 +61,7 @@ char *fn_801C32CC(char *pString);
 float fn_80237260(int stream);
 void PlyrNameTagSetText(PlyrNameTag_t *p, const char *name);
 void fn_8009BD88(Object_80039F5C *p, float scale);
-void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_801CFE40(float y, float x);
@@ -222,7 +222,7 @@ extern "C" void fn_800B5764(Vector_80039F5C *pOut)
     } else {
         height = 1.65f;
     }
-    fn_8013AA00(BallGetCurrent(), height, 0, pOut);
+    BallSolveFallToHeight(BallGetCurrent(), height, 0, pOut);
 }
 
 extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPos, Vector_80039F5C *pVel, int carried)

@@ -55,7 +55,7 @@ int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
-void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 }
 
 extern "C" void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo) {
@@ -106,7 +106,7 @@ extern "C" void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo) {
 extern "C" void fn_80107680(Points_800F3A6C *pInfo, int index) {
     pInfo->mpUnknown0 = BallGet(index);
     BallGetLandingPoint(pInfo->mpUnknown0, &pInfo->mUnknown4);
-    fn_8013AA00(pInfo->mpUnknown0, 1.5f, &pInfo->mUnknown48, (Vector_80039F5C *)&pInfo->mUnknown40);
+    BallSolveFallToHeight(pInfo->mpUnknown0, 1.5f, &pInfo->mUnknown48, (Vector_80039F5C *)&pInfo->mUnknown40);
     BallGetVelocity(pInfo->mpUnknown0, &pInfo->mUnknown28);
     BallGetPosition(pInfo->mpUnknown0, &pInfo->mUnknown16);
 }
