@@ -3,9 +3,10 @@
 #include "dolphin/hw_regs.h"
 
 
-#if defined(DECOMP_COMPARE)
 void __DSPHandler(__OSInterrupt, OSContext* context)
 {
+    // FAKEMATCH: unused local (the BFBB/TSSM handler's tmp_task), kept only for the target's 744-byte frame
+    DSPTaskInfo* tmp_task;
     OSContext exceptionContext;
     u16 tmp;
     u32 mail;
@@ -208,8 +209,6 @@ void __DSPHandler(__OSInterrupt, OSContext* context)
     OSClearContext(&exceptionContext);
     OSSetCurrentContext(context);
 }
-
-#endif
 
 void __DSP_exec_task(DSPTaskInfo* curr, DSPTaskInfo* next)
 {

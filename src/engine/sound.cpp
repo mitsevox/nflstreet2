@@ -113,7 +113,7 @@ void FileDebugProcess(void);
 void *fn_801D310C(void *pAddr, int size, int ident, int flags);
 int fn_801B91A0(void *p);
 void fn_801B9328(void *p);
-unsigned long fn_8023CEE0(void);
+unsigned long OSGetSoundMode(void);
 void fn_8027555C(void);
 void fn_8026F5F8(int a);
 void fn_8026F710(int mode);
@@ -392,7 +392,7 @@ int SndInit(SndInitDesc_t *pDesc)
 int SndInitParms(SndInitDesc_t *pDesc)
 {
     fn_8027555C();
-    if (fn_8023CEE0() == 0) {
+    if (OSGetSoundMode() == 0) {
         fn_8026F710(0);
     } else {
         switch (_Snd_ModuleInfo.mUnk50) {

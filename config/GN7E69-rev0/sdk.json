@@ -631,11 +631,11 @@
         {
           "section": ".bss",
           "start": "0x803A3AC0",
-          "end": "0x803A3B10",
+          "end": "0x803A3B14",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "Target OSRtc forms 803A3AC0 at 8023C978. The SRAM input/DMA buffer length is 64 at 8023CA14, with offset/state words at +64/+68/+72/+76 accessed at 8023CA70/8023C980/8023C984/8023CA68; sync returns the final +76 word at 8023CED8. Only the 80-byte accessed prefix is assigned. The donor 84-byte struct has an extra callback at +80, but no retained target OSRtc reference proves its allocation; its four bytes remain unassigned."
+          "evidence": "Target OSRtc forms 803A3AC0 at 8023C978. The SRAM input/DMA buffer length is 64 at 8023CA14, with offset/state words at +64/+68/+72/+76 accessed at 8023CA70/8023C980/8023C984/8023CA68; sync returns the final +76 word at 8023CED8. The 84-byte SramControl of include/dolphin/os/OSRtc.h also holds the callback word at +80 (0x803A3B10), which only the SDK's ROM-read routines use; those have no code in this target, so no retained instruction addresses it. The compiled .bss of the linked source is 0x54 bytes and the next object, OSThread.c's .bss, starts at 0x803A3B18 on an 8-byte boundary, so the 84-byte object fits the gap; ownership of the word is from the struct, not from a target access."
         },
         {
           "section": ".text",

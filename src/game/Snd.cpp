@@ -26,7 +26,7 @@ struct SndInitDesc_t {
 extern "C" {
 void fn_801F76E8(void);
 void fn_801F7710(void);
-unsigned long fn_8023CEE0(void);
+unsigned long OSGetSoundMode(void);
 void SndSetOutputMode(int a, int b);
 void SndSetAllocHeap(int a);
 int SndInit(SndInitDesc_t *pDesc);
@@ -63,7 +63,7 @@ int Snd::Init()
     desc.mUnknown52 = 0;
     desc.mUnknown53 = 1;
     desc.mUnknown54 = 1;
-    if (fn_8023CEE0()) {
+    if (OSGetSoundMode()) {
         SndSetOutputMode(3, 0);
     }
     SndSetAllocHeap(256);

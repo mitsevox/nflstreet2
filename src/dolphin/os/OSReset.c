@@ -147,6 +147,8 @@ void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu)
 {
     BOOL rc;
     BOOL disableRecalibration;
+    // FAKEMATCH: unused stack object, only for the target's 0x40-byte frame
+    u8 unused[16];
 
     OSDisableScheduler();
     __OSStopAudioSystem();

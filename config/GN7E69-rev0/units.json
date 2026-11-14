@@ -256,22 +256,6 @@
       "address": "0x801C1F94",
       "evidence": "evidence.tsv CARD external row memset: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
-    "__OSLockSramEx": {
-      "address": "0x8023CAF0",
-      "evidence": "evidence.tsv retained CARD external __OSLockSramEx: branch or address-load operands and reference signature."
-    },
-    "__OSUnlockSramEx": {
-      "address": "0x8023CEAC",
-      "evidence": "evidence.tsv retained CARD external __OSUnlockSramEx: branch or address-load operands and reference signature."
-    },
-    "__OSLockSram": {
-      "address": "0x8023CA94",
-      "evidence": "evidence.tsv retained CARD external __OSLockSram: branch or address-load operands and reference signature."
-    },
-    "__OSUnlockSram": {
-      "address": "0x8023CE88",
-      "evidence": "evidence.tsv retained CARD external __OSUnlockSram: branch or address-load operands and reference signature."
-    },
     "__DSP_curr_task": {
       "address": "0x803ED508",
       "evidence": "Target SDA-relative instructions and pinned SDK global layouts; original storage remains linked because native alignment not accepted."
@@ -287,14 +271,6 @@
     "__pure_virtual": {
       "address": "0x8025F088",
       "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
-    },
-    "OSSetWirelessID": {
-      "address": "0x8023D0F8",
-      "evidence": "evidence.tsv SIBios external row: target call relocation and related SDK declaration."
-    },
-    "OSGetWirelessID": {
-      "address": "0x8023D074",
-      "evidence": "evidence.tsv SIBios external row: target call relocation and related SDK declaration."
     },
     "__DSP_rude_task": {
       "address": "0x803ED4F8",
@@ -636,10 +612,6 @@
       "address": "0x803EC2C2",
       "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
     },
-    "OSRegisterResetFunction": {
-      "address": "0x8023BFBC",
-      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
-    },
     "__CARDVendorID": {
       "address": "0x803EC2C0",
       "evidence": "Complete BFBB CARDMount native retained operand resolved against original target; source name corroborated by pinned donor declaration and actual call/access context."
@@ -659,26 +631,6 @@
     "__ArenaHi": {
       "address": "0x81780000",
       "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
-    },
-    "__OSDoHotReset": {
-      "address": "0x8023C0B0",
-      "evidence": "Original complete __OSReboot call instruction0x8023EC38 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "Reset": {
-      "address": "0x8023C040",
-      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
-    },
-    "__OSSyncSram": {
-      "address": "0x8023CED0",
-      "evidence": "Original complete OSResetSystem call instruction0x8023C240 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "OSGetResetCode": {
-      "address": "0x8023C3B0",
-      "evidence": "Original complete ClearArena call instruction0x802389BC identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "__OSInitSram": {
-      "address": "0x8023C958",
-      "evidence": "Original complete OSInit call instruction0x80238CC0 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
     "EnableMetroTRKInterrupts": {
       "address": "0x801AA7B8",
@@ -1191,10 +1143,6 @@
     "fn_801E90CC__14Class_801E8E04P14Class_801E27A4P14Class_801E2878": {
       "address": "0x801E90CC",
       "evidence": "evidence.tsv external row for 0x801E90CC (fn_801E90CC__14Class_801E8E04P14Class_801E27A4P14Class_801E2878) and function row 0x801E90CC (comparison unit; original assembly remains linked)."
-    },
-    "OSResetSystem": {
-      "address": "0x8023C0F8",
-      "evidence": "evidence.tsv function/name rows for 0x8023C0F8 (target extent, related SDK name)."
     },
     "_vt.14Class_802A2A40": {
       "address": "0x802A2A40",
@@ -5521,23 +5469,31 @@
     {
       "source": "src/dolphin/odemuexi2/DebuggerDriver.c",
       "profile": "dolphin_release",
-      "evidence": "evidence.tsv unit, function, name, type, data and source-form rows for src/dolphin/odemuexi2/DebuggerDriver.c; the eleven functions 0x8025D930-0x8025E148 are exact and linked with the file's .sbss; the start holdout 0x8025D6C8-0x8025D930 is registered in comparisons.json.",
+      "evidence": "evidence.tsv unit, function, name, type, data and source-form rows for src/dolphin/odemuexi2/DebuggerDriver.c; all fourteen functions 0x8025D6C8-0x8025E148 are exact and linked with the file's .sdata byte SendCount and its .sbss.",
       "link_roots": {
         "symbols": [
+          "DBClose",
+          "DBOpen",
+          "DBWrite",
           "DBRead",
           "DBQueryData",
           "DBInitInterrupts",
-          "DBInitComm",
-          "DBGWrite"
+          "DBInitComm"
         ],
-        "evidence": "DBRead, DBQueryData, DBInitInterrupts and DBInitComm are the linked entries of the .data table 0x802C2A8C-0x802C2AA8 (words at 0x802C2A98, 0x802C2A94, 0x802C2A90 and 0x802C2A8C); no instruction calls them. DBGWrite's only caller is the holdout DBWrite (bl at 0x8025D7AC), which stays original bytes, so it is a root too. The other six linked functions stay through their callers in this file."
+        "evidence": "DBClose, DBOpen, DBWrite, DBRead, DBQueryData, DBInitInterrupts and DBInitComm are the entries of the .data table 0x802C2A8C-0x802C2AA8 (words at 0x802C2AA4, 0x802C2AA0, 0x802C2A9C, 0x802C2A98, 0x802C2A94, 0x802C2A90 and 0x802C2A8C); no instruction calls them. The other seven functions stay through their callers in this file."
       },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8025D930",
+          "start": "0x8025D6C8",
           "end": "0x8025E148"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC320",
+          "end": "0x803EC321"
         },
         {
           "section": ".sbss",
@@ -6099,21 +6055,22 @@
     {
       "source": "src/dolphin/dsp/dsp_task.c",
       "profile": "dolphin_release",
-      "evidence": "evidence.tsv dsp_task.c unit, function, layout and data rows; CREDITS.md pinned donor provenance.",
+      "evidence": "evidence.tsv dsp_task.c unit, function, layout, data and source-form rows; CREDITS.md pinned donor provenance. All five functions 0x80285DC8-0x8028664C exact and linked; __DSPHandler carries a labeled FAKEMATCH unused stack object (source-form row 0x80285DC8).",
       "link_roots": {
         "symbols": [
+          "__DSPHandler",
           "__DSP_exec_task",
           "__DSP_boot_task",
           "__DSP_insert_task",
           "__DSP_remove_task"
         ],
-        "evidence": "Target retained functions; native SN liveness removes unmatched handler and unused add-task."
+        "evidence": "Target retained functions; __DSPHandler is installed as the DSP interrupt handler by DSPInit and has no direct caller. The unused add-task routine has no code in the target and is dropped by the linker."
       },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x802861EC",
+          "start": "0x80285DC8",
           "end": "0x8028664C"
         },
         {
@@ -11428,6 +11385,43 @@
       ]
     },
     {
+      "source": "src/dolphin/os/OSRtc.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit row 0x8023C7E0-0x8023D2CC (src/dolphin/os/OSRtc.c) and its function, data and source-form rows; CREDITS.md for the source; all 16 target functions exact, promoted from comparison-only. OSSetGbsMode carries a labeled FAKEMATCH unused stack object (source-form row 0x8023D214).",
+      "link_roots": {
+        "symbols": [
+          "__OSInitSram",
+          "__OSLockSram",
+          "__OSLockSramEx",
+          "__OSUnlockSram",
+          "__OSUnlockSramEx",
+          "__OSSyncSram",
+          "OSGetSoundMode",
+          "OSGetProgressiveMode",
+          "OSSetProgressiveMode",
+          "OSGetWirelessID",
+          "OSSetWirelessID",
+          "OSGetGbsMode",
+          "OSSetGbsMode"
+        ],
+        "evidence": "The thirteen global target functions (the static WriteSramCallback, WriteSram and UnlockSram stay through their callers); the other SDK bodies in the source (GetRTC, ReadSram, __OSGetRTC, __OSSetRTC, __OSCheckSram, __OSReadROM, __OSReadROMAsync, __OSReadROMCallback, OSSetSoundMode, OSGetVideoMode, OSSetVideoMode, OSGetLanguage, OSSetLanguage, __OSGetBootMode, __OSSetBootMode, OSGetEuRgb60Mode, OSSetEuRgb60Mode) have no code in the target and are dropped by the linker; LockSram is inlined into __OSLockSram and __OSLockSramEx."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023C7E0",
+          "end": "0x8023D2CC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A3AC0",
+          "end": "0x803A3B14"
+        }
+      ]
+    },
+    {
       "source": "src/game/BallPlace.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801390D0-0x80139308 (src/game/BallPlace.cpp) and its data, compiler and source-form rows.",
@@ -11712,6 +11706,35 @@
           "placement": ".text",
           "start": "0x8023BD50",
           "end": "0x8023BFBC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSReset.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit row 0x8023BFBC-0x8023C3E0 (src/dolphin/os/OSReset.c) and its function, data and source-form rows; CREDITS.md for the source; all 5 target functions exact, promoted from comparison-only. OSResetSystem carries a labeled FAKEMATCH unused stack object (source-form row 0x8023C0F8).",
+      "link_roots": {
+        "symbols": [
+          "OSRegisterResetFunction",
+          "Reset",
+          "__OSDoHotReset",
+          "OSResetSystem",
+          "OSGetResetCode"
+        ],
+        "evidence": "The five target functions; the other SDK bodies in the source have no code in the target and are dropped by the linker."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023BFBC",
+          "end": "0x8023C3E0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED0A0",
+          "end": "0x803ED0AC"
         }
       ]
     },
