@@ -39,7 +39,7 @@ Nobody will know exactly what the original source looked like, and there is rare
 **Accepted.** These need an evidence row that gives the reasoning; best-evidence hunches are accepted when nothing in the target contradicts them.
 
 - Compiler choices at the file or library level: a file or library that builds with its own flags gets its own named profile (for example `-fno-strength-reduce` for the speech, sound and CSIS code, or fast math for `CurveList.c`), and a separately built library may use another compiler version (CodeWarrior GC/1.3 for the VM library). Real builds made these choices per file and per library.
-- Source forms that 2004 game code plausibly contains even when nothing else shows them: unused or debug-leftover locals, a dead store, a repeated test, accessor definitions that inline away, an unused static, a flag that is never set, an extern that only a discarded function reads.
+- Source forms that 2004 game code plausibly contains even when nothing else shows them: a dead store, accessor definitions that inline away, an unused static, an extern that only a discarded function reads. A form like these that is present only to reproduce the bytes, such as an unused stack object for the frame size, a repeated test or a flag that is never set, is a fake match and needs both labels below.
 - Labeled fake matches, under the conditions below.
 
 **Fake matches.** A fake match is a form that is in the source only to reproduce the bytes and that nothing in the target or a related build shows the original had: an unused stack object that sets the frame size, an unreachable repeated test, a never-set flag that keeps strings referenced. It is accepted only when all four hold:
@@ -53,13 +53,12 @@ A fake match that meets these conditions is not a review failure; one that is un
 
 **Still banned.** These are egregious, and a function that needs one stays a registered partial:
 
-- Per-function flags, `#pragma`s (optimization, scheduling, peephole and the like) or compiler attributes that steer one function's code generation. The exception is a form the original source is shown to have used, such as Nintendo SDK source that carries the pragma, with the owner's approval.
+- Per-function flags, `#pragma`s (optimization, scheduling, peephole and the like) or compiler attributes that steer one function's code generation. The only exception is a form the original source is shown to have used, with the owner's approval; a guess that the SDK might have had one is not that (`GXPerf.c`, ruled on #1334).
 - Inline assembly, embedded instruction bytes or patched compiler output standing in for compiled source. Originally handwritten assembly needs provenance.
-- Source produced by a permuter; the owner has not allowed one. A declaration or statement order found by trying variants is an ordinary source form when it reads naturally, otherwise a labeled fake match.
 - Altered symbol boundaries, excluded comparisons or progress categories that conceal mismatches.
 - Any change to behavior made to satisfy the compiler.
 
-Reviewers judge what is egregious; when a form is in doubt, the PR asks the owner. Build-tool mechanisms that link a derived object instead of the untouched compiler object (the `folded` map, the COMMON storage map, `kept_locals`) are owner exceptions, each use named in AGENTS.md, and a new use needs the owner's approval.
+A declaration or statement order found by trying variants is an ordinary source form when it reads naturally, otherwise a labeled fake match. Reviewers judge what is egregious; when a form is in doubt, the PR asks the owner. Build-tool mechanisms that link a derived object instead of the untouched compiler object (the `folded` map, and the COMMON storage map and `kept_locals` that #1338 adds) are owner exceptions, each use named in AGENTS.md, and a new use needs the owner's approval. A new compiler version, such as CodeWarrior GC/1.3, is a tool and pin change made in its own PR.
 
 Outside `// FAKEMATCH:` comments, put compiler reasoning, exception evidence and matching experiments in metadata or the PR, not in reconstructed source. Preserve original assertions and diagnostics when the target requires them.
 
