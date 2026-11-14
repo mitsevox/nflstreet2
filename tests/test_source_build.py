@@ -469,6 +469,133 @@ class FoldedDuplicates(Fixture):
         sb.check_folded_objects(unit, bytes(binary), bytes(binary))
 
 
+class CommonStorage(Fixture):
+    """COMMON symbols that an evidenced storage map places at their target addresses."""
+
+    COMMON = [{"name": "Unit_Function", "value": 0, "shndx": 1, "type": sb.STT_FUNC, "size": 8},
+              {"name": "g_Shared", "value": 4, "size": 8, "shndx": sb.SHN_COMMON},
+              {"name": "g_Flag", "value": 4, "size": 4, "shndx": sb.SHN_COMMON}]
+
+    def storage_manifest(self, rows=None):
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"][0]["storage"] = rows if rows is not None else [
+            {"symbol": "g_Shared", "start": "0x80005010", "end": "0x80005018"},
+            {"symbol": "g_Flag", "start": "0x80005020", "end": "0x80005024"}]
+        return manifest
+
+    def objects(self, symbols=None):
+        return {"src/unit.c": compiled([text(8), rodata(4)], symbols if symbols is not None else self.COMMON)}
+
+    def storage(self, manifest=None):
+        return self.load(manifest or self.storage_manifest())[0][0]["storage"]
+
+    def common_object(self, storage, symbols=None):
+        """Derive the link object of a synthetic native object; return (native, derived) symbols."""
+        with tempfile.TemporaryDirectory() as temporary:
+            native = Path(temporary) / "unit.o"
+            sb.write_object(native, [text(8), rodata(4)], symbols if symbols is not None else self.COMMON)
+            derived = Path(temporary) / "unit.common.o"
+            sb.common_object(native.read_bytes(), storage, derived, "src/unit.c")
+            return sb.read_elf(native.read_bytes())[1], sb.read_elf(derived.read_bytes())[1], \
+                native.read_bytes(), derived.read_bytes()
+
+    def test_without_a_map_a_common_symbol_fails(self):
+        units, _, _ = self.load()
+        self.assertIsNone(units[0]["storage"])
+        with self.assertRaisesRegex(ValueError, "common symbol g_Shared has no placement"):
+            self.plan(self.objects())
+        # A map that leaves one COMMON symbol out still fails for that symbol.
+        storage = self.storage(self.storage_manifest([{"symbol": "g_Shared", "start": "0x80005010",
+                                                       "end": "0x80005018"}]))
+        with self.assertRaisesRegex(ValueError, "common symbol g_Flag has no placement"):
+            self.common_object(storage)
+
+    def test_mapped_common_symbols_become_undefined_references_only(self):
+        native, derived, native_bytes, derived_bytes = self.common_object(self.storage())
+        self.assertEqual([(s["name"], s["shndx"], s["value"], s["size"]) for s in derived if s["name"].startswith("g_")],
+                         [("g_Shared", sb.SHN_UNDEF, 0, 0), ("g_Flag", sb.SHN_UNDEF, 0, 0)])
+        self.assertEqual([s for s in native if not s["name"].startswith("g_")],
+                         [s for s in derived if not s["name"].startswith("g_")])
+        # Only the two symbol table entries differ; section headers and contents are the same bytes.
+        self.assertEqual(sb.read_elf(native_bytes)[0], sb.read_elf(derived_bytes)[0])
+        table = next(s for s in sb.read_elf(native_bytes)[0] if s["type"] == sb.SHT_SYMTAB)
+        changed = {(at - table["offset"]) // 16 for at, (a, b) in enumerate(zip(native_bytes, derived_bytes)) if a != b}
+        self.assertEqual(len(native_bytes), len(derived_bytes))
+        self.assertEqual(changed, {index for index, s in enumerate(native, 1) if s["name"].startswith("g_")})
+
+    def test_map_must_agree_with_the_compiled_common_symbols(self):
+        cases = [
+            ("differs from its compiled COMMON size", [{"symbol": "g_Shared", "start": "0x80005010", "end": "0x80005014"},
+                                                      {"symbol": "g_Flag", "start": "0x80005020", "end": "0x80005024"}]),
+            ("differs from its compiled COMMON size", [{"symbol": "g_Shared", "start": "0x80005012", "end": "0x8000501A"},
+                                                      {"symbol": "g_Flag", "start": "0x80005020", "end": "0x80005024"}]),
+            ("not a compiled COMMON symbol", [{"symbol": "g_Shared", "start": "0x80005010", "end": "0x80005018"},
+                                             {"symbol": "g_Flag", "start": "0x80005020", "end": "0x80005024"},
+                                             {"symbol": "g_Other", "start": "0x80005030", "end": "0x80005034"}]),
+        ]
+        for message, rows in cases:
+            with self.subTest(message=message), self.assertRaisesRegex(ValueError, message):
+                self.common_object(self.storage(self.storage_manifest(rows)))
+
+    def test_mapped_symbols_are_defined_by_the_original_piece_that_holds_them(self):
+        undefined = [self.COMMON[0], {"name": "g_Shared", "value": 0, "shndx": 0}, {"name": "g_Flag", "value": 0, "shndx": 0}]
+        pieces, defined, resolved = self.plan(self.objects(undefined), self.storage_manifest())
+        self.assertEqual(defined["g_Shared"], (0x80005010, "src/unit.c"))
+        self.assertEqual(defined["g_Flag"], (0x80005020, "src/unit.c"))
+        self.assertEqual(pieces[".bss"], [{"start": 0x80005000, "end": 0x80005040, "symbols": [
+            {"name": "g_Shared", "value": 0x10}, {"name": "g_Flag", "value": 0x20}]}])
+        self.assertEqual(resolved, {})
+        # Without the map the same references are unresolved.
+        with self.assertRaisesRegex(ValueError, "unresolved symbol g_Shared"):
+            self.plan(self.objects(undefined))
+        # Another unit's reference resolves to the definition, not to an external.
+        manifest = self.storage_manifest()
+        manifest["units"].append({"source": "src/other.c", "profile": "library", "evidence": "x", "sections": [
+            {"section": ".text", "placement": ".init", "start": "0x80003120", "end": "0x80003128"}]})
+        objects = self.objects(undefined)
+        objects["src/other.c"] = compiled([text(8)], [{"name": "g_Flag", "value": 0, "shndx": 0}])
+        _, _, resolved = self.plan(objects, manifest)
+        self.assertNotIn("g_Flag", resolved)
+        # A mapped name cannot also be an external or another definition.
+        manifest = self.storage_manifest()
+        manifest["externals"] = {"g_Flag": {"address": "0x80005020", "evidence": "x"}}
+        with self.assertRaisesRegex(ValueError, "already defined"):
+            self.plan(self.objects(undefined), manifest)
+        clash = undefined[:2] + [{"name": "g_Flag", "value": 0, "shndx": 2}]
+        with self.assertRaisesRegex(ValueError, "already defined"):
+            self.plan(self.objects(clash), self.storage_manifest())
+
+    def test_map_rows_are_checked_when_the_manifest_loads(self):
+        cases = [
+            ("rows need symbol, start and end",[{"symbol": "g_Shared", "start": "0x80005010"}]),
+            ("compiled COMMON name", [{"symbol": "lbl_80005010", "start": "0x80005010", "end": "0x80005018"}]),
+            ("duplicate storage symbol", [{"symbol": "g_Shared", "start": "0x80005010", "end": "0x80005018"},
+                                          {"symbol": "g_Shared", "start": "0x80005020", "end": "0x80005028"}]),
+            ("not inside one data section", [{"symbol": "g_Shared", "start": "0x80003120", "end": "0x80003128"}]),
+            ("overlap", [{"symbol": "g_Shared", "start": "0x80004008", "end": "0x80004010"}]),
+            ("overlap", [{"symbol": "g_Shared", "start": "0x80005010", "end": "0x80005018"},
+                         {"symbol": "g_Flag", "start": "0x80005014", "end": "0x80005018"}]),
+            ("must list", []),
+        ]
+        for message, rows in cases:
+            with self.subTest(rows=rows), self.assertRaisesRegex(ValueError, message):
+                self.load(self.storage_manifest(rows))
+
+    def test_storage_needs_exact_evidence_and_zero_target_bytes(self):
+        units, _, _ = self.load(self.storage_manifest())
+        evidence = {(0x80005010, 0x80005018), (0x80005020, 0x80005024)}
+        sb.check_storage(units, evidence, self.sections)
+        with self.assertRaisesRegex(ValueError, "storage g_Flag 0x80005020-0x80005024 does not equal an evidence"):
+            sb.check_storage(units, {(0x80005010, 0x80005018)}, self.sections)
+        # Storage in a loaded data section must hold zeros there in the target.
+        units, _, _ = self.load(self.storage_manifest([{"symbol": "g_Flag", "start": "0x80004010", "end": "0x80004014"}]))
+        with self.assertRaisesRegex(ValueError, "is not zero in the target"):
+            sb.check_storage(units, {(0x80004010, 0x80004014)}, self.sections)
+        binary = bytearray(self.binary)
+        binary[0x150:0x154] = bytes(4)  # .data2 0x80004010-0x80004014
+        sb.check_storage(units, {(0x80004010, 0x80004014)}, sb.target_sections(bytes(binary), TARGET, {}))
+
+
 class ReadOnlyDataAfterCode(Fixture):
     """A unit's read-only data may be configured directly after its own code in a code section."""
 

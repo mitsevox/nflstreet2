@@ -52,7 +52,24 @@ def unit_for(source, binary):
     unit['functions'] = [{'symbol': f['symbol'], 'start': f['address'],
                           'end': f"0x{int(f['address'], 16) + f['size']:08X}"} for f in placed['functions']]
     unit['storage'], unit['discarded'] = None, list((entry.get('link_roots') or {}).get('discarded', []))
+    unit['linked_storage'] = {name: int(value, 16) for name, value in (placed.get('storage') or {}).items()}
     return unit, False
+
+
+def linked_storage(sections, symbols, placements, mapped):
+    """For a linked file with a COMMON storage map: {symbol index: address} for each COMMON symbol,
+    at the address the build defined it, and for each named object of its placed uninitialized
+    sections, at its placement start plus its offset, as the build linked them."""
+    nobits = {s['index']: s['name'] for s in sections if s['type'] == sb.SHT_NOBITS and s['flags'] & sb.SHF_ALLOC}
+    bound = {}
+    for index, symbol in enumerate(symbols):
+        if symbol['shndx'] == sb.SHN_COMMON:
+            if symbol['name'] not in mapped:
+                raise SystemExit(f"trial: COMMON symbol {symbol['name']} is not in the build's storage map")
+            bound[index] = mapped[symbol['name']]
+        elif symbol['shndx'] in nobits and symbol['name'] and symbol['size'] and symbol['type'] in (0, 1):
+            bound[index] = placements[nobits[symbol['shndx']]]['start'] + symbol['value']
+    return bound
 
 
 def chosen(unit, names):
@@ -136,7 +153,9 @@ def main():
     if set(allocated) - set(placements):
         raise SystemExit(f'trial: the object has sections its entry does not place: {sorted(set(allocated) - set(placements))}')
     storage = fc.storage_symbols(sections, symbols, unit['storage'])
-    targets = {f['symbol']: (int(f['address'], 16), int(f['address'], 16) + f['size'])
+    if not comparison and unit.get('linked_storage'):
+        storage = linked_storage(sections, symbols, placements, unit['linked_storage'])
+    targets ={f['symbol']: (int(f['address'], 16), int(f['address'], 16) + f['size'])
                for u in accepted if u['source'] == source for f in u['functions']}
     targets.update({r['symbol']: (sb.address(r['start']), sb.address(r['end'])) for r in unit['functions']})
     target = json.loads((ROOT / f'config/{TARGET}/baseline.json').read_text())

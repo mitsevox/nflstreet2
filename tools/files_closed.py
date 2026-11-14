@@ -67,7 +67,12 @@ def unit_labels(index, unit):
             if name in functions:  # Functions the linker discarded are not in the game.
                 found.append((name, functions[name], True))
             continue
-        if symbol['shndx'] == sb.SHN_COMMON or symbol['shndx'] >= len(sections):
+        if symbol['shndx'] == sb.SHN_COMMON:
+            # A COMMON symbol is located only by the unit's storage map, at the address the build defined it.
+            storage = unit.get('storage') or {}
+            found.append((name, int(storage[name], 16) if name in storage else None, False))
+            continue
+        if symbol['shndx'] >= len(sections):
             found.append((name, None, False))
             continue
         section = sections[symbol['shndx']]

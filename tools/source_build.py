@@ -213,7 +213,7 @@ def load_manifest(manifest, sections, compiler_version):
     by_name = {section["name"]: section for section in sections}
     units, ranges, sources, followed = [], [], set(), []
     for unit in manifest.get("units", []):
-        if set(unit) - {"link_roots", "folded"} != {"source", "profile", "evidence", "sections"} \
+        if set(unit) - {"link_roots", "folded", "storage"} != {"source", "profile", "evidence", "sections"} \
                 or not unit["evidence"].strip():
             raise ValueError("Each unit needs exactly source, profile, evidence and sections; "
                              "flags belong to a profile")
@@ -273,6 +273,9 @@ def load_manifest(manifest, sections, compiler_version):
                                  f"of the same unit earlier in {entry['placement']}")
             followed.append((code["end"], entry["start"], unit["source"], entry["section"]))
         folded = folded_symbols(unit.get("folded"), placed, unit["source"])
+        storage = storage_symbols(unit.get("storage"), sections, unit["source"])
+        for name, (start, end) in (storage or {}).items():
+            ranges.append((start, end, f"{unit['source']} storage {name}"))
         root = profiles[unit["profile"]].get("source_root")
         compile_path = None
         if root:
@@ -288,7 +291,7 @@ def load_manifest(manifest, sections, compiler_version):
                       "compiler": profiles[unit["profile"]].get("compiler", "prodg"),
                       "include_dirs": profiles[unit["profile"]].get("include_dirs", []),
                       "source_root": root, "compile_path": compile_path, "link_roots": roots,
-                      "folded": folded})
+                      "folded": folded, "storage": storage})
     ranges.sort()
     for left, right in zip(ranges, ranges[1:]):
         if right[0] < left[1]:
@@ -319,6 +322,89 @@ def folded_symbols(folded, placed, source):
         if any(entry["start"] <= result[name] < entry["end"] for entry in placed):
             raise ValueError(f"{source}: folded symbol {name} targets the unit's own range")
     return result
+
+
+def storage_symbols(storage, sections, source):
+    """Validate a unit's COMMON storage map; return {name: (start, end)} or None.
+
+    `storage` lists {"symbol", "start", "end"} rows. A COMMON symbol has no section, so the
+    original linker chose its address: after every file's .bss, or among one file's own
+    uninitialized objects. Each row gives one such symbol the target extent an evidenced storage
+    map records for it. The extent lies in one uninitialized or initialized data section, outside
+    every configured range (load_manifest checks overlaps), and plan() checks it against the
+    compiled object; build() checks it against the evidence table."""
+    if storage is None:
+        return None
+    if not isinstance(storage, list) or not storage:
+        raise ValueError(f"{source}: storage must list COMMON symbols with their target extents")
+    result = {}
+    for row in storage:
+        if not isinstance(row, dict) or set(row) != {"symbol", "start", "end"} \
+                or not isinstance(row["symbol"], str) or not row["symbol"]:
+            raise ValueError(f"{source}: storage rows need symbol, start and end")
+        name = row["symbol"]
+        if NEUTRAL.fullmatch(name) or name in LINKER_SYMBOLS or name.startswith("__original_"):
+            raise ValueError(f"{source}: storage symbol {name} must be the compiled COMMON name")
+        if name in result:
+            raise ValueError(f"{source}: duplicate storage symbol {name}")
+        start, end = address(row["start"]), address(row["end"])
+        if not any(section["kind"] != "code" and section["start"] <= start < end <= section["end"]
+                   for section in sections):
+            raise ValueError(f"{source}: storage {name} 0x{start:08X}-0x{end:08X} is not inside one data section")
+        result[name] = (start, end)
+    return result
+
+
+def common_object(native, storage, output, source):
+    """Model the original linker's allocation of a unit's mapped COMMON symbols.
+
+    Every COMMON symbol of the object must have exactly one storage row, at its compiled size
+    and COMMON alignment (the symbol value), and every row must name such a symbol. The derived
+    object differs from `native` only in those symbol table entries: each becomes an undefined
+    global reference, which the link resolves to the definition plan() places at its storage
+    address. Relocations, section bytes and every other symbol are unchanged. (ngcld 3.9.3 links
+    a COMMON symbol against such a definition but warns, L0016, when the COMMON is small enough
+    for small data and the definition lies outside a small-data section.) Writes `output`."""
+    data = bytearray(native)
+    sections, symbols = read_elf(bytes(data))
+    tables = [section for section in sections if section["type"] == SHT_SYMTAB]
+    if len(tables) != 1:
+        raise ValueError(f"{source}: COMMON storage requires exactly one symbol table")
+    commons = {}
+    for index, symbol in enumerate(symbols, 1):
+        if symbol["shndx"] != SHN_COMMON:
+            continue
+        name = symbol["name"]
+        if name not in storage:
+            raise ValueError(f"{source}: common symbol {name} has no placement")
+        start, end = storage[name]
+        if name in commons or symbol["bind"] != STB_GLOBAL or end - start != symbol["size"] \
+                or start % max(symbol["value"], 1):
+            raise ValueError(f"{source}: storage {name} differs from its compiled COMMON size or alignment")
+        commons[name] = index
+    if set(storage) != set(commons):
+        raise ValueError(f"{source}: storage names a symbol that is not a compiled COMMON symbol: "
+                         f"{sorted(set(storage) - set(commons))}")
+    for index in commons.values():
+        at = tables[0]["offset"] + index * 16
+        struct.pack_into(">II", data, at + 4, 0, 0)
+        struct.pack_into(">H", data, at + 14, SHN_UNDEF)
+    Path(output).write_bytes(bytes(data))
+
+
+def check_storage(units, data, sections):
+    """Each storage extent must equal an evidence data row with exact edges, and storage in a
+    loaded section must hold zero bytes in the target, as linker-allocated COMMON storage does."""
+    for unit in units:
+        for name, (start, end) in (unit.get("storage") or {}).items():
+            if (start, end) not in data:
+                raise ValueError(f"{unit['source']}: storage {name} 0x{start:08X}-0x{end:08X} does not equal "
+                                 "an evidence data row with exact edges")
+            section = next(s for s in sections if s["start"] <= start < end <= s["end"])
+            if section["contents"] is not None \
+                    and any(section["contents"][start - section["start"]:end - section["start"]]):
+                raise ValueError(f"{unit['source']}: storage {name} 0x{start:08X}-0x{end:08X} is not zero "
+                                 "in the target")
 
 
 def folded_reference(name):
@@ -517,6 +603,12 @@ def plan(sections, units, objects, externals):
                 raise ValueError(f"{unit['source']}: target padding 0x{code['end']:08X}-0x{entry['start']:08X} "
                                  f"before {entry['section']} is not zero")
         by_index = {entry["index"]: entry for entry in unit["sections"]}
+        # Mapped COMMON symbols are undefined references in the link object (common_object), and
+        # the unit defines them at their storage addresses.
+        for name, (start, _) in (unit.get("storage") or {}).items():
+            if name in defined or name in externals:
+                raise ValueError(f"{unit['source']}: symbol {name} is already defined elsewhere")
+            defined[name] = (start, unit["source"])
         for symbol in symbols:
             if symbol["shndx"] == SHN_COMMON:
                 raise ValueError(f"{unit['source']}: common symbol {symbol['name']} has no placement")
@@ -547,6 +639,15 @@ def plan(sections, units, objects, externals):
             cursor = end
         if cursor < section["end"]:
             pieces[section["name"]].append({"start": cursor, "end": section["end"], "symbols": []})
+    # A mapped COMMON symbol is defined at its storage address by the original-bytes piece that
+    # holds it; the unit's COMMON then resolves to that definition, so the linker allocates nothing.
+    for unit in units:
+        for name, (start, end) in sorted((unit.get("storage") or {}).items(), key=lambda item: item[1]):
+            owner = next((piece for section in sections for piece in pieces[section["name"]]
+                         if "unit" not in piece and piece["start"] <= start < end <= piece["end"]), None)
+            if owner is None:
+                raise ValueError(f"{unit['source']}: storage {name} lies inside a source unit's range")
+            owner["symbols"].append({"name": name, "value": start - owner["start"]})
     resolved = {}
     for unit in units:
         folds = {folded_reference(name): value for name, value in (unit.get("folded") or {}).items()}
@@ -798,6 +899,10 @@ def link_object(unit):
         unit["folds"] = fold_object(unit["object"].read_bytes(), unit["folded"], unit["link_object"])
         if not unit["link_roots"] and any(symbol["type"] == STT_FUNC for symbol, _ in unit["folds"].values()):
             raise ValueError(f"{unit['source']}: a folded function needs link_roots so the linker drops its body")
+    if unit.get("storage"):
+        derived = unit["object"].with_suffix(".common.o")
+        common_object(unit["link_object"].read_bytes(), unit["storage"], derived, unit["source"])
+        unit["link_object"] = derived
     unit["link_object_sha256"] = sha256(unit["link_object"])
 
 
@@ -921,7 +1026,7 @@ def retained_layout(unit, compiler, wrapper):
     # SN preserves some unused undefined symbol-table entries after removing their relocations.
     generated = {"__sn__bss__tag__address__", "__sn__bss__tag__"}
     used_symbols = [symbol for symbol in linked_symbols if symbol["name"] not in generated
-                    and (symbol["shndx"] in mapped_indices
+                    and (symbol["shndx"] in mapped_indices or symbol["shndx"] == SHN_COMMON
                          or (symbol["shndx"] == SHN_UNDEF and symbol["name"] in referenced))]
     unit["native_object_sha256"] = before
     return mapped, used_symbols
@@ -974,6 +1079,7 @@ def build(original, manifest_path, report_path, cache=None):
     check_data_in_code([(entry["start"], entry["end"], unit["source"]) for unit in units
                         for entry in unit["sections"] if entry["follows"] is not None],
                        function_extents(ROOT), data_extents(ROOT))
+    check_storage(units, data_extents(ROOT), sections)
     if BUILD.exists():
         shutil.rmtree(BUILD)
     (BUILD / "obj").mkdir(parents=True)
@@ -1205,6 +1311,8 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                          "link_roots": unit.get("link_roots"),
                          "folded": {name: f"0x{value:08X}" for name, value in unit["folded"].items()}
                          if unit.get("folded") else None,
+                         "storage": {name: f"0x{start:08X}" for name, (start, _) in unit["storage"].items()}
+                         if unit.get("storage") else None,
                          "native_object_sha256": unit.get("native_object_sha256"),
                          "link_object_sha256": unit.get("link_object_sha256"),
                          "status": "matched" if identical else "unverified", "sections": entries,
