@@ -7,7 +7,7 @@
 #include "engine/tdbext.h"
 #include <stdio.h>
 
-#include "game/Candidate_8016B364.h"
+#include "game/PlayCandidate.h"
 #include "game/DbCursor.h"
 #include "game/QueryStatus.h"
 #include "game/DbQueryTable.h"
@@ -21,10 +21,10 @@ extern "C" {
 extern char lbl_802EBDF8[];
 
 unsigned int PlayBookGetLoadFlags(void);
-void fn_8016B364(int team, Candidate_8016B364 *pList, unsigned int count);
+void PlayTrackWeightCandidates(int team, PlayCandidate_t *pList, unsigned int count);
 void SortArray(int a, void *pBase, int count, int size,
-                 int (*pCompare)(Candidate_8016B364 *, Candidate_8016B364 *),
-                 void (*pSwap)(Candidate_8016B364 *, Candidate_8016B364 *), int b, int c);
+                 int (*pCompare)(PlayCandidate_t *, PlayCandidate_t *),
+                 void (*pSwap)(PlayCandidate_t *, PlayCandidate_t *), int b, int c);
 int fn_801FA0BC(int handle, DbQueryTable *pTables, DbFilter *pFilter, void *pSort, int *pCursor,
                 QueryResult *pResult);
 }
@@ -846,7 +846,7 @@ int SelectLTESName(int tag, char *pName, int set)
     return fn_801FCE10(0, "use \x8c select 'eman' into \x88 from 'LTES' where 'LTES' = \x85\n", tag, pName, set);
 }
 
-int _PlayBookDbComparePickWeight(Candidate_8016B364 *pA, Candidate_8016B364 *pB)
+int _PlayBookDbComparePickWeight(PlayCandidate_t *pA, PlayCandidate_t *pB)
 {
     if (pA->mUnknown4 < pB->mUnknown4) {
         return -1;
@@ -854,9 +854,9 @@ int _PlayBookDbComparePickWeight(Candidate_8016B364 *pA, Candidate_8016B364 *pB)
     return 0;
 }
 
-void _PlayBookDbSwapPicks(Candidate_8016B364 *pA, Candidate_8016B364 *pB)
+void _PlayBookDbSwapPicks(PlayCandidate_t *pA, PlayCandidate_t *pB)
 {
-    Candidate_8016B364 temp = *pA;
+    PlayCandidate_t temp = *pA;
 
     *pA = *pB;
     *pB = temp;
@@ -864,7 +864,7 @@ void _PlayBookDbSwapPicks(Candidate_8016B364 *pA, Candidate_8016B364 *pB)
 
 int PlayBookDbPickAIPlay(int team, int tag, int kind)
 {
-    Candidate_8016B364 list[225];
+    PlayCandidate_t list[225];
     DbFilter kindFilter;
     DbFilter joinFilter;
     DbFilter lylpFilter;
@@ -921,8 +921,8 @@ int PlayBookDbPickAIPlay(int team, int tag, int kind)
     if (status != 0) {
         return status;
     }
-    SortArray(0, list, count, sizeof(Candidate_8016B364), _PlayBookDbComparePickWeight, _PlayBookDbSwapPicks, 0, 0);
-    fn_8016B364(team, list, count);
+    SortArray(0, list, count, sizeof(PlayCandidate_t), _PlayBookDbComparePickWeight, _PlayBookDbSwapPicks, 0, 0);
+    PlayTrackWeightCandidates(team, list, count);
     total = 0;
     for (i = 0; i < count; i++) {
         total += list[i].mUnknown4;

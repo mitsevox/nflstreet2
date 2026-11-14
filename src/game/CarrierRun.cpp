@@ -155,8 +155,8 @@ extern "C" unsigned char fn_800C13A0(Object_80039F5C *p, unsigned char *pA, unsi
 
 extern "C" int fn_8009FB60(Object_80039F5C *p);
 extern "C" int fn_800A5C04(Object_80039F5C *p, int a, int b);
-extern "C" float fn_8016B938(void);
-extern "C" float fn_8016B974(void);
+extern "C" float PlayTrackGetPlayIdRate(void);
+extern "C" float PlayTrackGetResult5Rate(void);
 extern "C" int fn_800E1584(Object_80039F5C *p);
 extern "C" int fn_8009E180(Object_80039F5C *p);
 extern "C" int fn_800F2C1C(Object_80039F5C *p, int a);

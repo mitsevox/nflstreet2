@@ -100,7 +100,7 @@ void fn_80162780(int a, int b);
 void fn_80164C4C(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int team, int a);
 int fn_801650BC(PlayBookPlay_t *pRecord);
 PlayBookFormation_t *PlayBookGetFormation(int team);
-void fn_8016B0B0(void);
+void PlayTrackUpdateSummary(void);
 void ClockRuleSnap(void);
 void DriveLogUpdateTeam(void);
 void PenaltyCheckOffside(void);
@@ -422,7 +422,7 @@ extern "C" void fn_8016E498(void)
     fn_8009E0EC();
     fn_8011875C();
     fn_800FAD2C();
-    fn_8016B0B0();
+    PlayTrackUpdateSummary();
     fn_800FAECC(1);
     fn_80164C4C(PlayBookGetFormation(team), PlayBookGetPlay(team), team, 0);
     fn_80164C4C(PlayBookGetFormation(other), PlayBookGetPlay(other), other, 0);

@@ -36,8 +36,8 @@ int fn_80177C38(void);
 int BallStateGet(Ball_t *p, int *pOut);
 int fn_8009FB60(Object_80039F5C *p);
 int fn_800A5C04(Object_80039F5C *p, int a, int b);
-float fn_8016B938(void);
-float fn_8016B974(void);
+float PlayTrackGetPlayIdRate(void);
+float PlayTrackGetResult5Rate(void);
 int fn_800E1584(Object_80039F5C *p);
 int fn_8009E180(Object_80039F5C *p);
 int fn_800F2C1C(Object_80039F5C *p, int a);
@@ -107,10 +107,10 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
         if (carrier && fn_800B65A0(p->mIdBytes[2]) != 255
             && fn_800B65A0(carrier->mIdBytes[2]) == 255 && !fn_80177C38()) {
             state->mUnknown16 -= (int)MIN((float)state->mUnknown16,
-                                          (float)state->mUnknown16 * fn_8016B938());
+                                          (float)state->mUnknown16 * PlayTrackGetPlayIdRate());
             if (fn_8011F1CC() && (carrier->mFlags & 0x8000)) {
                 state->mUnknown16 -= (int)MIN((float)state->mUnknown16,
-                                              (float)state->mUnknown16 * fn_8016B974());
+                                              (float)state->mUnknown16 * PlayTrackGetResult5Rate());
             }
         }
         if (fn_800E1584(p)) {

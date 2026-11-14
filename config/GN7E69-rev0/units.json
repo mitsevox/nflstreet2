@@ -8664,7 +8664,7 @@
     {
       "source": "src/game/PlayBook.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80167910-0x80168ED0 (src/game/PlayBook.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80167910-0x8016BD54 (src/game/PlayBook.cpp), its data, linker, type, compiler and source-form rows.",
       "link_roots": {
         "symbols": [
           "PlayBookOffsetSpots",
@@ -8714,31 +8714,128 @@
           "PlayBookGetReceiver",
           "PlayBookSetReceiverOption",
           "PlayBookGetDatabase",
-          "PlayBookGetTeam"
+          "PlayBookGetTeam",
+          "PlayCallGetPlaybookId",
+          "PlayCallApplyPlay",
+          "PlayCallFillOffenseExtra",
+          "PlayCallFillDefenseExtra",
+          "PlayCallFillSituation",
+          "PlayCallFillOffenseSituation",
+          "PlayCallFillDefenseSituation",
+          "PlayCallOffenseCommand",
+          "PlayCallDefenseCommand",
+          "PlayCallScriptReadValue",
+          "PlayCallScriptGetStream",
+          "PlayCallScriptRelocate",
+          "PlayCallScriptIsEqual",
+          "PlayCallScriptIsLess",
+          "PlayCallScriptIsGreater",
+          "PlayCallScriptIsLessEqual",
+          "PlayCallScriptIsGreaterEqual",
+          "PlayCallScriptIsNotEqual",
+          "PlayCallScriptExecute",
+          "PlayCallScriptHandleEndCode",
+          "PlayCallScriptApplyOffenseResult",
+          "PlayCallScriptApplyDefenseResult",
+          "PlayCallScriptInit",
+          "PlayCallScriptRunOffense",
+          "PlayCallScriptRunDefense",
+          "PlayTrackGetKindGroup",
+          "PlayTrackGetCallTendency",
+          "PlayTrackScoreTendencyMatch",
+          "PlayTrackRateResult5",
+          "PlayTrackRateResult6",
+          "PlayTrackRateFlag10",
+          "PlayTrackRateFlag11",
+          "PlayTrackScaleByMask",
+          "PlayTrackScoreRepeatedPlay",
+          "PlayTrackScoreFlagMatch",
+          "PlayTrackWeightOffense",
+          "PlayTrackWeightDefense",
+          "PlayTrackFilterByMode",
+          "PlayTrackFilterByChallenge",
+          "PlayTrackClassifyPlay",
+          "PlayTrackGetRatingBias",
+          "PlayTrackInit",
+          "PlayTrackShutdown",
+          "PlayTrackUpdateSummary",
+          "PlayTrackPushPlay",
+          "PlayTrackSetEntryWord4",
+          "PlayTrackSetEntryByteC",
+          "PlayTrackSetDirection",
+          "PlayTrackSetGain",
+          "PlayTrackSetResult",
+          "PlayTrackSetKind",
+          "PlayTrackSetFlag10",
+          "PlayTrackSetFlag11",
+          "PlayTrackWeightCandidates",
+          "PlayTrackGetGainTendency",
+          "PlayTrackMatchesGainFlags",
+          "PlayTrackGetPlayTendency",
+          "PlayTrackRatePlayId",
+          "PlayTrackGetPlayIdRate",
+          "PlayTrackGetResult5Rate",
+          "PlayTrackGetFlag10Rate",
+          "PlayTrackGetFlag11Rate",
+          "PlayTrackGetOffenseTendency",
+          "PlayTrackReset",
+          "PlayTrackRegister",
+          "PlayAutoFlip"
         ],
         "discarded": [
-          "GetPlayerPosition"
+          "GetPlayerPosition",
+          "PlayBookTurnPage",
+          "GetTrackerFloat8",
+          "SumKind1WeightsBit28",
+          "SumKind1WeightsBit30",
+          "PlayBookGetZoneCenter",
+          "PlayBookRouteApplyTurn",
+          "PlayBookRouteAddStep",
+          "PlayBookRouteAddZoneStep",
+          "PlayBookRouteAddShift",
+          "PlayBookRouteCommand",
+          "PlayBookBuildRoute",
+          "PlayBookRouteToArt",
+          "PlayBookPointToArt"
         ],
-        "evidence": "evidence.tsv linker row 0x802A498C-0x802A4990: the target keeps every listed function, all reached from outside the unit or from each other; the point accessor GetPlayerPosition, rebuilt from its Xbox prototype counterpart 0x11DBA0, has no code in the target, while its 9.0f constant remains in the unit's rodata."
+        "evidence": "evidence.tsv linker rows 0x802A498C-0x802A4990, 0x802A4990-0x802A49A4, 0x802A4B88-0x802A4BA0 and 0x802A4BA4-0x802A4BF4: the target keeps every listed function; the listed discarded functions, rebuilt from their Xbox prototype counterparts, have no code in the target while their constants remain in the unit's .rodata."
       },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80167910",
-          "end": "0x80168ED0"
+          "end": "0x8016BD54"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A4908",
-          "end": "0x802A4990"
+          "end": "0x802A4C18"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E9970",
+          "end": "0x802E99C4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB40C",
+          "end": "0x803EB414"
         },
         {
           "section": ".sbss",
           "placement": ".sbss",
           "start": "0x803ECAF4",
           "end": "0x803ECAF8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036167C",
+          "end": "0x80361694"
         }
       ]
     },
@@ -12428,25 +12525,6 @@
       ]
     },
     {
-      "source": "src/game/PlayAutoFlip.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8016BAD8-0x8016BD54 (src/game/PlayAutoFlip.cpp) and its data and source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8016BAD8",
-          "end": "0x8016BD54"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A4BA0",
-          "end": "0x802A4BA4"
-        }
-      ]
-    },
-    {
       "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80164568-0x801660A0 (src/game/PlayAlign.cpp), its function rows and data rows 0x802A4610-0x802A4624 and 0x803EB3B0-0x803EB3B8.",
@@ -12499,19 +12577,6 @@
           "placement": ".data5",
           "start": "0x803EB3A4",
           "end": "0x803EB3A8"
-        }
-      ]
-    },
-    {
-      "source": "src/game/PlayCallAI.cpp",
-      "profile": "game_cpp",
-      "evidence": "Target function extents 0x80168ED0-0x801695D4 (evidence.tsv function rows) and callback producer 0x80168324. Provisional grouping.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80168ED0",
-          "end": "0x801695D4"
         }
       ]
     },
@@ -17431,31 +17496,6 @@
           "placement": ".bss",
           "start": "0x8031B7DC",
           "end": "0x8031BD04"
-        }
-      ]
-    },
-    {
-      "source": "src/game/PlayCallScript.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801695D4-0x80169F80 (src/game/PlayCallScript.cpp), its function rows, data rows 0x802A4BF8-0x802A4C14 and 0x8036167C-0x80361694, and its type, compiler and source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801695D4",
-          "end": "0x80169F80"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A4BF8",
-          "end": "0x802A4C14"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8036167C",
-          "end": "0x80361694"
         }
       ]
     },

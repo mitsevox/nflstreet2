@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/cu_8008E978.h"
 
-extern "C" float fn_8016B9B0(void);
+extern "C" float PlayTrackGetFlag10Rate(void);
 
 extern "C" void fn_800A481C(Object_80039F5C *p, Object_80039F5C *pOther, int index,
                             Params_800A4E8C *pParams)
@@ -20,5 +20,5 @@ extern "C" void fn_800A481C(Object_80039F5C *p, Object_80039F5C *pOther, int ind
         pParams->mUnknown8 = 255;
         break;
     }
-    pParams->mUnknown8 = (unsigned int)((float)pParams->mUnknown8 * (1.0f - fn_8016B9B0()));
+    pParams->mUnknown8 = (unsigned int)((float)pParams->mUnknown8 * (1.0f - PlayTrackGetFlag10Rate()));
 }

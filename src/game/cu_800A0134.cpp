@@ -159,15 +159,15 @@ int fn_8011F354(void);
 int fn_8011F524(void);
 float fn_8011F4D4(void);
 PlayBookPlay_t *PlayBookGetSavedPlay(int);
-void fn_8016B144(int,int);
-void fn_8016B210(int,int);
-void fn_8016B22C(int,signed char);
-void fn_8016B248(int,Point_8017886C,Point_8017886C,int);
-void fn_8016B2B8(int,float);
-void fn_8016B2E8(int,unsigned char);
-void fn_8016B310(int,unsigned char);
-void fn_8016B32C(int,unsigned char);
-void fn_8016B348(int,unsigned char);
+void PlayTrackPushPlay(int,int);
+void PlayTrackSetEntryWord4(int,int);
+void PlayTrackSetEntryByteC(int,signed char);
+void PlayTrackSetDirection(int,Point_8017886C,Point_8017886C,int);
+void PlayTrackSetGain(int,float);
+void PlayTrackSetResult(int,unsigned char);
+void PlayTrackSetKind(int,unsigned char);
+void PlayTrackSetFlag10(int,unsigned char);
+void PlayTrackSetFlag11(int,unsigned char);
 int fn_8009E9C8(void);
 void fn_8009BD2C(Object_80039F5C *,int *);
 void SpchIGSetTackler(int);
@@ -188,24 +188,24 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
     unsigned short count=fn_800B15D4();
     int ref=0;
     if(count>1 && !fn_8011F354()) {
-        fn_8016B144(team,PlayBookGetSavedPlay(team)->mUnknown4);
-        fn_8016B210(team,PlayBookGetSavedPlay((unsigned char)(team^1))->mUnknown4);
-        if(fn_8011F1CC())fn_8016B310(team,2);
+        PlayTrackPushPlay(team,PlayBookGetSavedPlay(team)->mUnknown4);
+        PlayTrackSetEntryWord4(team,PlayBookGetSavedPlay((unsigned char)(team^1))->mUnknown4);
+        if(fn_8011F1CC())PlayTrackSetKind(team,2);
         else {
-            fn_8016B310(team,1);
-            if(fn_8011F524())fn_8016B2E8(team,6);
+            PlayTrackSetKind(team,1);
+            if(fn_8011F524())PlayTrackSetResult(team,6);
             Point_8017886C to={fn_8011F4D4(),point.mY};
-            fn_8016B248(team,point,to,fn_8009E9C8());
+            PlayTrackSetDirection(team,point,to,fn_8009E9C8());
         }
-        fn_8016B32C(team,fn_8011F37C());
+        PlayTrackSetFlag10(team,fn_8011F37C());
         tracked=true;
-        fn_8016B348(team,0);
+        PlayTrackSetFlag11(team,0);
     }
     for(unsigned short i=0;i<count;++i) {
         Record_800B15FC *e=fn_800B1648(i);
         switch(e->mUnknown14) {
         case 2:
-            if(tracked)fn_8016B2B8(team,out->mUnknown08.mY-point.mY);
+            if(tracked)PlayTrackSetGain(team,out->mUnknown08.mY-point.mY);
             break;
         case 3:
             state->mUnknown0=1;
@@ -215,21 +215,21 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
             break;
         case 4:case 8:
             ref=e->mUnknown0;state->mUnknown4=1;state->mWord8=0;
-            if(tracked)fn_8016B22C(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
+            if(tracked)PlayTrackSetEntryByteC(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
             break;
         case 5:
             ref=e->mUnknown0;state->mUnknown4=4;special=true;
             out->mUnknown18|=0x8000;
-            if(!(fabsf(e->mUnknownC-point.mX)<=4.0f))fn_8016B2E8(team,5);
-            if(tracked && e->mUnknown8)fn_8016B22C(team,((Object_80039F5C *)e->mUnknown8)->mIdBytes[1]);
+            if(!(fabsf(e->mUnknownC-point.mX)<=4.0f))PlayTrackSetResult(team,5);
+            if(tracked && e->mUnknown8)PlayTrackSetEntryByteC(team,((Object_80039F5C *)e->mUnknown8)->mIdBytes[1]);
             break;
         case 6:
             ref=e->mUnknown0;state->mUnknown4=1;state->mWord8=0;
             SpchIGSetPassCatcher(e->mUnknown0);out->mUnknown18|=0x10000;
             if(tracked) {
                 Point_8017886C to={e->mUnknownC,e->mUnknown10};
-                fn_8016B248(team,point,to,fn_8009E9C8());
-                fn_8016B22C(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
+                PlayTrackSetDirection(team,point,to,fn_8009E9C8());
+                PlayTrackSetEntryByteC(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
             }
             break;
         case 7:
@@ -246,7 +246,7 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
         case 18:case 55:
             state->mWord8=1;state->mUnknown4=5;state->mFloat14=e->mUnknown10;
             {out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}
-            if(tracked)fn_8016B2E8(team,2);
+            if(tracked)PlayTrackSetResult(team,2);
             break;
         case 19:
             ref=e->mUnknown0;SpchIGSetTurnoverPlayer(e->mUnknown0);
@@ -256,14 +256,14 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
             ref=e->mUnknown0;out->mUnknown18|=0x400;SpchIGSetTurnoverPlayer(e->mUnknown0);
             if(tracked) {
                 Point_8017886C to={e->mUnknownC,e->mUnknown10};
-                fn_8016B248(team,point,to,fn_8009E9C8());fn_8016B2E8(team,3);
+                PlayTrackSetDirection(team,point,to,fn_8009E9C8());PlayTrackSetResult(team,3);
             }
             break;
         case 21:
             i=count;
             if(tracked) {
                 Point_8017886C to={e->mUnknownC,e->mUnknown10};
-                fn_8016B248(team,point,to,fn_8009E9C8());fn_8016B2E8(team,1);
+                PlayTrackSetDirection(team,point,to,fn_8009E9C8());PlayTrackSetResult(team,1);
             }
             break;
         case 22:
@@ -281,9 +281,9 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
             placed=true;break;
         case 24:
             if(tracked && !special && fn_8011F1CC() && fn_8009BCE8(&e->mUnknown0)) {
-                fn_8016B310(team,1);fn_8016B22C(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
+                PlayTrackSetKind(team,1);PlayTrackSetEntryByteC(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
                 Point_8017886C to={e->mUnknownC,e->mUnknown10};
-                fn_8016B248(team,point,to,fn_8009E9C8());fn_8016B2E8(team,5);
+                PlayTrackSetDirection(team,point,to,fn_8009E9C8());PlayTrackSetResult(team,5);
             }
             break;
         case 28:
@@ -291,12 +291,12 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
             state->mUnknown10=e->mUnknown4;SpchIGSetTackler(e->mUnknown4);
             fn_800A061C(state,&out->mUnknown00,state->mUnknown10);
             if(tracked) {
-                if(fabsf(e->mUnknownC-point.mX)>4.0f)fn_8016B2E8(team,5);
-                else if(fn_8011F1CC() && !(e->mUnknown10>=point.mY))fn_8016B2E8(team,4);
+                if(fabsf(e->mUnknownC-point.mX)>4.0f)PlayTrackSetResult(team,5);
+                else if(fn_8011F1CC() && !(e->mUnknown10>=point.mY))PlayTrackSetResult(team,4);
             }
             break;
         case 47:case 54:out->mUnknown18|=0x20000;break;
-        case 61:fn_8016B348(fn_80178308(),1);break;
+        case 61:PlayTrackSetFlag11(fn_80178308(),1);break;
         }
     }
 }
@@ -487,7 +487,7 @@ void ClockRuleStopGameClock(Object_8017886C *);
 void fn_800B2304(void);
 void fn_800B9A9C(PostPlayPhase *);
 void fn_801789F8(void);
-void fn_8016BAAC(void);
+void PlayTrackRegister(void);
 int HotspotPollCaptured(void);
 void PauseOpenScreen(int,int,int);
 void fn_800AE380(void);
@@ -553,7 +553,7 @@ extern "C" void fn_800A1C74(Object_8017886C *result,Object_8017886C *input)
         if(fn_80177F70()==6)fn_801782F4(fn_80178A2C());
         if(fn_800BA6F8())fn_800BAAE4();
         ClockRuleStopGameClock(result);fn_800B14E4();fn_800B2304();fn_800B9A9C(lbl_803EAB84);
-        fn_801789F8();fn_8016BAAC();
+        fn_801789F8();PlayTrackRegister();
         if(HotspotPollCaptured())PauseOpenScreen(3,22,-1);
         fn_800AE380();
         if(result->mUnknown18&0x2000 || fn_800B2314()&1)fn_8009BA9C(result);
