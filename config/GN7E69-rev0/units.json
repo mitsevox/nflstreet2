@@ -17544,6 +17544,31 @@
           "end": "0x803EC4A4"
         }
       ]
+    },
+    {
+      "source": "src/engine/lzm.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional whole-file lzm.c envelope, exact first-eleven-function prefix and six native bit-stream state objects. Later full bodies stay behind DECOMP_COMPARE and keep their original executable providers; no file closure.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802805C4",
+          "end": "0x8028113C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC578",
+          "end": "0x803EC584"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED414",
+          "end": "0x803ED420"
+        }
+      ]
     }
   ]
 }
