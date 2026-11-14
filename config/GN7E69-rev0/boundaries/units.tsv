@@ -141,6 +141,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x8025FAF8	0x8025FBD4	libgcc2.c	4	4	4	0	4	-	eabi.asm
 0x80260FC4	0x80260FE8	sf_fabs.c	1	1	1	1	0	-	-
 0x8026120C	0x80261328	sf_scalbn.c	1	1	1	1	0	-	-
+0x80261414	0x802614C0	kf_sin.c	1	1	1	1	0	-	-
 0x80261A24	0x80261A58	sf_copysign.c	1	1	1	1	0	-	-
 0x802622DC	0x80262310	vprintf.c	1	1	1	1	0	-	-
 0x80262310	0x802623A8	src/engine/atexit.c	1	0	-	0	0	provisional	-
