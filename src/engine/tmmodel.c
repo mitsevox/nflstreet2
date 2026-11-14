@@ -185,7 +185,7 @@ void TMModelFreeChannels(TMModel_t *pModel)
     }
 }
 
-void TMModelAddExtent(TMModel_t *pModel, Extent_802144AC *pExtent, int state, int arg)
+void TMModelAddExtent(TMModel_t *pModel, TMClipExtent_t *pExtent, int state, int arg)
 {
     TMGeom_t *pGeom = pModel->mpGeom;
     TMSwapDef_t *pSwap = pModel->mpSwap;

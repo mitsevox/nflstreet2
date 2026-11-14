@@ -26,19 +26,21 @@ public:
     virtual FlowTransitionEntry_t *GSGetTransitionList() = 0;
     virtual ModuleDependency *GSGetStageModuleList(int id) = 0;
     virtual const char *GSGetGroupName() = 0;
-    virtual void fn_801CC6F8();
-    virtual void fn_801CC6FC(int id);
+    virtual void TransitionStartCallback();
+    virtual void TransitionEndCallback(int id);
 
-    void fn_801CC3C0();
-    int fn_801CC490(int id);
-    int fn_801CC4DC();
-    int fn_801CC518();
-    ModuleDependency *fn_801CC524(int id);
-    void fn_801CC558();
-    void fn_801CC5B4(int id);
-    void fn_801CC604(int id);
-    int fn_801CC654(int id);
-    const char *fn_801CC6C4();
+    void Init();
+    int Start(int id);
+    int Stop();
+    int IsStarted();
+    int GetActiveStage();
+    int GetDefaultStage();
+    ModuleDependency *GetStageModuleList(int id);
+    void Process();
+    void TransitionStart(int id);
+    void TransitionEnd(int id);
+    int Transition(int id);
+    const char *GetName();
 
     unsigned char mUnknown0;
     unsigned char mUnknown1;
@@ -50,11 +52,6 @@ public:
     int mOverrideId;
     unsigned char mOverride;
 };
-
-extern "C" {
-int fn_801CC4F4(FlowGroupC *pGroup);
-int fn_801CC4FC(FlowGroupC *pGroup);
-}
 
 class DebugGroup : public FlowGroupC {
 public:

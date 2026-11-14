@@ -12,7 +12,7 @@
 #include "game/DepthChart.h"
 #include "game/AutoDepth.h"
 #include "game/GameInfo.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/DepthChartSide.h"
 #include "game/fn_80061AD4.h"
 #include "game/fn_80178D18.h"
@@ -20,7 +20,7 @@
 #include "game/StoryTeam.h"
 #include "game/StevTable.h"
 #include "game/fn_801C1F94.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_802372EC.h"
@@ -137,8 +137,6 @@ int TeamLogoGetHandle(int a);
 void fn_8018C48C(int tag);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
-int fn_801C302C(const char *s1, const char *s2, int n);
 void SortArray(int a, void *pBase, int count, int size, int (*pCompare)(TeamPickPlayer_t *, TeamPickPlayer_t *), int b,
                  int c, int d);
 int fn_801F967C(int handle, int table);
@@ -747,7 +745,7 @@ int MsgTeamPickCompareNames(TeamPickPlayer_t *pA, TeamPickPlayer_t *pB)
             PlayerDbGetLastName(&_MsgTeamPick_PlayerCursor, last, 15);
             PlayerDbGetFirstName(&_MsgTeamPick_PlayerCursor, first, 12);
             fn_801C2D88(nameB, 27, "%s%s", last, first);
-            return fn_801C302C(nameA, nameB, 27);
+            return strncmp(nameA, nameB, 27);
         }
     }
     return 0;
@@ -1480,7 +1478,7 @@ void MsgTeamPickGetPlayerInfo(int row, int *pId, int *pTeam, int *pValues, char 
 
 void MsgTeamPickStepGroup(int message, MenuArg_t text, int *pCount)
 {
-    Params_80005284 *pParams = text.pParams;
+    MenuText_t *pParams = text.pParams;
 
     switch (message) {
     case -1:
@@ -1567,8 +1565,8 @@ void MsgTeamPickGetCaptain(int slot, int *pId, int *pController)
 void MsgTeamPickGetRosterEntry(int slot, int *pId, MenuArg_t name, MenuArg_t position)
 {
     unsigned char team = _MsgTeamPick_pState->mUnknown1A;
-    Params_80005284 *pName = name.pParams;
-    Params_80005284 *pPosition = position.pParams;
+    MenuText_t *pName = name.pParams;
+    MenuText_t *pPosition = position.pParams;
 
     if (fn_801486A0() == 2) {
         if (slot < _MsgTeamPick_pState->mUnknown0C[team]) {
@@ -1675,7 +1673,7 @@ void MsgTeamPickStepShownTeam(int dir, int *pResult, char *pText, int length)
                 break;
             }
             if (pName) {
-                fn_801C2EF0(pText, pName, length);
+                strncpy(pText, pName, length);
             }
         }
     } else {
@@ -1687,7 +1685,7 @@ void MsgTeamPickStepShownTeam(int dir, int *pResult, char *pText, int length)
 
 void MsgTeamPickGetListName(int index, MenuArg_t text)
 {
-    Params_80005284 *pParams = text.pParams;
+    MenuText_t *pParams = text.pParams;
     int pick = MsgTeamPickFindListRow(_MsgTeamPick_pState->mUnknown17, index);
     int row = MsgTeamPickGroupToPoolIndex(_MsgTeamPick_pState->mUnknown17, pick);
 
@@ -1831,9 +1829,9 @@ int MsgTeamPickAutoSelect(int *pGroupDelta, int *pResult)
 
 void MsgTeamPickStepGroupTabs(int dir, int *pResult, MenuArg_t prevText, MenuArg_t groupText, MenuArg_t nextText)
 {
-    Params_80005284 *pPrev = prevText.pParams;
-    Params_80005284 *pGroup = groupText.pParams;
-    Params_80005284 *pNext = nextText.pParams;
+    MenuText_t *pPrev = prevText.pParams;
+    MenuText_t *pGroup = groupText.pParams;
+    MenuText_t *pNext = nextText.pParams;
     unsigned short prev;
     unsigned short next;
 
@@ -1890,8 +1888,8 @@ void MsgTeamPickGetTeamSlot(int index, int team, int *pValid, int *pId, MenuArg_
     } else {
         *pValid = 0;
         *pId = -1;
-        fn_801C3284(name.pParams->mpText, "", name.pParams->mLength + 1);
-        fn_801C3284(text.pParams->mpText, "", text.pParams->mLength + 1);
+        strnzcpy(name.pParams->mpText, "", name.pParams->mLength + 1);
+        strnzcpy(text.pParams->mpText, "", text.pParams->mLength + 1);
     }
 }
 
@@ -1931,14 +1929,14 @@ void MsgTeamPickGetOpponentName(int index, char *pDest, int size)
 {
     *pDest = 0;
     if (GameModeTypeGet() != 7) {
-        fn_801C2EF0(pDest, "Opponent", size);
+        strncpy(pDest, "Opponent", size);
     } else if (index < _MsgTeamPick_pState->mCount && index > -1) {
         int id = *_MsgTeamPick_pState->mppLists[index];
         int result = 0;
         if (PlayerDbSeekId(&_MsgTeamPick_PlayerCursor, id, &result)) {
             PlayerDbGetShortName(&_MsgTeamPick_PlayerCursor, pDest, size);
         } else {
-            fn_801C2EF0(pDest, "Opponent", size);
+            strncpy(pDest, "Opponent", size);
         }
     }
 }

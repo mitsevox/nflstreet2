@@ -295,7 +295,7 @@ int fn_80206EB8(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_t *pCols, TDbQIdx_80205
                             (*ppQIdx)->mTree.mParts[count].mUnknown4 = t;
                             (*ppQIdx)->mTree.mParts[count].mAscending = pCols[count].mDescending == 0;
                             (*ppQIdx)->mTree.mParts[count].mColumn =
-                                pCols[count].mId != TDB_COLUMN_ROW ? fn_8020B97C(pStmt->mTables[t], pCols[count].mId)
+                                pCols[count].mId != TDB_COLUMN_ROW ? _TDbTblResolveColRef(pStmt->mTables[t], pCols[count].mId)
                                                                    : TDB_COLUMN_ROW;
                             break;
                         }

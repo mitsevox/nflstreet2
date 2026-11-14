@@ -1,4 +1,4 @@
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 
 extern "C" {
 int fn_8005F938(unsigned int id, void *pArgs, int unused, int *pResult);

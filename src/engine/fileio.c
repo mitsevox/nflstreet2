@@ -1,44 +1,55 @@
+/* The engine's file layer: opening files on the disc, memory card or host PC through device
+   lists and path prefixes, and reading or writing them in blocks through a priority-ordered
+   queue of asynchronous requests, with blocking wrappers for whole-file reads and writes.
+   The device-level work is in llfileio.c. */
+
 #include "engine/list.h"
 #include "engine/fileio.h"
 #include "game/fn_801C68FC.h"
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 
-typedef struct FileWaitResult_801C8F14 {
-    int mCount;
-    unsigned char mDone;
-} FileWaitResult_801C8F14;
+/* Filled in by _FileAsyncCallback when a blocking read or write finishes. */
+typedef struct FileWaitResult_t {
+    volatile int mCount;
+    volatile unsigned char mDone;
+} FileWaitResult_t;
 
-extern unsigned char lbl_803EBC18;
-extern FileEntry_801C8F14 *lbl_803EBC24;
-extern Lock_801F8014 *lbl_803EBC28;
-extern int lbl_803EBC2C;
-extern FileDevTable_801C8F14 *lbl_803EBC30;
-extern int lbl_803EBC34;
-extern unsigned int lbl_803EBC10;
-extern unsigned int lbl_803EBC14;
-extern void *lbl_803ED628;
-extern void *lbl_803ED62C;
-extern unsigned char lbl_803ED630;
-extern Lock_801F8014 lbl_803D5168;
-extern Lock_801F8014 lbl_803D5188;
-extern FileConfig_801C8F14 lbl_803D51A8;
-extern unsigned char lbl_803D55B4[9];
-extern Lock_801F8014 lbl_803D55C0;
-extern FileDevTable_801C8F14 lbl_802F4A50;
+static unsigned int _File_uNumOpenFiles = 0;
+static unsigned int _File_uMaxFilesOpenedAtOnce = 0;
+unsigned char File_ModuleActive = 0;
+char File_ModuleID[] = "FileIO";
+FileStreamInfo_t *File_StreamInfo = 0;
+Lock_801F8014 *File_HandleInUseCS = 0;
+static int _File_DefaultDevice = 0;
+
+static FilevDevicePath_t _File_DefaultvDevicePath = { { 4 }, { "" }, 1 };
+static FilevDeviceList_t _File_DefaultvDeviceList = { { &_File_DefaultvDevicePath }, 1 };
+
+static FilevDeviceList_t *_File_CurrentvDeviceList = &_File_DefaultvDeviceList;
+int File_uMemFlags = 0;
+
+void *File_pFileRequestList;
+void *File_pAsyncRequestList;
+unsigned char File_AsyncFileCopy;
+Lock_801F8014 File_RequestListCS;
+Lock_801F8014 File_AsyncRequestListCS;
+FileInitParms_t File_InitParms;
+unsigned char File_AsyncThreadActive[9];
+Lock_801F8014 File_AsyncThreadActiveCS;
 
 void fn_801F81AC(void);
 int MemFill(void *pDest, int size, int value, int width);
-int FileQueueAsyncRequest(FileAsync_801C8F14 *pAsync);
+int FileQueueAsyncRequest(FileAsyncRequest_t *pAsync);
 void FileAsyncWaitStream(int handle);
 int FileOpenhDevice(const char *pName, int device, const char *pPrefix);
 int FileCloseStream(int handle);
-void FileLLInit(FileConfig_801C8F14 *pConfig);
+void FileLLInit(FileInitParms_t *pConfig);
 void FileLLShutdown(void);
 
-static int fn_801C8F14(FileAsync_801C8F14 *pA, FileAsync_801C8F14 *pB)
+static int _FileRequestInsertFunc(FileAsyncRequest_t *pA, FileAsyncRequest_t *pB)
 {
     int diff = pA->mPriority - pB->mPriority;
 
@@ -48,20 +59,20 @@ static int fn_801C8F14(FileAsync_801C8F14 *pA, FileAsync_801C8F14 *pB)
     return diff;
 }
 
-static void fn_801C8F2C(int count, int error, FileWaitResult_801C8F14 *pResult)
+static void _FileAsyncCallback(int count, int error, FileWaitResult_t *pResult)
 {
     pResult->mCount += count;
     pResult->mDone = 1;
 }
 
-static FileReq_801C8F14 *fn_801C8F44(void)
+static FileRequest_t *_GetNewFileRequest(void)
 {
-    FileReq_801C8F14 *pReq;
+    FileRequest_t *pReq;
 
     for (;;) {
-        fn_801F8014(&lbl_803D5168);
-        pReq = DSNewNode(lbl_803ED628);
-        fn_801F809C(&lbl_803D5168);
+        fn_801F8014(&File_RequestListCS);
+        pReq = DSNewNode(File_pFileRequestList);
+        fn_801F809C(&File_RequestListCS);
         if (pReq) {
             break;
         }
@@ -70,21 +81,21 @@ static FileReq_801C8F14 *fn_801C8F44(void)
     return pReq;
 }
 
-static void fn_801C8F9C(FileReq_801C8F14 *pReq)
+static void _DeleteFileRequestNode(FileRequest_t *pReq)
 {
-    fn_801F8014(&lbl_803D5168);
-    DSDelNode(lbl_803ED628, pReq);
-    fn_801F809C(&lbl_803D5168);
+    fn_801F8014(&File_RequestListCS);
+    DSDelNode(File_pFileRequestList, pReq);
+    fn_801F809C(&File_RequestListCS);
 }
 
-FileAsync_801C8F14 *fn_801C8FE4(void)
+FileAsyncRequest_t *_FileGetAsyncRequest(void)
 {
-    FileAsync_801C8F14 *pAsync;
+    FileAsyncRequest_t *pAsync;
 
     for (;;) {
-        fn_801F8014(&lbl_803D5188);
-        pAsync = fn_801C6A20(lbl_803ED62C);
-        fn_801F809C(&lbl_803D5188);
+        fn_801F8014(&File_AsyncRequestListCS);
+        pAsync = fn_801C6A20(File_pAsyncRequestList);
+        fn_801F809C(&File_AsyncRequestListCS);
         if (pAsync) {
             break;
         }
@@ -93,29 +104,30 @@ FileAsync_801C8F14 *fn_801C8FE4(void)
     return pAsync;
 }
 
-int fn_801C903C(int unused, int arg, FileReq_801C8F14 *pReq)
+int _FileReqDoNextBlock(int unused, int arg, FileRequest_t *pReq)
 {
     int done = 0;
-    FileAsync_801C8F14 *pAsync = pReq->mpAsync;
+    FileAsyncRequest_t *pAsync = pReq->mpAsync;
     int size;
 
     if (pReq->mpBlockFn) {
         pReq->mpBlockFn(pAsync->mSize, pAsync->mpBuffer, arg, pReq->mpArg);
     }
     if (pReq->mSize != pReq->mDone) {
-        size = pAsync->mSize;
+        int step = pAsync->mSize;
+
         if (!pReq->mCyclic) {
-            pAsync->mpBuffer += size;
+            pAsync->mpBuffer += step;
         }
-        pAsync->mPos += size;
+        pAsync->mPos += step;
         size = pReq->mSize - pReq->mDone;
         if (size > pReq->mBlockSize) {
             size = pReq->mBlockSize;
         }
         pAsync->mSize = size;
-        lbl_803EBC24[pReq->mHandle].mAsyncPos += size;
-        if (pAsync->mType == 2 && lbl_803EBC24[pReq->mHandle].mAsyncPos > lbl_803EBC24[pReq->mHandle].mLength) {
-            lbl_803EBC24[pReq->mHandle].mLength = lbl_803EBC24[pReq->mHandle].mAsyncPos;
+        File_StreamInfo[pReq->mHandle].mAsyncPos += size;
+        if (pAsync->mType == 2 && File_StreamInfo[pReq->mHandle].mAsyncPos > File_StreamInfo[pReq->mHandle].mLength) {
+            File_StreamInfo[pReq->mHandle].mLength = File_StreamInfo[pReq->mHandle].mAsyncPos;
         }
         pReq->mDone += pAsync->mSize;
     } else {
@@ -123,15 +135,15 @@ int fn_801C903C(int unused, int arg, FileReq_801C8F14 *pReq)
             pReq->mpDoneFn(pReq->mSize, 0, pReq->mpArg);
         }
         done = 1;
-        fn_801C8F9C(pReq);
+        _DeleteFileRequestNode(pReq);
     }
     return done;
 }
 
-FileReq_801C8F14 *fn_801C9174(FileReq_801C8F14 *pSrc, int type)
+FileRequest_t *_FileRequest(FileRequest_t *pSrc, int type)
 {
-    FileReq_801C8F14 *pReq = fn_801C8F44();
-    FileAsync_801C8F14 *pAsync;
+    FileRequest_t *pReq = _GetNewFileRequest();
+    FileAsyncRequest_t *pAsync;
     int state = 0;
     int size;
 
@@ -144,14 +156,14 @@ FileReq_801C8F14 *fn_801C9174(FileReq_801C8F14 *pSrc, int type)
     pReq->mpArg = pSrc->mpArg;
     pReq->mpBlockFn = pSrc->mpBlockFn;
     pReq->mCyclic = pSrc->mCyclic;
-    pAsync = fn_801C8FE4();
+    pAsync = _FileGetAsyncRequest();
     pReq->mpAsync = pAsync;
     pAsync->mType = type;
     pAsync->mState = state;
-    pAsync->mpStep = (int (*)(int, int, void *))fn_801C903C;
+    pAsync->mpStep = (int (*)(int, int, void *))_FileReqDoNextBlock;
     pAsync->mpReq = pReq;
     pAsync->mHandle = pReq->mHandle;
-    pAsync->mPos = lbl_803EBC24[pReq->mHandle].mPos;
+    pAsync->mPos = File_StreamInfo[pReq->mHandle].mPos;
     pAsync->mpBuffer = pReq->mpBuffer;
     size = pReq->mSize;
     if (size > pReq->mBlockSize) {
@@ -159,76 +171,76 @@ FileReq_801C8F14 *fn_801C9174(FileReq_801C8F14 *pSrc, int type)
     }
     pAsync->mSize = size;
     pAsync->mPriority = pReq->mPriority;
-    lbl_803EBC24[pReq->mHandle].mPos += pReq->mSize;
+    File_StreamInfo[pReq->mHandle].mPos += pReq->mSize;
     pReq->mDone = pAsync->mSize;
-    if (pAsync->mType == 2 && lbl_803EBC24[pReq->mHandle].mPos > lbl_803EBC24[pReq->mHandle].mLength) {
-        lbl_803EBC24[pReq->mHandle].mLength = lbl_803EBC24[pReq->mHandle].mPos;
+    if (pAsync->mType == 2 && File_StreamInfo[pReq->mHandle].mPos > File_StreamInfo[pReq->mHandle].mLength) {
+        File_StreamInfo[pReq->mHandle].mLength = File_StreamInfo[pReq->mHandle].mPos;
     }
     fn_801F7BD4(FileQueueAsyncRequest(pAsync));
     return pReq;
 }
 
-void fn_801C92B8(char *pDst, const char *pPath, const char *pName, int flags)
+void FileCreateAbsoluteFileName(char *pDst, const char *pPath, const char *pName, int flags)
 {
     char prefix[128];
     int len;
 
     switch (flags & 0xF) {
     case 1:
-        fn_801C2EB4(prefix, lbl_803D51A8.mPath1);
+        strcpy(prefix, File_InitParms.mPath1);
         break;
     case 4:
-        fn_801C2EB4(prefix, lbl_803D51A8.mPath0);
+        strcpy(prefix, File_InitParms.mPath0);
         break;
     case 3:
-        fn_801C2EB4(prefix, lbl_803D51A8.mPath3);
+        strcpy(prefix, File_InitParms.mPath3);
         break;
     case 8:
-        fn_801C2EB4(prefix, lbl_803D51A8.mPath8);
+        strcpy(prefix, File_InitParms.mPath8);
         break;
     default:
-        fn_801C2EB4(prefix, lbl_803D51A8.mPath0);
+        strcpy(prefix, File_InitParms.mPath0);
         break;
     }
-    len = fn_801C3180(pPath);
-    len += fn_801C3180(pName);
-    len += fn_801C3180(prefix);
+    len = strlen(pPath);
+    len += strlen(pName);
+    len += strlen(prefix);
     if (len != -1 && pDst) {
-        fn_801C2EB4(pDst, prefix);
-        fn_801C2F2C(pDst, pPath);
-        fn_801C2F2C(pDst, pName);
+        strcpy(pDst, prefix);
+        strcat(pDst, pPath);
+        strcat(pDst, pName);
     }
 }
 
-int fn_801C93D0(FileConfig_801C8F14 *pConfig)
+int FileInit(FileInitParms_t *pConfig)
 {
     int error = 0;
-    int size;
     int i;
     int j;
 
-    if (!lbl_803EBC18) {
-        lbl_803D51A8 = *pConfig;
-        lbl_803EBC24 = fn_801D2B7C(size = lbl_803D51A8.mNumFiles * sizeof(FileEntry_801C8F14), 0, 0);
-        MemFill(lbl_803EBC24, size, 0, 1);
-        lbl_803EBC28 = fn_801D2B7C(size = lbl_803D51A8.mNumFiles * 0x20, 0, 0);
-        MemFill(lbl_803EBC28, size, 0, 1);
-        for (j = 0; j < 9; j++) {
-            lbl_803D55B4[j] = 0;
+    if (!File_ModuleActive) {
+        File_InitParms = *pConfig;
+        // FAKEMATCH: i holds the allocation sizes and then counts the clear loop, only for the target registers
+        File_StreamInfo = fn_801D2B7C(i = File_InitParms.mNumFiles * sizeof(FileStreamInfo_t), 0, 0);
+        MemFill(File_StreamInfo, i, 0, 1);
+        File_HandleInUseCS = fn_801D2B7C(i = File_InitParms.mNumFiles * 0x20, 0, 0);
+        MemFill(File_HandleInUseCS, i, 0, 1);
+        for (i = 0; i < 9; i++) {
+            File_AsyncThreadActive[i] = 0;
         }
-        fn_801F7FA8(&lbl_803D55C0);
-        for (i = 0; i < lbl_803D51A8.mNumFiles; i++) {
-            fn_801F7FA8(&lbl_803EBC28[i]);
+        fn_801F7FA8(&File_AsyncThreadActiveCS);
+        for (j = 0; j < File_InitParms.mNumFiles; j++) {
+            fn_801F7FA8(&File_HandleInUseCS[j]);
         }
-        lbl_803ED62C = fn_801C68FC(1, 0, 0x40, sizeof(FileAsync_801C8F14), (int (*)(void *, void *))fn_801C8F14, 0);
-        fn_801F7FA8(&lbl_803D5188);
-        lbl_803ED630 = 0;
-        lbl_803ED628 = DSNewNodeHandler(1, 0x40, sizeof(FileReq_801C8F14), 0);
-        fn_801F7FA8(&lbl_803D5168);
-        FileLLInit(&lbl_803D51A8);
-        lbl_803EBC10 = 0;
-        lbl_803EBC34 = 0;
-        lbl_803EBC18 = 1;
+        File_pAsyncRequestList = fn_801C68FC(1, 0, 0x40, sizeof(FileAsyncRequest_t), (int (*)(void *, void *))_FileRequestInsertFunc, 0);
+        fn_801F7FA8(&File_AsyncRequestListCS);
+        File_AsyncFileCopy = 0;
+        File_pFileRequestList = DSNewNodeHandler(1, 0x40, sizeof(FileRequest_t), 0);
+        fn_801F7FA8(&File_RequestListCS);
+        FileLLInit(&File_InitParms);
+        _File_uNumOpenFiles = 0;
+        File_uMemFlags = 0;
+        File_ModuleActive = 1;
     } else {
         error = 0xA0001;
     }
@@ -236,30 +248,30 @@ int fn_801C93D0(FileConfig_801C8F14 *pConfig)
     return error;
 }
 
-int fn_801C95C4(void)
+int FileShutdown(void)
 {
     int error = 0;
     int i;
 
-    if (lbl_803EBC18) {
+    if (File_ModuleActive) {
         FileLLShutdown();
-        for (i = 0; i < lbl_803D51A8.mNumFiles; i++) {
-            if (i >= 0 && i < lbl_803D51A8.mNumFiles && lbl_803EBC24[i].mInUse) {
+        for (i = 0; i < File_InitParms.mNumFiles; i++) {
+            if (i >= 0 && i < File_InitParms.mNumFiles && File_StreamInfo[i].mInUse) {
                 FileAsyncWaitStream(i);
             }
-            fn_801F80D0(&lbl_803EBC28[i]);
+            fn_801F80D0(&File_HandleInUseCS[i]);
         }
-        fn_801C69E4(lbl_803ED62C);
-        fn_801F80D0(&lbl_803D5188);
-        fn_801F80D0(&lbl_803D55C0);
-        DSDelNodeHandler(lbl_803ED628);
-        fn_801F80D0(&lbl_803D5168);
-        fn_801D2BD0(lbl_803EBC24);
-        fn_801D2BD0(lbl_803EBC28);
-        lbl_803EBC24 = 0;
-        lbl_803EBC28 = 0;
-        lbl_803EBC34 = 0;
-        lbl_803EBC18 = 0;
+        fn_801C69E4(File_pAsyncRequestList);
+        fn_801F80D0(&File_AsyncRequestListCS);
+        fn_801F80D0(&File_AsyncThreadActiveCS);
+        DSDelNodeHandler(File_pFileRequestList);
+        fn_801F80D0(&File_RequestListCS);
+        fn_801D2BD0(File_StreamInfo);
+        fn_801D2BD0(File_HandleInUseCS);
+        File_StreamInfo = 0;
+        File_HandleInUseCS = 0;
+        File_uMemFlags = 0;
+        File_ModuleActive = 0;
     } else {
         error = 0xA0002;
     }
@@ -267,19 +279,19 @@ int fn_801C95C4(void)
     return error;
 }
 
-int fn_801C96E4(const char *pName, int device)
+int FileOpenFileDevice(const char *pName, int device)
 {
     int handle = 0;
     int error = 0;
-    FileDevList_801C8F14 *pList;
+    FilevDevicePath_t *pList;
     int count;
     int i;
 
     if (device == 0x2C) {
-        device = lbl_803EBC2C;
+        device = _File_DefaultDevice;
     }
     if (device <= 0) {
-        pList = lbl_803EBC30->mpList[-device];
+        pList = _File_CurrentvDeviceList->mpList[-device];
         error = 0xA0003;
         count = pList->mCount;
         for (i = 0; error == 0xA0003 && i < count; i++) {
@@ -294,14 +306,14 @@ int fn_801C96E4(const char *pName, int device)
     }
     fn_801F7BD4(error);
     if (error == 0) {
-        lbl_803EBC10++;
-        lbl_803EBC14 = lbl_803EBC14 < lbl_803EBC10 ? lbl_803EBC10 : lbl_803EBC14;
+        _File_uNumOpenFiles++;
+        _File_uMaxFilesOpenedAtOnce = _File_uMaxFilesOpenedAtOnce < _File_uNumOpenFiles ? _File_uNumOpenFiles : _File_uMaxFilesOpenedAtOnce;
         return handle;
     }
     return -1;
 }
 
-int fn_801C97F0(int handle)
+int FileClose(int handle)
 {
     int error;
 
@@ -309,56 +321,56 @@ int fn_801C97F0(int handle)
     error = FileCloseStream(handle);
     fn_801F7BD4(error);
     if (error == 0) {
-        lbl_803EBC10--;
+        _File_uNumOpenFiles--;
     }
     return error;
 }
 
-int fn_801C9844(int handle, int offset, unsigned int whence)
+int FileSeek(int handle, int offset, unsigned int whence)
 {
     int error = 0;
-    FileEntry_801C8F14 *pFile;
+    FileStreamInfo_t *pFile;
 
     switch (whence) {
     case 0:
-        lbl_803EBC24[handle].mPos = offset;
+        File_StreamInfo[handle].mPos = offset;
         break;
     case 1:
-        lbl_803EBC24[handle].mPos += offset;
+        File_StreamInfo[handle].mPos += offset;
         break;
     case 2:
-        lbl_803EBC24[handle].mPos = lbl_803EBC24[handle].mLength - offset;
+        File_StreamInfo[handle].mPos = File_StreamInfo[handle].mLength - offset;
         break;
     }
-    if (lbl_803EBC24[handle].mPos < 0) {
-        lbl_803EBC24[handle].mPos = 0;
+    if (File_StreamInfo[handle].mPos < 0) {
+        File_StreamInfo[handle].mPos = 0;
         error = 0xA0004;
-    } else if (lbl_803EBC24[handle].mPos > lbl_803EBC24[handle].mLength) {
-        lbl_803EBC24[handle].mPos = lbl_803EBC24[handle].mLength;
+    } else if (File_StreamInfo[handle].mPos > File_StreamInfo[handle].mLength) {
+        File_StreamInfo[handle].mPos = File_StreamInfo[handle].mLength;
         error = 0xA0004;
     }
     fn_801F7BD4(error);
     return error;
 }
 
-int fn_801C9910(const char *pName, int device)
+int FileExistsFileDevice(const char *pName, int device)
 {
-    int handle = fn_801C96E4(pName, device);
+    int handle = FileOpenFileDevice(pName, device);
     int error;
 
     if (handle < 0) {
         error = 0xA0003;
     } else {
-        error = fn_801C97F0(handle);
+        error = FileClose(handle);
     }
     fn_801F7BD4(error);
     return error;
 }
 
-int fn_801C9960(int handle, char *pBuffer, int size, void (*callback)(int, int, int))
+int FileReadCallback(int handle, char *pBuffer, int size, void (*callback)(int, int, int))
 {
-    FileReq_801C8F14 req;
-    FileWaitResult_801C8F14 result;
+    FileRequest_t req;
+    FileWaitResult_t result;
     int error = 0;
     int count;
 
@@ -367,13 +379,13 @@ int fn_801C9960(int handle, char *pBuffer, int size, void (*callback)(int, int, 
     req.mHandle = handle;
     req.mpBuffer = pBuffer;
     req.mSize = size;
-    req.mBlockSize = 0x8000;
     req.mPriority = 100;
-    req.mpBlockFn = 0;
-    req.mpDoneFn = (FileDoneFn_801C8F14)fn_801C8F2C;
+    req.mBlockSize = 0x8000;
+    req.mpDoneFn = (FileDoneFn_t)_FileAsyncCallback;
     req.mpArg = &result;
     req.mCyclic = 0;
-    fn_801C9174(&req, 1);
+    req.mpBlockFn = 0;
+    _FileRequest(&req, 1);
     FileAsyncWaitStream(handle);
     count = result.mCount;
     if (count < 0 || count != size) {
@@ -389,10 +401,10 @@ int fn_801C9960(int handle, char *pBuffer, int size, void (*callback)(int, int, 
     return count;
 }
 
-int fn_801C9A3C(int handle, char *pBuffer, int size, void (*callback)(int, int, int))
+int FileWriteCallback(int handle, char *pBuffer, int size, void (*callback)(int, int, int))
 {
-    FileReq_801C8F14 req;
-    FileWaitResult_801C8F14 result;
+    FileRequest_t req;
+    FileWaitResult_t result;
     int error = 0;
     int count;
 
@@ -401,13 +413,13 @@ int fn_801C9A3C(int handle, char *pBuffer, int size, void (*callback)(int, int, 
     req.mHandle = handle;
     req.mpBuffer = pBuffer;
     req.mSize = size;
-    req.mBlockSize = 0x8000;
     req.mPriority = 100;
-    req.mpBlockFn = 0;
-    req.mpDoneFn = (FileDoneFn_801C8F14)fn_801C8F2C;
+    req.mBlockSize = 0x8000;
+    req.mpDoneFn = (FileDoneFn_t)_FileAsyncCallback;
     req.mpArg = &result;
     req.mCyclic = 0;
-    fn_801C9174(&req, 2);
+    req.mpBlockFn = 0;
+    _FileRequest(&req, 2);
     FileAsyncWaitStream(handle);
     count = result.mCount;
     if (count < 0 || count != size) {
@@ -423,11 +435,11 @@ int fn_801C9A3C(int handle, char *pBuffer, int size, void (*callback)(int, int, 
     return count;
 }
 
-FileReq_801C8F14 *fn_801C9B18(int handle, char *pBuffer, int size, int priority, FileDoneFn_801C8F14 doneFn,
+FileRequest_t *FileReadAsync(int handle, char *pBuffer, int size, int priority, FileDoneFn_t doneFn,
                               void *pArg)
 {
-    FileReq_801C8F14 req;
-    FileReq_801C8F14 *pReq;
+    FileRequest_t req;
+    FileRequest_t *pReq;
     int error = 0;
 
     req.mHandle = handle;
@@ -439,18 +451,18 @@ FileReq_801C8F14 *fn_801C9B18(int handle, char *pBuffer, int size, int priority,
     req.mPriority = priority;
     req.mCyclic = 0;
     req.mpBlockFn = 0;
-    if (!(pReq = fn_801C9174(&req, 1))) {
+    if (!(pReq = _FileRequest(&req, 1))) {
         error = fn_801F7C88();
     }
     fn_801F7BD4(error);
     return pReq;
 }
 
-FileReq_801C8F14 *fn_801C9B94(int handle, char *pBuffer, int size, int priority, FileDoneFn_801C8F14 doneFn,
-                              void *pArg, FileBlockFn_801C8F14 blockFn, int blockSize)
+FileRequest_t *FileReadAsyncCyclic(int handle, char *pBuffer, int size, int priority, FileDoneFn_t doneFn,
+                              void *pArg, FileBlockFn_t blockFn, int blockSize)
 {
-    FileReq_801C8F14 req;
-    FileReq_801C8F14 *pReq;
+    FileRequest_t req;
+    FileRequest_t *pReq;
     int error = 0;
 
     req.mHandle = handle;
@@ -462,18 +474,18 @@ FileReq_801C8F14 *fn_801C9B94(int handle, char *pBuffer, int size, int priority,
     req.mPriority = priority;
     req.mBlockSize = blockSize;
     req.mCyclic = 1;
-    if (!(pReq = fn_801C9174(&req, 1))) {
+    if (!(pReq = _FileRequest(&req, 1))) {
         error = fn_801F7C88();
     }
     fn_801F7BD4(error);
     return pReq;
 }
 
-FileReq_801C8F14 *fn_801C9C0C(int handle, char *pBuffer, int size, int priority, FileDoneFn_801C8F14 doneFn,
+FileRequest_t *FileWriteAsync(int handle, char *pBuffer, int size, int priority, FileDoneFn_t doneFn,
                               void *pArg)
 {
-    FileReq_801C8F14 req;
-    FileReq_801C8F14 *pReq;
+    FileRequest_t req;
+    FileRequest_t *pReq;
     int error = 0;
 
     req.mHandle = handle;
@@ -485,77 +497,77 @@ FileReq_801C8F14 *fn_801C9C0C(int handle, char *pBuffer, int size, int priority,
     req.mPriority = priority;
     req.mCyclic = 0;
     req.mpBlockFn = 0;
-    if (!(pReq = fn_801C9174(&req, 2))) {
+    if (!(pReq = _FileRequest(&req, 2))) {
         error = fn_801F7C88();
     }
     fn_801F7BD4(error);
     return pReq;
 }
 
-FileReq_801C8F14 *fn_801C9C88(FileReq_801C8F14 *pReq, int priority)
+FileRequest_t *FileRePrioritizeAsync(FileRequest_t *pReq, int priority)
 {
     if (pReq) {
-        fn_801F8014(&lbl_803D5188);
+        fn_801F8014(&File_AsyncRequestListCS);
         if (pReq->mpAsync) {
             pReq->mPriority = priority;
             if (pReq->mpAsync->mState == 0) {
                 pReq->mpAsync->mPriority = priority;
-                fn_801C6BC0(lbl_803ED62C, pReq->mpAsync);
-                fn_801C6AA4(lbl_803ED62C, pReq->mpAsync, 0);
+                fn_801C6BC0(File_pAsyncRequestList, pReq->mpAsync);
+                fn_801C6AA4(File_pAsyncRequestList, pReq->mpAsync, 0);
             } else {
                 pReq->mpAsync->mPriority = priority;
             }
         }
-        fn_801F809C(&lbl_803D5188);
+        fn_801F809C(&File_AsyncRequestListCS);
     }
     return pReq;
 }
 
-int fn_801C9D18(int handle)
+int FileGetLength(int handle)
 {
-    return lbl_803EBC24[handle].mLength;
+    return File_StreamInfo[handle].mLength;
 }
 
-int fn_801C9D2C(int handle)
+int FileGetPosition(int handle)
 {
-    return lbl_803EBC24[handle].mPos;
+    return File_StreamInfo[handle].mPos;
 }
 
-int fn_801C9D40(FileDevTable_801C8F14 *pTable)
+int FileSetDeviceList(FilevDeviceList_t *pTable)
 {
     if (pTable) {
-        lbl_803EBC30 = pTable;
+        _File_CurrentvDeviceList = pTable;
     } else {
-        lbl_803EBC30 = &lbl_802F4A50;
+        _File_CurrentvDeviceList = &_File_DefaultvDeviceList;
     }
     return 0;
 }
 
-FileDevTable_801C8F14 *fn_801C9D64(void)
+FilevDeviceList_t *FileGetDeviceList(void)
 {
-    return lbl_803EBC30;
+    return _File_CurrentvDeviceList;
 }
 
-int fn_801C9D6C(int device)
+int FileSetDefaultDevice(int device)
 {
-    lbl_803EBC2C = device;
+    _File_DefaultDevice = device;
     return 0;
 }
 
-void fn_801C9D78(void)
+void FileLockAsyncRequestList(void)
 {
-    fn_801F8014(&lbl_803D5188);
+    fn_801F8014(&File_AsyncRequestListCS);
 }
 
-void fn_801C9DA0(void)
+void FileUnlockAsyncRequestList(void)
 {
-    fn_801F809C(&lbl_803D5188);
+    fn_801F809C(&File_AsyncRequestListCS);
 }
 
-int fn_801C9DC8(int flags)
+int FileSetMemAllocFlags(int flags)
 {
-    int old = lbl_803EBC34;
+    int old = File_uMemFlags;
 
-    lbl_803EBC34 = flags;
+    File_uMemFlags = flags;
     return old;
 }

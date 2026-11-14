@@ -27,7 +27,7 @@ int TexInit(int heap, int count, int unknown);
 int TexShutdown(void);
 int TexCreate(void *pSrc, Texture_t *pTex);
 int TexDelete(Texture_t *pTex);
-void fn_8020E7EC(Texture_t *pTex);
+void LLTexPadToPow2(Texture_t *pTex);
 #ifdef __cplusplus
 }
 #endif

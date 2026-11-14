@@ -28,7 +28,7 @@ extern char _CamMainTypeDefs[];
 extern char lbl_802EBE24[];
 extern char lbl_802EBE34[];
 extern char lbl_802EBE40[];
-extern Driver_801E11E8 lbl_802F94D0;
+extern PerDriver_t lbl_802F94D0;
 
 void MemCardFilesInit(void);
 void MemCardFilesShutdown(void);
@@ -361,8 +361,8 @@ int MemCard::Shutdown()
     return 1;
 }
 
-/* Null-terminated list read by fn_801E11E8 through Desc_801E1478::mppDrivers. */
-static Driver_801E11E8 *sPeriphEntries[] = { &lbl_802F94D0, 0 };
+/* Null-terminated list read by _PerCreateDriverList through PerInitParms_t::mppDrivers. */
+static PerDriver_t *sPeriphEntries[] = { &lbl_802F94D0, 0 };
 static int sPeriphCounter = 0;
 
 extern "C" {
@@ -373,7 +373,7 @@ static int _PeriphNextId()
 }
 
 static int sPeriphState[2];
-static Desc_801E1478 sPeriphDesc = { 4, 16, 16, _PeriphNextId, sPeriphEntries, sPeriphState };
+static PerInitParms_t sPeriphDesc = { 4, 16, 16, _PeriphNextId, sPeriphEntries, sPeriphState };
 static ModuleDependency sPeriphDependencies[] = { &gSys, 0 };
 Periph gPeriph;
 
@@ -385,13 +385,13 @@ int Periph::Init()
 {
     sPeriphState[0] = 0;
     sPeriphState[1] = 0;
-    fn_801E1478(&sPeriphDesc);
+    PerInit(&sPeriphDesc);
     return 1;
 }
 
 int Periph::Shutdown()
 {
-    fn_801E153C();
+    PerShutdown();
     return 1;
 }
 

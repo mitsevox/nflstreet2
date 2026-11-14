@@ -3,7 +3,7 @@
 # sibling references/NASCAR 2005/DOL-GN4E-USA/symbols/compile_units.tsv sha256 9da005d2c9fa45e5e30e3a395d806cb882a2c71ceb2f88fa9367ccb0e34fde00
 # Proposed units; a proposal, not an established extent (evidence: one unit-anchor row per run).
 start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anchors	claim	other_files
-0x801AD57C	0x801ADDB4	FSasync.c	13	13	13	0	13	-	-
+0x801AD57C	0x801ADDB4	FSasync.c	13	13	13	13	0	-	-
 0x801ADDB4	0x801AE3E4	sndvd.c	12	10	11	0	10	-	spchdata.c
 0x801AE3E4	0x801AF60C	spchevnt.c	46	46	46	0	44	-	-
 0x801AF75C	0x801B1A3C	spchpick.c	56	56	67	0	47	-	-
@@ -13,27 +13,30 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801B9F00	0x801BA784	animchan.c	17	13	13	0	9	-	-
 0x801BA784	0x801BAD70	animemot.c	14	10	10	10	0	-	-
 0x801BE82C	0x801BF090	animtran.c	5	5	5	0	5	-	-
-0x801BF090	0x801BF8DC	animwgt.c	17	13	13	2	11	-	animcache.c
+0x801BF090	0x801BF8DC	animwgt.c	17	13	13	13	0	-	animcache.c
 0x801BFEF8	0x801C00F8	AnimSequencer.c	8	5	5	5	0	-	AnimSeqCamera.c
 0x801C06E8	0x801C0E04	animTexLib.c	11	11	11	2	9	-	-
 0x801C0E04	0x801C10E0	llanimtexlib.c	8	8	8	8	0	-	-
+0x801C1D54	0x801C1F54	auxram.c	5	4	4	4	0	-	-
 0x801C1F54	0x801C1F94	ctype.c	2	2	2	2	0	-	-
 0x801C1F94	0x801C20A0	memory.c	4	4	4	0	4	-	printf.c
-0x801C2EB4	0x801C32CC	string.c	13	11	11	0	9	-	-
+0x801C2EB4	0x801C32CC	string.c	13	11	11	11	0	-	-
 0x801C33E8	0x801C3A44	camera.c	16	14	15	14	0	-	-
 0x801C3A44	0x801C3CE8	camfocus.c	8	8	8	8	0	-	-
 0x801C3CE8	0x801C3EFC	camfree.c	9	9	9	9	0	-	-
 0x801C4960	0x801C4F10	skeleton.c	11	11	11	11	0	-	-
-0x801C5B9C	0x801C657C	context.c	10	9	10	9	0	-	-
+0x801C4F64	0x801C5008	Curve.c	2	2	2	2	0	-	-
+0x801C5008	0x801C53A8	CurveList.c	5	5	5	5	0	-	-
+0x801C53A8	0x801C5B9C	polynomial.c	4	4	4	4	0	-	lldma.c,dmamem.c,dma.c
 0x801C6584	0x801C665C	ds.c	4	4	4	4	0	-	-
 0x801C665C	0x801C6E5C	list.c	17	17	17	0	17	-	-
 0x801C6E5C	0x801C735C	linklist.c	14	14	14	14	0	-	-
 0x801C735C	0x801C7684	node.c	10	10	10	10	0	-	-
 0x801C7684	0x801C7F70	splytree.c	15	15	15	0	15	-	-
-0x801C7F70	0x801C8F14	bintree.c	25	25	25	0	25	-	-
-0x801C8F14	0x801C9DD8	fileio.c	28	27	28	0	27	-	-
+0x801C7F70	0x801C8F14	bintree.c	25	25	25	25	0	-	-
+0x801C8F14	0x801C9DD8	fileio.c	28	27	28	27	0	-	-
 0x801C9DD8	0x801CB1BC	llfileio.c	24	23	24	23	0	-	-
-0x801CB1BC	0x801CB5D4	fs_cli.c	8	8	8	0	8	-	-
+0x801CB1BC	0x801CB5D4	fs_cli.c	8	8	8	8	0	-	-
 0x801CB5D4	0x801CBC1C	filemc.c	11	10	10	0	10	-	-
 0x801CBC1C	0x801CBC50	filehost.c	8	7	7	7	0	-	-
 0x801CCA64	0x801CD79C	Font.c	24	23	23	0	23	-	-
@@ -53,9 +56,9 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801D34C4	0x801D36E8	llmemory.c	3	3	3	3	0	-	-
 0x801D36E8	0x801D3BD0	MemExtern.c	10	10	10	0	10	-	-
 0x801D3BD0	0x801D3C68	TibNew.cpp	4	4	8	2	2	-	-
-0x801D86B4	0x801D94A0	moviercmp.cpp	21	18	21	0	18	-	-
+0x801D86B4	0x801D94A0	moviercmp.cpp	21	18	21	16	2	-	-
 0x801D9A88	0x801DA4B8	rcmp_mad_codec.cpp	13	13	17	0	11	-	-
-0x801DA52C	0x801DB058	maddec.cpp	10	8	10	0	8	-	-
+0x801DA52C	0x801DB058	maddec.cpp	10	8	10	7	1	-	-
 0x801DB058	0x801DB21C	maddeca.cpp	2	2	2	1	1	-	-
 0x801DB7D4	0x801DB89C	render.c	3	3	3	3	0	-	-
 0x801DCA10	0x801DD474	object.c	24	22	23	22	0	-	-
@@ -63,7 +66,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801DFE0C	0x801E01FC	psysEmitter.c	4	4	4	4	0	-	-
 0x801E01FC	0x801E052C	psysCollision.c	6	6	8	6	0	-	-
 0x801E052C	0x801E0A1C	colorRamp.c	10	10	10	0	10	-	-
-0x801E11D0	0x801E1A20	periph.c	18	18	18	0	18	-	-
+0x801E11D0	0x801E1A20	periph.c	18	18	18	18	0	-	-
 0x801E1A20	0x801E1D44	llperiph.c	10	10	11	10	0	-	-
 0x801EC1B4	0x801EC650	remap.c	5	4	4	4	0	-	-
 0x801EC650	0x801F1538	Resource.c	50	48	48	47	1	-	-
@@ -90,7 +93,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x80203444	0x80203754	t3db_mem.c	5	5	5	0	5	-	-
 0x80203754	0x80205754	t3db_expr.c	78	78	78	76	2	-	-
 0x80205754	0x8020AE88	t3db_query.c	33	32	38	0	25	-	-
-0x8020B564	0x8020CD2C	t3db_table.c	13	13	13	1	12	-	t3dbUtil.c
+0x8020B564	0x8020CD2C	t3db_table.c	13	13	13	13	0	-	t3dbUtil.c
 0x8020CD2C	0x8020CEC4	t3db_blob.c	2	2	2	2	0	-	-
 0x8020CEC4	0x8020CFA0	t3db_data.c	2	2	2	2	0	-	-
 0x8020D0CC	0x8020D2D0	tdbext.c	8	8	10	8	0	-	-
@@ -113,7 +116,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x80213224	0x80213444	tmshadercode.c	5	5	5	5	0	-	tmmaterialdef.c,tmclusterdef.c
 0x80213444	0x80213A38	tmclusterobj.c	7	6	6	5	1	-	-
 0x80213A38	0x80213BCC	tmtev.c	1	1	1	1	0	-	-
-0x80213BCC	0x802144D8	tmclip.c	10	9	10	0	6	-	-
+0x80213BCC	0x802144D8	tmclip.c	10	9	10	9	0	-	-
 0x80214554	0x802146C8	tmbuffer.c	7	7	7	7	0	-	-
 0x802146C8	0x80214718	tmlightdef.c	1	1	1	1	0	-	-
 0x80214718	0x80214D40	tmblend.c	14	12	13	12	0	-	-
@@ -152,7 +155,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x80265D2C	0x80266640	math_support.c	4	4	4	0	4	-	impure.c
 0x80266640	0x8026696C	mbtowc_r.c	1	1	1	1	0	-	-
 0x8026696C	0x80266A2C	memchr.c	1	1	1	1	0	-	-
-0x80271D34	0x8027257C	sdspmix.c	7	7	8	0	6	-	-
+0x80271D34	0x8027257C	sdspmix.c	8	8	8	0	8	-	-
 0x8027257C	0x802753F0	snddrv.c	40	38	49	0	30	-	-
 0x80278700	0x8027882C	slinklst.c	5	5	5	0	5	-	-
 0x8027EFAC	0x8027F0DC	date.c	3	3	3	3	0	-	-

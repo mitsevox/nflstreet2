@@ -640,11 +640,11 @@ void PlayerLocoSwitchBlendPair(LocoBlendSet_t *pObject, Block_801BE60C *pBlock, 
     pBlock->mUnknown1 = second;
 
     fn_801BA418(a, pEntries, pBlock->mUnknown0, b, pObject->mUnknown24[index].mUnknown8, d, pRecord);
-    fn_801BF3C8(&pEntries[pBlock->mUnknown0].mUnknown30, 0, 0.0f, 0, 0.0f);
-    fn_801BF4A8(&pEntries[pBlock->mUnknown0].mUnknown30, flag, -1.0f, 1.0f);
+    AnimWgtSet(&pEntries[pBlock->mUnknown0].mUnknown30, 0, 0.0f, 0, 0.0f);
+    AnimWgtSetLinear(&pEntries[pBlock->mUnknown0].mUnknown30, flag, -1.0f, 1.0f);
     fn_801BA418(a, pEntries, pBlock->mUnknown1, b, pObject->mUnknown24[index + 1].mUnknown8, d, pRecord);
-    fn_801BF3C8(&pEntries[pBlock->mUnknown1].mUnknown30, 0, 0.0f, 0, 0.0f);
-    fn_801BF4A8(&pEntries[pBlock->mUnknown1].mUnknown30, flag, -1.0f, 1.0f);
+    AnimWgtSet(&pEntries[pBlock->mUnknown1].mUnknown30, 0, 0.0f, 0, 0.0f);
+    AnimWgtSetLinear(&pEntries[pBlock->mUnknown1].mUnknown30, flag, -1.0f, 1.0f);
 }
 
 float PlayerLocoUpdateBlendWeights(int index, Block_801BE60C *pBlock, LocoBlendSet_t *pObject, Record_800D81C8 *pEntries,
@@ -679,8 +679,8 @@ float PlayerLocoUpdateBlendWeights(int index, Block_801BE60C *pBlock, LocoBlendS
             second = b + (a - first);
         }
     }
-    fn_801BF3C8(&pEntries[pBlock->mUnknown0].mUnknown30, 0, first, 0, first);
-    fn_801BF3C8(&pEntries[pBlock->mUnknown1].mUnknown30, 0, second, 0, second);
+    AnimWgtSet(&pEntries[pBlock->mUnknown0].mUnknown30, 0, first, 0, first);
+    AnimWgtSet(&pEntries[pBlock->mUnknown1].mUnknown30, 0, second, 0, second);
     return result;
 }
 
@@ -695,7 +695,7 @@ void PlayerLocoFadeOldPair(Block_801BE60C *pBlock, void *a, Record_800D81C8 *pEn
 
     if (pBlock->mUnknown2 != 255) {
         if (weight != 0.0f) {
-            fn_801BF3C8(&pEntries[pBlock->mUnknown2].mUnknown30, 0, weight * pBlock->mUnknown8, 0,
+            AnimWgtSet(&pEntries[pBlock->mUnknown2].mUnknown30, 0, weight * pBlock->mUnknown8, 0,
                         weight * pBlock->mUnknown8);
         } else {
             fn_801BA384((AnimHeader_t *)a, pEntries, pBlock->mUnknown2);
@@ -704,7 +704,7 @@ void PlayerLocoFadeOldPair(Block_801BE60C *pBlock, void *a, Record_800D81C8 *pEn
     }
     if (pBlock->mUnknown3 != 255) {
         if (weight != 0.0f) {
-            fn_801BF3C8(&pEntries[pBlock->mUnknown3].mUnknown30, 0, weight * (1.0f - pBlock->mUnknown8), 0,
+            AnimWgtSet(&pEntries[pBlock->mUnknown3].mUnknown30, 0, weight * (1.0f - pBlock->mUnknown8), 0,
                         weight * (1.0f - pBlock->mUnknown8));
         } else {
             fn_801BA384((AnimHeader_t *)a, pEntries, pBlock->mUnknown3);

@@ -1,8 +1,8 @@
 #include "engine/Resource.h"
 
-extern int fn_801C9844(int handle, int offset, unsigned int whence);
-extern int fn_801C9A3C(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
-extern int fn_801C9D2C(int handle);
+extern int FileSeek(int handle, int offset, unsigned int whence);
+extern int FileWriteCallback(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
+extern int FileGetPosition(int handle);
 extern int fn_801F1838(int a, int b, int c, int d, int e, int f, int g);
 extern int fn_801F1D20(ResFile_t *pWrite);
 extern int ProcBuildHashTable(int type, unsigned int count, char **ppStrings, int *pHashes, unsigned int **ppParams,
@@ -42,12 +42,12 @@ int fn_801F1B6C(ResFile_t *pWrite)
     if (pWrite->mNumRes != pWrite->mNumWritten) {
         return 0xF0011;
     }
-    size = fn_801C9D2C(pWrite->mFile);
+    size = FileGetPosition(pWrite->mFile);
     if (pWrite->mPosition < pWrite->mEndPad && pWrite->mEndPad != -1) {
         fn_801F21E4(pWrite->mFile, 0, pWrite->mEndPad - pWrite->mPosition);
     }
     size -= pWrite->mBaseOffset;
-    fn_801C9844(pWrite->mFile, pWrite->mBaseOffset, 0);
+    FileSeek(pWrite->mFile, pWrite->mBaseOffset, 0);
     fn_801F2294(pWrite->mFile, 0x44415441, 0);
     fn_801F2294(pWrite->mFile, size, pWrite->mBigEndian);
     if (fn_801F1D20(pWrite) == 0) {
@@ -130,8 +130,8 @@ int fn_801F1D20(ResFile_t *pWrite)
     pad = fn_801F1CF8(size, pWrite->mAlignment);
     type = pWrite->mHashTag;
     size += pad;
-    position = fn_801C9D2C(pWrite->mFile);
-    fn_801C9844(pWrite->mFile, pWrite->mHashOffset, 0);
+    position = FileGetPosition(pWrite->mFile);
+    FileSeek(pWrite->mFile, pWrite->mHashOffset, 0);
     fn_801F2294(pWrite->mFile, type, 0);
     fn_801F2294(pWrite->mFile, size, pWrite->mBigEndian);
     fn_801F2294(pWrite->mFile, pHash->mType, pWrite->mBigEndian);
@@ -154,7 +154,7 @@ int fn_801F1D20(ResFile_t *pWrite)
         }
     }
     fn_801F21E4(pWrite->mFile, 0, pad);
-    fn_801C9844(pWrite->mFile, position, 0);
+    FileSeek(pWrite->mFile, position, 0);
     return 1;
 }
 
@@ -164,8 +164,8 @@ int fn_801F1F30(ResFile_t *pWrite)
     unsigned int size;
     unsigned int i;
 
-    position = fn_801C9D2C(pWrite->mFile);
-    fn_801C9844(pWrite->mFile, pWrite->mDirOffset, 0);
+    position = FileGetPosition(pWrite->mFile);
+    FileSeek(pWrite->mFile, pWrite->mDirOffset, 0);
     size = pWrite->mDirSize;
     fn_801F2294(pWrite->mFile, 0x44495231, 0);
     fn_801F2294(pWrite->mFile, size, pWrite->mBigEndian);
@@ -174,7 +174,7 @@ int fn_801F1F30(ResFile_t *pWrite)
             fn_801F2120(pWrite, i, pWrite->pDir[i].mOffsetOrCodec, pWrite->pDir[i].mSize);
         }
     }
-    fn_801C9844(pWrite->mFile, position, 0);
+    FileSeek(pWrite->mFile, position, 0);
     return 1;
 }
 
@@ -190,27 +190,27 @@ static int fn_801F201C(ResFile_t *pWrite)
         return 1;
     }
     i = 0;
-    position = fn_801C9D2C(pWrite->mFile);
-    fn_801C9844(pWrite->mFile, pWrite->mCompOffset, 0);
+    position = FileGetPosition(pWrite->mFile);
+    FileSeek(pWrite->mFile, pWrite->mCompOffset, 0);
     fn_801F2294(pWrite->mFile, 0x434F4D50, 0);
     fn_801F2294(pWrite->mFile, size, pWrite->mBigEndian);
     for (; i < pWrite->mNumRes; i++) {
         fn_801F2294(pWrite->mFile, pWrite->pBlocks[i].mOffsetOrCodec, pWrite->mBigEndian);
         fn_801F2294(pWrite->mFile, pWrite->pBlocks[i].mSize, pWrite->mBigEndian);
     }
-    written = fn_801C9D2C(pWrite->mFile) - pWrite->mCompOffset;
+    written = FileGetPosition(pWrite->mFile) - pWrite->mCompOffset;
     fn_801F21E4(pWrite->mFile, 0, pWrite->mCompSize - written);
-    fn_801C9844(pWrite->mFile, position, 0);
+    FileSeek(pWrite->mFile, position, 0);
     return 1;
 }
 
 static int fn_801F2120(ResFile_t *pWrite, int index, unsigned int offset, unsigned int size)
 {
-    fn_801C9844(pWrite->mFile, pWrite->mDirOffset + 8, 0);
+    FileSeek(pWrite->mFile, pWrite->mDirOffset + 8, 0);
     if (pWrite->mDirTag != 0x44495231) {
         return 0;
     }
-    fn_801C9844(pWrite->mFile, index * 8, 1);
+    FileSeek(pWrite->mFile, index * 8, 1);
     fn_801F2294(pWrite->mFile, offset, pWrite->mBigEndian);
     fn_801F2294(pWrite->mFile, size, pWrite->mBigEndian);
     return 1;
@@ -218,7 +218,7 @@ static int fn_801F2120(ResFile_t *pWrite, int index, unsigned int offset, unsign
 
 static void fn_801F21B4(int handle, unsigned char value)
 {
-    fn_801C9A3C(handle, &value, 1, 0);
+    FileWriteCallback(handle, &value, 1, 0);
 }
 
 static unsigned int fn_801F21E4(int handle, unsigned char value, unsigned int count)
@@ -226,7 +226,7 @@ static unsigned int fn_801F21E4(int handle, unsigned char value, unsigned int co
     unsigned int i;
 
     for (i = 0; i < count; i++) {
-        fn_801C9A3C(handle, &value, 1, 0);
+        FileWriteCallback(handle, &value, 1, 0);
     }
     return count;
 }
@@ -240,7 +240,7 @@ static void fn_801F2244(int handle, unsigned short value, int bigEndian)
     } else {
         out = ((unsigned char)value << 8) | (value >> 8);
     }
-    fn_801C9A3C(handle, &out, 2, 0);
+    FileWriteCallback(handle, &out, 2, 0);
 }
 
 static void fn_801F2294(int handle, unsigned int value, int bigEndian)
@@ -258,5 +258,5 @@ static void fn_801F2294(int handle, unsigned int value, int bigEndian)
         out[2] = (value & 0xFF0000) >> 16;
         out[3] = (value & 0xFF000000) >> 24;
     }
-    fn_801C9A3C(handle, out, 4, 0);
+    FileWriteCallback(handle, out, 4, 0);
 }

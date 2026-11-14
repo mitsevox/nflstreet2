@@ -1,4 +1,4 @@
-/* Comparison fragment of src/engine/cu_80226F9C.c: fn_80227B04 and its literal pool. */
+/* Comparison fragment of src/engine/llvector.c: fn_80227B04 and its literal pool. */
 
 float fn_80227B04(float *pA, float *pB, float *pP)
 {

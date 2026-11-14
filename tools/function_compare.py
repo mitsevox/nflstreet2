@@ -539,6 +539,11 @@ def reference_addresses(root, manifest, accepted):
         native_sections, native_symbols = sb.read_elf(native.read_bytes())
         public = public_definitions(native_symbols)
         externals.update({f['symbol']: int(f['address'], 16) for f in u['functions'] if f['symbol'] in public})
+        # A linked unit's mapped COMMON symbols are defined at the addresses the build verified.
+        externals.update({name: int(value, 16) for name, value in (u.get('storage') or {}).items()
+                          if any(s['name'] == name and s['shndx'] == sb.SHN_COMMON for s in native_symbols)})
+        # A kept local is public only in the derived link object (source_build.keep_object).
+        externals.update({name: int(value, 16) for name, value in (u.get('kept_locals') or {}).items()})
         accepted_objects.append((u['sections'], native_sections, native_symbols))
     # Public data objects of accepted source resolve at their verified linked placements.
     data_symbols, ambiguous = accepted_data_symbols(accepted_objects, externals)

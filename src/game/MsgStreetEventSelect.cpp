@@ -3,7 +3,7 @@
    database and remembers the chosen event for the game. */
 
 #include "game/FELoop.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/fn_801FCE10.h"
 
 extern "C" {
@@ -12,7 +12,7 @@ void fn_801485B4(void);
 void fn_801485C0(void);
 void fn_801485EC(int value);
 int MsgGameGetSetupState(void);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
+char *strncpy(char *pDest, const char *pSource, int count);
 int fn_8022EF8C(int a, int tag);
 int fn_8022EFBC(int a, int tag);
 }
@@ -67,7 +67,7 @@ void MsgStreetEventSelectGetName(int id, char *pDest, int count)
         name[0] = '?';
         name[1] = 0;
     }
-    fn_801C2EF0(pDest, name, count);
+    strncpy(pDest, name, count);
 }
 
 void MsgStreetEventSelectGetInfo(int id, int *pValue, char *pDest, int count)
@@ -79,7 +79,7 @@ void MsgStreetEventSelectGetInfo(int id, int *pValue, char *pDest, int count)
         name[0] = '?';
         name[1] = 0;
     }
-    fn_801C2EF0(pDest, name, count);
+    strncpy(pDest, name, count);
 }
 
 int MsgStreetEventSelectSetChoice(int value)

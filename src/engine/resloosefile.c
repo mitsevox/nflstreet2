@@ -4,10 +4,10 @@
 #include "engine/Resource.h"
 
 extern int sprintf(char *buffer, const char *format, ...);
-extern int fn_801C96E4(const char *pName, int device);
-extern int fn_801C97F0(int handle);
-extern int fn_801C9910(const char *pName, int device);
-extern int fn_801C9D18(int handle);
+extern int FileOpenFileDevice(const char *pName, int device);
+extern int FileClose(int handle);
+extern int FileExistsFileDevice(const char *pName, int device);
+extern int FileGetLength(int handle);
 
 extern char lbl_802B19AC[];
 extern char lbl_802B19B0[];
@@ -36,7 +36,7 @@ static void _ResLooseFileGetName(ResFile_t *pFile, int index)
 int ResLooseFileExists(ResFile_t *pFile, int index)
 {
     _ResLooseFileGetName(pFile, index);
-    return fn_801C9910(lbl_803E933C, 0x2C) == 0;
+    return FileExistsFileDevice(lbl_803E933C, 0x2C) == 0;
 }
 
 int ResLooseFileGetSize(ResFile_t *pFile, unsigned int index, unsigned int *pSize)
@@ -45,11 +45,11 @@ int ResLooseFileGetSize(ResFile_t *pFile, unsigned int index, unsigned int *pSiz
     int handle;
 
     _ResLooseFileGetName(pFile, index);
-    if (fn_801C9910(lbl_803E933C, 0x2C) == 0) {
-        handle = fn_801C96E4(lbl_803E933C, 0x2C);
+    if (FileExistsFileDevice(lbl_803E933C, 0x2C) == 0) {
+        handle = FileOpenFileDevice(lbl_803E933C, 0x2C);
         if (handle >= 0) {
-            *pSize = fn_801C9D18(handle);
-            fn_801C97F0(handle);
+            *pSize = FileGetLength(handle);
+            FileClose(handle);
         } else {
             result = 0;
         }
@@ -64,8 +64,8 @@ int ResLooseFileOpen(ResFile_t *pFile, int index)
     int handle;
 
     _ResLooseFileGetName(pFile, index);
-    if (fn_801C9910(lbl_803E933C, 0x2C) == 0) {
-        handle = fn_801C96E4(lbl_803E933C, 0x2C);
+    if (FileExistsFileDevice(lbl_803E933C, 0x2C) == 0) {
+        handle = FileOpenFileDevice(lbl_803E933C, 0x2C);
     } else {
         handle = -1;
     }

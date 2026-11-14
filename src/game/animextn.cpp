@@ -7,11 +7,11 @@
 
 extern "C" {
 void *fn_801D2BB0(int a, int size, int c, int d);
-void fn_801C1D98(void *destination, char *source, int size);
+void AuxRamUpload(void *destination, char *source, int size);
 int fn_801D3148(int a, void *allocation);
 void *fn_801D310C(void *allocation, int size, int c, int d);
 void fn_801D2BD0(void *allocation);
-void fn_801C1E78(char *pDst, void *pSrc, int size);
+void AuxRamDownload(char *pDst, void *pSrc, int size);
 void fn_801C1FBC(void *destination, void *source, unsigned int size);
 }
 
@@ -43,7 +43,7 @@ void _AnimExtnRelocateMotion(AnimFileFormat_t *file)
     int headerSize = start - (unsigned int)file;
     int motionSize = size - headerSize;
     unsigned int copy = (unsigned int)fn_801D2BB0(16, motionSize, 0, 0);
-    fn_801C1D98((void *)copy, (char *)start, (motionSize + 31) & ~31);
+    AuxRamUpload((void *)copy, (char *)start, (motionSize + 31) & ~31);
     fn_801D310C(file, headerSize, 0, 0);
     if (file->flags & 4) {
         for (i = 0; i < file->groups->count; ++i) {
@@ -103,7 +103,7 @@ extern "C" void AnimExtnReadMotion(AnimFileFormat_t *file, int a, unsigned char 
     char *buffer = AnimExtn_ARamTransferBuffer[AnimExtn_iCurrBuffer];
     AnimExtn_iCurrBuffer = AnimExtn_iCurrBuffer == 0;
     unsigned int offset = source & 31;
-    fn_801C1E78(buffer, (void *)(source & ~31), 0xC0);
+    AuxRamDownload(buffer, (void *)(source & ~31), 0xC0);
     if (file->flags & 1) {
         if (file->flags & 4)
             AnimDecompressFrame(destination, (unsigned char *)source, file->groupMotion[group].compress, 0);

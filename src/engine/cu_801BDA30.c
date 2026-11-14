@@ -206,7 +206,7 @@ int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *
                 i--;
                 if (p->mUnknown4[i].mUnknown0 == 0xFFFF) {
                     p->mUnknown4[i].mUnknown0 = fn_801BDF38(p);
-                    fn_801BF4A8(&p->mUnknown4[i].mUnknown4C, 10, -1.0f, 0.0f);
+                    AnimWgtSetLinear(&p->mUnknown4[i].mUnknown4C, 10, -1.0f, 0.0f);
                     while (fn_801BA568(pObject, pRecords, 0xFFFF)) {
                         pRecords[fn_801BA5A8(pObject, pRecords, 0xFFFF, 0)].mUnknown8 = p->mUnknown4[i].mUnknown0;
                     }
@@ -238,17 +238,29 @@ int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *
         p->mUnknown4[slot].mUnknown0 = 0xFFFF;
         p->mUnknown4[slot].mUnknown2 = add;
         p->mUnknown4[slot].mUnknown8 = 0.0f;
-        fn_801BF3C8(&p->mUnknown4[slot].mUnknown4C, 0, 0.0f, 0, 0.0f);
+        AnimWgtSet(&p->mUnknown4[slot].mUnknown4C, 0, 0.0f, 0, 0.0f);
     }
     slot = fn_801BDC3C(p, pObject, pRecords, pOwner, key);
     memset(&p->mUnknown4[slot], 0, sizeof(Slot_801BE594));
     p->mUnknown4[slot].mUnknown2 = 3;
     p->mUnknown4[slot].mUnknown0 = key;
     p->mUnknown4[slot].mUnknown8 = 0.0f;
-    fn_801BF4A8(&p->mUnknown4[slot].mUnknown4C, 10, 0.0f, frames);
+    AnimWgtSetLinear(&p->mUnknown4[slot].mUnknown4C, 10, 0.0f, frames);
     fn_801BDA30(pObject->mUnknown2, key, pOwner, 0, pObject, pRecords);
     fn_801BE99C(p, pObject, pRecords, key, previous, 2, pOwner);
     return 0;
+}
+
+void fn_801BE3C0(Collection_801BE594 *p, float from, float to, unsigned short key, int type, void *pSource)
+{
+    int i;
+
+    for (i = 0; i <= 3; i++) {
+        if (p->mUnknown4[i].mUnknown0 == key && p->mUnknown4[i].mUnknown2 == 3) {
+            AnimWgtSet(&p->mUnknown4[i].mUnknown4C, type, from, pSource, to);
+            break;
+        }
+    }
 }
 
 void fn_801BE420(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, void *pOwner, float step)
@@ -262,7 +274,7 @@ void fn_801BE420(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
         p->mUnknown4[i].mUnknown8 -= step;
         if (p->mUnknown4[i].mUnknown8 < 0.0f) {
             p->mUnknown4[i].mUnknown8 = 0.0f;
-            fn_801BF46C(&p->mUnknown4[i].mUnknown4C, step);
+            AnimWgtProcess(&p->mUnknown4[i].mUnknown4C, step);
             if (p->mUnknown4[i].mUnknown4C.mUnknown0 > 1e-07f) {
                 if (p->mUnknown4[i].mUnknown4 & 1) {
                     fn_801BDA30(pObject->mUnknown2, p->mUnknown4[i].mUnknown0, pOwner, 2, pObject, pRecords);
@@ -343,7 +355,7 @@ void fn_801BE67C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
     fn_801BDAC0(p);
     if (p->mUnknown4[0].mUnknown2 == 3) {
         p->mUnknown4[0].mUnknown8 = 0.0f;
-        fn_801BF3C8(&p->mUnknown4[0].mUnknown4C, 0, 1.0f, 0, 1.0f);
+        AnimWgtSet(&p->mUnknown4[0].mUnknown4C, 0, 1.0f, 0, 1.0f);
     }
 }
 

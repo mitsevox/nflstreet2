@@ -30,7 +30,7 @@ struct Node_801D9A88 {
 
 /* Decoded MAD frame (0x14 bytes; NASCAR 2005 MAD_FRAME): the frame record, a list node at +8
    and a use count. */
-struct MadFrame_801D9A88 : public Frame_801D86B4, public Node_801D9A88 {
+struct MadFrame_801D9A88 : public RcmpFrame_t, public Node_801D9A88 {
     int mRefs;
 };
 
@@ -49,7 +49,7 @@ struct FrameList_801D9A88 : public Node_801D9A88 {
 };
 
 /* MAD codec state (0x34 bytes; NASCAR 2005 MAD_CODEC_INTERNAL). */
-class MadCodec_801D9A88 : public Codec_801D9634 {
+class MadCodec_801D9A88 : public RcmpCodec {
 public:
     float mFrameRate;
     int mRate;
@@ -60,17 +60,17 @@ public:
     unsigned int mCurFrame;
     FrameList_801D9A88 mUsed;
     FrameList_801D9A88 mFree;
-    Decoder_801D86B4 *mpDecoder;
+    RcmpDecoder *mpDecoder;
 
     virtual ~MadCodec_801D9A88();
-    virtual int fn_801D9DA4(Decoder_801D86B4 *pDecoder, Chunk_801D86B4 *pChunk);
-    virtual Frame_801D86B4 *fn_801DA20C(unsigned int frame);
+    virtual int fn_801D9DA4(RcmpDecoder *pDecoder, RcmpChunk_t *pChunk);
+    virtual RcmpFrame_t *fn_801DA20C(unsigned int frame);
     virtual unsigned int fn_801D9DC0();
     virtual float fn_801D9DC8();
-    virtual void fn_801DA418(Frame_801D86B4 *pFrame);
-    void fn_801D9DD0(Chunk_801D86B4 **ppChunk);
-    void fn_801D9E14(Chunk_801D86B4 *pChunk);
-    MadFrame_801D9A88 *fn_801D9E40(Chunk_801D86B4 *pChunk);
+    virtual void fn_801DA418(RcmpFrame_t *pFrame);
+    void fn_801D9DD0(RcmpChunk_t **ppChunk);
+    void fn_801D9E14(RcmpChunk_t *pChunk);
+    MadFrame_801D9A88 *fn_801D9E40(RcmpChunk_t *pChunk);
     MadFrame_801D9A88 *fn_801DA338();
     MadFrame_801D9A88 *fn_801DA3A8();
 };
@@ -79,11 +79,11 @@ extern "C" {
 MadCodec_801D9A88 *fn_801D9BC8(void *pMem);
 }
 
-extern Alloc_801D86B4 lbl_80399100;
+extern RcmpAllocator_t lbl_80399100;
 extern const char lbl_802AFFA8[];
 extern const char lbl_802AFFAC[];
 
-unsigned int fn_801D9A88(Chunk_801D86B4 *pChunk)
+unsigned int fn_801D9A88(RcmpChunk_t *pChunk)
 {
     if (pChunk != 0) {
         return *(unsigned int *)pChunk->mpData;
@@ -104,7 +104,7 @@ extern "C" MadFrame_801D9A88 *fn_801D9AA8(MadFrame_801D9A88 *pFrame, unsigned in
     return pFrame;
 }
 
-int MadCodec_801D9A88::fn_801D9DA4(Decoder_801D86B4 *pDecoder, Chunk_801D86B4 *pChunk)
+int MadCodec_801D9A88::fn_801D9DA4(RcmpDecoder *pDecoder, RcmpChunk_t *pChunk)
 {
     mCurFrame = 0;
     mpDecoder = pDecoder;
@@ -122,20 +122,20 @@ float MadCodec_801D9A88::fn_801D9DC8()
     return mFrameRate;
 }
 
-void MadCodec_801D9A88::fn_801D9DD0(Chunk_801D86B4 **ppChunk)
+void MadCodec_801D9A88::fn_801D9DD0(RcmpChunk_t **ppChunk)
 {
     *ppChunk = fn_801D98CC(mpDecoder);
     mCurFrame++;
 }
 
-void MadCodec_801D9A88::fn_801D9E14(Chunk_801D86B4 *pChunk)
+void MadCodec_801D9A88::fn_801D9E14(RcmpChunk_t *pChunk)
 {
     if (pChunk != 0) {
         fn_801D9924(mpDecoder, pChunk);
     }
 }
 
-MadFrame_801D9A88 *MadCodec_801D9A88::fn_801D9E40(Chunk_801D86B4 *pChunk)
+MadFrame_801D9A88 *MadCodec_801D9A88::fn_801D9E40(RcmpChunk_t *pChunk)
 {
     MadFrame_801D9A88 *pFrame = 0;
     unsigned char *pHeader = (unsigned char *)pChunk->mpData;
@@ -183,13 +183,13 @@ MadFrame_801D9A88 *MadCodec_801D9A88::fn_801D9E40(Chunk_801D86B4 *pChunk)
         }
         mpLast = 0;
         pFrame = fn_801DA338();
-        fn_801DABE0((const unsigned short *)(pHeader + 0x18), 0, (signed char)pHeader[0x15]);
+        MAD_initdecode((const unsigned short *)(pHeader + 0x18), 0, (signed char)pHeader[0x15]);
     } else if (fn_801D9A88(pChunk) == 0x4D41446D) {
         pFrame = fn_801DA338();
-        fn_801DABE0((const unsigned short *)(pHeader + 0x18), 1, (signed char)pHeader[0x15]);
+        MAD_initdecode((const unsigned short *)(pHeader + 0x18), 1, (signed char)pHeader[0x15]);
     } else if (fn_801D9A88(pChunk) == 0x4D414465) {
         pFrame = fn_801DA3A8();
-        fn_801DABE0((const unsigned short *)(pHeader + 0x18), 1, (signed char)pHeader[0x15]);
+        MAD_initdecode((const unsigned short *)(pHeader + 0x18), 1, (signed char)pHeader[0x15]);
     }
     if (pFrame->mpShape->mFlags & 0x10000000) {
         pY = (unsigned char *)pFrame->mpShape + pFrame->mpShape->mOffset;
@@ -203,7 +203,7 @@ MadFrame_801D9A88 *MadCodec_801D9A88::fn_801D9E40(Chunk_801D86B4 *pChunk)
             int offset = y * mWidth + x;
             int chroma = y * mWidth / 4 + x / 2;
 
-            fn_801DAD20(pRefY + offset, pRefU + chroma, pRefV + chroma, pY + offset, pU + chroma, pV + chroma, mWidth);
+            MAD_decodemacroblock(pRefY + offset, pRefU + chroma, pRefV + chroma, pY + offset, pU + chroma, pV + chroma, mWidth);
         }
     }
     if (fn_801D9A88(pChunk) == 0x4D41446D) {
@@ -217,9 +217,9 @@ MadFrame_801D9A88 *MadCodec_801D9A88::fn_801D9E40(Chunk_801D86B4 *pChunk)
     return pFrame;
 }
 
-Frame_801D86B4 *MadCodec_801D9A88::fn_801DA20C(unsigned int frame)
+RcmpFrame_t *MadCodec_801D9A88::fn_801DA20C(unsigned int frame)
 {
-    Chunk_801D86B4 *pChunk;
+    RcmpChunk_t *pChunk;
 
     fn_801D9DD0(&pChunk);
     if (mFirst == 0) {
@@ -286,7 +286,7 @@ MadFrame_801D9A88 *MadCodec_801D9A88::fn_801DA3A8()
     return 0;
 }
 
-void MadCodec_801D9A88::fn_801DA418(Frame_801D86B4 *pFrame)
+void MadCodec_801D9A88::fn_801DA418(RcmpFrame_t *pFrame)
 {
     MadFrame_801D9A88 *pMadFrame = (MadFrame_801D9A88 *)pFrame;
 
@@ -297,7 +297,7 @@ void MadCodec_801D9A88::fn_801DA418(Frame_801D86B4 *pFrame)
     mFree.PushBack(pMadFrame);
 }
 
-Codec_801D9634 *fn_801DA46C()
+RcmpCodec *fn_801DA46C()
 {
     return fn_801D9BC8(lbl_80399100.mAlloc(lbl_802AFFA8, sizeof(MadCodec_801D9A88), 0, 0, lbl_80399100.mFlags));
 }

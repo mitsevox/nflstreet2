@@ -8,7 +8,7 @@
 #include "game/Entry_80219044.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/fn_801FCE10.h"
 
 /* The cached database row of the last player looked up by GameTextLoadPlayer. */
@@ -79,7 +79,6 @@ static char _GameText_szSavedDialogText[256];
 static char _GameText_aszNames[3][129];
 
 int fn_801F95C8(void);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int MsgGameGetPlayerPortrait(int id);
 void *fn_8021EA44(int index);
 int fn_8021E72C(void *pObject, int a, int b);
@@ -217,16 +216,16 @@ void GameTextFormatScore(int team, char *pText, int length)
         fn_801FCE10(0, "select 'CSHG' into \x82 from 'FNIG'\n", &score);
     }
     sprintf(text, "%d", score);
-    fn_801C2EF0(pText, text, length);
+    strncpy(pText, text, length);
 }
 
 void GameTextGetTeamDisplayName(int id, char *pText, int size)
 {
     if (id != 0x3FF) {
         GameTextLoadTeam(id);
-        fn_801C2EF0(pText, _GameText_sTeam.mDisplayName, size);
+        strncpy(pText, _GameText_sTeam.mDisplayName, size);
     } else {
-        fn_801C2EF0(pText, "", size);
+        strncpy(pText, "", size);
     }
 }
 
@@ -389,7 +388,7 @@ void GameTextFormatGameClock(char *pText, int length)
     char text[8];
     unsigned int seconds = fn_8009D990(1);
     sprintf(text, "%d:%02d", (unsigned char)(seconds / 60), (unsigned char)(seconds % 60));
-    fn_801C2EF0(pText, text, length);
+    strncpy(pText, text, length);
 }
 
 void GameTextFormatPlayClock(char *pText, int length)
@@ -400,7 +399,7 @@ void GameTextFormatPlayClock(char *pText, int length)
         return;
     }
     sprintf(text, ":%02d", fn_8009D990(0));
-    fn_801C2EF0(pText, text, length);
+    strncpy(pText, text, length);
 }
 
 void GameTextGetUnknownName(char *pText)
@@ -455,7 +454,7 @@ void GameTextFormatPlayerName(const char *pFirst, const char *pLast, char *pText
         }
     }
     if (whole) {
-        fn_801C2EF0(pText, pFirst, length);
+        strncpy(pText, pFirst, length);
         if (strlen(pText) < length) {
             strcat(pText, " ");
         }
@@ -464,7 +463,7 @@ void GameTextFormatPlayerName(const char *pFirst, const char *pLast, char *pText
         pText[1] = '.';
         pText[2] = 0;
     }
-    fn_801C2EF0(pText + strlen(pText), pLast, length - strlen(pText));
+    strncpy(pText + strlen(pText), pLast, length - strlen(pText));
 }
 
 void GameTextQueuePlayerPortraits(void)
@@ -556,7 +555,7 @@ void GameTextShowBusyDialog(int show, const char *pText, int a, int b)
             ++_GameText_nBusyDialogs;
         }
         if (_GameText_nBusyDialogs == 1) {
-            fn_801C3284(_GameText_szDialogText, pText, 255);
+            strnzcpy(_GameText_szDialogText, pText, 255);
             _GameText_bDialogArgA = a;
             _GameText_bDialogArgB = b;
             _GameText_aDialogEntries[0].mUnknown0 = 0;
@@ -666,10 +665,10 @@ int GameTextFormatPlayerYearsPro(int id, char *pText)
 int GameTextGetMemCardNames(char *pText0, int length0, char *pText1, int length1,
                 char *pText2, int length2, char *pText3, int length3)
 {
-    fn_801C3284(pText0, "NGC", length0);
-    fn_801C3284(pText1, "Memory Card", length1);
-    fn_801C3284(pText2, "Memory Card", length2);
-    fn_801C3284(pText3, "Memory Card Slot", length3);
+    strnzcpy(pText0, "NGC", length0);
+    strnzcpy(pText1, "Memory Card", length1);
+    strnzcpy(pText2, "Memory Card", length2);
+    strnzcpy(pText3, "Memory Card Slot", length3);
     return 2;
 }
 
@@ -713,7 +712,7 @@ int GameTextShowRosterFill(int player, int team, int stage)
     case 0:
         if (_GameText_nBusyDialogs != 0) {
             _GameText_bDialogSaved = 1;
-            fn_801C3284(_GameText_szSavedDialogText, _GameText_szDialogText, 254);
+            strnzcpy(_GameText_szSavedDialogText, _GameText_szDialogText, 254);
             _GameText_bSavedArgA = _GameText_bDialogArgA;
             _GameText_bSavedArgB = _GameText_bDialogArgB;
         }
@@ -795,10 +794,10 @@ void GameTextGetSelectedTeamName(char *pText, int length)
     char name[17] = {0};
     if (_GameText_iSelectedTeam != 0x3FF) {
         if (fn_801FCE10(0, "select 'ANLT' into \x88 from 'MAET' where 'DIGT' = \x85\n", name, _GameText_iSelectedTeam) == 0) {
-            fn_801C3284(pText, name, length);
+            strnzcpy(pText, name, length);
         }
     } else {
-        fn_801C3284(pText, "", 0);
+        strnzcpy(pText, "", 0);
     }
 }
 

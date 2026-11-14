@@ -1,6 +1,6 @@
 #include "engine/filemc.h"
 #include "engine/fn_801F7BD4.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 
 extern MCFile_801CB5D4 lbl_80381C40;
 extern unsigned char lbl_803DD600[];
@@ -94,7 +94,7 @@ int fn_801CB698(int chan, int unused, const char *pName, int unused2, int create
             } else {
                 if (CARDFreeBlocks(chan, &bytesFree, &filesFree) == 0) {
                     for (fileNo = 0; fileNo < 127; fileNo++) {
-                        if (CARDGetStatus(chan, fileNo, &stat) == 0 && fn_801C2FE4(stat.fileName, pName) == 0) {
+                        if (CARDGetStatus(chan, fileNo, &stat) == 0 && strcmp(stat.fileName, pName) == 0) {
                             break;
                         }
                     }

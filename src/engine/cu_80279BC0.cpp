@@ -294,7 +294,7 @@ int fn_8027AB4C(Node_80279D90 *node, int count, float *a, float *b, int flag)
     if (decoder->m20 >= decoder->m1C) {
         return -1;
     }
-    n = fn_8027D05C(decoder->m28, &b, count);
+    n = CodecReadSamples(decoder->m28, &b, count);
     decoder->m20 += n;
     b += n;
     if (n < count) {
@@ -351,7 +351,7 @@ int fn_8027AD10(Node_80279D90 *node, int count, float *a, float *b, int flag)
 
     decoder = (Decoder_8027AE04 *)node;
     while (count > 0) {
-        n = fn_8027D05C(decoder->m1C, &b, count);
+        n = CodecReadSamples(decoder->m1C, &b, count);
         b += n;
         decoder->m20 += n;
         count -= n;

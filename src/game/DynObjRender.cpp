@@ -98,7 +98,7 @@ void fn_80227C2C(void *, void *); void fn_802271F0(void *, void *); float fn_802
 int fn_8004D5B8(int, const char *, char *, int); void fn_8004D498(int);
 int fn_8004D4B0(int, const char *); int fn_8004D508(int, const char *);
 void fn_8004E090(DynObj *, int, int);
-int ResFindIndexByName(void *, const char *); char *fn_801C310C(char *, const char *);
+int ResFindIndexByName(void *, const char *);
 int DynObjIsFacingAway(DynObj *); int DynObjChildIsFacingAway(DynObjChild *);
 int DynObjDrawChild(DynObjChild *, int);
 }
@@ -260,7 +260,7 @@ void DynObjRenderInit(void *data,int handle,DynObj *p)
     }
     TMTexLibRegistryReset();TMTexLibRegister("model",&s->mpUnknown0->mUnknown14C);
     TMMaterialListAllocDefs(&s->mUnknown4,s->mpUnknown0->mpUnknown148);TMTexLibRegistryReset();
-    if(fn_801C310C(p->mUnknown158,"CROWDGROUP"))fn_80234A30(&s->mUnknownC,0x80);else fn_80234A30(&s->mUnknownC,0x40);
+    if(strstr(p->mUnknown158,"CROWDGROUP"))fn_80234A30(&s->mUnknownC,0x80);else fn_80234A30(&s->mUnknownC,0x40);
     fn_80234CF0(&s->mUnknownC,0,&s->mUnknown4);fn_80234DC0(&s->mUnknownC,8);
     fn_80234A94(&s->mUnknownC,&s->mpUnknown0->mUnknown4);
     if(skel) {

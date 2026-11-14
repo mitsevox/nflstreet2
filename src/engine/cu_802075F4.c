@@ -4,7 +4,7 @@ extern int fn_801F88F0(void *pDb, int id, int *pOut, TDbTable_t **ppTable);
 extern int fn_80205DB8(TDbStmt_80205754 *pStmt, TDbExpr_t *pWhere, int a, int b);
 extern unsigned char fn_80207448(TDbExpr_t *pExpr, unsigned int table, unsigned int *pOtherTable,
                                  TDbExpr_t **ppOut);
-extern void fn_8020C3E4(TDbTable_t *pTable, int row);
+extern void _TDbTblDeleteSingleRow(TDbTable_t *pTable, int row);
 extern void fn_8020A5A8(void);
 
 int fn_802075F4(TDbStmt_80205754 *pStmt, unsigned int t)
@@ -258,7 +258,7 @@ int fn_80207E24(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_t *pCols, int create)
     pStmt->mIndexes[0] = 0;
     if (pCols != 0) {
         for (pCol = pCols; pCol->mId != -1; pCol++) {
-            pCol->mColumn = fn_8020B97C(pStmt->mTables[0], pCol->mId);
+            pCol->mColumn = _TDbTblResolveColRef(pStmt->mTables[0], pCol->mId);
             if (pCol->mColumn == 0xFF) {
                 return 9;
             }
@@ -412,7 +412,7 @@ int fn_80208204(int dbId, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pResult)
                         if (err != 0) {
                             break;
                         }
-                        fn_8020C3E4(pStmt->mTables[0], pStmt->mRows[0]);
+                        _TDbTblDeleteSingleRow(pStmt->mTables[0], pStmt->mRows[0]);
                         pResult->mCount++;
                     }
                     if (pStmt->mRows[0] < pStmt->mTables[0]->mRowCount &&

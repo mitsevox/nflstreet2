@@ -6,9 +6,9 @@
 extern "C" {
 
 void FESndShutdown(void);
-int fn_801CC7FC(ModuleNode *pNode);
-int fn_801CC820(ModuleNode *pNode, unsigned char flags);
-int fn_801CC8AC(ModuleNode *pNode, unsigned char flags);
+int FlowModulePreStart(FlowModuleC *pNode);
+int FlowModuleStart(FlowModuleC *pNode, unsigned char flags);
+int FlowModuleStop(FlowModuleC *pNode, unsigned char flags);
 void fn_801D64EC(void);
 int fn_801F3D2C(void);
 }
@@ -19,20 +19,20 @@ float gFrameTimeScale = 1.0f;
 
 void MainLoopUpdate(void)
 {
-    fn_801CBFA8(&gGSFlowManager);
+    gGSFlowManager.Process();
 }
 
 void MainLoopRun(void)
 {
     Sys *pModule = &gSys;
-    fn_801CC7FC(pModule);
-    fn_801CC820(pModule, 0);
+    FlowModulePreStart(pModule);
+    FlowModuleStart(pModule, 0);
 
     GSFlowManagerC *pObject = &gGSFlowManager;
-    fn_801CBCD0(pObject);
-    fn_801CC054(pObject, 0);
-    pObject->fn_801CBD80(0, -1);
-    pObject->fn_801CBD80(2, 7);
+    pObject->Init();
+    pObject->SetVerboseFlags(0);
+    pObject->StartGroup(0, -1);
+    pObject->StartGroup(2, 7);
 
     while (!_MainLoop_bDone) {
         MainLoopUpdate();
@@ -41,7 +41,7 @@ void MainLoopRun(void)
     FESndShutdown();
     fn_801F3D2C();
     fn_801D64EC();
-    fn_801CC8AC(&gSys, 0);
+    FlowModuleStop(&gSys, 0);
 }
 
 void MainLoopQuit(void)

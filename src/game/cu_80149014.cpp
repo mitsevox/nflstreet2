@@ -28,7 +28,6 @@ int fn_800C8744(int team);
 int fn_8022B414(int handle, unsigned int tag, int *pValue);
 int fn_8022B7A4(int handle, unsigned int tag, int *pValue);
 int fn_801C2D88(char *pText, int capacity, const char *pFormat, ...);
-char *fn_801C2EF0(char *pText, const char *pSource, unsigned int capacity);
 int fn_802372EC(int first, int last);
 int fn_801486A0(void);
 void fn_8017767C(void);
@@ -104,7 +103,7 @@ void fn_801493E0(Class_80148A58 *p,int team,unsigned char index,char *text,unsig
             if(i) {
                 text[0]=',';text[1]=' ';text+=2;capacity-=2;length-=2;
             }
-            fn_801C2EF0(text,name,capacity);
+            strncpy(text,name,capacity);
             text+=length;
             capacity-=length;
         }

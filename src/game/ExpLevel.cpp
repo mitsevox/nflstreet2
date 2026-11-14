@@ -6,7 +6,7 @@
 
 extern "C" {
 void SndgMusicPumpFrame(int a);
-char *fn_801C2EF0(char *pDst, const char *pSrc, int size);
+char *strncpy(char *pDst, const char *pSrc, int size);
 int fn_8022EF8C(int a, int tag);
 int fn_8022EFBC(int a, int tag);
 }
@@ -83,7 +83,7 @@ int ExpLevelQueryName(int vlxe, char *pName, int size)
     int result = fn_801FCE10(0, "select 'NLXE' into \x88 from 'LPXE' where 'VLXE' = \x85\n", name, vlxe);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
-        fn_801C2EF0(pName, name, size);
+        strncpy(pName, name, size);
         found = 1;
     }
     return found;

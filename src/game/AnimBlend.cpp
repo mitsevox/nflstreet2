@@ -226,10 +226,10 @@ void AnimBlendEntries(Object_8003DEC4 *pObject, AnimBlendList *pBlend, int count
     scale = pObject->mUnknown28;
     pContext = pEntry->mpUnknown36;
     if (pEntry->mUnknown8 & 1) {
-        fn_8019D994(pPose, pEntry, pObject->mUnknown32, scale, pContext, 0);
+        AnimDecodePoseMirrored(pPose, pEntry, scale, pObject->mUnknown32, pContext, 0);
         pPair = &pContext->mUnknownC;
     } else {
-        fn_8019E00C(pPose, pEntry, pObject->mUnknown32, scale, pContext, 0);
+        AnimDecodePose(pPose, pEntry, scale, pObject->mUnknown32, pContext, 0);
         pPair = &pContext->mUnknown4;
     }
     if (pContext != 0) {
@@ -240,10 +240,10 @@ void AnimBlendEntries(Object_8003DEC4 *pObject, AnimBlendList *pBlend, int count
         weight = pBlend->mUnknown4[i].mUnknown4;
         pContext = pEntry->mpUnknown36;
         if (pEntry->mUnknown8 & 1) {
-            fn_8019D994(&pose, pEntry, pObject->mUnknown32, scale, pContext, 0);
+            AnimDecodePoseMirrored(&pose, pEntry, scale, pObject->mUnknown32, pContext, 0);
             pPair = &pContext->mUnknownC;
         } else {
-            fn_8019E00C(&pose, pEntry, pObject->mUnknown32, scale, pContext, 0);
+            AnimDecodePose(&pose, pEntry, scale, pObject->mUnknown32, pContext, 0);
             pPair = &pContext->mUnknown4;
         }
         fn_80227930(pPose->mUnknown8, pose.mUnknown8, pPose->mUnknown8, weight);

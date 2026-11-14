@@ -88,8 +88,8 @@ int fn_800A33E8(void);
 void fn_80227538(void *, int, float);
 void fn_8022765C(void *, void *, void *);
 void fn_801D0664(void *);
-void fn_80214184(int);
-unsigned int fn_8021445C(void *, void *, int);
+void TMClipMatrix(int);
+unsigned int TMClipBBox(void *, void *, int);
 void WeatherDrawLines(unsigned int);
 void WeatherDrawQuads(unsigned int);
 int fn_800A33B8(void);
@@ -97,7 +97,7 @@ int fn_800A3444(void);
 float fn_800A33C4(void);
 float fn_800A33F4(void);
 void fn_801D1288(int, void *);
-void fn_80214140(int);
+void TMClipProjection(int);
 void fn_801D131C(int);
 void fn_801D0F80(void *);
 void GXSetNumChans(int);
@@ -357,8 +357,8 @@ void WeatherDrawCell(float x, float y, float z) {
   fn_801D0C58(&point);
   fn_801D04C4();
   fn_801D0664(_Weather_afViewMatrix);
-  fn_80214184(0);
-  unsigned int flags = fn_8021445C(_Weather_afCellBox, 0, 0) & 63;
+  TMClipMatrix(0);
+  unsigned int flags = TMClipBBox(_Weather_afCellBox, 0, 0) & 63;
   if (!flags) {
     WeatherSetDrawPass(0);
     if (_Weather_uRepeats > 1) {
@@ -464,7 +464,7 @@ void WeatherRender(void) {
   fn_801D0470(VptGetMatrixStack());
   Mtx44 matrix;
   fn_801D1288(2, matrix);
-  fn_80214140(0);
+  TMClipProjection(0);
   fn_801D0508();
   fn_801D131C(3);
   fn_801D0C58(&_Weather_vDrift);

@@ -3,7 +3,7 @@
    needs. */
 #include <string.h>
 #include "game/Callees_801D57E0.h"
-#include "game/fn_801C3284.h"
+#include <string.h>
 #include "game/ResLoad.h"
 #include "engine/texfile.h"
 #include "game/MemCardCallbacks.h"
@@ -33,7 +33,7 @@ int MemCardGetNameFromComment(char *pOut, int unused, MemCardComment *pComment)
     if (p == 0) {
         return 1;
     }
-    fn_801C3284(pOut, p + 1, 17);
+    strnzcpy(pOut, p + 1, 17);
     return 0;
 }
 

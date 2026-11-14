@@ -290,10 +290,11 @@ static void fn_801F3834(void *pRes, SndBankInfo_801F3524 **ppBank, unsigned int 
     if (lbl_8039AE8C.mStatus.mFlags.mActive && lbl_8039AE8C.mStatus.mFlags.mEnabled) {
         pBank = (SndBankInfo_801F3524 *)fn_801C6A20(lbl_8039AE8C.pBankList);
         fn_801C6AA4(lbl_8039AE8C.pBankList, pBank, 0);
-        pBank->mFlags = flags | 1;
+        // FAKEMATCH: store order found by trying the 120 orders of the first five stores
         pBank->mBank = bank;
         pBank->mLoaded = 0;
         pBank->pCallback = pCallback;
+        pBank->mFlags = flags | 1;
         pBank->mState = 1;
         pBank->pRes = (ResFile_t *)pRes;
         pBank->mIndex = index;
@@ -843,5 +844,9 @@ char *fn_801F4F98(StreamFile_801F6D54 *pFile)
 
 StreamFile_801F6D54 *fn_801F5000(const char *pName)
 {
-    return lbl_8039AE8C.apFileDesc[(pName[4] - '0') * 10 + (pName[5] - '0')];
+    int i;
+
+    i = (pName[4] - '0') * 10;
+    i += pName[5] - '0';
+    return lbl_8039AE8C.apFileDesc[i];
 }

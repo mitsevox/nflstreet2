@@ -23,11 +23,11 @@ int fn_801784C4(void);
 int fn_801BE068(void *pA, void *pB, void *pC, unsigned short key, float value, void *p);
 unsigned short fn_801BE648(void *p);
 void fn_801BE67C(void *pA, void *pB, void *pC, void *p);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
-int fn_801C2FE4(const char *pText0, const char *pText1);
-char *fn_801C310C(char *pText, const char *pPattern);
-unsigned int fn_801C3180(const char *pText);
-char *fn_801C32CC(char *pText);
+char *strncpy(char *pDest, const char *pSource, int count);
+int strcmp(const char *pText0, const char *pText1);
+char *strstr(char *pText, const char *pPattern);
+unsigned int strlen(const char *pText);
+char *strupr(char *pText);
 }
 
 static inline void StartAnim(BigObjInst *pObject, unsigned short key, float value)
@@ -92,7 +92,7 @@ int BigObjBirdUpdate(BigObjInst *pObject, BigObj_t *pItem, int mode)
             pObject->mUnknown380 = 0;
             float value = pObject->mUnknown372;
             for (; pNode; pNode = pNode->mpNext) {
-                if (fn_801C2FE4(pNode->mName, pObject->mUnknown316) == 0) {
+                if (strcmp(pNode->mName, pObject->mUnknown316) == 0) {
                     if (pNode->mId != -1) {
                         StartAnim(pObject, pNode->mId, 1.0f);
                     }
@@ -118,18 +118,18 @@ void BigObjFenceSwing(BigObj_t *pItem, BigObjNode_t *pNode)
     BigObjFenceLinks_t *pPair = (BigObjFenceLinks_t *)pItem->mUnknown472->mUnknown420;
     char name[64];
 
-    fn_801C2EF0(name, pNode->mName, 64);
-    fn_801C32CC(name);
-    if (fn_801C310C(name, "RIGHT")) {
+    strncpy(name, pNode->mName, 64);
+    strupr(name);
+    if (strstr(name, "RIGHT")) {
         if (pPair->mpRight) {
             pExtra->mUnknown1704 = pItem->mUnknown472->mUnknown424;
             StartAnim(pItem->mUnknown472, pNode->mId, 1.0f);
             if (pPair->mpRight) {
                 for (BigObjNode_t *pOther = pPair->mpRight->mUnknown472->mUnknown312; pOther;
                      pOther = pOther->mpNext) {
-                    fn_801C2EF0(name, pOther->mName, 64);
-                    fn_801C32CC(name);
-                    if (fn_801C310C(name, "LEFT")) {
+                    strncpy(name, pOther->mName, 64);
+                    strupr(name);
+                    if (strstr(name, "LEFT")) {
                         if (pOther->mId != -1 &&
                             fn_801BE648(pPair->mpRight->mUnknown472->mUnknown428->mUnknown1300) !=
                                 pOther->mId) {
@@ -155,9 +155,9 @@ void BigObjFenceSwing(BigObj_t *pItem, BigObjNode_t *pNode)
         if (pPair->mpLeft) {
             for (BigObjNode_t *pOther = pPair->mpLeft->mUnknown472->mUnknown312; pOther;
                  pOther = pOther->mpNext) {
-                fn_801C2EF0(name, pOther->mName, 64);
-                fn_801C32CC(name);
-                if (fn_801C310C(name, "RIGHT")) {
+                strncpy(name, pOther->mName, 64);
+                strupr(name);
+                if (strstr(name, "RIGHT")) {
                     if (pOther->mId != -1 &&
                         fn_801BE648(pPair->mpLeft->mUnknown472->mUnknown428->mUnknown1300) !=
                             pOther->mId) {
@@ -207,7 +207,7 @@ int BigObjFenceUpdate(BigObjInst *pObject, BigObj_t *pItem, int mode)
                 pos.mY = -pos.mY;
             }
             for (BigObjNode_t *pNode = pObject->mUnknown312; pNode; pNode = pNode->mpNext) {
-                if (fn_801C2FE4(pNode->mName, pObject->mUnknown316) == 0) {
+                if (strcmp(pNode->mName, pObject->mUnknown316) == 0) {
                     if (pObject->mUnknown381 == 0) {
                         if (pNode->mId != -1 &&
                             fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196) {
@@ -233,7 +233,7 @@ int BigObjGetNameNumber(BigObj_t *pItem)
     unsigned int i = 0;
 
     if (pItem) {
-        unsigned int length = fn_801C3180(pItem->mName);
+        unsigned int length = strlen(pItem->mName);
 
         while (i < length && (unsigned char)pItem->mName[i] - '0' > 9u) {
             i++;

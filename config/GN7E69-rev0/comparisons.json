@@ -1933,9 +1933,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8005D60C.cpp",
+      "source": "src/game/StoryEvents.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8005D60C-0x80060948 (src/game/cu_8005D60C.cpp), its 69 exact function extents, the exact data rows 0x8028ED08-0x8028F4C8, 0x802D4D40-0x802D4E28 and 0x803EA5B8-0x803EA5E8, the .ctors/.dtors words 0x80289A8C/0x80289BCC, the .bss and .sbss rows and its source-form rows. Wholly unlinked draft source: the original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x8005D60C-0x80060948 (src/game/StoryEvents.cpp), its 69 exact function extents, the exact data rows 0x8028ED08-0x8028F4C8, 0x802D4D40-0x802D4E28 and 0x803EA5B8-0x803EA5E8, the .ctors/.dtors words 0x80289A8C/0x80289BCC, the .bss and .sbss rows and its source-form rows. Wholly unlinked draft source: the original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -3153,638 +3153,6 @@
       ]
     },
     {
-      "source": "src/game/cu_80181330.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row for src/game/cu_80181330.cpp, its 115 exact function extents, exact data rows 0x802A6AC0-0x802A6C10, 0x802EA988-0x802EAA40, 0x803EB548-0x803EB590 and the .ctors/.dtors words 0x80289AF8/0x80289C24, and its source-form rows. Wholly unlinked draft source: the original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80181330",
-          "end": "0x8018422C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A6AC0",
-          "end": "0x802A6C10"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802EA988",
-          "end": "0x802EAA40"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB548",
-          "end": "0x803EB590"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x80362A20",
-          "end": "0x80362B7C"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ECB54",
-          "end": "0x803ECB80"
-        },
-        {
-          "section": ".ctors",
-          "placement": ".data2",
-          "start": "0x80289AF8",
-          "end": "0x80289AFC"
-        },
-        {
-          "section": ".dtors",
-          "placement": ".data2",
-          "start": "0x80289C24",
-          "end": "0x80289C28"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80181330",
-          "start": "0x80181330",
-          "end": "0x801813F4"
-        },
-        {
-          "symbol": "fn_801813F4",
-          "start": "0x801813F4",
-          "end": "0x80181458"
-        },
-        {
-          "symbol": "fn_80181458",
-          "start": "0x80181458",
-          "end": "0x801814E0"
-        },
-        {
-          "symbol": "fn_801814E0",
-          "start": "0x801814E0",
-          "end": "0x8018150C"
-        },
-        {
-          "symbol": "fn_8018150C",
-          "start": "0x8018150C",
-          "end": "0x8018152C"
-        },
-        {
-          "symbol": "fn_8018152C",
-          "start": "0x8018152C",
-          "end": "0x80181554"
-        },
-        {
-          "symbol": "fn_80181554",
-          "start": "0x80181554",
-          "end": "0x80181570"
-        },
-        {
-          "symbol": "fn_80181570",
-          "start": "0x80181570",
-          "end": "0x80181588"
-        },
-        {
-          "symbol": "fn_80181588",
-          "start": "0x80181588",
-          "end": "0x801815A0"
-        },
-        {
-          "symbol": "fn_801815A0",
-          "start": "0x801815A0",
-          "end": "0x801815D8"
-        },
-        {
-          "symbol": "fn_801815D8",
-          "start": "0x801815D8",
-          "end": "0x80181670"
-        },
-        {
-          "symbol": "fn_80181670",
-          "start": "0x80181670",
-          "end": "0x80181828"
-        },
-        {
-          "symbol": "fn_80181828",
-          "start": "0x80181828",
-          "end": "0x8018196C"
-        },
-        {
-          "symbol": "fn_8018196C",
-          "start": "0x8018196C",
-          "end": "0x80181A88"
-        },
-        {
-          "symbol": "fn_80181A88",
-          "start": "0x80181A88",
-          "end": "0x80181AD4"
-        },
-        {
-          "symbol": "fn_80181AD4",
-          "start": "0x80181AD4",
-          "end": "0x80181C10"
-        },
-        {
-          "symbol": "fn_80181C10",
-          "start": "0x80181C10",
-          "end": "0x80181CF8"
-        },
-        {
-          "symbol": "fn_80181CF8",
-          "start": "0x80181CF8",
-          "end": "0x80181D48"
-        },
-        {
-          "symbol": "fn_80181D48",
-          "start": "0x80181D48",
-          "end": "0x80181DA8"
-        },
-        {
-          "symbol": "fn_80181DA8",
-          "start": "0x80181DA8",
-          "end": "0x80181EAC"
-        },
-        {
-          "symbol": "fn_80181EAC",
-          "start": "0x80181EAC",
-          "end": "0x80181F60"
-        },
-        {
-          "symbol": "fn_80181F60",
-          "start": "0x80181F60",
-          "end": "0x801820A0"
-        },
-        {
-          "symbol": "fn_801820A0",
-          "start": "0x801820A0",
-          "end": "0x80182170"
-        },
-        {
-          "symbol": "fn_80182170",
-          "start": "0x80182170",
-          "end": "0x801821D8"
-        },
-        {
-          "symbol": "fn_801821D8",
-          "start": "0x801821D8",
-          "end": "0x8018223C"
-        },
-        {
-          "symbol": "fn_8018223C",
-          "start": "0x8018223C",
-          "end": "0x80182280"
-        },
-        {
-          "symbol": "fn_80182280",
-          "start": "0x80182280",
-          "end": "0x801822DC"
-        },
-        {
-          "symbol": "fn_801822DC",
-          "start": "0x801822DC",
-          "end": "0x80182320"
-        },
-        {
-          "symbol": "fn_80182320",
-          "start": "0x80182320",
-          "end": "0x8018241C"
-        },
-        {
-          "symbol": "fn_8018241C",
-          "start": "0x8018241C",
-          "end": "0x801824BC"
-        },
-        {
-          "symbol": "fn_801824BC",
-          "start": "0x801824BC",
-          "end": "0x80182520"
-        },
-        {
-          "symbol": "fn_80182520",
-          "start": "0x80182520",
-          "end": "0x8018257C"
-        },
-        {
-          "symbol": "fn_8018257C",
-          "start": "0x8018257C",
-          "end": "0x801825C0"
-        },
-        {
-          "symbol": "fn_801825C0",
-          "start": "0x801825C0",
-          "end": "0x8018260C"
-        },
-        {
-          "symbol": "fn_8018260C",
-          "start": "0x8018260C",
-          "end": "0x8018265C"
-        },
-        {
-          "symbol": "fn_8018265C",
-          "start": "0x8018265C",
-          "end": "0x801826FC"
-        },
-        {
-          "symbol": "fn_801826FC",
-          "start": "0x801826FC",
-          "end": "0x8018275C"
-        },
-        {
-          "symbol": "fn_8018275C",
-          "start": "0x8018275C",
-          "end": "0x801828E0"
-        },
-        {
-          "symbol": "fn_801828E0",
-          "start": "0x801828E0",
-          "end": "0x80182954"
-        },
-        {
-          "symbol": "fn_80182954",
-          "start": "0x80182954",
-          "end": "0x80182964"
-        },
-        {
-          "symbol": "fn_80182964",
-          "start": "0x80182964",
-          "end": "0x80182A60"
-        },
-        {
-          "symbol": "fn_80182A60",
-          "start": "0x80182A60",
-          "end": "0x80182A80"
-        },
-        {
-          "symbol": "GetColor__14MenuItemEditoriPi",
-          "start": "0x80182A80",
-          "end": "0x80182A84"
-        },
-        {
-          "symbol": "EndColor__14MenuItemEditoriii",
-          "start": "0x80182A84",
-          "end": "0x80182A88"
-        },
-        {
-          "symbol": "GetCycle__14MenuItemEditoriPiT2",
-          "start": "0x80182A88",
-          "end": "0x80182A8C"
-        },
-        {
-          "symbol": "EndCycle__14MenuItemEditoriii",
-          "start": "0x80182A8C",
-          "end": "0x80182A90"
-        },
-        {
-          "symbol": "GetCycleText__14MenuItemEditoriiG9MenuArg_t",
-          "start": "0x80182A90",
-          "end": "0x80182A94"
-        },
-        {
-          "symbol": "BeginSlider__14MenuItemEditoriiiPiT4G9MenuArg_tN26",
-          "start": "0x80182A94",
-          "end": "0x80182A98"
-        },
-        {
-          "symbol": "MoveSlider__14MenuItemEditoriiG9MenuArg_t",
-          "start": "0x80182A98",
-          "end": "0x80182AA0"
-        },
-        {
-          "symbol": "EndSlider__14MenuItemEditoriii",
-          "start": "0x80182AA0",
-          "end": "0x80182AA4"
-        },
-        {
-          "symbol": "GetText__14MenuItemEditoriPiG9MenuArg_t",
-          "start": "0x80182AA4",
-          "end": "0x80182AA8"
-        },
-        {
-          "symbol": "SetText__14MenuItemEditoriG9MenuArg_t",
-          "start": "0x80182AA8",
-          "end": "0x80182AAC"
-        },
-        {
-          "symbol": "Enter__14Class_802A6B10iPiT2",
-          "start": "0x80182AAC",
-          "end": "0x80182AD4"
-        },
-        {
-          "symbol": "Leave__14Class_802A6B10iiPPv",
-          "start": "0x80182AD4",
-          "end": "0x80182B40"
-        },
-        {
-          "symbol": "Enter__14MenuListScreeniPiT2",
-          "start": "0x80182B40",
-          "end": "0x80182B84"
-        },
-        {
-          "symbol": "Leave__14MenuListScreeniiPPv",
-          "start": "0x80182B84",
-          "end": "0x80182BC4"
-        },
-        {
-          "symbol": "Highlight__14MenuListScreeni",
-          "start": "0x80182BC4",
-          "end": "0x80182C78"
-        },
-        {
-          "symbol": "GetItemId__14MenuListScreeniPi",
-          "start": "0x80182C78",
-          "end": "0x80182CC8"
-        },
-        {
-          "symbol": "GetItem__14MenuListScreeniP11MenuEntry_t",
-          "start": "0x80182CC8",
-          "end": "0x80182DBC"
-        },
-        {
-          "symbol": "fn_80182DBC",
-          "start": "0x80182DBC",
-          "end": "0x80182DC8"
-        },
-        {
-          "symbol": "fn_80182DC8",
-          "start": "0x80182DC8",
-          "end": "0x80182DD4"
-        },
-        {
-          "symbol": "fn_80182DD4",
-          "start": "0x80182DD4",
-          "end": "0x80182E04"
-        },
-        {
-          "symbol": "fn_80182E04",
-          "start": "0x80182E04",
-          "end": "0x80182E34"
-        },
-        {
-          "symbol": "fn_80182E34",
-          "start": "0x80182E34",
-          "end": "0x80182E64"
-        },
-        {
-          "symbol": "fn_80182E64",
-          "start": "0x80182E64",
-          "end": "0x80182E70"
-        },
-        {
-          "symbol": "fn_80182E70",
-          "start": "0x80182E70",
-          "end": "0x80182E7C"
-        },
-        {
-          "symbol": "fn_80182E7C",
-          "start": "0x80182E7C",
-          "end": "0x80182E88"
-        },
-        {
-          "symbol": "fn_80182E88",
-          "start": "0x80182E88",
-          "end": "0x80182E9C"
-        },
-        {
-          "symbol": "fn_80182E9C",
-          "start": "0x80182E9C",
-          "end": "0x80182EC4"
-        },
-        {
-          "symbol": "fn_80182EC4",
-          "start": "0x80182EC4",
-          "end": "0x80182ED0"
-        },
-        {
-          "symbol": "fn_80182ED0",
-          "start": "0x80182ED0",
-          "end": "0x80182EFC"
-        },
-        {
-          "symbol": "fn_80182EFC",
-          "start": "0x80182EFC",
-          "end": "0x80182F24"
-        },
-        {
-          "symbol": "fn_80182F24",
-          "start": "0x80182F24",
-          "end": "0x80182F60"
-        },
-        {
-          "symbol": "fn_80182F60",
-          "start": "0x80182F60",
-          "end": "0x80182FD4"
-        },
-        {
-          "symbol": "fn_80182FD4",
-          "start": "0x80182FD4",
-          "end": "0x8018300C"
-        },
-        {
-          "symbol": "fn_8018300C",
-          "start": "0x8018300C",
-          "end": "0x80183034"
-        },
-        {
-          "symbol": "fn_80183034",
-          "start": "0x80183034",
-          "end": "0x80183130"
-        },
-        {
-          "symbol": "fn_80183130",
-          "start": "0x80183130",
-          "end": "0x801831A4"
-        },
-        {
-          "symbol": "fn_801831A4",
-          "start": "0x801831A4",
-          "end": "0x801831E8"
-        },
-        {
-          "symbol": "fn_801831E8",
-          "start": "0x801831E8",
-          "end": "0x801831F0"
-        },
-        {
-          "symbol": "fn_801831F0",
-          "start": "0x801831F0",
-          "end": "0x801831F8"
-        },
-        {
-          "symbol": "fn_801831F8",
-          "start": "0x801831F8",
-          "end": "0x80183220"
-        },
-        {
-          "symbol": "fn_80183220",
-          "start": "0x80183220",
-          "end": "0x80183228"
-        },
-        {
-          "symbol": "fn_80183228",
-          "start": "0x80183228",
-          "end": "0x80183230"
-        },
-        {
-          "symbol": "fn_80183230",
-          "start": "0x80183230",
-          "end": "0x80183238"
-        },
-        {
-          "symbol": "fn_80183238",
-          "start": "0x80183238",
-          "end": "0x8018324C"
-        },
-        {
-          "symbol": "fn_8018324C",
-          "start": "0x8018324C",
-          "end": "0x8018326C"
-        },
-        {
-          "symbol": "fn_8018326C",
-          "start": "0x8018326C",
-          "end": "0x801832A4"
-        },
-        {
-          "symbol": "fn_801832A4",
-          "start": "0x801832A4",
-          "end": "0x801832B0"
-        },
-        {
-          "symbol": "fn_801832B0",
-          "start": "0x801832B0",
-          "end": "0x80183354"
-        },
-        {
-          "symbol": "fn_80183354",
-          "start": "0x80183354",
-          "end": "0x80183360"
-        },
-        {
-          "symbol": "fn_80183360",
-          "start": "0x80183360",
-          "end": "0x80183368"
-        },
-        {
-          "symbol": "fn_80183368",
-          "start": "0x80183368",
-          "end": "0x801834DC"
-        },
-        {
-          "symbol": "fn_801834DC",
-          "start": "0x801834DC",
-          "end": "0x801835A0"
-        },
-        {
-          "symbol": "fn_801835A0",
-          "start": "0x801835A0",
-          "end": "0x801835C0"
-        },
-        {
-          "symbol": "fn_801835C0",
-          "start": "0x801835C0",
-          "end": "0x801835C8"
-        },
-        {
-          "symbol": "fn_801835C8",
-          "start": "0x801835C8",
-          "end": "0x80183704"
-        },
-        {
-          "symbol": "fn_80183704",
-          "start": "0x80183704",
-          "end": "0x80183734"
-        },
-        {
-          "symbol": "fn_80183734",
-          "start": "0x80183734",
-          "end": "0x80183740"
-        },
-        {
-          "symbol": "fn_80183740",
-          "start": "0x80183740",
-          "end": "0x80183920"
-        },
-        {
-          "symbol": "fn_80183920",
-          "start": "0x80183920",
-          "end": "0x80183934"
-        },
-        {
-          "symbol": "fn_80183934",
-          "start": "0x80183934",
-          "end": "0x80183948"
-        },
-        {
-          "symbol": "fn_80183948",
-          "start": "0x80183948",
-          "end": "0x80183950"
-        },
-        {
-          "symbol": "fn_80183950",
-          "start": "0x80183950",
-          "end": "0x80183968"
-        },
-        {
-          "symbol": "fn_80183968",
-          "start": "0x80183968",
-          "end": "0x8018397C"
-        },
-        {
-          "symbol": "fn_8018397C",
-          "start": "0x8018397C",
-          "end": "0x80183990"
-        },
-        {
-          "symbol": "fn_80183990",
-          "start": "0x80183990",
-          "end": "0x8018399C"
-        },
-        {
-          "symbol": "fn_8018399C",
-          "start": "0x8018399C",
-          "end": "0x80184128"
-        },
-        {
-          "symbol": "__static_initialization_and_destruction_0",
-          "start": "0x80184128",
-          "end": "0x80184190"
-        },
-        {
-          "symbol": "GetEditor__10MenuScreen",
-          "start": "0x80184190",
-          "end": "0x80184198"
-        },
-        {
-          "symbol": "GetEntryCount__14Class_802A6B10",
-          "start": "0x80184198",
-          "end": "0x801841A0"
-        },
-        {
-          "symbol": "GetEntries__14Class_802A6B10",
-          "start": "0x801841A0",
-          "end": "0x801841AC"
-        },
-        {
-          "symbol": "fn_801841AC__Fv",
-          "start": "0x801841AC",
-          "end": "0x801841D4"
-        },
-        {
-          "symbol": "_GLOBAL_.I.fn_80181330",
-          "start": "0x801841D4",
-          "end": "0x80184200"
-        },
-        {
-          "symbol": "_GLOBAL_.D.fn_80181330",
-          "start": "0x80184200",
-          "end": "0x8018422C"
-        }
-      ]
-    },
-    {
       "source": "src/game/StoryData.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8018DF98-0x8018E5F4 (src/game/StoryData.cpp), which places 0x8018E5F4-0x8018E9A4 in the same source file, the individual exact function extents of that range, the data row 0x802AAEE8-0x802AAF9C and the StoryData draft functions source-form row. Draft comparisons only; the accepted build keeps 0x8018DF98-0x8018E5F4 and 0x802AAD90-0x802AAEE8 linked and the original bytes of the draft range.",
@@ -3918,7 +3286,7 @@
       ]
     },
     {
-      "source": "src/game/cu_800857D0.cpp",
+      "source": "src/game/FormationLineupEdit.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv open unit row, exact per-function boundaries and data slice 0x802943DC-0x80294568. First three functions and native rodata prefix are linked; comparison preserves the remaining eight whole functions and measures only the evidenced unlinked literal slice. No excluded mismatches or completed-original-file claim.",
       "sections": [
@@ -3937,42 +3305,42 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8008593C",
+          "symbol": "FormationLineupSwapAllUser",
           "start": "0x8008593C",
           "end": "0x80085A34"
         },
         {
-          "symbol": "fn_80085A34",
+          "symbol": "FormationLineupApplyUser",
           "start": "0x80085A34",
           "end": "0x80085A7C"
         },
         {
-          "symbol": "fn_80085A7C",
+          "symbol": "FormationLineupClearAll",
           "start": "0x80085A7C",
           "end": "0x80085AA0"
         },
         {
-          "symbol": "fn_80085AA0",
+          "symbol": "FormationLineupRemapTeams",
           "start": "0x80085AA0",
           "end": "0x80085BE4"
         },
         {
-          "symbol": "fn_80085BE4",
+          "symbol": "FormationLineupCommitTeam",
           "start": "0x80085BE4",
           "end": "0x80085C3C"
         },
         {
-          "symbol": "fn_80085C3C",
+          "symbol": "FormationLineupRevertTeam",
           "start": "0x80085C3C",
           "end": "0x80085C94"
         },
         {
-          "symbol": "fn_80085C94",
+          "symbol": "FormationLineupFillTeam",
           "start": "0x80085C94",
           "end": "0x80085D54"
         },
         {
-          "symbol": "fn_80085D54",
+          "symbol": "FormationLineupReset",
           "start": "0x80085D54",
           "end": "0x80085D7C"
         }
@@ -9126,7 +8494,7 @@
     {
       "source": "src/game/cu_8004A2F4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/cu_8004A2F4.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names. Static initializer 0x80051D0C and its .ctors/.dtors stubs 0x80051DBC/0x80051DE8 are registered from the file's definition of the Time_801E8C78 object 0x803084B8 (.bss 0x803084B8-0x803084C4) with the .ctors word 0x80289A84 and .dtors word 0x80289BC4.",
+      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0–0x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/cu_8004A2F4.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names. Static initializer 0x80051D0C and its .ctors/.dtors stubs 0x80051DBC/0x80051DE8 are registered from the file's definition of the Time_801E8C78 object 0x803084B8 (.bss 0x803084B8-0x803084C4) with the .ctors word 0x80289A84 and .dtors word 0x80289BC4.",
       "sections": [
         {
           "section": ".text",
@@ -11294,42 +10662,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8019D994.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv frame decoding target access/type/data rows; code and generated literal pool unlinked, original executable retained.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8019D994",
-          "end": "0x8019E530"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802ADF40",
-          "end": "0x802ADF80"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8019D994",
-          "start": "0x8019D994",
-          "end": "0x8019DF38"
-        },
-        {
-          "symbol": "fn_8019DF38",
-          "start": "0x8019DF38",
-          "end": "0x8019E00C"
-        },
-        {
-          "symbol": "fn_8019E00C",
-          "start": "0x8019E00C",
-          "end": "0x8019E530"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_8013FF84.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional camera grouping, exact function extents, direct type/field observations and bounded rodata/sdata/sbss accesses. External initialized mode/jitter tables remain original and unclaimed. Partial comparison only.",
@@ -12266,9 +11598,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8003BA10.cpp",
+      "source": "src/game/PlyrObjs.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8003BA00-0x8003E214 (src/game/cu_8003BA10.cpp), projected geometry and resource group rows; original assembly linked.",
+      "evidence": "evidence.tsv unit row 0x8003BA00-0x8003E214 (src/game/PlyrObjs.cpp), projected geometry and resource group rows; original assembly linked.",
       "sections": [
         {
           "section": ".text",
@@ -12499,7 +11831,7 @@
     {
       "source": "src/game/cu_80086C10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u201380087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10–80087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
         {
           "section": ".text",
@@ -12815,37 +12147,6 @@
       ]
     },
     {
-      "source": "src/dolphin/os/OSAudioSystem.c",
-      "profile": "dolphin_release",
-      "evidence": "Complete pinned dolsdk2004 2328b4164b1a98422a2255d83ce9a5a7548990cc source; ordinary dolphin_release profile; full target functions measured independently, original bytes linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80239A18",
-          "end": "0x80239CAC"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FBC48",
-          "end": "0x802FBCC8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__OSInitAudioSystem",
-          "start": "0x80239A18",
-          "end": "0x80239BD4"
-        },
-        {
-          "symbol": "__OSStopAudioSystem",
-          "start": "0x80239BD4",
-          "end": "0x80239CAC"
-        }
-      ]
-    },
-    {
       "source": "src/dolphin/dsp/dsp_task.c",
       "profile": "dolphin_release",
       "evidence": "Full coherent BFBB handler already imported clean; fixed comparison guard registers complete original extent; existing4 linkedhelpers unchanged.",
@@ -12868,533 +12169,6 @@
           "symbol": "__DSPHandler",
           "start": "0x80285DC8",
           "end": "0x802861EC"
-        }
-      ]
-    },
-    {
-      "source": "src/dolphin/dvd/dvd.c",
-      "profile": "dolphin_dvd_release",
-      "evidence": "Complete coherent BFBB DVD core source under the library-wide dolphin_dvd_release signed plain-char setting; all 46 target functions in the full 9,980-byte range are measured. Unsupported unused stack local omitted. Native small-BSS packing remains diagnostic: trailing target globals differ, partials remain, and no NOBITS source credit or whole-unit promotion is claimed.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8023F494",
-          "end": "0x80241B90"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC180",
-          "end": "0x803EC198"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FD0F8",
-          "end": "0x802FD278"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A5540",
-          "end": "0x803A55D8"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ED118",
-          "end": "0x803ED164"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "defaultOptionalCommandChecker",
-          "start": "0x8023F494",
-          "end": "0x8023F498"
-        },
-        {
-          "symbol": "DVDInit",
-          "start": "0x8023F498",
-          "end": "0x8023F564"
-        },
-        {
-          "symbol": "stateReadingFST",
-          "start": "0x8023F564",
-          "end": "0x8023F5F8"
-        },
-        {
-          "symbol": "cbForStateReadingFST",
-          "start": "0x8023F5F8",
-          "end": "0x8023F684"
-        },
-        {
-          "symbol": "cbForStateError",
-          "start": "0x8023F684",
-          "end": "0x8023F730"
-        },
-        {
-          "symbol": "stateTimeout",
-          "start": "0x8023F730",
-          "end": "0x8023F764"
-        },
-        {
-          "symbol": "stateGettingError",
-          "start": "0x8023F764",
-          "end": "0x8023F78C"
-        },
-        {
-          "symbol": "CategorizeError",
-          "start": "0x8023F78C",
-          "end": "0x8023F840"
-        },
-        {
-          "symbol": "cbForStateGettingError",
-          "start": "0x8023F840",
-          "end": "0x8023FAD4"
-        },
-        {
-          "symbol": "cbForUnrecoveredError",
-          "start": "0x8023FAD4",
-          "end": "0x8023FB3C"
-        },
-        {
-          "symbol": "cbForUnrecoveredErrorRetry",
-          "start": "0x8023FB3C",
-          "end": "0x8023FBD4"
-        },
-        {
-          "symbol": "stateGoToRetry",
-          "start": "0x8023FBD4",
-          "end": "0x8023FBFC"
-        },
-        {
-          "symbol": "cbForStateGoToRetry",
-          "start": "0x8023FBFC",
-          "end": "0x8023FD54"
-        },
-        {
-          "symbol": "stateCheckID",
-          "start": "0x8023FD54",
-          "end": "0x8023FE34"
-        },
-        {
-          "symbol": "stateCheckID3",
-          "start": "0x8023FE34",
-          "end": "0x8023FE68"
-        },
-        {
-          "symbol": "stateCheckID2a",
-          "start": "0x8023FE68",
-          "end": "0x8023FE9C"
-        },
-        {
-          "symbol": "cbForStateCheckID2a",
-          "start": "0x8023FE9C",
-          "end": "0x8023FF10"
-        },
-        {
-          "symbol": "stateCheckID2",
-          "start": "0x8023FF10",
-          "end": "0x8023FF48"
-        },
-        {
-          "symbol": "cbForStateCheckID1",
-          "start": "0x8023FF48",
-          "end": "0x8024005C"
-        },
-        {
-          "symbol": "cbForStateCheckID2",
-          "start": "0x8024005C",
-          "end": "0x80240140"
-        },
-        {
-          "symbol": "cbForStateCheckID3",
-          "start": "0x80240140",
-          "end": "0x8024023C"
-        },
-        {
-          "symbol": "AlarmHandler",
-          "start": "0x8024023C",
-          "end": "0x80240280"
-        },
-        {
-          "symbol": "stateCoverClosed",
-          "start": "0x80240280",
-          "end": "0x8024034C"
-        },
-        {
-          "symbol": "stateCoverClosed_CMD",
-          "start": "0x8024034C",
-          "end": "0x8024037C"
-        },
-        {
-          "symbol": "cbForStateCoverClosed",
-          "start": "0x8024037C",
-          "end": "0x802403EC"
-        },
-        {
-          "symbol": "stateMotorStopped",
-          "start": "0x802403EC",
-          "end": "0x80240414"
-        },
-        {
-          "symbol": "cbForStateMotorStopped",
-          "start": "0x80240414",
-          "end": "0x802404F8"
-        },
-        {
-          "symbol": "stateReady",
-          "start": "0x802404F8",
-          "end": "0x80240728"
-        },
-        {
-          "symbol": "stateBusy",
-          "start": "0x80240728",
-          "end": "0x80240A48"
-        },
-        {
-          "symbol": "cbForStateBusy",
-          "start": "0x80240A48",
-          "end": "0x80241080"
-        },
-        {
-          "symbol": "DVDReadAbsAsyncPrio",
-          "start": "0x80241080",
-          "end": "0x8024115C"
-        },
-        {
-          "symbol": "DVDReadAbsAsyncForBS",
-          "start": "0x8024115C",
-          "end": "0x8024122C"
-        },
-        {
-          "symbol": "DVDReadDiskID",
-          "start": "0x8024122C",
-          "end": "0x80241300"
-        },
-        {
-          "symbol": "DVDCancelStreamAsync",
-          "start": "0x80241300",
-          "end": "0x802413BC"
-        },
-        {
-          "symbol": "DVDInquiryAsync",
-          "start": "0x802413BC",
-          "end": "0x8024148C"
-        },
-        {
-          "symbol": "DVDReset",
-          "start": "0x8024148C",
-          "end": "0x802414D0"
-        },
-        {
-          "symbol": "DVDGetCommandBlockStatus",
-          "start": "0x802414D0",
-          "end": "0x8024151C"
-        },
-        {
-          "symbol": "DVDGetDriveStatus",
-          "start": "0x8024151C",
-          "end": "0x802415C8"
-        },
-        {
-          "symbol": "DVDSetAutoInvalidation",
-          "start": "0x802415C8",
-          "end": "0x802415D8"
-        },
-        {
-          "symbol": "DVDResume",
-          "start": "0x802415D8",
-          "end": "0x80241628"
-        },
-        {
-          "symbol": "DVDCancelAsync",
-          "start": "0x80241628",
-          "end": "0x802418A4"
-        },
-        {
-          "symbol": "DVDCancel",
-          "start": "0x802418A4",
-          "end": "0x80241950"
-        },
-        {
-          "symbol": "cbForCancelSync",
-          "start": "0x80241950",
-          "end": "0x80241974"
-        },
-        {
-          "symbol": "DVDGetCurrentDiskID",
-          "start": "0x80241974",
-          "end": "0x8024197C"
-        },
-        {
-          "symbol": "DVDCheckDisk",
-          "start": "0x8024197C",
-          "end": "0x80241A74"
-        },
-        {
-          "symbol": "__DVDPrepareResetAsync",
-          "start": "0x80241A74",
-          "end": "0x80241B90"
-        }
-      ],
-      "discarded": [
-        "cbForCancelAllSync",
-        "DVDSeekAbsAsyncPrio",
-        "DVDCancelAllAsync",
-        "DVDCancelAll"
-      ]
-    },
-    {
-      "source": "src/dolphin/pad/Pad.c",
-      "profile": "dolphin_release",
-      "evidence": "Existing pinned BFBB8fb1c232 coherent nineteen-function PAD source unchanged under fixed dolphin_release. Explicit storage symbols bind all13genuine BSS objects using actual target word accesses and typed caller evidence; all19functions and initialized pools are exact comparison-only. The sbss diagnostic envelope contains unowned803ED2A4..803ED2A8 without source allocation, ownership or initialized-data credit; SDK mapping owned spans remain unchanged. No whole linked SDA-placement or unit-completion claim. See evidence.tsv storage facts.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802466D0",
-          "end": "0x802481A0"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC218",
-          "end": "0x803EC238"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A5880",
-          "end": "0x803A58D0"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FDD00",
-          "end": "0x802FDD58"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ED288",
-          "end": "0x803ED2B4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "UpdateOrigin",
-          "start": "0x802466D0",
-          "end": "0x80246874"
-        },
-        {
-          "symbol": "PADOriginCallback",
-          "start": "0x80246874",
-          "end": "0x80246938"
-        },
-        {
-          "symbol": "PADOriginUpdateCallback",
-          "start": "0x80246938",
-          "end": "0x802469F8"
-        },
-        {
-          "symbol": "PADProbeCallback",
-          "start": "0x802469F8",
-          "end": "0x80246AD0"
-        },
-        {
-          "symbol": "PADTypeAndStatusCallback",
-          "start": "0x80246AD0",
-          "end": "0x80246DFC"
-        },
-        {
-          "symbol": "PADReceiveCheckCallback",
-          "start": "0x80246DFC",
-          "end": "0x80246F30"
-        },
-        {
-          "symbol": "PADReset",
-          "start": "0x80246F30",
-          "end": "0x80247030"
-        },
-        {
-          "symbol": "PADRecalibrate",
-          "start": "0x80247030",
-          "end": "0x80247134"
-        },
-        {
-          "symbol": "PADInit",
-          "start": "0x80247134",
-          "end": "0x8024734C"
-        },
-        {
-          "symbol": "PADRead",
-          "start": "0x8024734C",
-          "end": "0x802476F8"
-        },
-        {
-          "symbol": "PADControlMotor",
-          "start": "0x802476F8",
-          "end": "0x8024779C"
-        },
-        {
-          "symbol": "PADSetSpec",
-          "start": "0x8024779C",
-          "end": "0x802477FC"
-        },
-        {
-          "symbol": "SPEC0_MakeStatus",
-          "start": "0x802477FC",
-          "end": "0x80247970"
-        },
-        {
-          "symbol": "SPEC1_MakeStatus",
-          "start": "0x80247970",
-          "end": "0x80247AE4"
-        },
-        {
-          "symbol": "SPEC2_MakeStatus",
-          "start": "0x80247AE4",
-          "end": "0x80247EDC"
-        },
-        {
-          "symbol": "OnReset",
-          "start": "0x80247EDC",
-          "end": "0x80248070"
-        },
-        {
-          "symbol": "SamplingHandler",
-          "start": "0x80248070",
-          "end": "0x802480D0"
-        },
-        {
-          "symbol": "PADSetSamplingCallback",
-          "start": "0x802480D0",
-          "end": "0x80248124"
-        },
-        {
-          "symbol": "__PADDisableRecalibration",
-          "start": "0x80248124",
-          "end": "0x802481A0"
-        }
-      ],
-      "storage": [
-        {
-          "symbol": "Initialized",
-          "start": "0x803ED288",
-          "end": "0x803ED28C"
-        },
-        {
-          "symbol": "EnabledBits",
-          "start": "0x803ED28C",
-          "end": "0x803ED290"
-        },
-        {
-          "symbol": "ResettingBits",
-          "start": "0x803ED290",
-          "end": "0x803ED294"
-        },
-        {
-          "symbol": "RecalibrateBits",
-          "start": "0x803ED294",
-          "end": "0x803ED298"
-        },
-        {
-          "symbol": "WaitingBits",
-          "start": "0x803ED298",
-          "end": "0x803ED29C"
-        },
-        {
-          "symbol": "CheckingBits",
-          "start": "0x803ED29C",
-          "end": "0x803ED2A0"
-        },
-        {
-          "symbol": "PendingBits",
-          "start": "0x803ED2A0",
-          "end": "0x803ED2A4"
-        },
-        {
-          "symbol": "SamplingCallback",
-          "start": "0x803ED2A8",
-          "end": "0x803ED2AC"
-        },
-        {
-          "symbol": "recalibrated$358",
-          "start": "0x803ED2AC",
-          "end": "0x803ED2B0"
-        },
-        {
-          "symbol": "__PADSpec",
-          "start": "0x803ED2B0",
-          "end": "0x803ED2B4"
-        },
-        {
-          "symbol": "Type",
-          "start": "0x803A5880",
-          "end": "0x803A5890"
-        },
-        {
-          "symbol": "Origin",
-          "start": "0x803A5890",
-          "end": "0x803A58C0"
-        },
-        {
-          "symbol": "CmdProbeDevice",
-          "start": "0x803A58C0",
-          "end": "0x803A58D0"
-        }
-      ]
-    },
-    {
-      "source": "src/dolphin/os/OSMemory.c",
-      "profile": "dolphin_release",
-      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8023BA78",
-          "end": "0x8023BD50"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FC470",
-          "end": "0x802FC480"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "OnReset",
-          "start": "0x8023BA78",
-          "end": "0x8023BAB4"
-        },
-        {
-          "symbol": "MEMIntrruptHandler",
-          "start": "0x8023BAB4",
-          "end": "0x8023BB20"
-        },
-        {
-          "symbol": "__OSInitMemoryProtection",
-          "start": "0x8023BC38",
-          "end": "0x8023BD50"
-        },
-        {
-          "symbol": "Config24MB",
-          "start": "0x8023BB20",
-          "end": "0x8023BBA0"
-        },
-        {
-          "symbol": "Config48MB",
-          "start": "0x8023BBA0",
-          "end": "0x8023BC20"
-        },
-        {
-          "symbol": "RealMode",
-          "start": "0x8023BC20",
-          "end": "0x8023BC38"
         }
       ]
     },
@@ -13441,76 +12215,6 @@
           "symbol": "Reset",
           "start": "0x8023C040",
           "end": "0x8023C0B0"
-        }
-      ]
-    },
-    {
-      "source": "src/dolphin/gx/GXInit.c",
-      "profile": "dolphin_release",
-      "evidence": "Pinned coherent BFBB five complete C bodies; original unsupported unused ASM helper omitted; ordinary partial comparison, no promotion",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8024ACC0",
-          "end": "0x8024C038"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FDE40",
-          "end": "0x802FE07C"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A5900",
-          "end": "0x803A5F30"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC258",
-          "end": "0x803EC25C"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ED358",
-          "end": "0x803ED380"
-        },
-        {
-          "section": ".sdata2",
-          "placement": ".data6",
-          "start": "0x803ED840",
-          "end": "0x803ED868"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__GXDefaultTexRegionCallback",
-          "start": "0x8024ACC0",
-          "end": "0x8024ADBC"
-        },
-        {
-          "symbol": "__GXDefaultTlutRegionCallback",
-          "start": "0x8024ADBC",
-          "end": "0x8024ADE0"
-        },
-        {
-          "symbol": "__GXShutdown",
-          "start": "0x8024ADE0",
-          "end": "0x8024AF70"
-        },
-        {
-          "symbol": "GXInit",
-          "start": "0x8024AF70",
-          "end": "0x8024B700"
-        },
-        {
-          "symbol": "__GXInitGX",
-          "start": "0x8024B700",
-          "end": "0x8024C038"
         }
       ]
     },
@@ -19981,103 +18685,6 @@
       ]
     },
     {
-      "source": "src/dolphin/cu_8025D6C8.c",
-      "profile": "dolphin_release",
-      "evidence": "evidence.tsv provisional unit row 0x8025D6C8-0x8025E148 (src/dolphin/cu_8025D6C8.c), its compiler, source-form, type, function and name rows and the exact data rows 0x803EC320-0x803EC321 (.sdata) and 0x803ED3F8-0x803ED40D (.sbss). Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8025D6C8",
-          "end": "0x8025E148"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC320",
-          "end": "0x803EC321"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ED3F8",
-          "end": "0x803ED40D"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8025D6C8",
-          "start": "0x8025D6C8",
-          "end": "0x8025D6CC"
-        },
-        {
-          "symbol": "fn_8025D6CC",
-          "start": "0x8025D6CC",
-          "end": "0x8025D6D0"
-        },
-        {
-          "symbol": "fn_8025D6D0",
-          "start": "0x8025D6D0",
-          "end": "0x8025D930"
-        },
-        {
-          "symbol": "fn_8025D930",
-          "start": "0x8025D930",
-          "end": "0x8025D9BC"
-        },
-        {
-          "symbol": "fn_8025D9BC",
-          "start": "0x8025D9BC",
-          "end": "0x8025DA58"
-        },
-        {
-          "symbol": "fn_8025DA58",
-          "start": "0x8025DA58",
-          "end": "0x8025DAAC"
-        },
-        {
-          "symbol": "fn_8025DAAC",
-          "start": "0x8025DAAC",
-          "end": "0x8025DB24"
-        },
-        {
-          "symbol": "fn_8025DB24",
-          "start": "0x8025DB24",
-          "end": "0x8025DB64"
-        },
-        {
-          "symbol": "fn_8025DB64",
-          "start": "0x8025DB64",
-          "end": "0x8025DBA0"
-        },
-        {
-          "symbol": "fn_8025DBA0",
-          "start": "0x8025DBA0",
-          "end": "0x8025DC4C"
-        },
-        {
-          "symbol": "fn_8025DC4C",
-          "start": "0x8025DC4C",
-          "end": "0x8025DD28"
-        },
-        {
-          "symbol": "fn_8025DD28",
-          "start": "0x8025DD28",
-          "end": "0x8025DE04"
-        },
-        {
-          "symbol": "fn_8025DE04",
-          "start": "0x8025DE04",
-          "end": "0x8025DEB0"
-        },
-        {
-          "symbol": "fn_8025DEB0",
-          "start": "0x8025DEB0",
-          "end": "0x8025E148"
-        }
-      ]
-    },
-    {
       "source": "src/Common/UIStudio/UIStudio.c",
       "profile": "uistudio",
       "evidence": "evidence.tsv provisional unit row 0x802176E8-0x8021A068 for ../../../Source/Common/UIStudio/UIStudio.c, exact whole-function rows and neutral name rows for the 23 draft bodies, and the file compiler row. The drafts use no static data; the .rodata block data_802B1D40 and all other functions remain original and unmeasured.",
@@ -20208,39 +18815,18 @@
       ]
     },
     {
-      "source": "src/engine/cu_80226F9C.c",
+      "source": "src/engine/llvector.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x80226F9C-0x80227F14 (src/engine/cu_80226F9C.c), its function and name rows and the exact .sdata data row 0x803EBF88-0x803EBF8C. Draft comparisons only; original assembly remains linked. The four functions that load .rodata constants have no draft body and no .rodata is registered.",
+      "evidence": "evidence.tsv provisional unit row 0x802270A4-0x80227F14 (src/engine/llvector.c), its function and name rows. Draft comparisons only; original assembly remains linked. The four functions that load .rodata constants are drafted in the comparison fragments src/engine/cu_8022772C.c, cu_80227970.c, cu_80227B04.c and cu_80227D6C.c; no .rodata is registered here.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80226F9C",
+          "start": "0x802270A4",
           "end": "0x80227F14"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBF88",
-          "end": "0x803EBF8C"
         }
       ],
       "functions": [
-        {
-          "symbol": "fn_80226F9C",
-          "start": "0x80226F9C",
-          "end": "0x80226FF0"
-        },
-        {
-          "symbol": "fn_80226FF0",
-          "start": "0x80226FF0",
-          "end": "0x80227040"
-        },
-        {
-          "symbol": "fn_80227040",
-          "start": "0x80227040",
-          "end": "0x802270A4"
-        },
         {
           "symbol": "fn_802270A4",
           "start": "0x802270A4",
@@ -20426,7 +19012,7 @@
     {
       "source": "src/engine/cu_8022772C.c",
       "profile": "engine_c_fastmath",
-      "evidence": "Comparison source fragment of src/engine/cu_80226F9C.c (evidence.tsv unit row 0x80226F9C-0x80227F14): the target function extent 0x8022772C-0x802277DC and its literal-pool slice 0x802B2078-0x802B207C (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
+      "evidence": "Comparison source fragment of src/engine/llvector.c (evidence.tsv unit row 0x802270A4-0x80227F14): the target function extent 0x8022772C-0x802277DC and its literal-pool slice 0x802B2078-0x802B207C (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -20452,7 +19038,7 @@
     {
       "source": "src/engine/cu_80227970.c",
       "profile": "engine_c_fastmath",
-      "evidence": "Comparison source fragment of src/engine/cu_80226F9C.c (evidence.tsv unit row 0x80226F9C-0x80227F14): the target function extent 0x80227970-0x80227B04 and its literal-pool slice 0x802B2098-0x802B20A0 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
+      "evidence": "Comparison source fragment of src/engine/llvector.c (evidence.tsv unit row 0x802270A4-0x80227F14): the target function extent 0x80227970-0x80227B04 and its literal-pool slice 0x802B2098-0x802B20A0 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -20478,7 +19064,7 @@
     {
       "source": "src/engine/cu_80227B04.c",
       "profile": "engine_c_fastmath",
-      "evidence": "Comparison source fragment of src/engine/cu_80226F9C.c (evidence.tsv unit row 0x80226F9C-0x80227F14): the target function extent 0x80227B04-0x80227C2C and its literal-pool slice 0x802B20A0-0x802B20A8 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
+      "evidence": "Comparison source fragment of src/engine/llvector.c (evidence.tsv unit row 0x802270A4-0x80227F14): the target function extent 0x80227B04-0x80227C2C and its literal-pool slice 0x802B20A0-0x802B20A8 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -20504,7 +19090,7 @@
     {
       "source": "src/engine/cu_80227D6C.c",
       "profile": "engine_c_fastmath",
-      "evidence": "Comparison source fragment of src/engine/cu_80226F9C.c (evidence.tsv unit row 0x80226F9C-0x80227F14): the target function extent 0x80227D6C-0x80227E40 and its literal-pool slice 0x802B20BC-0x802B20C0 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
+      "evidence": "Comparison source fragment of src/engine/llvector.c (evidence.tsv unit row 0x802270A4-0x80227F14): the target function extent 0x80227D6C-0x80227E40 and its literal-pool slice 0x802B20BC-0x802B20C0 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -20524,31 +19110,6 @@
           "symbol": "fn_80227D6C",
           "start": "0x80227D6C",
           "end": "0x80227E40"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80229084.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80229084-0x80229094 (src/engine/cu_80229084.c), its compiler row and function and name rows. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80229084",
-          "end": "0x80229094"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80229084",
-          "start": "0x80229084",
-          "end": "0x8022908C"
-        },
-        {
-          "symbol": "fn_8022908C",
-          "start": "0x8022908C",
-          "end": "0x80229094"
         }
       ]
     },
@@ -23348,14 +21909,34 @@
       ]
     },
     {
-      "source": "src/game/cu_80088F2C.cpp",
+      "source": "src/game/Main.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80088F2C-0x80089330 (src/game/cu_80088F2C.cpp), the function rows 0x80088F2C-0x80088F78 and 0x80088FFC-0x80089330, the exact .rodata row 0x80295214-0x80295224 and the source-form rows. Comparison-only fn_80088F2C (inline asm, kept out of the linked build) and draft fn_80088FFC; 0x80088F78-0x80088FFC is linked source.",
+      "evidence": "evidence.tsv unit row 0x80088F2C-0x80088FFC (src/game/Main.cpp), the function row 0x80088F2C-0x80088F78 and the source-form row. The inline-asm start function _MainInitFastCast is comparison-only (kept out of the linked build); 0x80088F78-0x80088FFC is linked source.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80088F2C",
+          "end": "0x80088FFC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "_MainInitFastCast",
+          "start": "0x80088F2C",
+          "end": "0x80088F78"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80088FFC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80088FFC-0x80089330 (src/game/cu_80088FFC.cpp), the function row 0x80088FFC-0x80089330, the exact .rodata row 0x80295214-0x80295224 and the source-form row. Comparison-only draft fn_80088FFC; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80088FFC",
           "end": "0x80089330"
         },
         {
@@ -23366,11 +21947,6 @@
         }
       ],
       "functions": [
-        {
-          "symbol": "fn_80088F2C",
-          "start": "0x80088F2C",
-          "end": "0x80088F78"
-        },
         {
           "symbol": "fn_80088FFC",
           "start": "0x80088FFC",
@@ -25597,42 +24173,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8016C70C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #740; evidence.tsv full function extents and bounded literal context 0x802A4D00-0x802A4D68. Three complete unlinked bodies; provisional source grouping; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8016C70C",
-          "end": "0x8016CEEC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A4D00",
-          "end": "0x802A4D68"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8016C70C",
-          "start": "0x8016C70C",
-          "end": "0x8016CA50"
-        },
-        {
-          "symbol": "fn_8016CA50",
-          "start": "0x8016CA50",
-          "end": "0x8016CDD4"
-        },
-        {
-          "symbol": "fn_8016CDD4",
-          "start": "0x8016CDD4",
-          "end": "0x8016CEEC"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_801485B4.cpp",
       "profile": "game_cpp",
       "evidence": "Issue #748; thirteen complete leading control/setup bodies inside retained provisional cu_801485B4 survey group. Original file boundaries and remaining source ownership unresolved. Full target function ranges and complete 32-byte literal context measured; original assembly stays linked. No promotion or header edits.",
@@ -25968,7 +24508,7 @@
     {
       "source": "src/game/cu_8014AB64.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The widened provisional comparison hull includes only explicit whole functions; shared target literal |^Done at802A0B74 gives the source-grouping reason. Existing readonly target context802A0B50\u2013802A0CE0 remains unchanged. Complete natural native pool grows84 to104 bytes and is compared without clipping against400 target bytes. Done pools correctly at native+0x24; new Jump Ball Battle native+0x54 resolves802A0BA4, differing from actual802A130C. No data exactness, original-unit or adjacent-storage ownership claim.",
+      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The widened provisional comparison hull includes only explicit whole functions; shared target literal |^Done at802A0B74 gives the source-grouping reason. Existing readonly target context802A0B50–802A0CE0 remains unchanged. Complete natural native pool grows84 to104 bytes and is compared without clipping against400 target bytes. Done pools correctly at native+0x24; new Jump Ball Battle native+0x54 resolves802A0BA4, differing from actual802A130C. No data exactness, original-unit or adjacent-storage ownership claim.",
       "sections": [
         {
           "section": ".text",
@@ -28231,7 +26771,7 @@
     {
       "source": "src/game/cu_801534D4.cpp",
       "profile": "game_cpp",
-      "evidence": "One complete slot body inside the retained provisional cu_801485B4 survey group: slot 10 of the table 0x802A1930 of src/game/cu_801531C4.cpp (derived from the rule-set table 0x802A56E8, include/game/ScrmRuleSet.h; 0x801534D4-0x80153700, word 0x802A1984). Calls the base slot 0x8017767C through its declaration ScrmRuleSet::ResetPlaySpot, fn_80148A58 and fn_8017886C through their headers, slot 35 of the fn_80148A58 object, 0x80155128 (src/game/cu_80155128.cpp), 0x800948E4, 0x8008593C (src/game/cu_800857D0.cpp), 0x80178D70 (include/game/fn_80178D18.h) and 0x80177E6C, 0x80178308, 0x80178320, 0x8017833C, 0x80178348, 0x80178360 and 0x80178CD8 (src/game/cu_80176F18.cpp) as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "One complete slot body inside the retained provisional cu_801485B4 survey group: slot 10 of the table 0x802A1930 of src/game/cu_801531C4.cpp (derived from the rule-set table 0x802A56E8, include/game/ScrmRuleSet.h; 0x801534D4-0x80153700, word 0x802A1984). Calls the base slot 0x8017767C through its declaration ScrmRuleSet::ResetPlaySpot, fn_80148A58 and fn_8017886C through their headers, slot 35 of the fn_80148A58 object, 0x80155128 (src/game/cu_80155128.cpp), 0x800948E4, 0x8008593C (src/game/FormationLineupEdit.cpp), 0x80178D70 (include/game/fn_80178D18.h) and 0x80177E6C, 0x80178308, 0x80178320, 0x8017833C, 0x80178348, 0x80178360 and 0x80178CD8 (src/game/cu_80176F18.cpp) as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -28968,13 +27508,19 @@
     {
       "source": "src/engine/sdspmix.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80271D34-0x8027257C (src/engine/sdspmix.c), the sound_cxx compiler row and the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80271D34-0x8027257C (src/engine/sdspmix.c), the sound_cxx compiler row and the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function and the data row 0x802C1D88-0x802C1D8C. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80271D34",
           "end": "0x8027257C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C1D88",
+          "end": "0x802C1D8C"
         }
       ],
       "functions": [
@@ -28982,6 +27528,11 @@
           "symbol": "fn_80271D34",
           "start": "0x80271D34",
           "end": "0x80271D78"
+        },
+        {
+          "symbol": "fn_80271D78",
+          "start": "0x80271D78",
+          "end": "0x80271E50"
         },
         {
           "symbol": "fn_80271E50",
@@ -29856,7 +28407,7 @@
           "end": "0x8027D05C"
         },
         {
-          "symbol": "fn_8027D05C",
+          "symbol": "CodecReadSamples",
           "start": "0x8027D05C",
           "end": "0x8027D284"
         },
@@ -34068,9 +32619,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801AD424.c",
+      "source": "src/engine/sn_cwhelpers.c",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AD424-0x801AD488 (src/engine/cu_801AD424.c), function rows, data row 0x802AE9F8-0x802AEA00, compiler and source-form rows. __cvt_fp2unsigned is a partial C body; the seven branch stubs are hand-written assembly. Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801AD424-0x801AD488 (src/engine/sn_cwhelpers.c), function rows, data row 0x802AE9F8-0x802AEA00, compiler and source-form rows. Documented holdout at the start of .text: __cvt_fp2unsigned 0x801AD424-0x801AD46C is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes with its double; the seven hand-written branch stubs after it are linked through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -34090,121 +32641,6 @@
           "symbol": "__cvt_fp2unsigned",
           "start": "0x801AD424",
           "end": "0x801AD46C"
-        },
-        {
-          "symbol": "__shr2u",
-          "start": "0x801AD46C",
-          "end": "0x801AD470"
-        },
-        {
-          "symbol": "__div2i",
-          "start": "0x801AD470",
-          "end": "0x801AD474"
-        },
-        {
-          "symbol": "__shl2i",
-          "start": "0x801AD474",
-          "end": "0x801AD478"
-        },
-        {
-          "symbol": "fn_801AD478",
-          "start": "0x801AD478",
-          "end": "0x801AD47C"
-        },
-        {
-          "symbol": "__shr2i",
-          "start": "0x801AD47C",
-          "end": "0x801AD480"
-        },
-        {
-          "symbol": "fn_801AD480",
-          "start": "0x801AD480",
-          "end": "0x801AD484"
-        },
-        {
-          "symbol": "fn_801AD484",
-          "start": "0x801AD484",
-          "end": "0x801AD488"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/FSasync.c",
-      "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AD57C-0x801ADDB4 (src/engine/FSasync.c), function rows, compiler and source-form rows. State globals 0x802CC580-0x802CC5E0 stay external. Comparison only; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801AD57C",
-          "end": "0x801ADDB4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801AD57C",
-          "start": "0x801AD57C",
-          "end": "0x801AD584"
-        },
-        {
-          "symbol": "fn_801AD584",
-          "start": "0x801AD584",
-          "end": "0x801AD610"
-        },
-        {
-          "symbol": "fn_801AD610",
-          "start": "0x801AD610",
-          "end": "0x801AD66C"
-        },
-        {
-          "symbol": "fn_801AD66C",
-          "start": "0x801AD66C",
-          "end": "0x801AD6F8"
-        },
-        {
-          "symbol": "fn_801AD6F8",
-          "start": "0x801AD6F8",
-          "end": "0x801AD79C"
-        },
-        {
-          "symbol": "fn_801AD79C",
-          "start": "0x801AD79C",
-          "end": "0x801AD83C"
-        },
-        {
-          "symbol": "fn_801AD83C",
-          "start": "0x801AD83C",
-          "end": "0x801AD9C0"
-        },
-        {
-          "symbol": "fn_801AD9C0",
-          "start": "0x801AD9C0",
-          "end": "0x801ADA68"
-        },
-        {
-          "symbol": "fn_801ADA68",
-          "start": "0x801ADA68",
-          "end": "0x801ADB40"
-        },
-        {
-          "symbol": "fn_801ADB40",
-          "start": "0x801ADB40",
-          "end": "0x801ADB94"
-        },
-        {
-          "symbol": "fn_801ADB94",
-          "start": "0x801ADB94",
-          "end": "0x801ADC08"
-        },
-        {
-          "symbol": "fn_801ADC08",
-          "start": "0x801ADC08",
-          "end": "0x801ADD44"
-        },
-        {
-          "symbol": "fn_801ADD44",
-          "start": "0x801ADD44",
-          "end": "0x801ADDB4"
         }
       ]
     },
@@ -34290,21 +32726,21 @@
       ]
     },
     {
-      "source": "src/engine/cu_801B9F00.c",
+      "source": "src/engine/animchan.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801B9F00-0x801BA2A8 (src/engine/cu_801B9F00.c, head of animchan.c), function rows, data row 0x802AED98-0x802AEDA4, compiler row engine_c_fastmath and source-form row for the split at 0x801BA154 (not reconstructed; it owns .rodata 0x802AEDA4-0x802AEDB0, so this file and cu_801BA2A8.c cannot be one comparison unit). Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801B9F00-0x801BA818 (src/engine/animchan.c), function rows, data row 0x802AED98-0x802AEDB8 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B9F00",
-          "end": "0x801BA154"
+          "end": "0x801BA818"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802AED98",
-          "end": "0x802AEDA4"
+          "end": "0x802AEDB8"
         }
       ],
       "functions": [
@@ -34322,28 +32758,12 @@
           "symbol": "fn_801BA03C",
           "start": "0x801BA03C",
           "end": "0x801BA154"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801BA2A8.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BA2A8-0x801BA818 (src/engine/cu_801BA2A8.c, tail of animchan.c), function rows, data row 0x802AEDB0-0x802AEDB8, compiler row engine_c_fastmath and source-form row for the split at 0x801BA154. Comparison only; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801BA2A8",
-          "end": "0x801BA818"
         },
         {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEDB0",
-          "end": "0x802AEDB8"
-        }
-      ],
-      "functions": [
+          "symbol": "fn_801BA154",
+          "start": "0x801BA154",
+          "end": "0x801BA2A8"
+        },
         {
           "symbol": "fn_801BA2A8",
           "start": "0x801BA2A8",
@@ -34675,7 +33095,7 @@
     {
       "source": "src/engine/cu_801BDA30.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/cu_801BDA30.c, animst.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; fn_801BE3C0 is not reconstructed (it loads no literal). Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/cu_801BDA30.c, animst.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -34740,6 +33160,11 @@
           "symbol": "fn_801BE068",
           "start": "0x801BE068",
           "end": "0x801BE3C0"
+        },
+        {
+          "symbol": "fn_801BE3C0",
+          "start": "0x801BE3C0",
+          "end": "0x801BE420"
         },
         {
           "symbol": "fn_801BE420",
@@ -34840,9 +33265,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BF090.c",
+      "source": "src/engine/animwgt.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BF090-0x801BF5E8 (src/engine/cu_801BF090.c, animwgt.c), function rows, data row 0x802AEEA8-0x802AEEE0 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801BF090-0x801BF5E8 (src/engine/animwgt.c) and the source-form row at 0x801BF530. Documented holdout at the end of .text: AnimWgtSetLinearInAndOut 0x801BF530-0x801BF5E8 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes with its pool 0x802AEED0-0x802AEEE0; the rest of the file is linked through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -34855,103 +33280,31 @@
           "placement": ".data3",
           "start": "0x802AEEA8",
           "end": "0x802AEEE0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F484C",
+          "end": "0x802F485C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBB9C",
+          "end": "0x803EBBA8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED614",
+          "end": "0x803ED618"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801BF090",
-          "start": "0x801BF090",
-          "end": "0x801BF094"
-        },
-        {
-          "symbol": "fn_801BF094",
-          "start": "0x801BF094",
-          "end": "0x801BF11C"
-        },
-        {
-          "symbol": "fn_801BF11C",
-          "start": "0x801BF11C",
-          "end": "0x801BF140"
-        },
-        {
-          "symbol": "fn_801BF140",
-          "start": "0x801BF140",
-          "end": "0x801BF2B0"
-        },
-        {
-          "symbol": "fn_801BF2B0",
-          "start": "0x801BF2B0",
-          "end": "0x801BF384"
-        },
-        {
-          "symbol": "fn_801BF384",
-          "start": "0x801BF384",
-          "end": "0x801BF3C8"
-        },
-        {
-          "symbol": "fn_801BF3C8",
-          "start": "0x801BF3C8",
-          "end": "0x801BF434"
-        },
-        {
-          "symbol": "fn_801BF434",
-          "start": "0x801BF434",
-          "end": "0x801BF46C"
-        },
-        {
-          "symbol": "fn_801BF46C",
-          "start": "0x801BF46C",
-          "end": "0x801BF4A8"
-        },
-        {
-          "symbol": "fn_801BF4A8",
-          "start": "0x801BF4A8",
-          "end": "0x801BF530"
-        },
-        {
-          "symbol": "fn_801BF530",
+          "symbol": "AnimWgtSetLinearInAndOut",
           "start": "0x801BF530",
           "end": "0x801BF5E8"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801C1D54.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801C1D54-0x801C1F54 (src/engine/cu_801C1D54.c, auxram.c), function rows and compiler rows engine_c_fastmath (0x801B9D00-0x801C1D84 and 0x801C1D84-0x801C1F54). Comparison only; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C1D54",
-          "end": "0x801C1F54"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801C1D54",
-          "start": "0x801C1D54",
-          "end": "0x801C1D84"
-        },
-        {
-          "symbol": "fn_801C1D84",
-          "start": "0x801C1D84",
-          "end": "0x801C1D88"
-        },
-        {
-          "symbol": "fn_801C1D88",
-          "start": "0x801C1D88",
-          "end": "0x801C1D98"
-        },
-        {
-          "symbol": "fn_801C1D98",
-          "start": "0x801C1D98",
-          "end": "0x801C1E78"
-        },
-        {
-          "symbol": "fn_801C1E78",
-          "start": "0x801C1E78",
-          "end": "0x801C1F54"
         }
       ]
     },
@@ -37699,111 +36052,6 @@
       ]
     },
     {
-      "source": "src/engine/periph.c",
-      "profile": "engine_c",
-      "evidence": "E3 lane draft of periph.c over 0x801E11D0-0x801E1A20 (NASCAR 2005 symbol-table size/order match; see the periph.c name rows); evidence.tsv function rows and the compiler row for this range. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801E11D0",
-          "end": "0x801E1A20"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801E11D0",
-          "start": "0x801E11D0",
-          "end": "0x801E11E8"
-        },
-        {
-          "symbol": "fn_801E11E8",
-          "start": "0x801E11E8",
-          "end": "0x801E12CC"
-        },
-        {
-          "symbol": "fn_801E12CC",
-          "start": "0x801E12CC",
-          "end": "0x801E12F8"
-        },
-        {
-          "symbol": "fn_801E12F8",
-          "start": "0x801E12F8",
-          "end": "0x801E1444"
-        },
-        {
-          "symbol": "fn_801E1444",
-          "start": "0x801E1444",
-          "end": "0x801E1478"
-        },
-        {
-          "symbol": "fn_801E1478",
-          "start": "0x801E1478",
-          "end": "0x801E153C"
-        },
-        {
-          "symbol": "fn_801E153C",
-          "start": "0x801E153C",
-          "end": "0x801E15B8"
-        },
-        {
-          "symbol": "fn_801E15B8",
-          "start": "0x801E15B8",
-          "end": "0x801E15D0"
-        },
-        {
-          "symbol": "fn_801E15D0",
-          "start": "0x801E15D0",
-          "end": "0x801E1688"
-        },
-        {
-          "symbol": "fn_801E1688",
-          "start": "0x801E1688",
-          "end": "0x801E173C"
-        },
-        {
-          "symbol": "fn_801E173C",
-          "start": "0x801E173C",
-          "end": "0x801E17D0"
-        },
-        {
-          "symbol": "fn_801E17D0",
-          "start": "0x801E17D0",
-          "end": "0x801E1884"
-        },
-        {
-          "symbol": "fn_801E1884",
-          "start": "0x801E1884",
-          "end": "0x801E1940"
-        },
-        {
-          "symbol": "fn_801E1940",
-          "start": "0x801E1940",
-          "end": "0x801E194C"
-        },
-        {
-          "symbol": "fn_801E194C",
-          "start": "0x801E194C",
-          "end": "0x801E1954"
-        },
-        {
-          "symbol": "fn_801E1954",
-          "start": "0x801E1954",
-          "end": "0x801E195C"
-        },
-        {
-          "symbol": "fn_801E195C",
-          "start": "0x801E195C",
-          "end": "0x801E19B4"
-        },
-        {
-          "symbol": "fn_801E19B4",
-          "start": "0x801E19B4",
-          "end": "0x801E1A20"
-        }
-      ]
-    },
-    {
       "source": "src/engine/PJoyDrvr.c",
       "profile": "engine_c",
       "evidence": "E3 lane draft of PJoyDrvr.c over 0x801E1D44-0x801E274C (NASCAR 2005 symbol-table size/order match; see the PJoyDrvr.c name rows); evidence.tsv function rows and the compiler row for this range. Draft comparisons only; original assembly remains linked.",
@@ -38940,132 +37188,6 @@
       ]
     },
     {
-      "source": "src/engine/moviercmp.cpp",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D86B4-0x801D94A0 (src/engine/moviercmp.cpp), its function rows and the exact .rodata data row 0x802AFF40-0x802AFF68. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file moviercmp.cpp (C++ linkage for the RCMP allocator and streamer callbacks, C linkage for MovieRcmpInitVideo ... MovieRcmpInstallMADCOWCodec). MovieRcmpResetTime 0x801D8CD8, MovieRcmpGetTime 0x801D8DE8 and MovieRcmpIsDecodeTime 0x801D900C divide 64-bit tick counts through the libgcc helper __divdi3 (units.json external 0x8025E290). The allocator table 0x80399100 and codec hooks 0x803EBD44/0x803EBD48 stay extern (lbl_).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801D86B4",
-          "end": "0x801D94A0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AFF40",
-          "end": "0x802AFF68"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801D86B4__FPCciiii",
-          "start": "0x801D86B4",
-          "end": "0x801D86E0"
-        },
-        {
-          "symbol": "fn_801D86E0__FPv",
-          "start": "0x801D86E0",
-          "end": "0x801D8704"
-        },
-        {
-          "symbol": "fn_801D8704__FP14Audio_801D86B4",
-          "start": "0x801D8704",
-          "end": "0x801D8770"
-        },
-        {
-          "symbol": "fn_801D8770__FPv",
-          "start": "0x801D8770",
-          "end": "0x801D8778"
-        },
-        {
-          "symbol": "fn_801D8778__FP16Decoder_801D86B4PP13Info_801D86B4PP14Chunk_801D86B4",
-          "start": "0x801D8778",
-          "end": "0x801D89D4"
-        },
-        {
-          "symbol": "fn_801D89D4__FP16Decoder_801D86B4PP13Info_801D86B4P14Chunk_801D86B4",
-          "start": "0x801D89D4",
-          "end": "0x801D8A2C"
-        },
-        {
-          "symbol": "fn_801D8A2C",
-          "start": "0x801D8A2C",
-          "end": "0x801D8B54"
-        },
-        {
-          "symbol": "fn_801D8B54",
-          "start": "0x801D8B54",
-          "end": "0x801D8BC8"
-        },
-        {
-          "symbol": "fn_801D8BC8",
-          "start": "0x801D8BC8",
-          "end": "0x801D8C84"
-        },
-        {
-          "symbol": "fn_801D8C84",
-          "start": "0x801D8C84",
-          "end": "0x801D8CD8"
-        },
-        {
-          "symbol": "fn_801D8CD8",
-          "start": "0x801D8CD8",
-          "end": "0x801D8DE8"
-        },
-        {
-          "symbol": "fn_801D8DE8",
-          "start": "0x801D8DE8",
-          "end": "0x801D900C"
-        },
-        {
-          "symbol": "fn_801D900C",
-          "start": "0x801D900C",
-          "end": "0x801D9224"
-        },
-        {
-          "symbol": "fn_801D9224",
-          "start": "0x801D9224",
-          "end": "0x801D9230"
-        },
-        {
-          "symbol": "fn_801D9230",
-          "start": "0x801D9230",
-          "end": "0x801D923C"
-        },
-        {
-          "symbol": "fn_801D923C",
-          "start": "0x801D923C",
-          "end": "0x801D9290"
-        },
-        {
-          "symbol": "fn_801D9290",
-          "start": "0x801D9290",
-          "end": "0x801D92B8"
-        },
-        {
-          "symbol": "fn_801D92B8",
-          "start": "0x801D92B8",
-          "end": "0x801D9320"
-        },
-        {
-          "symbol": "fn_801D9320",
-          "start": "0x801D9320",
-          "end": "0x801D9360"
-        },
-        {
-          "symbol": "fn_801D9360",
-          "start": "0x801D9360",
-          "end": "0x801D9494"
-        },
-        {
-          "symbol": "fn_801D9494",
-          "start": "0x801D9494",
-          "end": "0x801D94A0"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801D9634.cpp",
       "profile": "engine_c",
       "evidence": "evidence.tsv compiler row 0x801D9634-0x801D9A88 (src/engine/cu_801D9634.cpp) and its function rows. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file rcmpbase.cpp (RCMP::DECODER, RCMP::CHUNK, RCMP::CODEC_IDATA, RCMP::RCMP_SYSTEM). The decoder methods are drafted as C functions taking the decoder explicitly and the two record constructors as C functions returning the object; the RCMP_SYSTEM and DECODER constructors/destructors and the static initialisers (0x801D9634, 0x801D9654, 0x801D96C8, 0x801D99A8-0x801D9A88) have no draft because they store the virtual table addresses 0x802AFF78/0x802AFF90.",
@@ -39150,7 +37272,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801D9A88__FP14Chunk_801D86B4",
+          "symbol": "fn_801D9A88__FP11RcmpChunk_t",
           "start": "0x801D9A88",
           "end": "0x801D9AA8"
         },
@@ -39160,7 +37282,7 @@
           "end": "0x801D9B5C"
         },
         {
-          "symbol": "fn_801D9DA4__17MadCodec_801D9A88P16Decoder_801D86B4P14Chunk_801D86B4",
+          "symbol": "fn_801D9DA4__17MadCodec_801D9A88P11RcmpDecoderP11RcmpChunk_t",
           "start": "0x801D9DA4",
           "end": "0x801D9DC0"
         },
@@ -39175,17 +37297,17 @@
           "end": "0x801D9DD0"
         },
         {
-          "symbol": "fn_801D9DD0__17MadCodec_801D9A88PP14Chunk_801D86B4",
+          "symbol": "fn_801D9DD0__17MadCodec_801D9A88PP11RcmpChunk_t",
           "start": "0x801D9DD0",
           "end": "0x801D9E14"
         },
         {
-          "symbol": "fn_801D9E14__17MadCodec_801D9A88P14Chunk_801D86B4",
+          "symbol": "fn_801D9E14__17MadCodec_801D9A88P11RcmpChunk_t",
           "start": "0x801D9E14",
           "end": "0x801D9E40"
         },
         {
-          "symbol": "fn_801D9E40__17MadCodec_801D9A88P14Chunk_801D86B4",
+          "symbol": "fn_801D9E40__17MadCodec_801D9A88P11RcmpChunk_t",
           "start": "0x801D9E40",
           "end": "0x801DA20C"
         },
@@ -39205,7 +37327,7 @@
           "end": "0x801DA418"
         },
         {
-          "symbol": "fn_801DA418__17MadCodec_801D9A88P14Frame_801D86B4",
+          "symbol": "fn_801DA418__17MadCodec_801D9A88P11RcmpFrame_t",
           "start": "0x801DA418",
           "end": "0x801DA46C"
         },
@@ -39219,65 +37341,44 @@
     {
       "source": "src/engine/maddec.cpp",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801DA52C-0x801DB058 (src/engine/maddec.cpp) and its function rows. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file maddec.cpp (C++ linkage: madinit__Fv, discardbits__Fi, getluma__FPCUciPii, MAD_initdecode__FPCUsii, MAD_decodemacroblock__FPCUcN20PUcN23i ...). The bit-reader words 0x803ECF1C-0x803ECF2C, the tables 0x80399110-0x8039A910 and the code tables 0x802B0060/0x802B0650/0x802B0E50/0x802F7BA0 stay extern (lbl_).",
+      "evidence": "evidence.tsv unit row 0x801DA52C-0x801DB058 (src/engine/maddec.cpp) and the source-form rows from 0x801DA52C. Documented holdout at the start of .text: the table initializer 0x801DA52C-0x801DA7E8 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes; the rest of the file and all of its data are linked through units.json.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801DA52C",
           "end": "0x801DB058"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B0060",
+          "end": "0x802B0F50"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7BA0",
+          "end": "0x802F7CA0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80399110",
+          "end": "0x8039AC10"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF1C",
+          "end": "0x803ECF30"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801DA52C__Fv",
+          "symbol": "madinit__Fv",
           "start": "0x801DA52C",
           "end": "0x801DA7E8"
-        },
-        {
-          "symbol": "fn_801DA7E8__Fi",
-          "start": "0x801DA7E8",
-          "end": "0x801DA840"
-        },
-        {
-          "symbol": "fn_801DA840__Fv",
-          "start": "0x801DA840",
-          "end": "0x801DA884"
-        },
-        {
-          "symbol": "fn_801DA884__FPii",
-          "start": "0x801DA884",
-          "end": "0x801DA8E0"
-        },
-        {
-          "symbol": "fn_801DA8E0__FPCUciPii",
-          "start": "0x801DA8E0",
-          "end": "0x801DA980"
-        },
-        {
-          "symbol": "fn_801DA980__FPCUciPii",
-          "start": "0x801DA980",
-          "end": "0x801DAA20"
-        },
-        {
-          "symbol": "fn_801DAA20__FPCiPUci",
-          "start": "0x801DAA20",
-          "end": "0x801DAB40"
-        },
-        {
-          "symbol": "fn_801DAB40__FPCiPUci",
-          "start": "0x801DAB40",
-          "end": "0x801DABE0"
-        },
-        {
-          "symbol": "fn_801DABE0__FPCUsii",
-          "start": "0x801DABE0",
-          "end": "0x801DAD20"
-        },
-        {
-          "symbol": "fn_801DAD20__FPCUcN20PUcN23i",
-          "start": "0x801DAD20",
-          "end": "0x801DB058"
         }
       ]
     },
@@ -40825,86 +38926,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C2EB4.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C2EB4-0x801C333C (src/engine/cu_801C2EB4.c, string.c), its compiler row and function rows; the character-class table 0x802AEF10 stays external. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C2EB4",
-          "end": "0x801C333C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801C2EB4",
-          "start": "0x801C2EB4",
-          "end": "0x801C2EF0"
-        },
-        {
-          "symbol": "fn_801C2EF0",
-          "start": "0x801C2EF0",
-          "end": "0x801C2F2C"
-        },
-        {
-          "symbol": "fn_801C2F2C",
-          "start": "0x801C2F2C",
-          "end": "0x801C2F88"
-        },
-        {
-          "symbol": "fn_801C2F88",
-          "start": "0x801C2F88",
-          "end": "0x801C2FE4"
-        },
-        {
-          "symbol": "fn_801C2FE4",
-          "start": "0x801C2FE4",
-          "end": "0x801C302C"
-        },
-        {
-          "symbol": "fn_801C302C",
-          "start": "0x801C302C",
-          "end": "0x801C3084"
-        },
-        {
-          "symbol": "fn_801C3084",
-          "start": "0x801C3084",
-          "end": "0x801C30C0"
-        },
-        {
-          "symbol": "fn_801C30C0",
-          "start": "0x801C30C0",
-          "end": "0x801C310C"
-        },
-        {
-          "symbol": "fn_801C310C",
-          "start": "0x801C310C",
-          "end": "0x801C3180"
-        },
-        {
-          "symbol": "fn_801C3180",
-          "start": "0x801C3180",
-          "end": "0x801C31B0"
-        },
-        {
-          "symbol": "fn_801C31B0",
-          "start": "0x801C31B0",
-          "end": "0x801C3214"
-        },
-        {
-          "symbol": "fn_801C3214",
-          "start": "0x801C3214",
-          "end": "0x801C3284"
-        },
-        {
-          "symbol": "fn_801C32CC",
-          "start": "0x801C32CC",
-          "end": "0x801C333C"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801C3EFC.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x801C3EFC-0x801C4960 (src/engine/cu_801C3EFC.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF0F0-0x802AF100. Draft comparisons only; the solver switches 0x803EBBD8/0x803EBBD9, the .sdata tuning floats 0x803EBBDC-0x803EBBE4, the axis vectors 0x802F489C/0x802F48A8 and the matrix, vector and quaternion helpers stay external; original assembly remains linked.",
@@ -40963,7 +38984,7 @@
     {
       "source": "src/engine/CurveList.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C5008-0x801C53A8 (src/engine/CurveList.c, CurveList.c), its compiler row and function rows, its type row and the exact data row for its .rodata 0x802AF100-0x802AF130. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C5008-0x801C53A8 (src/engine/CurveList.c, CurveList.c), its engine_c compiler row, function, name and source-form rows, its type/field rows and the exact data row for its .rodata 0x802AF100-0x802AF130. Draft comparisons only; original assembly remains linked. Under engine_c the two evaluators stay partial (owner question on engine_c_fastmath in the compiler row).",
       "sections": [
         {
           "section": ".text",
@@ -40980,27 +39001,27 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801C5008",
+          "symbol": "_CurveListEvaluateHermiteCurve",
           "start": "0x801C5008",
           "end": "0x801C5130"
         },
         {
-          "symbol": "fn_801C5130",
+          "symbol": "_CurveListEvaluateBezierCurve",
           "start": "0x801C5130",
           "end": "0x801C5278"
         },
         {
-          "symbol": "fn_801C5278",
+          "symbol": "CurveListEvaluate",
           "start": "0x801C5278",
           "end": "0x801C52CC"
         },
         {
-          "symbol": "fn_801C52CC",
+          "symbol": "CurveListCalculateHermite",
           "start": "0x801C52CC",
           "end": "0x801C52E0"
         },
         {
-          "symbol": "fn_801C52E0",
+          "symbol": "CurveListCalculateBezier",
           "start": "0x801C52E0",
           "end": "0x801C53A8"
         }
@@ -41183,619 +39204,6 @@
           "symbol": "fn_801C7EE4",
           "start": "0x801C7EE4",
           "end": "0x801C7F70"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/bintree.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C7F70-0x801C8F14 (src/engine/bintree.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF188-0x802AF198. Draft comparisons only; the list-type table 0x803D4FB8 and the static parent node 0x8037F880 stay external; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C7F70",
-          "end": "0x801C8F14"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF188",
-          "end": "0x802AF198"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801C7F70",
-          "start": "0x801C7F70",
-          "end": "0x801C8014"
-        },
-        {
-          "symbol": "fn_801C8014",
-          "start": "0x801C8014",
-          "end": "0x801C80B8"
-        },
-        {
-          "symbol": "fn_801C80B8",
-          "start": "0x801C80B8",
-          "end": "0x801C819C"
-        },
-        {
-          "symbol": "fn_801C819C",
-          "start": "0x801C819C",
-          "end": "0x801C81E0"
-        },
-        {
-          "symbol": "fn_801C81E0",
-          "start": "0x801C81E0",
-          "end": "0x801C8224"
-        },
-        {
-          "symbol": "fn_801C8224",
-          "start": "0x801C8224",
-          "end": "0x801C8298"
-        },
-        {
-          "symbol": "fn_801C8298",
-          "start": "0x801C8298",
-          "end": "0x801C82E0"
-        },
-        {
-          "symbol": "fn_801C82E0",
-          "start": "0x801C82E0",
-          "end": "0x801C831C"
-        },
-        {
-          "symbol": "fn_801C831C",
-          "start": "0x801C831C",
-          "end": "0x801C8340"
-        },
-        {
-          "symbol": "fn_801C8340",
-          "start": "0x801C8340",
-          "end": "0x801C83FC"
-        },
-        {
-          "symbol": "fn_801C83FC",
-          "start": "0x801C83FC",
-          "end": "0x801C84EC"
-        },
-        {
-          "symbol": "fn_801C84EC",
-          "start": "0x801C84EC",
-          "end": "0x801C850C"
-        },
-        {
-          "symbol": "fn_801C850C",
-          "start": "0x801C850C",
-          "end": "0x801C8650"
-        },
-        {
-          "symbol": "fn_801C8650",
-          "start": "0x801C8650",
-          "end": "0x801C8770"
-        },
-        {
-          "symbol": "fn_801C8770",
-          "start": "0x801C8770",
-          "end": "0x801C87C0"
-        },
-        {
-          "symbol": "fn_801C87C0",
-          "start": "0x801C87C0",
-          "end": "0x801C87DC"
-        },
-        {
-          "symbol": "fn_801C87DC",
-          "start": "0x801C87DC",
-          "end": "0x801C8834"
-        },
-        {
-          "symbol": "fn_801C8834",
-          "start": "0x801C8834",
-          "end": "0x801C89AC"
-        },
-        {
-          "symbol": "fn_801C89AC",
-          "start": "0x801C89AC",
-          "end": "0x801C89D4"
-        },
-        {
-          "symbol": "fn_801C89D4",
-          "start": "0x801C89D4",
-          "end": "0x801C8AB4"
-        },
-        {
-          "symbol": "fn_801C8AB4",
-          "start": "0x801C8AB4",
-          "end": "0x801C8C44"
-        },
-        {
-          "symbol": "fn_801C8C44",
-          "start": "0x801C8C44",
-          "end": "0x801C8C84"
-        },
-        {
-          "symbol": "fn_801C8C84",
-          "start": "0x801C8C84",
-          "end": "0x801C8D38"
-        },
-        {
-          "symbol": "fn_801C8D38",
-          "start": "0x801C8D38",
-          "end": "0x801C8E88"
-        },
-        {
-          "symbol": "fn_801C8E88",
-          "start": "0x801C8E88",
-          "end": "0x801C8F14"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801CBC50.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801CBC50-0x801CCA64 (src/engine/cu_801CBC50.cpp), its compiler, source-form and type rows, its function rows and the virtual-table data row 0x802AF388-0x802AF490. Draft comparisons only; original assembly remains linked. The .sdata/.sbss words 0x803EBC50/0x803EBC54 and the node table 0x803D4780 stay extern.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CBC50",
-          "end": "0x801CCA64"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF388",
-          "end": "0x802AF490"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__12FlowManagerC",
-          "start": "0x801CBC50",
-          "end": "0x801CBC9C"
-        },
-        {
-          "symbol": "_._12FlowManagerC",
-          "start": "0x801CBC9C",
-          "end": "0x801CBCD0"
-        },
-        {
-          "symbol": "fn_801CBCD0",
-          "start": "0x801CBCD0",
-          "end": "0x801CBD80"
-        },
-        {
-          "symbol": "fn_801CBD80__12FlowManagerCii",
-          "start": "0x801CBD80",
-          "end": "0x801CBE24"
-        },
-        {
-          "symbol": "fn_801CBE24__12FlowManagerCi",
-          "start": "0x801CBE24",
-          "end": "0x801CBE9C"
-        },
-        {
-          "symbol": "fn_801CBE9C__12FlowManagerCi",
-          "start": "0x801CBE9C",
-          "end": "0x801CBEC8"
-        },
-        {
-          "symbol": "fn_801CBEC8__12FlowManagerCi",
-          "start": "0x801CBEC8",
-          "end": "0x801CBEF4"
-        },
-        {
-          "symbol": "fn_801CBEF4__12FlowManagerCii",
-          "start": "0x801CBEF4",
-          "end": "0x801CBFA0"
-        },
-        {
-          "symbol": "fn_801CBFA0",
-          "start": "0x801CBFA0",
-          "end": "0x801CBFA8"
-        },
-        {
-          "symbol": "fn_801CBFA8",
-          "start": "0x801CBFA8",
-          "end": "0x801CC054"
-        },
-        {
-          "symbol": "fn_801CC054",
-          "start": "0x801CC054",
-          "end": "0x801CC05C"
-        },
-        {
-          "symbol": "fn_801CC05C__12FlowManagerCP16ModuleDependency",
-          "start": "0x801CC05C",
-          "end": "0x801CC0D0"
-        },
-        {
-          "symbol": "fn_801CC0D0__12FlowManagerCP16ModuleDependency",
-          "start": "0x801CC0D0",
-          "end": "0x801CC168"
-        },
-        {
-          "symbol": "fn_801CC168__12FlowManagerCP16ModuleDependency",
-          "start": "0x801CC168",
-          "end": "0x801CC1DC"
-        },
-        {
-          "symbol": "fn_801CC1DC__12FlowManagerCiii",
-          "start": "0x801CC1DC",
-          "end": "0x801CC280"
-        },
-        {
-          "symbol": "fn_801CC280__12FlowManagerCP10ModuleNode",
-          "start": "0x801CC280",
-          "end": "0x801CC2E8"
-        },
-        {
-          "symbol": "fn_801CC2E8__12FlowManagerCP10ModuleNode",
-          "start": "0x801CC2E8",
-          "end": "0x801CC350"
-        },
-        {
-          "symbol": "__10FlowGroupC",
-          "start": "0x801CC350",
-          "end": "0x801CC38C"
-        },
-        {
-          "symbol": "_._10FlowGroupC",
-          "start": "0x801CC38C",
-          "end": "0x801CC3C0"
-        },
-        {
-          "symbol": "fn_801CC3C0__10FlowGroupC",
-          "start": "0x801CC3C0",
-          "end": "0x801CC490"
-        },
-        {
-          "symbol": "fn_801CC490__10FlowGroupCi",
-          "start": "0x801CC490",
-          "end": "0x801CC4DC"
-        },
-        {
-          "symbol": "fn_801CC4DC__10FlowGroupC",
-          "start": "0x801CC4DC",
-          "end": "0x801CC4F4"
-        },
-        {
-          "symbol": "fn_801CC4F4",
-          "start": "0x801CC4F4",
-          "end": "0x801CC4FC"
-        },
-        {
-          "symbol": "fn_801CC4FC",
-          "start": "0x801CC4FC",
-          "end": "0x801CC518"
-        },
-        {
-          "symbol": "fn_801CC518__10FlowGroupC",
-          "start": "0x801CC518",
-          "end": "0x801CC524"
-        },
-        {
-          "symbol": "fn_801CC524__10FlowGroupCi",
-          "start": "0x801CC524",
-          "end": "0x801CC558"
-        },
-        {
-          "symbol": "fn_801CC558__10FlowGroupC",
-          "start": "0x801CC558",
-          "end": "0x801CC5B4"
-        },
-        {
-          "symbol": "fn_801CC5B4__10FlowGroupCi",
-          "start": "0x801CC5B4",
-          "end": "0x801CC604"
-        },
-        {
-          "symbol": "fn_801CC604__10FlowGroupCi",
-          "start": "0x801CC604",
-          "end": "0x801CC654"
-        },
-        {
-          "symbol": "fn_801CC654__10FlowGroupCi",
-          "start": "0x801CC654",
-          "end": "0x801CC6C4"
-        },
-        {
-          "symbol": "fn_801CC6C4__10FlowGroupC",
-          "start": "0x801CC6C4",
-          "end": "0x801CC6F8"
-        },
-        {
-          "symbol": "fn_801CC6F8__10FlowGroupC",
-          "start": "0x801CC6F8",
-          "end": "0x801CC6FC"
-        },
-        {
-          "symbol": "fn_801CC6FC__10FlowGroupCi",
-          "start": "0x801CC6FC",
-          "end": "0x801CC700"
-        },
-        {
-          "symbol": "__10ModuleNode",
-          "start": "0x801CC700",
-          "end": "0x801CC740"
-        },
-        {
-          "symbol": "_._10ModuleNode",
-          "start": "0x801CC740",
-          "end": "0x801CC7FC"
-        },
-        {
-          "symbol": "fn_801CC7FC",
-          "start": "0x801CC7FC",
-          "end": "0x801CC820"
-        },
-        {
-          "symbol": "fn_801CC820",
-          "start": "0x801CC820",
-          "end": "0x801CC8AC"
-        },
-        {
-          "symbol": "fn_801CC8AC",
-          "start": "0x801CC8AC",
-          "end": "0x801CC96C"
-        },
-        {
-          "symbol": "fn_801CC96C__10ModuleNode",
-          "start": "0x801CC96C",
-          "end": "0x801CC974"
-        },
-        {
-          "symbol": "fn_801CC974__10ModuleNode",
-          "start": "0x801CC974",
-          "end": "0x801CC9A8"
-        },
-        {
-          "symbol": "fn_801CC9A8__10ModuleNode",
-          "start": "0x801CC9A8",
-          "end": "0x801CC9DC"
-        },
-        {
-          "symbol": "fn_801CC9DC__Fi",
-          "start": "0x801CC9DC",
-          "end": "0x801CC9E4"
-        },
-        {
-          "symbol": "fn_801CC9E4__Fv",
-          "start": "0x801CC9E4",
-          "end": "0x801CC9E8"
-        },
-        {
-          "symbol": "fn_801CC9E8__Fv",
-          "start": "0x801CC9E8",
-          "end": "0x801CC9EC"
-        },
-        {
-          "symbol": "_._13ModuleCounter",
-          "start": "0x801CC9EC",
-          "end": "0x801CCA20"
-        },
-        {
-          "symbol": "fn_801CCA20__13ModuleCounterP10ModuleNode",
-          "start": "0x801CCA20",
-          "end": "0x801CCA64"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/fileio.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C8F14-0x801C9DD8 (src/engine/fileio.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF198-0x802AF19C. Draft comparisons only; the open-file table, mutex array, configuration block 0x803D51A8, request/async pools, the device table 0x802F4A50 and the llfileio/OS/DS helpers stay external; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C8F14",
-          "end": "0x801C9DD8"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF198",
-          "end": "0x802AF19C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801C8F14",
-          "start": "0x801C8F14",
-          "end": "0x801C8F2C"
-        },
-        {
-          "symbol": "fn_801C8F2C",
-          "start": "0x801C8F2C",
-          "end": "0x801C8F44"
-        },
-        {
-          "symbol": "fn_801C8F44",
-          "start": "0x801C8F44",
-          "end": "0x801C8F9C"
-        },
-        {
-          "symbol": "fn_801C8F9C",
-          "start": "0x801C8F9C",
-          "end": "0x801C8FE4"
-        },
-        {
-          "symbol": "fn_801C8FE4",
-          "start": "0x801C8FE4",
-          "end": "0x801C903C"
-        },
-        {
-          "symbol": "fn_801C903C",
-          "start": "0x801C903C",
-          "end": "0x801C9174"
-        },
-        {
-          "symbol": "fn_801C9174",
-          "start": "0x801C9174",
-          "end": "0x801C92B8"
-        },
-        {
-          "symbol": "fn_801C92B8",
-          "start": "0x801C92B8",
-          "end": "0x801C93D0"
-        },
-        {
-          "symbol": "fn_801C93D0",
-          "start": "0x801C93D0",
-          "end": "0x801C95C4"
-        },
-        {
-          "symbol": "fn_801C95C4",
-          "start": "0x801C95C4",
-          "end": "0x801C96E4"
-        },
-        {
-          "symbol": "fn_801C96E4",
-          "start": "0x801C96E4",
-          "end": "0x801C97F0"
-        },
-        {
-          "symbol": "fn_801C97F0",
-          "start": "0x801C97F0",
-          "end": "0x801C9844"
-        },
-        {
-          "symbol": "fn_801C9844",
-          "start": "0x801C9844",
-          "end": "0x801C9910"
-        },
-        {
-          "symbol": "fn_801C9910",
-          "start": "0x801C9910",
-          "end": "0x801C9960"
-        },
-        {
-          "symbol": "fn_801C9960",
-          "start": "0x801C9960",
-          "end": "0x801C9A3C"
-        },
-        {
-          "symbol": "fn_801C9A3C",
-          "start": "0x801C9A3C",
-          "end": "0x801C9B18"
-        },
-        {
-          "symbol": "fn_801C9B18",
-          "start": "0x801C9B18",
-          "end": "0x801C9B94"
-        },
-        {
-          "symbol": "fn_801C9B94",
-          "start": "0x801C9B94",
-          "end": "0x801C9C0C"
-        },
-        {
-          "symbol": "fn_801C9C0C",
-          "start": "0x801C9C0C",
-          "end": "0x801C9C88"
-        },
-        {
-          "symbol": "fn_801C9C88",
-          "start": "0x801C9C88",
-          "end": "0x801C9D18"
-        },
-        {
-          "symbol": "fn_801C9D18",
-          "start": "0x801C9D18",
-          "end": "0x801C9D2C"
-        },
-        {
-          "symbol": "fn_801C9D2C",
-          "start": "0x801C9D2C",
-          "end": "0x801C9D40"
-        },
-        {
-          "symbol": "fn_801C9D40",
-          "start": "0x801C9D40",
-          "end": "0x801C9D64"
-        },
-        {
-          "symbol": "fn_801C9D64",
-          "start": "0x801C9D64",
-          "end": "0x801C9D6C"
-        },
-        {
-          "symbol": "fn_801C9D6C",
-          "start": "0x801C9D6C",
-          "end": "0x801C9D78"
-        },
-        {
-          "symbol": "fn_801C9D78",
-          "start": "0x801C9D78",
-          "end": "0x801C9DA0"
-        },
-        {
-          "symbol": "fn_801C9DA0",
-          "start": "0x801C9DA0",
-          "end": "0x801C9DC8"
-        },
-        {
-          "symbol": "fn_801C9DC8",
-          "start": "0x801C9DC8",
-          "end": "0x801C9DD8"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/fs_cli.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CB1BC-0x801CB5D4 (src/engine/fs_cli.c), its compiler and type rows and exact function rows. Draft comparisons only; the client record 0x803D55E0, the read buffer 0x803D5600, the heap word 0x803EBC34, the thread 0x8037F8C0, its stack 0x8037FC00 and the semaphores 0x80381C00/0x80381C0C stay external; OS semaphore calls use their accepted SDK names, other callees their addresses; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CB1BC",
-          "end": "0x801CB5D4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801CB1BC",
-          "start": "0x801CB1BC",
-          "end": "0x801CB240"
-        },
-        {
-          "symbol": "fn_801CB240",
-          "start": "0x801CB240",
-          "end": "0x801CB270"
-        },
-        {
-          "symbol": "fn_801CB270",
-          "start": "0x801CB270",
-          "end": "0x801CB2E0"
-        },
-        {
-          "symbol": "fn_801CB2E0",
-          "start": "0x801CB2E0",
-          "end": "0x801CB3D0"
-        },
-        {
-          "symbol": "fn_801CB3D0",
-          "start": "0x801CB3D0",
-          "end": "0x801CB4A0"
-        },
-        {
-          "symbol": "fn_801CB4A0",
-          "start": "0x801CB4A0",
-          "end": "0x801CB4EC"
-        },
-        {
-          "symbol": "fn_801CB4EC",
-          "start": "0x801CB4EC",
-          "end": "0x801CB5A8"
-        },
-        {
-          "symbol": "fn_801CB5A8",
-          "start": "0x801CB5A8",
-          "end": "0x801CB5D4"
         }
       ]
     },
@@ -42647,7 +40055,7 @@
     {
       "source": "src/engine/t3db_table.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 12 drafted bodies, partial: 0x8020B564, 0x8020C764. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler row and the source-form rows from 0x8020B564. Documented holdout at the start of .text: _TDbTblFillColHeader 0x8020B564-0x8020B710 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (86.0%: register allocation and frame); the rest of the file is linked through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -42658,122 +40066,16 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8020B564",
+          "symbol": "_TDbTblFillColHeader",
           "start": "0x8020B564",
           "end": "0x8020B710"
-        },
-        {
-          "symbol": "fn_8020B710",
-          "start": "0x8020B710",
-          "end": "0x8020B878"
-        },
-        {
-          "symbol": "fn_8020B878",
-          "start": "0x8020B878",
-          "end": "0x8020B97C"
-        },
-        {
-          "symbol": "fn_8020B97C",
-          "start": "0x8020B97C",
-          "end": "0x8020BA48"
-        },
-        {
-          "symbol": "fn_8020BA48",
-          "start": "0x8020BA48",
-          "end": "0x8020BA7C"
-        },
-        {
-          "symbol": "fn_8020BA7C",
-          "start": "0x8020BA7C",
-          "end": "0x8020BD90"
-        },
-        {
-          "symbol": "fn_8020BD90",
-          "start": "0x8020BD90",
-          "end": "0x8020BFA4"
-        },
-        {
-          "symbol": "fn_8020BFA4",
-          "start": "0x8020BFA4",
-          "end": "0x8020C3E4"
-        },
-        {
-          "symbol": "fn_8020C3E4",
-          "start": "0x8020C3E4",
-          "end": "0x8020C5C8"
-        },
-        {
-          "symbol": "fn_8020C5C8",
-          "start": "0x8020C5C8",
-          "end": "0x8020C6C8"
-        },
-        {
-          "symbol": "fn_8020C6C8",
-          "start": "0x8020C6C8",
-          "end": "0x8020C764"
-        },
-        {
-          "symbol": "fn_8020C764",
-          "start": "0x8020C764",
-          "end": "0x8020CCBC"
         }
       ]
     },
     {
-      "source": "src/engine/tdbiomem.c",
+      "source": "src/engine/lltextur.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit ownership row for src/engine/tdbiomem.c, exact function/data extents, names, type/fields and compiler/source-form rows. Six complete callbacks and the complete 28-byte table are measured. Read/write holdouts omit one mr r5,r31 each (120/124 versus target 124/128 bytes); whole unit remains comparison-only with original bytes linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8020D388",
-          "end": "0x8020D534"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802F9B90",
-          "end": "0x802F9BAC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_TDbIOMemOpen",
-          "start": "0x8020D388",
-          "end": "0x8020D3C0"
-        },
-        {
-          "symbol": "_TDbIOMemClose",
-          "start": "0x8020D3C0",
-          "end": "0x8020D3F4"
-        },
-        {
-          "symbol": "_TDbIOMemWrite",
-          "start": "0x8020D3F4",
-          "end": "0x8020D470"
-        },
-        {
-          "symbol": "_TDbIOMemRead",
-          "start": "0x8020D470",
-          "end": "0x8020D4F0"
-        },
-        {
-          "symbol": "_TDbIOMemSeek",
-          "start": "0x8020D4F0",
-          "end": "0x8020D52C"
-        },
-        {
-          "symbol": "_TDbIOMemCalcExtraSize",
-          "start": "0x8020D52C",
-          "end": "0x8020D534"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_8020E7EC.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8020E7EC-0x8020EA18 (src/engine/cu_8020E7EC.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies, partial: 0x8020E7EC. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x8020E7EC-0x8020EA18 (src/engine/lltextur.c), its compiler row, the source-form rows and the exact function rows. Documented holdout at the start of .text: LLTexPadToPow2 0x8020E7EC-0x8020E9D0 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes; LLTexCopyFlush after it is linked through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -42784,14 +40086,9 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8020E7EC",
+          "symbol": "LLTexPadToPow2",
           "start": "0x8020E7EC",
           "end": "0x8020E9D0"
-        },
-        {
-          "symbol": "fn_8020E9D0",
-          "start": "0x8020E9D0",
-          "end": "0x8020EA18"
         }
       ]
     },
@@ -42842,103 +40139,6 @@
           "symbol": "fn_80211424",
           "start": "0x80211424",
           "end": "0x80211638"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/tmclip.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80213BCC-0x80214554 (src/engine/tmclip.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1C88-0x802B1C94. 9 drafted bodies. Comparison only; original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80213BCC",
-          "end": "0x80214554"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1C88",
-          "end": "0x802B1C94"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80213BCC",
-          "start": "0x80213BCC",
-          "end": "0x80213DB0"
-        },
-        {
-          "symbol": "fn_80214140",
-          "start": "0x80214140",
-          "end": "0x80214184"
-        },
-        {
-          "symbol": "fn_80214184",
-          "start": "0x80214184",
-          "end": "0x802141C4"
-        },
-        {
-          "symbol": "fn_802141C4",
-          "start": "0x802141C4",
-          "end": "0x80214238"
-        },
-        {
-          "symbol": "fn_80214238",
-          "start": "0x80214238",
-          "end": "0x802142B0"
-        },
-        {
-          "symbol": "fn_802142B0",
-          "start": "0x802142B0",
-          "end": "0x8021445C"
-        },
-        {
-          "symbol": "fn_8021445C",
-          "start": "0x8021445C",
-          "end": "0x802144AC"
-        },
-        {
-          "symbol": "fn_802144AC",
-          "start": "0x802144AC",
-          "end": "0x802144D8"
-        },
-        {
-          "symbol": "fn_802144D8",
-          "start": "0x802144D8",
-          "end": "0x80214554"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80213DB0.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80213BCC-0x80214554 (src/engine/tmclip.c; this source covers 0x80213DB0-0x80214140 as src/engine/cu_80213DB0.c), its compiler and source-form rows, the function rows of 0x80213DB0 and 0x80213F18 and the exact data row for .rodata 0x802B1C58-0x802B1C78. Split from src/engine/tmclip.c because the unaddressed constant block 0x802B1C78-0x802B1C88 separates these two pools from tmclip.c's tail pool. Comparison only; original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80213DB0",
-          "end": "0x80214140"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1C58",
-          "end": "0x802B1C78"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80213DB0",
-          "start": "0x80213DB0",
-          "end": "0x80213F18"
-        },
-        {
-          "symbol": "fn_80213F18",
-          "start": "0x80213F18",
-          "end": "0x80214140"
         }
       ]
     },
@@ -43036,7 +40236,7 @@
     {
       "source": "src/game/cu_8014FFC4.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #1021; complete coordinate helper at existing whole-function extent. Original source grouping unresolved; natural constants 6,20,40 map to target readonly 802A12BC\u2013802A12C8. Partial comparison only; original bytes remain linked.",
+      "evidence": "Issue #1021; complete coordinate helper at existing whole-function extent. Original source grouping unresolved; natural constants 6,20,40 map to target readonly 802A12BC–802A12C8. Partial comparison only; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -43129,7 +40329,7 @@
     {
       "source": "src/game/cu_800E55B8.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue1021 bounded fragment; full natural48byte native pool measured against earlier unclaimed contextDC34\u2013DCD8; natural mismatches retained. Original source boundaries unresolved; no linked promotion. fn_800E586C, fn_800E5C00 and fn_800E5EA4 (PR 1123) are added in address order; their literals 0x8029DC3C-0x8029DC70 follow the pool of fn_800E55B8 inside the same context.",
+      "evidence": "Issue1021 bounded fragment; full natural48byte native pool measured against earlier unclaimed contextDC34–DCD8; natural mismatches retained. Original source boundaries unresolved; no linked promotion. fn_800E586C, fn_800E5C00 and fn_800E5EA4 (PR 1123) are added in address order; their literals 0x8029DC3C-0x8029DC70 follow the pool of fn_800E55B8 inside the same context.",
       "sections": [
         {
           "section": ".text",
@@ -45944,58 +43144,32 @@
       ]
     },
     {
-      "source": "src/game/GameStats.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80055584-0x80056584 (src/game/GameStats.cpp) and the source-form row 0x80055584-0x80055B2C. Documented holdout: 0x80055584 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes; the rest of the file is linked through units.json",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80055584",
-          "end": "0x80056584"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8028E008",
-          "end": "0x8028E16C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "GameStatsGather",
-          "start": "0x80055584",
-          "end": "0x80055B2C"
-        }
-      ]
-    },
-    {
       "source": "src/game/InGameScreens.cpp",
       "profile": "game_cpp",
-      "evidence": "Complete 110 registered bodies: 78 prior, 31 additional ordinary stat/scoring/unlock functions through8005D540, and one evidence-supported naturally generated empty virtual destructor at8005D580-8005D5B4. Full2972-byte readonly surrounding context E16C-ED08 and44-byte initialized small-data context remain measured, preserving old prefixes. Original file edges, nominal record identity and ownership of unrecovered readonly items remain provisional; no promotion. D540 initializer and D5B4/D5E0 stubs stay unregistered and original-linked. The static initializer 0x8005D540 constructs lbl_80309F98 (Object_8008044C) and its .ctors/.dtors stubs 0x8005D5B4/0x8005D5E0 close the range.",
+      "evidence": "evidence.tsv unit row 0x80055584-0x8005D60C (src/game/InGameScreens.cpp, merged with the former src/game/GameStats.cpp), its function, name, data and source-form rows. Comparison-only: the file is rung 4, so the original assembly stays linked. The .rodata starts at 0x8028E008 with the GameStats query literal, which puts the file's 8-aligned double pool 0x8028E6D0 at its target offset. The static initializer 0x8005D540 and its .ctors/.dtors stubs 0x8005D5B4/0x8005D5E0 stay unregistered and original-linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80056584",
+          "start": "0x80055584",
           "end": "0x8005D60C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8028E16C",
+          "start": "0x8028E008",
           "end": "0x8028ED08"
         },
         {
           "section": ".data",
           "placement": ".data4",
-          "start": "0x802D4D0C",
+          "start": "0x802D4B14",
           "end": "0x802D4D40"
         },
         {
           "section": ".sdata",
           "placement": ".data5",
-          "start": "0x803EA58C",
+          "start": "0x803EA588",
           "end": "0x803EA5B8"
         },
         {
@@ -46003,6 +43177,12 @@
           "placement": ".bss",
           "start": "0x80309F98",
           "end": "0x80309FC4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC7EC",
+          "end": "0x803EC7F0"
         },
         {
           "section": ".ctors",
@@ -46018,6 +43198,41 @@
         }
       ],
       "functions": [
+        {
+          "symbol": "GameStatsGather",
+          "start": "0x80055584",
+          "end": "0x80055B2C"
+        },
+        {
+          "symbol": "GameStatsCheckRecords",
+          "start": "0x80055B2C",
+          "end": "0x80055E8C"
+        },
+        {
+          "symbol": "GameStatsGetRecords",
+          "start": "0x80055E8C",
+          "end": "0x80055F24"
+        },
+        {
+          "symbol": "GameStatsReadTag",
+          "start": "0x80055F24",
+          "end": "0x80055F4C"
+        },
+        {
+          "symbol": "GameStatsFill",
+          "start": "0x80055F4C",
+          "end": "0x80056444"
+        },
+        {
+          "symbol": "GameStatsMsg",
+          "start": "0x80056444",
+          "end": "0x80056560"
+        },
+        {
+          "symbol": "GameStatsUpdateRecords",
+          "start": "0x80056560",
+          "end": "0x80056584"
+        },
         {
           "symbol": "fn_80056584",
           "start": "0x80056584",
@@ -46574,12 +43789,12 @@
           "end": "0x8005D5B4"
         },
         {
-          "symbol": "_GLOBAL_.I.lbl_803EA58C",
+          "symbol": "_GLOBAL_.I.lbl_802D4B14",
           "start": "0x8005D5B4",
           "end": "0x8005D5E0"
         },
         {
-          "symbol": "_GLOBAL_.D.lbl_803EA58C",
+          "symbol": "_GLOBAL_.D.lbl_802D4B14",
           "start": "0x8005D5E0",
           "end": "0x8005D60C"
         }
@@ -47103,6 +44318,154 @@
           "symbol": "fn_800E2F20",
           "start": "0x800E2F20",
           "end": "0x800E2FE4"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/odemuexi2/DebuggerDriver.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit, compiler, source-form, function, name, type and data rows for src/dolphin/odemuexi2/DebuggerDriver.c; documented start holdout DBClose, DBOpen and DBWrite (0x8025D6C8-0x8025D930) and the .sdata byte SendCount that only DBWrite uses keep the original bytes; the rest of the file is linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025D6C8",
+          "end": "0x8025E148"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC320",
+          "end": "0x803EC321"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3F8",
+          "end": "0x803ED40D"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "DBClose",
+          "start": "0x8025D6C8",
+          "end": "0x8025D6CC"
+        },
+        {
+          "symbol": "DBOpen",
+          "start": "0x8025D6CC",
+          "end": "0x8025D6D0"
+        },
+        {
+          "symbol": "DBWrite",
+          "start": "0x8025D6D0",
+          "end": "0x8025D930"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/flowman.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801CBC50-0x801CC350 (src/engine/flowman.cpp), its compiler, source-form, type, function and name rows and the FlowManagerC virtual-table data row 0x802AF388-0x802AF3B8. Comparison only; 0x801CC168 differs, so the original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CBC50",
+          "end": "0x801CC350"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF388",
+          "end": "0x802AF3B8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__12FlowManagerC",
+          "start": "0x801CBC50",
+          "end": "0x801CBC9C"
+        },
+        {
+          "symbol": "_._12FlowManagerC",
+          "start": "0x801CBC9C",
+          "end": "0x801CBCD0"
+        },
+        {
+          "symbol": "Init__12FlowManagerC",
+          "start": "0x801CBCD0",
+          "end": "0x801CBD80"
+        },
+        {
+          "symbol": "StartGroup__12FlowManagerCii",
+          "start": "0x801CBD80",
+          "end": "0x801CBE24"
+        },
+        {
+          "symbol": "StopGroup__12FlowManagerCi",
+          "start": "0x801CBE24",
+          "end": "0x801CBE9C"
+        },
+        {
+          "symbol": "IsGroupStarted__12FlowManagerCi",
+          "start": "0x801CBE9C",
+          "end": "0x801CBEC8"
+        },
+        {
+          "symbol": "GetActiveStage__12FlowManagerCi",
+          "start": "0x801CBEC8",
+          "end": "0x801CBEF4"
+        },
+        {
+          "symbol": "QueueTransition__12FlowManagerCii",
+          "start": "0x801CBEF4",
+          "end": "0x801CBFA0"
+        },
+        {
+          "symbol": "GetNumQueuedTransitions__12FlowManagerC",
+          "start": "0x801CBFA0",
+          "end": "0x801CBFA8"
+        },
+        {
+          "symbol": "Process__12FlowManagerC",
+          "start": "0x801CBFA8",
+          "end": "0x801CC054"
+        },
+        {
+          "symbol": "SetVerboseFlags__12FlowManagerCi",
+          "start": "0x801CC054",
+          "end": "0x801CC05C"
+        },
+        {
+          "symbol": "PreStartModuleList__12FlowManagerCP16ModuleDependency",
+          "start": "0x801CC05C",
+          "end": "0x801CC0D0"
+        },
+        {
+          "symbol": "StartModuleList__12FlowManagerCP16ModuleDependency",
+          "start": "0x801CC0D0",
+          "end": "0x801CC168"
+        },
+        {
+          "symbol": "StopModuleList__12FlowManagerCP16ModuleDependency",
+          "start": "0x801CC168",
+          "end": "0x801CC1DC"
+        },
+        {
+          "symbol": "Transition__12FlowManagerCiii",
+          "start": "0x801CC1DC",
+          "end": "0x801CC280"
+        },
+        {
+          "symbol": "StartModule__12FlowManagerCP11FlowModuleC",
+          "start": "0x801CC280",
+          "end": "0x801CC2E8"
+        },
+        {
+          "symbol": "StopModule__12FlowManagerCP11FlowModuleC",
+          "start": "0x801CC2E8",
+          "end": "0x801CC350"
         }
       ]
     }

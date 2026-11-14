@@ -1,6 +1,6 @@
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_80181330.h"
+#include "game/EditMenu.h"
 #include "game/DepthChart.h"
 #include "game/StevTable.h"
 #include "game/fn_80061AD4.h"
@@ -37,8 +37,8 @@ struct Block_800619FC {
     int *mpGame;
     int *mpDit2;
     int *mpDit1;
-    Params_80005284 *mpName2;
-    Params_80005284 *mpName1;
+    MenuText_t *mpName2;
+    MenuText_t *mpName1;
     int *mpUnknown20;
     int *mpUnknown24;
     int *mpWinner;
@@ -59,7 +59,7 @@ void GameInfoSet(int index, int value);
 void fn_80084A8C(int a, int *pList, int b, int c);
 int FormationGetByIndex(int a, int b);
 int *FormationLineupFetchUser(int a, int b);
-int fn_80085C94(int a, int *pList);
+int FormationLineupFillTeam(int a, int *pList);
 int ExpLevelClose(void);
 int ExpLevelOpen(void);
 int TournamentSetPlayersTeam(int *pDigp, int count, int munt, int digt);
@@ -81,7 +81,7 @@ int MsgGameGetSetupState(void);
 void fn_80186F30(signed char a, int b);
 void fn_8018C48C(int tag);
 int StoryGetLkss(int a);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
+char *strncpy(char *pDest, const char *pSource, int count);
 int fn_8022C8F0(unsigned int low, unsigned int high);
 int fn_8022F358(int index);
 int fn_8022F384(int a);
@@ -135,11 +135,11 @@ void fn_80060948(int id, char *pName, int size)
         return;
     }
     if (fn_80084034(&lbl_8030A314, id, 0) == 0) {
-        fn_801C2EF0(pName, "NFL Draft Team", size);
+        strncpy(pName, "NFL Draft Team", size);
     } else {
         DbCursorGetString(&lbl_8030A314, 0x414E4454, (int)name, sizeof(name));
         name[17] = 0;
-        fn_801C2EF0(pName, name, size);
+        strncpy(pName, name, size);
     }
 }
 
@@ -472,7 +472,7 @@ void fn_80061274(int a, int *pList, int count, Object_8008044C *pObject)
                 }
             }
         }
-        fn_80085C94(a, pSlots);
+        FormationLineupFillTeam(a, pSlots);
     }
 }
 

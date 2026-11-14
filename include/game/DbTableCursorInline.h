@@ -8,4 +8,10 @@
    files that construct the object inline. */
 inline DbTableCursor::DbTableCursor() {}
 
+/* Constructs the cursor and opens it on a table in one step. */
+inline DbTableCursor::DbTableCursor(int a, int b, void *c, void *d, int e)
+{
+    OpenTable(a, b, c, d, e);
+}
+
 #endif

@@ -23,28 +23,29 @@ int fn_801B8C18(Handle_801B8C60 *out, Struct_803EB878 *desc)
 int fn_801B8C60(Handle_801B8C60 *out, Struct_803EB878 *desc)
 {
     int pass = 0;
-    for (;;) {
-        Link_801B8C18 *link = lbl_8037E820.mHead;
-        while (link) {
-            Bank_801B8C18 *bank = (Bank_801B8C18 *)((char *)link - offsetof(Bank_801B8C18, mLink));
-            Entry_801B8C60 *entries = bank->mEntriesA;
-            int count = bank->mCountA;
-            if (bank->mUnknown10 == (short)(desc->mHash >> 16) || pass) {
-                for (int i = 0; i < count; i++) {
-                    Entry_801B8C60 *entry = &entries[i];
-                    if ((short)desc->mHash == (short)(entry->mValue >> 16) &&
-                        strcmp(desc->mName, entry->mName) == 0) {
-                        out->mEntry = entry;
-                        out->mValue = entry->mValue;
-                        return 0;
-                    }
+// FAKEMATCH: goto instead of a loop, so the head address is reloaded on every pass as in the target
+retry:
+    Link_801B8C18 *link = lbl_8037E820.mHead;
+    while (link) {
+        Bank_801B8C18 *bank = (Bank_801B8C18 *)((char *)link - offsetof(Bank_801B8C18, mLink));
+        Entry_801B8C60 *entries = bank->mEntriesA;
+        int count = bank->mCountA;
+        if (bank->mUnknown10 == (short)(desc->mHash >> 16) || pass) {
+            for (int i = 0; i < count; i++) {
+                Entry_801B8C60 *entry = &entries[i];
+                if ((short)desc->mHash == (short)(entry->mValue >> 16) &&
+                    strcmp(desc->mName, entry->mName) == 0) {
+                    out->mEntry = entry;
+                    out->mValue = entry->mValue;
+                    return 0;
                 }
             }
-            link = bank->mLink.mNext;
         }
-        if (pass)
-            break;
+        link = bank->mLink.mNext;
+    }
+    if (!pass) {
         pass = 1;
+        goto retry;
     }
     return -5;
 }
@@ -55,12 +56,11 @@ int fn_801B8D4C(Handle_801B8C60 *handle)
         return handle->mValue;
     if (!handle->mEntry)
         return -6;
-    if (handle->mValue != handle->mEntry->mValue) {
-        handle->mValue = -3;
-        handle->mEntry = 0;
-        return -3;
-    }
-    return 0;
+    if (handle->mValue == handle->mEntry->mValue)
+        return 0;
+    handle->mValue = -3;
+    handle->mEntry = 0;
+    return -3;
 }
 
 }
@@ -83,28 +83,29 @@ int fn_801B8DA8(CsisClassHandle *out, Struct_803EB878 *desc)
 int fn_801B8DF0(CsisClassHandle *out, Struct_803EB878 *desc)
 {
     int pass = 0;
-    for (;;) {
-        Link_801B8C18 *link = lbl_8037E820.mHead;
-        while (link) {
-            Bank_801B8C18 *bank = (Bank_801B8C18 *)((char *)link - offsetof(Bank_801B8C18, mLink));
-            Entry_801B8DF0 *entries = bank->mEntriesB;
-            int count = bank->mCountB;
-            if (bank->mUnknown10 == (short)(desc->mHash >> 16) || pass) {
-                for (int i = 0; i < count; i++) {
-                    Entry_801B8DF0 *entry = &entries[i];
-                    if ((short)desc->mHash == (short)(entry->mValue >> 16) &&
-                        strcmp(desc->mName, entry->mName) == 0) {
-                        out->mEntry = entry;
-                        out->mValue = entry->mValue;
-                        return 0;
-                    }
+// FAKEMATCH: goto instead of a loop, so the head address is reloaded on every pass as in the target
+retry:
+    Link_801B8C18 *link = lbl_8037E820.mHead;
+    while (link) {
+        Bank_801B8C18 *bank = (Bank_801B8C18 *)((char *)link - offsetof(Bank_801B8C18, mLink));
+        Entry_801B8DF0 *entries = bank->mEntriesB;
+        int count = bank->mCountB;
+        if (bank->mUnknown10 == (short)(desc->mHash >> 16) || pass) {
+            for (int i = 0; i < count; i++) {
+                Entry_801B8DF0 *entry = &entries[i];
+                if ((short)desc->mHash == (short)(entry->mValue >> 16) &&
+                    strcmp(desc->mName, entry->mName) == 0) {
+                    out->mEntry = entry;
+                    out->mValue = entry->mValue;
+                    return 0;
                 }
             }
-            link = bank->mLink.mNext;
         }
-        if (pass)
-            break;
+        link = bank->mLink.mNext;
+    }
+    if (!pass) {
         pass = 1;
+        goto retry;
     }
     return -5;
 }
@@ -115,39 +116,39 @@ int fn_801B8EDC(CsisClassHandle *handle)
         return handle->mValue;
     if (!handle->mEntry)
         return -6;
-    if (handle->mValue != handle->mEntry->mValue) {
-        handle->mValue = -3;
-        handle->mEntry = 0;
-        return -3;
-    }
-    return 0;
+    if (handle->mValue == handle->mEntry->mValue)
+        return 0;
+    handle->mValue = -3;
+    handle->mEntry = 0;
+    return -3;
 }
 
 int fn_801B8F2C(Handle_801B8F2C *out, Struct_803EB878 *desc)
 {
     int pass = 0;
-    for (;;) {
-        Link_801B8C18 *link = lbl_8037E820.mHead;
-        while (link) {
-            Bank_801B8C18 *bank = (Bank_801B8C18 *)((char *)link - offsetof(Bank_801B8C18, mLink));
-            Entry_801B8F2C *entries = bank->mEntriesC;
-            int count = bank->mCountC;
-            if (bank->mUnknown10 == (short)(desc->mHash >> 16) || pass) {
-                for (int i = 0; i < count; i++) {
-                    Entry_801B8F2C *entry = &entries[i];
-                    if ((short)desc->mHash == (short)(entry->mValue >> 16) &&
-                        strcmp(desc->mName, entry->mName) == 0) {
-                        out->mEntry = entry;
-                        out->mValue = entry->mValue;
-                        return 0;
-                    }
+// FAKEMATCH: goto instead of a loop, so the head address is reloaded on every pass as in the target
+retry:
+    Link_801B8C18 *link = lbl_8037E820.mHead;
+    while (link) {
+        Bank_801B8C18 *bank = (Bank_801B8C18 *)((char *)link - offsetof(Bank_801B8C18, mLink));
+        Entry_801B8F2C *entries = bank->mEntriesC;
+        int count = bank->mCountC;
+        if (bank->mUnknown10 == (short)(desc->mHash >> 16) || pass) {
+            for (int i = 0; i < count; i++) {
+                Entry_801B8F2C *entry = &entries[i];
+                if ((short)desc->mHash == (short)(entry->mValue >> 16) &&
+                    strcmp(desc->mName, entry->mName) == 0) {
+                    out->mEntry = entry;
+                    out->mValue = entry->mValue;
+                    return 0;
                 }
             }
-            link = bank->mLink.mNext;
         }
-        if (pass)
-            break;
+        link = bank->mLink.mNext;
+    }
+    if (!pass) {
         pass = 1;
+        goto retry;
     }
     return -5;
 }
@@ -158,12 +159,11 @@ int fn_801B9018(Handle_801B8F2C *handle)
         return handle->mValue;
     if (!handle->mEntry)
         return -6;
-    if (handle->mValue != handle->mEntry->mValue) {
-        handle->mValue = -3;
-        handle->mEntry = 0;
-        return -3;
-    }
-    return 0;
+    if (handle->mValue == handle->mEntry->mValue)
+        return 0;
+    handle->mValue = -3;
+    handle->mEntry = 0;
+    return -3;
 }
 
 void fn_801B9068(Object_801B9068 *object, void *params)
@@ -234,20 +234,23 @@ int fn_801B91A0(Bank_801B8C18 *bank)
     bank->mEntriesC = (Entry_801B8F2C *)(bank->mEntriesB + bank->mCountB);
 
     for (i = 0; i < bank->mCountA; i++) {
-        bank->mEntriesA[i].mName = (const char *)bank + (int)bank->mEntriesA[i].mName;
-        if (++lbl_802F483C & 0x8000)
+        bank->mEntriesA[i].mName = (int)bank->mEntriesA[i].mName + (const char *)bank;
+        lbl_802F483C++;
+        if (lbl_802F483C & 0x8000)
             lbl_802F483C = 1;
         bank->mEntriesA[i].mParts.mId = lbl_802F483C;
     }
     for (i = 0; i < bank->mCountB; i++) {
-        bank->mEntriesB[i].mName = (const char *)bank + (int)bank->mEntriesB[i].mName;
-        if (++lbl_802F483C & 0x8000)
+        bank->mEntriesB[i].mName = (int)bank->mEntriesB[i].mName + (const char *)bank;
+        lbl_802F483C++;
+        if (lbl_802F483C & 0x8000)
             lbl_802F483C = 1;
         bank->mEntriesB[i].mParts.mId = lbl_802F483C;
     }
     for (i = 0; i < bank->mCountC; i++) {
-        bank->mEntriesC[i].mName = (const char *)bank + (int)bank->mEntriesC[i].mName;
-        if (++lbl_802F483C & 0x8000)
+        bank->mEntriesC[i].mName = (int)bank->mEntriesC[i].mName + (const char *)bank;
+        lbl_802F483C++;
+        if (lbl_802F483C & 0x8000)
             lbl_802F483C = 1;
         bank->mEntriesC[i].mParts.mId = lbl_802F483C;
     }

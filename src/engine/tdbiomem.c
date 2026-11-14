@@ -1,4 +1,5 @@
-/* Database I/O callbacks for reading and writing a caller-owned memory buffer. */
+/* Memory-buffer I/O device for the T3DB game database: open, close, read, write and seek callbacks
+   that let a database be loaded from, or written into, a caller-owned memory buffer. */
 #include <string.h>
 #include "engine/tdbiomem.h"
 
@@ -43,30 +44,32 @@ static int _TDbIOMemClose(void *pHandle)
 static int _TDbIOMemWrite(void *pHandle, void *pSrc, unsigned int size, unsigned int *pWritten)
 {
     TDbIOMemFile_t *pFile = pHandle;
-    if (pFile->mpData != 0) {
-        if (pFile->mSize >= pFile->mPos + size) {
-            memcpy(pFile->mpData + pFile->mPos, pSrc, size);
-            *pWritten = size;
-            pFile->mPos += size;
-            return 0;
-        }
+    if (pFile->mpData == 0) {
+        return 3;
     }
-    return 3;
+    if (pFile->mSize < pFile->mPos + size) {
+        return 3;
+    }
+    memcpy(pFile->mpData + pFile->mPos, pSrc, size);
+    *pWritten = size;
+    pFile->mPos += size;
+    return 0;
 }
 
 /* Copy bytes out of the buffer and advance the position on success. */
 static int _TDbIOMemRead(void *pHandle, void *pDst, unsigned int size, unsigned int *pRead)
 {
     TDbIOMemFile_t *pFile = pHandle;
-    if (pFile->mpData != 0) {
-        if (pFile->mSize >= pFile->mPos + size) {
-            memcpy(pDst, pFile->mpData + pFile->mPos, size);
-            *pRead = size;
-            pFile->mPos += size;
-            return 0;
-        }
+    if (pFile->mpData == 0) {
+        return 3;
     }
-    return 3;
+    if (pFile->mSize < pFile->mPos + size) {
+        return 3;
+    }
+    memcpy(pDst, pFile->mpData + pFile->mPos, size);
+    *pRead = size;
+    pFile->mPos += size;
+    return 0;
 }
 
 /* Move relative to the current position, rejecting a negative or past-end result. */

@@ -28,8 +28,7 @@ void PlyrModelLodBindSkeleton(ModelLod_802DF190 *pLod, AnimSkeleton_t *pSkeleton
 void fn_801A4690(int a);
 void fn_801A46BC(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-char *fn_801C3084(const char *pString, int c);
-int fn_801C9DC8(int value);
+int FileSetMemAllocFlags(int value);
 void fn_801CE910(void);
 int fn_801D3148(int a, void *p);
 void ResCopyAsyncToBuffer(void *pArchive, int id, int a, void *pDest, int b, void (*pCallback)(void), int c);
@@ -692,7 +691,7 @@ Object_80233EAC *fn_8015E440(int type, int index)
 void fn_8015E548(void)
 {
     int a = ResSetMemFlags(4);
-    int b = fn_801C9DC8(4);
+    int b = FileSetMemAllocFlags(4);
 
     lbl_803ECACC = ResOpenDevice(lbl_802EC028, 0x2C);
     lbl_803ECAD0 = ResOpenDevice(lbl_802EC044, 0x2C);
@@ -702,7 +701,7 @@ void fn_8015E548(void)
     lbl_803ECAE0 = ResOpenDevice(lbl_802EC070, 0x2C);
     lbl_803ECAE4 = ResOpenDevice(lbl_802EC08C, 0x2C);
     ResSetMemFlags(a);
-    fn_801C9DC8(b);
+    FileSetMemAllocFlags(b);
 }
 
 void fn_8015E620(unsigned int players, int mode)
@@ -1122,7 +1121,7 @@ int fn_8015F5BC(const char *pName)
     char *p;
     int id;
 
-    p = fn_801C3084(pName, ' ');
+    p = strchr(pName, ' ');
     if (p) {
         *p = 0;
     }
@@ -1159,7 +1158,7 @@ void fn_8015F6E8(const char *pName, int style, int shape, int hat, PlayerHeadIds
 
     fn_8015F638(style, shape, hat, &pIds->mUnknown0);
     if (pName) {
-        p = fn_801C3084(pName, ' ');
+        p = strchr(pName, ' ');
         if (p) {
             *p = 0;
         }

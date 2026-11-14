@@ -46,7 +46,7 @@ void fn_80061DDC(void);
 int fn_800841AC(DbCursor *pObject);
 int fn_800841D8(DbCursor *pObject);
 int fn_80084204(DbCursor *pObject);
-int fn_80183950(void);
+int EditMenuIsStoryTeam(void);
 void MemCardUISetScriptFlag(unsigned char value);
 unsigned char MemCardUIGetScriptFlag(void);
 unsigned char MemCardUIGetTeamFlag(void);
@@ -175,7 +175,7 @@ void StoryPlayerScreenExit(void)
     if (_StoryPlayerScreen_bActive) {
         PlayerSaveFree();
         FEPlyrHide();
-        if (fn_80183950() == 0) {
+        if (EditMenuIsStoryTeam() == 0) {
             fn_8018C48C(0x54415453);
         }
         MemCardUISetScriptFlag(_StoryPlayerScreen_bSavedFlag);

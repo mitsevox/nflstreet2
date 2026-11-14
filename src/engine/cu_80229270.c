@@ -146,8 +146,8 @@ void fn_8022CAEC(Node_8022CC6C **ppHead);
 extern int fn_8022A624(Object_8022A59C *p, struct QueryCursor cursor, int a, int b);
 extern int fn_802303B4(int key, unsigned short *pId);
 extern int fn_80230CC8(unsigned short id);
-extern int fn_80229084(void);
-extern int fn_8022908C(void);
+extern int DbLockAcquire(void);
+extern int DbLockRelease(void);
 
 extern char lbl_802B2138[];
 extern char lbl_802B2178[];
@@ -630,7 +630,7 @@ int fn_8022A558(int a, int b, int c, int d)
 
 int fn_8022A59C(int a, Object_8022A59C **ppOut)
 {
-    int err = fn_80229084();
+    int err = DbLockAcquire();
     Object_8022A59C *p = fn_8022C938(8, 0);
 
     p->mUnknown4 = a;
@@ -680,9 +680,9 @@ int fn_8022AC80(Object_8022A59C *p)
         err = fn_80230CC8(p->mUnknown0);
     }
     if (err == 0) {
-        err = fn_8022908C();
+        err = DbLockRelease();
     } else {
-        fn_8022908C();
+        DbLockRelease();
     }
     fn_8022C988(p);
     return err;

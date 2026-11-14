@@ -4,7 +4,7 @@
 
 extern "C" {
 int fn_801486A0(void);
-int fn_80183950(void);
+int EditMenuIsStoryTeam(void);
 void *fn_801C2030(void *dst, const void *src, unsigned int n);
 
 void fn_80148D20(AutoDepthPlayer_t *pRecord, int *pValues, DbCursor *)
@@ -63,7 +63,7 @@ void fn_80148DFC(AutoDepthPlayer_t *pRecords, int count, int *, int *pId, int *p
     }
     *pId = ids[0];
     *pCategory = categories[0];
-    if (!fn_80183950() && *pCategory) {
+    if (!EditMenuIsStoryTeam() && *pCategory) {
         switch (fn_801486A0()) {
         case 0:
         case 1:

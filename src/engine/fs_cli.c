@@ -1,13 +1,16 @@
-/* Disc file client: up to N open files, one asynchronous read in flight at a time. */
+/* Disc file client used by the game's file system: opens files on the game disc by path, keeps a
+   table of open files, and runs one asynchronous disc read at a time through a 32 KB aligned buffer,
+   which a helper thread copies to the caller's destination before signalling the next request. */
 
 #include <dolphin/os/OSCache.h>
 #include <dolphin/os/OSSemaphore.h>
 #include <dolphin/os/OSThread.h>
 #include <dolphin/dvd.h>
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "engine/ctype.h"
 
-typedef struct FsClient_801CB1BC {
+typedef struct CdInfo_t {
     int mNumFiles;
     void (*mpReadDone)(int);
     DVDFileInfo *mpFiles;
@@ -15,72 +18,72 @@ typedef struct FsClient_801CB1BC {
     void *mpReadDst;
     int mReadOffset;
     int mReadSize;
-} FsClient_801CB1BC;
+} CdInfo_t;
 
-extern FsClient_801CB1BC lbl_803D55E0;
-extern unsigned char lbl_803D5600[];
-extern int lbl_803EBC34;
-extern OSThread lbl_8037F8C0;
-extern unsigned char lbl_8037FC00[0x2000];
-extern OSSemaphore lbl_80381C00;
-extern OSSemaphore lbl_80381C0C;
+CdInfo_t Cdinfo;
+unsigned char _CDVDAlignedBuffer[0x8000];
+extern int File_uMemFlags;
+
+static OSThread _CdReadCompleteThread;
+static unsigned char CdReadCompleteThreadStack[0x2000] __attribute__((aligned(64)));
+static OSSemaphore _File_SubmitReadRequest;
+static OSSemaphore _File_ReadSemaphore;
 
 int MemFill(void *pDest, int size, int value, int width);
-void *fn_801C1FBC();
 
-static DVDFileInfo *fn_801CB1BC(void)
+static DVDFileInfo *_fsFindOpenFile(void)
 {
     int i;
 
-    for (i = 0; i < lbl_803D55E0.mNumFiles && lbl_803D55E0.mpFiles[i].length != 0; i++) {
+    for (i = 0; i < Cdinfo.mNumFiles && Cdinfo.mpFiles[i].length != 0; i++) {
     }
-    if (i < lbl_803D55E0.mNumFiles) {
-        return &lbl_803D55E0.mpFiles[i];
+    if (i < Cdinfo.mNumFiles) {
+        return &Cdinfo.mpFiles[i];
     }
     return 0;
 }
 
-static void fn_801CB240(s32 result, DVDFileInfo *pFileInfo)
+static void _fsReadEndFunc(s32 result, DVDFileInfo *pFileInfo)
 {
     if (result >= 0) {
-        OSSignalSemaphore(&lbl_80381C0C);
+        OSSignalSemaphore(&_File_ReadSemaphore);
     }
 }
 
-static void *fn_801CB270(void *pParam)
+static void *_CdReadCompleteThreadFunc(void *pParam)
 {
     for (;;) {
-        OSWaitSemaphore(&lbl_80381C0C);
-        fn_801C1FBC(lbl_803D55E0.mpReadDst, lbl_803D5600, lbl_803D55E0.mReadSize);
-        DCFlushRange(lbl_803D55E0.mpReadDst, lbl_803D55E0.mReadSize);
-        OSSignalSemaphore(&lbl_80381C00);
-        if (lbl_803D55E0.mpReadDone) {
-            lbl_803D55E0.mpReadDone(1);
+        OSWaitSemaphore(&_File_ReadSemaphore);
+        memcpy(Cdinfo.mpReadDst, _CDVDAlignedBuffer, Cdinfo.mReadSize);
+        DCFlushRange(Cdinfo.mpReadDst, Cdinfo.mReadSize);
+        OSSignalSemaphore(&_File_SubmitReadRequest);
+        if (Cdinfo.mpReadDone) {
+            Cdinfo.mpReadDone(1);
         }
     }
 }
 
-int fn_801CB2E0(int unused, int numFiles, int unused2, void (*pReadDone)(int))
+int CDVD_init(int unused, int numFiles, int unused2, void (*pReadDone)(int))
 {
     int size = numFiles * sizeof(DVDFileInfo);
     DVDFileInfo *pFiles;
 
-    pFiles = fn_801D2BB0(1, size, lbl_803EBC34, 0);
-    MemFill(&lbl_803D55E0, sizeof(FsClient_801CB1BC), 0, 4);
-    lbl_803D55E0.mpFiles = pFiles;
+    pFiles = fn_801D2BB0(1, size, File_uMemFlags, 0);
+    MemFill(&Cdinfo, sizeof(CdInfo_t), 0, 4);
+    Cdinfo.mpFiles = pFiles;
     MemFill(pFiles, size, 0, 4);
-    lbl_803D55E0.mNumFiles = numFiles;
-    OSInitSemaphore(&lbl_80381C0C, 10);
-    OSInitSemaphore(&lbl_80381C00, 10);
-    if (OSCreateThread(&lbl_8037F8C0, fn_801CB270, 0, lbl_8037FC00 + sizeof(lbl_8037FC00), 0x2000, 12, 1)) {
-        OSResumeThread(&lbl_8037F8C0);
+    Cdinfo.mNumFiles = numFiles;
+    OSInitSemaphore(&_File_ReadSemaphore, 10);
+    OSInitSemaphore(&_File_SubmitReadRequest, 10);
+    if ((unsigned char)OSCreateThread(&_CdReadCompleteThread, _CdReadCompleteThreadFunc, 0, CdReadCompleteThreadStack + sizeof(CdReadCompleteThreadStack), 0x2000, 12, 1)) {
+        OSResumeThread(&_CdReadCompleteThread);
     }
-    lbl_803D55E0.mpReadDone = pReadDone;
-    OSSignalSemaphore(&lbl_80381C00);
-    return lbl_803D55E0.mNumFiles;
+    Cdinfo.mpReadDone = pReadDone;
+    OSSignalSemaphore(&_File_SubmitReadRequest);
+    return Cdinfo.mNumFiles;
 }
 
-int fn_801CB3D0(const char *pName, int unused, int *pHandle)
+int CDVD_open(const char *pName, int unused, int *pHandle)
 {
     char path[64];
     char *pOut = path;
@@ -98,9 +101,9 @@ int fn_801CB3D0(const char *pName, int unused, int *pHandle)
         }
     }
     *pOut = 0;
-    pFileInfo = fn_801CB1BC();
+    pFileInfo = _fsFindOpenFile();
     if (pFileInfo) {
-        *pHandle = pFileInfo - lbl_803D55E0.mpFiles + 1;
+        *pHandle = pFileInfo - Cdinfo.mpFiles + 1;
         DVDOpen(path, pFileInfo);
         result = 1;
     } else {
@@ -110,34 +113,34 @@ int fn_801CB3D0(const char *pName, int unused, int *pHandle)
     return result;
 }
 
-int fn_801CB4A0(int handle)
+int CDVD_close(int handle)
 {
-    DVDFileInfo *pFileInfo = &lbl_803D55E0.mpFiles[handle - 1];
+    DVDFileInfo *pFileInfo = &Cdinfo.mpFiles[handle - 1];
 
     DVDClose(pFileInfo);
     pFileInfo->length = 0;
     return 0;
 }
 
-int fn_801CB4EC(int handle, void *pDst, int offset, int size)
+int CDVD_read(int handle, void *pDst, int offset, int size)
 {
-    DVDFileInfo *pFileInfo = &lbl_803D55E0.mpFiles[handle - 1];
+    DVDFileInfo *pFileInfo = &Cdinfo.mpFiles[handle - 1];
 
     if (size > (int)(pFileInfo->length - offset) || size <= 0 || offset < 0) {
         size = pFileInfo->length - offset;
     }
-    OSWaitSemaphore(&lbl_80381C00);
-    lbl_803D55E0.mpReadDst = pDst;
-    lbl_803D55E0.mpReadFile = pFileInfo;
-    lbl_803D55E0.mReadOffset = offset;
-    lbl_803D55E0.mReadSize = size;
-    DVDReadAsyncPrio(pFileInfo, lbl_803D5600, (size + 0x1F) & ~0x1F, offset, fn_801CB240, 2);
+    OSWaitSemaphore(&_File_SubmitReadRequest);
+    Cdinfo.mpReadFile = pFileInfo;
+    Cdinfo.mReadOffset = offset;
+    Cdinfo.mReadSize = size;
+    Cdinfo.mpReadDst = pDst;
+    DVDReadAsyncPrio(pFileInfo, _CDVDAlignedBuffer, (size + 0x1F) & ~0x1F, offset, _fsReadEndFunc, 2);
     return size;
 }
 
-unsigned int fn_801CB5A8(int handle, int unused, unsigned int *pSize)
+unsigned int CDVD_getattrfromhandle(int handle, int unused, unsigned int *pSize)
 {
-    DVDFileInfo *pFileInfo = &lbl_803D55E0.mpFiles[handle - 1];
+    DVDFileInfo *pFileInfo = &Cdinfo.mpFiles[handle - 1];
 
     if (pSize) {
         *pSize = pFileInfo->length;

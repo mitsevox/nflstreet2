@@ -1,7 +1,7 @@
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
 #include "game/Ball.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 #include "game/fn_802372EC.h"
 
 struct Record_8014F104 {
@@ -245,7 +245,7 @@ void RefreshSixPlayerScoreRows(void *p)
     for (unsigned char i = 0; i <= 5; i++) {
         char name[24];
         char score[16];
-        fn_801C2EB4(name, PlyrFindById(fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown0)->mUnknown2927 + 21);
+        strcpy(name, PlyrFindById(fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown0)->mUnknown2927 + 21);
         fn_801C2E18(score, lbl_802A0DDC, fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown4);
         if (fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown8 != 255) {
             fn_8014F104(fn_80148A58());

@@ -25,39 +25,39 @@ typedef struct FileFontPos_t {
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 #include "engine/llglib.h"
 #include "engine/llmatrix.h"
 #include "engine/viewport.h"
 
-extern FileEntry_801C8F14 *lbl_803EBC24;
-extern Lock_801F8014 *lbl_803EBC28;
-extern int lbl_803EBC34;
-extern FileAsync_801C8F14 *lbl_803EBC3C;
+extern FileStreamInfo_t *File_StreamInfo;
+extern Lock_801F8014 *File_HandleInUseCS;
+extern int File_uMemFlags;
+extern FileAsyncRequest_t *lbl_803EBC3C;
 extern unsigned char lbl_803EBC40;
 extern unsigned char lbl_803EBC41;
 extern unsigned char lbl_803EBC42;
 extern const char *lbl_803EBC44;
-extern void *lbl_803ED62C;
+extern void *File_pAsyncRequestList;
 extern int lbl_803ECEE8;
 extern int lbl_803ECEF4;
 extern Font_801CCA64 *lbl_803ECEF8;
-extern Lock_801F8014 lbl_803D5188;
-extern FileConfig_801C8F14 lbl_803D51A8;
-extern Lock_801F8014 lbl_803D55C0;
+extern Lock_801F8014 File_AsyncRequestListCS;
+extern FileInitParms_t File_InitParms;
+extern Lock_801F8014 File_AsyncThreadActiveCS;
 extern FontColor_801CCA64 lbl_802F4A74;
 extern unsigned char lbl_802F4AC0[];
 
 void fn_801F8768(void);
 int fn_801F7ABC(void);
 void fn_801F7AD4(int level);
-void fn_801C92B8(char *pDst, const char *pPath, const char *pName, int flags);
-FileDevTable_801C8F14 *fn_801C9D64(void);
-int fn_801CB2E0(int unused, int numFiles, int unused2, void (*pReadDone)(int));
-int fn_801CB3D0(const char *pName, int unused, int *pHandle);
-int fn_801CB4A0(int handle);
-int fn_801CB4EC(int handle, void *pDst, int offset, int size);
-unsigned int fn_801CB5A8(int handle, int unused, unsigned int *pSize);
+void FileCreateAbsoluteFileName(char *pDst, const char *pPath, const char *pName, int flags);
+FilevDeviceList_t *FileGetDeviceList(void);
+int CDVD_init(int unused, int numFiles, int unused2, void (*pReadDone)(int));
+int CDVD_open(const char *pName, int unused, int *pHandle);
+int CDVD_close(int handle);
+int CDVD_read(int handle, void *pDst, int offset, int size);
+unsigned int CDVD_getattrfromhandle(int handle, int unused, unsigned int *pSize);
 void fn_801CB61C(void);
 void fn_801CB648(void);
 int fn_801CB64C(int device);
@@ -111,10 +111,10 @@ static int _FileOpenStream(int device, const char *pName, int mode)
         }
         break;
     case 1:
-        if (fn_801CB3D0(pName, 0, &handle) == 0) {
+        if (CDVD_open(pName, 0, &handle) == 0) {
             error = 0xA0003;
         } else {
-            fn_801CB5A8(handle, 0, &size);
+            CDVD_getattrfromhandle(handle, 0, &size);
         }
         break;
     case 2:
@@ -133,21 +133,22 @@ static int _FileOpenStream(int device, const char *pName, int mode)
     }
     if (error == 0) {
         found = 0;
-        for (i = 0; error == 0 && i < lbl_803D51A8.mNumFiles && !found; i++) {
-            if (!lbl_803EBC24[i].mInUse) {
-                if (!(pCopy = fn_801D2BB0(1, fn_801C3180(pName) + 1, lbl_803EBC34, 0))) {
+        for (i = 0; error == 0 && i < File_InitParms.mNumFiles && !found; i++) {
+            if (!File_StreamInfo[i].mInUse) {
+                if (!(pCopy = fn_801D2BB0(1, strlen(pName) + 1, File_uMemFlags, 0))) {
                     error = fn_801F7C88();
                 } else {
-                    fn_801C2EB4(pCopy, pName);
-                    lbl_803EBC24[i].mInUse = 1;
-                    lbl_803EBC24[i].mDevHandle = handle;
-                    lbl_803EBC24[i].mAsyncPos = 0;
-                    lbl_803EBC24[i].mPos = 0;
-                    lbl_803EBC24[i].mpName = pCopy;
+                    strcpy(pCopy, pName);
+                    // FAKEMATCH: field order found by compiling all 120 orders of the first five stores
+                    File_StreamInfo[i].mInUse = 1;
+                    File_StreamInfo[i].mDevHandle = handle;
+                    File_StreamInfo[i].mAsyncPos = 0;
+                    File_StreamInfo[i].mPos = 0;
+                    File_StreamInfo[i].mpName = pCopy;
                     found = 1;
-                    lbl_803EBC24[i].mMode = mode;
-                    lbl_803EBC24[i].mLength = size;
-                    lbl_803EBC24[i].mDevType = device;
+                    File_StreamInfo[i].mMode = mode;
+                    File_StreamInfo[i].mLength = size;
+                    File_StreamInfo[i].mDevType = device;
                 }
             }
         }
@@ -163,7 +164,7 @@ static int _FileOpenStream(int device, const char *pName, int mode)
     return i;
 }
 
-static int _FileStartAsyncRequest(FileAsync_801C8F14 *pAsync)
+static int _FileStartAsyncRequest(FileAsyncRequest_t *pAsync)
 {
     int result = 0;
     int error = 0;
@@ -172,13 +173,13 @@ static int _FileStartAsyncRequest(FileAsync_801C8F14 *pAsync)
     switch (pAsync->mType) {
     case 1:
         busy = 1;
-        if (lbl_803EBC24[pAsync->mHandle].mDevType == 1 || lbl_803EBC24[pAsync->mHandle].mDevType == 4) {
+        if (File_StreamInfo[pAsync->mHandle].mDevType == 1 || File_StreamInfo[pAsync->mHandle].mDevType == 4) {
             busy = 0;
         }
         if (!busy) {
-            lbl_803EBC24[pAsync->mHandle].mAsyncPos = pAsync->mPos;
-            if (pAsync->mSize > lbl_803EBC24[pAsync->mHandle].mLength - pAsync->mPos) {
-                pAsync->mSize = lbl_803EBC24[pAsync->mHandle].mLength - pAsync->mPos;
+            File_StreamInfo[pAsync->mHandle].mAsyncPos = pAsync->mPos;
+            if (pAsync->mSize > File_StreamInfo[pAsync->mHandle].mLength - pAsync->mPos) {
+                pAsync->mSize = File_StreamInfo[pAsync->mHandle].mLength - pAsync->mPos;
             }
             lbl_803EBC3C = pAsync;
             pAsync->mState = 1;
@@ -191,7 +192,7 @@ static int _FileStartAsyncRequest(FileAsync_801C8F14 *pAsync)
         }
         break;
     case 2:
-        lbl_803EBC24[pAsync->mHandle].mAsyncPos = pAsync->mPos;
+        File_StreamInfo[pAsync->mHandle].mAsyncPos = pAsync->mPos;
         if ((result = FilePerformWrite(pAsync->mHandle, pAsync->mPos, pAsync->mpBuffer, pAsync->mSize)) >= 0) {
             pAsync->mState = 1;
         } else if (!(error = fn_801F7C88())) {
@@ -206,11 +207,11 @@ static int _FileStartAsyncRequest(FileAsync_801C8F14 *pAsync)
 static int _FileStartIO(int devType)
 {
     int found = 0;
-    FileAsync_801C8F14 *pAsync;
+    FileAsyncRequest_t *pAsync;
 
-    fn_801F8014(&lbl_803D5188);
-    for (pAsync = fn_801C6B4C(lbl_803ED62C, 0); pAsync; pAsync = fn_801C6C84(lbl_803ED62C, pAsync)) {
-        if (lbl_803EBC24[pAsync->mHandle].mDevType == devType && pAsync->mState == 0) {
+    fn_801F8014(&File_AsyncRequestListCS);
+    for (pAsync = fn_801C6B4C(File_pAsyncRequestList, 0); pAsync; pAsync = fn_801C6C84(File_pAsyncRequestList, pAsync)) {
+        if (File_StreamInfo[pAsync->mHandle].mDevType == devType && pAsync->mState == 0) {
             found = 1;
             break;
         }
@@ -218,29 +219,29 @@ static int _FileStartIO(int devType)
     if (found) {
         _FileStartAsyncRequest(pAsync);
     }
-    fn_801F809C(&lbl_803D5188);
+    fn_801F809C(&File_AsyncRequestListCS);
     return found;
 }
 
-void _FileProcessRequestFinish(FileAsync_801C8F14 *pAsync)
+void _FileProcessRequestFinish(FileAsyncRequest_t *pAsync)
 {
     int done = 1;
-    int devType = lbl_803EBC24[pAsync->mHandle].mDevType;
+    int devType = File_StreamInfo[pAsync->mHandle].mDevType;
     int busy;
 
     if (pAsync->mpStep) {
         done = pAsync->mpStep(pAsync->mSize, 0, pAsync->mpReq);
     }
-    fn_801F8014(&lbl_803D5188);
+    fn_801F8014(&File_AsyncRequestListCS);
     if (done) {
         pAsync->mState = 2;
         pAsync->mpReq->mpAsync = 0;
-        fn_801C6C0C(lbl_803ED62C, pAsync);
+        fn_801C6C0C(File_pAsyncRequestList, pAsync);
     } else {
         pAsync->mState = done;
     }
     busy = 0;
-    for (pAsync = fn_801C6B4C(lbl_803ED62C, 0); pAsync; pAsync = fn_801C6C84(lbl_803ED62C, pAsync)) {
+    for (pAsync = fn_801C6B4C(File_pAsyncRequestList, 0); pAsync; pAsync = fn_801C6C84(File_pAsyncRequestList, pAsync)) {
         if (pAsync->mState == 1) {
             busy = 1;
         }
@@ -248,15 +249,15 @@ void _FileProcessRequestFinish(FileAsync_801C8F14 *pAsync)
     if (!busy) {
         _FileStartIO(devType);
     }
-    fn_801F809C(&lbl_803D5188);
+    fn_801F809C(&File_AsyncRequestListCS);
 }
 
 static void _FileCDVDCallback(int result)
 {
-    fn_801F8014(&lbl_803D5188);
+    fn_801F8014(&File_AsyncRequestListCS);
     lbl_803EBC40 = 1;
     _FileProcessRequestFinish(lbl_803EBC3C);
-    fn_801F809C(&lbl_803D5188);
+    fn_801F809C(&File_AsyncRequestListCS);
 }
 
 int FileOpenhDevice(const char *pName, int device, const char *pPrefix)
@@ -269,7 +270,7 @@ int FileOpenhDevice(const char *pName, int device, const char *pPrefix)
     case 4: {
         char path[128] = "";
 
-        fn_801C92B8(path, pPrefix, pName, device);
+        FileCreateAbsoluteFileName(path, pPrefix, pName, device);
         handle = _FileOpenStream(device, path, 0);
         if (handle < 0) {
             error = fn_801F7C88();
@@ -302,14 +303,14 @@ int FileCloseStream(int handle)
 {
     int error = 0;
 
-    fn_801D2BD0(lbl_803EBC24[handle].mpName);
-    lbl_803EBC24[handle].mInUse = 0;
-    switch (lbl_803EBC24[handle].mDevType) {
+    fn_801D2BD0(File_StreamInfo[handle].mpName);
+    File_StreamInfo[handle].mInUse = 0;
+    switch (File_StreamInfo[handle].mDevType) {
     case 4:
-        FileHostClose(lbl_803EBC24[handle].mDevHandle);
+        FileHostClose(File_StreamInfo[handle].mDevHandle);
         break;
     case 1:
-        fn_801CB4A0(lbl_803EBC24[handle].mDevHandle);
+        CDVD_close(File_StreamInfo[handle].mDevHandle);
         break;
     case 2:
         fn_801CB8C8(handle);
@@ -334,17 +335,17 @@ int FilePerformRead(int handle, int pos, void *pBuffer, int size)
     int result = 0;
     int error = 0;
 
-    switch (lbl_803EBC24[handle].mDevType) {
+    switch (File_StreamInfo[handle].mDevType) {
     case 1:
         lbl_803EBC40 = 0;
-        result = fn_801CB4EC(lbl_803EBC24[handle].mDevHandle, pBuffer, pos, size);
+        result = CDVD_read(File_StreamInfo[handle].mDevHandle, pBuffer, pos, size);
         if (result != size) {
             error = 0xA0007;
         }
         break;
     case 4:
-        FileHostLSeek(lbl_803EBC24[handle].mDevHandle, pos, 0);
-        if ((result = FileHostRead(lbl_803EBC24[handle].mDevHandle, pBuffer, size)) < 0) {
+        FileHostLSeek(File_StreamInfo[handle].mDevHandle, pos, 0);
+        if ((result = FileHostRead(File_StreamInfo[handle].mDevHandle, pBuffer, size)) < 0) {
             error = 0xA0007;
         } else {
             result = size;
@@ -352,8 +353,8 @@ int FilePerformRead(int handle, int pos, void *pBuffer, int size)
         break;
     case 2:
     case 3:
-        fn_801CB92C(lbl_803EBC24[handle].mDevHandle, pos, 0);
-        if ((result = fn_801CBA0C(lbl_803EBC24[handle].mDevHandle, pBuffer, size)) < 0) {
+        fn_801CB92C(File_StreamInfo[handle].mDevHandle, pos, 0);
+        if ((result = fn_801CBA0C(File_StreamInfo[handle].mDevHandle, pBuffer, size)) < 0) {
             error = 0xA0007;
         }
         break;
@@ -370,13 +371,13 @@ int FilePerformWrite(int handle, int pos, void *pBuffer, int size)
     int result = 0;
     int error;
 
-    fn_801F8014(&lbl_803EBC28[handle]);
+    fn_801F8014(&File_HandleInUseCS[handle]);
     error = 0;
-    switch (lbl_803EBC24[handle].mDevType) {
+    switch (File_StreamInfo[handle].mDevType) {
     case 1:
     case 4:
-        FileHostLSeek(lbl_803EBC24[handle].mDevHandle, pos, 0);
-        if ((result = FileHostWrite(lbl_803EBC24[handle].mDevHandle, pBuffer, size)) < 0) {
+        FileHostLSeek(File_StreamInfo[handle].mDevHandle, pos, 0);
+        if ((result = FileHostWrite(File_StreamInfo[handle].mDevHandle, pBuffer, size)) < 0) {
             error = 0xA0008;
         } else {
             result = size;
@@ -384,13 +385,13 @@ int FilePerformWrite(int handle, int pos, void *pBuffer, int size)
         break;
     case 2:
     case 3:
-        fn_801CB92C(lbl_803EBC24[handle].mDevHandle, pos, 0);
-        if ((result = fn_801CBAD8(lbl_803EBC24[handle].mDevHandle, pBuffer, size)) < 0) {
+        fn_801CB92C(File_StreamInfo[handle].mDevHandle, pos, 0);
+        if ((result = fn_801CBAD8(File_StreamInfo[handle].mDevHandle, pBuffer, size)) < 0) {
             error = 0xA0008;
         }
         break;
     }
-    fn_801F809C(&lbl_803EBC28[handle]);
+    fn_801F809C(&File_HandleInUseCS[handle]);
     if (error) {
         result = -1;
     }
@@ -398,28 +399,28 @@ int FilePerformWrite(int handle, int pos, void *pBuffer, int size)
     return result;
 }
 
-int FileQueueAsyncRequest(FileAsync_801C8F14 *pAsync)
+int FileQueueAsyncRequest(FileAsyncRequest_t *pAsync)
 {
     int busy = 0;
-    FileAsync_801C8F14 *pNode;
+    FileAsyncRequest_t *pNode;
 
-    fn_801F8014(&lbl_803D5188);
-    fn_801F8014(&lbl_803D55C0);
-    fn_801C6AA4(lbl_803ED62C, pAsync, 0);
-    for (pNode = fn_801C6B4C(lbl_803ED62C, 0); pNode; pNode = fn_801C6C84(lbl_803ED62C, pNode)) {
+    fn_801F8014(&File_AsyncRequestListCS);
+    fn_801F8014(&File_AsyncThreadActiveCS);
+    fn_801C6AA4(File_pAsyncRequestList, pAsync, 0);
+    for (pNode = fn_801C6B4C(File_pAsyncRequestList, 0); pNode; pNode = fn_801C6C84(File_pAsyncRequestList, pNode)) {
         if (pNode->mState == 1) {
             busy = 1;
             break;
         }
     }
     if (!busy) {
-        lbl_803ECEE8 = lbl_803EBC24[pAsync->mHandle].mDevType;
+        lbl_803ECEE8 = File_StreamInfo[pAsync->mHandle].mDevType;
         if (lbl_803ECEE8 != 4) {
             _FileStartIO(lbl_803ECEE8);
         }
     }
-    fn_801F809C(&lbl_803D55C0);
-    fn_801F809C(&lbl_803D5188);
+    fn_801F809C(&File_AsyncThreadActiveCS);
+    fn_801F809C(&File_AsyncRequestListCS);
     fn_801F7BD4(0);
     return 0;
 }
@@ -427,16 +428,16 @@ int FileQueueAsyncRequest(FileAsync_801C8F14 *pAsync)
 void FileAsyncWaitStream(int handle)
 {
     int busy;
-    FileAsync_801C8F14 *pAsync;
-    FileAsync_801C8F14 *pNext;
+    FileAsyncRequest_t *pAsync;
+    FileAsyncRequest_t *pNext;
 
     do {
         fn_801F8768();
         busy = 0;
         FileAsyncCheckError();
-        fn_801F8014(&lbl_803D5188);
-        for (pAsync = fn_801C6B4C(lbl_803ED62C, 0); pAsync; pAsync = pNext) {
-            pNext = fn_801C6C84(lbl_803ED62C, pAsync);
+        fn_801F8014(&File_AsyncRequestListCS);
+        for (pAsync = fn_801C6B4C(File_pAsyncRequestList, 0); pAsync; pAsync = pNext) {
+            pNext = fn_801C6C84(File_pAsyncRequestList, pAsync);
             if (pAsync->mHandle == handle && pAsync->mState != 2) {
                 busy = 1;
                 break;
@@ -445,7 +446,7 @@ void FileAsyncWaitStream(int handle)
         if (busy) {
             FileDebugProcess();
         }
-        fn_801F809C(&lbl_803D5188);
+        fn_801F809C(&File_AsyncRequestListCS);
     } while (busy);
 }
 
@@ -583,14 +584,14 @@ void FileInitErrorMessages(void)
 
 void FileDebugProcess(void)
 {
-    FileAsync_801C8F14 *pFirst = 0;
+    FileAsyncRequest_t *pFirst = 0;
     int found = 0;
-    FileAsync_801C8F14 *pAsync;
+    FileAsyncRequest_t *pAsync;
 
-    fn_801F8014(&lbl_803D5188);
-    for (pAsync = fn_801C6B4C(lbl_803ED62C, 0); pAsync; pAsync = fn_801C6C84(lbl_803ED62C, pAsync)) {
+    fn_801F8014(&File_AsyncRequestListCS);
+    for (pAsync = fn_801C6B4C(File_pAsyncRequestList, 0); pAsync; pAsync = fn_801C6C84(File_pAsyncRequestList, pAsync)) {
         if (pAsync->mState == 1) {
-            if (lbl_803EBC24[pAsync->mHandle].mDevType == 4) {
+            if (File_StreamInfo[pAsync->mHandle].mDevType == 4) {
                 _FileProcessRequestFinish(pAsync);
             }
             found = 1;
@@ -600,28 +601,28 @@ void FileDebugProcess(void)
             pFirst = pAsync;
         }
     }
-    if (!found && pFirst && pFirst->mState == 0 && lbl_803EBC24[pFirst->mHandle].mDevType == 4) {
+    if (!found && pFirst && pFirst->mState == 0 && File_StreamInfo[pFirst->mHandle].mDevType == 4) {
         _FileStartIO(4);
     }
-    fn_801F809C(&lbl_803D5188);
+    fn_801F809C(&File_AsyncRequestListCS);
 }
 
-void FileLLInit(FileConfig_801C8F14 *pConfig)
+void FileLLInit(FileInitParms_t *pConfig)
 {
-    FileDevTable_801C8F14 *pTable;
-    FileDevList_801C8F14 *pList;
+    FilevDeviceList_t *pTable;
+    FilevDevicePath_t *pList;
     int done = 0;
     int i;
     int j;
 
     lbl_803EBC41 = 1;
-    pTable = fn_801C9D64();
+    pTable = FileGetDeviceList();
     for (i = 0; i < pTable->mCount; i++) {
         pList = pTable->mpList[i];
         for (j = 0; j < pList->mCount; j++) {
             if (pList->mDevice[j] == 1) {
                 done = 1;
-                fn_801CB2E0(pConfig->mNumFiles, pConfig->mUnk400, lbl_803ECEF4, _FileCDVDCallback);
+                CDVD_init(pConfig->mNumFiles, pConfig->mUnk400, lbl_803ECEF4, _FileCDVDCallback);
                 lbl_803EBC41 = 0;
                 break;
             }
@@ -631,14 +632,14 @@ void FileLLInit(FileConfig_801C8F14 *pConfig)
         }
     }
     fn_801CB61C();
-    if (lbl_803D51A8.mHostEnabled) {
-        FileHostInit(lbl_803D51A8.mNumFiles);
+    if (File_InitParms.mHostEnabled) {
+        FileHostInit(File_InitParms.mNumFiles);
     }
 }
 
 void FileLLShutdown(void)
 {
-    if (lbl_803D51A8.mHostEnabled) {
+    if (File_InitParms.mHostEnabled) {
         FileHostShutdown();
     }
     fn_801CB648();
@@ -655,12 +656,12 @@ int FileGetSize(int handle)
 {
     int size;
 
-    switch (lbl_803EBC24[handle].mDevType) {
+    switch (File_StreamInfo[handle].mDevType) {
     case 1:
-        fn_801CB5A8(lbl_803EBC24[handle].mDevHandle, 0, &size);
+        CDVD_getattrfromhandle(File_StreamInfo[handle].mDevHandle, 0, &size);
         break;
     case 4:
-        size = FileHostGetSize(lbl_803EBC24[handle].mDevHandle);
+        size = FileHostGetSize(File_StreamInfo[handle].mDevHandle);
         break;
     }
     return size;

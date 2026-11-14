@@ -28,8 +28,8 @@ int fn_80207E24(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_t *pCols, int create);
 void fn_80209F34(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLits, unsigned int *pMask);
 void fn_8020A540(void);
 void fn_8020A5A8(void);
-void fn_8020B710(TDbTable_t *pTable, int row);
-void fn_8020B878(TDbTable_t *pTable, int row, TDbLitRef_t *pValues);
+void _TDbTblCallInsertTriggers(TDbTable_t *pTable, int row);
+void _TDbTblGetFullRow(TDbTable_t *pTable, int row, TDbLitRef_t *pValues);
 void _TDbBlobGetData(TDbTable_t *pTable, TDbColumn_t *pColumn, void *pRow, unsigned char *pOut);
 void _TDbDataSetPtrData(unsigned char *pRow, unsigned int bitOffset, unsigned int bitCount, void *pSrc, unsigned int len);
 void _TDbDataGetPtrData(unsigned char *pRow, unsigned int bitOffset, unsigned int bitCount, unsigned char *pDst,

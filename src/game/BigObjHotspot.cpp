@@ -17,7 +17,7 @@
 #include "game/Record_8011F4F8.h"
 #include "game/Ball.h"
 #include "game/fn_80177FE0.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 #include "engine/texture.h"
 #include "engine/texfile.h"
 
@@ -385,7 +385,7 @@ int BigObjHotspotFrameUpdate(BigObjInst *pInst, BigObj_t *pOwner, int mode)
         BigObjNode_t *pNode = pInst->mUnknown312;
         pInst->mUnknown380 = 0;
         while (pNode) {
-            if (fn_801C2FE4(pNode->mName, pInst->mUnknown316) == 0 && pInst->mUnknown376 != 0) {
+            if (strcmp(pNode->mName, pInst->mUnknown316) == 0 && pInst->mUnknown376 != 0) {
                 HotspotPlay_t play;
                 play.mpObject = pOwner;
                 play.mRef = pInst->mUnknown376;
@@ -415,7 +415,7 @@ void HotspotFrameTouch(BigObj_t *pObject, Object_80039F5C *pPlayer)
     int ref;
     fn_8009BD2C(pPlayer, &ref);
     BigObjNode_t *pNode = pObject->mUnknown472->mUnknown312;
-    while (pNode && fn_801C2FE4(pNode->mName, "Obj_Hotspot_Sponsor") != 0) {
+    while (pNode && strcmp(pNode->mName, "Obj_Hotspot_Sponsor") != 0) {
         pNode = pNode->mpNext;
     }
     HotspotPlay_t play;
@@ -478,7 +478,7 @@ void HotspotResolvePending(Object_80039F5C *pPlayer)
 void HotspotFramePlayEffect(BigObj_t *pObject, int index, int apply)
 {
     BigObjNode_t *pNode = pObject->mUnknown472->mUnknown312;
-    while (pNode && fn_801C2FE4(pNode->mName, "Obj_Hotspot_Sponsor") != 0) {
+    while (pNode && strcmp(pNode->mName, "Obj_Hotspot_Sponsor") != 0) {
         pNode = pNode->mpNext;
     }
     if (apply) {

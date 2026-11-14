@@ -1,3 +1,5 @@
+/* Nintendo SDK controller library: detects the pads on the four ports, reads their buttons and sticks
+   every frame, records each pad's resting stick and trigger positions and drives the rumble motors. */
 #include <dolphin/pad.h>
 #include <dolphin/os.h>
 #include <string.h>
@@ -42,6 +44,7 @@ static void (*MakeStatus)(s32, PADStatus*, u32[2]) = SPEC2_MakeStatus;
 
 static u32 Type[SI_MAX_CHAN];
 static PADStatus Origin[SI_MAX_CHAN];
+static u32 CmdTypeAndStatus;
 
 static u32 CmdReadOrigin = 0x41 << 24;
 static u32 CmdCalibrate = 0x42 << 24;

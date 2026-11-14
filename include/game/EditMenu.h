@@ -1,9 +1,13 @@
-#ifndef GAME_CU_80181330_H
-#define GAME_CU_80181330_H
+#ifndef GAME_EDITMENU_H
+#define GAME_EDITMENU_H
 
-/* Layout returned by fn_80183734; fn_80183740 adds an optional
-   offset record of the same layout to it. */
-struct Layout_802EA9E0 {
+/* The menu framework of the edit screens (src/game/EditMenu.cpp): menu
+   screens, their item editors and the message arguments they take. */
+
+/* Placement of the two front-end player models, returned by
+   EditMenuGetPlayerLayout; EditMenuMovePlayers adds an optional offset record
+   of the same layout to it. */
+struct PlayerLayout_t {
     float mUnknown0;
     float mUnknown4;
     float mUnknown8;
@@ -13,7 +17,7 @@ struct Layout_802EA9E0 {
     unsigned char mUnknown24;
 };
 
-extern "C" void fn_80183740(const Layout_802EA9E0 *pOffset);
+extern "C" void EditMenuMovePlayers(const PlayerLayout_t *pOffset);
 
 /* 44-byte list entry. */
 struct MenuEntry_t {
@@ -28,20 +32,20 @@ struct MenuEntry_t {
 };
 
 /* Text argument record reached through MenuArg_t::pParams. */
-struct Params_80005284 {
+struct MenuText_t {
     int mUnknown0;
     int mLength;
     char *mpText;
 };
 
-/* One argument or result slot of the message handler fn_8018399C. Text
+/* One argument or result slot of the message handler EditMenuHandleMessage. Text
    arguments are passed on to the MenuItemEditor entries by value. */
 union MenuArg_t {
     int i;
     float f;
     int *pi;
     float *pf;
-    Params_80005284 *pParams;
+    MenuText_t *pParams;
 };
 
 /* The value controls of the current menu item: a colour pick, a left/right

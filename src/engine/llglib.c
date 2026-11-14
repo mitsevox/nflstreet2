@@ -162,7 +162,7 @@ int fn_801CE2F4(GlibConfig_801CE1F8 *pConfig)
     pMode->mFrame = 0;
     lbl_803ECF04 = 0;
     VIConfigure(&pMode->mMode);
-    VISetNextFrameBuffer(pMode->mpXfb[pMode->mFrame]);
+    VISetNextFrameBuffer(lbl_803E9224.mpXfb[pMode->mFrame]);
     pMode->mLog2Width = fn_801CE1F8(pCfg->mWidth);
     pMode->mLog2Height = fn_801CE1F8(pCfg->mHeight);
     pFifo = fn_801D2B7C(pCfg->mFifoSize, 0, 0);
@@ -184,9 +184,9 @@ int fn_801CE2F4(GlibConfig_801CE1F8 *pConfig)
     }
     VISetBlack(1);
     VIFlush();
-    GXCopyDisp(lbl_803E9224.mpXfb[pMode->mFrame], 1);
+    GXCopyDisp(pMode->mpXfb[pMode->mFrame], 1);
     VIFlush();
-    GXCopyDisp(lbl_803E9224.mpXfb[pMode->mFrame], 1);
+    GXCopyDisp(pMode->mpXfb[pMode->mFrame], 1);
     VIFlush();
     fn_801CE7D0(0);
     if (pMode->mMode.viTVmode & 1) {

@@ -159,7 +159,6 @@ int fn_8004D84C(int handle);
 void fn_8004D860(int handle, int position);
 int fn_800C47C4(void);
 void ParticleSysSetEffectFile(int type, int index);
-char *fn_801C2EB4(char *pDst, const char *pSrc);
 int ResFindIndexByName(int set, const char *pName);
 void fn_8004CBEC(void *pData, float t, BigObjInst *pObject, BigObj_t *pOwner);
 int fn_801BE068(void *pA, void *pB, void *pC, unsigned short key, float value, void *p);
@@ -188,7 +187,6 @@ int fn_801BBE5C(int a, int b);
 void fn_801BE030(int type, Table_803EA4D0 *pTable);
 void fn_801BE040(void *p);
 Frame_801C02CC *AnimSeqncrGetStaticPtr(Actor_801C009C *pActor, int index);
-int fn_801C2FE4(const char *pA, const char *pB);
 int fn_801CFE40(float y, float x);
 void fn_80227248(void *pOut, void *p, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -534,7 +532,7 @@ int fn_8004B020(const char *pName, NameId_8004B020 *pTable)
     int i;
 
     for (i = 0; pTable[i].mId != -1; i++) {
-        if (fn_801C2FE4(pName, pTable[i].mName) == 0) {
+        if (strcmp(pName, pTable[i].mName) == 0) {
             return pTable[i].mId;
         }
     }
@@ -699,7 +697,7 @@ int fn_8004B354(BigObjInst *pObject, BigObj_t *pOwner, int mode)
             for (pNode = pObject->mUnknown312; pNode; pNode = pNode->mpNext) {
                 unsigned int count;
 
-                if (fn_801C2FE4(pNode->mName, pObject->mUnknown316) != 0) {
+                if (strcmp(pNode->mName, pObject->mUnknown316) != 0) {
                     continue;
                 }
                 if (!pObject->mUnknown381) {
@@ -886,7 +884,7 @@ void fn_8004BD20(int handle, BigObjInst *pObject)
     strcpy(pNode->mName, "");
     pObject->mUnknown312 = pNode;
     if (fn_8004D5B8(handle, "name", text, 64)) {
-        fn_801C2EB4(pNode->mName, text);
+        strcpy(pNode->mName, text);
     }
     if (fn_8004D508(handle, "anim") && fn_8004D5B8(handle, "emotion2State", text, 64)) {
         pNode->mId = fn_8004C2FC(text);
@@ -920,7 +918,7 @@ void fn_8004BD20(int handle, BigObjInst *pObject)
             pEmitter->mUnknown0 = -1;
             pEmitter->mUnknown40 = 0;
             pEmitter->mUnknown36 = 0.0f;
-            if (fn_8004D5B8(handle, "emitPoint", text, 64) && fn_801C2FE4(text, "IMPACT") == 0) {
+            if (fn_8004D5B8(handle, "emitPoint", text, 64) && strcmp(text, "IMPACT") == 0) {
                 pEmitter->mUnknown40 = 1;
             }
             if (fn_8004D5B8(handle, "psf", text, 64)) {
@@ -984,7 +982,7 @@ int fn_8004C204(const char *pName)
     int i;
 
     for (i = 0; i < sizeof(lbl_802D14C8) / sizeof(lbl_802D14C8[0]); i++) {
-        if (fn_801C2FE4(pName, lbl_802D14C8[i].mName) == 0) {
+        if (strcmp(pName, lbl_802D14C8[i].mName) == 0) {
             return lbl_802D14C8[i].mId;
         }
     }
@@ -996,8 +994,8 @@ int fn_8004C270(const char *pName, const char *pState)
     int i;
 
     for (i = 0; i < sizeof(lbl_802D1D48) / sizeof(lbl_802D1D48[0]); i++) {
-        if (fn_801C2FE4(pName, lbl_802D1D48[i].mName) == 0 &&
-            fn_801C2FE4(pState, lbl_802D1D48[i].mState) == 0) {
+        if (strcmp(pName, lbl_802D1D48[i].mName) == 0 &&
+            strcmp(pState, lbl_802D1D48[i].mState) == 0) {
             return lbl_802D1D48[i].mId;
         }
     }
@@ -1009,7 +1007,7 @@ int fn_8004C2FC(const char *pName)
     int i;
 
     for (i = 0; i < sizeof(lbl_802CFE34) / sizeof(lbl_802CFE34[0]); i++) {
-        if (fn_801C2FE4(pName, lbl_802CFE34[i].mName) == 0) {
+        if (strcmp(pName, lbl_802CFE34[i].mName) == 0) {
             return lbl_802CFE34[i].mId;
         }
     }
@@ -1021,7 +1019,7 @@ int fn_8004C368(const char *pName)
     int i;
 
     for (i = 0; i < sizeof(lbl_802CFBCC) / sizeof(lbl_802CFBCC[0]); i++) {
-        if (fn_801C2FE4(pName, lbl_802CFBCC[i].mName) == 0) {
+        if (strcmp(pName, lbl_802CFBCC[i].mName) == 0) {
             return lbl_802CFBCC[i].mId;
         }
     }
@@ -1033,7 +1031,7 @@ int fn_8004C3D4(const char *pName)
     int i;
 
     for (i = 0; i < sizeof(lbl_802CFD2C) / sizeof(lbl_802CFD2C[0]); i++) {
-        if (fn_801C2FE4(pName, lbl_802CFD2C[i].mName) == 0) {
+        if (strcmp(pName, lbl_802CFD2C[i].mName) == 0) {
             return lbl_802CFD2C[i].mId;
         }
     }
@@ -1045,7 +1043,7 @@ int fn_8004C440(const char *pName)
     int i;
 
     for (i = 0; i < sizeof(lbl_802CFDA4) / sizeof(lbl_802CFDA4[0]); i++) {
-        if (fn_801C2FE4(pName, lbl_802CFDA4[i].mName) == 0) {
+        if (strcmp(pName, lbl_802CFDA4[i].mName) == 0) {
             return lbl_802CFDA4[i].mId;
         }
     }
@@ -1057,7 +1055,7 @@ unsigned short fn_8004C4AC(const char *pName)
     int i;
 
     for (i = 0; i < sizeof(lbl_802D3DC4) / sizeof(lbl_802D3DC4[0]); i++) {
-        if (fn_801C2FE4(pName, lbl_802D3DC4[i].mName) == 0) {
+        if (strcmp(pName, lbl_802D3DC4[i].mName) == 0) {
             return lbl_802D3DC4[i].mId;
         }
     }
@@ -1198,7 +1196,7 @@ void fn_8004C844(BigObj_t *pItem, float *pPos, float *pDir, const char *pName, i
     }
     pObject->mUnknown380 = 1;
     pObject->mUnknown381 = fn_8005164C(type);
-    fn_801C2EB4(pObject->mUnknown316, pName);
+    strcpy(pObject->mUnknown316, pName);
     pObject->mUnknown360.mX = pPos[0];
     pObject->mUnknown360.mY = pPos[1];
     pObject->mUnknown360.mZ = pPos[2];
@@ -1505,7 +1503,7 @@ int fn_8004D2F8(DynObjChild *p) { if (p->mpOwner50) fn_8004CEE8(p); return 0; }
 int fn_8004D334(const char *pName)
 {
     for (int i = 0; i < lbl_803EC7D4; i++)
-        if (fn_801C2FE4(pName, lbl_803EA4F8[i].mName) == 0) return i;
+        if (strcmp(pName, lbl_803EA4F8[i].mName) == 0) return i;
     return -1;
 }
 
@@ -1515,7 +1513,7 @@ int fn_8004D3A8(void *pData, char *pName)
     if (id == -1) return -1;
     int index = fn_8004D334(pName);
     if (index == -1) {
-        fn_801C2EB4(lbl_803EA4F8[lbl_803EC7D4].mName, pName);
+        strcpy(lbl_803EA4F8[lbl_803EC7D4].mName, pName);
         void *p = ResLoadToBuffer(pData, id, lbl_803EC7DC);
         lbl_803EA4F8[lbl_803EC7D4].mpCursor = p;
         lbl_803EA4F8[lbl_803EC7D4].mpData = p;
@@ -1596,7 +1594,7 @@ int fn_8004D874(DynObj *p, int mode)
 int fn_8004D994(const char *pName)
 {
     for (int i = 0; i < lbl_803EA4FC; i++)
-        if (fn_801C2FE4(pName, lbl_8030869C[i]->mName) == 0) return i;
+        if (strcmp(pName, lbl_8030869C[i]->mName) == 0) return i;
     return -1;
 }
 
@@ -1614,7 +1612,7 @@ void fn_8004DA0C(void *pData, int handle, BigObj_t *pObject)
         fn_801C1F94(lbl_8030869C[lbl_803EA4FC], 0, 320);
         pInstance->mpCache = lbl_8030869C[lbl_803EA4FC++];
         pInstance->mpCache->mReferences = 1;
-        fn_801C2EB4(pInstance->mpCache->mName, name);
+        strcpy(pInstance->mpCache->mName, name);
         pInstance->mpCache->mpArchive = pData;
         pInstance->mpCache->mId = ResFindIndexByName((int)pData, name);
         pInstance->mpCache->mHandle = ResLoad(pData, pInstance->mpCache->mId, 1);
@@ -1656,15 +1654,15 @@ void fn_8004DC88(void *pData, int handle, BigObj_t *pObject)
     fn_8004D498(handle);
     if (!fn_8004D4B0(handle, "render")) return;
     fn_8004D5B8(handle, "type", type, 32);
-    if (fn_801C2FE4(type, "NO_RENDER") == 0) {
+    if (strcmp(type, "NO_RENDER") == 0) {
         p->mTypeEC = 0;
         fn_8004E16C(pData, handle, pObject);
         return;
     }
-    if (fn_801C2FE4(type, "STATIC_RENDER") == 0) {
+    if (strcmp(type, "STATIC_RENDER") == 0) {
         p->mTypeEC = 1;
         fn_8004DA0C(pData, handle, pObject);
-    } else if (fn_801C2FE4(type, "DYNAMIC_RENDER") == 0) {
+    } else if (strcmp(type, "DYNAMIC_RENDER") == 0) {
         p->mTypeEC = 2;
         fn_8004E16C(pData, handle, pObject);
         fn_8004D498(handle); fn_8004D4B0(handle, "render");
@@ -1799,8 +1797,6 @@ void fn_801E9AF0(RigidBody_t *, Vector_80039F5C *, Quat_801EB488 *);
 void fn_801E9F0C(RigidBody_t *, int);
 void fn_801E2878(void *, RigidBody_t *);
 void fn_801E91E0(void *, void *);
-int fn_801C3180(const char *);
-char *fn_801C2EF0(char *, const char *, int);
 void fn_8004E2B4(BigObj_t *);
 
 void fn_8004DF68(BigObj_t *pObject)
@@ -1836,7 +1832,7 @@ void fn_8004E0CC(BigObj_t *p, int index, int value)
 int fn_8004E0F4(const char *pName)
 {
     for (int i = 0; i < lbl_803EA4FE; i++)
-        if (fn_801C2FE4(pName, lbl_802D4974[i]->mName) == 0) return i;
+        if (strcmp(pName, lbl_802D4974[i]->mName) == 0) return i;
     return -1;
 }
 void fn_8004E16C(void *pData, int handle, BigObj_t *pObject)
@@ -1852,7 +1848,7 @@ void fn_8004E16C(void *pData, int handle, BigObj_t *pObject)
             fn_801C1F94(lbl_802D4974[lbl_803EA4FE], 0, 272);
             Cache_8004E16C *pCache = lbl_802D4974[lbl_803EA4FE++];
             p->mpSkeleton130 = pCache;
-            fn_801C2EB4(pCache->mName, name);
+            strcpy(pCache->mName, name);
             pCache->mpArchive = pData;
             pCache->mReferences = 1;
             pCache->mId = ResFindIndexByName((int)pData, name);
@@ -2149,17 +2145,17 @@ void fn_8004F56C(Metadata_8004ED44 *p, char (*pNames)[32], unsigned int count)
         unsigned char names = 1;
         unsigned char i = 1;
         map[0] = 0;
-        int bytes = fn_801C3180(pNames[0]) + 1;
+        int bytes = strlen(pNames[0]) + 1;
         for (; i < count; i++) {
             int found = 0;
             for (unsigned char j = 0; j < names; j++) {
-                if (!fn_801C2FE4(pNames[j], pNames[i])) {
+                if (!strcmp(pNames[j], pNames[i])) {
                     map[i] = j; found = 1; break;
                 }
             }
             if (!found) {
-                if (names != i) fn_801C2EF0(pNames[names], pNames[i], 32);
-                bytes += fn_801C3180(pNames[names]) + 1;
+                if (names != i) strncpy(pNames[names], pNames[i], 32);
+                bytes += strlen(pNames[names]) + 1;
                 map[i] = names++;
             }
         }
@@ -2167,8 +2163,8 @@ void fn_8004F56C(Metadata_8004ED44 *p, char (*pNames)[32], unsigned int count)
         char *pText = (char *)(p->mNames + count);
         for (i = 0; i < names; i++) {
             unique[i] = pText;
-            fn_801C2EB4(pText, pNames[i]);
-            pText += fn_801C3180(unique[i]) + 1;
+            strcpy(pText, pNames[i]);
+            pText += strlen(unique[i]) + 1;
         }
         for (i = 0; i < count; i++) p->mNames[i] = unique[map[i]];
     }
@@ -2215,20 +2211,20 @@ void fn_8004F754(int handle, BigObj_t *pObject, int objectIndex)
             do {
                 fn_8004D5B8(handle, "name", names[count], 32);
                 fn_8004D5B8(handle, "PRIM_TYPE", type, 32);
-                if (!fn_801C2FE4(type, "CYLINDER")) {
+                if (!strcmp(type, "CYLINDER")) {
                     fn_8004D728(handle, "PRIM_CYL_END1", &a.mX);
                     fn_8004D728(handle, "PRIM_CYL_END2", &b.mX);
                     float radius = fn_8004D624(handle, "PRIM_CYL_RADIUS");
                     float friction = fn_8004D624(handle, "friction");
                     float bounce = fn_8004D624(handle, "bounce");
                     fn_8004F2D0(handle, pSet, pState, &a, &b, friction, bounce, radius);
-                } else if (!fn_801C2FE4(type, "BOX")) {
+                } else if (!strcmp(type, "BOX")) {
                     fn_8004D728(handle, "PRIM_BOX_MIN", &a.mX);
                     fn_8004D728(handle, "PRIM_BOX_MAX", &b.mX);
                     float friction = fn_8004D624(handle, "friction");
                     float bounce = fn_8004D624(handle, "bounce");
                     fn_8004F3A4(handle, pSet, pState, &a, &b, friction, bounce);
-                } else if (!fn_801C2FE4(type, "SPHERE")) {
+                } else if (!strcmp(type, "SPHERE")) {
                     fn_8004D728(handle, "PRIM_SPH_POS", &a.mX);
                     float radius = fn_8004D624(handle, "PRIM_SPH_RADIUS");
                     float friction = fn_8004D624(handle, "friction");

@@ -2,7 +2,7 @@
    name and converts joint rotations between Euler angles, quaternions and global matrices. */
 
 #include "engine/skeleton.h"
-#include "engine/cu_801C2EB4.h"
+#include <string.h>
 #include "engine/llmatrix.h"
 #include "engine/llquat.h"
 
@@ -168,7 +168,7 @@ int CharSkelGetJointByName(Skel_t *pSkel, const char *pName)
     SkelJoint_t *pJoints = pSkel->mpJoints;
     int i;
 
-    for (i = 0; i < pSkel->mNumJoints && fn_801C2FE4(pName, pJoints[i].mName) != 0; i++) {
+    for (i = 0; i < pSkel->mNumJoints && strcmp(pName, pJoints[i].mName) != 0; i++) {
     }
     if (i == pSkel->mNumJoints) {
         i = -1;

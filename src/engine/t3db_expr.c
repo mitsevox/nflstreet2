@@ -733,7 +733,7 @@ int _TDbExprPrepare(TDbExpr_t *pSrc, TDbExpr_t **ppDst, TDbTable_t **ppTables, i
     case TDB_TYPE_COLUMN:
         for (i = 0; i < tableCount; i++) {
             if ((int)(pSrc->mLeft.mValue.l >> 32) == ppTables[i]->mId) {
-                column = fn_8020B97C(ppTables[i], (int)pSrc->mLeft.mValue.l);
+                column = _TDbTblResolveColRef(ppTables[i], (int)pSrc->mLeft.mValue.l);
                 if (column == 0xFF) {
                     return 9;
                 }
@@ -787,7 +787,7 @@ int _TDbExprPrepare(TDbExpr_t *pSrc, TDbExpr_t **ppDst, TDbTable_t **ppTables, i
         case TDB_TYPE_COLUMN:
             for (i = 0; i < tableCount; i++) {
                 if ((int)(pSrc->mRight.mValue.l >> 32) == ppTables[i]->mId) {
-                    column = fn_8020B97C(ppTables[i], (int)pSrc->mRight.mValue.l);
+                    column = _TDbTblResolveColRef(ppTables[i], (int)pSrc->mRight.mValue.l);
                     if (column == 0xFF) {
                         return 9;
                     }

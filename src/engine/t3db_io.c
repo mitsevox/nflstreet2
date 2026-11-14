@@ -13,14 +13,14 @@ typedef struct TDbIOFileHdr_t {
     unsigned int mBase;
 } TDbIOFileHdr_t;
 
-extern TDbTable_t *fn_8020BA48(TDbDatabase_t *pDb, int id);
-extern int fn_8020BD90(TDbTable_t *pTable);
+extern TDbTable_t *_TDbTblFindTable(TDbDatabase_t *pDb, int id);
+extern int _TDbTblDestroy(TDbTable_t *pTable);
 extern int fn_80208204(int dbId, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pResult);
 int _TDbIOReadExprNode(TDbExpr_t *pExpr, TDbIOStream_t *pStream, int release);
 
 unsigned int crc32_table[256] = { 0 };
 
-extern int fn_8020C5C8(TDbTable_t *pTable, int count);
+extern int _TDbTblRowGrow(TDbTable_t *pTable, int count);
 int _TDbIOReadTableRow(TDbTable_t *pTable, TDbIOStream_t *pStream, int skip);
 int _TDbIOReadIndex(TDbTable_t *pTable, TDbIOStream_t *pStream, int mode);
 
@@ -155,7 +155,7 @@ int _TDbIOReadTableAppend(TDbTable_t *pTable, TDbIOTableHdr_t *pHdr, int unused,
         return 0x31;
     }
     if (count != 0 && (pTable->mFlags & 8) && pTable->mCapacity == 0 && pTable->mNominalCapacity != 0) {
-        fn_8020C5C8(pTable, pTable->mNominalCapacity);
+        _TDbTblRowGrow(pTable, pTable->mNominalCapacity);
     }
     if (count > (unsigned short)(_TDbTableAvailableRows(pTable) + pTable->mDeletedCount)) {
         return 0x13;
@@ -727,7 +727,7 @@ int _TDbIOLoadDatabase(TDbDatabase_t *pDb, int *pTableIds, void *pName,
     _TDbMemNotify(1, (int)pDb->mId, -1);
     if (mode == 0 && pTableIds == 0) {
         while (pDb->mTables != 0) {
-            fn_8020BD90(pDb->mTables);
+            _TDbTblDestroy(pDb->mTables);
         }
     }
     stream.mDevice = pDevice;
@@ -825,11 +825,11 @@ int _TDbIOLoadDatabase(TDbDatabase_t *pDb, int *pTableIds, void *pName,
                         stream.mCrcB = -1;
                     }
                     if (err == 0) {
-                        pTable = fn_8020BA48(pDb, id);
+                        pTable = _TDbTblFindTable(pDb, id);
                         switch (mode) {
                         case 0:
                             if (pTable != 0) {
-                                fn_8020BD90(pTable);
+                                _TDbTblDestroy(pTable);
                                 pTable = 0;
                             }
                         case 3:

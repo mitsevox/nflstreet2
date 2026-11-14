@@ -1,52 +1,8 @@
-#include <dolphin/os.h>
-#include <dolphin/dvd.h>
-#include <dolphin/vi.h>
-#include <dolphin/__vm.h>
+/* Closest points of two segments: the squared distance between the nearest points of two
+   line segments, used by the capsule contacts of src/game/CollideContacts.cpp and by
+   src/game/BallSweep.cpp. */
 #include <math.h>
 
-/* Defined with C++ linkage in src/game/MainLoop.cpp. */
-void MainLoopRun(void);
-
-extern "C" {
-
-void GlibSetTvMode(int value);
-void fn_802451F8(int value);
-void fn_80088F2C(void);
-
-#if defined(DECOMP_COMPARE)
-void fn_80088F2C(void)
-{
-    asm volatile("li 3,4\n\toris 3,3,4\n\tmtspr GQR2,3\n\t"
-                 "li 3,5\n\toris 3,3,5\n\tmtspr GQR3,3\n\t"
-                 "li 3,6\n\toris 3,3,6\n\tmtspr GQR4,3\n\t"
-                 "li 3,7\n\toris 3,3,7\n\tmtspr GQR5,3\n\t"
-                 "li 3,7\n\toris 3,3,3847\n\tmtspr GQR6,3\n\t"
-                 "li 3,7\n\toris 3,3,7\n\tmtspr GQR7,3"
-                 : : : "r3");
-}
-#endif
-
-void fn_80088F78(void)
-{
-    OSInit();
-    fn_80088F2C();
-    DVDInit();
-    VIInit();
-    VMInit(0x41000, 0xAFC000, 0x104000);
-    fn_802451F8(0);
-}
-
-}
-
-int main(void)
-{
-    fn_80088F78();
-    GlibSetTvMode(0);
-    MainLoopRun();
-    return 0;
-}
-
-#if defined(DECOMP_COMPARE)
 /* Draft. Clamps a parameter s on pA0-pA1 and t on pB0-pB1 to 0..1 (s from
    the two-segment solve, then t from s, then s again from t), stores the
    midpoint of the two points to pOut and returns their squared distance. */
@@ -106,4 +62,3 @@ extern "C" float fn_80088FFC(float *pA0, float *pA1, float *pB0, float *pB1, flo
     pOut[2] = (p[2] + q[2]) * 0.5f;
     return (p[0] - q[0]) * (p[0] - q[0]) + (p[1] - q[1]) * (p[1] - q[1]) + (p[2] - q[2]) * (p[2] - q[2]);
 }
-#endif

@@ -5,7 +5,7 @@
 extern "C" {
 int fn_8022EF8C(int a, int tag);
 int fn_8022EFBC(int a, int tag);
-char *fn_801C2EF0(char *pDest, const char *pSource, int count);
+char *strncpy(char *pDest, const char *pSource, int count);
 }
 
 static QueryCursor _Credits_Cursor;
@@ -52,7 +52,7 @@ void CreditsCountLines(int *pCount)
 
 void CreditsGetLine(char *pDest, int count)
 {
-    fn_801C2EF0(pDest, _Credits_szLine, count);
+    strncpy(pDest, _Credits_szLine, count);
 }
 
 void CreditsGetLineType(int *pValue)

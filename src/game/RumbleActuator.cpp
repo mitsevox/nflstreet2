@@ -4,7 +4,7 @@
 
 extern "C" {
 int ConGetChannelInfo(int a, int b);
-int fn_801E1884(int channel, void *state);
+int PerSendDeviceData(int channel, void *state);
 }
 
 struct RumbleMotor_t {
@@ -157,7 +157,7 @@ void RumbleProcess(void)
         }
         _Rumble_aPorts[i].mState.mLevel[0] = _Rumble_aPorts[i].mMotor[0].mLevel;
         _Rumble_aPorts[i].mState.mLevel[1] = _Rumble_aPorts[i].mMotor[1].mLevel;
-        fn_801E1884(i, &_Rumble_aPorts[i].mState);
+        PerSendDeviceData(i, &_Rumble_aPorts[i].mState);
     }
 }
 

@@ -158,11 +158,11 @@ typedef struct TMModelRes_t {
     unsigned char mbRelocated;
 } TMModelRes_t;
 
-typedef struct Extent_802144AC {
+typedef struct TMClipExtent_t {
     float mMin[3];
     float mUnknownC;
     float mMax[3];
-} Extent_802144AC;
+} TMClipExtent_t;
 
 typedef struct TMGeomAttr_t {
     void *mpData;
@@ -315,13 +315,13 @@ void TMModelResRelocate(TMModelRes_t *pRes);
 void *TMModelResGetChunk(TMModelRes_t *pRes, int tag, TMChunk_t **ppChunk);
 
 /* tmgeometry.c */
-void TMGeomExtentAddS16Points(Extent_802144AC *pExtent, short *pPoints, int count);
-void TMGeomExtentAddF32Points(Extent_802144AC *pExtent, float *pPoints, int count);
+void TMGeomExtentAddS16Points(TMClipExtent_t *pExtent, short *pPoints, int count);
+void TMGeomExtentAddF32Points(TMClipExtent_t *pExtent, float *pPoints, int count);
 void TMGeomInitChannelBuffer(int size);
 void TMGeomFreeChannelBuffer(void);
 void TMGeomRelocateChunk(TMGeom_t *pPart, void *pOldBase, void *pNewBase);
 void TMGeometryRemapMaterials(TMGeom_t *pPart, unsigned short *pRemap, int numMaterials);
-void TMGeomAddNodeExtent(TMGeom_t *pPart, int nodeIndex, Extent_802144AC *pExtent);
+void TMGeomAddNodeExtent(TMGeom_t *pPart, int nodeIndex, TMClipExtent_t *pExtent);
 
 /* tmshader.c */
 void TMShaderNew(TMShader_t *pShader, TMShaderDef_t *pDef);
@@ -422,7 +422,7 @@ void TMModelRemapClusters(TMModel_t *pModel, void *pOther);
 void TMModelResetChannels(TMModel_t *pModel);
 void TMModelAllocChannels(TMModel_t *pModel);
 void TMModelFreeChannels(TMModel_t *pModel);
-void TMModelAddExtent(TMModel_t *pModel, Extent_802144AC *pExtent, int state, int arg);
+void TMModelAddExtent(TMModel_t *pModel, TMClipExtent_t *pExtent, int state, int arg);
 
 /* tmmaterialdef.c */
 void TMMaterialDefRelocateChunk(TMMaterialDefList_t *pLib, void *pOldBase, void *pNewBase);
@@ -589,8 +589,8 @@ short *TMSkelBuildRemapTable(TMSkeleton_t *pSkel, void *pOther);
 void TMSkelRemapNodes(TMSkeleton_t *pSkel, short *pRemap);
 
 /* tmclip.c */
-void fn_802144AC(Extent_802144AC *pExtent);
-void fn_802144D8(Extent_802144AC *pExtent, float x, float y, float z);
+void TMClipResetExtent(TMClipExtent_t *pExtent);
+void TMClipExtentAddPoint(TMClipExtent_t *pExtent, float x, float y, float z);
 
 /* tmtev.c */
 void TMTevSetTevOp(GXTevStageID stage, GXTevMode mode, GXTevScale scale);
