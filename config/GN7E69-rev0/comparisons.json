@@ -35718,7 +35718,7 @@
     {
       "source": "src/engine/lzm.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802805C4-0x802821E8 (src/engine/lzm.c), its compiler row, function and name rows, and the exact data rows 0x803EC578-0x803EC584 (.sdata) and 0x803ED414-0x803ED420 (.sbss; no bytes, not measured). Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv complete 20-function lzm.c recovery, related names, provisional whole-file edges and unchanged engine_c profile; every original function is compared over its full extent. Native prefix/storage are linked separately; documented partials retain original executable bytes.",
       "sections": [
         {
           "section": ".text",
@@ -35741,92 +35741,102 @@
       ],
       "functions": [
         {
-          "symbol": "fn_802805C4",
+          "symbol": "sInitTree",
           "start": "0x802805C4",
           "end": "0x80280660"
         },
         {
-          "symbol": "fn_80280660",
+          "symbol": "sFindNextNode",
           "start": "0x80280660",
           "end": "0x802806F8"
         },
         {
-          "symbol": "fn_802806F8",
+          "symbol": "sReplaceNode",
           "start": "0x802806F8",
           "end": "0x80280780"
         },
         {
-          "symbol": "fn_80280780",
+          "symbol": "sRotateNodeLeft",
           "start": "0x80280780",
           "end": "0x802807F4"
         },
         {
-          "symbol": "fn_802807F4",
+          "symbol": "sRotateNodeRight",
           "start": "0x802807F4",
           "end": "0x80280864"
         },
         {
-          "symbol": "fn_80280864",
+          "symbol": "sDeleteNode",
           "start": "0x80280864",
           "end": "0x80280B94"
         },
         {
-          "symbol": "fn_80280B94",
+          "symbol": "sAddNode",
           "start": "0x80280B94",
           "end": "0x80280E70"
         },
         {
-          "symbol": "fn_80280E70",
+          "symbol": "sWriteBits",
           "start": "0x80280E70",
           "end": "0x80280F38"
         },
         {
-          "symbol": "fn_80280F38",
+          "symbol": "sQuadAlign_Outbuffer",
           "start": "0x80280F38",
           "end": "0x80280FC4"
         },
         {
-          "symbol": "fn_80280FC4",
+          "symbol": "sReadBits",
           "start": "0x80280FC4",
           "end": "0x80281090"
         },
         {
-          "symbol": "fn_80281090",
+          "symbol": "sReadZeroBits",
           "start": "0x80281090",
           "end": "0x8028113C"
         },
         {
-          "symbol": "fn_8028113C",
+          "symbol": "sFlushBuffer",
           "start": "0x8028113C",
           "end": "0x8028156C"
         },
         {
-          "symbol": "fn_8028156C",
+          "symbol": "sCalcLogMagnitude",
           "start": "0x8028156C",
           "end": "0x80281590"
         },
         {
-          "symbol": "fn_80281590",
+          "symbol": "sFlushMatch",
           "start": "0x80281590",
           "end": "0x80281938"
         },
         {
-          "symbol": "fn_80281938",
+          "symbol": "_LZMCoStart",
           "start": "0x80281938",
           "end": "0x80281940"
         },
         {
-          "symbol": "fn_80281C68",
+          "symbol": "_LZMCoProcess",
+          "start": "0x80281940",
+          "end": "0x80281C68"
+        },
+        {
+          "symbol": "_LZMCoStop",
           "start": "0x80281C68",
           "end": "0x80281C6C"
         },
         {
-          "symbol": "fn_80281C6C",
+          "symbol": "_LZMDecStart",
           "start": "0x80281C6C",
           "end": "0x80281C74"
         },
         {
-          "symbol": "fn_802821E4",
+          "symbol": "_LZMDecProcess",
+          "start": "0x80281C74",
+          "end": "0x802821E4"
+        },
+        {
+          "symbol": "_LZMDecStop",
           "start": "0x802821E4",
           "end": "0x802821E8"
         }

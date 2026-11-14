@@ -160,5 +160,5 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x8027FB2C	0x802802A0	huff.c	11	11	11	11	0	-	-
 0x802802A0	0x80280504	rle.c	6	6	6	6	0	-	-
 0x80280504	0x802805C4	none.c	6	6	6	6	0	-	-
-0x802805C4	0x802821E8	lzm.c	18	18	20	0	15	-	-
-0x802821E8	0x802856D8	lzh.c	37	35	37	0	32	-	-
+0x802805C4	0x802821E8	lzm.c	20	20	20	20	0	-	-
+0x802821E8	0x802856D8	lzh.c	37	35	37	0	34	-	-

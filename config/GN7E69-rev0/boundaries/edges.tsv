@@ -210,7 +210,7 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .sdata	-	0x803EBF80	0x803EBF80	data	0	4/2	UIGFmv.c	LLUIGFmv.c
 .sdata	-	0x803EC4A4	0x803EC4A4	data	0	9/7	kf_cos.c	kf_sin.c
 .sdata	-	0x803EC550	0x803EC550	data	0	2/2	vfprintf.c	vfprintf.c
-.sdata	-	0x803EC584	0x803EC584	thin	0	2/1	lzm.c	lzh.c
+.sdata	-	0x803EC584	0x803EC584	thin	0	3/1	lzm.c	lzh.c
 .sbss	-	0x803ECF70	0x803ECF70	data	0	6/4	remap.c	Resource.c
 .sbss	-	0x803ED420	0x803ED420	data	0	3/45	lzm.c	lzh.c
 .sbss	-	0x803ED660	0x803ED664	thin	0	3/1	periph.c	llperiph.c
