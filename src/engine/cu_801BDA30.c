@@ -251,6 +251,18 @@ int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *
     return 0;
 }
 
+void fn_801BE3C0(Collection_801BE594 *p, float from, float to, unsigned short key, int type, void *pSource)
+{
+    int i;
+
+    for (i = 0; i <= 3; i++) {
+        if (p->mUnknown4[i].mUnknown0 == key && p->mUnknown4[i].mUnknown2 == 3) {
+            AnimWgtSet(&p->mUnknown4[i].mUnknown4C, type, from, pSource, to);
+            break;
+        }
+    }
+}
+
 void fn_801BE420(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, void *pOwner, float step)
 {
     int i;

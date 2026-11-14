@@ -14,6 +14,31 @@ void fn_80271D34(Voice_803A7734 *voice)
     voice->m30 = 0;
 }
 
+void fn_80271D78(AXVPB *vpb, float *p, unsigned int a, int b)
+{
+    Voice_803A7734 *voice = &lbl_803A7734[vpb->index];
+
+    if (lbl_803A8D34 == 4) {
+        unsigned int index = a >> 8;
+
+        if (b == 0) {
+            voice->m3A = lbl_80300050[index][1];
+            voice->m52 = lbl_80300050[index][3];
+            voice->m4E = lbl_80300050[index][2];
+            voice->m36 = lbl_80300050[index][0];
+        } else {
+            voice->m36 = 0;
+            voice->m4E = 0;
+            voice->m52 = 0;
+            voice->m3A = 0;
+        }
+    } else {
+        voice->m3A = p[0] * 32767.0f;
+        voice->m36 = p[1] * 32767.0f;
+    }
+    voice->m4 |= 0x40000000;
+}
+
 void fn_80271E50(AXVPB *vpb, unsigned short value, int which)
 {
     Voice_803A7734 *voice = &lbl_803A7734[vpb->index];

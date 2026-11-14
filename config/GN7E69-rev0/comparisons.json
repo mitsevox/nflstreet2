@@ -27485,13 +27485,19 @@
     {
       "source": "src/engine/sdspmix.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80271D34-0x8027257C (src/engine/sdspmix.c), the sound_cxx compiler row and the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80271D34-0x8027257C (src/engine/sdspmix.c), the sound_cxx compiler row and the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function and the data row 0x802C1D88-0x802C1D8C. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80271D34",
           "end": "0x8027257C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C1D88",
+          "end": "0x802C1D8C"
         }
       ],
       "functions": [
@@ -27499,6 +27505,11 @@
           "symbol": "fn_80271D34",
           "start": "0x80271D34",
           "end": "0x80271D78"
+        },
+        {
+          "symbol": "fn_80271D78",
+          "start": "0x80271D78",
+          "end": "0x80271E50"
         },
         {
           "symbol": "fn_80271E50",
@@ -33061,7 +33072,7 @@
     {
       "source": "src/engine/cu_801BDA30.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/cu_801BDA30.c, animst.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; fn_801BE3C0 is not reconstructed (it loads no literal). Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/cu_801BDA30.c, animst.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -33126,6 +33137,11 @@
           "symbol": "fn_801BE068",
           "start": "0x801BE068",
           "end": "0x801BE3C0"
+        },
+        {
+          "symbol": "fn_801BE3C0",
+          "start": "0x801BE3C0",
+          "end": "0x801BE420"
         },
         {
           "symbol": "fn_801BE420",

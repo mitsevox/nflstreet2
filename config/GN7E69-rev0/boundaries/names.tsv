@@ -2645,7 +2645,8 @@ address	size	sibling_name	how	sibling_file	unit
 0x80269014	52	SNDAEMSI_SetClassData__FPQ24Csis9ParameterPv	size	saems.c	-
 0x80269048	60	CsisFunctionCallback__FPQ24Csis9ParameterPv	size	saems.c	-
 0x80271640	88	SNDAEMSI_restore__Fv	gap	saems.c	-
-0x80271D34	68	SNDDRV_DSPMixerResetChannel__FP16SNDDRVMIXCHANNEL	gap	sdspmix.c	sdspmix.c
+0x80271D34	68	SNDDRV_DSPMixerResetChannel__FP16SNDDRVMIXCHANNEL	size	sdspmix.c	sdspmix.c
+0x80271D78	216	SNDDRV_DSPMixerSetPan__FP6_AXVPBPfUsi	size	sdspmix.c	sdspmix.c
 0x80271E50	116	SNDDRV_DSPMixerSetAuxBus__FP6_AXVPBUsi	size	sdspmix.c	sdspmix.c
 0x80271EC4	84	SNDDRV_DSPMixerInit__Fi	size	sdspmix.c	sdspmix.c
 0x80271F18	500	SNDDRV_DSPMixerInitChannel__FP6_AXVPBUliUsUsPfUsi	size	sdspmix.c	sdspmix.c
