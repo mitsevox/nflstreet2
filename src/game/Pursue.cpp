@@ -31,7 +31,7 @@ extern "C" {
 int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, void *pBlock, int b, int c, int d,
                 int e, float range);
 int fn_80099F04(Object_80039F5C *p, int handle, unsigned char index);
-int fn_8009A77C(Object_80039F5C *p);
+int PlyrRollContestedCatch(Object_80039F5C *p);
 void fn_8009A8D4(void *p);
 int fn_8009AF00(int team, int value);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
@@ -1425,7 +1425,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
             PursueAvoidPlayers(p, pState, distance);
             pState->mUnknown8 = PursueClipHeading(pMotion, pState->mUnknown8, pos, dir);
             if (pState->mUnknown41 == 1 && BallStateGet(pBall, 0) == 3) {
-                int handle = fn_80099734(p, pBall, 0, 2, pState->mUnknown20, 1, 0, 0, fn_8009A77C(p), 120.0f);
+                int handle = fn_80099734(p, pBall, 0, 2, pState->mUnknown20, 1, 0, 0, PlyrRollContestedCatch(p), 120.0f);
 
                 if (handle != 0x1FFFFFFF && fn_80099F04(p, handle, BallGetIndex(pBall)) == 1) {
                     return 0;

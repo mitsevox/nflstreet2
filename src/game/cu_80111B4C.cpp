@@ -169,7 +169,7 @@ int fn_800997F4(Object_80039F5C *p, Ball_t *pBall, float range, void *pBlock, in
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
 int fn_8009A1A8(Object_80039F5C *p, int a, int b, int c, int index);
 int fn_8009A6EC(Object_80039F5C *p);
-int fn_8009A77C(Object_80039F5C *p);
+int PlyrRollContestedCatch(Object_80039F5C *p);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_8009E9A4(void);
 void fn_8009E9EC(Object_80039F5C *p, int side, Point_8017886C *pOut);
@@ -509,7 +509,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
         target = fn_800997F4(p, pBall, range, state, 3, 0, 0, &value, &extra);
     }
     if (target == 0x1FFFFFFF) {
-        target = fn_80099734(p, pBall, 0, mode, range, state, 1, 0, 0, fn_8009A77C(p));
+        target = fn_80099734(p, pBall, 0, mode, range, state, 1, 0, 0, PlyrRollContestedCatch(p));
     }
     if (target != 0x1FFFFFFF) {
         int result;
@@ -539,7 +539,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
             }
             if (flag) {
                 found = 1;
-                target = fn_80099734(p, pBall, a, mode, range, state, 1, 0, 1, fn_8009A77C(p));
+                target = fn_80099734(p, pBall, a, mode, range, state, 1, 0, 1, PlyrRollContestedCatch(p));
                 if (target == 0x1FFFFFFF) {
                     found = 0;
                 }

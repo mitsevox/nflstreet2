@@ -5064,7 +5064,7 @@ extern "C" int fn_8009B718(void *p)
     return sizeof(Block_8009B720);
 }
 
-extern "C" void fn_8009B720(void *pData)
+extern "C" void CelebrationBlocksInit(void *pData)
 {
     Block_8009B720 *pBlock = 0;
     unsigned int i;
@@ -17169,7 +17169,7 @@ extern "C" void fn_800C310C(void)
     }
 }
 
-extern "C" void fn_800C3130(Item_800C2F94 *pItem, short a, unsigned short b, int index)
+extern "C" void SortListAdd(Item_800C2F94 *pItem, short a, unsigned short b, int index)
 {
     lbl_8030FF40[index][lbl_802D9E90[index]].mpUnknown0 = pItem;
     lbl_8030FF40[index][lbl_802D9E90[index]].mUnknown4 = a;

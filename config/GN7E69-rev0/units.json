@@ -2408,6 +2408,18 @@
     "gPlayerPositionAbbrevs": {
       "address": "0x802EA294",
       "evidence": "evidence.tsv data and name rows for 0x802EA294 (26 position-name pointers in the .data of a file that is not yet a unit, used here only by the discarded GameTextShowRosterFill of src/game/GameText.cpp; storage not claimed by any unit)."
+    },
+    "PlyrRollContestedCatch": {
+      "address": "0x8009A77C",
+      "evidence": "evidence.tsv function and name rows for 0x8009A77C (unlinked; called from linked src/game/LooseBall.cpp and src/game/Pursue.cpp)."
+    },
+    "CelebrationBlocksInit": {
+      "address": "0x8009B720",
+      "evidence": "evidence.tsv function and name rows for 0x8009B720 (unlinked; called from linked src/game/Celebration.cpp)."
+    },
+    "SortListAdd": {
+      "address": "0x800C3130",
+      "evidence": "evidence.tsv function and name rows for 0x800C3130 (unlinked; called from linked src/game/PlyrMgr.cpp)."
     }
   },
   "units": [

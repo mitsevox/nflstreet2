@@ -14990,7 +14990,7 @@
           "end": "0x8009B720"
         },
         {
-          "symbol": "fn_8009B720",
+          "symbol": "CelebrationBlocksInit",
           "start": "0x8009B720",
           "end": "0x8009B7E0"
         },
@@ -18150,7 +18150,7 @@
           "end": "0x800C3130"
         },
         {
-          "symbol": "fn_800C3130",
+          "symbol": "SortListAdd",
           "start": "0x800C3130",
           "end": "0x800C3170"
         },
@@ -19648,7 +19648,7 @@
           "end": "0x8009A77C"
         },
         {
-          "symbol": "fn_8009A77C",
+          "symbol": "PlyrRollContestedCatch",
           "start": "0x8009A77C",
           "end": "0x8009A8D4"
         },

@@ -62,7 +62,7 @@ static float _LooseBall_fThreatRange = 2.0f;
 static float _LooseBall_fThreatAngle = 15.0f;
 static AnimStateAnimList_t _LooseBall_AnimTable;
 extern float gPlyrMoveFwdSpeed;
-int fn_8009A77C(Object_80039F5C *p);
+int PlyrRollContestedCatch(Object_80039F5C *p);
 float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
                 float f);
@@ -551,7 +551,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
     if (state->mUnknown42 == 0) {
         if (kind == 4 || kind == 5) {
             if (!fn_801787A0() && velocity.mZ < 0.0f) {
-                int handle = fn_80099734(p, pBall, 0, 3, state->mUnknown48, 1, 0, 0, fn_8009A77C(p), 120.0f);
+                int handle = fn_80099734(p, pBall, 0, 3, state->mUnknown48, 1, 0, 0, PlyrRollContestedCatch(p), 120.0f);
                 if (handle != 0x1FFFFFFF && fn_80099F04(p, handle, BallGetIndex(pBall)) == 1) {
                     result = 0;
                     goto done;

@@ -97,7 +97,7 @@ extern "C" int fn_8009A6EC(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_8009A77C(Object_80039F5C *p)
+extern "C" int PlyrRollContestedCatch(Object_80039F5C *p)
 {
     float distance = 1000.0f;
     int result = 0;

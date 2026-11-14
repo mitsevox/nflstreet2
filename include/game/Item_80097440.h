@@ -95,7 +95,7 @@ struct Block_8009B5E8 {
     int mUnknown128;
 };
 
-/* 304-byte blocks allocated by fn_8009B720 under the id 'celb'. */
+/* 304-byte blocks allocated by CelebrationBlocksInit under the id 'celb'. */
 struct Block_8009B720 {
     void *mpUnknown0;
     Block_8009B5E8 mUnknown4;
