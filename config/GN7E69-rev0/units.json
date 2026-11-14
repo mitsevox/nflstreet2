@@ -165,7 +165,7 @@
       "include_dirs": [
         "include/libc"
       ],
-      "evidence": "evidence.tsv compiler row 0x801B8C18-0x801B9D00 (engine_cpp_nosda_nosr), the one file src/engine/cu_801B8C18.cpp: engine_cpp_nosda's -O2 -G0 (absolute lis/load/store pairs for its scalar globals, no SDA) plus -fno-strength-reduce (owner ruling of 2026-11-14, per-file profile): the target recomputes index*12 and index*16 with mulli inside each lookup loop. The flag is not given to engine_cpp_nosda because it changes FSasync.c (DoFSReadHeader) and src/engine/cu_8025E148.c (fn_8025E148)."
+      "evidence": "evidence.tsv compiler row 0x801B8C18-0x801B9D00 (engine_cpp_nosda_nosr), the one file src/engine/csis.cpp: engine_cpp_nosda's -O2 -G0 (absolute lis/load/store pairs for its scalar globals, no SDA) plus -fno-strength-reduce (owner ruling of 2026-11-14, per-file profile): the target recomputes index*12 and index*16 with mulli inside each lookup loop. The flag is not given to engine_cpp_nosda because it changes FSasync.c (DoFSReadHeader) and src/engine/cu_8025E148.c (fn_8025E148)."
     },
     "speech_cxx": {
       "flags": [
@@ -2255,6 +2255,14 @@
     "spchlibauthor": {
       "address": "0x802F4794",
       "evidence": "evidence.tsv data/name rows for 0x802F4794 (target extent, related name); speech-library storage, original-owned."
+    },
+    "Init_GFLink": {
+      "address": "0x802856D8",
+      "evidence": "evidence.tsv function/name rows for 0x802856D8 (target extent, related name); src/engine/gflink.c is comparison-only, so src/engine/llperiph.c calls the original bytes."
+    },
+    "GBAFanServiceLink": {
+      "address": "0x802857D8",
+      "evidence": "evidence.tsv function/name rows for 0x802857D8 (target extent, related name); src/engine/gbafan.c is comparison-only, so src/engine/PJoyDrvr.c calls the original bytes."
     }
   },
   "units": [
@@ -15315,9 +15323,9 @@
       "evidence": "evidence.tsv unit row 0x801B1A3C-0x801B1CFC (src/engine/spchrand.c), its function, name and source-form rows, the data rows of its own storage (seedX .data 0x802F477C-0x802F4794, gRandArray .bss 0x8037E794-0x8037E814, gRandArrayIndex .sdata 0x803EBB20-0x803EBB24) and the speech_cxx compiler row; all five functions match the target, promoted from comparison-only."
     },
     {
-      "source": "src/engine/cu_801B8C18.cpp",
+      "source": "src/engine/csis.cpp",
       "profile": "engine_cpp_nosda_nosr",
-      "evidence": "evidence.tsv unit row 0x801B8C18-0x801B9D00 (src/engine/cu_801B8C18.cpp), its compiler row (engine_cpp_nosda_nosr), function and source-form rows, the .bss data row 0x8037E820-0x8037E824 and the .ctors data row 0x80289B44-0x80289B48; all 42 functions exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801B8C18-0x801B9D00 (src/engine/csis.cpp), its compiler row (engine_cpp_nosda_nosr), function, name, type and source-form rows, the .data rows 0x802F4838 and 0x802F483C, the .bss data rows 0x8037E820, 0x8037E824 and 0x8037E828 and the .ctors data row 0x80289B44-0x80289B48; all 42 functions exact and all of the file's storage defined.",
       "sections": [
         {
           "section": ".text",
@@ -15326,10 +15334,16 @@
           "end": "0x801B9D00"
         },
         {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4838",
+          "end": "0x802F4840"
+        },
+        {
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8037E820",
-          "end": "0x8037E824"
+          "end": "0x8037E840"
         },
         {
           "section": ".ctors",
@@ -18279,6 +18293,25 @@
           "placement": ".data4",
           "start": "0x802F9B90",
           "end": "0x802F9BAC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tdbiofio.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80285808-0x80285A24 (src/engine/tdbiofio.c), its compiler, function, name, type and data rows; all six callbacks and the 28-byte callback table tdbiofioCallback match the target under unchanged engine_c, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80285808",
+          "end": "0x80285A24"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x8030199C",
+          "end": "0x803019B8"
         }
       ]
     },

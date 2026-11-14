@@ -20971,63 +20971,63 @@
       ]
     },
     {
-      "source": "src/engine/cu_802856D8.c",
+      "source": "src/engine/gflink.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802856D8-0x80285A90 (src/engine/cu_802856D8.c), its compiler, function and name rows. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802856D8-0x802857D8 (src/engine/gflink.c), its compiler, function and name rows. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802856D8",
-          "end": "0x80285A90"
+          "end": "0x802857D8"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_802856D8",
+          "symbol": "Init_GFLink",
           "start": "0x802856D8",
           "end": "0x8028572C"
         },
         {
-          "symbol": "fn_8028572C",
+          "symbol": "GetState_GFLink",
           "start": "0x8028572C",
           "end": "0x802857D8"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/gbafan.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x802857D8-0x80285808 (src/engine/gbafan.c), its compiler, function and name rows. Draft comparisons only; original assembly remains linked.",
+      "sections": [
         {
-          "symbol": "fn_802857D8",
+          "section": ".text",
+          "placement": ".text",
           "start": "0x802857D8",
           "end": "0x80285808"
-        },
+        }
+      ],
+      "functions": [
         {
-          "symbol": "fn_80285808",
-          "start": "0x80285808",
-          "end": "0x80285878"
-        },
+          "symbol": "GBAFanServiceLink",
+          "start": "0x802857D8",
+          "end": "0x80285808"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80285A24.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80285A24-0x80285A90 (src/engine/cu_80285A24.c), its compiler, function and name rows. Draft comparisons only; original assembly remains linked.",
+      "sections": [
         {
-          "symbol": "fn_80285878",
-          "start": "0x80285878",
-          "end": "0x802858BC"
-        },
-        {
-          "symbol": "fn_802858BC",
-          "start": "0x802858BC",
-          "end": "0x80285940"
-        },
-        {
-          "symbol": "fn_80285940",
-          "start": "0x80285940",
-          "end": "0x802859B4"
-        },
-        {
-          "symbol": "fn_802859B4",
-          "start": "0x802859B4",
-          "end": "0x80285A1C"
-        },
-        {
-          "symbol": "fn_80285A1C",
-          "start": "0x80285A1C",
-          "end": "0x80285A24"
-        },
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80285A24",
+          "end": "0x80285A90"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_80285A24",
           "start": "0x80285A24",

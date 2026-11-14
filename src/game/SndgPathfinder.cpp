@@ -13,8 +13,7 @@
 #include "game/SndgPathfinder.h"
 #include "game/cu_8002B8F8.h"
 #include "game/GameCamera.h"
-#include "game/CsisClassHandle.h"
-#include "engine/cu_801B8C18.h"
+#include "game/SndgHandles.h"
 #include "game/Object_8017886C.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
@@ -36,25 +35,23 @@ struct Vec2 {
 };
 
 extern "C" {
-int fn_801B8DA8(CsisClassHandle *list, Struct_803EB878 *desc);
-
-extern Struct_803EB878 lbl_803EB878;
-extern Struct_803EB878 lbl_803EB888;
-extern Struct_803EB878 lbl_803EB890;
-extern Struct_803EB878 lbl_803EB898;
-extern Struct_803EB878 lbl_803EB8A0;
-extern Struct_803EB878 lbl_803EB8A8;
-extern Struct_803EB878 lbl_803EB8B0;
-extern Struct_803EB878 lbl_803EB8B8;
-extern Struct_803EB878 lbl_803EB8C0;
+extern Csis::InterfaceId lbl_803EB878;
+extern Csis::InterfaceId lbl_803EB888;
+extern Csis::InterfaceId lbl_803EB890;
+extern Csis::InterfaceId lbl_803EB898;
+extern Csis::InterfaceId lbl_803EB8A0;
+extern Csis::InterfaceId lbl_803EB8A8;
+extern Csis::InterfaceId lbl_803EB8B0;
+extern Csis::InterfaceId lbl_803EB8B8;
+extern Csis::InterfaceId lbl_803EB8C0;
 }
 
-static inline int AddSound(CsisClassHandle *list, Struct_803EB878 *desc, void *params, Object_801B9068 **handle)
+static inline int AddSound(Csis::ClassHandle *list, Csis::InterfaceId *desc, void *params, Csis::Class **handle)
 {
-    int err = fn_801B95AC(list, params, handle);
+    int err = Csis::Class::CreateInstance(list, params, handle);
     if (err < 0) {
-        fn_801B8DA8(list, desc);
-        err = fn_801B95AC(list, params, handle);
+        list->Set(desc);
+        err = Csis::Class::CreateInstance(list, params, handle);
     }
     return err;
 }
@@ -63,23 +60,23 @@ struct SoundObject {
     static void *operator new(unsigned int size)
     {
         Allocator *alloc;
-        fn_801B90CC(&alloc);
-        fn_801B9148();
+        Csis::System::GetAllocator(&alloc);
+        Csis::System::Lock();
         void *p = alloc->Alloc(size, AllocParams());
-        fn_801B9174();
+        Csis::System::Unlock();
         return p;
     }
 
     static void operator delete(void *p)
     {
         Allocator *alloc;
-        fn_801B90CC(&alloc);
-        fn_801B9148();
+        Csis::System::GetAllocator(&alloc);
+        Csis::System::Lock();
         alloc->Free(p, 0);
-        fn_801B9174();
+        Csis::System::Unlock();
     }
 
-    Object_801B9068 *mHandle;
+    Csis::Class *mHandle;
 };
 
 // The fields after mHandle form the parameter block that is registered with
@@ -118,14 +115,14 @@ struct Sound0 : SoundObject {
     ~Sound0()
     {
         if (mHandle != 0) {
-            fn_801B96E4(mHandle);
+            mHandle->Release();
         }
     }
 
     void Commit()
     {
         if (mHandle != 0) {
-            fn_801B983C(mHandle, &mUnknown4);
+            mHandle->SetMemberData(&mUnknown4);
         }
     }
 
@@ -157,7 +154,7 @@ struct SoundVP : SoundObject {
         mPan = pan;
     }
 
-    SoundVP(CsisClassHandle *list, Struct_803EB878 *desc, int volume, unsigned short pan)
+    SoundVP(Csis::ClassHandle *list, Csis::InterfaceId *desc, int volume, unsigned short pan)
     {
         SetVolume(volume);
         SetPan(pan);
@@ -167,14 +164,14 @@ struct SoundVP : SoundObject {
     ~SoundVP()
     {
         if (mHandle != 0) {
-            fn_801B96E4(mHandle);
+            mHandle->Release();
         }
     }
 
     void Commit()
     {
         if (mHandle != 0) {
-            fn_801B983C(mHandle, &mVolume);
+            mHandle->SetMemberData(&mVolume);
         }
     }
 
@@ -213,7 +210,7 @@ struct SoundVFP : SoundObject {
         mPan = pan;
     }
 
-    SoundVFP(CsisClassHandle *list, Struct_803EB878 *desc, int volume, int f, unsigned short pan)
+    SoundVFP(Csis::ClassHandle *list, Csis::InterfaceId *desc, int volume, int f, unsigned short pan)
     {
         SetVolume(volume);
         SetUnknown8(f);
@@ -224,14 +221,14 @@ struct SoundVFP : SoundObject {
     ~SoundVFP()
     {
         if (mHandle != 0) {
-            fn_801B96E4(mHandle);
+            mHandle->Release();
         }
     }
 
     void Commit()
     {
         if (mHandle != 0) {
-            fn_801B983C(mHandle, &mVolume);
+            mHandle->SetMemberData(&mVolume);
         }
     }
 
@@ -282,14 +279,14 @@ struct Sound3 : SoundObject {
     ~Sound3()
     {
         if (mHandle != 0) {
-            fn_801B96E4(mHandle);
+            mHandle->Release();
         }
     }
 
     void Commit()
     {
         if (mHandle != 0) {
-            fn_801B983C(mHandle, &mVolume);
+            mHandle->SetMemberData(&mVolume);
         }
     }
 
