@@ -2432,23 +2432,23 @@
     },
     "SNDPKTPLAY_framesoutstanding": {
       "address": "0x802791D0",
-      "evidence": "evidence.tsv function/name rows for 0x802791D0; registered in the comparison-only src/engine/spktplay.c, which keeps its original bytes until the whole file can be linked; called here by name from src/engine/cu_80276DE4.cpp."
+      "evidence": "evidence.tsv function/name rows for 0x802791D0; registered in the comparison-only src/engine/spktplay.c, which keeps its original bytes until the whole file can be linked; called by name from src/engine/sststat.c and src/engine/stretch.c."
     },
     "SFILTER_createHPFFIR8": {
       "address": "0x80279CB8",
-      "evidence": "evidence.tsv function/name rows for 0x80279CB8; registered in the comparison-only src/engine/sfhpffir8.c, which keeps its original bytes until the whole file can be linked; called here by name from src/engine/cu_802753F0.cpp."
+      "evidence": "evidence.tsv function/name rows for 0x80279CB8; registered in the comparison-only src/engine/sfhpffir8.c, which keeps its original bytes until the whole file can be linked; called by name from src/engine/smixhip.c."
     },
     "SFILTER_add": {
       "address": "0x80279D90",
-      "evidence": "evidence.tsv function/name rows for 0x80279D90; registered in the comparison-only src/engine/sfilter.c, which keeps its original bytes until the whole file can be linked; called here by name from src/engine/cu_802753F0.cpp."
+      "evidence": "evidence.tsv function/name rows for 0x80279D90; registered in the comparison-only src/engine/sfilter.c, which keeps its original bytes until the whole file can be linked; called by name from src/engine/smixer.c, src/engine/smixfilt.c, src/engine/smixhip.c and src/engine/smixptch.c."
     },
     "SFILTER_remove": {
       "address": "0x80279DF8",
-      "evidence": "evidence.tsv function/name rows for 0x80279DF8; registered in the comparison-only src/engine/sfilter.c, which keeps its original bytes until the whole file can be linked; called here by name from src/engine/cu_802753F0.cpp."
+      "evidence": "evidence.tsv function/name rows for 0x80279DF8; registered in the comparison-only src/engine/sfilter.c, which keeps its original bytes until the whole file can be linked; called by name from src/engine/smixhip.c."
     },
     "SFILTER_rsfsetpitch": {
       "address": "0x8027A4C0",
-      "evidence": "evidence.tsv function/name rows for 0x8027A4C0; registered in the comparison-only src/engine/sfrsf.c, which keeps its original bytes until the whole file can be linked; called here by name from src/engine/cu_802753F0.cpp."
+      "evidence": "evidence.tsv function/name rows for 0x8027A4C0; registered in the comparison-only src/engine/sfrsf.c, which keeps its original bytes until the whole file can be linked; called by name from src/engine/smixptch.c."
     },
     "SNDPKTPLAYI_freeframes": {
       "address": "0x8027952C",
@@ -2456,11 +2456,11 @@
     },
     "SFILTER_unpackxalfinit": {
       "address": "0x8027B7B0",
-      "evidence": "evidence.tsv function/name rows for 0x8027B7B0; exact but unlinked in the comparison-only src/engine/supxalf.cpp, which keeps its original bytes until the whole file can be linked; stored in the constructor table by src/engine/cu_80279BC0.cpp by name."
+      "evidence": "evidence.tsv function/name rows for 0x8027B7B0; exact but unlinked in the comparison-only src/engine/supxalf.cpp, which keeps its original bytes until the whole file can be linked; stored by name in the constructor table of src/engine/sinitxa.c."
     },
     "SFILTER_unpackxapfinit": {
       "address": "0x8027BA6C",
-      "evidence": "evidence.tsv function/name rows for 0x8027BA6C; exact but unlinked in the comparison-only src/engine/supxapf.cpp, which keeps its original bytes until the whole file can be linked; stored in the constructor table by src/engine/cu_80279BC0.cpp by name."
+      "evidence": "evidence.tsv function/name rows for 0x8027BA6C; exact but unlinked in the comparison-only src/engine/supxapf.cpp, which keeps its original bytes until the whole file can be linked; stored by name in the constructor table of src/engine/sinitxa.c."
     },
     "SNDPKTPLAY_overhead": {
       "address": "0x80278AC8",

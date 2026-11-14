@@ -2,7 +2,7 @@
 #define ENGINE_MTDECF_H
 
 /* 3432-byte MT decoder state used by src/engine/mtdecf.cpp (the MT unpack
-   filter constructors in src/engine/cu_80279BC0.cpp and src/engine/supmutpf.c
+   filter constructors in src/engine/supmutf.c, src/engine/supmutlf.c and src/engine/supmutpf.c
    allocate it with fn_8027C020(3432)). Partial layout: +0xC-+0x683 are not accessed by the
    reconstructed functions. */
 typedef struct Codec_8027CF9C {
