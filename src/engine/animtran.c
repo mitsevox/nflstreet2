@@ -1,7 +1,7 @@
 #include "engine/cu_801BDA30.h"
 
 void fn_801BE910(Collection_801BE594 *p, unsigned short key, int frames);
-Transition_801BEFA4 *fn_801BEFA4(AnimStateTransList_t *pTable, AnimHeader_t *pObject, Record_800D81C8 *pRecords,
+Transition_801BEFA4 *fn_801BEFA4(AnimStateTransList_t *pTable, AnimHeader_t *pObject, AnimChannel_t *pRecords,
                                  unsigned short fromAnim, unsigned short fromFileNum, unsigned short fromReadPos,
                                  unsigned short state, unsigned short toAnim, unsigned short toFileNum);
 
@@ -11,15 +11,15 @@ int fn_801BE82C(unsigned short type, unsigned short key)
     return lbl_803D4F50.mCount;
 }
 
-unsigned int fn_801BE860(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, unsigned short key)
+unsigned int fn_801BE860(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, unsigned short key)
 {
     float highest = 0.0f;
     unsigned int best = 0xFFFF;
-    unsigned int count = fn_801BA568(pObject, pRecords, key);
+    unsigned int count = AnimChanGetNumActiveByState(pObject, pRecords, key);
     unsigned short i;
 
     for (i = 0; i < count; i++) {
-        unsigned int index = fn_801BA5A8(pObject, pRecords, key, i);
+        unsigned int index = AnimChanGetStateChannelByIndex(pObject, pRecords, key, i);
 
         if (highest < pRecords[index].mUnknown30.mUnknown0) {
             highest = pRecords[index].mUnknown30.mUnknown0;
@@ -41,7 +41,7 @@ void fn_801BE910(Collection_801BE594 *p, unsigned short key, int frames)
     }
 }
 
-void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, unsigned short key,
+void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, unsigned short key,
                  unsigned short previous, int state, void *pOwner)
 {
     AnimStateTransList_t *pTable = &lbl_803D4F50;
@@ -111,7 +111,7 @@ void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
                         p->mUnknown4[i].mUnknown6 = AnimFileGetTransitionStateFromObjType(pObject->mUnknown2);
                         file = AnimFileGetSlotFromFileNum(pObject->mUnknown2, pTransition->mUnknownC);
                         if (file != 0xFFFFFF &&
-                            (index = fn_801BA154(pObject, pRecords, (unsigned short)file, pTransition->mUnknownE, 1.0f,
+                            (index = AnimChanStartAnimPerState(pObject, pRecords, (unsigned short)file, pTransition->mUnknownE, 1.0f,
                                                  0xFFFF, pOwner, p->mUnknown4[i].mUnknown6)) != -1) {
                             float duration = AnimSeqGetLife(pRecords[index].mUnknown4C.mpUnknown0);
                             unsigned int fade = duration * (1.0f - pTransition->mUnknown8) * 0.5f;
@@ -124,7 +124,7 @@ void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
                                         p->mUnknown4[i + 2].mUnknown4C.mUnknown4);
                             delay = (float)hold + (float)fade;
                             fn_801BE798(p, key, delay);
-                            fn_801BA60C(pObject, pRecords, key, delay);
+                            AnimChanSetDelayByState(pObject, pRecords, key, delay);
                             fallback = 0;
                         } else {
                             fallback = 1;
@@ -141,7 +141,7 @@ void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
     }
 }
 
-Transition_801BEFA4 *fn_801BEFA4(AnimStateTransList_t *pTable, AnimHeader_t *pObject, Record_800D81C8 *pRecords,
+Transition_801BEFA4 *fn_801BEFA4(AnimStateTransList_t *pTable, AnimHeader_t *pObject, AnimChannel_t *pRecords,
                                  unsigned short fromAnim, unsigned short fromFileNum, unsigned short fromReadPos,
                                  unsigned short state, unsigned short toAnim, unsigned short toFileNum)
 {

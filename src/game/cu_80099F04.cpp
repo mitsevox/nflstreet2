@@ -1,4 +1,4 @@
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/Ball.h"
 #include "game/fn_801C1F94.h"
 #include "game/Block_801BE60C.h"
@@ -6,8 +6,8 @@
 
 extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, float *pOut, short *pValue);
 extern "C" int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
-extern "C" int fn_801BA6B0(Record_800D81C8 *entry);
-extern "C" void fn_801BA6BC(Record_800D81C8 *entry, int value);
+extern "C" int AnimChanIsMirrored(AnimChannel_t *entry);
+extern "C" void AnimChanSetMirrored(AnimChannel_t *entry, int value);
 extern "C" void AnimSeqSetSpeed(void *p, float value);
 extern "C" void fn_800F05E4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
 
@@ -28,7 +28,7 @@ extern "C" int fn_80099F04(Object_80039F5C *p, int handle, int kind)
     if (!(p->mFlags & 0x800)) {
         float blend;
         short value;
-        Record_800D81C8 *pRecords;
+        AnimChannel_t *pRecords;
         float duration;
         int index;
         unsigned short key;
@@ -66,9 +66,9 @@ extern "C" int fn_80099F04(Object_80039F5C *p, int handle, int kind)
         p->mUnknown9[0] = 1;
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, lbl_8030C2B8[index].mUnknown0, 1.0f, p);
         pRecords = p->mpUnknown800;
-        entry = fn_801BA5A8(p->mpUnknown796, pRecords, lbl_8030C2B8[index].mUnknown0, 0);
+        entry = AnimChanGetStateChannelByIndex(p->mpUnknown796, pRecords, lbl_8030C2B8[index].mUnknown0, 0);
         if (handle < 0) {
-            fn_801BA6BC(&pRecords[entry], fn_801BA6B0(&pRecords[entry]) == 0);
+            AnimChanSetMirrored(&pRecords[entry], AnimChanIsMirrored(&pRecords[entry]) == 0);
         }
         pRecords[entry].mUnknown2C = duration;
         AnimSeqSetSpeed(&pRecords[entry].mUnknown4C, blend);

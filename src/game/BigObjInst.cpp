@@ -26,7 +26,7 @@ void fn_8004A8E8(BigObj_t *pItem, void *a, int b, void *c);
 void fn_8004A908(BigObjInst *pObject, int index);
 void fn_8004C684(void *pOwner, BigObjInst *pObject);
 void fn_8004C7B8(BigObjInst *pObject);
-void fn_801BA03C(void *a, void *b, float c, BigObjInst *pObject);
+void AnimChanProcess(void *a, void *b, float c, BigObjInst *pObject);
 int fn_801BC7C0(void *a, void *b, void *c);
 int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
 int fn_801BCCAC(void *a, void *b, int c, void *d, int e, int f);
@@ -182,7 +182,7 @@ int BigObjInstSimulateAll(float dt)
                 pExtra->mUnknown1708 |= 16;
             }
             fn_801BE420(pExtra->mUnknown1300, pExtra->mUnknown48, pExtra->mUnknown60, pObject, dt);
-            fn_801BA03C(pExtra->mUnknown48, pExtra->mUnknown60, dt, pObject);
+            AnimChanProcess(pExtra->mUnknown48, pExtra->mUnknown60, dt, pObject);
             a = fn_801BC7C0(pExtra->mUnknown48, pExtra->mUnknown60, pExtra->mUnknown1300);
             fn_8004A8C4(pExtra, BigObjGet(i), a);
             pExtra->mUnknown32 = fn_801BCA74(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown36, 0xFFFF, 1);

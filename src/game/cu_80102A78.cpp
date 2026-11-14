@@ -1,6 +1,6 @@
 #include "game/fn_801248D4.h"
 #include "game/StyleTracker.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
 #include <math.h>
@@ -57,7 +57,7 @@ struct Entry_801018B4 {
     float mUnknown24;
 };
 
-/* 8-byte item of List_801018B4: two halfwords for fn_801BA2A8 and the
+/* 8-byte item of List_801018B4: two halfwords for AnimChanStartAnim and the
    entry pointer. */
 struct Item_801018B4 {
     unsigned short mUnknown0;
@@ -222,7 +222,7 @@ extern "C" {
 
 extern "C" int fn_801018B4(Object_80039F5C *p, List_801018B4 *pList, int a, int b, int *pOut);
 
-extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void *pData, Record_800D81C8 *pEntries,
+extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void *pData, AnimChannel_t *pEntries,
                            Object_80039F5C *p, unsigned int mode)
 {
     int delta = 0;
@@ -271,7 +271,7 @@ extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void 
             } else {
                 pState->mUnknown4 = failed;
             }
-            pState->mUnknown0 = fn_801BA2A8(pData, pEntries, pList->mItems[index].mUnknown0,
+            pState->mUnknown0 = AnimChanStartAnim(pData, pEntries, pList->mItems[index].mUnknown0,
                                             pList->mItems[index].mUnknown2, animation, p, 1.0f);
             AnimSeqSetSpeed(&pEntries[pState->mUnknown0].mUnknown4C, MathInverse(lbl_803EAEC4));
         }

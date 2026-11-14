@@ -6,7 +6,7 @@
 #include <math.h>
 #include <string.h>
 
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/Directions_8012430C.h"
 #include "game/fn_80177FE0.h"

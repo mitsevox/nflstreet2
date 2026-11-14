@@ -1,7 +1,7 @@
 #ifndef GAME_FEPLYRMODEL_H
 #define GAME_FEPLYRMODEL_H
 
-#include "engine/Record_800D81C8.h"
+#include "engine/AnimChannel.h"
 #include "game/Object_8003DEC4.h"
 
 /* Argument of fn_800B267C, fn_800B26E0 and fn_800B2A14. */

@@ -36,7 +36,7 @@
 #include "game/fn_80238174.h"
 #include "game/Record_800DB60C.h"
 #include "game/fn_801BE60C.h"
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 
 extern "C" {
 int fn_800FFFB0(Object_80039F5C *p);
@@ -73,7 +73,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
     Object_80039F5C *pOther = 0;
     State_800FDA58 *pState;
     Record_8011F4F8 *pRequest;
-    Record_800D81C8 *pChannels;
+    AnimChannel_t *pChannels;
     unsigned char hasBall;
     int kind;
     unsigned char mode;
@@ -158,26 +158,26 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
     if (hasBall) {
         if (kind == 4) {
             if (fn_80101B7C(p) != 0) {
-                anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0xEB, 0);
+                anim = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 0xEB, 0);
                 p->mFlags |= 8;
                 AudmonEventPostId(0x32, &p->mMotion.mPos, p->mId, 0, 0, 0);
                 fn_800A2190(0);
             } else {
                 fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0xB2, 1.0f, p);
-                anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0xB2, 0);
+                anim = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 0xB2, 0);
                 TutorialSetMoveDone(0x19, 1);
             }
         } else {
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0xB2, 1.0f, p);
-            anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0xB2, 0);
+            anim = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 0xB2, 0);
             TutorialSetMoveDone(0x19, 1);
         }
         if (anim == 0xFFFF) {
-            anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0x45, 0);
+            anim = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 0x45, 0);
         }
     } else {
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0x45, 1.0f, p);
-        anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0x45, 0);
+        anim = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 0x45, 0);
     }
     pChannels = p->mpUnknown800;
     if (pRequest->mUnknown1D != 4 && fn_801BE648(p->mpUnknown792) != 0xEB) {

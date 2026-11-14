@@ -24,7 +24,7 @@
 #include "game/bitstream.h"
 
 #include "engine/vptmanager.h"
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/GameCamera.h"
 #include "game/Class_80148A58.h"
 #include "game/Entry_800B206C.h"
@@ -777,7 +777,7 @@ extern "C" void fn_800917A4(int index)
             if (pBlock->mUnknown680 != 0xFFFF) {
                 BigObjPhysics_t *pExtra = pBlock->mpUnknown676->mUnknown428;
 
-                fn_801BA384((AnimHeader_t *)pExtra->mUnknown48, (Record_800D81C8 *)pExtra->mUnknown60,
+                AnimChanStopAnim((AnimHeader_t *)pExtra->mUnknown48, (AnimChannel_t *)pExtra->mUnknown60,
                             pBlock->mUnknown680);
                 pBlock->mUnknown680 = 0xFFFF;
             }
@@ -1399,7 +1399,7 @@ extern "C" void fn_800940F0(int handle)
             Object_80039F5C *p = pCharacter->mUnknown14[i];
 
             if (p->mIdBytes[3] == 1 || p->mIdBytes[3] == 3) {
-                fn_801BA398((AnimHeader_t *)p->mUnknown1244, (Record_800D81C8 *)(p->mUnknown1244 + 12), 10);
+                AnimChanStopByStateIndex((AnimHeader_t *)p->mUnknown1244, (AnimChannel_t *)(p->mUnknown1244 + 12), 10);
                 fn_800A3B5C(p);
             }
         }
@@ -8307,62 +8307,62 @@ extern "C" void fn_800B4A18(int index, char *pDest, int size)
 }
 
 typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void *pRecord,
-                                Record_800D81C8 *pEntries, Object_80039F5C *p, unsigned int phase);
+                                AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int phase);
 
 extern "C" {
-int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int PlayerLocoCyclePhase(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int PlayerLocoCyclePhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_80089E70(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_80089E70(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800A44C0(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800A44C0(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int PlayerLocoHandleMomentumState(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+int PlayerLocoHandleMomentumState(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
                                   Object_80039F5C *p, unsigned int phase);
-int PlayerLocoMoveCmdPhase(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int PlayerLocoMoveCmdPhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int PlayerActionAnimFacingCallback(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int PlayerActionAnimFacingCallback(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int LooseBallAnimEvent(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int LooseBallAnimEvent(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800F2CB4(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_800F2CB4(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_80102A78(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_80102A78(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_8010680C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_8010680C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_8010BC90(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_8010BC90(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_8010D834(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_8010D834(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_80110C70(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int fn_80110C70(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 
 extern Handler_800B4D7C lbl_8030FB60[248];
@@ -11227,7 +11227,7 @@ struct Block_800AEB1C {
 };
 
 extern "C" {
-int fn_800ADA1C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+int fn_800ADA1C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
                 PlyrSlot_t *p, unsigned int phase);
 void fn_800AE138(unsigned int index);
 int fn_800B6644(int index);
@@ -11251,7 +11251,7 @@ void fn_8011E240(Object_80039F5C *p);
 Object_80039F5C *fn_800AEBA0(void);
 
 extern int (*lbl_8030F51C[6])(Table_80089904 *pTable, unsigned short key, void *pRecord,
-                              Record_800D81C8 *pEntries, PlyrSlot_t *p, unsigned int phase);
+                              AnimChannel_t *pEntries, PlyrSlot_t *p, unsigned int phase);
 extern unsigned char lbl_8030F9DC[15];
 extern unsigned char lbl_8030F9EC[15];
 extern Record_802D82E0 lbl_802D82E0[15];

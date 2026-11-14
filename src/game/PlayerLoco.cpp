@@ -11,7 +11,7 @@
 #include "game/Object_801BBD5C.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802270D4.h"
@@ -19,14 +19,14 @@
 extern "C" {
 int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
-int fn_801BA6B0(Record_800D81C8 *pEntry);
-void fn_801BA6BC(Record_800D81C8 *pEntry, int value);
+int AnimChanIsMirrored(AnimChannel_t *pEntry);
+void AnimChanSetMirrored(AnimChannel_t *pEntry, int value);
 void AnimMomentumInit(AnimMomentum_t *p, AnimMomentumActor_t *pOther, int entry);
 void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOther);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 int fn_800C0464(void *p);
 int PlayerLocoFindSampleIndex(Object_801BBD5C *pObject, float value);
-float PlayerLocoUpdateBlendWeights(int index, Block_801BE60C *pBlock, LocoBlendSet_t *pObject, Record_800D81C8 *pEntries,
+float PlayerLocoUpdateBlendWeights(int index, Block_801BE60C *pBlock, LocoBlendSet_t *pObject, AnimChannel_t *pEntries,
                   float value);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 Object_801BBD5C *AnimFileGetStateData(unsigned short a, unsigned short b);
@@ -42,14 +42,14 @@ int PlayerMoveIsVariantPending(Object_80039F5C *p);
 }
 
 /* Payload that fn_801BE60C returns for this handler's key: the channel index
-   that fn_801BA2A8 returns and the state AnimMomentumInit and AnimMomentumUpdate update. */
+   that AnimChanStartAnim returns and the state AnimMomentumInit and AnimMomentumUpdate update. */
 struct PlayerLocoMomentumPayload_t {
     int mEntry;
     AnimMomentum_t mState;
 };
 
 extern "C" int PlayerLocoHandleMomentumState(Table_80089904 *pTable, unsigned short key, void *pRecord,
-                                             Record_800D81C8 *pEntries, Object_80039F5C *p, unsigned int phase)
+                                             AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int phase)
 {
     PlayerLocoMomentumPayload_t *pPayload = (PlayerLocoMomentumPayload_t *)fn_801BE60C(p->mpUnknown792, key);
 
@@ -61,11 +61,11 @@ extern "C" int PlayerLocoHandleMomentumState(Table_80089904 *pTable, unsigned sh
         AnimFileGetStateAnimList(p->mpUnknown796->mUnknown2, pTable->mEntries[i].mUnknown2 & 0x7FFF, pTable);
         int index = fn_8009C4B0(pTable, &p->mUnknown1008);
         if (index >= 0) {
-            pPayload->mEntry = fn_801BA2A8(pRecord, pEntries, pTable->mEntries[index].mUnknown0,
+            pPayload->mEntry = AnimChanStartAnim(pRecord, pEntries, pTable->mEntries[index].mUnknown0,
                                            pTable->mEntries[index].mUnknown2, key, p, 1.0f);
             if (BallFindHeldBy(p) && p->mUnknown776 == 1) {
-                Record_800D81C8 *pEntry = &pEntries[pPayload->mEntry];
-                fn_801BA6BC(pEntry, fn_801BA6B0(pEntry) == 0);
+                AnimChannel_t *pEntry = &pEntries[pPayload->mEntry];
+                AnimChanSetMirrored(pEntry, AnimChanIsMirrored(pEntry) == 0);
             }
             AnimMomentumInit(&pPayload->mState, (AnimMomentumActor_t *)p, pPayload->mEntry);
         }
@@ -214,7 +214,7 @@ extern "C" int PlayerLocoGetBlendIndex(Object_80039F5C *p, Object_801BBD5C *pObj
 }
 
 extern "C" void PlayerLocoSetCycleDuration(float value, Block_801BE60C *pBlock, LocoBlendSet_t *pObject,
-                                           Record_800D81C8 *pRecords)
+                                           AnimChannel_t *pRecords)
 {
     pBlock->mUnknown20.mUnknown10 = PlayerLocoUpdateBlendWeights(pBlock->mUnknown20.mUnknown14Half, pBlock, pObject, pRecords, value);
     for (unsigned char i = 0; i <= 1; i++) {

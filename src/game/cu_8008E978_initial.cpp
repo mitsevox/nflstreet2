@@ -83,8 +83,8 @@ extern int lbl_802D7154[];
 extern int lbl_802D71CC[];
 extern float lbl_803EA8B4,lbl_803EA8B8;
 BigObjInst *BallModelGetLinkedObj(Block_80170E64 *);
-int fn_801BA5A8(AnimHeader_t *,Record_800D81C8 *,unsigned short,int);
-int fn_801BA6B0(Record_800D81C8 *);
+int AnimChanGetStateChannelByIndex(AnimHeader_t *,AnimChannel_t *,unsigned short,int);
+int AnimChanIsMirrored(AnimChannel_t *);
 void fn_800518E0(Object_80039F5C *);
 void fn_800C8688(Object_80039F5C *,Object_80039F5C *,int,int);
 int fn_800C8694(Object_80039F5C *);
@@ -191,9 +191,9 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
         case 0xC00F:
             if(AnimSeqGetOpcodeParameter()==2) p->mFlags|=0x80000;else p->mFlags&=~0x80000;return 1;
         case 0xC010: {
-            int index=fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,10,0);
-            if(index==0xFFFF) index=fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
-            if(index!=0xFFFF) mode=fn_801BA6B0(&p->mpUnknown800[index]);
+            int index=AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,10,0);
+            if(index==0xFFFF) index=AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
+            if(index!=0xFFFF) mode=AnimChanIsMirrored(&p->mpUnknown800[index]);
             fn_800ADBFC(p,mode);return 1;
         }
         case 0xC011:fn_800ADD04(p);return 1;
@@ -202,8 +202,8 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
         case 0xC014:p->mUnknown1240.mUnknown3=(unsigned char)AnimSeqGetOpcodeParameter();return 1;
         case 0xC015: {
             int selection=2;
-            int index=fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
-            mode=fn_801BA6B0(&p->mpUnknown800[index]);
+            int index=AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
+            mode=AnimChanIsMirrored(&p->mpUnknown800[index]);
             if(AnimSeqGetOpcodeParameter()==2) selection=1;
             if(mode) selection=selection==2?1:2;
             if(!fn_800DBAF0(p)) fn_800D7A0C(p,selection);
@@ -212,8 +212,8 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
         case 0xC016:case 0xC01B:case 0xC021:case 0xD004:
             AnimSeqGetOpcodeParameter();return 1;
         case 0xC017: {
-            int index=fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
-            if(index!=0xFFFF) mode=fn_801BA6B0(&p->mpUnknown800[index]);
+            int index=AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
+            if(index!=0xFFFF) mode=AnimChanIsMirrored(&p->mpUnknown800[index]);
             else mode=p->mUnknown776==1;
             int selection=AnimSeqGetOpcodeParameter();int *record;
             switch(selection) {
@@ -225,7 +225,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
         }
         case 0xC018:p->mFlags|=0x2000;return 1;
         case 0xC019:fn_800ADD00(p);return 1;
-        case 0xC01A:fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);return 1;
+        case 0xC01A:AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);return 1;
         case 0xC01C: {
             short bone=(short)(AnimSeqGetOpcodeParameter()-1);
             short effect=(short)(AnimSeqGetOpcodeParameter()-1);
@@ -236,7 +236,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             return 1;
         }
         case 0xC01E:
-            fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
+            AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
             ReplayEventAddForCode(p,AnimSeqGetOpcodeParameter());return 1;
         case 0xC01F:
             if(AnimSeqGetOpcodeParameter()==1) AudmonEventPostId(43,&p->mMotion.mPos,p->mId,0,0,0);

@@ -18573,6 +18573,25 @@
           "end": "0x803ED610"
         }
       ]
+    },
+    {
+      "source": "src/engine/animchan.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801B9F00-0x801BA818 (src/engine/animchan.c), its compiler, function, name, data, type and source-form rows; all 18 functions exact (AnimChanStartAnimPerState through a labeled fake-match form), promoted from comparison-only, with the file's .rodata 0x802AED98-0x802AEDB8.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B9F00",
+          "end": "0x801BA818"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AED98",
+          "end": "0x802AEDB8"
+        }
+      ]
     }
   ]
 }

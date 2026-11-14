@@ -61,7 +61,7 @@ struct PlyrModelView_t {
 
 /* Saved-state view of one 5336-byte player slot, as PlyrMgrLoadSnapshot restores
    it: whole-block copies and 124-byte entries restored through
-   fn_801BA784. Bytes 0-1031 are not restored. */
+   AnimChanCopyChannel. Bytes 0-1031 are not restored. */
 struct PlyrSaveWords12_t {
     int mWords[3];
 };
@@ -140,8 +140,8 @@ void fn_8009BEA8(Object_80039F5C *p);
 int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
 void PlyrMoveCmdReverse(PlyrMoveCmd_t *pObject);
 void AnimInitHeader(void *p, int a, int b, int c);
-void fn_801B9FEC(void *p, void *q);
-void fn_801BA03C(void *a, void *b, float f, Object_80039F5C *p);
+void AnimChanInitChannels(void *p, void *q);
+void AnimChanProcess(void *a, void *b, float f, Object_80039F5C *p);
 int fn_801BC7C0(void *a, void *b, void *c);
 void fn_801BCEEC(void *a, void *b);
 void fn_801BE040(void *p);
@@ -203,7 +203,7 @@ void *fn_8023816C(void *pHandle);
 int PlyrMgrCompareSnapshot(PlyrMgr_t *pA, PlyrMgr_t *pB);
 int PlyrMgrSaveSnapshot(PlyrMgr_t *pManager, char *pBuffer);
 int PlyrMgrLoadSnapshot(PlyrMgr_t *pManager, char *pBuffer);
-void fn_801BA784(void *pDest, void *pSrc);
+void AnimChanCopyChannel(void *pDest, void *pSrc);
 void fn_8009C0B8(void *pDest, void *pSrc);
 int fn_8016278C(void);
 Object_80039F5C *fn_80163064(void);
@@ -408,18 +408,18 @@ extern "C" int PlyrMgrLoadSnapshot(PlyrMgr_t *pManager, char *pBuffer)
         pDst->mUnknown1244 = pSrc->mUnknown1244;
         pDst->mUnknown2496 = pSrc->mUnknown2496;
         for (j = 0; j <= 9; j++) {
-            fn_801BA784(&pDst->mUnknown1256[j], &pSrc->mUnknown1256[j]);
+            AnimChanCopyChannel(&pDst->mUnknown1256[j], &pSrc->mUnknown1256[j]);
         }
         pDst->mUnknown3096 = pSrc->mUnknown3096;
         pDst->mUnknown3604 = pSrc->mUnknown3604;
         for (j = 0; j <= 3; j++) {
-            fn_801BA784(&pDst->mUnknown3108[j], &pSrc->mUnknown3108[j]);
+            AnimChanCopyChannel(&pDst->mUnknown3108[j], &pSrc->mUnknown3108[j]);
         }
         for (k = 0; k <= 1; k++) {
             pDst->mUnknown4008[k] = pSrc->mUnknown4008[k];
             pDst->mUnknown4528[k] = pSrc->mUnknown4528[k];
             for (j = 0; j <= 1; j++) {
-                fn_801BA784(&pDst->mUnknown4032[k][j], &pSrc->mUnknown4032[k][j]);
+                AnimChanCopyChannel(&pDst->mUnknown4032[k][j], &pSrc->mUnknown4032[k][j]);
             }
         }
         pDst->mUnknown1032 = pSrc->mUnknown1032;
@@ -461,7 +461,7 @@ extern "C" void PlyrInit(Object_80039F5C *p, PlyrSlot_t *pPlayer, unsigned char 
     p->mpState = &pPlayer->mObject.mQueue[0];
     p->mpUnknown792 = pPlayer->mObject.mUnknown1244 + 1252;
     p->mpUnknown796 = (AnimHeader_t *)pPlayer->mObject.mUnknown1244;
-    p->mpUnknown800 = (Record_800D81C8 *)(pPlayer->mObject.mUnknown1244 + 12);
+    p->mpUnknown800 = (AnimChannel_t *)(pPlayer->mObject.mUnknown1244 + 12);
     p->mpUnknown804 = pPlayer->mUnknown3604;
     p->mpUnknown808 = &pPlayer->mUnknown3096;
     p->mpUnknown812 = pPlayer->mUnknown3108;
@@ -545,7 +545,7 @@ extern "C" void PlyrAnimUpdateOverlay(Object_80039F5C *p, PlyrModelView_t *pBloc
     PlyrSlot_t *pPlayer = (PlyrSlot_t *)p;
 
     fn_801BE420(pPlayer->mUnknown3604, &pPlayer->mUnknown3096, pPlayer->mUnknown3108, p, f);
-    fn_801BA03C(&pPlayer->mUnknown3096, pPlayer->mUnknown3108, f, p);
+    AnimChanProcess(&pPlayer->mUnknown3096, pPlayer->mUnknown3108, f, p);
     PlyrPoseSetBlend(pBlock, fn_801BC7C0(&pPlayer->mUnknown3096, pPlayer->mUnknown3108, pPlayer->mUnknown3604));
 }
 
@@ -557,7 +557,7 @@ extern "C" void PlyrAnimUpdateHands(Object_80039F5C *p, PlyrModelView_t *pBlock,
     for (i = 0; i <= 1; i++) {
         if (pBlock->mFlags & 32) {
             fn_801BE420(pPlayer->mUnknown4528[i], &pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], p, f);
-            fn_801BA03C(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], f, p);
+            AnimChanProcess(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], f, p);
             PlyrPoseBlendRawEntries(pBlock, fn_801BC7C0(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], pPlayer->mUnknown4528[i]), i);
         } else if (fn_800ADD7C(pBlock->mUnknown116, i) != 0) {
             PlyrPoseBlendRawEntries(pBlock, fn_800ADEFC(pBlock->mUnknown116, i), i);
@@ -835,7 +835,7 @@ extern "C" void PlyrMgrUpdatePoses(float dt)
     for (i = 0; i < count; i++) {
         p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
 
-        fn_801BA03C(p->mUnknown1244, p->mUnknown1244 + 12, dt, p);
+        AnimChanProcess(p->mUnknown1244, p->mUnknown1244 + 12, dt, p);
     }
     for (i = 0; i < count; i++) {
         p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
@@ -1283,14 +1283,14 @@ extern "C" void PlyrInitAnimChannels(Object_80039F5C *p)
     unsigned int i;
 
     AnimInitHeader(p->mUnknown1244, 0, 1, 10);
-    fn_801B9FEC(p->mUnknown1244, p->mUnknown1244 + 12);
+    AnimChanInitChannels(p->mUnknown1244, p->mUnknown1244 + 12);
     fn_801BE040(p->mUnknown1244 + 1252);
     AnimInitHeader(&pPlayer->mUnknown3096, 2, 3, 4);
-    fn_801B9FEC(&pPlayer->mUnknown3096, pPlayer->mUnknown3108);
+    AnimChanInitChannels(&pPlayer->mUnknown3096, pPlayer->mUnknown3108);
     fn_801BE040(pPlayer->mUnknown3604);
     for (i = 0; i <= 1; i++) {
         AnimInitHeader(&pPlayer->mUnknown4008[i], 0, 4, 2);
-        fn_801B9FEC(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i]);
+        AnimChanInitChannels(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i]);
         fn_801BE040(pPlayer->mUnknown4528[i]);
     }
 }

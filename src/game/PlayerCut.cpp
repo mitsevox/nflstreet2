@@ -2,7 +2,7 @@
    animation, then hands over to the next state or keeps running on his facing. Also holds
    the lookups other code uses to read the cut table and the cut in progress. */
 
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/StyleTracker.h"
 #include "game/OptionRunControl.h"
 #include "game/Message_800F01CC.h"
@@ -368,8 +368,8 @@ extern "C" int PlayerCutGetAnimTime(Object_80039F5C *p)
 {
     int result = 0;
 
-    if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 153)) {
-        int index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 153, 0);
+    if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 153)) {
+        int index = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 153, 0);
         float start = AnimSeqGetTimeToOpcode(&p->mpUnknown800[index].mUnknown4C, 0xC004);
 
         result = (int)(AnimSeqGetOpcodeTime(p->mpUnknown800[index].mUnknown4C.mpUnknown0, 0xC004) - start);

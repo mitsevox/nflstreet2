@@ -1,7 +1,7 @@
 #include "engine/physconstraint.h"
 #include "engine/TibNew.h"
 #include "engine/Collection_801E7034.h"
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/Object_8008044C.h"
 #include "game/fn_80233CBC.h"
 #include "game/BigObjDesc.h"
@@ -23,7 +23,7 @@
 #include "game/cu_8008E978.h"
 #include "game/Ball.h"
 #include "game/fn_80177FE0.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802372EC.h"
@@ -36,7 +36,7 @@ struct Variant_8004A6EC {
     unsigned char mKey[4];
 };
 
-/* Entry of a variant table: the two halfwords handed to fn_801BA2A8 and the
+/* Entry of a variant table: the two halfwords handed to AnimChanStartAnim and the
    scored record. */
 struct VariantEntry_8004A6EC {
     unsigned short mUnknown0;
@@ -181,7 +181,7 @@ void AnimBlendPose(AnimPose_t *pOut, AnimPose_t *pA, AnimPose_t *pB, AnimPose_t 
 void BigObjAnimBlendPose(BigObjPhysics_t *pExtra, BigObj_t *pItem, int a, int b);
 void BigObjAnimBlendRootAngles(BigObj_t *pItem, void *a, int b, void *c);
 short *BigObjAnimAllocSamples(int count);
-void fn_801B9FEC(void *p, void *q);
+void AnimChanInitChannels(void *p, void *q);
 int AnimFileLoadResident(int id, int a);
 int AnimFileGetSlotFromFileNum(int a, int b);
 void fn_801BE030(int type, Table_803EA4D0 *pTable);
@@ -227,7 +227,7 @@ int fn_8004A474(VariantTable_8004A6EC *pTable, void *a, void *b, BigObjInst *pOb
     int index = fn_8004A6EC(pTable, &pObject->mUnknown428->mUnknown1704);
 
     if (index >= 0) {
-        fn_801BA2A8(a, b, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, c, pObject, 1.0f);
+        AnimChanStartAnim(a, b, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, c, pObject, 1.0f);
     }
     return 0;
 }
@@ -237,7 +237,7 @@ int fn_8004A4F0(VariantTable_8004A6EC *pTable, void *a, void *b, BigObjInst *pOb
     int index = fn_8004A7A8(pTable, &pObject->mUnknown428->mUnknown1704);
 
     if (index >= 0) {
-        fn_801BA2A8(a, b, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, c, pObject, 1.0f);
+        AnimChanStartAnim(a, b, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, c, pObject, 1.0f);
     }
     return 0;
 }
@@ -268,7 +268,7 @@ int fn_8004A5EC(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *
         unsigned char b3 = pExtra->mUnknown1707;
         Frame_801C02CC *pFrame = AnimSeqncrGetStaticPtr(fn_80093BAC(b0, b1), b2);
 
-        fn_801BA2A8(a, b, AnimFileGetSlotFromFileNum(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14), b3, c, pObject, 1.0f);
+        AnimChanStartAnim(a, b, AnimFileGetSlotFromFileNum(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14), b3, c, pObject, 1.0f);
     }
     return 0;
 }
@@ -373,7 +373,7 @@ void fn_8004A908(BigObjInst *pObject, int index)
             fn_8004A680(&pPlaced->mUnknown172, pSkeleton);
         }
         AnimInitHeader((AnimHeader_t *)pObject->mUnknown428->mUnknown48, 0, 10, 10);
-        fn_801B9FEC(pObject->mUnknown428->mUnknown48, pObject->mUnknown428->mUnknown60);
+        AnimChanInitChannels(pObject->mUnknown428->mUnknown48, pObject->mUnknown428->mUnknown60);
         fn_801BE040(pObject->mUnknown428->mUnknown1300);
         pObject->mUnknown428->mUnknown1708 = 0;
     }

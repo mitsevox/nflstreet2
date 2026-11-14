@@ -4,8 +4,8 @@
 #define GAME_PLAYERACTION_H
 
 #include "engine/fn_801C065C.h"
-#include "engine/cu_801B9F00.h"
-#include "game/fn_801BA2A8.h"
+#include "engine/animchan.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/AnimMomentumActor.h"
 #include "game/fn_801BE60C.h"
 #include "game/Object_80039F5C.h"
@@ -358,12 +358,12 @@ struct Record_800DCC14 {
 };
 extern "C" {
 Object_801BBD5C *AnimFileGetStateData(unsigned short key, unsigned short id);
-int fn_801BA2D0(void *pA, Record_800D81C8 *pEntries, Record_800D81C8 *pEntry);
-void fn_801BA418(void *pA, Record_800D81C8 *pEntries, int index, unsigned short a, int b, unsigned short key, Object_80039F5C *p);
-void PlayerLocoStartBlendPair(LocoBlendSet_t *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, int key, FEPlyrModel_t *pA, Record_800D81C8 *pEntries);
-void PlayerLocoSwitchBlendPair(LocoBlendSet_t *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, unsigned short key, void *pA, Record_800D81C8 *pEntries, unsigned char flag);
+int AnimChanStartCopy(void *pA, AnimChannel_t *pEntries, AnimChannel_t *pEntry);
+void AnimChanSwitchAnim(void *pA, AnimChannel_t *pEntries, int index, unsigned short a, int b, unsigned short key, Object_80039F5C *p);
+void PlayerLocoStartBlendPair(LocoBlendSet_t *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, int key, FEPlyrModel_t *pA, AnimChannel_t *pEntries);
+void PlayerLocoSwitchBlendPair(LocoBlendSet_t *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, unsigned short key, void *pA, AnimChannel_t *pEntries, unsigned char flag);
 void PlayerLocoSetFadeFraction(Block_801BE60C *p, float a, float b);
-void PlayerLocoFadeOldPair(Block_801BE60C *p, void *pA, Record_800D81C8 *pEntries);
+void PlayerLocoFadeOldPair(Block_801BE60C *p, void *pA, AnimChannel_t *pEntries);
 }
 
 extern "C" {
@@ -461,8 +461,8 @@ int AnimFileGetSlotFromFileNum(int objectType, int fileNum);
 void *AnimFileGetPtrFromSlot(unsigned int);
 AnimScript_t *AnimFileGetAnimation(void *, int);
 int AnimSeqHasOpcode(float *, void *, unsigned short);
-int fn_801BA6B0(Record_800D81C8 *);
-void fn_801BA6BC(Record_800D81C8 *, int);
+int AnimChanIsMirrored(AnimChannel_t *);
+void AnimChanSetMirrored(AnimChannel_t *, int);
 void fn_800D7A0C(Object_80039F5C *, int);
 unsigned int AnimFileGetSiblingSlot(unsigned int, int);
 int AnimFileGetStateQueryIndex(int state, unsigned int slot);
@@ -499,10 +499,10 @@ extern "C" int fn_800DC584(Object_80039F5C *p, Record_800DC584 *pRecord);
 extern "C" float fn_800DC61C(Object_801BBD5C *pObject, Object_80039F5C *p);
 extern "C" int fn_800DC674(Object_801BBD5C *pObject, Object_80039F5C *p);
 extern "C" float fn_800DC6A8(Object_801BBD5C *pObject, Object_80039F5C *p, int index, void *pA, int b);
-extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA, Record_800D81C8 *pEntries, Object_80039F5C *p, unsigned int mode);
-extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA, Record_800D81C8 *pEntries, Object_80039F5C *p, unsigned int mode);
+extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
+extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
 extern "C" int fn_800DCE2C(Object_80039F5C *p, unsigned char *pInfo);
-extern "C" int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA, Record_800D81C8 *pEntries, Object_80039F5C *p, unsigned int mode);
+extern "C" int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
 extern "C" int fn_800DD5E4(Object_80039F5C *p);
 extern "C" int fn_800DD648(Object_80039F5C *p);
 extern "C" int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *p, unsigned int mode);
@@ -517,7 +517,7 @@ extern "C" int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pA,
 extern "C" void fn_800DDE6C(Object_80039F5C *p);
 extern "C" int fn_800DDEE4(unsigned char *pA, unsigned char *pB);
 extern "C" unsigned short fn_800DDF34(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, int *pAngle, float *pTime, float *pRate);
-extern "C" int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pA, Record_800D81C8 *pEntries, Object_80039F5C *p, unsigned int mode);
+extern "C" int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
 extern "C" int fn_800DE364(unsigned int id);
 extern "C" void fn_800DE3B0(Block_800DE3B0 *pBlock, Object_80039F5C *p, Command_800DE3B0 *pCommand);
 extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id);
@@ -525,7 +525,7 @@ extern "C" void fn_800DE910(Object_80039F5C *p, Block_800DE3B0 *pBlock);
 extern "C" void fn_800DEAB0(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key, void *pData, int angle, Entry_800DE51C *pRecord);
 extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock);
 extern "C" void fn_800DF134(Object_80039F5C *p, Point_8017886C offset, int angle, int key);
-extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pData, Record_800D81C8 *pEntries, Object_80039F5C *p, unsigned int mode);
+extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pData, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
 extern "C" void fn_800DF654(Object_80039F5C *p, Block_801BE60C *pRecord);
 extern "C" int fn_800DF6EC(Object_80039F5C *p);
 extern "C" void fn_800DF710(Object_80039F5C *p, int joint, Vector_80039F5C *pPos, QuatEulerAngles_t *pAngles);

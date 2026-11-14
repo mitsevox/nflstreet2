@@ -2,7 +2,7 @@
    steers around defenders and the field edges, sets his speed and sprint, and picks evasive
    moves (jukes, spins and the like) from a table of move tests. */
 
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/StyleTracker.h"
 #include "game/OptionRunControl.h"
 #include "game/Message_800F01CC.h"

@@ -1,7 +1,7 @@
 /* Animation file manager: the slot table of resident, dynamic and virtual animation files, their
    synchronous and asynchronous loading, unloading and relocation, the per-object state queries
    (with the state cache), and the unpacking of big files into virtual slots. */
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "engine/animemot.h"
 #include "engine/ResCopyAsyncToBuffer.h"
 #include "engine/fn_801F7BD4.h"

@@ -3,7 +3,7 @@
    their timed keys, and measures the sequence's length. */
 
 #include "engine/fn_801C065C.h"
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "engine/animemot.h"
 #include "engine/AnimSeqCamera.h"
 

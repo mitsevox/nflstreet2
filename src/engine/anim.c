@@ -2,7 +2,7 @@
    stacks of game data that animation scripts hand to the game when they reach a
    game-defined opcode, and records which sequence file version is in use. */
 
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "engine/animemot.h"
 #include "engine/fn_801F7BD4.h"
 

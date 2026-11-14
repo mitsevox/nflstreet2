@@ -1,7 +1,7 @@
 #include "game/FEPlyrModel.h"
 #include "game/Object_8008044C.h"
 #include "game/Object_801BBD5C.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/fn_802372EC.h"
 #include "game/Table_80089904.h"
 #include "game/fn_801BE60C.h"
@@ -248,7 +248,7 @@ int fn_80089E70(Table_80089904 *pTable, unsigned short event, void *a, void *b,
             choice = fn_80089904(pRecord, pTable, sCurrent[index], 2);
         }
         if (choice >= 0) {
-            fn_801BA2A8(a, b, pTable->mEntries[choice].mUnknown0,
+            AnimChanStartAnim(a, b, pTable->mEntries[choice].mUnknown0,
                        pTable->mEntries[choice].mUnknown2, event, pRecord, 1.0f);
         }
         break;

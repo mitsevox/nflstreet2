@@ -1,7 +1,7 @@
-#ifndef ENGINE_CU_801B9F00_H
-#define ENGINE_CU_801B9F00_H
+#ifndef ENGINE_ANIMCHAN_H
+#define ENGINE_ANIMCHAN_H
 
-#include "engine/Record_800D81C8.h"
+#include "engine/AnimChannel.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -14,15 +14,15 @@ void _AnimUserCallbackPopState(void);
 void _AnimUserCallbackPopInfo(void);
 void AnimInitHeader(AnimHeader_t *pList, unsigned short a, unsigned short b, unsigned short count);
 int AnimGetSeqVersion(void);
-int fn_801B9F00(AnimHeader_t *pList, Record_800D81C8 *pChannels);
-int fn_801BA154(AnimHeader_t *pList, Record_800D81C8 *pChannels, int slot, int anim, float weight, int state,
+int _AnimChanFindChannel(AnimHeader_t *pList, AnimChannel_t *pChannels);
+int AnimChanStartAnimPerState(AnimHeader_t *pList, AnimChannel_t *pChannels, int slot, int anim, float weight, int state,
                 void *pUser, unsigned short stateRef);
-void fn_801BA384(AnimHeader_t *pList, Record_800D81C8 *pChannels, int index);
-void fn_801BA398(AnimHeader_t *pList, Record_800D81C8 *pChannels, int state);
-unsigned short fn_801BA568(AnimHeader_t *pList, Record_800D81C8 *pChannels, unsigned short state);
-unsigned short fn_801BA5A8(AnimHeader_t *pList, Record_800D81C8 *pChannels, unsigned short state, int index);
-void fn_801BA60C(AnimHeader_t *pList, Record_800D81C8 *pChannels, int state, float delay);
-int fn_801BA650(Record_800D81C8 *pChannel, float time, void *pUser);
+void AnimChanStopAnim(AnimHeader_t *pList, AnimChannel_t *pChannels, int index);
+void AnimChanStopByStateIndex(AnimHeader_t *pList, AnimChannel_t *pChannels, int state);
+unsigned short AnimChanGetNumActiveByState(AnimHeader_t *pList, AnimChannel_t *pChannels, unsigned short state);
+unsigned short AnimChanGetStateChannelByIndex(AnimHeader_t *pList, AnimChannel_t *pChannels, unsigned short state, int index);
+void AnimChanSetDelayByState(AnimHeader_t *pList, AnimChannel_t *pChannels, int state, float delay);
+int AnimChanGrow(AnimChannel_t *pChannel, float time, void *pUser);
 void fn_801BC67C(Triple_801BCA74 *pOut, Triple_801BCA74 *pA, Triple_801BCA74 *pB, float t);
 int AnimSeqStart(AnimSeq_t *p, AnimScript_t *pScript);
 int AnimSeqGrow(AnimSeq_t *p, float step);

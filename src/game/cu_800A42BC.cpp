@@ -13,10 +13,10 @@ extern "C" void fn_800A42BC(Object_80039F5C *p, Block_801BE60C *pBlock)
 
 #include "game/Table_80089904.h"
 #include "game/fn_801BE60C.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/fn_801C1F94.h"
 #include "game/Message_800F01CC.h"
-#include "engine/Record_800D81C8.h"
+#include "engine/AnimChannel.h"
 
 extern "C" {
 void fn_800A4294(Object_80039F5C *p, Block_801BE60C *pBlock);
@@ -28,7 +28,7 @@ void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 }
 
 extern "C" int fn_800A44C0(Table_80089904 *table, unsigned short key, void *record,
-                           Record_800D81C8 *entries, Object_80039F5C *p, unsigned int phase)
+                           AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase)
 {
     Block_801BE60C *block = fn_801BE60C(p->mpUnknown792, key);
     switch (phase) {
@@ -41,7 +41,7 @@ extern "C" int fn_800A44C0(Table_80089904 *table, unsigned short key, void *reco
             index = fn_800A414C(table, p, block);
         else
             index = fn_800A4358(table, p, block);
-        int entry = fn_801BA2A8(record, entries, table->mEntries[index].mUnknown0,
+        int entry = AnimChanStartAnim(record, entries, table->mEntries[index].mUnknown0,
                                 table->mEntries[index].mUnknown2, key, p, 1.0f);
         block->mUnknown0Word = entry;
         AnimSeqSetSpeed(&entries[entry].mUnknown4C, MathInverse(block->mUnknown8));

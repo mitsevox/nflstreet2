@@ -1,6 +1,6 @@
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/StyleTracker.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/fn_801248D4.h"
 #include "game/State_800FDA58.h"
 #include "game/Input_800B6D34.h"
@@ -157,8 +157,8 @@ Object_80039F5C *fn_8017876C(void);
 int fn_801787A0(void);
 float fn_80178A08(void);
 int fn_80178C9C(void);
-int fn_801BA6B0(Entry_800EAC9C *pEntry);
-void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
+int AnimChanIsMirrored(Entry_800EAC9C *pEntry);
+void AnimChanSetMirrored(Entry_800EAC9C *pEntry, int flag);
 float AnimSeqGetTimeToOpcode(AnimSeq_t *p, int key);
 void AnimSeqSetSpeed(void *p, float value);
 int fn_801CFE40(float y, float x);
@@ -399,7 +399,7 @@ extern "C" int fn_8010FE40(Object_80039F5C *p)
     unsigned short key;
     Timer_8010FD94 *pTimer = (Timer_8010FD94 *)&p->mUnknown336;
     int target;
-    Record_800D81C8 *pEntries;
+    AnimChannel_t *pEntries;
     int index;
 
     if ((p->mFlags & 0x4000) && pTimer->mUnknown8 != 0) {
@@ -422,9 +422,9 @@ extern "C" int fn_8010FE40(Object_80039F5C *p)
             key = p->mpState->mUnknown1;
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, 1.0f, p);
             target = p->mpState->mUnknown2 << 16;
-            if (MathAngleDiff(target, p->mMotion.mFacing) > 0xB60B && fn_801BA568(p->mpUnknown796, p->mpUnknown800, key)) {
+            if (MathAngleDiff(target, p->mMotion.mFacing) > 0xB60B && AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, key)) {
                 pEntries = p->mpUnknown800;
-                index = fn_801BA5A8(p->mpUnknown796, pEntries, key, 0);
+                index = AnimChanGetStateChannelByIndex(p->mpUnknown796, pEntries, key, 0);
                 pTimer->mUnknown4 = pEntries[index].mUnknown48;
                 if (pTimer->mUnknown4 == 0.0f) {
                     pTimer->mUnknown4 = AnimSeqGetTimeToOpcode(&pEntries[index].mUnknown4C, 0xC004);
@@ -699,11 +699,11 @@ extern "C" int fn_80110C70(Table_8010B738 *pTable, unsigned short key, void *pA,
         fn_801104BC(p, pBlock);
         fn_801104E4(p, pBlock);
         index = fn_8011067C(pTable, p, pBlock, angle);
-        pBlock->mUnknown8 = fn_801BA2A8(pA, pEntries, pTable->mEntries[index].mUnknown0,
+        pBlock->mUnknown8 = AnimChanStartAnim(pA, pEntries, pTable->mEntries[index].mUnknown0,
                                         pTable->mEntries[index].mUnknown2, key, p, 1.0f);
         if (p->mUnknown776 == 1) {
             pEntry = &pEntries[pBlock->mUnknown8];
-            fn_801BA6BC(pEntry, fn_801BA6B0(pEntry) == 0);
+            AnimChanSetMirrored(pEntry, AnimChanIsMirrored(pEntry) == 0);
             if (side == 6) {
                 side = 3;
             } else {

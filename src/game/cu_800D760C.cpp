@@ -6,7 +6,7 @@
 #include "game/Ball.h"
 #include "game/bitstream.h"
 #include "game/fn_801BE60C.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/Table_80089904.h"
 
 
@@ -167,7 +167,7 @@ extern "C" void fn_800D7D78(Object_80039F5C *p, Block_801BE60C *pBlock)
     }
 }
 
-extern "C" int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+extern "C" int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
                            Object_80039F5C *p, unsigned int phase)
 {
     Block_801BE60C *pBlock = fn_801BE60C(p->mpUnknown792, key);
@@ -178,7 +178,7 @@ extern "C" int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRe
         fn_801BE760(p->mpUnknown792, key, 1);
         int index = fn_8009C4B0(pTable, &p->mUnknown1008);
         float scale;
-        pBlock->mUnknown4Word = fn_801BA2A8(pRecord, pEntries, pTable->mEntries[index].mUnknown0,
+        pBlock->mUnknown4Word = AnimChanStartAnim(pRecord, pEntries, pTable->mEntries[index].mUnknown0,
                                        pTable->mEntries[index].mUnknown2, key, p, 1.0f);
         pBlock->mUnknown24Float = 0.0f;
         if (pState->mUnknown5 == 3) {

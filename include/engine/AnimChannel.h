@@ -1,5 +1,5 @@
-#ifndef ENGINE_RECORD_800D81C8_H
-#define ENGINE_RECORD_800D81C8_H
+#ifndef ENGINE_ANIMCHANNEL_H
+#define ENGINE_ANIMCHANNEL_H
 
 /* Animation channel types shared by the engine animation library and the game. */
 
@@ -88,7 +88,7 @@ typedef struct AnimWgt_t {
 } AnimWgt_t;
 
 /* 124-byte animation channel. */
-typedef struct Record_800D81C8 {
+typedef struct AnimChannel_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
     short mUnknown2;
@@ -106,6 +106,6 @@ typedef struct Record_800D81C8 {
     AnimWgt_t mUnknown30;
     float mUnknown48;
     AnimSeq_t mUnknown4C;
-} Record_800D81C8;
+} AnimChannel_t;
 
 #endif

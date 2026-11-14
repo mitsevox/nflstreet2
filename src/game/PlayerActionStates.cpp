@@ -92,15 +92,15 @@ extern "C" int fn_800DFA00(Object_80039F5C *p, float *pValue)
     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 10, 1.0f, p);
     if ((pView->mFlags & 32) || p->mIdBytes[3] == 3) fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
     if (pView->mFlags & 8) {
-        unsigned char count = fn_801BA568(p->mpUnknown796, p->mpUnknown800, 10);
+        unsigned char count = AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 10);
         for (unsigned char i = 0; i < count; i++) {
-            Record_800D81C8 *pEntry = &p->mpUnknown800[fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 10, i)];
-            fn_801BA6BC(pEntry, !fn_801BA6B0(pEntry));
+            AnimChannel_t *pEntry = &p->mpUnknown800[AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 10, i)];
+            AnimChanSetMirrored(pEntry, !AnimChanIsMirrored(pEntry));
         }
         fn_800D7A0C(p, p->mUnknown776 == 2 ? 1 : 2);
     }
-    if ((pView->mFlags & 16) && fn_801BA568(p->mpUnknown796, p->mpUnknown800, 10)) {
-        p->mpUnknown800[fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 10, 0)].mUnknown2C = 1.0f / p->mUnknown768;
+    if ((pView->mFlags & 16) && AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 10)) {
+        p->mpUnknown800[AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 10, 0)].mUnknown2C = 1.0f / p->mUnknown768;
     }
     if (handle != 0xFFFFFF) {
         unsigned int other = AnimFileGetSiblingSlot(handle, 1024);
@@ -388,7 +388,7 @@ extern "C" int fn_800E0850(Object_80039F5C *p)
     fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &index, &handle);
     float time = fn_8009A270(handle);
     if (fn_801BE648(p->mpUnknown792) == 224) {
-        unsigned char entry = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 224, 0);
+        unsigned char entry = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 224, 0);
         time += AnimSeqGetLife(p->mpUnknown800[entry].mUnknown4C.mpUnknown0);
     }
     Ball_t *pBall = BallGet(index);
@@ -441,7 +441,7 @@ extern "C" int fn_800E0AD8(Object_80039F5C *p)
     if (--pBlock->mUnknown24 >= 0) {
         p->mMotion.mFacing = (p->mMotion.mFacing + pBlock->mUnknown20) & 0xFFFFFF;
         p->mpUnknown796->mUnknown8 = p->mMotion.mFacing;
-        unsigned short entry = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, fn_801BE648(p->mpUnknown792), 0);
+        unsigned short entry = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, fn_801BE648(p->mpUnknown792), 0);
         if (entry != 0xFFFF) {
             p->mpUnknown800[entry].mUnknownC = (p->mpUnknown800[entry].mUnknownC + pBlock->mUnknown20) & 0xFFFFFF;
         }
