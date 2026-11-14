@@ -33,8 +33,8 @@ int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 char *strncpy(char *pDest, const char *pSource, int count);
 void ResTrackLabel(const char *pText);
-int fn_801F2C54(const char *pName, int unknown);
-int fn_801F2CD4(const char *pName);
+int ResQuickloadOpenDevice(const char *pName, int unknown);
+int ResQuickloadClose(const char *pName);
 void fn_802371B0(int unknown, int seed);
 void fn_8023725C(void);
 }
@@ -169,7 +169,7 @@ int Qkl::Init()
     } else {
         fn_801C2D88(mFileName.mText, sizeof(mFileName.mText), "%s%d.qkl", lbl_803EB6F8, fn_800A3444());
     }
-    fn_801F2C54(mFileName.mText, 44);
+    ResQuickloadOpenDevice(mFileName.mText, 44);
     return 1;
 }
 
@@ -177,7 +177,7 @@ int Qkl::Shutdown()
 {
     char text[24];
 
-    fn_801F2CD4(mFileName.mText);
+    ResQuickloadClose(mFileName.mText);
     mFileName.mText[0] = 0;
 
     if (MainFEGroupIsStarted(&gMainFEGroup)) {
