@@ -3,6 +3,7 @@
 #include "game/Module.h"
 #include "game/MemPoolDesc.h"
 #include "engine/MemExtern.h"
+#include <dolphin/__vm.h>
 
 /* Argument of fn_801D2054. */
 struct MemInitParams_t {
@@ -30,7 +31,6 @@ int fn_801D20C8(void);
 int fn_801D2130(MemPoolDesc_t *pArena);
 int fn_801D2570(int id);
 void fn_801D277C(int a);
-int fn_80245514(int base, int size);
 int fn_801F7824(SysInitParams_t *pDesc);
 int fn_801F79C0(void);
 void fn_801F8248(void);
@@ -65,7 +65,7 @@ int Sys::Init()
     fn_801D2130(MemPoolGetDesc(0x20));
     fn_801D2130(MemPoolGetDesc(0x100));
     pDb = MemPoolGetDesc(2);
-    fn_80245514(pDb->mUnknownC, pDb->mUnknown10);
+    VMAlloc(pDb->mUnknownC, pDb->mUnknown10);
     fn_801D2130(MemPoolGetDesc(2));
     pDebug = MemPoolGetDesc(8);
     if (pDebug->mUnknown10 != 0) {

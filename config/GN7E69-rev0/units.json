@@ -178,6 +178,40 @@
       ],
       "language": "c++",
       "evidence": "evidence.tsv compiler row 0x802714A8-0x8027CF9C (sound_cxx): the sound files sdspmix.c, snddrv.c, slinklst.c, saramman.c and supmutpf.c carry NASCAR 2005's .c names, and NASCAR's symbols for every function of those files are C++-mangled (SNDDRV_DSPMixerSetAuxBus__FP6_AXVPBUsi in sdspmix.c, SNDPLATFORM_stop__Fi in snddrv.c, SNDLINKI_push__FP11SNDLINKLISTP11SNDLINKNODE in slinklst.c, SNDARAM_alloc__Fi in saramman.c, SFILTER_unpackmtpf__FPviT0T0i in supmutpf.c), so the original build compiled them as C++. The flags are engine_cpp_nosda's, measured on the former files src/engine/cu_802714A8.cpp and src/engine/cu_80276DE4.cpp (their compiler rows): no r13 or r2 access in the range, and default -G8 would turn absolute word accesses into SDA relocations."
+    },
+    "dolphin_vm_release": {
+      "compiler": "mwcc",
+      "compiler_version": "GC/1.3",
+      "flags": [
+        "-nodefaults",
+        "-proc",
+        "gekko",
+        "-fp",
+        "hard",
+        "-Cpp_exceptions",
+        "off",
+        "-enum",
+        "int",
+        "-char",
+        "unsigned",
+        "-warn",
+        "pragmas",
+        "-requireprotos",
+        "-pragma",
+        "cats off",
+        "-O4,p",
+        "-inline",
+        "auto",
+        "-I-",
+        "-D__GEKKO__",
+        "-DSDK_REVISION=1",
+        "-lang=c"
+      ],
+      "include_dirs": [
+        "include/libc",
+        "src/dolphin"
+      ],
+      "evidence": "evidence.tsv compiler row 0x80244F18-0x80245820 (dolphin_vm_release): the VM library (VM.c, VMPageReplacement.c, VMMapping.c) was built with a newer CodeWarrior than the other SDK files; the dolphin_release flags under GC/1.3 reproduce all 19 functions, GC/1.2.5n does not."
     }
   },
   "externals": {
@@ -280,10 +314,6 @@
     "sprintf": {
       "address": "0x801C2E18",
       "evidence": "evidence.tsv external row sprintf: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
-    },
-    "VMInit": {
-      "address": "0x80244F18",
-      "evidence": "evidence.tsv external row for 0x80244F18 (VMInit)."
     },
     "__main": {
       "address": "0x8025E1D8",
@@ -652,50 +682,6 @@
     "GXClearGPMetric": {
       "address": "0x8025334C",
       "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "__VMGetMRAMPages": {
-      "address": "0x80244FB4",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
-    "__VMGetARAMSize": {
-      "address": "0x80244FBC",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
-    "__VMGetARAMStart": {
-      "address": "0x80244FC4",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
-    "__VMGetPageToReplace": {
-      "address": "0x80245200",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
-    "__VMTranslateVMPageToARAMPage": {
-      "address": "0x80245614",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
-    "__VMIsPageMapped": {
-      "address": "0x80245654",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
-    "__VMMappingErrorAlert": {
-      "address": "0x80245674",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
-    "__VMSetPageInARAM": {
-      "address": "0x802456AC",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
-    "__VMIsPageInARAM": {
-      "address": "0x802456C4",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
-    "__VMAllocVirtualToARAMLUT": {
-      "address": "0x802456D8",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
-    "__VMAllocARAMToVirtualLUT": {
-      "address": "0x80245780",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
     },
     "VMBASEInit": {
       "address": "0x80245820",
@@ -2288,6 +2274,22 @@
     "FormationLineupReset": {
       "address": "0x80085D54",
       "evidence": "evidence.tsv function and name rows for 0x80085D54 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+    },
+    "_savegpr_23": {
+      "address": "0x8025FA48",
+      "evidence": "evidence.tsv external row for 0x8025FA48 (_savegpr_23)."
+    },
+    "_restgpr_23": {
+      "address": "0x8025FA94",
+      "evidence": "evidence.tsv external row for 0x8025FA94 (_restgpr_23)."
+    },
+    "_savegpr_24": {
+      "address": "0x8025FA4C",
+      "evidence": "evidence.tsv external row for 0x8025FA4C (_savegpr_24)."
+    },
+    "_restgpr_24": {
+      "address": "0x8025FA98",
+      "evidence": "evidence.tsv external row for 0x8025FA98 (_restgpr_24)."
     }
   },
   "units": [
@@ -4929,6 +4931,92 @@
           "placement": ".sbss",
           "start": "0x803ED118",
           "end": "0x803ED170"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/vm/VM.c",
+      "profile": "dolphin_vm_release",
+      "evidence": "evidence.tsv VM.c unit, compiler, linker, function and data rows; every retained function exact under GC/1.3, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "VMInit",
+          "__VMGetMRAMPages",
+          "__VMGetARAMSize",
+          "__VMGetARAMStart",
+          "__VMAllocMRAMSwapSpace",
+          "__VMSwapPageIn"
+        ],
+        "evidence": "evidence.tsv VM.c linker row 0x80244F18-0x802451F8: the target keeps the six functions from VMInit to __VMSwapPageIn; VMSetLogStatsCallback, __VMSwapPageOut and VMStoreAllPages have no code in the target and are removed by ordinary SN retention."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80244F18",
+          "end": "0x802451F8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC208",
+          "end": "0x803EC20C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED230",
+          "end": "0x803ED248"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/vm/VMPageReplacement.c",
+      "profile": "dolphin_vm_release",
+      "evidence": "evidence.tsv VMPageReplacement.c unit, compiler, function and data rows; every function exact under GC/1.3, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802451F8",
+          "end": "0x80245514"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC210",
+          "end": "0x803EC218"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED250",
+          "end": "0x803ED254"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/vm/VMMapping.c",
+      "profile": "dolphin_vm_release",
+      "evidence": "evidence.tsv VMMapping.c unit, compiler, function and data rows; every function exact under GC/1.3, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80245514",
+          "end": "0x80245820"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDC98",
+          "end": "0x802FDCFF"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED258",
+          "end": "0x803ED268"
         }
       ]
     },

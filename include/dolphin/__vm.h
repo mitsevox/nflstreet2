@@ -19,6 +19,7 @@ void __VMSwapPageIn(u32 virtualAddr);
 void __VMSwapPageOut(u32 virtualAddr);
 void VMStoreAllPages(void);
 
+void VMSetPageReplacementPolicy(s32 policy);
 u32 __VMGetPageToReplace(void);
 u32 __VMPageReplacementLRU(void);
 u32 __VMPageReplacementRandom(void);

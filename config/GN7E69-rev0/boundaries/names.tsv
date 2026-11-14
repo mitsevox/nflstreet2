@@ -2117,6 +2117,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x80244FC4	8	VMGetARAMBase	size	dvdlow.c	-
 0x80244FCC	48	__VMAllocMRAMSwapSpace	name	dvdlow.c	-
 0x80244FFC	508	__VMSwapPageIn	name	dvdlow.c	-
+0x802451F8	8	VMSetPageReplacementPolicy	name	dvdlow.c	-
 0x80245200	68	__VMGetPageToReplace	name	dvdlow.c	-
 0x80245244	464	__VMPageReplacementLRU	name	dvdlow.c	-
 0x80245414	148	__VMPageReplacementRandom	name	dvdlow.c	-

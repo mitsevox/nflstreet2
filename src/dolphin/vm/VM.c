@@ -1,3 +1,6 @@
+/* Nintendo SDK virtual memory: lets the game address more memory than main RAM holds by keeping
+ * 4 KB pages in ARAM and swapping them into a main-memory page cache on a page fault. The game
+ * calls VMInit once at start-up. */
 #include <dolphin/os.h>
 #include <dolphin/base/PPCArch.h>
 #include <libc/stdio.h>

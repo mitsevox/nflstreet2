@@ -1,3 +1,5 @@
+/* Nintendo SDK virtual memory, address mapping: VMAlloc gives a virtual range ARAM pages to back
+ * it, and the lookup tables here translate between virtual pages and their ARAM pages. */
 #include <dolphin/os.h>
 #include <dolphin/base/PPCArch.h>
 #include <libc/stdio.h>

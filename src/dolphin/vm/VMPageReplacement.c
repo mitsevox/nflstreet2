@@ -1,3 +1,6 @@
+/* Nintendo SDK virtual memory, page replacement: when a page fault needs a free main-memory page,
+ * these routines choose which resident page to give up, by the policy the game sets (the game sets
+ * LRU at start-up). */
 #include <dolphin/os.h>
 #include <dolphin/base/PPCArch.h>
 #include <libc/stdio.h>
@@ -8,6 +11,11 @@
 static u32 sCurrentPage;
 static BOOL sFirstPass = TRUE;
 static s32 sPolicy = 1;
+
+/* Selects the replacement policy __VMGetPageToReplace uses: 0 LRU, 1 random, anything else FIFO. */
+void VMSetPageReplacementPolicy(s32 policy) {
+    sPolicy = policy;
+}
 
 /* Picks the main-memory page to reuse, by the current policy: 0 LRU, 1 random (the default),
  * anything else FIFO. */

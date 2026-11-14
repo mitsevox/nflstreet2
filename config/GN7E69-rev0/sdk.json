@@ -1213,7 +1213,7 @@
         {
           "section": ".text",
           "start": "0x80244F18",
-          "end": "0x80245200",
+          "end": "0x802451F8",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Actual target analysis function cuts and ordered calls corroborate the complete mapped code denominator. Related MVP2005 source names remain reference-derived; normal compiler comparisons include every retained target C body and preserve measured mismatches."
@@ -1246,7 +1246,7 @@
         },
         {
           "section": ".text",
-          "start": "0x80245200",
+          "start": "0x802451F8",
           "end": "0x80245514",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
