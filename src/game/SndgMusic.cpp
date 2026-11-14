@@ -80,12 +80,12 @@ void SndgPathResumeTrack(int a);
 void SndgPathStopTrack(int a);
 void SndgPathAddCallback(void (*callback)(int, int));
 void SndgPathRemoveCallback(void (*callback)(int, int));
-void fn_8007B358(DbCursor *p);
-void fn_8007B3AC(DbCursor *p);
-void fn_8007B3CC(DbCursor *p, int id, int *pResult);
-void fn_8007B42C(DbCursor *p, char *pBuffer, int size);
-void fn_8007B460(DbCursor *p, char *pBuffer, int size);
-void fn_8007B494(DbCursor *p, char *pBuffer, int size);
+void EATraxDbOpen(DbCursor *p);
+void EATraxDbClose(DbCursor *p);
+void EATraxDbFindSong(DbCursor *p, int id, int *pResult);
+void EATraxDbGetArtist(DbCursor *p, char *pBuffer, int size);
+void EATraxDbGetTitle(DbCursor *p, char *pBuffer, int size);
+void EATraxDbGetAlbum(DbCursor *p, char *pBuffer, int size);
 void fn_8008352C(DbCursor *p, Query_8008352C *pQuery);
 void fn_800835D0(DbCursor *p);
 void fn_80083644(DbCursor *p);
@@ -415,12 +415,12 @@ void SndgMusicPublishSongText(void)
             }
         }
         if (_SndgMusic_pState->mUnknown122) {
-            fn_8007B358(&cursor);
-            fn_8007B3CC(&cursor, _SndgMusic_pState->mUnknown2C, 0);
-            fn_8007B42C(&cursor, _SndgMusic_pState->mUnknown58, 51);
-            fn_8007B460(&cursor, _SndgMusic_pState->mUnknown8B, 51);
-            fn_8007B494(&cursor, _SndgMusic_pState->mUnknownBE, 51);
-            fn_8007B3AC(&cursor);
+            EATraxDbOpen(&cursor);
+            EATraxDbFindSong(&cursor, _SndgMusic_pState->mUnknown2C, 0);
+            EATraxDbGetArtist(&cursor, _SndgMusic_pState->mUnknown58, 51);
+            EATraxDbGetTitle(&cursor, _SndgMusic_pState->mUnknown8B, 51);
+            EATraxDbGetAlbum(&cursor, _SndgMusic_pState->mUnknownBE, 51);
+            EATraxDbClose(&cursor);
         }
         struct {
             int count;

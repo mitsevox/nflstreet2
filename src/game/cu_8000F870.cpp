@@ -131,7 +131,7 @@ int DbCursorGetRow(DbCursor *pObject);
 int DbCursorLast(DbCursor *pObject);
 int DbCursorPrev(DbCursor *pObject);
 int DbCursorGetValue(DbCursor *pObject, int key);
-int fn_8007AF84(int team);
+int PortDbSideHasPlayers(int team);
 int EnvIsLocked(int index, int id);
 void EnvSelect(int id);
 void EnvRelease(void);
@@ -1658,7 +1658,7 @@ int fn_80011FA0(int side, int id)
         TeamLockOpen(&cursor, db);
         result = TeamLockIsHidden(&cursor, id);
         TeamLockClose(&cursor);
-    } else if (otherDb != -1 && !fn_8007AF84(side)) {
+    } else if (otherDb != -1 && !PortDbSideHasPlayers(side)) {
         DbCursor cursor;
         TeamLockOpen(&cursor, otherDb);
         result = TeamLockIsHidden(&cursor, id);
@@ -2670,7 +2670,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         } else {
             query.mUnknown4 = 3;
         }
-    } else if (fn_8007AF84(0) == 0 && fn_80186F7C(1) != -1) {
+    } else if (PortDbSideHasPlayers(0) == 0 && fn_80186F7C(1) != -1) {
         query.mUnknown4 = 1;
         query.mUnknown8 = 1;
     } else {
@@ -2694,7 +2694,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
             query.mUnknown4 = 3;
         }
     } else {
-        int ai = fn_8007AF84(1);
+        int ai = PortDbSideHasPlayers(1);
         if (ai == 0 && fn_80186F7C(0) != -1) {
             query.mUnknown4 = 1;
             query.mUnknown8 = ai;

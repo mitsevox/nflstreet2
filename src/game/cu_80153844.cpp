@@ -65,7 +65,7 @@ unsigned int fn_80153328(Class_802A1930 *p);
 void HudShowAlert(const char *pText);
 void BallResetToSpot(void);
 Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, int team);
-unsigned char fn_8007AFDC(int team);
+unsigned char PortDbCountSidePlayers(int team);
 int fn_800B65D0(int team);
 void fn_800B6714(Object_80039F5C *p, int a);
 void fn_800B65C0(int team, unsigned char index);
@@ -148,7 +148,7 @@ void fn_80153BBC(Class_802A1B58 *p)
 {
     p->PreSnapPhase::AssignControlledPlayers();
     int team = fn_80178308();
-    unsigned char kind = fn_8007AFDC(team);
+    unsigned char kind = PortDbCountSidePlayers(team);
     int first = fn_800B65A0(team);
     int second = fn_800B65D0(team);
     Object_80039F5C *p0 = PlyrGet(team, 0);
@@ -174,7 +174,7 @@ void fn_80153BBC(Class_802A1B58 *p)
         }
     }
     team = fn_80178320();
-    kind = fn_8007AFDC(team);
+    kind = PortDbCountSidePlayers(team);
     first = fn_800B65A0(team);
     second = fn_800B65D0(team);
     p0 = PlyrGet(team, 0);
