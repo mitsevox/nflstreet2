@@ -7,9 +7,9 @@ extern "C" {
 
 void fn_8027981C(int count)
 {
-    fn_8026D0AC();
-    lbl_803B53EC.mC = fn_8026B5D4(count * 8);
-    fn_8026D0EC();
+    SNDSYS_entercritical();
+    lbl_803B53EC.mC = SNDMEMI_allocz(count * 8);
+    SNDSYS_leavecritical();
     lbl_803B53EC.m0 = 0;
     lbl_803B53EC.m2 = count;
 }
@@ -31,9 +31,9 @@ void fn_8027986C(unsigned int start, unsigned int length)
 void fn_802798C0(void)
 {
     if (lbl_803B53EC.mC != 0) {
-        fn_8026D0AC();
-        fn_8026B7D8(lbl_803B53EC.mC);
-        fn_8026D0EC();
+        SNDSYS_entercritical();
+        SNDMEMI_free(lbl_803B53EC.mC);
+        SNDSYS_leavecritical();
         lbl_803B53EC.mC = 0;
     }
 }

@@ -152,22 +152,22 @@ extern "C" {
 
 void *fn_801B2C40(int size);
 void fn_801B3A88(void);
-void fn_8026D0AC(void);
-void fn_8026D0EC(void);
+void SNDSYS_entercritical(void);
+void SNDSYS_leavecritical(void);
 int fn_8026EEB0(int handle, int value);
 int fn_8026EF38(int handle, int value);
 int fn_8026EAC0(int handle, int a, int b);
 int fn_8026ED1C(int handle, int value);
 int fn_801F685C(int count, int filters, int taps);
 int fn_802714A8(int handle, int value);
-int fn_8026AEAC(int handle, int value);
+int SNDCTRL_drylevel(int handle, int value);
 int fn_80278070(int handle, int a, int b);
-int fn_8026C9BC(int handle, int value);
-int fn_8026A870(int *handle, void *data);
-int fn_8026A96C(void);
-int fn_8026AB88(int handle);
-int fn_8026A9F4(int handle);
-int fn_8026A980(void *dest, int handle);
+int SNDpitchmult(int handle, int value);
+int SNDBANK_asyncloadmem(int *handle, void *data);
+int SNDBANK_asyncloadmemdone(void);
+int SNDbankremove(int handle);
+int SNDbankheadersize(int handle);
+int SNDbankheadercopy(void *dest, int handle);
 int fn_8026EDC4(int handle);
 int fn_8026E388(int handle);
 void fn_801B2C94(void *p);
@@ -285,9 +285,9 @@ int Object_8027DAE4::vfn_13(int value)
     int status = Object_8027D6E8::vfn_13(value);
     int result = 0;
     if (status == 0) {
-        fn_8026D0AC();
+        SNDSYS_entercritical();
         result = fn_802714A8(m124, value);
-        fn_8026D0EC();
+        SNDSYS_leavecritical();
         m10 = value;
         mFC = value;
     }
@@ -299,9 +299,9 @@ int Object_8027DAE4::vfn_15(int value)
     int status = fn_8027D9EC(this);
     int result = 0;
     if (status == 0) {
-        fn_8026D0AC();
-        result = fn_8026AEAC(m124, value);
-        fn_8026D0EC();
+        SNDSYS_entercritical();
+        result = SNDCTRL_drylevel(m124, value);
+        SNDSYS_leavecritical();
         mC = value;
         m100 = value;
     }
@@ -313,9 +313,9 @@ int Object_8027DAE4::vfn_17(int a, int b)
     int status = fn_8027D9F4(this);
     int result = 0;
     if (status == 0) {
-        fn_8026D0AC();
+        SNDSYS_entercritical();
         result = fn_80278070(m124, a, b);
-        fn_8026D0EC();
+        SNDSYS_leavecritical();
         m8 = b;
         m101 = b;
     }
@@ -325,9 +325,9 @@ int Object_8027DAE4::vfn_17(int a, int b)
 int Object_8027DAE4::vfn_19(int value)
 {
     int result;
-    fn_8026D0AC();
-    result = fn_8026C9BC(m124, value);
-    fn_8026D0EC();
+    SNDSYS_entercritical();
+    result = SNDpitchmult(m124, value);
+    SNDSYS_leavecritical();
     m114 = value;
     m108 = value;
     return result;
@@ -348,9 +348,9 @@ int fn_8027E0AC(Object_8027DAE4 *p, int index)
 int Object_8027DAE4::vfn_04(void)
 {
     int result;
-    fn_8026D0AC();
+    SNDSYS_entercritical();
     result = fn_8026EDC4(m0);
-    fn_8026D0EC();
+    SNDSYS_leavecritical();
     m38 = 1;
     m124 = -1;
     m0 = -1;
@@ -363,7 +363,7 @@ int Object_8027DAE4::vfn_30(int key, void *data)
     int result = -8;
     Record_8027E2D0 *record = vfn_28(key);
     if (record != 0) {
-        result = fn_8026A870(&record->m18, data);
+        result = SNDBANK_asyncloadmem(&record->m18, data);
     }
     return result;
 }
@@ -373,7 +373,7 @@ int Object_8027DAE4::vfn_31(int key)
     int result = 0;
     Record_8027E2D0 *record = vfn_28(key);
     if (record != 0) {
-        result = fn_8026A96C();
+        result = SNDBANK_asyncloadmemdone();
     }
     return result;
 }
@@ -410,7 +410,7 @@ int Object_8027DAE4::vfn_33(int key)
     Record_8027E2D0 *record = vfn_28(key);
     if (record != 0 && record->m18 != -1) {
         if (record->m14 == 0) {
-            result = fn_8026AB88(record->m18);
+            result = SNDbankremove(record->m18);
             fn_801B2C94(record->m1C);
         }
         memset(record, 0, sizeof(*record));
@@ -425,9 +425,9 @@ int Object_8027DAE4::vfn_32(int key, int mode)
     void *data;
     Record_8027E2D0 *record = vfn_28(key);
     if (record != 0 && record->m18 != -1 && mode == 7) {
-        data = fn_801B2C40(fn_8026A9F4(record->m18));
+        data = fn_801B2C40(SNDbankheadersize(record->m18));
         if (data != 0) {
-            fn_8026A980(data, record->m18);
+            SNDbankheadercopy(data, record->m18);
             result = 0;
             fn_801B2C94(record->m1C);
             record->m1C = data;
@@ -476,9 +476,9 @@ int Object_8027E518::vfn_15(int value)
 {
     int result = 0;
     if (fn_8027D9EC(this) == 0) {
-        fn_8026D0AC();
+        SNDSYS_entercritical();
         result = fn_8026EF38(m0, value);
-        fn_8026D0EC();
+        SNDSYS_leavecritical();
         mC = value;
     }
     return result;
@@ -488,9 +488,9 @@ int Object_8027E518::vfn_17(int a, int b)
 {
     int result = 0;
     if (fn_8027D9F4(this) == 0) {
-        fn_8026D0AC();
+        SNDSYS_entercritical();
         result = fn_8026EAC0(m0, a, b);
-        fn_8026D0EC();
+        SNDSYS_leavecritical();
         m8 = b;
     }
     return result;
@@ -504,9 +504,9 @@ int Object_8027E518::vfn_25(int value)
 int Object_8027E518::vfn_19(int value)
 {
     int result;
-    fn_8026D0AC();
+    SNDSYS_entercritical();
     result = fn_8026EEB0(m0, value);
-    fn_8026D0EC();
+    SNDSYS_leavecritical();
     m108 = value;
     m114 = value;
     return result;
@@ -540,9 +540,9 @@ int Object_8027E518::vfn_09(int index)
 int Object_8027E518::vfn_04(void)
 {
     int result;
-    fn_8026D0AC();
+    SNDSYS_entercritical();
     result = fn_8026E388(m0);
-    fn_8026D0EC();
+    SNDSYS_leavecritical();
     m38 = 1;
     vfn_03();
     return result;

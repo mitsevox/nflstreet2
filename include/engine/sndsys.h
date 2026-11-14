@@ -30,11 +30,18 @@ typedef struct Object_80277404 {
     int m1830;
 } Object_80277404;
 
+typedef struct SndMemEntry_t {
+    unsigned int m0;
+    int m4;
+} SndMemEntry_t;
+
 typedef struct Struct_80278894 {
-    unsigned char mUnknown0[8];
+    char *m0;
+    SndMemEntry_t *m4;
     int m8;
-    unsigned char mUnknownC[4];
+    unsigned int mC;
     int m10;
+    int m14;
 } Struct_80278894;
 
 typedef struct Parser_8027823C {
@@ -229,11 +236,11 @@ extern unsigned char lbl_80300EDC[];
 extern unsigned int lbl_80301428[];
 extern int lbl_803A772C;
 
-void *fn_8026B5D4(int size);
-void fn_8026B7D8(void *p);
-unsigned int fn_8026CB14(void);
-void fn_8026D0AC(void);
-void fn_8026D0EC(void);
+void *SNDMEMI_allocz(int size);
+void SNDMEMI_free(void *p);
+unsigned int iSNDrandom(void);
+void SNDSYS_entercritical(void);
+void SNDSYS_leavecritical(void);
 void fn_80276B7C(float *a, float *b, float *c, int count, int n);
 int fn_802789E0(int handle);
 int fn_80276C98(int count, unsigned char **data, float *value, float scale);

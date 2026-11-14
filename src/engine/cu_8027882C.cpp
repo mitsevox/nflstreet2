@@ -12,7 +12,7 @@ int fn_8027882C(int handle, int value)
     handle = fn_8026A288(handle);
     if (handle >= 0) {
         index = -1;
-        while (fn_8026C910(handle, &index)) {
+        while (iSNDpatchkey(handle, &index)) {
             fn_80274D34(index, value);
         }
     }
@@ -90,10 +90,10 @@ int fn_802791F4(int index, int a, int b)
 
 int fn_8027929C(int index)
 {
-    fn_8026D0AC();
+    SNDSYS_entercritical();
     fn_8027474C(index);
     lbl_803B5060.m304[index] = 0;
-    fn_8026D0EC();
+    SNDSYS_leavecritical();
     return 0;
 }
 
@@ -131,10 +131,10 @@ void fn_80279648(void **buffer, int *capacity, int size, int elementSize)
             }
         }
         oldBuffer = *buffer;
-        newBuffer = fn_8026B5D4(*capacity * elementSize);
+        newBuffer = SNDMEMI_allocz(*capacity * elementSize);
         if (oldBuffer != 0) {
-            fn_8026B2E0(newBuffer, oldBuffer, old * elementSize);
-            fn_8026B7D8(oldBuffer);
+            SNDI_memcpy(newBuffer, oldBuffer, old * elementSize);
+            SNDMEMI_free(oldBuffer);
         }
         *buffer = newBuffer;
     }
@@ -147,7 +147,7 @@ int fn_80279798(int range)
     } else if (range < 0) {
         range = 0;
     }
-    return (((int)(fn_8026CB14() & 0x7FFF) - 0x4000) * range) >> 14;
+    return (((int)(iSNDrandom() & 0x7FFF) - 0x4000) * range) >> 14;
 }
 
 void fn_802797F4(void *(*alloc)(int size))

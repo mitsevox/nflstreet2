@@ -2359,6 +2359,38 @@
     "gEventDats": {
       "address": "0x8037E0B4",
       "evidence": "evidence.tsv data/name rows for 0x8037E0B4 (target extent, related name); speech-library storage, original-owned."
+    },
+    "SNDbankremove": {
+      "address": "0x8026AB88",
+      "evidence": "evidence.tsv function and name rows for SNDbankremove 0x8026AB88; its draft src/engine/sbremove.c is registered in comparisons.json one function short of exact, so the original provider stays linked and linked callers resolve this name to it."
+    },
+    "iSNDpatchkey": {
+      "address": "0x8026C910",
+      "evidence": "evidence.tsv function and name rows for iSNDpatchkey 0x8026C910; its draft src/engine/spatkey.c is registered in comparisons.json one function short of exact, so the original provider stays linked and linked callers resolve this name to it."
+    },
+    "SNDplaysetdef": {
+      "address": "0x8026CA50",
+      "evidence": "evidence.tsv function and name rows for SNDplaysetdef 0x8026CA50; its draft src/engine/splysdef.c is registered in comparisons.json one function short of exact, so the original provider stays linked and linked callers resolve this name to it."
+    },
+    "SNDMEMI_constrain": {
+      "address": "0x8026B520",
+      "evidence": "evidence.tsv function and name rows for SNDMEMI_constrain 0x8026B520; the draft src/engine/smemman.c is registered in comparisons.json (two of its five functions differ), so the original provider stays linked and linked callers resolve this name to it."
+    },
+    "SNDMEMI_init": {
+      "address": "0x8026B54C",
+      "evidence": "evidence.tsv function and name rows for SNDMEMI_init 0x8026B54C; the draft src/engine/smemman.c is registered in comparisons.json (two of its five functions differ), so the original provider stays linked and linked callers resolve this name to it."
+    },
+    "SNDMEMI_restore": {
+      "address": "0x8026B5B4",
+      "evidence": "evidence.tsv function and name rows for SNDMEMI_restore 0x8026B5B4; the draft src/engine/smemman.c is registered in comparisons.json (two of its five functions differ), so the original provider stays linked and linked callers resolve this name to it."
+    },
+    "SNDMEMI_allocz": {
+      "address": "0x8026B5D4",
+      "evidence": "evidence.tsv function and name rows for SNDMEMI_allocz 0x8026B5D4; the draft src/engine/smemman.c is registered in comparisons.json (two of its five functions differ), so the original provider stays linked and linked callers resolve this name to it."
+    },
+    "SNDMEMI_free": {
+      "address": "0x8026B7D8",
+      "evidence": "evidence.tsv function and name rows for SNDMEMI_free 0x8026B7D8; the draft src/engine/smemman.c is registered in comparisons.json (two of its five functions differ), so the original provider stays linked and linked callers resolve this name to it."
     }
   },
   "units": [
@@ -18883,6 +18915,301 @@
           "placement": ".data4",
           "start": "0x802FFC90",
           "end": "0x802FFCC0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sballoc.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026A664-0x8026A6E8 (src/engine/sballoc.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026A664",
+          "end": "0x8026A6E8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sbhdrcpy.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026A980-0x8026A9F4 (src/engine/sbhdrcpy.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026A980",
+          "end": "0x8026A9F4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sbhdrsze.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026A9F4-0x8026AA0C (src/engine/sbhdrsze.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026A9F4",
+          "end": "0x8026AA0C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sbplay.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026AAF0-0x8026AB88 (src/engine/sbplay.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026AAF0",
+          "end": "0x8026AB88"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sbvalid.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026AD18-0x8026AD74 (src/engine/sbvalid.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026AD18",
+          "end": "0x8026AD74"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/scheckpo.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026AD74-0x8026ADA0 (src/engine/scheckpo.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026AD74",
+          "end": "0x8026ADA0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sclnt100.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026ADA0-0x8026AEAC (src/engine/sclnt100.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026ADA0",
+          "end": "0x8026AEAC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sbasyncm.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026A6E8-0x8026A980 (src/engine/sbasyncm.c), its function and name rows, the data rows of its .bss 0x803A6C10-0x803A6C24, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026A6E8",
+          "end": "0x8026A980"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6C10",
+          "end": "0x803A6C24"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sbpatinf.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026AA0C-0x8026AAF0 (src/engine/sbpatinf.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026AA0C",
+          "end": "0x8026AAF0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sctrldry.cpp",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026AEAC-0x8026AF64 (src/engine/sctrldry.cpp), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026AEAC",
+          "end": "0x8026AF64"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/smemlmt.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026B4D8-0x8026B520 (src/engine/smemlmt.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026B4D8",
+          "end": "0x8026B520"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/spitch.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026C9BC-0x8026CA50 (src/engine/spitch.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026C9BC",
+          "end": "0x8026CA50"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/spoutlat.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026CAA8-0x8026CAE0 (src/engine/spoutlat.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026CAA8",
+          "end": "0x8026CAE0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/srelease.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026CC1C-0x8026CD20 (src/engine/srelease.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026CC1C",
+          "end": "0x8026CD20"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sresopat.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026CD20-0x8026CDA0 (src/engine/sresopat.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026CD20",
+          "end": "0x8026CDA0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/smemcpy.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026B2E0-0x8026B4D8 (src/engine/smemcpy.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026B2E0",
+          "end": "0x8026B4D8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/srandom.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026CAE0-0x8026CC1C (src/engine/srandom.c), its function and name rows, the data rows of its .data 0x802FFDD4-0x802FFDEC, .bss 0x803A7624-0x803A763C, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026CAE0",
+          "end": "0x8026CC1C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFDD4",
+          "end": "0x802FFDEC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A7624",
+          "end": "0x803A763C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sserver.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026CDA0-0x8026D180 (src/engine/sserver.c), its function and name rows, the data rows of its .rodata 0x802B790C-0x802B7910, .data 0x802FFDEC-0x802FFDF8, .bss 0x803A763C-0x803A7644, .ctors 0x80289B50-0x80289B54, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026CDA0",
+          "end": "0x8026D180"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B790C",
+          "end": "0x802B7910"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFDEC",
+          "end": "0x802FFDF8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A763C",
+          "end": "0x803A7644"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B50",
+          "end": "0x80289B54"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/ssine.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026D180-0x8026D200 (src/engine/ssine.c), its function and name rows, the data rows of its .data 0x802FFDF8-0x802FFFFA, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026D180",
+          "end": "0x8026D200"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFDF8",
+          "end": "0x802FFFFC"
         }
       ]
     }

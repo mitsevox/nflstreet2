@@ -181,10 +181,10 @@ typedef struct Object_80269048 {
 extern void (*lbl_802FFB6C[])(Object_80268480 *params, int value);
 extern int fn_801B9410(void *p, int *values);
 extern int fn_801B9B30(void *p, int *value);
-extern int fn_8026AAF0(int a, int b, Object_80268480 *params);
-extern void fn_8026CA50(Object_80268480 *params);
-extern unsigned int fn_8026CB14(void);
-extern int fn_8026C9BC(int handle, int value);
+extern int SNDBANK_play(int a, int b, Object_80268480 *params);
+extern void SNDplaysetdef(Object_80268480 *params);
+extern unsigned int iSNDrandom(void);
+extern int SNDpitchmult(int handle, int value);
 extern int fn_8026EDC4(int handle);
 extern int fn_802714A8(int handle, int value);
 extern int fn_80274B50(int voice, int value);
@@ -292,7 +292,7 @@ int fn_80267480(Object_80267480 *p)
     int result;
 
     if (p->mUnknownC != 0) {
-        result = fn_8026CB14() % p->mUnknown4 + p->mUnknown0;
+        result = iSNDrandom() % p->mUnknown4 + p->mUnknown0;
         p->mUnknown8 = result;
     } else {
         result = p->mUnknown8;
@@ -305,7 +305,7 @@ int fn_802674DC(Object_802674DC *p)
     unsigned int index;
 
     if (*(int *)((char *)p + p->mUnknown0) != 0) {
-        index = fn_8026CB14() % (unsigned int)(p->mUnknownA - p->mUnknown8 - p->mUnknown3) + p->mUnknown8;
+        index = iSNDrandom() % (unsigned int)(p->mUnknownA - p->mUnknown8 - p->mUnknown3) + p->mUnknown8;
         if (p->mUnknown2 == 1) {
             p->mUnknownC = p->mUnknown10.mBytes[index];
             p->mUnknown10.mBytes[index] = p->mUnknown10.mBytes[p->mUnknown8];
@@ -646,14 +646,14 @@ Result_802685B8 fn_802685B8(Object_802685B8 *p, int *q)
     Entry_802686CC *e;
     int i;
 
-    fn_8026CA50(&params);
+    SNDplaysetdef(&params);
     params.mUnknown5 = 0;
     e = p->mEntries;
     for (i = 0; i < p->mUnknownE; i++, e++) {
         lbl_802FFB6C[e->mType](&params, e->mUnknown8);
         e->mUnknown4 = e->mUnknown8;
     }
-    result.mUnknown0 = fn_8026AAF0(p->mUnknown0->mUnknown40, q[1], &params);
+    result.mUnknown0 = SNDBANK_play(p->mUnknown0->mUnknown40, q[1], &params);
     return result;
 }
 
@@ -667,7 +667,7 @@ int fn_8026868C(int *p)
     int handle = *p;
 
     fn_802714A8(handle, 0);
-    return fn_8026C9BC(handle, 0);
+    return SNDpitchmult(handle, 0);
 }
 
 void fn_802686CC(Object_802686CC *p)

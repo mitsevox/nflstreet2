@@ -18,19 +18,19 @@ void fn_80276DE4(Object_80277404 *p, float **buffer, int n)
         dst = src + p->m2C;
     }
     if (n == 0) {
-        fn_8026B2E0(p->m838, src, p->m2C * 4);
+        SNDI_memcpy(p->m838, src, p->m2C * 4);
         p->m30 -= p->m2C;
         p->m38 = p->m2C;
         *buffer = dst;
     } else if (n > 0) {
-        fn_8026B2E0(p->m838, src, n * 4);
+        SNDI_memcpy(p->m838, src, n * 4);
         fn_80276B7C(src, dst, &p->m838[n], p->m2C, n);
         p->m30 -= p->m2C;
         p->m38 = p->m2C + n;
         *buffer = dst;
     } else {
         fn_80276B7C(src, dst, p->m838, p->m2C, n);
-        fn_8026B2E0(&p->m838[p->m2C], dst - n, (p->m2C + n) * 4);
+        SNDI_memcpy(&p->m838[p->m2C], dst - n, (p->m2C + n) * 4);
         p->m30 -= p->m2C * 2;
         p->m38 = p->m2C * 2 + n;
         *buffer = dst + p->m2C;
@@ -49,7 +49,7 @@ int fn_80276F38(Object_80277404 *p, int *count, float **buffer)
     } else {
         n = *count;
     }
-    fn_8026B2E0(dst, src, n * 4);
+    SNDI_memcpy(dst, src, n * 4);
     p->m3C += n;
     p->m38 -= n;
     *count -= n;
@@ -129,7 +129,7 @@ int fn_802770F8(Object_80277404 *p, int count, float *src, float *dst)
         total += fn_80276F38(p, &count, &dst);
     }
     if (n > 0) {
-        fn_8026B2E0(p->m40, src, p->m2C * 4);
+        SNDI_memcpy(p->m40, src, p->m2C * 4);
         p->m34 = p->m2C;
         src += p->m2C;
     }
@@ -138,7 +138,7 @@ int fn_802770F8(Object_80277404 *p, int count, float *src, float *dst)
         if (n > p->m30) {
             n = p->m30;
         }
-        fn_8026B2E0(dst, src, n * 4);
+        SNDI_memcpy(dst, src, n * 4);
         total += n;
         p->m30 -= n;
     }
@@ -179,7 +179,7 @@ int fn_80277280(Node_80279D90 *node, int count, float *a, float *b, int flag)
 void fn_802773C0(Object_80277404 *p)
 {
     if (p->m1828 != 0) {
-        fn_8026B7D8(p->m1828);
+        SNDMEMI_free(p->m1828);
         p->m1828 = 0;
         p->m182C = 0;
     }
@@ -202,7 +202,7 @@ int fn_80277520(int id, int offset, int value)
     handle = fn_8026A288(id);
     if (handle >= 0) {
         index = -1;
-        while (fn_8026C910(handle, &index)) {
+        while (iSNDpatchkey(handle, &index)) {
             record = &lbl_803A6C24.m1CC[index];
             if (record->m23 == 1) {
                 record->m1E = clamped;
@@ -266,7 +266,7 @@ int fn_80277D88(int handle, int value)
     handle = fn_8026A288(handle);
     if (handle >= 0) {
         index = -1;
-        while (fn_8026C910(handle, &index)) {
+        while (iSNDpatchkey(handle, &index)) {
             record = &lbl_803A6C24.m1CC[index];
             if (record->m68 == value || record->m86 == 0) {
                 return 0;
@@ -337,7 +337,7 @@ int fn_80277F98(int handle, Desc_80276798 *desc)
     handle = fn_8026A288(handle);
     if (handle >= 0) {
         index = -1;
-        while (fn_8026C910(handle, &index)) {
+        while (iSNDpatchkey(handle, &index)) {
             fn_802750B8(index, desc);
         }
     }
@@ -401,7 +401,7 @@ int fn_80278530(int handle, int value)
     handle = fn_8026A288(handle);
     if (handle >= 0) {
         index = -1;
-        while (fn_8026C910(handle, &index)) {
+        while (iSNDpatchkey(handle, &index)) {
             fn_80274E24(index, value);
         }
     }

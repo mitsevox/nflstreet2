@@ -92,8 +92,8 @@ struct SndModuleInfo_t {
 
 /* The active and enabled bytes tested together as one word. */
 #define SND_READY() ((_Snd_ModuleInfo.mStatus.mWord & 0x00FFFF00) == 0x00010100)
-#define SND_LOCK() if (_Snd_ModuleInfo.mStatus.mFlags.mNoLock == 0) fn_8026D0AC()
-#define SND_UNLOCK() if (_Snd_ModuleInfo.mStatus.mFlags.mNoLock == 0) fn_8026D0EC()
+#define SND_LOCK() if (_Snd_ModuleInfo.mStatus.mFlags.mNoLock == 0) SNDSYS_entercritical()
+#define SND_UNLOCK() if (_Snd_ModuleInfo.mStatus.mFlags.mNoLock == 0) SNDSYS_leavecritical()
 
 typedef int (*SndTraverseFn_t)(void *pNode, void *pKey, void *pOut);
 
@@ -125,18 +125,18 @@ int fn_802692B8(int handle);
 int fn_802697D8(void *pData, char *pName, int b, void *(*pAlloc)(void *, int, int));
 void fn_8026A2DC(int handle, int a, int b);
 void fn_8026A4D4(int *pHandle, void *pData);
-int fn_8026A870(int *pHandle, void *pData);
-int fn_8026A96C(void);
-int fn_8026AAF0(int handle, int a, void *b);
-int fn_8026AB88(int handle);
+int SNDBANK_asyncloadmem(int *pHandle, void *pData);
+int SNDBANK_asyncloadmemdone(void);
+int SNDBANK_play(int handle, int a, void *b);
+int SNDbankremove(int handle);
 void fn_8026B124(void *p);
 void fn_8026B250(void);
 void fn_8026C280(void);
 int fn_8026C3BC(int handle);
-int fn_8026C9BC(int handle, int value);
-void fn_8026CA50(SndPatchOpts_t *pOpts);
-void fn_8026D0AC(void);
-void fn_8026D0EC(void);
+int SNDpitchmult(int handle, int value);
+void SNDplaysetdef(SndPatchOpts_t *pOpts);
+void SNDSYS_entercritical(void);
+void SNDSYS_leavecritical(void);
 int fn_8026E280(SndPatchOpts_t *pOpts, int a, int b, void *pBuffer, int size);
 void fn_8026E2A8(int handle);
 int fn_8026E364(int handle, int a, void *b);
@@ -245,7 +245,7 @@ static void _SndProcessBanks(void)
     fn_801C6D34(_Snd_ModuleInfo.pBankList, 0, (void *)3, &pBank, _SndBankTraverseFindState, 1);
     if (pBank != 0 && pBank->mState == 3) {
         busy = 1;
-        if (fn_8026A96C() != 0) {
+        if (SNDBANK_asyncloadmemdone() != 0) {
             _SndBankFinishDMA(pBank);
         }
     }
@@ -261,7 +261,7 @@ static void _SndProcessBanks(void)
                 ResLoadAsyncToBuffer(pBank->pRes, pBank->mIndex, 1, pData, 100, _SndALoadBankCallback, pBank);
             } else {
                 SndSetHeap(_Snd_ModuleInfo.pBankTable, pBank->mBank);
-                fn_8026A870(&pBank->mHandle, pBank->pData);
+                SNDBANK_asyncloadmem(&pBank->mHandle, pBank->pData);
             }
         }
     }
@@ -527,7 +527,7 @@ void SndUnloadBank(SndBankInfo_t *pBank)
             }
             SndService();
         }
-        fn_8026AB88(pBank->mHandle);
+        SNDbankremove(pBank->mHandle);
         if (pBank->mFlags & 1) {
             ResUnLoad(pBank->pRes, pBank->mIndex);
         }
@@ -555,7 +555,7 @@ int SndPlayPatch(SndBankInfo_t *pBank, int patch, void *pOpts)
     }
     if (pBank->mLoaded) {
         SND_LOCK();
-        handle = fn_8026AAF0(pBank->mHandle, patch, pOpts);
+        handle = SNDBANK_play(pBank->mHandle, patch, pOpts);
         SND_UNLOCK();
     } else {
         handle = -1;
@@ -566,7 +566,7 @@ int SndPlayPatch(SndBankInfo_t *pBank, int patch, void *pOpts)
 void SndFillPatchOpts(SndPatchOpts_t *pOpts)
 {
     if (SND_READY()) {
-        fn_8026CA50(pOpts);
+        SNDplaysetdef(pOpts);
     }
 }
 
@@ -614,7 +614,7 @@ void SndSetPatchRate(int handle, int value)
 {
     if (SND_READY()) {
         SND_LOCK();
-        fn_8026C9BC(handle, value);
+        SNDpitchmult(handle, value);
         SND_UNLOCK();
     }
 }
@@ -664,7 +664,7 @@ SndStream_t *SndCreateStream(int extra, int a, int b, int bank)
     SndSetHeap(_Snd_ModuleInfo.pBankTable, bank);
     pStream = (SndStream_t *)fn_801C6A20(_Snd_ModuleInfo.pStreamList);
     fn_801C6AA4(_Snd_ModuleInfo.pStreamList, pStream, 0);
-    fn_8026CA50(&opts);
+    SNDplaysetdef(&opts);
     size = fn_8026EE6C(a, b) + extra;
     pStream->pBuffer = fn_801D2BB0(1, size, 0, 0);
     pStream->mHandle = fn_8026E280(&opts, a, b, pStream->pBuffer, size);

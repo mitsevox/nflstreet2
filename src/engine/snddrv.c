@@ -261,14 +261,14 @@ void fn_80272EC4(void)
     setup.m4 = fn_80272618;
     setup.mA = 0;
     lbl_803B5028(&setup);
-    fn_8026D0AC();
+    SNDSYS_entercritical();
     for (i = 0; i < setup.m9; i++) {
-        void *buffer = fn_8026B5D4(672);
+        void *buffer = SNDMEMI_allocz(672);
 
         lbl_803A8D60.mC050[i] = buffer;
         lbl_803A8D60.mC068[i] = (void *)OSRoundUp32B(buffer);
     }
-    fn_8026D0EC();
+    SNDSYS_leavecritical();
     lbl_803A8D60.mC048 = 1;
 }
 
@@ -277,11 +277,11 @@ void fn_80272FB4(void)
     int i;
 
     lbl_803A8D60.mC048 = 0;
-    fn_8026D0AC();
+    SNDSYS_entercritical();
     for (i = 0; i < lbl_803A6C24.m1C.m23; i++) {
-        fn_8026B7D8(lbl_803A8D60.mC050[i]);
+        SNDMEMI_free(lbl_803A8D60.mC050[i]);
     }
-    fn_8026D0EC();
+    SNDSYS_leavecritical();
     lbl_803B502C();
 }
 
@@ -356,7 +356,7 @@ void fn_80273040(int index, Stream_802743A0 *stream, Record_803A6DF0 *record)
             }
         }
         for (i = 0; i < record->m23; i++) {
-            fn_8026B2E0(stream->m2580[i] + (1536 - remaining), source[i], chunk);
+            SNDI_memcpy(stream->m2580[i] + (1536 - remaining), source[i], chunk);
         }
         remaining = rest;
     } while (remaining > 0);
@@ -508,7 +508,7 @@ int fn_80273960(int flag)
         fn_802798C0();
     }
     while (lbl_803A6C24.m169 != 0) {
-        fn_8026D0EC();
+        SNDSYS_leavecritical();
     }
     OSCancelThread(&lbl_803A8D60.m1AC8);
     AXQuit();
@@ -687,7 +687,7 @@ int fn_80273DF8(Header_80273DF8 *header, int base, int index, int a, int b, int 
             u32 endAddress;
 
             if (record->m22 == 18) {
-                fn_8026B2E0(&adpcm, header->mC8[i], 32);
+                SNDI_memcpy(&adpcm, header->mC8[i], 32);
                 adpcm.pred_scale = header->mC8[i][32];
                 if (header->m60 > 0) {
                     loop.loop_pred_scale = header->mE0[i]->m4;

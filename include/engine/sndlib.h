@@ -166,9 +166,12 @@ struct State_803A8D60 {
 };
 
 struct Struct_80270E04 {
-    unsigned char mUnknown0[0x64];
+    unsigned char mUnknown0[0x18];
+    unsigned short m18;
+    unsigned char mUnknown1A[0x4A];
     int *m64;
     int m68;
+    unsigned char mUnknown6C[0x94];
 };
 
 struct Struct_802753AC {
@@ -264,10 +267,10 @@ void fn_80277A60(unsigned short angle, float *levels);
 void fn_8027981C(int count);
 
 void fn_8026A0E8(int value);
-void *fn_8026B5D4(int size);
-void fn_8026B7D8(void *p);
-void fn_8026D0AC(void);
-void fn_8026D0EC(void);
+void *SNDMEMI_allocz(int size);
+void SNDMEMI_free(void *p);
+void SNDSYS_entercritical(void);
+void SNDSYS_leavecritical(void);
 void fn_8027555C(void);
 int fn_80276820(int index);
 void fn_80276868(int index, int value);

@@ -12,13 +12,13 @@ float *fn_802753F0(int index)
 void fn_80275404(void)
 {
     int size = lbl_8030002C * sizeof(float *) + lbl_8030002C * sizeof(int) + lbl_8030002C * sizeof(float);
-    float **buffer = (float **)fn_8026B5D4(size);
+    float **buffer = (float **)SNDMEMI_allocz(size);
 
     lbl_803B4E24 = buffer;
     lbl_803B4E34.m14 = (int *)(buffer + lbl_8030002C);
     lbl_803B4E34.m100 = (float *)(lbl_803B4E34.m14 + lbl_8030002C);
     memset(buffer, 0, size);
-    lbl_803B4E20 = (Node_803B4E20 **)fn_8026B5D4(lbl_8030002C * 4);
+    lbl_803B4E20 = (Node_803B4E20 **)SNDMEMI_allocz(lbl_8030002C * 4);
     memset(lbl_803B4E20, 0, lbl_8030002C * 4);
     lbl_80300E98 = 1;
 }
@@ -28,7 +28,7 @@ void fn_802754A8(void)
     int i;
 
     if (lbl_80300E98 != 0) {
-        fn_8026B7D8(lbl_803B4E24);
+        SNDMEMI_free(lbl_803B4E24);
         for (i = 0; i < lbl_8030002C; i++) {
             if (lbl_803B4E20[i] != 0) {
                 Node_803B4E20 *node = lbl_803B4E20[i];
@@ -36,12 +36,12 @@ void fn_802754A8(void)
                 do {
                     Node_803B4E20 *next = node->m0;
 
-                    fn_8026B7D8(node);
+                    SNDMEMI_free(node);
                     node = next;
                 } while (node != 0);
             }
         }
-        fn_8026B7D8(lbl_803B4E20);
+        SNDMEMI_free(lbl_803B4E20);
         lbl_80300E98 = 0;
     }
 }
@@ -63,12 +63,12 @@ void fn_80275948(float value)
 
 void *fn_80275B7C(int size)
 {
-    return fn_8026B5D4(size);
+    return SNDMEMI_allocz(size);
 }
 
 void fn_80275B9C(void *p)
 {
-    fn_8026B7D8(p);
+    SNDMEMI_free(p);
 }
 
 void fn_80275BBC(Setup_80272EC4 *setup)
@@ -77,15 +77,15 @@ void fn_80275BBC(Setup_80272EC4 *setup)
 
     fn_802797F4(fn_80275B7C);
     fn_80279800(fn_80275B9C);
-    fn_8027980C(fn_8026B2E0);
+    fn_8027980C(SNDI_memcpy);
     lbl_803B4E34.m0 = *setup;
-    fn_8026D0AC();
+    SNDSYS_entercritical();
     fn_80275404();
     for (i = 0; i < lbl_8030002C; i++) {
         lbl_803B4E34.m14[i] = 0;
     }
     for (i = 0; i < 2; i++) {
-        void *buffer = fn_8026B5D4(2748);
+        void *buffer = SNDMEMI_allocz(2748);
 
         lbl_803B4E34.mA8[i] = buffer;
         lbl_803B4E34.mB0[i] = (int *)buffer + 2;
@@ -94,7 +94,7 @@ void fn_80275BBC(Setup_80272EC4 *setup)
         }
     }
     for (i = 0; i < lbl_803B4E34.m0.m9; i++) {
-        void *buffer = fn_8026B5D4(704);
+        void *buffer = SNDMEMI_allocz(704);
 
         lbl_803B4E34.mB8[i] = buffer;
         lbl_803B4E34.mD0[i] = (int *)buffer;
@@ -105,7 +105,7 @@ void fn_80275BBC(Setup_80272EC4 *setup)
     if (lbl_803B4E34.m0.m8 != 0) {
         float *p;
 
-        lbl_803B4E34.m1DC = (Record_803B5010 *)fn_8026B5D4(
+        lbl_803B4E34.m1DC = (Record_803B5010 *)SNDMEMI_allocz(
             lbl_803B4E34.m0.m8 * sizeof(Record_803B5010) + lbl_8030002C * sizeof(float) * lbl_803B4E34.m0.m8 +
             lbl_8030002C * sizeof(float) * lbl_803B4E34.m0.m8);
         memset(lbl_803B4E34.m1DC, 0,
@@ -119,7 +119,7 @@ void fn_80275BBC(Setup_80272EC4 *setup)
             p += lbl_8030002C;
         }
     }
-    fn_8026D0EC();
+    SNDSYS_leavecritical();
     fn_8027A7FC();
     fn_8027A8A4();
     fn_8027A844();
@@ -179,7 +179,7 @@ void fn_80275F80(int index, int type, int mode, int a, int b, void *data, int c,
         table = 2;
     }
     if (lbl_803B4E34.m18[kind][table] != 0) {
-        record->m48 = (Node_80279D90 *)fn_8026B5D4(lbl_803B4E34.m60[kind][table]);
+        record->m48 = (Node_80279D90 *)SNDMEMI_allocz(lbl_803B4E34.m60[kind][table]);
         params.m0 = a;
         params.m24 = k;
         params.m4 = b;
@@ -200,7 +200,7 @@ void fn_80275F80(int index, int type, int mode, int a, int b, void *data, int c,
         if (mode != 0) {
             index = -1;
         }
-        record->m4C = (Node_80279D90 *)fn_8026B5D4(6196);
+        record->m4C = (Node_80279D90 *)SNDMEMI_allocz(6196);
         record->m4C->m4 = 0;
         record->m4C->m18 = 200;
         record->m4C->m1A = slot;
@@ -233,7 +233,7 @@ void fn_80276278(int index)
             record->m40->m4(record->m40);
         }
         next = record->m40->m8;
-        fn_8026B7D8(record->m40);
+        SNDMEMI_free(record->m40);
         record->m40 = next;
     } while (next != 0);
     record->m0 = 0;
@@ -254,7 +254,7 @@ void fn_802763AC(int index, int slot, float value)
 void fn_80276798(int index, int slot, Desc_80276798 *desc)
 {
     Record_803B5010 *record = &lbl_803B4E34.m1DC[index];
-    Node_80279D90 *node = (Node_80279D90 *)fn_8026B5D4(desc->m4);
+    Node_80279D90 *node = (Node_80279D90 *)SNDMEMI_allocz(desc->m4);
 
     desc->mC(node, desc->m0, slot);
     node->m18 = desc->mA;
@@ -283,7 +283,7 @@ void fn_80276868(int index, int value)
     if (value > 0) {
         node = record->m58;
         if (node == 0) {
-            record->m58 = (Node_80279D90 *)fn_8026B5D4(88);
+            record->m58 = (Node_80279D90 *)SNDMEMI_allocz(88);
             record->m58->m4 = 0;
             record->m58->m18 = 80;
             record->m58->m1A = 0;
@@ -295,7 +295,7 @@ void fn_80276868(int index, int value)
         fn_80279D0C(record->m58, &params);
     } else if (record->m58 != 0) {
         fn_80279DF8(&record->m40, record->m58);
-        fn_8026B7D8(record->m58);
+        SNDMEMI_free(record->m58);
         record->m58 = 0;
     }
 }
@@ -311,7 +311,7 @@ void fn_80276A84(int index, int value)
     }
     node = record->m50;
     if (node == 0) {
-        record->m50 = (Node_80279D90 *)fn_8026B5D4(60);
+        record->m50 = (Node_80279D90 *)SNDMEMI_allocz(60);
         if (lbl_803B4E34.mE > 49) {
             flag = 1;
         }

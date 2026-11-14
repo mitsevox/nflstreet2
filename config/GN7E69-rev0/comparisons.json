@@ -42337,6 +42337,106 @@
           "end": "0x801CC350"
         }
       ]
+    },
+    {
+      "source": "src/engine/sbremove.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026AB88-0x8026AD18 (src/engine/sbremove.c) and its function rows; draft comparison only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026AB88",
+          "end": "0x8026AD18"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SNDbankremove",
+          "start": "0x8026AB88",
+          "end": "0x8026AD18"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/spatkey.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026C910-0x8026C9BC (src/engine/spatkey.c) and its function rows; draft comparison only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026C910",
+          "end": "0x8026C9BC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "iSNDpatchkey",
+          "start": "0x8026C910",
+          "end": "0x8026C9BC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/splysdef.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026CA50-0x8026CAA8 (src/engine/splysdef.c) and its function rows; draft comparison only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026CA50",
+          "end": "0x8026CAA8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SNDplaysetdef",
+          "start": "0x8026CA50",
+          "end": "0x8026CAA8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/smemman.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026B520-0x8026B898 (src/engine/smemman.c) and its function rows; draft comparison only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026B520",
+          "end": "0x8026B898"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SNDMEMI_constrain",
+          "start": "0x8026B520",
+          "end": "0x8026B54C"
+        },
+        {
+          "symbol": "SNDMEMI_init",
+          "start": "0x8026B54C",
+          "end": "0x8026B5B4"
+        },
+        {
+          "symbol": "SNDMEMI_restore",
+          "start": "0x8026B5B4",
+          "end": "0x8026B5D4"
+        },
+        {
+          "symbol": "SNDMEMI_allocz",
+          "start": "0x8026B5D4",
+          "end": "0x8026B7D8"
+        },
+        {
+          "symbol": "SNDMEMI_free",
+          "start": "0x8026B7D8",
+          "end": "0x8026B898"
+        }
+      ]
     }
   ]
 }
