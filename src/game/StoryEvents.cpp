@@ -379,7 +379,8 @@ int fn_8005DC10(void)
     int list[14];
     QueryResult result;
     int digp = 0;
-    unsigned int count;
+    // FAKEMATCH: dead initializer; count is set from the query result before its use
+    unsigned int count = 0;
     unsigned int i;
 
     MemFill(list, sizeof(list), 0x7FFF, 4);
@@ -725,6 +726,8 @@ void fn_8005E7E4(void)
     }
     StoryAddCompletedEvent(lbl_802D4D40.mIndex, lbl_803EA5C8->mNets);
     int total = 0;
+    // FAKEMATCH: dead initializer; base is set again before its use
+    int base = 0;
     fn_8005D990(&total);
     total += lbl_803EA5C8->mPdwr;
     if (lbl_803EA5C8->mItes == 1) {
@@ -746,7 +749,7 @@ void fn_8005E7E4(void)
     lbl_802D4D40.mUnknown14 = total;
     total += lbl_802D4D40.mUnknownC;
     StorySetDevPoints(lbl_802D4D40.mIndex, total);
-    int base = lbl_802D4D40.mUnknown8;
+    base = lbl_802D4D40.mUnknown8;
     int credits = lbl_803EA5C8->mCswr;
     lbl_802D4D40.mUnknown18 = credits;
     UserStatsSet(lbl_803EA5D0, 14, base + credits);
@@ -1009,10 +1012,12 @@ void fn_8005EEC4(int *pState, int *pScreen)
                 }
             } else {
                 *pState = 3;
-                *pScreen = fn_8005D804(lbl_803EA5C8->mDive);
+                // FAKEMATCH: goto shares the screen store below; it sets the target's register choice
+                goto current;
             }
         } else if (lbl_803EA5C8) {
             *pState = 3;
+        current:
             *pScreen = fn_8005D804(lbl_803EA5C8->mDive);
         }
     }
