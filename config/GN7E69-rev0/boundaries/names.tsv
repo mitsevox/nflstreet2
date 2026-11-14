@@ -2571,6 +2571,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x80260B1C	248	sqrtf	gap	ef_sqrt.c	-
 0x80260FC4	36	fabsf	name	sf_fabs.c	sf_fabs.c
 0x8026120C	284	scalbnf	name	sf_scalbn.c	sf_scalbn.c
+0x80261328	236	__kernel_cosf	name	kf_cos.c	kf_cos.c
 0x80261414	172	__kernel_sinf	name	kf_sin.c	kf_sin.c
 0x80261A24	52	copysignf	name	sf_copysign.c	sf_copysign.c
 0x802622DC	52	vprintf	name	vprintf.c	vprintf.c
