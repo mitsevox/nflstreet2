@@ -171,7 +171,7 @@ void MovieRcmpInitVideo(MovieRcmpInfo_t *pInfo, void *pStream)
     MovieRcmpResetTime(pAudio);
     pVideo->mpInfo = pInfo;
     fn_801D9990(&iData, &pVideo->mpInfo, (RcmpGetChunkFunc_t)_MovieRcmpGetChunk, (RcmpReleaseChunkFunc_t)_MovieRcmpReleaseChunk, 2);
-    pVideo->mpDecoder = fn_801D9654(lbl_80399100.mAlloc("", 0x1C, 0, 0, lbl_80399100.mFlags), &iData);
+    pVideo->mpDecoder = fn_801D9654(lbl_80399100.Alloc(0x1C, ""), &iData);
 }
 
 void MovieRcmpShutdownVideo(MovieRcmpInfo_t *pInfo)

@@ -6,11 +6,13 @@
 
 unsigned char FlowModuleC::s_bLockModuleList = 0;
 unsigned int FlowModuleC::s_uNumModules = 0;
-static FlowModuleC *_FlowModule_aModuleList[500];
+/* FlowModuleC::s_aModuleList, the 500-entry module list, is an uninitialized class static that the
+   original linker allocated as COMMON (0x803D4780). The source build cannot place COMMON storage
+   yet, so its definition is left out and the symbol resolves through units.json externals. */
 
 FlowModuleC::FlowModuleC()
 {
-    _FlowModule_aModuleList[s_uNumModules] = this;
+    s_aModuleList[s_uNumModules] = this;
     s_uNumModules++;
     mUnknown0 = 0;
     mUnknown8 = 0;
@@ -23,14 +25,14 @@ FlowModuleC::~FlowModuleC()
     int found = 0;
 
     for (i = 0; i < s_uNumModules; i++) {
-        if (_FlowModule_aModuleList[i] == this) {
+        if (s_aModuleList[i] == this) {
             found = 1;
         }
         if (found) {
             if (i != s_uNumModules - 1) {
-                _FlowModule_aModuleList[i] = _FlowModule_aModuleList[i + 1];
+                s_aModuleList[i] = s_aModuleList[i + 1];
             } else {
-                _FlowModule_aModuleList[i] = 0;
+                s_aModuleList[i] = 0;
             }
         }
     }

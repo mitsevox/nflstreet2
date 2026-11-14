@@ -40034,6 +40034,52 @@
       ]
     },
     {
+      "source": "src/engine/CurveList.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801C5008-0x801C53A8 (src/engine/CurveList.c, CurveList.c), its engine_c compiler row, function, name and source-form rows, its type/field rows and the exact data row for its .rodata 0x802AF100-0x802AF130. Draft comparisons only; original assembly remains linked. Under engine_c the two evaluators stay partial (owner question on engine_c_fastmath in the compiler row).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C5008",
+          "end": "0x801C53A8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF100",
+          "end": "0x802AF130"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "_CurveListEvaluateHermiteCurve",
+          "start": "0x801C5008",
+          "end": "0x801C5130"
+        },
+        {
+          "symbol": "_CurveListEvaluateBezierCurve",
+          "start": "0x801C5130",
+          "end": "0x801C5278"
+        },
+        {
+          "symbol": "CurveListEvaluate",
+          "start": "0x801C5278",
+          "end": "0x801C52CC"
+        },
+        {
+          "symbol": "CurveListCalculateHermite",
+          "start": "0x801C52CC",
+          "end": "0x801C52E0"
+        },
+        {
+          "symbol": "CurveListCalculateBezier",
+          "start": "0x801C52E0",
+          "end": "0x801C53A8"
+        }
+      ]
+    },
+    {
       "source": "src/engine/list.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x801C665C-0x801C6E5C (src/engine/list.c), its compiler and type rows and exact function rows. Draft comparisons only; the list-type table 0x803D4FB8 (.bss) stays external; original assembly remains linked.",

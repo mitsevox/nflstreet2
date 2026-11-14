@@ -2353,6 +2353,14 @@
       "address": "0x8020E7EC",
       "evidence": "evidence.tsv function and name rows for 0x8020E7EC (documented holdout 0x8020E7EC-0x8020E9D0 at the start of src/engine/lltextur.c: draft registered in comparisons.json, original bytes). Called by ResTexture.cpp."
     },
+    "_11FlowModuleC.s_aModuleList": {
+      "address": "0x803D4780",
+      "evidence": "evidence.tsv data/name rows for 0x803D4780: the 500-entry module list of src/engine/flowmodule.cpp, the uninitialized class static FlowModuleC::s_aModuleList, which the original linker allocated as COMMON after the .bss of every file; the source build rejects common symbols, so the storage stays in the original bytes."
+    },
+    "CurveListEvaluate": {
+      "address": "0x801C5278",
+      "evidence": "evidence.tsv function and name rows for 0x801C5278 (src/engine/CurveList.c, a comparison-only file: draft registered in comparisons.json, original bytes). Called by camcurve.cpp and cu_800913E8.cpp."
+    },
     "Cdinfo": {
       "address": "0x803D55E0",
       "evidence": "evidence.tsv data/name rows for 0x803D55E0: the 28-byte disc client record of src/engine/fs_cli.c, a public uninitialized definition the original linker allocated as COMMON after the .bss of every file; the source build rejects common symbols, so the storage stays in the original bytes."
@@ -14721,25 +14729,6 @@
       ]
     },
     {
-      "source": "src/engine/CurveList.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional whole-file unit row 0x801C5008-0x801C53A8, five function/name rows, compiler row engine_c_fastmath (tested against engine_c), source-form row for the evaluators, type/field rows for CurveList_t and its two key types, and the exact 48-byte .rodata row 0x802AF100-0x802AF130. Complete native text and rodata; no writable section.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C5008",
-          "end": "0x801C53A8"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF100",
-          "end": "0x802AF130"
-        }
-      ]
-    },
-    {
       "source": "src/engine/polynomial.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional four-function unit row0x801C53A8-0x801C5B9C, exact function extents and literal data0x802AF130-0x802AF168, inferred name/type/field and source-form rows. Complete native text2036 and rodata56, no native writable section.",
@@ -17595,7 +17584,7 @@
     {
       "source": "src/engine/flowmodule.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801CC700-0x801CCA64 (src/engine/flowmodule.cpp), its compiler, function and name rows, the virtual-table rows 0x802AF410-0x802AF490 and the static data rows 0x803EBC50-0x803EBC58 and 0x803D4780-0x803D4F50. All 13 functions and the file's data are linked.",
+      "evidence": "evidence.tsv unit row 0x801CC700-0x801CCA64 (src/engine/flowmodule.cpp), its compiler, function and name rows, the virtual-table rows 0x802AF410-0x802AF490 and the .sdata rows 0x803EBC50-0x803EBC58. All 13 functions and the file's .rodata and .sdata are linked; the class static FlowModuleC::s_aModuleList (0x803D4780) is COMMON storage and resolves as an external.",
       "sections": [
         {
           "section": ".text",
@@ -17614,12 +17603,6 @@
           "placement": ".data5",
           "start": "0x803EBC50",
           "end": "0x803EBC58"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803D4780",
-          "end": "0x803D4F50"
         }
       ]
     },

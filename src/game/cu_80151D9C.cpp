@@ -7,6 +7,7 @@
 #include "game/ScrmRuleSet.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_8009D990.h"
+#include <string.h>
 
 class Class_802A1DC8 : public PreGamePhase {
 public:
@@ -88,10 +89,7 @@ public:
 extern "C" {
 int fn_80151B20(Class_802A2918 *p);
 void HudShowCallout(const char *pText);
-char *strncpy(char *pDest, const char *pSource, unsigned int count);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-int strlen(const char *pString);
-char *strncat(char *pDest, const char *pSource, unsigned int count);
 Object_80039F5C *PlyrFindById(int id);
 void fn_80151CCC(Class_802A2918 *p, unsigned int index, unsigned char value);
 void fn_801502B4(void *p);

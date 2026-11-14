@@ -6,6 +6,7 @@
 #include <dolphin/os/OSSemaphore.h>
 #include <dolphin/os/OSThread.h>
 #include <dolphin/dvd.h>
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "engine/ctype.h"
 
@@ -29,7 +30,6 @@ static OSSemaphore _File_SubmitReadRequest;
 static OSSemaphore _File_ReadSemaphore;
 
 int MemFill(void *pDest, int size, int value, int width);
-void *memcpy();
 
 static DVDFileInfo *_fsFindOpenFile(void)
 {

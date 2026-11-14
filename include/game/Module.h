@@ -25,6 +25,7 @@ public:
 
     static unsigned char s_bLockModuleList;
     static unsigned int s_uNumModules;
+    static FlowModuleC *s_aModuleList[500];
 
     int mUnknown0;
     int mUnknown4;
