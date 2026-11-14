@@ -27737,58 +27737,53 @@
       ]
     },
     {
-      "source": "src/engine/cu_80266A2C.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80266A2C-0x8026A664 (src/engine/cu_80266A2C.c), its compiler and source-form rows, and exact whole-function rows and neutral name rows for the 72 draft bodies. engine_c is the comparison setting only; the original flags of this range are unresolved (compiler row). The drafts define no static data; references to other data use neutral labels. Draft comparisons only; original assembly remains linked.",
+      "source": "src/engine/spchrslv.c",
+      "profile": "speech_cxx",
+      "evidence": "evidence.tsv unit row 0x80266AF8-0x80266D00 (src/engine/spchrslv.c), its compiler, function and name rows. Part of the former src/engine/cu_80266A2C.c (split by c16a).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80266A2C",
-          "end": "0x8026A664"
+          "start": "0x80266AF8",
+          "end": "0x80266D00"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_80266A88",
-          "start": "0x80266A88",
-          "end": "0x80266AD8"
-        },
-        {
-          "symbol": "fn_80266AD8",
-          "start": "0x80266AD8",
-          "end": "0x80266AF8"
-        },
-        {
-          "symbol": "fn_80266AF8",
+          "symbol": "iSPCH_GetGlobalMatchParmAddr",
           "start": "0x80266AF8",
           "end": "0x80266B14"
         },
         {
-          "symbol": "fn_80266B14",
+          "symbol": "SPCH_ClearMatchParmSettings",
           "start": "0x80266B14",
           "end": "0x80266BB8"
         },
         {
-          "symbol": "fn_80266BB8",
+          "symbol": "iSPCH_BindData__FPcUi",
           "start": "0x80266BB8",
           "end": "0x80266CB8"
         },
         {
-          "symbol": "fn_80266CB8",
+          "symbol": "SPCH_AddEventDB",
           "start": "0x80266CB8",
           "end": "0x80266D00"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/saems.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x80266E88-0x802697D8 (src/engine/saems.c) and its compiler and source-form rows; draft comparisons only, original assembly remains linked. Part of the former src/engine/cu_80266A2C.c (split by c16a).",
+      "sections": [
         {
-          "symbol": "fn_80266D0C",
-          "start": "0x80266D0C",
-          "end": "0x80266D20"
-        },
-        {
-          "symbol": "fn_80266D20",
-          "start": "0x80266D20",
-          "end": "0x80266DAC"
-        },
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80266E88",
+          "end": "0x802697D8"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_80266E88",
           "start": "0x80266E88",
@@ -28048,7 +28043,22 @@
           "symbol": "fn_80269048",
           "start": "0x80269048",
           "end": "0x80269084"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/saemsamb.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x802697D8-0x802699F4 (src/engine/saemsamb.c); draft comparisons only, original assembly remains linked. Part of the former src/engine/cu_80266A2C.c (split by c16a).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802697D8",
+          "end": "0x802699F4"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_80269990",
           "start": "0x80269990",
@@ -28058,42 +28068,22 @@
           "symbol": "fn_802699C8",
           "start": "0x802699C8",
           "end": "0x802699F4"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/salloc.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x80269CE8-0x8026A2DC (src/engine/salloc.c); draft comparisons only, original assembly remains linked. Part of the former src/engine/cu_80266A2C.c (split by c16a).",
+      "sections": [
         {
-          "symbol": "fn_802699F4",
-          "start": "0x802699F4",
-          "end": "0x80269A3C"
-        },
-        {
-          "symbol": "fn_80269A3C",
-          "start": "0x80269A3C",
-          "end": "0x80269A78"
-        },
-        {
-          "symbol": "fn_80269B58",
-          "start": "0x80269B58",
-          "end": "0x80269B9C"
-        },
-        {
-          "symbol": "fn_80269B9C",
-          "start": "0x80269B9C",
-          "end": "0x80269BE4"
-        },
-        {
-          "symbol": "fn_80269BE4",
-          "start": "0x80269BE4",
-          "end": "0x80269C2C"
-        },
-        {
-          "symbol": "fn_80269C2C",
-          "start": "0x80269C2C",
-          "end": "0x80269C6C"
-        },
-        {
-          "symbol": "fn_80269C6C",
-          "start": "0x80269C6C",
-          "end": "0x80269C70"
-        },
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80269CE8",
+          "end": "0x8026A2DC"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_80269CE8",
           "start": "0x80269CE8",
@@ -28103,16 +28093,26 @@
           "symbol": "fn_8026A288",
           "start": "0x8026A288",
           "end": "0x8026A2DC"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sbadd.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x8026A40C-0x8026A664 (src/engine/sbadd.c); draft comparisons only, original assembly remains linked. Part of the former src/engine/cu_80266A2C.c (split by c16a).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026A40C",
+          "end": "0x8026A664"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8026A40C",
           "start": "0x8026A40C",
           "end": "0x8026A4D4"
-        },
-        {
-          "symbol": "fn_80266D00",
-          "start": "0x80266D00",
-          "end": "0x80266D0C"
         }
       ]
     },

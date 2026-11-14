@@ -1,19 +1,10 @@
-/* Partial source for the inferred partition 0x80266A2C-0x8026A664 (neutral file name). */
+/* Partial source of the sound library's module player (saems.c): the module state updaters,
+   bank and play-option setters, bank players and the Csis module callbacks. */
 
-#include "engine/fn_80266AD8.h"
-#include "engine/Object_80266AF8.h"
-#include <string.h>
+#include "engine/sndaems.h"
+#include "engine/sndvoice.h"
 
-typedef struct Entry_80266D20 {
-    unsigned char mUnknown0[11];
-    signed char mUnknownB;
-} Entry_80266D20;
-
-
-typedef struct Slot_8037E0B4 {
-    Object_80266AF8 *mObject;
-    int mKey;
-} Slot_8037E0B4;
+extern "C" {
 
 typedef struct Range_80267114 {
     int mMin;
@@ -187,80 +178,14 @@ typedef struct Object_80269048 {
     int mUnknown1C[1];
 } Object_80269048;
 
-typedef struct Object_803A6BCC {
-    int mUnknown0;
-    int mUnknown4;
-    unsigned char mUnknown8[32];
-    int mUnknown28;
-    int mUnknown2C;
-} Object_803A6BCC;
-
-typedef struct Voice_803A6C24 {
-    int mUnknown0;
-    short mUnknown4[12];
-    unsigned short mUnknown1C;
-    unsigned char mUnknown1E[5];
-    unsigned char mUnknown23;
-    unsigned char mUnknown24[59];
-    unsigned char mUnknown5F;
-    unsigned char mUnknown60[13];
-    unsigned char mUnknown6D;
-    unsigned short mUnknown6E;
-    unsigned char mUnknown70[30];
-    unsigned short mUnknown8E;
-} Voice_803A6C24;
-
-typedef struct Object_803A6C24 {
-    unsigned char mUnknown0[364];
-    short mUnknown16C;
-    signed char mUnknown16E;
-    unsigned char mUnknown16F[53];
-    void (*mUnknown1A4[10])(void *);
-    Voice_803A6C24 *mUnknown1CC;
-} Object_803A6C24;
-
-typedef struct Object_8026A40C {
-    unsigned char mUnknown0[23];
-    signed char mUnknown17;
-    unsigned char mUnknown18[28];
-    int mUnknown34[4];
-    int mUnknown44[4];
-} Object_8026A40C;
-
-typedef struct Message_8026A40C {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-} Message_8026A40C;
-
-extern Slot_8037E0B4 lbl_8037E0B4[8];
 extern void (*lbl_802FFB6C[])(Object_80268480 *params, int value);
-extern Object_803A6BCC lbl_803A6BCC;
-extern Object_803A6C24 lbl_803A6C24;
-extern short lbl_803A6C04[];
-extern unsigned char lbl_802F4750[];
-
-extern int fn_801AC9C8(int fd, void *buf, int len);
-extern void *fn_801AE6BC(int *key);
-extern int fn_801AEAEC(int *block);
-extern int *fn_801AF4A8(int size);
-extern void fn_801AF500(int *block);
 extern int fn_801B9410(void *p, int *values);
 extern int fn_801B9B30(void *p, int *value);
-extern int fn_80266A2C(void *buf, int len);
-extern void fn_80266DAC(Object_80266AF8 *p);
-extern int fn_8026A288(int handle);
 extern int fn_8026AAF0(int a, int b, Object_80268480 *params);
 extern void fn_8026CA50(Object_80268480 *params);
 extern unsigned int fn_8026CB14(void);
 extern int fn_8026C9BC(int handle, int value);
-extern int fn_8026EAC0(int handle, int a, int b);
-extern int fn_8026ECCC(int handle, int value);
-extern int fn_8026ED74(int handle, int value);
 extern int fn_8026EDC4(int handle);
-extern int fn_8026EEB0(int handle, int value);
-extern int fn_8026EF38(int handle, int value);
-extern int fn_8026F2C8(int handle, int value);
 extern int fn_802714A8(int handle, int value);
 extern int fn_80274B50(int voice, int value);
 extern int fn_80274CA8(int voice, int value);
@@ -269,107 +194,6 @@ extern void fn_80274960(int voice, int value);
 extern void fn_80274D34(int voice, int value);
 extern void fn_80274E24(int voice, int value);
 extern void fn_80268188(int handle, int value);
-
-int fn_80266A88(int fd, void *buf, int len)
-{
-    if (fd == 1 || fd == 2)
-        return fn_80266A2C(buf, len);
-    if (fd == 0)
-        return -1;
-    return fn_801AC9C8(fd, buf, len);
-}
-
-int fn_80266AD8(int fd, void *buf, int len)
-{
-    return fn_80266A88(fd, buf, len);
-}
-
-void *fn_80266AF8(Object_80266AF8 *p)
-{
-    return (char *)p + (((p->mUnknown10 * 2 + 3) & ~3) + 24);
-}
-
-void fn_80266B14(int key)
-{
-    int i;
-    int j;
-    unsigned char *bytes;
-
-    for (i = 0; i < 8; i++) {
-        if (lbl_8037E0B4[i].mObject != 0 && lbl_8037E0B4[i].mKey == key) {
-            bytes = fn_80266AF8(lbl_8037E0B4[i].mObject);
-            for (j = 0; j < lbl_8037E0B4[i].mObject->mUnknown12; j++)
-                bytes[j] = 0xFF;
-        }
-    }
-}
-
-int fn_80266BB8(Object_80266AF8 *p, int key)
-{
-    int a;
-    int b;
-    int result = 0;
-    int i;
-
-    if ((p->mUnknown0 & 0xFFFF0000) == 0x03100000) {
-        fn_801AFABC(p, &a, &b);
-        for (i = 0; i < 8; i++) {
-            Object_80266AF8 *object = lbl_8037E0B4[i].mObject;
-            if (object != 0 && object->mUnknown9 == b && object->mUnknown8 == a)
-                return result;
-        }
-        for (i = 0; i < 8; i++) {
-            if (lbl_8037E0B4[i].mObject == 0) {
-                lbl_8037E0B4[i].mObject = p;
-                result = 1;
-                lbl_8037E0B4[i].mKey = key;
-                break;
-            }
-        }
-        fn_80266B14(key);
-    }
-    return result;
-}
-
-int fn_80266CB8(Object_80266AF8 *p, unsigned int key)
-{
-    int result = 0;
-
-    if (key <= 7) {
-        result = fn_80266BB8(p, key);
-        fn_80266DAC(p);
-    }
-    return result;
-}
-
-void *fn_80266D00(void)
-{
-    return lbl_802F4750;
-}
-
-unsigned short *fn_80266D0C(void *base, unsigned short *offsets, int index)
-{
-    return (unsigned short *)((char *)base + offsets[index] * 4);
-}
-
-void fn_80266D20(void *data, int key)
-{
-    Entry_80266D20 *entry;
-    int *block;
-    int size;
-
-    entry = fn_801AE6BC(&key);
-    if (entry != 0) {
-        size = entry->mUnknownB * 4;
-        block = fn_801AF4A8(size + 4);
-        if (block != 0) {
-            *block = key;
-            memcpy(block + 1, data, size);
-            if (fn_801AEAEC(block) == 0)
-                fn_801AF500(block);
-        }
-    }
-}
 
 int fn_80266E88(int *p)
 {
@@ -935,132 +759,4 @@ void fn_80269048(int *values, Object_80269048 *p)
         p->mUnknown1C[i] = values[i];
     p->mUnknown19 = 1;
 }
-
-void fn_80269990(int a, int b)
-{
-    if (b == 0xFFFF && a != 0) {
-        lbl_803A6BCC.mUnknown0 = 0;
-        lbl_803A6BCC.mUnknown4 = 0;
-        lbl_803A6BCC.mUnknown28 = 0;
-        lbl_803A6BCC.mUnknown2C = 0;
-    }
-}
-
-void fn_802699C8(void)
-{
-    fn_80269990(1, 0xFFFF);
-}
-
-int fn_802699F4(int handle, int value)
-{
-    int max = 0xFFFF;
-
-    if (value < 0)
-        value = 0;
-    else if (value > max)
-        value = max;
-    return fn_8026EEB0(handle, value);
-}
-
-int fn_80269A3C(int handle, int value)
-{
-    if (value > 8192)
-        value = 8192;
-    else if (value < 2048)
-        value = 2048;
-    return fn_8026F2C8(handle, value);
-}
-
-int fn_80269B58(int handle, int value)
-{
-    int clamped;
-
-    if (value < 0)
-        clamped = 0;
-    else if (value > 32767)
-        clamped = 32767;
-    else
-        clamped = value;
-    return fn_8026EAC0(handle, 0, clamped >> 8);
-}
-
-int fn_80269B9C(int handle, int value)
-{
-    int max = 0xFFFF;
-
-    if (value < 0)
-        value = 0;
-    else if (value > max)
-        value = max;
-    return fn_8026ED74(handle, value);
-}
-
-int fn_80269BE4(int handle, int value)
-{
-    int max = 0xFFFF;
-
-    if (value < 0)
-        value = 0;
-    else if (value > max)
-        value = max;
-    return fn_8026ECCC(handle, value);
-}
-
-int fn_80269C2C(int handle, int value)
-{
-    int clamped;
-
-    if (value < 0)
-        clamped = 0;
-    else if (value > 32767)
-        clamped = 32767;
-    else
-        clamped = value;
-    return fn_8026EF38(handle, clamped >> 8);
-}
-
-void fn_80269C6C(void)
-{
-}
-
-int fn_80269CE8(int value, int count)
-{
-    int i;
-
-    for (i = 0; i < count; i++) {
-        if (lbl_803A6C04[i] == value)
-            return 1;
-    }
-    return 0;
-}
-
-int fn_8026A288(int handle)
-{
-    int index;
-    Voice_803A6C24 *v;
-
-    if (handle < 0)
-        return -8;
-    index = handle & 0xFF;
-    if (index >= lbl_803A6C24.mUnknown16C)
-        return -8;
-    v = lbl_803A6C24.mUnknown1CC + index;
-    if (v->mUnknown6D != 0 && v->mUnknown0 == handle)
-        return index;
-    return -8;
-}
-
-void fn_8026A40C(Object_8026A40C *p, int value)
-{
-    Message_8026A40C message;
-    int i;
-
-    while (p->mUnknown17 > 0) {
-        p->mUnknown17--;
-        message.mUnknown0 = value;
-        message.mUnknown8 = p->mUnknown44[p->mUnknown17];
-        message.mUnknown4 = p->mUnknown34[p->mUnknown17];
-        for (i = 0; i < lbl_803A6C24.mUnknown16E; i++)
-            lbl_803A6C24.mUnknown1A4[i](&message);
-    }
 }

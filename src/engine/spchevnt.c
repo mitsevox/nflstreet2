@@ -120,10 +120,10 @@ int fn_801AE658(SpchEventKey_t *key, Slot_8037E0B4 **out)
     int i;
 
     for (i = 0; i < 8; i++) {
-        Bank_801AE444 *bank = lbl_8037E0B4[i].mBank;
+        Bank_801AE444 *bank = gEventDats[i].mBank;
         if (bank != 0) {
             if (bank->mUnknown9 == key->mUnknown2 && bank->mUnknown8 == key->mUnknown3) {
-                *out = &lbl_8037E0B4[i];
+                *out = &gEventDats[i];
                 found = 1;
                 break;
             }
@@ -184,8 +184,8 @@ void fn_801AE808(void)
     int i;
 
     for (i = 0; i <= 7; i++) {
-        lbl_8037E0B4[i].mBank = 0;
-        lbl_8037E0B4[i].mValue = 0;
+        gEventDats[i].mBank = 0;
+        gEventDats[i].mValue = 0;
     }
 }
 

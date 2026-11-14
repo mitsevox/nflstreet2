@@ -2351,6 +2351,14 @@
     "LLUIGFmvInitTexture": {
       "address": "0x802267D8",
       "evidence": "evidence.tsv function and name rows for 0x802267D8 (LLUIGFmvInitTexture, src/engine/LLUIGFmv.c, comparison-only without a body; original bytes)."
+    },
+    "SPCH_AddEventDB": {
+      "address": "0x80266CB8",
+      "evidence": "evidence.tsv function/name rows for 0x80266CB8 (target extent, related name); src/engine/spchrslv.c is comparison-only, so src/engine/Speech.cpp calls the original bytes."
+    },
+    "gEventDats": {
+      "address": "0x8037E0B4",
+      "evidence": "evidence.tsv data/name rows for 0x8037E0B4 (target extent, related name); speech-library storage, original-owned."
     }
   },
   "units": [
@@ -18799,6 +18807,82 @@
           "placement": ".data3",
           "start": "0x802AED98",
           "end": "0x802AEDB8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dummy.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x80266A2C-0x80266AF8 (src/engine/dummy.c), its compiler, function, name and data rows; all three functions match the target and the file defines its one .data object, the static first of __sn_serialp (data row 0x802CC660). Split from the former src/engine/cu_80266A2C.c by c16a.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80266A2C",
+          "end": "0x80266AF8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC660",
+          "end": "0x802CC664"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sputil.c",
+      "profile": "speech_cxx",
+      "evidence": "evidence.tsv unit row 0x80266D00-0x80266D0C (src/engine/sputil.c), its compiler, function, name and data rows; SPCH_GetExtVecs matches the target and the file defines its 12-byte .data object gExtVecs (data row 0x802F4750). Split from the former src/engine/cu_80266A2C.c by c16a.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80266D00",
+          "end": "0x80266D0C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4750",
+          "end": "0x802F475C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/spchcsis.cpp",
+      "profile": "speech_cxx",
+      "evidence": "evidence.tsv unit row 0x80266D0C-0x80266E88 (src/engine/spchcsis.cpp), its compiler, function, name and source-form rows; all three functions match the target. The file defines no data. Split from the former src/engine/cu_80266A2C.c by c16a.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80266D0C",
+          "end": "0x80266E88"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/saemsstr.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x802699F4-0x80269C70 (src/engine/saemsstr.c), its compiler, function, name and data rows; all nine functions match the target and the file defines its .rodata constants (data row 0x802B78A0) and its .data table SNDAEMSI_streamfuncs (data row 0x802FFC90). Split from the former src/engine/cu_80266A2C.c by c16a.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802699F4",
+          "end": "0x80269C70"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B78A0",
+          "end": "0x802B78C0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFC90",
+          "end": "0x802FFCC0"
         }
       ]
     }

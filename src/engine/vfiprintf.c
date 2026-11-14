@@ -56,7 +56,7 @@
 
 #include "engine/vfiprintf.h"
 #include "engine/mbtowc_r.h"
-#include "engine/fn_80266AD8.h"
+#include "engine/dummy.h"
 #include <stddef.h>
 #include <string.h>
 
@@ -79,7 +79,7 @@ _vfwrite (int a, const char *s, unsigned int n, int flush)
 
   if (flush == 1)
     {
-      result = fn_80266AD8 (a, _VFI_acBuffer, _VFI_iBuffered);
+      result = write (a, _VFI_acBuffer, _VFI_iBuffered);
       _VFI_iBuffered = 0;
       _VFI_pWrite = _VFI_acBuffer;
       return result;
@@ -90,7 +90,7 @@ _vfwrite (int a, const char *s, unsigned int n, int flush)
       _VFI_pWrite++;
       if (++_VFI_iBuffered > 127)
 	{
-	  result = fn_80266AD8 (a, _VFI_acBuffer, _VFI_iBuffered);
+	  result = write (a, _VFI_acBuffer, _VFI_iBuffered);
 	  _VFI_pWrite = _VFI_acBuffer;
 	  _VFI_iBuffered = 0;
 	  if (result == 0)

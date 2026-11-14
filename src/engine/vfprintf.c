@@ -1,7 +1,7 @@
 /* Partial source for vfprintf.c (C library): the formatted-output engine and its number
    conversion helpers. */
 
-#include "engine/fn_80266AD8.h"
+#include "engine/dummy.h"
 #include "engine/math_support.h"
 #include "engine/Reent_802622DC.h"
 #include "engine/vfiprintf.h"
@@ -264,7 +264,7 @@ fn_80262A88 (int a, const char *s, unsigned int n, int flush)
 
   if (flush == 1)
     {
-      result = fn_80266AD8 (a, lbl_803A6ACC, lbl_803EC548);
+      result = write (a, lbl_803A6ACC, lbl_803EC548);
       lbl_803EC548 = 0;
       lbl_803EC54C = lbl_803A6ACC;
       return result;
@@ -275,7 +275,7 @@ fn_80262A88 (int a, const char *s, unsigned int n, int flush)
       lbl_803EC54C++;
       if (++lbl_803EC548 > 127)
 	{
-	  result = fn_80266AD8 (a, lbl_803A6ACC, lbl_803EC548);
+	  result = write (a, lbl_803A6ACC, lbl_803EC548);
 	  lbl_803EC54C = lbl_803A6ACC;
 	  lbl_803EC548 = 0;
 	  if (result == 0)
