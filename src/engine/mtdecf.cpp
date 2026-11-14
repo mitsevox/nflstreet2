@@ -1,10 +1,47 @@
-#include "engine/cu_802714A8.h"
-#include "engine/cu_8027CF9C.h"
+/* MT block decoder (mtdecf.cpp): decodes MT compressed sample blocks into a 432-sample float buffer
+   for the MT unpack filters: allocation, the bit reader, block parsing, sample delivery and the
+   decoder's state save/restore. */
+
+#include "engine/sndsys.h"
 
 extern "C" {
 
 void fn_8027CA34(Codec_8027CF9C *unused, unsigned char *data, Codec_8027CF9C *p, int flag);
 void fn_8027CBA4(Codec_8027CF9C *p);
+
+void *fn_8027C020(int size)
+{
+    return lbl_803B53E4(size);
+}
+
+void fn_8027C04C(void *p)
+{
+    lbl_803B53E8(p);
+}
+
+unsigned int fn_8027C078(Bits_8027C078 *bits, int count)
+{
+    unsigned int value;
+
+    value = bits->m4 & lbl_80301428[count];
+    bits->m4 >>= count;
+    bits->m8 -= count;
+    if (bits->m8 <= 7) {
+        bits->m4 |= *bits->m0++ << bits->m8;
+        bits->m8 += 8;
+    }
+    return value;
+}
+
+void fn_8027C0D8(Bits_8027C078 *bits, int count)
+{
+    bits->m4 >>= count;
+    bits->m8 -= count;
+    if (bits->m8 <= 7) {
+        bits->m4 |= *bits->m0++ << bits->m8;
+        bits->m8 += 8;
+    }
+}
 
 Codec_8027CF9C *fn_8027CF9C(void *memory)
 {
@@ -136,28 +173,6 @@ void fn_8027D2C4(Codec_8027CF9C *p, Format_8027D284 *format, int flags)
 void fn_8027D2E0(Codec_8027CF9C *p, int mode)
 {
     p->mD64 = mode;
-}
-
-typedef union Phase_8027D2E8 {
-    unsigned int mWord;
-    unsigned short mHalf[2];
-} Phase_8027D2E8;
-
-void fn_8027D2E8(int count, float *src, float *dst, int *pos, Phase_8027D2E8 *phase, unsigned int stepHi,
-                 unsigned int stepLo)
-{
-    unsigned int step;
-    int i;
-
-    phase->mWord = phase->mHalf[0];
-    step = (stepHi << 16) | (stepLo >> 16);
-    for (i = 0; i < count; i++) {
-        dst[i] = src[*pos] + phase->mWord * 1.5258e-5f * (src[*pos + 1] - src[*pos]);
-        phase->mWord += step;
-        *pos += phase->mWord >> 16;
-        phase->mWord = phase->mHalf[1];
-    }
-    phase->mWord <<= 16;
 }
 
 }

@@ -11,7 +11,7 @@ void MIXI_initunpack16(void)
     lbl_803B4E34.m60[0][0] = 44;
     lbl_803B4E34.m18[0][1] = SFILTER_unpacklfinit;
     lbl_803B4E34.m60[0][1] = 48;
-    lbl_803B4E34.m18[0][2] = fn_8027B328;
+    lbl_803B4E34.m18[0][2] = SFILTER_unpackpfinit;
     lbl_803B4E34.m60[0][2] = 52;
 }
 

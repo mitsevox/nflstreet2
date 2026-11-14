@@ -1,11 +1,12 @@
 #ifndef ENGINE_SNDSYS_H
 #define ENGINE_SNDSYS_H
 
-/* Declarations shared by the files of the sound range 0x80276B7C-0x8027CF9C: stretch.c, s3dlow.c,
+/* Declarations shared by the files of the sound range 0x80276B7C-0x8027D3AC: stretch.c, s3dlow.c,
    sattrdef.c, sbend.c, sclcptch.c, sctlfilt.c, sgetdata.c, sgettag.c, shipass.c, slinklst.c,
    slowpass.c, smemhigh.cpp, SNDI_cos.c, SNDI_sin.c, spktctoh.c, spktplay.c, sreallocbuf.cpp,
    srrange.c, saramman.c, sfft24.c, sfhpffir8.c, sfilter.c, sfir8.c, sfrsf.c, sinit16.c, sinitut.c,
-   sinitxa.c, smixc.c, supf.c, suplf.c, supmutf.c, supmutlf.c, supmutpf.c and cu_8027B1F8.cpp. */
+   sinitxa.c, smixc.c, supf.c, suplf.c, supmutf.c, supmutlf.c, supmutpf.c, suppf.c, supxaf.cpp,
+   supxalf.cpp, supxapf.cpp, eaxadecf.cpp and mtdecf.cpp. */
 
 #include <string.h>
 
@@ -13,7 +14,7 @@
 
 #include "engine/cu_802714A8.h"
 #include "engine/sndvoice.h"
-#include "engine/cu_8027CF9C.h"
+#include "engine/mtdecf.h"
 
 typedef struct Object_80277404 {
     Node_80279D90 mNode;
@@ -184,24 +185,24 @@ typedef struct SndMtUnpackFilter_t {
     unsigned char mChannel;
 } SndMtUnpackFilter_t;
 
-typedef struct Decoder_8027B328 {
+typedef struct SndPcmUnpackFilter_t {
     Node_80279D90 mNode;
-    unsigned char *m1C;
-    int m20;
-    int m24;
-    int m28;
-    int m2C;
-    unsigned char m30;
-    unsigned char m31;
-} Decoder_8027B328;
+    unsigned char *mpPacket;
+    int mPacketLength;
+    int mPosition;
+    int mStream;
+    int mPendingCount;
+    unsigned char mConvert;
+    unsigned char mChannel;
+} SndPcmUnpackFilter_t;
 
-typedef struct Decoder_8027B464 {
+typedef struct SndXaUnpackFilter_t {
     Node_80279D90 mNode;
-    Struct_8027BE24 *m1C;
-    char *m20;
-    int m24;
-    int m28;
-} Decoder_8027B464;
+    Struct_8027BE24 *mpDecoder;
+    char *mpData;
+    int mFrameCount;
+    int mFramePosition;
+} SndXaUnpackFilter_t;
 
 typedef struct Decoder_8027B7B0 {
     Node_80279D90 mNode;
@@ -262,7 +263,7 @@ void SNDI_fir8init(SndFirState_t *state);
 void SNDI_fir8(SndFirState_t *state, int count, float *in, float *out);
 int fn_8027B4F4(Node_80279D90 *node, int count, float *a, float *b, int flag);
 int fn_8027B888(Node_80279D90 *node, int count, float *a, float *b, int flag);
-int fn_8027B1F8(Node_80279D90 *node, int count, float *a, float *b, int flag);
+int SFILTER_unpackpf(Node_80279D90 *node, int count, float *a, float *b, int flag);
 
 /* Defined in another file of the library. */
 void SNDPKTPLAYI_freeframes(int index, int channel, int value);
@@ -271,8 +272,8 @@ void SFILTER_unpackfinit(Node_80279D90 *node, Params_80275F80 *params);
 void SFILTER_unpacklfinit(Node_80279D90 *node, Params_80275F80 *params);
 void SFILTER_unpackmtfinit(Node_80279D90 *node, Params_80275F80 *params);
 void SFILTER_unpackmtlfinit(Node_80279D90 *node, Params_80275F80 *params);
-void fn_8027B328(Node_80279D90 *node, Params_80275F80 *params);
-void fn_8027B464(Node_80279D90 *node, Params_80275F80 *params);
+void SFILTER_unpackpfinit(Node_80279D90 *node, Params_80275F80 *params);
+void SFILTER_unpackxafinit(Node_80279D90 *node, Params_80275F80 *params);
 void fn_8027B7B0(Node_80279D90 *node, Params_80275F80 *params);
 void fn_8027BA6C(Node_80279D90 *node, Params_80275F80 *params);
 

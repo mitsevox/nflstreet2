@@ -70,6 +70,16 @@
       ],
       "evidence": "evidence.tsv compiler rows 0x80227F14-0x802288F8 and 0x802288F8-0x80228E44 (engine_c): ProDG 3.9.3 cc1 -O2 (default -G 8) reproduces every instruction and data byte of both units; -O1, -O3, -Os and -G0 change them. Same flags as the uistudio profile; a separate profile because uistudio's scope evidence and source root are the UI Studio library, and these units include SDK headers that need include/libc."
     },
+    "path_cxx": {
+      "flags": [
+        "-O2"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "language": "c++",
+      "evidence": "evidence.tsv compiler rows 0x8027D3AC-0x8027ED6C (src/engine/pathsnd.c) and 0x8027ED6C-0x8027EFAC (src/engine/pathreal5.c): the PATH sound files keep GoldenEye: Rogue Agent's and Medal of Honor: European Assault's .c names, whose symbols for these files are C++-mangled (PATH_vectortosnd__Fv, __Q24Path9PathToSnd, TaskService__Q24Path11PathToReal5ii), and the code uses virtual tables and constructors; -O2 with the default -G 8 follows the r13 small-data accesses of both ranges. The flags are the ones the same sources compiled with as src/engine/cu_8027D3AC.cpp under engine_c."
+    },
     "engine_c_fastmath": {
       "flags": [
         "-O2",
@@ -2090,7 +2100,7 @@
     },
     "CodecReadSamples": {
       "address": "0x8027D05C",
-      "evidence": "evidence.tsv function/name rows for 0x8027D05C; exact but unlinked in the comparison-only src/engine/cu_8027CF9C.cpp, which keeps its original bytes until the whole file can be linked; called here by name."
+      "evidence": "evidence.tsv function/name rows for 0x8027D05C; exact but unlinked in the comparison-only src/engine/mtdecf.cpp, which keeps its original bytes until the whole file can be linked; called here by name."
     },
     "PlyrRollContestedCatch": {
       "address": "0x8009A77C",
@@ -15775,6 +15785,51 @@
         }
       ],
       "evidence": "evidence.tsv complete 788-byte supmutpf.c unit, three function/name rows and owned decoder layout/fields; whole file linked with provisional edges."
+    },
+    {
+      "source": "src/engine/suppf.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8027B1F8-0x8027B39C (src/engine/suppf.c), its two function and name rows (SFILTER_unpackpf, SFILTER_unpackpfinit), the SndPcmUnpackFilter_t type and field rows, and the sound_cxx compiler row 0x80276DE4-0x8027CF9C; every function exact, promoted from comparison-only. No owned data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027B1F8",
+          "end": "0x8027B39C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/supxaf.cpp",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8027B39C-0x8027B4F4 (src/engine/supxaf.cpp), its four function and name rows (SFILTER_unpackxaf, SFILTER_unpackgetframexaf, SFILTER_unpackxafrestore, SFILTER_unpackxafinit), the SndXaUnpackFilter_t type and field rows, and the sound_cxx compiler row 0x80276DE4-0x8027CF9C; every function exact, promoted from comparison-only. No owned data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027B39C",
+          "end": "0x8027B4F4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/scrsfl.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8027D2E8-0x8027D3AC (src/engine/scrsfl.c), its function and name row (rsflc), the SndResamplePhase_t type row, the exact .rodata data row 0x802C2370-0x802C2380 and the sound_cxx compiler row 0x8027CF9C-0x8027D3AC; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027D2E8",
+          "end": "0x8027D3AC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2370",
+          "end": "0x802C2380"
+        }
+      ]
     },
     {
       "source": "src/game/FEPlyrLoad.cpp",
