@@ -5,7 +5,7 @@
 #include "engine/llmatrix.h"
 
 extern "C" {
-void fn_801E736C(Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB, int a, int b, int c);
+void DispatchCollisionDebugLine(Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB, int a, int b, int c);
 }
 
 BoundingBox::BoundingBox()
@@ -129,16 +129,16 @@ void BoundingBox::DrawDebug(int a, int b, int c)
     corners[6] = point;
     fn_8022765C(&point, &corner, &axisY);
     corners[7] = point;
-    fn_801E736C(&corners[0], &corners[1], a, b, c);
-    fn_801E736C(&corners[1], &corners[2], a, b, c);
-    fn_801E736C(&corners[2], &corners[3], a, b, c);
-    fn_801E736C(&corners[3], &corners[0], a, b, c);
-    fn_801E736C(&corners[4], &corners[5], a, b, c);
-    fn_801E736C(&corners[5], &corners[6], a, b, c);
-    fn_801E736C(&corners[6], &corners[7], a, b, c);
-    fn_801E736C(&corners[7], &corners[4], a, b, c);
-    fn_801E736C(&corners[0], &corners[4], a, b, c);
-    fn_801E736C(&corners[1], &corners[5], a, b, c);
-    fn_801E736C(&corners[2], &corners[6], a, b, c);
-    fn_801E736C(&corners[3], &corners[7], a, b, c);
+    DispatchCollisionDebugLine(&corners[0], &corners[1], a, b, c);
+    DispatchCollisionDebugLine(&corners[1], &corners[2], a, b, c);
+    DispatchCollisionDebugLine(&corners[2], &corners[3], a, b, c);
+    DispatchCollisionDebugLine(&corners[3], &corners[0], a, b, c);
+    DispatchCollisionDebugLine(&corners[4], &corners[5], a, b, c);
+    DispatchCollisionDebugLine(&corners[5], &corners[6], a, b, c);
+    DispatchCollisionDebugLine(&corners[6], &corners[7], a, b, c);
+    DispatchCollisionDebugLine(&corners[7], &corners[4], a, b, c);
+    DispatchCollisionDebugLine(&corners[0], &corners[4], a, b, c);
+    DispatchCollisionDebugLine(&corners[1], &corners[5], a, b, c);
+    DispatchCollisionDebugLine(&corners[2], &corners[6], a, b, c);
+    DispatchCollisionDebugLine(&corners[3], &corners[7], a, b, c);
 }

@@ -14820,6 +14820,31 @@
       ]
     },
     {
+      "source": "src/engine/physcollection.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801E7034-0x801E739C (src/engine/physcollection.cpp), its compiler, function, name, source-form and type rows; all eight functions exact, promoted from comparison-only, with the file-owned vtable 0x802B1480-0x802B1498 (.rodata) and debug line callback word 0x803EBD78-0x803EBD7C (.sdata) linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E7034",
+          "end": "0x801E739C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1480",
+          "end": "0x802B1498"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD78",
+          "end": "0x803EBD7C"
+        }
+      ]
+    },
+    {
       "source": "src/engine/physconstraint.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row for src/engine/physconstraint.cpp, individual target function extents, exact literal/vtable data 0x802B1548-0x802B1570 and compiler/source-form/type records. Complete class source and native sections; original file edges remain provisional.",
@@ -14835,6 +14860,25 @@
           "placement": ".data3",
           "start": "0x802B1548",
           "end": "0x802B1570"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/rigidbody.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801E9BB4-0x801E9F70 (src/engine/rigidbody.cpp), its compiler, function, name and source-form rows; all eleven functions exact, promoted from comparison-only, with their literal pool 0x802B16B8-0x802B16CC (.rodata) linked. The unit links the tail of the rigid-body file; the body functions before 0x801E9BB4 keep their original bytes (unit row).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E9BB4",
+          "end": "0x801E9F70"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B16B8",
+          "end": "0x802B16CC"
         }
       ]
     },

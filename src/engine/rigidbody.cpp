@@ -1,3 +1,7 @@
+/* Rigid-body physics: the motion helpers of a body (pose, momentum and velocity setters, forces
+   and impulses at a point, point velocity and the motion state), used by the game's physics
+   objects and by the collision response. */
+
 #include "engine/rigidbody.h"
 #include "engine/llmatrix.h"
 #include "game/fn_802270D4.h"

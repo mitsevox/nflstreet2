@@ -1,12 +1,12 @@
-#ifndef ENGINE_SHAPE_801E2CB4_H
-#define ENGINE_SHAPE_801E2CB4_H
+#ifndef ENGINE_PHYSSHAPE_H
+#define ENGINE_PHYSSHAPE_H
 
 struct Vector_80039F5C;
 
 /* Collision-shape interface used by queries and debug drawing. */
-class Shape_801E2CB4 {
+class CollisionShape {
 public:
-    virtual ~Shape_801E2CB4();
+    virtual ~CollisionShape();
     virtual void vfn_02(void *pBounds);
     virtual float vfn_03(Vector_80039F5C *pPoint, const float matrix[4][4],
                        Vector_80039F5C *pDelta, Vector_80039F5C *pNormal,

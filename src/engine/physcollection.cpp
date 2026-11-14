@@ -1,15 +1,22 @@
-#include "engine/Collection_801E7034.h"
+/* Rigid-body physics: a body's collection of collision shapes, which keeps their combined local
+   and world bounding boxes and draws the shapes and boxes for collision debugging. */
+
+#include "engine/physcollection.h"
 #include "engine/TibNew.h"
 
+extern "C" {
+void (*Collision_pDebugLineProc)(Vec3_801DE1E0 *, Vec3_801DE1E0 *, int, int, int) = 0;
+}
+
 // Reserve pointer slots and start with empty local and world bounds.
-Collection_801E7034::Collection_801E7034(unsigned int capacity, int mask)
+ShapeCollection::ShapeCollection(unsigned int capacity, int mask)
     : mCount(0), mCapacity(capacity), mMask(mask)
 {
-    mpShapes = new (0) Shape_801E2CB4 *[capacity];
+    mpShapes = new (0) CollisionShape *[capacity];
 }
 
 // Releasing the collection leaves its borrowed shapes alive.
-Collection_801E7034::~Collection_801E7034()
+ShapeCollection::~ShapeCollection()
 {
     if (mpShapes) {
         delete[] mpShapes;
@@ -20,7 +27,7 @@ Collection_801E7034::~Collection_801E7034()
 }
 
 // The first shape seeds the bounds; later shapes extend them at both corners.
-void Collection_801E7034::AddShape(Shape_801E2CB4 *pShape)
+void ShapeCollection::AddShape(CollisionShape *pShape)
 {
     BoundingBox bounds;
     pShape->vfn_02(&bounds);
@@ -35,19 +42,19 @@ void Collection_801E7034::AddShape(Shape_801E2CB4 *pShape)
 }
 
 // Callers provide an index within the populated pointer slots.
-Shape_801E2CB4 *Collection_801E7034::GetShape(unsigned int index)
+CollisionShape *ShapeCollection::GetShape(unsigned int index)
 {
     return mpShapes[index];
 }
 
 // Keep the world-space box synchronized with the supplied body transform.
-void Collection_801E7034::UpdateWorldBounds(float matrix[4][4])
+void ShapeCollection::UpdateWorldBounds(float matrix[4][4])
 {
     mLocalBounds.TransformBox(matrix, &mWorldBounds);
 }
 
 // Each shape supplies its own debug geometry under the body transform.
-void Collection_801E7034::DrawShapes(const float matrix[4][4], int red, int green, int blue)
+void ShapeCollection::DrawShapes(const float matrix[4][4], int red, int green, int blue)
 {
     for (unsigned char i = 0; i < mCount; i++) {
         mpShapes[i]->vfn_05(matrix, red, green, blue);
@@ -55,7 +62,7 @@ void Collection_801E7034::DrawShapes(const float matrix[4][4], int red, int gree
 }
 
 // Show the cached world box, or the individual and combined local boxes.
-void Collection_801E7034::DrawBounds(int red, int green, int blue, int worldSpace)
+void ShapeCollection::DrawBounds(int red, int green, int blue, int worldSpace)
 {
     if (worldSpace) {
         mWorldBounds.DrawDebug(red, green, blue);
@@ -73,7 +80,7 @@ void Collection_801E7034::DrawBounds(int red, int green, int blue, int worldSpac
 extern "C" void DispatchCollisionDebugLine(Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB,
                                            int red, int green, int blue)
 {
-    if (lbl_803EBD78) {
-        lbl_803EBD78(pA, pB, red, green, blue);
+    if (Collision_pDebugLineProc) {
+        Collision_pDebugLineProc(pA, pB, red, green, blue);
     }
 }
