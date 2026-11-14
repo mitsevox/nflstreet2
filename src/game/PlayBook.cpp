@@ -1718,6 +1718,7 @@ void PlayTrackFilterByChallenge(int team, PlayCandidate_t *pList, unsigned int c
 unsigned int PlayTrackClassifyPlay(int kind, Point_8017886C from, Point_8017886C *pTo, int flag)
 {
     unsigned int result = 0;
+    // FAKEMATCH: one local reused for both distances gives the target float registers
     float distance = fabsf(pTo->mX - from.mX);
 
     if (distance > 4.5f) {
@@ -1764,6 +1765,7 @@ unsigned int PlayTrackClassifyPlay(int kind, Point_8017886C from, Point_8017886C
 void PlayTrackGetRatingBias(int team, float *pA, float *pB)
 {
     unsigned int rating = 50;
+    // FAKEMATCH: the local stops -ffast-math folding * 0.02f * 0.5f into one constant
     float value;
 
     int id = fn_800C8744(team);
@@ -1785,6 +1787,7 @@ void PlayTrackGetRatingBias(int team, float *pA, float *pB)
 
 void PlayTrackInit(void)
 {
+    // FAKEMATCH: never-set flag; keeps the PNIG/STPG query strings in .rodata (owner-accepted 2026-11-14)
     int resume = 0;
     void *pHandle = fn_80238174(0, (void **)&_PlayTrack_pData, sizeof(PlayTrack_t), 0, 0x7074726B);
     fn_801C1F94(fn_8023816C(), 0, sizeof(PlayTrack_t));
@@ -2273,6 +2276,7 @@ void PlayBookRouteApplyTurn(int heading, Point_8017886C *pPos)
     if (_PlayRoute_bTurn == 10) {
         return;
     }
+    // FAKEMATCH: Xbox does not clear the step; the clear forms the 0.0f pool word
     step.mX = step.mY = 0.0f;
     switch (_PlayRoute_bTurn) {
     case 0:
@@ -2314,6 +2318,7 @@ void PlayBookRouteAddStep(unsigned char *pArgs, PlayRoute_t *pRoute)
     int heading = (pArgs[1] & 0x7F) << 17;
     unsigned char distance = pArgs[0];
 
+    // FAKEMATCH: Xbox does not clear the step; the clear forms the 0.0f pool word
     step.mX = step.mY = 0.0f;
     PlayBookRouteApplyTurn(heading, &pRoute->mCur);
     fn_80227538(&step, heading, (float)(distance & 7) * (1.0f / 7.0f) + (float)(distance >> 3));
@@ -2430,6 +2435,7 @@ void PlayBookPointToArt(Point_8017886C *pSrc, Point_8017886C *pDst)
     pDst->mX = pSrc->mX * 3.75f;
     pDst->mY = pSrc->mY * (-200.0f / 41.0f);
     pDst->mX += 60.0f;
+    // FAKEMATCH: inverted test orders the pool as 50.0f then 90.0f; same result
     pDst->mY += !gGameTextPlayArtShift ? 50.0f : 90.0f;
     if (pDst->mY < 4.0f) {
         pDst->mY = 4.0f;
