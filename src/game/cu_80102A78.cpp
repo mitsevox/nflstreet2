@@ -1,6 +1,6 @@
 #include "game/fn_801248D4.h"
 #include "game/StyleTracker.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
 #include <math.h>
@@ -57,7 +57,7 @@ struct Entry_801018B4 {
     float mUnknown24;
 };
 
-/* 8-byte item of List_801018B4: two halfwords for fn_801BA2A8 and the
+/* 8-byte item of List_801018B4: two halfwords for AnimChanStartAnim and the
    entry pointer. */
 struct Item_801018B4 {
     unsigned short mUnknown0;
@@ -137,7 +137,7 @@ struct Type_803EA368;
 
 extern Type_803EA368 *lbl_803EA368;
 
-extern "C" void fn_800310C0(Type_803EA368 *p, int id, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
+extern "C" void ReplayEventAdd(Type_803EA368 *p, int id, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
 extern "C" {
 Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, int a, int team);
 void SpchIGSetPassTarget(int id);
@@ -222,7 +222,7 @@ extern "C" {
 
 extern "C" int fn_801018B4(Object_80039F5C *p, List_801018B4 *pList, int a, int b, int *pOut);
 
-extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void *pData, Record_800D81C8 *pEntries,
+extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void *pData, AnimChannel_t *pEntries,
                            Object_80039F5C *p, unsigned int mode)
 {
     int delta = 0;
@@ -271,7 +271,7 @@ extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void 
             } else {
                 pState->mUnknown4 = failed;
             }
-            pState->mUnknown0 = fn_801BA2A8(pData, pEntries, pList->mItems[index].mUnknown0,
+            pState->mUnknown0 = AnimChanStartAnim(pData, pEntries, pList->mItems[index].mUnknown0,
                                             pList->mItems[index].mUnknown2, animation, p, 1.0f);
             AnimSeqSetSpeed(&pEntries[pState->mUnknown0].mUnknown4C, MathInverse(lbl_803EAEC4));
         }
@@ -451,10 +451,10 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         {
             Object_80039F5C *pNearest = PlyrFindNearest(&pTarget->mMotion.mPos, 0, fn_80178320());
 
-            fn_800310C0(lbl_803EA368, 5, pNearest, &pNearest->mMotion.mPos, &pNearest->mMotion.mFacing);
+            ReplayEventAdd(lbl_803EA368, 5, pNearest, &pNearest->mMotion.mPos, &pNearest->mMotion.mFacing);
         }
-        fn_800310C0(lbl_803EA368, 18, p, pPos, &p->mMotion.mFacing);
-        fn_800310C0(lbl_803EA368, 17, pTarget, &pTarget->mMotion.mPos, &pTarget->mMotion.mFacing);
+        ReplayEventAdd(lbl_803EA368, 18, p, pPos, &p->mMotion.mFacing);
+        ReplayEventAdd(lbl_803EA368, 17, pTarget, &pTarget->mMotion.mPos, &pTarget->mMotion.mFacing);
         fn_80099568(1);
         if (fn_800A7F1C(p->mIdBytes[2]) == 0) {
             speed *= lbl_803EAECC;
@@ -584,7 +584,7 @@ extern "C" void fn_801039D8(Object_80039F5C *p)
     StyleTrackerMarkCatchOpportunity(p->mIdBytes[2]);
     fn_800B1584(56, 0);
     fn_801783D0(23, 1);
-    fn_800310C0(lbl_803EA368, 18, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+    ReplayEventAdd(lbl_803EA368, 18, p, &p->mMotion.mPos, &p->mMotion.mFacing);
     BallGetVelocity(pBall, &velocity);
     velocity.mX = velocity.mX < -0.2f ? -0.2f : (velocity.mX > 0.2f ? 0.2f : velocity.mX);
     velocity.mY = velocity.mY < -0.1f ? -0.1f : (velocity.mY > 0.15f ? 0.15f : velocity.mY);

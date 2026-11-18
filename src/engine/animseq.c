@@ -2,7 +2,7 @@
    loops, speed changes and game-defined opcodes) and answers timing questions
    such as its length or the time left until a given opcode. */
 
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 
 static AnimSeq_t *_AnimSeq_CurrentInfo;
 

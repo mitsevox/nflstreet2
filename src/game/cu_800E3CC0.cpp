@@ -1,6 +1,6 @@
 #include "game/State_800E4494.h"
 #include "game/StyleTracker.h"
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/Command_800CEE74.h"
 #include "game/Block_801BE60C.h"
 #include "game/Input_800B6D34.h"
@@ -28,7 +28,7 @@
 #include <math.h>
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/Table_80089904.h"
 #include "game/Record_800CE608.h"
 
@@ -101,8 +101,8 @@ void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 void fn_800E9528(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800E9DBC(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_801BA6B0(Record_800D81C8 *entry);
-void fn_801BA6BC(Record_800D81C8 *entry, int value);
+int AnimChanIsMirrored(AnimChannel_t *entry);
+void AnimChanSetMirrored(AnimChannel_t *entry, int value);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_8011E240(Object_80039F5C *p);
 void fn_8011E3EC(Object_80039F5C *p, int a);
@@ -1414,7 +1414,7 @@ extern "C" void fn_800EA6F0(Object_80039F5C *p) {
 extern "C" int fn_800EAC9C(Object_80039F5C *p) {
     int result = 0;
     int animation = fn_801BE648(p->mpUnknown792);
-    int index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
+    int index = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, animation, 0);
     if (index != 0xFFFF) {
         float start = AnimSeqGetOpcodeTime(p->mpUnknown800[index].mUnknown4C.mpUnknown0, 0xC001);
         result = start < AnimSeqGetOpcodeTime(p->mpUnknown800[index].mUnknown4C.mpUnknown0, 0x8000);

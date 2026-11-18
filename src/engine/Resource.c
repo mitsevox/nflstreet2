@@ -72,7 +72,7 @@ typedef struct ResTrackLoadDone_t {
     int mIndex;
 } ResTrackLoadDone_t;
 
-extern int fn_801F2D60(int file, char *pName, unsigned int id, int *pHandle, int *pOffset);
+extern int ResQuickloadIsInFile(int file, char *pName, unsigned int id, int *pHandle, int *pOffset);
 extern int FileSeek(int handle, int offset, unsigned int whence);
 extern int FileGetPosition(int handle);
 extern int FileGetLength(int handle);
@@ -454,12 +454,12 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
                 cache = 0;
             } else {
                 file = pRes->mFile;
-                quick = fn_801F2D60(1, pRes->pName, index, &file, (int *)&offset);
+                quick = ResQuickloadIsInFile(1, pRes->pName, index, &file, (int *)&offset);
                 cache = 1;
             }
         } else {
             file = pRes->mFile;
-            quick = fn_801F2D60(1, pRes->pName, index, &file, (int *)&offset);
+            quick = ResQuickloadIsInFile(1, pRes->pName, index, &file, (int *)&offset);
         }
         track.mAsync = 0;
         track.mOffset = offset;
@@ -895,7 +895,7 @@ static int _ResInitResourceFile(ResFile_t *pRes, char *pName)
 
     file = pRes->mFile;
     quickload = 0;
-    if (fn_801F2D60(0, pName, 0, &file, &position) != 0) {
+    if (ResQuickloadIsInFile(0, pName, 0, &file, &position) != 0) {
         quickload = 1;
         FileSeek(file, position, 0);
     }
@@ -1981,7 +1981,7 @@ int ResLoadAll(ResFile_t *pRes, int heap, int bulk)
             pRes->mHeap = heap;
             pRes->mNumLocked = 0;
             offset = pRes->mBaseOffset;
-            result = fn_801F2D60(2, pRes->pName, -1, &file, (int *)&offset);
+            result = ResQuickloadIsInFile(2, pRes->pName, -1, &file, (int *)&offset);
             {
                 track.pRes = pRes;
                 track.mIndex = -1;

@@ -188,7 +188,7 @@ void DepthChartAutoFill(int group, int *list, int value)
     FormationLineupCommitTeam(group);
 }
 
-int DepthChartAutoFillEx(int group, int *list, int value, int a, int b)
+void DepthChartAutoFillEx(int group, int *list, int value, int a, int b)
 {
     if (fn_801485D4()) {
         fn_80148A58()->vfn_11(value, list, _DepthChart_aCommitted[group], a, b);
@@ -196,7 +196,7 @@ int DepthChartAutoFillEx(int group, int *list, int value, int a, int b)
         AutoDepthFillChart(value, list, _DepthChart_aCommitted[group]);
     }
     FormationLineupFillTeam(group, _DepthChart_aCommitted[group]);
-    return FormationLineupCommitTeam(group);
+    FormationLineupCommitTeam(group);
 }
 
 unsigned char DepthChartGetEntry(int group, int index, int *pValue)

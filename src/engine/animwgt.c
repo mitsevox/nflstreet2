@@ -3,7 +3,7 @@
    held and faded out. The module keeps a table of update functions and parameter
    sizes, one per weight type, that the animation channels step every frame. */
 
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "engine/fn_801F7BD4.h"
 #include "game/fn_801D2B7C.h"
 

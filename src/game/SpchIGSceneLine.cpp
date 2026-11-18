@@ -30,11 +30,11 @@ extern "C" void SpchIGSaySceneLine(int a, int b, int c)
         SpchIGGetTargetCategory(&result2, c);
         if ((unsigned char)(b >> 8) == 0) {
             SpchIGPurgeChannel(1);
-            lbl_803EBB10(fn_801AE5D4(1, 0, 0x201E), 3, a, result1, result2);
+            gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x201E), 3, a, result1, result2);
             fn_801AF2CC(1);
         } else {
             SpchIGPurgeChannel(0);
-            lbl_803EBB10(fn_801AE5D4(2, 0, 0x401E), 3, a, result1, result2);
+            gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x401E), 3, a, result1, result2);
             fn_801AF2CC(0);
         }
     }

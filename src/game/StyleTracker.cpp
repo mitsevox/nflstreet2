@@ -10,7 +10,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Record_800B15FC.h"
 #include "game/AudmonEvent.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 #include "game/PlayBookGetPlay.h"
@@ -1399,7 +1399,7 @@ extern "C" void StyleTrackerStartRunEffect(void) {
     Object_80039F5C *p = _StyleTracker_pState->mpRunEffectPlayer;
 
     if (p != 0) {
-        fn_800310C0(lbl_803EA368, 56, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+        ReplayEventAdd(lbl_803EA368, 56, p, &p->mMotion.mPos, &p->mMotion.mFacing);
     }
 }
 
@@ -2117,7 +2117,7 @@ extern "C" int StyleTrackerUpdateRun(int active, int a, int b) {
                     float distance = (float)fabs(_StyleTracker_pState->mpRunPlayer->mMotion.mPos.mX) + 6.0f;
                     if (!(distance <= fn_800A32B4())) {
                         Object_80039F5C *p = _StyleTracker_pState->mpRunEffectPlayer;
-                        fn_800310C0(lbl_803EA368, 57, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                        ReplayEventAdd(lbl_803EA368, 57, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                         _StyleTracker_pState->mRunEffectActive = 0;
                     }
                 }
@@ -2151,7 +2151,7 @@ extern "C" int StyleTrackerUpdateRun(int active, int a, int b) {
             StyleTrackerResetRun();
             if (_StyleTracker_pState->mRunEffectActive) {
                 Object_80039F5C *p = _StyleTracker_pState->mpRunEffectPlayer;
-                fn_800310C0(lbl_803EA368, 57, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                ReplayEventAdd(lbl_803EA368, 57, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                 _StyleTracker_pState->mRunEffectActive = 0;
             }
         }

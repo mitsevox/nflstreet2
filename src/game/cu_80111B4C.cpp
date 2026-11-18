@@ -1,4 +1,4 @@
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/StyleTracker.h"
 #include "game/fn_801248D4.h"
 #include "game/State_800FDA58.h"
@@ -1052,8 +1052,8 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
             p->mUnknown778 = -1;
             p->mFlags &= ~0x1000;
             state->mUnknown30 = 0;
-        } else if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 69) == 0 &&
-                   fn_801BA568(p->mpUnknown796, p->mpUnknown800, 178) == 0) {
+        } else if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 69) == 0 &&
+                   AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 178) == 0) {
             p->mUnknown778 = -1;
             state->mUnknown30 = 0;
         } else {
@@ -1261,10 +1261,10 @@ extern "C" void fn_80114F64(Object_80039F5C *p, int angle)
         }
     }
     pOther = fn_8009BCE8(&state->mRef);
-    index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, key, 0);
-    otherIndex = fn_801BA5A8(pOther->mpUnknown796, pOther->mpUnknown800, key, 0);
+    index = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, key, 0);
+    otherIndex = AnimChanGetStateChannelByIndex(pOther->mpUnknown796, pOther->mpUnknown800, key, 0);
     if (otherIndex != 0xFFFF && index != 0xFFFF) {
-        Record_800D81C8 *pOtherRecord;
+        AnimChannel_t *pOtherRecord;
         Block_80114F64 *pBlock;
         Point_8017886C offset;
         Point_8017886C rotated;

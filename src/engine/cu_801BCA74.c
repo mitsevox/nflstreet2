@@ -1,4 +1,4 @@
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 
 typedef struct Entry_801BCA74 {
     float mUnknown0;
@@ -19,7 +19,7 @@ typedef struct Anim_801BCA74 {
 
 void OrientLerpAngle(int *pOut, int a, int b, float t);
 
-int fn_801BCA74(AnimHeader_t *pObject, Record_800D81C8 *pRecords, Anim_801BCA74 *pAnim, int *pOut, int key, int all)
+int fn_801BCA74(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *pAnim, int *pOut, int key, int all)
 {
     float total = 0.0f;
     int found = 0;
@@ -45,7 +45,7 @@ int fn_801BCA74(AnimHeader_t *pObject, Record_800D81C8 *pRecords, Anim_801BCA74 
             pRecords[index].mUnknown10 = pEntry->mUnknownC;
         }
         if (pEntry->mUnknown8 & 2) {
-            Record_800D81C8 *pRecord = &pRecords[index];
+            AnimChannel_t *pRecord = &pRecords[index];
             int angle;
             int delta;
             int blend;
@@ -91,7 +91,7 @@ void fn_80227638(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB);
 void fn_80227690(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB);
 void fn_80227904(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB, float t);
 
-int fn_801BCCAC(AnimHeader_t *pObject, Record_800D81C8 *pRecords, Anim_801BCA74 *pAnim, Pair_802270A4 *pOut, int key, int all)
+int fn_801BCCAC(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *pAnim, Pair_802270A4 *pOut, int key, int all)
 {
     Pair_802270A4 sum;
     Pair_802270A4 offset;
@@ -115,7 +115,7 @@ int fn_801BCCAC(AnimHeader_t *pObject, Record_800D81C8 *pRecords, Anim_801BCA74 
                 apply = 1;
             }
             if (apply == 1) {
-                Record_800D81C8 *pRecord = &pRecords[index];
+                AnimChannel_t *pRecord = &pRecords[index];
                 Pair_802270A4 *pOffset;
 
                 if (pRecord->mUnknown4C.mUnknown1E & 1) {
@@ -155,7 +155,7 @@ int fn_801BCCAC(AnimHeader_t *pObject, Record_800D81C8 *pRecords, Anim_801BCA74 
     return found;
 }
 
-void fn_801BCEEC(AnimHeader_t *p, Record_800D81C8 *pRecords)
+void fn_801BCEEC(AnimHeader_t *p, AnimChannel_t *pRecords)
 {
     int i;
 

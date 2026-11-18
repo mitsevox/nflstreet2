@@ -6,7 +6,7 @@ struct Value_801BBD5C {
     unsigned char mUnknown4[8];
 };
 
-/* Object whose address fn_801BBD5C returns. Only the accessed fields are
+/* Object whose address AnimFileGetStateData returns. Only the accessed fields are
    declared; mValues holds mCount entries. */
 struct Object_801BBD5C {
     unsigned char mUnknown0[4];

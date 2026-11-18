@@ -6,7 +6,7 @@
    sends the message that moves him to the right next state. */
 
 #include "game/StyleTracker.h"
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/Block_801BE60C.h"
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
@@ -23,7 +23,7 @@
 #include <math.h>
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/Table_80089904.h"
 #include "engine/AnimStateAnimList.h"
 
@@ -150,7 +150,7 @@ extern "C" int LooseBallStartAnim(Object_80039F5C *p, int a, int b, int c) {
         p->mUnknown1008.mUnknown1 = b;
         p->mUnknown1008.mUnknown2 = c;
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 48, 1.0f, p);
-        result = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 48, 0);
+        result = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 48, 0);
         p->mFlags &= ~4;
         p->mUnknown512.mUnknown14 = 0;
         if (((LooseBallBlock_t *)&p->mUnknown336)->mUnknown45 == 5)
@@ -263,7 +263,7 @@ extern "C" int LooseBallFindAnim(Object_80039F5C *p, LooseBallBlock_t *state, Ba
         BallGetVelocity(pCurrent, &velocity);
         if (!force && (fn_802270D4(&velocity) >= 100.0f || !LooseBallCanReach(p, pCurrent)))
             goto done;
-        fn_801BBC3C(1, 48, (Table_80089904 *)&_LooseBall_AnimTable);
+        AnimFileGetStateAnimList(1, 48, (Table_80089904 *)&_LooseBall_AnimTable);
         for (signed char i = 0; i < _LooseBall_AnimTable.mCount; i++) {
             Info_80089904 *pInfo = (Info_80089904 *)_LooseBall_AnimTable.mEntries[i].mpUnknown4;
             if (type != pInfo->mType)
@@ -655,7 +655,7 @@ extern "C" int LooseBallAnimEvent(Table_80089904 *table, unsigned short key, voi
                             Object_80039F5C *p, int phase) {
     if (phase == 0) {
         LooseBallBlock_t *state = (LooseBallBlock_t *)&p->mUnknown336;
-        fn_801BA2A8(record, entries, table->mEntries[state->mUnknown44].mUnknown0,
+        AnimChanStartAnim(record, entries, table->mEntries[state->mUnknown44].mUnknown0,
                     table->mEntries[state->mUnknown44].mUnknown2, key, p, 1.0f);
     }
     return 0;

@@ -2,7 +2,7 @@
 #define ENGINE_ANIMSTATEANIMLIST_H
 
 /* The state animation list types alone, without the animation library prototypes, so that game
-   files which keep their own caller view of fn_801BBC3C (include/game/Table_80089904.h) can
+   files which keep their own caller view of AnimFileGetStateAnimList (include/game/Table_80089904.h) can
    declare storage of the list's real type. include/engine/animemot.h includes this header. */
 
 typedef struct AnimListEntry_t {
@@ -11,7 +11,7 @@ typedef struct AnimListEntry_t {
     void *mpUnknown4;
 } AnimListEntry_t;
 
-/* State animation list filled by fn_801BBC3C. */
+/* State animation list filled by AnimFileGetStateAnimList. */
 typedef struct AnimStateAnimList_t {
     unsigned short mCount;
     unsigned short mMax;

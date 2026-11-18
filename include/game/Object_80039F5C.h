@@ -220,7 +220,7 @@ struct Object_800CE674 {
 };
 
 /* 124-byte entry of the array that +800 points to. */
-typedef Record_800D81C8 Entry_800EAC9C;
+typedef AnimChannel_t Entry_800EAC9C;
 
 /* 12-byte block at +1228; PlayerMoveGetKind returns its first word. */
 struct PlayerMove_t {
@@ -411,10 +411,10 @@ struct Object_80039F5C {
     char mUnknown788[4];
     void *mpUnknown792;
     AnimHeader_t *mpUnknown796;
-    Record_800D81C8 *mpUnknown800;
+    AnimChannel_t *mpUnknown800;
     void *mpUnknown804;
     AnimHeader_t *mpUnknown808;
-    Record_800D81C8 *mpUnknown812;
+    AnimChannel_t *mpUnknown812;
     char mUnknown816[192];
     union {
         int mUnknown1008Word;

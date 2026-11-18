@@ -363,6 +363,19 @@ class FoldedDuplicates(Fixture):
         with self.assertRaisesRegex(ValueError, "uppercase hexadecimal"):
             self.load(self.folded_manifest(symbols={"Destroy": "0x80003124a"}))
 
+    def test_folding_unit_may_discard_nothing_else(self):
+        # Roots that only make the linker drop folded bodies may list no other discarded function.
+        roots = {"symbols": ["Unit_Function"], "discarded": [], "evidence": "linker evidence"}
+        manifest = self.folded_manifest()
+        manifest["units"][0]["link_roots"] = roots
+        units, _, _ = self.load(manifest)
+        self.assertEqual(units[0]["link_roots"]["discarded"], [])
+        # Without folds an empty list is still refused.
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"][0]["link_roots"] = roots
+        with self.assertRaisesRegex(ValueError, "a list of the discarded functions"):
+            self.load(manifest)
+
     def test_only_relocations_to_folded_symbols_change(self):
         native, output = self.native()
         folds = sb.fold_object(native, {"Destroy": 0x80003124, "Table": 0x80004010}, output)
@@ -405,6 +418,11 @@ class FoldedDuplicates(Fixture):
         sb.fold_object(self.native(rodata_relocations=((0, 4, 1, 0),))[0], {"Destroy": 0x80003124}, output)
         # The same section relocation outside the folded extent is unaffected.
         sb.fold_object(self.native(rodata_relocations=((0, 2, 1, 0),))[0], {"Destroy": 0x80003124}, output)
+        # A branch inside the folded function to its own body goes with the body; the same
+        # section reference from another function still fails.
+        sb.fold_object(self.native(text_relocations=((4, 2, 11, 6),))[0], {"Destroy": 0x80003124}, output)
+        with self.assertRaisesRegex(ValueError, "through another symbol"):
+            sb.fold_object(self.native(text_relocations=((0, 2, 11, 6),))[0], {"Destroy": 0x80003124}, output)
         alias = self.SYMBOLS + [{"name": "Alias", "value": 6, "size": 0, "shndx": 1, "bind": sb.STB_LOCAL}]
         with self.assertRaisesRegex(ValueError, "aliases a folded symbol"):
             sb.fold_object(self.native(alias)[0], {"Destroy": 0x80003124}, output)
@@ -634,10 +652,11 @@ class KeptLocals(Fixture):
             self.load(self.kept_manifest(symbols={}))
         with self.assertRaisesRegex(ValueError, "descriptive name"):
             self.load(self.kept_manifest(symbols={"fn_80003114": "0x80003114"}))
-        # Another file's code or the unit's own data is not a kept copy of this unit's code.
-        for value in ("0x80003120", "0x80004008"):
-            with self.subTest(value=value), self.assertRaisesRegex(ValueError, "outside the unit's code"):
-                self.load(self.kept_manifest(symbols={"Inline": value}))
+        # Another file's code is not a kept copy; the unit's own data may hold a kept table.
+        with self.assertRaisesRegex(ValueError, "outside the unit's sections"):
+            self.load(self.kept_manifest(symbols={"Inline": "0x80003120"}))
+        units, _, _ = self.load(self.kept_manifest(symbols={"Table": "0x80004008"}))
+        self.assertEqual(units[0]["kept_locals"], {"Table": 0x80004008})
         manifest = self.kept_manifest()
         manifest["units"][0]["folded"] = {"symbols": {"Inline": "0x80003124"}, "evidence": "x"}
         with self.assertRaisesRegex(ValueError, "both folded and kept"):
@@ -660,13 +679,52 @@ class KeptLocals(Fixture):
 
     def test_kept_names_must_be_unique_local_functions(self):
         native, output = self.native()
-        for name in ("Missing", "Unit_Function", "Table"):
+        for name in ("Missing", "Unit_Function"):
             with self.subTest(name=name), self.assertRaisesRegex(ValueError, "not one local function"):
                 sb.keep_object(native, {name: 0x80003114}, output)
         twice = self.SYMBOLS + [dict(self.SYMBOLS[1], value=0)]
         with self.assertRaisesRegex(ValueError, "not one local function"):
             sb.keep_object(self.native(twice)[0], {"Inline": 0x80003114}, output)
+        # A function must be code and a table must be data.
+        swapped = [self.SYMBOLS[0], self.SYMBOLS[1], dict(self.SYMBOLS[2], type=sb.STT_FUNC)]
+        with self.assertRaisesRegex(ValueError, "not one local function or object"):
+            sb.keep_object(self.native(swapped)[0], {"Table": 0x80004008}, output)
         self.assertFalse(output.exists())
+
+    def test_a_kept_table_and_a_folded_alias_are_added(self):
+        native, output = self.native()
+        sb.keep_object(native, {"Inline": 0x80003114, "Table": 0x80004008}, output, aliases={"Table"})
+        _, symbols = sb.read_elf(output.read_bytes())
+        self.assertEqual([(s["name"], s["type"], s["shndx"], s["value"]) for s in symbols[-3:]],
+                         [("Inline", sb.STT_FUNC, 1, 4), ("Table", sb.STT_OBJECT, 2, 0),
+                          ("__folded_Table", sb.STT_OBJECT, 2, 0)])
+        # The inventory lists a kept function once, not again under its folded alias.
+        sb.keep_object(native, {"Inline": 0x80003114}, output, aliases={"Inline"})
+        units, _, _ = self.load(self.kept_manifest())
+        units[0]["sections"][0].update(index=1, compiled=8, executable=True)
+        units[0]["sections"][1].update(index=2, compiled=4, executable=False)
+        functions = sb.compiled_functions(units[0], sb.read_elf(output.read_bytes()))
+        self.assertEqual([f["symbol"] for f in functions], ["Unit_Function", "Inline"])
+
+    def test_a_fold_into_another_units_kept_copy_resolves_to_it(self):
+        native, output = self.native()
+        sb.keep_object(native, {"Inline": 0x80003114}, output, aliases={"Inline"})
+        other = compiled([text(4)], [{"name": "__folded_Inline", "value": 0, "shndx": 0}])
+        objects = {"src/unit.c": sb.read_elf(output.read_bytes()), "src/other.c": other}
+        manifest = self.kept_manifest()
+        manifest["units"][1]["folded"] = {"symbols": {"Inline": "0x80003114"}, "evidence": "x"}
+        _, defined, resolved = self.plan(objects, manifest)
+        self.assertEqual(defined["__folded_Inline"], (0x80003114, "src/unit.c"))
+        self.assertNotIn("__folded_Inline", resolved)
+        # Without kept_locals the copy is not published, and a fold elsewhere is still refused.
+        plain = dict(objects, **{"src/unit.c": sb.read_elf(native)})
+        manifest["units"][0].pop("kept_locals")
+        with self.assertRaisesRegex(ValueError, "inside source unit"):
+            self.plan(plain, manifest)
+        manifest = self.kept_manifest()
+        manifest["units"][1]["folded"] = {"symbols": {"Inline": "0x80003110"}, "evidence": "x"}
+        with self.assertRaisesRegex(ValueError, "ambiguous|inside source unit"):
+            self.plan(objects, manifest)
 
     def test_other_units_resolve_to_the_kept_copy_only_with_kept_locals(self):
         native, output = self.native()

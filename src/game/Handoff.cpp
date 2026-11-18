@@ -6,7 +6,7 @@
    around the huddle point and hold the first player of the formation
    there. */
 
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/Command_800CEE74.h"
 #include "game/Block_801BE60C.h"
 #include "game/Input_800B6D34.h"
@@ -30,7 +30,7 @@
 #include <math.h>
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/Record_800CE608.h"
 
 /* Player block at +336 in the turn-to-play state. */
@@ -103,8 +103,8 @@ int fn_800A2178(void);
 int fn_80178348(void);
 int fn_801787A0(void);
 int BallStateGet(Ball_t *pBall, int *pOut);
-int fn_801BA6B0(Record_800D81C8 *entry);
-void fn_801BA6BC(Record_800D81C8 *entry, int value);
+int AnimChanIsMirrored(AnimChannel_t *entry);
+void AnimChanSetMirrored(AnimChannel_t *entry, int value);
 extern float _Handoff_fTurnCloseRange;
 extern unsigned char _Handoff_auTurnDirections[8];
 void HuddleSetSpot(HuddleBlock_t *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value);
@@ -231,12 +231,12 @@ extern "C" void TurnToPlayStartAnim(Object_80039F5C *p, int kind, int flag) {
     int alternate = 0;
     fn_8009BD60(p);
     p->mUnknown512.mUnknown14 = mirror;
-    if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, fn_801BE648(p->mpUnknown792))) {
+    if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, fn_801BE648(p->mpUnknown792))) {
         if (fn_801BE648(p->mpUnknown792) == 192) {
             mirror = p->mUnknown776 == 1;
         } else {
-            Record_800D81C8 *pEntries = p->mpUnknown800;
-            mirror = fn_801BA6B0(&pEntries[fn_801BA5A8(p->mpUnknown796, pEntries, fn_801BE648(p->mpUnknown792), 0)]);
+            AnimChannel_t *pEntries = p->mpUnknown800;
+            mirror = AnimChanIsMirrored(&pEntries[AnimChanGetStateChannelByIndex(p->mpUnknown796, pEntries, fn_801BE648(p->mpUnknown792), 0)]);
         }
     }
     if (kind == 3)
@@ -286,12 +286,12 @@ extern "C" void TurnToPlayStartAnim(Object_80039F5C *p, int kind, int flag) {
     else
         p->mUnknown1008.mUnknown0 = 2;
     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, 1.0f, p);
-    if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, animation)) {
-        Record_800D81C8 *pEntries = p->mpUnknown800;
-        int index = fn_801BA5A8(p->mpUnknown796, pEntries, animation, 0);
+    if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, animation)) {
+        AnimChannel_t *pEntries = p->mpUnknown800;
+        int index = AnimChanGetStateChannelByIndex(p->mpUnknown796, pEntries, animation, 0);
         if (mirror) {
-            Record_800D81C8 *pEntry = &pEntries[index];
-            fn_801BA6BC(pEntry, fn_801BA6B0(pEntry) == 0);
+            AnimChannel_t *pEntry = &pEntries[index];
+            AnimChanSetMirrored(pEntry, AnimChanIsMirrored(pEntry) == 0);
         }
     }
     p->mUnknown9[0] = 1;
@@ -532,9 +532,9 @@ extern "C" void HandoffStartAnim(Object_80039F5C *p, HandoffBlock_t *state, unsi
             fn_800D7A0C(p, 2);
     }
     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, 1.0f, p);
-    unsigned char count = fn_801BA568(p->mpUnknown796, p->mpUnknown800, animation);
+    unsigned char count = AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, animation);
     for (unsigned char i = 0; i < count; i++)
-        p->mpUnknown800[fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, i)].mUnknown20 = (int)(speed * 16777216.0f);
+        p->mpUnknown800[AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, animation, i)].mUnknown20 = (int)(speed * 16777216.0f);
 }
 
 extern "C" int HandoffTryPairAnim(Object_80039F5C *p, Object_80039F5C *pOther, HandoffBlock_t *state) {

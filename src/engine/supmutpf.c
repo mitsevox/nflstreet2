@@ -16,7 +16,7 @@ int SFILTER_unpackmtpf(Node_80279D90 *node, int count, float *a, float *b, int f
     decoder = (SndMtUnpackFilter_t *)node;
     total = 0;
     if (decoder->mPendingCount != 0) {
-        fn_8027952C(decoder->mStream, decoder->mChannel, decoder->mPendingCount);
+        SNDPKTPLAYI_freeframes(decoder->mStream, decoder->mChannel, decoder->mPendingCount);
         decoder->mPendingCount = 0;
     }
     while (count > 0) {
@@ -84,7 +84,7 @@ void SFILTER_unpackmtpfinit(Node_80279D90 *node, Params_80275F80 *params)
 
     decoder = (SndMtUnpackFilter_t *)node;
     node->m0 = SFILTER_unpackmtpf;
-    decoder->mStream = fn_802789E0(fn_80274304(params->m1C));
+    decoder->mStream = SNDPKTPLAYI_voicetopackethandle(fn_80274304(params->m1C));
     decoder->mChannel = fn_80274334(params->m1C);
     decoder->mpPacket = 0;
     decoder->mPacketPosition = 0;

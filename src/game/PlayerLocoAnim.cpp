@@ -4,8 +4,8 @@
    fade and weights). The turn-in-place functions after
    PlayerLocoGetRunCategory are not referenced and do not reach the game. */
 
-#include "engine/cu_801B9F00.h"
-#include "game/fn_801BA2A8.h"
+#include "engine/animchan.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/LocoBlendSet.h"
 #include "game/Object_80039F5C.h"
 #include "game/AnimMomentumActor.h"
@@ -42,19 +42,19 @@ void fn_8009BEFC(Object_80039F5C *p, int joint, Vector_80039F5C *out, int *scrat
 int CharSkelGetJointByName(void *p, const char *name);
 int PlayerLocoGetBlendIndex(Object_80039F5C *p, Object_801BBD5C *object);
 int PlayerLocoSelectBlendSet(Object_80039F5C *p, Block_801BE60C *block, unsigned char *value);
-void PlayerLocoSetCycleDuration(float value, Block_801BE60C *block, LocoBlendSet_t *object, Record_800D81C8 *entries);
+void PlayerLocoSetCycleDuration(float value, Block_801BE60C *block, LocoBlendSet_t *object, AnimChannel_t *entries);
 unsigned char fn_800D78C4(Object_80039F5C *p, unsigned short key);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 int fn_8009C4B0(Table_80089904 *table, Key_80110630 *key);
-int fn_801BA6B0(Record_800D81C8 *entry);
-void fn_801BA6BC(Record_800D81C8 *entry, int value);
+int AnimChanIsMirrored(AnimChannel_t *entry);
+void AnimChanSetMirrored(AnimChannel_t *entry, int value);
 float MathInverse(float value);
 void AnimSeqSetSpeed(void *p, float value);
-void PlayerLocoTrimBlendEntries(FEPlyrModel_t *record, Record_800D81C8 *entries, int key);
-void PlayerLocoStartBlendPair(LocoBlendSet_t *object, Block_801BE60C *block, Object_80039F5C *p, int value, int index, int key, FEPlyrModel_t *record, Record_800D81C8 *entries);
-void PlayerLocoSwitchBlendPair(LocoBlendSet_t *, Block_801BE60C *, Object_80039F5C *, int, int, unsigned short, void *, Record_800D81C8 *, unsigned char);
+void PlayerLocoTrimBlendEntries(FEPlyrModel_t *record, AnimChannel_t *entries, int key);
+void PlayerLocoStartBlendPair(LocoBlendSet_t *object, Block_801BE60C *block, Object_80039F5C *p, int value, int index, int key, FEPlyrModel_t *record, AnimChannel_t *entries);
+void PlayerLocoSwitchBlendPair(LocoBlendSet_t *, Block_801BE60C *, Object_80039F5C *, int, int, unsigned short, void *, AnimChannel_t *, unsigned char);
 void PlayerLocoSetFadeFraction(Block_801BE60C *, float, float);
-void PlayerLocoFadeOldPair(Block_801BE60C *, void *, Record_800D81C8 *);
+void PlayerLocoFadeOldPair(Block_801BE60C *, void *, AnimChannel_t *);
 int PlayerLocoGetStartSide(Object_80039F5C *, int, int);
 
 int PlayerLocoUpdateCategories(void *, Block_801BE60C *, Object_80039F5C *, Object_80039F5C *, int);
@@ -66,8 +66,8 @@ int fn_80178308(void);
 int PlayerLocoGetPrimaryCategory(Object_80039F5C *p, int team, int flag, unsigned char *pValue);
 int PlayerLocoGetSecondaryCategory(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag, unsigned char value);
 void PlayerLocoSelectStates(void *a, Block_801BE60C *pBlock, Object_80039F5C *p, int value);
-int fn_801BA2D0(void *a, Record_800D81C8 *pEntries, Record_800D81C8 *pEntry);
-void fn_801BA418(void *a, Record_800D81C8 *pEntries, int index, unsigned short b,
+int AnimChanStartCopy(void *a, AnimChannel_t *pEntries, AnimChannel_t *pEntry);
+void AnimChanSwitchAnim(void *a, AnimChannel_t *pEntries, int index, unsigned short b,
                  int c, unsigned short d, Object_80039F5C *pRecord);
 void AnimSeqSetDuration(AnimSeq_t *p, float value);
 
@@ -250,25 +250,25 @@ int PlayerLocoNotInState84(Object_80039F5C *p)
     return result;
 }
 
-static inline Record_800D81C8 *AnimEntryAt(Record_800D81C8 *pEntries, int index)
+static inline AnimChannel_t *AnimEntryAt(AnimChannel_t *pEntries, int index)
 {
     return &pEntries[index];
 }
 
-static inline void PlayerLocoUpdateCycle(Object_80039F5C *p, Block_801BE60C *block, Record_800D81C8 *entries)
+static inline void PlayerLocoUpdateCycle(Object_80039F5C *p, Block_801BE60C *block, AnimChannel_t *entries)
 {
     if (MathAngleDiff(p->mMotion.mFacing, p->mMotion.mUnknown32) > 0x56C16C)
         PlayerLocoSetCycleDuration(-block->mUnknown20.mUnknownC, block, (LocoBlendSet_t *)block->mpUnknownC, entries);
     else PlayerLocoSetCycleDuration(block->mUnknown20.mUnknownC, block, (LocoBlendSet_t *)block->mpUnknownC, entries);
 }
 
-static inline float AnimEntryGetRate(Record_800D81C8 *pEntry)
+static inline float AnimEntryGetRate(AnimChannel_t *pEntry)
 {
     return pEntry->mUnknown4C.mUnknown4 / ((float)((unsigned char *)pEntry->mUnknown4C.mpUnknown0)[0] * 0.0625f);
 }
 
 int PlayerLocoCyclePhase(Table_80089904 *table, unsigned short key, FEPlyrModel_t *record,
-                 Record_800D81C8 *entries, Object_80039F5C *p, unsigned int phase)
+                 AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase)
 {
     unsigned char frames = 8;
     Vector_80039F5C left, right;
@@ -301,33 +301,33 @@ int PlayerLocoCyclePhase(Table_80089904 *table, unsigned short key, FEPlyrModel_
         fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lankle"), &left, scratch);
         fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rankle"), &right, scratch);
         if (mode) {
-            fn_801BA6BC(&entries[block->mUnknown0], 1);
-            fn_801BA6BC(&entries[block->mUnknown1], 1);
+            AnimChanSetMirrored(&entries[block->mUnknown0], 1);
+            AnimChanSetMirrored(&entries[block->mUnknown1], 1);
             if (!(left.mZ >= right.mZ)) {
-                Record_800D81C8 *entry = AnimEntryAt(entries, block->mUnknown0);
+                AnimChannel_t *entry = AnimEntryAt(entries, block->mUnknown0);
                 float duration = AnimSeqGetLife(entry->mUnknown4C.mpUnknown0);
                 float scale;
                 scale = AnimEntryGetRate(&entries[block->mUnknown0]);
                 scale *= 0.6f;
-                fn_801BA650(entry, duration * scale, p);
+                AnimChanGrow(entry, duration * scale, p);
                 entry = AnimEntryAt(entries, block->mUnknown1);
                 duration = AnimSeqGetLife(entry->mUnknown4C.mpUnknown0);
                 scale = AnimEntryGetRate(&entries[block->mUnknown1]);
                 scale *= 0.6f;
-                fn_801BA650(entry, duration * scale, p);
+                AnimChanGrow(entry, duration * scale, p);
             }
         } else if (!(right.mZ >= left.mZ)) {
-            Record_800D81C8 *entry = AnimEntryAt(entries, block->mUnknown0);
+            AnimChannel_t *entry = AnimEntryAt(entries, block->mUnknown0);
             float duration = AnimSeqGetLife(entry->mUnknown4C.mpUnknown0);
             float scale;
             scale = AnimEntryGetRate(&entries[block->mUnknown0]);
             scale *= 0.6f;
-            fn_801BA650(entry, duration * scale, p);
+            AnimChanGrow(entry, duration * scale, p);
             entry = AnimEntryAt(entries, block->mUnknown1);
             duration = AnimSeqGetLife(entry->mUnknown4C.mpUnknown0);
             scale = AnimEntryGetRate(&entries[block->mUnknown1]);
             scale *= 0.6f;
-            fn_801BA650(entry, duration * scale, p);
+            AnimChanGrow(entry, duration * scale, p);
         }
         block->mUnknown20.mUnknownC = p->mMotion.mUnknown28;
         PlayerLocoUpdateCycle(p, block, entries);
@@ -339,44 +339,44 @@ int PlayerLocoCyclePhase(Table_80089904 *table, unsigned short key, FEPlyrModel_
         if (fn_801BE648(p->mpUnknown792) != key) return 0;
         other = BallGetCurrentHolder();
         if ((signed char)block->mUnknown3A[1] <= 0) {
-            mode = fn_801BA6B0(&entries[block->mUnknown0]);
+            mode = AnimChanIsMirrored(&entries[block->mUnknown0]);
             unsigned char changed = PlayerLocoUpdateCategories(table, block, p, other, mode) | PlayerLocoSelectBlendSet(p, block, &frames);
             index = PlayerLocoGetBlendIndex(p, block->mpUnknownC);
             if ((index != block->mUnknown20.mUnknown14Half || changed) && block->mUnknown20.mUnknown14Half != -1) {
                 PlayerLocoSwitchBlendPair((LocoBlendSet_t *)block->mpUnknownC, block, p,
                            block->mUnknown20.mUnknown16, (signed char)index, key, record, entries, frames);
-                fn_801BA6BC(&entries[block->mUnknown0], mode);
-                fn_801BA6BC(&entries[block->mUnknown1], mode);
+                AnimChanSetMirrored(&entries[block->mUnknown0], mode);
+                AnimChanSetMirrored(&entries[block->mUnknown1], mode);
                 if (mode == 1) {
                     if (PlayerLocoGetStartSide(p, 0, 1) == 0) {
-                        Record_800D81C8 *entry = AnimEntryAt(entries, block->mUnknown0);
+                        AnimChannel_t *entry = AnimEntryAt(entries, block->mUnknown0);
                         float duration = AnimSeqGetLife(entry->mUnknown4C.mpUnknown0);
                         float scale;
                         scale = AnimEntryGetRate(&entries[block->mUnknown0]);
                         scale *= 0.5f;
-                        fn_801BA650(entry, duration * scale, p);
+                        AnimChanGrow(entry, duration * scale, p);
                         entry = AnimEntryAt(entries, block->mUnknown1);
                         duration = AnimSeqGetLife(entry->mUnknown4C.mpUnknown0);
                         scale = AnimEntryGetRate(&entries[block->mUnknown1]);
                         scale *= 0.5f;
-                        fn_801BA650(entry, duration * scale, p);
-                        fn_801BA6BC(&entries[block->mUnknown0], 0);
-                        fn_801BA6BC(&entries[block->mUnknown1], 0);
+                        AnimChanGrow(entry, duration * scale, p);
+                        AnimChanSetMirrored(&entries[block->mUnknown0], 0);
+                        AnimChanSetMirrored(&entries[block->mUnknown1], 0);
                     }
                 } else if (PlayerLocoGetStartSide(p, 0, mode) == 1) {
-                    Record_800D81C8 *entry = AnimEntryAt(entries, block->mUnknown0);
+                    AnimChannel_t *entry = AnimEntryAt(entries, block->mUnknown0);
                     float duration = AnimSeqGetLife(entry->mUnknown4C.mpUnknown0);
                     float scale;
                     scale = AnimEntryGetRate(&entries[block->mUnknown0]);
                     scale *= 0.5f;
-                    fn_801BA650(entry, duration * scale, p);
+                    AnimChanGrow(entry, duration * scale, p);
                     entry = AnimEntryAt(entries, block->mUnknown1);
                     duration = AnimSeqGetLife(entry->mUnknown4C.mpUnknown0);
                     scale = AnimEntryGetRate(&entries[block->mUnknown1]);
                     scale *= 0.5f;
-                    fn_801BA650(entry, duration * scale, p);
-                    fn_801BA6BC(&entries[block->mUnknown0], 1);
-                    fn_801BA6BC(&entries[block->mUnknown1], 1);
+                    AnimChanGrow(entry, duration * scale, p);
+                    AnimChanSetMirrored(&entries[block->mUnknown0], 1);
+                    AnimChanSetMirrored(&entries[block->mUnknown1], 1);
                 }
                 block->mUnknown20.mUnknown14Half = index;
                 block->mUnknown3A[1] = block->mUnknown3A[0] = frames;
@@ -513,7 +513,7 @@ unsigned short PlayerLocoSelectTurnEntry(Table_80089904 *table, Object_80039F5C 
    by PlayerLocoSelectTurnEntry, phase 2 applies the turn once the state is
    current. */
 int PlayerLocoTurnPhase(Table_80089904 *table, unsigned short key, FEPlyrModel_t *record,
-                        Record_800D81C8 *entries, Object_80039F5C *p, unsigned int phase)
+                        AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase)
 {
     LocoTurnBlock_t *block = (LocoTurnBlock_t *)fn_801BE60C(p->mpUnknown792, key);
     int turn;
@@ -523,7 +523,7 @@ int PlayerLocoTurnPhase(Table_80089904 *table, unsigned short key, FEPlyrModel_t
     case 0: {
         fn_801BE760(p->mpUnknown792, key, 1);
         int index = PlayerLocoSelectTurnEntry(table, p, &turn, &scale, &block->mUnknownC);
-        block->mUnknown4 = fn_801BA2A8(record, entries, table->mEntries[index].mUnknown0,
+        block->mUnknown4 = AnimChanStartAnim(record, entries, table->mEntries[index].mUnknown0,
                                        table->mEntries[index].mUnknown2, key, p, 1.0f);
         block->mUnknown8 = turn;
         block->mUnknown0 = p->mUnknown1008.mUnknown1 == 1;
@@ -536,7 +536,7 @@ int PlayerLocoTurnPhase(Table_80089904 *table, unsigned short key, FEPlyrModel_t
         }
         p->mMotion.mFacing = (p->mMotion.mFacing + block->mUnknown8) & 0xFFFFFF;
         if (!block->mUnknown0) {
-            Record_800D81C8 *pEntry = &p->mpUnknown800[block->mUnknown4];
+            AnimChannel_t *pEntry = &p->mpUnknown800[block->mUnknown4];
             pEntry->mUnknownC = (pEntry->mUnknownC + block->mUnknown8) & 0xFFFFFF;
         } else {
             fn_80227638((Point_8017886C *)&p->mMotion.mPos, (Point_8017886C *)&p->mMotion.mPos,
@@ -552,7 +552,7 @@ int PlayerLocoTurnPhase(Table_80089904 *table, unsigned short key, FEPlyrModel_t
 }
 
 int PlayerLocoMoveCmdPhase(Table_80089904 *table, unsigned short key, FEPlyrModel_t *record,
-                 Record_800D81C8 *entries, Object_80039F5C *p, unsigned int phase)
+                 AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase)
 {
     Block_801BE60C *block = fn_801BE60C(p->mpUnknown792, key);
     switch (phase) {
@@ -561,7 +561,7 @@ int PlayerLocoMoveCmdPhase(Table_80089904 *table, unsigned short key, FEPlyrMode
         block->mUnknown1 = p->mUnknown1008.mUnknown0;
         block->mUnknown2 = p->mUnknown1008.mUnknown1;
         int index = fn_8009C4B0(table, &p->mUnknown1008);
-        block->mUnknown0 = fn_801BA2A8(record, entries, table->mEntries[index].mUnknown0,
+        block->mUnknown0 = AnimChanStartAnim(record, entries, table->mEntries[index].mUnknown0,
                                        table->mEntries[index].mUnknown2, key, p, 1.0f);
         if (block->mUnknown2 == 2 && p->mUnknown528.mUnknown0 != 0.0f)
             AnimSeqSetSpeed(&entries[block->mUnknown0].mUnknown4C, MathInverse(p->mUnknown528.mUnknown0));
@@ -579,24 +579,24 @@ int PlayerLocoMoveCmdPhase(Table_80089904 *table, unsigned short key, FEPlyrMode
     return 0;
 }
 
-void PlayerLocoTrimBlendEntries(FEPlyrModel_t *record, Record_800D81C8 *entries, int)
+void PlayerLocoTrimBlendEntries(FEPlyrModel_t *record, AnimChannel_t *entries, int)
 {
     for (unsigned int i = 0; i <= 3; i++) {
         PlayerLocoTrimKey_t *pKey = &_PlayerLoco_aTrimKeys[i];
-        unsigned int count = fn_801BA568((AnimHeader_t *)record, entries, pKey->mUnknown2);
+        unsigned int count = AnimChanGetNumActiveByState((AnimHeader_t *)record, entries, pKey->mUnknown2);
         while (count > 2) {
             unsigned int selected = 0xFFFF;
             float best = 1.0f;
             for (unsigned int j = 0; j < count; j++) {
                 PlayerLocoTrimKey_t *pLoopKey = &_PlayerLoco_aTrimKeys[i];
-                unsigned int index = fn_801BA5A8((AnimHeader_t *)record, entries, pLoopKey->mUnknown2, (unsigned short)j);
+                unsigned int index = AnimChanGetStateChannelByIndex((AnimHeader_t *)record, entries, pLoopKey->mUnknown2, (unsigned short)j);
                 float weight = entries[index].mUnknown30.mUnknown0;
                 if (!(best <= weight)) {
                     best = weight;
                     selected = index;
                 }
             }
-            fn_801BA384((AnimHeader_t *)record, entries, selected);
+            AnimChanStopAnim((AnimHeader_t *)record, entries, selected);
             count--;
         }
     }
@@ -616,22 +616,22 @@ int PlayerLocoFindSampleIndex(Object_801BBD5C *pObject, float value)
 
 void PlayerLocoStartBlendPair(LocoBlendSet_t *object, Block_801BE60C *block, Object_80039F5C *p,
                  int value, int index, int key, FEPlyrModel_t *record,
-                 Record_800D81C8 *entries)
+                 AnimChannel_t *entries)
 {
     PlayerLocoTrimBlendEntries(record, entries, key);
     int first = object->mUnknown24[index].mUnknown8;
     int second = object->mUnknown24[index + 1].mUnknown8;
-    block->mUnknown0 = fn_801BA2A8(record, entries, (unsigned short)value, first, key, p, 1.0f);
-    block->mUnknown1 = fn_801BA2A8(record, entries, (unsigned short)value, second, key, p, 1.0f);
+    block->mUnknown0 = AnimChanStartAnim(record, entries, (unsigned short)value, first, key, p, 1.0f);
+    block->mUnknown1 = AnimChanStartAnim(record, entries, (unsigned short)value, second, key, p, 1.0f);
     block->mUnknown2 = 255;
     block->mUnknown3 = 255;
 }
 
 void PlayerLocoSwitchBlendPair(LocoBlendSet_t *pObject, Block_801BE60C *pBlock, Object_80039F5C *pRecord, int b,
-                 int index, unsigned short d, void *a, Record_800D81C8 *pEntries, unsigned char flag)
+                 int index, unsigned short d, void *a, AnimChannel_t *pEntries, unsigned char flag)
 {
-    int first = fn_801BA2D0(a, pEntries, &pEntries[pBlock->mUnknown0]);
-    int second = fn_801BA2D0(a, pEntries, &pEntries[pBlock->mUnknown1]);
+    int first = AnimChanStartCopy(a, pEntries, &pEntries[pBlock->mUnknown0]);
+    int second = AnimChanStartCopy(a, pEntries, &pEntries[pBlock->mUnknown1]);
 
     pBlock->mUnknown2 = pBlock->mUnknown0;
     pBlock->mUnknown3 = pBlock->mUnknown1;
@@ -639,15 +639,15 @@ void PlayerLocoSwitchBlendPair(LocoBlendSet_t *pObject, Block_801BE60C *pBlock, 
     pBlock->mUnknown0 = first;
     pBlock->mUnknown1 = second;
 
-    fn_801BA418(a, pEntries, pBlock->mUnknown0, b, pObject->mUnknown24[index].mUnknown8, d, pRecord);
+    AnimChanSwitchAnim(a, pEntries, pBlock->mUnknown0, b, pObject->mUnknown24[index].mUnknown8, d, pRecord);
     AnimWgtSet(&pEntries[pBlock->mUnknown0].mUnknown30, 0, 0.0f, 0, 0.0f);
     AnimWgtSetLinear(&pEntries[pBlock->mUnknown0].mUnknown30, flag, -1.0f, 1.0f);
-    fn_801BA418(a, pEntries, pBlock->mUnknown1, b, pObject->mUnknown24[index + 1].mUnknown8, d, pRecord);
+    AnimChanSwitchAnim(a, pEntries, pBlock->mUnknown1, b, pObject->mUnknown24[index + 1].mUnknown8, d, pRecord);
     AnimWgtSet(&pEntries[pBlock->mUnknown1].mUnknown30, 0, 0.0f, 0, 0.0f);
     AnimWgtSetLinear(&pEntries[pBlock->mUnknown1].mUnknown30, flag, -1.0f, 1.0f);
 }
 
-float PlayerLocoUpdateBlendWeights(int index, Block_801BE60C *pBlock, LocoBlendSet_t *pObject, Record_800D81C8 *pEntries,
+float PlayerLocoUpdateBlendWeights(int index, Block_801BE60C *pBlock, LocoBlendSet_t *pObject, AnimChannel_t *pEntries,
                   float value)
 {
     float start = pObject->mUnknown24[index].mUnknown4 * gFrameTimeScale;
@@ -689,7 +689,7 @@ void PlayerLocoSetFadeFraction(Block_801BE60C *p, float a, float b)
     p->mUnknown4 = (a - b) / a;
 }
 
-void PlayerLocoFadeOldPair(Block_801BE60C *pBlock, void *a, Record_800D81C8 *pEntries)
+void PlayerLocoFadeOldPair(Block_801BE60C *pBlock, void *a, AnimChannel_t *pEntries)
 {
     float weight = 1.0f - pBlock->mUnknown4;
 
@@ -698,7 +698,7 @@ void PlayerLocoFadeOldPair(Block_801BE60C *pBlock, void *a, Record_800D81C8 *pEn
             AnimWgtSet(&pEntries[pBlock->mUnknown2].mUnknown30, 0, weight * pBlock->mUnknown8, 0,
                         weight * pBlock->mUnknown8);
         } else {
-            fn_801BA384((AnimHeader_t *)a, pEntries, pBlock->mUnknown2);
+            AnimChanStopAnim((AnimHeader_t *)a, pEntries, pBlock->mUnknown2);
             pBlock->mUnknown2 = 255;
         }
     }
@@ -707,7 +707,7 @@ void PlayerLocoFadeOldPair(Block_801BE60C *pBlock, void *a, Record_800D81C8 *pEn
             AnimWgtSet(&pEntries[pBlock->mUnknown3].mUnknown30, 0, weight * (1.0f - pBlock->mUnknown8), 0,
                         weight * (1.0f - pBlock->mUnknown8));
         } else {
-            fn_801BA384((AnimHeader_t *)a, pEntries, pBlock->mUnknown3);
+            AnimChanStopAnim((AnimHeader_t *)a, pEntries, pBlock->mUnknown3);
             pBlock->mUnknown3 = 255;
         }
     }

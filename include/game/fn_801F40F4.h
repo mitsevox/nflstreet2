@@ -1,7 +1,7 @@
 #ifndef GAME_FN_801F40F4_H
 #define GAME_FN_801F40F4_H
 
-/* Sound parameters filled in by fn_801F40F4 and passed to fn_801F4050. */
+/* Sound parameters filled in by SndFillPatchOpts and passed to SndPlayPatch. */
 struct Info_801F40F4 {
     signed char mVolume;
     unsigned char mUnknown1[7];
@@ -11,13 +11,13 @@ struct Info_801F40F4 {
     char mUnknownE[10];
 };
 
-/* Two-word block passed to fn_801F4580. */
+/* Two-word block passed to SndStreamQueueFile. */
 struct SndStreamFile_t {
     void *mpUnknown0;
     int mUnknown4;
 };
 
-/* Status that fn_801F4834 writes for a playing sound. */
+/* Status that SndStreamGetStatus writes for a playing sound. */
 struct Status_801F4834 {
     int mUnknown0;
     int mUnknown4;
@@ -25,10 +25,10 @@ struct Status_801F4834 {
 };
 
 extern "C" {
-int fn_801F4050(int a, int b, Info_801F40F4 *pInfo);
-void fn_801F40F4(Info_801F40F4 *pInfo);
-int fn_801F4580(int handle, SndStreamFile_t *pPair, int a, int b);
-void fn_801F4834(int handle, Status_801F4834 *pStatus);
+int SndPlayPatch(int a, int b, Info_801F40F4 *pInfo);
+void SndFillPatchOpts(Info_801F40F4 *pInfo);
+int SndStreamQueueFile(int handle, SndStreamFile_t *pPair, int a, int b);
+void SndStreamGetStatus(int handle, Status_801F4834 *pStatus);
 }
 
 #endif

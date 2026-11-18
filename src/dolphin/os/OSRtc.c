@@ -499,6 +499,8 @@ u16 OSGetGbsMode(void) {
 
 void OSSetGbsMode(u16 mode) {
     OSSramEx* sram;
+    // FAKEMATCH: unused stack object, only for the target's 0x20-byte frame
+    u8 unused[8];
 
     if (((u32)mode & 0x7c00) == 0x5000 || ((u32)mode & 0xc0) == 0xc0) {
         mode = 0;

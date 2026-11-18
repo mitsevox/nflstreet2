@@ -15,7 +15,7 @@ void fn_80085060(DbCursor *pObject);
 int fn_80085080(DbCursor *pObject, int value, int *pResult);
 int fn_800850B8(DbCursor *pObject, int category);
 unsigned int fn_80081ECC(int category, int *pValues);
-void fn_801F4B20(void);
+void SndService(void);
 }
 
 static AutoDepthPlayer_t *_AutoDepth_pRecords = 0;
@@ -177,7 +177,7 @@ void AutoDepthBuild(int value, int *list, AutoDepthPlayer_t **pRecords)
         (*records)[i].category = PlayerDbGetPbpo(&second);
         PlayerGetGearRatings(&second, values);
         _AutoDepth_pRateFunc(&(*records)[i], values, &first);
-        fn_801F4B20();
+        SndService();
     }
     fn_8008056C(&second);
     fn_80085060(&first);

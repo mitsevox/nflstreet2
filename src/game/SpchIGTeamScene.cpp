@@ -25,14 +25,14 @@ extern "C" void SpchIGSayTeamSceneLine(int a, int b, int c, int index)
         SpchIGPurgeChannel(0);
         SpchIGGetPlayerCategory(&result1, b);
         SpchIGGetTargetCategory(&result2, c);
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x401E), 3, a, result1, result2);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x401E), 3, a, result1, result2);
         break;
     case 1:
         _SpchIG_iTeamSceneSpeaker1 = b;
         SpchIGPurgeChannel(1);
         SpchIGGetPlayerCategory(&result1, b);
         SpchIGGetTargetCategory(&result2, c);
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x201E), 3, a, result1, result2);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x201E), 3, a, result1, result2);
         break;
     }
 }

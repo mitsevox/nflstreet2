@@ -15,5 +15,6 @@
       "sha256": "7fdf620b151744296b9bb93318d8c4009d3d3e98e23718a6eda9fbec4cefbb2a"
     }
   },
-  "sdk_compiler_version": "GC/1.2.5n"
+  "sdk_compiler_version": "GC/1.2.5n",
+  "sdk_profile_compiler_versions": ["GC/1.3"]
 }

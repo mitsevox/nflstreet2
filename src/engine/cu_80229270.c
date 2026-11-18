@@ -39,7 +39,7 @@ extern Entry_802FB300 lbl_802FB300[];
 extern int fn_801F91AC(int handle, int a, int b);
 extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
 extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
-extern TDbIODevice_t lbl_8030199C;
+extern TDbIODevice_t tdbiofioCallback;
 extern int fn_801F967C(int db, int tbl);
 int fn_8022F384(int key);
 
@@ -2114,7 +2114,7 @@ void fn_8022EF60(void)
 
 int fn_8022EF8C(int db, int file)
 {
-    return fn_801F9064(db, file, lbl_803EC0C0, 3, &lbl_8030199C);
+    return fn_801F9064(db, file, lbl_803EC0C0, 3, &tdbiofioCallback);
 }
 
 int fn_8022EFBC(int db, int tbl)

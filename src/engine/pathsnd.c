@@ -1,0 +1,568 @@
+/* PATH sound tracks (pathsnd.c): the PATH audio-track system's sound back end. It creates the
+   PathToSnd singleton and its bank and stream track objects, and drives the sound library's voices for
+   their volume, pitch, send levels, pause, play and stop. */
+
+#include <string.h>
+#include "engine/system.h"
+
+typedef struct Record_8027D9FC {
+    int m0;
+    int m4;
+    int m8;
+    int mC;
+} Record_8027D9FC;
+
+typedef struct Record_8027EC7C {
+    unsigned int mWords[32];
+} Record_8027EC7C;
+
+typedef struct Record_8027E2D0 {
+    int m0;
+    unsigned char mUnknown4[8];
+    int mC;
+    int m10;
+    int m14;
+    int m18;
+    void *m1C;
+    unsigned char mUnknown20[4];
+} Record_8027E2D0;
+
+struct Class_801B44BC {
+    int m0;
+    unsigned char mUnknown4[4];
+    int m8;
+    int mC;
+    int m10;
+    unsigned char mUnknown14[8];
+    int m1C;
+    unsigned char mUnknown20[0x18];
+    int m38;
+    unsigned char mUnknown3C[0x18];
+    int m54;
+    int m58;
+    unsigned char mUnknown5C[8];
+    Record_8027E2D0 *m64;
+    virtual ~Class_801B44BC();
+    virtual void vfn_02();
+    virtual void vfn_03();
+    virtual int vfn_04();
+    virtual int vfn_05(int flag);
+    virtual void vfn_06();
+    virtual void vfn_07();
+    virtual void vfn_08();
+    virtual int vfn_09(int index);
+    virtual void vfn_10();
+    virtual void vfn_11();
+    virtual int vfn_12();
+    virtual int vfn_13(int value);
+    virtual void vfn_14();
+    virtual int vfn_15(int value);
+    virtual void vfn_16();
+    virtual int vfn_17(int a, int b);
+    virtual void vfn_18();
+    virtual int vfn_19(int value);
+    virtual void vfn_20();
+    virtual void vfn_21();
+    virtual void vfn_22();
+    virtual void vfn_23(Record_8027EC7C *record);
+    virtual void vfn_24();
+    virtual int vfn_25(int value);
+    virtual void vfn_26();
+    virtual int vfn_27();
+    virtual Record_8027E2D0 *vfn_28(int key);
+    virtual Record_8027E2D0 *vfn_29();
+    virtual int vfn_30(int key, void *data);
+    virtual int vfn_31(int key);
+    virtual int vfn_32(int key, int mode);
+    virtual int vfn_33(int key);
+    virtual int vfn_34(int value, int a);
+    virtual int vfn_35();
+};
+
+struct Object_8027D6E8 : Class_801B44BC {
+    virtual ~Object_8027D6E8();
+    Record_8027D9FC m6C;
+    Record_8027EC7C m7C;
+    unsigned char mFC;
+    unsigned char mUnknownFD[3];
+    unsigned char m100;
+    unsigned char m101;
+    unsigned char mUnknown102[6];
+    unsigned short m108;
+    unsigned char mUnknown10A[0xA];
+    int m114;
+    virtual int vfn_13(int value);
+    virtual int vfn_05(int flag);
+};
+
+struct Object_8027DAE4 : Object_8027D6E8 {
+    virtual ~Object_8027DAE4();
+    unsigned char mUnknown118[0xC];
+    int m124;
+    virtual int vfn_13(int value);
+    virtual int vfn_15(int value);
+    virtual int vfn_17(int a, int b);
+    virtual int vfn_19(int value);
+    virtual int vfn_04(void);
+    virtual int vfn_30(int key, void *data);
+    virtual int vfn_31(int key);
+    virtual Record_8027E2D0 *vfn_28(int key);
+    virtual Record_8027E2D0 *vfn_29(void);
+    virtual int vfn_33(int key);
+    virtual int vfn_32(int key, int mode);
+    virtual int vfn_34(int key, int data);
+};
+
+typedef struct Record_8027EAC0 {
+    unsigned char mUnknown0[4];
+    int m4;
+    int m8;
+    unsigned char mUnknownC[8];
+} Record_8027EAC0;
+
+struct Object_8027E518 : Object_8027D6E8 {
+    virtual ~Object_8027E518();
+    int m118;
+    int m11C;
+    Record_8027EAC0 *m120;
+    int m124;
+    int m128;
+    virtual int vfn_34(int value, int a);
+    virtual int vfn_35(void);
+    virtual int vfn_15(int value);
+    virtual int vfn_17(int a, int b);
+    virtual int vfn_25(int value);
+    virtual int vfn_19(int value);
+    virtual int vfn_09(int index);
+    virtual int vfn_04(void);
+    virtual void vfn_23(Record_8027EC7C *record);
+};
+
+
+extern "C" {
+
+void *fn_801B2C40(int size);
+void fn_801B3A88(void);
+void SNDSYS_entercritical(void);
+void SNDSYS_leavecritical(void);
+int SNDSTRM_pitchmult(int handle, int value);
+int SNDSTRM_drylevel(int handle, int value);
+int SNDSTRM_fxlevel(int handle, int a, int b);
+int SNDSTRM_modifyhold(int handle, int value);
+int fn_801F685C(int count, int filters, int taps);
+int fn_802714A8(int handle, int value);
+int SNDCTRL_drylevel(int handle, int value);
+int fn_80278070(int handle, int a, int b);
+int SNDpitchmult(int handle, int value);
+int SNDBANK_asyncloadmem(int *handle, void *data);
+int SNDBANK_asyncloadmemdone(void);
+int SNDbankremove(int handle);
+int SNDbankheadersize(int handle);
+int SNDbankheadercopy(void *dest, int handle);
+int SNDstop(int handle);
+int fn_8026E388(int handle);
+void fn_801B2C94(void *p);
+
+void *fn_8027D5CC(int size)
+{
+    return fn_801B2C40(size);
+}
+
+void fn_8027D5EC(void *p)
+{
+    fn_801B2C94(p);
+}
+
+int fn_8027D960(Object_8027D6E8 *p)
+{
+    return p->m38;
+}
+
+int fn_8027D968(Object_8027D6E8 *p)
+{
+    return p->m54;
+}
+
+int fn_8027D970(Object_8027D6E8 *p)
+{
+    return p->m10;
+}
+
+}
+
+int Object_8027D6E8::vfn_13(int value)
+{
+    int current;
+    if ((unsigned int)value > 127) {
+        return -8;
+    }
+    current = vfn_12();
+    if (current == value || value < 0 || current < 0) {
+        return -1;
+    }
+    return 0;
+}
+
+extern "C" {
+
+int fn_8027D9EC(Object_8027D6E8 *p)
+{
+    return 0;
+}
+
+int fn_8027D9F4(Object_8027D6E8 *p)
+{
+    return 0;
+}
+
+void fn_8027D9FC(Object_8027D6E8 *p, Record_8027D9FC *record)
+{
+    p->m6C = *record;
+}
+
+}
+
+int Object_8027D6E8::vfn_05(int flag)
+{
+    int arg = 0;
+    int value = 0;
+    if (m114 > 0) {
+        value = m114;
+    } else if (m108 != 0) {
+        value = m108;
+    }
+    if (flag == 0) {
+        arg = value = m114;
+    }
+    vfn_19(arg);
+    m114 = value;
+    return 0;
+}
+
+extern "C" {
+
+void *fn_8027DAA4(int size)
+{
+    return fn_801B2C40(size);
+}
+
+void fn_8027DAC4(void *p)
+{
+    fn_801B2C94(p);
+}
+
+}
+
+int Object_8027DAE4::vfn_34(int key, int data)
+{
+    Record_8027E2D0 *record;
+
+    if (vfn_28(key) != 0) {
+        return -18;
+    }
+    record = vfn_29();
+    if (record == 0) {
+        return -13;
+    }
+    record->m0 = 100;
+    record->mC = key;
+    record->m18 = data;
+    record->m14 = record->m10 = 1;
+    return 0;
+}
+
+int Object_8027DAE4::vfn_13(int value)
+{
+    int status = Object_8027D6E8::vfn_13(value);
+    int result = 0;
+    if (status == 0) {
+        SNDSYS_entercritical();
+        result = fn_802714A8(m124, value);
+        SNDSYS_leavecritical();
+        m10 = value;
+        mFC = value;
+    }
+    return result;
+}
+
+int Object_8027DAE4::vfn_15(int value)
+{
+    int status = fn_8027D9EC(this);
+    int result = 0;
+    if (status == 0) {
+        SNDSYS_entercritical();
+        result = SNDCTRL_drylevel(m124, value);
+        SNDSYS_leavecritical();
+        mC = value;
+        m100 = value;
+    }
+    return result;
+}
+
+int Object_8027DAE4::vfn_17(int a, int b)
+{
+    int status = fn_8027D9F4(this);
+    int result = 0;
+    if (status == 0) {
+        SNDSYS_entercritical();
+        result = fn_80278070(m124, a, b);
+        SNDSYS_leavecritical();
+        m8 = b;
+        m101 = b;
+    }
+    return result;
+}
+
+int Object_8027DAE4::vfn_19(int value)
+{
+    int result;
+    SNDSYS_entercritical();
+    result = SNDpitchmult(m124, value);
+    SNDSYS_leavecritical();
+    m114 = value;
+    m108 = value;
+    return result;
+}
+
+extern "C" {
+
+int fn_8027E0AC(Object_8027DAE4 *p, int index)
+{
+    if (index == 0) {
+        return p->m58;
+    }
+    return -1;
+}
+
+}
+
+int Object_8027DAE4::vfn_04(void)
+{
+    int result;
+    SNDSYS_entercritical();
+    result = SNDstop(m0);
+    SNDSYS_leavecritical();
+    m38 = 1;
+    m124 = -1;
+    m0 = -1;
+    vfn_03();
+    return result;
+}
+
+int Object_8027DAE4::vfn_30(int key, void *data)
+{
+    int result = -8;
+    Record_8027E2D0 *record = vfn_28(key);
+    if (record != 0) {
+        result = SNDBANK_asyncloadmem(&record->m18, data);
+    }
+    return result;
+}
+
+int Object_8027DAE4::vfn_31(int key)
+{
+    int result = 0;
+    Record_8027E2D0 *record = vfn_28(key);
+    if (record != 0) {
+        result = SNDBANK_asyncloadmemdone();
+    }
+    return result;
+}
+
+Record_8027E2D0 *Object_8027DAE4::vfn_28(int key)
+{
+    int i;
+    Record_8027E2D0 *record;
+    for (i = 0; i < vfn_27(); i++) {
+        record = &m64[i];
+        if (record->mC == key) {
+            return record;
+        }
+    }
+    return 0;
+}
+
+Record_8027E2D0 *Object_8027DAE4::vfn_29(void)
+{
+    int i;
+    Record_8027E2D0 *record;
+    for (i = 0; i < vfn_27(); i++) {
+        record = &m64[i];
+        if (record->mC < 0) {
+            return record;
+        }
+    }
+    return 0;
+}
+
+int Object_8027DAE4::vfn_33(int key)
+{
+    int result = 0;
+    Record_8027E2D0 *record = vfn_28(key);
+    if (record != 0 && record->m18 != -1) {
+        if (record->m14 == 0) {
+            result = SNDbankremove(record->m18);
+            fn_801B2C94(record->m1C);
+        }
+        memset(record, 0, sizeof(*record));
+        record->m18 = -1;
+    }
+    return result;
+}
+
+int Object_8027DAE4::vfn_32(int key, int mode)
+{
+    int result = -8;
+    void *data;
+    Record_8027E2D0 *record = vfn_28(key);
+    if (record != 0 && record->m18 != -1 && mode == 7) {
+        data = fn_801B2C40(SNDbankheadersize(record->m18));
+        if (data != 0) {
+            SNDbankheadercopy(data, record->m18);
+            result = 0;
+            fn_801B2C94(record->m1C);
+            record->m1C = data;
+        }
+    }
+    return result;
+}
+
+extern "C" {
+
+void *fn_8027E4D8(int size)
+{
+    return fn_801B2C40(size);
+}
+
+void fn_8027E4F8(void *p)
+{
+    fn_801B2C94(p);
+}
+
+}
+
+int Object_8027E518::vfn_34(int value, int a)
+{
+    if (m0 >= 0) {
+        return -18;
+    }
+    m0 = value;
+    m1C = 1;
+    m118 = a;
+    return 0;
+}
+
+int Object_8027E518::vfn_35(void)
+{
+    int value = m0;
+    if (value < 0) {
+        return -18;
+    }
+    m0 = -1;
+    m118 = 0;
+    return value;
+}
+
+int Object_8027E518::vfn_15(int value)
+{
+    int result = 0;
+    if (fn_8027D9EC(this) == 0) {
+        SNDSYS_entercritical();
+        result = SNDSTRM_drylevel(m0, value);
+        SNDSYS_leavecritical();
+        mC = value;
+    }
+    return result;
+}
+
+int Object_8027E518::vfn_17(int a, int b)
+{
+    int result = 0;
+    if (fn_8027D9F4(this) == 0) {
+        SNDSYS_entercritical();
+        result = SNDSTRM_fxlevel(m0, a, b);
+        SNDSYS_leavecritical();
+        m8 = b;
+    }
+    return result;
+}
+
+int Object_8027E518::vfn_25(int value)
+{
+    return SNDSTRM_modifyhold(m120->m4, value);
+}
+
+int Object_8027E518::vfn_19(int value)
+{
+    int result;
+    SNDSYS_entercritical();
+    result = SNDSTRM_pitchmult(m0, value);
+    SNDSYS_leavecritical();
+    m108 = value;
+    m114 = value;
+    return result;
+}
+
+extern "C" {
+
+void fn_8027EAB4(Object_8027E518 *p, int a, int b)
+{
+    p->m124 = a;
+    p->m128 = b;
+}
+
+}
+
+int Object_8027E518::vfn_09(int index)
+{
+    Record_8027EAC0 *record;
+    if (index < 0) {
+        return m58;
+    }
+    if (index < m11C) {
+        record = &m120[index];
+        if (record->m4 >= 0) {
+            return record->m8;
+        }
+    }
+    return -8;
+}
+
+int Object_8027E518::vfn_04(void)
+{
+    int result;
+    SNDSYS_entercritical();
+    result = fn_8026E388(m0);
+    SNDSYS_leavecritical();
+    m38 = 1;
+    vfn_03();
+    return result;
+}
+
+void Object_8027E518::vfn_23(Record_8027EC7C *record)
+{
+    m7C = *record;
+}
+
+extern "C" {
+
+void fn_8027ED4C(Object_8027D6E8 *p)
+{
+    p->m1C = 1;
+}
+
+void fn_8027ED58(Object_8027D6E8 *p)
+{
+}
+
+int fn_8027ED5C(Object_8027D6E8 *p)
+{
+    return -1;
+}
+
+int fn_8027ED64(Object_8027D6E8 *p)
+{
+    return p->m114;
+}
+
+}

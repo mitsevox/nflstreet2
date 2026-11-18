@@ -1,5 +1,5 @@
 #include "game/fn_801248D4.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
 #include <math.h>
@@ -205,7 +205,7 @@ extern "C" int fn_8010BA90(Object_80039F5C *p) {
     return 0;
 }
 
-extern "C" int fn_8010BC90(Table_8010B738 *pTable, unsigned short key, void *pData, Record_800D81C8 *pEntries,
+extern "C" int fn_8010BC90(Table_8010B738 *pTable, unsigned short key, void *pData, AnimChannel_t *pEntries,
                            Object_80039F5C *p, unsigned int mode) {
     Block_801BE60C *pRecord = fn_801BE60C(p->mpUnknown792, key);
     Block_8010BC90 *pBlock = (Block_8010BC90 *)&p->mUnknown336;
@@ -216,7 +216,7 @@ extern "C" int fn_8010BC90(Table_8010B738 *pTable, unsigned short key, void *pDa
 
         if (index != 255) {
             pBlock->mUnknown3 = index;
-            pRecord->mUnknown0Word = fn_801BA2A8(pData, pEntries, pTable->mEntries[index].mUnknown0,
+            pRecord->mUnknown0Word = AnimChanStartAnim(pData, pEntries, pTable->mEntries[index].mUnknown0,
                                                  pTable->mEntries[index].mUnknown2, key, p, 1.0f);
             lbl_802DABBC[index] = 1;
         } else {

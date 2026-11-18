@@ -9,7 +9,7 @@ extern void *lbl_803ED664;
 
 void fn_801CE234(void (*pCallback)(void));
 int PADInit(void);
-void fn_802856D8(void);
+void Init_GFLink(void);
 int PerRegisterSingleDevice(unsigned char port);
 int PerUnRegisterDevices(void);
 void PerCheckConnectSingle(unsigned char port);
@@ -18,12 +18,12 @@ unsigned int PerSystemGetDriverDataSize(void);
 int PerSystemInit(void *pData)
 {
     PADInit();
-    fn_802856D8();
+    Init_GFLink();
     lbl_803ED664 = fn_801D2BB0(1, PerSystemGetDriverDataSize() * 4, 0, 0);
     Per_NumDevices = 4;
     PerRegisterDevices();
-    fn_801E26FC();
-    fn_801CE234(fn_801E26FC);
+    PerJoyDriverPollPADs();
+    fn_801CE234(PerJoyDriverPollPADs);
     return 0;
 }
 

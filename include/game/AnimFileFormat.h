@@ -1,7 +1,7 @@
 #ifndef GAME_ANIMFILEFORMAT_H
 #define GAME_ANIMFILEFORMAT_H
 
-#include "engine/Record_800D81C8.h"
+#include "engine/AnimChannel.h"
 #include "game/AnimQuantContext.h"
 
 typedef struct AnimMotionGroupView {

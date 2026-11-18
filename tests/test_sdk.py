@@ -53,6 +53,43 @@ class Dependencies(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "relative repository path"):
             source_build.load_manifest(wrong, sections, "3.9.3")
 
+    def test_sdk_profile_may_select_only_a_pinned_compiler_version(self):
+        sections = source_build.target_sections(synthetic_dol(), TARGET, {})
+        unit = {"source": "src/dolphin/vm/VM.c", "profile": "sdk", "evidence": "test unit",
+                "sections": [{"section": ".text", "placement": ".init",
+                              "start": "0x80003100", "end": "0x80003108"}]}
+        manifest = {"schema": 1, "target": "GN7E69-rev0", "compiler": "3.9.3", "include_dirs": [],
+                    "profiles": {"sdk": {"compiler": "mwcc", "flags": FLAGS, "evidence": "upstream release"}},
+                    "units": [unit]}
+        # Without compiler_version an SDK profile uses the pinned default.
+        self.assertEqual(source_build.load_manifest(manifest, sections, "3.9.3")[0][0]["compiler_version"],
+                         "GC/1.2.5n")
+        chosen = copy.deepcopy(manifest)
+        chosen["profiles"]["sdk"]["compiler_version"] = "GC/1.3"
+        self.assertEqual(source_build.load_manifest(chosen, sections, "3.9.3")[0][0]["compiler_version"],
+                         "GC/1.3")
+        # A version the lock file does not list, or one given to a ProDG profile, is refused.
+        for version in ("GC/2.6", "GC/1.2.5n ", "3.9.3"):
+            wrong = copy.deepcopy(manifest)
+            wrong["profiles"]["sdk"]["compiler_version"] = version
+            with self.subTest(version=version), self.assertRaisesRegex(ValueError, "not pinned"):
+                source_build.load_manifest(wrong, sections, "3.9.3")
+        wrong = copy.deepcopy(manifest)
+        wrong["profiles"]["sdk"] = {"flags": ["-O2"], "evidence": "game", "compiler_version": "GC/1.3"}
+        with self.assertRaisesRegex(ValueError, "only to SDK profiles"):
+            source_build.load_manifest(wrong, sections, "3.9.3")
+
+    def test_lock_file_lists_only_reviewed_sdk_versions(self):
+        self.assertEqual(setup_compiler.sdk_versions(), ("GC/1.2.5n", {"GC/1.3"}))
+        for lock in ({"sdk_compiler_version": "GC/1.3"},
+                     {"sdk_compiler_version": "GC/1.2.5n", "sdk_profile_compiler_versions": ["GC/2.6"]},
+                     {"sdk_compiler_version": "GC/1.2.5n", "sdk_profile_compiler_versions": ["GC/1.3", "GC/1.3"]},
+                     {"sdk_compiler_version": "GC/1.2.5n", "sdk_profile_compiler_versions": "GC/1.3"}):
+            with self.subTest(lock=lock), self.assertRaises(RuntimeError):
+                setup_compiler.sdk_versions(lock)
+        with self.assertRaisesRegex(RuntimeError, "not pinned"):
+            setup_compiler.setup_sdk("GC/2.6")
+
 
 class Fingerprints(unittest.TestCase):
     def test_only_relocation_fields_are_ignored(self):
@@ -107,6 +144,14 @@ class CompilerReporting(unittest.TestCase):
             self.assertEqual(result["units"][0]["functions"],
                              [{"symbol": "Unit0", "address": "0x80003100", "size": 4}])
             self.assertNotIn("compiler", result)
+            self.assertEqual(result["profile_compilers"], {})
+            # A unit whose SDK profile selects another pinned version is reported with it.
+            units[1].update(compiler_version="GC/1.3", profile="sdk_vm")
+            with patch.object(source_build, "ROOT", root):
+                result = source_build.measure(target, sections, units, b"{}", binary, True, {}, objects)
+            self.assertEqual(result["compilers"], {"prodg": "3.9.3", "mwcc": "GC/1.2.5n"})
+            self.assertEqual(result["profile_compilers"], {"sdk_vm": "GC/1.3"})
+            self.assertEqual(result["units"][1]["compiler"], {"family": "mwcc", "version": "GC/1.3"})
 
 
 class NativeCompiler(unittest.TestCase):
@@ -140,6 +185,31 @@ class NativeCompiler(unittest.TestCase):
                 sdk_cc.compile(self.directory, self.wrapper, source, output, depfile, FLAGS, [root], ROOT)
             self.assertFalse(output.exists())
             self.assertFalse(depfile.exists())
+
+    def test_each_unit_compiles_with_its_profile_version(self):
+        # VMPageReplacement.c is one of the VM library files whose profile selects GC/1.3; the
+        # same source and flags compile to a different .text under the GC/1.2.5n default.
+        import json
+        manifest = json.loads((ROOT / "config/GN7E69-rev0/units.json").read_text())
+        entry = next(u for u in manifest["units"] if u["source"] == "src/dolphin/vm/VMPageReplacement.c")
+        profile = manifest["profiles"][entry["profile"]]
+        self.assertEqual(profile["compiler_version"], "GC/1.3")
+        directories = setup_compiler.setup_sdks(["GC/1.2.5n", "GC/1.3"])
+        sizes = {}
+        with tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
+            for version in ("GC/1.2.5n", "GC/1.3"):
+                folder = Path(temporary) / version.replace("/", "_")
+                folder.mkdir()
+                unit = {"source": entry["source"], "path": ROOT / entry["source"], "compile_path": None,
+                        "compiler": "mwcc", "compiler_version": version, "flags": profile["flags"],
+                        "include_dirs": profile["include_dirs"],
+                        "object": folder / "unit.o", "depfile": folder / "unit.d"}
+                source_build.compile_unit(unit, None, self.wrapper, directories, manifest["include_dirs"])
+                sections = source_build.read_elf(unit["object"].read_bytes())[0]
+                sizes[version] = next(s["size"] for s in sections if s["name"] == ".text")
+        # 0x31C is the target range 0x802451F8-0x80245514.
+        self.assertEqual(sizes["GC/1.3"], 0x31C)
+        self.assertNotEqual(sizes["GC/1.2.5n"], 0x31C)
 
 
 

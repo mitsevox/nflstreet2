@@ -2,7 +2,7 @@
    from rotation matrices and Euler angles, rotating vectors, and spherical interpolation, used by
    animation blending and camera and player orientation. */
 
-#include "engine/Record_800D81C8.h"
+#include "engine/AnimChannel.h"
 #include "engine/llmatrix.h"
 #include "engine/vec.h"
 #include "engine/llquat.h"

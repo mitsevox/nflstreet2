@@ -83,9 +83,9 @@ int SpchIGGetTurnoverPlayer(void);
 int SpchIGGetScorer(void);
 int SpchIGGetTeamSceneSpeaker(int index);
 void *ResOpenRam(void *pData, int a, int b, int c);
-void fn_801F4638(int handle);
-void fn_801F46F8(int handle, int a);
-void fn_801F4AB0(int a, int b);
+void SndPurgeStream(int handle);
+void SndStreamSetPitchMult(int handle, int a);
+void SndSetMasterVol(int a, int b);
 void fn_801F5B30(SpchIGInitParams_t *pParams);
 void fn_801F5C34(void);
 void fn_801F5C6C(void *a, int b, void *c, int d);
@@ -341,7 +341,7 @@ extern "C" int SpchIGSampleRequest(SpchIGSampleRequest_t *pRecord)
     handle = SpchIGGetChannelStream(pRecord->mUnknown10);
     value = SpchIGGetStreamFlags(pRecord->mUnknownC);
     _SpchIG_sState.mSlots[pRecord->mUnknown10].mUnknown8 = value;
-    _SpchIG_sState.mSlots[pRecord->mUnknown10].mUnknown4 = fn_801F4580(handle, &pair, value, pRecord->mUnknown4);
+    _SpchIG_sState.mSlots[pRecord->mUnknown10].mUnknown4 = SndStreamQueueFile(handle, &pair, value, pRecord->mUnknown4);
     return _SpchIG_sState.mSlots[pRecord->mUnknown10].mUnknown4;
 }
 
@@ -435,7 +435,7 @@ extern "C" void SpchIGUpdate(void)
         SndgChannelSetVolume(5, 95);
     }
 
-    fn_801F4834(SpchIGGetChannelStream(0), &status);
+    SndStreamGetStatus(SpchIGGetChannelStream(0), &status);
     SndgChannelSetPosition(4, 0);
     if (_SpchIG_bUseSpeakerPos != 0) {
         handle = SpchIGGetChannelSpeaker(0);
@@ -449,7 +449,7 @@ extern "C" void SpchIGUpdate(void)
         fn_801AF364(0);
     }
 
-    fn_801F4834(SpchIGGetChannelStream(1), &status);
+    SndStreamGetStatus(SpchIGGetChannelStream(1), &status);
     SndgChannelSetPosition(5, 0);
     if (_SpchIG_bUseSpeakerPos != 0) {
         handle = SpchIGGetChannelSpeaker(1);
@@ -464,7 +464,7 @@ extern "C" void SpchIGUpdate(void)
     }
 
     if (_SpchIG_bTutorial != 0) {
-        fn_801F4834(SpchIGGetChannelStream(2), &status);
+        SndStreamGetStatus(SpchIGGetChannelStream(2), &status);
         SndgChannelSetPosition(6, 0);
         SndgChannelFadeStream(6, 0, 127);
         if (status.mUnknown0 == 0) {
@@ -497,7 +497,7 @@ extern "C" void SpchIGStop(void)
 extern "C" void SpchIGPauseChannel(int index)
 {
     if (SpchIGGetChannelStream(index) != 0) {
-        fn_801F46F8(SpchIGGetChannelStream(index), 0);
+        SndStreamSetPitchMult(SpchIGGetChannelStream(index), 0);
     }
 }
 
@@ -505,9 +505,9 @@ extern "C" void SpchIGResumeChannel(int index)
 {
     Info_801F40F4 info;
 
-    fn_801F40F4(&info);
+    SndFillPatchOpts(&info);
     if (SpchIGGetChannelStream(index) != 0) {
-        fn_801F46F8(SpchIGGetChannelStream(index), info.mUnknownC);
+        SndStreamSetPitchMult(SpchIGGetChannelStream(index), info.mUnknownC);
     }
 }
 
@@ -516,10 +516,10 @@ extern "C" void SpchIGStopChannel(int index)
     Status_801F4834 status;
 
     if (SpchIGGetChannelStream(index) != 0) {
-        fn_801F4834(SpchIGGetChannelStream(index), &status);
+        SndStreamGetStatus(SpchIGGetChannelStream(index), &status);
         if (status.mUnknown0 > 0) {
             _SpchIG_sState.mSlots[index].mUnknown8 = 0;
-            fn_801F4AB0(status.mUnknown4, 0);
+            SndSetMasterVol(status.mUnknown4, 0);
             _SpchIG_sState.mSlots[index].mUnknown4 = -1;
         }
     }
@@ -543,7 +543,7 @@ extern "C" int SpchIGGetChannelSpeaker(int index)
 extern "C" void SpchIGPurgeChannel(int index)
 {
     if (SpchIGGetChannelStream(index) != 0) {
-        fn_801F4638(SpchIGGetChannelStream(index));
+        SndPurgeStream(SpchIGGetChannelStream(index));
     }
 }
 
@@ -612,7 +612,7 @@ extern "C" int SpchIGIsChannelIdle(int index)
 {
     Status_801F4834 status;
 
-    fn_801F4834(SpchIGGetChannelStream(index), &status);
+    SndStreamGetStatus(SpchIGGetChannelStream(index), &status);
     return status.mUnknown0 == 0;
 }
 

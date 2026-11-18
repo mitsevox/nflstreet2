@@ -10,7 +10,7 @@ int FlowModulePreStart(FlowModuleC *pNode);
 int FlowModuleStart(FlowModuleC *pNode, unsigned char flags);
 int FlowModuleStop(FlowModuleC *pNode, unsigned char flags);
 void fn_801D64EC(void);
-int fn_801F3D2C(void);
+int SndShutdown(void);
 }
 
 /* Set by MainLoopQuit; ends the loop in MainLoopRun. */
@@ -39,7 +39,7 @@ void MainLoopRun(void)
     }
 
     FESndShutdown();
-    fn_801F3D2C();
+    SndShutdown();
     fn_801D64EC();
     FlowModuleStop(&gSys, 0);
 }

@@ -22,7 +22,7 @@ int AudioVoiceGetMaxMetric(int id)
     best = -7;
     if (handle >= 0) {
         index = -1;
-        while (fn_8026C910(handle, &index)) {
+        while (iSNDpatchkey(handle, &index)) {
             record = &lbl_803A6C24.m1CC[index];
             if (record->m18 > 0) {
                 value = -7;

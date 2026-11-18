@@ -25,10 +25,10 @@ extern unsigned char lbl_803EBE28;
 void *memset(void *dst, int value, size_t n);
 void fn_801AF060(void);
 void fn_801AF5E4(int (*pA)(void), void (*pB)(void));
-void fn_801AF630(void *pFunc);
-void fn_801AF718(void);
+void SPCH_SetRuleCallback(void *pFunc);
+void SPCH_Deinit(void);
 void fn_801B2A08(void *pData);
-void fn_80266CB8(void *pData, int a);
+void SPCH_AddEventDB(void *pData, int a);
 
 void fn_801F5C34(void);
 void fn_801F5C6C(ResFile_t *pRes, unsigned int index);
@@ -80,7 +80,7 @@ static void fn_801F5828(int type, int time, int numArgs, unsigned int *pArgs)
 
 void fn_801F5C34(void)
 {
-    fn_801AF718();
+    SPCH_Deinit();
     fn_801D2BD0(lbl_803ECF90);
     fn_801D2BD0(lbl_803ECF8C);
     lbl_803EBE28 = 0;
@@ -93,7 +93,7 @@ void fn_801F5C6C(ResFile_t *pRes, unsigned int index)
 
 void fn_801F5C94(ResFile_t *pRes, unsigned int index, int a)
 {
-    fn_80266CB8((void *)ResLoad(pRes, index, 1), a);
+    SPCH_AddEventDB((void *)ResLoad(pRes, index, 1), a);
 }
 
 void fn_801F5CCC(int (*pA)(void), void (*pB)(void))
@@ -103,7 +103,7 @@ void fn_801F5CCC(int (*pA)(void), void (*pB)(void))
 
 void fn_801F5CEC(void *pFunc)
 {
-    fn_801AF630(pFunc);
+    SPCH_SetRuleCallback(pFunc);
 }
 
 void fn_801F5D0C(void)

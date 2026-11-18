@@ -1,10 +1,10 @@
 #include "game/Object_80039F5C.h"
 #include "game/fn_8022781C.h"
-#include "engine/Record_800D81C8.h"
+#include "engine/AnimChannel.h"
 #include "game/Table_80089904.h"
 #include "game/Block_801BE60C.h"
 #include "game/fn_801BE60C.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/Object_8003DEC4.h"
 #include "game/fn_800A3530.h"
 
@@ -13,8 +13,8 @@ void fn_801BE3C0(void *p, float from, float to, unsigned short key, int type, vo
 float AnimSeqGetOpcodeTime(void *pScript, int key);
 float AnimSeqGetTime(AnimSeq_t *p);
 void PlyrPoseClearBlend(Object_8003DEC4 *pObject);
-void fn_801BA384(AnimHeader_t *pList, Record_800D81C8 *pChannels, int index);
-void fn_801BE420(void *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, void *pOwner, float step);
+void AnimChanStopAnim(AnimHeader_t *pList, AnimChannel_t *pChannels, int index);
+void fn_801BE420(void *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, void *pOwner, float step);
 void fn_800A3D68(int value);
 extern int lbl_803EC93C;
 extern int lbl_803EC940;
@@ -30,14 +30,14 @@ extern float lbl_803EAA0C;
 }
 
 extern "C" int fn_800A3530(Table_80089904 *table, unsigned short key, void *record,
-                           Record_800D81C8 *entries, Object_80039F5C *p, unsigned int phase)
+                           AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase)
 {
     Block_801BE60C *block = fn_801BE60C(p->mpUnknown804, key);
     switch (phase) {
     case 0:
         fn_801BE760(p->mpUnknown804, key, 1);
         if (p->mUnknown1012[0] < table->mCount) {
-            int entry = fn_801BA2A8(record, entries, table->mEntries[p->mUnknown1012[0]].mUnknown0,
+            int entry = AnimChanStartAnim(record, entries, table->mEntries[p->mUnknown1012[0]].mUnknown0,
                                     table->mEntries[p->mUnknown1012[0]].mUnknown2, key, p, 1.0f);
             block->mUnknown0Word = entry;
             block->mUnknown4Unsigned =
@@ -78,11 +78,11 @@ extern "C" int fn_800A3530(Table_80089904 *table, unsigned short key, void *reco
 }
 
 extern "C" int fn_800A37D8(Table_80089904 *table, unsigned short key, void *record,
-                           Record_800D81C8 *entries, Object_80039F5C *p, unsigned int phase)
+                           AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase)
 {
     switch (phase) {
     case 0:
-        fn_801BA2A8(record, entries, lbl_803EC93C, lbl_803EC940, key, p, 1.0f);
+        AnimChanStartAnim(record, entries, lbl_803EC93C, lbl_803EC940, key, p, 1.0f);
         p->mpUnknown4->mUnknown20 |= 0x10;
         break;
     case 1:
@@ -100,14 +100,14 @@ extern "C" int fn_800A37D8(Table_80089904 *table, unsigned short key, void *reco
 }
 
 extern "C" int fn_800A3898(Table_80089904 *table, unsigned short key, void *record,
-                           Record_800D81C8 *entries, Object_80039F5C *p, unsigned int phase)
+                           AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase)
 {
     Block_801BE60C *block = fn_801BE60C(p->mpUnknown804, key);
     switch (phase) {
     case 0: {
         fn_801BE760(p->mpUnknown804, key, 1);
         int index = (signed char)p->mUnknown1012[0];
-        int entry = fn_801BA2A8(record, entries, table->mEntries[index].mUnknown0,
+        int entry = AnimChanStartAnim(record, entries, table->mEntries[index].mUnknown0,
                                 table->mEntries[index].mUnknown2, key, p, 1.0f);
         block->mUnknown0Word = entry;
         block->mUnknown4Unsigned =
@@ -159,7 +159,7 @@ extern "C" void fn_800A3B5C(Object_80039F5C *p)
     if (p->mpUnknown808 != 0) {
         for (int i = 0; i < p->mpUnknown808->mUnknown4; i++) {
             if (p->mpUnknown812[i].mUnknown1 == 2)
-                fn_801BA384(p->mpUnknown808, p->mpUnknown812, i);
+                AnimChanStopAnim(p->mpUnknown808, p->mpUnknown812, i);
         }
         fn_801BE420(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, p, 1.0f);
         fn_801BE420(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, p, 1.0f);

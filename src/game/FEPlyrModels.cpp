@@ -86,7 +86,7 @@ void PlaTexCacheUpdate(void);
 void PlyrMoveCmdClear(void *pObject);
 void UISGameSetDrawMode(int a);
 void UISViewObjSetDrawFunc(void (*pCallback)(int, float, float, float, float));
-void fn_801BA03C(AnimHeader_t *pObject, void *a, float b, FEPlyrModel_t *pRecord);
+void AnimChanProcess(AnimHeader_t *pObject, void *a, float b, FEPlyrModel_t *pRecord);
 int fn_801BC7C0(AnimHeader_t *pObject, void *a, void *b);
 int fn_801BCA74(AnimHeader_t *pObject, void *a, int b, void *c, int d, int e);
 int fn_801BCCAC(AnimHeader_t *pObject, void *a, int b, void *c, int d, int e);
@@ -181,7 +181,7 @@ static void _FEPlyrUpdatePartAnims(FEPlyrModel_t *pRecord, Object_8003DEC4 *pObj
     for (i = 0; i < 2; i++) {
         if (pObject->mUnknown20 & 0x20) {
             fn_801BE420(pRecord->mUnknown4528[i], &pRecord->mUnknown4008[i], pRecord->mUnknown4032[i], pRecord, step);
-            fn_801BA03C(&pRecord->mUnknown4008[i], pRecord->mUnknown4032[i], step, pRecord);
+            AnimChanProcess(&pRecord->mUnknown4008[i], pRecord->mUnknown4032[i], step, pRecord);
             PlyrPoseBlendRawEntries(pObject, fn_801BC7C0(&pRecord->mUnknown4008[i], pRecord->mUnknown4032[i], pRecord->mUnknown4528[i]), i);
         } else if (fn_800ADD7C(pObject->mUnknown116, i)) {
             PlyrPoseBlendRawEntries(pObject, fn_800ADEFC(pObject->mUnknown116, i), i);
@@ -197,13 +197,13 @@ static void _FEPlyrUpdateAnims(FEPlyrModel_t *pRecord, float step)
     fn_800EFFA0(0, (State_80039F5C *)pRecord->mUnknown3048, pRecord, 0);
     if (pObject->mUnknown20 & 0x10) {
         fn_801BE420(pRecord->mUnknown3604, &pRecord->mUnknown3096, pRecord->mUnknown3108, pRecord, step);
-        fn_801BA03C(&pRecord->mUnknown3096, pRecord->mUnknown3108, step, pRecord);
+        AnimChanProcess(&pRecord->mUnknown3096, pRecord->mUnknown3108, step, pRecord);
         result = fn_801BC7C0(&pRecord->mUnknown3096, pRecord->mUnknown3108, pRecord->mUnknown3604);
         PlyrPoseSetBlend(pObject, result);
     }
     _FEPlyrUpdatePartAnims(pRecord, pObject, step);
     fn_801BE420(pRecord->mUnknown2496, &pRecord->mUnknown1244, pRecord->mUnknown1256, pRecord, step);
-    fn_801BA03C(&pRecord->mUnknown1244, pRecord->mUnknown1256, step, pRecord);
+    AnimChanProcess(&pRecord->mUnknown1244, pRecord->mUnknown1256, step, pRecord);
     result = fn_801BC7C0(&pRecord->mUnknown1244, pRecord->mUnknown1256, pRecord->mUnknown2496);
     PlyrPoseBlendEntries(pObject, result);
     pRecord->mUnknown544 = fn_801BCA74(&pRecord->mUnknown1244, pRecord->mUnknown1256, result, pRecord->mUnknown548, 0xFFFF, 1);

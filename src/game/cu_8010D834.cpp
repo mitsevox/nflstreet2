@@ -1,5 +1,5 @@
 #include "game/fn_801248D4.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
 #include <math.h>
@@ -52,18 +52,18 @@ extern "C" {
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
 }
 
-extern "C" int fn_8010D834(Table_80089904 *pTable, unsigned short key, void *pData, Record_800D81C8 *pEntries,
+extern "C" int fn_8010D834(Table_80089904 *pTable, unsigned short key, void *pData, AnimChannel_t *pEntries,
                            Object_80039F5C *p, unsigned int mode) {
     if (mode == 0) {
         if (p->mpState->mId == 56) {
             Block_8010BC90 *pBlock = (Block_8010BC90 *)&p->mUnknown336;
 
-            fn_801BA2A8(pData, pEntries, pBlock->mUnknown24, pBlock->mUnknown20, key, p, 1.0f);
+            AnimChanStartAnim(pData, pEntries, pBlock->mUnknown24, pBlock->mUnknown20, key, p, 1.0f);
         } else {
             int index = fn_8009C4B0(pTable, &p->mUnknown1008);
 
             if (index >= 0) {
-                fn_801BA2A8(pData, pEntries, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2,
+                AnimChanStartAnim(pData, pEntries, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2,
                             key, p, 1.0f);
             }
         }

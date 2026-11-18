@@ -124,7 +124,7 @@ unsigned char *_AnimFrameCacheAddToCache(AnimFileFormat_t *file, AnimFrameCache_
     unsigned char *data;
 
     if (node->mUsed == 1)
-        SetMotion(fn_801BC084(node->mHandle), node->mMotion, (unsigned short)node->mGroup, node->mSource);
+        SetMotion(AnimFileGetPtrFromSlot(node->mHandle), node->mMotion, (unsigned short)node->mGroup, node->mSource);
     node->mSource = source;
     node->mHandle = handle;
     node->mUsed = 1;
@@ -177,7 +177,7 @@ void AnimFrameCacheDestroy(AnimFrameCache_t *cache)
 
 void *AnimFrameCacheGetFrame(AnimFileFormat_t *file, int a, int handle, unsigned int motion, char *source, int group)
 {
-    AnimFrameCache_t *cache = fn_801BC0C0(handle);
+    AnimFrameCache_t *cache = AnimFileGetFrameCacheFromSlot(handle);
     unsigned char *data;
     unsigned char found;
 
@@ -198,6 +198,6 @@ void AnimFrameCacheRestoreSources(AnimFrameCache_t *cache)
     for (i = 0; i < cache->mList.mCount; i++) {
         AnimFrameCacheNode_t *node = &cache->mList.mNodes[i];
         if (node->mUsed == 1)
-            SetMotion(fn_801BC084(node->mHandle), node->mMotion, (unsigned short)node->mGroup, node->mSource);
+            SetMotion(AnimFileGetPtrFromSlot(node->mHandle), node->mMotion, (unsigned short)node->mGroup, node->mSource);
     }
 }

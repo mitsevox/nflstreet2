@@ -1,7 +1,7 @@
 /* Rate-limited player turning: two movement mode handlers that swing the player's facing toward
    the requested heading by at most a rating-based turn rate and ease the move speed toward the
    request, and the check that caps speed and turn rate in certain player states. */
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_801BE60C.h"
@@ -108,8 +108,8 @@ void PlyrMoveTurnWithAnim(Object_80039F5C *p)
         pMotion->mFacing = (pMotion->mFacing + limit) & 0xFFFFFF;
         if (p->mUnknown545 != 0) {
             AnimHeader_t *pHeader = p->mpUnknown796;
-            Record_800D81C8 *pEntries = p->mpUnknown800;
-            int index = fn_801BA5A8(pHeader, pEntries, fn_801BE648(p->mpUnknown792), 0);
+            AnimChannel_t *pEntries = p->mpUnknown800;
+            int index = AnimChanGetStateChannelByIndex(pHeader, pEntries, fn_801BE648(p->mpUnknown792), 0);
             if (index != 0xFFFF) {
                 p->mpUnknown800[index].mUnknownC = (p->mpUnknown800[index].mUnknownC + limit) & 0xFFFFFF;
             }

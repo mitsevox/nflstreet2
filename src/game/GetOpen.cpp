@@ -3,7 +3,7 @@
    of the ball and the far end of the field, cuts toward it or runs there, and turns back to
    wave for the ball when the carrier is behind him. */
 
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/StyleTracker.h"
 #include "game/OptionRunControl.h"
 #include "game/Message_800F01CC.h"
@@ -13,7 +13,7 @@
 #include "game/Plan_80121264.h"
 #include "game/Table_80089904.h"
 #include "game/AudmonEvent.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/GameOptions.h"

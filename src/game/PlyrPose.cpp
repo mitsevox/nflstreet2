@@ -38,7 +38,7 @@ void AnimBlendRawEntries(Object_8003DEC4 *pObject, int a, unsigned int b, int co
 void AnimResetWeights(float *p);
 void AnimBuildPoseMatrices(Object_8003DEC4 *pObject);
 void *AnimFileGetFrame(Object_801BC084 *pRecord, int b, int handle, unsigned int c);
-int fn_801BBE5C(int a, int b);
+int AnimFileGetSlotFromFileNum(int a, int b);
 void OrientLerpAngle(int *pOut, int a, int b, float t);
 void fn_801D0470(int a);
 void fn_801D0494(void);
@@ -267,18 +267,18 @@ void PlyrPoseLerpBlend(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStrea
     blend.mUnknown0 = count;
     pObject->mUnknown260 = blend.mUnknown0;
     if (blend.mUnknown0) {
-        handle = fn_801BBE5C(3, 0);
+        handle = AnimFileGetSlotFromFileNum(3, 0);
         ReadBitStream(pStreamA, 16);
         long long frame = ReadBitStream(pStreamB, 16);
         ReadBitStream(pStreamA, 32);
         weight = ReadBitStream(pStreamB, 32);
-        blend.mUnknown4[0].mpUnknown40 = AnimFileGetFrame(fn_801BC084(handle), 0, handle, frame);
+        blend.mUnknown4[0].mpUnknown40 = AnimFileGetFrame(AnimFileGetPtrFromSlot(handle), 0, handle, frame);
         blend.mUnknown4[0].mUnknown4 = 1.0f;
         pObject->mUnknown260 = 1;
         if (blend.mUnknown0 > 1) {
             ReadBitStream(pStreamA, 16);
             long long nextFrame = ReadBitStream(pStreamB, 16);
-            blend.mUnknown4[1].mpUnknown40 = AnimFileGetFrame(fn_801BC084(handle), 0, handle, nextFrame);
+            blend.mUnknown4[1].mpUnknown40 = AnimFileGetFrame(AnimFileGetPtrFromSlot(handle), 0, handle, nextFrame);
             blend.mUnknown4[1].mUnknown4 = weight;
         } else {
             ReadBitStream(pStreamA, 16);

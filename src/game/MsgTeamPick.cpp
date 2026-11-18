@@ -141,9 +141,9 @@ void SortArray(int a, void *pBase, int count, int size, int (*pCompare)(TeamPick
                  int c, int d);
 int fn_801F967C(int handle, int table);
 int fn_801F9980(int handle, int *pTable);
-int fn_8021E2B4(void *pObject, int a, int b);
-void fn_8021E72C(void *pObject, int a, int b);
-void *fn_8021EA44(int index);
+int UIGLibraryLoadItem(void *pObject, int a, int b);
+void UIGLibraryUnLoadItem(void *pObject, int a, int b);
+void *UIGLibraryGetGlobal(int index);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
@@ -797,10 +797,10 @@ void MsgTeamPickRegisterPortraits(void)
     void *pList;
     int i;
 
-    pList = fn_8021EA44(1);
+    pList = UIGLibraryGetGlobal(1);
     for (i = 0; i < _MsgTeamPick_iPoolCount; i++) {
         if (_MsgTeamPick_pPool[i].mUnknown8 > 630) {
-            fn_8021E2B4(pList, 10, _MsgTeamPick_pPool[i].mUnknown8);
+            UIGLibraryLoadItem(pList, 10, _MsgTeamPick_pPool[i].mUnknown8);
         }
     }
     _MsgTeamPick_pState->mUnknown1B = 1;
@@ -812,10 +812,10 @@ void MsgTeamPickUnregisterPortraits(void)
     int i;
 
     if (_MsgTeamPick_pState->mUnknown1B) {
-        pList = fn_8021EA44(1);
+        pList = UIGLibraryGetGlobal(1);
         for (i = 0; i < _MsgTeamPick_iPoolCount; i++) {
             if (_MsgTeamPick_pPool[i].mUnknown8 > 630) {
-                fn_8021E72C(pList, 10, _MsgTeamPick_pPool[i].mUnknown8);
+                UIGLibraryUnLoadItem(pList, 10, _MsgTeamPick_pPool[i].mUnknown8);
             }
             if (i % 10 == 9) {
                 FESndUpdate(1);

@@ -83,8 +83,8 @@ void SndgNullUpdate(void);
 int fn_800A3444(void);
 int FileHostCheckActive(void);
 void FileDebugProcess(void);
-void fn_801F4B20(void);
-int fn_801F41A0(int handle);
+void SndService(void);
+int SndPatchOver(int handle);
 unsigned int fn_801F7ABC(void);
 void fn_80227690(void *out, void *a, void *b);
 int fn_80237470(int a, int b);
@@ -735,7 +735,7 @@ void fn_800711E0(void)
             if (fn_801486A0()) {
                 while (!SndgIsBankReady(3)) {
                     if (FileHostCheckActive()) FileDebugProcess();
-                    fn_801F4B20();
+                    SndService();
                 }
             }
             SndgRequestBank(3, id, 0);
@@ -748,7 +748,7 @@ void fn_800711E0(void)
             if (fn_801486A0()) {
                 while (!SndgIsBankReady(4)) {
                     if (FileHostCheckActive()) FileDebugProcess();
-                    fn_801F4B20();
+                    SndService();
                 }
             }
             SndgRequestBank(4, id, 0);
@@ -854,7 +854,7 @@ void fn_800716E4(void)
 
 void fn_80071748(void)
 {
-    if (lbl_803EA6C0 != 0x7FFFFFFF && fn_801F41A0(lbl_803EA6C0)) lbl_803EA6C0 = 0x7FFFFFFF;
+    if (lbl_803EA6C0 != 0x7FFFFFFF && SndPatchOver(lbl_803EA6C0)) lbl_803EA6C0 = 0x7FFFFFFF;
 }
 
 void fn_80071794(int id)

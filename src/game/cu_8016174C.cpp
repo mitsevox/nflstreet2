@@ -1,3 +1,4 @@
+#include <dolphin/gx/GXPixel.h>
 #include "engine/viewport.h"
 #include "game/Object_80039F5C.h"
 #include "game/PlayBookTeam.h"
@@ -29,14 +30,29 @@ struct Desc_801618D8 {
     Object_801618D8 *mUnknownC;
 };
 extern "C" {
-extern Object_801618D8 *lbl_802E9780[9], *lbl_802E97A4[9], *lbl_802E97C8[9];
-extern float lbl_802E97EC[][4];
-extern Object_801618D8 *lbl_8031D2A4[5];
-extern unsigned char lbl_803EB388, lbl_803EB389, lbl_803EB38A, lbl_803EB38B;
-extern Object_801618D8 *lbl_803EB38C, *lbl_803EB390;
-extern unsigned char lbl_803EB394, lbl_803EB395, lbl_803EB396, lbl_803EB397;
-extern Object_80039F5C *lbl_803EB398;
-extern int lbl_803ECAEC;
+static Object_801618D8 *lbl_802E9780[9] = {0};
+static Object_801618D8 *lbl_802E97A4[9] = {0};
+static Object_801618D8 *lbl_802E97C8[9] = {0};
+static float lbl_802E97EC[10][4] = {
+    {0.2734375f, 0.0f, 0.0f, 1.0f},        {0.0f, 0.0f, 0.390625f, 1.0f},
+    {0.2734375f, 0.390625f, 0.0f, 1.0f},   {0.390625f, 0.19921875f, 0.0f, 1.0f},
+    {0.19921875f, 0.0f, 0.2734375f, 1.0f}, {0.3515625f, 0.3515625f, 0.0f, 1.0f},
+    {0.0f, 0.2734375f, 0.390625f, 1.0f},   {0.0f, 0.19921875f, 0.0f, 1.0f},
+    {0.390625f, 0.390625f, 0.390625f, 1.0f}, {0.0f, 0.0f, 0.0f, 1.0f},
+};
+static Object_801618D8 *lbl_8031D2A4[5];
+static unsigned char lbl_803EB388 = 1;
+static unsigned char lbl_803EB389 = 1;
+static unsigned char lbl_803EB38A = 1;
+static unsigned char lbl_803EB38B = 1;
+static Object_801618D8 *lbl_803EB38C = 0;
+static Object_801618D8 *lbl_803EB390 = 0;
+static unsigned char lbl_803EB394 = 1;
+static unsigned char lbl_803EB395 = 1;
+static unsigned char lbl_803EB396 = 0;
+static unsigned char lbl_803EB397 = 1;
+static Object_80039F5C *lbl_803EB398 = 0;
+static int lbl_803ECAEC;
 Object_80039F5C *BallGetCurrentHolder(void);
 Object_80039F5C *fn_800B6544(int);
 int GameTextGetPadPlayer(int);
@@ -55,7 +71,6 @@ int fn_801CFE40(float, float);
 void fn_80227E40(void *, void *);
 void TMRenderBindTexture(int, int, int);
 void TMRenderSetZRange(float, float);
-void fn_802520E0(int, int, int);
 void fn_802353D8(void *, int);
 void fn_80235588(void *, int);
 void fn_802355E4(void *);
@@ -89,53 +104,65 @@ Object_80039F5C *fn_8016174C(int index, unsigned char *enabled) {
     if (item && (fn_800B65A0(0) != 255 || fn_800B65A0(1) != 255)) {
         if (index != 8) {
             if (item->mUnknown2C != -1) {
-                Object_80039F5C *linked = 0;
-                if (item->mUnknown20 & 4)
-                    linked = fn_8009BCE8(&item->mUnknown104);
-                if (!(item->mUnknown20 & 4) || (linked->mFlags & 0x400)) {
+                if (!(item->mUnknown20 & 4)) {
                     player = fn_800B6544(item->mUnknown2C);
                     if (player && (player->mpUnknown4->mUnknown20 & 1) && !(player->mFlags & 0x400))
                         player = 0;
-                } else if (linked->mpUnknown4->mUnknown20 & 1)
-                    player = linked;
+                } else {
+                    Object_80039F5C *linked = fn_8009BCE8(&item->mUnknown104);
+                    if (linked->mFlags & 0x400) {
+                        player = fn_800B6544(item->mUnknown2C);
+                        if (player && (player->mpUnknown4->mUnknown20 & 1) && !(player->mFlags & 0x400))
+                            player = 0;
+                    } else if (linked->mpUnknown4->mUnknown20 & 1)
+                        player = linked;
+                }
             }
         } else {
             if (lbl_803EB397) {
-                if (item->mUnknown20 & 4) {
+                if (!(item->mUnknown20 & 4)) {
+                    if (current && (current->mpUnknown4->mUnknown20 & 1) && (current->mId & 255) == 1 &&
+                        !(current->mFlags & 0x400) && fn_800B65A0((current->mId >> 8) & 255) == 255)
+                        player = current;
+                } else {
                     Object_80039F5C *linked = fn_8009BCE8(&item->mUnknown104);
                     if (linked->mpUnknown4->mUnknown20 & 1)
                         player = linked;
-                } else if (current && (current->mpUnknown4->mUnknown20 & 1) && (current->mId & 255) == 1 &&
-                           !(current->mFlags & 0x400) && fn_800B65A0(current->mIdBytes[2]) == 255)
-                    player = current;
+                }
             }
             lbl_803EB398 = player;
         }
     }
-    *enabled = player != 0;
+    if (player)
+        *enabled = 1;
+    else
+        *enabled = 0;
     return player;
 }
 void fn_801618D8(Object_801618D8 *item, Desc_801618D8 *desc) {
+    int kind = desc->mUnknown8;
+    // FAKEMATCH: store order of the field initializers below was found by permutation search
+    item->mUnknown34 = kind;
+    item->mUnknown4.mX = 0.0f;
+    item->mUnknown4.mY = 0.0f;
     item->mUnknown4.mZ = 0.0f;
     item->mUnknown14 = 0;
+    item->mUnknown38 = 1.0f;
     item->mUnknown20 = 18;
     item->mUnknown1C = 1.0f;
-    item->mUnknown34 = desc->mUnknown8;
-    item->mUnknown4.mX = item->mUnknown4.mY = 0.0f;
-    item->mUnknown38 = 1.0f;
-    if (desc->mUnknown8 == 8) {
-        item->mUnknown30 = 8;
+    if (kind == 8) {
+        item->mUnknown30 = kind;
         item->mUnknown2C = -1;
     } else {
-        item->mUnknown2C = desc->mUnknown8;
-        item->mUnknown30 = GameTextGetPadPlayer(desc->mUnknown8) % 10;
+        item->mUnknown2C = kind;
+        item->mUnknown30 = GameTextGetPadPlayer(kind) % 10;
     }
     item->mUnknown100 = 0;
     item->mUnknown24 = desc->mUnknown0;
     item->mUnknown28 = desc->mUnknown4;
     if (!desc->mUnknownC) {
         item->mUnknownFC = 0;
-        item->mUnknownFC = ResLoad(desc->mUnknown0, desc->mUnknown4, 1);
+        item->mUnknownFC = ResLoad(item->mUnknown24, item->mUnknown28, 1);
         fn_80235DB8(item->mUnknownFC);
     } else {
         item->mUnknown20 |= 1;
@@ -166,8 +193,8 @@ void fn_80161A88(Object_801618D8 *out, Object_801618D8 *in) {
 }
 void fn_80161AD4(void *render, int index) {
     int context = ConGetCurrentContext();
-    float *color = lbl_802E97EC[index];
-    fn_80235C90(render, context, color[0], color[1], color[2], color[3]);
+    fn_80235C90(render, context, lbl_802E97EC[index][0], lbl_802E97EC[index][1], lbl_802E97EC[index][2],
+                lbl_802E97EC[index][3]);
 }
 int fn_80161B38(Object_801618D8 *item) {
     Object_801618D8 *extra = 0;
@@ -235,7 +262,7 @@ int fn_80161B38(Object_801618D8 *item) {
             break;
         }
         if (valid == 1) {
-            fn_802520E0(1, 3, 0);
+            GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
             TMRenderBindTexture(0, 0, 0);
             if (item->mUnknown28 == 6) {
                 fn_80235740(item->mUnknown3C, ConGetCurrentContext());
@@ -317,20 +344,23 @@ void fn_801620D4(BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream_t *d,
     fn_80161F5C(lbl_803EB38C, a, b, c, d, blend);
 }
 Object_801618D8 *fn_8016216C(void) {
-    for (int i = 0; i < 5; ++i)
-        if (!lbl_8031D2A4[i]->mUnknown100)
-            return lbl_8031D2A4[i];
-    return 0;
+    unsigned int i = 0;
+    Object_801618D8 *item;
+    while ((item = lbl_8031D2A4[i])->mUnknown100) {
+        if (++i >= 5)
+            return 0;
+    }
+    return item;
 }
-float fn_801621AC(void) {
+float fn_801621AC(Object_801618D8 *item) {
     return 2.5f;
 }
 void fn_801621B8(void) {
-    for (int i = 0; i < 5; ++i) {
+    for (unsigned int i = 0; i < 5; ++i) {
         Object_801618D8 *item = lbl_8031D2A4[i];
         if (item->mUnknown20 & 2) {
             if (item->mUnknown20 & 4) {
-                if (item->mUnknown18 > 1.0f)
+                if (!(item->mUnknown18 <= 1.0f))
                     item->mUnknown18 *= 0.88f;
                 else {
                     item->mUnknown18 = 1.0f;
@@ -339,29 +369,28 @@ void fn_801621B8(void) {
             }
             if (item->mUnknown20 & 8) {
                 item->mUnknown18 *= 1.13f;
-                if (item->mUnknown18 > 8.0f) {
+                if (!(item->mUnknown18 <= 8.0f)) {
                     item->mUnknown100 = 0;
                     item->mUnknown20 &= ~2;
                 }
             }
             if (item->mUnknown20 & 0x20) {
                 item->mUnknown18 *= 1.1f;
-                Vec2_t *point = (Vec2_t *)&item->mUnknown100->mMotion.mPos;
-                fn_80161E7C(item, point, fn_801784C4());
-                if (item->mUnknown18 > item->mUnknown38) {
+                fn_80161E7C(item, (Vec2_t *)&item->mUnknown100->mMotion.mPos, fn_801784C4());
+                if (!(item->mUnknown18 <= item->mUnknown38)) {
                     item->mUnknown18 = item->mUnknown38;
                     item->mUnknown20 = (item->mUnknown20 & ~0x20) | 0x40;
                 }
             }
             if (item->mUnknown20 & 0x40) {
-                Vec2_t *point = (Vec2_t *)&item->mUnknown100->mMotion.mPos;
-                fn_80161E7C(item, point, fn_801784C4());
-                if (item->mUnknown18 > 1.0f)
+                fn_80161E7C(item, (Vec2_t *)&item->mUnknown100->mMotion.mPos, fn_801784C4());
+                if (!(item->mUnknown18 <= 1.0f))
                     item->mUnknown18 *= 0.9f;
                 else {
                     item->mUnknown18 = 1.0f;
+                    item->mUnknown20 &= ~0x40;
                     item->mUnknown100 = 0;
-                    item->mUnknown20 &= ~0x42;
+                    item->mUnknown20 &= ~2;
                 }
             }
             if (item->mUnknown20 & 0x10)
@@ -380,7 +409,12 @@ void fn_80162404(void) {
     lbl_803EB398 = 0;
 }
 Object_801618D8 *fn_80162434(void *arg, int index, Object_801618D8 *shared, void *data, int mode) {
-    Desc_801618D8 desc = {data, mode, index, shared};
+    Desc_801618D8 desc;
+    // FAKEMATCH: store order +0, +0xC, +8, +4 chosen to reproduce the target schedule
+    desc.mUnknown0 = data;
+    desc.mUnknownC = shared;
+    desc.mUnknown8 = index;
+    desc.mUnknown4 = mode;
     int handle = ObjNewInList(arg, 8, 0, &desc);
     ObjSetPriority(arg, handle, 3);
     return (Object_801618D8 *)handle;
@@ -430,7 +464,8 @@ void fn_801624D0(void *arg) {
     }
 }
 void fn_801626A4(void *arg) {
-    for (int i = 0; i < 9; ++i) {
+    unsigned int i;
+    for (i = 0; i < 9; ++i) {
         fn_80162494(arg, lbl_802E9780[i]);
         lbl_802E9780[i] = 0;
         fn_80162494(arg, lbl_802E97A4[i]);
@@ -438,7 +473,7 @@ void fn_801626A4(void *arg) {
         fn_80162494(arg, lbl_802E97C8[i]);
         lbl_802E97C8[i] = 0;
     }
-    for (int i = 0; i < 5; ++i) {
+    for (i = 0; i < 5; ++i) {
         fn_80162494(arg, lbl_8031D2A4[i]);
         lbl_8031D2A4[i] = 0;
     }
@@ -470,20 +505,21 @@ void fn_80162794(void) {
                 }
                 fn_80161E7C(item, (Vec2_t *)&player->mMotion.mPos, fn_801784C4());
                 other->mUnknown20 |= 2;
-                other->mUnknown4 = item->mUnknown4;
+                other->mUnknown4.mX = item->mUnknown4.mX;
+                other->mUnknown4.mY = item->mUnknown4.mY;
+                other->mUnknown4.mZ = item->mUnknown4.mZ;
                 if (player == current) {
                     lbl_803EB396 = (unsigned char)item->mUnknown2C;
-                    Object_801618D8 *global = lbl_803EB38C;
-                    global->mUnknown30 = item->mUnknown30;
-                    global->mUnknown20 |= 2;
-                    global->mUnknown4.mX = item->mUnknown4.mX;
-                    global->mUnknown4.mY = item->mUnknown4.mY;
-                    global->mUnknown4.mZ = 0.0f;
-                    if (global->mUnknown20 & 0x10)
-                        global->mUnknown14 = (global->mUnknown14 - 0x16C16) & 0xFFFFFF;
+                    lbl_803EB38C->mUnknown30 = item->mUnknown30;
+                    lbl_803EB38C->mUnknown20 |= 2;
+                    lbl_803EB38C->mUnknown4.mX = item->mUnknown4.mX;
+                    lbl_803EB38C->mUnknown4.mY = item->mUnknown4.mY;
+                    lbl_803EB38C->mUnknown4.mZ = 0.0f;
+                    if (lbl_803EB38C->mUnknown20 & 0x10)
+                        lbl_803EB38C->mUnknown14 = (lbl_803EB38C->mUnknown14 - 0x16C16) & 0xFFFFFF;
                     else
-                        global->mUnknown14 = 0;
-                    fn_80161A88(lbl_803EB390, global);
+                        lbl_803EB38C->mUnknown14 = 0;
+                    fn_80161A88(lbl_803EB390, lbl_803EB38C);
                 }
             } else {
                 item->mUnknown20 &= ~2;
@@ -495,82 +531,94 @@ void fn_80162794(void) {
     fn_801621B8();
 }
 int fn_8016295C(Vector_80039F5C *input, Vector_80039F5C *out, int *angle, float *scale) {
+    struct Projection_8016295C {
+        float mX, mY, mZ, mW;
+    };
+    int result;
     fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D12BC(4);
-    struct Projection_8016295C {
-        float mX, mY, mZ, mW;
-    } point;
-    Projection_8016295C original = {input->mX, input->mY, 0.5f, 1.0f};
-    Vector_80039F5C unscaled = {input->mX, input->mY, 0.5f};
+    Projection_8016295C point;
+    Vector_80039F5C unused;
+    Projection_8016295C original;
+    unused.mX = input->mX;
+    unused.mY = input->mY;
+    unused.mZ = 0.5f;
+    original.mX = input->mX;
+    original.mY = input->mY;
+    original.mZ = 0.5f;
+    original.mW = 1.0f;
     fn_80227E40(&point, &original);
-    if (!(point.mX < -point.mW || point.mX > point.mW || point.mY < -point.mW) && point.mY <= point.mW) {
-        fn_801D0544();
-        return 0;
-    }
-    unscaled.mX = point.mX;
-    unscaled.mY = point.mY;
-    unscaled.mZ = point.mZ;
-    *angle = fn_801CFE40(-point.mX, point.mY);
-    float ratio = 1.0f;
-    if (fabsf(point.mW) < 1.0f) {
-        if (point.mW < 0.0f)
-            ratio = -1.0f;
+    if (point.mX < -point.mW || point.mX > point.mW || point.mY < -point.mW || !(point.mY <= point.mW)) {
+        original.mX = point.mX;
+        original.mY = point.mY;
+        original.mZ = point.mZ;
+        *angle = fn_801CFE40(-point.mX, point.mY);
+        float ratio = 1.0f;
+        if (!(fabsf(point.mW) >= 1.0f)) {
+            if (!(point.mW >= 0.0f))
+                ratio = -1.0f;
+        } else
+            ratio = 1.0f / point.mW;
+        point.mX *= ratio;
+        point.mY *= ratio;
+        float a = fn_802270D4((Vector_80039F5C *)&original) - 10.25f;
+        a *= 0.11111111f;
+        Vec2_t pair;
+        pair.mX = point.mX;
+        pair.mY = point.mY;
+        float b = (fn_802270A4(&pair) - 1.0f) * 0.5f;
+        if (!(original.mZ >= 0.0f))
+            b = a;
+        else if (!(original.mZ > 1.0f))
+            b = b * original.mZ + a * (1.0f - original.mZ);
+        if (!(b >= 0.0f))
+            b = 0.0f;
+        if (!(b <= 1.0f))
+            b = 1.0f;
+        float alpha = 1.0f - b;
+        if (!(point.mW >= 0.0f)) {
+            point.mX = -point.mX;
+            point.mY = -0.9f;
+        }
+        if (!(point.mX <= 0.7f))
+            point.mX = (point.mX - 0.7f) * 0.020000001f + 0.7f;
+        else if (!(point.mX >= -0.7f))
+            point.mX = (point.mX - 0.7f) * 0.020000001f + -0.7f;
+        if (!(point.mY <= 0.7f))
+            point.mY = (point.mY - 0.7f) * 0.080000006f + 0.7f;
+        else if (!(point.mY >= -0.7f))
+            point.mY = (point.mY - 0.7f) * 0.080000006f + -0.7f;
+        if (!(point.mX <= 0.9f))
+            point.mX = 0.9f;
+        if (!(point.mX >= -0.9f))
+            point.mX = -0.9f;
+        if (!(point.mY <= 0.9f))
+            point.mY = 0.9f;
+        if (!(point.mY >= -0.9f))
+            point.mY = -0.9f;
+        out->mX = point.mX * 5.0f;
+        out->mY = -(point.mY * -3.0f);
+        out->mZ = -10.0f;
+        if (!(out->mX >= -5.0f))
+            out->mX = -5.0f;
+        if (!(out->mX <= 5.0f))
+            out->mX = 5.0f;
+        if (!(out->mY <= 3.0f))
+            out->mY = 3.0f;
+        if (!(out->mY >= -3.0f))
+            out->mY = -3.0f;
+        float amount = alpha * 0.75f + 0.25f;
+        if (!(amount >= 0.25f))
+            amount = 0.25f;
+        if (!(amount <= 1.0f))
+            amount = 1.0f;
+        *scale = amount;
+        result = 1;
     } else
-        ratio = 1.0f / point.mW;
-    point.mX *= ratio;
-    point.mY *= ratio;
-    float a = (fn_802270D4(&unscaled) - 10.25f) * 0.11111111f;
-    Vec2_t pair = {point.mX, point.mY};
-    float b = (fn_802270A4(&pair) - 1.0f) * 0.5f;
-    if (unscaled.mZ < 0.0f)
-        b = a;
-    else if (unscaled.mZ <= 1.0f)
-        b = b * unscaled.mZ + a * (1.0f - unscaled.mZ);
-    if (b < 0.0f)
-        b = 0.0f;
-    if (b > 1.0f)
-        b = 1.0f;
-    float alpha = 1.0f - b;
-    if (point.mW < 0.0f) {
-        point.mX = -point.mX;
-        point.mY = -0.9f;
-    }
-    if (point.mX > 0.7f)
-        point.mX = (point.mX - 0.7f) * 0.020000001f + 0.7f;
-    else if (point.mX < -0.7f)
-        point.mX = (point.mX - 0.7f) * 0.020000001f - 0.7f;
-    if (point.mY > 0.7f)
-        point.mY = (point.mY - 0.7f) * 0.080000006f + 0.7f;
-    else if (point.mY < -0.7f)
-        point.mY = (point.mY - 0.7f) * 0.080000006f - 0.7f;
-    if (point.mX > 0.9f)
-        point.mX = 0.9f;
-    if (point.mX < -0.9f)
-        point.mX = -0.9f;
-    if (point.mY > 0.9f)
-        point.mY = 0.9f;
-    if (point.mY < -0.9f)
-        point.mY = -0.9f;
-    out->mX = point.mX * 5.0f;
-    out->mY = -(point.mY * -3.0f);
-    out->mZ = -10.0f;
-    if (out->mX < -5.0f)
-        out->mX = -5.0f;
-    if (out->mX > 5.0f)
-        out->mX = 5.0f;
-    if (out->mY > 3.0f)
-        out->mY = 3.0f;
-    if (out->mY < -3.0f)
-        out->mY = -3.0f;
-    float amount = alpha * 0.75f + 0.25f;
-    if (amount < 0.25f)
-        amount = 0.25f;
-    if (amount > 1.0f)
-        amount = 1.0f;
-    *scale = amount;
+        result = 0;
     fn_801D0544();
-    return 1;
+    return result;
 }
 void fn_80162D78(void) {
     lbl_803ECAEC = fn_80161ED4();
@@ -580,7 +628,9 @@ Object_801618D8 *fn_80162DBC(int index) {
     return lbl_8031D2A4[index];
 }
 void fn_80162DD0(Object_801618D8 *item, Vector_80039F5C *point) {
-    item->mUnknown4 = *point;
+    item->mUnknown4.mX = point->mX;
+    item->mUnknown4.mY = point->mY;
+    item->mUnknown4.mZ = point->mZ;
     if (fn_801784C4()) {
         item->mUnknown4.mX = -item->mUnknown4.mX;
         item->mUnknown4.mY = -item->mUnknown4.mY;
@@ -588,21 +638,20 @@ void fn_80162DD0(Object_801618D8 *item, Vector_80039F5C *point) {
     item->mUnknown20 |= 2;
 }
 unsigned int fn_80162E40(int index) {
-    float *color = lbl_802E97EC[index];
-    float r = color[0];
-    if (r > 1.0f)
+    float r = lbl_802E97EC[index][0];
+    if (!(r <= 1.0f))
         r = 1.0f;
     unsigned char red = (int)(r * 255.0f);
-    float g = color[1];
-    if (g > 1.0f)
+    float g = lbl_802E97EC[index][1];
+    if (!(g <= 1.0f))
         g = 1.0f;
     unsigned char green = (int)(g * 255.0f);
-    float b = color[2];
-    if (b > 1.0f)
+    float b = lbl_802E97EC[index][2];
+    if (!(b <= 1.0f))
         b = 1.0f;
     unsigned char blue = (int)(b * 255.0f);
-    float a = color[3];
-    if (a > 1.0f)
+    float a = lbl_802E97EC[index][3];
+    if (!(a <= 1.0f))
         a = 1.0f;
     return ((unsigned int)(int)(a * 255.0f) << 24) | (red << 16) | (green << 8) | blue;
 }
@@ -610,11 +659,11 @@ void fn_80162F28(Object_801618D8 *source) {
     if (source) {
         Object_801618D8 *item = fn_8016216C();
         if (item) {
-            item->mUnknown20 |= 0x22;
             item->mUnknown100 = source->mUnknown100;
+            item->mUnknown20 |= 0x22;
             item->mUnknown14 = 0;
             item->mUnknown18 = 1.0f;
-            item->mUnknown38 = fn_801621AC();
+            item->mUnknown38 = fn_801621AC(item);
             item->mUnknown30 = source->mUnknown30;
             Vec2_t *point = (Vec2_t *)&item->mUnknown100->mMotion.mPos;
             fn_80161E7C(item, point, fn_801784C4());

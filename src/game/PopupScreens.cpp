@@ -11,7 +11,7 @@ int ProgressivePopupMsg(int id, int *pArgs, int c, int *pResult);
 int PopupScreen20Msg(int id, void *pArgs, int c, int *pResult);
 int CtrlSelHandleMessage(unsigned int id, void *pArgs, int c, int *pResult);
 void fn_801CEB58(int a);
-void fn_8023CFD0(int a);
+void OSSetProgressiveMode(int a);
 }
 
 static int _ProgressivePopup_bOn = 0;
@@ -22,11 +22,11 @@ extern "C" int ProgressivePopupMsg(int id, int *pArgs, int c, int *pResult)
     case 0x80000001:
         if (*pArgs == 1) {
             _ProgressivePopup_bOn = *pArgs;
-            fn_8023CFD0(1);
+            OSSetProgressiveMode(1);
             fn_801CEB58(1);
         } else {
             _ProgressivePopup_bOn = 0;
-            fn_8023CFD0(0);
+            OSSetProgressiveMode(0);
         }
         break;
     default:

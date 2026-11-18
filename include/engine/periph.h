@@ -29,6 +29,8 @@ typedef struct PerDevice_t {
    axis bytes and button bits from +8. */
 typedef struct PerData_t {
     unsigned int mIndex;
+    int mUnknown04;
+    unsigned char mUnknown08[1];
 } PerData_t;
 
 /* Descriptor passed to PerInit (sPeriphDesc, 0x18 bytes). */
@@ -63,7 +65,7 @@ unsigned int PerGetDeviceTypeT(unsigned int index);
 int PerSystemInit(void *pData);
 int PerSystemShutdown(void);
 int PerRegisterDevices(void);
-void fn_801E26FC(void);
+void PerJoyDriverPollPADs(void);
 
 #ifdef __cplusplus
 }

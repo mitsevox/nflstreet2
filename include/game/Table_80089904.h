@@ -39,7 +39,7 @@ struct Entry_80089904 {
     Info_80089904 *mpInfo;
 };
 
-/* Filled by fn_801BBC3C: an entry count followed by the entries. */
+/* Filled by AnimFileGetStateAnimList: an entry count followed by the entries. */
 struct Table_80089904 {
     unsigned short mCount;
     unsigned char mUnknown2[2];
@@ -48,7 +48,7 @@ struct Table_80089904 {
 
 extern "C" {
 int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
-void fn_801BBC3C(unsigned short a, unsigned short b, Table_80089904 *pTable);
+void AnimFileGetStateAnimList(unsigned short a, unsigned short b, Table_80089904 *pTable);
 }
 
 #endif

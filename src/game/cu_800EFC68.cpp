@@ -1,4 +1,4 @@
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/StyleTracker.h"
 #include "game/fn_801248D4.h"
 #include "game/Directions_8012430C.h"
@@ -480,7 +480,7 @@ struct Entry_801018B4 {
     unsigned short mUnknown16;
 };
 
-/* 8-byte item of List_801018B4: two halfwords for fn_801BA2A8 and the
+/* 8-byte item of List_801018B4: two halfwords for AnimChanStartAnim and the
    entry pointer. */
 struct Item_801018B4 {
     unsigned short mUnknown0;
@@ -691,8 +691,8 @@ int fn_800B83F4(Object_80039F5C *p);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 int PlayerMoveGetKind(Object_80039F5C *p);
 void PlayerMoveSetResult(Object_80039F5C *p, int a);
-int fn_801BA6B0(Entry_800EAC9C *pEntry);
-void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
+int AnimChanIsMirrored(Entry_800EAC9C *pEntry);
+void AnimChanSetMirrored(Entry_800EAC9C *pEntry, int flag);
 void AnimSeqSetSpeed(void *p, float value);
 float MathInverse(float value);
 int fn_800B83A0(Object_80039F5C *p);
@@ -2183,7 +2183,7 @@ extern "C" int fn_800FC4A8(Object_80039F5C *p, Block_800FCC24 *pBlock, int mode)
         int index;
 
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, 1.0f, p);
-        index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
+        index = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, animation, 0);
         p->mpUnknown800[index].mUnknown2C = speed;
         return 1;
     }

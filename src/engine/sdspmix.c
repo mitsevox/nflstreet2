@@ -2,8 +2,10 @@
 
 #include "engine/sndlib.h"
 
+static SndDrvMixChannel_t __MIXChannel[64];
+static int numoutputchannels;
 
-void fn_80271D34(Voice_803A7734 *voice)
+void SNDDRV_DSPMixerResetChannel(SndDrvMixChannel_t *voice)
 {
     voice->m4 = 0x50000000;
     voice->m8 = 0;
@@ -14,19 +16,19 @@ void fn_80271D34(Voice_803A7734 *voice)
     voice->m30 = 0;
 }
 
-void fn_80271D78(AXVPB *vpb, float *p, unsigned int a, int b)
+void SNDDRV_DSPMixerSetPan(AXVPB *vpb, float *p, unsigned short a, int b)
 {
-    Voice_803A7734 *voice = &lbl_803A7734[vpb->index];
+    SndDrvMixChannel_t *voice = &__MIXChannel[vpb->index];
 
-    if (lbl_803A8D34 == 4) {
+    if (numoutputchannels == 4) {
         unsigned int index = a >> 8;
 
         // FAKEMATCH: both store orders below found by trying all 24 orders of each block
         if (b == 0) {
-            voice->m3A = lbl_80300050[index][1];
-            voice->m52 = lbl_80300050[index][3];
-            voice->m4E = lbl_80300050[index][2];
-            voice->m36 = lbl_80300050[index][0];
+            voice->m3A = SNDDRV_dolbypl2balances[index][1];
+            voice->m52 = SNDDRV_dolbypl2balances[index][3];
+            voice->m4E = SNDDRV_dolbypl2balances[index][2];
+            voice->m36 = SNDDRV_dolbypl2balances[index][0];
         } else {
             voice->m36 = 0;
             voice->m4E = 0;
@@ -40,52 +42,52 @@ void fn_80271D78(AXVPB *vpb, float *p, unsigned int a, int b)
     voice->m4 |= 0x40000000;
 }
 
-void fn_80271E50(AXVPB *vpb, unsigned short value, int which)
+void SNDDRV_DSPMixerSetAuxBus(AXVPB *vpb, unsigned short value, int which)
 {
-    Voice_803A7734 *voice = &lbl_803A7734[vpb->index];
+    SndDrvMixChannel_t *voice = &__MIXChannel[vpb->index];
 
     if (which == 1) {
         voice->m46 = value;
         voice->m42 = value;
-        if (lbl_803A8D34 == 4) {
+        if (numoutputchannels == 4) {
             voice->m4A = value;
             voice->m56 = value;
         }
     } else if (which == 2) {
         voice->m52 = value;
         voice->m4E = value;
-        if (lbl_803A8D34 == 3) {
+        if (numoutputchannels == 3) {
             voice->m56 = value;
         }
     }
     voice->m4 |= 0x40000000;
 }
 
-void fn_80271EC4(int mode)
+void SNDDRV_DSPMixerInit(int mode)
 {
     int i;
 
     for (i = 0; i < 64; i++) {
-        fn_80271D34(&lbl_803A7734[i]);
+        SNDDRV_DSPMixerResetChannel(&__MIXChannel[i]);
     }
-    lbl_803A8D34 = mode;
+    numoutputchannels = mode;
 }
 
-void fn_80271F18(AXVPB *vpb, unsigned int flags, int volume, unsigned short aux, int unused, float *p,
-                 unsigned int a, int b)
+void SNDDRV_DSPMixerInitChannel(AXVPB *vpb, unsigned long flags, int volume, unsigned short aux, unsigned short unused,
+                 float *p, unsigned short a, int b)
 {
-    Voice_803A7734 *voice = &lbl_803A7734[vpb->index];
+    SndDrvMixChannel_t *voice = &__MIXChannel[vpb->index];
     unsigned short mixerCtrl = 0;
     BOOL enabled;
 
     voice->m0 = vpb;
     voice->m4 = flags & 4;
     voice->m8 = volume;
-    fn_80271E50(vpb, aux, 1);
+    SNDDRV_DSPMixerSetAuxBus(vpb, aux, 1);
     voice->m40 = voice->m42;
     voice->m44 = voice->m46;
     voice->m48 = voice->m4A;
-    fn_80271D78(vpb, p, a, b);
+    SNDDRV_DSPMixerSetPan(vpb, p, a, b);
     voice->m34 = voice->m36;
     voice->m38 = voice->m3A;
     voice->m4C = voice->m4E;
@@ -139,25 +141,25 @@ void fn_80271F18(AXVPB *vpb, unsigned int flags, int volume, unsigned short aux,
     OSRestoreInterrupts(enabled);
 }
 
-void fn_8027210C(AXVPB *vpb)
+void SNDDRV_DSPMixerReleaseChannel(AXVPB *vpb)
 {
-    lbl_803A7734[vpb->index].m0 = 0;
+    __MIXChannel[vpb->index].m0 = 0;
 }
 
-void fn_80272128(AXVPB *vpb, int value)
+void SNDDRV_DSPMixerSetVol(AXVPB *vpb, int value)
 {
-    Voice_803A7734 *voice = &lbl_803A7734[vpb->index];
+    SndDrvMixChannel_t *voice = &__MIXChannel[vpb->index];
 
     voice->m8 = value;
     voice->m4 |= 0x10000000;
 }
 
-void fn_80272150(void)
+void SNDDRV_DSPMixerUpdate(void)
 {
     int i;
 
     for (i = 0; i < 64; i++) {
-        Voice_803A7734 *voice = &lbl_803A7734[i];
+        SndDrvMixChannel_t *voice = &__MIXChannel[i];
         AXVPB *vpb = voice->m0;
         int volumeChanged = 0;
         int mixChanged = 0;

@@ -9,7 +9,7 @@
 #include <string.h>
 #include <dolphin/gx/GXManage.h>
 
-/* Record returned by fn_80221BAC. */
+/* Record returned by LLUIGTexNodeGet. */
 struct TexPaletteInfo_t {
     int mUnknown0;
     int mUnknown4;
@@ -27,7 +27,7 @@ struct PaletteDesc_t {
     char *mpUnknown8;
 };
 
-/* One pending entry, applied by TeamLogoUpdatePending once fn_80221BAC finds it. */
+/* One pending entry, applied by TeamLogoUpdatePending once LLUIGTexNodeGet finds it. */
 struct TeamLogoPending_t {
     int mUnknown0;
     int mUnknown4;
@@ -42,10 +42,10 @@ int fn_800841D8(DbCursor *pObject);
 int fn_80084204(DbCursor *pObject);
 void PlaDynClutApplyColors(PaletteDesc_t *pDesc, int id, FMCAPPORTText *pText);
 void fn_801CE910(void);
-void *fn_8021EA44(int index);
-int fn_8021E2B4(void *pObject, int a, int b);
+void *UIGLibraryGetGlobal(int index);
+int UIGLibraryLoadItem(void *pObject, int a, int b);
 char *fn_80220BFC(int a, int b);
-TexPaletteInfo_t *fn_80221BAC(void *pObject, int a, int b);
+TexPaletteInfo_t *LLUIGTexNodeGet(void *pObject, int a, int b);
 void DCStoreRange(char *p, int size);
 }
 
@@ -76,7 +76,7 @@ void TeamLogoTintPalette(int id, int a, int b, int c, const unsigned char *pColo
     int count;
     int bytes;
 
-    pRecord = fn_80221BAC(fn_8021EA44(1), a, b);
+    pRecord = LLUIGTexNodeGet(UIGLibraryGetGlobal(1), a, b);
     count = 256;
     bytes = 4;
     desc.mUnknown0 = pRecord->mUnknown8;
@@ -110,7 +110,7 @@ void TeamLogoTintMatchup(int a, int b)
     int id0;
     int id1;
 
-    pObject = fn_8021EA44(1);
+    pObject = UIGLibraryGetGlobal(1);
     fn_80083E1C(&cursor, 0);
     fn_80084034(&cursor, a, 0);
     id0 = fn_80084158(&cursor);
@@ -123,8 +123,8 @@ void TeamLogoTintMatchup(int a, int b)
     color1[1] = fn_800841D8(&cursor);
     color1[2] = fn_80084204(&cursor);
     fn_80083F68(&cursor);
-    fn_8021E2B4(pObject, 4, id0);
-    fn_8021E2B4(pObject, 4, id1);
+    UIGLibraryLoadItem(pObject, 4, id0);
+    UIGLibraryLoadItem(pObject, 4, id1);
     TeamLogoTintPalette(TeamLogoGetSlot(0), 4, id0, 0xAC, color0);
     TeamLogoTintPalette(TeamLogoGetSlot(1), 4, id1, 0xAC, color1);
 }
@@ -153,7 +153,7 @@ void TeamLogoUpdatePending(void)
     }
     for (i = 0; i < 2; i++) {
         if (_TeamLogo_aPending[i].mUnknown4 != -1) {
-            if (fn_80221BAC(fn_8021EA44(1), _TeamLogo_aPending[i].mUnknown0, _TeamLogo_aPending[i].mUnknown4)) {
+            if (LLUIGTexNodeGet(UIGLibraryGetGlobal(1), _TeamLogo_aPending[i].mUnknown0, _TeamLogo_aPending[i].mUnknown4)) {
                 TeamLogoTintPalette(TeamLogoGetSlot(i), _TeamLogo_aPending[i].mUnknown0, _TeamLogo_aPending[i].mUnknown4, _TeamLogo_aPending[i].mUnknown8,
                             _TeamLogo_aPending[i].mUnknown12);
                 _TeamLogo_aPending[i].mUnknown4 = -1;

@@ -16,7 +16,6 @@ const char* __DSPVersion = "<< Dolphin SDK - DSP\trelease build: Apr 17 2003 12:
 
 static s32 __DSP_init_flag = 0;
 
-void fn_80285DC8(__OSInterrupt interrupt, OSContext* context);
 u32 DSPCheckMailToDSP(void)
 {
     return (__DSPRegs[0] >> 0xF) & 1;
@@ -54,7 +53,7 @@ void DSPInit(void)
     }
     OSRegisterVersion(__DSPVersion);
     oldInt = OSDisableInterrupts();
-    __OSSetInterruptHandler(7, fn_80285DC8);
+    __OSSetInterruptHandler(7, __DSPHandler);
     __OSUnmaskInterrupts(0x1000000);
     reg = __DSPRegs[5];
     reg = (reg & ~0xA8) | 0x800;

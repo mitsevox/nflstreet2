@@ -9,7 +9,7 @@
 #include "game/Record_8011F4F8.h"
 #include "game/Record_8011F518.h"
 #include "game/Record_800B15FC.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
@@ -450,7 +450,7 @@ extern "C" void fn_8016E498(void)
     fn_8002C9A8(lbl_803EA368, 1, 0);
     if (fn_800A937C() == 0 && fn_800A9680() == 0) {
         fn_8002C9A8(lbl_803EA368, 2, 0);
-        fn_800310C0(lbl_803EA368, 2, 0, &ballPos, 0);
+        ReplayEventAdd(lbl_803EA368, 2, 0, &ballPos, 0);
     }
     fn_8016E064();
     fn_80120618();
@@ -844,7 +844,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
             }
             break;
         }
-        fn_800310C0(lbl_803EA368, 11, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+        ReplayEventAdd(lbl_803EA368, 11, p, &p->mMotion.mPos, &p->mMotion.mFacing);
         pRecord = fn_800B15FC();
         fn_8009BD2C(p, &pRecord->mUnknown0);
         pRecord->mUnknownC = ballPos.mX < 0.5f - fn_80178A08()
@@ -917,17 +917,17 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                 case 2:
                     break;
                 }
-                fn_800310C0(lbl_803EA368, 11, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                ReplayEventAdd(lbl_803EA368, 11, p, &p->mMotion.mPos, &p->mMotion.mFacing);
             }
             pOther = fn_8017876C();
             fn_800B1698(p, pOther);
             if (pOther != 0) {
-                fn_800310C0(lbl_803EA368, 7, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);
-                fn_800310C0(lbl_803EA368, 25, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);
+                ReplayEventAdd(lbl_803EA368, 7, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);
+                ReplayEventAdd(lbl_803EA368, 25, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);
             }
             if (!skip) {
                 StyleTrackerOnTackle(p, line);
-                fn_800310C0(lbl_803EA368, 6, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                ReplayEventAdd(lbl_803EA368, 6, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                 fn_80178370();
             }
             pOwner->mFlags &= ~0x10000;

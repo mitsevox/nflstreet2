@@ -160,7 +160,7 @@ struct Object_801618D8 {
     int mUnknown104;
 };
 
-/* Position that fn_801F4934 writes for a playing stream. */
+/* Position that SndStreamGetPosition writes for a playing stream. */
 struct Position_801F4934 {
     int mUnknown0;
     int mUnknown4;
@@ -174,7 +174,7 @@ void PlyrRouteShowTeam(int a, int team);
 int SndgChannelGetStream(int idx);
 Object_801618D8 *fn_80162DBC(int index);
 void fn_80162DD0(Object_801618D8 *item, Vector_80039F5C *point);
-void fn_801F4934(int a, Position_801F4934 *pPosition);
+void SndStreamGetPosition(int a, Position_801F4934 *pPosition);
 }
 
 extern "C" int fn_800B9F50(void)
@@ -183,11 +183,11 @@ extern "C" int fn_800B9F50(void)
     Position_801F4934 position;
     int done = 0;
 
-    fn_801F4834(SndgChannelGetStream(4), &status);
+    SndStreamGetStatus(SndgChannelGetStream(4), &status);
     if (status.mUnknown0 == 0) {
         position.mUnknown4 = 0xFFFF;
     } else {
-        fn_801F4934(status.mUnknown4, &position);
+        SndStreamGetPosition(status.mUnknown4, &position);
     }
     while (!done && position.mUnknown4 >= lbl_803EAB88->mpUnknown178->mTime) {
         Event_800B9F50 *pEvent = lbl_803EAB88->mpUnknown178++;

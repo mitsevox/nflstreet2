@@ -58,8 +58,6 @@ void fn_801F87FC(int a);
 int fn_80219044(void *p, int a, int b, int c, struct Entry_80219044 **ppEntries);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-int fn_8023CF60(void);
-void fn_8023CFD0(int a);
 }
 
 /* Filled by PerGetDeviceData; the byte array at +8 is indexed by Per_MaxAxis + 1. */
@@ -122,7 +120,7 @@ static void _BootProgressiveCheck(void)
 {
     unsigned int i = 0;
     PerDeviceData_t *pState = (PerDeviceData_t *)fn_801D2B7C(PerSizeofPerDataT(), 0, 0);
-    int found = fn_8023CF60() == 1;
+    int found = OSGetProgressiveMode() == 1;
 
     for (; !found && i < 4; i++) {
         if (PerGetDeviceStatus(i) == 2) {
@@ -162,7 +160,7 @@ static void _BootProgressiveCheck(void)
         _BootWaitForScreen(gUISMainInfo, 1, 3, -1);
         MsgGameSetMemCardActive(0);
     } else {
-        fn_8023CFD0(0);
+        OSSetProgressiveMode(0);
     }
 }
 

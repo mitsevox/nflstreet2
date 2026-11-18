@@ -55,7 +55,7 @@
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#include "engine/fn_80266AD8.h"
+#include "engine/dummy.h"
 #include "engine/mbtowc_r.h"
 #include "engine/math_support.h"
 #include "engine/Reent_802622DC.h"
@@ -331,7 +331,7 @@ _vfwrite (int a, const char *s, unsigned int n, int flush)
 
   if (flush == 1)
     {
-      result = fn_80266AD8 (a, _VF_acBuffer, _VF_iBuffered);
+      result = write (a, _VF_acBuffer, _VF_iBuffered);
       _VF_iBuffered = 0;
       _VF_pWrite = _VF_acBuffer;
       return result;
@@ -342,7 +342,7 @@ _vfwrite (int a, const char *s, unsigned int n, int flush)
       _VF_pWrite++;
       if (++_VF_iBuffered > 127)
 	{
-	  result = fn_80266AD8 (a, _VF_acBuffer, _VF_iBuffered);
+	  result = write (a, _VF_acBuffer, _VF_iBuffered);
 	  _VF_pWrite = _VF_acBuffer;
 	  _VF_iBuffered = 0;
 	  if (result == 0)

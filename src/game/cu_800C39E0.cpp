@@ -4,7 +4,7 @@
 #include "game/LevelData.h"
 #include "game/LevelWallInfo.h"
 #include "game/Table_80089904.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_802372EC.h"
 #include "game/Object_8017886C.h"
@@ -35,8 +35,8 @@ void AnimMomentumUpdate(AnimMomentum_t *pState, Object_80039F5C *p);
 void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock);
 void fn_800DF654(Object_80039F5C *p, Block_801BE60C *pRecord);
 int fn_801784C4(void);
-int fn_801BA6B0(Record_800D81C8 *pChannel);
-void fn_801BA6BC(Record_800D81C8 *pChannel, int enable);
+int AnimChanIsMirrored(AnimChannel_t *pChannel);
+void AnimChanSetMirrored(AnimChannel_t *pChannel, int enable);
 
 extern Record_800C432C lbl_803103F0[10];
 extern float lbl_803EABD8;
@@ -57,7 +57,7 @@ extern "C" void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int
 }
 
 
-extern "C" int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA, Record_800D81C8 *pEntries,
+extern "C" int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries,
                            Object_80039F5C *p, unsigned int mode)
 {
     Block_800DE3B0 *pBlock = (Block_800DE3B0 *)fn_801BE60C(p->mpUnknown792, key);
@@ -68,16 +68,16 @@ extern "C" int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA,
 
         fn_801BE760(p->mpUnknown792, key, 1);
         index = p->mUnknown1008.mUnknown0 | (p->mUnknown1008.mUnknown1 << 8);
-        pBlock->mUnknown1D = fn_801BA2A8(pA, pEntries, p->mUnknown1008.mUnknown2 | (p->mUnknown1011 << 8),
+        pBlock->mUnknown1D = AnimChanStartAnim(pA, pEntries, p->mUnknown1008.mUnknown2 | (p->mUnknown1011 << 8),
                                          index & 0x7FFF, key, p, 1.0f);
         pBlock->mUnknown18 = key;
         p->mFlags |= 0x200;
         fn_800C38C4(p, pBlock, index);
         if (pBlock->mUnknown1F) {
-            Record_800D81C8 *pEntry = &pEntries[pBlock->mUnknown1D];
+            AnimChannel_t *pEntry = &pEntries[pBlock->mUnknown1D];
 
-            fn_801BA6BC(pEntry, fn_801BA6B0(pEntry) == 0);
-            pBlock->mUnknown1F = fn_801BA6B0(&pEntries[pBlock->mUnknown1D]);
+            AnimChanSetMirrored(pEntry, AnimChanIsMirrored(pEntry) == 0);
+            pBlock->mUnknown1F = AnimChanIsMirrored(&pEntries[pBlock->mUnknown1D]);
         }
         AnimMomentumInit(&pBlock->mUnknown20, p, pBlock->mUnknown1D);
         pBlock->mUnknown1E = fn_801784C4();

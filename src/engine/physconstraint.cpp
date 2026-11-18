@@ -51,8 +51,8 @@ void PointConstraint::Solve()
     fn_80227CC0(&pointA, &mAnchorA);
     fn_801D06D4(pMatrixB);
     fn_80227CC0(&pointB, &mAnchorB);
-    fn_801E9E18(mpBodyA, &pointA, &velA);
-    fn_801E9E18(mpBodyB, &pointB, &velB);
+    GetBodyPointVelocity(mpBodyA, &pointA, &velA);
+    GetBodyPointVelocity(mpBodyB, &pointB, &velB);
     fn_802276B4(&error, &velB, &velA);
     fn_802276B4(&delta, &pointB, &pointA);
     fn_80227264(&delta, &delta, 1.0f);
@@ -76,11 +76,11 @@ void PointConstraint::Solve()
         invMassB = mpBodyB->mUnknown044;
         dotA = fn_80227704(&normal, &crossA);
         fn_80227264(&impulse, &normal, length / (invMassA + invMassB + dotA + fn_80227704(&normal, &crossB)));
-        fn_801E9D64(mpBodyA, &impulse, &pointA);
+        ApplyBodyImpulseAtPoint(mpBodyA, &impulse, &pointA);
         impulse.x = -impulse.x;
         impulse.y = -impulse.y;
         impulse.z = -impulse.z;
-        fn_801E9D64(mpBodyB, &impulse, &pointB);
+        ApplyBodyImpulseAtPoint(mpBodyB, &impulse, &pointB);
         fn_801E987C(mpBodyA);
         fn_801E987C(mpBodyB);
     }

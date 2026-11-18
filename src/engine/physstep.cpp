@@ -101,7 +101,7 @@ void SleepController::UpdateSleepState(RigidBody_t *pBody, float dt)
         if (IsBodyResting(pBody)) {
             time = *(float *)&pBody->mUserData + dt;
             if (time > mSleepTime && (!mpFilter || mpFilter->AllowStateChange(pBody, 0))) {
-                fn_801E9F0C(pBody, 3);
+                SetBodyMotionState(pBody, 3);
                 time = 0.0f;
             }
         } else {
@@ -111,13 +111,13 @@ void SleepController::UpdateSleepState(RigidBody_t *pBody, float dt)
                 target = maxSpeed * 0.95f;
                 float speed = fn_80260B1C(speedSq);
                 fn_80227264(&vel, &pBody->mUnknown07C, target / speed);
-                fn_801E9C1C(pBody, &vel);
+                SetBodyAngularMomentum(pBody, &vel);
             }
         }
         pBody->mUserData = *(int *)&time;
     }
     if (state == 3 && !IsBodyResting(pBody) && (!mpFilter || mpFilter->AllowStateChange(pBody, 1))) {
-        fn_801E9F0C(pBody, 2);
+        SetBodyMotionState(pBody, 2);
         time = 0.0f;
         pBody->mUserData = *(int *)&time;
     }

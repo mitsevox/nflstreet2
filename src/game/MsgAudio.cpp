@@ -38,7 +38,7 @@ int SpchIGGetChannelStream(unsigned int index);
 void CamSetupAspect(void);
 void UISGameSetAspect(Viewport_t *pObject, int mode);
 Viewport_t *UISGameGetMainViewport(void);
-int fn_801F48B8(int handle);
+int SndStreamGetVol(int handle);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 
 extern void *gUISMainInfo;
@@ -279,11 +279,11 @@ void OptAudioUpdate(int unknown)
         fn_80219650(gUISMainInfo, &a, &b);
         if ((a == 5 && b == 5) || (a == 3 && b == 11)) {
             SndgChannelFadeStream(_OptAudio_uPreviewChannel, 0, 127);
-            fn_801F4834(SndgChannelGetStream(_OptAudio_uPreviewChannel), &status);
-            if (status.mUnknown0 <= 0 && fn_801F48B8(SndgChannelGetStream(_OptAudio_uPreviewChannel)) != 0) {
+            SndStreamGetStatus(SndgChannelGetStream(_OptAudio_uPreviewChannel), &status);
+            if (status.mUnknown0 <= 0 && SndStreamGetVol(SndgChannelGetStream(_OptAudio_uPreviewChannel)) != 0) {
                 pair.mpUnknown0 = _OptAudio_hSoundRes;
                 pair.mUnknown4 = _OptAudio_iPreviewSample;
-                fn_801F4580(SndgChannelGetStream(_OptAudio_uPreviewChannel), &pair, 0, 0);
+                SndStreamQueueFile(SndgChannelGetStream(_OptAudio_uPreviewChannel), &pair, 0, 0);
             }
         } else {
             SndgChannelFadeStream(_OptAudio_uPreviewChannel, 0, 0);

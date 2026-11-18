@@ -1,6 +1,6 @@
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/StyleTracker.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/fn_801248D4.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
@@ -720,7 +720,7 @@ extern "C" int fn_80105FF8(Object_80039F5C *p, Ball_t *pBall, float time) {
         unsigned char side = p->mUnknown776;
 
         if (p->mpState->mId == 10 || p->mpState->mId == 16) {
-            int index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
+            int index = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, animation, 0);
 
             if (index != 0xFFFF && AnimSeqGetTimeToOpcode(&p->mpUnknown800[index].mUnknown4C, 0xC001) > time) {
                 ready = 1;
@@ -903,7 +903,7 @@ extern "C" int fn_801067D8(Object_80039F5C *p) {
     return fn_8012506C(p, 6) < lbl_803EAEF4;
 }
 
-extern "C" int fn_8010680C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+extern "C" int fn_8010680C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
                            Object_80039F5C *p, unsigned int phase) {
     Turn_8010680C *pTurn = (Turn_8010680C *)fn_801BE60C(p->mpUnknown792, key);
 
@@ -914,17 +914,17 @@ extern "C" int fn_8010680C(Table_80089904 *pTable, unsigned short key, void *pRe
 
         if (index >= 0) {
             p->mFlags &= ~4;
-            pTurn->mUnknown8 = fn_801BA2A8(pRecord, pEntries, pTable->mEntries[index].mUnknown0,
+            pTurn->mUnknown8 = AnimChanStartAnim(pRecord, pEntries, pTable->mEntries[index].mUnknown0,
                                            pTable->mEntries[index].mUnknown2, key, p, 1.0f);
         }
         facing = p->mUnknown512.mUnknown8;
         if (MathAngleDiff(facing, p->mMotion.mFacing) > 0xB60B) {
             fn_801BE760(p->mpUnknown792, key, 1);
-            if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 204)) {
+            if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 204)) {
                 int entry;
 
                 pEntries = p->mpUnknown800;
-                entry = fn_801BA5A8(p->mpUnknown796, pEntries, 204, 0);
+                entry = AnimChanGetStateChannelByIndex(p->mpUnknown796, pEntries, 204, 0);
 
                 pTurn->mUnknown4 = pEntries[entry].mUnknown48;
                 if (pTurn->mUnknown4 != 0.0f ||

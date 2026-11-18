@@ -1,3 +1,5 @@
+/* Nintendo SDK virtual memory, address mapping: VMAlloc gives a virtual range ARAM pages to back
+ * it, and the lookup tables here translate between virtual pages and their ARAM pages. */
 #include <dolphin/os.h>
 #include <dolphin/base/PPCArch.h>
 #include <libc/stdio.h>
@@ -25,12 +27,12 @@ BOOL VMAlloc(u32 virtualAddr, u32 size) {
     u32 offset;
     u32 addr;
 
-    firstPage = __VMGetARAMStart() >> 12;
-    endPage = firstPage + (__VMGetARAMSize() >> 12);
+    firstPage = VMGetARAMBase() >> 12;
+    endPage = firstPage + (VMGetARAMSize() >> 12);
     if (sARAMPageCursor < firstPage) {
         sARAMPageCursor = firstPage;
     }
-    if (sAllocatedARAM + size > __VMGetARAMSize()) {
+    if (sAllocatedARAM + size > VMGetARAMSize()) {
         return FALSE;
     }
     for (offset = 0; offset < size; offset += 0x1000) {
@@ -58,7 +60,7 @@ u32 __VMTranslateVMPageToARAMPage(u32 virtualAddr) {
     return 0;
 }
 
-BOOL __VMIsPageMapped(u32 virtualAddr) {
+BOOL __VMDoesMappingExist(u32 virtualAddr) {
     return (sVirtualToARAMLUT[VM_LUT_INDEX(virtualAddr)] & 0x7FFFFFFF) != 0;
 }
 
@@ -71,11 +73,11 @@ void __VMMappingErrorAlert(u32 virtualAddr) {
 }
 
 /* Marks virtualAddr's page as written out, so the next fault copies it back from ARAM. */
-void __VMSetPageInARAM(u32 virtualAddr) {
+void __VMSetARAMPageAsDirty(u32 virtualAddr) {
     sVirtualToARAMLUT[VM_LUT_INDEX(virtualAddr)] |= 0x80000000;
 }
 
-BOOL __VMIsPageInARAM(u32 virtualAddr) {
+BOOL __VMIsARAMPageDirty(u32 virtualAddr) {
     return sVirtualToARAMLUT[VM_LUT_INDEX(virtualAddr)] >> 31;
 }
 

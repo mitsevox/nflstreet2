@@ -2,7 +2,7 @@
    stacks of game data that animation scripts hand to the game when they reach a
    game-defined opcode, and records which sequence file version is in use. */
 
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "engine/animemot.h"
 #include "engine/fn_801F7BD4.h"
 
@@ -60,11 +60,11 @@ int AnimInit(unsigned int mode)
     AnimFileSetCustomRelocateFunc(0);
     switch (mode) {
     case 0:
-        fn_801BC64C(fn_801BC57C);
+        AnimFileSetRelocateBigFileFunc(AnimFileProcessBigFile);
         break;
     case 1:
     case 2:
-        fn_801BC64C(fn_801BC0E8);
+        AnimFileSetRelocateBigFileFunc(AnimFileNewProcessBigFile);
         break;
     }
     _Anim_SeqVersion = mode;

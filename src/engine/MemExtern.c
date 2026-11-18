@@ -103,7 +103,6 @@ static void *_MemExternAlloc(void *pHeapData, int size, int flags, const char *p
     MemExternHeap_t *pHeap = pHeapData;
     unsigned int *pBlock;
     unsigned int want;
-    unsigned int block;
     unsigned int rounded;
     unsigned int offset;
     unsigned int numBlocks;
@@ -119,8 +118,7 @@ static void *_MemExternAlloc(void *pHeapData, int size, int flags, const char *p
     for (pBlock = pHeap->mBlocks; *pBlock < want; pBlock++) {
         offset += *pBlock;
     }
-    block = *pBlock;
-    if (block == BLOCK_END) {
+    if (*pBlock == BLOCK_END) {
         return 0;
     }
     numBlocks = pHeap->mNumBlocks;
@@ -128,28 +126,25 @@ static void *_MemExternAlloc(void *pHeapData, int size, int flags, const char *p
     if (pHeap->mKind == 'b') {
         unsigned int *pScan = pBlock;
         unsigned int scanOffset;
-        unsigned int next;
 
-        scanOffset = offset + block;
+        scanOffset = offset + *pBlock;
         while (*++pScan != BLOCK_END) {
-            next = *pScan;
-            if (next >= want && next < *pBlock) {
+            if (*pScan >= want && *pScan < *pBlock) {
                 pBlock = pScan;
                 offset = scanOffset;
             }
-            scanOffset += next;
-            block = *pBlock;
+            scanOffset += *pScan;
         }
     }
-    if (numBlocks >= maxBlocks || BLOCK_SIZE(block) < size + 0x100) {
-        *pBlock = BLOCK_SIZE(block);
+    if (numBlocks >= maxBlocks || BLOCK_SIZE(*pBlock) < size + 0x100) {
+        *pBlock = BLOCK_SIZE(*pBlock);
     } else {
         unsigned int *pScan;
         unsigned int carry;
         unsigned int next;
 
+        carry = (BLOCK_SIZE(*pBlock) - size) | BLOCK_FREE;
         *pBlock = BLOCK_SIZE(size);
-        carry = (BLOCK_SIZE(block) - size) | BLOCK_FREE;
         for (pScan = pBlock + 1; *pScan != BLOCK_END; pScan++) {
             next = *pScan;
             *pScan = carry;
@@ -244,14 +239,20 @@ int MemInitExternHeap(int ident, int parentIdent, char *pStart, unsigned int siz
         return 0;
     }
     memset(pHeap, 0, sizeof(MemExternHeap_t));
-    pHeap->mBlocks[1] = BLOCK_END;
-    pHeap->mAlign = align;
-    pHeap->mIdent = ident;
-    pHeap->mKind = 'b';
-    pHeap->mNumBlocks = 2;
-    pHeap->mMaxBlocks = maxBlocks * 2;
-    pHeap->mSize = size;
-    pHeap->mBlocks[0] = size | BLOCK_FREE;
-    pHeap->mBase = pStart;
+    {
+        // FAKEMATCH: kind and count held in block locals only so the -1 constant is loaded after them, as in the target
+        int kind = 'b';
+        int numBlocks = 2;
+
+        pHeap->mBlocks[1] = BLOCK_END;
+        pHeap->mAlign = align;
+        pHeap->mIdent = ident;
+        pHeap->mKind = kind;
+        pHeap->mNumBlocks = numBlocks;
+        pHeap->mMaxBlocks = maxBlocks * 2;
+        pHeap->mSize = size;
+        pHeap->mBlocks[0] = size | BLOCK_FREE;
+        pHeap->mBase = pStart;
+    }
     return 0;
 }

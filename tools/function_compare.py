@@ -610,7 +610,7 @@ def generate(original, source_report, tool, cache=None, compile_cache=None):
     accepted_linked = linked_ranges(accepted, sb.address)
     addresses, ambiguous = reference_addresses(root, manifest, accepted)
     compiler, wrapper = sb.setup_compiler.setup()
-    sdk = sb.setup_compiler.setup_sdk() if any(u['compiler'] == 'mwcc' for u in units) else None
+    sdk = sb.setup_compiler.setup_sdks(u['compiler_version'] for u in units if u['compiler'] == 'mwcc')
     work = root / 'build/matching/candidates'
     if work.exists():
         shutil.rmtree(work)

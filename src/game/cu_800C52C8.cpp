@@ -40,7 +40,7 @@
 #include "game/PlayBookTeam.h"
 #include "game/cu_8002B8F8.h"
 #include "game/BigObjInst.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/PauseMenu.h"
 #include "game/AudmonEvent.h"
 #include "game/Block_801BE60C.h"
@@ -803,7 +803,7 @@ extern "C" int fn_800C7118(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
                 StyleTrackerResolveStiffArm(p, 1);
                 fn_800A8954(2, p->mIdBytes[2], p);
                 AudmonEventPostId(97, &p->mMotion.mPos, p->mId, p->mpState->mId, 0, 0);
-                fn_800310C0(lbl_803EA368, 59, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                ReplayEventAdd(lbl_803EA368, 59, p, &p->mMotion.mPos, &p->mMotion.mFacing);
             } else if (isTwo) {
                 StyleTrackerBeginHurdle(p, PlayerMoveGetKind(p), 255);
             } else {

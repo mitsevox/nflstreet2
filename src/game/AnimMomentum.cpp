@@ -107,7 +107,7 @@ extern "C" void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOthe
 extern "C" void AnimMomentumUpdateLinked(AnimMomentum_t *p, AnimMomentumActor_t *pOther)
 {
     if (p && pOther) {
-        Record_800D81C8 *pRecord = &pOther->mpUnknown320[p->mUnknown17];
+        AnimChannel_t *pRecord = &pOther->mpUnknown320[p->mUnknown17];
         AnimSeq_t *pBlock = &pRecord->mUnknown4C;
         if (p->mUnknown17 == 255) return;
         if ((pOther->mUnknownC & 8) && p->mUnknown16) return;

@@ -1,4 +1,4 @@
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include "game/fn_801248D4.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
@@ -200,11 +200,11 @@ extern "C" void fn_80109CA0(Object_80039F5C *p, int animation, unsigned char a, 
     }
     if (animation != fn_801BE648(p->mpUnknown792)) {
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, 1.0f, p);
-        pBlock->mUnknown50 = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
+        pBlock->mUnknown50 = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, animation, 0);
         p->mUnknown512.mUnknown14 = 0;
         p->mFlags &= ~4;
     } else {
-        pBlock->mUnknown50 = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
+        pBlock->mUnknown50 = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, animation, 0);
     }
 }
 

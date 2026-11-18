@@ -1,5 +1,5 @@
 #include "game/cu_8008E978.h"
-#include "engine/Record_800D81C8.h"
+#include "engine/AnimChannel.h"
 
 extern "C" int fn_8009313C(Params_80092E54 *pRequest);
 

@@ -119,7 +119,7 @@ void AnimCacheUpdate(void)
     for (i = 0; i < _AnimCache_nCaches; i++) {
         AnimCacheObjType_t *entry = &_AnimCache_pCaches[i];
         if (entry->mDirty) {
-            fn_801BBB54(i);
+            AnimFileBuildStateCache(i);
             entry->mDirty = 0;
         }
     }

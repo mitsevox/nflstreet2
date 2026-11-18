@@ -4,7 +4,7 @@
    against the target when it is close. */
 
 #include "game/PursueState.h"
-#include "engine/cu_801B9F00.h"
+#include "engine/animchan.h"
 #include <math.h>
 #include "game/Object_80039F5C.h"
 #include "game/PlayBookTeam.h"
@@ -220,7 +220,7 @@ extern "C" unsigned int PursueGetCloseTackleChance(Object_80039F5C *p)
     unsigned int i;
 
     for (i = 0; i < 4; i++) {
-        if (fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, _Pursue_auCloseTargetIds[i], 0) != 0xFFFF) {
+        if (AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, _Pursue_auCloseTargetIds[i], 0) != 0xFFFF) {
             value >>= 1;
             break;
         }

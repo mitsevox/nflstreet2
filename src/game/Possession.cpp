@@ -19,7 +19,7 @@
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
 #include "game/Record_8011F4F8.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/Object_8017886C.h"
@@ -550,7 +550,7 @@ void PossClassifyCatch(Object_80039F5C *p, int *pFlags, int *pAngle, int move, i
             } else {
                 *pFlags = 0x100;
                 if (kind == 7) {
-                    fn_80031328(lbl_803EA368, 0x2A);
+                    ReplayEventInWindow(lbl_803EA368, 0x2A);
                 }
             }
             int ballAngle = fn_801CFE40(velocity.mY, velocity.mX);
@@ -1280,7 +1280,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
                 if (fn_800E0EF0(p)) {
                     HudShowAlert("User Steal");
                     StyleTrackerFinishPitch(p->mId >> 8 & 0xFF, 1, 1);
-                    fn_800310C0(lbl_803EA368, 0x35, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                    ReplayEventAdd(lbl_803EA368, 0x35, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                 } else {
                     StyleTrackerFinishPitch(p->mId >> 8 & 0xFF, 1, 0);
                     HudShowAlert("Stolen Pitch");
@@ -1409,7 +1409,7 @@ void PossLogBallResult(Object_80039F5C *p)
                 target.mX = p->mMotion.mPos.mX;
                 target.mY = p->mMotion.mPos.mY;
                 target.mZ = p->mMotion.mUnknown32;
-                fn_800310C0(lbl_803EA368, 3, p, &target, &p->mMotion.mFacing);
+                ReplayEventAdd(lbl_803EA368, 3, p, &target, &p->mMotion.mFacing);
                 pRecord->mUnknown14 = 6;
                 if (p->mpState->mId == 0x1C) {
                     pRecord->mUnknown4 = fn_8009A578(handle);
@@ -1418,7 +1418,7 @@ void PossLogBallResult(Object_80039F5C *p)
                 }
             } else {
                 Object_80039F5C *pReceiver;
-                fn_800310C0(lbl_803EA368, 4, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                ReplayEventAdd(lbl_803EA368, 4, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                 pReceiver = BallGetLastHolder(pBall);
                 if (pReceiver) {
                     fn_800A3B58(pReceiver, 0xA, 0);
@@ -1664,7 +1664,7 @@ void PossUpdateMissedCatch(PossBallView_t *pEvent)
                 pRecord->mUnknown10 = pTackler->mMotion.mPos.mY;
                 pRecord->mUnknown14 = 0x23;
                 fn_800B1508();
-                fn_800310C0(lbl_803EA368, 0x26, pTackler, &pTackler->mMotion.mPos, &pTackler->mMotion.mFacing);
+                ReplayEventAdd(lbl_803EA368, 0x26, pTackler, &pTackler->mMotion.mPos, &pTackler->mMotion.mFacing);
             }
             AudmonEventPostId(0x2F, &pEvent->mUnknownC, pEvent->mUnknownCC, 0, 0, pEvent->mUnknownF4);
             fn_800A8954(8, pEvent->mUnknownCC >> 8 & 0xFF, fn_8009BCE8(&pEvent->mUnknownCC));

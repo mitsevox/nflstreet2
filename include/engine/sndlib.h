@@ -1,9 +1,11 @@
 #ifndef ENGINE_SNDLIB_H
 #define ENGINE_SNDLIB_H
 
-/* Declarations shared by the files of the sound range 0x802714A8-0x80276DE4:
-   cu_802714A8.cpp, sdspmix.c, snddrv.c and cu_802753F0.cpp. */
+/* Declarations shared by the files of the sound range 0x802714A8-0x80276B7C:
+   cu_802714A8.cpp, sdspmix.c, snddrv.c, sfxrevc.c, slinkmix.c, smixer.c, smixfilt.c, smixfram.c,
+   smixhip.c, smixptch.c and smixtmul.c. */
 
+#include <dolphin/ai.h>
 #include <dolphin/ar.h>
 #include <dolphin/ax.h>
 #include <dolphin/os.h>
@@ -68,7 +70,7 @@ public:
     virtual ~Class_80271B74();
 };
 
-struct Voice_803A7734 {
+struct SndDrvMixChannel_t {
     AXVPB *m0;
     unsigned int m4;
     int m8;
@@ -98,7 +100,7 @@ struct Voice_803A7734 {
 };
 
 struct Channel_803A8D60 {
-    unsigned char mUnknown0[0x18];
+    float m0[6];
     int m18;
     signed char m1C;
     unsigned char mUnknown1D[2];
@@ -111,7 +113,8 @@ struct Channel_803A8D60 {
 };
 
 struct Transfer_803B2B90 {
-    int m0;
+    // FAKEMATCH: volatile only for the target's repeated load of the key in fn_80275288
+    volatile int m0;
     ARQRequest m4;
     unsigned int m24;
     unsigned int m28;
@@ -138,15 +141,19 @@ struct Stream_802743A0 {
 
 struct State_803A8D60 {
     Channel_803A8D60 m0[48];
-    unsigned char mUnknownC00[0x808];
+    unsigned char mUnknownC00[0x800];
+    float m1400;
+    void *m1404;
     u32 m1408;
     u32 m140C;
     Stream_802743A0 *m1410[32];
-    unsigned char mUnknown1490[0x630];
+    unsigned char mUnknown1490[0x10];
+    unsigned char m14A0[0x620];
     unsigned char *m1AC0;
     unsigned char mUnknown1AC4[4];
     OSThread m1AC8;
-    unsigned char mUnknown1DE0[0x8008];
+    OSThreadQueue m1DE0;
+    unsigned char m1DE8[0x8000];
     int m9DE8;
     int m9DEC;
     unsigned char mUnknown9DF0[0x40];
@@ -160,9 +167,12 @@ struct State_803A8D60 {
 };
 
 struct Struct_80270E04 {
-    unsigned char mUnknown0[0x64];
+    unsigned char mUnknown0[0x18];
+    unsigned short m18;
+    unsigned char mUnknown1A[0x4A];
     int *m64;
     int m68;
+    unsigned char mUnknown6C[0x94];
 };
 
 struct Struct_802753AC {
@@ -221,9 +231,7 @@ extern "C" {
 extern int lbl_80300044;
 extern const unsigned short lbl_802B7A98[];
 extern const short lbl_802B7AF0[2][3][16];
-extern Voice_803A7734 lbl_803A7734[64];
-extern int lbl_803A8D34;
-extern unsigned short lbl_80300050[256][4];
+extern unsigned short SNDDRV_dolbypl2balances[256][4];
 extern State_803A8D60 lbl_803A8D60;
 extern void (*lbl_803B5028)(Setup_80272EC4 *setup);
 extern void (*lbl_803B502C)(void);
@@ -234,26 +242,41 @@ extern void (*lbl_803B5038)(int index);
 extern void (*lbl_803B503C)(int index);
 extern void (*lbl_803B5040)(int index, int value);
 extern int lbl_8030002C;
-extern int lbl_80300E98;
 extern OSMutex lbl_803B4B90;
 extern Node_803B4E20 **lbl_803B4E20;
 extern float **lbl_803B4E24;
+extern int lbl_80300850;
+extern float lbl_80300854;
+extern int lbl_80300858;
+extern unsigned char lbl_803A7728;
+extern int lbl_803A772C;
+extern float *lbl_803A8D40;
+
+void SNDSYSI_variabletimerservice(void);
+void SNDSYSI_100hzserver(void);
+void fn_80272D34(void **buffers, void *unused);
+void *fn_80273264(void *arg);
+int fn_80273648(int mode);
+void fn_80274924(int index);
+void fn_80276938(int index, float value);
+void fn_80277A60(unsigned short angle, float *levels);
+void fn_8027981C(int count);
 
 void fn_8026A0E8(int value);
-void *fn_8026B5D4(int size);
-void fn_8026B7D8(void *p);
-void fn_8026D0AC(void);
-void fn_8026D0EC(void);
-void fn_8027555C(void);
-int fn_80276820(int index);
-void fn_80276868(int index, int value);
+void *SNDMEMI_allocz(int size);
+void SNDMEMI_free(void *p);
+void SNDSYS_entercritical(void);
+void SNDSYS_leavecritical(void);
+void SNDSYS_linkmaincpumixer(void);
+int MIX_getframe(int index);
+void MIX_sethighpass(int index, int value);
 void *fn_80279960(int size);
 void fn_80279B24(void *p);
 void fn_80279D0C(Node_80279D90 *node, Params_80279D0C *params);
-void fn_80279DF8(Node_80279D90 **list, Node_80279D90 *node);
+void SFILTER_remove(Node_80279D90 **list, Node_80279D90 *node);
 void fn_8027A7A0(Node_80279D90 *node, int a, int b);
 void fn_80277240(Node_80279D90 *node);
-void fn_80275F54(void);
+void MIX_reset(void);
 void fn_802747D8(int index);
 void fn_80279598(void);
 int fn_8027271C(int index);
@@ -264,15 +287,15 @@ void fn_802763E0(void **buffers, int count);
 void fn_80277404(Node_80279D90 *node, void *data, int index);
 
 int fn_80271A04(void);
-void fn_80271D34(Voice_803A7734 *voice);
-void fn_80271D78(AXVPB *vpb, float *p, unsigned int a, int b);
-void fn_80271E50(AXVPB *vpb, unsigned short value, int which);
-void fn_80271EC4(int mode);
-void fn_80271F18(AXVPB *vpb, unsigned int flags, int volume, unsigned short aux, int unused, float *p,
-                 unsigned int a, int b);
-void fn_8027210C(AXVPB *vpb);
-void fn_80272128(AXVPB *vpb, int value);
-void fn_80272150(void);
+void SNDDRV_DSPMixerResetChannel(SndDrvMixChannel_t *voice);
+void SNDDRV_DSPMixerSetPan(AXVPB *vpb, float *p, unsigned short a, int b);
+void SNDDRV_DSPMixerSetAuxBus(AXVPB *vpb, unsigned short value, int which);
+void SNDDRV_DSPMixerInit(int mode);
+void SNDDRV_DSPMixerInitChannel(AXVPB *vpb, unsigned long flags, int volume, unsigned short aux, unsigned short unused,
+                 float *p, unsigned short a, int b);
+void SNDDRV_DSPMixerReleaseChannel(AXVPB *vpb);
+void SNDDRV_DSPMixerSetVol(AXVPB *vpb, int value);
+void SNDDRV_DSPMixerUpdate(void);
 void fn_8027257C(void);
 void fn_80272618(int value);
 void fn_80272644(AXVPB *vpb);
@@ -306,25 +329,25 @@ void fn_80275358(void);
 void fn_8027535C(void);
 void fn_80275384(void);
 int fn_802753AC(Struct_802753AC *p, int mode);
-float *fn_802753F0(int index);
-void fn_80275404(void);
-void fn_802754A8(void);
-void fn_8027555C(void);
-void fn_80275F80(int index, int type, int mode, int a, int b, void *data, int c, int d, int e, int f, int g, int h,
+float *MIX_getwetbuffer(int index);
+void MIX_createFxglobals(void);
+void MIX_destroyFxglobals(void);
+void SNDSYS_linkmaincpumixer(void);
+void MIX_playinit(int index, int type, int mode, int a, int b, void *data, int c, int d, int e, int f, int g, int h,
                  int k, int slot);
-void fn_80275948(float value);
-void *fn_80275B7C(int size);
-void fn_80275B9C(void *p);
-void fn_80275BBC(Setup_80272EC4 *setup);
-void fn_80276238(int index);
-void fn_80276278(int index);
-void fn_80276378(int index, int channel, float value);
-void fn_802763AC(int index, int slot, float value);
-void fn_80276798(int index, int slot, Desc_80276798 *desc);
-int fn_80276820(int index);
-void fn_80276868(int index, int value);
-void fn_80276A84(int index, int value);
-void fn_80276B40(int index, int value);
+void SNDMIX_setmasterlowpass(float value);
+void *SNDI_New(int size);
+void SNDI_Delete(void *p);
+void MIX_create(Setup_80272EC4 *setup);
+void MIXI_stop(int index);
+void MIX_stop(int index);
+void SNDMIX_setdrygain(int index, int channel, float value);
+void SNDMIX_setwetgain(int index, int slot, float value);
+void MIX_filteradd(int index, int slot, Desc_80276798 *desc);
+int MIX_getframe(int index);
+void MIX_sethighpass(int index, int value);
+void MIX_setpitch(int index, int value);
+void MIX_settimemult(int index, int value);
 }
 
 

@@ -46,17 +46,45 @@ def extract(archive, version):
     return directory
 
 
-def setup_sdk():
-    lock = json.loads((ROOT / "tools/compiler-tools.json").read_text())
-    version = lock.get("sdk_compiler_version")
-    if version != "GC/1.2.5n":
+# The reviewed CodeWarrior versions: the SDK default, and the ones an SDK profile may select
+# with "compiler_version" (each such profile carries its own compiler evidence row).
+SDK_DEFAULT = "GC/1.2.5n"
+SDK_PROFILE_VERSIONS = {"GC/1.3"}
+
+
+def sdk_versions(lock=None):
+    """(default SDK compiler, versions an SDK profile may select) from the pinned lock file."""
+    lock = lock or json.loads((ROOT / "tools/compiler-tools.json").read_text())
+    default = lock.get("sdk_compiler_version")
+    extra = lock.get("sdk_profile_compiler_versions", [])
+    if default != SDK_DEFAULT:
         raise RuntimeError("Unsupported pinned SDK compiler")
+    if not isinstance(extra, list) or len(set(extra)) != len(extra) \
+            or not set(extra) <= SDK_PROFILE_VERSIONS:
+        raise RuntimeError("Unsupported pinned SDK profile compiler")
+    return default, set(extra)
+
+
+def setup_sdk(version=None):
+    """The directory of one pinned CodeWarrior version (the SDK default when version is None)."""
+    lock = json.loads((ROOT / "tools/compiler-tools.json").read_text())
+    default, extra = sdk_versions(lock)
+    version = default if version is None else version
+    if version != default and version not in extra:
+        raise RuntimeError(f"SDK compiler {version} is not pinned in tools/compiler-tools.json")
     compilers = toolchain.recorded("compilers")
     if compilers is not None:
+        if not (compilers / version / "mwcceppc.exe").is_file():
+            raise RuntimeError(f"The recorded compiler pack has no {version}")
         return compilers / version
     archive = DESTINATION / "compilers.zip"
     fetch(lock["compilers"], archive)
     return extract(archive, version)
+
+
+def setup_sdks(versions):
+    """{version: directory} for each SDK compiler version the given units use."""
+    return {version: setup_sdk(version) for version in sorted(set(versions))}
 
 
 def setup():

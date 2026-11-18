@@ -126,10 +126,10 @@ extern "C" void SpchIGSayDownAndDistance(void)
     SpchIGGetDistanceFlags(&result2);
     if (fn_80178360() == 0) {
         SpchIGGetPlayerCategory(&result3, SpchIGGetTeamPlayer(0));
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x2002), 3, result1, result2, result3);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x2002), 3, result1, result2, result3);
     } else {
         SpchIGGetPlayerCategory(&result3, SpchIGGetTeamPlayer(1));
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x4002), 3, result1, result2, result3);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x4002), 3, result1, result2, result3);
     }
 }
 
@@ -152,14 +152,14 @@ extern "C" void SpchIGSayPreSnap(int side)
     SpchIGGetScoreMargin(&result5);
     if (side == 0) {
         if (fn_80178360() == 0) {
-            lbl_803EBB10(fn_801AE5D4(1, 0, 0x2012), 3, result1, result2, result3);
+            gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x2012), 3, result1, result2, result3);
         } else {
-            lbl_803EBB10(fn_801AE5D4(1, 0, 0x2003), 5, result1, result2, result3, result4, result5);
+            gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x2003), 5, result1, result2, result3, result4, result5);
         }
     } else if (fn_80178360() == 0) {
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x4003), 5, result1, result2, result3, result4, result5);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x4003), 5, result1, result2, result3, result4, result5);
     } else {
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x4012), 3, result1, result2, result3);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x4012), 3, result1, result2, result3);
     }
 }
 
@@ -169,10 +169,10 @@ extern "C" void SpchIGSayDefenseShift(void)
 
     if (fn_80178360() == 0) {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(0));
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x200C), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x200C), 1, result);
     } else {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(1));
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x400C), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x400C), 1, result);
     }
 }
 
@@ -182,9 +182,9 @@ extern "C" void SpchIGSayOffenseMotion(void)
 
     if (fn_80178308() == 0) {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(0));
-        lbl_803EBB10(fn_801AE5D4(1, 0, 0x201A), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x201A), 1, result);
     } else {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(1));
-        lbl_803EBB10(fn_801AE5D4(2, 0, 0x401A), 1, result);
+        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x401A), 1, result);
     }
 }

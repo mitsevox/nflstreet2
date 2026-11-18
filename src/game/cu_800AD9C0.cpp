@@ -5,7 +5,7 @@
 #include "game/Object_8003DEC4.h"
 #include "game/Block_801BE60C.h"
 #include "game/fn_801BE60C.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/PlyrSlot.h"
 
 extern "C" {
@@ -27,7 +27,7 @@ extern "C" void fn_800AD9C0(float value)
 }
 
 extern "C" int fn_800ADA1C(Table_80089904 *pTable, unsigned short key, void *pA,
-                           Record_800D81C8 *pRecords, PlyrSlot_t *p, unsigned int phase)
+                           AnimChannel_t *pRecords, PlyrSlot_t *p, unsigned int phase)
 {
     int side;
     Object_8003DEC4 *pObject;
@@ -42,7 +42,7 @@ extern "C" int fn_800ADA1C(Table_80089904 *pTable, unsigned short key, void *pA,
     pBlock = fn_801BE60C(p->mUnknown4528[side], key);
     switch (phase) {
     case 0:
-        fn_801BA2A8(pA, pRecords,
+        AnimChanStartAnim(pA, pRecords,
                     pTable->mEntries[p->mObject.mUnknown1008.mUnknown0 | (p->mObject.mUnknown1008.mUnknown1 << 8)].mUnknown0,
                     pTable->mEntries[p->mObject.mUnknown1008.mUnknown0 | (p->mObject.mUnknown1008.mUnknown1 << 8)].mUnknown2,
                     key, 0, 1.0f);

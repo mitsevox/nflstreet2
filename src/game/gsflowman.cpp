@@ -3,7 +3,7 @@
    out each group object by index. */
 #include "game/FlowManagerC.h"
 #include "game/FlowGroupC.h"
-#include "game/Class_800325E8.h"
+#include "game/InGameGroup.h"
 #include "game/MainFEGroup.h"
 
 
@@ -17,7 +17,7 @@ void *GSFlowManagerC::GSCreateGroup(int index)
     case 0:
         return &gSystemGroup;
     case 1:
-        return &lbl_803068B4;
+        return &gInGameGroup;
     case 2:
         return &gMainFEGroup;
     case 3:

@@ -4,7 +4,7 @@
 #include "game/AnimFileFormat.h"
 #include "engine/AnimStateAnimList.h"
 
-/* State transition list filled by fn_801BBDCC. */
+/* State transition list filled by AnimFileGetTransList. */
 typedef struct AnimStateTransList_t {
     unsigned short mCount;
     unsigned short mMax;
@@ -19,7 +19,7 @@ typedef struct AnimCacheStateInfo_t {
     short mUnknown2;
 } AnimCacheStateInfo_t;
 
-/* Buffer definition (stride 0xC) and init configuration read by fn_801BB2D8. */
+/* Buffer definition (stride 0xC) and init configuration read by AnimFileStart. */
 typedef struct AnimFileBufferDef_t {
     int mSize;
     unsigned short mFlags;
@@ -39,7 +39,7 @@ typedef struct AnimFileConfig_t {
 } AnimFileConfig_t;
 
 struct AnimFrameCache_t;
-struct Info_801BC0E8;
+struct AnimFileBigInfo_t;
 
 #ifdef __cplusplus
 extern "C" {
@@ -56,17 +56,17 @@ void *AnimFileGetStateDataByStateRef(AnimFileFormat_t *pFile, int stateRef);
 unsigned int AnimFileGetNumStates(AnimFileFormat_t *pFile);
 unsigned short AnimFileGetStateIdByStateRef(AnimFileFormat_t *pFile, int stateRef);
 void *AnimFileGetFrame(AnimFileFormat_t *pFile, int a, int b, unsigned int index);
-int fn_801BB2D8(AnimFileConfig_t *pConfig);
-void fn_801BBB54(int objectType);
-void fn_801BBC3C(int objectType, int state, AnimStateAnimList_t *pList);
-void fn_801BBDCC(int objectType, int state, AnimStateTransList_t *pList);
-int fn_801BBE5C(int objectType, int fileNum);
-unsigned short fn_801BBF44(int objectType);
-AnimFileFormat_t *fn_801BC084(unsigned int slot);
-struct AnimFrameCache_t *fn_801BC0C0(unsigned int slot);
-void fn_801BC0E8(int slot, struct Info_801BC0E8 *pInfo);
-void fn_801BC57C(int slot, struct Info_801BC0E8 *pInfo);
-void fn_801BC64C(void (*pFunc)(int, struct Info_801BC0E8 *));
+int AnimFileStart(AnimFileConfig_t *pConfig);
+void AnimFileBuildStateCache(int objectType);
+void AnimFileGetStateAnimList(int objectType, int state, AnimStateAnimList_t *pList);
+void AnimFileGetTransList(int objectType, int state, AnimStateTransList_t *pList);
+int AnimFileGetSlotFromFileNum(int objectType, int fileNum);
+unsigned short AnimFileGetTransitionStateFromObjType(int objectType);
+AnimFileFormat_t *AnimFileGetPtrFromSlot(unsigned int slot);
+struct AnimFrameCache_t *AnimFileGetFrameCacheFromSlot(unsigned int slot);
+void AnimFileNewProcessBigFile(int slot, struct AnimFileBigInfo_t *pInfo);
+void AnimFileProcessBigFile(int slot, struct AnimFileBigInfo_t *pInfo);
+void AnimFileSetRelocateBigFileFunc(void (*pFunc)(int, struct AnimFileBigInfo_t *));
 void AnimCacheInvalidate(unsigned int objectType);
 AnimCacheStateInfo_t *AnimCacheGetStateInfo(unsigned int objectType, unsigned int state);
 void *AnimFrameCacheGetFrame(AnimFileFormat_t *pFile, int a, int slot, unsigned int motion, char *pSource, int group);

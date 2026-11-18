@@ -4,11 +4,11 @@
 extern "C" {
 
 int ResInit(int);
-void fn_801F2BAC(int);
+void ResQuickloadInit(int);
 void ResTrackInitSize(int, int);
 void ResTrackSetTideCompatible(int);
 void ResTrackEnable(int);
-void fn_801F2BF0(void);
+void ResQuickloadShutdown(void);
 int ResShutdown(void);
 }
 
@@ -22,7 +22,7 @@ const char *Res::GetName() { return "Res"; }
 int Res::Init()
 {
     ResInit(0x40);
-    fn_801F2BAC(1);
+    ResQuickloadInit(1);
     if (MemPoolGetDesc(8)->mUnknown10 != 0) {
         ResTrackInitSize(8, 0x100000);
         ResTrackSetTideCompatible(0);
@@ -33,7 +33,7 @@ int Res::Init()
 
 int Res::Shutdown()
 {
-    fn_801F2BF0();
+    ResQuickloadShutdown();
     ResShutdown();
     return 1;
 }

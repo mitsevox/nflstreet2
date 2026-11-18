@@ -1,5 +1,5 @@
 #include "game/Object_80039F5C.h"
-#include "engine/Record_800D81C8.h"
+#include "engine/AnimChannel.h"
 #include "game/fn_802270D4.h"
 
 extern "C" {

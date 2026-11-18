@@ -1,7 +1,7 @@
 #include "engine/physconstraint.h"
 #include "engine/TibNew.h"
-#include "engine/Collection_801E7034.h"
-#include "engine/cu_801B9F00.h"
+#include "engine/physcollection.h"
+#include "engine/animchan.h"
 #include "game/Object_8008044C.h"
 #include "game/fn_80233CBC.h"
 #include "game/BigObjDesc.h"
@@ -23,7 +23,7 @@
 #include "game/cu_8008E978.h"
 #include "game/Ball.h"
 #include "game/fn_80177FE0.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802372EC.h"
@@ -36,7 +36,7 @@ struct Variant_8004A6EC {
     unsigned char mKey[4];
 };
 
-/* Entry of a variant table: the two halfwords handed to fn_801BA2A8 and the
+/* Entry of a variant table: the two halfwords handed to AnimChanStartAnim and the
    scored record. */
 struct VariantEntry_8004A6EC {
     unsigned short mUnknown0;
@@ -77,7 +77,7 @@ struct StateNameId_8004C270 {
     int mId;
 };
 
-/* Record of AnimSeqncrGetStaticPtr; its halfwords +42 and +14 are passed to fn_801BBE5C. */
+/* Record of AnimSeqncrGetStaticPtr; its halfwords +42 and +14 are passed to AnimFileGetSlotFromFileNum. */
 struct Frame_801C02CC {
     char mUnknown0[14];
     unsigned short mUnknown14;
@@ -181,9 +181,9 @@ void AnimBlendPose(AnimPose_t *pOut, AnimPose_t *pA, AnimPose_t *pB, AnimPose_t 
 void BigObjAnimBlendPose(BigObjPhysics_t *pExtra, BigObj_t *pItem, int a, int b);
 void BigObjAnimBlendRootAngles(BigObj_t *pItem, void *a, int b, void *c);
 short *BigObjAnimAllocSamples(int count);
-void fn_801B9FEC(void *p, void *q);
-int fn_801BB638(int id, int a);
-int fn_801BBE5C(int a, int b);
+void AnimChanInitChannels(void *p, void *q);
+int AnimFileLoadResident(int id, int a);
+int AnimFileGetSlotFromFileNum(int a, int b);
 void fn_801BE030(int type, Table_803EA4D0 *pTable);
 void fn_801BE040(void *p);
 Frame_801C02CC *AnimSeqncrGetStaticPtr(Actor_801C009C *pActor, int index);
@@ -227,7 +227,7 @@ int fn_8004A474(VariantTable_8004A6EC *pTable, void *a, void *b, BigObjInst *pOb
     int index = fn_8004A6EC(pTable, &pObject->mUnknown428->mUnknown1704);
 
     if (index >= 0) {
-        fn_801BA2A8(a, b, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, c, pObject, 1.0f);
+        AnimChanStartAnim(a, b, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, c, pObject, 1.0f);
     }
     return 0;
 }
@@ -237,7 +237,7 @@ int fn_8004A4F0(VariantTable_8004A6EC *pTable, void *a, void *b, BigObjInst *pOb
     int index = fn_8004A7A8(pTable, &pObject->mUnknown428->mUnknown1704);
 
     if (index >= 0) {
-        fn_801BA2A8(a, b, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, c, pObject, 1.0f);
+        AnimChanStartAnim(a, b, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, c, pObject, 1.0f);
     }
     return 0;
 }
@@ -268,7 +268,7 @@ int fn_8004A5EC(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *
         unsigned char b3 = pExtra->mUnknown1707;
         Frame_801C02CC *pFrame = AnimSeqncrGetStaticPtr(fn_80093BAC(b0, b1), b2);
 
-        fn_801BA2A8(a, b, fn_801BBE5C(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14), b3, c, pObject, 1.0f);
+        AnimChanStartAnim(a, b, AnimFileGetSlotFromFileNum(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14), b3, c, pObject, 1.0f);
     }
     return 0;
 }
@@ -373,7 +373,7 @@ void fn_8004A908(BigObjInst *pObject, int index)
             fn_8004A680(&pPlaced->mUnknown172, pSkeleton);
         }
         AnimInitHeader((AnimHeader_t *)pObject->mUnknown428->mUnknown48, 0, 10, 10);
-        fn_801B9FEC(pObject->mUnknown428->mUnknown48, pObject->mUnknown428->mUnknown60);
+        AnimChanInitChannels(pObject->mUnknown428->mUnknown48, pObject->mUnknown428->mUnknown60);
         fn_801BE040(pObject->mUnknown428->mUnknown1300);
         pObject->mUnknown428->mUnknown1708 = 0;
     }
@@ -450,58 +450,58 @@ void fn_8004AD3C(int a)
 {
     switch (fn_800A3444()) {
     case 4:
-        fn_801BB638(0x66, a);
-        fn_801BB638(0x67, a);
-        fn_801BB638(0x68, a);
+        AnimFileLoadResident(0x66, a);
+        AnimFileLoadResident(0x67, a);
+        AnimFileLoadResident(0x68, a);
         break;
     case 0:
-        fn_801BB638(0x69, a);
-        fn_801BB638(0x6A, a);
-        fn_801BB638(0x6B, a);
+        AnimFileLoadResident(0x69, a);
+        AnimFileLoadResident(0x6A, a);
+        AnimFileLoadResident(0x6B, a);
         break;
     case 3:
-        fn_801BB638(0x6C, a);
-        fn_801BB638(0x6D, a);
-        fn_801BB638(0x6E, a);
+        AnimFileLoadResident(0x6C, a);
+        AnimFileLoadResident(0x6D, a);
+        AnimFileLoadResident(0x6E, a);
         break;
     case 5:
-        fn_801BB638(0x6F, a);
-        fn_801BB638(0x70, a);
-        fn_801BB638(0x71, a);
+        AnimFileLoadResident(0x6F, a);
+        AnimFileLoadResident(0x70, a);
+        AnimFileLoadResident(0x71, a);
         break;
     case 7:
-        fn_801BB638(0x72, a);
-        fn_801BB638(0x73, a);
+        AnimFileLoadResident(0x72, a);
+        AnimFileLoadResident(0x73, a);
         break;
     case 10:
-        fn_801BB638(0x74, a);
-        fn_801BB638(0x75, a);
-        fn_801BB638(0x76, a);
+        AnimFileLoadResident(0x74, a);
+        AnimFileLoadResident(0x75, a);
+        AnimFileLoadResident(0x76, a);
         break;
     case 6:
-        fn_801BB638(0x7A, a);
-        fn_801BB638(0x7B, a);
-        fn_801BB638(0x7C, a);
+        AnimFileLoadResident(0x7A, a);
+        AnimFileLoadResident(0x7B, a);
+        AnimFileLoadResident(0x7C, a);
         break;
     case 2:
-        fn_801BB638(0x77, a);
-        fn_801BB638(0x78, a);
-        fn_801BB638(0x79, a);
+        AnimFileLoadResident(0x77, a);
+        AnimFileLoadResident(0x78, a);
+        AnimFileLoadResident(0x79, a);
         break;
     case 1:
-        fn_801BB638(0x7D, a);
-        fn_801BB638(0x7E, a);
-        fn_801BB638(0x7F, a);
+        AnimFileLoadResident(0x7D, a);
+        AnimFileLoadResident(0x7E, a);
+        AnimFileLoadResident(0x7F, a);
         break;
     case 8:
-        fn_801BB638(0x80, a);
-        fn_801BB638(0x81, a);
-        fn_801BB638(0x82, a);
+        AnimFileLoadResident(0x80, a);
+        AnimFileLoadResident(0x81, a);
+        AnimFileLoadResident(0x82, a);
         break;
     case 11:
-        fn_801BB638(0x74, a);
-        fn_801BB638(0x75, a);
-        fn_801BB638(0x76, a);
+        AnimFileLoadResident(0x74, a);
+        AnimFileLoadResident(0x75, a);
+        AnimFileLoadResident(0x76, a);
         break;
     }
 }
@@ -1728,7 +1728,7 @@ struct RigidBody_t {
     Vector_80039F5C mUnknown264;
     char mUnknown276[36];
     int mKind;
-    Collection_801E7034 *mpShapes;
+    ShapeCollection *mpShapes;
     char mUnknown320[4];
     Metadata_8004ED44 *mpMetadata;
 };
@@ -1742,8 +1742,8 @@ struct Contact_8004ED44 {
 extern "C" {
 extern unsigned short lbl_803EA4FE;
 extern Cache_8004E16C *lbl_802D4974[];
-extern Shape_801E2CB4 *lbl_8030883C[];
-extern Shape_801E2CB4 *lbl_80308AD4[];
+extern CollisionShape *lbl_8030883C[];
+extern CollisionShape *lbl_80308AD4[];
 extern Vector_80039F5C *lbl_80308B0C[];
 extern RigidBody_t *lbl_80308D0C[];
 extern RigidBody_t *lbl_80308F0C[];
@@ -1751,7 +1751,7 @@ extern void *lbl_80308F44[];
 extern Metadata_8004ED44 lbl_80308F64[];
 extern void *lbl_803EA50C;
 extern void *lbl_803EA514;
-extern Shape_801E2CB4 *lbl_803EA51C;
+extern CollisionShape *lbl_803EA51C;
 extern int lbl_803EA520;
 extern int lbl_803EA524;
 extern int lbl_803EA528;
@@ -1765,7 +1765,7 @@ int DebugPrintf(const char *, ...);
 void CharRelocateSkeleton(int);
 int CharSkelGetJointByName(AnimSkeleton_t *, const char *);
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *);
-Shape_801E2CB4 *fn_801E71D0(Collection_801E7034 *, unsigned int);
+CollisionShape *fn_801E71D0(ShapeCollection *, unsigned int);
 void fn_801E9E18(RigidBody_t *, Vector_80039F5C *, Vector_80039F5C *);
 void fn_802273E8(void *, void *, int, int, int);
 void fn_802271A4(void *, void *);
@@ -1782,12 +1782,12 @@ void fn_801783D0(int, int);
 void fn_801E9CC4(RigidBody_t *);
 void fn_801E9CF0(RigidBody_t *, Vector_80039F5C *, Vector_80039F5C *);
 void *fn_801D3BD0(unsigned int, int);
-Shape_801E2CB4 *fn_801E3144(void *, Vector_80039F5C *, Vector_80039F5C *, float, float, float);
-Shape_801E2CB4 *fn_801E4088(void *, Vector_80039F5C *, float, float, float, float, float);
-Shape_801E2CB4 *fn_801E3DD8(void *, Vector_80039F5C *, float, float, float);
-Collection_801E7034 *fn_801E7034(void *, int, int);
-void fn_801E7120(Collection_801E7034 *, Shape_801E2CB4 *);
-RigidBody_t *fn_801E9538(void *, Vector_80039F5C *, Collection_801E7034 *, Metadata_8004ED44 *, float, float);
+CollisionShape *fn_801E3144(void *, Vector_80039F5C *, Vector_80039F5C *, float, float, float);
+CollisionShape *fn_801E4088(void *, Vector_80039F5C *, float, float, float, float, float);
+CollisionShape *fn_801E3DD8(void *, Vector_80039F5C *, float, float, float);
+ShapeCollection *fn_801E7034(void *, int, int);
+void fn_801E7120(ShapeCollection *, CollisionShape *);
+RigidBody_t *fn_801E9538(void *, Vector_80039F5C *, ShapeCollection *, Metadata_8004ED44 *, float, float);
 void fn_801E9C1C(RigidBody_t *, Vector_80039F5C *);
 void fn_801E9BDC(RigidBody_t *, Vector_80039F5C *);
 void fn_801E9C5C(RigidBody_t *, Vector_80039F5C *);
@@ -1908,7 +1908,7 @@ void fn_8004E4D0(RigidBody_t *pBody, unsigned int index, RigidBody_t *pOther,
                  unsigned int otherIndex, unsigned int count, Contact_8004ED44 *pContacts, float step)
 {
     Object_80039F5C *p = fn_8003E0C8(pBody->mpMetadata->mpBlock);
-    Shape_801E2CB4 *pShape = fn_801E71D0(pBody->mpShapes, index);
+    CollisionShape *pShape = fn_801E71D0(pBody->mpShapes, index);
     for (unsigned int i = 0; i < count; i++) {
         Vector_80039F5C velocity, delta, normal, point, direction;
         float distance;
@@ -2099,7 +2099,7 @@ void fn_8004F20C(void)
     }
 }
 
-void fn_8004F2D0(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
+void fn_8004F2D0(int handle, ShapeCollection *pSet, BigObjInst *pObject,
                  Vector_80039F5C *pA, Vector_80039F5C *pB, float friction, float bounce, float radius)
 {
     float y = pA->mY; pA->mY = -pA->mZ; pA->mZ = y;
@@ -2110,7 +2110,7 @@ void fn_8004F2D0(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
     index = lbl_803EA528++;
     fn_801E7120(pSet, lbl_8030883C[index]);
 }
-void fn_8004F3A4(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
+void fn_8004F3A4(int handle, ShapeCollection *pSet, BigObjInst *pObject,
                  Vector_80039F5C *pA, Vector_80039F5C *pB, float friction, float bounce)
 {
     float y = pA->mY; pA->mY = -pA->mZ; pA->mZ = y;
@@ -2125,7 +2125,7 @@ void fn_8004F3A4(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
     index = lbl_803EA528++;
     fn_801E7120(pSet, lbl_8030883C[index]);
 }
-void fn_8004F4B4(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
+void fn_8004F4B4(int handle, ShapeCollection *pSet, BigObjInst *pObject,
                  Vector_80039F5C *pPoint, float friction, float bounce, float radius)
 {
     float y = pPoint->mY; pPoint->mY = -pPoint->mZ; pPoint->mZ = y;
@@ -2202,7 +2202,7 @@ void fn_8004F754(int handle, BigObj_t *pObject, int objectIndex)
         int kind;
         if (mass <= 0.0f) kind = 2;
         else kind = 0;
-        Collection_801E7034 *pSet = fn_801E7034(fn_801D3BD0(76, 0), 20, kind);
+        ShapeCollection *pSet = fn_801E7034(fn_801D3BD0(76, 0), 20, kind);
         char names[20][32];
         char type[32];
         Vector_80039F5C a, b;
@@ -2331,7 +2331,7 @@ void fn_8004FF8C(void)
             inertia.mY = 15.1875f;
             inertia.mZ = inertia.mX;
             lbl_80308AD4[slot] = fn_801E3144(fn_801D3BD0(44, 0), &a, &b, 0.5f, 0.6f, 0.45f);
-            Collection_801E7034 *pSet = fn_801E7034(fn_801D3BD0(76, 0), 1, 1);
+            ShapeCollection *pSet = fn_801E7034(fn_801D3BD0(76, 0), 1, 1);
             fn_801E7120(pSet, lbl_80308AD4[slot]);
             Metadata_8004ED44 *pMetadata = &lbl_80308F64[lbl_803EA524];
             pMetadata->mpBlock = pBlock;
@@ -2367,7 +2367,7 @@ void fn_800502C0(void)
     inertia.mZ = 0.12f * 0.12f * 0.5f;
     Vector_80039F5C centers[2] = {{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}};
     lbl_803EA51C = fn_801E3DD8(fn_801D3BD0(32, 0), &centers[0], 0.1f, 1.0f, 0.15f);
-    Collection_801E7034 *pSet = fn_801E7034(fn_801D3BD0(76, 0), 1, 1);
+    ShapeCollection *pSet = fn_801E7034(fn_801D3BD0(76, 0), 1, 1);
     fn_801E7120(pSet, lbl_803EA51C);
     Metadata_8004ED44 *pMetadata = &lbl_80308F64[lbl_803EA524];
     pMetadata->mpBlock = 0;
@@ -2475,13 +2475,13 @@ int fn_802275D8(void *, void *, float);
 int QuatIsEqual(void *, void *, float);
 void fn_802271F0(void *, void *);
 float fn_8022785C(void *, void *);
-void fn_801E3610(Shape_801E2CB4 *, void *, void *, void *, void *);
-void fn_801E501C(Shape_801E2CB4 *, void *, void *, void *, void *);
-void fn_801E3710(Shape_801E2CB4 *, void *, void *, void *, void *, void *, void *);
+void fn_801E3610(CollisionShape *, void *, void *, void *, void *);
+void fn_801E501C(CollisionShape *, void *, void *, void *, void *);
+void fn_801E3710(CollisionShape *, void *, void *, void *, void *, void *, void *);
 void *fn_801E2C3C(void *);
 RigidBody_t *fn_801E2C64(void *, void **);
-void fn_801E7208(Collection_801E7034 *, void *, int, int, int);
-void fn_801E7298(Collection_801E7034 *, int, int, int, int);
+void fn_801E7208(ShapeCollection *, void *, int, int, int);
+void fn_801E7298(ShapeCollection *, int, int, int, int);
 void fn_80178370(void);
 void fn_80050960(Vec3_801DE1E0 *, Vec3_801DE1E0 *, int, int, int);
 int fn_800AD9B4(void);
@@ -2598,11 +2598,11 @@ void fn_80050F14(void)
     unsigned int index = 0;
     fn_801D0470(renderState);
     fn_801D0508();
-    lbl_803EBD78 = fn_80050960;
+    Collision_pDebugLineProc = fn_80050960;
     void *cursor = fn_801E2C3C(lbl_803EA514);
     RigidBody_t *pBody;
     while ((pBody = fn_801E2C64(lbl_803EA514, &cursor)) != 0) {
-        Collection_801E7034 *pShapes = pBody->mpShapes;
+        ShapeCollection *pShapes = pBody->mpShapes;
         if (!pShapes) continue;
         if ((unsigned int)pBody->mKind <= 1) {
             switch (index % 7) {
@@ -2680,7 +2680,7 @@ void fn_800518E0(Object_80039F5C *pPlayer)
             unsigned int count = pBody->mpShapes->mCount;
             for (unsigned int j = 0; j < count; j++) {
                 if (!(nearest <= 0.75f)) {
-                    Shape_801E2CB4 *pShape = fn_801E71D0(pBody->mpShapes, j);
+                    CollisionShape *pShape = fn_801E71D0(pBody->mpShapes, j);
                     Vector_80039F5C delta, normal, direction;
                     if (pShape->mUnknown8 == 2) {
                         fn_801E501C(pShape, &position, pBody->mTransform, &delta, &point);

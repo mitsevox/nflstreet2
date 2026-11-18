@@ -61,9 +61,9 @@ void StorySetFlag200(int index, int value);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801F967C(int handle, int table);
 int fn_801F9980(int handle, int *pTable);
-int fn_8021E2B4(void *pObject, int a, int b);
-int fn_8021E72C(void *pObject, int a, int b);
-void *fn_8021EA44(int index);
+int UIGLibraryLoadItem(void *pObject, int a, int b);
+int UIGLibraryUnLoadItem(void *pObject, int a, int b);
+void *UIGLibraryGetGlobal(int index);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022F384(int a);
@@ -147,18 +147,18 @@ int MsgPlayerPickupGetDropFlag(void)
 
 void MsgPlayerPickupRegisterPlayers(void)
 {
-    void *pList = fn_8021EA44(1);
+    void *pList = UIGLibraryGetGlobal(1);
 
     if (DbCursorFirst((DbCursor *)&_MsgPlayerPickup_PoolCursor)) {
         do {
-            fn_8021E2B4(pList, 10, PlayerDbGetPortraitId(&_MsgPlayerPickup_PoolCursor));
+            UIGLibraryLoadItem(pList, 10, PlayerDbGetPortraitId(&_MsgPlayerPickup_PoolCursor));
         } while (DbCursorNext((DbCursor *)&_MsgPlayerPickup_PoolCursor));
     }
     DbCursorFirst((DbCursor *)&_MsgPlayerPickup_PoolCursor);
     if (_MsgPlayerPickup_bSkipTeam == 0) {
         if (DbCursorFirst((DbCursor *)&_MsgPlayerPickup_TeamCursor)) {
             do {
-                fn_8021E2B4(pList, 10, PlayerDbGetPortraitId(&_MsgPlayerPickup_TeamCursor));
+                UIGLibraryLoadItem(pList, 10, PlayerDbGetPortraitId(&_MsgPlayerPickup_TeamCursor));
             } while (DbCursorNext((DbCursor *)&_MsgPlayerPickup_TeamCursor));
         }
         DbCursorFirst((DbCursor *)&_MsgPlayerPickup_TeamCursor);
@@ -228,17 +228,17 @@ void MsgPlayerPickupCopyTeam(int db)
 
 void MsgPlayerPickupUnregisterPlayers(void)
 {
-    void *pList = fn_8021EA44(1);
+    void *pList = UIGLibraryGetGlobal(1);
 
     if (DbCursorFirst((DbCursor *)&_MsgPlayerPickup_PoolCursor)) {
         do {
-            fn_8021E72C(pList, 10, PlayerDbGetPortraitId(&_MsgPlayerPickup_PoolCursor));
+            UIGLibraryUnLoadItem(pList, 10, PlayerDbGetPortraitId(&_MsgPlayerPickup_PoolCursor));
         } while (DbCursorNext((DbCursor *)&_MsgPlayerPickup_PoolCursor));
     }
     if (_MsgPlayerPickup_bSkipTeam == 0) {
         if (DbCursorFirst((DbCursor *)&_MsgPlayerPickup_TeamCursor)) {
             do {
-                fn_8021E72C(pList, 10, PlayerDbGetPortraitId(&_MsgPlayerPickup_TeamCursor));
+                UIGLibraryUnLoadItem(pList, 10, PlayerDbGetPortraitId(&_MsgPlayerPickup_TeamCursor));
             } while (DbCursorNext((DbCursor *)&_MsgPlayerPickup_TeamCursor));
         }
     }

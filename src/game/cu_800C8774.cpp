@@ -1,5 +1,5 @@
 #include "game/Step_800C4460.h"
-#include "game/fn_801BA2A8.h"
+#include "game/AnimChanStartAnim.h"
 #include "game/Block_8030E6E8.h"
 #include "game/Record_800A0624.h"
 #include "game/Command_800CEE74.h"
@@ -40,7 +40,7 @@
 #include "game/PlayBookTeam.h"
 #include "game/cu_8002B8F8.h"
 #include "game/BigObjInst.h"
-#include "game/cu_8003108C.h"
+#include "game/ReplayEvent.h"
 #include "game/PauseMenu.h"
 #include "game/AudmonEvent.h"
 #include "game/Block_801BE60C.h"
@@ -88,8 +88,8 @@ int fn_800CAE28(Object_80039F5C *p, Info_80089904 *pInfo, int angle);
 void fn_800CB484(Point_8017886C *pOut, Point_8017886C *pFrom, Point_8017886C *pTo, int flip, int angle, float scale);
 int fn_80177F70(void);
 Point_8017886C fn_80177FFC(int team);
-int fn_801BA6B0(Record_800D81C8 *pRecord);
-void fn_801BA6BC(Record_800D81C8 *pRecord, int value);
+int AnimChanIsMirrored(AnimChannel_t *pRecord);
+void AnimChanSetMirrored(AnimChannel_t *pRecord, int value);
 float AnimSeqGetOpcodeTime(void *p, int key);
 void AnimSeqSetSpeed(void *p, float value);
 int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
@@ -383,7 +383,7 @@ extern "C" float fn_800CAAFC(Object_80039F5C *p)
 
 extern "C" int fn_800CAC54(Object_80039F5C *p)
 {
-    Record_800D81C8 *pRecord;
+    AnimChannel_t *pRecord;
     unsigned char i;
     int foot;
 
@@ -420,7 +420,7 @@ extern "C" int fn_800CAC54(Object_80039F5C *p)
             foot = 1;
             break;
         }
-        if (fn_801BA6B0(pRecord) != 0 && foot != 255) {
+        if (AnimChanIsMirrored(pRecord) != 0 && foot != 255) {
             if (foot == 1) {
                 foot = 2;
             } else {
@@ -442,7 +442,7 @@ extern "C" int fn_800CAC54(Object_80039F5C *p)
     return foot;
 }
 
-extern "C" void fn_800CAF4C(Object_80039F5C *p, int key, Record_800D81C8 *pRecords, Turn_800CBBAC *pTurn,
+extern "C" void fn_800CAF4C(Object_80039F5C *p, int key, AnimChannel_t *pRecords, Turn_800CBBAC *pTurn,
                             Info_80089904 *pInfo)
 {
     int index;
@@ -458,7 +458,7 @@ extern "C" void fn_800CAF4C(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
     pTurn->mUnknown18 = 0;
     index = pTurn->mRecord;
     if (lbl_803EAC4C != 0) {
-        fn_801BA6BC(&pRecords[index], 1);
+        AnimChanSetMirrored(&pRecords[index], 1);
     }
     pRecords[index].mUnknown2C = 1.0f;
     AnimSeqSetSpeed(&pRecords[index].mUnknown4C, MathInverse(lbl_803EAC68));
@@ -481,7 +481,7 @@ extern "C" void fn_800CAF4C(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
     pTurn->mRate = (int)((float)turn * 0.1f);
 }
 
-extern "C" void fn_800CB080(Object_80039F5C *p, int key, Record_800D81C8 *pRecords, Turn_800CBBAC *pTurn,
+extern "C" void fn_800CB080(Object_80039F5C *p, int key, AnimChannel_t *pRecords, Turn_800CBBAC *pTurn,
                             Info_80089904 *pInfo)
 {
     Point_8017886C target;
@@ -505,7 +505,7 @@ extern "C" void fn_800CB080(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
     pTurn->mTarget.mX = target.mX;
     pTurn->mTarget.mY = target.mY;
     if (lbl_803EAC4C != 0) {
-        fn_801BA6BC(&pRecords[index], 1);
+        AnimChanSetMirrored(&pRecords[index], 1);
     }
     pRecords[index].mUnknown2C = lbl_803EAC60;
     AnimSeqSetSpeed(&pRecords[index].mUnknown4C, MathInverse(lbl_803EAC6C));
@@ -591,8 +591,8 @@ extern "C" int fn_800CB228(Object_80039F5C *p, Info_80089904 *pInfo, int angle, 
 
 extern "C" void fn_800CB504(void)
 {
-    fn_801BBC3C(1, 143, &lbl_80317AF4);
-    fn_801BBC3C(1, 144, &lbl_803186D8);
+    AnimFileGetStateAnimList(1, 143, &lbl_80317AF4);
+    AnimFileGetStateAnimList(1, 144, &lbl_803186D8);
     lbl_803EAC44 = 0;
     lbl_803EAC48 = 0;
     lbl_803EAC4C = 0;
@@ -784,7 +784,7 @@ extern "C" int fn_800CBB00(Object_80039F5C *p, int index, Point_8017886C target,
     return 1;
 }
 
-extern "C" int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pOwner, Record_800D81C8 *pRecords,
+extern "C" int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pOwner, AnimChannel_t *pRecords,
                            Object_80039F5C *p, unsigned int event)
 {
     Turn_800CBBAC *pTurn = (Turn_800CBBAC *)fn_801BE60C(p->mpUnknown792, key);
@@ -807,7 +807,7 @@ extern "C" int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pOw
         first = p->mUnknown1008.mUnknown2;
         first |= p->mUnknown1011 << 8;
         fn_801BE760(p->mpUnknown792, key, 1);
-        pTurn->mRecord = fn_801BA2A8(pOwner, pRecords, first, second, key, p, 1.0f);
+        pTurn->mRecord = AnimChanStartAnim(pOwner, pRecords, first, second, key, p, 1.0f);
         pTurn->mScale = 1.0f;
         for (i = 0; i < pTable->mCount; i++) {
             if (pTable->mEntries[i].mUnknown2 == second && pTable->mEntries[i].mUnknown0 == first) {
@@ -841,7 +841,7 @@ extern "C" int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pOw
                     pTurn->mUnknown10 = frames;
                     pTurn->mStepY = pTurn->mStepX = 0.0f;
                 } else {
-                    Record_800D81C8 *pRecord = &pRecords[pTurn->mRecord];
+                    AnimChannel_t *pRecord = &pRecords[pTurn->mRecord];
                     Point_8017886C origin;
                     Point_8017886C step;
                     Point_8017886C end;
@@ -855,7 +855,7 @@ extern "C" int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pOw
                     origin.mY = pRecord->mUnknown24.mUnknown4;
                     step.mX = pTurn->mpInfo->mUnknown20Float;
                     step.mY = pTurn->mpInfo->mUnknown24;
-                    fn_800CB484(&end, &origin, &step, fn_801BA6B0(pRecord),
+                    fn_800CB484(&end, &origin, &step, AnimChanIsMirrored(pRecord),
                                 p->mpUnknown800[pTurn->mRecord].mUnknownC, pRecord->mUnknown2C);
                     fn_80227638(&end, &p->mMotion.mPos, &end);
                     fn_80227690(&delta, &pTurn->mTarget, &end);

@@ -80,8 +80,8 @@ static char _GameText_aszNames[3][129];
 
 int fn_801F95C8(void);
 int MsgGameGetPlayerPortrait(int id);
-void *fn_8021EA44(int index);
-int fn_8021E72C(void *pObject, int a, int b);
+void *UIGLibraryGetGlobal(int index);
+int UIGLibraryUnLoadItem(void *pObject, int a, int b);
 int fn_8022E558(void);
 int fn_8022E560(void);
 int fn_80219044(void *p, int a, int b, int c, Entry_80219044 **ppEntries);
@@ -468,14 +468,14 @@ void GameTextFormatPlayerName(const char *pFirst, const char *pLast, char *pText
 
 void GameTextQueuePlayerPortraits(void)
 {
-    void *pList = fn_8021EA44(1);
+    void *pList = UIGLibraryGetGlobal(1);
     for (unsigned char team = 0; team < 2; ++team) {
         for (unsigned char index = 0; index < 7; ++index) {
             Object_80039F5C *p = PlyrGet(team, index);
             if (p->mUnknown9[2] != 0) {
                 int id = MsgGameGetPlayerPortrait(p->mUnknown2908);
                 if (id > 630) {
-                    fn_8021E72C(pList, 10, id);
+                    UIGLibraryUnLoadItem(pList, 10, id);
                 }
             }
             if ((unsigned char)(index % 10) == 9) {

@@ -38,7 +38,9 @@ char *fn_801AF80C(RowBank_801AFE90 *p)
 
 Entry_801AF84C *fn_801AF84C(Record_801AF75C *p, int i)
 {
-    return p->mEntries + i;
+    // FAKEMATCH: the base-pointer local keeps the target's add order (base + 8 first)
+    Entry_801AF84C *entries = p->mEntries;
+    return entries + i;
 }
 
 int fn_801AF85C(unsigned char *p)
@@ -184,7 +186,7 @@ int fn_801AFBD8(unsigned char *p, Record_801AF75C *record, EventWord_801AFBD8 *e
                     int *words = (int *)fn_801AF8B0(p);
                     if (words[flags & 127] & mask) result = 1;
                 } else {
-                    Key_801AE658 key = event[0].mKey;
+                    SpchEventKey_t key = event[0].mKey;
                     char *text;
                     if (fn_801AE7B4(&key, &text) && (unsigned char)text[flags] == value) result = 1;
                 }
@@ -197,7 +199,7 @@ int fn_801AFBD8(unsigned char *p, Record_801AF75C *record, EventWord_801AFBD8 *e
     return result;
 }
 
-int fn_801AFD04(Key_801AE658 *key, EventWord_801AFBD8 *event, Result_801AFD04 *out)
+int fn_801AFD04(SpchEventKey_t *key, EventWord_801AFBD8 *event, Result_801AFD04 *out)
 {
     int mode = key->mUnknown3;
     int index = key->mUnknown2;
@@ -300,8 +302,8 @@ int fn_801AFFA4(Record_801AF75C *a, RowBank_801AFE90 *b, int *values)
 int fn_801B01E8(int value)
 {
     int result = 0;
-    if (lbl_803ECEA4) {
-        result = value * 100 / lbl_803ECEA4;
+    if (gDataRate) {
+        result = value * 100 / gDataRate;
     }
     return result;
 }
@@ -443,7 +445,7 @@ int fn_801B0B18(WorkEntry_801B0B18 *p)
     return 1;
 }
 
-void fn_801B0B5C(Key_801AE658 *key, Work_801B10AC *work, unsigned char *p)
+void fn_801B0B5C(SpchEventKey_t *key, Work_801B10AC *work, unsigned char *p)
 {
     char *text;
     if (fn_801AE7B4(key, &text)) {
@@ -467,7 +469,7 @@ void fn_801B0B5C(Key_801AE658 *key, Work_801B10AC *work, unsigned char *p)
     }
 }
 
-int fn_801B0C7C(Key_801AE658 *key, Work_801B10AC *work, unsigned char *p, int a, int limit)
+int fn_801B0C7C(SpchEventKey_t *key, Work_801B10AC *work, unsigned char *p, int a, int limit)
 {
     int result;
     if (limit > 0 || p[3]) {
@@ -582,28 +584,28 @@ void fn_801B192C(int value)
 // Advance the shared six-word generator and return its leading word.
 unsigned int iSPCH_EACrandom(void)
 {
-    unsigned int old = gSpchRandomState[4];
-    unsigned int sum = old + gSpchRandomState[5];
-    unsigned int carry = sum < old || sum < gSpchRandomState[5];
-    gSpchRandomState[4] = sum;
-    old = gSpchRandomState[3];
+    unsigned int old = seedX[4];
+    unsigned int sum = old + seedX[5];
+    unsigned int carry = sum < old || sum < seedX[5];
+    seedX[4] = sum;
+    old = seedX[3];
     sum += old + carry;
-    gSpchRandomState[3] = sum;
+    seedX[3] = sum;
     carry = sum < old;
-    old = gSpchRandomState[2];
+    old = seedX[2];
     sum += old + carry;
-    gSpchRandomState[2] = sum;
+    seedX[2] = sum;
     carry = sum < old;
-    old = gSpchRandomState[1];
+    old = seedX[1];
     sum += old + carry;
-    gSpchRandomState[1] = sum;
+    seedX[1] = sum;
     carry = sum < old;
-    sum += gSpchRandomState[0] + carry;
-    gSpchRandomState[0] = sum;
+    sum += seedX[0] + carry;
+    seedX[0] = sum;
     for (int i = 5; i >= 0; i--) {
-        if (++gSpchRandomState[i]) break;
+        if (++seedX[i]) break;
     }
-    return gSpchRandomState[0];
+    return seedX[0];
 }
 
 }

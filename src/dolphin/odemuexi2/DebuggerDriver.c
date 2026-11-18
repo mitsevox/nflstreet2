@@ -26,13 +26,11 @@ BOOL DBGEXIImm(void *pData, s32 size, u32 write);
 
 static MTRCallbackType MTRCallback;
 static DBGCallbackType DBGCallback;
-static u32 RecvMailData;
+static u32 SendMailData;
 static s32 RecvDataLeng;
 static u8 *pEXIInputFlag;
 static u8 EXIInputFlag;
-#if defined(DECOMP_COMPARE)
 static u8 SendCount = 0x80;
-#endif
 
 static inline void Exi2Select(u32 device)
 {
@@ -56,10 +54,87 @@ static inline BOOL Exi2Sync(void)
     return TRUE;
 }
 
+// FAKEMATCH: DBGReadStatus's body as an inline defined ahead of DBWrite, so DBWrite can inline it while
+// DBGReadStatus keeps its place after DBWrite in the file; same code, no change in logic
+static inline BOOL ReadStatus(u32 *pValue)
+{
+    BOOL error = FALSE;
+    u32 command;
+
+    Exi2Select(4);
+    command = 0x40000000;
+    error |= !DBGEXIImm(&command, 2, 1);
+    error |= !Exi2Sync();
+    error |= !DBGEXIImm(pValue, 4, 0);
+    error |= !Exi2Sync();
+    error |= !Exi2Deselect();
+    return !error;
+}
+
+static inline BOOL WriteMailbox(u32 value)
+{
+    BOOL error = FALSE;
+    // FAKEMATCH: unused stack objects on both sides of command, only for DBWrite's 120-byte frame;
+    // the (void) uses keep the inliner from dropping them
+    u8 unusedA[4];
+    u32 command;
+    u8 unusedB[4];
+    (void)unusedA;
+    (void)unusedB;
+
+    Exi2Select(4);
+    command = (value & 0x1FFFFFFF) | 0xC0000000;
+    error |= !DBGEXIImm(&command, 4, 1);
+    error |= !Exi2Sync();
+    error |= !Exi2Deselect();
+    return !error;
+}
+
+void DBClose(void)
+{
+}
+
+void DBOpen(void)
+{
+}
+
+BOOL DBWrite(const void *pData, u32 size)
+{
+    u32 value;
+    u32 status;
+    BOOL enabled = OSDisableInterrupts();
+
+    do {
+        ReadStatus(&status);
+    } while (status & 2);
+
+    SendCount++;
+    value = (SendCount & 1) ? 0x1000 : 0;
+
+    while (!DBGWrite(value | 0x1C000, pData, (size + 3) & ~3)) {
+    }
+
+    do {
+        ReadStatus(&status);
+    } while (status & 2);
+
+    value = SendCount;
+    while (!WriteMailbox(0x1F000000 | value << 16 | size)) {
+    }
+
+    do {
+        while (!ReadStatus(&status)) {
+        }
+    } while (status & 2);
+
+    OSRestoreInterrupts(enabled);
+    return FALSE;
+}
+
 BOOL DBRead(u32 *pData, s32 size)
 {
     BOOL enabled = OSDisableInterrupts();
-    u32 bank = RecvMailData & 0x10000 ? 0x1000 : 0;
+    u32 bank = SendMailData & 0x10000 ? 0x1000 : 0;
 
     DBGRead(bank + 0x1E000, pData, (size + 3) & ~3);
     RecvDataLeng = 0;
@@ -77,7 +152,7 @@ static inline void CheckMailbox(void)
         DBGReadMailbox(&value);
         value &= 0x1FFFFFFF;
         if ((value & 0x1F000000) == 0x1F000000) {
-            RecvMailData = value;
+            SendMailData = value;
             RecvDataLeng = value & 0x7FFF;
             EXIInputFlag = 1;
         }
@@ -136,17 +211,7 @@ void MWCallback(u32 value, OSContext *context)
 
 BOOL DBGReadStatus(u32 *pValue)
 {
-    BOOL error = FALSE;
-    u32 command;
-
-    Exi2Select(4);
-    command = 0x40000000;
-    error |= !DBGEXIImm(&command, 2, 1);
-    error |= !Exi2Sync();
-    error |= !DBGEXIImm(pValue, 4, 0);
-    error |= !Exi2Sync();
-    error |= !Exi2Deselect();
-    return !error;
+    return ReadStatus(pValue);
 }
 
 BOOL DBGWrite(u32 address, const void *pData, s32 size)
@@ -245,59 +310,3 @@ BOOL DBGEXIImm(void *pData, s32 size, u32 write)
 
     return TRUE;
 }
-
-#if defined(DECOMP_COMPARE)
-static inline BOOL WriteMailbox(u32 value)
-{
-    BOOL error = FALSE;
-    u32 command;
-
-    Exi2Select(4);
-    command = (value & 0x1FFFFFFF) | 0xC0000000;
-    error |= !DBGEXIImm(&command, 4, 1);
-    error |= !Exi2Sync();
-    error |= !Exi2Deselect();
-    return !error;
-}
-
-BOOL DBWrite(const void *pData, u32 size)
-{
-    u32 value;
-    u32 status;
-    BOOL enabled = OSDisableInterrupts();
-
-    do {
-        DBGReadStatus(&status);
-    } while (status & 2);
-
-    SendCount++;
-    value = (SendCount & 1) ? 0x1000 : 0;
-
-    while (!DBGWrite(value | 0x1C000, pData, (size + 3) & ~3)) {
-    }
-
-    do {
-        DBGReadStatus(&status);
-    } while (status & 2);
-
-    value = SendCount;
-    while (!WriteMailbox(0x1F000000 | value << 16 | size)) {
-    }
-
-    do {
-        while (!DBGReadStatus(&status)) {
-        }
-    } while (status & 2);
-
-    OSRestoreInterrupts(enabled);
-    return FALSE;
-}
-
-void DBOpen(void)
-{
-}
-
-void DBClose(void)
-{
-}
-#endif
