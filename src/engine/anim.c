@@ -4,7 +4,7 @@
 
 #include "engine/animchan.h"
 #include "engine/animemot.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 
 typedef int (*AnimUserOpcodeCallback_t)(void *pUser, int op, unsigned int state);
 
@@ -68,7 +68,7 @@ int AnimInit(unsigned int mode)
         break;
     }
     _Anim_SeqVersion = mode;
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -82,7 +82,7 @@ int AnimShutdown(void)
     } else {
         err = 0x140002;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 

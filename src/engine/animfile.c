@@ -4,7 +4,7 @@
 #include "engine/animchan.h"
 #include "engine/animemot.h"
 #include "engine/ResCopyAsyncToBuffer.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResLoad.h"
 
@@ -229,7 +229,7 @@ static int _AnimFileLoadSeqResident(int id, AnimFileFormat_t *pData, struct Anim
             _AnimFile_pBufferInfo[i].mId = id;
             if (pData == 0) {
                 _AnimFile_pBufferInfo[i].mpData = (void *)ResLoad(_AnimFile_ResFile, id, _AnimFile_MemoryHeap);
-                result = fn_801F7C88();
+                result = SysGetLastError();
             } else {
                 _AnimFile_pBufferInfo[i].mpData = pData;
             }
@@ -294,7 +294,7 @@ int AnimFileStart(AnimFileConfig_t *pConfig)
         }
         return 0;
     }
-    return fn_801F7C88();
+    return SysGetLastError();
 }
 
 void AnimFileStop(void)
@@ -359,7 +359,7 @@ int AnimFileLoadResidentAsync(int id, struct AnimFrameCache_t *pFrameCache)
             pReq->mSlot = i;
             pReq->mpInfo = 0;
             _AnimFile_pBufferInfo[i].mpData = ResLoadAsync(_AnimFile_ResFile, id, _AnimFile_MemoryHeap, _AnimFile_AsyncPriority, _AnimfileResourceCallback, pReq);
-            result = fn_801F7C88();
+            result = SysGetLastError();
             break;
         }
     }
@@ -395,7 +395,7 @@ int AnimFileLoadSeqDynamicAsync(unsigned short slot, int id, AnimFileBigInfo_t *
         pReq->mSlot = index;
         pReq->mpInfo = pInfo;
         ResCopyAsyncToBuffer(_AnimFile_ResFile, id, _AnimFile_MemoryHeap, _AnimFile_pBufferInfo[index].mpData, _AnimFile_AsyncPriority, _AnimfileResourceCallback, pReq);
-        result = fn_801F7C88();
+        result = SysGetLastError();
     }
     return result;
 }

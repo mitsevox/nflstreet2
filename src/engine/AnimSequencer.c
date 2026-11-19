@@ -3,7 +3,7 @@
    cameras. */
 
 #include "engine/AnimSeqCamera.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 
 extern unsigned char _AnimSequencer_ModuleActive;
 extern float _AnimSequencer_fTicksPerSecond;
@@ -18,7 +18,7 @@ int AnimSequencerInit(float rate)
         _AnimSequencer_fTicksPerSecond = rate;
         _AnimSequencer_ModuleActive = 1;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -30,7 +30,7 @@ int AnimSequencerShutdown(void)
         _AnimSequencer_ModuleActive = 0;
     else
         err = 0x1D0002;
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 

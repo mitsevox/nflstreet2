@@ -2,7 +2,7 @@
    indices, used to hand out and take back list nodes. */
 
 #include "engine/list.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "game/fn_801D2B7C.h"
 
 
@@ -106,7 +106,7 @@ NodePool_t *DSNewNodeHandler(int heap, unsigned int count, int size, NodePool_t 
         pPool->mpStack = (char *)pPool + stackOffset;
         pPool->mpNodes = (char *)pPool + nodeOffset;
         _DSFormatNodeHandlerStack(pPool);
-        fn_801F7BD4(0);
+        SysSetLastErrorFunc(0);
     } else {
         pResult = 0;
     }
@@ -137,7 +137,7 @@ void *DSNewNode(NodePool_t *pPool)
         pNode = 0;
         error = 0x30003;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return pNode;
 }
 

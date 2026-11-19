@@ -35,7 +35,7 @@ unsigned int fn_801D85A8(int a);
 int fn_801D4400(int *pA, int *pB);
 int fn_801D46E8(int slot);
 char *strncpy(char *pDst, const char *pSrc, int size);
-int fn_801F7ABC(void);
+int SysGetSystemTime(void);
 void fn_801F8838(void);
 void FeatClearEAGameSaves(void);
 void FeatSetEAGameSave(short a);
@@ -594,14 +594,14 @@ void MemCardUIClearCallbacks()
 
 int MemCardUIIsTimeMarkCurrent(void)
 {
-    return fn_801F7ABC() == _MemCardUI_iMarkTime;
+    return SysGetSystemTime() == _MemCardUI_iMarkTime;
 }
 
 void MemCardUISetTimeMark(int enable)
 {
     if (enable != 0) {
         if (!_MemCardUI_bTimeMarked) {
-            _MemCardUI_iMarkTime = fn_801F7ABC();
+            _MemCardUI_iMarkTime = SysGetSystemTime();
         }
         _MemCardUI_bTimeMarked = 1;
     } else {

@@ -1,6 +1,6 @@
 #include <string.h>
 #include "engine/cu_801BDA30.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "game/fn_801D2B7C.h"
 
 extern Handlers_801BDA30 **lbl_803EBB98;
@@ -156,7 +156,7 @@ int fn_801BDF90(int count)
     int result;
 
     lbl_803EBB98 = fn_801D2B7C(count * 4, 0, 0);
-    result = fn_801F7C88();
+    result = SysGetLastError();
     lbl_803ECEBC = count;
     if (lbl_803EBB98 != 0) {
         memset(lbl_803EBB98, 0, count * 4);

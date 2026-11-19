@@ -4,7 +4,7 @@
 #include "engine/dslist.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/object.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 
 extern void *DSNewListNode(void *pool);
 extern void *DSGetListNode(void *pool, void *item);
@@ -174,7 +174,7 @@ int ObjInit(int count)
             lbl_803EBD50 = 1;
             return 0;
         }
-        return fn_801F7C88();
+        return SysGetLastError();
     }
     return 0x90001;
 }
@@ -200,9 +200,9 @@ int ObjNewType_(int type, int size, int count, ObjNewFunc_t pNew, ObjDelFunc_t p
     pType->mCount = count;
     pType->mpPool = DSNewNodeHandler(1, count, size, 0);
     if (pType->mpPool == 0) {
-        err = fn_801F7C88();
+        err = SysGetLastError();
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -217,7 +217,7 @@ int ObjDelType(int type)
             err = DSDelNodeHandler(pType->mpPool);
         }
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -295,7 +295,7 @@ int ObjAddToList(ObjList_t *pList, Obj_t *pObj)
         pObj->mRefCount++;
         return 0;
     }
-    return fn_801F7C88();
+    return SysGetLastError();
 }
 
 Obj_t *ObjNewInList(ObjList_t *pList, int type, int subType, int arg)

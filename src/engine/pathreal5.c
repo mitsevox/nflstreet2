@@ -101,7 +101,7 @@ int PathToReal5::GetMinStreamBufferSize(int channels)
 
 int PathToReal5::GetMilliseconds()
 {
-    return ((int)fn_801F7ABC() * 50) / 3;
+    return ((int)SysGetSystemTime() * 50) / 3;
 }
 
 int PathToReal5::LoadFile(char *name, int &size, int flags)

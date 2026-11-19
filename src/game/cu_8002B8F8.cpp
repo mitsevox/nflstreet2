@@ -210,7 +210,7 @@ void *DSNextListNode(void *pool, void *item);
 void *fn_801D2B7C(int size, int a, int b);
 int fn_801D2BD0(void *p);
 void RemapCopyTable(int a, int b);
-int fn_801F7ABC(void);
+int SysGetSystemTime(void);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 void fn_802196B4(void *p, int a, int b, int c, float *pD, unsigned char e);
 void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
@@ -1118,7 +1118,7 @@ extern "C" void fn_8002CFF4(Type_803EA368 *p)
     args.mUnknown00 = 1;
     args.mUnknown04 = 1;
     args.mUnknown08 = 1;
-    p->mUnknownD84 = fn_801F7ABC();
+    p->mUnknownD84 = SysGetSystemTime();
     p->mUnknownD94 = (p->mUnknownD94 | 0x10000) & ~0x40;
     ReplayCursorSetVisible(0);
     fn_8002C300(p, &args);
@@ -2246,7 +2246,7 @@ extern "C" void fn_8002F26C(GameCamera_t *pCamera, unsigned int input, float amo
 {
     Point_8017886C offset;
 
-    if ((unsigned int)(fn_801F7ABC() - lbl_803EC624) > 29) {
+    if ((unsigned int)(SysGetSystemTime() - lbl_803EC624) > 29) {
         if (lbl_803EC620 == 0) {
             float dist;
             unsigned char flag;
@@ -2262,7 +2262,7 @@ extern "C" void fn_8002F26C(GameCamera_t *pCamera, unsigned int input, float amo
                     fn_80227638(&lbl_8030660C.mPos, &lbl_8030660C.mPos, &offset);
                 } else {
                     lbl_803EC620 = pTarget;
-                    lbl_803EC624 = fn_801F7ABC();
+                    lbl_803EC624 = SysGetSystemTime();
                     lbl_803EC628 = flag;
                     ReplayCursorSetVisible(0);
                 }
@@ -2317,7 +2317,7 @@ extern "C" GameCamera_t *fn_8002F61C(Type_8002FDB4 *pDesc)
     memset(&lbl_8030660C, 0, sizeof(Type_8030660C));
     lbl_803EC620 = 0;
     lbl_803EC61C = 0;
-    lbl_803EC624 = fn_801F7ABC();
+    lbl_803EC624 = SysGetSystemTime();
     lbl_803EC628 = 1;
     lbl_803EC62C = 16.0f;
     pCamera = fn_8002EA78(pDesc);

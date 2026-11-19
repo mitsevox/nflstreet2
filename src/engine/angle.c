@@ -1,6 +1,6 @@
 /* Angle difference and interpolation in 24-bit angles. */
 
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 
 int MathAngleDiff(int a, int b)
 {
@@ -36,6 +36,6 @@ int MathRLerp(int a, int b, float t)
             result = (a + (int)((float)diff * t)) & 0xFFFFFF;
         }
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return result;
 }

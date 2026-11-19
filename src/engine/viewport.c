@@ -31,8 +31,8 @@ extern float fn_801CFD28(int angle);
 extern int MatNewStack(unsigned int a, unsigned int b);
 extern int MatDelStack(unsigned int a);
 extern void ObjProcessListFunc(int handle, int a, int b);
-extern void fn_801F7BD4(int err);
-extern int fn_801F7C88(void);
+extern void SysSetLastErrorFunc(int err);
+extern int SysGetLastError(void);
 extern void fn_801F8768(void);
 
 static unsigned char _Vpt_ModuleActive = 0;
@@ -119,14 +119,14 @@ int VptInit(VptInitBlock_t *pInit)
                 err = VptLLInit(pInit);
             }
         } else {
-            err = fn_801F7C88();
+            err = SysGetLastError();
         }
         _Vpt_pCurrentViewport = 0;
         _Vpt_ModuleActive = 1;
     } else {
         err = 0x80001;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -150,7 +150,7 @@ int VptShutdown(void)
     } else {
         err = 0x80002;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -184,7 +184,7 @@ Viewport_t *VptOpen(ViewportDesc_t *pDesc)
         DSAddListNode(_Vpt_ViewportList, pObject, 0);
         err = VptLLOpen(pDesc, pObject);
         if (err) {
-            fn_801F7BD4(err);
+            SysSetLastErrorFunc(err);
         }
     }
     return pObject;
@@ -197,7 +197,7 @@ int VptClose(Viewport_t *pObject)
 
     err = VptLLClose(pObject);
     if (err) {
-        fn_801F7BD4(err);
+        SysSetLastErrorFunc(err);
     }
     match.mUnknown0 = pObject;
     match.mUnknown4 = 0;
@@ -219,7 +219,7 @@ int VptSetCallback(Viewport_t *pObject, int event, VptCallbackFuncT fn, int key)
         pEntry->mUnknown12 = pObject;
         DSAddListNode(_Vpt_CallbackList, pEntry, 0);
     } else {
-        err = fn_801F7C88();
+        err = SysGetLastError();
     }
     return err;
 }

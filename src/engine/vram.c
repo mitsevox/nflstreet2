@@ -3,7 +3,7 @@
  * of video memory the game may hand out, marks every entry free, and frees the table at shutdown.
  */
 #include "engine/vram.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "game/fn_801D2B7C.h"
 
 /* 28-byte pool entry; only the byte at +8 is written here. */
@@ -28,7 +28,7 @@ int VramInit(VramInitBlock_t *pDesc)
         _Vram_NextHandle = err;
         _Vram_Blocks = fn_801D2BB0(1, _Vram_MaxBlocks * sizeof(VramBlock_t), 0, 0);
         if (_Vram_Blocks == 0) {
-            err = fn_801F7C88();
+            err = SysGetLastError();
         } else {
             for (i = 0; i < _Vram_MaxBlocks; i++) {
                 _Vram_Blocks[i].mUnknown8 = 0xFF;
@@ -38,7 +38,7 @@ int VramInit(VramInitBlock_t *pDesc)
     } else {
         err = 0x80001;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -55,6 +55,6 @@ int VramShutdown(void)
     } else {
         err = 0x80002;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }

@@ -60,7 +60,7 @@ extern int sprintf(char *pDst, const char *pFormat, ...);
 
 extern void *fn_801D28A8(int a, int size, int ident, int flags);
 extern void *fn_801D2E5C(int a, void *pAddr, int size, int ident, int flags);
-extern int fn_801F7ABC(void);
+extern int SysGetSystemTime(void);
 extern int fn_801D2130(Struct_801D2130 *pParams);
 extern int fn_801D2570(int ident);
 
@@ -576,7 +576,7 @@ static void fn_801D1ED8(Struct_801D1ED8 *pInfo, const char *pFile, unsigned int 
         pInfo->mSerial = lbl_803EBCE8;
         lbl_803EBCE8++;
     } else {
-        pInfo->mSerial = fn_801F7ABC();
+        pInfo->mSerial = SysGetSystemTime();
     }
 }
 

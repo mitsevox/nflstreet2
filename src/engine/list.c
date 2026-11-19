@@ -1,6 +1,6 @@
 #include "engine/list.h"
 #include "engine/dslist.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "game/fn_801D2B7C.h"
 
 /* The handler table of each list type (0 linked, 1 binary tree, 2 splay tree, ...), filled by
@@ -120,7 +120,7 @@ void *DSNewList(int a, int b, int count, int size, int (*cmp)(void *, void *), v
         pPool = (NodePool_t *)((char *)pList + DSAlignSize(DSList_Interface[b].mHeaderSize));
         pList->mpNodes = DSNewNodeHandler(0, count, size, pPool);
         DSList_Interface[b].mInit(pList);
-        fn_801F7BD4(0);
+        SysSetLastErrorFunc(0);
     } else {
         pResult = 0;
     }

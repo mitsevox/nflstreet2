@@ -1,10 +1,10 @@
 /* Task list behind the game's Task module: created at start-up with room for a given number of
    44-byte entries kept sorted by a 16-bit key, freed at shutdown, with the system time its clock starts from. */
 
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "engine/dslist.h"
 
-extern int fn_801F7ABC(void);
+extern int SysGetSystemTime(void);
 
 extern unsigned char lbl_803EBE9C;
 extern void *lbl_803ECFAC;
@@ -26,7 +26,7 @@ int TaskInit(int count)
     if (lbl_803EBE9C == 0) {
         lbl_803ECFAC = DSNewList(1, 0, count, 0x2C, TaskCompareKey, 0);
         if (lbl_803ECFAC == 0) {
-            err = fn_801F7C88();
+            err = SysGetLastError();
         }
         TaskResetClock();
         lbl_803EBE9C = 1;
@@ -35,7 +35,7 @@ int TaskInit(int count)
     }
     lbl_803ECFB4 = 0;
     lbl_803ECFB8 = 0;
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -51,11 +51,11 @@ int TaskShutdown(void)
     } else {
         err = 0x80002;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
 void TaskResetClock(void)
 {
-    lbl_803ECFB0 = fn_801F7ABC();
+    lbl_803ECFB0 = SysGetSystemTime();
 }

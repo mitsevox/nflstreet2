@@ -85,7 +85,7 @@ int FileHostCheckActive(void);
 void FileDebugProcess(void);
 void SndService(void);
 int SndPatchOver(int handle);
-unsigned int fn_801F7ABC(void);
+unsigned int SysGetSystemTime(void);
 void fn_80227690(void *out, void *a, void *b);
 int fn_80237470(int a, int b);
 int fn_802374C8(int handle);
@@ -879,7 +879,7 @@ int fn_8007184C(Vector_80039F5C *pos)
 
 void fn_800718A0(void)
 {
-    if (lbl_803EA6E8 > 0 && fn_801F7ABC() >= (unsigned int)lbl_803EA6E8) {
+    if (lbl_803EA6E8 > 0 && SysGetSystemTime() >= (unsigned int)lbl_803EA6E8) {
         lbl_803EA6D8 = (lbl_803EA6D8 + 1) % 6;
         lbl_803EA6E8 = -1;
         SndgSfxPlay(lbl_803EA6D8 + 28, &lbl_8030AA7C);
@@ -889,7 +889,7 @@ void fn_800718A0(void)
 void fn_80071914(Vector_80039F5C *pos)
 {
     if (lbl_803EA6E8 == -1) {
-        lbl_803EA6E8 = fn_801F7ABC() + 6;
+        lbl_803EA6E8 = SysGetSystemTime() + 6;
         lbl_8030AA7C.mX = pos->mX;
         lbl_8030AA7C.mY = pos->mY;
         lbl_8030AA7C.mZ = pos->mZ;

@@ -2596,6 +2596,42 @@
       ]
     },
     {
+      "source": "src/engine/system.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801F77DC-0x801F7DF4 (src/engine/system.c), its compiler, function, name, data, type and source-form rows; every function exact and the file-owned .sdata linked; the file defines the _Sys_TimerList, _Sys_CallbackList and _SysCS COMMON globals and the unit's storage map places each at its exact data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F77DC",
+          "end": "0x801F7DF4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBE30",
+          "end": "0x803EBE4C"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_SysCS",
+          "start": "0x8039B3F8",
+          "end": "0x8039B418"
+        },
+        {
+          "symbol": "_Sys_TimerList",
+          "start": "0x803ECFA4",
+          "end": "0x803ECFA8"
+        },
+        {
+          "symbol": "_Sys_CallbackList",
+          "start": "0x803ECFA8",
+          "end": "0x803ECFAC"
+        }
+      ]
+    },
+    {
       "source": "src/Common/UIStudio/UISEvent.c",
       "profile": "uistudio",
       "evidence": "evidence.tsv unit row 0x8021A068-0x8021A438 (provisional edges) and data row 0x802B1DF0-0x802B1E78.",

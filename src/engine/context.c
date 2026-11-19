@@ -1,6 +1,6 @@
 /* Controller context: channels of mapped input buffers, processed through dead-zone entry tables into callbacks. */
 
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
 #include <string.h>
@@ -130,13 +130,13 @@ int ConInit(unsigned int count, int size)
         lbl_803ECED8 = count;
         lbl_803EBBF0 = fn_801D2BB0(1, count * sizeof(ConChannel_t), 0, 0);
         if (!lbl_803EBBF0) {
-            error = fn_801F7C88();
+            error = SysGetLastError();
         } else {
             lbl_803ECEDC = size * sizeof(float);
             lbl_803ECEE0 = fn_801D2BB0(1, count * (lbl_803ECEDC + lbl_803ECEDC), 0, 0);
             if (!lbl_803ECEE0) {
                 fn_801D2BD0(lbl_803EBBF0);
-                error = fn_801F7C88();
+                error = SysGetLastError();
             } else {
                 MemFill(lbl_803ECEE0, count * (lbl_803ECEDC + lbl_803ECEDC), 0, 4);
                 MemFill(lbl_803EBBF0, count * sizeof(ConChannel_t), 0, 4);
@@ -156,7 +156,7 @@ int ConInit(unsigned int count, int size)
     } else {
         error = 0x1A0001;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -175,7 +175,7 @@ int ConShutdown(void)
     } else {
         error = 0x1A0002;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -194,7 +194,7 @@ int ConUpdateChannel(unsigned int channel)
     } else {
         error = 0x1A0003;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -252,7 +252,7 @@ int ConProcessChannel(unsigned int channel)
     } else {
         error = 0x1A0003;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -308,7 +308,7 @@ int ConSetChannelInfo(unsigned int channel, unsigned int type, unsigned int valu
     } else {
         error = 0x1A0003;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -350,7 +350,7 @@ unsigned int ConGetChannelInfo(unsigned int channel, unsigned int type)
     } else {
         error = 0x1A0003;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return value;
 }
 

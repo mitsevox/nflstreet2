@@ -41,7 +41,7 @@ void GCmpStop(GCmpStream_t *pStream);
 extern void *fn_801D2BB0(int a, int size, int c, int d);
 extern int fn_801D2BD0(void *p);
 extern void *fn_801D310C(void *allocation, int size, int c, int d);
-extern void fn_801F7BD4(int err);
+extern void SysSetLastErrorFunc(int err);
 extern char *strnzcpy(char *pDest, const char *pSource, int size);
 extern int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 
@@ -81,7 +81,7 @@ int GCmpInit(int count)
     } else {
         err = 0x150001;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -101,7 +101,7 @@ int GCmpShutdown(void)
     } else {
         err = 0x150002;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 

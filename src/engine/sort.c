@@ -33,7 +33,7 @@ int SortInit(void)
     } else {
         err = 0x170001;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -46,7 +46,7 @@ int SortShutdown(void)
     } else {
         err = 0x170002;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 

@@ -11,7 +11,7 @@ struct MemInitParams_t {
     MemPoolDesc_t *mpArena;
 };
 
-/* Argument of fn_801F7824. */
+/* Argument of SysInit. */
 struct SysInitParams_t {
     SysInitParams_t(unsigned char unknown0, unsigned char unknown1, unsigned char unknown2)
         : mUnknown0(unknown0), mUnknown1(unknown1), mUnknown2(unknown2) {}
@@ -31,8 +31,8 @@ int fn_801D20C8(void);
 int fn_801D2130(MemPoolDesc_t *pArena);
 int fn_801D2570(int id);
 void fn_801D277C(int a);
-int fn_801F7824(SysInitParams_t *pDesc);
-int fn_801F79C0(void);
+int SysInit(SysInitParams_t *pDesc);
+int SysShutdown(void);
 void fn_801F8248(void);
 int fn_801F8868(int (*pCallback)());
 }
@@ -75,7 +75,7 @@ int Sys::Init()
     MemInitExternHeap(0x10, 1, (char *)pAuxRam->mUnknownC, pAuxRam->mUnknown10, 0x20, 0x20);
     fn_801D277C(1);
     SysInitParams_t desc(1, 0, 1);
-    fn_801F7824(&desc);
+    SysInit(&desc);
     fn_801F8248();
     fn_801F8868(_SysCanReset);
     return 1;
@@ -83,7 +83,7 @@ int Sys::Init()
 
 int Sys::Shutdown()
 {
-    fn_801F79C0();
+    SysShutdown();
     if (MemPoolGetDesc(8)->mUnknown10 != 0) {
         fn_801D2570(8);
     }

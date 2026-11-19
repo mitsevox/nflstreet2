@@ -3,7 +3,7 @@
 #include "engine/list.h"
 #include "engine/Font.h"
 #include "engine/dslist.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
@@ -120,7 +120,7 @@ int fn_801CCBD0(FontEntry_801CCA64 *pEntry, FontHeader_801CCA64 *pData)
     if (pData->mMagic != 0x464E5447) {
         error = 0x110003;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -146,7 +146,7 @@ int fn_801CCC24(FontParams_801CCA64 *pParams)
     } else {
         error = 0x110001;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -165,7 +165,7 @@ int fn_801CCD0C(void)
     } else {
         error = 0x110002;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -180,9 +180,9 @@ int fn_801CCDA4(const char *pName, int mode)
     } else if (result = ResOpenDevice(pName, mode)) {
         handle = (int)result;
     } else {
-        error = fn_801F7C88();
+        error = SysGetLastError();
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return handle;
 }
 
@@ -195,7 +195,7 @@ int fn_801CCE10(int handle)
     } else {
         error = ResClose((void *)handle);
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -212,7 +212,7 @@ int fn_801CCE60(void *pFile, int id)
             fn_801CDE98(&lbl_80383CF0.mpPalette0, &lbl_80383CF0.mpPalette1, &lbl_80383CF0.mpPalette2);
         }
         if (!(pEntry = DSNewListNode(lbl_80383CF0.mpList))) {
-            error = fn_801F7C88();
+            error = SysGetLastError();
         } else {
             if (pData = (FontHeader_801CCA64 *)ResLoad(pFile, id, lbl_80383CF0.mHeap)) {
                 pEntry->mHandle = id;
@@ -221,7 +221,7 @@ int fn_801CCE60(void *pFile, int id)
                 error = fn_801CCBD0(pEntry, pData);
                 DSAddListNode(lbl_80383CF0.mpList, pEntry, 0);
             } else {
-                error = fn_801F7C88();
+                error = SysGetLastError();
             }
             lbl_80383CF0.mNumFonts++;
         }
@@ -229,7 +229,7 @@ int fn_801CCE60(void *pFile, int id)
     if (error && pEntry) {
         DSDelListNode(lbl_80383CF0.mpList, pEntry);
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -245,7 +245,7 @@ int fn_801CCF74(void *pFile, int id, FontHeader_801CCA64 *pData)
             fn_801CDE98(&lbl_80383CF0.mpPalette0, &lbl_80383CF0.mpPalette1, &lbl_80383CF0.mpPalette2);
         }
         if (!(pEntry = DSNewListNode(lbl_80383CF0.mpList))) {
-            error = fn_801F7C88();
+            error = SysGetLastError();
         } else {
             if (pData) {
                 pEntry->mpFile = pFile;
@@ -254,7 +254,7 @@ int fn_801CCF74(void *pFile, int id, FontHeader_801CCA64 *pData)
                 error = fn_801CCBD0(pEntry, pData);
                 DSAddListNode(lbl_80383CF0.mpList, pEntry, 0);
             } else {
-                error = fn_801F7C88();
+                error = SysGetLastError();
             }
             lbl_80383CF0.mNumFonts++;
         }
@@ -262,7 +262,7 @@ int fn_801CCF74(void *pFile, int id, FontHeader_801CCA64 *pData)
     if (error && pEntry) {
         DSDelListNode(lbl_80383CF0.mpList, pEntry);
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -285,7 +285,7 @@ int fn_801CD07C(int id)
             fn_801CDFE4(lbl_80383CF0.mpPalette0, lbl_80383CF0.mpPalette1, lbl_80383CF0.mpPalette2);
         }
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -315,7 +315,7 @@ Font_801CCA64 *fn_801CD130(int id)
     } else {
         error = 0x110004;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return pFont;
 }
 
@@ -334,7 +334,7 @@ int fn_801CD244(Font_801CCA64 *pFont)
         fn_801CE108(pFont);
         error = fn_801D2BD0(pFont);
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -369,7 +369,7 @@ int fn_801CD308(int which, FontColor_801CCA64 color)
         break;
     default:
         error = 0x110005;
-        fn_801F7BD4(error);
+        SysSetLastErrorFunc(error);
         goto done;
     }
     pDst->r = color.r;
@@ -475,7 +475,7 @@ void fn_801CD3E4(Font_801CCA64 *pFont, const char *pText, unsigned int flags, fl
         }
         *pCount = count;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
 }
 
 int fn_801CD63C(Font_801CCA64 *pFont, const char *pText, unsigned int flags)
@@ -519,7 +519,7 @@ int fn_801CD63C(Font_801CCA64 *pFont, const char *pText, unsigned int flags)
             }
         }
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return maxWidth;
 }
 

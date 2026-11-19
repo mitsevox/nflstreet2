@@ -93,7 +93,7 @@ void ResTrackResource(unsigned int type, void *pData)
                     break;
                 }
                 if (pName != 0) {
-                    lbl_803EBDBC += sprintf(lbl_803EBDBC, lbl_802B1854, pName, index, lbl_803EBDC4, fn_801F7ABC());
+                    lbl_803EBDBC += sprintf(lbl_803EBDBC, lbl_802B1854, pName, index, lbl_803EBDC4, SysGetSystemTime());
                 }
             } else {
                 pLoad = pData;
@@ -105,12 +105,12 @@ void ResTrackResource(unsigned int type, void *pData)
                     } else {
                         mode = 'i';
                     }
-                    lbl_803EBDBC += sprintf(pMem, lbl_802B1864, mode, fn_801F7ABC(), ((ResTrackOpenInfo_t *)pData)->pName);
+                    lbl_803EBDBC += sprintf(pMem, lbl_802B1864, mode, SysGetSystemTime(), ((ResTrackOpenInfo_t *)pData)->pName);
                     break;
                 }
                 case 1:
                     pRes = pLoad->pRes;
-                    lbl_803EBDBC += sprintf(pMem, lbl_802B1874, fn_801F7ABC(), pRes->pName, pLoad->mIndex, pLoad->mIndex);
+                    lbl_803EBDBC += sprintf(pMem, lbl_802B1874, SysGetSystemTime(), pRes->pName, pLoad->mIndex, pLoad->mIndex);
                     break;
                 case 2: {
                     char mode;
@@ -120,7 +120,7 @@ void ResTrackResource(unsigned int type, void *pData)
                     } else {
                         mode = 'i';
                     }
-                    lbl_803EBDBC += sprintf(pMem, lbl_802B1890, mode, fn_801F7ABC(), pRes->pName);
+                    lbl_803EBDBC += sprintf(pMem, lbl_802B1890, mode, SysGetSystemTime(), pRes->pName);
                     if (pLoad->mIndex == -1) {
                         lbl_803EBDBC += sprintf(lbl_803EBDBC, lbl_802B18A0);
                     } else {
@@ -132,7 +132,7 @@ void ResTrackResource(unsigned int type, void *pData)
                 }
                 case 3:
                     pRes = pLoad->pRes;
-                    lbl_803EBDBC += sprintf(pMem, lbl_802B18CC, fn_801F7ABC(), pRes->pName);
+                    lbl_803EBDBC += sprintf(pMem, lbl_802B18CC, SysGetSystemTime(), pRes->pName);
                     if (pLoad->mIndex == -1) {
                         lbl_803EBDBC += sprintf(lbl_803EBDBC, lbl_802B18E0);
                     } else {
@@ -172,7 +172,7 @@ void ResTrackLabel(char *pLabel)
 {
     if (lbl_803EBDD0 == 1 && lbl_803EBDD1 == 1 &&
         lbl_803EBDBC - lbl_803EBDC0 < lbl_803EBDB8 - 100 && lbl_803EBDC8 == 0) {
-        lbl_803EBDBC += sprintf(lbl_803EBDBC, lbl_802B1994, fn_801F7ABC(), pLabel);
+        lbl_803EBDBC += sprintf(lbl_803EBDBC, lbl_802B1994, SysGetSystemTime(), pLabel);
     }
 }
 

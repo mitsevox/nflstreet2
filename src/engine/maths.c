@@ -1,6 +1,6 @@
 /* Math library init and shutdown. */
 
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 
 extern unsigned char lbl_803EBCB0;
 
@@ -16,7 +16,7 @@ int MathInit(void)
     } else {
         result = 0x40001;
     }
-    fn_801F7BD4(result);
+    SysSetLastErrorFunc(result);
     return result;
 }
 
@@ -29,6 +29,6 @@ int MathShutdown(void)
     } else {
         result = 0x40002;
     }
-    fn_801F7BD4(result);
+    SysSetLastErrorFunc(result);
     return result;
 }

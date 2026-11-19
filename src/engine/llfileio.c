@@ -22,7 +22,7 @@ typedef struct FileFontPos_t {
     float z;
 } FileFontPos_t;
 #include "engine/dslist.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
 #include <string.h>
@@ -49,8 +49,8 @@ extern FontColor_801CCA64 lbl_802F4A74;
 extern unsigned char lbl_802F4AC0[];
 
 void fn_801F8768(void);
-int fn_801F7ABC(void);
-void fn_801F7AD4(int level);
+int SysGetSystemTime(void);
+void SysSetSystemTime(int level);
 void FileCreateAbsoluteFileName(char *pDst, const char *pPath, const char *pName, int flags);
 FilevDeviceList_t *FileGetDeviceList(void);
 int CDVD_init(int unused, int numFiles, int unused2, void (*pReadDone)(int));
@@ -123,7 +123,7 @@ static int _FileOpenStream(int device, const char *pName, int mode)
         slot = fn_801CB678(device);
         if ((handle = fn_801CB698(port, slot, pName, mode, 0, 0)) < 0) {
             if ((handle = fn_801CB698(port, slot, pName, mode, 1, 0)) < 0) {
-                error = fn_801F7C88();
+                error = SysGetLastError();
             }
         }
         break;
@@ -136,7 +136,7 @@ static int _FileOpenStream(int device, const char *pName, int mode)
         for (i = 0; error == 0 && i < File_InitParms.mNumFiles && !found; i++) {
             if (!File_StreamInfo[i].mInUse) {
                 if (!(pCopy = fn_801D2BB0(1, strlen(pName) + 1, File_uMemFlags, 0))) {
-                    error = fn_801F7C88();
+                    error = SysGetLastError();
                 } else {
                     strcpy(pCopy, pName);
                     // FAKEMATCH: field order found by compiling all 120 orders of the first five stores
@@ -160,7 +160,7 @@ static int _FileOpenStream(int device, const char *pName, int mode)
     if (error) {
         i = -1;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return i;
 }
 
@@ -185,7 +185,7 @@ static int _FileStartAsyncRequest(FileAsyncRequest_t *pAsync)
             pAsync->mState = 1;
             if ((result = FilePerformRead(pAsync->mHandle, pAsync->mPos, pAsync->mpBuffer, pAsync->mSize)) < 0) {
                 pAsync->mState = busy;
-                if (!(error = fn_801F7C88())) {
+                if (!(error = SysGetLastError())) {
                     error = 0xA0007;
                 }
             }
@@ -195,12 +195,12 @@ static int _FileStartAsyncRequest(FileAsyncRequest_t *pAsync)
         File_StreamInfo[pAsync->mHandle].mAsyncPos = pAsync->mPos;
         if ((result = FilePerformWrite(pAsync->mHandle, pAsync->mPos, pAsync->mpBuffer, pAsync->mSize)) >= 0) {
             pAsync->mState = 1;
-        } else if (!(error = fn_801F7C88())) {
+        } else if (!(error = SysGetLastError())) {
             error = 0xA0008;
         }
         break;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return result;
 }
 
@@ -273,7 +273,7 @@ int FileOpenhDevice(const char *pName, int device, const char *pPrefix)
         FileCreateAbsoluteFileName(path, pPrefix, pName, device);
         handle = _FileOpenStream(device, path, 0);
         if (handle < 0) {
-            error = fn_801F7C88();
+            error = SysGetLastError();
         }
         break;
     }
@@ -281,7 +281,7 @@ int FileOpenhDevice(const char *pName, int device, const char *pPrefix)
     case 3:
         handle = _FileOpenStream(device, pName, 3);
         if (handle < 0) {
-            error = fn_801F7C88();
+            error = SysGetLastError();
         }
         break;
     case 0x2A:
@@ -295,7 +295,7 @@ int FileOpenhDevice(const char *pName, int device, const char *pPrefix)
     if (error) {
         handle = -1;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return handle;
 }
 
@@ -316,7 +316,7 @@ int FileCloseStream(int handle)
         fn_801CB8C8(handle);
         break;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -362,7 +362,7 @@ int FilePerformRead(int handle, int pos, void *pBuffer, int size)
     if (error) {
         result = -1;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return result;
 }
 
@@ -395,7 +395,7 @@ int FilePerformWrite(int handle, int pos, void *pBuffer, int size)
     if (error) {
         result = -1;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return result;
 }
 
@@ -421,7 +421,7 @@ int FileQueueAsyncRequest(FileAsyncRequest_t *pAsync)
     }
     fn_801F809C(&File_AsyncThreadActiveCS);
     fn_801F809C(&File_AsyncRequestListCS);
-    fn_801F7BD4(0);
+    SysSetLastErrorFunc(0);
     return 0;
 }
 
@@ -510,7 +510,7 @@ void FileAsyncCheckError(void)
 
     status = DVDGetDriveStatus();
     if ((unsigned int)(status - 4) <= 2 || status == 11 || status == -1) {
-        level = fn_801F7ABC();
+        level = SysGetSystemTime();
         GXDrawDone();
         PADControlMotor(0, 2);
         PADControlMotor(1, 2);
@@ -566,7 +566,7 @@ void FileAsyncCheckError(void)
         fn_801CDB5C(lbl_803ECEF8, "Loading...", 1, 0.0f, &pos.x);
         GlibSwapBuffers();
         MatPop();
-        fn_801F7AD4(level);
+        SysSetSystemTime(level);
         GlibSetVIInt(1);
         GlibEnableVIRetraceCallback(1);
     }

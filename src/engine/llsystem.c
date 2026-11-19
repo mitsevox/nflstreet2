@@ -27,7 +27,7 @@ extern unsigned char lbl_803EBE68;
 extern unsigned int lbl_803EBE58;
 extern unsigned int lbl_803EBE5C;
 extern OSMutex lbl_8039B418;
-extern SysTime_8039B430 lbl_8039B430;
+extern SysTime_t lbl_8039B430;
 
 void fn_801F8574(void);
 void fn_801F8768(void);
@@ -35,7 +35,7 @@ void fn_801F87FC(int code);
 
 static void fn_801F7DF4(u32 retraceCount)
 {
-    fn_801F7AE8();
+    SysIncSystemTime();
     fn_801F8574();
 }
 
@@ -69,7 +69,7 @@ int fn_801F7ED0(void)
     return 0;
 }
 
-int fn_801F7EF8(SysTimer_801F7B1C *pTimer)
+int fn_801F7EF8(SysTimer_t *pTimer)
 {
     if (!(pTimer->mFlags & 4)) {
         if (pTimer->pFunc == 0) {
@@ -99,7 +99,7 @@ int fn_801F7EF8(SysTimer_801F7B1C *pTimer)
     return 0;
 }
 
-int fn_801F7F60(SysTimer_801F7B1C *pTimer)
+int fn_801F7F60(SysTimer_t *pTimer)
 {
     if (pTimer->mFlags & 4) {
         if (pTimer->mFlags & 2) {
@@ -191,7 +191,7 @@ int fn_801F81D4(void)
     return (int)OSGetCurrentThread();
 }
 
-void fn_801F81F4(SysTime_8039B430 *pTime)
+void fn_801F81F4(SysTime_t *pTime)
 {
     unsigned char enabled = OSDisableInterrupts();
 

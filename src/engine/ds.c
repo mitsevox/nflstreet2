@@ -1,7 +1,7 @@
 /* Data-structure library module: init/shutdown and the shared size alignment. */
 
 #include "engine/list.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 
 extern unsigned char lbl_803EBC00;
 extern int lbl_803EBC04;
@@ -21,7 +21,7 @@ int DSInit(void)
     } else {
         error = 0x30001;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -34,7 +34,7 @@ int DSShutdown(void)
     } else {
         error = 0x30002;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 

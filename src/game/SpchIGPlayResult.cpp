@@ -27,7 +27,7 @@ int fn_80178348(void);
 int fn_80178360(void);
 int fn_801783AC(int bit);
 int fn_80179138(void);
-int fn_801F7ABC(void);
+int SysGetSystemTime(void);
 float fn_80237260(int stream);
 
 void SpchIGSayPlayResult(void);
@@ -374,7 +374,7 @@ extern "C" void SpchIGFlushPlayResult(void)
 extern "C" void SpchIGUpdatePlayResult(void)
 {
     if (_SpchIG_uResultStartTime != 0) {
-        if ((float)(fn_801F7ABC() - _SpchIG_uResultStartTime) >= _SpchIG_fResultDelay * 60.0f) {
+        if ((float)(SysGetSystemTime() - _SpchIG_uResultStartTime) >= _SpchIG_fResultDelay * 60.0f) {
             SpchIGSayPlayResult();
             _SpchIG_uResultStartTime = 0;
         }
@@ -384,7 +384,7 @@ extern "C" void SpchIGUpdatePlayResult(void)
 extern "C" void SpchIGSayPlayResult(void)
 {
     if (_SpchIG_uResultStartTime == 0) {
-        _SpchIG_uResultStartTime = fn_801F7ABC();
+        _SpchIG_uResultStartTime = SysGetSystemTime();
         _SpchIG_fResultDelay = fn_80237260(1) + 1.0f;
         _SpchIG_bResultSide = SpchIGGetResultFirstSide();
     }

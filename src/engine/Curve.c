@@ -1,6 +1,6 @@
 /* Curve module init and shutdown. */
 
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 
 extern unsigned char lbl_803EBBE8;
 
@@ -13,7 +13,7 @@ int CurveInit(void)
     } else {
         lbl_803EBBE8 = 1;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -26,6 +26,6 @@ int CurveShutdown(void)
     } else {
         error = 0x1E0002;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }

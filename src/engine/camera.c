@@ -2,7 +2,7 @@
 
 #include "engine/camera.h"
 #include "engine/viewport.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "game/CamAddCameraToViewport.h"
 #include "engine/llmatrix.h"
 
@@ -80,7 +80,7 @@ int CamInit(int count, int numTypes, CamType_t *pTypes, int type)
     } else {
         error = 0xB0001;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -94,7 +94,7 @@ int CamShutdown(void)
     } else {
         error = 0xB0002;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 

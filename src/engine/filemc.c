@@ -1,5 +1,5 @@
 #include "engine/filemc.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include <string.h>
 
 extern MCFile_801CB5D4 lbl_80381C40;
@@ -136,7 +136,7 @@ int fn_801CB92C(int fileNo, unsigned int offset, int whence)
     int error = 0;
 
     if (fn_801CBBAC()) {
-        fn_801F7BD4(0xA0008);
+        SysSetLastErrorFunc(0xA0008);
         return -1;
     }
     pFile = &lbl_80381C40;
@@ -157,7 +157,7 @@ int fn_801CB92C(int fileNo, unsigned int offset, int whence)
         result = -1;
     }
     lbl_80381C40.mSector = lbl_80381C40.mPos & ~0x1FFF;
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return result;
 }
 

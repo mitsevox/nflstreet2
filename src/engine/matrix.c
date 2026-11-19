@@ -1,7 +1,7 @@
 /* Matrix stacks: indexed stacks of 4x4 float matrices. */
 
 #include "engine/matrix.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/llmatrix.h"
 
@@ -39,12 +39,12 @@ int MatInit(int numStacks)
             MatLLInit();
             lbl_803EBCB4 = 1;
         } else {
-            result = fn_801F7C88();
+            result = SysGetLastError();
         }
     } else {
         result = 0x50001;
     }
-    fn_801F7BD4(result);
+    SysSetLastErrorFunc(result);
     return result;
 }
 
@@ -66,7 +66,7 @@ int MatShutdown(void)
     } else {
         result = 0x50002;
     }
-    fn_801F7BD4(result);
+    SysSetLastErrorFunc(result);
     return result;
 }
 
@@ -83,9 +83,9 @@ int MatNewStack(unsigned int index, unsigned int depth)
         result = 0;
         MatMakeUnitMatrix(*pMatrices);
     } else {
-        result = fn_801F7C88();
+        result = SysGetLastError();
     }
-    fn_801F7BD4(result);
+    SysSetLastErrorFunc(result);
     return result;
 }
 
@@ -99,9 +99,9 @@ int MatDelStack(unsigned int index)
         pStack->mTop = 0;
         pStack->mpMatrices = 0;
     } else {
-        result = fn_801F7C88();
+        result = SysGetLastError();
     }
-    fn_801F7BD4(result);
+    SysSetLastErrorFunc(result);
     return result;
 }
 

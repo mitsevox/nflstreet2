@@ -63,7 +63,7 @@ void ObjSetPriority(int handle, BigObj_t *pObject, int a);
 void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
 int ResSetMemFlags(int value);
-int fn_801F7C88(void);
+int SysGetLastError(void);
 int fn_80227594(float *pA, float *pB, float tolerance);
 float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
@@ -219,7 +219,7 @@ void BigObjSetupBigObjects(int count, int handle)
     BigObjRegisterPool(handle, count);
     _BigObj_apObjects = (BigObj_t **)fn_801D2B7C(count * 4, 0, 0);
     memset(_BigObj_apObjects, 0, count * 4);
-    fn_801F7C88();
+    SysGetLastError();
     _BigObj_uMax = count;
     _BigObj_uCount = 0;
     _BigObj_pModelFile = ResOpenDevice("objmodel.dat", 44);

@@ -56,7 +56,7 @@ int _Glib_BreakCycle;
 
 void *memset();
 void *memcpy();
-void fn_801F7B04(void);
+void SysIncVsyncCounter(void);
 void GXSetProjection(float (*pMtx)[4], int type);
 void GlibRenderBegin(GlibState_t *pMode);
 void TMRenderBeginFrame(void);
@@ -113,7 +113,7 @@ static void _GlibLLDrawDone(void)
 
 static void _Glib_VIRetraceCallback(u32 retraceCount)
 {
-    fn_801F7B04();
+    SysIncVsyncCounter();
     if (_Glib_pCallback) {
         _Glib_pCallback();
     }

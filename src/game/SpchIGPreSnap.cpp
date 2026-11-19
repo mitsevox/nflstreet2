@@ -18,7 +18,7 @@ int fn_80177F7C(void);
 int fn_80178194(void);
 int fn_80178308(void);
 int fn_80178360(void);
-int fn_801F7ABC(void);
+int SysGetSystemTime(void);
 float fn_80237260(int stream);
 void SpchIGSayPreSnap(int side);
 }
@@ -109,7 +109,7 @@ extern "C" void SpchIGEndPreSnap(void) {}
 extern "C" void SpchIGUpdatePreSnap(void)
 {
     if (_SpchIG_uPreSnapStartTime != 0) {
-        if ((float)(fn_801F7ABC() - _SpchIG_uPreSnapStartTime) >= _SpchIG_fPreSnapDelay * 60.0f) {
+        if ((float)(SysGetSystemTime() - _SpchIG_uPreSnapStartTime) >= _SpchIG_fPreSnapDelay * 60.0f) {
             SpchIGSayPreSnap(fn_80178360());
             _SpchIG_uPreSnapStartTime = 0;
         }
@@ -142,7 +142,7 @@ extern "C" void SpchIGSayPreSnap(int side)
     int result5;
 
     if (_SpchIG_uPreSnapStartTime == 0) {
-        _SpchIG_uPreSnapStartTime = fn_801F7ABC();
+        _SpchIG_uPreSnapStartTime = SysGetSystemTime();
         _SpchIG_fPreSnapDelay = fn_80237260(1) + 1.0f;
     }
     SpchIGGetLastPlayFlags(&result1);

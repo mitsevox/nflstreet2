@@ -3,7 +3,7 @@
    its driver. */
 
 #include "engine/periph.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
 
@@ -51,14 +51,14 @@ static int _PerCreateDriverList(PerDriver_t **ppDrivers)
     Per_NumDrivers = count;
     Per_DriverArray = fn_801D2BB0(1, count * sizeof(PerDriver_t), 0, 0);
     if (Per_DriverArray == 0) {
-        err = fn_801F7C88();
+        err = SysGetLastError();
     } else if (ppDrivers) {
         pDst = Per_DriverArray;
         for (ppDriver = ppDrivers; *ppDriver; ppDriver++) {
             *pDst++ = **ppDriver;
         }
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -84,11 +84,11 @@ static int _PerCreateDeviceArray(unsigned int numDevices, unsigned int numBits, 
     err = 0;
     Per_DeviceArray = fn_801D2BB0(1, numDevices * sizeof(PerDevice_t), 0, 0);
     if (Per_DeviceArray == 0) {
-        err = fn_801F7C88();
+        err = SysGetLastError();
     } else {
         Per_DeviceDataBuffer = fn_801D2BB0(1, numDevices * _Per_DataTSize, 0, 0);
         if (Per_DeviceDataBuffer == 0) {
-            err = fn_801F7C88();
+            err = SysGetLastError();
             fn_801D2BD0(Per_DeviceArray);
         }
     }
@@ -107,7 +107,7 @@ static int _PerCreateDeviceArray(unsigned int numDevices, unsigned int numBits, 
             pData += _Per_DataTSize;
         }
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -143,7 +143,7 @@ int PerInit(PerInitParms_t *pDesc)
     } else {
         err = 0x180001;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -163,7 +163,7 @@ int PerShutdown(void)
     } else {
         err = 0x180002;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -193,7 +193,7 @@ int PerPollSingleDevice(unsigned int index)
             err = 0x180006;
         }
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -218,7 +218,7 @@ int PerReleaseSingleDevice(unsigned int index)
             err = 0x180006;
         }
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -236,7 +236,7 @@ int PerReleaseDevices(void)
             }
         }
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -261,7 +261,7 @@ int PerGetDeviceData(unsigned int index, void *pBuffer)
     } else {
         err = 0x180007;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -286,7 +286,7 @@ int PerSendDeviceData(unsigned int index, void *pBuffer)
     } else {
         err = 0x180007;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -327,6 +327,6 @@ unsigned int PerGetDeviceTypeT(unsigned int index)
     } else {
         err = 0x180006;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return type;
 }

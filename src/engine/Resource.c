@@ -305,7 +305,7 @@ static void _ResAsyncCallbackFunc(int result, int arg, void *pArg)
         _Res_pAsyncDebugProc(pRes, index, &event, arg, _Res_iAsyncDebugParm);
     }
     if (result < pReq->mDiskSize) {
-        err = fn_801F7C88();
+        err = SysGetLastError();
         fn_801D2BD0(pReq->pBuffer);
         pRes->pFlags[index] &= ~0x10;
     } else {
@@ -386,9 +386,9 @@ static inline void _ResWaitForLoad(ResFile_t *pRes, unsigned int index, int type
     unsigned int elapsed;
 
     if (pRes != 0) {
-        start = fn_801F7B14();
+        start = SysGetVsyncCounter();
         while (pRes->pFlags[index] & 0x10) {
-            elapsed = fn_801F7B14() - start;
+            elapsed = SysGetVsyncCounter() - start;
             if (_Res_pLoopingCallback != 0 && elapsed > 0x4650) {
                 _Res_pLoopingCallback(type);
             }
@@ -426,10 +426,10 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
     if (_Res_bLooseFileSupport != 0 && ResLooseFileGetSize(pRes, index, &size) != 0) {
         file = ResLooseFileOpen(pRes, index);
         if (file < 0) {
-            err = fn_801F7C88();
+            err = SysGetLastError();
         } else {
             if (FileReadCallback(file, (void *)*pBuffer, size, 0) != (int)size) {
-                err = fn_801F7C88();
+                err = SysGetLastError();
             }
             FileClose(file);
         }
@@ -487,7 +487,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
                     dst.pData = (void *)*pBuffer;
                     dst.mDone = 1;
                     if (FileReadCallback(file, pCompressed, compressedSize, 0) < (int)compressedSize) {
-                        return fn_801F7C88();
+                        return SysGetLastError();
                     }
                     fn_801F318C(pRes, index, originalOffset, src.pData, compressedSize);
                     cache = 0;
@@ -533,7 +533,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
                 dst.mSize = size;
                 dst.pData = (void *)*pBuffer;
                 if (FileReadCallback(file, src.pData, compressedSize, 0) < (int)compressedSize) {
-                    return fn_801F7C88();
+                    return SysGetLastError();
                 }
                 if (_Res_bCachingEnabled != 0 && cache != 0) {
                     fn_801F318C(pRes, index, originalOffset, src.pData, compressedSize);
@@ -550,7 +550,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
                 GCmpSetLabel(0);
                 if ((int)dst.mSize != (int)size) {
                     fn_801D2BD0(src.pData);
-                    return fn_801F7C88();
+                    return SysGetLastError();
                 }
                 fn_801D2BD0(src.pData);
             }
@@ -559,7 +559,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
             result = FileReadCallback(file, (void *)*pBuffer, size, 0);
         }
         if (result < (int)size) {
-            err = fn_801F7C88();
+            err = SysGetLastError();
         }
         if (_Res_bCachingEnabled != 0 && cache != 0) {
             fn_801F318C(pRes, index, originalOffset, (void *)*pBuffer, size);
@@ -589,7 +589,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
             GCmpSetLabel(0);
             if ((int)dst.mSize != (int)size) {
                 fn_801D2BD0(dst.pData);
-                return fn_801F7C88();
+                return SysGetLastError();
             }
             if (address != *pBuffer) {
                 memcpy((void *)*pBuffer, dst.pData, dst.mSize);
@@ -642,7 +642,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
             fn_801D2BD0(src.pData);
             if ((int)dst.mSize != (int)size) {
                 fn_801D2BD0(dst.pData);
-                return fn_801F7C88();
+                return SysGetLastError();
             }
             if (address != *pBuffer) {
                 memcpy((void *)*pBuffer, dst.pData, dst.mSize);
@@ -705,10 +705,10 @@ static int _ResLoadResAsync(ResFile_t *pRes, unsigned int index, void *pBuffer, 
             file = ResLooseFileOpen(pRes, index);
             if (file >= 0) {
                 if (FileReadAsync(file, pBuffer, size, priority, _ResAsyncCallbackFunc, pReq) == 0) {
-                    err = fn_801F7C88();
+                    err = SysGetLastError();
                 }
             } else {
-                err = fn_801F7C88();
+                err = SysGetLastError();
             }
             return err;
         }
@@ -811,12 +811,12 @@ static int _ResLoadResAsync(ResFile_t *pRes, unsigned int index, void *pBuffer, 
             pRead = FileReadAsync(file, pBuffer, size, priority, _ResAsyncCallbackFunc, pReq);
         }
         if (pRead == 0) {
-            err = fn_801F7C88();
+            err = SysGetLastError();
         }
     } else {
-        err = fn_801F7C88();
+        err = SysGetLastError();
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     if (pRes->mMinDelay != 0 && _Res_uTimedAsyncTick == 0) {
         _ResWaitForLoad(pRes, index, 1);
     }
@@ -861,7 +861,7 @@ static int _ResReadTerfBlock(int file, void *pBuffer)
 
     err = 0;
     if (FileReadCallback(file, pBuffer, 8, 0) < 8) {
-        err = fn_801F7C88();
+        err = SysGetLastError();
     }
     return err;
 }
@@ -872,7 +872,7 @@ static int _ResReadBlock(int file, void *pBuffer, int size)
 
     err = 0;
     if (FileReadCallback(file, pBuffer, size, 0) < size) {
-        err = fn_801F7C88();
+        err = SysGetLastError();
     }
     return err;
 }
@@ -933,21 +933,21 @@ static int _ResInitResourceFile(ResFile_t *pRes, char *pName)
     pRes->mVersion = header.mVersion;
     pRes->pName = fn_801D2BB0(1, strlen(pName) + 1, _Res_uMemAllocFlags, 0);
     if (pRes->pName == 0) {
-        err = fn_801F7C88();
+        err = SysGetLastError();
         goto done;
     }
     strcpy(pRes->pName, pName);
     size = header.mNumRes * sizeof(*pRes->pAddrs);
     pRes->pAddrs = fn_801D2BB0(1, size, _Res_uMemAllocFlags, 0);
     if (pRes->pAddrs == 0) {
-        err = fn_801F7C88();
+        err = SysGetLastError();
         goto done;
     }
     memset(pRes->pAddrs, 0, size);
     size = header.mNumRes * sizeof(*pRes->pFlags);
     pRes->pFlags = fn_801D2BB0(1, size, _Res_uMemAllocFlags, 0);
     if (pRes->pFlags == 0) {
-        err = fn_801F7C88();
+        err = SysGetLastError();
         goto done;
     }
     memset((void *)pRes->pFlags, 0, size);
@@ -970,7 +970,7 @@ static int _ResInitResourceFile(ResFile_t *pRes, char *pName)
                 pRes->mDirOffset = position;
                 pRes->pDir = fn_801D2BB0(1, size, _Res_uMemAllocFlags, 0);
                 if (pRes->pDir == 0) {
-                    err = fn_801F7C88();
+                    err = SysGetLastError();
                     goto done;
                 }
                 err = _ResReadBlock(file, pRes->pDir, size);
@@ -983,7 +983,7 @@ static int _ResInitResourceFile(ResFile_t *pRes, char *pName)
             size = _ResGetBaseBlockSize(0x434F4D50, pRes->mNumRes);
             pRes->pBlocks = fn_801D2BB0(1, size, _Res_uMemAllocFlags, 0);
             if (pRes->pBlocks == 0) {
-                err = fn_801F7C88();
+                err = SysGetLastError();
                 goto done;
             }
             err = _ResReadBlock(file, pRes->pBlocks, size);
@@ -1003,7 +1003,7 @@ static int _ResInitResourceFile(ResFile_t *pRes, char *pName)
                 pRes->mHashOffset = position;
                 pRes->pHash = fn_801D2BB0(1, size, _Res_uMemAllocFlags, 0);
                 if (pRes->pHash == 0) {
-                    err = fn_801F7C88();
+                    err = SysGetLastError();
                     goto done;
                 }
                 err = _ResReadBlock(file, pRes->pHash, size);
@@ -1076,7 +1076,7 @@ cleanup:
             pRes->mHashTag = 0;
         }
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -1174,14 +1174,14 @@ static int _ResInitRamResourceFile(ResFile_t *pRes, char *pName, unsigned int fi
     size = header.mNumRes * sizeof(*pRes->pAddrs);
     pRes->pAddrs = fn_801D2BB0(1, size, _Res_uMemAllocFlags, 0);
     if (pRes->pAddrs == 0) {
-        err = fn_801F7C88();
+        err = SysGetLastError();
         goto done;
     }
     memset(pRes->pAddrs, 0, size);
     size = header.mNumRes * sizeof(*pRes->pFlags);
     pRes->pFlags = fn_801D2BB0(1, size, _Res_uMemAllocFlags, 0);
     if (pRes->pFlags == 0) {
-        err = fn_801F7C88();
+        err = SysGetLastError();
         goto done;
     }
     memset((void *)pRes->pFlags, 0, size);
@@ -1203,7 +1203,7 @@ done:
             pRes->pName = 0;
         }
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -1291,7 +1291,7 @@ int ResInit(int maxResources)
     _Res_iTimedAsyncPut = 0;
     _Res_iTimedAsyncGet = 0;
     _Res_uTimedAsyncTick = 0;
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -1323,7 +1323,7 @@ int ResShutdown(void)
     if (GCmpIsActive() != 0) {
         GCmpShutdown();
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -1342,13 +1342,13 @@ ResFile_t *ResOpenDevice(char *pName, int mode)
         if (pRes == 0) {
             pRes = DSNewListNode(_Res_pResourceFileList);
             if (pRes == 0) {
-                err = fn_801F7C88();
+                err = SysGetLastError();
                 goto done;
             }
             memset(pRes, 0, sizeof(ResFile_t));
             pRes->mFile = FileOpenFileDevice(pName, mode);
             if (pRes->mFile < 0) {
-                err = fn_801F7C88();
+                err = SysGetLastError();
                 goto done;
             }
             err = _ResInitResourceFile(pRes, pName);
@@ -1374,7 +1374,7 @@ done:
         }
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return pRes;
 }
 
@@ -1402,7 +1402,7 @@ ResFile_t *ResOpenRam(ResFile_t *pParent, unsigned int index, int heap, int mode
         }
         pName = fn_801D2BB0(1, strlen(pParent->pName) + 1 + digits, _Res_uMemAllocFlags, 0);
         if (pName == 0) {
-            err = fn_801F7C88();
+            err = SysGetLastError();
             goto done;
         }
         strcpy(pName, pParent->pName);
@@ -1418,7 +1418,7 @@ ResFile_t *ResOpenRam(ResFile_t *pParent, unsigned int index, int heap, int mode
         if (pRes == 0) {
             pRes = DSNewListNode(_Res_pResourceFileList);
             if (pRes == 0) {
-                err = fn_801F7C88();
+                err = SysGetLastError();
                 goto done;
             }
             memset(pRes, 0, sizeof(ResFile_t));
@@ -1452,7 +1452,7 @@ done:
         pRes = 0;
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return pRes;
 }
 
@@ -1588,7 +1588,7 @@ int ResClose(ResFile_t *pRes)
         }
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -1614,7 +1614,7 @@ unsigned int ResLoad(ResFile_t *pRes, unsigned int index, int heap)
             if (buffer != 0) {
                 err = _ResLoadRes(pRes, index, &buffer);
             } else {
-                err = fn_801F7C88();
+                err = SysGetLastError();
             }
             if (err == 0) {
                 pRes->pAddrs[index] = buffer;
@@ -1630,7 +1630,7 @@ unsigned int ResLoad(ResFile_t *pRes, unsigned int index, int heap)
         }
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return buffer;
 }
 
@@ -1658,7 +1658,7 @@ unsigned int ResLoadAsync(ResFile_t *pRes, unsigned int index, int heap, int a, 
                 pRes->pFlags[index] |= 0x11;
                 err = _ResLoadResAsync(pRes, index, (void *)buffer, heap, a, pDone, pUser, 0);
             } else {
-                err = fn_801F7C88();
+                err = SysGetLastError();
             }
             if (err != 0) {
                 if (p != 0) {
@@ -1677,7 +1677,7 @@ unsigned int ResLoadAsync(ResFile_t *pRes, unsigned int index, int heap, int a, 
         }
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return buffer;
 }
 
@@ -1711,7 +1711,7 @@ unsigned int ResLoadToBuffer(ResFile_t *pRes, unsigned int index, void *pBuffer)
         }
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return buffer;
 }
 
@@ -1746,7 +1746,7 @@ int ResWriteFromBuffer(ResFile_t *pRes, unsigned int index, void *pBuffer)
         }
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -1773,7 +1773,7 @@ unsigned int ResLoadAsyncToBuffer(ResFile_t *pRes, unsigned int index, int heap,
                 pRes->pFlags[index] |= 0x10;
                 err = _ResLoadResAsync(pRes, index, pBuffer, heap, a, pDone, pUser, 0);
             } else {
-                err = fn_801F7C88();
+                err = SysGetLastError();
             }
             if (err != 0) {
                 pBuffer = 0;
@@ -1788,7 +1788,7 @@ unsigned int ResLoadAsyncToBuffer(ResFile_t *pRes, unsigned int index, int heap,
         }
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return (unsigned int)pBuffer;
 }
 
@@ -1815,7 +1815,7 @@ unsigned int ResCopyAsyncToBuffer(ResFile_t *pRes, unsigned int index, int heap,
                 pRes->pFlags[index] |= 0x10;
                 err = _ResLoadResAsync(pRes, index, pBuffer, heap, a, pDone, pUser, 1);
             } else {
-                err = fn_801F7C88();
+                err = SysGetLastError();
             }
             if (err != 0) {
                 pBuffer = 0;
@@ -1830,7 +1830,7 @@ unsigned int ResCopyAsyncToBuffer(ResFile_t *pRes, unsigned int index, int heap,
         }
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return (unsigned int)pBuffer;
 }
 
@@ -1868,7 +1868,7 @@ int ResCopyToBuffer(ResFile_t *pRes, unsigned int index, void *pBuffer)
         }
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -1904,7 +1904,7 @@ int ResUnLoad(ResFile_t *pRes, unsigned int index)
         }
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -1948,7 +1948,7 @@ int ResLoadAll(ResFile_t *pRes, int heap, int bulk)
             for (index = 0; index < pRes->mNumRes; index++) {
                 if (!(pRes->pFlags[index] & 2)) {
                     if (ResLoad(pRes, index, heap) == 0) {
-                        err = fn_801F7C88();
+                        err = SysGetLastError();
                     } else {
                         pRes->pFlags[index] = 7;
                         _ResUnlockRes(pRes, index);
@@ -1973,7 +1973,7 @@ int ResLoadAll(ResFile_t *pRes, int heap, int bulk)
             }
             pBuffer = fn_801D2BB0(heap, totalSize, _Res_uMemAllocFlags, 0);
             if (pBuffer == 0) {
-                err = fn_801F7C88();
+                err = SysGetLastError();
                 goto done;
             }
             pRes->mState = 1;
@@ -2001,7 +2001,7 @@ int ResLoadAll(ResFile_t *pRes, int heap, int bulk)
                 ResTrackResource(3, &track);
             }
             if (result < (int)pRes->mDataSize) {
-                err = fn_801F7C88();
+                err = SysGetLastError();
                 fn_801D2BD0(pBuffer);
                 pRes->mBaseAddr = 0;
                 goto done;
@@ -2061,7 +2061,7 @@ int ResLoadAll(ResFile_t *pRes, int heap, int bulk)
     }
 done:
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -2103,7 +2103,7 @@ int ResUnLoadAll(ResFile_t *pRes)
         }
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -2166,7 +2166,7 @@ int ResFindIndexByName(ResFile_t *pRes, char *pName)
     }
 done:
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return index;
 }
 
@@ -2191,7 +2191,7 @@ unsigned int ResGetSize(ResFile_t *pRes, unsigned int index)
         _ResGetDirInfo(pRes, index, &offset, &prevSize, &size);
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return size;
 }
 
@@ -2211,7 +2211,7 @@ int ResGetNumResources(ResFile_t *pRes)
         count = pRes->mNumRes;
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return count;
 }
 
@@ -2233,7 +2233,7 @@ int ResIsLoaded(ResFile_t *pRes, unsigned int index)
         loaded = 1;
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return loaded;
 }
 
@@ -2255,7 +2255,7 @@ int ResIsLoading(ResFile_t *pRes, unsigned int index)
         loading = 1;
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return loading;
 }
 
@@ -2265,9 +2265,9 @@ int ResSync(int noWait)
     unsigned int elapsed;
 
     if (noWait == 0) {
-        start = fn_801F7B14();
+        start = SysGetVsyncCounter();
         while (_Res_iAsyncLoadCount != 0) {
-            elapsed = fn_801F7B14() - start;
+            elapsed = SysGetVsyncCounter() - start;
             if (_Res_pLoopingCallback != 0 && elapsed > 0x4650) {
                 _Res_pLoopingCallback(2);
             }
@@ -2312,7 +2312,7 @@ int ResIsMemoryBacked(ResFile_t *pRes)
             err = 0xF0005;
         }
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return result;
 }
 
@@ -2338,7 +2338,7 @@ int ResGetStreamInfo(ResFile_t *pRes, unsigned int index, unsigned int *pSize, u
         *pFile = pRes->mFile;
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -2356,7 +2356,7 @@ void ResSetFlags(ResFile_t *pRes, unsigned int flags)
         pRes->mFlags |= flags;
         fn_801F809C(&_Res_sResourceLock);
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
 }
 
 void ResClearFlags(ResFile_t *pRes, unsigned int flags)
@@ -2373,7 +2373,7 @@ void ResClearFlags(ResFile_t *pRes, unsigned int flags)
         pRes->mFlags &= ~flags;
         fn_801F809C(&_Res_sResourceLock);
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
 }
 
 void ResCallTimedAsync(unsigned int time)
@@ -2435,7 +2435,7 @@ int ResGetAlignment(ResFile_t *pRes)
         alignment = pRes->mAlignment;
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return alignment;
 }
 

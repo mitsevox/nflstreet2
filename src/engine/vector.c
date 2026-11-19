@@ -1,6 +1,6 @@
 /* Vector library front end: the module init/shutdown guard and the angle between two 3D vectors. */
 
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 
 extern int fn_801CFD78(float x);
 float fn_8022716C(float *p);
@@ -17,7 +17,7 @@ int VecInit(void)
     } else {
         err = 0x60001;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -30,7 +30,7 @@ int VecShutdown(void)
     } else {
         err = 0x60002;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 

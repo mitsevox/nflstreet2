@@ -105,7 +105,7 @@ static void fn_801F5760(const char *pFormat, ...)
 
 static int fn_801F57AC(void)
 {
-    return fn_801F7ABC();
+    return SysGetSystemTime();
 }
 
 static void fn_801F57CC(void)

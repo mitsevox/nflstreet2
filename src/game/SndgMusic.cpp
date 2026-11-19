@@ -99,7 +99,7 @@ void GlibVsync(int a);
 void *ResOpenDevice(const char *pName, int flags);
 void ResClose(void *p);
 int SndEnabled(void);
-unsigned long long fn_801F7D34(SndgMusicClock_t *p);
+unsigned long long SysTimeToMilliseconds(SndgMusicClock_t *p);
 void fn_801F81F4(SndgMusicClock_t *p);
 void fn_80219650(void *p, unsigned short *a, unsigned short *b);
 
@@ -504,7 +504,7 @@ void SndgMusicUpdate(void)
     if (SndEnabled()) {
         SndgMusicClock_t calendar;
         fn_801F81F4(&calendar);
-        unsigned long long now = fn_801F7D34(&calendar);
+        unsigned long long now = SysTimeToMilliseconds(&calendar);
         if (_SndgMusic_pState->mUnknown0 && now > _SndgMusic_pState->mUnknown0) {
             SndgMusicState_t *p = _SndgMusic_pState;
             if (p->mUnknown18 < p->mUnknown14) {
@@ -603,7 +603,7 @@ void SndgMusicFadeOut(unsigned int delay, int wait)
         SndgMusicExitMode(0);
         SndgMusicClock_t calendar;
         fn_801F81F4(&calendar);
-        _SndgMusic_pState->mUnknown8 = fn_801F7D34(&calendar) + delay;
+        _SndgMusic_pState->mUnknown8 = SysTimeToMilliseconds(&calendar) + delay;
         if (_SndgMusic_pState->mUnknown122 || _SndgMusic_pState->mUnknown128) {
             SndgPathFadeTrack(0x11000001, 0, delay);
         }
@@ -730,7 +730,7 @@ void SndgMusicRampCutoff(int value, unsigned int duration)
             p->mUnknown10 = (value < p->mUnknown18 ? p->mUnknown18 - value : value - p->mUnknown18) / duration;
             SndgMusicClock_t calendar;
             fn_801F81F4(&calendar);
-            _SndgMusic_pState->mUnknown0 = fn_801F7D34(&calendar);
+            _SndgMusic_pState->mUnknown0 = SysTimeToMilliseconds(&calendar);
         }
     }
 }

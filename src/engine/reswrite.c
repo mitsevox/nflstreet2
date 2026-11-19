@@ -125,7 +125,7 @@ done:
         fn_801D2BD0(dst.mpData);
     }
     fn_801F809C(&_Res_sResourceLock);
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return size;
 }
 

@@ -591,7 +591,7 @@ void SndAemsLoadSystem(void *pData, int a, int b);
 void SndAemsUnloadSystem(void);
 int SndAemsLoadBank(void *pData, int b, int c);
 void SndAemsUnloadBank(int handle);
-int fn_801F7ABC(void);
+int SysGetSystemTime(void);
 int Vec3GetAngle(Vector_80039F5C *a, Vector_80039F5C *b);
 int fn_802275D8(Vector_80039F5C *a, Vector_80039F5C *b, float eps);
 void fn_80227690(void *pOut, void *a, void *b);
@@ -2112,7 +2112,7 @@ extern "C" int SndgSfxPlayVolume(int index, Vector_80039F5C *pPos, unsigned char
         return 0x7FFFFFFF;
     }
     pEntry = &_Sndg_sState.mC[index];
-    now = fn_801F7ABC();
+    now = SysGetSystemTime();
     if (SndPatchOver(pEntry->m14) != 0 || (unsigned int)(index - 0x72) <= 30 ||
         now - pEntry->m10 > fn_802372EC(1, 15) + 10) {
         SndFillPatchOpts(&params);

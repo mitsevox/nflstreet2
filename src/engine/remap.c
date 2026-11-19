@@ -1,7 +1,7 @@
 /* Controller remapping tables: each table maps game actions to combinations of pad buttons and analog
    axes, and RemapCheckEntry turns the current pad input into a float value for one action. */
 
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "engine/fn_801F8014.h"
 #include "engine/remap.h"
 #include "game/fn_801D2B7C.h"
@@ -36,7 +36,7 @@ int RemapInit(unsigned int numTables, unsigned int numEntries, unsigned int numI
         if (lbl_803ECF68 != 0) {
             lbl_803ECF6C = fn_801D2BB0(1, lbl_803ECF68, 0, 0);
             if (lbl_803ECF6C == 0) {
-                err = fn_801F7C88();
+                err = SysGetLastError();
             } else {
                 MemFill(lbl_803ECF6C, lbl_803ECF68, 0, 2);
                 lbl_803EBD7C = 1;
@@ -48,7 +48,7 @@ int RemapInit(unsigned int numTables, unsigned int numEntries, unsigned int numI
     } else {
         err = 0x180001;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -67,7 +67,7 @@ int RemapShutdown(void)
     } else {
         err = 0x180002;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -82,7 +82,7 @@ int RemapSetupEntries(unsigned int table, unsigned int start, unsigned int count
     } else {
         err = 0x180003;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -163,6 +163,6 @@ float RemapCheckEntry(unsigned int table, unsigned int entry, unsigned char *pIn
         err = 0x180003;
         result = 0.0f;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return result;
 }

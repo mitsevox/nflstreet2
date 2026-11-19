@@ -9,7 +9,7 @@
 #include <dolphin/gx/GXTransform.h>
 #include <dolphin/os/OSCache.h>
 #include "engine/Font.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/llmatrix.h"
 #include "engine/viewport.h"
@@ -71,7 +71,7 @@ int fn_801CDB5C(Font_801CCA64 *pFont, const char *pText, unsigned int flags, flo
             fn_801CD964(state, pFont, pQuads, count, &lbl_803E7600.mColor, 0);
         }
         MatPop();
-        fn_801F7BD4(0);
+        SysSetLastErrorFunc(0);
     }
     return 0;
 }

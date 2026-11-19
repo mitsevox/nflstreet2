@@ -5,7 +5,7 @@
 #include "engine/tdbiores.h"
 #include "engine/Resource.h"
 #include "game/fn_801D2B7C.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 
 typedef struct TDbIOResRef_t {
     void *mpArchive;
@@ -51,7 +51,7 @@ static int _IORes_Open(void *pHandle, unsigned int expectedSize, void *pName, in
         return 3;
     }
     size = ResGetSize(pDesc->mpArchive, pDesc->mId);
-    if (fn_801F7C88() != 0 || (bAnySize == 0 && size != expectedSize)) {
+    if (SysGetLastError() != 0 || (bAnySize == 0 && size != expectedSize)) {
         return 0x24;
     }
     pFile->mDesc = *pDesc;

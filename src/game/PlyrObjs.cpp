@@ -116,7 +116,7 @@ void PlaTexCacheStart();
 int fn_8003D378(int, int);
 void ResTrackPause();
 void ResTrackResume();
-int fn_801F7C88();
+int SysGetLastError();
 void *fn_801D2B7C(int, int, int);
 void fn_8015EE74();
 void fn_8015EF10();
@@ -683,12 +683,12 @@ void fn_8003D2E0() {
   fn_800AF790(2, lbl_803EA41C, "rshoulder", "rwrist", 1);
 }
 int fn_8003D378(int owner, int mode) {
-  // FAKEMATCH: dead initializer; result is set from fn_801F7C88 before any read
+  // FAKEMATCH: dead initializer; result is set from SysGetLastError before any read
   int result = 0;
   Object_8008044C object;
   ResTrackPause();
   lbl_803EA430 = (Object_8003DEC4 **)fn_801D2B7C(lbl_803EA434 * 4, 0, 0);
-  result = fn_801F7C88();
+  result = SysGetLastError();
   if (lbl_803EA430) {
     fn_8008044C(&object, 0, mode ? 0x54415453 : 0x454D4147);
     fn_8003D958();

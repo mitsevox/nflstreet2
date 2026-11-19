@@ -6,7 +6,7 @@
 #include "engine/list.h"
 #include "engine/fileio.h"
 #include "engine/dslist.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
 #include <string.h>
@@ -176,7 +176,7 @@ FileRequest_t *_FileRequest(FileRequest_t *pSrc, int type)
     if (pAsync->mType == 2 && File_StreamInfo[pReq->mHandle].mPos > File_StreamInfo[pReq->mHandle].mLength) {
         File_StreamInfo[pReq->mHandle].mLength = File_StreamInfo[pReq->mHandle].mPos;
     }
-    fn_801F7BD4(FileQueueAsyncRequest(pAsync));
+    SysSetLastErrorFunc(FileQueueAsyncRequest(pAsync));
     return pReq;
 }
 
@@ -244,7 +244,7 @@ int FileInit(FileInitParms_t *pConfig)
     } else {
         error = 0xA0001;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -275,7 +275,7 @@ int FileShutdown(void)
     } else {
         error = 0xA0002;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -304,7 +304,7 @@ int FileOpenFileDevice(const char *pName, int device)
             error = 0xA0003;
         }
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     if (error == 0) {
         _File_uNumOpenFiles++;
         _File_uMaxFilesOpenedAtOnce = _File_uMaxFilesOpenedAtOnce < _File_uNumOpenFiles ? _File_uNumOpenFiles : _File_uMaxFilesOpenedAtOnce;
@@ -319,7 +319,7 @@ int FileClose(int handle)
 
     FileAsyncWaitStream(handle);
     error = FileCloseStream(handle);
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     if (error == 0) {
         _File_uNumOpenFiles--;
     }
@@ -349,7 +349,7 @@ int FileSeek(int handle, int offset, unsigned int whence)
         File_StreamInfo[handle].mPos = File_StreamInfo[handle].mLength;
         error = 0xA0004;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -363,7 +363,7 @@ int FileExistsFileDevice(const char *pName, int device)
     } else {
         error = FileClose(handle);
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return error;
 }
 
@@ -397,7 +397,7 @@ int FileReadCallback(int handle, char *pBuffer, int size, void (*callback)(int, 
     if (error) {
         count = -1;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return count;
 }
 
@@ -423,7 +423,7 @@ int FileWriteCallback(int handle, char *pBuffer, int size, void (*callback)(int,
     FileAsyncWaitStream(handle);
     count = result.mCount;
     if (count < 0 || count != size) {
-        error = fn_801F7C88();
+        error = SysGetLastError();
     }
     if (callback) {
         callback(count, error, 0);
@@ -431,7 +431,7 @@ int FileWriteCallback(int handle, char *pBuffer, int size, void (*callback)(int,
     if (error) {
         count = -1;
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return count;
 }
 
@@ -452,9 +452,9 @@ FileRequest_t *FileReadAsync(int handle, char *pBuffer, int size, int priority, 
     req.mCyclic = 0;
     req.mpBlockFn = 0;
     if (!(pReq = _FileRequest(&req, 1))) {
-        error = fn_801F7C88();
+        error = SysGetLastError();
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return pReq;
 }
 
@@ -475,9 +475,9 @@ FileRequest_t *FileReadAsyncCyclic(int handle, char *pBuffer, int size, int prio
     req.mBlockSize = blockSize;
     req.mCyclic = 1;
     if (!(pReq = _FileRequest(&req, 1))) {
-        error = fn_801F7C88();
+        error = SysGetLastError();
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return pReq;
 }
 
@@ -498,9 +498,9 @@ FileRequest_t *FileWriteAsync(int handle, char *pBuffer, int size, int priority,
     req.mCyclic = 0;
     req.mpBlockFn = 0;
     if (!(pReq = _FileRequest(&req, 2))) {
-        error = fn_801F7C88();
+        error = SysGetLastError();
     }
-    fn_801F7BD4(error);
+    SysSetLastErrorFunc(error);
     return pReq;
 }
 

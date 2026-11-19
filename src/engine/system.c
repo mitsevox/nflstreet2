@@ -1,27 +1,34 @@
+/* Low-level system services: module init and shutdown, the system timer list and the per-thread
+   error codes every engine module reports through, the vsync counter and the time-to-milliseconds
+   conversion of the clock record. */
+
 #include "engine/system.h"
 #include "engine/dslist.h"
 
-typedef struct SysInitParms_801F7824 {
+/* Release-build form of the library's assertion check: compiles to an empty statement. */
+#define SYS_ASSERT(e) do { } while (0)
+
+typedef struct SysInitParams_t {
     unsigned char mNumTimers;
     unsigned char mNumCallbacks;
     unsigned char mNumThreads;
-} SysInitParms_801F7824;
+} SysInitParams_t;
 
-typedef struct SysCallback_801F77DC {
+typedef struct SysCallback_t {
     unsigned short mUnknown0;
     unsigned short mPriority;
     int mUnknown4;
-} SysCallback_801F77DC;
+} SysCallback_t;
 
-typedef struct SysThreadIndex_801F7824 {
+typedef struct SysThreadIndex_t {
     int mUnknown0;
     unsigned int mIndex;
-} SysThreadIndex_801F7824;
+} SysThreadIndex_t;
 
-typedef struct SysError_801F77EC {
+typedef struct SysErrorEntry_t {
     int mError;
     int mThreadID;
-} SysError_801F77EC;
+} SysErrorEntry_t;
 
 #define SYS_ERROR_UNUSED 0x8000FFFF
 
@@ -32,29 +39,29 @@ extern int DSTraverseList(void *pPool, int start, void *pKey, void *pOut, int (*
 extern int DateGetNumDaysInYear(int year);
 extern int DateGetNumDaysInMonth(int month, int year);
 
-extern unsigned char lbl_803EBE30;
-extern int lbl_803EBE34;
-extern void *lbl_803EBE38;
-extern void *lbl_803EBE3C;
-extern int lbl_803EBE40;
-extern SysTimer_801F7B1C *lbl_803EBE44;
-extern unsigned int lbl_803EBE48;
-extern void *lbl_803ECFA4;
-extern void *lbl_803ECFA8;
-extern Lock_801F8014 lbl_8039B3F8;
+static unsigned char _Sys_ModuleActive = 0;
+static int _Sys_LastError = 0;
+static void *_Sys_ErrorList = 0;
+static void *_Sys_ThreadIndexList = 0;
+static int _Sys_NumThreads = 0;
+static SysTimer_t *_Sys_SystemTimer = 0;
+static unsigned int _Sys_uVSyncCounter = 0;
+void *_Sys_TimerList;
+void *_Sys_CallbackList;
+Lock_801F8014 _SysCS;
 
-SysTimer_801F7B1C *fn_801F7B1C(void *pFunc, int a);
-void fn_801F7B9C(SysTimer_801F7B1C *pTimer);
+SysTimer_t *SysAllocTimer(void *pFunc, int a);
+void SysFreeTimer(SysTimer_t *pTimer);
 
-static int fn_801F77DC(void *pA, void *pB)
+static int _SysInsertByPriorityCallback(void *pA, void *pB)
 {
-    return ((SysCallback_801F77DC *)pA)->mPriority - ((SysCallback_801F77DC *)pB)->mPriority;
+    return ((SysCallback_t *)pA)->mPriority - ((SysCallback_t *)pB)->mPriority;
 }
 
-static int fn_801F77EC(void *pItem, void *pKey, void *pOut)
+static int _SysTraverseErrorList(void *pItem, void *pKey, void *pOut)
 {
-    SysError_801F77EC *pError = pItem;
-    SysError_801F77EC **ppFound = pOut;
+    SysErrorEntry_t *pError = pItem;
+    SysErrorEntry_t **ppFound = pOut;
 
     if (pError->mThreadID == (int)pKey) {
         *ppFound = pError;
@@ -66,121 +73,124 @@ static int fn_801F77EC(void *pItem, void *pKey, void *pOut)
     return 1;
 }
 
-int fn_801F7824(SysInitParms_801F7824 *pParms)
+int SysInit(SysInitParams_t *pParms)
 {
     int err;
-    int i = 0;
     void *pPool;
 
-    if (!lbl_803EBE30) {
+    if (!_Sys_ModuleActive) {
+        int i = 0;
+
+        // FAKEMATCH: compiled-out assert; its empty do-while keeps i = 0 ahead of the first call
+        SYS_ASSERT(pParms != NULL);
         err = fn_801F7E90();
-        lbl_803EBE30 = 1;
-        lbl_803ECFA4 = DSNewList(1, 0, pParms->mNumTimers, sizeof(SysTimer_801F7B1C), 0, 0);
-        lbl_803EBE44 = fn_801F7B1C(0, 3);
-        fn_801F7EF8(lbl_803EBE44);
-        lbl_803ECFA8 = DSNewList(1, 0, pParms->mNumCallbacks + 4, sizeof(SysCallback_801F77DC), fn_801F77DC, 0);
-        lbl_803EBE40 = pParms->mNumThreads;
-        lbl_803EBE3C = DSNewList(1, 0, pParms->mNumThreads, sizeof(SysThreadIndex_801F7824), 0, 0);
+        _Sys_ModuleActive = 1;
+        _Sys_TimerList = DSNewList(1, 0, pParms->mNumTimers, sizeof(SysTimer_t), 0, 0);
+        _Sys_SystemTimer = SysAllocTimer(0, 3);
+        fn_801F7EF8(_Sys_SystemTimer);
+        _Sys_CallbackList = DSNewList(1, 0, pParms->mNumCallbacks + 4, sizeof(SysCallback_t), _SysInsertByPriorityCallback, 0);
+        _Sys_NumThreads = pParms->mNumThreads;
+        _Sys_ThreadIndexList = DSNewList(1, 0, pParms->mNumThreads, sizeof(SysThreadIndex_t), 0, 0);
         for (; i < pParms->mNumThreads; i++) {
-            SysThreadIndex_801F7824 *pIndex = DSNewListNode(lbl_803EBE3C);
+            SysThreadIndex_t *pIndex = DSNewListNode(_Sys_ThreadIndexList);
 
             pIndex->mIndex = i | 0x80000000;
-            DSAddListNode(lbl_803EBE3C, pIndex, 0);
+            DSAddListNode(_Sys_ThreadIndexList, pIndex, 0);
         }
         if (pParms->mNumThreads > 1) {
-            pPool = DSNewList(1, 0, pParms->mNumThreads, sizeof(SysError_801F77EC), 0, 0);
+            pPool = DSNewList(1, 0, pParms->mNumThreads, sizeof(SysErrorEntry_t), 0, 0);
             for (i = 0; i < pParms->mNumThreads; i++) {
-                SysError_801F77EC *pError = DSNewListNode(pPool);
+                SysErrorEntry_t *pError = DSNewListNode(pPool);
 
                 pError->mError = SYS_ERROR_UNUSED;
                 DSAddListNode(pPool, pError, 0);
             }
-            lbl_803EBE38 = pPool;
+            _Sys_ErrorList = pPool;
         }
-        fn_801F7FA8(&lbl_8039B3F8);
+        fn_801F7FA8(&_SysCS);
     } else {
         err = 0x20001;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
-int fn_801F79C0(void)
+int SysShutdown(void)
 {
     int err = 0;
     void *p;
 
-    if (lbl_803EBE30) {
-        if (lbl_803EBE44) {
-            fn_801F7B9C(lbl_803EBE44);
-            lbl_803EBE44 = 0;
+    if (_Sys_ModuleActive) {
+        if (_Sys_SystemTimer) {
+            SysFreeTimer(_Sys_SystemTimer);
+            _Sys_SystemTimer = 0;
         }
-        if (lbl_803ECFA4) {
-            while ((p = DSGetListNode(lbl_803ECFA4, 2)) != 0) {
-                fn_801F7B9C(p);
+        if (_Sys_TimerList) {
+            while ((p = DSGetListNode(_Sys_TimerList, 2)) != 0) {
+                SysFreeTimer(p);
             }
-            DSDelList(lbl_803ECFA4);
-            lbl_803ECFA4 = 0;
+            DSDelList(_Sys_TimerList);
+            _Sys_TimerList = 0;
         }
-        if (lbl_803ECFA8) {
-            DSDelList(lbl_803ECFA8);
-            lbl_803ECFA8 = 0;
+        if (_Sys_CallbackList) {
+            DSDelList(_Sys_CallbackList);
+            _Sys_CallbackList = 0;
         }
-        if (lbl_803EBE3C) {
-            DSDelList(lbl_803EBE3C);
-            lbl_803EBE3C = 0;
+        if (_Sys_ThreadIndexList) {
+            DSDelList(_Sys_ThreadIndexList);
+            _Sys_ThreadIndexList = 0;
         }
-        if (lbl_803EBE38) {
-            p = lbl_803EBE38;
-            lbl_803EBE38 = 0;
+        if (_Sys_ErrorList) {
+            p = _Sys_ErrorList;
+            _Sys_ErrorList = 0;
             DSDelList(p);
         }
         err = fn_801F7ED0();
-        fn_801F80D0(&lbl_8039B3F8);
-        lbl_803EBE30 = 0;
+        fn_801F80D0(&_SysCS);
+        _Sys_ModuleActive = 0;
     } else {
         err = 0x20002;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
-unsigned int fn_801F7ABC(void)
+unsigned int SysGetSystemTime(void)
 {
-    if (lbl_803EBE44) {
-        return lbl_803EBE44->mCount;
+    if (_Sys_SystemTimer) {
+        return _Sys_SystemTimer->mCount;
     }
     return 0;
 }
 
-void fn_801F7AD4(unsigned int count)
+void SysSetSystemTime(unsigned int count)
 {
-    if (lbl_803EBE44) {
-        lbl_803EBE44->mCount = count;
+    if (_Sys_SystemTimer) {
+        _Sys_SystemTimer->mCount = count;
     }
 }
 
-void fn_801F7AE8(void)
+void SysIncSystemTime(void)
 {
-    if (lbl_803EBE44) {
-        lbl_803EBE44->mCount++;
+    if (_Sys_SystemTimer) {
+        _Sys_SystemTimer->mCount++;
     }
 }
 
-void fn_801F7B04(void)
+void SysIncVsyncCounter(void)
 {
-    lbl_803EBE48++;
+    _Sys_uVSyncCounter++;
 }
 
-unsigned int fn_801F7B14(void)
+unsigned int SysGetVsyncCounter(void)
 {
-    return lbl_803EBE48;
+    return _Sys_uVSyncCounter;
 }
 
-SysTimer_801F7B1C *fn_801F7B1C(void *pFunc, int a)
+SysTimer_t *SysAllocTimer(void *pFunc, int a)
 {
     int err = 0;
-    SysTimer_801F7B1C *pTimer = DSNewListNode(lbl_803ECFA4);
+    SysTimer_t *pTimer = DSNewListNode(_Sys_TimerList);
 
     if (pTimer) {
         pTimer->pFunc = pFunc;
@@ -188,65 +198,65 @@ SysTimer_801F7B1C *fn_801F7B1C(void *pFunc, int a)
         pTimer->mUnk8 = err;
         pTimer->mUnknown10 = err;
         pTimer->mFlags = 1;
-        DSAddListNode(lbl_803ECFA4, pTimer, 0);
+        DSAddListNode(_Sys_TimerList, pTimer, 0);
     } else {
         err = 0x20003;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return pTimer;
 }
 
-void fn_801F7B9C(SysTimer_801F7B1C *pTimer)
+void SysFreeTimer(SysTimer_t *pTimer)
 {
     fn_801F7F60(pTimer);
-    DSDelListNode(lbl_803ECFA4, pTimer);
+    DSDelListNode(_Sys_TimerList, pTimer);
 }
 
-int fn_801F7BD4(int err)
+int SysSetLastErrorFunc(int err)
 {
-    SysError_801F77EC *pError;
+    SysErrorEntry_t *pError;
     int threadID;
 
-    if (lbl_803EBE38) {
+    if (_Sys_ErrorList) {
         pError = 0;
         threadID = fn_801F81D4();
-        fn_801F8014(&lbl_8039B3F8);
-        DSTraverseList(lbl_803EBE38, 0, (void *)threadID, &pError, fn_801F77EC, 1);
+        fn_801F8014(&_SysCS);
+        DSTraverseList(_Sys_ErrorList, 0, (void *)threadID, &pError, _SysTraverseErrorList, 1);
         if (pError) {
             if (pError->mError == SYS_ERROR_UNUSED) {
                 pError->mThreadID = threadID;
             }
             pError->mError = err;
         }
-        fn_801F809C(&lbl_8039B3F8);
+        fn_801F809C(&_SysCS);
     } else {
-        lbl_803EBE34 = err;
+        _Sys_LastError = err;
     }
     return err;
 }
 
-int fn_801F7C88(void)
+int SysGetLastError(void)
 {
-    SysError_801F77EC *pError;
+    SysErrorEntry_t *pError;
     int threadID;
     int err;
 
-    if (lbl_803EBE38) {
+    if (_Sys_ErrorList) {
         pError = 0;
         err = 0;
         threadID = fn_801F81D4();
-        fn_801F8014(&lbl_8039B3F8);
-        DSTraverseList(lbl_803EBE38, 0, (void *)threadID, &pError, fn_801F77EC, 1);
+        fn_801F8014(&_SysCS);
+        DSTraverseList(_Sys_ErrorList, 0, (void *)threadID, &pError, _SysTraverseErrorList, 1);
         if (pError && pError->mError != SYS_ERROR_UNUSED) {
             err = pError->mError;
         }
-        fn_801F809C(&lbl_8039B3F8);
+        fn_801F809C(&_SysCS);
         return err;
     }
-    return lbl_803EBE34;
+    return _Sys_LastError;
 }
 
-unsigned long long fn_801F7D34(SysTime_8039B430 *pTime)
+unsigned long long SysTimeToMilliseconds(SysTime_t *pTime)
 {
     unsigned int monthDays = DateGetNumDaysInMonth(pTime->mMonth, pTime->mYear);
     unsigned int yearDays = DateGetNumDaysInYear(pTime->mYear);

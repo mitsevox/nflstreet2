@@ -1,7 +1,7 @@
 /* Graphics library front end: init/shutdown guards and the TV mode word (1 selects 50 Hz frame timing). */
 
 #include "engine/llglib.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 
 extern unsigned char lbl_803EBC60;
 extern int lbl_803EBC64;
@@ -19,7 +19,7 @@ int GlibInit(GlibConfig_t *pConfig)
     } else {
         result = 0xE0001;
     }
-    fn_801F7BD4(result);
+    SysSetLastErrorFunc(result);
     return result;
 }
 
@@ -33,7 +33,7 @@ int GlibShutdown(void)
     } else {
         result = 0xE0002;
     }
-    fn_801F7BD4(result);
+    SysSetLastErrorFunc(result);
     return result;
 }
 

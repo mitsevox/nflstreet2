@@ -4,7 +4,7 @@
 
 #include <string.h>
 #include "game/fn_801D2B7C.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "engine/GCmp.h"
 #include "engine/tmlib.h"
 
@@ -210,7 +210,7 @@ int TexInit(int heap, int count, int unknown)
     } else {
         err = 0x100001;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -231,7 +231,7 @@ int TexShutdown(void)
     } else {
         err = 0x100002;
     }
-    fn_801F7BD4(err);
+    SysSetLastErrorFunc(err);
     return err;
 }
 
@@ -272,7 +272,7 @@ int TexCreateEmpty(Texture_t *pTex, unsigned short width, unsigned short height,
         if (pTex->mpPalette != 0) {
             MemFill(pTex->mpPalette, size, 0, 1);
         } else {
-            err = fn_801F7C88();
+            err = SysGetLastError();
         }
     }
     if (err == 0) {
@@ -285,7 +285,7 @@ int TexCreateEmpty(Texture_t *pTex, unsigned short width, unsigned short height,
         } else {
             fn_801D2BD0(pTex->mpPalette);
             pTex->mpPalette = 0;
-            err = fn_801F7C88();
+            err = SysGetLastError();
         }
     }
     pTex->mUnknown4 = 0;

@@ -4,7 +4,7 @@
    sizes, one per weight type, that the animation channels step every frame. */
 
 #include "engine/animchan.h"
-#include "engine/fn_801F7BD4.h"
+#include "engine/SysSetLastErrorFunc.h"
 #include "game/fn_801D2B7C.h"
 
 typedef void (*AnimWgtFunc_t)(AnimWgt_t *p, float step);
@@ -116,7 +116,7 @@ void AnimWgtInit(int count)
 
     _AnimWgt_pFunctions = fn_801D2B7C(count * 4, 0, 0);
     _AnimWgt_TypeStructSize = fn_801D2B7C(count, 0, 0);
-    fn_801F7C88();
+    SysGetLastError();
     _AnimWgt_NumFunctions = count;
     if (_AnimWgt_pFunctions != 0) {
         for (i = 0; i < 4; i++) {
