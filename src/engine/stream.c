@@ -485,28 +485,22 @@ StreamTap_801F5DA4 *fn_801F687C(int numRequests, int numFilters, int numTaps, vo
 {
     Stream_801F5DA4 *s = pMem;
     int bufferSize = memSize - fn_801F685C(numRequests, numFilters, numTaps);
-    StreamRequest_801F5EA4 *pRequests;
-    StreamFilter_801F6074 *pFilters;
-    StreamTap_801F5DA4 *pTaps;
     char *pBuffer;
     int i;
 
-    if (bufferSize < 0x1800 || numRequests < 2 || numRequests > 256 || numFilters < 1 || numFilters > 16 ||
+    if (bufferSize < 0x1800 || numRequests < 2 || numRequests > 256 || (numFilters < 1 || numFilters > 16) ||
         numTaps <= 0 || numTaps > numFilters) {
         return 0;
     }
     s->mMagic = STREAM_MAGIC;
     s->pMutex = _StreamMUTEX_alloc();
-    pRequests = (StreamRequest_801F5EA4 *)(s + 1);
-    pFilters = (StreamFilter_801F6074 *)(pRequests + numRequests);
-    pTaps = (StreamTap_801F5DA4 *)(pFilters + numFilters);
-    pBuffer = (char *)(((unsigned int)(pTaps + numTaps) & ~31) + 32);
-    s->pRequests = pRequests;
+    s->pRequests = (StreamRequest_801F5EA4 *)(s + 1);
     s->mNumRequests = numRequests;
-    s->pFilters = pFilters;
+    s->pFilters = (StreamFilter_801F6074 *)(s->pRequests + numRequests);
     s->mNumFilters = numFilters;
-    s->pTaps = pTaps;
+    s->pTaps = (StreamTap_801F5DA4 *)(s->pFilters + numFilters);
     s->mNumTaps = numTaps;
+    pBuffer = (char *)(((unsigned int)(s->pTaps + numTaps) & ~31) + 32);
     s->pBuffer = pBuffer;
     s->pWrap = pBuffer;
     s->pBufferEnd = (char *)pMem + memSize;
@@ -522,7 +516,7 @@ StreamTap_801F5DA4 *fn_801F687C(int numRequests, int numFilters, int numTaps, vo
     s->pFirst = 0;
     s->pCurrent = 0;
     s->pLast = 0;
-    s->pFree = pRequests;
+    s->pFree = s->pRequests;
     s->mFile.pRes = (ResFile_t *)-1;
     s->mFile.mIndex = -1;
     s->mFileSize = 0;
@@ -538,20 +532,25 @@ StreamTap_801F5DA4 *fn_801F687C(int numRequests, int numFilters, int numTaps, vo
         s->mBlockSize = 0x8000;
     }
     for (i = 0; i < numRequests; i++) {
-        s->pRequests[i].mID = i;
-        s->pRequests[i].mState = 0;
-        s->pRequests[i].pNext = &s->pRequests[i + 1];
+        StreamRequest_801F5EA4 *pReq = &s->pRequests[i];
+        pReq->mID = i;
+        pReq->mState = 0;
+        pReq->pNext = &s->pRequests[i + 1];
     }
     s->pRequests[numRequests - 1].pNext = 0;
     for (i = 0; i < numFilters; i++) {
-        s->pFilters[i].mMask = 0;
-        s->pFilters[i].mTap = 1;
-        s->pFilters[i].mValue = 0;
+        StreamFilter_801F6074 *pFilter = &s->pFilters[i];
+        // FAKEMATCH: value written before tap; this source order gives the target schedule (+0x8 at 0x801F6A64, +0x4 at 0x801F6A6C)
+        pFilter->mMask = 0;
+        pFilter->mValue = 0;
+        pFilter->mTap = 1;
     }
     for (i = 0; i < numTaps; i++) {
-        s->pTaps[i].pStream = s;
-        s->pTaps[i].mBytes = 0;
-        s->pTaps[i].mIndex = i + 1;
+        StreamTap_801F5DA4 *pTap = &s->pTaps[i];
+        // FAKEMATCH: index written before byte count; this source order gives the target schedule (+0x8 at 0x801F6AA0, +0x4 at 0x801F6AA8)
+        pTap->pStream = s;
+        pTap->mIndex = i + 1;
+        pTap->mBytes = 0;
     }
     return s->pTaps;
 }
