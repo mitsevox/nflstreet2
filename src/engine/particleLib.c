@@ -86,15 +86,15 @@ extern Vec3_801DE1E0 lbl_802F94C4;
 extern unsigned char lbl_803EBD58;
 extern float lbl_803ECF4C;
 
-void fn_801D04C4(void);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D0558(void);
-void fn_801D08FC(int a);
-void fn_801D09EC(int a);
-void fn_801D0ADC(int a);
-void fn_801D0C58(Vec3_801DE1E0 *pPos);
-void fn_801D0F80(float (*m)[4]);
+void MatPush(void);
+void MatPushUnit(void);
+void MatPop(void);
+void MatMakeUnit(void);
+void MatRotX(int a);
+void MatRotY(int a);
+void MatRotZ(int a);
+void MatTranslate(Vec3_801DE1E0 *pPos);
+void MatStore(float (*m)[4]);
 void fn_801D2130(ObjType_801DE1E0 *pType);
 int fn_801D2570(int a);
 int fn_801D2730(void);
@@ -380,19 +380,19 @@ void fn_801DE1E0(Desc_801DE1E0 *pDesc)
     fn_80227264(&lbl_8039AD10.mUnknown78, &lbl_802F94C4, pDesc->mUnknown0C);
     lbl_8039AD10.mUnknown1C = pDesc->mUnknown1C;
     lbl_8039AD10.mUnknown18 = 0;
-    fn_801D04C4();
-    fn_801D0558();
+    MatPush();
+    MatMakeUnit();
     switch (lbl_8039AD10.mUnknown1C) {
     case 0:
         break;
     case 1:
         lbl_8039AD10.mUnknown18 = 1;
-        fn_801D08FC(0x400000);
+        MatRotX(0x400000);
         break;
     }
     fn_80227C2C(&lbl_8039AD10.mUnknown78, &lbl_8039AD10.mUnknown78);
-    fn_801D0F80(lbl_8039AD10.mUnknown20);
-    fn_801D0544();
+    MatStore(lbl_8039AD10.mUnknown20);
+    MatPop();
     lbl_8039AD10.mUnknown8C.mppUnknown0 = 0;
     lbl_8039AD10.mUnknown8C.mppUnknown4 = 0;
     lbl_8039AD10.mUnknown8C.mppUnknown8 = 0;
@@ -429,10 +429,10 @@ void fn_801DE410(void)
     pState->mpRandom = 0;
     pState->mUnknown84 = 0;
     pState->mUnknown18 = 0;
-    fn_801D04C4();
-    fn_801D0558();
-    fn_801D0F80(pState->mUnknown20);
-    fn_801D0544();
+    MatPush();
+    MatMakeUnit();
+    MatStore(pState->mUnknown20);
+    MatPop();
     lbl_803EBD58 = 0;
 }
 
@@ -580,17 +580,17 @@ void fn_801DE968(PartObj_801DE1E0 *pObj, AnimTex_t *pTex)
 
 void fn_801DE9A0(PartObj_801DE1E0 *pObj, Vec3_801DE1E0 *pPos, Vec3_801DE1E0 *pRot)
 {
-    fn_801D0508();
+    MatPushUnit();
     if (pPos) {
-        fn_801D0C58(pPos);
+        MatTranslate(pPos);
     }
     if (pRot) {
-        fn_801D0ADC((int)(pRot->z * 46603.38f));
-        fn_801D09EC((int)(pRot->y * 46603.38f));
-        fn_801D08FC((int)(pRot->x * 46603.38f));
+        MatRotZ((int)(pRot->z * 46603.38f));
+        MatRotY((int)(pRot->y * 46603.38f));
+        MatRotX((int)(pRot->x * 46603.38f));
     }
-    fn_801D0F80(pObj->mUnknown35C);
-    fn_801D0544();
+    MatStore(pObj->mUnknown35C);
+    MatPop();
 }
 
 static void fn_801DEA50(PartObj_801DE1E0 *pObj)

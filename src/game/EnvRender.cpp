@@ -43,10 +43,10 @@ int fn_800A26C4(void);
 int fn_800A34B0(void);
 int fn_800A34BC(void);
 int ConGetCurrentContext(void);
-void fn_801D0470(int a);
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D0C58(void *p);
+void MatSetStack(int a);
+void MatPush(void);
+void MatPop(void);
+void MatTranslate(void *p);
 void TMRenderReset(void);
 void fn_802353D8(Object_80235588 *p, int flags);
 void fn_802353F8(Object_80235588 *p, int flags);
@@ -121,15 +121,15 @@ void EnvSkyDraw(EnvSkyObj_t *pInstance, int unused)
     fn_80235C90(&pInstance->mUnknown48, 1, 0.5f, 0.5f, 0.5f, 0.51f);
     fn_80235C90(&pInstance->mUnknown108, 0, 0.5f, 0.5f, 0.5f, 0.51f);
     fn_80235C90(&pInstance->mUnknown108, 1, 0.5f, 0.5f, 0.5f, 0.51f);
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D04C4();
-    fn_801D0C58(&pInstance->mUnknown4);
+    MatSetStack(VptGetMatrixStack());
+    MatPush();
+    MatTranslate(&pInstance->mUnknown4);
     fn_80235740(&pInstance->mUnknown48, handle);
     fn_80235764(&pInstance->mUnknown48, handle);
     fn_80235740(&pInstance->mUnknown108, handle);
     fn_80235764(&pInstance->mUnknown108, handle);
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D0544();
+    MatSetStack(VptGetMatrixStack());
+    MatPop();
 }
 
 EnvFogSettings *EnvGetFogSettings(int index)
@@ -310,9 +310,9 @@ int EnvDrawOverlay(EnvObjOverlay *pOwner)
     int handle = ConGetCurrentContext();
     float alpha = 0.1f;
 
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D04C4();
-    fn_801D0C58(&pObject->mUnknown4);
+    MatSetStack(VptGetMatrixStack());
+    MatPush();
+    MatTranslate(&pObject->mUnknown4);
     fn_80235D78(&((EnvViewport *)VptManagerGetCurrentCamera(0))->mUnknown4);
     if (ScreenTintIsActive(1) == 0) {
         fn_80235740(&pObject->mUnknown24[0], handle);
@@ -332,8 +332,8 @@ int EnvDrawOverlay(EnvObjOverlay *pOwner)
         fn_80235740(&pObject->mUnknown24[5], handle);
         fn_80235764(&pObject->mUnknown24[5], handle);
     }
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D0544();
+    MatSetStack(VptGetMatrixStack());
+    MatPop();
     return 0;
 }
 
@@ -342,9 +342,9 @@ int EnvDraw(EnvObj *pObject)
     int handle = ConGetCurrentContext();
     unsigned int i;
 
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D04C4();
-    fn_801D0C58(&pObject->mUnknown4);
+    MatSetStack(VptGetMatrixStack());
+    MatPush();
+    MatTranslate(&pObject->mUnknown4);
     fn_80235D78(&((EnvViewport *)VptManagerGetCurrentCamera(0))->mUnknown4);
     fn_80235740(&pObject->mUnknown24[4], handle);
     fn_80235764(&pObject->mUnknown24[4], handle);
@@ -377,8 +377,8 @@ int EnvDraw(EnvObj *pObject)
         fn_80235740(&pObject->mUnknown6E4[i], handle);
         fn_80235764(&pObject->mUnknown6E4[i], handle);
     }
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D0544();
+    MatSetStack(VptGetMatrixStack());
+    MatPop();
     if (fn_800A34B0()) {
         FieldMarkerDrawBeams();
     }

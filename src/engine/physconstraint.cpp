@@ -7,7 +7,7 @@
 #include "engine/physconstraint.h"
 #include "engine/llmatrix.h"
 
-PointConstraint::PointConstraint(RigidBody_t *pBodyA, RigidBody_t *pBodyB,
+PointConstraint::PointConstraint(RigidBody *pBodyA, RigidBody *pBodyB,
                                Vec3_801DE1E0 *pAnchorA, Vec3_801DE1E0 *pAnchorB)
     : mpBodyA(pBodyA), mAnchorA(*pAnchorA), mpBodyB(pBodyB), mAnchorB(*pAnchorB)
 {
@@ -44,12 +44,12 @@ void PointConstraint::Solve()
     float invMassB;
     float dotA;
 
-    fn_801D04C4();
-    pMatrixA = mpBodyA->mUnknown088[0];
-    pMatrixB = mpBodyB->mUnknown088[0];
-    fn_801D06D4(pMatrixA);
+    MatPush();
+    pMatrixA = mpBodyA->mTransform[0];
+    pMatrixB = mpBodyB->mTransform[0];
+    MatLoad(pMatrixA);
     fn_80227CC0(&pointA, &mAnchorA);
-    fn_801D06D4(pMatrixB);
+    MatLoad(pMatrixB);
     fn_80227CC0(&pointB, &mAnchorB);
     GetBodyPointVelocity(mpBodyA, &pointA, &velA);
     GetBodyPointVelocity(mpBodyB, &pointB, &velB);
@@ -60,20 +60,20 @@ void PointConstraint::Solve()
     length = fn_802270D4(&error);
     if (!(length <= 1e-06f)) {
         fn_80227264(&normal, &error, 1.0f / length);
-        fn_802276B4(&armA, &pointA, &mpBodyA->mUnknown064);
-        fn_802276B4(&armB, &pointB, &mpBodyB->mUnknown064);
-        pInertiaA = mpBodyA->mUnknown0C8[0];
-        pInertiaB = mpBodyB->mUnknown0C8[0];
+        fn_802276B4(&armA, &pointA, &mpBodyA->mPosition);
+        fn_802276B4(&armB, &pointB, &mpBodyB->mPosition);
+        pInertiaA = mpBodyA->mWorldInvInertia[0];
+        pInertiaB = mpBodyB->mWorldInvInertia[0];
         fn_802277DC(&crossA, &armA, &normal);
         fn_802277DC(&crossB, &armB, &normal);
-        fn_801D06D4(pInertiaA);
+        MatLoad(pInertiaA);
         fn_80227C2C(&turnA, &crossA);
-        fn_801D06D4(pInertiaB);
+        MatLoad(pInertiaB);
         fn_80227C2C(&turnB, &crossB);
         fn_802277DC(&crossA, &turnA, &armA);
         fn_802277DC(&crossB, &turnB, &armB);
-        invMassA = mpBodyA->mUnknown044;
-        invMassB = mpBodyB->mUnknown044;
+        invMassA = mpBodyA->mInvMass;
+        invMassB = mpBodyB->mInvMass;
         dotA = fn_80227704(&normal, &crossA);
         fn_80227264(&impulse, &normal, length / (invMassA + invMassB + dotA + fn_80227704(&normal, &crossB)));
         ApplyBodyImpulseAtPoint(mpBodyA, &impulse, &pointA);
@@ -81,8 +81,8 @@ void PointConstraint::Solve()
         impulse.y = -impulse.y;
         impulse.z = -impulse.z;
         ApplyBodyImpulseAtPoint(mpBodyB, &impulse, &pointB);
-        fn_801E987C(mpBodyA);
-        fn_801E987C(mpBodyB);
+        UpdateBodyDerivedState(mpBodyA);
+        UpdateBodyDerivedState(mpBodyB);
     }
-    fn_801D0544();
+    MatPop();
 }

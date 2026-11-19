@@ -17,9 +17,9 @@ int MsgAudioSettingsHandleMessage(unsigned int id, OptionsScreenMsg_t *pBlock, i
 int TournBracketMsg(unsigned int id, void *pArgs, int unused, int *pResult);
 int OptionsScreenMsg(unsigned int id, OptionsScreenMsg_t *pBlock, int unused, int *pResult);
 int OptAudioHandleMessage(unsigned int id, void *pArgs, int unused, int *pResult);
-signed char fn_80186B38(int a);
-void fn_80186ED8(signed char a);
-void fn_80186F30(signed char a, int b);
+signed char UserProfileFindIndex(int a);
+void UserProfileTouch(signed char a);
+void UserProfileSelect(signed char a, int b);
 int fn_8022F3D4(int a);
 int fn_8022F4BC(void);
 }
@@ -32,8 +32,8 @@ void MsgOptionsStubSelect(int index);
 int MsgProfileAssignHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     if (id == 0x80000001) {
-        fn_80186F30(fn_80186B38(fn_8022F4BC()), 1);
-        fn_80186F30(-1, 0);
+        UserProfileSelect(UserProfileFindIndex(fn_8022F4BC()), 1);
+        UserProfileSelect(-1, 0);
         return 1;
     }
     return 0;
@@ -101,7 +101,7 @@ int MsgUnlockListHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, in
         cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
         pA = (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4);
         pB = (int *)(pArgs[2].i + (*pArgs[2].pi + 1) * 4);
-        fn_80186ED8(fn_80186B38(fn_8022F4BC()));
+        UserProfileTouch(UserProfileFindIndex(fn_8022F4BC()));
         base = pArgs[0].i * 4;
         for (i = 0; i < 12; i++) {
             pA[i] = i + base;

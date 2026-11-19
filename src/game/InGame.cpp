@@ -104,8 +104,8 @@ int ConProcessChannel(int a);
 int ConSetChannelInfo(int a, int b, void *pValue);
 int ConGetChannelInfo(int a, int b);
 void FileDebugProcess(void);
-void fn_801CE82C(void);
-void fn_801CE910(void);
+void GlibSwapBuffers(void);
+void GlibSyncFrame(void);
 void fn_801D6F58(void);
 int PerPollSingleDevice(int a);
 int PerGetDeviceData(int a, char *p);
@@ -378,7 +378,7 @@ unsigned char InGame::Update()
     SndgMusicFlushSongText();
     ScreenTransUpdate();
     SndgUpdate(1);
-    fn_801CE82C();
+    GlibSwapBuffers();
     VptProcessViewports();
     fn_80236F34();
     if (_InGame_pFrameCallback) {
@@ -416,7 +416,7 @@ int InGame::Shutdown()
     PadInputSetAxisCallback(0);
     ScreenTransFinish();
     PauseUpdate();
-    fn_801CE910();
+    GlibSyncFrame();
     fn_800582D0();
     fn_800AB944(lbl_803EAA8C);
     PlaybookSideClearAll();

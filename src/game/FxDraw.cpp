@@ -13,11 +13,11 @@
 
 extern "C" {
 int fn_800A34F8(int index);
-void fn_801D03D0(Mtx44 m);
-void fn_801D04C4(void);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D0F80(Mtx44 m);
+void MatMakeUnitMatrix(Mtx44 m);
+void MatPush(void);
+void MatPushUnit(void);
+void MatPop(void);
+void MatStore(Mtx44 m);
 void *fn_801D2BB0(int a, int size, int c, int d);
 void ResLoadToBuffer(void *a, int b, void *p);
 int ResGetSize(void *a, int b);
@@ -35,9 +35,9 @@ void GXSetClipMode(int a);
 
 void FxParticleDrawBegin(void)
 {
-    fn_801D0508();
+    MatPushUnit();
     TMXform(0, 0);
-    fn_801D0544();
+    MatPop();
 }
 
 void FxParticleDrawEnd(void)
@@ -118,11 +118,11 @@ void FxTintDraw(unsigned int color, int mode, float alpha)
         GXGetProjectionv(saved);
         C_MTXOrtho(projection, 0.0f, 448.0f, 0.0f, 640.0f, 1.0f, 2.0f);
         GXSetProjection(projection, 1);
-        fn_801D04C4();
-        fn_801D03D0(view);
+        MatPush();
+        MatMakeUnitMatrix(view);
         GXLoadPosMtxImm(view, 0);
         GXSetCurrentMtx(0);
-        fn_801D0544();
+        MatPop();
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
         GXPosition3f32(0.0f, 0.0f, -1.0f);
         GXPosition3f32(640.0f, 0.0f, -1.0f);
@@ -130,7 +130,7 @@ void FxTintDraw(unsigned int color, int mode, float alpha)
         GXPosition3f32(640.0f, 448.0f, -1.0f);
         GXSetProjectionv(saved);
     }
-    fn_801D0F80(view);
+    MatStore(view);
     GXLoadPosMtxImm(view, 0);
     GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);

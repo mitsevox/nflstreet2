@@ -1,7 +1,7 @@
-#ifndef ENGINE_OBJECT_80266AF8_H
-#define ENGINE_OBJECT_80266AF8_H
+#ifndef ENGINE_VOXDATHEADER_H
+#define ENGINE_VOXDATHEADER_H
 
-typedef struct Object_80266AF8 {
+typedef struct VoxDatHeader_t {
     unsigned int mUnknown0;
     unsigned char mUnknown4[4];
     unsigned char mUnknown8;
@@ -9,13 +9,13 @@ typedef struct Object_80266AF8 {
     unsigned char mUnknownA[6];
     unsigned short mUnknown10;
     unsigned char mUnknown12;
-} Object_80266AF8;
+} VoxDatHeader_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void fn_801AFABC(Object_80266AF8 *p, int *a, int *b);
+void fn_801AFABC(VoxDatHeader_t *p, int *a, int *b);
 
 #ifdef __cplusplus
 }

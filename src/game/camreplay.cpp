@@ -95,8 +95,8 @@ void CamSetDefaultAspect(float aspect);
 int CamRLerp(int *pValue, int *pVel, int target, int a, int b);
 int CamLerp(float *pValue, float *pVel, float target, float a, float b);
 void CamSetFieldOfView(CamReplayCamera_t *pCamera, float a, float b);
-int fn_801CEB40(void);
-int fn_801CEB4C(void);
+int GlibGetLetterBoxMode(void);
+int GlibGetWidescreenMode(void);
 float fn_801CFB74(float x);
 int fn_801CFE40(float y, float x);
 void fn_802272DC(float *pOut, float *pIn, float scale);
@@ -220,8 +220,8 @@ extern "C" float CamCalcLookAngles(float *pFrom, float *pTo, int *pAngles)
 
 extern "C" void CamSetupAspect(void)
 {
-    int a = fn_801CEB40();
-    int b = fn_801CEB4C();
+    int a = GlibGetLetterBoxMode();
+    int b = GlibGetWidescreenMode();
 
     if (a == 0xFFFF && b == 0xFFFF) {
         if (GameOptionsGet(6) == 0) {
@@ -244,8 +244,8 @@ extern "C" void CamSetupAspect(void)
 
 extern "C" float CamGetAspect(void)
 {
-    int a = fn_801CEB40();
-    int b = fn_801CEB4C();
+    int a = GlibGetLetterBoxMode();
+    int b = GlibGetWidescreenMode();
     float aspect;
 
     if (a == 0xFFFF && b == 0xFFFF) {
@@ -264,8 +264,8 @@ extern "C" float CamGetAspect(void)
 
 extern "C" int CamGetDisplayModeIndex(void)
 {
-    int a = fn_801CEB40();
-    int b = fn_801CEB4C();
+    int a = GlibGetLetterBoxMode();
+    int b = GlibGetWidescreenMode();
 
     if (b == 1) {
         return 1;

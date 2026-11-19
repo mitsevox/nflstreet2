@@ -58,7 +58,7 @@
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
 #include <string.h>
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"

@@ -29,7 +29,6 @@ int fn_801FA0BC(int handle, DbQueryTable *pTables, DbFilter *pFilter, void *pSor
                 QueryResult *pResult);
 }
 
-#if defined(DECOMP_COMPARE)
 static const char *_PlayBookDb_apPositionNames[25] = {
     "QB", "HB", "FB", "WR", "TE", "LT", "LG", "C", "RG", "RT", "LE", "RE", "DT",
     "LOLB", "MLB", "ROLB", "CB", "FS", "SS", "K", "P", "KR", "PR", "KOS", "LS"
@@ -40,7 +39,6 @@ static int _PlayBookDb_iState0 = 0;
 static int _PlayBookDb_iState1 = 0;
 static int _PlayBookDb_iState2 = 0;
 static int _PlayBookDb_iState3 = 0;
-#endif
 
 extern "C" {
 
@@ -61,7 +59,6 @@ int PlayBookDbOpen(unsigned int id, int a, int b, int c, int d, int e);
 void PlayBookDbClose(unsigned int id, int a);
 void PlayBookDbLoadPlayScripts(int tag, int key, PlayBookPlay_t *pRecord, int flag);
 
-#if defined(DECOMP_COMPARE)
 /* Discarded by the GameCube linker; body from the Xbox counterpart 0x195410. */
 const char *GetPositionString(int index)
 {
@@ -385,6 +382,8 @@ void PlayBookDbLoadPlayDetails(int tag, int key, unsigned int kind, PlayBookPlay
         PlayBookDbLoadPlayHole(tag, key, pRecord);
         break;
     case 21:
+        // FAKEMATCH: dead store keeps case 21 non-empty until flow deletes it (target's cmpwi 21 / b exit)
+        kind = 0;
         break;
     }
     PlayBookDbLoadPlayCommands(tag, key, pRecord);
@@ -593,8 +592,6 @@ void PlayBookDbLoadPlayScripts(int tag, int key, PlayBookPlay_t *pRecord, int fl
         }
     }
 }
-
-#endif
 
 unsigned short PlayBookDbCountFormations(int tag, int kind)
 {

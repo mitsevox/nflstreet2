@@ -1,5 +1,5 @@
 #include "engine/system.h"
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 
 typedef struct SysInitParms_801F7824 {
     unsigned char mNumTimers;
@@ -25,10 +25,10 @@ typedef struct SysError_801F77EC {
 
 #define SYS_ERROR_UNUSED 0x8000FFFF
 
-extern void *fn_801C6A20(void *pPool);
-extern void *fn_801C6B4C(void *pPool, int mode);
-extern void fn_801C6C0C(void *pPool, void *pItem);
-extern int fn_801C6D34(void *pPool, int start, void *pKey, void *pOut, int (*pFunc)(void *, void *, void *), int count);
+extern void *DSNewListNode(void *pPool);
+extern void *DSGetListNode(void *pPool, int mode);
+extern void DSDelListNode(void *pPool, void *pItem);
+extern int DSTraverseList(void *pPool, int start, void *pKey, void *pOut, int (*pFunc)(void *, void *, void *), int count);
 extern int DateGetNumDaysInYear(int year);
 extern int DateGetNumDaysInMonth(int month, int year);
 
@@ -75,25 +75,25 @@ int fn_801F7824(SysInitParms_801F7824 *pParms)
     if (!lbl_803EBE30) {
         err = fn_801F7E90();
         lbl_803EBE30 = 1;
-        lbl_803ECFA4 = fn_801C68FC(1, 0, pParms->mNumTimers, sizeof(SysTimer_801F7B1C), 0, 0);
+        lbl_803ECFA4 = DSNewList(1, 0, pParms->mNumTimers, sizeof(SysTimer_801F7B1C), 0, 0);
         lbl_803EBE44 = fn_801F7B1C(0, 3);
         fn_801F7EF8(lbl_803EBE44);
-        lbl_803ECFA8 = fn_801C68FC(1, 0, pParms->mNumCallbacks + 4, sizeof(SysCallback_801F77DC), fn_801F77DC, 0);
+        lbl_803ECFA8 = DSNewList(1, 0, pParms->mNumCallbacks + 4, sizeof(SysCallback_801F77DC), fn_801F77DC, 0);
         lbl_803EBE40 = pParms->mNumThreads;
-        lbl_803EBE3C = fn_801C68FC(1, 0, pParms->mNumThreads, sizeof(SysThreadIndex_801F7824), 0, 0);
+        lbl_803EBE3C = DSNewList(1, 0, pParms->mNumThreads, sizeof(SysThreadIndex_801F7824), 0, 0);
         for (; i < pParms->mNumThreads; i++) {
-            SysThreadIndex_801F7824 *pIndex = fn_801C6A20(lbl_803EBE3C);
+            SysThreadIndex_801F7824 *pIndex = DSNewListNode(lbl_803EBE3C);
 
             pIndex->mIndex = i | 0x80000000;
-            fn_801C6AA4(lbl_803EBE3C, pIndex, 0);
+            DSAddListNode(lbl_803EBE3C, pIndex, 0);
         }
         if (pParms->mNumThreads > 1) {
-            pPool = fn_801C68FC(1, 0, pParms->mNumThreads, sizeof(SysError_801F77EC), 0, 0);
+            pPool = DSNewList(1, 0, pParms->mNumThreads, sizeof(SysError_801F77EC), 0, 0);
             for (i = 0; i < pParms->mNumThreads; i++) {
-                SysError_801F77EC *pError = fn_801C6A20(pPool);
+                SysError_801F77EC *pError = DSNewListNode(pPool);
 
                 pError->mError = SYS_ERROR_UNUSED;
-                fn_801C6AA4(pPool, pError, 0);
+                DSAddListNode(pPool, pError, 0);
             }
             lbl_803EBE38 = pPool;
         }
@@ -116,24 +116,24 @@ int fn_801F79C0(void)
             lbl_803EBE44 = 0;
         }
         if (lbl_803ECFA4) {
-            while ((p = fn_801C6B4C(lbl_803ECFA4, 2)) != 0) {
+            while ((p = DSGetListNode(lbl_803ECFA4, 2)) != 0) {
                 fn_801F7B9C(p);
             }
-            fn_801C69E4(lbl_803ECFA4);
+            DSDelList(lbl_803ECFA4);
             lbl_803ECFA4 = 0;
         }
         if (lbl_803ECFA8) {
-            fn_801C69E4(lbl_803ECFA8);
+            DSDelList(lbl_803ECFA8);
             lbl_803ECFA8 = 0;
         }
         if (lbl_803EBE3C) {
-            fn_801C69E4(lbl_803EBE3C);
+            DSDelList(lbl_803EBE3C);
             lbl_803EBE3C = 0;
         }
         if (lbl_803EBE38) {
             p = lbl_803EBE38;
             lbl_803EBE38 = 0;
-            fn_801C69E4(p);
+            DSDelList(p);
         }
         err = fn_801F7ED0();
         fn_801F80D0(&lbl_8039B3F8);
@@ -180,7 +180,7 @@ unsigned int fn_801F7B14(void)
 SysTimer_801F7B1C *fn_801F7B1C(void *pFunc, int a)
 {
     int err = 0;
-    SysTimer_801F7B1C *pTimer = fn_801C6A20(lbl_803ECFA4);
+    SysTimer_801F7B1C *pTimer = DSNewListNode(lbl_803ECFA4);
 
     if (pTimer) {
         pTimer->pFunc = pFunc;
@@ -188,7 +188,7 @@ SysTimer_801F7B1C *fn_801F7B1C(void *pFunc, int a)
         pTimer->mUnk8 = err;
         pTimer->mUnknown10 = err;
         pTimer->mFlags = 1;
-        fn_801C6AA4(lbl_803ECFA4, pTimer, 0);
+        DSAddListNode(lbl_803ECFA4, pTimer, 0);
     } else {
         err = 0x20003;
     }
@@ -199,7 +199,7 @@ SysTimer_801F7B1C *fn_801F7B1C(void *pFunc, int a)
 void fn_801F7B9C(SysTimer_801F7B1C *pTimer)
 {
     fn_801F7F60(pTimer);
-    fn_801C6C0C(lbl_803ECFA4, pTimer);
+    DSDelListNode(lbl_803ECFA4, pTimer);
 }
 
 int fn_801F7BD4(int err)
@@ -211,7 +211,7 @@ int fn_801F7BD4(int err)
         pError = 0;
         threadID = fn_801F81D4();
         fn_801F8014(&lbl_8039B3F8);
-        fn_801C6D34(lbl_803EBE38, 0, (void *)threadID, &pError, fn_801F77EC, 1);
+        DSTraverseList(lbl_803EBE38, 0, (void *)threadID, &pError, fn_801F77EC, 1);
         if (pError) {
             if (pError->mError == SYS_ERROR_UNUSED) {
                 pError->mThreadID = threadID;
@@ -236,7 +236,7 @@ int fn_801F7C88(void)
         err = 0;
         threadID = fn_801F81D4();
         fn_801F8014(&lbl_8039B3F8);
-        fn_801C6D34(lbl_803EBE38, 0, (void *)threadID, &pError, fn_801F77EC, 1);
+        DSTraverseList(lbl_803EBE38, 0, (void *)threadID, &pError, fn_801F77EC, 1);
         if (pError && pError->mError != SYS_ERROR_UNUSED) {
             err = pError->mError;
         }

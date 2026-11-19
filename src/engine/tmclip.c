@@ -7,12 +7,12 @@
  */
 #include "engine/tmlib.h"
 
-extern void fn_801D0424(void *pDst, void *pSrc);
-extern void fn_801D04C4(void);
-extern void fn_801D0544(void);
-extern void fn_801D0664(void *pMtx);
-extern void fn_801D06D4(void *pMtx);
-extern void fn_801D1288(int mode, void *pMtx);
+extern void MatCopyMatrix(void *pDst, void *pSrc);
+extern void MatPush(void);
+extern void MatPop(void);
+extern void MatCat(void *pMtx);
+extern void MatLoad(void *pMtx);
+extern void MatGetSlot(int mode, void *pMtx);
 
 static f32 _TMClip_ZeroVec[3] = { 0.0f, 0.0f, 0.0f };
 static Mtx44 _TMClip_Projection;
@@ -178,9 +178,9 @@ static unsigned int _TMClipVertexListProjExtent(f32 *pPoints, int numPoints, f32
 void TMClipProjection(void *pMtx)
 {
     if (pMtx != 0) {
-        fn_801D0424(_TMClip_Projection, pMtx);
+        MatCopyMatrix(_TMClip_Projection, pMtx);
     } else {
-        fn_801D1288(2, _TMClip_Projection);
+        MatGetSlot(2, _TMClip_Projection);
     }
 }
 
@@ -188,27 +188,27 @@ void TMClipProjection(void *pMtx)
 void TMClipMatrix(void *pMtx)
 {
     if (pMtx != 0) {
-        fn_801D0424(_TMClip_LocalToCamera, pMtx);
+        MatCopyMatrix(_TMClip_LocalToCamera, pMtx);
     } else {
-        fn_801D0F80(_TMClip_LocalToCamera);
+        MatStore(_TMClip_LocalToCamera);
     }
 }
 
 /* Builds the local-to-camera matrix from up to three matrices on a pushed matrix stack. */
 void TMClipMatrixWorld(void *pMtxA, void *pMtxB, void *pMtxC)
 {
-    fn_801D04C4();
+    MatPush();
     if (pMtxA != 0) {
-        fn_801D06D4(pMtxA);
+        MatLoad(pMtxA);
     }
     if (pMtxB != 0) {
-        fn_801D0664(pMtxB);
+        MatCat(pMtxB);
     }
     if (pMtxC != 0) {
-        fn_801D0664(pMtxC);
+        MatCat(pMtxC);
     }
-    fn_801D0F80(_TMClip_LocalToCamera);
-    fn_801D0544();
+    MatStore(_TMClip_LocalToCamera);
+    MatPop();
 }
 
 /* Clip codes of local-space points through both matrices, with optional extent and depth. */

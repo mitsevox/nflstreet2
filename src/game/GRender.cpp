@@ -1,7 +1,7 @@
 #include "game/Module.h"
 
 extern "C" {
-void fn_801CE910(void);
+void GlibSyncFrame(void);
 void fn_802348CC(int);
 void fn_80234908(void);
 }
@@ -21,7 +21,7 @@ int GRender::Init()
 
 int GRender::Shutdown()
 {
-    fn_801CE910();
+    GlibSyncFrame();
     fn_80234908();
     return 1;
 }

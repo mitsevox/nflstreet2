@@ -44,25 +44,6 @@ typedef struct SndSampleAttr_t {
     int m30[6];
 } SndSampleAttr_t;
 
-/* The play options record that SNDplaysetdef fills. */
-typedef struct SndPlayOpts_t {
-    unsigned char m0;
-    unsigned char m1;
-    unsigned char m2;
-    unsigned char m3;
-    unsigned char m4;
-    unsigned char m5;
-    unsigned char unk_0x6[2];
-    unsigned short m8;
-    unsigned short mA;
-    unsigned short mC;
-    unsigned short mE;
-    unsigned short m10;
-    unsigned char unk_0x12[2];
-    short m14;
-    unsigned short m16;
-} SndPlayOpts_t;
-
 extern "C" {
 
 void *memmove(void *dst, const void *src, unsigned int n);

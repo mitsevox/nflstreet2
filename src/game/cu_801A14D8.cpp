@@ -205,16 +205,16 @@ void PlaTexCacheCloseArchive(void);
 void fn_8019723C(ParticleTrailSet_t *p);
 void PlyrModelDrawNameplate(Object_8003DEC4 *pPlayer);
 void ConGetCurrentContext(void);
-void fn_801D0470(void);
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D0664(void *pMatrix);
-void fn_801D06D4(void *pMatrix);
-void fn_801D09EC(int a);
-void fn_801D0C58(float *p);
-void fn_801D0CFC(float scale);
-void fn_801D0D94(float x, float y, float z);
-void fn_801D0F80(float (*pMatrix)[4]);
+void MatSetStack(void);
+void MatPush(void);
+void MatPop(void);
+void MatCat(void *pMatrix);
+void MatLoad(void *pMatrix);
+void MatRotY(int a);
+void MatTranslate(float *p);
+void MatScale(float scale);
+void MatScaleCol(float x, float y, float z);
+void MatStore(float (*pMatrix)[4]);
 int fn_801D2BB0(int a, void *p, int b, int c);
 void fn_801D2BD0(int handle);
 void ObjSetPriority(void *a, Object_8003DEC4 *pPlayer, int b);
@@ -235,7 +235,7 @@ void TMRenderBindTexture(int a, int b, int c);
 void TMRenderBindMaterialList(void *p);
 void TMRenderSetBlendMode(int a);
 void TMRenderSetZRange(float a, float b);
-void fn_802113C0(int a, int b);
+void TMRenderGeomNode(int a, int b);
 void TMTexLibLoad(void *p, int handle);
 void TMTexLibUnload(void *p);
 void TMTexLibRegistryReset(void);
@@ -511,12 +511,12 @@ int fn_801A1C10(Object_8003DEC4 *pPlayer)
         fn_801A3300(pPlayer, a, b);
         fn_801A32AC(30, 1.0f, 1.0f, b[0], b[1]);
         GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-        fn_802113C0(2, 0);
+        TMRenderGeomNode(2, 0);
         fn_801A32AC(30, 1.0f, 1.0f, a[0], a[1]);
         GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-        fn_802113C0(3, 0);
+        TMRenderGeomNode(3, 0);
         GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-        fn_802113C0(1, 0);
+        TMRenderGeomNode(1, 0);
     } else {
         fn_80234BF4(0, &pPlayer->mUnknown1164[4], 0);
     }
@@ -529,7 +529,7 @@ void fn_801A1D80(Object_8003DEC4 *pPlayer, int flag)
         TMRenderBindModel(&lbl_80365D54);
         TMRenderBindMaterialList(pPlayer->mUnknown4044);
         TMRenderBindClusterObj(&pPlayer->mUnknown4064[1]);
-        fn_802113C0(4, 0);
+        TMRenderGeomNode(4, 0);
     } else {
         fn_80234BF4(0, &pPlayer->mUnknown1164[5], 0);
     }
@@ -608,21 +608,21 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
     } else {
         pPose = pPlayer->mUnknown44.mUnknown48;
     }
-    fn_801D04C4();
-    fn_801D0664(pMatrix);
-    fn_801D0CFC(pPlayer->mUnknown24);
+    MatPush();
+    MatCat(pMatrix);
+    MatScale(pPlayer->mUnknown24);
     if (pScale) {
-        fn_801D0D94(pScale[0], pScale[1], pScale[2]);
+        MatScaleCol(pScale[0], pScale[1], pScale[2]);
     }
-    fn_801D04C4();
+    MatPush();
     fn_80233BE0();
     if (!(pPlayer->mUnknown20 & 0x2000)) {
         if (pTrail) {
-            fn_801D0C58(&pTrail->mUnknown448[index].mX);
-            fn_801D09EC(pTrail->mUnknown460[index]);
+            MatTranslate(&pTrail->mUnknown448[index].mX);
+            MatRotY(pTrail->mUnknown460[index]);
         } else {
-            fn_801D0C58(pPlayer->mUnknown44.mUnknown8);
-            fn_801D09EC(pPlayer->mUnknown44.mUnknown32);
+            MatTranslate(pPlayer->mUnknown44.mUnknown8);
+            MatRotY(pPlayer->mUnknown44.mUnknown32);
         }
     }
     if (pPlayer->mUnknown20 & 0x4000) {
@@ -687,41 +687,41 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
             }
         }
     }
-    fn_801D0544();
+    MatPop();
     if (pPlayer->mUnknown1164[6].mpUnknown12) {
         float (*pBones)[4][4] = pPlayer->mUnknown44.mUnknown52;
         short *pHead;
 
         if (pTrail) {
             pHead = pTrail->mUnknown468[index].mUnknown;
-            fn_801D04C4();
-            fn_801D0664(pTrail->mUnknown4D4[index]);
+            MatPush();
+            MatCat(pTrail->mUnknown4D4[index]);
         } else {
-            fn_801D04C4();
-            fn_801D06D4(pPlayer->mUnknown908);
+            MatPush();
+            MatLoad(pPlayer->mUnknown908);
             fn_800C2150(pPlayer, &pPlayer->mUnknown280, !(pPlayer->mUnknown20 & 8));
-            fn_801D0544();
+            MatPop();
             pHead = pPlayer->mUnknown280.mUnknown256.mUnknown48;
-            fn_801D04C4();
-            fn_801D0664(pBones[13]);
+            MatPush();
+            MatCat(pBones[13]);
         }
         pHead[0] = pPose[39];
         pHead[1] = pPose[40];
         pHead[2] = pPose[41];
         fn_802337D4(pPlayer->mUnknown1164[6].mpUnknown12, &pPlayer->mUnknown4064[2], pHead, 0xE0000000);
-        fn_801D0544();
+        MatPop();
     }
     if (pPlayer->mUnknown1164[11].mpUnknown12) {
         float (*pBones)[4][4] = pPlayer->mUnknown44.mUnknown52;
         short *pHat;
 
-        fn_801D04C4();
-        fn_801D06D4(pPlayer->mUnknown908);
+        MatPush();
+        MatLoad(pPlayer->mUnknown908);
         fn_800C2884(pPlayer, &pPlayer->mUnknown596, !(pPlayer->mUnknown20 & 8));
-        fn_801D0544();
+        MatPop();
         pHat = pPlayer->mUnknown596.mUnknown160.mUnknown48;
-        fn_801D04C4();
-        fn_801D0664(pBones[11]);
+        MatPush();
+        MatCat(pBones[11]);
         pHat[0] = pPose[33];
         pHat[1] = pPose[34];
         pHat[2] = pPose[35];
@@ -751,7 +751,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
                 }
             }
         }
-        fn_801D0544();
+        MatPop();
     }
     if (lod <= 1) {
         short *apHands[2];
@@ -766,8 +766,8 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
                     bone = 0x17;
                 }
                 apHands[k] = pPlayer->mUnknown116[k].mUnknown12.mUnknown48;
-                fn_801D04C4();
-                fn_801D0664(pBones[bone]);
+                MatPush();
+                MatCat(pBones[bone]);
                 short *pJoint = pPose + bone * 3 + 3;
                 apHands[k][0] = pJoint[0];
                 apHands[k][1] = pJoint[1];
@@ -792,11 +792,11 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
                         }
                     }
                 }
-                fn_801D0544();
+                MatPop();
             }
         }
     }
-    fn_801D0544();
+    MatPop();
 }
 
 unsigned int fn_801A28E8(Object_8003DEC4 *pPlayer)
@@ -1199,7 +1199,7 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
     flags = fn_801A28E8(pPlayer);
     ConGetCurrentContext();
     VptGetMatrixStack();
-    fn_801D0470();
+    MatSetStack();
     lod = pPlayer->mUnknown4216.mUnknown0;
     if (pPlayer->mUnknown20 & 8) {
         lod = 0;
@@ -1325,7 +1325,7 @@ void fn_801A3FFC(void)
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     TMRenderBindTexture(0, lbl_803ECC08, lbl_803ECC0C);
-    fn_801D0F80(m);
+    MatStore(m);
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
     for (; i < fn_8003DEB4(); i++) {
@@ -1385,7 +1385,7 @@ void fn_801A42D4(void)
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     TMRenderBindTexture(0, lbl_803ECC08, lbl_803ECC0C);
-    fn_801D0F80(m);
+    MatStore(m);
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
     for (; i < fn_8003DEB4(); i++) {

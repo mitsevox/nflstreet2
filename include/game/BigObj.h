@@ -33,7 +33,7 @@ struct BigObj_t {
         AnimPose_t mUnknown172;
         struct {
             char mUnknown172Head[8];
-            /* Its start is passed to fn_801D0C58 as a position vector. */
+            /* Its start is passed to MatTranslate as a position vector. */
             char mUnknown180[24];
             int mUnknown204;
             char mUnknown208[12];

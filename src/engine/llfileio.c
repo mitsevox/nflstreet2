@@ -21,7 +21,7 @@ typedef struct FileFontPos_t {
     float y;
     float z;
 } FileFontPos_t;
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
@@ -75,9 +75,9 @@ int FileHostRead(int handle, void *pDst, int size);
 int FileHostWrite(int handle, const void *pSrc, int size);
 int FileHostLSeek(int handle, int offset, int whence);
 int FileHostGetSize(int handle);
-void fn_801CEA7C(unsigned char clear);
-void fn_801CE908(unsigned char enable);
-void fn_801CE82C(void);
+void GlibSetClear(unsigned char clear);
+void GlibSetVIInt(unsigned char enable);
+void GlibSwapBuffers(void);
 void PSMTXIdentity(float (*pMtx)[4]);
 void GXSetProjection(float (*pMtx)[4], int type);
 
@@ -210,7 +210,7 @@ static int _FileStartIO(int devType)
     FileAsyncRequest_t *pAsync;
 
     fn_801F8014(&File_AsyncRequestListCS);
-    for (pAsync = fn_801C6B4C(File_pAsyncRequestList, 0); pAsync; pAsync = fn_801C6C84(File_pAsyncRequestList, pAsync)) {
+    for (pAsync = DSGetListNode(File_pAsyncRequestList, 0); pAsync; pAsync = DSNextListNode(File_pAsyncRequestList, pAsync)) {
         if (File_StreamInfo[pAsync->mHandle].mDevType == devType && pAsync->mState == 0) {
             found = 1;
             break;
@@ -236,12 +236,12 @@ void _FileProcessRequestFinish(FileAsyncRequest_t *pAsync)
     if (done) {
         pAsync->mState = 2;
         pAsync->mpReq->mpAsync = 0;
-        fn_801C6C0C(File_pAsyncRequestList, pAsync);
+        DSDelListNode(File_pAsyncRequestList, pAsync);
     } else {
         pAsync->mState = done;
     }
     busy = 0;
-    for (pAsync = fn_801C6B4C(File_pAsyncRequestList, 0); pAsync; pAsync = fn_801C6C84(File_pAsyncRequestList, pAsync)) {
+    for (pAsync = DSGetListNode(File_pAsyncRequestList, 0); pAsync; pAsync = DSNextListNode(File_pAsyncRequestList, pAsync)) {
         if (pAsync->mState == 1) {
             busy = 1;
         }
@@ -406,8 +406,8 @@ int FileQueueAsyncRequest(FileAsyncRequest_t *pAsync)
 
     fn_801F8014(&File_AsyncRequestListCS);
     fn_801F8014(&File_AsyncThreadActiveCS);
-    fn_801C6AA4(File_pAsyncRequestList, pAsync, 0);
-    for (pNode = fn_801C6B4C(File_pAsyncRequestList, 0); pNode; pNode = fn_801C6C84(File_pAsyncRequestList, pNode)) {
+    DSAddListNode(File_pAsyncRequestList, pAsync, 0);
+    for (pNode = DSGetListNode(File_pAsyncRequestList, 0); pNode; pNode = DSNextListNode(File_pAsyncRequestList, pNode)) {
         if (pNode->mState == 1) {
             busy = 1;
             break;
@@ -436,8 +436,8 @@ void FileAsyncWaitStream(int handle)
         busy = 0;
         FileAsyncCheckError();
         fn_801F8014(&File_AsyncRequestListCS);
-        for (pAsync = fn_801C6B4C(File_pAsyncRequestList, 0); pAsync; pAsync = pNext) {
-            pNext = fn_801C6C84(File_pAsyncRequestList, pAsync);
+        for (pAsync = DSGetListNode(File_pAsyncRequestList, 0); pAsync; pAsync = pNext) {
+            pNext = DSNextListNode(File_pAsyncRequestList, pAsync);
             if (pAsync->mHandle == handle && pAsync->mState != 2) {
                 busy = 1;
                 break;
@@ -542,12 +542,12 @@ void FileAsyncCheckError(void)
         GXSetVtxAttrFmt(0, 13, 1, 4, 0);
         GXSetNumTexGens(0);
         GXSetNumTevStages(1);
-        fn_801CEA7C(1);
-        fn_801CE908(0);
-        fn_801CE2B8(0);
-        fn_801D0470(VptGetMatrixStack());
-        fn_801D0508();
-        fn_801D0D94(0.0014705883f, -0.002232143f, 1.0f);
+        GlibSetClear(1);
+        GlibSetVIInt(0);
+        GlibEnableVIRetraceCallback(0);
+        MatSetStack(VptGetMatrixStack());
+        MatPushUnit();
+        MatScaleCol(0.0014705883f, -0.002232143f, 1.0f);
         do {
             if (status != -1) {
                 fn_801F8768();
@@ -557,18 +557,18 @@ void FileAsyncCheckError(void)
             fn_801CD308(0, lbl_802F4A74);
             fn_801CDD18();
             _FileDisplayErrorString(&pos, status);
-            fn_801CE82C();
+            GlibSwapBuffers();
         } while (current == status);
         fn_801CD2A4();
         fn_801CD308(0, lbl_802F4A74);
         fn_801CDD18();
         pos.y = 0.0f;
         fn_801CDB5C(lbl_803ECEF8, "Loading...", 1, 0.0f, &pos.x);
-        fn_801CE82C();
-        fn_801D0544();
+        GlibSwapBuffers();
+        MatPop();
         fn_801F7AD4(level);
-        fn_801CE908(1);
-        fn_801CE2B8(1);
+        GlibSetVIInt(1);
+        GlibEnableVIRetraceCallback(1);
     }
 }
 
@@ -589,7 +589,7 @@ void FileDebugProcess(void)
     FileAsyncRequest_t *pAsync;
 
     fn_801F8014(&File_AsyncRequestListCS);
-    for (pAsync = fn_801C6B4C(File_pAsyncRequestList, 0); pAsync; pAsync = fn_801C6C84(File_pAsyncRequestList, pAsync)) {
+    for (pAsync = DSGetListNode(File_pAsyncRequestList, 0); pAsync; pAsync = DSNextListNode(File_pAsyncRequestList, pAsync)) {
         if (pAsync->mState == 1) {
             if (File_StreamInfo[pAsync->mHandle].mDevType == 4) {
                 _FileProcessRequestFinish(pAsync);

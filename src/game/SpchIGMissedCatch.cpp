@@ -39,9 +39,9 @@ extern "C" void SpchIGSayMissedCatch(Vector_80039F5C *pOther)
     }
     SpchIGGetPlayerCategory(&result, _SpchIG_iMissedCatchPlayer);
     if (fn_80178320() == 0) {
-        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x2020), 1, result);
+        gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2020), 1, result);
     } else {
-        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x4020), 1, result);
+        gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x4020), 1, result);
     }
 }
 

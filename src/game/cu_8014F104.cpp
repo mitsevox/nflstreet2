@@ -20,8 +20,8 @@ extern const char lbl_802A0F74[];
 extern const char lbl_802A1074[];
 
 int GameTextGetPadPlayer(int index);
-int fn_80187A78(unsigned char index, char *pText, int count);
-int fn_80187400(int kind, int key, int first, int last);
+int UserProfileGetPadName(unsigned char index, char *pText, int count);
+int UserProfileGetFreeKey(int kind, int key, int first, int last);
 
 Object_80039F5C *PlyrFindById(int id);
 int GameModeTypeGet(void);
@@ -60,7 +60,7 @@ void fn_8014F19C(Class_802A2B68 *p)
             continue;
         }
         char name[32];
-        if (!fn_80187A78(GameTextGetPadPlayer(p->mpUnknown1C->mpUnknown34[i].mUnknown8), name, 31)) {
+        if (!UserProfileGetPadName(GameTextGetPadPlayer(p->mpUnknown1C->mpUnknown34[i].mUnknown8), name, 31)) {
             continue;
         }
         QueryResult result;
@@ -82,7 +82,7 @@ void fn_8014F19C(Class_802A2B68 *p)
             int id = 0;
             int status = fn_801FCE10(0, lbl_802A0F34, &id, name);
             if (status == 23) {
-                id = fn_80187400(0x52435348, 0x4B505348, 0, 255);
+                id = UserProfileGetFreeKey(0x52435348, 0x4B505348, 0, 255);
                 if (id == -1) {
                     continue;
                 }

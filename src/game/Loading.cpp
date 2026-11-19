@@ -67,23 +67,23 @@ void GXSetChanCtrl(int,int,int,int,int,int,int);
 void GXSetClipMode(int);
 void GXGetProjectionv(float *);
 void GXSetProjection(Mtx44,int);
-void fn_801D03D0(Mtx44);
+void MatMakeUnitMatrix(Mtx44);
 void GXLoadPosMtxImm(Mtx44,int);
 void GXSetCurrentMtx(int);
-void fn_801CE720(void);
-void fn_801CE774(void);
+void GlibSetUpRender(void);
+void GlibFinishRender(void);
 extern "C" void GXInitTexPreLoadRegion(GXTexRegion *,int,int,int,int);
 extern "C" void GXInvalidateTexAll(void);
-void fn_801CEA7C(int);
-int fn_801CEA08(void);
-int fn_801CEA14(void);
-void fn_801CEC48(int,int,int,int);
-void fn_801CE22C(void (*)(void));
-void fn_801CE23C(void);
+void GlibSetClear(int);
+int GlibGetScreenWidth(void);
+int GlibGetScreenHeight(void);
+void GlibSetScissor(int,int,int,int);
+void GlibSetVsyncCallback(void (*)(void));
+void GlibRemoveVsyncCallback(void);
 extern "C" void GXInitTexCacheRegion(GXTexRegion *,int,unsigned int,int,unsigned int,int);
 extern "C" LoadingTexRegionFunc_t GXSetTexRegionCallback(LoadingTexRegionFunc_t);
-int fn_801CE930(void);
-int fn_801CE944(int);
+int GlibGetFrame(void);
+int GlibGetFrameBufferAddr(int);
 void GXCopyDisp(int,int);
 
 void LoadingBeginDraw(int alpha);
@@ -119,7 +119,7 @@ void LoadingVSyncCallback(void)
         }
         LoadingBeginDraw(128);
         LoadingDrawScreen();
-        GXCopyDisp(fn_801CE944((unsigned char)fn_801CE930()), 1);
+        GXCopyDisp(GlibGetFrameBufferAddr((unsigned char)GlibGetFrame()), 1);
         GXPixModeSync();
         GXFlush();
     }
@@ -230,7 +230,7 @@ void LoadingBeginDraw(int alpha)
     GXGetProjectionv(_Loading_MatOldProj[0]);
     C_MTXOrtho(projection,0.0f, 480.0f, 0.0f, 640.0f, 1.0f, 2.0f);
     GXSetProjection(projection,1);
-    fn_801D03D0(view);
+    MatMakeUnitMatrix(view);
     GXLoadPosMtxImm(view,0);
     GXSetCurrentMtx(0);
 }
@@ -248,11 +248,11 @@ void LoadingDrawScreen(void)
 }
 void LoadingRenderFrame(int, int alpha)
 {
-    fn_801CE720();
+    GlibSetUpRender();
     LoadingBeginDraw(alpha);
     LoadingDrawScreen();
     LoadingEndDraw();
-    fn_801CE774();
+    GlibFinishRender();
 }
 void LoadingInit(void)
 {
@@ -274,7 +274,7 @@ void LoadingBegin(int mode)
     _Loading_pImageFile = ResOpenDevice(lbl_802EBE14,44);
     GXInvalidateTexAll();
     GXTexModeSync();
-    fn_801CEA7C(0);
+    GlibSetClear(0);
     _Loading_bShowMarker = 0;
     switch (mode) {
     case 1:
@@ -288,9 +288,9 @@ void LoadingBegin(int mode)
         _Loading_iFrontEndImage++;
         if (_Loading_iFrontEndImage == 2) _Loading_iFrontEndImage = 0;
         if (GameOptionsGet(6) == 1) {
-            int a = fn_801CEA08();
-            int b = fn_801CEA14();
-            fn_801CEC48(0,a,0,b);
+            int a = GlibGetScreenWidth();
+            int b = GlibGetScreenHeight();
+            GlibSetScissor(0,a,0,b);
         }
         LoadingLoadImage(index,&_Loading_Image,0);
         LoadingSetPolyTexture(&_Loading_BackgroundPoly,&_Loading_Image);
@@ -299,9 +299,9 @@ void LoadingBegin(int mode)
         break;
     }
     case 2: case 3: {
-        int a = fn_801CEA08();
-        int b = fn_801CEA14();
-        fn_801CEC48(0,a,0,b);
+        int a = GlibGetScreenWidth();
+        int b = GlibGetScreenHeight();
+        GlibSetScissor(0,a,0,b);
         LoadingLoadImage(LoadingPickImage(),&_Loading_Image,0);
         LoadingSetPolyTexture(&_Loading_BackgroundPoly,&_Loading_Image);
         LoadingSetPolyVertices(&_Loading_BackgroundPoly,0,0,0,640,480);
@@ -324,7 +324,7 @@ void LoadingBegin(int mode)
     }
     LoadingRenderFrame(mode,128);
     LoadingBeginDraw(128);
-    fn_801CE22C(LoadingVSyncCallback);
+    GlibSetVsyncCallback(LoadingVSyncCallback);
     GXInitTexCacheRegion(&_Loading_TexCacheRegion,0,0x80000,1,0x80000,1);
     _Loading_pOldTexRegionFunc = GXSetTexRegionCallback(LoadingTexRegionFunc);
     _Loading_iMode = mode;
@@ -334,14 +334,14 @@ void LoadingBegin(int mode)
 void LoadingEnd(int clear)
 {
     VIWaitForRetrace();
-    fn_801CE23C();
+    GlibRemoveVsyncCallback();
     LoadingBeginDraw(128);
     LoadingDrawScreen();
-    GXCopyDisp(fn_801CE944((unsigned char)fn_801CE930()),clear);
+    GXCopyDisp(GlibGetFrameBufferAddr((unsigned char)GlibGetFrame()),clear);
     GXPixModeSync();
     GXFlush();
     LoadingEndDraw();
-    fn_801CEA7C(1);
+    GlibSetClear(1);
     LoadingFreeImage(&_Loading_Image);
     GXSetTexRegionCallback(_Loading_pOldTexRegionFunc);
     _Loading_iMode = 0;

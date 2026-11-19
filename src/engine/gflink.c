@@ -1,6 +1,7 @@
 /* Game Boy Advance link status: initializes the GBA library and keeps, for each of the four
    controller ports, whether a GBA answers on it (with a one-second grace period before a
-   lost link is reported). */
+   lost link is reported). The file also defines a character map string and a status byte
+   that no function in this build uses. */
 
 #include <dolphin/os.h>
 #include <dolphin/gba.h>
@@ -15,7 +16,10 @@ typedef struct GFLinkPort_t
     char mUnknown0C[0x260 - 0xC];
 } GFLinkPort_t;
 
-extern GFLinkPort_t lbl_803E990C[];
+static char *_charMap = " ABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&'()*+,-./0123456789:;<=>?@[\\]^_                  abcdefghijklmnopqrstuvwxyz";
+static unsigned char _hackStatus;
+
+GFLinkPort_t _state[4];
 
 void Init_GFLink(void)
 {
@@ -23,7 +27,7 @@ void Init_GFLink(void)
 
     GBAInit();
     for (i = 0; i < 4; i++)
-        memset(&lbl_803E990C[i], 0, sizeof(GFLinkPort_t));
+        memset(&_state[i], 0, sizeof(GFLinkPort_t));
 }
 
 int GetState_GFLink(int channel)
@@ -31,18 +35,18 @@ int GetState_GFLink(int channel)
     OSTick tick;
     u8 status;
 
-    if (lbl_803E990C[channel].mUnknown08 < 2 || lbl_803E990C[channel].mUnknown08 > 4)
+    if (_state[channel].mUnknown08 < 2 || _state[channel].mUnknown08 > 4)
     {
         tick = OSGetTick();
         if (GBAGetStatus(channel, &status) == 0)
         {
-            lbl_803E990C[channel].mUnknown00 = tick;
-            lbl_803E990C[channel].mUnknown08 = 1;
+            _state[channel].mUnknown00 = tick;
+            _state[channel].mUnknown08 = 1;
         }
-        else if (OSTicksToSeconds(tick - lbl_803E990C[channel].mUnknown00) != 0)
+        else if (OSTicksToSeconds(tick - _state[channel].mUnknown00) != 0)
         {
-            lbl_803E990C[channel].mUnknown08 = 0;
+            _state[channel].mUnknown08 = 0;
         }
     }
-    return lbl_803E990C[channel].mUnknown08;
+    return _state[channel].mUnknown08;
 }

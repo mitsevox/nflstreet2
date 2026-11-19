@@ -412,14 +412,7 @@ int _TDbIOReadTableNew(TDbDatabase_t *pDb, TDbIOTableHdr_t *pHdr, int id,
             }
         }
     }
-    if (_tDbMemAllocInfoCallback) {
-        TDbMemEvent_t event;
-
-        event.mType = 4;
-        event.mUnknown4 = -1;
-        event.mUnknown8 = -1;
-        _tDbMemAllocInfoCallback(&event);
-    }
+    _TDbMemNotifyEnd();
     return err;
 }
 
@@ -891,14 +884,7 @@ int _TDbIOLoadDatabase(TDbDatabase_t *pDb, int *pTableIds, void *pName,
             pDevice->mClose(stream.mHandle);
         }
     }
-    if (_tDbMemAllocInfoCallback) {
-        TDbMemEvent_t event;
-
-        event.mType = 4;
-        event.mUnknown8 = -1;
-        event.mUnknown4 = -1;
-        _tDbMemAllocInfoCallback(&event);
-    }
+    _TDbMemNotifyEnd();
     return err;
 }
 
@@ -996,14 +982,7 @@ int _TDbIOSaveDatabase(TDbDatabase_t *pDb, void *pName, TDbIODevice_t *pDevice)
     } else if (pOffsets) {
         TDbExtMemFree(_tDbGlobalMemoryHeapID, pOffsets, count * 8);
     }
-    if (_tDbMemAllocInfoCallback) {
-        TDbMemEvent_t event;
-
-        event.mType = 4;
-        event.mUnknown8 = -1;
-        event.mUnknown4 = -1;
-        _tDbMemAllocInfoCallback(&event);
-    }
+    _TDbMemNotifyEnd();
     return err;
 }
 

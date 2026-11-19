@@ -32,8 +32,8 @@ unsigned char UnlockListGetIndex(DbCursor *pObject);
 int fn_801486A0(void);
 int UserRecGetCount(void);
 int UserRecGetName(int index, char *pText);
-signed char fn_80186B38(int a);
-signed char fn_80186F7C(unsigned char index);
+signed char UserProfileFindIndex(int a);
+signed char UserProfileGetSelected(unsigned char index);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 int fn_8022F358(signed char index);
 int fn_8022F384(int a);
@@ -65,7 +65,7 @@ int FeatAwardByKey(DbCursor *pCursor, DbCursor *pOther, int key, FeatAward_t *pE
     UnlockListReadItem(pCursor, &record);
     UserInfoAddPoints(db, record.mUnknown148);
     fn_801C2E18(pEntry->mName, record.mName);
-    UserRecGetName(fn_80186B38(db), pEntry->mText);
+    UserRecGetName(UserProfileFindIndex(db), pEntry->mText);
     pEntry->mCredits = record.mUnknown148;
     return 1;
 }
@@ -195,7 +195,7 @@ void FeatAwardAfterGame(void)
     int db;
 
     for (i = 0; i < 2; i++) {
-        pad = fn_80186F7C(i);
+        pad = UserProfileGetSelected(i);
         if (pad == -1) {
             continue;
         }
@@ -397,13 +397,13 @@ int FeatAwardGameCredits(int side)
 
     flag = 0;
     if (GameModeTypeGet() == 0) {
-        if (fn_80186F7C(0) != -1) {
-            CheatSelectSlot(fn_80186F7C(0));
+        if (UserProfileGetSelected(0) != -1) {
+            CheatSelectSlot(UserProfileGetSelected(0));
             flag |= CheatIsNoneEnabled() == 0;
             CheatClearSlot();
         }
-        if (fn_80186F7C(1) != -1) {
-            CheatSelectSlot(fn_80186F7C(1));
+        if (UserProfileGetSelected(1) != -1) {
+            CheatSelectSlot(UserProfileGetSelected(1));
             flag |= CheatIsNoneEnabled() == 0;
             CheatClearSlot();
         }

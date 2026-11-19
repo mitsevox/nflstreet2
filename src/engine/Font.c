@@ -2,7 +2,7 @@
 
 #include "engine/list.h"
 #include "engine/Font.h"
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
@@ -47,7 +47,7 @@ static FontEntry_801CCA64 *fn_801CCA64(int id)
 {
     FontEntry_801CCA64 *pEntry;
 
-    if (fn_801C6DCC(lbl_80383CF0.mpList, 0, &id, &pEntry, (ListSearchFn_801C6DCC)fn_801CCAB8) != 2) {
+    if (DSSearchList(lbl_80383CF0.mpList, 0, &id, &pEntry, (DSListSearchFn_t)fn_801CCAB8) != 2) {
         pEntry = 0;
     }
     return pEntry;
@@ -132,7 +132,7 @@ int fn_801CCC24(FontParams_801CCA64 *pParams)
         fn_801F7FA8(&lbl_80383CD0);
         fn_801F8014(&lbl_80383CD0);
         lbl_80383CF0.mNumFonts = 0;
-        lbl_80383CF0.mpList = fn_801C68FC(pParams->mHeap, 0, pParams->mMaxFonts, sizeof(FontEntry_801CCA64), 0, 0);
+        lbl_80383CF0.mpList = DSNewList(pParams->mHeap, 0, pParams->mMaxFonts, sizeof(FontEntry_801CCA64), 0, 0);
         lbl_80383CF0.mUnk10 = pParams->mUnk4;
         lbl_80383CF0.mHeap = pParams->mHeap;
         lbl_80383CF0.mUnk14 = pParams->mUnkC;
@@ -156,7 +156,7 @@ int fn_801CCD0C(void)
 
     if (lbl_803EBC58) {
         fn_801F8014(&lbl_80383CD0);
-        fn_801C69E4(lbl_80383CF0.mpList);
+        DSDelList(lbl_80383CF0.mpList);
         fn_801F809C(&lbl_80383CD0);
         fn_801F80D0(&lbl_80383CD0);
         lbl_803EBC58 = 0;
@@ -211,7 +211,7 @@ int fn_801CCE60(void *pFile, int id)
         if (lbl_80383CF0.mNumFonts == 0) {
             fn_801CDE98(&lbl_80383CF0.mpPalette0, &lbl_80383CF0.mpPalette1, &lbl_80383CF0.mpPalette2);
         }
-        if (!(pEntry = fn_801C6A20(lbl_80383CF0.mpList))) {
+        if (!(pEntry = DSNewListNode(lbl_80383CF0.mpList))) {
             error = fn_801F7C88();
         } else {
             if (pData = (FontHeader_801CCA64 *)ResLoad(pFile, id, lbl_80383CF0.mHeap)) {
@@ -219,7 +219,7 @@ int fn_801CCE60(void *pFile, int id)
                 pEntry->mId = id;
                 pEntry->mpFile = pFile;
                 error = fn_801CCBD0(pEntry, pData);
-                fn_801C6AA4(lbl_80383CF0.mpList, pEntry, 0);
+                DSAddListNode(lbl_80383CF0.mpList, pEntry, 0);
             } else {
                 error = fn_801F7C88();
             }
@@ -227,7 +227,7 @@ int fn_801CCE60(void *pFile, int id)
         }
     }
     if (error && pEntry) {
-        fn_801C6C0C(lbl_80383CF0.mpList, pEntry);
+        DSDelListNode(lbl_80383CF0.mpList, pEntry);
     }
     fn_801F7BD4(error);
     return error;
@@ -244,7 +244,7 @@ int fn_801CCF74(void *pFile, int id, FontHeader_801CCA64 *pData)
         if (lbl_80383CF0.mNumFonts == 0) {
             fn_801CDE98(&lbl_80383CF0.mpPalette0, &lbl_80383CF0.mpPalette1, &lbl_80383CF0.mpPalette2);
         }
-        if (!(pEntry = fn_801C6A20(lbl_80383CF0.mpList))) {
+        if (!(pEntry = DSNewListNode(lbl_80383CF0.mpList))) {
             error = fn_801F7C88();
         } else {
             if (pData) {
@@ -252,7 +252,7 @@ int fn_801CCF74(void *pFile, int id, FontHeader_801CCA64 *pData)
                 pEntry->mHandle = id;
                 pEntry->mId = id;
                 error = fn_801CCBD0(pEntry, pData);
-                fn_801C6AA4(lbl_80383CF0.mpList, pEntry, 0);
+                DSAddListNode(lbl_80383CF0.mpList, pEntry, 0);
             } else {
                 error = fn_801F7C88();
             }
@@ -260,7 +260,7 @@ int fn_801CCF74(void *pFile, int id, FontHeader_801CCA64 *pData)
         }
     }
     if (error && pEntry) {
-        fn_801C6C0C(lbl_80383CF0.mpList, pEntry);
+        DSDelListNode(lbl_80383CF0.mpList, pEntry);
     }
     fn_801F7BD4(error);
     return error;
@@ -276,7 +276,7 @@ int fn_801CD07C(int id)
     } else {
         if (pEntry = fn_801CCA64(id)) {
             error = ResUnLoad(pEntry->mpFile, pEntry->mHandle);
-            fn_801C6C0C(lbl_80383CF0.mpList, pEntry);
+            DSDelListNode(lbl_80383CF0.mpList, pEntry);
             lbl_80383CF0.mNumFonts--;
         } else {
             error = 0x110004;

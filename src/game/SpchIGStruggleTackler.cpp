@@ -16,9 +16,9 @@ extern "C" void SpchIGSayStruggleTackler(void)
 
     SpchIGGetPlayerCategory(&result, _SpchIG_iStruggleTackler);
     if (fn_80178320() == 0) {
-        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x2022), 1, result);
+        gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2022), 1, result);
     } else {
-        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x4022), 1, result);
+        gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x4022), 1, result);
     }
 }
 

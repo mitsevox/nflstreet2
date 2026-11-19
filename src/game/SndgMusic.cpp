@@ -95,7 +95,7 @@ unsigned char fn_800837D8(DbCursor *p);
 int fn_80083804(DbCursor *p);
 int fn_8008382C(DbCursor *p);
 int fn_801B3084(int flags, const char *pName, int value);
-void fn_801CE7D0(int a);
+void GlibVsync(int a);
 void *ResOpenDevice(const char *pName, int flags);
 void ResClose(void *p);
 int SndEnabled(void);
@@ -739,7 +739,7 @@ void SndgMusicPumpFrame(int draw)
 {
     SndgUpdate(1);
     if (draw) {
-        fn_801CE7D0(1);
+        GlibVsync(1);
     }
 }
 

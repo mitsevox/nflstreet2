@@ -53,10 +53,10 @@ void BoundingBox::TransformBox(float (*m)[4], BoundingBox *pOut)
     float sizeY;
     float sizeZ;
 
-    fn_801D04C4();
-    fn_801D06D4(m[0]);
+    MatPush();
+    MatLoad(m[0]);
     fn_80227CC0(&corner, &mMin);
-    fn_801D0544();
+    MatPop();
     axisX.x = m[0][0];
     axisX.y = m[1][0];
     axisX.z = m[2][0];

@@ -33,6 +33,20 @@ def demangle(symbol):
     if match and int(match[2]) <= len(match[3]):
         name = match[3][:int(match[2])]
         return f"{name}::{'~' if match[1] == '_._' else ''}{name}"
+    match = re.match(r'(.+?)__C?Q([1-9])(\w+)', symbol)
+    if match:
+        # A member of a namespace-qualified class: Allocate__Q32EA9Allocator21TiburonIAllocatorImplUiUii
+        # -> EA::Allocator::TiburonIAllocatorImpl::Allocate.
+        parts, rest = [], match[3]
+        for _ in range(int(match[2])):
+            length = re.match(r'\d+', rest)
+            if not length or int(length[0]) > len(rest) - len(length[0]):
+                break
+            rest = rest[len(length[0]):]
+            parts.append(rest[:int(length[0])])
+            rest = rest[int(length[0]):]
+        else:
+            return '::'.join(parts + [match[1]])
     match = re.match(r'(.+?)__(\d+)([A-Za-z_]\w*)', symbol)
     if match and int(match[2]) <= len(match[3]):
         return f'{match[3][:int(match[2])]}::{match[1]}'

@@ -156,7 +156,7 @@ int _PerJoyDriverPoll(PerDevice_t *pDevice, int (*pCounter)(unsigned int))
             int yNegative;
             int axis;
             int value;
-            int out;
+            signed char out;
 
             for (i = 0; i < Per_MaxButtons; i++) {
                 if (i < pDevice->mUnknown14) {

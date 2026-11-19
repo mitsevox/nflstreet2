@@ -2,7 +2,7 @@
    decodes a byte stream bit by bit. */
 
 #include "engine/GCmp.h"
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 
 /* 12-byte tree node. */
 typedef struct HuffNode_t {
@@ -27,12 +27,12 @@ typedef struct HuffState_t {
 
 extern void *fn_801D2BB0(int a, int size, int c, int d);
 extern int fn_801D2BD0(void *p);
-extern unsigned int fn_801C6880(void *pool, int c);
-extern void *fn_801C6A20(void *pool);
-extern void *fn_801C6B4C(void *pool, void *item);
-extern void fn_801C6BC0(void *pool, void *item);
-extern void *fn_801C6C84(void *pool, void *item);
-extern int fn_801C6DCC(void *pool, void *start, void *key, void *pFound,
+extern unsigned int DSGetListStat(void *pool, int c);
+extern void *DSNewListNode(void *pool);
+extern void *DSGetListNode(void *pool, void *item);
+extern void DSRemoveListNode(void *pool, void *item);
+extern void *DSNextListNode(void *pool, void *item);
+extern int DSSearchList(void *pool, void *start, void *key, void *pFound,
                        int (*match)(void *, void *, void *));
 
 int _InsertSortByFreq(void *a, void *b)
@@ -72,23 +72,23 @@ HuffNode_t *_BuildTree(void *pool)
     HuffItem_t *pChild;
     HuffNode_t *pRoot;
 
-    while (fn_801C6880(pool, 3) > 1) {
-        pItem = fn_801C6A20(pool);
+    while (DSGetListStat(pool, 3) > 1) {
+        pItem = DSNewListNode(pool);
         pItem->mpNode = fn_801D2BB0(1, sizeof(HuffNode_t), 0, 0);
-        pChild = fn_801C6B4C(pool, 0);
+        pChild = DSGetListNode(pool, 0);
         pItem->mpNode->mpLeft = pChild->mpNode;
         pItem->mCount = pChild->mCount;
-        fn_801C6BC0(pool, pChild);
-        pChild = fn_801C6B4C(pool, 0);
+        DSRemoveListNode(pool, pChild);
+        pChild = DSGetListNode(pool, 0);
         pItem->mpNode->mpRight = pChild->mpNode;
         pItem->mCount += pChild->mCount;
-        fn_801C6BC0(pool, pChild);
+        DSRemoveListNode(pool, pChild);
         pItem->mpNode->mSymbol = 0;
-        fn_801C6AA4(pool, pItem, 0);
+        DSAddListNode(pool, pItem, 0);
     }
-    pChild = fn_801C6B4C(pool, 0);
+    pChild = DSGetListNode(pool, 0);
     pRoot = pChild->mpNode;
-    fn_801C6BC0(pool, pChild);
+    DSRemoveListNode(pool, pChild);
     return pRoot;
 }
 
@@ -113,34 +113,34 @@ HuffState_t *_HuffCoStart(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
     int index;
 
     pState = fn_801D2BB0(1, sizeof(HuffState_t), 0, 0);
-    pool = fn_801C68FC(1, 0, 2056, sizeof(HuffItem_t), _InsertSortByFreq, 0);
+    pool = DSNewList(1, 0, 2056, sizeof(HuffItem_t), _InsertSortByFreq, 0);
     while (GCmpRead(pSrc, &symbol, 1)) {
         pItem = 0;
-        if (fn_801C6DCC(pool, 0, &symbol, &pItem, _SearchForSymbol) == 2) {
-            fn_801C6BC0(pool, pItem);
+        if (DSSearchList(pool, 0, &symbol, &pItem, _SearchForSymbol) == 2) {
+            DSRemoveListNode(pool, pItem);
             pItem->mCount++;
-            fn_801C6AA4(pool, pItem, 0);
+            DSAddListNode(pool, pItem, 0);
         } else {
-            pItem = fn_801C6A20(pool);
+            pItem = DSNewListNode(pool);
             pItem->mCount = 1;
             pItem->mpNode = fn_801D2BB0(1, sizeof(HuffNode_t), 0, 0);
             pItem->mpNode->mSymbol = symbol;
             pItem->mpNode->mpLeft = pItem->mpNode->mpRight = 0;
-            fn_801C6AA4(pool, pItem, 0);
+            DSAddListNode(pool, pItem, 0);
         }
     }
     pSrc->mPos = 0;
     GCmpWrite(pDst, &pSrc->mSize, 4);
     index = 0;
-    count = fn_801C6880(pool, 3);
+    count = DSGetListStat(pool, 3);
     GCmpWrite(pDst, &count, 2);
-    for (pItem = fn_801C6B4C(pool, 0); pItem != 0; pItem = fn_801C6C84(pool, pItem)) {
+    for (pItem = DSGetListNode(pool, 0); pItem != 0; pItem = DSNextListNode(pool, pItem)) {
         GCmpWrite(pDst, pItem->mpNode, 1);
         pItem->mCount = index;
         index++;
     }
     pState->mpRoot = _BuildTree(pool);
-    fn_801C69E4(pool);
+    DSDelList(pool);
     pState->mBits = 0;
     pState->mBitCount = 0;
     return pState;
@@ -189,19 +189,19 @@ HuffState_t *_HuffDecStart(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
     HuffItem_t *pItem;
 
     pState = fn_801D2BB0(1, sizeof(HuffState_t), 0, 0);
-    pool = fn_801C68FC(1, 0, 2056, sizeof(HuffItem_t), _InsertSortByFreq, 0);
+    pool = DSNewList(1, 0, 2056, sizeof(HuffItem_t), _InsertSortByFreq, 0);
     GCmpRead(pSrc, &pState->mRemaining, 4);
     GCmpRead(pSrc, &count, 2);
     for (; i < count; i++) {
-        pItem = fn_801C6A20(pool);
+        pItem = DSNewListNode(pool);
         pItem->mpNode = fn_801D2BB0(1, sizeof(HuffNode_t), 0, 0);
         GCmpRead(pSrc, pItem->mpNode, 1);
         pItem->mCount = i;
         pItem->mpNode->mpLeft = pItem->mpNode->mpRight = 0;
-        fn_801C6AA4(pool, pItem, 0);
+        DSAddListNode(pool, pItem, 0);
     }
     pState->mpRoot = _BuildTree(pool);
-    fn_801C69E4(pool);
+    DSDelList(pool);
     pState->mBits = 0;
     pState->mBitCount = 0;
     return pState;

@@ -48,10 +48,10 @@ struct Particle_t {
 };
 
 extern "C" {
-void fn_801D04C4(void);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D0ADC(int a);
+void MatPush(void);
+void MatPushUnit(void);
+void MatPop(void);
+void MatRotZ(int a);
 void fn_801DF064(float *pColor, PsysEmitter_t *pEmitter, Particle_t *pParticle);
 float fn_801DF184(PsysEmitter_t *pEmitter, Particle_t *pParticle);
 void TMRenderBindShader(int a);
@@ -160,7 +160,7 @@ int ParticleRenderEmitter(PsysEmitter_t *pEmitter, int mode)
     count = pEmitter->mUnknown3B8;
     pTexture = pEmitter->mpUnknown2AC;
     if (count) {
-        fn_801D04C4();
+        MatPush();
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
         ParticleRenderSetBlend(pEmitter->mUnknown60);
         if (pEmitter->mUnknown45 && pTexture) {
@@ -194,8 +194,8 @@ int ParticleRenderEmitter(PsysEmitter_t *pEmitter, int mode)
                 color[2] = CLAMP(color[2] * scale, 0.0f, 1.0f);
                 AnimTexGetCoords(pTexture, pParticle->mUnknown40, pParticle->mUnknown3A, pEmitter->mUnknown48, coords[0]);
                 size = fn_801DF184(pEmitter, pParticle);
-                fn_801D0508();
-                fn_801D0ADC((int)(pParticle->mUnknown50 * 46603.38f));
+                MatPushUnit();
+                MatRotZ((int)(pParticle->mUnknown50 * 46603.38f));
                 for (j = 0; j < 4; j++) {
                     fn_80227264(&corner, &_ParticleRender_aCorners[j], size);
                     fn_80227C2C(&corner, &corner);
@@ -204,7 +204,7 @@ int ParticleRenderEmitter(PsysEmitter_t *pEmitter, int mode)
                     GXColor4u8(color[0] * 255.0f, color[1] * 255.0f, color[2] * 255.0f, color[3] * 255.0f);
                     GXTexCoord2f32(coords[j][0], coords[j][1]);
                 }
-                fn_801D0544();
+                MatPop();
             }
         } else {
             TMRenderBindShader(_ParticleRender_iFlatShader);
@@ -226,8 +226,8 @@ int ParticleRenderEmitter(PsysEmitter_t *pEmitter, int mode)
                 fn_801DF064(color, pEmitter, pParticle);
                 size = fn_801DF184(pEmitter, pParticle);
                 fn_80227CC0(&position, &pParticle->mPosition);
-                fn_801D0508();
-                fn_801D0ADC((int)(pParticle->mUnknown50 * 46603.38f));
+                MatPushUnit();
+                MatRotZ((int)(pParticle->mUnknown50 * 46603.38f));
                 for (j = 0; j < 4; j++) {
                     fn_80227264(&corner, &_ParticleRender_aCorners[j], size);
                     fn_80227C2C(&corner, &corner);
@@ -235,10 +235,10 @@ int ParticleRenderEmitter(PsysEmitter_t *pEmitter, int mode)
                     GXPosition3f32(vertex.mX, vertex.mY, vertex.mZ);
                     GXColor4u8(color[0] * 255.0f, color[1] * 255.0f, color[2] * 255.0f, color[3] * 255.0f);
                 }
-                fn_801D0544();
+                MatPop();
             }
         }
-        fn_801D0544();
+        MatPop();
     }
     return 1;
 }

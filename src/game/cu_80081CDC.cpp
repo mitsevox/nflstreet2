@@ -20,7 +20,7 @@ int fn_8008058C(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode)
 void fn_80080874(int which);
 int PlayerDbGetId(Object_8008044C *pObject);
 void SndgMusicPumpFrame(int a);
-int fn_80186F7C(unsigned char index);
+int UserProfileGetSelected(unsigned char index);
 int toupper(int c);
 unsigned int fn_80229CFC(int category, int *pValues, int a);
 int fn_8022C8F0(unsigned int low, unsigned int high);
@@ -291,7 +291,7 @@ int fn_8008257C(int count, unsigned int *pOut)
     *pOut = 0;
     result = count - 10;
     for (pad = 0; pad <= 1; pad++) {
-        int db = fn_80186F7C(pad);
+        int db = UserProfileGetSelected(pad);
 
         if (db != -1) {
             int handle = fn_8022F3D4(fn_8022F358((signed char)db));

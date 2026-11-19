@@ -42,12 +42,12 @@ int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
 int fn_801784C4(void);
 int ConGetCurrentContext(void);
-void fn_801D0470(int a);
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D08FC(int a);
-void fn_801D0C58(void *p);
-void fn_801D0CFC(float a);
+void MatSetStack(int a);
+void MatPush(void);
+void MatPop(void);
+void MatRotX(int a);
+void MatTranslate(void *p);
+void MatScale(float a);
 int ObjNewType_(int type, int size, int count,
                 void (*pCreate)(BallMarkerObj_t *, int *),
                 void (*pDestroy)(BallMarkerObj_t *));
@@ -187,14 +187,14 @@ int BallMarkerObjDraw(BallMarkerObj_t *pObject)
                     fn_80235C90(pObject->mUnknown18, ConGetCurrentContext(),
                                0.390625f, 0.19921875f, 0.0f, 1.0f);
                 }
-                fn_801D0470(VptGetMatrixStack());
-                fn_801D04C4();
-                fn_801D0C58(&lbl_802E989C.mEntries[i].mPosition);
-                fn_801D08FC(0x400000);
-                fn_801D0CFC(lbl_802E989C.mEntries[i].mScale);
+                MatSetStack(VptGetMatrixStack());
+                MatPush();
+                MatTranslate(&lbl_802E989C.mEntries[i].mPosition);
+                MatRotX(0x400000);
+                MatScale(lbl_802E989C.mEntries[i].mScale);
                 fn_80235740(pObject->mUnknown18, ConGetCurrentContext());
-                fn_801D0470(VptGetMatrixStack());
-                fn_801D0544();
+                MatSetStack(VptGetMatrixStack());
+                MatPop();
                 fn_80235764(pObject->mUnknown18, ConGetCurrentContext());
             }
         }

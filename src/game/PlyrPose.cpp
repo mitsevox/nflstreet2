@@ -40,22 +40,22 @@ void AnimBuildPoseMatrices(Object_8003DEC4 *pObject);
 void *AnimFileGetFrame(Object_801BC084 *pRecord, int b, int handle, unsigned int c);
 int AnimFileGetSlotFromFileNum(int a, int b);
 void OrientLerpAngle(int *pOut, int a, int b, float t);
-void fn_801D0470(int a);
-void fn_801D0494(void);
-void fn_801D04C4(void);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D0664(float m[4][4]);
-void fn_801D06D4(float m[4][4]);
-void fn_801D08FC(int a);
-void fn_801D09EC(int a);
-void fn_801D0ADC(int a);
-void fn_801D0BCC(int a, int b, int c);
-void fn_801D0C58(float *p);
-void fn_801D0CFC(float a);
-void fn_801D0F80(float m[4][4]);
-void fn_801D0FB8(float *p);
-void fn_801D11F4(int *p, int a);
+void MatSetStack(int a);
+void MatResetStack(void);
+void MatPush(void);
+void MatPushUnit(void);
+void MatPop(void);
+void MatCat(float m[4][4]);
+void MatLoad(float m[4][4]);
+void MatRotX(int a);
+void MatRotY(int a);
+void MatRotZ(int a);
+void MatRotZYX(int a, int b, int c);
+void MatTranslate(float *p);
+void MatScale(float a);
+void MatStore(float m[4][4]);
+void MatGetPos(float *p);
+void MatGetRotByOrder(int *p, int a);
 void QuatIdentity(Quat_801EB488 *pRot);
 void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
@@ -343,29 +343,29 @@ void PlyrPoseSetFromModel(FEPlyrModel_t *pRecord)
 
 void PlyrPoseBuildWorldMatrix(Object_8003DEC4 *pObject)
 {
-    fn_801D0508();
-    fn_801D0C58(pObject->mUnknown4);
-    fn_801D0ADC(pObject->mUnknown36 + 0x400000);
-    fn_801D08FC(0x400000);
+    MatPushUnit();
+    MatTranslate(pObject->mUnknown4);
+    MatRotZ(pObject->mUnknown36 + 0x400000);
+    MatRotX(0x400000);
     if (pObject->mUnknown20 & 0x2000) {
-        fn_801D0C58(pObject->mUnknown44.mUnknown8);
-        fn_801D09EC(pObject->mUnknown44.mUnknown32);
+        MatTranslate(pObject->mUnknown44.mUnknown8);
+        MatRotY(pObject->mUnknown44.mUnknown32);
     }
-    fn_801D0F80(pObject->mUnknown908);
-    fn_801D0544();
+    MatStore(pObject->mUnknown908);
+    MatPop();
 }
 
 void PlyrPoseGetBoneTransform(Object_8003DEC4 *pObject, int bone, float *pOut, int *pAngles)
 {
-    fn_801D04C4();
-    fn_801D06D4(pObject->mUnknown908);
-    fn_801D0CFC(pObject->mUnknown24);
-    fn_801D0664(pObject->mUnknown44.mUnknown52[bone]);
-    fn_801D0FB8(pOut);
+    MatPush();
+    MatLoad(pObject->mUnknown908);
+    MatScale(pObject->mUnknown24);
+    MatCat(pObject->mUnknown44.mUnknown52[bone]);
+    MatGetPos(pOut);
     if (pAngles) {
-        fn_801D11F4(pAngles, 0);
+        MatGetRotByOrder(pAngles, 0);
     }
-    fn_801D0544();
+    MatPop();
 }
 
 void PlyrPoseGetAttachTransform(Object_8003DEC4 *pObject, float *pOut, Quat_801EB488 *pRot)
@@ -376,15 +376,15 @@ void PlyrPoseGetAttachTransform(Object_8003DEC4 *pObject, float *pOut, Quat_801E
         float (*pMatrix)[4][4] = &pObject->mUnknown44.mUnknown52[bone];
         int angles[3];
 
-        fn_801D04C4();
-        fn_801D06D4(pObject->mUnknown908);
-        fn_801D0CFC(pObject->mUnknown24);
-        fn_801D0664(*pMatrix);
-        fn_801D0C58(pObject->mUnknown44.mUnknown20);
-        fn_801D0BCC(pObject->mUnknown44.mUnknown36[2], pObject->mUnknown44.mUnknown36[1], pObject->mUnknown44.mUnknown36[0]);
-        fn_801D0FB8(pOut);
-        fn_801D11F4(angles, 0);
-        fn_801D0544();
+        MatPush();
+        MatLoad(pObject->mUnknown908);
+        MatScale(pObject->mUnknown24);
+        MatCat(*pMatrix);
+        MatTranslate(pObject->mUnknown44.mUnknown20);
+        MatRotZYX(pObject->mUnknown44.mUnknown36[2], pObject->mUnknown44.mUnknown36[1], pObject->mUnknown44.mUnknown36[0]);
+        MatGetPos(pOut);
+        MatGetRotByOrder(angles, 0);
+        MatPop();
         QuatFromEuler(pRot, angles[2], angles[1], angles[0]);
     } else {
         pOut[0] = pOut[1] = pOut[2] = 0.0f;
@@ -526,8 +526,8 @@ void PlyrPoseFree(Object_8003DEC4 *pObject)
 
 void PlyrPoseUpdate(Object_8003DEC4 *pObject)
 {
-    fn_801D0470(1);
-    fn_801D0494();
+    MatSetStack(1);
+    MatResetStack();
     if (pObject->mUnknown830) {
         if (--pObject->mUnknown828 < 0) {
             pObject->mUnknown828 = fn_802372EC(1, 480) + 30;

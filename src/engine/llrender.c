@@ -60,7 +60,7 @@ int GlibRenderShutdown(void)
     return 0;
 }
 
-void GlibRenderBegin(GlibState_801CE1F8 *pMode)
+void GlibRenderBegin(GlibState_t *pMode)
 {
     float width;
     float height;

@@ -3,36 +3,60 @@
 
 #include "engine/vec.h"
 
-/* Accessed fields of the rigid body used by motion helpers, joints and sleep control. */
-typedef struct RigidBody_t {
-    char mUnknown000[0x44];
-    float mUnknown044;
-    float mUnknown048;
-    char mUnknown04C[0x54 - 0x4C];
-    Vec4_801DE1E0 mUnknown054;
-    Vec3_801DE1E0 mUnknown064;
-    Vec3_801DE1E0 mUnknown070;
-    Vec3_801DE1E0 mUnknown07C;
-    float mUnknown088[4][4];
-    float mUnknown0C8[4][4];
-    Vec3_801DE1E0 mUnknown108;
-    Vec3_801DE1E0 mUnknown114;
-    Vec3_801DE1E0 mUnknown120;
-    Vec3_801DE1E0 mUnknown12C;
-    int mState;
-    int mUnknown13C;
-    int mUserData;
-} RigidBody_t;
+#ifdef __cplusplus
+class ShapeCollection;
 
-#ifdef __cplusplus
+/* A simulated system seen as a state vector: an integrator reads the state, asks for its rate of
+   change and writes the advanced state back. Each call returns the number of state floats. */
+class IntegrableSystem {
+public:
+    virtual int GetState(float *pState) = 0;
+    virtual int SetState(float *pState) = 0;
+    virtual int GetDerivative(void *pStart, float *pRate) = 0;
+};
+
+/* A rigid body: its 13-float state (orientation, position, linear and angular momentum), the
+   matrices and velocities derived from it, the accumulated force and torque, its sleep state and
+   the collision shapes that follow it. */
+class RigidBody : public IntegrableSystem {
+public:
+    RigidBody(Vec3_801DE1E0 *pInertia, ShapeCollection *pShapes, void *pOwner, float mass,
+              float restLimit);
+    virtual ~RigidBody();
+    virtual int GetState(float *pState);
+    virtual int SetState(float *pState);
+    virtual int GetDerivative(void *pStart, float *pRate);
+
+    float mInvInertia[4][4];
+    float mInvMass;
+    float mRestLimit;
+    float mUnknown04C;
+    float mUnknown050;
+    Vec4_801DE1E0 mOrientation;
+    Vec3_801DE1E0 mPosition;
+    Vec3_801DE1E0 mLinearMomentum;
+    Vec3_801DE1E0 mAngularMomentum;
+    float mTransform[4][4];
+    float mWorldInvInertia[4][4];
+    Vec3_801DE1E0 mLinearVelocity;
+    Vec3_801DE1E0 mAngularVelocity;
+    Vec3_801DE1E0 mForce;
+    Vec3_801DE1E0 mTorque;
+    int mState;
+    ShapeCollection *mpShapes;
+    int mUserData;
+    void *mpOwner;
+};
+
 extern "C" {
-#endif
-void fn_801E987C(RigidBody_t *pBody);
-void SetBodyAngularMomentum(RigidBody_t *pBody, Vec3_801DE1E0 *pMomentum);
-void ApplyBodyImpulseAtPoint(RigidBody_t *pBody, Vec3_801DE1E0 *pImpulse, Vec3_801DE1E0 *pPoint);
-void GetBodyPointVelocity(RigidBody_t *pBody, Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pVel);
-void SetBodyMotionState(RigidBody_t *pBody, int state);
-#ifdef __cplusplus
+void UpdateBodyDerivedState(RigidBody *pBody);
+void SetBodyPosition(RigidBody *pBody, Vec3_801DE1E0 *pPosition);
+void SetBodyOrientation(RigidBody *pBody, Vec4_801DE1E0 *pOrientation);
+void SetBodyPose(RigidBody *pBody, Vec3_801DE1E0 *pPosition, Vec4_801DE1E0 *pOrientation);
+void SetBodyAngularMomentum(RigidBody *pBody, Vec3_801DE1E0 *pMomentum);
+void ApplyBodyImpulseAtPoint(RigidBody *pBody, Vec3_801DE1E0 *pImpulse, Vec3_801DE1E0 *pPoint);
+void GetBodyPointVelocity(RigidBody *pBody, Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pVel);
+void SetBodyMotionState(RigidBody *pBody, int state);
 }
 #endif
 

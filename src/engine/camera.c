@@ -210,15 +210,15 @@ void CamConvertHdrToMatrix(void *pUnused, Cam_t *pCam)
 {
     float pos[3];
 
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D0494();
-    fn_801D08FC(pCam->mHeader.mUnknown14[0]);
-    fn_801D09EC(pCam->mHeader.mUnknown14[1]);
-    fn_801D0ADC(pCam->mHeader.mUnknown14[2]);
+    MatSetStack(VptGetMatrixStack());
+    MatResetStack();
+    MatRotX(pCam->mHeader.mUnknown14[0]);
+    MatRotY(pCam->mHeader.mUnknown14[1]);
+    MatRotZ(pCam->mHeader.mUnknown14[2]);
     pos[0] = -pCam->mHeader.mUnknown04[0];
     pos[1] = -pCam->mHeader.mUnknown04[1];
     pos[2] = -pCam->mHeader.mUnknown04[2];
-    fn_801D0C58(pos);
+    MatTranslate(pos);
 }
 
 void CamSetFieldOfView(Cam_t *pCam, float fov, float aspect)

@@ -5,6 +5,16 @@
 
 extern "C" {
 
+// FAKEMATCH: file-static rounding helper chosen for codegen (inline in each branch gives r9 results and
+// r29/r30 swapped); no sibling symbol shows the helper. Logic unchanged.
+static inline int SNDSTRMI_round(float t)
+{
+    if (!(t < 0.0f)) {
+        return (int)(t + 0.5f);
+    }
+    return (int)(t - 0.5f);
+}
+
 int SNDSTRM_requeststatus(int id, SndStreamRequestStatus_t *status)
 {
     SndStreamChannel_t *channel;
@@ -36,23 +46,11 @@ int SNDSTRM_requeststatus(int id, SndStreamRequestStatus_t *status)
             }
             scale = 1000.0f / (float)rate;
             t = (float)request->unk_0x14 * scale;
-            if (!(t < 0.0f)) {
-                status->unk_0x4 = (int)(t + 0.5f);
-            } else {
-                status->unk_0x4 = (int)(t - 0.5f);
-            }
+            status->unk_0x4 = SNDSTRMI_round(t);
             t = (float)(request->unk_0x18 - request->unk_0x14) * scale;
-            if (!(t < 0.0f)) {
-                status->unk_0x8 = (int)(t + 0.5f);
-            } else {
-                status->unk_0x8 = (int)(t - 0.5f);
-            }
+            status->unk_0x8 = SNDSTRMI_round(t);
             t = (float)request->unk_0x1C * scale;
-            if (!(t < 0.0f)) {
-                status->unk_0xC = (int)(t + 0.5f);
-            } else {
-                status->unk_0xC = (int)(t - 0.5f);
-            }
+            status->unk_0xC = SNDSTRMI_round(t);
         } else {
             status->mState = 0;
         }

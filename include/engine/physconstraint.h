@@ -3,7 +3,7 @@
 
 #include "engine/vec.h"
 
-struct RigidBody_t;
+class RigidBody;
 
 /* Interface of a body constraint: one solve step. */
 class Constraint {
@@ -14,14 +14,14 @@ public:
 /* Point-to-point joint between two bodies. */
 class PointConstraint : public Constraint {
 public:
-    PointConstraint(RigidBody_t *pBodyA, RigidBody_t *pBodyB, Vec3_801DE1E0 *pAnchorA,
+    PointConstraint(RigidBody *pBodyA, RigidBody *pBodyB, Vec3_801DE1E0 *pAnchorA,
                    Vec3_801DE1E0 *pAnchorB);
     virtual void Solve();
     virtual ~PointConstraint();
 
-    RigidBody_t *mpBodyA;
+    RigidBody *mpBodyA;
     Vec3_801DE1E0 mAnchorA;
-    RigidBody_t *mpBodyB;
+    RigidBody *mpBodyB;
     Vec3_801DE1E0 mAnchorB;
 };
 

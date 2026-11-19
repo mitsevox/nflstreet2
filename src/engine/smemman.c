@@ -97,7 +97,10 @@ void SNDMEMI_free(void *p)
     int offset = (char *)p - lbl_803A6C24.m1D4->m0;
 
     for (i = 0; i > lbl_803A6C24.m1D4->m14; i--) {
-        if (lbl_803A6C24.m1D4->m4[i].m0 == offset) {
+        // FAKEMATCH: the entry-pointer local keeps the target's add order (array base first, index offset second)
+        SndMemEntry_t *e = &lbl_803A6C24.m1D4->m4[i];
+
+        if (e->m0 == offset) {
             lbl_803A6C24.m1D4->m14++;
             lbl_803A6C24.m1D4->mC += 8;
             for (; i > lbl_803A6C24.m1D4->m14; i--) {

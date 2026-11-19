@@ -10,7 +10,7 @@
 #include "engine/llglib.h"
 #include "engine/llmatrix.h"
 
-extern void fn_801CEC48(int a, int b, int c, int d);
+extern void GlibSetScissor(int a, int b, int c, int d);
 extern float fn_801CFD28(int angle);
 extern int ObjNewList(int a, int b, int c, int d, int e, int f, int g, int h);
 extern void ObjDelList(int handle);
@@ -25,7 +25,7 @@ static int _Vpt_TrashLatency = 0;
 
 static void _VptSetupScissor(Viewport_t *pObject)
 {
-    fn_801CEC48((unsigned int)pObject->mUnknown4, (unsigned int)pObject->mUnknown20,
+    GlibSetScissor((unsigned int)pObject->mUnknown4, (unsigned int)pObject->mUnknown20,
                 (unsigned int)pObject->mUnknown8, (unsigned int)pObject->mUnknown24);
 }
 
@@ -91,9 +91,9 @@ void VptSetUpRender(Viewport_t *pObject)
     Mtx44 viewport;
     Mtx44 projection;
     Mtx44 m;
-    float width = fn_801CEA08();
-    float height = fn_801CEA14();
-    float depth = (float)((1 << fn_801CE93C()) - 1) * 0.0625f;
+    float width = GlibGetScreenWidth();
+    float height = GlibGetScreenHeight();
+    float depth = (float)((1 << GlibGetZDepthBits()) - 1) * 0.0625f;
 
     VptViewport(viewport, pObject->mUnknown4, pObject->mUnknown8, pObject->mUnknown20, pObject->mUnknown24, depth);
     if (pObject->mUnknown28 & 4) {
@@ -103,30 +103,30 @@ void VptSetUpRender(Viewport_t *pObject)
         VptFrustum(projection, pObject->mUnknown216, pObject->mUnknown220, pObject->mUnknown228,
                     pObject->mUnknown224, pObject->mUnknown232, pObject->mUnknown236, pObject->mUnknown240);
     }
-    fn_801D0424((float *)pObject->mUnknown140, projection[0]);
-    fn_801CEA20(projection);
+    MatCopyMatrix((float *)pObject->mUnknown140, projection[0]);
+    GlibSetProjection(projection);
     GXSetViewport(pObject->mUnknown4, pObject->mUnknown8, pObject->mUnknown20, pObject->mUnknown24, 0.0f, 1.0f);
-    fn_801D1258(2, projection[0]);
-    fn_801D1258(1, viewport[0]);
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D0F80(m[0]);
-    fn_801D0508();
-    fn_801D0664(m[0]);
-    fn_801D12EC(3);
-    fn_801D0544();
-    fn_801D12BC(3);
-    fn_801D04C4();
-    fn_801D12BC(1);
-    fn_801D131C(2);
-    fn_801D12EC(6);
-    fn_801D12BC(1);
-    fn_801D131C(2);
-    fn_801D131C(3);
-    fn_801D12EC(5);
-    fn_801D12BC(2);
-    fn_801D131C(3);
-    fn_801D12EC(4);
-    fn_801D0544();
+    MatSetSlot(2, projection[0]);
+    MatSetSlot(1, viewport[0]);
+    MatSetStack(VptGetMatrixStack());
+    MatStore(m[0]);
+    MatPushUnit();
+    MatCat(m[0]);
+    MatStoreSlot(3);
+    MatPop();
+    MatLoadSlot(3);
+    MatPush();
+    MatLoadSlot(1);
+    MatCatSlot(2);
+    MatStoreSlot(6);
+    MatLoadSlot(1);
+    MatCatSlot(2);
+    MatCatSlot(3);
+    MatStoreSlot(5);
+    MatLoadSlot(2);
+    MatCatSlot(3);
+    MatStoreSlot(4);
+    MatPop();
     _VptSetupScissor(pObject);
     TMRenderBeginViewport();
 }
@@ -159,7 +159,7 @@ void VptFlushObjectTrash(void)
 
 void VptFlushObjectTrashSync(void)
 {
-    fn_801CE910();
+    GlibSyncFrame();
     VptFlushObjectTrash();
     VptFlushObjectTrash();
     VptFlushObjectTrash();

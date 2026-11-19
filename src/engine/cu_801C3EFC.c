@@ -79,16 +79,16 @@ void fn_801C3F48(Chain_801C3EFC *pChain, int first, int last, int (*pAngles)[3],
 
     for (i = first; i <= last; i++) {
         bone = pNode->mJoint;
-        fn_801D0C58(pSkel->mPos[bone]);
-        fn_801D0BCC(pAngles[bone][2], pAngles[bone][1], pAngles[bone][0]);
-        fn_801D0F80(pOut[i]);
+        MatTranslate(pSkel->mPos[bone]);
+        MatRotZYX(pAngles[bone][2], pAngles[bone][1], pAngles[bone][0]);
+        MatStore(pOut[i]);
         pNode = pNode->mpChildren[pChain->mpLinks[i].mChild];
     }
 }
 
 static inline void fn_801C3EFC_Rot(int x, int y, int z)
 {
-    fn_801D0BCC(z << 8, y << 8, x << 8);
+    MatRotZYX(z << 8, y << 8, x << 8);
 }
 
 void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose_t *pInst,
@@ -113,18 +113,18 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     int count;
     int i;
 
-    fn_801D04C4();
+    MatPush();
     pSkel = pChain->mpSkel;
     for (i = 0; i < 32; i++) {
         angles[i][0] = ((SkelEuler_t *)pInst->mpLocal)[i].x << 8;
         angles[i][1] = ((SkelEuler_t *)pInst->mpLocal)[i].y << 8;
         angles[i][2] = ((SkelEuler_t *)pInst->mpLocal)[i].z << 8;
     }
-    fn_801D0558();
-    fn_801D0C58(pInst->mPos);
+    MatMakeUnit();
+    MatTranslate(pInst->mPos);
     fn_801C3F48(pChain, 0, pChain->mStart - 1, angles, mats);
     while (iterations--) {
-        fn_801D06D4(mats[pChain->mStart - 1]);
+        MatLoad(mats[pChain->mStart - 1]);
         fn_801C3F48(pChain, pChain->mStart, pChain->mEnd, angles, mats);
         endPos[0] = mats[pChain->mEnd][3];
         endPos[1] = mats[pChain->mEnd][7];
@@ -136,8 +136,8 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
             jointPos[2] = mats[i][11];
             fn_802276B4(toEnd, endPos, jointPos);
             fn_802276B4(toTarget, pTarget, jointPos);
-            fn_801D06D4(mats[i]);
-            fn_801D0E94();
+            MatLoad(mats[i]);
+            MatTranspose();
             fn_80227C2C(toEnd, toEnd);
             fn_80227C2C(toTarget, toTarget);
             c = fn_8022772C(toEnd, toTarget);
@@ -164,15 +164,15 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
                     angles[bone][1] = rot[1];
                     angles[bone][2] = rot[2];
                 }
-                fn_801D06D4(mats[i - 1]);
-                fn_801D0C58(pSkel->mPos[bone]);
-                fn_801D0BCC(angles[bone][2], angles[bone][1], angles[bone][0]);
-                fn_801D0C58(pSkel->mPos[bone + 1]);
-                fn_801D0FB8(endPos);
+                MatLoad(mats[i - 1]);
+                MatTranslate(pSkel->mPos[bone]);
+                MatRotZYX(angles[bone][2], angles[bone][1], angles[bone][0]);
+                MatTranslate(pSkel->mPos[bone + 1]);
+                MatGetPos(endPos);
             }
         }
     }
-    fn_801D0544();
+    MatPop();
     count = 0;
     for (i = pChain->mStart; i <= pChain->mEnd; i++) {
         bone = pChain->mpLinks[i].mBone;
@@ -193,12 +193,12 @@ void fn_801C447C(Chain_801C3EFC *pChain, SkelPose_t *pInst, SkelEuler_t *pAngles
     int bone;
     int i;
 
-    fn_801D0C58(pInst->mPos);
-    fn_801D09EC(pInst->mRotY);
+    MatTranslate(pInst->mPos);
+    MatRotY(pInst->mRotY);
     pNode = pSkel->mpJoints[pChain->mpLinks[0].mBone].mpNode;
     for (i = 0; i < pChain->mCount; i++) {
         bone = pNode->mJoint;
-        fn_801D0C58(pSkel->mPos[bone]);
+        MatTranslate(pSkel->mPos[bone]);
         if (bone == stop) {
             break;
         }
@@ -223,25 +223,25 @@ void fn_801C4550(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     int bone = pChain->mpLinks[pChain->mCount - 1].mBone;
     float d;
 
-    fn_801D0508();
+    MatPushUnit();
     fn_801C447C(pChain, pInst, pAngles, bone);
-    fn_801D0F80(base);
+    MatStore(base);
     pos[0] = base[3];
     pos[1] = base[7];
     pos[2] = base[11];
     fn_802276B4(dir, pTarget, pos);
-    fn_801D04C4();
+    MatPush();
     fn_801C3EFC_Rot(pAngles[bone].x, pAngles[bone].y, pAngles[bone].z);
-    fn_801D0F80(joint);
+    MatStore(joint);
     fn_80227C2C(up, lbl_802F48A8);
-    fn_801D0544();
+    MatPop();
     up[0] = 0.0f;
     fn_802271F0(up, up);
-    fn_801D04C4();
-    fn_801D0E94();
+    MatPush();
+    MatTranspose();
     fn_80227C2C(fwd, up);
     fn_80227C2C(dir, dir);
-    fn_801D0544();
+    MatPop();
     fn_80227490(dir, dir, 0, 0, *pYaw);
     if (!(dir[2] >= lbl_803EBBE0)) {
         d = __builtin_fabs(dir[0]);
@@ -255,19 +255,19 @@ void fn_801C4550(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     if (!(fn_80227704(lbl_802F489C, dir) >= 0.9999f)) {
         fn_802277DC(side, fwd, dir);
         fn_802277DC(up, dir, side);
-        fn_801D03D0(rot);
-        fn_801D0C0C(rot, side, up, dir);
-        fn_801D0FFC(angles, rot);
-        fn_801D06D4(base);
-        fn_801D0664(rot);
-        fn_801D0F80(((float (*)[16])pInst->mpOutput)[bone]);
+        MatMakeUnitMatrix(rot);
+        MatSetAxes(rot, side, up, dir);
+        MatGetRotFromMatrixZYX(angles, rot);
+        MatLoad(base);
+        MatCat(rot);
+        MatStore(((float (*)[16])pInst->mpOutput)[bone]);
         pChain->mSolved = 1;
         pResult->mBone = bone;
         pResult->x = angles[0] >> 8;
         pResult->y = angles[1] >> 8;
         pResult->z = angles[2] >> 8;
     }
-    fn_801D0544();
+    MatPop();
 }
 
 Chain_801C3EFC *fn_801C47EC(Skel_t *pSkel, int start, int end, int type)

@@ -20,16 +20,16 @@ void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
 void GXSetNumChans(int a);
 void TMRenderSetBlendMode(int a);
 void TMRenderSetZRange(float a, float b);
-void fn_801D0470(int a);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D131C(int a);
-Mtx44Ptr fn_801D0444(void);
+void MatSetStack(int a);
+void MatPushUnit(void);
+void MatPop(void);
+void MatCatSlot(int a);
+Mtx44Ptr MatGetCurMatrixPtr(void);
 void GXLoadPosMtxImm(Mtx44 m, int a);
 void fn_80227490(float *pOut, float *pIn, int a, int b, int c);
 void fn_8022765C(float *pOut, float *pA, float *pB);
-int fn_801CEA08(void);
-int fn_801CEA14(void);
+int GlibGetScreenWidth(void);
+int GlibGetScreenHeight(void);
 }
 
 /* The texture of one marker kind: 0x4C bytes of .bss, of which the draw code uses only the
@@ -171,11 +171,11 @@ void FieldMarkerDrawBeams(void)
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     GXSetNumTevStages(1);
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D0508();
-    fn_801D131C(3);
-    GXLoadPosMtxImm(fn_801D0444(), 0);
-    fn_801D0544();
+    MatSetStack(VptGetMatrixStack());
+    MatPushUnit();
+    MatCatSlot(3);
+    GXLoadPosMtxImm(MatGetCurMatrixPtr(), 0);
+    MatPop();
     if (_FieldMarker_BeamTextureInfo.mUnknown0 == 1)
         GXLoadTlut(&_FieldMarker_BeamTexture.mTlutObj, 0);
     GXLoadTexObj(&_FieldMarker_BeamTexture.mTexObj, GX_TEXMAP0);
@@ -213,11 +213,11 @@ void FieldMarkerDrawArrows(void)
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
     GXSetZCompLoc(GX_FALSE);
     TMRenderSetZRange(0.0f, 0.9999f);
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D0508();
-    fn_801D131C(3);
-    GXLoadPosMtxImm(fn_801D0444(), 0);
-    fn_801D0544();
+    MatSetStack(VptGetMatrixStack());
+    MatPushUnit();
+    MatCatSlot(3);
+    GXLoadPosMtxImm(MatGetCurMatrixPtr(), 0);
+    MatPop();
     if (_FieldMarker_ArrowTextureInfo.mUnknown0 == 1)
         GXLoadTlut(&_FieldMarker_ArrowTexture.mTlutObj, 0);
     GXLoadTexObj(&_FieldMarker_ArrowTexture.mTexObj, GX_TEXMAP0);
@@ -246,8 +246,8 @@ unsigned int FieldMarkerReadDepth(float x, float y)
     u32 depth = 0;
     if (x <= -1.0f || y <= -1.0f || x >= 1.0f || y >= 1.0f)
         return depth;
-    unsigned short screenX = (unsigned short)((x + 1.0f) * fn_801CEA08() * 0.5f);
-    unsigned short screenY = (unsigned short)((1.0f - y) * fn_801CEA14() * 0.5f);
+    unsigned short screenX = (unsigned short)((x + 1.0f) * GlibGetScreenWidth() * 0.5f);
+    unsigned short screenY = (unsigned short)((1.0f - y) * GlibGetScreenHeight() * 0.5f);
     GXPeekZ(screenX, screenY, &depth);
     return depth;
 }

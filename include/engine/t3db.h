@@ -343,6 +343,20 @@ static inline void _TDbMemNotify(int type, int a, int b)
     }
 }
 
+/* Closing memory event: type 4 with both arguments -1. */
+/* FAKEMATCH: parameterless end-event inline, the same event as _TDbMemNotify(4, -1, -1); the target sets the two -1 arguments after the callback test, which only this form gives (t3db_io.c 0x801FBFEC/0x801FC5FC, t3db_query.c) */
+static inline void _TDbMemNotifyEnd(void)
+{
+    TDbMemEvent_t event;
+
+    if (_tDbMemAllocInfoCallback) {
+        event.mType = 4;
+        event.mUnknown4 = -1;
+        event.mUnknown8 = -1;
+        _tDbMemAllocInfoCallback(&event);
+    }
+}
+
 static inline unsigned char _TDbRowIsDeleted(TDbTable_t *pTable, unsigned int row)
 {
     unsigned char *pRow = pTable->mRows + pTable->mRowSize * row;

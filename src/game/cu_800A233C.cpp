@@ -167,12 +167,12 @@ void LevelLoad(void);
 void *fn_800C47C4(void);
 void GlowInit(void *owner);
 void GlowSetScale(float value);
-void fn_801D03D0(float *pMatrix);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D0BCC(int z, int y, int x);
-void fn_801D0C58(void *p);
-void fn_801D0F80(float m[4][4]);
+void MatMakeUnitMatrix(float *pMatrix);
+void MatPushUnit(void);
+void MatPop(void);
+void MatRotZYX(int z, int y, int x);
+void MatTranslate(void *p);
+void MatStore(float m[4][4]);
 unsigned char CheatFlagsIsSet(int index);
 unsigned int GameModeTypeGet(void);
 
@@ -320,16 +320,16 @@ extern "C" void fn_800A3170(void)
     for (i = 0; i < gLevelData->mUnknown96; i++) {
         LevelPlacement_t *pEntry = &gLevelData->mUnknown100[i];
 
-        fn_801D03D0(m[0]);
+        MatMakeUnitMatrix(m[0]);
         m[0][3] = 0.0f;
         m[1][3] = 0.0f;
         m[2][3] = 0.0f;
-        fn_801D0508();
-        fn_801D0C58(pEntry->mUnknown0);
-        fn_801D0BCC((int)(pEntry->mUnknown0[5] * 46603.379f), (int)(pEntry->mUnknown0[4] * 46603.379f),
+        MatPushUnit();
+        MatTranslate(pEntry->mUnknown0);
+        MatRotZYX((int)(pEntry->mUnknown0[5] * 46603.379f), (int)(pEntry->mUnknown0[4] * 46603.379f),
                     (int)(pEntry->mUnknown0[3] * 46603.379f));
-        fn_801D0F80(lbl_8030E6E8.mUnknown134[i]);
-        fn_801D0544();
+        MatStore(lbl_8030E6E8.mUnknown134[i]);
+        MatPop();
         args.mUnknown04 = &lbl_8030E6E8.mUnknown134[i];
         args.mUnknown0C = 0;
         args.mUnknown10 = 0;

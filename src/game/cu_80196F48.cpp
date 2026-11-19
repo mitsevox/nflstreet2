@@ -19,14 +19,14 @@
 extern "C" {
 void TMRenderReset(void);
 void TMRenderSetBlendMode(int);
-void fn_801D0470(int);
-void fn_801D04C4(void);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D131C(int);
-void fn_801D12BC(int);
-Mtx44Ptr fn_801D0444(void);
-void fn_801D0F80(Mtx44);
+void MatSetStack(int);
+void MatPush(void);
+void MatPushUnit(void);
+void MatPop(void);
+void MatCatSlot(int);
+void MatLoadSlot(int);
+Mtx44Ptr MatGetCurMatrixPtr(void);
+void MatStore(Mtx44);
 void GXSetProjection(Mtx44, int);
 void GXGetProjectionv(float *);
 void fn_8022765C(void *, void *, void *);
@@ -38,9 +38,9 @@ float fn_80237260(int);
 unsigned char ParticleTrailIsEnabled(void);
 GlowTexture_t *GlowGetTexture(int);
 void GlowTransformPoint(Vector_80039F5C *, Vector_80039F5C *);
-int fn_801CEB4C(void);
-int fn_801CEC74(void);
-int fn_801CEA14(void);
+int GlibGetWidescreenMode(void);
+int GlibGetScreenLetterBoxHeight(void);
+int GlibGetScreenHeight(void);
 unsigned int FieldMarkerReadDepth(float, float);
 int TexGetNumMaterials(void *);
 int TexGetNumPalettes(void *);
@@ -88,11 +88,11 @@ void fn_80196F48(float scale, void *position)
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     GXSetNumTevStages(1);
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D0508();
-    fn_801D131C(3);
-    GXLoadPosMtxImm(fn_801D0444(), 0);
-    fn_801D0544();
+    MatSetStack(VptGetMatrixStack());
+    MatPushUnit();
+    MatCatSlot(3);
+    GXLoadPosMtxImm(MatGetCurMatrixPtr(), 0);
+    MatPop();
     if (lbl_803EB750 == 1) GXLoadTlut(&lbl_803651D8, 0);
     GXLoadTexObj(&lbl_803651B8, GX_TEXMAP0);
     unsigned char alpha = (unsigned char)_FxRemap(scale, 0.05f, 3.0f, 255.0f, 0.0f);
@@ -128,7 +128,7 @@ void fn_8019723C(ParticleTrailSet_t *p)
     GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_VTX, 1, GX_DF_CLAMP, GX_AF_SPOT);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-    fn_801D0F80(matrix);
+    MatStore(matrix);
     GXSetCurrentMtx(0);
     GXLoadPosMtxImm(matrix, 0);
     if (p->mUnknown23C) TMRenderSetBlendMode(6);
@@ -198,13 +198,13 @@ void fn_80197680(Glow_t *p)
     screen[0] = projected[0];
     screen[1] = projected[1];
     if (p->mUnknown4 == 1) {
-        fn_801D0470(VptGetMatrixStack());
-        fn_801D04C4();
-        fn_801D12BC(3);
+        MatSetStack(VptGetMatrixStack());
+        MatPush();
+        MatLoadSlot(3);
         fn_80227C2C(&facing, &p->mUnknown24);
         angle = fn_80227704(&facing, &axis);
         if (angle < 0.0f) angle = 0.0f;
-        fn_801D0544();
+        MatPop();
     }
     if (p->mUnknown34) {
         if (++p->mUnknown35 >= p->mUnknown34) {
@@ -320,9 +320,9 @@ float fn_80197D08(float *out, Vector_80039F5C *position)
     float normalized[3];
     float point[4];
     float result;
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D04C4();
-    fn_801D12BC(4);
+    MatSetStack(VptGetMatrixStack());
+    MatPush();
+    MatLoadSlot(4);
     point[0] = position->mX;
     point[1] = position->mY;
     point[2] = position->mZ;
@@ -348,7 +348,7 @@ float fn_80197D08(float *out, Vector_80039F5C *position)
     } else {
         result = 0.0f;
     }
-    fn_801D0544();
+    MatPop();
     return result;
 }
 
@@ -397,9 +397,9 @@ void fn_80197FDC(void *unused, Glow_t *p)
         depth = depth < 0.0f ? 0.0f : (depth > 1.0f ? 1.0f : depth);
         unsigned int value = (unsigned int)(depth * 16777215.0f);
         if (!(projected[0] <= -1.0f || projected[0] >= 1.0f || projected[1] <= -1.0f || projected[1] >= 1.0f)) {
-            if (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1) {
-                int height = fn_801CEC74();
-                projected[1] *= (float)height / (float)fn_801CEA14();
+            if (GameOptionsGet(6) == 1 || GlibGetWidescreenMode() == 1) {
+                int height = GlibGetScreenLetterBoxHeight();
+                projected[1] *= (float)height / (float)GlibGetScreenHeight();
             }
             if (value > FieldMarkerReadDepth(projected[0], projected[1]) || !GlowIsOnScreen((Vector_80039F5C *)projected)) p->mUnknown11 = 0;
             else p->mUnknown11 = 1;

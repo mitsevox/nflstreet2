@@ -46,7 +46,7 @@ typedef struct {
 
 #define va_start(AP,LASTARG) \
   (__builtin_next_arg (LASTARG), \
-   __builtin_memcpy ((AP), __builtin_saveregs (), sizeof(__gnuc_va_list)))
+   *(AP) = *(struct __va_list_tag *) __builtin_saveregs ())
 
 #define __va_float_p(TYPE)	(__builtin_classify_type(*(TYPE *)0) == 8)
 #define __va_aggregate_p(TYPE)	(__builtin_classify_type(*(TYPE *)0) >= 12)

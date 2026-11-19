@@ -71,7 +71,7 @@ int fn_801D6844(void);
 void fn_801D6B4C(char *, int);
 int fn_801D673C(int);
 void fn_801D868C(int, int, char *, int);
-void fn_80186ED8(signed char);
+void UserProfileTouch(signed char);
 int fn_801D6850(void);
 int fn_800039E4(int, int *, int *);
 int fn_801D6620(int *);
@@ -256,7 +256,7 @@ void MemCardFilesAddSlot(int type, int index, int value, const char *name)
     slot->mInUse = 1;
     slot->mUnknownD = 1;
     if (type == 2 || type == 3) {
-        fn_80186ED8(index);
+        UserProfileTouch(index);
     }
     slot->mUnknown0 = fn_801D671C();
     slot->mUnknown4 = fn_801D6844();

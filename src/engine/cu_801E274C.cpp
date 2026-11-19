@@ -1,12 +1,12 @@
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include "engine/Class_801E27A4.h"
 
 extern "C" {
-void *fn_801C6A20(void *pool);
-void *fn_801C6B4C(void *pool, void *item);
-void fn_801C6BC0(void *pool, void *item);
-void fn_801C6C0C(void *pool, void *item);
-void *fn_801C6C84(void *pool, void *item);
+void *DSNewListNode(void *pool);
+void *DSGetListNode(void *pool, void *item);
+void DSRemoveListNode(void *pool, void *item);
+void DSDelListNode(void *pool, void *item);
+void *DSNextListNode(void *pool, void *item);
 }
 
 Class_801E274C::Class_801E274C() : mpOwner(0)
@@ -24,12 +24,12 @@ void Class_801E274C::fn_801E279C(Class_801E8E04 *pOwner)
 
 Class_801E27A4::Class_801E27A4(int count) : mpUnknown8(0), mpNodes(0), mUnknown10(1)
 {
-    mpNodes = fn_801C68FC(1, 0, count, sizeof(Node_801E2878), 0, 0);
+    mpNodes = DSNewList(1, 0, count, sizeof(Node_801E2878), 0, 0);
 }
 
 Class_801E27A4::~Class_801E27A4()
 {
-    fn_801C69E4(mpNodes);
+    DSDelList(mpNodes);
     mpNodes = 0;
     mpUnknown8 = 0;
 }
@@ -41,11 +41,11 @@ void Class_801E27A4::fn_801E2870(Class_801E299C *p)
 
 int Class_801E27A4::fn_801E2878(Class_801E2878 *pMember)
 {
-    Node_801E2878 *pNode = (Node_801E2878 *)fn_801C6A20(mpNodes);
+    Node_801E2878 *pNode = (Node_801E2878 *)DSNewListNode(mpNodes);
 
     pNode->mpMember = pMember;
-    if (fn_801C6AA4(mpNodes, pNode, 1) != pNode) {
-        fn_801C6C0C(mpNodes, pNode);
+    if (DSAddListNode(mpNodes, pNode, 1) != pNode) {
+        DSDelListNode(mpNodes, pNode);
         return 0;
     }
     if (mpOwner) {
@@ -58,15 +58,15 @@ int Class_801E27A4::fn_801E28FC(Class_801E2878 *pMember)
 {
     Node_801E2878 *pNode;
 
-    for (pNode = (Node_801E2878 *)fn_801C6B4C(mpNodes, 0); pNode;
-         pNode = (Node_801E2878 *)fn_801C6C84(mpNodes, pNode)) {
+    for (pNode = (Node_801E2878 *)DSGetListNode(mpNodes, 0); pNode;
+         pNode = (Node_801E2878 *)DSNextListNode(mpNodes, pNode)) {
         if (pNode->mpMember == pMember) {
             break;
         }
     }
     if (pNode) {
-        fn_801C6BC0(mpNodes, pNode);
-        fn_801C6C0C(mpNodes, pNode);
+        DSRemoveListNode(mpNodes, pNode);
+        DSDelListNode(mpNodes, pNode);
         if (mpOwner) {
             mpOwner->fn_801E90CC(this, pMember);
         }
@@ -94,8 +94,8 @@ int Class_801E27A4::vfn_01(void **ppOut)
     int count = 0;
     int n;
 
-    for (pNode = (Node_801E2878 *)fn_801C6B4C(mpNodes, 0); pNode;
-         pNode = (Node_801E2878 *)fn_801C6C84(mpNodes, pNode)) {
+    for (pNode = (Node_801E2878 *)DSGetListNode(mpNodes, 0); pNode;
+         pNode = (Node_801E2878 *)DSNextListNode(mpNodes, pNode)) {
         if (pNode->mpMember->mType == 2) {
             n = pNode->mpMember->vfn_01(ppOut);
             count += n;
@@ -111,8 +111,8 @@ int Class_801E27A4::vfn_02(void **ppOut)
     int count = 0;
     int n;
 
-    for (pNode = (Node_801E2878 *)fn_801C6B4C(mpNodes, 0); pNode;
-         pNode = (Node_801E2878 *)fn_801C6C84(mpNodes, pNode)) {
+    for (pNode = (Node_801E2878 *)DSGetListNode(mpNodes, 0); pNode;
+         pNode = (Node_801E2878 *)DSNextListNode(mpNodes, pNode)) {
         if (pNode->mpMember->mType == 2) {
             n = pNode->mpMember->vfn_02(ppOut);
             count += n;
@@ -129,8 +129,8 @@ int Class_801E27A4::vfn_03(int a, void **ppOut)
     int n;
 
     vfn_07();
-    for (pNode = (Node_801E2878 *)fn_801C6B4C(mpNodes, 0); pNode;
-         pNode = (Node_801E2878 *)fn_801C6C84(mpNodes, pNode)) {
+    for (pNode = (Node_801E2878 *)DSGetListNode(mpNodes, 0); pNode;
+         pNode = (Node_801E2878 *)DSNextListNode(mpNodes, pNode)) {
         if (pNode->mpMember->mType == 2) {
             n = pNode->mpMember->vfn_03(a, ppOut);
             count += n;
@@ -142,7 +142,7 @@ int Class_801E27A4::vfn_03(int a, void **ppOut)
 
 Node_801E2878 *Class_801E27A4::fn_801E2C3C()
 {
-    return (Node_801E2878 *)fn_801C6B4C(mpNodes, 0);
+    return (Node_801E2878 *)DSGetListNode(mpNodes, 0);
 }
 
 Class_801E2878 *Class_801E27A4::fn_801E2C64(Node_801E2878 **ppNode)
@@ -151,7 +151,7 @@ Class_801E2878 *Class_801E27A4::fn_801E2C64(Node_801E2878 **ppNode)
 
     if (*ppNode) {
         pMember = (*ppNode)->mpMember;
-        *ppNode = (Node_801E2878 *)fn_801C6C84(mpNodes, *ppNode);
+        *ppNode = (Node_801E2878 *)DSNextListNode(mpNodes, *ppNode);
     }
     return pMember;
 }

@@ -16,10 +16,10 @@ void AnimScaleFixed(short *pOut, short *pA, int count, short *pOffset, short *pS
 float fn_801BE5D0(void *p, unsigned short index);
 void Orient3Lerp(int *pOut, int *pA, int *pB, float t);
 void OrientLerpAngle(int *pOut, int a, int b, float t);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D09EC(int a);
-void fn_801D0C58(float *p);
+void MatPushUnit(void);
+void MatPop(void);
+void MatRotY(int a);
+void MatTranslate(float *p);
 void QuatToEulerYZX(int *pAngles, Quat_801EB488 *pRot);
 void QuatFromEulerYZX(Quat_801EB488 *pOut, int a, int b, int c);
 void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
@@ -397,12 +397,12 @@ void AnimResetWeights(float *pValues)
 
 void AnimBuildPoseMatrices(Object_8003DEC4 *pObject)
 {
-    fn_801D0508();
+    MatPushUnit();
     if (!(pObject->mUnknown20 & 0x2000)) {
-        fn_801D0C58(pObject->mUnknown44.mUnknown8);
-        fn_801D09EC(pObject->mUnknown44.mUnknown32);
+        MatTranslate(pObject->mUnknown44.mUnknown8);
+        MatRotY(pObject->mUnknown44.mUnknown32);
     }
     fn_802338D4(&pObject->mUnknown44, pObject->mUnknown100, 0xE0000000);
-    fn_801D0544();
+    MatPop();
 }
 }

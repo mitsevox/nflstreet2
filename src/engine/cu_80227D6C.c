@@ -1,6 +1,6 @@
 /* Comparison fragment of src/engine/llvector.c: fn_80227D6C and its literal pool. */
 
-extern void fn_801D0F80(float m[4][4]);
+extern void MatStore(float m[4][4]);
 
 void fn_80227D6C(float *pOut, float *pV)
 {
@@ -9,7 +9,7 @@ void fn_80227D6C(float *pOut, float *pV)
     float y;
     float z;
 
-    fn_801D0F80(m);
+    MatStore(m);
     x = pV[0];
     y = pV[1];
     z = pV[2];

@@ -1,4 +1,4 @@
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include "engine/Class_801E27A4.h"
 
 /* Pool entry: one pointer. */
@@ -7,11 +7,11 @@ struct Node_801E8E04 {
 };
 
 extern "C" {
-void *fn_801C6A20(void *pool);
-void *fn_801C6B4C(void *pool, void *item);
-void fn_801C6BC0(void *pool, void *item);
-void fn_801C6C0C(void *pool, void *item);
-void *fn_801C6C84(void *pool, void *item);
+void *DSNewListNode(void *pool);
+void *DSGetListNode(void *pool, void *item);
+void DSRemoveListNode(void *pool, void *item);
+void DSDelListNode(void *pool, void *item);
+void *DSNextListNode(void *pool, void *item);
 }
 
 Class_801E8E04::Class_801E8E04(int groupCount, int objectCount, Class_801E90F0 *pObserverA,
@@ -19,20 +19,20 @@ Class_801E8E04::Class_801E8E04(int groupCount, int objectCount, Class_801E90F0 *
     : mpObserverA(pObserverA), mpObserverB(pObserverB), mpGroups(0), mpObjects(0)
 {
     if (groupCount) {
-        mpGroups = fn_801C68FC(1, 0, groupCount, sizeof(Node_801E8E04), 0, 0);
+        mpGroups = DSNewList(1, 0, groupCount, sizeof(Node_801E8E04), 0, 0);
     }
     if (objectCount) {
-        mpObjects = fn_801C68FC(1, 0, objectCount, sizeof(Node_801E8E04), 0, 0);
+        mpObjects = DSNewList(1, 0, objectCount, sizeof(Node_801E8E04), 0, 0);
     }
 }
 
 Class_801E8E04::~Class_801E8E04()
 {
     if (mpGroups) {
-        fn_801C69E4(mpGroups);
+        DSDelList(mpGroups);
     }
     if (mpObjects) {
-        fn_801C69E4(mpObjects);
+        DSDelList(mpObjects);
     }
     mpGroups = 0;
     mpObjects = 0;
@@ -41,13 +41,13 @@ Class_801E8E04::~Class_801E8E04()
 
 int Class_801E8E04::fn_801E8F1C(Class_801E27A4 *pGroup)
 {
-    Node_801E8E04 *pNode = (Node_801E8E04 *)fn_801C6A20(mpGroups);
+    Node_801E8E04 *pNode = (Node_801E8E04 *)DSNewListNode(mpGroups);
     Node_801E2878 *pIter;
     Class_801E2878 *pMember;
 
     pNode->mpItem = pGroup;
-    if (fn_801C6AA4(mpGroups, pNode, 1) != pNode) {
-        fn_801C6C0C(mpGroups, pNode);
+    if (DSAddListNode(mpGroups, pNode, 1) != pNode) {
+        DSDelListNode(mpGroups, pNode);
         return 0;
     }
     pIter = pGroup->fn_801E2C3C();
@@ -65,8 +65,8 @@ int Class_801E8E04::fn_801E8FD4(Class_801E27A4 *pGroup)
     Node_801E2878 *pIter;
     Class_801E2878 *pMember;
 
-    for (pNode = (Node_801E8E04 *)fn_801C6B4C(mpGroups, 0); pNode;
-         pNode = (Node_801E8E04 *)fn_801C6C84(mpGroups, pNode)) {
+    for (pNode = (Node_801E8E04 *)DSGetListNode(mpGroups, 0); pNode;
+         pNode = (Node_801E8E04 *)DSNextListNode(mpGroups, pNode)) {
         if (pNode->mpItem == pGroup) {
             break;
         }
@@ -77,8 +77,8 @@ int Class_801E8E04::fn_801E8FD4(Class_801E27A4 *pGroup)
          pMember = pGroup->fn_801E2C64(&pIter)) {
             fn_801E9168(pMember);
         }
-        fn_801C6BC0(mpGroups, pNode);
-        fn_801C6C0C(mpGroups, pNode);
+        DSRemoveListNode(mpGroups, pNode);
+        DSDelListNode(mpGroups, pNode);
         pGroup->fn_801E279C(0);
         return 1;
     }
@@ -117,11 +117,11 @@ void Class_801E8E04::fn_801E9168(Class_801E2878 *pMember)
 
 int Class_801E8E04::fn_801E91E0(void *pObject)
 {
-    Node_801E8E04 *pNode = (Node_801E8E04 *)fn_801C6A20(mpObjects);
+    Node_801E8E04 *pNode = (Node_801E8E04 *)DSNewListNode(mpObjects);
 
     pNode->mpItem = pObject;
-    if (fn_801C6AA4(mpObjects, pNode, 1) != pNode) {
-        fn_801C6C0C(mpObjects, pNode);
+    if (DSAddListNode(mpObjects, pNode, 1) != pNode) {
+        DSDelListNode(mpObjects, pNode);
         return 0;
     }
     return 1;
@@ -131,15 +131,15 @@ int Class_801E8E04::fn_801E9248(void *pObject)
 {
     Node_801E8E04 *pNode;
 
-    for (pNode = (Node_801E8E04 *)fn_801C6B4C(mpObjects, 0); pNode;
-         pNode = (Node_801E8E04 *)fn_801C6C84(mpObjects, pNode)) {
+    for (pNode = (Node_801E8E04 *)DSGetListNode(mpObjects, 0); pNode;
+         pNode = (Node_801E8E04 *)DSNextListNode(mpObjects, pNode)) {
         if (pNode->mpItem == pObject) {
             break;
         }
     }
     if (pNode) {
-        fn_801C6BC0(mpObjects, pNode);
-        fn_801C6C0C(mpObjects, pNode);
+        DSRemoveListNode(mpObjects, pNode);
+        DSDelListNode(mpObjects, pNode);
         return 1;
     }
     return 0;

@@ -10,11 +10,11 @@ void *operator new(unsigned int size, int unknown);
 extern "C" {
 
 void CamCurveSetNarrowFov(int a);
-int fn_801CEA08(void);
-int fn_801CEA14(void);
-int fn_801CEB4C(void);
-int fn_801CEC74(void);
-int fn_801CEC7C(void);
+int GlibGetScreenWidth(void);
+int GlibGetScreenHeight(void);
+int GlibGetWidescreenMode(void);
+int GlibGetScreenLetterBoxHeight(void);
+int GlibGetScreenLetterBoxWidth(void);
 }
 
 static ModuleDependency sDependencies[] = { &gSys, &gGLIB, &gVpt, &gGameObjList, 0 };
@@ -34,13 +34,13 @@ int GameVpt::Init()
     desc.mUnknown3 = 2;
     desc.mUnknown4[0] = 0;
     desc.mUnknown4[1] = 0;
-    if (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1) {
-        desc.mUnknown16 = fn_801CEC74();
-        desc.mUnknown18 = fn_801CEC7C();
+    if (GameOptionsGet(6) == 1 || GlibGetWidescreenMode() == 1) {
+        desc.mUnknown16 = GlibGetScreenLetterBoxHeight();
+        desc.mUnknown18 = GlibGetScreenLetterBoxWidth();
         CamCurveSetNarrowFov(1);
     } else {
-        desc.mUnknown16 = fn_801CEA14();
-        desc.mUnknown18 = fn_801CEA08();
+        desc.mUnknown16 = GlibGetScreenHeight();
+        desc.mUnknown18 = GlibGetScreenWidth();
         CamCurveSetNarrowFov(0);
     }
     mpState.mp->mpObject = VptOpen(&desc);

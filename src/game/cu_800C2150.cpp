@@ -106,12 +106,12 @@ extern "C" void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, in
         pBlock->mUnknown2 = 0;
         return;
     }
-    fn_801D04C4();
-    fn_801D0664(pPlayer->mUnknown44.mUnknown52[pBlock->mUnknown1][0]);
+    MatPush();
+    MatCat(pPlayer->mUnknown44.mUnknown52[pBlock->mUnknown1][0]);
     fn_80227C2C(&back, &back);
     fn_80227C2C(&side, &side);
-    fn_801D0FB8(&pos.mX);
-    fn_801D11F4(dir, 0);
+    MatGetPos(&pos.mX);
+    MatGetRotByOrder(dir, 0);
     if (pBlock->mUnknown2 == 0) {
         pBlock->mUnknown4[0] = pos.mX;
         pBlock->mUnknown4[1] = pos.mY;
@@ -140,7 +140,7 @@ extern "C" void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, in
     v.mZ = 0.0f;
     fn_80227C2C(&v, &v);
     roll = -lbl_803EABC0 * v.mZ;
-    fn_801D0544();
+    MatPop();
     target[0] = (int)(speed * dotBack * lbl_803EABBC * 46603.37890625f) + (int)(pitch * 46603.37890625f);
     target[1] = 0;
     target[2] = (int)(speed * dotSide * lbl_803EABBC * 46603.37890625f) + (int)(roll * 46603.37890625f);
@@ -214,13 +214,13 @@ extern "C" void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, in
         pBlock->mUnknown2 = 0;
         return;
     }
-    fn_801D04C4();
-    fn_801D0664(pPlayer->mUnknown44.mUnknown52[pBlock->mUnknown1][0]);
-    fn_801D0BCC(-0x22D82D, 0, -0x1C71C7);
+    MatPush();
+    MatCat(pPlayer->mUnknown44.mUnknown52[pBlock->mUnknown1][0]);
+    MatRotZYX(-0x22D82D, 0, -0x1C71C7);
     fn_80227C2C(&back, &back);
     fn_80227C2C(&side, &side);
-    fn_801D0FB8(&pos.mX);
-    fn_801D11F4(dir, 0);
+    MatGetPos(&pos.mX);
+    MatGetRotByOrder(dir, 0);
     if (pBlock->mUnknown2 == 0) {
         pBlock->mUnknown4[0] = pos.mX;
         pBlock->mUnknown4[1] = pos.mY;
@@ -249,7 +249,7 @@ extern "C" void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, in
     v.mZ = 0.0f;
     fn_80227C2C(&v, &v);
     roll = -lbl_803EABCC * v.mZ;
-    fn_801D0544();
+    MatPop();
     target[0] = (int)(speed * dotBack * lbl_803EABC8 * 46603.37890625f) + (int)(pitch * 46603.37890625f);
     target[1] = 0;
     target[2] = (int)(speed * dotSide * lbl_803EABC8 * 46603.37890625f) + (int)(roll * 46603.37890625f);

@@ -56,12 +56,12 @@ void CamFreeMoveAngle(GameCamera_t *pCamera, int a, int b, int c);
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
-void fn_801D0470(int a);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D08FC(int angle);
-void fn_801D0ADC(int angle);
-void fn_801D0C58(Vector_80039F5C *pPos);
+void MatSetStack(int a);
+void MatPushUnit(void);
+void MatPop(void);
+void MatRotX(int angle);
+void MatRotZ(int angle);
+void MatTranslate(Vector_80039F5C *pPos);
 void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227CC0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 
@@ -645,16 +645,16 @@ void CamEaseVecUpdate(CamEaseVec_t *pEase, int steps)
     angles[0] = (int)(pEase->mX.mValue * 46603.37890625f);
     angles[1] = (int)(pEase->mY.mValue * 46603.37890625f);
     angles[2] = (int)(pEase->mZ.mValue * 46603.37890625f);
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D0508();
-    fn_801D0C58(&pEase->mBase);
-    fn_801D0ADC(-angles[2]);
-    fn_801D08FC(-angles[0]);
+    MatSetStack(VptGetMatrixStack());
+    MatPushUnit();
+    MatTranslate(&pEase->mBase);
+    MatRotZ(-angles[2]);
+    MatRotX(-angles[0]);
     offset.mX = 0.0f;
     offset.mY = 0.0f;
     offset.mZ = pEase->mScale.mValue;
     fn_80227CC0(&pEase->mResult, &offset);
-    fn_801D0544();
+    MatPop();
 }
 
 /* Negates the base x and y and turns the z angle by 180 degrees. */

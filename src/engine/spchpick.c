@@ -5,18 +5,18 @@
 
 extern "C" {
 
-char *fn_801AF75C(RowBank_801AFE90 *p)
+char *fn_801AF75C(VoxBankHdr_t *p)
 {
     return (char *)p + ((p->mUnknown5 * ((p->mUnknown4 & 127) + 2) + 15) & ~3);
 }
 
-char *fn_801AF780(RowBank_801AFE90 *p)
+char *fn_801AF780(VoxBankHdr_t *p)
 {
     char *result = fn_801AF75C(p);
     return result + (p->mUnknown4 & 127) * 4;
 }
 
-char *fn_801AF7B8(RowBank_801AFE90 *p)
+char *fn_801AF7B8(VoxBankHdr_t *p)
 {
     int size = 0;
     char *result = fn_801AF780(p);
@@ -26,7 +26,7 @@ char *fn_801AF7B8(RowBank_801AFE90 *p)
     return result + size;
 }
 
-char *fn_801AF80C(RowBank_801AFE90 *p)
+char *fn_801AF80C(VoxBankHdr_t *p)
 {
     char *result = fn_801AF7B8(p);
     int size = p->mUnknown6;
@@ -64,32 +64,32 @@ char *fn_801AF8B0(unsigned char *p)
     return fn_801AF874(p) + size;
 }
 
-int fn_801AF8E4(Item_801AE3F4 *p)
+int fn_801AF8E4(VoxEvent_t *p)
 {
     return p->mUnknown7;
 }
 
-int fn_801AF8EC(Item_801AE3F4 *p)
+int fn_801AF8EC(VoxEvent_t *p)
 {
     return p->mUnknown8 & 15;
 }
 
-int fn_801AF8F8(Item_801AE3F4 *p)
+int fn_801AF8F8(VoxEvent_t *p)
 {
     return p->mUnknown8 >> 4;
 }
 
-int fn_801AF904(Item_801AE3F4 *p)
+int fn_801AF904(VoxEvent_t *p)
 {
     return p->mUnknownA & 1;
 }
 
-int fn_801AF910(Item_801AE3F4 *p)
+int fn_801AF910(VoxEvent_t *p)
 {
     return (p->mUnknownA >> 3) & 1;
 }
 
-int fn_801AF91C(Item_801AE3F4 *p)
+int fn_801AF91C(VoxEvent_t *p)
 {
     return (p->mUnknownA >> 5) & 1;
 }
@@ -104,37 +104,40 @@ char *fn_801AF938(char *p, unsigned short *offsets, int i)
     return p + offsets[i] * 4;
 }
 
-char *fn_801AF94C(Item_801AE3F4 *p)
+char *fn_801AF94C(VoxEvent_t *p)
 {
-    return (char *)p + (((p->mUnknown6 * 2 + 3) & ~3) + 12);
+    // FAKEMATCH: size computed then rounded up in place (reused local); the one-expression form ties the count load and the final sum into r9, the target keeps both in r0
+    int size = p->mUnknown6 * 2;
+    size = (size + 3) & ~3;
+    return (char *)p + (size + 12);
 }
 
-char *fn_801AF968(Item_801AE3F4 *p)
+char *fn_801AF968(VoxEvent_t *p)
 {
     char *result = fn_801AF94C(p);
     return result + ((fn_801AF8E4(p) * 3 + 3) & ~3);
 }
 
-char *fn_801AF9B4(Item_801AE3F4 *p)
+char *fn_801AF9B4(VoxEvent_t *p)
 {
     char *result = fn_801AF968(p);
     return result + ((((fn_801AF8E4(p) + 7) / 8) * p->mUnknown6 * 2 + 3) & ~3);
 }
 
-int fn_801AFA14(Item_801AE3F4 *p, int i)
+int fn_801AFA14(VoxEvent_t *p, int i)
 {
     char *result = fn_801AF9B4(p);
     result += (fn_801AF8F8(p) * 3 + 3) & ~3;
     return ((unsigned short *)(result + 4))[i];
 }
 
-int fn_801AFA70(Item_801AE3F4 *p)
+int fn_801AFA70(VoxEvent_t *p)
 {
     char *result = fn_801AF9B4(p);
     return *(int *)(result + ((fn_801AF8F8(p) * 3 + 3) & ~3));
 }
 
-void fn_801AFABC(Object_80266AF8 *p, int *a, int *b)
+void fn_801AFABC(VoxDatHeader_t *p, int *a, int *b)
 {
     *a = p->mUnknown8;
     *b = p->mUnknown9;
@@ -174,28 +177,30 @@ int fn_801AFBD8(unsigned char *p, Record_801AF75C *record, EventWord_801AFBD8 *e
     for (int i = 0; i < count; i++) {
         int value = values[i];
         result = 0;
-        if ((unsigned int)value > 31) break;
+        // FAKEMATCH: goto past the loop; with break the loop keeps its jump-to-test form
+        if ((unsigned int)value > 31) goto done;
         unsigned int mask = 1U << value;
         int id = fn_801AF84C(record, i)->mUnknown4;
-        if (fn_801AF84C(record, i)->mUnknown0 & mask) {
+        if (mask & fn_801AF84C(record, i)->mUnknown0) {
             if (id == 0 || id == 254) {
                 result = 1;
             } else if (id == 255) {
                 int flags = fn_801AF84C(record, i)->mUnknown6;
                 if (flags & 128) {
                     int *words = (int *)fn_801AF8B0(p);
-                    if (words[flags & 127] & mask) result = 1;
+                    if (mask & words[flags & 127]) result = 1;
                 } else {
                     SpchEventKey_t key = event[0].mKey;
                     char *text;
-                    if (fn_801AE7B4(&key, &text) && (unsigned char)text[flags] == value) result = 1;
+                    if (iSPCH_GetGlobalMatchParmsArray(&key, &text) && value == (unsigned char)text[flags]) result = 1;
                 }
             } else {
-                if (event[id].mWord & mask) result = 1;
+                if (mask & event[id].mWord) result = 1;
             }
         }
-        if (!result) break;
+        if (!result) goto done;
     }
+done:
     return result;
 }
 
@@ -210,17 +215,17 @@ int fn_801AFD04(SpchEventKey_t *key, EventWord_801AFBD8 *event, Result_801AFD04 
     out->mUnknown0 = -1;
     switch (mode) {
     case 0:
-        out->mUnknown4 = fn_801B2648(id, &value);
+        out->mUnknown4 = iSPCH_FindBank(id, &value);
         out->mUnknown0 = (short)value;
         break;
     case 1:
-        out->mUnknown4 = fn_801B26D8(id, event[index].mHalfwords[1], &value);
+        out->mUnknown4 = iSPCH_FindSubBank(id, event[index].mHalfwords[1], &value);
         out->mUnknown0 = value;
         break;
     case 2:
         {
-            int slot = fn_801B2648(id, &value);
-            if (fn_801B2798(slot, event[index].mWord)) out->mUnknown6 = event[index].mHalfwords[1];
+            int slot = iSPCH_FindBank(id, &value);
+            if (iSPCH_TestSubBankBounds(slot, event[index].mWord)) out->mUnknown6 = event[index].mHalfwords[1];
             else value = -1;
             out->mUnknown4 = slot;
             out->mUnknown0 = value;
@@ -230,7 +235,7 @@ int fn_801AFD04(SpchEventKey_t *key, EventWord_801AFBD8 *event, Result_801AFD04 
     return out->mUnknown0 >= 0;
 }
 
-void fn_801AFDFC(RowBank_801AFE90 *p, int i)
+void fn_801AFDFC(VoxBankHdr_t *p, int i)
 {
     int index = i / 8 + 1;
     unsigned char mask = ~(1 << (i % 8));
@@ -244,7 +249,7 @@ int fn_801AFE58(unsigned char *bits, int i)
     return bits[i / 8] & mask;
 }
 
-int fn_801AFE90(Result_801AFD04 *result, RowBank_801AFE90 *p, int i)
+int fn_801AFE90(Result_801AFD04 *result, VoxBankHdr_t *p, int i)
 {
     int index = result->mUnknown6;
     int found = 0;
@@ -255,7 +260,7 @@ int fn_801AFE90(Result_801AFD04 *result, RowBank_801AFE90 *p, int i)
     return found;
 }
 
-int fn_801AFEE8(Result_801AFD04 *result, RowBank_801AFE90 *p, int i)
+int fn_801AFEE8(Result_801AFD04 *result, VoxBankHdr_t *p, int i)
 {
     int found = 1;
     if (i > p->mUnknown5) {
@@ -282,7 +287,7 @@ int fn_801AFF74(Buffer_801AFF74 *p, int value)
     return result;
 }
 
-int fn_801AFFA4(Record_801AF75C *a, RowBank_801AFE90 *b, int *values)
+int fn_801AFFA4(Record_801AF75C *a, VoxBankHdr_t *b, int *values)
 {
     int *words = (int *)fn_801AF75C(b);
     int count = b->mUnknown4 & 127;
@@ -292,10 +297,12 @@ int fn_801AFFA4(Record_801AF75C *a, RowBank_801AFE90 *b, int *values)
         if (id != 0 && id != 255 && id != 254) {
             if (!(words[i] & values[id])) {
                 result = 0;
-                break;
+                // FAKEMATCH: goto past the loop; with break the loop keeps its jump-to-test form
+                goto done;
             }
         }
     }
+done:
     return result;
 }
 
@@ -314,7 +321,7 @@ int fn_801B0208(unsigned char *p, Work_801B10AC *work)
     int count = fn_801AF85C(p);
     for (int i = 0; i < count; i++) {
         int index = work->mEntries[i].mUnknown4;
-        RowBank_801AFE90 *record = lbl_803EBB00[index].mUnknown4;
+        VoxBankHdr_t *record = gVoxBanks[index].mUnknown4;
         int a, b;
         if (fn_801B22E0(record, work->mValues[work->mEntries[i].mUnknownA], &a, &b)) {
             total += b;
@@ -333,12 +340,12 @@ int fn_801B02B8(unsigned char *p)
     return fn_801B029C(*p);
 }
 
-int fn_801B040C(Item_801AE3F4 *p, int channel)
+int fn_801B040C(VoxEvent_t *p, int channel)
 {
     int result = 1;
-    if (p->mId == lbl_8037E234[channel].mKey.mId) {
+    if (p->mId == gVoxInGame[channel].mKey.mId) {
         int limit = fn_801AF8EC(p);
-        if (limit > 0) result = lbl_8037E234[channel].mUnknown4 < limit;
+        if (limit > 0) result = gVoxInGame[channel].mUnknown4 < limit;
     }
     return result;
 }
@@ -448,7 +455,7 @@ int fn_801B0B18(WorkEntry_801B0B18 *p)
 void fn_801B0B5C(SpchEventKey_t *key, Work_801B10AC *work, unsigned char *p)
 {
     char *text;
-    if (fn_801AE7B4(key, &text)) {
+    if (iSPCH_GetGlobalMatchParmsArray(key, &text)) {
         int count = fn_801AF85C(p);
         for (int i = 0; i < count; i++) {
             Record_801AF75C *record = (Record_801AF75C *)fn_801AF928((char *)p, p + 8, i);
@@ -456,8 +463,8 @@ void fn_801B0B5C(SpchEventKey_t *key, Work_801B10AC *work, unsigned char *p)
                 if (fn_801AF84C(record, j)->mUnknown4 == 254) {
                     if (!(fn_801AF84C(record, j)->mUnknown6 & 128)) {
                         int slot = work->mEntries[i].mUnknown4;
-                        RowBank_801AFE90 *bank = lbl_803EBB00[slot].mUnknown4;
-                        char *values = fn_801B22B0(bank, work->mValues[work->mEntries[i].mUnknownA]);
+                        VoxBankHdr_t *bank = gVoxBanks[slot].mUnknown4;
+                        char *values = iSPCH_GetSampleParmAddr(bank, work->mValues[work->mEntries[i].mUnknownA]);
                         if (values) {
                             int index = fn_801AF84C(record, j)->mUnknown6;
                             text[index] = values[j];
@@ -500,7 +507,7 @@ void fn_801B10D8(int channel)
 {
     Channel_801B118C *p = &lbl_8037E294[channel];
     if (p->mUnknownC) {
-        fn_801AF500(p->mUnknownC);
+        iSPCH_MemFree(p->mUnknownC);
         p->mUnknownC = 0;
     }
     p->mUnknown0 = 0;
@@ -557,7 +564,7 @@ int fn_801B1474(unsigned int bits, int value, int index)
     return result;
 }
 
-int fn_801B14B4(Item_801AE3F4 *p, int *values)
+int fn_801B14B4(VoxEvent_t *p, int *values)
 {
     unsigned int bits = fn_801AFA70(p);
     int result = 0;
@@ -578,7 +585,7 @@ int fn_801B15E4(unsigned char *p)
 
 void fn_801B192C(int value)
 {
-    lbl_803ECEA8 = value;
+    gPreLoadTicks = value;
 }
 
 // Advance the shared six-word generator and return its leading word.

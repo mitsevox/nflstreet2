@@ -26,7 +26,7 @@ struct PassIconClut {
 
 extern "C" {
 int fn_800C47C4(void);
-Mtx44Ptr fn_801D0444(void);
+Mtx44Ptr MatGetCurMatrixPtr(void);
 void TMRenderReset(void);
 void TMTexLibLoad(PassIconTexLib *pElement, int a);
 void TMTexLibUnload(PassIconTexLib *pElement);
@@ -102,7 +102,7 @@ void PassIconTexDraw(PassIconObj_t *pInstance)
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     GXSetNumTevStages(1);
-    GXLoadPosMtxImm(fn_801D0444(), 0);
+    GXLoadPosMtxImm(MatGetCurMatrixPtr(), 0);
     GXSetZCompLoc(GX_DISABLE);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
     GXSetAlphaCompare(GX_GREATER, 32, GX_AOP_AND, GX_GREATER, 32);

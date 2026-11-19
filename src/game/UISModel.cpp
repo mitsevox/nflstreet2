@@ -12,14 +12,14 @@ ResBank_t *_UISModel_pLibCache = 0;
 extern char *lbl_802EAD10[];
 int FELoopIsMainFEActive(void);
 int ConGetCurrentContext(void);
-void fn_801D0470(int);
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D08FC(int);
-void fn_801D09EC(int);
-void fn_801D0ADC(int);
-void fn_801D0C58(void *);
-void fn_801D0D94(float, float, float);
+void MatSetStack(int);
+void MatPush(void);
+void MatPop(void);
+void MatRotX(int);
+void MatRotY(int);
+void MatRotZ(int);
+void MatTranslate(void *);
+void MatScaleCol(float, float, float);
 int ObjNewType_(int, int, int, void (*)(UISModel_t *, UISModelDesc_t *), void (*)(UISModel_t *));
 int ObjDelType(int);
 int ObjSetListObjFunc(void *, int, int, int (*)(UISModel_t *, int));
@@ -107,13 +107,13 @@ void UISModelFree(UISModel_t *pObject)
 int UISModelDraw(UISModel_t *pObject, int value)
 {
     int context = ConGetCurrentContext();
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D04C4();
-    fn_801D0C58(&pObject->mUnknown19C);
-    fn_801D08FC(pObject->mUnknown1A8);
-    fn_801D09EC(pObject->mUnknown1AC);
-    fn_801D0ADC(pObject->mUnknown1B0);
-    fn_801D0D94(pObject->mUnknown1C0.mX, pObject->mUnknown1C0.mY, pObject->mUnknown1C0.mZ);
+    MatSetStack(VptGetMatrixStack());
+    MatPush();
+    MatTranslate(&pObject->mUnknown19C);
+    MatRotX(pObject->mUnknown1A8);
+    MatRotY(pObject->mUnknown1AC);
+    MatRotZ(pObject->mUnknown1B0);
+    MatScaleCol(pObject->mUnknown1C0.mX, pObject->mUnknown1C0.mY, pObject->mUnknown1C0.mZ);
     if (pObject->mUnknown198 & 1) {
         if (pObject->mUnknown1E4 == 255) {
             fn_80235740(&pObject->mUnknown48, context);
@@ -134,8 +134,8 @@ int UISModelDraw(UISModel_t *pObject, int value)
             fn_802353E8(&pObject->mUnknown48, 0x100);
             GXSetCullMode(GX_CULL_NONE);
         }
-        fn_801D0470(VptGetMatrixStack());
-        fn_801D0544();
+        MatSetStack(VptGetMatrixStack());
+        MatPop();
     }
     return 0;
 }

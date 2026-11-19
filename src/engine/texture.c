@@ -58,9 +58,9 @@ extern TexChunk_t *GlibFindChunk(void *pStream, int id, int endId, int flags);
 extern char lbl_802B1BC4[];
 extern char lbl_802B1BCC[];
 
-extern unsigned char lbl_802F7A00[];
-extern unsigned int lbl_802F7A10[];
-extern unsigned char lbl_803EBC80[4];
+extern unsigned char Glib_TexBitsPerPixel[];
+extern unsigned int Glib_TexPalEntries[];
+extern unsigned char Glib_PalBitsPerPixel[7];
 extern TexFileType_t _Tex_RawFileType;
 extern TexFileType_t _Tex_MipmapFileType;
 extern unsigned char lbl_803EBEB8;
@@ -86,7 +86,7 @@ static int _TexRawConvert(Texture_t *pTex, void *pSrc, unsigned int flags)
     err = 0;
     if (pChunk != 0) {
         memcpy(pTex->mpImage, pChunk->mData, pChunk->mSize - 8);
-        if (lbl_802F7A10[pDesc->mFormat] != 0) {
+        if (Glib_TexPalEntries[pDesc->mFormat] != 0) {
             pChunk = GlibFindChunk(&pDesc->mStream, 0x434C5554, 0x454E4444, flags);
             if (pChunk != 0) {
                 memcpy(pTex->mpPalette, pChunk->mData, pChunk->mSize - 8);
@@ -119,13 +119,13 @@ static int _TexMipmapConvert(Texture_t *pTex, void *pSrc, unsigned int index)
             pTex->mWidth = pImage->mWidth;
             pTex->mHeight = pImage->mHeight;
         }
-        if (lbl_802F7A10[pImage->mFormat] != 0) {
+        if (Glib_TexPalEntries[pImage->mFormat] != 0) {
             if (pEntries[index].mUnknown0 != 0) {
                 TexFilePalette_t *pPalette = TexGetPaletteByIndex(pFile, pEntry->mUnknown8);
 
-                unsigned int numEntries = lbl_802F7A10[pPalette->mFormat];
+                unsigned int numEntries = Glib_TexPalEntries[pPalette->mFormat];
 
-                memcpy(pTex->mpPalette, pPalette->mpUnknown8, (numEntries * lbl_803EBC80[pPalette->mUnknown2]) >> 3);
+                memcpy(pTex->mpPalette, pPalette->mpUnknown8, (numEntries * Glib_PalBitsPerPixel[pPalette->mUnknown2]) >> 3);
             } else {
                 err = 0x100004;
             }
@@ -266,8 +266,8 @@ int TexCreateEmpty(Texture_t *pTex, unsigned short width, unsigned short height,
     pTex->mWidth = width;
     pTex->mHeight = height;
     pTex->mpPalette = 0;
-    if (tlutFormat != 3 && lbl_802F7A10[format] != 0) {
-        size = (lbl_802F7A10[format] * lbl_803EBC80[tlutFormat]) >> 3;
+    if (tlutFormat != 3 && Glib_TexPalEntries[format] != 0) {
+        size = (Glib_TexPalEntries[format] * Glib_PalBitsPerPixel[tlutFormat]) >> 3;
         pTex->mpPalette = fn_801D2BB0(lbl_803EBEBC, size, 0, 0);
         if (pTex->mpPalette != 0) {
             MemFill(pTex->mpPalette, size, 0, 1);
@@ -277,7 +277,7 @@ int TexCreateEmpty(Texture_t *pTex, unsigned short width, unsigned short height,
     }
     if (err == 0) {
         pTex->mFormat = format;
-        size = (width * height * lbl_802F7A00[format]) >> 3;
+        size = (width * height * Glib_TexBitsPerPixel[format]) >> 3;
         pTex->mpImage = fn_801D2BB0(lbl_803EBEBC, size, 0, 0);
         if (pTex->mpImage != 0) {
             MemFill(pTex->mpImage, size, 0, 1);
@@ -482,7 +482,7 @@ void *TexDecompressTexture(TexFileImage_t *pImage, void *pDst)
     int size;
 
     if (pImage->mType != 4) {
-        size = (pImage->mWidth * pImage->mHeight * lbl_802F7A00[pImage->mFormat]) >> 3;
+        size = (pImage->mWidth * pImage->mHeight * Glib_TexBitsPerPixel[pImage->mFormat]) >> 3;
     } else {
         pImage->mFormat = 0xE;
         size = pImage->mWidth * pImage->mHeight * 2;
@@ -504,7 +504,7 @@ void *TexDecompressTexture(TexFileImage_t *pImage, void *pDst)
         dst.mpData = pDst;
         GCmpDecompress(pImage->mType, &src, &dst);
         if (pImage->mType != 4) {
-            int bpp = lbl_802F7A00[pImage->mFormat];
+            int bpp = Glib_TexBitsPerPixel[pImage->mFormat];
 
             dst.mSize = pImage->mWidth * pImage->mHeight * bpp / 8;
         } else {

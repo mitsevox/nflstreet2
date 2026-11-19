@@ -78,10 +78,10 @@ extern "C" unsigned char *fn_8009CD00(Object_80039F5C *p,
         side = 2;
     }
     fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, pName), &pos, &angles);
-    fn_801D04C4();
-    fn_801D06D4(p->mUnknown704[0]);
+    MatPush();
+    MatLoad(p->mUnknown704[0]);
     fn_80227CC0(&pos, &pos);
-    fn_801D0544();
+    MatPop();
     pEntry = fn_8009C6F4(pEntries, pBlock, pCallback, &pos, a, side, b);
     if (pEntry) {
         return pEntry->mUnknown10;

@@ -26,13 +26,13 @@ int fn_801CDB5C(int a, const char *b, int c, float d, float *pPosition);
 void fn_801CDD18(void);
 int GlibRenderGetBin(int index);
 void GlibRenderSelectBin(int a);
-void fn_801D0470(int a);
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D0C58(void *a);
-void fn_801D1258(int which, float (*pMatrix)[4]);
-void fn_801D1288(int which, float (*pMatrix)[4]);
-void fn_801D12BC(int a);
+void MatSetStack(int a);
+void MatPush(void);
+void MatPop(void);
+void MatTranslate(void *a);
+void MatSetSlot(int which, float (*pMatrix)[4]);
+void MatGetSlot(int which, float (*pMatrix)[4]);
+void MatLoadSlot(int a);
 int ObjNewType_(int a, int b, int c, void (*pA)(PlyrNameTag_t *), void (*pB)(PlyrNameTag_t *));
 int ObjDelType(int a);
 void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(PlyrNameTag_t *));
@@ -98,22 +98,22 @@ int PlyrNameTagDraw(PlyrNameTag_t *pInstance)
             }
             fn_801CD3B0(32);
             fn_801CDD18();
-            fn_801D1288(1, saved);
-            fn_801D1288(1, matrix);
+            MatGetSlot(1, saved);
+            MatGetSlot(1, matrix);
             matrix[2][0] = 0.0f;
             matrix[2][1] = 0.0f;
             matrix[2][2] = 0.0f;
             matrix[2][3] = pInstance->mUnknown32;
-            fn_801D1258(1, matrix);
-            fn_801D0470(VptGetMatrixStack());
-            fn_801D04C4();
+            MatSetSlot(1, matrix);
+            MatSetStack(VptGetMatrixStack());
+            MatPush();
             offset[0] = 106.666679f;
             offset[1] = 0.0f;
             offset[2] = 0.0f;
-            fn_801D0C58(offset);
+            MatTranslate(offset);
             fn_801CDB5C(pInstance->mUnknown20, pInstance->mpUnknown24, 1, 0.0f, pInstance->mUnknown4);
-            fn_801D0544();
-            fn_801D1258(1, saved);
+            MatPop();
+            MatSetSlot(1, saved);
             fn_80236EC0(state);
         }
     }
@@ -178,9 +178,9 @@ void PlyrNameTagUpdatePosition(PlyrNameTag_t *pInstance, void *p)
     position[0] = pPosition[0];
     position[1] = pPosition[1];
     position[2] = pPosition[2];
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D04C4();
-    fn_801D12BC(4);
+    MatSetStack(VptGetMatrixStack());
+    MatPush();
+    MatLoadSlot(4);
     point[0] = position[0];
     point[1] = position[1];
     point[2] = position[2];
@@ -193,7 +193,7 @@ void PlyrNameTagUpdatePosition(PlyrNameTag_t *pInstance, void *p)
         clip[1] *= scale;
         clip[2] *= scale;
         clip[3] *= scale;
-        fn_801D12BC(1);
+        MatLoadSlot(1);
         fn_80227E40(view, clip);
         float aspect = VptGetCurrentViewport()->mUnknown208 * 0.75f;
         float width = aspect * 320.0f;
@@ -205,7 +205,7 @@ void PlyrNameTagUpdatePosition(PlyrNameTag_t *pInstance, void *p)
     } else {
         pInstance->mUnknown28 = 0;
     }
-    fn_801D0544();
+    MatPop();
 }
 
 void PlyrNameTagEnable(unsigned char enable)

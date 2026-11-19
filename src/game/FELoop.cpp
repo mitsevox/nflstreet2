@@ -50,7 +50,7 @@ void fn_8009418C(void);
 void CamSetupAspect(void);
 void FEPlyrLoadUpdate(void);
 void MsgGameSetFEStarted(int a);
-void fn_80186EF4(void);
+void UserProfileInit(void);
 void GameTextReset(void);
 void GameTextServiceReset(void);
 void GameTextSetSetupActive(int a);
@@ -64,9 +64,9 @@ int ConProcessChannel(int a);
 int ConSetChannelInfo(int a, int b, void *pValue);
 void CamSetDefaultAspect(float a);
 void FileDebugProcess(void);
-void fn_801CE82C(void);
-void fn_801CE910(void);
-int fn_801CEB4C(void);
+void GlibSwapBuffers(void);
+void GlibSyncFrame(void);
+int GlibGetWidescreenMode(void);
 void fn_801D6F58(void);
 void ResTrackLabel(const char *pText);
 void fn_8021956C(void *p, int a, int b, int c);
@@ -289,12 +289,12 @@ void FELoop::Boot()
     ResTrackLabel("FELoopBootStart");
     _FELoopBootSetup();
     GameTextServiceReset();
-    if (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1) {
+    if (GameOptionsGet(6) == 1 || GlibGetWidescreenMode() == 1) {
         CamSetDefaultAspect(4.0f / 3.0f);
     } else {
         CamSetupAspect();
     }
-    fn_80186EF4();
+    UserProfileInit();
     BootPlayIntroMovies();
     ResTrackLabel("FELoopBootFinish");
 }
@@ -386,7 +386,7 @@ unsigned char FELoop::Update()
         VptProcessViewports();
         FileDebugProcess();
         SndgUpdate(1);
-        fn_801CE82C();
+        GlibSwapBuffers();
         if (_FELoop_pFrameCallback) {
             _FELoop_pFrameCallback();
         }
@@ -404,7 +404,7 @@ unsigned char FELoop::Update()
 int FELoop::Shutdown()
 {
     TeamLogoShutdown();
-    fn_801CE910();
+    GlibSyncFrame();
     PlayBookDbClose(0x31544250, 0);
     PlayBookDbClose(0x31444250, 0);
     fn_8009418C();

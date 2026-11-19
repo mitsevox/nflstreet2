@@ -19,7 +19,7 @@ int SFILTER_unpackpf(Node_80279D90 *node, int count, float *a, float *b, int fla
     }
     while (count > 0) {
         if (decoder->mPosition >= decoder->mPacketLength) {
-            decoder->mpPacket = fn_802792F0(decoder->mStream, decoder->mChannel, &length, &last);
+            decoder->mpPacket = SNDPKTPLAYI_get(decoder->mStream, decoder->mChannel, &length, &last);
             if (decoder->mpPacket == 0) {
                 if (decoder->mPendingCount != 0) {
                     memset(b, 0, count * 4);

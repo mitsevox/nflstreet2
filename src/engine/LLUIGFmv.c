@@ -1,8 +1,8 @@
 /* GameCube side of the UI graphics movies: allocates a 320x240 movie node,
    streams the movie file and its sound through the MovieRcmp player, decodes
    each frame into the node's texture and swizzles it into GX tiles, and
-   moves a playing movie to another menu slot. Functions without a body here
-   keep their original bytes. */
+   moves a playing movie to another menu slot. File name, function names and
+   the three statics from NASCAR 2005 (DOL-GN4E-USA symbols.tsv, LLUIGFmv.c). */
 
 #include <string.h>
 
@@ -17,9 +17,10 @@
 extern void *memset();
 extern void *memcpy();
 
-extern void *lbl_803EBF80;
-extern Uint8 lbl_803EBF84;
-extern Uint8 lbl_803EBF85;
+/* .sdata 0x803EBF80-0x803EBF88; explicit initializers keep them out of .sbss. */
+static void *_pToImage = NULL;
+static Uint8 _bAbortPlayback = 0;
+static Uint8 _bIsFinished = 1;
 
 struct StreamTap_801F5DA4 *fn_801F687C(int numRequests, int numFilters, int numTaps, void *pMem,
                                        int memSize);
@@ -81,8 +82,8 @@ Int32 LLUIGFmvNextFrame(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie, LLUIGFmv
             LLUIGFmvStopInstance(pObject, pMovie);
             LLUIGFmvStartInstance(pObject, pMovie);
         } else {
-            lbl_803EBF85 = 1;
-            lbl_803EBF84 = 1;
+            _bIsFinished = 1;
+            _bAbortPlayback = 1;
         }
     }
     return pFrame != NULL;
@@ -130,6 +131,27 @@ void LLUIGFmvShutdown(void)
 {
 }
 
+void LLUIGFmvInitTexture(LLUIGFmvMovie_t *pMovie, Int32 a, Int32 b)
+{
+    UIGTexNode_t *pNode = &pMovie->Node;
+    Uint32 Width;
+    Uint32 Height;
+
+    pNode->Texture.mWidth = a;
+    pNode->Texture.mHeight = b;
+    pNode->Texture.mFormat = 6;
+    pNode->Texture.mpImage = pMovie->Sub.unk_1C;
+    pNode->Texture.mTlutFormat = 3;
+    /* FAKEMATCH: store order found by search (field order gives one swapped register). */
+    pNode->Texture.mUnknown18 = 0;
+    pNode->Texture.mpPalette = NULL;
+    pNode->Texture.mUnknown1C = 0;
+    Width = LLUIGTexNodeRoundToPowerOf2(a);
+    Height = LLUIGTexNodeRoundToPowerOf2(b);
+    pNode->unk_30 = (Float32)Width / (Float32)a;
+    pNode->unk_34 = (Float32)Height / (Float32)b;
+}
+
 LLUIGFmvMovie_t *LLUIGFmvAddInstance(UIGLibrary_t *pObject, Int16 a, Int16 b)
 {
     Int32 Heap = UIGFmvGetHeap();
@@ -150,7 +172,7 @@ LLUIGFmvMovie_t *LLUIGFmvAddInstance(UIGLibrary_t *pObject, Int16 a, Int16 b)
     LLUIGFmvInitTexture(pMovie, 320, 240);
     pMovie->unk_40 = b;
     pMovie->unk_3C = a;
-    lbl_803EBF84 = 1;
+    _bAbortPlayback = 1;
     return pMovie;
 }
 
@@ -159,9 +181,9 @@ void LLUIGFmvDeleteInstance(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie)
     LLUIGFmvStream_t *pSub = &pMovie->Sub;
 
     LLUIGFmvStopInstance(pObject, pMovie);
-    if (lbl_803EBF80 != NULL) {
-        fn_801D2BD0(lbl_803EBF80);
-        lbl_803EBF80 = NULL;
+    if (_pToImage != NULL) {
+        fn_801D2BD0(_pToImage);
+        _pToImage = NULL;
     }
     if (pSub->unk_08 != NULL) {
         fn_801D2BD0(pSub->unk_08);
@@ -176,7 +198,7 @@ void LLUIGFmvDeleteInstance(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie)
         pSub->unk_18 = NULL;
     }
     fn_801D2BD0(pMovie);
-    lbl_803EBF85 = 1;
+    _bIsFinished = 1;
 }
 
 void LLUIGFmvStartInstance(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie)
@@ -216,8 +238,8 @@ void LLUIGFmvStartInstance(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie)
     pMovie->unk_44 = 1;
     pSub->unk_14 = 0;
     pSub->unk_16 = UIGFmvHaveAlphaMap();
-    lbl_803EBF85 = 0;
-    lbl_803EBF84 = 0;
+    _bIsFinished = 0;
+    _bAbortPlayback = 0;
 }
 
 void LLUIGFmvStopInstance(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie)
@@ -225,7 +247,7 @@ void LLUIGFmvStopInstance(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie)
     LLUIGFmvStream_t *pSub;
 
     if (pMovie->unk_40 == -1) {
-        lbl_803EBF85 = 1;
+        _bIsFinished = 1;
         return;
     }
     pSub = &pMovie->Sub;
@@ -251,7 +273,7 @@ void LLUIGFmvStopInstance(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie)
         fn_801D2BD0(pSub->unk_18);
         pSub->unk_18 = NULL;
     }
-    lbl_803EBF84 = 1;
+    _bAbortPlayback = 1;
 }
 
 void LLUIGFMVSizzle32to32(Int32 Width, Int32 Height, Uint8 *pData)
@@ -263,17 +285,17 @@ void LLUIGFMVSizzle32to32(Int32 Width, Int32 Height, Uint8 *pData)
     Uint32 y;
     Uint8 *pTile;
 
-    if (lbl_803EBF80 == NULL) {
-        lbl_803EBF80 = fn_801D2BB0(Heap, TilesX * TilesY * 64, 0, 0);
+    if (_pToImage == NULL) {
+        _pToImage = fn_801D2BB0(Heap, TilesX * TilesY * 64, 0, 0);
     }
-    pTile = lbl_803EBF80;
+    pTile = _pToImage;
     for (y = 0; y < TilesY; y++) {
         for (x = 0; x < TilesX; x++) {
             _PackTile_RGBA8(pData, x * 4, y * 4, pTile, Width, Height);
             pTile += 64;
         }
     }
-    memcpy(pData, lbl_803EBF80, TilesX * TilesY * 64);
+    memcpy(pData, _pToImage, TilesX * TilesY * 64);
 }
 
 void _GetLayerValue(Uint8 *pSrc, Int32 Width, Int32 x, Int32 y, Uint8 *pA, Uint8 *pB, Uint8 *pC)
@@ -300,7 +322,10 @@ void _PackTile_RGBA8(Uint8 *pSrc, Int32 x, Int32 y, Uint8 *pTile, Int32 Width, I
     Uint32 j;
     Uint8 *pAR;
     Uint8 *pGB;
-    Uint8 Texel[4];
+    Uint16 AR;
+    Uint8 *pA;
+    Uint8 G;
+    Uint8 B;
 
     if (Rows > 4) {
         Rows = 4;
@@ -312,11 +337,15 @@ void _PackTile_RGBA8(Uint8 *pSrc, Int32 x, Int32 y, Uint8 *pTile, Int32 Width, I
         pAR = &pTile[j * 8];
         pGB = &pTile[j * 8 + 32];
         for (i = 0; i < Cols; i++) {
-            _GetLayerValue(pSrc, Width, x + i, y + j, &Texel[0], &Texel[2], &Texel[3]);
-            pAR[0] = Texel[1];
-            pAR[1] = Texel[0];
-            pGB[0] = Texel[2];
-            pGB[1] = Texel[3];
+            _GetLayerValue(pSrc, Width, x + i, y + j, (Uint8 *)&AR, &G, &B);
+            // FAKEMATCH: the alpha-red pair is a halfword read back through the byte pointer pA for
+            // its second byte only; the target keeps that address in its own register (r23, set
+            // before the inner loop) while the call argument and the first byte use r1+8.
+            pA = (Uint8 *)&AR;
+            pAR[0] = pA[1];
+            pAR[1] = ((Uint8 *)&AR)[0];
+            pGB[0] = G;
+            pGB[1] = B;
             pAR += 2;
             pGB += 2;
         }
@@ -329,6 +358,6 @@ void LLUIGFmvSwapInstance(UIGLibrary_t *pObject, Int16 a, Int16 b, LLUIGFmvMovie
     LLUIGFmvStopInstance(pObject, pMovie);
     pMovie->unk_3C = a;
     pMovie->unk_40 = b;
-    lbl_803EBF84 = 0;
+    _bAbortPlayback = 0;
     pMovie->Flags &= ~2;
 }

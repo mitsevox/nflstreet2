@@ -23,7 +23,7 @@ union MemCardScanArg_t {
 
 extern "C" {
 int UserRecGetCount();
-void fn_80186ED8(signed char);
+void UserProfileTouch(signed char);
 void MemCardFilesSetLoadTarget(int, int);
 void MemCardFilesStartLoad();
 int PerPollSingleDevice(int a);
@@ -108,7 +108,7 @@ extern "C" void MsgMemCardScanClose()
     fn_801D654C(0);
     MemCardUIClearCallbacks();
     for (signed char i = UserRecGetCount() - 1; i >= 0; --i) {
-        fn_80186ED8(i);
+        UserProfileTouch(i);
     }
 }
 

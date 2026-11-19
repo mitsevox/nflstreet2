@@ -7,7 +7,7 @@
 
 extern void *lbl_803ED664;
 
-void fn_801CE234(void (*pCallback)(void));
+void GlibSetVsyncCallbackAfter(void (*pCallback)(void));
 int PADInit(void);
 void Init_GFLink(void);
 int PerRegisterSingleDevice(unsigned char port);
@@ -23,7 +23,7 @@ int PerSystemInit(void *pData)
     Per_NumDevices = 4;
     PerRegisterDevices();
     PerJoyDriverPollPADs();
-    fn_801CE234(PerJoyDriverPollPADs);
+    GlibSetVsyncCallbackAfter(PerJoyDriverPollPADs);
     return 0;
 }
 

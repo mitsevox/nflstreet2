@@ -2,7 +2,7 @@
 #define ENGINE_SNDLIB_H
 
 /* Declarations shared by the files of the sound range 0x802714A8-0x80276B7C:
-   cu_802714A8.cpp, sdspmix.c, snddrv.c, sfxrevc.c, slinkmix.c, smixer.c, smixfilt.c, smixfram.c,
+   lbmpeg.cpp, mpegl3base.cpp, sdspmix.c, snddrv.c, sfxrevc.c, slinkmix.c, smixer.c, smixfilt.c, smixfram.c,
    smixhip.c, smixptch.c and smixtmul.c. */
 
 #include <dolphin/ai.h>
@@ -14,7 +14,7 @@
 #include "engine/cu_802714A8.h"
 #include "engine/sndvoice.h"
 
-class Class_80271640 {
+class CMpegBase {
 public:
     unsigned int m0;
     unsigned int m4;
@@ -49,25 +49,26 @@ public:
     int m48;
     void *m4C;
 
-    virtual ~Class_80271640();
-    virtual int vfn_02(unsigned int header);
-    virtual int vfn_03(unsigned char *data);
-    virtual int vfn_04();
-    virtual void vfn_05(unsigned char *data);
-    virtual int vfn_06();
+    virtual ~CMpegBase();
+    virtual int ProcessHeader(unsigned int header);
+    virtual int Open(unsigned char *data);
+    virtual int Close();
+    virtual void Seek(unsigned char *data);
+    virtual int OpenLayer();
 
-    void fn_80271698();
-    void fn_80271710();
-    int fn_80271918();
-    void fn_80271AB8();
+    void OpenSynth();
+    void CloseSynth();
+    int GetHeader();
+    int CloseLayer();
+    void Reset();
 };
 
-class Class_80271B74 : public Class_80271640 {
+class CMpegLayer3Base : public CMpegBase {
 public:
     unsigned char mUnknown54[0x15C];
     void *m1B0;
 
-    virtual ~Class_80271B74();
+    virtual ~CMpegLayer3Base();
 };
 
 struct SndDrvMixChannel_t {
@@ -210,25 +211,16 @@ struct Header_80273DF8 {
     Loop_80273DF8 *mE0[6];
 };
 
-struct Info_80274464 {
-    unsigned short m0;
-    unsigned char m2;
-};
-
-struct Struct_80274464 {
-    unsigned char mUnknown0[7];
-    unsigned char m7;
-    unsigned char mUnknown8[0x10];
-    void *m18[8];
-};
-
 struct Params_80279D0C {
     int m0;
     int m4;
 };
 
+namespace Snd {
+extern int MPEGuse_MMX;
+}
+
 extern "C" {
-extern int lbl_80300044;
 extern const unsigned short lbl_802B7A98[];
 extern const short lbl_802B7AF0[2][3][16];
 extern unsigned short SNDDRV_dolbypl2balances[256][4];
@@ -244,7 +236,14 @@ extern void (*lbl_803B5040)(int index, int value);
 extern int lbl_8030002C;
 extern OSMutex lbl_803B4B90;
 extern Node_803B4E20 **lbl_803B4E20;
-extern float **lbl_803B4E24;
+/* The effect bus state of sfxrevc.c (GoldenEye sndfx, 8 bytes): the per-bus wet buffers and a word the
+   mixer clears after mixing a voice into a bus. */
+typedef struct SndFx_t {
+    float **m0;
+    int m4;
+} SndFx_t;
+
+extern SndFx_t lbl_803B4E24;
 extern int lbl_80300850;
 extern float lbl_80300854;
 extern int lbl_80300858;
@@ -259,7 +258,7 @@ void *fn_80273264(void *arg);
 int fn_80273648(int mode);
 void fn_80274924(int index);
 void fn_80276938(int index, float value);
-void fn_80277A60(unsigned short angle, float *levels);
+void SNDI_aztospkrvol(unsigned short angle, float *levels);
 void fn_8027981C(int count);
 
 void fn_8026A0E8(int value);
@@ -272,21 +271,20 @@ int MIX_getframe(int index);
 void MIX_sethighpass(int index, int value);
 void *fn_80279960(int size);
 void fn_80279B24(void *p);
-void fn_80279D0C(Node_80279D90 *node, Params_80279D0C *params);
+void SFILTER_modifyHPFFIR8(Node_80279D90 *node, Params_80279D0C *params);
 void SFILTER_remove(Node_80279D90 **list, Node_80279D90 *node);
-void fn_8027A7A0(Node_80279D90 *node, int a, int b);
-void fn_80277240(Node_80279D90 *node);
+void SFILTER_rsfinit(Node_80279D90 *node, int a, int b);
+void SFILTER_timestretchsetratio(Node_80279D90 *node, int ratio);
 void MIX_reset(void);
 void fn_802747D8(int index);
-void fn_80279598(void);
+void SNDPKTPLAYI_flushcallbackdata(void);
 int fn_8027271C(int index);
 int fn_80271BD4(int index, int slot);
-void fn_80275E7C(void);
-void fn_80276194(int index);
-void fn_802763E0(void **buffers, int count);
-void fn_80277404(Node_80279D90 *node, void *data, int index);
+void MIX_destroy(void);
+void MIX_play(int index);
+void MIX_audioslice(void **buffers, int count);
+int SFILTER_timestretchinit(Node_80279D90 *node, unsigned char *data, int index);
 
-int fn_80271A04(void);
 void SNDDRV_DSPMixerResetChannel(SndDrvMixChannel_t *voice);
 void SNDDRV_DSPMixerSetPan(AXVPB *vpb, float *p, unsigned short a, int b);
 void SNDDRV_DSPMixerSetAuxBus(AXVPB *vpb, unsigned short value, int which);

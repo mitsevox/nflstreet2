@@ -47,19 +47,19 @@ static void _CamFocusUpdate(CamFocus_t *pCam)
     float offset[3];
     float focus[3];
 
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D0508();
+    MatSetStack(VptGetMatrixStack());
+    MatPushUnit();
     focus[0] = pCam->mFocus[0];
     focus[1] = pCam->mFocus[1];
     focus[2] = pCam->mFocus[2];
-    fn_801D0C58(focus);
-    fn_801D0ADC(-pCam->mCam.mHeader.mUnknown14[2]);
-    fn_801D08FC(-pCam->mCam.mHeader.mUnknown14[0]);
+    MatTranslate(focus);
+    MatRotZ(-pCam->mCam.mHeader.mUnknown14[2]);
+    MatRotX(-pCam->mCam.mHeader.mUnknown14[0]);
     offset[0] = 0.0f;
     offset[1] = 0.0f;
     offset[2] = pCam->mCurDist;
     fn_80227CC0(pCam->mCam.mHeader.mUnknown04, offset);
-    fn_801D0544();
+    MatPop();
 }
 
 void CamFocusAdd(void *camera, int unused)

@@ -124,7 +124,7 @@ int fn_801486A0(void);
 void fn_80148AF8(Class_80148A58 *pObject);
 void fn_8014F3DC(int ticks);
 void EditMenuBegin(int mode, int value);
-void fn_80186F30(signed char a, int b);
+void UserProfileSelect(signed char a, int b);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
 int TeamLogoGetHandle(int a);
 void StoryTeamCursorOpen(DbCursor *pCursor, int index);
@@ -597,7 +597,7 @@ void fn_8005E4A8(void)
     int b = fn_8000FCDC();
 
     fn_80011600(-1, fn_8000FCCC(), b);
-    fn_80186F30(lbl_802D4D40.mIndex, 1);
+    UserProfileSelect(lbl_802D4D40.mIndex, 1);
     GameInfoSet(2, 1);
     fn_8005DA7C(0, lbl_803EA5C8->mPes[1] >= 0 ? lbl_803EA5C8->mPes[1] : 2);
     SndgMusicWaitForStart(90);

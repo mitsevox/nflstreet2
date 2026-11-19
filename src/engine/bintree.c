@@ -15,7 +15,7 @@ typedef int (*BinVisitFn_t)(void *, int, int);
 #define BIN_IS_LEFT 0x10
 #define BIN_IS_RIGHT 0x20
 
-#define BIN_NODE_SIZE (lbl_803D4FB8[1].mNodeSize)
+#define BIN_NODE_SIZE (DSList_Interface[1].mNodeSize)
 #define BIN_ITEM(pNode) ((pNode) ? (char *)(pNode) + BIN_NODE_SIZE : 0)
 
 static void _DSListResetBinaryTree(BinTree_t *pTree, BinNode_t **ppNodes, int count);
@@ -169,7 +169,7 @@ static void _DSListResetBinaryTree(BinTree_t *pTree, BinNode_t **ppNodes, int co
 
 static int _DSListOptTrvFunc(void *pItem, BinNode_t **ppNodes, int *pIndex)
 {
-    ppNodes[*pIndex] = pItem ? (BinNode_t *)((char *)pItem - lbl_803D4FB8[1].mNodeSize) : 0;
+    ppNodes[*pIndex] = pItem ? (BinNode_t *)((char *)pItem - DSList_Interface[1].mNodeSize) : 0;
     (*pIndex)++;
     return 1;
 }
@@ -435,7 +435,7 @@ static BinNode_t *_DSListGetBinaryNode(BinTree_t *pTree, BinNode_t *pNode, unsig
             pResult = _DSListGetBinaryNext(pResult);
             break;
         default:
-            pResult = pNode ? (BinNode_t *)((char *)pNode - lbl_803D4FB8[1].mNodeSize) : 0;
+            pResult = pNode ? (BinNode_t *)((char *)pNode - DSList_Interface[1].mNodeSize) : 0;
             break;
         }
     } else {
@@ -555,12 +555,12 @@ static int _DSListOptimizeBinaryTree(BinTree_t *pTree, float avgLimit, int force
 
 void DSListInitBinTreeModule(void)
 {
-    fn_801C67AC(1, (void (*)(List_801C68FC *))_DSListInitBinaryTree, (int (*)(List_801C68FC *))_DSListDelBinaryTree,
-                (void (*)(Node_801C6A20 *, int))_DSListInitBinaryNode,
-                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) _DSListAddBinaryNode,
-                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) _DSListGetBinaryNode,
-                (void (*)(List_801C68FC *, Node_801C6A20 *))_DSListRemoveBinaryNode,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListVisitFn_801C6D34, int))_DSListTraverseBinaryTree,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC))_DSListSearchBinaryTree,
-                (void (*)(List_801C68FC *))_DSListOptimizeBinaryTree, sizeof(BinTree_t), sizeof(BinNode_t));
+    DSAddListType(1, (void (*)(DSList_t *))_DSListInitBinaryTree, (int (*)(DSList_t *))_DSListDelBinaryTree,
+                (void (*)(DSListNode_t *, int))_DSListInitBinaryNode,
+                (DSListNode_t * (*)(DSList_t *, DSListNode_t *, int)) _DSListAddBinaryNode,
+                (DSListNode_t * (*)(DSList_t *, DSListNode_t *, int)) _DSListGetBinaryNode,
+                (void (*)(DSList_t *, DSListNode_t *))_DSListRemoveBinaryNode,
+                (int (*)(DSList_t *, DSListNode_t *, void *, void *, DSListVisitFn_t, int))_DSListTraverseBinaryTree,
+                (int (*)(DSList_t *, DSListNode_t *, void *, void *, DSListSearchFn_t))_DSListSearchBinaryTree,
+                (void (*)(DSList_t *))_DSListOptimizeBinaryTree, sizeof(BinTree_t), sizeof(BinNode_t));
 }

@@ -55,14 +55,14 @@ int fn_800A33B0(void);
 int fn_800A33B8(void);
 int fn_800A3420(void);
 Vector_80039F5C *fn_800A3438(void);
-void fn_801D0470(int);
-void fn_801D04C4(void);
-void fn_801D0558(void);
-void fn_801D0544(void);
-void fn_801D0ADC(int);
-void fn_801D09EC(int);
-void fn_801D08FC(int);
-void fn_801D12BC(int);
+void MatSetStack(int);
+void MatPush(void);
+void MatMakeUnit(void);
+void MatPop(void);
+void MatRotZ(int);
+void MatRotY(int);
+void MatRotX(int);
+void MatLoadSlot(int);
 void fn_80227C2C(Vector_80039F5C *, Vector_80039F5C *);
 void fn_80227D6C(Vector_80039F5C *, Vector_80039F5C *);
 Glow_t *GlowCreate(int, GlowDesc_t *);
@@ -216,12 +216,12 @@ void GlowInit(void *owner)
             if (desc) {
                 int angle[3];
                 _Glow_apLevelGlows[i] = GlowCreate(0, desc);
-                fn_801D0470(VptGetMatrixStack()); fn_801D04C4(); fn_801D0558();
+                MatSetStack(VptGetMatrixStack()); MatPush(); MatMakeUnit();
                 angle[0] = (int)(input->mUnknownC.mX * 46603.37890625f);
                 angle[1] = (int)(input->mUnknownC.mY * 46603.37890625f);
                 angle[2] = (int)((input->mUnknownC.mZ + 90.0f) * 46603.37890625f);
-                fn_801D0ADC(-angle[2]); fn_801D09EC(-angle[1]); fn_801D08FC(-angle[0]);
-                fn_80227C2C(&out, &v); fn_801D0544();
+                MatRotZ(-angle[2]); MatRotY(-angle[1]); MatRotX(-angle[0]);
+                fn_80227C2C(&out, &v); MatPop();
                 _Glow_apLevelGlows[i]->mUnknown18.mX = input->mUnknown0.mX;
                 _Glow_apLevelGlows[i]->mUnknown18.mY = input->mUnknown0.mY;
                 _Glow_apLevelGlows[i]->mUnknown18.mZ = input->mUnknown0.mZ;
@@ -269,8 +269,8 @@ void GlowAddGhost(Glow_t *p, GlowGhostDesc_t *q)
 void GlowTransformPoint(Vector_80039F5C *out, Vector_80039F5C *in)
 {
     Vector_80039F5C v;
-    fn_801D0470(VptGetMatrixStack()); fn_801D04C4(); fn_801D12BC(3);
-    fn_80227D6C(&v, in); out->mX = v.mX; out->mY = v.mY; out->mZ = v.mZ; fn_801D0544();
+    MatSetStack(VptGetMatrixStack()); MatPush(); MatLoadSlot(3);
+    fn_80227D6C(&v, in); out->mX = v.mX; out->mY = v.mY; out->mZ = v.mZ; MatPop();
 }
 int GlowIsOnScreen(Vector_80039F5C *p)
 {
@@ -344,12 +344,12 @@ void fn_800840A4(DbCursor *pObject, void *pBuffer);
 int fn_800A7EF4(unsigned char a);
 int fn_800C8744(int team);
 int GameTextGetPadPlayer(int a);
-void fn_801D0424(void *p, float (*m)[4]);
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D0664(float (*m)[4]);
-void fn_801D06D4(void *p);
-void fn_801D0FB8(Vector_80039F5C *pOut);
+void MatCopyMatrix(void *p, float (*m)[4]);
+void MatPush(void);
+void MatPop(void);
+void MatCat(float (*m)[4]);
+void MatLoad(void *p);
+void MatGetPos(Vector_80039F5C *pOut);
 
 }
 
@@ -402,11 +402,11 @@ float GlowGetFlickerDuration(unsigned int index)
 
 void ParticleTrailGetJointPoint(Object_8003DEC4 *pObject, int index, Vector_80039F5C *pOut)
 {
-    fn_801D04C4();
-    fn_801D06D4(pObject->mUnknown908);
-    fn_801D0664(pObject->mUnknown44.mUnknown52[index]);
-    fn_801D0FB8(pOut);
-    fn_801D0544();
+    MatPush();
+    MatLoad(pObject->mUnknown908);
+    MatCat(pObject->mUnknown44.mUnknown52[index]);
+    MatGetPos(pOut);
+    MatPop();
 }
 
 void ParticleTrailStartup(void)
@@ -467,14 +467,14 @@ void ParticleTrailUpdate(Object_8003DEC4 *pObject)
         if (--pData->mUnknown554 < 0) {
             pData->mUnknown554 = 1;
         }
-        fn_801D0424(pData->mUnknown260[pData->mUnknown554], pObject->mUnknown908);
+        MatCopyMatrix(pData->mUnknown260[pData->mUnknown554], pObject->mUnknown908);
         pData->mUnknown2E0[pData->mUnknown554] = *(ParticleTrailBodyPose_t *)pObject->mUnknown44.mUnknown48;
         (pData->mUnknown448 + pData->mUnknown554)->mX = pObject->mUnknown44.mUnknown8[0];
         (pData->mUnknown448 + pData->mUnknown554)->mY = pObject->mUnknown44.mUnknown8[1];
         (pData->mUnknown448 + pData->mUnknown554)->mZ = pObject->mUnknown44.mUnknown8[2];
         pData->mUnknown460[pData->mUnknown554] = pObject->mUnknown44.mUnknown32;
         pData->mUnknown468[pData->mUnknown554] = *(ParticleTrailSubPose_t *)pObject->mUnknown280.mUnknown256.mUnknown48;
-        fn_801D0424(pData->mUnknown4D4[pData->mUnknown554], pObject->mUnknown44.mUnknown52[13]);
+        MatCopyMatrix(pData->mUnknown4D4[pData->mUnknown554], pObject->mUnknown44.mUnknown52[13]);
         if (pData->mUnknown560 == 0) {
             if (pData->mUnknown558 != 0) {
                 pData->mUnknown558--;

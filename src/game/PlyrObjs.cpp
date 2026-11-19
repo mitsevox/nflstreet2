@@ -59,9 +59,9 @@ void fn_8022732C(void *, void *, float);
 void fn_80227904(void *, void *, void *, float);
 void fn_80227930(void *, void *, void *, float);
 
-void fn_801D04C4();
-void fn_801D06D4();
-void fn_801D0544();
+void MatPush();
+void MatLoad();
+void MatPop();
 void fn_80236384(int);
 unsigned int fn_80236398(int);
 void fn_801A3FFC();
@@ -449,9 +449,9 @@ int fn_8003C97C(Point2_t *a, Point2_t *b, Point2_t *c,
   return 1;
 }
 int fn_8003CA20() {
-  fn_801D04C4();
+  MatPush();
   fn_80236384(0);
-  fn_801D06D4();
+  MatLoad();
   unsigned int value = fn_80236398(0);
   float color[4];
   color[0] = (float)(value & 255) * 0.0078125f;
@@ -478,7 +478,7 @@ int fn_8003CA20() {
   fn_80227264(vector, vector, 1.0f / length);
   for (int i = 0; i < lbl_803EA434; ++i)
     fn_8003BA10(lbl_803EA430[i], color, (Point2_t *)vector, angle);
-  fn_801D0544();
+  MatPop();
   lbl_803EA438 = !lbl_803EA438;
   return 0;
 }

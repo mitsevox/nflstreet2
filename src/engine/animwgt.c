@@ -176,19 +176,22 @@ void AnimWgtSetLinear(AnimWgt_t *p, unsigned int frames, float from, float to)
     AnimWgtSet(p, 1, from, &data, to);
 }
 
-#if defined(DECOMP_COMPARE)
 void AnimWgtSetLinearInAndOut(AnimWgt_t *p, unsigned char frames, unsigned char hold, float from, float to)
 {
     AnimWgtLinearInAndOut_t data;
 
     AnimWgtClrTypeStruct(3, &data);
-    if (from == -1.0f)
+    // FAKEMATCH: the block store is written in both arms; cross-jumping merges the two copies into
+    // one store at the join, which keeps it ahead of the frame-count conversion.
+    if (from == -1.0f) {
         from = p->mUnknown0;
-    data.mUnknown0 = from;
+        data.mUnknown0 = from;
+    } else {
+        data.mUnknown0 = from;
+    }
     data.mUnknownA = hold;
     data.mUnknown9 = 0;
     data.mUnknown8 = frames;
     data.mUnknown4 = frames;
     AnimWgtSet(p, 3, from, &data, to);
 }
-#endif

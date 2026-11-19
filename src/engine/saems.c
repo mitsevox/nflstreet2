@@ -187,10 +187,10 @@ extern unsigned int iSNDrandom(void);
 extern int SNDpitchmult(int handle, int value);
 extern int SNDstop(int handle);
 extern int fn_802714A8(int handle, int value);
-extern int fn_80274B50(int voice, int value);
+extern int fn_80274B50(int index);
 extern int fn_80274CA8(int voice, int value);
 extern void fn_80274924(int voice);
-extern void fn_80274960(int voice, int value);
+extern void fn_80274960(int index);
 extern void fn_80274D34(int voice, int value);
 extern void fn_80274E24(int voice, int value);
 extern void fn_80268188(int handle, int value);
@@ -484,7 +484,7 @@ int fn_802680D4(int voice, int value)
     else if (value > max)
         value = max;
     lbl_803A6C24.mUnknown1CC[voice].mUnknown8E = value;
-    return fn_80274B50(voice, value);
+    return fn_80274B50(voice);
 }
 
 int fn_80268130(int voice, int value)
@@ -503,7 +503,7 @@ void fn_80268270(int voice, int value)
 
     if (v->mUnknown23 == 1) {
         v->mUnknown1C = value;
-        fn_80274960(voice, value);
+        fn_80274960(voice);
     }
 }
 

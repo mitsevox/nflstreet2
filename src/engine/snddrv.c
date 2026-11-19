@@ -57,6 +57,8 @@ void fn_80272644(AXVPB *vpb)
 
 int fn_8027271C(int index)
 {
+    // FAKEMATCH: unused stack object; reproduces the target frame (16 bytes below the conversion slot)
+    volatile int spare[4];
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
     float pitch = record->m48 * (float)record->m5F;
     unsigned short volume = (int)(record->m48 * (*record->m64 * 32767.0f));
@@ -89,7 +91,7 @@ int fn_8027271C(int index)
             } else {
                 rear = 0;
             }
-            fn_80277A60(record->m1C, lbl_803A8D60.m0[record->m4[i]].m0);
+            SNDI_aztospkrvol(record->m1C, lbl_803A8D60.m0[record->m4[i]].m0);
             SNDDRV_DSPMixerInitChannel(lbl_803A8D60.m0[record->m4[i]].m3C, 0, (int)(pitch * 258.0f), volume, 0,
                                        lbl_803A8D60.m0[record->m4[i]].m0, record->m1C, rear);
         } else {
@@ -327,10 +329,10 @@ void fn_80273040(int index, Stream_802743A0 *stream, Record_803A6DF0 *record)
     do {
         if (stream->m25C4[0] == 0) {
             for (i = 0; i < record->m23; i++) {
-                stream->m25C4[i] = fn_802792F0(index, i, &length, &b);
+                stream->m25C4[i] = SNDPKTPLAYI_get(index, i, &length, &b);
             }
             stream->m25E0 = 0;
-            stream->m25DC = length * 2;
+            stream->m25DC = length << 1;
         }
         chunk = remaining;
         if (stream->m25C4[0] != 0) {
@@ -375,7 +377,7 @@ void *fn_80273264(void *arg)
         }
         if (lbl_803A8D60.mC048 != 0) {
             lbl_803B5030(lbl_803A8D60.mC068, 160);
-            fn_80279598();
+            SNDPKTPLAYI_flushcallbackdata();
         }
         if (lbl_80300850 & 1) {
             SNDSYSI_100hzserver();
@@ -585,7 +587,7 @@ void fn_802739F8(void)
             stream->m2599 = half;
         }
     }
-    fn_80279598();
+    SNDPKTPLAYI_flushcallbackdata();
     for (i = 0; i < lbl_803A6C24.m1C.m12; i++) {
         Channel_803A8D60 *channel = &lbl_803A8D60.m0[i];
         Record_803A6DF0 *record = &lbl_803A6C24.m1CC[i];
@@ -742,7 +744,7 @@ int fn_80273DF8(Header_80273DF8 *header, int base, int index, int a, int b, int 
         fn_80274D34(record->m4[0], b);
         fn_80274E24(record->m4[0], c);
         for (i = 0; i < record->m23; i++) {
-            fn_80276194(record->m4[i] - lbl_803A6C24.m1C.m12);
+            MIX_play(record->m4[i] - lbl_803A6C24.m1C.m12);
         }
     }
     return 0;
@@ -925,7 +927,7 @@ void fn_80274960(int index)
         channel->m0[4] = 0.0f;
         channel->m0[5] = 0.0f;
     } else {
-        fn_80277A60(record->m1C, channel->m0);
+        SNDI_aztospkrvol(record->m1C, channel->m0);
     }
     if ((record->m24 & 4) && lbl_803A6C24.m1C.m23 > 2 && record->m4E == 0) {
         int pan = record->m1C >> 8;
@@ -945,6 +947,8 @@ void fn_80274960(int index)
 
 int fn_80274B50(int index)
 {
+    // FAKEMATCH: unused stack object; reproduces the target frame (8 bytes below the conversion slot)
+    volatile int spare[2];
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
     unsigned int pitch;
     int i;
@@ -988,6 +992,8 @@ int fn_80274CA8(int index, int value)
 
 void fn_80274D34(int index, int value)
 {
+    // FAKEMATCH: unused stack object; reproduces the target frame (8 bytes below the conversion slot)
+    volatile int spare[2];
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
     int i;
 

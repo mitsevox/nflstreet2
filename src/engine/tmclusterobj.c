@@ -101,7 +101,7 @@ void TMClusterObjSynthesizeMatrices(TMClusterObj_t *pObj, TMClusterPose_t *pPose
     } else if (LCQueueLength() != 0) {
         LCQueueWait(0);
     }
-    fn_801D0F80(pMatrices[0]);
+    MatStore(pMatrices[0]);
     for (i = 1; i < pBones->mNumBones; i++) {
         TMClusterBone_t *pBone = &pBones->mpBones[i];
         int index = pBone->mIndex;

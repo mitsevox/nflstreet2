@@ -10,7 +10,7 @@ int MsgMemCardScanHandleMessage(unsigned int id, void *pArgs, int c, int *pResul
 int ProgressivePopupMsg(int id, int *pArgs, int c, int *pResult);
 int PopupScreen20Msg(int id, void *pArgs, int c, int *pResult);
 int CtrlSelHandleMessage(unsigned int id, void *pArgs, int c, int *pResult);
-void fn_801CEB58(int a);
+void GlibToggleProgressive(int a);
 void OSSetProgressiveMode(int a);
 }
 
@@ -23,7 +23,7 @@ extern "C" int ProgressivePopupMsg(int id, int *pArgs, int c, int *pResult)
         if (*pArgs == 1) {
             _ProgressivePopup_bOn = *pArgs;
             OSSetProgressiveMode(1);
-            fn_801CEB58(1);
+            GlibToggleProgressive(1);
         } else {
             _ProgressivePopup_bOn = 0;
             OSSetProgressiveMode(0);

@@ -7,7 +7,7 @@ typedef struct Object_80237EE8 {
     int mUnknown8;
     int mUnknown12;
     int mUnknown16;
-    List_801C68FC *mpUnknown20;
+    DSList_t *mpUnknown20;
     void *mpUnknown24;
 } Object_80237EE8;
 #ifdef __cplusplus

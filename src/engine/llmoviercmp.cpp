@@ -4,10 +4,10 @@
 
 #include "engine/moviercmp.h"
 #include "engine/render.h"
-#include "engine/fn_801CEA08.h"
+#include "engine/llglib.h"
 
 extern "C" {
-int fn_801CEC84(void);
+int GlibGetXFBHeight(void);
 int DVDGetDriveStatus(void);
 }
 
@@ -17,8 +17,8 @@ void MovieRcmpRenderInit(Shape_t *pShape)
 {
     int width = pShape->mWidth;
     int height = pShape->mHeight;
-    int screenWidth = fn_801CEA08();
-    int screenHeight = fn_801CEC84();
+    int screenWidth = GlibGetScreenWidth();
+    int screenHeight = GlibGetXFBHeight();
     int x = screenWidth / 2 - width / 2;
     if (height != 0x1C0) { height <<= 1; }
     yuvrenderinit(x, (screenHeight / 2 - height / 2) & ~1, width, height, 0, 0);

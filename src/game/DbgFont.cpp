@@ -12,7 +12,7 @@
 #include <dolphin/gx/GXTev.h>
 
 extern "C" {
-void fn_801D0F80(Mtx44 m);
+void MatStore(Mtx44 m);
 void TMRenderReset(void);
 void GXSetNumChans(int a);
 void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
@@ -229,7 +229,7 @@ int DbgFontPrint(int x, unsigned short y, int c, char *pText, int e)
         GXSetZCompLoc(GX_DISABLE);
         GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
         GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_GREATER, 0);
-        fn_801D0F80(m);
+        MatStore(m);
         GXLoadPosMtxImm(m, 0);
         GXSetCurrentMtx(0);
         DbgFontLoadTexture();

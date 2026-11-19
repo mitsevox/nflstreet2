@@ -74,20 +74,20 @@ extern "C" int fn_80093814(Character_80093BCC *pCharacter, Object_80039F5C *p, O
         } else {
             pCharacter->mUnknown8 |= 0x20;
             if (pActor->mUnknown8 & 0x20) {
-                fn_801D04C4();
-                fn_801D0558();
-                fn_801D0C58(&start.mX);
-                fn_801D0ADC(fn_80093AF0(pRef));
+                MatPush();
+                MatMakeUnit();
+                MatTranslate(&start.mX);
+                MatRotZ(fn_80093AF0(pRef));
                 spot.mX = pFrame->mUnknown24;
                 spot.mY = pFrame->mUnknown1C;
                 spot.mZ = pFrame->mUnknown20;
-                fn_801D0C58(&spot.mX);
+                MatTranslate(&spot.mX);
                 angle = (int)(pFrame->mUnknown18 * 2670176.75f);
-                fn_801D0ADC(angle);
-                fn_801D0FB8(&spot.mX);
-                fn_801D11F4(angles, 0);
+                MatRotZ(angle);
+                MatGetPos(&spot.mX);
+                MatGetRotByOrder(angles, 0);
                 angle = angles[2];
-                fn_801D0544();
+                MatPop();
             } else {
                 spot.mX = pFrame->mUnknown24;
                 spot.mY = pFrame->mUnknown1C;

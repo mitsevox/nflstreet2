@@ -18,7 +18,7 @@ int fn_8022F34C(void);
 int fn_8022F358(int index);
 int fn_8022F3D4(int handle);
 int fn_8022F4BC(void);
-int fn_80187400(int kind, int key, int first, int last);
+int UserProfileGetFreeKey(int kind, int key, int first, int last);
 }
 
 extern "C" {
@@ -155,7 +155,7 @@ void UserRecAddRecent(int key)
         code = status;
     }
     if (status == 23) {
-        value = fn_80187400(0x48435348, 0x4B504348, 0, 15);
+        value = UserProfileGetFreeKey(0x48435348, 0x4B504348, 0, 15);
         if (value != -1) {
             if (value > 10) {
                 signed char i;

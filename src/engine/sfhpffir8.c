@@ -1,5 +1,5 @@
-/* Sound filter (sfhpffir8.c): the 8-tap FIR high-pass filter and its create. The modify function is
-   not reconstructed yet. */
+/* Sound filter (sfhpffir8.c): the 8-tap FIR high-pass filter, its create, and its modify (cutoff ratio
+   from the parameter pair, then the coefficients through calcFIRCoeffs). */
 
 #include "engine/sndsys.h"
 
@@ -32,6 +32,12 @@ int SFILTER_createHPFFIR8(Node_80279D90 *node)
     node->m0 = SFILTER_hpfFIR8;
     SNDI_fir8init(&((SndHpfState_t *)node)->m1C);
     return 0;
+}
+
+void SFILTER_modifyHPFFIR8(Node_80279D90 *node, int *params)
+{
+    ((SndHpfState_t *)node)->m1C.m34 = (float)(params[0] >> 7) / (float)(params[1] >> 8);
+    calcFIRCoeffs(&((SndHpfState_t *)node)->m1C, 3);
 }
 
 }

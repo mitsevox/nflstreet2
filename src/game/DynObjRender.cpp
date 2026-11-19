@@ -67,10 +67,10 @@ void ConGetCurrentContext(void);
 int DynObjSetupLight(void *, void *);
 void UVScrollFloat(DynObjUVMesh *);
 void UVScrollFixed(DynObjUVMesh *);
-void fn_801D0470(int); void fn_801D04C4(void); void fn_801D0508(void);
-void fn_801D0544(void); void fn_801D0558(void); void fn_801D06D4(Mtx44);
-void fn_801D0C58(void *); void fn_801D0860(void *); void fn_801D08FC(int);
-void fn_801D09EC(int); void fn_801D0F80(Mtx44);
+void MatSetStack(int); void MatPush(void); void MatPushUnit(void);
+void MatPop(void); void MatMakeUnit(void); void MatLoad(Mtx44);
+void MatTranslate(void *); void MatRotQuat(void *); void MatRotX(int);
+void MatRotY(int); void MatStore(Mtx44);
 void TMXform(int, void *); void TMXformSelect(int);
 void TMModelResRelocate(void *); void TMModelBindModelRes(void *, void *);
 void *TMModelResGetChunk(void *, unsigned int, void *);
@@ -81,7 +81,7 @@ void TMMaterialListSelect(void *, int); void TMMaterialBindClut(unsigned int, in
 void TMRenderBindModel(Object_8023417C *); void TMRenderBindClusterObj(void *);
 void TMRenderBindTexture(int, int, unsigned char *);
 void TMRenderBindMaterialList(void *); void TMRenderSetBlendMode(int);
-void fn_8021126C(void); void fn_802112DC(void *, int); void fn_80211350(void);
+void TMRenderGeomSkinAll(void); void TMRenderGeomList(void *, int); void TMRenderGeomAll(void);
 void TMTexLibLoad(DynObjTexLib *, int); void TMTexLibUnload(DynObjTexLib *);
 void TMTexLibRegistryReset(void); void TMTexLibRegister(const char *, DynObjTexLib *);
 int TMTexLibGetClut(DynObjTexLib *, unsigned int, int);
@@ -122,12 +122,12 @@ int DynObjDraw(DynObj *p, int arg)
     GXSetChanCtrl(GX_COLOR0,GX_ENABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_CLAMP,GX_AF_NONE);
     GXSetChanCtrl(GX_ALPHA0,GX_DISABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_NONE,GX_AF_NONE);
     GXSetAlphaCompare(GX_GEQUAL, 16, GX_AOP_AND, GX_ALWAYS, 0); GXSetZCompLoc(GX_FALSE); GXSetZMode(GX_TRUE,GX_LEQUAL,GX_TRUE); GXSetCullMode(GX_CULL_FRONT);
-    TMRenderSetBlendMode(2); fn_801D0470(VptGetMatrixStack()); fn_801D04C4(); fn_801D0508();
-    fn_801D0C58(&p->mUnknown4); fn_801D0860(&p->mUnknown18); fn_801D08FC(0x400000);
-    fn_801D0C58(&p->mUnknownB4); fn_801D09EC(p->mUnknownCC); fn_801D0F80(m1);
-    fn_801D0544(); fn_801D0C58(&p->mUnknown4); fn_801D0860(&p->mUnknown18);
-    fn_801D08FC(0x400000); fn_801D0C58(&p->mUnknownB4); fn_801D09EC(p->mUnknownCC);
-    fn_801D0F80(m2); TMXform(0,m2); TMXformSelect(0);
+    TMRenderSetBlendMode(2); MatSetStack(VptGetMatrixStack()); MatPush(); MatPushUnit();
+    MatTranslate(&p->mUnknown4); MatRotQuat(&p->mUnknown18); MatRotX(0x400000);
+    MatTranslate(&p->mUnknownB4); MatRotY(p->mUnknownCC); MatStore(m1);
+    MatPop(); MatTranslate(&p->mUnknown4); MatRotQuat(&p->mUnknown18);
+    MatRotX(0x400000); MatTranslate(&p->mUnknownB4); MatRotY(p->mUnknownCC);
+    MatStore(m2); TMXform(0,m2); TMXformSelect(0);
     unsigned int flags=fn_80234D4C(_DynObj_afCullBox,m1,0,0);
     if(DynObjIsFacingAway(p)) flags|=0x3F;
     p->mUnknown138=0;
@@ -155,17 +155,17 @@ int DynObjDraw(DynObj *p, int arg)
                         p->mUnknown138=1;
                         if(!s->mUnknownC.mpUnknownC->mUnknown1C) TMModelAllocChannels(s->mUnknownC.mpUnknownC);
                         TMRenderBindModel(reinterpret_cast<Object_8023417C *>(model));
-                        TMRenderBindClusterObj(s->mUnknownC.mpUnknownE0); fn_801D04C4(); fn_801D0558();
+                        TMRenderBindClusterObj(s->mUnknownC.mpUnknownE0); MatPush(); MatMakeUnit();
                         fn_802337D4(model,s->mUnknownFC,p->mpUnknownDC,0);
-                        fn_801D0544(); fn_8021126C();
+                        MatPop(); TMRenderGeomSkinAll();
                     }
                     GXSetCurrentMtx(GX_PNMTX0);GXLoadPosMtxImm(m2,GX_PNMTX0);GXLoadNrmMtxImm(m2,GX_PNMTX0);
                     GXSetNumTexGens(1);GXSetNumTevStages(1);GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
                     if(p->mUnknownE8.mWord&16) {
                         s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mpUnknown4+=p->mUnknownFC*40;
-                        fn_80211350();
+                        TMRenderGeomAll();
                         s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mpUnknown4-=p->mUnknownFC*40;
-                    } else fn_802112DC(s->mUnknownC.mUnknown60,s->mUnknownC.mUnknown5C);
+                    } else TMRenderGeomList(s->mUnknownC.mUnknown60,s->mUnknownC.mUnknown5C);
                 } else {
                     p->mUnknown138=1;fn_802337D4(s->mUnknownC.mpUnknownC,s->mUnknownFC,p->mpUnknownDC,0);
                     fn_80234BF4(work,&s->mUnknownC,0);
@@ -173,7 +173,7 @@ int DynObjDraw(DynObj *p, int arg)
             } else fn_80234BF4(work,&s->mUnknownC,0);
         }
     }
-    fn_801D0544(); if(p->mpUnknown1E0)DynObjDrawChild(p->mpUnknown1E0,arg);
+    MatPop(); if(p->mpUnknown1E0)DynObjDrawChild(p->mpUnknown1E0,arg);
     GXSetCullMode(GX_CULL_NONE); return 0;
 }
 int DynObjFindCache(const char *name)
@@ -189,8 +189,8 @@ int DynObjIsFacingAway(DynObj *p)
     int result=0;
     if(p->mUnknownE8.mWord&16) {
         Vector_80039F5C delta,axis=_DynObj_vUpAxis;
-        void *viewport=VptManagerGetCurrentCamera(0);fn_801D0508();fn_801D0860(&p->mpUnknown1D8->mUnknown60);
-        fn_80227C2C(&axis,&axis);fn_801D0544();
+        void *viewport=VptManagerGetCurrentCamera(0);MatPushUnit();MatRotQuat(&p->mpUnknown1D8->mUnknown60);
+        fn_80227C2C(&axis,&axis);MatPop();
         fn_802276B4(&delta,&p->mpUnknown1D8->mUnknown8,static_cast<unsigned char *>(viewport)+4);
         fn_802271F0(&delta,&delta);result=fn_80227704(&delta,&axis)<-0.2f;
     }
@@ -203,8 +203,8 @@ int DynObjChildIsFacingAway(DynObjChild *p)
     int result=0;
     if(p->mpUnknown50->mUnknownE8.mWord&16) {
         Vector_80039F5C delta,axis=_DynObj_vUpAxis;
-        void *viewport=VptManagerGetCurrentCamera(0);fn_801D0508();fn_801D0860(&p->mUnknown3C);
-        fn_80227C2C(&axis,&axis);fn_801D0544();
+        void *viewport=VptManagerGetCurrentCamera(0);MatPushUnit();MatRotQuat(&p->mUnknown3C);
+        fn_80227C2C(&axis,&axis);MatPop();
         fn_802276B4(&delta,&p->mUnknown30,static_cast<unsigned char *>(viewport)+4);
         fn_802271F0(&delta,&delta);result=fn_80227704(&delta,&axis)<-0.2f;
     }
@@ -324,11 +324,11 @@ int DynObjDrawChild(DynObjChild *p,int arg)
     copy=color;GXSetChanMatColor(GX_COLOR0,copy);GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0,GX_ENABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_CLAMP,GX_AF_NONE);
     GXSetChanCtrl(GX_ALPHA0,GX_DISABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_NONE,GX_AF_NONE);
-    fn_801D0470(VptGetMatrixStack());fn_801D0508();
-    fn_801D0C58(&p->mUnknown30);fn_801D0860(&p->mUnknown3C);fn_801D08FC(0x400000);
-    fn_801D0C58(&p->mpUnknown50->mUnknownB4);fn_801D09EC(p->mpUnknown50->mUnknownCC);fn_801D0F80(m1);
-    fn_801D0544();fn_801D04C4();fn_801D0C58(&p->mUnknown30);fn_801D0860(&p->mUnknown3C);
-    fn_801D08FC(0x400000);fn_801D0C58(&p->mpUnknown50->mUnknownB4);fn_801D09EC(p->mpUnknown50->mUnknownCC);fn_801D0F80(m2);
+    MatSetStack(VptGetMatrixStack());MatPushUnit();
+    MatTranslate(&p->mUnknown30);MatRotQuat(&p->mUnknown3C);MatRotX(0x400000);
+    MatTranslate(&p->mpUnknown50->mUnknownB4);MatRotY(p->mpUnknown50->mUnknownCC);MatStore(m1);
+    MatPop();MatPush();MatTranslate(&p->mUnknown30);MatRotQuat(&p->mUnknown3C);
+    MatRotX(0x400000);MatTranslate(&p->mpUnknown50->mUnknownB4);MatRotY(p->mpUnknown50->mUnknownCC);MatStore(m2);
     unsigned int flags=fn_80234D4C(_DynObj_afCullBox,m1,0,0);if(DynObjChildIsFacingAway(p))flags|=0x3F;
     if(!(flags&0x3F)) {
         fn_80234AFC(work);fn_80234DC8(work,flags&0xF2000);fn_80234B1C(work);fn_80234B20(work,m1,0);
@@ -341,26 +341,26 @@ int DynObjDrawChild(DynObjChild *p,int arg)
                     p->mpUnknown50->mUnknown138=1;
                     if(!s->mUnknownC.mpUnknownC->mUnknown1C)TMModelAllocChannels(s->mUnknownC.mpUnknownC);
                     TMRenderBindModel(reinterpret_cast<Object_8023417C *>(model));TMRenderBindClusterObj(s->mUnknownC.mpUnknownE0);
-                    fn_801D04C4();fn_801D0558();fn_802337D4(model,s->mUnknownFC,p->mpUnknown50->mpUnknownDC,0);
-                    fn_801D0544();fn_8021126C();GXSetNumTexGens(1);GXSetNumTevStages(1);GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+                    MatPush();MatMakeUnit();fn_802337D4(model,s->mUnknownFC,p->mpUnknown50->mpUnknownDC,0);
+                    MatPop();TMRenderGeomSkinAll();GXSetNumTexGens(1);GXSetNumTevStages(1);GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
                 }
                 GXSetCurrentMtx(GX_PNMTX0);GXLoadPosMtxImm(m2,GX_PNMTX0);GXLoadNrmMtxImm(m2,GX_PNMTX0);
                 if(p->mpUnknown50->mUnknownE8.mWord&16) {
                     s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mpUnknown4+=p->mUnknown6C*40;
                     TMRenderBindTexture(0,s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mUnknown0,s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mpUnknown4);
-                    fn_80211350();
+                    TMRenderGeomAll();
                     s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mpUnknown4-=p->mUnknown6C*40;
-                } else fn_802112DC(s->mUnknownC.mUnknown60,s->mUnknownC.mUnknown5C);
+                } else TMRenderGeomList(s->mUnknownC.mUnknown60,s->mUnknownC.mUnknown5C);
             } else {
                 if(!p->mpUnknown50->mUnknown138) {
-                    fn_801D06D4(m2);p->mpUnknown50->mUnknown138=1;
+                    MatLoad(m2);p->mpUnknown50->mUnknown138=1;
                     fn_802337D4(s->mUnknownC.mpUnknownC,s->mUnknownFC,p->mpUnknown50->mpUnknownDC,0);
                 }
                 fn_80234BF4(work,&s->mUnknownC,0);
             }
         }
     }
-    fn_801D0544();if(p->mpUnknown5C)DynObjDrawChild(p->mpUnknown5C,arg);
+    MatPop();if(p->mpUnknown5C)DynObjDrawChild(p->mpUnknown5C,arg);
     GXSetCullMode(GX_CULL_NONE);return 0;
 }
 }

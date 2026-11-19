@@ -2,41 +2,41 @@
 #define ENGINE_LIST_H
 
 /* Node header word: bit 31 is set while the node is linked into its list. */
-typedef struct Node_801C6A20 {
+typedef struct DSListNode_t {
     unsigned int mFlags;
-} Node_801C6A20;
+} DSListNode_t;
 
-typedef struct List_801C68FC {
+typedef struct DSList_t {
     int mType;
     int mCount;
     int mItemSize;
     int mHeap;
     int (*mCompare)(void *, void *);
     void *mpNodes;
-} List_801C68FC;
+} DSList_t;
 
 /* Visit callback of 0x801C6D34: item, then the caller's context and argument, passed through unchanged
    by the type's traverse function (the bintree collector 0x801C82E0 takes an index pointer there). */
-typedef int (*ListVisitFn_801C6D34)(void *pItem, void *pCtx, void *pArg);
+typedef int (*DSListVisitFn_t)(void *pItem, void *pCtx, void *pArg);
 /* Search callback of 0x801C6DCC: item, key and result pointer. */
-typedef int (*ListSearchFn_801C6DCC)(void *pItem, void *pKey, void *pResult);
+typedef int (*DSListSearchFn_t)(void *pItem, void *pKey, void *pResult);
 
-typedef struct ListType_803D4FB8 {
-    void (*mInit)(List_801C68FC *);
-    int (*mDelete)(List_801C68FC *);
-    void (*mInitNode)(Node_801C6A20 *, int);
-    Node_801C6A20 *(*mAdd)(List_801C68FC *, Node_801C6A20 *, int);
-    Node_801C6A20 *(*mGet)(List_801C68FC *, Node_801C6A20 *, int);
-    void (*mRemove)(List_801C68FC *, Node_801C6A20 *);
-    int (*mTraverse)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListVisitFn_801C6D34, int);
-    int (*mSearch)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC);
-    void (*mOptimize)(List_801C68FC *);
+typedef struct DSListType_t {
+    void (*mInit)(DSList_t *);
+    int (*mDelete)(DSList_t *);
+    void (*mInitNode)(DSListNode_t *, int);
+    DSListNode_t *(*mAdd)(DSList_t *, DSListNode_t *, int);
+    DSListNode_t *(*mGet)(DSList_t *, DSListNode_t *, int);
+    void (*mRemove)(DSList_t *, DSListNode_t *);
+    int (*mTraverse)(DSList_t *, DSListNode_t *, void *, void *, DSListVisitFn_t, int);
+    int (*mSearch)(DSList_t *, DSListNode_t *, void *, void *, DSListSearchFn_t);
+    void (*mOptimize)(DSList_t *);
     int mHeaderSize;
     int mNodeSize;
     unsigned char mActive;
-} ListType_803D4FB8;
+} DSListType_t;
 
-extern ListType_803D4FB8 lbl_803D4FB8[9];
+extern DSListType_t DSList_Interface[9];
 
 typedef struct LinkNode_t {
     unsigned int mFlags;
@@ -46,7 +46,7 @@ typedef struct LinkNode_t {
 } LinkNode_t;
 
 typedef struct LinkList_t {
-    List_801C68FC mBase;
+    DSList_t mBase;
     LinkNode_t *mpHead;
     LinkNode_t *mpTail;
 } LinkList_t;
@@ -59,7 +59,7 @@ typedef struct SplayNode_801C7684 {
 } SplayNode_801C7684;
 
 typedef struct SplayTree_801C7684 {
-    List_801C68FC mBase;
+    DSList_t mBase;
     SplayNode_801C7684 mNil;
     SplayNode_801C7684 *mpFirst;
     SplayNode_801C7684 *mpLast;
@@ -78,7 +78,7 @@ typedef struct BinNode_t {
 } BinNode_t;
 
 typedef struct BinTree_t {
-    List_801C68FC mBase;
+    DSList_t mBase;
     unsigned int mMaxDepth;
     unsigned int mTotalDepth;
     unsigned char mAutoOptimize;
@@ -98,22 +98,22 @@ typedef struct NodePool_t {
 } NodePool_t;
 
 int DSAlignSize(int size);
-void fn_801C67AC(int type, void (*init)(List_801C68FC *), int (*del)(List_801C68FC *),
-                 void (*initNode)(Node_801C6A20 *, int),
-                 Node_801C6A20 *(*add)(List_801C68FC *, Node_801C6A20 *, int),
-                 Node_801C6A20 *(*get)(List_801C68FC *, Node_801C6A20 *, int),
-                 void (*remove)(List_801C68FC *, Node_801C6A20 *),
-                 int (*traverse)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListVisitFn_801C6D34, int),
-                 int (*search)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC),
-                 void (*optimize)(List_801C68FC *), int headerSize, int nodeSize);
+void DSAddListType(int type, void (*init)(DSList_t *), int (*del)(DSList_t *),
+                 void (*initNode)(DSListNode_t *, int),
+                 DSListNode_t *(*add)(DSList_t *, DSListNode_t *, int),
+                 DSListNode_t *(*get)(DSList_t *, DSListNode_t *, int),
+                 void (*remove)(DSList_t *, DSListNode_t *),
+                 int (*traverse)(DSList_t *, DSListNode_t *, void *, void *, DSListVisitFn_t, int),
+                 int (*search)(DSList_t *, DSListNode_t *, void *, void *, DSListSearchFn_t),
+                 void (*optimize)(DSList_t *), int headerSize, int nodeSize);
 
-void *fn_801C6A20(void *pool);
-void *fn_801C6B4C(List_801C68FC *pList, int mode);
-void fn_801C6BC0(List_801C68FC *pList, void *item);
-void fn_801C6C0C(List_801C68FC *pList, void *item);
-void *fn_801C6C84(List_801C68FC *pList, void *item);
-int fn_801C6D34(List_801C68FC *pList, void *pStart, void *pCtx, void *pArg, ListVisitFn_801C6D34 fn, int direction);
-int fn_801C6DCC(List_801C68FC *pList, void *pStart, void *pKey, void *pResult, ListSearchFn_801C6DCC fn);
+void *DSNewListNode(void *pool);
+void *DSGetListNode(DSList_t *pList, int mode);
+void DSRemoveListNode(DSList_t *pList, void *item);
+void DSDelListNode(DSList_t *pList, void *item);
+void *DSNextListNode(DSList_t *pList, void *item);
+int DSTraverseList(DSList_t *pList, void *pStart, void *pCtx, void *pArg, DSListVisitFn_t fn, int direction);
+int DSSearchList(DSList_t *pList, void *pStart, void *pKey, void *pResult, DSListSearchFn_t fn);
 int DSGetNodeHandlerMemSize(unsigned int count, int size);
 unsigned int DSGetNodeHandlerStat(NodePool_t *pPool, unsigned int stat);
 NodePool_t *DSNewNodeHandler(int heap, unsigned int count, int size, NodePool_t *pPool);

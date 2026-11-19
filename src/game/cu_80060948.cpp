@@ -78,7 +78,7 @@ void UserStatsOpen(DbCursor *pObject, int index);
 void UserStatsClose(DbCursor *pObject);
 int fn_80178AE0(void);
 int MsgGameGetSetupState(void);
-void fn_80186F30(signed char a, int b);
+void UserProfileSelect(signed char a, int b);
 void fn_8018C48C(int tag);
 int StoryGetLkss(int a);
 char *strncpy(char *pDest, const char *pSource, int count);
@@ -541,7 +541,7 @@ void fn_80061584(void)
         lbl_803EA5EC->mDive = 0;
     }
     fn_80011600(-1, fn_8000FCCC(), saved);
-    fn_80186F30(lbl_803EA5F8.mIndex, 1);
+    UserProfileSelect(lbl_803EA5F8.mIndex, 1);
     GameInfoSet(2, 1);
     fn_80015D28(lbl_803EA5EC->mDive);
 }
@@ -724,7 +724,7 @@ void fn_80061AE8(void)
 
     fn_8006167C();
     fn_80011600(-1, fn_8000FCCC(), saved);
-    fn_80186F30(lbl_803EA5F8.mIndex, 1);
+    UserProfileSelect(lbl_803EA5F8.mIndex, 1);
     if (lbl_803EA5F8.mOpen == 0) {
         lbl_803EA5F8.mIndex = fn_8022F384(fn_8022F4BC());
         TournamentOpen(lbl_803EA5F8.mIndex);

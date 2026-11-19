@@ -9,9 +9,9 @@ static signed char _MsgCheatCodes_cProfile = -1;
 
 extern "C" {
 int UserRecGetCount(void);
-int fn_80186DF0(signed char *pIndices, int length);
+int UserProfileSortByRecent(signed char *pIndices, int length);
 int UserRecGetName(int index, char *pText);
-void fn_80186ED8(signed char index);
+void UserProfileTouch(signed char index);
 void CheatEffectRemove(signed char db, int id);
 void CheatEffectApply(signed char db, int id);
 
@@ -21,7 +21,7 @@ void MsgCheatCodesCycleProfile(int control)
     if (_MsgCheatCodes_cProfile == -1 && count > 0) {
         signed char indices[2];
         unsigned char auxiliary[2];
-        fn_80186DF0(indices, 2);
+        UserProfileSortByRecent(indices, 2);
         for (int i = 0; i < 2; ++i) {
             if (indices[i] != -1) {
                 auxiliary[i] = 1;
@@ -66,7 +66,7 @@ int MsgCheatCodesGetEntry(int value, char *pText, int length, int *pResult)
 int MsgCheatCodesEnterCode(const char *pCode, int unused, char *pName, int d)
 {
     unsigned int value = CheatFindByCode(pCode, unused, pName);
-    fn_80186ED8(_MsgCheatCodes_cProfile);
+    UserProfileTouch(_MsgCheatCodes_cProfile);
     if (value > 54) {
         return 0;
     }
@@ -134,7 +134,7 @@ void MsgCheatCodesDisableConflicts(int value)
 void MsgCheatCodesToggle(int value, int *pResult)
 {
     int result = CheatGetUnlockedId(value);
-    fn_80186ED8(_MsgCheatCodes_cProfile);
+    UserProfileTouch(_MsgCheatCodes_cProfile);
     int changed;
     if (CheatIsEnabled(result)) {
         CheatDisable(result);

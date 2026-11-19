@@ -8,7 +8,7 @@ void TMXform(u32 id, f32 (*pMtx)[4])
     f32 aMtx[4][4];
 
     if (pMtx == 0) {
-        fn_801D0F80(aMtx);
+        MatStore(aMtx);
         pMtx = aMtx;
     }
     GXLoadPosMtxImm(pMtx, id);

@@ -25,8 +25,8 @@ extern "C" {
 UISModel_t *ObjNew(int type, int flags, UISModelDesc_t *pDesc);
 UISColor_t *fn_8021CA3C(void);
 void UISGameSetDrawMode(int a);
-void fn_801CE9E0(int a);
-void fn_801CE95C(void);
+void GlibSetZBufferEnable(int a);
+void GlibClearZBuffer(void);
 
 void UISModelObjCreate(UISModelObj_t *p);
 void UISModelObjDraw(UISModelObj_t *p, int *pFlag);
@@ -54,14 +54,14 @@ void UISModelObjDraw(UISModelObj_t *p, int *pFlag)
     UISColor_t *pObject = fn_8021CA3C();
 
     UISGameSetDrawMode(4);
-    fn_801CE9E0(1);
+    GlibSetZBufferEnable(1);
     if (pFlag != 0 && *pFlag == 0) {
-        fn_801CE95C();
+        GlibClearZBuffer();
         *pFlag = 1;
     }
     UISModelSetDrawMode(p->mpUnknown52, (unsigned char)(pObject->mUnknown12 * 255.0f));
     UISModelDrawReady(p->mpUnknown52, 1);
-    fn_801CE9E0(0);
+    GlibSetZBufferEnable(0);
 }
 
 void UISModelObjDestroy(UISModelObj_t *p)

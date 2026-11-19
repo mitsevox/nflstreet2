@@ -26,7 +26,7 @@ void fn_8008274C(int db);
 int TutorialAllComplete(void);
 void TutorialSetProfileDb(int db);
 void UserInfoSetPoints(int handle, int value);
-int fn_80186B38(int db);
+int UserProfileFindIndex(int db);
 void StorySetDevPoints(int index, int value);
 void GauntletMarkTeamBeaten(int a, int b);
 int GauntletGetTeamsLeft(int a);
@@ -135,8 +135,8 @@ void CheatEffectApply(signed char db, int id)
     case 48:
         for (int i = 1; i <= 32; i++) {
             if (i != 19 && i != 22) {
-                GauntletMarkTeamBeaten(fn_80186B38(fn_8022F4BC()), i);
-                GauntletAdvance(fn_80186B38(fn_8022F4BC()));
+                GauntletMarkTeamBeaten(UserProfileFindIndex(fn_8022F4BC()), i);
+                GauntletAdvance(UserProfileFindIndex(fn_8022F4BC()));
             }
         }
         break;

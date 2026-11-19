@@ -192,8 +192,8 @@ struct GameStatsArgs_t {
 extern "C" {
 int fn_8022F3D4(int handle);
 int CheatIsNoneEnabled(void);
-void fn_80186BAC(void);
-void fn_80186CE8(unsigned char *flags);
+void UserProfileAddGameStats(void);
+void UserProfileSaveAllRecords(unsigned char *flags);
 int UserRecGetName(int index, char *text);
 void RecordsBegin(void);
 void RecordsEnd(void);
@@ -276,7 +276,7 @@ void PlayArtResetTeam(int group);
 int PlayBookDbLoadFormation(int tag, int a, int b, PlayBookFormation_t *pObject);
 unsigned short PlayBookDbCountPlays(int tag, int handle);
 void *fn_801D2BB0(int a, int size, int c, int d);
-int fn_80186F7C(int index);
+int UserProfileGetSelected(int index);
 int fn_8022F358(int index);
 int fn_8022F488(int a);
 int fn_800BA6F8(void);
@@ -375,8 +375,8 @@ void GameStatsGather(void)
         lbl_802D4B14[i].exceeded = 0;
     }
     for (int side = 0; side <= 1; ++side) {
-        if (fn_80186F7C((unsigned char)side) != -1) {
-            int handle = fn_8022F358(fn_80186F7C((unsigned char)side));
+        if (UserProfileGetSelected((unsigned char)side) != -1) {
+            int handle = fn_8022F358(UserProfileGetSelected((unsigned char)side));
             fn_8022F478(handle);
             int values[18];
             int result = fn_801FCE10(0,
@@ -430,25 +430,25 @@ void GameStatsCheckRecords(unsigned char *anyExceeded)
     *anyExceeded = 0;
     unavailable = 0;
     if (!GameModeTypeGet()) {
-        if (fn_80186F7C(0) != -1) {
-            CheatSelectSlot(fn_80186F7C(0));
+        if (UserProfileGetSelected(0) != -1) {
+            CheatSelectSlot(UserProfileGetSelected(0));
             unavailable |= CheatIsNoneEnabled() == 0;
             CheatClearSlot();
         }
-        if (fn_80186F7C(1) != -1) {
-            CheatSelectSlot(fn_80186F7C(1));
+        if (UserProfileGetSelected(1) != -1) {
+            CheatSelectSlot(UserProfileGetSelected(1));
             unavailable |= CheatIsNoneEnabled() == 0;
             CheatClearSlot();
         }
     }
     if (!unavailable) {
         if (update)
-            fn_80186BAC();
+            UserProfileAddGameStats();
         memset(lbl_803EC7EC, 0, 2);
-        if (update && (fn_80186F7C(0) != -1 || fn_80186F7C(1) != -1)) {
+        if (update && (UserProfileGetSelected(0) != -1 || UserProfileGetSelected(1) != -1)) {
             for (side = 0; side <= 1; ++side) {
-                if (fn_80186F7C((unsigned char)side) != -1)
-                    UserRecGetName(fn_80186F7C((unsigned char)side), names[side]);
+                if (UserProfileGetSelected((unsigned char)side) != -1)
+                    UserRecGetName(UserProfileGetSelected((unsigned char)side), names[side]);
                 else
                     names[side][0] = 0;
             }
@@ -488,7 +488,7 @@ void GameStatsCheckRecords(unsigned char *anyExceeded)
             RecordsEnd();
         }
         if (update)
-            fn_80186CE8(lbl_803EC7EC);
+            UserProfileSaveAllRecords(lbl_803EC7EC);
     }
 }
 
@@ -1256,7 +1256,7 @@ void fn_80057C58(unsigned char team, int index, int flag)
     }
     if (fn_800B65A0(team) != 0xFF && fn_80056848()) {
         int database;
-        int id = fn_80186F7C(team);
+        int id = UserProfileGetSelected(team);
         if (id != -1) {
             database = fn_8022F488(fn_8022F358(id));
         } else {
@@ -2057,7 +2057,7 @@ int ChallengeIsPairingGame(void);
 int ChallengeEvaluateGoals(void);
 int fn_80178AE0(void);
 void *fn_8022F4BC(void);
-void *fn_80186B38(void *p);
+void *UserProfileFindIndex(void *p);
 int GauntletScreenGetSelection(void);
 void GauntletMarkTeamBeaten(void *p,int id);
 void GauntletAdvance(void *p);
@@ -2440,12 +2440,12 @@ void fn_8005B128(int *pResult,int *pId,MenuText_t *pText)
     else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
     if(GameModeTypeGet()==8) {
         if(score1>score0) {
-            void *p=fn_80186B38(fn_8022F4BC());
+            void *p=UserProfileFindIndex(fn_8022F4BC());
             GauntletMarkTeamBeaten(p,GauntletScreenGetSelection());
-            GauntletAdvance(fn_80186B38(fn_8022F4BC()));
+            GauntletAdvance(UserProfileFindIndex(fn_8022F4BC()));
             *pResult=1;
-            if(GauntletIsTeamBeaten(fn_80186B38(fn_8022F4BC()),34)) *pResult=3;
-            else if(!GauntletGetTeamsLeft(fn_80186B38(fn_8022F4BC()))) *pResult=2;
+            if(GauntletIsTeamBeaten(UserProfileFindIndex(fn_8022F4BC()),34)) *pResult=3;
+            else if(!GauntletGetTeamsLeft(UserProfileFindIndex(fn_8022F4BC()))) *pResult=2;
         } else *pResult=0;
         DbCursor query;
         fn_80083E40(&query,0,0x54415453);

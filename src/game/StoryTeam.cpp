@@ -193,7 +193,7 @@ void fn_8018C48C(int handle);
 void fn_8018C344(int database, int firstTable, int secondTable,
                  int *pFirstCopy, int *pSecondCopy);
 void fn_8018C3EC(int firstTable, int secondTable);
-int fn_80186F7C(unsigned char index);
+int UserProfileGetSelected(unsigned char index);
 int StoryTestIndexedFlag(int index, int n);
 int fn_801F9D70(int handle, int table, DbFilter *pFilter, unsigned short *pCount);
 int DbCursorGetValue(DbCursor *pObject, int key);
@@ -495,7 +495,7 @@ void StoryTeamLoadUserTeams(int reset, int count)
         fn_8018C48C(0x454D4147);
     }
     for (unsigned char i = 0; i <= 1; i++) {
-        int index = fn_80186F7C(i);
+        int index = UserProfileGetSelected(i);
         if (index == -1) continue;
         int skip;
         if (!reset && count == 1) skip = StoryTestIndexedFlag(index, 1);

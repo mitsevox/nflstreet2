@@ -307,3 +307,5 @@
 0x801FB5C0	lifewillbeokay	First exact body (_TDbIOReadIndex) in original PR #1333, landed through this integration PR.
 0x80201030	lifewillbeokay	First exact body (T3DB_Lexer_Identifier) in original PR #1333, landed through this integration PR.
 0x80261328	adampreddy	First exact body (__kernel_cosf) in original PR #1342, landed through this integration PR.
+0x801FBFEC	lifewillbeokay,adampreddy	First exact (_TDbIOLoadDatabase) through this integration PR: the body from original PR #1333 (lifewillbeokay) with the _TDbMemNotifyEnd closing-event form from original PR #1361 (adampreddy), which made it exact.
+0x801FC5FC	lifewillbeokay,adampreddy	First exact (_TDbIOSaveDatabase) through this integration PR: the body from original PR #1333 (lifewillbeokay) with the _TDbMemNotifyEnd closing-event form from original PR #1361 (adampreddy), which made it exact.

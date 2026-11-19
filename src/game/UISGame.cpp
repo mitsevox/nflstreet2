@@ -81,14 +81,14 @@ void CamSetZScale(void *p, float a);
 void CamFreeSetPos(void *p, float a, float b, float c);
 void CamFreeSetAngle(void *p, int a, int b, int c);
 void fn_801CD2A4(void);
-void fn_801CE82C(void);
-void fn_801CE910(void);
-void fn_801CE9E0(int a);
-int fn_801CEA08(void);
-int fn_801CEA14(void);
-int fn_801CEB4C(void);
-int fn_801CEC74(void);
-int fn_801CEC7C(void);
+void GlibSwapBuffers(void);
+void GlibSyncFrame(void);
+void GlibSetZBufferEnable(int a);
+int GlibGetScreenWidth(void);
+int GlibGetScreenHeight(void);
+int GlibGetWidescreenMode(void);
+int GlibGetScreenLetterBoxHeight(void);
+int GlibGetScreenLetterBoxWidth(void);
 int GlibRenderGetBin(int index);
 void GlibRenderSelectBin(int a);
 float fn_801CFD28(int a);
@@ -209,7 +209,7 @@ int UISGameDrawObj(int a, int b)
 
     UISGameSetDrawMode(0);
     TeamLogoUpdatePending();
-    fn_801CE9E0(0);
+    GlibSetZBufferEnable(0);
     fn_801CD2A4();
     if (FELoopIsMainFEActive()) {
         UIGLibraryProcess(UIGLibraryGetGlobal(1));
@@ -228,7 +228,7 @@ int UISGameDrawObj(int a, int b)
         }
     }
     fn_80236EC0(saved);
-    fn_801CE9E0(1);
+    GlibSetZBufferEnable(1);
     return 0;
 }
 
@@ -252,7 +252,7 @@ void UISGameFreeItem(int a, int b)
 
 void UISGameDrawDone(void)
 {
-    fn_801CE910();
+    GlibSyncFrame();
 }
 
 int UISGameIsInputPad(int a)
@@ -473,11 +473,11 @@ void UISGameCreateMain(void)
     desc.mUnknown3 = 2;
     desc.mUnknown4[0] = 0;
     desc.mUnknown4[1] = 0;
-    desc.mUnknown16 = fn_801CEA14();
-    desc.mUnknown18 = fn_801CEA08();
-    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1)) {
-        desc.mUnknown16 = fn_801CEC74();
-        desc.mUnknown18 = fn_801CEC7C();
+    desc.mUnknown16 = GlibGetScreenHeight();
+    desc.mUnknown18 = GlibGetScreenWidth();
+    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || GlibGetWidescreenMode() == 1)) {
+        desc.mUnknown16 = GlibGetScreenLetterBoxHeight();
+        desc.mUnknown18 = GlibGetScreenLetterBoxWidth();
     }
     _UISGame_pMainVpt = VptOpen(&desc);
     UISGameSetProjection(_UISGame_pMainVpt);
@@ -515,11 +515,11 @@ void UISGameCreateSub(void)
     desc.mUnknown3 = 2;
     desc.mUnknown4[0] = 0;
     desc.mUnknown4[1] = 0;
-    desc.mUnknown16 = fn_801CEA14();
-    desc.mUnknown18 = fn_801CEA08();
-    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1)) {
-        desc.mUnknown16 = fn_801CEC74();
-        desc.mUnknown18 = fn_801CEC7C();
+    desc.mUnknown16 = GlibGetScreenHeight();
+    desc.mUnknown18 = GlibGetScreenWidth();
+    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || GlibGetWidescreenMode() == 1)) {
+        desc.mUnknown16 = GlibGetScreenLetterBoxHeight();
+        desc.mUnknown18 = GlibGetScreenLetterBoxWidth();
     }
     _UISGame_pSubVpt = VptOpen(&desc);
     UISGameSetProjection(_UISGame_pSubVpt);
@@ -549,11 +549,11 @@ void UISGameCreateSub2(void)
     desc.mUnknown3 = 2;
     desc.mUnknown4[0] = 0;
     desc.mUnknown4[1] = 0;
-    desc.mUnknown16 = fn_801CEA14();
-    desc.mUnknown18 = fn_801CEA08();
-    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1)) {
-        desc.mUnknown16 = fn_801CEC74();
-        desc.mUnknown18 = fn_801CEC7C();
+    desc.mUnknown16 = GlibGetScreenHeight();
+    desc.mUnknown18 = GlibGetScreenWidth();
+    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || GlibGetWidescreenMode() == 1)) {
+        desc.mUnknown16 = GlibGetScreenLetterBoxHeight();
+        desc.mUnknown18 = GlibGetScreenLetterBoxWidth();
     }
     _UISGame_pSub2Vpt = VptOpen(&desc);
     UISGameSetProjection(_UISGame_pSub2Vpt);
@@ -854,7 +854,7 @@ void UISGamePresentFrame(void)
         }
         VptProcessViewports();
         SndgUpdate(1);
-        fn_801CE82C();
+        GlibSwapBuffers();
     }
 }
 

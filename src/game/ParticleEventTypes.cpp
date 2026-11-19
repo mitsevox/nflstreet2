@@ -13,32 +13,32 @@ int fn_800A33DC(void);
 int fn_800A8444(int team);
 int ParticleSysGetFootstepEffect(int a);
 int ParticleSysGetImpactEffect(int a);
-void fn_801D03D0(float m[4][4]);
-void fn_801D04C4(void);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D0664(float (*m)[4]);
-void fn_801D06D4(void *p);
-void fn_801D0BCC(int a, int b, int c);
-void fn_801D0C58(void *a);
-void fn_801D0CFC(float a);
-void fn_801D0F80(float m[4][4]);
-void fn_801D0FB8(Vector_80039F5C *pOut);
-void fn_801D11F4(QuatEulerAngles_t *pOut, int a);
+void MatMakeUnitMatrix(float m[4][4]);
+void MatPush(void);
+void MatPushUnit(void);
+void MatPop(void);
+void MatCat(float (*m)[4]);
+void MatLoad(void *p);
+void MatRotZYX(int a, int b, int c);
+void MatTranslate(void *a);
+void MatScale(float a);
+void MatStore(float m[4][4]);
+void MatGetPos(Vector_80039F5C *pOut);
+void MatGetRotByOrder(QuatEulerAngles_t *pOut, int a);
 int fn_80227594(float *pA, float *pB, float tolerance);
 }
 
 extern "C" void ParticleEventGetJoint(Object_8003DEC4 *pBody, int index, Vector_80039F5C *pPos, QuatEulerAngles_t *pAngles)
 {
-    fn_801D04C4();
-    fn_801D06D4(pBody->mUnknown908);
-    fn_801D0CFC(pBody->mUnknown24);
-    fn_801D0664(pBody->mUnknown44.mUnknown52[index]);
-    fn_801D0FB8(pPos);
+    MatPush();
+    MatLoad(pBody->mUnknown908);
+    MatScale(pBody->mUnknown24);
+    MatCat(pBody->mUnknown44.mUnknown52[index]);
+    MatGetPos(pPos);
     if (pAngles) {
-        fn_801D11F4(pAngles, 0);
+        MatGetRotByOrder(pAngles, 0);
     }
-    fn_801D0544();
+    MatPop();
 }
 
 extern "C" void ParticleEventFootstep(ParticleEvent_t *pEvent)
@@ -66,11 +66,11 @@ extern "C" void ParticleEventFootstep(ParticleEvent_t *pEvent)
             pPlayer->mUnknown1024[1] = pos.mY;
         }
         if (pEvent->mUnknown18 == 0 && pBody->mUnknown972 != 0) {
-            fn_801D03D0(m);
+            MatMakeUnitMatrix(m);
             m[0][3] = 0.0f;
             m[1][3] = 0.0f;
             m[2][3] = 0.0f;
-            fn_801D03D0(pEvent->mUnknown20);
+            MatMakeUnitMatrix(pEvent->mUnknown20);
             pEvent->mUnknown20[0][3] = pos.mX;
             pEvent->mUnknown20[1][3] = pos.mY;
             pEvent->mUnknown20[2][3] = pos.mZ;
@@ -94,15 +94,15 @@ extern "C" void ParticleEventAttached(ParticleEvent_t *pEvent)
 
     ParticleEventGetJoint((Object_8003DEC4 *)pPlayer->mpUnknown4, pEvent->mUnknown14, &pos, &angles);
     if (pEvent->mUnknown18 == 0) {
-        fn_801D03D0(m);
+        MatMakeUnitMatrix(m);
         m[0][3] = 0.0f;
         m[1][3] = 0.0f;
         m[2][3] = 0.0f;
-        fn_801D0508();
-        fn_801D0C58(&pos);
-        fn_801D0BCC(angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
-        fn_801D0F80(pEvent->mUnknown20);
-        fn_801D0544();
+        MatPushUnit();
+        MatTranslate(&pos);
+        MatRotZYX(angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+        MatStore(pEvent->mUnknown20);
+        MatPop();
         args.mUnknown0C = 0;
         args.mUnknown10 = 0;
         args.mUnknown08 = &m;
@@ -110,11 +110,11 @@ extern "C" void ParticleEventAttached(ParticleEvent_t *pEvent)
         args.mUnknown00 = pEvent->mUnknown1C;
         pEvent->mUnknown18 = ParticleSysSpawnEmitter(&args, 0, 0);
     } else {
-        fn_801D0508();
-        fn_801D0C58(&pos);
-        fn_801D0BCC(angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
-        fn_801D0F80(pEvent->mUnknown20);
-        fn_801D0544();
+        MatPushUnit();
+        MatTranslate(&pos);
+        MatRotZYX(angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+        MatStore(pEvent->mUnknown20);
+        MatPop();
     }
     if (pEvent->mUnknown18) {
         pEvent->mUnknown18->mUnknown39C = pPlayer->mMotion.mUnknown40;
@@ -137,16 +137,16 @@ extern "C" void ParticleEventBodyTrail(ParticleEvent_t *pEvent)
     }
     ParticleEventGetJoint(pBody, pEvent->mUnknown14, &pos, &angles);
     if (pEvent->mUnknown18 == 0) {
-        fn_801D03D0(m);
+        MatMakeUnitMatrix(m);
         m[0][3] = 0.0f;
         m[1][3] = 0.0f;
         m[2][3] = 0.0f;
-        fn_801D0508();
-        fn_801D0C58(&pos);
-        fn_801D0BCC(angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
-        fn_801D0CFC(pBody->mUnknown24);
-        fn_801D0F80(pEvent->mUnknown20);
-        fn_801D0544();
+        MatPushUnit();
+        MatTranslate(&pos);
+        MatRotZYX(angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+        MatScale(pBody->mUnknown24);
+        MatStore(pEvent->mUnknown20);
+        MatPop();
         args.mUnknown0C = 0;
         args.mUnknown10 = 0;
         args.mUnknown08 = &m;
@@ -162,12 +162,12 @@ extern "C" void ParticleEventBodyTrail(ParticleEvent_t *pEvent)
             pEvent->mUnknown18->mUnknownAC *= 1.35f;
         }
     } else {
-        fn_801D0508();
-        fn_801D0C58(&pos);
-        fn_801D0BCC(angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
-        fn_801D0CFC(pBody->mUnknown24);
-        fn_801D0F80(pEvent->mUnknown20);
-        fn_801D0544();
+        MatPushUnit();
+        MatTranslate(&pos);
+        MatRotZYX(angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+        MatScale(pBody->mUnknown24);
+        MatStore(pEvent->mUnknown20);
+        MatPop();
     }
 }
 
@@ -185,11 +185,11 @@ extern "C" void ParticleEventBodyImpact(ParticleEvent_t *pEvent)
     BallGetHolder(BallGetCurrent());
     args.mUnknown00 = 21;
     if (pBody->mUnknown972 != 0) {
-        fn_801D03D0(m);
+        MatMakeUnitMatrix(m);
         m[0][3] = 0.0f;
         m[1][3] = 0.0f;
         m[2][3] = 0.0f;
-        fn_801D03D0(pEvent->mUnknown20);
+        MatMakeUnitMatrix(pEvent->mUnknown20);
         pEvent->mUnknown20[0][3] = pos.mX;
         pEvent->mUnknown20[1][3] = pos.mY;
         pEvent->mUnknown20[2][3] = pos.mZ;
@@ -222,11 +222,11 @@ extern "C" void ParticleEventBallBounce(ParticleEvent_t *pEvent)
         && pEvent->mUnknown18 == 0) {
         pSource = (ParticleSource_t *)((Ball_t *)pEvent->mUnknown10)->mpUnknown00->mUnknown660;
         if (pSource != 0) {
-            fn_801D03D0(m);
+            MatMakeUnitMatrix(m);
             m[0][3] = 0.0f;
             m[1][3] = 0.0f;
             m[2][3] = 0.0f;
-            fn_801D03D0(pEvent->mUnknown20);
+            MatMakeUnitMatrix(pEvent->mUnknown20);
             pEvent->mUnknown20[0][3] = pos.mX;
             pEvent->mUnknown20[1][3] = pos.mY;
             pEvent->mUnknown20[2][3] = pos.mZ;

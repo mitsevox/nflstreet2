@@ -1,10 +1,19 @@
+/* Draws the nodes of a TM model's geometry: binds each node's material, sets up its vertex arrays and calls its
+   display list, and skins positions and normals in software against the cluster matrices before drawing. */
+
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXTexture.h>
 #include <dolphin/gx/GXTransform.h>
 #include <dolphin/gx/GXDispList.h>
+#include <dolphin/os/OSCache.h>
 #include "engine/tmlib.h"
 
-static void fn_80210D30(TMGeomNode_t *pNode, TMChannelList_t *pList)
+/* llmatrix.c matrix-stack operations (engine/llmatrix.h clashes with tmlib.h over MatStore). */
+void MatPush(void);
+void MatPop(void);
+void MatMakeUnit(void);
+
+static void _TMRenderGeomSubmit(TMGeomNode_t *pNode, TMChannelList_t *pList)
 {
     TMRenderState_t *pState = &lbl_803E96E8;
 
@@ -25,7 +34,122 @@ static void fn_80210D30(TMGeomNode_t *pNode, TMChannelList_t *pList)
     }
 }
 
-static void fn_80211138(TMRenderState_t *pState, TMGeomNode_t *pNode)
+static inline float TMs16tof32(short *pIn)
+{
+    float f;
+
+    asm volatile("psq_l %0,0(%1),1,5" : "=f"(f) : "b"(pIn));
+    return f;
+}
+
+static inline float TMs8tof32(signed char *pIn)
+{
+    float f;
+
+    asm volatile("psq_l %0,0(%1),1,4" : "=f"(f) : "b"(pIn));
+    return f;
+}
+
+static inline void TMf32tos8(float f, signed char *pOut)
+{
+    asm volatile("psq_st %0,0(%1),1,4" : : "f"(f), "b"(pOut) : "memory");
+}
+
+void TMRenderGeomSkin(TMRenderState_t *pState, TMGeomNode_t *pNode)
+{
+    TMGeomAttr_t *pAttrs;
+    TMGeomAttr_t *pAttr;
+    short *pMtxIndex;
+    unsigned int i;
+    Vec v;
+
+    if (pState == 0 || pState->mpClusterObj == 0 || pState->mpClusterObj->mpMatrices == 0) {
+        return;
+    }
+    pAttrs = pState->mpGeom->mpAttrs;
+    DCFlushRange(pState->mpClusterObj->mpMatrices, pState->mpClusterObj->mNumMatrices * sizeof(Mtx));
+    for (i = 0; i < pNode->mNumAttrs; i++) {
+        pAttr = &pAttrs[pNode->mFirstAttr + i];
+        if (pAttr->mType == GX_VA_POS) {
+            if (pAttr->mCompType == GX_S16) {
+                short *pSrc = pAttr->mpData;
+                unsigned short j;
+                Vec *pDst;
+
+                pMtxIndex = pAttrs[pNode->mUnknown16].mpData;
+                pDst = (Vec *)TMGeomAllocChannelBuffer(pAttr->mCount * sizeof(Vec));
+                pState->mpChannels[pNode->mFirstAttr + i] = pDst;
+                MatPush();
+                MatMakeUnit();
+                for (j = 0; j < pAttr->mCount; j++) {
+                    v.x = TMs16tof32(pSrc);
+                    pSrc++;
+                    v.y = TMs16tof32(pSrc);
+                    pSrc++;
+                    v.z = TMs16tof32(pSrc);
+                    pSrc++;
+                    PSMTXMultVec(((Mtx *)pState->mpClusterObj->mpMatrices)[pMtxIndex[j]], &v, pDst);
+                    pDst++;
+                }
+            } else if (pAttr->mCompType == GX_F32) {
+                // FAKEMATCH: own vector for this arm (the other arms share the function-scope one) gives the target's two stack slots
+                Vec v;
+                float *pSrc = pAttr->mpData;
+                unsigned short j;
+                Vec *pDst;
+
+                pMtxIndex = pAttrs[pNode->mUnknown16].mpData;
+                pDst = (Vec *)TMGeomAllocChannelBuffer(pAttr->mCount * sizeof(Vec));
+                pState->mpChannels[pNode->mFirstAttr + i] = pDst;
+                MatPush();
+                MatMakeUnit();
+                for (j = 0; j < pAttr->mCount; j++) {
+                    v.x = *pSrc++;
+                    v.y = *pSrc++;
+                    v.z = *pSrc++;
+                    PSMTXMultVec(((Mtx *)pState->mpClusterObj->mpMatrices)[pMtxIndex[j]], &v, pDst);
+                    pDst++;
+                }
+            } else {
+                continue;
+            }
+            MatPop();
+            DCFlushRange(pState->mpChannels[pNode->mFirstAttr + i], pAttr->mCount * sizeof(Vec));
+        } else if (pAttr->mType == GX_VA_NRM && pAttr->mCompType == GX_S8) {
+            signed char *pSrc = pAttr->mpData;
+            unsigned short j;
+            signed char *pDst;
+
+            pMtxIndex = pAttrs[pNode->mUnknown16].mpData;
+            pDst = (signed char *)TMGeomAllocChannelBuffer(pAttr->mCount * 8);
+            pState->mpChannels[pNode->mFirstAttr + i] = pDst;
+            MatPush();
+            MatMakeUnit();
+            for (j = 0; j < pAttr->mCount; j++) {
+                v.x = TMs8tof32(pSrc);
+                pSrc++;
+                v.y = TMs8tof32(pSrc);
+                pSrc++;
+                v.z = TMs8tof32(pSrc);
+                pSrc++;
+                PSMTXMultVecSR(((Mtx *)pState->mpClusterObj->mpMatrices)[pMtxIndex[j]], &v, &v);
+                v.x *= 32768.0f;
+                v.y *= 32768.0f;
+                v.z *= 32768.0f;
+                TMf32tos8(v.x, pDst);
+                pDst++;
+                TMf32tos8(v.y, pDst);
+                pDst++;
+                TMf32tos8(v.z, pDst);
+                pDst++;
+            }
+            MatPop();
+            DCFlushRange(pState->mpChannels[pNode->mFirstAttr + i], pAttr->mCount * 3);
+        }
+    }
+}
+
+static void _TMRenderGeom(TMRenderState_t *pState, TMGeomNode_t *pNode)
 {
     TMChannelList_t list;
     TMGeomNode_t *pLod;
@@ -49,12 +173,12 @@ static void fn_80211138(TMRenderState_t *pState, TMGeomNode_t *pNode)
                 }
             }
         }
-        fn_80210D30(pNode, &list);
+        _TMRenderGeomSubmit(pNode, &list);
     } else {
         int i;
 
         for (i = 0; i < pState->mNumHooks; i++) {
-            RenderHook_80211138 *pHook = pState->mapHooks[i];
+            TMRenderHook_t *pHook = pState->mapHooks[i];
 
             if (pHook->mFunc != 0) {
                 pHook->mFunc(pHook, pNode, &list);
@@ -63,7 +187,7 @@ static void fn_80211138(TMRenderState_t *pState, TMGeomNode_t *pNode)
     }
 }
 
-void fn_8021126C(void)
+void TMRenderGeomSkinAll(void)
 {
     TMRenderState_t *pState = &lbl_803E96E8;
     TMGeom_t *pGeom = pState->mpGeom;
@@ -71,12 +195,12 @@ void fn_8021126C(void)
 
     if (pGeom != 0) {
         for (i = 0; i < pGeom->mNumNodes; i++) {
-            fn_80210DCC(pState, &pGeom->mpNodes[i]);
+            TMRenderGeomSkin(pState, &pGeom->mpNodes[i]);
         }
     }
 }
 
-void fn_802112DC(unsigned short *pIndices, unsigned int count)
+void TMRenderGeomList(unsigned short *pIndices, unsigned int count)
 {
     TMRenderState_t *pState = &lbl_803E96E8;
     TMGeom_t *pGeom = pState->mpGeom;
@@ -84,12 +208,12 @@ void fn_802112DC(unsigned short *pIndices, unsigned int count)
 
     if (pGeom != 0) {
         for (i = 0; i < count; i++) {
-            fn_80211138(pState, &pGeom->mpNodes[pIndices[i]]);
+            _TMRenderGeom(pState, &pGeom->mpNodes[pIndices[i]]);
         }
     }
 }
 
-void fn_80211350(void)
+void TMRenderGeomAll(void)
 {
     TMRenderState_t *pState = &lbl_803E96E8;
     TMGeom_t *pGeom = pState->mpGeom;
@@ -97,12 +221,12 @@ void fn_80211350(void)
 
     if (pGeom != 0) {
         for (i = 0; i < pGeom->mNumNodes; i++) {
-            fn_80211138(pState, &pGeom->mpNodes[i]);
+            _TMRenderGeom(pState, &pGeom->mpNodes[i]);
         }
     }
 }
 
-void fn_802113C0(int state, int arg)
+void TMRenderGeomNode(int state, int arg)
 {
     TMSwapDef_t *pSwap = lbl_803E96E8.mpSwap;
 
@@ -110,12 +234,12 @@ void fn_802113C0(int state, int arg)
         TMSwapState_t *pSwapState = TMSwapGetState(pSwap, state, arg);
 
         if (pSwapState != 0) {
-            fn_802112DC(&pSwap->mpNodeIndices[pSwapState->mFirstNode], pSwapState->mNumNodes);
+            TMRenderGeomList(&pSwap->mpNodeIndices[pSwapState->mFirstNode], pSwapState->mNumNodes);
         }
     }
 }
 
-void fn_80211424(unsigned short *pIndices, unsigned int count)
+void TMRenderGeomListDirect(unsigned short *pIndices, unsigned int count)
 {
     TMGeom_t *pGeom = lbl_803E96E8.mpGeom;
     TMRenderState_t *pState = &lbl_803E96E8;
@@ -148,7 +272,8 @@ void fn_80211424(unsigned short *pIndices, unsigned int count)
                 }
             }
             if (pNode->mFormatIndex != lbl_803E96E8.mUnknown60) {
-                TMGeomAttr_t *pAttr = &pAttrs[pNode->mFirstAttr];
+                // FAKEMATCH: integer address sum (index offset first) gives the target's add order; same address as &pAttrs[pNode->mFirstAttr]
+                TMGeomAttr_t *pAttr = (TMGeomAttr_t *)(pNode->mFirstAttr * sizeof(TMGeomAttr_t) + (unsigned int)pAttrs);
                 int n = pNode->mNumAttrs;
 
                 GXClearVtxDesc();
@@ -165,7 +290,8 @@ void fn_80211424(unsigned short *pIndices, unsigned int count)
                     lbl_803E96E8.mUnknown60 = pNode->mFormatIndex;
                 }
             } else {
-                TMGeomAttr_t *pAttr = &pAttrs[pNode->mFirstAttr];
+                // FAKEMATCH: integer address sum, as above
+                TMGeomAttr_t *pAttr = (TMGeomAttr_t *)(pNode->mFirstAttr * sizeof(TMGeomAttr_t) + (unsigned int)pAttrs);
                 int n = pNode->mNumAttrs;
 
                 for (; n > 0; n--) {

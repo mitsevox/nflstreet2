@@ -6,15 +6,15 @@
 extern unsigned char lbl_803EBC60;
 extern int lbl_803EBC64;
 
-int fn_801CE2F4(GlibConfig_801CE1F8 *pConfig);
-int fn_801CE718(void);
+int GlibLLInit(GlibConfig_t *pConfig);
+int GlibLLShutdown(void);
 
-int GlibInit(GlibConfig_801CE1F8 *pConfig)
+int GlibInit(GlibConfig_t *pConfig)
 {
     int result;
 
     if (!lbl_803EBC60) {
-        result = fn_801CE2F4(pConfig);
+        result = GlibLLInit(pConfig);
         lbl_803EBC60 = 1;
     } else {
         result = 0xE0001;
@@ -28,7 +28,7 @@ int GlibShutdown(void)
     int result;
 
     if (lbl_803EBC60) {
-        result = fn_801CE718();
+        result = GlibLLShutdown();
         lbl_803EBC60 = 0;
     } else {
         result = 0xE0002;

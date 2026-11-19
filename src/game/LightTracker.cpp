@@ -7,7 +7,7 @@
 #include "game/LightTracker.h"
 
 extern "C" {
-void fn_801D0470(int a);
+void MatSetStack(int a);
 void fn_802271F0(float *pOut, float *pIn);
 void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 }
@@ -44,7 +44,7 @@ int LightTrackerUpdate(LightTracker_t *pTracker, LightSource_t *pSource, float *
         direction.mX = pObject->mUnknown12.mX;
         direction.mY = -pObject->mUnknown12.mZ;
         direction.mZ = pObject->mUnknown12.mY;
-        fn_801D0470(VptGetMatrixStack());
+        MatSetStack(VptGetMatrixStack());
         fn_802271F0(&direction.mX, &direction.mX);
         direction.mX = -direction.mX;
         direction.mY = -direction.mY;

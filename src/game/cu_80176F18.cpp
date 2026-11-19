@@ -1556,7 +1556,8 @@ extern "C" void fn_801795EC(int id, float from, float to)
         yards = -0x7FF - total;
     }
     fn_8017937C(id, 0x61796167, yards);
-    fn_8017937C(id, 0x4E6C6167, (int)(to - from));
+    // FAKEMATCH: -from + to is the same IEEE value as to - from; the spelling keeps gcse from reusing the first difference
+    fn_8017937C(id, 0x4E6C6167, (int)(-from + to));
 }
 
 extern "C" void fn_801796C8(int id, float from, float catchY, float to, float time)
@@ -1577,7 +1578,8 @@ extern "C" void fn_801796C8(int id, float from, float catchY, float to, float ti
         yards = -0x3FF - total;
     }
     fn_8017937C(id, 0x61796367, yards);
-    gain = (int)(to - from);
+    // FAKEMATCH: -from + to is the same IEEE value as to - from; the spelling keeps gcse from reusing the first difference
+    gain = (int)(-from + to);
     fn_8017937C(id, 0x4C726367, gain);
     if (catchY < fn_80178A2C()) {
         fn_8017937C(id, 0x63796367, (int)(to - catchY));

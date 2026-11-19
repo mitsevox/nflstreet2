@@ -16,9 +16,9 @@ extern "C" void SpchIGSayStyling(void)
 
     SpchIGGetPlayerCategory(&result, _SpchIG_iStylingPlayer);
     if (fn_80178308() == 0) {
-        gSPCH_AddEvent(fn_801AE5D4(1, 0, 0x201D), 1, result);
+        gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x201D), 1, result);
     } else {
-        gSPCH_AddEvent(fn_801AE5D4(2, 0, 0x401D), 1, result);
+        gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x401D), 1, result);
     }
 }
 

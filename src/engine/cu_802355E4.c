@@ -16,7 +16,7 @@
 
 #include "engine/list.h"
 #include "engine/llmemory.h"
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 
 typedef struct Chunk_80237D5C {
     unsigned int mWords[16];
@@ -72,7 +72,7 @@ typedef struct Table_802382F0 {
 void fn_80237B84(Object_80237EE8 *p);
 void fn_80238034(Object_80237EE8 *p);
 
-extern List_801C68FC *lbl_803ED030;
+extern DSList_t *lbl_803ED030;
 extern Table_802382F0 lbl_803A3A14;
 extern unsigned char lbl_803EC140;
 extern unsigned int lbl_802FB464[256];
@@ -276,7 +276,7 @@ void fn_8023570C(Object_80235588 *p, const char *pName)
 
 void fn_80235740(Object_80235588 *p, int handle)
 {
-    fn_801D0F80(p->mUnknown8[0]);
+    MatStore(p->mUnknown8[0]);
 }
 
 void fn_80235764(Object_80235588 *p, int handle)
@@ -504,7 +504,7 @@ Light_802362C4 *fn_802362C4(Scene_8023609C *pScene, int index)
 void fn_802362D4(Viewport_t *pObject)
 {
     if (lbl_803A2868.mpUnknown0 != 0) {
-        fn_801D0470(VptGetMatrixStack());
+        MatSetStack(VptGetMatrixStack());
         fn_8023609C(lbl_803A2868.mpUnknown0);
         fn_80236258(lbl_803A2868.mpUnknown0, lbl_803A2868.mUnknown276);
         fn_80236164(lbl_803A2868.mpUnknown0, lbl_803A2868.mUnknown4, lbl_803A2868.mUnknown260);
@@ -549,18 +549,18 @@ void fn_80236408(int index, float *pOut)
     float v[3];
     float w[3];
 
-    fn_801D0470(0);
+    MatSetStack(0);
     v[0] = 0.0f;
     v[1] = 0.0f;
     v[2] = 1.0f;
-    fn_801D04C4();
-    fn_801D06D4((float *)pLight);
+    MatPush();
+    MatLoad((float *)pLight);
     fn_80227C2C(w, v);
     pOut[0] = v[0] - w[0];
     pOut[1] = v[1] - w[1];
     pOut[2] = v[2] - w[2];
     fn_802271F0(pOut, pOut);
-    fn_801D0544();
+    MatPop();
 }
 
 GXColor fn_802364B4(float *pColor)
@@ -1124,7 +1124,7 @@ int fn_80237A30(Counter_80237934 *pA, Counter_80237934 *pB)
 }
 Handle_80237A40 *fn_80237A40(Object_80237EE8 *pGroup, void **ppData, int size, int a, unsigned int id)
 {
-    Handle_80237A40 *p = fn_801C6A20(pGroup->mpUnknown20);
+    Handle_80237A40 *p = DSNewListNode(pGroup->mpUnknown20);
     memset(p, 0, sizeof(Handle_80237A40));
     p->mppUnknown0 = ppData;
     p->mUnknown8 = a;
@@ -1133,7 +1133,7 @@ Handle_80237A40 *fn_80237A40(Object_80237EE8 *pGroup, void **ppData, int size, i
     p->mpUnknown48 = pGroup;
     p->mpUnknown44 = fn_801D2B7C(size, 0, 0);
     memset(p->mpUnknown44, 0, size);
-    fn_801C6AA4(pGroup->mpUnknown20, p, 0);
+    DSAddListNode(pGroup->mpUnknown20, p, 0);
     return p;
 }
 
@@ -1169,10 +1169,10 @@ void fn_80237B84(Object_80237EE8 *p)
     if (p->mpUnknown24 != 0) {
         fn_80237D5C(fn_801D27B8(p->mUnknown16), p->mpUnknown24, p->mUnknown12);
     }
-    pItem = fn_801C6B4C(p->mpUnknown20, 0);
+    pItem = DSGetListNode(p->mpUnknown20, 0);
     while (pItem != 0) {
         fn_80237ADC(pItem);
-        pItem = fn_801C6C84(p->mpUnknown20, pItem);
+        pItem = DSNextListNode(p->mpUnknown20, pItem);
     }
     p->mUnknown4 = 2;
     fn_80238034(p);
@@ -1182,10 +1182,10 @@ void fn_80237C0C(Object_80237EE8 *p)
 {
     Handle_80237A40 *pItem;
     if (p->mUnknown4 != 1) {
-        pItem = fn_801C6B4C(p->mpUnknown20, 0);
+        pItem = DSGetListNode(p->mpUnknown20, 0);
         while (pItem != 0) {
             fn_80237AEC(pItem);
-            pItem = fn_801C6C84(p->mpUnknown20, pItem);
+            pItem = DSNextListNode(p->mpUnknown20, pItem);
         }
         p->mUnknown4 = 1;
     }
@@ -1205,21 +1205,21 @@ int fn_80237C78(void *p, void *pKey, void *pOut)
 
 Object_80237EE8 *fn_80237CB0(int key, int a, int b, int c)
 {
-    Object_80237EE8 *p = fn_801C6A20(lbl_803ED030);
+    Object_80237EE8 *p = DSNewListNode(lbl_803ED030);
     p->mUnknown0 = key;
     p->mUnknown8 = a;
     p->mUnknown16 = c;
     p->mUnknown12 = b;
     p->mUnknown4 = 1;
     p->mpUnknown24 = 0;
-    fn_801C6AA4(lbl_803ED030, p, 0);
+    DSAddListNode(lbl_803ED030, p, 0);
     return p;
 }
 
 void fn_80237D24(Object_80237EE8 *p)
 {
     fn_80237FF4(p);
-    fn_801C6C0C(lbl_803ED030, p);
+    DSDelListNode(lbl_803ED030, p);
 }
 
 void fn_80237D5C(void *pDst, const void *pSrc, unsigned int size)
@@ -1237,18 +1237,18 @@ void fn_80237D5C(void *pDst, const void *pSrc, unsigned int size)
 
 void fn_80237E3C(int count)
 {
-    lbl_803ED030 = fn_801C68FC(1, 0, count, sizeof(Object_80237EE8), 0, 0);
+    lbl_803ED030 = DSNewList(1, 0, count, sizeof(Object_80237EE8), 0, 0);
 }
 
 int fn_80237E78(void)
 {
-    return fn_801C69E4(lbl_803ED030);
+    return DSDelList(lbl_803ED030);
 }
 
 Object_80237EE8 *fn_80237E9C(int key)
 {
     Object_80237EE8 *pResult;
-    if (fn_801C6DCC(lbl_803ED030, 0, &key, &pResult, fn_80237C78) == 2) {
+    if (DSSearchList(lbl_803ED030, 0, &key, &pResult, fn_80237C78) == 2) {
         return pResult;
     }
     return 0;
@@ -1261,7 +1261,7 @@ Object_80237EE8 *fn_80237EE8(int key, int count, int size, Config_80237EE8 *pCon
     lbl_803A39FC = *pConfig;
     fn_801D2130(&lbl_803A39FC);
     p = fn_80237CB0(key, count, size, lbl_803A39FC.mUnknown8);
-    p->mpUnknown20 = fn_801C68FC(lbl_803A39FC.mUnknown8, 0, count, sizeof(Handle_80237A40),
+    p->mpUnknown20 = DSNewList(lbl_803A39FC.mUnknown8, 0, count, sizeof(Handle_80237A40),
                                  (int (*)(void *, void *))fn_80237A30, 0);
     return p;
 }
@@ -1290,10 +1290,10 @@ void fn_80237FF4(Object_80237EE8 *p)
 
 void fn_80238034(Object_80237EE8 *p)
 {
-    Handle_80237A40 *pItem = fn_801C6B4C(p->mpUnknown20, 0);
+    Handle_80237A40 *pItem = DSGetListNode(p->mpUnknown20, 0);
     while (pItem != 0) {
         fn_80237AFC(pItem);
-        pItem = fn_801C6C84(p->mpUnknown20, pItem);
+        pItem = DSNextListNode(p->mpUnknown20, pItem);
     }
 }
 
@@ -1303,14 +1303,14 @@ void fn_8023808C(Object_80237EE8 *p)
     Handle_80237A40 *pNext;
 
     fn_801D277C(p->mUnknown16);
-    pItem = fn_801C6B4C(p->mpUnknown20, 0);
+    pItem = DSGetListNode(p->mpUnknown20, 0);
     while (pItem != 0) {
         fn_80237B34(pItem);
-        pNext = fn_801C6C84(p->mpUnknown20, pItem);
-        fn_801C6C0C(p->mpUnknown20, pItem);
+        pNext = DSNextListNode(p->mpUnknown20, pItem);
+        DSDelListNode(p->mpUnknown20, pItem);
         pItem = pNext;
     }
-    fn_801C69E4(p->mpUnknown20);
+    DSDelList(p->mpUnknown20);
     fn_801D277C(1);
     fn_801D2570(p->mUnknown16);
     fn_80237D24(p);

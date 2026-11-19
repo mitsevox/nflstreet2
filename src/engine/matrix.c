@@ -36,7 +36,7 @@ int MatInit(int numStacks)
                 lbl_803EBCB8[i].mpMatrices = 0;
             }
             lbl_803EBCBC = count;
-            fn_801D070C();
+            MatLLInit();
             lbl_803EBCB4 = 1;
         } else {
             result = fn_801F7C88();
@@ -81,7 +81,7 @@ int MatNewStack(unsigned int index, unsigned int depth)
         pStack->mTop = 0;
         pStack->mpMatrices = pMatrices;
         result = 0;
-        fn_801D03D0(*pMatrices);
+        MatMakeUnitMatrix(*pMatrices);
     } else {
         result = fn_801F7C88();
     }
@@ -111,5 +111,5 @@ void MatRotVecToVec(float *pFrom, float *pTo)
 
     fn_802277DC(axis, pFrom, pTo);
     fn_802271F0(axis, axis);
-    fn_801D0710(axis, Vec3GetAngle(pFrom, pTo));
+    MatRotAxis(axis, Vec3GetAngle(pFrom, pTo));
 }

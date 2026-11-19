@@ -91,29 +91,29 @@ int fn_801BC7C0(AnimHeader_t *pObject, void *a, void *b);
 int fn_801BCA74(AnimHeader_t *pObject, void *a, int b, void *c, int d, int e);
 int fn_801BCCAC(AnimHeader_t *pObject, void *a, int b, void *c, int d, int e);
 void fn_801BE420(void *a, AnimHeader_t *pObject, void *b, FEPlyrModel_t *pRecord, float c);
-void fn_801CE9E0(int a);
+void GlibSetZBufferEnable(int a);
 float fn_801CFD28(int a);
 int MathRLerp(int a, int b, float c);
-void fn_801D0470(int);
-void fn_801D04C4(void);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D08FC(int a);
-void fn_801D0ADC(int a);
-void fn_801D0C58(void *a);
-void fn_801D0F80(void *a);
-void fn_801D1258(int which, float (*pMatrix)[4]);
-void fn_801D1288(int which, float (*pMatrix)[4]);
-void fn_801D12BC(int a);
-void fn_801D12EC(int a);
-void fn_801D131C(int a);
+void MatSetStack(int);
+void MatPush(void);
+void MatPushUnit(void);
+void MatPop(void);
+void MatRotX(int a);
+void MatRotZ(int a);
+void MatTranslate(void *a);
+void MatStore(void *a);
+void MatSetSlot(int which, float (*pMatrix)[4]);
+void MatGetSlot(int which, float (*pMatrix)[4]);
+void MatLoadSlot(int a);
+void MatStoreSlot(int a);
+void MatCatSlot(int a);
 FEPlyrScene_t *ObjNew(int a, int b, FEPlyrSceneDesc_t *pDesc);
 void fn_80227490(float *pOut, float *pIn, int a, int b, int c);
 void fn_80234424(int a);
 }
 
 static Object_8008044C _FEPlyr_PlayerCursor;
-/* Matrix built by VptPerspective and passed to fn_801D1258. */
+/* Matrix built by VptPerspective and passed to MatSetSlot. */
 static float _FEPlyr_Projection[4][4];
 static FEPlyrModel_t _FEPlyr_aModels[14];
 /* Current values; FEPlyrUpdateMoves interpolates them from _FEPlyr_aMoveFrom towards
@@ -265,14 +265,14 @@ static void _FEPlyrUpdateModel(int index, unsigned int step)
 
 static void _FEPlyrBuildTransform(Object_8003DEC4 *pObject)
 {
-    fn_801D0508();
-    fn_801D08FC(0x400000);
-    fn_801D0ADC(-0x400000);
-    fn_801D0C58(pObject->mUnknown4);
-    fn_801D0ADC(pObject->mUnknown36 + 0x400000);
-    fn_801D08FC(0x400000);
-    fn_801D0F80(pObject->mUnknown908);
-    fn_801D0544();
+    MatPushUnit();
+    MatRotX(0x400000);
+    MatRotZ(-0x400000);
+    MatTranslate(pObject->mUnknown4);
+    MatRotZ(pObject->mUnknown36 + 0x400000);
+    MatRotX(0x400000);
+    MatStore(pObject->mUnknown908);
+    MatPop();
 }
 
 static void _FEPlyrDrawModel(int index, float a, float b, float c, float d)
@@ -283,16 +283,16 @@ static void _FEPlyrDrawModel(int index, float a, float b, float c, float d)
     float view[4][4];
 
     UISGameSetDrawMode(3);
-    fn_801CE9E0(1);
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D1288(2, projection);
-    fn_801D1288(6, view);
-    fn_801D04C4();
-    fn_801D1258(2, _FEPlyr_Projection);
-    fn_801D12BC(1);
-    fn_801D131C(2);
-    fn_801D12EC(6);
-    fn_801D0544();
+    GlibSetZBufferEnable(1);
+    MatSetStack(VptGetMatrixStack());
+    MatGetSlot(2, projection);
+    MatGetSlot(6, view);
+    MatPush();
+    MatSetSlot(2, _FEPlyr_Projection);
+    MatLoadSlot(1);
+    MatCatSlot(2);
+    MatStoreSlot(6);
+    MatPop();
     fn_80234424(0);
     PlayerObjDraw(pObject, 1);
     if (_FEPlyr_bPairMode ? index == _FEPlyr_iFrontIndex : index == 0) {
@@ -300,9 +300,9 @@ static void _FEPlyrDrawModel(int index, float a, float b, float c, float d)
             BallModelDraw(_FEPlyr_pScene, 1);
         }
     }
-    fn_801D1258(2, projection);
-    fn_801D1258(6, view);
-    fn_801CE9E0(0);
+    MatSetSlot(2, projection);
+    MatSetSlot(6, view);
+    GlibSetZBufferEnable(0);
 }
 
 static void _FEPlyrRender(int index, float a, float b, float c, float d)

@@ -30,7 +30,7 @@ int SPCH_Init(int a, int b, int c)
         iSPCH_InitCallbacks();
         gDataRate = c;
         gCallbacks.mUnknown0 = a;
-        gSPCH_AddEvent = fn_801AEC58;
+        gSPCH_AddEvent = SPCH_AddEventV;
         gGameNum = b;
         iSPCH_InitRandom(b);
         fn_801B118C();
@@ -38,10 +38,10 @@ int SPCH_Init(int a, int b, int c)
         for (i = 0; i <= 7; i++) {
             gFilterSetting[i] = 0;
         }
-        fn_801AE808();
-        fn_801AF544();
-        fn_801B2450();
-        fn_801AE8DC();
+        iSPCH_InitEventDat();
+        iSPCH_InitInGame();
+        iSPCH_InitBanks();
+        iSPCH_InitEventQueue();
         gSPCH_Initialized = 0x01789A34;
         return 1;
     }
@@ -53,8 +53,8 @@ void SPCH_Deinit(void)
     if (gSPCH_Initialized == 0x01789A34) {
         gSPCH_Initialized = 0;
         iSPCH_InitCallbacks();
-        fn_801B2468();
-        fn_801AE808();
+        iSPCH_DisposeBanks();
+        iSPCH_InitEventDat();
     }
 }
 

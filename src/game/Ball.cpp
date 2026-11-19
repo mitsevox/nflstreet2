@@ -40,9 +40,9 @@ float BallSweepToPart(CollideObject_t *pA, CollideObject_t *pB, unsigned char su
 CollideSet_t *StatcollGetSet(void);
 void ParticlesAddBallEvent(int a, Ball_t *pBall);
 int fn_801486A0(void);
-void fn_801D0470(int a);
-void fn_801D0494(void);
-void fn_801D0860(Quat_801EB488 *pRot);
+void MatSetStack(int a);
+void MatResetStack(void);
+void MatRotQuat(Quat_801EB488 *pRot);
 int MemFill(void *pDest, int size, int value, int width);
 void QuatIdentity(Quat_801EB488 *pRot);
 void QuatMultiply(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB);
@@ -750,9 +750,9 @@ void BallUpdateCollRecord(CollideObject_t *pRecord)
         pSub = &pRecord->mpUnknown20[i];
         axis.mX = axis.mY = 0.0f;
         axis.mZ = 0.06940532f;
-        fn_801D0470(3);
-        fn_801D0494();
-        fn_801D0860(&pBall->mState.mUnknown18);
+        MatSetStack(3);
+        MatResetStack();
+        MatRotQuat(&pBall->mState.mUnknown18);
         fn_80227C2C(&axis, &axis);
         pSub->mUnknown0 = pBall->mState.mPos.mX;
         pSub->mUnknown4 = pBall->mState.mPos.mY;

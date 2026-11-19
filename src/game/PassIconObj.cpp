@@ -24,13 +24,13 @@ int PassIconsAreShown(void);
 int PassIconGetPosition(int index, Vector_80039F5C *pOut);
 int PassIconsWereShown(void);
 float fn_80178A44(void);
-void fn_801D0470(int a);
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D08FC(int a);
-void fn_801D0ADC(int a);
-void fn_801D0C58(void *a);
-void fn_801D0CFC(float a);
+void MatSetStack(int a);
+void MatPush(void);
+void MatPop(void);
+void MatRotX(int a);
+void MatRotZ(int a);
+void MatTranslate(void *a);
+void MatScale(float a);
 int ObjNewType_(int a, int b, int c, void (*pA)(PassIconObj_t *, const PassIconObjDesc_t *), void (*pB)(void));
 int ObjDelType(int a);
 void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(PassIconObj_t *));
@@ -65,18 +65,18 @@ extern "C" int PassIconObjDraw(PassIconObj_t *pInstance)
 
             pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
             scale = fabsf(pInstance->mUnknown04.mY - pCamera->mHeader.mUnknown04[1]) / (fn_80178A44() * 2.0f) * 2.0f + 0.3f;
-            fn_801D0470(VptGetMatrixStack());
-            fn_801D04C4();
+            MatSetStack(VptGetMatrixStack());
+            MatPush();
             pos = *pPos;
             pos.mZ += scale * 0.5;
-            fn_801D0C58(&pos);
-            fn_801D0ADC(-pCamera->mHeader.mUnknown14[2]);
-            fn_801D08FC(0xC00000 - pCamera->mHeader.mUnknown14[0]);
+            MatTranslate(&pos);
+            MatRotZ(-pCamera->mHeader.mUnknown14[2]);
+            MatRotX(0xC00000 - pCamera->mHeader.mUnknown14[0]);
             pInstance->mUnknown20 = PassIconsAreShown() ? 1.0f : 0.4f;
-            fn_801D0CFC(scale);
+            MatScale(scale);
             PassIconTexDraw(pInstance);
-            fn_801D0470(VptGetMatrixStack());
-            fn_801D0544();
+            MatSetStack(VptGetMatrixStack());
+            MatPop();
         }
     }
     return 0;

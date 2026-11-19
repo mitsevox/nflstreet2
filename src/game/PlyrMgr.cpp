@@ -174,9 +174,9 @@ Object_8003DEC4 *fn_8003DEE4(int value);
 void fn_8009CF30(void *pDst, AnimPose_t *pPose);
 extern unsigned char _PlyrMgr_aCapsuleBonePairs[11][2];
 void PlyrCollideResetBlock(Block_80170374 *pBlock);
-void fn_801D04C4(void);
-void fn_801D06D4(void *p);
-void fn_801D0544(void);
+void MatPush(void);
+void MatLoad(void *p);
+void MatPop(void);
 void fn_80227930(void *pOut, void *pA, void *pB, float t);
 float fn_8022785C(void *pA, void *pB);
 void fn_80227CC0(void *pOut, void *pIn);
@@ -1108,8 +1108,8 @@ extern "C" void PlyrUpdateCollRecord(CollideObject_t *pRecord)
     pRecord->mUnknown8 = p->mMotion.mPos.mZ + 1.0f;
     pRecord->mUnknown10 = p->mMotion.mPos.mZ;
     pRecord->mUnknown14 = p->mMotion.mPos.mZ + 6.0f;
-    fn_801D04C4();
-    fn_801D06D4(p->mUnknown640);
+    MatPush();
+    MatLoad(p->mUnknown640);
     radius = 0.0f;
     int mode = fn_800AD9B4();
     if ((pRecord->mUnknown2C & 2) && (mode == 2 || mode == 6 || mode == 7) && !(p->mFlags & 0x4000)) {
@@ -1211,7 +1211,7 @@ extern "C" void PlyrUpdateCollRecord(CollideObject_t *pRecord)
             fn_80227930(pSub, &pSub->mUnknown10, &pSub->mUnknown20, 0.5f);
         }
     }
-    fn_801D0544();
+    MatPop();
     pRecord->mUnknown18 = radius;
     if (!(pRecord->mUnknown2C & 2)) {
         for (i = 0; i <= 10; i++) {

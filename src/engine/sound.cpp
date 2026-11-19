@@ -4,7 +4,7 @@
 
 #include "engine/sound.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include "engine/IAllocator.h"
 #include "engine/csis.h"
 
@@ -111,11 +111,11 @@ public:
 extern "C" {
 int sprintf(char *s, const char *format, ...);
 void DCFlushRange(void *addr, unsigned long nBytes);
-void *fn_801C6A20(void *pList);
-void *fn_801C6AA4(void *pPool, void *pItem, int c);
-void *fn_801C6B4C(void *pList, int where);
-void fn_801C6C0C(void *pList, void *pNode);
-int fn_801C6D34(void *pPool, int start, void *pKey, void *pOut, SndTraverseFn_t pFunc, int count);
+void *DSNewListNode(void *pList);
+void *DSAddListNode(void *pPool, void *pItem, int c);
+void *DSGetListNode(void *pList, int where);
+void DSDelListNode(void *pList, void *pNode);
+int DSTraverseList(void *pPool, int start, void *pKey, void *pOut, SndTraverseFn_t pFunc, int count);
 int FileHostCheckActive(void);
 void FileDebugProcess(void);
 void *fn_801D310C(void *pAddr, int size, int ident, int flags);
@@ -139,7 +139,7 @@ int SNDbankremove(int handle);
 void fn_8026B124(void *p);
 void fn_8026B250(void);
 void fn_8026C280(void);
-int fn_8026C3BC(int handle);
+int SNDover(int handle);
 int SNDpitchmult(int handle, int value);
 void SNDplaysetdef(SndPatchOpts_t *pOpts);
 void SNDSYS_entercritical(void);
@@ -157,7 +157,7 @@ int SNDstop(int handle);
 int SNDSTRM_overhead(int a, int b);
 int SNDSTRM_pitchmult(int handle, int a);
 int SNDSTRM_drylevel(int handle, int a);
-int fn_8026EF88(int a, int b);
+int SNDSTRM_requeststatus(int a, int b);
 void SNDSTRM_status(int handle, int *pStatus);
 void SNDSYS_service(void);
 int fn_802714A8(int handle, int value);
@@ -248,7 +248,7 @@ static void _SndProcessBanks(void)
 
     busy = 0;
     pBank = 0;
-    fn_801C6D34(_Snd_ModuleInfo.pBankList, 0, (void *)3, &pBank, _SndBankTraverseFindState, 1);
+    DSTraverseList(_Snd_ModuleInfo.pBankList, 0, (void *)3, &pBank, _SndBankTraverseFindState, 1);
     if (pBank != 0 && pBank->mState == 3) {
         busy = 1;
         if (SNDBANK_asyncloadmemdone() != 0) {
@@ -257,7 +257,7 @@ static void _SndProcessBanks(void)
     }
     if (!busy) {
         pBank = 0;
-        fn_801C6D34(_Snd_ModuleInfo.pBankList, 0, (void *)2, &pBank, _SndBankTraverseFindState, 1);
+        DSTraverseList(_Snd_ModuleInfo.pBankList, 0, (void *)2, &pBank, _SndBankTraverseFindState, 1);
         if (pBank != 0 && pBank->mState == 2) {
             pBank->mState = 3;
             pData = (char *)pBank->pData;
@@ -282,8 +282,8 @@ static SndBankInfo_t *_SndLoadBank(void *pRes, unsigned int index, unsigned int 
     if (!_Snd_ModuleInfo.mStatus.mFlags.mActive || !_Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         return 0;
     }
-    pBank = (SndBankInfo_t *)fn_801C6A20(_Snd_ModuleInfo.pBankList);
-    fn_801C6AA4(_Snd_ModuleInfo.pBankList, pBank, 0);
+    pBank = (SndBankInfo_t *)DSNewListNode(_Snd_ModuleInfo.pBankList);
+    DSAddListNode(_Snd_ModuleInfo.pBankList, pBank, 0);
     pBank->mBank = bank;
     pBank->mFlags = flags;
     pBank->pRes = (ResFile_t *)pRes;
@@ -309,8 +309,8 @@ static void _SndALoadBank(void *pRes, SndBankInfo_t **ppBank, unsigned int index
     SndBankInfo_t *pBank;
 
     if (_Snd_ModuleInfo.mStatus.mFlags.mActive && _Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
-        pBank = (SndBankInfo_t *)fn_801C6A20(_Snd_ModuleInfo.pBankList);
-        fn_801C6AA4(_Snd_ModuleInfo.pBankList, pBank, 0);
+        pBank = (SndBankInfo_t *)DSNewListNode(_Snd_ModuleInfo.pBankList);
+        DSAddListNode(_Snd_ModuleInfo.pBankList, pBank, 0);
         // FAKEMATCH: store order found by trying the 120 orders of the first five stores
         pBank->mBank = bank;
         pBank->mLoaded = 0;
@@ -375,12 +375,12 @@ int SndInit(SndInitDesc_t *pDesc)
         fn_8026F97C(pDesc->mUnknown0);
         _Snd_ModuleInfo.mUnk0 = pDesc->mUnknown0;
         fn_8026C18C();
-        _Snd_ModuleInfo.pBankList = fn_801C68FC(1, 0, pDesc->mUnknown16, sizeof(SndBankInfo_t), 0, 0);
-        _Snd_ModuleInfo.pSeqList = fn_801C68FC(1, 0, pDesc->mUnknown20, sizeof(SndSeqInfo_t), 0, 0);
-        _Snd_ModuleInfo.pStreamList = fn_801C68FC(1, 0, pDesc->mUnknown22, sizeof(SndStream_t), 0, 0);
+        _Snd_ModuleInfo.pBankList = DSNewList(1, 0, pDesc->mUnknown16, sizeof(SndBankInfo_t), 0, 0);
+        _Snd_ModuleInfo.pSeqList = DSNewList(1, 0, pDesc->mUnknown20, sizeof(SndSeqInfo_t), 0, 0);
+        _Snd_ModuleInfo.pStreamList = DSNewList(1, 0, pDesc->mUnknown22, sizeof(SndStream_t), 0, 0);
         if (pDesc->mUnknown18 != 0) {
             _Snd_ModuleInfo.pAemsBankList =
-                fn_801C68FC(1, 0, pDesc->mUnknown18, sizeof(SndAemsBankInfo_t), 0, 0);
+                DSNewList(1, 0, pDesc->mUnknown18, sizeof(SndAemsBankInfo_t), 0, 0);
         }
         _Snd_ModuleInfo.pBankTable = (SndBankHeap_t *)pDesc->mUnknown32;
         _Snd_ModuleInfo.pAemsSystem = 0;
@@ -430,14 +430,14 @@ void SndUnloadAll(void)
         SND_UNLOCK();
         // FAKEMATCH: node tested twice per pass (target keeps the loop test at the top)
         do {
-            pNode = fn_801C6B4C(_Snd_ModuleInfo.pSeqList, 0);
+            pNode = DSGetListNode(_Snd_ModuleInfo.pSeqList, 0);
             if (pNode != 0) {
                 SndUnloadSeq((SndSeqInfo_t *)pNode);
             }
         } while (pNode != 0);
         // FAKEMATCH: node tested twice per pass (target keeps the loop test at the top)
         do {
-            pNode = fn_801C6B4C(_Snd_ModuleInfo.pBankList, 0);
+            pNode = DSGetListNode(_Snd_ModuleInfo.pBankList, 0);
             if (pNode != 0) {
                 SndUnloadBank((SndBankInfo_t *)pNode);
             }
@@ -445,7 +445,7 @@ void SndUnloadAll(void)
         if (_Snd_ModuleInfo.pAemsBankList != 0) {
             // FAKEMATCH: node tested twice per pass (target keeps the loop test at the top)
             do {
-                pNode = fn_801C6B4C(_Snd_ModuleInfo.pAemsBankList, 0);
+                pNode = DSGetListNode(_Snd_ModuleInfo.pAemsBankList, 0);
                 if (pNode != 0) {
                     SndAemsUnloadBank((SndAemsBankInfo_t *)pNode);
                 }
@@ -471,17 +471,17 @@ int SndShutdown(void)
             fn_8026C280();
             SND_UNLOCK();
             SndUnloadAll();
-            fn_801C69E4(_Snd_ModuleInfo.pSeqList);
-            fn_801C69E4(_Snd_ModuleInfo.pBankList);
+            DSDelList(_Snd_ModuleInfo.pSeqList);
+            DSDelList(_Snd_ModuleInfo.pBankList);
             if (_Snd_ModuleInfo.pAemsBankList != 0) {
-                fn_801C69E4(_Snd_ModuleInfo.pAemsBankList);
+                DSDelList(_Snd_ModuleInfo.pAemsBankList);
                 _Snd_ModuleInfo.pAemsBankList = 0;
             }
             fn_8026C23C();
             fn_8026FBCC();
             Csis::System::Restore();
             delete pIAllocator;
-            fn_801C69E4(_Snd_ModuleInfo.pStreamList);
+            DSDelList(_Snd_ModuleInfo.pStreamList);
             fn_801D2BD0(_Snd_ModuleInfo.pHeap);
         }
     } else {
@@ -540,7 +540,7 @@ void SndUnloadBank(SndBankInfo_t *pBank)
         if (!(pBank->mFlags & 2)) {
             fn_801D2BD0(pBank->pData);
         }
-        fn_801C6C0C(_Snd_ModuleInfo.pBankList, pBank);
+        DSDelListNode(_Snd_ModuleInfo.pBankList, pBank);
     }
 }
 
@@ -592,7 +592,7 @@ int SndPatchOver(int handle)
     result = 0;
     if (SND_READY()) {
         SND_LOCK();
-        result = fn_8026C3BC(handle);
+        result = SNDover(handle);
         SND_UNLOCK();
     }
     return result;
@@ -633,8 +633,8 @@ SndSeqInfo_t *SndLoadSeq(ResFile_t *pRes, unsigned int index)
     if (!_Snd_ModuleInfo.mStatus.mFlags.mActive || !_Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         return 0;
     }
-    pSeq = (SndSeqInfo_t *)fn_801C6A20(_Snd_ModuleInfo.pSeqList);
-    fn_801C6AA4(_Snd_ModuleInfo.pSeqList, pSeq, 0);
+    pSeq = (SndSeqInfo_t *)DSNewListNode(_Snd_ModuleInfo.pSeqList);
+    DSAddListNode(_Snd_ModuleInfo.pSeqList, pSeq, 0);
     pSeq->pRes = pRes;
     pSeq->mIndex = index;
     pData = fn_801D2B7C(ResGetSize(pRes, index), 0, 0);
@@ -649,7 +649,7 @@ void SndUnloadSeq(SndSeqInfo_t *pSeq)
 {
     if (SND_READY()) {
         fn_801D2BD0(pSeq->pData);
-        fn_801C6C0C(_Snd_ModuleInfo.pSeqList, pSeq);
+        DSDelListNode(_Snd_ModuleInfo.pSeqList, pSeq);
     }
 }
 
@@ -668,8 +668,8 @@ SndStream_t *SndCreateStream(int extra, int a, int b, int bank)
         return 0;
     }
     SndSetHeap(_Snd_ModuleInfo.pBankTable, bank);
-    pStream = (SndStream_t *)fn_801C6A20(_Snd_ModuleInfo.pStreamList);
-    fn_801C6AA4(_Snd_ModuleInfo.pStreamList, pStream, 0);
+    pStream = (SndStream_t *)DSNewListNode(_Snd_ModuleInfo.pStreamList);
+    DSAddListNode(_Snd_ModuleInfo.pStreamList, pStream, 0);
     SNDplaysetdef(&opts);
     size = SNDSTRM_overhead(a, b) + extra;
     pStream->pBuffer = fn_801D2BB0(1, size, 0, 0);
@@ -693,7 +693,7 @@ void SndDestroyStream(SndStream_t *pStream)
     if (SND_READY()) {
         fn_8026E2A8(pStream->mHandle);
         fn_801D2BD0(pStream->pBuffer);
-        fn_801C6C0C(_Snd_ModuleInfo.pStreamList, pStream);
+        DSDelListNode(_Snd_ModuleInfo.pStreamList, pStream);
     }
 }
 
@@ -769,7 +769,7 @@ int SndStreamGetPosition(int a, int b)
     result = -1;
     if (SND_READY()) {
         SND_LOCK();
-        result = fn_8026EF88(a, b);
+        result = SNDSTRM_requeststatus(a, b);
         SND_UNLOCK();
     }
     return result;
@@ -874,7 +874,7 @@ static void *_SndAemsBankAlloc(void *pData, int size, int c)
     SndAemsBankInfo_t *pBank;
 
     pBank = 0;
-    fn_801C6D34(_Snd_ModuleInfo.pAemsBankList, 0, pData, &pBank, _SndAemsBankTraverseFindPointer, 1);
+    DSTraverseList(_Snd_ModuleInfo.pAemsBankList, 0, pData, &pBank, _SndAemsBankTraverseFindPointer, 1);
     if (pBank != 0) {
         pBank->mSize = size;
     }
@@ -900,8 +900,8 @@ SndAemsBankInfo_t *SndAemsLoadBankWithStream(ResFile_t *pRes, unsigned int index
 
     pBank = 0;
     if (SND_READY() && _Snd_ModuleInfo.pAemsBankList != 0) {
-        pBank = (SndAemsBankInfo_t *)fn_801C6A20(_Snd_ModuleInfo.pAemsBankList);
-        fn_801C6AA4(_Snd_ModuleInfo.pAemsBankList, pBank, 0);
+        pBank = (SndAemsBankInfo_t *)DSNewListNode(_Snd_ModuleInfo.pAemsBankList);
+        DSAddListNode(_Snd_ModuleInfo.pAemsBankList, pBank, 0);
         pBank->mBank = bank;
         SndSetHeap(_Snd_ModuleInfo.pBankTable, bank);
         size = ResGetSize(pRes, index);
@@ -931,7 +931,7 @@ int SndAemsUnloadBank(SndAemsBankInfo_t *pBank)
     if (SND_READY()) {
         result = fn_802692B8(pBank->mHandle);
         fn_801D2BD0(pBank->pData);
-        fn_801C6C0C(_Snd_ModuleInfo.pAemsBankList, pBank);
+        DSDelListNode(_Snd_ModuleInfo.pAemsBankList, pBank);
     }
     return result;
 }

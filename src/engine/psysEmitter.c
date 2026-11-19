@@ -121,11 +121,11 @@ void EmitterGetNewDir(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
         break;
     }
     case 3:
-        fn_801D0508();
+        MatPushUnit();
         pCase3 = &pObj->mEmitter.mCase3;
-        fn_801D0710(&pCase3->mUnknown2C.x, (int)((fn_801DE1B8() * pCase3->mUnknown44 + pCase3->mUnknown24) * 16777216.0f));
+        MatRotAxis(&pCase3->mUnknown2C.x, (int)((fn_801DE1B8() * pCase3->mUnknown44 + pCase3->mUnknown24) * 16777216.0f));
         fn_80227C2C(pOut, &pCase3->mUnknown38);
-        fn_801D0544();
+        MatPop();
         break;
     }
 }

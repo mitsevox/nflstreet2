@@ -99,6 +99,48 @@ unsigned short fn_801E079C(Ramp_801E052C *pRamp, float t, Vec3_801DE1E0 *pColor)
     return i;
 }
 
+unsigned int fn_801E0844(Ramp_801E052C *pRamp, float t, Vec3_801DE1E0 *pColor, unsigned int start)
+{
+    int found = 0;
+    RampNode_801E052C *pNode = 0;
+    RampNode_801E052C *pPrev;
+    unsigned int i;
+
+    for (i = start; i < pRamp->mCount; i++) {
+        pNode = pRamp->mpNodes[i];
+        if (t >= pNode->mT) {
+            continue;
+        }
+        found = 1;
+        if (i == 0) {
+            pColor->x = pNode->mColor.x;
+            pColor->y = pNode->mColor.y;
+            pColor->z = pNode->mColor.z;
+        } else if (pRamp->mInterp == 0) {
+            pColor->x = pNode[-1].mColor.x;
+            pColor->y = pNode[-1].mColor.y;
+            pColor->z = pNode[-1].mColor.z;
+        } else {
+            pPrev = pRamp->mpNodes[i - 1];
+            fn_801E05F8(pColor, &pPrev->mColor, &pNode->mColor, pRamp->mInterp,
+                        (t - pPrev->mT) / (pNode->mT - pPrev->mT));
+        }
+        break;
+    }
+    if (!found) {
+        if (pNode == 0) {
+            pColor->z = 0.0f;
+            pColor->x = 0.0f;
+            pColor->y = 0.0f;
+        } else {
+            pColor->x = pNode->mColor.x;
+            pColor->y = pNode->mColor.y;
+            pColor->z = pNode->mColor.z;
+        }
+    }
+    return i;
+}
+
 void fn_801E0984(Ramp_801E052C *pRamp, int interp)
 {
     pRamp->mInterp = interp;

@@ -20,10 +20,10 @@ struct ReplayCursor_t {
 extern "C" {
 int fn_800C47C4(void);
 int ConGetCurrentContext(void);
-void fn_801D0470(int a);
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D0C58(void *a);
+void MatSetStack(int a);
+void MatPush(void);
+void MatPop(void);
+void MatTranslate(void *a);
 int ObjNewType_(int a, int size, int c, void (*pInit)(ReplayCursor_t *, int *),
                 void (*pRelease)(ReplayCursor_t *));
 int ObjDelType(int a);
@@ -77,15 +77,15 @@ int ReplayCursorObjDraw(ReplayCursor_t *pObject)
     float v[3];
 
     if (pObject->mUnknown220 != 0 && pObject->mbVisible == 1) {
-        fn_801D0470(VptGetMatrixStack());
-        fn_801D04C4();
+        MatSetStack(VptGetMatrixStack());
+        MatPush();
         v[0] = pObject->mPos[0];
         v[1] = pObject->mPos[1];
         v[2] = 0.0f;
-        fn_801D0C58(v);
+        MatTranslate(v);
         fn_80235740(pObject->mUnknown28, ConGetCurrentContext());
-        fn_801D0470(VptGetMatrixStack());
-        fn_801D0544();
+        MatSetStack(VptGetMatrixStack());
+        MatPop();
         fn_80235C90(pObject->mUnknown28, ConGetCurrentContext(), 0.25f, 0.25f, 0.75f, 1.0f);
         TMRenderBindTexture(0, 0, 0);
         fn_80235764(pObject->mUnknown28, ConGetCurrentContext());

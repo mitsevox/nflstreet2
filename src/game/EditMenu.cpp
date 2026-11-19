@@ -97,7 +97,7 @@ int ColorPickCellToIndex(int a, int b);
 void ColorPickIndexToCell(int value, int *pQuotient, int *pRemainder);
 int ColorPickGetSelected(void);
 int MsgGameGetSetupState(void);
-int fn_80186B38(int a);
+int UserProfileFindIndex(int a);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
 int TeamLogoGetHandle(int a);
 int StoryTeamExists(int a);
@@ -1567,7 +1567,7 @@ int EditMenuHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg
             int team;
 
             CreateTeamClear();
-            team = fn_80186B38(fn_8022F4BC());
+            team = UserProfileFindIndex(fn_8022F4BC());
             if (StoryTeamExists(team)) {
                 StorySetIndexedFlag(team, 1, 0);
             }

@@ -5,7 +5,7 @@
 
 typedef int (*VisitFn_801C7684)(void *, int, int);
 
-#define SPLAY_NODE_SIZE (lbl_803D4FB8[2].mNodeSize)
+#define SPLAY_NODE_SIZE (DSList_Interface[2].mNodeSize)
 #define SPLAY_ITEM(pNode) ((pNode) ? (char *)(pNode) + SPLAY_NODE_SIZE : 0)
 
 SplayNode_801C7684 *fn_801C77DC(SplayTree_801C7684 *pTree, SplayNode_801C7684 *pNode);
@@ -45,6 +45,32 @@ static int fn_801C7730(SplayTree_801C7684 *pTree, SplayNode_801C7684 *pNode, int
         pNode = pNext;
     } while (!done);
     return result == 0 ? 4 : 0;
+}
+
+SplayNode_801C7684 *fn_801C77DC(SplayTree_801C7684 *pTree, SplayNode_801C7684 *pNode)
+{
+    SplayNode_801C7684 *pNil = pTree->mpNil;
+
+    pNode = pNode->mpLeft;
+    if (pNode != pNil) {
+        while (pNode->mpRight != pNil) {
+            pNode = pNode->mpRight;
+        }
+    }
+    return pNode;
+}
+
+SplayNode_801C7684 *fn_801C7810(SplayTree_801C7684 *pTree, SplayNode_801C7684 *pNode)
+{
+    SplayNode_801C7684 *pNil = pTree->mpNil;
+
+    pNode = pNode->mpRight;
+    if (pNode != pNil) {
+        while (pNode->mpLeft != pNil) {
+            pNode = pNode->mpLeft;
+        }
+    }
+    return pNode;
 }
 
 static SplayNode_801C7684 *fn_801C7844(SplayNode_801C7684 *pNode, SplayTree_801C7684 *pTree)
@@ -243,7 +269,7 @@ static int fn_801C7E30(SplayTree_801C7684 *pTree, SplayNode_801C7684 *pNode, int
     int cmp;
 
     do {
-        cmp = -callback(pCur ? (char *)pCur + lbl_803D4FB8[2].mNodeSize : 0, a, b);
+        cmp = -callback(pCur ? (char *)pCur + DSList_Interface[2].mNodeSize : 0, a, b);
         if (cmp < 0) {
             if (pCur->mpLeft == pTree->mpNil) {
                 result = 3;
@@ -268,12 +294,12 @@ static int fn_801C7EDC(SplayTree_801C7684 *pTree)
 
 void fn_801C7EE4(void)
 {
-    fn_801C67AC(2, (void (*)(List_801C68FC *))fn_801C7A34, (int (*)(List_801C68FC *))fn_801C7A60,
-                (void (*)(Node_801C6A20 *, int))fn_801C7C1C,
-                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C7A98,
-                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C7C44,
-                (void (*)(List_801C68FC *, Node_801C6A20 *))fn_801C7D1C,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListVisitFn_801C6D34, int))fn_801C7E00,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC))fn_801C7E30,
-                (void (*)(List_801C68FC *))fn_801C7EDC, sizeof(SplayTree_801C7684), sizeof(SplayNode_801C7684));
+    DSAddListType(2, (void (*)(DSList_t *))fn_801C7A34, (int (*)(DSList_t *))fn_801C7A60,
+                (void (*)(DSListNode_t *, int))fn_801C7C1C,
+                (DSListNode_t * (*)(DSList_t *, DSListNode_t *, int)) fn_801C7A98,
+                (DSListNode_t * (*)(DSList_t *, DSListNode_t *, int)) fn_801C7C44,
+                (void (*)(DSList_t *, DSListNode_t *))fn_801C7D1C,
+                (int (*)(DSList_t *, DSListNode_t *, void *, void *, DSListVisitFn_t, int))fn_801C7E00,
+                (int (*)(DSList_t *, DSListNode_t *, void *, void *, DSListSearchFn_t))fn_801C7E30,
+                (void (*)(DSList_t *))fn_801C7EDC, sizeof(SplayTree_801C7684), sizeof(SplayNode_801C7684));
 }

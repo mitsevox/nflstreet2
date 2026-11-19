@@ -84,7 +84,7 @@ int fn_801784C4(void);
 void fn_8017CA3C(int, int);
 void HudShowAlert(const char *);
 void MsgGameGetPlayerStatus(int, int *, int *);
-int fn_80186F7C(unsigned char);
+int UserProfileGetSelected(unsigned char);
 int TeamLogoGetSlot(int);
 void *UIGLibraryGetGlobal(int);
 unsigned char *fn_80220BFC(int, int);
@@ -176,7 +176,7 @@ done:
 void HotspotRecordCapture(HotspotPlay_t *pPlay)
 {
     unsigned int index = fn_800A3444();
-    int db = fn_80186F7C(_PlayerRefTeam(pPlay->mRef));
+    int db = UserProfileGetSelected(_PlayerRefTeam(pPlay->mRef));
     if (fn_801485D4() == 0 && TutorialIsActive() == 0 && db != -1 && index <= 9) {
         int handle = fn_8022F3D4(fn_8022F358(db));
         int bit = 1 << index;

@@ -59,6 +59,16 @@ class Naming(unittest.TestCase):
         self.assertEqual(naming.demangle('DVDInit'), 'DVDInit')
         self.assertIsNone(naming.demangle('_GLOBAL_.I.vfn_01__14Class_80005618iPiT2'))
 
+    def test_demangle_namespaced(self):
+        # Members of namespace-qualified classes (__Q<n>, const __CQ<n>), as in NASCAR 2005's Speech.cpp.
+        self.assertEqual(naming.demangle('Allocate__Q32EA9Allocator21TiburonIAllocatorImplUiUii'),
+                         'EA::Allocator::TiburonIAllocatorImpl::Allocate')
+        self.assertEqual(naming.demangle('MaxAlloc__CQ32EA9Allocator21TiburonIAllocatorImpl'),
+                         'EA::Allocator::TiburonIAllocatorImpl::MaxAlloc')
+        self.assertEqual(naming.demangle('VectorToCsisMutex__Q23Snd6SystemPv'), 'Snd::System::VectorToCsisMutex')
+        # A qualifier whose length runs past the symbol falls back to the plain function name.
+        self.assertEqual(naming.demangle('f__Q29Short'), 'f')
+
 
 class Rename(unittest.TestCase):
     def test_text(self):

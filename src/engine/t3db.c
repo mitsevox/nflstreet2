@@ -241,6 +241,34 @@ static inline void Notify_801F8A54(int type, int a, int b)
     }
 }
 
+/* Closing memory event (type 4, both arguments -1). */
+/* FAKEMATCH: parameterless end-event inline (same event as Notify_801F8A54(4, -1, -1)); it sets the two -1 arguments after the callback test as the target does, see include/engine/t3db.h _TDbMemNotifyEnd */
+static inline void NotifyEnd_801F8A54(void)
+{
+    TDbEvent_801F8A54 event;
+
+    if (_tDbMemAllocInfoCallback != 0) {
+        event.mType = 4;
+        event.mUnk4 = -1;
+        event.mUnk8 = -1;
+        _tDbMemAllocInfoCallback(&event);
+    }
+}
+
+/* Finds the open database with this id, in any state. */
+/* FAKEMATCH: inline helper chosen for codegen; with the search loop written in place fn_801F9228 and fn_801F92EC give 95.71% and 95.62% */
+static inline TDbDb_801F88F0 *LookupDb_801F9228(int db)
+{
+    TDbDb_801F88F0 *pDb;
+
+    for (pDb = lbl_803EBE88; pDb != 0; pDb = pDb->pNext) {
+        if (db == pDb->mId) {
+            break;
+        }
+    }
+    return pDb;
+}
+
 static inline TDbDb_801F88F0 *FindDb_801F88F0(int db)
 {
     TDbDb_801F88F0 *pDb;
@@ -384,7 +412,7 @@ int fn_801F8A54(TDbInitParms_801F8A0C *pParms)
         if (err != 0) {
             TDbExtMemShutdown(_tDbGlobalMemoryHeapID);
         }
-        Notify_801F8A54(4, -1, -1);
+        NotifyEnd_801F8A54();
         pFuncs = pParms->pStrFuncs;
         if (pFuncs != 0) {
             lbl_803EBE70 = (pFuncs->pStrlen != 0) ? pFuncs->pStrlen : strlen;
@@ -451,7 +479,7 @@ int fn_801F8D60(int db, int size)
         if (err == 0) {
             Notify_801F8A54(1, db, -1);
             err = TDbExtMemAlloc(heap, 0x14, &pDb);
-            Notify_801F8A54(4, -1, -1);
+            NotifyEnd_801F8A54();
             if (err != 0) {
                 TDbExtMemShutdown(heap);
             }
@@ -597,22 +625,17 @@ void fn_801F9228(TDbAsync_801F9228 *pReq, void (*pStart)(TDbJob_801F9228 *pJob),
 {
     TDbJob_801F9228 job;
     TDbDb_801F88F0 *pDb;
-    int db;
 
-    job.mUnk0 = 0;
-    job.mUnk4 = b;
+    /* FAKEMATCH: job stores in a search-found order, only for the target's store schedule */
     job.pReq = pReq;
     job.mUnkC = 0;
-    job.pRun = fn_801F93AC;
+    job.mUnk0 = 0;
     job.mUnk14 = a;
+    job.mUnk4 = b;
+    job.pRun = fn_801F93AC;
     *pReq->pResult = 0x2E;
     pReq->mIsLoad = 1;
-    db = pReq->mDb;
-    for (pDb = lbl_803EBE88; pDb != 0; pDb = pDb->pNext) {
-        if (db == pDb->mId) {
-            break;
-        }
-    }
+    pDb = LookupDb_801F9228(pReq->mDb);
     if (pDb == 0) {
         *pReq->pResult = 5;
     } else if (pDb->mState == 1) {
@@ -627,22 +650,17 @@ void fn_801F92EC(TDbAsync_801F9228 *pReq, void (*pStart)(TDbJob_801F9228 *pJob),
 {
     TDbJob_801F9228 job;
     TDbDb_801F88F0 *pDb;
-    int db;
 
-    job.mUnk0 = 0;
-    job.mUnk4 = b;
+    /* FAKEMATCH: job stores in a search-found order, only for the target's store schedule */
     job.pReq = pReq;
     job.mUnkC = 0;
-    job.pRun = fn_801F93AC;
+    job.mUnk0 = 0;
     job.mUnk14 = a;
+    job.mUnk4 = b;
+    job.pRun = fn_801F93AC;
     *pReq->pResult = 0x2E;
     pReq->mIsLoad = 0;
-    db = pReq->mDb;
-    for (pDb = lbl_803EBE88; pDb != 0; pDb = pDb->pNext) {
-        if (db == pDb->mId) {
-            break;
-        }
-    }
+    pDb = LookupDb_801F9228(pReq->mDb);
     if (pDb == 0) {
         *pReq->pResult = 5;
     } else if (pDb->mState == 1) {
@@ -1056,12 +1074,13 @@ int fn_801F9D70(int db, int tbl, TDbTerm_801FA4B0 *pFilter, unsigned short *pCou
         if (pFilter == 0) {
             n = pTbl->mUnk44 - pTbl->mUnk46;
         } else {
-            qry.mUnk4 = 0;
+            /* FAKEMATCH: mUnk4 cleared last, only for the target's store schedule */
             qry.mSel.mUnkC8 = 0;
             qry.mSel.mUnkA0 = 0;
             qry.mSel.mUnk50 = 0;
             qry.mSel.mUnk78 = 0;
             qry.mRow.mUnk0 = 0;
+            qry.mUnk4 = 0;
             qry.mSel.pTbl = pTbl;
             qry.mRow.mUnk14 = 2;
             qry.mUnk0 = 1;

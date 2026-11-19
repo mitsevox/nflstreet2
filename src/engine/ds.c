@@ -6,7 +6,7 @@
 extern unsigned char lbl_803EBC00;
 extern int lbl_803EBC04;
 
-void fn_801C6760(void);
+void DSListInitModule(void);
 
 int DSSetAlignment(int alignment);
 
@@ -15,7 +15,7 @@ int DSInit(void)
     int error = 0;
 
     if (!lbl_803EBC00) {
-        fn_801C6760();
+        DSListInitModule();
         DSSetAlignment(4);
         lbl_803EBC00 = 1;
     } else {

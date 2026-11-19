@@ -5,9 +5,12 @@
 
 extern "C" {
 
-unsigned char *iSPCH_GetGlobalMatchParmAddr(Bank_801AE444 *bank)
+unsigned char *iSPCH_GetGlobalMatchParmAddr(VoxDat_t *bank)
 {
-    return (unsigned char *)bank + (((bank->mUnknown10 + bank->mUnknown10 + 3) & ~3) + 24);
+    // FAKEMATCH: size computed then rounded up in place (reused local); the one-expression form ties the count load and the final sum into r9, the target keeps both in r0
+    int size = bank->mUnknown10 * 2;
+    size = (size + 3) & ~3;
+    return (unsigned char *)bank + (size + 24);
 }
 
 void SPCH_ClearMatchParmSettings(int key)
@@ -28,7 +31,7 @@ void SPCH_ClearMatchParmSettings(int key)
 
 int iSPCH_BindData(char *data, unsigned int key)
 {
-    Object_80266AF8 *p = (Object_80266AF8 *)data;
+    VoxDatHeader_t *p = (VoxDatHeader_t *)data;
     int a;
     int b;
     int result = 0;
@@ -37,14 +40,14 @@ int iSPCH_BindData(char *data, unsigned int key)
     if ((p->mUnknown0 & 0xFFFF0000) == 0x03100000) {
         fn_801AFABC(p, &a, &b);
         for (i = 0; i < 8; i++) {
-            Bank_801AE444 *bank = gEventDats[i].mBank;
+            VoxDat_t *bank = gEventDats[i].mBank;
             // FAKEMATCH: goto to the shared return instead of return result, so the found case branches to the final mr r3,r29 as in the target
             if (bank != 0 && bank->mUnknown9 == b && bank->mUnknown8 == a)
                 goto done;
         }
         for (i = 0; i < 8; i++) {
             if (gEventDats[i].mBank == 0) {
-                gEventDats[i].mBank = (Bank_801AE444 *)data;
+                gEventDats[i].mBank = (VoxDat_t *)data;
                 result = 1;
                 gEventDats[i].mValue = key;
                 break;
@@ -64,7 +67,7 @@ int SPCH_AddEventDB(char *data, unsigned int key)
 
     if (key <= 7) {
         result = iSPCH_BindData(data, key);
-        iSPCH_InitCsis((Bank_801AE444 *)data);
+        iSPCH_InitCsis((VoxDat_t *)data);
     }
     return result;
 }

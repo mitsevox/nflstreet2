@@ -2,7 +2,7 @@
  * asynchronous reads, decompression, caching and timed request processing. */
 #include "engine/Resource.h"
 #include "engine/system.h"
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include "game/fn_801D2B7C.h"
 
 typedef struct ResRequest_t {
@@ -127,11 +127,11 @@ extern unsigned int strlen(const char *s);
 extern char *strcpy(char *pDst, const char *pSrc);
 extern int sprintf(char *s, const char *format, ...);
 
-extern void *fn_801C6B4C(void *pPool, int mode);
-extern void *fn_801C6C84(void *pPool, void *pItem);
-extern void *fn_801C6A20(void *pPool);
-extern void fn_801C6C0C(void *pPool, void *pItem);
-extern int fn_801C6DCC(void *pPool, void *pStart, void *pKey, void *pFound, int (*pMatch)(void *, void *, void *));
+extern void *DSGetListNode(void *pPool, int mode);
+extern void *DSNextListNode(void *pPool, void *pItem);
+extern void *DSNewListNode(void *pPool);
+extern void DSDelListNode(void *pPool, void *pItem);
+extern int DSSearchList(void *pPool, void *pStart, void *pKey, void *pFound, int (*pMatch)(void *, void *, void *));
 extern int FilePerformWrite(int file, int offset, void *pBuffer, int size);
 extern void FileAsyncWaitStream(int handle);
 extern int FileHostCheckActive(void);
@@ -404,7 +404,7 @@ static inline void _ResWaitForLoad(ResFile_t *pRes, unsigned int index, int type
 static inline void _ResFindByName(char *pName, ResFile_t **ppRes)
 {
     *ppRes = 0;
-    fn_801C6DCC(_Res_pResourceFileList, 0, pName, ppRes, _ResFileSearchByFileNameFunc);
+    DSSearchList(_Res_pResourceFileList, 0, pName, ppRes, _ResFileSearchByFileNameFunc);
 }
 
 /* File, mapped-memory and ARAM sources share the same entry-loading interface. */
@@ -960,6 +960,8 @@ static int _ResInitResourceFile(ResFile_t *pRes, char *pName)
         }
         tag = block.mTag;
         switch (tag) {
+        case 0x54455246:
+            break;
         case 0x44495231:
             if (pRes->mDirTag == 0) {
                 size = _ResGetBaseBlockSize(0x44495231, pRes->mNumRes);
@@ -1029,8 +1031,6 @@ static int _ResInitResourceFile(ResFile_t *pRes, char *pName)
         default:
             err = 0xF0005;
             goto cleanup;
-        case 0x54455246:
-            break;
         }
         FileSeek(file, position + block.mSize, 0);
         position = FileGetPosition(file);
@@ -1279,7 +1279,7 @@ int ResInit(int maxResources)
         fn_801F7FA8(&_Res_sResourceLock);
         fn_801F7FA8(&_Res_sAsyncCountLock);
         fn_801F8014(&_Res_sResourceLock);
-        _Res_pResourceFileList = fn_801C68FC(1, 1, maxResources, 0xA4, _ResFileInsertFunc, 0);
+        _Res_pResourceFileList = DSNewList(1, 1, maxResources, 0xA4, _ResFileInsertFunc, 0);
         _Res_pBlockLoadBuffer = fn_801D2BB0(1, 0x8000, _Res_uMemAllocFlags, 0);
         _Res_bModuleActive = 1;
         _Res_bCachingEnabled = 0;
@@ -1304,14 +1304,14 @@ int ResShutdown(void)
     err = 0;
     if (_Res_bModuleActive != 0) {
         fn_801F8014(&_Res_sResourceLock);
-        pNext = fn_801C6B4C(_Res_pResourceFileList, 0);
+        pNext = DSGetListNode(_Res_pResourceFileList, 0);
         while (pNext != 0) {
             pRes = pNext;
             ResClearFlags(pRes, 1);
-            pNext = fn_801C6C84(_Res_pResourceFileList, pRes);
+            pNext = DSNextListNode(_Res_pResourceFileList, pRes);
             ResClose(pRes);
         }
-        fn_801C69E4(_Res_pResourceFileList);
+        DSDelList(_Res_pResourceFileList);
         fn_801D2BD0(_Res_pBlockLoadBuffer);
         fn_801F809C(&_Res_sResourceLock);
         fn_801F80D0(&_Res_sResourceLock);
@@ -1340,7 +1340,7 @@ ResFile_t *ResOpenDevice(char *pName, int mode)
     } else {
         _ResFindByName(pName, &pRes);
         if (pRes == 0) {
-            pRes = fn_801C6A20(_Res_pResourceFileList);
+            pRes = DSNewListNode(_Res_pResourceFileList);
             if (pRes == 0) {
                 err = fn_801F7C88();
                 goto done;
@@ -1359,14 +1359,14 @@ ResFile_t *ResOpenDevice(char *pName, int mode)
             if (_Res_bCachingEnabled != 0) {
                 fn_801F2EE0(pRes, pName);
             }
-            fn_801C6AA4(_Res_pResourceFileList, pRes, 0);
+            DSAddListNode(_Res_pResourceFileList, pRes, 0);
         }
         pRes->mOpenCount++;
     }
 done:
     if (err != 0) {
         if (pRes != 0) {
-            fn_801C6C0C(_Res_pResourceFileList, pRes);
+            DSDelListNode(_Res_pResourceFileList, pRes);
             pRes = 0;
         }
         if (_Res_pErrorCallback != 0) {
@@ -1414,9 +1414,9 @@ ResFile_t *ResOpenRam(ResFile_t *pParent, unsigned int index, int heap, int mode
             value /= 10;
         }
         pName[len + digits] = 0;
-        fn_801C6DCC(_Res_pResourceFileList, 0, pName, &pRes, _ResFileSearchByFileNameFunc);
+        DSSearchList(_Res_pResourceFileList, 0, pName, &pRes, _ResFileSearchByFileNameFunc);
         if (pRes == 0) {
-            pRes = fn_801C6A20(_Res_pResourceFileList);
+            pRes = DSNewListNode(_Res_pResourceFileList);
             if (pRes == 0) {
                 err = fn_801F7C88();
                 goto done;
@@ -1440,7 +1440,7 @@ ResFile_t *ResOpenRam(ResFile_t *pParent, unsigned int index, int heap, int mode
                 pRes->pAddrs[index] = 0;
                 _ResGetDirInfo(pRes, index, &offset, &value, &value);
             }
-            fn_801C6AA4(_Res_pResourceFileList, pRes, 0);
+            DSAddListNode(_Res_pResourceFileList, pRes, 0);
         } else {
             fn_801D2BD0(pName);
         }
@@ -1448,7 +1448,7 @@ ResFile_t *ResOpenRam(ResFile_t *pParent, unsigned int index, int heap, int mode
     }
 done:
     if (err != 0 && pRes != 0) {
-        fn_801C6C0C(_Res_pResourceFileList, pRes);
+        DSDelListNode(_Res_pResourceFileList, pRes);
         pRes = 0;
     }
     fn_801F809C(&_Res_sResourceLock);
@@ -1581,7 +1581,7 @@ int ResClose(ResFile_t *pRes)
                 }
             }
             if (close) {
-                fn_801C6C0C(_Res_pResourceFileList, pRes);
+                DSDelListNode(_Res_pResourceFileList, pRes);
             }
         } else {
             err = 0xF0005;
@@ -2286,7 +2286,7 @@ int ResIsOpen(char *pName)
     pFound = 0;
     open = 0;
     if (_Res_bModuleActive != 0) {
-        fn_801C6DCC(_Res_pResourceFileList, 0, pName, &pFound, _ResFileSearchByFileNameFunc);
+        DSSearchList(_Res_pResourceFileList, 0, pName, &pFound, _ResFileSearchByFileNameFunc);
         if (pFound != 0) {
             open = 1;
         }

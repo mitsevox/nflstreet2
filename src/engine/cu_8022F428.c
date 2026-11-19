@@ -265,12 +265,12 @@ extern int lbl_803ED6E4[2];
 
 double fabs(double);
 
-extern void fn_801D04C4(void);
-extern void fn_801D0508(void);
-extern void fn_801D0544(void);
-extern void fn_801D0664(Mtx44 m);
-extern void fn_801D0F80(Mtx44 m);
-extern void fn_801D12BC(int a);
+extern void MatPush(void);
+extern void MatPushUnit(void);
+extern void MatPop(void);
+extern void MatCat(Mtx44 m);
+extern void MatStore(Mtx44 m);
+extern void MatLoadSlot(int a);
 extern void *fn_801D2B7C(int size, int a, int b);
 extern int fn_801D2BD0(void *p);
 extern int ResLoad(void *pData, int index, int a);
@@ -306,8 +306,8 @@ extern void TMMaterialListSelect(void *p, int a);
 extern void TMRenderBindModel(void *p);
 extern void TMRenderBindClusterObj(void *p);
 extern void TMRenderBindMaterialList(void *p);
-extern void fn_802112DC(short *pValues, int count);
-extern void fn_80211424(short *pValues, int count);
+extern void TMRenderGeomList(short *pValues, int count);
+extern void TMRenderGeomListDirect(short *pValues, int count);
 extern int TMShaderLibGetShader(const char *pName);
 extern void TMTexLibLoad(void *p, int a);
 extern void TMTexLibUnload(void *p);
@@ -1655,15 +1655,15 @@ void fn_80234B1C(void *p)
 
 void fn_80234B20(Object_80234B20 *pObject, Mtx44 a, Mtx44 b)
 {
-    fn_801D04C4();
+    MatPush();
     if (b != 0) {
-        fn_801D0664(b);
+        MatCat(b);
     }
     if (a != 0) {
-        fn_801D0664(a);
+        MatCat(a);
     }
-    fn_801D0F80(pObject->mUnknown64);
-    fn_801D0544();
+    MatStore(pObject->mUnknown64);
+    MatPop();
 }
 
 int fn_80234B80(void *p)
@@ -1689,14 +1689,14 @@ void fn_80234BF4(int a, Part_80234A30 *pPart, int mode)
     TMRenderBindClusterObj(pPart->mpUnknown224);
     switch (mode) {
     case 0:
-        fn_802112DC(pPart->mUnknown96, pPart->mUnknown92);
+        TMRenderGeomList(pPart->mUnknown96, pPart->mUnknown92);
         break;
     case 1:
         GXSetNumTexGens(1);
         GXSetNumTevStages(1);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
         TMTevSetTevOp(0, 0, 1);
-        fn_80211424(pPart->mUnknown96, pPart->mUnknown92);
+        TMRenderGeomListDirect(pPart->mUnknown96, pPart->mUnknown92);
         break;
     }
 }
@@ -1730,12 +1730,12 @@ unsigned int fn_80234D4C(float *pBox, void *m, void *p, void *q)
 {
     unsigned int result;
 
-    fn_801D0508();
-    fn_801D12BC(3);
+    MatPushUnit();
+    MatLoadSlot(3);
     TMClipProjection(0);
     TMClipMatrixWorld(0, p, m);
     result = TMClipBBox(pBox, q, 0);
-    fn_801D0544();
+    MatPop();
     return result;
 }
 

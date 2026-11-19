@@ -5,9 +5,9 @@
 #include <dolphin/gx/GXTev.h>
 
 extern "C" {
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D0F80(Mtx44 m);
+void MatPushUnit(void);
+void MatPop(void);
+void MatStore(Mtx44 m);
 void TMRenderReset(void);
 int fn_80236EC0(int a);
 void GXSetNumChans(int a);
@@ -28,8 +28,8 @@ void EffectBlendBegin(void *p, int value)
 
     TMRenderReset();
     GXSetCurrentMtx(0);
-    fn_801D0508();
-    fn_801D0F80(mtx);
+    MatPushUnit();
+    MatStore(mtx);
     GXLoadPosMtxImm(mtx, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -53,8 +53,8 @@ void EffectBlendEnd(void *p, int value)
 {
     Mtx44 mtx;
 
-    fn_801D0544();
-    fn_801D0F80(mtx);
+    MatPop();
+    MatStore(mtx);
     GXLoadPosMtxImm(mtx, 0);
     GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
     GXSetProjectionv(_EffectBlend_afProjection);

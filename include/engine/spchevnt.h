@@ -5,9 +5,9 @@
 extern "C" {
 extern int (*gSPCH_AddEvent)(int, int, ...);
 
-int fn_801AE5D4(int a, int b, int c);
-void fn_801AF2CC(unsigned int channel);
-int fn_801AF364(unsigned int channel);
+int SPCH_MakeEventSpec(int a, int b, int c);
+void SPCH_PlayLastEvent(unsigned int channel);
+int SPCH_Play(unsigned int channel);
 }
 
 #endif

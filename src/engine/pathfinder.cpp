@@ -2,7 +2,7 @@
    its memory allocator, loads music maps and creates, controls and queries music tracks for
    the game's SndgPathfinder module. */
 
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "engine/Resource.h"
@@ -32,9 +32,9 @@ struct PathfinderTrack_t {
 };
 
 struct PathfinderState_t {
-    List_801C68FC *mpPool0;
+    DSList_t *mpPool0;
     int mHandle;
-    List_801C68FC *mpPool8;
+    DSList_t *mpPool8;
 };
 
 struct TagValuePair {
@@ -67,7 +67,7 @@ void fn_801B5CD0(int a);
 int fn_801B5FC0(int id, int a);
 void fn_8027D3AC(void);
 void fn_8027ECD8(void *p, int b);
-void fn_8027ED6C(void);
+extern "C++" void PATH_vectortoreal5(void);
 
 static int _PathfinderMatchMap(void *p, void *key, void *result)
 {
@@ -101,7 +101,7 @@ static int _PathfinderNewMapHandle(void)
     do {
         _Pathfinder_State.mHandle++;
         pFound = 0;
-        fn_801C6DCC(_Pathfinder_State.mpPool0, 0, (void *)_Pathfinder_State.mHandle, &pFound,
+        DSSearchList(_Pathfinder_State.mpPool0, 0, (void *)_Pathfinder_State.mHandle, &pFound,
                     _PathfinderMatchMap);
     } while (pFound || _Pathfinder_State.mHandle == -1);
     return handle;
@@ -117,11 +117,11 @@ int PathfinderInit(PathfinderInitDesc_t *pDesc)
     _Pathfinder_pAllocator = new TiburonIAllocator13Impl(pDesc->mHeap);
     TagValuePair config;
     fn_801B2C18(_Pathfinder_pAllocator, &config);
-    fn_8027ED6C();
+    PATH_vectortoreal5();
     fn_8027D3AC();
     memset(&_Pathfinder_State, 0, sizeof(_Pathfinder_State));
-    _Pathfinder_State.mpPool0 = (List_801C68FC *)fn_801C68FC(pDesc->mHeap, 0, 4, sizeof(PathfinderMap_t), 0, 0);
-    _Pathfinder_State.mpPool8 = (List_801C68FC *)fn_801C68FC(pDesc->mHeap, 0, pDesc->mCount, sizeof(PathfinderTrack_t), 0, 0);
+    _Pathfinder_State.mpPool0 = (DSList_t *)DSNewList(pDesc->mHeap, 0, 4, sizeof(PathfinderMap_t), 0, 0);
+    _Pathfinder_State.mpPool8 = (DSList_t *)DSNewList(pDesc->mHeap, 0, pDesc->mCount, sizeof(PathfinderTrack_t), 0, 0);
     if (_Pathfinder_State.mpPool0 && _Pathfinder_State.mpPool8) {
         _Pathfinder_bInit = 1;
     }
@@ -134,15 +134,15 @@ void PathfinderShutdown(void)
 
     fn_801B2F28(-1);
     if (_Pathfinder_State.mpPool8) {
-        fn_801C69E4(_Pathfinder_State.mpPool8);
+        DSDelList(_Pathfinder_State.mpPool8);
     }
     if (_Pathfinder_State.mpPool0) {
-        pItem = (PathfinderMap_t *)fn_801C6B4C(_Pathfinder_State.mpPool0, 0);
+        pItem = (PathfinderMap_t *)DSGetListNode(_Pathfinder_State.mpPool0, 0);
         while (pItem) {
             ResUnLoad((ResFile_t *)pItem->mpData, pItem->mUnknown8);
-            pItem = (PathfinderMap_t *)fn_801C6C84(_Pathfinder_State.mpPool0, pItem);
+            pItem = (PathfinderMap_t *)DSNextListNode(_Pathfinder_State.mpPool0, pItem);
         }
-        fn_801C69E4(_Pathfinder_State.mpPool0);
+        DSDelList(_Pathfinder_State.mpPool0);
     }
     fn_801B2B58();
     if (_Pathfinder_pAllocator) {
@@ -159,7 +159,7 @@ int PathfinderLoadMap(void *pData, int a, int b)
     int handle = -1;
 
     if (_Pathfinder_bInit) {
-        pItem = (PathfinderMap_t *)fn_801C6A20(_Pathfinder_State.mpPool0);
+        pItem = (PathfinderMap_t *)DSNewListNode(_Pathfinder_State.mpPool0);
         if (pItem) {
             id = ResLoad((ResFile_t *)pData, a, b);
             if (id) {
@@ -169,10 +169,10 @@ int PathfinderLoadMap(void *pData, int a, int b)
                     pItem->mpData = pData;
                     pItem->mUnknown8 = a;
                     handle = pItem->mHandle;
-                    fn_801C6AA4(_Pathfinder_State.mpPool0, pItem, 0);
+                    DSAddListNode(_Pathfinder_State.mpPool0, pItem, 0);
                 } else {
                     ResUnLoad((ResFile_t *)pData, a);
-                    fn_801C6C0C(_Pathfinder_State.mpPool0, pItem);
+                    DSDelListNode(_Pathfinder_State.mpPool0, pItem);
                 }
             }
         }
@@ -187,12 +187,12 @@ int PathfinderUnloadMap(int handle)
 
     if (_Pathfinder_bInit) {
         pItem = 0;
-        fn_801C6DCC(_Pathfinder_State.mpPool0, 0, (void *)handle, &pItem,
+        DSSearchList(_Pathfinder_State.mpPool0, 0, (void *)handle, &pItem,
                     _PathfinderMatchMap);
         if (pItem) {
             result = 0;
             ResUnLoad((ResFile_t *)pItem->mpData, pItem->mUnknown8);
-            fn_801C6C0C(_Pathfinder_State.mpPool0, pItem);
+            DSDelListNode(_Pathfinder_State.mpPool0, pItem);
         }
     }
     return result;
@@ -203,7 +203,7 @@ int PathfinderCreateTrack(PathfinderTrackDesc_t *pDesc)
     PathfinderTrack_t *pItem;
     int result = 0;
 
-    pItem = (PathfinderTrack_t *)fn_801C6A20(_Pathfinder_State.mpPool8);
+    pItem = (PathfinderTrack_t *)DSNewListNode(_Pathfinder_State.mpPool8);
     if (pItem) {
         memset(pItem, 0, sizeof(PathfinderTrack_t));
         pItem->mUnknown8 = pDesc->mUnknown24;
@@ -227,9 +227,9 @@ int PathfinderCreateTrack(PathfinderTrackDesc_t *pDesc)
         }
         if (result >= 0) {
             pItem->mId = pDesc->mId;
-            fn_801C6AA4(_Pathfinder_State.mpPool8, pItem, 0);
+            DSAddListNode(_Pathfinder_State.mpPool8, pItem, 0);
         } else {
-            fn_801C6C0C(_Pathfinder_State.mpPool8, pItem);
+            DSDelListNode(_Pathfinder_State.mpPool8, pItem);
         }
     }
     return result;
@@ -240,9 +240,9 @@ int PathfinderDestroyTrack(int id)
     PathfinderTrack_t *pItem = 0;
     int result = -1;
 
-    fn_801C6DCC(_Pathfinder_State.mpPool8, 0, (void *)id, &pItem, _PathfinderMatchTrack);
+    DSSearchList(_Pathfinder_State.mpPool8, 0, (void *)id, &pItem, _PathfinderMatchTrack);
     if (pItem) {
-        fn_801C6C0C(_Pathfinder_State.mpPool8, pItem);
+        DSDelListNode(_Pathfinder_State.mpPool8, pItem);
         if (fn_801B2F28(id)) {
             result = 0;
         }

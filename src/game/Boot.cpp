@@ -29,13 +29,13 @@ void AuxRamShutdown(void);
 int ConUpdateChannel(int a);
 int ConProcessChannel(int a);
 void FileDebugProcess(void);
-void fn_801CE248(int a);
-void fn_801CE82C(void);
-int fn_801CE944(int a);
-int fn_801CEA08(void);
-void fn_801CEA84(void);
-void fn_801CEADC(int a);
-int fn_801CEC84(void);
+void GlibSetVsyncFlipEnable(int a);
+void GlibSwapBuffers(void);
+int GlibGetFrameBufferAddr(int a);
+int GlibGetScreenWidth(void);
+void GlibSwitchToSingle(void);
+void GlibSwitchToDouble(int a);
+int GlibGetXFBHeight(void);
 void fn_801D6F58(void);
 void MovieRcmpPlay(int a, int b, int c, int (*pCallback)(int), int d);
 int MovieRcmpInstallMADCOWCodec(void (*pCallback)(void));
@@ -97,7 +97,7 @@ static void _BootWaitForScreen(void *p, unsigned short a, unsigned short b, int 
         fn_801D6F58();
         VptProcessViewports();
         FileDebugProcess();
-        fn_801CE82C();
+        GlibSwapBuffers();
         fn_80219650(p, &current, &other);
     }
 }
@@ -111,7 +111,7 @@ static void _BootDelay(void)
         ConProcessChannel(-1);
         VptProcessViewports();
         FileDebugProcess();
-        fn_801CE82C();
+        GlibSwapBuffers();
     }
 }
 
@@ -186,13 +186,13 @@ void BootShowStartupScreens(void)
 {
     void *p = gUISMainInfo;
 
-    fn_801CE248(1);
+    GlibSetVsyncFlipEnable(1);
     _BootDelay();
     _BootProgressiveCheck();
     fn_80218FC4(p, 1, 4, 0, 0);
     fn_802195E4(p, 1, 4);
     _BootWaitForScreen(p, 1, 4, -1);
-    fn_801CE248(0);
+    GlibSetVsyncFlipEnable(0);
 }
 
 void BootInstallResetCallback(void)
@@ -331,16 +331,16 @@ static unsigned char _BootPlayMovie(int index, int a, int b, int c, int d, void 
     desc.mUnknown4 = index;
     unknown1 = fn_801F6D54(handle, &desc, 0, 0);
     if (b == 1) {
-        fn_801CEADC(1);
+        GlibSwitchToDouble(1);
     } else {
-        fn_801CEADC(0);
+        GlibSwitchToDouble(0);
     }
-    frameBuffer = fn_801CE944(1);
-    height = fn_801CEC84();
-    DCFlushRange((void *)frameBuffer, height * (unsigned short)((fn_801CEA08() + 15) & ~15) * 4);
+    frameBuffer = GlibGetFrameBufferAddr(1);
+    height = GlibGetXFBHeight();
+    DCFlushRange((void *)frameBuffer, height * (unsigned short)((GlibGetScreenWidth() + 15) & ~15) * 4);
     _Boot_bMovieAbort = 0;
     MovieRcmpPlay(handle, unknown0, unknown1, _BootMovieCallback, a == 1);
-    fn_801CEA84();
+    GlibSwitchToSingle();
     fn_801F6B84(handle);
     fn_801D2BD0(pBuffer);
     ResClose(_Boot_pMovieFile);

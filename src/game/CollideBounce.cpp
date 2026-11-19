@@ -11,9 +11,9 @@ extern float gPlyrMoveFwdSpeed;
 extern "C" {
 int fn_801CFE40(float y, float x);
 void MatRotVecToVec(Vector_80039F5C *pFrom, Vector_80039F5C *pTo);
-void fn_801D0470(int mode);
-void fn_801D0494(void);
-void fn_801D0E94(void);
+void MatSetStack(int mode);
+void MatResetStack(void);
+void MatTranspose(void);
 void fn_802271F0(void *pOut, void *pIn);
 void fn_80227248(void *pOut, void *pIn, float scale);
 void fn_80227264(void *pOut, void *pIn, float scale);
@@ -122,8 +122,8 @@ void BounceBody3D(BounceBody_t *pBody, Vector_80039F5C *pNormal, float restituti
     up.mX = 0.0f;
     up.mY = 0.0f;
     up.mZ = 1.0f;
-    fn_801D0470(3);
-    fn_801D0494();
+    MatSetStack(3);
+    MatResetStack();
     MatRotVecToVec(pNormal, &up);
     fn_80227C2C(&pBody->mUnknown0, &pBody->mUnknown0);
     pBody->mUnknown12.mX = pBody->mUnknown0.mX * 0.5f;
@@ -139,7 +139,7 @@ void BounceBody3D(BounceBody_t *pBody, Vector_80039F5C *pNormal, float restituti
     }
     pBody->mUnknown12.mZ = axis.mUnknown4;
     pBody->mUnknown24.mZ = axis.mUnknown8;
-    fn_801D0E94();
+    MatTranspose();
     fn_80227C2C(&pBody->mUnknown12, &pBody->mUnknown12);
     fn_80227C2C(&pBody->mUnknown24, &pBody->mUnknown24);
 }
@@ -187,8 +187,8 @@ void BounceBodyPair3D(BounceBody_t *pA, BounceBody_t *pB, Vector_80039F5C *pNorm
     up.mY = 0.0f;
     up.mZ = 1.0f;
     fn_802271F0(pNormal, pNormal);
-    fn_801D0470(3);
-    fn_801D0494();
+    MatSetStack(3);
+    MatResetStack();
     MatRotVecToVec(pNormal, &up);
     fn_80227C2C(&pA->mUnknown0, &pA->mUnknown0);
     fn_80227C2C(&pB->mUnknown0, &pB->mUnknown0);
@@ -209,7 +209,7 @@ void BounceBodyPair3D(BounceBody_t *pA, BounceBody_t *pB, Vector_80039F5C *pNorm
     pA->mUnknown24.mZ = axisA.mUnknown8;
     pB->mUnknown12.mZ = axisB.mUnknown4;
     pB->mUnknown24.mZ = axisB.mUnknown8;
-    fn_801D0E94();
+    MatTranspose();
     fn_80227C2C(&pA->mUnknown12, &pA->mUnknown12);
     fn_80227C2C(&pA->mUnknown24, &pA->mUnknown24);
     fn_80227C2C(&pB->mUnknown12, &pB->mUnknown12);
@@ -224,14 +224,14 @@ void BounceScatterVector(Vector_80039F5C *pOut, Vector_80039F5C *pNormal, float 
     up.mX = 0.0f;
     up.mY = 0.0f;
     up.mZ = 1.0f;
-    fn_801D0470(3);
-    fn_801D0494();
+    MatSetStack(3);
+    MatResetStack();
     MatRotVecToVec(pNormal, &up);
     v.mX = fn_80237260(0) - 0.5f;
     v.mY = fn_80237260(0) - 0.5f;
     v.mZ = fn_80237260(0) * 0.5f;
     fn_802272DC(&v, &v, scale);
-    fn_801D0E94();
+    MatTranspose();
     fn_80227C2C(pOut, &v);
 }
 

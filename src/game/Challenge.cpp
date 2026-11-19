@@ -181,8 +181,8 @@ void fn_800B4A18(int index, char *pDest, int size);
 int fn_800B9A90(PostPlayPhase *p);
 int fn_80178308(void);
 int fn_801787DC(int team);
-int fn_80186B38(int a);
-void fn_8018787C(int index);
+int UserProfileFindIndex(int a);
+void UserProfileAddRecordRow(int index);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_8022B7A4(int handle, int tag, void *pValue);
 int fn_8022F358(int index);
@@ -755,7 +755,7 @@ void ChalSetTournamentWon(int value)
         if (value) {
             fn_801FCE10(0, "use \x8c update 'TSPU' set 'FNWU' = \x82\n", handle, 1);
             GameOptionsSet(20, 1);
-            fn_8018787C(fn_80186B38(index));
+            UserProfileAddRecordRow(UserProfileFindIndex(index));
         }
     }
 }

@@ -48,10 +48,10 @@ int fn_801784C4(void);
 float fn_80178A08(void);
 float fn_80178A2C(void);
 int fn_801486A0(void);
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D0C58(void *p);
-void fn_801D0F80(float (*pMatrix)[4]);
+void MatPush(void);
+void MatPop(void);
+void MatTranslate(void *p);
+void MatStore(float (*pMatrix)[4]);
 int ObjNewType_(int type, int size, int count, void (*a)(Item_800469EC *), void (*b)(Item_800469EC *));
 int ObjDelType(int type);
 void ObjSetListObjFunc(int handle, int type, int a, int (*callback)(Item_800469EC *));
@@ -89,11 +89,11 @@ float fn_80046920(Item_800469EC *p)
 {
     Bounds_80234D00 bounds;
     float extra = 0.0f;
-    fn_801D04C4();
-    fn_801D0C58(&p->mUnknown4);
+    MatPush();
+    MatTranslate(&p->mUnknown4);
     fn_80234D00(&lbl_802CEFF0, &bounds);
     float distance = fn_8022781C(&bounds.mUnknown10, &bounds.mUnknown0);
-    fn_801D0544();
+    MatPop();
     if (distance < 0.08f) {
         float ratio = 0.08f / distance;
         if (!(ratio < 1.0f)) {
@@ -140,12 +140,12 @@ int fn_800469EC(Item_800469EC *p)
             GXSetNumTevStages(1);
             GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
             TMRenderBindTexture(0, p->mUnknown120, p->mUnknown124);
-            fn_801D04C4();
-            fn_801D0C58(&p->mUnknown4);
-            fn_801D0F80(matrix);
+            MatPush();
+            MatTranslate(&p->mUnknown4);
+            MatStore(matrix);
             GXLoadPosMtxImm(matrix, 0);
             GXSetCurrentMtx(0);
-            fn_801D0544();
+            MatPop();
             fn_8024E908(0x98, 0, 4);
             GXPosition3f32(fn_80178A08(), scale * (1.0f - lbl_803EA4B8) * 0.55556f, zero);
             GXTexCoord2f32(0.9f, 1.0f - lbl_803EA4B8 * 0.5f);

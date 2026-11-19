@@ -83,12 +83,12 @@ void WeatherInit(void);
 void WeatherShutdown(void);
 void WeatherUpdate(float rate);
 void WeatherRender(void);
-void *fn_801C6B4C(void *pool, void *item);
-void *fn_801C6C84(void *pool, void *item);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D0664(Mtx44 m);
-void fn_801D0F80(Mtx44 m);
+void *DSGetListNode(void *pool, void *item);
+void *DSNextListNode(void *pool, void *item);
+void MatPushUnit(void);
+void MatPop(void);
+void MatCat(Mtx44 m);
+void MatStore(Mtx44 m);
 void *fn_801D2BB0(int a, int size, int c, int d);
 int ObjNewType_(int type, int size, int count, void *pCreate, void *pDestroy);
 int ObjDelType(int type);
@@ -162,7 +162,7 @@ void ParticleSysAllocDrawList(void)
     int count = 0;
     void *pItem;
 
-    for (pItem = fn_801C6B4C(pManager->mpPool, 0); pItem != 0; pItem = fn_801C6C84(pManager->mpPool, pItem)) {
+    for (pItem = DSGetListNode(pManager->mpPool, 0); pItem != 0; pItem = DSNextListNode(pManager->mpPool, pItem)) {
         count++;
     }
     pList->mCapacity = count;
@@ -388,12 +388,12 @@ PsysEmitter_t *ParticleSysSpawnEmitter(ParticleSpawnArgs_t *pArgs, int b, Partic
         if (pObject->mUnknown0F0 != 3) {
             pObject->mUnknown35A = 1;
         }
-        fn_801D0508();
+        MatPushUnit();
         if (pObject->mUnknown03C != 0) {
-            fn_801D0664(pObject->mUnknown35C);
+            MatCat(pObject->mUnknown35C);
         }
-        fn_801D0F80(pObject->mUnknown35C);
-        fn_801D0544();
+        MatStore(pObject->mUnknown35C);
+        MatPop();
         pObject->mUnknown03C = 1;
         PsysColExtClearAll(pObject);
     }
@@ -444,8 +444,8 @@ void ParticleSysUpdate(float rate)
     fn_801DE4F8((unsigned int)fabsf(1.0f / rate * 60.0f));
     pList = &_ParticleSys_DrawList;
     pManager = fn_801DFD34();
-    for (pItem = (PsysPoolItem_t *)fn_801C6B4C(pManager->mpPool, 0); pItem != 0;
-         pItem = (PsysPoolItem_t *)fn_801C6C84(pManager->mpPool, pItem)) {
+    for (pItem = (PsysPoolItem_t *)DSGetListNode(pManager->mpPool, 0); pItem != 0;
+         pItem = (PsysPoolItem_t *)DSNextListNode(pManager->mpPool, pItem)) {
         if (pItem->mpObject->mUnknown2B4 != 0) {
             fn_801DEA90(pItem->mpObject, 1);
             pList->mppList[count++] = pItem->mpObject;

@@ -36,23 +36,23 @@ struct PortraitPoseDesc_t {
 };
 
 extern "C" {
-void fn_801CE95C(void);
-void fn_801D03D0(PortraitMtx44_t m);
-void fn_801D0470(void);
-void fn_801D04C4(void);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D0664(PortraitMtx44_t m);
-void fn_801D06D4(PortraitMtx44_t m);
-void fn_801D0BCC(int a, int b, int c);
+void GlibClearZBuffer(void);
+void MatMakeUnitMatrix(PortraitMtx44_t m);
+void MatSetStack(void);
+void MatPush(void);
+void MatPushUnit(void);
+void MatPop(void);
+void MatCat(PortraitMtx44_t m);
+void MatLoad(PortraitMtx44_t m);
+void MatRotZYX(int a, int b, int c);
 void C_MTXOrtho(PortraitMtx44_t m, float t, float b, float l, float r, float n, float f);
-void fn_801D0C58(PortraitVec3_t *p);
-void fn_801D0CFC(float a);
-void fn_801D0F80(PortraitMtx44_t m);
-void fn_801D1258(int a, PortraitMtx44_t m);
-void fn_801D12BC(int a);
-void fn_801D12EC(int a);
-void fn_801D131C(int a);
+void MatTranslate(PortraitVec3_t *p);
+void MatScale(float a);
+void MatStore(PortraitMtx44_t m);
+void MatSetSlot(int a, PortraitMtx44_t m);
+void MatLoadSlot(int a);
+void MatStoreSlot(int a);
+void MatCatSlot(int a);
 int PortraitGetSkeletonParam(int index);
 void TMMaterialListSetMatDefs(ModelPartBinding_t *pObject, void *p);
 void TMRenderReset(void);
@@ -221,15 +221,15 @@ void PortraitRenderPoseModels(PortraitJob_t *pObject)
     unsigned int i;
     ModelPartBinding_t *pUnknown612 = &pObject->mUnknown612;
 
-    fn_801D0508();
-    fn_801D0C58(&_PortraitRender_vTranslate);
-    fn_801D0BCC((int)(_PortraitRender_vRotate.mUnknown8 * 46603.379f), (int)(_PortraitRender_vRotate.mUnknown4 * 46603.379f),
+    MatPushUnit();
+    MatTranslate(&_PortraitRender_vTranslate);
+    MatRotZYX((int)(_PortraitRender_vRotate.mUnknown8 * 46603.379f), (int)(_PortraitRender_vRotate.mUnknown4 * 46603.379f),
                 (int)(_PortraitRender_vRotate.mUnknown0 * 46603.379f));
-    fn_801D0CFC(_PortraitRender_fScale);
-    fn_801D0F80(_PortraitRender_ModelMtx);
+    MatScale(_PortraitRender_fScale);
+    MatStore(_PortraitRender_ModelMtx);
     GXLoadPosMtxImm(_PortraitRender_ModelMtx, 0);
     GXSetCurrentMtx(0);
-    fn_801D0544();
+    MatPop();
 
     pData0 = PortraitGetSkeleton(0);
     pData1 = PortraitGetSkeleton(1);
@@ -261,30 +261,30 @@ void PortraitRenderPoseModels(PortraitJob_t *pObject)
     pObject->mUnknown1340[13].mUnknown0 = 0xF342;
     desc.mpUnknown48 = pObject->mUnknown1340;
     desc.mpUnknown52 = matrices;
-    fn_801D0508();
+    MatPushUnit();
     fn_802338D4(&desc, pData0, 0);
-    fn_801D0544();
+    MatPop();
 
-    fn_801D0508();
-    fn_801D06D4(_PortraitRender_ModelMtx);
+    MatPushUnit();
+    MatLoad(_PortraitRender_ModelMtx);
     if (pObject->mUnknown620[0].mpUnknown12 != 0) {
-        fn_801D04C4();
+        MatPush();
         fn_802337D4(pObject->mUnknown620[0].mpUnknown12, pObject->mUnknown588,
                     pObject->mUnknown1340, 0xE0000000);
-        fn_801D0544();
+        MatPop();
     }
     if (pObject->mUnknown620[2].mpUnknown12 != 0) {
-        fn_801D04C4();
-        fn_801D0664(matrices[13]);
+        MatPush();
+        MatCat(matrices[13]);
         memcpy(triples, pData1->mUnknown1040, sizeof(triples));
         triples[0].mUnknown0 = pObject->mUnknown1340[13].mUnknown0;
         triples[0].mUnknown2 = pObject->mUnknown1340[13].mUnknown2;
         triples[0].mUnknown4 = pObject->mUnknown1340[13].mUnknown4;
         fn_802337D4(pObject->mUnknown620[2].mpUnknown12, pObject->mUnknown620[2].mpUnknown224,
                     triples, 0xE0000000);
-        fn_801D0544();
+        MatPop();
     }
-    fn_801D0544();
+    MatPop();
 }
 
 void PortraitRenderCapture(PortraitJob_t *pObject)
@@ -368,7 +368,7 @@ void PortraitRenderBegin2D(int textured, unsigned int color, GXTexObj *pTexture,
     GXGetProjectionv(_PortraitRender_afProjection[0]);
     C_MTXOrtho(projection, 0.0f, 448.0f, 0.0f, 640.0f, 1.0f, 2.0f);
     GXSetProjection(projection, 1);
-    fn_801D03D0(view);
+    MatMakeUnitMatrix(view);
     GXLoadPosMtxImm(view, 0);
     GXSetCurrentMtx(0);
 }
@@ -402,13 +402,13 @@ void PortraitRenderSetCamera(void)
     VptPerspective(_PortraitRender_ProjMtx, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
     GXSetProjection(_PortraitRender_ProjMtx, 0);
     VptGetMatrixStack();
-    fn_801D0470();
-    fn_801D04C4();
-    fn_801D1258(2, _PortraitRender_ProjMtx);
-    fn_801D12BC(1);
-    fn_801D131C(2);
-    fn_801D12EC(6);
-    fn_801D0544();
+    MatSetStack();
+    MatPush();
+    MatSetSlot(2, _PortraitRender_ProjMtx);
+    MatLoadSlot(1);
+    MatCatSlot(2);
+    MatStoreSlot(6);
+    MatPop();
 }
 
 void PortraitRenderDrawModels(PortraitJob_t *pObject)
@@ -457,7 +457,7 @@ void PortraitRenderDraw(PortraitJob_t *pObject)
     PortraitRenderDrawModels(pObject);
     PortraitRenderCapture(pObject);
     PortraitRenderAfterCapture();
-    fn_801CE95C();
+    GlibClearZBuffer();
 }
 
 void PortraitRenderGetColor(unsigned char (*pColors)[4], int index, unsigned char *pR, unsigned char *pG,

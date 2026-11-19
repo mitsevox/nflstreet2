@@ -9,14 +9,6 @@ float fn_80260B1C(float x);
 float fn_801E8DBC(void *pEnd, void *pStart);
 }
 
-/* A simulated system seen as a state vector (implemented in another file). */
-class IntegrableSystem {
-public:
-    virtual int GetState(float *pState) = 0;
-    virtual void SetState(float *pState) = 0;
-    virtual int GetDerivative(void *pStart, float *pRate) = 0;
-};
-
 /* Steps a system's state vector through time. */
 class Integrator {
 public:
@@ -45,25 +37,25 @@ public:
 /* Decides whether a body may change its sleep state. */
 class SleepFilter {
 public:
-    virtual int AllowStateChange(RigidBody_t *pBody, int wake) = 0;
+    virtual int AllowStateChange(RigidBody *pBody, int wake) = 0;
 };
 
 /* Per-body hooks a body set calls on add, remove and each step. */
 class BodyController {
 public:
-    virtual void AddBody(RigidBody_t *pBody) = 0;
-    virtual void RemoveBody(RigidBody_t *pBody) = 0;
-    virtual void UpdateSleepState(RigidBody_t *pBody, float dt) = 0;
+    virtual void AddBody(RigidBody *pBody) = 0;
+    virtual void RemoveBody(RigidBody *pBody) = 0;
+    virtual void UpdateSleepState(RigidBody *pBody, float dt) = 0;
 };
 
 /* Puts slow bodies to sleep and wakes moving ones. */
 class SleepController : public BodyController {
 public:
     SleepController(float sleepTime, float maxSpeed, SleepFilter *pFilter);
-    virtual void AddBody(RigidBody_t *pBody);
-    virtual void RemoveBody(RigidBody_t *pBody);
-    virtual void UpdateSleepState(RigidBody_t *pBody, float dt);
-    int IsBodyResting(RigidBody_t *pBody);
+    virtual void AddBody(RigidBody *pBody);
+    virtual void RemoveBody(RigidBody *pBody);
+    virtual void UpdateSleepState(RigidBody *pBody, float dt);
+    int IsBodyResting(RigidBody *pBody);
 
     float mSleepTime;
     float mMaxSpeed;
@@ -75,20 +67,20 @@ SleepController::SleepController(float sleepTime, float maxSpeed, SleepFilter *p
 {
 }
 
-void SleepController::AddBody(RigidBody_t *pBody)
+void SleepController::AddBody(RigidBody *pBody)
 {
     float time = 0.0f;
 
     pBody->mUserData = *(int *)&time;
 }
 
-void SleepController::RemoveBody(RigidBody_t *pBody)
+void SleepController::RemoveBody(RigidBody *pBody)
 {
     pBody->mUserData = 0;
 }
 
 /* A body must stay below both motion limits before the sleep timer can advance. */
-void SleepController::UpdateSleepState(RigidBody_t *pBody, float dt)
+void SleepController::UpdateSleepState(RigidBody *pBody, float dt)
 {
     int state = pBody->mState;
     float time = 0.0f;
@@ -105,12 +97,12 @@ void SleepController::UpdateSleepState(RigidBody_t *pBody, float dt)
                 time = 0.0f;
             }
         } else {
-            speedSq = fn_80227120(&pBody->mUnknown114);
+            speedSq = fn_80227120(&pBody->mAngularVelocity);
             maxSpeed = mMaxSpeed;
             if (speedSq > maxSpeed * maxSpeed) {
                 target = maxSpeed * 0.95f;
                 float speed = fn_80260B1C(speedSq);
-                fn_80227264(&vel, &pBody->mUnknown07C, target / speed);
+                fn_80227264(&vel, &pBody->mAngularMomentum, target / speed);
                 SetBodyAngularMomentum(pBody, &vel);
             }
         }
@@ -123,11 +115,11 @@ void SleepController::UpdateSleepState(RigidBody_t *pBody, float dt)
     }
 }
 
-int SleepController::IsBodyResting(RigidBody_t *pBody)
+int SleepController::IsBodyResting(RigidBody *pBody)
 {
-    float limit = pBody->mUnknown048;
-    float linearSq = fn_80227120(&pBody->mUnknown108);
-    float angularSq = fn_80227120(&pBody->mUnknown114);
+    float limit = pBody->mRestLimit;
+    float linearSq = fn_80227120(&pBody->mLinearVelocity);
+    float angularSq = fn_80227120(&pBody->mAngularVelocity);
 
     if (linearSq <= limit && angularSq <= limit) {
         return 1;

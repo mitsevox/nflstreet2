@@ -2,7 +2,7 @@
    chunks parsed once, so resource lookups can find a resource's offset without seeking the archive. */
 #include "engine/Resource.h"
 #include "engine/bsearch.h"
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include "game/fn_801D2B7C.h"
 
 typedef struct ResQuickloadChunk_t {
@@ -53,10 +53,10 @@ typedef struct ResQuickloadAlias_t {
 } ResQuickloadAlias_t;
 
 extern int strcmp(const char *a, const char *b);
-extern void *fn_801C6A20(void *pPool);
-extern void *fn_801C6B4C(void *pPool, int mode);
-extern void fn_801C6C0C(void *pPool, void *pItem);
-extern void *fn_801C6C84(void *pPool, void *pItem);
+extern void *DSNewListNode(void *pPool);
+extern void *DSGetListNode(void *pPool, int mode);
+extern void DSDelListNode(void *pPool, void *pItem);
+extern void *DSNextListNode(void *pPool, void *pItem);
 extern int FileOpenFileDevice(const char *pName, int device);
 extern int FileClose(int handle);
 extern int FileSeek(int handle, int offset, unsigned int whence);
@@ -109,8 +109,8 @@ static ResQuickload_t *_ResQuickloadGetFile(char *pName, int *pIndex)
     ResQuickloadFiles_t *pFiles;
     char *pFound;
 
-    for (pQuickload = fn_801C6B4C(_ResQuickload_pFileList, 0); pQuickload != 0;
-         pQuickload = fn_801C6C84(_ResQuickload_pFileList, pQuickload)) {
+    for (pQuickload = DSGetListNode(_ResQuickload_pFileList, 0); pQuickload != 0;
+         pQuickload = DSNextListNode(_ResQuickload_pFileList, pQuickload)) {
         pFiles = pQuickload->pFiles;
         pFound = bsearch(pName, pFiles->mEntries, pFiles->mCount, sizeof(pFiles->mEntries[0]),
                          _ResQuickloadCompareFile1T);
@@ -198,7 +198,7 @@ static int _ResQuickloadIsActive(void)
 
 void ResQuickloadInit(int count)
 {
-    _ResQuickload_pFileList = fn_801C68FC(1, 0, count, sizeof(ResQuickload_t), 0, 0);
+    _ResQuickload_pFileList = DSNewList(1, 0, count, sizeof(ResQuickload_t), 0, 0);
     _aFilenameRemappings = 0;
 }
 
@@ -206,11 +206,11 @@ void ResQuickloadShutdown(void)
 {
     ResQuickload_t *pQuickload;
 
-    for (pQuickload = fn_801C6B4C(_ResQuickload_pFileList, 0); pQuickload != 0;
-         pQuickload = fn_801C6C84(_ResQuickload_pFileList, pQuickload)) {
+    for (pQuickload = DSGetListNode(_ResQuickload_pFileList, 0); pQuickload != 0;
+         pQuickload = DSNextListNode(_ResQuickload_pFileList, pQuickload)) {
         ResQuickloadClose(pQuickload->pName);
     }
-    fn_801C69E4(_ResQuickload_pFileList);
+    DSDelList(_ResQuickload_pFileList);
     _ResQuickload_pFileList = 0;
 }
 
@@ -222,13 +222,13 @@ int ResQuickloadOpenDevice(char *pName, int mode)
 
     handle = FileOpenFileDevice(pName, mode);
     if (handle >= 0) {
-        pQuickload = fn_801C6A20(_ResQuickload_pFileList);
+        pQuickload = DSNewListNode(_ResQuickload_pFileList);
         if (pQuickload != 0) {
             pQuickload->pName = pName;
             pQuickload->mHandle = handle;
             result = 1;
             _ResQuickloadReadFileInfo(handle, pQuickload);
-            fn_801C6AA4(_ResQuickload_pFileList, pQuickload, 0);
+            DSAddListNode(_ResQuickload_pFileList, pQuickload, 0);
         } else {
             FileClose(handle);
         }
@@ -241,12 +241,12 @@ int ResQuickloadClose(char *pName)
     int result = 0;
     ResQuickload_t *pQuickload;
 
-    for (pQuickload = fn_801C6B4C(_ResQuickload_pFileList, 0); pQuickload != 0;
-         pQuickload = fn_801C6C84(_ResQuickload_pFileList, pQuickload)) {
+    for (pQuickload = DSGetListNode(_ResQuickload_pFileList, 0); pQuickload != 0;
+         pQuickload = DSNextListNode(_ResQuickload_pFileList, pQuickload)) {
         if (strcmp(pQuickload->pName, pName) == 0) {
             fn_801D2BD0(pQuickload->pData);
             FileClose(pQuickload->mHandle);
-            fn_801C6C0C(_ResQuickload_pFileList, pQuickload);
+            DSDelListNode(_ResQuickload_pFileList, pQuickload);
             result = 1;
             break;
         }

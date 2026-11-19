@@ -46,8 +46,8 @@ void fn_8018C48C(int);
 void fn_8018C344(int database, int firstTable, int secondTable,
                  int *pFirstCopy, int *pSecondCopy);
 void fn_8018C3EC(int firstTable, int secondTable);
-int fn_80186F7C(unsigned char);
-int fn_80186B38(int);
+int UserProfileGetSelected(unsigned char);
+int UserProfileFindIndex(int);
 int GauntletGetCurrentTeam(int);
 void GauntletReset(int);
 int fn_8022EF8C(int, int);
@@ -383,7 +383,7 @@ void CreateTeamLoadUserTeams()
     fn_8018C48C(0x54415453);
     fn_8018C48C(0x454D4147);
     for (unsigned char i = 0; i <= 1; i++) {
-        int index = fn_80186F7C(i);
+        int index = UserProfileGetSelected(i);
         if (index != -1 && CreateTeamExists(index)) {
             CreateTeamSyncCreatedPlayers(index);
             CreateTeamLoadAll(0x54415453, i, index, ids, 0);
@@ -405,8 +405,8 @@ void CreateTeamStoreFromStats(int index, int team)
 void CreateTeamClear()
 {
     int source = fn_8022F3D4(fn_8022F4BC());
-    if (!GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC())))
-        GauntletReset(fn_80186B38(fn_8022F4BC()));
+    if (!GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC())))
+        GauntletReset(UserProfileFindIndex(fn_8022F4BC()));
     QueryResult result;
     DbQueryTable tables[2];
     QueryCursor cursor;

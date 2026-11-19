@@ -101,13 +101,13 @@ void fn_8003065C(void *pStream, float *pValues, int bits, float scale);
 void PlyrPoseGetAttachTransform(Object_8003DEC4 *p, float *pPos, Quat_801EB488 *pRot);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_80030CB8(void);
-void fn_801D0470(int a);
-void fn_801D04C4(void);
-void fn_801D0508(void);
-void fn_801D0C58(float *p);
-void fn_801D0860(Quat_801EB488 *p);
-void fn_801D0F80(float (*p)[4]);
-void fn_801D0544(void);
+void MatSetStack(int a);
+void MatPush(void);
+void MatPushUnit(void);
+void MatTranslate(float *p);
+void MatRotQuat(Quat_801EB488 *p);
+void MatStore(float (*p)[4]);
+void MatPop(void);
 void ObjNewType_(int type, int size, int count,
                  void (*pInit)(BallModel_t *, BallModelInit_t *),
                  void (*pDestroy)(BallModel_t *));
@@ -299,16 +299,16 @@ extern "C" void BallModelDelete(int handle, int item)
 extern "C" int BallModelDraw(BallModel_t *p)
 {
     if (p->mUnknown20 & 1) {
-        fn_801D0470(VptGetMatrixStack());
-        fn_801D04C4();
-        fn_801D0508();
-        fn_801D0C58(&p->mUnknown4.mX);
-        fn_801D0860(&p->mUnknown108);
-        fn_801D0F80(p->mUnknown32);
-        fn_801D0544();
+        MatSetStack(VptGetMatrixStack());
+        MatPush();
+        MatPushUnit();
+        MatTranslate(&p->mUnknown4.mX);
+        MatRotQuat(&p->mUnknown108);
+        MatStore(p->mUnknown32);
+        MatPop();
         BallRenderDraw(p);
         p->mUnknown656 = 0;
-        fn_801D0544();
+        MatPop();
     }
     return 0;
 }

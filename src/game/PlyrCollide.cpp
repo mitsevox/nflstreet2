@@ -11,9 +11,9 @@ extern float gPlyrMoveFwdSpeed;
 extern "C" {
 int fn_801CFE40(float y, float x);
 void MatRotVecToVec(Vector_80039F5C *pFrom, Vector_80039F5C *pTo);
-void fn_801D0470(int mode);
-void fn_801D0494(void);
-void fn_801D0E94(void);
+void MatSetStack(int mode);
+void MatResetStack(void);
+void MatTranspose(void);
 void fn_802271F0(void *pOut, void *pIn);
 void fn_80227248(void *pOut, void *pIn, float scale);
 void fn_80227264(void *pOut, void *pIn, float scale);

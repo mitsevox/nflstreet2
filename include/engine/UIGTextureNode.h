@@ -17,7 +17,7 @@ typedef struct UIGTexNode_t {
     Uint8 unk_38[0x04];
 } UIGTexNode_t;
 
-typedef void UIGTexNodeCreateFunc_t(Int32 a, Uint32 b, void *p);
+typedef void UIGTexNodeCreateFunc_t(Int16 a, Int16 b, UIGTexNode_t *pNode, const char *pName);
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,10 +36,10 @@ Uint32 LLUIGTexNodeRoundToPowerOf2(Uint32 x);
 void LLUIGTexNodeUpdate(Int32 a, Int32 b);
 UIGTexNode_t *LLUIGTexNodeSetImage(Int32 a, Int32 b, Int32 c, Int32 d, Int32 e);
 void LLUIGTexNodeFreeImage(Int32 a, Int32 b, UIGTexNode_t *pNode);
-Int32 LLUIGTexNodeRegisterObj(Int32 a);
+Int32 LLUIGTexNodeRegisterObj(Texture_t *pTex);
 void LLUIGSetColorChannel(Int32 a);
 void LLUIGSetTexturing(Int32 a);
-void LLUIGSetClamp(Int32 a, Int32 b);
+void LLUIGSetClamp(Int32 WrapS, Int32 WrapT, Texture_t *pTex);
 void *LLUIGTexNodeGet(UIGLibrary_t *pObject, Int32 a, Int32 b);
 unsigned short *LLUIGTexNodeGetPalette(UIGTexNode_t *pNode);
 void LLUIGTexNodeSetPalette(UIGTexNode_t *pNode, unsigned short *pPalette);

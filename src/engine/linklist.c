@@ -8,7 +8,7 @@
 
 typedef int (*LinkSearchFn_t)(void *, void *, void *);
 
-#define LINK_NODE_SIZE (lbl_803D4FB8[0].mNodeSize)
+#define LINK_NODE_SIZE (DSList_Interface[0].mNodeSize)
 
 static void _DSListInsertLinkAtHead(LinkList_t *pList, LinkNode_t *pNode)
 {
@@ -146,7 +146,7 @@ static void _DSListRemoveLinkedNode(LinkList_t *pList, LinkNode_t *pNode)
 }
 
 static int _DSListTraverseLinkedList(LinkList_t *pList, LinkNode_t *pNode, void *pCtx, void *pArg,
-                       ListVisitFn_801C6D34 callback, int direction)
+                       DSListVisitFn_t callback, int direction)
 {
     LinkNode_t *pNext;
     int result = 1;
@@ -157,7 +157,7 @@ static int _DSListTraverseLinkedList(LinkList_t *pList, LinkNode_t *pNode, void 
         } else {
             pNext = pNode->mpNext;
         }
-        result = callback(pNode ? (char *)pNode + lbl_803D4FB8[0].mNodeSize : 0, pCtx, pArg);
+        result = callback(pNode ? (char *)pNode + DSList_Interface[0].mNodeSize : 0, pCtx, pArg);
         pNode = pNext;
     }
     return result == 0 ? 4 : 0;
@@ -171,7 +171,7 @@ static int _DSListSearchLinkedList(LinkList_t *pList, LinkNode_t *pNode, void *a
 
     while (pNode && result < 0) {
         pNext = pNode->mpNext;
-        result = callback(pNode ? (char *)pNode + lbl_803D4FB8[0].mNodeSize : 0, a, b);
+        result = callback(pNode ? (char *)pNode + DSList_Interface[0].mNodeSize : 0, a, b);
         pNode = pNext;
     }
     return result == 0 ? 2 : 3;
@@ -184,12 +184,12 @@ static int _DSListOptimizeLinkedList(LinkList_t *pList)
 
 void DSListInitLinkedModule(void)
 {
-    fn_801C67AC(0, (void (*)(List_801C68FC *))_DSListInitLinkedList, (int (*)(List_801C68FC *))_DSListDelLinkedList,
-                (void (*)(Node_801C6A20 *, int))_DSListInitLinkedNode,
-                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) _DSListAddLinkedNode,
-                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) _DSListGetLinkedNode,
-                (void (*)(List_801C68FC *, Node_801C6A20 *))_DSListRemoveLinkedNode,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListVisitFn_801C6D34, int))_DSListTraverseLinkedList,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC))_DSListSearchLinkedList,
-                (void (*)(List_801C68FC *))_DSListOptimizeLinkedList, sizeof(LinkList_t), sizeof(LinkNode_t));
+    DSAddListType(0, (void (*)(DSList_t *))_DSListInitLinkedList, (int (*)(DSList_t *))_DSListDelLinkedList,
+                (void (*)(DSListNode_t *, int))_DSListInitLinkedNode,
+                (DSListNode_t * (*)(DSList_t *, DSListNode_t *, int)) _DSListAddLinkedNode,
+                (DSListNode_t * (*)(DSList_t *, DSListNode_t *, int)) _DSListGetLinkedNode,
+                (void (*)(DSList_t *, DSListNode_t *))_DSListRemoveLinkedNode,
+                (int (*)(DSList_t *, DSListNode_t *, void *, void *, DSListVisitFn_t, int))_DSListTraverseLinkedList,
+                (int (*)(DSList_t *, DSListNode_t *, void *, void *, DSListSearchFn_t))_DSListSearchLinkedList,
+                (void (*)(DSList_t *))_DSListOptimizeLinkedList, sizeof(LinkList_t), sizeof(LinkNode_t));
 }

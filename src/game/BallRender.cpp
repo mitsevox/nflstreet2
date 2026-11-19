@@ -50,10 +50,10 @@ int FELoopIsMainFEActive(void);
 unsigned char CheatFlagsIsSet(int index);
 int fn_801486A0(void);
 void SimpShadowSetVisible(void *p, int a);
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D0664(Mtx44 m);
-void fn_801D0CFC(float a);
+void MatPush(void);
+void MatPop(void);
+void MatCat(Mtx44 m);
+void MatScale(float a);
 void TMXform(int a, void *b);
 void TMMaterialListAllocDefs(void *p, void *q);
 void TMMaterialListFree(void *p);
@@ -63,7 +63,7 @@ void TMRenderBindMaterialList(void *p);
 void TMRenderSetBlendMode(int a);
 void TMRenderSetZRange(float a, float b);
 void TMRenderSetZMode(int a, int b, int c);
-void fn_80211350(void);
+void TMRenderGeomAll(void);
 void TMTexLibLoad(BallTexLib *pElement, int a);
 void TMTexLibUnload(BallTexLib *pElement);
 void TMTexLibRegistryReset(void);
@@ -180,18 +180,18 @@ void BallRenderDraw(BallRenderObj *pObject)
     TMRenderBindModel(pResult);
     TMRenderBindMaterialList(pObject->mUnknown284);
     if (!(result & 63)) {
-        fn_801D04C4();
-        fn_801D0664(pObject->mUnknown20);
+        MatPush();
+        MatCat(pObject->mUnknown20);
         if (CheatFlagsIsSet(33) || CheatFlagsIsSet(34)) {
             if (!GameModeTypeGet()) {
-                fn_801D0CFC(1.5f);
+                MatScale(1.5f);
             }
         }
         TMXform(0, 0);
         TMRenderSetBlendMode(2);
-        fn_80211350();
+        TMRenderGeomAll();
         TMRenderSetBlendMode(1);
-        fn_801D0544();
+        MatPop();
     }
     if (!(pObject->mUnknown14 & 2)) {
         SimpShadowSetVisible(pObject->mUnknown4, 1);

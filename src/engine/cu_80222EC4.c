@@ -1,10 +1,36 @@
-/* Comparison fragment of src/engine/cu_80221BF0.c (formerly part of cu_80221198.c): fn_80222EC4 .. fn_80223224 and their literal pools. */
+#include <dolphin/gx/GXBump.h>
+#include <dolphin/gx/GXCull.h>
+#include <dolphin/gx/GXDispList.h>
+#include <dolphin/gx/GXGeometry.h>
+#include <dolphin/gx/GXLighting.h>
+#include <dolphin/gx/GXPixel.h>
+#include <dolphin/gx/GXTev.h>
+#include <dolphin/gx/GXTexture.h>
+#include <dolphin/gx/GXTransform.h>
+#include <dolphin/os/OSCache.h>
+#include "engine/MovieRcmpInfo.h"
+#include <string.h>
+#include "engine/Font.h"
+#include "engine/llmatrix.h"
 #include "engine/cu_8021A438.h"
+#include "engine/viewport.h"
+#include "engine/sound.h"
+#include "engine/texture.h"
+#include "game/fn_801D2B7C.h"
+#include "game/ResOpenDevice.h"
+
+/* Partial source for the engine range 0x80222EC4-0x80223B00 (neutral file
+   name): curve helpers and the first node update path. Functions without a
+   body here keep their original bytes. */
 
 extern float fn_80260B1C(float x);
 
 extern Point_80222EC4 lbl_8039FDB8[];
 extern Point_80222EC4 lbl_803A00D8[];
+
+void fn_80223AA0(Node_80223874 *pNode);
+void fn_80223AD0(Node_80223874 *pNode);
+void fn_80223B00(Node_80223874 *pNode, Int32 a);
 
 void fn_80222EC4(Point_80222EC4 *pPoints, int count, float t, Point_80222EC4 *pOut)
 {
@@ -114,3 +140,83 @@ void fn_80223224(int numPoints, Point_80222EC4 *pPoints, float *pWidths, Point_8
     fn_8022306C(&lbl_803A00D8[numOut - 1], &lbl_803A00D8[numOut], &pOut[j], &pOut[j + 1], 0, 0, pWidths[2]);
 }
 
+Point_80222EC4 fn_802233DC(Point_80222EC4 *pPoints, int unused, int index)
+{
+    Point_80222EC4 result;
+
+    if (index == 1) {
+        result.mX = ((pPoints[0].mX + pPoints[2].mX) * 0.5f + pPoints[1].mX) * 0.5f;
+        result.mY = ((pPoints[0].mY + pPoints[2].mY) * 0.5f + pPoints[1].mY) * 0.5f;
+        return result;
+    }
+    return pPoints[index];
+}
+
+void fn_80223874(Node_80223874 *pNode)
+{
+    UIGLibrary_t *pObject;
+    Int32 Item = 0;
+
+    if ((pNode->Flags & 2) && pNode->unk_06 != -1 && pNode->unk_04 != -1) {
+        pObject = UIGLibraryGetGlobal(1);
+        if (UIGLibraryGetType(pObject, pNode->unk_06) & 2) {
+            UIGFmvUpdate(pObject, pNode->unk_06, pNode->unk_04);
+        }
+        if (pNode->unk_0C != -1 && pNode->unk_0E != -1 &&
+            UIGLibraryIsItemLoading(pObject, pNode->unk_06, pNode->unk_04) == 0) {
+            UIGTexNodeSwap(pObject, &pNode->unk_06, &pNode->unk_04, pNode->unk_0E, pNode->unk_0C);
+            pNode->unk_0C = -1;
+            pNode->unk_0E = -1;
+        }
+        Item = UIGLibraryIsItemDataAvailable(pObject, pNode->unk_06, pNode->unk_04);
+    }
+    if (Item != 0 && (pNode->Flags & 0x10) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
+        fn_80220C4C(pNode->unk_0A, pNode->unk_08, Item);
+    }
+    fn_80223B00(pNode, Item);
+    if (Item != 0 && (pNode->Flags & 0x10) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
+        fn_80220CA4(pNode->unk_0A, pNode->unk_08, Item);
+    }
+}
+
+void fn_802239D0(Node_80223874 *pNode)
+{
+    UIGLibrary_t *pObject;
+
+    if (pNode->Flags & 2) {
+        pObject = UIGLibraryGetGlobal(1);
+        if (pNode->unk_06 != -1 && pNode->unk_04 != -1) {
+            UIGLibraryLoadItem(pObject, pNode->unk_06, pNode->unk_04);
+        }
+    }
+    pNode->unk_0C = pNode->unk_04;
+    pNode->unk_0E = pNode->unk_06;
+    fn_80223AA0(pNode);
+}
+
+void fn_80223A40(Node_80223874 *pNode)
+{
+    UIGLibrary_t *pObject;
+
+    if (pNode->Flags & 2) {
+        pObject = UIGLibraryGetGlobal(1);
+        if (pNode->unk_06 != -1 && pNode->unk_04 != -1) {
+            UIGLibraryUnLoadItem(pObject, pNode->unk_06, pNode->unk_04);
+        }
+    }
+    fn_80223AD0(pNode);
+}
+
+void fn_80223AA0(Node_80223874 *pNode)
+{
+    if (pNode->Flags & 0x8000) {
+        UIGDispListRelocate(&pNode->u.List);
+    }
+}
+
+void fn_80223AD0(Node_80223874 *pNode)
+{
+    if (pNode->Flags & 0x8000) {
+        UIGDispListUnrelocate(&pNode->u.List);
+    }
+}

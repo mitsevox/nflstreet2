@@ -1,10 +1,12 @@
 /* Matrix operations on the current stack: load, multiply, push/pop and the
- * rotation/translation/scale builders. */
+ * rotation/translation/scale builders the game uses to place players, the ball,
+ * cameras and effects, plus sixteen saved matrix slots. */
 
 #include "engine/matrix.h"
 #include "engine/llmatrix.h"
 
-extern MatStack_t *lbl_803EBCC0;
+MatStack_t *_Mat_pCurStack = 0;
+static MatMatrix_t _LLMatrix_SlotArray[16];
 
 void PSMTXConcat(float *pA, float *pB, float *pDst);
 void QuatToMatrix(float *pMatrix, float *pQuat);
@@ -15,10 +17,7 @@ float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
 float MathInverse(float x);
 
-extern MatMatrix_t lbl_803847C0[];
-
-
-void fn_801D03D0(float *pMatrix)
+void MatMakeUnitMatrix(float *pMatrix)
 {
     float zero = 0.0f;
     float one = 1.0f;
@@ -41,7 +40,7 @@ void fn_801D03D0(float *pMatrix)
     pMatrix[15] = one;
 }
 
-void fn_801D0424(float *pDst, float *pSrc)
+void MatCopyMatrix(float *pDst, float *pSrc)
 {
     int i;
 
@@ -50,56 +49,56 @@ void fn_801D0424(float *pDst, float *pSrc)
     }
 }
 
-float *fn_801D0444(void)
+float *MatGetCurMatrixPtr(void)
 {
-    MatStack_t *pStack = lbl_803EBCC0;
+    MatStack_t *pStack = _Mat_pCurStack;
 
     return pStack->mDepth ? pStack->mpMatrices[pStack->mTop] : 0;
 }
 
-void fn_801D0470(unsigned int index)
+void MatSetStack(unsigned int index)
 {
-    lbl_803EBCC0 = MatGetStackPtrFromIndex(index);
+    _Mat_pCurStack = MatGetStackPtrFromIndex(index);
 }
 
-void fn_801D0494(void)
+void MatResetStack(void)
 {
-    lbl_803EBCC0->mTop = 0;
-    fn_801D03D0(*lbl_803EBCC0->mpMatrices);
+    _Mat_pCurStack->mTop = 0;
+    MatMakeUnitMatrix(*_Mat_pCurStack->mpMatrices);
 }
 
-void fn_801D04C4(void)
+void MatPush(void)
 {
-    MatStack_t *pStack = lbl_803EBCC0;
+    MatStack_t *pStack = _Mat_pCurStack;
 
     pStack->mTop++;
-    fn_801D0424(pStack->mpMatrices[pStack->mTop], pStack->mpMatrices[pStack->mTop - 1]);
+    MatCopyMatrix(pStack->mpMatrices[pStack->mTop], pStack->mpMatrices[pStack->mTop - 1]);
 }
 
-void fn_801D0508(void)
+void MatPushUnit(void)
 {
-    MatStack_t *pStack = lbl_803EBCC0;
+    MatStack_t *pStack = _Mat_pCurStack;
 
     pStack->mTop++;
-    fn_801D03D0(pStack->mpMatrices[pStack->mTop]);
+    MatMakeUnitMatrix(pStack->mpMatrices[pStack->mTop]);
 }
 
-void fn_801D0544(void)
+void MatPop(void)
 {
-    lbl_803EBCC0->mTop--;
+    _Mat_pCurStack->mTop--;
 }
 
-void fn_801D0558(void)
+void MatMakeUnit(void)
 {
-    fn_801D03D0(lbl_803EBCC0->mpMatrices[lbl_803EBCC0->mTop]);
+    MatMakeUnitMatrix(_Mat_pCurStack->mpMatrices[_Mat_pCurStack->mTop]);
 }
 
-void fn_801D058C(float *pDst, float *pA, float *pB)
+void MatMulMatrices(float *pDst, float *pA, float *pB)
 {
     PSMTXConcat(pA, pB, pDst);
 }
 
-void fn_801D05BC(float *pDst, float *pA, float *pB)
+void MatMulMatrices4x4(float *pDst, float *pA, float *pB)
 {
     float result[16];
     int i;
@@ -107,37 +106,41 @@ void fn_801D05BC(float *pDst, float *pA, float *pB)
 
     for (i = 0; i <= 3; i++) {
         for (j = 0; j < 4; j++) {
-            result[j * 4 + i] = pB[i] * pA[j * 4 + 0] + pB[i + 4] * pA[j * 4 + 1] + pB[i + 8] * pA[j * 4 + 2] +
-                                pB[i + 12] * pA[j * 4 + 3];
+            // FAKEMATCH: B's elements are read through byte offsets ((i + 4n) << 2) so each offset stays a
+            // register of its own and the loads keep the base register first, as in the target.
+            result[j * 4 + i] = *(float *)((char *)pB + (i << 2)) * pA[j * 4 + 0] +
+                                *(float *)((char *)pB + ((i + 4) << 2)) * pA[j * 4 + 1] +
+                                *(float *)((char *)pB + ((i + 8) << 2)) * pA[j * 4 + 2] +
+                                *(float *)((char *)pB + ((i + 12) << 2)) * pA[j * 4 + 3];
         }
     }
-    fn_801D0424(pDst, result);
+    MatCopyMatrix(pDst, result);
 }
 
-void fn_801D0664(float *pMatrix)
+void MatCat(float *pMatrix)
 {
-    float *pCurrent = fn_801D0444();
+    float *pCurrent = MatGetCurMatrixPtr();
 
-    fn_801D058C(pCurrent, pCurrent, pMatrix);
+    MatMulMatrices(pCurrent, pCurrent, pMatrix);
 }
 
-void fn_801D069C(float *pMatrix)
+void MatCat4x4(float *pMatrix)
 {
-    float *pCurrent = fn_801D0444();
+    float *pCurrent = MatGetCurMatrixPtr();
 
-    fn_801D05BC(pCurrent, pCurrent, pMatrix);
+    MatMulMatrices4x4(pCurrent, pCurrent, pMatrix);
 }
 
-void fn_801D06D4(float *pMatrix)
+void MatLoad(float *pMatrix)
 {
-    fn_801D0424(lbl_803EBCC0->mpMatrices[lbl_803EBCC0->mTop], pMatrix);
+    MatCopyMatrix(_Mat_pCurStack->mpMatrices[_Mat_pCurStack->mTop], pMatrix);
 }
 
-void fn_801D070C(void)
+void MatLLInit(void)
 {
 }
 
-void fn_801D0710(float *pAxis, int angle)
+void MatRotAxis(float *pAxis, int angle)
 {
     float m[16];
     float s = fn_801CFB18(angle);
@@ -162,8 +165,8 @@ void fn_801D0710(float *pAxis, int angle)
     m[11] = 0.0f;
     m[12] = m[13] = m[14] = 0.0f;
     m[15] = 1.0f;
-    pCurrent = fn_801D0444();
-    fn_801D058C(m, pCurrent, m);
+    pCurrent = MatGetCurMatrixPtr();
+    MatMulMatrices(m, pCurrent, m);
     pCurrent[0] = m[0];
     pCurrent[4] = m[4];
     pCurrent[8] = m[8];
@@ -175,15 +178,15 @@ void fn_801D0710(float *pAxis, int angle)
     pCurrent[10] = m[10];
 }
 
-void fn_801D0860(float *pQuat)
+void MatRotQuat(float *pQuat)
 {
     float m[16];
     float *pCurrent;
 
-    fn_801D03D0(m);
+    MatMakeUnitMatrix(m);
     QuatToMatrix(m, pQuat);
-    pCurrent = fn_801D0444();
-    fn_801D058C(m, pCurrent, m);
+    pCurrent = MatGetCurMatrixPtr();
+    MatMulMatrices(m, pCurrent, m);
     pCurrent[0] = m[0];
     pCurrent[4] = m[4];
     pCurrent[8] = m[8];
@@ -195,9 +198,9 @@ void fn_801D0860(float *pQuat)
     pCurrent[10] = m[10];
 }
 
-void fn_801D08FC(int angle)
+void MatRotX(int angle)
 {
-    float *p = fn_801D0444();
+    float *p = MatGetCurMatrixPtr();
     float m[16];
     float s;
     float c;
@@ -217,9 +220,9 @@ void fn_801D08FC(int angle)
     p[10] = m[10];
 }
 
-void fn_801D09EC(int angle)
+void MatRotY(int angle)
 {
-    float *p = fn_801D0444();
+    float *p = MatGetCurMatrixPtr();
     float m[16];
     float s;
     float c;
@@ -239,9 +242,9 @@ void fn_801D09EC(int angle)
     p[10] = m[10];
 }
 
-void fn_801D0ADC(int angle)
+void MatRotZ(int angle)
 {
-    float *p = fn_801D0444();
+    float *p = MatGetCurMatrixPtr();
     float m[16];
     float s;
     float c;
@@ -261,14 +264,14 @@ void fn_801D0ADC(int angle)
     p[9] = m[9];
 }
 
-void fn_801D0BCC(int z, int y, int x)
+void MatRotZYX(int z, int y, int x)
 {
-    fn_801D0ADC(z);
-    fn_801D09EC(y);
-    fn_801D08FC(x);
+    MatRotZ(z);
+    MatRotY(y);
+    MatRotX(x);
 }
 
-void fn_801D0C0C(float *pMatrix, float *pX, float *pY, float *pZ)
+void MatSetAxes(float *pMatrix, float *pX, float *pY, float *pZ)
 {
     pMatrix[0] = pX[0];
     pMatrix[4] = pX[1];
@@ -281,9 +284,9 @@ void fn_801D0C0C(float *pMatrix, float *pX, float *pY, float *pZ)
     pMatrix[10] = pZ[2];
 }
 
-void fn_801D0C58(float *pPos)
+void MatTranslate(float *pPos)
 {
-    float *p = fn_801D0444();
+    float *p = MatGetCurMatrixPtr();
     float x = pPos[0] * p[0] + pPos[1] * p[1] + pPos[2] * p[2];
     float y = pPos[0] * p[4] + pPos[1] * p[5] + pPos[2] * p[6];
     float z = pPos[0] * p[8] + pPos[1] * p[9] + pPos[2] * p[10];
@@ -293,9 +296,9 @@ void fn_801D0C58(float *pPos)
     p[11] = p[11] + z;
 }
 
-void fn_801D0CFC(float scale)
+void MatScale(float scale)
 {
-    float *p = fn_801D0444();
+    float *p = MatGetCurMatrixPtr();
 
     p[0] *= scale;
     p[4] *= scale;
@@ -308,9 +311,9 @@ void fn_801D0CFC(float scale)
     p[10] *= scale;
 }
 
-void fn_801D0D94(float x, float y, float z)
+void MatScaleCol(float x, float y, float z)
 {
-    float *p = fn_801D0444();
+    float *p = MatGetCurMatrixPtr();
 
     p[0] *= x;
     p[4] *= x;
@@ -323,18 +326,18 @@ void fn_801D0D94(float x, float y, float z)
     p[10] *= z;
 }
 
-void fn_801D0E44(float scale)
+void MatScalePos(float scale)
 {
-    float *p = fn_801D0444();
+    float *p = MatGetCurMatrixPtr();
 
     p[3] *= scale;
     p[7] *= scale;
     p[11] *= scale;
 }
 
-void fn_801D0E94(void)
+void MatTranspose(void)
 {
-    float *p = fn_801D0444();
+    float *p = MatGetCurMatrixPtr();
     float t;
 
     t = p[4];
@@ -348,13 +351,13 @@ void fn_801D0E94(void)
     p[6] = t;
 }
 
-void fn_801D0EE4(void)
+void MatInvertRigid(void)
 {
     float m[16];
     float pos[3];
     float t;
 
-    fn_801D0F80(m);
+    MatStore(m);
     t = m[4];
     m[4] = m[1];
     m[1] = t;
@@ -370,25 +373,25 @@ void fn_801D0EE4(void)
     m[3] = 0.0f;
     m[7] = 0.0f;
     m[11] = 0.0f;
-    fn_801D06D4(m);
-    fn_801D0C58(pos);
+    MatLoad(m);
+    MatTranslate(pos);
 }
 
-void fn_801D0F80(float *pMatrix)
+void MatStore(float *pMatrix)
 {
-    fn_801D0424(pMatrix, fn_801D0444());
+    MatCopyMatrix(pMatrix, MatGetCurMatrixPtr());
 }
 
-void fn_801D0FB8(float *pPos)
+void MatGetPos(float *pPos)
 {
-    float *p = fn_801D0444();
+    float *p = MatGetCurMatrixPtr();
 
     pPos[0] = p[3];
     pPos[1] = p[7];
     pPos[2] = p[11];
 }
 
-void fn_801D0FFC(int *pAngles, float *pMatrix)
+void MatGetRotFromMatrixZYX(int *pAngles, float *pMatrix)
 {
     float sy = -pMatrix[8];
     float t = sy * sy;
@@ -420,7 +423,7 @@ void fn_801D0FFC(int *pAngles, float *pMatrix)
     pAngles[2] = fn_801CFE40(sz, cz);
 }
 
-void fn_801D10F8(int *pAngles, float *pMatrix)
+void MatGetRotFromMatrixYZX(int *pAngles, float *pMatrix)
 {
     float sz = pMatrix[4];
     float t = sz * sz;
@@ -452,43 +455,43 @@ void fn_801D10F8(int *pAngles, float *pMatrix)
     pAngles[2] = fn_801CFE40(sz, cz);
 }
 
-void fn_801D11F4(int *pAngles, unsigned int order)
+void MatGetRotByOrder(int *pAngles, unsigned int order)
 {
-    float *p = fn_801D0444();
+    float *p = MatGetCurMatrixPtr();
 
     switch (order) {
     case 0:
-        fn_801D0FFC(pAngles, p);
+        MatGetRotFromMatrixZYX(pAngles, p);
         break;
     case 1:
         break;
     case 2:
-        fn_801D10F8(pAngles, p);
+        MatGetRotFromMatrixYZX(pAngles, p);
         break;
     }
 }
 
-void fn_801D1258(int slot, float *pMatrix)
+void MatSetSlot(int slot, float *pMatrix)
 {
-    fn_801D0424(lbl_803847C0[slot], pMatrix);
+    MatCopyMatrix(_LLMatrix_SlotArray[slot], pMatrix);
 }
 
-void fn_801D1288(int slot, float *pMatrix)
+void MatGetSlot(int slot, float *pMatrix)
 {
-    fn_801D0424(pMatrix, lbl_803847C0[slot]);
+    MatCopyMatrix(pMatrix, _LLMatrix_SlotArray[slot]);
 }
 
-void fn_801D12BC(int slot)
+void MatLoadSlot(int slot)
 {
-    fn_801D06D4(lbl_803847C0[slot]);
+    MatLoad(_LLMatrix_SlotArray[slot]);
 }
 
-void fn_801D12EC(int slot)
+void MatStoreSlot(int slot)
 {
-    fn_801D0F80(lbl_803847C0[slot]);
+    MatStore(_LLMatrix_SlotArray[slot]);
 }
 
-void fn_801D131C(int slot)
+void MatCatSlot(int slot)
 {
-    fn_801D069C(lbl_803847C0[slot]);
+    MatCat4x4(_LLMatrix_SlotArray[slot]);
 }

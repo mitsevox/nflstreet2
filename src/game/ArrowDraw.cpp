@@ -39,7 +39,7 @@ struct ArrowFanVertex {
 extern "C" {
 int fn_801CFC14(int angle, float *pFirst, float *pSecond);
 float MathInvSqrt(float value);
-void fn_801D0F80(Mtx44 m);
+void MatStore(Mtx44 m);
 void TMRenderReset(void);
 void TMRenderSetBlendMode(int a);
 void TMRenderSetZRange(float a, float b);
@@ -299,7 +299,7 @@ void ArrowDraw(ArrowPath *pTrail)
     GXSetChanCtrl(4, 0, 0, 1, 1, 2, 1);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-    fn_801D0F80(view);
+    MatStore(view);
     GXSetCurrentMtx(0);
     GXLoadPosMtxImm(view, 0);
     GXSetZCompLoc(GX_TRUE);

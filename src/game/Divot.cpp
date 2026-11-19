@@ -144,8 +144,8 @@ void DivotRenderEndType(int type);
 char *strchr(const char *pString, int c);
 int strnicmp(const char *pA, const char *pB, int n);
 int atoi(const char *pString);
-void fn_801CE910(void);
-void fn_801D0470(int a);
+void GlibSyncFrame(void);
+void MatSetStack(int a);
 void *fn_801D2BB0(int a, int size, int c, int d);
 int ObjNewType_(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
 int ObjDelType(int a);
@@ -369,7 +369,7 @@ void DivotUpdateFading(Divot *p)
 
 void DivotFlushFading(void)
 {
-    fn_801CE910();
+    GlibSyncFrame();
     for (float frame = 0.0f; frame < 2.0f; frame += 1.0f) {
         for (int type = 0; type < DIVOT_NUM_TYPES; type++) {
             for (int i = 0; i < DivotGetPoolSize(type); i++) {
@@ -657,7 +657,7 @@ void DivotDraw(void)
     int i;
 
     if (_Divot_bDraw) {
-        fn_801D0470(VptGetMatrixStack());
+        MatSetStack(VptGetMatrixStack());
         DivotRenderBeginType(0);
         pPool = _Divot_apPool[0];
         alpha = 0.1f;

@@ -27,12 +27,12 @@ extern "C" {
 int fn_800C47C4(void);
 int GlibRenderGetBin(int index);
 int GlibRenderSelectBin(int a);
-void fn_801D0470(int a);
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D0664(Mtx44 m);
-void fn_801D0D94(float x, float y, float z);
-void fn_801D0F80(Mtx44 m);
+void MatSetStack(int a);
+void MatPush(void);
+void MatPop(void);
+void MatCat(Mtx44 m);
+void MatScaleCol(float x, float y, float z);
+void MatStore(Mtx44 m);
 int MemFill(void *pDest, int size, int value, int width);
 void TMRenderReset(void);
 void fn_802271A4(Vector_80039F5C *pOut, Vector_80039F5C *p);
@@ -180,29 +180,29 @@ void SimpShadowDrawAll(void)
         GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
         GXSetNumTevStages(1);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-        fn_801D0470(VptGetMatrixStack());
+        MatSetStack(VptGetMatrixStack());
         GXLoadTexObj(&_SimpShadow_TexObj, 0);
-        fn_801D04C4();
-        fn_801D0664((float (*)[4])fn_80236384(0));
+        MatPush();
+        MatCat((float (*)[4])fn_80236384(0));
         fn_80236408(0, &scale);
         scale.mZ = 0.0f;
         fn_80227384(&scale, &scale, 0x200000);
         fn_802271A4(&scale, &scale);
-        fn_801D0F80(mtx);
+        MatStore(mtx);
         GXLoadPosMtxImm(mtx, 0);
         GXSetCurrentMtx(0);
-        fn_801D0544();
+        MatPop();
         for (i = 0; i < _SimpShadow_uCount; i++) {
             if (_SimpShadow_apEntries[i]->mUnknown10 != 0 && _SimpShadow_apEntries[i]->mUnknown0 == 0) {
                 cursor = SimpShadowDrawQuad(cursor, _SimpShadow_apEntries[i], &scale);
             }
         }
-        fn_801D04C4();
-        fn_801D0D94(1.0f, 1.0f, 0.0f);
-        fn_801D0F80(mtx);
+        MatPush();
+        MatScaleCol(1.0f, 1.0f, 0.0f);
+        MatStore(mtx);
         GXLoadPosMtxImm(mtx, 0);
         GXSetCurrentMtx(0);
-        fn_801D0544();
+        MatPop();
         scale.mY = scale.mX = 0.5f;
         for (i = 0; i < _SimpShadow_uCount; i++) {
             if (_SimpShadow_apEntries[i]->mUnknown10 != 0 && _SimpShadow_apEntries[i]->mUnknown0 == 1) {

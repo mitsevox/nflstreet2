@@ -44,10 +44,10 @@ void *fn_800A336C(void);
 int fn_800A3398(void);
 void SimpShadowDrawAll(void);
 int ConGetCurrentContext(void);
-void fn_801D0470(int a);
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D0C58(void *a);
+void MatSetStack(int a);
+void MatPush(void);
+void MatPop(void);
+void MatTranslate(void *a);
 int ObjNewType_(int a, int size, int c, void (*pInit)(FldObj_t *, int *),
                 void (*pRelease)(FldObj_t *));
 int ObjDelType(int a);
@@ -146,8 +146,8 @@ void FldObjDrawLayer(FldObj_t *pObject, int index, void *pPos, float scale)
     if (pObject->mUnknown4AC[index] != 0 && _FldObj_aLayers[index].mUnknown19 != 0) {
         handle = ConGetCurrentContext();
         if (pPos != 0) {
-            fn_801D04C4();
-            fn_801D0C58(pPos);
+            MatPush();
+            MatTranslate(pPos);
         }
         fn_80235740(pSub, handle);
         fn_80235C90(pSub, handle, 1.0f, 1.0f, 1.0f, scale * _FldObj_aLayers[index].mUnknown14);
@@ -156,7 +156,7 @@ void FldObjDrawLayer(FldObj_t *pObject, int index, void *pPos, float scale)
         }
         fn_80235764(pSub, handle);
         if (pPos != 0) {
-            fn_801D0544();
+            MatPop();
         }
     }
 }
@@ -169,8 +169,8 @@ void FldObjDrawShadowPass(FldObj_t *pObject, float scale, void *pPos)
     if (pObject->mUnknown4AC[4] != 0 && _FldObj_aLayers[4].mUnknown19 != 0) {
         handle = ConGetCurrentContext();
         if (pPos != 0) {
-            fn_801D04C4();
-            fn_801D0C58(pPos);
+            MatPush();
+            MatTranslate(pPos);
         }
         fn_80235740(pSub, handle);
         fn_80235C90(pSub, handle, 0.5f, 0.5f, 0.5f, scale * _FldObj_aLayers[4].mUnknown14);
@@ -179,7 +179,7 @@ void FldObjDrawShadowPass(FldObj_t *pObject, float scale, void *pPos)
         }
         fn_80235764(pSub, handle);
         if (pPos != 0) {
-            fn_801D0544();
+            MatPop();
         }
     }
 }
@@ -188,9 +188,9 @@ int FldObjRender(FldObj_t *pObject)
 {
     unsigned int i;
 
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D04C4();
-    fn_801D0C58(&pObject->mUnknown4);
+    MatSetStack(VptGetMatrixStack());
+    MatPush();
+    MatTranslate(&pObject->mUnknown4);
     FldObjDrawLayer(pObject, 0, 0, 1.0f);
     FldObjDrawLayer(pObject, 1, 0, 1.0f);
     for (i = 0; i < sizeof(_FldObj_aLinePasses) / sizeof(_FldObj_aLinePasses[0]); i++) {
@@ -201,7 +201,7 @@ int FldObjRender(FldObj_t *pObject)
     DivotDraw();
     FldObjDrawLayer(pObject, 4, 0, 1.0f);
     FldObjDrawShadowPass(pObject, 1.0f, 0);
-    fn_801D0544();
+    MatPop();
     SimpShadowDrawAll();
     return 0;
 }

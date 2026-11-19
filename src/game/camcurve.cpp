@@ -25,8 +25,8 @@ float AnimSequencerGetTicksPerSecond(void);
 AnimSeqCamSample_t *AnimSeqCamFindFirstCamera(Actor_801C009C *);
 AnimSeqCamSample_t *AnimSeqCamFindCamera(Actor_801C009C *bank, unsigned short id, unsigned short subId, unsigned short index);
 float CurveListEvaluate(float,CurveList_t *,int);
-void fn_801D04C4(void); void fn_801D0558(void); void fn_801D0544(void); void fn_801D0508(void);
-void fn_801D0F80(float (*)[4]); void fn_801D06D4(float (*)[4]); void fn_801D0ADC(int);
+void MatPush(void); void MatMakeUnit(void); void MatPop(void); void MatPushUnit(void);
+void MatStore(float (*)[4]); void MatLoad(float (*)[4]); void MatRotZ(int);
 void QuatFromAxisAngle(float *,Vector_80039F5C *,int);
 void QuatMultiply(float *,float *,float *);
 void QuatToMatrix(float (*)[4],float *);
@@ -99,7 +99,7 @@ extern "C" void CamCurveApplyActorCurves(GameCamera_t *camera, Actor_801C009C *a
     AnimSeqCamSample_t *sample;
     float t = time / AnimSequencerGetTicksPerSecond();
 
-    fn_801D04C4(); fn_801D0558(); fn_801D0F80(matrix); fn_801D0544();
+    MatPush(); MatMakeUnit(); MatStore(matrix); MatPop();
     if (!selection->mUnknown0) return;
     if (selection->mUnknown4.mWord == -1 || selection->mUnknown8.mWord == -1)
         sample = AnimSeqCamFindFirstCamera(actor);
@@ -135,10 +135,10 @@ extern "C" void CamCurveApplyActorCurves(GameCamera_t *camera, Actor_801C009C *a
     fn_802276B4(&direction,&position,&look); fn_802276B4(&look,&look,&position);
     if (fn_80227120(&look)<0.0001f) { look.mX=0.0f; look.mY=1.0f; look.mZ=0.0f; }
     if (fn_80227120(&up)<0.0001f) { up.mX=0.0f; up.mY=0.0f; up.mZ=1.0f; }
-    fn_801D04C4(); fn_801D06D4(matrix);
+    MatPush(); MatLoad(matrix);
     fn_802276B4(&position,&position,&base); fn_80227C2C(&position,&position);
     fn_8022765C(&position,&position,&base); fn_8022765C(&position,&position,&offset);
-    fn_80227C2C(&up,&up); fn_80227C2C(&look,&look); fn_801D0544();
+    fn_80227C2C(&up,&up); fn_80227C2C(&look,&look); MatPop();
     float dot = fn_80227704(&up,&look); float length = fn_80227120(&look);
     fn_80227264(&projection,&look,dot/length); fn_802276B4(&up,&up,&projection);
     position.mX-=actor->mUnknown18->mUnknown34; position.mY+=actor->mUnknown18->mUnknown3C;
@@ -146,7 +146,7 @@ extern "C" void CamCurveApplyActorCurves(GameCamera_t *camera, Actor_801C009C *a
     fn_80227384(&look,&look,camera->mUnknown10C-(int)(actor->mUnknown18->mUnknown30*2670176.75f)+0x400000);
     fn_80227384(&up,&up,camera->mUnknown10C-(int)(actor->mUnknown18->mUnknown30*2670176.75f)+0x400000);
     fn_80227384(&direction,&direction,camera->mUnknown10C-(int)(actor->mUnknown18->mUnknown30*2670176.75f)+0x400000);
-    fn_801D0508(); fn_801D0ADC(0x400000); fn_80227C2C(&direction,&direction); fn_801D0544();
+    MatPushUnit(); MatRotZ(0x400000); fn_80227C2C(&direction,&direction); MatPop();
     angles.mY=0;
     angles.mZ=fn_801CFE40(direction.mY,direction.mX);
     float horizontal=fn_80260B1C(direction.mX*direction.mX+direction.mY*direction.mY);
@@ -186,7 +186,7 @@ extern "C" void CamCurveApplyPlaybackCurves(GameCamera_t *camera, Actor_801C009C
     axis.mX=0.0f; axis.mY=1.0f; axis.mZ=0.0f; QuatFromAxisAngle(qy,&axis,rotation.mY);
     axis.mX=0.0f; axis.mY=0.0f; axis.mZ=1.0f; QuatFromAxisAngle(qz,&axis,rotation.mZ);
     QuatMultiply(q,qy,qz); QuatMultiply(q,q,qx); QuatToMatrix(matrix,q);
-    fn_801D04C4(); fn_801D06D4(matrix); if (mirror) fn_801D0ADC(0x800000); fn_801D0F80(matrix); fn_801D0544();
+    MatPush(); MatLoad(matrix); if (mirror) MatRotZ(0x800000); MatStore(matrix); MatPop();
     position.mX=CurveListEvaluate(t,&sample->mCurves[0],0);
     position.mY=-CurveListEvaluate(t,&sample->mCurves[2],0);
     position.mZ=CurveListEvaluate(t,&sample->mCurves[1],0);
@@ -200,10 +200,10 @@ extern "C" void CamCurveApplyPlaybackCurves(GameCamera_t *camera, Actor_801C009C
     fn_802276B4(&look,&look,&position);
     if (fn_80227120(&look)<0.0001f) { look.mX=0.0f; look.mY=1.0f; look.mZ=0.0f; }
     if (fn_80227120(&up)<0.0001f) { up.mX=0.0f; up.mY=0.0f; up.mZ=1.0f; }
-    fn_801D04C4(); fn_801D06D4(matrix);
+    MatPush(); MatLoad(matrix);
     fn_802276B4(&position,&position,&base); fn_80227C2C(&position,&position);
     fn_8022765C(&position,&position,&base); fn_8022765C(&position,&position,&offset);
-    fn_80227C2C(&up,&up); fn_80227C2C(&look,&look); fn_801D0544();
+    fn_80227C2C(&up,&up); fn_80227C2C(&look,&look); MatPop();
     float dot=fn_80227704(&up,&look); float length=fn_80227120(&look);
     fn_80227264(&projection,&look,dot/length); fn_802276B4(&up,&up,&projection);
     angles.mZ=fn_801CFE40(look.mY,look.mX)-0x400000;

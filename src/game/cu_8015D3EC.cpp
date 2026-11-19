@@ -29,7 +29,7 @@ void fn_801A4690(int a);
 void fn_801A46BC(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int FileSetMemAllocFlags(int value);
-void fn_801CE910(void);
+void GlibSyncFrame(void);
 int fn_801D3148(int a, void *p);
 void ResCopyAsyncToBuffer(void *pArchive, int id, int a, void *pDest, int b, void (*pCallback)(void), int c);
 int ResCopyToBuffer(void *pArchive, int id, void *pDest);
@@ -418,7 +418,7 @@ void fn_8015DA80(int index, int load)
 
     if (load) {
         if (lbl_803EB35D) {
-            fn_801CE910();
+            GlibSyncFrame();
         }
         ResCopyToBuffer(HairArchive(id0), HairId(lbl_802E31D0[index][0].mId), lbl_8031C6A4[index][0]);
         ResCopyToBuffer(HairArchive(id1), HairId(lbl_802E31D0[index][1].mId), lbl_8031C6A4[index][1]);
@@ -457,7 +457,7 @@ void fn_8015DD3C(int index, int load)
 
     if (load) {
         if (lbl_803EB35D) {
-            fn_801CE910();
+            GlibSyncFrame();
         }
         fn_80233EAC(&lbl_8031C31C[index], lbl_802E3208[index], "PLYRMODEL", 0, lbl_803ECADC,
                     lbl_803EB348, lbl_8031C714[index], 1);
@@ -480,7 +480,7 @@ void fn_8015DE3C(int index, int load)
 
     if (load) {
         if (lbl_803EB35D) {
-            fn_801CE910();
+            GlibSyncFrame();
         }
         fn_80233EAC(&lbl_8031C434[index], lbl_802E3240[index], "PLYRMODEL", 0, lbl_803ECAE0,
                     lbl_803EB348, lbl_8031C784[index], 1);
@@ -515,7 +515,7 @@ void fn_8015DF3C(int index, int load)
 
     if (load) {
         if (lbl_803EB35D) {
-            fn_801CE910();
+            GlibSyncFrame();
         }
         fn_80233EAC(&lbl_8031C54C[index], lbl_802E3278[index], "PLYRMODEL", 0, lbl_803ECAE4,
                     lbl_803EB358, lbl_8031C7F4[index], 1);

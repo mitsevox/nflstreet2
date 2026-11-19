@@ -37,15 +37,15 @@ static int _SkelEulerLToMatrixGHierarchy(Skel_t *pSkel, SkelNode_t *pNode, SkelE
     SkelEuler_t *pEuler;
     int i;
 
-    fn_801D04C4();
+    MatPush();
     for (last = -1; last < pNode->mId; pNode = pNode->mpChildren[0]) {
         joint = pNode->mJoint;
-        fn_801D0C58(pSkel->mPos[joint]);
+        MatTranslate(pSkel->mPos[joint]);
         pEuler = &pEulers[joint];
-        fn_801D0ADC(pEuler->z);
-        fn_801D09EC(pEuler->y);
-        fn_801D08FC(pEuler->x);
-        fn_801D0F80(pMatrices[joint]);
+        MatRotZ(pEuler->z);
+        MatRotY(pEuler->y);
+        MatRotX(pEuler->x);
+        MatStore(pMatrices[joint]);
         if (pNode->mNumChildren > 1) {
             for (i = 0; i < pNode->mNumChildren; i++) {
                 last = _SkelEulerLToMatrixGHierarchy(pSkel, pNode->mpChildren[i], pEulers, pMatrices);
@@ -54,17 +54,17 @@ static int _SkelEulerLToMatrixGHierarchy(Skel_t *pSkel, SkelNode_t *pNode, SkelE
             last = pNode->mId;
         }
     }
-    fn_801D0544();
+    MatPop();
     return last;
 }
 
 static void _SkelEulerLToMatrixG(Skel_t *pSkel, SkelNode_t *pNode, SkelPose_t *pPose)
 {
-    fn_801D04C4();
-    fn_801D0C58(pPose->mPos);
-    fn_801D09EC(pPose->mRotY);
+    MatPush();
+    MatTranslate(pPose->mPos);
+    MatRotY(pPose->mRotY);
     _SkelEulerLToMatrixGHierarchy(pSkel, pNode, pPose->mpLocal, pPose->mpOutput);
-    fn_801D0544();
+    MatPop();
 }
 
 static void _SkelQuatLToEulerL(Skel_t *pSkel, SkelNode_t *pUnused, SkelPose_t *pPose)
@@ -114,7 +114,7 @@ static void _SkelQuatLToMatrixG(Skel_t *pSkel, SkelNode_t *pNode, SkelPose_t *pP
     SkelXform_t xform;
 
     QuatFromMat(xform.mQuat);
-    fn_801D0FB8(xform.mPos);
+    MatGetPos(xform.mPos);
     _SkelQuatLToMatrixGHierarchy(pSkel, pNode, &xform, pPose->mpLocal, pPose->mpOutput);
 }
 

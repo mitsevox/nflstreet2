@@ -179,7 +179,7 @@ void QuatFromMat(float *q)
 {
     QuatMatrix_t m;
 
-    fn_801D0F80(m.mElements);
+    MatStore(m.mElements);
     QuatFromMatrix(q, &m);
 }
 

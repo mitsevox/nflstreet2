@@ -21,7 +21,7 @@ int SNDSTRM_createtap(void *pStream, void *pConfig, int a, int b, void *pBuffer,
 int SNDSTRM_queuerequestid(int voice, int a, int b);
 void fn_8026E2A8(int voice);
 void SNDSYS_entercritical(void);
-void fn_8026EF88(int handle, void *pStatus);
+void SNDSTRM_requeststatus(int handle, void *pStatus);
 void SNDSYS_leavecritical(void);
 int SNDPROFILE_outputlatency(void);
 RcmpDecoder *fn_801D9654(void *pMem, RcmpCodecIData_t *pIData);
@@ -260,7 +260,7 @@ int MovieRcmpGetTime(MovieRcmpInfo_t *pInfo)
         int played;
 
         SNDSYS_entercritical();
-        fn_8026EF88(pAudio->mHandle, status);
+        SNDSTRM_requeststatus(pAudio->mHandle, status);
         SNDSYS_leavecritical();
         played = status[1] - SNDPROFILE_outputlatency();
         if (played > pAudio->mLastTime) {

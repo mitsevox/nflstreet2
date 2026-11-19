@@ -16,7 +16,7 @@ union ProfileListArgs_t {
 };
 
 extern "C" {
-int fn_80186DF0(signed char *pIndices, int length);
+int UserProfileSortByRecent(signed char *pIndices, int length);
 int UserRecGetName(int index, char *pText);
 int fn_8022F358(int index);
 
@@ -24,7 +24,7 @@ void MsgProfileListFill(ProfileListWord_t *pRecords, ProfileListWord_t *pFlags, 
 {
     char text[64];
     signed char indices[4];
-    fn_80186DF0(indices, 4);
+    UserProfileSortByRecent(indices, 4);
     signed char count = 0;
     signed char i;
     for (i = 0; i < 4; ++i) {

@@ -25,7 +25,7 @@ int fn_80205B88(TDbStmt_80205754 *pStmt);
 void fn_80205C08(TDbStmt_80205754 *pStmt);
 int fn_80207E24(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_t *pCols, int create);
 
-void fn_80209F34(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLits, unsigned int *pMask);
+int fn_80209F34(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLits, unsigned int *pMask);
 void fn_8020A540(void);
 void fn_8020A5A8(void);
 void _TDbTblCallInsertTriggers(TDbTable_t *pTable, int row);

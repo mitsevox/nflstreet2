@@ -2,11 +2,11 @@
    frame into the frame buffer. */
 
 #include "engine/render.h"
-#include "engine/fn_801CEA08.h"
+#include "engine/llglib.h"
 
-extern void fn_801CE82C(void);
-extern int fn_801CE930(void);
-extern int fn_801CE944(int a);
+extern void GlibSwapBuffers(void);
+extern int GlibGetFrame(void);
+extern int GlibGetFrameBufferAddr(int a);
 extern void fn_801DB900(unsigned char **ppPlanes, int x, int y, int pitch, int width, int height, int frameBuffer);
 extern void fn_801DBEB4(unsigned char **ppPlanes, int x, int y, int pitch, int width, int height, int frameBuffer);
 
@@ -39,9 +39,9 @@ void yuvrenderDoubleYLines(unsigned char **ppPlanes)
     int pitch;
     int frameBuffer;
 
-    fn_801CE82C();
-    pitch = (fn_801CEA08() + 15) & 0xFFF0;
-    frameBuffer = fn_801CE944((unsigned char)fn_801CE930());
+    GlibSwapBuffers();
+    pitch = (GlibGetScreenWidth() + 15) & 0xFFF0;
+    frameBuffer = GlibGetFrameBufferAddr((unsigned char)GlibGetFrame());
     fn_801DB900(ppPlanes, lbl_803ECF34, lbl_803ECF38, pitch, lbl_803ECF3C, lbl_803ECF40, frameBuffer);
 }
 
@@ -50,8 +50,8 @@ void yuvrenderVP6YLines(unsigned char **ppPlanes)
     int pitch;
     int frameBuffer;
 
-    fn_801CE82C();
-    pitch = (fn_801CEA08() + 15) & 0xFFF0;
-    frameBuffer = fn_801CE944((unsigned char)fn_801CE930());
+    GlibSwapBuffers();
+    pitch = (GlibGetScreenWidth() + 15) & 0xFFF0;
+    frameBuffer = GlibGetFrameBufferAddr((unsigned char)GlibGetFrame());
     fn_801DBEB4(ppPlanes, lbl_803ECF34, lbl_803ECF38, pitch, lbl_803ECF3C, lbl_803ECF40, frameBuffer);
 }

@@ -20,7 +20,7 @@ int _TDbMemPoolInit(TDbMemPool_t *pPool, void *pHeap, unsigned int itemSize, uns
     pPool->mCount = count;
     _TDbMemNotify(0, -1, -1);
     err = TDbExtMemAlloc(pHeap, count * itemSize + sizeof(TDbMemBlock_t), &pBlock);
-    _TDbMemNotify(4, -1, -1);
+    _TDbMemNotifyEnd();
     if (err != 0) {
         return err;
     }

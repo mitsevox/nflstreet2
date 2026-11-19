@@ -3,7 +3,7 @@
    count on every open file and loaded resource so callers can share them. */
 
 #include "game/ResBank.h"
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/ResLoad.h"
@@ -33,9 +33,9 @@ struct ResBank_t {
 };
 
 extern "C" {
-int fn_801C6DCC(void *pPool, int a, void *pKey, void *pResult, int (*match)(void *, void *, void **));
-void *fn_801C6A20(void *pPool);
-void fn_801C6C0C(void *pPool, void *pItem);
+int DSSearchList(void *pPool, int a, void *pKey, void *pResult, int (*match)(void *, void *, void **));
+void *DSNewListNode(void *pPool);
+void DSDelListNode(void *pPool, void *pItem);
 void *fn_801D2BB0(int a, int size, int c, int d);
 void *ResOpenRam(void *pData, int a, int b, int c);
 int ResLoadAsync(void *pData, int index, int a, int b, void (*callback)(void *, int, int, int, ResBank_t *), ResBank_t *pCache);
@@ -80,7 +80,7 @@ ResBankFile_t *ResBankFindFile(ResBank_t *pCache, int key)
     ResBankFile_t *pFound = 0;
 
     match.mKey = key;
-    fn_801C6DCC(pCache->mpEntries, 0, &match, &pFound, ResBankMatchFileKey);
+    DSSearchList(pCache->mpEntries, 0, &match, &pFound, ResBankMatchFileKey);
     return pFound;
 }
 
@@ -90,7 +90,7 @@ ResBankFile_t *ResBankFindFileByRes(ResBank_t *pCache, void *pData)
     ResBankFile_t *pFound = 0;
 
     match.mpData = pData;
-    fn_801C6DCC(pCache->mpEntries, 0, &match, &pFound, ResBankMatchFileRes);
+    DSSearchList(pCache->mpEntries, 0, &match, &pFound, ResBankMatchFileRes);
     return pFound;
 }
 
@@ -100,7 +100,7 @@ ResBankItem_t *ResBankFindItem(ResBankFile_t *pEntry, int index)
     ResBankItem_t *pFound = 0;
 
     match.mIndex = index;
-    fn_801C6DCC(pEntry->mpEntries, 0, &match, &pFound, ResBankMatchItemIndex);
+    DSSearchList(pEntry->mpEntries, 0, &match, &pFound, ResBankMatchItemIndex);
     return pFound;
 }
 
@@ -137,10 +137,10 @@ void ResBankLoadEntry(ResBank_t *pCache, int key, int index, int async)
     }
     pItem = ResBankFindItem(pEntry, index);
     if (pItem == 0) {
-        pItem = (ResBankItem_t *)fn_801C6A20(pEntry->mpEntries);
+        pItem = (ResBankItem_t *)DSNewListNode(pEntry->mpEntries);
         pItem->mRefs = 1;
         pItem->mIndex = index;
-        fn_801C6AA4(pEntry->mpEntries, pItem, 1);
+        DSAddListNode(pEntry->mpEntries, pItem, 1);
         if (async && ResIsMemoryBacked(pEntry->mpData) == 0) {
             pItem->mLoaded = 0;
             pItem->mValue = ResLoadAsync(pEntry->mpData, index, pCache->mUnknown0, 100, ResBankLoadDone, pCache);
@@ -182,7 +182,7 @@ void ResBankUnloadEntry(ResBank_t *pCache, int key, int index)
             pItem->mRefs--;
             if (!single || pItem->mRefs == 0) {
                 ResUnLoad(pEntry->mpData, index);
-                fn_801C6C0C(pEntry->mpEntries, pItem);
+                DSDelListNode(pEntry->mpEntries, pItem);
             }
         }
     }
@@ -204,7 +204,7 @@ ResBank_t *ResBankCreate(ResBankDesc_t *pDesc)
         if (pCache->mpName) {
             pCache->mpData = ResOpenDevice(pCache->mpName, 44);
         }
-        pCache->mpEntries = fn_801C68FC(pCache->mUnknown0, 0, pCache->mCount, sizeof(ResBankFile_t), 0, 0);
+        pCache->mpEntries = DSNewList(pCache->mUnknown0, 0, pCache->mCount, sizeof(ResBankFile_t), 0, 0);
     }
     return pCache;
 }
@@ -216,7 +216,7 @@ void ResBankDestroy(ResBank_t *pCache)
         if (pCache->mpName) {
             ResClose(pCache->mpData);
         }
-        fn_801C69E4(pCache->mpEntries);
+        DSDelList(pCache->mpEntries);
         fn_801D2BD0(pCache);
     }
 }
@@ -236,7 +236,7 @@ void ResBankOpenFile(ResBank_t *pCache, int key)
     }
     pEntry = ResBankFindFile(pCache, key);
     if (pEntry == 0) {
-        pEntry = (ResBankFile_t *)fn_801C6A20(pCache->mpEntries);
+        pEntry = (ResBankFile_t *)DSNewListNode(pCache->mpEntries);
         pEntry->mKey = key;
         if (pCache->mpNames && pCache->mpNames[key]) {
             pEntry->mpData = ResOpenDevice(pCache->mpNames[key], 44);
@@ -245,8 +245,8 @@ void ResBankOpenFile(ResBank_t *pCache, int key)
         }
         pEntry->mCount = ResGetNumResources(pEntry->mpData);
         pEntry->mRefs = 1;
-        pEntry->mpEntries = fn_801C68FC(pCache->mUnknown0, 0, pEntry->mCount, sizeof(ResBankItem_t), 0, 0);
-        fn_801C6AA4(pCache->mpEntries, pEntry, 1);
+        pEntry->mpEntries = DSNewList(pCache->mUnknown0, 0, pEntry->mCount, sizeof(ResBankItem_t), 0, 0);
+        DSAddListNode(pCache->mpEntries, pEntry, 1);
     } else {
         pEntry->mRefs++;
     }
@@ -277,8 +277,8 @@ void ResBankCloseFile(ResBank_t *pCache, int key)
             if (!single || pEntry->mRefs == 0) {
                 ResBankUnloadEntry(pCache, key, -1);
                 ResClose(pEntry->mpData);
-                fn_801C69E4(pEntry->mpEntries);
-                fn_801C6C0C(pCache->mpEntries, pEntry);
+                DSDelList(pEntry->mpEntries);
+                DSDelListNode(pCache->mpEntries, pEntry);
             }
         }
     }

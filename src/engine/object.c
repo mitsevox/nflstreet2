@@ -1,18 +1,18 @@
 /* Object manager: pools of typed game objects and ordered object lists, with per-type
    functions run over each list every frame in fixed time steps. */
 
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/object.h"
 #include "engine/fn_801F7BD4.h"
 
-extern void *fn_801C6A20(void *pool);
-extern void *fn_801C6B4C(void *pool, void *item);
-extern void fn_801C6C0C(void *pool, void *item);
-extern void *fn_801C6C84(void *pool, void *item);
-extern int fn_801C6D34(void *pool, int b, void *ctx, int d, int (*fn)(void *, void *), int f);
-extern int fn_801C6DCC(void *pool, int a, void *pKey, void *pResult, int (*match)(void *, void *));
-extern unsigned int fn_801C6880(void *pool, int c);
+extern void *DSNewListNode(void *pool);
+extern void *DSGetListNode(void *pool, void *item);
+extern void DSDelListNode(void *pool, void *item);
+extern void *DSNextListNode(void *pool, void *item);
+extern int DSTraverseList(void *pool, int b, void *ctx, int d, int (*fn)(void *, void *), int f);
+extern int DSSearchList(void *pool, int a, void *pKey, void *pResult, int (*match)(void *, void *));
+extern unsigned int DSGetListStat(void *pool, int c);
 extern void *DSNewNodeHandler(int a, int count, int size, void *pMemory);
 extern int DSDelNodeHandler(void *pPool);
 extern void *DSNewNode(void *pPool);
@@ -45,7 +45,7 @@ void _ObjProcessListSingleFunc(ObjList_t *pList, int time, int step, int func)
     Obj_t **pNode;
 
     for (; time >= step; time -= step) {
-        for (pNode = fn_801C6B4C(pList->mpList, 0); pNode != 0; pNode = fn_801C6C84(pList->mpList, pNode)) {
+        for (pNode = DSGetListNode(pList->mpList, 0); pNode != 0; pNode = DSNextListNode(pList->mpList, pNode)) {
             ObjFunc_t fn = pList->mFuncs[(*pNode)->mType * pList->mFuncCount + func];
             if (fn != 0) {
                 fn(*pNode, step);
@@ -62,7 +62,7 @@ void _ObjProcessListObjsFirst(ObjList_t *pList, int time, int step)
     int i;
 
     for (; time >= step; time -= step) {
-        for (pNode = fn_801C6B4C(pList->mpList, 0); pNode != 0; pNode = fn_801C6C84(pList->mpList, pNode)) {
+        for (pNode = DSGetListNode(pList->mpList, 0); pNode != 0; pNode = DSNextListNode(pList->mpList, pNode)) {
             first = (*pNode)->mType * pList->mFuncCount;
             for (i = 0; i < pList->mFuncCount; i++) {
                 ObjFunc_t fn = pList->mFuncs[first + i];
@@ -84,7 +84,7 @@ void _ObjProcessListFuncsFirst(ObjList_t *pList, int time, int step)
     while (time >= step) {
         rest = time - step;
         for (i = 0; i < pList->mFuncCount; i++) {
-            for (pNode = fn_801C6B4C(pList->mpList, 0); pNode != 0; pNode = fn_801C6C84(pList->mpList, pNode)) {
+            for (pNode = DSGetListNode(pList->mpList, 0); pNode != 0; pNode = DSNextListNode(pList->mpList, pNode)) {
                 ObjFunc_t fn = pList->mFuncs[(*pNode)->mType * pList->mFuncCount + i];
                 if (fn != 0) {
                     fn(*pNode, step);
@@ -105,7 +105,7 @@ void _ObjProcessList(ObjList_t *pList, int time, unsigned int mode, int func)
     } else {
         step = time;
     }
-    if (fn_801C6880(pList->mpList, 3) != 0) {
+    if (DSGetListStat(pList->mpList, 3) != 0) {
         switch (mode) {
         case 0:
             _ObjProcessListObjsFirst(pList, time, step);
@@ -232,7 +232,7 @@ ObjList_t *ObjNewList(int a, int b, int c, ObjInsertFunc_t pInsert, ObjFindFunc_
         if (pInsert == 0) {
             pInsert = (ObjInsertFunc_t)_ObjDefaultInsertFunc;
         }
-        pList->mpList = fn_801C68FC(a, c, b, 4, (int (*)(void *, void *))pInsert, 0);
+        pList->mpList = DSNewList(a, c, b, 4, (int (*)(void *, void *))pInsert, 0);
         pList->mUnknown4 = c;
         pList->mInsert = pInsert;
         pList->mFind = pFind;
@@ -257,8 +257,8 @@ void ObjSetListObjFunc(ObjList_t *pList, int type, int func, ObjFunc_t fn)
 
 void ObjDelList(ObjList_t *pList)
 {
-    fn_801C6D34(pList->mpList, 0, 0, 0, _ObjDelListTraverseFunc, 1);
-    fn_801C69E4(pList->mpList);
+    DSTraverseList(pList->mpList, 0, 0, 0, _ObjDelListTraverseFunc, 1);
+    DSDelList(pList->mpList);
     fn_801D2BD0(pList);
 }
 
@@ -288,10 +288,10 @@ int ObjAddToList(ObjList_t *pList, Obj_t *pObj)
 {
     Obj_t **pNode;
 
-    pNode = fn_801C6A20(pList->mpList);
+    pNode = DSNewListNode(pList->mpList);
     if (pNode != 0) {
         *pNode = pObj;
-        fn_801C6AA4(pList->mpList, pNode, 0);
+        DSAddListNode(pList->mpList, pNode, 0);
         pObj->mRefCount++;
         return 0;
     }
@@ -322,11 +322,11 @@ void ObjRemoveFromList(ObjList_t *pList, Obj_t *pObj)
     void *pNode = pObj;
 
     if (pList->mFind != 0) {
-        fn_801C6DCC(pList->mpList, 0, &pNode, 0, pList->mFind);
+        DSSearchList(pList->mpList, 0, &pNode, 0, pList->mFind);
     } else {
-        fn_801C6D34(pList->mpList, 0, &pNode, 0, _ObjListTraverseFunc, 1);
+        DSTraverseList(pList->mpList, 0, &pNode, 0, _ObjListTraverseFunc, 1);
     }
-    fn_801C6C0C(pList->mpList, pNode);
+    DSDelListNode(pList->mpList, pNode);
     pObj->mRefCount--;
 }
 
@@ -342,17 +342,17 @@ void ObjClearList(ObjList_t *pList)
     Obj_t **pNode;
     Obj_t **pNext;
 
-    for (pNode = fn_801C6B4C(pList->mpList, 0); pNode != 0; pNode = pNext) {
+    for (pNode = DSGetListNode(pList->mpList, 0); pNode != 0; pNode = pNext) {
         (*pNode)->mRefCount--;
         if ((*pNode)->mRefCount == 0) {
             ObjDel(*pNode);
         }
-        pNext = fn_801C6C84(pList->mpList, pNode);
-        fn_801C6C0C(pList->mpList, pNode);
+        pNext = DSNextListNode(pList->mpList, pNode);
+        DSDelListNode(pList->mpList, pNode);
     }
 }
 
 unsigned int ObjGetListInfo(ObjList_t *pList, int c)
 {
-    return fn_801C6880(pList->mpList, c);
+    return DSGetListStat(pList->mpList, c);
 }

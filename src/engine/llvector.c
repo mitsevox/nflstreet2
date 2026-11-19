@@ -5,7 +5,7 @@ extern float fn_80260B1C(float x);
 extern float MathInvSqrt(float x);
 extern void fn_801CFC14(int angle, float *pFirst, float *pSecond);
 extern void fn_801CFCD0(int *pAngles, float *pFirst, float *pSecond);
-extern void fn_801D0F80(float m[4][4]);
+extern void MatStore(float m[4][4]);
 extern double fabs(double x);
 
 float fn_802270A4(float *p)
@@ -287,7 +287,7 @@ void fn_80227C2C(float *pOut, float *p)
     float y;
     float z;
 
-    fn_801D0F80(m);
+    MatStore(m);
     x = p[0];
     y = p[1];
     z = p[2];
@@ -303,7 +303,7 @@ void fn_80227CC0(float *pOut, float *p)
     float y;
     float z;
 
-    fn_801D0F80(m);
+    MatStore(m);
     x = p[0];
     y = p[1];
     z = p[2];
@@ -320,7 +320,7 @@ void fn_80227E40(float *pOut, float *p)
     float z;
     float w;
 
-    fn_801D0F80(m);
+    MatStore(m);
     x = p[0];
     y = p[1];
     z = p[2];

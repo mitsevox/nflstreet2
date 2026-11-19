@@ -215,7 +215,7 @@ float fn_80178A2C(void);
 Point_8017886C fn_80178070(void);
 int fn_801787DC(int);
 void HudShowPlayLeader(int);
-int fn_80186F7C(unsigned char);
+int UserProfileGetSelected(unsigned char);
 int fn_8022F358(int);
 void UserInfoAddPoints(int, unsigned int);
 void TkTableOpen(DbCursor *, int);
@@ -2726,7 +2726,7 @@ extern "C" unsigned char StyleTrackerGetStyleCatchStreak(int team) {
 }
 
 extern "C" unsigned int StyleTrackerAddProfilePoints(int side, unsigned int value) {
-    int index = fn_80186F7C((unsigned char)side);
+    int index = UserProfileGetSelected((unsigned char)side);
     unsigned int result = 0;
     if (index != -1) {
         result = (unsigned int)((float)value * _StyleTracker_fProfilePointScale);

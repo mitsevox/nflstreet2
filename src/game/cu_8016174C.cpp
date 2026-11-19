@@ -57,16 +57,16 @@ Object_80039F5C *BallGetCurrentHolder(void);
 Object_80039F5C *fn_800B6544(int);
 int GameTextGetPadPlayer(int);
 int ConGetCurrentContext(void);
-void fn_801D0470(int);
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D0558(void);
-void fn_801D08FC(int);
-void fn_801D0ADC(int);
-void fn_801D0C58(void *);
-void fn_801D0CFC(float);
-void fn_801D0D94(float, float, float);
-void fn_801D12BC(int);
+void MatSetStack(int);
+void MatPush(void);
+void MatPop(void);
+void MatMakeUnit(void);
+void MatRotX(int);
+void MatRotZ(int);
+void MatTranslate(void *);
+void MatScale(float);
+void MatScaleCol(float, float, float);
+void MatLoadSlot(int);
 int fn_801CFE40(float, float);
 void fn_80227E40(void *, void *);
 void TMRenderBindTexture(int, int, int);
@@ -200,15 +200,15 @@ int fn_80161B38(Object_801618D8 *item) {
     Object_801618D8 *extra = 0;
     int draw = 1, valid = 1;
     if (item->mUnknownFC && (item->mUnknown20 & 2)) {
-        fn_801D0470(VptGetMatrixStack());
-        fn_801D04C4();
+        MatSetStack(VptGetMatrixStack());
+        MatPush();
         switch (item->mUnknown28) {
         case 5:
             if (lbl_803EB394 == 1) {
                 float scale = item->mUnknown1C;
-                fn_801D0C58(&item->mUnknown4);
-                fn_801D0ADC(item->mUnknown14);
-                fn_801D0D94(scale, scale, 1.0f);
+                MatTranslate(&item->mUnknown4);
+                MatRotZ(item->mUnknown14);
+                MatScaleCol(scale, scale, 1.0f);
                 fn_80161AD4(item->mUnknown3C, item->mUnknown30);
                 if (!lbl_803EB388)
                     draw = 0;
@@ -224,13 +224,13 @@ int fn_80161B38(Object_801618D8 *item) {
                 Vector_80039F5C point;
                 float scale;
                 if (fn_8016295C(&item->mUnknown4, &point, &item->mUnknown14, &scale)) {
-                    fn_801D0558();
+                    MatMakeUnit();
                     scale = (scale + item->mUnknown18) * 0.5f;
                     item->mUnknown18 = scale;
-                    fn_801D0C58(&point);
-                    fn_801D0ADC(item->mUnknown14);
-                    fn_801D08FC(0x400000);
-                    fn_801D0CFC(item->mUnknown18);
+                    MatTranslate(&point);
+                    MatRotZ(item->mUnknown14);
+                    MatRotX(0x400000);
+                    MatScale(item->mUnknown18);
                     fn_80161AD4(item->mUnknown3C, item->mUnknown30);
                 } else {
                     valid = 0;
@@ -244,9 +244,9 @@ int fn_80161B38(Object_801618D8 *item) {
         case 7:
             if (lbl_803EB395 == 1) {
                 float scale = item->mUnknown1C * item->mUnknown18;
-                fn_801D0C58(&item->mUnknown4);
-                fn_801D0ADC(item->mUnknown14);
-                fn_801D0D94(scale, scale, 1.0f);
+                MatTranslate(&item->mUnknown4);
+                MatRotZ(item->mUnknown14);
+                MatScaleCol(scale, scale, 1.0f);
                 fn_80161AD4(item->mUnknown3C, item->mUnknown30);
                 if (!lbl_803EB38A)
                     draw = 0;
@@ -267,8 +267,8 @@ int fn_80161B38(Object_801618D8 *item) {
             if (item->mUnknown28 == 6) {
                 fn_80235740(item->mUnknown3C, ConGetCurrentContext());
                 TMRenderSetZRange(0.0f, 0.0f);
-                fn_801D0470(VptGetMatrixStack());
-                fn_801D0544();
+                MatSetStack(VptGetMatrixStack());
+                MatPop();
                 fn_80235764(item->mUnknown3C, ConGetCurrentContext());
                 TMRenderSetZRange(0.0f, 1.0f);
             } else {
@@ -276,16 +276,16 @@ int fn_80161B38(Object_801618D8 *item) {
                     fn_80235740(extra->mUnknown3C, ConGetCurrentContext());
                 if (draw)
                     fn_80235740(item->mUnknown3C, ConGetCurrentContext());
-                fn_801D0470(VptGetMatrixStack());
-                fn_801D0544();
+                MatSetStack(VptGetMatrixStack());
+                MatPop();
                 if (extra)
                     fn_80235764(extra->mUnknown3C, ConGetCurrentContext());
                 if (draw)
                     fn_80235764(item->mUnknown3C, ConGetCurrentContext());
             }
         } else {
-            fn_801D0470(VptGetMatrixStack());
-            fn_801D0544();
+            MatSetStack(VptGetMatrixStack());
+            MatPop();
         }
     }
     return 0;
@@ -535,9 +535,9 @@ int fn_8016295C(Vector_80039F5C *input, Vector_80039F5C *out, int *angle, float 
         float mX, mY, mZ, mW;
     };
     int result;
-    fn_801D0470(VptGetMatrixStack());
-    fn_801D04C4();
-    fn_801D12BC(4);
+    MatSetStack(VptGetMatrixStack());
+    MatPush();
+    MatLoadSlot(4);
     Projection_8016295C point;
     Vector_80039F5C unused;
     Projection_8016295C original;
@@ -617,7 +617,7 @@ int fn_8016295C(Vector_80039F5C *input, Vector_80039F5C *out, int *angle, float 
         result = 1;
     } else
         result = 0;
-    fn_801D0544();
+    MatPop();
     return result;
 }
 void fn_80162D78(void) {

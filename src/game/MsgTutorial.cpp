@@ -58,7 +58,7 @@ void TutorialSetActiveStep(int value);
 unsigned int TutorialGetLesson(void);
 int MsgGameGetSetupState(void);
 void MsgGameIgnoreValue(int a);
-void fn_80186F30(signed char a, int b);
+void UserProfileSelect(signed char a, int b);
 signed char fn_8022F384(int a);
 int fn_8022F478(int a);
 int fn_8022F4BC(void);
@@ -171,7 +171,7 @@ void MsgTutorialBeginLesson(void)
             _MsgTutorial_bDatabaseSet = state;
         }
         fn_80011600(-1, fn_8000FCCC(), value);
-        fn_80186F30(fn_8022F384(TutorialGetProfileDb()), 1);
+        UserProfileSelect(fn_8022F384(TutorialGetProfileDb()), 1);
         fn_80014294(0x36, 0x21);
         FELoopSetResume(1);
         unsigned int id = TutorialGetLesson();

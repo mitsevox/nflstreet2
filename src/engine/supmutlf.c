@@ -13,12 +13,12 @@ int SFILTER_unpackgetframemtlf(Node_80279D90 *node)
 int SFILTER_unpackmtlf(Node_80279D90 *node, int count, float *a, float *b, int flag)
 {
     SndMtLoopUnpackFilter_t *decoder;
-    Format_8027D284 format;
+    Snd::MTFSTATE format;
     int n;
 
     decoder = (SndMtLoopUnpackFilter_t *)node;
     while (count > 0) {
-        n = CodecReadSamples(decoder->m1C, &b, count);
+        n = decoder->m1C->Decode(&b, count);
         b += n;
         decoder->m20 += n;
         count -= n;
@@ -27,8 +27,8 @@ int SFILTER_unpackmtlf(Node_80279D90 *node, int count, float *a, float *b, int f
             format.m4 = 0;
             format.m0 = 0;
             format.m8 = 1;
-            fn_8027D2C4(decoder->m1C, &format, 0);
-            fn_8027CFCC(decoder->m1C, decoder->m2C, (decoder->m28 - decoder->m24 + 1) * 4,
+            decoder->m1C->SetState(&format, 0);
+            decoder->m1C->Feed(decoder->m2C, (decoder->m28 - decoder->m24 + 1) * 4,
                         decoder->m28 - decoder->m24 + 1);
         }
     }
@@ -41,14 +41,14 @@ void SFILTER_unpackmtlfrestore(Node_80279D90 *node)
 
     decoder = (SndMtLoopUnpackFilter_t *)node;
     if (decoder->m1C != 0) {
-        fn_8027C04C(decoder->m1C);
+        delete decoder->m1C;
     }
 }
 
 void SFILTER_unpackmtlfinit(Node_80279D90 *node, Params_80275F80 *params)
 {
     SndMtLoopUnpackFilter_t *decoder;
-    Format_8027D284 format;
+    Snd::MTFSTATE format;
 
     decoder = (SndMtLoopUnpackFilter_t *)node;
     node->m0 = SFILTER_unpackmtlf;
@@ -57,11 +57,11 @@ void SFILTER_unpackmtlfinit(Node_80279D90 *node, Params_80275F80 *params)
     decoder->m20 = 0;
     decoder->m24 = params->m10;
     decoder->m28 = params->m14;
-    decoder->m1C = fn_8027CF9C(fn_8027C020(3432));
-    format = fn_8027D284(decoder->m1C);
+    decoder->m1C = new Snd::CMTBLKDecf;
+    format = decoder->m1C->GetState();
     format.m8 = 1;
-    fn_8027D2C4(decoder->m1C, &format, 0);
-    fn_8027CFCC(decoder->m1C, (unsigned char *)params->m0, decoder->m24 * 4, decoder->m24);
+    decoder->m1C->SetState(&format, 0);
+    decoder->m1C->Feed((unsigned char *)params->m0, decoder->m24 * 4, decoder->m24);
     params->m28 = SFILTER_unpackgetframemtlf;
 }
 

@@ -20,7 +20,7 @@ void MIX_sethighpass(int index, int value)
         }
         params.m0 = value << 8;
         params.m4 = lbl_803A6C24.m1C.mA << 8;
-        fn_80279D0C(record->m58, &params);
+        SFILTER_modifyHPFFIR8(record->m58, &params);
     } else if (record->m58 != 0) {
         SFILTER_remove(&record->m40, record->m58);
         SNDMEMI_free(record->m58);

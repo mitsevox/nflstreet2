@@ -23,26 +23,26 @@ unsigned short *iSPCH_GetOffset16(void *base, unsigned short *offsets, int index
 
 void iSPCH_CsisCb(int *values, void *context)
 {
-    Item_801AE3F4 *item;
+    VoxEvent_t *item;
     int *block;
     int size;
 
-    item = fn_801AE6BC((SpchEventKey_t *)&context);
+    item = iSPCH_FindEvent((SpchEventKey_t *)&context);
     if (item != 0) {
         size = item->mUnknownB * 4;
-        block = (int *)fn_801AF4A8(size + 4);
+        block = (int *)iSPCH_MemAlloc(size + 4);
         if (block != 0) {
             *block = (int)context;
             memcpy(block + 1, values, size);
-            if (fn_801AEAEC(block) == 0)
-                fn_801AF500(block);
+            if (iSPCH_AddEvent(block) == 0)
+                iSPCH_MemFree(block);
         }
     }
 }
 
 extern "C" {
 
-void iSPCH_InitCsis(Bank_801AE444 *bank)
+void iSPCH_InitCsis(VoxDat_t *bank)
 {
     SpchCsisEntry_t *table;
     char *names;
@@ -60,7 +60,7 @@ void iSPCH_InitCsis(Bank_801AE444 *bank)
             node = &table[i].mNode;
             node->mCallback = (void (*)(Csis::Parameter *, void *))iSPCH_CsisCb;
             offset = *iSPCH_GetOffset16(bank, bank->mUnknown18, i);
-            node->mContext = (void *)fn_801AE5D4(bank->mUnknown8, bank->mUnknown9, offset);
+            node->mContext = (void *)SPCH_MakeEventSpec(bank->mUnknown8, bank->mUnknown9, offset);
             Csis::Function::Subscribe(&table[i].mHandle, node);
         }
         bank->mUnknownB = 1;

@@ -198,13 +198,13 @@ int EditMenuIsOpen(void);
 void EditMenuCancelRequest(void);
 int UserRecGetCount(void);
 int UserRecGetName(int index, char *pText);
-signed char fn_80186B38(int a);
-int fn_80186DF0(signed char *pIndices, int length);
-void fn_80186F30(signed char a, unsigned char b);
-int fn_80186F7C(unsigned char index);
-void fn_80186F8C(int a);
-void fn_80187A28(unsigned char index, char *pText);
-int fn_80187A78(unsigned char index, char *pText, int length);
+signed char UserProfileFindIndex(int a);
+int UserProfileSortByRecent(signed char *pIndices, int length);
+void UserProfileSelect(signed char a, unsigned char b);
+int UserProfileGetSelected(unsigned char index);
+void UserProfileDeselect(int a);
+void UserProfileSetPadName(unsigned char index, char *pText);
+int UserProfileGetPadName(unsigned char index, char *pText, int length);
 unsigned char GameTextGetBootFinished(void);
 void GameTextSetPadPlayer(int index, int value);
 int GameTextGetPadPlayer(int a);
@@ -426,8 +426,8 @@ void fn_8000FAD0(int mode)
             }
             break;
         case 8:
-            fn_80186F30(fn_80186B38(fn_8022F4BC()), 1);
-            fn_80186F30(-1, 0);
+            UserProfileSelect(UserProfileFindIndex(fn_8022F4BC()), 1);
+            UserProfileSelect(-1, 0);
             /* fall through */
         case 2:
         case 6:
@@ -718,7 +718,7 @@ void fn_800102D8(void)
 {
     Pair_803ECE48 previous = lbl_803ECE48;
 
-    fn_80186DF0(lbl_803ECE48.mIndex, 2);
+    UserProfileSortByRecent(lbl_803ECE48.mIndex, 2);
     for (unsigned char i = 0; i <= 3; i++) {
         if (lbl_803EB96C[i] <= 1) {
             unsigned char j;
@@ -804,7 +804,7 @@ int fn_800103A4(int force)
         for (j = 0; j <= 3; j++) {
             lbl_803ECE40[j] = 1;
             lbl_803ECE44[j] = 0;
-            fn_80187A28(j, 0);
+            UserProfileSetPadName(j, 0);
         }
         if (force) {
             for (j = 0; j < 4; j++) {
@@ -970,16 +970,16 @@ void fn_80010914(void)
             }
         }
     }
-    fn_80186F8C(0);
+    UserProfileDeselect(0);
     if (GameModeTypeGet() != 6 && GameModeTypeGet() != 8 && GameModeTypeGet() != 7 && GameModeTypeGet() != 11) {
-        fn_80186F8C(1);
+        UserProfileDeselect(1);
         if (fn_801486A0() != 0 && fn_801486A0() != 1) {
             for (i = 0; i <= 3; i++) {
                 if (lbl_803ECE44[i] == 1 && lbl_803EB96C[i] <= 1) {
                     if (lbl_803ECE40[i] == 0) {
-                        fn_80186F30(lbl_803ECE48.mIndex[lbl_803EB96C[i]], 1);
+                        UserProfileSelect(lbl_803ECE48.mIndex[lbl_803EB96C[i]], 1);
                     } else {
-                        fn_80186F30(lbl_803ECE48.mIndex[lbl_803EB96C[i]], 0);
+                        UserProfileSelect(lbl_803ECE48.mIndex[lbl_803EB96C[i]], 0);
                     }
                     CheatFlagsAddUser(lbl_803ECE48.mIndex[lbl_803EB96C[i]]);
                 }
@@ -991,22 +991,22 @@ void fn_80010914(void)
                 case 1:
                     if (lbl_803EB96C[i] <= 1) {
                         UserRecGetName(lbl_803ECE48.mIndex[lbl_803EB96C[i]], text);
-                        fn_80187A28(i, text);
+                        UserProfileSetPadName(i, text);
                     } else {
-                        fn_80187A28(i, 0);
+                        UserProfileSetPadName(i, 0);
                     }
                     if (lbl_803EB96C[i] != 3 && team <= 1) {
-                        fn_80186F30(lbl_803ECE48.mIndex[lbl_803EB96C[i]], team);
+                        UserProfileSelect(lbl_803ECE48.mIndex[lbl_803EB96C[i]], team);
                         team++;
                     }
                     break;
                 case 2:
                     if (lbl_803EB96C[i] != 2) {
-                        fn_80187A28(i, 0);
+                        UserProfileSetPadName(i, 0);
                     }
                     break;
                 default:
-                    fn_80187A28(i, 0);
+                    UserProfileSetPadName(i, 0);
                     break;
                 }
             }
@@ -1216,7 +1216,7 @@ void fn_80010E68(int index, int dir, MenuArg_t arg)
         case 0:
             switch (lbl_803EB96C[index]) {
             case 3:
-                if (fn_80187A78(index, 0, 0)) {
+                if (UserProfileGetPadName(index, 0, 0)) {
                     lbl_803EB96C[index] = 2;
                 } else {
                     lbl_803EB96C[index] = 5;
@@ -1239,7 +1239,7 @@ void fn_80010E68(int index, int dir, MenuArg_t arg)
                 lbl_803EB96C[index] = 5;
                 break;
             case 5:
-                if (fn_80187A78(index, 0, 0)) {
+                if (UserProfileGetPadName(index, 0, 0)) {
                     lbl_803EB96C[index] = 2;
                 } else {
                     lbl_803EB96C[index] = 3;
@@ -1260,7 +1260,7 @@ void fn_80010E68(int index, int dir, MenuArg_t arg)
             break;
         }
         if (lbl_803EB96C[index] == 2) {
-            fn_80187A78(index, pParams->mpText, pParams->mLength);
+            UserProfileGetPadName(index, pParams->mpText, pParams->mLength);
         } else {
             strncpy(pParams->mpText, lbl_802F41BC[lbl_803EB96C[index] - 3], pParams->mLength);
         }
@@ -1315,7 +1315,7 @@ int fn_80011344(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
         *pResult = fn_800108A8(pArgs[0].i);
         break;
     case 0x8000000A:
-        fn_80187A28(pArgs[0].i, pArgs[1].pParams->mpText);
+        UserProfileSetPadName(pArgs[0].i, pArgs[1].pParams->mpText);
         break;
     case 0x80000007:
         if (pArgs[0].i == 2) {
@@ -1408,7 +1408,7 @@ void fn_80011600(int pad0, int pad1, int keep)
         lbl_803EB96C[GameTextGetPadPlayer(pad0)] = db;
         if (db != -1) {
             UserRecGetName(db, name);
-            fn_80187A28(GameTextGetPadPlayer(pad0), name);
+            UserProfileSetPadName(GameTextGetPadPlayer(pad0), name);
         }
     }
     if (pad1 != -1 && GameTextGetPadPlayer(pad1) != -1) {
@@ -1421,7 +1421,7 @@ void fn_80011600(int pad0, int pad1, int keep)
         lbl_803EB96C[GameTextGetPadPlayer(pad1)] = db;
         if (db != -1) {
             UserRecGetName(db, name);
-            fn_80187A28(GameTextGetPadPlayer(pad1), name);
+            UserProfileSetPadName(GameTextGetPadPlayer(pad1), name);
         }
     }
     fn_80010914();
@@ -1560,11 +1560,11 @@ void fn_80011B60(DbCursor *pObject, int index, int saved)
 
 unsigned char fn_80011C1C(unsigned char pad)
 {
-    int db = fn_80186F7C(pad);
+    int db = UserProfileGetSelected(pad);
 
     if (db != -1) {
-        if (fn_8022F358(fn_80186F7C(pad)) != lbl_803EB9B4[pad]) {
-            lbl_803EB9B4[pad] = fn_8022F358(fn_80186F7C(pad));
+        if (fn_8022F358(UserProfileGetSelected(pad)) != lbl_803EB9B4[pad]) {
+            lbl_803EB9B4[pad] = fn_8022F358(UserProfileGetSelected(pad));
             return 1;
         }
     } else if (lbl_803EB9B4[pad] != -1) {
@@ -1647,8 +1647,8 @@ void fn_80011EBC(int side, int id, char *pName, int size, int *pA, int *pB, int 
 int fn_80011FA0(int side, int id)
 {
     int result = 0;
-    int db = fn_80186F7C(side);
-    int otherDb = fn_80186F7C(!side);
+    int db = UserProfileGetSelected(side);
+    int otherDb = UserProfileGetSelected(!side);
 
     if (db != -1) {
         DbCursor cursor;
@@ -1676,9 +1676,9 @@ void fn_800120C8(int side, int *pIndex)
     int count = fn_80012244(side);
 
     for (i = 0; i < count; i++) {
-        if (GameModeTypeGet() == 8 && GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC())) != 0x3FF) {
+        if (GameModeTypeGet() == 8 && GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC())) != 0x3FF) {
             if (side == 1) {
-                if (lbl_803EB994[1][i] == GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC()))) {
+                if (lbl_803EB994[1][i] == GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC()))) {
                     *pIndex = i;
                     return;
                 }
@@ -2216,10 +2216,10 @@ int fn_80013614(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
             break;
         }
         if (GameModeTypeGet() == 8 && MsgGameGetSetupState() == 1) {
-            if (GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC())) == 0x3FF) {
-                GauntletSetCurrentTeam(fn_80186B38(fn_8022F4BC()), pArgs[1].i);
+            if (GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC())) == 0x3FF) {
+                GauntletSetCurrentTeam(UserProfileFindIndex(fn_8022F4BC()), pArgs[1].i);
             } else {
-                pArgs[1].i = GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC()));
+                pArgs[1].i = GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC()));
             }
         }
         if (GameModeTypeGet() == 6 && ChallengeIsActive()) {
@@ -2241,7 +2241,7 @@ int fn_80013614(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
         *pResult = GauntletScreenGetSelection();
         break;
     case 0x80000017:
-        *pResult = GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC()));
+        *pResult = GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC()));
         break;
     case 0x8000000F:
         if (count == 5) {
@@ -2667,7 +2667,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         } else {
             query.mUnknown4 = 3;
         }
-    } else if (PortDbSideHasPlayers(0) == 0 && fn_80186F7C(1) != -1) {
+    } else if (PortDbSideHasPlayers(0) == 0 && UserProfileGetSelected(1) != -1) {
         query.mUnknown4 = 1;
         query.mUnknown8 = 1;
     } else {
@@ -2692,7 +2692,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         }
     } else {
         int ai = PortDbSideHasPlayers(1);
-        if (ai == 0 && fn_80186F7C(0) != -1) {
+        if (ai == 0 && UserProfileGetSelected(0) != -1) {
             query.mUnknown4 = 1;
             query.mUnknown8 = ai;
         } else {
@@ -2794,9 +2794,9 @@ void fn_80014AA8(int team, int id)
     fn_80012834(team);
     if (FELoopIsMainFEActive()) {
         if (lbl_803EB9AC[team]) {
-            int index = fn_80186F7C(team);
+            int index = UserProfileGetSelected(team);
             if (index == -1) {
-                index = fn_80186F7C(team == 0);
+                index = UserProfileGetSelected(team == 0);
             }
             fn_80082558(id, index);
             fn_800128E8(team);
@@ -3099,8 +3099,8 @@ void fn_800156B4(int index, char *pName, int nameSize, char *pTeam, int teamSize
         lbl_803EB9DC[index].mUnknownA8 = RecordsGetValue(5);
         RecordsEnd();
         if (lbl_803EB9E5) {
-            int index0 = fn_80186F7C(0);
-            int index1 = fn_80186F7C(1);
+            int index0 = UserProfileGetSelected(0);
+            int index1 = UserProfileGetSelected(1);
             *pFlag = 1;
             fn_8022F4BC();
             if (index0 != -1) {
@@ -3117,7 +3117,7 @@ void fn_800156B4(int index, char *pName, int nameSize, char *pTeam, int teamSize
                 }
             }
             if (GameModeTypeGet() == 8) {
-                int value = GauntletGetTeamsLeft(fn_80186F7C(1));
+                int value = GauntletGetTeamsLeft(UserProfileGetSelected(1));
                 if (value == 0 && lbl_802F43A8[index] == 11) {
                     *pFlag = value;
                 }
@@ -3167,7 +3167,7 @@ void fn_800159A4(int *pCount, int *pCurrent, int *pResult)
     }
     *pCount = 12;
     *pCurrent = lbl_803EB9E0;
-    if (GameModeTypeGet() == 8 && GauntletGetTeamsLeft(fn_80186F7C(1)) == 0) {
+    if (GameModeTypeGet() == 8 && GauntletGetTeamsLeft(UserProfileGetSelected(1)) == 0) {
         *pCurrent = 11;
         lbl_803EB9E0 = 11;
     }
@@ -3381,7 +3381,7 @@ void fn_80016248(int *pCount)
     signed char indices[4];
     lbl_803EB9E8 = (Stats_803EB9E8 *)fn_801D2B7C(sizeof(Stats_803EB9E8), 0, 0);
     *pCount = UserRecGetCount();
-    fn_80186DF0(indices, 4);
+    UserProfileSortByRecent(indices, 4);
     if (*pCount > 0) {
         lbl_803EB9E7 = indices[0];
     } else {
@@ -3630,7 +3630,7 @@ void fn_80016A08(int *pCount)
     if (lbl_803EB9FE > 0) {
         signed char indices[2];
         unsigned char auxiliary[2];
-        fn_80186DF0(indices, 2);
+        UserProfileSortByRecent(indices, 2);
         for (int i = 0; i < 2; ++i) {
             if (indices[i] != -1) {
                 auxiliary[i] = 1;

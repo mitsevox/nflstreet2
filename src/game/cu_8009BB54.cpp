@@ -7,19 +7,19 @@
 extern "C" {
 unsigned int fn_8009B910(int index);
 extern Block_8009B720 *lbl_803EA984[2];
-void fn_801D0508(void);
-void fn_801D0C58(void *p);
-void fn_801D0ADC(int a);
-void fn_801D08FC(int a);
-void fn_801D0CFC(float a);
-void fn_801D0F80(float m[4][4]);
-void fn_801D0544(void);
-void fn_801D04C4(void);
-void fn_801D06D4(float m[4][4]);
-void fn_801D0664(float m[4][4]);
-void fn_801D0FB8(Vector_80039F5C *pOut);
-void fn_801D11F4(void *pOut, int a);
-void fn_801D0BCC(int a, int b, int c);
+void MatPushUnit(void);
+void MatTranslate(void *p);
+void MatRotZ(int a);
+void MatRotX(int a);
+void MatScale(float a);
+void MatStore(float m[4][4]);
+void MatPop(void);
+void MatPush(void);
+void MatLoad(float m[4][4]);
+void MatCat(float m[4][4]);
+void MatGetPos(Vector_80039F5C *pOut);
+void MatGetRotByOrder(void *pOut, int a);
+void MatRotZYX(int a, int b, int c);
 void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void QuatIdentity(Quat_801EB488 *pRot);
 void fn_8009BE0C(float m[4][4], Vector_80039F5C *pPos, int angle, float scale);
@@ -66,16 +66,16 @@ extern "C" void fn_8009BE0C(float m[4][4], Vector_80039F5C *pPos, int angle, flo
 {
     Vector_80039F5C pos;
 
-    fn_801D0508();
-    fn_801D0CFC(1.0f / scale);
-    fn_801D08FC(-0x400000);
-    fn_801D0ADC(-(angle + 0x400000));
+    MatPushUnit();
+    MatScale(1.0f / scale);
+    MatRotX(-0x400000);
+    MatRotZ(-(angle + 0x400000));
     pos.mX = -pPos->mX;
     pos.mY = -pPos->mY;
     pos.mZ = -pPos->mZ;
-    fn_801D0C58(&pos);
-    fn_801D0F80(m);
-    fn_801D0544();
+    MatTranslate(&pos);
+    MatStore(m);
+    MatPop();
 }
 
 extern "C" void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot, int joint)
@@ -86,15 +86,15 @@ extern "C" void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801E
         float (*m)[4] = pBlock->mUnknown44.mUnknown52[joint];
         QuatEulerAngles_t angles;
 
-        fn_801D04C4();
-        fn_801D06D4(p->mUnknown640);
-        fn_801D0664(m);
-        fn_801D0C58(pBlock->mUnknown44.mUnknown20);
-        fn_801D0BCC(pBlock->mUnknown44.mUnknown36[2], pBlock->mUnknown44.mUnknown36[1],
+        MatPush();
+        MatLoad(p->mUnknown640);
+        MatCat(m);
+        MatTranslate(pBlock->mUnknown44.mUnknown20);
+        MatRotZYX(pBlock->mUnknown44.mUnknown36[2], pBlock->mUnknown44.mUnknown36[1],
                     pBlock->mUnknown44.mUnknown36[0]);
-        fn_801D0FB8(pOut);
-        fn_801D11F4(&angles, 0);
-        fn_801D0544();
+        MatGetPos(pOut);
+        MatGetRotByOrder(&angles, 0);
+        MatPop();
         QuatFromEuler(pRot, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
     } else {
         pOut->mX = pOut->mY = pOut->mZ = 0.0f;

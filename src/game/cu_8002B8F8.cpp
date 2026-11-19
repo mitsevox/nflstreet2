@@ -23,7 +23,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/MemCardUtil.h"
 #include <string.h>
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include "game/fn_80227638.h"
 
 #define ABS(x) ((x) < 0 ? -(x) : (x))
@@ -204,9 +204,9 @@ void CamDestroy(void *pCamera);
 void CamSetNearPlane(GameCamera_t *pCamera, float value);
 int ConSetChannelInfo(int a, int b, int c);
 int ConGetChannelInfo(int a, int b);
-void *fn_801C6A20(void *pool);
-void *fn_801C6B4C(void *pool, void *item);
-void *fn_801C6C84(void *pool, void *item);
+void *DSNewListNode(void *pool);
+void *DSGetListNode(void *pool, void *item);
+void *DSNextListNode(void *pool, void *item);
 void *fn_801D2B7C(int size, int a, int b);
 int fn_801D2BD0(void *p);
 void RemapCopyTable(int a, int b);
@@ -2563,8 +2563,8 @@ extern "C" void fn_8002FE34(int index)
         Type_80030ACC *pEntry;
 
         fn_80190ED4(&stream, pBuffer, 1);
-        for (pEntry = (Type_80030ACC *)fn_801C6B4C(lbl_803EC648, 0); pEntry != 0;
-             pEntry = (Type_80030ACC *)fn_801C6C84(lbl_803EC648, pEntry)) {
+        for (pEntry = (Type_80030ACC *)DSGetListNode(lbl_803EC648, 0); pEntry != 0;
+             pEntry = (Type_80030ACC *)DSNextListNode(lbl_803EC648, pEntry)) {
             pEntry->mpWrite(&stream);
         }
         fn_80190EF0(&stream);
@@ -2777,8 +2777,8 @@ extern "C" void fn_80030940(Type_803EA368 *pGame)
     if (pNext2) {
         fn_80190ED4(&streams[3], pNext2, 0);
     }
-    for (pRecord = (Type_80030ACC *)fn_801C6B4C(lbl_803EC648, 0); pRecord;
-         pRecord = (Type_80030ACC *)fn_801C6C84(lbl_803EC648, pRecord)) {
+    for (pRecord = (Type_80030ACC *)DSGetListNode(lbl_803EC648, 0); pRecord;
+         pRecord = (Type_80030ACC *)DSNextListNode(lbl_803EC648, pRecord)) {
         if (pPrev == 0) {
             if (pNext2 == 0) {
                 pRecord->mpRead(&streams[1], &streams[0], 0, 0, lbl_803EC66C);
@@ -2806,12 +2806,12 @@ extern "C" void fn_80030ACC(void (*pWrite)(Type_80190ED4 *),
                             void (*pRead)(Type_80190ED4 *, Type_80190ED4 *, Type_80190ED4 *, Type_80190ED4 *, float),
                             unsigned int size, const char *pName)
 {
-    Type_80030ACC *pRecord = (Type_80030ACC *)fn_801C6A20(lbl_803EC648);
+    Type_80030ACC *pRecord = (Type_80030ACC *)DSNewListNode(lbl_803EC648);
 
     pRecord->mpWrite = pWrite;
     pRecord->mpRead = pRead;
     pRecord->mSize = size;
-    fn_801C6AA4(lbl_803EC648, pRecord, 0);
+    DSAddListNode(lbl_803EC648, pRecord, 0);
     lbl_803EC650 += size;
 }
 
@@ -2819,8 +2819,8 @@ extern "C" void fn_80030B30(void)
 {
     Type_80030ACC *pRecord;
 
-    for (pRecord = (Type_80030ACC *)fn_801C6B4C(lbl_803EC648, 0); pRecord;
-         pRecord = (Type_80030ACC *)fn_801C6C84(lbl_803EC648, pRecord)) {
+    for (pRecord = (Type_80030ACC *)DSGetListNode(lbl_803EC648, 0); pRecord;
+         pRecord = (Type_80030ACC *)DSNextListNode(lbl_803EC648, pRecord)) {
         lbl_803EC650 += pRecord->mSize;
     }
     lbl_803EC650 = ((((lbl_803EC650 / 2 + 7) / 8 + 7) & ~7) + 31) & ~31;
@@ -2830,7 +2830,7 @@ extern "C" void fn_80030B30(void)
 
 extern "C" void fn_80030BC0(int size)
 {
-    lbl_803EC648 = fn_801C68FC(1, 0, 11, 12, 0, 0);
+    lbl_803EC648 = DSNewList(1, 0, 11, 12, 0, 0);
     lbl_803EC650 = 0;
     lbl_803EC64C = 0x400000 - size;
     if (size > 0x400000 || lbl_803EC64C < 0x3C000) {
@@ -2840,7 +2840,7 @@ extern "C" void fn_80030BC0(int size)
 
 extern "C" void fn_80030C40(void)
 {
-    fn_801C69E4(lbl_803EC648);
+    DSDelList(lbl_803EC648);
     lbl_803EC648 = 0;
     ReplayAuxRamShutdown();
 }

@@ -100,7 +100,6 @@ static BallCameraJoint_t _CamBall_aHolderJoints[2] = {
 
 extern "C" {
 
-#if defined(DECOMP_COMPARE)
 void CamBallStart(BallCamera_t *pCamera)
 {
     BallCameraState_t *pState = &pCamera->mUnknownF8;
@@ -114,7 +113,11 @@ void CamBallStart(BallCamera_t *pCamera)
     pState->mUnknown70 = fn_80178298();
     pState->mUnknown74 = fn_80177F70();
     pState->mUnknown38 = 0.0f;
-    switch (pCamera->mUnknownA0) {
+    /* FAKEMATCH: the view word is read into a local so that case 1 can store it as the restart flag
+       (it equals 1 there) and the target reuses that register for the 0x803EB200 store. */
+    int view = pCamera->mUnknownA0;
+
+    switch (view) {
     case 0:
         break;
     case 1:
@@ -123,13 +126,17 @@ void CamBallStart(BallCamera_t *pCamera)
         } else {
             pState->mUnknown44 = pState->mUnknown68.mY < 30.0f ? -30.0f : 50.0f;
         }
-        _CamBall_bRestart = 1;
+        _CamBall_bRestart = view; // FAKEMATCH: view == 1 here; same value as storing 1
         break;
     case 2:
         break;
+    // FAKEMATCH: cases 3 and 4 return, which is the same as falling out of the switch (nothing
+    // follows it); the target compare tree 2/0/1 (beq/bgt on 2 first) needs case values above 2.
+    case 3:
+    case 4:
+        return;
     }
 }
-#endif
 
 void CamBallProcess(BallCamera_t *pCamera)
 {

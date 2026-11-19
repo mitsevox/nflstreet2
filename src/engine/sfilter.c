@@ -36,10 +36,8 @@ void SFILTER_remove(Node_80279D90 **list, Node_80279D90 *node)
         *list = prev->m8;
         return;
     }
-    cur = prev->m8;
-    while (cur != 0 && cur != node) {
+    while ((cur = prev->m8) != 0 && cur != node) {
         prev = cur;
-        cur = prev->m8;
     }
     if (cur != 0 && cur == node) {
         node = node->m8;

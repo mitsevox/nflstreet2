@@ -16,7 +16,7 @@ int fn_80061C44(void);
 int fn_80061CAC(void);
 int fn_8005F910(void);
 int fn_8005F938(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_80186B38(int a);
+int UserProfileFindIndex(int a);
 int GauntletGetCurrentTeam(int a);
 void GauntletStatsOpen(DbCursor *pObject, int a);
 void GauntletStatsClose(DbCursor *pObject);
@@ -47,7 +47,7 @@ void FEMiscSetHelpText(const char *pText)
 
 int FEMiscIsTeamUnset(void)
 {
-    return GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC())) == 0x3FF;
+    return GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC())) == 0x3FF;
 }
 
 /* Reads sixteen values of the current entry; element 6 is the sum of

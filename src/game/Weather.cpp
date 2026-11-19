@@ -73,21 +73,21 @@ static int _Weather_iDrawPass;
 float fn_80237260(int);
 void DCFlushRange(void *, int);
 void DCStoreRange(void *, int);
-void fn_801D0470(int);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D04C4(void);
-void fn_801D0C58(void *);
-void fn_801D0ADC(int);
+void MatSetStack(int);
+void MatPushUnit(void);
+void MatPop(void);
+void MatPush(void);
+void MatTranslate(void *);
+void MatRotZ(int);
 void fn_80227CC0(void *, void *);
-float *fn_801D0444(void);
+float *MatGetCurMatrixPtr(void);
 void GXLoadPosMtxImm(float *, int);
-float *fn_801D0EE4(void);
+float *MatInvertRigid(void);
 int fn_801784C4(void);
 int fn_800A33E8(void);
 void fn_80227538(void *, int, float);
 void fn_8022765C(void *, void *, void *);
-void fn_801D0664(void *);
+void MatCat(void *);
 void TMClipMatrix(int);
 unsigned int TMClipBBox(void *, void *, int);
 void WeatherDrawLines(unsigned int);
@@ -96,10 +96,10 @@ int fn_800A33B8(void);
 int fn_800A3444(void);
 float fn_800A33C4(void);
 float fn_800A33F4(void);
-void fn_801D1288(int, void *);
+void MatGetSlot(int, void *);
 void TMClipProjection(int);
-void fn_801D131C(int);
-void fn_801D0F80(void *);
+void MatCatSlot(int);
+void MatStore(void *);
 void GXSetNumChans(int);
 void GXSetChanCtrl(int, int, int, int, int, int, int);
 
@@ -129,10 +129,10 @@ void WeatherInitParticles(WeatherParticle_t *entry, unsigned int count) {
 }
 void WeatherUpdateParticles(WeatherParticle_t *entries, unsigned int count, float speed,
                  float step) {
-  fn_801D0470(VptGetMatrixStack());
-  fn_801D0508();
-  fn_801D0C58(&_Weather_vDrift);
-  fn_801D0ADC(_Weather_iSpinAngle);
+  MatSetStack(VptGetMatrixStack());
+  MatPushUnit();
+  MatTranslate(&_Weather_vDrift);
+  MatRotZ(_Weather_iSpinAngle);
   for (unsigned int i = 0; i < count; ++i) {
     WeatherParticle_t *entry = &entries[i];
     entry->mUnknown0.mZ += speed * step;
@@ -162,7 +162,7 @@ void WeatherUpdateParticles(WeatherParticle_t *entries, unsigned int count, floa
         _Weather_aSplashes[i].mUnknownC.a = 0;
     }
   }
-  fn_801D0544();
+  MatPop();
   DCStoreRange(_Weather_aParticles, _Weather_uParticleCount * 16);
   DCStoreRange(_Weather_aSplashes, _Weather_uParticleCount * 16);
 }
@@ -198,7 +198,7 @@ void WeatherLoadCornerMatrices(int mode) {
   Vector_80039F5C *offset;
   float *matrix;
   if (mode == 1 || _Weather_iMode == 1) {
-    matrix = fn_801D0444();
+    matrix = MatGetCurMatrixPtr();
     float saved[3];
     saved[0] = matrix[3];
     saved[1] = matrix[7];
@@ -217,14 +217,14 @@ void WeatherLoadCornerMatrices(int mode) {
     matrix[11] = saved[2];
   } else {
     offset = _Weather_avLineEnds;
-    fn_801D04C4();
-    fn_801D0C58(&offset[0]);
-    GXLoadPosMtxImm(fn_801D0444(), 3);
-    fn_801D0544();
-    fn_801D04C4();
-    fn_801D0C58(&offset[1]);
-    GXLoadPosMtxImm(fn_801D0444(), 6);
-    fn_801D0544();
+    MatPush();
+    MatTranslate(&offset[0]);
+    GXLoadPosMtxImm(MatGetCurMatrixPtr(), 3);
+    MatPop();
+    MatPush();
+    MatTranslate(&offset[1]);
+    GXLoadPosMtxImm(MatGetCurMatrixPtr(), 6);
+    MatPop();
   }
 }
 void WeatherGetViewExtent(float *matrix, Vector_80039F5C *out, float depth) {
@@ -233,9 +233,9 @@ void WeatherGetViewExtent(float *matrix, Vector_80039F5C *out, float depth) {
   out->mZ = depth;
 }
 void WeatherGetFrustumBounds(float *matrix, WeatherBounds_t *bounds, float a, float b) {
-  fn_801D0470(VptGetMatrixStack());
-  fn_801D04C4();
-  fn_801D0EE4();
+  MatSetStack(VptGetMatrixStack());
+  MatPush();
+  MatInvertRigid();
   Vector_80039F5C low, high, point, transformed;
   WeatherGetViewExtent(matrix, &low, a);
   WeatherGetViewExtent(matrix, &high, b);
@@ -265,7 +265,7 @@ void WeatherGetFrustumBounds(float *matrix, WeatherBounds_t *bounds, float a, fl
     if (!(transformed.mX <= bounds->mUnknown10[0]))
       bounds->mUnknown10[0] = transformed.mX;
   }
-  fn_801D0544();
+  MatPop();
 }
 void WeatherGetDrawBounds(WeatherBounds_t *bounds, float *matrix,
                  Vector_80039F5C *position) {
@@ -353,10 +353,10 @@ void WeatherDrawCell(float x, float y, float z) {
   point.mX = x;
   point.mY = y;
   point.mZ = z;
-  fn_801D04C4();
-  fn_801D0C58(&point);
-  fn_801D04C4();
-  fn_801D0664(_Weather_afViewMatrix);
+  MatPush();
+  MatTranslate(&point);
+  MatPush();
+  MatCat(_Weather_afViewMatrix);
   TMClipMatrix(0);
   unsigned int flags = TMClipBBox(_Weather_afCellBox, 0, 0) & 63;
   if (!flags) {
@@ -369,9 +369,9 @@ void WeatherDrawCell(float x, float y, float z) {
         else
           WeatherDrawQuads(_Weather_uParticleCount);
         if (_Weather_iMode == 1)
-          fn_801D0ADC(_Weather_iRepeatSpin);
+          MatRotZ(_Weather_iRepeatSpin);
         else
-          fn_801D0C58(&_Weather_avRepeatSteps[i]);
+          MatTranslate(&_Weather_avRepeatSteps[i]);
       }
     } else {
       WeatherLoadCornerMatrices(0);
@@ -382,13 +382,13 @@ void WeatherDrawCell(float x, float y, float z) {
     }
     ++_Weather_uCellsDrawn;
   }
-  fn_801D0544();
+  MatPop();
   if (!flags && !(z > 0.0f)) {
     WeatherSetDrawPass(1);
     WeatherLoadCornerMatrices(1);
     WeatherDrawQuads(_Weather_uParticleCount);
   }
-  fn_801D0544();
+  MatPop();
 }
 void WeatherInit(void) {
   _Weather_iMode = fn_800A33B8();
@@ -461,18 +461,18 @@ void WeatherRender(void) {
   _Weather_iDrawPass = -1;
   GXLoadTlut(&_Weather_pAnimTex->mGX.mTlutObj, 0);
   GXLoadTexObj(&_Weather_pAnimTex->mGX.mTexObj, GX_TEXMAP0);
-  fn_801D0470(VptGetMatrixStack());
+  MatSetStack(VptGetMatrixStack());
   Mtx44 matrix;
-  fn_801D1288(2, matrix);
+  MatGetSlot(2, matrix);
   TMClipProjection(0);
-  fn_801D0508();
-  fn_801D131C(3);
-  fn_801D0C58(&_Weather_vDrift);
+  MatPushUnit();
+  MatCatSlot(3);
+  MatTranslate(&_Weather_vDrift);
   WeatherBounds_t bounds;
   int range[3][2];
   Vector_80039F5C position;
   WeatherGetDrawBounds(&bounds, matrix[0], &position);
-  fn_801D0544();
+  MatPop();
   range[0][0] = (int)((bounds.mUnknown0[0] - 15.0f) * 0.0625f);
   range[1][0] = (int)((bounds.mUnknown0[1] - 15.0f) * 0.0625f);
   range[2][0] = (int)(bounds.mUnknown0[2] * 0.125f);
@@ -484,11 +484,11 @@ void WeatherRender(void) {
   if (range[2][1] < 0)
     range[2][1] = 0;
   _Weather_uCellsDrawn = 0;
-  fn_801D0508();
-  fn_801D0C58(&_Weather_vDrift);
-  fn_801D0ADC(_Weather_iSpinAngle);
-  fn_801D0F80(_Weather_afViewMatrix);
-  fn_801D0544();
+  MatPushUnit();
+  MatTranslate(&_Weather_vDrift);
+  MatRotZ(_Weather_iSpinAngle);
+  MatStore(_Weather_afViewMatrix);
+  MatPop();
   GXInvalidateVtxCache();
   GXClearVtxDesc();
   GXSetVtxDesc(GX_VA_PNMTXIDX, GX_DIRECT);

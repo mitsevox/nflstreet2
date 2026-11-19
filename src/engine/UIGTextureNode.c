@@ -6,7 +6,7 @@
 #include "engine/UIGTextureNode.h"
 #include "engine/UIGFmv.h"
 
-void fn_801CE910(void);
+void GlibSyncFrame(void);
 
 void UIGTexNodeUnLoad(UIGLibrary_t *pObject, Int16 a, Int16 b)
 {
@@ -37,7 +37,7 @@ void UIGTexNodeSwap(UIGLibrary_t *pObject, Int16 *pA, Int16 *pB, Int16 c, Int16 
         if ((UIGLibraryGetType(pObject, *pA) & 2) && (UIGLibraryGetType(pObject, c) & 2)) {
             UIGFmvSwapInstance(pObject, c, d, *pA, *pB);
         } else {
-            fn_801CE910();
+            GlibSyncFrame();
             UIGLibraryUnLoadItem(pObject, *pA, *pB);
             UIGLibraryLoadItem(pObject, c, d);
         }

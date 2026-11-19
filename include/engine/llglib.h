@@ -4,7 +4,7 @@
 #include <dolphin/gx/GXStruct.h>
 
 /* Display configuration copied in by the low-level init (0x2C bytes at 0x803E91F8). */
-typedef struct GlibConfig_801CE1F8 {
+typedef struct GlibConfig_t {
     int mWidth;
     int mHeight;
     int mUnk8[3];
@@ -14,10 +14,10 @@ typedef struct GlibConfig_801CE1F8 {
     unsigned char mUnk1E[2];
     int mFifoSize;
     int mUnk24[2];
-} GlibConfig_801CE1F8;
+} GlibConfig_t;
 
 /* Video render mode (the GX layout, 0x3C bytes) followed by the FIFO and frame-buffer state. */
-typedef struct GlibState_801CE1F8 {
+typedef struct GlibState_t {
     GXRenderModeObj mMode;
     int mFifoSize;
     void *mpFifo;
@@ -27,14 +27,15 @@ typedef struct GlibState_801CE1F8 {
     short mLog2Width;
     short mLog2Height;
     unsigned char mFrame;
-} GlibState_801CE1F8;
+} GlibState_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void fn_801CE2B8(int enable);
-void fn_801CEA20(float (*pMatrix)[4]);
+void GlibEnableVIRetraceCallback(int enable);
+void GlibSetProjection(float (*pMatrix)[4]);
+int GlibGetScreenWidth(void);
 
 #ifdef __cplusplus
 }

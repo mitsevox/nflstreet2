@@ -6,7 +6,7 @@ void CamSetupAspect(void);
 void LoadingBegin(int);
 void LoadingEnd(int);
 void CamSetDefaultAspect(float);
-int fn_801CEB4C(void);
+int GlibGetWidescreenMode(void);
 }
 
 static ModuleDependency sDependencies[] = { &gLoading, &gGRender, 0 };
@@ -23,7 +23,7 @@ int LoadingFE::Init()
         sFirstInit = 0;
         LoadingBegin(1);
     } else {
-        if (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1) {
+        if (GameOptionsGet(6) == 1 || GlibGetWidescreenMode() == 1) {
             CamSetDefaultAspect(4.0f / 3.0f);
         } else {
             CamSetupAspect();

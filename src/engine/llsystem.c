@@ -8,7 +8,7 @@
 
 typedef int (*SysResetCallback_801F8868)(void);
 
-extern void fn_801CE2B8(int a);
+extern void GlibEnableVIRetraceCallback(int a);
 extern void FileAsyncCheckError(void);
 extern void LCDisable(void);
 extern int GlibGetTvMode(void);
@@ -41,7 +41,7 @@ static void fn_801F7DF4(u32 retraceCount)
 
 static void fn_801F7E18(void)
 {
-    fn_801CE2B8(0);
+    GlibEnableVIRetraceCallback(0);
     LCDisable();
     PADRecalibrate(0xF0000000);
     PADControlMotor(0, 2);

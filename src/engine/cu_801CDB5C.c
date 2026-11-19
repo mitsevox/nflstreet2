@@ -43,10 +43,10 @@ int fn_801CDB5C(Font_801CCA64 *pFont, const char *pText, unsigned int flags, flo
     count = 0;
     fn_801CD3E4(pFont, pText, flags, maxWidth, pQuads, &count);
     if (count) {
-        fn_801D0470(VptGetMatrixStack());
-        fn_801D04C4();
-        fn_801D0C58(pPos);
-        fn_801D0F80(mtx[0]);
+        MatSetStack(VptGetMatrixStack());
+        MatPush();
+        MatTranslate(pPos);
+        MatStore(mtx[0]);
         GXLoadPosMtxImm(mtx, 0);
         if (pFont->mpHeader->mFlags & 4) {
             lbl_803E7600.mFlags |= 0x40;
@@ -59,18 +59,18 @@ int fn_801CDB5C(Font_801CCA64 *pFont, const char *pText, unsigned int flags, flo
         } else {
             GXLoadTexObj(pFont->mpTexObj, 0);
             if (lbl_803E7600.mFlags & 0x10) {
-                fn_801D04C4();
-                fn_801D0C58(lbl_803E7600.mShadowOffset);
-                fn_801D0F80(mtx[0]);
+                MatPush();
+                MatTranslate(lbl_803E7600.mShadowOffset);
+                MatStore(mtx[0]);
                 GXLoadPosMtxImm(mtx, 0);
                 state = fn_801CD964(0, pFont, pQuads, count, &lbl_803E7600.mShadowColor, 0);
-                fn_801D0544();
-                fn_801D0F80(mtx[0]);
+                MatPop();
+                MatStore(mtx[0]);
                 GXLoadPosMtxImm(mtx, 0);
             }
             fn_801CD964(state, pFont, pQuads, count, &lbl_803E7600.mColor, 0);
         }
-        fn_801D0544();
+        MatPop();
         fn_801F7BD4(0);
     }
     return 0;

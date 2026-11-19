@@ -51,8 +51,8 @@ extern const char lbl_802A0F34[];
 extern const char lbl_802A0F74[];
 
 int GameTextGetPadPlayer(int index);
-int fn_80187A78(unsigned char index, char *pText, int count);
-int fn_80187400(int kind, int key, int first, int last);
+int UserProfileGetPadName(unsigned char index, char *pText, int count);
+int UserProfileGetFreeKey(int kind, int key, int first, int last);
 void fn_80152940(Class_802A2918 *p, int index, MiniGameSlotInfo_t *pInfo);
 
 void fn_80152400(Class_802A2918 *p, int value, int *list, int *ids)
@@ -76,7 +76,7 @@ void fn_8015247C(Class_802A2918 *p)
             continue;
         }
         char name[32];
-        if (!fn_80187A78(GameTextGetPadPlayer(p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown12), name, 31)) {
+        if (!UserProfileGetPadName(GameTextGetPadPlayer(p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown12), name, 31)) {
             continue;
         }
         QueryResult result;
@@ -100,7 +100,7 @@ void fn_8015247C(Class_802A2918 *p)
             int id = 0;
             int status = fn_801FCE10(0, lbl_802A0F34, &id, name);
             if (status == 23) {
-                id = fn_80187400(0x52435348, 0x4B505348, 0, 255);
+                id = UserProfileGetFreeKey(0x52435348, 0x4B505348, 0, 255);
                 if (id == -1) {
                     continue;
                 }

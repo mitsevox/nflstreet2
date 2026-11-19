@@ -5,12 +5,15 @@
 
 int iSNDpatchkey(int handle, int *cursor)
 {
-/*V*/    unsigned char key = lbl_803A6C24.m1CC[handle].m26;
-/*V*/
+    // FAKEMATCH: one record-pointer local, set for the handle here and reused for each cursor position below;
+    // it keeps the target's add order (array base first, index offset second)
+    Record_803A6DF0 *rec = &lbl_803A6C24.m1CC[handle];
+    unsigned char key = rec->m26;
+
     if (key != 0) {
         for ((*cursor)++; *cursor < lbl_803A6C24.m16C; (*cursor)++) {
-            Record_803A6DF0 *rec = &lbl_803A6C24.m1CC[*cursor];
-
+            // FAKEMATCH: reuse of the handle's record-pointer local (see above)
+            rec = &lbl_803A6C24.m1CC[*cursor];
             if (rec->m26 == key && rec->m6D == 1 && rec->m0 >= 0) {
                 return 1;
             }

@@ -21,11 +21,11 @@ void SNDI_fir8(SndFirState_t *state, int count, float *in, float *out)
 {
     int i;
     for (i = 0; i < count; i++) {
-        out[i] = state->m20 * (in[i] + state->m0[7]) +
-                 state->m24 * (state->m0[0] + state->m0[6]) +
-                 state->m28 * (state->m0[1] + state->m0[5]) +
-                 state->m2C * (state->m0[2] + state->m0[4]) +
-                 state->m30 * state->m0[3];
+        out[i] = state->m20[0] * (in[i] + state->m0[7]) +
+                 state->m20[1] * (state->m0[0] + state->m0[6]) +
+                 state->m20[2] * (state->m0[1] + state->m0[5]) +
+                 state->m20[3] * (state->m0[2] + state->m0[4]) +
+                 state->m20[4] * state->m0[3];
         state->m0[7] = state->m0[6];
         state->m0[6] = state->m0[5];
         state->m0[5] = state->m0[4];

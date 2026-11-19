@@ -19,7 +19,7 @@
 #include "game/Ball.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/GameModeType.h"
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/ResLoad.h"
@@ -553,12 +553,12 @@ unsigned long long fn_80190F18(void *pStream, int bits);
 void fn_80191068(void *pStream, unsigned long long value, int bits);
 void fn_801B2F18(void (*a)(int, int), void (*b)(int, int), void (*c)(int, int));
 void fn_801B3084(int flags, const char *pName, int value);
-void *fn_801C6A20(void *pool);
-void *fn_801C6B4C(void *pool, void *item);
-void fn_801C6C0C(void *pool, void *item);
-void *fn_801C6C84(void *pool, void *item);
-int fn_801C6DCC(void *pool, int a, int key, void *pResult, int (*match)(SndgPathCallbackKey_t *, int, SndgPathCallbackKey_t **));
-void fn_801CE7D0(int a);
+void *DSNewListNode(void *pool);
+void *DSGetListNode(void *pool, void *item);
+void DSDelListNode(void *pool, void *item);
+void *DSNextListNode(void *pool, void *item);
+int DSSearchList(void *pool, int a, int key, void *pResult, int (*match)(SndgPathCallbackKey_t *, int, SndgPathCallbackKey_t **));
+void GlibVsync(int a);
 int fn_801CFE40(float y, float x);
 unsigned int fn_801D27F4(int a);
 int MemFill(void *p, int size, int value, int align);
@@ -1805,13 +1805,13 @@ extern "C" int SndgLoadQueueCompare(void *a, void *b)
 
 extern "C" void SndgLoadQueueCreate(void)
 {
-    _Sndg_sState.m1C = fn_801C68FC(1, 0, 20, sizeof(SndgLoadRequest_t), SndgLoadQueueCompare, 0);
+    _Sndg_sState.m1C = DSNewList(1, 0, 20, sizeof(SndgLoadRequest_t), SndgLoadQueueCompare, 0);
 }
 
 extern "C" void SndgLoadQueueDestroy(void)
 {
     if (_Sndg_sState.m1C != 0) {
-        fn_801C69E4(_Sndg_sState.m1C);
+        DSDelList(_Sndg_sState.m1C);
         _Sndg_sState.m1C = 0;
     }
 }
@@ -1828,20 +1828,20 @@ extern "C" int SndgLoadQueueAdd(unsigned int index, void *a, int b, SndgBankLoad
     if (_Sndg_sState.m1C == 0) {
         return 0;
     }
-    for (pNode = (SndgLoadRequest_t *)fn_801C6B4C(_Sndg_sState.m1C, 0); pNode != 0;
-         pNode = (SndgLoadRequest_t *)fn_801C6C84(_Sndg_sState.m1C, pNode)) {
+    for (pNode = (SndgLoadRequest_t *)DSGetListNode(_Sndg_sState.m1C, 0); pNode != 0;
+         pNode = (SndgLoadRequest_t *)DSNextListNode(_Sndg_sState.m1C, pNode)) {
         if (pNode->m4 == a && pNode->m8 == b) {
             isNew = 0;
         }
     }
     if (isNew) {
-        pNode = (SndgLoadRequest_t *)fn_801C6A20(_Sndg_sState.m1C);
+        pNode = (SndgLoadRequest_t *)DSNewListNode(_Sndg_sState.m1C);
         if (pNode != 0) {
             pNode->m0 = index;
             pNode->m4 = a;
             pNode->m8 = b;
             pNode->mC = cb;
-            fn_801C6AA4(_Sndg_sState.m1C, pNode, 0);
+            DSAddListNode(_Sndg_sState.m1C, pNode, 0);
             result = 1;
         }
     }
@@ -1851,7 +1851,7 @@ extern "C" int SndgLoadQueueAdd(unsigned int index, void *a, int b, SndgBankLoad
 extern "C" void SndgLoadQueueRemove(void *item)
 {
     if (_Sndg_sState.m1C != 0) {
-        fn_801C6C0C(_Sndg_sState.m1C, item);
+        DSDelListNode(_Sndg_sState.m1C, item);
     }
 }
 
@@ -1881,7 +1881,7 @@ extern "C" void SndgLoadQueueService(int a)
         return;
     }
     if (_Sndg_sState.m18 != 0x7FFFFFFF) {
-        pNode = (SndgLoadRequest_t *)fn_801C6B4C(_Sndg_sState.m1C, 0);
+        pNode = (SndgLoadRequest_t *)DSGetListNode(_Sndg_sState.m1C, 0);
         if (SndgIsBankLoaded(pNode->m0)) {
             _Sndg_sState.m18 = 0x7FFFFFFF;
             SndgLoadQueueRemove(pNode);
@@ -1890,7 +1890,7 @@ extern "C" void SndgLoadQueueService(int a)
             return;
         }
     }
-    pNode = (SndgLoadRequest_t *)fn_801C6B4C(_Sndg_sState.m1C, 0);
+    pNode = (SndgLoadRequest_t *)DSGetListNode(_Sndg_sState.m1C, 0);
     if (pNode != 0) {
         int start = 1;
         if (a && fn_800AD9B4() == 3) {
@@ -1904,7 +1904,7 @@ extern "C" void SndgLoadQueueService(int a)
 
 extern "C" void SndgLoadQueueFlush(void)
 {
-    while (fn_801C6B4C(_Sndg_sState.m1C, 0) != 0) {
+    while (DSGetListNode(_Sndg_sState.m1C, 0) != 0) {
         SndgLoadQueueService(0);
         SndService();
     }
@@ -1976,7 +1976,7 @@ extern "C" void SndgShutdown(void)
 
     if (_Sndg_sState.m20) {
         for (i = 0; i < 20; i++) {
-            fn_801CE7D0(1);
+            GlibVsync(1);
             SndService();
         }
         SndUnloadAll();
@@ -2561,8 +2561,8 @@ extern "C" void SndgPathCallList0(int a, int b)
 {
     SndgPathCallback_t *entry;
 
-    for (entry = (SndgPathCallback_t *)fn_801C6B4C(_SndgPathfinder_pState->mpPool[0], 0); entry;
-         entry = (SndgPathCallback_t *)fn_801C6C84(_SndgPathfinder_pState->mpPool[0], entry)) {
+    for (entry = (SndgPathCallback_t *)DSGetListNode(_SndgPathfinder_pState->mpPool[0], 0); entry;
+         entry = (SndgPathCallback_t *)DSNextListNode(_SndgPathfinder_pState->mpPool[0], entry)) {
         entry->mFunc(a, b);
     }
 }
@@ -2571,8 +2571,8 @@ extern "C" void SndgPathCallList1(int a, int b)
 {
     SndgPathCallback_t *entry;
 
-    for (entry = (SndgPathCallback_t *)fn_801C6B4C(_SndgPathfinder_pState->mpPool[1], 0); entry;
-         entry = (SndgPathCallback_t *)fn_801C6C84(_SndgPathfinder_pState->mpPool[1], entry)) {
+    for (entry = (SndgPathCallback_t *)DSGetListNode(_SndgPathfinder_pState->mpPool[1], 0); entry;
+         entry = (SndgPathCallback_t *)DSNextListNode(_SndgPathfinder_pState->mpPool[1], entry)) {
         entry->mFunc(a, b);
     }
 }
@@ -2581,8 +2581,8 @@ extern "C" void SndgPathCallList2(int a, int b)
 {
     SndgPathCallback_t *entry;
 
-    for (entry = (SndgPathCallback_t *)fn_801C6B4C(_SndgPathfinder_pState->mpPool[2], 0); entry;
-         entry = (SndgPathCallback_t *)fn_801C6C84(_SndgPathfinder_pState->mpPool[2], entry)) {
+    for (entry = (SndgPathCallback_t *)DSGetListNode(_SndgPathfinder_pState->mpPool[2], 0); entry;
+         entry = (SndgPathCallback_t *)DSNextListNode(_SndgPathfinder_pState->mpPool[2], entry)) {
         entry->mFunc(a, b);
     }
 }
@@ -2604,9 +2604,9 @@ int SndgPathfinder::Init()
 {
     _SndgPathfinder_pState = new (0) SndgPathfinderState;
     memset(_SndgPathfinder_pState, 0, sizeof(SndgPathfinderState));
-    _SndgPathfinder_pState->mpPool[0] = fn_801C68FC(1, 0, 4, 4, 0, 0);
-    _SndgPathfinder_pState->mpPool[1] = fn_801C68FC(1, 0, 4, 4, 0, 0);
-    _SndgPathfinder_pState->mpPool[2] = fn_801C68FC(1, 0, 4, 4, 0, 0);
+    _SndgPathfinder_pState->mpPool[0] = DSNewList(1, 0, 4, 4, 0, 0);
+    _SndgPathfinder_pState->mpPool[1] = DSNewList(1, 0, 4, 4, 0, 0);
+    _SndgPathfinder_pState->mpPool[2] = DSNewList(1, 0, 4, 4, 0, 0);
     if (SndEnabled()) {
         PathfinderInitDesc_t desc;
         desc.mHeap = 1;
@@ -2622,9 +2622,9 @@ int SndgPathfinder::Shutdown()
     if (SndEnabled()) {
         PathfinderShutdown();
     }
-    fn_801C69E4(_SndgPathfinder_pState->mpPool[0]);
-    fn_801C69E4(_SndgPathfinder_pState->mpPool[1]);
-    fn_801C69E4(_SndgPathfinder_pState->mpPool[2]);
+    DSDelList(_SndgPathfinder_pState->mpPool[0]);
+    DSDelList(_SndgPathfinder_pState->mpPool[1]);
+    DSDelList(_SndgPathfinder_pState->mpPool[2]);
     delete _SndgPathfinder_pState;
     _SndgPathfinder_pState = 0;
     return 1;
@@ -2739,10 +2739,10 @@ extern "C" void SndgPathStopTrack(int a)
 extern "C" void SndgPathAddCallback(int value)
 {
     if (gSndgPathfinder.IsStarted()) {
-        SndgPathCallbackKey_t *pItem = (SndgPathCallbackKey_t *)fn_801C6A20(_SndgPathfinder_pState->mpPool[0]);
+        SndgPathCallbackKey_t *pItem = (SndgPathCallbackKey_t *)DSNewListNode(_SndgPathfinder_pState->mpPool[0]);
         if (pItem) {
             pItem->mKey = value;
-            fn_801C6AA4(_SndgPathfinder_pState->mpPool[0], pItem, 0);
+            DSAddListNode(_SndgPathfinder_pState->mpPool[0], pItem, 0);
         }
     }
 }
@@ -2751,9 +2751,9 @@ extern "C" void SndgPathRemoveCallback(int value)
 {
     if (gSndgPathfinder.IsStarted()) {
         SndgPathCallbackKey_t *pFound = 0;
-        fn_801C6DCC(_SndgPathfinder_pState->mpPool[0], 0, value, &pFound, SndgPathMatchCallback);
+        DSSearchList(_SndgPathfinder_pState->mpPool[0], 0, value, &pFound, SndgPathMatchCallback);
         if (pFound) {
-            fn_801C6C0C(_SndgPathfinder_pState->mpPool[0], pFound);
+            DSDelListNode(_SndgPathfinder_pState->mpPool[0], pFound);
         }
     }
 }

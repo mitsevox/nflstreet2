@@ -40,12 +40,12 @@ union MsgGameArg_t {
 
 extern "C" {
 int fn_8022F4BC(void);
-int fn_80186B38(int a);
+int UserProfileFindIndex(int a);
 int GauntletSetCurrentTeam(int a, int b);
 int fn_8001194C(int a);
 int UserRecGetCount(void);
-int fn_80186D64(int a);
-void fn_80186F9C(int a, char *pText, int c);
+int UserProfileGetOldest(int a);
+void UserProfileCreate(int a, char *pText, int c);
 int fn_801486A0(void);
 void fn_80152940(Class_80148A58 *pObject, int index, MiniGameSlotInfo_t *pInfo);
 int fn_80178AE0(void);
@@ -65,10 +65,10 @@ int GameTextGetMemCardNames(char *pText0, int length0, char *pText1, int length1
 int fn_801D6850(void);
 void GameTextGetEnteredName(char *pText, int length);
 void fn_801410F4(int a);
-void fn_80186A44(signed char a);
+void UserProfileDelete(signed char a);
 int fn_8022F358(int index);
-void fn_80186F30(signed char a, int b);
-void fn_80186F8C(int a);
+void UserProfileSelect(signed char a, int b);
+void UserProfileDeselect(int a);
 unsigned char MemCardScreenGetFlag(void);
 int UserStringGet(char *pDest, int count);
 void UserStringSet(const char *pSource, int count);
@@ -135,7 +135,7 @@ void MsgGameSetSetup(int a, int b, int c)
     _MsgGame_iSetupId = b;
     _MsgGame_iSetupArg = c;
     if (a == 0 && b == 0x69 && GameModeTypeGet() == 8) {
-        GauntletSetCurrentTeam(fn_80186B38(fn_8022F4BC()), 0x3FF);
+        GauntletSetCurrentTeam(UserProfileFindIndex(fn_8022F4BC()), 0x3FF);
     }
 }
 
@@ -156,7 +156,7 @@ int MsgGameGetProfileValue(int a, int *pResult)
     *pResult = UserRecGetCount();
     bool found = false;
     if (*pResult == 2) {
-        *pResult = fn_80186D64(value);
+        *pResult = UserProfileGetOldest(value);
         found = true;
     }
     return found;
@@ -175,7 +175,7 @@ int MsgGameSetProfileText(int a, char *pText)
         a = 1;
     }
     state = UserRecGetCount();
-    fn_80186F9C(state, pText, a);
+    UserProfileCreate(state, pText, a);
     return state;
 }
 
@@ -362,17 +362,17 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         pResult->i = UserRecGetCount();
         break;
     case 0x1F0:
-        fn_80186A44(pArgs[0].i);
+        UserProfileDelete(pArgs[0].i);
         break;
     case 0x1EF:
         if (pArgs[0].i == -1) {
             fn_8022F478(fn_8022F358((signed char)pArgs[1].i));
         } else {
-            fn_80186F30(pArgs[1].i, pArgs[0].i != 0);
+            UserProfileSelect(pArgs[1].i, pArgs[0].i != 0);
         }
         break;
     case 0x14:
-        fn_80186D64(fn_8001194C(pArgs[0].i == 0));
+        UserProfileGetOldest(fn_8001194C(pArgs[0].i == 0));
         break;
     case 0x23:
         pResult->i = MsgGameGetProfileValue(pArgs[0].i, pArgs[1].pi);
@@ -381,7 +381,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         pResult->i = MsgGameSetProfileText(pArgs[0].i, pArgs[1].pParams->mpText);
         break;
     case 0x25:
-        fn_80186F8C(pArgs[0].i != 0);
+        UserProfileDeselect(pArgs[0].i != 0);
         break;
     case 0x21: {
         int value = GameOptionsGet(12);

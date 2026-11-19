@@ -8,7 +8,7 @@ extern "C" {
 int SFILTER_unpackxapf(Node_80279D90 *node, int count, float *a, float *b, int flag)
 {
     Decoder_8027BA6C *decoder;
-    Pair_8027BFDC state;
+    Snd::XAFSTATE state;
     int last;
     int total;
     int seed;
@@ -22,26 +22,26 @@ int SFILTER_unpackxapf(Node_80279D90 *node, int count, float *a, float *b, int f
         decoder->m34 = 0;
     }
     while (count > 0) {
-        n = fn_8027BE24(decoder->m1C, &b, count);
+        n = decoder->m1C->Decode(&b, count);
         decoder->m28 += n;
         b += n;
         decoder->m34 += n;
         total += n;
         if (n < count) {
             count -= n;
-            decoder->m20 = (int)fn_802792F0(decoder->m30, decoder->m38, &decoder->m24, &last);
+            decoder->m20 = (int)SNDPKTPLAYI_get(decoder->m30, decoder->m38, &decoder->m24, &last);
             if (decoder->m20 != 0) {
                 if (decoder->m2C <= 2) {
                     seed = 1;
                 }
                 if (seed != 0) {
-                    state.m0 = ((short *)decoder->m20)[0];
-                    state.m4 = ((short *)decoder->m20)[1];
-                    fn_8027C00C(decoder->m1C, &state);
+                    state.mPrev1 = ((short *)decoder->m20)[0];
+                    state.mPrev2 = ((short *)decoder->m20)[1];
+                    decoder->m1C->SetState(&state);
                     decoder->m20 += 4;
                 }
                 decoder->m28 = 0;
-                fn_8027BDE8(decoder->m1C, (char *)decoder->m20, decoder->m24 * 4, decoder->m24);
+                decoder->m1C->Feed((char *)decoder->m20, decoder->m24 * 4, decoder->m24);
             } else {
                 if (count > 0 && decoder->m34 != 0) {
                     memset(b, 0, count * 4);
@@ -61,7 +61,7 @@ void SFILTER_unpackxapfrestore(Node_80279D90 *node)
 
     decoder = (Decoder_8027BA6C *)node;
     if (decoder->m1C != 0) {
-        fn_8027BD94(decoder->m1C);
+        delete decoder->m1C;
     }
 }
 
@@ -79,7 +79,7 @@ void SFILTER_unpackxapfinit(Node_80279D90 *node, Params_80275F80 *params)
     decoder->m24 = params->mC;
     decoder->m28 = 0;
     decoder->m34 = 0;
-    decoder->m1C = fn_8027BDC0(fn_8027BD68(168));
+    decoder->m1C = new Snd::CEAXABLKDecf;
 }
 
 }

@@ -5,7 +5,7 @@
 
 #include "engine/list.h"
 #include "engine/fileio.h"
-#include "game/fn_801C68FC.h"
+#include "engine/dslist.h"
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
@@ -94,7 +94,7 @@ FileAsyncRequest_t *_FileGetAsyncRequest(void)
 
     for (;;) {
         fn_801F8014(&File_AsyncRequestListCS);
-        pAsync = fn_801C6A20(File_pAsyncRequestList);
+        pAsync = DSNewListNode(File_pAsyncRequestList);
         fn_801F809C(&File_AsyncRequestListCS);
         if (pAsync) {
             break;
@@ -232,7 +232,7 @@ int FileInit(FileInitParms_t *pConfig)
         for (j = 0; j < File_InitParms.mNumFiles; j++) {
             fn_801F7FA8(&File_HandleInUseCS[j]);
         }
-        File_pAsyncRequestList = fn_801C68FC(1, 0, 0x40, sizeof(FileAsyncRequest_t), (int (*)(void *, void *))_FileRequestInsertFunc, 0);
+        File_pAsyncRequestList = DSNewList(1, 0, 0x40, sizeof(FileAsyncRequest_t), (int (*)(void *, void *))_FileRequestInsertFunc, 0);
         fn_801F7FA8(&File_AsyncRequestListCS);
         File_AsyncFileCopy = 0;
         File_pFileRequestList = DSNewNodeHandler(1, 0x40, sizeof(FileRequest_t), 0);
@@ -261,7 +261,7 @@ int FileShutdown(void)
             }
             fn_801F80D0(&File_HandleInUseCS[i]);
         }
-        fn_801C69E4(File_pAsyncRequestList);
+        DSDelList(File_pAsyncRequestList);
         fn_801F80D0(&File_AsyncRequestListCS);
         fn_801F80D0(&File_AsyncThreadActiveCS);
         DSDelNodeHandler(File_pFileRequestList);
@@ -512,8 +512,8 @@ FileRequest_t *FileRePrioritizeAsync(FileRequest_t *pReq, int priority)
             pReq->mPriority = priority;
             if (pReq->mpAsync->mState == 0) {
                 pReq->mpAsync->mPriority = priority;
-                fn_801C6BC0(File_pAsyncRequestList, pReq->mpAsync);
-                fn_801C6AA4(File_pAsyncRequestList, pReq->mpAsync, 0);
+                DSRemoveListNode(File_pAsyncRequestList, pReq->mpAsync);
+                DSAddListNode(File_pAsyncRequestList, pReq->mpAsync, 0);
             } else {
                 pReq->mpAsync->mPriority = priority;
             }

@@ -5,52 +5,52 @@
 
 extern "C" {
 
-char *fn_801B23A0(RowBank_801AFE90 *p)
+char *BANKHDR_GetValidParmMask(VoxBankHdr_t *p)
 {
     return (char *)p + ((p->mUnknown5 * ((p->mUnknown4 & 127) + 2) + 15) & ~3);
 }
 
-char *fn_801B23C4(RowBank_801AFE90 *p)
+char *BANKHDR_GetCycleBitsAddr(VoxBankHdr_t *p)
 {
-    char *result = fn_801B23A0(p);
+    char *result = BANKHDR_GetValidParmMask(p);
     return result + (p->mUnknown4 & 127) * 4;
 }
 
-char *fn_801B23FC(RowBank_801AFE90 *p)
+char *BANKHDR_GetSampleRepeatAddr(VoxBankHdr_t *p)
 {
     int size = 0;
-    char *result = fn_801B23C4(p);
+    char *result = BANKHDR_GetCycleBitsAddr(p);
     if (p->mUnknown4 & 128) {
         size = (p->mUnknown5 + 7) / 8 + 1;
     }
     return result + size;
 }
 
-void fn_801B2450(void)
+void iSPCH_InitBanks(void)
 {
-    lbl_803EBB00 = 0;
-    lbl_803EBB08 = 0;
-    lbl_803EBB0C = 0;
-    lbl_803EBB04 = 0;
+    gVoxBanks = 0;
+    gNumBanks = 0;
+    gBankCount = 0;
+    gUniqueBankHandle = 0;
 }
 
-void fn_801B2468(void)
+void iSPCH_DisposeBanks(void)
 {
-    lbl_803EBB00 = 0;
-    lbl_803EBB08 = 0;
-    lbl_803EBB0C = 0;
-    lbl_803EBB04 = 0;
+    gVoxBanks = 0;
+    gNumBanks = 0;
+    gBankCount = 0;
+    gUniqueBankHandle = 0;
 }
 
-int fn_801B2480(int count)
+int SPCH_GetBankPtrMemSize(int count)
 {
     return count * 8;
 }
 
-void fn_801B2488(int count, Slot_801B2450 *slots)
+void SPCH_InitBankMem(int count, VoxBankSlot_t *slots)
 {
-    lbl_803EBB08 = count;
-    lbl_803EBB00 = slots;
+    gNumBanks = count;
+    gVoxBanks = slots;
     if (slots) {
         for (int i = 0; i < count; i++) {
             slots[i].mUnknown0 = 0;
@@ -59,16 +59,52 @@ void fn_801B2488(int count, Slot_801B2450 *slots)
     }
 }
 
-int fn_801B2648(unsigned int id, int *out)
+int iSPCH_FindInsertPosition(VoxBankHdr_t *bank)
 {
     int low = 0;
-    int high = lbl_803EBB0C - 1;
-    if (lbl_803EBB00 && lbl_803EBB0C) {
+    int high = gBankCount - 1;
+    if (gBankCount == 0) {
+        return 0;
+    }
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        if (bank->mUnknown0 == gVoxBanks[mid].mUnknown4->mUnknown0 && bank->mUnknown2 == gVoxBanks[mid].mUnknown4->mUnknown2) {
+            // FAKEMATCH: goto past the loop; with return -1 here the slot-0 test does not reuse the hoisted id
+            goto fail;
+        }
+        if (mid == 0) {
+            if ((bank->mUnknown0 == gVoxBanks[0].mUnknown4->mUnknown0 && bank->mUnknown2 < gVoxBanks[0].mUnknown4->mUnknown2) || bank->mUnknown0 < gVoxBanks[0].mUnknown4->mUnknown0) {
+                return (short)mid;
+            }
+        }
+        if ((bank->mUnknown0 == gVoxBanks[mid].mUnknown4->mUnknown0 && bank->mUnknown2 < gVoxBanks[mid].mUnknown4->mUnknown2) || bank->mUnknown0 < gVoxBanks[mid].mUnknown4->mUnknown0) {
+            if ((bank->mUnknown0 == gVoxBanks[mid - 1].mUnknown4->mUnknown0 && bank->mUnknown2 > gVoxBanks[mid - 1].mUnknown4->mUnknown2) || bank->mUnknown0 > gVoxBanks[mid - 1].mUnknown4->mUnknown0) {
+                return (short)mid;
+            }
+        }
+        if (bank->mUnknown0 > gVoxBanks[mid].mUnknown4->mUnknown0 || (bank->mUnknown0 == gVoxBanks[mid].mUnknown4->mUnknown0 && bank->mUnknown2 > gVoxBanks[mid].mUnknown4->mUnknown2)) {
+            low = mid + 1;
+            if (gVoxBanks[low].mUnknown4 == 0) {
+                return (short)low;
+            }
+        } else {
+            high = mid - 1;
+        }
+    }
+fail:
+    return -1;
+}
+
+int iSPCH_FindBank(unsigned int id, int *out)
+{
+    int low = 0;
+    int high = gBankCount - 1;
+    if (gVoxBanks && gBankCount) {
         while (low <= high) {
             int mid = (low + high) / 2;
-            RowBank_801AFE90 *p = lbl_803EBB00[mid].mUnknown4;
+            VoxBankHdr_t *p = gVoxBanks[mid].mUnknown4;
             if (id == p->mUnknown0) {
-                *out = lbl_803EBB00[mid].mUnknown0;
+                *out = gVoxBanks[mid].mUnknown0;
                 return (short)mid;
             }
             if (id > p->mUnknown0) low = mid + 1;
@@ -78,30 +114,29 @@ int fn_801B2648(unsigned int id, int *out)
     return -1;
 }
 
-int fn_801B26D8(unsigned int id, unsigned int key, int *out)
+int iSPCH_FindSubBank(unsigned int id, unsigned int key, int *out)
 {
     int low = 0;
-    int high = lbl_803EBB0C - 1;
-    if (lbl_803EBB00 && lbl_803EBB0C) {
+    int high = gBankCount - 1;
+    if (gVoxBanks && gBankCount) {
         while (low <= high) {
             int mid = (low + high) / 2;
-            RowBank_801AFE90 *p = lbl_803EBB00[mid].mUnknown4;
-            if (id == p->mUnknown0 && key == p->mUnknown2) {
-                *out = lbl_803EBB00[mid].mUnknown0;
+            if (id == gVoxBanks[mid].mUnknown4->mUnknown0 && key == gVoxBanks[mid].mUnknown4->mUnknown2) {
+                *out = gVoxBanks[mid].mUnknown0;
                 return (short)mid;
             }
-            if (id > p->mUnknown0 || (id == p->mUnknown0 && key > p->mUnknown2)) low = mid + 1;
+            if (id > gVoxBanks[mid].mUnknown4->mUnknown0 || (id == gVoxBanks[mid].mUnknown4->mUnknown0 && key > gVoxBanks[mid].mUnknown4->mUnknown2)) low = mid + 1;
             else high = mid - 1;
         }
     }
     return -1;
 }
 
-int fn_801B2798(int i, unsigned int value)
+int iSPCH_TestSubBankBounds(int i, unsigned int value)
 {
     int result = 0;
-    if (lbl_803EBB00 && i >= 0) {
-        int limit = lbl_803EBB00[i].mUnknown4->mUnknownA;
+    if (gVoxBanks && i >= 0) {
+        int limit = gVoxBanks[i].mUnknown4->mUnknownA;
         if (limit != 65535) {
             result = value < (unsigned int)limit;
         }
@@ -109,20 +144,20 @@ int fn_801B2798(int i, unsigned int value)
     return result;
 }
 
-int fn_801B27E4(int id)
+int iSPCH_FindBankIndexFromHandle(int id)
 {
-    for (int i = 0; i < lbl_803EBB0C; i++) {
-        if (lbl_803EBB00[i].mUnknown0 == id) {
+    for (int i = 0; i < gBankCount; i++) {
+        if (gVoxBanks[i].mUnknown0 == id) {
             return i;
         }
     }
     return -1;
 }
 
-void fn_801B2828(RowBank_801AFE90 *p, int value)
+void iSPCHBank_AddToQueue(VoxBankHdr_t *p, int value)
 {
     if (p->mUnknown6) {
-        unsigned char *history = (unsigned char *)fn_801B23FC(p);
+        unsigned char *history = (unsigned char *)BANKHDR_GetSampleRepeatAddr(p);
         unsigned char index = history[0];
         if (index < p->mUnknown6) {
             history[index + 1] = value;
@@ -135,12 +170,12 @@ void fn_801B2828(RowBank_801AFE90 *p, int value)
     }
 }
 
-int fn_801B2898(RowBank_801AFE90 *p, int value)
+int iSPCHBank_GetSampleTimeInQueue(VoxBankHdr_t *p, int value)
 {
     int count = p->mUnknown6;
     int result = 0;
     if (count > 0) {
-        unsigned char *history = (unsigned char *)fn_801B23FC(p);
+        unsigned char *history = (unsigned char *)BANKHDR_GetSampleRepeatAddr(p);
         int index = *history++;
         for (int i = 0; i < count; i++) {
             if (--index < 0) {
@@ -148,14 +183,16 @@ int fn_801B2898(RowBank_801AFE90 *p, int value)
             }
             if (history[index] == value) {
                 result = i + 1;
-                break;
+                // FAKEMATCH: goto past the loop; with break the loop keeps its jump-to-test form
+                goto done;
             }
         }
     }
+done:
     return result;
 }
 
-unsigned int fn_801B2918(unsigned int a, int b, int c)
+unsigned int iSPCH_GetStartSample(unsigned int a, int b, int c)
 {
     int quotient = b / c;
     int remainder = b % c;
@@ -168,27 +205,47 @@ unsigned int fn_801B2918(unsigned int a, int b, int c)
     return result;
 }
 
-void fn_801B2944(RowBank_801AFE90 *p)
+void iSPCH_SetCycleBits(VoxBankHdr_t *p)
 {
-    unsigned char *bits = (unsigned char *)fn_801B23C4(p);
+    unsigned char *bits = (unsigned char *)BANKHDR_GetCycleBitsAddr(p);
     int count = bits[0];
     if (count > 0) {
         unsigned int time = (unsigned int)gGameNum % count;
         int size = p->mUnknown5;
-        unsigned int start = fn_801B2918(time, size, count);
-        int length = fn_801B2918(time + 1, size, count) - start;
+        unsigned int start = iSPCH_GetStartSample(time, size, count);
+        int length = iSPCH_GetStartSample(time + 1, size, count) - start;
         int index = start / 8 + 1;
         int bit = start & 7;
         for (int i = 0; i < length; i++) {
             bits[index] |= 1 << bit;
-            if (bit == 7) {
+            if (++bit == 8) {
                 bit = 0;
                 index++;
-            } else {
-                bit++;
             }
         }
     }
+}
+
+int SPCH_AddBank(VoxBankHdr_t *bank)
+{
+    int handle = -1;
+    if (gVoxBanks) {
+        int pos = iSPCH_FindInsertPosition(bank);
+        if (pos < gNumBanks && pos >= 0) {
+            if (bank->mUnknown4 & 128) {
+                iSPCH_SetCycleBits(bank);
+            }
+            for (int i = gBankCount; i > pos; i--) {
+                gVoxBanks[i] = gVoxBanks[i - 1];
+            }
+            handle = gUniqueBankHandle;
+            gVoxBanks[pos].mUnknown4 = bank;
+            gVoxBanks[pos].mUnknown0 = handle;
+            gUniqueBankHandle++;
+            gBankCount++;
+        }
+    }
+    return handle;
 }
 
 }
