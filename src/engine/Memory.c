@@ -111,6 +111,7 @@ static void fn_801D1474(void)
 {
     MemHeap_801D134C *pHeap;
     MemRange_801D134C *pRange;
+    MemRange_801D134C *pPrev;
     MemRange_801D134C tmp;
     int i;
 
@@ -126,11 +127,12 @@ static void fn_801D1474(void)
     }
     lbl_803EBCD0 = i;
     for (i = 1; i < lbl_803EBCD0; i++) {
-        pRange = &lbl_80384BC0[i - 1];
-        if (pRange[0].mpStart > pRange[1].mpStart) {
-            tmp = pRange[0];
-            pRange[0] = pRange[1];
-            pRange[1] = tmp;
+        pRange = &lbl_80384BC0[i];
+        pPrev = &lbl_80384BC0[i - 1];
+        if (pPrev->mpStart > pRange->mpStart) {
+            tmp = *pPrev;
+            *pPrev = *pRange;
+            *pRange = tmp;
             if (i > 1) {
                 i -= 2;
             }

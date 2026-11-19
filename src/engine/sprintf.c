@@ -1,6 +1,7 @@
 /* The integer, float, scientific, hex and string field writers used by vsnprintf. */
 
 #include <string.h>
+#include <stdarg.h>
 
 
 static char *fn_801C20F0(unsigned int value, char *pOut, char *pEnd, char pad, int width, int isSigned)
@@ -221,4 +222,130 @@ static char *fn_801C27D0(const char *pString, char *pOut, char *pEnd, int width,
         }
     }
     return pOut;
+}
+
+int vsnprintf(char *pBuffer, int size, const char *pFormat, va_list args)
+{
+    char *pOut = pBuffer;
+    char *pEnd = pBuffer + (size - 1);
+    char c;
+    int leftAlign;
+    int width;
+    int precision;
+    int alt;
+    int caseOffset;
+    char pad;
+
+    if (pBuffer == NULL || size == 0 || pFormat == NULL) {
+        return -1;
+    }
+    c = *pFormat++;
+    while (c != 0 && pOut < pEnd) {
+        leftAlign = 0;
+        if (c == '%') {
+            c = *pFormat++;
+            alt = 0;
+            width = 0;
+            precision = -1;
+            pad = ' ';
+            if (c == '-') {
+                leftAlign = 1;
+                c = *pFormat++;
+            }
+            if (c == '0') {
+                pad = '0';
+                c = *pFormat++;
+            }
+            while ((unsigned int)(c - '0') <= 9) {
+                width = width * 10 + c - '0';
+                c = *pFormat++;
+            }
+            if (c == '.') {
+                c = *pFormat++;
+            }
+            if (c == 'l') {
+                c = *pFormat++;
+            }
+            if ((unsigned char)(c - '0') <= 9) {
+                precision = c - '0';
+                c = *pFormat++;
+                while ((unsigned int)(c - '0') <= 9) {
+                    precision = precision * 10 + c - '0';
+                    c = *pFormat++;
+                }
+            }
+            switch (c) {
+            case 'h':
+            case 'L':
+            case 'l':
+                c = *pFormat++;
+                break;
+            }
+            caseOffset = 0;
+            if (c >= 'A' && c <= 'Z') {
+                caseOffset = 'A' - 'a';
+            }
+            switch (c) {
+            case 'c':
+                *pOut++ = va_arg(args, int);
+                break;
+            case 's': {
+                const char *pString = va_arg(args, const char *);
+                if (pString != NULL) {
+                    pOut = fn_801C27D0(pString, pOut, pEnd, width, precision, leftAlign);
+                } else {
+                    pOut = fn_801C27D0("(null)", pOut, pEnd, width, precision, leftAlign);
+                }
+                break;
+            }
+            case 'u':
+                alt = 1;
+            case 'd':
+            case 'i':
+                pOut = fn_801C20F0(va_arg(args, int), pOut, pEnd, pad, width, !alt);
+                break;
+            case 'f':
+                pOut = fn_801C21D0(va_arg(args, double), pOut, pEnd, width, precision);
+                break;
+            case 'g':
+            case 'G':
+                alt = 1;
+            case 'e':
+            case 'E':
+                pOut = fn_801C2428(va_arg(args, double), pOut, pEnd, width, precision, caseOffset, !alt);
+                break;
+            case 'x':
+            case 'X':
+            case 'p':
+                pOut = fn_801C2728(va_arg(args, unsigned int), pOut, pEnd, width, pad, caseOffset);
+                break;
+            default:
+                if (c != 0) {
+                    *pOut++ = c;
+                }
+                break;
+            }
+        } else if (c != 0) {
+            *pOut++ = c;
+        }
+        c = *pFormat++;
+    }
+    *pOut = 0;
+    return pOut - pBuffer;
+}
+
+int snprintf(char *pBuffer, int size, const char *pFormat, ...)
+{
+    va_list args;
+
+    va_start(args, pFormat);
+    return vsnprintf(pBuffer, size, pFormat, args);
+}
+
+int sprintf(char *pBuffer, const char *pFormat, ...)
+{
+    va_list args;
+
+    va_start(args, pFormat);
+    return vsnprintf(pBuffer, 2048, pFormat, args);
 }

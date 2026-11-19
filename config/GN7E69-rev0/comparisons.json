@@ -30766,7 +30766,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B1080",
-          "end": "0x802B10E8"
+          "end": "0x802B10F0"
         }
       ],
       "functions": [
@@ -30906,6 +30906,11 @@
           "end": "0x801DF064"
         },
         {
+          "symbol": "fn_801DF064",
+          "start": "0x801DF064",
+          "end": "0x801DF184"
+        },
+        {
           "symbol": "fn_801DF184",
           "start": "0x801DF184",
           "end": "0x801DF1A0"
@@ -30939,6 +30944,11 @@
           "symbol": "fn_801DF338",
           "start": "0x801DF338",
           "end": "0x801DF3E4"
+        },
+        {
+          "symbol": "fn_801DF3E4",
+          "start": "0x801DF3E4",
+          "end": "0x801DF428"
         },
         {
           "symbol": "fn_801DF428",
@@ -39733,19 +39743,19 @@
     {
       "source": "src/engine/sprintf.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C20F0-0x801C2EB4 (src/engine/sprintf.c, renamed from the neutral cu_801C20F0.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF018-0x802AF050. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C20F0-0x801C2EB4 (src/engine/sprintf.c, renamed from the neutral cu_801C20F0.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF018-0x802AF058. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801C20F0",
-          "end": "0x801C289C"
+          "end": "0x801C2EB4"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802AF018",
-          "end": "0x802AF050"
+          "end": "0x802AF058"
         }
       ],
       "functions": [
@@ -39773,6 +39783,21 @@
           "symbol": "fn_801C27D0",
           "start": "0x801C27D0",
           "end": "0x801C289C"
+        },
+        {
+          "symbol": "vsnprintf",
+          "start": "0x801C289C",
+          "end": "0x801C2D88"
+        },
+        {
+          "symbol": "snprintf",
+          "start": "0x801C2D88",
+          "end": "0x801C2E18"
+        },
+        {
+          "symbol": "sprintf",
+          "start": "0x801C2E18",
+          "end": "0x801C2EB4"
         }
       ]
     }
