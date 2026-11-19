@@ -14761,6 +14761,19 @@
       ]
     },
     {
+      "source": "src/engine/sattrdef.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80277CF0-0x80277D88 (src/engine/sattrdef.c), the function, name and source-form rows of SND_attrsetdef and the SndSampleAttr_t type row; sound_cxx compiler rows 0x80276DE4-0x8027CF9C. Complete native .text, no owned data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80277CF0",
+          "end": "0x80277D88"
+        }
+      ]
+    },
+    {
       "source": "src/engine/supmutpf.c",
       "profile": "sound_cxx",
       "sections": [

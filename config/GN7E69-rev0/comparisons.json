@@ -38445,26 +38445,6 @@
       ]
     },
     {
-      "source": "src/engine/sattrdef.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80277CF0-0x80277D88 (src/engine/sattrdef.c), the sound_cxx compiler rows and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80277CF0",
-          "end": "0x80277D88"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SND_attrsetdef",
-          "start": "0x80277CF0",
-          "end": "0x80277D88"
-        }
-      ]
-    },
-    {
       "source": "src/engine/spktplay.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x80278A68-0x80279648 (src/engine/spktplay.c), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
