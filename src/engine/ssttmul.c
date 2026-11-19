@@ -19,7 +19,7 @@ int SNDSTRM_timemult(int stream, int mult)
         return -8;
     }
     channel->mTimeMult = mult;
-    fn_80270D6C(channel->mVoice, mult);
+    SNDCTRL_timemult(channel->mVoice, mult);
     return 0;
 }
 

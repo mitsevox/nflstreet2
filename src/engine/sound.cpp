@@ -130,7 +130,7 @@ void fn_8026FBFC(int a, int b, int c);
 void fn_8026FCAC(int a, int b);
 int fn_802692B8(int handle);
 int fn_802697D8(void *pData, char *pName, int b, void *(*pAlloc)(void *, int, int));
-void fn_8026A2DC(int handle, int a, int b);
+int SNDautovol(int handle, int time, int vol);
 void fn_8026A4D4(int *pHandle, void *pData);
 int SNDBANK_asyncloadmem(int *pHandle, void *pData);
 int SNDBANK_asyncloadmemdone(void);
@@ -163,7 +163,7 @@ void SNDSYS_service(void);
 int fn_802714A8(int handle, int value);
 
 void _StreamMUTEX_init(void);
-void fn_8026C39C(int a);
+int SNDsetoutputchannels(int count);
 void fn_8026F97C(int a);
 void fn_8026C18C(void);
 void fn_8026C23C(void);
@@ -366,7 +366,7 @@ int SndInit(SndInitDesc_t *pDesc)
         pHeap = fn_801D2BB0(1, pDesc->mUnknown4, 0, 0);
         _Snd_ModuleInfo.pHeap = pHeap;
         _Snd_ModuleInfo.mHeapSize = pDesc->mUnknown4;
-        fn_8026C39C(4);
+        SNDsetoutputchannels(4);
         pIAllocator = new TiburonIAllocator13Impl(_Snd_ModuleInfo.mUnk30, (void (*)(int))_SndIAllocatorMemLabelCB);
         Csis::System::SetAllocator((Allocator *)pIAllocator);
         Csis::System::Init();
@@ -611,7 +611,7 @@ void SndSetPatchParam(int handle, int a, int value)
 {
     if (SND_READY()) {
         SND_LOCK();
-        fn_8026A2DC(handle, a, value);
+        SNDautovol(handle, a, value);
         SND_UNLOCK();
     }
 }

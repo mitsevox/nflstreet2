@@ -39740,26 +39740,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_80225CBC.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80225CBC-0x80225D90 (src/engine/cu_80225CBC.c), its function and name rows and the file compiler row. Draft comparisons only; original assembly remains linked. The draft body uses no compiled static data; 0x80225CBC, the user of the .rodata 0x802B2050-0x802B2058, has no body here.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80225CBC",
-          "end": "0x80225D90"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80225D8C",
-          "start": "0x80225D8C",
-          "end": "0x80225D90"
-        }
-      ]
-    },
-    {
       "source": "src/engine/t3db_query.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x80205754-0x8020B564 (src/engine/t3db_query.c, the whole original t3db_query.c of the NASCAR 2005 symbol table), its compiler row 0x8020840C-0x8020B564 (engine_c_fastmath, the profile all four former comparison pieces used), the source-form rows 0x8020651C-0x80207448, 0x80207448-0x802075F4, 0x802075F4-0x8020840C and 0x8020840C-0x802176E8, and the exact .rodata data row 0x802B1B90-0x802B1BB0. One source since c19c (the former comparison pieces src/engine/cu_8020651C.c, cu_802075F4.c and cu_8020840C.c are joined in address order). All 40 functions drafted (the seven bodies 0x80205DB8, 0x8020840C, 0x802088FC, 0x8020925C, 0x80209F34, 0x8020A908 and 0x8020B094 from the 2026-10-30 s72a/s73a drafts, ported by c19c); 37 exact. Partial: 0x802067D4 (95.70%, ~140 forms by s73a), 0x8020925C (99.98%, one inverted branch after the mErr == 7 test), 0x8020AE88 (98.02%: the target copies the zero result register into the key count, mr r24,r30). Labeled forms: the source-form row 0x80205754-0x8020B564 't3db_query.c labeled forms'. Comparison only; original assembly stays linked.",
@@ -40023,6 +40003,32 @@
           "symbol": "fn_801C27D0",
           "start": "0x801C27D0",
           "end": "0x801C289C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sautovol.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x8026A2DC-0x8026A40C (src/engine/sautovol.c), its function, name and data rows and the sound_cxx compiler row 0x80266E88-0x8026A664. Draft comparison only (SNDautovol differs in its frame size, see the source-form row); original assembly and .rodata stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026A2DC",
+          "end": "0x8026A40C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B78E0",
+          "end": "0x802B78F0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SNDautovol",
+          "start": "0x8026A2DC",
+          "end": "0x8026A40C"
         }
       ]
     }

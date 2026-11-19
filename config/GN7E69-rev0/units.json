@@ -2344,6 +2344,10 @@
     "gLastSubTick": {
       "address": "0x803ECEB0",
       "evidence": "evidence.tsv data/name rows for 0x803ECEB0 (target extent, related name); speech-library storage, original-owned."
+    },
+    "SNDautovol": {
+      "address": "0x8026A2DC",
+      "evidence": "evidence.tsv function and name rows 0x8026A2DC (src/engine/sautovol.c, a registered partial whose original bytes stay linked); called by SndSetPatchParam in src/engine/sound.cpp (bl at 0x801F42EC)."
     }
   },
   "units": [
@@ -14916,6 +14920,25 @@
       ]
     },
     {
+      "source": "src/engine/sn_malloc.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80262440-0x8026247C (src/engine/sn_malloc.c), its function, name, source-form and data rows; the one function and its .rodata string 0x802B733C-0x802B73BC are exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80262440",
+          "end": "0x8026247C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B733C",
+          "end": "0x802B73BC"
+        }
+      ]
+    },
+    {
       "source": "src/engine/atexit.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row src/engine/atexit.c 0x80262310-0x802623A8, exact function extent, inferred atexit name and callback-block type/field rows. Whole exit-registration file owns no static data.",
@@ -18694,6 +18717,25 @@
       ]
     },
     {
+      "source": "src/engine/cu_80225CBC.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80225CBC-0x80225D90 (src/engine/cu_80225CBC.c), its function rows, the data row 0x802B2050-0x802B2054, the file compiler row and the source-form row 0x80225CBC-0x80225D8C; both functions exact (one labeled FAKEMATCH form), linked with the file .rodata.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80225CBC",
+          "end": "0x80225D90"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B2050",
+          "end": "0x802B2054"
+        }
+      ]
+    },
+    {
       "source": "src/engine/UIGFont.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x80225D90-0x802260B0 (src/engine/UIGFont.c), its compiler, function and name rows; every function exact, promoted from comparison-only; the file has no data.",
@@ -19092,6 +19134,19 @@
           "placement": ".data3",
           "start": "0x802C2370",
           "end": "0x802C2380"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/stimemul.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80270D6C-0x80270E04 (src/engine/stimemul.c), its function and name rows and its sound_cxx compiler row; the one function is exact; owns no data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80270D6C",
+          "end": "0x80270E04"
         }
       ]
     },
@@ -20810,6 +20865,19 @@
           "placement": ".text",
           "start": "0x8026AB88",
           "end": "0x8026AD18"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/soutputmap.cpp",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026C39C-0x8026C3BC (src/engine/soutputmap.cpp), its function and name rows and the sound_cxx compiler row 0x8026A664-0x8026D200; the one function is exact; owns no data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026C39C",
+          "end": "0x8026C3BC"
         }
       ]
     },

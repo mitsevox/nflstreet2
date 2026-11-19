@@ -94,7 +94,7 @@ void SNDSYS_entercritical(void);
 void SNDSYS_leavecritical(void);
 int SNDCTRL_drylevel(int voice, int level);
 int SNDpitchmult(int voice, int mult);
-int fn_80270D6C(int voice, int mult);
+int SNDCTRL_timemult(int handle, int mult);
 int fn_80274F5C(int index);
 void fn_802747D8(int index);
 int fn_80271BD4(int index, int slot);

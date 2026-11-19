@@ -4,7 +4,7 @@
 #include "engine/Reent_802622DC.h"
 #include <stddef.h>
 
-extern void *fn_80262440 (size_t size);
+extern void *malloc (size_t size);
 
 int
 atexit (void (*fn) (void))
@@ -15,7 +15,7 @@ atexit (void (*fn) (void))
     lbl_803EC56C->mExitBlock = p = &lbl_803EC56C->mEmbeddedExitBlock;
   if (p->mCount >= 32)
     {
-      if ((p = fn_80262440 (sizeof *p)) == NULL)
+      if ((p = malloc (sizeof *p)) == NULL)
 	return -1;
       p->mCount = 0;
       p->mPrevious = lbl_803EC56C->mExitBlock;
