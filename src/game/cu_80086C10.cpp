@@ -25,6 +25,13 @@ struct Sort_80086D0C {
         mMode = mode;
     }
 
+    void SetEnd()
+    {
+        mTable = -1;
+        mColumn = -1;
+        mMode = 3;
+    }
+
     int mTable;
     int mColumn;
     int mMode;
@@ -145,7 +152,7 @@ int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
     tables[1].Set(-1);
     if (byRow) {
         sort[0].Set(pDescriptor->mTable, pDescriptor->mSortColumn, 0);
-        sort[1].Set(-1, -1, 3);
+        sort[1].SetEnd();
         if (fn_801FA0BC(0x54415453, tables, 0, sort, &cursor, &queryResult) == 0) {
             if (fn_801FA228(cursor, 1, id, columns) == 0) {
                 result = 1;
