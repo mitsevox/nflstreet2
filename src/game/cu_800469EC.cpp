@@ -97,10 +97,7 @@ float fn_80046920(Item_800469EC *p)
     if (distance < 0.08f) {
         float ratio = 0.08f / distance;
         if (!(ratio < 1.0f)) {
-            if (ratio > 20.0f) {
-                ratio = 20.0f;
-            }
-            extra = (ratio - 1.0f) * 0.5f;
+            extra = ((ratio > 20.0f ? 20.0f : ratio) - 1.0f) * 0.5f;
         }
     }
     return extra + 1.0f;
@@ -124,12 +121,8 @@ int fn_800469EC(Item_800469EC *p)
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-            GXColor color;
-            color.r = (unsigned char)(int)(p->mUnknownD8 * 255.0f);
-            color.g = (unsigned char)(int)(p->mUnknownDC * 255.0f);
-            color.b = (unsigned char)(int)(p->mUnknownE0 * 255.0f);
-            color.a = (unsigned char)(int)(p->mUnknownE4 * 255.0f);
-            GXSetChanMatColor(4, color);
+            GXSetChanMatColor(4, (GXColor){(unsigned char)(int)(p->mUnknownD8 * 255.0f), (unsigned char)(int)(p->mUnknownDC * 255.0f),
+                             (unsigned char)(int)(p->mUnknownE0 * 255.0f), (unsigned char)(int)(p->mUnknownE4 * 255.0f)});
             GXSetNumChans(1);
             GXSetChanCtrl(4, 0, 0, 0, 1, 2, 1);
             GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
@@ -147,13 +140,29 @@ int fn_800469EC(Item_800469EC *p)
             GXSetCurrentMtx(0);
             MatPop();
             fn_8024E908(0x98, 0, 4);
-            GXPosition3f32(fn_80178A08(), scale * (1.0f - lbl_803EA4B8) * 0.55556f, zero);
+            {
+                float x = fn_80178A08();
+                float y = (1.0f - lbl_803EA4B8) * 0.55556f;
+                GXPosition3f32(x, scale * y, zero);
+            }
             GXTexCoord2f32(0.9f, 1.0f - lbl_803EA4B8 * 0.5f);
-            GXPosition3f32(fn_80178A08(), scale * (1.0f - lbl_803EA4B8) * -0.55556f, zero);
+            {
+                float x = fn_80178A08();
+                float y = (1.0f - lbl_803EA4B8) * -0.55556f;
+                GXPosition3f32(x, scale * y, zero);
+            }
             GXTexCoord2f32(0.9f, lbl_803EA4B8 * 0.5f);
-            GXPosition3f32(-fn_80178A08(), scale * (1.0f - lbl_803EA4B8) * 0.55556f, zero);
+            {
+                float x = -fn_80178A08();
+                float y = (1.0f - lbl_803EA4B8) * 0.55556f;
+                GXPosition3f32(x, scale * y, zero);
+            }
             GXTexCoord2f32(0.1f, 1.0f - lbl_803EA4B8 * 0.5f);
-            GXPosition3f32(-fn_80178A08(), scale * (1.0f - lbl_803EA4B8) * -0.55556f, zero);
+            {
+                float x = -fn_80178A08();
+                float y = (1.0f - lbl_803EA4B8) * -0.55556f;
+                GXPosition3f32(x, scale * y, zero);
+            }
             GXTexCoord2f32(0.1f, lbl_803EA4B8 * 0.5f);
             fn_80236EC0(state);
         }
@@ -241,20 +250,26 @@ void fn_80046FD0(void)
     lbl_803EC7B8 = 0;
 }
 
+// FAKEMATCH: an inline compare helper; inlined at RTL level its bound stays `>= 2` (a direct `mode >= 2` folds to `> 1`).
+static inline int AtLeast(int value, int lo)
+{
+    return value >= lo;
+}
+
 void fn_80047050(void)
 {
     for (unsigned int i = 0; i <= 4; ++i) {
         Item_800469EC *p = lbl_803078D4[i];
+        int enabled = 0;
         int mode = fn_800AD9B4();
-        int inRange = 0;
         if (mode <= 3) {
-            inRange = mode >= 2;
+            enabled = AtLeast(mode, 2);
         }
         int ready = 0;
-        if (inRange && fn_80177F70() && !fn_800BA6F8()) {
+        if (enabled && fn_80177F70() && !fn_800BA6F8()) {
             ready = !fn_8002D060(lbl_803EA368);
         }
-        int enabled = ready;
+        enabled = ready;
         switch ((unsigned int)p->mUnknownF4) {
         case 0: {
             lbl_803078D4[i]->mUnknown4.mX = 0.0f;
@@ -295,9 +310,13 @@ void fn_80047050(void)
             if (fn_800AD9B4() != 2) {
                 enabled = 0;
             }
-            int state = fn_801486A0();
-            if (state > 4 || state < 3) {
+            switch (fn_801486A0()) {
+            case 3:
+            case 4:
+                break;
+            default:
                 enabled = 0;
+                break;
             }
             break;
         }
