@@ -34,54 +34,59 @@ void SNDMEMI_restore(void)
 
 void *SNDMEMI_allocz(int size)
 {
-    int need = (size + 15) & ~15;
     int i = 0;
     unsigned int start;
     int avail;
 
+    size += 15;
+    size &= ~15;
     if (lbl_803A6C24.m1D4->m14 == 0) {
         start = 0;
         avail = lbl_803A6C24.m1D4->mC;
         SNDMEMI_constrain(&start, &avail);
-        if (need > avail) {
-            return 0;
+        if (size <= avail) {
+            goto found;
         }
-    } else {
-        for (i = 0; i > lbl_803A6C24.m1D4->m14; i--) {
-            SndMemEntry_t *table = lbl_803A6C24.m1D4->m4;
+        goto fail;
+    }
+    for (i = 0; i > lbl_803A6C24.m1D4->m14; i--) {
+        SndMemEntry_t *e = &lbl_803A6C24.m1D4->m4[i];
 
-            if (i == 0) {
-                start = 0;
-                avail = table[i].m0;
-            } else {
-                start = table[i + 1].m0 + table[i + 1].m4;
-                avail = table[i].m0 - start;
-            }
-            SNDMEMI_constrain(&start, &avail);
-            if (need <= avail) {
-                int j;
-
-                for (j = lbl_803A6C24.m1D4->m14; j < i; j++) {
-                    lbl_803A6C24.m1D4->m4[j] = lbl_803A6C24.m1D4->m4[j + 1];
-                }
-                goto found;
-            }
+        if (i == 0) {
+            start = 0;
+            avail = e->m0;
+        } else {
+            start = e[1].m0 + e[1].m4;
+            avail = e->m0 - start;
         }
-        start = lbl_803A6C24.m1D4->m4[i + 1].m0 + lbl_803A6C24.m1D4->m4[i + 1].m4;
-        avail = lbl_803A6C24.m1D4->mC - start;
         SNDMEMI_constrain(&start, &avail);
-        if (need > avail) {
-            return 0;
+        if (size <= avail) {
+            int j;
+
+            for (j = lbl_803A6C24.m1D4->m14; j < i; j++) {
+                lbl_803A6C24.m1D4->m4[j] = lbl_803A6C24.m1D4->m4[j + 1];
+            }
+            goto found;
         }
     }
+    start = lbl_803A6C24.m1D4->m4[i + 1].m0 + lbl_803A6C24.m1D4->m4[i + 1].m4;
+    avail = lbl_803A6C24.m1D4->mC - start;
+    SNDMEMI_constrain(&start, &avail);
+    if (size > avail) {
+        goto fail;
+    }
 found:
-    lbl_803A6C24.m1D4->m4[i].m0 = start;
-    lbl_803A6C24.m1D4->m4[i].m4 = need;
+    {
+        SndMemEntry_t *e = &lbl_803A6C24.m1D4->m4[i];
+
+        e->m0 = start;
+        e->m4 = size;
+    }
     lbl_803A6C24.m1D4->m14--;
     lbl_803A6C24.m1D4->mC -= 8;
     {
         SndMemPool_t *heap = lbl_803A6C24.m1D4;
-        int left = heap->mC - (start + need);
+        int left = heap->mC - (start + size);
         char *p = heap->m0 + start;
 
         if (left < heap->m10) {
@@ -89,6 +94,8 @@ found:
         }
         return p;
     }
+fail:
+    return 0;
 }
 
 void SNDMEMI_free(void *p)
