@@ -186,7 +186,7 @@ extern void SNDplaysetdef(Object_80268480 *params);
 extern unsigned int iSNDrandom(void);
 extern int SNDpitchmult(int handle, int value);
 extern int SNDstop(int handle);
-extern int fn_802714A8(int handle, int value);
+extern int SNDvol(int handle, int value);
 extern int fn_80274B50(int index);
 extern int fn_80274CA8(int voice, int value);
 extern void fn_80274924(int voice);
@@ -666,7 +666,7 @@ int fn_8026868C(int *p)
 {
     int handle = *p;
 
-    fn_802714A8(handle, 0);
+    SNDvol(handle, 0);
     return SNDpitchmult(handle, 0);
 }
 

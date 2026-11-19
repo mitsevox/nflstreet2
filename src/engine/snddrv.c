@@ -57,8 +57,6 @@ void fn_80272644(AXVPB *vpb)
 
 int fn_8027271C(int index)
 {
-    // FAKEMATCH: unused stack object; reproduces the target frame (16 bytes below the conversion slot)
-    volatile int spare[4];
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
     float pitch = record->m48 * (float)record->m5F;
     unsigned short volume = (int)(record->m48 * (*record->m64 * 32767.0f));
@@ -947,8 +945,6 @@ void fn_80274960(int index)
 
 int fn_80274B50(int index)
 {
-    // FAKEMATCH: unused stack object; reproduces the target frame (8 bytes below the conversion slot)
-    volatile int spare[2];
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
     unsigned int pitch;
     int i;
@@ -992,8 +988,6 @@ int fn_80274CA8(int index, int value)
 
 void fn_80274D34(int index, int value)
 {
-    // FAKEMATCH: unused stack object; reproduces the target frame (8 bytes below the conversion slot)
-    volatile int spare[2];
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
     int i;
 

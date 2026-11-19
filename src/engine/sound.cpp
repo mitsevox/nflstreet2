@@ -160,7 +160,7 @@ int SNDSTRM_drylevel(int handle, int a);
 int SNDSTRM_requeststatus(int a, int b);
 void SNDSTRM_status(int handle, int *pStatus);
 void SNDSYS_service(void);
-int fn_802714A8(int handle, int value);
+int SNDvol(int handle, int value);
 
 void _StreamMUTEX_init(void);
 int SNDsetoutputchannels(int count);
@@ -602,7 +602,7 @@ void SndSetPatchPitchMult(int handle, int value)
 {
     if (SND_READY()) {
         SND_LOCK();
-        fn_802714A8(handle, value);
+        SNDvol(handle, value);
         SND_UNLOCK();
     }
 }

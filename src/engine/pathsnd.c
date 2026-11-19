@@ -150,7 +150,7 @@ int SNDSTRM_drylevel(int handle, int value);
 int SNDSTRM_fxlevel(int handle, int a, int b);
 int SNDSTRM_modifyhold(int handle, int value);
 int fn_801F685C(int count, int filters, int taps);
-int fn_802714A8(int handle, int value);
+int SNDvol(int handle, int value);
 int SNDCTRL_drylevel(int handle, int value);
 int fn_80278070(int handle, int a, int b);
 int SNDpitchmult(int handle, int value);
@@ -277,7 +277,7 @@ int Object_8027DAE4::vfn_13(int value)
     int result = 0;
     if (status == 0) {
         SNDSYS_entercritical();
-        result = fn_802714A8(m124, value);
+        result = SNDvol(m124, value);
         SNDSYS_leavecritical();
         m10 = value;
         mFC = value;

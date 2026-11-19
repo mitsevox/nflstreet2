@@ -7,8 +7,6 @@
 
 int SNDPLATFORM_setfxlevel(int index, int slot)
 {
-    // FAKEMATCH: unused local array; only reproduces the target's 16 unused bytes at the frame bottom
-    int unused[4];
     Record_803A6DF0 *pRec = &lbl_803A6C24.m1CC[index];
     float level;
     int i;

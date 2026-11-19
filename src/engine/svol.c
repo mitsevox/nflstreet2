@@ -1,4 +1,4 @@
-/* Volume of a playing sound: sets the volume level (0-127) of every voice of a sound handle,
+/* Sound volume (svol.c): sets the volume level (0-127) of every voice of a sound handle,
    refreshes the voices whose level changed and then re-applies the handle's effect-send levels. */
 
 #include "engine/sndlib.h"
@@ -7,7 +7,7 @@ extern "C" {
 
 void fn_80278598(int index);
 
-int fn_802714A8(int id, int value)
+int SNDvol(int id, int value)
 {
     int handle;
     int index;

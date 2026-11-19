@@ -19,8 +19,6 @@ extern unsigned char *lbl_803B5048[6];
 
 void SNDI_equalpower(SndGainPair_t *pair, float a, float b, float azimuth)
 {
-    // FAKEMATCH: unused stack object; reproduces the target frame (8 bytes below the saved registers)
-    volatile int spare[2];
     float angle = (azimuth * 0.017453294f - b * 0.017453294f) / (a * 0.017453294f - b * 0.017453294f) * 1.5707964f;
 
     pair->m0 = SNDI_sin(angle);

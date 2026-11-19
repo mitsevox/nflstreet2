@@ -144,8 +144,6 @@ void discardbits(UTALKSTATE_CODA *bits, int count)
 
 void readsamples(UTALKSTATE_CODA *s, int multipulse, float *out, int stride)
 {
-    // FAKEMATCH: unused stack object; reproduces the target frame (0x58, conversion slot at 0x18)
-    volatile int spare;
     int i;
     int model;
     int cnt;
@@ -292,8 +290,6 @@ void filter(UTALKSTATE_CODA *p, int offset, int count)
 
 void CMTBLKDecf::initmut(unsigned char *data, UTALKSTATE_CODA *p, int flag)
 {
-    // FAKEMATCH: unused stack object; reproduces the target frame (0x28, conversion slot at 0x10)
-    volatile int spare;
     int i;
     float mult;
 
@@ -322,8 +318,6 @@ void decodemut(UTALKSTATE_CODA *p)
 {
     float excitation[118];
     float delta[12];
-    // FAKEMATCH: unused stack object; reproduces the target frame (0x280, 16-byte hole above delta)
-    float spare[4];
     int multipulse;
     int idx;
     int i;

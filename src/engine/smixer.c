@@ -62,8 +62,6 @@ void SNDMIX_setmasterlowpass(float value)
 
 int SNDMIXI_volramp(Record_803B5010 *record)
 {
-    // FAKEMATCH: unused stack object; reproduces the target frame (8 bytes below the saved registers)
-    volatile int spare[2];
     int i;
 
     if (record->m40->m0(record->m40, 16, (float *)lbl_803B4E34.mB0[0], (float *)lbl_803B4E34.mB0[1], 0) <= 0) {
@@ -331,8 +329,6 @@ void SNDMIX_setwetgain(int index, int slot, float value)
 
 void MIX_audioslice(void **outputs, int count)
 {
-    // FAKEMATCH: unused stack object; reproduces the target frame (8 bytes below the saved registers)
-    volatile int spare[2];
     Record_803B5010 *record;
     int done;
     int left;

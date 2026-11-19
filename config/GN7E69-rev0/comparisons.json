@@ -25657,32 +25657,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_802714A8.cpp",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x802714A8-0x80271624 (sound volume slot, neutral file name src/engine/cu_802714A8.cpp), the compiler and external rows 0x802714A8-0x80276DE4 and the function row of its one function; the literal pool 0x802B7A88-0x802B7A98 is its read-only data. Draft comparison only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802714A8",
-          "end": "0x80271624"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B7A88",
-          "end": "0x802B7A98"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_802714A8",
-          "start": "0x802714A8",
-          "end": "0x80271624"
-        }
-      ]
-    },
-    {
       "source": "src/engine/snddrv.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), the sound_cxx compiler row and the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
@@ -39242,42 +39216,6 @@
           "symbol": "SNDSTRM_autovol",
           "start": "0x8026E8FC",
           "end": "0x8026EA80"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/supxapf.cpp",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8027B888-0x8027BAFC (src/engine/supxapf.cpp), its compiler and source-form rows, and the function and name rows of every registered function; the exact .rodata data row 0x802C2250-0x802C2258. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8027B888",
-          "end": "0x8027BAFC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802C2250",
-          "end": "0x802C2258"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SFILTER_unpackxapf",
-          "start": "0x8027B888",
-          "end": "0x8027BA40"
-        },
-        {
-          "symbol": "SFILTER_unpackxapfrestore",
-          "start": "0x8027BA40",
-          "end": "0x8027BA6C"
-        },
-        {
-          "symbol": "SFILTER_unpackxapfinit",
-          "start": "0x8027BA6C",
-          "end": "0x8027BAFC"
         }
       ]
     },

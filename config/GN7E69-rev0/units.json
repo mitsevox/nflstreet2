@@ -185,13 +185,14 @@
       "flags": [
         "-O2",
         "-G0",
-        "-fno-strength-reduce"
+        "-fno-strength-reduce",
+        "-mps-float"
       ],
       "include_dirs": [
         "include/libc"
       ],
       "language": "c++",
-      "evidence": "evidence.tsv compiler rows 0x802714A8-0x8027CF9C (sound_cxx): the sound files sdspmix.c, snddrv.c, slinklst.c, saramman.c and supmutpf.c carry NASCAR 2005's .c names, and NASCAR's symbols for every function of those files are C++-mangled (SNDDRV_DSPMixerSetAuxBus__FP6_AXVPBUsi in sdspmix.c, SNDPLATFORM_stop__Fi in snddrv.c, SNDLINKI_push__FP11SNDLINKLISTP11SNDLINKNODE in slinklst.c, SNDARAM_alloc__Fi in saramman.c, SFILTER_unpackmtpf__FPviT0T0i in supmutpf.c), so the original build compiled them as C++. -O2 -G0 are measured on the former files src/engine/cu_802714A8.cpp and src/engine/cu_80276DE4.cpp (their compiler rows): no r13 or r2 access in the range, and default -G8 would turn absolute word accesses into SDA relocations. -fno-strength-reduce (owner ruling of 2026-11-14, per-profile flag): the target recomputes loop indexes on every pass (mulli r3,r31,88 in 0x80271EC4; slwi/lfsx at 0x80279BD4/0x80279BD8) and the flag turns no exact function of the range inexact. The neutral .cpp files of the same range use this profile too."
+      "evidence": "evidence.tsv compiler rows 0x802714A8-0x8027CF9C (sound_cxx): the sound files sdspmix.c, snddrv.c, slinklst.c, saramman.c and supmutpf.c carry NASCAR 2005's .c names, and NASCAR's symbols for every function of those files are C++-mangled (SNDDRV_DSPMixerSetAuxBus__FP6_AXVPBUsi in sdspmix.c, SNDPLATFORM_stop__Fi in snddrv.c, SNDLINKI_push__FP11SNDLINKLISTP11SNDLINKNODE in slinklst.c, SNDARAM_alloc__Fi in saramman.c, SFILTER_unpackmtpf__FPviT0T0i in supmutpf.c), so the original build compiled them as C++. -O2 -G0 are measured on the former files src/engine/cu_802714A8.cpp and src/engine/cu_80276DE4.cpp (their compiler rows): no r13 or r2 access in the range, and default -G8 would turn absolute word accesses into SDA relocations. -fno-strength-reduce (owner ruling of 2026-11-14, per-profile flag): the target recomputes loop indexes on every pass (mulli r3,r31,88 in 0x80271EC4; slwi/lfsx at 0x80279BD4/0x80279BD8) and the flag turns no exact function of the range inexact. The neutral .cpp files of the same range use this profile too. -mps-float (SN's paired-single float switch): evidence.tsv compiler row 0x80266E88-0x8027D3AC; it gives the target frame of every sound function that saves floating-point registers (8 bytes per saved register above the locals) and changes nothing else."
     },
     "path_cxx": {
       "flags": [
@@ -2216,10 +2217,6 @@
     "SNDPKTPLAYI_freeframes": {
       "address": "0x8027952C",
       "evidence": "evidence.tsv function/name rows for 0x8027952C (SNDPKTPLAYI_freeframes in src/engine/spktplay.c, comparison only until linked); the linked src/engine/supmutpf.c calls it by name."
-    },
-    "SFILTER_unpackxapfinit": {
-      "address": "0x8027BA6C",
-      "evidence": "evidence.tsv function/name rows for 0x8027BA6C; exact but unlinked in the comparison-only src/engine/supxapf.cpp, which keeps its original bytes until the whole file can be linked; stored by name in the constructor table of src/engine/sinitxa.c."
     },
     "SNDPKTPLAY_overhead": {
       "address": "0x80278AC8",
@@ -5434,6 +5431,44 @@
           "placement": ".text",
           "start": "0x80257CF4",
           "end": "0x80258070"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/svol.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x802714A8-0x80271624 (src/engine/svol.c, NASCAR 2005 svol.c), the function and name rows of SNDvol, the data row of its .rodata literal pool 0x802B7A88-0x802B7A98, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C (with -mps-float, compiler row 0x80266E88-0x8027D3AC); its one function is exact and linked (d3 wave).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802714A8",
+          "end": "0x80271624"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7A88",
+          "end": "0x802B7A98"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/supxapf.cpp",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8027B888-0x8027BAFC (src/engine/supxapf.cpp), its three function and name rows, the data row of its .rodata double 0x802C2250-0x802C2258, and the sound_cxx compiler rows 0x80276DE4-0x8027CF9C (with -mps-float, compiler row 0x80266E88-0x8027D3AC); every function exact and linked (d3 wave).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027B888",
+          "end": "0x8027BAFC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2250",
+          "end": "0x802C2258"
         }
       ]
     },
@@ -20640,7 +20675,7 @@
     {
       "source": "src/engine/splatfxlevel.cpp",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x80271BD4-0x80271D34 (SNDPLATFORM_setfxlevel, src/engine/splatfxlevel.cpp), its function row and source-form row, the data row of its .rodata floats 0x802C1D80-0x802C1D88, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; its one function is exact (written in the c18 wave) and linked.",
+      "evidence": "evidence.tsv unit row 0x80271BD4-0x80271D34 (SNDPLATFORM_setfxlevel, src/engine/splatfxlevel.cpp), its function row, the data row of its .rodata floats 0x802C1D80-0x802C1D88, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; its one function is exact (written in the c18 wave) and linked.",
       "sections": [
         {
           "section": ".text",
