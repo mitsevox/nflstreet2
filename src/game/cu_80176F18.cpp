@@ -271,7 +271,7 @@ void fn_801795EC(int id, float from, float to);
 void fn_801796C8(int id, float from, float catchY, float to, float time);
 void fn_80179874(int id, float from, float to, float time);
 void fn_80179A54(int id, float from, float to);
-void fn_80179AF0(int id, float from, float to, int flag, float spot);
+void fn_80179AF0(int id, float from, float to, float spot, int flag);
 void fn_80179C74(int id, float from, float to);
 void fn_80179D98(int id, float from, float to);
 void fn_80179EBC(int ref);
@@ -1634,7 +1634,7 @@ extern "C" void fn_80179A54(int id, float from, float to)
     }
 }
 
-extern "C" void fn_80179AF0(int id, float from, float to, int flag, float spot)
+extern "C" void fn_80179AF0(int id, float from, float to, float spot, int flag)
 {
     int yards;
 
@@ -1892,7 +1892,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                 fn_8017952C(carrier, 0, pRecord->mUnknownC, 0.0f);
             }
             if (state == 0x61797067 && mode != 0) {
-                fn_80179AF0(kicker, startY, ballY, kicked, ballY);
+                fn_80179AF0(kicker, startY, ballY, ballY, kicked);
             }
             break;
         case 41:
@@ -1980,7 +1980,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                         break;
                     case 0x79707267:
                         if (mode != 0 && !lateral) {
-                            fn_80179AF0(kicker, startY, pRecord->mUnknown10, kicked, markY);
+                            fn_80179AF0(kicker, startY, pRecord->mUnknown10, markY, kicked);
                             lateral = 1;
                         }
                         if (pRecord->mUnknown10 > -fn_80178A2C() && !zeroFlagA) {
@@ -2089,7 +2089,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             kicked = 1;
             if (state == 0x61797067) {
                 state = 0;
-                fn_80179AF0(kicker, startY, startY, 1, startY);
+                fn_80179AF0(kicker, startY, startY, startY, 1);
                 fn_8017937C(kicker, 0x6C627067, 1);
             } else {
                 fn_8017937C(kicker, 0x62666B67, 1);
@@ -2113,7 +2113,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
         case 11:
             ballY = pRecord->mUnknown10;
             if (state == 0x61797067 && mode != 0) {
-                fn_80179AF0(kicker, startY, ballY, kicked, ballY);
+                fn_80179AF0(kicker, startY, ballY, ballY, kicked);
                 state = 0;
             }
             break;
@@ -2122,7 +2122,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             id = pRecord->mUnknown0;
             ballY = pRecord->mUnknown10;
             if (state == 0x61797067 && mode != 0) {
-                fn_80179AF0(kicker, startY, ballY, kicked, ballY);
+                fn_80179AF0(kicker, startY, ballY, ballY, kicked);
                 lateral = 1;
             }
             state = 0x79707267;
@@ -2287,7 +2287,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
         break;
     case 0x79707267:
         if (mode != 0 && !lateral) {
-            fn_80179AF0(kicker, startY, ballY, kicked, markY);
+            fn_80179AF0(kicker, startY, ballY, markY, kicked);
         }
         if (ballY > -fn_80178A2C() && !zeroFlagA) {
             fn_80179C74(id, markY, ballY);
