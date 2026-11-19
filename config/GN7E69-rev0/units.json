@@ -15933,6 +15933,37 @@
       ]
     },
     {
+      "source": "src/game/cu_8013E514.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8013E514-0x8013F460 (src/game/cu_8013E514.cpp) and its function, name and data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8013E514",
+          "end": "0x8013F460"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A01C0",
+          "end": "0x802A01E8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DBDD4",
+          "end": "0x802DBDE0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB1D0",
+          "end": "0x803EB1E4"
+        }
+      ]
+    },
+    {
       "source": "src/game/ScreenTransition.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80194FE8-0x801962CC (src/game/ScreenTransition.cpp) and its function, name, .rodata, .data, .sdata, .bss and .sbss data rows; every function exact.",

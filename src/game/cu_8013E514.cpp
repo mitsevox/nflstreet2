@@ -10,6 +10,9 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 
+// FAKEMATCH: release form of an assert macro (empty loop, condition discarded).
+#define SCRIPTCAM_ASSERT(e) do { } while (0)
+
 struct Entry_8013F374 {
     int mType;
     void *mpData;
@@ -81,8 +84,14 @@ struct Desc1_8013F090 {
     void (*mCallback)(Entry_8013F374 *);
 };
 
+struct ModeTable_8013E514 {
+    void (*mpInit)(ScriptCamera_8013E514 *p);
+    void (*mpUninit)(void);
+    int mUnknown08;
+};
+
 extern "C" {
-extern int lbl_803EB1D0;
+int lbl_803EB1D0 = 60;
 unsigned char lbl_803EB1D4 = 0;
 ScriptCamera_8013E514 *lbl_803EB1D8 = 0;
 State_8013E574 *lbl_803EB1DC = 0;
@@ -110,6 +119,10 @@ void fn_8013EEE0(ScriptCamera_8013E514 *);
 void fn_8013F298(void);
 void fn_8013F300(void);
 void fn_8013F3FC(void);
+void fn_8013E514(ScriptCamera_8013E514 *p);
+void fn_8013E538(void);
+
+ModeTable_8013E514 lbl_802DBDD4 = { fn_8013E514, fn_8013E538, 0 };
 }
 
 extern "C" void fn_8013E514(ScriptCamera_8013E514 *p)
@@ -122,8 +135,10 @@ extern "C" void fn_8013E514(ScriptCamera_8013E514 *p)
 extern "C" void fn_8013E538(void)
 {
     if (InGameIsStopped() == 0) fn_8013F300();
-    lbl_803EB1E0 = 0;
     lbl_803EB1D8 = 0;
+    lbl_803EB1E0 = 0;
+    // FAKEMATCH: compiled-out assert on the state pointer; the release macro's empty loop orders the stores.
+    SCRIPTCAM_ASSERT(lbl_803EB1DC != 0);
     lbl_803EB1DC = 0;
 }
 extern "C" State_8013E574 *fn_8013E574(void)
@@ -239,11 +254,12 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
 {
     if (s->mRead < s->mWrite) {
         Record_8013E944 *r = &s->mRecords[s->mRead++];
+        Entry_8013F374 entry;
         s->mpCurrent = r; s->mFrame = 0;
         switch (r->mType) {
         case 1: {
             Payload1_8013F090 *b = &r->mData.m1;
-            if (b->mCallback) { Entry_8013F374 entry = {1, b}; b->mCallback(&entry); }
+            if (b->mCallback) { entry.mType = 1; entry.mpData = b; b->mCallback(&entry); }
             if (b->mRef) {
                 Object_80039F5C *p = fn_8009BCE8(&b->mRef);
                 if (p && p->mIdBytes[3] == 1) {
@@ -255,7 +271,8 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
             if (b->mUnknown118) { BannerClear(7); BannerShow(b->mUnknown114, b->mUnknown116, b->mUnknown118, 0); }
             if ((b->mFlags & 8) && b->mRef) {
                 Object_80039F5C *p = fn_8009BCE8(&b->mRef);
-                float angle = 360.0f - (float)p->mMotion.mFacing * 0.000021457672119140625f;
+                float angle = (float)p->mMotion.mFacing * 0.000021457672119140625f;
+                angle = 360.0f - angle;
                 while (angle > 360.0f) angle -= 360.0f;
                 b->mPosition.mZ.mStart += angle;
                 b->mPosition.mZ.mTarget += angle;
@@ -269,7 +286,7 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
         }
         case 0: {
             Payload0_8013EEE4 *b = &r->mData.m0;
-            if (b->mCallback) { Entry_8013F374 entry = {0, b}; b->mCallback(&entry); }
+            if (b->mCallback) { entry.mType = 0; entry.mpData = b; b->mCallback(&entry); }
             if (fn_801784C4()) {
                 b->mTarget.mX = -b->mTarget.mX; b->mTarget.mY = -b->mTarget.mY;
                 b->mY.mStart = -b->mY.mStart; b->mY.mValue = -b->mY.mValue; b->mY.mTarget = -b->mY.mTarget;
@@ -286,8 +303,6 @@ extern "C" void fn_8013EDE4(GameCamera_t *camera, int msg)
     ScriptCamera_8013E514 *p = (ScriptCamera_8013E514 *)camera;
     State_8013E574 *s = &p->mState;
     switch (msg) {
-    case 0: case 2: break;
-    case 1: fn_8013EEE0(p); break;
     case 3:
         if (lbl_803EB1D4) fn_8013F298();
         else if (lbl_803EB1E0 && s->mpCurrent) {
@@ -301,6 +316,8 @@ extern "C" void fn_8013EDE4(GameCamera_t *camera, int msg)
             ++s->mFrame;
         }
         break;
+    case 1: fn_8013EEE0(p); break;
+    case 0: case 2: case 4: break;
     }
 }
 extern "C" void fn_8013EEE0(ScriptCamera_8013E514 *) {}
