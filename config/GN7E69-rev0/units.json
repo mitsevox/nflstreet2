@@ -2375,6 +2375,37 @@
       ]
     },
     {
+      "source": "src/game/MemCard.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800034A0-0x80003C94 (src/game/MemCard.cpp), its function, name and data rows and its source-form row; all six functions exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800034A0",
+          "end": "0x80003C94"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB8C8",
+          "end": "0x803EB8D8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECCA4",
+          "end": "0x803ECCA8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80367580",
+          "end": "0x80367590"
+        }
+      ]
+    },
+    {
       "source": "src/game/StatGen.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row 0x80003C94-0x80003CF0 (src/game/StatGen.cpp), its function and name rows and its .sdata data row 0x803EB8D8-0x803EB8DC; every function and data placement exact, promoted from comparison-only.",

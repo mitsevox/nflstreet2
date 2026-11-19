@@ -1,6 +1,10 @@
+/* Memory card save and load driver: allocates the 16 KB I/O buffer, starts the
+   asynchronous save or load of the current save target (options through the card
+   stream, a roster or a player profile through the database), finishes a load and
+   steps the save/load state machine that MemCardFiles drives. */
 #include "engine/cu_80229270.h"
 #include "game/fn_801D2B7C.h"
-#include "game/cu_800034A0.h"
+#include "game/MemCard.h"
 #include "game/PlayerSave.h"
 
 extern "C" {
@@ -47,44 +51,50 @@ void MemCardFilesIdle(void);
 extern SaveStreamOps_t gCardStreamOps;
 }
 
+static int _MemCard_iResult = 0;
+int _MemCard_aiReserved[2] = {0, 0};
+static unsigned char _MemCard_bIdleCallback = 0;
+static void *_MemCard_pIOBuffer;
+static CardStreamTarget _MemCard_StreamTarget;
+
 extern "C" {
 
-void fn_800034A0(void)
+void MemCardAllocateIOBuffer(void)
 {
-    lbl_803ECCA4 = fn_801D2B7C(16384, 0, 0);
+    _MemCard_pIOBuffer = fn_801D2B7C(16384, 0, 0);
 }
 
-void fn_800034D0(void)
+void MemCardFreeIOBuffer(void)
 {
-    fn_801D2BD0(lbl_803ECCA4);
-    lbl_803ECCA4 = 0;
+    fn_801D2BD0(_MemCard_pIOBuffer);
+    _MemCard_pIOBuffer = 0;
 }
 
-void fn_800034FC(void)
+void MemCardBeginSave(void)
 {
     SaveRequest_t req;
     char slot[4];
     int type;
 
-    fn_800034A0();
+    MemCardAllocateIOBuffer();
 
-    *(void **)&req.mUnknown0[0] = &lbl_803EB8C8;
-    *(void **)&req.mUnknown0[4] = lbl_803ECCA4;
+    *(void **)&req.mUnknown0[0] = &_MemCard_iResult;
+    *(void **)&req.mUnknown0[4] = _MemCard_pIOBuffer;
     *(int *)&req.mUnknown0[8] = 16384;
     req.mUnknown10 = 1;
-    req.mTarget = (int)&lbl_80367580;
+    req.mTarget = (int)&_MemCard_StreamTarget;
 
-    lbl_80367580.mFillToEnd = 1;
-    lbl_80367580.mPosition = 0;
+    _MemCard_StreamTarget.mFillToEnd = 1;
+    _MemCard_StreamTarget.mPosition = 0;
 
     if (UISGameGetMainViewport()) {
         VptSetCallback(UISGameGetMainViewport(), 2, (void *)MemCardFilesIdle, 31);
     }
 
-    lbl_803EB8D4 = 1;
+    _MemCard_bIdleCallback = 1;
     MemCardFilesGetSaveTarget(&type, slot);
-    lbl_803EB8C8 = 0;
-    lbl_80367580.mSize = MemCardFilesGetDataSize(type);
+    _MemCard_iResult = 0;
+    _MemCard_StreamTarget.mSize = MemCardFilesGetDataSize(type);
 
     switch (type) {
     case 3:
@@ -98,37 +108,37 @@ void fn_800034FC(void)
         fn_8022F698(&req, &gCardStreamOps);
         break;
     case 1:
-        fn_8022EB94(&lbl_80367580, &gCardStreamOps);
+        fn_8022EB94(&_MemCard_StreamTarget, &gCardStreamOps);
         break;
     }
 }
 
-void fn_80003620(void)
+void MemCardBeginLoad(void)
 {
     SaveRequest_t req;
     char slot[4];
     int type;
     int handle = 0;
 
-    fn_800034A0();
+    MemCardAllocateIOBuffer();
 
-    *(void **)&req.mUnknown0[0] = &lbl_803EB8C8;
-    *(void **)&req.mUnknown0[4] = lbl_803ECCA4;
+    *(void **)&req.mUnknown0[0] = &_MemCard_iResult;
+    *(void **)&req.mUnknown0[4] = _MemCard_pIOBuffer;
     *(int *)&req.mUnknown0[8] = 16384;
     req.mUnknown10 = 1;
-    req.mTarget = (int)&lbl_80367580;
+    req.mTarget = (int)&_MemCard_StreamTarget;
 
-    lbl_803EB8C8 = 0;
-    lbl_80367580.mFillToEnd = 1;
-    lbl_80367580.mPosition = 0;
+    _MemCard_iResult = 0;
+    _MemCard_StreamTarget.mFillToEnd = 1;
+    _MemCard_StreamTarget.mPosition = 0;
 
     if (UISGameGetMainViewport()) {
         VptSetCallback(UISGameGetMainViewport(), 2, (void *)MemCardFilesIdle, 31);
     }
 
-    lbl_803EB8D4 = 1;
+    _MemCard_bIdleCallback = 1;
     MemCardFilesGetLoadTarget(&type, slot);
-    lbl_80367580.mSize = MemCardFilesGetDataSize(type);
+    _MemCard_StreamTarget.mSize = MemCardFilesGetDataSize(type);
 
     // FAKEMATCH: each case stores its own handle (the target tests it at the end of every case)
     switch (type) {
@@ -143,7 +153,7 @@ void fn_80003620(void)
             handle = PlayerSaveOnLoad(&req, &gCardStreamOps);
         }
         if (handle) {
-            lbl_803EB8C8 = handle;
+            _MemCard_iResult = handle;
         }
         break;
     case 2:
@@ -157,26 +167,26 @@ void fn_80003620(void)
             handle = fn_8022F5E4(&req, &gCardStreamOps);
         }
         if (handle) {
-            lbl_803EB8C8 = handle;
+            _MemCard_iResult = handle;
         }
         break;
     case 1:
-        handle = fn_8022EB5C(&lbl_80367580, &gCardStreamOps);
+        handle = fn_8022EB5C(&_MemCard_StreamTarget, &gCardStreamOps);
         if (handle) {
-            lbl_803EB8C8 = handle;
+            _MemCard_iResult = handle;
         }
         break;
     }
 }
 
-void fn_800037C0(int a, int *b)
+void MemCardFinishLoad(int a, int *b)
 {
-    // FAKEMATCH: one 48-byte local stands for the frame objects (a byte set to 1 at +16, the 17-byte date at +24); the original objects are not recovered
-    char buf[48];
+    SaveRequest_t req;
+    char date[0x11];
     int type;
     int slot;
 
-    buf[16] = 1;
+    req.mUnknown10 = 1;
 
     MemCardFilesGetLoadTarget(&type, &slot);
 
@@ -187,8 +197,8 @@ void fn_800037C0(int a, int *b)
         case 0:
             slot = fn_8022F384(fn_8022F4BC());
             MemCardFilesSetLoadTarget(type, slot);
-            fn_801D6B24(buf + 24, 17);
-            MemCardFilesAddSlot(type, slot, lbl_80367580.mChecksum, buf + 24);
+            fn_801D6B24(date, 17);
+            MemCardFilesAddSlot(type, slot, _MemCard_StreamTarget.mChecksum, date);
             MemCardFilesStoreChecksum(type, slot);
             break;
         case 1:
@@ -216,8 +226,8 @@ void fn_800037C0(int a, int *b)
             int handle = fn_8022F4BC();
             slot = fn_8022F384(handle);
             MemCardFilesSetLoadTarget(type, slot);
-            fn_801D6B24(buf + 24, 17);
-            MemCardFilesAddSlot(type, slot, lbl_80367580.mChecksum, buf + 24);
+            fn_801D6B24(date, 17);
+            MemCardFilesAddSlot(type, slot, _MemCard_StreamTarget.mChecksum, date);
             DbCheckVersion(fn_8022F3D4(handle));
             MemCardFilesStoreChecksum(type, slot);
             break;
@@ -254,14 +264,14 @@ void fn_800037C0(int a, int *b)
             GameOptionsShutdown();
         }
         if (a == 0) {
-            fn_801D6B24(buf + 24, 17);
-            MemCardFilesAddSlot(type, slot, MemCardFilesComputeChecksum(type, slot), buf + 24);
+            fn_801D6B24(date, 17);
+            MemCardFilesAddSlot(type, slot, MemCardFilesComputeChecksum(type, slot), date);
         }
         break;
     }
 }
 
-int fn_800039E4(int a, int *b, int *c)
+int MemCardUpdateSaveLoad(int a, int *b, int *c)
 {
     char val = 0;
     int state = a;
@@ -277,20 +287,20 @@ int fn_800039E4(int a, int *b, int *c)
     case 4:
         *b = fn_801D6620(c);
         if (fn_801D6EA0(0)) {
-            fn_800034FC();
+            MemCardBeginSave();
             state = 5;
         }
         break;
     case 5:
         *b = 0;
-        if ((unsigned int)(lbl_803EB8C8 - 45) > 1) {
+        if ((unsigned int)(_MemCard_iResult - 45) > 1) {
             if (fn_801D6EA0((int)&val)) {
-                fn_800034D0();
+                MemCardFreeIOBuffer();
                 state = 6;
                 fn_801D6EFC();
             }
             if (val) {
-                fn_800034D0();
+                MemCardFreeIOBuffer();
                 state = 6;
             }
         }
@@ -300,12 +310,12 @@ int fn_800039E4(int a, int *b, int *c)
         int slot;
         *b = fn_801D6620(c);
         if (*b != 0) {
-            if (lbl_803EB8C8 == 0 && c != 0 && *c < 0) {
-                lbl_803EB8C8 = 36;
+            if (_MemCard_iResult == 0 && c != 0 && *c < 0) {
+                _MemCard_iResult = 36;
             }
             MemCardFilesGetSaveTarget(&type, &slot);
-            if (lbl_803EB8C8 == 0) {
-                MemCardFilesUpdateSlot(type, slot, lbl_80367580.mChecksum);
+            if (_MemCard_iResult == 0) {
+                MemCardFilesUpdateSlot(type, slot, _MemCard_StreamTarget.mChecksum);
             } else {
                 MemCardFilesClearSlotInfo(type, slot);
             }
@@ -320,20 +330,20 @@ int fn_800039E4(int a, int *b, int *c)
     case 9:
         *b = fn_801D6620(c);
         if (fn_801D6EA0(0)) {
-            fn_80003620();
+            MemCardBeginLoad();
             state = 10;
         }
         break;
     case 10:
         *b = 0;
-        if ((unsigned int)(lbl_803EB8C8 - 45) > 1) {
+        if ((unsigned int)(_MemCard_iResult - 45) > 1) {
             if (fn_801D6EA0((int)&val)) {
-                fn_800034D0();
+                MemCardFreeIOBuffer();
                 state = 11;
                 fn_801D6EFC();
             }
             if (val) {
-                fn_800034D0();
+                MemCardFreeIOBuffer();
                 state = 11;
             }
         }
@@ -341,20 +351,20 @@ int fn_800039E4(int a, int *b, int *c)
     case 11:
         *b = fn_801D6620(c);
         if (*b != 0) {
-            if (lbl_803EB8C8 == 0 && c != 0 && *c < 0) {
-                lbl_803EB8C8 = 36;
+            if (_MemCard_iResult == 0 && c != 0 && *c < 0) {
+                _MemCard_iResult = 36;
             }
             state = 0;
-            fn_800037C0(lbl_803EB8C8, c);
+            MemCardFinishLoad(_MemCard_iResult, c);
         }
         break;
     }
 
-    if (*b != 0 && lbl_803EB8D4 != 0) {
+    if (*b != 0 && _MemCard_bIdleCallback != 0) {
         if (UISGameGetMainViewport()) {
             VptRemoveCallback(UISGameGetMainViewport(), (void *)MemCardFilesIdle);
         }
-        lbl_803EB8D4 = 0;
+        _MemCard_bIdleCallback = 0;
     }
 
     return state;

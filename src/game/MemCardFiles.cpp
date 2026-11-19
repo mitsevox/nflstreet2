@@ -73,7 +73,7 @@ int fn_801D673C(int);
 void fn_801D868C(int, int, char *, int);
 void UserProfileTouch(signed char);
 int fn_801D6850(void);
-int fn_800039E4(int, int *, int *);
+int MemCardUpdateSaveLoad(int, int *, int *);
 int fn_801D6620(int *);
 void fn_801D6754(int);
 void fn_801D676C(SaveComment *);
@@ -278,7 +278,7 @@ int MemCardFilesPollOperation(int *arg)
     case 1:
     case 2:
     case 3:
-        _MemCardFiles_iOperation = fn_800039E4(_MemCardFiles_iOperation, &done, arg);
+        _MemCardFiles_iOperation = MemCardUpdateSaveLoad(_MemCardFiles_iOperation, &done, arg);
         break;
     default:
         done = fn_801D6620(arg);
