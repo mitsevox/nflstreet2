@@ -18370,6 +18370,32 @@
       ]
     },
     {
+      "source": "src/engine/filemc.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801CB5D4-0x801CBC1C (src/engine/filemc.c), its compiler, type, function, name, data and source-form rows; all eleven functions and the 0x2090-byte file record in .bss match the target under unchanged engine_c, promoted from comparison-only. The public CARD work area is an uninitialized definition the original linker allocated as COMMON; the file defines it and the unit's storage map places it at its exact data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CB5D4",
+          "end": "0x801CBC1C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80381C40",
+          "end": "0x80383CD0"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "FileMCWorkArea",
+          "start": "0x803DD600",
+          "end": "0x803E7600"
+        }
+      ]
+    },
+    {
       "source": "src/engine/tdbiomem.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8020D388-0x8020D534 (src/engine/tdbiomem.c), its compiler, function, name, type/field, data and source-form rows; all six callbacks and the 28-byte callback table match the target under unchanged engine_c, promoted from comparison-only.",

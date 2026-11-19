@@ -4,7 +4,7 @@
 #include <dolphin/card.h>
 
 /* Single open memory-card file, cached one 8 KB sector at a time. */
-typedef struct MCFile_801CB5D4 {
+typedef struct FileMCInfo_t {
     unsigned char mBuffer[0x2000];
     unsigned int mSector;
     unsigned int mPos;
@@ -12,6 +12,6 @@ typedef struct MCFile_801CB5D4 {
     int mChan;
     CARDStat mStat;
     CARDFileInfo mFileInfo;
-} MCFile_801CB5D4;
+} FileMCInfo_t;
 
 #endif

@@ -1,36 +1,39 @@
+/* Memory-card file device of the low-level file layer: opens or creates one save file on a
+   GameCube memory card and reads, writes and seeks it through one cached 8 KB sector. */
+
 #include "engine/filemc.h"
 #include "engine/SysSetLastErrorFunc.h"
 #include <string.h>
 
-extern MCFile_801CB5D4 lbl_80381C40;
-extern unsigned char lbl_803DD600[];
+unsigned char FileMCWorkArea[0xA000];
+static FileMCInfo_t _FileMCCurrentInfo;
 
 void fn_801F8758(int a);
 void fn_801F8768(void);
 void *memset();
 void *memcpy();
 
-int fn_801CBBAC(void);
+int FileMCFlush(void);
 
-static int fn_801CB5D4(void)
+static int _FileMCReadCurrentSector(void)
 {
-    if (CARDRead(&lbl_80381C40.mFileInfo, lbl_80381C40.mBuffer, 0x2000, lbl_80381C40.mSector) != 0) {
+    if (CARDRead(&_FileMCCurrentInfo.mFileInfo, _FileMCCurrentInfo.mBuffer, 0x2000, _FileMCCurrentInfo.mSector) != 0) {
         return -1;
     }
     return 0;
 }
 
-void fn_801CB61C(void)
+void FileMCInit(void)
 {
     CARDInit();
-    lbl_80381C40.mChan = -1;
+    _FileMCCurrentInfo.mChan = -1;
 }
 
-void fn_801CB648(void)
+void FileMCShutdown(void)
 {
 }
 
-int fn_801CB64C(int device)
+int FileMCGetPort(int device)
 {
     int port = -1;
 
@@ -45,7 +48,7 @@ int fn_801CB64C(int device)
     return port;
 }
 
-int fn_801CB678(unsigned int device)
+int FileMCGetSlot(unsigned int device)
 {
     int slot = -1;
 
@@ -58,38 +61,41 @@ int fn_801CB678(unsigned int device)
     return slot;
 }
 
-int fn_801CB698(int chan, int unused, const char *pName, int unused2, int create, unsigned int size)
+int FileMCOpen(int chan, int unused, const char *pName, int unused2, int create, unsigned int size)
 {
     CARDStat stat;
-    s32 bytesFree = 0;
     s32 filesFree = 0;
+    s32 bytesFree = 0;
     int fileNo;
     int result;
 
     fileNo = -1;
     if (CARDProbe(chan)) {
-        result = CARDMount(chan, lbl_803DD600, 0);
+        result = CARDMount(chan, FileMCWorkArea, 0);
         if (result == 0 || result == -6) {
             result = CARDCheck(chan);
         }
         if (result == 0) {
             if (create) {
                 CARDDelete(chan, pName);
-                if (CARDCreate(chan, pName, (size + 0x1FFF) & ~0x1FFF, &lbl_80381C40.mFileInfo) == 0) {
+                result = CARDCreate(chan, pName, (size + 0x1FFF) & ~0x1FFF, &_FileMCCurrentInfo.mFileInfo);
+                if (result == 0) {
                     fn_801F8758(0);
-                    fileNo = lbl_80381C40.mFileInfo.fileNo;
-                    CARDGetStatus(chan, fileNo, &lbl_80381C40.mStat);
-                    lbl_80381C40.mStat.bannerFormat &= ~7;
-                    lbl_80381C40.mStat.iconFormat = (lbl_80381C40.mStat.iconFormat & ~3) | 2;
-                    lbl_80381C40.mStat.iconSpeed = (lbl_80381C40.mStat.iconSpeed & ~3) | 3;
-                    lbl_80381C40.mStat.iconSpeed &= ~0xC;
-                    lbl_80381C40.mStat.iconAddr = 0x40;
-                    lbl_80381C40.mChan = chan;
-                    lbl_80381C40.mDirty = 0;
-                    lbl_80381C40.mStat.commentAddr = 0;
-                    lbl_80381C40.mSector = 0;
-                    lbl_80381C40.mPos = 0;
-                    memset(lbl_80381C40.mBuffer, 0, 0x2000);
+                    fileNo = CARDGetFileNo(&_FileMCCurrentInfo.mFileInfo);
+                    result = CARDGetStatus(chan, fileNo, &_FileMCCurrentInfo.mStat);
+                    // FAKEMATCH: setter order (as in memorycard.c) and the reset order mChan, mSector, mPos, mDirty chosen by testing
+                    _FileMCCurrentInfo.mStat.commentAddr = 0;
+                    _FileMCCurrentInfo.mStat.iconAddr = 0x40;
+                    CARDSetIconFormat(&_FileMCCurrentInfo.mStat, 0, CARD_STAT_ICON_RGB5A3);
+                    CARDSetIconSpeed(&_FileMCCurrentInfo.mStat, 0, CARD_STAT_SPEED_SLOW);
+                    CARDSetIconSpeed(&_FileMCCurrentInfo.mStat, 1, CARD_STAT_SPEED_END);
+                    CARDSetBannerFormat(&_FileMCCurrentInfo.mStat, CARD_STAT_BANNER_NONE);
+                    CARDSetIconAnim(&_FileMCCurrentInfo.mStat, CARD_STAT_ANIM_LOOP);
+                    _FileMCCurrentInfo.mChan = chan;
+                    _FileMCCurrentInfo.mSector = 0;
+                    _FileMCCurrentInfo.mPos = 0;
+                    _FileMCCurrentInfo.mDirty = 0;
+                    memset(_FileMCCurrentInfo.mBuffer, 0, 0x2000);
                 }
             } else {
                 if (CARDFreeBlocks(chan, &bytesFree, &filesFree) == 0) {
@@ -100,15 +106,17 @@ int fn_801CB698(int chan, int unused, const char *pName, int unused2, int create
                     }
                 }
                 if (fileNo < 127) {
-                    if (CARDFastOpen(chan, fileNo, &lbl_80381C40.mFileInfo) == 0) {
+                    result = CARDFastOpen(chan, fileNo, &_FileMCCurrentInfo.mFileInfo);
+                    if (result == 0) {
                         fn_801F8758(0);
-                        fileNo = lbl_80381C40.mFileInfo.fileNo;
-                        CARDGetStatus(chan, fileNo, &lbl_80381C40.mStat);
-                        lbl_80381C40.mChan = chan;
-                        lbl_80381C40.mDirty = 0;
-                        lbl_80381C40.mSector = 0;
-                        lbl_80381C40.mPos = 0;
-                        memset(lbl_80381C40.mBuffer, 0, 0x2000);
+                        fileNo = CARDGetFileNo(&_FileMCCurrentInfo.mFileInfo);
+                        result = CARDGetStatus(chan, fileNo, &_FileMCCurrentInfo.mStat);
+                        // FAKEMATCH: reset order mChan, mSector, mPos, mDirty chosen by testing
+                        _FileMCCurrentInfo.mChan = chan;
+                        _FileMCCurrentInfo.mSector = 0;
+                        _FileMCCurrentInfo.mPos = 0;
+                        _FileMCCurrentInfo.mDirty = 0;
+                        memset(_FileMCCurrentInfo.mBuffer, 0, 0x2000);
                     }
                 }
             }
@@ -119,27 +127,27 @@ int fn_801CB698(int chan, int unused, const char *pName, int unused2, int create
     return fileNo;
 }
 
-void fn_801CB8C8(int fileNo)
+void FileMCClose(int fileNo)
 {
-    fn_801CBBAC();
-    CARDSetStatus(lbl_80381C40.mChan, fileNo, &lbl_80381C40.mStat);
-    CARDClose(&lbl_80381C40.mFileInfo);
-    CARDUnmount(lbl_80381C40.mChan);
-    lbl_80381C40.mChan = -1;
+    FileMCFlush();
+    CARDSetStatus(_FileMCCurrentInfo.mChan, fileNo, &_FileMCCurrentInfo.mStat);
+    CARDClose(&_FileMCCurrentInfo.mFileInfo);
+    CARDUnmount(_FileMCCurrentInfo.mChan);
+    _FileMCCurrentInfo.mChan = -1;
     fn_801F8758(1);
 }
 
-int fn_801CB92C(int fileNo, unsigned int offset, int whence)
+int FileMCSeek(int fileNo, unsigned int offset, int whence)
 {
-    MCFile_801CB5D4 *pFile;
+    FileMCInfo_t *pFile;
     int result = 0;
     int error = 0;
 
-    if (fn_801CBBAC()) {
+    if (FileMCFlush()) {
         SysSetLastErrorFunc(0xA0008);
         return -1;
     }
-    pFile = &lbl_80381C40;
+    pFile = &_FileMCCurrentInfo;
     switch (whence) {
     case 0:
         pFile->mPos = offset;
@@ -151,39 +159,39 @@ int fn_801CB92C(int fileNo, unsigned int offset, int whence)
         pFile->mPos = pFile->mStat.length - offset;
         break;
     }
-    if (lbl_80381C40.mPos > lbl_80381C40.mStat.length) {
-        lbl_80381C40.mPos = lbl_80381C40.mStat.length;
+    if (_FileMCCurrentInfo.mPos > _FileMCCurrentInfo.mStat.length) {
+        _FileMCCurrentInfo.mPos = _FileMCCurrentInfo.mStat.length;
         error = 0xA0004;
         result = -1;
     }
-    lbl_80381C40.mSector = lbl_80381C40.mPos & ~0x1FFF;
+    _FileMCCurrentInfo.mSector = _FileMCCurrentInfo.mPos & ~0x1FFF;
     SysSetLastErrorFunc(error);
     return result;
 }
 
-unsigned int fn_801CBA0C(int fileNo, unsigned char *pDst, unsigned int size)
+unsigned int FileMCRead(int fileNo, unsigned char *pDst, unsigned int size)
 {
     unsigned int total = 0;
     unsigned int offset;
     unsigned int count;
 
     while (size) {
-        if (fn_801CB5D4()) {
+        if (_FileMCReadCurrentSector()) {
             return 0;
         }
-        offset = lbl_80381C40.mPos - lbl_80381C40.mSector;
+        offset = _FileMCCurrentInfo.mPos - _FileMCCurrentInfo.mSector;
         count = 0x2000 - offset;
         if (count > size) {
             count = size;
         }
-        memcpy(pDst, lbl_80381C40.mBuffer + offset, count);
+        memcpy(pDst, _FileMCCurrentInfo.mBuffer + offset, count);
         total += count;
         size -= count;
         pDst += count;
-        lbl_80381C40.mPos += count;
-        if (!(lbl_80381C40.mPos & 0x1FFF)) {
-            lbl_80381C40.mSector += 0x2000;
-            if (lbl_80381C40.mSector >= lbl_80381C40.mStat.length) {
+        _FileMCCurrentInfo.mPos += count;
+        if (!(_FileMCCurrentInfo.mPos & 0x1FFF)) {
+            _FileMCCurrentInfo.mSector += 0x2000;
+            if (_FileMCCurrentInfo.mSector >= _FileMCCurrentInfo.mStat.length) {
                 size = 0;
             }
         }
@@ -192,31 +200,31 @@ unsigned int fn_801CBA0C(int fileNo, unsigned char *pDst, unsigned int size)
     return total;
 }
 
-unsigned int fn_801CBAD8(int fileNo, unsigned char *pSrc, unsigned int size)
+unsigned int FileMCWrite(int fileNo, unsigned char *pSrc, unsigned int size)
 {
     unsigned int total = 0;
     unsigned int offset;
     unsigned int count;
 
     while (size) {
-        if (!lbl_80381C40.mDirty) {
-            if (fn_801CB5D4()) {
+        if (!_FileMCCurrentInfo.mDirty) {
+            if (_FileMCReadCurrentSector()) {
                 return 0;
             }
         }
-        offset = lbl_80381C40.mPos - lbl_80381C40.mSector;
+        offset = _FileMCCurrentInfo.mPos - _FileMCCurrentInfo.mSector;
         count = 0x2000 - offset;
         if (count > size) {
             count = size;
         }
-        memcpy(lbl_80381C40.mBuffer + offset, pSrc, count);
+        memcpy(_FileMCCurrentInfo.mBuffer + offset, pSrc, count);
         total += count;
         size -= count;
         pSrc += count;
-        lbl_80381C40.mDirty = 1;
-        lbl_80381C40.mPos += count;
-        if (!(lbl_80381C40.mPos & 0x1FFF)) {
-            if (fn_801CBBAC()) {
+        _FileMCCurrentInfo.mDirty = 1;
+        _FileMCCurrentInfo.mPos += count;
+        if (!(_FileMCCurrentInfo.mPos & 0x1FFF)) {
+            if (FileMCFlush()) {
                 return 0;
             }
         }
@@ -225,17 +233,17 @@ unsigned int fn_801CBAD8(int fileNo, unsigned char *pSrc, unsigned int size)
     return total;
 }
 
-int fn_801CBBAC(void)
+int FileMCFlush(void)
 {
     int result;
 
-    if (lbl_80381C40.mDirty) {
-        result = CARDWrite(&lbl_80381C40.mFileInfo, lbl_80381C40.mBuffer, 0x2000, lbl_80381C40.mSector);
+    if (_FileMCCurrentInfo.mDirty) {
+        result = CARDWrite(&_FileMCCurrentInfo.mFileInfo, _FileMCCurrentInfo.mBuffer, 0x2000, _FileMCCurrentInfo.mSector);
         if (result != 0) {
             return -1;
         }
-        lbl_80381C40.mDirty = 0;
-        lbl_80381C40.mSector += 0x2000;
+        _FileMCCurrentInfo.mDirty = 0;
+        _FileMCCurrentInfo.mSector += 0x2000;
     }
     return 0;
 }

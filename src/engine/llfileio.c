@@ -58,15 +58,15 @@ int CDVD_open(const char *pName, int unused, int *pHandle);
 int CDVD_close(int handle);
 int CDVD_read(int handle, void *pDst, int offset, int size);
 unsigned int CDVD_getattrfromhandle(int handle, int unused, unsigned int *pSize);
-void fn_801CB61C(void);
-void fn_801CB648(void);
-int fn_801CB64C(int device);
-int fn_801CB678(unsigned int device);
-int fn_801CB698(int chan, int unused, const char *pName, int unused2, int create, unsigned int size);
-void fn_801CB8C8(int fileNo);
-int fn_801CB92C(int fileNo, unsigned int offset, int whence);
-unsigned int fn_801CBA0C(int fileNo, unsigned char *pDst, unsigned int size);
-unsigned int fn_801CBAD8(int fileNo, unsigned char *pSrc, unsigned int size);
+void FileMCInit(void);
+void FileMCShutdown(void);
+int FileMCGetPort(int device);
+int FileMCGetSlot(unsigned int device);
+int FileMCOpen(int chan, int unused, const char *pName, int unused2, int create, unsigned int size);
+void FileMCClose(int fileNo);
+int FileMCSeek(int fileNo, unsigned int offset, int whence);
+unsigned int FileMCRead(int fileNo, unsigned char *pDst, unsigned int size);
+unsigned int FileMCWrite(int fileNo, unsigned char *pSrc, unsigned int size);
 void FileHostInit(int count);
 void FileHostShutdown(void);
 int FileHostOpen(const char *pName, int mode);
@@ -119,10 +119,10 @@ static int _FileOpenStream(int device, const char *pName, int mode)
         break;
     case 2:
     case 3:
-        port = fn_801CB64C(device);
-        slot = fn_801CB678(device);
-        if ((handle = fn_801CB698(port, slot, pName, mode, 0, 0)) < 0) {
-            if ((handle = fn_801CB698(port, slot, pName, mode, 1, 0)) < 0) {
+        port = FileMCGetPort(device);
+        slot = FileMCGetSlot(device);
+        if ((handle = FileMCOpen(port, slot, pName, mode, 0, 0)) < 0) {
+            if ((handle = FileMCOpen(port, slot, pName, mode, 1, 0)) < 0) {
                 error = SysGetLastError();
             }
         }
@@ -313,7 +313,7 @@ int FileCloseStream(int handle)
         CDVD_close(File_StreamInfo[handle].mDevHandle);
         break;
     case 2:
-        fn_801CB8C8(handle);
+        FileMCClose(handle);
         break;
     }
     SysSetLastErrorFunc(error);
@@ -353,8 +353,8 @@ int FilePerformRead(int handle, int pos, void *pBuffer, int size)
         break;
     case 2:
     case 3:
-        fn_801CB92C(File_StreamInfo[handle].mDevHandle, pos, 0);
-        if ((result = fn_801CBA0C(File_StreamInfo[handle].mDevHandle, pBuffer, size)) < 0) {
+        FileMCSeek(File_StreamInfo[handle].mDevHandle, pos, 0);
+        if ((result = FileMCRead(File_StreamInfo[handle].mDevHandle, pBuffer, size)) < 0) {
             error = 0xA0007;
         }
         break;
@@ -385,8 +385,8 @@ int FilePerformWrite(int handle, int pos, void *pBuffer, int size)
         break;
     case 2:
     case 3:
-        fn_801CB92C(File_StreamInfo[handle].mDevHandle, pos, 0);
-        if ((result = fn_801CBAD8(File_StreamInfo[handle].mDevHandle, pBuffer, size)) < 0) {
+        FileMCSeek(File_StreamInfo[handle].mDevHandle, pos, 0);
+        if ((result = FileMCWrite(File_StreamInfo[handle].mDevHandle, pBuffer, size)) < 0) {
             error = 0xA0008;
         }
         break;
@@ -631,7 +631,7 @@ void FileLLInit(FileInitParms_t *pConfig)
             break;
         }
     }
-    fn_801CB61C();
+    FileMCInit();
     if (File_InitParms.mHostEnabled) {
         FileHostInit(File_InitParms.mNumFiles);
     }
@@ -642,7 +642,7 @@ void FileLLShutdown(void)
     if (File_InitParms.mHostEnabled) {
         FileHostShutdown();
     }
-    fn_801CB648();
+    FileMCShutdown();
 }
 
 int FileHostCheckActive(void)
