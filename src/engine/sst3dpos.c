@@ -22,8 +22,6 @@ static inline int SNDSTRMI_round(float t)
 
 int SNDSTRM_setazimuth(int stream, int speaker, float azimuth)
 {
-    // FAKEMATCH: unused stack object; reproduces the target's 8 bytes at the frame bottom
-    volatile int spare[2];
     SndStreamChannel_t *channel;
     Record_803A6DF0 *record;
     Record_803A6DF0 *dst;

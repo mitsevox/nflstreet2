@@ -2345,10 +2345,6 @@
     "gLastSubTick": {
       "address": "0x803ECEB0",
       "evidence": "evidence.tsv data/name rows for 0x803ECEB0 (target extent, related name); speech-library storage, original-owned."
-    },
-    "SNDautovol": {
-      "address": "0x8026A2DC",
-      "evidence": "evidence.tsv function and name rows 0x8026A2DC (src/engine/sautovol.c, a registered partial whose original bytes stay linked); called by SndSetPatchParam in src/engine/sound.cpp (bl at 0x801F42EC)."
     }
   },
   "units": [
@@ -21070,6 +21066,25 @@
           "placement": ".data3",
           "start": "0x802B7938",
           "end": "0x802B7948"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sautovol.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026A2DC-0x8026A40C (src/engine/sautovol.c), its function and name rows, the data row 0x802B78E0-0x802B78F0 of its .rodata literals, the source-form row for SNDautovol and the sound_cxx compiler rows (with -mps-float, compiler row 0x80266E88-0x8027D3AC); its one function is exact, promoted from comparison-only (d2 wave). No owned .data or .bss.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026A2DC",
+          "end": "0x8026A40C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B78E0",
+          "end": "0x802B78F0"
         }
       ]
     }

@@ -39945,32 +39945,6 @@
       ]
     },
     {
-      "source": "src/engine/sautovol.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8026A2DC-0x8026A40C (src/engine/sautovol.c), its function, name and data rows and the sound_cxx compiler row 0x80266E88-0x8026A664. Draft comparison only (SNDautovol differs in its frame size, see the source-form row); original assembly and .rodata stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026A2DC",
-          "end": "0x8026A40C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B78E0",
-          "end": "0x802B78F0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SNDautovol",
-          "start": "0x8026A2DC",
-          "end": "0x8026A40C"
-        }
-      ]
-    },
-    {
       "source": "src/engine/physworld.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801E8E04-0x801E9538 (src/engine/physworld.cpp), the function, name and source-form rows of PhysicsWorld::Step 0x801E92D0. Documented holdout: Step is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (95.99%: the target inlines the PhysicsTime destructor of its two local times as a vtable store with the vtable 0x8028DD58 external, while a declaration that inlines it here makes the compiler emit its own static vtable and destructor; with the destructor out of line the step calls it). The other ten functions and the vtable are linked through units.json.",
