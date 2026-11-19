@@ -10772,19 +10772,19 @@
     {
       "source": "src/game/FxDraw.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80196AF0-0x80196F48 (src/game/FxDraw.cpp) and its .rodata row.",
+      "evidence": "evidence.tsv unit row 0x80196AF0-0x8019723C (src/game/FxDraw.cpp) and its .rodata row.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80196AF0",
-          "end": "0x80196F48"
+          "end": "0x8019723C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802ADA20",
-          "end": "0x802ADA3C"
+          "end": "0x802ADA80"
         }
       ]
     },

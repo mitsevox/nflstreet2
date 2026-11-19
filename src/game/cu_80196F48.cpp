@@ -29,7 +29,6 @@ Mtx44Ptr MatGetCurMatrixPtr(void);
 void MatStore(Mtx44);
 void GXSetProjection(Mtx44, int);
 void GXGetProjectionv(float *);
-void fn_8022765C(void *, void *, void *);
 float fn_80227704(void *, void *);
 void fn_80227904(float *, float *, float *, float);
 void fn_80227C2C(Vector_80039F5C *, Vector_80039F5C *);
@@ -49,67 +48,11 @@ void TMTextureClutNew(void *, void *, int, int, int);
 void TMTextureTexDelete(void *);
 void TMTextureClutDelete(void *);
 float fn_80197D08(float *, Vector_80039F5C *);
-extern unsigned char lbl_803EB750;
 extern float lbl_803EB758[2];
-extern GXTexObj lbl_803651B8;
-extern GXTlutObj lbl_803651D8;
 extern ParticleTrailColor_t gParticleTrail_aPointColors[];
-extern float lbl_802EDDF0[][2];
-}
-
-static inline float _FxRemap(float x, float x0, float x1, float y0, float y1)
-{
-    return (x - x0) * (y1 - y0) / (x1 - x0) + y0;
 }
 
 extern "C" {
-void fn_80196F48(float scale, void *position)
-{
-    Vector_80039F5C offset;
-    Vector_80039F5C vertex;
-    unsigned char color[3] = {255, 125, 25};
-    Vector_80039F5C corners[4] = {
-        {-3.0f, 3.0f, 0.15f}, {-3.0f, -3.0f, 0.15f},
-        {3.0f, -3.0f, 0.15f}, {3.0f, 3.0f, 0.15f}
-    };
-    TMRenderReset();
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_VTX, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
-    GXSetNumChans(1);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-    TMRenderSetBlendMode(6);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
-    GXSetNumTevStages(1);
-    MatSetStack(VptGetMatrixStack());
-    MatPushUnit();
-    MatCatSlot(3);
-    GXLoadPosMtxImm(MatGetCurMatrixPtr(), 0);
-    MatPop();
-    if (lbl_803EB750 == 1) GXLoadTlut(&lbl_803651D8, 0);
-    GXLoadTexObj(&lbl_803651B8, GX_TEXMAP0);
-    unsigned char alpha = (unsigned char)_FxRemap(scale, 0.05f, 3.0f, 255.0f, 0.0f);
-    for (unsigned char i = 0; i <= 3; ++i) {
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        for (unsigned char j = 0; j <= 3; ++j) {
-            offset.mX = corners[j].mX * scale;
-            offset.mY = corners[j].mY * scale;
-            fn_8022765C(&vertex, position, &offset);
-            GXPosition3f32(vertex.mX, vertex.mY, vertex.mZ);
-            GXColor4u8(color[0], color[1], color[2], alpha);
-            GXTexCoord2f32(lbl_802EDDF0[j][0], lbl_802EDDF0[j][1]);
-        }
-    }
-    TMRenderSetBlendMode(1);
-}
-
 void fn_8019723C(ParticleTrailSet_t *p)
 {
     if (!ParticleTrailIsEnabled()) return;

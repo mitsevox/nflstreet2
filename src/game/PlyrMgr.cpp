@@ -340,7 +340,8 @@ extern "C" int PlyrMgrCompareSnapshot(PlyrMgr_t *pA, PlyrMgr_t *pB)
     Object_80039F5C *b;
 
     if (pB != 0) {
-        result = pA->mCount != pB->mCount;
+        result = 0;
+        result |= pA->mCount != pB->mCount;
         result |= pA->mPerTeam != pB->mPerTeam;
         for (i = 0; i < pA->mCount; i++) {
             a = (Object_80039F5C *)((char *)&pA->mpPlayers[i] + ((char *)pA - (char *)_PlyrMgr_pManager));
