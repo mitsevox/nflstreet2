@@ -2712,10 +2712,10 @@ void fn_800518E0(Object_80039F5C *pPlayer)
 
 }
 
-class Time_801E8C78 {
+class PhysicsTime {
 public:
-    Time_801E8C78();
-    virtual ~Time_801E8C78() {}
+    PhysicsTime();
+    virtual ~PhysicsTime() {}
     void fn_801E8D14(float delta);
 
     unsigned int mIntegral;
@@ -2723,13 +2723,13 @@ public:
 };
 
 extern "C" {
-Time_801E8C78 lbl_803084B8;
+PhysicsTime lbl_803084B8;
 extern unsigned char lbl_803EA534;
-void fn_801E92D0(void *pWorld, Time_801E8C78 *pOldTime, Time_801E8C78 *pNewTime);
+void fn_801E92D0(void *pWorld, PhysicsTime *pOldTime, PhysicsTime *pNewTime);
 
 void fn_8005122C(float dt)
 {
-    Time_801E8C78 next;
+    PhysicsTime next;
     fn_80050964();
     fn_80050CCC();
     if (!lbl_803EA534) {

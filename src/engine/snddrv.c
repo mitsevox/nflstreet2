@@ -682,7 +682,7 @@ int fn_80273DF8(Header_80273DF8 *header, int base, int index, int a, int b, int 
             fn_802747D8(record->m4[i]);
         }
         fn_80274B50(index);
-        fn_80271BD4(record->m4[0], 0);
+        SNDPLATFORM_setfxlevel(record->m4[0], 0);
         for (i = 0; i < header->m3; i++) {
             u32 start;
             u32 loopAddress;
@@ -738,7 +738,7 @@ int fn_80273DF8(Header_80273DF8 *header, int base, int index, int a, int b, int 
         }
         fn_80274B50(record->m4[0]);
         for (i = 0; i < lbl_8030002C; i++) {
-            fn_80271BD4(record->m4[0], i);
+            SNDPLATFORM_setfxlevel(record->m4[0], i);
         }
         fn_80274CA8(record->m4[0], a);
         fn_80274D34(record->m4[0], b);

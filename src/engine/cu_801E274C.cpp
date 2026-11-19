@@ -1,5 +1,5 @@
 #include "engine/dslist.h"
-#include "engine/Class_801E27A4.h"
+#include "engine/physworld.h"
 
 extern "C" {
 void *DSNewListNode(void *pool);
@@ -17,31 +17,31 @@ Class_801E274C::~Class_801E274C()
 {
 }
 
-void Class_801E274C::fn_801E279C(Class_801E8E04 *pOwner)
+void Class_801E274C::fn_801E279C(PhysicsWorld *pOwner)
 {
     mpOwner = pOwner;
 }
 
-Class_801E27A4::Class_801E27A4(int count) : mpUnknown8(0), mpNodes(0), mUnknown10(1)
+BodyGroup::BodyGroup(int count) : mpUnknown8(0), mpNodes(0), mUnknown10(1)
 {
-    mpNodes = DSNewList(1, 0, count, sizeof(Node_801E2878), 0, 0);
+    mpNodes = DSNewList(1, 0, count, sizeof(BodyGroupNode), 0, 0);
 }
 
-Class_801E27A4::~Class_801E27A4()
+BodyGroup::~BodyGroup()
 {
     DSDelList(mpNodes);
     mpNodes = 0;
     mpUnknown8 = 0;
 }
 
-void Class_801E27A4::fn_801E2870(Class_801E299C *p)
+void BodyGroup::fn_801E2870(Class_801E299C *p)
 {
     mpUnknown8 = p;
 }
 
-int Class_801E27A4::fn_801E2878(Class_801E2878 *pMember)
+int BodyGroup::fn_801E2878(RigidBody *pMember)
 {
-    Node_801E2878 *pNode = (Node_801E2878 *)DSNewListNode(mpNodes);
+    BodyGroupNode *pNode = (BodyGroupNode *)DSNewListNode(mpNodes);
 
     pNode->mpMember = pMember;
     if (DSAddListNode(mpNodes, pNode, 1) != pNode) {
@@ -49,17 +49,17 @@ int Class_801E27A4::fn_801E2878(Class_801E2878 *pMember)
         return 0;
     }
     if (mpOwner) {
-        mpOwner->fn_801E90A8(this, pMember);
+        mpOwner->OnGroupBodyAdded(this, pMember);
     }
     return 1;
 }
 
-int Class_801E27A4::fn_801E28FC(Class_801E2878 *pMember)
+int BodyGroup::fn_801E28FC(RigidBody *pMember)
 {
-    Node_801E2878 *pNode;
+    BodyGroupNode *pNode;
 
-    for (pNode = (Node_801E2878 *)DSGetListNode(mpNodes, 0); pNode;
-         pNode = (Node_801E2878 *)DSNextListNode(mpNodes, pNode)) {
+    for (pNode = (BodyGroupNode *)DSGetListNode(mpNodes, 0); pNode;
+         pNode = (BodyGroupNode *)DSNextListNode(mpNodes, pNode)) {
         if (pNode->mpMember == pMember) {
             break;
         }
@@ -68,14 +68,14 @@ int Class_801E27A4::fn_801E28FC(Class_801E2878 *pMember)
         DSRemoveListNode(mpNodes, pNode);
         DSDelListNode(mpNodes, pNode);
         if (mpOwner) {
-            mpOwner->fn_801E90CC(this, pMember);
+            mpOwner->OnGroupBodyRemoved(this, pMember);
         }
         return 1;
     }
     return 0;
 }
 
-int Class_801E27A4::vfn_05(int a, int b)
+int BodyGroup::vfn_05(int a, int b)
 {
     int first = mpUnknown8->vfn_02();
     int second = vfn_08(a, b);
@@ -83,75 +83,75 @@ int Class_801E27A4::vfn_05(int a, int b)
     return first || second;
 }
 
-int Class_801E27A4::vfn_06()
+int BodyGroup::vfn_06()
 {
     return mpUnknown8->vfn_03();
 }
 
-int Class_801E27A4::vfn_01(void **ppOut)
+int BodyGroup::GetState(float *pState)
 {
-    Node_801E2878 *pNode;
+    BodyGroupNode *pNode;
     int count = 0;
     int n;
 
-    for (pNode = (Node_801E2878 *)DSGetListNode(mpNodes, 0); pNode;
-         pNode = (Node_801E2878 *)DSNextListNode(mpNodes, pNode)) {
-        if (pNode->mpMember->mType == 2) {
-            n = pNode->mpMember->vfn_01(ppOut);
+    for (pNode = (BodyGroupNode *)DSGetListNode(mpNodes, 0); pNode;
+         pNode = (BodyGroupNode *)DSNextListNode(mpNodes, pNode)) {
+        if (pNode->mpMember->mState == 2) {
+            n = pNode->mpMember->GetState(pState);
             count += n;
-            ppOut += n;
+            pState += n;
         }
     }
     return count;
 }
 
-int Class_801E27A4::vfn_02(void **ppOut)
+int BodyGroup::SetState(float *pState)
 {
-    Node_801E2878 *pNode;
+    BodyGroupNode *pNode;
     int count = 0;
     int n;
 
-    for (pNode = (Node_801E2878 *)DSGetListNode(mpNodes, 0); pNode;
-         pNode = (Node_801E2878 *)DSNextListNode(mpNodes, pNode)) {
-        if (pNode->mpMember->mType == 2) {
-            n = pNode->mpMember->vfn_02(ppOut);
+    for (pNode = (BodyGroupNode *)DSGetListNode(mpNodes, 0); pNode;
+         pNode = (BodyGroupNode *)DSNextListNode(mpNodes, pNode)) {
+        if (pNode->mpMember->mState == 2) {
+            n = pNode->mpMember->SetState(pState);
             count += n;
-            ppOut += n;
+            pState += n;
         }
     }
     return count;
 }
 
-int Class_801E27A4::vfn_03(int a, void **ppOut)
+int BodyGroup::GetDerivative(void *pStart, float *pRate)
 {
-    Node_801E2878 *pNode;
+    BodyGroupNode *pNode;
     int count = 0;
     int n;
 
     vfn_07();
-    for (pNode = (Node_801E2878 *)DSGetListNode(mpNodes, 0); pNode;
-         pNode = (Node_801E2878 *)DSNextListNode(mpNodes, pNode)) {
-        if (pNode->mpMember->mType == 2) {
-            n = pNode->mpMember->vfn_03(a, ppOut);
+    for (pNode = (BodyGroupNode *)DSGetListNode(mpNodes, 0); pNode;
+         pNode = (BodyGroupNode *)DSNextListNode(mpNodes, pNode)) {
+        if (pNode->mpMember->mState == 2) {
+            n = pNode->mpMember->GetDerivative(pStart, pRate);
             count += n;
-            ppOut += n;
+            pRate += n;
         }
     }
     return count;
 }
 
-Node_801E2878 *Class_801E27A4::fn_801E2C3C()
+BodyGroupNode *BodyGroup::fn_801E2C3C()
 {
-    return (Node_801E2878 *)DSGetListNode(mpNodes, 0);
+    return (BodyGroupNode *)DSGetListNode(mpNodes, 0);
 }
 
-Class_801E2878 *Class_801E27A4::fn_801E2C64(Node_801E2878 **ppNode)
+RigidBody *BodyGroup::fn_801E2C64(BodyGroupNode **ppNode)
 {
-    Class_801E2878 *pMember = 0;
+    RigidBody *pMember = 0;
 
     if (*ppNode) {
         pMember = (*ppNode)->mpMember;
-        *ppNode = (Node_801E2878 *)DSNextListNode(mpNodes, *ppNode);
+        *ppNode = (BodyGroupNode *)DSNextListNode(mpNodes, *ppNode);
     }
     return pMember;
 }

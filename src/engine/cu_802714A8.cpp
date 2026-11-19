@@ -39,10 +39,10 @@ int fn_802714A8(int id, int value)
             if (changed) {
                 if (pRecord->m24 & 4) {
                     for (i = 0; i < lbl_8030002C; i++) {
-                        fn_80271BD4(handle, i);
+                        SNDPLATFORM_setfxlevel(handle, i);
                     }
                 } else {
-                    fn_80271BD4(handle, 0);
+                    SNDPLATFORM_setfxlevel(handle, 0);
                 }
             }
         }

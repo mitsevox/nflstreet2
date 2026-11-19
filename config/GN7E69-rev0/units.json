@@ -1085,15 +1085,15 @@
       "address": "0x80307470",
       "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gTutorialGame. InGame dependency pointer written at 0x80032B7C."
     },
-    "fn_801E279C__14Class_801E274CP14Class_801E8E04": {
+    "fn_801E279C__14Class_801E274CP12PhysicsWorld": {
       "address": "0x801E279C",
       "evidence": "evidence.tsv external row for 0x801E279C (fn_801E279C__14Class_801E274CP14Class_801E8E04) and function row 0x801E279C (comparison unit; original assembly remains linked)."
     },
-    "fn_801E2C3C__14Class_801E27A4": {
+    "fn_801E2C3C__9BodyGroup": {
       "address": "0x801E2C3C",
       "evidence": "evidence.tsv external row for 0x801E2C3C (fn_801E2C3C__14Class_801E27A4) and function row 0x801E2C3C (comparison unit; original assembly remains linked)."
     },
-    "fn_801E2C64__14Class_801E27A4PP13Node_801E2878": {
+    "fn_801E2C64__9BodyGroupPP13BodyGroupNode": {
       "address": "0x801E2C64",
       "evidence": "evidence.tsv external row for 0x801E2C64 (fn_801E2C64__14Class_801E27A4PP13Node_801E2878) and function row 0x801E2C64 (comparison unit; original assembly remains linked)."
     },
@@ -1101,11 +1101,15 @@
       "address": "0x802A2A40",
       "evidence": "evidence.tsv external row for 0x802A2A40 (_vt.14Class_802A2A40)."
     },
-    "__13Time_801E8C78": {
+    "__11PhysicsTime": {
       "address": "0x801E8C78",
       "evidence": "Target constructor initializes u32+0/f32+4 and vptr+8; inferred class contract."
     },
-    "fn_801E8D14__13Time_801E8C78f": {
+    "_._11PhysicsTime": {
+      "address": "0x80051D60",
+      "evidence": "evidence.tsv external row for 0x80051D60 (_._13Time_801E8C78, the deleting destructor in the Time_801E8C78 vtable 0x8028DD58 slot 1); lets the PhysicsWorld::Step comparison draft in src/engine/physworld.cpp resolve its local-object destructor calls (original assembly remains linked)."
+    },
+    "fn_801E8D14__11PhysicsTimef": {
       "address": "0x801E8D14",
       "evidence": "Target member increments u32+0/f32+4 with f1 delta; inferred member contract."
     },
@@ -18485,9 +18489,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801E8E04.cpp",
+      "source": "src/engine/physworld.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv linker row 0x801E8E04-0x801E92D0 for the unchanged native contribution from src/engine/cu_801E8E04.cpp; existing function/type/compiler evidence and larger-file ownership remain in force. This is a linked native range, not a claim that its original source file is complete or closed.",
+      "evidence": "evidence.tsv linker row 0x801E8E04-0x801E92D0 for the native contribution from src/engine/physworld.cpp (unit row 0x801E8E04-0x801E9538); PhysicsWorld::Step 0x801E92D0-0x801E9538 is drafted in comparisons.json and keeps its original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -20622,9 +20626,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_80271BD4.cpp",
+      "source": "src/engine/splatfxlevel.cpp",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x80271BD4-0x80271D34 (fx-level slot, neutral file name src/engine/cu_80271BD4.cpp), its function row and source-form row, the data row of its .rodata floats 0x802C1D80-0x802C1D88, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; its one function is exact (written in the c18 wave) and linked.",
+      "evidence": "evidence.tsv unit row 0x80271BD4-0x80271D34 (SNDPLATFORM_setfxlevel, src/engine/splatfxlevel.cpp), its function row and source-form row, the data row of its .rodata floats 0x802C1D80-0x802C1D88, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; its one function is exact (written in the c18 wave) and linked.",
       "sections": [
         {
           "section": ".text",

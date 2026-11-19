@@ -5,10 +5,10 @@
 #include "engine/sndlib.h"
 
 
-int fn_80271BD4(int index, int slot)
+int SNDPLATFORM_setfxlevel(int index, int slot)
 {
-    // FAKEMATCH: unused stack object; only reproduces the target's 16 unused bytes at the frame bottom
-    volatile int unused[4];
+    // FAKEMATCH: unused local array; only reproduces the target's 16 unused bytes at the frame bottom
+    int unused[4];
     Record_803A6DF0 *pRec = &lbl_803A6C24.m1CC[index];
     float level;
     int i;

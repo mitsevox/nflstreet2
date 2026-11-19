@@ -45,7 +45,7 @@ void StreamFader(void *context)
             dst->m48 = vol * lbl_80300028;
             fn_802747D8(index);
             for (i = 0; i < lbl_8030002C; i++) {
-                fn_80271BD4(voice, i);
+                SNDPLATFORM_setfxlevel(voice, i);
             }
         }
     }

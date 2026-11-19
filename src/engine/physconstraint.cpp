@@ -19,7 +19,7 @@ PointConstraint::~PointConstraint()
     mpBodyB = 0;
 }
 
-void PointConstraint::Solve()
+void PointConstraint::Solve(float dt)
 {
     Vec3_801DE1E0 pointA;
     Vec3_801DE1E0 pointB;

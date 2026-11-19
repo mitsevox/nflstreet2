@@ -279,7 +279,7 @@ void MIX_reset(void);
 void fn_802747D8(int index);
 void SNDPKTPLAYI_flushcallbackdata(void);
 int fn_8027271C(int index);
-int fn_80271BD4(int index, int slot);
+int SNDPLATFORM_setfxlevel(int index, int slot);
 void MIX_destroy(void);
 void MIX_play(int index);
 void MIX_audioslice(void **buffers, int count);

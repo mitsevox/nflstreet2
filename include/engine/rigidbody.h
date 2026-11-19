@@ -48,6 +48,14 @@ public:
     void *mpOwner;
 };
 
+/* Per-body hooks a body set calls on add, remove and each step. */
+class BodyController {
+public:
+    virtual void AddBody(RigidBody *pBody) = 0;
+    virtual void RemoveBody(RigidBody *pBody) = 0;
+    virtual void UpdateSleepState(RigidBody *pBody, float dt) = 0;
+};
+
 extern "C" {
 void UpdateBodyDerivedState(RigidBody *pBody);
 void SetBodyPosition(RigidBody *pBody, Vec3_801DE1E0 *pPosition);

@@ -40,14 +40,6 @@ public:
     virtual int AllowStateChange(RigidBody *pBody, int wake) = 0;
 };
 
-/* Per-body hooks a body set calls on add, remove and each step. */
-class BodyController {
-public:
-    virtual void AddBody(RigidBody *pBody) = 0;
-    virtual void RemoveBody(RigidBody *pBody) = 0;
-    virtual void UpdateSleepState(RigidBody *pBody, float dt) = 0;
-};
-
 /* Puts slow bodies to sleep and wakes moving ones. */
 class SleepController : public BodyController {
 public:

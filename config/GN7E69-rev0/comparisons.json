@@ -9003,7 +9003,7 @@
           "end": "0x80051308"
         },
         {
-          "symbol": "_._13Time_801E8C78",
+          "symbol": "_._11PhysicsTime",
           "start": "0x80051D60",
           "end": "0x80051D94"
         },
@@ -31268,67 +31268,67 @@
           "end": "0x801E279C"
         },
         {
-          "symbol": "fn_801E279C__14Class_801E274CP14Class_801E8E04",
+          "symbol": "fn_801E279C__14Class_801E274CP12PhysicsWorld",
           "start": "0x801E279C",
           "end": "0x801E27A4"
         },
         {
-          "symbol": "__14Class_801E27A4i",
+          "symbol": "__9BodyGroupi",
           "start": "0x801E27A4",
           "end": "0x801E2818"
         },
         {
-          "symbol": "_._14Class_801E27A4",
+          "symbol": "_._9BodyGroup",
           "start": "0x801E2818",
           "end": "0x801E2870"
         },
         {
-          "symbol": "fn_801E2870__14Class_801E27A4P14Class_801E299C",
+          "symbol": "fn_801E2870__9BodyGroupP14Class_801E299C",
           "start": "0x801E2870",
           "end": "0x801E2878"
         },
         {
-          "symbol": "fn_801E2878__14Class_801E27A4P14Class_801E2878",
+          "symbol": "fn_801E2878__9BodyGroupP9RigidBody",
           "start": "0x801E2878",
           "end": "0x801E28FC"
         },
         {
-          "symbol": "fn_801E28FC__14Class_801E27A4P14Class_801E2878",
+          "symbol": "fn_801E28FC__9BodyGroupP9RigidBody",
           "start": "0x801E28FC",
           "end": "0x801E299C"
         },
         {
-          "symbol": "vfn_05__14Class_801E27A4ii",
+          "symbol": "vfn_05__9BodyGroupii",
           "start": "0x801E299C",
           "end": "0x801E2A28"
         },
         {
-          "symbol": "vfn_06__14Class_801E27A4",
+          "symbol": "vfn_06__9BodyGroup",
           "start": "0x801E2A28",
           "end": "0x801E2A60"
         },
         {
-          "symbol": "vfn_01__14Class_801E27A4PPv",
+          "symbol": "GetState__9BodyGroupPf",
           "start": "0x801E2A60",
           "end": "0x801E2AF4"
         },
         {
-          "symbol": "vfn_02__14Class_801E27A4PPv",
+          "symbol": "SetState__9BodyGroupPf",
           "start": "0x801E2AF4",
           "end": "0x801E2B88"
         },
         {
-          "symbol": "vfn_03__14Class_801E27A4iPPv",
+          "symbol": "GetDerivative__9BodyGroupPvPf",
           "start": "0x801E2B88",
           "end": "0x801E2C3C"
         },
         {
-          "symbol": "fn_801E2C3C__14Class_801E27A4",
+          "symbol": "fn_801E2C3C__9BodyGroup",
           "start": "0x801E2C3C",
           "end": "0x801E2C64"
         },
         {
-          "symbol": "fn_801E2C64__14Class_801E27A4PP13Node_801E2878",
+          "symbol": "fn_801E2C64__9BodyGroupPP13BodyGroupNode",
           "start": "0x801E2C64",
           "end": "0x801E2CB4"
         }
@@ -40029,6 +40029,32 @@
           "symbol": "SNDautovol",
           "start": "0x8026A2DC",
           "end": "0x8026A40C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/physworld.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801E8E04-0x801E9538 (src/engine/physworld.cpp), the function, name and source-form rows of PhysicsWorld::Step 0x801E92D0. Documented holdout: Step is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (95.99%: the target inlines the PhysicsTime destructor of its two local times as a vtable store with the vtable 0x8028DD58 external, while a declaration that inlines it here makes the compiler emit its own static vtable and destructor; with the destructor out of line the step calls it). The other ten functions and the vtable are linked through units.json.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E8E04",
+          "end": "0x801E9538"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1660",
+          "end": "0x802B1678"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "Step__12PhysicsWorldP11PhysicsTimeT1",
+          "start": "0x801E92D0",
+          "end": "0x801E9538"
         }
       ]
     }
