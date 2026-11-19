@@ -6,17 +6,27 @@
 
 extern "C" {
 
-extern unsigned char lbl_802C1F62[][6][6];
-extern unsigned char lbl_802C1FF2[][6];
+extern const unsigned char lbl_802C1F68[][6][6];
+extern unsigned char lbl_802C1FF8[][6];
 extern int lbl_803A772C;
+
+/* Rounds to the nearest integer, halves away from zero. */
+// FAKEMATCH: file-static rounding helper as in sstrstat.c; written in place, the pan and loop registers swap
+static inline int SNDSTRMI_round(float t)
+{
+    if (!(t < 0.0f)) {
+        return (int)(t + 0.5f);
+    }
+    return (int)(t - 0.5f);
+}
 
 int SNDSTRM_setazimuth(int stream, int speaker, float azimuth)
 {
+    // FAKEMATCH: unused stack object; reproduces the target's 8 bytes at the frame bottom
+    volatile int spare[2];
     SndStreamChannel_t *channel;
-    SndStreamSpeaker_t *sp;
     Record_803A6DF0 *record;
     Record_803A6DF0 *dst;
-    unsigned char *pans;
     unsigned short pan;
     float angle;
     int voice;
@@ -29,12 +39,7 @@ int SNDSTRM_setazimuth(int stream, int speaker, float azimuth)
     if (channel == 0) {
         return -8;
     }
-    angle = azimuth * (65536.0f / 360.0f);
-    if (!(angle < 0.0f)) {
-        pan = (int)(angle + 0.5f);
-    } else {
-        pan = (int)(angle - 0.5f);
-    }
+    pan = SNDSTRMI_round(azimuth * (65536.0f / 360.0f));
     on = 0;
     channel->mPanned = 0;
     if (speaker == -1) {
@@ -43,12 +48,16 @@ int SNDSTRM_setazimuth(int stream, int speaker, float azimuth)
         } else {
             angle = azimuth;
         }
-        for (i = 0; i <= 5; i++) {
-            channel->mSpeakers[i].mAzimuth = angle;
-            channel->mSpeakers[i].mAzimuthOn = on;
+        // FAKEMATCH: per-branch loop index, slot and pan-row pointers and this store order keep the target's register choice
+        for (int j = 0; j <= 5; j++) {
+            SndStreamSpeaker_t *sp = &channel->mSpeakers[j];
+
+            sp->mAzimuthOn = 0;
+            sp->mAzimuth = angle;
         }
     } else {
-        sp = &channel->mSpeakers[speaker];
+        SndStreamSpeaker_t *sp = &channel->mSpeakers[speaker];
+
         if (azimuth == -1000000.0f) {
             sp->mAzimuth = -1000000.0f;
         } else {
@@ -62,18 +71,20 @@ int SNDSTRM_setazimuth(int stream, int speaker, float azimuth)
         record = &lbl_803A6C24.m1CC[voice];
         if (speaker == -1) {
             if (azimuth == -1000000.0f) {
-                pans = lbl_802C1F62[lbl_803A772C][record->m23];
+                const unsigned char *pans = lbl_802C1F68[lbl_803A772C][record->m23 - 1];
+
                 for (i = 0; i < record->m23; i++) {
-                    dst = lbl_803A6C24.m1CC + record->m4[i];
-                    dst->m1C = pans[i] << 8;
-                    fn_80274960(record->m4[i]);
+                    index = record->m4[i];
+                    lbl_803A6C24.m1CC[index].m1C = pans[i] << 8;
+                    fn_80274960(index);
                 }
             } else {
-                pans = lbl_802C1FF2[channel->mChannels];
+                const unsigned char *pans = lbl_802C1FF8[channel->mChannels - 1];
+
                 for (i = 0; i < record->m23; i++) {
-                    dst = lbl_803A6C24.m1CC + record->m4[i];
-                    dst->m1C = pan + (pans[i] << 8);
-                    fn_80274960(record->m4[i]);
+                    index = record->m4[i];
+                    lbl_803A6C24.m1CC[index].m1C = pan + (pans[i] << 8);
+                    fn_80274960(index);
                 }
             }
         } else {
@@ -82,7 +93,9 @@ int SNDSTRM_setazimuth(int stream, int speaker, float azimuth)
             dst = &lbl_803A6C24.m1CC[index];
             if (slot != -128) {
                 if (azimuth == -1000000.0f) {
-                    dst->m1C = lbl_802C1F62[lbl_803A772C][record->m23][slot] << 8;
+                    const unsigned char *pans = lbl_802C1F68[lbl_803A772C][record->m23 - 1];
+
+                    dst->m1C = pans[slot] << 8;
                 } else {
                     dst->m1C = pan;
                 }

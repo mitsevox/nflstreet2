@@ -39215,32 +39215,6 @@
       ]
     },
     {
-      "source": "src/engine/sst3dpos.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row for src/engine/sst3dpos.c; draft comparison.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026E4C0",
-          "end": "0x8026E774"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B7938",
-          "end": "0x802B7948"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SNDSTRM_setazimuth",
-          "start": "0x8026E4C0",
-          "end": "0x8026E774"
-        }
-      ]
-    },
-    {
       "source": "src/engine/sstautov.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row for src/engine/sstautov.c; draft comparison.",

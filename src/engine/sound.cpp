@@ -151,7 +151,7 @@ int fn_8026E388(int handle);
 void fn_8026E8FC(int handle, int a, int b);
 int SNDSTRM_fxlevel(int handle, int a, int b);
 int SNDSTRM_getprogvol(int handle);
-int fn_8026E4C0(int handle, float degrees, int a);
+int SNDSTRM_setazimuth(int stream, int speaker, float azimuth);
 int SNDSTRM_modifyhold(int a, int b);
 int SNDstop(int handle);
 int SNDSTRM_overhead(int a, int b);
@@ -732,7 +732,7 @@ int SndStreamSetPan(SndStream_t *pStream, unsigned int angle)
     result = 0;
     if (_Snd_ModuleInfo.mStatus.mFlags.mActive && _Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         SND_LOCK();
-        result = fn_8026E4C0(pStream->mHandle, degrees, -1);
+        result = SNDSTRM_setazimuth(pStream->mHandle, -1, degrees);
         SND_UNLOCK();
     }
     return result;
