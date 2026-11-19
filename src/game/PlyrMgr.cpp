@@ -30,12 +30,12 @@
 
 /* Block that +4 of the manager points to (28 bytes). */
 struct PlyrMgrCollideSet_t {
-    void *mpUnknown0;
+    CollideObject_t *mpUnknown0;
     int mUnknown4;
     char mUnknown8[4];
     int mUnknown12;
     char mUnknown16[4];
-    void *mpUnknown20[2];
+    CollideShape_t *mpUnknown20[2];
 };
 
 /* The player manager that _PlyrMgr_pManager points to (12 bytes). */
@@ -398,7 +398,6 @@ extern "C" int PlyrMgrLoadSnapshot(PlyrMgr_t *pManager, char *pBuffer)
 {
     PlyrSaveView_t *pDst;
     PlyrSaveView_t *pSrc;
-    char *pData;
     short i;
 
     *pManager = *(PlyrMgr_t *)pBuffer;
@@ -431,12 +430,12 @@ extern "C" int PlyrMgrLoadSnapshot(PlyrMgr_t *pManager, char *pBuffer)
         pDst++;
         pSrc++;
     }
-    pData = (char *)pSrc + sizeof(PlyrMgrCollideSet_t);
-    memcpy(pManager->mpUnknown4->mpUnknown0, pData, pManager->mpUnknown4->mUnknown4 * 48);
-    pData += pManager->mpUnknown4->mUnknown4 * 48;
+    pSrc = (PlyrSaveView_t *)((char *)pSrc + sizeof(PlyrMgrCollideSet_t));
+    memcpy(pManager->mpUnknown4->mpUnknown0, pSrc, pManager->mpUnknown4->mUnknown4 * 48);
+    pSrc = (PlyrSaveView_t *)((char *)pSrc + pManager->mpUnknown4->mUnknown4 * 48);
     for (i = 0; i <= 1; i++) {
-        memcpy(pManager->mpUnknown4->mpUnknown20[i], pData, pManager->mpUnknown4->mUnknown12 * 48);
-        pData += pManager->mpUnknown4->mUnknown12 * 48;
+        memcpy(pManager->mpUnknown4->mpUnknown20[i], pSrc, pManager->mpUnknown4->mUnknown12 * 48);
+        pSrc = (PlyrSaveView_t *)((char *)pSrc + pManager->mpUnknown4->mUnknown12 * 48);
     }
     return 1;
 }
