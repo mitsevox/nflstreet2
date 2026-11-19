@@ -30346,7 +30346,7 @@
     {
       "source": "src/engine/cu_80222EC4.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80222EC4-0x80223B00 (src/engine/cu_80222EC4.c), its function and name rows and the file compiler row. Draft comparisons only; original assembly remains linked. The bodies of 0x80222EC4-0x80223460 compile with their literal pools 0x802B1FC0-0x802B1FEC (exact data rows); 0x80223460, the user of 0x802B1FEC-0x802B1FF4, has no body.",
+      "evidence": "evidence.tsv provisional unit row 0x80222EC4-0x80223B00 (src/engine/cu_80222EC4.c), its function and name rows and the file compiler row. Draft comparisons only; original assembly remains linked. The bodies of 0x80222EC4-0x80223874 compile with their literal pools 0x802B1FC0-0x802B1FF0 (exact data row 0x802B1FC0-0x802B1FF4).",
       "sections": [
         {
           "section": ".text",
@@ -30358,7 +30358,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B1FC0",
-          "end": "0x802B1FEC"
+          "end": "0x802B1FF4"
         }
       ],
       "functions": [
@@ -30386,6 +30386,11 @@
           "symbol": "fn_802233DC",
           "start": "0x802233DC",
           "end": "0x80223460"
+        },
+        {
+          "symbol": "fn_80223460",
+          "start": "0x80223460",
+          "end": "0x80223874"
         },
         {
           "symbol": "fn_80223874",
@@ -33874,6 +33879,21 @@
           "symbol": "fn_802166F0",
           "start": "0x802166F0",
           "end": "0x80216860"
+        },
+        {
+          "symbol": "fn_80216860",
+          "start": "0x80216860",
+          "end": "0x80216A2C"
+        },
+        {
+          "symbol": "fn_80216A2C",
+          "start": "0x80216A2C",
+          "end": "0x80216BFC"
+        },
+        {
+          "symbol": "fn_80216BFC",
+          "start": "0x80216BFC",
+          "end": "0x80216E34"
         },
         {
           "symbol": "fn_80216E34",

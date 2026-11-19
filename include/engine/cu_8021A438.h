@@ -54,6 +54,14 @@ typedef struct Node_80223874 {
             Float32 unk_38;        /* 0x38 */
             Float32 unk_3C[2];     /* 0x3C */
         } t;
+        struct {
+            Int16 unk_10;              /* 0x10 */
+            Uint8 unk_12[0x02];
+            Uint8 unk_14[4];           /* 0x14 */
+            Point_80222EC4 unk_18[3];  /* 0x18 */
+            Point_80222EC4 unk_30;     /* 0x30 */
+            Float32 unk_38[3];         /* 0x38 */
+        } c;
     } u;            /* 0x10 */
 } Node_80223874;
 

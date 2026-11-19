@@ -211,6 +211,202 @@ const unsigned char *fn_802166F0(const unsigned char *p)
     return p;
 }
 
+const unsigned char *fn_80216A2C(const unsigned char *p, const unsigned char *pPath);
+const unsigned char *fn_80216BFC(const unsigned char *p, const unsigned char *pPath);
+
+const unsigned char *fn_80216860(const unsigned char *p, const unsigned char *pPath)
+{
+    const unsigned char *pResult = 0;
+    const unsigned char *pNext;
+    int i;
+
+    if (p == 0 || *p == 0 || pPath == 0 || *pPath == 0) {
+        return 0;
+    }
+    do {
+        while (*p != '<' && *p != 0) {
+            p++;
+        }
+        if (p[0] == '<' && p[1] == '?') {
+            p = fn_8021658C(p);
+            continue;
+        }
+        if (p[0] == '<' && p[1] == '!') {
+            p = fn_8021658C(p);
+            continue;
+        }
+        if (p[0] == '<' && p[1] == '/') {
+            p = fn_8021658C(p);
+            continue;
+        }
+        if (*p != 0) {
+            p++;
+        }
+        for (i = 0; p[i] != 0 && pPath[i] != 0 && p[i] == pPath[i]; i++) {
+        }
+        if (p[i] == 0) {
+            break;
+        }
+        if (p[i] <= ' ' || p[i] == '>' || p[i] == '/') {
+            if (pPath[i] == 0) {
+                pResult = p - 1;
+                break;
+            }
+            if (pPath[i] == '.' && p[i] != '/') {
+                pNext = i + pPath;
+                while (*p != 0 && *p != '>') {
+                    p++;
+                }
+                if (pNext[1] == 0) {
+                    pResult = 0;
+                    if (*p != 0) {
+                        pResult = p + 1;
+                    }
+                } else if (*p != 0) {
+                    pResult = fn_80216BFC(p + 1, pNext + 1);
+                }
+                break;
+            }
+        }
+        p = fn_8021658C(p - 1);
+    } while (p != 0);
+    return pResult;
+}
+
+const unsigned char *fn_80216A2C(const unsigned char *p, const unsigned char *pPath)
+{
+    const unsigned char *pResult = 0;
+    const unsigned char *pNext;
+    int i;
+
+    if (p == 0 || *p == 0 || pPath == 0 || *pPath == 0) {
+        return 0;
+    }
+    do {
+        while (*p != '<' && *p != 0) {
+            p++;
+        }
+        if (p[0] == '<' && p[1] == '?') {
+            p = fn_802166F0(p);
+            continue;
+        }
+        if (p[0] == '<' && p[1] == '!') {
+            p = fn_802166F0(p);
+            continue;
+        }
+        if (p[0] == '<' && p[1] == '/') {
+            break;
+        }
+        if (*p != 0) {
+            p++;
+        }
+        for (i = 0; p[i] != 0 && pPath[i] != 0 && p[i] == pPath[i]; i++) {
+        }
+        if (p[i] == 0) {
+            break;
+        }
+        if (p[i] <= ' ' || p[i] == '>' || p[i] == '/') {
+            if (pPath[i] == 0) {
+                pResult = p - 1;
+                break;
+            }
+            if (pPath[i] == '.' && p[i] != '/') {
+                pNext = i + pPath;
+                while (*p != 0 && *p != '>') {
+                    p++;
+                }
+                if (pNext[1] == 0) {
+                    pResult = 0;
+                    if (*p != 0) {
+                        pResult = p + 1;
+                    }
+                } else if (*p != 0) {
+                    pResult = fn_80216A2C(p + 1, pNext + 1);
+                }
+                break;
+            }
+        }
+        p = fn_802166F0(p - 1);
+    } while (p != 0);
+    return pResult;
+}
+
+const unsigned char *fn_80216BFC(const unsigned char *p, const unsigned char *pPath)
+{
+    const unsigned char *pResult = 0;
+    const unsigned char *pNext;
+    const unsigned char *pEnd = 0;
+    const unsigned char *q;
+    int depth;
+    int i;
+
+    if (p == 0 || *p == 0 || pPath == 0 || *pPath == 0) {
+        return 0;
+    }
+    do {
+        while (*p != '<' && *p != 0) {
+            p++;
+        }
+        if (p[0] == '<' && p[1] == '?') {
+            p = fn_802166F0(p);
+            continue;
+        }
+        if (p[0] == '<' && p[1] == '!') {
+            p = fn_802166F0(p);
+            continue;
+        }
+        if (p[0] == '<' && p[1] == '/') {
+            break;
+        }
+        if (pEnd == 0) {
+            depth = 0;
+            for (q = p; *q != 0; q++) {
+                if (*q == '<' && q[1] != '?' && q[1] != '!') {
+                    if (q[1] != '/') {
+                        depth++;
+                    } else if (--depth == 0) {
+                        pEnd = q;
+                        break;
+                    }
+                }
+            }
+        } else if (p > pEnd) {
+            break;
+        }
+        if (*p != 0) {
+            p++;
+        }
+        for (i = 0; p[i] != 0 && pPath[i] != 0 && p[i] == pPath[i]; i++) {
+        }
+        if (p[i] == 0) {
+            break;
+        }
+        if (p[i] <= ' ' || p[i] == '>' || p[i] == '/') {
+            if (pPath[i] == 0) {
+                pResult = p - 1;
+                break;
+            }
+            if (pPath[i] == '.' && p[i] != '/') {
+                pNext = i + pPath;
+                while (*p != 0 && *p != '>') {
+                    p++;
+                }
+                if (pNext[1] == 0) {
+                    pResult = 0;
+                    if (*p != 0) {
+                        pResult = p + 1;
+                    }
+                } else if (*p != 0) {
+                    pResult = fn_80216A2C(p + 1, pNext + 1);
+                }
+                break;
+            }
+        }
+        p = fn_8021658C(p - 1);
+    } while (p != 0);
+    return pResult;
+}
+
 const unsigned char *fn_80216E34(const unsigned char *pElem)
 {
     const unsigned char *p;
