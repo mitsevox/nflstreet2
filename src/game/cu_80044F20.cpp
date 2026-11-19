@@ -14,7 +14,8 @@ void DCStoreRange(void *p, int size);
 
 static inline void UnpackColor(const unsigned short *pData, int index, PaletteColor *pColor, int format)
 {
-    unsigned int value = pData[index];
+    // FAKEMATCH: the entry is read through a byte offset (index << 1), which the target computes with slwi
+    unsigned int value = *(const unsigned short *)((const char *)pData + (index << 1));
 
     switch (format) {
     case 2:
@@ -60,7 +61,7 @@ static inline void PackColor(unsigned short *pData, int index, const PaletteColo
 
 static inline int BlendChannel(int a, int b, int weightA, int weightB, int total)
 {
-    int value = (a * weightA + b * weightB) / total;
+    int value = (weightA * a + weightB * b) / total;
 
     if (value > 255) {
         value = 255;

@@ -71,8 +71,8 @@ void fn_800034FC(void)
     *(void **)&req.mUnknown0[0] = &lbl_803EB8C8;
     *(void **)&req.mUnknown0[4] = lbl_803ECCA4;
     *(int *)&req.mUnknown0[8] = 16384;
-    req.mTarget = (int)&lbl_80367580;
     req.mUnknown10 = 1;
+    req.mTarget = (int)&lbl_80367580;
 
     lbl_80367580.mFillToEnd = 1;
     lbl_80367580.mPosition = 0;
@@ -87,18 +87,18 @@ void fn_800034FC(void)
     lbl_80367580.mSize = MemCardFilesGetDataSize(type);
 
     switch (type) {
-    case 1:
-        fn_8022EB94(&lbl_80367580, &gCardStreamOps);
+    case 3:
+        fn_8022F358(slot[3]);
+        fn_8022F478();
+        PlayerSaveOnSave(&req, &gCardStreamOps);
         break;
     case 2:
         fn_8022F358(slot[3]);
         fn_8022F478();
         fn_8022F698(&req, &gCardStreamOps);
         break;
-    case 3:
-        fn_8022F358(slot[3]);
-        fn_8022F478();
-        PlayerSaveOnSave(&req, &gCardStreamOps);
+    case 1:
+        fn_8022EB94(&lbl_80367580, &gCardStreamOps);
         break;
     }
 }
@@ -115,8 +115,8 @@ void fn_80003620(void)
     *(void **)&req.mUnknown0[0] = &lbl_803EB8C8;
     *(void **)&req.mUnknown0[4] = lbl_803ECCA4;
     *(int *)&req.mUnknown0[8] = 16384;
-    req.mTarget = (int)&lbl_80367580;
     req.mUnknown10 = 1;
+    req.mTarget = (int)&lbl_80367580;
 
     lbl_803EB8C8 = 0;
     lbl_80367580.mFillToEnd = 1;
@@ -130,9 +130,21 @@ void fn_80003620(void)
     MemCardFilesGetLoadTarget(&type, slot);
     lbl_80367580.mSize = MemCardFilesGetDataSize(type);
 
+    // FAKEMATCH: each case stores its own handle (the target tests it at the end of every case)
     switch (type) {
-    case 1:
-        handle = fn_8022EB5C(&lbl_80367580, &gCardStreamOps);
+    case 3:
+        if (MemCardFilesIsUsed(3, *(int *)slot)) {
+            fn_8022F358(slot[3]);
+            fn_8022F1BC();
+            MemCardFilesRemoveSlot(type, *(int *)slot);
+        }
+        if (fn_8022F0D4() != -1) {
+            fn_8022F478();
+            handle = PlayerSaveOnLoad(&req, &gCardStreamOps);
+        }
+        if (handle) {
+            lbl_803EB8C8 = handle;
+        }
         break;
     case 2:
         if (MemCardFilesIsUsed(2, *(int *)slot)) {
@@ -144,38 +156,94 @@ void fn_80003620(void)
             fn_8022F478();
             handle = fn_8022F5E4(&req, &gCardStreamOps);
         }
-        break;
-    case 3:
-        if (MemCardFilesIsUsed(3, *(int *)slot)) {
-            fn_8022F358(slot[3]);
-            fn_8022F1BC();
-            MemCardFilesRemoveSlot(type, *(int *)slot);
-        }
-        if (fn_8022F0D4() != -1) {
-            fn_8022F478();
-            handle = PlayerSaveOnLoad(&req, &gCardStreamOps);
+        if (handle) {
+            lbl_803EB8C8 = handle;
         }
         break;
-    }
-
-    if (handle) {
-        lbl_803EB8C8 = handle;
+    case 1:
+        handle = fn_8022EB5C(&lbl_80367580, &gCardStreamOps);
+        if (handle) {
+            lbl_803EB8C8 = handle;
+        }
+        break;
     }
 }
 
 void fn_800037C0(int a, int *b)
 {
-    char buf[24];
-    int slot;
+    // FAKEMATCH: one 48-byte local stands for the frame objects (a byte set to 1 at +16, the 17-byte date at +24); the original objects are not recovered
+    char buf[48];
     int type;
+    int slot;
 
-    buf[0] = 1;
+    buf[16] = 1;
 
     MemCardFilesGetLoadTarget(&type, &slot);
 
     switch (type) {
+    case 3:
+        a = fn_8022F53C(a);
+        switch (a) {
+        case 0:
+            slot = fn_8022F384(fn_8022F4BC());
+            MemCardFilesSetLoadTarget(type, slot);
+            fn_801D6B24(buf + 24, 17);
+            MemCardFilesAddSlot(type, slot, lbl_80367580.mChecksum, buf + 24);
+            MemCardFilesStoreChecksum(type, slot);
+            break;
+        case 1:
+            fn_8022F4BC();
+            fn_8022F1BC();
+            if (*b >= 0) {
+                *b = -50;
+            }
+            break;
+        case 2: // FAKEMATCH: explicit case 2 shapes the dispatch tree; its body is the default one
+        default:
+            fn_8022F4BC();
+            fn_8022F1BC();
+            fn_801D6DE0(fn_801D6844(), type);
+            if (*b >= 0) {
+                *b = -100;
+            }
+            break;
+        }
+        break;
+    case 2:
+        a = fn_8022F53C(a);
+        switch (a) {
+        case 0: {
+            int handle = fn_8022F4BC();
+            slot = fn_8022F384(handle);
+            MemCardFilesSetLoadTarget(type, slot);
+            fn_801D6B24(buf + 24, 17);
+            MemCardFilesAddSlot(type, slot, lbl_80367580.mChecksum, buf + 24);
+            DbCheckVersion(fn_8022F3D4(handle));
+            MemCardFilesStoreChecksum(type, slot);
+            break;
+        }
+        case 1:
+            fn_8022F4BC();
+            fn_8022F1BC();
+            if (*b >= 0) {
+                *b = -50;
+            }
+            break;
+        case 2:
+        default:
+            fn_8022F4BC();
+            fn_8022F1BC();
+            fn_801D6DE0(fn_801D6844(), type);
+            if (*b >= 0) {
+                *b = -100;
+            }
+            break;
+        }
+        break;
     case 1:
-        if (a) {
+        if (a == 0) {
+            SndgApplyVolumeOptions();
+        } else {
             fn_801D6DE0(fn_801D6844(), type);
             if (*b >= 0) {
                 *b = -100;
@@ -184,63 +252,12 @@ void fn_800037C0(int a, int *b)
             fn_8022EB10();
             GameOptionsInit(1);
             GameOptionsShutdown();
-        } else {
-            SndgApplyVolumeOptions();
-            fn_801D6B24(buf + 8, 17);
-            MemCardFilesAddSlot(type, slot, MemCardFilesComputeChecksum(type, slot), buf + 8);
+        }
+        if (a == 0) {
+            fn_801D6B24(buf + 24, 17);
+            MemCardFilesAddSlot(type, slot, MemCardFilesComputeChecksum(type, slot), buf + 24);
         }
         break;
-    case 2: {
-        int res = fn_8022F53C(a);
-        if (res == 1) {
-            fn_8022F4BC();
-            fn_8022F1BC();
-            if (*b >= 0) {
-                *b = -50;
-            }
-        } else if (res == 0) {
-            int res_f4bc = fn_8022F4BC();
-            slot = fn_8022F384(res_f4bc);
-            MemCardFilesSetLoadTarget(type, slot);
-            fn_801D6B24(buf + 8, 17);
-            MemCardFilesAddSlot(type, slot, lbl_80367580.mChecksum, buf + 8);
-            DbCheckVersion(fn_8022F3D4(res_f4bc));
-            MemCardFilesStoreChecksum(type, slot);
-        } else {
-            fn_8022F4BC();
-            fn_8022F1BC();
-            fn_801D6DE0(fn_801D6844(), type);
-            if (*b >= 0) {
-                *b = -100;
-            }
-        }
-        break;
-    }
-    case 3: {
-        int res = fn_8022F53C(a);
-        if (res == 1) {
-            fn_8022F4BC();
-            fn_8022F1BC();
-            if (*b >= 0) {
-                *b = -50;
-            }
-        } else if (res == 0) {
-            int res_f4bc = fn_8022F4BC();
-            slot = fn_8022F384(res_f4bc);
-            MemCardFilesSetLoadTarget(type, slot);
-            fn_801D6B24(buf + 8, 17);
-            MemCardFilesAddSlot(type, slot, lbl_80367580.mChecksum, buf + 8);
-            MemCardFilesStoreChecksum(type, slot);
-        } else {
-            fn_8022F4BC();
-            fn_8022F1BC();
-            fn_801D6DE0(fn_801D6844(), type);
-            if (*b >= 0) {
-                *b = -100;
-            }
-        }
-        break;
-    }
     }
 }
 
@@ -282,19 +299,18 @@ int fn_800039E4(int a, int *b, int *c)
         int type;
         int slot;
         *b = fn_801D6620(c);
-        if (*b == 0) {
-            return state;
+        if (*b != 0) {
+            if (lbl_803EB8C8 == 0 && c != 0 && *c < 0) {
+                lbl_803EB8C8 = 36;
+            }
+            MemCardFilesGetSaveTarget(&type, &slot);
+            if (lbl_803EB8C8 == 0) {
+                MemCardFilesUpdateSlot(type, slot, lbl_80367580.mChecksum);
+            } else {
+                MemCardFilesClearSlotInfo(type, slot);
+            }
+            state = 0;
         }
-        if (lbl_803EB8C8 == 0 && c != 0 && *c < 0) {
-            lbl_803EB8C8 = 36;
-        }
-        MemCardFilesGetSaveTarget(&type, &slot);
-        if (lbl_803EB8C8 == 0) {
-            MemCardFilesUpdateSlot(type, slot, lbl_80367580.mChecksum);
-        } else {
-            MemCardFilesClearSlotInfo(type, slot);
-        }
-        state = 0;
         break;
     }
     case 7:
@@ -324,14 +340,13 @@ int fn_800039E4(int a, int *b, int *c)
         break;
     case 11:
         *b = fn_801D6620(c);
-        if (*b == 0) {
-            return state;
+        if (*b != 0) {
+            if (lbl_803EB8C8 == 0 && c != 0 && *c < 0) {
+                lbl_803EB8C8 = 36;
+            }
+            state = 0;
+            fn_800037C0(lbl_803EB8C8, c);
         }
-        if (lbl_803EB8C8 == 0 && c != 0 && *c < 0) {
-            lbl_803EB8C8 = 36;
-        }
-        state = 0;
-        fn_800037C0(lbl_803EB8C8, c);
         break;
     }
 

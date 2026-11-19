@@ -87,8 +87,8 @@ extern "C" int fn_8007FC70(int source, int value, int reset, int start)
     record.mUnknown0C = other;
     unsigned short count = 1;
     fn_8007FA48(0x54415453, 0x59414C50, &record.mUnknown00, &count, start);
-    record.mUnknown14 = value;
     record.mUnknown10 = value;
+    record.mUnknown14 = value;
     fn_80082C64(&record);
     SndgMusicPumpFrame(0);
     fn_80082D30(&record);
@@ -98,10 +98,10 @@ extern "C" int fn_8007FC70(int source, int value, int reset, int start)
     fn_80083070(&record);
     SndgMusicPumpFrame(0);
     if (reset) {
+        // FAKEMATCH: store order; mUnknown18 is cleared last (the first scheduling pass then puts it fourth, as in the target)
         record.mUnknown10C = 0x41;
         record.mUnknown118 = 2;
         record.mUnknown1C = 1;
-        record.mUnknown18 = 0;
         record.mUnknown110 = 0;
         record.mUnknownC8 = 0;
         record.mUnknownC4 = 0;
@@ -130,6 +130,7 @@ extern "C" int fn_8007FC70(int source, int value, int reset, int start)
         record.mUnknown94 = 0;
         record.mUnknown98 = 0;
         record.mUnknown9C = 0;
+        record.mUnknown18 = 0;
     }
     SndgMusicPumpFrame(0);
     fn_8008318C(0x59414C50, &record, source, 0x1AD);
@@ -152,7 +153,9 @@ extern "C" void fn_8007FE40(Object_8008044C *p, void *arg, int selector, int fla
 extern "C" void fn_8007FEB8(Object_8008044C *p, void *arg, int flags)
 {
     DbFilter node;
-    node.Set(6, 0x59414C5047494C50LL, 3, 1);
+    // FAKEMATCH: the operand value is held in a local, as the selector parameter of the sibling wrappers is
+    int selector = 1;
+    node.Set(6, 0x59414C5047494C50LL, 3, selector);
     DbCursorOpen(reinterpret_cast<DbCursor *>(p), 0x59414C50, 0x44494750, arg, &node, flags);
 }
 extern "C" void fn_8007FF30(Object_8008044C *p, void *arg, int selector, int flags)
@@ -242,6 +245,7 @@ extern "C" void fn_8008040C(Object_8008044C *p, Desc_8008044C *desc)
 }
 extern "C" void fn_8008044C(Object_8008044C *p, Desc_8008044C *desc, int tag)
 {
+    void *arg = 0;
     Desc_8008044C local;
     if (desc) {
         local.mUnknown0 = desc->mUnknown0;
@@ -249,8 +253,8 @@ extern "C" void fn_8008044C(Object_8008044C *p, Desc_8008044C *desc, int tag)
         local.mUnknown8 = desc->mUnknown8;
         local.mUnknown12 = desc->mUnknown12;
     }
-    void *arg = 0;
     switch (local.mUnknown0) {
+    case 0: break;
     case 1: arg = lbl_802D6950; break;
     case 2: arg = lbl_802D6990; break;
     }
