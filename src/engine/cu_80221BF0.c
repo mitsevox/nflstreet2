@@ -80,7 +80,8 @@ void fn_80221BF0(Text_80221BF0 *pText, Int32 Offset, Int32 *pA, Int32 *pB)
     i = pText->NumRanges;
     while (i-- != 0) {
         pRange = fn_80221D30(pText, i);
-        if (pRange->unk_00 <= Offset) {
+        /* FAKEMATCH: unsigned compare (cmplw at 0x80221C90) written as a cast of Offset */
+        if (pRange->unk_00 <= (Uint32)Offset) {
             break;
         }
     }
