@@ -148,7 +148,6 @@ int PhysicsWorld::RemoveConstraint(Constraint *pConstraint)
     return 0;
 }
 
-#if defined(DECOMP_COMPARE)
 extern "C" float fn_801E8DBC(void *pEnd, void *pStart);
 
 void PhysicsWorld::Step(PhysicsTime *pStart, PhysicsTime *pEnd)
@@ -199,4 +198,3 @@ void PhysicsWorld::Step(PhysicsTime *pStart, PhysicsTime *pEnd)
         }
     }
 }
-#endif

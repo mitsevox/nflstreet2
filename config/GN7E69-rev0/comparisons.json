@@ -39943,32 +39943,6 @@
           "end": "0x801C289C"
         }
       ]
-    },
-    {
-      "source": "src/engine/physworld.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801E8E04-0x801E9538 (src/engine/physworld.cpp), the function, name and source-form rows of PhysicsWorld::Step 0x801E92D0. Documented holdout: Step is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (95.99%: the target inlines the PhysicsTime destructor of its two local times as a vtable store with the vtable 0x8028DD58 external, while a declaration that inlines it here makes the compiler emit its own static vtable and destructor; with the destructor out of line the step calls it). The other ten functions and the vtable are linked through units.json.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801E8E04",
-          "end": "0x801E9538"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1660",
-          "end": "0x802B1678"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "Step__12PhysicsWorldP11PhysicsTimeT1",
-          "start": "0x801E92D0",
-          "end": "0x801E9538"
-        }
-      ]
     }
   ]
 }

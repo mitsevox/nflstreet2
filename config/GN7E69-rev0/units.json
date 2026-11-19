@@ -1106,9 +1106,9 @@
       "address": "0x801E8C78",
       "evidence": "Target constructor initializes u32+0/f32+4 and vptr+8; inferred class contract."
     },
-    "_._11PhysicsTime": {
-      "address": "0x80051D60",
-      "evidence": "evidence.tsv external row for 0x80051D60 (_._13Time_801E8C78, the deleting destructor in the Time_801E8C78 vtable 0x8028DD58 slot 1); lets the PhysicsWorld::Step comparison draft in src/engine/physworld.cpp resolve its local-object destructor calls (original assembly remains linked)."
+    "_vt.11PhysicsTime": {
+      "address": "0x8028DD58",
+      "evidence": "evidence.tsv external row for 0x8028DD58 (_vt.11PhysicsTime, the PhysicsTime vtable in the game rodata) and source-form row 0x801E92D0 (include/engine/phystime.h #pragma interface); src/engine/physworld.cpp references it from the inlined destructors of PhysicsWorld::Step."
     },
     "fn_801E8D14__11PhysicsTimef": {
       "address": "0x801E8D14",
@@ -18522,13 +18522,13 @@
     {
       "source": "src/engine/physworld.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv linker row 0x801E8E04-0x801E92D0 for the native contribution from src/engine/physworld.cpp (unit row 0x801E8E04-0x801E9538); PhysicsWorld::Step 0x801E92D0-0x801E9538 is drafted in comparisons.json and keeps its original bytes.",
+      "evidence": "evidence.tsv linker row 0x801E8E04-0x801E92D0 for the native contribution from src/engine/physworld.cpp (unit row 0x801E8E04-0x801E9538, all eleven functions and the vtable 0x802B1660); PhysicsWorld::Step 0x801E92D0 joined in the d2 wave (source-form row on include/engine/phystime.h).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801E8E04",
-          "end": "0x801E92D0"
+          "end": "0x801E9538"
         },
         {
           "section": ".rodata",
