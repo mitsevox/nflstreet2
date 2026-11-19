@@ -536,6 +536,12 @@ void fn_801A1D80(Object_8003DEC4 *pPlayer, int flag)
 }
 
 /* Draws the recorded trail poses of the player with fading alpha. */
+/* Release-build assert: the check is passed to an empty inline function and compiles to nothing. */
+static inline void _FxAssert(int)
+{
+}
+#define FX_ASSERT(e) _FxAssert(e)
+
 void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int count)
 {
     Color_8024FB58 color = {255};
@@ -547,7 +553,10 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
     color.g = 255;
     color.b = 255;
     color.a = 255;
-    fn_80227930(&v, lbl_802F29B0, lbl_802F29BC, StyleTrackerGetMeterFraction(pPlayer->mUnknown4968));
+    float fraction = StyleTrackerGetMeterFraction(pPlayer->mUnknown4968);
+    // FAKEMATCH: compiled-out range assert on the meter fraction; its 1.0f enters the pool before 0.0f
+    FX_ASSERT(fraction <= 1.0f && fraction >= 0.0f);
+    fn_80227930(&v, lbl_802F29B0, lbl_802F29BC, fraction);
     light = fn_80236B98(1, v.x, v.y, v.z);
     GXSetChanMatColor(0, color);
     GXSetNumChans(1);
