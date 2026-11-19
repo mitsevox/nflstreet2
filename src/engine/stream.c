@@ -268,6 +268,10 @@ static int fn_801F60F0(Stream_801F5DA4 *s)
             }
             _StreamMUTEX_unlock(s->pMutex);
         } else {
+            /* FAKEMATCH: the greedy-state reset value is a local set at the top of this arm
+               (the target holds the 0 in r25 from 0x801F6190 to the store at 0x801F6210). */
+            int greedyState = 0;
+
             c->mSize = fn_801F5D84(size | (tap << 24));
             _StreamMUTEX_lock(s->pMutex);
             cancelled = req->mState == 4;
@@ -281,7 +285,7 @@ static int fn_801F60F0(Stream_801F5DA4 *s)
                 s->mUsed = used + size;
                 s->pHead += size;
                 if (used < s->mGreedyLevel && s->mUsed >= s->mGreedyLevel) {
-                    s->mGreedyState = 0;
+                    s->mGreedyState = greedyState;
                 }
             }
             _StreamMUTEX_unlock(s->pMutex);
@@ -413,16 +417,17 @@ static void fn_801F6540(Stream_801F5DA4 *s, int priority)
     } else {
         avail = s->pBufferEnd - s->pWrite - 32;
         if (avail < s->mBlockSize) {
-            req = s->pCurrent;
             len = s->pWrite - s->pHead;
-            if (req->mType == 1) {
+            if (s->pCurrent->mType == 1) {
                 if (s->pTail - s->pWrap < len + 1) {
-                    goto stall;
+                    s->mState = 2;
+                    return;
                 }
             } else if (s->pTail - s->pWrap - 32 < len + 1) {
-                goto stall;
+                s->mState = 2;
+                return;
             }
-            if ((len & 31) == 0 || req->mType == 1) {
+            if ((len & 31) == 0 || s->pCurrent->mType == 1) {
                 s->pWrap = s->pBuffer;
             } else {
                 s->pWrap = s->pBuffer - (len % 32 - 32);
