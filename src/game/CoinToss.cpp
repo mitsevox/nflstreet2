@@ -78,8 +78,8 @@ int FELoopIsMainFEActive(void);
 void fn_8009BD48(int *pRef, int a, int b, int c);
 void CamInterpUpdateEaseInOut(CamInterp_t *pInterp, int steps);
 void CamInterpUpdateSine(CamInterp_t *pInterp, int steps);
-void fn_8013F374(CoinTossCamEntry_t *pEntries);
-void fn_8013F3FC(void);
+void CamShotPlay(CoinTossCamEntry_t *pEntries);
+void CamShotRequestStop(void);
 void fn_80177E6C(int a, int b);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -314,7 +314,7 @@ int CoinTossDecide(int mode)
             break;
         }
         if (fn_800B65A0(fn_80178308()) != 0xFF || fn_800B65A0(fn_80178320()) != 0xFF) {
-            fn_8013F3FC();
+            CamShotRequestStop();
         }
         _CoinToss_pState->mState = 10;
         CoinTossApplyResult();
@@ -399,7 +399,7 @@ int CoinTossUpdate(void)
     switch (_CoinToss_pState->mState) {
     case 1:
         CoinTossOnShotStart();
-        fn_8013F374(_CoinToss_aCamList);
+        CamShotPlay(_CoinToss_aCamList);
         UISGameLockPad((unsigned char)CoinTossGetCallerPad());
         _CoinToss_pState->mState = 2;
         break;
@@ -429,7 +429,7 @@ int CoinTossUpdate(void)
     case 6:
         if (_CoinToss_pState->mUnknown43 != -1) {
             _CoinToss_pState->mState = 9;
-            fn_8013F3FC();
+            CamShotRequestStop();
             goto finish;
         }
         if (_CoinToss_pState->mTimer == 240) {

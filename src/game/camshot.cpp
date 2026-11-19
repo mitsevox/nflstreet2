@@ -1,3 +1,9 @@
+/* Scripted camera shots. A camera mode (gCamShotMode) that plays a list of
+   shots, used by the coin toss: each shot either moves the camera from a
+   start to an end position while it aims at a fixed point, or eases the
+   camera around a target that can follow a player. Each frame the current
+   shot is updated until its duration ends, then the next one starts; when
+   the list is done the game returns to the normal camera. */
 #include "game/fn_80177FE0.h"
 #include "game/ScreenTransition.h"
 #include "game/GameCamera.h"
@@ -11,15 +17,15 @@
 #include "game/fn_80227638.h"
 
 // FAKEMATCH: release form of an assert macro (empty loop, condition discarded).
-#define SCRIPTCAM_ASSERT(e) do { } while (0)
+#define CAMSHOT_ASSERT(e) do { } while (0)
 
-struct Entry_8013F374 {
+struct CamShotEntry_t {
     int mType;
     void *mpData;
 };
 
 /* The two record kinds have distinct payloads; their common stride is 0x130. */
-struct Payload0_8013EEE4 {
+struct CamShotFixed_t {
     CamInterp_t mX, mY, mZ;
     Vector_80039F5C mTarget;
     CamInterp_t mFov;
@@ -27,10 +33,10 @@ struct Payload0_8013EEE4 {
     unsigned short mUnknown70, mUnknown72;
     int mUnknown74, mUnknown78;
     unsigned int mFlags;
-    void (*mCallback)(Entry_8013F374 *);
+    void (*mCallback)(CamShotEntry_t *);
     char mUnknown84[0xA4];
 };
-struct Payload1_8013F090 {
+struct CamShotFollow_t {
     CamEaseVec_t mPosition, mTarget;
     CamInterp_t mFov;
     float mLimit;
@@ -39,38 +45,38 @@ struct Payload1_8013F090 {
     unsigned short mUnknown114, mUnknown116;
     int mUnknown118, mUnknown11C;
     unsigned int mFlags;
-    void (*mCallback)(Entry_8013F374 *);
+    void (*mCallback)(CamShotEntry_t *);
 };
-struct Record_8013E944 {
+struct CamShotRecord_t {
     int mType;
-    union { Payload0_8013EEE4 m0; Payload1_8013F090 m1; } mData;
+    union { CamShotFixed_t m0; CamShotFollow_t m1; } mData;
     int mDuration;
 };
-struct State_8013E574 {
-    Record_8013E944 *mpCurrent;
-    Record_8013E944 mRecords[12];
+struct CamShotState_t {
+    CamShotRecord_t *mpCurrent;
+    CamShotRecord_t mRecords[12];
     int mRead, mWrite, mFrame;
-    Entry_8013F374 *mpList;
+    CamShotEntry_t *mpList;
     Vector_80039F5C mTarget;
 };
 /* Mode-specific payload at +F8; the common leading camera block is shared. */
-struct ScriptCamera_8013E514 {
+struct CamShotCamera_t {
     CamHdr_t mHeader;
     char mUnknown28[0xB4];
     void (*mCallback)(GameCamera_t *, int);
     char mUnknownE0[0x18];
-    State_8013E574 mState;
+    CamShotState_t mState;
 };
-struct Desc0_8013EEE4 {
+struct CamShotFixedDesc_t {
     Vector_80039F5C mPosition, mEndPosition, mTarget;
     float mFov, mEndFov, mLimit, mRate, mDuration;
     CamInterpFunc_t mModeX, mModeY, mModeZ, mModeFov;
     unsigned short mUnknown48, mUnknown4A;
     int mUnknown4C, mUnknown50;
     unsigned int mFlags;
-    void (*mCallback)(Entry_8013F374 *);
+    void (*mCallback)(CamShotEntry_t *);
 };
-struct Desc1_8013F090 {
+struct CamShotFollowDesc_t {
     Vector_80039F5C mPosition, mStartAngles, mEndAngles;
     float mStartScale, mEndScale;
     Vector_80039F5C mTarget, mTargetStartAngles, mTargetEndAngles;
@@ -81,21 +87,21 @@ struct Desc1_8013F090 {
     unsigned short mUnknown80, mUnknown82;
     int mUnknown84, mUnknown88;
     unsigned int mFlags;
-    void (*mCallback)(Entry_8013F374 *);
+    void (*mCallback)(CamShotEntry_t *);
 };
 
-struct ModeTable_8013E514 {
-    void (*mpInit)(ScriptCamera_8013E514 *p);
+struct CamShotModeTable_t {
+    void (*mpInit)(CamShotCamera_t *p);
     void (*mpUninit)(void);
     int mUnknown08;
 };
 
 extern "C" {
-int lbl_803EB1D0 = 60;
-unsigned char lbl_803EB1D4 = 0;
-ScriptCamera_8013E514 *lbl_803EB1D8 = 0;
-State_8013E574 *lbl_803EB1DC = 0;
-unsigned char lbl_803EB1E0 = 0;
+static int _CamShot_iFadeTime = 60;
+static unsigned char _CamShot_bStopRequest = 0;
+static CamShotCamera_t *_CamShot_pCamera = 0;
+static CamShotState_t *_CamShot_pState = 0;
+static unsigned char _CamShot_bActive = 0;
 int InGameIsStopped(void);
 void fn_800A3B5C(void);
 int fn_800AD9B4(void);
@@ -111,52 +117,52 @@ int ScreenTransCanCapture(int);
 void CamSetFieldOfView(void *, float, float);
 int fn_801CFE40(float, float);
 void fn_80227490(void *, void *, int, int, int);
-void fn_8013EDE4(GameCamera_t *, int);
-void fn_8013E960(int, int);
-void fn_8013E9F0(int, int);
-void fn_8013EA8C(State_8013E574 *);
-void fn_8013EEE0(ScriptCamera_8013E514 *);
-void fn_8013F298(void);
-void fn_8013F300(void);
-void fn_8013F3FC(void);
-void fn_8013E514(ScriptCamera_8013E514 *p);
-void fn_8013E538(void);
+void CamShotHandleMsg(GameCamera_t *, int);
+void CamShotSetTeamBlockFlag(int, int);
+void CamShotSetTeamPlayerFlag(int, int);
+void CamShotNextRecord(CamShotState_t *);
+void CamShotHandleMsg1(CamShotCamera_t *);
+void CamShotFinish(void);
+void CamShotEndCurrent(void);
+void CamShotRequestStop(void);
+void CamShotInit(CamShotCamera_t *p);
+void CamShotUninit(void);
 
-ModeTable_8013E514 lbl_802DBDD4 = { fn_8013E514, fn_8013E538, 0 };
+CamShotModeTable_t gCamShotMode = { CamShotInit, CamShotUninit, 0 };
 }
 
-extern "C" void fn_8013E514(ScriptCamera_8013E514 *p)
+extern "C" void CamShotInit(CamShotCamera_t *p)
 {
-    lbl_803EB1DC = &p->mState;
-    lbl_803EB1D4 = 0;
-    lbl_803EB1D8 = p;
-    p->mCallback = fn_8013EDE4;
+    _CamShot_pState = &p->mState;
+    _CamShot_bStopRequest = 0;
+    _CamShot_pCamera = p;
+    p->mCallback = CamShotHandleMsg;
 }
-extern "C" void fn_8013E538(void)
+extern "C" void CamShotUninit(void)
 {
-    if (InGameIsStopped() == 0) fn_8013F300();
-    lbl_803EB1D8 = 0;
-    lbl_803EB1E0 = 0;
+    if (InGameIsStopped() == 0) CamShotEndCurrent();
+    _CamShot_pCamera = 0;
+    _CamShot_bActive = 0;
     // FAKEMATCH: compiled-out assert on the state pointer; the release macro's empty loop orders the stores.
-    SCRIPTCAM_ASSERT(lbl_803EB1DC != 0);
-    lbl_803EB1DC = 0;
+    CAMSHOT_ASSERT(_CamShot_pState != 0);
+    _CamShot_pState = 0;
 }
-extern "C" State_8013E574 *fn_8013E574(void)
+extern "C" CamShotState_t *CamShotBegin(void)
 {
     CamGameChangeType(3, 17);
     CamGameSelectCamera(3);
-    State_8013E574 *p = lbl_803EB1DC;
+    CamShotState_t *p = _CamShot_pState;
     p->mRead = 0;
     p->mpCurrent = 0;
     p->mWrite = 0;
     p->mFrame = 0;
-    lbl_803EB1E0 = 1;
+    _CamShot_bActive = 1;
     return p;
 }
-extern "C" void fn_8013E5C8(ScriptCamera_8013E514 *p)
+extern "C" void CamShotUpdateFollow(CamShotCamera_t *p)
 {
-    State_8013E574 *s = &p->mState;
-    Payload1_8013F090 *b = &s->mpCurrent->mData.m1;
+    CamShotState_t *s = &p->mState;
+    CamShotFollow_t *b = &s->mpCurrent->mData.m1;
     CamEaseVec_t *target = &b->mTarget;
     CamInterp_t *fov = &b->mFov;
     int done = (float)s->mFrame >= b->mLimit;
@@ -187,23 +193,23 @@ extern "C" void fn_8013E5C8(ScriptCamera_8013E514 *p)
     CamSetFieldOfView(p, fov->mValue, p->mHeader.mUnknown24);
     fn_802270D4(&v);
 }
-extern "C" void fn_8013E75C(ScriptCamera_8013E514 *p)
+extern "C" void CamShotEndFollow(CamShotCamera_t *p)
 {
-    Payload1_8013F090 *b = &p->mState.mpCurrent->mData.m1;
+    CamShotFollow_t *b = &p->mState.mpCurrent->mData.m1;
     if (b->mRef) {
         Object_80039F5C *o = fn_8009BCE8(&b->mRef);
         o->mpUnknown4->mUnknown20 &= ~0x400;
         fn_800A3B5C();
         if (b->mFlags & 0x20) {
-            fn_8013E960(o->mIdBytes[2], 1);
-            fn_8013E9F0(o->mIdBytes[2], 1);
+            CamShotSetTeamBlockFlag(o->mIdBytes[2], 1);
+            CamShotSetTeamPlayerFlag(o->mIdBytes[2], 1);
         }
     }
 }
-extern "C" void fn_8013E7D8(ScriptCamera_8013E514 *p)
+extern "C" void CamShotUpdateFixed(CamShotCamera_t *p)
 {
-    State_8013E574 *s = &p->mState;
-    Payload0_8013EEE4 *b = &s->mpCurrent->mData.m0;
+    CamShotState_t *s = &p->mState;
+    CamShotFixed_t *b = &s->mpCurrent->mData.m0;
     Vector_80039F5C *target = &b->mTarget;
     CamInterp_t *fov = &b->mFov;
     int done = (float)s->mFrame >= b->mLimit;
@@ -222,12 +228,12 @@ extern "C" void fn_8013E7D8(ScriptCamera_8013E514 *p)
     fn_802270D4(&v);
     CamSetFieldOfView(p, fov->mValue, p->mHeader.mUnknown24);
 }
-extern "C" void fn_8013E940(ScriptCamera_8013E514 *) {}
-extern "C" Record_8013E944 *fn_8013E944(State_8013E574 *p)
+extern "C" void CamShotEndFixed(CamShotCamera_t *) {}
+extern "C" CamShotRecord_t *CamShotAllocRecord(CamShotState_t *p)
 {
     return &p->mRecords[p->mWrite++];
 }
-extern "C" void fn_8013E960(int team, int flag)
+extern "C" void CamShotSetTeamBlockFlag(int team, int flag)
 {
     int count = fn_80178D18((unsigned char)team);
     for (int i = 0; i < count; ++i) {
@@ -239,7 +245,7 @@ extern "C" void fn_8013E960(int team, int flag)
         }
     }
 }
-extern "C" void fn_8013E9F0(int team, int flag)
+extern "C" void CamShotSetTeamPlayerFlag(int team, int flag)
 {
     if (fn_800AD9B4() == 1) {
         int count = fn_80178D18((unsigned char)team);
@@ -250,28 +256,29 @@ extern "C" void fn_8013E9F0(int team, int flag)
         }
     }
 }
-extern "C" void fn_8013EA8C(State_8013E574 *s)
+extern "C" void CamShotNextRecord(CamShotState_t *s)
 {
     if (s->mRead < s->mWrite) {
-        Record_8013E944 *r = &s->mRecords[s->mRead++];
-        Entry_8013F374 entry;
+        CamShotRecord_t *r = &s->mRecords[s->mRead++];
+        CamShotEntry_t entry;
         s->mpCurrent = r; s->mFrame = 0;
         switch (r->mType) {
         case 1: {
-            Payload1_8013F090 *b = &r->mData.m1;
+            CamShotFollow_t *b = &r->mData.m1;
             if (b->mCallback) { entry.mType = 1; entry.mpData = b; b->mCallback(&entry); }
             if (b->mRef) {
                 Object_80039F5C *p = fn_8009BCE8(&b->mRef);
                 if (p && p->mIdBytes[3] == 1) {
                     GameTextSetLastPlayer(p->mUnknown2908);
-                    if (b->mFlags & 0x20) { fn_8013E960(p->mIdBytes[2], 0); fn_8013E9F0(p->mIdBytes[2], 0); }
+                    if (b->mFlags & 0x20) { CamShotSetTeamBlockFlag(p->mIdBytes[2], 0); CamShotSetTeamPlayerFlag(p->mIdBytes[2], 0); }
                     p->mpUnknown4->mUnknown20 |= 1;
                 }
             }
             if (b->mUnknown118) { BannerClear(7); BannerShow(b->mUnknown114, b->mUnknown116, b->mUnknown118, 0); }
             if ((b->mFlags & 8) && b->mRef) {
                 Object_80039F5C *p = fn_8009BCE8(&b->mRef);
-                float angle = (float)p->mMotion.mFacing * 0.000021457672119140625f;
+                // FAKEMATCH: the angle is converted, then flipped, in two assignments.
+                float angle = (float)p->mMotion.mFacing * (360.0f / 16777216.0f);
                 angle = 360.0f - angle;
                 while (angle > 360.0f) angle -= 360.0f;
                 b->mPosition.mZ.mStart += angle;
@@ -280,51 +287,51 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
                 while (b->mPosition.mZ.mTarget > 360.0f) b->mPosition.mZ.mTarget -= 360.0f;
             }
             if (fn_801784C4()) { CamEaseVecFlip(&b->mPosition); CamEaseVecFlip(&b->mTarget); }
-            if ((b->mFlags & 2) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, lbl_803EB1D0, 0x808080, 0);
+            if ((b->mFlags & 2) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, _CamShot_iFadeTime, 0x808080, 0);
             if ((b->mFlags & 0x100) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, 12, 0x808080, 0);
             break;
         }
         case 0: {
-            Payload0_8013EEE4 *b = &r->mData.m0;
+            CamShotFixed_t *b = &r->mData.m0;
             if (b->mCallback) { entry.mType = 0; entry.mpData = b; b->mCallback(&entry); }
             if (fn_801784C4()) {
                 b->mTarget.mX = -b->mTarget.mX; b->mTarget.mY = -b->mTarget.mY;
                 b->mY.mStart = -b->mY.mStart; b->mY.mValue = -b->mY.mValue; b->mY.mTarget = -b->mY.mTarget;
             }
             if (b->mUnknown74) BannerShow(b->mUnknown70, b->mUnknown72, b->mUnknown74, b->mUnknown78);
-            if ((b->mFlags & 2) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, lbl_803EB1D0, 0x808080, 0);
+            if ((b->mFlags & 2) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, _CamShot_iFadeTime, 0x808080, 0);
             break;
         }
         }
-    } else fn_8013F3FC();
+    } else CamShotRequestStop();
 }
-extern "C" void fn_8013EDE4(GameCamera_t *camera, int msg)
+extern "C" void CamShotHandleMsg(GameCamera_t *camera, int msg)
 {
-    ScriptCamera_8013E514 *p = (ScriptCamera_8013E514 *)camera;
-    State_8013E574 *s = &p->mState;
+    CamShotCamera_t *p = (CamShotCamera_t *)camera;
+    CamShotState_t *s = &p->mState;
     switch (msg) {
     case 3:
-        if (lbl_803EB1D4) fn_8013F298();
-        else if (lbl_803EB1E0 && s->mpCurrent) {
-            Record_8013E944 *r = s->mpCurrent;
+        if (_CamShot_bStopRequest) CamShotFinish();
+        else if (_CamShot_bActive && s->mpCurrent) {
+            CamShotRecord_t *r = s->mpCurrent;
             if (r->mDuration == -1 || s->mFrame <= r->mDuration) {
-                switch (r->mType) { case 0: fn_8013E7D8(p); break; case 1: fn_8013E5C8(p); break; }
+                switch (r->mType) { case 0: CamShotUpdateFixed(p); break; case 1: CamShotUpdateFollow(p); break; }
             } else {
-                switch (r->mType) { case 0: fn_8013E940(p); break; case 1: fn_8013E75C(p); break; }
-                fn_8013EA8C(s);
+                switch (r->mType) { case 0: CamShotEndFixed(p); break; case 1: CamShotEndFollow(p); break; }
+                CamShotNextRecord(s);
             }
             ++s->mFrame;
         }
         break;
-    case 1: fn_8013EEE0(p); break;
+    case 1: CamShotHandleMsg1(p); break;
     case 0: case 2: case 4: break;
     }
 }
-extern "C" void fn_8013EEE0(ScriptCamera_8013E514 *) {}
-extern "C" void fn_8013EEE4(State_8013E574 *s, Desc0_8013EEE4 *d)
+extern "C" void CamShotHandleMsg1(CamShotCamera_t *) {}
+extern "C" void CamShotAddFixed(CamShotState_t *s, CamShotFixedDesc_t *d)
 {
-    Record_8013E944 *r = fn_8013E944(s); r->mType = 0; r->mDuration = (int)d->mDuration;
-    Payload0_8013EEE4 *b = &r->mData.m0;
+    CamShotRecord_t *r = CamShotAllocRecord(s); r->mType = 0; r->mDuration = (int)d->mDuration;
+    CamShotFixed_t *b = &r->mData.m0;
     Vector_80039F5C *pTarget = &b->mTarget;
     Vector_80039F5C pos, end;
     pos.mX = d->mPosition.mX; pos.mY = d->mPosition.mY; pos.mZ = d->mPosition.mZ;
@@ -341,10 +348,10 @@ extern "C" void fn_8013EEE4(State_8013E574 *s, Desc0_8013EEE4 *d)
     CamInterpSetTarget(&b->mZ, end.mZ, d->mModeZ, d->mRate);
     CamInterpInit(&b->mFov, d->mFov); CamInterpSetTarget(&b->mFov, d->mEndFov, d->mModeFov, d->mRate);
 }
-extern "C" void fn_8013F090(State_8013E574 *s, Desc1_8013F090 *d)
+extern "C" void CamShotAddFollow(CamShotState_t *s, CamShotFollowDesc_t *d)
 {
-    Record_8013E944 *r = fn_8013E944(s); r->mType = 1; r->mDuration = (int)d->mDuration;
-    Payload1_8013F090 *b = &r->mData.m1;
+    CamShotRecord_t *r = CamShotAllocRecord(s); r->mType = 1; r->mDuration = (int)d->mDuration;
+    CamShotFollow_t *b = &r->mData.m1;
     CamEaseVec_t *pTarget = &b->mTarget;
     Vector_80039F5C pos, target, a, z;
     a.mX = d->mStartAngles.mX; a.mY = d->mStartAngles.mY; a.mZ = d->mStartAngles.mZ;
@@ -365,34 +372,34 @@ extern "C" void fn_8013F090(State_8013E574 *s, Desc1_8013F090 *d)
     b->mUnknown118 = d->mUnknown84; b->mUnknown11C = d->mUnknown88;
     CamInterpInit(&b->mFov, d->mFov); CamInterpSetTarget(&b->mFov, d->mEndFov, d->mModeFov, d->mRate);
 }
-extern "C" void fn_8013F298(void)
+extern "C" void CamShotFinish(void)
 {
-    if (lbl_803EB1E0) {
-        fn_8013F300(); lbl_803EB1E0 = 0; lbl_803EB1DC = 0; lbl_803EB1D8 = 0;
+    if (_CamShot_bActive) {
+        CamShotEndCurrent(); _CamShot_bActive = 0; _CamShot_pState = 0; _CamShot_pCamera = 0;
         CamGameSelectCamera(0); CamGameGetCamera(5)->mUnknown94 |= 4; CamBallRequestRestart();
     }
-    lbl_803EB1D4 = 0;
+    _CamShot_bStopRequest = 0;
 }
-extern "C" void fn_8013F300(void)
+extern "C" void CamShotEndCurrent(void)
 {
-    if (lbl_803EB1D8 && lbl_803EB1DC->mpCurrent) {
-        switch (lbl_803EB1DC->mpCurrent->mType) { case 0: fn_8013E940(lbl_803EB1D8); break; case 1: fn_8013E75C(lbl_803EB1D8); break; }
+    if (_CamShot_pCamera && _CamShot_pState->mpCurrent) {
+        switch (_CamShot_pState->mpCurrent->mType) { case 0: CamShotEndFixed(_CamShot_pCamera); break; case 1: CamShotEndFollow(_CamShot_pCamera); break; }
     }
-    fn_8013E960(0, 1); fn_8013E960(1, 1);
+    CamShotSetTeamBlockFlag(0, 1); CamShotSetTeamBlockFlag(1, 1);
 }
-extern "C" void fn_8013F374(Entry_8013F374 *list)
+extern "C" void CamShotPlay(CamShotEntry_t *list)
 {
-    fn_8013F300(); State_8013E574 *s = fn_8013E574(); s->mpList = list;
-    for (Entry_8013F374 *e = list; e->mpData; ++e) {
-        switch (e->mType) { case 1: fn_8013F090(s, (Desc1_8013F090 *)e->mpData); break; case 0: fn_8013EEE4(s, (Desc0_8013EEE4 *)e->mpData); break; }
+    CamShotEndCurrent(); CamShotState_t *s = CamShotBegin(); s->mpList = list;
+    for (CamShotEntry_t *e = list; e->mpData; ++e) {
+        switch (e->mType) { case 1: CamShotAddFollow(s, (CamShotFollowDesc_t *)e->mpData); break; case 0: CamShotAddFixed(s, (CamShotFixedDesc_t *)e->mpData); break; }
     }
-    fn_8013EA8C(s);
+    CamShotNextRecord(s);
 }
-extern "C" void fn_8013F3FC(void) { lbl_803EB1D4 = 1; }
-extern "C" Object_80039F5C *fn_8013F408(void)
+extern "C" void CamShotRequestStop(void) { _CamShot_bStopRequest = 1; }
+extern "C" Object_80039F5C *CamShotGetPlayer(void)
 {
-    Object_80039F5C *p = 0; State_8013E574 *s = lbl_803EB1DC;
-    if (lbl_803EB1E0) {
+    Object_80039F5C *p = 0; CamShotState_t *s = _CamShot_pState;
+    if (_CamShot_bActive) {
         switch (s->mpCurrent->mType) {
         case 0: break;
         case 1: p = fn_8009BCE8(&s->mpCurrent->mData.m1.mRef); break;

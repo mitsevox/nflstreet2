@@ -31,7 +31,7 @@ int fn_800A8740(void);
 void fn_800AD910(int mode, float dt);
 void fn_800B4184(int a);
 void fn_800B63B0(void);
-void fn_8013F3FC(void);
+void CamShotRequestStop(void);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
 void PlayTrackReset(void);
@@ -90,7 +90,7 @@ extern "C" void fn_800C1CA0(void)
     SpchIGResumeChannel(1);
     SpchIGResumeChannel(2);
     fn_80162780(0, 0);
-    fn_8013F3FC();
+    CamShotRequestStop();
     if (fn_800A8740() == 0) {
         fn_800A7A0C(0);
         fn_800A7A0C(1);

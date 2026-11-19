@@ -676,8 +676,8 @@ extern "C" void fn_8009126C(int index)
     }
 }
 
-extern "C" void fn_8013F408(void);
-extern "C" void fn_8013F3FC(void);
+extern "C" void CamShotGetPlayer(void);
+extern "C" void CamShotRequestStop(void);
 
 extern "C" void fn_8009134C(int index)
 {
@@ -688,8 +688,8 @@ extern "C" void fn_8009134C(int index)
         int ref;
 
         fn_8009BD2C(fn_8008FF28(pCharacter, pActor), &ref);
-        fn_8013F408();
-        fn_8013F3FC();
+        CamShotGetPlayer();
+        CamShotRequestStop();
         if (fn_800AD9B4() != 0 && fn_800AD9B4() != 7 && fn_800AD9B4() != 1) {
             fn_800AD9B4();
         }
@@ -9000,7 +9000,7 @@ extern "C" void fn_800BBE98(void);
 extern "C" void fn_800BAF7C(void)
 {
     PlayerObjSetDrawReady(1);
-    fn_8013F3FC();
+    CamShotRequestStop();
     if (lbl_803EC98C->mpUnknown10[lbl_803EAB95].mUnknown0 == 9999) {
         fn_800BBE98();
     } else {
@@ -15705,7 +15705,7 @@ void PostPlayPhase::Finish(float dt)
             fn_801783D0(0x15, 1);
             SndgSituationSetFlags(0x400);
             fn_80162780(1, 1);
-            fn_8013F3FC();
+            CamShotRequestStop();
             fn_800AD910(2, dt);
             lbl_803EABA4->fn_800C02EC(0x27);
             fn_800CC470();
@@ -17602,7 +17602,7 @@ extern "C" void fn_800BD8F4(void)
 {
     int team = fn_80178320();
 
-    fn_8013F3FC();
+    CamShotRequestStop();
     fn_800B6408();
     PlayAlignTeam(PlayBookGetFormation(team), team, gPlayAlignNormSet);
     fn_8016E008(team);

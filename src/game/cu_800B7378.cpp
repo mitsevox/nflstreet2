@@ -109,7 +109,7 @@ int fn_801133FC(Object_80039F5C *p, int a, int b);
 int fn_8011F1CC(void);
 int fn_80125510(Object_80039F5C *p, int a);
 int BallStateGet(Ball_t *p, int *pOut);
-void fn_8013F3FC(void);
+void CamShotRequestStop(void);
 unsigned char ParticleTrailSetEnabled(unsigned char a);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
@@ -350,7 +350,7 @@ extern "C" void fn_800B8494(int value)
     fn_801FCE10(0, "select 'DIOT' into \x82 from 'MTTS' where 'DIGT' = \x82\n", &resultB, b);
     if (resultA == resultB) {
         fn_800BD184(lbl_803EAB90, value);
-        fn_8013F3FC();
+        CamShotRequestStop();
     } else {
         fn_800BD184(lbl_803EAB90, value);
     }

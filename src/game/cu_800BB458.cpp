@@ -53,7 +53,7 @@ int fn_800B6644(int index);
 int fn_800BA6F8(void);
 void fn_800BB9A4(int team, int value);
 void fn_800BBE98(void);
-void fn_8013F3FC(void);
+void CamShotRequestStop(void);
 void fn_80162780(int a, int b);
 
 extern unsigned char lbl_803EAB94;
@@ -135,7 +135,7 @@ extern "C" void fn_800BB694(int index, unsigned int kind, float value)
         return;
     }
     PlayerObjSetDrawReady(1);
-    fn_8013F3FC();
+    CamShotRequestStop();
     fn_800BB9A4(1, 1);
     fn_80162780(1, 1);
     SpchIGPurgeChannel(0);
