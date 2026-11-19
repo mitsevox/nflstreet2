@@ -142,7 +142,7 @@ void PlyrMoveCmdReverse(PlyrMoveCmd_t *pObject);
 void AnimInitHeader(void *p, int a, int b, int c);
 void AnimChanInitChannels(void *p, void *q);
 void AnimChanProcess(void *a, void *b, float f, Object_80039F5C *p);
-int fn_801BC7C0(void *a, void *b, void *c);
+int AnimMotCreateWeightList(void *a, void *b, void *c);
 void fn_801BCEEC(void *a, void *b);
 void fn_801BE040(void *p);
 void fn_801BE420(void *a, void *b, void *c, Object_80039F5C *p, float f);
@@ -316,7 +316,7 @@ extern "C" int PlyrMgrRefreshAll(PlyrMgr_t *pManager, int flags)
 
                 for (j = 0; j <= 1; j++) {
                     if (pObject->mUnknown20 & 32) {
-                        PlyrPoseBlendRawEntries(pObject, fn_801BC7C0(&pPlayer->mUnknown4008[j], pPlayer->mUnknown4032[j],
+                        PlyrPoseBlendRawEntries(pObject, AnimMotCreateWeightList(&pPlayer->mUnknown4008[j], pPlayer->mUnknown4032[j],
                                                          pPlayer->mUnknown4528[j]), j);
                     } else {
                         PlyrPoseBlendRawEntries(pObject, fn_800ADEFC(pObject->mUnknown116, j), j);
@@ -548,7 +548,7 @@ extern "C" void PlyrAnimUpdateOverlay(Object_80039F5C *p, PlyrModelView_t *pBloc
 
     fn_801BE420(pPlayer->mUnknown3604, &pPlayer->mUnknown3096, pPlayer->mUnknown3108, p, f);
     AnimChanProcess(&pPlayer->mUnknown3096, pPlayer->mUnknown3108, f, p);
-    PlyrPoseSetBlend(pBlock, fn_801BC7C0(&pPlayer->mUnknown3096, pPlayer->mUnknown3108, pPlayer->mUnknown3604));
+    PlyrPoseSetBlend(pBlock, AnimMotCreateWeightList(&pPlayer->mUnknown3096, pPlayer->mUnknown3108, pPlayer->mUnknown3604));
 }
 
 extern "C" void PlyrAnimUpdateHands(Object_80039F5C *p, PlyrModelView_t *pBlock, float f)
@@ -560,7 +560,7 @@ extern "C" void PlyrAnimUpdateHands(Object_80039F5C *p, PlyrModelView_t *pBlock,
         if (pBlock->mFlags & 32) {
             fn_801BE420(pPlayer->mUnknown4528[i], &pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], p, f);
             AnimChanProcess(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], f, p);
-            PlyrPoseBlendRawEntries(pBlock, fn_801BC7C0(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], pPlayer->mUnknown4528[i]), i);
+            PlyrPoseBlendRawEntries(pBlock, AnimMotCreateWeightList(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], pPlayer->mUnknown4528[i]), i);
         } else if (fn_800ADD7C(pBlock->mUnknown116, i) != 0) {
             PlyrPoseBlendRawEntries(pBlock, fn_800ADEFC(pBlock->mUnknown116, i), i);
         }
@@ -846,7 +846,7 @@ extern "C" void PlyrMgrUpdatePoses(float dt)
 
         pBlock->mUnknown28 = p->mUnknown772;
         pBlock->mUnknown32 = p->mUnknown776;
-        texture = fn_801BC7C0(p->mUnknown1244, p->mUnknown1244 + 12, p->mUnknown1244 + 1252);
+        texture = AnimMotCreateWeightList(p->mUnknown1244, p->mUnknown1244 + 12, p->mUnknown1244 + 1252);
         PlyrPoseBlendEntries(pBlock, texture);
         p->mUnknown544 = fn_801BCA74(p->mUnknown1244, p->mUnknown1244 + 12, texture, &p->mUnknown548,
                                      fn_801BE648(p->mpUnknown792), (p->mFlags & 0x200) == 0);

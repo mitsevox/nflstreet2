@@ -23,7 +23,7 @@ unsigned short AnimChanGetNumActiveByState(AnimHeader_t *pList, AnimChannel_t *p
 unsigned short AnimChanGetStateChannelByIndex(AnimHeader_t *pList, AnimChannel_t *pChannels, unsigned short state, int index);
 void AnimChanSetDelayByState(AnimHeader_t *pList, AnimChannel_t *pChannels, int state, float delay);
 int AnimChanGrow(AnimChannel_t *pChannel, float time, void *pUser);
-void fn_801BC67C(Triple_801BCA74 *pOut, Triple_801BCA74 *pA, Triple_801BCA74 *pB, float t);
+void _AnimMotBlendOrient(Triple_801BCA74 *pOut, Triple_801BCA74 *pA, Triple_801BCA74 *pB, float t);
 int AnimSeqStart(AnimSeq_t *p, AnimScript_t *pScript);
 int AnimSeqGrow(AnimSeq_t *p, float step);
 float AnimSeqGetLife(AnimScript_t *pScript);

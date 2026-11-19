@@ -39,7 +39,7 @@ int fn_801BCA74(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *p
                 target.mUnknown4 = 0;
                 target.mUnknown0 = 0;
             }
-            fn_801BC67C(&pRecords[index].mUnknown10, &pEntry->mUnknownC, &target, pRecords[index].mUnknown4C.mUnknown14);
+            _AnimMotBlendOrient(&pRecords[index].mUnknown10, &pEntry->mUnknownC, &target, pRecords[index].mUnknown4C.mUnknown14);
             i++;
         } else {
             pRecords[index].mUnknown10 = pEntry->mUnknownC;

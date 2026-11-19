@@ -381,7 +381,7 @@ int fn_800AF9E4(Entry_800AF82C *p, int index);
 void fn_800AF95C(Entry_800AF82C *p, int index, int a);
 void fn_800AF9C0(Entry_800AF82C *p, int index, int *pValue);
 void PlyrPoseStartBlink(Object_8003DEC4 *pObject);
-int fn_801BC7C0(void *a, void *b, void *c);
+int AnimMotCreateWeightList(void *a, void *b, void *c);
 void PlyrPoseBlendEntries(Object_8003DEC4 *pObject, int a);
 void PlyrPoseBlendRootAngles(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
 void PlyrPoseUpdate(Object_8003DEC4 *pObject);
@@ -5350,7 +5350,7 @@ extern "C" void fn_8009C370(Object_80039F5C *p)
     pObject->mUnknown24 = p->mUnknown768;
     pObject->mUnknown28 = p->mUnknown772;
     pObject->mUnknown32 = p->mUnknown776;
-    PlyrPoseBlendEntries(pObject, fn_801BC7C0(p->mpUnknown796, p->mpUnknown800, p->mpUnknown792));
+    PlyrPoseBlendEntries(pObject, AnimMotCreateWeightList(p->mpUnknown796, p->mpUnknown800, p->mpUnknown792));
     PlyrPoseBlendRootAngles(pObject, p->mpUnknown800, p->mpUnknown796->mUnknown4, p->mpUnknown792);
     fn_800C8A98(p);
     PlyrPoseUpdate(pObject);

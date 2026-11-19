@@ -27,7 +27,7 @@ void fn_8004A908(BigObjInst *pObject, int index);
 void fn_8004C684(void *pOwner, BigObjInst *pObject);
 void fn_8004C7B8(BigObjInst *pObject);
 void AnimChanProcess(void *a, void *b, float c, BigObjInst *pObject);
-int fn_801BC7C0(void *a, void *b, void *c);
+int AnimMotCreateWeightList(void *a, void *b, void *c);
 int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
 int fn_801BCCAC(void *a, void *b, int c, void *d, int e, int f);
 void fn_801BE420(void *a, void *b, void *c, BigObjInst *pObject, float d);
@@ -183,7 +183,7 @@ int BigObjInstSimulateAll(float dt)
             }
             fn_801BE420(pExtra->mUnknown1300, pExtra->mUnknown48, pExtra->mUnknown60, pObject, dt);
             AnimChanProcess(pExtra->mUnknown48, pExtra->mUnknown60, dt, pObject);
-            a = fn_801BC7C0(pExtra->mUnknown48, pExtra->mUnknown60, pExtra->mUnknown1300);
+            a = AnimMotCreateWeightList(pExtra->mUnknown48, pExtra->mUnknown60, pExtra->mUnknown1300);
             fn_8004A8C4(pExtra, BigObjGet(i), a);
             pExtra->mUnknown32 = fn_801BCA74(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown36, 0xFFFF, 1);
             pExtra->mUnknown33 = fn_801BCCAC(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown40,

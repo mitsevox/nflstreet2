@@ -87,7 +87,7 @@ void PlyrMoveCmdClear(void *pObject);
 void UISGameSetDrawMode(int a);
 void UISViewObjSetDrawFunc(void (*pCallback)(int, float, float, float, float));
 void AnimChanProcess(AnimHeader_t *pObject, void *a, float b, FEPlyrModel_t *pRecord);
-int fn_801BC7C0(AnimHeader_t *pObject, void *a, void *b);
+int AnimMotCreateWeightList(AnimHeader_t *pObject, void *a, void *b);
 int fn_801BCA74(AnimHeader_t *pObject, void *a, int b, void *c, int d, int e);
 int fn_801BCCAC(AnimHeader_t *pObject, void *a, int b, void *c, int d, int e);
 void fn_801BE420(void *a, AnimHeader_t *pObject, void *b, FEPlyrModel_t *pRecord, float c);
@@ -182,7 +182,7 @@ static void _FEPlyrUpdatePartAnims(FEPlyrModel_t *pRecord, Object_8003DEC4 *pObj
         if (pObject->mUnknown20 & 0x20) {
             fn_801BE420(pRecord->mUnknown4528[i], &pRecord->mUnknown4008[i], pRecord->mUnknown4032[i], pRecord, step);
             AnimChanProcess(&pRecord->mUnknown4008[i], pRecord->mUnknown4032[i], step, pRecord);
-            PlyrPoseBlendRawEntries(pObject, fn_801BC7C0(&pRecord->mUnknown4008[i], pRecord->mUnknown4032[i], pRecord->mUnknown4528[i]), i);
+            PlyrPoseBlendRawEntries(pObject, AnimMotCreateWeightList(&pRecord->mUnknown4008[i], pRecord->mUnknown4032[i], pRecord->mUnknown4528[i]), i);
         } else if (fn_800ADD7C(pObject->mUnknown116, i)) {
             PlyrPoseBlendRawEntries(pObject, fn_800ADEFC(pObject->mUnknown116, i), i);
         }
@@ -198,13 +198,13 @@ static void _FEPlyrUpdateAnims(FEPlyrModel_t *pRecord, float step)
     if (pObject->mUnknown20 & 0x10) {
         fn_801BE420(pRecord->mUnknown3604, &pRecord->mUnknown3096, pRecord->mUnknown3108, pRecord, step);
         AnimChanProcess(&pRecord->mUnknown3096, pRecord->mUnknown3108, step, pRecord);
-        result = fn_801BC7C0(&pRecord->mUnknown3096, pRecord->mUnknown3108, pRecord->mUnknown3604);
+        result = AnimMotCreateWeightList(&pRecord->mUnknown3096, pRecord->mUnknown3108, pRecord->mUnknown3604);
         PlyrPoseSetBlend(pObject, result);
     }
     _FEPlyrUpdatePartAnims(pRecord, pObject, step);
     fn_801BE420(pRecord->mUnknown2496, &pRecord->mUnknown1244, pRecord->mUnknown1256, pRecord, step);
     AnimChanProcess(&pRecord->mUnknown1244, pRecord->mUnknown1256, step, pRecord);
-    result = fn_801BC7C0(&pRecord->mUnknown1244, pRecord->mUnknown1256, pRecord->mUnknown2496);
+    result = AnimMotCreateWeightList(&pRecord->mUnknown1244, pRecord->mUnknown1256, pRecord->mUnknown2496);
     PlyrPoseBlendEntries(pObject, result);
     pRecord->mUnknown544 = fn_801BCA74(&pRecord->mUnknown1244, pRecord->mUnknown1256, result, pRecord->mUnknown548, 0xFFFF, 1);
     pRecord->mUnknown545 = fn_801BCCAC(&pRecord->mUnknown1244, pRecord->mUnknown1256, result, pRecord->mUnknown552,

@@ -18508,15 +18508,27 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BC65C.c",
+      "source": "src/engine/animmot.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv linker row 0x801BC65C-0x801BC7C0 for the unchanged native contribution from src/engine/cu_801BC65C.c; existing function/type/compiler evidence and larger-file ownership remain in force. This is a linked native range, not a claim that its original source file is complete or closed.",
+      "evidence": "evidence.tsv unit row 0x801BC65C-0x801BCA74 (src/engine/animmot.c, head of NASCAR 2005's animmot.c), its four function and name rows, the data rows of its .rodata 0x802AEDB8-0x802AEDC0 and .bss _AnimMot_FrameList 0x8037E858-0x8037EC7C, and the source-form row of AnimMotCreateWeightList; every function exact and linked (AnimMotCreateWeightList written in the d2 wave).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801BC65C",
-          "end": "0x801BC7C0"
+          "end": "0x801BCA74"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEDB8",
+          "end": "0x802AEDC0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037E858",
+          "end": "0x8037EC7C"
         }
       ]
     },
