@@ -217,7 +217,6 @@ const unsigned char *fn_80216BFC(const unsigned char *p, const unsigned char *pP
 const unsigned char *fn_80216860(const unsigned char *p, const unsigned char *pPath)
 {
     const unsigned char *pResult = 0;
-    const unsigned char *pNext;
     int i;
 
     if (p == 0 || *p == 0 || pPath == 0 || *pPath == 0) {
@@ -253,17 +252,16 @@ const unsigned char *fn_80216860(const unsigned char *p, const unsigned char *pP
                 break;
             }
             if (pPath[i] == '.' && p[i] != '/') {
-                pNext = i + pPath;
                 while (*p != 0 && *p != '>') {
                     p++;
                 }
-                if (pNext[1] == 0) {
+                if (pPath[i + 1] == 0) {
                     pResult = 0;
                     if (*p != 0) {
                         pResult = p + 1;
                     }
                 } else if (*p != 0) {
-                    pResult = fn_80216BFC(p + 1, pNext + 1);
+                    pResult = fn_80216BFC(p + 1, pPath + i + 1);
                 }
                 break;
             }
@@ -276,7 +274,6 @@ const unsigned char *fn_80216860(const unsigned char *p, const unsigned char *pP
 const unsigned char *fn_80216A2C(const unsigned char *p, const unsigned char *pPath)
 {
     const unsigned char *pResult = 0;
-    const unsigned char *pNext;
     int i;
 
     if (p == 0 || *p == 0 || pPath == 0 || *pPath == 0) {
@@ -311,17 +308,16 @@ const unsigned char *fn_80216A2C(const unsigned char *p, const unsigned char *pP
                 break;
             }
             if (pPath[i] == '.' && p[i] != '/') {
-                pNext = i + pPath;
                 while (*p != 0 && *p != '>') {
                     p++;
                 }
-                if (pNext[1] == 0) {
+                if (pPath[i + 1] == 0) {
                     pResult = 0;
                     if (*p != 0) {
                         pResult = p + 1;
                     }
                 } else if (*p != 0) {
-                    pResult = fn_80216A2C(p + 1, pNext + 1);
+                    pResult = fn_80216A2C(p + 1, pPath + i + 1);
                 }
                 break;
             }
@@ -334,7 +330,6 @@ const unsigned char *fn_80216A2C(const unsigned char *p, const unsigned char *pP
 const unsigned char *fn_80216BFC(const unsigned char *p, const unsigned char *pPath)
 {
     const unsigned char *pResult = 0;
-    const unsigned char *pNext;
     const unsigned char *pEnd = 0;
     const unsigned char *q;
     int depth;
@@ -387,17 +382,16 @@ const unsigned char *fn_80216BFC(const unsigned char *p, const unsigned char *pP
                 break;
             }
             if (pPath[i] == '.' && p[i] != '/') {
-                pNext = i + pPath;
                 while (*p != 0 && *p != '>') {
                     p++;
                 }
-                if (pNext[1] == 0) {
+                if (pPath[i + 1] == 0) {
                     pResult = 0;
                     if (*p != 0) {
                         pResult = p + 1;
                     }
                 } else if (*p != 0) {
-                    pResult = fn_80216A2C(p + 1, pNext + 1);
+                    pResult = fn_80216A2C(p + 1, pPath + i + 1);
                 }
                 break;
             }
