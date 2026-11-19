@@ -245,16 +245,24 @@ int StoryCountCompletedEvents(int index)
     return result;
 }
 
-#if defined(DECOMP_COMPARE)
+// FAKEMATCH: the status test sets the flag through a reference parameter of a
+// file-static inline helper; the flag stays addressable through the first jump
+// pass, so GCC keeps the branch (cmpwi/bne/li 1) instead of the store-flag form.
+static inline void _StoryCheckQueryFound(int status, int &found)
+{
+    if (status == 0) {
+        found = 1;
+    }
+}
+
 int StoryIsEventCompleted(int index, int id)
 {
     int value;
     int found = 0;
 
-    if (fn_801FCE10(0, "use \x8c select 'NETS' into \x82 from 'CETS' where 'NETS' = \x82\n",
-                    fn_8022F3D4(fn_8022F358(index)), &value, id) == 0) {
-        found = 1;
-    }
+    _StoryCheckQueryFound(fn_801FCE10(0, "use \x8c select 'NETS' into \x82 from 'CETS' where 'NETS' = \x82\n",
+                                      fn_8022F3D4(fn_8022F358(index)), &value, id),
+                          found);
     return found;
 }
 
@@ -347,5 +355,4 @@ void StorySetFlag200(int index, int value)
 {
     StorySetFlag(index, 0x200, !value);
 }
-#endif
 }

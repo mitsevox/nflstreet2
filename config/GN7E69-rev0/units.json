@@ -1593,62 +1593,6 @@
       "address": "0x8018EB20",
       "evidence": "evidence.tsv function/name rows for 0x8018EB20 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
     },
-    "StoryIsEventCompleted": {
-      "address": "0x8018E5F4",
-      "evidence": "evidence.tsv function/name rows for 0x8018E5F4 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StoryAddCompletedEvent": {
-      "address": "0x8018E658",
-      "evidence": "evidence.tsv function/name rows for 0x8018E658 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StoryCountRemainingEvents": {
-      "address": "0x8018E6A4",
-      "evidence": "evidence.tsv function/name rows for 0x8018E6A4 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StoryAreGroupEventsCompleted": {
-      "address": "0x8018E6E0",
-      "evidence": "evidence.tsv function/name rows for 0x8018E6E0 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StoryIsNew": {
-      "address": "0x8018E774",
-      "evidence": "evidence.tsv function/name rows for 0x8018E774 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StorySetNew": {
-      "address": "0x8018E7A0",
-      "evidence": "evidence.tsv function/name rows for 0x8018E7A0 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StoryGetLkss": {
-      "address": "0x8018E7CC",
-      "evidence": "evidence.tsv function/name rows for 0x8018E7CC (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StorySetLkss": {
-      "address": "0x8018E828",
-      "evidence": "evidence.tsv function/name rows for 0x8018E828 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StoryTestIndexedFlag": {
-      "address": "0x8018E874",
-      "evidence": "evidence.tsv function/name rows for 0x8018E874 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StorySetIndexedFlag": {
-      "address": "0x8018E8B0",
-      "evidence": "evidence.tsv function/name rows for 0x8018E8B0 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StoryGetFlag100": {
-      "address": "0x8018E8F4",
-      "evidence": "evidence.tsv function/name rows for 0x8018E8F4 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StorySetFlag100": {
-      "address": "0x8018E920",
-      "evidence": "evidence.tsv function/name rows for 0x8018E920 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StoryGetFlag200": {
-      "address": "0x8018E94C",
-      "evidence": "evidence.tsv function/name rows for 0x8018E94C (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StorySetFlag200": {
-      "address": "0x8018E978",
-      "evidence": "evidence.tsv function/name rows for 0x8018E978 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
     "PlyrFixWristBones": {
       "address": "0x8003830C",
       "evidence": "evidence.tsv function and name rows for 0x8003830C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
@@ -15360,7 +15304,7 @@
     {
       "source": "src/game/StoryData.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018DF98-0x8018E5F4 (src/game/StoryData.cpp) and its data, linker, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8018DF98-0x8018E9A4 (src/game/StoryData.cpp) and its data, linker, compiler and source-form rows.",
       "link_roots": {
         "symbols": [
           "StoryTestFlag",
@@ -15378,7 +15322,21 @@
           "StoryClearFlags",
           "StoryStartNew",
           "StoryClearCompletedEvents",
-          "StoryCountCompletedEvents"
+          "StoryCountCompletedEvents",
+          "StoryIsEventCompleted",
+          "StoryAddCompletedEvent",
+          "StoryCountRemainingEvents",
+          "StoryAreGroupEventsCompleted",
+          "StoryIsNew",
+          "StorySetNew",
+          "StoryGetLkss",
+          "StorySetLkss",
+          "StoryTestIndexedFlag",
+          "StorySetIndexedFlag",
+          "StoryGetFlag100",
+          "StorySetFlag100",
+          "StoryGetFlag200",
+          "StorySetFlag200"
         ],
         "discarded": [
           "ResetYptsTadsCetsTables"
@@ -15390,13 +15348,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8018DF98",
-          "end": "0x8018E5F4"
+          "end": "0x8018E9A4"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802AAD90",
-          "end": "0x802AAEE8"
+          "end": "0x802AAF9C"
         }
       ]
     },
