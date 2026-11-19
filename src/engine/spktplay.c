@@ -5,6 +5,9 @@
 
 #include "engine/sndsys.h"
 
+/* Release-build form of the library's assertion check: compiles to an empty statement. */
+#define SND_ASSERT(e) do { } while (0)
+
 extern "C" {
 
 int fn_802743A0(int index, void *stream);
@@ -63,6 +66,8 @@ int SNDPKTPLAY_create(void (*release)(int value, void *context), void (*callback
     SNDSYS_leavecritical();
     return -9;
 found:
+    // FAKEMATCH: compiled-out assert; its empty do-while keeps the slot search apart from the voice setup
+    SND_ASSERT(size >= (unsigned int)SNDPKTPLAY_overhead(8));
     if (fn_802743A0(i, memory) < 0) {
         SNDSYS_leavecritical();
         return -6;
