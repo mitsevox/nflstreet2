@@ -83,7 +83,7 @@ extern "C" {
 
 extern int lbl_8030002C;
 extern float lbl_80300028;
-extern const signed char lbl_802B79A0[6][6];
+extern const signed char SNDSTRMIspeakerchannel[6][6];
 
 int SNDSTRM_setvol(int stream, int speaker, float vol);
 

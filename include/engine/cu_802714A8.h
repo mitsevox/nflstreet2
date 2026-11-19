@@ -272,6 +272,20 @@ struct SndTimerClientList_t {
     SndStreamFader_t *mpHead;
 
     SndTimerClientList_t() : mpHead(0) {}
+
+    /* Unlinks a client from the list. */
+    void Remove(SndStreamFader_t *client)
+    {
+        if (client == mpHead) {
+            mpHead = client->mpNext;
+        }
+        if (client->mpPrev != 0) {
+            client->mpPrev->mpNext = client->mpNext;
+        }
+        if (client->mpNext != 0) {
+            client->mpNext->mpPrev = client->mpPrev;
+        }
+    }
 };
 
 /* The variable-rate timer and the critical-section vector of sserver.c. */

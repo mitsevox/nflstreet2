@@ -77,7 +77,7 @@ int SNDSTRM_setazimuth(int stream, int speaker, float azimuth)
                 }
             }
         } else {
-            slot = lbl_802B79A0[record->m23 - 1][speaker];
+            slot = SNDSTRMIspeakerchannel[record->m23 - 1][speaker];
             index = record->m4[slot];
             dst = &lbl_803A6C24.m1CC[index];
             if (slot != -128) {

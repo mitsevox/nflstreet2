@@ -36,7 +36,7 @@ void StreamFader(void *context)
     voice = fn_8026A288(channel->mVoice);
     if (voice >= 0) {
         record = &lbl_803A6C24.m1CC[voice];
-        slot = lbl_802B79A0[record->m23 - 1][sp->mIndex];
+        slot = SNDSTRMIspeakerchannel[record->m23 - 1][sp->mIndex];
         if (slot != -128) {
             index = record->m4[slot];
             dst = &lbl_803A6C24.m1CC[index];

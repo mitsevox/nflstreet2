@@ -2181,10 +2181,6 @@
       "address": "0x8026B7D8",
       "evidence": "evidence.tsv function and name rows for SNDMEMI_free 0x8026B7D8; the draft src/engine/smemman.c is registered in comparisons.json (one of its five functions, SNDMEMI_allocz, differs), so the original provider stays linked and linked callers resolve this name to it."
     },
-    "SNDSTRM_setvol": {
-      "address": "0x8026F334",
-      "evidence": "evidence.tsv function/name rows for 0x8026F334 (src/engine/sstvol.c, comparison only until linked)."
-    },
     "SNDSTRM_setazimuth": {
       "address": "0x8026E4C0",
       "evidence": "evidence.tsv function/name rows for 0x8026E4C0 (src/engine/sst3dpos.c, comparison only until linked); the linked src/engine/saemsstr.c calls it by name (integration of c16a and c16c)."
@@ -20921,6 +20917,25 @@
           "placement": ".data5",
           "start": "0x803EBB18",
           "end": "0x803EBB20"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sstvol.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026F334-0x8026F5F8 (src/engine/sstvol.c), its function and name rows, the data rows 0x802B79A0-0x802B79C8 of its .rodata (the speaker-slot table SNDSTRMIspeakerchannel and the 0.0 literal), the FAKEMATCH source-form row for SNDSTRM_setvol and the sound_cxx compiler row 0x8026E4C0-0x80270494; every function exact, promoted from comparison-only. No owned .data or .bss.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026F334",
+          "end": "0x8026F5F8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B79A0",
+          "end": "0x802B79C8"
         }
       ]
     }
