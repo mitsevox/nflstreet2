@@ -1,19 +1,45 @@
 /* SN Systems runtime helpers for the CodeWarrior-compiled Nintendo SDK code:
    the runtime names that code calls for double-to-unsigned conversion and for
    64-bit shifts, division and remainder. The conversion is a small function;
-   each 64-bit helper is a single branch to the matching libgcc routine. */
+   each 64-bit helper is a single branch to the matching libgcc routine. The whole
+   file is the runtime's own assembly: __cvt_fp2unsigned(double) returns the value
+   truncated to unsigned, subtracting 2^31 first and putting the top bit back for
+   values of 2^31 and above. */
 
-#if defined(DECOMP_COMPARE)
-unsigned long __cvt_fp2unsigned(double d)
-{
-    if (d >= 2147483648.0)
-        return (long)(d - 2147483648.0) ^ 0x80000000;
-    return (long)d;
-}
-#endif
-
-asm(".section \".text\"\n"
+asm(".section \".rodata\"\n"
+    ".align 3\n"
+    "__cvt_fp2unsigned_two31:\n"
+    "\t.long 0x41e00000\n"
+    "\t.long 0x0\n"
+    ".size __cvt_fp2unsigned_two31,8\n"
+    "\n"
+    ".section \".text\"\n"
     ".align 2\n"
+    "\n"
+    ".globl __cvt_fp2unsigned\n"
+    ".type __cvt_fp2unsigned,@function\n"
+    "__cvt_fp2unsigned:\n"
+    "\tstwu 1,-16(1)\n"
+    "\tlis 9,__cvt_fp2unsigned_two31@ha\n"
+    "\taddi 9,9,__cvt_fp2unsigned_two31@l\n"
+    "\tlfd 0,0(9)\n"
+    "\tfcmpu 0,1,0\n"
+    "\tcror 3,2,1\n"
+    "\tbc 12,3,.Lcvt_big\n"
+    "\tfctiwz 0,1\n"
+    "\tstfd 0,8(1)\n"
+    "\tlwz 3,12(1)\n"
+    "\tb .Lcvt_done\n"
+    ".Lcvt_big:\n"
+    "\tfsub 0,1,0\n"
+    "\tfctiwz 13,0\n"
+    "\tstfd 13,8(1)\n"
+    "\tlwz 3,12(1)\n"
+    "\txoris 3,3,0x8000\n"
+    ".Lcvt_done:\n"
+    "\taddi 1,1,16\n"
+    "\tblr\n"
+    ".size __cvt_fp2unsigned,.-__cvt_fp2unsigned\n"
     "\n"
     ".globl __shr2u\n"
     ".type __shr2u,@function\n"

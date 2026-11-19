@@ -29646,32 +29646,6 @@
       ]
     },
     {
-      "source": "src/engine/sn_cwhelpers.c",
-      "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AD424-0x801AD488 (src/engine/sn_cwhelpers.c), function rows, data row 0x802AE9F8-0x802AEA00, compiler and source-form rows. Documented holdout at the start of .text: __cvt_fp2unsigned 0x801AD424-0x801AD46C is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes with its double; the seven hand-written branch stubs after it are linked through units.json.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801AD424",
-          "end": "0x801AD488"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AE9F8",
-          "end": "0x802AEA00"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__cvt_fp2unsigned",
-          "start": "0x801AD424",
-          "end": "0x801AD46C"
-        }
-      ]
-    },
-    {
       "source": "src/engine/sndvd.c",
       "profile": "engine_cpp_nosda",
       "evidence": "evidence.tsv unit row 0x801ADDB4-0x801AE3E4 (src/engine/sndvd.c), function rows, data row 0x802AEA00-0x802AEA18, compiler and source-form rows. State globals 0x802CC5E0-0x802CC651 and 0x802C2A5C stay external. Comparison only; original bytes stay linked.",

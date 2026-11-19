@@ -613,10 +613,6 @@
       "address": "0x80190F18",
       "evidence": "evidence.tsv external row 0x80190F18 (ReadBitStream__FP11BitStream_tUi), name row 0x80190F18 and type row BitStream_t."
     },
-    "__cvt_fp2unsigned": {
-      "address": "0x801AD424",
-      "evidence": "evidence.tsv external row for GXPixel resolved caller and related SDK/runtime callee identity."
-    },
     "_stack_addr": {
       "address": "0x803FE4C0",
       "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; outside the image, so the linked source build defines it as an absolute link-script symbol; no object storage claimed."
@@ -18196,13 +18192,19 @@
     {
       "source": "src/engine/sn_cwhelpers.c",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AD424-0x801AD488 (src/engine/sn_cwhelpers.c), its function, name and source-form rows; the seven branch stubs 0x801AD46C-0x801AD488 are linked (no data); the documented holdout __cvt_fp2unsigned 0x801AD424-0x801AD46C at the start of .text (with its double 0x802AE9F8-0x802AEA00) keeps its original bytes and stays a comparison.",
+      "evidence": "evidence.tsv unit row 0x801AD424-0x801AD488 (src/engine/sn_cwhelpers.c), its function, name, data, assembly and source-form rows; the whole file is linked: __cvt_fp2unsigned and the seven branch stubs 0x801AD424-0x801AD488 and the double __cvt_fp2unsigned_two31 0x802AE9F8-0x802AEA00.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801AD46C",
+          "start": "0x801AD424",
           "end": "0x801AD488"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE9F8",
+          "end": "0x802AEA00"
         }
       ]
     },
