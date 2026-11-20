@@ -28,7 +28,7 @@ typedef struct LLLight_t {
     float mUnknown36[3];
 } LLLight_t;
 
-/* 32-byte entry at +0x14 of LLLightScene_t, read by 0x80236164. */
+/* 32-byte entry at +0x14 of LLLightScene_t. */
 typedef struct LLLightProjector_t {
     unsigned int mUnknown0;
     float mUnknown4[4];
@@ -47,7 +47,7 @@ typedef struct LLLightScene_t {
     float mUnknown148[4];
 } LLLightScene_t;
 
-/* 20-byte record of the 100-byte block returned by 0x8023608C, read by 0x802368D0. */
+/* 20-byte record of a 100-byte light-set reference block. */
 typedef struct LLLightSetRef_t {
     int mUnknown0;
     float mUnknown4[4];
