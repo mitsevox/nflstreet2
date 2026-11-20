@@ -75,7 +75,7 @@ extern "C" int fn_8007FA48(int table, int column, int *out, unsigned short *coun
     return result;
 }
 
-extern "C" int fn_8007FC70(int source, int value, int reset, int start)
+extern "C" int PlayerRecordCreate(int source, int value, int reset, int start)
 {
     char first[16], last[16], other[16];
     Record_80082B18 record;
@@ -150,7 +150,7 @@ extern "C" void fn_8007FE40(Object_8008044C *p, void *arg, int selector, int fla
     node.Set(6, 0x59414C5044494754LL, 3, selector);
     DbCursorOpen(reinterpret_cast<DbCursor *>(p), 0x59414C50, 0x44494750, arg, &node, flags);
 }
-extern "C" void fn_8007FEB8(Object_8008044C *p, void *arg, int flags)
+extern "C" void PlayerCursorOpenByPlig(Object_8008044C *p, void *arg, int flags)
 {
     DbFilter node;
     // FAKEMATCH: the operand value is held in a local, as the selector parameter of the sibling wrappers is
@@ -242,9 +242,9 @@ extern "C" void fn_80080138(int selector, int index, int mode)
 extern "C" void fn_8008040C(Object_8008044C *p, Desc_8008044C *desc)
 {
     int tag = fn_801F95C8();
-    fn_8008044C(p, desc, tag);
+    PlayerCursorOpen(p, desc, tag);
 }
-extern "C" void fn_8008044C(Object_8008044C *p, Desc_8008044C *desc, int tag)
+extern "C" void PlayerCursorOpen(Object_8008044C *p, Desc_8008044C *desc, int tag)
 {
     void *arg = 0;
     Desc_8008044C local;
@@ -263,7 +263,7 @@ extern "C" void fn_8008044C(Object_8008044C *p, Desc_8008044C *desc, int tag)
     switch (local.mUnknown4) {
     case 0: fn_8007FE04(p, arg, tag); break;
     case 1: fn_8007FE40(p, arg, local.mUnknown8, tag); break;
-    case 2: fn_8007FEB8(p, arg, tag); break;
+    case 2: PlayerCursorOpenByPlig(p, arg, tag); break;
     case 3: fn_8007FF30(p, arg, local.mUnknown8, tag); break;
     case 4: fn_8007FFA8(p, arg, local.mUnknown8, local.mUnknown12, tag); break;
     }

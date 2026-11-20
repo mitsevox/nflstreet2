@@ -155,7 +155,7 @@ void ObjRemoveFromList(int handle, int item);
 void VptTrashObject(int handle);
 double fabs(double x);
 int ResFindIndexByName(void *pData, char *pName);
-void *fn_80216860(int handle, const char *pName);
+void *XmlFindPath(int handle, const char *pName);
 void *fn_80216BFC(void *pNode, const char *pName);
 void *fn_80216E34(void *pNode);
 int fn_80216F3C(void *pNode, const char *pName, char *pOut, int size, const char *pDefault);
@@ -494,7 +494,7 @@ void DivotLoadVariants(void)
     for (int i = 0; i < DIVOT_NUM_TYPES; i++) {
         counts[i] = 0;
     }
-    for (pSurface = fn_80216860(ResLoad(fn_800A336C(), fn_800A33A4(), 1), "surface"); pSurface;
+    for (pSurface = XmlFindPath(ResLoad(fn_800A336C(), fn_800A33A4(), 1), "surface"); pSurface;
          pSurface = fn_80216E34(pSurface)) {
         int surface = fn_80217070(pSurface, "surfType", DIVOT_SURFACE_NONE);
 

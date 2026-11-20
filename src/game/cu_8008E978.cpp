@@ -15598,7 +15598,7 @@ extern "C" void fn_800B86A4(int index)
 }
 
 extern "C" {
-int fn_8002D228(Type_803EA368 *p);
+int ReplayIsHalted(Type_803EA368 *p);
 int fn_8009B9BC(void);
 void BannerClear(int index);
 int BannerIsActive(int a);
@@ -15737,7 +15737,7 @@ extern "C" void fn_800B8C9C(void)
 void PostPlayPhase::UpdateCue(float dt)
 {
     fn_800B8C9C();
-    if (fn_8002D228(lbl_803EA368) != 0 && lbl_803EAB7C == 0 && lbl_803EAB7D != 0
+    if (ReplayIsHalted(lbl_803EA368) != 0 && lbl_803EAB7C == 0 && lbl_803EAB7D != 0
         && lbl_803EAB78->mUnknown154 > 45) {
         fn_8009BC30(lbl_803EAB80);
         if (fn_8002E950(0) != 0) {

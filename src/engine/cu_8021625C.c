@@ -211,10 +211,10 @@ const unsigned char *fn_802166F0(const unsigned char *p)
     return p;
 }
 
-const unsigned char *fn_80216A2C(const unsigned char *p, const unsigned char *pPath);
+const unsigned char *XmlFindChild(const unsigned char *p, const unsigned char *pPath);
 const unsigned char *fn_80216BFC(const unsigned char *p, const unsigned char *pPath);
 
-const unsigned char *fn_80216860(const unsigned char *p, const unsigned char *pPath)
+const unsigned char *XmlFindPath(const unsigned char *p, const unsigned char *pPath)
 {
     const unsigned char *pResult = 0;
     int i;
@@ -271,7 +271,7 @@ const unsigned char *fn_80216860(const unsigned char *p, const unsigned char *pP
     return pResult;
 }
 
-const unsigned char *fn_80216A2C(const unsigned char *p, const unsigned char *pPath)
+const unsigned char *XmlFindChild(const unsigned char *p, const unsigned char *pPath)
 {
     const unsigned char *pResult = 0;
     int i;
@@ -317,7 +317,7 @@ const unsigned char *fn_80216A2C(const unsigned char *p, const unsigned char *pP
                         pResult = p + 1;
                     }
                 } else if (*p != 0) {
-                    pResult = fn_80216A2C(p + 1, pPath + i + 1);
+                    pResult = XmlFindChild(p + 1, pPath + i + 1);
                 }
                 break;
             }
@@ -391,7 +391,7 @@ const unsigned char *fn_80216BFC(const unsigned char *p, const unsigned char *pP
                         pResult = p + 1;
                     }
                 } else if (*p != 0) {
-                    pResult = fn_80216A2C(p + 1, pPath + i + 1);
+                    pResult = XmlFindChild(p + 1, pPath + i + 1);
                 }
                 break;
             }

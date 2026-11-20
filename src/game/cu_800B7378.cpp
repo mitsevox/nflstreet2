@@ -64,7 +64,7 @@ int fn_8002C9A8(Type_803EA368 *p, int msg, int value);
 int fn_8002CA74(Type_803EA368 *p, int msg, int value);
 unsigned char fn_8002D060(Type_803EA368 *p);
 int fn_8002D0AC(Type_803EA368 *p);
-int fn_8002D228(Type_803EA368 *p);
+int ReplayIsHalted(Type_803EA368 *p);
 void fn_8002D2C8(Type_803EA368 *p, unsigned char value);
 int PauseRequestIsPending(void);
 void SpchIGResetPlayResult(void);
@@ -377,7 +377,7 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
             && InGameIsDemo() == 0 && InGameIsPaused() == 0 && TeamPromptIsActive() == 0 && PauseRequestIsPending() == 0
             && PauseIsUnblocked() == 1 && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1)) {
             fn_8002C9A8(lbl_803EA368, 3, 0);
-            if (fn_8002D228(lbl_803EA368) != 0) {
+            if (ReplayIsHalted(lbl_803EA368) != 0) {
                 fn_8009BA10(0);
                 fn_8009B924();
                 fn_80094DF0();

@@ -165,7 +165,7 @@ void AutoDepthBuild(int value, int *list, AutoDepthPlayer_t **pRecords)
     }
     fn_80085020(&first);
     fn_80085080(&first, value, 0);
-    fn_8008044C(&second, 0, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
+    PlayerCursorOpen(&second, 0, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
     int i = 0;
     while (list[i] != 32767) i++;
     _AutoDepth_iCount = i;

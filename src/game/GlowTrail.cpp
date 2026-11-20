@@ -48,7 +48,7 @@ void fn_80197E64(void);
 void fn_80197E68(void);
 void fn_80197E6C(void *);
 void fn_80197F84(void *);
-void fn_80197FDC(void *, void *);
+void GlowDraw(void *, void *);
 void EffectBlendBegin(void *, int);
 void EffectBlendEnd(void *, int);
 int fn_800A33B0(void);
@@ -310,7 +310,7 @@ Glow_t *GlowCreate(int index, GlowDesc_t *q)
 /* The blend state a group draw opens and closes around its glows. */
 struct EffectBlendScope_t {
     void Begin(int main) { EffectBlendBegin(this, main); }
-    void Draw(Glow_t *p) { fn_80197FDC(this, p); }
+    void Draw(Glow_t *p) { GlowDraw(this, p); }
     void End(int main) { EffectBlendEnd(this, main); }
 };
 void GlowDrawGroup(int index)

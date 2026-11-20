@@ -1327,7 +1327,7 @@ BigObj_t *BigObjFindByKey(int, unsigned int);
 void DynObjChildRefreshFrame(DynObjChild *);
 void *ResLoadToBuffer(void *, int, char *);
 int ResGetSize(void *, int);
-void *fn_80216860(void *, const char *);
+void *XmlFindPath(void *, const char *);
 void *fn_80216BFC(void *, const char *);
 void *fn_80216E34(void *);
 int fn_80216F3C(void *, const char *, char *, int, const char *);
@@ -1526,7 +1526,7 @@ int fn_8004D3A8(void *pData, char *pName)
 
 void fn_8004D498(int handle) { lbl_803EA4F8[handle].mpCursor = lbl_803EA4F8[handle].mpData; }
 int fn_8004D4B0(int handle, const char *pKey) {
-    void *p = fn_80216860(lbl_803EA4F8[handle].mpCursor, pKey);
+    void *p = XmlFindPath(lbl_803EA4F8[handle].mpCursor, pKey);
     lbl_803EA4F8[handle].mpCursor = p; return p != 0;
 }
 int fn_8004D508(int handle, const char *pKey) {

@@ -171,7 +171,7 @@ void fn_800450D8(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_
     }
 }
 
-void fn_800451D0(ColorEntry *pEntry, State_80045084 *pState)
+void PlaDynClutFillRange(ColorEntry *pEntry, State_80045084 *pState)
 {
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
@@ -262,7 +262,7 @@ void fn_80045F64(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_
         fn_800450D8(pEntry, pState, pPalettes);
         break;
     case 1:
-        fn_800451D0(pEntry, pState);
+        PlaDynClutFillRange(pEntry, pState);
         break;
     case 2:
         fn_800452F8(pEntry, pState);

@@ -109,7 +109,7 @@ void fn_8022306C(Point_80222EC4 *pA, Point_80222EC4 *pB, Point_80222EC4 *pLeft, 
 }
 
 
-void fn_80223224(int numPoints, Point_80222EC4 *pPoints, float *pWidths, Point_80222EC4 *pOut, int numOut)
+void UIGCurveBuildStrip(int numPoints, Point_80222EC4 *pPoints, float *pWidths, Point_80222EC4 *pOut, int numOut)
 {
     Point_80222EC4 dir;
     float stepA;
@@ -137,7 +137,7 @@ void fn_80223224(int numPoints, Point_80222EC4 *pPoints, float *pWidths, Point_8
     fn_8022306C(&lbl_803A00D8[numOut - 1], &lbl_803A00D8[numOut], &pOut[j + 1], &pOut[j], pWidths[2], 0, 0);
 }
 
-Point_80222EC4 fn_802233DC(Point_80222EC4 *pPoints, int unused, int index)
+Point_80222EC4 UIGCurveGetPoint(Point_80222EC4 *pPoints, int unused, int index)
 {
     Point_80222EC4 result;
 
@@ -160,7 +160,7 @@ void fn_80223874(Node_80223874 *pNode);
 void fn_802239D0(Node_80223874 *pNode);
 void fn_80223A40(Node_80223874 *pNode);
 
-void fn_80223460(Node_80223874 *pNode, Uint32 msg, int nArgs, NodeArg_80223460 *pArgs)
+void UIGCurveObjAction(Node_80223874 *pNode, Uint32 msg, int nArgs, NodeArg_80223460 *pArgs)
 {
     switch (msg) {
     case -1:
@@ -213,7 +213,7 @@ void fn_80223460(Node_80223874 *pNode, Uint32 msg, int nArgs, NodeArg_80223460 *
         Uint32 index = pArgs[0].i;
 
         if (index <= 2 && nArgs == 4) {
-            Point_80222EC4 pt = fn_802233DC(pNode->u.c.unk_18, 3, index);
+            Point_80222EC4 pt = UIGCurveGetPoint(pNode->u.c.unk_18, 3, index);
 
             *(Float32 *)pArgs[1].p = pt.mX;
             *(Float32 *)pArgs[2].p = pt.mY;

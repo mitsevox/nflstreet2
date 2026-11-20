@@ -265,7 +265,7 @@ void DepthChartLoad(int reset)
         int *p;
 
         desc.mUnknown0 = 1;
-        fn_8008044C(&_DepthChart_sPlayerCursor, &desc, 0x54415453);
+        PlayerCursorOpen(&_DepthChart_sPlayerCursor, &desc, 0x54415453);
         _DepthChart_bNeedsLoad = 1;
         if (reset) {
             FormationLineupReset();

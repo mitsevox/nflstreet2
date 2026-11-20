@@ -56,14 +56,14 @@ void fn_80070D68(void);
 void fn_80070E8C(void);
 void fn_80070F84(void);
 void fn_8007105C(void);
-void fn_800710C8(void);
+void SndgEventLoadLevelBank(void);
 void fn_8007134C(void);
 int fn_800717E0(Vector_80039F5C *pPos);
 int fn_8007184C(Vector_80039F5C *pPos);
 void fn_80071914(Vector_80039F5C *pPos);
 int fn_80071A04(int id, Vector_80039F5C *pPos);
 int fn_80071A6C(int id, Vector_80039F5C *pPos, unsigned int volume);
-int fn_80071B08(int unused, int value);
+int SndgEventGetFootstepSfx(int unused, int value);
 
 
 int fn_80177F70(void);
@@ -188,7 +188,7 @@ void fn_800719D4(void)
     SndgSfxSetVolume(lbl_803EA6D9 + 34, 100, 0);
 }
 
-int fn_80071BA0(int a, int value)
+int SndgEventGetSurfaceHitSfx(int a, int value)
 {
     switch (value) {
     case 10:
@@ -303,7 +303,7 @@ void fn_8006F850(AudmonEvent_t *p)
         if (pose && pose->mUnknown972) surface = ((LevelSurface_t *)pose->mUnknown972)->mSurface;
         int state = fn_800A3444();
         lbl_803EA6D1 = (lbl_803EA6D1 + 1) % 2;
-        SndgSfxPlay(fn_80071B08(state, surface) + lbl_803EA6D1, &p->mPos);
+        SndgSfxPlay(SndgEventGetFootstepSfx(state, surface) + lbl_803EA6D1, &p->mPos);
         break;
     }
     case 101: fn_80071974(&p->mPos); break;
@@ -459,7 +459,7 @@ void fn_8006F850(AudmonEvent_t *p)
             switch (lbl_803EA6E5) {
             case 0: fn_80070D68(); break;
             case 1: fn_80070E8C(); fn_8007105C(); break;
-            case 2: fn_80070D68(); fn_800710C8(); break;
+            case 2: fn_80070D68(); SndgEventLoadLevelBank(); break;
             case 3: fn_80070E8C(); break;
             }
         }
@@ -710,7 +710,7 @@ void fn_8007105C(void)
     }
 }
 
-void fn_800710C8(void)
+void SndgEventLoadLevelBank(void)
 {
     int base = 118;
     if (lbl_803EA6FA) {
@@ -923,7 +923,7 @@ int fn_80071A6C(int id, Vector_80039F5C *pos, unsigned int volume)
     return SndgSfxPlayVolume(sound, pos, (unsigned char)((volume * SndgSfxGetVolume(sound)) / 100));
 }
 
-int fn_80071B08(int unused, int value)
+int SndgEventGetFootstepSfx(int unused, int value)
 {
     int result = 36;
     int choice = fn_802372EC(1, 2);
