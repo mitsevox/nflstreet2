@@ -1446,8 +1446,8 @@ struct Script_802D7A10 {
 };
 
 extern "C" Script_802D7A10 lbl_802D7A10[];
-extern "C" void AnimSeqncrRelocateSeqFile(void);
-extern "C" void AnimSeqncrRelocateTable(void);
+extern "C" void AnimSeqncrRelocateSeqFile(struct AnimSeqncrFile_t *file);
+extern "C" void AnimSeqncrRelocateTable(struct AnimSeqncrTable_t *table);
 
 extern "C" void fn_80094238(int index)
 {
@@ -1458,9 +1458,9 @@ extern "C" void fn_80094238(int index)
     lbl_803EC924->mEntries[index].mUnknownC = lbl_802D7A10[index].mUnknown18;
     pData = lbl_803EC924->mpUnknown7C;
     lbl_803EC924->mEntries[index].mpUnknown0 = (Table_80093BAC *)ResLoad(pData, lbl_802D7A10[index].mUnknown14, 1);
-    AnimSeqncrRelocateSeqFile();
+    AnimSeqncrRelocateSeqFile((struct AnimSeqncrFile_t *)lbl_803EC924->mEntries[index].mpUnknown0);
     lbl_803EC924->mEntries[index].mUnknown4 = ResLoad(pData, lbl_802D7A10[index].mUnknown18, 1);
-    AnimSeqncrRelocateTable();
+    AnimSeqncrRelocateTable((struct AnimSeqncrTable_t *)lbl_803EC924->mEntries[index].mUnknown4);
 }
 
 extern "C" void fn_800942F0(int index)
@@ -1737,31 +1737,33 @@ extern "C" void fn_80094EDC(void);
 
 extern "C" void fn_80094DF0(void)
 {
+    Entry_80094BC4 *p;
     int count;
+    int i;
 
-    do {
-        Entry_80094BC4 *p = lbl_803EA8DC;
-        int i;
-
-        count = 0;
-        for (i = 0; i < 10; i++) {
-            switch (p->mUnknown24) {
-            case 0:
-                break;
-            case 2:
-                p->mUnknown24 = 3;
-            case 1:
-            case 3:
-            case 4:
-                count++;
-                break;
-            }
-            p++;
+retry:
+    p = lbl_803EA8DC;
+    count = 0;
+    for (i = 0; i < 10; i++) {
+        switch (p->mUnknown24) {
+        case 0:
+            break;
+        case 2:
+            p->mUnknown24 = 3;
+        case 1:
+        case 3:
+        case 4:
+            count++;
+            break;
         }
-        if (count != 0) {
-            fn_80094EDC();
-        }
-    } while (count > 0);
+        p++;
+    }
+    if (count != 0) {
+        fn_80094EDC();
+    }
+    if (count > 0) {
+        goto retry;
+    }
 }
 
 extern "C" void fn_80094E80(void)
@@ -2496,7 +2498,7 @@ extern "C" void fn_80096954(void *pData)
 
     lbl_803EA920 = (Block_80096954 *)fn_801D2B7C(sizeof(Block_80096954), 0, 0);
     lbl_803EA920->mpUnknown0[0] = (Table_80093BAC *)ResLoad(pData, 3, 1);
-    AnimSeqncrRelocateSeqFile();
+    AnimSeqncrRelocateSeqFile((struct AnimSeqncrFile_t *)lbl_803EA920->mpUnknown0[0]);
     lbl_803EA920->mpUnknown8 = pData;
     for (i = 0; i < 2; i++) {
         memset(&lbl_803EA920->mUnknown10[i], 0, sizeof(Playback_80096DA8));
