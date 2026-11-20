@@ -26246,6 +26246,38 @@
       ]
     },
     {
+      "source": "src/game/cu_800FA300.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the state 22 update handler 0x800FA300-0x800FAD10 as its own object so its literal pool 0x8029E3C8-0x8029E404 and the four-entry handler table 0x802DAB38-0x802DAB48 it calls through (lis/addi 0x802DAB38 at 0x800FA968) are placed exactly; it does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FA300",
+          "end": "0x800FAD10"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E3C8",
+          "end": "0x8029E404"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DAB38",
+          "end": "0x802DAB48"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800FA300",
+          "start": "0x800FA300",
+          "end": "0x800FAD10"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800FAD2C.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies 0x800FAD2C and 0x800FB314 as their own object so their literal pool 0x8029E404-0x8029E40C is placed exactly; 0x800FAECC, which lies between them and uses no literals, is compiled in src/game/cu_800EFC68.cpp. It does not claim an original file boundary.",
