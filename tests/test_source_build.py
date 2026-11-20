@@ -766,6 +766,241 @@ class KeptLocals(Fixture):
                                      {"symbol": "Inline", "address": "0x80003114", "size": 4}])
 
 
+class Holdouts(Fixture):
+    """An owner-approved file links whole except its non-exact functions (owner ruling 2026-11-19)."""
+
+    # Object sections: 1 .text.a, 2 .text.b (the holdout), 3 .text.c, 4 .rodata; symbol indices:
+    # 0 null, 1 file, 2 to 5 the section symbols, then these.
+    SYMBOLS = [{"name": "a", "value": 0, "size": 8, "shndx": 1, "type": sb.STT_FUNC},
+               {"name": "b", "value": 0, "size": 12, "shndx": 2, "type": sb.STT_FUNC},
+               {"name": "c", "value": 0, "size": 8, "shndx": 3, "type": sb.STT_FUNC, "bind": sb.STB_LOCAL},
+               {"name": "Label", "value": 4, "size": 0, "shndx": 2, "bind": sb.STB_LOCAL},
+               {"name": "Other", "value": 0, "size": 0, "shndx": 0}]
+    COMPARISONS = {"schema": 2, "units": [{"source": "src/unit.c", "functions": [
+        {"symbol": "a", "start": "0x80003110", "end": "0x80003118"},
+        {"symbol": "b", "start": "0x80003118", "end": "0x80003120"},
+        {"symbol": "c", "start": "0x80003120", "end": "0x80003128"}]},
+        {"source": "src/other.c", "functions": [{"symbol": "d", "start": "0x80003130", "end": "0x80003138"}]}]}
+
+    def held_manifest(self, functions=("b",), runs=(("0x80003110", "0x80003118"), ("0x80003120", "0x80003128")),
+                      approved=("src/unit.c",)):
+        manifest = copy.deepcopy(self.manifest)
+        manifest["holdouts_approved"] = {"sources": list(approved), "evidence": "owner ruling 2026-11-19"}
+        unit = manifest["units"][0]
+        unit["sections"] = [{"section": ".text", "placement": ".init", "start": start, "end": end}
+                            for start, end in runs]
+        unit["sections"].append({"section": ".rodata", "placement": ".data2",
+                                 "start": "0x80004008", "end": "0x80004010"})
+        unit["holdouts"] = {"functions": list(functions), "evidence": "comparisons.json partials"}
+        return manifest
+
+    def held(self, manifest=None, comparisons=None):
+        return sb.load_manifest(manifest or self.held_manifest(), self.sections, "3.9.3",
+                                comparisons or self.COMPARISONS)
+
+    def native(self, symbols=None, b_size=12, c_align=4):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        path = Path(temporary.name) / "unit.o"
+        code = [dict(text(8), name=".text.a", data=bytes(range(8))),
+                dict(text(b_size), name=".text.b", data=bytes(range(0x40, 0x40 + b_size))),
+                dict(text(8, c_align), name=".text.c", data=bytes(range(8, 16)))]
+        symbols = copy.deepcopy(self.SYMBOLS if symbols is None else symbols)
+        for symbol in symbols:
+            if symbol["name"] == "b":
+                symbol["size"] = b_size
+        sb.write_object(path, code + [rodata(8)], symbols)
+        with_relocations(path, 1, ((0, 7, 10, 0), (4, 4, 10, 0)))  # a: call b; branch to c's section
+        with_relocations(path, 2, ((0, 6, 10, 0),))                # b: call a (dropped with b)
+        with_relocations(path, 3, ((0, 5, 6, 0), (4, 10, 10, 0)))  # c: .rodata; call Other
+        with_relocations(path, 4, ((0, 3, 1, 4), (4, 9, 1, 0)))    # .rodata: into b's section; Label
+        return path
+
+    def test_manifest_holdouts(self):
+        units, _, _ = self.held()
+        unit = units[0]
+        self.assertEqual(unit["holdouts"], [{"symbol": "b", "start": 0x80003118, "end": 0x80003120}])
+        self.assertEqual(unit["flags"], ["-O2", "-ffunction-sections"])
+        self.assertEqual([entry.get("input") for entry in unit["sections"]],
+                         [".text.holdout_run_80003110", ".text.holdout_run_80003120", None])
+        # A holdout may be named by its registered start address.
+        self.assertEqual(self.held(self.held_manifest(functions=("0x80003118",)))[0][0]["holdouts"],
+                         unit["holdouts"])
+        # Units without holdouts are unchanged.
+        self.assertIsNone(self.load()[0][0]["holdouts"])
+        self.assertEqual(self.load()[0][0]["flags"], ["-O2"])
+
+    def test_holdouts_need_the_owners_approval(self):
+        with self.assertRaisesRegex(ValueError, "owner's approval for this file"):
+            self.held(self.held_manifest(approved=("src/other.c",)))
+        manifest = self.held_manifest()
+        del manifest["holdouts_approved"]
+        with self.assertRaisesRegex(ValueError, "owner's approval for this file"):
+            self.held(manifest)
+        for approval in ({"sources": [], "evidence": "x"}, {"sources": ["src/unit.c"], "evidence": " "},
+                         {"sources": ["src/unit.c", "src/unit.c"], "evidence": "x"}, {"sources": ["src/unit.c"]},
+                         {"sources": ["../unit.c"], "evidence": "x"}):
+            manifest = self.held_manifest()
+            manifest["holdouts_approved"] = approval
+            with self.subTest(approval=approval), self.assertRaises(ValueError):
+                self.held(manifest)
+
+    def test_holdout_shapes(self):
+        for spec in ({"functions": [], "evidence": "x"}, {"functions": ["b"], "evidence": " "},
+                     {"functions": ["b"]}, {"functions": "b", "evidence": "x"},
+                     {"functions": ["b"], "evidence": "x", "symbols": {}}, ["b"]):
+            manifest = self.held_manifest()
+            manifest["units"][0]["holdouts"] = spec
+            with self.subTest(spec=spec), self.assertRaisesRegex(ValueError, "functions list and evidence"):
+                self.held(manifest)
+        with self.assertRaisesRegex(ValueError, "duplicate holdout"):
+            self.held(self.held_manifest(functions=("b", "0x80003118")))
+        for key in ("folded", "kept_locals", "link_roots"):
+            manifest = self.held_manifest()
+            value = "0x80003130" if key == "folded" else "0x80003110"
+            manifest["units"][0][key] = {"symbols": {"x": value}, "evidence": "x"} if key != "link_roots" \
+                else {"symbols": ["a"], "discarded": ["z"], "evidence": "x"}
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError, f"cannot be combined with {key}"):
+                self.held(manifest)
+
+    def test_holdouts_are_registered_partials_of_the_same_file(self):
+        with self.assertRaisesRegex(ValueError, "holdout x is not one function comparisons.json registers"):
+            self.held(self.held_manifest(functions=("x",)))
+        with self.assertRaisesRegex(ValueError, "holdout d is not one function"):
+            self.held(self.held_manifest(functions=("d",)))
+        with self.assertRaisesRegex(ValueError, "holdout 0x80003114 is not one function"):
+            self.held(self.held_manifest(functions=("0x80003114",)))
+
+    def test_runs_and_holdouts_tile_one_code_range(self):
+        with self.assertRaisesRegex(ValueError, "0x80003120 is followed by 0x8000311C"):
+            self.held(self.held_manifest(runs=(("0x80003110", "0x80003118"), ("0x8000311C", "0x80003128"))))
+        # Two runs with no holdout between them are one run.
+        with self.assertRaisesRegex(ValueError, "two code runs meet at 0x80003124 without a holdout"):
+            self.held(self.held_manifest(runs=(("0x80003110", "0x80003118"), ("0x80003120", "0x80003124"),
+                                               ("0x80003124", "0x80003128"))))
+        # A leading or trailing holdout is fine; a holdout may not overlap another unit's range.
+        units, _, _ = self.held(self.held_manifest(functions=("a", "b"), runs=(("0x80003120", "0x80003128"),)))
+        self.assertEqual([row["symbol"] for row in units[0]["holdouts"]], ["a", "b"])
+        manifest = self.held_manifest(functions=("b", "c"), runs=(("0x80003110", "0x80003118"),))
+        other = copy.deepcopy(self.manifest["units"][0])
+        other.update(source="src/other.c", sections=[{"section": ".text", "placement": ".init",
+                                                      "start": "0x80003120", "end": "0x80003124"}])
+        manifest["units"].append(other)
+        with self.assertRaisesRegex(ValueError, "overlap"):
+            self.held(manifest)
+        # Without holdouts a code section is still mapped once.
+        manifest = self.held_manifest()
+        del manifest["units"][0]["holdouts"]
+        with self.assertRaisesRegex(ValueError, "maps .text more than once"):
+            self.held(manifest)
+
+    def test_derived_object_drops_the_holdout_and_redirects_references(self):
+        units, _, _ = self.held()
+        unit = dict(units[0], object=self.native())
+        native = unit["object"].read_bytes()
+        sb.link_object(unit)
+        self.assertEqual(unit["link_object"], unit["object"].with_suffix(".holdouts.o"))
+        self.assertEqual(unit["object"].read_bytes(), native)
+        self.assertEqual(unit["held"], {"dropped": [{"symbol": "b", "start": 0x80003118, "end": 0x80003120,
+                                                     "compiled": 12}],
+                                        "globals": {"b": 0x80003118},
+                                        "linked": {"a": 0x80003110, "c": 0x80003120}})
+        derived = unit["link_object"].read_bytes()
+        sections, symbols = sb.read_elf(derived)
+        allocated = [(s["name"], s["size"], s.get("data")) for s in sections if s["flags"] & sb.SHF_ALLOC]
+        self.assertEqual(allocated, [(".text.holdout_run_80003110", 8, bytes(range(8))),
+                                     (".text.holdout_run_80003120", 8, bytes(range(8, 16))),
+                                     (".rodata", 8, bytes(8))])
+        # Section symbols have no name: "" is a run's or .rodata's.
+        self.assertEqual(relocations(derived), [(0, "__holdout_80003118", 10, 0), (4, "", 10, 0),
+                                                (0, "", 6, 0), (4, "Other", 10, 0),
+                                                (0, "__holdout_80003118", 1, 4), (4, "__holdout_80003118", 1, 4)])
+        named = {s["name"]: (s["bind"], s["shndx"], s["value"]) for s in symbols if s["name"]}
+        run_a, run_c = (next(s["index"] for s in sections if s["name"] == f".text.holdout_run_{x}")
+                        for x in ("80003110", "80003120"))
+        self.assertEqual(named, {"unit.o": (sb.STB_LOCAL, sb.SHN_ABS, 0), "a": (sb.STB_GLOBAL, run_a, 0),
+                                 "c": (sb.STB_LOCAL, run_c, 0), "Other": (sb.STB_GLOBAL, sb.SHN_UNDEF, 0),
+                                 "__holdout_80003118": (sb.STB_GLOBAL, sb.SHN_UNDEF, 0),
+                                 "__holdout_run_80003110": (sb.STB_GLOBAL, run_a, 0),
+                                 "__holdout_run_80003120": (sb.STB_GLOBAL, run_c, 0)})
+        # The branch to c's section names c's run section symbol.
+        section_symbols = {s["shndx"] for s in symbols if s["type"] == sb.STT_SECTION}
+        self.assertEqual(section_symbols, {s["index"] for s in sections if s["flags"] & sb.SHF_ALLOC})
+        # plan() places the derived runs and resolves the holdout inside the original bytes.
+        objects = {"src/unit.c": (sections, symbols)}
+        pieces, defined, resolved = sb.plan(self.sections, [unit], objects, {"Other": 0x80003104})
+        self.assertEqual(resolved, {"__holdout_80003118": 0x80003118, "Other": 0x80003104})
+        self.assertEqual([(p["start"], p.get("entry", {}).get("input"), p.get("symbols")) for p in pieces[".init"]],
+                         [(0x80003100, None, [{"name": "Other", "value": 4}]),
+                          (0x80003110, ".text.holdout_run_80003110", None),
+                          (0x80003118, None, [{"name": "__holdout_80003118", "value": 0}]),
+                          (0x80003120, ".text.holdout_run_80003120", None), (0x80003128, None, [])])
+        self.assertEqual(defined["__holdout_run_80003120"], (0x80003120, "src/unit.c"))
+        self.assertNotIn("b", defined)
+
+    def test_other_units_resolve_a_global_holdout_to_its_target(self):
+        units, _, _ = self.held()
+        unit = dict(units[0], object=self.native())
+        sb.link_object(unit)
+        caller = {"source": "src/other.c", "sections": [], "holdouts": None}
+        objects = {"src/unit.c": sb.read_elf(unit["link_object"].read_bytes()),
+                   "src/other.c": ([], [{"name": "b", "value": 0, "size": 0, "bind": sb.STB_GLOBAL,
+                                         "type": 0, "shndx": sb.SHN_UNDEF}])}
+        _, _, resolved = sb.plan(self.sections, [unit, caller], objects, {"Other": 0x80003104})
+        self.assertEqual(resolved["b"], 0x80003118)
+        with self.assertRaisesRegex(ValueError, "holdout b is already defined elsewhere"):
+            sb.plan(self.sections, [unit, caller], objects, {"Other": 0x80003104, "b": 0x80003100})
+
+    def test_compiled_layout_must_fill_the_runs(self):
+        units, _, _ = self.held()
+        # A holdout keeps its registered extent whatever its compiled size.
+        for size in (4, 8, 16):
+            unit = dict(units[0], object=self.native(b_size=size))
+            sb.link_object(unit)
+        # A linked function must fit its run at its alignment.
+        unit = dict(units[0], object=self.native(c_align=64))
+        with self.assertRaisesRegex(ValueError, "compiled function c at 0x80003140 does not fit"):
+            sb.link_object(unit)
+        # The compiled functions must reach each holdout at its start and end with the last range.
+        units, _, _ = self.held(self.held_manifest(functions=("c",), runs=(("0x80003110", "0x80003120"),)))
+        with self.assertRaisesRegex(ValueError, "holdout c 0x80003120 is not where the compiled order reaches "
+                                                r"\(0x8000311C\)"):
+            sb.link_object(dict(units[0], object=self.native(b_size=4)))
+        units, _, _ = self.held(self.held_manifest(functions=("a",), runs=(("0x80003118", "0x80003128"),)))
+        with self.assertRaisesRegex(ValueError, "compiled functions end at 0x80003124"):
+            sb.link_object(dict(units[0], object=self.native(b_size=4)))
+        sb.link_object(dict(units[0], object=self.native(b_size=8)))
+        # A code section with more than one function, or none, was not compiled per function.
+        symbols = copy.deepcopy(self.SYMBOLS)
+        symbols[2]["shndx"] = 1
+        with self.assertRaisesRegex(ValueError, "not exactly one function"):
+            sb.link_object(dict(self.held()[0][0], object=self.native(symbols)))
+        # Every holdout must be one compiled function.
+        symbols = copy.deepcopy(self.SYMBOLS)
+        symbols[1]["name"] = "e"
+        with self.assertRaisesRegex(ValueError, "holdout b is not one compiled function"):
+            sb.link_object(dict(self.held()[0][0], object=self.native(symbols)))
+
+    def test_an_exact_holdout_is_refused(self):
+        units, _, _ = self.held()
+        unit = dict(units[0], object=self.native(b_size=8))
+        sb.link_object(unit)
+        target = sb.dol_bytes(self.binary, 0x80003118, 0x80003120)
+        args = (unit, TARGET, self.sections, self.binary, {}, None, None)
+        with patch.object(sb, "link_holdout", return_value=target) as linked:
+            with self.assertRaisesRegex(ValueError, "holdout b 0x80003118 is exact; link it"):
+                sb.check_holdouts(*args)
+            self.assertEqual(linked.call_count, 1)
+        with patch.object(sb, "link_holdout", return_value=bytes(8)):
+            sb.check_holdouts(*args)
+        # A holdout of another size than its target differs without a link.
+        unit = dict(units[0], object=self.native(b_size=12))
+        sb.link_object(unit)
+        with patch.object(sb, "link_holdout") as linked:
+            sb.check_holdouts(unit, *args[1:])
+            linked.assert_not_called()
+
+
 class ReadOnlyDataAfterCode(Fixture):
     """A unit's read-only data may be configured directly after its own code in a code section."""
 

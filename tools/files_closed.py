@@ -52,6 +52,8 @@ def unit_labels(index, unit):
         raise ValueError(f"{native.relative_to(ROOT)} differs from the build's receipt; rebuild")
     sections, symbols = sb.read_elf(native.read_bytes())
     functions = {f['symbol']: int(f['address'], 16) for f in unit['functions']}
+    # A holdout (source_build.holdout_object) is not linked, but it is the file's function at its target range.
+    functions.update({row['symbol']: int(row['start'], 16) for row in unit.get('holdouts') or []})
     placed = {}
     for placement in unit['sections']:
         start, end = int(placement['start'], 16), int(placement['end'], 16)

@@ -544,6 +544,9 @@ def reference_addresses(root, manifest, accepted):
                           if any(s['name'] == name and s['shndx'] == sb.SHN_COMMON for s in native_symbols)})
         # A kept local is public only in the derived link object (source_build.keep_object).
         externals.update({name: int(value, 16) for name, value in (u.get('kept_locals') or {}).items()})
+        # A public holdout keeps its original bytes at its target start (source_build.holdout_object).
+        externals.update({row['symbol']: int(row['start'], 16) for row in u.get('holdouts') or []
+                          if row['symbol'] in public})
         accepted_objects.append((u['sections'], native_sections, native_symbols))
     # Public data objects of accepted source resolve at their verified linked placements.
     data_symbols, ambiguous = accepted_data_symbols(accepted_objects, externals)
