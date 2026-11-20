@@ -66,7 +66,7 @@ void fn_801D64EC(void);
 int ResGetSize(void *, int);
 int fn_801D8618(int, unsigned int, int);
 int fn_801D8658(int, unsigned int, int);
-void fn_8022F698(SaveRequest_t *, SaveStreamOps_t *);
+void DbUserSave(SaveRequest_t *, SaveStreamOps_t *);
 int fn_801D6844(void);
 void fn_801D6B4C(char *, int);
 int fn_801D673C(int);
@@ -218,7 +218,7 @@ int MemCardFilesComputeChecksum(int type, int index)
         break;
     case 2:
         fn_8022F478(fn_8022F358((signed char)index));
-        fn_8022F698(&request, &gChecksumCRC32StreamType);
+        DbUserSave(&request, &gChecksumCRC32StreamType);
         break;
     case 1:
         fn_8022EB94(&result, &gChecksumCRC32StreamType);

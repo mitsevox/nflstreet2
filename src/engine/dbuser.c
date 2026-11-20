@@ -590,7 +590,7 @@ void DbFileShutdown(void);
 int DbFileTblLoad(int db, int file);
 int DbFileTblDestroy(int db, int tbl);
 int fn_8022EFDC(void);
-int fn_8022F028(int a, const char *pName, int b);
+int DbUserInit(int a, const char *pName, int b);
 void fn_8022F094(void);
 int fn_8022F0D4(void);
 void fn_8022F1BC(int key);
@@ -1268,15 +1268,17 @@ int fn_8022EFDC(void)
     return key;
 }
 
-int fn_8022F028(int a, const char *pName, int b)
+int DbUserInit(int a, const char *pName, int b)
 {
+    int result = 0;
+
     lbl_803EC0C8 = a;
     lbl_803EC0CC = DbUtilAlloc(strlen(pName) + 1, 1);
     strcpy(lbl_803EC0CC, pName);
     lbl_803EC0D0 = b;
     lbl_803EC0D4 = -1;
-    lbl_803EC0D8 = 0;
-    return 0;
+    lbl_803EC0D8 = result;
+    return result;
 }
 
 void fn_8022F094(void)
@@ -1454,6 +1456,67 @@ int fn_8022F53C(int a)
         err = 36;
     }
     return err;
+}
+
+typedef struct DbUserSaveRequest_t {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    int mTarget;
+    unsigned char mUnknown10;
+} DbUserSaveRequest_t;
+
+typedef struct DbUserAsync_t {
+    int mDb;
+    int mUnknown4;
+    int mUnknown8;
+    int mUnknownC;
+    void *mpUnknown10;
+    void (*pDone)(void);
+    int mIsLoad;
+} DbUserAsync_t;
+
+extern DbUserAsync_t lbl_803A25F0;
+extern DbUserAsync_t lbl_803A260C;
+extern void fn_801F9228(DbUserAsync_t *pReq, void (*pStart)(void *pJob), int a, int b);
+extern void fn_801F92EC(DbUserAsync_t *pReq, void (*pStart)(void *pJob), int a, int b);
+extern void fn_80285A24(void *pJob);
+extern void fn_80285A8C(void);
+
+int DbUserLoad(DbUserSaveRequest_t *pRequest, void *pOps)
+{
+    int result = 0;
+
+    if (pRequest->mUnknown10 != 0) {
+        lbl_803A25F0.mDb = fn_8022F3D4(fn_8022F4BC());
+        lbl_803A25F0.mUnknown4 = result;
+        lbl_803A25F0.mUnknown8 = pRequest->mUnknown0;
+        lbl_803A25F0.mUnknownC = pRequest->mTarget;
+        lbl_803A25F0.mpUnknown10 = pOps;
+        lbl_803A25F0.pDone = fn_80285A8C;
+        fn_801F9228(&lbl_803A25F0, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
+    } else {
+        result = fn_8022F53C(fn_801F9134(fn_8022F3D4(fn_8022F4BC()), pRequest->mTarget, 0, (int)pOps));
+    }
+    return result;
+}
+
+int DbUserSave(DbUserSaveRequest_t *pRequest, void *pOps)
+{
+    int result = 0;
+
+    if (pRequest->mUnknown10 != 0) {
+        lbl_803A260C.mDb = fn_8022F3D4(fn_8022F4BC());
+        lbl_803A260C.mUnknown4 = result;
+        lbl_803A260C.mUnknown8 = pRequest->mUnknown0;
+        lbl_803A260C.mUnknownC = pRequest->mTarget;
+        lbl_803A260C.mpUnknown10 = pOps;
+        lbl_803A260C.pDone = fn_80285A8C;
+        fn_801F92EC(&lbl_803A260C, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
+    } else {
+        result = fn_801F91AC(fn_8022F3D4(fn_8022F4BC()), pRequest->mTarget, (int)pOps);
+    }
+    return result;
 }
 
 int fn_8022F744(void)

@@ -84,7 +84,7 @@ int fn_8022EBF0(int a, const char *pName, int b);
 void fn_8022EC48(void);
 int DbFileInit(const char *pName);
 void DbFileShutdown(void);
-int fn_8022F028(int a, const char *pName, int b);
+int DbUserInit(int a, const char *pName, int b);
 void fn_8022F094(void);
 int fn_8022F4C4(void);
 int fn_8022F744(void);
@@ -233,7 +233,7 @@ int DbGame::Init()
     DbTatsLoad();
     fn_8022EBF0(0x96000, lbl_802EBE24, 2);
     DbFileInit(lbl_802EBE34);
-    fn_8022F028(0x3000, lbl_802EBE24, 5);
+    DbUserInit(0x3000, lbl_802EBE24, 5);
     fn_8022F4C4();
     DbTeamsInit(lbl_802EBE40);
     fn_801F9430(0x54415453, _DbGame_aOptionTables, _DbGame_aSaveTags);

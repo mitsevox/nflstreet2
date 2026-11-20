@@ -4386,6 +4386,44 @@
       }
     },
     {
+      "source": "src/engine/dbuser.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x8022EFDC-0x8022F80C (src/engine/dbuser.c), its function and name rows and the compiler and source-form rows of the range it was split from; linked with holdouts (owner ruling of 2026-11-20): 18 of 20 functions exact, the two holdouts keep the original bytes. The file compiles no data of its own.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022EFDC",
+          "end": "0x8022F1BC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022F294",
+          "end": "0x8022F4C4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022F53C",
+          "end": "0x8022F80C"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8022F1BC",
+            "evidence": "evidence.tsv source-form 0x8022F1BC-0x8022F294"
+          },
+          {
+            "function": "fn_8022F4C4",
+            "evidence": "evidence.tsv source-form 0x8022F4C4-0x8022F53C"
+          }
+        ],
+        "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/dbuser.c holds out fn_8022F1BC and fn_8022F4C4."
+      }
+    },
+    {
       "source": "src/engine/dbmanager.c",
       "profile": "engine_c_fastmath_holdouts",
       "evidence": "evidence.tsv provisional unit row 0x802328A8-0x802336C4 (src/engine/dbmanager.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdout, whose range keeps the original bytes. The file compiles no data sections of its own (its strings and tables are external labels).",

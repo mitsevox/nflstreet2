@@ -590,7 +590,7 @@ void DbFileShutdown(void);
 int DbFileTblLoad(int db, int file);
 int DbFileTblDestroy(int db, int tbl);
 int fn_8022EFDC(void);
-int fn_8022F028(int a, const char *pName, int b);
+int DbUserInit(int a, const char *pName, int b);
 void fn_8022F094(void);
 int fn_8022F0D4(void);
 void fn_8022F1BC(int key);

@@ -20028,7 +20028,7 @@
           "end": "0x8022F028"
         },
         {
-          "symbol": "fn_8022F028",
+          "symbol": "DbUserInit",
           "start": "0x8022F028",
           "end": "0x8022F094"
         },
@@ -20101,6 +20101,16 @@
           "symbol": "fn_8022F53C",
           "start": "0x8022F53C",
           "end": "0x8022F5E4"
+        },
+        {
+          "symbol": "DbUserLoad",
+          "start": "0x8022F5E4",
+          "end": "0x8022F698"
+        },
+        {
+          "symbol": "DbUserSave",
+          "start": "0x8022F698",
+          "end": "0x8022F744"
         },
         {
           "symbol": "fn_8022F744",

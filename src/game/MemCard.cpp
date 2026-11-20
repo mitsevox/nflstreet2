@@ -14,14 +14,14 @@ void VptSetCallback(int a, int b, void *c, int d);
 void MemCardFilesGetSaveTarget(int *pType, void *pSlot);
 int MemCardFilesGetDataSize(int type);
 void fn_8022F478(void);
-int fn_8022F698(SaveRequest_t *pRequest, SaveStreamOps_t *pOps);
+int DbUserSave(SaveRequest_t *pRequest, SaveStreamOps_t *pOps);
 void MemCardFilesGetLoadTarget(int *pType, void *pSlot);
 int MemCardFilesIsUsed(int a, int b);
 void fn_8022F1BC(void);
 void MemCardFilesRemoveSlot(int a, int b);
 int fn_8022F0D4(void);
 int PlayerSaveOnLoad(SaveRequest_t *pRequest, SaveStreamOps_t *pOps);
-int fn_8022F5E4(SaveRequest_t *pRequest, SaveStreamOps_t *pOps);
+int DbUserLoad(SaveRequest_t *pRequest, SaveStreamOps_t *pOps);
 int fn_8022EB5C(CardStreamTarget *pTarget, SaveStreamOps_t *pOps);
 
 int fn_8022F53C(int a);
@@ -105,7 +105,7 @@ void MemCardBeginSave(void)
     case 2:
         fn_8022F358(slot[3]);
         fn_8022F478();
-        fn_8022F698(&req, &gCardStreamOps);
+        DbUserSave(&req, &gCardStreamOps);
         break;
     case 1:
         fn_8022EB94(&_MemCard_StreamTarget, &gCardStreamOps);
@@ -164,7 +164,7 @@ void MemCardBeginLoad(void)
         }
         if (fn_8022F0D4() != -1) {
             fn_8022F478();
-            handle = fn_8022F5E4(&req, &gCardStreamOps);
+            handle = DbUserLoad(&req, &gCardStreamOps);
         }
         if (handle) {
             _MemCard_iResult = handle;
