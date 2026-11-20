@@ -191,12 +191,16 @@ void fn_800719D4(void)
 int fn_80071BA0(int a, int value)
 {
     switch (value) {
-    case 3:
-        return 105;
-    case 9:
-        return 111;
     case 10:
         return 108;
+    case 9:
+        return 111;
+    // FAKEMATCH: the empty case labels -1, 1 and 11 sit on the default arm; they only shape the
+    // compare tree (root 3, then 10, then 9) and change no result
+    case -1:
+    case 1:
+    case 11:
+    case 3:
     default:
         return 105;
     }
@@ -264,10 +268,8 @@ void fn_8006F850(AudmonEvent_t *p)
         if (pose && pose->mUnknown972) surface = ((LevelSurface_t *)pose->mUnknown972)->mSurface;
         int id = fn_80071BDC(surface);
         if (BallGetCurrentHolder() == player) {
-            int volume = SndgSfxGetVolume(id) * 2;
-            if (volume > 127) volume = 127;
-            else volume = SndgSfxGetVolume(id) * 2;
-            SndgSfxPlayVolume(id, &p->mPos, (unsigned char)volume);
+            SndgSfxPlayVolume(id, &p->mPos,
+                (unsigned char)(SndgSfxGetVolume(id) * 2 <= 127 ? SndgSfxGetVolume(id) * 2 : 127));
         } else SndgSfxPlay(id, &p->mPos);
         break;
     }
@@ -281,14 +283,17 @@ void fn_8006F850(AudmonEvent_t *p)
             if (entry->mRef == p->mUnknown0) { active = entry->mUnknown10 == 1; break; }
         }
         int id;
-        switch (p->mUnknown10.mValue) {
-        case 12: fn_8007184C(&p->mPos); break;
-        case 34: id = active ? 46 : 45; SndgSfxPlay(id, &p->mPos); fn_800717E0(&p->mPos); break;
-        case 35: id = active ? 48 : 47; SndgSfxPlay(id, &p->mPos); fn_800717E0(&p->mPos); break;
-        case 36: id = active ? 50 : 49; SndgSfxPlay(id, &p->mPos); fn_800717E0(&p->mPos); break;
-        case 43: id = active ? 52 : 51; SndgSfxPlay(id, &p->mPos); fn_800717E0(&p->mPos); break;
-        default: break;
+        if (p->mUnknown10.mValue == 12) {
+            fn_8007184C(&p->mPos);
+            break;
         }
+        if (p->mUnknown10.mValue == 34) id = active ? 46 : 45;
+        else if (p->mUnknown10.mValue == 35) id = active ? 48 : 47;
+        else if (p->mUnknown10.mValue == 36) id = active ? 50 : 49;
+        else if (p->mUnknown10.mValue == 43) id = active ? 52 : 51;
+        else break;
+        SndgSfxPlay(id, &p->mPos);
+        fn_800717E0(&p->mPos);
         break;
     }
     case 36: {
@@ -319,8 +324,8 @@ void fn_8006F850(AudmonEvent_t *p)
             if (lbl_803EA6EC) volume = 100;
             else {
                 unsigned int scaled = p->mUnknown10.mValue * 4;
-                if (scaled <= 24) volume = 25;
-                else volume = scaled > 100 ? 100 : (unsigned char)scaled;
+                if (scaled > 24) volume = (unsigned char)(scaled > 100 ? 100 : scaled);
+                else volume = 25;
             }
             fn_80071A6C(0, &p->mPos, volume);
         }
@@ -346,8 +351,8 @@ void fn_8006F850(AudmonEvent_t *p)
             if (lbl_803EA6EC) volume = 100;
             else {
                 unsigned int scaled = p->mUnknown10.mValue * 4;
-                if (scaled <= 24) volume = 25;
-                else volume = scaled > 100 ? 100 : (unsigned char)scaled;
+                if (scaled > 24) volume = (unsigned char)(scaled > 100 ? 100 : scaled);
+                else volume = 25;
             }
             fn_80071A6C(2, &p->mPos, volume);
         }
@@ -385,8 +390,8 @@ void fn_8006F850(AudmonEvent_t *p)
             if (lbl_803EA6EC) volume = 100;
             else {
                 unsigned int scaled = p->mUnknown10.mValue * 4;
-                if (scaled <= 24) volume = 25;
-                else volume = scaled > 100 ? 100 : (unsigned char)scaled;
+                if (scaled > 24) volume = (unsigned char)(scaled > 100 ? 100 : scaled);
+                else volume = 25;
             }
             fn_80071A6C(8, &p->mPos, volume);
         }
@@ -602,6 +607,10 @@ void fn_8006F850(AudmonEvent_t *p)
             lbl_803EA6F8 = 0;
         }
         break;
+    case 14: case 21: case 38: case 71: case 91: case 93: case 99: case 111: case 121: case 122: break;
+    // FAKEMATCH: the empty case labels -1, 1, 16 and 19 leave no compare in the target; they only
+    // balance the compare tree like the target's (root 75, then 37 and 102) and change no result
+    case -1: case 1: case 16: case 19: break;
     }
 }
 
@@ -709,9 +718,13 @@ void fn_800710C8(void)
         case 3: base = 133; break;
         case 9: base = 121; break;
         case 4: base = 130; break;
-        case 6: case 7: case 8: base = 139; break;
+        case 6: base = 139; break;
+        case 7: base = 139; break;
+        case 8: base = 139; break;
         case 10: base = 127; break;
         case 0: case 5: case 11: base = 136; break;
+        case 2: break;
+        case 1: base = 118; break;
         }
         lbl_803EA6C8 = (lbl_803EA6C8 + 1) % 3;
         SndgRequestBank(8, base + lbl_803EA6C8, 0);
@@ -917,6 +930,9 @@ int fn_80071B08(int unused, int value)
     case 2: case 4: result = choice ? 36 : 38; break;
     case 1: case 10: result = 40; break;
     case 9: break;
+    // FAKEMATCH: the empty case labels -1 and 11 sit on the default arm; they only shape the
+    // compare tree (the bounds checks after 1 and 10) and change no result
+    case -1: case 11:
     default: result = 38; break;
     }
     return result;

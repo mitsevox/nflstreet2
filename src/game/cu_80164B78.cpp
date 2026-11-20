@@ -364,30 +364,35 @@ void fn_801660A0(PlayArtVertex_t *points, PlayArtVertex_t *out, int width)
 
 void fn_80166110(PlayArtVertex_t *points, PlayArtVertex_t *out, int width, int length)
 {
-    PlayArtVertex_t direction = {points[0].mX - points[1].mX, points[0].mY - points[1].mY};
+    PlayArtVertex_t direction;
+    direction.mY = points[0].mY - points[1].mY;
+    direction.mX = points[0].mX - points[1].mX;
     float magnitude = fn_80260B1C(direction.mX * direction.mX + direction.mY * direction.mY);
     if (magnitude != 0.0f) {direction.mX /= magnitude; direction.mY /= magnitude;}
-    float x = -direction.mY * 0.5f * (float)width;
-    float y = -direction.mX * 0.5f * (float)width;
-    out[0].mX = points[0].mX + x;
-    float forwardX = direction.mX * 0.5f * (float)length;
-    out[0].mY = points[0].mY - y;
-    float forwardY = direction.mY * 0.5f * (float)length;
-    out[1].mX = points[0].mX - x;
-    out[2].mX = out[0].mX + forwardX;
-    out[2].mY = out[0].mY + forwardY;
-    out[3].mX = out[1].mX + forwardX;
-    out[1].mY = points[0].mY + y;
-    out[3].mY = out[1].mY + forwardY;
+    PlayArtVertex_t side;
+    side.mX = -direction.mY;
+    side.mY = -direction.mX;
+    side.mX = side.mX * 0.5f * (float)width;
+    side.mY = side.mY * 0.5f * (float)width;
+    out[0].mX = points[0].mX + side.mX;
+    direction.mX = direction.mX * 0.5f * (float)length;
+    out[0].mY = points[0].mY - side.mY;
+    direction.mY = direction.mY * 0.5f * (float)length;
+    out[1].mX = points[0].mX - side.mX;
+    out[2].mX = out[0].mX + direction.mX;
+    out[2].mY = out[0].mY + direction.mY;
+    out[3].mX = out[1].mX + direction.mX;
+    out[1].mY = points[0].mY + side.mY;
+    out[3].mY = out[1].mY + direction.mY;
 }
 
 int fn_801662A8(PlayArtVertex_t *out, int count, int, PlayArtVertex_t *quad)
 {
-    out[count] = quad[0];
-    out[count+1] = quad[1];
-    out[count+2] = quad[3];
-    out[count+3] = quad[2];
-    return count+4;
+    out[count++] = quad[0];
+    out[count++] = quad[1];
+    out[count++] = quad[3];
+    out[count++] = quad[2];
+    return count;
 }
 
 int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void *arrowBuffer,

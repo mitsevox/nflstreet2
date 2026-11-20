@@ -546,6 +546,9 @@ int fn_8015BF28(Object_8015C244 *p, unsigned char *pCommand)
     switch (code) {
     case 254: return 85;
     case 253: return 2;
+    // FAKEMATCH: the explicit case 22 keeps the command unchanged like the fall-through; it only
+    // shapes the compare tree (the bound check after 253)
+    case 22: break;
     }
     return 22;
 }
