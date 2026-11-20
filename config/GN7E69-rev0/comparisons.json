@@ -35956,6 +35956,11 @@
           "end": "0x8026BF04"
         },
         {
+          "symbol": "SNDI_midiprocesstick__Fi",
+          "start": "0x8026BF04",
+          "end": "0x8026C0C0"
+        },
+        {
           "symbol": "SNDI_midiserver__Fv",
           "start": "0x8026C0C0",
           "end": "0x8026C18C"

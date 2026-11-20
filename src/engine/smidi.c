@@ -60,7 +60,8 @@ int SNDvol(int handle, int vol);
 void SNDSYS_entercritical(void);
 void SNDSYS_leavecritical(void);
 int fn_80277D88(int handle, int bend);
-void fn_8026BF04(int seq);
+void fn_8026BA60(int seq, SndMidiChan_t *chan, int channel, int key);
+void fn_8026BC9C(int seq, SndMidiChan_t *chan, int channel, int control);
 
 int SNDseqstop(int handle);
 int SNDmidistopall(void);
@@ -165,6 +166,68 @@ void SNDI_midiparsepitchbend(int seq, SndMidiChan_t *chan, int channel, int lsb)
     }
 }
 
+void SNDI_midiprocesstick(int seq)
+{
+    SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
+    int delta;
+    int status;
+    int data;
+
+    s->mpData++;
+    s->mDelta--;
+    status = *s->mpData++;
+    data = *s->mpData++;
+    s->mpData -= 3;
+    if ((status & 0xF0) == 0xF0 && data == 0x2F) {
+        if (SNDI_midiseqover(seq) != 0) {
+            SNDseqstop(s->mHandle);
+        }
+        return;
+    }
+    if (s->mDelta != 0) {
+        return;
+    }
+    do {
+        int channel;
+        SndMidiChan_t *chan;
+
+        delta = *s->mpData++;
+        status = *s->mpData++;
+        data = *s->mpData++;
+        channel = status & 0xF;
+        chan = &s->mChans[channel];
+        switch (status & 0xF0) {
+        case 0x90:
+            fn_8026BA60(seq, chan, channel, data);
+            break;
+        case 0x80:
+            SNDI_midiparsenoteoff(seq, channel, data);
+            break;
+        case 0xB0:
+            fn_8026BC9C(seq, chan, channel, data);
+            break;
+        case 0xC0:
+            chan->mPatch = data;
+            break;
+        case 0xE0:
+            SNDI_midiparsepitchbend(seq, chan, channel, data);
+            break;
+        case 0xF0:
+            if (data == 0x2F) {
+                if (SNDI_midiseqover(seq) != 0) {
+                    SNDseqstop(s->mHandle);
+                } else {
+                    delta = 1;
+                    s->mpData -= 3;
+                    s->mDelta++;
+                }
+            }
+            break;
+        }
+    } while (delta == 0 && s->mState == 3);
+    s->mDelta = delta;
+}
+
 void SNDI_midiserver(void)
 {
     int i;
@@ -182,7 +245,7 @@ void SNDI_midiserver(void)
         target = s->mTicks * s->mTempo / 100;
         s->mTicks++;
         for (; s->mPosition <= target && s->mState == 3; s->mPosition++) {
-            fn_8026BF04(i);
+            SNDI_midiprocesstick(i);
         }
     }
 }
