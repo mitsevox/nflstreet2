@@ -635,13 +635,15 @@ void fn_800E3CC0(Object_80039F5C *p)
 {
     State_800E4494 *state = (State_800E4494 *)&p->mUnknown336;
     Object_80039F5C *pOther = state->mpUnknown36;
-    Point_8017886C origin = fn_80177FFC(p->mIdBytes[2]);
+    Point_8017886C origin;
+    origin = fn_80177FFC(p->mIdBytes[2]);
     if (pOther->mpState->mId == 7) {
         PlayBookFormation_t *pTeam = PlayBookGetFormation(fn_80178308());
         PlayBookPosition_t *pEntry = PlaySetGetEntry(pTeam, pOther->mIdBytes[1], 0);
         Point_8017886C point;
-        point.mX = pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18.mX : pEntry->mUnknown10.mX;
-        point.mY = pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18.mY : pEntry->mUnknown10.mY;
+        point.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
+        point.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
+
         fn_80227638(&point, &point, &origin);
     }
     Point_8017886C target;
@@ -1191,6 +1193,7 @@ extern "C" int fn_800E513C(Object_80039F5C *p)
 extern "C" {
 void fn_800E55B8(Object_80039F5C *p)
 {
+    Message_800F01CC *pMessage = 0;
     Record_8011F4E0 *pInfo = fn_8011F4E0();
     State_800E4494 *state = (State_800E4494 *)&p->mUnknown336;
     PlayerReleaseJointCtrls(p);
@@ -1200,14 +1203,15 @@ void fn_800E55B8(Object_80039F5C *p)
     state->mUnknown24 = 0;
     state->mUnknown26 = 15;
     state->mUnknown28 = (signed char)(int)(SyncRandGetFloat(0) * 240.0f + 150.0f);
-    for (int i = 1; i >= 0; i--) {
+    for (int i = 0; i < 2; i++) {
         state->mUnknown22[i] = 0;
     }
+
     if (pInfo->mUnknown5 == 0) {
         fn_800FBB70();
     }
     PlayBookFormation_t *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
-    Message_800F01CC *pMessage = fn_800AEE20(p);
+    pMessage = fn_800AEE20(p);
     if (pMessage == 0) {
         if (pTeam->mUnknown8.mUnknownF == 0) {
             pMessage = (Message_800F01CC *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]),
@@ -1220,8 +1224,8 @@ void fn_800E55B8(Object_80039F5C *p)
     switch (pMessage->mId & ~0x80) {
     case 48:
         if (pMessage->mUnknown1[0] >= fn_802372EC(0, 100)) {
-            state->mUnknown30 = 0;
             state->mUnknown24 = 1;
+            state->mUnknown30 = 0;
         }
         break;
     case 22:
@@ -1642,6 +1646,8 @@ extern "C" int *fn_800E68A8(int flag, unsigned int index) {
 extern "C" {
 int fn_800E6984(Object_80039F5C *p)
 {
+    int direction = 1;
+
     int angle = (int)(((0x1000000 - (p->mUnknown512.mUnknown4 - p->mMotion.mFacing)) & 0xFFFFFF)
                      * 0.000021457672119140625f);
     if (angle <= 179) {
@@ -1649,13 +1655,16 @@ int fn_800E6984(Object_80039F5C *p)
     } else {
         angle = angle < 225 ? 225 : angle > 359 ? 359 : angle;
     }
-    if (angle >= 225 && angle <= 247) return 16;
-    if (angle >= 248 && angle <= 292) return 14;
-    if (angle >= 293 && angle <= 337) return 15;
-    if ((angle >= 338 && angle <= 358) || angle <= 22) return 1;
-    if ((angle >= 23 && angle <= 67) || (angle >= 68 && angle <= 112) ||
-        (angle >= 113 && angle <= 157)) return 4;
-    return 1;
+    if (angle >= 225 && angle <= 247) direction = 16;
+    else if (angle >= 248 && angle <= 292) direction = 14;
+    else if (angle >= 293 && angle <= 337) direction = 15;
+    else if (angle >= 338 && angle <= 358) return 1;
+    else if (angle >= 0 && angle <= 22) return 1;
+    else if (angle >= 23 && angle <= 67) direction = 4;
+    else if (angle >= 68 && angle <= 112) direction = 4;
+    else if (angle >= 113 && angle <= 157) direction = 4;
+    else if (angle >= 113 && angle <= 135) direction = 4;
+    return direction;
 }
 }
 
@@ -1682,7 +1691,8 @@ extern "C" int fn_800E6AC8(Object_80039F5C *p, int mode)
     Input_800B6D34 input;
     Vector_80039F5C target;
     fn_800B6D34(p, &input);
-    if (human && (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f || (input.mUnknown0 & 0xF))) {
+    if (human == 1 && (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f || (input.mUnknown0 & 0xF))) {
+
         Point_8017886C dir;
         if (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f) {
             dir.mX = input.mUnknown4;
@@ -1796,10 +1806,11 @@ extern "C" {
 int fn_800E705C(Object_80039F5C *p)
 {
     Object_80039F5C *carrier = BallGetCurrentHolder();
+    int *pTimer = &p->mUnknown336;
+    Message_800F01CC message;
     if (p->mIdBytes[3] == 1 && p->mUnknown1032 == 4) return 1;
     Ball_t *ball = BallGetCurrent();
     if (BallStateGet(ball, 0) == 4 && p == BallGetTarget(ball)) {
-        Message_800F01CC message;
         memset(&message, 0, 4);
         message.mId = 23;
         message.mUnknown1[0] = BallGetIndex(ball);
@@ -1808,14 +1819,13 @@ int fn_800E705C(Object_80039F5C *p)
     }
     if (!fn_801787A0() && BallGetCurrentHolder() && fn_801783AC(0) &&
         fn_801486A0() != 0 && fn_801486A0() != 1 && fn_801486A0() != 2) {
-        Message_800F01CC message;
         memset(&message, 0, 4);
         message.mId = 33;
         fn_800F053C(0, p->mpState, &message, p);
         return 1;
     }
     if ((p->mFlags & 0x4000) && fn_801486A0()) return 1;
-    p->mUnknown336--;
+    (*pTimer)--;
     if (carrier && !((float)fn_8011E188() <= lbl_803EAD50) && !fn_801787A0() &&
         !(p->mMotion.mUnknown28 >= 0.1f)) {
         int heading;
@@ -1832,7 +1842,8 @@ int fn_800E705C(Object_80039F5C *p)
             else p->mMotion.mFacing -= 0x38E38;
         } else p->mMotion.mFacing = heading;
     }
-    if (p->mUnknown336 < 0) return 1;
+    if (*pTimer < 0) return 1;
+
     if (fn_801486A0() == 0) {
         p->mUnknown512.mUnknown0 = 0.0f;
         p->mUnknown512.mUnknown14 = 3;
@@ -2163,8 +2174,8 @@ void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *state)
         point.mY = carrier->mMotion.mPos.mY;
         float distance = fn_8022781C(&carrier->mMotion.mPos, &p->mMotion.mPos);
         if (!(distance <= 10.0f)) distance = 10.0f;
-        float rate = lbl_803EAD78;
-        float scale = distance * (rate * 0.1f);
+        float rate = lbl_803EAD78 * 0.1f;
+        float scale = distance * rate;
         point.mX += carrier->mMotion.mUnknown40 * scale;
         point.mY += carrier->mMotion.mUnknown44 * scale;
     } else BallGetPosition(BallGetCurrent(), &point);
@@ -2172,8 +2183,8 @@ void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *state)
     fn_80227690(&delta, &point, &p->mMotion.mPos);
     int heading = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
     int limit = fn_800ACD04(p);
-    Point_8017886C origin = fn_80177FE0();
-    if (!(point.mY >= origin.mY) && !fn_801783AC(0)) limit *= (int)lbl_803EAD7C;
+    if (!(point.mY >= fn_80177FE0().mY) && !fn_801783AC(0)) limit *= (int)lbl_803EAD7C;
+
     int step;
     if (MathAngleDiff(heading, p->mMotion.mFacing) <= limit)
         step = MathAngleDiff(heading, p->mMotion.mFacing);
@@ -2527,13 +2538,15 @@ extern "C" int fn_800E8BE8(Object_80039F5C *p) {
 
 extern "C" int fn_800E8E04(Object_80039F5C *p) {
     State_800E8BE8 *state = (State_800E8BE8 *)&p->mUnknown336;
-    p->mFlags &= ~0x40000;
+    unsigned int flags = p->mFlags;
+    p->mFlags = flags & ~0x40000;
     if (p->mFlags & 0x4000)
         return 1;
     if (state->mUnknown8) {
-        if (p->mFlags & 4) {
-            state->mUnknown8 = 0;
+        if (flags & 4) {
             p->mFlags &= ~4;
+            state->mUnknown8 = 0;
+
             p->mUnknown512.mUnknown0 = 0.0f;
             p->mUnknown512.mUnknown14 = 3;
             p->mUnknown512.mUnknown8 = state->mUnknown0;
@@ -2798,13 +2811,15 @@ extern "C" void fn_800E954C(Object_80039F5C *p, int id, int *pAngle, int value, 
         if (pHeading) {
             heading = *pHeading;
             difference = MathAngleDiff(p->mMotion.mFacing, heading);
+            message.mUnknown1[0] = fn_800E9010(heading, difference);
         } else {
             heading = (heading - p->mMotion.mFacing) & 0xFFFFFF;
             difference = MathAngleDiff(p->mMotion.mFacing, heading);
             if (BallFindHeldBy(p) && p->mUnknown776 == 1)
                 heading = 0x1000000 - heading;
+            message.mUnknown1[0] = fn_800E9010(heading, difference);
         }
-        message.mUnknown1[0] = fn_800E9010(heading, difference);
+
         message.mUnknown1[0] |= lbl_803EAD9C[((heading + 0x100000) >> 21) & 7] << 4;
         message.mUnknown1[2] = value;
         switch (p->mpState->mId) {
@@ -3055,9 +3070,10 @@ extern "C" int fn_800E9FD8(Object_80039F5C *p) {
         }
         p->mFlags &= ~0x4080804;
         p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = 0.4f;
-        p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+
         result = 1;
     }
     if (result == 1)
