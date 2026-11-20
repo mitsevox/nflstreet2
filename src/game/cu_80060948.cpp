@@ -82,7 +82,7 @@ void UserProfileSelect(signed char a, int b);
 void fn_8018C48C(int tag);
 int StoryGetLkss(int a);
 char *strncpy(char *pDest, const char *pSource, int count);
-int fn_8022C8F0(unsigned int low, unsigned int high);
+int DbUtilRandomRange(unsigned int low, unsigned int high);
 int fn_8022F358(int index);
 int fn_8022F384(int a);
 int fn_8022F3D4(int a);
@@ -226,7 +226,7 @@ int fn_80060C50(int dit1, int dit2)
     if (dit2 == 0x31) {
         return 2;
     }
-    return fn_8022C8F0(1, 3);
+    return DbUtilRandomRange(1, 3);
 }
 
 int fn_80060C94(void)
@@ -262,7 +262,7 @@ void fn_80060CD4(void)
     }
     for (i = 0; i <= 7; i++) {
         do {
-            j = fn_8022C8F0(0, 8);
+            j = DbUtilRandomRange(0, 8);
         } while (j == i);
         int swap = order[i];
         order[i] = order[j];

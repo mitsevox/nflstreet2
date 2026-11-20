@@ -7,8 +7,8 @@
 extern "C" {
 void SndgMusicPumpFrame(int a);
 char *strncpy(char *pDst, const char *pSrc, int size);
-int fn_8022EF8C(int a, int tag);
-int fn_8022EFBC(int a, int tag);
+int DbFileTblLoad(int a, int tag);
+int DbFileTblDestroy(int a, int tag);
 }
 
 static unsigned char _ExpLevel_bOpen = 0;
@@ -94,7 +94,7 @@ int ExpLevelCloseTable(void)
     int ok = 1;
 
     if (_ExpLevel_bOpen) {
-        ok = fn_8022EFBC(0, 0x4C505845) == 0;
+        ok = DbFileTblDestroy(0, 0x4C505845) == 0;
         _ExpLevel_bOpen = 0;
     }
     return ok;
@@ -108,7 +108,7 @@ int ExpLevelOpenTable(void)
     if (!_ExpLevel_bOpen) {
         SndgMusicPumpFrame(1);
         SndgMusicPumpFrame(0);
-        failed = fn_8022EF8C(0, 0x4C505845);
+        failed = DbFileTblLoad(0, 0x4C505845);
         SndgMusicPumpFrame(1);
         SndgMusicPumpFrame(0);
         if (failed) {

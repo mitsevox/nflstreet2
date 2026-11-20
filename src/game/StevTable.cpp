@@ -10,8 +10,8 @@
 
 extern "C" {
 void SndgMusicPumpFrame(int a);
-int fn_8022EF8C(int a, int tag);
-int fn_8022EFBC(int a, int tag);
+int DbFileTblLoad(int a, int tag);
+int DbFileTblDestroy(int a, int tag);
 int fn_8022F3D4(int a);
 int fn_8022F4BC(void);
 }
@@ -191,7 +191,7 @@ int StevCountRows(void)
 int StevClose(void)
 {
     if (_Stev_bOpen) {
-        fn_8022EFBC(0, 0x56455453);
+        DbFileTblDestroy(0, 0x56455453);
         _Stev_bOpen = 0;
     }
     return 1;
@@ -204,7 +204,7 @@ int StevOpen(void)
 
     SndgMusicPumpFrame(1);
     SndgMusicPumpFrame(0);
-    failed = fn_8022EF8C(0, 0x56455453);
+    failed = DbFileTblLoad(0, 0x56455453);
     SndgMusicPumpFrame(1);
     SndgMusicPumpFrame(0);
     if (failed == 0) {

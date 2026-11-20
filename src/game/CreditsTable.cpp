@@ -3,8 +3,8 @@
 
 #include "game/fn_801FCE10.h"
 extern "C" {
-int fn_8022EF8C(int a, int tag);
-int fn_8022EFBC(int a, int tag);
+int DbFileTblLoad(int a, int tag);
+int DbFileTblDestroy(int a, int tag);
 char *strncpy(char *pDest, const char *pSource, int count);
 }
 
@@ -23,7 +23,7 @@ void CreditsOpen(void)
 {
     _Credits_szLine[0] = 0;
     _Credits_iLineType = 0;
-    if (fn_8022EF8C(0, 0x4C524443) == 0) {
+    if (DbFileTblLoad(0, 0x4C524443) == 0) {
         _Credits_Cursor.mUnknown0 = 0;
         _Credits_Cursor.mUnknown4 = 0;
         _Credits_Cursor.mUnknown8 = -1;
@@ -37,7 +37,7 @@ void CreditsClose(void)
     if (_Credits_Cursor.mUnknown0 != 0) {
         fn_801FCFA0(&_Credits_Cursor);
     }
-    fn_8022EFBC(0, 0x4C524443);
+    DbFileTblDestroy(0, 0x4C524443);
     _Credits_szLine[0] = 0;
     _Credits_iLineType = 0;
 }

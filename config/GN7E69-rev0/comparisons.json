@@ -19392,21 +19392,15 @@
       ]
     },
     {
-      "source": "src/engine/cu_80229270.c",
+      "source": "src/engine/dbocmt.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80229270-0x8022F428 (src/engine/cu_80229270.c), its function and name rows and the cu_80229270 compiler and source-form rows. The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80229270-0x8022942C (src/engine/dbocmt.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_80229270.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80229270",
-          "end": "0x8022F428"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B5078",
-          "end": "0x802B5080"
+          "end": "0x8022942C"
         }
       ],
       "functions": [
@@ -19434,7 +19428,22 @@
           "symbol": "fn_802293FC",
           "start": "0x802293FC",
           "end": "0x8022942C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dboptions.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8022942C-0x80229470 (src/engine/dboptions.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_80229270.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022942C",
+          "end": "0x80229470"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8022942C",
           "start": "0x8022942C",
@@ -19449,7 +19458,22 @@
           "symbol": "fn_80229438",
           "start": "0x80229438",
           "end": "0x80229470"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbniom.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80229470-0x802297D8 (src/engine/dbniom.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_80229270.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80229470",
+          "end": "0x802297D8"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_80229470",
           "start": "0x80229470",
@@ -19529,7 +19553,22 @@
           "symbol": "fn_802297B0",
           "start": "0x802297B0",
           "end": "0x802297D8"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802297D8.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x802297D8-0x8022C894 (src/engine/cu_802297D8.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_80229270.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802297D8",
+          "end": "0x8022C894"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_802299FC",
           "start": "0x802299FC",
@@ -19704,37 +19743,28 @@
           "symbol": "fn_8022C858",
           "start": "0x8022C858",
           "end": "0x8022C894"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_8022C9A8.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8022C9A8-0x8022EA74 (src/engine/cu_8022C9A8.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_80229270.c). The draft bodies compile no data section other than the .rodata literal range listed; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022C9A8",
+          "end": "0x8022EA74"
         },
         {
-          "symbol": "fn_8022C894",
-          "start": "0x8022C894",
-          "end": "0x8022C8C4"
-        },
-        {
-          "symbol": "fn_8022C8C4",
-          "start": "0x8022C8C4",
-          "end": "0x8022C8F0"
-        },
-        {
-          "symbol": "fn_8022C8F0",
-          "start": "0x8022C8F0",
-          "end": "0x8022C930"
-        },
-        {
-          "symbol": "fn_8022C930",
-          "start": "0x8022C930",
-          "end": "0x8022C938"
-        },
-        {
-          "symbol": "fn_8022C938",
-          "start": "0x8022C938",
-          "end": "0x8022C988"
-        },
-        {
-          "symbol": "fn_8022C988",
-          "start": "0x8022C988",
-          "end": "0x8022C9A8"
-        },
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B5078",
+          "end": "0x802B5080"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8022C9A8",
           "start": "0x8022C9A8",
@@ -20044,7 +20074,22 @@
           "symbol": "fn_8022EA4C",
           "start": "0x8022EA4C",
           "end": "0x8022EA74"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbevas.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8022EA74-0x8022EBF0 (src/engine/dbevas.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_80229270.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022EA74",
+          "end": "0x8022EBF0"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8022EA74",
           "start": "0x8022EA74",
@@ -20084,7 +20129,22 @@
           "symbol": "fn_8022EBC8",
           "start": "0x8022EBC8",
           "end": "0x8022EBF0"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbtatscopy.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8022EBF0-0x8022EF14 (src/engine/dbtatscopy.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_80229270.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022EBF0",
+          "end": "0x8022EF14"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8022EBF0",
           "start": "0x8022EBF0",
@@ -20119,27 +20179,22 @@
           "symbol": "fn_8022ED50",
           "start": "0x8022ED50",
           "end": "0x8022EF14"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbuser.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8022EFDC-0x8022F80C (src/engine/dbuser.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_80229270.c and src/engine/cu_8022F428.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
         {
-          "symbol": "fn_8022EF14",
-          "start": "0x8022EF14",
-          "end": "0x8022EF60"
-        },
-        {
-          "symbol": "fn_8022EF60",
-          "start": "0x8022EF60",
-          "end": "0x8022EF8C"
-        },
-        {
-          "symbol": "fn_8022EF8C",
-          "start": "0x8022EF8C",
-          "end": "0x8022EFBC"
-        },
-        {
-          "symbol": "fn_8022EFBC",
-          "start": "0x8022EFBC",
-          "end": "0x8022EFDC"
-        },
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022EFDC",
+          "end": "0x8022F80C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8022EFDC",
           "start": "0x8022EFDC",
@@ -20189,28 +20244,7 @@
           "symbol": "fn_8022F3D4",
           "start": "0x8022F3D4",
           "end": "0x8022F428"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_8022F428.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x8022F428-0x802355E4 (src/engine/cu_8022F428.c), its function and name rows and the cu_8022F428 source-form and compiler rows. The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8022F428",
-          "end": "0x802355E4"
         },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B7120",
-          "end": "0x802B7128"
-        }
-      ],
-      "functions": [
         {
           "symbol": "fn_8022F428",
           "start": "0x8022F428",
@@ -20250,7 +20284,22 @@
           "symbol": "fn_8022F794",
           "start": "0x8022F794",
           "end": "0x8022F80C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbcache.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x8022F80C-0x802311C8 (src/engine/dbcache.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022F80C",
+          "end": "0x802311C8"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8022F80C",
           "start": "0x8022F80C",
@@ -20290,7 +20339,22 @@
           "symbol": "fn_80230CEC",
           "start": "0x80230CEC",
           "end": "0x80230D8C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802311C8.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x802311C8-0x802328A8 (src/engine/cu_802311C8.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802311C8",
+          "end": "0x802328A8"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_802311C8",
           "start": "0x802311C8",
@@ -20310,7 +20374,22 @@
           "symbol": "fn_80231A8C",
           "start": "0x80231A8C",
           "end": "0x80231B04"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbmanager.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x802328A8-0x802336C4 (src/engine/dbmanager.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802328A8",
+          "end": "0x802336C4"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_802328A8",
           "start": "0x802328A8",
@@ -20485,7 +20564,28 @@
           "symbol": "fn_802336BC",
           "start": "0x802336BC",
           "end": "0x802336C4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802336C4.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x802336C4-0x802355E4 (src/engine/cu_802336C4.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c). The draft bodies compile no data section other than the .rodata literal range listed; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802336C4",
+          "end": "0x802355E4"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7120",
+          "end": "0x802B7128"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_802336C4",
           "start": "0x802336C4",
@@ -20610,6 +20710,16 @@
           "symbol": "fn_802341E8",
           "start": "0x802341E8",
           "end": "0x8023424C"
+        },
+        {
+          "symbol": "fn_8023424C",
+          "start": "0x8023424C",
+          "end": "0x80234394"
+        },
+        {
+          "symbol": "fn_80234394",
+          "start": "0x80234394",
+          "end": "0x80234424"
         },
         {
           "symbol": "fn_802345BC",
@@ -20840,16 +20950,6 @@
           "symbol": "fn_80235588",
           "start": "0x80235588",
           "end": "0x802355E4"
-        },
-        {
-          "symbol": "fn_8023424C",
-          "start": "0x8023424C",
-          "end": "0x80234394"
-        },
-        {
-          "symbol": "fn_80234394",
-          "start": "0x80234394",
-          "end": "0x80234424"
         }
       ]
     },

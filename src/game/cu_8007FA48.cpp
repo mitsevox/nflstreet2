@@ -11,8 +11,8 @@ extern int lbl_802D6990[];
 int fn_801F95C8(void);
 int fn_801FA0BC(int, void *, void *, void *, void *, int *, void *);
 int fn_801FA148(int);
-int fn_8022EF8C(int, int);
-int fn_8022EFBC(int, int);
+int DbFileTblLoad(int, int);
+int DbFileTblDestroy(int, int);
 int fn_8022F358(int);
 int fn_8022F3D4(int);
 void fn_80082B18(Record_80082B18 *);
@@ -195,7 +195,7 @@ extern "C" void fn_80080138(int selector, int index, int mode)
         from = 0x52475250;
         if (index == -1) {
             destination = 0x54415453;
-            fn_8022EF8C(destination, from);
+            DbFileTblLoad(destination, from);
             created = 1;
         } else destination = fn_8022F3D4(fn_8022F358(index));
         source = 0x54415453;
@@ -236,7 +236,7 @@ extern "C" void fn_80080138(int selector, int index, int mode)
         }
     }
     fn_801FA148(cursor);
-    if (created) fn_8022EFBC(0x54415453, from);
+    if (created) DbFileTblDestroy(0x54415453, from);
 }
 
 extern "C" void fn_8008040C(Object_8008044C *p, Desc_8008044C *desc)

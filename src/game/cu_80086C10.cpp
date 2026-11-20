@@ -47,8 +47,8 @@ int fn_801FA0BC(int handle, DbQueryTable *pTables, DbFilter *pFilter,
                 void *pSort, int *pCursor, QueryResult *pResult);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
-int fn_8022EF8C(int a, int tag);
-int fn_8022EFBC(int a, int tag);
+int DbFileTblLoad(int a, int tag);
+int DbFileTblDestroy(int a, int tag);
 int fn_8022F3D4(int handle);
 int fn_8022F4BC(void);
 }
@@ -310,7 +310,7 @@ void fn_80087600(int index, int id)
 int fn_800876C0(void)
 {
     if (sActive) {
-        fn_8022EFBC(0, 0x4D4E5453);
+        DbFileTblDestroy(0, 0x4D4E5453);
         sActive = 0;
     }
     return 1;
@@ -319,7 +319,7 @@ int fn_800876C0(void)
 int fn_80087704(void)
 {
     int result = 1;
-    if (fn_8022EF8C(0, 0x4D4E5453) == 0) {
+    if (DbFileTblLoad(0, 0x4D4E5453) == 0) {
         sActive = 1;
     } else {
         sActive = 0;

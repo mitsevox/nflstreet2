@@ -6,8 +6,8 @@
 #include "game/QueryStatus.h"
 
 extern "C" {
-int fn_8022EF8C(int a, int tag);
-int fn_8022EFBC(int a, int tag);
+int DbFileTblLoad(int a, int tag);
+int DbFileTblDestroy(int a, int tag);
 int fn_8022F358(int index);
 int fn_8022F3D4(int a);
 }
@@ -401,7 +401,7 @@ int TournamentClose(void)
     if (!_Tournament_bDraftPoolOpen) {
         return 1;
     }
-    result = fn_8022EFBC(0, 0x5044464E);
+    result = DbFileTblDestroy(0, 0x5044464E);
     _Tournament_iDbHandle = -1;
     _Tournament_bDraftPoolOpen = 0;
     return result == 0;
@@ -415,7 +415,7 @@ int TournamentOpen(int index)
     if (_Tournament_iDbHandle == -1) {
         ok = 0;
     }
-    if (fn_8022EF8C(0, 0x5044464E) == 0) {
+    if (DbFileTblLoad(0, 0x5044464E) == 0) {
         _Tournament_bDraftPoolOpen = 1;
     } else {
         _Tournament_bDraftPoolOpen = 0;

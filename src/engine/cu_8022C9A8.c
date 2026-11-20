@@ -1,9 +1,10 @@
+/* Partial source for several game-database modules (player lists, depth charts, game info, conference and division lists) not yet cut into their files. */
+
 #include "engine/dbteams.h"
 #include "engine/tdbext.h"
-#include "engine/fn_8022C938.h"
+#include "engine/dbutil.h"
 #include "engine/fn_801F9134.h"
 #include "engine/cu_80229270.h"
-/* Partial source for the engine range 0x80229270-0x8022F428 (neutral file name). */
 
 #include "engine/Funcs_802FB3BC.h"
 #include "engine/llmemory.h"
@@ -29,7 +30,6 @@ extern int lbl_803EC0A0;
 extern char *lbl_803EC0B4;
 extern int lbl_803EC0B8;
 extern int lbl_803EC0B0;
-extern char *lbl_803EC0C0;
 extern int lbl_803EC0C8;
 extern char *lbl_803EC0CC;
 extern int lbl_803EC0D0;
@@ -249,8 +249,6 @@ extern int (*lbl_803EC02C)(int a);
 extern unsigned char lbl_803EC030;
 extern int (*lbl_803EC034)(int a);
 extern int (*lbl_803EC038)(int a);
-extern void *lbl_803EC040;
-extern int lbl_803EC044;
 extern int (*lbl_803EC048)(int a);
 extern int (*lbl_803EC04C)(int a);
 extern Node_8022CC6C *lbl_803EC050;
@@ -272,9 +270,9 @@ int fn_8022AB6C(Object_8022A59C *p, int a, int b);
 int fn_8022AC80(Object_8022A59C *p);
 int fn_8022BF60(void);
 int fn_8022BF68(void);
-void fn_8022C894(void);
-void fn_8022C8C4(void);
-int fn_8022C8F0(unsigned int low, unsigned int high);
+void DbUtilRandomInit(void);
+void DbUtilRandomShutdown(void);
+int DbUtilRandomRange(unsigned int low, unsigned int high);
 void *fn_8022C9A8(void);
 void fn_8022C9B4(void *p);
 void fn_8022CADC(void);
@@ -286,907 +284,321 @@ int fn_8022D14C(int a);
 int fn_8022D250(int (*pCallback)(int a));
 int fn_8022D25C(int (*pCallback)(int a));
 
-int fn_80229270(void)
-{
-    struct QueryCursor cursor;
-    int a;
-    int b;
-    int c;
-    unsigned char i;
-    int err;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    err = fn_801FCE10(0, lbl_802B2138, &cursor);
-    i = 0;
-    if (err == 0) {
-        do {
-            err = fn_801FCE10(0, lbl_802B2178, &cursor, &a, &b, &c);
-            if (err != 0) {
-                break;
-            }
-            if (c != i) {
-                err = fn_801FCE10(0, lbl_802B21B8, i, a, b);
-            }
-            i++;
-        } while (err == 0);
-    }
-    if (QUERY_STATUS_ACCEPTED(err) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            err = fn_801FCFA0(&cursor);
-        } else {
-            err = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
-    }
-    return err;
-}
-
-int fn_802293A8(void)
-{
-    return 0;
-}
-
-void fn_802293B0(void)
-{
-}
-
-int fn_802293B4(int a, int b)
-{
-    int err = fn_801FCE10(0, lbl_802B21FC, a, b, 255);
-
-    if (err == 0) {
-        err = fn_80229270();
-    }
-    return err;
-}
-
-int fn_802293FC(void)
-{
-    return fn_801FCE10(0, lbl_802B2268);
-}
-
-int fn_8022942C(void)
-{
-    return 0;
-}
-
-void fn_80229434(void)
-{
-}
-
-int fn_80229438(int column, int value)
-{
-    return fn_801FCE10(0, lbl_802B231C, column, value);
-}
-
-int fn_80229470(void)
-{
-    fn_8022C894();
-    return 0;
-}
-
-void fn_80229494(void)
-{
-    fn_8022C8C4();
-    fn_80229674();
-    lbl_803EBFD8 = 0;
-    lbl_803EBFDC = 0;
-    lbl_803EBFE0 = 0;
-    lbl_803EBFE4 = 0;
-    lbl_803EBFE8 = -1;
-    lbl_803EBFEC = 0;
-}
-
-void fn_802294D8(Handlers_802294D8 *p)
-{
-    lbl_803EBFD8 = p->mpUnknown0;
-    lbl_803EBFDC = p->mpUnknown4;
-    lbl_803EBFE0 = p->mpUnknown8;
-}
-
-int fn_802294F4(void)
-{
-    return lbl_803EBFEC;
-}
-
-int fn_802294FC(int *p)
-{
-    int err = 0;
-
-    if (lbl_803EBFEC == 0) {
-        err = fn_801FCE10(0, lbl_802B238C, *p);
-        if (err == 0) {
-            lbl_803EBFEC = 1;
-        }
-    }
-    return err;
-}
-
-int fn_80229554(void)
-{
-    int err = 0;
-
-    if (lbl_803EBFEC == 1) {
-        lbl_803EBFED = 1;
-        err = lbl_803EBFD8();
-        if (err == 0) {
-            err = fn_80229674();
-        } else {
-            fn_80229674();
-        }
-        lbl_803EBFEC = 0;
-        lbl_803EBFED = 0;
-    }
-    return err;
-}
-
-int fn_802295C0(void)
-{
-    if (lbl_803EBFE4 != 0) {
-        lbl_803EBFE4(lbl_803EBFE8);
-    }
-    return 0;
-}
-
-int fn_802295F8(int a)
-{
-    int err = 0;
-
-    if (lbl_803EBFF0 == 0) {
-        err = fn_8022A59C(a, &lbl_803EBFF0);
-        if (err != 0) {
-            fn_80229674();
-        }
-    }
-    return err;
-}
-
-int fn_80229644(int a, int b)
-{
-    return fn_8022AB6C(lbl_803EBFF0, a, b);
-}
-
-int fn_80229674(void)
-{
-    int err = 0;
-
-    if (lbl_803EBFF0 != 0) {
-        err = fn_8022AC80(lbl_803EBFF0);
-        lbl_803EBFF0 = 0;
-    }
-    return err;
-}
-
-int fn_802296B4(int a, int b)
-{
-    int err = fn_802295F8(0);
-
-    if (err == 0) {
-        err = fn_80229644(a, b);
-    }
-    if (err == 0) {
-        err = fn_80229674();
-    } else {
-        fn_80229674();
-    }
-    return err;
-}
-
-void fn_80229718(Funcs_802FB3BC *pFuncs)
-{
-    lbl_803EBFF8 = pFuncs->mpUnknown0;
-    lbl_803EBFFC = pFuncs->mpUnknown4;
-    lbl_803EC000 = pFuncs->mpUnknown8;
-    lbl_803EC004 = pFuncs->mpUnknown12;
-    lbl_803EC008 = pFuncs->mpUnknown16;
-}
-
-void fn_80229744(void)
-{
-    lbl_803EBFF8 = 0;
-    lbl_803EBFFC = 0;
-    lbl_803EC000 = 0;
-    lbl_803EC004 = 0;
-    lbl_803EC008 = 0;
-}
-
-int fn_80229760(void **ppData, void *p)
-{
-    return lbl_803EBFFC(ppData, p);
-}
-
-int fn_80229788(int a, int b)
-{
-    return lbl_803EC000(a, b);
-}
-
-int fn_802297B0(void)
-{
-    return lbl_803EC004();
-}
-
-int fn_802299FC(void)
-{
-    int result = fn_802297D8(lbl_803A1C60, 0x43524F50);
-    if (result == 0) {
-        result = fn_802297D8(lbl_803A20A4, 0x524F4250);
-    } else {
-        fn_802297D8(lbl_803A20A4, 0x524F4250);
-    }
-    return result;
-}
-
-int fn_80229A70(void)
-{
-    return MemFill(lbl_803A1C60, 1092, 0, 4);
-}
-
-float fn_80229C98(int index)
-{
-    return lbl_803A20A4[index][1];
-}
-
-float fn_80229CB0(int index)
-{
-    return lbl_803A20A4[index][0];
-}
-
-float fn_80229CC4(int index, int item)
-{
-    return lbl_803A20A4[index][item + 2];
-}
-
-float fn_80229CE4(int index)
-{
-    return lbl_803A20A4[index][12];
-}
-
-int fn_80229E78(void)
-{
-    return 0;
-}
-
-int fn_80229E80(void)
-{
-    return 0;
-}
-
-void fn_8022A304(void)
-{
-    unsigned short i;
-
-    for (i = 0; i < 21; i++) {
-        lbl_802FA180[i].mUnknown0 = 31;
-        lbl_802FA180[i].mUnknown4 = 31;
-        lbl_802FA180[i].mUnknown8 = 7;
-        lbl_802FA180[i].mUnknownC = 0;
-        lbl_802FA180[i].mUnknownD = 0;
-        lbl_802FA180[i].mUnknownE = 0;
-        lbl_802FA180[i].mUnknown10 = 0;
-        lbl_802FA180[i].mUnknown12 = 0;
-        lbl_802FA180[i].mUnknown14 = 0;
-    }
-    for (i = 0; i < 17; i++) {
-        lbl_802FA378[i].mUnknown0 = 31;
-        lbl_802FA378[i].mUnknown4 = 31;
-        lbl_802FA378[i].mUnknown8 = 7;
-        lbl_802FA378[i].mUnknownC = 0;
-        lbl_802FA378[i].mUnknownD = 0;
-        lbl_802FA378[i].mUnknownE = 0;
-        lbl_802FA378[i].mUnknown10 = 0;
-        lbl_802FA378[i].mUnknown12 = 0;
-        lbl_802FA378[i].mUnknown14 = 0;
-    }
-    for (i = 0; i < 10; i++) {
-        lbl_802FA510[i].mUnknown0 = 31;
-        lbl_802FA510[i].mUnknown4 = 31;
-        lbl_802FA510[i].mUnknown8 = 7;
-        lbl_802FA510[i].mUnknownC = 0;
-        lbl_802FA510[i].mUnknownD = 0;
-        lbl_802FA510[i].mUnknownE = 0;
-        lbl_802FA510[i].mUnknown10 = 0;
-        lbl_802FA510[i].mUnknown12 = 0;
-        lbl_802FA510[i].mUnknown14 = 0;
-    }
-}
-
-int fn_8022A428(int a)
-{
-    return fn_801FCE10(0, lbl_802B2F64, a, 1023, 1023, 31, -1, 3, 15, 7, -1, 0);
-}
-
-int fn_8022A490(unsigned int count)
-{
-    int err = fn_801FCE10(0, lbl_802B3010);
-
-    if (err == 0) {
-        int id = 0;
-        unsigned short i;
-
-        for (i = 0; i < count; i++) {
-            if ((err = fn_8022A428(id)) == 0) {
-                id++;
-            } else {
-                break;
-            }
-        }
-    }
-    return err;
-}
-
-int fn_8022A508(int a, int b, int c, int d, int e)
-{
-    return fn_801FCE10(0, lbl_802B30D0, b, c, d, e, a);
-}
-
-int fn_8022A558(int a, int b, int c, int d)
-{
-    return fn_801FCE10(0, lbl_802B3180, b, c, d, a);
-}
-
-int fn_8022A59C(int a, Object_8022A59C **ppOut)
-{
-    int err = DbLockAcquire();
-    Object_8022A59C *p = fn_8022C938(8, 0);
-
-    p->mUnknown4 = a;
-    p->mUnknown0 = -1;
-    if (err == 0) {
-        err = fn_802303B4(0, &p->mUnknown0);
-    }
-    if (err == 0) {
-        *ppOut = p;
-    } else {
-        fn_8022AC80(p);
-        *ppOut = 0;
-    }
-    return err;
-}
-
-int fn_8022AB6C(Object_8022A59C *p, int a, int b)
-{
-    struct QueryCursor cursor;
-    int err;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    err = fn_801FCE10(0, lbl_802B3524, &cursor);
-    if (err == 0) {
-        err = fn_8022A624(p, cursor, a, b);
-    }
-    if (QUERY_STATUS_ACCEPTED(err) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            err = fn_801FCFA0(&cursor);
-        } else {
-            err = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
-    }
-    return err;
-}
-
-int fn_8022AC80(Object_8022A59C *p)
-{
-    int err = 0;
-
-    if (p->mUnknown0 != 0xFFFF) {
-        err = fn_80230CC8(p->mUnknown0);
-    }
-    if (err == 0) {
-        err = DbLockRelease();
-    } else {
-        DbLockRelease();
-    }
-    fn_8022C988(p);
-    return err;
-}
-
-int fn_8022ACEC(int key, int unused, int col, int value, int index)
-{
-    TDbCol_801F9718 aCols[4];
-    int table;
-
-    table = lbl_803EC020[index];
-    aCols[0].mUnk0 = key;
-    aCols[0].mUnk4 = table;
-    aCols[0].mCol = 0x44494754;
-    aCols[1].mCol = col;
-    aCols[1].mUnk4 = table;
-    aCols[1].mUnk0 = value;
-    fn_801F9718_SetEnd(&aCols[2]);
-    return fn_801F9718(0, table, aCols, 0, 0);
-}
-
-
-int fn_8022AD64(int db, TDbCol_801F9718 **ppCols, unsigned char *pCount)
-{
-    TDbColInfo_801F9AB8 aInfo[254];
-    unsigned int count;
-    int status;
-    int hasP;
-    int hasT;
-    unsigned char n;
-    unsigned char i;
-
-    n = 1;
-    hasP = fn_801F9C68(0, db, 0x44494750) == 0;
-    hasT = fn_801F9C68(0, db, 0x44494754) == 0;
-    count = 254;
-    status = fn_801F9AB8(0, db, aInfo, &count);
-    if (!hasP && !hasT) {
-        n = 0;
-    }
-    if (status == 0) {
-        *ppCols = fn_8022C938((count + 1) * 16, 1);
-        (*ppCols)[0].mCol = -1;
-        for (i = 0; i < count; i++) {
-            if (aInfo[i].mCol == 0x44494750 || aInfo[i].mCol == 0x44494754) {
-                (*ppCols)[0].mUnk4 = db;
-                (*ppCols)[0].mCol = aInfo[i].mCol;
-            } else {
-                (*ppCols)[n].mUnk4 = db;
-                (*ppCols)[n].mCol = aInfo[i].mCol;
-                n++;
-            }
-        }
-        fn_801F9718_SetEnd(&(*ppCols)[n]);
-    }
-    if (status == 0) {
-        *pCount = n;
-    } else {
-        *pCount = 0;
-    }
-    return status;
-}
-
-int fn_8022AEFC(unsigned int value)
-{
-    int c = value >> 24;
-    int result = 255;
-    if ((lbl_802AEF10 + 1)[c] & 2) {
-        result = 0;
-    } else if ((lbl_802AEF10 + 1)[c] & 1) {
-        result = 3;
-    } else if (c == '0') {
-        result = 2;
-    } else if (c == '1') {
-        result = 1;
-    }
-    return result;
-}
-
-int fn_8022AF54(int a, int b)
-{
-    return 0;
-}
-
-int fn_8022AF5C(int key, int unused, int col, int value, int set, int index)
-{
-    TDbCol_801F9718 aCols[4];
-    int table;
-    int err;
-
-    table = lbl_803EC010[set][index];
-    aCols[0].mUnk0 = key;
-    aCols[0].mUnk4 = table;
-    aCols[0].mCol = 0x44494750;
-    aCols[1].mCol = col;
-    aCols[1].mUnk4 = table;
-    aCols[1].mUnk0 = value;
-    fn_801F9718_SetEnd(&aCols[2]);
-    err = fn_801F9718(0, table, aCols, 0, 0);
-    if (err == 19) {
-        err = fn_8022AF54(set, index);
-        if (err == 0) {
-            err = fn_801F9718(0, table, aCols, 0, 0);
-        }
-    }
-    return err;
-}
-
-
-int fn_8022B02C(Callbacks_8022B02C *pCallbacks)
-{
-    int status = 0;
-    int table;
-    unsigned char i;
-    unsigned char j;
-    unsigned char count;
-
-    for (i = 0; i < 1; i++) {
-        count = lbl_803EC014[i];
-        for (j = 0; j < count; j++) {
-            lbl_803EC018[i][j] = 0;
-        }
-    }
-    for (i = 0; i < 1; i++) {
-        lbl_803EC024[i] = 0;
-    }
-    for (i = 0; i < 1; i++) {
-        count = lbl_803EC014[i];
-        for (j = 0; j < count; j++) {
-            table = lbl_803EC010[i][j];
-            if (fn_801F9A90(0, table) == 0) {
-                status = fn_8022AD64(table, &lbl_803EC018[i][j], &lbl_803EC01C[i][j]);
-            } else {
-                lbl_803EC018[i][j] = 0;
-                lbl_803EC01C[i][j] = 0;
-            }
-            if (status != 0) {
-                break;
-            }
-        }
-        if (status != 0) {
-            break;
-        }
-    }
-    for (i = 0; i < 1 && status == 0; i++) {
-        table = lbl_803EC020[i];
-        if (fn_801F9A90(0, table) == 0) {
-            status = fn_8022AD64(table, &lbl_803EC024[i], &lbl_803ED01C[i]);
-        } else {
-            lbl_803ED01C[i] = 0;
-        }
-    }
-    if (status == 0) {
-        if (pCallbacks != 0) {
-            lbl_803EC028 = pCallbacks->mpUnknown0;
-            lbl_803EC02C = pCallbacks->mpUnknown4;
-        }
-        status = fn_802311C8(0);
-    }
-    return status;
-}
-
-void fn_8022B200(void)
-{
-    unsigned char i;
-    unsigned char j;
-    unsigned char count;
-
-    fn_80231208();
-    for (i = 0; i < 1; i++) {
-        count = lbl_803EC014[i];
-        for (j = 0; j < count; j++) {
-            if (lbl_803EC018[i][j] != 0) {
-                fn_8022C988(lbl_803EC018[i][j]);
-                lbl_803EC018[i][j] = 0;
-            }
-        }
-    }
-    for (i = 0; i < 1; i++) {
-        if (lbl_803EC024[i] != 0) {
-            fn_8022C988(lbl_803EC024[i]);
-            lbl_803EC024[i] = 0;
-        }
-    }
-    lbl_803EC028 = 0;
-    lbl_803EC02C = 0;
-}
-
-int fn_8022BF60(void)
-{
-    return 0;
-}
-
-int fn_8022BF68(void)
-{
-    int err = 0;
-    unsigned char i;
-
-    for (i = 0; i <= 4; i++) {
-        err = fn_801FCE10(0, lbl_802B35D4, lbl_802FA600[i]);
-        if (err != 0) {
-            break;
-        }
-    }
-    if (err == 0) {
-        err = fn_801FCE10(0, lbl_802B35D4, lbl_803EC020[0]);
-    }
-    if (err == 0) {
-        err = fn_801FCE10(0, lbl_802B35E4);
-    }
-    if (err == 0) {
-        err = fn_801FCE10(0, lbl_802B35F8);
-    }
-    return err;
-}
-
-int fn_8022C02C(int a, int b, int c, int d)
-{
-    int err = 0;
-
-    if (c == 0) {
-        err = fn_8022BF68();
-    }
-    if (err == 0 && lbl_803EC028 != 0) {
-        err = lbl_803EC028(a, b, c, d);
-    }
-    return err;
-}
-
-int fn_8022C098(int a)
-{
-    int err = 0;
-
-    if (lbl_803EC02C != 0) {
-        err = lbl_803EC02C(a);
-    }
-    if (err == 0) {
-        err = fn_8022BF60();
-    }
-    return err;
-}
-
-int fn_8022C0E0(struct QueryCursor cursor, int a)
-{
-    unsigned short total;
-    int *pIds;
-    int id;
-    int status;
-    unsigned short count;
-    unsigned short i;
-
-    pIds = 0;
-    status = fn_801FA1C0(cursor.mUnknown0, &total);
-    if (status == 0) {
-        pIds = fn_8022C938(total * 4, 0);
-    }
-    count = 0;
-    if (status == 0) {
-        while (status == 0) {
-            status = fn_801FCE10(0, lbl_802B3610, &cursor, &id);
-            if (status == 0) {
-                pIds[count] = id;
-                count++;
-            }
-        }
-        if (QUERY_STATUS_ACCEPTED(status) == 1) {
-            status = 0;
-        }
-        if (status == 0) {
-            for (i = 0; i < count; i++) {
-                status = fn_80230D8C(pIds[i], 0, a);
-                if (status != 0) {
-                    break;
-                }
-            }
-        }
-    }
-    if (pIds != 0) {
-        fn_8022C988(pIds);
-    }
-    return status;
-}
-
-int fn_8022C214(Callbacks_8022C214 *pCallbacks)
-{
-    struct QueryCursor cursor;
-    int status = 0;
-    int index;
-    unsigned short a;
-    unsigned short b;
-    unsigned short c;
-    unsigned short d;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    status = fn_801FCE10(0, lbl_802B3698, &cursor);
-    while (status == 0) {
-        status = fn_801FCE10(0, lbl_802B36C4, &cursor, &index, &a, &b, &c, &d);
-        if (status == 0) {
-            lbl_803A2390[index].mUnknown0 = a;
-            lbl_803A2390[index].mUnknown2 = b;
-            lbl_803A2390[index].mUnknown4 = c;
-            lbl_803A2390[index].mUnknown6 = d;
-        }
-    }
-    if (QUERY_STATUS_ACCEPTED(status) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            status = fn_801FCFA0(&cursor);
-        } else {
-            status = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
-    }
-    if (status == 0) {
-        status = fn_8022ED30(0, 0x53525054);
-    } else {
-        fn_8022ED30(0, 0x53525054);
-    }
-    lbl_803EC030 = 0;
-    if (status == 0) {
-        lbl_803EC030 = fn_801F9A90(0, 0x53525054) == 0;
-        if (pCallbacks != 0) {
-            lbl_803EC034 = pCallbacks->mpUnknown0;
-            lbl_803EC038 = pCallbacks->mpUnknown4;
-        }
-    }
-    return status;
-}
-
-void fn_8022C3C8(void)
-{
-    MemFill((char *)lbl_803A2390, 88, 0, 4);
-    lbl_803EC030 = 0;
-    lbl_803EC034 = 0;
-    lbl_803EC038 = 0;
-}
-
-int fn_8022C410(int a)
-{
-    struct QueryCursor cursor;
-    int status = 0;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    status = fn_801FCE10(0, lbl_802B37E4, &cursor, 0);
-    if (status == 0) {
-        status = fn_8022C0E0(cursor, a);
-    }
-    if (QUERY_STATUS_ACCEPTED(status) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            status = fn_801FCFA0(&cursor);
-        } else {
-            status = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
-    }
-    return status;
-}
-
-int fn_8022C518(int a)
-{
-    struct QueryCursor cursor;
-    int status = 0;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    status = fn_801FCE10(0, lbl_802B3824, &cursor, 0, 5, 1);
-    if (status == 0) {
-        status = fn_8022C0E0(cursor, a);
-    }
-    if (QUERY_STATUS_ACCEPTED(status) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            status = fn_801FCFA0(&cursor);
-        } else {
-            status = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
-    }
-    return status;
-}
-
-int fn_8022C628(int db, int tbl, int *pIds, unsigned short *pCount)
-{
-    struct QueryCursor cursor;
-    int status = 0;
-    int id;
-    int prev;
-    int next;
-    int last;
-    unsigned short count;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    status = fn_801FCE10(0, lbl_802B3888, db, &cursor, tbl);
-    prev = -1;
-    next = -1;
-    last = 1023;
-    count = 0;
-    while (status == 0 && count < *pCount) {
-        status = fn_801FCE10(0, lbl_802B3610, &cursor, &id);
-        if (status == 0) {
-            if (id > prev + 1) {
-                next = prev + 1;
-                while (status == 0 && next < id && count < *pCount && next <= 1008) {
-                    pIds[count] = next;
-                    count++;
-                    next++;
-                }
-            }
-            last = (next > id) ? next : id;
-            prev = id;
-        }
-    }
-    if (QUERY_STATUS_ACCEPTED(status) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            status = fn_801FCFA0(&cursor);
-        } else {
-            status = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
-    }
-    if (status == 0 && count < *pCount) {
-        next = last + 1;
-        if (last == 1023) {
-            next = 0;
-        }
-        while (count < *pCount && next <= 1008) {
-            pIds[count] = next;
-            count++;
-            next++;
-        }
-    }
-    *pCount = count;
-    return status;
-}
-
-int fn_8022C81C(int a)
-{
-    if (lbl_803EC034 != 0) {
-        return lbl_803EC034(a);
-    }
-    return 0;
-}
-
-int fn_8022C858(int a)
-{
-    if (lbl_803EC038 != 0) {
-        return lbl_803EC038(a);
-    }
-    return 0;
-}
-
-void fn_8022C894(void)
-{
-    lbl_803EC040 = MathNewRandomStream(0, MathGetRandomSeed());
-}
-
-void fn_8022C8C4(void)
-{
-    MathDelRandomStream(lbl_803EC040);
-    lbl_803EC040 = 0;
-}
-
-int fn_8022C8F0(unsigned int low, unsigned int high)
-{
-    if (low < high) {
-        return low + MathGetRandomRange(lbl_803EC040, high - low);
-    }
-    return low;
-}
-
-void fn_8022C930(int a)
-{
-    lbl_803EC044 = a;
-}
-
-void *fn_8022C938(int size, int a)
-{
-    void *p;
-
-    if (a != 0) {
-        p = fn_801D2BB0(lbl_803EC044, size, 0, 0);
-    } else {
-        p = fn_801D2B7C(size, 0, 0);
-    }
-    return p;
-}
-
-void fn_8022C988(void *p)
-{
-    fn_801D2BD0(p);
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* prototypes of the functions defined in the original src/engine/cu_80229270.c */
+int fn_80229270(void);
+int fn_802293A8(void);
+void fn_802293B0(void);
+int fn_802293B4(int a, int b);
+int fn_802293FC(void);
+int fn_8022942C(void);
+void fn_80229434(void);
+int fn_80229438(int column, int value);
+int fn_80229470(void);
+void fn_80229494(void);
+void fn_802294D8(Handlers_802294D8 *p);
+int fn_802294F4(void);
+int fn_802294FC(int *p);
+int fn_80229554(void);
+int fn_802295C0(void);
+int fn_802295F8(int a);
+int fn_80229644(int a, int b);
+int fn_80229674(void);
+int fn_802296B4(int a, int b);
+void fn_80229718(Funcs_802FB3BC *pFuncs);
+void fn_80229744(void);
+int fn_80229760(void **ppData, void *p);
+int fn_80229788(int a, int b);
+int fn_802297B0(void);
+int fn_802299FC(void);
+int fn_80229A70(void);
+float fn_80229C98(int index);
+float fn_80229CB0(int index);
+float fn_80229CC4(int index, int item);
+float fn_80229CE4(int index);
+int fn_80229E78(void);
+int fn_80229E80(void);
+void fn_8022A304(void);
+int fn_8022A428(int a);
+int fn_8022A490(unsigned int count);
+int fn_8022A508(int a, int b, int c, int d, int e);
+int fn_8022A558(int a, int b, int c, int d);
+int fn_8022A59C(int a, Object_8022A59C **ppOut);
+int fn_8022AB6C(Object_8022A59C *p, int a, int b);
+int fn_8022AC80(Object_8022A59C *p);
+int fn_8022ACEC(int key, int unused, int col, int value, int index);
+int fn_8022AD64(int db, TDbCol_801F9718 **ppCols, unsigned char *pCount);
+int fn_8022AEFC(unsigned int value);
+int fn_8022AF54(int a, int b);
+int fn_8022AF5C(int key, int unused, int col, int value, int set, int index);
+int fn_8022B02C(Callbacks_8022B02C *pCallbacks);
+void fn_8022B200(void);
+int fn_8022BF60(void);
+int fn_8022BF68(void);
+int fn_8022C02C(int a, int b, int c, int d);
+int fn_8022C098(int a);
+int fn_8022C0E0(struct QueryCursor cursor, int a);
+int fn_8022C214(Callbacks_8022C214 *pCallbacks);
+void fn_8022C3C8(void);
+int fn_8022C410(int a);
+int fn_8022C518(int a);
+int fn_8022C628(int db, int tbl, int *pIds, unsigned short *pCount);
+int fn_8022C81C(int a);
+int fn_8022C858(int a);
+void DbUtilRandomInit(void);
+void DbUtilRandomShutdown(void);
+int DbUtilRandomRange(unsigned int low, unsigned int high);
+void DbUtilSetHeap(int a);
+void *DbUtilAlloc(int size, int a);
+void DbUtilFree(void *p);
+void *fn_8022C9A8(void);
+void fn_8022C9B4(void *p);
+void fn_8022C9B8(void *pPairs);
+void fn_8022CADC(void);
+void fn_8022CAEC(Node_8022CC6C **ppHead);
+Node_8022CC6C *fn_8022CC6C(Node_8022CC6C **ppHead, unsigned char key);
+Node_8022CC6C *fn_8022CC98(Node_8022CC6C **ppHead, unsigned short key);
+void fn_8022CCC4(Node_8022CC6C **ppHead, Node_8022CC6C *p);
+void fn_8022CD0C(Node_8022CC6C **ppHead, Node_8022CC6C *p);
+void *fn_8022CD30(void);
+void fn_8022CD3C(void *p);
+int fn_8022CD40(int a, int b, int c);
+void fn_8022CDA0(void);
+void fn_8022CDF8(void);
+int fn_8022D14C(int a);
+int fn_8022D154(void);
+int fn_8022D1B8(void);
+int fn_8022D23C(void);
+int fn_8022D250(int (*pCallback)(int a));
+int fn_8022D25C(int (*pCallback)(int a));
+int fn_8022D268(int a, int b, int c, void *pPairs, int action, int mode);
+int fn_8022D2F4(int a, int b, int c, void *pPairs, int mode);
+int fn_8022D3AC(void);
+unsigned short fn_8022D3D4(unsigned char key);
+int fn_8022D418(int a, int b, int mode);
+int fn_8022D540(void);
+int fn_8022D5A4(int key, int mode);
+int fn_8022D6E8(void);
+void fn_8022D6F0(void);
+unsigned short fn_8022D6FC(int index);
+int fn_8022D710(int a, int b, int c, int row, int value);
+int fn_8022D834(int row, int column);
+int fn_8022D864(void);
+int fn_8022D86C(void);
+int fn_8022D874(int a, int b, int c, int key);
+int fn_8022D8F8(int a, int *p, int tag);
+int fn_8022DA44(int a, int *b, int c, int *d, int e);
+int fn_8022DA90(int *p);
+void fn_8022DB08(void);
+int fn_8022DB20(void);
+int fn_8022DBF4(int value);
+int fn_8022DC38(int value);
+int fn_8022DC7C(int value);
+int fn_8022DCB0(int value);
+int fn_8022DCE4(int value);
+int fn_8022DD18(int value);
+int fn_8022DD4C(int value);
+int fn_8022DD80(int value);
+int fn_8022DDB4(int a, void *p);
+int fn_8022E21C(int a, int b);
+int fn_8022E558(void);
+int fn_8022E560(void);
+int fn_8022E568(void);
+void fn_8022E694(void);
+int fn_8022E6CC(void);
+void fn_8022E7FC(void);
+int fn_8022E834(void);
+void fn_8022E96C(void);
+int fn_8022E9A4(void);
+void fn_8022E9C4(void);
+int fn_8022E9E4(void);
+void fn_8022EA4C(void);
+int fn_8022EA74(void);
+void fn_8022EA7C(void);
+int fn_8022EA80(int a, const char *pName, int b);
+void fn_8022EAD8(void);
+int fn_8022EB10(void);
+int fn_8022EB5C(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps);
+int fn_8022EB94(void *pTarget, struct SaveStreamOps_t *pOps);
+int fn_8022EBC8(void);
+int fn_8022EBF0(int a, const char *pName, int b);
+void fn_8022EC48(void);
+int fn_8022EC80(void);
+int fn_8022ECCC(void);
+int fn_8022ECF4(int a, int b);
+int fn_8022ED30(int db, int tbl);
+int fn_8022ED50(int db, int a, int b);
+int DbFileInit(const char *pName);
+void DbFileShutdown(void);
+int DbFileTblLoad(int db, int file);
+int DbFileTblDestroy(int db, int tbl);
+int fn_8022EFDC(void);
+int fn_8022F028(int a, const char *pName, int b);
+void fn_8022F094(void);
+int fn_8022F0D4(void);
+void fn_8022F1BC(int key);
+void fn_8022F294(int key);
+int fn_8022F34C(void);
+int fn_8022F358(int index);
+int fn_8022F384(int key);
+int fn_8022F3D4(int key);
 
 void *fn_8022C9A8(void)
 {
@@ -1779,6 +1191,7 @@ int fn_8022DDB4(int a, void *p)
 {
     return 0;
 }
+
 int fn_8022E21C(int a, int b)
 {
     if (a != 1023 && b != 1023) {
@@ -1815,7 +1228,7 @@ int fn_8022E568(void)
     status = fn_801FCE10(&result, lbl_802B5A48, &cursor, 0, 1);
     lbl_803EC088 = result.mUnknown0;
     if (status == 0 && lbl_803EC088 != 0) {
-        lbl_803EC084 = fn_8022C938(lbl_803EC088 * 4, 1);
+        lbl_803EC084 = DbUtilAlloc(lbl_803EC088 * 4, 1);
         i = 0;
         do {
             status = fn_801FCE10(0, lbl_802B5AB0, &cursor, &lbl_803EC084[i]);
@@ -1837,7 +1250,7 @@ int fn_8022E568(void)
 void fn_8022E694(void)
 {
     if (lbl_803EC084 != 0) {
-        fn_8022C988(lbl_803EC084);
+        DbUtilFree(lbl_803EC084);
         lbl_803EC084 = 0;
         lbl_803EC088 = 0;
     }
@@ -1856,7 +1269,7 @@ int fn_8022E6CC(void)
     status = fn_801FCE10(&result, lbl_802B5ACC, &cursor, 0, 7);
     lbl_803EC090 = result.mUnknown0;
     if (status == 0 && lbl_803EC090 != 0) {
-        lbl_803EC08C = fn_8022C938(lbl_803EC090 * 8, 1);
+        lbl_803EC08C = DbUtilAlloc(lbl_803EC090 * 8, 1);
         i = 0;
         do {
             status = fn_801FCE10(0, lbl_802B5B34, &cursor, &lbl_803EC08C[i][0], &lbl_803EC08C[i][1]);
@@ -1878,7 +1291,7 @@ int fn_8022E6CC(void)
 void fn_8022E7FC(void)
 {
     if (lbl_803EC08C != 0) {
-        fn_8022C988(lbl_803EC08C);
+        DbUtilFree(lbl_803EC08C);
         lbl_803EC08C = 0;
         lbl_803EC090 = 0;
     }
@@ -1897,7 +1310,7 @@ int fn_8022E834(void)
     status = fn_801FCE10(&result, lbl_802B5B64, &cursor, 0, 8, 1);
     lbl_803EC098 = result.mUnknown0;
     if (status == 0 && lbl_803EC098 != 0) {
-        lbl_803EC094 = fn_8022C938(lbl_803EC098 * 12, 1);
+        lbl_803EC094 = DbUtilAlloc(lbl_803EC098 * 12, 1);
         i = 0;
         do {
             status = fn_801FCE10(0, lbl_802B5BDC, &cursor, &lbl_803EC094[i][0], &lbl_803EC094[i][1], &lbl_803EC094[i][2]);
@@ -1919,7 +1332,7 @@ int fn_8022E834(void)
 void fn_8022E96C(void)
 {
     if (lbl_803EC094 != 0) {
-        fn_8022C988(lbl_803EC094);
+        DbUtilFree(lbl_803EC094);
         lbl_803EC094 = 0;
         lbl_803EC098 = 0;
     }
@@ -1962,293 +1375,4 @@ void fn_8022EA4C(void)
     fn_8022E96C();
     fn_8022E7FC();
     fn_8022E694();
-}
-
-int fn_8022EA74(void)
-{
-    return 0;
-}
-
-void fn_8022EA7C(void)
-{
-}
-
-int fn_8022EA80(int a, const char *pName, int b)
-{
-    lbl_803EC0A4 = fn_8022C938(strlen(pName) + 1, 1);
-    strcpy(lbl_803EC0A4, pName);
-    lbl_803EC0A8 = b;
-    return 0;
-}
-
-void fn_8022EAD8(void)
-{
-    fn_8022C988(lbl_803EC0A4);
-    lbl_803EC0A0 = 0;
-    lbl_803EC0A4 = 0;
-    lbl_803EC0A8 = -1;
-}
-
-int fn_8022EB10(void)
-{
-    int result = fn_801F8D60(0x45564153, lbl_803EC0A0);
-    if (result == 0) {
-        result = TDbExtLoadFromResource(0x45564153, lbl_803EC0A4, lbl_803EC0A8, 0);
-    }
-    return result;
-}
-
-int fn_8022EB5C(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps)
-{
-    return fn_801F9134(0x45564153, (int)pTarget, 0, (int)pOps);
-}
-
-int fn_8022EB94(void *pTarget, struct SaveStreamOps_t *pOps)
-{
-    return fn_801F91AC(0x45564153, (int)pTarget, (int)pOps);
-}
-
-int fn_8022EBC8(void)
-{
-    return fn_801F8EEC(0x45564153);
-}
-
-int fn_8022EBF0(int a, const char *pName, int b)
-{
-    lbl_803EC0B4 = fn_8022C938(strlen(pName) + 1, 1);
-    strcpy(lbl_803EC0B4, pName);
-    lbl_803EC0B8 = b;
-    return 0;
-}
-
-void fn_8022EC48(void)
-{
-    fn_8022C988(lbl_803EC0B4);
-    lbl_803EC0B0 = 0;
-    lbl_803EC0B4 = 0;
-    lbl_803EC0B8 = -1;
-}
-
-int fn_8022EC80(void)
-{
-    int result = fn_801F8D60(0x54415453, lbl_803EC0B0);
-    if (result == 0) {
-        result = TDbExtLoadFromResource(0x54415453, lbl_803EC0B4, lbl_803EC0B8, 0);
-    }
-    return result;
-}
-
-int fn_8022ECCC(void)
-{
-    return fn_801F8EEC(0x54415453);
-}
-
-int fn_8022ECF4(int a, int b)
-{
-    return fn_801FCE10(0, lbl_802B5C8C, a, b, b);
-}
-
-int fn_8022ED30(int db, int tbl)
-{
-    return fn_801F967C(db, tbl);
-}
-
-int fn_8022ED50(int db, int a, int b)
-{
-    struct QueryCursor cursor;
-    int tbl;
-    int status = 0;
-    int opened = 0;
-
-    if (fn_801F9014(0x54415453) != 0) {
-        status = fn_8022EC80();
-        opened = status == 0;
-    }
-    if (status == 0) {
-        cursor.mUnknown0 = 0;
-        cursor.mUnknown4 = 0;
-        cursor.mUnknown8 = -1;
-        cursor.mUnknown12 = 0;
-        status = fn_801FCE10(0, lbl_802B5CB4, db, &cursor, a, b, 1);
-        while (status == 0) {
-            status = fn_801FCE10(0, lbl_802B5CF0, &cursor, &tbl);
-            if (status == 0 && fn_801F9A90(db, tbl) != 0) {
-                status = fn_8022ECF4(db, tbl);
-                if (QUERY_STATUS_ACCEPTED(status) == 1) {
-                    status = 0;
-                }
-            }
-        }
-        if (QUERY_STATUS_ACCEPTED(status) == 1) {
-            if (cursor.mUnknown0 != 0) {
-                status = fn_801FCFA0(&cursor);
-            } else {
-                status = 0;
-            }
-        } else if (cursor.mUnknown0 != 0) {
-            fn_801FCFA0(&cursor);
-        }
-    }
-    if (opened == 1) {
-        if (status == 0) {
-            status = fn_8022ECCC();
-        } else {
-            fn_8022ECCC();
-        }
-    }
-    return status;
-}
-
-int fn_8022EF14(const char *pName)
-{
-    lbl_803EC0C0 = fn_8022C938(strlen(pName) + 1, 1);
-    strcpy(lbl_803EC0C0, pName);
-    return 0;
-}
-
-void fn_8022EF60(void)
-{
-    fn_8022C988(lbl_803EC0C0);
-    lbl_803EC0C0 = 0;
-}
-
-int fn_8022EF8C(int db, int file)
-{
-    return fn_801F9064(db, file, lbl_803EC0C0, 3, &tdbiofioCallback);
-}
-
-int fn_8022EFBC(int db, int tbl)
-{
-    return fn_801F967C(db, tbl);
-}
-
-int fn_8022EFDC(void)
-{
-    int key;
-    do {
-        key = fn_8022C8F0(0, 0x7FFFFFFA) & 0x7FFFFFFF;
-    } while (fn_8022F384(key) != -1);
-    return key;
-}
-
-int fn_8022F028(int a, const char *pName, int b)
-{
-    lbl_803EC0C8 = a;
-    lbl_803EC0CC = fn_8022C938(strlen(pName) + 1, 1);
-    strcpy(lbl_803EC0CC, pName);
-    lbl_803EC0D0 = b;
-    lbl_803EC0D4 = -1;
-    lbl_803EC0D8 = 0;
-    return 0;
-}
-
-void fn_8022F094(void)
-{
-    fn_8022C988(lbl_803EC0CC);
-    lbl_803EC0C8 = 0;
-    lbl_803EC0CC = 0;
-    lbl_803EC0D0 = -1;
-    lbl_803EC0D4 = -1;
-    lbl_803EC0D8 = 0;
-}
-
-int fn_8022F0D4(void)
-{
-    unsigned char i;
-    int id;
-    int key;
-    int old;
-
-    id = -1;
-    if ((signed char)lbl_803EC0D8 <= 1) {
-        for (i = 0; fn_8022F428(key = lbl_803ED6E4[i]) != -1; i++) {
-        }
-        id = fn_8022EFDC();
-        lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown0 = id;
-        lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown4 = key;
-        TDbExtLoadFromResource(key, lbl_803EC0CC, lbl_803EC0D0, 0);
-        lbl_803EC0D8++;
-        old = fn_8022F478(id);
-        fn_801FCE10(0, lbl_802B5D64, fn_8022F3D4(fn_8022F4BC()), id);
-        fn_8022F478(old);
-    }
-    return id;
-}
-
-void fn_8022F1BC(int key)
-{
-    signed char index;
-
-    if (key != -1) {
-        index = fn_8022F384(key);
-        if (index != -1) {
-            lbl_803EC0D8--;
-            TDbExtLoadFromResource(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
-            for (; index < (signed char)lbl_803EC0D8; index++) {
-                lbl_802FB300[index] = lbl_802FB300[index + 1];
-            }
-            lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown0 = -1;
-            lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown4 = -1;
-        }
-    }
-}
-
-void fn_8022F294(int key)
-{
-    int index;
-    int id;
-    int old;
-
-    if (key != -1) {
-        index = fn_8022F384(key);
-        if (index != -1) {
-            TDbExtLoadFromResource(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
-            id = fn_8022EFDC();
-            old = fn_8022F478(key);
-            fn_801FCE10(0, lbl_802B5D64, fn_8022F3D4(fn_8022F4BC()), id);
-            lbl_802FB300[index].mUnknown0 = id;
-            if (old == key) {
-                fn_8022F478(id);
-            } else {
-                fn_8022F478(old);
-            }
-        }
-    }
-}
-
-int fn_8022F34C(void)
-{
-    return (signed char)lbl_803EC0D8;
-}
-
-int fn_8022F358(int index)
-{
-    int value = -1;
-    if (index < (signed char)lbl_803EC0D8) {
-        value = lbl_802FB300[index].mUnknown0;
-    }
-    return value;
-}
-
-int fn_8022F384(int key)
-{
-    signed char i;
-    for (i = 0; i < (signed char)lbl_803EC0D8; i++) {
-        if (key == lbl_802FB300[i].mUnknown0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-int fn_8022F3D4(int key)
-{
-    int value = -1;
-    if (key != -1) {
-        int index = fn_8022F384(key);
-        if (index != -1) {
-            value = lbl_802FB300[index].mUnknown4;
-        }
-    }
-    return value;
 }

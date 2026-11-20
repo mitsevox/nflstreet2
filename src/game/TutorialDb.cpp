@@ -8,8 +8,8 @@
 #include "game/fn_801FCE10.h"
 
 extern "C" {
-int fn_8022EF8C(int a, int tag);
-int fn_8022EFBC(int a, int tag);
+int DbFileTblLoad(int a, int tag);
+int DbFileTblDestroy(int a, int tag);
 int fn_8022F3D4(int a);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 int TutorialIsComplete(int id);
@@ -32,7 +32,7 @@ unsigned char TutorialDbOpenPlays(void)
     unsigned char result = 1;
 
     if (!_Tutorial_bPlaysOpen) {
-        if (fn_8022EF8C(0, 0x4C505554)) {
+        if (DbFileTblLoad(0, 0x4C505554)) {
             _Tutorial_bPlaysOpen = 0;
             result = 0;
         } else {
@@ -47,7 +47,7 @@ unsigned char TutorialDbOpenInfo(void)
     unsigned char result = 1;
 
     if (!_Tutorial_bInfoOpen) {
-        if (fn_8022EF8C(0, 0x464E4954)) {
+        if (DbFileTblLoad(0, 0x464E4954)) {
             _Tutorial_bInfoOpen = 0;
             result = 0;
         } else {
@@ -62,7 +62,7 @@ unsigned char TutorialDbCloseInfo(void)
     unsigned char result = 1;
 
     if (_Tutorial_bInfoOpen) {
-        result = fn_8022EFBC(0, 0x464E4954) == 0;
+        result = DbFileTblDestroy(0, 0x464E4954) == 0;
         _Tutorial_bInfoOpen = 0;
     }
     return result;
@@ -73,7 +73,7 @@ unsigned char TutorialDbClosePlays(void)
     unsigned char result = 1;
 
     if (_Tutorial_bPlaysOpen) {
-        result = fn_8022EFBC(0, 0x4C505554) == 0;
+        result = DbFileTblDestroy(0, 0x4C505554) == 0;
         _Tutorial_bPlaysOpen = 0;
     }
     return result;

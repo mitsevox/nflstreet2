@@ -102,7 +102,7 @@ Point_8017886C fn_80177FE0(void);
 float fn_80178A2C(void);
 int RoundToNearestInt(float value);
 unsigned int fn_8009D990(int index);
-int fn_8022C8F0(unsigned int low, unsigned int high);
+int DbUtilRandomRange(unsigned int low, unsigned int high);
 unsigned short GameTextPickRandomTeam(int type);
 unsigned char CurrentIdIsSet(void);
 unsigned short TeamRecordFindIndex(int team);
@@ -534,7 +534,7 @@ unsigned short GameTextPickRandomTeam(int type)
                              &cursor, &team, type);
     }
     if (status == 0) {
-        cursor.mUnknown4 = fn_8022C8F0(0, result.mUnknown0 - 1);
+        cursor.mUnknown4 = DbUtilRandomRange(0, result.mUnknown0 - 1);
         fn_801FCE10(0, "fetch from \x8a\n", &cursor);
     }
     if (cursor.mUnknown0 != 0) {

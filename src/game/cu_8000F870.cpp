@@ -237,7 +237,7 @@ int fn_802294F4(void);
 int fn_80229554(void);
 void fn_8022A490(int a);
 int fn_8022A508(int a, int b, int c, int d, int e);
-int fn_8022C8F0(unsigned int low, unsigned int high);
+int DbUtilRandomRange(unsigned int low, unsigned int high);
 void fn_8022DC7C(int a);
 void fn_8022DCB0(int a);
 void fn_8022DCE4(int a);
@@ -1606,7 +1606,7 @@ void fn_80011D9C(DbCursor *pObject, int side)
 {
     do {
         unsigned int i = 0;
-        unsigned int count = fn_8022C8F0(0, lbl_803EB978[side]);
+        unsigned int count = DbUtilRandomRange(0, lbl_803EB978[side]);
         while (i < count) {
             fn_80011CEC(pObject);
             if (!fn_80011FA0(side, fn_80083FBC(pObject))) {

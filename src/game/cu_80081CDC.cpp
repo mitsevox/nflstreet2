@@ -23,9 +23,9 @@ void SndgMusicPumpFrame(int a);
 int UserProfileGetSelected(unsigned char index);
 int toupper(int c);
 unsigned int fn_80229CFC(int category, int *pValues, int a);
-int fn_8022C8F0(unsigned int low, unsigned int high);
-int fn_8022EF8C(int a, int tag);
-int fn_8022EFBC(int a, int tag);
+int DbUtilRandomRange(unsigned int low, unsigned int high);
+int DbFileTblLoad(int a, int tag);
+int DbFileTblDestroy(int a, int tag);
 int fn_8022F358(int index);
 int fn_8022F3D4(int handle);
 
@@ -371,9 +371,9 @@ void fn_800828FC(void)
     QueryResult result;
 
     SndgMusicPumpFrame(0);
-    fn_8022EF8C(0, 0x4D4E4653);
+    DbFileTblLoad(0, 0x4D4E4653);
     SndgMusicPumpFrame(0);
-    fn_8022EF8C(0, 0x4D4E4C53);
+    DbFileTblLoad(0, 0x4D4E4C53);
     SndgMusicPumpFrame(0);
     lbl_8030BC88.mUnknown0 = 0;
     lbl_8030BC88.mUnknown4 = 0;
@@ -399,16 +399,16 @@ void fn_800829D8(void)
         fn_801FCFA0(&lbl_8030BC88);
     }
     SndgMusicPumpFrame(0);
-    fn_8022EFBC(0, 0x4D4E4653);
+    DbFileTblDestroy(0, 0x4D4E4653);
     SndgMusicPumpFrame(0);
-    fn_8022EFBC(0, 0x4D4E4C53);
+    DbFileTblDestroy(0, 0x4D4E4C53);
     SndgMusicPumpFrame(0);
     lbl_803EA7D8 = 0;
 }
 
 int fn_80082A64(int a, int b)
 {
-    return fn_8007FC70(a, fn_8022C8F0(0, 14), 0, b);
+    return fn_8007FC70(a, DbUtilRandomRange(0, 14), 0, b);
 }
 
 int fn_80082AB0(int a, int b, int c)

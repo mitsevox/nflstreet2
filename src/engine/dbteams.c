@@ -8,7 +8,7 @@
 #include "game/ResOpenDevice.h"
 #include <string.h>
 #include "engine/dbteams.h"
-#include "engine/fn_8022C938.h"
+#include "engine/dbutil.h"
 #include "engine/fn_801F9134.h"
 #include "engine/tdbiores.h"
 
@@ -21,14 +21,14 @@ static int _DbTeams_iDbId = -1;
 
 int DbTeamsInit(const char *pName)
 {
-    _DbTeams_pFileName = fn_8022C938(strlen(pName) + 1, 1);
+    _DbTeams_pFileName = DbUtilAlloc(strlen(pName) + 1, 1);
     strcpy(_DbTeams_pFileName, pName);
     return 0;
 }
 
 void DbTeamsShutdown(void)
 {
-    fn_8022C988(_DbTeams_pFileName);
+    DbUtilFree(_DbTeams_pFileName);
     _DbTeams_pFileName = 0;
 }
 

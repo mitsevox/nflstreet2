@@ -206,7 +206,7 @@ int fn_80229554(void);
 void fn_800828FC(void);
 void fn_800829D8(void);
 int fn_80082AE4(int a, int b);
-int fn_8022C8F0(unsigned int low, unsigned int high);
+int DbUtilRandomRange(unsigned int low, unsigned int high);
 int PlayerDbGetHairStyle(Object_8008044C *pObject);
 int PlayerDbGetPlht(Object_8008044C *pObject);
 int fn_80081E3C(Object_8008044C *pObject);
@@ -278,7 +278,7 @@ void StoryTeamCreatePlayer(int index, int value)
         fn_802329F0(&request);
     }
     fn_800828FC();
-    int k = fn_8022C8F0(0, 7);
+    int k = DbUtilRandomRange(0, 7);
     int id = fn_80082AE4(_StoryTeam_aPositions[k], value);
     fn_800829D8();
     if (!busy) fn_80229554();

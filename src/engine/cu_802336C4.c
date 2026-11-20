@@ -1,8 +1,9 @@
+/* Partial source for model, level-of-detail and render wrappers over the TM renderer, not yet cut into their files. */
+
 #include "engine/fn_801F8D60.h"
 #include "engine/tdbext.h"
-#include "engine/fn_8022C938.h"
+#include "engine/dbutil.h"
 #include "engine/fn_801F9134.h"
-/* Partial source for the engine range 0x8022F428-0x802355E4 (neutral file name). */
 
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXTev.h>
@@ -401,725 +402,264 @@ void fn_80234A94(Part_80234A30 *pPart, void *pRecord);
 void fn_80234B88(Part_80234A30 *pPart);
 void fn_80234DFC(int a, Sprite_80234DFC *pSprite, int c, int d, const char *pName, int e);
 
-int fn_8022F428(int key)
-{
-    unsigned char i = lbl_803EC0D8;
-
-    while (--i != 255) {
-        if (lbl_802FB300[i].mUnknown4 == key) {
-            return lbl_802FB300[i].mUnknown0;
-        }
-    }
-    return -1;
-}
-
-int fn_8022F478(int value)
-{
-    int old = lbl_803EC0D4;
-
-    lbl_803EC0D4 = value;
-    return old;
-}
-
-int fn_8022F488(int value)
-{
-    fn_8022F478(value);
-    return fn_8022F3D4(value);
-}
-
-int fn_8022F4BC(void)
-{
-    return lbl_803EC0D4;
-}
-
-int fn_8022F4C4(void)
-{
-    int err = 0;
-    unsigned int i;
-
-    for (i = 0; i <= 1 && (err = fn_801F8D60(lbl_803ED6E4[i], lbl_803EC0C8)) == 0; i++) {
-        err = TDbExtLoadFromResource(lbl_803ED6E4[i], lbl_803EC0CC, lbl_803EC0D0, 0);
-        if (err != 0) {
-            break;
-        }
-    }
-    return err;
-}
-
-int fn_8022F53C(int a)
-{
-    int key;
-    int err;
-
-    if (a == 0) {
-        err = fn_801FCE10(0, lbl_802B5D88, fn_8022F3D4(fn_8022F4BC()), &key);
-        if (key != fn_8022F4BC()) {
-            if (fn_8022F384(key) == -1) {
-                (lbl_802FB300 + fn_8022F384(fn_8022F4BC()))->mUnknown0 = key;
-                lbl_803EC0D4 = key;
-            } else {
-                err = 1;
-            }
-        }
-    } else {
-        err = 36;
-    }
-    return err;
-}
-
-int fn_8022F744(void)
-{
-    int err = 0;
-    unsigned int i;
-
-    for (i = 0; i <= 1; i++) {
-        err = fn_801F8EEC(lbl_803ED6E4[i]);
-        if (err != 0) {
-            break;
-        }
-    }
-    return err;
-}
-
-int fn_8022F794(int value, char *pName)
-{
-    int err = 0;
-    int old = fn_8022F478(value);
-
-    if (fn_8022F3D4(fn_8022F4BC()) != -1) {
-        err = fn_801FCE10(0, lbl_802B5DB0, fn_8022F3D4(fn_8022F4BC()), pName);
-    }
-    fn_8022F478(old);
-    return err;
-}
-
-unsigned short fn_8022F80C(void)
-{
-    unsigned short id;
-    Cache_8022F8A8 *pCache;
-
-    for (id = 0; id <= 0xFFFD; id++) {
-        for (pCache = lbl_803EC0E0; pCache != 0 && pCache->mUnknown0 != id; pCache = pCache->mpUnknown100) {
-        }
-        if (pCache == 0) {
-            return id;
-        }
-    }
-    return id;
-}
-
-Cache_8022F8A8 *fn_8022F858(unsigned short id)
-{
-    Cache_8022F8A8 *pCache;
-
-    for (pCache = lbl_803EC0E0; pCache != 0 && pCache->mUnknown0 != id; pCache = pCache->mpUnknown100) {
-    }
-    return pCache;
-}
-
-Cache_8022F8A8 *fn_8022F880(int key)
-{
-    Cache_8022F8A8 *pCache;
-
-    for (pCache = lbl_803EC0E0; pCache != 0 && pCache->mUnknown4 != key; pCache = pCache->mpUnknown100) {
-    }
-    return pCache;
-}
-
-int fn_8022FBAC(Cache_8022F8A8 *pCache)
-{
-    unsigned short i;
-
-    if (pCache->mUnknown36.mWord != 0) {
-        for (i = 0; i <= 1; i++) {
-            if ((pCache->mUnknown36.mBytes[i >> 3] & (1 << (i & 7))) == (1 << (i & 7))) {
-                fn_8022C988(pCache->mpUnknown12[i]);
-                fn_8022C988(pCache->mpUnknown20[i]);
-                fn_8022C988(pCache->mpUnknown28[i]);
-            }
-        }
-    }
-    if (pCache->mpUnknown96 != 0) {
-        pCache->mpUnknown96->mpUnknown100 = pCache->mpUnknown100;
-    }
-    if (pCache->mpUnknown100 != 0) {
-        pCache->mpUnknown100->mpUnknown96 = pCache->mpUnknown96;
-    }
-    if (lbl_803EC0E0 == pCache) {
-        lbl_803EC0E0 = pCache->mpUnknown100;
-    }
-    fn_8022C988(pCache);
-    return 0;
-}
-
-int fn_802303A0(int index)
-{
-    return lbl_802FB310[index].mUnknown0;
-}
-
-int fn_802303B4(int key, unsigned short *pId)
-{
-    Cache_8022F8A8 *pCache;
-    int err = fn_8022F8A8(key, &pCache);
-
-    if (err == 0) {
-        *pId = pCache->mUnknown0;
-    } else {
-        *pId = 0xFFFF;
-    }
-    return err;
-}
-
-int fn_80230CC8(unsigned short id)
-{
-    return fn_8022FBAC(fn_8022F858(id));
-}
-
-int fn_80230CEC(int a, int b, int c, int key, int e, int f)
-{
-    unsigned short id;
-    int err = fn_802303B4(key, &id);
-
-    if (err == 0) {
-        err = fn_80230400(id, a, a, b, c, e, f);
-    }
-    if (id != 0xFFFF) {
-        if (err == 0) {
-            err = fn_80230CC8(id);
-        } else {
-            fn_80230CC8(id);
-        }
-    }
-    return err;
-}
-
-int fn_802311C8(int handle)
-{
-    lbl_803EC0E8 = handle;
-    lbl_803EC0E4 = 0x4F434350;
-    return fn_801FA68C(fn_8023123C, 0x4F434350);
-}
-
-void fn_80231208(void)
-{
-    lbl_803EC0E8 = -1;
-    fn_801FA740(lbl_803EC0E4);
-    lbl_803EC0E4 = 0;
-}
-
-int fn_80231A84(void)
-{
-    return 3;
-}
-
-int fn_80231A8C(const char *pWhere, int b, int c, int d, int e, struct QueryCursor *pCursor)
-{
-    int table;
-
-    fn_801F9980(lbl_803EC0E8, &table);
-    return fn_801FCE10(0, lbl_802B6520, pCursor, table, pWhere, c, d, e);
-}
-
-int fn_802328A8(void)
-{
-    int err;
-
-    if ((err = fn_8022EA74()) != 0) {
-        return err;
-    }
-    if ((err = fn_8022942C()) != 0) {
-        return err;
-    }
-    if ((err = fn_802293A8()) != 0) {
-        return err;
-    }
-    if ((err = fn_8022E9A4()) != 0) {
-        return err;
-    }
-    if ((err = fn_80229E88()) != 0) {
-        return err;
-    }
-    if ((err = fn_8022B02C(0)) != 0) {
-        return err;
-    }
-    if ((err = fn_8022C214(0)) != 0) {
-        return err;
-    }
-    if ((err = fn_802299FC()) != 0) {
-        return err;
-    }
-    if ((err = fn_8022D6E8()) != 0) {
-        return err;
-    }
-    if ((err = fn_8022D154()) != 0) {
-        return err;
-    }
-    return fn_8022DA90(lbl_802FB398);
-}
-
-void fn_80232950(void)
-{
-    fn_8022DB08();
-    fn_8022D1B8();
-    fn_8022D6F0();
-    fn_80229A70();
-    fn_8022C3C8();
-    fn_8022B200();
-    fn_8022A304();
-    fn_8022E9C4();
-    fn_802293B0();
-    fn_80229434();
-    fn_8022EA7C();
-}
-
-int fn_80232998(void)
-{
-    return fn_801F9430(0x454D4147, lbl_802FB3B0, lbl_802FB3A4);
-}
-
-int fn_802329D0(void)
-{
-    return fn_801F9574();
-}
-
-int fn_802329F0(struct Request_802329F0 *p)
-{
-    int result;
-    fn_802294D8(&lbl_802FB38C);
-    result = fn_80233588((Block_80233588 *)&p->mSize);
-    if (result == 0) {
-        result = fn_80232998();
-        if (result == 0) {
-            result = fn_802336BC();
-            if (result == 0) {
-                result = fn_80230CEC(1023, 0x54415453, 1, 0x454D4147, 0x04000000, 0);
-                if (result == 0) {
-                    result = fn_802294FC(&p->mMode);
-                    if (result == 0) {
-                        result = fn_802328A8();
-                        if (result == 0) {
-                            result = fn_80232DE0();
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return result;
-}
-
-int fn_80232A98(void)
-{
-    int err;
-
-    fn_80232950();
-    err = fn_802329D0();
-    if (fn_801F9014(0x454D4147) == 0) {
-        if (err == 0) {
-            err = fn_80233694();
-        } else {
-            fn_80233694();
-        }
-    }
-    return err;
-}
-
-int fn_80232AF8(void **ppData, void *p)
-{
-    Funcs_802FB3BC funcs;
-    int mode;
-    int err;
-
-    fn_80232950();
-    if ((err = fn_80233604(ppData, p)) != 0) {
-        return err;
-    }
-    if ((err = fn_802328A8()) != 0) {
-        return err;
-    }
-    mode = 0;
-    if ((err = fn_801FCE10(0, lbl_802B6E10, &mode)) != 0) {
-        return err;
-    }
-    fn_802334F0(mode, &funcs);
-    fn_80229718(&funcs);
-    return fn_80229760(ppData, p);
-}
-
-int fn_80232B8C(int a, int b)
-{
-    struct QueryCursor cursor;
-    int mode;
-    int id;
-    int err = fn_801FCE10(0, lbl_802B6E10, &mode);
-
-    if (err == 0) {
-        if (mode != 2) {
-            cursor.mUnknown0 = 0;
-            cursor.mUnknown4 = 0;
-            cursor.mUnknown8 = -1;
-            cursor.mUnknown12 = 0;
-            err = fn_801FCE10(0, lbl_802B6E34, &cursor, 1);
-            if (err == 0) {
-                do {
-                    err = fn_801FCE10(0, lbl_802B6E74, &cursor, &id);
-                    if (err != 0) {
-                        break;
-                    }
-                    err = fn_801FCE10(0, lbl_802B6E90, id);
-                } while (err == 0);
-            }
-            if (QUERY_STATUS_ACCEPTED(err) == 1) {
-                if (cursor.mUnknown0 != 0) {
-                    err = fn_801FCFA0(&cursor);
-                } else {
-                    err = 0;
-                }
-            } else if (cursor.mUnknown0 != 0) {
-                fn_801FCFA0(&cursor);
-            }
-        }
-        if (err == 0) {
-            cursor.mUnknown0 = 0;
-            cursor.mUnknown4 = 0;
-            cursor.mUnknown8 = -1;
-            cursor.mUnknown12 = 0;
-            err = fn_801FCE10(0, lbl_802B6EA0, &cursor, 0);
-            if (err == 0) {
-                do {
-                    err = fn_801FCE10(0, lbl_802B6E74, &cursor, &id);
-                    if (err != 0) {
-                        break;
-                    }
-                    if (fn_801F9A90(0, id) == 0) {
-                        err = fn_801F9D0C(0, id, 0);
-                    }
-                } while (err == 0);
-            }
-            if (QUERY_STATUS_ACCEPTED(err) == 1) {
-                if (cursor.mUnknown0 != 0) {
-                    err = fn_801FCFA0(&cursor);
-                } else {
-                    err = 0;
-                }
-            } else if (cursor.mUnknown0 != 0) {
-                fn_801FCFA0(&cursor);
-            }
-            if (err == 0) {
-                err = fn_80229788(a, b);
-            }
-        }
-    }
-    return err;
-}
-
-int fn_80232DE0(void)
-{
-    fn_80229718(&lbl_802FB3BC);
-    return fn_801FCE10(0, lbl_802B6EE0, 0);
-}
-
-int fn_80232E20(void)
-{
-    int err = fn_801FCE10(0, lbl_802B6F00, 0, 4);
-
-    if (err == 0) {
-        fn_80229744();
-    }
-    return err;
-}
-
-int fn_80232E70(void)
-{
-    return 0;
-}
-
-int fn_80232E78(void)
-{
-    return 0;
-}
-
-int fn_80232E80(void)
-{
-    int err = fn_80232E20();
-
-    if (err == 0) {
-        err = fn_80232EB4();
-    }
-    return err;
-}
-
-int fn_80232EAC(void)
-{
-    return 0;
-}
-
-int fn_80232EB4(void)
-{
-    fn_80229718(&lbl_802FB3D0);
-    return fn_801FCE10(0, lbl_802B6EE0, 1);
-}
-
-int fn_80232EF4(void)
-{
-    int err = fn_801FCE10(0, lbl_802B6F00, 1, 4);
-
-    if (err == 0) {
-        fn_80229744();
-    }
-    return err;
-}
-
-int fn_80232F44(void)
-{
-    return 0;
-}
-
-int fn_80232F4C(void)
-{
-    return 0;
-}
-
-int fn_80232F54(void)
-{
-    return fn_80232EF4();
-}
-
-int fn_80232F74(void)
-{
-    int mode;
-    int err = fn_801FCE10(0, lbl_802B6F30, &mode);
-
-    if (err == 0) {
-        if (mode == 4) {
-            err = fn_80229554();
-        } else {
-            err = fn_80232EF4();
-            if (err == 0) {
-                err = fn_80232DE0();
-            }
-        }
-    }
-    return err;
-}
-
-int fn_80232FD4(int *pRecord0, int *pRecord1)
-{
-    unsigned char flag;
-    unsigned char result;
-    int id0;
-    int id1;
-    unsigned int i;
-    int err;
-
-    fn_80229718(&lbl_802FB3E4);
-    err = fn_801FCE10(0, lbl_802B6F54, &flag);
-    if (err == 0) {
-        if (flag == 0) {
-            err = fn_8022C518(0x07000000);
-            if (err == 0) {
-                err = fn_8022C410(0x04000000);
-                if (err == 0) {
-                    err = fn_802296B4(0x07000000, 0x03000000);
-                    if (err == 0) {
-                        err = fn_8022E9E4();
-                    }
-                }
-            }
-            id0 = 0;
-            id1 = 0;
-            if (err == 0 && (err = fn_801FCE10(0, lbl_802B6F78, &id0, 0)) == 0
-                && (err = fn_801FCE10(0, lbl_802B6F78, &id1, 1)) == 0
-                && (err = fn_8022DBF4(id0)) == 0 && (err = fn_8022DC38(id1)) == 0) {
-                for (i = 0; i <= 13; i++) {
-                    fn_801FCE10(0, lbl_802B6FB0, &pRecord0[i], pRecord0[i], id0);
-                }
-                for (i = 0; i <= 13; i++) {
-                    fn_801FCE10(0, lbl_802B6FB0, &pRecord1[i], pRecord1[i], id1);
-                }
-                if (err == 0) {
-                    err = fn_8022E28C(flag, 0, &result, pRecord0, pRecord1);
-                }
-            }
-        }
-        if (err == 0) {
-            err = fn_801FCE10(0, lbl_802B6EE0, 2);
-        }
-    }
-    return err;
-}
-
-int fn_802331BC(void)
-{
-    struct QueryCursor cursor;
-    int id;
-    int err = fn_801FCE10(0, lbl_802B6FF4, &cursor, 6, 5);
-
-    if (err == 0) {
-        for (;;) {
-            err = fn_801FCE10(0, lbl_802B7050, &cursor, &id);
-            if (err != 0) {
-                break;
-            }
-            err = fn_801FCE10(0, lbl_802B706C, id);
-            if (err != 0) {
-                break;
-            }
-        }
-    }
-    if (QUERY_STATUS_ACCEPTED(err) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            err = fn_801FCFA0(&cursor);
-        } else {
-            err = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
-    }
-    if (err == 0) {
-        err = fn_801FCE10(0, lbl_802B709C, 6, 5);
-        if (QUERY_STATUS_ACCEPTED(err) == 1) {
-            err = 0;
-        }
-        if (err == 0) {
-            err = fn_801FCE10(0, lbl_802B6F00, 2, 4);
-            if (err == 0) {
-                fn_80229744();
-            }
-        }
-    }
-    return err;
-}
-
-int fn_80233344(void)
-{
-    return 0;
-}
-
-int fn_8023334C(int a, int b)
-{
-    int err = fn_801FCE10(0, lbl_802B6F00, 4, 1);
-
-    if (err == 0) {
-        err = fn_801FCE10(0, lbl_802B70DC, 1);
-    }
-    if (err == 0) {
-        err = fn_80233660(a, b);
-    }
-    if (err == 0) {
-        err = fn_801FCE10(0, lbl_802B6F00, 1, 2);
-    } else {
-        fn_801FCE10(0, lbl_802B6F00, 1, 2);
-    }
-    if (err == 0) {
-        err = fn_801FCE10(0, lbl_802B70DC, 0);
-    } else {
-        fn_801FCE10(0, lbl_802B70DC, 0);
-    }
-    return err;
-}
-
-int fn_80233454(void)
-{
-    int mode;
-    int err = fn_801FCE10(0, lbl_802B70FC, &mode);
-
-    if (err == 0) {
-        if (mode == 6) {
-            err = fn_8022E484();
-        }
-        if (err == 0) {
-            err = fn_8022DB20();
-            if (err == 0) {
-                err = fn_802331BC();
-                if (err == 0) {
-                    err = fn_80232DE0();
-                }
-            }
-        }
-    }
-    return err;
-}
-
-int fn_802334C4(void)
-{
-    int err = fn_802331BC();
-
-    if (err == 0) {
-        err = fn_80232DE0();
-    }
-    return err;
-}
-
-void fn_802334F0(int mode, Funcs_802FB3BC *pFuncs)
-{
-    switch (mode) {
-    case 0:
-        *pFuncs = lbl_802FB3BC;
-        break;
-    case 1:
-        *pFuncs = lbl_802FB3D0;
-        break;
-    case 2:
-        *pFuncs = lbl_802FB3E4;
-        break;
-    }
-}
-
-int fn_80233568(int a, int b, unsigned char *pDone)
-{
-    *pDone = 1;
-    return 0;
-}
-
-int fn_80233578(void)
-{
-    return 0;
-}
-
-int fn_80233580(void)
-{
-    return 0;
-}
-
-int fn_80233588(Block_80233588 *p)
-{
-    int err = fn_801F8D60(0x454D4147, p->mUnknown0);
-
-    if (err != 0) {
-        return err;
-    }
-    err = TDbExtLoadFromResource(0x454D4147, p->mpUnknown4, p->mUnknown8, 3);
-    if (err != 0) {
-        return err;
-    }
-    return fn_8022ED50(0x454D4147, 0x4C424154, 0x534C4654);
-}
-
-int fn_80233604(void **ppData, void *p)
-{
-    int err = fn_801F9134(0x454D4147, (int)ppData, 3, (int)p);
-
-    if (err != 0) {
-        return err;
-    }
-    return fn_8022ED50(0x454D4147, 0x4C424154, 0x534C4654);
-}
-
-int fn_80233660(int a, int b)
-{
-    return fn_801F91AC(0x454D4147, a, b);
-}
-
-int fn_80233694(void)
-{
-    return fn_801F8EEC(0x454D4147);
-}
-
-int fn_802336BC(void)
-{
-    return 0;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* prototypes of the functions defined in the original src/engine/cu_8022F428.c */
+int fn_8022F428(int key);
+int fn_8022F478(int value);
+int fn_8022F488(int value);
+int fn_8022F4BC(void);
+int fn_8022F4C4(void);
+int fn_8022F53C(int a);
+int fn_8022F744(void);
+int fn_8022F794(int value, char *pName);
+unsigned short fn_8022F80C(void);
+Cache_8022F8A8 *fn_8022F858(unsigned short id);
+Cache_8022F8A8 *fn_8022F880(int key);
+int fn_8022FBAC(Cache_8022F8A8 *pCache);
+int fn_802303A0(int index);
+int fn_802303B4(int key, unsigned short *pId);
+int fn_80230CC8(unsigned short id);
+int fn_80230CEC(int a, int b, int c, int key, int e, int f);
+int fn_802311C8(int handle);
+void fn_80231208(void);
+int fn_80231A84(void);
+int fn_80231A8C(const char *pWhere, int b, int c, int d, int e, struct QueryCursor *pCursor);
+int fn_802328A8(void);
+void fn_80232950(void);
+int fn_80232998(void);
+int fn_802329D0(void);
+int fn_802329F0(struct Request_802329F0 *p);
+int fn_80232A98(void);
+int fn_80232AF8(void **ppData, void *p);
+int fn_80232B8C(int a, int b);
+int fn_80232DE0(void);
+int fn_80232E20(void);
+int fn_80232E70(void);
+int fn_80232E78(void);
+int fn_80232E80(void);
+int fn_80232EAC(void);
+int fn_80232EB4(void);
+int fn_80232EF4(void);
+int fn_80232F44(void);
+int fn_80232F4C(void);
+int fn_80232F54(void);
+int fn_80232F74(void);
+int fn_80232FD4(int *pRecord0, int *pRecord1);
+int fn_802331BC(void);
+int fn_80233344(void);
+int fn_8023334C(int a, int b);
+int fn_80233454(void);
+int fn_802334C4(void);
+void fn_802334F0(int mode, Funcs_802FB3BC *pFuncs);
+int fn_80233568(int a, int b, unsigned char *pDone);
+int fn_80233578(void);
+int fn_80233580(void);
+int fn_80233588(Block_80233588 *p);
+int fn_80233604(void **ppData, void *p);
+int fn_80233660(int a, int b);
+int fn_80233694(void);
+int fn_802336BC(void);
+void fn_802336C4(Block_802336C4 *pBlock, void *pSource, int a);
+void fn_80233728(Block_802336C4 *pBlock);
+void fn_80233760(Block_802336C4 *pBlock, short *pValues, int count);
+void fn_802337D4(Model_802337D4 *pModel, Joints_802337D4 *pJoints, void *pPose, unsigned int mask);
+void fn_80233850(Model_802337D4 *pModel, Joints_802337D4 *pJoints, void *pPose, unsigned int mask, unsigned char *pFlags);
+void fn_80233BB8(void *pJoints, int a, int b);
+void fn_80233BD8(void *pJoints);
+void fn_80233BDC(void *pJoints, void *pSkeleton);
+void fn_80233BE0(void);
+int fn_80233BE4(short *pOut, Model_80233BE4 *pModel, Values_80233C7C *pValues);
+void fn_80233C7C(Values_80233C7C *pValues);
+void fn_80233CBC(void *p, int index, int value);
+void fn_80233CF0(ModelLod_802DF190 *pLod, void *pData, void *p);
+void fn_80233D64(Object_80233EAC *pObject, ModelLod_802DF190 *pLods, const char *pName, int a, void *pData, void *p);
+void fn_80233EAC(Object_80233EAC *pObject, ModelLod_802DF190 *pLods, const char *pName, int a, void *pArchive, AnimSkeleton_t *pSkeleton, void **ppData, int load);
+void fn_80233FCC(Object_80233EAC *pObject);
+float fn_80234070(Box_80234070 *pBox);
+void fn_80234094(Box_80234070 *pBox);
+int fn_80234098(Object_80233EAC *pObject, float value);
+int fn_80234144(Object_80233EAC *pObject, void *pBox);
+Object_8023417C *fn_8023417C(Object_80233EAC *pObject, int index);
+void fn_802341AC(void);
+void fn_802341B8(void);
+void fn_802341C4(void *p);
+void fn_802341E8(void *p);
+void fn_8023424C(Instance_8023424C *p, int *pCounts, Box_80234070 *pClip);
+int fn_80234394(Instance_8023424C **ppList, unsigned int count, int key);
+void fn_802345BC(void *p);
+void fn_802345C4(void *pSource, int count);
+Desc_802345F8 *fn_802345F8(Desc_802345F8 *pDescs, const char *pName);
+void fn_8023465C(Object_8023465C *pObject, Model_8023465C *pModel, Desc_802345F8 *pDescs);
+void fn_8023472C(void *p, int a, int b, Desc_802345F8 *pA, Desc_802345F8 *pB, int c);
+void fn_802347EC(void *pData, Desc_802345F8 *pDesc, int a, int b);
+void fn_80234844(Desc_802345F8 *pDesc);
+void fn_8023488C(void *p, int a);
+void fn_802348AC(void *p);
+void fn_802348CC(int a);
+void fn_80234908(void);
+void fn_80234994(Array_8023491C *pArray);
+void fn_802349B8(Array_8023491C *pArray, int value);
+void fn_80234A14(Part_80234A30 *pPart, int mask);
+void fn_80234A30(Part_80234A30 *pPart, int a);
+void fn_80234A90(Part_80234A30 *pPart);
+void fn_80234A94(Part_80234A30 *pPart, void *pRecord);
+void fn_80234AD8(Part_80234A30 *pPart, Block_802336C4 *pBlock);
+void fn_80234AFC(void *p);
+void fn_80234B1C(void *p);
+void fn_80234B20(Object_80234B20 *pObject, Mtx44 a, Mtx44 b);
+int fn_80234B80(void *p);
+void fn_80234B88(Part_80234A30 *pPart);
+void fn_80234BF4(int a, Part_80234A30 *pPart, int mode);
+void fn_80234CA4(Part_80234A30 *pPart, void *p);
+void fn_80234CAC(Part_80234A30 *pPart, void *p);
+void fn_80234CF0(Part_80234A30 *pPart, int index, void *p);
+void fn_80234D00(void *pIn, void *pOut);
+unsigned int fn_80234D4C(float *pBox, void *m, void *p, void *q);
+void fn_80234DC0(void *p, int a);
+void fn_80234DC4(void *p, int a);
+void fn_80234DC8(void *p, unsigned int a);
+void fn_80234DCC(int a, Sprite_80234DFC *pSprite, const char *pName, int b);
+void fn_80234DFC(int a, Sprite_80234DFC *pSprite, int c, int d, const char *pName, int e);
+void fn_80234EA0(Sprite_80234DFC *pSprite, int keep);
+void fn_80234EEC(Holder_80234EEC *pHolder, int index, void *pData, unsigned char sourceIndex);
+void fn_80234F74(Sprite_80234DFC *pSprite, int index, void *pData, unsigned char sourceIndex, int offset);
+void fn_80235328(Owner_80235328 *pOwner, int key);
+void fn_802353CC(void *p);
+void fn_802353D0(void *p);
+void fn_802353D4(Object_80235588 *p, int flags);
+void fn_802353D8(Object_80235588 *p, int flags);
+void fn_802353E8(Object_80235588 *p, int flags);
+void fn_802353F8(Object_80235588 *p, int flags);
+void fn_80235510(Object_80235588 *p, int mode);
+void fn_80235588(Object_80235588 *p, int a);
 
 void fn_802336C4(Block_802336C4 *pBlock, void *pSource, int a)
 {

@@ -136,8 +136,8 @@ void EditMenuHidePlayers(void);
 int EditMenuGetMode(void);
 int EditMenuIsStoryTeam(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-int fn_8022EF8C(int a, int tag);
-int fn_8022EFBC(int a, int tag);
+int DbFileTblLoad(int a, int tag);
+int DbFileTblDestroy(int a, int tag);
 
 int CreatePlayerGetPoints(void);
 }
@@ -2020,7 +2020,7 @@ static void _CreatePlayerOpen()
         if (EditMenuGetMode() != 3) {
             _CreatePlayer_iPlayerId = 0;
         }
-        if (fn_8022EF8C(0, 0x434C4B53) == 0) {
+        if (DbFileTblLoad(0, 0x434C4B53) == 0) {
             _CreatePlayer_bSkillTable = 1;
             _CreatePlayer_aSkillCosts[0] = 0;
             _CreatePlayer_iSkillGroup = 15;
@@ -2035,7 +2035,7 @@ static void _CreatePlayerClose()
     HairListClose(&_CreatePlayer_sHairCursor);
     PoseTableClose(&_CreatePlayer_sPoseCursor);
     if (_CreatePlayer_bSkillTable) {
-        fn_8022EFBC(0, 0x434C4B53);
+        DbFileTblDestroy(0, 0x434C4B53);
         _CreatePlayer_bSkillTable = 0;
     }
     _CreatePlayer_iPlayerId = 0x7FFF;

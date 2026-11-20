@@ -77,13 +77,13 @@ void TDbExtInit(MemPoolDesc_t *pRecord);
 void TDbExtShutdown(void);
 int fn_80229470(void);
 void fn_80229494(void);
-void fn_8022C930(int a);
+void DbUtilSetHeap(int a);
 int fn_8022EA80(int a, const char *pName, int b);
 void fn_8022EAD8(void);
 int fn_8022EBF0(int a, const char *pName, int b);
 void fn_8022EC48(void);
-int fn_8022EF14(const char *pName);
-void fn_8022EF60(void);
+int DbFileInit(const char *pName);
+void DbFileShutdown(void);
 int fn_8022F028(int a, const char *pName, int b);
 void fn_8022F094(void);
 int fn_8022F4C4(void);
@@ -195,7 +195,7 @@ int Db::Init()
     MemPoolDesc_t *record = MemPoolGetDesc(2);
     DbInitDesc_t desc;
 
-    fn_8022C930(32);
+    DbUtilSetHeap(32);
     TDbExtInit(record);
     fn_801F8A0C(&desc);
     desc.mUnknown0 = record->mUnknown10;
@@ -232,7 +232,7 @@ int DbGame::Init()
     DbTatsInit(0x96000, lbl_802EBE24, 2);
     DbTatsLoad();
     fn_8022EBF0(0x96000, lbl_802EBE24, 2);
-    fn_8022EF14(lbl_802EBE34);
+    DbFileInit(lbl_802EBE34);
     fn_8022F028(0x3000, lbl_802EBE24, 5);
     fn_8022F4C4();
     DbTeamsInit(lbl_802EBE40);
@@ -249,7 +249,7 @@ int DbGame::Shutdown()
     DbTeamsShutdown();
     fn_8022F744();
     fn_8022F094();
-    fn_8022EF60();
+    DbFileShutdown();
     fn_8022EC48();
     DbTatsUnload();
     DbTatsShutdown();

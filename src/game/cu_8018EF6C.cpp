@@ -2,8 +2,8 @@
 #include "game/fn_801FCE10.h"
 
 extern "C" {
-int fn_8022EF8C(int a, int tag);
-int fn_8022EFBC(int a, int tag);
+int DbFileTblLoad(int a, int tag);
+int DbFileTblDestroy(int a, int tag);
 int fn_8022F3D4(int a);
 int fn_8022F4BC(void);
 int fn_80237390(int stream, int low, int high);
@@ -19,7 +19,7 @@ void fn_8018EF6C(int key)
     int value = 9;
     int lglt;
 
-    fn_8022EF8C(0, 0x43544E52);
+    DbFileTblLoad(0, 0x43544E52);
     fn_801FCE10(0, "select count(*) into \x82 from 'CTNR'\n", &count);
     int *pOrder = (int *)fn_801D2B7C(count * 4, 0, 0);
     for (int i = 0; i < count; i++) pOrder[i] = i;
@@ -56,6 +56,6 @@ void fn_8018EF6C(int key)
     }
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
     fn_801D2BD0(pOrder);
-    fn_8022EFBC(0, 0x43544E52);
+    DbFileTblDestroy(0, 0x43544E52);
 }
 }

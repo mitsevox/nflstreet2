@@ -15471,6 +15471,44 @@
       ]
     },
     {
+      "source": "src/engine/dbutil.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8022C894-0x8022C9A8 (src/engine/dbutil.c), its six function/name rows, the .sdata data row 0x803EC040-0x803EC048 and the engine_c compiler row of src/engine/cu_80229270.c it was split from. Complete source file linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022C894",
+          "end": "0x8022C9A8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC040",
+          "end": "0x803EC048"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbfile.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8022EF14-0x8022EFDC (src/engine/dbfile.c), its four function/name rows, the .sdata data row 0x803EC0C0-0x803EC0C4 and its engine_c compiler row. Complete source file linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022EF14",
+          "end": "0x8022EFDC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC0C0",
+          "end": "0x803EC0C4"
+        }
+      ]
+    },
+    {
       "source": "src/engine/dbtats.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80228F78-0x80229084, four function/name rows, complete native .sdata row 0x803EBFB8-0x803EBFC4 and canonical declaration/source-form row. Complete source file linked.",

@@ -32,13 +32,13 @@ int UIGLibraryUnLoadItem(void *pObject, int a, int b);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
-int fn_8022C8F0(unsigned int low, unsigned int high);
+int DbUtilRandomRange(unsigned int low, unsigned int high);
 void fn_8022DC7C(int a);
 void fn_8022DCB0(int a);
 void fn_8022DCE4(int a);
 void fn_8022DD18(int a);
-int fn_8022EF8C(int a, int tag);
-int fn_8022EFBC(int a, int tag);
+int DbFileTblLoad(int a, int tag);
+int DbFileTblDestroy(int a, int tag);
 int fn_80237390(int stream, int low, int high);
 }
 
@@ -534,7 +534,7 @@ int fn_8008454C(int type, int logo, const char *pName)
     }
     values[0] += 45;
     if (values[0] < 46 || values[0] > 132) {
-        values[0] = fn_8022C8F0(46, 133);
+        values[0] = DbUtilRandomRange(46, 133);
     }
     id = fn_800844B8(name, type, values[0]);
     fn_801FCE10(0, "use 'TATS' update 'MAET' set '1CMT' = \x85 and '2CMT' = \x85 and '3CMT' = \x85 where 'DIGT' = \x85\n",
@@ -568,7 +568,7 @@ void fn_800846F4(int logo, char *pName, int size)
 
     if (fn_801F9A90(0, 0x43544E52)) {
         flag = 1;
-        fn_8022EF8C(0, 0x43544E52);
+        DbFileTblLoad(0, 0x43544E52);
     }
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
@@ -586,7 +586,7 @@ void fn_800846F4(int logo, char *pName, int size)
         fn_801FCFA0(&cursor);
     }
     if (flag) {
-        fn_8022EFBC(0, 0x43544E52);
+        DbFileTblDestroy(0, 0x43544E52);
     }
 }
 
