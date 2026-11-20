@@ -7,7 +7,7 @@
 #include "engine/slinklst.h"
 #include "engine/cu_802714A8.h"
 #include "engine/sndvoice.h"
-#include "engine/sndbank.h"
+#include "engine/sndsample.h"
 
 /* One queued stream request: linked on its channel's request list. */
 typedef struct SndStreamRequest_t {

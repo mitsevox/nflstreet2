@@ -233,7 +233,7 @@ __ashrdi3 (DItype u, word_type b)
 
 #define CLZ_TAB __clz_tab_divdi3
 #define UDIVMODDI4 __udivmoddi4_divdi3
-#include "cu_8025E148_udivmoddi4.inc"
+#include "engine/libgcc2_udivmoddi4.h"
 #undef CLZ_TAB
 #undef UDIVMODDI4
 
@@ -353,7 +353,7 @@ __lshrdi3 (DItype u, word_type b)
 
 #define CLZ_TAB __clz_tab_moddi3
 #define UDIVMODDI4 __udivmoddi4_moddi3
-#include "cu_8025E148_udivmoddi4.inc"
+#include "engine/libgcc2_udivmoddi4.h"
 #undef CLZ_TAB
 #undef UDIVMODDI4
 
@@ -388,7 +388,7 @@ __pure_virtual (void)
 
 #define CLZ_TAB __clz_tab_udivdi3
 #define UDIVMODDI4 __udivmoddi4_udivdi3
-#include "cu_8025E148_udivmoddi4.inc"
+#include "engine/libgcc2_udivmoddi4.h"
 #undef CLZ_TAB
 #undef UDIVMODDI4
 
@@ -400,7 +400,7 @@ __udivdi3 (UDItype n, UDItype d)
 
 #define CLZ_TAB __clz_tab_umoddi3
 #define UDIVMODDI4 __udivmoddi4_umoddi3
-#include "cu_8025E148_udivmoddi4.inc"
+#include "engine/libgcc2_udivmoddi4.h"
 #undef CLZ_TAB
 #undef UDIVMODDI4
 
