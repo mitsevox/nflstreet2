@@ -429,13 +429,16 @@ extern "C" int fn_800E0AD8(Object_80039F5C *p)
     ++pBlock->mUnknown0;
     fn_800B8344(p);
     if (!fn_8009A68C(p)) return 1;
+    Input_800B6D34 input;
     unsigned char index;
     int handle;
     fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &index, &handle);
     if (p->mFlags & 0x4000) {
-        Input_800B6D34 input;
         fn_800B6D34(p, &input);
-        pBlock->mUnknown29 = (input.mUnknown96 & 0x11) != 0;
+        if ((input.mUnknown96 & 1) || (input.mUnknown96 & 0x10))
+            pBlock->mUnknown29 = 1;
+        else
+            pBlock->mUnknown29 = 0;
     }
     float time = fn_8009A270(handle);
     if (--pBlock->mUnknown24 >= 0) {
@@ -447,18 +450,18 @@ extern "C" int fn_800E0AD8(Object_80039F5C *p)
         }
     }
     if (!pBlock->mUnknown2) {
-        if (!(p->mFlags & 4) && !((float)pBlock->mUnknown0 <= time - 90.0f) &&
-            !((float)pBlock->mUnknown0 >= time) && p->mUnknown16 != 0 && p->mUnknown16 != 4) {
+        if (!(p->mFlags & 4) && !(pBlock->mUnknown0 <= time - 90.0f) &&
+            !(pBlock->mUnknown0 >= time) && p->mUnknown16 != 0 && p->mUnknown16 != 4) {
             *fn_8009CC2C(p, fn_800E0818, 15, 2) = index;
         }
         pBlock->mUnknown2 = 1;
-    } else if ((p->mFlags & 4) || !((float)pBlock->mUnknown0 <= time)) {
+    } else if ((p->mFlags & 4) || !(pBlock->mUnknown0 <= time)) {
         fn_8009CE88(p, &p->mUnknown16, 8);
     }
-    if (!((float)pBlock->mUnknown0 <= time - 30.0f)) PlyrPoseDelayBlink(p->mpUnknown4);
+    if (!(pBlock->mUnknown0 <= time - 30.0f)) PlyrPoseDelayBlink(p->mpUnknown4);
     Ball_t *pBall = BallGet(index);
     unsigned short key = fn_801BE648(p->mpUnknown792);
-    if (BallGetHolder(pBall) && BallGetHolder(pBall) != p && !fn_8009A68C(p) && key != 70) return 1;
+    if (BallGetHolder(pBall) && p != BallGetHolder(pBall) && !fn_8009A68C(p) && key != 70) return 1;
     if (p->mFlags & 1) {
         p->mFlags &= ~1;
         if (fn_800C4B6C(p)) return 1;
@@ -480,8 +483,8 @@ extern "C" int fn_800E0AD8(Object_80039F5C *p)
             return 1;
         } else {
             p->mUnknown512.mUnknown14 = 1;
-            p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
             p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+            p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
             p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
             fn_8009A260(p);
             return 1;
@@ -761,9 +764,17 @@ extern "C" int fn_800E1870(Object_80039F5C *p)
     return result;
 }
 
+// FAKEMATCH: stand-in for stripped debug code that named the two linebacker slots; the empty inline
+// compiles to nothing but keeps the "LB_L"/"LB_R" literals at 0x8029DA9C/0x8029DAA4 in the pool.
+static inline void _PlayerActionDebugSlot(Object_80039F5C *, const char *)
+{
+}
+
 extern "C" void fn_800E1954(Object_80039F5C *p)
 {
-    Point_8017886C marked = {0.0f, 0.0f};
+    Point_8017886C marked;
+    marked.mY = 0.0f;
+    marked.mX = 0.0f;
     Record_8011F4E0 *pTactics = fn_8011F4E0();
     Point_8017886C goal = fn_80177FFC(p->mIdBytes[2]);
     Object_80039F5C *pLeft = 0, *pRight = 0, *pSpecial = 0, *pMarked = 0;
@@ -774,6 +785,7 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
         if (pOther->mUnknown2914 >= 17 && pOther->mUnknown2914 <= 18) {
             if (!(pOther->mMotion.mPos.mX <= goal.mX)) pRight = pOther;
             else pLeft = pOther;
+            _PlayerActionDebugSlot(pOther, pOther == pLeft ? "LB_L" : "LB_R");
         }
         if (fn_8009F778(pOther) && fn_8009F6B4() == 1) pSpecial = pOther;
         if (fn_8009F778(pOther) && fn_8009F6B4() == 1 && !pOtherBlock->mpUnknown36) PlayAlignGetSetName(2);
@@ -809,8 +821,9 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
             if (!(own.mX <= goal.mX)) {
                 if (!(marked.mX <= own.mX + 4.0f)) {
                     pBlock->mUnknown40.mX = marked.mX - 3.0f;
+                    float floor = goal.mY + 3.5f;
                     float y = own.mY - 4.5f;
-                    if (!(y >= goal.mY + 3.5f)) y = goal.mY + 3.5f;
+                    if (!(y >= floor)) y = floor;
                     pBlock->mUnknown40.mY = y;
                 } else {
                     pBlock->mUnknown40.mX = own.mX;
@@ -874,8 +887,8 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
         } else if (fn_8009F778(p) && pTactics->mUnknown16[p->mIdBytes[1]] == 255) {
             if (pMarked) {
                 if (!(own.mX <= goal.mX)) {
-                    if (!(own.mX <= marked.mX + 3.0f)) pBlock->mUnknown40.mX = own.mX - 2.5f;
-                } else if (!(own.mX >= marked.mX - 3.0f)) pBlock->mUnknown40.mX = own.mX + 2.5f;
+                    if (!(own.mX <= marked.mX + 3.0f)) pBlock->mUnknown40.mX = own.mX - 1.5f;
+                } else if (!(own.mX >= marked.mX - 3.0f)) pBlock->mUnknown40.mX = own.mX + 1.5f;
                 pBlock->mUnknown40.mY = own.mY;
             } else {
                 int slot = !(own.mX <= goal.mX) ? 2 : 4;
@@ -899,14 +912,14 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
         if (pMarked) {
             if (!(p->mMotion.mPos.mX <= goal.mX) && (!pSpecial || !specialRight)) {
                 if (!(marked.mX <= own.mX + 3.0f)) {
-                    pBlock->mUnknown40.mX = marked.mX - 1.5f;
+                    pBlock->mUnknown40.mX = marked.mX - 1.0f;
                     float y = own.mY;
                     if (!(y >= goal.mY + 2.5f)) y = goal.mY + 2.5f;
                     pBlock->mUnknown40.mY = y;
                     pBlock->mUnknown49 = 1;
                 }
             } else if (!(marked.mX >= own.mX - 3.0f) && (!pSpecial || specialRight)) {
-                pBlock->mUnknown40.mX = marked.mX + 1.5f;
+                pBlock->mUnknown40.mX = marked.mX + 1.0f;
                 float y = own.mY;
                 if (!(y >= goal.mY + 2.5f)) y = goal.mY + 2.5f;
                 pBlock->mUnknown40.mY = y;
@@ -923,7 +936,7 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
         }
             if (!(own.mX <= goal.mX) && !(marked.mX <= own.mX + 3.0f)) {
                 if (pRight && !pRight->mUnknown361[24] && (!pSpecial || !specialRight)) {
-                    pBlock->mUnknown40.mX = marked.mX - 1.5f;
+                    pBlock->mUnknown40.mX = marked.mX - 1.0f;
                     float y = own.mY;
                     if (!(y >= goal.mY + 2.5f)) y = goal.mY + 2.5f;
                     pBlock->mUnknown40.mY = y;
@@ -931,7 +944,7 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
                 }
             } else if (!(own.mX >= goal.mX) && !(marked.mX >= own.mX - 3.0f)) {
                 if (pLeft && !pLeft->mUnknown361[24] && (!pSpecial || specialRight)) {
-                    pBlock->mUnknown40.mX = marked.mX + 1.5f;
+                    pBlock->mUnknown40.mX = marked.mX + 1.0f;
                     float y = own.mY;
                     if (!(y >= goal.mY + 2.5f)) y = goal.mY + 2.5f;
                     pBlock->mUnknown40.mY = y;
@@ -947,7 +960,7 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
         Point_8017886C delta;
         if (pBlock->mUnknown49) fn_80227690(&delta, &pBlock->mUnknown40, &p->mMotion);
         else fn_80227690(&delta, &own, &p->mMotion);
-        if (!(fn_802270A4(&delta) <= 1.5f) && !pBlock->mUnknown24) pBlock->mUnknown1 = 1;
+        if (!(fn_802270A4(&delta) <= 1.0f) && !pBlock->mUnknown24) pBlock->mUnknown1 = 1;
     }
 }
 
@@ -1011,25 +1024,26 @@ extern "C" int fn_800E283C(Object_80039F5C *p, int count, float *pValues, float 
             do { ++i; } while (i < count && pValues[i] <= p->mMotion.mPos.mX);
         }
         if (i == count) return result;
-        if (!i) {
-            *pOut = pValues[0] - 0.7f;
-            return 1;
-        }
-        while (!result && i > 0) {
-            --i;
-            float left = pValues[i];
-            float right = pValues[i + 1];
-            if (!((left + right) * 0.5f >= target)) {
-                float upper = right - 0.7f;
-                if (!(upper <= target)) upper = target;
-                if (!(upper <= p->mMotion.mPos.mX + 1.2f)) upper = p->mMotion.mPos.mX + 1.2f;
-                float lower = left + 0.7f;
-                if (!(lower >= p->mMotion.mPos.mX - 1.2f)) lower = p->mMotion.mPos.mX - 1.2f;
-                if (!(upper <= lower)) {
-                    result = 1;
-                    *pOut = (upper + lower) * 0.5f;
+        if (i) {
+            while (!result && i > 0) {
+                --i;
+                float left = pValues[i];
+                float right = pValues[i + 1];
+                if (!((left + right) * 0.5f >= target)) {
+                    float upper = right - 0.7f;
+                    if (!(upper <= target)) upper = target;
+                    if (!(upper <= p->mMotion.mPos.mX + 1.2f)) upper = p->mMotion.mPos.mX + 1.2f;
+                    float lower = left + 0.7f;
+                    if (!(lower >= p->mMotion.mPos.mX - 1.2f)) lower = p->mMotion.mPos.mX - 1.2f;
+                    if (!(upper <= lower)) {
+                        result = 1;
+                        *pOut = (upper + lower) * 0.5f;
+                    }
                 }
             }
+        } else {
+            *pOut = pValues[0] - 0.7f;
+            return 1;
         }
     } else {
         int i = count - 1;

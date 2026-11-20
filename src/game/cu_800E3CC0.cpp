@@ -744,8 +744,12 @@ extern "C" void fn_800E9024(Object_80039F5C *p, int id) {
         message.mUnknown1[0] = fn_800E9010(relative, difference) | lbl_803EAD9C[octant] << 4;
         message.mUnknown1[2] = fn_800E948C(p);
         if (p == BallGetCurrentHolder()) {
-            if (id == 58 && message.mUnknown1[1] != 8)
-                message.mUnknown1[0] = 0x88;
+            if (id == 58 && message.mUnknown1[1] != 8) {
+                // FAKEMATCH: the target loads the byte as li r0,-0x78 (0x800E91AC); a direct
+                // constant store compiles to li r0,0x88, the int temporary to -0x78. Same byte stored.
+                int neutral = 0x88;
+                message.mUnknown1[0] = neutral;
+            }
             int previous = fn_800F06F4(0, p->mpState, 18, 0xFFFF);
             fn_800EFE60(0, p->mpState, p);
             fn_800F053C(0, p->mpState, &message, p);
