@@ -28,7 +28,7 @@ public:
     int fn_800C0414();
     unsigned char fn_800C0420(int index);
     unsigned char fn_800C043C(int index);
-    unsigned char fn_800C0458();
+    int fn_800C0458();
 };
 
 /* .sdata word whose initial value is the object at 0x803EC914, the .sbss word

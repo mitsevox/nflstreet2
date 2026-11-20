@@ -28,6 +28,7 @@
 #include "game/PlayTrack.h"
 #include "game/Item_80097440.h"
 #include "game/fn_80227638.h"
+#include "game/PreSnapPhase.h"
 
 /* Allocated through fn_80238174 under the id 'plbk' (PlayBookAlloc). */
 struct PlayBook_t {
@@ -775,11 +776,10 @@ int fn_800A8444(int team);
 void PlayBookPickPlay(int team, int kind);
 void PlayBookSelectPlayById(int team, int kind);
 int PlayBookIsAiPlay(int team, int kind, int value);
-void fn_800C02EC(void *p, int event);
-void fn_800C02F8(void *p, int event);
+
 void fn_800B4300(int value);
 void fn_800B43AC(int value);
-extern void *lbl_803EABA4;
+
 
 int PlayCallGetPlaybookId(void)
 {
@@ -901,7 +901,7 @@ int PlayCallOffenseCommand(int id, short *p, int value)
         PlayBookSelectPlayById(team, value & ~0x8000);
         PlayCallApplyPlay(team, value);
         break;
-    case 4: fn_800C02EC(lbl_803EABA4, 39); break;
+    case 4: lbl_803EABA4->fn_800C02EC(39); break;
     case 6: p[19] = 255; break;
     case 7: p[19] = 254; break;
     case 11:
@@ -912,21 +912,21 @@ int PlayCallOffenseCommand(int id, short *p, int value)
     case 2:
         fn_800B4300(0);
         if (fn_800B65A0(fn_80178308()) == 255)
-            fn_800C02F8(lbl_803EABA4, 2);
+            lbl_803EABA4->fn_800C02F8(2);
         break;
     case 3:
         fn_800B4300(1);
-        fn_800C02F8(lbl_803EABA4, 1);
+        lbl_803EABA4->fn_800C02F8(1);
         break;
     case 5:
         fn_800B43AC(1);
         if (fn_800B65A0(fn_80178308()) == 255)
-            fn_800C02F8(lbl_803EABA4, 2);
+            lbl_803EABA4->fn_800C02F8(2);
         break;
     case 12:
         fn_800B43AC(2);
         if (fn_800B65A0(fn_80178308()) == 255)
-            fn_800C02F8(lbl_803EABA4, 2);
+            lbl_803EABA4->fn_800C02F8(2);
         break;
     }
     return result;
