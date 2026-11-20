@@ -22734,31 +22734,19 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800DF9FC",
-          "end": "0x800DFED0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800E0188",
           "end": "0x800E02D0"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800E034C",
-          "end": "0x800E0694"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800E0818",
           "end": "0x800E1954"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800E2550",
-          "end": "0x800E283C"
+          "end": "0x800E2ABC"
         },
         {
           "section": ".text",
@@ -22780,24 +22768,12 @@
             "evidence": "evidence.tsv source-form 0x800DF7CC-0x800DF9FC"
           },
           {
-            "function": "fn_800DFED0",
-            "evidence": "evidence.tsv source-form 0x800DFED0-0x800E0188"
-          },
-          {
             "function": "fn_800E02D0",
             "evidence": "evidence.tsv source-form 0x800E02D0-0x800E034C"
           },
           {
-            "function": "fn_800E0694",
-            "evidence": "evidence.tsv source-form 0x800E0694-0x800E0818"
-          },
-          {
             "function": "fn_800E1954",
             "evidence": "evidence.tsv source-form 0x800E1954-0x800E2550"
-          },
-          {
-            "function": "fn_800E283C",
-            "evidence": "evidence.tsv source-form 0x800E283C-0x800E2ABC"
           },
           {
             "function": "fn_800E2ABC",
@@ -22857,7 +22833,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800DF134",
+          "start": "0x800DEC10",
           "end": "0x800DF1F4"
         },
         {
@@ -22920,10 +22896,6 @@
           {
             "function": "fn_800DEAB0",
             "evidence": "evidence.tsv source-form 0x800DEAB0-0x800DEC10"
-          },
-          {
-            "function": "fn_800DEC10",
-            "evidence": "evidence.tsv source-form 0x800DEC10-0x800DF134"
           },
           {
             "function": "fn_800DF1F4",

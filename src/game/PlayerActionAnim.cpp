@@ -752,31 +752,32 @@ extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA,
 {
     Record_800DCC14 *pRecord = (Record_800DCC14 *)fn_801BE60C(p->mpUnknown792, key);
     Object_801BBD5C *pObject;
+    int index;
     switch (mode) {
     case 0: {
         fn_801BE760(p->mpUnknown792, key, 1);
         pObject = AnimFileGetStateData(key, p->mpUnknown796->mUnknown2);
-        int index = fn_800DC674(pObject, p);
+        index = fn_800DC674(pObject, p);
         pRecord->mUnknown4 = 1.0f;
-        unsigned char *pEntry = (unsigned char *)&pTable->mEntries[index];
-        PlayerLocoStartBlendPair((LocoBlendSet_t *)pObject, (Block_801BE60C *)pRecord, p, pEntry[1], (signed char)index, key, (FEPlyrModel_t *)pA, pEntries);
+        PlayerLocoStartBlendPair((LocoBlendSet_t *)pObject, (Block_801BE60C *)pRecord, p, (unsigned char)pTable->mEntries[index].mUnknown0, (signed char)index, key, (FEPlyrModel_t *)pA, pEntries);
         pRecord->mUnknown12 = index;
         fn_800DC6A8(pObject, p, index, pRecord, (int)pEntries);
         pRecord->mUnknown16 = 0;
         break;
     }
+    case 1:
+        break;
     case 2:
         if (fn_801BE648(p->mpUnknown792) != key) {
             break;
         }
         pObject = AnimFileGetStateData(key, p->mpUnknown796->mUnknown2);
         if (pRecord->mUnknown16 <= 0) {
-            int index = fn_800DC674(pObject, p);
+            index = fn_800DC674(pObject, p);
             if (index != pRecord->mUnknown12) {
                 pRecord->mUnknown12 = index;
                 pRecord->mUnknown16 = 8;
-                unsigned char *pEntry = (unsigned char *)&pTable->mEntries[index];
-                PlayerLocoSwitchBlendPair((LocoBlendSet_t *)pObject, (Block_801BE60C *)pRecord, p, pEntry[1], (signed char)index, key, pA, pEntries, 8);
+                PlayerLocoSwitchBlendPair((LocoBlendSet_t *)pObject, (Block_801BE60C *)pRecord, p, (unsigned char)pTable->mEntries[index].mUnknown0, (signed char)index, key, pA, pEntries, 8);
             }
         }
         if (pRecord->mUnknown16 > 0) {
@@ -937,7 +938,7 @@ extern "C" int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA,
             }
         }
         while (!found) {
-            int type = category ? 1 : 2;
+            int type = category == 0 ? 2 : 1;
             for (int i = 0; i < pTable->mCount; ++i) {
                 unsigned char *pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
                 if (pInfo[5] == type) {
@@ -957,13 +958,13 @@ extern "C" int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA,
                 if (category == 2) { chosen = 0; break; }
             }
         }
-        int blend = pRecord->mUnknown6 ? 20 : 10;
         unsigned short old = pRecord->mUnknown2;
+        int blend = pRecord->mUnknown6 ? 20 : 10;
         if (old != 0xFFFF && pEntries[old].mUnknown1 == 2 && pEntries[old].mUnknown8 == key) {
             AnimWgtSetLinear(&pEntries[old].mUnknown30, blend, -1.0f, 0.0f);
         }
         unsigned char *pInfo = (unsigned char *)pTable->mEntries[chosen].mpInfo;
-        pRecord->mUnknown6 = pInfo[5] == 2;
+        if (pInfo[5] == 2) pRecord->mUnknown6 = 1; else pRecord->mUnknown6 = 0;
         pRecord->mUnknown4 = pInfo[4];
         p->mFlags &= ~4;
         pRecord->mUnknown2 = AnimChanStartAnim(pA, pEntries, pTable->mEntries[chosen].mUnknown0, pTable->mEntries[chosen].mUnknown2, key, p, 1.0f);
@@ -1029,7 +1030,7 @@ extern "C" int fn_800DD780(Object_80039F5C *p, int value, unsigned short key)
     return result;
 }
 
-extern "C" int fn_800DD830(void *p) {
+extern "C" int fn_800DD830(void *p, int value) {
     return 1;
 }
 
@@ -1100,16 +1101,18 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
         case 5: weight = 5; break;
         default: weight = 0; break;
         }
-        unsigned int shift = pInfo[5];
-        unsigned int bit = (shift & 63) < 32 ? 1u << (shift & 31) : 0;
+        int bit = 1 << pInfo[5];
         if (!(mask & bit)) {
             weight = 0;
-        } else if (shift == 5) {
-            weight <<= 2;
-        } else if (shift == 6) {
-            weight <<= 3;
+        } else {
+            switch (pInfo[5]) {
+            case 4: break;
+            case 5: weight <<= 2; break;
+            case 6: weight <<= 3; break;
+            case 7: break;
+            }
         }
-        if (pInfo[6] != 1 && !fn_800DD830(p)) weight = 0;
+        if (pInfo[6] != 1 && !fn_800DD830(p, pInfo[6])) weight = 0;
         weights[i] = weight;
         total += weight;
     }
@@ -1120,8 +1123,8 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
         if (fn_800DD780(p, (unsigned char)chosen, key)) {
             unsigned char *pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
             pRecord->mUnknown8 = pInfo[5];
-            *((unsigned char *)pRecord + 16) = chosen;
             pRecord->mUnknown9 = pInfo[7] == 2;
+            *((unsigned char *)pRecord + 16) = chosen;
             break;
         }
         chosen = chosen == pTable->mCount - 1 ? 0 : (unsigned short)(chosen + 1);
@@ -1133,8 +1136,8 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
             unsigned char *pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
             chosen = pTable->mCount - 1;
             pRecord->mUnknown8 = pInfo[5];
-            *((unsigned char *)pRecord + 16) = chosen;
             pRecord->mUnknown9 = pInfo[7] == 2;
+            *((unsigned char *)pRecord + 16) = chosen;
         }
     }
     fn_802372EC(0, total);
@@ -1234,6 +1237,11 @@ extern "C" int fn_800DDEE4(unsigned char *pA, unsigned char *pB)
     return result;
 }
 
+template <class T> static inline T _Max(T a, T b)
+{
+    return a < b ? b : a;
+}
+
 extern "C" unsigned short fn_800DDF34(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, int *pAngle, float *pTime, float *pRate)
 {
     int facing = p->mMotion.mFacing & 0xFFFFFF;
@@ -1259,9 +1267,7 @@ extern "C" unsigned short fn_800DDF34(Table_80089904 *pTable, Object_80039F5C *p
     if (pChosen && chosen < pTable->mCount) {
         if (key == 100 || p->mIdBytes[3] != 1) {
             *pRate = (float)(pChosen->mUnknown12 < 0 ? -pChosen->mUnknown12 : pChosen->mUnknown12) / (float)difference;
-            if (!(*pRate >= 1.0f)) {
-                *pRate = 1.0f;
-            }
+            *pRate = _Max(*pRate, 1.0f);
         }
         *pRate *= p->mUnknown512.mUnknown0;
         int magnitude = pChosen->mUnknown12 < 0 ? -pChosen->mUnknown12 : pChosen->mUnknown12;
@@ -1337,11 +1343,6 @@ extern "C" int fn_800DE364(unsigned int id)
     return result;
 }
 
-template <class T> static inline T _Max(T a, T b)
-{
-    return a < b ? b : a;
-}
-
 extern "C" void fn_800DE3B0(Block_800DE3B0 *pBlock, Object_80039F5C *p, Command_800DE3B0 *pCommand)
 {
     int desired = fn_801CFE40(pCommand->mUnknown0.mUnknown4, pCommand->mUnknown0.mUnknown0) & 0xFFFFFF;
@@ -1372,18 +1373,18 @@ extern "C" void fn_800DE3B0(Block_800DE3B0 *pBlock, Object_80039F5C *p, Command_
 extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
 {
     Table_80089904 *pTable = fn_801BE72C(p->mpUnknown796->mUnknown2, fn_801BE648(p->mpUnknown792));
-    Entry_800DE51C *pChosen = 0, *pFallback = 0;
+    Entry_800DE51C *pFallback = 0;
     int fallbackKey = 0;
+    Entry_800DE51C *pChosen = 0;
     pBlock->mUnknown3F = pBlock->mUnknown3E = -1;
     for (unsigned int i = 0; i < pTable->mCount; i++) {
         int key = pTable->mEntries[i].mUnknown2 & 0x7FFF;
         Table_800DE51C *pRecords = (Table_800DE51C *)AnimFileGetStateData(key, p->mpUnknown796->mUnknown2);
         for (unsigned int j = 0; j < pRecords->mCount; j++) {
-            Entry_800DE51C *pEntry = &pRecords->mEntries[j];
-            if (!pEntry->mUnknown2) {
-                pChosen = pEntry;
-                if (pEntry->mUnknown0 == id) break;
-            } else if (pEntry->mUnknown2 == 1 && pEntry->mUnknown0 == id) {
+            if (!pRecords->mEntries[j].mUnknown2) {
+                pChosen = &pRecords->mEntries[j];
+                if (pChosen->mUnknown0 == id) break;
+            } else if (pRecords->mEntries[j].mUnknown2 == 1 && pRecords->mEntries[j].mUnknown0 == id) {
                 fallbackKey = key;
                 for (signed char k = 0; k < pRecords->mCount; k++) {
                     if (!pRecords->mEntries[k].mUnknown2) pFallback = &pRecords->mEntries[k];
@@ -1397,14 +1398,19 @@ extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
         pBlock->mUnknown1C = 1;
         Object_80039F5C *pOther = 0;
         switch (p->mpState->mId) {
-        case 16:
-            if (((unsigned char *)&p->mUnknown1160)[56]) pBlock->mUnknown1F = ((unsigned char *)&p->mUnknown1160)[55];
+        case 16: {
+            unsigned char *pFlags = (unsigned char *)&p->mUnknown1160;
+            if (pFlags[56]) pBlock->mUnknown1F = pFlags[55];
             else if (p->mUnknown776 == 1) pBlock->mUnknown1F = 1;
             break;
+        }
         case 17:
-            pOther = PlyrGet((unsigned char)(1-p->mIdBytes[2]), p->mpState->mUnknown3[0]);
-            if (((unsigned char *)&p->mUnknown1160)[56]) pBlock->mUnknown1F = ((unsigned char *)&p->mUnknown1160)[55];
-            else if (pOther->mUnknown776 == 1) pBlock->mUnknown1F = 1;
+            {
+                unsigned char *pFlags = (unsigned char *)&p->mUnknown1160;
+                pOther = PlyrGet((unsigned char)(1-p->mIdBytes[2]), p->mpState->mUnknown3[0]);
+                if (pFlags[56]) pBlock->mUnknown1F = pFlags[55];
+                else if (pOther->mUnknown776 == 1) pBlock->mUnknown1F = 1;
+            }
             break;
         case 32:
             if (p->mUnknown1036) pOther = PlyrGet((p->mUnknown1036 >> 8) & 255, p->mpState->mUnknown3[0]);
@@ -1425,14 +1431,21 @@ extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
                 }
             }
         }
-        pBlock->mUnknownC.mUnknown0 = pBlock->mUnknownC.mUnknown4 = 0.0f;
+        pBlock->mUnknownC.mUnknown4 = pBlock->mUnknownC.mUnknown0 = 0.0f;
         fn_800CEDA4(pChosen, &pBlock->mUnknown4, &pBlock->mUnknown14, pOther, pBlock->mUnknown1F);
         pBlock->mUnknown0 = 0.0f;
     } else {
-        if (p->mpState->mId == 16) {
-            if (((unsigned char *)&p->mUnknown1160)[56]) pBlock->mUnknown1F = ((unsigned char *)&p->mUnknown1160)[55];
+        switch (p->mpState->mId) {
+        case 16: {
+            unsigned char *pFlags = (unsigned char *)&p->mUnknown1160;
+            if (pFlags[56]) pBlock->mUnknown1F = pFlags[55];
             else if (p->mUnknown776 == 1) pBlock->mUnknown1F = 1;
-        } else if (p->mpState->mId == 32 && (p->mUnknown1128[4] & 2)) pBlock->mUnknown1F = 1;
+            break;
+        }
+        case 32:
+            if (p->mUnknown1128[4] & 2) pBlock->mUnknown1F = 1;
+            break;
+        }
         Pair_802270A4 point;
         int angle;
         pBlock->mUnknown1C = 0;
@@ -1494,22 +1507,24 @@ extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock)
 {
     State_800DE3B0 *pState = (State_800DE3B0 *)p->mUnknown1160.mUnknown12;
     AnimChannel_t *pEntry = &p->mpUnknown800[pBlock->mUnknown1D];
-    Object_80039F5C *pOther = 0;
     AnimChannel_t *pOtherEntry = 0;
+    Object_80039F5C *pOther = 0;
     Block_801BE60C *pOtherBlock = 0;
-    int index = 0xFFFF;
-    unsigned short key = (unsigned short)pBlock->mUnknown18;
+    int index;
     if (fn_801BE648(p->mpUnknown792) == 181 || fn_801BE648(p->mpUnknown792) == 186) {
         pOther = PlyrGet(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
-        index = AnimChanGetStateChannelByIndex(pOther->mpUnknown796, pOther->mpUnknown800, key, 0);
+        index = AnimChanGetStateChannelByIndex(pOther->mpUnknown796, pOther->mpUnknown800, pBlock->mUnknown18, 0);
+    } else {
+        index = 0xFFFF;
     }
-    Pair_802270A4 point = pState->mUnknown4;
+    Pair_802270A4 point = ((State_800DE3B0 *)p->mUnknown1160.mUnknown12)->mUnknown4;
     if (index != 0xFFFF) {
         pOtherEntry = &pOther->mpUnknown800[index];
-        pOtherBlock = fn_801BE60C(pOther->mpUnknown792, key);
+        pOtherBlock = fn_801BE60C(pOther->mpUnknown792, pBlock->mUnknown18);
     }
-    Pair_802270A4 rotated, delta, offset;
     if (pBlock->mUnknown3E > 0) {
+        Pair_802270A4 rotated;
+        Point_8017886C delta;
         --pBlock->mUnknown3E;
         if (pState->mUnknown12 == 1) {
             fn_80227384(&rotated, &pBlock->mUnknownC, pBlock->mUnknown38);
@@ -1528,13 +1543,15 @@ extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock)
             fn_80227638(&p->mMotion, &p->mMotion, &delta);
             if (index != 0xFFFF) {
                 fn_80227638(&pOther->mMotion, &pOther->mMotion, &delta);
-                Point_8017886C adjustment = {delta.mUnknown0, delta.mUnknown4};
-                fn_800DF134(pOther, adjustment, 0, pBlock->mUnknown18);
+                fn_800DF134(pOther, delta, 0, pBlock->mUnknown18);
             }
         }
         p->mMotion.mFacing = (p->mMotion.mFacing + pBlock->mUnknown38) & 0xFFFFFF;
         p->mpUnknown800[pBlock->mUnknown1D].mUnknownC = (pEntry->mUnknownC + pBlock->mUnknown38) & 0xFFFFFF;
         if (index != 0xFFFF) {
+            Point_8017886C delta;
+            Pair_802270A4 rotated;
+            Point_8017886C offset;
             fn_80227690(&delta, &pOther->mMotion, &p->mMotion);
             fn_80227384(&rotated, &delta, pBlock->mUnknown38);
             fn_80227638(&pOther->mMotion, &rotated, &p->mMotion);
@@ -1543,12 +1560,13 @@ extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock)
             fn_80227690(&delta, &pOtherBlock->mUnknown4, &p->mMotion);
             fn_80227384(&rotated, &delta, pBlock->mUnknown38);
             fn_80227690(&offset, &rotated, &delta);
-            Point_8017886C adjustment = {offset.mUnknown0, offset.mUnknown4};
-            fn_800DF134(pOther, adjustment, pBlock->mUnknown38, pBlock->mUnknown18);
+            fn_800DF134(pOther, offset, pBlock->mUnknown38, pBlock->mUnknown18);
         }
     } else if (pBlock->mUnknown3E == 0) {
         --pBlock->mUnknown3E;
         if (pState->mUnknown12 == 1) {
+            Pair_802270A4 rotated;
+            Point_8017886C delta;
             fn_80227384(&rotated, (char *)pEntry + 36, pState->mUnknown1C);
             fn_80227690(&delta, &p->mMotion, &pState->mUnknown14);
             fn_80227690(&delta, &delta, &rotated);
@@ -1566,13 +1584,15 @@ extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock)
         fn_80227638(&p->mMotion, &p->mMotion, &pBlock->mUnknownC);
         if (index != 0xFFFF) {
             fn_80227638(&pOther->mMotion, &pOther->mMotion, &pBlock->mUnknownC);
-            Point_8017886C adjustment = {pBlock->mUnknownC.mUnknown0, pBlock->mUnknownC.mUnknown4};
-            fn_800DF134(pOther, adjustment, 0, pBlock->mUnknown18);
+            fn_800DF134(pOther, *(Point_8017886C *)&pBlock->mUnknownC, 0, pBlock->mUnknown18);
         }
     }
     if (pBlock->mUnknown3F == 0) {
         --pBlock->mUnknown3F;
-        Vector_80039F5C position = {pBlock->mUnknown4.mUnknown0, pBlock->mUnknown4.mUnknown4, pBlock->mUnknownC.mUnknown0};
+        Vector_80039F5C position;
+        position.mX = pBlock->mUnknown4.mUnknown0;
+        position.mY = pBlock->mUnknown4.mUnknown4;
+        position.mZ = pBlock->mUnknownC.mUnknown0;
         if (fn_801784C4()) {
             position.mX = -position.mX;
             position.mY = -position.mY;
@@ -1610,10 +1630,18 @@ extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pDa
         pBlock->mUnknown1D = AnimChanStartAnim(pData, pEntries, second, first, key, p, 1.0f);
         pBlock->mUnknown18 = key;
         if (fn_800DE364(key)) p->mFlags |= 512;
-        bool excluded = (key >= 49 && key <= 55) || key == 59 || key == 60 || key == 106 || key == 107;
-        if (key == 172 || key == 173) {
+        switch (key) {
+        case 49: case 50: case 51: case 52: case 53: case 54: case 55:
+        case 59: case 60:
+        case 106: case 107:
+            if (p->mUnknown512.mUnknown14 == 5) {
+                float rate = p->mUnknown512.mUnknown0 + 0.8f;
+                AnimSeqSetSpeed(&pEntries[pBlock->mUnknown1D].mUnknown4C, MathInverse(rate <= 1.2f ? rate : 1.2f));
+            }
+            break;
+        case 172: case 173: {
             for (unsigned short i = 0; i < pTable->mCount; i++) {
-                if (pTable->mEntries[i].mUnknown0 == second) {
+                if (second == pTable->mEntries[i].mUnknown0) {
                     Table_800DE51C *pRecords = (Table_800DE51C *)AnimFileGetStateData(pTable->mEntries[i].mUnknown2 & 0x7FFF, p->mpUnknown796->mUnknown2);
                     if (pRecords->mEntries[0].mUnknown0 == first || pRecords->mEntries[1].mUnknown0 == first) {
                         pBlock->mUnknown3C = ((unsigned char *)pTable->mEntries[i].mpInfo)[4];
@@ -1621,13 +1649,18 @@ extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pDa
                     }
                 }
             }
-            Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown336);
-            float rate = p->mpState->mId == 16 ? fn_80114EE4(p, pOther) : fn_80114EE4(pOther, p);
+            Object_80039F5C *pA, *pB;
+            if (p->mpState->mId == 16) {
+                pA = p;
+                pB = fn_8009BCE8(&p->mUnknown336);
+            } else {
+                pA = fn_8009BCE8(&p->mUnknown336);
+                pB = p;
+            }
+            float rate = fn_80114EE4(pA, pB);
             AnimSeqSetSpeed(&pEntries[pBlock->mUnknown1D].mUnknown4C, MathInverse(rate));
-        } else if (!excluded && p->mUnknown512.mUnknown14 == 5) {
-            float rate = p->mUnknown512.mUnknown0 + 0.8f;
-            if (!(rate <= 1.2f)) rate = 1.2f;
-            AnimSeqSetSpeed(&pEntries[pBlock->mUnknown1D].mUnknown4C, MathInverse(rate));
+            break;
+        }
         }
         fn_800DE51C(p, pBlock, first);
         if (pBlock->mUnknown1F) {
@@ -1655,7 +1688,11 @@ extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pDa
             if (fn_801BE648(p->mpUnknown792) == 94 || fn_801BE648(p->mpUnknown792) == 95 || fn_801BE648(p->mpUnknown792) == 234) AnimMomentumUpdateLinked(&pBlock->mUnknown20, p);
             else AnimMomentumUpdate(&pBlock->mUnknown20, p);
         } else if (!fn_800DE364(fn_801BE648(p->mpUnknown792))) p->mFlags &= ~512;
-        if ((key == 172 || key == 173) && (p->mFlags & 4)) fn_800C854C(p, key, pBlock->mUnknown3C);
+        switch (key) {
+        case 172: case 173:
+            if (p->mFlags & 4) fn_800C854C(p, key, pBlock->mUnknown3C);
+            break;
+        }
         break;
     case 1: case 3:
         pBlock->mUnknown1C = 0;

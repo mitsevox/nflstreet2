@@ -507,7 +507,7 @@ extern "C" int fn_800DD5E4(Object_80039F5C *p);
 extern "C" int fn_800DD648(Object_80039F5C *p);
 extern "C" int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *p, unsigned int mode);
 extern "C" int fn_800DD780(Object_80039F5C *p, int value, unsigned short key);
-extern "C" int fn_800DD830(void *p);
+extern "C" int fn_800DD830(void *p, int value);
 extern "C" int fn_800DD838(Object_80039F5C *p);
 extern "C" void fn_800DD92C(Table_80089904 *pTable, unsigned short a, unsigned char value);
 extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, void *pA, void *pB,
