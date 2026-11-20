@@ -12488,7 +12488,13 @@ extern "C" int fn_800B0F98(void)
     return lbl_803EAB14->mUnknown2D0;
 }
 
-extern "C" void fn_800B0FA4(void)
+static inline void _PointCopy(Point_8017886C *pDst, const Point_8017886C *pSrc)
+{
+    pDst->mX = pSrc->mX;
+    pDst->mY = pSrc->mY;
+}
+
+extern "C" void PlayPickWeightedPlayer(void)
 {
     fn_800B0090();
     unsigned char total = 0;
@@ -12520,8 +12526,11 @@ extern "C" void fn_800B0FA4(void)
                     break;
                 }
                 PlayBookPosition_t *pEntry = &pTeam->mUnknown8.mUnknown84[0][index];
-                Point_8017886C pos = pEntry->mUnknown10;
-                Point_8017886C mirror = pEntry->mUnknown18;
+                Point_8017886C pos;
+                Point_8017886C mirror;
+
+                _PointCopy(&pos, &pEntry->mUnknown10);
+                _PointCopy(&mirror, &pEntry->mUnknown18);
                 if (pos.mX == mirror.mX && pos.mY == mirror.mY) {
                     mirror.mX = -mirror.mX;
                     for (unsigned char j = 0; j < count; j++) {
@@ -15246,14 +15255,12 @@ extern "C" int fn_800B7CA4(Object_80039F5C *p)
     if (input.mUnknown92 & 4) {
         if (BallStateGet(pBall, 0) != 4) {
             if (fn_800F2C1C(p, 0) != 0) {
-                goto handled;
+                p->mFlags |= 0x4000;
+                return 0;
             }
         } else {
-            int mode = 1;
+            int mode = ((input.mUnknown96 & 1) ? fn_8009A6EC(p) : (input.mUnknown96 & 0x10)) ? 3 : 1;
 
-            if ((input.mUnknown96 & 1) ? fn_8009A6EC(p) : (input.mUnknown96 & 0x10)) {
-                mode = 3;
-            }
             if (fn_801133FC(p, mode, 0) != 0) {
                 goto handled;
             }
@@ -17255,7 +17262,7 @@ extern "C" {
 int fn_800BF56C(void);
 void fn_8016E008(int team);
 void PlayAlignPostStartDelays(int team);
-void fn_800B0FA4(void);
+void PlayPickWeightedPlayer(void);
 int fn_8016E928(void);
 int SndgChannelIsStreamBusy(int idx);
 void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
@@ -17530,7 +17537,7 @@ extern "C" void fn_800BDA00(void)
     if (count != 0 && lbl_803EABA8->mUnknownC5 != 0) {
         if ((short)fn_8009D990(0) <= (short)lbl_803EABA4->fn_800C02C8()) {
             lbl_803EABA4->fn_800C02D4(0);
-            fn_800B0FA4();
+            PlayPickWeightedPlayer();
         }
     }
 }

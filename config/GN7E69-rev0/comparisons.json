@@ -16462,7 +16462,7 @@
           "end": "0x800B3AF4"
         },
         {
-          "symbol": "fn_800B0FA4",
+          "symbol": "PlayPickWeightedPlayer",
           "start": "0x800B0FA4",
           "end": "0x800B119C"
         },
