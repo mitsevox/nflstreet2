@@ -18,7 +18,7 @@ int AudioVoiceGetMaxMetric(int id)
     int metric;
     Record_803A6DF0 *record;
 
-    handle = fn_8026A288(id);
+    handle = SNDVOICEI_get(id);
     best = -7;
     if (handle >= 0) {
         index = -1;

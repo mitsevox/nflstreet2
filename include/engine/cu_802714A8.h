@@ -2,22 +2,25 @@
 #define ENGINE_CU_802714A8_H
 
 typedef struct Params_803A6C40 {
-    unsigned char mUnknown0[8];
+    unsigned char mUnknown0[4];
+    unsigned int m4;
     unsigned short m8;
     unsigned short mA;
     unsigned char mUnknownC[2];
     unsigned char mE;
     unsigned char mUnknownF[3];
     unsigned char m12;
-    unsigned char mUnknown13;
+    unsigned char m13;
     float m14;
-    unsigned char mUnknown18[9];
+    unsigned char m18;
+    unsigned char mUnknown19[8];
     unsigned char m21;
     unsigned char m22;
     unsigned char m23;
-    unsigned char mUnknown24;
+    unsigned char m24;
     unsigned char m25;
-    unsigned char mUnknown26[2];
+    unsigned char mUnknown26;
+    unsigned char m27;
     unsigned char m28;
     unsigned char mUnknown29;
     unsigned short m2A[2];
@@ -148,18 +151,19 @@ typedef struct Struct_803A6C24 {
     void (*volatile mBC)(void *p);
     unsigned char mUnknownC0[0xC];
     Params_803A6C40 mCC;
-    unsigned char m168;
+    signed char m168;
     unsigned char m169;
     signed char m16A;
     signed char m16B;
     short m16C;
-    unsigned char mUnknown16E;
+    unsigned char m16E;
     unsigned char m16F;
     volatile unsigned int m170;
     void (*m174[6])(void);
     void (*m18C[13])(void);
     int (*m1C0)(int bank);
-    unsigned char mUnknown1C4[8];
+    void (*m1C4)(void);
+    void (*m1C8)(void);
     Record_803A6DF0 *m1CC;
     struct SndBankSlot_t *m1D0;
     struct SndMemPool_t *m1D4;

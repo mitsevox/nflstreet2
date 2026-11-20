@@ -19,7 +19,7 @@ int SND3dpos(int id, int offset, int value)
     } else {
         clamped = value;
     }
-    handle = fn_8026A288(id);
+    handle = SNDVOICEI_get(id);
     if (handle >= 0) {
         index = -1;
         while (iSNDpatchkey(handle, &index)) {

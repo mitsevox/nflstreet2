@@ -17,7 +17,7 @@ int SNDSTRM_fxlevel(int stream, int bus, int level)
         return -8;
     }
     channel->mpFxLevels[bus] = (float)level * (1.0f / 127.0f);
-    voice = fn_8026A288(channel->mVoice);
+    voice = SNDVOICEI_get(channel->mVoice);
     if (voice >= 0) {
         for (i = 0; i < channel->mChannels; i++) {
             dst = lbl_803A6C24.m1CC + lbl_803A6C24.m1CC[voice].m4[i];

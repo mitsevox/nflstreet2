@@ -678,7 +678,7 @@ void fn_802686CC(Object_802686CC *p)
     int i;
     Entry_802686CC *e;
 
-    handle = fn_8026A288(p->mUnknown8);
+    handle = SNDVOICEI_get(p->mUnknown8);
     if (handle >= 0) {
         e = p->mEntries;
         for (i = 0; i < p->mUnknownE; i++, e++) {

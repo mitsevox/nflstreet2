@@ -18,7 +18,7 @@ int SNDvol(int id, int value)
     Record_803A6DF0 *pRecord;
     Record_803A6DF0 *pVoice;
 
-    handle = fn_8026A288(id);
+    handle = SNDVOICEI_get(id);
     if (handle >= 0) {
         level = (float)value * (1.0f / 127.0f);
         index = -1;

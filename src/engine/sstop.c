@@ -9,7 +9,7 @@ int SNDstop(int handle)
     int voice;
     int index;
 
-    voice = fn_8026A288(handle);
+    voice = SNDVOICEI_get(handle);
     if (voice >= 0) {
         index = -1;
         while (iSNDpatchkey(voice, &index)) {

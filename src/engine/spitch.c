@@ -5,7 +5,7 @@
 
 int SNDpitchmult(int handle, int pitch)
 {
-    int index = fn_8026A288(handle);
+    int index = SNDVOICEI_get(handle);
     int cursor;
 
     if (index >= 0) {

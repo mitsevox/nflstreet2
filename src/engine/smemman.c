@@ -27,9 +27,9 @@ void SNDMEMI_init(void *memory, int size)
     lbl_803A6C24.m1D4->m10 = size;
 }
 
-void SNDMEMI_restore(void)
+int SNDMEMI_restore(void)
 {
-    SNDMEM_gethighwater();
+    return SNDMEM_gethighwater();
 }
 
 void *SNDMEMI_allocz(int size)

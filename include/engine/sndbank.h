@@ -60,9 +60,9 @@ extern "C" {
 
 void *memmove(void *dst, const void *src, unsigned int n);
 
-int fn_8026A288(int handle);
+int SNDVOICEI_get(int handle);
 void fn_8026A40C(void *message, int value);
-int fn_80270B10(BankVer_t *bank, void *patch, int bank_index, int patch_index, SndPlayOpts_t *opts);
+int SNDBANKI_playpatch(BankVer_t *bank, void *patch, int bank_index, int patch_index, SndPlayOpts_t *opts);
 void fn_80274924(int index);
 void iSNDcalcpitch(int index);
 int fn_80270E04(char **cursor, Struct_80270E04 *out);
@@ -103,7 +103,7 @@ int iSNDsin(int angle);
 int SNDMEM_gethighwater(void);
 void SNDMEMI_constrain(unsigned int *start, int *size);
 void SNDMEMI_init(void *memory, int size);
-void SNDMEMI_restore(void);
+int SNDMEMI_restore(void);
 
 }
 

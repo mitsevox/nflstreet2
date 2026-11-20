@@ -25,7 +25,7 @@ void fn_8027257C(void)
 
 void fn_80272618(int value)
 {
-    fn_8026A0E8(value + lbl_803A6C24.m1C.m12);
+    SNDVOICEI_free(value + lbl_803A6C24.m1C.m12);
 }
 
 void fn_80272644(AXVPB *vpb)
@@ -102,7 +102,7 @@ int fn_8027271C(int index)
                         lbl_803A8D60.m0[record->m4[j]].m3C = 0;
                     }
                     if (lbl_803A6C24.m1CC[record->m4[j]].m6D != 0) {
-                        fn_8026A0E8(record->m4[j]);
+                        SNDVOICEI_free(record->m4[j]);
                     }
                 }
             }
@@ -121,7 +121,7 @@ void fn_80272990(int channel, int mode)
     SNDDRV_DSPMixerReleaseChannel(vpb);
     state->m18 = -1;
     if (record->m6D != 0) {
-        fn_8026A0E8(channel);
+        SNDVOICEI_free(channel);
     }
     if (mode == 0) {
         if (vpb != 0) {
@@ -1057,7 +1057,7 @@ int fn_80274F5C(int index)
     } else {
         for (i = 0; i < record->m23; i++) {
             lbl_803B503C(record->m4[i] - lbl_803A6C24.m1C.m12);
-            fn_8026A0E8(record->m4[i]);
+            SNDVOICEI_free(record->m4[i]);
         }
     }
     return 0;

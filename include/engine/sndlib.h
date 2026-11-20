@@ -168,7 +168,13 @@ struct State_803A8D60 {
 };
 
 struct Struct_80270E04 {
-    unsigned char mUnknown0[0x18];
+    short m0;
+    unsigned char mUnknown2[6];
+    signed char m8;
+    signed char m9;
+    signed char mA;
+    signed char mB;
+    unsigned char mUnknownC[0xC];
     unsigned short m18;
     unsigned char mUnknown1A[0x4A];
     int *m64;
@@ -261,7 +267,7 @@ void fn_80276938(int index, float value);
 void SNDI_aztospkrvol(unsigned short angle, float *levels);
 void fn_8027981C(int count);
 
-void fn_8026A0E8(int value);
+void SNDVOICEI_free(int value);
 void *SNDMEMI_allocz(int size);
 void SNDMEMI_free(void *p);
 void SNDSYS_entercritical(void);

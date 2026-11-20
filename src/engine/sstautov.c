@@ -33,7 +33,7 @@ void StreamFader(void *context)
     }
     offset = sp->mIndex * sizeof(SndStreamSpeaker_t) + 316;
     channel = (SndStreamChannel_t *)((char *)sp - offset);
-    voice = fn_8026A288(channel->mVoice);
+    voice = SNDVOICEI_get(channel->mVoice);
     if (voice >= 0) {
         record = &lbl_803A6C24.m1CC[voice];
         slot = SNDSTRMIspeakerchannel[record->m23 - 1][sp->mIndex];

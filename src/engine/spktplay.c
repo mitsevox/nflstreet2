@@ -17,10 +17,10 @@ int SNDPKTPLAY_purge(int index, int a, int b);
 void SNDI_checkplayopts(SndPlayOpts_t *opts);
 void iSNDcalcpitch(int index);
 int fn_80274464(int stream, int index, int a, int b, int c, Info_80274464 *info, Struct_80274464 *p);
-void fn_8026A0E8(int value);
+void SNDVOICEI_free(int value);
 void fn_80273D7C(unsigned int flags, int *a, int *b);
 extern float lbl_80300028;
-int fn_80269D28(int count, int priority, int *handle, int rate, int format);
+int SNDVOICEI_alloc(int count, int priority, int *handle, int rate, int format);
 int SNDI_validrendermode(int *mode, SndPatchHeader_t *header);
 void SetDefaultAzimuths(Record_803A6DF0 *p);
 int SNDPKTPLAYI_gethighchannel(int index, int count);
@@ -130,7 +130,7 @@ int SNDPKTPLAY_start(int index, Info_80274464 *info, Struct_80274464 *params, Sn
     // FAKEMATCH: found is never set (success leaves by break); without the test 80.87%
     while (!found && (render = SNDI_validrendermode(&cursor, &header)) != 0) {
         fn_80273D7C(render, &rate, &format);
-        voice = fn_80269D28(count, 101, &handle, rate, format);
+        voice = SNDVOICEI_alloc(count, 101, &handle, rate, format);
         if (voice < 0) {
             stream->m0 = -9;
             continue;
@@ -200,7 +200,7 @@ int SNDPKTPLAY_start(int index, Info_80274464 *info, Struct_80274464 *params, Sn
             break;
         }
         for (i = 0; i < count; i++) {
-            fn_8026A0E8(lbl_803A6C24.m1CC[voice].m4[i]);
+            SNDVOICEI_free(lbl_803A6C24.m1CC[voice].m4[i]);
         }
         stream->m0 = result;
     }

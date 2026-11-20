@@ -48,7 +48,7 @@ int SNDSTRM_setvol(int stream, int speaker, float vol)
     } else {
         _SNDSTRM_setspeakervol(&channel->mSpeakers[speaker], vol);
     }
-    voice = fn_8026A288(channel->mVoice);
+    voice = SNDVOICEI_get(channel->mVoice);
     if (voice >= 0) {
         if (speaker == -1) {
             record = &lbl_803A6C24.m1CC[voice];

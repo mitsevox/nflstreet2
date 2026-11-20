@@ -8,7 +8,7 @@ int SNDCTRL_highpass(int handle, int value)
 {
     int index;
 
-    handle = fn_8026A288(handle);
+    handle = SNDVOICEI_get(handle);
     if (handle >= 0) {
         index = -1;
         while (iSNDpatchkey(handle, &index)) {

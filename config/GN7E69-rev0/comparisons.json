@@ -34950,23 +34950,29 @@
     {
       "source": "src/engine/salloc.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80269CE8-0x8026A2DC (src/engine/salloc.c); draft comparisons only, original assembly remains linked. Part of the former src/engine/cu_80266A2C.c (split by c16a).",
+      "evidence": "evidence.tsv unit row 0x80269CE8-0x8026A2DC (src/engine/salloc.c), its function, name and data rows and the sound_cxx compiler row 0x80266E88-0x8026A664. Documented holdout: fn_8026A0E8 0x8026A0E8-0x8026A288 (99.03%, one base-register form in its last clear) and the exact fn_8026A288 after it are compiled with DECOMP_COMPARE for comparison only and keep their original bytes; the leading two functions are linked through units.json.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80269CE8",
           "end": "0x8026A2DC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFCC0",
+          "end": "0x802FFCC4"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_80269CE8",
-          "start": "0x80269CE8",
-          "end": "0x80269D28"
+          "symbol": "SNDVOICEI_free",
+          "start": "0x8026A0E8",
+          "end": "0x8026A288"
         },
         {
-          "symbol": "fn_8026A288",
+          "symbol": "SNDVOICEI_get",
           "start": "0x8026A288",
           "end": "0x8026A2DC"
         }
@@ -36281,6 +36287,69 @@
           "symbol": "sprintf",
           "start": "0x801C2E18",
           "end": "0x801C2EB4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/ssysinit.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026FD28-0x802702D8 (src/engine/ssysinit.c), its function, name and data rows and the sound_cxx compiler row. Documented holdout in the middle of .text: SNDSYS_restore 0x802700E0-0x802701D8 (95.97%, one register choice) and the exact SNDSYSI_chanpubinit 0x802701D8-0x802702D8 after it are compiled with DECOMP_COMPARE for comparison only and keep their original bytes; the leading three functions are linked through units.json.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026FD28",
+          "end": "0x802702D8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7A68",
+          "end": "0x802B7A74"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300030",
+          "end": "0x80300038"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SNDSYS_restore",
+          "start": "0x802700E0",
+          "end": "0x802701D8"
+        },
+        {
+          "symbol": "SNDSYSI_chanpubinit",
+          "start": "0x802701D8",
+          "end": "0x802702D8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/stagpat.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80270494-0x80270D6C (src/engine/stagpat.c), its function, name and data rows and the sound_cxx compiler row. fn_80270B10 0x80270B10-0x80270D6C is exact and compiled with DECOMP_COMPARE for comparison only (it follows the unwritten 1528-byte fn_80270518, which keeps its original bytes); fn_80270494 is linked through units.json.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80270494",
+          "end": "0x80270D6C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300038",
+          "end": "0x8030003C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SNDBANKI_playpatch",
+          "start": "0x80270B10",
+          "end": "0x80270D6C"
         }
       ]
     }

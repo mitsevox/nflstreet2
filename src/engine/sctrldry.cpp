@@ -5,7 +5,7 @@
 
 int SNDCTRL_drylevel(int handle, int level)
 {
-    int index = fn_8026A288(handle);
+    int index = SNDVOICEI_get(handle);
     int cursor;
 
     if (index >= 0) {

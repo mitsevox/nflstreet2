@@ -64,7 +64,7 @@ int SNDSTRM_setazimuth(int stream, int speaker, float azimuth)
         }
         sp->mAzimuthOn = on;
     }
-    voice = fn_8026A288(channel->mVoice);
+    voice = SNDVOICEI_get(channel->mVoice);
     if (voice >= 0) {
         record = &lbl_803A6C24.m1CC[voice];
         if (speaker == -1) {

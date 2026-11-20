@@ -8,7 +8,7 @@ int SNDCTRL_filteradd(int handle, Desc_80276798 *desc)
 {
     int index;
 
-    handle = fn_8026A288(handle);
+    handle = SNDVOICEI_get(handle);
     if (handle >= 0) {
         index = -1;
         while (iSNDpatchkey(handle, &index)) {

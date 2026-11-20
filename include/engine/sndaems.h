@@ -10,7 +10,14 @@ typedef struct Voice_803A6C24 {
     unsigned short mUnknown1C;
     unsigned char mUnknown1E[5];
     unsigned char mUnknown23;
-    unsigned char mUnknown24[59];
+    unsigned char mUnknown24[2];
+    unsigned char m26;
+    unsigned char m27;
+    short m28;
+    unsigned char m2A;
+    unsigned char mUnknown2B;
+    int m2C;
+    unsigned char mUnknown30[47];
     unsigned char mUnknown5F;
     unsigned char mUnknown60[13];
     unsigned char mUnknown6D;
@@ -20,10 +27,14 @@ typedef struct Voice_803A6C24 {
 } Voice_803A6C24;
 
 typedef struct Object_803A6C24 {
-    unsigned char mUnknown0[364];
+    unsigned char mUnknown0[0x34];
+    unsigned char m34;
+    unsigned char mUnknown35[0x137];
     short mUnknown16C;
     signed char mUnknown16E;
-    unsigned char mUnknown16F[53];
+    unsigned char mUnknown16F;
+    int m170;
+    unsigned char mUnknown174[48];
     void (*mUnknown1A4[10])(void *);
     Voice_803A6C24 *mUnknown1CC;
 } Object_803A6C24;

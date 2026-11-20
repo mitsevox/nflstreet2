@@ -14,5 +14,5 @@ int SNDBANK_play(int bank, int patch, SndPlayOpts_t *opts)
     if (patch < 0 || patch >= hdr->m6) {
         return -8;
     }
-    return fn_80270B10(hdr, SNDBANKI_getppatch(hdr, patch), bank, patch, opts);
+    return SNDBANKI_playpatch(hdr, SNDBANKI_getppatch(hdr, patch), bank, patch, opts);
 }

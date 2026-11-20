@@ -7,7 +7,7 @@ extern "C" {
 
 int SNDover(int handle)
 {
-    return fn_8026A288(handle) < 0;
+    return SNDVOICEI_get(handle) < 0;
 }
 
 }

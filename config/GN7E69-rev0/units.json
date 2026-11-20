@@ -2150,6 +2150,34 @@
       "address": "0x803ECEB0",
       "evidence": "evidence.tsv data/name rows for 0x803ECEB0 (target extent, related name); speech-library storage, original-owned."
     },
+    "SNDI_spkrconfig": {
+      "address": "0x80277B3C",
+      "evidence": "evidence.tsv function and name rows for SNDI_spkrconfig 0x80277B3C; the draft src/engine/satospkr.c is registered in comparisons.json (SNDI_precalcaztospkrvol differs), so the original provider stays linked and linked callers (src/engine/ssysinit.c) resolve this name to it."
+    },
+    "SNDI_precalcaztospkrvol": {
+      "address": "0x80277658",
+      "evidence": "evidence.tsv function and name rows for SNDI_precalcaztospkrvol 0x80277658; the draft src/engine/satospkr.c is registered in comparisons.json (this function differs), so the original provider stays linked and linked callers (src/engine/ssysinit.c) resolve this name to it."
+    },
+    "SNDI_freespkrtable": {
+      "address": "0x80277AFC",
+      "evidence": "evidence.tsv function and name rows for SNDI_freespkrtable 0x80277AFC; the draft src/engine/satospkr.c is registered in comparisons.json (SNDI_precalcaztospkrvol differs), so the original provider stays linked and linked callers (src/engine/ssysinit.c) resolve this name to it."
+    },
+    "SNDSYSI_chanpubinit": {
+      "address": "0x802701D8",
+      "evidence": "evidence.tsv function and name rows for SNDSYSI_chanpubinit 0x802701D8; it is exact but follows the documented holdout SNDSYS_restore in src/engine/ssysinit.c, so it is registered in comparisons.json, its original bytes stay linked and the linked SNDSYSI_init resolves this name to it."
+    },
+    "SNDVOICEI_free": {
+      "address": "0x8026A0E8",
+      "evidence": "evidence.tsv function and name rows for fn_8026A0E8 0x8026A0E8; it is exact or partial but follows the documented holdout fn_8026A0E8 in src/engine/salloc.c, so it is registered in comparisons.json, its original bytes stay linked and linked callers resolve this name to it."
+    },
+    "SNDVOICEI_get": {
+      "address": "0x8026A288",
+      "evidence": "evidence.tsv function and name rows for fn_8026A288 0x8026A288; it is exact or partial but follows the documented holdout fn_8026A0E8 in src/engine/salloc.c, so it is registered in comparisons.json, its original bytes stay linked and linked callers resolve this name to it."
+    },
+    "SNDBANKI_playpatch": {
+      "address": "0x80270B10",
+      "evidence": "evidence.tsv function and name rows for fn_80270B10 0x80270B10; it is exact but follows the unwritten fn_80270518 in src/engine/stagpat.c, so it is registered in comparisons.json, its original bytes stay linked and linked callers (src/engine/sbplay.c) resolve this name to it."
+    },
     "SNQueryData": {
       "address": "0x801ACB9C",
       "evidence": "evidence.tsv name row SNQueryData 0x801ACB9C (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801ACB9C; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
@@ -5344,6 +5372,25 @@
           "placement": ".text",
           "start": "0x80257CF4",
           "end": "0x80258070"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/stagpat.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80270494-0x80270D6C (src/engine/stagpat.c, NASCAR 2005 stagpat.c), its function and name rows, the data row of its .data 0x80300038-0x8030003C (freekey and padding) and the sound_cxx compiler row 0x8026E4C0-0x80270494 with the d4 source-form row; fn_80270494 (0x80270494-0x80270518) is exact and linked with the .data byte. fn_80270518 (1528 bytes) is not yet written and keeps its original bytes; the exact fn_80270B10 after it stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80270494",
+          "end": "0x80270518"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300038",
+          "end": "0x8030003C"
         }
       ]
     },
@@ -20642,6 +20689,25 @@
       ]
     },
     {
+      "source": "src/engine/salloc.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80269CE8-0x8026A2DC (src/engine/salloc.c, FIFA Soccer 2005 salloc.o), its function and name rows, the data row of its .data lasthandle 0x802FFCC0-0x802FFCC4 and the sound_cxx compiler row 0x80266E88-0x8026A664; fn_80269CE8 and fn_80269D28 (0x80269CE8-0x8026A0E8) are exact and linked with the .data word. The documented holdout fn_8026A0E8 0x8026A0E8-0x8026A288 and the exact fn_8026A288 after it keep their original bytes and stay comparisons.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80269CE8",
+          "end": "0x8026A0E8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFCC0",
+          "end": "0x802FFCC4"
+        }
+      ]
+    },
+    {
       "source": "src/engine/sballoc.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x8026A664-0x8026A6E8 (src/engine/sballoc.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
@@ -21159,6 +21225,31 @@
           "placement": ".text",
           "start": "0x8026F2C8",
           "end": "0x8026F334"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/ssysinit.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026FD28-0x802702D8 (src/engine/ssysinit.c, NASCAR 2005 ssysinit.c), its function and name rows, the data rows of its .data 0x80300030-0x80300038 and its .rodata literal pool 0x802B7A68-0x802B7A74, and the sound_cxx compiler row 0x8026E4C0-0x80270494; SNDSYS_getopts, SNDSYS_setopts and SNDSYSI_init (0x8026FD28-0x802700E0) are exact and linked with the whole .data and the first two literals (0x802B7A68-0x802B7A70). The documented holdout SNDSYS_restore 0x802700E0-0x802701D8 and the exact SNDSYSI_chanpubinit after it (with its literal 0x802B7A70) keep their original bytes and stay comparisons.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026FD28",
+          "end": "0x802700E0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7A68",
+          "end": "0x802B7A70"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300030",
+          "end": "0x80300038"
         }
       ]
     },

@@ -8,7 +8,7 @@ int SNDPKTPLAYI_voicetopackethandle(int handle)
 {
     int i;
     for (i = 0; i < lbl_803A6C24.m1C.m22; i++) {
-        if (sndpps.m304[i] != 0 && fn_8026A288(sndpps.m304[i]->m0) == handle) {
+        if (sndpps.m304[i] != 0 && SNDVOICEI_get(sndpps.m304[i]->m0) == handle) {
             return i;
         }
     }
