@@ -287,7 +287,7 @@ void fn_80234CF0(Part_8003DEC4 *p, int a, void *q);
 void fn_80234DC0(Part_8003DEC4 *p, int a);
 int fn_80236B98(int a, float r, float g, float b);
 void fn_80236C10(int a, Vector_801A1650 *pScale, void *p);
-int fn_80236EC0(int a);
+int LLFogEnable(int a);
 void fn_8024E908(int type, int fmt, int count);
 void fn_8024EB28(int a);
 void GXSetChanMatColor(int chan, Color_8024FB58 color);
@@ -1313,7 +1313,7 @@ void fn_801A3FFC(void)
 
     TMRenderReset();
     i = 0;
-    old = fn_80236EC0(1);
+    old = LLFogEnable(1);
     fn_8024EB28(0);
     fn_80252034(1, 4, 5, 5);
     fn_80252114(0);
@@ -1362,7 +1362,7 @@ void fn_801A3FFC(void)
     }
     TMRenderSetZRange(0.0f, 1.0f);
     fn_802520E0(1, 3, 1);
-    fn_80236EC0(old);
+    LLFogEnable(old);
 }
 
 /* Draws the clipped shadow polygons of all players. */
@@ -1374,7 +1374,7 @@ void fn_801A42D4(void)
 
     TMRenderReset();
     i = 0;
-    old = fn_80236EC0(1);
+    old = LLFogEnable(1);
     fn_8024EB28(0);
     fn_80252034(1, 4, 5, 5);
     fn_80252114(0);
@@ -1426,7 +1426,7 @@ void fn_801A42D4(void)
     }
     TMRenderSetZRange(0.0f, 1.0f);
     fn_802520E0(1, 3, 1);
-    fn_80236EC0(old);
+    LLFogEnable(old);
 }
 
 void fn_801A45CC(void)

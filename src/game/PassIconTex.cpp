@@ -32,7 +32,7 @@ void TMTexLibLoad(PassIconTexLib *pElement, int a);
 void TMTexLibUnload(PassIconTexLib *pElement);
 PassIconTexture *TMTexLibGetTexture(PassIconTexLib *pElement, int a);
 PassIconClut *TMTexLibGetClut(PassIconTexLib *pElement, int a, int b);
-int fn_80236EC0(int a);
+int LLFogEnable(int a);
 void GXSetNumChans(int a);
 void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXInitTexObjCI(GXTexObj *pObject, void *pData, int width, int height, int a, int b, int c, int d, int e);
@@ -84,7 +84,7 @@ void PassIconTexFree(void)
 
 void PassIconTexDraw(PassIconObj_t *pInstance)
 {
-    int value = fn_80236EC0(0);
+    int value = LLFogEnable(0);
 
     TMRenderReset();
     GXClearVtxDesc();
@@ -123,6 +123,6 @@ void PassIconTexDraw(PassIconObj_t *pInstance)
     GXTexCoord2f32(0.0f, 0.0f);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZCompLoc(GX_ENABLE);
-    fn_80236EC0(value);
+    LLFogEnable(value);
 }
 }

@@ -54,7 +54,7 @@ int TMTexLibGetClut(DivotTexLib *pElement, int a, int b);
 void TMRenderReset(void);
 void TMRenderBindTexture(int a, int b, int c);
 void TMRenderSetZRange(float a, float b);
-int fn_80236EC0(int a);
+int LLFogEnable(int a);
 void GXSetChanMatColor(int a, GXColor color);
 void GXSetNumChans(int a);
 void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
@@ -125,7 +125,7 @@ void DivotRenderBegin(int index)
     GXColor color = { 255, 255, 255, 255 };
 
     TMRenderReset();
-    _DivotRender_bSavedFog = fn_80236EC0(1);
+    _DivotRender_bSavedFog = LLFogEnable(1);
     GXSetCullMode(GX_CULL_NONE);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
     GXSetZCompLoc(GX_DISABLE);
@@ -150,7 +150,7 @@ void DivotRenderEnd(int index)
 {
     TMRenderSetZRange(0.0f, 1.0f);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
-    fn_80236EC0(_DivotRender_bSavedFog);
+    LLFogEnable(_DivotRender_bSavedFog);
 }
 
 void DivotRenderDrawOne(DivotDrawView *pObject)

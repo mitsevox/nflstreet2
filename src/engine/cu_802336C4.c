@@ -377,7 +377,7 @@ extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
 extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int f);
 extern void fn_802349CC(void *p);
 extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
-extern void fn_80236F00(void);
+extern void LLCacheLockedEnable(void);
 
 void fn_8023123C(void *p, int mode, unsigned char *pDone);
 int fn_80232DE0(void);
@@ -700,7 +700,7 @@ void fn_802337D4(Model_802337D4 *pModel, Joints_802337D4 *pJoints, void *pPose, 
         pBones = pModel->mpUnknown16;
         if (pSkeleton != 0 && pBones != 0) {
             if (pJoints->mUnknown4 != 0) {
-                fn_80236F00();
+                LLCacheLockedEnable();
             }
             TMClusterObjAllocMatrices(pJoints, pSkeleton[1]);
             TMClusterObjSynthesizeMatrices(pJoints, pBones, pSkeleton, pPose);
@@ -719,7 +719,7 @@ void fn_80233850(Model_802337D4 *pModel, Joints_802337D4 *pJoints, void *pPose, 
         pBones = pModel->mpUnknown16;
         if (pSkeleton != 0 && pBones != 0) {
             if (pJoints->mUnknown4 != 0) {
-                fn_80236F00();
+                LLCacheLockedEnable();
             }
             TMClusterObjAllocMatrices(pJoints, pSkeleton[1]);
             TMClusterObjSynthesizeMatricesSlerp(pJoints, pBones, pSkeleton, pPose, pFlags);

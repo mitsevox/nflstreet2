@@ -20956,19 +20956,19 @@
     {
       "source": "src/engine/cu_802355E4.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802355E4-0x8023873C, function/name/source-form rows and data row 0x802B71A8-0x802B71AC for the one emitted float literal. All complete reconstructed functions and native initialized data are measured; original bytes remain linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802355E4-0x80235DD8 (src/engine/cu_802355E4.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows and the data row for its .rodata 0x802B71A8-0x802B71B0. Complete reconstructed functions are measured; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802355E4",
-          "end": "0x8023873C"
+          "end": "0x80235DD8"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B71A8",
-          "end": "0x802B7220"
+          "end": "0x802B71B0"
         }
       ],
       "functions": [
@@ -21048,6 +21048,32 @@
           "end": "0x80235DD8"
         },
         {
+          "symbol": "fn_80235D10",
+          "start": "0x80235D10",
+          "end": "0x80235D74"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/lllight.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80235DD8-0x80236DD8 (src/engine/lllight.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows and the data row for its .rodata 0x802B71B0-0x802B721C. Complete reconstructed functions are measured; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80235DD8",
+          "end": "0x80236DD8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B71B0",
+          "end": "0x802B721C"
+        }
+      ],
+      "functions": [
+        {
           "symbol": "fn_8023608C",
           "start": "0x8023608C",
           "end": "0x8023609C"
@@ -21113,45 +21139,70 @@
           "end": "0x80236C10"
         },
         {
-          "symbol": "fn_80236DD8",
-          "start": "0x80236DD8",
-          "end": "0x80236DE0"
+          "symbol": "fn_80235DD8",
+          "start": "0x80235DD8",
+          "end": "0x80235EB4"
         },
         {
-          "symbol": "fn_80236DE0",
-          "start": "0x80236DE0",
-          "end": "0x80236E04"
+          "symbol": "fn_80235EB4",
+          "start": "0x80235EB4",
+          "end": "0x80235F58"
         },
         {
-          "symbol": "fn_80236E04",
-          "start": "0x80236E04",
-          "end": "0x80236E2C"
+          "symbol": "fn_80235F58",
+          "start": "0x80235F58",
+          "end": "0x8023608C"
         },
         {
-          "symbol": "fn_80236E2C",
-          "start": "0x80236E2C",
-          "end": "0x80236E3C"
+          "symbol": "fn_80236164",
+          "start": "0x80236164",
+          "end": "0x80236258"
         },
         {
-          "symbol": "fn_80236EC0",
-          "start": "0x80236EC0",
-          "end": "0x80236EFC"
+          "symbol": "fn_80236408",
+          "start": "0x80236408",
+          "end": "0x802364B4"
         },
         {
-          "symbol": "fn_80236EFC",
-          "start": "0x80236EFC",
-          "end": "0x80236F00"
+          "symbol": "fn_802364B4",
+          "start": "0x802364B4",
+          "end": "0x802365E8"
         },
         {
-          "symbol": "fn_80236F00",
-          "start": "0x80236F00",
-          "end": "0x80236F34"
+          "symbol": "fn_802365E8",
+          "start": "0x802365E8",
+          "end": "0x802368D0"
         },
         {
-          "symbol": "fn_80236F34",
-          "start": "0x80236F34",
-          "end": "0x80236F78"
+          "symbol": "fn_802368D0",
+          "start": "0x802368D0",
+          "end": "0x80236B4C"
         },
+        {
+          "symbol": "fn_80236B4C",
+          "start": "0x80236B4C",
+          "end": "0x80236B98"
+        },
+        {
+          "symbol": "fn_80236C10",
+          "start": "0x80236C10",
+          "end": "0x80236DD8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/syncrand.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80236F78-0x8023758C (src/engine/syncrand.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows. Complete reconstructed functions are measured; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80236F78",
+          "end": "0x8023758C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_80236F78",
           "start": "0x80236F78",
@@ -21221,7 +21272,22 @@
           "symbol": "fn_8023756C",
           "start": "0x8023756C",
           "end": "0x8023758C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/synctime.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8023758C-0x80237A30 (src/engine/synctime.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows. Complete reconstructed functions are measured; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023758C",
+          "end": "0x80237A30"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8023758C",
           "start": "0x8023758C",
@@ -21326,7 +21392,22 @@
           "symbol": "fn_80237A28",
           "start": "0x80237A28",
           "end": "0x80237A30"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/syncstate.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80237A30-0x80238258 (src/engine/syncstate.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows. Complete reconstructed functions are measured; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80237A30",
+          "end": "0x80238258"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_80237A30",
           "start": "0x80237A30",
@@ -21453,6 +21534,31 @@
           "end": "0x80238258"
         },
         {
+          "symbol": "fn_80237EE8",
+          "start": "0x80237EE8",
+          "end": "0x80237F98"
+        },
+        {
+          "symbol": "fn_8023808C",
+          "start": "0x8023808C",
+          "end": "0x8023811C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/crc32.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80238258-0x802382CC (src/engine/crc32.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows. Complete reconstructed functions are measured; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80238258",
+          "end": "0x802382CC"
+        }
+      ],
+      "functions": [
+        {
           "symbol": "fn_80238258",
           "start": "0x80238258",
           "end": "0x80238278"
@@ -21461,7 +21567,22 @@
           "symbol": "fn_80238278",
           "start": "0x80238278",
           "end": "0x802382CC"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/evmon.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x802382CC-0x8023873C (src/engine/evmon.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows. Complete reconstructed functions are measured; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802382CC",
+          "end": "0x8023873C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_802382CC",
           "start": "0x802382CC",
@@ -21531,71 +21652,6 @@
           "symbol": "fn_802386DC",
           "start": "0x802386DC",
           "end": "0x8023873C"
-        },
-        {
-          "symbol": "fn_80235D10",
-          "start": "0x80235D10",
-          "end": "0x80235D74"
-        },
-        {
-          "symbol": "fn_80235DD8",
-          "start": "0x80235DD8",
-          "end": "0x80235EB4"
-        },
-        {
-          "symbol": "fn_80235EB4",
-          "start": "0x80235EB4",
-          "end": "0x80235F58"
-        },
-        {
-          "symbol": "fn_80235F58",
-          "start": "0x80235F58",
-          "end": "0x8023608C"
-        },
-        {
-          "symbol": "fn_80236164",
-          "start": "0x80236164",
-          "end": "0x80236258"
-        },
-        {
-          "symbol": "fn_80236408",
-          "start": "0x80236408",
-          "end": "0x802364B4"
-        },
-        {
-          "symbol": "fn_802364B4",
-          "start": "0x802364B4",
-          "end": "0x802365E8"
-        },
-        {
-          "symbol": "fn_802365E8",
-          "start": "0x802365E8",
-          "end": "0x802368D0"
-        },
-        {
-          "symbol": "fn_802368D0",
-          "start": "0x802368D0",
-          "end": "0x80236B4C"
-        },
-        {
-          "symbol": "fn_80236B4C",
-          "start": "0x80236B4C",
-          "end": "0x80236B98"
-        },
-        {
-          "symbol": "fn_80236C10",
-          "start": "0x80236C10",
-          "end": "0x80236DD8"
-        },
-        {
-          "symbol": "fn_80237EE8",
-          "start": "0x80237EE8",
-          "end": "0x80237F98"
-        },
-        {
-          "symbol": "fn_8023808C",
-          "start": "0x8023808C",
-          "end": "0x8023811C"
         }
       ]
     },

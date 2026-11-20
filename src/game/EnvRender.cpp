@@ -62,12 +62,12 @@ void fn_80235C90(Object_80235588 *p, int a, float b, float c, float d, float e);
 void fn_80235D0C(Object_80235588 *p, int a);
 void fn_80235D10(Object_80235588 *p, float a);
 void fn_80235D78(Vector_80039F5C *p);
-void fn_80236DD8(Viewport_t *p);
-void fn_80236DE0(int a);
-void fn_80236E04(float a, float b);
-void fn_80236E2C(int r, int g, int b);
-int fn_80236EC0(int a);
-void fn_80236EFC(float a);
+void LLFogSetViewport(Viewport_t *p);
+void LLFogSetType(int a);
+void LLFogSetRange(float a, float b);
+void LLFogSetColor(int r, int g, int b);
+int LLFogEnable(int a);
+void LLFogSetDensity(float a);
 }
 
 static EnvFogSettings _EnvRender_aFogSettings[12] = {
@@ -108,8 +108,8 @@ void EnvSkyInit(EnvSkyObj_t *pInstance)
 
 void EnvSkyShutdown(EnvSkyObj_t *pInstance)
 {
-    fn_80236DE0(0);
-    fn_80236EC0(0);
+    LLFogSetType(0);
+    LLFogEnable(0);
 }
 
 void EnvSkyDraw(EnvSkyObj_t *pInstance, int unused)
@@ -187,17 +187,17 @@ void EnvApplyFog(void)
     float density = fn_800A3400();
 
     if (density > 0.0f) {
-        fn_80236DE0(pEntry->mUnknown8);
+        LLFogSetType(pEntry->mUnknown8);
     } else {
-        fn_80236DE0(0);
+        LLFogSetType(0);
     }
     if (InGameIsPlaying()) {
-        fn_80236DD8(GameVpt::GetViewport());
+        LLFogSetViewport(GameVpt::GetViewport());
     }
-    fn_80236E2C(color & 0xFF, (color >> 8) & 0xFF, (color >> 16) & 0xFF);
-    fn_80236E04(pEntry->mUnknown0, pEntry->mUnknown4);
-    fn_80236EFC(density);
-    fn_80236EC0(1);
+    LLFogSetColor(color & 0xFF, (color >> 8) & 0xFF, (color >> 16) & 0xFF);
+    LLFogSetRange(pEntry->mUnknown0, pEntry->mUnknown4);
+    LLFogSetDensity(density);
+    LLFogEnable(1);
 }
 
 void EnvLayersInit(EnvObj *pObject)

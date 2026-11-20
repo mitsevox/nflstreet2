@@ -72,7 +72,7 @@ void TMTexLibUnload(void *p);
 int TMTexLibGetTexture(void *p, unsigned int key);
 int TMTexLibGetClut(void *p, unsigned int key, int a);
 void fn_80234D00(FieldLineBounds_t *pIn, FieldLineBounds_t *pOut);
-int fn_80236EC0(int a);
+int LLFogEnable(int a);
 void GXSetChanMatColor(int a, GXColor color);
 void GXSetNumChans(int a);
 void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
@@ -114,7 +114,7 @@ int FieldLineDraw(FieldLine_t *p)
             float scale = FieldLineGetScale(p);
             float matrix[4][4];
             TMRenderReset();
-            int state = fn_80236EC0(0);
+            int state = LLFogEnable(0);
             GXSetCullMode(GX_CULL_NONE);
             GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
             GXSetZCompLoc(GX_FALSE);
@@ -166,7 +166,7 @@ int FieldLineDraw(FieldLine_t *p)
                 GXPosition3f32(x, scale * y, zero);
             }
             GXTexCoord2f32(0.1f, _FieldLines_fHeight * 0.5f);
-            fn_80236EC0(state);
+            LLFogEnable(state);
         }
         p->mUnknownE4 += p->mUnknownE8;
         if ((p->mUnknownE8 > zero && p->mUnknownE4 > p->mUnknownF0) ||

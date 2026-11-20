@@ -39,7 +39,7 @@ void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(PlyrNameTag_t 
 int ObjNewInList(int handle, int a, int b, int *pInit);
 void ObjRemoveFromList(int handle, PlyrNameTag_t *pInstance);
 void fn_80227E40(float *pOut, float *pIn);
-int fn_80236EC0(int a);
+int LLFogEnable(int a);
 
 static int _PlyrNameTag_iObjList = 0;
 static float _PlyrNameTag_fDepthScale = 1.3f;
@@ -87,7 +87,7 @@ int PlyrNameTagDraw(PlyrNameTag_t *pInstance)
             int state;
 
             GlibRenderSelectBin(GlibRenderGetBin(14));
-            state = fn_80236EC0(0);
+            state = LLFogEnable(0);
             fn_801CD2A4();
             if (_PlyrNameTag_bBlackText) {
                 value.mValues[0] = 0.0f;
@@ -114,7 +114,7 @@ int PlyrNameTagDraw(PlyrNameTag_t *pInstance)
             fn_801CDB5C(pInstance->mUnknown20, pInstance->mpUnknown24, 1, 0.0f, pInstance->mUnknown4);
             MatPop();
             MatSetSlot(1, saved);
-            fn_80236EC0(state);
+            LLFogEnable(state);
         }
     }
     return 0;

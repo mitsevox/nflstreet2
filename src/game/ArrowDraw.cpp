@@ -49,7 +49,7 @@ void fn_80227538(Point2_t *pOut, int angle, float length);
 int fn_802275D8(Vector_80039F5C *pA, Vector_80039F5C *pB, float epsilon);
 void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
-int fn_80236EC0(int a);
+int LLFogEnable(int a);
 void GXSetNumChans(int a);
 void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
 void GXLoadPosMtxImm(Mtx44 m, int a);
@@ -312,7 +312,7 @@ void ArrowDraw(ArrowPath *pTrail)
         TMRenderSetZRange(0.01f, 0.01f);
     }
     TMRenderSetBlendMode(2);
-    state = fn_80236EC0(0);
+    state = LLFogEnable(0);
     if (pTrail->mType == 0) {
         ArrowDrawHead(0, pTrail, pTrail->mCount - 1);
     } else if (pTrail->mType == 1) {
@@ -328,6 +328,6 @@ void ArrowDraw(ArrowPath *pTrail)
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     TMRenderSetZRange(0.0f, 1.0f);
     TMRenderSetBlendMode(1);
-    fn_80236EC0(state);
+    LLFogEnable(state);
 }
 }

@@ -114,7 +114,7 @@ int PerIsDeviceConnected(unsigned char a);
 float RemapCheckEntry(int a, int b, char *p);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_802345C4(struct EngineParamWords *pDesc, int count);
-void fn_80236F34(void);
+void LLCacheLockedDisable(void);
 void fn_80237830(int a);
 unsigned int fn_802378C8(void);
 }
@@ -321,7 +321,7 @@ unsigned char InGame::Update()
     int handled;
     unsigned int count;
 
-    fn_80236F34();
+    LLCacheLockedDisable();
     handled = 0;
     UISGameRefreshAll();
     _InGameUpdateHook1();
@@ -380,7 +380,7 @@ unsigned char InGame::Update()
     SndgUpdate(1);
     GlibSwapBuffers();
     VptProcessViewports();
-    fn_80236F34();
+    LLCacheLockedDisable();
     if (_InGame_pFrameCallback) {
         _InGame_pFrameCallback();
     }

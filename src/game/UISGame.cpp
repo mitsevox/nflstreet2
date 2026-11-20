@@ -133,7 +133,7 @@ void fn_80223460(void);
 void fn_80225654(void);
 void fn_802363B0(Viewport_t *pObject);
 void fn_802363E0(Viewport_t *pObject);
-int fn_80236EC0(int a);
+int LLFogEnable(int a);
 }
 
 static ResBank_t *_UISGame_pCache = 0;
@@ -214,7 +214,7 @@ int UISGameDrawObj(int a, int b)
     if (FELoopIsMainFEActive()) {
         UIGLibraryProcess(UIGLibraryGetGlobal(1));
     }
-    saved = fn_80236EC0(0);
+    saved = LLFogEnable(0);
     if (a == _UISGame_pMainObj) {
         if (gUISMainInfo && (_UISGame_iDrawMask & 1)) {
             fn_8021992C(gUISMainInfo, b);
@@ -227,7 +227,7 @@ int UISGameDrawObj(int a, int b)
             fn_8021992C(gUISSub2Info, b);
         }
     }
-    fn_80236EC0(saved);
+    LLFogEnable(saved);
     GlibSetZBufferEnable(1);
     return 0;
 }

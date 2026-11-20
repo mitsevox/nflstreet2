@@ -4556,6 +4556,56 @@
       ]
     },
     {
+      "source": "src/engine/llfog.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80236DD8-0x80236F00 (src/engine/llfog.c), its compiler, function, name and data rows; every function exact, split from the former cu_802355E4 chunk and promoted together with its .rodata 0x802B7220-0x802B7224, .sdata 0x803EC110-0x803EC124 and .sbss 0x803ED02C-0x803ED030.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80236DD8",
+          "end": "0x80236F00"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7220",
+          "end": "0x802B7224"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC110",
+          "end": "0x803EC124"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED02C",
+          "end": "0x803ED030"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/llcache.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80236F00-0x80236F78 (src/engine/llcache.c), its compiler, function, name and data rows; every function exact, split from the former cu_802355E4 chunk and promoted together with its .sdata 0x803EC128-0x803EC12C.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80236F00",
+          "end": "0x80236F78"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC128",
+          "end": "0x803EC12C"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/os/OSArena.c",
       "profile": "dolphin_release",
       "evidence": "sdk.json unit src/dolphin/os/OSArena.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
