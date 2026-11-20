@@ -156,11 +156,32 @@ void MatSetStack(int stack);
 void MatCatSlot(int slot);
 Mtx44Ptr MatGetCurMatrixPtr(void);
 void fn_8022765C(void *pOut, void *pA, void *pB);
-extern unsigned char lbl_803EB750;
-extern GXTexObj lbl_803651B8;
-extern GXTlutObj lbl_803651D8;
-extern float lbl_802EDDF0[][2];
 }
+
+/* The ground pulse texture: 0x4C bytes of .bss, of which the draw code uses only the texture
+   object at +0x20 and the palette object at +0x40. No GameCube code initialises them. */
+struct FxDrawTexture_t {
+    unsigned char mUnknown0[0x20];
+    GXTexObj mTexObj;
+    GXTlutObj mTlutObj;
+};
+
+/* 8 bytes of .sdata: the draw code reads only byte +0, which selects the palette load when
+   it is 1. */
+struct FxDrawTextureInfo_t {
+    unsigned char mUnknown0;
+    unsigned char mUnknown1[7];
+};
+
+static FxDrawTextureInfo_t _FxDraw_GroundPulseTextureInfo = {0};
+static FxDrawTexture_t _FxDraw_GroundPulseTexture;
+
+static float _FxDraw_aGroundPulseUVs[4][2] = {
+    {0.0f, 1.0f},
+    {1.0f, 1.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.0f},
+};
 
 static inline float _FxRemap(float x, float x0, float x1, float y0, float y1)
 {
@@ -198,8 +219,9 @@ void FxGroundPulseDraw(float scale, void *position)
     MatCatSlot(3);
     GXLoadPosMtxImm(MatGetCurMatrixPtr(), 0);
     MatPop();
-    if (lbl_803EB750 == 1) GXLoadTlut(&lbl_803651D8, 0);
-    GXLoadTexObj(&lbl_803651B8, GX_TEXMAP0);
+    if (_FxDraw_GroundPulseTextureInfo.mUnknown0 == 1)
+        GXLoadTlut(&_FxDraw_GroundPulseTexture.mTlutObj, 0);
+    GXLoadTexObj(&_FxDraw_GroundPulseTexture.mTexObj, GX_TEXMAP0);
     unsigned char alpha = (unsigned char)_FxRemap(scale, 0.05f, 3.0f, 255.0f, 0.0f);
     for (unsigned char i = 0; i <= 3; ++i) {
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -209,7 +231,7 @@ void FxGroundPulseDraw(float scale, void *position)
             fn_8022765C(&vertex, position, &offset);
             GXPosition3f32(vertex.mX, vertex.mY, vertex.mZ);
             GXColor4u8(color[0], color[1], color[2], alpha);
-            GXTexCoord2f32(lbl_802EDDF0[j][0], lbl_802EDDF0[j][1]);
+            GXTexCoord2f32(_FxDraw_aGroundPulseUVs[j][0], _FxDraw_aGroundPulseUVs[j][1]);
         }
     }
     TMRenderSetBlendMode(1);

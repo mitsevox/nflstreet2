@@ -262,6 +262,7 @@ void FieldLinesUpdate(void)
 {
     for (unsigned int i = 0; i <= 4; ++i) {
         FieldLine_t *p = _FieldLines_apLines[i];
+        // FAKEMATCH: enabled is reused for the range gate and then the readiness result (keeps it in r28 across the calls)
         int enabled = 0;
         int mode = fn_800AD9B4();
         if (mode <= 3) {
@@ -272,6 +273,7 @@ void FieldLinesUpdate(void)
             ready = !fn_8002D060(lbl_803EA368);
         }
         enabled = ready;
+        // FAKEMATCH: each case writes y through a local copy qN of the line pointer, loaded before the getter calls
         switch ((unsigned int)p->mUnknownF4) {
         case 0: {
             _FieldLines_apLines[i]->mUnknown4.mX = 0.0f;

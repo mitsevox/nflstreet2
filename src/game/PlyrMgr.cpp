@@ -430,6 +430,7 @@ extern "C" int PlyrMgrLoadSnapshot(PlyrMgr_t *pManager, char *pBuffer)
         pDst++;
         pSrc++;
     }
+    // FAKEMATCH: pSrc is reused as the byte cursor through casts (a separate char * cursor takes another register)
     pSrc = (PlyrSaveView_t *)((char *)pSrc + sizeof(PlyrMgrCollideSet_t));
     memcpy(pManager->mpUnknown4->mpUnknown0, pSrc, pManager->mpUnknown4->mUnknown4 * 48);
     pSrc = (PlyrSaveView_t *)((char *)pSrc + pManager->mpUnknown4->mUnknown4 * 48);

@@ -751,8 +751,9 @@ void fn_801DEF18(PartObj_801DE1E0 *pObj)
     lbl_8039ADAC.mpPools[index].mFree++;
 }
 
-/* No GameCube code: nothing calls it, and SN ngcld -strip-unused drops the body, while its 60.0f
-   stays in .rodata ahead of the pool of the next function (evidence.tsv linker row 0x802B10E8). */
+/* Frame of a particle's texture: 0 for a single frame, else the particle's start frame plus (for
+   an animated texture) its age in 60ths of a second divided by the object's frame divisor,
+   modulo the frame count. */
 static unsigned int PSysRenderCalcParticleFrame(AnimTex_t *pTex, PartObj_801DE1E0 *pObj,
                                                 Particle_801DE1E0 *pParticle)
 {

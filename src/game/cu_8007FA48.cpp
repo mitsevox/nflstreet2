@@ -255,6 +255,7 @@ extern "C" void fn_8008044C(Object_8008044C *p, Desc_8008044C *desc, int tag)
         local.mUnknown12 = desc->mUnknown12;
     }
     switch (local.mUnknown0) {
+    // FAKEMATCH: the empty case 0 leaves no compare in the target; it only shapes the dispatch tree
     case 0: break;
     case 1: arg = lbl_802D6950; break;
     case 2: arg = lbl_802D6990; break;

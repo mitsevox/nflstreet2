@@ -724,6 +724,7 @@ void fn_800710C8(void)
         case 10: base = 127; break;
         case 0: case 5: case 11: base = 136; break;
         case 2: break;
+        // FAKEMATCH: case 1 repeats the initial base 118 and leaves no compare in the target; it only shapes the dispatch tree
         case 1: base = 118; break;
         }
         lbl_803EA6C8 = (lbl_803EA6C8 + 1) % 3;

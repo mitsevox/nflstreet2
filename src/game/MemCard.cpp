@@ -239,7 +239,7 @@ void MemCardFinishLoad(int a, int *b)
                 *b = -50;
             }
             break;
-        case 2:
+        case 2: // FAKEMATCH: explicit case 2 shapes the dispatch tree; its body is the default one
         default:
             fn_8022F4BC();
             fn_8022F1BC();

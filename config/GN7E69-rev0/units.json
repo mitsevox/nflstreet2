@@ -10784,7 +10784,7 @@
     {
       "source": "src/game/FxDraw.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80196AF0-0x8019723C (src/game/FxDraw.cpp) and its .rodata row.",
+      "evidence": "evidence.tsv unit row 0x80196AF0-0x8019723C (src/game/FxDraw.cpp) and its .rodata, .data, .sdata and .bss rows.",
       "sections": [
         {
           "section": ".text",
@@ -10797,6 +10797,24 @@
           "placement": ".data3",
           "start": "0x802ADA20",
           "end": "0x802ADA80"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EDDF0",
+          "end": "0x802EDE10"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB750",
+          "end": "0x803EB758"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365198",
+          "end": "0x803651E4"
         }
       ]
     },
@@ -19594,7 +19612,7 @@
     {
       "source": "src/engine/sevent.cpp",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026AF64-0x8026B2E0 (src/engine/sevent.cpp), its function and name rows, its type and field rows, the data rows of its .data 0x802FFCC4-0x802FFCCC, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact.",
+      "evidence": "evidence.tsv unit row 0x8026AF64-0x8026B2E0 (src/engine/sevent.cpp), its function and name rows, its type and field rows, the data rows of its .data 0x802FFCC4-0x802FFCD0, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact.",
       "sections": [
         {
           "section": ".text",
@@ -19606,7 +19624,7 @@
           "section": ".data",
           "placement": ".data4",
           "start": "0x802FFCC4",
-          "end": "0x802FFCCC"
+          "end": "0x802FFCD0"
         }
       ]
     },

@@ -37,6 +37,7 @@ struct A1cInstance {
 
 A1cSystemDesc *gpA1cSystemDesc = 0;
 Allocator *gpA1cAllocator = 0;
+int gA1cAbortIfIncompatible = 1;
 
 void A1cMemberDataCallBack(Csis::Parameter *params, void *context)
 {

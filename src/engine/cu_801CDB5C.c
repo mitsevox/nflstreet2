@@ -37,9 +37,7 @@ typedef struct FontVerts_801CD79C {
     float mUV[4][4];
 } FontVerts_801CD79C;
 
-/* No GameCube code: nothing calls it, and SN ngcld -strip-unused drops the body, while its
-   unsigned int-to-float bias stays in .rodata ahead of the pool of fn_801CD79C (evidence.tsv
-   linker row 0x802AF4B0-0x802AF4B8). fn_801CD79C writes the same texel-to-UV division out. */
+/* FAKEMATCH: invented unused static; its body exists only for its unsigned int-to-float bias in .rodata */
 static float FontLLTexelToUV(unsigned int texel, float size)
 {
     return texel / size;
@@ -74,6 +72,7 @@ static void fn_801CD79C(Font_801CCA64 *pFont, FontVerts_801CD79C *pVerts, FontQu
     pVerts->mUV[2][1] = pVerts->mUV[3][1] = v1;
 }
 
+/* FAKEMATCH: the four vertices go through a file-static inline helper; written inline the function does not match */
 static inline void _FontLLSendQuad(FontVerts_801CD79C *pVerts, GXColor *pColor)
 {
     GXPosition3f32(pVerts->mPos[0][0], pVerts->mPos[0][1], pVerts->mPos[0][2]);
