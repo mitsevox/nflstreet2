@@ -12261,18 +12261,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800BE8E4",
-          "end": "0x800BF07C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800BF174",
-          "end": "0x800BFB88"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800BFFD4",
           "end": "0x800C0910"
         },
         {
@@ -12577,14 +12565,6 @@
           {
             "function": "fn_800BE808",
             "evidence": "evidence.tsv source-form 0x800BE808-0x800BE8E4"
-          },
-          {
-            "function": "fn_800BF07C",
-            "evidence": "evidence.tsv source-form 0x800BF07C-0x800BF174"
-          },
-          {
-            "function": "OnEnter__12PreSnapPhasef",
-            "evidence": "evidence.tsv source-form 0x800BFB88-0x800BFFD4"
           },
           {
             "function": "fn_800C0910",

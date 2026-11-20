@@ -5764,7 +5764,7 @@ extern "C" void fn_80097564(void);
 
 extern "C" void fn_800975A4(unsigned char kind, int handle, unsigned char *pHigh, unsigned char *pLow);
 
-extern "C" void fn_800975EC(int id, int flag, int index);
+extern "C" void fn_800975EC(unsigned short id, int flag, int index);
 
 extern "C" int fn_8009780C(Object_80039F5C *p, Ball_t *pBall);
 
@@ -12009,7 +12009,7 @@ extern "C" void fn_800975A4(unsigned char kind, int handle, unsigned char *pHigh
     *pLow = value;
 }
 
-extern "C" void fn_800975EC(int id, int flag, int index)
+extern "C" void fn_800975EC(unsigned short id, int flag, int index)
 {
     if (lbl_8030C2B8[index].mUnknown0 != id) {
         lbl_8030C2B8[index].mUnknown0 = id;
@@ -12017,6 +12017,7 @@ extern "C" void fn_800975EC(int id, int flag, int index)
         if (flag != 0) {
             unsigned char groups[11];
             unsigned short i;
+            unsigned short j;
 
             groups[1] = 0;
             groups[2] = 0;
@@ -12028,21 +12029,22 @@ extern "C" void fn_800975EC(int id, int flag, int index)
             groups[8] = 4;
             groups[9] = 5;
             groups[10] = 6;
-            for (i = 0; i <= 6; i++) {
-                lbl_8030C2B8[index].mUnknownBEC[i] = 0;
-                lbl_8030C2B8[index].mUnknownBFA[i] = 0;
+            for (j = 0; j <= 6; j++) {
+                lbl_8030C2B8[index].mUnknownBEC[j] = 0;
+                lbl_8030C2B8[index].mUnknownBFA[j] = 0;
             }
             for (i = 0; i < lbl_8030C2B8[index].mUnknown4; i++) {
                 unsigned char group = groups[lbl_8030C2B8[index].mUnknown8[i].mpUnknown4->mUnknown4];
-                unsigned short j;
 
                 if (i != lbl_8030C2B8[index].mUnknownBEC[group]) {
-                    Slot_80097440 slot = lbl_8030C2B8[index].mUnknown8[i];
+                    Table_80089904 *pTable = (Table_80089904 *)&lbl_8030C2B8[index].mUnknown4;
+                    Slot_80097440 slot;
                     unsigned short start = lbl_8030C2B8[index].mUnknownBEC[group];
 
-                    memmove(&lbl_8030C2B8[index].mUnknown8[start + 1], &lbl_8030C2B8[index].mUnknown8[start],
-                                (i - start) * sizeof(Slot_80097440));
-                    lbl_8030C2B8[index].mUnknown8[lbl_8030C2B8[index].mUnknownBEC[group]] = slot;
+                    memcpy(&slot, &lbl_8030C2B8[index].mUnknown8[i], sizeof(slot));
+
+                    memmove(&pTable->mEntries[start + 1], &pTable->mEntries[start], (i - start) * sizeof(Entry_80089904));
+                    memcpy(&lbl_8030C2B8[index].mUnknown8[lbl_8030C2B8[index].mUnknownBEC[group]], &slot, sizeof(slot));
                 }
                 lbl_8030C2B8[index].mUnknownBFA[group]++;
                 for (j = group + 1; j <= 6; j++) {
@@ -12135,15 +12137,15 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
     unsigned int rating = p->mRatings[3] + p->mRatings[0] / 2 + p->mRatings[3] / 4;
     float skill;
     Item_80097440 *pItem;
-    Vector_80039F5C reach;
     Vector_80039F5C ballPos;
     Vector_80039F5C startPos;
-    Vector_80039F5C velocity;
-    Vector_80039F5C spin;
     Vector_80039F5C drift;
     Vector_80039F5C landing;
+    Vector_80039F5C velocity;
+    Vector_80039F5C spin;
     Vector_80039F5C toReach;
-    Vector_80039F5C toBall;
+    Vector_80039F5C reach;
+    Vec2_t toBall;
     int turn;
     float time;
     float reachLength;
@@ -12156,7 +12158,9 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
     skill = (speed - (float)(rating - low) / (float)(high - low)) * 0.65f;
     skill = speed - SyncRandGetFloat(0) * skill;
     pItem = fn_8009A63C(handle);
-    reach = pItem->mUnknown8;
+    reach.mX = pItem->mUnknown8.mX;
+    reach.mY = pItem->mUnknown8.mY;
+    reach.mZ = pItem->mUnknown8.mZ;
     fn_80227690(&reach, &reach, &pItem->mUnknown14);
     fn_80227248(&reach, &reach, p->mUnknown768);
     fn_80227638(&reach, &reach, &pItem->mUnknown14);
@@ -12164,7 +12168,9 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
     time = pItem->mUnknown20;
     *pScale = speed;
     BallGetPosition(pBall, &ballPos);
-    startPos = ballPos;
+    startPos.mX = ballPos.mX;
+    startPos.mY = ballPos.mY;
+    startPos.mZ = ballPos.mZ;
     BallGetVelocity(pBall, &velocity);
     BallGetSpin(pBall, &spin);
     ballPos.mZ += velocity.mZ * time - 0.0029814816f * time * time * 0.5f;
@@ -12172,7 +12178,7 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
         float height = ballPos.mZ - reach.mZ;
 
         if (!(fabsf(height) <= 0.03f)) {
-            float target = height >= 0.0f ? reach.mZ + 0.03f : reach.mZ - 0.03f;
+            float target = height < 0.0f ? reach.mZ - 0.03f : reach.mZ + 0.03f;
             float t = ((startPos.mZ - target) * 0.005962963f + velocity.mZ * velocity.mZ) * 112495.65f;
 
             t = fn_80260B1C(t >= 0.0f ? t : 0.0f);
@@ -12199,12 +12205,14 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
     fn_80227350(&drift, &velocity, time);
     ballPos.mX += drift.mX;
     ballPos.mY += drift.mY;
-    landing = ballPos;
+    landing.mX = ballPos.mX;
+    landing.mY = ballPos.mY;
+    landing.mZ = ballPos.mZ;
     fn_80227690(&ballPos, &ballPos, &p->mMotion.mPos);
     fn_80227384(&ballPos, &ballPos, -p->mMotion.mFacing);
     fn_802276B4(&toReach, &reach, &pItem->mUnknown14);
     reachLength = fn_802270A4(&toReach);
-    fn_80227690(&toBall, &pItem->mUnknown8, &ballPos);
+    fn_80227690((Vector_80039F5C *)&toBall, &pItem->mUnknown8, &ballPos);
     ballLength = fn_802270A4(&ballPos);
     MathAngleDiff((fn_801CFE40(velocity.mY, velocity.mX) + 0x800000) & 0xFFFFFF,
                   (p->mMotion.mFacing + pItem->mUnknown28 + pItem->mUnknown38) & 0xFFFFFF);
@@ -30347,7 +30355,9 @@ extern "C" void fn_800BF07C(void)
     if (fn_8009D9D8(1) == 0) {
         mode = 0;
     }
-    if (fn_8011F32C() == 0 && fn_8011F228() == 0 && fn_800B119C() != 0) {
+    if (fn_8011F32C() != 0 || fn_8011F228() != 0 || fn_800B119C() == 0) {
+        value = 0;
+    } else {
         switch (mode) {
         case 0:
             if (fn_800BA6F8() != 0) {
@@ -30360,6 +30370,8 @@ extern "C" void fn_800BF07C(void)
         case 1:
             value = fn_8009D990(0) - 6;
             value -= fn_802372EC(0, 8);
+            break;
+        case 2:
             break;
         }
         if (value <= 4) {
@@ -30742,16 +30754,16 @@ void PreSnapPhase::OnEnter(float dt)
 
         pSlot->mUnknown0 = 0;
         pSlot->mUnknown4 = 0;
+        pSlot->mUnknown1C = 0;
         pSlot->mUnknown8 = 0;
-        pSlot->mUnknownC = 0.0f;
-        pSlot->mUnknown10 = 0.0f;
-        pSlot->mUnknown14 = 0;
         pSlot->mUnknown15[0] = 0;
+        pSlot->mUnknown14 = 0;
         pSlot->mUnknown15[1] = 0;
         pSlot->mUnknown15[2] = 0;
         pSlot->mUnknown18 = 0;
         pSlot->mUnknown19 = 0;
-        pSlot->mUnknown1C = 0;
+        pSlot->mUnknownC = 0.0f;
+        pSlot->mUnknown10 = 0.0f;
     }
     lbl_803EABA8->mUnknownC7 = 0;
     lbl_803EABA8->mUnknown98 = 0;
