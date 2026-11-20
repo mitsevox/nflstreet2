@@ -74,6 +74,22 @@ static void fn_801CD79C(Font_801CCA64 *pFont, FontVerts_801CD79C *pVerts, FontQu
     pVerts->mUV[2][1] = pVerts->mUV[3][1] = v1;
 }
 
+static inline void _FontLLSendQuad(FontVerts_801CD79C *pVerts, GXColor *pColor)
+{
+    GXPosition3f32(pVerts->mPos[0][0], pVerts->mPos[0][1], pVerts->mPos[0][2]);
+    GXColor4u8(pColor->r, pColor->g, pColor->b, pColor->a);
+    GXTexCoord2f32(pVerts->mUV[0][0], pVerts->mUV[0][1]);
+    GXPosition3f32(pVerts->mPos[1][0], pVerts->mPos[1][1], pVerts->mPos[1][2]);
+    GXColor4u8(pColor->r, pColor->g, pColor->b, pColor->a);
+    GXTexCoord2f32(pVerts->mUV[1][0], pVerts->mUV[1][1]);
+    GXPosition3f32(pVerts->mPos[2][0], pVerts->mPos[2][1], pVerts->mPos[2][2]);
+    GXColor4u8(pColor->r, pColor->g, pColor->b, pColor->a);
+    GXTexCoord2f32(pVerts->mUV[2][0], pVerts->mUV[2][1]);
+    GXPosition3f32(pVerts->mPos[3][0], pVerts->mPos[3][1], pVerts->mPos[3][2]);
+    GXColor4u8(pColor->r, pColor->g, pColor->b, pColor->a);
+    GXTexCoord2f32(pVerts->mUV[3][0], pVerts->mUV[3][1]);
+}
+
 static int fn_801CD964(int state, Font_801CCA64 *pFont, FontQuad_801CCA64 *pQuads, unsigned int count,
                        FontColor_801CCA64 *pColor, int unused)
 {
@@ -85,22 +101,11 @@ static int fn_801CD964(int state, Font_801CCA64 *pFont, FontQuad_801CCA64 *pQuad
     color.g = pColor->g * 255.0f;
     color.b = pColor->b * 255.0f;
     color.a = pColor->a * 255.0f;
-    verts.mPos[0][2] = verts.mPos[1][2] = verts.mPos[2][2] = verts.mPos[3][2] = 0.0f;
+    verts.mPos[3][2] = verts.mPos[2][2] = verts.mPos[1][2] = verts.mPos[0][2] = 0.0f;
     for (i = 0; i < count; i++) {
         fn_801CD79C(pFont, &verts, &pQuads[i]);
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3f32(verts.mPos[0][0], verts.mPos[0][1], verts.mPos[0][2]);
-        GXColor4u8(color.r, color.g, color.b, color.a);
-        GXTexCoord2f32(verts.mUV[0][0], verts.mUV[0][1]);
-        GXPosition3f32(verts.mPos[1][0], verts.mPos[1][1], verts.mPos[1][2]);
-        GXColor4u8(color.r, color.g, color.b, color.a);
-        GXTexCoord2f32(verts.mUV[1][0], verts.mUV[1][1]);
-        GXPosition3f32(verts.mPos[2][0], verts.mPos[2][1], verts.mPos[2][2]);
-        GXColor4u8(color.r, color.g, color.b, color.a);
-        GXTexCoord2f32(verts.mUV[2][0], verts.mUV[2][1]);
-        GXPosition3f32(verts.mPos[3][0], verts.mPos[3][1], verts.mPos[3][2]);
-        GXColor4u8(color.r, color.g, color.b, color.a);
-        GXTexCoord2f32(verts.mUV[3][0], verts.mUV[3][1]);
+        _FontLLSendQuad(&verts, &color);
     }
     return state;
 }
