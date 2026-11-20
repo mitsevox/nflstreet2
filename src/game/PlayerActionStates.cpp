@@ -74,48 +74,55 @@ extern "C" int fn_800DFA00(Object_80039F5C *p, float *pValue)
 {
     Block_800DFCEC *pBlock = (Block_800DFCEC *)&p->mUnknown336;
     Character_80093BCC *pCharacter = fn_80093BCC(pBlock->mUnknown8);
-    if (!pCharacter) return 1;
-    Character_800DF7CC *pView = (Character_800DF7CC *)pCharacter;
-    Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4), pBlock->mUnknown9);
-    p->mpUnknown4->mUnknown20 |= 0x1000;
-    unsigned int handle = AnimFileGetSlotFromFileNum(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14);
-    void *pData = AnimFileGetPtrFromSlot(handle);
-    if (!pData) return 1;
-    float value;
-    pBlock->mUnknown13 = AnimSeqHasOpcode(&value, AnimFileGetAnimation(pData, 0), 0x8003) || AnimSeqHasOpcode(&value, AnimFileGetAnimation(pData, 0), 0x8001);
-    *pValue = AnimSeqGetLife(AnimFileGetAnimation(pData, 0));
-    fn_8009BD60(p);
-    p->mUnknown1008.mUnknown0 = ((unsigned char *)pCharacter)[3];
-    p->mUnknown1008.mUnknown1 = ((unsigned char *)pCharacter)[7];
-    p->mUnknown1008.mUnknown2 = pBlock->mUnknown9;
-    p->mUnknown1011 = pBlock->mUnknown10;
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 10, 1.0f, p);
-    if ((pView->mFlags & 32) || p->mIdBytes[3] == 3) fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
-    if (pView->mFlags & 8) {
-        unsigned char count = AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 10);
-        for (unsigned char i = 0; i < count; i++) {
-            AnimChannel_t *pEntry = &p->mpUnknown800[AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 10, i)];
-            AnimChanSetMirrored(pEntry, !AnimChanIsMirrored(pEntry));
-        }
-        fn_800D7A0C(p, p->mUnknown776 == 2 ? 1 : 2);
-    }
-    if ((pView->mFlags & 16) && AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 10)) {
-        p->mpUnknown800[AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 10, 0)].mUnknown2C = 1.0f / p->mUnknown768;
-    }
-    if (handle != 0xFFFFFF) {
-        unsigned int other = AnimFileGetSiblingSlot(handle, 1024);
-        if (other != 0xFFFFFF) {
+    if (pCharacter) {
+        Character_800DF7CC *pView = (Character_800DF7CC *)pCharacter;
+        Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4), pBlock->mUnknown9);
+        p->mpUnknown4->mUnknown20 |= 0x1000;
+        unsigned int handle = AnimFileGetSlotFromFileNum(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14);
+        void *pData = AnimFileGetPtrFromSlot(handle);
+        if (pData) {
+            AnimSeq_t seq;
+            if (AnimSeqHasOpcode(&seq, AnimFileGetAnimation(pData, 0), 0x8003) || AnimSeqHasOpcode(&seq, AnimFileGetAnimation(pData, 0), 0x8001)) {
+                pBlock->mUnknown13 = 1;
+            } else {
+                pBlock->mUnknown13 = 0;
+            }
+            *pValue = AnimSeqGetLife(AnimFileGetAnimation(pData, 0));
             fn_8009BD60(p);
-            unsigned int key = AnimFileGetStateQueryIndex(0, other);
-            p->mUnknown1012[1] = key >> 8;
-            p->mUnknown1012[0] = key;
-            fn_801BE068(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, 0, 1.0f, p);
+            p->mUnknown1008.mUnknown0 = ((unsigned char *)pCharacter)[3];
+            p->mUnknown1008.mUnknown1 = ((unsigned char *)pCharacter)[7];
+            p->mUnknown1008.mUnknown2 = pBlock->mUnknown9;
+            p->mUnknown1011 = pBlock->mUnknown10;
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 10, 1.0f, p);
+            if ((pView->mFlags & 32) || p->mIdBytes[3] == 3) fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
+            if (pView->mFlags & 8) {
+                unsigned char count = AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 10);
+                for (unsigned char i = 0; i < count; i++) {
+                    AnimChannel_t *pEntry = &p->mpUnknown800[AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 10, i)];
+                    AnimChanSetMirrored(pEntry, !AnimChanIsMirrored(pEntry));
+                }
+                fn_800D7A0C(p, p->mUnknown776 == 2 ? 1 : 2);
+            }
+            if ((pView->mFlags & 16) && AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 10)) {
+                p->mpUnknown800[AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 10, 0)].mUnknown2C = 1.0f / p->mUnknown768;
+            }
+            if (handle != 0xFFFFFF) {
+                unsigned int other = AnimFileGetSiblingSlot(handle, 1024);
+                if (other != 0xFFFFFF) {
+                    fn_8009BD60(p);
+                    unsigned int key = AnimFileGetStateQueryIndex(0, other);
+                    p->mUnknown1012[1] = key >> 8;
+                    p->mUnknown1012[0] = key;
+                    fn_801BE068(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, 0, 1.0f, p);
+                }
+            }
+            p->mpUnknown4->mUnknown20 |= 16;
+            p->mFlags &= ~4;
+            p->mFlags &= ~0x1000;
+            return 0;
         }
     }
-    p->mpUnknown4->mUnknown20 |= 16;
-    p->mFlags &= ~4;
-    p->mFlags &= ~0x1000;
-    return 0;
+    return 1;
 }
 
 extern "C" void fn_800DFCEC(Object_80039F5C *p)
@@ -146,19 +153,23 @@ extern "C" int fn_800DFD90(Object_80039F5C *p)
         return 0;
     }
     if (!(pActor->mUnknown8 & 0x40)) {
-        if (p->mIdBytes[3] == 3) {
+        switch (p->mIdBytes[3]) {
+        case 3:
             fn_8009BD60(p);
             p->mUnknown1008.mUnknown0 = 1;
             p->mUnknown1008Word = 6;
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 82, 1.0f, p);
             fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
-        } else if (p->mIdBytes[3] == 1) {
+            break;
+        case 1: {
             int mode = fn_800AD9B4();
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
             fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
             if (mode == 4) {
                 fn_8010A2DC(p, 0, -1);
             }
+            break;
+        }
         }
     }
     return 1;
@@ -266,7 +277,11 @@ extern "C" void fn_800E034C(Object_80039F5C *p, Block_800E0230 *pBlock)
         pBlock->mUnknown4 = p->mMotion.mFacing;
         float y = fabsf(p->mMotion.mPos.mY);
         if (!(y <= fn_80178A2C())) {
-            pBlock->mUnknown4 = MathAngleDiff(p->mMotion.mFacing, 0) > 0x400000 ? 0x800000 : 0;
+            if (MathAngleDiff(p->mMotion.mFacing, 0) > 0x400000) {
+                pBlock->mUnknown4 = 0x800000;
+            } else {
+                pBlock->mUnknown4 = 0;
+            }
         }
         p->mUnknown512.mUnknown14 = 10;
         p->mUnknown512.mUnknown8 = pBlock->mUnknown4;
@@ -691,12 +706,9 @@ extern "C" int fn_800E1584(Object_80039F5C *p)
     int result = 0;
     Object_80039F5C *pOther = BallGetCurrentHolder();
     if (pOther && MathAngleDiff(pOther->mMotion.mUnknown32, 0x400000) <= 0x38E38E && p && !(p->mFlags & 0x4000)) {
-        int special = 0;
         fn_800ACDE4(p, &chance, &angle);
-        if (fn_80178308() == fn_80178348() && !(p->mMotion.mPos.mY >= fn_80177FE0().mY) &&
-            (pOther->mpState->mId == 1 || pOther->mpState->mId == 18)) {
-            special = 1;
-        }
+        int special = fn_80178308() == fn_80178348() && !(p->mMotion.mPos.mY >= fn_80177FE0().mY) &&
+            (pOther->mpState->mId == 1 || pOther->mpState->mId == 18);
         if (special) {
             if (!(fn_8022781C(&p->mMotion, &pOther->mMotion) >= 3.0f) &&
                 MathAngleDiff(fn_800E1248(p, pOther), p->mMotion.mUnknown32) < (int)(angle * 46603.37890625f) &&

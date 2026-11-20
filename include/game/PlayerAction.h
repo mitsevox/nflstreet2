@@ -460,7 +460,7 @@ void fn_8009134C(unsigned short);
 int AnimFileGetSlotFromFileNum(int objectType, int fileNum);
 void *AnimFileGetPtrFromSlot(unsigned int);
 AnimScript_t *AnimFileGetAnimation(void *, int);
-int AnimSeqHasOpcode(float *, void *, unsigned short);
+int AnimSeqHasOpcode(AnimSeq_t *, AnimScript_t *, unsigned short);
 int AnimChanIsMirrored(AnimChannel_t *);
 void AnimChanSetMirrored(AnimChannel_t *, int);
 void fn_800D7A0C(Object_80039F5C *, int);

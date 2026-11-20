@@ -80,8 +80,9 @@ extern "C" void fn_800DB100(Object_80039F5C *p, Ball_t *pBall, Record_800DB074 *
     delta.mY = delta.mY < 0.0f ? 0.0f : delta.mY;
     int angle = delta.Heading();
     pRequest->mUnknown10 = angle + fn_802372EC(0, 0xE38E3);
-    if (pRequest->mUnknownC == 0.0f) {
-        float value = pRequest->mUnknown10 * 2.3841858e-07f;
+    float value = pRequest->mUnknownC;
+    if (value == 0.0f) {
+        value = pRequest->mUnknown10 * 2.3841858e-07f;
         pRequest->mUnknownC = value * 0.5f + 0.5f;
     }
     float scale = pRequest->mUnknownC * 0.5f;
@@ -270,11 +271,8 @@ extern "C" void fn_800DB8B4(Record_800DB60C *pRecord, Object_80039F5C *p)
     if (!pOther) {
         return;
     }
-    int can = 0;
-    if (allow && OptionRunCanPitchTo(p, &point, pOther)) {
-        can = 1;
-    }
-    if (!can) {
+    allow = allow && OptionRunCanPitchTo(p, &point, pOther);
+    if (!allow) {
         return;
     }
     int ready = 0;
@@ -650,15 +648,19 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
         fn_8009BD60(p);
         pRecord->mUnknown8 = fn_800DC584(p, (Record_800DC584 *)pRecord);
         if (p->mIdBytes[3] != 1) {
-            pRecord->mUnknown9 = 2;
             pRecord->mUnknown10 = 2;
+            pRecord->mUnknown9 = 2;
         } else if (!p->mUnknown1052) {
             if (fn_800AD9B4() == 3) {
                 pRecord->mUnknown10 = 4;
                 pRecord->mUnknown9 = 2;
             } else {
                 pRecord->mUnknown10 = 2;
-                pRecord->mUnknown9 = !(p->mUnknown528.mUnknown0 <= 0.65f) ? 2 : 1;
+                if (!(p->mUnknown528.mUnknown0 <= 0.65f)) {
+                    pRecord->mUnknown9 = 2;
+                } else {
+                    pRecord->mUnknown9 = 1;
+                }
             }
         } else {
             pRecord->mUnknown10 = 3;
@@ -674,6 +676,8 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
         AnimSeqSetSpeed(&pEntries[entry].mUnknown4C, MathInverse(p->mUnknown528.mUnknown0 + 0.2799999713897705f));
         break;
     }
+    case 1:
+        break;
     case 2: {
         int direction = fn_800DC584(p, (Record_800DC584 *)pRecord);
         if (direction != pRecord->mUnknown8) {
@@ -695,9 +699,8 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
             AnimWgtSetLinear(&pEntries[pRecord->mUnknown0].mUnknown30, 12, -1.0f, 1.0f);
             pEntries[pRecord->mUnknown0].mUnknown24.mUnknown4 = -pEntries[pRecord->mUnknown0].mUnknown24.mUnknown4;
             pEntries[pRecord->mUnknown0].mUnknown4C.mUnknown1E = value;
+            p->mUnknown528.mUnknown0 -= p->mUnknown528.mUnknown0 * 0.2f;
             float speed = p->mUnknown528.mUnknown0;
-            speed -= speed * 0.2f;
-            p->mUnknown528.mUnknown0 = speed;
             if (!(speed >= 0.01f)) {
                 speed = 0.01f;
             }
@@ -1270,7 +1273,11 @@ extern "C" int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pA,
     switch (mode) {
     case 0: {
         fn_801BE760(p->mpUnknown792, key, 1);
-        if (p->mIdBytes[3] != 1 || key == 100) {
+        if (p->mIdBytes[3] == 1) {
+            if (key == 100) {
+                fn_800DDE6C(p);
+            }
+        } else {
             fn_800DDE6C(p);
         }
         int angle;
@@ -1283,11 +1290,12 @@ extern "C" int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pA,
         p->mFlags &= ~4;
         break;
     }
+    case 1:
+        break;
     case 2:
         if (fn_801BE648(p->mpUnknown792) == key) {
             p->mMotion.mFacing = (p->mMotion.mFacing + pRecord->mUnknown4) & 0xFFFFFF;
-            AnimChannel_t *pEntry = &p->mpUnknown800[pRecord->mUnknown0];
-            pEntry->mUnknownC = (pEntry->mUnknownC + pRecord->mUnknown4) & 0xFFFFFF;
+            p->mpUnknown800[pRecord->mUnknown0].mUnknownC = (p->mpUnknown800[pRecord->mUnknown0].mUnknownC + pRecord->mUnknown4) & 0xFFFFFF;
             if (p->mFlags & 4) {
                 p->mMotion.mFacing &= 0xFFFFFF;
                 pRecord->mUnknown4 = 0;
@@ -1319,27 +1327,29 @@ extern "C" int fn_800DE364(unsigned int id)
     return result;
 }
 
+template <class T> static inline T _Max(T a, T b)
+{
+    return a < b ? b : a;
+}
+
 extern "C" void fn_800DE3B0(Block_800DE3B0 *pBlock, Object_80039F5C *p, Command_800DE3B0 *pCommand)
 {
     int desired = fn_801CFE40(pCommand->mUnknown0.mUnknown4, pCommand->mUnknown0.mUnknown0) & 0xFFFFFF;
     State_800DE3B0 *pState = (State_800DE3B0 *)p->mUnknown1160.mUnknown12;
     int original = pState->mUnknown0 & 0xFFFFFF;
     Pair_802270A4 old = pState->mUnknown4;
-    signed char frames = (int)(lbl_803EAD20 * pCommand->mUnknown18);
-    if (frames < 1) {
-        frames = 1;
-    }
-    pBlock->mUnknown3E = frames;
+    pBlock->mUnknown3E = _Max<signed char>((int)(lbl_803EAD20 * pCommand->mUnknown18), 1);
     pBlock->mUnknown38 = (original - desired) & 0xFFFFFF;
     if (pBlock->mUnknown38 > 0x800000) {
         pBlock->mUnknown38 -= 0x1000000;
     }
-    pState->mUnknown1C = (p->mMotion.mFacing + pBlock->mUnknown38) & 0xFFFFFF;
+    pState->mUnknown1C = (pBlock->mUnknown38 + p->mMotion.mFacing) & 0xFFFFFF;
     pState->mUnknown14.mUnknown0 = p->mMotion.mPos.mX;
     pState->mUnknown14.mUnknown4 = p->mMotion.mPos.mY;
     pBlock->mUnknown38 /= pBlock->mUnknown3E;
     pBlock->mUnknown3F = (int)(pCommand->mUnknown18 - (float)pBlock->mUnknown3E);
-    pBlock->mUnknown4 = pCommand->mUnknownC;
+    pBlock->mUnknown4.mUnknown0 = pCommand->mUnknownC.mUnknown0;
+    pBlock->mUnknown4.mUnknown4 = pCommand->mUnknownC.mUnknown4;
     if (pState->mUnknown12 == 1) {
         fn_80227690(&pBlock->mUnknownC, &pBlock->mUnknown4, &p->mMotion);
         pBlock->mUnknown14 = desired;
@@ -1424,6 +1434,7 @@ extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
 extern "C" void fn_800DE910(Object_80039F5C *p, Block_800DE3B0 *pBlock)
 {
     AnimChannel_t *pEntry = &p->mpUnknown800[pBlock->mUnknown1D];
+    Object_800B26B0 *pMotion = &p->mMotion;
     pBlock->mUnknown0 += 0.03333333507180214f;
     if (!(pBlock->mUnknown0 < 1.0f)) {
         pBlock->mUnknown1C = 0;
@@ -1435,15 +1446,15 @@ extern "C" void fn_800DE910(Object_80039F5C *p, Block_800DE3B0 *pBlock)
     fn_80227638(&pBlock->mUnknownC, &delta, &pBlock->mUnknownC);
     fn_80227384(&delta, &pBlock->mUnknownC, pBlock->mUnknown14);
     fn_80227638(&delta, &delta, &pBlock->mUnknown4);
-    p->mMotion.mPos.mX = (delta.mUnknown0 - p->mMotion.mPos.mX) * pBlock->mUnknown0 + p->mMotion.mPos.mX;
-    p->mMotion.mPos.mY = (delta.mUnknown4 - p->mMotion.mPos.mY) * pBlock->mUnknown0 + p->mMotion.mPos.mY;
+    pMotion->mPos.mX = (delta.mUnknown0 - pMotion->mPos.mX) * pBlock->mUnknown0 + pMotion->mPos.mX;
+    pMotion->mPos.mY = (delta.mUnknown4 - pMotion->mPos.mY) * pBlock->mUnknown0 + pMotion->mPos.mY;
     int desired = (pBlock->mUnknown14 + pEntry->mUnknown1C) & 0xFFFFFF;
-    int angle = (int)((float)MathAngleDiff(desired, p->mMotion.mFacing) * pBlock->mUnknown0);
-    if (((p->mMotion.mFacing - desired) & 0xFFFFFF) <= 0x7FFFFF) {
-        p->mMotion.mFacing = (p->mMotion.mFacing - angle) & 0xFFFFFF;
+    int angle = (int)((float)MathAngleDiff(desired, pMotion->mFacing) * pBlock->mUnknown0);
+    if (((pMotion->mFacing - desired) & 0xFFFFFF) <= 0x7FFFFF) {
+        pMotion->mFacing = (pMotion->mFacing - angle) & 0xFFFFFF;
         pEntry->mUnknownC = (pEntry->mUnknownC - angle) & 0xFFFFFF;
     } else {
-        p->mMotion.mFacing = (p->mMotion.mFacing + angle) & 0xFFFFFF;
+        pMotion->mFacing = (pMotion->mFacing + angle) & 0xFFFFFF;
         pEntry->mUnknownC = (pEntry->mUnknownC + angle) & 0xFFFFFF;
     }
 }
