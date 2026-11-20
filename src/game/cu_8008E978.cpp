@@ -4949,7 +4949,7 @@ void GetOpenGetRunOnPoint(Object_80039F5C *p, Point_8017886C *pOut);
 }
 
 extern "C" {
-float fn_80103DD8(Object_80039F5C *pPasser, Object_80039F5C *pReceiver, short *pTicks, float scale);
+float AssignGetPassSpeed(Object_80039F5C *p, Object_80039F5C *pOther, float scale, short *pCount);
 }
 
 extern "C" {
@@ -13377,8 +13377,6 @@ extern "C" int fn_8009AD30(Object_80039F5C *p, int value)
     return value;
 }
 
-/* Discarded by SN's linker: no GameCube code; its pool 0.0f, 1.0f stays at 0x80296380 between the pools of
-   fn_8009AC18 and fn_8009AD38 (linker row 0x80296380). */
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
 static float Stripped_80296380(float x)
@@ -13784,8 +13782,6 @@ extern "C" void fn_8009BB50(int a, int b)
 {
 }
 
-/* Discarded by SN's linker: its pool 0.0f and the int-to-float bias stay at 0x802963D8 between the pools of
-   fn_8009B0CC and fn_8009BB54 (linker row 0x802963D8). */
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
 static float Stripped_802963D8(float x, int i)
@@ -17342,8 +17338,6 @@ extern "C" int fn_800A350C(void)
     return result;
 }
 
-/* Discarded by SN's linker: its pool 0.16296296f, 0.0f stays at 0x80296710 between the pools of
-   fn_800A32E4 and fn_800A3530 (linker row 0x80296710). */
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
 static float Stripped_80296710(float x)
@@ -17601,8 +17595,7 @@ extern "C" int fn_800A3E00(Object_80039F5C *p)
     return result;
 }
 
-/* The Xbox body fills one static record (0x59CC90) that has no GameCube counterpart; it is passed in here so
-   the discarded function leaves no undefined symbol in the linked object (linker row 0x80296754). */
+// FAKEMATCH: the record is a parameter; the Xbox counterpart fills a static record that has no GameCube counterpart
 extern "C" {
 static Record_80296754 *Stripped_80296754(Record_80296754 *pRecord, const unsigned char *pData)
 {
@@ -19504,8 +19497,6 @@ extern "C" int fn_800A851C(int team, Object_80039F5C *p)
     return result;
 }
 
-/* Discarded by SN's linker: its pool 1.0f and the unsigned-to-float bias stay at 0x8029687C between the pools of
-   fn_800A82FC and fn_800A8570 (linker row 0x8029687C). */
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
 static float Stripped_8029687C(unsigned int u, float x)
@@ -21672,8 +21663,6 @@ extern "C" void fn_800ACAF8(int team, unsigned int *pValue)
     }
 }
 
-/* Discarded by SN's linker: its pool 1.0f, 0.75f, 1.07f, 1.15f stays at 0x802969A0 between the pools of
-   fn_800AC980 and fn_800ACB8C (linker row 0x802969A0). */
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
 static void Stripped_802969A0(float *p)
@@ -22729,8 +22718,6 @@ extern "C" void fn_800AEB9C(void)
 {
 }
 
-/* Discarded by SN's linker: two functions whose pools 0.5f, 3.0f (0x80296A4C) and 0.0f, 3.0f (0x80296A54) stay
-   between the pools of fn_800AE998 and fn_800AEBA0 (linker rows 0x80296A4C, 0x80296A54). */
 // FAKEMATCH: invented bodies; only their constant pools are evidenced
 extern "C" {
 static void Stripped_80296A4C(float *p)
@@ -22970,8 +22957,6 @@ extern "C" void fn_800AF304(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_80
     }
 }
 
-/* Discarded by SN's linker: two functions whose pools 0.0f (0x80296A64) and 0.0f, 3.5f, 3.0f (0x80296A68) stay
-   between the pools of fn_800AEBA0 and fn_800AF404 (linker rows 0x80296A64, 0x80296A68). */
 // FAKEMATCH: invented bodies; only their constant pools are evidenced
 extern "C" {
 static void Stripped_80296A64(float *p)
@@ -23341,8 +23326,6 @@ extern "C" void fn_800B0004(void)
     }
 }
 
-/* The ten strings 0x80296AA4-0x80296AF4 have no code reference; only the .data table 0x802D8754-0x802D877C,
-   original bytes outside this unit, points at them (source-form row 0x80296AA4). */
 // FAKEMATCH: never-called inline helper; it stands in for the .data table that this unit does not compile
 static inline const char *_StrippedNames_80296AA4(int index)
 {
@@ -24531,8 +24514,6 @@ extern "C" void fn_800B2670(unsigned char value)
     lbl_803EAB20->mUnknown4.mUnknown5E = value;
 }
 
-/* Discarded by SN's linker: its pool 0.0f stays at 0x80296B78 between the pools of fn_800B2618 and
-   fn_800B267C (linker row 0x80296B78). */
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
 static void Stripped_80296B78(float *p)
@@ -24966,7 +24947,6 @@ extern "C" void fn_800B34BC(void)
     }
 }
 
-/* The three prompts 0x80296BAC-0x80296BF4 have no code or data reference (source-form row 0x80296BAC). */
 // FAKEMATCH: never-called inline helper; only the strings are evidenced
 static inline const char *_StrippedPrompts_80296BAC(int defense, int count)
 {
@@ -25402,9 +25382,6 @@ extern "C" void fn_800B4434(void)
     lbl_803EAB34->mUnknown8 &= ~6;
 }
 
-/* The ten ability names 0x80296BF4-0x80296C58 have no code reference; only the .data table lbl_802D87A4
-   (0x802D87A4-0x802D87CC, original bytes outside this unit, read by fn_800B4A18) points at them
-   (source-form row 0x80296BF4). */
 // FAKEMATCH: never-called inline helper; it stands in for the .data table that this unit does not compile
 static inline const char *_StrippedAbilityNames_80296BF4(int index)
 {
@@ -25535,7 +25512,6 @@ extern "C" void fn_800B4A18(int index, char *pDest, int size)
     strnzcpy(pDest, lbl_802D87A4[index], size);
 }
 
-/* The player query 0x80296D28-0x80296D58 has no code or data reference (source-form row 0x80296D28). */
 // FAKEMATCH: never-called inline helper; only the string is evidenced
 static inline const char *_StrippedQuery_80296D28(void)
 {
@@ -27746,8 +27722,6 @@ extern "C" void fn_800B9BAC(PostPlayPhase *p)
     lbl_803EAB78->mUnknown151 = 1;
 }
 
-/* The 34 defensive play and formation names 0x8029713C-0x80297218 have no code reference; only the .data
-   records 0x802D88AC-0x802D8C0C, original bytes outside this unit, point at them (source-form row 0x8029713C). */
 // FAKEMATCH: never-called inline helper; it stands in for the .data records that this unit does not compile
 static inline const char *_StrippedDefenseNames_8029713C(int index)
 {
@@ -28581,8 +28555,6 @@ extern "C" void fn_800BB24C(void)
     }
 }
 
-/* Discarded by SN's linker: its pool 120.0f, 20.0f, 0.0f stays at 0x80297330 between the pools of fn_800BAAE4
-   and fn_800BB458 (linker row 0x80297330). */
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
 static void Stripped_80297330(float *p)
@@ -31604,7 +31576,7 @@ extern "C" float fn_800C146C(Point_8017886C *pOut, Object_80039F5C *pPasser, Obj
         pAim->mX = receiver.mObject.mMotion.mUnknown40;
         pAim->mY = receiver.mObject.mMotion.mUnknown44;
     }
-    flight = fn_80103DD8(&passer.mObject, &receiver.mObject, &passTicks, 0.9f);
+    flight = AssignGetPassSpeed(&passer.mObject, &receiver.mObject, 0.9f, &passTicks);
     pos = receiver.mObject.mMotion.mPos;
     velocity = *(Vector_80039F5C *)&receiver.mObject.mMotion.mUnknown40;
     fn_80103F80(BallGetCurrent(), pos, velocity, receiver.mObject.mMotion.mUnknown28, receiver.mObject.mMotion.mUnknown32,
@@ -34496,8 +34468,6 @@ extern "C" int fn_800C8744(int team)
     return fn_8022E560();
 }
 
-/* The bone name and three score queries 0x80297850-0x802978D8 have no code or data reference
-   (source-form row 0x80297850). */
 // FAKEMATCH: never-called inline helper; only the strings are evidenced
 static inline const char *_StrippedQueries_80297850(int which)
 {

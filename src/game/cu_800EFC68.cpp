@@ -6689,7 +6689,6 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
     return result;
 }
 
-/* Discarded by SN's linker: only its pool (8.0f at 0x8029E1F0) survives in .rodata. */
 // FAKEMATCH: invented body; only its pool constant(s) are target evidence
 extern "C" {
 static float _StrippedScaleByEight(float x)
@@ -14935,7 +14934,6 @@ extern "C" int fn_8010A640(Object_80039F5C *p) {
     return 0;
 }
 
-/* Discarded by SN's linker: only its pool (0.0f at 0x8029EBB8) survives in .rodata. */
 // FAKEMATCH: invented body; only its pool constant(s) are target evidence
 extern "C" {
 static float _StrippedClampNonNegative(float x)
@@ -20104,7 +20102,6 @@ extern "C" int fn_80116984(Object_80039F5C *p, Object_80039F5C *pOther, float *p
     return result;
 }
 
-/* Discarded by SN's linker: only its pool (10.0f and 5.0f at 0x8029F040) survives in .rodata. */
 // FAKEMATCH: invented body; only its pool constant(s) are target evidence
 extern "C" {
 static float _StrippedScaleTenPlusFive(float x)
