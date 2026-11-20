@@ -88,7 +88,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801F524C	0x801F5458	bubble.c	3	3	3	3	0	-	-
 0x801F5458	0x801F5760	quick.c	4	4	4	4	0	-	-
 0x801F5760	0x801F5D84	Speech.cpp	15	14	15	1	12	-	-
-0x801F5D84	0x801F7738	stream.c	33	33	33	0	33	-	-
+0x801F5D84	0x801F7738	stream.c	33	33	33	1	32	-	-
 0x801F7738	0x801F77DC	mutex.c	5	5	5	5	0	-	-
 0x801F77DC	0x801F7D34	system.c	13	13	13	13	0	-	-
 0x801F7DF4	0x801F8878	llsystem.c	24	18	22	0	12	-	-
@@ -100,7 +100,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x80201EC8	0x80203444	t3db_index.c	17	17	17	17	0	-	-
 0x80203444	0x80203754	t3db_mem.c	5	5	5	0	5	-	-
 0x80203754	0x80205754	t3db_expr.c	78	78	78	76	2	-	-
-0x80205754	0x8020B564	t3db_query.c	40	38	38	0	36	-	-
+0x80205754	0x8020B564	t3db_query.c	40	38	38	1	35	-	-
 0x8020B564	0x8020CD2C	t3db_table.c	13	13	13	13	0	-	t3dbUtil.c
 0x8020CD2C	0x8020CEC4	t3db_blob.c	2	2	2	2	0	-	-
 0x8020CEC4	0x8020CFA0	t3db_data.c	2	2	2	2	0	-	-
@@ -166,6 +166,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x8026AF64	0x8026B2E0	sevent.cpp	5	5	5	5	0	-	-
 0x8026EE24	0x8026EEB0	sstovrhd.c	2	2	2	2	0	-	-
 0x8026EF0C	0x8026EF38	sstqreqi.c	1	1	1	1	0	-	-
+0x8026FD28	0x802702D8	ssysinit.c	5	5	5	0	5	-	-
 0x802753F0	0x8027555C	sfxrevc.c	3	3	3	3	0	-	-
 0x8027555C	0x802755E0	slinkmix.c	1	1	1	1	0	-	sfreson.c
 0x802755E0	0x802763E0	smixer.c	15	14	16	9	5	-	-

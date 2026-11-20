@@ -1226,7 +1226,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x801F63EC	36	_StreamReadCallback	size	stream.c	stream.c
 0x801F6410	304	startnextrequest	size	stream.c	stream.c
 0x801F6540	796	restartstream	size	stream.c	stream.c
-0x801F685C	32	STREAM_overhead	size	stream.c	stream.c
+0x801F685C	32	STREAM_overhead	name	stream.c	stream.c
 0x801F687C	588	STREAM_create	size	stream.c	stream.c
 0x801F6AC8	188	STREAM_setfilter	size	stream.c	stream.c
 0x801F6B84	128	STREAM_destroy	size	stream.c	stream.c
@@ -1497,7 +1497,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x802087D4	212	_TDbQryDestroy	size	t3db_query.c	t3db_query.c
 0x802088A8	84	_TDbQryGetCount	size	t3db_query.c	t3db_query.c
 0x802088FC	2400	_TDbQryRetrieve	size	t3db_query.c	t3db_query.c
-0x8020925C	3044	_TDbQryCreateTbl	size	t3db_query.c	t3db_query.c
+0x8020925C	3044	_TDbQryCreateTbl	name	t3db_query.c	t3db_query.c
 0x80209E40	244	_TDbQryPrepColLits	size	t3db_query.c	t3db_query.c
 0x80209F34	1132	_TDbQryFillFromColLits	size	t3db_query.c	t3db_query.c
 0x8020A3A0	416	_TDbQryFillToColLits	size	t3db_query.c	t3db_query.c
@@ -2660,6 +2660,12 @@ address	size	sibling_name	how	sibling_file	unit
 0x8026EE24	72	SNDSTRM_overheadtap	name	sstovrhd.c	sstovrhd.c
 0x8026EE6C	68	SNDSTRM_overhead	name	sstovrhd.c	sstovrhd.c
 0x8026EF0C	44	SNDSTRM_queuerequestid	name	sstqreqi.c	sstqreqi.c
+0x8026F2C8	108	SNDPKTPLAYI_freeframes__Fiii	gap	spktplay.c	-
+0x8026FD28	340	SNDSYS_getopts__FP10SNDSYSOPTS	size	ssysinit.c	ssysinit.c
+0x8026FE7C	300	SNDSYS_setopts__FP10SNDSYSOPTS	size	ssysinit.c	ssysinit.c
+0x8026FFA8	312	SNDSYSI_init__FPvii	size	ssysinit.c	ssysinit.c
+0x802700E0	248	SNDSYS_restore__Fv	size	ssysinit.c	ssysinit.c
+0x802701D8	256	SNDSYSI_chanpubinit__Fv	size	ssysinit.c	ssysinit.c
 0x802753F0	20	MIX_getwetbuffer	name	sfxrevc.c	sfxrevc.c
 0x80275404	164	MIX_createFxglobals	name	sfxrevc.c	sfxrevc.c
 0x802754A8	180	MIX_destroyFxglobals	name	sfxrevc.c	sfxrevc.c
