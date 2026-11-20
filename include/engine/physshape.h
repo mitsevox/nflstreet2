@@ -17,7 +17,7 @@ public:
                             float length) = 0;
     virtual float GetSupportWeight(Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pDirection,
                                    float (*pMatrix)[4]) = 0;
-    virtual void Draw(float (*pMatrix)[4], int red, int green, int blue) = 0;
+    virtual void Draw(const float pMatrix[4][4], int red, int green, int blue) = 0;
     virtual void GetMaterial(float *pFriction, float *pBounce);
 
     float mFriction;
@@ -33,7 +33,7 @@ public:
     float TestPoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4], Vec3_801DE1E0 *pDelta,
                     Vec3_801DE1E0 *pNormal, Vec3_801DE1E0 *pContact, float *pDepth, float length);
     float GetSupportWeight(Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pDirection, float (*pMatrix)[4]);
-    void Draw(float (*pMatrix)[4], int red, int green, int blue);
+    void Draw(const float pMatrix[4][4], int red, int green, int blue);
     void GetWorldSegment(float (*pMatrix)[4], Vec3_801DE1E0 *pEnd, Vec3_801DE1E0 *pStart,
                          Vec3_801DE1E0 *pHalfAxis);
     void ClosestSurfacePoint(Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pEnd, Vec3_801DE1E0 *pStart,
@@ -58,7 +58,7 @@ public:
     float TestPoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4], Vec3_801DE1E0 *pDelta,
                     Vec3_801DE1E0 *pNormal, Vec3_801DE1E0 *pContact, float *pDepth, float length);
     float GetSupportWeight(Vec3_801DE1E0 *, Vec3_801DE1E0 *, float (*)[4]) { return 1.0f; }
-    void Draw(float (*pMatrix)[4], int red, int green, int blue);
+    void Draw(const float pMatrix[4][4], int red, int green, int blue);
 
     Vec3_801DE1E0 mCenter;
     float mRadius;
@@ -73,7 +73,7 @@ public:
     float TestPoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4], Vec3_801DE1E0 *pDelta,
                     Vec3_801DE1E0 *pNormal, Vec3_801DE1E0 *pContact, float *pDepth, float length);
     float GetSupportWeight(Vec3_801DE1E0 *, Vec3_801DE1E0 *, float (*)[4]) { return 0.0f; }
-    void Draw(float (*pMatrix)[4], int red, int green, int blue);
+    void Draw(const float pMatrix[4][4], int red, int green, int blue);
     unsigned int SegmentHits(Vec3_801DE1E0 *pStart, Vec3_801DE1E0 *pEnd, Vec3_801DE1E0 *pOut,
                              unsigned int max, int withEnds);
     unsigned int QuadHits(Vec3_801DE1E0 *pQuad, Vec3_801DE1E0 *pOut, unsigned int max);

@@ -29281,6 +29281,16 @@
       ],
       "functions": [
         {
+          "symbol": "fn_801DB21C",
+          "start": "0x801DB21C",
+          "end": "0x801DB490"
+        },
+        {
+          "symbol": "fn_801DB490",
+          "start": "0x801DB490",
+          "end": "0x801DB670"
+        },
+        {
           "symbol": "fn_801DB670",
           "start": "0x801DB670",
           "end": "0x801DB7D4"
@@ -35601,7 +35611,7 @@
     {
       "source": "src/engine/physshape.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row for src/engine/physshape.cpp; draft comparisons, original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x801E2CB4-0x801E7034 (src/engine/physshape.cpp) and its function rows; all 39 bodies compared with the full .rodata 0x802B1290-0x802B1480 and .data 0x802F94E4-0x802F9508 (data rows); 36 exact and linked, the holdouts SphereShape::TestPoint, BoxShape::SegmentHits and SphereShape::Draw keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -35779,17 +35789,17 @@
           "end": "0x801E6724"
         },
         {
-          "symbol": "Draw__11SphereShapePA3_fiii",
+          "symbol": "Draw__11SphereShapePA3_Cfiii",
           "start": "0x801E6724",
           "end": "0x801E69D0"
         },
         {
-          "symbol": "Draw__12CapsuleShapePA3_fiii",
+          "symbol": "Draw__12CapsuleShapePA3_Cfiii",
           "start": "0x801E69D0",
           "end": "0x801E6CE0"
         },
         {
-          "symbol": "Draw__8BoxShapePA3_fiii",
+          "symbol": "Draw__8BoxShapePA3_Cfiii",
           "start": "0x801E6CE0",
           "end": "0x801E6FBC"
         },

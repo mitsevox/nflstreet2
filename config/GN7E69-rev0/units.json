@@ -20425,6 +20425,66 @@
       ]
     },
     {
+      "source": "src/engine/physshape.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x801E2CB4-0x801E7034 (src/engine/physshape.cpp), its function, name and source-form rows, and the data rows 0x802B1290-0x802B1480 (.rodata: pools and the four shape vtables) and 0x802F94E4-0x802F9508 (.data: the shape-pair test table); linked with holdouts (owner ruling of 2026-11-20): 36 of 39 functions exact, the three holdouts keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E2CB4",
+          "end": "0x801E3EC0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E4088",
+          "end": "0x801E47B8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E4D40",
+          "end": "0x801E6724"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E69D0",
+          "end": "0x801E7034"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1290",
+          "end": "0x802B1480"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F94E4",
+          "end": "0x802F9508"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "0x801E3EC0",
+            "evidence": "evidence.tsv source-form 0x801E3EC0-0x801E4088"
+          },
+          {
+            "function": "0x801E47B8",
+            "evidence": "evidence.tsv source-form 0x801E47B8-0x801E4D40"
+          },
+          {
+            "function": "0x801E6724",
+            "evidence": "evidence.tsv source-form 0x801E6724-0x801E69D0"
+          }
+        ],
+        "evidence": "w1a merge notes (swarm w1 tracking table): src/engine/physshape.cpp holds out SphereShape::TestPoint, BoxShape::SegmentHits and SphereShape::Draw."
+      }
+    },
+    {
       "source": "src/engine/physcollection.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801E7034-0x801E739C (src/engine/physcollection.cpp), its compiler, function, name, source-form and type rows; all eight functions exact, promoted from comparison-only, with the file-owned vtable 0x802B1480-0x802B1498 (.rodata) and debug line callback word 0x803EBD78-0x803EBD7C (.sdata) linked.",

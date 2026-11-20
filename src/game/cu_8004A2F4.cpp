@@ -1917,7 +1917,7 @@ void fn_8004E4D0(RigidBody *pBody, unsigned int index, RigidBody *pOther,
         float length = (speed + speed) * step;
         if (!(length >= 0.002f)) length = 0.002f;
         fn_80227264(&delta, &velocity, -(length / speed));
-        pShape->vfn_03(&pContacts[i].mPos, pBody->mTransform, &delta, &normal, &point, &distance, length);
+        pShape->TestPoint((Vec3_801DE1E0 *)&pContacts[i].mPos, pBody->mTransform, (Vec3_801DE1E0 *)&delta, (Vec3_801DE1E0 *)&normal, (Vec3_801DE1E0 *)&point, &distance, length);
         int code = fn_801BE648(p->mpUnknown792);
         if ((code == 0xB5 || code == 0xBA || code == 0xC5 || code == 0xC3 || code == 0xC4 ||
              code == 0xD2 || code == 0xE0 || code == 0xE5 || code == 0xE4 || code == 0xE6 ||
@@ -2682,9 +2682,9 @@ void fn_800518E0(Object_80039F5C *pPlayer)
                 if (!(nearest <= 0.75f)) {
                     CollisionShape *pShape = fn_801E71D0(pBody->mpShapes, j);
                     Vector_80039F5C delta, normal, direction;
-                    if (pShape->mUnknown8 == 2) {
+                    if (pShape->mType == 2) {
                         fn_801E501C(pShape, &position, pBody->mTransform, &delta, &point);
-                    } else if (pShape->mUnknown8 == 1) {
+                    } else if (pShape->mType == 1) {
                         fn_801E3610(pShape, pBody->mTransform, &delta, &normal, &direction);
                         fn_802271F0(&direction, &direction);
                         unsigned char hit;

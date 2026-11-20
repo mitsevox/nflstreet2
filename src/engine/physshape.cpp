@@ -689,8 +689,13 @@ static inline void _SetVec(Vec3_801DE1E0 *pOut, float x, float y, float z)
         float t = (PLANE - pStart->AXIS) / (pEnd->AXIS - pStart->AXIS);                       \
         float u = (pEnd->U - pStart->U) * t + pStart->U;                                      \
         float v = (pEnd->V - pStart->V) * t + pStart->V;                                      \
+        float x = X;                                                                          \
+        float y = Y;                                                                          \
+        float z = Z;                                                                          \
         if (fabsf(u) < HALF_U && fabsf(v) < HALF_V) {                                         \
-            _SetVec(&pOut[count], X, Y, Z);                                                   \
+            pOut[count].x = x;                                                                \
+            pOut[count].y = y;                                                                \
+            pOut[count].z = z;                                                                \
             count++;                                                                          \
             if (count >= max) {                                                               \
                 return count;                                                                 \
@@ -1254,7 +1259,7 @@ static int _ShapeCollideCapsuleCapsule(CollisionShape *pA, float (*pMatrixA)[4],
     return 0;
 }
 
-void SphereShape::Draw(float (*pMatrix)[4], int red, int green, int blue)
+void SphereShape::Draw(const float pMatrix[4][4], int red, int green, int blue)
 {
     Vec3_801DE1E0 a;
     Vec3_801DE1E0 b;
@@ -1310,7 +1315,7 @@ void SphereShape::Draw(float (*pMatrix)[4], int red, int green, int blue)
     } while (angle <= end);
 }
 
-void CapsuleShape::Draw(float (*pMatrix)[4], int red, int green, int blue)
+void CapsuleShape::Draw(const float pMatrix[4][4], int red, int green, int blue)
 {
     float step = 0.62831855f;
     Vec3_801DE1E0 side;
@@ -1387,7 +1392,7 @@ void CapsuleShape::Draw(float (*pMatrix)[4], int red, int green, int blue)
     }
 }
 
-void BoxShape::Draw(float (*pMatrix)[4], int red, int green, int blue)
+void BoxShape::Draw(const float pMatrix[4][4], int red, int green, int blue)
 {
     Vec3_801DE1E0 corners[8];
 
