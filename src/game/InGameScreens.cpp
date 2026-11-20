@@ -6,7 +6,7 @@
    (Continue, Rematch, Exit), team stat leaders, the scoring summary of each
    possession, challenge rewards and the NFL Legends unlock message. */
 #include "game/GameModeType.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 #include "game/Cheat.h"
 #include "game/GameOptions.h"
 #include "game/fn_8009D990.h"
@@ -190,7 +190,7 @@ struct GameStatsArgs_t {
 };
 
 extern "C" {
-int fn_8022F3D4(int handle);
+int DbUserGetDb(int handle);
 int CheatIsNoneEnabled(void);
 void UserProfileAddGameStats(void);
 void UserProfileSaveAllRecords(unsigned char *flags);
@@ -205,7 +205,7 @@ int fn_801788D8(int *pValue);
 int fn_800A7E40(unsigned char side);
 int fn_800A7E54(unsigned char side);
 int FeatAwardGameCredits(int side);
-int fn_8022F384(int a);
+int DbUserFindIndex(int a);
 void GauntletStatsOpen(DbCursor *pObject, int a);
 void GauntletStatsClose(DbCursor *pObject);
 void GauntletStatsAdd(DbCursor *pObject, int index, int delta);
@@ -215,7 +215,7 @@ int GameTextGetHomeTeam(void);
 int fn_801787DC(int team);
 int fn_80178EE0(int team);
 int fn_80178AE0(void);
-void *fn_8022F4BC(void);
+void *DbUserGetCurrent(void);
 extern char lbl_8031BDD4[];
 extern void *gUISMainInfo;
 
@@ -264,7 +264,7 @@ int PauseIsOpen(void);
 unsigned char fn_8002D060(void *p);
 void fn_80179144(int a);
 void fn_8017916C(void);
-unsigned int fn_802372EC(int stream, int count);
+unsigned int SyncRandGetRange(int stream, int count);
 void fn_800B41BC(int a, int b, int c);
 int FormationLineupApplyUser(int formation, int team);
 void fn_800B4184(int a);
@@ -277,8 +277,8 @@ int PlayBookDbLoadFormation(int tag, int a, int b, PlayBookFormation_t *pObject)
 unsigned short PlayBookDbCountPlays(int tag, int handle);
 void *fn_801D2BB0(int a, int size, int c, int d);
 int UserProfileGetSelected(int index);
-int fn_8022F358(int index);
-int fn_8022F488(int a);
+int DbUserGetId(int index);
+int DbUserSelect(int a);
 int fn_800BA6F8(void);
 void fn_800588F8(int a, int b);
 int PauseGetValue(void);
@@ -376,12 +376,12 @@ void GameStatsGather(void)
     }
     for (int side = 0; side <= 1; ++side) {
         if (UserProfileGetSelected((unsigned char)side) != -1) {
-            int handle = fn_8022F358(UserProfileGetSelected((unsigned char)side));
-            fn_8022F478(handle);
+            int handle = DbUserGetId(UserProfileGetSelected((unsigned char)side));
+            DbUserSetCurrent(handle);
             int values[18];
             int result = fn_801FCE10(0,
                 "use \x8c select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'sdSU' into \x82 and 'WSQU' into \x82 and 'WOSU' into \x82 and 'LOSU' into \x82 and 'SOSU' into \x82 and 'AOSU' into \x82 from 'TSPU'\n",
-                fn_8022F3D4(handle),
+                DbUserGetDb(handle),
                 &values[0], &values[1], &values[2], &values[3], &values[4], &values[5],
                 &values[6], &values[7], &values[8], &values[9], &values[10], &values[11],
                 &values[12], &values[13], &values[14], &values[15], &values[16], &values[17]);
@@ -587,7 +587,7 @@ void GameStatsFill(int *pHandles, int *pStats1, int *pStats0, int *pMode, char *
         unsigned int score1;
         unsigned int score0;
 
-        GauntletStatsOpen(&cursor, (signed char)fn_8022F384((int)fn_8022F4BC()));
+        GauntletStatsOpen(&cursor, (signed char)DbUserFindIndex((int)DbUserGetCurrent()));
         if (GameOptionsGet(14) == 1) {
             score1 = StyleTrackerGetTotal(1);
             score0 = StyleTrackerGetTotal(0);
@@ -1037,10 +1037,10 @@ void fn_8005740C(int value1, int *pPair1, int word1, int test1, int value0, int 
             } else {
                 if (fn_80178308() == 0) {
                     PlayBookSetIndices(0, 0, 0,
-                                lbl_803EA594->mpUnknown0[0][0][(unsigned char)fn_802372EC(0, lbl_803EA594->mUnknown40[0][0])]);
+                                lbl_803EA594->mpUnknown0[0][0][(unsigned char)SyncRandGetRange(0, lbl_803EA594->mUnknown40[0][0])]);
                 } else {
                     PlayBookSetIndices(0, 0, 0,
-                                lbl_803EA594->mpUnknown20[0][0][(unsigned char)fn_802372EC(0, lbl_803EA594->mUnknown48[0][0])]);
+                                lbl_803EA594->mpUnknown20[0][0][(unsigned char)SyncRandGetRange(0, lbl_803EA594->mUnknown48[0][0])]);
                 }
                 PlayBookLoadCurrentPlay(0);
                 fn_800B41BC(0, 0, 0);
@@ -1059,10 +1059,10 @@ void fn_8005740C(int value1, int *pPair1, int word1, int test1, int value0, int 
             } else {
                 if (fn_80178308() == 1) {
                     PlayBookSetIndices(1, 0, 0,
-                                lbl_803EA594->mpUnknown0[1][0][(unsigned char)fn_802372EC(0, lbl_803EA594->mUnknown40[1][0])]);
+                                lbl_803EA594->mpUnknown0[1][0][(unsigned char)SyncRandGetRange(0, lbl_803EA594->mUnknown40[1][0])]);
                 } else {
                     PlayBookSetIndices(1, 0, 0,
-                                lbl_803EA594->mpUnknown20[1][0][(unsigned char)fn_802372EC(0, lbl_803EA594->mUnknown48[1][0])]);
+                                lbl_803EA594->mpUnknown20[1][0][(unsigned char)SyncRandGetRange(0, lbl_803EA594->mUnknown48[1][0])]);
                 }
                 PlayBookLoadCurrentPlay(1);
                 fn_800B41BC(1, 0, 0);
@@ -1256,7 +1256,7 @@ void fn_80057C58(unsigned char team, int index, int flag)
         int database;
         int id = UserProfileGetSelected(team);
         if (id != -1) {
-            database = fn_8022F488(fn_8022F358(id));
+            database = DbUserSelect(DbUserGetId(id));
         } else {
             database = 0x454D4147;
         }
@@ -2054,7 +2054,7 @@ void fn_800C1E50(void);
 int ChallengeIsPairingGame(void);
 int ChallengeEvaluateGoals(void);
 int fn_80178AE0(void);
-void *fn_8022F4BC(void);
+void *DbUserGetCurrent(void);
 void *UserProfileFindIndex(void *p);
 int GauntletScreenGetSelection(void);
 void GauntletMarkTeamBeaten(void *p,int id);
@@ -2448,12 +2448,12 @@ void fn_8005B128(int *pResult,int *pId,MenuText_t *pText)
     else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
     if(GameModeTypeGet()==8) {
         if(score1>score0) {
-            void *p=UserProfileFindIndex(fn_8022F4BC());
+            void *p=UserProfileFindIndex(DbUserGetCurrent());
             GauntletMarkTeamBeaten(p,GauntletScreenGetSelection());
-            GauntletAdvance(UserProfileFindIndex(fn_8022F4BC()));
+            GauntletAdvance(UserProfileFindIndex(DbUserGetCurrent()));
             *pResult=1;
-            if(GauntletIsTeamBeaten(UserProfileFindIndex(fn_8022F4BC()),34)) *pResult=3;
-            else if(!GauntletGetTeamsLeft(UserProfileFindIndex(fn_8022F4BC()))) *pResult=2;
+            if(GauntletIsTeamBeaten(UserProfileFindIndex(DbUserGetCurrent()),34)) *pResult=3;
+            else if(!GauntletGetTeamsLeft(UserProfileFindIndex(DbUserGetCurrent()))) *pResult=2;
         } else *pResult=0;
         DbCursor query;
         fn_80083E40(&query,0,0x54415453);

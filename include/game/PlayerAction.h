@@ -15,7 +15,7 @@
 #include "game/Record_8011F4F8.h"
 #include "game/Record_8011F518.h"
 #include "game/Ball.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_800B65A0.h"
 #include "game/Table_80089904.h"
 
@@ -51,7 +51,7 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 float AnimSeqGetKeyTime(void *p, int flags);
 float AnimSeqGetTime(AnimSeq_t *p);
 int fn_801787A0(void);
-int fn_8023790C(void);
+int SyncTimeGetGameTime(void);
 void fn_800DB40C(Record_800DB074 *pRecord, Object_80039F5C *p, Ball_t *pBall);
 }
 
@@ -128,7 +128,7 @@ int MathAngleDiff(int a, int b);
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "game/fn_8022781C.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "engine/llquat.h"
 #include "game/fn_80094488.h"

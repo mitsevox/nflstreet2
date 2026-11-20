@@ -198,7 +198,7 @@ int fn_8009C328(Object_80039F5C *pA, Object_80039F5C *pB);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 int fn_800ABDA4(int team);
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 int PlyrMgrCompareSnapshot(PlyrMgr_t *pA, PlyrMgr_t *pB);
 int PlyrMgrSaveSnapshot(PlyrMgr_t *pManager, char *pBuffer);
 int PlyrMgrLoadSnapshot(PlyrMgr_t *pManager, char *pBuffer);
@@ -657,14 +657,14 @@ extern "C" void PlyrMgrRegister(unsigned int count)
 
     CollideSetPairCallback(0, 0, PlyrContactCallback);
     pHandle = SyncStateRegister(0, (void **)&_PlyrMgr_pManager, sizeof(PlyrMgr_t), 1, 0x706C7972);
-    fn_80238234(pHandle, (Callback_80238234)PlyrMgrCreate, (Callback_80238234)PlyrMgrDestroy,
+    SyncStateSetCallbacks(pHandle, (Callback_80238234)PlyrMgrCreate, (Callback_80238234)PlyrMgrDestroy,
                 (Callback_80238234)PlyrMgrRefreshAll, (Callback1C_80238234)PlyrMgrCompareSnapshot);
-    fn_80238248(pHandle, (Callback28_80238248)PlyrMgrSaveSnapshot, (Callback24_80238248)PlyrMgrGetSnapshotSize,
+    SyncStateSetSaveCallbacks(pHandle, (Callback28_80238248)PlyrMgrSaveSnapshot, (Callback24_80238248)PlyrMgrGetSnapshotSize,
                 (Callback20_80238248)PlyrMgrLoadSnapshot);
-    pManager = (PlyrMgr_t *)fn_8023816C(pHandle);
+    pManager = (PlyrMgr_t *)SyncStateGetData(pHandle);
     pManager->mCount = count;
     pManager->mPerTeam = count >> 1;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 extern "C" void PlyrMgrReset(void)

@@ -596,7 +596,7 @@ int Vec3GetAngle(Vector_80039F5C *a, Vector_80039F5C *b);
 int fn_802275D8(Vector_80039F5C *a, Vector_80039F5C *b, float eps);
 void fn_80227690(void *pOut, void *a, void *b);
 float fn_8022785C(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
-unsigned int fn_802372EC(int a, int b);
+unsigned int SyncRandGetRange(int a, int b);
 void SndgReplayReadEntry(SndgReplaySfx_t *pEntry, void *pStream0, void *pStream1, void *pStream2, void *pStream3,
                  float unknown);
 void SndgAmbAllocObjects(void);
@@ -2114,7 +2114,7 @@ extern "C" int SndgSfxPlayVolume(int index, Vector_80039F5C *pPos, unsigned char
     pEntry = &_Sndg_sState.mC[index];
     now = SysGetSystemTime();
     if (SndPatchOver(pEntry->m14) != 0 || (unsigned int)(index - 0x72) <= 30 ||
-        now - pEntry->m10 > fn_802372EC(1, 15) + 10) {
+        now - pEntry->m10 > SyncRandGetRange(1, 15) + 10) {
         SndFillPatchOpts(&params);
         params.mVolume = c;
         SndgChannelSetPatchOpts(pEntry->mD, pPos, &params);
@@ -3233,7 +3233,7 @@ extern "C" void SndgSpchHandleEvent(AudmonEvent_t *pEvent)
                 case 0x65:
                     SpchIGSetStruggleCarrier(pEvent->mUnknown10.mValue);
                     SpchIGSetStruggleTackler(pEvent->mUnknown14);
-                    if (fn_802372EC(1, 2)) {
+                    if (SyncRandGetRange(1, 2)) {
                         SpchIGSayStruggleCarrier();
                     } else {
                         SpchIGSayStruggleTackler();

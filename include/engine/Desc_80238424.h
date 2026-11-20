@@ -9,7 +9,7 @@ typedef struct Desc_80238424 {
 extern "C" {
 #endif
 int EvMonCreate(const Desc_80238424 *pDesc);
-int fn_80238424(const Desc_80238424 *pDesc);
+int EvMonAlloc(const Desc_80238424 *pDesc);
 #ifdef __cplusplus
 }
 #endif

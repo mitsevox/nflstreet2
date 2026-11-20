@@ -20,8 +20,8 @@ int OptAudioHandleMessage(unsigned int id, void *pArgs, int unused, int *pResult
 signed char UserProfileFindIndex(int a);
 void UserProfileTouch(signed char a);
 void UserProfileSelect(signed char a, int b);
-int fn_8022F3D4(int a);
-int fn_8022F4BC(void);
+int DbUserGetDb(int a);
+int DbUserGetCurrent(void);
 }
 
 static int _MsgUnlockList_iSelection = 0;
@@ -32,7 +32,7 @@ void MsgOptionsStubSelect(int index);
 int MsgProfileAssignHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     if (id == 0x80000001) {
-        UserProfileSelect(UserProfileFindIndex(fn_8022F4BC()), 1);
+        UserProfileSelect(UserProfileFindIndex(DbUserGetCurrent()), 1);
         UserProfileSelect(-1, 0);
         return 1;
     }
@@ -90,7 +90,7 @@ int MsgUnlockListHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, in
     case 0x80000003:
         break;
     case 0x80000001: {
-        int handle = fn_8022F3D4(fn_8022F4BC());
+        int handle = DbUserGetDb(DbUserGetCurrent());
         DbTableCursor cursor;
         int *pA;
         int *pB;
@@ -101,7 +101,7 @@ int MsgUnlockListHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, in
         cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
         pA = (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4);
         pB = (int *)(pArgs[2].i + (*pArgs[2].pi + 1) * 4);
-        UserProfileTouch(UserProfileFindIndex(fn_8022F4BC()));
+        UserProfileTouch(UserProfileFindIndex(DbUserGetCurrent()));
         base = pArgs[0].i * 4;
         for (i = 0; i < 12; i++) {
             pA[i] = i + base;
@@ -132,7 +132,7 @@ int MsgUnlockListHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, in
             _MsgUnlockList_iSelection = 0;
         }
         {
-            int handle = fn_8022F3D4(fn_8022F4BC());
+            int handle = DbUserGetDb(DbUserGetCurrent());
             DbTableCursor cursor;
             unsigned int mask;
             int index;

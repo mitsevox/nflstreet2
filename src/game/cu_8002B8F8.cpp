@@ -218,7 +218,7 @@ void fn_802196B4(void *p, int a, int b, int c, float *pD, unsigned char e);
 void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
 float fn_8022785C(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
-int fn_8023790C(void);
+int SyncTimeGetGameTime(void);
 
 /* Animation state and animation of each player ([team][index]), filled by
    fn_800D7708. */
@@ -509,7 +509,7 @@ extern "C" int fn_8002BCD4(Type_803EA368 *p)
     if (p->mUnknownD90 == 0) {
         fn_8002B960(&p->mUnknown000);
         p->mUnknownD8C = -1;
-        p->mUnknownD74 = p->mUnknownD70 = fn_8023790C();
+        p->mUnknownD74 = p->mUnknownD70 = SyncTimeGetGameTime();
         p->mUnknownD90 = 1;
         p->mUnknown14B4 = fn_801784C4();
         fn_80030CB0(BallGetCurrentIndex());
@@ -522,7 +522,7 @@ extern "C" int fn_8002BD44(Type_803EA368 *p)
 {
     if (p->mUnknownD90 == 1) {
         ReplayEventAdd(p, 0x34, 0, 0, 0);
-        p->mUnknownD80 = p->mUnknownD7C = fn_8023790C();
+        p->mUnknownD80 = p->mUnknownD7C = SyncTimeGetGameTime();
         fn_80030828(p);
         p->mUnknownD90 = 2;
         p->mUnknownD94 &= ~0x10;
@@ -786,7 +786,7 @@ extern "C" int fn_8002C4B0(Type_803EA368 *p)
 
 extern "C" void fn_8002C630(Type_803EA368 *p)
 {
-    fn_8023790C();
+    SyncTimeGetGameTime();
     fn_80030940(p);
 }
 

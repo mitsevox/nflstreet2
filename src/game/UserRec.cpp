@@ -5,7 +5,7 @@
 
 #include "game/fn_801FCE10.h"
 #include "game/StyleTracker.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 
 extern "C" {
 int fn_80178AE0(void);
@@ -14,10 +14,10 @@ int fn_80178EA0(int a);
 int fn_80178EE0(int a);
 int fn_800A7E40(unsigned char a);
 int fn_800A7E54(unsigned char a);
-int fn_8022F34C(void);
-int fn_8022F358(int index);
-int fn_8022F3D4(int handle);
-int fn_8022F4BC(void);
+int DbUserGetCount(void);
+int DbUserGetId(int index);
+int DbUserGetDb(int handle);
+int DbUserGetCurrent(void);
 int UserProfileGetFreeKey(int kind, int key, int first, int last);
 }
 
@@ -112,8 +112,8 @@ void UserRecUpdateStreak(int index, int a, int b)
 {
     int value;
 
-    fn_8022F478(index);
-    if (fn_801FCE10(0, "use \x8c select 'swSU' into \x82 from 'TSPU'\n", fn_8022F3D4(fn_8022F4BC()), &value) == 0) {
+    DbUserSetCurrent(index);
+    if (fn_801FCE10(0, "use \x8c select 'swSU' into \x82 from 'TSPU'\n", DbUserGetDb(DbUserGetCurrent()), &value) == 0) {
         int up = UserRecGetGameStat(2, 0, 0, a, b);
         int down = UserRecGetGameStat(3, 0, 0, a, b);
         if (up) {
@@ -129,7 +129,7 @@ void UserRecUpdateStreak(int index, int a, int b)
                 value--;
             }
         }
-        fn_801FCE10(0, "use \x8c update 'TSPU' set 'swSU' = \x82\n", fn_8022F3D4(fn_8022F4BC()), value);
+        fn_801FCE10(0, "use \x8c update 'TSPU' set 'swSU' = \x82\n", DbUserGetDb(DbUserGetCurrent()), value);
     }
 }
 
@@ -137,10 +137,10 @@ void UserRecAddStat(int index, int key, int delta)
 {
     int value;
 
-    fn_8022F478(index);
-    if (fn_801FCE10(0, "use \x8c select \x8c into \x82 from 'TSPU'\n", fn_8022F3D4(fn_8022F4BC()), key, &value) == 0) {
+    DbUserSetCurrent(index);
+    if (fn_801FCE10(0, "use \x8c select \x8c into \x82 from 'TSPU'\n", DbUserGetDb(DbUserGetCurrent()), key, &value) == 0) {
         value += delta;
-        fn_801FCE10(0, "use \x8c update 'TSPU' set \x8c = \x82\n", fn_8022F3D4(fn_8022F4BC()), key, value);
+        fn_801FCE10(0, "use \x8c update 'TSPU' set \x8c = \x82\n", DbUserGetDb(DbUserGetCurrent()), key, value);
     }
 }
 
@@ -175,7 +175,7 @@ extern const char _UserRec_szSelectIntQuery[] = "use \x8c select \x8c into \x82 
 
 int UserRecGetString(int index, int table, int column, char *pText)
 {
-    return fn_801FCE10(0, "use \x8c select \x8c into \x88 from \x8c\n", fn_8022F3D4(fn_8022F358(index)), column, pText, table);
+    return fn_801FCE10(0, "use \x8c select \x8c into \x88 from \x8c\n", DbUserGetDb(DbUserGetId(index)), column, pText, table);
 }
 
 extern const char _UserRec_szSelect89Query[] = "use \x8c select \x8c into \x89 from \x8c\n";
@@ -185,7 +185,7 @@ extern const char _UserRec_szUpdate89Query[] = "use \x8c update \x8c set \x8c = 
 
 int UserRecGetCount(void)
 {
-    return fn_8022F34C();
+    return DbUserGetCount();
 }
 
 int UserRecGetName(int index, char *pText)

@@ -39,7 +39,7 @@ struct GlowGroup_t { unsigned int mUnknown0; int mUnknown4; Glow_t *mUnknown8; u
 extern "C" {
 extern LevelData_t *gLevelData;
 extern const Vector_80039F5C gParticleSys_vUp;
-unsigned int fn_802372EC(int, unsigned int);
+unsigned int SyncRandGetRange(int, unsigned int);
 int strcmp(const char *, const char *);
 void *fn_801D2B7C(unsigned int, int, int);
 void fn_801D2BD0(void *);
@@ -141,7 +141,7 @@ void GlowFlickerUpdate(GlowFlicker_t *p)
                 range = (unsigned int)((p->mUnknown10 - p->mUnknownC) * 100.0f);
                 base = (unsigned int)(p->mUnknownC * 100.0f);
             }
-            p->mUnknown20 = (float)(fn_802372EC(1, range) + base) * 0.01f;
+            p->mUnknown20 = (float)(SyncRandGetRange(1, range) + base) * 0.01f;
         } else p->mUnknown1C += 0.01666666753590107f;
     }
 }

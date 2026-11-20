@@ -4,7 +4,7 @@
 #include "game/AudmonEvent.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 class Class_802A1B18 : public Class_80297B50 {
 };
@@ -51,7 +51,7 @@ void fn_80153DBC(Class_802A1B18 *p, float dt)
 {
     int team = fn_80178308();
     int other = !team;
-    unsigned int flag = fn_802372EC(0, 100) & 1;
+    unsigned int flag = SyncRandGetRange(0, 100) & 1;
 
     PlayBookSetFormationType(team, 1);
     PlayBookSetFormationType(other, 11);

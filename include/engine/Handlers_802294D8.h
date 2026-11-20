@@ -10,8 +10,8 @@ typedef struct Handlers_802294D8 {
 #ifdef __cplusplus
 extern "C" {
 #endif
-void fn_802294D8(Handlers_802294D8 *p);
-int fn_802294FC(int *p);
+void DbNiomSetHandlers(Handlers_802294D8 *p);
+int DbNiomBeginMode(int *p);
 #ifdef __cplusplus
 }
 #endif

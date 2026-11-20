@@ -23,7 +23,7 @@
 #include "game/fn_80227638.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_800F06F4.h"
@@ -291,7 +291,7 @@ extern "C" int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, floa
                         best = grid[i][j];
                         bestX = i;
                         bestY = j;
-                    } else if (grid[i][j] == best && fn_802372EC(0, 100) <= 19) {
+                    } else if (grid[i][j] == best && SyncRandGetRange(0, 100) <= 19) {
                         bestX = i;
                         bestY = j;
                     }
@@ -439,7 +439,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
                 }
                 ++state->mUnknown36;
                 if (!fn_80103D6C(p) && MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0x71C70
-                    && !state->mUnknown40 && fn_802372EC(0, state->mUnknown32) < state->mUnknown36) {
+                    && !state->mUnknown40 && SyncRandGetRange(0, state->mUnknown32) < state->mUnknown36) {
                     p->mUnknown512.mUnknown14 = 0;
                     fn_8009BD60(p);
                     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 152, 1.0f, p);

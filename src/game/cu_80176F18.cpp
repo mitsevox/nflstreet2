@@ -162,7 +162,7 @@ int fn_8022B7A4(int handle, int tag, int *pValue);
 int fn_8022B8C8(int handle, int tag, int value);
 void fn_8022BAB4(int handle, int a, int b, int c);
 void fn_8022BD30(int handle, int a, int b);
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 }
 
 extern "C" {
@@ -644,7 +644,7 @@ int Class_802A5630::GetScore(int team)
 extern "C" void fn_801779D8(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EB444, sizeof(ScrmState), 0, 0x73637275);
-    ScrmState *pState = (ScrmState *)fn_8023816C(pHandle);
+    ScrmState *pState = (ScrmState *)SyncStateGetData(pHandle);
 
     int resume = 0;
 
@@ -690,7 +690,7 @@ extern "C" void fn_801779D8(void)
     pState->mUnknownA4 = 0.0f;
     pState->mUnknownA8 = 0.0f;
     pState->mUnknownAC = 0.0f;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
     fn_80178F20(0);
     ClockRuleInit();
     fn_80179150();

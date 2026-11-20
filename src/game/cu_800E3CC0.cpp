@@ -24,7 +24,7 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
 #include "game/fn_80227638.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include <math.h>
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
@@ -231,7 +231,7 @@ float SyncRandGetFloat(int stream);
 }
 
 extern "C" {
-int fn_8023790C(void);
+int SyncTimeGetGameTime(void);
 }
 
 extern "C" {
@@ -1198,7 +1198,7 @@ void fn_800E55B8(Object_80039F5C *p)
     State_800E4494 *state = (State_800E4494 *)&p->mUnknown336;
     PlayerReleaseJointCtrls(p);
     state->mUnknown1 = 1;
-    state->mUnknown2 = fn_802372EC(0, 45);
+    state->mUnknown2 = SyncRandGetRange(0, 45);
     state->mUnknown0 = 0;
     state->mUnknown24 = 0;
     state->mUnknown26 = 15;
@@ -1223,7 +1223,7 @@ void fn_800E55B8(Object_80039F5C *p)
     }
     switch (pMessage->mId & ~0x80) {
     case 48:
-        if (pMessage->mUnknown1[0] >= fn_802372EC(0, 100)) {
+        if (pMessage->mUnknown1[0] >= SyncRandGetRange(0, 100)) {
             state->mUnknown24 = 1;
             state->mUnknown30 = 0;
         }
@@ -1386,7 +1386,7 @@ int fn_800E5C00(Object_80039F5C *p, int value)
     if (value == 241) {
         switch (result) {
         case 15:
-            switch (fn_802372EC(0, 4)) {
+            switch (SyncRandGetRange(0, 4)) {
             case 0:
             case 1:
                 break;
@@ -1399,7 +1399,7 @@ int fn_800E5C00(Object_80039F5C *p, int value)
             }
             break;
         case 4:
-            switch (fn_802372EC(0, 4)) {
+            switch (SyncRandGetRange(0, 4)) {
             case 0:
             case 1:
                 break;
@@ -1472,7 +1472,7 @@ int fn_800E5EA4(Object_80039F5C *p, Object_80039F5C *pOther, Record_800E5EA4 *pA
     if (p->mFlags & 0x400) {
         offense = (int)(offense * 1.05f);
     }
-    return fn_802372EC(0, offense) > fn_802372EC(0, defense);
+    return SyncRandGetRange(0, offense) > SyncRandGetRange(0, defense);
 }
 }
 
@@ -1490,7 +1490,7 @@ extern "C" int fn_800E6328(Object_80039F5C *p, Object_80039F5C *pOther, Block_80
     if (pBlock->mUnknown0 == 4 || pBlock->mUnknown0 == 6) {
         if (fn_8011F1CC() && !fn_801783AC(0)) {
             if (pCarrier && (pCarrier->mFlags & 0x8000)) {
-                result = fn_802372EC(0, 5);
+                result = SyncRandGetRange(0, 5);
             } else {
                 float ratio = (float)pRatings[0] / (float)pRatings[9] * 128.0f;
                 if (ratio >= 0.0f) {
@@ -1501,10 +1501,10 @@ extern "C" int fn_800E6328(Object_80039F5C *p, Object_80039F5C *pOther, Block_80
                 } else {
                     rating = 0.0f;
                 }
-                if (rating > 192.0f && fn_802372EC(0, 100) <= 84) {
-                    result = fn_802372EC(0, 5);
-                } else if (rating < 84.0f && fn_802372EC(0, 100) <= 84) {
-                    switch (fn_802372EC(0, 5)) {
+                if (rating > 192.0f && SyncRandGetRange(0, 100) <= 84) {
+                    result = SyncRandGetRange(0, 5);
+                } else if (rating < 84.0f && SyncRandGetRange(0, 100) <= 84) {
+                    switch (SyncRandGetRange(0, 5)) {
                     case 0:
                         result = 0;
                         break;
@@ -1520,7 +1520,7 @@ extern "C" int fn_800E6328(Object_80039F5C *p, Object_80039F5C *pOther, Block_80
                         break;
                     }
                 } else {
-                    result = fn_802372EC(0, 4);
+                    result = SyncRandGetRange(0, 4);
                 }
             }
             if ((unsigned int)result <= 1) {
@@ -1569,12 +1569,12 @@ extern "C" int fn_800E6328(Object_80039F5C *p, Object_80039F5C *pOther, Block_80
             } else {
                 rating = 0.0f;
             }
-            if (rating > 192.0f && fn_802372EC(0, 100) > 85) {
-                result = fn_802372EC(0, 5);
-            } else if (rating < 84.0f && fn_802372EC(0, 100) > 85) {
+            if (rating > 192.0f && SyncRandGetRange(0, 100) > 85) {
+                result = SyncRandGetRange(0, 5);
+            } else if (rating < 84.0f && SyncRandGetRange(0, 100) > 85) {
                 result = 6;
             } else {
-                result = fn_802372EC(0, 6);
+                result = SyncRandGetRange(0, 6);
             }
         }
     }
@@ -2263,11 +2263,11 @@ int fn_800E815C(Object_80039F5C *p, int unused, int mode)
         choice = 2;
         kind = 4;
     }
-    if (choice == 0) choice = fn_802372EC(0, 3) + 1;
+    if (choice == 0) choice = SyncRandGetRange(0, 3) + 1;
     PlayerMoveBegin(p, mode, 12);
     message.mUnknown1[0] = kind;
     message.mUnknown1[1] = choice;
-    message.mUnknown1[2] = mode == 0 ? 0 : lbl_803EAD68[fn_802372EC(0, 5)];
+    message.mUnknown1[2] = mode == 0 ? 0 : lbl_803EAD68[SyncRandGetRange(0, 5)];
     fn_800F00D4(0, p->mpState, &message, p);
     return 1;
 }
@@ -2417,7 +2417,7 @@ extern "C" int fn_800E8748(Object_80039F5C *p) {
 }
 
 extern "C" int fn_800E885C(void) {
-    return fn_802372EC(0, 100) >= lbl_803EAD80 ? 4 : 0;
+    return SyncRandGetRange(0, 100) >= lbl_803EAD80 ? 4 : 0;
 }
 
 extern "C" int fn_800E8898(Object_80039F5C *p, Object_80039F5C **ppLast) {
@@ -2463,8 +2463,8 @@ extern "C" int fn_800E8898(Object_80039F5C *p, Object_80039F5C **ppLast) {
                         short otherRollBase = (short)pOther->mUnknown2904Float;
                         short otherLimit = (short)(ratingMax * lbl_803EAD84 + otherRollBase * lbl_803EAD88);
                         short limit = (short)(rating * lbl_803EAD8C + rollBase * lbl_803EAD90);
-                        short roll = fn_802372EC(0, limit);
-                        short otherRoll = fn_802372EC(0, otherLimit);
+                        short roll = SyncRandGetRange(0, limit);
+                        short otherRoll = SyncRandGetRange(0, otherLimit);
                         if (pOther->mMotion.mPos.mY < fn_80177FE0().mY)
                             roll = (short)(roll * lbl_803EAD94);
                         if (roll > otherRoll) {
@@ -2781,7 +2781,7 @@ extern "C" int fn_800E948C(Object_80039F5C *p) {
             return 1;
         return 3;
     }
-    switch (fn_802372EC(0, 3)) {
+    switch (SyncRandGetRange(0, 3)) {
     case 0:
         return 2;
     case 1:
@@ -3061,9 +3061,9 @@ extern "C" int fn_800E9FD8(Object_80039F5C *p) {
         result = 1;
     } else if (p->mFlags & 4) {
         if (!fn_801787A0() && state->mUnknown20[1]) {
-            unsigned int now = fn_8023790C();
+            unsigned int now = SyncTimeGetGameTime();
             if (state->mUnknown40 > now) {
-                now = fn_8023790C();
+                now = SyncTimeGetGameTime();
                 state->mUnknown40 = now - 1.0f;
                 fn_800DB7A4(state->mUnknown20, p);
             }

@@ -23,7 +23,7 @@
 #include "game/fn_80227638.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_800F06F4.h"

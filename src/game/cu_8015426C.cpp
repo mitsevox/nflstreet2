@@ -97,7 +97,7 @@ void fn_800B9598(PostPlayPhase *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
 void fn_80178F20(ScrmRuleSet *pObject);
 int fn_80149014(void);
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 float fn_80178A2C(void);
 void fn_80178E88(float v);
 
@@ -110,7 +110,7 @@ void fn_8015426C(Class_802A27F0 *p)
     p->mpUnknown1C = new (0) Rules_801531C4;
     if (allocate) {
         pHandle = SyncStateRegister(0, (void **)&p->mpUnknown1C->mpUnknown52, sizeof(Score_801531C4), 0, 0x4D474F46);
-        pScore = (Score_801531C4 *)fn_8023816C(pHandle);
+        pScore = (Score_801531C4 *)SyncStateGetData(pHandle);
     } else {
         p->mpUnknown1C->mpUnknown52 = (Score_801531C4 *)fn_801D2B7C(sizeof(Score_801531C4), 0, 0);
         pScore = p->mpUnknown1C->mpUnknown52;
@@ -130,7 +130,7 @@ void fn_8015426C(Class_802A27F0 *p)
     p->mpUnknown1C->mUnknown4.mUnknown22 = -1;
     p->mpUnknown1C->mUnknown4.mUnknown23 = -1;
     if (allocate) {
-        fn_802381E0(pHandle);
+        SyncStateCommit(pHandle);
     }
     fn_800BC51C(&p->mpUnknown1C->mUnknown0);
     fn_800BFAB4(&p->mpUnknown1C->mUnknown4);

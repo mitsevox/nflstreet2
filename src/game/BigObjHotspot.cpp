@@ -91,10 +91,10 @@ unsigned char *fn_80220BFC(int, int);
 void *LLUIGTexNodeGet(void *, int, int);
 void TMTexLibReplaceClut(void *, TexFilePalette_t *, int, void *);
 void TMTexLibReplaceTexture(void *, void *, int, TexFileImage_t *, int, int);
-int fn_8022F358(int);
-int fn_8022F384(int);
-int fn_8022F3D4(int);
-int fn_8022F4BC(void);
+int DbUserGetId(int);
+int DbUserFindIndex(int);
+int DbUserGetDb(int);
+int DbUserGetCurrent(void);
 
 int HotspotClassifyPlay(HotspotPlay_t *pPlay)
 {
@@ -178,7 +178,7 @@ void HotspotRecordCapture(HotspotPlay_t *pPlay)
     unsigned int index = fn_800A3444();
     int db = UserProfileGetSelected(_PlayerRefTeam(pPlay->mRef));
     if (fn_801485D4() == 0 && TutorialIsActive() == 0 && db != -1 && index <= 9) {
-        int handle = fn_8022F3D4(fn_8022F358(db));
+        int handle = DbUserGetDb(DbUserGetId(db));
         int bit = 1 << index;
         DbTableCursor cursor;
         cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
@@ -190,7 +190,7 @@ void HotspotRecordCapture(HotspotPlay_t *pPlay)
             _Hotspot_iCaptureBit = bit;
             if (value == 0x3FF) {
                 fn_8005D2C8(1);
-                TeamUnlock(fn_8022F384(fn_8022F4BC()), 34);
+                TeamUnlock(DbUserFindIndex(DbUserGetCurrent()), 34);
             }
         }
     }

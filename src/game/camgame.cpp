@@ -41,7 +41,7 @@ int fn_80178308(void);
 int fn_80178320(void);
 void *CamCreate(int a, CameraDesc_t *pDesc);
 void CamDestroy(void *pCamera);
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 
 void _CamGameAdd(CamGameState_t *pState, int index, int id);
 void _CamGameDelete(CamGameState_t *pState, int index);
@@ -175,12 +175,12 @@ void CamGameStart(void *pObject)
 {
     void *pHandle = SyncStateRegister(0, (void **)&_CamGame_pState, sizeof(CamGameState_t), 0, 0x63616D67);
 
-    fn_80238234(pHandle, _CamGameCreate, _CamGameDestroy, 0, _CamGameBlockCompare);
-    fn_80238248(pHandle, _CamGameBlockSave, _CamGameBlockGetSaveSize, _CamGameBlockRestore);
-    CamGameState_t *pState = (CamGameState_t *)fn_8023816C(pHandle);
+    SyncStateSetCallbacks(pHandle, _CamGameCreate, _CamGameDestroy, 0, _CamGameBlockCompare);
+    SyncStateSetSaveCallbacks(pHandle, _CamGameBlockSave, _CamGameBlockGetSaveSize, _CamGameBlockRestore);
+    CamGameState_t *pState = (CamGameState_t *)SyncStateGetData(pHandle);
     pState->mpObject = pObject;
     pState->mSet.mUnknown14 = 0;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 void CamGameSelectCamera(int index)

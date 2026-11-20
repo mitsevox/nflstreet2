@@ -18,7 +18,7 @@
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 /* One signed byte per side, copied as a pair. */
 struct Pair_803ECE48 {
@@ -230,11 +230,11 @@ void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 int UIGLibraryLoadItem(void *pObject, int a, int b);
 void UIGLibraryUnLoadItem(void *pObject, int a, int b);
 void *UIGLibraryGetGlobal(int index);
-void fn_802293B4(int a, int b);
-void fn_802293FC(void);
-void fn_80229438(int tag, int a);
-int fn_802294F4(void);
-int fn_80229554(void);
+void DbOcmtInsert(int a, int b);
+void DbOcmtClear(void);
+void DbOptionsSetTpom(int tag, int a);
+int DbNiomIsModeActive(void);
+int DbNiomEndMode(void);
 void fn_8022A490(int a);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
@@ -242,9 +242,9 @@ void fn_8022DC7C(int a);
 void fn_8022DCB0(int a);
 void fn_8022DCE4(int a);
 void fn_8022DD18(int a);
-int fn_8022F358(int index);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserGetId(int index);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 
 extern char lbl_802EBE24[];
 extern void *gUISMainInfo;
@@ -401,8 +401,8 @@ void fn_8000FA0C(void)
         if (GameInfoIsInitialized()) {
             GameInfoShutdown();
         }
-        if (fn_802294F4()) {
-            fn_80229554();
+        if (DbNiomIsModeActive()) {
+            DbNiomEndMode();
         }
         if (GameTextGetBootFinished() && !UserRecGetCount() && !FELoopIsIdleTimedOut()) {
             fn_80010150(11);
@@ -426,7 +426,7 @@ void fn_8000FAD0(int mode)
             }
             break;
         case 8:
-            UserProfileSelect(UserProfileFindIndex(fn_8022F4BC()), 1);
+            UserProfileSelect(UserProfileFindIndex(DbUserGetCurrent()), 1);
             UserProfileSelect(-1, 0);
             /* fall through */
         case 2:
@@ -453,9 +453,9 @@ void fn_8000FAD0(int mode)
             request.mSize = 0x96000;
             request.mpName = lbl_802EBE24;
             request.mCount = 1;
-            if (fn_802294F4()) {
+            if (DbNiomIsModeActive()) {
                 SndgMusicPumpFrame(0);
-                fn_80229554();
+                DbNiomEndMode();
             }
             switch (mode) {
             case 0:
@@ -466,7 +466,7 @@ void fn_8000FAD0(int mode)
                 if (lbl_803EB958) {
                     fn_801FCE10(0, "update 'FNIG' set 'YTPG' = \x82\n", lbl_803EB95C);
                 }
-                fn_80229438(0x544E464F, 2);
+                DbOptionsSetTpom(0x544E464F, 2);
                 fn_8022A490(2);
                 break;
             case 7:
@@ -482,7 +482,7 @@ void fn_8000FAD0(int mode)
                 SndgMusicPumpFrame(0);
                 GameInfoInit();
                 SndgMusicPumpFrame(0);
-                fn_80229438(0x544E464F, 2);
+                DbOptionsSetTpom(0x544E464F, 2);
                 SndgMusicPumpFrame(0);
                 fn_8022A490(2);
                 break;
@@ -634,15 +634,15 @@ int fn_8000FE60(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
         *pResult = 1;
         switch (pArgs[0].i) {
         case 751:
-            *pResult = StoryTeamExists(fn_8022F384(fn_8022F4BC()));
+            *pResult = StoryTeamExists(DbUserFindIndex(DbUserGetCurrent()));
             break;
         case 752:
-            *pResult = CreateTeamExists(fn_8022F384(fn_8022F4BC()));
+            *pResult = CreateTeamExists(DbUserFindIndex(DbUserGetCurrent()));
             break;
         }
         break;
     case 0x80000009:
-        *pResult = CreateTeamExists(fn_8022F384(fn_8022F4BC()));
+        *pResult = CreateTeamExists(DbUserFindIndex(DbUserGetCurrent()));
         break;
     default:
         return 0;
@@ -955,18 +955,18 @@ void fn_80010914(void)
     char text[16];
     int i;
 
-    fn_802293FC();
+    DbOcmtClear();
     for (i = 0; i <= 3; i++) {
         int pad = GameTextFindPlayerPad(i);
         if (pad != -1) {
             if (lbl_803ECE40[i] == 2) {
                 if (lbl_803EB968) {
-                    fn_802293B4(0, pad);
+                    DbOcmtInsert(0, pad);
                 } else {
-                    fn_802293B4(1, pad);
+                    DbOcmtInsert(1, pad);
                 }
             } else if (lbl_803ECE40[i] == 0) {
-                fn_802293B4(1, pad);
+                DbOcmtInsert(1, pad);
             }
         }
     }
@@ -1400,7 +1400,7 @@ void fn_80011600(int pad0, int pad1, int keep)
         lbl_803EB96A = 1;
     }
     char name[13] = {0};
-    int db = fn_8022F384(fn_8022F4BC());
+    int db = DbUserFindIndex(DbUserGetCurrent());
     if (pad0 != -1 && GameTextGetPadPlayer(pad0) != -1) {
         lbl_803ECE40[GameTextGetPadPlayer(pad0)] = 2;
         GameModeTypeIsSpecial();
@@ -1563,8 +1563,8 @@ unsigned char fn_80011C1C(unsigned char pad)
     int db = UserProfileGetSelected(pad);
 
     if (db != -1) {
-        if (fn_8022F358(UserProfileGetSelected(pad)) != lbl_803EB9B4[pad]) {
-            lbl_803EB9B4[pad] = fn_8022F358(UserProfileGetSelected(pad));
+        if (DbUserGetId(UserProfileGetSelected(pad)) != lbl_803EB9B4[pad]) {
+            lbl_803EB9B4[pad] = DbUserGetId(UserProfileGetSelected(pad));
             return 1;
         }
     } else if (lbl_803EB9B4[pad] != -1) {
@@ -1676,9 +1676,9 @@ void fn_800120C8(int side, int *pIndex)
     int count = fn_80012244(side);
 
     for (i = 0; i < count; i++) {
-        if (GameModeTypeGet() == 8 && GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC())) != 0x3FF) {
+        if (GameModeTypeGet() == 8 && GauntletGetCurrentTeam(UserProfileFindIndex(DbUserGetCurrent())) != 0x3FF) {
             if (side == 1) {
-                if (lbl_803EB994[1][i] == GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC()))) {
+                if (lbl_803EB994[1][i] == GauntletGetCurrentTeam(UserProfileFindIndex(DbUserGetCurrent()))) {
                     *pIndex = i;
                     return;
                 }
@@ -2220,10 +2220,10 @@ int fn_80013614(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
             break;
         }
         if (GameModeTypeGet() == 8 && MsgGameGetSetupState() == 1) {
-            if (GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC())) == 0x3FF) {
-                GauntletSetCurrentTeam(UserProfileFindIndex(fn_8022F4BC()), pArgs[1].i);
+            if (GauntletGetCurrentTeam(UserProfileFindIndex(DbUserGetCurrent())) == 0x3FF) {
+                GauntletSetCurrentTeam(UserProfileFindIndex(DbUserGetCurrent()), pArgs[1].i);
             } else {
-                pArgs[1].i = GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC()));
+                pArgs[1].i = GauntletGetCurrentTeam(UserProfileFindIndex(DbUserGetCurrent()));
             }
         }
         if (GameModeTypeGet() == 6 && ChallengeIsActive()) {
@@ -2245,7 +2245,7 @@ int fn_80013614(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
         *pResult = GauntletScreenGetSelection();
         break;
     case 0x80000017:
-        *pResult = GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC()));
+        *pResult = GauntletGetCurrentTeam(UserProfileFindIndex(DbUserGetCurrent()));
         break;
     case 0x8000000F:
         if (count == 5) {
@@ -2364,8 +2364,8 @@ int fn_80013614(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 int fn_80013CCC(int *pCount, int *pA, int *pB, int *pC)
 {
     *pC = 0;
-    if (fn_802294F4()) {
-        fn_80229554();
+    if (DbNiomIsModeActive()) {
+        DbNiomEndMode();
     }
     *pB = 0;
     if (EditMenuIsOpen()) {
@@ -2802,7 +2802,7 @@ void fn_80014AA8(int team, int id)
             fn_800128E8(team);
             fn_80012A14(team);
             fn_800129E4(team);
-            lbl_803EB9C4[team] = fn_802372EC(0, 5);
+            lbl_803EB9C4[team] = SyncRandGetRange(0, 5);
             lbl_803EB9C0[team] = 1;
             lbl_803EB9B0[team] = 0;
             lbl_803EB9BC[team] = 1;
@@ -3102,7 +3102,7 @@ void fn_800156B4(int index, char *pName, int nameSize, char *pTeam, int teamSize
             int index0 = UserProfileGetSelected(0);
             int index1 = UserProfileGetSelected(1);
             *pFlag = 1;
-            fn_8022F4BC();
+            DbUserGetCurrent();
             if (index0 != -1) {
                 *pFlag = EnvIsLocked(index0, lbl_802F43A8[index]);
             }
@@ -3198,7 +3198,7 @@ int fn_80015B68(int *pIndex, int any)
 {
     int index;
     do {
-        index = fn_802372EC(0, 12);
+        index = SyncRandGetRange(0, 12);
     } while ((!any && lbl_803EB9DC[index].mUnknownB4) || index == lbl_803EB9E0);
     int id = lbl_802F43A8[index];
     *pIndex = index;
@@ -3359,7 +3359,7 @@ void fn_80016038(void)
         lbl_803EB9E8->mValues[9] = UserStatsGet(&query, 7);
         lbl_803EB9E8->mValues[10] = UserStatsGet(&query, 12);
         lbl_803EB9E8->mValues[11] = UserStatsGet(&query, 13);
-        lbl_803EB9E8->mValues[12] = UserInfoGetTotalPoints(fn_8022F358(lbl_803EB9E7));
+        lbl_803EB9E8->mValues[12] = UserInfoGetTotalPoints(DbUserGetId(lbl_803EB9E7));
         lbl_803EB9E8->mUnknown34 = UserStatsGet(&query, 0);
         lbl_803EB9E8->mUnknown38 = UserStatsGet(&query, 1);
         lbl_803EB9E8->mStreak = UserStatsGet(&query, 2);
@@ -3680,7 +3680,7 @@ void fn_80016B60(int control, char *pText, int *pResult)
     }
     UnlockStatusOpen(lbl_803EBA04, lbl_803EB9FC);
     UserRecGetName(lbl_803EB9FC, pText);
-    *pResult = UserInfoGetPoints(fn_8022F358(lbl_803EB9FC));
+    *pResult = UserInfoGetPoints(DbUserGetId(lbl_803EB9FC));
 }
 
 void fn_80016C60(int index, char *pText, int *pUnknown94, int *pFlag)

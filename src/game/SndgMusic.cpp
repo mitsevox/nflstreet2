@@ -9,7 +9,7 @@
 #include "game/fn_801D2B7C.h"
 #include <string.h>
 #include "game/fn_8021D7B8.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_800AD9B4.h"
 
 #include <string.h>
@@ -352,7 +352,7 @@ void SndgMusicShufflePlaylist(void)
     if (count) {
         for (int round = 0; round <= 7; ++round) {
             for (i = 0; i < count - 1; ++i) {
-                int k = i + fn_802372EC(1, count - i);
+                int k = i + SyncRandGetRange(1, count - i);
                 signed char first = _SndgMusic_pState->mUnknownF1[i];
                 signed char second = _SndgMusic_pState->mUnknownF1[k];
                 _SndgMusic_pState->mUnknownF1[k] = first;

@@ -6,7 +6,7 @@
 #include "game/Object_8008044C.h"
 #include "game/Row_8007BC34.h"
 #include "game/fn_801FCE10.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 
 extern "C" {
@@ -26,8 +26,8 @@ unsigned int fn_80229CFC(int category, int *pValues, int a);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
-int fn_8022F358(int index);
-int fn_8022F3D4(int handle);
+int DbUserGetId(int index);
+int DbUserGetDb(int handle);
 
 int fn_80082280(Object_8008044C *pObject);
 int fn_8008257C(int count, unsigned int *pOut);
@@ -294,7 +294,7 @@ int fn_8008257C(int count, unsigned int *pOut)
         int db = UserProfileGetSelected(pad);
 
         if (db != -1) {
-            int handle = fn_8022F3D4(fn_8022F358((signed char)db));
+            int handle = DbUserGetDb(DbUserGetId((signed char)db));
             DbTableCursor cursor;
 
             cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
@@ -318,7 +318,7 @@ void fn_80082688(int db)
         mask |= 1 << i;
     }
     {
-        int handle = fn_8022F3D4(fn_8022F358(db));
+        int handle = DbUserGetDb(DbUserGetId(db));
         DbTableCursor cursor;
 
         cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
@@ -329,7 +329,7 @@ void fn_80082688(int db)
 void fn_8008274C(int db)
 {
     int mask = 0;
-    int handle = fn_8022F3D4(fn_8022F358(db));
+    int handle = DbUserGetDb(DbUserGetId(db));
     DbTableCursor cursor;
 
     cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
@@ -506,9 +506,9 @@ void fn_80082C64(Record_80082B18 *pRecord)
     char *pUpper = pRecord->mUnknown0C;
     unsigned int i;
 
-    lbl_8030BC88.mUnknown4 = fn_802372EC(0, lbl_803EA7DC);
+    lbl_8030BC88.mUnknown4 = SyncRandGetRange(0, lbl_803EA7DC);
     fn_801FCE10(0, "fetch from \x8a 'ANFP' into \x88\n", &lbl_8030BC88, pFirst);
-    lbl_8030BC98.mUnknown4 = fn_802372EC(0, lbl_803EA7E0);
+    lbl_8030BC98.mUnknown4 = SyncRandGetRange(0, lbl_803EA7E0);
     fn_801FCE10(0, "fetch from \x8a 'ANLP' into \x88\n", &lbl_8030BC98, pLast);
     for (i = 0; i < 15; i++) {
         if (pLast) {
@@ -521,7 +521,7 @@ void fn_80082D30(Record_80082B18 *pRecord)
 {
     QueryCursor cursor;
     QueryResult result;
-    unsigned int skin = fn_802372EC(0, 12);
+    unsigned int skin = SyncRandGetRange(0, 12);
 
     pRecord->mUnknown28 = skin;
     cursor.mUnknown0 = 0;
@@ -529,7 +529,7 @@ void fn_80082D30(Record_80082B18 *pRecord)
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
     fn_801FCE10(&result, "use 'TATS' declare \x8a cursor for select * from 'ECAF' where 'IKSP' = \x85\n", &cursor, skin);
-    cursor.mUnknown4 = fn_802372EC(0, result.mUnknown0);
+    cursor.mUnknown4 = SyncRandGetRange(0, result.mUnknown0);
     fn_801FCE10(0,
                 "fetch from \x8a 'CFRP' into \x82 and 'THLP' into \x82 and 'PTEP' into \x82 and 'XELP' into \x82 "
                 "and 'HFFP' into \x82 and 'BEFP' into \x82 and 'AEFP' into \x82 and 'OMFP' into \x82 and 'PLFP' "
@@ -559,7 +559,7 @@ void fn_80082E48(Record_80082B18 *pRecord)
                 "'MAET'.'DIGT' where 'YALP'.'OPBP' = \x85 and 'MAET'.'PYTT' = \x82\n",
                 &cursor, pRecord->mUnknown14, 0);
     count = result.mUnknown0;
-    cursor.mUnknown4 = fn_802372EC(0, count);
+    cursor.mUnknown4 = SyncRandGetRange(0, count);
     fn_801FCE10(0,
                 "fetch from \x8a 'TAHP' into \x82 and 'ROHP' into \x82 and 'RWEP' into \x82 and 'APSP' into \x82 "
                 "and 'TRSP' into \x82 and 'TNPP' into \x82 and 'RAUP' into \x82 and 'LULP' into \x82 and 'WBEP' "
@@ -573,7 +573,7 @@ void fn_80082E48(Record_80082B18 *pRecord)
                 &pRecord->mUnknown9C, &pRecord->mUnknownA0, &pRecord->mUnknownA4, &pRecord->mUnknownA8,
                 &pRecord->mUnknownAC, &pRecord->mUnknownB0, &pRecord->mUnknownB4, &pRecord->mUnknownB8,
                 &pRecord->mUnknownBC, &pRecord->mUnknownC0, &pRecord->mUnknown1C, &pRecord->mUnknown20);
-    cursor.mUnknown4 = fn_802372EC(0, count);
+    cursor.mUnknown4 = SyncRandGetRange(0, count);
     fn_801FCE10(0,
                 "fetch from \x8a 'DPSP' into \x82 and 'IGAP' into \x82 and 'MUJP' into \x82 and 'HTCP' into \x82 "
                 "and 'KTBP' into \x82 and 'KATP' into \x82 and 'SSPP' into \x82 and 'KLBP' into \x82 and 'VOCP' "
@@ -587,7 +587,7 @@ void fn_80082E48(Record_80082B18 *pRecord)
                 &pRecord->mUnknownF4, &pRecord->mUnknownF8, &pRecord->mUnknownFC, &pRecord->mUnknown100,
                 &pRecord->mUnknown104, &pRecord->mUnknown108, &pRecord->mUnknown10C, &pRecord->mUnknown110,
                 &pRecord->mUnknown114, &pRecord->mUnknown118, &pRecord->mUnknown11C);
-    pRecord->mUnknown18 = fn_802372EC(0, 100);
+    pRecord->mUnknown18 = SyncRandGetRange(0, 100);
     if (cursor.mUnknown0) {
         fn_801FCFA0(&cursor);
     }

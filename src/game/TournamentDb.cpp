@@ -8,8 +8,8 @@
 extern "C" {
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
-int fn_8022F358(int index);
-int fn_8022F3D4(int a);
+int DbUserGetId(int index);
+int DbUserGetDb(int a);
 }
 
 static unsigned char _Tournament_bDraftPoolOpen = 0;
@@ -411,7 +411,7 @@ int TournamentOpen(int index)
 {
     int ok = 1;
 
-    _Tournament_iDbHandle = fn_8022F3D4(fn_8022F358(index));
+    _Tournament_iDbHandle = DbUserGetDb(DbUserGetId(index));
     if (_Tournament_iDbHandle == -1) {
         ok = 0;
     }

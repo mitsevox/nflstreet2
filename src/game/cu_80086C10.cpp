@@ -49,8 +49,8 @@ int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
-int fn_8022F3D4(int handle);
-int fn_8022F4BC(void);
+int DbUserGetDb(int handle);
+int DbUserGetCurrent(void);
 }
 
 static int sTeamColumns[16] = {
@@ -242,7 +242,7 @@ int fn_8008736C(int index, int id)
     int count;
     int result = 1;
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
-    int db = fn_8022F3D4(fn_8022F4BC());
+    int db = DbUserGetDb(DbUserGetCurrent());
     int category = fn_80087BA0(index);
     int status;
     if (category != 3) {
@@ -263,7 +263,7 @@ int fn_80087460(int index, int id)
     int count;
     int result = 1;
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
-    int db = fn_8022F3D4(fn_8022F4BC());
+    int db = DbUserGetDb(DbUserGetCurrent());
     int category = fn_80087BA0(index);
     int status;
     if (category != 3) {
@@ -282,7 +282,7 @@ int fn_80087460(int index, int id)
 void fn_8008754C(int index, int id)
 {
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
-    int db = fn_8022F3D4(fn_8022F4BC());
+    int db = DbUserGetDb(DbUserGetCurrent());
     int category = fn_80087BA0(index);
     if (category != 3) {
         fn_801FCE10(0, "use \x8c update \x8c set \x8c = 0 where \x8c = \x85 and \x8c = \x82\n", db,
@@ -296,7 +296,7 @@ void fn_8008754C(int index, int id)
 void fn_80087600(int index, int id)
 {
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
-    int db = fn_8022F3D4(fn_8022F4BC());
+    int db = DbUserGetDb(DbUserGetCurrent());
     int category = fn_80087BA0(index);
     if (category != 3) {
         fn_801FCE10(0, "use \x8c update \x8c set \x8c = 0 and \x8c = 1 where \x8c = \x85 and \x8c = \x82\n", db,

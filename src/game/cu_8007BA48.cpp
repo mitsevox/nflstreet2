@@ -8,9 +8,9 @@
 #include "game/DbSortKey.h"
 
 extern "C" {
-int fn_8022F384(int a);
-int fn_8022F3D4(int a);
-int fn_8022F4BC(void);
+int DbUserFindIndex(int a);
+int DbUserGetDb(int a);
+int DbUserGetCurrent(void);
 void GearLockOpen(DbCursor *pCursor, int index);
 void GearLockClose(DbCursor *pCursor);
 int GearLockIsLocked(DbCursor *pCursor, int key);
@@ -188,8 +188,8 @@ int fn_8007BF3C(DbCursor *pCursor)
 
 void fn_8007BF60(int id)
 {
-    int index = fn_8022F384(fn_8022F4BC());
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int index = DbUserFindIndex(DbUserGetCurrent());
+    int handle = DbUserGetDb(DbUserGetCurrent());
     DbTableCursor cursor(0x4C504947, 0x49544947, 0, 0, handle);
 
     if (cursor.FindColumnValue(0x49544947, id, 0, 0)) {
@@ -281,7 +281,7 @@ int fn_8007C46C(int key)
     int b;
     int last;
     int max;
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
 
     fn_801FCE10(0, "use 'TATS' select 'ITIG' into \x82 and 'GPIG' into \x82 and 'LPIG' into \x82 from 'PIRG' where 'YKPG' = \x85\n",
                 &a, &b, &last, key);
@@ -304,7 +304,7 @@ int fn_8007C538(int id)
     DbFilter arg;
     DbCursor keys;
 
-    GearLockOpen(&keys, fn_8022F384(fn_8022F4BC()));
+    GearLockOpen(&keys, DbUserFindIndex(DbUserGetCurrent()));
     arg.Set(6, 0x5049524749544947LL, 2, id);
     {
         DbTableCursor rows(0x50495247, 0x594B5047, 0, &arg, 0x54415453);

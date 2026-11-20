@@ -83,8 +83,8 @@ int EditMenuGetMode(void);
 int EditMenuIsStoryTeam(void);
 int EditMenuIsCreateTeam(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 }
 
 extern const MenuEntry_t _Gear_aAreaEntries[];
@@ -1689,7 +1689,7 @@ void GearShirtDecalList::GetItem(int index, MenuEntry_t *pOut)
 
 void GearMenuOpen(int a)
 {
-    GearLockOpen(&_Gear_sLockCursor, fn_8022F384(fn_8022F4BC()));
+    GearLockOpen(&_Gear_sLockCursor, DbUserFindIndex(DbUserGetCurrent()));
     _Gear_bFromCreatePlayer = a;
     if (a == 0) {
         EditMenuShowPlayers();

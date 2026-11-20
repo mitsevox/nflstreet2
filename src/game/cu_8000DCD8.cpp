@@ -247,7 +247,7 @@ void EditMenuSetName(char *pText);
 void EditMenuSetView(int a);
 void EditMenuShowPlayers(void);
 void EditMenuHidePlayers(void);
-int fn_8022F4BC(void);
+int DbUserGetCurrent(void);
 }
 
 static const int lbl_8000F590[] = {
@@ -345,7 +345,7 @@ void Class_8000F500::GetItem(int id, MenuEntry_t *pOut)
 
         pOut->mUnknown40 = 0;
         fn_8008731C(mUnknown8, id, &item, &price, pOut->mName, 22);
-        if (!fn_8008736C(mUnknown8, item) || UserInfoGetPoints(fn_8022F4BC()) < price) {
+        if (!fn_8008736C(mUnknown8, item) || UserInfoGetPoints(DbUserGetCurrent()) < price) {
             pOut->mUnknown30 = 0;
         } else {
             pOut->mUnknown30 = 1;
@@ -833,7 +833,7 @@ Class_8000F540 *fn_8000EB3C()
 
 unsigned int fn_8000EB5C()
 {
-    return UserInfoGetPoints(fn_8022F4BC());
+    return UserInfoGetPoints(DbUserGetCurrent());
 }
 
 int fn_8000EB80()
@@ -850,7 +850,7 @@ void fn_8000EBA4(int id)
     fn_8008731C(fn_8000EC44()->mUnknown4, id, &item, &price, buffer, 8);
     fn_8000EC44()->mUnknown8 = 1;
     fn_80087600(fn_8000EC44()->mUnknown4, item);
-    UserInfoSpendPoints(fn_8022F4BC(), price);
+    UserInfoSpendPoints(DbUserGetCurrent(), price);
 }
 
 unsigned char fn_8000EC14()

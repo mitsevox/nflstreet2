@@ -58,7 +58,7 @@ static View_8013FF84 *lbl_803ECA04;
 static float lbl_803ECA08;
 extern "C" {
 void CamPresetSetEaseRates(GameCamera_t *, int);
-unsigned int fn_802372EC(unsigned int,unsigned int);
+unsigned int SyncRandGetRange(unsigned int,unsigned int);
 void fn_8022765C(void *,void *,void *);
 int fn_801CFDD0(float);
 void CamFreeClearVelocity(GameCamera_t *);
@@ -107,9 +107,9 @@ void fn_8013FF84(GameCamera_t *camera, Vector_8013FF84 *point)
             Vector_8013FF84 value;
             float low = lbl_802DBECC[index].mUnknown8;
             float range = lbl_802DBECC[index].mUnknownC-low;
-            value.mX = scale*(low+range*((float)fn_802372EC(1,100)*0.01f));
-            value.mZ = scale*(low+range*((float)fn_802372EC(1,100)*0.01f));
-            value.mY = lbl_802DBECC[index].mUnknown1D == 1 ? scale*(low+range*((float)fn_802372EC(1,100)*0.01f)) : 0.0f;
+            value.mX = scale*(low+range*((float)SyncRandGetRange(1,100)*0.01f));
+            value.mZ = scale*(low+range*((float)SyncRandGetRange(1,100)*0.01f));
+            value.mY = lbl_802DBECC[index].mUnknown1D == 1 ? scale*(low+range*((float)SyncRandGetRange(1,100)*0.01f)) : 0.0f;
             value.mX = value.mX < -0.3f ? -0.3f : (value.mX > 0.3f ? 0.3f : value.mX);
             value.mY = value.mY < -0.3f ? -0.3f : (value.mY > 0.3f ? 0.3f : value.mY);
             value.mZ = value.mZ < -0.3f ? -0.3f : (value.mZ > 0.3f ? 0.3f : value.mZ);

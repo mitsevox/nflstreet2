@@ -70,7 +70,7 @@ void QuatFromMat(Quat_801EB488 *pRot);
 void fn_80227248(void *pOut, void *p, float scale);
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
-unsigned int fn_8023790C(void);
+unsigned int SyncTimeGetGameTime(void);
 float fn_80260B1C(float x);
 void BallStateChange(Ball_t *pBall, int state, int arg);
 int BallStateGet(Ball_t *pBall, int *pArg);
@@ -924,7 +924,7 @@ void BallStateStepTimed(Ball_t *pBall, float dt)
     Object_80039F5C *pHolder = BallGetHolder(pBall);
 
     fn_8013A64C(pBall, dt);
-    pBall->mState.mUnknownC0 = fn_8023790C();
+    pBall->mState.mUnknownC0 = SyncTimeGetGameTime();
     if (fn_801BE648(pHolder->mpUnknown792) == 0xE1) {
         fn_8009BF5C(pHolder, 0, &pos, 0);
         counting = pos.mZ <= 2.25f;
@@ -958,7 +958,7 @@ void fn_8013B250(Ball_t *pBall)
     Block_80170E64 *pBlock = BallGetModel(pBall);
 
     pBlock->mUnknown20 &= ~2;
-    pBall->mState.mUnknownC0 = fn_8023790C();
+    pBall->mState.mUnknownC0 = SyncTimeGetGameTime();
     pBall->mState.mUnknownBC = 0;
     pBall->mState.mUnknownCC = pBall->mState.mUnknownB4;
 }
@@ -1042,7 +1042,7 @@ int fn_8013B52C(Ball_t *pBall, void *pData, unsigned int type)
     BallStateGet(pBall, &arg);
     if (mode == 3 && arg == 1) {
         if (fn_8013AE1C(pBall, p, type, 0) &&
-            (BallGetStateStartTick(pBall) + 60 < fn_8023790C() || fn_801BE648(p->mpUnknown792) == 0x30)) {
+            (BallGetStateStartTick(pBall) + 60 < SyncTimeGetGameTime() || fn_801BE648(p->mpUnknown792) == 0x30)) {
             result = 1;
             PossGrabBall(p);
         } else {
@@ -1060,7 +1060,7 @@ int fn_8013B5EC(Ball_t *pBall, void *pData, unsigned int type)
 
     if (fn_8013AE1C(pBall, p, type, 0)) {
         BallGetVelocity(pBall, &vel);
-        if (p->mIdBytes[2] == fn_80178308() && pBall->mState.mUnknownC0 + 5 >= fn_8023790C()) {
+        if (p->mIdBytes[2] == fn_80178308() && pBall->mState.mUnknownC0 + 5 >= SyncTimeGetGameTime()) {
             result = 1;
         } else {
             result = PossTryCatch(pBall, p, type);
@@ -1079,7 +1079,7 @@ int fn_8013B6A0(Ball_t *pBall, void *pData, unsigned int type)
     // FAKEMATCH: redundant zero initializer, only to keep the target branch layout
     int result = 0;
 
-    if (fn_8009BCE8(&pBall->mState.mUnknownB8) == p && pBall->mState.mUnknownC0 + 5 >= fn_8023790C()) {
+    if (fn_8009BCE8(&pBall->mState.mUnknownB8) == p && pBall->mState.mUnknownC0 + 5 >= SyncTimeGetGameTime()) {
         result = 1;
     } else if (fn_8013AE1C(pBall, p, type, 1)) {
         result = PossTryReceivePitch(pBall, p, type);

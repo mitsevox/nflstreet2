@@ -27,7 +27,7 @@
 extern Float32 lbl_803A0400[][2];
 extern GXColor lbl_803A1400[];
 
-void fn_80225CBC(Node_80223874 *pNode, Int32 Index, Float32 *pCoord)
+void LLUIGVertexSend(Node_80223874 *pNode, Int32 Index, Float32 *pCoord)
 {
     GXPosition3f32(lbl_803A0400[Index][0], lbl_803A0400[Index][1], 0.0f);
     // FAKEMATCH: the flag test reads the node's first word (lwz/rlwinm) where Flags is a halfword
@@ -42,6 +42,6 @@ void fn_80225CBC(Node_80223874 *pNode, Int32 Index, Float32 *pCoord)
     }
 }
 
-void fn_80225D8C(Node_80223874 *pNode, Int32 Index, Float32 *pCoord)
+void LLUIGVertexEnd(Node_80223874 *pNode, Int32 Index, Float32 *pCoord)
 {
 }

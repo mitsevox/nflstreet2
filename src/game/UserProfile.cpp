@@ -7,7 +7,7 @@
 #include "game/fn_801FCE10.h"
 #include "game/StyleTracker.h"
 #include <string.h>
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 #include "game/GameModeType.h"
 #include "game/Cheat.h"
 #include "libc/string.h"
@@ -15,9 +15,9 @@
 extern "C" {
 int UserRecGetCount(void);
 int UserRecGetName(int, char *);
-int fn_8022F358(int);
+int DbUserGetId(int);
 void ChalCloseCursors(void);
-void fn_8022F1BC(int);
+void DbUserDelete(int);
 void MemCardFilesRemoveSlot(int, int);
 void MemCardFilesCopySlot(int, int, int, int);
 void fn_80011894(int);
@@ -25,10 +25,10 @@ int UserRecGetGameStat(int, int, int, int, int);
 void UserRecAddStat(int, int, int);
 void UserRecUpdateStreak(int, int, int);
 void RecordsPrune(void);
-void fn_8022F294(int);
-int fn_8022F0D4(int);
-int fn_8022F794(int, char *);
-int fn_8022F3D4(int);
+void DbUserReset(int);
+int DbUserCreate(int);
+int DbUserSetName(int, char *);
+int DbUserGetDb(int);
 void MemCardFilesResetSlot(int, int, int);
 void MemCardFilesRenameSlot(int, int, char *);
 int CheatIsNoneEnabled(void);
@@ -80,9 +80,9 @@ extern "C" {
 void UserProfileDelete(signed char index)
 {
     int count = UserRecGetCount();
-    int db = fn_8022F358(index);
+    int db = DbUserGetId(index);
     ChalCloseCursors();
-    fn_8022F1BC(db);
+    DbUserDelete(db);
     for (int i = index; i < count; i = (signed char)(i + 1)) {
         MemCardFilesRemoveSlot(2, i);
         int next = i + 1;
@@ -105,7 +105,7 @@ int UserProfileFindIndex(int db)
     signed char i = 0;
     int searching = 1;
     while (searching && i < count) {
-        if (fn_8022F358((int)i) == db) searching = 0;
+        if (DbUserGetId((int)i) == db) searching = 0;
         else i++;
     }
     return i;
@@ -117,15 +117,15 @@ void UserProfileAddGameStats(void)
         int value;
         if (UserProfileGetSelected(0) != -1) {
             value = UserRecGetGameStat(p->mKind, p->mTable, p->mColumn, 0, 1);
-            UserRecAddStat(fn_8022F358(UserProfileGetSelected(0)), p->mProfileColumn, value);
+            UserRecAddStat(DbUserGetId(UserProfileGetSelected(0)), p->mProfileColumn, value);
         }
         if (UserProfileGetSelected(1) != -1) {
             value = UserRecGetGameStat(p->mKind, p->mTable, p->mColumn, 1, 0);
-            UserRecAddStat(fn_8022F358(UserProfileGetSelected(1)), p->mProfileColumn, value);
+            UserRecAddStat(DbUserGetId(UserProfileGetSelected(1)), p->mProfileColumn, value);
         }
     }
-    if (UserProfileGetSelected(0) != -1) UserRecUpdateStreak(fn_8022F358(UserProfileGetSelected(0)), 0, 1);
-    if (UserProfileGetSelected(1) != -1) UserRecUpdateStreak(fn_8022F358(UserProfileGetSelected(1)), 1, 0);
+    if (UserProfileGetSelected(0) != -1) UserRecUpdateStreak(DbUserGetId(UserProfileGetSelected(0)), 0, 1);
+    if (UserProfileGetSelected(1) != -1) UserRecUpdateStreak(DbUserGetId(UserProfileGetSelected(1)), 1, 0);
 }
 void UserProfileSaveAllRecords(unsigned char *pFlags)
 {
@@ -181,11 +181,11 @@ void UserProfileCreate(int index, char *pName, int)
 {
     int count = UserRecGetCount();
     int db;
-    if (index <= count - 1) { db = fn_8022F358(index); fn_8022F294(db); }
-    else { index = count; db = fn_8022F0D4(count); }
-    fn_8022F794(db, pName);
+    if (index <= count - 1) { db = DbUserGetId(index); DbUserReset(db); }
+    else { index = count; db = DbUserCreate(count); }
+    DbUserSetName(db, pName);
     UserProfileTouch(index);
-    fn_8022F478(fn_8022F358(index));
+    DbUserSetCurrent(DbUserGetId(index));
     MemCardFilesResetSlot(2, index, 0);
     MemCardFilesRenameSlot(2, index, pName);
 }
@@ -196,9 +196,9 @@ int UserProfileSaveRecords(unsigned char pad, int allowCreate)
     int changed = 0; int code = 0; unsigned char busy = 0; // FAKEMATCH: code is a dead store target
     int selected = UserProfileGetSelected(pad);
     UserRecGetName(selected, name);
-    int db = fn_8022F358(selected);
-    fn_8022F478(db);
-    int token = fn_8022F3D4(db);
+    int db = DbUserGetId(selected);
+    DbUserSetCurrent(db);
+    int token = DbUserGetDb(db);
     int status = fn_801FCE10(0, "use \x8C select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'sdSU' into \x82 and 'FNWU' into \x82 and 'WSQU' into \x82 and 'WOSU' into \x82 and 'LOSU' into \x82 and 'SOSU' into \x82 and 'AOSU' into \x82 from 'TSPU'\n", token, &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12, &v13, &v14, &v15, &v16, &v17, &v18);
     if (v1 < 0) v1 = 0;
     if (GameModeTypeGet() == 0) {
@@ -307,9 +307,9 @@ void UserProfileAddRecordRow(int index)
     // FAKEMATCH: code only receives a dead store of the error status below
     char name[32]; int id = 0; int code = 0; int v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12 = 0;
     UserRecGetName(index, name);
-    int db = fn_8022F358(index);
-    fn_8022F478(db);
-    int token = fn_8022F3D4(db);
+    int db = DbUserGetId(index);
+    DbUserSetCurrent(db);
+    int token = DbUserGetDb(db);
     int status = fn_801FCE10(0, "use 'EVAS' select 'KPSH' into \x82 from 'RCSH' where 'KUSH' = \x88\n", &id, name);
     if (status != 0 && status != 23) code = status; // FAKEMATCH: dead store of the error status
     if (status == 23) {

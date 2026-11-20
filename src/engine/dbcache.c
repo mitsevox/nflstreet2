@@ -12,7 +12,7 @@
 #include <dolphin/os.h>
 #include <string.h>
 #include "engine/Funcs_802FB3BC.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 #include "game/fn_80233CBC.h"
 #include "game/fn_801FCE10.h"
 #include "engine/texfile.h"
@@ -356,16 +356,16 @@ extern void TMBlendBindModel(void *p);
 extern void TMBlendGeomAll(void);
 extern Range_80216190 *TMSwapGetState(Group_803E96E8 *pGroup, int a, int key);
 extern int TMSwapGetGeomRefs(List_80233BE4 *pList, short *pOut, unsigned int index, int value);
-extern int fn_802293A8(void);
-extern void fn_802293B0(void);
-extern int fn_8022942C(void);
-extern void fn_80229434(void);
-extern int fn_80229554(void);
-extern int fn_802296B4(int a, int b);
-extern void fn_80229718(Funcs_802FB3BC *pFuncs);
-extern void fn_80229744(void);
-extern int fn_80229760(void **ppData, void *p);
-extern int fn_80229788(int a, int b);
+extern int DbOcmtModuleInit(void);
+extern void DbOcmtModuleShutdown(void);
+extern int DbOptionsModuleInit(void);
+extern void DbOptionsModuleShutdown(void);
+extern int DbNiomEndMode(void);
+extern int DbNiomReadOnce(int a, int b);
+extern void DbNiomSetModeFuncs(Funcs_802FB3BC *pFuncs);
+extern void DbNiomClearModeFuncs(void);
+extern int DbNiomModeLoad(void **ppData, void *p);
+extern int DbNiomModeReset(int a, int b);
 extern int fn_802299FC(void);
 extern int fn_80229A70(void);
 extern int fn_80229E88(void);
@@ -390,11 +390,11 @@ extern int fn_8022E484(void);
 extern int fn_8022E9A4(void);
 extern void fn_8022E9C4(void);
 extern int fn_8022E9E4(void);
-extern int fn_8022EA74(void);
-extern void fn_8022EA7C(void);
+extern int DbEvasModuleInit(void);
+extern void DbEvasModuleShutdown(void);
 extern int fn_8022ED50(int a, int b, int c);
-extern signed char fn_8022F384(int key);
-extern int fn_8022F3D4(int key);
+extern signed char DbUserFindIndex(int key);
+extern int DbUserGetDb(int key);
 extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
 extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int f);
 extern void fn_802349CC(void *p);
@@ -554,14 +554,14 @@ void fn_80234DFC(int a, Sprite_80234DFC *pSprite, int c, int d, const char *pNam
 
 
 /* prototypes of the db functions in 0x8022F428-0x802355E4 (dbuser.c to cu_802336C4.c) */
-int fn_8022F428(int key);
-int fn_8022F478(int value);
-int fn_8022F488(int value);
-int fn_8022F4BC(void);
-int fn_8022F4C4(void);
-int fn_8022F53C(int a);
-int fn_8022F744(void);
-int fn_8022F794(int value, char *pName);
+int DbUserFindIdByDb(int key);
+int DbUserSetCurrent(int value);
+int DbUserSelect(int value);
+int DbUserGetCurrent(void);
+int DbUserOpenDatabases(void);
+int DbUserPostLoad(int a);
+int DbUserCloseDatabases(void);
+int DbUserSetName(int value, char *pName);
 unsigned short fn_8022F80C(void);
 Cache_8022F8A8 *fn_8022F858(unsigned short id);
 Cache_8022F8A8 *fn_8022F880(int key);

@@ -13,7 +13,7 @@
 #include "game/LevelSurface.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResLoad.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 #define DIVOT_NUM_TYPES 1
 #define DIVOT_TYPE_0 0
@@ -852,7 +852,7 @@ unsigned char DivotPlace(Divot *p)
         p->mAngle = (p->mAngle + 0x800000) & 0xFFFFFF;
     }
     if (_Divot_aaucSurfaceVariants[p->mType][p->mSurface] && DivotCheckPlacement(p)) {
-        p->mVariant = fn_802372EC(1, _Divot_aaucSurfaceVariants[p->mType][p->mSurface]);
+        p->mVariant = SyncRandGetRange(1, _Divot_aaucSurfaceVariants[p->mType][p->mSurface]);
         p->mVariant += _Divot_aaucSurfaceFirstVariant[p->mType][p->mSurface];
         _Divot_aHandlers[p->mType].mpPlace(p);
         if (p->mActive) {

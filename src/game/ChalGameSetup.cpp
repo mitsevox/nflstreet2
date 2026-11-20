@@ -28,7 +28,7 @@ void fn_80084808(int a, int *pIds, int *pCounts, int count, int *pOut, int total
 void fn_80083DE4(int id);
 void ChallengeSetMode(int mode);
 void GameOutcomeSet(int value);
-int fn_8022F4BC(void);
+int DbUserGetCurrent(void);
 signed char UserProfileFindIndex(int db);
 void UserProfileSelect(signed char index, unsigned char pad);
 void TeamFilterSet(int value);
@@ -128,7 +128,7 @@ void ChalGameStart(unsigned char id)
     _ChalGame_bGeneratedOpponent = 0;
     ChallengeSetMode(0);
     GameOutcomeSet(2);
-    UserProfileSelect(UserProfileFindIndex(fn_8022F4BC()), 1);
+    UserProfileSelect(UserProfileFindIndex(DbUserGetCurrent()), 1);
     UserProfileSelect(-1, 0);
     TeamFilterSet(1023);
     MsgChallengeSetFlowState(5);
@@ -142,13 +142,13 @@ void ChalGameStart(unsigned char id)
         team = 0;
     } else if (pRecord->mUnknown198) {
         team = pRecord->mUnknown198;
-    } else if (_ChalGame_iCachedChallenge == pRecord->mUnknown0 && _ChalGame_iCachedTeam != -1 && _ChalGame_iCachedUser == fn_8022F4BC()) {
+    } else if (_ChalGame_iCachedChallenge == pRecord->mUnknown0 && _ChalGame_iCachedTeam != -1 && _ChalGame_iCachedUser == DbUserGetCurrent()) {
         team = _ChalGame_iCachedTeam;
     } else {
         team = fn_80084388();
         _ChalGame_iCachedChallenge = pRecord->mUnknown0;
         _ChalGame_iCachedTeam = team;
-        _ChalGame_iCachedUser = fn_8022F4BC();
+        _ChalGame_iCachedUser = DbUserGetCurrent();
     }
     CreateTeamLoadUserTeams();
     fn_8008406C(&cursor, 1, 0);
@@ -189,7 +189,7 @@ void ChalGameStartTournament(int team, int value)
     GameOutcomeSet(2);
     TeamFilterSet(1023);
     MsgChallengeSetFlowState(6);
-    UserProfileSelect(UserProfileFindIndex(fn_8022F4BC()), 1);
+    UserProfileSelect(UserProfileFindIndex(DbUserGetCurrent()), 1);
     UserProfileSelect(-1, 0);
     CreateTeamLoadUserTeams();
     fn_80083E1C(&cursor, 0);

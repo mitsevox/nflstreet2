@@ -8,7 +8,7 @@
 #include "game/Point2.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include <math.h>
 #include "game/fn_8009D990.h"
 #include "game/fn_8013AD94.h"
@@ -589,7 +589,7 @@ int PenaltyCanFoulInState(Object_80039F5C *player) {
   case 24:
     if ((unsigned char)player->mUnknown361[24] == 3)
       result = 1;
-    else if (fn_802372EC(0, 15) < (unsigned int)fn_800B2600())
+    else if (SyncRandGetRange(0, 15) < (unsigned int)fn_800B2600())
       result = 1;
     break;
   case 2:
@@ -989,13 +989,13 @@ void PenaltyRollPassPlayFoul(Object_80039F5C *player) {
     return;
   float chance = 450.0f;
   PenaltyApplyFrequency(&chance, 0, 10000.0f);
-  if (fn_802372EC(0, 10000) < (unsigned int)chance)
+  if (SyncRandGetRange(0, 10000) < (unsigned int)chance)
     fn_800B2370(player, 0, 0, 1.0f);
 }
 int PenaltyRollFacemask(void) {
   float chance = 2000.0f;
   PenaltyApplyFrequency(&chance, 2, 10000.0f);
-  if (!fn_801787A0() && (float)fn_802372EC(0, 10000) < chance)
+  if (!fn_801787A0() && (float)SyncRandGetRange(0, 10000) < chance)
     return 1;
   return 0;
 }
@@ -1005,13 +1005,13 @@ void PenaltyRollRoughing(Object_80039F5C *player) {
   float chance = 75.0f;
   PenaltyApplyFrequency(&chance, 9, 100.0f);
   PenaltyApplyDiscipline(&chance, player, 9);
-  if (!((float)fn_802372EC(0, 100) >= chance))
+  if (!((float)SyncRandGetRange(0, 100) >= chance))
     fn_800B2370(player, 12, 0, 1.0f);
 }
 int PenaltyRollTackleFoul(void) {
   float chance = 2300.0f;
   PenaltyApplyFrequency(&chance, 0, 10000.0f);
-  if (fn_800AD9B4() == 3 && (float)fn_802372EC(0, 10000) < chance)
+  if (fn_800AD9B4() == 3 && (float)SyncRandGetRange(0, 10000) < chance)
     return 1;
   return 0;
 }

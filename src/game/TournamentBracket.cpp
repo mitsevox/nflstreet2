@@ -7,7 +7,7 @@
 #include <string.h>
 #include <string.h>
 #include "game/fn_801D2B7C.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 struct BracketNameArg_t {
     MenuText_t *mUnknown0;
@@ -172,7 +172,7 @@ extern "C" void TournBracketSimScore(int index, short *score)
         count++;
     }
     if (count > 99) {
-        char winner = fn_802372EC(1, 2);
+        char winner = SyncRandGetRange(1, 2);
         score[winner] = 36;
     }
 }
@@ -212,7 +212,7 @@ extern "C" void TournBracketShuffleSeeds()
     for (i = 0; i <= 2; i++) {
         int j;
         for (j = 0; j < 32; j++) {
-            int k = fn_802372EC(1, 32);
+            int k = SyncRandGetRange(1, 32);
             int value = _TournBracket_aiSeedTeams[j];
             _TournBracket_aiSeedTeams[j] = _TournBracket_aiSeedTeams[k];
             _TournBracket_aiSeedTeams[k] = value;
@@ -244,7 +244,7 @@ extern "C" void TournBracketEnter(int *pIndex)
     }
     _TournBracket_iUserSeed = ChalGetTournamentSlot();
     if (_TournBracket_iUserSeed == -1) {
-        _TournBracket_iUserSeed = fn_802372EC(1, 32);
+        _TournBracket_iUserSeed = SyncRandGetRange(1, 32);
         ChalSetTournamentSlot(_TournBracket_iUserSeed);
         TournBracketShuffleSeeds();
         TournBracketSaveSeeds();

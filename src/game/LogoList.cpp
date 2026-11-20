@@ -8,8 +8,8 @@
 extern "C" {
 int fn_801F967C(int handle, int table);
 int fn_801F9980(int handle, int *pTable);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 void LogoLockOpen(DbCursor *pObject, signed char a);
 void LogoLockClose(DbCursor *pObject);
 int LogoLockGetId(DbCursor *pObject);
@@ -28,7 +28,7 @@ void LogoListOpen(DbCursor *pObject)
     DbFilter arg;
     unsigned char a;
 
-    a = fn_8022F384(fn_8022F4BC());
+    a = DbUserFindIndex(DbUserGetCurrent());
     fn_801F9980(0x54415453, &_LogoList_iTable);
     fn_801FCE10(&result, "use \x8c select into \x8c * from 'OGOL'\n", 0x54415453, _LogoList_iTable);
     LogoLockOpen(&cursor, a);

@@ -12,8 +12,8 @@ extern "C" {
 void SndgMusicPumpFrame(int a);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
-int fn_8022F3D4(int a);
-int fn_8022F4BC(void);
+int DbUserGetDb(int a);
+int DbUserGetCurrent(void);
 }
 
 static unsigned char _Stev_bOpen = 0;
@@ -50,7 +50,7 @@ int SstlFetchEntry(unsigned int index, int *pLglt, char *pEtnr, int size)
     int count;
     int lglt;
     int found = 0;
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
     char etnr[33] = {0};
 
     fn_801FCE10(0, "use \x8c select count(*) into \x82 from 'LTSS'\n", handle, &count);

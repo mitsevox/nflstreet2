@@ -79,7 +79,7 @@ extern "C" void fn_800DB100(Object_80039F5C *p, Ball_t *pBall, Record_800DB074 *
     delta.mY = pRecord->mUnknown8 - ball.mZ;
     delta.mY = delta.mY < 0.0f ? 0.0f : delta.mY;
     int angle = delta.Heading();
-    pRequest->mUnknown10 = angle + fn_802372EC(0, 0xE38E3);
+    pRequest->mUnknown10 = angle + SyncRandGetRange(0, 0xE38E3);
     float value = pRequest->mUnknownC;
     if (value == 0.0f) {
         value = pRequest->mUnknown10 * 2.3841858e-07f;
@@ -128,7 +128,7 @@ extern "C" void fn_800DB40C(Record_800DB074 *pRecord, Object_80039F5C *p, Ball_t
     if (fn_80105FF8(p, pBall, pRecord->mUnknown20)) {
         pRecord->mUnknown1 = 1;
     }
-    pRecord->mUnknown20 += (unsigned int)fn_8023790C();
+    pRecord->mUnknown20 += (unsigned int)SyncTimeGetGameTime();
 }
 
 extern "C" void fn_800DB498(Record_800DB074 *pRecord, Object_80039F5C *p, Ball_t *pBall)
@@ -139,7 +139,7 @@ extern "C" void fn_800DB498(Record_800DB074 *pRecord, Object_80039F5C *p, Ball_t
     pRecord->mUnknown0 = 1;
     BallGetPosition(pBall, &pos);
     pRecord->mUnknown8 = pRecord->mUnknown4 = pos.mZ;
-    pRecord->mUnknown20 += (unsigned int)fn_8023790C();
+    pRecord->mUnknown20 += (unsigned int)SyncTimeGetGameTime();
 }
 
 extern "C" void fn_800DB520(Record_800DB074 *pRecord, Object_80039F5C *p, Object_80039F5C *pOther, float value)
@@ -181,7 +181,7 @@ extern "C" void fn_800DB688(Record_800DB074 *pRecord, Object_80039F5C *p)
         Ball_t *pBall = BallFindHeldBy(p);
         if (!pBall) {
             pRecord->mUnknown0 = 0;
-        } else if (pRecord->mUnknown20 <= (unsigned int)fn_8023790C()) {
+        } else if (pRecord->mUnknown20 <= (unsigned int)SyncTimeGetGameTime()) {
             if (p->mFlags & 0x1000) {
                 fn_800DB100(p, pBall, pRecord);
                 p->mFlags &= ~0x3000;
@@ -214,7 +214,7 @@ extern "C" void fn_800DB7A4(Record_800DB074 *pRecord, Object_80039F5C *p)
             if (!pBall) {
                 pRecord->mUnknown1 = 0;
             } else {
-                if (pRecord->mUnknown20 <= (unsigned int)fn_8023790C()) {
+                if (pRecord->mUnknown20 <= (unsigned int)SyncTimeGetGameTime()) {
                     done = 1;
                     fn_800DB074(p, pBall, pRecord);
                     p->mFlags &= ~0x3000;
@@ -259,11 +259,11 @@ extern "C" void fn_800DB8B4(Record_800DB60C *pRecord, Object_80039F5C *p)
     if (!(fn_8012506C(p, 3) <= 65.0f)) {
         allow = 0;
     }
-    unsigned int roll = (unsigned int)fn_802372EC(0, 255);
+    unsigned int roll = (unsigned int)SyncRandGetRange(0, 255);
     if (roll > (unsigned int)fn_800ACFA8(p)) {
         failed = 1;
     }
-    if (failed && (unsigned int)fn_802372EC(0, 100) < (unsigned int)lbl_803EAD19) {
+    if (failed && (unsigned int)SyncRandGetRange(0, 100) < (unsigned int)lbl_803EAD19) {
         allow = allow == 0;
     }
     Point_8017886C point;
@@ -808,7 +808,7 @@ extern "C" int fn_800DCE2C(Object_80039F5C *p, unsigned char *pInfo)
     case 5: chance = 5; break;
     default: chance = 0; break;
     }
-    if ((unsigned int)fn_802372EC(0, 100) < chance) {
+    if ((unsigned int)SyncRandGetRange(0, 100) < chance) {
         unsigned char role = p->mUnknown2914;
         int check = 0;
         if (fn_80177F70()) {
@@ -944,7 +944,7 @@ extern "C" int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA,
                 if (pInfo[5] == type) {
                     int value = fn_800DCE2C(p, pInfo + 4);
                     if (value >= score && value > 0) {
-                        if (score != value || (unsigned int)fn_802372EC(0, 100) <= 49) {
+                        if (score != value || (unsigned int)SyncRandGetRange(0, 100) <= 49) {
                             if (score != value) score = value;
                             chosen = i;
                         }
@@ -1116,7 +1116,7 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
         weights[i] = weight;
         total += weight;
     }
-    unsigned short chosen = fn_802372EC(0, pTable->mCount);
+    unsigned short chosen = SyncRandGetRange(0, pTable->mCount);
     if (chosen >= pTable->mCount) chosen = pTable->mCount - 1;
     int i = 0;
     while (i < pTable->mCount) {
@@ -1131,7 +1131,7 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
         ++i;
     }
     if (i == pTable->mCount) {
-        chosen = fn_802372EC(0, i);
+        chosen = SyncRandGetRange(0, i);
         if (chosen >= pTable->mCount) {
             unsigned char *pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
             chosen = pTable->mCount - 1;
@@ -1140,7 +1140,7 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
             *((unsigned char *)pRecord + 16) = chosen;
         }
     }
-    fn_802372EC(0, total);
+    SyncRandGetRange(0, total);
     unsigned short old = pRecord->mUnknown14;
     AnimChannel_t *pEntries = (AnimChannel_t *)pB;
     if (old != 0xFFFF && !FELoopIsMainFEActive()) {
@@ -1258,7 +1258,7 @@ extern "C" unsigned short fn_800DDF34(Table_80089904 *pTable, Object_80039F5C *p
         if (fn_800DDEE4(pInfo->mUnknown4, (unsigned char *)&p->mUnknown1008) &&
             difference >= pInfo->mUnknown16 && difference <= pInfo->mUnknown20 &&
             ((direction > 0 && pInfo->mUnknown12 > 0) || (direction < 0 && pInfo->mUnknown12 < 0))) {
-            if (!pChosen || (unsigned int)fn_802372EC(0, 100) <= 49) {
+            if (!pChosen || (unsigned int)SyncRandGetRange(0, 100) <= 49) {
                 pChosen = pInfo;
                 chosen = i;
             }

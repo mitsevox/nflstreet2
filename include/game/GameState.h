@@ -4,12 +4,12 @@
 #include "game/Module.h"
 #include "game/MemPoolDesc.h"
 
-/* Object returned by fn_80237EE8. */
+/* Object returned by SyncStateNewGroup. */
 #include "engine/Object_80237EE8.h"
 
 struct GameStateData {
     Object_80237EE8 *mpObject;
-    /* Set when Init called fn_802382F0; Shutdown then calls fn_80238358. */
+    /* Set when Init called EvMonInit; Shutdown then calls EvMonShutdown. */
     unsigned char mUnknown4;
 };
 

@@ -13,7 +13,7 @@
 #include "game/fn_800F06F4.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 
 #define MIN(a, b) ((a) <= (b) ? (a) : (b))
@@ -399,7 +399,7 @@ extern "C" int RouteRunUpdate(Object_80039F5C *p)
                     dir = fn_801CFE40(delta.mY, delta.mX);
                     side = MathAngleDiff(p->mMotion.mFacing, dir + 0x400000) <= 0x3FFFFF;
                     pBlock->mUnknown34 = side ? 19 : 18;
-                    pBlock->mUnknown32 = fn_802372EC(0, 40) + 40;
+                    pBlock->mUnknown32 = SyncRandGetRange(0, 40) + 40;
                     AudmonEventPostId(98, &p->mMotion.mPos, p->mId, 0, 0, 0);
                     pBlock->mUnknown60 = 1;
                     pBlock->mUnknown61 = 1;

@@ -21,7 +21,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/PlaySet.h"
 #include "game/PlayCandidate.h"
 #include "game/Challenge.h"
@@ -360,8 +360,8 @@ void PlayBookAlloc(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&_PlayBook_pData, sizeof(PlayBook_t), 0, 0x706C626B);
 
-    fn_80238234(pHandle, 0, 0, 0, PlayBookCompareData);
-    fn_802381E0(pHandle);
+    SyncStateSetCallbacks(pHandle, 0, 0, 0, PlayBookCompareData);
+    SyncStateCommit(pHandle);
 }
 
 void PlayBookClear(void)
@@ -853,7 +853,7 @@ void PlayCallFillSituation(short *p)
     }
     float line = fn_80178298();
     p[2] = (int)(line - fn_80177FE0().mY);
-    p[5] = fn_802372EC(0, 100);
+    p[5] = SyncRandGetRange(0, 100);
     p[8] = *(unsigned short *)((char *)PlayBookGetFormation(offense) + 26);
     p[9] = 0;
     p[13] = p[12] = 50;
@@ -1301,7 +1301,7 @@ int fn_80178308(void);
 float fn_80178A5C(void);
 int GameTextGetAwayTeam(void);
 int GameTextGetHomeTeam(void);
-void *fn_8023816C(void);
+void *SyncStateGetData(void);
 }
 
 static PlayTrack_t *_PlayTrack_pData = 0;
@@ -1789,7 +1789,7 @@ void PlayTrackInit(void)
     // FAKEMATCH: never-set flag; keeps the PNIG/STPG query strings in .rodata (owner-accepted 2026-11-14)
     int resume = 0;
     void *pHandle = SyncStateRegister(0, (void **)&_PlayTrack_pData, sizeof(PlayTrack_t), 0, 0x7074726B);
-    memset(fn_8023816C(), 0, sizeof(PlayTrack_t));
+    memset(SyncStateGetData(), 0, sizeof(PlayTrack_t));
     if (resume) {
         int found;
 
@@ -1799,7 +1799,7 @@ void PlayTrackInit(void)
     if (resume) {
         fn_801FCE10(0, "select 'STPG' into \x89 from 'NIBG'\n", _PlayTrack_pData);
     }
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
     PlayTrackRegister();
 }
 
@@ -2223,7 +2223,7 @@ int PlayAutoFlip(int team)
         break;
     }
 
-    if (fn_802372EC(0, 100) < chance) {
+    if (SyncRandGetRange(0, 100) < chance) {
         flipped = 1;
         pObject->mUnknown8.mUnknownF ^= 1;
     }

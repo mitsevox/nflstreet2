@@ -75,19 +75,19 @@ int TaskInit(int a);
 int TaskShutdown(void);
 void TDbExtInit(MemPoolDesc_t *pRecord);
 void TDbExtShutdown(void);
-int fn_80229470(void);
-void fn_80229494(void);
+int DbNiomInit(void);
+void DbNiomShutdown(void);
 void DbUtilSetHeap(int a);
-int fn_8022EA80(int a, const char *pName, int b);
-void fn_8022EAD8(void);
+int DbEvasInit(int a, const char *pName, int b);
+void DbEvasShutdown(void);
 int fn_8022EBF0(int a, const char *pName, int b);
 void fn_8022EC48(void);
 int DbFileInit(const char *pName);
 void DbFileShutdown(void);
 int DbUserInit(int a, const char *pName, int b);
-void fn_8022F094(void);
-int fn_8022F4C4(void);
-int fn_8022F744(void);
+void DbUserShutdown(void);
+int DbUserOpenDatabases(void);
+int DbUserCloseDatabases(void);
 }
 
 static ModuleDependency sAResDependencies[] = { &gRes, 0 };
@@ -225,16 +225,16 @@ int DbGame::Init()
 {
     void *data;
 
-    fn_80229470();
+    DbNiomInit();
     data = ResOpenDevice(lbl_802EBE24, 44);
-    fn_8022EA80(0x3000, lbl_802EBE24, 4);
-    fn_8022EB10();
+    DbEvasInit(0x3000, lbl_802EBE24, 4);
+    DbEvasLoad();
     DbTatsInit(0x96000, lbl_802EBE24, 2);
     DbTatsLoad();
     fn_8022EBF0(0x96000, lbl_802EBE24, 2);
     DbFileInit(lbl_802EBE34);
     DbUserInit(0x3000, lbl_802EBE24, 5);
-    fn_8022F4C4();
+    DbUserOpenDatabases();
     DbTeamsInit(lbl_802EBE40);
     fn_801F9430(0x54415453, _DbGame_aOptionTables, _DbGame_aSaveTags);
     GameOptionsInit(1);
@@ -247,15 +247,15 @@ int DbGame::Shutdown()
     GameOptionsShutdown();
     fn_801F9574();
     DbTeamsShutdown();
-    fn_8022F744();
-    fn_8022F094();
+    DbUserCloseDatabases();
+    DbUserShutdown();
     DbFileShutdown();
     fn_8022EC48();
     DbTatsUnload();
     DbTatsShutdown();
-    fn_8022EBC8();
-    fn_8022EAD8();
-    fn_80229494();
+    DbEvasUnload();
+    DbEvasShutdown();
+    DbNiomShutdown();
     return 1;
 }
 

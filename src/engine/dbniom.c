@@ -14,7 +14,7 @@
 #include "game/QueryStatus.h"
 #include "engine/t3db.h"
 #include "engine/t3db_cols.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 
 #include <string.h>
 
@@ -41,16 +41,16 @@ extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int 
 extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
 extern TDbIODevice_t tdbiofioCallback;
 extern int fn_801F967C(int db, int tbl);
-signed char fn_8022F384(int key);
+signed char DbUserFindIndex(int key);
 
 extern const unsigned char lbl_802AEF10[];
 extern int fn_802297D8(void *p, int tag);
 extern int fn_8022D8F8(int a, int *p, int c);
 int fn_8022DB20(void);
-extern int fn_8022F428(int key);
-extern int fn_8022F4BC(void);
+extern int DbUserFindIdByDb(int key);
+extern int DbUserGetCurrent(void);
 extern void fn_80231208(void);
-int fn_8022F3D4(int key);
+int DbUserGetDb(int key);
 extern const int lbl_803ED6E4[2];
 extern char lbl_802B5D64[];
 extern char lbl_802B56F4[];
@@ -264,7 +264,7 @@ extern int lbl_803EC074;
 extern int lbl_803EC07C;
 extern int lbl_803EC080;
 
-int fn_80229674(void);
+int DbNiomCloseCursor(void);
 int fn_8022A59C(int a, Object_8022A59C **ppOut);
 int fn_8022AB6C(Object_8022A59C *p, int a, int b);
 int fn_8022AC80(Object_8022A59C *p);
@@ -443,30 +443,30 @@ int fn_8022D25C(int (*pCallback)(int a));
 
 
 /* prototypes of the db functions in 0x80229270-0x8022F428 (dbocmt.c to dbuser.c) */
-int fn_80229270(void);
-int fn_802293A8(void);
-void fn_802293B0(void);
-int fn_802293B4(int a, int b);
-int fn_802293FC(void);
-int fn_8022942C(void);
-void fn_80229434(void);
-int fn_80229438(int column, int value);
-int fn_80229470(void);
-void fn_80229494(void);
-void fn_802294D8(Handlers_802294D8 *p);
-int fn_802294F4(void);
-int fn_802294FC(int *p);
-int fn_80229554(void);
-int fn_802295C0(void);
-int fn_802295F8(int a);
-int fn_80229644(int a, int b);
-int fn_80229674(void);
-int fn_802296B4(int a, int b);
-void fn_80229718(Funcs_802FB3BC *pFuncs);
-void fn_80229744(void);
-int fn_80229760(void **ppData, void *p);
-int fn_80229788(int a, int b);
-int fn_802297B0(void);
+int DbOcmtRenumber(void);
+int DbOcmtModuleInit(void);
+void DbOcmtModuleShutdown(void);
+int DbOcmtInsert(int a, int b);
+int DbOcmtClear(void);
+int DbOptionsModuleInit(void);
+void DbOptionsModuleShutdown(void);
+int DbOptionsSetTpom(int column, int value);
+int DbNiomInit(void);
+void DbNiomShutdown(void);
+void DbNiomSetHandlers(Handlers_802294D8 *p);
+int DbNiomIsModeActive(void);
+int DbNiomBeginMode(int *p);
+int DbNiomEndMode(void);
+int DbNiomRunCallback(void);
+int DbNiomOpenCursor(int a);
+int DbNiomReadCursor(int a, int b);
+int DbNiomCloseCursor(void);
+int DbNiomReadOnce(int a, int b);
+void DbNiomSetModeFuncs(Funcs_802FB3BC *pFuncs);
+void DbNiomClearModeFuncs(void);
+int DbNiomModeLoad(void **ppData, void *p);
+int DbNiomModeReset(int a, int b);
+int DbNiomModeResume(void);
 int fn_802299FC(void);
 int fn_80229A70(void);
 float fn_80229C98(int index);
@@ -570,14 +570,14 @@ int fn_8022E9A4(void);
 void fn_8022E9C4(void);
 int fn_8022E9E4(void);
 void fn_8022EA4C(void);
-int fn_8022EA74(void);
-void fn_8022EA7C(void);
-int fn_8022EA80(int a, const char *pName, int b);
-void fn_8022EAD8(void);
-int fn_8022EB10(void);
-int fn_8022EB5C(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps);
-int fn_8022EB94(void *pTarget, struct SaveStreamOps_t *pOps);
-int fn_8022EBC8(void);
+int DbEvasModuleInit(void);
+void DbEvasModuleShutdown(void);
+int DbEvasInit(int a, const char *pName, int b);
+void DbEvasShutdown(void);
+int DbEvasLoad(void);
+int DbEvasLoadStream(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps);
+int DbEvasSaveStream(void *pTarget, struct SaveStreamOps_t *pOps);
+int DbEvasUnload(void);
 int fn_8022EBF0(int a, const char *pName, int b);
 void fn_8022EC48(void);
 int fn_8022EC80(void);
@@ -589,27 +589,27 @@ int DbFileInit(const char *pName);
 void DbFileShutdown(void);
 int DbFileTblLoad(int db, int file);
 int DbFileTblDestroy(int db, int tbl);
-int fn_8022EFDC(void);
+int DbUserNewId(void);
 int DbUserInit(int a, const char *pName, int b);
-void fn_8022F094(void);
-int fn_8022F0D4(void);
-void fn_8022F1BC(int key);
-void fn_8022F294(int key);
-int fn_8022F34C(void);
-int fn_8022F358(int index);
-signed char fn_8022F384(int key);
-int fn_8022F3D4(int key);
+void DbUserShutdown(void);
+int DbUserCreate(void);
+void DbUserDelete(int key);
+void DbUserReset(int key);
+int DbUserGetCount(void);
+int DbUserGetId(int index);
+signed char DbUserFindIndex(int key);
+int DbUserGetDb(int key);
 
-int fn_80229470(void)
+int DbNiomInit(void)
 {
     DbUtilRandomInit();
     return 0;
 }
 
-void fn_80229494(void)
+void DbNiomShutdown(void)
 {
     DbUtilRandomShutdown();
-    fn_80229674();
+    DbNiomCloseCursor();
     lbl_803EBFD8 = 0;
     lbl_803EBFDC = 0;
     lbl_803EBFE0 = 0;
@@ -618,19 +618,19 @@ void fn_80229494(void)
     lbl_803EBFEC = 0;
 }
 
-void fn_802294D8(Handlers_802294D8 *p)
+void DbNiomSetHandlers(Handlers_802294D8 *p)
 {
     lbl_803EBFD8 = p->mpUnknown0;
     lbl_803EBFDC = p->mpUnknown4;
     lbl_803EBFE0 = p->mpUnknown8;
 }
 
-int fn_802294F4(void)
+int DbNiomIsModeActive(void)
 {
     return lbl_803EBFEC;
 }
 
-int fn_802294FC(int *p)
+int DbNiomBeginMode(int *p)
 {
     int err = 0;
 
@@ -643,7 +643,7 @@ int fn_802294FC(int *p)
     return err;
 }
 
-int fn_80229554(void)
+int DbNiomEndMode(void)
 {
     int err = 0;
 
@@ -651,9 +651,9 @@ int fn_80229554(void)
         lbl_803EBFED = 1;
         err = lbl_803EBFD8();
         if (err == 0) {
-            err = fn_80229674();
+            err = DbNiomCloseCursor();
         } else {
-            fn_80229674();
+            DbNiomCloseCursor();
         }
         lbl_803EBFEC = 0;
         lbl_803EBFED = 0;
@@ -661,7 +661,7 @@ int fn_80229554(void)
     return err;
 }
 
-int fn_802295C0(void)
+int DbNiomRunCallback(void)
 {
     if (lbl_803EBFE4 != 0) {
         lbl_803EBFE4(lbl_803EBFE8);
@@ -669,25 +669,25 @@ int fn_802295C0(void)
     return 0;
 }
 
-int fn_802295F8(int a)
+int DbNiomOpenCursor(int a)
 {
     int err = 0;
 
     if (lbl_803EBFF0 == 0) {
         err = fn_8022A59C(a, &lbl_803EBFF0);
         if (err != 0) {
-            fn_80229674();
+            DbNiomCloseCursor();
         }
     }
     return err;
 }
 
-int fn_80229644(int a, int b)
+int DbNiomReadCursor(int a, int b)
 {
     return fn_8022AB6C(lbl_803EBFF0, a, b);
 }
 
-int fn_80229674(void)
+int DbNiomCloseCursor(void)
 {
     int err = 0;
 
@@ -698,22 +698,22 @@ int fn_80229674(void)
     return err;
 }
 
-int fn_802296B4(int a, int b)
+int DbNiomReadOnce(int a, int b)
 {
-    int err = fn_802295F8(0);
+    int err = DbNiomOpenCursor(0);
 
     if (err == 0) {
-        err = fn_80229644(a, b);
+        err = DbNiomReadCursor(a, b);
     }
     if (err == 0) {
-        err = fn_80229674();
+        err = DbNiomCloseCursor();
     } else {
-        fn_80229674();
+        DbNiomCloseCursor();
     }
     return err;
 }
 
-void fn_80229718(Funcs_802FB3BC *pFuncs)
+void DbNiomSetModeFuncs(Funcs_802FB3BC *pFuncs)
 {
     lbl_803EBFF8 = pFuncs->mpUnknown0;
     lbl_803EBFFC = pFuncs->mpUnknown4;
@@ -722,7 +722,7 @@ void fn_80229718(Funcs_802FB3BC *pFuncs)
     lbl_803EC008 = pFuncs->mpUnknown16;
 }
 
-void fn_80229744(void)
+void DbNiomClearModeFuncs(void)
 {
     lbl_803EBFF8 = 0;
     lbl_803EBFFC = 0;
@@ -731,17 +731,17 @@ void fn_80229744(void)
     lbl_803EC008 = 0;
 }
 
-int fn_80229760(void **ppData, void *p)
+int DbNiomModeLoad(void **ppData, void *p)
 {
     return lbl_803EBFFC(ppData, p);
 }
 
-int fn_80229788(int a, int b)
+int DbNiomModeReset(int a, int b)
 {
     return lbl_803EC000(a, b);
 }
 
-int fn_802297B0(void)
+int DbNiomModeResume(void)
 {
     return lbl_803EC004();
 }

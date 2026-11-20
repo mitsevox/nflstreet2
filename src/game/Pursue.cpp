@@ -13,7 +13,7 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "game/Lookup_8012078C.h"
 #include "game/Message_800F01CC.h"
@@ -205,7 +205,7 @@ extern "C" int PursueShouldPlayBall(Object_80039F5C *p)
             float playerDistance = fn_8022781C(&p->mMotion.mPos, &position);
             short rating = p->mRatings[5] >= p->mRatings[8] ? p->mRatings[5] : p->mRatings[8];
             unsigned int threshold = rating;
-            if (fn_802372EC(0, 255) < threshold >> 2 &&
+            if (SyncRandGetRange(0, 255) < threshold >> 2 &&
                 MathAngleDiff(ballAngle, playerAngle) < (int)(_Pursue_fPlayBallAngleDeg * 46603.37890625f) &&
                 !(playerDistance >= ballDistance))
                 result = 1;
@@ -264,7 +264,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
             else chance = 0;
         }
     }
-    if (attempt && fn_802372EC(0, 100) < (unsigned int)chance && fn_800E815C(p, 0, 0)) done = 1;
+    if (attempt && SyncRandGetRange(0, 100) < (unsigned int)chance && fn_800E815C(p, 0, 0)) done = 1;
     if (done) return;
     float offset[2];
     Object_80039F5C *reference;
@@ -286,7 +286,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
                         !(fabsf(other->mMotion.mPos.mX) <= fabsf(motion->mPos.mX))) odds = 80;
                 }
             } else if (!(distance >= 10.0f) && PursueGetTarget() == BallGetCurrentHolder()) odds = 80;
-            if (fn_802372EC(0, 100) < (unsigned int)odds ||
+            if (SyncRandGetRange(0, 100) < (unsigned int)odds ||
                 (!fn_800A7F30((unsigned char)(1 - p->mIdBytes[2])) && fn_800A851C(p->mIdBytes[2], p))) {
                 reference = fn_8009BCE8(&block->mUnknown4);
                 int mode;
@@ -325,7 +325,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
             if (MathAngleDiff(ballAngle, fn_801CFE40(offset[1], offset[0])) > 0x78E38E) {
                 int facing = motion->mFacing;
                 if (MathAngleDiff(facing, fn_801CFE40(offset[1], offset[0])) <= 0x3FFFFF &&
-                    !(fn_802270A4(offset) >= 6.0f) && fn_802372EC(0, 100) <= 49) fn_800F2C1C(p, 0);
+                    !(fn_802270A4(offset) >= 6.0f) && SyncRandGetRange(0, 100) <= 49) fn_800F2C1C(p, 0);
             }
         }
     } else if (block->mUnknown0 == 4 && other) {
@@ -1010,12 +1010,12 @@ extern "C" void PursueTryBlockReaction(Object_80039F5C *p, Object_80039F5C *pOth
     if (found == 0) {
         return;
     }
-    if (fn_802372EC(0, 100) < 75) {
+    if (SyncRandGetRange(0, 100) < 75) {
         fn_80227690(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
         if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), pTarget->mMotion.mUnknown32) <= 0x3FFFFF) {
             fn_80111354(p);
         }
-    } else if (fn_802372EC(0, 100) < 50) {
+    } else if (SyncRandGetRange(0, 100) < 50) {
         fn_80227690(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
         if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), pTarget->mMotion.mUnknown32) <= 0x3FFFFF) {
             fn_800E96EC(p, pTarget);
@@ -1045,7 +1045,7 @@ extern "C" int PursueUpdateHold(Object_80039F5C *p, PursueState_t *pState, Vecto
     } else {
         if (value != 4) {
             if (pState->mUnknown4 == -1.0f) {
-                if (fn_802372EC(0, 100) < 5) {
+                if (SyncRandGetRange(0, 100) < 5) {
                     pState->mUnknown4 = 0.0f;
                 }
                 if (pState->mUnknown0 > 0.4f) {
@@ -1344,7 +1344,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
                         float receiverDistance = fn_8022781C(&pos, &pReceiver->mMotion.mPos);
 
                         if (selfDistance < 10.0f && receiverDistance > 8.0f && fn_8009F0B8(p, 0x2AAAAA) != 0) {
-                            intercept = fn_802372EC(0, 255) < (unsigned int)p->mRatings[8];
+                            intercept = SyncRandGetRange(0, 255) < (unsigned int)p->mRatings[8];
                         }
                         if (intercept) {
                             memset(&message, 0, sizeof(message));
@@ -1528,7 +1528,7 @@ extern "C" int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther
                     odds += (unsigned int)(odds * PlayTrackGetResult5Rate());
                     boosted = 1;
                 }
-                if (fn_802372EC(0, 100) < odds) {
+                if (SyncRandGetRange(0, 100) < odds) {
                     result = 1;
                 }
                 if (pMotion->mPos.mY < pos.mY) {
@@ -1543,7 +1543,7 @@ extern "C" int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther
                         if (boosted) {
                             odds += (unsigned int)(odds * PlayTrackGetResult5Rate());
                         }
-                        if (fn_802372EC(0, 100) < odds) {
+                        if (SyncRandGetRange(0, 100) < odds) {
                             result = 1;
                         }
                     }

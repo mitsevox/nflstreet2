@@ -8,7 +8,7 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_801F9908.h"
 #include <string.h>
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 #include "game/DbCursor.h"
 #include "game/Query_8008352C.h"
 #include "game/DbQueryTable.h"
@@ -17,9 +17,9 @@
 #include "game/FMCAPPORT.h"
 
 extern "C" {
-int fn_8022F358(int);
-int fn_8022F4BC(void);
-int fn_8022F3D4(int);
+int DbUserGetId(int);
+int DbUserGetCurrent(void);
+int DbUserGetDb(int);
 void CreateTeamClearTables(int);
 void CreateTeamUpdateRatings(int);
 int fn_801F9980(int, int *);
@@ -140,7 +140,7 @@ void CreateTeamCalcRatings(int index, int *pOffense, int *pDefense, int *pOveral
 
 void CreateTeamUpdateRatings(int index)
 {
-    int handle = fn_8022F3D4(fn_8022F358(index));
+    int handle = DbUserGetDb(DbUserGetId(index));
     int offense;
     int defense;
     int overall;
@@ -169,7 +169,7 @@ void CreateTeamStore(int source, int team, int index)
     int table = -1;
     QueryCursor cursor = {0, 0, -1, 0};
     int player;
-    int destination = fn_8022F3D4(fn_8022F358(index));
+    int destination = DbUserGetDb(DbUserGetId(index));
     CreateTeamClearTables(destination);
     fn_801F9980(destination, &table);
     fn_801FCE10(0, "use \x8c select into \x8c.\x8c * from 'MAET' where ('DIGT' = \x82)\n", source, destination, table, 0);
@@ -241,7 +241,7 @@ int CreateTeamLoad(int source, int teamTable, int playerTable, int destination,
 
 int CreateTeamLoadAll(int destination, int rumt, int index, int *pOriginalIds, int preserveOriginal)
 {
-    int source = fn_8022F3D4(fn_8022F358(index));
+    int source = DbUserGetDb(DbUserGetId(index));
     return CreateTeamLoad(source, 0x4D545243, 0x59505243, destination, rumt, pOriginalIds, preserveOriginal);
 }
 
@@ -249,7 +249,7 @@ void CreateTeamSyncCreatedPlayers(int index)
 {
     QueryResult result;
     int player, ytrp, oldPxsp;
-    int source = fn_8022F3D4(fn_8022F358(index));
+    int source = DbUserGetDb(DbUserGetId(index));
     QueryCursor cursor = {0, 0, -1, 0};
     int hadState = MemCardFilesNeedsSave(2, index);
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
@@ -303,9 +303,9 @@ void CreateTeamCopyStylePlayers(int index, int team, int rumt)
     QueryCursor cursor = {0, 0, -1, 0};
     int ids[16];
     unsigned short total, count;
-    int saved = fn_8022F4BC();
-    fn_8022F478(fn_8022F358(index));
-    fn_8022F3D4(fn_8022F358(index));
+    int saved = DbUserGetCurrent();
+    DbUserSetCurrent(DbUserGetId(index));
+    DbUserGetDb(DbUserGetId(index));
     arg.Set(6, 0x5244524344494754LL, 2, rumt);
     fn_801F9D70(0x54415453, 0x52445243, &arg, &total);
     count = total;
@@ -353,7 +353,7 @@ void CreateTeamCopyStylePlayers(int index, int team, int rumt)
     }
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
     gFMCAPPORT.Start();
-    fn_8022F478(saved);
+    DbUserSetCurrent(saved);
 }
 
 int CreateTeamGetStylePoints(int value)
@@ -365,7 +365,7 @@ int CreateTeamExists(int index)
 {
     unsigned short count = 0;
     int found = 0;
-    fn_801F9D70(fn_8022F3D4(fn_8022F358(index)), 0x4D545243, 0, &count);
+    fn_801F9D70(DbUserGetDb(DbUserGetId(index)), 0x4D545243, 0, &count);
     if (count) found = 1;
     return found;
 }
@@ -373,7 +373,7 @@ int CreateTeamHasPlayers(int index)
 {
     unsigned short count = 0;
     int found = 0;
-    fn_801F9D70(fn_8022F3D4(fn_8022F358(index)), 0x59505243, 0, &count);
+    fn_801F9D70(DbUserGetDb(DbUserGetId(index)), 0x59505243, 0, &count);
     if (count) found = 1;
     return found;
 }
@@ -404,9 +404,9 @@ void CreateTeamStoreFromStats(int index, int team)
 }
 void CreateTeamClear()
 {
-    int source = fn_8022F3D4(fn_8022F4BC());
-    if (!GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC())))
-        GauntletReset(UserProfileFindIndex(fn_8022F4BC()));
+    int source = DbUserGetDb(DbUserGetCurrent());
+    if (!GauntletGetCurrentTeam(UserProfileFindIndex(DbUserGetCurrent())))
+        GauntletReset(UserProfileFindIndex(DbUserGetCurrent()));
     QueryResult result;
     DbQueryTable tables[2];
     QueryCursor cursor;
@@ -492,14 +492,14 @@ void CreateTeamFreeBackup(int firstTable, int secondTable)
 }
 void CreateTeamRestore(int first, int second)
 {
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
     CreateTeamClearTables(handle);
     fn_801FCE10(0, "use \x8c insert into \x8c.'MTRC' * select * from \x8c\n", 0x54415453, handle, first);
     fn_801FCE10(0, "use \x8c insert into \x8c.'YPRC' * select * from \x8c\n", 0x54415453, handle, second);
 }
 void CreateTeamPlayerCursorOpen(DbCursor *pCursor, int index)
 {
-    DbCursorOpen(pCursor, 0x59505243, 0x44494750, 0, 0, fn_8022F3D4(fn_8022F358(index)));
+    DbCursorOpen(pCursor, 0x59505243, 0x44494750, 0, 0, DbUserGetDb(DbUserGetId(index)));
 }
 void CreateTeamPlayerCursorClose(DbCursor *pCursor)
 {

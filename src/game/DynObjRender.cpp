@@ -13,7 +13,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/ResLoad.h"
 #include "game/fn_802270D4.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include <dolphin/gx/GXStruct.h>
 typedef float Mtx44[4][4];
 #include <dolphin/os/OSCache.h>
@@ -215,7 +215,7 @@ int DynObjChildIsFacingAway(DynObjChild *p)
 void DynObjChildPickFrame(DynObjChild *p,DynObj *owner)
 {
     DynObjInstance *s=owner->mpUnknown12C;
-    unsigned int index=fn_802372EC(1,s->mpUnknown0->mpUnknown144->mUnknown10);
+    unsigned int index=SyncRandGetRange(1,s->mpUnknown0->mpUnknown144->mUnknown10);
     p->mUnknown6C=index;
     if((unsigned char)index==owner->mUnknownFC && s->mpUnknown0->mpUnknown144->mUnknown10>1) {
         p->mUnknown6C=index+1;
@@ -251,7 +251,7 @@ void DynObjRenderInit(void *data,int handle,DynObj *p)
             } else {
                 p->mUnknownF4=ResFindIndexByName(data,behavior);
                 s->mpUnknown0->mpUnknown144=reinterpret_cast<DynObjTexHeader *>(ResLoad(data,p->mUnknownF4,1));
-                p->mUnknownFC=fn_802372EC(1,s->mpUnknown0->mpUnknown144->mUnknown10);
+                p->mUnknownFC=SyncRandGetRange(1,s->mpUnknown0->mpUnknown144->mUnknown10);
             }
             if(s->mpUnknown0->mpUnknown144)TMTexLibLoad(&s->mpUnknown0->mUnknown14C,reinterpret_cast<int>(s->mpUnknown0->mpUnknown144));
             s->mpUnknown0->mpUnknown148=TMModelResGetChunk(s->mpUnknown0->mpUnknown0,0x4D61746C,0);

@@ -4,11 +4,11 @@
 
 #include "engine/Desc_80238424.h"
 #include "game/StyleTracker.h"
-#include "engine/fn_80238680.h"
+#include "engine/EvMonAddListener.h"
 #include "game/AudmonEvent.h"
 #include "game/fn_8009D990.h"
 
-/* Descriptor passed to fn_80238424, which allocates mUnknown0 records of
+/* Descriptor passed to EvMonAlloc, which allocates mUnknown0 records of
    mUnknown4 bytes after mUnknown8 callback slots. */
 
 typedef unsigned int (*AudmonClockFn_t)(int);
@@ -16,10 +16,10 @@ typedef unsigned int (*AudmonClockFn_t)(int);
 extern "C" {
 void SndgHandleEvent(AudmonEvent_t *pRecord);
 int MemFill(void *pDest, int size, int value, int width);
-void fn_802384C4(int handle);
-void *fn_8023850C(int handle);
+void EvMonFree(int handle);
+void *EvMonGetCurrentRecord(int handle);
 void EvMonFire(int handle, int unknown);
-void fn_8023861C(int handle);
+void EvMonClear(int handle);
 }
 
 static Desc_80238424 _AudmonEvent_QueueDesc = { 50, sizeof(AudmonEvent_t), 3 };
@@ -28,30 +28,30 @@ static AudmonClockFn_t _AudmonEvent_pfnClock = 0;
 
 extern "C" void AudmonEventInit(void)
 {
-    _AudmonEvent_iQueue = fn_80238424(&_AudmonEvent_QueueDesc);
+    _AudmonEvent_iQueue = EvMonAlloc(&_AudmonEvent_QueueDesc);
     _AudmonEvent_pfnClock = 0;
 }
 
 extern "C" void AudmonEventShutdown(void)
 {
-    fn_802384C4(_AudmonEvent_iQueue);
+    EvMonFree(_AudmonEvent_iQueue);
     _AudmonEvent_iQueue = 0xFF;
 }
 
 extern "C" void AudmonEventStartInGame(void)
 {
     _AudmonEvent_pfnClock = fn_8009D990;
-    fn_80238680(_AudmonEvent_iQueue, SndgHandleEvent);
+    EvMonAddListener(_AudmonEvent_iQueue, SndgHandleEvent);
 }
 
 extern "C" AudmonEvent_t *AudmonEventGetRecord(void)
 {
-    return (AudmonEvent_t *)fn_8023850C(_AudmonEvent_iQueue);
+    return (AudmonEvent_t *)EvMonGetCurrentRecord(_AudmonEvent_iQueue);
 }
 
 extern "C" void AudmonEventClear(void)
 {
-    fn_8023861C(_AudmonEvent_iQueue);
+    EvMonClear(_AudmonEvent_iQueue);
 }
 
 extern "C" void AudmonEventSend(void)
@@ -116,10 +116,10 @@ extern "C" void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a
 
 extern "C" void AudmonEventAddListener(AudmonEventFn_t pCallback)
 {
-    fn_80238680(_AudmonEvent_iQueue, pCallback);
+    EvMonAddListener(_AudmonEvent_iQueue, pCallback);
 }
 
 extern "C" void AudmonEventRemoveListener(AudmonEventFn_t pCallback)
 {
-    fn_802386DC(_AudmonEvent_iQueue, pCallback);
+    EvMonRemoveListener(_AudmonEvent_iQueue, pCallback);
 }

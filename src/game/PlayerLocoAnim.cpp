@@ -14,7 +14,7 @@
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "game/Object_8017886C.h"
 #include <math.h>
@@ -230,7 +230,7 @@ int PlayerLocoGetStartSide(Object_80039F5C *p, int check, int value)
         }
         if (BallFindHeldBy(p) == 0) {
             if (check != 0 && fn_800AD9B4() != 2) {
-                value = fn_802372EC(0, 100) < 50;
+                value = SyncRandGetRange(0, 100) < 50;
             }
         } else {
             value = p->mUnknown776 == 1;
@@ -480,7 +480,7 @@ unsigned short PlayerLocoSelectTurnEntry(Table_80089904 *table, Object_80039F5C 
             continue;
         }
         if ((side > 0 && info->mUnknown12 > 0) || (side < 0 && info->mUnknown12 < 0)) {
-            if (!best || fn_802372EC(0, 100) < 50) {
+            if (!best || SyncRandGetRange(0, 100) < 50) {
                 best = info;
                 bestIndex = i;
             }

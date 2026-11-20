@@ -1,8 +1,8 @@
 #include "game/GameState.h"
 
 extern "C" {
-void fn_80237780(int);
-void fn_80237868(void);
+void SyncTimeInit(int);
+void SyncTimeShutdown(void);
 }
 
 static ModuleDependency sDependencies[] = { &gGameState, 0 };
@@ -14,12 +14,12 @@ const char *Timg::GetName() { return "Timg"; }
 
 int Timg::Init()
 {
-    fn_80237780(1);
+    SyncTimeInit(1);
     return 1;
 }
 
 int Timg::Shutdown()
 {
-    fn_80237868();
+    SyncTimeShutdown();
     return 1;
 }

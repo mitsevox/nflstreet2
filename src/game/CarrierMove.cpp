@@ -18,7 +18,7 @@
 #include "game/fn_800AD9B4.h"
 #include <string.h>
 #include "game/fn_800B65A0.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 /* Partial view of the opaque player block at +336 used by the handlers
    below. */
@@ -142,7 +142,7 @@ extern "C" void CarrierMoveStartAnim(Object_80039F5C *p) {
         p->mUnknown1008.mUnknown0 = 1;
     }
     if (mode) {
-        unsigned int roll = fn_802372EC(0, 100);
+        unsigned int roll = SyncRandGetRange(0, 100);
         if (roll <= 32)
             p->mUnknown1008.mUnknown2 = 1;
         else if (roll <= 66)

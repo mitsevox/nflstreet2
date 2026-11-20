@@ -6,7 +6,7 @@
 #include "game/fn_8009D990.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/ScrmRuleSet.h"
 #include "game/cammain.h"
 
@@ -119,8 +119,8 @@ void fn_801539A0(Class_802A1B58 *p, float dt)
     fn_801487C0(0, fn_80148A58()->vfn_05(0));
     fn_801487C0(1, fn_80148A58()->vfn_05(1));
     do {
-        pRules->mpUnknown52->mUnknown8 = fn_802372EC(0, 3);
-    } while (pRules->mpUnknown52->mUnknown8 == pRules->mpUnknown52->mUnknown0[team] && fn_802372EC(0, 100) > 20);
+        pRules->mpUnknown52->mUnknown8 = SyncRandGetRange(0, 3);
+    } while (pRules->mpUnknown52->mUnknown8 == pRules->mpUnknown52->mUnknown0[team] && SyncRandGetRange(0, 100) > 20);
     pRules->mpUnknown52->mUnknown0[team] = pRules->mpUnknown52->mUnknown8;
     ((Class_802A27F0 *)fn_80148A58())->vfn_35(fn_80178308(), 1);
     ((Class_802A27F0 *)fn_80148A58())->vfn_35(fn_80178320(), 0);

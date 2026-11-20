@@ -4,7 +4,7 @@
 
 #include "engine/Object_80237EE8.h"
 #include "engine/Desc_80238424.h"
-#include "engine/fn_80238680.h"
+#include "engine/EvMonAddListener.h"
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/gx/GXPixel.h>
 #include <dolphin/os/OSCache.h>
@@ -39,11 +39,11 @@ typedef struct Bits_80237438 {
 
 extern Random_80236F78 *lbl_803EC130;
 extern int lbl_803EC134;
-extern void *fn_8023816C(void *pHandle);
+extern void *SyncStateGetData(void *pHandle);
 int SyncRandSaveState(void *p, void *pBuffer);
 int SyncRandLoadState(void *p, void *pBuffer);
 
-int fn_80236F78(void *p, int value)
+int SyncRandInitState(void *p, int value)
 {
     Random_80236F78 *pRandom = p;
     int i;
@@ -60,7 +60,7 @@ int fn_80236F78(void *p, int value)
     return 0;
 }
 
-int fn_8023701C(void *p, int value)
+int SyncRandShutdownState(void *p, int value)
 {
     Random_80236F78 *pRandom = p;
 
@@ -104,27 +104,27 @@ int SyncRandLoadState(void *p, void *pBuffer)
     return 1;
 }
 
-int fn_80237180(void *p)
+int SyncRandGetStateSize(void *p)
 {
     return MathGetRandomStreamSize(lbl_803EC130->mpUnknown20[0]) + sizeof(Random_80236F78);
 }
 
-void fn_802371B0(int count, int seed)
+void SyncRandInit(int count, int seed)
 {
     void *pHandle;
     Random_80236F78 *pRandom;
 
     pHandle = SyncStateRegister(0, (void **)&lbl_803EC130, sizeof(Random_80236F78), 0, 0x72616E64);
-    fn_80238234(pHandle, fn_80236F78, fn_8023701C, 0, SyncRandCompareState);
-    fn_80238248(pHandle, SyncRandSaveState, fn_80237180, SyncRandLoadState);
-    pRandom = fn_8023816C(pHandle);
+    SyncStateSetCallbacks(pHandle, SyncRandInitState, SyncRandShutdownState, 0, SyncRandCompareState);
+    SyncStateSetSaveCallbacks(pHandle, SyncRandSaveState, SyncRandGetStateSize, SyncRandLoadState);
+    pRandom = SyncStateGetData(pHandle);
     pRandom->mUnknown0 = count;
     pRandom->mUnknown4 = seed;
     pRandom->mUnknown12 = seed;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
-void fn_8023725C(void)
+void SyncRandShutdown(void)
 {
 }
 
@@ -146,7 +146,7 @@ float SyncRandGetFloat(int stream)
     return value;
 }
 
-unsigned int fn_802372EC(int stream, unsigned int count)
+unsigned int SyncRandGetRange(int stream, unsigned int count)
 {
     unsigned int value;
 
@@ -163,9 +163,9 @@ unsigned int fn_802372EC(int stream, unsigned int count)
     return value;
 }
 
-int fn_80237390(int stream, int low, int high)
+int SyncRandGetIntRange(int stream, int low, int high)
 {
-    return fn_802372EC(stream, high - low + 1) + low;
+    return SyncRandGetRange(stream, high - low + 1) + low;
 }
 
 float SyncRandGetFloatRange(int stream, float low, float high)
@@ -181,7 +181,7 @@ float SyncRandGetFloatRange(int stream, float low, float high)
     return range * value + low;
 }
 
-void fn_80237438(Bits_80237438 *pBits)
+void SyncRandBitPoolClear(Bits_80237438 *pBits)
 {
     unsigned int i;
     unsigned char *pData = pBits->mUnknown8;
@@ -192,17 +192,17 @@ void fn_80237438(Bits_80237438 *pBits)
     }
 }
 
-Bits_80237438 *fn_80237470(int stream, unsigned int count)
+Bits_80237438 *SyncRandBitPoolNew(int stream, unsigned int count)
 {
     Bits_80237438 *pBits = fn_801D2B7C(((count + 7) >> 3) + 8, 0, 0);
 
     pBits->mUnknown0 = count;
     pBits->mUnknown4 = stream;
-    fn_80237438(pBits);
+    SyncRandBitPoolClear(pBits);
     return pBits;
 }
 
-int fn_802374C8(Bits_80237438 *pBits)
+int SyncRandBitPoolDraw(Bits_80237438 *pBits)
 {
     unsigned int i;
     unsigned int index;
@@ -210,7 +210,7 @@ int fn_802374C8(Bits_80237438 *pBits)
     unsigned int start;
     unsigned char *pData = pBits->mUnknown8;
 
-    i = fn_802372EC(pBits->mUnknown4, pBits->mUnknown0);
+    i = SyncRandGetRange(pBits->mUnknown4, pBits->mUnknown0);
     index = i >> 3;
     bit = i & 7;
     start = i;
@@ -219,14 +219,14 @@ int fn_802374C8(Bits_80237438 *pBits)
         index = i >> 3;
         bit = i & 7;
         if (i == start) {
-            fn_80237438(pBits);
+            SyncRandBitPoolClear(pBits);
         }
     }
     pData[index] |= 1 << bit;
     return i;
 }
 
-void fn_8023756C(Bits_80237438 *pBits)
+void SyncRandBitPoolDelete(Bits_80237438 *pBits)
 {
     fn_801D2BD0(pBits);
 }

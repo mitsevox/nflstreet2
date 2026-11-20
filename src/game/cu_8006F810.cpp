@@ -13,7 +13,7 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/GameModeType.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 struct Record_80071594 {
     int mUnknown0;
@@ -87,9 +87,9 @@ void SndService(void);
 int SndPatchOver(int handle);
 unsigned int SysGetSystemTime(void);
 void fn_80227690(void *out, void *a, void *b);
-int fn_80237470(int a, int b);
-int fn_802374C8(int handle);
-void fn_8023756C(int handle);
+int SyncRandBitPoolNew(int a, int b);
+int SyncRandBitPoolDraw(int handle);
+void SyncRandBitPoolDelete(int handle);
 extern unsigned char lbl_802D63D0[];
 static const unsigned char lbl_80290BAC[][2] = {
     {0x44, 4}, {0x66, 2}, {0x4C, 2}, {0x48, 4}, {0x50, 4}, {0x54, 4},
@@ -544,7 +544,7 @@ void fn_80070C40(AudmonEvent_t *p)
     if (!fn_80177F70()) return;
     switch (p->mType) {
     case 117: lbl_803EA6E4 = 1; break;
-    case 118: fn_802372EC(1, 2); break;
+    case 118: SyncRandGetRange(1, 2); break;
     case 116: {
         unsigned char side = ((unsigned char *)&p->mUnknown10)[3];
         if (GameModeTypeGet() == 11 && fn_801486A0() == 15) break;
@@ -621,9 +621,9 @@ void fn_80070F84(void)
         if (!(x <= -6.0f) && !(x >= 6.0f) && !(y >= 3.0f)) ++count;
     }
     int id;
-    if (count > 2) id = fn_802374C8(lbl_803EC828) + 40;
-    else if (count > 1) id = fn_802374C8(lbl_803EC82C) + 56;
-    else id = fn_802374C8(lbl_803EC830) + 72;
+    if (count > 2) id = SyncRandBitPoolDraw(lbl_803EC828) + 40;
+    else if (count > 1) id = SyncRandBitPoolDraw(lbl_803EC82C) + 56;
+    else id = SyncRandBitPoolDraw(lbl_803EC830) + 72;
     SndgRequestBank(6, id, 0);
 }
 
@@ -669,10 +669,10 @@ void fn_800711E0(void)
         case 0: {
             SndgNullUpdate();
             unsigned char id;
-            lbl_803EA6C4 = fn_802374C8(lbl_803EC820);
+            lbl_803EA6C4 = SyncRandBitPoolDraw(lbl_803EC820);
             id = lbl_803EA6C4;
             while (SndgIsBankIndexLoaded(3, id)) {
-                lbl_803EA6C4 = fn_802374C8(lbl_803EC820);
+                lbl_803EA6C4 = SyncRandBitPoolDraw(lbl_803EC820);
                 id = lbl_803EA6C4;
             }
             if (fn_801486A0()) {
@@ -682,10 +682,10 @@ void fn_800711E0(void)
                 }
             }
             SndgRequestBank(3, id, 0);
-            lbl_803EA6C5 = fn_802374C8(lbl_803EC820);
+            lbl_803EA6C5 = SyncRandBitPoolDraw(lbl_803EC820);
             id = lbl_803EA6C5;
             while (SndgIsBankIndexLoaded(4, id)) {
-                lbl_803EA6C5 = fn_802374C8(lbl_803EC820);
+                lbl_803EA6C5 = SyncRandBitPoolDraw(lbl_803EC820);
                 id = lbl_803EA6C5;
             }
             if (fn_801486A0()) {
@@ -767,15 +767,15 @@ void fn_80071594(void *record)
 
 void fn_80071600(void)
 {
-    lbl_803EC820 = fn_80237470(1, 30);
-    lbl_803EC824 = fn_80237470(1, 10);
-    lbl_803EC828 = fn_80237470(1, 16);
-    lbl_803EC82C = fn_80237470(1, 16);
-    lbl_803EC830 = fn_80237470(1, 5);
-    lbl_803EC834 = fn_80237470(1, 5);
-    lbl_803EC838 = fn_80237470(1, 3);
-    lbl_803EC83C = fn_80237470(1, 10);
-    lbl_803EC840 = fn_80237470(1, 13);
+    lbl_803EC820 = SyncRandBitPoolNew(1, 30);
+    lbl_803EC824 = SyncRandBitPoolNew(1, 10);
+    lbl_803EC828 = SyncRandBitPoolNew(1, 16);
+    lbl_803EC82C = SyncRandBitPoolNew(1, 16);
+    lbl_803EC830 = SyncRandBitPoolNew(1, 5);
+    lbl_803EC834 = SyncRandBitPoolNew(1, 5);
+    lbl_803EC838 = SyncRandBitPoolNew(1, 3);
+    lbl_803EC83C = SyncRandBitPoolNew(1, 10);
+    lbl_803EC840 = SyncRandBitPoolNew(1, 13);
     lbl_803EA6C5 = 1;
     lbl_803EA6CF = 0;
     lbl_803EA6D0 = 0;
@@ -792,15 +792,15 @@ void fn_80071600(void)
 
 void fn_800716E4(void)
 {
-    fn_8023756C(lbl_803EC820);
-    fn_8023756C(lbl_803EC824);
-    fn_8023756C(lbl_803EC828);
-    fn_8023756C(lbl_803EC82C);
-    fn_8023756C(lbl_803EC830);
-    fn_8023756C(lbl_803EC834);
-    fn_8023756C(lbl_803EC838);
-    fn_8023756C(lbl_803EC83C);
-    fn_8023756C(lbl_803EC840);
+    SyncRandBitPoolDelete(lbl_803EC820);
+    SyncRandBitPoolDelete(lbl_803EC824);
+    SyncRandBitPoolDelete(lbl_803EC828);
+    SyncRandBitPoolDelete(lbl_803EC82C);
+    SyncRandBitPoolDelete(lbl_803EC830);
+    SyncRandBitPoolDelete(lbl_803EC834);
+    SyncRandBitPoolDelete(lbl_803EC838);
+    SyncRandBitPoolDelete(lbl_803EC83C);
+    SyncRandBitPoolDelete(lbl_803EC840);
 }
 
 void fn_80071748(void)
@@ -820,14 +820,14 @@ void fn_80071794(int id)
 
 int fn_800717E0(Vector_80039F5C *pos)
 {
-    unsigned int step = fn_802372EC(1, 2) + 1;
+    unsigned int step = SyncRandGetRange(1, 2) + 1;
     lbl_803EA6D6 = (lbl_803EA6D6 + step) % 6;
     return SndgSfxPlay(lbl_803EA6D6 + 18, pos);
 }
 
 int fn_8007184C(Vector_80039F5C *pos)
 {
-    unsigned int step = fn_802372EC(1, 2) + 1;
+    unsigned int step = SyncRandGetRange(1, 2) + 1;
     lbl_803EA6D7 = (lbl_803EA6D7 + step) % 4;
     return SndgSfxPlay(lbl_803EA6D7 + 24, pos);
 }
@@ -884,7 +884,7 @@ int fn_80071A6C(int id, Vector_80039F5C *pos, unsigned int volume)
 int fn_80071B08(int unused, int value)
 {
     int result = 36;
-    int choice = fn_802372EC(1, 2);
+    int choice = SyncRandGetRange(1, 2);
     switch (value) {
     case 2: case 4: result = choice ? 36 : 38; break;
     case 1: case 10: result = 40; break;

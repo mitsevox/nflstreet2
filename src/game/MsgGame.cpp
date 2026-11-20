@@ -1,6 +1,6 @@
 /* Game-wide front-end message handler: the first handler the message dispatcher tries, it answers the generic message ids that no screen handler took (game setup values, Street Event sides, controllers, profiles, player status and portrait, user text buffers, demo and memory card flags). */
 #include "game/ResLoad.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
@@ -39,7 +39,7 @@ union MsgGameArg_t {
 };
 
 extern "C" {
-int fn_8022F4BC(void);
+int DbUserGetCurrent(void);
 int UserProfileFindIndex(int a);
 int GauntletSetCurrentTeam(int a, int b);
 int fn_8001194C(int a);
@@ -66,7 +66,7 @@ int fn_801D6850(void);
 void GameTextGetEnteredName(char *pText, int length);
 void fn_801410F4(int a);
 void UserProfileDelete(signed char a);
-int fn_8022F358(int index);
+int DbUserGetId(int index);
 void UserProfileSelect(signed char a, int b);
 void UserProfileDeselect(int a);
 unsigned char MemCardScreenGetFlag(void);
@@ -85,7 +85,7 @@ int fn_8000FCDC(void);
 void fn_80011600(int a, int b, int c);
 void UISGameSetInputFlag(unsigned char value);
 int PauseGetValue(void);
-int fn_8022F384(int a);
+int DbUserFindIndex(int a);
 void *UIGLibraryGetGlobal(int index);
 void *UIGLibraryGetResFile(void *p, int a);
 void fn_8000FCD4(int a);
@@ -135,7 +135,7 @@ void MsgGameSetSetup(int a, int b, int c)
     _MsgGame_iSetupId = b;
     _MsgGame_iSetupArg = c;
     if (a == 0 && b == 0x69 && GameModeTypeGet() == 8) {
-        GauntletSetCurrentTeam(UserProfileFindIndex(fn_8022F4BC()), 0x3FF);
+        GauntletSetCurrentTeam(UserProfileFindIndex(DbUserGetCurrent()), 0x3FF);
     }
 }
 
@@ -366,7 +366,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         break;
     case 0x1EF:
         if (pArgs[0].i == -1) {
-            fn_8022F478(fn_8022F358((signed char)pArgs[1].i));
+            DbUserSetCurrent(DbUserGetId((signed char)pArgs[1].i));
         } else {
             UserProfileSelect(pArgs[1].i, pArgs[0].i != 0);
         }
@@ -466,7 +466,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         MsgGameSetFEStarted(pArgs[0].i == 1);
         break;
     case 0x108:
-        pResult->i = fn_8022F384(fn_8022F4BC());
+        pResult->i = DbUserFindIndex(DbUserGetCurrent());
         break;
     case 0x111:
         pResult->i = MsgGameFindActivePort();

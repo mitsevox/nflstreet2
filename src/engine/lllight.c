@@ -4,7 +4,7 @@
 
 #include "engine/Object_80237EE8.h"
 #include "engine/Desc_80238424.h"
-#include "engine/fn_80238680.h"
+#include "engine/EvMonAddListener.h"
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/gx/GXPixel.h>
 #include <dolphin/os/OSCache.h>

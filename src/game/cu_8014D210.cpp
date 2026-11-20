@@ -2,7 +2,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Ball.h"
 #include <string.h>
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 struct Record_8014F104 {
     int mUnknown0;
@@ -206,7 +206,7 @@ void fn_8014D298(int kind, int unused, const char *pText, int value, int addValu
 // Place one player at the center and the other five within the field bounds.
 void PlaceSixPlayerFormation(void)
 {
-    unsigned int first = fn_802372EC(0, 6);
+    unsigned int first = SyncRandGetRange(0, 6);
     float sectorWidth = lbl_802A0DB8[0];
     Object_80039F5C *pPlayer = PlyrGet(1, 0);
     fn_800EFE60(0, pPlayer->mpState, pPlayer);
@@ -224,8 +224,8 @@ void PlaceSixPlayerFormation(void)
         fn_800EFE60(0, pPlayer->mpState, pPlayer);
         PlyrClearPendingMsg(pPlayer, 0);
         unsigned int sector = (i + first) % 6;
-        float radius = fn_802372EC(0, 2) + lbl_802A0DD8[0];
-        float degrees = sector * sectorWidth + fn_802372EC(0, (unsigned int)sectorWidth);
+        float radius = SyncRandGetRange(0, 2) + lbl_802A0DD8[0];
+        float degrees = sector * sectorWidth + SyncRandGetRange(0, (unsigned int)sectorWidth);
         fn_80227538(&pPlayer->mMotion.mPos.mX, (int)(degrees * lbl_802A0DC0[0]), radius);
         pPlayer->mMotion.mPos.mX = pPlayer->mMotion.mPos.mX < -fn_80178A08() ? -fn_80178A08() :
             (pPlayer->mMotion.mPos.mX > fn_80178A08() ? fn_80178A08() : pPlayer->mMotion.mPos.mX);

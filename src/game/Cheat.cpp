@@ -7,8 +7,8 @@
 #include <string.h>
 
 extern "C" {
-int fn_8022F358(int index);
-int fn_8022F3D4(int handle);
+int DbUserGetId(int index);
+int DbUserGetDb(int handle);
 int DbCursorGetValue(DbCursor *pObject, int key);
 }
 
@@ -18,7 +18,7 @@ extern "C" {
 void CheatOpenCursor(DbCursor *pObject, int index)
 {
     DbCursorOpen(pObject, 0x53544843, 0x58494843, 0, 0,
-                fn_8022F3D4(fn_8022F358(index)));
+                DbUserGetDb(DbUserGetId(index)));
 }
 
 int CheatCloseCursor(DbCursor *pObject)
@@ -40,7 +40,7 @@ int CheatCountUnlocked(void)
 {
     int count;
     int status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'STHC' where 'LUHC' = 1\n",
-                             fn_8022F3D4(fn_8022F358(_Cheat_iSlot)), &count);
+                             DbUserGetDb(DbUserGetId(_Cheat_iSlot)), &count);
     if (QUERY_STATUS_ACCEPTED(status) && status != 0x17) return count;
     return 0;
 }
@@ -49,7 +49,7 @@ int CheatAreAllUnlocked(void)
 {
     int count;
     int status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'STHC' where 'LUHC' = 0\n",
-                             fn_8022F3D4(fn_8022F358(_Cheat_iSlot)), &count);
+                             DbUserGetDb(DbUserGetId(_Cheat_iSlot)), &count);
     if (QUERY_STATUS_ACCEPTED(status) && status != 0x17) {
         if (count) return 0;
     }
@@ -60,7 +60,7 @@ int CheatIsNoneEnabled(void)
 {
     int count;
     int status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'STHC' where 'NEHC' = 1 and ( 'XIHC' < \x82 or 'XIHC' > \x82 )\n",
-                             fn_8022F3D4(fn_8022F358(_Cheat_iSlot)), &count, 9, 21);
+                             DbUserGetDb(DbUserGetId(_Cheat_iSlot)), &count, 9, 21);
     if (QUERY_STATUS_ACCEPTED(status) && status != 0x17) {
         if (count) return 0;
     }
@@ -84,7 +84,7 @@ int CheatFindByCode(const char *pCode, int unused, char *pName)
 int CheatGetUnlockedId(int index)
 {
     int found = 0;
-    int handle = fn_8022F3D4(fn_8022F358(_Cheat_iSlot));
+    int handle = DbUserGetDb(DbUserGetId(_Cheat_iSlot));
     QueryCursor cursor;
     int id;
     cursor.mUnknown0 = 0;
@@ -111,7 +111,7 @@ int CheatGetUnlockedInfo(int index, int *pId, char *pName, int count, int *pEnab
     int enabled;
     int marked;
     int found = 0;
-    int handle = fn_8022F3D4(fn_8022F358(_Cheat_iSlot));
+    int handle = DbUserGetDb(DbUserGetId(_Cheat_iSlot));
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;

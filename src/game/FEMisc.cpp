@@ -24,8 +24,8 @@ int GauntletStatsGet(DbCursor *pObject, int index);
 void EditMenuBegin(int mode, int value);
 int EditMenuIsOpen(void);
 int EditMenuGetMode(void);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 
 /* Posts message 0x80000006 with the text when it differs from the last
    text posted. */
@@ -47,7 +47,7 @@ void FEMiscSetHelpText(const char *pText)
 
 int FEMiscIsTeamUnset(void)
 {
-    return GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC())) == 0x3FF;
+    return GauntletGetCurrentTeam(UserProfileFindIndex(DbUserGetCurrent())) == 0x3FF;
 }
 
 /* Reads sixteen values of the current entry; element 6 is the sum of
@@ -57,7 +57,7 @@ void FEMiscGetStats(int *pValues)
     DbCursor object;
     int total;
 
-    GauntletStatsOpen(&object, (signed char)fn_8022F384(fn_8022F4BC()));
+    GauntletStatsOpen(&object, (signed char)DbUserFindIndex(DbUserGetCurrent()));
     pValues[0] = GauntletStatsGet(&object, 0);
     pValues[1] = GauntletStatsGet(&object, 1);
     pValues[2] = GauntletStatsGet(&object, 14);

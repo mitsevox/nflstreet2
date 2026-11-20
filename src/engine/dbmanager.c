@@ -11,7 +11,7 @@
 #include <dolphin/os.h>
 #include <string.h>
 #include "engine/Funcs_802FB3BC.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 #include "game/fn_80233CBC.h"
 #include "game/fn_801FCE10.h"
 #include "engine/texfile.h"
@@ -334,16 +334,16 @@ extern void TMBlendBindModel(void *p);
 extern void TMBlendGeomAll(void);
 extern Range_80216190 *TMSwapGetState(Group_803E96E8 *pGroup, int a, int key);
 extern int TMSwapGetGeomRefs(List_80233BE4 *pList, short *pOut, unsigned int index, int value);
-extern int fn_802293A8(void);
-extern void fn_802293B0(void);
-extern int fn_8022942C(void);
-extern void fn_80229434(void);
-extern int fn_80229554(void);
-extern int fn_802296B4(int a, int b);
-extern void fn_80229718(Funcs_802FB3BC *pFuncs);
-extern void fn_80229744(void);
-extern int fn_80229760(void **ppData, void *p);
-extern int fn_80229788(int a, int b);
+extern int DbOcmtModuleInit(void);
+extern void DbOcmtModuleShutdown(void);
+extern int DbOptionsModuleInit(void);
+extern void DbOptionsModuleShutdown(void);
+extern int DbNiomEndMode(void);
+extern int DbNiomReadOnce(int a, int b);
+extern void DbNiomSetModeFuncs(Funcs_802FB3BC *pFuncs);
+extern void DbNiomClearModeFuncs(void);
+extern int DbNiomModeLoad(void **ppData, void *p);
+extern int DbNiomModeReset(int a, int b);
 extern int fn_802299FC(void);
 extern int fn_80229A70(void);
 extern int fn_80229E88(void);
@@ -368,11 +368,11 @@ extern int fn_8022E484(void);
 extern int fn_8022E9A4(void);
 extern void fn_8022E9C4(void);
 extern int fn_8022E9E4(void);
-extern int fn_8022EA74(void);
-extern void fn_8022EA7C(void);
+extern int DbEvasModuleInit(void);
+extern void DbEvasModuleShutdown(void);
 extern int fn_8022ED50(int a, int b, int c);
-extern signed char fn_8022F384(int key);
-extern int fn_8022F3D4(int key);
+extern signed char DbUserFindIndex(int key);
+extern int DbUserGetDb(int key);
 extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
 extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int f);
 extern void fn_802349CC(void *p);
@@ -532,14 +532,14 @@ void fn_80234DFC(int a, Sprite_80234DFC *pSprite, int c, int d, const char *pNam
 
 
 /* prototypes of the db functions in 0x8022F428-0x802355E4 (dbuser.c to cu_802336C4.c) */
-int fn_8022F428(int key);
-int fn_8022F478(int value);
-int fn_8022F488(int value);
-int fn_8022F4BC(void);
-int fn_8022F4C4(void);
-int fn_8022F53C(int a);
-int fn_8022F744(void);
-int fn_8022F794(int value, char *pName);
+int DbUserFindIdByDb(int key);
+int DbUserSetCurrent(int value);
+int DbUserSelect(int value);
+int DbUserGetCurrent(void);
+int DbUserOpenDatabases(void);
+int DbUserPostLoad(int a);
+int DbUserCloseDatabases(void);
+int DbUserSetName(int value, char *pName);
 unsigned short fn_8022F80C(void);
 Cache_8022F8A8 *fn_8022F858(unsigned short id);
 Cache_8022F8A8 *fn_8022F880(int key);
@@ -665,13 +665,13 @@ int fn_802328A8(void)
 {
     int err;
 
-    if ((err = fn_8022EA74()) != 0) {
+    if ((err = DbEvasModuleInit()) != 0) {
         return err;
     }
-    if ((err = fn_8022942C()) != 0) {
+    if ((err = DbOptionsModuleInit()) != 0) {
         return err;
     }
-    if ((err = fn_802293A8()) != 0) {
+    if ((err = DbOcmtModuleInit()) != 0) {
         return err;
     }
     if ((err = fn_8022E9A4()) != 0) {
@@ -708,9 +708,9 @@ void fn_80232950(void)
     fn_8022B200();
     fn_8022A304();
     fn_8022E9C4();
-    fn_802293B0();
-    fn_80229434();
-    fn_8022EA7C();
+    DbOcmtModuleShutdown();
+    DbOptionsModuleShutdown();
+    DbEvasModuleShutdown();
 }
 
 int fn_80232998(void)
@@ -726,7 +726,7 @@ int fn_802329D0(void)
 int fn_802329F0(struct Request_802329F0 *p)
 {
     int result;
-    fn_802294D8(&lbl_802FB38C);
+    DbNiomSetHandlers(&lbl_802FB38C);
     result = fn_80233588((Block_80233588 *)&p->mSize);
     if (result == 0) {
         result = fn_80232998();
@@ -735,7 +735,7 @@ int fn_802329F0(struct Request_802329F0 *p)
             if (result == 0) {
                 result = fn_80230CEC(1023, 0x54415453, 1, 0x454D4147, 0x04000000, 0);
                 if (result == 0) {
-                    result = fn_802294FC(&p->mMode);
+                    result = DbNiomBeginMode(&p->mMode);
                     if (result == 0) {
                         result = fn_802328A8();
                         if (result == 0) {
@@ -783,8 +783,8 @@ int fn_80232AF8(void **ppData, void *p)
         return err;
     }
     fn_802334F0(mode, &funcs);
-    fn_80229718(&funcs);
-    return fn_80229760(ppData, p);
+    DbNiomSetModeFuncs(&funcs);
+    return DbNiomModeLoad(ppData, p);
 }
 
 int fn_80232B8C(int a, int b)
@@ -847,7 +847,7 @@ int fn_80232B8C(int a, int b)
                 fn_801FCFA0(&cursor);
             }
             if (err == 0) {
-                err = fn_80229788(a, b);
+                err = DbNiomModeReset(a, b);
             }
         }
     }
@@ -856,7 +856,7 @@ int fn_80232B8C(int a, int b)
 
 int fn_80232DE0(void)
 {
-    fn_80229718(&lbl_802FB3BC);
+    DbNiomSetModeFuncs(&lbl_802FB3BC);
     return fn_801FCE10(0, lbl_802B6EE0, 0);
 }
 
@@ -865,7 +865,7 @@ int fn_80232E20(void)
     int err = fn_801FCE10(0, lbl_802B6F00, 0, 4);
 
     if (err == 0) {
-        fn_80229744();
+        DbNiomClearModeFuncs();
     }
     return err;
 }
@@ -897,7 +897,7 @@ int fn_80232EAC(void)
 
 int fn_80232EB4(void)
 {
-    fn_80229718(&lbl_802FB3D0);
+    DbNiomSetModeFuncs(&lbl_802FB3D0);
     return fn_801FCE10(0, lbl_802B6EE0, 1);
 }
 
@@ -906,7 +906,7 @@ int fn_80232EF4(void)
     int err = fn_801FCE10(0, lbl_802B6F00, 1, 4);
 
     if (err == 0) {
-        fn_80229744();
+        DbNiomClearModeFuncs();
     }
     return err;
 }
@@ -933,7 +933,7 @@ int fn_80232F74(void)
 
     if (err == 0) {
         if (mode == 4) {
-            err = fn_80229554();
+            err = DbNiomEndMode();
         } else {
             err = fn_80232EF4();
             if (err == 0) {
@@ -953,7 +953,7 @@ int fn_80232FD4(int *pRecord0, int *pRecord1)
     unsigned int i;
     int err;
 
-    fn_80229718(&lbl_802FB3E4);
+    DbNiomSetModeFuncs(&lbl_802FB3E4);
     err = fn_801FCE10(0, lbl_802B6F54, &flag);
     if (err == 0) {
         if (flag == 0) {
@@ -961,7 +961,7 @@ int fn_80232FD4(int *pRecord0, int *pRecord1)
             if (err == 0) {
                 err = fn_8022C410(0x04000000);
                 if (err == 0) {
-                    err = fn_802296B4(0x07000000, 0x03000000);
+                    err = DbNiomReadOnce(0x07000000, 0x03000000);
                     if (err == 0) {
                         err = fn_8022E9E4();
                     }
@@ -1026,7 +1026,7 @@ int fn_802331BC(void)
         if (err == 0) {
             err = fn_801FCE10(0, lbl_802B6F00, 2, 4);
             if (err == 0) {
-                fn_80229744();
+                DbNiomClearModeFuncs();
             }
         }
     }

@@ -17,7 +17,7 @@
 #include "game/GameModeType.h"
 #include <string.h>
 #include <string.h>
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 /* Four bytes copied as one word from lbl_802CFB1C and passed by value. */
 struct PlayerLookColors_t {
@@ -125,9 +125,9 @@ extern "C" void PlayerLookRandomizeGear(int index)
     fn_8007BA88(&cursor, 1);
     c = DbCursorGetRowCount(&cursor);
     fn_8007BB04(&cursor);
-    int x = fn_802372EC(0, a - 1) + 1;
-    int y = fn_802372EC(0, b);
-    int z = fn_802372EC(0, c - 1) + 1;
+    int x = SyncRandGetRange(0, a - 1) + 1;
+    int y = SyncRandGetRange(0, b);
+    int z = SyncRandGetRange(0, c - 1) + 1;
     gPlayerLooks[index].mInfo.mValues[12] = x;
     gPlayerLooks[index].mInfo.mValues[13] = y;
     gPlayerLooks[index].mInfo.mValues[1] = z;

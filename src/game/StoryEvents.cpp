@@ -19,7 +19,7 @@
 #include "game/GameOptions.h"
 #include "game/fn_801FCE10.h"
 
-/* Index returned by fn_8022F384 and values read for it by fn_8005D6EC. */
+/* Index returned by DbUserFindIndex and values read for it by fn_8005D6EC. */
 struct State_802D4D40 {
     signed char mIndex;
     signed char mUnknown1;
@@ -157,10 +157,10 @@ int MemFill(void *pDest, int size, int value, int width);
 int fn_801F967C(int handle, int table);
 int fn_801F9980(int handle, int *pTable);
 int fn_801F9D70(int handle, int table, DbFilter *pFilter, unsigned short *pCount);
-int fn_8022F358(int index);
-int fn_8022F3D4(int a);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserGetId(int index);
+int DbUserGetDb(int a);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 void fn_8005BE54(unsigned char value);
 void fn_80061ADC(void);
 void fn_80061AE8(void);
@@ -224,7 +224,7 @@ void fn_8005D60C(void)
 
 void fn_8005D660(void)
 {
-    lbl_802D4D40.mIndex = fn_8022F384(fn_8022F4BC());
+    lbl_802D4D40.mIndex = DbUserFindIndex(DbUserGetCurrent());
     lbl_803EA5CC = &lbl_8030A0E4;
     fn_8008044C(&lbl_8030A0E4, 0, 0x54415453);
     StevOpen();
@@ -755,7 +755,7 @@ void fn_8005E7E4(void)
     int credits = lbl_803EA5C8->mCswr;
     lbl_802D4D40.mUnknown18 = credits;
     UserStatsSet(lbl_803EA5D0, 14, base + credits);
-    UserInfoAddPoints(fn_8022F358(lbl_802D4D40.mIndex), lbl_803EA5C8->mCswr);
+    UserInfoAddPoints(DbUserGetId(lbl_802D4D40.mIndex), lbl_803EA5C8->mCswr);
     lbl_8030A2AC.mDone[lbl_803EA5C8->mDive] = StoryAreGroupEventsCompleted(lbl_802D4D40.mIndex, lbl_803EA5C8->mDive);
     fn_8005D6EC();
 }
@@ -997,7 +997,7 @@ void fn_8005EEC4(int *pState, int *pScreen)
             if (lbl_803EA5C8->mItes == 0 || lbl_803EA5C8->mItes == 1) {
                 lbl_802D4D40.mUnknown20 = 2;
                 count = 0;
-                fn_801F9D70(fn_8022F3D4(fn_8022F358(lbl_802D4D40.mIndex)), 0x59505453, 0, &count);
+                fn_801F9D70(DbUserGetDb(DbUserGetId(lbl_802D4D40.mIndex)), 0x59505453, 0, &count);
                 if (count == 4) {
                     lbl_803EA5E4 = 1;
                 }
@@ -1286,7 +1286,7 @@ void fn_8005F900(int *pHome)
 
 int fn_8005F910(void)
 {
-    return StoryIsNew(fn_8022F384(fn_8022F4BC()));
+    return StoryIsNew(DbUserFindIndex(DbUserGetCurrent()));
 }
 
 int fn_8005F938(unsigned int id, int *pArgs, int unused, int *pResult)

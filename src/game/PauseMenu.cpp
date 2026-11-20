@@ -11,7 +11,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_80218FC4.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/InGame.h"
 #include "game/PreSnapPhase.h"
 
@@ -240,7 +240,7 @@ void PauseCameraStart(void)
         params.mUnknown0 = 4;
         break;
     }
-    params.mUnknown28 = fn_802372EC(1, 3);
+    params.mUnknown28 = SyncRandGetRange(1, 3);
     params.mUnknown20 = 2;
     params.mUnknown24 = 0;
     if (_Pause_State.mPair.mHigh != 7 && ScreenTransGetMode() != 5 && !fn_8002D0AC(lbl_803EA368)

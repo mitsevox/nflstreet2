@@ -9,7 +9,7 @@
 #include "game/LevelData.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802270D4.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include <string.h>
 
 extern "C" {
@@ -102,7 +102,7 @@ static void _FieldMarkerUpdateBeams(float dt)
 static void _FieldMarkerPlaceArrow(FieldMarkerArrow_t *pArrow)
 {
     Vector_80039F5C side, across, toSecond, toThird, toFourth, point;
-    LevelQuad_t *pQuad = (LevelQuad_t *)gLevelData->mUnknown124 + fn_802372EC(1, gLevelData->mUnknown120);
+    LevelQuad_t *pQuad = (LevelQuad_t *)gLevelData->mUnknown124 + SyncRandGetRange(1, gLevelData->mUnknown120);
     float u = SyncRandGetFloat(1);
     float v = SyncRandGetFloat(1);
 

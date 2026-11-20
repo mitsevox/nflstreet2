@@ -22,7 +22,7 @@
 #include "game/fn_80227638.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_800F06F4.h"
@@ -806,7 +806,7 @@ extern "C" int CarrierRunTryJuke(Object_80039F5C *p, Object_80039F5C *, float di
     } else {
         chance = 0;
     }
-    if (chance && fn_802372EC(0, 100) < chance) {
+    if (chance && SyncRandGetRange(0, 100) < chance) {
         if (!(fn_80178A68(&p->mMotion.mPos) >= 5.0f)) {
             if (fn_800F22D8(p, kind, side, 4)) {
                 return 1;
@@ -822,7 +822,7 @@ extern "C" int CarrierRunTrySpinOffBlock(Object_80039F5C *p, Object_80039F5C *pO
 {
     Object_800B26B0 *pMotion = &p->mMotion;
 
-    if (fn_8011E9B4(pOther) && fn_802372EC(0, 100) < (unsigned int)(p->mRatings[0] >> 3 & 0x7FFFFFFF)) {
+    if (fn_8011E9B4(pOther) && SyncRandGetRange(0, 100) < (unsigned int)(p->mRatings[0] >> 3 & 0x7FFFFFFF)) {
         Point_8017886C delta;
         int direction;
 
@@ -893,7 +893,7 @@ extern "C" int CarrierRunTrySpin(Object_80039F5C *p, Object_80039F5C *pOther, fl
                     side = 1;
                 }
             }
-            if (kind != 1 && fn_802372EC(0, 100) < ((unsigned int)(pRatings[0] >> 3) & 0x7FFFFFFF)
+            if (kind != 1 && SyncRandGetRange(0, 100) < ((unsigned int)(pRatings[0] >> 3) & 0x7FFFFFFF)
                 && fn_80110824(p, kind, side, fn_80110EB0(p, pOther))) {
                 return 1;
             }
@@ -949,7 +949,7 @@ extern "C" int CarrierRunTryDive(Object_80039F5C *p, Object_80039F5C *pOther, fl
                 && !(fn_80178A08() - fabsf(p->mMotion.mPos.mX) >= 4.0f)) {
                 chance = chance * 3 >> 1;
             }
-            if (fn_802372EC(0, 100) < chance && fn_800E815C(p, 2, fn_800E885C(p))) {
+            if (SyncRandGetRange(0, 100) < chance && fn_800E815C(p, 2, fn_800E885C(p))) {
                 StyleTrackerOnStyleFirstDown();
                 return 1;
             }
@@ -990,7 +990,7 @@ extern "C" int CarrierRunTryStiffArm(Object_80039F5C *p, Object_80039F5C *pOther
                     chance = 0;
                 }
             }
-            if (fn_802372EC(0, 100) < (unsigned int)chance && fn_80111090(p, side)) {
+            if (SyncRandGetRange(0, 100) < (unsigned int)chance && fn_80111090(p, side)) {
                 return 1;
             }
         }
@@ -1408,7 +1408,7 @@ extern "C" void CarrierRunResetControl(Object_80039F5C *p, OptionRunControl_t *p
     pControl->mUnknown56.mUnknown5 = 0;
     if (fn_801486A0() == 0) {
         if (!(p->mFlags & 0x400)) {
-            unsigned char roll = fn_802372EC(0, 100);
+            unsigned char roll = SyncRandGetRange(0, 100);
 
             if ((fn_800ABDA4(1) == 0 && roll > 80) || (fn_800ABDA4(1) == 1 && roll > 40)
                 || (fn_800ABDA4(1) == 2 && roll != 0)) {

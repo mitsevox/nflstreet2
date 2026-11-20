@@ -8,7 +8,7 @@
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
 #include "game/AudmonEvent.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/Object_80039F5C.h"
 #include "game/PostPlayPhase.h"
 #include "game/Point2.h"
@@ -211,7 +211,7 @@ int fn_8016E764(void);
 int fn_801787DC(int team);
 int fn_80178AE0(void);
 int fn_80178C24(void);
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 void ClockRuleSetFlags(unsigned int mask);
 unsigned int ClockRuleTestFlags(unsigned int mask);
 void ClockRuleClearFlags(unsigned int mask);
@@ -1104,7 +1104,7 @@ void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler)
             fn_800ACE90(p, &chance);
             chance = chance > 95 ? 95 : chance;
         }
-        if (forced || fn_802372EC(0, 100) < chance) {
+        if (forced || SyncRandGetRange(0, 100) < chance) {
             Record_8011F4F8 *pRequest;
 
             state = BallStateGetPrev(pBall, &unknown);
@@ -1716,8 +1716,8 @@ void ClockRuleInit(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&_ClockRule_puFlags, sizeof(*_ClockRule_puFlags), 0, 0x636C6B72);
 
-    fn_8023816C(pHandle);
-    fn_802381E0(pHandle);
+    SyncStateGetData(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 void ClockRuleShutdown(void)

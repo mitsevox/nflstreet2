@@ -23,7 +23,7 @@
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 /* Pick state allocated by MsgTeamPickAllocState (0x1C bytes) and freed by
    MsgTeamPickFreeState: mCount pick lists of mSize player ids, with a pick
@@ -153,8 +153,8 @@ void fn_8022DCE4(int a);
 void fn_8022DD18(int a);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 
 TeamPickState_t *_MsgTeamPick_pState = 0;
 TeamPickPlayer_t *_MsgTeamPick_pPool = 0;
@@ -264,7 +264,7 @@ int MsgTeamPickGetPlayerGroup(int index)
 
 int MsgTeamPickRandomDepthValue(void)
 {
-    return fn_802372EC(0, 5);
+    return SyncRandGetRange(0, 5);
 }
 
 TeamPickPlayer_t *MsgTeamPickFindPlayer(int id, int *pIndex)
@@ -319,7 +319,7 @@ int MsgTeamPickFillGroupQuotas(int teamId)
         fn_80080874(2);
     }
     while (n < _MsgTeamPick_iPoolCount && n < total) {
-        i = fn_802372EC(0, 7);
+        i = SyncRandGetRange(0, 7);
         if (counts[i] > used[i]) {
             fn_8008058C(&id, &pos, &value, _MsgTeamPick_aaiGroupPositions[i][0], _MsgTeamPick_aaiGroupPositions[i][1], _MsgTeamPick_aaiGroupPositions[i][2], 2);
             fn_8008082C(used[i], 2);
@@ -380,11 +380,11 @@ int MsgTeamPickFillRandomGroups(int n, int teamId, float scale)
         }
         for (int k = 0; k < max && n < _MsgTeamPick_iPoolCount; k++, n++) {
             int pick;
-            int second = (fn_802372EC(0, 6) && count1) ? 1 : 0;
+            int second = (SyncRandGetRange(0, 6) && count1) ? 1 : 0;
             if (second == 1) {
-                pick = count0 + fn_802372EC(0, count1);
+                pick = count0 + SyncRandGetRange(0, count1);
             } else {
-                pick = fn_802372EC(0, count0);
+                pick = SyncRandGetRange(0, count0);
             }
             for (;;) {
                 int found = 0;
@@ -479,7 +479,7 @@ int MsgTeamPickFillRemaining(int start, int teamId, float scale)
             }
             seq++;
         } else {
-            pick = fn_802372EC(0, range);
+            pick = SyncRandGetRange(0, range);
             if (pick < total) {
                 for (;;) {
                     int taken = 0;
@@ -487,7 +487,7 @@ int MsgTeamPickFillRemaining(int start, int teamId, float scale)
                         fn_8008082C(pick, 0);
                         fn_8008079C(0);
                     } else if (pick < count0 + count1) {
-                        fn_8008082C(fn_802372EC(0, 11), 1);
+                        fn_8008082C(SyncRandGetRange(0, 11), 1);
                         fn_8008079C(1);
                         if (fn_800827EC(id, team)) taken = 1;
                     }
@@ -513,7 +513,7 @@ int MsgTeamPickFillRemaining(int start, int teamId, float scale)
         } else if (_MsgTeamPick_abSources[2]) {
             range--;
             int group = (pos + 1) % 7;
-            int index = fn_802372EC(0, _MsgTeamPick_aiGroupSize[group]);
+            int index = SyncRandGetRange(0, _MsgTeamPick_aiGroupSize[group]);
             pos = _MsgTeamPick_aaiGroupPositions[group][index];
             _MsgTeamPick_pPool[n].mUnknownC = pos;
             MsgTeamPickCreatePlayer(&_MsgTeamPick_pPool[n], pos, scale, teamId);
@@ -546,7 +546,7 @@ int MsgTeamPickBuildTournamentPool(void)
     int i;
     unsigned int j;
 
-    index = fn_8022F384(fn_8022F4BC());
+    index = DbUserFindIndex(DbUserGetCurrent());
     digt = StoryTeamLoadOneToStats(index, 1, (StoryTeamIdBlock_t *)ids);
     if (PlayerDbSeekId(&_MsgTeamPick_PlayerCursor, ids[0], 0)) {
         DbCursorSetInt(&_MsgTeamPick_PlayerCursor, 0x44494F50, ids[0]);
@@ -618,7 +618,7 @@ int MsgTeamPickAddEventPlayer(void)
     int valueC;
     int ok = 0;
 
-    index = fn_8022F384(fn_8022F4BC());
+    index = DbUserFindIndex(DbUserGetCurrent());
     digt = StoryTeamLoadOneToStats(index, 1, &ids);
     if (PlayerDbSeekId(&_MsgTeamPick_PlayerCursor, ids.mUnknown0, 0)) {
         DbCursorSetInt(&_MsgTeamPick_PlayerCursor, 0x44494F50, ids.mUnknown0);
@@ -1081,7 +1081,7 @@ void MsgTeamPickInitSixCaptains(void)
     }
     if (!GameModeTypeIsSpecial()) {
         for (i = 0; i < 6; i++) {
-            unsigned char j = i + fn_802372EC(0, 6 - i);
+            unsigned char j = i + SyncRandGetRange(0, 6 - i);
             unsigned char id = _MsgTeamPick_pState->mpUnknown08[i];
 
             _MsgTeamPick_pState->mpUnknown08[i] = _MsgTeamPick_pState->mpUnknown08[j];
@@ -1160,7 +1160,7 @@ void MsgTeamPickInitSevenCaptains(void)
     }
     if (!GameModeTypeIsSpecial()) {
         for (i = 0; i < 4; i++) {
-            unsigned char j = i + fn_802372EC(0, 4 - i);
+            unsigned char j = i + SyncRandGetRange(0, 4 - i);
             unsigned char id = _MsgTeamPick_pState->mpUnknown08[i];
 
             _MsgTeamPick_pState->mpUnknown08[i] = _MsgTeamPick_pState->mpUnknown08[j];

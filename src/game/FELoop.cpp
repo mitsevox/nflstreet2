@@ -71,9 +71,9 @@ void fn_801D6F58(void);
 void ResTrackLabel(const char *pText);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-int fn_802294F4(void);
-int fn_80229554(void);
-void fn_802297B0(void);
+int DbNiomIsModeActive(void);
+int DbNiomEndMode(void);
+void DbNiomModeResume(void);
 int fn_80232FD4(DepthChartSide_t *pRecord0, DepthChartSide_t *pRecord1);
 }
 
@@ -348,10 +348,10 @@ int FELoop::Init()
     GameTextReset();
     if (_FELoop_bResume == 1) {
         if (_FELoop_uResumeMode != 3) {
-            fn_802297B0();
+            DbNiomModeResume();
         }
-    } else if (fn_802294F4() == 1) {
-        fn_802297B0();
+    } else if (DbNiomIsModeActive() == 1) {
+        DbNiomModeResume();
         FELoopRefreshModeType();
     }
     _FELoop_uModeType = GameModeTypeGet();
@@ -436,11 +436,11 @@ void FELoopSetResumeMode(unsigned char value)
 void FELoopRefreshModeType()
 {
     FELoopSetResume(0);
-    if (fn_802294F4() == 1) {
+    if (DbNiomIsModeActive() == 1) {
         if (GameInfoIsInitialized()) {
             GameInfoShutdown();
         }
-        fn_80229554();
+        DbNiomEndMode();
     }
     _FELoop_uModeType = GameModeTypeGet();
 }

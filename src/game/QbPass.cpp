@@ -56,7 +56,7 @@ Object_80039F5C *BallGetCurrentHolder(void);
 void QbPassResetTarget(Object_80039F5C *);
 void fn_800D7A0C(Object_80039F5C *, int);
 unsigned char PlayBookGetReceiver(int, unsigned char, unsigned char *);
-unsigned int fn_802372EC(unsigned int, unsigned int);
+unsigned int SyncRandGetRange(unsigned int, unsigned int);
 int fn_80178320(void);
 int fn_800AD9B4(void);
 int PassIconsAreShown(void);
@@ -172,7 +172,7 @@ int QbPassPickRandomReceiver(Object_80039F5C *p, PlyrModeState_t *s,
         if (!(SyncRandGetFloat(0) <= threshold)) {
             *out = 0;
             do {
-                unsigned int n = fn_802372EC(0, 3);
+                unsigned int n = SyncRandGetRange(0, 3);
                 if (indexes[n] != 255 && s->mUnknown30[n]) {
                     *out = PlyrGet(p->mIdBytes[2], indexes[n]);
                     *choice = s->mUnknown23[n];
@@ -315,7 +315,7 @@ int QbPassEnter(Object_80039F5C *player) {
         float rating = (float)(player->mRatings[4] + player->mRatings[0]) * 0.5f;
         rating *= 0.0039215689f;
         state->mUnknown1B = (int)(rating * 29.0f);
-        if (fn_802372EC(0, 31) <= state->mUnknown1B)
+        if (SyncRandGetRange(0, 31) <= state->mUnknown1B)
             state->mUnknown1C = 29;
         else
             state->mUnknown1C = 0;
@@ -378,7 +378,7 @@ int QbPassUpdate(Object_80039F5C *player) {
             int limit = 255 - player->mRatings[6];
             if (limit < 0)
                 limit = 0;
-            state->mUnknown0 = state->mUnknown0 + fn_802372EC(0, (limit >> 5) + 1) + 3;
+            state->mUnknown0 = state->mUnknown0 + SyncRandGetRange(0, (limit >> 5) + 1) + 3;
             if (player->mUnknown2914)
                 state->mUnknown0 *= 2;
             int value = 0;
@@ -435,7 +435,7 @@ int QbPassUpdate(Object_80039F5C *player) {
                     indices[i] = PlayBookGetReceiver(player->mIdBytes[2], i, 0);
                     total += state->mUnknown2D[i];
                 }
-                total = fn_802372EC(0, total);
+                total = SyncRandGetRange(0, total);
                 if (!state->mUnknown28) {
                     for (i = 0; i < 3; ++i) {
                         total -= state->mUnknown2D[i];
@@ -606,7 +606,7 @@ void QbPassResetTarget(Object_80039F5C *p)
     s->mUnknown2C = -1;
     for (unsigned int i = 3; i != 0; --i)
         s->mUnknown1D[i - 1] = 2;
-    s->mUnknown4 = fn_802372EC(0, 255 - p->mRatings[4]);
+    s->mUnknown4 = SyncRandGetRange(0, 255 - p->mRatings[4]);
 }
 
 int QbPassHoldOrRun(Object_80039F5C *p, float *values, float *costs, unsigned char *choices)
@@ -630,7 +630,7 @@ int QbPassHoldOrRun(Object_80039F5C *p, float *values, float *costs, unsigned ch
             selection = i;
         }
     }
-    if (!fn_802372EC(0, 85) && !(s->mUnknown14 < 2.0f) && !(s->mUnknown14 > 3.0f)) {
+    if (!SyncRandGetRange(0, 85) && !(s->mUnknown14 < 2.0f) && !(s->mUnknown14 > 3.0f)) {
         fn_801024FC(p, 4, choices[selection], 12, 0);
         return 1;
     }

@@ -27,8 +27,8 @@ void PassIconStateStart(void)
 {
     void *pHandle = SyncStateRegister(0, &_PassIconState_pFlags, 4, 0, 0x67696E74);
 
-    fn_80238234(pHandle, PassIconStateBlockInit, PassIconStateBlockShutdown, 0, PassIconStateBlockCompare);
-    fn_802381E0(pHandle);
+    SyncStateSetCallbacks(pHandle, PassIconStateBlockInit, PassIconStateBlockShutdown, 0, PassIconStateBlockCompare);
+    SyncStateCommit(pHandle);
 }
 
 void *PassIconStateGetFlags(int value)

@@ -5,7 +5,7 @@
    to the next phase, chosen by the game period. */
 
 #include "game/ScreenTransition.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/SyncStateRegister.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80096A58.h"
@@ -86,7 +86,7 @@ void CoinTossApplyResultSwapped(void);
 int ResSync(int a);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 void fn_8021956C(void *p, int a, int b, int c);
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 }
 
 static QuarterEndState_t *_QuarterEnd_pState = 0;
@@ -170,7 +170,7 @@ void QuarterEndLoadClip(int a, void *pBuffer, int size)
     memset(&params, 0, sizeof(params));
     params.mUnknown0 = a;
     params.mUnknown8 = 36;
-    index = fn_802372EC(0, 3);
+    index = SyncRandGetRange(0, 3);
     params.mUnknownE0.mUnknown0 = 1;
     params.mUnknownE0.mUnknown4.mWord = _QuarterEnd_aClipVariants[index].mUnknown0;
     params.mUnknownE0.mUnknown8.mWord = _QuarterEnd_aClipVariants[index].mUnknown4;
@@ -332,7 +332,7 @@ void QuarterEndStartVenueEffect(void)
         params.mUnknown0 = 5;
         break;
     }
-    params.mUnknown28 = fn_802372EC(1, 2);
+    params.mUnknown28 = SyncRandGetRange(1, 2);
     params.mUnknown20 = 2;
     params.mUnknown24 = 0;
     params.mUnknown12 |= 0x10;
@@ -346,8 +346,8 @@ void QuarterEndPhase::InitState()
 {
     void *pHandle = SyncStateRegister(0, (void **)&_QuarterEnd_pState, sizeof(QuarterEndState_t), 0, 0x71656E64);
 
-    fn_8023816C(pHandle);
-    fn_802381E0(pHandle);
+    SyncStateGetData(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 void QuarterEndPhase::OnEnter()

@@ -2,7 +2,7 @@
 #include "game/QueryStatus.h"
 
 extern "C" {
-int fn_8022F3D4(int handle);
+int DbUserGetDb(int handle);
 int fn_801F9980(int handle, int *pTable);
 int fn_801F967C(int handle, int table);
 int fn_801F9014(int handle);
@@ -12,7 +12,7 @@ int TournamentGetTeamList(int *pList);
 void fn_8018C344(int database, int firstTable, int secondTable,
                 int *pFirstCopy, int *pSecondCopy)
 {
-    int source = fn_8022F3D4(database);
+    int source = DbUserGetDb(database);
     fn_801F9980(0x54415453, pFirstCopy);
     fn_801FCE10(0, "use \x8c select into \x8c.\x8c * from \x8c\n", source, 0x54415453, *pFirstCopy, firstTable);
     fn_801F9980(0x54415453, pSecondCopy);

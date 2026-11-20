@@ -4,7 +4,7 @@
 #include "game/InGame.h"
 
 extern "C" {
-int fn_802294F4(void);
+int DbNiomIsModeActive(void);
 }
 
 static int _GameModeType_iCached = 99;
@@ -14,7 +14,7 @@ unsigned int GameModeTypeGet(void)
 {
     int value = 99;
 
-    if (fn_802294F4() != 0) {
+    if (DbNiomIsModeActive() != 0) {
         int cached = _GameModeType_iCached;
 
         if (cached == 99) {

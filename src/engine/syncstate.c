@@ -5,7 +5,7 @@
 
 #include "engine/Object_80237EE8.h"
 #include "engine/Desc_80238424.h"
-#include "engine/fn_80238680.h"
+#include "engine/EvMonAddListener.h"
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/gx/GXPixel.h>
 #include <dolphin/os/OSCache.h>
@@ -25,7 +25,7 @@ typedef struct Chunk_80237D5C {
     unsigned int mWords[4];
 } Chunk_80237D5C;
 
-void fn_80237D5C(void *pDst, const void *pSrc, unsigned int size);
+void SyncStateCopy(void *pDst, const void *pSrc, unsigned int size);
 typedef struct Handle_80237A40 {
     void **mppUnknown0;
     int mUnknown4;
@@ -53,16 +53,16 @@ typedef struct Config_80237EE8 {
 } Config_80237EE8;
 
 extern Config_80237EE8 lbl_803A39FC;
-void fn_80237B84(Object_80237EE8 *p);
-void fn_80238034(Object_80237EE8 *p);
+void SyncStateRestoreGroup(Object_80237EE8 *p);
+void SyncStateNotifyGroup(Object_80237EE8 *p);
 extern DSList_t *lbl_803ED030;
 extern void fn_801D277C(int ident);
 extern char *fn_801D27B8(int ident);
 extern void fn_801D2130(void *pConfig);
 extern void fn_801D2570(int ident);
-void fn_80237C0C(Object_80237EE8 *p);
-void fn_80237FF4(Object_80237EE8 *p);
-Object_80237EE8 *fn_80237E9C(int key);
+void SyncStateDetachGroup(Object_80237EE8 *p);
+void SyncStateFreeCopy(Object_80237EE8 *p);
+Object_80237EE8 *SyncStateFindGroup(int key);
 Handle_80237A40 *SyncStateNewHandle(Object_80237EE8 *pGroup, void **ppData, int size, int a, unsigned int id);
 typedef struct Counter_80237934 {
     int mUnknown0;
@@ -71,9 +71,9 @@ typedef struct Counter_80237934 {
     int mUnknown12;
 } Counter_80237934;
 
-extern void *fn_8023816C(void *pHandle);
+extern void *SyncStateGetData(void *pHandle);
 
-int fn_80237A30(Counter_80237934 *pA, Counter_80237934 *pB)
+int SyncStateCompareHandles(Counter_80237934 *pA, Counter_80237934 *pB)
 {
     return pB->mUnknown8 - pA->mUnknown8;
 }
@@ -93,61 +93,61 @@ Handle_80237A40 *SyncStateNewHandle(Object_80237EE8 *pGroup, void **ppData, int 
     return p;
 }
 
-void fn_80237ADC(Handle_80237A40 *p)
+void SyncStateAttachHandle(Handle_80237A40 *p)
 {
     *p->mppUnknown0 = p->mpUnknown44;
 }
 
-void fn_80237AEC(Handle_80237A40 *p)
+void SyncStateDetachHandle(Handle_80237A40 *p)
 {
     *p->mppUnknown0 = 0;
 }
 
-void fn_80237AFC(Handle_80237A40 *p)
+void SyncStateNotifyHandle(Handle_80237A40 *p)
 {
     if (p->mpUnknown24 != 0) {
         p->mpUnknown24(p->mpUnknown44, 0);
     }
 }
 
-void fn_80237B34(Handle_80237A40 *p)
+void SyncStateDelHandle(Handle_80237A40 *p)
 {
-    fn_80237AEC(p);
+    SyncStateDetachHandle(p);
     if (p->mpUnknown20 != 0) {
         p->mpUnknown20(p->mpUnknown44, 0);
     }
     fn_801D2BD0(p->mpUnknown44);
 }
 
-void fn_80237B84(Object_80237EE8 *p)
+void SyncStateRestoreGroup(Object_80237EE8 *p)
 {
     Handle_80237A40 *pItem;
     if (p->mpUnknown24 != 0) {
-        fn_80237D5C(fn_801D27B8(p->mUnknown16), p->mpUnknown24, p->mUnknown12);
+        SyncStateCopy(fn_801D27B8(p->mUnknown16), p->mpUnknown24, p->mUnknown12);
     }
     pItem = DSGetListNode(p->mpUnknown20, 0);
     while (pItem != 0) {
-        fn_80237ADC(pItem);
+        SyncStateAttachHandle(pItem);
         pItem = DSNextListNode(p->mpUnknown20, pItem);
     }
     p->mUnknown4 = 2;
-    fn_80238034(p);
+    SyncStateNotifyGroup(p);
 }
 
-void fn_80237C0C(Object_80237EE8 *p)
+void SyncStateDetachGroup(Object_80237EE8 *p)
 {
     Handle_80237A40 *pItem;
     if (p->mUnknown4 != 1) {
         pItem = DSGetListNode(p->mpUnknown20, 0);
         while (pItem != 0) {
-            fn_80237AEC(pItem);
+            SyncStateDetachHandle(pItem);
             pItem = DSNextListNode(p->mpUnknown20, pItem);
         }
         p->mUnknown4 = 1;
     }
 }
 
-int fn_80237C78(void *p, void *pKey, void *pOut)
+int SyncStateMatchGroup(void *p, void *pKey, void *pOut)
 {
     Object_80237EE8 *pGroup = p;
     int *pValue = pKey;
@@ -159,7 +159,7 @@ int fn_80237C78(void *p, void *pKey, void *pOut)
     return -1;
 }
 
-Object_80237EE8 *fn_80237CB0(int key, int a, int b, int c)
+Object_80237EE8 *SyncStateAddGroup(int key, int a, int b, int c)
 {
     Object_80237EE8 *p = DSNewListNode(lbl_803ED030);
     p->mUnknown0 = key;
@@ -172,13 +172,13 @@ Object_80237EE8 *fn_80237CB0(int key, int a, int b, int c)
     return p;
 }
 
-void fn_80237D24(Object_80237EE8 *p)
+void SyncStateRemoveGroup(Object_80237EE8 *p)
 {
-    fn_80237FF4(p);
+    SyncStateFreeCopy(p);
     DSDelListNode(lbl_803ED030, p);
 }
 
-void fn_80237D5C(void *pDst, const void *pSrc, unsigned int size)
+void SyncStateCopy(void *pDst, const void *pSrc, unsigned int size)
 {
     while (size >= 64) {
         ((Chunk_80237D5C *)pDst)[0] = ((const Chunk_80237D5C *)pSrc)[0];
@@ -194,52 +194,52 @@ void fn_80237D5C(void *pDst, const void *pSrc, unsigned int size)
     __builtin_memcpy(pDst, pSrc, size);
 }
 
-void fn_80237E3C(int count)
+void SyncStateInit(int count)
 {
     lbl_803ED030 = DSNewList(1, 0, count, sizeof(Object_80237EE8), 0, 0);
 }
 
-int fn_80237E78(void)
+int SyncStateShutdown(void)
 {
     return DSDelList(lbl_803ED030);
 }
 
-Object_80237EE8 *fn_80237E9C(int key)
+Object_80237EE8 *SyncStateFindGroup(int key)
 {
     Object_80237EE8 *pResult;
-    if (DSSearchList(lbl_803ED030, 0, &key, &pResult, fn_80237C78) == 2) {
+    if (DSSearchList(lbl_803ED030, 0, &key, &pResult, SyncStateMatchGroup) == 2) {
         return pResult;
     }
     return 0;
 }
 
-Object_80237EE8 *fn_80237EE8(int key, int count, int size, Config_80237EE8 *pConfig)
+Object_80237EE8 *SyncStateNewGroup(int key, int count, int size, Config_80237EE8 *pConfig)
 {
     Object_80237EE8 *p;
 
     lbl_803A39FC = *pConfig;
     fn_801D2130(&lbl_803A39FC);
-    p = fn_80237CB0(key, count, size, lbl_803A39FC.mUnknown8);
+    p = SyncStateAddGroup(key, count, size, lbl_803A39FC.mUnknown8);
     p->mpUnknown20 = DSNewList(lbl_803A39FC.mUnknown8, 0, count, sizeof(Handle_80237A40),
-                                 (int (*)(void *, void *))fn_80237A30, 0);
+                                 (int (*)(void *, void *))SyncStateCompareHandles, 0);
     return p;
 }
 
-void fn_80237F98(Object_80237EE8 *p)
+void SyncStateOpenGroup(Object_80237EE8 *p)
 {
     p->mUnknown4 = 0;
 }
 
-void fn_80237FA4(Object_80237EE8 *p)
+void SyncStateSaveGroup(Object_80237EE8 *p)
 {
     char *pData = fn_801D27B8(p->mUnknown16);
     if (p->mpUnknown24 != 0) {
-        fn_80237D5C(p->mpUnknown24, pData, p->mUnknown12);
+        SyncStateCopy(p->mpUnknown24, pData, p->mUnknown12);
     }
-    fn_80237C0C(p);
+    SyncStateDetachGroup(p);
 }
 
-void fn_80237FF4(Object_80237EE8 *p)
+void SyncStateFreeCopy(Object_80237EE8 *p)
 {
     if (p->mpUnknown24 != 0) {
         fn_801D2BD0(p->mpUnknown24);
@@ -247,16 +247,16 @@ void fn_80237FF4(Object_80237EE8 *p)
     }
 }
 
-void fn_80238034(Object_80237EE8 *p)
+void SyncStateNotifyGroup(Object_80237EE8 *p)
 {
     Handle_80237A40 *pItem = DSGetListNode(p->mpUnknown20, 0);
     while (pItem != 0) {
-        fn_80237AFC(pItem);
+        SyncStateNotifyHandle(pItem);
         pItem = DSNextListNode(p->mpUnknown20, pItem);
     }
 }
 
-void fn_8023808C(Object_80237EE8 *p)
+void SyncStateDelGroup(Object_80237EE8 *p)
 {
     Handle_80237A40 *pItem;
     Handle_80237A40 *pNext;
@@ -264,7 +264,7 @@ void fn_8023808C(Object_80237EE8 *p)
     fn_801D277C(p->mUnknown16);
     pItem = DSGetListNode(p->mpUnknown20, 0);
     while (pItem != 0) {
-        fn_80237B34(pItem);
+        SyncStateDelHandle(pItem);
         pNext = DSNextListNode(p->mpUnknown20, pItem);
         DSDelListNode(p->mpUnknown20, pItem);
         pItem = pNext;
@@ -272,22 +272,22 @@ void fn_8023808C(Object_80237EE8 *p)
     DSDelList(p->mpUnknown20);
     fn_801D277C(1);
     fn_801D2570(p->mUnknown16);
-    fn_80237D24(p);
+    SyncStateRemoveGroup(p);
 }
 
 Object_80237EE8 *SyncStateEndGroup(Object_80237EE8 *p)
 {
     // FAKEMATCH: dead initial copy of p, the second register copy of p (mr r30,r31) the target keeps
     Object_80237EE8 *pFound = p;
-    pFound = fn_80237E9C(p->mUnknown0);
+    pFound = SyncStateFindGroup(p->mUnknown0);
     if (pFound != 0) {
-        fn_80237C0C(pFound);
+        SyncStateDetachGroup(pFound);
     }
-    fn_80237B84(p);
+    SyncStateRestoreGroup(p);
     return pFound;
 }
 
-void *fn_8023816C(void *pHandle)
+void *SyncStateGetData(void *pHandle)
 {
     Handle_80237A40 *p = pHandle;
     return p->mpUnknown44;
@@ -296,7 +296,7 @@ void *fn_8023816C(void *pHandle)
 void *SyncStateRegister(int a, void **ppData, int size, int b, unsigned int id)
 {
     void *pResult = 0;
-    Object_80237EE8 *p = fn_80237E9C(a);
+    Object_80237EE8 *p = SyncStateFindGroup(a);
     if (p != 0) {
         fn_801D277C(p->mUnknown16);
         pResult = SyncStateNewHandle(p, ppData, size, b, id);
@@ -304,17 +304,17 @@ void *SyncStateRegister(int a, void **ppData, int size, int b, unsigned int id)
     return pResult;
 }
 
-void fn_802381E0(void *pHandle)
+void SyncStateCommit(void *pHandle)
 {
     Handle_80237A40 *p = pHandle;
     if (p->mpUnknown16 != 0) {
         p->mpUnknown16(p->mpUnknown44, 0);
     }
-    fn_80237ADC(p);
+    SyncStateAttachHandle(p);
     fn_801D277C(1);
 }
 
-void fn_80238234(void *pHandle, Callback_80238234 pCallback10, Callback_80238234 pCallback14, Callback_80238234 pCallback18, Callback1C_80238234 pCallback1C)
+void SyncStateSetCallbacks(void *pHandle, Callback_80238234 pCallback10, Callback_80238234 pCallback14, Callback_80238234 pCallback18, Callback1C_80238234 pCallback1C)
 {
     Handle_80237A40 *p = pHandle;
     p->mpUnknown16 = pCallback10;
@@ -323,7 +323,7 @@ void fn_80238234(void *pHandle, Callback_80238234 pCallback10, Callback_80238234
     p->mpUnknown28 = pCallback1C;
 }
 
-void fn_80238248(void *pHandle, Callback28_80238248 pCallback28, Callback24_80238248 pCallback24, Callback20_80238248 pCallback20)
+void SyncStateSetSaveCallbacks(void *pHandle, Callback28_80238248 pCallback28, Callback24_80238248 pCallback24, Callback20_80238248 pCallback20)
 {
     Handle_80237A40 *p = pHandle;
     p->mpUnknown32 = pCallback20;

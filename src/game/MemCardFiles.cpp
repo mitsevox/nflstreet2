@@ -15,7 +15,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/ResLoad.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 
 struct SaveSlot {
     int mUnknown0;
@@ -213,15 +213,15 @@ int MemCardFilesComputeChecksum(int type, int index)
     request.mTarget = (int)&result;
     switch (type) {
     case 3:
-        fn_8022F478(fn_8022F358((signed char)index));
+        DbUserSetCurrent(DbUserGetId((signed char)index));
         PlayerSaveOnSave(&request, &gChecksumCRC32StreamType);
         break;
     case 2:
-        fn_8022F478(fn_8022F358((signed char)index));
+        DbUserSetCurrent(DbUserGetId((signed char)index));
         DbUserSave(&request, &gChecksumCRC32StreamType);
         break;
     case 1:
-        fn_8022EB94(&result, &gChecksumCRC32StreamType);
+        DbEvasSaveStream(&result, &gChecksumCRC32StreamType);
         break;
     }
     return result;

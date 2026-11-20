@@ -8,7 +8,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801F9908.h"
 #include "game/fn_801FCE10.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 extern "C" {
 void fn_8003DE74(unsigned char side, int *pList);
@@ -39,7 +39,7 @@ void fn_8022DCE4(int a);
 void fn_8022DD18(int a);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
-int fn_80237390(int stream, int low, int high);
+int SyncRandGetIntRange(int stream, int low, int high);
 }
 
 static int lbl_802D6B08[8] = { 0x54534C50, 0x44494E53, 0, 0, -1, -1, 3, 0 };
@@ -480,7 +480,7 @@ int fn_80084388(void)
 
     query.mUnknown4 = 3;
     fn_80083E1C(&cursor, &query);
-    DbCursorSeek(&cursor, (signed char)fn_80237390(1, 0, DbCursorGetRowCount(&cursor) - 1));
+    DbCursorSeek(&cursor, (signed char)SyncRandGetIntRange(1, 0, DbCursorGetRowCount(&cursor) - 1));
     id = DbCursorGetValue(&cursor, 0x44494754);
     fn_80083F68(&cursor);
     return id;
@@ -552,7 +552,7 @@ void fn_8008463C(int *pLogo, int *pFirst, int *pSecond, int *pThird)
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
     fn_801FCE10(&result, "use 'TATS' declare \x8a cursor for select * from 'LTPS'\n", &cursor);
-    cursor.mUnknown4 = fn_80237390(1, 0, result.mUnknown0 - 1);
+    cursor.mUnknown4 = SyncRandGetIntRange(1, 0, result.mUnknown0 - 1);
     fn_801FCE10(0, "use 'TATS' fetch from \x8a 'LGLT' into \x85 and '1CMT' into \x85 and '2CMT' into \x85 and '3CMT' into \x85\n",
                 &cursor, pLogo, pFirst, pSecond, pThird);
     if (cursor.mUnknown0) {
@@ -577,7 +577,7 @@ void fn_800846F4(int logo, char *pName, int size)
     fn_801FCE10(&result, "declare \x8a cursor for select * from 'CTNR' where ('LGLT' = \x82)\n", &cursor, logo);
     int count = result.mUnknown0;
     if (count > 0) {
-        cursor.mUnknown4 = fn_80237390(1, 0, count - 1);
+        cursor.mUnknown4 = SyncRandGetIntRange(1, 0, count - 1);
         fn_801FCE10(0, "fetch from \x8a 'ETNR' into \x88\n", &cursor, pName);
     } else {
         strncpy(pName, "Playaz", size);
@@ -629,7 +629,7 @@ void fn_80084908(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned
     memcpy(pList, pIn, size * 4);
     MemFill(excluded, sizeof(excluded), 0xFF, 4);
     pList[size] = 0x7FFF;
-    lbl_803EC86C = fn_802372EC(0, 5);
+    lbl_803EC86C = SyncRandGetRange(0, 5);
     AutoDepthBuild(lbl_803EC86C, pList, &lbl_803EA7E8);
     for (i = 0; i < count; i++) {
         int id;

@@ -26,7 +26,7 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
 #include "game/fn_80227638.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include <math.h>
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
@@ -1131,7 +1131,7 @@ extern "C" void HuddleArrive(Object_80039F5C *p, HuddleBlock_t *pState) {
 
 extern "C" void HuddleSetSpot(HuddleBlock_t *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value) {
     fn_800FF598(pState, p, pPoint, value, 0.0f);
-    pState->mUnknown0 = fn_802372EC(0, 40) + 20;
+    pState->mUnknown0 = SyncRandGetRange(0, 40) + 20;
 }
 
 extern "C" int HuddleMoveEnter(Object_80039F5C *p) {
@@ -1263,7 +1263,7 @@ extern "C" void HuddleGetSpot(Point_8017886C *pOut, int *pFacing, Object_80039F5
                 base = 2.5f;
             else
                 base = 4.0f;
-            fn_80227538(pOut, 0, fn_802372EC(0, 100) * 0.003f + base);
+            fn_80227538(pOut, 0, SyncRandGetRange(0, 100) * 0.003f + base);
             fn_80227384(pOut, pOut, ((_Handoff_auHuddleSlots[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
             fn_80227690(&offset, &offset, pOut);
             *pFacing = fn_801CFE40(offset.mY, offset.mX);
@@ -1279,7 +1279,7 @@ extern "C" void HuddleGetSpot(Point_8017886C *pOut, int *pFacing, Object_80039F5
                 base = 2.5f;
             else
                 base = 4.0f;
-            fn_80227538(pOut, 0, fn_802372EC(0, 100) * 0.003f + base);
+            fn_80227538(pOut, 0, SyncRandGetRange(0, 100) * 0.003f + base);
             fn_80227384(pOut, pOut, ((_Handoff_auHuddleSlots[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
             fn_80227690(&offset, &offset, pOut);
             *pFacing = fn_801CFE40(offset.mY, offset.mX);

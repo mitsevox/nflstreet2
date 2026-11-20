@@ -8,8 +8,8 @@
 
 extern "C" {
 int SstlFetchEntry(unsigned int index, int *pLglt, char *pEtnr, int size);
-int fn_8022F358(int index);
-int fn_8022F3D4(int a);
+int DbUserGetId(int index);
+int DbUserGetDb(int a);
 
 int SstlGetEntryTag(unsigned int index, char *pEtnr, int size);
 int GauntletGetCurrentTeam(int a);
@@ -45,7 +45,7 @@ int GauntletGetCurrentTeam(int a)
     int lttg = GauntletGetTeamsLeft(a);
 
     fn_801FCE10(0, "use \x8c select 'DIGT' into \x85 from 'MTTG' where 'LTTG' = \x82\n",
-                fn_8022F3D4(fn_8022F358(a)), &digt, lttg);
+                DbUserGetDb(DbUserGetId(a)), &digt, lttg);
     return digt;
 }
 
@@ -54,7 +54,7 @@ int GauntletIsTeamBeaten(int a, int b)
     int fdtg;
 
     if (fn_801FCE10(0, "use \x8c select 'FDTG' into \x82 from 'NUAG' where 'DIGT' = \x85\n",
-                    fn_8022F3D4(fn_8022F358(a)), &fdtg, b) == 0 && fdtg == 1) {
+                    DbUserGetDb(DbUserGetId(a)), &fdtg, b) == 0 && fdtg == 1) {
         return 1;
     }
     return 0;
@@ -62,24 +62,24 @@ int GauntletIsTeamBeaten(int a, int b)
 
 int GauntletSetCurrentTeam(int a, int b)
 {
-    return fn_801FCE10(0, "use \x8c update 'MTTG' set 'DIGT' = \x85\n", fn_8022F3D4(fn_8022F358(a)), b);
+    return fn_801FCE10(0, "use \x8c update 'MTTG' set 'DIGT' = \x85\n", DbUserGetDb(DbUserGetId(a)), b);
 }
 
 void GauntletMarkTeamBeaten(int a, int b)
 {
-    fn_801FCE10(0, "use \x8c update 'NUAG' set 'FDTG' = 1 where 'DIGT' = \x85\n", fn_8022F3D4(fn_8022F358(a)), b);
+    fn_801FCE10(0, "use \x8c update 'NUAG' set 'FDTG' = 1 where 'DIGT' = \x85\n", DbUserGetDb(DbUserGetId(a)), b);
 }
 
 void GauntletClearTeamBeaten(int a, int b)
 {
-    fn_801FCE10(0, "use \x8c update 'NUAG' set 'FDTG' = 0 where 'DIGT' = \x85\n", fn_8022F3D4(fn_8022F358(a)), b);
+    fn_801FCE10(0, "use \x8c update 'NUAG' set 'FDTG' = 0 where 'DIGT' = \x85\n", DbUserGetDb(DbUserGetId(a)), b);
 }
 
 int GauntletGetTeamsLeft(int a)
 {
     int lttg;
 
-    fn_801FCE10(0, "use \x8c select 'LTTG' into \x82 from 'MTTG'\n", fn_8022F3D4(fn_8022F358(a)), &lttg);
+    fn_801FCE10(0, "use \x8c select 'LTTG' into \x82 from 'MTTG'\n", DbUserGetDb(DbUserGetId(a)), &lttg);
     return lttg;
 }
 
@@ -98,7 +98,7 @@ void GauntletReset(int a)
 
 void GauntletResetTeamsLeft(int a)
 {
-    fn_801FCE10(0, "use \x8c update 'MTTG' set 'LTTG' = 32\n", fn_8022F3D4(fn_8022F358(a)));
+    fn_801FCE10(0, "use \x8c update 'MTTG' set 'LTTG' = 32\n", DbUserGetDb(DbUserGetId(a)));
 }
 
 void GauntletAdvance(int a)
@@ -107,12 +107,12 @@ void GauntletAdvance(int a)
     int digt = GauntletGetCurrentTeam(a);
 
     fn_801FCE10(0, "use \x8c update 'MTTG' set 'LTTG' = \x82 where 'DIGT' = \x85\n",
-                fn_8022F3D4(fn_8022F358(a)), lttg, digt);
+                DbUserGetDb(DbUserGetId(a)), lttg, digt);
 }
 
 void GauntletStatsOpen(DbCursor *pObject, int a)
 {
-    DbCursorOpen(pObject, 0x41545347, 0x4E575347, 0, 0, fn_8022F3D4(fn_8022F358(a)));
+    DbCursorOpen(pObject, 0x41545347, 0x4E575347, 0, 0, DbUserGetDb(DbUserGetId(a)));
 }
 
 void GauntletStatsClose(DbCursor *pObject)

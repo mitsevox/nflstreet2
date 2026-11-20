@@ -26,7 +26,7 @@
 #include "game/AnimChanStartAnim.h"
 #include <string.h>
 #include "game/fn_801D2B7C.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 
@@ -292,7 +292,7 @@ int fn_8004A6EC(VariantTable_8004A6EC *pTable, unsigned char *pKey)
 
     for (i = 0; i < pTable->mCount; i++) {
         Variant_8004A6EC *pVariant = pTable->mEntries[i].mpVariant;
-        int score = fn_802372EC(1, 10);
+        int score = SyncRandGetRange(1, 10);
         int j;
 
         for (j = 0; j < 4; j++) {
@@ -316,7 +316,7 @@ int fn_8004A7A8(VariantTable_8004A6EC *pTable, unsigned char *pKey)
 
     for (i = 0; i < pTable->mCount; i++) {
         Variant_8004A6EC *pVariant = pTable->mEntries[i].mpVariant;
-        int score = fn_802372EC(0, 10);
+        int score = SyncRandGetRange(0, 10);
         int j;
 
         for (j = 0; j < 4; j++) {

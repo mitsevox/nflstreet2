@@ -4,7 +4,7 @@
 
 #include "engine/Object_80237EE8.h"
 #include "engine/Desc_80238424.h"
-#include "engine/fn_80238680.h"
+#include "engine/EvMonAddListener.h"
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/gx/GXPixel.h>
 #include <dolphin/os/OSCache.h>
@@ -36,9 +36,9 @@ typedef struct Table_802382F0 {
 
 extern Table_802382F0 lbl_803A3A14;
 extern unsigned char lbl_803EC140;
-extern void *fn_8023816C(void *pHandle);
+extern void *SyncStateGetData(void *pHandle);
 
-void fn_802382CC(int *p, const Desc_80238424 *q)
+void EvMonInitHeader(int *p, const Desc_80238424 *q)
 {
     p[0] = q->mUnknown0;
     p[1] = 0;
@@ -46,7 +46,7 @@ void fn_802382CC(int *p, const Desc_80238424 *q)
     p[3] = q->mUnknown8;
 }
 
-void fn_802382F0(int count)
+void EvMonInit(int count)
 {
     lbl_803A3A14.mUnknown0 = 0;
     lbl_803A3A14.mUnknown4 = count;
@@ -55,7 +55,7 @@ void fn_802382F0(int count)
     lbl_803EC140 = 1;
 }
 
-void fn_80238358(void)
+void EvMonShutdown(void)
 {
     fn_801D2BD0(lbl_803A3A14.mppUnknown8);
     lbl_803EC140 = 0;
@@ -66,40 +66,40 @@ int EvMonCreate(const Desc_80238424 *pDesc)
     int index = lbl_803A3A14.mUnknown0;
     int size = pDesc->mUnknown0 * pDesc->mUnknown4 + 16 + pDesc->mUnknown8 * 4;
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803A3A14.mppUnknown8[index], size, 0, 0x65766D6F);
-    fn_802382CC(fn_8023816C(pHandle), pDesc);
-    fn_802381E0(pHandle);
+    EvMonInitHeader(SyncStateGetData(pHandle), pDesc);
+    SyncStateCommit(pHandle);
     lbl_803A3A14.mUnknown0++;
     return index;
 }
 
-void fn_80238420(int index)
+void EvMonDestroy(int index)
 {
 }
 
-int fn_80238424(const Desc_80238424 *pDesc)
+int EvMonAlloc(const Desc_80238424 *pDesc)
 {
     int index = lbl_803A3A14.mUnknown0;
     int size = pDesc->mUnknown0 * pDesc->mUnknown4 + 16 + pDesc->mUnknown8 * 4;
     lbl_803A3A14.mppUnknown8[index] = fn_801D2B7C(size, 0, 0);
     memset(lbl_803A3A14.mppUnknown8[index], 0, size);
-    fn_802382CC((int *)lbl_803A3A14.mppUnknown8[index], pDesc);
+    EvMonInitHeader((int *)lbl_803A3A14.mppUnknown8[index], pDesc);
     lbl_803A3A14.mUnknown0++;
     return index;
 }
 
-void fn_802384C4(int index)
+void EvMonFree(int index)
 {
     fn_801D2BD0(lbl_803A3A14.mppUnknown8[index]);
     lbl_803A3A14.mppUnknown8[index] = 0;
 }
 
-void *fn_8023850C(int index)
+void *EvMonGetCurrentRecord(int index)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     return (char *)p + 16 + p->mUnknown12 * 4 + p->mUnknown8 * p->mUnknown4;
 }
 
-void *fn_80238540(int index, int item)
+void *EvMonGetRecord(int index, int item)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     return (char *)p + 16 + p->mUnknown12 * 4 + p->mUnknown8 * item;
@@ -112,7 +112,7 @@ void EvMonFire(int index, int advance)
     for (i = 0; i < p->mUnknown12; i++) {
         AudmonEventFn_t callback = p->mpUnknown16[i];
         if (callback != 0) {
-            callback(fn_8023850C(index));
+            callback(EvMonGetCurrentRecord(index));
         }
     }
     if (advance != 0) {
@@ -120,19 +120,19 @@ void EvMonFire(int index, int advance)
     }
 }
 
-unsigned int fn_80238604(int index)
+unsigned int EvMonGetCount(int index)
 {
     return lbl_803A3A14.mppUnknown8[index]->mUnknown4;
 }
 
-void fn_8023861C(int index)
+void EvMonClear(int index)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     MemFill((char *)p + 16 + p->mUnknown12 * 4, p->mUnknown0 * p->mUnknown8, 0, 4);
     p->mUnknown4 = 0;
 }
 
-void fn_80238680(int index, AudmonEventFn_t callback)
+void EvMonAddListener(int index, AudmonEventFn_t callback)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     unsigned int i;
@@ -141,7 +141,7 @@ void fn_80238680(int index, AudmonEventFn_t callback)
     ((AudmonEventFn_t *)p)[i + 4] = callback;
 }
 
-void fn_802386DC(int index, AudmonEventFn_t callback)
+void EvMonRemoveListener(int index, AudmonEventFn_t callback)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     unsigned int i;

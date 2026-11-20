@@ -127,8 +127,8 @@ void GauntletReset(int a);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 void *UIGLibraryGetGlobal(int index);
 unsigned int UIGFontGetStringWidth(void *a, int b, int c, const char *pText);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 }
 
 static int _EditMenu_iMode = 6;
@@ -232,7 +232,7 @@ void EditMenuBackupTeam(void)
     switch (_EditMenu_iMode) {
     case 4:
         _EditMenu_iSavedPoints = StoryGetDevPoints(_EditMenu_cTeamSlot);
-        StoryTeamBackup(&_EditMenu_iTeamTableCopy, &_EditMenu_iPlayerTableCopy, fn_8022F4BC());
+        StoryTeamBackup(&_EditMenu_iTeamTableCopy, &_EditMenu_iPlayerTableCopy, DbUserGetCurrent());
         break;
     case 3:
         _EditMenu_iSavedPoints = StoryGetDevPoints(_EditMenu_cTeamSlot);
@@ -246,7 +246,7 @@ void EditMenuBackupTeam(void)
         break;
     default:
         _EditMenu_iSavedPoints = ChalGetDevPoints();
-        CreateTeamBackup(&_EditMenu_iTeamTableCopy, &_EditMenu_iPlayerTableCopy, fn_8022F4BC());
+        CreateTeamBackup(&_EditMenu_iTeamTableCopy, &_EditMenu_iPlayerTableCopy, DbUserGetCurrent());
         break;
     }
 }
@@ -520,7 +520,7 @@ void EditMenuClose(unsigned char a)
         _EditMenu_bSaving = 1;
     }
     if (done) {
-        MemCardFilesStoreChecksum(2, fn_8022F384(fn_8022F4BC()));
+        MemCardFilesStoreChecksum(2, DbUserFindIndex(DbUserGetCurrent()));
     }
 }
 
@@ -1242,7 +1242,7 @@ void EditMenuBegin(int mode, int value)
     int status;
 
     _EditMenu_iMode = mode;
-    _EditMenu_cTeamSlot = fn_8022F384(fn_8022F4BC());
+    _EditMenu_cTeamSlot = DbUserFindIndex(DbUserGetCurrent());
     _EditMenu_bActive = 1;
     _EditMenu_bPending = 0;
     _EditMenu_bChanged = 0;
@@ -1553,11 +1553,11 @@ int EditMenuHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg
         break;
     case 0x126:
         if (pArgs[0].i == 7) {
-            pResult->i = StoryTeamExists(fn_8022F384(fn_8022F4BC()));
+            pResult->i = StoryTeamExists(DbUserFindIndex(DbUserGetCurrent()));
         } else if (pArgs[0].i == 6) {
-            pResult->i = CreateTeamExists(fn_8022F384(fn_8022F4BC()));
+            pResult->i = CreateTeamExists(DbUserFindIndex(DbUserGetCurrent()));
         } else if (pArgs[0].i == 8) {
-            pResult->i = GauntletGetCurrentTeam(fn_8022F384(fn_8022F4BC())) != 0x3FF;
+            pResult->i = GauntletGetCurrentTeam(DbUserFindIndex(DbUserGetCurrent())) != 0x3FF;
         }
         break;
     case 0x125:
@@ -1567,12 +1567,12 @@ int EditMenuHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg
             int team;
 
             CreateTeamClear();
-            team = UserProfileFindIndex(fn_8022F4BC());
+            team = UserProfileFindIndex(DbUserGetCurrent());
             if (StoryTeamExists(team)) {
                 StorySetIndexedFlag(team, 1, 0);
             }
         } else if (pArgs[0].i == 8) {
-            GauntletReset(fn_8022F384(fn_8022F4BC()));
+            GauntletReset(DbUserFindIndex(DbUserGetCurrent()));
         }
         break;
     case 0xF0:
@@ -1589,7 +1589,7 @@ int EditMenuHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg
         pResult->i = _EditMenu_iView;
         break;
     case 0x197:
-        MemCardFilesStoreChecksum(2, fn_8022F384(fn_8022F4BC()));
+        MemCardFilesStoreChecksum(2, DbUserFindIndex(DbUserGetCurrent()));
         break;
     case 0x19A:
         pResult->i = _EditMenu_bPresetPending;

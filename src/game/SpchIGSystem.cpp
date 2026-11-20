@@ -10,7 +10,7 @@
 #include "game/ResOpenDevice.h"
 #include "game/fn_801F40F4.h"
 #include "game/fn_802270D4.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/Object_80039F5C.h"
 #include "engine/spchevnt.h"
 
@@ -633,9 +633,9 @@ extern "C" void SpchIGPickTeamPlayer(int side)
     int stream = fn_80178D70(side);
 
     if (side == 0) {
-        _SpchIG_iTeamPlayer0 = 1 | (fn_802372EC(1, stream) & 0xFF) << 16;
+        _SpchIG_iTeamPlayer0 = 1 | (SyncRandGetRange(1, stream) & 0xFF) << 16;
     } else {
-        _SpchIG_iTeamPlayer1 = side << 8 | 1 | (fn_802372EC(1, stream) & 0xFF) << 16;
+        _SpchIG_iTeamPlayer1 = side << 8 | 1 | (SyncRandGetRange(1, stream) & 0xFF) << 16;
     }
 }
 

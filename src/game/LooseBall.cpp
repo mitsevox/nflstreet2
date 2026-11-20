@@ -19,7 +19,7 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
 #include "game/fn_80227638.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include <math.h>
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
@@ -396,7 +396,7 @@ extern "C" void LooseBallBroadcast(int id) {
             int value = fn_8009F0B8(pOther, 0x3C71C7) ? _LooseBall_iPriorityFacing : _LooseBall_iPriorityBase;
             value += (unsigned int)(fn_802270A4(&delta) * _LooseBall_fPriorityPerDist);
             value += (int)((255 - pOther->mRatings[0]) * _LooseBall_fPriorityPerRating);
-            value += fn_802372EC(0, _LooseBall_iPriorityRandom);
+            value += SyncRandGetRange(0, _LooseBall_iPriorityRandom);
             if ((pOther->mFlags & 0x400) || !fn_801486A0())
                 value = 0;
             switch (pOther->mpState->mId) {

@@ -5,7 +5,7 @@
 #include "game/fn_8021D7B8.h"
 #include "game/PauseMenu.h"
 #include "game/fn_800B65A0.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include <string.h>
 
 struct PlaybookTeamView {
@@ -218,7 +218,7 @@ void fn_8014B028(void *p, float dt)
         fn_8016DDDC(fn_80178320());
         fn_8009D944(1);
         fn_8009D944(0);
-        short value = 9 - fn_802372EC(0, 5);
+        short value = 9 - SyncRandGetRange(0, 5);
         fn_800C02EC(lbl_803EABA4, value);
     }
 }
@@ -234,7 +234,7 @@ void fn_8014B0D0(void *p, float dt)
     fn_800BFB88(p, dt);
     fn_801487C0(fn_80178308(), 3);
     fn_801487C0(fn_80178320(), 2);
-    short value = 9 - fn_802372EC(0, 5);
+    short value = 9 - SyncRandGetRange(0, 5);
     fn_800C02EC(lbl_803EABA4, value);
     Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C pos;

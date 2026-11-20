@@ -58,7 +58,7 @@ int fn_8011F2F8(void);
 void fn_800C89F0(Object_80039F5C *, int, int, int, float);
 int fn_80124714(Object_80039F5C *, Object_80039F5C *, Object_80039F5C **);
 int fn_80178320(void);
-unsigned int fn_802372EC(unsigned int, unsigned int);
+unsigned int SyncRandGetRange(unsigned int, unsigned int);
 unsigned char PlayBookGetReceiver(int, unsigned char, unsigned char *);
 
 void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, Point_8017886C *pTarget)
@@ -491,7 +491,7 @@ int fn_80133EE8(Object_80039F5C *p)
     }
     int result = 0;
     if (fn_801787A0()) {
-        if ((p->mUnknown1032 != 4 && p->mUnknown1032 != 7) || fn_802372EC(0, 100) <= 9) {
+        if ((p->mUnknown1032 != 4 && p->mUnknown1032 != 7) || SyncRandGetRange(0, 100) <= 9) {
             fn_8011E3EC(p, 0);
             fn_8011E240(p);
         }

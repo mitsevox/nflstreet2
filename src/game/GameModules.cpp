@@ -35,8 +35,8 @@ char *strncpy(char *pDest, const char *pSource, int count);
 void ResTrackLabel(const char *pText);
 int ResQuickloadOpenDevice(const char *pName, int unknown);
 int ResQuickloadClose(const char *pName);
-void fn_802371B0(int unknown, int seed);
-void fn_8023725C(void);
+void SyncRandInit(int unknown, int seed);
+void SyncRandShutdown(void);
 }
 
 static ModuleDependency _GameModules_aAnimDataDependencies[] = { &gRes, 0 };
@@ -90,13 +90,13 @@ const char *GRand::GetName() { return "GRand"; }
 
 int GRand::Init()
 {
-    fn_802371B0(2, MathGetRandomSeed());
+    SyncRandInit(2, MathGetRandomSeed());
     return 1;
 }
 
 int GRand::Shutdown()
 {
-    fn_8023725C();
+    SyncRandShutdown();
     return 1;
 }
 

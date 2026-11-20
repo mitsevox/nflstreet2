@@ -28,7 +28,7 @@ int fn_800C8744(int team);
 int fn_8022B414(int handle, unsigned int tag, int *pValue);
 int fn_8022B7A4(int handle, unsigned int tag, int *pValue);
 int fn_801C2D88(char *pText, int capacity, const char *pFormat, ...);
-int fn_802372EC(int first, int last);
+int SyncRandGetRange(int first, int last);
 int fn_801486A0(void);
 void fn_8017767C(void);
 void fn_80177F88(int value);
@@ -159,7 +159,7 @@ int fn_801498EC(Class_80148A58 *,int team,int index,int value)
 const char *fn_8014993C(Class_80148A58 *,int kind)
 {
     unsigned char index=0;
-    if(lbl_802DDC20[kind].mCount>1)index=fn_802372EC(0,lbl_802DDC20[kind].mCount);
+    if(lbl_802DDC20[kind].mCount>1)index=SyncRandGetRange(0,lbl_802DDC20[kind].mCount);
     return lbl_802DDC20[kind].mpText[index];
 }
 

@@ -4,9 +4,9 @@
 extern "C" {
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
-int fn_8022F3D4(int a);
-int fn_8022F4BC(void);
-int fn_80237390(int stream, int low, int high);
+int DbUserGetDb(int a);
+int DbUserGetCurrent(void);
+int SyncRandGetIntRange(int stream, int low, int high);
 
 /* Rebuilds 'LTSS' from 'CTNR' in a shuffled row order; the entry whose
    'CTNR' row index equals the 'LGLT' value selected from 'METS' for the
@@ -24,14 +24,14 @@ void fn_8018EF6C(int key)
     int *pOrder = (int *)fn_801D2B7C(count * 4, 0, 0);
     for (int i = 0; i < count; i++) pOrder[i] = i;
     for (int i = 0; i < count * 8; i++) {
-        int a = fn_80237390(1, 0, count - 1);
-        int b = fn_80237390(1, 0, count - 1);
+        int a = SyncRandGetIntRange(1, 0, count - 1);
+        int b = SyncRandGetIntRange(1, 0, count - 1);
         int temp = pOrder[a];
         pOrder[a] = pOrder[b];
         pOrder[b] = temp;
     }
 
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
     fn_801FCE10(0, "use \x8c select 'LGLT' into \x82 from 'METS' where 'DIGT' = \x82\n", handle, &value, key);
     int last = count - 1;
     for (int i = 0; i < count && last >= 0; i++) {

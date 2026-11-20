@@ -15,7 +15,7 @@
 #include "game/PlayBookDb.h"
 #include <string.h>
 #include "game/fn_801FCE10.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 extern "C" {
 extern char lbl_802EBDF8[];
@@ -924,7 +924,7 @@ int PlayBookDbPickAIPlay(int team, int tag, int kind)
     for (i = 0; i < count; i++) {
         total += list[i].mUnknown4;
     }
-    pick = fn_802372EC(0, total);
+    pick = SyncRandGetRange(0, total);
     total = 0;
     for (i = 0; i < count; i++) {
         total += list[i].mUnknown4;

@@ -66,8 +66,8 @@ int UIGLibraryUnLoadItem(void *pObject, int a, int b);
 void *UIGLibraryGetGlobal(int index);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 }
 
 static PlayerPickupModelLayout_t _MsgPlayerPickup_ModelLayout = { 550.0f, 330.0f, 7.0f, 1.0f, 14 };
@@ -359,7 +359,7 @@ unsigned char MsgPlayerPickupInit(void)
     _MsgPlayerPickup_bTeamFull = 0;
     _MsgPlayerPickup_iDropPlayer = 0x7FFF;
     _MsgPlayerPickup_iAddPlayer = 0x7FFF;
-    _MsgPlayerPickup_cProfile = fn_8022F384(fn_8022F4BC());
+    _MsgPlayerPickup_cProfile = DbUserFindIndex(DbUserGetCurrent());
     found = fn_8005FC7C();
     if (found) {
         _MsgPlayerPickup_bCopyMode = 1;

@@ -14,7 +14,7 @@
 #include "game/QueryStatus.h"
 #include "engine/t3db.h"
 #include "engine/t3db_cols.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 
 #include <string.h>
 
@@ -41,16 +41,16 @@ extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int 
 extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
 extern TDbIODevice_t tdbiofioCallback;
 extern int fn_801F967C(int db, int tbl);
-signed char fn_8022F384(int key);
+signed char DbUserFindIndex(int key);
 
 extern const unsigned char lbl_802AEF10[];
 extern int fn_802297D8(void *p, int tag);
 extern int fn_8022D8F8(int a, int *p, int c);
 int fn_8022DB20(void);
-extern int fn_8022F428(int key);
-extern int fn_8022F4BC(void);
+extern int DbUserFindIdByDb(int key);
+extern int DbUserGetCurrent(void);
 extern void fn_80231208(void);
-int fn_8022F3D4(int key);
+int DbUserGetDb(int key);
 extern const int lbl_803ED6E4[2];
 extern char lbl_802B5D64[];
 extern char lbl_802B56F4[];
@@ -264,7 +264,7 @@ extern int lbl_803EC074;
 extern int lbl_803EC07C;
 extern int lbl_803EC080;
 
-int fn_80229674(void);
+int DbNiomCloseCursor(void);
 int fn_8022A59C(int a, Object_8022A59C **ppOut);
 int fn_8022AB6C(Object_8022A59C *p, int a, int b);
 int fn_8022AC80(Object_8022A59C *p);
@@ -443,30 +443,30 @@ int fn_8022D25C(int (*pCallback)(int a));
 
 
 /* prototypes of the db functions in 0x80229270-0x8022F428 (dbocmt.c to dbuser.c) */
-int fn_80229270(void);
-int fn_802293A8(void);
-void fn_802293B0(void);
-int fn_802293B4(int a, int b);
-int fn_802293FC(void);
-int fn_8022942C(void);
-void fn_80229434(void);
-int fn_80229438(int column, int value);
-int fn_80229470(void);
-void fn_80229494(void);
-void fn_802294D8(Handlers_802294D8 *p);
-int fn_802294F4(void);
-int fn_802294FC(int *p);
-int fn_80229554(void);
-int fn_802295C0(void);
-int fn_802295F8(int a);
-int fn_80229644(int a, int b);
-int fn_80229674(void);
-int fn_802296B4(int a, int b);
-void fn_80229718(Funcs_802FB3BC *pFuncs);
-void fn_80229744(void);
-int fn_80229760(void **ppData, void *p);
-int fn_80229788(int a, int b);
-int fn_802297B0(void);
+int DbOcmtRenumber(void);
+int DbOcmtModuleInit(void);
+void DbOcmtModuleShutdown(void);
+int DbOcmtInsert(int a, int b);
+int DbOcmtClear(void);
+int DbOptionsModuleInit(void);
+void DbOptionsModuleShutdown(void);
+int DbOptionsSetTpom(int column, int value);
+int DbNiomInit(void);
+void DbNiomShutdown(void);
+void DbNiomSetHandlers(Handlers_802294D8 *p);
+int DbNiomIsModeActive(void);
+int DbNiomBeginMode(int *p);
+int DbNiomEndMode(void);
+int DbNiomRunCallback(void);
+int DbNiomOpenCursor(int a);
+int DbNiomReadCursor(int a, int b);
+int DbNiomCloseCursor(void);
+int DbNiomReadOnce(int a, int b);
+void DbNiomSetModeFuncs(Funcs_802FB3BC *pFuncs);
+void DbNiomClearModeFuncs(void);
+int DbNiomModeLoad(void **ppData, void *p);
+int DbNiomModeReset(int a, int b);
+int DbNiomModeResume(void);
 int fn_802299FC(void);
 int fn_80229A70(void);
 float fn_80229C98(int index);
@@ -570,14 +570,14 @@ int fn_8022E9A4(void);
 void fn_8022E9C4(void);
 int fn_8022E9E4(void);
 void fn_8022EA4C(void);
-int fn_8022EA74(void);
-void fn_8022EA7C(void);
-int fn_8022EA80(int a, const char *pName, int b);
-void fn_8022EAD8(void);
-int fn_8022EB10(void);
-int fn_8022EB5C(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps);
-int fn_8022EB94(void *pTarget, struct SaveStreamOps_t *pOps);
-int fn_8022EBC8(void);
+int DbEvasModuleInit(void);
+void DbEvasModuleShutdown(void);
+int DbEvasInit(int a, const char *pName, int b);
+void DbEvasShutdown(void);
+int DbEvasLoad(void);
+int DbEvasLoadStream(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps);
+int DbEvasSaveStream(void *pTarget, struct SaveStreamOps_t *pOps);
+int DbEvasUnload(void);
 int fn_8022EBF0(int a, const char *pName, int b);
 void fn_8022EC48(void);
 int fn_8022EC80(void);
@@ -589,16 +589,16 @@ int DbFileInit(const char *pName);
 void DbFileShutdown(void);
 int DbFileTblLoad(int db, int file);
 int DbFileTblDestroy(int db, int tbl);
-int fn_8022EFDC(void);
+int DbUserNewId(void);
 int DbUserInit(int a, const char *pName, int b);
-void fn_8022F094(void);
-int fn_8022F0D4(void);
-void fn_8022F1BC(int key);
-void fn_8022F294(int key);
-int fn_8022F34C(void);
-int fn_8022F358(int index);
-signed char fn_8022F384(int key);
-int fn_8022F3D4(int key);
+void DbUserShutdown(void);
+int DbUserCreate(void);
+void DbUserDelete(int key);
+void DbUserReset(int key);
+int DbUserGetCount(void);
+int DbUserGetId(int index);
+signed char DbUserFindIndex(int key);
+int DbUserGetDb(int key);
 
 #include "engine/fn_801F8D60.h"
 #include "engine/tdbext.h"
@@ -611,7 +611,7 @@ int fn_8022F3D4(int key);
 #include <dolphin/os.h>
 #include <string.h>
 #include "engine/Funcs_802FB3BC.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 #include "game/fn_80233CBC.h"
 #include "game/fn_801FCE10.h"
 #include "engine/texfile.h"
@@ -934,16 +934,16 @@ extern void TMBlendBindModel(void *p);
 extern void TMBlendGeomAll(void);
 extern Range_80216190 *TMSwapGetState(Group_803E96E8 *pGroup, int a, int key);
 extern int TMSwapGetGeomRefs(List_80233BE4 *pList, short *pOut, unsigned int index, int value);
-extern int fn_802293A8(void);
-extern void fn_802293B0(void);
-extern int fn_8022942C(void);
-extern void fn_80229434(void);
-extern int fn_80229554(void);
-extern int fn_802296B4(int a, int b);
-extern void fn_80229718(Funcs_802FB3BC *pFuncs);
-extern void fn_80229744(void);
-extern int fn_80229760(void **ppData, void *p);
-extern int fn_80229788(int a, int b);
+extern int DbOcmtModuleInit(void);
+extern void DbOcmtModuleShutdown(void);
+extern int DbOptionsModuleInit(void);
+extern void DbOptionsModuleShutdown(void);
+extern int DbNiomEndMode(void);
+extern int DbNiomReadOnce(int a, int b);
+extern void DbNiomSetModeFuncs(Funcs_802FB3BC *pFuncs);
+extern void DbNiomClearModeFuncs(void);
+extern int DbNiomModeLoad(void **ppData, void *p);
+extern int DbNiomModeReset(int a, int b);
 extern int fn_802299FC(void);
 extern int fn_80229A70(void);
 extern int fn_80229E88(void);
@@ -966,11 +966,11 @@ extern int fn_8022E484(void);
 extern int fn_8022E9A4(void);
 extern void fn_8022E9C4(void);
 extern int fn_8022E9E4(void);
-extern int fn_8022EA74(void);
-extern void fn_8022EA7C(void);
+extern int DbEvasModuleInit(void);
+extern void DbEvasModuleShutdown(void);
 extern int fn_8022ED50(int a, int b, int c);
-extern signed char fn_8022F384(int key);
-extern int fn_8022F3D4(int key);
+extern signed char DbUserFindIndex(int key);
+extern int DbUserGetDb(int key);
 extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
 extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int f);
 extern void fn_802349CC(void *p);
@@ -1130,14 +1130,14 @@ void fn_80234DFC(int a, Sprite_80234DFC *pSprite, int c, int d, const char *pNam
 
 
 /* prototypes of the db functions in 0x8022F428-0x802355E4 (dbuser.c to cu_802336C4.c) */
-int fn_8022F428(int key);
-int fn_8022F478(int value);
-int fn_8022F488(int value);
-int fn_8022F4BC(void);
-int fn_8022F4C4(void);
-int fn_8022F53C(int a);
-int fn_8022F744(void);
-int fn_8022F794(int value, char *pName);
+int DbUserFindIdByDb(int key);
+int DbUserSetCurrent(int value);
+int DbUserSelect(int value);
+int DbUserGetCurrent(void);
+int DbUserOpenDatabases(void);
+int DbUserPostLoad(int a);
+int DbUserCloseDatabases(void);
+int DbUserSetName(int value, char *pName);
 unsigned short fn_8022F80C(void);
 Cache_8022F8A8 *fn_8022F858(unsigned short id);
 Cache_8022F8A8 *fn_8022F880(int key);
@@ -1259,12 +1259,12 @@ void fn_802353F8(Object_80235588 *p, int flags);
 void fn_80235510(Object_80235588 *p, int mode);
 void fn_80235588(Object_80235588 *p, int a);
 
-int fn_8022EFDC(void)
+int DbUserNewId(void)
 {
     int key;
     do {
         key = DbUtilRandomRange(0, 0x7FFFFFFA) & 0x7FFFFFFF;
-    } while (fn_8022F384(key) != -1);
+    } while (DbUserFindIndex(key) != -1);
     return key;
 }
 
@@ -1281,7 +1281,7 @@ int DbUserInit(int a, const char *pName, int b)
     return result;
 }
 
-void fn_8022F094(void)
+void DbUserShutdown(void)
 {
     DbUtilFree(lbl_803EC0CC);
     lbl_803EC0C8 = 0;
@@ -1291,7 +1291,7 @@ void fn_8022F094(void)
     lbl_803EC0D8 = 0;
 }
 
-int fn_8022F0D4(void)
+int DbUserCreate(void)
 {
     unsigned char i;
     int id;
@@ -1300,26 +1300,26 @@ int fn_8022F0D4(void)
 
     id = -1;
     if ((signed char)lbl_803EC0D8 <= 1) {
-        for (i = 0; fn_8022F428(key = lbl_803ED6E4[i]) != -1; i++) {
+        for (i = 0; DbUserFindIdByDb(key = lbl_803ED6E4[i]) != -1; i++) {
         }
-        id = fn_8022EFDC();
+        id = DbUserNewId();
         lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown0 = id;
         lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown4 = key;
         TDbExtLoadFromResource(key, lbl_803EC0CC, lbl_803EC0D0, 0);
         lbl_803EC0D8++;
-        old = fn_8022F478(id);
-        fn_801FCE10(0, lbl_802B5D64, fn_8022F3D4(fn_8022F4BC()), id);
-        fn_8022F478(old);
+        old = DbUserSetCurrent(id);
+        fn_801FCE10(0, lbl_802B5D64, DbUserGetDb(DbUserGetCurrent()), id);
+        DbUserSetCurrent(old);
     }
     return id;
 }
 
-void fn_8022F1BC(int key)
+void DbUserDelete(int key)
 {
     signed char index;
 
     if (key != -1) {
-        index = fn_8022F384(key);
+        index = DbUserFindIndex(key);
         if (index != -1) {
             lbl_803EC0D8--;
             TDbExtLoadFromResource(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
@@ -1332,35 +1332,35 @@ void fn_8022F1BC(int key)
     }
 }
 
-void fn_8022F294(int key)
+void DbUserReset(int key)
 {
     int index;
     int id;
     int old;
 
     if (key != -1) {
-        index = fn_8022F384(key);
+        index = DbUserFindIndex(key);
         if (index != -1) {
             TDbExtLoadFromResource(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
-            id = fn_8022EFDC();
-            old = fn_8022F478(key);
-            fn_801FCE10(0, lbl_802B5D64, fn_8022F3D4(fn_8022F4BC()), id);
+            id = DbUserNewId();
+            old = DbUserSetCurrent(key);
+            fn_801FCE10(0, lbl_802B5D64, DbUserGetDb(DbUserGetCurrent()), id);
             lbl_802FB300[index].mUnknown0 = id;
             if (old == key) {
-                fn_8022F478(id);
+                DbUserSetCurrent(id);
             } else {
-                fn_8022F478(old);
+                DbUserSetCurrent(old);
             }
         }
     }
 }
 
-int fn_8022F34C(void)
+int DbUserGetCount(void)
 {
     return (signed char)lbl_803EC0D8;
 }
 
-int fn_8022F358(int index)
+int DbUserGetId(int index)
 {
     int value = -1;
     if (index < (signed char)lbl_803EC0D8) {
@@ -1369,7 +1369,7 @@ int fn_8022F358(int index)
     return value;
 }
 
-signed char fn_8022F384(int key)
+signed char DbUserFindIndex(int key)
 {
     signed char i;
     for (i = 0; i < (signed char)lbl_803EC0D8; i++) {
@@ -1380,11 +1380,11 @@ signed char fn_8022F384(int key)
     return -1;
 }
 
-int fn_8022F3D4(int key)
+int DbUserGetDb(int key)
 {
     int value = -1;
     if (key != -1) {
-        int index = fn_8022F384(key);
+        int index = DbUserFindIndex(key);
         if (index != -1) {
             value = lbl_802FB300[index].mUnknown4;
         }
@@ -1392,7 +1392,7 @@ int fn_8022F3D4(int key)
     return value;
 }
 
-int fn_8022F428(int key)
+int DbUserFindIdByDb(int key)
 {
     unsigned char i = lbl_803EC0D8;
 
@@ -1404,7 +1404,7 @@ int fn_8022F428(int key)
     return -1;
 }
 
-int fn_8022F478(int value)
+int DbUserSetCurrent(int value)
 {
     int old = lbl_803EC0D4;
 
@@ -1412,18 +1412,18 @@ int fn_8022F478(int value)
     return old;
 }
 
-int fn_8022F488(int value)
+int DbUserSelect(int value)
 {
-    fn_8022F478(value);
-    return fn_8022F3D4(value);
+    DbUserSetCurrent(value);
+    return DbUserGetDb(value);
 }
 
-int fn_8022F4BC(void)
+int DbUserGetCurrent(void)
 {
     return lbl_803EC0D4;
 }
 
-int fn_8022F4C4(void)
+int DbUserOpenDatabases(void)
 {
     int err = 0;
     unsigned int i;
@@ -1437,16 +1437,16 @@ int fn_8022F4C4(void)
     return err;
 }
 
-int fn_8022F53C(int a)
+int DbUserPostLoad(int a)
 {
     int key;
     int err;
 
     if (a == 0) {
-        err = fn_801FCE10(0, lbl_802B5D88, fn_8022F3D4(fn_8022F4BC()), &key);
-        if (key != fn_8022F4BC()) {
-            if (fn_8022F384(key) == -1) {
-                (lbl_802FB300 + fn_8022F384(fn_8022F4BC()))->mUnknown0 = key;
+        err = fn_801FCE10(0, lbl_802B5D88, DbUserGetDb(DbUserGetCurrent()), &key);
+        if (key != DbUserGetCurrent()) {
+            if (DbUserFindIndex(key) == -1) {
+                (lbl_802FB300 + DbUserFindIndex(DbUserGetCurrent()))->mUnknown0 = key;
                 lbl_803EC0D4 = key;
             } else {
                 err = 1;
@@ -1488,7 +1488,7 @@ int DbUserLoad(DbUserSaveRequest_t *pRequest, void *pOps)
     int result = 0;
 
     if (pRequest->mUnknown10 != 0) {
-        lbl_803A25F0.mDb = fn_8022F3D4(fn_8022F4BC());
+        lbl_803A25F0.mDb = DbUserGetDb(DbUserGetCurrent());
         lbl_803A25F0.mUnknown4 = result;
         lbl_803A25F0.mUnknown8 = pRequest->mUnknown0;
         lbl_803A25F0.mUnknownC = pRequest->mTarget;
@@ -1496,7 +1496,7 @@ int DbUserLoad(DbUserSaveRequest_t *pRequest, void *pOps)
         lbl_803A25F0.pDone = fn_80285A8C;
         fn_801F9228(&lbl_803A25F0, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
     } else {
-        result = fn_8022F53C(fn_801F9134(fn_8022F3D4(fn_8022F4BC()), pRequest->mTarget, 0, (int)pOps));
+        result = DbUserPostLoad(fn_801F9134(DbUserGetDb(DbUserGetCurrent()), pRequest->mTarget, 0, (int)pOps));
     }
     return result;
 }
@@ -1506,7 +1506,7 @@ int DbUserSave(DbUserSaveRequest_t *pRequest, void *pOps)
     int result = 0;
 
     if (pRequest->mUnknown10 != 0) {
-        lbl_803A260C.mDb = fn_8022F3D4(fn_8022F4BC());
+        lbl_803A260C.mDb = DbUserGetDb(DbUserGetCurrent());
         lbl_803A260C.mUnknown4 = result;
         lbl_803A260C.mUnknown8 = pRequest->mUnknown0;
         lbl_803A260C.mUnknownC = pRequest->mTarget;
@@ -1514,12 +1514,12 @@ int DbUserSave(DbUserSaveRequest_t *pRequest, void *pOps)
         lbl_803A260C.pDone = fn_80285A8C;
         fn_801F92EC(&lbl_803A260C, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
     } else {
-        result = fn_801F91AC(fn_8022F3D4(fn_8022F4BC()), pRequest->mTarget, (int)pOps);
+        result = fn_801F91AC(DbUserGetDb(DbUserGetCurrent()), pRequest->mTarget, (int)pOps);
     }
     return result;
 }
 
-int fn_8022F744(void)
+int DbUserCloseDatabases(void)
 {
     int err = 0;
     unsigned int i;
@@ -1533,14 +1533,14 @@ int fn_8022F744(void)
     return err;
 }
 
-int fn_8022F794(int value, char *pName)
+int DbUserSetName(int value, char *pName)
 {
     int err = 0;
-    int old = fn_8022F478(value);
+    int old = DbUserSetCurrent(value);
 
-    if (fn_8022F3D4(fn_8022F4BC()) != -1) {
-        err = fn_801FCE10(0, lbl_802B5DB0, fn_8022F3D4(fn_8022F4BC()), pName);
+    if (DbUserGetDb(DbUserGetCurrent()) != -1) {
+        err = fn_801FCE10(0, lbl_802B5DB0, DbUserGetDb(DbUserGetCurrent()), pName);
     }
-    fn_8022F478(old);
+    DbUserSetCurrent(old);
     return err;
 }

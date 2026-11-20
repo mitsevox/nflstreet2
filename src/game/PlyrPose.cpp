@@ -11,7 +11,7 @@
 #include "game/Ball.h"
 #include <string.h>
 #include "game/fn_801D2B7C.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 /* Quantization of one pose value: a base offset and a bit width. */
 struct PlyrPoseQuant_t {
@@ -530,7 +530,7 @@ void PlyrPoseUpdate(Object_8003DEC4 *pObject)
     MatResetStack();
     if (pObject->mUnknown830) {
         if (--pObject->mUnknown828 < 0) {
-            pObject->mUnknown828 = fn_802372EC(1, 480) + 30;
+            pObject->mUnknown828 = SyncRandGetRange(1, 480) + 30;
         }
     }
     AnimBuildPoseMatrices(pObject);

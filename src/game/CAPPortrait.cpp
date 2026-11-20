@@ -39,9 +39,9 @@ void fn_801A46BC(void);
 int ResCopyToBuffer(void *pArchive, int id, void *pDest);
 int ResGetSize(void *pArchive, int id);
 void LLUIGTexNodeSetCreateCallback(void (*pCallback)(int, unsigned int, PortraitImageRequest_t *));
-int fn_8022F358(int index);
-int fn_8022F3D4(int a);
-int fn_8022F4BC(void);
+int DbUserGetId(int index);
+int DbUserGetDb(int a);
+int DbUserGetCurrent(void);
 void fn_802336C4(void *pObject, Object_8023417C *pModel, int b);
 void fn_80233728(void *pObject);
 void fn_80233760(void *pObject, short *pValues, int count);
@@ -357,7 +357,7 @@ void PortraitReadImage(unsigned int id, PortraitImageRequest_t *pObject)
         fn_801FCE10(0,
                     "use \x8c select 'XTPP' into \x89 and 'LPPP' into \x89 from 'PPRC' where "
                     "'PXSP' = \x85\n",
-                    fn_8022F3D4(fn_8022F358((signed char)_Portrait_pSlots->mSlots[id - 0x277].mValue)), pUnknown12, pBuffer, id);
+                    DbUserGetDb(DbUserGetId((signed char)_Portrait_pSlots->mSlots[id - 0x277].mValue)), pUnknown12, pBuffer, id);
         memcpy(pObject->mpUnknown20, pBuffer, 0x200);
         fn_801D2BD0(pBuffer);
     }
@@ -371,7 +371,7 @@ void PortraitJobSave(PortraitJob_t *pObject)
     fn_801FCE10(0,
                 "use \x8c update 'PPRC' set 'XTPP' = \x89 and 'LPPP' = \x89 where 'PXSP' = "
                 "\x85\n",
-                fn_8022F3D4(fn_8022F4BC()), pUnknown4, pUnknown8, pObject->mUnknown0);
+                DbUserGetDb(DbUserGetCurrent()), pUnknown4, pUnknown8, pObject->mUnknown0);
     fn_801D2BD0(pUnknown4);
     fn_801D2BD0(pUnknown8);
 }

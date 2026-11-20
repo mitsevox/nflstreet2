@@ -266,7 +266,7 @@ extern "C" void fn_800E01D8(Object_80039F5C *p, Block_800E0230 *pBlock, int a)
 
 extern "C" void fn_800E0230(Object_80039F5C *p, Block_800E0230 *pBlock)
 {
-    if (fn_802372EC(0, 100) <= 64) {
+    if (SyncRandGetRange(0, 100) <= 64) {
         pBlock->mUnknown9 = 0;
         if (p->mUnknown776 == 2) {
             fn_800E01D8(p, pBlock, 6);
@@ -406,7 +406,7 @@ extern "C" void fn_800E0694(Object_80039F5C *p, int handle, int index)
 {
     if (p->mRatings[0] < lbl_803EAD34) {
         unsigned int threshold = p->mRatings[0] * lbl_803EAD2C;
-        if ((unsigned int)fn_802372EC(0, lbl_803EAD28) > threshold) {
+        if ((unsigned int)SyncRandGetRange(0, lbl_803EAD28) > threshold) {
             p->mUnknown1008.mUnknown0 = fn_8009A63C(handle)->mUnknown4;
             if (!(SyncRandGetFloat(0) >= lbl_803EAD30)) p->mUnknown1008.mUnknown1 = 1; else p->mUnknown1008.mUnknown1 = 2;
             p->mUnknown1008.mUnknown2 = handle < 0 ? 2 : 1;
@@ -785,7 +785,7 @@ extern "C" int fn_800E1778(Object_80039F5C *p)
     if ((pRecord->mUnknown0 & ~0x80) == 85) {
         chance = 0;
     }
-    if (chance != 0 && fn_802372EC(0, 100) < chance) {
+    if (chance != 0 && SyncRandGetRange(0, 100) < chance) {
         pBlock->mUnknown24 = 1;
         pBlock->mUnknown30 = 0;
     }

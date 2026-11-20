@@ -115,8 +115,8 @@ float RemapCheckEntry(int a, int b, char *p);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_802345C4(struct EngineParamWords *pDesc, int count);
 void LLCacheLockedDisable(void);
-void fn_80237830(int a);
-unsigned int fn_802378C8(void);
+void SyncTimeAdvance(int a);
+unsigned int SyncTimeUpdateTicks(void);
 }
 
 /* Argument of fn_802345C4. */
@@ -350,9 +350,9 @@ unsigned char InGame::Update()
     TimeScaleUpdate();
     if (_InGame_iPauseCount == 0) {
         _InGame_iFrameCount++;
-        fn_80237830(1);
+        SyncTimeAdvance(1);
     }
-    while ((count = fn_802378C8()) != 0) {
+    while ((count = SyncTimeUpdateTicks()) != 0) {
         float value = count;
 
         handled = 1;

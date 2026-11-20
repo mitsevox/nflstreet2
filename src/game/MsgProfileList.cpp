@@ -3,7 +3,7 @@
 
 #include <string.h>
 #include "game/TextRecord.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 
 union ProfileListWord_t {
     int mUnknown0;
@@ -18,7 +18,7 @@ union ProfileListArgs_t {
 extern "C" {
 int UserProfileSortByRecent(signed char *pIndices, int length);
 int UserRecGetName(int index, char *pText);
-int fn_8022F358(int index);
+int DbUserGetId(int index);
 
 void MsgProfileListFill(ProfileListWord_t *pRecords, ProfileListWord_t *pFlags, ProfileListWord_t *pIndices)
 {
@@ -59,7 +59,7 @@ int MsgProfileListHandleMessage(unsigned int id, ProfileListArgs_t *pArgs)
         break;
     }
     case 0x80000003:
-        fn_8022F478(fn_8022F358(pArgs->mUnknown0[3]));
+        DbUserSetCurrent(DbUserGetId(pArgs->mUnknown0[3]));
         break;
     default:
         return 0;

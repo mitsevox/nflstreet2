@@ -8,7 +8,7 @@
 #include "game/CollideContacts.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802270D4.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/LevelSurface.h"
 #include "game/SyncStateRegister.h"
 
@@ -49,7 +49,7 @@ void QuatMultiply(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB);
 void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void fn_8022765C(float *pOut, float *pA, float *pB);
 void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 }
@@ -694,12 +694,12 @@ void BallsStart(int count)
 
     CollideSetPairCallback(0, 1, BallCollidePlayer);
     pHandle = SyncStateRegister(0, (void **)&_Ball_pSet, sizeof(BallBlock_t) + (count - 1) * sizeof(Ball_t), 10, 0x62616C6C);
-    fn_80238234(pHandle, BallBlockInit, BallBlockShutdown, BallBlockSyncModels, BallBlockCompare);
-    fn_80238248(pHandle, BallBlockSave, BallBlockGetSaveSize, BallBlockRestore);
-    pSet = (BallBlock_t *)fn_8023816C(pHandle);
+    SyncStateSetCallbacks(pHandle, BallBlockInit, BallBlockShutdown, BallBlockSyncModels, BallBlockCompare);
+    SyncStateSetSaveCallbacks(pHandle, BallBlockSave, BallBlockGetSaveSize, BallBlockRestore);
+    pSet = (BallBlock_t *)SyncStateGetData(pHandle);
     MemFill(pSet, sizeof(BallBlock_t), 0, 4);
     pSet->mHeader.mCount = count;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 int BallGetLandingPoint(Ball_t *pBall, Vector_80039F5C *pOut)
@@ -894,7 +894,7 @@ void BallKickUp(Ball_t *pBall, int decay)
         pBall->mState.mUnknownF0 = pBall->mState.mUnknownF0 < 0.0f ? 0.0f : pBall->mState.mUnknownF0;
     }
     if (fabsf(vector.mX) < 1e-7f && fabsf(vector.mY) < 1e-7f) {
-        unsigned char degrees = fn_802372EC(0, 360);
+        unsigned char degrees = SyncRandGetRange(0, 360);
 
         fn_80227538(&vector, (int)(degrees * 46603.38f), 0.075f);
     }

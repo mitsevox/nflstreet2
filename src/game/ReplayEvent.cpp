@@ -17,7 +17,7 @@ int fn_8002D0AC(Type_803EA368 *p);
 int fn_8002D0D0(Type_803EA368 *p);
 int fn_8002D158(Type_803EA368 *p);
 int fn_8011F1A4(void);
-int fn_8023790C(void);
+int SyncTimeGetGameTime(void);
 }
 
 /* The address of event slot i's position, &p->mEvents[i].mPos. */
@@ -95,7 +95,7 @@ void ReplayEventAdd(Type_803EA368 *p, int id, Object_80039F5C *pObject, Vector_8
         }
         p->mEvents[i].mId = id;
         p->mEvents[i].mpObject = pObject;
-        p->mEvents[i].mUnknown04 = fn_8023790C();
+        p->mEvents[i].mUnknown04 = SyncTimeGetGameTime();
         if (id == 0x34) {
             p->mEvents[i].mUnknown04 -= 6;
         }

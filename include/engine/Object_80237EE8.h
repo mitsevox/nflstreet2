@@ -13,9 +13,9 @@ typedef struct Object_80237EE8 {
 #ifdef __cplusplus
 extern "C" {
 #endif
-int fn_80237E78(void);
-void fn_80237F98(Object_80237EE8 *p);
-void fn_80237FA4(Object_80237EE8 *p);
+int SyncStateShutdown(void);
+void SyncStateOpenGroup(Object_80237EE8 *p);
+void SyncStateSaveGroup(Object_80237EE8 *p);
 Object_80237EE8 *SyncStateEndGroup(Object_80237EE8 *p);
 #ifdef __cplusplus
 }

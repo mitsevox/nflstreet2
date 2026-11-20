@@ -62,10 +62,10 @@ int CreateTeamCountStandIns(int a);
 void CreateTeamAddPlayer(int a, int b, int c);
 int StoryTestIndexedFlag(int a, int b);
 void StorySetIndexedFlag(int a, int b, int c);
-int fn_8022F358(int index);
-int fn_8022F384(int a);
-int fn_8022F3D4(int a);
-int fn_8022F4BC(void);
+int DbUserGetId(int index);
+int DbUserFindIndex(int a);
+int DbUserGetDb(int a);
+int DbUserGetCurrent(void);
 
 static StoryModelLayout_t _StoryPlayerScreen_ModelLayout = {{330.0f, 290.0f, 7.0f}, 1.0f, 14};
 static unsigned char _StoryPlayerScreen_bActive = 0;
@@ -78,7 +78,7 @@ void StoryPlayerScreenCopyToSlot8(void)
 {
     int a;
     int b;
-    int handle = fn_8022F3D4(fn_8022F358(_StoryPlayerScreen_iProfile));
+    int handle = DbUserGetDb(DbUserGetId(_StoryPlayerScreen_iProfile));
     void *p1;
     void *p2;
 
@@ -140,7 +140,7 @@ void StoryPlayerScreenEnter(int *pId)
     fn_80061DDC();
     if (_StoryPlayerScreen_bActive == 0) {
         _StoryPlayerScreen_bActive = 1;
-        _StoryPlayerScreen_iProfile = fn_8022F384(fn_8022F4BC());
+        _StoryPlayerScreen_iProfile = DbUserFindIndex(DbUserGetCurrent());
         FEPlyrShow();
         FEPlyrSetPosition(0, _StoryPlayerScreen_ModelLayout.mPosition[0], _StoryPlayerScreen_ModelLayout.mPosition[1], _StoryPlayerScreen_ModelLayout.mPosition[2]);
         FEPlyrSetAngle(0, 0.0f);

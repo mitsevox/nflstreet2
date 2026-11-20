@@ -24,7 +24,7 @@ struct Saved_802D4E28 {
     unsigned char mSaved;
 };
 
-/* Index returned by fn_8022F384, and whether fn_80060B0C opened the 'PDFN'
+/* Index returned by DbUserFindIndex, and whether fn_80060B0C opened the 'PDFN'
    database; while it is open, queries skip their own open and close. */
 struct State_803EA5F8 {
     signed char mIndex;
@@ -83,10 +83,10 @@ void fn_8018C48C(int tag);
 int StoryGetLkss(int a);
 char *strncpy(char *pDest, const char *pSource, int count);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
-int fn_8022F358(int index);
-int fn_8022F384(int a);
-int fn_8022F3D4(int a);
-int fn_8022F4BC(void);
+int DbUserGetId(int index);
+int DbUserFindIndex(int a);
+int DbUserGetDb(int a);
+int DbUserGetCurrent(void);
 }
 
 Object_8008044C lbl_8030A2BC;
@@ -184,7 +184,7 @@ void fn_80060A9C(void)
 
 void fn_80060B0C(void)
 {
-    lbl_803EA5F8.mIndex = fn_8022F384(fn_8022F4BC());
+    lbl_803EA5F8.mIndex = DbUserFindIndex(DbUserGetCurrent());
     lbl_803EA5F0 = &lbl_8030A2BC;
     fn_8008044C(&lbl_8030A2BC, 0, 0x54415453);
     StevOpen();
@@ -726,7 +726,7 @@ void fn_80061AE8(void)
     fn_80011600(-1, fn_8000FCCC(), saved);
     UserProfileSelect(lbl_803EA5F8.mIndex, 1);
     if (lbl_803EA5F8.mOpen == 0) {
-        lbl_803EA5F8.mIndex = fn_8022F384(fn_8022F4BC());
+        lbl_803EA5F8.mIndex = DbUserFindIndex(DbUserGetCurrent());
         TournamentOpen(lbl_803EA5F8.mIndex);
     }
     TournamentClearMatches();
@@ -761,7 +761,7 @@ int fn_80061C44(void)
     int result;
 
     if (lbl_803EA5F8.mOpen == 0) {
-        TournamentOpen(lbl_803EA5F8.mIndex = fn_8022F384(fn_8022F4BC()));
+        TournamentOpen(lbl_803EA5F8.mIndex = DbUserFindIndex(DbUserGetCurrent()));
     }
     result = fn_8006164C();
     if (lbl_803EA5F8.mOpen == 0) {
@@ -775,7 +775,7 @@ int fn_80061CAC(void)
     int result;
 
     if (lbl_803EA5F8.mOpen == 0) {
-        TournamentOpen(lbl_803EA5F8.mIndex = fn_8022F384(fn_8022F4BC()));
+        TournamentOpen(lbl_803EA5F8.mIndex = DbUserFindIndex(DbUserGetCurrent()));
     }
     result = fn_8006102C();
     if (lbl_803EA5F8.mOpen == 0) {
@@ -804,12 +804,12 @@ void fn_80061D64(int index)
 {
     fn_801FCE10(0,
                 "use \x8c insert into 'LTFN' set 'TNIW' = 2 and 'LVLT' = 0 and '1DIT' = 1 and '2DIT' = 2\n",
-                fn_8022F3D4(fn_8022F358(index)));
+                DbUserGetDb(DbUserGetId(index)));
 }
 
 void fn_80061DA0(int index)
 {
-    fn_801FCE10(0, "use \x8c delete from 'LTFN' where ('TNIW' = 2)\n", fn_8022F3D4(fn_8022F358(index)));
+    fn_801FCE10(0, "use \x8c delete from 'LTFN' where ('TNIW' = 2)\n", DbUserGetDb(DbUserGetId(index)));
 }
 
 void fn_80061DDC(void)
@@ -821,7 +821,7 @@ int fn_80061DE8(void)
 {
     int count = 0;
 
-    fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LTFN'\n", fn_8022F3D4(fn_8022F4BC()), &count);
+    fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LTFN'\n", DbUserGetDb(DbUserGetCurrent()), &count);
     return count;
 }
 }

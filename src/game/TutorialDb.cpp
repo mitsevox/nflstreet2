@@ -10,7 +10,7 @@
 extern "C" {
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
-int fn_8022F3D4(int a);
+int DbUserGetDb(int a);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 int TutorialIsComplete(int id);
 void TutorialMarkComplete(int id);
@@ -85,7 +85,7 @@ int TutorialGetStepCount(int id)
 
     if (_Tutorial_iProfileDb != -1) {
         fn_801FCE10(0, "use \x8c select 'GCUT' into \x82 from 'RUUT' where 'NCUT' = \x82\n",
-                    fn_8022F3D4(_Tutorial_iProfileDb), &value, id);
+                    DbUserGetDb(_Tutorial_iProfileDb), &value, id);
     }
     return value;
 }
@@ -122,7 +122,7 @@ void TutorialSetStepCount(unsigned int id, unsigned int count)
 
     if (update) {
         fn_801FCE10(0, "use \x8c update 'RUUT' set 'GCUT' = \x82 where 'NCUT' = \x82\n",
-                    fn_8022F3D4(_Tutorial_iProfileDb), value, id);
+                    DbUserGetDb(_Tutorial_iProfileDb), value, id);
     }
 }
 
@@ -142,7 +142,7 @@ int TutorialIsComplete(int id)
     int value = 0;
 
     if (_Tutorial_iProfileDb != -1) {
-        int db = fn_8022F3D4(_Tutorial_iProfileDb);
+        int db = DbUserGetDb(_Tutorial_iProfileDb);
         if (db != -1) {
             fn_801FCE10(0, "use \x8c select 'MCUT' into \x82 from 'RUUT' where 'NCUT' = \x82\n", db, &value, id);
         }
@@ -152,7 +152,7 @@ int TutorialIsComplete(int id)
 
 void TutorialMarkComplete(int id)
 {
-    int db = fn_8022F3D4(_Tutorial_iProfileDb);
+    int db = DbUserGetDb(_Tutorial_iProfileDb);
 
     if (db != -1) {
         int value = 0;

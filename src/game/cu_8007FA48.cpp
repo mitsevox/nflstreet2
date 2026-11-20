@@ -13,8 +13,8 @@ int fn_801FA0BC(int, void *, void *, void *, void *, int *, void *);
 int fn_801FA148(int);
 int DbFileTblLoad(int, int);
 int DbFileTblDestroy(int, int);
-int fn_8022F358(int);
-int fn_8022F3D4(int);
+int DbUserGetId(int);
+int DbUserGetDb(int);
 void fn_80082B18(Record_80082B18 *);
 void fn_80082C64(Record_80082B18 *);
 void fn_80082D30(Record_80082B18 *);
@@ -197,11 +197,11 @@ extern "C" void fn_80080138(int selector, int index, int mode)
             destination = 0x54415453;
             DbFileTblLoad(destination, from);
             created = 1;
-        } else destination = fn_8022F3D4(fn_8022F358(index));
+        } else destination = DbUserGetDb(DbUserGetId(index));
         source = 0x54415453;
         to = 0x59414C50;
     } else {
-        source = fn_8022F3D4(fn_8022F358(index));
+        source = DbUserGetDb(DbUserGetId(index));
         destination = 0x54415453;
         from = 0x59414C50;
         to = 0x52475250;

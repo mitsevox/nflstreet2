@@ -17,7 +17,7 @@
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include <string.h>
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/PlayAlign.h"
 #include "game/PlaySet.h"
 #include "game/fn_800B65A0.h"
@@ -379,7 +379,7 @@ extern "C" void fn_8016E15C(void)
                      fabsf(pos.mX - p->mMotion.mPos.mX) > 6.0f)) {
                     float delay = 0.025098039f;
 
-                    delay += fn_802372EC(0, 8) * 0.01f;
+                    delay += SyncRandGetRange(0, 8) * 0.01f;
                     if (p->mIdBytes[2] == defense) {
                         delay += 0.075f;
                     } else {
