@@ -14,7 +14,7 @@ int SNDautovol(int handle, int time, int vol)
     Record_803A6DF0 *rec;
     Record_803A6DF0 *sub;
 
-    voice = fn_8026A288(handle);
+    voice = SNDVOICEI_get(handle);
     if (voice >= 0) {
         target = vol * (1.0f / 127.0f);
         if (time <= 0) {
