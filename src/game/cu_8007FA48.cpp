@@ -180,7 +180,8 @@ extern "C" void fn_80080084(int value, int handle, int table, DbColumnValue *col
     DbExpression node;
     tables[0].Set(table, 2, &node);
     tables[1].Set(-1);
-    node.Set((static_cast<unsigned long long>(static_cast<unsigned int>(table)) << 32) | 0x44494750, 0x10003, value);
+    unsigned long long column = 0x44494750;
+    node.Set(6, ((unsigned long long)table << 32) | column, 3, value);
     fn_801FA428(handle, tables, 0, columns, &result, 0);
 }
 
