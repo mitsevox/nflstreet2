@@ -35726,6 +35726,76 @@
       ]
     },
     {
+      "source": "src/engine/ssys.cpp",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x8026F5F8-0x8026FD28 (src/engine/ssys.cpp, NASCAR 2005 ssys.cpp), its function and name rows and the sound_cxx compiler row 0x8026E4C0-0x80270494; written in w1, original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026F5F8",
+          "end": "0x8026FD28"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SetMaxBanks__Q23Snd6Systemi",
+          "start": "0x8026F5F8",
+          "end": "0x8026F66C"
+        },
+        {
+          "symbol": "CapOutputMode__Q23Snd6SystemQ23Snd10OutputModePb",
+          "start": "0x8026F66C",
+          "end": "0x8026F710"
+        },
+        {
+          "symbol": "SetOutputMode__Q23Snd6SystemQ23Snd10OutputMode",
+          "start": "0x8026F710",
+          "end": "0x8026F788"
+        },
+        {
+          "symbol": "SetVoices__Q23Snd6SystemQ23Snd6Devicei",
+          "start": "0x8026F788",
+          "end": "0x8026F894"
+        },
+        {
+          "symbol": "SetSndInitsAram__Q23Snd6Systemb",
+          "start": "0x8026F894",
+          "end": "0x8026F908"
+        },
+        {
+          "symbol": "SetAbortHandler__Q23Snd6SystemPFPCc_v",
+          "start": "0x8026F908",
+          "end": "0x8026F97C"
+        },
+        {
+          "symbol": "Init__Q23Snd6Systemi",
+          "start": "0x8026F97C",
+          "end": "0x8026FBB4"
+        },
+        {
+          "symbol": "IsInited__Q23Snd6System",
+          "start": "0x8026FBB4",
+          "end": "0x8026FBCC"
+        },
+        {
+          "symbol": "Restore__Q23Snd6System",
+          "start": "0x8026FBCC",
+          "end": "0x8026FBFC"
+        },
+        {
+          "symbol": "SetHeap__Q23Snd6MemoryQ23Snd6DevicePvi",
+          "start": "0x8026FBFC",
+          "end": "0x8026FCAC"
+        },
+        {
+          "symbol": "SetFunctionProfiler__Q23Snd7ProfilePFPCc_vT1",
+          "start": "0x8026FCAC",
+          "end": "0x8026FD28"
+        }
+      ]
+    },
+    {
       "source": "src/engine/physshape.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801E2CB4-0x801E7034 (src/engine/physshape.cpp) and its function rows; all 39 bodies compared with the full .rodata 0x802B1290-0x802B1480 and .data 0x802F94E4-0x802F9508 (data rows); 36 exact and linked, the holdouts SphereShape::TestPoint, BoxShape::SegmentHits and SphereShape::Draw keep the original bytes.",

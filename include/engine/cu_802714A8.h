@@ -170,6 +170,10 @@ typedef struct Struct_803A6C24 {
     short m1D8[6][6];
     void (*m220)(void);
     void (*m224)(void);
+    unsigned char mUnknown228[9];
+    unsigned char m231;
+    unsigned char mUnknown232[2];
+    int m234;
 } Struct_803A6C24;
 
 typedef struct Setup_80272EC4 {

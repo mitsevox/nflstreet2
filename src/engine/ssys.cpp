@@ -1,0 +1,278 @@
+/* Sound system setup (ssys.cpp): the Snd::System, Snd::Memory and Snd::Profile front end the game
+   calls before and after starting the sound library. Each setter reads the library options, changes
+   one field (bank and voice counts, output mode, ARAM use, abort handler, heaps, profiler hooks) and
+   writes them back, or, once the library runs, queues the change; Init clears the queued changes and
+   starts the library. */
+
+#include "engine/ssysinit.h"
+
+extern "C" {
+extern void *lbl_80300020;
+extern int lbl_80300024;
+extern int lbl_803A7710;
+int fn_802753AC(SNDSYSOPTS *opts, int mode);
+}
+
+/* A setting changed while the library runs: its value and whether it is pending. */
+typedef struct SndPendingCount_t {
+    unsigned char mCount;
+    int mPending;
+} SndPendingCount_t;
+
+typedef struct SndPendingMode_t {
+    int mMode;
+    int mPending;
+} SndPendingMode_t;
+
+extern "C" {
+extern SndPendingCount_t lbl_803A76C8[4];
+extern SndPendingCount_t lbl_803A76E8[4];
+extern SndPendingMode_t lbl_803A7708;
+}
+
+namespace Snd {
+
+enum Device {
+    DEVICE_MAIN = 0,
+    DEVICE_ARAM = 2
+};
+
+enum OutputMode {
+    OUTPUT_MONO = 0,
+    OUTPUT_STEREO = 1,
+    OUTPUT_SURROUND = 8
+};
+
+/* The front end's result for a sound library error code. */
+static inline int _SndSysResult(int error)
+{
+    switch (error) {
+    case 0:
+        return 0;
+    case -19:
+        return -1;
+    case -18:
+        return -7;
+    case -15:
+        return -8;
+    case -14:
+        return -4;
+    case -10:
+        return -9;
+    case -9:
+    case -6:
+        return -2;
+    case -8:
+        return -10;
+    case -7:
+        return -11;
+    default:
+        return -6;
+    }
+}
+
+/* Read and write the library options, giving the front end's result. */
+static inline int _SndSysGetOpts(SNDSYSOPTS *opts)
+{
+    return _SndSysResult(SNDSYS_getopts(opts));
+}
+
+static inline int _SndSysSetOpts(SNDSYSOPTS *opts)
+{
+    return _SndSysResult(SNDSYS_setopts(opts));
+}
+
+class System {
+public:
+    static int SetMaxBanks(int count);
+    static int CapOutputMode(OutputMode mode, bool *capable);
+    static int SetOutputMode(OutputMode mode);
+    static int SetVoices(Device device, int count);
+    static int SetSndInitsAram(bool inits);
+    static int SetAbortHandler(void (*handler)(const char *message));
+    static int Init(int arg);
+    static bool IsInited(void);
+    static int Restore(void);
+};
+
+class Memory {
+public:
+    static int SetHeap(Device device, void *heap, int size);
+};
+
+class Profile {
+public:
+    static int SetFunctionProfiler(void (*enter)(const char *name), void (*exit)(const char *name));
+};
+
+int System::SetMaxBanks(int count)
+{
+    SNDSYSOPTS opts;
+
+    _SndSysGetOpts(&opts);
+    opts.mParams.m8 = count;
+    _SndSysSetOpts(&opts);
+    return 0;
+}
+
+int System::CapOutputMode(OutputMode mode, bool *capable)
+{
+    SNDSYSOPTS opts;
+
+    *capable = false;
+    _SndSysGetOpts(&opts);
+    switch (mode) {
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+        break;
+    case 1:
+        if (opts.m5 > 1) {
+            *capable = true;
+        }
+        break;
+    case 0:
+    case 8:
+        *capable = true;
+        break;
+    }
+    return 0;
+}
+
+int System::SetOutputMode(OutputMode mode)
+{
+    bool capable;
+
+    CapOutputMode(mode, &capable);
+    if (!capable) {
+        return -5;
+    }
+    if (lbl_803A6C24.m168 == 0) {
+        lbl_80300024 = mode;
+    } else {
+        lbl_803A7708.mMode = mode;
+        lbl_803A7708.mPending = 1;
+    }
+    return 0;
+}
+
+int System::SetVoices(Device device, int count)
+{
+    SNDSYSOPTS opts;
+
+    _SndSysGetOpts(&opts);
+    switch (device) {
+    case DEVICE_MAIN:
+        if (lbl_803A6C24.m168 == 0) {
+            opts.mParams.mE = count;
+        } else {
+            lbl_803A76C8[device].mCount = count;
+            lbl_803A76C8[device].mPending = 1;
+        }
+        break;
+    case DEVICE_ARAM:
+        if (lbl_803A6C24.m168 == 0) {
+            opts.mParams.m12 = count;
+        } else {
+            lbl_803A76C8[device].mCount = count;
+            lbl_803A76C8[device].mPending = 1;
+        }
+        break;
+    default:
+        return -5;
+    }
+    if (lbl_803A6C24.m168 == 0) {
+        _SndSysSetOpts(&opts);
+    }
+    return 0;
+}
+
+int System::SetSndInitsAram(bool inits)
+{
+    SNDSYSOPTS opts;
+
+    _SndSysGetOpts(&opts);
+    opts.mParams.m21 = inits;
+    _SndSysSetOpts(&opts);
+    return 0;
+}
+
+int System::SetAbortHandler(void (*handler)(const char *message))
+{
+    SNDSYSOPTS opts;
+
+    _SndSysGetOpts(&opts);
+    opts.mMem.mpAbort = handler;
+    _SndSysSetOpts(&opts);
+    return 0;
+}
+
+int System::Init(int arg)
+{
+    SNDSYSOPTS opts;
+    int result;
+    int i;
+
+    result = _SndSysGetOpts(&opts);
+    if (result < 0) {
+        return _SndSysResult(result);
+    }
+    for (i = 0; i < 4; i++) {
+        lbl_803A76C8[i].mPending = 0;
+        lbl_803A76E8[i].mPending = 0;
+    }
+    lbl_803A7708.mPending = 0;
+    lbl_803A6C24.m231 = 0;
+    lbl_803A6C24.m234 = 0;
+    fn_802753AC(&opts, lbl_80300024);
+    _SndSysSetOpts(&opts);
+    SNDSYSI_init(lbl_80300020, lbl_803A7710, arg);
+    return 0;
+}
+
+bool System::IsInited(void)
+{
+    return lbl_803A6C24.m168 == 1;
+}
+
+int System::Restore(void)
+{
+    SNDSYS_restore();
+    lbl_80300020 = 0;
+    return 0;
+}
+
+int Memory::SetHeap(Device device, void *heap, int size)
+{
+    SNDSYSOPTS opts;
+
+    switch (device) {
+    case DEVICE_MAIN:
+        lbl_80300020 = heap;
+        lbl_803A7710 = size;
+        break;
+    case DEVICE_ARAM:
+        _SndSysGetOpts(&opts);
+        opts.mParams.m38 = (unsigned int)heap;
+        opts.mParams.m3C = size;
+        _SndSysSetOpts(&opts);
+        break;
+    default:
+        return -5;
+    }
+    return 0;
+}
+
+int Profile::SetFunctionProfiler(void (*enter)(const char *name), void (*exit)(const char *name))
+{
+    SNDSYSOPTS opts;
+
+    _SndSysGetOpts(&opts);
+    opts.mMem.mpProfileEnter = enter;
+    opts.mMem.mpProfileExit = exit;
+    _SndSysSetOpts(&opts);
+    return 0;
+}
+
+}
