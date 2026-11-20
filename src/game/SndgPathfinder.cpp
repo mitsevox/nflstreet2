@@ -483,10 +483,10 @@ void ReplayRegisterChannel(void (*write)(void *), void (*read)(void *, void *, v
                  const char *pName);
 int ReplayCursorGetPos(float *pValue);
 void SndgCrowdSetVolume(unsigned char value);
-void fn_8006F850(AudmonEvent_t *pEvent);
-void fn_80070C40(AudmonEvent_t *pEvent);
-void fn_800717E0(Vector_80039F5C *pPos);
-int fn_80071BA0(int a, int b);
+void SndgEventProcess(AudmonEvent_t *pEvent);
+void SndgEventProcessInPlay(AudmonEvent_t *pEvent);
+void SndgEventPlayVariant18(Vector_80039F5C *pPos);
+int SndgEventGetSurfaceHitSfx(int a, int b);
 void SndgMusicUpdate(void);
 void SndgMusicSetVolume(int value);
 void SndgMusicRampCutoff(int a, int b);
@@ -743,7 +743,7 @@ void SndgSpchSetPlayFlags(int flags);
 void SndgSpchClearPlayFlags(int flags);
 int SndgSpchGetPlayFlags(void);
 
-void fn_80071748(int unknown);
+void SndgEventUpdatePatch(int unknown);
 void SpchIGUpdate(void);
 void SpchIGUpdateFrontEnd(void);
 void OptAudioUpdate(int unknown);
@@ -981,7 +981,7 @@ SndgAramRegion_t gSndgAramRegions[20] = {
     { 18, 0xffd800, 0x1000000 },
     { -1, 0xFFFFFFFF, 0xFFFFFFFF },
 };
-SndgUpdateFn _Sndg_apfnIGUpdate[] = { SndgChannelsUpdate, SndgSituationUpdate, (SndgUpdateFn)SpchIGUpdate, fn_80071748, SndgReplayUpdate, OptAudioUpdate, 0 };
+SndgUpdateFn _Sndg_apfnIGUpdate[] = { SndgChannelsUpdate, SndgSituationUpdate, (SndgUpdateFn)SpchIGUpdate, SndgEventUpdatePatch, SndgReplayUpdate, OptAudioUpdate, 0 };
 
 SndgConfig_t gSndgIGConfig = { 18, 1, _Sndg_aSfxTable, gSndgAramRegions, _Sndg_aIGResources, _Sndg_apfnIGUpdate };
 
@@ -2230,7 +2230,7 @@ extern "C" void SndgHandleBallEvent(AudmonEvent_t *p)
                 if (pBall != 0 && pBall->mpUnknown00 != 0 && pBall->mpUnknown00->mUnknown660 != 0) {
                     id = pBall->mpUnknown00->mUnknown660->mSurface;
                 }
-                SndgSfxPlay(fn_80071BA0(fn_800A3444(), id), &p->mPos);
+                SndgSfxPlay(SndgEventGetSurfaceHitSfx(fn_800A3444(), id), &p->mPos);
             } else {
                 SndgSfxPlay(0x69, &p->mPos);
             }
@@ -2240,7 +2240,7 @@ extern "C" void SndgHandleBallEvent(AudmonEvent_t *p)
         Vector_80039F5C vec;
         BallGetVelocity((Ball_t *)p->mUnknown10.mpObject, &vec);
         if (Vec3Magnitude(&vec) > 0.42f) {
-            fn_800717E0(&p->mPos);
+            SndgEventPlayVariant18(&p->mPos);
         }
         SndgAmbObjCreate(4, (unsigned char)p->mUnknown18, &p->mPos, p->mUnknown10.mpObject);
         break;
@@ -2273,8 +2273,8 @@ extern "C" void SndgHandleBallEvent(AudmonEvent_t *p)
 extern "C" void SndgHandleEvent(AudmonEvent_t *p)
 {
     SndgHandleBallEvent(p);
-    fn_8006F850(p);
-    fn_80070C40(p);
+    SndgEventProcess(p);
+    SndgEventProcessInPlay(p);
     SndgSituationHandleEvent(p);
 }
 

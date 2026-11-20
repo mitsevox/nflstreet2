@@ -93,11 +93,11 @@ int PlaTexCacheFindTexture(char *pName);
 void PlaTexCacheSetColors(int index, unsigned char *pColors);
 void PlaTexCacheGetHairTexture(int a, int *pId, int *pPalette);
 int EditMenuIsOpen(void);
-void fn_801A34B0(int a, int b, int c, int d);
-void fn_801A3520(void);
-void fn_801A3588(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit);
-void fn_801A3C40(Object_8003DEC4 *pPlayer);
-void fn_801A3F48(Object_8003DEC4 *pPlayer);
+void PlyrRenderInit(int a, int b, int c, int d);
+void PlyrRenderShutdown(void);
+void PlyrRenderInitPlayer(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit);
+void PlyrRenderDrawPlayer(Object_8003DEC4 *pPlayer);
+void PlyrRenderFreePlayer(Object_8003DEC4 *pPlayer);
 void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 int fn_801486A0(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
@@ -1144,25 +1144,25 @@ extern "C" void PlayerObjCreate(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit
     PlyrPoseInit(pPlayer, pInit->mUnknown04, pInit->mUnknown08, pInit->mUnknown10, pInit->mUnknown14);
     pPlayer->mUnknown4956 = pInit->mUnknown18;
     ParticleTrailReset(&pPlayer->mUnknown5188);
-    fn_801A3588(pPlayer, pInit);
+    PlyrRenderInitPlayer(pPlayer, pInit);
 }
 
 extern "C" void PlayerObjDestroy(Object_8003DEC4 *pPlayer)
 {
-    fn_801A3F48(pPlayer);
+    PlyrRenderFreePlayer(pPlayer);
     PlyrPoseFree(pPlayer);
 }
 
 extern "C" void PlayerObjRenderInit(int a, int b)
 {
     gPlayerObjDrawReady = 1;
-    fn_801A34B0(0, 0, a, b);
+    PlyrRenderInit(0, 0, a, b);
 }
 
 extern "C" void PlayerObjRenderShutdown(void)
 {
     gPlayerObjDrawReady = 0;
-    fn_801A3520();
+    PlyrRenderShutdown();
 }
 
 extern "C" void PlayerObjAddObjType(int owner, int type, int count)
@@ -1180,7 +1180,7 @@ extern "C" int PlayerObjDraw(Object_8003DEC4 *pPlayer, int unused)
     if (pItem && pItem->mUnknown28) {
         PlyrNameTagUpdatePosition(pItem, pPlayer->mUnknown4);
     }
-    fn_801A3C40(pPlayer);
+    PlyrRenderDrawPlayer(pPlayer);
     return 0;
 }
 

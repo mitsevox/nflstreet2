@@ -296,7 +296,7 @@ void PauseRequestCancel(void);
 void SndgAmbPostCue(int type);
 void SndgSetVolumeOption(int channel, unsigned int level);
 void SndgApplyVolumeOptions(void);
-void fn_8006F824(int a);
+void SndgEventSetSfx5Volume(int a);
 void SndgMusicFadeOut(int a, int b);
 int SndgMusicIsPaused(void);
 void SndgMusicResume(void);
@@ -2035,7 +2035,7 @@ void TutorialPostPlay::OnUpdate(float dt)
         } else {
             RumbleEnable(0);
             RumbleStopAll();
-            fn_8006F824(1);
+            SndgEventSetSfx5Volume(1);
             ShowResults();
             mUnknown5 = 1;
         }

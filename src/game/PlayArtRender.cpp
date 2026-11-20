@@ -1,3 +1,7 @@
+/* Play art drawing: draws the small play diagrams of the play-select screen (field, player
+   icons and letters, routes and route ends) from the play-art textures, which it also loads
+   and frees. */
+
 #include "game/Vec2Distance.h"
 #include "game/fn_80177FE0.h"
 #include "game/PlayArtState.h"

@@ -25,8 +25,8 @@ int HairListGetModel(DbCursor *pObject);
 void PlyrModelLodClear(ModelLod_802DF190 *pLod);
 void PlyrModelLodInit(ModelLod_802DF190 *pLod, ModelLod_802DF190 *pSource, AnimSkeleton_t *pSkeleton);
 void PlyrModelLodBindSkeleton(ModelLod_802DF190 *pLod, AnimSkeleton_t *pSkeleton);
-void fn_801A4690(int a);
-void fn_801A46BC(void);
+void PlyrRenderBindPartTable(int a);
+void PlyrRenderUnbindPartTable(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int FileSetMemAllocFlags(int value);
 void GlibSyncFrame(void);
@@ -726,11 +726,11 @@ void fn_8015E65C(void)
 
 void fn_8015E684(void)
 {
-    fn_801A4690(0);
+    PlyrRenderBindPartTable(0);
     fn_8015D3EC(1);
     fn_8015D550(1);
     fn_8015D718(1);
-    fn_801A46BC();
+    PlyrRenderUnbindPartTable();
 }
 
 void fn_8015E6C4(void)
@@ -802,9 +802,9 @@ void fn_8015E908(int a)
 
 void fn_8015E950(int load, int flag)
 {
-    fn_801A4690(0);
+    PlyrRenderBindPartTable(0);
     fn_8015E240(load, flag);
-    fn_801A46BC();
+    PlyrRenderUnbindPartTable();
 }
 
 void fn_8015E994(void)
@@ -1331,30 +1331,30 @@ void fn_8015FE4C(void)
     }
     if (lbl_803EB331 == 1) {
         lbl_803EB331 = 0;
-        fn_801A4690(0);
+        PlyrRenderBindPartTable(0);
         fn_8015DA80(lbl_803ECA74[0], 0);
-        fn_801A46BC();
+        PlyrRenderUnbindPartTable();
         lbl_803ECA78[0](lbl_803ECA7C[0]);
     }
     if (lbl_803EB332 == 1) {
         lbl_803EB332 = 0;
-        fn_801A4690(0);
+        PlyrRenderBindPartTable(0);
         fn_8015DD3C(lbl_803ECA80[0], 0);
-        fn_801A46BC();
+        PlyrRenderUnbindPartTable();
         lbl_803ECA84[0](lbl_803ECA88[0]);
     }
     if (lbl_803EB333 == 1) {
         lbl_803EB333 = 0;
-        fn_801A4690(0);
+        PlyrRenderBindPartTable(0);
         fn_8015DE3C(lbl_803ECA8C[0], 0);
-        fn_801A46BC();
+        PlyrRenderUnbindPartTable();
         lbl_803ECA90[0](lbl_803ECA94[0]);
     }
     if (lbl_803EB334 == 1) {
         lbl_803EB334 = 0;
-        fn_801A4690(0);
+        PlyrRenderBindPartTable(0);
         fn_8015DF3C(lbl_803ECA98[0], 0);
-        fn_801A46BC();
+        PlyrRenderUnbindPartTable();
         lbl_803ECA9C[0](lbl_803ECAA0[0]);
     }
 }

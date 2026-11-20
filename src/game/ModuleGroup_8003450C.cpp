@@ -171,7 +171,7 @@ void TeamLogoInit(void);
 void TeamLogoShutdown(void);
 void FldObjAddObjType(int a);
 void LevelLightsInit(void);
-void fn_801A4650(Viewport_t *pObject);
+void PlyrRenderSetViewport(Viewport_t *pObject);
 void SimpShadowInit(void);
 void SimpShadowShutdown(void);
 int ResSync(int a);
@@ -980,7 +980,7 @@ int Plyr::Init()
     PlyrMgrRegister(14);
     ResTrackLabel("PlaStateInitFinish");
     PlyrMgrEmptyPass();
-    fn_801A4650(GameVpt::GetViewport());
+    PlyrRenderSetViewport(GameVpt::GetViewport());
     fn_8004FF8C();
     return 1;
 }

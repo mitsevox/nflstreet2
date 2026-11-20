@@ -31,7 +31,7 @@ void SndSetOutputMode(int a, int b);
 void SndSetAllocHeap(int a);
 int SndInit(SndInitDesc_t *pDesc);
 int SndShutdown(void);
-void fn_80071790(void);
+void SndgEventNull(void);
 }
 
 static void *sDependencies[] = { 0 };
@@ -68,7 +68,7 @@ int Snd::Init()
     }
     SndSetAllocHeap(256);
     SndInit(&desc);
-    fn_80071790();
+    SndgEventNull();
     return 1;
 }
 

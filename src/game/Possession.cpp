@@ -71,8 +71,8 @@ void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 unsigned char CheatFlagsIsSet(int index);
 void HotspotResolvePending(Object_80039F5C *p);
 void SndgSpchSetPlayFlags(int a);
-void fn_80071458(Object_80039F5C *p, void *pBall);
-void fn_80071540(Object_80039F5C *p, void *pBall);
+void SndgEventPostBallContact(Object_80039F5C *p, void *pBall);
+void SndgEventPostBallValue(Object_80039F5C *p, void *pBall);
 void fn_80093C3C(int a, short b, Object_80039F5C *p);
 void fn_80097028(Object_80039F5C *p);
 int fn_8009704C(Object_80039F5C *p);
@@ -836,7 +836,7 @@ int PossTryCatch(void *pBall, Object_80039F5C *p, unsigned int move)
         caught = _Poss_bAllowCatch;
     }
     if (caught == 1) {
-        fn_80071458(p, pBall);
+        SndgEventPostBallContact(p, pBall);
         PossGiveBall(p, pBall);
         BallSetTarget(pBall, 0);
         if (handle == 0xFFFF || !fn_8009A5D4(handle)) {
@@ -844,7 +844,7 @@ int PossTryCatch(void *pBall, Object_80039F5C *p, unsigned int move)
         }
         CamGameSetModeAll(1);
     } else {
-        fn_80071540(p, pBall);
+        SndgEventPostBallValue(p, pBall);
     }
     return caught;
 }
@@ -872,14 +872,14 @@ int PossTryReceivePitch(void *pBall, Object_80039F5C *p)
         return 1;
     }
     if (caught == 1) {
-        fn_80071458(p, pBall);
+        SndgEventPostBallContact(p, pBall);
         Object_80039F5C *pPasser = BallGetCurrentLastHolder();
 
         AudmonEventPostId(0x1E, &p->mMotion.mPos, p->mId, 0, (p->mId >> 8 & 0xFF) == (pPasser->mId >> 8 & 0xFF), 0);
         PossGiveBall(p, pBall);
         PossLogBallResult(p);
     } else {
-        fn_80071540(p, pBall);
+        SndgEventPostBallValue(p, pBall);
     }
     return caught;
 }

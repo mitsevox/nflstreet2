@@ -64,9 +64,9 @@ void MatLoad();
 void MatPop();
 void LLLightGetProjectorMatrix(int);
 unsigned int LLLightGetProjectorColor(int);
-void fn_801A3FFC();
-void fn_801A42D4();
-void fn_801A45CC();
+void PlyrRenderDrawShadows();
+void PlyrRenderDrawClippedShadows();
+void PlyrRenderDrawTrails();
 void PlyrPoseWriteState(Object_8003DEC4 *, BitStream_t *);
 void PlyrPoseReadState(Object_8003DEC4 *, BitStream_t *, BitStream_t *, BitStream_t *,
                  BitStream_t *, float);
@@ -101,10 +101,10 @@ int PlyrObjsDrawShadowQuads();
 int PlyrObjsDrawShadowClips();
 int PlyrObjsDrawTrails();
 void PlayerObjAddObjType(int, int, int);
-void fn_801A4688(int);
+void PlyrRenderSetHideFlagged(int);
 int fn_8015E440(int, int);
 void fn_80234A14(void *, int);
-void fn_801A3514();
+void PlyrRenderNewFrame();
 void PlyrObjsInitStateTables(int);
 void PlyrStatesRegister(int, int);
 void PlyrObjsLoadSkeletons();
@@ -483,15 +483,15 @@ int PlyrObjsUpdateShadows() {
   return 0;
 }
 int PlyrObjsDrawShadowQuads() {
-  fn_801A3FFC();
+  PlyrRenderDrawShadows();
   return 0;
 }
 int PlyrObjsDrawShadowClips() {
-  fn_801A42D4();
+  PlyrRenderDrawClippedShadows();
   return 0;
 }
 int PlyrObjsDrawTrails() {
-  fn_801A45CC();
+  PlyrRenderDrawTrails();
   return 0;
 }
 void PlyrObjsInitBodySkelPose(AnimSkeleton_t *skeleton) {
@@ -1011,7 +1011,7 @@ void PlyrObjsRegisterState() {
   int size = PlyrPoseGetStreamBits(0) + PlyrObjsGetStreamBits();
   ReplayRegisterChannel(PlyrObjsWriteState, PlyrObjsReadState, size * lbl_803EA434, "Players");
 }
-void PlyrObjsSetDrawFlag(int a) { fn_801A4688(a); }
+void PlyrObjsSetDrawFlag(int a) { PlyrRenderSetHideFlagged(a); }
 void PlyrObjsSetBodyType(int index, int value) {
   Object_8003DEC4 *object = PlyrObjsGet(index);
   if (value == 7)
@@ -1021,7 +1021,7 @@ void PlyrObjsSetBodyType(int index, int value) {
   fn_80234A14(&object->mBytes992[172], 1);
 }
 void PlyrObjsDrawShadows() {
-  fn_801A3514();
+  PlyrRenderNewFrame();
   PlyrObjsUpdateShadows();
 }
 }

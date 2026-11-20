@@ -1,3 +1,8 @@
+/* Play camera: the game camera mode used while a play runs. It follows the ball between the
+   views of its camera definition, pans with the ball, adds a short random shake when the game
+   asks for one, can swing half way around the field on request, and keeps the camera inside
+   the field limits. */
+
 #include "game/fn_80177FE0.h"
 #include "game/GameCamera.h"
 #include "game/GameOptions.h"
@@ -231,7 +236,6 @@ unsigned char CamPlayProcessOrbit(GameCamera_t *camera)
     return camera->mUnknownE4;
 }
 unsigned char CamPlayIsOrbiting(GameCamera_t *camera) { return camera->mUnknownE4; }
-/* Converts a vector of degrees to the 24-bit integer angle units. */
 #define ANGLES_FROM_DEGREES(dst, degrees) \
     { \
         CamPlayAngles_t angles_ = {0, 0, 0}; \

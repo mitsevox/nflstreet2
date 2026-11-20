@@ -133,11 +133,11 @@ void PauseSetPollDelay(int value);
 void AudmonEventPost(int type, Vector_80039F5C *pPos);
 int SndgSfxPlay(int index, Vector_80039F5C *pPos);
 void SndgReplayReset(void);
-void fn_800711DC(int a);
-void fn_800711E0(void);
-void fn_80071344(void);
-void fn_80071348(void);
-void fn_80071794(int a);
+void SndgEventSetReplayKind(int a);
+void SndgEventReloadCrowdBanks(void);
+void SndgEventOnReplayCase1(void);
+void SndgEventOnReplayCase2(void);
+void SndgEventPlayReplaySfx(int a);
 void SndgMusicSetMode(int a);
 void SndgMusicResume(void);
 void fn_8009BB50(int a, int b);
@@ -778,7 +778,7 @@ extern "C" int ReplayExitPlayback(Type_803EA368 *p)
         GameEventFlagsSetFlag0(_Replay_bSavedEventFlag0);
         fn_800A866C();
         ParticlesStopOnLeave();
-        fn_800711E0();
+        SndgEventReloadCrowdBanks();
         result = 0;
     }
     ReplayDebugWindowClose();
@@ -848,18 +848,18 @@ extern "C" void ReplayTriggerMarkEffect(int type)
     case 0:
         break;
     case 1:
-        fn_80071344();
+        SndgEventOnReplayCase1();
         break;
     case 2:
-        fn_80071348();
+        SndgEventOnReplayCase2();
         break;
     case 3:
         break;
     case 4:
-        fn_80071794(8);
+        SndgEventPlayReplaySfx(8);
         break;
     case 5:
-        fn_80071794(9);
+        SndgEventPlayReplaySfx(9);
         break;
     }
 }
@@ -1936,13 +1936,13 @@ extern "C" void ReplayShotListStart(Type_803EA368 *p, RecordList_8002E7C0 *pList
     }
     ReplayStartShot(p, &pList->mUnknown000[0].mUnknown04);
     if (pList->mUnknown584 & 2) {
-        fn_800711DC(0);
+        SndgEventSetReplayKind(0);
     } else if (pList->mUnknown584 & 4) {
-        fn_800711DC(1);
+        SndgEventSetReplayKind(1);
     } else if (pList->mUnknown584 & 8) {
-        fn_800711DC(2);
+        SndgEventSetReplayKind(2);
     } else {
-        fn_800711DC(3);
+        SndgEventSetReplayKind(3);
     }
 }
 

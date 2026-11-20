@@ -3934,7 +3934,7 @@ void fn_800FB768(void);
 }
 
 extern "C" {
-void fn_800718A0(void);
+void SndgEventUpdateDelayed(void);
 }
 
 extern "C" {
@@ -4394,7 +4394,7 @@ struct Entry_80297E84 {
 };
 
 extern "C" {
-void fn_80071C34(int a);
+void SndgEventSetMusicHold(int a);
 }
 
 
@@ -5029,7 +5029,7 @@ void InGamePlayCallClearSaved(void);
 }
 
 extern "C" {
-void fn_80071C34(int value);
+void SndgEventSetMusicHold(int value);
 }
 
 extern "C" {
@@ -16166,7 +16166,7 @@ void LivePlayPhase::OnUpdate(float dt)
         fn_800FB768();
         fn_8009E138();
         fn_800A615C();
-        fn_800718A0();
+        SndgEventUpdateDelayed();
         BallGetCurrentHolder();
         ScrmUpdateBallCarrier();
     }
@@ -19724,7 +19724,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
                     0);
         if (lbl_803EC954[team]->mUnknown54 == 0) {
             if (event == 9 || event == 14 || event == 16) {
-                fn_80071C34(1);
+                SndgEventSetMusicHold(1);
             }
             fn_800A7A0C(team);
         }
@@ -19753,7 +19753,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
                     0);
         if (lbl_803EC954[other]->mUnknown54 == 0) {
             if (event == 9 || event == 14 || event == 16) {
-                fn_80071C34(1);
+                SndgEventSetMusicHold(1);
             }
             fn_800A7A0C(other);
         }
@@ -31693,7 +31693,7 @@ extern "C" void fn_800C1CA0(void)
     fn_8022BF68();
     StyleTrackerEndPlay();
     StyleTrackerReset();
-    fn_80071C34(0);
+    SndgEventSetMusicHold(0);
     if (SpchIGIsSceneLineActive()) {
         SpchIGEndSceneLine();
     }

@@ -1,3 +1,7 @@
+/* Route arrows: the arrows drawn on the field that show each player's route from his play
+   commands (runs, cuts, blocks and zones) while the play is chosen or previewed. A pool of 27
+   arrow objects is kept in the game object list and handed out per shown player. */
+
 #include "game/RouteArrow.h"
 
 extern "C" {

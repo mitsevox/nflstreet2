@@ -2289,9 +2289,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8006F810.cpp",
+      "source": "src/game/SndgEvents.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row of src/game/cu_8006F810.cpp (0x8006F810-0x80071C3C) and the data row 0x80290B58-0x80290BC8 of its whole .rodata (pools and the two constant tables); linked with holdouts (owner ruling of 2026-11-20): 35 of 37 functions exact, the two holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/game/SndgEvents.cpp (0x8006F810-0x80071C3C) and the data row 0x80290B58-0x80290BC8 of its whole .rodata (pools and the two constant tables); linked with holdouts (owner ruling of 2026-11-20): 35 of 37 functions exact, the two holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -2321,15 +2321,15 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8006F850",
+            "function": "SndgEventProcess",
             "evidence": "evidence.tsv source-form 0x8006F850-0x80070C40"
           },
           {
-            "function": "fn_80071BDC",
+            "function": "SndgEventGetSurfaceSfx",
             "evidence": "evidence.tsv source-form 0x80071BDC-0x80071C2C"
           }
         ],
-        "evidence": "x1f merge notes (swarm x1 tracking table): src/game/cu_8006F810.cpp holds out fn_8006F850 and fn_80071BDC."
+        "evidence": "x1f merge notes (swarm x1 tracking table): src/game/SndgEvents.cpp holds out fn_8006F850 and fn_80071BDC."
       }
     },
     {
@@ -2383,9 +2383,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8015A248.cpp",
+      "source": "src/game/RouteArrow.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x8015A248-0x8015C25C (src/game/cu_8015A248.cpp) and its data rows; one source linked with holdouts (owner ruling of 2026-11-20): the former three-function linked prefix and the 21 exact later functions are linked (source-form rows 0x8015AF48-0x8015B344 and 0x8015B834-0x8015BCAC), the three holdouts keep the original bytes; .rodata 0x802A3E40-0x802A3EF8 whole.",
+      "evidence": "evidence.tsv provisional unit row 0x8015A248-0x8015C25C (src/game/RouteArrow.cpp) and its data rows; one source linked with holdouts (owner ruling of 2026-11-20): the former three-function linked prefix and the 21 exact later functions are linked (source-form rows 0x8015AF48-0x8015B344 and 0x8015B834-0x8015BCAC), the three holdouts keep the original bytes; .rodata 0x802A3E40-0x802A3EF8 whole.",
       "sections": [
         {
           "section": ".text",
@@ -2433,7 +2433,7 @@
             "evidence": "evidence.tsv source-form 0x8015BCAC-0x8015BED4"
           }
         ],
-        "evidence": "x1f/x2d merge notes (swarm x1/x2 tracking tables): src/game/cu_8015A248.cpp holds out fn_8015A818, fn_8015B344, fn_8015BCAC."
+        "evidence": "x1f/x2d merge notes (swarm x1/x2 tracking tables): src/game/RouteArrow.cpp holds out fn_8015A818, fn_8015B344, fn_8015BCAC."
       }
     },
     {
@@ -18126,9 +18126,9 @@
       }
     },
     {
-      "source": "src/game/cu_801A14D8.cpp",
+      "source": "src/game/PlyrRender.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x801A14D8-0x801A4AD4 (src/game/cu_801A14D8.cpp), its exact function extents, the data rows 0x802AE098-0x802AE528 (.rodata) and 0x802F2934-0x802F3488 (.data) and the linker row of the discarded _PlyrHeadSetModelNow; linked with holdouts (owner ruling of 2026-11-20), its one holdout keeping its original bytes. The .sdata, .sbss and .bss objects it uses stay external original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x801A14D8-0x801A4AD4 (src/game/PlyrRender.cpp), its exact function extents, the data rows 0x802AE098-0x802AE528 (.rodata) and 0x802F2934-0x802F3488 (.data) and the linker row of the discarded _PlyrHeadSetModelNow; linked with holdouts (owner ruling of 2026-11-20), its one holdout keeping its original bytes. The .sdata, .sbss and .bss objects it uses stay external original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -18164,7 +18164,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801A1650",
+            "function": "PlyrRenderCalcLight",
             "evidence": "evidence.tsv source-form 0x801A1650-0x801A1978"
           }
         ],
@@ -24140,7 +24140,7 @@
       }
     },
     {
-      "source": "src/game/cu_801A0088.cpp",
+      "source": "src/game/PlayArtRender.cpp",
       "profile": "game_cpp_holdouts",
       "evidence": "evidence.tsv provisional/provisional membership, target function/data extents and instruction-supported shared state/source-form records; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes.",
       "sections": [
@@ -24500,9 +24500,9 @@
       }
     },
     {
-      "source": "src/game/cu_8013FF84.cpp",
+      "source": "src/game/camplay.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8013FF84-0x8014116C (src/game/cu_8013FF84.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "evidence": "evidence.tsv unit row 0x8013FF84-0x8014116C (src/game/camplay.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
       "sections": [
         {
           "section": ".text",

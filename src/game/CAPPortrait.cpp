@@ -34,8 +34,8 @@ AnimSkeleton_t *PlyrObjsGetSkel19(void);
 void PlaDynClutApplyColors(void *p, int id, FMCAPPORTText *pText);
 void *PlaTexCacheGetArchive(void);
 void PortraitRenderQuantize(PortraitJob_t *pObject);
-void fn_801A4690(int a);
-void fn_801A46BC(void);
+void PlyrRenderBindPartTable(int a);
+void PlyrRenderUnbindPartTable(void);
 int ResCopyToBuffer(void *pArchive, int id, void *pDest);
 int ResGetSize(void *pArchive, int id);
 void LLUIGTexNodeSetCreateCallback(void (*pCallback)(int, unsigned int, PortraitImageRequest_t *));
@@ -173,7 +173,7 @@ void PortraitLoadModels(PortraitJob_t *pObject)
     short values[53];
     unsigned int i;
 
-    fn_801A4690(0);
+    PlyrRenderBindPartTable(0);
     for (i = 0; i < 2; i++) {
         int id = pObject->mUnknown44[i];
 
@@ -209,7 +209,7 @@ void PortraitLoadModels(PortraitJob_t *pObject)
         fn_80233760(pObject->mUnknown520, values, 37);
     }
     fn_8015F3FC(0);
-    fn_801A46BC();
+    PlyrRenderUnbindPartTable();
 }
 
 void PortraitFreeModels(PortraitJob_t *pObject)

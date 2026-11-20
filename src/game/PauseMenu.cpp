@@ -62,8 +62,8 @@ int ReplayIsHalted(void *p);
 int InGamePauseIsRestart(void);
 int InGamePauseIsForfeit(void);
 void PauseRequestInit(void);
-void fn_8006F824(int a);
-void fn_800719D4(void);
+void SndgEventSetSfx5Volume(int a);
+void SndgEventSetSfx34Volume(void);
 void SpchIGPauseChannel(int index);
 void SpchIGResumeChannel(int index);
 void SpchIGSetEnabled(unsigned char value);
@@ -142,8 +142,8 @@ extern "C" {
 
 void PauseEnterAudio(void)
 {
-    fn_8006F824(0);
-    fn_800719D4();
+    SndgEventSetSfx5Volume(0);
+    SndgEventSetSfx34Volume();
     fn_801F5D0C();
     SpchIGPauseChannel(0);
     SpchIGPauseChannel(1);

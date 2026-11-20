@@ -1,3 +1,7 @@
+/* Game-event sounds: turns the in-game audio events (hits, footsteps, catches, whistles,
+   crowd moments, pauses) into sound effects, music modes and crowd reactions, and streams
+   the crowd and level sound banks during a game. */
+
 #include "game/PlayBookGetPlay.h"
 #include "game/SndgPathfinder.h"
 #include "game/Block_800C9D6C.h"
@@ -15,7 +19,7 @@
 #include "game/GameModeType.h"
 #include "game/SyncRandGetRange.h"
 
-struct Record_80071594 {
+struct SndgEventRecord_t {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
@@ -47,23 +51,23 @@ int fn_800A9680(void);
 int SndgMusicGetMode(void);
 int fn_801650DC(PlayBookPlay_t *pRecord);
 int fn_80178348(void);
-static const unsigned int lbl_80290B9C[4] = {5, 10, 12, 15};
+static const unsigned int _SndgEvent_aCrowdEvents[4] = {5, 10, 12, 15};
 extern float gPlyrMoveFwdSpeed;
 extern unsigned char lbl_803EA6EC;
 extern unsigned char lbl_803EA6F8;
 extern unsigned int lbl_803EA6E0;
-void fn_80070D68(void);
-void fn_80070E8C(void);
-void fn_80070F84(void);
-void fn_8007105C(void);
-void fn_800710C8(void);
-void fn_8007134C(void);
-int fn_800717E0(Vector_80039F5C *pPos);
-int fn_8007184C(Vector_80039F5C *pPos);
-void fn_80071914(Vector_80039F5C *pPos);
-int fn_80071A04(int id, Vector_80039F5C *pPos);
-int fn_80071A6C(int id, Vector_80039F5C *pPos, unsigned int volume);
-int fn_80071B08(int unused, int value);
+void SndgEventCycleCrowdBanks(void);
+void SndgEventCycleBanks145(void);
+void SndgEventLoadFormationBank(void);
+void SndgEventCycleBanks77(void);
+void SndgEventLoadLevelBank(void);
+void SndgEventLoadTeamBanks(void);
+int SndgEventPlayVariant18(Vector_80039F5C *pPos);
+int SndgEventPlayVariant24(Vector_80039F5C *pPos);
+void SndgEventQueueDelayed(Vector_80039F5C *pPos);
+int SndgEventPlayGroup(int id, Vector_80039F5C *pPos);
+int SndgEventPlayGroupVolume(int id, Vector_80039F5C *pPos, unsigned int volume);
+int SndgEventGetFootstepSfx(int unused, int value);
 
 
 int fn_80177F70(void);
@@ -91,7 +95,7 @@ int SyncRandBitPoolNew(int a, int b);
 int SyncRandBitPoolDraw(int handle);
 void SyncRandBitPoolDelete(int handle);
 extern unsigned char lbl_802D63D0[];
-static const unsigned char lbl_80290BAC[][2] = {
+static const unsigned char _SndgEvent_aSfxGroups[][2] = {
     {0x44, 4}, {0x66, 2}, {0x4C, 2}, {0x48, 4}, {0x50, 4}, {0x54, 4},
     {0x58, 4}, {0x5C, 4}, {0x60, 4}, {0x64, 2}, {0x4E, 2},
 };
@@ -144,27 +148,27 @@ extern unsigned char lbl_803EA6F9;
 extern unsigned char lbl_803EA6D9;
 extern unsigned char lbl_803EA6DA;
 
-int fn_80071974(Vector_80039F5C *p);
-int fn_800719A4(Vector_80039F5C *p);
-void fn_800719D4(void);
-int fn_80071BDC(int value);
-void fn_80071C2C(int value);
+int SndgEventPlaySfx34(Vector_80039F5C *p);
+int SndgEventPlaySfx35(Vector_80039F5C *p);
+void SndgEventSetSfx34Volume(void);
+int SndgEventGetSurfaceSfx(int value);
+void SndgEventSetCrowdCycle(int value);
 
-void fn_8006F810(void)
+void SndgEventInit(void)
 {
     lbl_803EA6CC = lbl_803EA6CD = 1;
 }
 
-void fn_8006F820(void)
+void SndgEventShutdown(void)
 {
 }
 
-void fn_8006F824(int value)
+void SndgEventSetSfx5Volume(int value)
 {
     SndgSfxSetVolume(5, value, 0);
 }
 
-void fn_8006F850(AudmonEvent_t *p)
+void SndgEventProcess(AudmonEvent_t *p)
 {
     switch (p->mType) {
     case 53: SndgSfxPlay(48, &p->mPos); break;
@@ -191,7 +195,7 @@ void fn_8006F850(AudmonEvent_t *p)
         Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
         Object_8003DEC4 *pose = (Object_8003DEC4 *)player->mpUnknown4;
         if (pose && pose->mUnknown972) surface = ((LevelSurface_t *)pose->mUnknown972)->mSurface;
-        int id = fn_80071BDC(surface);
+        int id = SndgEventGetSurfaceSfx(surface);
         if (BallGetCurrentHolder() == player) {
             SndgSfxPlayVolume(id, &p->mPos,
                 (unsigned char)(SndgSfxGetVolume(id) * 2 <= 127 ? SndgSfxGetVolume(id) * 2 : 127));
@@ -209,7 +213,7 @@ void fn_8006F850(AudmonEvent_t *p)
         }
         int id;
         if (p->mUnknown10.mValue == 12) {
-            fn_8007184C(&p->mPos);
+            SndgEventPlayVariant24(&p->mPos);
             break;
         }
         if (p->mUnknown10.mValue == 34) id = active ? 46 : 45;
@@ -218,7 +222,7 @@ void fn_8006F850(AudmonEvent_t *p)
         else if (p->mUnknown10.mValue == 43) id = active ? 52 : 51;
         else break;
         SndgSfxPlay(id, &p->mPos);
-        fn_800717E0(&p->mPos);
+        SndgEventPlayVariant18(&p->mPos);
         break;
     }
     case 36: {
@@ -228,17 +232,17 @@ void fn_8006F850(AudmonEvent_t *p)
         if (pose && pose->mUnknown972) surface = ((LevelSurface_t *)pose->mUnknown972)->mSurface;
         int state = fn_800A3444();
         lbl_803EA6D1 = (lbl_803EA6D1 + 1) % 2;
-        SndgSfxPlay(fn_80071B08(state, surface) + lbl_803EA6D1, &p->mPos);
+        SndgSfxPlay(SndgEventGetFootstepSfx(state, surface) + lbl_803EA6D1, &p->mPos);
         break;
     }
-    case 101: fn_80071974(&p->mPos); break;
-    case 102: fn_800719D4(); break;
-    case 103: fn_800719A4(&p->mPos); break;
+    case 101: SndgEventPlaySfx34(&p->mPos); break;
+    case 102: SndgEventSetSfx34Volume(); break;
+    case 103: SndgEventPlaySfx35(&p->mPos); break;
     case 62:
         if (p->mUnknown14 || !p->mUnknown0) {
             SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             SndgSfxPlay(108, &p->mPos);
-        } else { fn_80071A04(10, &p->mPos); fn_80071914(&p->mPos); }
+        } else { SndgEventPlayGroup(10, &p->mPos); SndgEventQueueDelayed(&p->mPos); }
         break;
     case 63:
         if (p->mUnknown14 || !p->mUnknown0) {
@@ -252,14 +256,14 @@ void fn_8006F850(AudmonEvent_t *p)
                 if (scaled > 24) volume = (unsigned char)(scaled > 100 ? 100 : scaled);
                 else volume = 25;
             }
-            fn_80071A6C(0, &p->mPos, volume);
+            SndgEventPlayGroupVolume(0, &p->mPos, volume);
         }
         break;
     case 65:
         if (p->mUnknown14 || !p->mUnknown0) {
             SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             SndgSfxPlay(106, &p->mPos);
-        } else fn_80071A04(3, &p->mPos);
+        } else SndgEventPlayGroup(3, &p->mPos);
         break;
     case 66:
         if (p->mUnknown14) {
@@ -279,26 +283,26 @@ void fn_8006F850(AudmonEvent_t *p)
                 if (scaled > 24) volume = (unsigned char)(scaled > 100 ? 100 : scaled);
                 else volume = 25;
             }
-            fn_80071A6C(2, &p->mPos, volume);
+            SndgEventPlayGroupVolume(2, &p->mPos, volume);
         }
         break;
     case 68:
         if (p->mUnknown14 || !p->mUnknown0) {
             SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             SndgSfxPlay(106, &p->mPos);
-        } else { fn_80071A04(4, &p->mPos); fn_80071914(&p->mPos); }
+        } else { SndgEventPlayGroup(4, &p->mPos); SndgEventQueueDelayed(&p->mPos); }
         break;
     case 69:
         if (p->mUnknown14 || !p->mUnknown0) {
             SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             SndgSfxPlay(108, &p->mPos);
-        } else { fn_80071A04(5, &p->mPos); fn_80071914(&p->mPos); }
+        } else { SndgEventPlayGroup(5, &p->mPos); SndgEventQueueDelayed(&p->mPos); }
         break;
     case 70:
         if (p->mUnknown14 || !p->mUnknown0) {
             SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             SndgSfxPlay(108, &p->mPos);
-        } else { fn_80071A04(6, &p->mPos); fn_80071914(&p->mPos); }
+        } else { SndgEventPlayGroup(6, &p->mPos); SndgEventQueueDelayed(&p->mPos); }
         break;
     case 72:
         if (p->mUnknown14 || !p->mUnknown0) {
@@ -318,18 +322,18 @@ void fn_8006F850(AudmonEvent_t *p)
                 if (scaled > 24) volume = (unsigned char)(scaled > 100 ? 100 : scaled);
                 else volume = 25;
             }
-            fn_80071A6C(8, &p->mPos, volume);
+            SndgEventPlayGroupVolume(8, &p->mPos, volume);
         }
         break;
     case 64: case 74:
         if (p->mUnknown14 || !p->mUnknown0) SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
-        fn_80071A04(9, &p->mPos);
+        SndgEventPlayGroup(9, &p->mPos);
         break;
     case 75:
         if (p->mUnknown14) {
             SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             SndgSfxPlay(111, &p->mPos);
-        } else fn_80071A04(8, &p->mPos);
+        } else SndgEventPlayGroup(8, &p->mPos);
         break;
     case 76:
         if (p->mUnknown14 || !p->mUnknown0) {
@@ -341,12 +345,12 @@ void fn_8006F850(AudmonEvent_t *p)
         if (p->mUnknown14 || !p->mUnknown0) {
             SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             SndgSfxPlay(107, &p->mPos);
-        } else { fn_80071A04(8, &p->mPos); fn_80071914(&p->mPos); }
+        } else { SndgEventPlayGroup(8, &p->mPos); SndgEventQueueDelayed(&p->mPos); }
         break;
     case 78:
-        fn_80071A04(1, &p->mPos);
+        SndgEventPlayGroup(1, &p->mPos);
         if (p->mUnknown14) SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
-        else fn_80071914(&p->mPos);
+        else SndgEventQueueDelayed(&p->mPos);
         break;
     case 47: SndgAmbObjStop(4, (unsigned char)p->mUnknown18); break;
     case 86: case 87:
@@ -362,8 +366,8 @@ void fn_8006F850(AudmonEvent_t *p)
         SndgSoundObjControl(6, SndgAmbObjExists(6, (unsigned char)SndgAmbObjFindSlot(6, p->mUnknown18)) ? 2 : 1, &p->mPos, 0, 0);
         break;
     case 44: lbl_803EA6EC = 1; break;
-    case 46: fn_80071914(&p->mPos); break;
-    case 96: if (p->mUnknown10.mValue <= 4) fn_800717E0(&p->mPos); break;
+    case 46: SndgEventQueueDelayed(&p->mPos); break;
+    case 96: if (p->mUnknown10.mValue <= 4) SndgEventPlayVariant18(&p->mPos); break;
     case 22: SndgSfxPlay(132, 0); break;
     case 23: SndgSfxPlay(133, 0); break;
     case 8: SndgMusicSetMode(3); break;
@@ -382,15 +386,15 @@ void fn_8006F850(AudmonEvent_t *p)
         if (fn_801486A0()) {
             lbl_803EA6E5 = (lbl_803EA6E5 + 1) % 4;
             switch (lbl_803EA6E5) {
-            case 0: fn_80070D68(); break;
-            case 1: fn_80070E8C(); fn_8007105C(); break;
-            case 2: fn_80070D68(); fn_800710C8(); break;
-            case 3: fn_80070E8C(); break;
+            case 0: SndgEventCycleCrowdBanks(); break;
+            case 1: SndgEventCycleBanks145(); SndgEventCycleBanks77(); break;
+            case 2: SndgEventCycleCrowdBanks(); SndgEventLoadLevelBank(); break;
+            case 3: SndgEventCycleBanks145(); break;
             }
         }
         break;
-    case 115: if (fn_801486A0()) fn_80070F84(); break;
-    case 112: if (fn_801486A0()) fn_8007134C(); break;
+    case 115: if (fn_801486A0()) SndgEventLoadFormationBank(); break;
+    case 112: if (fn_801486A0()) SndgEventLoadTeamBanks(); break;
     case 113:
         SndgSfxPlay(130, 0);
         SndgAmbPostCue(2);
@@ -449,9 +453,9 @@ void fn_8006F850(AudmonEvent_t *p)
             else lbl_803EA6F9 = 0;
             SndgCrowdTriggerEvent(5, player->mIdBytes[2]);
         } else if (lbl_803EA6CE) {
-            fn_80071C2C(0);
+            SndgEventSetCrowdCycle(0);
             lbl_803EA6E0 = (lbl_803EA6E0 + 1) % 4;
-            SndgCrowdTriggerEvent(lbl_80290B9C[lbl_803EA6E0], player->mIdBytes[2]);
+            SndgCrowdTriggerEvent(_SndgEvent_aCrowdEvents[lbl_803EA6E0], player->mIdBytes[2]);
         }
         break;
     }
@@ -477,7 +481,7 @@ void fn_8006F850(AudmonEvent_t *p)
         lbl_803EA6D4 = (lbl_803EA6D4 + 1) % 2;
         SndgSfxPlay(lbl_803EA6D4 + 10, &p->mPos);
         break;
-    case 43: fn_8007184C(&p->mPos); break;
+    case 43: SndgEventPlayVariant24(&p->mPos); break;
     case 37: {
         unsigned int amount = p->mUnknown10.mValue;
         int state = p->mUnknown14;
@@ -511,7 +515,7 @@ void fn_8006F850(AudmonEvent_t *p)
         if ((unsigned int)(id - 6) <= 1) {
             SndgSpchSetPlayFlags(4);
             if (!SndgSfxIsPlaying(60)) SndgSfxPlay(60, &p->mPos);
-            fn_80071914(&p->mPos);
+            SndgEventQueueDelayed(&p->mPos);
         }
         if ((unsigned int)(id - 10) > 1) {
             int eligible = 0;
@@ -525,7 +529,7 @@ void fn_8006F850(AudmonEvent_t *p)
     }
     case 124: fn_8017886C(); break;
     case 139:
-        fn_8006F824(50);
+        SndgEventSetSfx5Volume(50);
         SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
         if (lbl_803EA6F8) {
             SndgMusicSetMode(8);
@@ -539,7 +543,7 @@ void fn_8006F850(AudmonEvent_t *p)
     }
 }
 
-void fn_80070C40(AudmonEvent_t *p)
+void SndgEventProcessInPlay(AudmonEvent_t *p)
 {
     if (!fn_80177F70()) return;
     switch (p->mType) {
@@ -564,7 +568,7 @@ void fn_80070C40(AudmonEvent_t *p)
     }
 }
 
-void fn_80070D68(void)
+void SndgEventCycleCrowdBanks(void)
 {
     if (!lbl_803EA6FA) return;
     if (lbl_803EA6FB) {
@@ -590,7 +594,7 @@ void fn_80070D68(void)
     SndgRequestBank(5, lbl_803EA6C6 + 30, 0);
 }
 
-void fn_80070E8C(void)
+void SndgEventCycleBanks145(void)
 {
     if (!lbl_803EA6FA) return;
     if ((lbl_803EA6D6 + 1) % 6 <= 2) {
@@ -610,7 +614,7 @@ void fn_80070E8C(void)
     }
 }
 
-void fn_80070F84(void)
+void SndgEventLoadFormationBank(void)
 {
     if (!lbl_803EA6FA) return;
     PlayBookFormation_t *p = PlayBookGetFormation(fn_80178320());
@@ -627,7 +631,7 @@ void fn_80070F84(void)
     SndgRequestBank(6, id, 0);
 }
 
-void fn_8007105C(void)
+void SndgEventCycleBanks77(void)
 {
     if (lbl_803EA6FA) {
         lbl_803EA6C7 = (lbl_803EA6C7 + 1) % 5;
@@ -635,7 +639,7 @@ void fn_8007105C(void)
     }
 }
 
-void fn_800710C8(void)
+void SndgEventLoadLevelBank(void)
 {
     int base = 118;
     if (lbl_803EA6FA) {
@@ -657,11 +661,11 @@ void fn_800710C8(void)
     }
 }
 
-void fn_800711DC(int value)
+void SndgEventSetReplayKind(int value)
 {
 }
 
-void fn_800711E0(void)
+void SndgEventReloadCrowdBanks(void)
 {
     if (!SndgIsInit()) return;
     if (lbl_803EA6FA) {
@@ -703,15 +707,15 @@ void fn_800711E0(void)
     lbl_803EA6F4 = 3;
 }
 
-void fn_80071344(void)
+void SndgEventOnReplayCase1(void)
 {
 }
 
-void fn_80071348(void)
+void SndgEventOnReplayCase2(void)
 {
 }
 
-void fn_8007134C(void)
+void SndgEventLoadTeamBanks(void)
 {
     int side = fn_80178308();
     unsigned char value = 0;
@@ -734,7 +738,7 @@ void fn_8007134C(void)
     SndgRequestBank(16, other, 0);
 }
 
-void fn_80071458(Object_80039F5C *p, Ball_t *ball)
+void SndgEventPostBallContact(Object_80039F5C *p, Ball_t *ball)
 {
     Vector_80039F5C pos, velocity;
     Point_8017886C delta;
@@ -748,16 +752,16 @@ void fn_80071458(Object_80039F5C *p, Ball_t *ball)
     AudmonEventPostArgs(28, &pos, (unsigned int)(Vec3Magnitude(&velocity) * 65536.0f), nearby, ball->mState.mIndex);
 }
 
-void fn_80071540(int *value, Ball_t *ball)
+void SndgEventPostBallValue(int *value, Ball_t *ball)
 {
     Vector_80039F5C pos;
     BallGetPosition(ball, &pos);
     AudmonEventPostId(29, &pos, *value, 0, 0, ball->mState.mIndex);
 }
 
-void fn_80071594(void *record)
+void SndgEventPostRecord(void *record)
 {
-    Record_80071594 *p = (Record_80071594 *)record;
+    SndgEventRecord_t *p = (SndgEventRecord_t *)record;
     Vector_80039F5C pos;
     pos.mX = p->mUnknownC;
     pos.mY = p->mUnknown10;
@@ -765,7 +769,7 @@ void fn_80071594(void *record)
     if (lbl_803EA6CD) AudmonEventPostId((unsigned short)(p->mUnknown14 + 137), &pos, p->mUnknown0, p->mUnknown4, p->mUnknown8, 0);
 }
 
-void fn_80071600(void)
+void SndgEventInitRandom(void)
 {
     lbl_803EC820 = SyncRandBitPoolNew(1, 30);
     lbl_803EC824 = SyncRandBitPoolNew(1, 10);
@@ -790,7 +794,7 @@ void fn_80071600(void)
     lbl_803EA6DC = 0;
 }
 
-void fn_800716E4(void)
+void SndgEventFreeRandom(void)
 {
     SyncRandBitPoolDelete(lbl_803EC820);
     SyncRandBitPoolDelete(lbl_803EC824);
@@ -803,36 +807,36 @@ void fn_800716E4(void)
     SyncRandBitPoolDelete(lbl_803EC840);
 }
 
-void fn_80071748(void)
+void SndgEventUpdatePatch(void)
 {
     if (lbl_803EA6C0 != 0x7FFFFFFF && SndPatchOver(lbl_803EA6C0)) lbl_803EA6C0 = 0x7FFFFFFF;
 }
 
-void fn_80071790(void)
+void SndgEventNull(void)
 {
 }
 
-void fn_80071794(int id)
+void SndgEventPlayReplaySfx(int id)
 {
     SndgSfxPlayVolume(lbl_803EA6F0 + id, 0, 127);
     if (++lbl_803EA6F0 > 2) lbl_803EA6F0 = 2;
 }
 
-int fn_800717E0(Vector_80039F5C *pos)
+int SndgEventPlayVariant18(Vector_80039F5C *pos)
 {
     unsigned int step = SyncRandGetRange(1, 2) + 1;
     lbl_803EA6D6 = (lbl_803EA6D6 + step) % 6;
     return SndgSfxPlay(lbl_803EA6D6 + 18, pos);
 }
 
-int fn_8007184C(Vector_80039F5C *pos)
+int SndgEventPlayVariant24(Vector_80039F5C *pos)
 {
     unsigned int step = SyncRandGetRange(1, 2) + 1;
     lbl_803EA6D7 = (lbl_803EA6D7 + step) % 4;
     return SndgSfxPlay(lbl_803EA6D7 + 24, pos);
 }
 
-void fn_800718A0(void)
+void SndgEventUpdateDelayed(void)
 {
     if (lbl_803EA6E8 > 0 && SysGetSystemTime() >= (unsigned int)lbl_803EA6E8) {
         lbl_803EA6D8 = (lbl_803EA6D8 + 1) % 6;
@@ -841,7 +845,7 @@ void fn_800718A0(void)
     }
 }
 
-void fn_80071914(Vector_80039F5C *pos)
+void SndgEventQueueDelayed(Vector_80039F5C *pos)
 {
     if (lbl_803EA6E8 == -1) {
         lbl_803EA6E8 = SysGetSystemTime() + 6;
@@ -851,37 +855,37 @@ void fn_80071914(Vector_80039F5C *pos)
     }
 }
 
-int fn_80071974(Vector_80039F5C *p)
+int SndgEventPlaySfx34(Vector_80039F5C *p)
 {
     lbl_803EA6D9 = 0;
     return SndgSfxPlay(34, p);
 }
 
-int fn_800719A4(Vector_80039F5C *p)
+int SndgEventPlaySfx35(Vector_80039F5C *p)
 {
     lbl_803EA6DA = 0;
     return SndgSfxPlay(35, p);
 }
 
-void fn_800719D4(void)
+void SndgEventSetSfx34Volume(void)
 {
     SndgSfxSetVolume(lbl_803EA6D9 + 34, 100, 0);
 }
 
-int fn_80071A04(int id, Vector_80039F5C *pos)
+int SndgEventPlayGroup(int id, Vector_80039F5C *pos)
 {
-    if (++lbl_802D63D0[id] >= lbl_80290BAC[id][1]) lbl_802D63D0[id] = 0;
-    return SndgSfxPlay(lbl_80290BAC[id][0] + lbl_802D63D0[id], pos);
+    if (++lbl_802D63D0[id] >= _SndgEvent_aSfxGroups[id][1]) lbl_802D63D0[id] = 0;
+    return SndgSfxPlay(_SndgEvent_aSfxGroups[id][0] + lbl_802D63D0[id], pos);
 }
 
-int fn_80071A6C(int id, Vector_80039F5C *pos, unsigned int volume)
+int SndgEventPlayGroupVolume(int id, Vector_80039F5C *pos, unsigned int volume)
 {
-    if (++lbl_802D63D0[id] >= lbl_80290BAC[id][1]) lbl_802D63D0[id] = 0;
-    int sound = lbl_80290BAC[id][0] + lbl_802D63D0[id];
+    if (++lbl_802D63D0[id] >= _SndgEvent_aSfxGroups[id][1]) lbl_802D63D0[id] = 0;
+    int sound = _SndgEvent_aSfxGroups[id][0] + lbl_802D63D0[id];
     return SndgSfxPlayVolume(sound, pos, (unsigned char)((volume * SndgSfxGetVolume(sound)) / 100));
 }
 
-int fn_80071B08(int unused, int value)
+int SndgEventGetFootstepSfx(int unused, int value)
 {
     int result = 36;
     int choice = SyncRandGetRange(1, 2);
@@ -897,7 +901,7 @@ int fn_80071B08(int unused, int value)
     return result;
 }
 
-int fn_80071BA0(int a, int value)
+int SndgEventGetSurfaceHitSfx(int a, int value)
 {
     switch (value) {
     case 10:
@@ -915,7 +919,7 @@ int fn_80071BA0(int a, int value)
     }
 }
 
-int fn_80071BDC(int value)
+int SndgEventGetSurfaceSfx(int value)
 {
     int result = 42;
     switch (value) {
@@ -940,12 +944,12 @@ int fn_80071BDC(int value)
     return result;
 }
 
-void fn_80071C2C(int value)
+void SndgEventSetCrowdCycle(int value)
 {
     lbl_803EA6CE = value;
 }
 
-void fn_80071C34(int value)
+void SndgEventSetMusicHold(int value)
 {
     lbl_803EA6F9 = value;
 }

@@ -61,8 +61,8 @@ void PlaTexCacheWaitReads(void);
 void PlaTexCacheSetFace(int index, const char *pName, int a);
 void PlaTexCacheSetCapFace(int index, int a, int b, int c, int d);
 void PlaTexCacheDiscardRequests(void);
-void fn_801A46E0(Object_8003DEC4 *pPlayer, int id, Callback_8015F958 pCallback);
-void fn_801A472C(void);
+void PlyrHeadSetModel(Object_8003DEC4 *pPlayer, int id, Callback_8015F958 pCallback);
+void PlyrHeadProcessModel(void);
 void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 void fn_80233C7C(void *p);
 void fn_80234A14(void *p, int a);
@@ -158,7 +158,7 @@ extern "C" void FEPlyrLoadStartNextPart(void)
         fn_8015F958(pPlayer->mUnknown4970, &pEntry->mUnknown4, pPlayer, FEPlyrLoadHeadDone);
     } else if ((pEntry->mUnknownFA & 0x8) && !(pEntry->mUnknownFA & 0x100)) {
         pEntry->mUnknownFA |= 0x100;
-        fn_801A46E0(pPlayer, pEntry->mUnknownC, FEPlyrLoadFaceDone);
+        PlyrHeadSetModel(pPlayer, pEntry->mUnknownC, FEPlyrLoadFaceDone);
     } else if ((pEntry->mUnknownFA & 0x1) && !(pEntry->mUnknownFA & 0x20)) {
         pEntry->mUnknownFA |= 0x20;
         fn_8015FB38(pPlayer->mUnknown4970, pEntry->mUnknownE8, pPlayer, FEPlyrLoadHatDone);
@@ -330,7 +330,7 @@ extern "C" void FEPlyrLoadWait(int wait)
         while (pEntry->mUnknownFA & 0x3E0) {
             fn_8015FE4C();
             count++;
-            fn_801A472C();
+            PlyrHeadProcessModel();
             if (count > 4) {
                 count = 0;
                 if (wait) {
@@ -368,7 +368,7 @@ extern "C" void FEPlyrLoadShutdown(void)
         if (pEntry->mUnknownFA & 0x3E0) {
             while (pEntry->mUnknownFA & 0x3E0) {
                 fn_8015FE4C();
-                fn_801A472C();
+                PlyrHeadProcessModel();
             }
         } else if (pEntry->mUnknownF8) {
             PlaTexCacheWaitReads();
@@ -422,7 +422,7 @@ extern "C" void FEPlyrLoadUpdate(void)
     }
     FEPlyrLoadStartNextPart();
     fn_8015FE4C();
-    fn_801A472C();
+    PlyrHeadProcessModel();
     for (i = 0; i < 2; i++) {
         pState = _FEPlyrLoad_pState;
         pEntry = &pState->mEntries[i];
