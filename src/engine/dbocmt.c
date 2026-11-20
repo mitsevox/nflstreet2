@@ -609,12 +609,12 @@ int fn_80229270(void)
     unsigned char i;
     int err;
 
+    i = 0;
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
     err = fn_801FCE10(0, lbl_802B2138, &cursor);
-    i = 0;
     if (err == 0) {
         do {
             err = fn_801FCE10(0, lbl_802B2178, &cursor, &a, &b, &c);

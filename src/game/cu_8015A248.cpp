@@ -48,7 +48,6 @@ void fn_8015A354(Object_8015C244 *p)
 }
 }
 
-#ifdef DECOMP_COMPARE
 #include "game/Object_8015C244.h"
 #include "game/fn_80177FE0.h"
 #include "game/State_803EB098.h"
@@ -646,4 +645,3 @@ void fn_8015C254(int value)
     lbl_803ECA68 = value;
 }
 }
-#endif

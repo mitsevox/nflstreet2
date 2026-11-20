@@ -80,7 +80,8 @@ int fn_802375FC(void *p, void *q)
     int result;
 
     if (pB != 0) {
-        result = pA->mUnknown0 != pB->mUnknown0;
+        result = 0;
+        result |= pA->mUnknown0 != pB->mUnknown0;
         result |= pA->mUnknown4 != pB->mUnknown4;
         result |= pA->mUnknown8 != pB->mUnknown8;
         result |= fn_80237A28(pA->mpUnknown12) != fn_80237A28(pB->mpUnknown12);

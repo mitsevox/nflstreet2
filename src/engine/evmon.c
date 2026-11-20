@@ -64,7 +64,8 @@ void fn_80238358(void)
 int fn_80238388(const Desc_80238424 *pDesc)
 {
     int index = lbl_803A3A14.mUnknown0;
-    void *pHandle = fn_80238174(0, (void **)&lbl_803A3A14.mppUnknown8[index], pDesc->mUnknown0 * pDesc->mUnknown4 + 16 + pDesc->mUnknown8 * 4, 0, 0x65766D6F);
+    int size = pDesc->mUnknown0 * pDesc->mUnknown4 + 16 + pDesc->mUnknown8 * 4;
+    void *pHandle = fn_80238174(0, (void **)&lbl_803A3A14.mppUnknown8[index], size, 0, 0x65766D6F);
     fn_802382CC(fn_8023816C(pHandle), pDesc);
     fn_802381E0(pHandle);
     lbl_803A3A14.mUnknown0++;
@@ -108,9 +109,8 @@ void fn_80238570(int index, int advance)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     unsigned int i;
-    AudmonEventFn_t *pCallbacks = p->mpUnknown16;
     for (i = 0; i < p->mUnknown12; i++) {
-        AudmonEventFn_t callback = *pCallbacks++;
+        AudmonEventFn_t callback = p->mpUnknown16[i];
         if (callback != 0) {
             callback(fn_8023850C(index));
         }

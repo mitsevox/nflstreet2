@@ -644,6 +644,7 @@ int fn_8022ED50(int db, int a, int b)
 {
     struct QueryCursor cursor;
     int tbl;
+    int *pTbl;
     int status = 0;
     int opened = 0;
 
@@ -657,8 +658,9 @@ int fn_8022ED50(int db, int a, int b)
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
         status = fn_801FCE10(0, lbl_802B5CB4, db, &cursor, a, b, 1);
+        pTbl = &tbl;
         while (status == 0) {
-            status = fn_801FCE10(0, lbl_802B5CF0, &cursor, &tbl);
+            status = fn_801FCE10(0, lbl_802B5CF0, &cursor, pTbl);
             if (status == 0 && fn_801F9A90(db, tbl) != 0) {
                 status = fn_8022ECF4(db, tbl);
                 if (QUERY_STATUS_ACCEPTED(status) == 1) {

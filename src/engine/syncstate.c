@@ -274,7 +274,9 @@ void fn_8023808C(Object_80237EE8 *p)
 
 Object_80237EE8 *fn_8023811C(Object_80237EE8 *p)
 {
-    Object_80237EE8 *pFound = fn_80237E9C(p->mUnknown0);
+    // FAKEMATCH: dead initial copy of p, the second register copy of p (mr r30,r31) the target keeps
+    Object_80237EE8 *pFound = p;
+    pFound = fn_80237E9C(p->mUnknown0);
     if (pFound != 0) {
         fn_80237C0C(pFound);
     }
@@ -290,8 +292,8 @@ void *fn_8023816C(void *pHandle)
 
 void *fn_80238174(int a, void **ppData, int size, int b, unsigned int id)
 {
-    Object_80237EE8 *p = fn_80237E9C(a);
     void *pResult = 0;
+    Object_80237EE8 *p = fn_80237E9C(a);
     if (p != 0) {
         fn_801D277C(p->mUnknown16);
         pResult = fn_80237A40(p, ppData, size, b, id);

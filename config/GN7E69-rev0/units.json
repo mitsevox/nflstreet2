@@ -317,6 +317,39 @@
         "include/libc"
       ],
       "evidence": "engine_c_fastmath (its evidence.tsv compiler rows) plus -ffunction-sections, the named profile of an engine C unit of that profile linked with holdouts (owner rulings of 2026-11-20: holdouts for any file after real attempts, and the flag from a named profile, not added by the tool; config README, Holdouts). The partials of such a file keep comparing with engine_c_fastmath."
+    },
+    "engine_c_fastmath_nobuiltin": {
+      "flags": [
+        "-O2",
+        "-ffast-math",
+        "-fno-builtin"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler row 0x80236F78-0x80238258 (engine_c_fastmath_nobuiltin): engine_c_fastmath plus -fno-builtin for the synchronised-state files syncrand.c, synctime.c and syncstate.c, which call memset and memcpy with constant sizes as ordinary prototyped calls and compare floats without the IEEE cror of plain -O2."
+    },
+    "engine_c_fastmath_nobuiltin_holdouts": {
+      "flags": [
+        "-O2",
+        "-ffast-math",
+        "-fno-builtin",
+        "-ffunction-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "engine_c_fastmath_nobuiltin (its evidence.tsv compiler rows) plus -ffunction-sections, the named profile of a unit of that profile linked with holdouts (owner rulings of 2026-11-20: holdouts for any file after real attempts, and the flag from a named profile, not added by the tool; config README, Holdouts). The partials of such a file keep comparing with engine_c_fastmath_nobuiltin."
+    },
+    "engine_c_holdouts": {
+      "flags": [
+        "-O2",
+        "-ffunction-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "engine_c (its evidence.tsv compiler rows) plus -ffunction-sections, the named profile of a unit of that profile linked with holdouts (owner rulings of 2026-11-20: holdouts for any file after real attempts, and the flag from a named profile, not added by the tool; config README, Holdouts). The partials of such a file keep comparing with engine_c."
     }
   },
   "externals": {
@@ -1973,6 +2006,62 @@
           "end": "0x80298098"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8015A248.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x8015A248-0x8015C25C (src/game/cu_8015A248.cpp) and its data rows; one source linked with holdouts (owner ruling of 2026-11-20): the former three-function linked prefix and the 19 exact later functions are linked, the five holdouts keep the original bytes; .rodata 0x802A3E40-0x802A3EF8 whole.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015A248",
+          "end": "0x8015A818"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015AB84",
+          "end": "0x8015AF48"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015BED4",
+          "end": "0x8015C25C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A3E40",
+          "end": "0x802A3EF8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8015A818",
+            "evidence": "evidence.tsv source-form 0x8015A818-0x8015AB84"
+          },
+          {
+            "function": "fn_8015AF48",
+            "evidence": "evidence.tsv source-form 0x8015AF48-0x8015B344"
+          },
+          {
+            "function": "fn_8015B344",
+            "evidence": "evidence.tsv source-form 0x8015B344-0x8015B834"
+          },
+          {
+            "function": "fn_8015B834",
+            "evidence": "evidence.tsv source-form 0x8015B834-0x8015BCAC"
+          },
+          {
+            "function": "fn_8015BCAC",
+            "evidence": "evidence.tsv source-form 0x8015BCAC-0x8015BED4"
+          }
+        ],
+        "evidence": "x1f merge notes (swarm x1 tracking table): src/game/cu_8015A248.cpp holds out fn_8015A818, fn_8015AF48, fn_8015B344, fn_8015B834, fn_8015BCAC."
+      }
     },
     {
       "source": "src/game/Loading.cpp",
@@ -4170,6 +4259,28 @@
       ]
     },
     {
+      "source": "src/engine/dbocmt.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x80229270-0x8022942C (src/engine/dbocmt.c), its function and name rows and the compiler and source-form rows of the range it was split from; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes. The file compiles no data of its own.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802293A8",
+          "end": "0x8022942C"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80229270",
+            "evidence": "evidence.tsv source-form 0x80229270-0x802293A8"
+          }
+        ],
+        "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/dbocmt.c holds out fn_80229270."
+      }
+    },
+    {
       "source": "src/engine/dboptions.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8022942C-0x80229470 (src/engine/dboptions.c), its function and name rows and the compiler and source-form rows of the range it was split from; every function exact, complete .text linked (the file compiles no data; its query strings stay original bytes).",
@@ -4207,6 +4318,28 @@
           "end": "0x8022EBF0"
         }
       ]
+    },
+    {
+      "source": "src/engine/dbtatscopy.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x8022EBF0-0x8022EF14 (src/engine/dbtatscopy.c), its function and name rows and the compiler and source-form rows of the range it was split from; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes. The file compiles no data of its own.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022EBF0",
+          "end": "0x8022ED50"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8022ED50",
+            "evidence": "evidence.tsv source-form 0x8022ED50-0x8022EF14"
+          }
+        ],
+        "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/dbtatscopy.c holds out fn_8022ED50."
+      }
     },
     {
       "source": "src/engine/dbmanager.c",
@@ -4285,6 +4418,107 @@
           "end": "0x803EC12C"
         }
       ]
+    },
+    {
+      "source": "src/engine/syncrand.c",
+      "profile": "engine_c_fastmath_nobuiltin",
+      "evidence": "evidence.tsv provisional unit row 0x80236F78-0x8023758C (src/engine/syncrand.c), its function and name rows, the data row 0x802B7224-0x802B723C of its float literals and the compiler row 0x80236F78-0x80238258 (engine_c_fastmath_nobuiltin); every function exact, complete .text and .rodata linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80236F78",
+          "end": "0x8023758C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7224",
+          "end": "0x802B723C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/synctime.c",
+      "profile": "engine_c_fastmath_nobuiltin_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x8023758C-0x80237A30 (src/engine/synctime.c), its function and name rows and the compiler and source-form rows of the range it was split from; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes. The file compiles no data of its own.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023758C",
+          "end": "0x802376D8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80237728",
+          "end": "0x80237A30"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_802376D8",
+            "evidence": "evidence.tsv source-form 0x802376D8-0x80237728"
+          }
+        ],
+        "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/synctime.c holds out fn_802376D8."
+      }
+    },
+    {
+      "source": "src/engine/syncstate.c",
+      "profile": "engine_c_fastmath_nobuiltin_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x80237A30-0x80238258 (src/engine/syncstate.c), its function and name rows and the compiler and source-form rows of the range it was split from; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes. The file compiles no data of its own.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80237A30",
+          "end": "0x80237D5C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80237E3C",
+          "end": "0x80238258"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80237D5C",
+            "evidence": "evidence.tsv source-form 0x80237D5C-0x80237E3C"
+          }
+        ],
+        "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/syncstate.c holds out fn_80237D5C."
+      }
+    },
+    {
+      "source": "src/engine/evmon.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x802382CC-0x8023873C (src/engine/evmon.c), its function and name rows and the compiler and source-form rows of the range it was split from; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes. The file compiles no data of its own.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802382CC",
+          "end": "0x80238680"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80238680",
+            "evidence": "evidence.tsv source-form 0x80238680-0x802386DC"
+          },
+          {
+            "function": "fn_802386DC",
+            "evidence": "evidence.tsv source-form 0x802386DC-0x8023873C"
+          }
+        ],
+        "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/evmon.c holds out fn_80238680, fn_802386DC."
+      }
     },
     {
       "source": "src/dolphin/os/OSArena.c",
@@ -8597,25 +8831,6 @@
           "placement": ".sbss",
           "start": "0x803ECA5C",
           "end": "0x803ECA60"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8015A248.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8015A248-0x8015A39C (src/game/cu_8015A248.cpp) and its data rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015A248",
-          "end": "0x8015A39C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A3E40",
-          "end": "0x802A3E4C"
         }
       ]
     },

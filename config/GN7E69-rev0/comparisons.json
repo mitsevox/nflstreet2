@@ -21018,93 +21018,8 @@
       ]
     },
     {
-      "source": "src/engine/syncrand.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80236F78-0x8023758C (src/engine/syncrand.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows. Complete reconstructed functions are measured; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80236F78",
-          "end": "0x8023758C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80236F78",
-          "start": "0x80236F78",
-          "end": "0x8023701C"
-        },
-        {
-          "symbol": "fn_8023701C",
-          "start": "0x8023701C",
-          "end": "0x80237080"
-        },
-        {
-          "symbol": "fn_80237080",
-          "start": "0x80237080",
-          "end": "0x802370E8"
-        },
-        {
-          "symbol": "fn_802370E8",
-          "start": "0x802370E8",
-          "end": "0x80237138"
-        },
-        {
-          "symbol": "fn_80237138",
-          "start": "0x80237138",
-          "end": "0x80237180"
-        },
-        {
-          "symbol": "fn_80237180",
-          "start": "0x80237180",
-          "end": "0x802371B0"
-        },
-        {
-          "symbol": "fn_802371B0",
-          "start": "0x802371B0",
-          "end": "0x8023725C"
-        },
-        {
-          "symbol": "fn_8023725C",
-          "start": "0x8023725C",
-          "end": "0x80237260"
-        },
-        {
-          "symbol": "fn_802372EC",
-          "start": "0x802372EC",
-          "end": "0x80237390"
-        },
-        {
-          "symbol": "fn_80237390",
-          "start": "0x80237390",
-          "end": "0x802373C8"
-        },
-        {
-          "symbol": "fn_80237438",
-          "start": "0x80237438",
-          "end": "0x80237470"
-        },
-        {
-          "symbol": "fn_80237470",
-          "start": "0x80237470",
-          "end": "0x802374C8"
-        },
-        {
-          "symbol": "fn_802374C8",
-          "start": "0x802374C8",
-          "end": "0x8023756C"
-        },
-        {
-          "symbol": "fn_8023756C",
-          "start": "0x8023756C",
-          "end": "0x8023758C"
-        }
-      ]
-    },
-    {
       "source": "src/engine/synctime.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath_nobuiltin",
       "evidence": "evidence.tsv provisional unit row 0x8023758C-0x80237A30 (src/engine/synctime.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows. Complete reconstructed functions are measured; original bytes remain linked.",
       "sections": [
         {
@@ -21224,7 +21139,7 @@
     },
     {
       "source": "src/engine/syncstate.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath_nobuiltin",
       "evidence": "evidence.tsv provisional unit row 0x80237A30-0x80238258 (src/engine/syncstate.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows. Complete reconstructed functions are measured; original bytes remain linked.",
       "sections": [
         {

@@ -78,12 +78,14 @@ int fn_80237080(void *p, void *q)
     int result;
 
     if (pB != 0) {
-        result = pA->mUnknown0 != pB->mUnknown0;
+        result = 0;
+        result |= pA->mUnknown0 != pB->mUnknown0;
         result |= pA->mUnknown4 != pB->mUnknown4;
         result |= pA->mUnknown8 != pB->mUnknown8;
-        return result;
+    } else {
+        result = pA->mUnknown12;
     }
-    return pA->mUnknown12;
+    return result;
 }
 
 int fn_802370E8(void *p, void *pBuffer)
@@ -126,6 +128,24 @@ void fn_8023725C(void)
 {
 }
 
+float fn_80237260(int stream)
+{
+    float value;
+
+    value = MathGetRandom(lbl_803EC130->mpUnknown20[stream]);
+    if (stream == 0) {
+        lbl_803EC130->mUnknown8++;
+        lbl_803EC130->mUnknown12++;
+    } else if (lbl_803EC130->mUnknown1 != 0) {
+        if (lbl_803EC130->mUnknown1 < 0) {
+            value = 0.0f;
+        } else {
+            value = 0.9999f;
+        }
+    }
+    return value;
+}
+
 unsigned int fn_802372EC(int stream, unsigned int count)
 {
     unsigned int value;
@@ -146,6 +166,19 @@ unsigned int fn_802372EC(int stream, unsigned int count)
 int fn_80237390(int stream, int low, int high)
 {
     return fn_802372EC(stream, high - low + 1) + low;
+}
+
+float fn_802373C8(int stream, float low, float high)
+{
+    float range = high - low;
+    float value = fn_80237260(stream);
+
+    if (value >= 0.99999976f) {
+        value = 1.0f;
+    } else if (value <= 1e-7f) {
+        value = 0.0f;
+    }
+    return range * value + low;
 }
 
 void fn_80237438(Bits_80237438 *pBits)
