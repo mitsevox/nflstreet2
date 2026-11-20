@@ -88,9 +88,13 @@ struct Block_8003DEC4 {
 
 struct Slot_801A3284;
 
-/* Joint list of a model: four bytes per joint, the first a joint kind. */
+/* Joint list of a model: four bytes per joint, the first a joint kind. The list is a variable-length
+   array at the start of the table (indexing it as an array member keeps base-first indexed loads). */
+struct JointTable_801A209C {
+    unsigned char mUnknown0[1][4];
+};
 struct Joints_801A209C {
-    unsigned char (*mpUnknown0)[4];
+    JointTable_801A209C *mpUnknown0;
     unsigned int mUnknown4;
 };
 
@@ -114,8 +118,11 @@ struct Part_8003DEC4 {
 };
 
 /* Matrix palette set up by fn_80233BB8: one 3x4 float matrix per joint. */
+struct JointMtx_8003DEC4 {
+    float mUnknown0[12];
+};
 struct Joints_8003DEC4 {
-    float (*mpUnknown0)[12];
+    JointMtx_8003DEC4 *mpUnknown0;
     int mUnknown4;
     int mUnknown8;
 };

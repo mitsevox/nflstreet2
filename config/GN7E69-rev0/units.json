@@ -17322,7 +17322,7 @@
     {
       "source": "src/game/cu_801A14D8.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x801A14D8-0x801A4AD4 (src/game/cu_801A14D8.cpp), its exact function extents, the data rows 0x802AE098-0x802AE528 (.rodata) and 0x802F2934-0x802F3488 (.data) and the linker row of the discarded _PlyrHeadSetModelNow; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes. The .sdata, .sbss and .bss objects it uses stay external original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x801A14D8-0x801A4AD4 (src/game/cu_801A14D8.cpp), its exact function extents, the data rows 0x802AE098-0x802AE528 (.rodata) and 0x802F2934-0x802F3488 (.data) and the linker row of the discarded _PlyrHeadSetModelNow; linked with holdouts (owner ruling of 2026-11-20), its one holdout keeping its original bytes. The .sdata, .sbss and .bss objects it uses stay external original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -17334,18 +17334,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801A1978",
-          "end": "0x801A209C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801A28E8",
-          "end": "0x801A2EC8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801A31F0",
           "end": "0x801A4AD4"
         },
         {
@@ -17372,14 +17360,6 @@
           {
             "function": "fn_801A1650",
             "evidence": "evidence.tsv source-form 0x801A1650-0x801A1978"
-          },
-          {
-            "function": "fn_801A209C",
-            "evidence": "evidence.tsv source-form 0x801A209C-0x801A28E8"
-          },
-          {
-            "function": "fn_801A2EC8",
-            "evidence": "evidence.tsv source-form 0x801A2EC8-0x801A31F0"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"

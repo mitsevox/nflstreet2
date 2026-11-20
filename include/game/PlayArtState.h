@@ -15,7 +15,7 @@ struct PlayArtState_t {
     unsigned char mUnknown2078[11];
     unsigned char mUnknown2083;
     float mUnknown2084[11][4];
-    unsigned int mUnknown2134[11];
+    int mUnknown2134[11];
     int mUnknown2160;
     int mUnknown2164[5];
     float mUnknown2178[5][4];

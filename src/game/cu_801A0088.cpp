@@ -26,7 +26,7 @@ extern PlayArtVertex_t lbl_802F2774[4][4];
 extern PlayArtVertex_t lbl_802F27F4[5][4];
 extern QuadPoint_801A0614 lbl_802F2894[4];
 extern Mtx44 lbl_802F28F4;
-extern unsigned char lbl_803EB7DC[];
+extern unsigned char lbl_803EB7DC[6];
 int fn_800BA6F8(void);
 int FELoopIsMainFEActive(void);
 int fn_80177F70(void);
@@ -176,15 +176,14 @@ extern "C" int fn_801A09B0(int a,PlayArtState_t *s,int mirror)
     int count;
     if (s->mUnknown2083) count = fn_80178D70(fn_80178308()); else count = fn_80178D70(fn_80178320());
     for (int i = 0; i < count; ++i) {
-        int kind = s->mUnknown2134[i];
-        if (kind <= 5) {
+        if (s->mUnknown2134[i] <= 5) {
             QuadPoint_801A0614 p[4];
-            float x0, x1;
-            if (mirror) {x0=120.0f-s->mUnknown2084[i][0];x1=120.0f-s->mUnknown2084[i][2];}
-            else {x0=s->mUnknown2084[i][0];x1=s->mUnknown2084[i][2];}
-            float y0=s->mUnknown2084[i][1],y1=s->mUnknown2084[i][3];
-            p[0].mX=x0;p[0].mY=y0;p[1].mX=x0;p[1].mY=y1;p[2].mX=x1;p[2].mY=y0;p[3].mX=x1;p[3].mY=y1;
-            a=fn_801A0614(a,p,lbl_802F2774[lbl_803EB7DC[kind]],&s->mUnknown204C[i],0);
+            float r[4];
+            if (mirror) {r[0]=120.0f-s->mUnknown2084[i][0];r[2]=120.0f-s->mUnknown2084[i][2];}
+            else {r[0]=s->mUnknown2084[i][0];r[2]=s->mUnknown2084[i][2];}
+            r[1]=s->mUnknown2084[i][1];r[3]=s->mUnknown2084[i][3];
+            p[0].mX=r[0];p[0].mY=r[1];p[1].mX=r[0];p[1].mY=r[3];p[2].mX=r[2];p[2].mY=r[1];p[3].mX=r[2];p[3].mY=r[3];
+            a=fn_801A0614(a,p,lbl_802F2774[lbl_803EB7DC[s->mUnknown2134[i]]],&s->mUnknown204C[i],0);
         }
     }
     return a;
@@ -194,13 +193,13 @@ extern "C" void fn_801A0B1C(int a,PlayArtState_t *s,int mirror)
     for (int i=0;i<s->mUnknown2160;++i) {
         int flag=s->mUnknown21C8[i]; int kind=s->mUnknown2164[i];
         if (!(flag&0x80)) {
-            QuadPoint_801A0614 p[4];float x0,x1;
-            if (mirror) {x0=120.0f-s->mUnknown2178[i][2];x1=120.0f-s->mUnknown2178[i][0];}
-            else {x0=s->mUnknown2178[i][0];x1=s->mUnknown2178[i][2];}
-            float y0=s->mUnknown2178[i][1],y1=s->mUnknown2178[i][3];
+            QuadPoint_801A0614 p[4];float r[4];
+            if (mirror) {r[0]=120.0f-s->mUnknown2178[i][2];r[2]=120.0f-s->mUnknown2178[i][0];}
+            else {r[0]=s->mUnknown2178[i][0];r[2]=s->mUnknown2178[i][2];}
             int texture;switch(kind){case 0:texture=0;break;case 1:texture=1;break;case 2:texture=2;break;case 3:texture=3;break;default:texture=4;break;}
-            p[0].mX=x0;p[0].mY=y0;p[1].mX=x0;p[1].mY=y1;p[2].mX=x1;p[2].mY=y0;p[3].mX=x1;p[3].mY=y1;
-            fn_801A0788(a,p,lbl_802F27F4[texture],&s->mUnknown204C[flag],1);
+            r[3]=s->mUnknown2178[i][3];r[1]=s->mUnknown2178[i][1];
+            p[0].mX=r[0];p[0].mY=r[1];p[1].mX=r[0];p[1].mY=r[3];p[2].mX=r[2];p[2].mY=r[1];p[3].mX=r[2];p[3].mY=r[3];
+            a=fn_801A0788(a,p,lbl_802F27F4[texture],&s->mUnknown204C[flag],1);
         }
     }
 }
@@ -237,7 +236,7 @@ extern "C" void fn_801A0FAC(int a,PlayArtState_t *s,unsigned char mirror)
 }
 extern "C" void fn_801A105C(float x,float y,void *input,unsigned char mirror)
 {
-    PlayArtState_t *s=(PlayArtState_t *)input;GXColor c={255,255,255,255};float pos[3]={x,y,0.0f};Mtx44 m;Point_8017886C point;
+    PlayArtState_t *s=(PlayArtState_t *)input;GXColor c={255,255,255,255};float pos[3];pos[0]=x;pos[1]=y;pos[2]=0.0f;Mtx44 m;Point_8017886C point;
     fn_801A0E2C();point=fn_80177FE0();Point_8017886C *pPoint=&point;
     if(fn_80177F70()!=0&&fn_80177F70()!=6){float v=fn_80178298();if(v<fn_80178A2C()&&!fn_800BA6F8()&&!FELoopIsMainFEActive())fn_80178298();}
     GXSetChanAmbColor(4,c);MatSetStack(VptGetMatrixStack());MatPush();MatScaleCol(1.0f,1.0f,0.0f);MatTranslate(pos);MatStore(m);GXLoadPosMtxImm(m,0);
