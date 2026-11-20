@@ -233,9 +233,11 @@ extern "C" void fn_800DB7A4(Record_800DB074 *pRecord, Object_80039F5C *p)
     }
 }
 
-extern "C" void PlayerActionAnimSetSpeedRatio(Record_800DB074 *pRecord, float value)
+extern "C" {
+static void PlayerActionAnimSetSpeedRatio(Record_800DB074 *pRecord, float value)
 {
     pRecord->mUnknown16 = value / (gPlyrMoveFwdSpeed * 100621.12f);
+}
 }
 
 extern "C" void fn_800DB8B4(Record_800DB60C *pRecord, Object_80039F5C *p)

@@ -1397,18 +1397,6 @@
       "address": "0x802EA294",
       "evidence": "evidence.tsv data and name rows for 0x802EA294 (26 position-name pointers in the .data of a file that is not yet a unit, used here only by the discarded GameTextShowRosterFill of src/game/GameText.cpp; storage not claimed by any unit)."
     },
-    "PlayerActionAnimIsPassReady": {
-      "address": "0x800DC080",
-      "evidence": "evidence.tsv function and name rows for 0x800DC080 (unlinked; called from linked src/game/PlayerLoco.cpp, Handoff.cpp, PlayerMoveAnim.cpp, Pursue.cpp, PlyrMove.cpp and PlayerLocoAnim.cpp)."
-    },
-    "PlayerActionAnimSteerPassReady": {
-      "address": "0x800DBC4C",
-      "evidence": "evidence.tsv function and name rows for 0x800DBC4C (unlinked; called from linked src/game/Handoff.cpp and src/game/QbPass.cpp)."
-    },
-    "PlayerActionAnimFacingCallback": {
-      "address": "0x800DC36C",
-      "evidence": "evidence.tsv function and name rows for 0x800DC36C (unlinked; its address is stored by the comparison source src/game/cu_8008E978.cpp)."
-    },
     "_TDbIOReadTableNew": {
       "address": "0x801FB0F8",
       "evidence": "evidence.tsv function/name rows at0x801FB0F8; complete measured comparison in its original file; original target code remains linked."
@@ -1484,10 +1472,6 @@
     "LLTexPadToPow2": {
       "address": "0x8020E7EC",
       "evidence": "evidence.tsv function and name rows for 0x8020E7EC (documented holdout 0x8020E7EC-0x8020E9D0 at the start of src/engine/lltextur.c: draft registered in comparisons.json, original bytes). Called by ResTexture.cpp."
-    },
-    "GameStatsUpdateRecords": {
-      "address": "0x80056560",
-      "evidence": "evidence.tsv function/name rows for 0x80056560; GameStatsUpdateRecords is defined in src/game/InGameScreens.cpp, which is comparison-only, and is called by the comparison src/game/cu_80155F48.cpp (bl at 0x80155F60)."
     },
     "FormationLineupSwapAllUser": {
       "address": "0x8008593C",
@@ -22433,6 +22417,616 @@
           "end": "0x802B78F0"
         }
       ]
+    },
+    {
+      "source": "src/game/PlayerActionStates.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x800DF6EC-0x800E2FE4 (src/game/PlayerActionStates.cpp), its function extents and the exact .rodata row 0x8029D9F0-0x8029DB28; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DF6EC",
+          "end": "0x800DF7CC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DF9FC",
+          "end": "0x800DFA00"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DFCEC",
+          "end": "0x800DFD90"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E0188",
+          "end": "0x800E02D0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E0438",
+          "end": "0x800E0694"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E0818",
+          "end": "0x800E0850"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E0AD8",
+          "end": "0x800E1584"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E1778",
+          "end": "0x800E1870"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D9F0",
+          "end": "0x8029DB28"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_800DF7CC",
+            "evidence": "evidence.tsv source-form 0x800DF7CC-0x800DF9FC"
+          },
+          {
+            "function": "fn_800DFA00",
+            "evidence": "evidence.tsv source-form 0x800DFA00-0x800DFCEC"
+          },
+          {
+            "function": "fn_800DFD90",
+            "evidence": "evidence.tsv source-form 0x800DFD90-0x800DFED0"
+          },
+          {
+            "function": "fn_800DFED0",
+            "evidence": "evidence.tsv source-form 0x800DFED0-0x800E0188"
+          },
+          {
+            "function": "fn_800E02D0",
+            "evidence": "evidence.tsv source-form 0x800E02D0-0x800E034C"
+          },
+          {
+            "function": "fn_800E034C",
+            "evidence": "evidence.tsv source-form 0x800E034C-0x800E0438"
+          },
+          {
+            "function": "fn_800E0694",
+            "evidence": "evidence.tsv source-form 0x800E0694-0x800E0818"
+          },
+          {
+            "function": "fn_800E0850",
+            "evidence": "evidence.tsv source-form 0x800E0850-0x800E0AD8"
+          },
+          {
+            "function": "fn_800E1584",
+            "evidence": "evidence.tsv source-form 0x800E1584-0x800E1778"
+          },
+          {
+            "function": "fn_800E1870",
+            "evidence": "evidence.tsv source-form 0x800E1870-0x800E1954"
+          },
+          {
+            "function": "fn_800E1954",
+            "evidence": "evidence.tsv source-form 0x800E1954-0x800E2550"
+          },
+          {
+            "function": "fn_800E2550",
+            "evidence": "evidence.tsv source-form 0x800E2550-0x800E283C"
+          },
+          {
+            "function": "fn_800E283C",
+            "evidence": "evidence.tsv source-form 0x800E283C-0x800E2ABC"
+          },
+          {
+            "function": "fn_800E2ABC",
+            "evidence": "evidence.tsv source-form 0x800E2ABC-0x800E2F20"
+          },
+          {
+            "function": "fn_800E2F20",
+            "evidence": "evidence.tsv source-form 0x800E2F20-0x800E2FE4"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      }
+    },
+    {
+      "source": "src/game/PlayerActionAnim.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x800DAEE4-0x800DF6EC (src/game/PlayerActionAnim.cpp), its function extents and the exact data rows 0x8029D8A8-0x8029D9F0 (.rodata) and 0x803EAD1C-0x803EAD20 (.sdata); linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DAEE4",
+          "end": "0x800DAF5C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DB074",
+          "end": "0x800DB100"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DB308",
+          "end": "0x800DB688"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DB7A4",
+          "end": "0x800DB8B4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DBB74",
+          "end": "0x800DC6F4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DD5E4",
+          "end": "0x800DD69C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DD780",
+          "end": "0x800DD838"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DD92C",
+          "end": "0x800DD994"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DDCE4",
+          "end": "0x800DDF34"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DE364",
+          "end": "0x800DE3B0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DF134",
+          "end": "0x800DF1F4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DF654",
+          "end": "0x800DF6EC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D8A8",
+          "end": "0x8029D9F0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EAD1C",
+          "end": "0x803EAD20"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_800DAF5C",
+            "evidence": "evidence.tsv source-form 0x800DAF5C-0x800DB074"
+          },
+          {
+            "function": "fn_800DB100",
+            "evidence": "evidence.tsv source-form 0x800DB100-0x800DB308"
+          },
+          {
+            "function": "fn_800DB688",
+            "evidence": "evidence.tsv source-form 0x800DB688-0x800DB7A4"
+          },
+          {
+            "function": "fn_800DB8B4",
+            "evidence": "evidence.tsv source-form 0x800DB8B4-0x800DBAF0"
+          },
+          {
+            "function": "fn_800DBAF0",
+            "evidence": "evidence.tsv source-form 0x800DBAF0-0x800DBB74"
+          },
+          {
+            "function": "fn_800DC6F4",
+            "evidence": "evidence.tsv source-form 0x800DC6F4-0x800DCC14"
+          },
+          {
+            "function": "fn_800DCC14",
+            "evidence": "evidence.tsv source-form 0x800DCC14-0x800DCE2C"
+          },
+          {
+            "function": "fn_800DCE2C",
+            "evidence": "evidence.tsv source-form 0x800DCE2C-0x800DD2E8"
+          },
+          {
+            "function": "fn_800DD2E8",
+            "evidence": "evidence.tsv source-form 0x800DD2E8-0x800DD5E4"
+          },
+          {
+            "function": "fn_800DD69C",
+            "evidence": "evidence.tsv source-form 0x800DD69C-0x800DD780"
+          },
+          {
+            "function": "fn_800DD838",
+            "evidence": "evidence.tsv source-form 0x800DD838-0x800DD92C"
+          },
+          {
+            "function": "fn_800DD994",
+            "evidence": "evidence.tsv source-form 0x800DD994-0x800DDCE4"
+          },
+          {
+            "function": "fn_800DDF34",
+            "evidence": "evidence.tsv source-form 0x800DDF34-0x800DE19C"
+          },
+          {
+            "function": "fn_800DE19C",
+            "evidence": "evidence.tsv source-form 0x800DE19C-0x800DE364"
+          },
+          {
+            "function": "fn_800DE3B0",
+            "evidence": "evidence.tsv source-form 0x800DE3B0-0x800DE51C"
+          },
+          {
+            "function": "fn_800DE51C",
+            "evidence": "evidence.tsv source-form 0x800DE51C-0x800DE910"
+          },
+          {
+            "function": "fn_800DE910",
+            "evidence": "evidence.tsv source-form 0x800DE910-0x800DEAB0"
+          },
+          {
+            "function": "fn_800DEAB0",
+            "evidence": "evidence.tsv source-form 0x800DEAB0-0x800DEC10"
+          },
+          {
+            "function": "fn_800DEC10",
+            "evidence": "evidence.tsv source-form 0x800DEC10-0x800DF134"
+          },
+          {
+            "function": "fn_800DF1F4",
+            "evidence": "evidence.tsv source-form 0x800DF1F4-0x800DF654"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      },
+      "link_roots": {
+        "discarded": [
+          "PlayerActionAnimSetSpeedRatio"
+        ],
+        "evidence": "evidence.tsv linker row 0x8029D908-0x8029D90C (the unreferenced 100621.12f literal of the discarded body, Xbox prototype 0x94410)"
+      }
+    },
+    {
+      "source": "src/game/InGameScreens.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x80055584-0x8005D60C (src/game/InGameScreens.cpp), its function extents, the exact data rows 0x8028E008-0x8028ED08 (.rodata), 0x802D4B14-0x802D4D40 (.data), 0x803EA588-0x803EA5B8 (.sdata), the .bss/.sbss rows and the .ctors/.dtors words 0x80289A88/0x80289BC8; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80055B2C",
+          "end": "0x80056ED8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80057044",
+          "end": "0x8005740C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800577DC",
+          "end": "0x80057C58"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80057F20",
+          "end": "0x80059B64"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80059F54",
+          "end": "0x80059F80"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005A794",
+          "end": "0x8005AB04"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005AC18",
+          "end": "0x8005ACF0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005ADCC",
+          "end": "0x8005AE5C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005B128",
+          "end": "0x8005B2BC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005B3CC",
+          "end": "0x8005B3D4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005B4B0",
+          "end": "0x8005B610"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005B9FC",
+          "end": "0x8005BC10"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005BE54",
+          "end": "0x8005BE5C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005BF18",
+          "end": "0x8005BFDC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005C144",
+          "end": "0x8005C1F4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005C338",
+          "end": "0x8005C4A4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005C6EC",
+          "end": "0x8005C844"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005D2C8",
+          "end": "0x8005D60C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028E008",
+          "end": "0x8028ED08"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D4B14",
+          "end": "0x802D4D40"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA588",
+          "end": "0x803EA5B8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80309F98",
+          "end": "0x80309FC4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC7EC",
+          "end": "0x803EC7F0"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A88",
+          "end": "0x80289A8C"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BC8",
+          "end": "0x80289BCC"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "GameStatsGather",
+            "evidence": "evidence.tsv source-form 0x80055584-0x80055B2C"
+          },
+          {
+            "function": "fn_80056ED8",
+            "evidence": "evidence.tsv source-form 0x80056ED8-0x80057044"
+          },
+          {
+            "function": "fn_8005740C",
+            "evidence": "evidence.tsv source-form 0x8005740C-0x800577DC"
+          },
+          {
+            "function": "fn_80057C58",
+            "evidence": "evidence.tsv source-form 0x80057C58-0x80057F20"
+          },
+          {
+            "function": "fn_80059B64",
+            "evidence": "evidence.tsv source-form 0x80059B64-0x80059E24"
+          },
+          {
+            "function": "fn_80059E24",
+            "evidence": "evidence.tsv source-form 0x80059E24-0x80059F54"
+          },
+          {
+            "function": "fn_80059F80",
+            "evidence": "evidence.tsv source-form 0x80059F80-0x8005A1C0"
+          },
+          {
+            "function": "fn_8005A1C0",
+            "evidence": "evidence.tsv source-form 0x8005A1C0-0x8005A2B8"
+          },
+          {
+            "function": "fn_8005A2B8",
+            "evidence": "evidence.tsv source-form 0x8005A2B8-0x8005A630"
+          },
+          {
+            "function": "fn_8005A630",
+            "evidence": "evidence.tsv source-form 0x8005A630-0x8005A794"
+          },
+          {
+            "function": "fn_8005AB04",
+            "evidence": "evidence.tsv source-form 0x8005AB04-0x8005AC18"
+          },
+          {
+            "function": "fn_8005ACF0",
+            "evidence": "evidence.tsv source-form 0x8005ACF0-0x8005ADCC"
+          },
+          {
+            "function": "fn_8005AE5C",
+            "evidence": "evidence.tsv source-form 0x8005AE5C-0x8005AEC8"
+          },
+          {
+            "function": "fn_8005AEC8",
+            "evidence": "evidence.tsv source-form 0x8005AEC8-0x8005B128"
+          },
+          {
+            "function": "fn_8005B2BC",
+            "evidence": "evidence.tsv source-form 0x8005B2BC-0x8005B3CC"
+          },
+          {
+            "function": "fn_8005B3D4",
+            "evidence": "evidence.tsv source-form 0x8005B3D4-0x8005B4B0"
+          },
+          {
+            "function": "fn_8005B610",
+            "evidence": "evidence.tsv source-form 0x8005B610-0x8005B6AC"
+          },
+          {
+            "function": "fn_8005B6AC",
+            "evidence": "evidence.tsv source-form 0x8005B6AC-0x8005B730"
+          },
+          {
+            "function": "fn_8005B730",
+            "evidence": "evidence.tsv source-form 0x8005B730-0x8005B838"
+          },
+          {
+            "function": "fn_8005B838",
+            "evidence": "evidence.tsv source-form 0x8005B838-0x8005B908"
+          },
+          {
+            "function": "fn_8005B908",
+            "evidence": "evidence.tsv source-form 0x8005B908-0x8005B9FC"
+          },
+          {
+            "function": "fn_8005BC10",
+            "evidence": "evidence.tsv source-form 0x8005BC10-0x8005BCA8"
+          },
+          {
+            "function": "fn_8005BCA8",
+            "evidence": "evidence.tsv source-form 0x8005BCA8-0x8005BE54"
+          },
+          {
+            "function": "fn_8005BE5C",
+            "evidence": "evidence.tsv source-form 0x8005BE5C-0x8005BF18"
+          },
+          {
+            "function": "fn_8005BFDC",
+            "evidence": "evidence.tsv source-form 0x8005BFDC-0x8005C0C0"
+          },
+          {
+            "function": "fn_8005C0C0",
+            "evidence": "evidence.tsv source-form 0x8005C0C0-0x8005C144"
+          },
+          {
+            "function": "fn_8005C1F4",
+            "evidence": "evidence.tsv source-form 0x8005C1F4-0x8005C338"
+          },
+          {
+            "function": "fn_8005C4A4",
+            "evidence": "evidence.tsv source-form 0x8005C4A4-0x8005C6EC"
+          },
+          {
+            "function": "fn_8005C844",
+            "evidence": "evidence.tsv source-form 0x8005C844-0x8005C994"
+          },
+          {
+            "function": "fn_8005C994",
+            "evidence": "evidence.tsv source-form 0x8005C994-0x8005CAE4"
+          },
+          {
+            "function": "fn_8005CAE4",
+            "evidence": "evidence.tsv source-form 0x8005CAE4-0x8005CC50"
+          },
+          {
+            "function": "fn_8005CC50",
+            "evidence": "evidence.tsv source-form 0x8005CC50-0x8005CD8C"
+          },
+          {
+            "function": "fn_8005CD8C",
+            "evidence": "evidence.tsv source-form 0x8005CD8C-0x8005CE10"
+          },
+          {
+            "function": "fn_8005CE10",
+            "evidence": "evidence.tsv source-form 0x8005CE10-0x8005D1E4"
+          },
+          {
+            "function": "fn_8005D1E4",
+            "evidence": "evidence.tsv source-form 0x8005D1E4-0x8005D2C8"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      }
     },
     {
       "source": "src/engine/smixer.c",

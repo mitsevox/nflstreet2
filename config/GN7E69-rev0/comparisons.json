@@ -32962,7 +32962,7 @@
     {
       "source": "src/game/InGameScreens.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80055584-0x8005D60C (src/game/InGameScreens.cpp, merged with the former src/game/GameStats.cpp), its function, name, data and source-form rows. Comparison-only: the file is rung 4, so the original assembly stays linked. The .rodata starts at 0x8028E008 with the GameStats query literal, which puts the file's 8-aligned double pool 0x8028E6D0 at its target offset. The static initializer 0x8005D540 and its .ctors/.dtors stubs 0x8005D5B4/0x8005D5E0 stay unregistered and original-linked.",
+      "evidence": "evidence.tsv unit row 0x80055584-0x8005D60C (src/game/InGameScreens.cpp, merged with the former src/game/GameStats.cpp), its function, name, data and source-form rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact functions stay registered here as its partials. The .rodata starts at 0x8028E008 with the GameStats query literal, which puts the file's 8-aligned double pool 0x8028E6D0 at its target offset. The static initializer 0x8005D540 and its .ctors/.dtors stubs 0x8005D5B4/0x8005D5E0 are not registered here; they are linked with the unit (their name rows).",
       "sections": [
         {
           "section": ".text",
@@ -33619,7 +33619,7 @@
     {
       "source": "src/game/PlayerActionAnim.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800DAEE4-0x800DF6EC for src/game/PlayerActionAnim.cpp (the first part of the former cu_800DAEE4.cpp, split at 0x800DF6EC), its function extents, .rodata 0x8029D8A8-0x8029D9F0 and the initialized word 0x803EAD1C-0x803EAD20. The unreferenced 100621.12f word at 0x8029D908 belongs to a function the GameCube linker discarded (Xbox prototype 0x94410); it is rebuilt from that body as the discarded PlayerActionAnimSetSpeedRatio (evidence.tsv linker row 0x8029D908), so the literals after it compare at their native offsets. Draft comparisons only; the original bytes remain linked.",
+      "evidence": "evidence.tsv unit row 0x800DAEE4-0x800DF6EC for src/game/PlayerActionAnim.cpp (the first part of the former cu_800DAEE4.cpp, split at 0x800DF6EC), its function extents, .rodata 0x8029D8A8-0x8029D9F0 and the initialized word 0x803EAD1C-0x803EAD20. The unreferenced 100621.12f word at 0x8029D908 belongs to a function the GameCube linker discarded (Xbox prototype 0x94410); it is rebuilt from that body as the discarded PlayerActionAnimSetSpeedRatio (evidence.tsv linker row 0x8029D908), so the literals after it compare at their native offsets. The source is linked with holdouts (units.json, owner ruling of 2026-11-20; the discarded body is its link_roots.discarded); the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -33899,7 +33899,7 @@
     {
       "source": "src/game/PlayerActionStates.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800DF6EC-0x800E2FE4 for src/game/PlayerActionStates.cpp (the second part of the former cu_800DAEE4.cpp, split at 0x800DF6EC), its function extents and .rodata 0x8029D9F0-0x8029DB28. The unreferenced strings \"LB_L\" and \"LB_R\" at 0x8029DA9C-0x8029DAAC have no GameCube user and no Xbox prototype code reference, so the source does not form them and the pools of fn_800E1954 onward stay shifted. Draft comparisons only; the original bytes remain linked.",
+      "evidence": "evidence.tsv unit row 0x800DF6EC-0x800E2FE4 for src/game/PlayerActionStates.cpp (the second part of the former cu_800DAEE4.cpp, split at 0x800DF6EC), its function extents and .rodata 0x8029D9F0-0x8029DB28. The unreferenced strings \"LB_L\" and \"LB_R\" at 0x8029DA9C-0x8029DAAC have no GameCube user and no Xbox prototype code reference; a labeled stand-in in fn_800E1954 forms them (its FAKEMATCH: source-form row), so the whole .rodata is byte-exact. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
