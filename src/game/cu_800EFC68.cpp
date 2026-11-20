@@ -7954,7 +7954,7 @@ extern "C" Object_80039F5C *fn_800F9AF0(unsigned char slot) {
     return p;
 }
 
-extern "C" Object_80039F5C *fn_800F9BD8(int forward, Object_80039F5C *p) {
+extern "C" Object_80039F5C *AssignGetNextSlotPlayer(int forward, Object_80039F5C *p) {
     Record_8011F4E0 *pRecord;
     Object_80039F5C *pResult = 0;
     int id = 0;
@@ -8620,7 +8620,7 @@ extern "C" void fn_800FAECC(void) {
                 Object_80039F5C *pSlot = 0;
                 int done = 0;
                 while (!done && tries <= 2) {
-                    pSlot = fn_800F9BD8(forward, pSlot);
+                    pSlot = AssignGetNextSlotPlayer(forward, pSlot);
                     tries++;
                     if (!pSlot) {
                         done = 1;
@@ -16809,7 +16809,7 @@ extern "C" int fn_8010F43C(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_8010F654(Object_80039F5C *p)
+extern "C" int PlyrTrackTargetUpdate(Object_80039F5C *p)
 {
     int result = 0;
     Ball_t *pBall = BallGetCurrent();

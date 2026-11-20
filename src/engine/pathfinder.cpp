@@ -282,7 +282,7 @@ void PathfinderStop(int a)
 
 void PathfinderSetStreamValue(int a, int b)
 {
-    void *p = fn_801B3234(a);
+    void *p = PATHI_findnodedata(a);
 
     if (p) {
         fn_8027ECD8(p, b);

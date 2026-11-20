@@ -385,8 +385,8 @@ extern void fn_8022DB08(void);
 extern int fn_8022DB20(void);
 extern int fn_8022DBF4(int a);
 extern int fn_8022DC38(int a);
-extern int fn_8022E28C(int a, int b, unsigned char *p, int *pA, int *pB);
-extern int fn_8022E484(void);
+extern int DbRunUpdateChain(int a, int b, unsigned char *p, int *pA, int *pB);
+extern int DbRunLoadChain(void);
 extern int fn_8022E9A4(void);
 extern void fn_8022E9C4(void);
 extern int fn_8022E9E4(void);
@@ -397,7 +397,7 @@ extern signed char fn_8022F384(int key);
 extern int fn_8022F3D4(int key);
 extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
 extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int f);
-extern void fn_802349CC(void *p);
+extern void ScaleBlockReset(void *p);
 extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
 extern void fn_80236F00(void);
 
@@ -837,7 +837,7 @@ int fn_8022FBAC(Cache_8022F8A8 *pCache)
 
 /* Writes one 64-bit column key (owner word, column id) per column of pInfo, the 'DIGT'
    column keyed by digtKey instead of key, then the -1 terminator. */
-void fn_8022FEF8(unsigned int key, unsigned int digtKey, TDbColInfo_801F9AB8 *pInfo,
+void DbCacheWriteColumnKeys(unsigned int key, unsigned int digtKey, TDbColInfo_801F9AB8 *pInfo,
                  unsigned long long *pKeys, unsigned short count)
 {
     unsigned char i;

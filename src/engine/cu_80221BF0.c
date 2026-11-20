@@ -298,11 +298,11 @@ void fn_80221DB0(Text_80221BF0 *pText)
 }
 
 void fn_80222764(Text_80221BF0 *pText);
-void fn_802227B0(Text_80221BF0 *pText);
+void UIGLibTextDraw(Text_80221BF0 *pText);
 void fn_80222E0C(Text_80221BF0 *pText);
 void fn_80222E54(Buffer_80222E54 *pDst, Buffer_80222E54 *pSrc);
 
-void fn_80222220(Text_80221BF0 *pText, Uint32 Msg, Int32 Unused, void *pData, void *pOut)
+void UIGLibTextObjAction(Text_80221BF0 *pText, Uint32 Msg, Int32 Unused, void *pData, void *pOut)
 {
     switch (Msg) {
     case -1:
@@ -310,7 +310,7 @@ void fn_80222220(Text_80221BF0 *pText, Uint32 Msg, Int32 Unused, void *pData, vo
         fn_80222764(pText);
         break;
     case -2:
-        fn_802227B0(pText);
+        UIGLibTextDraw(pText);
         break;
     case -3:
         fn_80222E0C(pText);
@@ -492,7 +492,7 @@ void fn_80222764(Text_80221BF0 *pText)
     fn_80221DB0(pText);
 }
 
-void fn_802227B0(Text_80221BF0 *pText)
+void UIGLibTextDraw(Text_80221BF0 *pText)
 {
     FontColor_801CCA64 Color;
     Float32 Pos[3];

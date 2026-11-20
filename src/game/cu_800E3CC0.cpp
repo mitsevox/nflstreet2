@@ -844,7 +844,7 @@ extern "C" Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int ang
                                          int facing);
 extern "C" unsigned short fn_801BE648(void *p);
 
-extern "C" int fn_800E459C(Object_80039F5C *p)
+extern "C" int PlyrHoldSpotUpdate(Object_80039F5C *p)
 {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     State_800E4494 *pState = (State_800E4494 *)&p->mUnknown336;
@@ -1784,7 +1784,7 @@ extern "C" int fn_800E6AC8(Object_80039F5C *p, int mode)
 }
 
 extern "C" {
-int fn_800E6F48(Object_80039F5C *p)
+int PlyrTimedWaitEnter(Object_80039F5C *p)
 {
     int *pTimer = &p->mUnknown336;
     int value = p->mpState->mUnknown1;

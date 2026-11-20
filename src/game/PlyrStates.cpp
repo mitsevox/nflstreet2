@@ -418,10 +418,10 @@ void fn_800E13E4(void);
 void fn_800E1438(void);
 void fn_800E1544(void);
 void fn_800E4494(void);
-void fn_800E459C(void);
+void PlyrHoldSpotUpdate(void);
 void fn_800E4EE4(void);
 void fn_800E513C(void);
-void fn_800E6F48(void);
+void PlyrTimedWaitEnter(void);
 void fn_800E705C(void);
 void fn_800E7330(void);
 void fn_800E8420(void);
@@ -512,7 +512,7 @@ void fn_8010D090(void);
 void fn_8010D6D4(void);
 void fn_8010D734(void);
 void fn_8010F43C(void);
-void fn_8010F654(void);
+void PlyrTrackTargetUpdate(void);
 void fn_8010FB10(void);
 void fn_8010FB4C(void);
 void fn_8010FC40(void);
@@ -616,7 +616,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)DirectedRunEnter, (void *)fn_800F0900, (void *)DirectedRunUpdate, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_800FD708}},
     {{(void *)fn_80133C50, (void *)fn_80134370, (void *)fn_80133EE8, (void *)fn_801343AC, (void *)fn_800F0908, 0}},
     {{(void *)PlyrEngageEnter, (void *)PlyrEngageExit, (void *)PlyrEngageUpdate, (void *)PlyrEngageInput, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8010F43C, (void *)fn_8010FB10, (void *)fn_8010F654, (void *)fn_8010FB4C, (void *)fn_800F0908, 0}},
+    {{(void *)fn_8010F43C, (void *)fn_8010FB10, (void *)PlyrTrackTargetUpdate, (void *)fn_8010FB4C, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F23EC, (void *)fn_800F0900, (void *)fn_800F24D8, (void *)fn_800F268C, (void *)fn_800F0908, 0}},
     {{(void *)fn_801108D4, (void *)fn_800F0900, (void *)fn_801109A4, (void *)fn_80110B00, (void *)fn_800F0908, 0}},
     {{(void *)CarrierMoveEnter, (void *)CarrierMoveExit, (void *)CarrierMoveUpdate, (void *)CarrierMoveInput, (void *)fn_800F0908, 0}},
@@ -625,7 +625,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_80116B98, (void *)fn_800F0900, (void *)fn_80116C34, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_801170A0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800E4494, (void *)fn_800E4EE4, (void *)fn_800E459C, (void *)fn_800E513C, (void *)fn_800F0908, 0}},
+    {{(void *)fn_800E4494, (void *)fn_800E4EE4, (void *)PlyrHoldSpotUpdate, (void *)fn_800E513C, (void *)fn_800F0908, 0}},
     {{(void *)fn_80111104, (void *)fn_801112D8, (void *)fn_801111E8, (void *)fn_80111314, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
@@ -634,7 +634,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_800F0900, (void *)fn_800F0900, (void *)fn_800F0900, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
     {{(void *)fn_800E0574, (void *)fn_800E068C, (void *)fn_800E05C0, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
     {{(void *)fn_800DFCEC, (void *)fn_800DFD90, (void *)fn_800DFED0, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800E6F48, (void *)fn_800F0900, (void *)fn_800E705C, (void *)fn_800E7330, (void *)fn_800F0908, 0}},
+    {{(void *)PlyrTimedWaitEnter, (void *)fn_800F0900, (void *)fn_800E705C, (void *)fn_800E7330, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F0C6C, (void *)fn_800F0900, (void *)fn_800F0CCC, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)fn_800F0E10}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},

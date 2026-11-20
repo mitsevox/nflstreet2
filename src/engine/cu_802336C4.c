@@ -401,8 +401,8 @@ extern void fn_8022DB08(void);
 extern int fn_8022DB20(void);
 extern int fn_8022DBF4(int a);
 extern int fn_8022DC38(int a);
-extern int fn_8022E28C(int a, int b, unsigned char *p, int *pA, int *pB);
-extern int fn_8022E484(void);
+extern int DbRunUpdateChain(int a, int b, unsigned char *p, int *pA, int *pB);
+extern int DbRunLoadChain(void);
 extern int fn_8022E9A4(void);
 extern void fn_8022E9C4(void);
 extern int fn_8022E9E4(void);
@@ -413,7 +413,7 @@ extern signed char fn_8022F384(int key);
 extern int fn_8022F3D4(int key);
 extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
 extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int f);
-void fn_802349CC(Block_802349CC *pBlock);
+void ScaleBlockReset(Block_802349CC *pBlock);
 extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
 extern void LLCacheLockedEnable(void);
 extern void fn_801CFC58(int angle, void *pTable, float *pSin, float *pCos);
@@ -1133,7 +1133,7 @@ int fn_80234394(Instance_8023424C **ppList, unsigned int count, int key)
 /* Rates every registered instance (clipped to the screen box when mode is 1), then moves
    instances down one detail level while a level holds more than its budget plus what the
    level above left unused. */
-void fn_80234424(int mode)
+void ModelLodBalance(int mode)
 {
     Box_80234070 *pClip;
     unsigned int i;
@@ -1280,7 +1280,7 @@ void fn_80234908(void)
 }
 
 /* Allocates count zeroed floats for pArray. */
-void fn_8023491C(Array_8023491C *pArray, unsigned int count)
+void FloatArrayAlloc(Array_8023491C *pArray, unsigned int count)
 {
     unsigned int i;
 
@@ -1304,7 +1304,7 @@ void fn_802349B8(Array_8023491C *pArray, int value)
 }
 
 /* Clears the 0x90-byte block and sets its three scale floats +0x80..+0x88 to 1. */
-void fn_802349CC(Block_802349CC *pBlock)
+void ScaleBlockReset(Block_802349CC *pBlock)
 {
     memset(pBlock, 0, sizeof(Block_802349CC));
     pBlock->mScale[0] = lbl_802B7170[0];
@@ -1352,7 +1352,7 @@ void fn_80234AD8(Part_80234A30 *pPart, Block_802336C4 *pBlock)
 
 void fn_80234AFC(void *p)
 {
-    fn_802349CC(p);
+    ScaleBlockReset(p);
 }
 
 void fn_80234B1C(void *p)

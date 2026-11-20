@@ -2702,7 +2702,7 @@
           "end": "0x800E459C"
         },
         {
-          "symbol": "fn_800E459C",
+          "symbol": "PlyrHoldSpotUpdate",
           "start": "0x800E459C",
           "end": "0x800E4EE4"
         },
@@ -2772,7 +2772,7 @@
           "end": "0x800E6F48"
         },
         {
-          "symbol": "fn_800E6F48",
+          "symbol": "PlyrTimedWaitEnter",
           "start": "0x800E6F48",
           "end": "0x800E705C"
         },
@@ -4184,7 +4184,7 @@
           "end": "0x800F9BD8"
         },
         {
-          "symbol": "fn_800F9BD8",
+          "symbol": "AssignGetNextSlotPlayer",
           "start": "0x800F9BD8",
           "end": "0x800F9CAC"
         },
@@ -5319,7 +5319,7 @@
           "end": "0x8010F654"
         },
         {
-          "symbol": "fn_8010F654",
+          "symbol": "PlyrTrackTargetUpdate",
           "start": "0x8010F654",
           "end": "0x8010FB10"
         },
@@ -19811,7 +19811,7 @@
           "end": "0x8022D834"
         },
         {
-          "symbol": "fn_8022D834",
+          "symbol": "DbTableLookupByte",
           "start": "0x8022D834",
           "end": "0x8022D864"
         },
@@ -19966,22 +19966,22 @@
           "end": "0x8022EA74"
         },
         {
-          "symbol": "fn_8022CED8",
+          "symbol": "DbAssignPendingNodeIds",
           "start": "0x8022CED8",
           "end": "0x8022D14C"
         },
         {
-          "symbol": "fn_8022DDBC",
+          "symbol": "DbUpdateSettingsRecord",
           "start": "0x8022DDBC",
           "end": "0x8022E21C"
         },
         {
-          "symbol": "fn_8022E28C",
+          "symbol": "DbRunUpdateChain",
           "start": "0x8022E28C",
           "end": "0x8022E484"
         },
         {
-          "symbol": "fn_8022E484",
+          "symbol": "DbRunLoadChain",
           "start": "0x8022E484",
           "end": "0x8022E558"
         }
@@ -20091,7 +20091,7 @@
           "end": "0x80230D8C"
         },
         {
-          "symbol": "fn_8022FEF8",
+          "symbol": "DbCacheWriteColumnKeys",
           "start": "0x8022FEF8",
           "end": "0x8022FFD0"
         },
@@ -20717,17 +20717,17 @@
           "end": "0x80233BB8"
         },
         {
-          "symbol": "fn_80234424",
+          "symbol": "ModelLodBalance",
           "start": "0x80234424",
           "end": "0x802345BC"
         },
         {
-          "symbol": "fn_8023491C",
+          "symbol": "FloatArrayAlloc",
           "start": "0x8023491C",
           "end": "0x80234994"
         },
         {
-          "symbol": "fn_802349CC",
+          "symbol": "ScaleBlockReset",
           "start": "0x802349CC",
           "end": "0x80234A14"
         }
@@ -31143,7 +31143,7 @@
           "end": "0x801B3234"
         },
         {
-          "symbol": "fn_801B3234",
+          "symbol": "PATHI_findnodedata",
           "start": "0x801B3234",
           "end": "0x801B3268"
         },
@@ -34631,12 +34631,12 @@
           "end": "0x80222EC4"
         },
         {
-          "symbol": "fn_80222220",
+          "symbol": "UIGLibTextObjAction",
           "start": "0x80222220",
           "end": "0x80222764"
         },
         {
-          "symbol": "fn_802227B0",
+          "symbol": "UIGLibTextDraw",
           "start": "0x802227B0",
           "end": "0x80222E0C"
         }

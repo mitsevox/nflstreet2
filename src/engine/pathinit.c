@@ -214,7 +214,7 @@ extern "C" int PATH_setvariable(int flags, const char *name, int value)
     return result;
 }
 
-extern "C" void *fn_801B3234(int flags)
+extern "C" void *PATHI_findnodedata(int flags)
 {
     Node_801B3FE0 *p = fn_801B4174(flags);
     if (!p)

@@ -4,7 +4,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-void *fn_801B3234(int flags);
+void *PATHI_findnodedata(int flags);
 #ifdef __cplusplus
 }
 #endif

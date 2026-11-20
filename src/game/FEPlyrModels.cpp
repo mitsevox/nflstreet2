@@ -109,7 +109,7 @@ void MatStoreSlot(int a);
 void MatCatSlot(int a);
 FEPlyrScene_t *ObjNew(int a, int b, FEPlyrSceneDesc_t *pDesc);
 void fn_80227490(float *pOut, float *pIn, int a, int b, int c);
-void fn_80234424(int a);
+void ModelLodBalance(int a);
 }
 
 static Object_8008044C _FEPlyr_PlayerCursor;
@@ -293,7 +293,7 @@ static void _FEPlyrDrawModel(int index, float a, float b, float c, float d)
     MatCatSlot(2);
     MatStoreSlot(6);
     MatPop();
-    fn_80234424(0);
+    ModelLodBalance(0);
     PlayerObjDraw(pObject, 1);
     if (_FEPlyr_bPairMode ? index == _FEPlyr_iFrontIndex : index == 0) {
         if (FEPlyrLoadIsShown(pObject)) {
