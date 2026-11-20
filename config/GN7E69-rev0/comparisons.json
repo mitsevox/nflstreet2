@@ -27311,19 +27311,19 @@
     {
       "source": "src/game/cu_800C0910.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: the complete body of 0x800C0910 and the three unreferenced AGLP query strings before its float and double literals, which form the readonly slice measured here. No original file boundary is claimed.",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: the complete bodies of 0x800C0910, 0x800C146C, 0x800C1CA0 and 0x800C1E5C and the three unreferenced AGLP query strings before their float and double literals, which form the readonly slice measured here (it ends 8-aligned only with the 0x800C1CA0 pool after it). No original file boundary is claimed.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800C0910",
-          "end": "0x800C1180"
+          "end": "0x800C2090"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802974D0",
-          "end": "0x802975A8"
+          "end": "0x802975E8"
         }
       ],
       "functions": [
@@ -27331,6 +27331,21 @@
           "symbol": "fn_800C0910",
           "start": "0x800C0910",
           "end": "0x800C1180"
+        },
+        {
+          "symbol": "fn_800C146C",
+          "start": "0x800C146C",
+          "end": "0x800C1C34"
+        },
+        {
+          "symbol": "fn_800C1CA0",
+          "start": "0x800C1CA0",
+          "end": "0x800C1E40"
+        },
+        {
+          "symbol": "fn_800C1E5C",
+          "start": "0x800C1E5C",
+          "end": "0x800C2090"
         }
       ]
     },
@@ -34981,37 +34996,6 @@
           "symbol": "fn_800BE944",
           "start": "0x800BE944",
           "end": "0x800BEC1C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800C1CA0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison-only fragment of the retained provisional cu_8008E978 grouping, split so that its literal-pool slice compiles independently. Bodies between its registered functions stay in src/game/cu_8008E978.cpp; no original file boundary is claimed.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800C1CA0",
-          "end": "0x800C2090"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802975D4",
-          "end": "0x802975E8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_800C1CA0",
-          "start": "0x800C1CA0",
-          "end": "0x800C1E40"
-        },
-        {
-          "symbol": "fn_800C1E5C",
-          "start": "0x800C1E5C",
-          "end": "0x800C2090"
         }
       ]
     },
