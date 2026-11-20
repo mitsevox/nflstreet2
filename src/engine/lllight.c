@@ -407,9 +407,9 @@ void fn_80236C10(int index, float *pColor, float *pDir)
     Vec3_801DE1E0 dir;
     unsigned char rgb[4];
 
-    pColor[0] = pColor[0] < 0.0f ? 0.0f : (pColor[0] <= 255.0f ? pColor[0] : 255.0f);
-    pColor[1] = pColor[1] < 0.0f ? 0.0f : (pColor[1] <= 255.0f ? pColor[1] : 255.0f);
-    pColor[2] = pColor[2] < 0.0f ? 0.0f : (pColor[2] <= 255.0f ? pColor[2] : 255.0f);
+    { float c = pColor[0]; if (!(c < 0.0f)) { if (!(c <= 255.0f)) c = 255.0f; } else c = 0.0f; pColor[0] = c; }
+    { float c = pColor[1]; if (!(c < 0.0f)) { if (!(c <= 255.0f)) c = 255.0f; } else c = 0.0f; pColor[1] = c; }
+    { float c = pColor[2]; if (!(c < 0.0f)) { if (!(c <= 255.0f)) c = 255.0f; } else c = 0.0f; pColor[2] = c; }
     rgb[0] = (int)pColor[0];
     rgb[1] = (int)pColor[1];
     rgb[2] = (int)pColor[2];

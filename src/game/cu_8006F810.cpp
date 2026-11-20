@@ -921,6 +921,8 @@ int fn_80071BDC(int value)
     switch (value) {
     case 0:
     case 1:
+    case 5:
+    case 7:
     case 8:
         result = 44;
         break;

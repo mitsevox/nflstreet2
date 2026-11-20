@@ -262,7 +262,7 @@ extern int lbl_803EC0F0;
 extern void *lbl_803EC0F4;
 extern int lbl_803ED020;
 extern int lbl_803ED024;
-extern int lbl_803ED6E4[2];
+extern const int lbl_803ED6E4[2];
 
 double fabs(double);
 
@@ -371,7 +371,7 @@ extern int fn_8022E9E4(void);
 extern int fn_8022EA74(void);
 extern void fn_8022EA7C(void);
 extern int fn_8022ED50(int a, int b, int c);
-extern int fn_8022F384(int key);
+extern signed char fn_8022F384(int key);
 extern int fn_8022F3D4(int key);
 extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
 extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int f);

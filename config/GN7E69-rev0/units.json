@@ -2042,7 +2042,7 @@
     {
       "source": "src/game/cu_8015A248.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x8015A248-0x8015C25C (src/game/cu_8015A248.cpp) and its data rows; one source linked with holdouts (owner ruling of 2026-11-20): the former three-function linked prefix and the 19 exact later functions are linked, the five holdouts keep the original bytes; .rodata 0x802A3E40-0x802A3EF8 whole.",
+      "evidence": "evidence.tsv provisional unit row 0x8015A248-0x8015C25C (src/game/cu_8015A248.cpp) and its data rows; one source linked with holdouts (owner ruling of 2026-11-20): the former three-function linked prefix and the 21 exact later functions are linked (source-form rows 0x8015AF48-0x8015B344 and 0x8015B834-0x8015BCAC), the three holdouts keep the original bytes; .rodata 0x802A3E40-0x802A3EF8 whole.",
       "sections": [
         {
           "section": ".text",
@@ -2054,7 +2054,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8015AB84",
-          "end": "0x8015AF48"
+          "end": "0x8015B344"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015B834",
+          "end": "0x8015BCAC"
         },
         {
           "section": ".text",
@@ -2076,23 +2082,15 @@
             "evidence": "evidence.tsv source-form 0x8015A818-0x8015AB84"
           },
           {
-            "function": "fn_8015AF48",
-            "evidence": "evidence.tsv source-form 0x8015AF48-0x8015B344"
-          },
-          {
             "function": "fn_8015B344",
             "evidence": "evidence.tsv source-form 0x8015B344-0x8015B834"
-          },
-          {
-            "function": "fn_8015B834",
-            "evidence": "evidence.tsv source-form 0x8015B834-0x8015BCAC"
           },
           {
             "function": "fn_8015BCAC",
             "evidence": "evidence.tsv source-form 0x8015BCAC-0x8015BED4"
           }
         ],
-        "evidence": "x1f merge notes (swarm x1 tracking table): src/game/cu_8015A248.cpp holds out fn_8015A818, fn_8015AF48, fn_8015B344, fn_8015B834, fn_8015BCAC."
+        "evidence": "x1f/x2d merge notes (swarm x1/x2 tracking tables): src/game/cu_8015A248.cpp holds out fn_8015A818, fn_8015B344, fn_8015BCAC."
       }
     },
     {

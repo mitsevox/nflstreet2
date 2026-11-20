@@ -41,7 +41,7 @@ extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int 
 extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
 extern TDbIODevice_t tdbiofioCallback;
 extern int fn_801F967C(int db, int tbl);
-int fn_8022F384(int key);
+signed char fn_8022F384(int key);
 
 extern const unsigned char lbl_802AEF10[];
 extern int fn_802297D8(void *p, int tag);
@@ -51,7 +51,7 @@ extern int fn_8022F428(int key);
 extern int fn_8022F4BC(void);
 extern void fn_80231208(void);
 int fn_8022F3D4(int key);
-extern int lbl_803ED6E4[2];
+extern const int lbl_803ED6E4[2];
 extern char lbl_802B5D64[];
 extern char lbl_802B56F4[];
 extern char lbl_802B5744[];
@@ -597,7 +597,7 @@ void fn_8022F1BC(int key);
 void fn_8022F294(int key);
 int fn_8022F34C(void);
 int fn_8022F358(int index);
-int fn_8022F384(int key);
+signed char fn_8022F384(int key);
 int fn_8022F3D4(int key);
 
 int fn_8022942C(void)
