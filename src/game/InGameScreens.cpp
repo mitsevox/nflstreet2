@@ -1242,15 +1242,15 @@ void fn_80057C58(unsigned char team, int index, int flag)
                 &handle, index + 1, object.mUnknown0);
     unsigned short count = PlayBookDbCountPlays(tag, handle);
     if (flag) {
-        pList = (signed char *)fn_801D2BB0(0x40, count, 0, 0);
+        lbl_803EA594->mpUnknown0[team][index] = (signed char *)fn_801D2BB0(0x40, count, 0, 0);
+        pList = lbl_803EA594->mpUnknown0[team][index];
         table = 0x504F5355;
-        lbl_803EA594->mpUnknown0[team][index] = pList;
         pFirst = &lbl_803EA594->mUnknown40[team][index];
         pCount = &lbl_803EA594->mUnknown50[team][index];
     } else {
-        pList = (signed char *)fn_801D2BB0(0x40, count, 0, 0);
+        lbl_803EA594->mpUnknown20[team][index] = (signed char *)fn_801D2BB0(0x40, count, 0, 0);
+        pList = lbl_803EA594->mpUnknown20[team][index];
         table = 0x50445355;
-        lbl_803EA594->mpUnknown20[team][index] = pList;
         pFirst = &lbl_803EA594->mUnknown48[team][index];
         pCount = &lbl_803EA594->mUnknown58[team][index];
     }
