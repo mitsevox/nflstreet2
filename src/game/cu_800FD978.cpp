@@ -69,7 +69,11 @@ extern "C" int fn_800FD828(Object_80039F5C *p)
         fn_8009BD60(p);
     } else if (animation == 85) {
         fn_8009BD60(p);
-        p->mUnknown1008.mUnknown2 = p->mUnknown2914 == 4 ? 3 : 5;
+        if (p->mUnknown2914 == 4) {
+            p->mUnknown1008.mUnknown2 = 3;
+        } else {
+            p->mUnknown1008.mUnknown2 = 5;
+        }
         if (fabsf(point.mY - base.mY) < 2.0f) {
             p->mUnknown1008.mUnknown1 = 9;
         }

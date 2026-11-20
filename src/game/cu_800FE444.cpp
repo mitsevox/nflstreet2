@@ -57,7 +57,7 @@ void PlayerCutGetEndPoint(Object_80039F5C *,Vector_80039F5C *);
 float PlayerCutGetRunSpeed(Object_80039F5C *,float);
 void fn_80103F80(Ball_t *,Vector_80039F5C,Vector_80039F5C,float,int,float,Vector_80039F5C *,Object_80039F5C *);
 void fn_80104328(Object_80039F5C *,unsigned int,int *,Vector_80039F5C *,int *);
-float fn_80103DD8(Object_80039F5C *,Object_80039F5C *,float,short *);
+float AssignGetPassSpeed(Object_80039F5C *,Object_80039F5C *,float,short *);
 int fn_8011E9B4(Object_80039F5C *);
 int fn_800A7F1C(unsigned char);
 unsigned int fn_80100B0C(void);
@@ -219,7 +219,7 @@ void fn_800FE910(Object_80039F5C *p, Point_8017886C *point, float *value, float 
     }
 }
 
-void fn_800FE9B4(Object_80039F5C *p, Point_8017886C *point, float *speed)
+void AssignRescanAvoidance(Object_80039F5C *p, Point_8017886C *point, float *speed)
 {
     State_800FDA58 *s = (State_800FDA58 *)&p->mUnknown336;
     float distance;
@@ -236,6 +236,7 @@ void fn_800FE9B4(Object_80039F5C *p, Point_8017886C *point, float *speed)
     s->mUnknown0 = lbl_803EAE76;
     s->mUnknown40 = 180.0f;
     s->mUnknown44 = 1000.0f;
+    // FAKEMATCH: x is cleared through the state block and y through direction (the same vector) for the target's two store bases
     s->mUnknown32.mX = direction->mY = 0.0f;
     if (*speed == 0.0f) {
         return;
@@ -406,7 +407,7 @@ int fn_800FF094(Object_80039F5C *p)
     case 0:
         if (--s->mUnknown0 <= 0) {
             s->mUnknown0 = 0;
-            fn_800FE9B4(p, &point, &s->mUnknown24);
+            AssignRescanAvoidance(p, &point, &s->mUnknown24);
             fn_800FEB60(p, &point, &s->mUnknown24);
             fn_80227690(&delta, &point, &p->mMotion.mPos);
             fn_801CFE40(delta.mY, delta.mX);
@@ -439,7 +440,7 @@ int fn_800FF094(Object_80039F5C *p)
         break;
     case 3:
         if (distance > 3.0f) {
-            fn_800FE9B4(p, &point, &s->mUnknown24);
+            AssignRescanAvoidance(p, &point, &s->mUnknown24);
             fn_800FEB60(p, &point, &s->mUnknown24);
             speed = s->mUnknown24;
         } else if (special && p->mUnknown560.mFlags.mBytes[0] != 0) {
@@ -1166,7 +1167,7 @@ void fn_80101568(Object_80039F5C *p, unsigned char *kind, Point_8017886C *point,
         if (state->mUnknown0Bytes[0]) {
             speed = gFrameTimeScale * 0.3f;
         } else {
-            speed = fn_80103DD8(p, other, 0.9f, &record->mUnknown8);
+            speed = AssignGetPassSpeed(p, other, 0.9f, &record->mUnknown8);
         }
         if (ball) {
             fn_801007A4(ball, p, other, speed, &target, kind);

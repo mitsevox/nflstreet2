@@ -532,7 +532,7 @@ int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut);
 int fn_8009FE24(Object_80039F5C *p);
 int fn_800F5AD4(Object_80039F5C *p);
 void fn_800F6AD8(float *p);
-Point_8017886C fn_800F97A8(Object_80039F5C *p);
+Point_8017886C AssignGetFormationPos(Object_80039F5C *p);
 int fn_800F9CB4(void);
 void fn_800FBB70(void);
 unsigned char fn_800FC014(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -1464,7 +1464,7 @@ extern "C" void fn_800F9440(Object_80039F5C *p, Object_80039F5C *pOther) {
     fn_8011F4E0()->mUnknown16[p->mIdBytes[1]] = pOther->mIdBytes[1];
 }
 
-extern "C" Point_8017886C fn_800F97A8(Object_80039F5C *p) {
+extern "C" Point_8017886C AssignGetFormationPos(Object_80039F5C *p) {
     Point_8017886C base;
     PlayBookFormation_t *pTeam;
     PlayBookPosition_t *pEntry;
@@ -1499,7 +1499,7 @@ extern "C" int fn_800F986C(Object_80039F5C *p) {
         }
     }
     state = p->mUnknown2914;
-    pos = fn_800F97A8(p);
+    pos = AssignGetFormationPos(p);
     switch (state) {
     case 16:
         if (fn_8009F778(p)) {
@@ -1726,7 +1726,7 @@ extern "C" void fn_800FAECC(void) {
             }
             entries[count].mpPlayer = p;
             entries[count].mKind = fn_800F986C(p);
-            entries[count].mX = fn_800F97A8(p).mX;
+            entries[count].mX = AssignGetFormationPos(p).mX;
             count++;
         } else {
             pRecord->mUnknown16[p->mIdBytes[1]] = 0xFF;
@@ -1829,14 +1829,14 @@ extern "C" Object_80039F5C *fn_800FB844(Object_80039F5C *p) {
         if (pRecord->mUnknown5 == 0) {
             fn_800FBB70();
         }
-        pos = fn_800F97A8(p);
+        pos = AssignGetFormationPos(p);
         ahead = 1;
         behind = 1;
         n = fn_80178D18(fn_80178320());
         for (i = 0; i < n; i++) {
             Object_80039F5C *pOther = PlyrGet(fn_80178320(), i);
             if (pOther != p && fn_8009FE24(pOther)) {
-                Point_8017886C otherPos = fn_800F97A8(pOther);
+                Point_8017886C otherPos = AssignGetFormationPos(pOther);
                 if (otherPos.mX > pos.mX) {
                     ahead++;
                 } else {
@@ -1974,7 +1974,7 @@ extern "C" void fn_800FBB70(void) {
     low3 = low2;
     pSlot4 = 0;
     while (*pp) {
-        x = fn_800F97A8(*pp).mX;
+        x = AssignGetFormationPos(*pp).mX;
 
         if (x > high1) {
             if (high1 > high2) {

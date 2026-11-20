@@ -151,7 +151,7 @@ void fn_80103F80(Ball_t *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, f
 void BallLaunchToTarget(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
 void fn_80152068(int index, Vector_80039F5C *pOut);
 int TutorialAreMovesDone(unsigned long long mask);
-float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, float scale, short *pCount);
+float AssignGetPassSpeed(Object_80039F5C *p, Object_80039F5C *pOther, float scale, short *pCount);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 void PenaltyCheckGrounding(Object_80039F5C *p);
 float fn_80178A2C(void);
@@ -335,7 +335,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         if (!(p->mFlags & 0x4000)) {
             fn_80101130(pTarget, p, &pRecord->mUnknown8);
         }
-        speed = fn_80103DD8(p, pTarget, pRecord->mUnknown0, &pRecord->mUnknown8);
+        speed = AssignGetPassSpeed(p, pTarget, pRecord->mUnknown0, &pRecord->mUnknown8);
         pEvent->mUnknown8 = (int)pTarget;
         if (PlayerMoveGetKind(p) != 0) {
             AudmonEventPostId(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
@@ -641,7 +641,7 @@ extern "C" int fn_80103D6C(Object_80039F5C *p)
     return result;
 }
 
-extern "C" float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, float scale, short *pCount)
+extern "C" float AssignGetPassSpeed(Object_80039F5C *p, Object_80039F5C *pOther, float scale, short *pCount)
 {
     Vector_80039F5C delta;
     float factor = 0.0f;

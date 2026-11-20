@@ -601,7 +601,7 @@ int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut);
 int fn_8009FE24(Object_80039F5C *p);
 int fn_800F5AD4(Object_80039F5C *p);
 void fn_800F6AD8(float *p);
-Point_8017886C fn_800F97A8(Object_80039F5C *p);
+Point_8017886C AssignGetFormationPos(Object_80039F5C *p);
 void fn_800FBB70(void);
 unsigned char fn_800FC014(Object_80039F5C *p, Object_80039F5C *pOther);
 unsigned char fn_800FC0C4(Object_80039F5C *p);
