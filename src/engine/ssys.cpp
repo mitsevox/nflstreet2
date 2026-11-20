@@ -8,9 +8,6 @@
 #include "engine/ssys.h"
 
 extern "C" {
-extern void *lbl_80300020;
-extern int lbl_80300024;
-extern int lbl_803A7710;
 int fn_802753AC(SNDSYSOPTS *opts, int mode);
 }
 
@@ -20,18 +17,27 @@ typedef struct SndPendingCount_t {
     int mPending;
 } SndPendingCount_t;
 
+typedef struct SndPendingRate_t {
+    int mRate;
+    int mPending;
+} SndPendingRate_t;
+
 typedef struct SndPendingMode_t {
     int mMode;
     int mPending;
 } SndPendingMode_t;
 
-extern "C" {
-extern SndPendingCount_t lbl_803A76C8[4];
-extern SndPendingCount_t lbl_803A76E8[4];
-extern SndPendingMode_t lbl_803A7708;
-}
-
 namespace Snd {
+
+/* The main-memory heap and the output mode that Init hands to the library. */
+void *pheap = 0;
+OutputMode outputmode = OUTPUT_SURROUND;
+
+/* The changes queued while the library runs; Init clears them. */
+SndPendingCount_t gVoicesNext[4];
+SndPendingRate_t gOutputSampleRateNext[4];
+SndPendingMode_t gOutputModeNext;
+int heapsize;
 
 /* The front end's result for a sound library error code. */
 static inline int _SndSysResult(int error)
@@ -116,10 +122,10 @@ int System::SetOutputMode(OutputMode mode)
         return -5;
     }
     if (lbl_803A6C24.m168 == 0) {
-        lbl_80300024 = mode;
+        outputmode = mode;
     } else {
-        lbl_803A7708.mMode = mode;
-        lbl_803A7708.mPending = 1;
+        gOutputModeNext.mMode = mode;
+        gOutputModeNext.mPending = 1;
     }
     return 0;
 }
@@ -134,16 +140,16 @@ int System::SetVoices(Device device, int count)
         if (lbl_803A6C24.m168 == 0) {
             opts.mParams.mE = count;
         } else {
-            lbl_803A76C8[device].mCount = count;
-            lbl_803A76C8[device].mPending = 1;
+            gVoicesNext[device].mCount = count;
+            gVoicesNext[device].mPending = 1;
         }
         break;
     case DEVICE_ARAM:
         if (lbl_803A6C24.m168 == 0) {
             opts.mParams.m12 = count;
         } else {
-            lbl_803A76C8[device].mCount = count;
-            lbl_803A76C8[device].mPending = 1;
+            gVoicesNext[device].mCount = count;
+            gVoicesNext[device].mPending = 1;
         }
         break;
     default:
@@ -186,15 +192,15 @@ int System::Init(int arg)
         return _SndSysResult(result);
     }
     for (i = 0; i < 4; i++) {
-        lbl_803A76C8[i].mPending = 0;
-        lbl_803A76E8[i].mPending = 0;
+        gVoicesNext[i].mPending = 0;
+        gOutputSampleRateNext[i].mPending = 0;
     }
-    lbl_803A7708.mPending = 0;
+    gOutputModeNext.mPending = 0;
     lbl_803A6C24.m231 = 0;
     lbl_803A6C24.m234 = 0;
-    fn_802753AC(&opts, lbl_80300024);
+    fn_802753AC(&opts, outputmode);
     _SndSysSetOpts(&opts);
-    SNDSYSI_init(lbl_80300020, lbl_803A7710, arg);
+    SNDSYSI_init(pheap, heapsize, arg);
     return 0;
 }
 
@@ -206,7 +212,7 @@ bool System::IsInited(void)
 int System::Restore(void)
 {
     SNDSYS_restore();
-    lbl_80300020 = 0;
+    pheap = 0;
     return 0;
 }
 
@@ -216,8 +222,8 @@ int Memory::SetHeap(Device device, void *heap, int size)
 
     switch (device) {
     case DEVICE_MAIN:
-        lbl_80300020 = heap;
-        lbl_803A7710 = size;
+        pheap = heap;
+        heapsize = size;
         break;
     case DEVICE_ARAM:
         _SndSysGetOpts(&opts);

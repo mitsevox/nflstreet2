@@ -16845,6 +16845,7 @@ extern "C" int fn_8010F654(Object_80039F5C *p)
                 message.mId = 57;
                 message.mUnknown1[0] = BallGetCurrentIndex();
                 fn_800F053C(0, p->mpState, &message, p);
+                // FAKEMATCH: goto the single return; with return result here cse1 emits its own li r3,0
                 goto done;
             }
         }

@@ -23079,13 +23079,25 @@
     {
       "source": "src/engine/ssys.cpp",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026F5F8-0x8026FD28 (src/engine/ssys.cpp, NASCAR 2005 ssys.cpp), its function and name rows and the sound_cxx compiler row 0x8026E4C0-0x80270494; all 11 functions exact (w1c), promoted from comparison-only in w1j once the linked callers (src/engine/sound.cpp, src/engine/ssysinit.c) call the class methods through include/engine/ssys.h. The object has no data sections; the output-mode strings 0x802B79D8-0x802B7A38 and the pending-change state keep their original bytes.",
+      "evidence": "evidence.tsv unit row 0x8026F5F8-0x8026FD28 (src/engine/ssys.cpp, NASCAR 2005 ssys.cpp), its function and name rows, the data rows of its .data 0x80300020-0x80300028 (Snd::pheap, Snd::outputmode) and .bss 0x803A76C8-0x803A7714 (Snd::gVoicesNext, Snd::gOutputSampleRateNext, Snd::gOutputModeNext, Snd::heapsize), and the sound_cxx compiler row 0x8026E4C0-0x80270494; all 11 functions exact (w1c), promoted from comparison-only in w1j once the linked callers (src/engine/sound.cpp, src/engine/ssysinit.c) call the class methods through include/engine/ssys.h. The output-mode strings 0x802B79C8-0x802B7A38 keep their original bytes (rule 8, data row 0x802B79C8).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8026F5F8",
           "end": "0x8026FD28"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300020",
+          "end": "0x80300028"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A76C8",
+          "end": "0x803A7714"
         }
       ]
     },
