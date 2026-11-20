@@ -7,7 +7,7 @@
 #include "game/TDbCompilePerformOp.h"
 
 extern "C" {
-void fn_8000FCD4(int a);
+void MsgMainMenuSetActivePad(int a);
 void fn_801485B4(void);
 void fn_801485C0(void);
 void fn_801485EC(int value);
@@ -105,7 +105,7 @@ int MsgStreetEventSelectHandleMessage(unsigned int id, MenuArg_t *pArgs, int unu
         break;
     case 0x80000005:
         *pResult = MsgStreetEventSelectSetChoice(pArgs[0].i);
-        fn_8000FCD4(pArgs[1].i);
+        MsgMainMenuSetActivePad(pArgs[1].i);
         break;
     default:
         return 0;

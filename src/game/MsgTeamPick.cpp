@@ -68,7 +68,7 @@ struct TeamPickCaptain_t {
 struct DepthChartText_t;
 
 extern "C" {
-void fn_80015D28(int id);
+void MsgStadiumStartGame(int id);
 void FESndUpdate(int a);
 void DepthChartCyclePending(int group, int kind, int slot, int code, int a, int b);
 void DepthChartRevertSide(int group);
@@ -1352,7 +1352,7 @@ void MsgTeamPickShutdown(void)
     if (MsgGameGetSetupState() == 1) {
         if (_MsgTeamPick_pTournamentRow == 0 && _MsgTeamPick_pEventRow) {
             fn_8005FCF8(digp[0], digp[1]);
-            fn_80015D28(_MsgTeamPick_pEventRow->mDive);
+            MsgStadiumStartGame(_MsgTeamPick_pEventRow->mDive);
         }
     } else {
         GameTextSetSetupActive(0);

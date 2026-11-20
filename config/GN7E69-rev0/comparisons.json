@@ -7786,9 +7786,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8000F870.cpp",
+      "source": "src/game/MsgFrontEnd.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8000F870.cpp, the function rows 0x8000F870-0x8001701C, the data rows 0x8001701C-0x800170E0 (data_8001701C), 0x802F41BC-0x802F43F4 and 0x803EB950-0x803EBA08, the .ctors/.dtors words and the data rows of its .bss and .sbss objects. Five function bodies differ (see the source-form row cu_8000F870 unmatched functions and their HOLDOUT: rows). The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row src/game/MsgFrontEnd.cpp, the function rows 0x8000F870-0x8001701C, the data rows 0x8001701C-0x800170E0 (data_8001701C), 0x802F41BC-0x802F43F4 and 0x803EB950-0x803EBA08, the .ctors/.dtors words and the data rows of its .bss and .sbss objects. Five function bodies differ (see the source-form row cu_8000F870 unmatched functions and their HOLDOUT: rows). The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -7842,617 +7842,617 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8000F870",
+          "symbol": "MsgFrontEndDispatch",
           "start": "0x8000F870",
           "end": "0x8000FA0C"
         },
         {
-          "symbol": "fn_8000FA0C",
+          "symbol": "MsgMainMenuEnter",
           "start": "0x8000FA0C",
           "end": "0x8000FAD0"
         },
         {
-          "symbol": "fn_8000FAD0",
+          "symbol": "MsgMainMenuLeave",
           "start": "0x8000FAD0",
           "end": "0x8000FCCC"
         },
         {
-          "symbol": "fn_8000FCCC",
+          "symbol": "MsgMainMenuGetActivePad",
           "start": "0x8000FCCC",
           "end": "0x8000FCD4"
         },
         {
-          "symbol": "fn_8000FCD4",
+          "symbol": "MsgMainMenuSetActivePad",
           "start": "0x8000FCD4",
           "end": "0x8000FCDC"
         },
         {
-          "symbol": "fn_8000FCDC",
+          "symbol": "MsgMainMenuAssignPads",
           "start": "0x8000FCDC",
           "end": "0x8000FE60"
         },
         {
-          "symbol": "fn_8000FE60",
+          "symbol": "MsgMainMenuHandleMessage",
           "start": "0x8000FE60",
           "end": "0x80010150"
         },
         {
-          "symbol": "fn_80010150",
+          "symbol": "MsgMainMenuGoTo",
           "start": "0x80010150",
           "end": "0x80010194"
         },
         {
-          "symbol": "fn_80010194",
+          "symbol": "MsgMainMenuIsShown",
           "start": "0x80010194",
           "end": "0x80010200"
         },
         {
-          "symbol": "fn_80010200",
+          "symbol": "MsgMainMenuSetResult",
           "start": "0x80010200",
           "end": "0x80010208"
         },
         {
-          "symbol": "fn_80010208",
+          "symbol": "MsgPlayerSelectInit",
           "start": "0x80010208",
           "end": "0x800102D8"
         },
         {
-          "symbol": "fn_800102D8",
+          "symbol": "MsgPlayerSelectSortProfiles",
           "start": "0x800102D8",
           "end": "0x800103A4"
         },
         {
-          "symbol": "fn_800103A4",
+          "symbol": "MsgPlayerSelectScanPads",
           "start": "0x800103A4",
           "end": "0x800106B8"
         },
         {
-          "symbol": "fn_800106B8",
+          "symbol": "MsgPlayerSelectGetLayout",
           "start": "0x800106B8",
           "end": "0x80010730"
         },
         {
-          "symbol": "fn_80010730",
+          "symbol": "MsgPlayerSelectCanMove",
           "start": "0x80010730",
           "end": "0x800107FC"
         },
         {
-          "symbol": "fn_800107FC",
+          "symbol": "MsgPlayerSelectMove",
           "start": "0x800107FC",
           "end": "0x800108A8"
         },
         {
-          "symbol": "fn_800108A8",
+          "symbol": "MsgPlayerSelectGetIcon",
           "start": "0x800108A8",
           "end": "0x80010914"
         },
         {
-          "symbol": "fn_80010914",
+          "symbol": "MsgPlayerSelectApply",
           "start": "0x80010914",
           "end": "0x80010B78"
         },
         {
-          "symbol": "fn_80010B78",
+          "symbol": "MsgPlayerSelectUpdateOwners",
           "start": "0x80010B78",
           "end": "0x80010CF4"
         },
         {
-          "symbol": "fn_80010CF4",
+          "symbol": "MsgPlayerSelectGetSide",
           "start": "0x80010CF4",
           "end": "0x80010DC4"
         },
         {
-          "symbol": "fn_80010DC4",
+          "symbol": "MsgPlayerSelectSetProfile",
           "start": "0x80010DC4",
           "end": "0x80010E68"
         },
         {
-          "symbol": "fn_80010E68",
+          "symbol": "MsgPlayerSelectCycleProfile",
           "start": "0x80010E68",
           "end": "0x80011224"
         },
         {
-          "symbol": "fn_80011224",
+          "symbol": "MsgPlayerSelectGetPads",
           "start": "0x80011224",
           "end": "0x800112F8"
         },
         {
-          "symbol": "fn_800112F8",
+          "symbol": "MsgPlayerSelectGetMoves",
           "start": "0x800112F8",
           "end": "0x80011344"
         },
         {
-          "symbol": "fn_80011344",
+          "symbol": "MsgPlayerSelectHandleMessage",
           "start": "0x80011344",
           "end": "0x80011600"
         },
         {
-          "symbol": "fn_80011600",
+          "symbol": "MsgPlayerSelectStart",
           "start": "0x80011600",
           "end": "0x80011894"
         },
         {
-          "symbol": "fn_80011894",
+          "symbol": "MsgPlayerSelectRemoveProfile",
           "start": "0x80011894",
           "end": "0x8001194C"
         },
         {
-          "symbol": "fn_8001194C",
+          "symbol": "MsgPlayerSelectGetSideProfile",
           "start": "0x8001194C",
           "end": "0x800119CC"
         },
         {
-          "symbol": "fn_800119CC",
+          "symbol": "MsgRecordsGetText",
           "start": "0x800119CC",
           "end": "0x80011AA8"
         },
         {
-          "symbol": "fn_80011AA8",
+          "symbol": "MsgRecordsHandleMessage",
           "start": "0x80011AA8",
           "end": "0x80011B60"
         },
         {
-          "symbol": "fn_80011B60",
+          "symbol": "MsgTeamSelectSeekStart",
           "start": "0x80011B60",
           "end": "0x80011C1C"
         },
         {
-          "symbol": "fn_80011C1C",
+          "symbol": "MsgTeamSelectProfileChanged",
           "start": "0x80011C1C",
           "end": "0x80011CB0"
         },
         {
-          "symbol": "fn_80011CB0",
+          "symbol": "MsgTeamSelectCursorPrev",
           "start": "0x80011CB0",
           "end": "0x80011CEC"
         },
         {
-          "symbol": "fn_80011CEC",
+          "symbol": "MsgTeamSelectCursorNext",
           "start": "0x80011CEC",
           "end": "0x80011D28"
         },
         {
-          "symbol": "fn_80011D28",
+          "symbol": "MsgTeamSelectCountOpen",
           "start": "0x80011D28",
           "end": "0x80011D9C"
         },
         {
-          "symbol": "fn_80011D9C",
+          "symbol": "MsgTeamSelectRandomize",
           "start": "0x80011D9C",
           "end": "0x80011E34"
         },
         {
-          "symbol": "fn_80011E34",
+          "symbol": "MsgTeamSelectPickRandom",
           "start": "0x80011E34",
           "end": "0x80011EBC"
         },
         {
-          "symbol": "fn_80011EBC",
+          "symbol": "MsgTeamSelectGetTeamInfo",
           "start": "0x80011EBC",
           "end": "0x80011FA0"
         },
         {
-          "symbol": "fn_80011FA0",
+          "symbol": "MsgTeamSelectIsLocked",
           "start": "0x80011FA0",
           "end": "0x800120C8"
         },
         {
-          "symbol": "fn_800120C8",
+          "symbol": "MsgTeamSelectFindIndex",
           "start": "0x800120C8",
           "end": "0x800121BC"
         },
         {
-          "symbol": "fn_800121BC",
+          "symbol": "MsgTeamSelectListIds",
           "start": "0x800121BC",
           "end": "0x80012244"
         },
         {
-          "symbol": "fn_80012244",
+          "symbol": "MsgTeamSelectGetCount",
           "start": "0x80012244",
           "end": "0x80012274"
         },
         {
-          "symbol": "fn_80012274",
+          "symbol": "MsgTeamSelectGetTeam",
           "start": "0x80012274",
           "end": "0x80012310"
         },
         {
-          "symbol": "fn_80012310",
+          "symbol": "MsgTeamSelectBrowsePlayer",
           "start": "0x80012310",
           "end": "0x80012634"
         },
         {
-          "symbol": "fn_80012634",
+          "symbol": "MsgTeamSelectUnloadPortraits",
           "start": "0x80012634",
           "end": "0x80012710"
         },
         {
-          "symbol": "fn_80012710",
+          "symbol": "MsgTeamSelectLoadPortraits",
           "start": "0x80012710",
           "end": "0x800127E4"
         },
         {
-          "symbol": "fn_800127E4",
+          "symbol": "MsgTeamSelectGetPlayerName",
           "start": "0x800127E4",
           "end": "0x80012834"
         },
         {
-          "symbol": "fn_80012834",
+          "symbol": "MsgTeamSelectOpenRoster",
           "start": "0x80012834",
           "end": "0x800128E8"
         },
         {
-          "symbol": "fn_800128E8",
+          "symbol": "MsgTeamSelectResetPicks",
           "start": "0x800128E8",
           "end": "0x800129E4"
         },
         {
-          "symbol": "fn_800129E4",
+          "symbol": "MsgTeamSelectResetScroll",
           "start": "0x800129E4",
           "end": "0x80012A14"
         },
         {
-          "symbol": "fn_80012A14",
+          "symbol": "MsgTeamSelectFillRoster",
           "start": "0x80012A14",
           "end": "0x80012ABC"
         },
         {
-          "symbol": "fn_80012ABC",
+          "symbol": "MsgTeamSelectGetVisibleRows",
           "start": "0x80012ABC",
           "end": "0x80012D50"
         },
         {
-          "symbol": "fn_80012D50",
+          "symbol": "MsgTeamSelectScroll",
           "start": "0x80012D50",
           "end": "0x80012F3C"
         },
         {
-          "symbol": "fn_80012F3C",
+          "symbol": "MsgTeamSelectGetRowInfo",
           "start": "0x80012F3C",
           "end": "0x800130B8"
         },
         {
-          "symbol": "fn_800130B8",
+          "symbol": "MsgTeamSelectSwapPending",
           "start": "0x800130B8",
           "end": "0x800130D8"
         },
         {
-          "symbol": "fn_800130D8",
+          "symbol": "MsgTeamSelectGetSideNames",
           "start": "0x800130D8",
           "end": "0x800130F8"
         },
         {
-          "symbol": "fn_800130F8",
+          "symbol": "MsgTeamSelectCyclePending",
           "start": "0x800130F8",
           "end": "0x80013118"
         },
         {
-          "symbol": "fn_80013118",
+          "symbol": "MsgTeamSelectHasFullTeam",
           "start": "0x80013118",
           "end": "0x8001317C"
         },
         {
-          "symbol": "fn_8001317C",
+          "symbol": "MsgTeamSelectGetPickedIds",
           "start": "0x8001317C",
           "end": "0x800131F4"
         },
         {
-          "symbol": "fn_800131F4",
+          "symbol": "MsgTeamSelectFindEntry",
           "start": "0x800131F4",
           "end": "0x80013254"
         },
         {
-          "symbol": "fn_80013254",
+          "symbol": "MsgTeamSelectAutoPickOne",
           "start": "0x80013254",
           "end": "0x800133B0"
         },
         {
-          "symbol": "fn_800133B0",
+          "symbol": "MsgTeamSelectSwapEntries",
           "start": "0x800133B0",
           "end": "0x80013438"
         },
         {
-          "symbol": "fn_80013438",
+          "symbol": "MsgTeamSelectAutoPick",
           "start": "0x80013438",
           "end": "0x80013614"
         },
         {
-          "symbol": "fn_80013614",
+          "symbol": "MsgTeamSelectHandleMessage",
           "start": "0x80013614",
           "end": "0x80013CCC"
         },
         {
-          "symbol": "fn_80013CCC",
+          "symbol": "MsgTeamEditSelectInit",
           "start": "0x80013CCC",
           "end": "0x80013D74"
         },
         {
-          "symbol": "fn_80013D74",
+          "symbol": "MsgTeamEditSelectExit",
           "start": "0x80013D74",
           "end": "0x80013DCC"
         },
         {
-          "symbol": "fn_80013DCC",
+          "symbol": "MsgTeamEditSelectGetTeamInfo",
           "start": "0x80013DCC",
           "end": "0x80013EAC"
         },
         {
-          "symbol": "fn_80013EAC",
+          "symbol": "MsgTeamEditSelectGetTeam",
           "start": "0x80013EAC",
           "end": "0x80013F54"
         },
         {
-          "symbol": "fn_80013F54",
+          "symbol": "MsgTeamEditSelectSeekCurrent",
           "start": "0x80013F54",
           "end": "0x80013FA8"
         },
         {
-          "symbol": "fn_80013FA8",
+          "symbol": "MsgTeamEditSelectSetCurrent",
           "start": "0x80013FA8",
           "end": "0x80013FB8"
         },
         {
-          "symbol": "fn_80013FB8",
+          "symbol": "MsgTeamEditSelectHandleMessage",
           "start": "0x80013FB8",
           "end": "0x8001416C"
         },
         {
-          "symbol": "fn_8001416C",
+          "symbol": "MsgTeamSelectFillSlots",
           "start": "0x8001416C",
           "end": "0x80014214"
         },
         {
-          "symbol": "fn_80014214",
+          "symbol": "MsgTeamSelectTrimSlots",
           "start": "0x80014214",
           "end": "0x80014260"
         },
         {
-          "symbol": "fn_80014260",
+          "symbol": "MsgTeamSelectDispatch",
           "start": "0x80014260",
           "end": "0x80014294"
         },
         {
-          "symbol": "fn_80014294",
+          "symbol": "MsgTeamSelectQuickSetup",
           "start": "0x80014294",
           "end": "0x8001441C"
         },
         {
-          "symbol": "fn_8001441C",
+          "symbol": "MsgTeamSelectSetChallengeTeam",
           "start": "0x8001441C",
           "end": "0x8001442C"
         },
         {
-          "symbol": "fn_8001442C",
+          "symbol": "MsgTeamSelectNull",
           "start": "0x8001442C",
           "end": "0x80014430"
         },
         {
-          "symbol": "fn_80014430",
+          "symbol": "MsgTeamSelectInit",
           "start": "0x80014430",
           "end": "0x80014AA8"
         },
         {
-          "symbol": "fn_80014AA8",
+          "symbol": "MsgTeamSelectSetTeam",
           "start": "0x80014AA8",
           "end": "0x80014B98"
         },
         {
-          "symbol": "fn_80014B98",
+          "symbol": "MsgTeamSelectExit",
           "start": "0x80014B98",
           "end": "0x80014FD8"
         },
         {
-          "symbol": "fn_80014FD8",
+          "symbol": "MsgTeamSelectRequestAutoPick",
           "start": "0x80014FD8",
           "end": "0x80015000"
         },
         {
-          "symbol": "fn_80015000",
+          "symbol": "MsgTeamSelectApplyPicks",
           "start": "0x80015000",
           "end": "0x800150FC"
         },
         {
-          "symbol": "fn_800150FC",
+          "symbol": "MsgTeamSelectGetRowName",
           "start": "0x800150FC",
           "end": "0x800151C0"
         },
         {
-          "symbol": "fn_800151C0",
+          "symbol": "MsgTeamSelectPickPlayer",
           "start": "0x800151C0",
           "end": "0x800153A0"
         },
         {
-          "symbol": "fn_800153A0",
+          "symbol": "MsgTeamSelectUnpickPlayer",
           "start": "0x800153A0",
           "end": "0x80015420"
         },
         {
-          "symbol": "fn_80015420",
+          "symbol": "MsgTeamSelectUndoPick",
           "start": "0x80015420",
           "end": "0x800155CC"
         },
         {
-          "symbol": "fn_800155CC",
+          "symbol": "MsgTeamSelectSaveDepth",
           "start": "0x800155CC",
           "end": "0x80015654"
         },
         {
-          "symbol": "fn_80015654",
+          "symbol": "MsgTeamSelectSetEditMode",
           "start": "0x80015654",
           "end": "0x8001565C"
         },
         {
-          "symbol": "fn_8001565C",
+          "symbol": "MsgTeamSelectGetSlotPlayer",
           "start": "0x8001565C",
           "end": "0x800156B4"
         },
         {
-          "symbol": "fn_800156B4",
+          "symbol": "MsgStadiumGetInfo",
           "start": "0x800156B4",
           "end": "0x800159A4"
         },
         {
-          "symbol": "fn_800159A4",
+          "symbol": "MsgStadiumInit",
           "start": "0x800159A4",
           "end": "0x80015B0C"
         },
         {
-          "symbol": "fn_80015B0C",
+          "symbol": "MsgStadiumExit",
           "start": "0x80015B0C",
           "end": "0x80015B68"
         },
         {
-          "symbol": "fn_80015B68",
+          "symbol": "MsgStadiumPickRandom",
           "start": "0x80015B68",
           "end": "0x80015BF0"
         },
         {
-          "symbol": "fn_80015BF0",
+          "symbol": "MsgStadiumSetCurrent",
           "start": "0x80015BF0",
           "end": "0x80015BF8"
         },
         {
-          "symbol": "fn_80015BF8",
+          "symbol": "MsgStadiumHandleMessage",
           "start": "0x80015BF8",
           "end": "0x80015D28"
         },
         {
-          "symbol": "fn_80015D28",
+          "symbol": "MsgStadiumStartGame",
           "start": "0x80015D28",
           "end": "0x80015E24"
         },
         {
-          "symbol": "fn_80015E24",
+          "symbol": "MsgStadiumGetEnvId",
           "start": "0x80015E24",
           "end": "0x80015E48"
         },
         {
-          "symbol": "fn_80015E48",
+          "symbol": "MsgStartScreenEnter",
           "start": "0x80015E48",
           "end": "0x80015E80"
         },
         {
-          "symbol": "fn_80015E80",
+          "symbol": "MsgStartScreenExit",
           "start": "0x80015E80",
           "end": "0x80015EB8"
         },
         {
-          "symbol": "fn_80015EB8",
+          "symbol": "MsgStartScreenHandleMessage",
           "start": "0x80015EB8",
           "end": "0x80015F2C"
         },
         {
-          "symbol": "fn_80015F2C",
+          "symbol": "MsgStartScreenIsShown",
           "start": "0x80015F2C",
           "end": "0x80015F90"
         },
         {
-          "symbol": "fn_80015F90",
+          "symbol": "MsgUserStatsCycle",
           "start": "0x80015F90",
           "end": "0x80016038"
         },
         {
-          "symbol": "fn_80016038",
+          "symbol": "MsgUserStatsLoad",
           "start": "0x80016038",
           "end": "0x80016248"
         },
         {
-          "symbol": "fn_80016248",
+          "symbol": "MsgUserStatsInit",
           "start": "0x80016248",
           "end": "0x800162B4"
         },
         {
-          "symbol": "fn_800162B4",
+          "symbol": "MsgUserStatsExit",
           "start": "0x800162B4",
           "end": "0x800162E8"
         },
         {
-          "symbol": "fn_800162E8",
+          "symbol": "MsgUserStatsGet",
           "start": "0x800162E8",
           "end": "0x8001642C"
         },
         {
-          "symbol": "fn_8001642C",
+          "symbol": "MsgUserStatsHandleMessage",
           "start": "0x8001642C",
           "end": "0x800164F0"
         },
         {
-          "symbol": "fn_800164F0",
+          "symbol": "MsgCreditsFormatText",
           "start": "0x800164F0",
           "end": "0x800165BC"
         },
         {
-          "symbol": "fn_800165BC",
+          "symbol": "MsgCreditsInit",
           "start": "0x800165BC",
           "end": "0x800165EC"
         },
         {
-          "symbol": "fn_800165EC",
+          "symbol": "MsgCreditsShutdown",
           "start": "0x800165EC",
           "end": "0x8001660C"
         },
         {
-          "symbol": "fn_8001660C",
+          "symbol": "MsgCreditsGetNextLine",
           "start": "0x8001660C",
           "end": "0x80016730"
         },
         {
-          "symbol": "fn_80016730",
+          "symbol": "MsgCreditsHandleMessage",
           "start": "0x80016730",
           "end": "0x800167D0"
         },
         {
-          "symbol": "fn_800167D0",
+          "symbol": "MsgTeamSourcesEnter",
           "start": "0x800167D0",
           "end": "0x80016808"
         },
         {
-          "symbol": "fn_80016808",
+          "symbol": "MsgTeamSourcesExit",
           "start": "0x80016808",
           "end": "0x80016878"
         },
         {
-          "symbol": "fn_80016878",
+          "symbol": "MsgTeamSourcesGet",
           "start": "0x80016878",
           "end": "0x800168E8"
         },
         {
-          "symbol": "fn_800168E8",
+          "symbol": "MsgTeamSourcesSet",
           "start": "0x800168E8",
           "end": "0x80016950"
         },
         {
-          "symbol": "fn_80016950",
+          "symbol": "MsgTeamSourcesHandleMessage",
           "start": "0x80016950",
           "end": "0x80016A08"
         },
         {
-          "symbol": "fn_80016A08",
+          "symbol": "MsgUnlocksInit",
           "start": "0x80016A08",
           "end": "0x80016AF4"
         },
         {
-          "symbol": "fn_80016AF4",
+          "symbol": "MsgUnlocksExit",
           "start": "0x80016AF4",
           "end": "0x80016B60"
         },
         {
-          "symbol": "fn_80016B60",
+          "symbol": "MsgUnlocksCycleUser",
           "start": "0x80016B60",
           "end": "0x80016C60"
         },
         {
-          "symbol": "fn_80016C60",
+          "symbol": "MsgUnlocksGetItem",
           "start": "0x80016C60",
           "end": "0x80016D14"
         },
         {
-          "symbol": "fn_80016D14",
+          "symbol": "MsgUnlocksCycleCategory",
           "start": "0x80016D14",
           "end": "0x80016DF4"
         },
         {
-          "symbol": "fn_80016DF4",
+          "symbol": "MsgUnlocksHandleMessage",
           "start": "0x80016DF4",
           "end": "0x80016EE4"
         },
@@ -8462,12 +8462,12 @@
           "end": "0x80016FC4"
         },
         {
-          "symbol": "_GLOBAL_.I.lbl_803EB950",
+          "symbol": "_GLOBAL_.I._MsgMainMenu_bEditOpen",
           "start": "0x80016FC4",
           "end": "0x80016FF0"
         },
         {
-          "symbol": "_GLOBAL_.D.lbl_803EB950",
+          "symbol": "_GLOBAL_.D._MsgMainMenu_bEditOpen",
           "start": "0x80016FF0",
           "end": "0x8001701C"
         }

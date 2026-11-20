@@ -49,11 +49,11 @@ struct StoryTournamentArgs_t {
 };
 
 extern "C" {
-int fn_8000FCCC(void);
-int fn_8000FCDC(void);
-void fn_80010150(int a);
-void fn_80011600(int a, int b, int c);
-void fn_80015D28(int a);
+int MsgMainMenuGetActivePad(void);
+int MsgMainMenuAssignPads(void);
+void MsgMainMenuGoTo(int a);
+void MsgPlayerSelectStart(int a, int b, int c);
+void MsgStadiumStartGame(int a);
 void MsgTeamPickSetMode(int a, int b);
 void MsgTeamPickSetSources(int a);
 void fn_8005BE54(unsigned char value);
@@ -533,7 +533,7 @@ void StoryTournamentStartMatch(void)
     int dit1;
     int dit2;
     int lvlt;
-    int saved = fn_8000FCDC();
+    int saved = MsgMainMenuAssignPads();
 
     StoryTournamentSetOptions(0, 0x24);
     if (TournamentGetLevelMatchCount(1) == 0) {
@@ -544,10 +544,10 @@ void StoryTournamentStartMatch(void)
     if (_StoryTournament_pEvent->mDive) {
         _StoryTournament_pEvent->mDive = 0;
     }
-    fn_80011600(-1, fn_8000FCCC(), saved);
+    MsgPlayerSelectStart(-1, MsgMainMenuGetActivePad(), saved);
     UserProfileSelect(_StoryTournament_State.mIndex, 1);
     GameInfoSet(2, 1);
-    fn_80015D28(_StoryTournament_pEvent->mDive);
+    MsgStadiumStartGame(_StoryTournament_pEvent->mDive);
 }
 
 int StoryTournamentHasMatches(void)
@@ -632,7 +632,7 @@ void StoryTournamentEnterScreen(int *pGame)
 
     *pGame = 0;
     if (!_StoryTournament_bEntered) {
-        fn_80010150(10);
+        MsgMainMenuGoTo(10);
         StoryTournamentPurgeRosters();
         StoryTournamentOpenDbs();
         StoryTournamentRestoreOptions();
@@ -724,10 +724,10 @@ void StoryTournamentClearEvent(void)
 
 void StoryTournamentBegin(void)
 {
-    int saved = fn_8000FCDC();
+    int saved = MsgMainMenuAssignPads();
 
     StoryTournamentFetchEvent();
-    fn_80011600(-1, fn_8000FCCC(), saved);
+    MsgPlayerSelectStart(-1, MsgMainMenuGetActivePad(), saved);
     UserProfileSelect(_StoryTournament_State.mIndex, 1);
     if (_StoryTournament_State.mOpen == 0) {
         _StoryTournament_State.mIndex = DbUserFindIndex(DbUserGetCurrent());

@@ -39,7 +39,7 @@ double fabs(double);
 
 void BootHandleReset(void);
 int MainFEGroupIsFirstStart(void *p);
-void fn_8000FCD4(int a);
+void MsgMainMenuSetActivePad(int a);
 void PlyrNameTagInit(int handle);
 void PlyrNameTagShutdown(void);
 void InGameStateReset(void);
@@ -793,7 +793,7 @@ void UISGameHandleInput(int a, unsigned int id, float value)
         }
         if (UISGameRepeatInput(&a, &id, &value)) {
             if ((id == 7 || id == 0) && FELoopIsMainFEActive()) {
-                fn_8000FCD4(a);
+                MsgMainMenuSetActivePad(a);
             }
             fn_802196B4(gUISMainInfo, a, id, 1, &value, _UISGame_bInputFlag);
         }

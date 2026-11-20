@@ -8334,9 +8334,9 @@
       }
     },
     {
-      "source": "src/game/cu_8000F870.cpp",
+      "source": "src/game/MsgFrontEnd.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8000F870-0x8001701C (src/game/cu_8000F870.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "evidence": "evidence.tsv unit row 0x8000F870-0x8001701C (src/game/MsgFrontEnd.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -8415,23 +8415,23 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_80012ABC",
+            "function": "MsgTeamSelectGetVisibleRows",
             "evidence": "evidence.tsv source-form 0x80012ABC-0x80012D50"
           },
           {
-            "function": "fn_80012D50",
+            "function": "MsgTeamSelectScroll",
             "evidence": "evidence.tsv source-form 0x80012D50-0x80012F3C"
           },
           {
-            "function": "fn_800133B0",
+            "function": "MsgTeamSelectSwapEntries",
             "evidence": "evidence.tsv source-form 0x800133B0-0x80013438"
           },
           {
-            "function": "fn_80014AA8",
+            "function": "MsgTeamSelectSetTeam",
             "evidence": "evidence.tsv source-form 0x80014AA8-0x80014B98"
           },
           {
-            "function": "fn_80015BF8",
+            "function": "MsgStadiumHandleMessage",
             "evidence": "evidence.tsv source-form 0x80015BF8-0x80015D28"
           }
         ],

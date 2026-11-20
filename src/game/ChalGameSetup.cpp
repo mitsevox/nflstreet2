@@ -40,7 +40,7 @@ int fn_80084388(void);
 void CreateTeamLoadUserTeams(void);
 int fn_8008406C(DbCursor *pObject, int id, int *pResult);
 int fn_80083FBC(DbCursor *pObject);
-void fn_8001441C(int team, int id);
+void MsgTeamSelectSetChallengeTeam(int team, int id);
 void GameInfoSet(int index, int value);
 float SyncRandGetFloat(int stream);
 void fn_800A2F3C(int value);
@@ -154,8 +154,8 @@ void ChalGameStart(unsigned char id)
     fn_8008406C(&cursor, 1, 0);
     int otherTeam = fn_80083FBC(&cursor);
     fn_80083F68(&cursor);
-    fn_8001441C(0, team);
-    fn_8001441C(1, otherTeam);
+    MsgTeamSelectSetChallengeTeam(0, team);
+    MsgTeamSelectSetChallengeTeam(1, otherTeam);
     switch (pRecord->mUnknown1B8) {
     case 0:
         GameInfoSet(2, 1);
@@ -196,8 +196,8 @@ void ChalGameStartTournament(int team, int value)
     fn_8008406C(&cursor, 1, 0);
     int otherTeam = fn_80083FBC(&cursor);
     fn_80083F68(&cursor);
-    fn_8001441C(0, team);
-    fn_8001441C(1, otherTeam);
+    MsgTeamSelectSetChallengeTeam(0, team);
+    MsgTeamSelectSetChallengeTeam(1, otherTeam);
     GameInfoSet(2, 1);
     fn_800A2F3C(value);
     GameOptionsSet(14, 0);

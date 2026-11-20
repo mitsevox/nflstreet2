@@ -42,7 +42,7 @@ extern "C" {
 int DbUserGetCurrent(void);
 int UserProfileFindIndex(int a);
 int GauntletSetCurrentTeam(int a, int b);
-int fn_8001194C(int a);
+int MsgPlayerSelectGetSideProfile(int a);
 int UserRecGetCount(void);
 int UserProfileGetOldest(int a);
 void UserProfileCreate(int a, char *pText, int c);
@@ -80,16 +80,16 @@ void fn_80083E1C(DbCursor *pObject, int a);
 int fn_8008400C(DbCursor *pObject);
 int fn_80084360(DbCursor *pObject);
 int PlayerDbGetPortraitId(Object_8008044C *pObject);
-void fn_80010150(int a);
-int fn_8000FCDC(void);
-void fn_80011600(int a, int b, int c);
+void MsgMainMenuGoTo(int a);
+int MsgMainMenuAssignPads(void);
+void MsgPlayerSelectStart(int a, int b, int c);
 void UISGameSetInputFlag(unsigned char value);
 int PauseGetValue(void);
 int DbUserFindIndex(int a);
 void *UIGLibraryGetGlobal(int index);
 void *UIGLibraryGetResFile(void *p, int a);
-void fn_8000FCD4(int a);
-int fn_8000FCCC(void);
+void MsgMainMenuSetActivePad(int a);
+int MsgMainMenuGetActivePad(void);
 unsigned char GameTextGetBootFinished(void);
 void GameTextSetBootFinished(unsigned char a);
 void TutorialGetHudPosition(float *pX, float *pY, float *pZ);
@@ -151,7 +151,7 @@ int MsgGameGetProfileValue(int a, int *pResult)
     int value = -1;
 
     if (a != -1) {
-        value = fn_8001194C(a == 0);
+        value = MsgPlayerSelectGetSideProfile(a == 0);
     }
     *pResult = UserRecGetCount();
     bool found = false;
@@ -372,7 +372,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         }
         break;
     case 0x14:
-        UserProfileGetOldest(fn_8001194C(pArgs[0].i == 0));
+        UserProfileGetOldest(MsgPlayerSelectGetSideProfile(pArgs[0].i == 0));
         break;
     case 0x23:
         pResult->i = MsgGameGetProfileValue(pArgs[0].i, pArgs[1].pi);
@@ -440,12 +440,12 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         break;
     }
     case 0x103:
-        fn_80010150(pArgs[0].i);
+        MsgMainMenuGoTo(pArgs[0].i);
         break;
     case 0xFF: {
-        int value = fn_8000FCDC();
+        int value = MsgMainMenuAssignPads();
 
-        fn_80011600(pArgs[0].i, pArgs[1].i, value);
+        MsgPlayerSelectStart(pArgs[0].i, pArgs[1].i, value);
         break;
     }
 
@@ -495,13 +495,13 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
     }
 
     case 0x189:
-        fn_8000FCD4(pArgs[0].i);
+        MsgMainMenuSetActivePad(pArgs[0].i);
         break;
     case 0x172:
         pResult->i = GameModeTypeGet();
         break;
     case 0x17C:
-        pResult->i = fn_8000FCCC();
+        pResult->i = MsgMainMenuGetActivePad();
         break;
     case 0x91: {
         int result = 0;

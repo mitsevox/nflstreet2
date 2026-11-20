@@ -20,7 +20,7 @@ void ChalCloseCursors(void);
 void DbUserDelete(int);
 void MemCardFilesRemoveSlot(int, int);
 void MemCardFilesCopySlot(int, int, int, int);
-void fn_80011894(int);
+void MsgPlayerSelectRemoveProfile(int);
 int UserRecGetGameStat(int, int, int, int, int);
 void UserRecAddStat(int, int, int);
 void UserRecUpdateStreak(int, int, int);
@@ -97,7 +97,7 @@ void UserProfileDelete(signed char index)
             else if (_UserProfile_aSelected[pad] == index) _UserProfile_aSelected[pad] = -1;
         }
     }
-    fn_80011894(index);
+    MsgPlayerSelectRemoveProfile(index);
 }
 int UserProfileFindIndex(int db)
 {

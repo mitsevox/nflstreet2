@@ -22,13 +22,13 @@ extern float gFrameTimeScale;
 extern void *gUISMainInfo;
 extern void *gUISSubInfo;
 
-void fn_80010150(int a);
-int fn_80010194(void);
-void fn_80011600(int a, int b, int c);
-void fn_80014294(int a, int b);
-void fn_8001442C(void);
-void fn_80015D28(int a);
-int fn_80015F2C(void);
+void MsgMainMenuGoTo(int a);
+int MsgMainMenuIsShown(void);
+void MsgPlayerSelectStart(int a, int b, int c);
+void MsgTeamSelectQuickSetup(int a, int b);
+void MsgTeamSelectNull(void);
+void MsgStadiumStartGame(int a);
+int MsgStartScreenIsShown(void);
 void MsgTeamPickFreePool(void);
 void FEPlyrUpdate(void);
 void BootPlayIntroMovies(void);
@@ -125,7 +125,7 @@ static void _FELoopEnterMode8()
 
     FELoopRefreshModeType();
     args[0] = 1;
-    fn_80010150(8);
+    MsgMainMenuGoTo(8);
     fn_80218FC4(gUISMainInfo, 11, 1, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -136,7 +136,7 @@ static void _FELoopEnterMode6()
 
     FELoopRefreshModeType();
     args[0] = 1;
-    fn_80010150(6);
+    MsgMainMenuGoTo(6);
     fn_80218FC4(gUISMainInfo, 8, 2, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -147,7 +147,7 @@ static void _FELoopEnterMode7()
 
     FELoopRefreshModeType();
     args[0] = fn_800602E8() ? 401 : 1;
-    fn_80010150(7);
+    MsgMainMenuGoTo(7);
     fn_80218FC4(gUISMainInfo, 12, 0, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -158,7 +158,7 @@ static void _FELoopEnterMode10()
 
     FELoopRefreshModeType();
     args[0] = 123;
-    fn_80010150(7);
+    MsgMainMenuGoTo(7);
     fn_80218FC4(gUISMainInfo, 12, 0, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -169,7 +169,7 @@ static void _FELoopEnterMode10Alt()
 
     FELoopRefreshModeType();
     args[0] = 604;
-    fn_80010150(7);
+    MsgMainMenuGoTo(7);
     fn_80218FC4(gUISMainInfo, 12, 0, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -180,7 +180,7 @@ static void _FELoopEnterMode11()
 
     FELoopRefreshModeType();
     args[0] = 1;
-    fn_80010150(11);
+    MsgMainMenuGoTo(11);
     fn_80218FC4(gUISMainInfo, 7, 17, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -191,7 +191,7 @@ static void _FELoopEnterMode9()
 
     FELoopRefreshModeType();
     args[0] = 700;
-    fn_80010150(9);
+    MsgMainMenuGoTo(9);
     fn_80218FC4(gUISMainInfo, 13, 0, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -323,14 +323,14 @@ void FELoopStartGame()
 
 void FELoopConfigureEntry(int a, int b, int c, int d, int e, int f)
 {
-    fn_80010150(a);
+    MsgMainMenuGoTo(a);
     if (b == -1 && c == -1) {
-        fn_80011600(-1, -1, 0);
+        MsgPlayerSelectStart(-1, -1, 0);
     } else {
-        fn_80011600(b, c, 1);
+        MsgPlayerSelectStart(b, c, 1);
     }
-    fn_80014294(d, e);
-    fn_80015D28(f);
+    MsgTeamSelectQuickSetup(d, e);
+    MsgStadiumStartGame(f);
 }
 
 ModuleDependency *FELoop::GetDependencies() { return (ModuleDependency *)sDependencies; }
@@ -379,7 +379,7 @@ unsigned char FELoop::Update()
     gFMCAPPORT.Update();
     fn_80219650(gUISMainInfo, &a, &b);
     if (a == 0 && b == 7) {
-        fn_8001442C();
+        MsgTeamSelectNull();
     }
     RumbleProcess();
     if (flag) {
@@ -390,7 +390,7 @@ unsigned char FELoop::Update()
         if (_FELoop_pFrameCallback) {
             _FELoop_pFrameCallback();
         }
-        if (fn_80010194() || fn_80015F2C()) {
+        if (MsgMainMenuIsShown() || MsgStartScreenIsShown()) {
             if (++_FELoop_uIdleFrames > (int)(60.0f / gFrameTimeScale) * 75) {
                 fn_8021D7B8(gUISMainInfo, 0x80000038, 0, 0);
                 SndgMusicFadeOut(0xFA, 1);

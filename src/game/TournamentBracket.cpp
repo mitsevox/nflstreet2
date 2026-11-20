@@ -37,7 +37,7 @@ void ChalSetTournamentSlot(int);
 int MsgGameGetSetupState();
 int MsgGameGetSetupArg();
 void ChalCloseCursors();
-void fn_8000FCD4(int a);
+void MsgMainMenuSetActivePad(int a);
 void ChalGameStartTournament(int, int);
 int ChalGetTournamentWon();
 int fn_801787DC(int a);
@@ -279,7 +279,7 @@ extern "C" void TournBracketPlayNext(int value)
     ChalCloseCursors();
     EditMenuEnd();
     if (active) {
-        fn_8000FCD4(value);
+        MsgMainMenuSetActivePad(value);
         ChalGameStartTournament(team, 11);
     }
 }

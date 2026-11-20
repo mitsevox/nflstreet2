@@ -26,10 +26,10 @@ struct TutorialArgs_t {
 extern "C" {
 extern void *gUISMainInfo;
 
-void fn_80010200(int value);
-void fn_80011600(int a, int b, int c);
-void fn_80014294(int a, int b);
-void fn_80015D28(int a);
+void MsgMainMenuSetResult(int value);
+void MsgPlayerSelectStart(int a, int b, int c);
+void MsgTeamSelectQuickSetup(int a, int b);
+void MsgStadiumStartGame(int a);
 void FELoopSetResume(unsigned char value);
 int LessonTableSeek(DbCursor *pObject, int a, int *pResult);
 int LessonTableGetCILM(DbCursor *pObject);
@@ -62,8 +62,8 @@ void UserProfileSelect(signed char a, int b);
 signed char DbUserFindIndex(int a);
 int DbUserSetCurrent(int a);
 int DbUserGetCurrent(void);
-int fn_8000FCCC(void);
-int fn_8000FCDC(void);
+int MsgMainMenuGetActivePad(void);
+int MsgMainMenuAssignPads(void);
 
 void MsgTutorialBeginLesson(void);
 void MsgTutorialCheckCompletion(void);
@@ -152,7 +152,7 @@ int MsgTutorialHandleMessage(unsigned int id, TutorialArgs_t *pParams, int unuse
         *pResult = TutorialTakeAllCompleteFlag();
         break;
     case 0x8000000A:
-        fn_80010200(600);
+        MsgMainMenuSetResult(600);
         break;
     default:
         return 0;
@@ -165,14 +165,14 @@ void MsgTutorialBeginLesson(void)
     int state = MsgGameGetSetupState();
 
     if (state == 1) {
-        int value = fn_8000FCDC();
+        int value = MsgMainMenuAssignPads();
         if (!_MsgTutorial_bDatabaseSet) {
             TutorialSetProfileDb(DbUserGetCurrent());
             _MsgTutorial_bDatabaseSet = state;
         }
-        fn_80011600(-1, fn_8000FCCC(), value);
+        MsgPlayerSelectStart(-1, MsgMainMenuGetActivePad(), value);
         UserProfileSelect(DbUserFindIndex(TutorialGetProfileDb()), 1);
-        fn_80014294(0x36, 0x21);
+        MsgTeamSelectQuickSetup(0x36, 0x21);
         FELoopSetResume(1);
         unsigned int id = TutorialGetLesson();
         if (TutorialIsComplete(id)) {
@@ -182,7 +182,7 @@ void MsgTutorialBeginLesson(void)
             TutorialSetActiveStep(TutorialGetStepCount(id));
             TutorialSetStep(TutorialGetStepCount(id));
         }
-        fn_80015D28(4);
+        MsgStadiumStartGame(4);
     } else {
         TutorialSetProfileDb(-1);
         _MsgTutorial_bDatabaseSet = 0;

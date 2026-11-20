@@ -75,14 +75,14 @@ struct Progress_8030A2AC {
 };
 
 extern "C" {
-int fn_8000FCCC(void);
-int fn_8000FCDC(void);
-void fn_80011600(int a, int b, int c);
-void fn_80015D28(int a);
+int MsgMainMenuGetActivePad(void);
+int MsgMainMenuAssignPads(void);
+void MsgPlayerSelectStart(int a, int b, int c);
+void MsgStadiumStartGame(int a);
 void MsgTeamPickSetMode(int a, int b);
 void MsgTeamPickSetSources(int a);
 void MsgTeamPickRequestTeamSave(void);
-void fn_80010150(int a);
+void MsgMainMenuGoTo(int a);
 void SndgMusicPumpFrame(int a);
 Object_80039F5C *PlyrFindByPoid(int id);
 void DepthChartAutoFillEx(int group, int *list, int value, int a, int b);
@@ -588,15 +588,15 @@ void fn_8005E43C(void)
     fn_8005E360();
     AutoDepthSetRateCallback(0);
     AutoDepthSetSelectCallback(0);
-    fn_80015D28(lbl_803EA5C8->mDive);
+    MsgStadiumStartGame(lbl_803EA5C8->mDive);
     TDbCompilePerformOp(0, "use 'EMAG' update 'YALP' set 'ITGT' = \x82 where 'DIOP' = \x82\n", 0x21, 0x1FF);
 }
 
 void fn_8005E4A8(void)
 {
-    int b = fn_8000FCDC();
+    int b = MsgMainMenuAssignPads();
 
-    fn_80011600(-1, fn_8000FCCC(), b);
+    MsgPlayerSelectStart(-1, MsgMainMenuGetActivePad(), b);
     UserProfileSelect(lbl_802D4D40.mIndex, 1);
     GameInfoSet(2, 1);
     fn_8005DA7C(0, lbl_803EA5C8->mPes[1] >= 0 ? lbl_803EA5C8->mPes[1] : 2);
@@ -1085,7 +1085,7 @@ void fn_8005F29C(void)
     StevRow_t row;
     int dive;
 
-    fn_80010150(7);
+    MsgMainMenuGoTo(7);
     fn_8005D660();
     fn_8005D6EC();
     for (dive = 0;; dive++) {
