@@ -58,7 +58,7 @@ void fn_8002CA74(void *p, int a, int b);
 int fn_8002D060(void *p);
 int fn_8002D0AC(void *p);
 void fn_8002D198(void *p);
-int fn_8002D228(void *p);
+int ReplayIsHalted(void *p);
 int fn_80059004(void);
 int fn_8005900C(void);
 void PauseRequestInit(void);
@@ -545,7 +545,7 @@ void PauseClose(void)
     }
     if (_Pause_bQuit) {
         fn_8002C9A8(lbl_803EA368, 3, 0);
-        if (fn_8002D228(lbl_803EA368) && !fn_8002D060(lbl_803EA368)) {
+        if (ReplayIsHalted(lbl_803EA368) && !fn_8002D060(lbl_803EA368)) {
             fn_8009B924();
             fn_80094DF0();
             fn_8002CA74(lbl_803EA368, 10, PauseGetValue());

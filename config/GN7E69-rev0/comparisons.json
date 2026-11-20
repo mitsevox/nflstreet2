@@ -2138,7 +2138,7 @@
           "end": "0x8005F4EC"
         },
         {
-          "symbol": "fn_8005F4EC",
+          "symbol": "StoryEventsGetHeroName",
           "start": "0x8005F4EC",
           "end": "0x8005F664"
         },
@@ -8114,7 +8114,7 @@
           "end": "0x80013254"
         },
         {
-          "symbol": "fn_80013254",
+          "symbol": "MsgTeamSelectAutoPickOne",
           "start": "0x80013254",
           "end": "0x800133B0"
         },
@@ -8129,7 +8129,7 @@
           "end": "0x80013614"
         },
         {
-          "symbol": "fn_80013614",
+          "symbol": "MsgTeamSelectHandleMessage",
           "start": "0x80013614",
           "end": "0x80013CCC"
         },
@@ -8717,7 +8717,7 @@
           "end": "0x8002D228"
         },
         {
-          "symbol": "fn_8002D228",
+          "symbol": "ReplayIsHalted",
           "start": "0x8002D228",
           "end": "0x8002D250"
         },
@@ -10098,7 +10098,7 @@
           "end": "0x800451D0"
         },
         {
-          "symbol": "fn_800451D0",
+          "symbol": "PlaDynClutFillRange",
           "start": "0x800451D0",
           "end": "0x800452F8"
         },
@@ -10603,7 +10603,7 @@
           "end": "0x8015BF28"
         },
         {
-          "symbol": "fn_8015BF28",
+          "symbol": "RouteArrowGetBlockCommand",
           "start": "0x8015BF28",
           "end": "0x8015BFAC"
         },
@@ -10724,7 +10724,7 @@
           "end": "0x800710C8"
         },
         {
-          "symbol": "fn_800710C8",
+          "symbol": "SndgEventLoadLevelBank",
           "start": "0x800710C8",
           "end": "0x800711DC"
         },
@@ -10839,12 +10839,12 @@
           "end": "0x80071B08"
         },
         {
-          "symbol": "fn_80071B08",
+          "symbol": "SndgEventGetFootstepSfx",
           "start": "0x80071B08",
           "end": "0x80071BA0"
         },
         {
-          "symbol": "fn_80071BA0",
+          "symbol": "SndgEventGetSurfaceHitSfx",
           "start": "0x80071BA0",
           "end": "0x80071BDC"
         },
@@ -11337,7 +11337,7 @@
           "end": "0x8007FC70"
         },
         {
-          "symbol": "fn_8007FC70",
+          "symbol": "PlayerRecordCreate",
           "start": "0x8007FC70",
           "end": "0x8007FE04"
         },
@@ -11352,7 +11352,7 @@
           "end": "0x8007FEB8"
         },
         {
-          "symbol": "fn_8007FEB8",
+          "symbol": "PlayerCursorOpenByPlig",
           "start": "0x8007FEB8",
           "end": "0x8007FF30"
         },
@@ -11382,7 +11382,7 @@
           "end": "0x8008044C"
         },
         {
-          "symbol": "fn_8008044C",
+          "symbol": "PlayerCursorOpen",
           "start": "0x8008044C",
           "end": "0x8008056C"
         },
@@ -22109,7 +22109,7 @@
           "end": "0x801A1DEC"
         },
         {
-          "symbol": "fn_801A1DEC",
+          "symbol": "PlyrRenderDrawAfterimages",
           "start": "0x801A1DEC",
           "end": "0x801A201C"
         },
@@ -22323,7 +22323,7 @@
           "end": "0x80197FDC"
         },
         {
-          "symbol": "fn_80197FDC",
+          "symbol": "GlowDraw",
           "start": "0x80197FDC",
           "end": "0x801981D8"
         }
@@ -22541,7 +22541,7 @@
           "end": "0x801662A8"
         },
         {
-          "symbol": "fn_801662A8",
+          "symbol": "PlayArtAddQuad",
           "start": "0x801662A8",
           "end": "0x8016631C"
         },
@@ -27481,17 +27481,17 @@
           "end": "0x80223224"
         },
         {
-          "symbol": "fn_80223224",
+          "symbol": "UIGCurveBuildStrip",
           "start": "0x80223224",
           "end": "0x802233DC"
         },
         {
-          "symbol": "fn_802233DC",
+          "symbol": "UIGCurveGetPoint",
           "start": "0x802233DC",
           "end": "0x80223460"
         },
         {
-          "symbol": "fn_80223460",
+          "symbol": "UIGCurveObjAction",
           "start": "0x80223460",
           "end": "0x80223874"
         },
@@ -28009,7 +28009,7 @@
           "end": "0x801DF064"
         },
         {
-          "symbol": "fn_801DF064",
+          "symbol": "PSysRenderCalcParticleColor",
           "start": "0x801DF064",
           "end": "0x801DF184"
         },
@@ -28370,7 +28370,7 @@
           "end": "0x801D1474"
         },
         {
-          "symbol": "fn_801D1474",
+          "symbol": "_BuildHeapAddrTable",
           "start": "0x801D1474",
           "end": "0x801D1588"
         },
@@ -30689,12 +30689,12 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801CD79C",
+          "symbol": "_FontLLSetupGlyph",
           "start": "0x801CD79C",
           "end": "0x801CD964"
         },
         {
-          "symbol": "fn_801CD964",
+          "symbol": "_FontLLRender",
           "start": "0x801CD964",
           "end": "0x801CDB5C"
         },
@@ -30914,12 +30914,12 @@
           "end": "0x80216860"
         },
         {
-          "symbol": "fn_80216860",
+          "symbol": "XmlFindPath",
           "start": "0x80216860",
           "end": "0x80216A2C"
         },
         {
-          "symbol": "fn_80216A2C",
+          "symbol": "XmlFindChild",
           "start": "0x80216A2C",
           "end": "0x80216BFC"
         },
@@ -34488,7 +34488,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80221BF0",
+          "symbol": "UIGTextGetCursorPos",
           "start": "0x80221BF0",
           "end": "0x80221D30"
         },

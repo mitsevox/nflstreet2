@@ -95,7 +95,7 @@ void ChalGameScaleTeamRatings(int team)
     Desc_8008044C desc;
     desc.mUnknown4 = 1;
     desc.mUnknown8 = team;
-    fn_8008044C(&cursor, &desc, 0x54415453);
+    PlayerCursorOpen(&cursor, &desc, 0x54415453);
     if (DbCursorFirst((DbCursor *)&cursor)) {
         do {
             for (int i = 0; i < 10; i++) {

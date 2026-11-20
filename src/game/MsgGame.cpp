@@ -696,7 +696,7 @@ int MsgGameGetPlayerPortrait(int id)
     int result = 0;
 
     if (FELoopIsMainFEActive()) {
-        fn_8008044C(&cursor, 0, 0x54415453);
+        PlayerCursorOpen(&cursor, 0, 0x54415453);
     } else {
         fn_8008040C(&cursor, 0);
     }

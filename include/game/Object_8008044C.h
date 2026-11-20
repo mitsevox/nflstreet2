@@ -18,7 +18,7 @@ struct Object_8008044C {
     char mUnknown20[24];
 };
 
-/* Optional second argument of fn_8008044C and fn_8008040C: four words, read
+/* Optional second argument of PlayerCursorOpen and fn_8008040C: four words, read
    only when the pointer is non-null. */
 struct Desc_8008044C {
     Desc_8008044C() : mUnknown0(0), mUnknown4(0), mUnknown8(0), mUnknown12(0) {}
@@ -51,7 +51,7 @@ struct PlayerGear_t {
 
 extern "C" {
 void fn_8008040C(Object_8008044C *pObject, Desc_8008044C *pDesc);
-void fn_8008044C(Object_8008044C *pObject, Desc_8008044C *pDesc, int tag);
+void PlayerCursorOpen(Object_8008044C *pObject, Desc_8008044C *pDesc, int tag);
 void fn_8008056C(Object_8008044C *pObject);
 int PlayerDbGetTeamId(Object_8008044C *pObject);
 int PlayerDbSeekId(Object_8008044C *pObject, int a, int *pResult);
