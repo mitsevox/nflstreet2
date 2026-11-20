@@ -16879,19 +16879,19 @@
     {
       "source": "src/game/cu_80097160.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. 4 target whole-function extents and the literal-pool slice 0x80296198-0x802961B4 they reference retain their evidence; the split lets this pool compile independently of the parent unit's other literals and does not claim an original file boundary or whole-unit promotion.",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. 5 target whole-function extents and the literal-pool slice 0x80296198-0x8029622C they reference retain their evidence; the split lets this pool compile independently of the parent unit's other literals and does not claim an original file boundary or whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80097160",
-          "end": "0x80097A88"
+          "end": "0x8009817C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296198",
-          "end": "0x802961B4"
+          "end": "0x8029622C"
         }
       ],
       "functions": [
@@ -16914,6 +16914,11 @@
           "symbol": "fn_800978F8",
           "start": "0x800978F8",
           "end": "0x80097A88"
+        },
+        {
+          "symbol": "fn_80097A88",
+          "start": "0x80097A88",
+          "end": "0x8009817C"
         }
       ]
     },
@@ -39822,6 +39827,32 @@
           "symbol": "sprintf",
           "start": "0x801C2E18",
           "end": "0x801C2EB4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80090558.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_80090558 and the literal-pool slice 0x80296060-0x80296080 they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80090558",
+          "end": "0x80090BDC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296060",
+          "end": "0x80296080"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80090558",
+          "start": "0x80090558",
+          "end": "0x80090BDC"
         }
       ]
     }
