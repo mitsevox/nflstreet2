@@ -9,7 +9,13 @@
 #include <dolphin/gx/GXTev.h>
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
-#include <string.h>
+#include <stddef.h>
+
+/* The fill routine is declared with an unsigned long size, as src/engine/PJoyDrvr.c does: the
+   type differs from GCC's built-in memset, so constant clears stay ordinary calls (no crclr). */
+void *memcpy(void *dest, const void *src, size_t num);
+void *memset(void *dest, int ch, unsigned long count);
+int strcmp(const char *s1, const char *s2);
 #include "engine/Funcs_802FB3BC.h"
 #include "game/fn_8022F478.h"
 #include "game/fn_80233CBC.h"
@@ -131,6 +137,34 @@ typedef struct Array_8023491C {
     int mUnknown8;
 } Array_8023491C;
 
+/* 16-byte bone record of the skeleton 0x802338D4 walks: position, then the parent index. */
+typedef struct Bone_802338D4 {
+    float mPos[3];
+    short mParent;
+    short mUnknown14;
+} Bone_802338D4;
+
+typedef struct Skeleton_802338D4 {
+    char mUnknown0[6];
+    unsigned short mNumBones;
+    char mUnknown8[8];
+    Bone_802338D4 mBones[1];
+} Skeleton_802338D4;
+
+/* Pose block of 0x802338D4 (AnimPose_t's +0x30 angle triples and +0x34 matrices). */
+typedef struct Pose_802338D4 {
+    char mUnknown0[48];
+    short *mpAngles;
+    Mtx44 *mpMatrices;
+} Pose_802338D4;
+
+/* 0x90-byte block cleared by 0x802349CC; three floats at +0x80 start at 1. */
+typedef struct Block_802349CC {
+    char mUnknown0[128];
+    float mScale[3];
+    char mUnknown140[4];
+} Block_802349CC;
+
 typedef struct Part_80234A30 {
     int mUnknown0;
     int mUnknown4;
@@ -239,6 +273,8 @@ extern char lbl_802B7128[];
 extern char lbl_802B7130[];
 extern char lbl_802B7154[];
 extern char lbl_802B715C[];
+extern const float lbl_802B7168[];
+extern const float lbl_802B7170[];
 extern Entry_802FB300 lbl_802FB300[];
 extern Entry_802FB310 lbl_802FB310[];
 extern int lbl_802FB398[];
@@ -247,7 +283,9 @@ extern int lbl_802FB3B0[];
 extern Funcs_802FB3BC lbl_802FB3BC;
 extern Funcs_802FB3BC lbl_802FB3D0;
 extern Funcs_802FB3BC lbl_802FB3E4;
-extern int lbl_802FB3F8[];
+extern unsigned int lbl_802FB3F8[];
+extern Box_80234070 lbl_802FB418;
+extern unsigned int lbl_803A2628[8];
 extern void *lbl_803A2648[];
 extern Table_803E96E8 lbl_803E96E8;
 extern int lbl_803EC0C8;
@@ -375,9 +413,11 @@ extern signed char fn_8022F384(int key);
 extern int fn_8022F3D4(int key);
 extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
 extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int f);
-extern void fn_802349CC(void *p);
+void fn_802349CC(Block_802349CC *pBlock);
 extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
 extern void LLCacheLockedEnable(void);
+extern void fn_801CFC58(int angle, void *pTable, float *pSin, float *pCos);
+extern unsigned char lbl_803E9288[];
 
 void fn_8023123C(void *p, int mode, unsigned char *pDone);
 int fn_80232DE0(void);
@@ -612,7 +652,7 @@ void fn_802341AC(void);
 void fn_802341B8(void);
 void fn_802341C4(void *p);
 void fn_802341E8(void *p);
-void fn_8023424C(Instance_8023424C *p, int *pCounts, Box_80234070 *pClip);
+void fn_8023424C(Instance_8023424C *p, unsigned int *pCounts, Box_80234070 *pClip);
 int fn_80234394(Instance_8023424C **ppList, unsigned int count, int key);
 void fn_802345BC(void *p);
 void fn_802345C4(void *pSource, int count);
@@ -724,6 +764,69 @@ void fn_80233850(Model_802337D4 *pModel, Joints_802337D4 *pJoints, void *pPose, 
             TMClusterObjAllocMatrices(pJoints, pSkeleton[1]);
             TMClusterObjSynthesizeMatricesSlerp(pJoints, pBones, pSkeleton, pPose, pFlags);
         }
+    }
+}
+
+/* Builds the local matrix of one bone from its three angles and position and
+   concatenates it with the parent's matrix (as in src/engine/tmclusterobj.c). */
+static inline void _BuildBoneMatrix(Mtx44 *pParent, Mtx44 *pOut, int rx, int ry, int rz,
+                                    float *pPos)
+{
+    float sx, cx, sy, cy, sz, cz;
+    float sxsy, cxsy;
+    Mtx44 mtx;
+
+    fn_801CFC58(rx, lbl_803E9288, &sx, &cx);
+    fn_801CFC58(ry, lbl_803E9288, &sy, &cy);
+    fn_801CFC58(rz, lbl_803E9288, &sz, &cz);
+    cxsy = cx * sy;
+    sxsy = sx * sy;
+    mtx[0][3] = pPos[0];
+    mtx[1][3] = pPos[1];
+    mtx[2][3] = pPos[2];
+    mtx[0][0] = cz * cy;
+    mtx[1][0] = sz * cy;
+    mtx[2][0] = -sy;
+    mtx[0][1] = -sz * cx + cz * sxsy;
+    mtx[1][1] = cz * cx + sz * sxsy;
+    mtx[2][1] = cy * sx;
+    mtx[0][2] = sz * sx + cz * cxsy;
+    mtx[1][2] = -cz * sx + sz * cxsy;
+    mtx[2][2] = cy * cx;
+    PSMTXConcat(*pParent, mtx, *pOut);
+}
+
+/* Builds every bone matrix of pPose under the current matrix, into the locked-cache buffer
+   pCache when given (then copied to the pose's matrices) or into the pose's matrices. */
+void fn_802338D4(Pose_802338D4 *pPose, Skeleton_802338D4 *pSkeleton, Mtx44 *pCache)
+{
+    Mtx44 *pMatrices = pCache;
+    short *pAngles;
+    Mtx44 root;
+    unsigned int i;
+
+    if (pMatrices == 0) {
+        pMatrices = pPose->mpMatrices;
+    }
+    pAngles = pPose->mpAngles;
+    if (pCache != 0) {
+        LLCacheLockedEnable();
+        if (LCQueueLength() != 0) {
+            LCQueueWait(0);
+        }
+    }
+    MatStore(root);
+    _BuildBoneMatrix(&root, &pMatrices[0], pAngles[0], pAngles[1], pAngles[2],
+                     pSkeleton->mBones[0].mPos);
+    for (i = 1; i < pSkeleton->mNumBones; i++) {
+        _BuildBoneMatrix(&pMatrices[pSkeleton->mBones[i].mParent], &pMatrices[i], pAngles[i * 3],
+                         pAngles[i * 3 + 1], pAngles[i * 3 + 2], pSkeleton->mBones[i].mPos);
+    }
+    if (pCache != 0) {
+        DCFlushRange(pPose->mpMatrices, i * sizeof(Mtx44));
+        LCStoreData(pPose->mpMatrices, pCache, i * sizeof(Mtx44));
+    } else {
+        DCStoreRange(pMatrices, i * sizeof(Mtx44));
     }
 }
 
@@ -975,7 +1078,7 @@ void fn_802341E8(void *p)
     }
 }
 
-void fn_8023424C(Instance_8023424C *p, int *pCounts, Box_80234070 *pClip)
+void fn_8023424C(Instance_8023424C *p, unsigned int *pCounts, Box_80234070 *pClip)
 {
     Box_80234070 box;
     float ndc[3];
@@ -1025,6 +1128,48 @@ int fn_80234394(Instance_8023424C **ppList, unsigned int count, int key)
         return 1;
     }
     return 0;
+}
+
+/* Rates every registered instance (clipped to the screen box when mode is 1), then moves
+   instances down one detail level while a level holds more than its budget plus what the
+   level above left unused. */
+void fn_80234424(int mode)
+{
+    Box_80234070 *pClip;
+    unsigned int i;
+    unsigned int level;
+
+    if (mode == 1) {
+        pClip = &lbl_802FB418;
+    } else {
+        pClip = 0;
+    }
+    memset(lbl_803A2628, 0, sizeof(lbl_803A2628));
+    for (i = 0; i < lbl_803EC0F0; i++) {
+        fn_8023424C(lbl_803A2648[i], lbl_803A2628, pClip);
+    }
+    for (level = 0; level <= 6; level++) {
+        if (level == 0) {
+            if (lbl_803A2628[level] > lbl_802FB3F8[level]) {
+                do {
+                    if (!fn_80234394((Instance_8023424C **)lbl_803A2648, lbl_803EC0F0, level)) {
+                        break;
+                    }
+                    lbl_803A2628[level]--;
+                    lbl_803A2628[level + 1]++;
+                } while (lbl_803A2628[level] > lbl_802FB3F8[level]);
+            }
+        } else {
+            while (lbl_803A2628[level] > lbl_802FB3F8[level]
+                                             + (lbl_802FB3F8[level - 1] - lbl_803A2628[level - 1])) {
+                if (!fn_80234394((Instance_8023424C **)lbl_803A2648, lbl_803EC0F0, level)) {
+                    break;
+                }
+                lbl_803A2628[level]--;
+                lbl_803A2628[level + 1]++;
+            }
+        }
+    }
 }
 
 void fn_802345BC(void *p)
@@ -1134,6 +1279,18 @@ void fn_80234908(void)
     lbl_803ED020 = 0;
 }
 
+/* Allocates count zeroed floats for pArray. */
+void fn_8023491C(Array_8023491C *pArray, unsigned int count)
+{
+    unsigned int i;
+
+    pArray->mUnknown0 = count;
+    pArray->mpUnknown4 = fn_801D2B7C(count * sizeof(float), 0, 0);
+    for (i = 0; i < pArray->mUnknown0; i++) {
+        pArray->mpUnknown4[i] = lbl_802B7168[0];
+    }
+}
+
 void fn_80234994(Array_8023491C *pArray)
 {
     fn_801D2BD0(pArray->mpUnknown4);
@@ -1144,6 +1301,15 @@ void fn_802349B8(Array_8023491C *pArray, int value)
     if (pArray->mUnknown8 != value) {
         pArray->mUnknown8 = value;
     }
+}
+
+/* Clears the 0x90-byte block and sets its three scale floats +0x80..+0x88 to 1. */
+void fn_802349CC(Block_802349CC *pBlock)
+{
+    memset(pBlock, 0, sizeof(Block_802349CC));
+    pBlock->mScale[0] = lbl_802B7170[0];
+    pBlock->mScale[1] = lbl_802B7170[0];
+    pBlock->mScale[2] = lbl_802B7170[0];
 }
 
 void fn_80234A14(Part_80234A30 *pPart, int mask)
