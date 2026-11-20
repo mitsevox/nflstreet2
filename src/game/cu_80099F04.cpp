@@ -4,7 +4,7 @@
 #include "game/Block_801BE60C.h"
 #include "game/Item_80097440.h"
 
-extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, float *pOut, short *pValue);
+extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, float *pOut, int *pValue);
 extern "C" int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 extern "C" int AnimChanIsMirrored(AnimChannel_t *entry);
 extern "C" void AnimChanSetMirrored(AnimChannel_t *entry, int value);
@@ -42,7 +42,7 @@ extern "C" int fn_80099F04(Object_80039F5C *p, int handle, int kind)
         lbl_803EC92C->mUnknown4.mUnknown4 = 0.0f;
         lbl_803EC92C->mUnknown4.mUnknown8 = 0.0f;
         lbl_803EC92C->mUnknown4.mUnknownC = 0.0f;
-        duration = fn_80097A88(p, handle, BallGet(kind), &blend, &value);
+        duration = fn_80097A88(p, handle, BallGet(kind), &blend, (int *)&value);
         index = (handle >> 29) & 3;
         key = lbl_8030C2B8[index].mUnknown8[handle & 0x1FFFFFFF].mUnknown0;
         group = lbl_8030C2B8[index].mUnknown8[handle & 0x1FFFFFFF].mUnknown2;

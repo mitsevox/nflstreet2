@@ -16885,13 +16885,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80097160",
-          "end": "0x8009817C"
+          "end": "0x80099F04"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296198",
-          "end": "0x8029622C"
+          "end": "0x802962F0"
         }
       ],
       "functions": [
@@ -16919,28 +16919,17 @@
           "symbol": "fn_80097A88",
           "start": "0x80097A88",
           "end": "0x8009817C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800997F4.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. 3 target whole-function extents and the literal-pool slice 0x802962DC-0x802962F0 they reference retain their evidence; the split lets this pool compile independently of the parent unit's other literals and does not claim an original file boundary or whole-unit promotion.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800997F4",
-          "end": "0x80099F04"
         },
         {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802962DC",
-          "end": "0x802962F0"
-        }
-      ],
-      "functions": [
+          "symbol": "fn_8009817C",
+          "start": "0x8009817C",
+          "end": "0x80098EAC"
+        },
+        {
+          "symbol": "fn_80098EAC",
+          "start": "0x80098EAC",
+          "end": "0x800994E0"
+        },
         {
           "symbol": "fn_800997F4",
           "start": "0x800997F4",

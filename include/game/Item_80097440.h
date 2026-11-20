@@ -18,7 +18,9 @@ struct Item_80097440 {
     unsigned short mUnknown24;
     unsigned char mUnknown26[2];
     int mUnknown28;
-    unsigned char mUnknown2C[12];
+    int mUnknown2C;
+    int mUnknown30;
+    int mUnknown34;
     int mUnknown38;
 };
 
@@ -43,9 +45,11 @@ struct Record_80097518 {
 /* Block at player +336 passed to fn_80099734, fn_800997F4 and fn_8009817C.
    Only the accessed fields are declared. */
 struct Block_800997F4 {
-    char mUnknown0[8];
+    int mUnknown0;
+    float mUnknown4;
     int mUnknown8;
     int mUnknown12;
+    float mUnknown16;
 };
 
 /* 60-byte payload fn_801BE60C returns for the state fn_8009A344 runs; phase
