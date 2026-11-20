@@ -13,6 +13,17 @@ Int32 fn_8021861C(void *pTarget);
 Int32 fn_80218DDC(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 bArg3, Int32 Arg4,
                   Int32 *pArg5);
 void fn_8021956C(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 bProcess);
+void fn_80217D30(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Arg2, Int32 Arg3);
+void fn_80218364(UISInfoT *pInfo, Uint32 MS);
+void fn_8021CA54(Float32 a, Float32 b, Float32 c, Float32 d);
+void fn_8021CA70(Float32 a, Float32 b, Float32 c, Float32 d);
+
+/* Draw-pass word cleared before each screen; neutral label, owner not established. */
+extern Int32 lbl_803ECFE8;
+/* 1.0f and 0.0f of this file's .rodata, referenced through neutral labels while the
+   file's literal pool is not compiled from source. */
+extern const Float32 lbl_802B1D5C[];
+extern const Float32 lbl_802B1D60[];
 
 /* Calls the control callback for control Control of pScreen and recurses
    into every control linked from its live nodes. */
@@ -240,6 +251,40 @@ void fn_80219854(UISInfoT *pInfo, UISRunStateT *pState, Int32 Arg2, Int32 Arg3, 
         }
         Done = 0;
         fn_802180A0(pInfo, pScreen, pState, 0, Arg2, Arg3, Count, pArgs, &Done);
+    }
+}
+
+/* Runs Ticks timer ticks, then draws every loaded screen between the draw callbacks. */
+void fn_8021992C(UISInfoT *pInfo, Uint32 Ticks)
+{
+    Uint32 Tick;
+    Uint32 Screen;
+    Uint32 NumScreens;
+    UISScreenT *pScreen;
+
+    Tick = 0;
+    fn_8021CA54(lbl_802B1D5C[0], lbl_802B1D5C[0], lbl_802B1D5C[0], lbl_802B1D5C[0]);
+    fn_8021CA70(lbl_802B1D60[0], lbl_802B1D60[0], lbl_802B1D60[0], lbl_802B1D60[0]);
+    for (; Tick < Ticks; Tick++) {
+        fn_80218364(pInfo, pInfo->MSPerTick);
+    }
+    if (pInfo->pCallback2C != 0) {
+        pInfo->pCallback2C();
+    }
+    NumScreens = pInfo->NumScreens;
+    for (Screen = 0; Screen < NumScreens; Screen++) {
+        lbl_803ECFE8 = 0;
+        pScreen = &pInfo->Screens[Screen];
+        if (pInfo->pCallback34 != 0) {
+            pInfo->pCallback34(pScreen->GroupID, pScreen->ScreenID);
+        }
+        fn_80217D30(pInfo, pScreen, 0, -2);
+        if (pInfo->pCallback38 != 0) {
+            pInfo->pCallback38(pScreen->GroupID, pScreen->ScreenID);
+        }
+    }
+    if (pInfo->pCallback30 != 0) {
+        pInfo->pCallback30();
     }
 }
 

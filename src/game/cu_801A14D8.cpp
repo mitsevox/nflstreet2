@@ -266,13 +266,13 @@ void fn_802341AC(void);
 void fn_802341B8(void);
 void fn_802341C4(Lod_802341C4 *p);
 void fn_802341E8(Lod_802341C4 *p);
-void fn_80234424(int a);
+void ModelLodBalance(int a);
 void fn_802345BC(Ref_803EB81C *p);
 void fn_8023465C(void *p, void *pModel, ModelTexSlot_t *pDescs);
 void fn_8023472C(void *p, int a, int b, ModelTexSlot_t *pA, ModelTexSlot_t *pB, int c);
 void fn_8023488C(void *p, int a);
 void fn_802348AC(void *p);
-void fn_8023491C(void *p, int a);
+void FloatArrayAlloc(void *p, int a);
 void fn_80234994(void *p);
 void fn_802349B8(void *p, int a);
 void fn_80234A14(Part_8003DEC4 *p, int a);
@@ -857,7 +857,7 @@ void fn_801A29F8(Part_8003DEC4 *pPart, void *pContext, Object_8003DEC4 *pPlayer)
     fn_80234CA4(pPart, &pPlayer->mUnknown4064[1]);
     fn_80234CF0(pPart, 0, pContext);
     fn_80234DC0(pPart, 10);
-    fn_8023491C(&pPlayer->mUnknown816, 0x40);
+    FloatArrayAlloc(&pPlayer->mUnknown816, 0x40);
     fn_80234CAC(pPart, &pPlayer->mUnknown816);
     fn_802349B8(&pPlayer->mUnknown816, 12);
     pPlayer->mUnknown830 = 0x24;
@@ -1021,7 +1021,7 @@ void fn_801A31F0(Object_8003DEC4 *pPlayer)
 
 void fn_801A323C(void)
 {
-    fn_80234424(0);
+    ModelLodBalance(0);
 }
 
 void fn_801A3260(Object_8003DEC4 *pPlayer)

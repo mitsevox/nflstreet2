@@ -1,10 +1,14 @@
 /* PATH events (pathevent.c): queues music events from the game, filters and releases them and
    services the event queue each tick. */
 
+#include <string.h>
 #include "engine/pathlib.h"
 
-extern "C" int fn_801B5E5C(int flags, Sequence_801B84E4 *sequence)
+extern "C" int PATHI_addevent(int flags, Sequence_801B84E4 *sequence)
 {
+    // FAKEMATCH: unused string local; emits the unreferenced "%s  %s" that starts the target .rodata
+    const char *header = "%s  %s";
+
     int result = -8;
     Event_801B845C *entry = sequence->mUnknown14;
     int depth = 0;
@@ -46,7 +50,89 @@ extern "C" int fn_801B5E5C(int flags, Sequence_801B84E4 *sequence)
     return result;
 }
 
-extern "C" void fn_801B6334(Sequence_801B84E4 *p)
+extern "C" int PATH_event(int flags, unsigned int id)
+{
+    int acquired;
+    if (++lbl_803EBB24 == 1 && lbl_803EBB38)
+        acquired = 1;
+    else {
+        --lbl_803EBB24;
+        acquired = 0;
+    }
+    if (!acquired)
+        return -18;
+    unsigned int voices = id & 0x0F000000;
+    int result = -8;
+    Sequence_801B84E4 *copy = 0;
+    id &= 0x00FFFFFF;
+    for (unsigned int i = 0; i < 4; ++i) {
+        if (fn_801B3480((unsigned char)i, flags) &&
+            (voices & (0x01000000 << lbl_803EBB28->mUnknown18->mUnknownC))) {
+            Entry_801B63F0 *event = PATHI_findevent(id);
+            if (event) {
+                if (!event->mUnknown10.bits.flag4000) {
+                    if (!copy) {
+                        copy = PATHI_copyevent((Sequence_801B84E4 *)event);
+                        if (!copy)
+                            continue;
+                    }
+                    result = PATHI_addevent(lbl_802F47D0[i]->mUnknown14, copy);
+                } else
+                    result = -18;
+            }
+        }
+    }
+    lbl_803EBB28 = 0;
+    --lbl_803EBB24;
+    return result;
+}
+
+extern "C" Sequence_801B84E4 *PATHI_copyevent(Sequence_801B84E4 *event)
+{
+    int size = event->mUnknownF * 12 + 20;
+    unsigned char *end = lbl_803EBB28->mUnknown100 + sizeof(lbl_803EBB28->mUnknown100);
+    unsigned char *free = lbl_803EBB28->mUnknown100;
+    for (int i = 0; i < 16; ++i) {
+        Sequence_801B84E4 *queued = lbl_803EBB28->mUnknownC0[i];
+        if ((unsigned char *)queued >= free && (unsigned char *)queued < end)
+            free += queued->mUnknownF * 12 + 20;
+    }
+    if (free + size < end) {
+        memcpy(free, event, size);
+        ((Sequence_801B84E4 *)free)->mBits10.mVoice = lbl_803EBB28->mUnknown14;
+        return (Sequence_801B84E4 *)free;
+    }
+    if (lbl_803EBB40 & 0x120)
+        PATHI_printf("Can't add new event, size %d bytes (%d bytes free).\n", size, end - free);
+    return 0;
+}
+
+extern "C" void PATHI_releaseevent(int index, int reason)
+{
+    Bank_801B3480 *bank = lbl_803EBB28;
+    Sequence_801B84E4 *event = bank->mUnknownC0[index];
+    int size = event->mUnknownF * 12 + 20;
+    SequenceHeader_801B6210 saved = *(SequenceHeader_801B6210 *)event;
+    unsigned char *free = bank->mUnknown100;
+    unsigned char *end = bank->mUnknown100 + sizeof(bank->mUnknown100);
+    int pooled = (unsigned char *)event >= free && (unsigned char *)event < end;
+    if (pooled) {
+        memcpy(event, (unsigned char *)event + size, end - (unsigned char *)event);
+        for (int i = 0; i <= 16; ++i) {
+            Sequence_801B84E4 *queued = lbl_803EBB28->mUnknownC0[i];
+            if ((unsigned char *)queued > (unsigned char *)event && (unsigned char *)queued < end) {
+                queued = (Sequence_801B84E4 *)((unsigned char *)queued - size);
+                lbl_803EBB28->mUnknownC0[i] = queued;
+                if (free <= (unsigned char *)queued)
+                    free = (unsigned char *)queued + (queued->mUnknownF * 12 + 20);
+            }
+        }
+    } else if (lbl_803EBB30 && event->mFlags10.flag2000)
+        lbl_803EBB30((int)event, reason);
+    PATHI_removeevent(event);
+}
+
+extern "C" void PATHI_removeevent(Sequence_801B84E4 *p)
 {
     for (int i = 0; i < 4; ++i) {
         Bank_801B3480 *bank = lbl_802F47D0[i];
@@ -63,24 +149,14 @@ extern "C" void fn_801B6334(Sequence_801B84E4 *p)
     }
 }
 
-extern "C" void fn_801B63F0(Entry_801B63F0 *p, int value)
+extern "C" void PATHI_seteventfilter(Entry_801B63F0 *p, int value)
 {
-    Header_801B2CDC *base = lbl_803EBB28->mUnknown18;
-    unsigned int key = p->mUnknownC >> 8;
-    short *offsets = lbl_803EBB28->mUnknown24;
-    Entry_801B63F0 *found = 0;
-    for (int i = base->mUnknownF - 1; i >= 0; --i) {
-        Entry_801B63F0 *entry = (Entry_801B63F0 *)((unsigned char *)base + offsets[i] * 4);
-        if ((entry->mUnknownC >> 8) == key) {
-            found = entry;
-            break;
-        }
-    }
+    Entry_801B63F0 *found = PATHI_findevent(p->mUnknownC >> 8);
     if (found)
         found->mUnknown10.bits.flag4000 = value;
 }
 
-extern "C" void fn_801B6460(void)
+extern "C" void PATHI_clearalleventfilters(void)
 {
     for (int i = 0; i < lbl_803EBB28->mUnknown18->mUnknownF; ++i) {
         Entry_801B63F0 *entry = (Entry_801B63F0 *)((unsigned char *)lbl_803EBB28->mUnknown18 + lbl_803EBB28->mUnknown24[i] * 4);
@@ -89,7 +165,7 @@ extern "C" void fn_801B6460(void)
     }
 }
 
-extern "C" int fn_801B64C0(int index)
+extern "C" int PATHI_serviceevent(int index)
 {
     Sequence_801B84E4 *p = lbl_803EBB28->mUnknownC0[index];
     int count = 0;
@@ -97,12 +173,64 @@ extern "C" int fn_801B64C0(int index)
         return 0;
     unsigned int i = p->mUnknown10;
     Event_801B845C *entry = &p->mUnknown14[i];
-    for (; i < p->mUnknownF; ++i, ++entry) {
-        if (!(entry->mUnknown4 & 0x10000) && !fn_801B7880(p, entry))
+    for (; i < p->mUnknownF; ++entry, ++i) {
+        if ((entry->mUnknown4 & 0x10000) || fn_801B7880(p, entry)) {
+            ++count;
+            ++p->mUnknown10;
+            p->mUnknown8 = lbl_803EBB3C;
+        } else
             break;
-        ++count;
-        ++p->mUnknown10;
-        p->mUnknown8 = lbl_803EBB3C;
     }
     return count;
+}
+
+extern "C" int PATHI_serviceeventqueue(void)
+{
+    int count = 0;
+    for (int i = 0; i < 16; ++i) {
+        if (i >= lbl_803EBB28->mUnknown1100)
+            lbl_803EBB28->mUnknownC0[i] = 0;
+        Sequence_801B84E4 *event = lbl_803EBB28->mUnknownC0[i];
+        if (event) {
+            int reason = 0;
+            if (event->mUnknown10 >= event->mUnknownF)
+                reason = 3;
+            if (event->mUnknown4 && event->mUnknown0 + event->mUnknown4 < lbl_803EBB3C)
+                reason = 1;
+            if (event->mBits10.mPriority && !PATHI_eventtakespriority(i))
+                reason = 2;
+            if (reason) {
+                PATHI_releaseevent(i, reason);
+                --i;
+            } else
+                count += PATHI_serviceevent(i);
+        }
+    }
+    return count;
+}
+
+extern "C" int PATHI_eventtakespriority(int index)
+{
+    Sequence_801B84E4 *event = lbl_803EBB28->mUnknownC0[index];
+    int priority = event->mBits10.mPriority;
+    int odd = priority % 2;
+    if (priority <= 0)
+        priority = -priority;
+    while (++index <= 15) {
+        Sequence_801B84E4 *other = lbl_803EBB28->mUnknownC0[index];
+        if (other && other->mBits10.mPriority) {
+            int level = other->mBits10.mPriority;
+            if (level < 0)
+                level = -level;
+            if (event->mBits10.mPriority > 0 && level < priority + odd) {
+                PATHI_releaseevent(index, 2);
+                --index;
+            } else if (other->mBits10.mPriority < 0) {
+                odd = level % 2;
+                if (priority < level + odd)
+                    return 0;
+            }
+        }
+    }
+    return 1;
 }

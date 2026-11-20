@@ -77,7 +77,7 @@ int SNDSTRM_setazimuth(int stream, int speaker, float azimuth)
                     fn_80274960(index);
                 }
             } else {
-                const unsigned char *pans = lbl_802C1FF8[channel->mChannels - 1];
+                const unsigned char *pans = lbl_802C1FF8[channel->mFormat.mChannels - 1];
 
                 for (i = 0; i < record->m23; i++) {
                     index = record->m4[i];

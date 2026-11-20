@@ -3,6 +3,7 @@
 
 #include "engine/sndstrm.h"
 #include "engine/csis.h"
+#include "engine/ssys.h"
 
 namespace Snd {
 
@@ -15,11 +16,6 @@ void CsisMutexUnlock(void)
 {
     Csis::System::Unlock();
 }
-
-class System {
-public:
-    static int VectorToCsisMutex(void);
-};
 
 int System::VectorToCsisMutex(void)
 {

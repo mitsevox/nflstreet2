@@ -39,10 +39,10 @@ int SNDSTRM_requeststatus(int id, SndStreamRequestStatus_t *status)
         if (request->mActive != 0) {
             if ((SndStreamRequest_t *)channel->mRequests.mpFirst == request) {
                 status->mState = 2;
-                rate = channel->mPlayRate;
+                rate = channel->mFormat.mRate;
             } else {
                 status->mState = 1;
-                rate = channel->mQueueRate;
+                rate = channel->mQueueFormat.mRate;
             }
             scale = 1000.0f / (float)rate;
             t = (float)request->unk_0x14 * scale;

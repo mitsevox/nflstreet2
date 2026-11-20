@@ -3,6 +3,7 @@
 #include "engine/fn_80238680.h"
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/gx/GXPixel.h>
+#include <dolphin/gx/GXTev.h>
 #include <dolphin/os/OSCache.h>
 #include <string.h>
 #include "engine/viewport.h"
@@ -26,7 +27,6 @@ typedef struct Element_80235B6C {
     Library_80235B6C *mpUnknown44;
 } Element_80235B6C;
 
-extern char lbl_802B71A0[];
 extern float lbl_802FB458[3];
 extern void TMModelResRelocate(void *p);
 extern void TMModelReset(void *p);
@@ -39,10 +39,27 @@ extern int TMShaderLibGetShader(const char *pName);
 extern void TMTexLibRegistryReset(void);
 extern void TMTexLibRegister(const char *pName, void *p);
 extern void TMClipResetExtent(void *p);
+extern void TMClipProjection(int a);
+extern void TMClipMatrix(void *pMtx);
+extern unsigned int TMClipBBox(void *p, void *q, int a);
+extern void TMRenderBindShader(void *pShader);
+extern void TMXform(unsigned int id, float (*pMtx)[4]);
+extern void TMXformSelect(unsigned int id);
+extern void TMRenderSetBlendMode(unsigned int mode);
+extern void TMRenderSetZMode(GXBool compareEnable, GXCompare func, GXBool updateEnable);
+extern void TMRenderSetZRange(float nearZ, float farZ);
+extern void TMRenderBindModel(void *pModel);
+extern void TMRenderBindMaterialList(void *pList);
+extern void TMRenderGeomAll(void);
+extern void TMRenderGeomNode(int state, int arg);
+extern int LLFogEnable(int enable);
+extern int lbl_803EC0F8;
+typedef struct Owner_80235328 Owner_80235328;
+void fn_80235328(Owner_80235328 *pOwner, int key);
 void fn_802353D4(Object_80235588 *p, int flags);
 void fn_802353D8(Object_80235588 *p, int flags);
 void fn_802353E8(Object_80235588 *p, int flags);
-void fn_80235788(Object_80235588 *p, int handle, int a);
+void ModelObjRender(Object_80235588 *p, int handle, int lightMask);
 
 void fn_802355E4(Object_80235588 *p)
 {
@@ -88,7 +105,110 @@ void fn_80235740(Object_80235588 *p, int handle)
 
 void fn_80235764(Object_80235588 *p, int handle)
 {
-    fn_80235788(p, handle, 1);
+    ModelObjRender(p, handle, 1);
+}
+
+/* Whether the model is drawn with fog turned off (flag bit 0 clear). */
+static inline int _ModelObjFogOff(Object_80235588 *p)
+{
+    return !(p->mUnknown0 & 1);
+}
+
+void ModelObjRender(Object_80235588 *p, int handle, int lightMask)
+{
+    int fog = 0;
+    GXBool zUpdate = 1;
+
+    if (lbl_803EC0F8 != 0 && p->mpUnknown84 != 0) {
+        /* FAKEMATCH: the target stores red with the initializer word and the other three
+           bytes through a pointer register (addi r9,r1,12); the original form is not known. */
+        GXColor color = {128};
+        GXColor *pColor = &color;
+
+        pColor->g = 128;
+        pColor->b = 128;
+        pColor->a = 255;
+        if (p->mUnknown0 & 0x4000) {
+            TMClipProjection(0);
+            TMClipMatrix(p->mUnknown8);
+            if (TMClipBBox(p->mUnknown152, 0, 0) & 0x3F) {
+                return;
+            }
+        }
+        if (p->mUnknown184 != 0) {
+            TMRenderBindShader((void *)p->mUnknown184);
+        }
+        GXSetChanMatColor(GX_COLOR0A0, color);
+        TMXform(0, p->mUnknown8);
+        TMXformSelect(0);
+        if (p->mUnknown0 & 0x100000) {
+            TMRenderSetBlendMode(3);
+        } else if (p->mUnknown0 & 0x200000) {
+            TMRenderSetBlendMode(6);
+        } else if (p->mUnknown0 & 2) {
+            TMRenderSetBlendMode(2);
+        } else {
+            TMRenderSetBlendMode(1);
+        }
+        if (p->mUnknown0 & 0x200) {
+            GXSetZCompLoc(0);
+            GXSetAlphaCompare(GX_GREATER, 32, GX_AOP_AND, GX_GREATER, 0);
+        } else {
+            GXSetZCompLoc(1);
+            GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_GREATER, 0);
+        }
+        if (p->mUnknown0 & 8) {
+            zUpdate = 0;
+        }
+        if (p->mUnknown0 & 0x40000) {
+            TMRenderSetZMode(1, GX_LEQUAL, zUpdate);
+            TMRenderSetZRange(0.0f, 1.0f - p->mUnknown188);
+        } else if (p->mUnknown0 & 0x80000) {
+            TMRenderSetZMode(1, GX_LESS, zUpdate);
+            TMRenderSetZRange(p->mUnknown72, p->mUnknown72);
+        } else if (p->mUnknown0 & 0x400000) {
+            TMRenderSetZMode(1, GX_ALWAYS, zUpdate);
+        } else {
+            TMRenderSetZMode(1, GX_LEQUAL, zUpdate);
+            TMRenderSetZRange(0.0f, 1.0f);
+        }
+        if (_ModelObjFogOff(p)) {
+            fog = LLFogEnable(0);
+        }
+        GXSetNumChans(1);
+        if (p->mUnknown0 & 0x20000) {
+            GXSetChanAmbColor(GX_COLOR0A0, *(GXColor *)p->mUnknown76);
+            GXSetChanCtrl(GX_COLOR0, 1, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+            GXSetChanCtrl(GX_ALPHA0, 1, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+        } else if (!(p->mUnknown0 & 0x8000)) {
+            GXSetChanCtrl(GX_ALPHA0, 0, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+            if (p->mUnknown0 & 0x10000) {
+                GXSetChanCtrl(GX_COLOR0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+            } else {
+                GXSetChanCtrl(GX_COLOR0, 0, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+            }
+        } else {
+            GXSetChanCtrl(GX_ALPHA0, 0, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+            GXSetChanCtrl(GX_COLOR0, 1, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, GX_AF_SPOT);
+        }
+        TMRenderBindModel(&p->mUnknown100);
+        TMRenderBindMaterialList(p->mUnknown92);
+        if (p->mUnknown0 & 0x800000) {
+            fn_80235328((Owner_80235328 *)&p->mUnknown100, p->mUnknown4);
+        }
+        if (p->mUnknown100.mUnknown20 == 0 || p->mUnknown4 == -1) {
+            TMRenderGeomAll();
+        } else {
+            TMRenderGeomNode(0, p->mUnknown4);
+        }
+        if (p->mUnknown0 & 0x4C0000) {
+            TMRenderSetZMode(1, GX_LEQUAL, 1);
+            TMRenderSetZRange(0.0f, 1.0f);
+        }
+        if (_ModelObjFogOff(p)) {
+            LLFogEnable(fog);
+        }
+    }
 }
 
 void fn_80235B6C(Object_80235588 *p, Element_80235B6C *pElement, int a)
@@ -102,7 +222,7 @@ void fn_80235B6C(Object_80235588 *p, Element_80235B6C *pElement, int a)
         if (pElement != 0) {
             TMTexLibRegistryReset();
             if (pElement->mUnknown40 != 0) {
-                TMTexLibRegister(lbl_802B71A0, pElement);
+                TMTexLibRegister("model", pElement);
             }
             pLibrary = pElement->mpUnknown44;
             if (pLibrary != 0) {

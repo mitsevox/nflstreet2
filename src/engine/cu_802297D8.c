@@ -115,7 +115,7 @@ extern char lbl_802B4A54[];
 extern char lbl_802B4A9C[];
 extern char lbl_802B4AE0[];
 void fn_8022C9B8(void *pPairs);
-void fn_8022CED8(void);
+void DbAssignPendingNodeIds(void);
 int fn_8022D5A4(int key, int mode);
 int fn_8022D710(int a, int b, int c, int row, int value);
 unsigned short fn_8022D6FC(int index);
@@ -237,6 +237,12 @@ extern int (*lbl_803EC000)(int a, int b);
 extern int (*lbl_803EC004)(void);
 extern int (*lbl_803EC008)(void);
 extern int lbl_803EC020[2];
+extern int fn_801FA290(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
+                       TDbCol_801F9718 *pCols);
+extern int fn_801FA428(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
+                       TDbCol_801F9718 *pCols, void *pResult, int callback);
+/* Set index per column letter ('A'/'a' first); neutral label. */
+extern unsigned char lbl_802FA614[];
 extern int *lbl_803EC010[1];
 extern unsigned char lbl_803EC014[1];
 extern TDbCol_801F9718 **lbl_803EC018[1];
@@ -539,7 +545,7 @@ int fn_8022D6E8(void);
 void fn_8022D6F0(void);
 unsigned short fn_8022D6FC(int index);
 int fn_8022D710(int a, int b, int c, int row, int value);
-int fn_8022D834(int row, int column);
+int DbTableLookupByte(int row, int column);
 int fn_8022D864(void);
 int fn_8022D86C(void);
 int fn_8022D874(int a, int b, int c, int key);
@@ -958,6 +964,156 @@ void fn_8022B200(void)
     }
     lbl_803EC028 = 0;
     lbl_803EC02C = 0;
+}
+
+/* The 64-bit column key of col in table (table word high, column id low). */
+static inline unsigned long long _DbColKey(unsigned int table, unsigned int col)
+{
+    return ((unsigned long long)table << 32) | col;
+}
+
+/* Writes value into column col of the 'DIGP' row key of the set selected by the column's
+   third letter; when no row matched (23) the row is added through 0x8022AF5C. Returns 131
+   for a column letter without a set. */
+int fn_8022B2CC(int key, unsigned int col, int value)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    TDbCol_801F9718 aCols[2];
+    TDbExpr_t expr;
+    unsigned int c;
+    int index;
+    int table;
+    int err;
+
+    c = (col >> 8) & 0xFF;
+    if (c > 96) {
+        index = lbl_802FA614[c - 97];
+    } else {
+        index = lbl_802FA614[c - 65];
+    }
+    if (index < 0) {
+        return 131;
+    }
+    table = lbl_803EC010[0][index];
+    aCols[0].mUnk0 = value;
+    aCols[0].mUnk4 = table;
+    aCols[0].mCol = col;
+    fn_801F9718_SetEnd(&aCols[1]);
+    expr.mLeft.mType = 6;
+    expr.mLeft.mValue.l = _DbColKey(table, 0x44494750);
+    expr.mRight.mType = 3;
+    expr.mRight.mValue.i = key;
+    expr.mOp = 0x10003;
+    aTables[0].mId = table;
+    aTables[0].mJoinType = 2;
+    aTables[0].mExpr = &expr;
+    aTables[1].mId = -1;
+    aTables[1].mJoinType = 2;
+    aTables[1].mExpr = 0;
+    err = fn_801FA428(0, aTables, 0, aCols, 0, 0);
+    if (err == 23) {
+        err = fn_8022AF5C(key, -1, col, value, 0, index);
+    }
+    return err;
+}
+
+/* Reads column col of the 'DIGP' row key of the set selected by the column's third letter
+   into *pOut; returns 131 for a letter without a set, 132 when no row matched. */
+int fn_8022B414(int key, unsigned int col, int *pOut)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    TDbCol_801F9718 aCols[2];
+    TDbExpr_t expr;
+    unsigned int c;
+    int index;
+    int table;
+    int err;
+    int ok;
+
+    *pOut = 0;
+    c = (col >> 8) & 0xFF;
+    if (c > 96) {
+        index = lbl_802FA614[c - 97];
+    } else {
+        index = lbl_802FA614[c - 65];
+    }
+    if (index >= 0) {
+        table = lbl_803EC010[0][index];
+        aCols[0].mUnk0 = 0;
+        aCols[0].mUnk4 = table;
+        aCols[0].mCol = col;
+        fn_801F9718_SetEnd(&aCols[1]);
+        expr.mLeft.mType = 6;
+        expr.mLeft.mValue.l = _DbColKey(table, 0x44494750);
+        expr.mRight.mType = 3;
+        expr.mRight.mValue.i = key;
+        expr.mOp = 0x10003;
+        aTables[0].mId = table;
+        aTables[0].mJoinType = 2;
+        aTables[0].mExpr = &expr;
+        aTables[1].mId = -1;
+        aTables[1].mJoinType = 2;
+        aTables[1].mExpr = 0;
+        err = fn_801FA290(0, aTables, 0, aCols);
+        ok = 0;
+        if (err == 0 || err == 23 || err == 21 || err == 20) {
+            ok = 1;
+        }
+        if (ok == 1) {
+            if (err == 0) {
+                *pOut = aCols[0].mUnk0;
+            } else {
+                err = 132;
+            }
+        }
+    } else {
+        err = 131;
+    }
+    return err;
+}
+
+/* Reads column col of the row of the first table whose 'DIGT' column equals value; returns
+   0 with the value in *pOut, 132 when the query ended without a row, or the query error. */
+int fn_8022B7A4(int value, int col, int *pOut)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    TDbCol_801F9718 aCols[2];
+    TDbExpr_t expr;
+    int table;
+    int err;
+    int ok;
+
+    err = 0;
+    *pOut = err;
+    table = lbl_803EC020[0];
+    aCols[0].mUnk0 = err;
+    aCols[0].mUnk4 = table;
+    aCols[0].mCol = col;
+    fn_801F9718_SetEnd(&aCols[1]);
+    expr.mLeft.mType = 6;
+    expr.mLeft.mValue.l = _DbColKey(table, 0x44494754);
+    expr.mRight.mType = 3;
+    expr.mRight.mValue.i = value;
+    expr.mOp = 0x10003;
+    aTables[0].mId = table;
+    aTables[0].mJoinType = 2;
+    aTables[0].mExpr = &expr;
+    aTables[1].mId = -1;
+    aTables[1].mJoinType = 2;
+    aTables[1].mExpr = 0;
+    err = fn_801FA290(0, aTables, 0, aCols);
+    ok = 0;
+    if (err == 0 || err == 23 || err == 21 || err == 20) {
+        ok = 1;
+    }
+    if (ok == 1) {
+        if (err == 0) {
+            *pOut = aCols[0].mUnk0;
+        } else {
+            err = 132;
+        }
+    }
+    return err;
 }
 
 int fn_8022BF60(void)

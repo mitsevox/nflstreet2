@@ -552,7 +552,7 @@ int fn_801784C4(void);
 unsigned long long fn_80190F18(void *pStream, int bits);
 void fn_80191068(void *pStream, unsigned long long value, int bits);
 void fn_801B2F18(void (*a)(int, int), void (*b)(int, int), void (*c)(int, int));
-void fn_801B3084(int flags, const char *pName, int value);
+void PATH_setvariable(int flags, const char *pName, int value);
 void *DSNewListNode(void *pool);
 void *DSGetListNode(void *pool, void *item);
 void DSDelListNode(void *pool, void *item);
@@ -1126,43 +1126,43 @@ extern "C" void SndgAmbStartStadiumTrack(void)
 
     switch (level) {
     case 0:
-        fn_801B3084(0x2000000, "Ambnum", 2);
+        PATH_setvariable(0x2000000, "Ambnum", 2);
         break;
     case 1:
-        fn_801B3084(0x2000000, "Ambnum", 4);
+        PATH_setvariable(0x2000000, "Ambnum", 4);
         break;
     case 3:
-        fn_801B3084(0x2000000, "Ambnum", 6);
+        PATH_setvariable(0x2000000, "Ambnum", 6);
         break;
     case 2:
-        fn_801B3084(0x2000000, "Ambnum", 1);
+        PATH_setvariable(0x2000000, "Ambnum", 1);
         break;
     case 4:
-        fn_801B3084(0x2000000, "Ambnum", 7);
+        PATH_setvariable(0x2000000, "Ambnum", 7);
         break;
     case 9:
-        fn_801B3084(0x2000000, "Ambnum", 3);
+        PATH_setvariable(0x2000000, "Ambnum", 3);
         break;
     case 5:
-        fn_801B3084(0x2000000, "Ambnum", 5);
+        PATH_setvariable(0x2000000, "Ambnum", 5);
         break;
     case 6:
-        fn_801B3084(0x2000000, "Ambnum", 8);
+        PATH_setvariable(0x2000000, "Ambnum", 8);
         break;
     case 7:
-        fn_801B3084(0x2000000, "Ambnum", 9);
+        PATH_setvariable(0x2000000, "Ambnum", 9);
         break;
     case 8:
-        fn_801B3084(0x2000000, "Ambnum", 10);
+        PATH_setvariable(0x2000000, "Ambnum", 10);
         break;
     case 11:
-        fn_801B3084(0x2000000, "Ambnum", 11);
+        PATH_setvariable(0x2000000, "Ambnum", 11);
         break;
     case 10:
-        fn_801B3084(0x2000000, "Ambnum", 12);
+        PATH_setvariable(0x2000000, "Ambnum", 12);
         break;
     default:
-        fn_801B3084(0x2000000, "Ambnum", 1);
+        PATH_setvariable(0x2000000, "Ambnum", 1);
         break;
     }
     _SndgAmb_uTrackLevel = _SndgAmb_aLevelTrackVolume[level];

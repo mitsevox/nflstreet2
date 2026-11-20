@@ -20,7 +20,9 @@ typedef struct Object_80235588 {
     struct {
         char mUnknown0[8];
         Record_80235630 *mpUnknown8;
-        char mUnknown12[40];
+        char mUnknown12[8];
+        int mUnknown20;
+        char mUnknown24[28];
     } mUnknown100;
     char mUnknown152[32];
     int mUnknown184;

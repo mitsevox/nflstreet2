@@ -30,7 +30,7 @@ ShapeCollection::~ShapeCollection()
 void ShapeCollection::AddShape(CollisionShape *pShape)
 {
     BoundingBox bounds;
-    pShape->vfn_02(&bounds);
+    pShape->GetBounds(&bounds);
     mpShapes[mCount] = pShape;
     mCount++;
     if (mCount == 1) {
@@ -57,7 +57,7 @@ void ShapeCollection::UpdateWorldBounds(float matrix[4][4])
 void ShapeCollection::DrawShapes(const float matrix[4][4], int red, int green, int blue)
 {
     for (unsigned char i = 0; i < mCount; i++) {
-        mpShapes[i]->vfn_05(matrix, red, green, blue);
+        mpShapes[i]->Draw(matrix, red, green, blue);
     }
 }
 
@@ -69,7 +69,7 @@ void ShapeCollection::DrawBounds(int red, int green, int blue, int worldSpace)
     } else {
         for (unsigned char i = 0; i < mCount; i++) {
             BoundingBox bounds;
-            mpShapes[i]->vfn_02(&bounds);
+            mpShapes[i]->GetBounds(&bounds);
             bounds.DrawDebug(red, green, blue);
         }
         mLocalBounds.DrawDebug(red, green, blue);

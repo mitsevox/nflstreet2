@@ -128,7 +128,7 @@ void fn_80220CDC(int a);
 void fn_80220CFC(int a);
 void fn_80220D04(void);
 void fn_802212C8(void);
-void fn_80222220(void);
+void UIGLibTextObjAction(void);
 void UIGCurveObjAction(void);
 void fn_80225654(void);
 void fn_802363B0(Viewport_t *pObject);
@@ -200,7 +200,7 @@ void UISGameSetCallbacks(void *p)
     fn_80218AD4(p, 5, UISTextTableAction);
     fn_80218AD4(p, 6, UISModelObjAction);
     fn_80218AD4(p, 7, UISGameObjSlot7);
-    fn_80218AD4(p, 8, fn_80222220);
+    fn_80218AD4(p, 8, UIGLibTextObjAction);
 }
 
 int UISGameDrawObj(int a, int b)

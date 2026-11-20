@@ -7,17 +7,32 @@
 #include "engine/fn_801B3234.h"
 #include "engine/csis.h"
 
+struct SubBank_801B51AC {
+    unsigned int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+};
+
 struct Data_801B4548 {
-    unsigned char mUnknown0[4];
+    unsigned int mUnknown0;
     unsigned short mUnknown4;
+    unsigned short mUnknown6;
+    unsigned int mUnknown8;
+    unsigned char mUnknownC[4];
 };
 
 struct Record_801B58F0 {
-    unsigned char mUnknown0[4];
-    int mUnknown4;
-    int mUnknown8;
-    unsigned char mUnknownC[20];
+    SubBank_801B51AC mUnknown0;
+    int mUnknownC;
+    int mUnknown10;
+    unsigned char mUnknown14[8];
+    char *mUnknown1C;
     int mUnknown20;
+};
+
+struct PathName_801B3FE0 {
+    void *mUnknown0;
+    int mUnknown4;
 };
 
 class Class_801B44BC {
@@ -32,48 +47,80 @@ public:
     virtual int vfn_08() = 0;
     virtual int vfn_09(int index) = 0;
     virtual void vfn_10() = 0;
-    virtual void vfn_11() = 0;
+    virtual int vfn_11(int node, int offset, int beats, int a, unsigned int length) = 0;
     virtual int fn_801B45A4();
     virtual void vfn_13(int value) = 0;
     virtual int fn_801B45AC();
-    virtual void vfn_15() = 0;
+    virtual void vfn_15(int value) = 0;
     virtual int fn_801B45B4(int value);
-    virtual void vfn_17() = 0;
-    virtual void vfn_18() = 0;
-    virtual void vfn_19() = 0;
+    virtual void vfn_17(int send, int value) = 0;
+    virtual int vfn_18() = 0;
+    virtual void vfn_19(int value) = 0;
     virtual int fn_801B45BC();
     virtual int fn_801B45C4();
-    virtual void vfn_22() = 0;
-    virtual void fn_801B45CC();
+    virtual void vfn_22(const char *name) = 0;
+    virtual void fn_801B45CC(PathName_801B3FE0 *path);
     virtual void vfn_24() = 0;
     virtual void vfn_25() = 0;
     virtual int fn_801B4548();
     virtual int fn_801B4564();
     virtual Record_801B58F0 *fn_801B456C(int index);
-    virtual int fn_801B4574();
-    virtual int fn_801B457C();
-    virtual int fn_801B4584();
-    virtual int fn_801B458C();
+    virtual Record_801B58F0 *fn_801B4574();
+    virtual int fn_801B457C(int index, char *data);
+    virtual int fn_801B4584(int index);
+    virtual int fn_801B458C(int index, int header);
     virtual int fn_801B4594(int index);
 
+    Class_801B44BC();
+
     int mUnknown0;
-    unsigned char mUnknown4[4];
+    int mUnknown4;
     int mUnknown8;
     int mUnknownC;
     int mUnknown10;
-    unsigned char mUnknown14[12];
+    int mUnknown14;
+    int mUnknown18;
+    int mUnknown1C;
     int mUnknown20;
-    unsigned char mUnknown24[56];
+    unsigned char mUnknown24[52];
+    int mUnknown58;
     Data_801B4548 *mUnknown5C;
     int mUnknown60;
-    unsigned char mUnknown64[4];
+    int mUnknown64;
 };
 
 struct Header_801B2CDC {
-    unsigned char mUnknown0[15];
+    unsigned int mUnknown0;
+    unsigned int mUnknown4;
+    unsigned char mUnknown8[2];
+    unsigned short mUnknownA;
+    unsigned char mUnknownC;
+    unsigned char mUnknownD;
+    unsigned char mUnknownE;
     unsigned char mUnknownF;
-    unsigned char mUnknown10[2];
+    unsigned char mUnknown10;
+    unsigned char mUnknown11;
     unsigned short mUnknown12;
+    int mUnknown14;
+    int mUnknown18;
+    int mUnknown1C;
+    int mUnknown20;
+    int mUnknown24;
+    int mUnknown28;
+    int mUnknown2C;
+    int mUnknown30;
+    int mUnknown34;
+    int mUnknown38;
+};
+
+struct Name_801B3084 {
+    char mUnknown0[16];
+    int mUnknown10;
+};
+
+struct Record_801B3268 {
+    unsigned int mUnknown0;
+    unsigned int mUnknown4;
 };
 
 struct Node_801B3FE0 {
@@ -86,9 +133,15 @@ struct Node_801B3FE0 {
     union {
         unsigned int word;
         struct { unsigned short high; unsigned char low[2]; } halves;
-        struct { unsigned int mUnknown7:25, flag40:1, mUnknown1:5, flag1:1; } bits;
+        struct {
+            unsigned int mUnknown16:16;
+            int mLoop:4;
+            int mUnknown7:5;
+            unsigned int flag40:1, flag20:1, flag10:1, mUnknown1:3, flag1:1;
+        } bits;
     } mUnknown8;
-    unsigned char mUnknownC[4];
+    unsigned short mUnknownC;
+    unsigned short mUnknownE;
     unsigned int mUnknown10;
     int mUnknown14;
     signed char mUnknown18, mUnknown19, mUnknown1A;
@@ -102,11 +155,20 @@ struct Node_801B3FE0 {
     signed char mUnknown30, mUnknown31, mUnknown32;
     unsigned char mUnknown33;
     unsigned int *mUnknown34;
-    unsigned char mUnknown38[184];
+    unsigned int mUnknown38;
+    unsigned int mUnknown3C;
+    unsigned int mUnknown40;
+    unsigned char mUnknown44[8];
+    int mUnknown4C;
+    PathName_801B3FE0 mUnknown50;
+    unsigned char mUnknown58[120];
+    char mUnknownD0[32];
     int mUnknownF0;
-    unsigned char mUnknownF4[12];
+    unsigned int mUnknownF4;
+    int mUnknownF8;
+    int mUnknownFC;
     Class_801B44BC *mUnknown100;
-    short mUnknown104;
+    unsigned short mUnknown104;
     unsigned char mUnknown106[2];
     int mUnknown108;
     int mUnknown10C;
@@ -125,21 +187,23 @@ struct Bank_801B3480 {
     int mUnknown0;
     unsigned int mUnknown4;
     unsigned int mUnknown8;
-    unsigned char mUnknownC[8];
+    int mUnknownC;
+    int mUnknown10;
     unsigned int mUnknown14;
     Header_801B2CDC *mUnknown18;
     short *mUnknown1C;
-    unsigned char mUnknown20[4];
+    void *mUnknown20;
     short *mUnknown24;
-    unsigned char mUnknown28[8];
+    void *mUnknown28;
+    Name_801B3084 *mUnknown2C;
     unsigned int *mUnknown30;
     int *mUnknown34;
-    unsigned char mUnknown38[4];
+    void *mUnknown38;
     unsigned int *mUnknown3C;
     Node_801B3FE0 *mUnknown40[24];
     unsigned char mUnknownA0[32];
-    Sequence_801B84E4 *mUnknownC0[17];
-    unsigned char mUnknown104[4092];
+    Sequence_801B84E4 *mUnknownC0[16];
+    unsigned char mUnknown100[4096];
     int mUnknown1100;
 };
 
@@ -150,6 +214,9 @@ public:
     virtual void vfn_03() = 0;
     virtual void vfn_04() = 0;
     virtual unsigned int vfn_05() = 0;
+    virtual int vfn_06(int channels) = 0;
+    virtual int vfn_07(char *name, int &size, int flags) = 0;
+    virtual int vfn_08(int handle, char *&data) = 0;
     unsigned char mUnknown0[12];
 };
 
@@ -161,26 +228,90 @@ struct Event_801B845C {
     };
     unsigned char mUnknown8[4];
 };
+struct SequenceHeader_801B6210 {
+    unsigned int mUnknown0[5];
+};
 struct Sequence_801B84E4 {
     unsigned int mUnknown0;
-    unsigned char mUnknown4[4];
+    unsigned int mUnknown4;
     unsigned int mUnknown8;
     unsigned char mUnknownC[3];
     unsigned char mUnknownF;
-    unsigned char mUnknown10;
-    unsigned char mUnknown11[3];
+    union {
+        unsigned char mUnknown10;
+        unsigned int mWord10;
+        struct {
+            unsigned int mUnknown18:8, mUnknown14:4;
+            int mPriority:4;
+            unsigned int mUnknownF:1, flag4000:1, mVoice:3, mUnknown0:11;
+        } mBits10;
+        struct {
+            unsigned int mUnknown13:18, flag2000:1, mUnknown0:13;
+        } mFlags10;
+    };
     Event_801B845C mUnknown14[1];
 };
 struct PathfinderStatus_t;
 struct Entry_801B63F0 {
-    unsigned char mUnknown0[4];
-    unsigned int mUnknown4;
-    unsigned char mUnknown8[4];
+    union {
+        struct {
+            short mUnknown0;
+            short mUnknown2;
+        };
+        struct {
+            unsigned int mUnknown16:16, mUnknown14:2, mTrack:5, mUnknown5:4;
+            int mLoop:5;
+        } mBits0;
+    };
+    union {
+        unsigned int mUnknown4;
+        struct {
+            unsigned int mUnknown20:12, mBranches:5, mKind:3, mBeats:4, mUnknown0:8;
+        } mBits4;
+    };
+    unsigned int mUnknown8;
     unsigned int mUnknownC;
     union {
         unsigned int word;
         struct { unsigned int mUnknownF:17, flag4000:1, mUnknown0:14; } bits;
     } mUnknown10;
+};
+struct PathStatus_801B67F8 {
+    unsigned char mUnknown0[8];
+    int mUnknown8;
+    unsigned char mUnknownC[12];
+    int mUnknown18;
+    int mUnknown1C;
+    int mUnknown20;
+    int mUnknown24;
+    int mUnknown28;
+    int mUnknown2C;
+};
+struct BeatInfo_801B67F8 {
+    unsigned int mUnknown0:4, mUnknown4b:4, mUnknown1:8, mUnknown2:16;
+    unsigned int mUnknown4;
+    int mUnknown8;
+    int mUnknownC;
+    int mUnknown10;
+    int mUnknown14;
+    unsigned int mUnknown18;
+};
+struct FindNode_801B6A18 {
+    unsigned char mUnknown0[8];
+    union {
+        short mUnknown8;
+        struct { unsigned int mUnknown4:28, mSync:2, mUnknown0:2; } mBits8;
+    };
+};
+struct TrackStatus_801B864C {
+    int mUnknown0;
+    unsigned char mUnknown4[20];
+    int mUnknown18;
+    unsigned char mUnknown1C[8];
+    int mUnknown24;
+    int mUnknown28;
+    int mUnknown2C;
+    unsigned char mUnknown30[12];
 };
 struct Record_801B6780 {
     short mUnknown0;
@@ -190,6 +321,8 @@ struct PathfinderTrackData_t;
 class Class_803EBB64 {
 public:
     virtual ~Class_803EBB64();
+    virtual int vfn_02(Class_801B44BC **track, int a, float b, int c) = 0;
+    virtual int vfn_03(Class_801B44BC **track, int a) = 0;
 };
 
 extern "C" {
@@ -212,11 +345,11 @@ extern int lbl_803EBB54;
 extern Bank_801B3480 *lbl_802F47D0[4];
 extern Class_803EBB60 *lbl_803EBB60;
 void fn_801B3724(void);
-int fn_801B3FE0(int flags, PathfinderTrackData_t *data);
+int PATHI_inittrack(int flags, PathfinderTrackData_t *data);
 int fn_801B7880(Sequence_801B84E4 *p, Event_801B845C *entry);
 extern unsigned int seedPATH[6];
 extern Class_803EBB64 *lbl_803EBB64;
-int fn_801B2F28(int flags);
+int PATH_destroy(int flags);
 void SNDSYS_entercritical(void);
 void SNDSYS_leavecritical(void);
 int fn_801B2AD4(void);
@@ -251,11 +384,11 @@ int PATHI_status(Node_801B3FE0 *p, void *info);
 void PATH_stop(int flags);
 int PATHI_stop(Node_801B3FE0 *p);
 void PATHI_printf(const char *format, ...);
-int fn_801B5E5C(int flags, Sequence_801B84E4 *sequence);
-void fn_801B6334(Sequence_801B84E4 *p);
-void fn_801B63F0(Entry_801B63F0 *p, int value);
-void fn_801B6460(void);
-int fn_801B64C0(int index);
+int PATHI_addevent(int flags, Sequence_801B84E4 *sequence);
+void PATHI_removeevent(Sequence_801B84E4 *p);
+void PATHI_seteventfilter(Entry_801B63F0 *p, int value);
+void PATHI_clearalleventfilters(void);
+int PATHI_serviceevent(int index);
 int fn_801B6780(int index);
 int fn_801B6CB4(Node_801B3FE0 *p);
 int fn_801B6D20(int count, int value, Record_801B6D20 *entries);
@@ -264,6 +397,67 @@ unsigned int PATHI_random(void);
 Event_801B845C *fn_801B845C(Event_801B845C *p, int state, Event_801B845C *end);
 int fn_801B84E4(Event_801B845C *p, Sequence_801B84E4 *sequence);
 int fn_801B8580(Node_801B3FE0 *p);
+int PATHI_getvalue(int id, int kind, Node_801B3FE0 *p, Sequence_801B84E4 *event);
+void PATHI_setvalue(int id, int kind, int value, Node_801B3FE0 *p, Sequence_801B84E4 *event);
+extern unsigned char lbl_803EBB3A;
+extern int lbl_803EBB44;
+void PATH_setallocator(Allocator *allocator, const AllocParams &params);
+int PATH_addmapfile(Header_801B2CDC *map);
+int PATH_destroy(int flags);
+int PATH_setvariable(int flags, const char *name, int value);
+int PATHI_bytesperms(int index);
+Class_801B44BC *PATH_createstreamimp(int flags, int a, float b);
+Class_801B44BC *PATH_createbankobject(int flags);
+void PATH_volume(int flags, signed char volume);
+void PATH_fade(int flags, int a, int b, int c);
+void PATHI_fade(Node_801B3FE0 *p, int a, int b, int c);
+void PATHI_setfadevolume(Node_801B3FE0 *p);
+void PATHI_setsfxfadevolume(Node_801B3FE0 *p);
+void PATHI_setdrylevelfadevolume(Node_801B3FE0 *p);
+int PATHI_loadbank(Node_801B3FE0 *p, int index);
+int PATHI_subbankready(Node_801B3FE0 *p, int index);
+int PATHI_loadbankdata(Node_801B3FE0 *p, int index, int size);
+int PATH_event(int flags, unsigned int id);
+Sequence_801B84E4 *PATHI_copyevent(Sequence_801B84E4 *event);
+void PATHI_releaseevent(int index, int reason);
+int PATHI_serviceeventqueue(void);
+int PATHI_eventtakespriority(int index);
+int PATHI_beatinfo(Node_801B3FE0 *p, BeatInfo_801B67F8 *info);
+int PATHI_calcwaitbeat(int a, int b, int c, BeatInfo_801B67F8 *info);
+int PATHI_nextnode(int index, int value, int advance);
+int PATHI_enternode(int track, int index, int value, int advance);
+void PATHI_seeknextnode(int index);
+int PATHI_queuenode(Node_801B3FE0 *p);
+int PATHI_choosesynchtime(int index, const FindNode_801B6A18 &find, const BeatInfo_801B67F8 &info, unsigned int &time);
+}
+
+static inline Data_801B4548 *PATHI_trackinfo(int index)
+{
+    Data_801B4548 *info = 0;
+    if (index >= 0 && index < lbl_803EBB28->mUnknown18->mUnknownD)
+        info = (Data_801B4548 *)((char *)lbl_803EBB28->mUnknown18 + lbl_803EBB28->mUnknown34[index] * 4);
+    return info;
+}
+
+static inline Entry_801B63F0 *PATHI_findevent(int key)
+{
+    int i = lbl_803EBB28->mUnknown18->mUnknownF;
+    while (--i >= 0) {
+        Entry_801B63F0 *entry = (Entry_801B63F0 *)((unsigned char *)lbl_803EBB28->mUnknown18 + lbl_803EBB28->mUnknown24[i] * 4);
+        if ((int)(entry->mUnknownC >> 8) == key)
+            return entry;
+    }
+    return 0;
+}
+
+static inline Entry_801B63F0 *PATHI_getnode(int index)
+{
+    Entry_801B63F0 *node;
+    if (index < 0 || index > lbl_803EBB28->mUnknown18->mUnknown12)
+        node = 0;
+    else
+        node = (Entry_801B63F0 *)((unsigned char *)lbl_803EBB28->mUnknown18 + lbl_803EBB28->mUnknown1C[index] * 4);
+    return node;
 }
 
 #endif

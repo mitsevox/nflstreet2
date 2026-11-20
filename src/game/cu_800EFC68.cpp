@@ -7954,12 +7954,14 @@ extern "C" Object_80039F5C *fn_800F9AF0(unsigned char slot) {
     return p;
 }
 
-extern "C" Object_80039F5C *fn_800F9BD8(int forward, Object_80039F5C *p) {
-    Record_8011F4E0 *pRecord = fn_8011F4E0();
+extern "C" Object_80039F5C *AssignGetNextSlotPlayer(int forward, Object_80039F5C *p) {
+    Record_8011F4E0 *pRecord;
     Object_80039F5C *pResult = 0;
     int id = 0;
     int found = 0;
     unsigned char i;
+
+    pRecord = fn_8011F4E0();
 
     if (!p) {
         found = 1;
@@ -8618,7 +8620,7 @@ extern "C" void fn_800FAECC(void) {
                 Object_80039F5C *pSlot = 0;
                 int done = 0;
                 while (!done && tries <= 2) {
-                    pSlot = fn_800F9BD8(forward, pSlot);
+                    pSlot = AssignGetNextSlotPlayer(forward, pSlot);
                     tries++;
                     if (!pSlot) {
                         done = 1;
@@ -16807,7 +16809,7 @@ extern "C" int fn_8010F43C(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_8010F654(Object_80039F5C *p)
+extern "C" int PlyrTrackTargetUpdate(Object_80039F5C *p)
 {
     int result = 0;
     Ball_t *pBall = BallGetCurrent();
@@ -16843,7 +16845,8 @@ extern "C" int fn_8010F654(Object_80039F5C *p)
                 message.mId = 57;
                 message.mUnknown1[0] = BallGetCurrentIndex();
                 fn_800F053C(0, p->mpState, &message, p);
-                return result;
+                // FAKEMATCH: goto the single return; with return result here cse1 emits its own li r3,0
+                goto done;
             }
         }
         if (!fn_801783AC(13) && !fn_801783AC(0) && fn_8011F1CC() && !fn_801787A0() &&
@@ -16918,6 +16921,7 @@ extern "C" int fn_8010F654(Object_80039F5C *p)
             }
         }
     }
+done:
     return result;
 }
 

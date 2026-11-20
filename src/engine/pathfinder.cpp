@@ -50,21 +50,21 @@ PathfinderState_t _Pathfinder_State;
 TiburonIAllocator13Impl *_Pathfinder_pAllocator = 0;
 unsigned char _Pathfinder_bInit = 0;
 
-void fn_801B2C18(TiburonIAllocator13Impl *pAllocator, TagValuePair *pConfig);
+void PATH_setallocator(TiburonIAllocator13Impl *pAllocator, TagValuePair *pConfig);
 int fn_801B2B58(void);
-int fn_801B2CDC(int a);
-int fn_801B2F28(int id);
+int PATH_addmapfile(int a);
+int PATH_destroy(int id);
 int fn_801B3AD0(int id, PathfinderTrackData_t *pData, int a);
-void *fn_801B3B7C(int id, int a, float b);
+void *PATH_createstreamimp(int id, int a, float b);
 int fn_801B3D28(int id, PathfinderTrackData_t *pData, int a);
-void *fn_801B3DD8(int id);
-void fn_801B45D0(int id, signed char value);
-void fn_801B4728(int a, int b, int c, int d);
+void *PATH_createbankobject(int id);
+void PATH_volume(int id, signed char value);
+void PATH_fade(int a, int b, int c, int d);
 int PATH_control(int id, int a);
 void PATH_pause(int a, unsigned char b);
 int PATH_status(int id, PathfinderStatus_t *pInfo);
 void PATH_stop(int a);
-int fn_801B5FC0(int id, int a);
+int PATH_event(int id, int a);
 void fn_8027D3AC(void);
 void fn_8027ECD8(void *p, int b);
 extern "C++" void PATH_vectortoreal5(void);
@@ -116,7 +116,7 @@ int PathfinderInit(PathfinderInitDesc_t *pDesc)
 {
     _Pathfinder_pAllocator = new TiburonIAllocator13Impl(pDesc->mHeap);
     TagValuePair config;
-    fn_801B2C18(_Pathfinder_pAllocator, &config);
+    PATH_setallocator(_Pathfinder_pAllocator, &config);
     PATH_vectortoreal5();
     fn_8027D3AC();
     memset(&_Pathfinder_State, 0, sizeof(_Pathfinder_State));
@@ -132,7 +132,7 @@ void PathfinderShutdown(void)
 {
     PathfinderMap_t *pItem;
 
-    fn_801B2F28(-1);
+    PATH_destroy(-1);
     if (_Pathfinder_State.mpPool8) {
         DSDelList(_Pathfinder_State.mpPool8);
     }
@@ -163,7 +163,7 @@ int PathfinderLoadMap(void *pData, int a, int b)
         if (pItem) {
             id = ResLoad((ResFile_t *)pData, a, b);
             if (id) {
-                if (fn_801B2CDC(id) >= 0) {
+                if (PATH_addmapfile(id) >= 0) {
                     pItem->mHandle = _PathfinderNewMapHandle();
                     pItem->mUnknownC = b;
                     pItem->mpData = pData;
@@ -211,7 +211,7 @@ int PathfinderCreateTrack(PathfinderTrackDesc_t *pDesc)
         if (pDesc->mUnknown24) {
             result = fn_801B3D28(pDesc->mId, &pDesc->mUnknown14, pDesc->mUnknown20);
             if (result >= 0) {
-                pItem->mpUnknown4 = fn_801B3DD8(pDesc->mId);
+                pItem->mpUnknown4 = PATH_createbankobject(pDesc->mId);
                 if (!pItem->mpUnknown4) {
                     result = -1;
                 }
@@ -219,7 +219,7 @@ int PathfinderCreateTrack(PathfinderTrackDesc_t *pDesc)
         } else {
             result = fn_801B3AD0(pDesc->mId, &pDesc->mUnknown14, pDesc->mUnknown04);
             if (result >= 0) {
-                pItem->mpUnknown4 = fn_801B3B7C(pDesc->mId, pDesc->mUnknown08, pDesc->mUnknown0C);
+                pItem->mpUnknown4 = PATH_createstreamimp(pDesc->mId, pDesc->mUnknown08, pDesc->mUnknown0C);
                 if (!pItem->mpUnknown4) {
                     result = -1;
                 }
@@ -243,7 +243,7 @@ int PathfinderDestroyTrack(int id)
     DSSearchList(_Pathfinder_State.mpPool8, 0, (void *)id, &pItem, _PathfinderMatchTrack);
     if (pItem) {
         DSDelListNode(_Pathfinder_State.mpPool8, pItem);
-        if (fn_801B2F28(id)) {
+        if (PATH_destroy(id)) {
             result = 0;
         }
     }
@@ -257,17 +257,17 @@ int PathfinderControl(int id, int a)
 
 int PathfinderEvent(int id, int a)
 {
-    return fn_801B5FC0(id, a);
+    return PATH_event(id, a);
 }
 
 void PathfinderSetVolume(int id, int value)
 {
-    fn_801B45D0(id, value);
+    PATH_volume(id, value);
 }
 
 void PathfinderFade(int a, int b, int c)
 {
-    fn_801B4728(a, b, c, 1);
+    PATH_fade(a, b, c, 1);
 }
 
 void PathfinderPause(int a, int b)
@@ -282,7 +282,7 @@ void PathfinderStop(int a)
 
 void PathfinderSetStreamValue(int a, int b)
 {
-    void *p = fn_801B3234(a);
+    void *p = PATHI_findnodedata(a);
 
     if (p) {
         fn_8027ECD8(p, b);
