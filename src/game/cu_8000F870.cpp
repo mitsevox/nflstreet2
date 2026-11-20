@@ -2094,18 +2094,22 @@ void fn_80013254(int team, int *pIndex)
     int ids[22];
     int keys[16];
     int id = 0;
-    int key = 0;
+    int key;
     Entry_8036AE60 *pSlot;
     unsigned int picked;
     unsigned int keyed;
 
+    // FAKEMATCH: dead keyed = 0 ahead of the loop (the loop resets it); key = 0 then reuses its zero register
+    keyed = 0;
+    key = 0;
     do {
         Entry_8036AE60 *pOpen = 0;
-        int count = 0;
+        int count;
         int i;
 
         picked = 0;
         keyed = 0;
+        count = 0;
         for (i = 0; i < lbl_803ECE50[team]; i++) {
             pSlot = &lbl_8036AE60[team].mEntries[i];
             if (pSlot->mSlot >= 0) {
@@ -2262,15 +2266,11 @@ int fn_80013614(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 
             fn_80012D50(pArgs[0].i, pArgs[1].i, pArgs[2].i, pRow + row);
         } else {
-            int *pPosition = pArgs[4].pi;
-            int *pStats = pArgs[7].pi;
-            int position = pPosition[0] + 1;
-            int stats = pStats[0] + 1;
-
             fn_80012310(pArgs[0].i, pArgs[1].i, pArgs[2].pi, pArgs[3].pParams->mpText, pArgs[3].pParams->mLength,
-                        pPosition + position, pArgs[5].pParams->mpText, pArgs[5].pParams->mLength,
-                        pArgs[6].pi, pStats + stats, pArgs[8].pParams->mpText,
-                        pArgs[8].pParams->mLength, pArgs[9].pParams->mpText, pArgs[9].pParams->mLength);
+                        (int *)(pArgs[4].i + (*pArgs[4].pi + 1) * 4), pArgs[5].pParams->mpText,
+                        pArgs[5].pParams->mLength, pArgs[6].pi, (int *)(pArgs[7].i + (*pArgs[7].pi + 1) * 4),
+                        pArgs[8].pParams->mpText, pArgs[8].pParams->mLength, pArgs[9].pParams->mpText,
+                        pArgs[9].pParams->mLength);
         }
         break;
     case 0x80000011:
