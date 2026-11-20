@@ -2,8 +2,8 @@
    light objects and colours, keeps the numbered light sets with their ambient
    colours, and loads a set into the GX hardware before models are drawn. */
 
-#include "engine/Object_80237EE8.h"
-#include "engine/Desc_80238424.h"
+#include "engine/SyncStateGroup.h"
+#include "engine/EvMonDesc.h"
 #include "engine/EvMonAddListener.h"
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/gx/GXPixel.h>

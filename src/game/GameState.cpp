@@ -10,8 +10,8 @@ extern char gMainFEGroup[];
 int MainFEGroupIsStarted(void *p);
 int MainFEGroupIsFirstStart(void *p);
 void SyncStateInit(int a);
-Object_80237EE8 *SyncStateNewGroup(int a, int b, int c, MemPoolDesc_t desc);
-void SyncStateDelGroup(Object_80237EE8 *pObject);
+SyncStateGroup_t *SyncStateNewGroup(int a, int b, int c, MemPoolDesc_t desc);
+void SyncStateDelGroup(SyncStateGroup_t *pObject);
 void EvMonInit(int a);
 void EvMonShutdown(void);
 }
@@ -66,7 +66,7 @@ int GameState::Shutdown()
     return 1;
 }
 
-Object_80237EE8 *GameState::GetStore()
+SyncStateGroup_t *GameState::GetStore()
 {
     return gGameState.mpData.mp->mpObject;
 }

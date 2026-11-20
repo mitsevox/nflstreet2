@@ -1,3 +1,7 @@
+/* UI graphics vertex output: the callbacks the UI shape drawing hands to
+   its strip builder, which send each vertex of a UI polygon (position,
+   colour and, for textured shapes, texture coordinate) to the GX FIFO. */
+
 #include <dolphin/gx/GXBump.h>
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXDispList.h>
@@ -19,10 +23,6 @@
 #include "engine/texture.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
-
-/* Partial source for the engine range 0x80225CBC-0x80225D90 (neutral file
-   name): the two vertex callbacks the strip builder 0x8022482C is given.
-   Functions without a body here keep their original bytes. */
 
 extern Float32 lbl_803A0400[][2];
 extern GXColor lbl_803A1400[];

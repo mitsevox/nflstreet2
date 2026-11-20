@@ -3,8 +3,8 @@
    load callbacks, so the game's synchronised state (random streams, the game
    clock, event queues) can be checked, saved and restored together. */
 
-#include "engine/Object_80237EE8.h"
-#include "engine/Desc_80238424.h"
+#include "engine/SyncStateGroup.h"
+#include "engine/EvMonDesc.h"
 #include "engine/EvMonAddListener.h"
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/gx/GXPixel.h>
@@ -21,67 +21,61 @@
 #include "engine/llmemory.h"
 #include "engine/dslist.h"
 
-typedef struct Chunk_80237D5C {
+typedef struct SyncStateBlock_t {
     unsigned int mWords[4];
-} Chunk_80237D5C;
+} SyncStateBlock_t;
 
 void SyncStateCopy(void *pDst, const void *pSrc, unsigned int size);
-typedef struct Handle_80237A40 {
+typedef struct SyncStateHandle_t {
     void **mppUnknown0;
     int mUnknown4;
     int mUnknown8;
     unsigned int mUnknown12;
-    Callback_80238234 mpUnknown16;
-    Callback_80238234 mpUnknown20;
-    Callback_80238234 mpUnknown24;
-    Callback1C_80238234 mpUnknown28;
-    Callback20_80238248 mpUnknown32;
-    Callback24_80238248 mpUnknown36;
-    Callback28_80238248 mpUnknown40;
+    SyncStateFn_t mpUnknown16;
+    SyncStateFn_t mpUnknown20;
+    SyncStateFn_t mpUnknown24;
+    SyncStateCompareFn_t mpUnknown28;
+    SyncStateLoadFn_t mpUnknown32;
+    SyncStateSizeFn_t mpUnknown36;
+    SyncStateSaveFn_t mpUnknown40;
     void *mpUnknown44;
-    Object_80237EE8 *mpUnknown48;
-} Handle_80237A40;
+    SyncStateGroup_t *mpUnknown48;
+} SyncStateHandle_t;
 
 /* 24-byte block copied to 0x803A39FC by 0x80237EE8; only +8 is read here. */
-typedef struct Config_80237EE8 {
+typedef struct SyncStateHeapDesc_t {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
     int mUnknown12;
     int mUnknown16;
     int mUnknown20;
-} Config_80237EE8;
+} SyncStateHeapDesc_t;
 
-extern Config_80237EE8 lbl_803A39FC;
-void SyncStateRestoreGroup(Object_80237EE8 *p);
-void SyncStateNotifyGroup(Object_80237EE8 *p);
-extern DSList_t *lbl_803ED030;
+extern SyncStateHeapDesc_t _SyncState_HeapDesc;
+void SyncStateRestoreGroup(SyncStateGroup_t *p);
+void SyncStateNotifyGroup(SyncStateGroup_t *p);
+extern DSList_t *_SyncState_pGroups;
 extern void fn_801D277C(int ident);
 extern char *fn_801D27B8(int ident);
 extern void fn_801D2130(void *pConfig);
 extern void fn_801D2570(int ident);
-void SyncStateDetachGroup(Object_80237EE8 *p);
-void SyncStateFreeCopy(Object_80237EE8 *p);
-Object_80237EE8 *SyncStateFindGroup(int key);
-Handle_80237A40 *SyncStateNewHandle(Object_80237EE8 *pGroup, void **ppData, int size, int a, unsigned int id);
-typedef struct Counter_80237934 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-} Counter_80237934;
+void SyncStateDetachGroup(SyncStateGroup_t *p);
+void SyncStateFreeCopy(SyncStateGroup_t *p);
+SyncStateGroup_t *SyncStateFindGroup(int key);
+SyncStateHandle_t *SyncStateNewHandle(SyncStateGroup_t *pGroup, void **ppData, int size, int a, unsigned int id);
 
 extern void *SyncStateGetData(void *pHandle);
 
-int SyncStateCompareHandles(Counter_80237934 *pA, Counter_80237934 *pB)
+int SyncStateCompareHandles(SyncStateHandle_t *pA, SyncStateHandle_t *pB)
 {
     return pB->mUnknown8 - pA->mUnknown8;
 }
 
-Handle_80237A40 *SyncStateNewHandle(Object_80237EE8 *pGroup, void **ppData, int size, int a, unsigned int id)
+SyncStateHandle_t *SyncStateNewHandle(SyncStateGroup_t *pGroup, void **ppData, int size, int a, unsigned int id)
 {
-    Handle_80237A40 *p = DSNewListNode(pGroup->mpUnknown20);
-    memset(p, 0, sizeof(Handle_80237A40));
+    SyncStateHandle_t *p = DSNewListNode(pGroup->mpUnknown20);
+    memset(p, 0, sizeof(SyncStateHandle_t));
     p->mppUnknown0 = ppData;
     p->mUnknown8 = a;
     p->mUnknown12 = id;
@@ -93,24 +87,24 @@ Handle_80237A40 *SyncStateNewHandle(Object_80237EE8 *pGroup, void **ppData, int 
     return p;
 }
 
-void SyncStateAttachHandle(Handle_80237A40 *p)
+void SyncStateAttachHandle(SyncStateHandle_t *p)
 {
     *p->mppUnknown0 = p->mpUnknown44;
 }
 
-void SyncStateDetachHandle(Handle_80237A40 *p)
+void SyncStateDetachHandle(SyncStateHandle_t *p)
 {
     *p->mppUnknown0 = 0;
 }
 
-void SyncStateNotifyHandle(Handle_80237A40 *p)
+void SyncStateNotifyHandle(SyncStateHandle_t *p)
 {
     if (p->mpUnknown24 != 0) {
         p->mpUnknown24(p->mpUnknown44, 0);
     }
 }
 
-void SyncStateDelHandle(Handle_80237A40 *p)
+void SyncStateDelHandle(SyncStateHandle_t *p)
 {
     SyncStateDetachHandle(p);
     if (p->mpUnknown20 != 0) {
@@ -119,9 +113,9 @@ void SyncStateDelHandle(Handle_80237A40 *p)
     fn_801D2BD0(p->mpUnknown44);
 }
 
-void SyncStateRestoreGroup(Object_80237EE8 *p)
+void SyncStateRestoreGroup(SyncStateGroup_t *p)
 {
-    Handle_80237A40 *pItem;
+    SyncStateHandle_t *pItem;
     if (p->mpUnknown24 != 0) {
         SyncStateCopy(fn_801D27B8(p->mUnknown16), p->mpUnknown24, p->mUnknown12);
     }
@@ -134,9 +128,9 @@ void SyncStateRestoreGroup(Object_80237EE8 *p)
     SyncStateNotifyGroup(p);
 }
 
-void SyncStateDetachGroup(Object_80237EE8 *p)
+void SyncStateDetachGroup(SyncStateGroup_t *p)
 {
-    Handle_80237A40 *pItem;
+    SyncStateHandle_t *pItem;
     if (p->mUnknown4 != 1) {
         pItem = DSGetListNode(p->mpUnknown20, 0);
         while (pItem != 0) {
@@ -149,9 +143,9 @@ void SyncStateDetachGroup(Object_80237EE8 *p)
 
 int SyncStateMatchGroup(void *p, void *pKey, void *pOut)
 {
-    Object_80237EE8 *pGroup = p;
+    SyncStateGroup_t *pGroup = p;
     int *pValue = pKey;
-    Object_80237EE8 **ppResult = pOut;
+    SyncStateGroup_t **ppResult = pOut;
     if (pGroup->mUnknown0 == *pValue && (pGroup->mUnknown4 == 2 || pGroup->mUnknown4 == 0)) {
         *ppResult = pGroup;
         return 0;
@@ -159,32 +153,32 @@ int SyncStateMatchGroup(void *p, void *pKey, void *pOut)
     return -1;
 }
 
-Object_80237EE8 *SyncStateAddGroup(int key, int a, int b, int c)
+SyncStateGroup_t *SyncStateAddGroup(int key, int a, int b, int c)
 {
-    Object_80237EE8 *p = DSNewListNode(lbl_803ED030);
+    SyncStateGroup_t *p = DSNewListNode(_SyncState_pGroups);
     p->mUnknown0 = key;
     p->mUnknown8 = a;
     p->mUnknown16 = c;
     p->mUnknown12 = b;
     p->mUnknown4 = 1;
     p->mpUnknown24 = 0;
-    DSAddListNode(lbl_803ED030, p, 0);
+    DSAddListNode(_SyncState_pGroups, p, 0);
     return p;
 }
 
-void SyncStateRemoveGroup(Object_80237EE8 *p)
+void SyncStateRemoveGroup(SyncStateGroup_t *p)
 {
     SyncStateFreeCopy(p);
-    DSDelListNode(lbl_803ED030, p);
+    DSDelListNode(_SyncState_pGroups, p);
 }
 
 void SyncStateCopy(void *pDst, const void *pSrc, unsigned int size)
 {
     while (size >= 64) {
-        ((Chunk_80237D5C *)pDst)[0] = ((const Chunk_80237D5C *)pSrc)[0];
-        ((Chunk_80237D5C *)pDst)[1] = ((const Chunk_80237D5C *)pSrc)[1];
-        ((Chunk_80237D5C *)pDst)[2] = ((const Chunk_80237D5C *)pSrc)[2];
-        ((Chunk_80237D5C *)pDst)[3] = ((const Chunk_80237D5C *)pSrc)[3];
+        ((SyncStateBlock_t *)pDst)[0] = ((const SyncStateBlock_t *)pSrc)[0];
+        ((SyncStateBlock_t *)pDst)[1] = ((const SyncStateBlock_t *)pSrc)[1];
+        ((SyncStateBlock_t *)pDst)[2] = ((const SyncStateBlock_t *)pSrc)[2];
+        ((SyncStateBlock_t *)pDst)[3] = ((const SyncStateBlock_t *)pSrc)[3];
         pDst = (char *)pDst + 64;
         pSrc = (const char *)pSrc + 64;
         size -= 64;
@@ -196,41 +190,41 @@ void SyncStateCopy(void *pDst, const void *pSrc, unsigned int size)
 
 void SyncStateInit(int count)
 {
-    lbl_803ED030 = DSNewList(1, 0, count, sizeof(Object_80237EE8), 0, 0);
+    _SyncState_pGroups = DSNewList(1, 0, count, sizeof(SyncStateGroup_t), 0, 0);
 }
 
 int SyncStateShutdown(void)
 {
-    return DSDelList(lbl_803ED030);
+    return DSDelList(_SyncState_pGroups);
 }
 
-Object_80237EE8 *SyncStateFindGroup(int key)
+SyncStateGroup_t *SyncStateFindGroup(int key)
 {
-    Object_80237EE8 *pResult;
-    if (DSSearchList(lbl_803ED030, 0, &key, &pResult, SyncStateMatchGroup) == 2) {
+    SyncStateGroup_t *pResult;
+    if (DSSearchList(_SyncState_pGroups, 0, &key, &pResult, SyncStateMatchGroup) == 2) {
         return pResult;
     }
     return 0;
 }
 
-Object_80237EE8 *SyncStateNewGroup(int key, int count, int size, Config_80237EE8 *pConfig)
+SyncStateGroup_t *SyncStateNewGroup(int key, int count, int size, SyncStateHeapDesc_t *pConfig)
 {
-    Object_80237EE8 *p;
+    SyncStateGroup_t *p;
 
-    lbl_803A39FC = *pConfig;
-    fn_801D2130(&lbl_803A39FC);
-    p = SyncStateAddGroup(key, count, size, lbl_803A39FC.mUnknown8);
-    p->mpUnknown20 = DSNewList(lbl_803A39FC.mUnknown8, 0, count, sizeof(Handle_80237A40),
+    _SyncState_HeapDesc = *pConfig;
+    fn_801D2130(&_SyncState_HeapDesc);
+    p = SyncStateAddGroup(key, count, size, _SyncState_HeapDesc.mUnknown8);
+    p->mpUnknown20 = DSNewList(_SyncState_HeapDesc.mUnknown8, 0, count, sizeof(SyncStateHandle_t),
                                  (int (*)(void *, void *))SyncStateCompareHandles, 0);
     return p;
 }
 
-void SyncStateOpenGroup(Object_80237EE8 *p)
+void SyncStateOpenGroup(SyncStateGroup_t *p)
 {
     p->mUnknown4 = 0;
 }
 
-void SyncStateSaveGroup(Object_80237EE8 *p)
+void SyncStateSaveGroup(SyncStateGroup_t *p)
 {
     char *pData = fn_801D27B8(p->mUnknown16);
     if (p->mpUnknown24 != 0) {
@@ -239,7 +233,7 @@ void SyncStateSaveGroup(Object_80237EE8 *p)
     SyncStateDetachGroup(p);
 }
 
-void SyncStateFreeCopy(Object_80237EE8 *p)
+void SyncStateFreeCopy(SyncStateGroup_t *p)
 {
     if (p->mpUnknown24 != 0) {
         fn_801D2BD0(p->mpUnknown24);
@@ -247,19 +241,19 @@ void SyncStateFreeCopy(Object_80237EE8 *p)
     }
 }
 
-void SyncStateNotifyGroup(Object_80237EE8 *p)
+void SyncStateNotifyGroup(SyncStateGroup_t *p)
 {
-    Handle_80237A40 *pItem = DSGetListNode(p->mpUnknown20, 0);
+    SyncStateHandle_t *pItem = DSGetListNode(p->mpUnknown20, 0);
     while (pItem != 0) {
         SyncStateNotifyHandle(pItem);
         pItem = DSNextListNode(p->mpUnknown20, pItem);
     }
 }
 
-void SyncStateDelGroup(Object_80237EE8 *p)
+void SyncStateDelGroup(SyncStateGroup_t *p)
 {
-    Handle_80237A40 *pItem;
-    Handle_80237A40 *pNext;
+    SyncStateHandle_t *pItem;
+    SyncStateHandle_t *pNext;
 
     fn_801D277C(p->mUnknown16);
     pItem = DSGetListNode(p->mpUnknown20, 0);
@@ -275,10 +269,10 @@ void SyncStateDelGroup(Object_80237EE8 *p)
     SyncStateRemoveGroup(p);
 }
 
-Object_80237EE8 *SyncStateEndGroup(Object_80237EE8 *p)
+SyncStateGroup_t *SyncStateEndGroup(SyncStateGroup_t *p)
 {
     // FAKEMATCH: dead initial copy of p, the second register copy of p (mr r30,r31) the target keeps
-    Object_80237EE8 *pFound = p;
+    SyncStateGroup_t *pFound = p;
     pFound = SyncStateFindGroup(p->mUnknown0);
     if (pFound != 0) {
         SyncStateDetachGroup(pFound);
@@ -289,14 +283,14 @@ Object_80237EE8 *SyncStateEndGroup(Object_80237EE8 *p)
 
 void *SyncStateGetData(void *pHandle)
 {
-    Handle_80237A40 *p = pHandle;
+    SyncStateHandle_t *p = pHandle;
     return p->mpUnknown44;
 }
 
 void *SyncStateRegister(int a, void **ppData, int size, int b, unsigned int id)
 {
     void *pResult = 0;
-    Object_80237EE8 *p = SyncStateFindGroup(a);
+    SyncStateGroup_t *p = SyncStateFindGroup(a);
     if (p != 0) {
         fn_801D277C(p->mUnknown16);
         pResult = SyncStateNewHandle(p, ppData, size, b, id);
@@ -306,7 +300,7 @@ void *SyncStateRegister(int a, void **ppData, int size, int b, unsigned int id)
 
 void SyncStateCommit(void *pHandle)
 {
-    Handle_80237A40 *p = pHandle;
+    SyncStateHandle_t *p = pHandle;
     if (p->mpUnknown16 != 0) {
         p->mpUnknown16(p->mpUnknown44, 0);
     }
@@ -314,18 +308,18 @@ void SyncStateCommit(void *pHandle)
     fn_801D277C(1);
 }
 
-void SyncStateSetCallbacks(void *pHandle, Callback_80238234 pCallback10, Callback_80238234 pCallback14, Callback_80238234 pCallback18, Callback1C_80238234 pCallback1C)
+void SyncStateSetCallbacks(void *pHandle, SyncStateFn_t pCallback10, SyncStateFn_t pCallback14, SyncStateFn_t pCallback18, SyncStateCompareFn_t pCallback1C)
 {
-    Handle_80237A40 *p = pHandle;
+    SyncStateHandle_t *p = pHandle;
     p->mpUnknown16 = pCallback10;
     p->mpUnknown20 = pCallback14;
     p->mpUnknown24 = pCallback18;
     p->mpUnknown28 = pCallback1C;
 }
 
-void SyncStateSetSaveCallbacks(void *pHandle, Callback28_80238248 pCallback28, Callback24_80238248 pCallback24, Callback20_80238248 pCallback20)
+void SyncStateSetSaveCallbacks(void *pHandle, SyncStateSaveFn_t pCallback28, SyncStateSizeFn_t pCallback24, SyncStateLoadFn_t pCallback20)
 {
-    Handle_80237A40 *p = pHandle;
+    SyncStateHandle_t *p = pHandle;
     p->mpUnknown32 = pCallback20;
     p->mpUnknown36 = pCallback24;
     p->mpUnknown40 = pCallback28;

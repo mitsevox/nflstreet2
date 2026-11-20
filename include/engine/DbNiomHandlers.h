@@ -1,16 +1,16 @@
-#ifndef ENGINE_HANDLERS_802294D8_H
-#define ENGINE_HANDLERS_802294D8_H
+#ifndef ENGINE_DBNIOMHANDLERS_H
+#define ENGINE_DBNIOMHANDLERS_H
 
-typedef struct Handlers_802294D8 {
+typedef struct DbNiomHandlers_t {
     int (*mpUnknown0)(void);
     void *mpUnknown4;
     void *mpUnknown8;
-} Handlers_802294D8;
+} DbNiomHandlers_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-void DbNiomSetHandlers(Handlers_802294D8 *p);
+void DbNiomSetHandlers(DbNiomHandlers_t *p);
 int DbNiomBeginMode(int *p);
 #ifdef __cplusplus
 }

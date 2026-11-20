@@ -1,4 +1,7 @@
-/* Partial source: the per-user databases and their 'FNIU' user-info table: create, load, find and update the user records. */
+/* The user-profile databases: up to two per-user databases with their
+   'FNIU' user-info table - create, delete and reset a user, find users by id
+   or database, pick the current user, and load and save a user's database
+   for the memory card. */
 
 #include "engine/dbteams.h"
 #include "engine/tdbext.h"
@@ -6,7 +9,7 @@
 #include "engine/fn_801F9134.h"
 #include "engine/cu_80229270.h"
 
-#include "engine/Funcs_802FB3BC.h"
+#include "engine/DbNiomModeFuncs.h"
 #include "engine/llmemory.h"
 #include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
@@ -20,22 +23,22 @@
 
 struct CardStreamTarget;
 struct SaveStreamOps_t;
-#include "engine/Entry_802FB300.h"
+#include "engine/DbUserEntry.h"
 extern char lbl_802B5C8C[];
 extern char lbl_803A1C60[];
 extern float lbl_803A20A4[][13];
-extern char *lbl_803EC0A4;
-extern int lbl_803EC0A8;
-extern int lbl_803EC0A0;
+extern char *_DbEvas_pFileName;
+extern int _DbEvas_iMode;
+extern int _DbEvas_iSize;
 extern char *lbl_803EC0B4;
 extern int lbl_803EC0B8;
 extern int lbl_803EC0B0;
-extern int lbl_803EC0C8;
-extern char *lbl_803EC0CC;
-extern int lbl_803EC0D0;
-extern int lbl_803EC0D4;
-extern unsigned char lbl_803EC0D8;
-extern Entry_802FB300 lbl_802FB300[];
+extern int _DbUser_iSize;
+extern char *_DbUser_pFileName;
+extern int _DbUser_iMode;
+extern int _DbUser_iCurrent;
+extern unsigned char _DbUser_iCount;
+extern DbUserEntry_t _DbUser_aEntries[];
 extern int fn_801F91AC(int handle, int a, int b);
 extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
 extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
@@ -51,7 +54,7 @@ extern int DbUserFindIdByDb(int key);
 extern int DbUserGetCurrent(void);
 extern void fn_80231208(void);
 int DbUserGetDb(int key);
-extern const int lbl_803ED6E4[2];
+extern const int _DbUser_aDbIds[2];
 extern char lbl_802B5D64[];
 extern char lbl_802B56F4[];
 extern char lbl_802B5744[];
@@ -120,7 +123,7 @@ int fn_8022D5A4(int key, int mode);
 int fn_8022D710(int a, int b, int c, int row, int value);
 unsigned short fn_8022D6FC(int index);
 
-#include "engine/Handlers_802294D8.h"
+#include "engine/DbNiomHandlers.h"
 
 typedef struct Object_8022A59C {
     unsigned short mUnknown0;
@@ -223,19 +226,19 @@ extern Entry_803A2390 lbl_803A2390[];
 extern char lbl_803A23E8[];
 extern char lbl_803A2474[];
 extern struct QueryCursor lbl_803A25E0;
-extern int (*lbl_803EBFD8)(void);
-extern void *lbl_803EBFDC;
-extern void *lbl_803EBFE0;
-extern void (*lbl_803EBFE4)(int);
-extern int lbl_803EBFE8;
-extern unsigned char lbl_803EBFEC;
-extern unsigned char lbl_803EBFED;
-extern Object_8022A59C *lbl_803EBFF0;
-extern int (*lbl_803EBFF8)(void);
-extern int (*lbl_803EBFFC)(void **ppData, void *p);
-extern int (*lbl_803EC000)(int a, int b);
-extern int (*lbl_803EC004)(void);
-extern int (*lbl_803EC008)(void);
+extern int (*_DbNiom_pEndFunc)(void);
+extern void *_DbNiom_pLoadFunc;
+extern void *_DbNiom_pResetFunc;
+extern void (*_DbNiom_pCallback)(int);
+extern int _DbNiom_iCallbackArg;
+extern unsigned char _DbNiom_bModeActive;
+extern unsigned char _DbNiom_bEnding;
+extern Object_8022A59C *_DbNiom_pCursor;
+extern int (*_DbNiom_pModeEnd)(void);
+extern int (*_DbNiom_pModeLoad)(void **ppData, void *p);
+extern int (*_DbNiom_pModeReset)(int a, int b);
+extern int (*_DbNiom_pModeResume)(void);
+extern int (*_DbNiom_pModeFn16)(void);
 extern int lbl_803EC020[2];
 extern int *lbl_803EC010[1];
 extern unsigned char lbl_803EC014[1];
@@ -453,7 +456,7 @@ void DbOptionsModuleShutdown(void);
 int DbOptionsSetTpom(int column, int value);
 int DbNiomInit(void);
 void DbNiomShutdown(void);
-void DbNiomSetHandlers(Handlers_802294D8 *p);
+void DbNiomSetHandlers(DbNiomHandlers_t *p);
 int DbNiomIsModeActive(void);
 int DbNiomBeginMode(int *p);
 int DbNiomEndMode(void);
@@ -462,7 +465,7 @@ int DbNiomOpenCursor(int a);
 int DbNiomReadCursor(int a, int b);
 int DbNiomCloseCursor(void);
 int DbNiomReadOnce(int a, int b);
-void DbNiomSetModeFuncs(Funcs_802FB3BC *pFuncs);
+void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs);
 void DbNiomClearModeFuncs(void);
 int DbNiomModeLoad(void **ppData, void *p);
 int DbNiomModeReset(int a, int b);
@@ -610,7 +613,7 @@ int DbUserGetDb(int key);
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
 #include <string.h>
-#include "engine/Funcs_802FB3BC.h"
+#include "engine/DbNiomModeFuncs.h"
 #include "game/DbUserSetCurrent.h"
 #include "game/fn_80233CBC.h"
 #include "game/fn_801FCE10.h"
@@ -619,9 +622,9 @@ int DbUserGetDb(int key);
 #include "game/Object_80235588.h"
 #include "game/QueryStatus.h"
 
-#include "engine/Entry_802FB300.h"
+#include "engine/DbUserEntry.h"
 
-#include "engine/Handlers_802294D8.h"
+#include "engine/DbNiomHandlers.h"
 #include "game/Request_802329F0.h"
 
 typedef struct Block_80233588 {
@@ -630,7 +633,7 @@ typedef struct Block_80233588 {
     int mUnknown8;
 } Block_80233588;
 
-extern Handlers_802294D8 lbl_802FB38C;
+extern DbNiomHandlers_t lbl_802FB38C;
 int fn_80233588(Block_80233588 *p);
 int fn_802336BC(void);
 
@@ -839,22 +842,22 @@ extern char lbl_802B7128[];
 extern char lbl_802B7130[];
 extern char lbl_802B7154[];
 extern char lbl_802B715C[];
-extern Entry_802FB300 lbl_802FB300[];
+extern DbUserEntry_t _DbUser_aEntries[];
 extern Entry_802FB310 lbl_802FB310[];
 extern int lbl_802FB398[];
 extern int lbl_802FB3A4[];
 extern int lbl_802FB3B0[];
-extern Funcs_802FB3BC lbl_802FB3BC;
-extern Funcs_802FB3BC lbl_802FB3D0;
-extern Funcs_802FB3BC lbl_802FB3E4;
+extern DbNiomModeFuncs_t lbl_802FB3BC;
+extern DbNiomModeFuncs_t lbl_802FB3D0;
+extern DbNiomModeFuncs_t lbl_802FB3E4;
 extern int lbl_802FB3F8[];
 extern void *lbl_803A2648[];
 extern Table_803E96E8 lbl_803E96E8;
-extern int lbl_803EC0C8;
-extern char *lbl_803EC0CC;
-extern int lbl_803EC0D0;
-extern int lbl_803EC0D4;
-extern unsigned char lbl_803EC0D8;
+extern int _DbUser_iSize;
+extern char *_DbUser_pFileName;
+extern int _DbUser_iMode;
+extern int _DbUser_iCurrent;
+extern unsigned char _DbUser_iCount;
 extern Cache_8022F8A8 *lbl_803EC0E0;
 extern int lbl_803EC0E4;
 extern int lbl_803EC0E8;
@@ -862,7 +865,7 @@ extern int lbl_803EC0F0;
 extern void *lbl_803EC0F4;
 extern int lbl_803ED020;
 extern int lbl_803ED024;
-extern const int lbl_803ED6E4[2];
+extern const int _DbUser_aDbIds[2];
 
 double fabs(double);
 
@@ -940,7 +943,7 @@ extern int DbOptionsModuleInit(void);
 extern void DbOptionsModuleShutdown(void);
 extern int DbNiomEndMode(void);
 extern int DbNiomReadOnce(int a, int b);
-extern void DbNiomSetModeFuncs(Funcs_802FB3BC *pFuncs);
+extern void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs);
 extern void DbNiomClearModeFuncs(void);
 extern int DbNiomModeLoad(void **ppData, void *p);
 extern int DbNiomModeReset(int a, int b);
@@ -982,7 +985,7 @@ int fn_80232DE0(void);
 int fn_80232EB4(void);
 int fn_80232EF4(void);
 int fn_802331BC(void);
-void fn_802334F0(int mode, Funcs_802FB3BC *pFuncs);
+void fn_802334F0(int mode, DbNiomModeFuncs_t *pFuncs);
 int fn_80233604(void **ppData, void *p);
 int fn_80233660(int a, int b);
 int fn_80233694(void);
@@ -1176,7 +1179,7 @@ int fn_80233344(void);
 int fn_8023334C(int a, int b);
 int fn_80233454(void);
 int fn_802334C4(void);
-void fn_802334F0(int mode, Funcs_802FB3BC *pFuncs);
+void fn_802334F0(int mode, DbNiomModeFuncs_t *pFuncs);
 int fn_80233568(int a, int b, unsigned char *pDone);
 int fn_80233578(void);
 int fn_80233580(void);
@@ -1272,23 +1275,23 @@ int DbUserInit(int a, const char *pName, int b)
 {
     int result = 0;
 
-    lbl_803EC0C8 = a;
-    lbl_803EC0CC = DbUtilAlloc(strlen(pName) + 1, 1);
-    strcpy(lbl_803EC0CC, pName);
-    lbl_803EC0D0 = b;
-    lbl_803EC0D4 = -1;
-    lbl_803EC0D8 = result;
+    _DbUser_iSize = a;
+    _DbUser_pFileName = DbUtilAlloc(strlen(pName) + 1, 1);
+    strcpy(_DbUser_pFileName, pName);
+    _DbUser_iMode = b;
+    _DbUser_iCurrent = -1;
+    _DbUser_iCount = result;
     return result;
 }
 
 void DbUserShutdown(void)
 {
-    DbUtilFree(lbl_803EC0CC);
-    lbl_803EC0C8 = 0;
-    lbl_803EC0CC = 0;
-    lbl_803EC0D0 = -1;
-    lbl_803EC0D4 = -1;
-    lbl_803EC0D8 = 0;
+    DbUtilFree(_DbUser_pFileName);
+    _DbUser_iSize = 0;
+    _DbUser_pFileName = 0;
+    _DbUser_iMode = -1;
+    _DbUser_iCurrent = -1;
+    _DbUser_iCount = 0;
 }
 
 int DbUserCreate(void)
@@ -1299,14 +1302,14 @@ int DbUserCreate(void)
     int old;
 
     id = -1;
-    if ((signed char)lbl_803EC0D8 <= 1) {
-        for (i = 0; DbUserFindIdByDb(key = lbl_803ED6E4[i]) != -1; i++) {
+    if ((signed char)_DbUser_iCount <= 1) {
+        for (i = 0; DbUserFindIdByDb(key = _DbUser_aDbIds[i]) != -1; i++) {
         }
         id = DbUserNewId();
-        lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown0 = id;
-        lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown4 = key;
-        TDbExtLoadFromResource(key, lbl_803EC0CC, lbl_803EC0D0, 0);
-        lbl_803EC0D8++;
+        _DbUser_aEntries[(signed char)_DbUser_iCount].mUnknown0 = id;
+        _DbUser_aEntries[(signed char)_DbUser_iCount].mUnknown4 = key;
+        TDbExtLoadFromResource(key, _DbUser_pFileName, _DbUser_iMode, 0);
+        _DbUser_iCount++;
         old = DbUserSetCurrent(id);
         fn_801FCE10(0, lbl_802B5D64, DbUserGetDb(DbUserGetCurrent()), id);
         DbUserSetCurrent(old);
@@ -1321,13 +1324,13 @@ void DbUserDelete(int key)
     if (key != -1) {
         index = DbUserFindIndex(key);
         if (index != -1) {
-            lbl_803EC0D8--;
-            TDbExtLoadFromResource(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
-            for (; index < (signed char)lbl_803EC0D8; index++) {
-                memcpy(&lbl_802FB300[index], &lbl_802FB300[index + 1], sizeof(lbl_802FB300[0]));
+            _DbUser_iCount--;
+            TDbExtLoadFromResource(_DbUser_aEntries[index].mUnknown4, _DbUser_pFileName, _DbUser_iMode, 0);
+            for (; index < (signed char)_DbUser_iCount; index++) {
+                memcpy(&_DbUser_aEntries[index], &_DbUser_aEntries[index + 1], sizeof(_DbUser_aEntries[0]));
             }
-            lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown0 = -1;
-            lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown4 = -1;
+            _DbUser_aEntries[(signed char)_DbUser_iCount].mUnknown0 = -1;
+            _DbUser_aEntries[(signed char)_DbUser_iCount].mUnknown4 = -1;
         }
     }
 }
@@ -1341,11 +1344,11 @@ void DbUserReset(int key)
     if (key != -1) {
         index = DbUserFindIndex(key);
         if (index != -1) {
-            TDbExtLoadFromResource(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
+            TDbExtLoadFromResource(_DbUser_aEntries[index].mUnknown4, _DbUser_pFileName, _DbUser_iMode, 0);
             id = DbUserNewId();
             old = DbUserSetCurrent(key);
             fn_801FCE10(0, lbl_802B5D64, DbUserGetDb(DbUserGetCurrent()), id);
-            lbl_802FB300[index].mUnknown0 = id;
+            _DbUser_aEntries[index].mUnknown0 = id;
             if (old == key) {
                 DbUserSetCurrent(id);
             } else {
@@ -1357,14 +1360,14 @@ void DbUserReset(int key)
 
 int DbUserGetCount(void)
 {
-    return (signed char)lbl_803EC0D8;
+    return (signed char)_DbUser_iCount;
 }
 
 int DbUserGetId(int index)
 {
     int value = -1;
-    if (index < (signed char)lbl_803EC0D8) {
-        value = lbl_802FB300[index].mUnknown0;
+    if (index < (signed char)_DbUser_iCount) {
+        value = _DbUser_aEntries[index].mUnknown0;
     }
     return value;
 }
@@ -1372,8 +1375,8 @@ int DbUserGetId(int index)
 signed char DbUserFindIndex(int key)
 {
     signed char i;
-    for (i = 0; i < (signed char)lbl_803EC0D8; i++) {
-        if (key == lbl_802FB300[i].mUnknown0) {
+    for (i = 0; i < (signed char)_DbUser_iCount; i++) {
+        if (key == _DbUser_aEntries[i].mUnknown0) {
             return i;
         }
     }
@@ -1386,7 +1389,7 @@ int DbUserGetDb(int key)
     if (key != -1) {
         int index = DbUserFindIndex(key);
         if (index != -1) {
-            value = lbl_802FB300[index].mUnknown4;
+            value = _DbUser_aEntries[index].mUnknown4;
         }
     }
     return value;
@@ -1394,11 +1397,11 @@ int DbUserGetDb(int key)
 
 int DbUserFindIdByDb(int key)
 {
-    unsigned char i = lbl_803EC0D8;
+    unsigned char i = _DbUser_iCount;
 
     while (--i != 255) {
-        if (lbl_802FB300[i].mUnknown4 == key) {
-            return lbl_802FB300[i].mUnknown0;
+        if (_DbUser_aEntries[i].mUnknown4 == key) {
+            return _DbUser_aEntries[i].mUnknown0;
         }
     }
     return -1;
@@ -1406,9 +1409,9 @@ int DbUserFindIdByDb(int key)
 
 int DbUserSetCurrent(int value)
 {
-    int old = lbl_803EC0D4;
+    int old = _DbUser_iCurrent;
 
-    lbl_803EC0D4 = value;
+    _DbUser_iCurrent = value;
     return old;
 }
 
@@ -1420,7 +1423,7 @@ int DbUserSelect(int value)
 
 int DbUserGetCurrent(void)
 {
-    return lbl_803EC0D4;
+    return _DbUser_iCurrent;
 }
 
 int DbUserOpenDatabases(void)
@@ -1428,8 +1431,8 @@ int DbUserOpenDatabases(void)
     int err = 0;
     unsigned int i;
 
-    for (i = 0; i <= 1 && (err = fn_801F8D60(lbl_803ED6E4[i], lbl_803EC0C8)) == 0; i++) {
-        err = TDbExtLoadFromResource(lbl_803ED6E4[i], lbl_803EC0CC, lbl_803EC0D0, 0);
+    for (i = 0; i <= 1 && (err = fn_801F8D60(_DbUser_aDbIds[i], _DbUser_iSize)) == 0; i++) {
+        err = TDbExtLoadFromResource(_DbUser_aDbIds[i], _DbUser_pFileName, _DbUser_iMode, 0);
         if (err != 0) {
             break;
         }
@@ -1446,8 +1449,8 @@ int DbUserPostLoad(int a)
         err = fn_801FCE10(0, lbl_802B5D88, DbUserGetDb(DbUserGetCurrent()), &key);
         if (key != DbUserGetCurrent()) {
             if (DbUserFindIndex(key) == -1) {
-                (lbl_802FB300 + DbUserFindIndex(DbUserGetCurrent()))->mUnknown0 = key;
-                lbl_803EC0D4 = key;
+                (_DbUser_aEntries + DbUserFindIndex(DbUserGetCurrent()))->mUnknown0 = key;
+                _DbUser_iCurrent = key;
             } else {
                 err = 1;
             }
@@ -1476,8 +1479,8 @@ typedef struct DbUserAsync_t {
     int mIsLoad;
 } DbUserAsync_t;
 
-extern DbUserAsync_t lbl_803A25F0;
-extern DbUserAsync_t lbl_803A260C;
+extern DbUserAsync_t _DbUser_LoadJob;
+extern DbUserAsync_t _DbUser_SaveJob;
 extern void fn_801F9228(DbUserAsync_t *pReq, void (*pStart)(void *pJob), int a, int b);
 extern void fn_801F92EC(DbUserAsync_t *pReq, void (*pStart)(void *pJob), int a, int b);
 extern void fn_80285A24(void *pJob);
@@ -1488,13 +1491,13 @@ int DbUserLoad(DbUserSaveRequest_t *pRequest, void *pOps)
     int result = 0;
 
     if (pRequest->mUnknown10 != 0) {
-        lbl_803A25F0.mDb = DbUserGetDb(DbUserGetCurrent());
-        lbl_803A25F0.mUnknown4 = result;
-        lbl_803A25F0.mUnknown8 = pRequest->mUnknown0;
-        lbl_803A25F0.mUnknownC = pRequest->mTarget;
-        lbl_803A25F0.mpUnknown10 = pOps;
-        lbl_803A25F0.pDone = fn_80285A8C;
-        fn_801F9228(&lbl_803A25F0, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
+        _DbUser_LoadJob.mDb = DbUserGetDb(DbUserGetCurrent());
+        _DbUser_LoadJob.mUnknown4 = result;
+        _DbUser_LoadJob.mUnknown8 = pRequest->mUnknown0;
+        _DbUser_LoadJob.mUnknownC = pRequest->mTarget;
+        _DbUser_LoadJob.mpUnknown10 = pOps;
+        _DbUser_LoadJob.pDone = fn_80285A8C;
+        fn_801F9228(&_DbUser_LoadJob, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
     } else {
         result = DbUserPostLoad(fn_801F9134(DbUserGetDb(DbUserGetCurrent()), pRequest->mTarget, 0, (int)pOps));
     }
@@ -1506,13 +1509,13 @@ int DbUserSave(DbUserSaveRequest_t *pRequest, void *pOps)
     int result = 0;
 
     if (pRequest->mUnknown10 != 0) {
-        lbl_803A260C.mDb = DbUserGetDb(DbUserGetCurrent());
-        lbl_803A260C.mUnknown4 = result;
-        lbl_803A260C.mUnknown8 = pRequest->mUnknown0;
-        lbl_803A260C.mUnknownC = pRequest->mTarget;
-        lbl_803A260C.mpUnknown10 = pOps;
-        lbl_803A260C.pDone = fn_80285A8C;
-        fn_801F92EC(&lbl_803A260C, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
+        _DbUser_SaveJob.mDb = DbUserGetDb(DbUserGetCurrent());
+        _DbUser_SaveJob.mUnknown4 = result;
+        _DbUser_SaveJob.mUnknown8 = pRequest->mUnknown0;
+        _DbUser_SaveJob.mUnknownC = pRequest->mTarget;
+        _DbUser_SaveJob.mpUnknown10 = pOps;
+        _DbUser_SaveJob.pDone = fn_80285A8C;
+        fn_801F92EC(&_DbUser_SaveJob, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
     } else {
         result = fn_801F91AC(DbUserGetDb(DbUserGetCurrent()), pRequest->mTarget, (int)pOps);
     }
@@ -1525,7 +1528,7 @@ int DbUserCloseDatabases(void)
     unsigned int i;
 
     for (i = 0; i <= 1; i++) {
-        err = fn_801F8EEC(lbl_803ED6E4[i]);
+        err = fn_801F8EEC(_DbUser_aDbIds[i]);
         if (err != 0) {
             break;
         }

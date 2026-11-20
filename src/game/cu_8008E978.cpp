@@ -1,4 +1,4 @@
-#include "engine/Desc_80238424.h"
+#include "engine/EvMonDesc.h"
 #include "game/StyleTracker.h"
 #include "game/Step_800C4460.h"
 #include "game/Block_8030E6E8.h"
@@ -2424,7 +2424,7 @@ struct Context_800AFC5C {
 };
 
 /* Three words passed by address to EvMonCreate. */
-typedef Desc_80238424 Args_800B1478;
+typedef EvMonDesc_t Args_800B1478;
 
 extern "C" {
 int fn_801D27A0(void);

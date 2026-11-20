@@ -1831,6 +1831,138 @@
     "PATHI_nextnode": {
       "address": "0x801B6D9C",
       "evidence": "evidence.tsv function and name rows for 0x801B6D9C (PATH library function defined by the comparison source src/engine/pathnode.c, not yet linked; called from src/engine/pathaction.c)."
+    },
+    "_SyncRand_pState": {
+      "address": "0x803EC130",
+      "evidence": "evidence.tsv data and name rows for 0x803EC130 (used only by src/engine/syncrand.c; storage not claimed by the unit)."
+    },
+    "_SyncRand_iToggle": {
+      "address": "0x803EC134",
+      "evidence": "evidence.tsv data and name rows for 0x803EC134 (used only by src/engine/syncrand.c; storage not claimed by the unit)."
+    },
+    "_SyncTime_pState": {
+      "address": "0x803EC138",
+      "evidence": "evidence.tsv data and name rows for 0x803EC138 (used only by src/engine/synctime.c; storage not claimed by the unit)."
+    },
+    "_SyncTime_iStep": {
+      "address": "0x803EC13C",
+      "evidence": "evidence.tsv data and name rows for 0x803EC13C (used only by src/engine/synctime.c; storage not claimed by the unit)."
+    },
+    "_EvMon_bInit": {
+      "address": "0x803EC140",
+      "evidence": "evidence.tsv data and name rows for 0x803EC140 (used only by src/engine/evmon.c; storage not claimed by the unit)."
+    },
+    "_EvMon_Table": {
+      "address": "0x803A3A14",
+      "evidence": "evidence.tsv data and name rows for 0x803A3A14 (used only by src/engine/evmon.c; storage not claimed by the unit)."
+    },
+    "_SyncState_pGroups": {
+      "address": "0x803ED030",
+      "evidence": "evidence.tsv data and name rows for 0x803ED030 (used only by src/engine/syncstate.c; storage not claimed by the unit)."
+    },
+    "_SyncState_HeapDesc": {
+      "address": "0x803A39FC",
+      "evidence": "evidence.tsv data and name rows for 0x803A39FC (used only by src/engine/syncstate.c; storage not claimed by the unit)."
+    },
+    "_DbNiom_pEndFunc": {
+      "address": "0x803EBFD8",
+      "evidence": "evidence.tsv data and name rows for 0x803EBFD8 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
+    },
+    "_DbNiom_pLoadFunc": {
+      "address": "0x803EBFDC",
+      "evidence": "evidence.tsv data and name rows for 0x803EBFDC (used only by src/engine/dbniom.c; storage not claimed by the unit)."
+    },
+    "_DbNiom_pResetFunc": {
+      "address": "0x803EBFE0",
+      "evidence": "evidence.tsv data and name rows for 0x803EBFE0 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
+    },
+    "_DbNiom_pCallback": {
+      "address": "0x803EBFE4",
+      "evidence": "evidence.tsv data and name rows for 0x803EBFE4 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
+    },
+    "_DbNiom_iCallbackArg": {
+      "address": "0x803EBFE8",
+      "evidence": "evidence.tsv data and name rows for 0x803EBFE8 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
+    },
+    "_DbNiom_bModeActive": {
+      "address": "0x803EBFEC",
+      "evidence": "evidence.tsv data and name rows for 0x803EBFEC (used only by src/engine/dbniom.c; storage not claimed by the unit)."
+    },
+    "_DbNiom_bEnding": {
+      "address": "0x803EBFED",
+      "evidence": "evidence.tsv data and name rows for 0x803EBFED (used only by src/engine/dbniom.c; storage not claimed by the unit)."
+    },
+    "_DbNiom_pCursor": {
+      "address": "0x803EBFF0",
+      "evidence": "evidence.tsv data and name rows for 0x803EBFF0 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
+    },
+    "_DbNiom_pModeEnd": {
+      "address": "0x803EBFF8",
+      "evidence": "evidence.tsv data and name rows for 0x803EBFF8 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
+    },
+    "_DbNiom_pModeLoad": {
+      "address": "0x803EBFFC",
+      "evidence": "evidence.tsv data and name rows for 0x803EBFFC (used only by src/engine/dbniom.c; storage not claimed by the unit)."
+    },
+    "_DbNiom_pModeReset": {
+      "address": "0x803EC000",
+      "evidence": "evidence.tsv data and name rows for 0x803EC000 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
+    },
+    "_DbNiom_pModeResume": {
+      "address": "0x803EC004",
+      "evidence": "evidence.tsv data and name rows for 0x803EC004 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
+    },
+    "_DbNiom_pModeFn16": {
+      "address": "0x803EC008",
+      "evidence": "evidence.tsv data and name rows for 0x803EC008 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
+    },
+    "_DbEvas_iSize": {
+      "address": "0x803EC0A0",
+      "evidence": "evidence.tsv data and name rows for 0x803EC0A0 (used only by src/engine/dbevas.c; storage not claimed by the unit)."
+    },
+    "_DbEvas_pFileName": {
+      "address": "0x803EC0A4",
+      "evidence": "evidence.tsv data and name rows for 0x803EC0A4 (used only by src/engine/dbevas.c; storage not claimed by the unit)."
+    },
+    "_DbEvas_iMode": {
+      "address": "0x803EC0A8",
+      "evidence": "evidence.tsv data and name rows for 0x803EC0A8 (used only by src/engine/dbevas.c; storage not claimed by the unit)."
+    },
+    "_DbUser_iSize": {
+      "address": "0x803EC0C8",
+      "evidence": "evidence.tsv data and name rows for 0x803EC0C8 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
+    },
+    "_DbUser_pFileName": {
+      "address": "0x803EC0CC",
+      "evidence": "evidence.tsv data and name rows for 0x803EC0CC (used only by src/engine/dbuser.c; storage not claimed by the unit)."
+    },
+    "_DbUser_iMode": {
+      "address": "0x803EC0D0",
+      "evidence": "evidence.tsv data and name rows for 0x803EC0D0 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
+    },
+    "_DbUser_iCurrent": {
+      "address": "0x803EC0D4",
+      "evidence": "evidence.tsv data and name rows for 0x803EC0D4 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
+    },
+    "_DbUser_iCount": {
+      "address": "0x803EC0D8",
+      "evidence": "evidence.tsv data and name rows for 0x803EC0D8 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
+    },
+    "_DbUser_aDbIds": {
+      "address": "0x803ED6E4",
+      "evidence": "evidence.tsv data and name rows for 0x803ED6E4 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
+    },
+    "_DbUser_aEntries": {
+      "address": "0x802FB300",
+      "evidence": "evidence.tsv data and name rows for 0x802FB300 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
+    },
+    "_DbUser_LoadJob": {
+      "address": "0x803A25F0",
+      "evidence": "evidence.tsv data and name rows for 0x803A25F0 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
+    },
+    "_DbUser_SaveJob": {
+      "address": "0x803A260C",
+      "evidence": "evidence.tsv data and name rows for 0x803A260C (used only by src/engine/dbuser.c; storage not claimed by the unit)."
     }
   },
   "units": [
@@ -20549,9 +20681,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_80225CBC.c",
+      "source": "src/engine/lluigvertex.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80225CBC-0x80225D90 (src/engine/cu_80225CBC.c), its function rows, the data row 0x802B2050-0x802B2054, the file compiler row and the source-form row 0x80225CBC-0x80225D8C; both functions exact (one labeled FAKEMATCH form), linked with the file .rodata.",
+      "evidence": "evidence.tsv provisional unit row 0x80225CBC-0x80225D90 (src/engine/lluigvertex.c), its function rows, the data row 0x802B2050-0x802B2054, the file compiler row and the source-form row 0x80225CBC-0x80225D8C; both functions exact (one labeled FAKEMATCH form), linked with the file .rodata.",
       "sections": [
         {
           "section": ".text",

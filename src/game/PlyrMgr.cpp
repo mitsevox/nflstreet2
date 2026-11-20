@@ -657,10 +657,10 @@ extern "C" void PlyrMgrRegister(unsigned int count)
 
     CollideSetPairCallback(0, 0, PlyrContactCallback);
     pHandle = SyncStateRegister(0, (void **)&_PlyrMgr_pManager, sizeof(PlyrMgr_t), 1, 0x706C7972);
-    SyncStateSetCallbacks(pHandle, (Callback_80238234)PlyrMgrCreate, (Callback_80238234)PlyrMgrDestroy,
-                (Callback_80238234)PlyrMgrRefreshAll, (Callback1C_80238234)PlyrMgrCompareSnapshot);
-    SyncStateSetSaveCallbacks(pHandle, (Callback28_80238248)PlyrMgrSaveSnapshot, (Callback24_80238248)PlyrMgrGetSnapshotSize,
-                (Callback20_80238248)PlyrMgrLoadSnapshot);
+    SyncStateSetCallbacks(pHandle, (SyncStateFn_t)PlyrMgrCreate, (SyncStateFn_t)PlyrMgrDestroy,
+                (SyncStateFn_t)PlyrMgrRefreshAll, (SyncStateCompareFn_t)PlyrMgrCompareSnapshot);
+    SyncStateSetSaveCallbacks(pHandle, (SyncStateSaveFn_t)PlyrMgrSaveSnapshot, (SyncStateSizeFn_t)PlyrMgrGetSnapshotSize,
+                (SyncStateLoadFn_t)PlyrMgrLoadSnapshot);
     pManager = (PlyrMgr_t *)SyncStateGetData(pHandle);
     pManager->mCount = count;
     pManager->mPerTeam = count >> 1;

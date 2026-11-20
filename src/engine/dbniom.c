@@ -1,4 +1,7 @@
-/* Partial source: the game-mode state the database code keeps (handlers, flags and counters), started and stopped with the game database, and the 'NIOM' table update. */
+/* The game database's mode state ('NIOM' table): starts and ends a game mode,
+   keeps the active mode's handler and function tables and calls them, and
+   reads through the 'NIOM' cursor; also starts and stops the database
+   random stream with the game database. */
 
 #include "engine/dbteams.h"
 #include "engine/tdbext.h"
@@ -6,7 +9,7 @@
 #include "engine/fn_801F9134.h"
 #include "engine/cu_80229270.h"
 
-#include "engine/Funcs_802FB3BC.h"
+#include "engine/DbNiomModeFuncs.h"
 #include "engine/llmemory.h"
 #include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
@@ -20,22 +23,22 @@
 
 struct CardStreamTarget;
 struct SaveStreamOps_t;
-#include "engine/Entry_802FB300.h"
+#include "engine/DbUserEntry.h"
 extern char lbl_802B5C8C[];
 extern char lbl_803A1C60[];
 extern float lbl_803A20A4[][13];
-extern char *lbl_803EC0A4;
-extern int lbl_803EC0A8;
-extern int lbl_803EC0A0;
+extern char *_DbEvas_pFileName;
+extern int _DbEvas_iMode;
+extern int _DbEvas_iSize;
 extern char *lbl_803EC0B4;
 extern int lbl_803EC0B8;
 extern int lbl_803EC0B0;
-extern int lbl_803EC0C8;
-extern char *lbl_803EC0CC;
-extern int lbl_803EC0D0;
-extern int lbl_803EC0D4;
-extern unsigned char lbl_803EC0D8;
-extern Entry_802FB300 lbl_802FB300[];
+extern int _DbUser_iSize;
+extern char *_DbUser_pFileName;
+extern int _DbUser_iMode;
+extern int _DbUser_iCurrent;
+extern unsigned char _DbUser_iCount;
+extern DbUserEntry_t _DbUser_aEntries[];
 extern int fn_801F91AC(int handle, int a, int b);
 extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
 extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
@@ -51,7 +54,7 @@ extern int DbUserFindIdByDb(int key);
 extern int DbUserGetCurrent(void);
 extern void fn_80231208(void);
 int DbUserGetDb(int key);
-extern const int lbl_803ED6E4[2];
+extern const int _DbUser_aDbIds[2];
 extern char lbl_802B5D64[];
 extern char lbl_802B56F4[];
 extern char lbl_802B5744[];
@@ -120,7 +123,7 @@ int fn_8022D5A4(int key, int mode);
 int fn_8022D710(int a, int b, int c, int row, int value);
 unsigned short fn_8022D6FC(int index);
 
-#include "engine/Handlers_802294D8.h"
+#include "engine/DbNiomHandlers.h"
 
 typedef struct Object_8022A59C {
     unsigned short mUnknown0;
@@ -223,19 +226,19 @@ extern Entry_803A2390 lbl_803A2390[];
 extern char lbl_803A23E8[];
 extern char lbl_803A2474[];
 extern struct QueryCursor lbl_803A25E0;
-extern int (*lbl_803EBFD8)(void);
-extern void *lbl_803EBFDC;
-extern void *lbl_803EBFE0;
-extern void (*lbl_803EBFE4)(int);
-extern int lbl_803EBFE8;
-extern unsigned char lbl_803EBFEC;
-extern unsigned char lbl_803EBFED;
-extern Object_8022A59C *lbl_803EBFF0;
-extern int (*lbl_803EBFF8)(void);
-extern int (*lbl_803EBFFC)(void **ppData, void *p);
-extern int (*lbl_803EC000)(int a, int b);
-extern int (*lbl_803EC004)(void);
-extern int (*lbl_803EC008)(void);
+extern int (*_DbNiom_pEndFunc)(void);
+extern void *_DbNiom_pLoadFunc;
+extern void *_DbNiom_pResetFunc;
+extern void (*_DbNiom_pCallback)(int);
+extern int _DbNiom_iCallbackArg;
+extern unsigned char _DbNiom_bModeActive;
+extern unsigned char _DbNiom_bEnding;
+extern Object_8022A59C *_DbNiom_pCursor;
+extern int (*_DbNiom_pModeEnd)(void);
+extern int (*_DbNiom_pModeLoad)(void **ppData, void *p);
+extern int (*_DbNiom_pModeReset)(int a, int b);
+extern int (*_DbNiom_pModeResume)(void);
+extern int (*_DbNiom_pModeFn16)(void);
 extern int lbl_803EC020[2];
 extern int *lbl_803EC010[1];
 extern unsigned char lbl_803EC014[1];
@@ -453,7 +456,7 @@ void DbOptionsModuleShutdown(void);
 int DbOptionsSetTpom(int column, int value);
 int DbNiomInit(void);
 void DbNiomShutdown(void);
-void DbNiomSetHandlers(Handlers_802294D8 *p);
+void DbNiomSetHandlers(DbNiomHandlers_t *p);
 int DbNiomIsModeActive(void);
 int DbNiomBeginMode(int *p);
 int DbNiomEndMode(void);
@@ -462,7 +465,7 @@ int DbNiomOpenCursor(int a);
 int DbNiomReadCursor(int a, int b);
 int DbNiomCloseCursor(void);
 int DbNiomReadOnce(int a, int b);
-void DbNiomSetModeFuncs(Funcs_802FB3BC *pFuncs);
+void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs);
 void DbNiomClearModeFuncs(void);
 int DbNiomModeLoad(void **ppData, void *p);
 int DbNiomModeReset(int a, int b);
@@ -610,34 +613,34 @@ void DbNiomShutdown(void)
 {
     DbUtilRandomShutdown();
     DbNiomCloseCursor();
-    lbl_803EBFD8 = 0;
-    lbl_803EBFDC = 0;
-    lbl_803EBFE0 = 0;
-    lbl_803EBFE4 = 0;
-    lbl_803EBFE8 = -1;
-    lbl_803EBFEC = 0;
+    _DbNiom_pEndFunc = 0;
+    _DbNiom_pLoadFunc = 0;
+    _DbNiom_pResetFunc = 0;
+    _DbNiom_pCallback = 0;
+    _DbNiom_iCallbackArg = -1;
+    _DbNiom_bModeActive = 0;
 }
 
-void DbNiomSetHandlers(Handlers_802294D8 *p)
+void DbNiomSetHandlers(DbNiomHandlers_t *p)
 {
-    lbl_803EBFD8 = p->mpUnknown0;
-    lbl_803EBFDC = p->mpUnknown4;
-    lbl_803EBFE0 = p->mpUnknown8;
+    _DbNiom_pEndFunc = p->mpUnknown0;
+    _DbNiom_pLoadFunc = p->mpUnknown4;
+    _DbNiom_pResetFunc = p->mpUnknown8;
 }
 
 int DbNiomIsModeActive(void)
 {
-    return lbl_803EBFEC;
+    return _DbNiom_bModeActive;
 }
 
 int DbNiomBeginMode(int *p)
 {
     int err = 0;
 
-    if (lbl_803EBFEC == 0) {
+    if (_DbNiom_bModeActive == 0) {
         err = fn_801FCE10(0, lbl_802B238C, *p);
         if (err == 0) {
-            lbl_803EBFEC = 1;
+            _DbNiom_bModeActive = 1;
         }
     }
     return err;
@@ -647,24 +650,24 @@ int DbNiomEndMode(void)
 {
     int err = 0;
 
-    if (lbl_803EBFEC == 1) {
-        lbl_803EBFED = 1;
-        err = lbl_803EBFD8();
+    if (_DbNiom_bModeActive == 1) {
+        _DbNiom_bEnding = 1;
+        err = _DbNiom_pEndFunc();
         if (err == 0) {
             err = DbNiomCloseCursor();
         } else {
             DbNiomCloseCursor();
         }
-        lbl_803EBFEC = 0;
-        lbl_803EBFED = 0;
+        _DbNiom_bModeActive = 0;
+        _DbNiom_bEnding = 0;
     }
     return err;
 }
 
 int DbNiomRunCallback(void)
 {
-    if (lbl_803EBFE4 != 0) {
-        lbl_803EBFE4(lbl_803EBFE8);
+    if (_DbNiom_pCallback != 0) {
+        _DbNiom_pCallback(_DbNiom_iCallbackArg);
     }
     return 0;
 }
@@ -673,8 +676,8 @@ int DbNiomOpenCursor(int a)
 {
     int err = 0;
 
-    if (lbl_803EBFF0 == 0) {
-        err = fn_8022A59C(a, &lbl_803EBFF0);
+    if (_DbNiom_pCursor == 0) {
+        err = fn_8022A59C(a, &_DbNiom_pCursor);
         if (err != 0) {
             DbNiomCloseCursor();
         }
@@ -684,16 +687,16 @@ int DbNiomOpenCursor(int a)
 
 int DbNiomReadCursor(int a, int b)
 {
-    return fn_8022AB6C(lbl_803EBFF0, a, b);
+    return fn_8022AB6C(_DbNiom_pCursor, a, b);
 }
 
 int DbNiomCloseCursor(void)
 {
     int err = 0;
 
-    if (lbl_803EBFF0 != 0) {
-        err = fn_8022AC80(lbl_803EBFF0);
-        lbl_803EBFF0 = 0;
+    if (_DbNiom_pCursor != 0) {
+        err = fn_8022AC80(_DbNiom_pCursor);
+        _DbNiom_pCursor = 0;
     }
     return err;
 }
@@ -713,35 +716,35 @@ int DbNiomReadOnce(int a, int b)
     return err;
 }
 
-void DbNiomSetModeFuncs(Funcs_802FB3BC *pFuncs)
+void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs)
 {
-    lbl_803EBFF8 = pFuncs->mpUnknown0;
-    lbl_803EBFFC = pFuncs->mpUnknown4;
-    lbl_803EC000 = pFuncs->mpUnknown8;
-    lbl_803EC004 = pFuncs->mpUnknown12;
-    lbl_803EC008 = pFuncs->mpUnknown16;
+    _DbNiom_pModeEnd = pFuncs->mpUnknown0;
+    _DbNiom_pModeLoad = pFuncs->mpUnknown4;
+    _DbNiom_pModeReset = pFuncs->mpUnknown8;
+    _DbNiom_pModeResume = pFuncs->mpUnknown12;
+    _DbNiom_pModeFn16 = pFuncs->mpUnknown16;
 }
 
 void DbNiomClearModeFuncs(void)
 {
-    lbl_803EBFF8 = 0;
-    lbl_803EBFFC = 0;
-    lbl_803EC000 = 0;
-    lbl_803EC004 = 0;
-    lbl_803EC008 = 0;
+    _DbNiom_pModeEnd = 0;
+    _DbNiom_pModeLoad = 0;
+    _DbNiom_pModeReset = 0;
+    _DbNiom_pModeResume = 0;
+    _DbNiom_pModeFn16 = 0;
 }
 
 int DbNiomModeLoad(void **ppData, void *p)
 {
-    return lbl_803EBFFC(ppData, p);
+    return _DbNiom_pModeLoad(ppData, p);
 }
 
 int DbNiomModeReset(int a, int b)
 {
-    return lbl_803EC000(a, b);
+    return _DbNiom_pModeReset(a, b);
 }
 
 int DbNiomModeResume(void)
 {
-    return lbl_803EC004();
+    return _DbNiom_pModeResume();
 }

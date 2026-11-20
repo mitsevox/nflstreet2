@@ -1,7 +1,7 @@
-#ifndef ENGINE_OBJECT_80237EE8_H
-#define ENGINE_OBJECT_80237EE8_H
+#ifndef ENGINE_SYNCSTATEGROUP_H
+#define ENGINE_SYNCSTATEGROUP_H
 #include "engine/list.h"
-typedef struct Object_80237EE8 {
+typedef struct SyncStateGroup_t {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
@@ -9,14 +9,14 @@ typedef struct Object_80237EE8 {
     int mUnknown16;
     DSList_t *mpUnknown20;
     void *mpUnknown24;
-} Object_80237EE8;
+} SyncStateGroup_t;
 #ifdef __cplusplus
 extern "C" {
 #endif
 int SyncStateShutdown(void);
-void SyncStateOpenGroup(Object_80237EE8 *p);
-void SyncStateSaveGroup(Object_80237EE8 *p);
-Object_80237EE8 *SyncStateEndGroup(Object_80237EE8 *p);
+void SyncStateOpenGroup(SyncStateGroup_t *p);
+void SyncStateSaveGroup(SyncStateGroup_t *p);
+SyncStateGroup_t *SyncStateEndGroup(SyncStateGroup_t *p);
 #ifdef __cplusplus
 }
 #endif

@@ -1,8 +1,8 @@
 /* Memory compare and CRC-32: a memcmp wrapper and the table-driven CRC-32
    the game uses to checksum its state. */
 
-#include "engine/Object_80237EE8.h"
-#include "engine/Desc_80238424.h"
+#include "engine/SyncStateGroup.h"
+#include "engine/EvMonDesc.h"
 #include "engine/EvMonAddListener.h"
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/gx/GXPixel.h>

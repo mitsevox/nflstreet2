@@ -1,4 +1,6 @@
-/* Partial source: creates, loads, saves and destroys the 'EVAS' T3DB database. */
+/* The save-game database ('EVAS'): keeps its file name, creates and fills it
+   when the game database starts, and loads, saves and destroys it for the
+   memory card load and save. */
 
 #include "engine/dbteams.h"
 #include "engine/tdbext.h"
@@ -6,7 +8,7 @@
 #include "engine/fn_801F9134.h"
 #include "engine/cu_80229270.h"
 
-#include "engine/Funcs_802FB3BC.h"
+#include "engine/DbNiomModeFuncs.h"
 #include "engine/llmemory.h"
 #include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
@@ -20,22 +22,22 @@
 
 struct CardStreamTarget;
 struct SaveStreamOps_t;
-#include "engine/Entry_802FB300.h"
+#include "engine/DbUserEntry.h"
 extern char lbl_802B5C8C[];
 extern char lbl_803A1C60[];
 extern float lbl_803A20A4[][13];
-extern char *lbl_803EC0A4;
-extern int lbl_803EC0A8;
-extern int lbl_803EC0A0;
+extern char *_DbEvas_pFileName;
+extern int _DbEvas_iMode;
+extern int _DbEvas_iSize;
 extern char *lbl_803EC0B4;
 extern int lbl_803EC0B8;
 extern int lbl_803EC0B0;
-extern int lbl_803EC0C8;
-extern char *lbl_803EC0CC;
-extern int lbl_803EC0D0;
-extern int lbl_803EC0D4;
-extern unsigned char lbl_803EC0D8;
-extern Entry_802FB300 lbl_802FB300[];
+extern int _DbUser_iSize;
+extern char *_DbUser_pFileName;
+extern int _DbUser_iMode;
+extern int _DbUser_iCurrent;
+extern unsigned char _DbUser_iCount;
+extern DbUserEntry_t _DbUser_aEntries[];
 extern int fn_801F91AC(int handle, int a, int b);
 extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
 extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
@@ -51,7 +53,7 @@ extern int DbUserFindIdByDb(int key);
 extern int DbUserGetCurrent(void);
 extern void fn_80231208(void);
 int DbUserGetDb(int key);
-extern const int lbl_803ED6E4[2];
+extern const int _DbUser_aDbIds[2];
 extern char lbl_802B5D64[];
 extern char lbl_802B56F4[];
 extern char lbl_802B5744[];
@@ -120,7 +122,7 @@ int fn_8022D5A4(int key, int mode);
 int fn_8022D710(int a, int b, int c, int row, int value);
 unsigned short fn_8022D6FC(int index);
 
-#include "engine/Handlers_802294D8.h"
+#include "engine/DbNiomHandlers.h"
 
 typedef struct Object_8022A59C {
     unsigned short mUnknown0;
@@ -223,19 +225,19 @@ extern Entry_803A2390 lbl_803A2390[];
 extern char lbl_803A23E8[];
 extern char lbl_803A2474[];
 extern struct QueryCursor lbl_803A25E0;
-extern int (*lbl_803EBFD8)(void);
-extern void *lbl_803EBFDC;
-extern void *lbl_803EBFE0;
-extern void (*lbl_803EBFE4)(int);
-extern int lbl_803EBFE8;
-extern unsigned char lbl_803EBFEC;
-extern unsigned char lbl_803EBFED;
-extern Object_8022A59C *lbl_803EBFF0;
-extern int (*lbl_803EBFF8)(void);
-extern int (*lbl_803EBFFC)(void **ppData, void *p);
-extern int (*lbl_803EC000)(int a, int b);
-extern int (*lbl_803EC004)(void);
-extern int (*lbl_803EC008)(void);
+extern int (*_DbNiom_pEndFunc)(void);
+extern void *_DbNiom_pLoadFunc;
+extern void *_DbNiom_pResetFunc;
+extern void (*_DbNiom_pCallback)(int);
+extern int _DbNiom_iCallbackArg;
+extern unsigned char _DbNiom_bModeActive;
+extern unsigned char _DbNiom_bEnding;
+extern Object_8022A59C *_DbNiom_pCursor;
+extern int (*_DbNiom_pModeEnd)(void);
+extern int (*_DbNiom_pModeLoad)(void **ppData, void *p);
+extern int (*_DbNiom_pModeReset)(int a, int b);
+extern int (*_DbNiom_pModeResume)(void);
+extern int (*_DbNiom_pModeFn16)(void);
 extern int lbl_803EC020[2];
 extern int *lbl_803EC010[1];
 extern unsigned char lbl_803EC014[1];
@@ -453,7 +455,7 @@ void DbOptionsModuleShutdown(void);
 int DbOptionsSetTpom(int column, int value);
 int DbNiomInit(void);
 void DbNiomShutdown(void);
-void DbNiomSetHandlers(Handlers_802294D8 *p);
+void DbNiomSetHandlers(DbNiomHandlers_t *p);
 int DbNiomIsModeActive(void);
 int DbNiomBeginMode(int *p);
 int DbNiomEndMode(void);
@@ -462,7 +464,7 @@ int DbNiomOpenCursor(int a);
 int DbNiomReadCursor(int a, int b);
 int DbNiomCloseCursor(void);
 int DbNiomReadOnce(int a, int b);
-void DbNiomSetModeFuncs(Funcs_802FB3BC *pFuncs);
+void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs);
 void DbNiomClearModeFuncs(void);
 int DbNiomModeLoad(void **ppData, void *p);
 int DbNiomModeReset(int a, int b);
@@ -611,25 +613,25 @@ void DbEvasModuleShutdown(void)
 
 int DbEvasInit(int a, const char *pName, int b)
 {
-    lbl_803EC0A4 = DbUtilAlloc(strlen(pName) + 1, 1);
-    strcpy(lbl_803EC0A4, pName);
-    lbl_803EC0A8 = b;
+    _DbEvas_pFileName = DbUtilAlloc(strlen(pName) + 1, 1);
+    strcpy(_DbEvas_pFileName, pName);
+    _DbEvas_iMode = b;
     return 0;
 }
 
 void DbEvasShutdown(void)
 {
-    DbUtilFree(lbl_803EC0A4);
-    lbl_803EC0A0 = 0;
-    lbl_803EC0A4 = 0;
-    lbl_803EC0A8 = -1;
+    DbUtilFree(_DbEvas_pFileName);
+    _DbEvas_iSize = 0;
+    _DbEvas_pFileName = 0;
+    _DbEvas_iMode = -1;
 }
 
 int DbEvasLoad(void)
 {
-    int result = fn_801F8D60(0x45564153, lbl_803EC0A0);
+    int result = fn_801F8D60(0x45564153, _DbEvas_iSize);
     if (result == 0) {
-        result = TDbExtLoadFromResource(0x45564153, lbl_803EC0A4, lbl_803EC0A8, 0);
+        result = TDbExtLoadFromResource(0x45564153, _DbEvas_pFileName, _DbEvas_iMode, 0);
     }
     return result;
 }

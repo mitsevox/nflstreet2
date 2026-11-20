@@ -16,7 +16,7 @@
 void *memcpy(void *dest, const void *src, size_t num);
 void *memset(void *dest, int ch, unsigned long count);
 int strcmp(const char *s1, const char *s2);
-#include "engine/Funcs_802FB3BC.h"
+#include "engine/DbNiomModeFuncs.h"
 #include "game/DbUserSetCurrent.h"
 #include "game/fn_80233CBC.h"
 #include "game/fn_801FCE10.h"
@@ -25,9 +25,9 @@ int strcmp(const char *s1, const char *s2);
 #include "game/Object_80235588.h"
 #include "game/QueryStatus.h"
 
-#include "engine/Entry_802FB300.h"
+#include "engine/DbUserEntry.h"
 
-#include "engine/Handlers_802294D8.h"
+#include "engine/DbNiomHandlers.h"
 #include "game/Request_802329F0.h"
 
 typedef struct Block_80233588 {
@@ -36,7 +36,7 @@ typedef struct Block_80233588 {
     int mUnknown8;
 } Block_80233588;
 
-extern Handlers_802294D8 lbl_802FB38C;
+extern DbNiomHandlers_t lbl_802FB38C;
 int fn_80233588(Block_80233588 *p);
 int fn_802336BC(void);
 
@@ -275,24 +275,24 @@ extern char lbl_802B7154[];
 extern char lbl_802B715C[];
 extern const float lbl_802B7168[];
 extern const float lbl_802B7170[];
-extern Entry_802FB300 lbl_802FB300[];
+extern DbUserEntry_t _DbUser_aEntries[];
 extern Entry_802FB310 lbl_802FB310[];
 extern int lbl_802FB398[];
 extern int lbl_802FB3A4[];
 extern int lbl_802FB3B0[];
-extern Funcs_802FB3BC lbl_802FB3BC;
-extern Funcs_802FB3BC lbl_802FB3D0;
-extern Funcs_802FB3BC lbl_802FB3E4;
+extern DbNiomModeFuncs_t lbl_802FB3BC;
+extern DbNiomModeFuncs_t lbl_802FB3D0;
+extern DbNiomModeFuncs_t lbl_802FB3E4;
 extern unsigned int lbl_802FB3F8[];
 extern Box_80234070 lbl_802FB418;
 extern unsigned int lbl_803A2628[8];
 extern void *lbl_803A2648[];
 extern Table_803E96E8 lbl_803E96E8;
-extern int lbl_803EC0C8;
-extern char *lbl_803EC0CC;
-extern int lbl_803EC0D0;
-extern int lbl_803EC0D4;
-extern unsigned char lbl_803EC0D8;
+extern int _DbUser_iSize;
+extern char *_DbUser_pFileName;
+extern int _DbUser_iMode;
+extern int _DbUser_iCurrent;
+extern unsigned char _DbUser_iCount;
 extern Cache_8022F8A8 *lbl_803EC0E0;
 extern int lbl_803EC0E4;
 extern int lbl_803EC0E8;
@@ -300,7 +300,7 @@ extern int lbl_803EC0F0;
 extern void *lbl_803EC0F4;
 extern int lbl_803ED020;
 extern int lbl_803ED024;
-extern const int lbl_803ED6E4[2];
+extern const int _DbUser_aDbIds[2];
 
 double fabs(double);
 
@@ -378,7 +378,7 @@ extern int DbOptionsModuleInit(void);
 extern void DbOptionsModuleShutdown(void);
 extern int DbNiomEndMode(void);
 extern int DbNiomReadOnce(int a, int b);
-extern void DbNiomSetModeFuncs(Funcs_802FB3BC *pFuncs);
+extern void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs);
 extern void DbNiomClearModeFuncs(void);
 extern int DbNiomModeLoad(void **ppData, void *p);
 extern int DbNiomModeReset(int a, int b);
@@ -424,7 +424,7 @@ int fn_80232DE0(void);
 int fn_80232EB4(void);
 int fn_80232EF4(void);
 int fn_802331BC(void);
-void fn_802334F0(int mode, Funcs_802FB3BC *pFuncs);
+void fn_802334F0(int mode, DbNiomModeFuncs_t *pFuncs);
 int fn_80233604(void **ppData, void *p);
 int fn_80233660(int a, int b);
 int fn_80233694(void);
@@ -618,7 +618,7 @@ int fn_80233344(void);
 int fn_8023334C(int a, int b);
 int fn_80233454(void);
 int fn_802334C4(void);
-void fn_802334F0(int mode, Funcs_802FB3BC *pFuncs);
+void fn_802334F0(int mode, DbNiomModeFuncs_t *pFuncs);
 int fn_80233568(int a, int b, unsigned char *pDone);
 int fn_80233578(void);
 int fn_80233580(void);

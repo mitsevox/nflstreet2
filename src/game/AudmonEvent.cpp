@@ -2,7 +2,7 @@
    position and a few values), which are time-stamped and passed straight to
    the registered audio listeners. */
 
-#include "engine/Desc_80238424.h"
+#include "engine/EvMonDesc.h"
 #include "game/StyleTracker.h"
 #include "engine/EvMonAddListener.h"
 #include "game/AudmonEvent.h"
@@ -22,7 +22,7 @@ void EvMonFire(int handle, int unknown);
 void EvMonClear(int handle);
 }
 
-static Desc_80238424 _AudmonEvent_QueueDesc = { 50, sizeof(AudmonEvent_t), 3 };
+static EvMonDesc_t _AudmonEvent_QueueDesc = { 50, sizeof(AudmonEvent_t), 3 };
 static int _AudmonEvent_iQueue = 0xFF;
 static AudmonClockFn_t _AudmonEvent_pfnClock = 0;
 

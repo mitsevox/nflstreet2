@@ -5,10 +5,10 @@
 #include "game/MemPoolDesc.h"
 
 /* Object returned by SyncStateNewGroup. */
-#include "engine/Object_80237EE8.h"
+#include "engine/SyncStateGroup.h"
 
 struct GameStateData {
-    Object_80237EE8 *mpObject;
+    SyncStateGroup_t *mpObject;
     /* Set when Init called EvMonInit; Shutdown then calls EvMonShutdown. */
     unsigned char mUnknown4;
 };
@@ -26,7 +26,7 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-    static Object_80237EE8 *GetStore();
+    static SyncStateGroup_t *GetStore();
     void Activate();
 
 private:
