@@ -15,7 +15,7 @@
 #include "engine/vec.h"
 #include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/Object_80235588.h"
 #include "engine/list.h"
 #include "engine/llmemory.h"
@@ -63,7 +63,7 @@ extern void fn_801D2570(int ident);
 void fn_80237C0C(Object_80237EE8 *p);
 void fn_80237FF4(Object_80237EE8 *p);
 Object_80237EE8 *fn_80237E9C(int key);
-Handle_80237A40 *fn_80237A40(Object_80237EE8 *pGroup, void **ppData, int size, int a, unsigned int id);
+Handle_80237A40 *SyncStateNewHandle(Object_80237EE8 *pGroup, void **ppData, int size, int a, unsigned int id);
 typedef struct Counter_80237934 {
     int mUnknown0;
     int mUnknown4;
@@ -78,7 +78,7 @@ int fn_80237A30(Counter_80237934 *pA, Counter_80237934 *pB)
     return pB->mUnknown8 - pA->mUnknown8;
 }
 
-Handle_80237A40 *fn_80237A40(Object_80237EE8 *pGroup, void **ppData, int size, int a, unsigned int id)
+Handle_80237A40 *SyncStateNewHandle(Object_80237EE8 *pGroup, void **ppData, int size, int a, unsigned int id)
 {
     Handle_80237A40 *p = DSNewListNode(pGroup->mpUnknown20);
     memset(p, 0, sizeof(Handle_80237A40));
@@ -272,7 +272,7 @@ void fn_8023808C(Object_80237EE8 *p)
     fn_80237D24(p);
 }
 
-Object_80237EE8 *fn_8023811C(Object_80237EE8 *p)
+Object_80237EE8 *SyncStateEndGroup(Object_80237EE8 *p)
 {
     // FAKEMATCH: dead initial copy of p, the second register copy of p (mr r30,r31) the target keeps
     Object_80237EE8 *pFound = p;
@@ -290,13 +290,13 @@ void *fn_8023816C(void *pHandle)
     return p->mpUnknown44;
 }
 
-void *fn_80238174(int a, void **ppData, int size, int b, unsigned int id)
+void *SyncStateRegister(int a, void **ppData, int size, int b, unsigned int id)
 {
     void *pResult = 0;
     Object_80237EE8 *p = fn_80237E9C(a);
     if (p != 0) {
         fn_801D277C(p->mUnknown16);
-        pResult = fn_80237A40(p, ppData, size, b, id);
+        pResult = SyncStateNewHandle(p, ppData, size, b, id);
     }
     return pResult;
 }

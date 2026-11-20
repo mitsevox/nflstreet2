@@ -14,7 +14,7 @@
 #include "game/DbCursor.h"
 #include "game/PlayBookDb.h"
 #include "game/fn_801FCE10.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
 #include "game/PlayBookTeam.h"
@@ -30,7 +30,7 @@
 #include "game/fn_80227638.h"
 #include "game/PreSnapPhase.h"
 
-/* Allocated through fn_80238174 under the id 'plbk' (PlayBookAlloc). */
+/* Allocated through SyncStateRegister under the id 'plbk' (PlayBookAlloc). */
 struct PlayBook_t {
     unsigned int mUnknown0;
     PlayBookTeam_t mUnknown4[2];
@@ -358,7 +358,7 @@ void PlayBookLoadAudibles(int team)
 
 void PlayBookAlloc(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&_PlayBook_pData, sizeof(PlayBook_t), 0, 0x706C626B);
+    void *pHandle = SyncStateRegister(0, (void **)&_PlayBook_pData, sizeof(PlayBook_t), 0, 0x706C626B);
 
     fn_80238234(pHandle, 0, 0, 0, PlayBookCompareData);
     fn_802381E0(pHandle);
@@ -1788,7 +1788,7 @@ void PlayTrackInit(void)
 {
     // FAKEMATCH: never-set flag; keeps the PNIG/STPG query strings in .rodata (owner-accepted 2026-11-14)
     int resume = 0;
-    void *pHandle = fn_80238174(0, (void **)&_PlayTrack_pData, sizeof(PlayTrack_t), 0, 0x7074726B);
+    void *pHandle = SyncStateRegister(0, (void **)&_PlayTrack_pData, sizeof(PlayTrack_t), 0, 0x7074726B);
     memset(fn_8023816C(), 0, sizeof(PlayTrack_t));
     if (resume) {
         int found;

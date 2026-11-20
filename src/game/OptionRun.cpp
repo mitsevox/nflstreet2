@@ -56,7 +56,7 @@ int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 }
 
 extern float gPlyrMoveFwdSpeed;
@@ -204,7 +204,7 @@ extern "C" int OptionRunDecide(Object_80039F5C *p, OptionRunControl_t *pControl)
             rating *= 0.5f;
             chance = rating * 0.08f + 0.02f;
 
-            if (fn_80237260(0) <= chance && MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x4E38E2) {
+            if (SyncRandGetFloat(0) <= chance && MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x4E38E2) {
                 result = 5;
             }
         }

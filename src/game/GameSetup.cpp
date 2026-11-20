@@ -17,7 +17,7 @@ void fn_801787FC(int which, short value);
 void fn_8017885C(void);
 void fn_80178878(const Object_8017886C *p);
 void fn_80179150(void);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 
 void GameSetupInit(void)
 {
@@ -39,7 +39,7 @@ void GameSetupInit(void)
         } else if (ChalGetCurrent()->mUnknown1B8 == 1) {
             fn_8017833C(0);
             fn_80178354(0);
-        } else if (fn_80237260(1) < 0.5f) {
+        } else if (SyncRandGetFloat(1) < 0.5f) {
             fn_8017833C(1);
             fn_80178354(1);
             GameInfoSet(2, 1);

@@ -70,7 +70,7 @@ struct Block_800920EC {
     unsigned char mUnknownE4F[1];
 };
 
-/* Allocated through fn_80238174 under the id 'anms' (fn_800925F0). */
+/* Allocated through SyncStateRegister under the id 'anms' (fn_800925F0). */
 struct Block_800925F0 {
     CondTable_t *mpUnknown0;
     Entry_80094238 mEntries[6];
@@ -216,7 +216,7 @@ struct Entry_800B5224 {
     unsigned char mUnknown9[3];
 };
 
-/* Allocated through fn_80238174 under the id 'pctl' (fn_800B62D8). */
+/* Allocated through SyncStateRegister under the id 'pctl' (fn_800B62D8). */
 struct Block_800B62D8 {
     Entry_800B5224 *mpEntries;
     unsigned char mCount;

@@ -58,7 +58,7 @@ int CharSkelGetJointByName(void *p, const char *pName);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 float fn_8022781C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pPoint, Vector_80039F5C *pOut, float *pDist,
                  float *pT);
@@ -361,7 +361,7 @@ extern "C" int RouteRunUpdate(Object_80039F5C *p)
         int move = 1;
 
         if (pBlock->mUnknown60 == 0 && (pBlock->mUnknown34 == 18 || pBlock->mUnknown34 == 19)
-            && fn_80237260(0) < 0.5f) {
+            && SyncRandGetFloat(0) < 0.5f) {
             move = pBlock->mUnknown34;
         }
         p->mUnknown512.mUnknown15 = move;

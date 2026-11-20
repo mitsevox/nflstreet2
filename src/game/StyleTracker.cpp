@@ -17,7 +17,7 @@
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
 #include "game/fn_8021D7B8.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 
 enum StyleMessage {};
 
@@ -2697,7 +2697,7 @@ extern "C" void StyleTrackerInit(void) {
             _StyleTracker_iMeterThreshold = 2000;
         }
     }
-    pHandle = fn_80238174(0, (void **)&_StyleTracker_pState, sizeof(StyleTrackerState_t), 0, 0x7472636B);
+    pHandle = SyncStateRegister(0, (void **)&_StyleTracker_pState, sizeof(StyleTrackerState_t), 0, 0x7472636B);
     fn_80238234(pHandle, StyleTrackerCreateState, StyleTrackerDestroyState, 0, StyleTrackerCompareState);
     fn_80238248(pHandle, StyleTrackerSaveState, StyleTrackerGetStateSize, StyleTrackerLoadState);
     fn_802381E0(pHandle);

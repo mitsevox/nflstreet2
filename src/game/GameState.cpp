@@ -74,7 +74,7 @@ Object_80237EE8 *GameState::GetStore()
 void GameState::Activate()
 {
     fn_80237FA4(mpData.mp->mpObject);
-    fn_8023811C(mpData.mp->mpObject);
+    SyncStateEndGroup(mpData.mp->mpObject);
 }
 
 ModuleDependency *GameStateActivate::GetDependencies() { return sGameStateActivateDependencies; }

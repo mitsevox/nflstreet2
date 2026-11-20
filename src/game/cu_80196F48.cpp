@@ -33,7 +33,7 @@ float fn_80227704(void *, void *);
 void fn_80227904(float *, float *, float *, float);
 void fn_80227C2C(Vector_80039F5C *, Vector_80039F5C *);
 void fn_80227E40(float *, float *);
-float fn_80237260(int);
+float SyncRandGetFloat(int);
 unsigned char ParticleTrailIsEnabled(void);
 GlowTexture_t *GlowGetTexture(int);
 void GlowTransformPoint(Vector_80039F5C *, Vector_80039F5C *);
@@ -153,9 +153,9 @@ void fn_80197680(Glow_t *p)
         if (++p->mUnknown35 >= p->mUnknown34) {
             p->mUnknown35 = 0;
             GlowElement_t *record = p->mUnknown0;
-            float value = fn_80237260(1) * (p->mUnknown30 + p->mUnknown30) - p->mUnknown30 + 1.0f;
+            float value = SyncRandGetFloat(1) * (p->mUnknown30 + p->mUnknown30) - p->mUnknown30 + 1.0f;
             if (value > p->mUnknown0->mUnknown14) value = p->mUnknown0->mUnknown14;
-            else value = fn_80237260(1) * (p->mUnknown30 + p->mUnknown30) - p->mUnknown30 + 1.0f;
+            else value = SyncRandGetFloat(1) * (p->mUnknown30 + p->mUnknown30) - p->mUnknown30 + 1.0f;
             record->mUnknown14 = value;
         }
     }

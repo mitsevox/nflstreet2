@@ -128,7 +128,7 @@ int fn_801784C4(void);
 struct BigObj_t;
 BigObj_t *BigObjFindNearestOfType(Vector_80039F5C *p, int a, float *pOut);
 float fn_800AD168(int team, float value);
-float fn_80237260(int a);
+float SyncRandGetFloat(int a);
 int fn_800F22D8(Object_80039F5C *p, int a, int b, int c);
 float fn_8011F4D4(void);
 int fn_801783AC(int a);
@@ -1126,7 +1126,7 @@ extern "C" void CarrierRunTryMoves(Object_80039F5C *p, OptionRunControl_t *contr
 
     nearest = fn_800AD168(p->mIdBytes[2], nearest);
     if (found && !(nearest >= 3.0f)) {
-        if (!(fn_80237260(0) >= 0.5f)) {
+        if (!(SyncRandGetFloat(0) >= 0.5f)) {
             fn_800F22D8(p, 4, 1, 4);
         } else {
             CarrierMoveStart(p, 4);

@@ -13,7 +13,7 @@
 #include <string.h>
 
 extern "C" {
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 float fn_802276E8(void *pA, void *pB);
 extern LevelData_t *gLevelData;
 extern float gFrameTimeScale;
@@ -103,8 +103,8 @@ static void _FieldMarkerPlaceArrow(FieldMarkerArrow_t *pArrow)
 {
     Vector_80039F5C side, across, toSecond, toThird, toFourth, point;
     LevelQuad_t *pQuad = (LevelQuad_t *)gLevelData->mUnknown124 + fn_802372EC(1, gLevelData->mUnknown120);
-    float u = fn_80237260(1);
-    float v = fn_80237260(1);
+    float u = SyncRandGetFloat(1);
+    float v = SyncRandGetFloat(1);
 
     fn_802276B4(&toSecond, &pQuad->mPoint[1], &pQuad->mPoint[0]);
     fn_802276B4(&toThird, &pQuad->mPoint[2], &pQuad->mPoint[0]);
@@ -143,7 +143,7 @@ static void _FieldMarkerUpdateArrows(float dt)
     if (gFieldMarkerArrowCount == 0) {
         for (unsigned int i = 0; i < 100; i++) {
             FieldMarkerArrow_t *pArrow = &gFieldMarkerArrows[i];
-            pArrow->mUnknownC = fn_80237260(1);
+            pArrow->mUnknownC = SyncRandGetFloat(1);
             pArrow->mUnknown10 = 1.0f;
             pArrow->mUnknown14 = 0;
             _FieldMarkerPlaceArrow(pArrow);

@@ -143,7 +143,7 @@ struct Entry_8009D964 {
     int mUnknown14;
 };
 
-/* Allocated through fn_80238174 under the id 'clck' (fn_8009D474). */
+/* Allocated through SyncStateRegister under the id 'clck' (fn_8009D474). */
 struct Block_8009D474 {
     int mUnknown0;
     Entry_8009D964 mEntries[6];

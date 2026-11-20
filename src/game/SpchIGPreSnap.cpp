@@ -19,7 +19,7 @@ int fn_80178194(void);
 int fn_80178308(void);
 int fn_80178360(void);
 int SysGetSystemTime(void);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 void SpchIGSayPreSnap(int side);
 }
 
@@ -143,7 +143,7 @@ extern "C" void SpchIGSayPreSnap(int side)
 
     if (_SpchIG_uPreSnapStartTime == 0) {
         _SpchIG_uPreSnapStartTime = SysGetSystemTime();
-        _SpchIG_fPreSnapDelay = fn_80237260(1) + 1.0f;
+        _SpchIG_fPreSnapDelay = SyncRandGetFloat(1) + 1.0f;
     }
     SpchIGGetLastPlayFlags(&result1);
     SpchIGGetScoreSituation(&result2);

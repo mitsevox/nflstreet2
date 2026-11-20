@@ -21,7 +21,7 @@
 #include "game/Record_8011F4F8.h"
 #include "game/ReplayEvent.h"
 #include "game/fn_801FCE10.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/Object_8017886C.h"
 #include "game/State_803EB098.h"
 #include "game/fn_801BE60C.h"
@@ -175,7 +175,7 @@ void fn_80227538(Point2_t *pOut, int angle, float length);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_802278D0(Vector_80039F5C *pA, Vector_80039F5C *pB);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 
 int PossIsCatchInBounds(Object_80039F5C *p);
 int PossCanFumble(Object_80039F5C *p);
@@ -801,12 +801,12 @@ int PossTryCatch(void *pBall, Object_80039F5C *p, unsigned int move)
                             fn_80097028(p);
                         }
                     }
-                    if (fn_80237260(0) < chance) {
+                    if (SyncRandGetFloat(0) < chance) {
                         caught = 1;
                     } else {
                         _Poss_iMissedCatchId = p->mId;
                     }
-                } else if (PossIsCatchInBounds(p) == 1 && fn_80237260(0) < chance) {
+                } else if (PossIsCatchInBounds(p) == 1 && SyncRandGetFloat(0) < chance) {
                     caught = 1;
                 } else {
                     _Poss_iMissedCatchId = p->mId;
@@ -957,7 +957,7 @@ void PossTryJarBall(Object_80039F5C *p)
             }
         }
     }
-    if ((fn_800A7EE0(p->mId >> 8 & 0xFF) != 2 && chance != 0.0f && fn_80237260(0) < chance)
+    if ((fn_800A7EE0(p->mId >> 8 & 0xFF) != 2 && chance != 0.0f && SyncRandGetFloat(0) < chance)
         || (pHitter && !fn_800A7EB8(p->mId >> 8 & 0xFF) && fn_800A851C(pHitter->mId >> 8 & 0xFF, pHitter))) {
         int unknown;
         int state = BallStateGetPrev(pBall, &unknown);
@@ -1714,7 +1714,7 @@ void ClockRuleDbSetTimeouts(int a, int b)
 
 void ClockRuleInit(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&_ClockRule_puFlags, sizeof(*_ClockRule_puFlags), 0, 0x636C6B72);
+    void *pHandle = SyncStateRegister(0, (void **)&_ClockRule_puFlags, sizeof(*_ClockRule_puFlags), 0, 0x636C6B72);
 
     fn_8023816C(pHandle);
     fn_802381E0(pHandle);

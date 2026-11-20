@@ -10,7 +10,7 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
 #include "game/LevelSurface.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 
 extern "C" {
 CollideSet_t *PlyrMgrGetCollideSet(void);
@@ -693,7 +693,7 @@ void BallsStart(int count)
     BallBlock_t *pSet;
 
     CollideSetPairCallback(0, 1, BallCollidePlayer);
-    pHandle = fn_80238174(0, (void **)&_Ball_pSet, sizeof(BallBlock_t) + (count - 1) * sizeof(Ball_t), 10, 0x62616C6C);
+    pHandle = SyncStateRegister(0, (void **)&_Ball_pSet, sizeof(BallBlock_t) + (count - 1) * sizeof(Ball_t), 10, 0x62616C6C);
     fn_80238234(pHandle, BallBlockInit, BallBlockShutdown, BallBlockSyncModels, BallBlockCompare);
     fn_80238248(pHandle, BallBlockSave, BallBlockGetSaveSize, BallBlockRestore);
     pSet = (BallBlock_t *)fn_8023816C(pHandle);

@@ -3,7 +3,7 @@
    syncing back to their owning objects. */
 #include "game/BigObjInst.h"
 #include "game/BigObj.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801BE60C.h"
@@ -103,7 +103,7 @@ void BigObjInstInit(int maxObjects, int maxExtras)
     void *pHandle;
     BigObjPool_t *pPool;
 
-    pHandle = fn_80238174(0, (void **)&_BigObjInst_pPool, 16, 2, 0x626F626A);
+    pHandle = SyncStateRegister(0, (void **)&_BigObjInst_pPool, 16, 2, 0x626F626A);
     fn_80238234(pHandle, BigObjPoolCreate, BigObjPoolDestroy, BigObjPoolEmptyPass, BigObjPoolCompare);
     pPool = (BigObjPool_t *)fn_8023816C(pHandle);
     pPool->mCount = 0;

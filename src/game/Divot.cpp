@@ -165,7 +165,7 @@ float fn_802278D0(Divot *pA, Divot *pB);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
 int VptGetMatrixStack(void);
 void VptFlushObjectTrashSync(void);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 
 void DivotRemove(Divot *p);
 int DivotIsAreaFree(Divot *pDivot, float radius);
@@ -387,7 +387,7 @@ void DivotStepPlace(Divot *p)
 {
     p->mActive = 0;
     if (_Divot_iRecordCount < DIVOT_MAX_RECORDS) {
-        if (p->mpOwner == BallGetCurrentHolder() || fn_80237260(1) < 0.75f) {
+        if (p->mpOwner == BallGetCurrentHolder() || SyncRandGetFloat(1) < 0.75f) {
             p->mAngle = (p->mAngle + 0xC00000) & 0xFFFFFF;
             p->mActive = 1;
             p->mAlpha = p->mAlphaMax;
@@ -596,8 +596,8 @@ void DivotScatterRandom(void)
             Vector_80039F5C pos;
             LevelSurface_t *pArea;
 
-            pos.mX = (fn_80237260(1) * 2.0f - 1.0f) * width;
-            pos.mY = (fn_80237260(1) * 2.0f - 1.0f) * length;
+            pos.mX = (SyncRandGetFloat(1) * 2.0f - 1.0f) * width;
+            pos.mY = (SyncRandGetFloat(1) * 2.0f - 1.0f) * length;
             pos.mZ = 0.0f;
             pArea = LevelFindArea(&pos.mX);
             if (pArea) {
@@ -607,7 +607,7 @@ void DivotScatterRandom(void)
                     p->mpOwner = 0;
                     p->mSurface = pArea->mSurface;
                     p->mPos = pos;
-                    p->mAngle = (int)(fn_80237260(1) * 16777216.0f);
+                    p->mAngle = (int)(SyncRandGetFloat(1) * 16777216.0f);
                     DivotPlace(p);
                 }
             }

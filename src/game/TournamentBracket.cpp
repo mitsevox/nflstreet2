@@ -21,7 +21,7 @@ struct BracketGame_t {
 extern "C" {
 int EditMenuGetTeam(void);
 void ChalGetTournamentScore(int, short *, short *);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 void ChalSetTournamentScore(int, int, int);
 void ChalSaveTournamentTeams(int *, int);
 void ChalLoadTournamentTeams(int *, int);
@@ -156,16 +156,16 @@ extern "C" void TournBracketSimScore(int index, short *score)
     score[0] = 0;
     score[1] = 0;
     while (score[0] <= 35 && score[1] <= 35 && count <= 99) {
-        if (fn_80237260(1) < 0.3f) {
+        if (SyncRandGetFloat(1) < 0.3f) {
             score[side] += 6;
             if (score[side] <= 35) {
-                if (fn_80237260(1) < 0.75f) {
+                if (SyncRandGetFloat(1) < 0.75f) {
                     score[side] += 2;
-                } else if (fn_80237260(1) < 0.5f) {
+                } else if (SyncRandGetFloat(1) < 0.5f) {
                     score[side] += 1;
                 }
             }
-        } else if (fn_80237260(1) < 0.05f) {
+        } else if (SyncRandGetFloat(1) < 0.05f) {
             score[side] += 2;
         }
         side ^= 1;

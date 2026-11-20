@@ -10,7 +10,7 @@
 #include "engine/vec.h"
 #include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/Object_80235588.h"
 #include "engine/list.h"
 #include "engine/llmemory.h"

@@ -57,7 +57,7 @@ int PortDbGetSide(DbCursor *pObject);
 int ConGetChannelInfo(int a, int b);
 int PerGetDeviceStatus(int a);
 int fn_800B81A4(void);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 int GameTextGetPadPlayer(int a);
 int GameTextFindPlayerPad(int a);
 void FEPlyrSetPlayer(int index, int a, int b);
@@ -126,7 +126,7 @@ int MsgGameMsg7Result(void)
 
 float MsgGameRandRange(float min, float max)
 {
-    return min + (max - min) * fn_80237260(1);
+    return min + (max - min) * SyncRandGetFloat(1);
 }
 
 void MsgGameSetSetup(int a, int b, int c)

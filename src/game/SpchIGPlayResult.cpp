@@ -28,7 +28,7 @@ int fn_80178360(void);
 int fn_801783AC(int bit);
 int fn_80179138(void);
 int SysGetSystemTime(void);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 
 void SpchIGSayPlayResult(void);
 int SpchIGGetTackler(void);
@@ -385,7 +385,7 @@ extern "C" void SpchIGSayPlayResult(void)
 {
     if (_SpchIG_uResultStartTime == 0) {
         _SpchIG_uResultStartTime = SysGetSystemTime();
-        _SpchIG_fResultDelay = fn_80237260(1) + 1.0f;
+        _SpchIG_fResultDelay = SyncRandGetFloat(1) + 1.0f;
         _SpchIG_bResultSide = SpchIGGetResultFirstSide();
     }
 

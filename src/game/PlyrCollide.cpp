@@ -24,7 +24,7 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80227704(void *pA, void *pB);
 void fn_802277DC(void *pOut, void *pA, void *pB);
 void fn_80227C2C(void *pOut, void *pIn);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_800B2C48(Object_800B26B0 *pA, Object_800B26B0 *pB, int angle, unsigned char *pHitA, unsigned char *pHitB);
 }

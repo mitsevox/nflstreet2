@@ -376,7 +376,7 @@ extern "C" void fn_800E0694(Object_80039F5C *p, int handle, int index)
         unsigned int threshold = p->mRatings[0] * lbl_803EAD2C;
         if ((unsigned int)fn_802372EC(0, lbl_803EAD28) > threshold) {
             p->mUnknown1008.mUnknown0 = fn_8009A63C(handle)->mUnknown4;
-            p->mUnknown1008.mUnknown1 = !(fn_80237260(0) >= lbl_803EAD30) ? 1 : 2;
+            p->mUnknown1008.mUnknown1 = !(SyncRandGetFloat(0) >= lbl_803EAD30) ? 1 : 2;
             p->mUnknown1008.mUnknown2 = handle < 0 ? 2 : 1;
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 226, 1.0f, p);
             return;
@@ -716,14 +716,14 @@ extern "C" int fn_800E1584(Object_80039F5C *p)
         if (special) {
             if (!(fn_8022781C(&p->mMotion, &pOther->mMotion) >= 3.0f) &&
                 MathAngleDiff(fn_800E1248(p, pOther), p->mMotion.mUnknown32) < (int)(angle * 46603.37890625f) &&
-                !(fn_80237260(0) >= chance) && fn_800E1350(p)) {
+                !(SyncRandGetFloat(0) >= chance) && fn_800E1350(p)) {
                 result = 1;
             }
         } else {
             if (!(p->mMotion.mPos.mY >= pOther->mMotion.mPos.mY) &&
                 !(fn_8022781C(&p->mMotion, &pOther->mMotion) >= 3.0f) &&
                 MathAngleDiff(fn_800E1248(p, pOther), p->mMotion.mUnknown32) < (int)(angle * 46603.37890625f) &&
-                !(fn_80237260(0) >= 0.1f) && fn_800E1350(p)) {
+                !(SyncRandGetFloat(0) >= 0.1f) && fn_800E1350(p)) {
                 result = 1;
             }
         }
@@ -1104,7 +1104,7 @@ extern "C" void fn_800E2ABC(Object_80039F5C *p)
     Block_800E1954 *pBlock = (Block_800E1954 *)&p->mUnknown336;
     Point_8017886C point;
     point = fn_80177FFC(p->mIdBytes[2]);
-    float random = fn_80237260(0);
+    float random = SyncRandGetFloat(0);
     Point_8017886C target;
     target.mY = point.mY + 1.4f + random;
     if (!(target.mY <= p->mMotion.mPos.mY)) {

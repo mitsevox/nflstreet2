@@ -13,7 +13,7 @@ struct Entry_800C9D6C {
     unsigned int mUnknown14;
 };
 
-/* Allocated through fn_80238174 under the id 'turb' (fn_800C9D6C). */
+/* Allocated through SyncStateRegister under the id 'turb' (fn_800C9D6C). */
 struct Block_800C9D6C {
     int mRefs[3];
     unsigned int mCounts[2];

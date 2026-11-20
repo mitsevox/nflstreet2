@@ -95,7 +95,7 @@ void PlyrCollideRemoveExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 void fn_8009BD60(Object_80039F5C *p);
 void TurnToPlayStartAnim(Object_80039F5C *p, int a, int b);
 float fn_80178A68(Point_8017886C *pPos);
@@ -1109,7 +1109,7 @@ extern "C" void HuddleArrive(Object_80039F5C *p, HuddleBlock_t *pState) {
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
     memset(&message, 0, 4);
     message.mId = 51;
-    message.mUnknown1[0] = (int)(fn_80237260(0) * 32.0f);
+    message.mUnknown1[0] = (int)(SyncRandGetFloat(0) * 32.0f);
     fn_800F03D8(0, p->mpState, &message, p);
     memset(&message, 0, 4);
     message.mId = 9;

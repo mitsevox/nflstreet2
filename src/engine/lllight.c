@@ -14,7 +14,7 @@
 #include "engine/vec.h"
 #include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/Object_80235588.h"
 #include "engine/list.h"
 #include "engine/llmemory.h"
@@ -143,27 +143,6 @@ unsigned int fn_80235F58(float *pColor, float scale)
     return color;
 }
 
-void fn_80236164(Scene_8023609C *pScene, GXLightObj *pLights, unsigned int *pColors)
-{
-    unsigned int i;
-    Projector_80236164 *pProjector;
-
-    for (i = 0; i < pScene->mUnknown16; i++) {
-        pProjector = &pScene->mUnknown20[i];
-        switch (pProjector->mUnknown0) {
-        case 0:
-            break;
-        case 1:
-            fn_80235DD8((float (*)[4])&pLights[i], fn_802362C4(pScene, pProjector->mUnknown20)->mUnknown4);
-            break;
-        case 2:
-            fn_80235EB4((float (*)[4])&pLights[i], (int)(pProjector->mUnknown24 * 46603.378f), pProjector->mUnknown28);
-            break;
-        }
-        pColors[i] = fn_80235F58(pProjector->mUnknown4, 128.0f);
-    }
-}
-
 void *fn_8023608C(Scene_8023609C *pScene, int index)
 {
     return pScene->mpUnknown12 + index * 100;
@@ -194,6 +173,27 @@ void fn_8023609C(Scene_8023609C *pScene)
             pLight->mUnknown36[2] = pLight->mUnknown4[2];
             break;
         }
+    }
+}
+
+void fn_80236164(Scene_8023609C *pScene, GXLightObj *pLights, unsigned int *pColors)
+{
+    unsigned int i;
+    Projector_80236164 *pProjector;
+
+    for (i = 0; i < pScene->mUnknown16; i++) {
+        pProjector = &pScene->mUnknown20[i];
+        switch (pProjector->mUnknown0) {
+        case 0:
+            break;
+        case 1:
+            fn_80235DD8((float (*)[4])&pLights[i], fn_802362C4(pScene, pProjector->mUnknown20)->mUnknown4);
+            break;
+        case 2:
+            fn_80235EB4((float (*)[4])&pLights[i], (int)(pProjector->mUnknown24 * 46603.378f), pProjector->mUnknown28);
+            break;
+        }
+        pColors[i] = fn_80235F58(pProjector->mUnknown4, 128.0f);
     }
 }
 
@@ -407,21 +407,9 @@ void fn_80236C10(int index, float *pColor, float *pDir)
     Vec3_801DE1E0 dir;
     unsigned char rgb[4];
 
-    if (pColor[0] < 0.0f) {
-        pColor[0] = 0.0f;
-    } else if (!(pColor[0] <= 255.0f)) {
-        pColor[0] = 255.0f;
-    }
-    if (pColor[1] < 0.0f) {
-        pColor[1] = 0.0f;
-    } else if (!(pColor[1] <= 255.0f)) {
-        pColor[1] = 255.0f;
-    }
-    if (pColor[2] < 0.0f) {
-        pColor[2] = 0.0f;
-    } else if (!(pColor[2] <= 255.0f)) {
-        pColor[2] = 255.0f;
-    }
+    pColor[0] = pColor[0] < 0.0f ? 0.0f : (pColor[0] <= 255.0f ? pColor[0] : 255.0f);
+    pColor[1] = pColor[1] < 0.0f ? 0.0f : (pColor[1] <= 255.0f ? pColor[1] : 255.0f);
+    pColor[2] = pColor[2] < 0.0f ? 0.0f : (pColor[2] <= 255.0f ? pColor[2] : 255.0f);
     rgb[0] = (int)pColor[0];
     rgb[1] = (int)pColor[1];
     rgb[2] = (int)pColor[2];

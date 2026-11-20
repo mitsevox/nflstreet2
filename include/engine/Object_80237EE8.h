@@ -16,7 +16,7 @@ extern "C" {
 int fn_80237E78(void);
 void fn_80237F98(Object_80237EE8 *p);
 void fn_80237FA4(Object_80237EE8 *p);
-Object_80237EE8 *fn_8023811C(Object_80237EE8 *p);
+Object_80237EE8 *SyncStateEndGroup(Object_80237EE8 *p);
 #ifdef __cplusplus
 }
 #endif

@@ -1,7 +1,7 @@
 #ifndef GAME_BLOCK_800B3660_H
 #define GAME_BLOCK_800B3660_H
 
-/* 72-byte block allocated through fn_80238174 under the id 'pcal'. */
+/* 72-byte block allocated through SyncStateRegister under the id 'pcal'. */
 struct Block_800B3660 {
     unsigned char mUnknown0[4];
     int mUnknown4;

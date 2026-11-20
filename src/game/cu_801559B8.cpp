@@ -5,7 +5,7 @@ int fn_80177F70(void);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801787DC(int team);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 
 int fn_801559B8(Class_80148A58 *p, int a)
 {
@@ -19,12 +19,12 @@ int fn_801559B8(Class_80148A58 *p, int a)
             if (second - first > 1) {
                 result = 2;
             } else {
-                result = fn_80237260(0) <= 0.5f ? 1 : 2;
+                result = SyncRandGetFloat(0) <= 0.5f ? 1 : 2;
             }
         } else if (first > second) {
-            result = fn_80237260(0) <= 0.5f ? 1 : 2;
+            result = SyncRandGetFloat(0) <= 0.5f ? 1 : 2;
         } else {
-            result = fn_80237260(0) <= 0.7f ? 1 : 2;
+            result = SyncRandGetFloat(0) <= 0.7f ? 1 : 2;
         }
     }
     return result;

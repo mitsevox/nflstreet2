@@ -1958,6 +1958,50 @@
       ]
     },
     {
+      "source": "src/game/cu_8006F810.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row of src/game/cu_8006F810.cpp (0x8006F810-0x80071C3C) and the data row 0x80290B58-0x80290BC8 of its whole .rodata (pools and the two constant tables); linked with holdouts (owner ruling of 2026-11-20): 35 of 37 functions exact, the two holdouts keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8006F810",
+          "end": "0x8006F850"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80070C40",
+          "end": "0x80071BDC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80071C2C",
+          "end": "0x80071C3C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80290B58",
+          "end": "0x80290BC8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8006F850",
+            "evidence": "evidence.tsv source-form 0x8006F850-0x80070C40"
+          },
+          {
+            "function": "fn_80071BDC",
+            "evidence": "evidence.tsv source-form 0x80071BDC-0x80071C2C"
+          }
+        ],
+        "evidence": "x1f merge notes (swarm x1 tracking table): src/game/cu_8006F810.cpp holds out fn_8006F850 and fn_80071BDC."
+      }
+    },
+    {
       "source": "src/game/OptionRun.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8013141C-0x801327F4 (src/game/OptionRun.cpp) and its function and data rows; every function exact, promoted from comparison-only. The edges are the researched likely file edges recorded in that row (owner rule 2026-10-22: researched likely boundaries count as file edges).",
@@ -4367,6 +4411,44 @@
           }
         ],
         "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/dbmanager.c holds out fn_802331BC only."
+      }
+    },
+    {
+      "source": "src/engine/lllight.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x80235DD8-0x80236DD8 (src/engine/lllight.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows and the data row 0x802B71B0-0x802B7220 of its whole .rodata; linked with holdouts (owner ruling of 2026-11-20): 21 of 23 functions exact, the two holdouts keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80235DD8",
+          "end": "0x802365E8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802368D0",
+          "end": "0x80236C10"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B71B0",
+          "end": "0x802B7220"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_802365E8",
+            "evidence": "evidence.tsv source-form 0x802365E8-0x802368D0"
+          },
+          {
+            "function": "fn_80236C10",
+            "evidence": "evidence.tsv source-form 0x80236C10-0x80236DD8"
+          }
+        ],
+        "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/lllight.c holds out fn_802365E8 and fn_80236C10."
       }
     },
     {

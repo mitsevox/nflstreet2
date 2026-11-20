@@ -25,7 +25,7 @@ struct Table_8015005C {
 extern "C" {
 Table_8015005C *fn_801530FC(void);
 int BallStateGet(Ball_t *pBall, int *pOut);
-float fn_802373C8(int selector, float first, float last);
+float SyncRandGetFloatRange(int selector, float first, float last);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int MathAngleDiff(int a, int b);
 int fn_8015228C(Object_80039F5C *p, unsigned char *pIndex);
@@ -58,7 +58,7 @@ int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex)
             Vector_80039F5C position;
             BallGetLandingPoint(pBall, &position);
             float distance = fn_8022781C(&position, &p->mMotion.mPos);
-            score = fn_802373C8(0, score, 0.75f);
+            score = SyncRandGetFloatRange(0, score, 0.75f);
             if (i == 0) {
                 score += 0.5f;
             }

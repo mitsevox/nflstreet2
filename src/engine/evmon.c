@@ -14,7 +14,7 @@
 #include "engine/vec.h"
 #include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/Object_80235588.h"
 #include "engine/list.h"
 #include "engine/llmemory.h"
@@ -61,11 +61,11 @@ void fn_80238358(void)
     lbl_803EC140 = 0;
 }
 
-int fn_80238388(const Desc_80238424 *pDesc)
+int EvMonCreate(const Desc_80238424 *pDesc)
 {
     int index = lbl_803A3A14.mUnknown0;
     int size = pDesc->mUnknown0 * pDesc->mUnknown4 + 16 + pDesc->mUnknown8 * 4;
-    void *pHandle = fn_80238174(0, (void **)&lbl_803A3A14.mppUnknown8[index], size, 0, 0x65766D6F);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803A3A14.mppUnknown8[index], size, 0, 0x65766D6F);
     fn_802382CC(fn_8023816C(pHandle), pDesc);
     fn_802381E0(pHandle);
     lbl_803A3A14.mUnknown0++;
@@ -105,7 +105,7 @@ void *fn_80238540(int index, int item)
     return (char *)p + 16 + p->mUnknown12 * 4 + p->mUnknown8 * item;
 }
 
-void fn_80238570(int index, int advance)
+void EvMonFire(int index, int advance)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     unsigned int i;

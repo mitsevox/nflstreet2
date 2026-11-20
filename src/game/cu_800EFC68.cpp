@@ -40,7 +40,7 @@
 #include "game/fn_80227638.h"
 #include "game/fn_8022781C.h"
 #include "game/fn_802372EC.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/Record_800DB60C.h"
 #include "game/fn_801BE60C.h"
 #include "game/AnimChanStartAnim.h"
@@ -388,7 +388,7 @@ struct Entry_800F0EFC {
     char mUnknown113[3];
 };
 
-/* 8-byte record registered through fn_80238174 by fn_800F164C. */
+/* 8-byte record registered through SyncStateRegister by fn_800F164C. */
 struct Record_803EAE18 {
     unsigned char mCount;
     char mUnknown1[3];
@@ -726,7 +726,7 @@ extern "C" void fn_80227264(void *pOut, void *p, float scale);
 extern "C" void fn_8022765C(void *pOut, void *pA, void *pB);
 
 extern "C" {
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 }
 
 extern "C" {
@@ -1126,7 +1126,7 @@ struct List_801018B4_800F0960 {
     Item_801018B4_800F0960 mItems[1];
 };
 
-/* 92-byte state allocated through fn_80238174 under the id 'blck'
+/* 92-byte state allocated through SyncStateRegister under the id 'blck'
    (fn_8011DF3C). */
 struct Block_803EB028_800F0960 {
     int mUnknown0;
@@ -1467,7 +1467,7 @@ extern "C" void fn_80227248(void *pOut, void *p, float scale);
 extern "C" void fn_80227904(void *pOut, void *pA, void *pB, float t);
 
 extern "C" {
-float fn_80237260(int);
+float SyncRandGetFloat(int);
 }
 
 extern "C" {
@@ -3441,7 +3441,7 @@ extern float lbl_803EB0A0, lbl_803EB0A4, lbl_803EB0A8, lbl_803EB0AC;
 
 
 extern "C" {
-float fn_80237260(int a);
+float SyncRandGetFloat(int a);
 }
 
 extern "C" {
@@ -4686,7 +4686,7 @@ extern "C" int fn_800F1638(void *p) {
 }
 
 extern "C" void fn_800F164C(int count) {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAE18, 8, 0, 0x6173736A);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAE18, 8, 0, 0x6173736A);
     Record_803EAE18 *pRecord;
 
     fn_80238234(pHandle, fn_800F0EFC, fn_800F0EC0, 0, fn_800F0E2C);
@@ -10433,7 +10433,7 @@ void fn_800FF598(State_800FDA58 *s, Object_80039F5C *p, Point_8017886C *point, i
             if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), angle) >= 0x3C71C8) {
                 s->mUnknown28 = 0.0f;
             } else {
-                float random = fn_80237260(0);
+                float random = SyncRandGetFloat(0);
 
                 s->mUnknown28 = random + random + 2.0f;
             }
@@ -10772,7 +10772,7 @@ void fn_8010016C(Object_80039F5C *p, Point_8017886C *point, Object_80039F5C *oth
     unsigned int count;
     unsigned int i;
 
-    if (lbl_803EAEA0 && fn_80237260(0) >= chance) {
+    if (lbl_803EAEA0 && SyncRandGetFloat(0) >= chance) {
         return;
     }
     fn_80227904(&middle, &p->mMotion.mPos, point, 0.5f);
@@ -10985,7 +10985,7 @@ void fn_80100B34(Object_80039F5C *p,float *out,float *maximum,float a,float b,fl
         a += (1.0f - (float)p->mRatings[6] * 0.00392156886f) * 0.3f + 0.05f;
         a += (1.0f - b) * 0.2f;
         *maximum = c * a * lbl_803EAEB0;
-        *out = fn_80237260(0) * *maximum;
+        *out = SyncRandGetFloat(0) * *maximum;
     }
 }
 }
@@ -11016,7 +11016,7 @@ void fn_80100BF8(Object_80039F5C *p, float, Vector_80039F5C *point, Point_801788
         error = 0.05f;
         if (ratio > 1.0f) {
             error += 0.1f;
-            length *= 1.0f - fn_80237260(0) * error * lbl_803EAEBC;
+            length *= 1.0f - SyncRandGetFloat(0) * error * lbl_803EAEBC;
             distance = length;
             fn_80227538((Point_8017886C *)&delta, fn_801CFE40(delta.mY, delta.mX), length);
             fn_80227638(point, &delta, &p->mMotion.mPos);
@@ -11950,12 +11950,12 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
     pEvent->mUnknown14 = 5;
     pEvent->mUnknown16 = (int)(speed * 256.0f);
     fn_800B1508();
-    spin = fn_80237260(0) * 0.2f;
+    spin = SyncRandGetFloat(0) * 0.2f;
     spin += p->mMotion.mUnknown28 * 0.1f / gPlyrMoveFwdSpeed;
     spin += p->mUnknown560.mUnknown32 * 0.15f / (gPlyrMoveFwdSpeed * 100621.1171875f);
     spin += (1.0f - pRecord->mUnknown4) * 0.2f * 2.0f;
     spin += pRecord->mUnknownC;
-    random = fn_80237260(0);
+    random = SyncRandGetFloat(0);
     spin = AddRatingNoise_80102D78(spin, random, p->mRatings[6]);
     if (fn_800A7F1C(p->mIdBytes[2]) == 0) {
         spin = lbl_803EAEC8;
@@ -12020,7 +12020,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
             fn_80103F80(pBall, pMotion->mPos, offset, length, angle, speed, &target, pTarget);
         }
         fn_8010016C(pTarget, (Point_8017886C *)&target, p, speed);
-        limit = 1.0f - fn_80237260(0) * 2.5f;
+        limit = 1.0f - SyncRandGetFloat(0) * 2.5f;
         target.mX = target.mX > fn_80178A08() + limit ? fn_80178A08() + limit : target.mX;
         target.mX = target.mX < -(fn_80178A08() + limit) ? -(fn_80178A08() + limit) : target.mX;
         target.mY = target.mY > fn_80178A44() + limit ? fn_80178A44() + limit : target.mY;
@@ -12507,8 +12507,8 @@ extern "C" void fn_80104944(Object_80039F5C *p, Vector_80039F5C *pOut) {
     float range = (1.0f - rating * 0.5f) * 2.0f;
 
     if (lbl_803EAEE8 == 0) {
-        pOut->mX += fn_80237260(0) * 2.0f * range - range;
-        pOut->mY += fn_80237260(0) * 2.0f * range - range;
+        pOut->mX += SyncRandGetFloat(0) * 2.0f * range - range;
+        pOut->mY += SyncRandGetFloat(0) * 2.0f * range - range;
     }
 }
 
@@ -12520,12 +12520,12 @@ extern "C" void fn_80104A08(Object_80039F5C *p, float scale, int angle, Point_80
         Point_8017886C offset;
         float t;
 
-        fn_80227538(&offset, angle, scale * 2.0f * fn_80237260(0));
-        offset.mX += fn_80237260(0) + -0.5f;
-        offset.mY += fn_80237260(0) + -0.5f;
+        fn_80227538(&offset, angle, scale * 2.0f * SyncRandGetFloat(0));
+        offset.mX += SyncRandGetFloat(0) + -0.5f;
+        offset.mY += SyncRandGetFloat(0) + -0.5f;
         fn_80227638(pPoint, pPoint, &offset);
         t = scale * 0.13000001f + 0.02f;
-        t = t * 2.0f * fn_80237260(0) - t;
+        t = t * 2.0f * SyncRandGetFloat(0) - t;
         *pValue *= t + 1.0f;
     }
 }
@@ -13944,7 +13944,7 @@ extern "C" void fn_8010810C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
         factor = 0.0f;
     }
     if (fn_801783AC(11) == 1 || fn_801783AC(12) == 1) {
-        if (fn_80237260(0) > p->mRatings[3] / 255.0f && fn_8022781C(&pInfo->mUnknown16, &p->mMotion.mPos) > 6.0f) {
+        if (SyncRandGetFloat(0) > p->mRatings[3] / 255.0f && fn_8022781C(&pInfo->mUnknown16, &p->mMotion.mPos) > 6.0f) {
             factor /= 3.0f;
         }
     }
@@ -14996,7 +14996,7 @@ extern "C" int fn_8010AFB8(Object_80039F5C *p) {
         }
     } else {
         if (fn_800B65A0(p->mIdBytes[2]) == 0xFF && pBlock->mUnknown7 == 0 && fn_8016E928() && fn_801486A0() != 2) {
-            if (fn_80237260(0) < 0.5f) {
+            if (SyncRandGetFloat(0) < 0.5f) {
                 fn_8010B1FC(p, 2, 0);
             }
             pBlock->mUnknown7 = 1;
@@ -15425,7 +15425,7 @@ extern "C" int fn_8010BD58(Object_80039F5C *p) {
         if (chance < limit) {
             chance = limit;
         }
-        if (fn_80237260(0) < chance) {
+        if (SyncRandGetFloat(0) < chance) {
             result = 1;
         }
     }
@@ -18315,7 +18315,7 @@ extern "C" int fn_80112928(Object_80039F5C *p)
                 chance = 0.0f;
             }
         }
-        if (fn_80237260(0) <= chance) {
+        if (SyncRandGetFloat(0) <= chance) {
             memset(&message, 0, sizeof(message));
             message.mId = 23;
             message.mUnknown1[0] = BallGetIndex(pBall);
@@ -20794,7 +20794,7 @@ extern "C" int fn_801182C8(Object_80039F5C *p)
 
 extern "C" void fn_80118704(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EC9F0, 4, 0, 0x7A736674);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EC9F0, 4, 0, 0x7A736674);
     unsigned char *pData = (unsigned char *)fn_8023816C(pHandle);
 
     *pData = 0;
@@ -20990,7 +20990,7 @@ extern "C" int fn_80118B4C(Object_80039F5C *p, Pair_8011BAE0 *pPair)
         if (fn_80227890(&p->mMotion.mPos, &pOther->mMotion.mPos) >= 12.25f) goto done;
         if (!fn_80124714(p, pOther, 0)) goto done;
         count = 0;
-        roll = fn_80237260(0);
+        roll = SyncRandGetFloat(0);
         fn_8011A2C4(p, pOther, *pPair, 1);
         if (pBlock->mUnknown20 != 1 || close) {
             if (roll < pBlock->mUnknown52) {
@@ -21189,7 +21189,7 @@ extern "C" void fn_801194F0(void)
         Block_801194F0 *pBlock = (Block_801194F0 *)&p->mBlock1032;
         if (BallFindHeldBy(p)) continue;
         if (p->mUnknown1032 != 2 && p->mUnknown1032 != 3) continue;
-        if (fn_80237260(0) >= 1.0f) continue;
+        if (SyncRandGetFloat(0) >= 1.0f) continue;
 
         int covered = 0;
         Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown1036);
@@ -21222,13 +21222,13 @@ extern "C" void fn_801194F0(void)
             int tryOther = 1;
             if (p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.2f
                 && MathAngleDiff(angle, p->mMotion.mFacing + fn_800C8BAC(p, 0)) <= 0x155554) {
-                if (fn_80237260(0) < pBlock->mUnknown52) {
+                if (SyncRandGetFloat(0) < pBlock->mUnknown52) {
                     moves[num] = lbl_802DAC20[3];
                     num++;
                     tryOther = 0;
                 }
             } else if (pOther->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.2f && !fn_80113BCC(pOther)) {
-                if (fn_80237260(0) < pBlock->mUnknown52) {
+                if (SyncRandGetFloat(0) < pBlock->mUnknown52) {
                     moves[num] = lbl_802DAC20[2];
                     num++;
                     tryOther = 0;
@@ -21248,12 +21248,12 @@ extern "C" void fn_801194F0(void)
                 if (!blocked) {
                     if (pOther->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.2f
                         && MathAngleDiff(angle + 0x800000, pOther->mMotion.mFacing + fn_800C8BAC(pOther, 0)) <= 0x155554) {
-                        if (fn_80237260(0) < pOtherBlock->mUnknown52) {
+                        if (SyncRandGetFloat(0) < pOtherBlock->mUnknown52) {
                             moves[num] = lbl_802DAC20[0];
                             num++;
                         }
                     } else if (p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.2f) {
-                        if (fn_80237260(0) < pOtherBlock->mUnknown52) {
+                        if (SyncRandGetFloat(0) < pOtherBlock->mUnknown52) {
                             moves[num] = lbl_802DAC20[5];
                             num++;
                         }
@@ -21457,25 +21457,25 @@ extern "C" void fn_8011A2C4(Object_80039F5C *p, Object_80039F5C *pOther, Pair_80
     fn_80119DB4(p, pOther, apply);
 
     share = pBlock->mUnknown28 / (pBlock->mUnknown28 + pOtherBlock->mUnknown28);
-    pBlock->mUnknown56 = fn_80237260(0) < share;
+    pBlock->mUnknown56 = SyncRandGetFloat(0) < share;
     pOtherBlock->mUnknown56 = pBlock->mUnknown56 ^ 1;
     if (pOtherBlock->mUnknown56) {
         share = 1.0f - share;
     }
-    if (fn_80237260(0) >= share) {
-        second = share * fn_80237260(0);
+    if (SyncRandGetFloat(0) >= share) {
+        second = share * SyncRandGetFloat(0);
     } else {
         second = share * share;
     }
 
     share = pBlock->mUnknown24 / (pBlock->mUnknown24 + pOtherBlock->mUnknown24);
-    pBlock->mUnknown55 = fn_80237260(0) < share;
+    pBlock->mUnknown55 = SyncRandGetFloat(0) < share;
     pOtherBlock->mUnknown55 = pBlock->mUnknown55 ^ 1;
     if (pOtherBlock->mUnknown55) {
         share = 1.0f - share;
     }
-    if (fn_80237260(0) >= share) {
-        first = share * fn_80237260(0);
+    if (SyncRandGetFloat(0) >= share) {
+        first = share * SyncRandGetFloat(0);
     } else {
         first = share * share;
     }
@@ -21484,8 +21484,8 @@ extern "C" void fn_8011A2C4(Object_80039F5C *p, Object_80039F5C *pOther, Pair_80
     if (fn_800E1554(pOther)) {
         share = 0.0f;
     }
-    if (fn_80237260(0) >= share) {
-        chance = share * fn_80237260(0);
+    if (SyncRandGetFloat(0) >= share) {
+        chance = share * SyncRandGetFloat(0);
     } else {
         chance = share * share;
     }
@@ -21543,8 +21543,8 @@ extern "C" int fn_8011A608(Object_80039F5C *p, Object_80039F5C *pOther)
     if (fn_800A851C(fn_80178320(), pOther)) {
         return 0;
     }
-    if ((fn_8011F1CC() && fn_80237260(0) > lbl_803EB080) || (fn_8011F1A4() && fn_80237260(0) > lbl_803EB084)) {
-        float chance = fn_80237260(0);
+    if ((fn_8011F1CC() && SyncRandGetFloat(0) > lbl_803EB080) || (fn_8011F1A4() && SyncRandGetFloat(0) > lbl_803EB084)) {
+        float chance = SyncRandGetFloat(0);
 
         if (chance < pBlock->mUnknown8) {
             fn_800CE770(&query);
@@ -22989,7 +22989,7 @@ void fn_8011DCDC(void)
 extern "C" {
 void fn_8011DF3C(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EB028, sizeof(Block_803EB028), 0, 0x626C636B);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EB028, sizeof(Block_803EB028), 0, 0x626C636B);
 
     fn_8023816C(pHandle);
     fn_802381E0(pHandle);
@@ -23626,7 +23626,7 @@ extern "C" {
 void fn_8011F0D8(void)
 {
     unsigned char count = BallsGetCount();
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EB098, 576 + count * sizeof(Record_8011F4F8), 0, 0x70696E66);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EB098, 576 + count * sizeof(Record_8011F4F8), 0, 0x70696E66);
     State_803EB098 *pState;
 
     fn_80238234(pHandle, 0, 0, 0, fn_8011EFD4);
@@ -24292,7 +24292,7 @@ void fn_80120384(void)
 extern "C" {
 void fn_8012055C(int count)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EB09C, sizeof(Lookup_8012078C), 0, 0x70757273);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EB09C, sizeof(Lookup_8012078C), 0, 0x70757273);
     Lookup_8012078C *pLookup;
 
     fn_80238234(pHandle, fn_8011F698, fn_8011F6BC, 0, fn_8011F71C);
@@ -24386,7 +24386,7 @@ int fn_80120794(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pDir,
     }
     result = PursuitGetInterceptAngle(pA, pB, speed, pDir);
     if (result <= 0x7FFFFF && pA->mY > pB->mY && pA->mY > fn_80178A2C()) {
-        fn_80237260(0);
+        SyncRandGetFloat(0);
         result = result > 0x400000 ? 0x800000 : 0;
     }
     return result;
@@ -26130,7 +26130,7 @@ void fn_80125594(Object_80039F5C *p, State_80125594 *pState)
     fn_80227690(&delta, (Point_8017886C *)&target, pPos);
     int toward = fn_801CFE40(delta.mY, delta.mX);
     if (fn_801486A0() == 0) {
-        predicted = MathRLerp(predicted, toward, fn_80237260(0));
+        predicted = MathRLerp(predicted, toward, SyncRandGetFloat(0));
     }
     pState->mUnknown8 = 1;
     pState->mUnknown4 = 1.0f;
@@ -26172,11 +26172,11 @@ void fn_80125708(Object_80039F5C *p, State_80125594 *pState)
         if (!blockedB) {
             side = 1;
             offset = distance * fn_801CFB18(0x800000 - difference);
-            offset += (fn_80237260(0) - 0.5f) * 3.0f;
+            offset += (SyncRandGetFloat(0) - 0.5f) * 3.0f;
         }
     } else if (!blockedA) {
         offset = distance * fn_801CFB18(difference - 0x800000);
-        offset += (fn_80237260(0) - 0.5f) * 3.0f;
+        offset += (SyncRandGetFloat(0) - 0.5f) * 3.0f;
     } else side = 1;
     int angle;
     if (!(offset >= distance * 0.25f)) {

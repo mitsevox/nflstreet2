@@ -6,7 +6,7 @@
 
 #include "game/ScreenTransition.h"
 #include "game/fn_802372EC.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80096A58.h"
 #include <string.h>
@@ -25,7 +25,7 @@ struct QuarterEndClip_t {
     unsigned char mUnknown20;
 };
 
-/* Allocated through fn_80238174 under the id 'qend' (InitState). */
+/* Allocated through SyncStateRegister under the id 'qend' (InitState). */
 struct QuarterEndState_t {
     int mUnknown0;
     int mState;
@@ -344,7 +344,7 @@ void QuarterEndPeriodTwoStub(void) {}
 
 void QuarterEndPhase::InitState()
 {
-    void *pHandle = fn_80238174(0, (void **)&_QuarterEnd_pState, sizeof(QuarterEndState_t), 0, 0x71656E64);
+    void *pHandle = SyncStateRegister(0, (void **)&_QuarterEnd_pState, sizeof(QuarterEndState_t), 0, 0x71656E64);
 
     fn_8023816C(pHandle);
     fn_802381E0(pHandle);

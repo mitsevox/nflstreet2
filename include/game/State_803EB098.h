@@ -24,7 +24,7 @@ struct Record_8011F4E0 {
     unsigned char mUnknown40[8];
 };
 
-/* State allocated through fn_80238174 under the id 'pinf' (fn_8011F0D8):
+/* State allocated through SyncStateRegister under the id 'pinf' (fn_8011F0D8):
    576 bytes followed by mUnknown572 records of 32 bytes. */
 struct State_803EB098 {
     float mUnknown0;

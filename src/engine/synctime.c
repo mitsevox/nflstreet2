@@ -14,7 +14,7 @@
 #include "engine/vec.h"
 #include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/Object_80235588.h"
 #include "engine/list.h"
 #include "engine/llmemory.h"
@@ -47,7 +47,7 @@ int fn_802376D8(void *p, void *pBuffer);
 void fn_80237888(unsigned int time);
 void fn_8023792C(void);
 void fn_80237930(void);
-Counter_80237934 *fn_80237934(int a, int b);
+Counter_80237934 *SyncTimeNewCounter(int a, int b);
 void fn_8023799C(Counter_80237934 *p);
 void fn_802379BC(Counter_80237934 *p, int value);
 void fn_802379C4(Counter_80237934 *p, int value);
@@ -61,7 +61,7 @@ int fn_8023758C(void *p, int value)
 
     pTimer->mUnknown8 = pTimer->mUnknown0;
     pTimer->mUnknown4 = pTimer->mUnknown0;
-    pTimer->mpUnknown12 = fn_80237934(0, lbl_803EC13C);
+    pTimer->mpUnknown12 = SyncTimeNewCounter(0, lbl_803EC13C);
     return 0;
 }
 
@@ -73,7 +73,7 @@ int fn_802375D4(void *p, int value)
     return 0;
 }
 
-int fn_802375FC(void *p, void *q)
+int SyncTimeCompareState(void *p, void *q)
 {
     Timer_80237780 *pA = p;
     Timer_80237780 *pB = q;
@@ -123,8 +123,8 @@ void fn_80237780(int a)
 
     fn_8023792C();
     lbl_803EC13C = a;
-    pHandle = fn_80238174(0, (void **)&lbl_803EC138, sizeof(Timer_80237780), 0, 0x74696D67);
-    fn_80238234(pHandle, fn_8023758C, fn_802375D4, 0, fn_802375FC);
+    pHandle = SyncStateRegister(0, (void **)&lbl_803EC138, sizeof(Timer_80237780), 0, 0x74696D67);
+    fn_80238234(pHandle, fn_8023758C, fn_802375D4, 0, SyncTimeCompareState);
     fn_80238248(pHandle, fn_802376D8, fn_80237778, fn_80237728);
     pTimer = fn_8023816C(pHandle);
     pTimer->mUnknown4 = 0;
@@ -183,7 +183,7 @@ void fn_80237930(void)
 {
 }
 
-Counter_80237934 *fn_80237934(int a, int b)
+Counter_80237934 *SyncTimeNewCounter(int a, int b)
 {
     Counter_80237934 *p = fn_801D2B7C(sizeof(Counter_80237934), 0, 0);
 

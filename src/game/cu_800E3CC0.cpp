@@ -126,7 +126,7 @@ void fn_800E55B8(Object_80039F5C *p);
 Point_8017886C fn_80177FFC(int team);
 Object_80039F5C *fn_8017876C(void);
 Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 int fn_8023790C(void);
 int fn_800C4184(Object_80039F5C *p);
 void fn_800D7A18(Object_80039F5C *p);
@@ -1323,7 +1323,7 @@ extern "C" void fn_800EA6F0(Object_80039F5C *p) {
     memset(&message, 0, 4);
     if (BallGetCurrentHolder() == p) {
         chance = p->mRatings[0] / 510.0f + 0.5f;
-        if (fn_80237260(0) < chance && !index) {
+        if (SyncRandGetFloat(0) < chance && !index) {
             id = 58;
             kind = 196;
         } else {
@@ -1332,7 +1332,7 @@ extern "C" void fn_800EA6F0(Object_80039F5C *p) {
         }
     } else {
         chance = p->mRatings[0] / 510.0f + 0.5f;
-        if (fn_80237260(0) < chance && !index) {
+        if (SyncRandGetFloat(0) < chance && !index) {
             id = 58;
             kind = 210;
         } else {
@@ -1351,7 +1351,7 @@ extern "C" void fn_800EA6F0(Object_80039F5C *p) {
                 p->mUnknown1008.mUnknown0 = !flag ? 6 : 3;
         } else if (nearY) {
             if (MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0xE38E2 || MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0xE38E2)
-                p->mUnknown1008.mUnknown0 = fn_80237260(0) >= 0.5f ? 3 : 6;
+                p->mUnknown1008.mUnknown0 = SyncRandGetFloat(0) >= 0.5f ? 3 : 6;
         }
     } else if (kind == 210) {
         if (nearX) {
@@ -1371,7 +1371,7 @@ extern "C" void fn_800EA6F0(Object_80039F5C *p) {
             }
         } else if (nearY) {
             if (MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0xE38E2 || MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0xE38E2)
-                p->mUnknown1008.mUnknown0 = fn_80237260(0) >= 0.5f ? 3 : 6;
+                p->mUnknown1008.mUnknown0 = SyncRandGetFloat(0) >= 0.5f ? 3 : 6;
         }
     }
     int value;

@@ -30,7 +30,7 @@ int fn_80177F70(void);
 Point_8017886C fn_80177FFC(int team);
 int fn_80178320(void);
 int MathAngleDiff(int a, int b);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 
 }
 
@@ -178,7 +178,7 @@ void PlayAlignPostStartDelays(int team)
                 fn_800FF6D8(p);
                 memset(&msg, 0, 4);
                 msg.mId = 51;
-                value = fn_80237260(0);
+                value = SyncRandGetFloat(0);
                 if (fn_80177F70() == 0) {
                     value *= 2.0f;
                 } else {

@@ -32,7 +32,7 @@ void fn_800FB824(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800E1778(Object_80039F5C *p);
 int fn_800B146C(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 extern float gFrameTimeScale;
 int fn_80178320(void);
 Point_8017886C fn_80177FE0(void);
@@ -58,7 +58,7 @@ void fn_800E55B8(Object_80039F5C *p)
     state->mUnknown0 = 0;
     state->mUnknown24 = 0;
     state->mUnknown26 = 15;
-    state->mUnknown28 = (signed char)(int)(fn_80237260(0) * 240.0f + 150.0f);
+    state->mUnknown28 = (signed char)(int)(SyncRandGetFloat(0) * 240.0f + 150.0f);
     for (int i = 1; i >= 0; i--) {
         state->mUnknown22[i] = 0;
     }

@@ -6,7 +6,7 @@
 #include "game/fn_800AD9B4.h"
 #include "game/GameCamera.h"
 #include "game/cammain.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/fn_800B65A0.h"
 
 /* One camera in a saved state; only mHeader is restored. */
@@ -21,7 +21,7 @@ struct CamGameSet_t {
     unsigned char mUnknown14;
 };
 
-/* Allocated through fn_80238174 under the id 'camg' (CamGameStart). */
+/* Allocated through SyncStateRegister under the id 'camg' (CamGameStart). */
 struct CamGameState_t {
     void *mpObject;
     CamGameSet_t mSet;
@@ -173,7 +173,7 @@ void _CamGameForAllCamerasDo(CamGameForAllFunc_t func, int a, int b, int c)
 
 void CamGameStart(void *pObject)
 {
-    void *pHandle = fn_80238174(0, (void **)&_CamGame_pState, sizeof(CamGameState_t), 0, 0x63616D67);
+    void *pHandle = SyncStateRegister(0, (void **)&_CamGame_pState, sizeof(CamGameState_t), 0, 0x63616D67);
 
     fn_80238234(pHandle, _CamGameCreate, _CamGameDestroy, 0, _CamGameBlockCompare);
     fn_80238248(pHandle, _CamGameBlockSave, _CamGameBlockGetSaveSize, _CamGameBlockRestore);

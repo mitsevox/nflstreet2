@@ -10674,7 +10674,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80290B58",
-          "end": "0x80290B9C"
+          "end": "0x80290BC8"
         }
       ],
       "functions": [
@@ -20896,7 +20896,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B71B0",
-          "end": "0x802B721C"
+          "end": "0x802B7220"
         }
       ],
       "functions": [
@@ -21041,7 +21041,7 @@
           "end": "0x802375FC"
         },
         {
-          "symbol": "fn_802375FC",
+          "symbol": "SyncTimeCompareState",
           "start": "0x802375FC",
           "end": "0x802376D8"
         },
@@ -21101,7 +21101,7 @@
           "end": "0x80237934"
         },
         {
-          "symbol": "fn_80237934",
+          "symbol": "SyncTimeNewCounter",
           "start": "0x80237934",
           "end": "0x8023799C"
         },
@@ -21156,7 +21156,7 @@
           "end": "0x80237A40"
         },
         {
-          "symbol": "fn_80237A40",
+          "symbol": "SyncStateNewHandle",
           "start": "0x80237A40",
           "end": "0x80237ADC"
         },
@@ -21246,7 +21246,7 @@
           "end": "0x8023808C"
         },
         {
-          "symbol": "fn_8023811C",
+          "symbol": "SyncStateEndGroup",
           "start": "0x8023811C",
           "end": "0x8023816C"
         },
@@ -21256,7 +21256,7 @@
           "end": "0x80238174"
         },
         {
-          "symbol": "fn_80238174",
+          "symbol": "SyncStateRegister",
           "start": "0x80238174",
           "end": "0x802381E0"
         },
@@ -21341,7 +21341,7 @@
           "end": "0x80238388"
         },
         {
-          "symbol": "fn_80238388",
+          "symbol": "EvMonCreate",
           "start": "0x80238388",
           "end": "0x80238420"
         },
@@ -21371,7 +21371,7 @@
           "end": "0x80238570"
         },
         {
-          "symbol": "fn_80238570",
+          "symbol": "EvMonFire",
           "start": "0x80238570",
           "end": "0x80238604"
         },

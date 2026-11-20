@@ -7,7 +7,7 @@
 #include "game/ScrmRuleSet.h"
 #include "game/GameOptions.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include <string.h>
 
 void *operator new(unsigned int size, int unknown);
@@ -103,7 +103,7 @@ void fn_80151858(Class_802A2918 *p)
 
     p->mpUnknown1C = new (0) Object_8015005C;
     if (allocate) {
-        pHandle = fn_80238174(0, (void **)&p->mpUnknown1C->mpUnknown36, sizeof(Table_8015005C), 0, 0x4D474A42);
+        pHandle = SyncStateRegister(0, (void **)&p->mpUnknown1C->mpUnknown36, sizeof(Table_8015005C), 0, 0x4D474A42);
         pTable = (Table_8015005C *)fn_8023816C(pHandle);
     } else {
         p->mpUnknown1C->mpUnknown36 = (Table_8015005C *)fn_801D2B7C(sizeof(Table_8015005C), 0, 0);

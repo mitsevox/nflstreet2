@@ -1,6 +1,6 @@
 /* The saved flag byte that says whether the pass icons are shown. */
 
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 
 extern "C" {
 }
@@ -25,7 +25,7 @@ int PassIconStateBlockCompare(void *p, void *q)
 
 void PassIconStateStart(void)
 {
-    void *pHandle = fn_80238174(0, &_PassIconState_pFlags, 4, 0, 0x67696E74);
+    void *pHandle = SyncStateRegister(0, &_PassIconState_pFlags, 4, 0, 0x67696E74);
 
     fn_80238234(pHandle, PassIconStateBlockInit, PassIconStateBlockShutdown, 0, PassIconStateBlockCompare);
     fn_802381E0(pHandle);

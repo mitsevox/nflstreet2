@@ -3,7 +3,7 @@
 #include "game/Object_80039F5C.h"
 #include <string.h>
 #include "game/fn_802372EC.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/fn_800B65A0.h"
 
 /* 0x30-byte block allocated by CoinTossAllocState under the id 'ctos'. */
@@ -91,7 +91,7 @@ int UISGameUnlockPad(void);
 int fn_801CFE40(float y, float x);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_8022DDB4(int tag, void *data);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 void *fn_8023816C(void *pHandle);
 
 int CoinTossGetTeamSide(int a);
@@ -326,7 +326,7 @@ int CoinTossDecide(int mode)
 void CoinTossLockPlayer(Object_80039F5C *p)
 {
     p->mpUnknown4->mUnknown20 |= 0x10;
-    fn_80237260(0);
+    SyncRandGetFloat(0);
 }
 
 void CoinTossUnlockPlayer(Object_80039F5C *p)
@@ -354,7 +354,7 @@ void CoinTossReleasePlayer(Object_80039F5C *p)
 
 void CoinTossAllocState(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&_CoinToss_pState, sizeof(CoinTossState_t), 0, 0x63746F73);
+    void *pHandle = SyncStateRegister(0, (void **)&_CoinToss_pState, sizeof(CoinTossState_t), 0, 0x63746F73);
 
     memset(fn_8023816C(pHandle), 0, sizeof(CoinTossState_t));
     fn_802381E0(pHandle);

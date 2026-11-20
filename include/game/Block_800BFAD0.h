@@ -32,7 +32,7 @@ struct Slot_800BFAD0 {
     unsigned char mUnknown1D[3];
 };
 
-/* Allocated through fn_80238174 under the id 'prep' (0x800BFAD0). */
+/* Allocated through SyncStateRegister under the id 'prep' (0x800BFAD0). */
 struct Block_800BFAD0 {
     Slot_800BFAD0 mSlots[2];
     int mUnknown40;

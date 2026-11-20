@@ -7,7 +7,7 @@
 
 #include "game/Collide.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 
 /* Eight-byte state allocated through the block manager under the id 'scol'. */
 struct StatcollState_t {
@@ -121,7 +121,7 @@ int StatcollBlockGetSaveSize(void *p)
 
 void StatcollStart(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&_Statcoll_pState, sizeof(StatcollState_t), 0, 0x73636F6C);
+    void *pHandle = SyncStateRegister(0, (void **)&_Statcoll_pState, sizeof(StatcollState_t), 0, 0x73636F6C);
 
     fn_80238234(pHandle, StatcollBlockInit, StatcollBlockShutdown, 0, StatcollBlockCompare);
     fn_80238248(pHandle, StatcollBlockSave, StatcollBlockGetSaveSize, StatcollBlockRestore);

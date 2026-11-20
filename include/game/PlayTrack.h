@@ -15,7 +15,7 @@ struct PlayTrackEntry_t {
     unsigned char mUnknown11;
 };
 
-/* Allocated through fn_80238174 under the id 'ptrk' (PlayTrackInit). */
+/* Allocated through SyncStateRegister under the id 'ptrk' (PlayTrackInit). */
 struct PlayTrack_t {
     float mUnknown0;
     float mUnknown4;

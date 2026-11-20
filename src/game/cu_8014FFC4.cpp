@@ -2,7 +2,7 @@
 
 extern "C" {
 float fn_800A32B4(void);
-float fn_802373C8(int selector, float first, float last);
+float SyncRandGetFloatRange(int selector, float first, float last);
 
 void fn_8014FFC4(Point_8017886C *p)
 {
@@ -11,7 +11,7 @@ void fn_8014FFC4(Point_8017886C *p)
     if (!(width <= 6.0f)) {
         width = 6.0f;
     }
-    p->mY = fn_802373C8(0, originY + 20.0f, originY + 40.0f);
-    p->mX = fn_802373C8(0, -width, width);
+    p->mY = SyncRandGetFloatRange(0, originY + 20.0f, originY + 40.0f);
+    p->mX = SyncRandGetFloatRange(0, -width, width);
 }
 }

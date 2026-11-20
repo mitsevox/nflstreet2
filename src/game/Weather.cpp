@@ -70,7 +70,7 @@ static unsigned char _Weather_auStreakColor[4];
 static unsigned char _Weather_auSplashColor[4];
 static AnimTex_t *_Weather_pAnimTex;
 static int _Weather_iDrawPass;
-float fn_80237260(int);
+float SyncRandGetFloat(int);
 void DCFlushRange(void *, int);
 void DCStoreRange(void *, int);
 void MatSetStack(int);
@@ -109,9 +109,9 @@ void WeatherInitParticles(WeatherParticle_t *entry, unsigned int count) {
   if (_Weather_iMode == 2)
     color = _Weather_auStreakColor;
   for (unsigned int i = 0; i < count; ++i, ++entry) {
-    entry->mUnknown0.mX = fn_80237260(1) * 15.9999f;
-    entry->mUnknown0.mY = fn_80237260(1) * 15.9999f;
-    entry->mUnknown0.mZ = fn_80237260(1) * 7.9999f;
+    entry->mUnknown0.mX = SyncRandGetFloat(1) * 15.9999f;
+    entry->mUnknown0.mY = SyncRandGetFloat(1) * 15.9999f;
+    entry->mUnknown0.mZ = SyncRandGetFloat(1) * 7.9999f;
     entry->mUnknownC.r = color[0];
     entry->mUnknownC.g = color[1];
     entry->mUnknownC.b = color[2];

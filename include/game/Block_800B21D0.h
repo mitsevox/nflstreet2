@@ -19,7 +19,7 @@ struct State_800B19E8 {
     unsigned char mUnknown5F[1];
 };
 
-/* Allocated through fn_80238174 under the id 'penl' (fn_800B21D0). */
+/* Allocated through SyncStateRegister under the id 'penl' (fn_800B21D0). */
 struct Block_800B21D0 {
     void *mpUnknown0;
     State_800B19E8 mUnknown4;

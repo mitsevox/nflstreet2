@@ -297,7 +297,7 @@ void fn_8013AD04(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin
 Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
 void fn_800ACDE4(Object_80039F5C *p, float *pChance, float *pAngle);
 int fn_80178348(void);
-float fn_80237260(int a);
+float SyncRandGetFloat(int a);
 int fn_800DFA00(Object_80039F5C *p, float *pValue);
 int fn_800B9A90(PostPlayPhase *p);
 }

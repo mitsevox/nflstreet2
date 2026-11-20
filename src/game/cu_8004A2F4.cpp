@@ -190,7 +190,7 @@ Frame_801C02CC *AnimSeqncrGetStaticPtr(Actor_801C009C *pActor, int index);
 int fn_801CFE40(float y, float x);
 void fn_80227248(void *pOut, void *p, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 
 Handler_803084C4 lbl_803084C4[102];
 
@@ -582,13 +582,13 @@ void fn_8004B1A0(BigObj_t *pObject)
         pos.mY = pObject->mUnknown472->mUnknown12;
         pos.mZ = pObject->mUnknown472->mUnknown16;
         if (outX) {
-            float margin = lbl_803EA4F0 * fn_80237260(0);
+            float margin = lbl_803EA4F0 * SyncRandGetFloat(0);
 
             pos.mX = pObject->mUnknown472->mUnknown8 < 0.0f ? lbl_803EA4EC - fn_80178A08() + margin
                                                                  : fn_80178A08() - (lbl_803EA4EC + margin);
         }
         if (outY) {
-            float margin = lbl_803EA4F0 * fn_80237260(0);
+            float margin = lbl_803EA4F0 * SyncRandGetFloat(0);
 
             pos.mY = pObject->mUnknown472->mUnknown12 < 0.0f ? lbl_803EA4EC - fn_80178A44() + margin
                                                                  : fn_80178A44() - (lbl_803EA4EC + margin);
@@ -2007,10 +2007,10 @@ void fn_8004EA80(Vector_80039F5C *pImpulse)
             else scale = 5.0f;
             fn_80227264(&impulse, &impulse, scale);
         } else fn_80227264(&impulse, &impulse, 5.0f);
-        float force = fn_802270D4(&impulse) * fn_80237260(0);
-        noise.mX = force * (fn_80237260(0) - 0.5f);
-        noise.mY = force * (fn_80237260(0) - 0.5f);
-        noise.mZ = force * (fn_80237260(0) - 0.5f);
+        float force = fn_802270D4(&impulse) * SyncRandGetFloat(0);
+        noise.mX = force * (SyncRandGetFloat(0) - 0.5f);
+        noise.mY = force * (SyncRandGetFloat(0) - 0.5f);
+        noise.mZ = force * (SyncRandGetFloat(0) - 0.5f);
         if (!(fabsf(impulse.mX) >= 0.05f) && !(fabsf(impulse.mY) >= 0.05f) && !(impulse.mZ <= 0.0f)) {
             impulse.mX += pBall->mState.mUnknown54.mX;
             impulse.mY += pBall->mState.mUnknown54.mY;

@@ -8,7 +8,7 @@ struct Entry_8011FBE0 {
     unsigned char mUnknown4;
 };
 
-/* 24-byte state allocated through fn_80238174 under the id 'purs'
+/* 24-byte state allocated through SyncStateRegister under the id 'purs'
    (fn_8012055C) and returned by fn_8012078C. Its four arrays each hold
    mUnknown16 elements. */
 struct Lookup_8012078C {

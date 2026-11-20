@@ -76,7 +76,7 @@ void BallStateChange(Ball_t *pBall, int state, int arg);
 int BallStateGet(Ball_t *pBall, int *pArg);
 int fn_800A3444(void);
 int fn_801784C4(void);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 int fn_801CFE40(float y, float x);
 void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_802271F0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
@@ -244,9 +244,9 @@ void fn_801398BC(Vector_80039F5C *pV, float scale)
     Vector_80039F5C delta;
     float size = fn_802270D4(pV) * scale;
 
-    delta.mX = size * (fn_80237260(0) - 0.5f);
-    delta.mY = size * (fn_80237260(0) - 0.5f);
-    delta.mZ = size * (fn_80237260(0) - 0.5f);
+    delta.mX = size * (SyncRandGetFloat(0) - 0.5f);
+    delta.mY = size * (SyncRandGetFloat(0) - 0.5f);
+    delta.mZ = size * (SyncRandGetFloat(0) - 0.5f);
     fn_8022765C(pV, pV, &delta);
 }
 
@@ -560,9 +560,9 @@ void BallApplyContactForce(Ball_t *pBall, float dt)
 
     fn_801397FC(pBall, &force);
     size = fn_802270D4(&force);
-    if (size > 20.0f && fn_80237260(0) < 0.4f) {
-        jitter.mX = fn_80237260(0) - 0.5f;
-        jitter.mY = fn_80237260(0);
+    if (size > 20.0f && SyncRandGetFloat(0) < 0.4f) {
+        jitter.mX = SyncRandGetFloat(0) - 0.5f;
+        jitter.mY = SyncRandGetFloat(0);
         jitter.mZ = 0.0f;
         if (pBall->mState.mUnknown54.mY > 0.0f) {
             jitter.mY = -jitter.mY;
@@ -590,7 +590,7 @@ static void BallApplyWobble(Ball_t *pBall)
 
     if ((pBall->mState.mFlags & 0x20) && count == 3) {
         pBall->mState.mUnknownE4 = 0;
-        if (fn_802270A4(pVel) > pVel->mZ + pVel->mZ && fn_80237260(0) < 0.6f) {
+        if (fn_802270A4(pVel) > pVel->mZ + pVel->mZ && SyncRandGetFloat(0) < 0.6f) {
             force.mX = -pVel->mX * 440.21735f;
             force.mY = -pVel->mY * 440.21735f;
             force.mZ = (fn_802270D4(pVel) - pVel->mZ) * lbl_803EB1BC * 293.47824f;

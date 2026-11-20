@@ -1,6 +1,6 @@
 /* Banner module: six timed on-screen banners with two 64-character text lines each, held in the 'bnnr' block; cleared, timed out per tick and given text by the game. */
 #include <string.h>
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 
 /* One of the six 0x90-byte entries of BannerSet_t. */
 struct Banner_t {
@@ -49,7 +49,7 @@ int BannerCompare(void *p, void *q)
 
 void BannerAlloc(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&_Banner_pSet, sizeof(BannerSet_t), 0, 0x626E6E72);
+    void *pHandle = SyncStateRegister(0, (void **)&_Banner_pSet, sizeof(BannerSet_t), 0, 0x626E6E72);
     BannerSet_t *pSet;
     unsigned int i;
     unsigned int j;

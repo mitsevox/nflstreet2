@@ -2,7 +2,7 @@
 
 #include <string.h>
 #include "engine/viewport.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/CamAddCameraToViewport.h"
 #include "engine/dslist.h"
 
@@ -91,7 +91,7 @@ int _VptManagerLoad(void *p,void *data) {
 }
 int _VptManagerGetSaveSize(void *p) {return 62;}
 void VptManagerInit() {
-    void *h=fn_80238174(0,(void **)&_VptManager_pStack,8,0,0x7670746D);
+    void *h=SyncStateRegister(0,(void **)&_VptManager_pStack,8,0,0x7670746D);
     fn_80238234(h,_VptManagerCreateStack,_VptManagerDestroyStack,0,_VptManagerCompare);
     fn_80238248(h,_VptManagerSave,_VptManagerGetSaveSize,_VptManagerLoad);
     fn_802381E0(h);

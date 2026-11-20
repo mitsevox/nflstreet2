@@ -18,7 +18,7 @@ void SndgHandleEvent(AudmonEvent_t *pRecord);
 int MemFill(void *pDest, int size, int value, int width);
 void fn_802384C4(int handle);
 void *fn_8023850C(int handle);
-void fn_80238570(int handle, int unknown);
+void EvMonFire(int handle, int unknown);
 void fn_8023861C(int handle);
 }
 
@@ -61,7 +61,7 @@ extern "C" void AudmonEventSend(void)
     if (_AudmonEvent_pfnClock) {
         p->mUnknown1C = _AudmonEvent_pfnClock(1);
     }
-    fn_80238570(_AudmonEvent_iQueue, 0);
+    EvMonFire(_AudmonEvent_iQueue, 0);
     StyleTrackerHandleAudioEvent(p);
 }
 

@@ -92,7 +92,7 @@
 #include "game/fn_80218FC4.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_801FCE10.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/PadInput.h"
 #include "game/fn_80094488.h"
 #include "game/PlayAlign.h"
@@ -1408,7 +1408,7 @@ void *fn_8023850C(int handle);
 }
 
 extern "C" {
-void fn_80238570(int handle, int unknown);
+void EvMonFire(int handle, int unknown);
 }
 
 extern "C" {
@@ -1591,7 +1591,7 @@ int PenaltyResolveEvents(Entry_800B206C *events, int count, unsigned char *resul
 }
 
 extern "C" {
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 }
 
 extern "C" {
@@ -1784,7 +1784,7 @@ struct Event_800B9F50 {
     unsigned short mTime;
 };
 
-/* Block allocated by fn_800BA3F0 through fn_80238174 under the id 'prac'
+/* Block allocated by fn_800BA3F0 through SyncStateRegister under the id 'prac'
    (392 bytes); only the accessed fields are declared. */
 struct Block_800BA3F0 {
     PlayBookFormation_t *mpUnknown0;
@@ -1887,7 +1887,7 @@ struct Record_800BAE7C {
 };
 
 /* Block allocated by 0x800BC538 (entry 1 of the PreGamePhase vtable)
-   through fn_80238174 under the id 'preg' (52 bytes); only the fields
+   through SyncStateRegister under the id 'preg' (52 bytes); only the fields
    accessed here are declared. */
 struct Block_800BC538 {
     int mUnknown0;
@@ -2423,7 +2423,7 @@ struct Context_800AFC5C {
     float mUnknown8;
 };
 
-/* Three words passed by address to fn_80238388. */
+/* Three words passed by address to EvMonCreate. */
 typedef Desc_80238424 Args_800B1478;
 
 extern "C" {
@@ -2731,7 +2731,7 @@ struct Record_800B8544 {
     unsigned char mUnknownC1[3];
 };
 
-/* Allocated through fn_80238174 under the id 'pstp' (fn_800B95B4, 360
+/* Allocated through SyncStateRegister under the id 'pstp' (fn_800B95B4, 360
    bytes). Only the accessed fields are named. */
 struct Block_800B95B4 {
     Sequence_800C4460 mSequence;
@@ -3708,7 +3708,7 @@ void fn_80227384(void *, void *, int);
 }
 
 extern "C" {
-float fn_80237260(int a);
+float SyncRandGetFloat(int a);
 }
 
 extern "C" {
@@ -4447,7 +4447,7 @@ extern float lbl_803EAAC8;
 
 extern unsigned short lbl_803EAACC[3];
 
-extern "C" float fn_80237260(int stream);
+extern "C" float SyncRandGetFloat(int stream);
 
 extern "C" {
 extern AnimBlendList lbl_8030F534;
@@ -9470,7 +9470,7 @@ extern "C" void fn_800925A4(void)
 
 extern "C" void fn_800925F0(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EC924, sizeof(Block_800925F0), 0, 0x616E6D73);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EC924, sizeof(Block_800925F0), 0, 0x616E6D73);
 
     fn_80238234(pHandle, 0, 0, 0, fn_80092168);
     fn_80238248(pHandle, fn_800920B8, fn_80092160, fn_800920EC);
@@ -10790,7 +10790,7 @@ retry:
 
 extern "C" void fn_80094E80(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EA8DC, 10 * sizeof(Entry_80094BC4), 0, 0x616E6D6D);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EA8DC, 10 * sizeof(Entry_80094BC4), 0, 0x616E6D6D);
 
     fn_80094C00((Entry_80094BC4 *)fn_8023816C(pHandle), 10);
     fn_802381E0(pHandle);
@@ -12154,7 +12154,7 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
         rating = low;
     }
     skill = (speed - (float)(rating - low) / (float)(high - low)) * 0.65f;
-    skill = speed - fn_80237260(0) * skill;
+    skill = speed - SyncRandGetFloat(0) * skill;
     pItem = fn_8009A63C(handle);
     reach = pItem->mUnknown8;
     fn_80227690(&reach, &reach, &pItem->mUnknown14);
@@ -12770,7 +12770,7 @@ extern "C" void fn_80099568(int kind)
 
 extern "C" void fn_80099630(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EC92C, sizeof(Block_80099630), 0, 0x63746368);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EC92C, sizeof(Block_80099630), 0, 0x63746368);
     unsigned char i;
 
     fn_80238234(pHandle, 0, 0, fn_800994E0, 0);
@@ -13368,7 +13368,7 @@ extern "C" void fn_8009A8F0(void)
 
 extern "C" void fn_8009AB34(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EA948, sizeof(Block_8009AB34), 0, 0x63747570);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EA948, sizeof(Block_8009AB34), 0, 0x63747570);
     Block_8009AB34 *p = (Block_8009AB34 *)fn_8023816C(pHandle);
 
     p->mUnknown0[1] = p->mUnknown0[0] = 0.0f;
@@ -13692,7 +13692,7 @@ extern "C" void CelebrationBlocksInit(void *pData)
 
     lbl_803EA98C = 0;
     for (i = 0; i <= 1; i++) {
-        void *pHandle = fn_80238174(0, (void **)&lbl_803EA984[i], sizeof(Block_8009B720), 0, 0x63656C62);
+        void *pHandle = SyncStateRegister(0, (void **)&lbl_803EA984[i], sizeof(Block_8009B720), 0, 0x63656C62);
 
         fn_80238234(pHandle, 0, 0, 0, fn_8009B5E8);
         fn_80238248(pHandle, fn_8009B628, fn_8009B718, fn_8009B698);
@@ -14632,7 +14632,7 @@ extern "C" void fn_8009D3F0(Timer_8009D338 *p, unsigned int time)
 
 extern "C" void fn_8009D474(int a, int b)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EA9A8, sizeof(Block_8009D474), 0, 0x636C636B);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EA9A8, sizeof(Block_8009D474), 0, 0x636C636B);
     Block_8009D474 *p = (Block_8009D474 *)fn_8023816C(pHandle);
 
     p->mUnknown0 = 0;
@@ -14966,7 +14966,7 @@ extern "C" int fn_8009DD88(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     int result = 0;
 
-    if (p != 0 && pOther != 0 && fn_80237260(0) < p->mRatings[8] / 255.0f
+    if (p != 0 && pOther != 0 && SyncRandGetFloat(0) < p->mRatings[8] / 255.0f
         && fn_8009F058(p, pOther, 0x400000) != 0) {
         Object_80039F5C *pCarrier = BallGetCurrentHolder();
 
@@ -16105,7 +16105,7 @@ extern "C" void fn_800A039C(LivePlayPhase *pObject)
 
 void LivePlayPhase::InitState()
 {
-    void *handle = fn_80238174(0, (void **)&lbl_803EA9E8, 80, 0, 0x64706C79);
+    void *handle = SyncStateRegister(0, (void **)&lbl_803EA9E8, 80, 0, 0x64706C79);
 
     fn_8023816C(handle);
     fn_802381E0(handle);
@@ -17037,11 +17037,11 @@ extern "C" void fn_800A29D8(int mode)
 extern "C" void fn_800A2B40(void)
 {
     if (fn_800A33B0()) {
-        float drift = fn_80237260(1) * 0.033333335f;
-        drift += fn_80237260(1) * 0.033333335f;
-        int turn = (int)(fn_80237260(1) * 38.0f);
-        turn += (int)(fn_80237260(1) * 38.0f);
-        float roll = fn_80237260(1) * 2.0f;
+        float drift = SyncRandGetFloat(1) * 0.033333335f;
+        drift += SyncRandGetFloat(1) * 0.033333335f;
+        int turn = (int)(SyncRandGetFloat(1) * 38.0f);
+        turn += (int)(SyncRandGetFloat(1) * 38.0f);
+        float roll = SyncRandGetFloat(1) * 2.0f;
 
         if (lbl_8030E6E8.mUnknown60 < lbl_8030E6E8.mUnknown58) {
             if (roll >= 0.5f) {
@@ -17057,7 +17057,7 @@ extern "C" void fn_800A2B40(void)
         lbl_8030E6E8.mUnknown60 = lbl_8030E6E8.mUnknown60 < 0.0f ? 0.0f
             : (lbl_8030E6E8.mUnknown60 > 1.0f ? 1.0f : lbl_8030E6E8.mUnknown60);
 
-        roll = fn_80237260(1) * 2.0f;
+        roll = SyncRandGetFloat(1) * 2.0f;
         if (lbl_8030E6E8.mUnknown5C - lbl_8030E6E8.mUnknown54 != MathAngleDiff(lbl_8030E6E8.mUnknown5C, lbl_8030E6E8.mUnknown54)) {
             if (roll >= 0.5f) {
                 lbl_8030E6E8.mUnknown5C = (lbl_8030E6E8.mUnknown5C + turn) & 0xFFFFFF;
@@ -18038,7 +18038,7 @@ extern "C" int fn_800A5104(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
     int result = 0;
 
     if (fn_8009F058(p, pTarget, 0x400000) != 0 && fn_8009F058(p, pOther, 0x400000) != 0) {
-        result = fn_80237260(0) < 0.33f;
+        result = SyncRandGetFloat(0) < 0.33f;
     }
     return result;
 }
@@ -18108,7 +18108,7 @@ extern "C" int fn_800A517C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
         }
         chance = pPair->mUnknown0 * 0.33333334f;
         chance += PlayTrackGetFlag11Rate();
-        if (fn_80237260(0) < chance) {
+        if (SyncRandGetFloat(0) < chance) {
             result = 0;
         }
     }
@@ -18717,10 +18717,10 @@ extern "C" unsigned char fn_800A6658(int team)
     }
     count = level + 1;
     step = 1;
-    if (fn_80237260(0) < 0.5f) {
+    if (SyncRandGetFloat(0) < 0.5f) {
         step = -1;
     }
-    while (fn_80237260(0) < 0.3f) {
+    while (SyncRandGetFloat(0) < 0.3f) {
         count += step;
     }
     count = count > 0 ? (count > 3 ? 3 : count) : 1;
@@ -18984,7 +18984,7 @@ extern "C" void fn_800A70F4(void)
     unsigned char team;
 
     for (team = 0; team <= 1; team++) {
-        void *pHandle = fn_80238174(0, (void **)&lbl_803EC954[team], sizeof(Block_800A70F4), 0, 'gbrk' + team);
+        void *pHandle = SyncStateRegister(0, (void **)&lbl_803EC954[team], sizeof(Block_800A70F4), 0, 'gbrk' + team);
         Block_800A70F4 *pBlock = (Block_800A70F4 *)fn_8023816C(pHandle);
         unsigned int count;
         unsigned short index;
@@ -20711,7 +20711,7 @@ extern "C" void fn_800AACB8(Class_80297B90 *pObject)
 
 void Class_80297B90::vfn_01()
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAA88, sizeof(Block_800AACD4), 0, 0x67656E64);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAA88, sizeof(Block_800AACD4), 0, 0x67656E64);
     Block_800AACD4 *pBlock = (Block_800AACD4 *)fn_8023816C(pHandle);
 
     pBlock->mUnknown4 = 0;
@@ -21237,7 +21237,7 @@ extern "C" void fn_800ABCE8(Block_800ABD1C *p)
 
 extern "C" void fn_800ABD1C(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAAB8, sizeof(Block_800ABD1C), 0, 0x67736B6C);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAAB8, sizeof(Block_800ABD1C), 0, 0x67736B6C);
     Block_800ABD1C *p = (Block_800ABD1C *)fn_8023816C(pHandle);
 
     fn_800ABCE8(p);
@@ -21920,13 +21920,13 @@ extern "C" float fn_800AD168(int team, float value)
 {
     switch (fn_800ABDA4(team)) {
     case 0:
-        value -= fn_80237260(0) * 3.0f;
+        value -= SyncRandGetFloat(0) * 3.0f;
         break;
     case 1:
-        value -= fn_80237260(0) * 2.0f;
+        value -= SyncRandGetFloat(0) * 2.0f;
         break;
     case 2:
-        value -= fn_80237260(0) * 0.0f;
+        value -= SyncRandGetFloat(0) * 0.0f;
         break;
     }
     if (value < 0.0f) {
@@ -22101,7 +22101,7 @@ static const Mode_80297FC8 lbl_80297FC8[11] = {
 
 extern "C" void fn_800AD634(float dt)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAAD4, sizeof(Block_800AD634), 0, 0x67706C79);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAAD4, sizeof(Block_800AD634), 0, 0x67706C79);
     Block_800AD634 *pBlock = (Block_800AD634 *)fn_8023816C(pHandle);
     void (*pEnter)(float);
 
@@ -22750,7 +22750,7 @@ extern "C" void fn_800AEA70(Object_80039F5C *p, Message_800F01CC *pMessages)
 
 extern "C" void fn_800AEB1C(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAAF4, sizeof(Block_800AEB1C), 0, 0x68727465);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAAF4, sizeof(Block_800AEB1C), 0, 0x68727465);
     Block_800AEB1C *pBlock = (Block_800AEB1C *)fn_8023816C(pHandle);
 
     memset(pBlock->mpObjects, 0, sizeof(pBlock->mpObjects));
@@ -23260,7 +23260,7 @@ extern "C" int fn_800AFC94(void *pItem, void *pContext, void *pResult)
 
 extern "C" void fn_800AFCB8(int value)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAB0C, sizeof(Block_800AFCB8), 0, 0x6A6D7367);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB0C, sizeof(Block_800AFCB8), 0, 0x6A6D7367);
 
     fn_80238234(pHandle, fn_800AFA60, fn_800AFAAC, 0, fn_800AFAD4);
     fn_80238248(pHandle, fn_800AFB70, fn_800AFC28, fn_800AFBD8);
@@ -23773,7 +23773,7 @@ extern "C" int fn_800B0C70(void *p, void *q)
 
 extern "C" void fn_800B0CFC(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAB14, sizeof(Block_800B0CFC), 0, 0x6D6D6F74);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB14, sizeof(Block_800B0CFC), 0, 0x6D6D6F74);
     Block_800B0CFC *pBlock;
 
     fn_80238234(pHandle, 0, 0, 0, fn_800B0C70);
@@ -24009,7 +24009,7 @@ extern "C" void fn_800B1478(void)
     args.mUnknown0 = 75;
     args.mUnknown4 = 28;
     args.mUnknown8 = 1;
-    lbl_803EAB18 = fn_80238388(&args);
+    lbl_803EAB18 = EvMonCreate(&args);
 }
 
 extern "C" void fn_800B14B8(void)
@@ -24029,7 +24029,7 @@ extern "C" void fn_800B1508(void)
         Record_800B15FC *pRecord = (Record_800B15FC *)fn_80238540(lbl_803EAB18, fn_80238604(lbl_803EAB18));
 
         pRecord->mUnknown18 = fn_8009D990(1);
-        fn_80238570(lbl_803EAB18, pRecord->mUnknown14 <= 61);
+        EvMonFire(lbl_803EAB18, pRecord->mUnknown14 <= 61);
         StyleTrackerHandleGameEvent(pRecord);
     }
 }
@@ -24101,7 +24101,7 @@ extern "C" void fn_800B1758(int a, unsigned int b, float c)
 
 extern "C" void fn_800B175C(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAB1C, sizeof(int), 0, 0x6F767274);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB1C, sizeof(int), 0, 0x6F767274);
     int *pState = (int *)fn_8023816C(pHandle);
 
     *pState = 1;
@@ -24355,7 +24355,7 @@ extern "C" int fn_800B1F58(Block_800B21D0 *p, float value)
         int kind = pEntry->mUnknown0;
         unsigned int flags = PenaltyGetKindFlags(kind);
 
-        if (fn_80237260(0) < value) {
+        if (SyncRandGetFloat(0) < value) {
             result = 1;
             p->mUnknown4.mUnknown5C |= 1;
             Record_800B15FC *pRecord = fn_800B15FC();
@@ -24413,7 +24413,7 @@ extern "C" void fn_800B21CC(Block_800B21D0 *p, int index)
 
 extern "C" void fn_800B21D0(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAB20, sizeof(Block_800B21D0), 0, 0x70656E6C);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB20, sizeof(Block_800B21D0), 0, 0x70656E6C);
     Block_800B21D0 *p;
     unsigned char i;
 
@@ -25028,7 +25028,7 @@ extern "C" void fn_800B3644(Class_80297B50 *p)
 
 void Class_80297B50::vfn_01()
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAB34, sizeof(Block_800B3660), 0, 0x7063616C);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB34, sizeof(Block_800B3660), 0, 0x7063616C);
     Block_800B3660 *p = (Block_800B3660 *)fn_8023816C(pHandle);
 
     p->mUnknown18 = 0;
@@ -25728,7 +25728,7 @@ extern "C" void PlyrLoadDbRecord(QueryCursor cursor, int index, void *pData)
         } else if (CheatFlagsIsSet(31)) {
             pOut->mUnknown0 = (float)values[3] * 1.5;
         } else if (CheatFlagsIsSet(44)) {
-            pOut->mUnknown0 = (float)values[3] * (fn_80237260(0) + 0.5f);
+            pOut->mUnknown0 = (float)values[3] * (SyncRandGetFloat(0) + 0.5f);
         } else {
             pOut->mUnknown0 = (float)values[3];
         }
@@ -26223,7 +26223,7 @@ extern "C" int fn_800B6098(Object_80039F5C *p, Input_800B6D34 *pInput, int mode)
 
 extern "C" void fn_800B62D8(int count)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAB60, sizeof(Block_800B62D8), 0, 0x7063746C);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB60, sizeof(Block_800B62D8), 0, 0x7063746C);
     Block_800B62D8 *pBlock;
     int i;
 
@@ -27584,7 +27584,7 @@ extern "C" void fn_800B9598(PostPlayPhase *p)
 
 void PostPlayPhase::InitState()
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAB78, sizeof(Block_800B95B4), 0, 0x70737470);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB78, sizeof(Block_800B95B4), 0, 0x70737470);
     Block_800B95B4 *p;
 
     fn_80238234(pHandle, 0, 0, 0, fn_800B898C);
@@ -28035,7 +28035,7 @@ extern "C" int fn_800B9F50(void)
 
 extern "C" void fn_800BA3F0(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAB88, sizeof(Block_800BA3F0), 0, 0x70726163);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB88, sizeof(Block_800BA3F0), 0, 0x70726163);
     Block_800BA3F0 *p = (Block_800BA3F0 *)fn_8023816C(pHandle);
 
     p->mUnknown17C = fn_800B9BBC();
@@ -29090,7 +29090,7 @@ extern "C" void fn_800BC51C(PreGamePhase *pObject)
 
 void PreGamePhase::InitState()
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EC98C, sizeof(Block_800BC538), 0, 0x70726567);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EC98C, sizeof(Block_800BC538), 0, 0x70726567);
     Block_800BC538 *p = (Block_800BC538 *)fn_8023816C(pHandle);
 
     memset(p, 0, sizeof(Block_800BC538));
@@ -30673,7 +30673,7 @@ extern "C" void fn_800BFAB4(PreSnapPhase *p)
 
 void PreSnapPhase::InitState()
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EABA8, sizeof(Block_800BFAD0), 0, 0x70726570);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EABA8, sizeof(Block_800BFAD0), 0, 0x70726570);
 
     fn_80238234(pHandle, 0, 0, 0, fn_800BF45C);
     ((Block_800BFAD0 *)fn_8023816C(pHandle))->mUnknown40 = 0;
@@ -31219,7 +31219,7 @@ extern "C" int fn_800C0910(Object_80039F5C *p, int kind, unsigned char *pLevel)
                     PASSLANE_ASSERT_RANGE(accuracy, 0.0f, 1.0f);
                     spread = (1.0f - accuracy) * 20.0f;
                     if (spread != 0.0f) {
-                        spread *= fn_80237260(0);
+                        spread *= SyncRandGetFloat(0);
                     }
                     fn_80227538(&offset, fn_802372EC(0, 0x1000000), spread);
                     fn_80227638(&target, &offset, &target);
@@ -32932,7 +32932,7 @@ extern "C" int fn_800C4B6C(Object_80039F5C *p)
 {
     int result = 0;
     short *pRating = &p->mRatings[0];
-    float chance = fn_80237260(0) * (1.0f / 255.0f);
+    float chance = SyncRandGetFloat(0) * (1.0f / 255.0f);
     float value = chance * p->mRatings[0];
 
     if (fn_800A84C0(p->mIdBytes[2]) != 0) {
@@ -32957,7 +32957,7 @@ extern "C" int fn_800C4B6C(Object_80039F5C *p)
             result = 1;
         }
         if (result == 0 && (p->mpState->mId >= 34 && p->mpState->mId <= 36) && *pRating < lbl_803EABEA) {
-            float roll = fn_80237260(0);
+            float roll = SyncRandGetFloat(0);
             value = *pRating * -lbl_803EABEC / lbl_803EABEA + lbl_803EABEC;
             if (roll < value) {
                 fn_800E9B84(p, kind);
@@ -32977,7 +32977,7 @@ extern "C" int fn_800C4B6C(Object_80039F5C *p)
 extern "C" int fn_800C4D54(Object_80039F5C *p)
 {
     int result = 0;
-    float chance = fn_80237260(0) * (1.0f / 255.0f);
+    float chance = SyncRandGetFloat(0) * (1.0f / 255.0f);
     float value = chance * p->mRatings[0];
 
     if (fn_800A84C0(p->mIdBytes[2]) != 0) {
@@ -35152,7 +35152,7 @@ extern "C" float fn_800C9CF0(int team, int index)
 
 extern "C" void fn_800C9D6C(unsigned char a, unsigned char b)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EAC3C, sizeof(Block_800C9D6C), 0, 0x74757262);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAC3C, sizeof(Block_800C9D6C), 0, 0x74757262);
     Block_800C9D6C *pBlock;
     unsigned char i;
 

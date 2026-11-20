@@ -103,7 +103,7 @@ int fn_801787DC(int);
 int fn_801788D8(int *);
 float fn_80178A08(void);
 float fn_80178A44(void);
-float fn_80237260(int);
+float SyncRandGetFloat(int);
 
 
 int QbPassInSpecialMode(void)
@@ -169,7 +169,7 @@ int QbPassPickRandomReceiver(Object_80039F5C *p, PlyrModeState_t *s,
     if (_QbPass_bRandomPick) {
         float threshold = (float)p->mRatings[6] * 0.003921568859368563f;
         if (!fn_800ABDA4(p->mIdBytes[2])) threshold *= 0.5f;
-        if (!(fn_80237260(0) <= threshold)) {
+        if (!(SyncRandGetFloat(0) <= threshold)) {
             *out = 0;
             do {
                 unsigned int n = fn_802372EC(0, 3);
@@ -193,7 +193,7 @@ int QbPassShouldRun(Object_80039F5C *p)
         if (QbPassInSpecialMode() || !(kind <= 1 || kind == 3)) return 0;
         float threshold = (float)p->mRatings[4] * _QbPass_fRunWeightA + (float)p->mRatings[0] * _QbPass_fRunWeightB;
         threshold *= 0.003921568859368563f;
-        if (fn_80237260(0) > threshold) return 0;
+        if (SyncRandGetFloat(0) > threshold) return 0;
         int mode = fn_80177F70();
         float limit = (_QbPass_fRunRoom + fn_80177FE0().mY - p->mMotion.mPos.mY) * (2.0f - threshold);
         if (mode == 4 || mode == 6) {

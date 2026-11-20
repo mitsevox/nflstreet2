@@ -110,13 +110,13 @@ int fn_800F2C1C(Object_80039F5C *p, int a);
 Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float length, float width, int facing);
 int fn_8011E9B4(Object_80039F5C *p);
 void fn_8011E240(Object_80039F5C *p);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 }
 
 extern "C" {
 int fn_800A8444(int team);
 int fn_800A8408(int team);
-float fn_80237260(int stream);
+float SyncRandGetFloat(int stream);
 int fn_801486A0(void);
 }
 
@@ -174,7 +174,7 @@ extern "C" signed char PursueGetTackleDelay(Object_80039F5C *p)
     short value;
 
     if (fn_800A8444(p->mIdBytes[2]) && fn_800A8408(p->mIdBytes[2]) == 1) {
-        value = (int)(fn_80237260(0) * 45.0f);
+        value = (int)(SyncRandGetFloat(0) * 45.0f);
     } else {
         value = PursueScaleRating(126, 0, PursueClampRating(pRatings[5], 0, 255), 255);
     }
@@ -293,7 +293,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
                 if (reference->mUnknown1052 == 1) mode = 8;
                 else {
                     fn_80227690(offset, &reference->mMotion.mPos, &motion->mPos);
-                    mode = !(fn_80237260(0) >= 0.8f) ? 4 : 8;
+                    mode = !(SyncRandGetFloat(0) >= 0.8f) ? 4 : 8;
                 }
                 if (fn_800E6AC8(p, mode)) done = 1;
                 else state->mUnknown13 += 10;

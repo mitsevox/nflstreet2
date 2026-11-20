@@ -21,7 +21,7 @@
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
 #include "game/fn_801FCE10.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
 #include "game/Info_ScrmState.h"
@@ -643,7 +643,7 @@ int Class_802A5630::GetScore(int team)
 
 extern "C" void fn_801779D8(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EB444, sizeof(ScrmState), 0, 0x73637275);
+    void *pHandle = SyncStateRegister(0, (void **)&lbl_803EB444, sizeof(ScrmState), 0, 0x73637275);
     ScrmState *pState = (ScrmState *)fn_8023816C(pHandle);
 
     int resume = 0;

@@ -21,7 +21,7 @@
 #include "game/Ball.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_801FCE10.h"
-#include "game/fn_80238174.h"
+#include "game/SyncStateRegister.h"
 #include "game/PreSnapPhase.h"
 #include "game/PlaySet.h"
 #include "game/PlayBookGetPlay.h"
@@ -656,7 +656,7 @@ extern "C" void PlyrMgrRegister(unsigned int count)
     PlyrMgr_t *pManager;
 
     CollideSetPairCallback(0, 0, PlyrContactCallback);
-    pHandle = fn_80238174(0, (void **)&_PlyrMgr_pManager, sizeof(PlyrMgr_t), 1, 0x706C7972);
+    pHandle = SyncStateRegister(0, (void **)&_PlyrMgr_pManager, sizeof(PlyrMgr_t), 1, 0x706C7972);
     fn_80238234(pHandle, (Callback_80238234)PlyrMgrCreate, (Callback_80238234)PlyrMgrDestroy,
                 (Callback_80238234)PlyrMgrRefreshAll, (Callback1C_80238234)PlyrMgrCompareSnapshot);
     fn_80238248(pHandle, (Callback28_80238248)PlyrMgrSaveSnapshot, (Callback24_80238248)PlyrMgrGetSnapshotSize,
