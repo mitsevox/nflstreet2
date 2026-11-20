@@ -12145,7 +12145,7 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
     Vector_80039F5C spin;
     Vector_80039F5C toReach;
     Vector_80039F5C reach;
-    Vec2_t toBall;
+    Vec2_t toBall; // the target reserves 8 bytes here: fn_80227690's third float lands in turn's slot, and turn is assigned afterwards
     int turn;
     float time;
     float reachLength;
