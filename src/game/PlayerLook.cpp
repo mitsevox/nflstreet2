@@ -620,7 +620,7 @@ extern "C" void PlayerLookLoad(int index, int unused, int id, unsigned char flag
 
 extern "C" void PlayerLookOpen(void)
 {
-    fn_8008044C(&_PlayerLook_sPlayerCursor, 0, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
+    PlayerCursorOpen(&_PlayerLook_sPlayerCursor, 0, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
     fn_80081CDC();
     fn_8007BA48(&_PlayerLook_sGearCursor);
 }

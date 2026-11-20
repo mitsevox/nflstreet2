@@ -350,7 +350,7 @@ void FEPlyrInit(int count)
     FEPlyrSceneDesc_t desc;
     FEPlyrScene_t *pView;
 
-    fn_8008044C(&_FEPlyr_PlayerCursor, 0, 0x54415453);
+    PlayerCursorOpen(&_FEPlyr_PlayerCursor, 0, 0x54415453);
     _FEPlyr_iCount = count;
     VptPerspective(_FEPlyr_Projection, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
     fn_8008FCB4(0);

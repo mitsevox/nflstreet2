@@ -651,8 +651,8 @@ address	size	sibling_name	how	sibling_file	unit
 0x801CD63C	276	FontGetTextWidth	size	Font.c	Font.c
 0x801CD750	64	FontGetCharWidth	size	Font.c	Font.c
 0x801CD790	12	FontGetDescent	size	Font.c	Font.c
-0x801CD79C	456	_FontLLSetupGlyph	size	LLFont.c	LLFont.c
-0x801CD964	504	_FontLLRender	size	LLFont.c	LLFont.c
+0x801CD79C	456	_FontLLSetupGlyph	name	LLFont.c	LLFont.c
+0x801CD964	504	_FontLLRender	name	LLFont.c	LLFont.c
 0x801CDB5C	444	FontLLRenderText	size	LLFont.c	LLFont.c
 0x801CDD18	384	FontLLRenderBegin	size	LLFont.c	LLFont.c
 0x801CDE98	332	FontLLUploadPalettes	size	LLFont.c	LLFont.c
@@ -783,7 +783,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x801D131C	48	MatCatSlot	name	llmatrix.c	llmatrix.c
 0x801D134C	88	_FindHeapByIdent	size	Memory.c	Memory.c
 0x801D13A4	208	_FindHeapByAddr	size	Memory.c	Memory.c
-0x801D1474	276	_BuildHeapAddrTable	size	Memory.c	Memory.c
+0x801D1474	276	_BuildHeapAddrTable	name	Memory.c	Memory.c
 0x801D1588	152	_FreeListInsert	size	Memory.c	Memory.c
 0x801D1620	348	_FreeListDelete	size	Memory.c	Memory.c
 0x801D177C	292	_ShortenBlock	size	Memory.c	Memory.c
@@ -971,7 +971,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x801DECFC	508	ParticlePoolCreate	size	particleLib.c	particleLib.c
 0x801DEEF8	32	ParticlePoolBorrow	size	particleLib.c	particleLib.c
 0x801DEF18	332	ParticlePoolReturn	size	particleLib.c	particleLib.c
-0x801DF064	288	PSysRenderCalcParticleColor	size	particleLib.c	particleLib.c
+0x801DF064	288	PSysRenderCalcParticleColor	name	particleLib.c	particleLib.c
 0x801DF184	28	PSysRenderCalcParticleScale	size	particleLib.c	particleLib.c
 0x801DF1A0	68	PartRead8	size	particleLib.c	particleLib.c
 0x801DF1E4	68	PartRead16	size	particleLib.c	particleLib.c

@@ -1749,7 +1749,7 @@ int fn_800F2CB4(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimC
 }
 
 extern "C" {
-int fn_80102A78(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
+int PlayerPassAnimFacingCallback(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 }
 
@@ -2848,7 +2848,7 @@ void PlyrMoveClearHold(Object_80039F5C *p);
 }
 
 extern "C" {
-int fn_8002D228(Type_803EA368 *p);
+int ReplayIsHalted(Type_803EA368 *p);
 }
 
 extern "C" {
@@ -7536,7 +7536,7 @@ extern "C" void fn_800BED54(unsigned char index);
 
 extern "C" void fn_800BEFAC(int index);
 
-extern "C" void fn_800BF07C(void);
+extern "C" void PreSnapInitPickTime(void);
 
 extern "C" void fn_800BF174(void);
 
@@ -12145,7 +12145,7 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
     Vector_80039F5C spin;
     Vector_80039F5C toReach;
     Vector_80039F5C reach;
-    Vec2_t toBall;
+    Vec2_t toBall; // the target reserves 8 bytes here: fn_80227690's third float lands in turn's slot, and turn is assigned afterwards
     int turn;
     float time;
     float reachLength;
@@ -25588,7 +25588,7 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[203] = fn_800DDD24;
     lbl_8030FB60[193] = PlayerLocoHandleMomentumState;
     lbl_8030FB60[157] = fn_800DCC14;
-    lbl_8030FB60[236] = fn_80102A78;
+    lbl_8030FB60[236] = PlayerPassAnimFacingCallback;
     lbl_8030FB60[86] = fn_800DD2E8;
     lbl_8030FB60[176] = fn_8010D834;
     lbl_8030FB60[68] = fn_800F2CB4;
@@ -25602,8 +25602,8 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[159] = fn_800DCC14;
     lbl_8030FB60[67] = fn_8009A344;
     lbl_8030FB60[227] = fn_8009A344;
-    lbl_8030FB60[69] = fn_80102A78;
-    lbl_8030FB60[178] = fn_80102A78;
+    lbl_8030FB60[69] = PlayerPassAnimFacingCallback;
+    lbl_8030FB60[178] = PlayerPassAnimFacingCallback;
     lbl_8030FB60[85] = fn_800DD2E8;
     lbl_8030FB60[37] = fn_8010D834;
     lbl_8030FB60[100] = fn_800DE19C;
@@ -27275,7 +27275,7 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
             && InGameIsDemo() == 0 && InGameIsPaused() == 0 && TeamPromptIsActive() == 0 && PauseRequestIsPending() == 0
             && PauseIsUnblocked() == 1 && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1)) {
             fn_8002C9A8(lbl_803EA368, 3, 0);
-            if (fn_8002D228(lbl_803EA368) != 0) {
+            if (ReplayIsHalted(lbl_803EA368) != 0) {
                 fn_8009BA10(0);
                 fn_8009B924();
                 fn_80094DF0();
@@ -27418,7 +27418,7 @@ extern "C" void fn_800B8C9C(void)
 void PostPlayPhase::UpdateCue(float dt)
 {
     fn_800B8C9C();
-    if (fn_8002D228(lbl_803EA368) != 0 && lbl_803EAB7C == 0 && lbl_803EAB7D != 0
+    if (ReplayIsHalted(lbl_803EA368) != 0 && lbl_803EAB7C == 0 && lbl_803EAB7D != 0
         && lbl_803EAB78->mUnknown154 > 45) {
         fn_8009BC30(lbl_803EAB80);
         if (fn_8002E950(0) != 0) {
@@ -30347,7 +30347,7 @@ extern "C" void fn_800BEFAC(int index)
     }
 }
 
-extern "C" void fn_800BF07C(void)
+extern "C" void PreSnapInitPickTime(void)
 {
     short value = 0;
     int mode = lbl_803EABA8->mUnknown40;
@@ -30773,7 +30773,7 @@ void PreSnapPhase::OnEnter(float dt)
     lbl_803EABA8->mUnknownC4 = 0;
     lbl_803EABA8->mUnknownC5 = 0;
     lbl_803EABA8->mUnknownC6 = 1;
-    fn_800BF07C();
+    PreSnapInitPickTime();
     lbl_803EABA8->mUnknownA0 = 120;
     lbl_803EABA8->mUnknown44 = -1;
     lbl_803EABA8->mUnknownA8 = 0;

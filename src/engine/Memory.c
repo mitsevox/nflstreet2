@@ -107,7 +107,7 @@ static MemHeap_801D134C *fn_801D13A4(char *pAddr)
     return 0;
 }
 
-static void fn_801D1474(void)
+static void _BuildHeapAddrTable(void)
 {
     MemHeap_801D134C *pHeap;
     MemRange_801D134C *pRange;
@@ -648,7 +648,7 @@ void *fn_801D2478(int ident, int parentIdent, char *pStart, unsigned int size, i
     pHeap->mpSelf = pHeap;
     pHeap->mpNext = lbl_803EBCC8;
     lbl_803EBCC8 = pHeap;
-    fn_801D1474();
+    _BuildHeapAddrTable();
     return pHeap + 1;
 fail:
     return 0;
@@ -693,7 +693,7 @@ int fn_801D2570(int ident)
             ppLink = &pHeap->mpNext;
         }
     }
-    fn_801D1474();
+    _BuildHeapAddrTable();
     return 0;
 }
 

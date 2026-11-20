@@ -95,7 +95,7 @@ void fn_80221D5C(Text_80221BF0 *pText);
 Range_80221D30 *fn_80221D30(Text_80221BF0 *pText, Uint8 Index);
 void fn_80221DB0(Text_80221BF0 *pText);
 
-void fn_80221BF0(Text_80221BF0 *pText, Int32 Offset, Int32 *pA, Int32 *pB)
+void UIGTextGetCursorPos(Text_80221BF0 *pText, Int32 Offset, Int32 *pA, Int32 *pB)
 {
     Font_801CCA64 **ppFont;
     Range_80221D30 *pRange = NULL;
@@ -419,7 +419,7 @@ void fn_80222220(Text_80221BF0 *pText, Uint32 Msg, Int32 Unused, void *pData, vo
         Int32 X;
         Int32 Y;
 
-        fn_80221BF0(pText, *(Int32 *)pData, &X, &Y);
+        UIGTextGetCursorPos(pText, *(Int32 *)pData, &X, &Y);
         *(Float32 *)pOut = X;
         break;
     }
@@ -427,7 +427,7 @@ void fn_80222220(Text_80221BF0 *pText, Uint32 Msg, Int32 Unused, void *pData, vo
         Int32 X;
         Int32 Y;
 
-        fn_80221BF0(pText, *(Int32 *)pData, &X, &Y);
+        UIGTextGetCursorPos(pText, *(Int32 *)pData, &X, &Y);
         *(Float32 *)pOut = Y;
         break;
     }

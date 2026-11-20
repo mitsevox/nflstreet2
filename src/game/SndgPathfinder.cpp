@@ -486,7 +486,7 @@ void SndgCrowdSetVolume(unsigned char value);
 void fn_8006F850(AudmonEvent_t *pEvent);
 void fn_80070C40(AudmonEvent_t *pEvent);
 void fn_800717E0(Vector_80039F5C *pPos);
-int fn_80071BA0(int a, int b);
+int SndgEventGetSurfaceHitSfx(int a, int b);
 void SndgMusicUpdate(void);
 void SndgMusicSetVolume(int value);
 void SndgMusicRampCutoff(int a, int b);
@@ -2230,7 +2230,7 @@ extern "C" void SndgHandleBallEvent(AudmonEvent_t *p)
                 if (pBall != 0 && pBall->mpUnknown00 != 0 && pBall->mpUnknown00->mUnknown660 != 0) {
                     id = pBall->mpUnknown00->mUnknown660->mSurface;
                 }
-                SndgSfxPlay(fn_80071BA0(fn_800A3444(), id), &p->mPos);
+                SndgSfxPlay(SndgEventGetSurfaceHitSfx(fn_800A3444(), id), &p->mPos);
             } else {
                 SndgSfxPlay(0x69, &p->mPos);
             }
