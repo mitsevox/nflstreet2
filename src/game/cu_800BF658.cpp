@@ -123,9 +123,10 @@ extern "C" void fn_800BF72C(PreSnapPhase *p, float dt)
             break;
         case 8:
             lbl_803EABAC[i] -= dt;
-            if (lbl_803EABAC[i] > 0.0f) {
-                break;
+            if (lbl_803EABAC[i] <= 0.0f) {
+                pSlot->mUnknown0 = 0;
             }
+            break;
         case 2:
             pSlot->mUnknown0 = 0;
             break;

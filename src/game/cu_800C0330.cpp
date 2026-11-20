@@ -4,6 +4,9 @@
 #include "game/fn_801FCE10.h"
 #include "game/Object_80039F5C.h"
 
+// FAKEMATCH: release form of an assert macro (empty loop, condition discarded).
+#define GAMESETUP_ASSERT(e) do { } while (0)
+
 extern "C" {
 void fn_800BE944(int index, int a, unsigned int msg, float value);
 void PlyrRouteShowTeam(int a, int index);
@@ -73,7 +76,12 @@ extern "C" void fn_800C07F0(QueryCursor cursor, unsigned char team, unsigned sho
     unsigned short i = 0;
     unsigned short id;
 
-    while (fn_801FCE10(0, "fetch from \x8a 'DIGP' into \x81\n", &cursor, &id) == 0) {
+    for (;;) {
+        // FAKEMATCH: compiled-out assert on the row count; its empty loop keeps the fetch test at the loop top
+        GAMESETUP_ASSERT(i <= 7);
+        if (fn_801FCE10(0, "fetch from \x8a 'DIGP' into \x81\n", &cursor, &id) != 0) {
+            break;
+        }
         if (i <= 6) {
             unsigned short index = fn_800C0660(pValues, id);
             Object_80039F5C *p = PlyrGet(team, index);

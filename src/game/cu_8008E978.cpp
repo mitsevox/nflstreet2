@@ -17669,22 +17669,31 @@ extern "C" void fn_800CE158(Group_800CC98C *p, Play_800CCEBC *pPlay, Record_800C
 
 extern "C" void fn_800CE218(Group_800CC98C *p)
 {
+    Block_800C8330 *pBlock = &p->mpUnknown0->mUnknown1160Wide;
+    unsigned char i;
+
     if (p->mUnknown60 != 0) {
-        p->mpUnknown0->mUnknown1216[0] = 1;
-        p->mpUnknown0->mUnknown1160.mUnknown55[0] = p->mUnknown57;
-        for (unsigned char i = 0; i <= 6; i++) {
+        pBlock->mUnknown56[0] = 1;
+        pBlock->mBlock.mUnknown55[0] = p->mUnknown57;
+        for (i = 0; i <= 6; i++) {
             Object_80039F5C *pB = p->mpUnknown4Entries[i];
+
             if (pB != 0) {
-                pB->mUnknown1216[0] = 1;
-                pB->mUnknown1160.mUnknown55[0] = p->mUnknown57;
+                Block_800C8330 *pOther = &pB->mUnknown1160Wide;
+
+                pOther->mUnknown56[0] = 1;
+                pOther->mBlock.mUnknown55[0] = p->mUnknown57;
             }
         }
     } else {
-        p->mpUnknown0->mUnknown1216[0] = 0;
-        for (unsigned char i = 0; i <= 6; i++) {
+        pBlock->mUnknown56[0] = 0;
+        for (i = 0; i <= 6; i++) {
             Object_80039F5C *pB = p->mpUnknown4Entries[i];
+
             if (pB != 0) {
-                pB->mUnknown1216[0] = 0;
+                Block_800C8330 *pOther = &pB->mUnknown1160Wide;
+
+                pOther->mUnknown56[0] = 0;
             }
         }
     }

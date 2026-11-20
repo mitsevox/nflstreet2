@@ -524,6 +524,8 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
             fn_800B0EB8();
         }
         break;
+    // FAKEMATCH: the ignored message 0x5C joins the ignored 0x60/0x63; its tree node gives the target's 0x5A/0x5B compares
+    case 0x5C:
     case 0x60:
     case 0x63:
         break;
