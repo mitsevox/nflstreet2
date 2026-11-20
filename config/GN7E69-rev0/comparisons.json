@@ -20021,6 +20021,16 @@
           "symbol": "fn_80230CEC",
           "start": "0x80230CEC",
           "end": "0x80230D8C"
+        },
+        {
+          "symbol": "fn_8022FEF8",
+          "start": "0x8022FEF8",
+          "end": "0x8022FFD0"
+        },
+        {
+          "symbol": "fn_8022F8A8",
+          "start": "0x8022F8A8",
+          "end": "0x8022FBAC"
         }
       ]
     },

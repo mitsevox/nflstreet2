@@ -4,6 +4,7 @@
 #include "engine/tdbext.h"
 #include "engine/dbutil.h"
 #include "engine/fn_801F9134.h"
+#include "engine/t3db_cols.h"
 
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXTev.h>
@@ -203,10 +204,27 @@ typedef struct Cache_8022F8A8 {
         int mWord;
         unsigned char mBytes[4];
     } mUnknown36;
-    char mUnknown40[56];
+    int mUnknown40[2];
+    struct CacheRec_8022F8A8 {
+        int mUnknown0;
+        int mUnknown4;
+        int mUnknown8;
+        int mUnknown12;
+    } mUnknown48[2];
+    char mUnknown80[16];
     struct Cache_8022F8A8 *mpUnknown96;
     struct Cache_8022F8A8 *mpUnknown100;
 } Cache_8022F8A8;
+
+/* 20-byte entry of the cached-column table 0x802FB340 (two entries: 'DIGT' of 'MAET',
+   'DIGP' of 'YALP'). */
+typedef struct CacheCol_802FB340 {
+    int mCol;
+    int mTable;
+    int mFill;
+    int mUnknown12;
+    void (*mpFill)(int key, int table, void *pValues, unsigned short *pCount);
+} CacheCol_802FB340;
 
 typedef struct Entry_802FB310 {
     int mUnknown0;
@@ -241,6 +259,7 @@ extern char lbl_802B7154[];
 extern char lbl_802B715C[];
 extern Entry_802FB300 lbl_802FB300[];
 extern Entry_802FB310 lbl_802FB310[];
+extern CacheCol_802FB340 lbl_802FB340[];
 extern int lbl_802FB398[];
 extern int lbl_802FB3A4[];
 extern int lbl_802FB3B0[];
@@ -284,6 +303,9 @@ extern int fn_801F9430(int a, int *pTable4, int *pTable8);
 extern int fn_801F9574(void);
 extern int fn_801F9980(int handle, int *pTable);
 extern int fn_801F9A90(int handle, int table);
+extern int fn_801F9608(int db, int tbl, unsigned char *pFlag, unsigned short *pValue);
+extern int fn_801F9CC0(int db, int tbl, unsigned short *pOut);
+extern int MemFill(void *pDst, unsigned int size, int value, unsigned int width);
 extern int fn_801F9D0C(int handle, int table, int a);
 extern int fn_801FA68C(void *pCallback, int tag);
 extern int fn_801FA740(int tag);
@@ -694,6 +716,99 @@ Cache_8022F8A8 *fn_8022F880(int key)
     return pCache;
 }
 
+/* Creates the column cache of key: shares the arrays of an existing cache of the same key,
+   otherwise reads each cached column's values into three filled arrays; links the cache
+   at the end of the list. */
+static inline void _CacheRecInit(struct CacheRec_8022F8A8 *pRec)
+{
+    pRec->mUnknown8 = -1;
+    pRec->mUnknown4 = -1;
+    pRec->mUnknown0 = 0;
+}
+
+int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache)
+{
+    Cache_8022F8A8 *pCache;
+    Cache_8022F8A8 *pOther;
+    Cache_8022F8A8 *pLast;
+    unsigned short count;
+    unsigned short size;
+    unsigned char flag;
+    int err;
+    unsigned short i;
+
+    pCache = DbUtilAlloc(sizeof(Cache_8022F8A8), 0);
+    err = 0;
+    i = 0;
+    pCache->mUnknown0 = fn_8022F80C();
+    pCache->mUnknown8 = 1023;
+    pCache->mUnknown4 = key;
+    pCache->mUnknown36.mWord = err;
+    pCache->mpUnknown96 = 0;
+    pCache->mpUnknown100 = 0;
+    for (; i <= 1; i++) {
+        pCache->mpUnknown12[i] = 0;
+        pCache->mpUnknown20[i] = 0;
+        pCache->mpUnknown28[i] = 0;
+        _CacheRecInit(&pCache->mUnknown48[i]);
+        pCache->mUnknown40[i] = 0;
+    }
+    pOther = fn_8022F880(key);
+    if (pOther != 0) {
+        for (i = 0; i <= 1; i++) {
+            pCache->mpUnknown12[i] = pOther->mpUnknown12[i];
+            pCache->mpUnknown20[i] = pOther->mpUnknown20[i];
+            pCache->mpUnknown28[i] = pOther->mpUnknown28[i];
+        }
+    } else {
+        for (i = 0; i <= 1; i++) {
+            if (fn_801F9A90(key, lbl_802FB340[i].mTable) == 0) {
+                count = 0;
+                err = fn_801F9608(key, lbl_802FB340[i].mTable, &flag, &count);
+                if (err == 0 && flag == 0) {
+                    err = fn_801F9CC0(key, lbl_802FB340[i].mTable, &count);
+                }
+                size = count;
+                if (err != 0) {
+                    break;
+                }
+                pCache->mpUnknown12[i] = DbUtilAlloc((count + 1) * 4, 0);
+                MemFill(pCache->mpUnknown12[i], (count + 1) * 4, lbl_802FB340[i].mFill, 4);
+                pCache->mpUnknown20[i] = DbUtilAlloc((count + 1) * 4, 0);
+                MemFill(pCache->mpUnknown20[i], (count + 1) * 4, lbl_802FB340[i].mFill, 4);
+                pCache->mpUnknown28[i] = DbUtilAlloc((count + 1) * 4, 0);
+                MemFill(pCache->mpUnknown28[i], (count + 1) * 4, lbl_802FB340[i].mFill, 4);
+                if (lbl_802FB340[i].mpFill != 0) {
+                    lbl_802FB340[i].mpFill(key, lbl_802FB340[i].mTable, pCache->mpUnknown28[i], &size);
+                }
+                pCache->mUnknown36.mBytes[i >> 3] |= 1 << (i & 7);
+            }
+            if (err != 0) {
+                break;
+            }
+        }
+    }
+    if (err == 0) {
+        if (lbl_803EC0E0 == 0) {
+            lbl_803EC0E0 = pCache;
+        } else {
+            for (pLast = lbl_803EC0E0; pLast->mpUnknown100 != 0; pLast = pLast->mpUnknown100) {
+            }
+            pLast->mpUnknown100 = pCache;
+            pCache->mpUnknown96 = pLast;
+        }
+    }
+    if (err != 0) {
+        if (pCache != 0) {
+            fn_8022FBAC(pCache);
+        }
+        *ppCache = 0;
+    } else {
+        *ppCache = pCache;
+    }
+    return err;
+}
+
 int fn_8022FBAC(Cache_8022F8A8 *pCache)
 {
     unsigned short i;
@@ -718,6 +833,23 @@ int fn_8022FBAC(Cache_8022F8A8 *pCache)
     }
     DbUtilFree(pCache);
     return 0;
+}
+
+/* Writes one 64-bit column key (owner word, column id) per column of pInfo, the 'DIGT'
+   column keyed by digtKey instead of key, then the -1 terminator. */
+void fn_8022FEF8(unsigned int key, unsigned int digtKey, TDbColInfo_801F9AB8 *pInfo,
+                 unsigned long long *pKeys, unsigned short count)
+{
+    unsigned char i;
+
+    for (i = 0; i < count; i++) {
+        if (pInfo[i].mCol == 0x44494754) {
+            pKeys[i] = ((unsigned long long)digtKey << 32) | (unsigned int)pInfo[i].mCol;
+        } else {
+            pKeys[i] = ((unsigned long long)key << 32) | (unsigned int)pInfo[i].mCol;
+        }
+    }
+    pKeys[i] = -1;
 }
 
 int fn_802303A0(int index)
