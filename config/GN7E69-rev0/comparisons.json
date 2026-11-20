@@ -7760,7 +7760,7 @@
     {
       "source": "src/game/cu_8000F870.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8000F870.cpp, the function rows 0x8000F870-0x8001701C, the data rows 0x8001701C-0x800170E0 (data_8001701C), 0x802F41BC-0x802F43F4 and 0x803EB950-0x803EBA08, the .ctors/.dtors words and the data rows of its .bss and .sbss objects. Draft comparison only: five function bodies differ (see the source-form row cu_8000F870 unmatched functions), so the unit stays unlinked.",
+      "evidence": "evidence.tsv unit row src/game/cu_8000F870.cpp, the function rows 0x8000F870-0x8001701C, the data rows 0x8001701C-0x800170E0 (data_8001701C), 0x802F41BC-0x802F43F4 and 0x803EB950-0x803EBA08, the .ctors/.dtors words and the data rows of its .bss and .sbss objects. Five function bodies differ (see the source-form row cu_8000F870 unmatched functions and their HOLDOUT: rows). The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -22351,7 +22351,7 @@
     {
       "source": "src/game/cu_801394B0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801394B0-0x8013B874 for src/game/cu_801394B0.cpp (replacing candidate cu_801394B0), its 57 function extents (evidence grade exact), the exact data rows 0x8029FF28-0x802A00B8 (.rodata literal pools, including four runs no surviving code loads) and 0x803EB1B0-0x803EB1C4 (.sdata floats), and the source-form rows recording the remaining differences. Wholly unlinked draft source: the four unreferenced literal runs are the pools of six functions the target linker discarded, rebuilt from their Xbox prototype counterparts and listed as discarded (linker rows 0x8029FFF8, 0x802A0038, 0x802A005C, 0x802A0094), so the compiled .rodata equals the target; the original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801394B0-0x8013B874 for src/game/cu_801394B0.cpp (replacing candidate cu_801394B0), its 57 function extents (evidence grade exact), the exact data rows 0x8029FF28-0x802A00B8 (.rodata literal pools, including four runs no surviving code loads) and 0x803EB1B0-0x803EB1C4 (.sdata floats), and the source-form rows recording the remaining differences. Wholly unlinked draft source: the four unreferenced literal runs are the pools of six functions the target linker discarded, rebuilt from their Xbox prototype counterparts and listed as discarded (linker rows 0x8029FFF8, 0x802A0038, 0x802A005C, 0x802A0094), so the compiled .rodata equals the target. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",

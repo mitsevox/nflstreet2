@@ -1730,54 +1730,6 @@
       "address": "0x800DC36C",
       "evidence": "evidence.tsv function and name rows for 0x800DC36C (unlinked; its address is stored by the comparison source src/game/cu_8008E978.cpp)."
     },
-    "BallApplyContactForce": {
-      "address": "0x8013A494",
-      "evidence": "evidence.tsv function and name rows for 0x8013A494 (unlinked; referenced from linked src/game/BallState.cpp)."
-    },
-    "BallStepGroundContact": {
-      "address": "0x8013A6A8",
-      "evidence": "evidence.tsv function and name rows for 0x8013A6A8 (unlinked; referenced from linked src/game/Ball.cpp)."
-    },
-    "BallFollowHolder": {
-      "address": "0x8013A72C",
-      "evidence": "evidence.tsv function and name rows for 0x8013A72C (unlinked; referenced from linked src/game/Ball.cpp)."
-    },
-    "BallStepMotion": {
-      "address": "0x8013A844",
-      "evidence": "evidence.tsv function and name rows for 0x8013A844 (unlinked; referenced from linked src/game/BallState.cpp)."
-    },
-    "BallRestAtAngles": {
-      "address": "0x8013A910",
-      "evidence": "evidence.tsv function and name rows for 0x8013A910 (unlinked; referenced from comparison and linked src/game/cu_800B9BBC.cpp, src/game/cu_800BA7A0.cpp, src/game/cu_80150DFC.cpp, src/game/TutorialLesson.cpp, src/game/BallPlace.cpp)."
-    },
-    "BallSolveFallToHeight": {
-      "address": "0x8013AA00",
-      "evidence": "evidence.tsv function and name rows for 0x8013AA00 (unlinked; referenced from comparison src/game/cu_800B4A4C.cpp and linked src/game/LooseBall.cpp and src/game/cu_800EFC68.cpp)."
-    },
-    "BallGetHeightAtTime": {
-      "address": "0x8013AB64",
-      "evidence": "evidence.tsv function and name rows for 0x8013AB64 (unlinked; referenced from linked src/game/cu_800EFC68.cpp)."
-    },
-    "BallLaunchToTarget": {
-      "address": "0x8013AC28",
-      "evidence": "evidence.tsv function and name rows for 0x8013AC28 (unlinked; referenced from linked src/game/cu_800EFC68.cpp)."
-    },
-    "BallIsContactRaised": {
-      "address": "0x8013AD78",
-      "evidence": "evidence.tsv function and name rows for 0x8013AD78 (unlinked; referenced from linked src/game/Possession.cpp)."
-    },
-    "BallStateStepTimed": {
-      "address": "0x8013B0B4",
-      "evidence": "evidence.tsv function and name rows for 0x8013B0B4 (unlinked; referenced from linked src/game/BallState.cpp)."
-    },
-    "BallStateStopVelocity": {
-      "address": "0x8013B198",
-      "evidence": "evidence.tsv function and name rows for 0x8013B198 (unlinked; referenced from linked src/game/BallState.cpp)."
-    },
-    "BallStatePlacedUpdate": {
-      "address": "0x8013B734",
-      "evidence": "evidence.tsv function and name rows for 0x8013B734 (unlinked; referenced from linked src/game/BallState.cpp)."
-    },
     "_TDbIOReadTableNew": {
       "address": "0x801FB0F8",
       "evidence": "evidence.tsv function/name rows at0x801FB0F8; complete measured comparison in its original file; original target code remains linked."
@@ -7861,6 +7813,162 @@
           "_StrippedEventDelay"
         ],
         "evidence": "evidence.tsv linker rows of the file-static functions of src/game/cu_8002B8F8.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
+      }
+    },
+    {
+      "source": "src/game/cu_8000F870.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8000F870-0x8001701C (src/game/cu_8000F870.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8000F870",
+          "end": "0x80012ABC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80012F3C",
+          "end": "0x800133B0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80013438",
+          "end": "0x80014AA8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80014B98",
+          "end": "0x80015BF8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80015D28",
+          "end": "0x8001701C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x8001701C",
+          "end": "0x800170E0",
+          "follows": ".text"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F41BC",
+          "end": "0x802F43F4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB950",
+          "end": "0x803EBA08"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036ADB0",
+          "end": "0x8036B168"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECE38",
+          "end": "0x803ECE58"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B28",
+          "end": "0x80289B2C"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C50",
+          "end": "0x80289C54"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80012ABC",
+            "evidence": "evidence.tsv source-form 0x80012ABC-0x80012D50"
+          },
+          {
+            "function": "fn_80012D50",
+            "evidence": "evidence.tsv source-form 0x80012D50-0x80012F3C"
+          },
+          {
+            "function": "fn_800133B0",
+            "evidence": "evidence.tsv source-form 0x800133B0-0x80013438"
+          },
+          {
+            "function": "fn_80014AA8",
+            "evidence": "evidence.tsv source-form 0x80014AA8-0x80014B98"
+          },
+          {
+            "function": "fn_80015BF8",
+            "evidence": "evidence.tsv source-form 0x80015BF8-0x80015D28"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      }
+    },
+    {
+      "source": "src/game/cu_801394B0.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x801394B0-0x8013B874 (src/game/cu_801394B0.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801394B0",
+          "end": "0x8013ABE0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8013AC28",
+          "end": "0x8013B874"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FF28",
+          "end": "0x802A00B8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB1B0",
+          "end": "0x803EB1C4"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8013ABE0",
+            "evidence": "evidence.tsv source-form 0x8013ABE0-0x8013AC28"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      },
+      "link_roots": {
+        "discarded": [
+          "BallGetWindDrift",
+          "BallApplyWindForce",
+          "BallApplyWindForceDamped",
+          "BallApplyWobble",
+          "BallAddClampedE0",
+          "BallIsSettled"
+        ],
+        "evidence": "evidence.tsv linker rows of the file-static functions of src/game/cu_801394B0.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
       }
     },
     {
