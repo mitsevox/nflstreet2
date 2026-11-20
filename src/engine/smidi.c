@@ -1,0 +1,228 @@
+/* Sound MIDI sequencer (smidi.c): plays the sound banks' MIDI sequences on the 100 Hz sound server.
+   Sixteen sequence slots keep their read cursor, volume fade and per-channel controller state; 24
+   note slots tie each started voice to its sequence, channel and key so note-offs, fades and stops
+   can find it. */
+
+#include "engine/sndbank.h"
+
+/* The controller state of one MIDI channel of a sequence: pitch bend, volume and pan as packed
+   fields, then the channel's patch. */
+typedef struct SndMidiChan_t {
+    unsigned int mBend : 10;
+    unsigned int mVolume : 7;
+    unsigned int mPan : 7;
+    signed int mPatch : 8;
+} SndMidiChan_t;
+
+/* One sequence slot: read cursor +0x8, handle +0x10, 16.16 volume +0x14 with its fade step and
+   target, state byte +0x28 and the 16 channel words +0x30. */
+typedef struct SndMidiSeq_t {
+    unsigned char unk_0x0[8];
+    unsigned char *mpData;
+    unsigned char *mpLoop;
+    int mHandle;
+    int mVolume;
+    int mFadeStep;
+    int mFadeTarget;
+    unsigned short m20;
+    unsigned short m22;
+    unsigned char unk_0x24[2];
+    unsigned char m26;
+    unsigned char unk_0x27;
+    unsigned char mState;
+    unsigned char unk_0x29[3];
+    short m2C;
+    short m2E;
+    SndMidiChan_t mChans[16];
+} SndMidiSeq_t;
+
+/* One note slot: the voice handle and the sequence, channel and key that started it. */
+typedef struct SndMidiNote_t {
+    int mHandle;
+    signed char mSeq;
+    signed char mChan;
+    signed char mKey;
+    signed char mFlags;
+} SndMidiNote_t;
+
+typedef struct SndMidiState_t {
+    SndMidiSeq_t mSeqs[16];
+    SndMidiNote_t mNotes[24];
+} SndMidiState_t;
+
+extern "C" {
+
+extern SndMidiState_t lbl_803A6E60;
+
+int SNDvol(int handle, int vol);
+void SNDSYS_entercritical(void);
+void SNDSYS_leavecritical(void);
+void fn_8026C0C0(void);
+
+int SNDseqstop(int handle);
+int SNDmidistopall(void);
+int SNDmidirestore(void);
+
+}
+
+int SNDI_midigetseqindex(int handle)
+{
+    int index;
+
+    if (handle < 0) {
+        return -8;
+    }
+    index = handle & 0x1F;
+    if (index > 15) {
+        return -8;
+    }
+    if (lbl_803A6E60.mSeqs[index].mHandle != handle) {
+        return -8;
+    }
+    return index;
+}
+
+int SNDI_midiupdatefade(int seq)
+{
+    SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
+    int i;
+
+    s->mVolume += s->mFadeStep;
+    if (s->mFadeStep < 0) {
+        if (s->mVolume <= s->mFadeTarget) {
+            s->mVolume = s->mFadeTarget;
+            s->mFadeStep = 0;
+        }
+    } else if (s->mVolume >= s->mFadeTarget) {
+        s->mVolume = s->mFadeTarget;
+        s->mFadeStep = 0;
+    }
+    if (s->mVolume < 0) {
+        SNDseqstop(s->mHandle);
+        return 1;
+    }
+    for (i = 0; i < 24; i++) {
+        SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+
+        if (note->mSeq == seq && note->mHandle > -1) {
+            SNDvol(note->mHandle, s->mChans[note->mChan].mVolume * (short)(s->mVolume >> 16) >> 7);
+        }
+    }
+    return 0;
+}
+
+int SNDI_midiseqover(int seq)
+{
+    int over = 1;
+    int i;
+
+    for (i = 0; i < 24; i++) {
+        SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+
+        if (note->mSeq == seq && note->mHandle >= 0 && SNDVOICEI_get(note->mHandle) >= 0) {
+            over = 0;
+            break;
+        }
+    }
+    return over;
+}
+
+void SNDI_midiparsenoteoff(int seq, int chan, int key)
+{
+    SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
+    int i;
+
+    s->mpData++;
+    for (i = 0; i < 24; i++) {
+        SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+
+        if (note->mSeq == seq && note->mChan == chan && note->mKey == key && !(note->mFlags & 0x80)) {
+            SNDrelease(note->mHandle);
+            note->mFlags = -1;
+            return;
+        }
+    }
+}
+
+extern "C" {
+
+int SNDmidiinit(void)
+{
+    int i;
+
+    SNDSYS_entercritical();
+    for (i = 0; i < 24; i++) {
+        SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+
+        note->mChan = -1;
+        note->mKey = 0;
+        note->mFlags = 0;
+        note->mHandle = -1;
+    }
+    for (i = 0; i < 16; i++) {
+        SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[i];
+
+        s->mHandle = -1;
+        s->mState = 0;
+    }
+    SNDSYS_add100hzclient(fn_8026C0C0);
+    lbl_803A6C24.m1C4 = (void (*)(void))SNDmidirestore;
+    SNDSYS_leavecritical();
+    return 0;
+}
+
+int SNDmidirestore(void)
+{
+    SNDSYS_entercritical();
+    SNDmidistopall();
+    SNDSYS_remove100hzclient(fn_8026C0C0);
+    lbl_803A6C24.m1C4 = 0;
+    SNDSYS_leavecritical();
+    return 0;
+}
+
+int SNDmidistopall(void)
+{
+    int i;
+
+    SNDSYS_entercritical();
+    for (i = 0; i < 16; i++) {
+        SNDseqstop(lbl_803A6E60.mSeqs[i].mHandle);
+    }
+    SNDSYS_leavecritical();
+    return 0;
+}
+
+int SNDseqstop(int handle)
+{
+    SndMidiSeq_t *s;
+    int seq;
+    int i;
+
+    seq = SNDI_midigetseqindex(handle);
+    if (seq < 0) {
+        return seq;
+    }
+    s = &lbl_803A6E60.mSeqs[seq];
+    if (s->mState != 0) {
+        for (i = 0; i < 24; i++) {
+            SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+
+            if (note->mSeq == seq) {
+                if (note->mHandle >= 0) {
+                    SNDstop(note->mHandle);
+                }
+                note->mChan = -1;
+                note->mKey = 0;
+                note->mFlags = 0;
+                note->mHandle = -1;
+            }
+        }
+        s->mHandle = -1;
+        s->mState = 2;
+        return 0;
+    }
+    return -1;
+}
+
+}

@@ -34008,6 +34008,12 @@
           "placement": ".text",
           "start": "0x80266E88",
           "end": "0x802697D8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7808",
+          "end": "0x802B7828"
         }
       ],
       "functions": [
@@ -34072,6 +34078,11 @@
           "end": "0x80267858"
         },
         {
+          "symbol": "SNDAEMSI_envelopeprogramsegment",
+          "start": "0x80267858",
+          "end": "0x80267894"
+        },
+        {
           "symbol": "fn_80267D84",
           "start": "0x80267D84",
           "end": "0x80267DB4"
@@ -34100,6 +34111,16 @@
           "symbol": "fn_80267EA8",
           "start": "0x80267EA8",
           "end": "0x80267EC4"
+        },
+        {
+          "symbol": "SNDAEMSI_updatescale",
+          "start": "0x80267EC4",
+          "end": "0x80267F80"
+        },
+        {
+          "symbol": "SNDAEMSI_updatescale2",
+          "start": "0x80267F80",
+          "end": "0x8026801C"
         },
         {
           "symbol": "fn_8026801C",
@@ -34232,6 +34253,11 @@
           "end": "0x80268774"
         },
         {
+          "symbol": "SNDAEMSI_playerresetoutputs",
+          "start": "0x80268774",
+          "end": "0x802687AC"
+        },
+        {
           "symbol": "fn_80268F54",
           "start": "0x80268F54",
           "end": "0x80268FA0"
@@ -34270,6 +34296,11 @@
           "symbol": "fn_80269048",
           "start": "0x80269048",
           "end": "0x80269084"
+        },
+        {
+          "symbol": "SNDAEMSI_restore",
+          "start": "0x80269260",
+          "end": "0x802692B8"
         }
       ]
     },
@@ -35883,6 +35914,61 @@
           "symbol": "SNDSTRM_purge",
           "start": "0x8026E388",
           "end": "0x8026E4C0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/smidi.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x8026B898-0x8026C39C (src/engine/smidi.c, NASCAR 2005 smidi.c), its function and name rows and the sound_cxx compiler row; written in w1, original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026B898",
+          "end": "0x8026C39C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SNDI_midigetseqindex__Fi",
+          "start": "0x8026B898",
+          "end": "0x8026B8E4"
+        },
+        {
+          "symbol": "SNDI_midiupdatefade__Fi",
+          "start": "0x8026B8E4",
+          "end": "0x8026B9E0"
+        },
+        {
+          "symbol": "SNDI_midiseqover__Fi",
+          "start": "0x8026B9E0",
+          "end": "0x8026BA60"
+        },
+        {
+          "symbol": "SNDI_midiparsenoteoff__Fiii",
+          "start": "0x8026BBF0",
+          "end": "0x8026BC9C"
+        },
+        {
+          "symbol": "SNDmidiinit",
+          "start": "0x8026C18C",
+          "end": "0x8026C23C"
+        },
+        {
+          "symbol": "SNDmidirestore",
+          "start": "0x8026C23C",
+          "end": "0x8026C280"
+        },
+        {
+          "symbol": "SNDmidistopall",
+          "start": "0x8026C280",
+          "end": "0x8026C2D4"
+        },
+        {
+          "symbol": "SNDseqstop",
+          "start": "0x8026C2D4",
+          "end": "0x8026C39C"
         }
       ]
     },
