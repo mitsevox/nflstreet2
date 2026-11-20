@@ -31796,15 +31796,15 @@
       ]
     },
     {
-      "source": "src/engine/cu_801B2AD4.cpp",
-      "profile": "engine_c",
-      "evidence": "Partial source within the retained provisional pathauthor survey grouping; complete registered bodies and naturally emitted allocator-configuration initialization/storage are measured. Original bytes remain linked. The static-init pair 0x801B33DC-0x801B343C and .ctors word 0x80289B40 establish 0x801B343C as an observed original-file-end anchor (P52). The survey extent contains at least two original translation units. The configuration object and .ctors word belong to the part ending at 0x801B343C. One survey source is retained; the internal edge 0x801B343C is provisional; redo with neighbours (P55). The alternative is to split the comparison source at 0x801B343C and assign the configuration storage and .ctors placement to the first part.",
+      "source": "src/engine/pathinit.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B2AD4-0x801B343C (src/engine/pathinit.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked. The allocator-configuration object (.bss 0x8037E814) and its .ctors word 0x80289B40 belong here: the static-initialization pair 0x801B33DC-0x801B343C ends the file.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B2AD4",
-          "end": "0x801B8C18"
+          "end": "0x801B343C"
         },
         {
           "section": ".bss",
@@ -31859,7 +31859,22 @@
           "symbol": "_GLOBAL_.I.fn_801B2AD4",
           "start": "0x801B3410",
           "end": "0x801B343C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/pathserv.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0 (src/engine/pathserv.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B343C",
+          "end": "0x801B3AD0"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801B343C",
           "start": "0x801B343C",
@@ -31894,7 +31909,22 @@
           "symbol": "fn_801B3AAC",
           "start": "0x801B3AAC",
           "end": "0x801B3AD0"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/pathtrack.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B3AD0-0x801B45D0 (src/engine/pathtrack.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B3AD0",
+          "end": "0x801B45D0"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801B3AD0",
           "start": "0x801B3AD0",
@@ -32009,7 +32039,22 @@
           "symbol": "fn_801B45CC__14Class_801B44BC",
           "start": "0x801B45CC",
           "end": "0x801B45D0"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/pathvol.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B45D0-0x801B51AC (src/engine/pathvol.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B45D0",
+          "end": "0x801B51AC"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801B4824",
           "start": "0x801B4824",
@@ -32024,7 +32069,22 @@
           "symbol": "fn_801B49C4",
           "start": "0x801B49C4",
           "end": "0x801B4A24"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/pathbank.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B51AC-0x801B59B0 (src/engine/pathbank.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B51AC",
+          "end": "0x801B59B0"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801B57C0",
           "start": "0x801B57C0",
@@ -32034,7 +32094,22 @@
           "symbol": "fn_801B58F0",
           "start": "0x801B58F0",
           "end": "0x801B59B0"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/pathcontrol.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B59B0-0x801B5E10 (src/engine/pathcontrol.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B59B0",
+          "end": "0x801B5E10"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801B59B0",
           "start": "0x801B59B0",
@@ -32064,12 +32139,22 @@
           "symbol": "fn_801B5DB4",
           "start": "0x801B5DB4",
           "end": "0x801B5E10"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/pathevent.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B5E5C-0x801B6780 (src/engine/pathevent.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
+      "sections": [
         {
-          "symbol": "fn_801B5E10",
-          "start": "0x801B5E10",
-          "end": "0x801B5E5C"
-        },
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B5E5C",
+          "end": "0x801B6780"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801B5E5C",
           "start": "0x801B5E5C",
@@ -32094,7 +32179,22 @@
           "symbol": "fn_801B64C0",
           "start": "0x801B64C0",
           "end": "0x801B6578"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/pathnode.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B6780-0x801B7778 (src/engine/pathnode.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B6780",
+          "end": "0x801B7778"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801B6780",
           "start": "0x801B6780",
@@ -32114,12 +32214,22 @@
           "symbol": "fn_801B7178",
           "start": "0x801B7178",
           "end": "0x801B721C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/pathaction.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B7880-0x801B8C18 (src/engine/pathaction.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
+      "sections": [
         {
-          "symbol": "fn_801B7778",
-          "start": "0x801B7778",
-          "end": "0x801B7880"
-        },
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B7880",
+          "end": "0x801B8C18"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801B845C",
           "start": "0x801B845C",

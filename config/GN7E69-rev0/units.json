@@ -2120,7 +2120,7 @@
     },
     "_Q24Path11IPathToReal.realimp": {
       "address": "0x803EBB60",
-      "evidence": "evidence.tsv external row for 0x803EBB60 (Path::IPathToReal::realimp, GoldenEye symbol); its storage stays in the open src/engine/cu_801B2AD4.cpp area; src/engine/pathreal5.c references it by name."
+      "evidence": "evidence.tsv external row for 0x803EBB60 (Path::IPathToReal::realimp, GoldenEye symbol); its storage stays in the open PATH library files (src/engine/pathinit.c and its neighbours); src/engine/pathreal5.c references it by name."
     },
     "STREAM_overhead": {
       "address": "0x801F685C",
@@ -22302,6 +22302,50 @@
           "placement": ".data3",
           "start": "0x802B78E0",
           "end": "0x802B78F0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/pathrand.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B7778-0x801B7880 (src/engine/pathrand.c), its compiler, function, name, data and source-form rows: PATHI_random exact; .rodata 0x802AED50-0x802AED58 is the file's unreferenced \"%s  %s\" string and .data 0x802F481C-0x802F4834 the generator state seedPATH, both defined by the file.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B7778",
+          "end": "0x801B7880"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AED50",
+          "end": "0x802AED58"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F481C",
+          "end": "0x802F4834"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/pathdebug.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B5E10-0x801B5E5C (src/engine/pathdebug.c), its compiler, function, name and source-form rows: PATHI_printf exact; .rodata 0x802AECB4-0x802AECBC is the file's unreferenced \"%s  %s\" string, defined by the file; the file has no other data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B5E10",
+          "end": "0x801B5E5C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AECB4",
+          "end": "0x802AECBC"
         }
       ]
     }
