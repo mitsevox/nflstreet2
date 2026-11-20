@@ -406,6 +406,10 @@
       "address": "0x800A042C",
       "evidence": "evidence.tsv external row for 0x800A042C (OnEnter__13LivePlayPhase)."
     },
+    "PlyrLoadDbRecord": {
+      "address": "0x800B4DE4",
+      "evidence": "evidence.tsv external row for 0x800B4DE4 (PlyrLoadDbRecord)."
+    },
     "OnEnter__12PreGamePhase": {
       "address": "0x800BC5DC",
       "evidence": "evidence.tsv external row for 0x800BC5DC (OnEnter__12PreGamePhase)."
