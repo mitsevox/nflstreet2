@@ -288,8 +288,7 @@ def load_manifest(manifest, sections, compiler_version, comparisons=None, eviden
         for entry in placed:
             if entry["follows"] is None:
                 continue
-            code = next((other for other in placed if other["section"] == entry["follows"]
-                         and other is not entry), None)
+            code = followed_code(placed, entry)
             if code is None or code["follows"] is not None or code["placement"] != entry["placement"] \
                     or not code["end"] <= entry["start"]:
                 raise ValueError(f"{unit['source']} {entry['section']} must follow another configured section "
@@ -321,7 +320,7 @@ def load_manifest(manifest, sections, compiler_version, comparisons=None, eviden
         if sectioned and not holdouts:
             raise ValueError(f"{unit['source']}: profile {unit['profile']} compiles with {FUNCTION_SECTIONS}, "
                              "which only a unit with holdouts may use")
-        root =profiles[unit["profile"]].get("source_root")
+        root = profiles[unit["profile"]].get("source_root")
         compile_path = None
         if root:
             directory, prefix, depth = source_root(root)
@@ -346,6 +345,13 @@ def load_manifest(manifest, sections, compiler_version, comparisons=None, eviden
         if any(gap_start < end and start < gap_end for start, end, _ in ranges):
             raise ValueError(f"{source} {name}: another configured range lies between it and the code it follows")
     return units, externals, [directory for directory in manifest.get("include_dirs", [])]
+
+
+def followed_code(placed, entry):
+    """The configured section that data entry `entry` follows, or None. A holdouts unit maps its
+    .text once per linked run, so data that follows .text follows the run that ends last."""
+    return max((other for other in placed if other["section"] == entry["follows"] and other is not entry),
+               key=lambda other: other["end"], default=None)
 
 
 def link_root_names(values, empty=False):
@@ -678,7 +684,8 @@ def holdout_functions(unit, placed, comparisons, evidence, by_name):
     declare holdouts (owner ruling of 2026-11-20). The unit's code entries are the linked runs
     between them: runs and holdouts tile one contiguous code range, with a holdout between any
     two runs. Each run is given the derived object's section that links it (`input`). build()
-    checks that none of the holdouts is exact.
+    checks that none of the holdouts is exact. Read-only data may follow the code (`follows`
+    .text), linked whole after the last run, when the code ends with that run.
 
     The unit may also list, as `link_roots: {"discarded": [...], "evidence": locator}`, file-static
     functions SN's linker discarded (the existing discarded-function practice): compiled, their
@@ -701,11 +708,6 @@ def holdout_functions(unit, placed, comparisons, evidence, by_name):
     for key in ("folded", "kept_locals"):
         if key in unit:
             raise ValueError(f"{source}: holdouts cannot be combined with {key}")
-    # plan() places a follows entry after a section the native object names; a holdouts unit's
-    # code is linked from the derived object's run sections instead, so the two cannot combine.
-    if any(entry["follows"] is not None for entry in placed):
-        raise ValueError(f"{source}: holdouts cannot be combined with follows; link each data section whole "
-                         "in its own placement")
     rows = [row for entry in comparisons.get("units", []) if entry.get("source") == source
             for row in entry.get("functions", [])]
     result = []
@@ -751,6 +753,14 @@ def holdout_functions(unit, placed, comparisons, evidence, by_name):
             raise ValueError(f"{source}: two code runs meet at 0x{right[0]:08X} without a holdout between them")
     if not target["start"] <= pieces[0][0] < pieces[-1][1] <= target["end"]:
         raise ValueError(f"{source}: holdouts lie outside {code[0]['placement']}")
+    # Read-only data configured to follow the code (follows) is linked whole, from the derived
+    # object's unchanged data section, after the last run (followed_code); plan() checks its
+    # alignment and the zero padding as for any unit. The code must end with that run: a trailing
+    # holdout would lie between the run and the data.
+    for entry in placed:
+        if entry["follows"] is not None and (entry["follows"] != ".text" or pieces[-1][2] != "run"):
+            raise ValueError(f"{source}: {entry['section']} follows the code, so it must follow .text and the "
+                             "unit's code must end with a linked run, not a holdout")
     for entry in code:
         entry["input"] = holdout_run(entry["start"])[0]
     return result
@@ -776,7 +786,9 @@ def holdout_object(native, unit, output):
     - drops each listed discarded function's code section, its relocations and the symbols defined
       in it, without an address: the compiled order skips it. Each must be one compiled local
       function, and a relocation that reaches it from any kept section or a holdout (whose code
-      the target has) fails, as the target's linker could not have discarded it then.
+      the target has) fails, as the target's linker could not have discarded it then. An
+      undefined symbol that only discarded functions reference is dropped too, so plan() need
+      not resolve it; one that anything else references stays;
     Data sections and their relocations are unchanged apart from those redirections. The native
     object stays the receipt."""
     source = unit["source"]
@@ -875,13 +887,28 @@ def holdout_object(native, unit, output):
     for start, index in run_index.items():
         for member in members[start]:
             index_map[member["index"]] = index
+    # An undefined symbol that only discarded functions' relocations name goes with them: their
+    # code and relocations are dropped, so nothing needs it resolved. One that any other section's
+    # relocation names (a run's, a holdout's, whose code the target has, or a data section's) stays.
+    needed, unneeded = set(), set()
+    for section in sections:
+        if section["type"] != 4:
+            continue
+        discarding = place.get(section["info"], ("",))[0] == "discarded"
+        for at in range(section["offset"], section["offset"] + section["size"], 12):
+            (unneeded if discarding else needed).add(struct.unpack_from(">IIi", data, at)[1] >> 8)
+    unneeded = {index for index in unneeded - needed
+                if index and symbols[index - 1]["shndx"] == SHN_UNDEF and symbols[index - 1]["name"]}
     # Symbols: same order; run section symbols replace their members' section symbols, symbols
-    # in a holdout's section go, and the holdout references and run markers are appended.
+    # in a holdout's or discarded function's section go, as do undefined symbols only discarded
+    # functions need, and the holdout references and run markers are appended.
     entries, mapping, run_symbol, first_global = [], {}, {}, None
     symtab_bytes = data[symtab["offset"]:symtab["offset"] + symtab["size"]]
     for index, symbol in enumerate(symbols, 1):
         if index == symtab["info"]:
             first_global = len(entries) + 1
+        if index in unneeded:
+            continue
         raw = symtab_bytes[index * 16:index * 16 + 16]
         name_offset, value, size, info, other, shndx = struct.unpack(">IIIBBH", raw)
         kind = place.get(shndx)
@@ -898,6 +925,11 @@ def holdout_object(native, unit, output):
                 mapping[index] = ("symbol", run_symbol[start], offset)
                 continue
             value, shndx = value + offset, run_index[start]
+            if info == STB_LOCAL << 4 | STT_FUNC:
+                # strip-unused drops an unreferenced local function even inside a kept section, and a
+                # file-static function whose only callers are holdouts has lost its references; as an
+                # untyped label it stays with its run, as the target's linker kept it.
+                info = STB_LOCAL << 4
         elif 0 < shndx < 0xFF00:
             if shndx not in index_map:
                 raise ValueError(f"{source}: symbol {symbol['name']} is defined in a section holdouts cannot keep")
@@ -913,7 +945,10 @@ def holdout_object(native, unit, output):
         entries.append(struct.pack(">IIIBBH", len(strings), 0, 0, STB_GLOBAL << 4, 0, SHN_UNDEF))
         strings += holdout_reference(row["start"]).encode("ascii") + b"\0"
     for start, index in sorted(run_index.items()):
-        entries.append(struct.pack(">IIIBBH", len(strings), 0, 0, STB_GLOBAL << 4, 0, index))
+        # The marker spans its run, as an original piece's marker does: strip-unused then keeps the
+        # whole run, including file-static functions that only a holdout calls.
+        entries.append(struct.pack(">IIIBBH", len(strings), 0, new_sections[index]["size"], STB_GLOBAL << 4, 0,
+                                   index))
         strings += holdout_run(start)[1].encode("ascii") + b"\0"
     # Relocations: a run's members' records merge into one section, moved by each member's offset.
     relocations = {}
@@ -1111,7 +1146,7 @@ def plan(sections, units, objects, externals):
         for entry in unit["sections"]:
             if entry.get("follows") is None:
                 continue
-            code = mapped[entry["follows"]]
+            code = followed_code(unit["sections"], entry)
             if not code["executable"]:
                 raise ValueError(f"{unit['source']}: {entry['section']} must follow the unit's own code")
             # The data starts at the first boundary of its own alignment after the code; the
@@ -1891,7 +1926,10 @@ def compiled_functions(unit, obj):
     placements = {entry["index"]: entry for entry in unit["sections"]}
     functions, seen = [], set()
     for symbol in obj[1]:
-        if symbol["type"] != STT_FUNC or symbol["shndx"] == SHN_UNDEF or symbol["size"] <= 0:
+        # holdout_object leaves a holdouts unit's local functions untyped (sized) so the link keeps them.
+        function = symbol["type"] == STT_FUNC or (unit.get("holdouts") and symbol["bind"] == STB_LOCAL
+                                                  and symbol["type"] == 0)
+        if not function or symbol["shndx"] == SHN_UNDEF or symbol["size"] <= 0:
             continue
         # A kept local's global copy (keep_object) names the same function once more, and its
         # alias for another unit's folded references (`__folded_<name>`) once again.
