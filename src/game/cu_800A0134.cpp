@@ -343,7 +343,7 @@ extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
                 }
                 if(fn_80177C38()>1) {
                     out->mUnknown18|=0x40;
-                    removed=(out->mUnknown18&4)!=0;
+                    if(out->mUnknown18&4)removed=true;
                     out->mUnknown18&=~4;
                 }
             } else if(previous==6) {
@@ -369,24 +369,27 @@ extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
         }
         if((previous!=6 && out->mUnknown08.mY < -fn_80178A2C()) || out->mUnknown18&0x100) {
             if(fn_801783AC(2) && !(out->mUnknown18&0x100)) {
-                out->mUnknown1D=-2;out->mUnknown04=1;
-                out->mUnknown18=(out->mUnknown18&~0x800)|0x84;
                 int count=0;
+                out->mUnknown1D=-2;out->mUnknown04=1;
+                out->mUnknown18=(out->mUnknown18|0x84)&~0x800;
                 switch(fn_801788D8(&count)) {
-                case 1:
-                    if(StyleTrackerGetWinner()==2)AudmonEventPostArgs(0x5C,0,fn_80178348(),0,0);
-                    break;
                 case 0:
                     if((unsigned int)(fn_801787DC(fn_80178360())+2)<(unsigned int)count)AudmonEventPostArgs(0x5C,0,fn_80178348(),0,0);
                     else if(!ChallengeIsActive())AudmonEventPostArgs(0x5E,0,fn_80178360(),0,0);
                     break;
+                case 1:
+                    if(StyleTrackerGetWinner()==2)AudmonEventPostArgs(0x5C,0,fn_80178348(),0,0);
+                    break;
+                // FAKEMATCH: empty case label; it makes the dispatch tree test 1 first as the target does
+                case 2:
+                    break;
                 }
             } else {
                 if(previous!=6 && fn_80177C38()>1 && removed)out->mUnknown18|=4;
-                if(!(out->mUnknown18&4)) {
-                    float line=fn_80178A2C();out->mUnknown18|=0x100;out->mUnknown08.mY=7.0f-line;
-                } else {
+                if(out->mUnknown18&4) {
                     float line=fn_80178A2C();out->mUnknown18|=0x100;out->mUnknown08.mY=line-7.0f;
+                } else {
+                    float line=fn_80178A2C();out->mUnknown18|=0x100;out->mUnknown08.mY=7.0f-line;
                 }
                 out->mUnknown04=1;out->mUnknown08.mX=0.0f;out->mUnknown18|=0x40;
             }
@@ -537,7 +540,15 @@ extern "C" void fn_800A1C74(Object_8017886C *result,Object_8017886C *input)
         if((result->mUnknown18&6)!=6) {
             if(result->mUnknown18&2) {fn_80177C50(1);fn_80177C44(0);}
             if(result->mUnknown18&4) {
-                if(fn_80178AE0()==2)fn_80177C50((result->mUnknown18&0x880)==0);
+                {
+                    // FAKEMATCH: both conditions are computed into flags before the tie test, as the target evaluates them
+                    int value=1;
+                    int notTie=0;
+
+                    if(fn_80178AE0()!=2)notTie=1;
+                    if(result->mUnknown18&0x880)value=0;
+                    if(!notTie)fn_80177C50(value);
+                }
                 fn_8009D8CC(1);fn_80177C44(1);result->mUnknown18|=0x40;
             }
         }
