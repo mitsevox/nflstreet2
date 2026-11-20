@@ -29,7 +29,8 @@ SAFE_PATH = re.compile(r"[A-Za-z0-9_./+-]+")
 LINKER_SYMBOLS = {"__start", "_SDA_BASE_", "_SDA2_BASE_"}
 LINK_TIMEOUT = 600
 # A unit with holdouts compiles each function into its own section, so a holdout's code can be
-# left out of the link while every other function keeps its bytes (holdout_object).
+# left out of the link while every other function keeps its bytes (holdout_object). The flag
+# comes from the unit's named profile (owner ruling of 2026-11-20); load_manifest requires it.
 FUNCTION_SECTIONS = "-ffunction-sections"
 # Build inputs the report is bound to; tools/progress.py rejects reports from other versions.
 TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/sdk_cc.py", "tools/setup_compiler.py",
@@ -173,20 +174,19 @@ def language_flags(profile):
     return ["-x", profile["language"]] if "language" in profile else []
 
 
-def load_manifest(manifest, sections, compiler_version, comparisons=None):
+def load_manifest(manifest, sections, compiler_version, comparisons=None, evidence=None):
     """Validate the unit manifest; return (units, externals, include directories).
 
-    `comparisons` is the parsed comparisons.json; it is read from the repository only when a
-    unit declares holdouts, which must be registered partials there."""
+    `comparisons` is the parsed comparisons.json and `evidence` the rows of evidence.tsv (as
+    holdout_evidence reads them); each is read from the repository only when a unit declares
+    holdouts, which must be registered partials there with a HOLDOUT: evidence row each."""
     if manifest.get("schema") != 1 or manifest.get("target") != "GN7E69-rev0":
         raise ValueError("Unit manifest must use schema 1 for target GN7E69-rev0")
     if manifest.get("compiler") != compiler_version:
         raise ValueError("Unit manifest compiler differs from the pinned compiler")
-    allowed = {"schema", "target", "compiler", "include_dirs", "profiles", "externals", "units",
-               "holdouts_approved"}
+    allowed = {"schema", "target", "compiler", "include_dirs", "profiles", "externals", "units"}
     if set(manifest) - allowed:
         raise ValueError(f"Unknown manifest fields: {sorted(set(manifest) - allowed)}")
-    approved = holdouts_approved(manifest.get("holdouts_approved"))
     for directory in manifest.get("include_dirs", []):
         repository_path(directory)
     profiles = manifest.get("profiles", {})
@@ -306,10 +306,22 @@ def load_manifest(manifest, sections, compiler_version, comparisons=None):
         if "holdouts" in unit:
             if comparisons is None:
                 comparisons = json.loads((ROOT / "config/GN7E69-rev0/comparisons.json").read_text())
-            holdouts = holdout_functions(unit, placed, approved, comparisons, by_name)
+            if evidence is None:
+                evidence = holdout_evidence(ROOT)
+            holdouts = holdout_functions(unit, placed, comparisons, evidence, by_name)
             for row in holdouts:
                 ranges.append((row["start"], row["end"], f"{unit['source']} holdout {row['symbol']}"))
-        root = profiles[unit["profile"]].get("source_root")
+        # Owner ruling of 2026-11-20: -ffunction-sections comes from a named profile, never from
+        # the tool. A holdouts unit needs such a ProDG profile, and only a holdouts unit may use one
+        # (its code is linked from the derived object's runs, not from per-function sections).
+        sectioned = FUNCTION_SECTIONS in profiles[unit["profile"]]["flags"]
+        if holdouts and (not sectioned or profiles[unit["profile"]].get("compiler", "prodg") != "prodg"):
+            raise ValueError(f"{unit['source']}: holdouts need a named ProDG profile whose flags include "
+                             f"{FUNCTION_SECTIONS} (for example game_cpp_holdouts), not {unit['profile']}")
+        if sectioned and not holdouts:
+            raise ValueError(f"{unit['source']}: profile {unit['profile']} compiles with {FUNCTION_SECTIONS}, "
+                             "which only a unit with holdouts may use")
+        root =profiles[unit["profile"]].get("source_root")
         compile_path = None
         if root:
             directory, prefix, depth = source_root(root)
@@ -319,8 +331,7 @@ def load_manifest(manifest, sections, compiler_version, comparisons=None):
                 raise ValueError(f"Unit {unit['source']} is outside its profile's source root {directory}")
             compile_path = f"{prefix}/{relative.as_posix()}"
         units.append({"source": unit["source"], "path": source, "profile": unit["profile"],
-                      "flags": language_flags(profiles[unit["profile"]]) + profiles[unit["profile"]]["flags"]
-                      + ([FUNCTION_SECTIONS] if holdouts else []),
+                      "flags": language_flags(profiles[unit["profile"]]) + profiles[unit["profile"]]["flags"],
                       "sections": placed,
                       "compiler": profiles[unit["profile"]].get("compiler", "prodg"),
                       "compiler_version": versions[unit["profile"]],
@@ -596,38 +607,55 @@ def fold_object(native, folded, output):
 
 # Holdouts ----------------------------------------------------------------------------------
 #
-# Owner ruling of 2026-11-19: a file the owner approved may be linked as one compiled source
-# with only its non-exact functions' code left out. Those functions (the holdouts) stay
-# registered partials in comparisons.json and their target ranges keep the original bytes;
-# every data section of the file is linked whole, so their literal pools and jump tables must
-# compile byte-exact. The unit compiles with -ffunction-sections, and the derived link object
+# Owner rulings of 2026-11-19 (the two released hulls) and 2026-11-20 (any file, after real
+# attempts, with every holdout tracked): a file may be linked as one compiled source with only
+# its non-exact functions' code left out. Those functions (the holdouts) stay registered
+# partials in comparisons.json and their target ranges keep the original bytes; every data
+# section of the file is linked whole, so their literal pools and jump tables must compile
+# byte-exact. The unit compiles with -ffunction-sections from its named profile (for example
+# game_cpp_holdouts), and the derived link object
 # (holdout_object) drops each holdout's code section and redirects every reference to it to
-# its target address.
+# its target address. Tracking is enforced here: each holdout names its own source-form row in
+# evidence.tsv, at its registered range, whose evidence starts with HOLDOUT: (the forms tried
+# and the cause); build() refuses an exact holdout, and tools/files_closed.py never closes the file.
 
-# The ruling approves exactly the two released hulls. units.json's holdouts_approved must list
-# exactly these sources, so a further use needs a new owner ruling and a change here (and in
-# tests/test_source_build.py, which pins the real config to this set).
-HOLDOUTS_APPROVED = frozenset({"src/game/cu_8008E978.cpp", "src/game/cu_800EFC68.cpp"})
+HOLDOUT_PREFIX = "HOLDOUT:"
+HOLDOUT_LOCATOR = re.compile(r"evidence\.tsv source-form (0x[0-9A-F]{8})-(0x[0-9A-F]{8})")
 
 
-def holdouts_approved(approval):
-    """The sources the owner approved for holdouts: {"sources": [...], "evidence": locator}.
+def holdout_evidence(root):
+    """The source-form rows of the target's evidence table: {(start, end): [evidence text]}."""
+    path = Path(root) / "config/GN7E69-rev0/evidence.tsv"
+    rows = {}
+    if path.exists():
+        with path.open() as file:
+            for row in csv.DictReader(file, delimiter="\t"):
+                if row["kind"] == "source-form" and row["start"] != "-" and row["end"] != "-":
+                    rows.setdefault((int(row["start"], 16), int(row["end"], 16)), []).append(row["evidence"] or "")
+    return rows
 
-    A present list must equal HOLDOUTS_APPROVED; without one, no unit may hold out functions."""
-    if approval is None:
-        return set()
-    if not isinstance(approval, dict) or set(approval) != {"sources", "evidence"} \
-            or not isinstance(approval["evidence"], str) or not approval["evidence"].strip() \
-            or not isinstance(approval["sources"], list) or not approval["sources"] \
-            or len(set(approval["sources"])) != len(approval["sources"]):
-        raise ValueError("holdouts_approved needs a list of distinct sources and the owner's approval as evidence")
-    for source in approval["sources"]:
-        repository_path(source)
-    if set(approval["sources"]) != HOLDOUTS_APPROVED:
-        raise ValueError("holdouts_approved must list exactly the sources the owner's ruling names ("
-                         + ", ".join(sorted(HOLDOUTS_APPROVED)) + "); a further use needs a new owner "
-                         "ruling and a change to source_build.HOLDOUTS_APPROVED")
-    return set(approval["sources"])
+
+def holdout_record(source, symbol, start, end, locator, evidence):
+    """Check a holdout's evidence locator: `evidence.tsv source-form 0xSTART-0xEND`, the holdout's
+    registered range, naming exactly one row there whose evidence starts with HOLDOUT: and goes
+    on to record the forms tried and the cause."""
+    match = HOLDOUT_LOCATOR.fullmatch(locator) if isinstance(locator, str) else None
+    if not match:
+        raise ValueError(f"{source}: holdout {symbol} needs the evidence locator 'evidence.tsv source-form "
+                         f"0x{start:08X}-0x{end:08X}' naming its {HOLDOUT_PREFIX} row")
+    if (address(match.group(1)), address(match.group(2))) != (start, end):
+        raise ValueError(f"{source}: holdout {symbol}'s evidence row {match.group(1)}-{match.group(2)} is not its "
+                         f"registered range 0x{start:08X}-0x{end:08X}")
+    texts = [text for text in evidence.get((start, end), []) if text.startswith(HOLDOUT_PREFIX)]
+    if not texts:
+        raise ValueError(f"{source}: holdout {symbol} has no source-form row 0x{start:08X}-0x{end:08X} in "
+                         f"evidence.tsv whose evidence starts with {HOLDOUT_PREFIX} (record the forms tried "
+                         "and the cause)")
+    if len(texts) != 1:
+        raise ValueError(f"{source}: holdout {symbol} has more than one {HOLDOUT_PREFIX} row at "
+                         f"0x{start:08X}-0x{end:08X}")
+    if not texts[0][len(HOLDOUT_PREFIX):].strip():
+        raise ValueError(f"{source}: holdout {symbol}'s {HOLDOUT_PREFIX} row records nothing")
 
 
 def holdout_reference(start):
@@ -640,15 +668,17 @@ def holdout_run(start):
     return f".text.holdout_run_{start:08X}", f"__holdout_run_{start:08X}"
 
 
-def holdout_functions(unit, placed, approved, comparisons, by_name):
-    """Validate a unit's holdouts; return [{"symbol", "start", "end"}] in address order.
+def holdout_functions(unit, placed, comparisons, evidence, by_name):
+    """Validate a unit's holdouts; return [{"symbol", "start", "end", "evidence"}] in address order.
 
-    `holdouts` is {"functions": [symbol or 0xADDRESS], "evidence": locator}. Each entry names one
-    function that comparisons.json registers for the same source; its registered extent is the
-    target range that keeps the original bytes. The unit's code entries are the linked runs
+    `holdouts` is {"functions": [{"function": symbol or 0xADDRESS, "evidence": locator}],
+    "evidence": locator}. Each entry names one function that comparisons.json registers for the
+    same source; its registered extent is the target range that keeps the original bytes, and its
+    locator names the HOLDOUT: row of evidence.tsv for that range (holdout_record). Any unit may
+    declare holdouts (owner ruling of 2026-11-20). The unit's code entries are the linked runs
     between them: runs and holdouts tile one contiguous code range, with a holdout between any
-    two runs. Each run is given the derived object's section that links it (`input`). Only
-    owner-approved sources may hold out functions; build() checks that none of them is exact.
+    two runs. Each run is given the derived object's section that links it (`input`). build()
+    checks that none of the holdouts is exact.
 
     The unit may also list, as `link_roots: {"discarded": [...], "evidence": locator}`, file-static
     functions SN's linker discarded (the existing discarded-function practice): compiled, their
@@ -656,8 +686,6 @@ def holdout_functions(unit, placed, approved, comparisons, by_name):
     Each must not be a function comparisons.json registers or a neutral label; holdout_object
     checks that each is one compiled local function that nothing kept references."""
     source, spec = unit["source"], unit["holdouts"]
-    if source not in approved:
-        raise ValueError(f"{source}: holdouts need the owner's approval for this file (holdouts_approved)")
     if not isinstance(spec, dict) or set(spec) != {"functions", "evidence"} \
             or not isinstance(spec["evidence"], str) or not spec["evidence"].strip() \
             or not isinstance(spec["functions"], list) or not spec["functions"]:
@@ -681,7 +709,11 @@ def holdout_functions(unit, placed, approved, comparisons, by_name):
     rows = [row for entry in comparisons.get("units", []) if entry.get("source") == source
             for row in entry.get("functions", [])]
     result = []
-    for item in spec["functions"]:
+    for entry in spec["functions"]:
+        if not isinstance(entry, dict) or set(entry) != {"function", "evidence"}:
+            raise ValueError(f"{source}: a holdout is {{\"function\": symbol or 0xXXXXXXXX start, \"evidence\": "
+                             f"'evidence.tsv source-form 0xSTART-0xEND'}}, not {entry!r}")
+        item = entry["function"]
         if not isinstance(item, str) or not item:
             raise ValueError(f"{source}: a holdout is a function symbol or its 0xXXXXXXXX start")
         if re.fullmatch(r"0x[0-9A-Fa-f]{8}", item):
@@ -690,8 +722,9 @@ def holdout_functions(unit, placed, approved, comparisons, by_name):
             found = [row for row in rows if row["symbol"] == item]
         if len(found) != 1:
             raise ValueError(f"{source}: holdout {item} is not one function comparisons.json registers for this file")
-        result.append({"symbol": found[0]["symbol"], "start": address(found[0]["start"]),
-                       "end": address(found[0]["end"])})
+        symbol, start, end = found[0]["symbol"], address(found[0]["start"]), address(found[0]["end"])
+        holdout_record(source, symbol, start, end, entry["evidence"], evidence)
+        result.append({"symbol": symbol, "start": start, "end": end, "evidence": entry["evidence"]})
     if len({row["symbol"] for row in result}) != len(result):
         raise ValueError(f"{source}: duplicate holdout")
     for name in (roots or {}).get("discarded", []):
@@ -1923,9 +1956,10 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                          "kept_locals": {name: f"0x{value:08X}" for name, value in unit["kept_locals"].items()}
                          if unit.get("kept_locals") else None,
                          # What the derived object dropped: each holdout's target range keeps the
-                         # original bytes, and its compiled size is recorded.
+                         # original bytes, and its compiled size and HOLDOUT: row are recorded.
                          "holdouts": [{"symbol": row["symbol"], "start": f"0x{row['start']:08X}",
-                                       "end": f"0x{row['end']:08X}", "compiled": row["compiled"]}
+                                       "end": f"0x{row['end']:08X}", "compiled": row["compiled"],
+                                       "evidence": row["evidence"]}
                                       for row in unit["held"]["dropped"]] if unit.get("holdouts") else None,
                          "native_object_sha256": unit.get("native_object_sha256"),
                          "link_object_sha256": unit.get("link_object_sha256"),

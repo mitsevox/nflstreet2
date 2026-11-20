@@ -1,5 +1,6 @@
 """Tests for the file-closing tools: naming, rename, the constant check, the dump flag, the
 sibling tables, and how the closed-file count and comparisons see a unit's holdouts."""
+import json
 from pathlib import Path
 import struct
 import sys
@@ -336,6 +337,21 @@ class HoldoutReport(unittest.TestCase):
                                               ('c', 0x80003120, True)])
             # Without the holdouts row only the linked function is the file's.
             self.assertEqual(files_closed.unit_labels(0, dict(self.unit, holdouts=None)), [('a', 0x80003110, True)])
+
+    def test_files_closed_never_closes_a_unit_with_holdouts(self):
+        config = self.root / f'config/{files_closed.TARGET}'
+        config.mkdir(parents=True)
+        (config / 'comparisons.json').write_text('{"schema": 2, "units": []}')
+        (config / 'evidence.tsv').write_text('kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n')
+        unit = dict(self.unit, source='src/game/Descriptive.cpp')
+        for holdouts, closed in ((unit['holdouts'], False), (None, True)):
+            report = self.root / 'report.json'
+            report.write_text(json.dumps({'complete': 'identical', 'units': [dict(unit, holdouts=holdouts)]}))
+            # Even with comparisons.json registering nothing for the file, its holdouts keep it open.
+            with self.subTest(holdouts=bool(holdouts)), patch.object(files_closed, 'ROOT', self.root), \
+                    patch.object(files_closed, 'unit_labels', return_value=[]):
+                [row] = files_closed.survey(report)
+                self.assertEqual((row['linked'], row['closed']), ('partly' if holdouts else 'yes', closed))
 
     def test_a_public_holdout_resolves_at_its_target_start_for_other_files(self):
         references, ambiguous = function_compare.reference_addresses(self.root, {'externals': {}}, [self.unit])
