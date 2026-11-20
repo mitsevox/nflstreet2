@@ -1,7 +1,7 @@
 #include "game/Item_80097440.h"
 #include "game/Object_8017886C.h"
 #include "game/Ball.h"
-#include "game/PlayerAction.h"
+
 #include "game/Object_80039F5C.h"
 #include "engine/AnimChannel.h"
 #include "game/fn_802270D4.h"

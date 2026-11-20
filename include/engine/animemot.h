@@ -3,6 +3,7 @@
 
 #include "game/AnimFileFormat.h"
 #include "engine/AnimStateAnimList.h"
+#include "engine/animfileconfig.h"
 
 /* State transition list filled by AnimFileGetTransList. */
 typedef struct AnimStateTransList_t {
@@ -19,24 +20,6 @@ typedef struct AnimCacheStateInfo_t {
     short mUnknown2;
 } AnimCacheStateInfo_t;
 
-/* Buffer definition (stride 0xC) and init configuration read by AnimFileStart. */
-typedef struct AnimFileBufferDef_t {
-    int mSize;
-    unsigned short mFlags;
-    unsigned char mUnknown6[2];
-    AnimFileFormat_t *mpData;
-} AnimFileBufferDef_t;
-
-typedef struct AnimFileConfig_t {
-    void *mpArchive;
-    int mUnknown4;
-    unsigned short mUnknown8;
-    unsigned short mUnknownA;
-    unsigned short mUnknownC;
-    unsigned char mUnknownE[2];
-    int mUnknown10;
-    AnimFileBufferDef_t *mpBuffers;
-} AnimFileConfig_t;
 
 struct AnimFrameCache_t;
 struct AnimFileBigInfo_t;

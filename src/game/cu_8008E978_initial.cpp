@@ -6,7 +6,7 @@
 #include "game/ResOpenDevice.h"
 #include "game/fn_801D2B7C.h"
 #include "game/AnimFileFormat.h"
-#include "engine/animemot.h"
+#include "engine/animfileconfig.h"
 #include "game/Object_8003DEC4.h"
 #include "game/BigObj.h"
 #include "game/BigObjInst.h"
