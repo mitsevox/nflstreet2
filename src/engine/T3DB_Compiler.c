@@ -597,11 +597,9 @@ int fn_801FE534(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
     result = fn_801FDF28(pInfo, pLexer, result, &pExpr->mRight);
     if ((pExpr->mLeft.mType == TDB_TYPE_COLUMN && (int)pExpr->mLeft.mValue.l == -1) ||
         (pExpr->mRight.mType == TDB_TYPE_COLUMN && (int)pExpr->mRight.mValue.l == -1)) {
+        pExpr->mLeft.mValue.u = pExpr->mRight.mValue.u = 1;
         pExpr->mOp = 0;
-        pExpr->mLeft.mType = TDB_TYPE_UINT;
-        pExpr->mLeft.mValue.u = 1;
-        pExpr->mRight.mType = TDB_TYPE_UINT;
-        pExpr->mRight.mValue.u = 1;
+        pExpr->mLeft.mType = pExpr->mRight.mType = TDB_TYPE_UINT;
     }
     return result;
 }

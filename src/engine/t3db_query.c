@@ -483,8 +483,13 @@ unsigned int fn_802067D4(TDbIndex_t *pIndex, TDbExpr_t *pExpr, TDbIdxColumnDef_t
         return -1;
     }
     cmp = (pIndex->mFilter != 0 && pExpr != 0) ? fn_802072E8(pExpr, pIndex->mFilter) : 0;
-    cmp = pExpr == 0 ? (pIndex->mFilter == 0 ? 1 : -1)
-                     : (pIndex->mFilter == 0 ? 0 : fn_802072E8(pExpr, pIndex->mFilter));
+    if (pExpr == 0) {
+        cmp = pIndex->mFilter == 0 ? 1 : -1;
+    } else if (pIndex->mFilter == 0) {
+        cmp = 0;
+    } else {
+        cmp = fn_802072E8(pExpr, pIndex->mFilter);
+    }
     if (cmp == 1) {
         score = 1;
         if (pExpr == 0) {
