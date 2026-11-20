@@ -7767,14 +7767,44 @@
     },
     {
       "source": "src/game/cu_8002B8F8.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002B8F8-0x80030D50 (src/game/cu_8002B8F8.cpp) and its data, compiler and source-form rows; the functions 0x8002B960-0x80030D50 are draft comparisons only.",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8002B8F8-0x80030D50 (src/game/cu_8002B8F8.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8002B8F8",
-          "end": "0x8002B960"
+          "end": "0x8002BDC4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002BE28",
+          "end": "0x8002D060"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002D0AC",
+          "end": "0x8002D4A0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002DC00",
+          "end": "0x8002F74C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002F9D8",
+          "end": "0x80030D50"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028A9C8",
+          "end": "0x8028AC28"
         },
         {
           "section": ".data",
@@ -7800,7 +7830,38 @@
           "start": "0x8030660C",
           "end": "0x80306620"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8002BDC4",
+            "evidence": "evidence.tsv source-form 0x8002BDC4-0x8002BE28"
+          },
+          {
+            "function": "fn_8002D060",
+            "evidence": "evidence.tsv source-form 0x8002D060-0x8002D0AC"
+          },
+          {
+            "function": "fn_8002D4A0",
+            "evidence": "evidence.tsv source-form 0x8002D4A0-0x8002DC00"
+          },
+          {
+            "function": "fn_8002F74C",
+            "evidence": "evidence.tsv source-form 0x8002F74C-0x8002F9D8"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      },
+      "link_roots": {
+        "discarded": [
+          "PrintPlayerDebugLine",
+          "PrintDebugHelpLine",
+          "GetHighlightedObject",
+          "SetFocusHeight",
+          "_StrippedEventDelay"
+        ],
+        "evidence": "evidence.tsv linker rows of the file-static functions of src/game/cu_8002B8F8.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
+      }
     },
     {
       "source": "src/game/Collide.cpp",
@@ -22507,6 +22568,171 @@
           "end": "0x802B78F0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8013FF84.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8013FF84-0x8014116C (src/game/cu_8013FF84.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8013FF84",
+          "end": "0x80140708"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80140DB4",
+          "end": "0x8014106C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801410F4",
+          "end": "0x8014116C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A01F8",
+          "end": "0x802A0268"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB1E4",
+          "end": "0x803EB1F0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA04",
+          "end": "0x803ECA0C"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80140708",
+            "evidence": "evidence.tsv source-form 0x80140708-0x80140DB4"
+          },
+          {
+            "function": "fn_8014106C",
+            "evidence": "evidence.tsv source-form 0x8014106C-0x801410F4"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      }
+    },
+    {
+      "source": "src/game/cu_8016174C.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8016174C-0x80163074 (src/game/cu_8016174C.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016174C",
+          "end": "0x8016216C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801621AC",
+          "end": "0x8016295C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80162D78",
+          "end": "0x80163074"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A44EC",
+          "end": "0x802A4598"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E9780",
+          "end": "0x802E988C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031D2A4",
+          "end": "0x8031D2B8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB388",
+          "end": "0x803EB39C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECAEC",
+          "end": "0x803ECAF0"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8016216C",
+            "evidence": "evidence.tsv source-form 0x8016216C-0x801621AC"
+          },
+          {
+            "function": "fn_8016295C",
+            "evidence": "evidence.tsv source-form 0x8016295C-0x80162D78"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      }
+    },
+    {
+      "source": "src/game/cu_8016DB94.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8016DB94-0x8016FB10 (src/game/cu_8016DB94.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016DB94",
+          "end": "0x8016E15C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016E498",
+          "end": "0x8016FB10"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4E38",
+          "end": "0x802A4EA8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8016E15C",
+            "evidence": "evidence.tsv source-form 0x8016E15C-0x8016E498"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      },
+      "link_roots": {
+        "discarded": [
+          "ScrmDefenseIsStill",
+          "ScrmDefenseIsStillNearLine"
+        ],
+        "evidence": "evidence.tsv linker rows of the file-static functions of src/game/cu_8016DB94.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
+      }
     },
     {
       "source": "src/engine/pathrand.c",

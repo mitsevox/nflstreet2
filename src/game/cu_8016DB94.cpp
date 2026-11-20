@@ -595,7 +595,13 @@ extern "C" int fn_8016EADC(void)
     return 0;
 }
 
-extern "C" int ScrmDefenseIsStill(void)
+/* File-static: nothing on GameCube calls these, and the linker drops them. */
+extern "C" {
+static int ScrmDefenseIsStill(void);
+static int ScrmDefenseIsStillNearLine(void);
+}
+
+static int ScrmDefenseIsStill(void)
 {
     int team = fn_80178320();
     int still = 1;
@@ -615,7 +621,7 @@ extern "C" int ScrmDefenseIsStill(void)
     return still;
 }
 
-extern "C" int ScrmDefenseIsStillNearLine(void)
+static int ScrmDefenseIsStillNearLine(void)
 {
     int team = fn_80178320();
     Point_8017886C los = fn_80177FE0();

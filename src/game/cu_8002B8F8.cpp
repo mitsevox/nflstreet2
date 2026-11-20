@@ -225,7 +225,13 @@ int fn_8023790C(void);
 extern unsigned short lbl_803192BC[2][7];
 extern unsigned short lbl_803192D8[2][7];
 
-Block_80170E64 *GetHighlightedObject(void);
+/* File-static: nothing on GameCube calls these, and the linker drops them. */
+extern "C" {
+static Block_80170E64 *GetHighlightedObject(void);
+static void PrintPlayerDebugLine(int line, char *pBuf, int);
+static void PrintDebugHelpLine(int line, char *pBuf, int, int *pCount);
+static void SetFocusHeight(unsigned char reset, float height);
+}
 
 void fn_8002B8F8(void);
 void fn_8002B8FC(void);
@@ -430,7 +436,6 @@ extern "C" void fn_8002B92C(void)
     }
 }
 
-#if defined(DECOMP_COMPARE)
 
 
 extern "C" void fn_8002B960(Type_8002B960 *p)
@@ -1248,7 +1253,7 @@ extern "C" void fn_8002D2C8(Type_803EA368 *p, unsigned char value) { p->mUnknown
    before the call at 0x8017F8CC; Xbox 0x17C502 pushes three through
    0x623644); the bodies read only the first two. This code is not
    measured. */
-extern "C" void PrintPlayerDebugLine(int line, char *pBuf, int)
+static void PrintPlayerDebugLine(int line, char *pBuf, int)
 {
     int id;
     Object_80039F5C *p;
@@ -1296,7 +1301,7 @@ extern "C" void PrintPlayerDebugLine(int line, char *pBuf, int)
     }
 }
 
-extern "C" void PrintDebugHelpLine(int line, char *pBuf, int, int *pCount)
+static void PrintDebugHelpLine(int line, char *pBuf, int, int *pCount)
 {
     *pCount = 4;
     switch (line) {
@@ -2540,9 +2545,9 @@ extern "C" void fn_8002FDB4(Type_8002FDB4 *pDesc)
 
 
 /* Accessors that nothing on GameCube calls; the linker drops them. */
-extern "C" Block_80170E64 *GetHighlightedObject(void) { return lbl_803EC620; }
+static Block_80170E64 *GetHighlightedObject(void) { return lbl_803EC620; }
 
-extern "C" void SetFocusHeight(unsigned char reset, float height)
+static void SetFocusHeight(unsigned char reset, float height)
 {
     if (reset) {
         lbl_803EA380 = 1.2f;
@@ -2900,4 +2905,11 @@ extern "C" Command_8002DC00 *fn_80030D14(int id)
     }
     return 0;
 }
-#endif
+
+// FAKEMATCH: invented body; only its pool constant 4/3 is target evidence
+extern "C" {
+static float _StrippedEventDelay(void)
+{
+    return 4.0f / 3.0f;
+}
+}
