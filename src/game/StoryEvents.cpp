@@ -1157,6 +1157,9 @@ int fn_8005F3E4(int *pResult)
     return value;
 }
 
+/* Compiled-out assert of the release build. */
+#define STORY_ASSERT(e) do { } while (0)
+
 void fn_8005F4EC(char *pName, int size)
 {
     unsigned int last = size - 1;
@@ -1170,6 +1173,8 @@ void fn_8005F4EC(char *pName, int size)
     if (!StoryPlayerGetLastName(&cursor, 0, buffer, sizeof(buffer))) {
         *pName = 0;
     }
+    // FAKEMATCH: compiled-out bounds assert; its empty do-while keeps the zero store of the branch on the call result
+    STORY_ASSERT(last < sizeof(buffer));
     buffer[last] = 0;
     length = strlen(buffer);
     buffer[0] = 0;
@@ -1178,7 +1183,8 @@ void fn_8005F4EC(char *pName, int size)
     } else {
         buffer[last] = 0;
         unsigned int first = strlen(buffer);
-        length = length + first + 1;
+        length += first;
+        length++;
         if (length < last - 1) {
             buffer[first] = ' ';
             first++;
