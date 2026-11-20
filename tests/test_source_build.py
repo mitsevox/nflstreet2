@@ -767,7 +767,8 @@ class KeptLocals(Fixture):
 
 
 class Holdouts(Fixture):
-    """An owner-approved file links whole except its non-exact functions (owner ruling 2026-11-19)."""
+    """A file links whole except its non-exact functions, each tracked by a HOLDOUT: evidence row
+    (owner rulings 2026-11-19 and 2026-11-20: any file, after real attempts)."""
 
     # Object sections: 1 .text.a, 2 .text.b (the holdout), 3 .text.c, 4 .rodata; symbol indices:
     # 0 null, 1 file, 2 to 5 the section symbols, then these.
@@ -781,29 +782,38 @@ class Holdouts(Fixture):
         {"symbol": "b", "start": "0x80003118", "end": "0x80003120"},
         {"symbol": "c", "start": "0x80003120", "end": "0x80003128"}]},
         {"source": "src/other.c", "functions": [{"symbol": "d", "start": "0x80003130", "end": "0x80003138"}]}]}
+    # evidence.tsv's source-form rows (sb.holdout_evidence): one HOLDOUT: row per registered function.
+    EVIDENCE = {(0x80003110, 0x80003118): ["HOLDOUT: a. Tried: x. Cause: y."],
+                (0x80003118, 0x80003120): ["Draft notes, not the holdout record.", "HOLDOUT: b. Tried: x. Cause: y."],
+                (0x80003120, 0x80003128): ["HOLDOUT: c. Tried: x. Cause: y."]}
+    LOCATORS = {"a": "evidence.tsv source-form 0x80003110-0x80003118",
+                "b": "evidence.tsv source-form 0x80003118-0x80003120",
+                "c": "evidence.tsv source-form 0x80003120-0x80003128"}
+    B = {"symbol": "b", "start": 0x80003118, "end": 0x80003120, "evidence": LOCATORS["b"]}
 
-    def setUp(self):
-        super().setUp()
-        # The fixture's file stands in for the two hulls the ruling pins (HoldoutsPin checks the real ones).
-        pinned = patch.object(sb, "HOLDOUTS_APPROVED", frozenset({"src/unit.c"}))
-        pinned.start()
-        self.addCleanup(pinned.stop)
-
-    def held_manifest(self, functions=("b",), runs=(("0x80003110", "0x80003118"), ("0x80003120", "0x80003128")),
-                      approved=("src/unit.c",)):
+    def held_manifest(self, functions=("b",), runs=(("0x80003110", "0x80003118"), ("0x80003120", "0x80003128"))):
+        """`functions` are names or starts, each given its HOLDOUT: row's locator, or whole entries."""
         manifest = copy.deepcopy(self.manifest)
-        manifest["holdouts_approved"] = {"sources": list(approved), "evidence": "owner ruling 2026-11-19"}
+        manifest["profiles"]["library_holdouts"] = {"flags": ["-O2", "-ffunction-sections"],
+                                                    "evidence": "library plus -ffunction-sections"}
         unit = manifest["units"][0]
+        unit["profile"] = "library_holdouts"
         unit["sections"] = [{"section": ".text", "placement": ".init", "start": start, "end": end}
                             for start, end in runs]
         unit["sections"].append({"section": ".rodata", "placement": ".data2",
                                  "start": "0x80004008", "end": "0x80004010"})
-        unit["holdouts"] = {"functions": list(functions), "evidence": "comparisons.json partials"}
+        by_start = {"0x80003110": "a", "0x80003118": "b", "0x80003120": "c"}
+        unit["holdouts"] = {"functions": [item if isinstance(item, dict) else
+                                          {"function": item, "evidence": self.LOCATORS.get(by_start.get(item, item),
+                                                                                           "evidence.tsv source-form "
+                                                                                           "0x80003130-0x80003138")}
+                                          for item in functions],
+                            "evidence": "the file's merge notes"}
         return manifest
 
-    def held(self, manifest=None, comparisons=None):
+    def held(self, manifest=None, comparisons=None, evidence=None):
         return sb.load_manifest(manifest or self.held_manifest(), self.sections, "3.9.3",
-                                comparisons or self.COMPARISONS)
+                                comparisons or self.COMPARISONS, self.EVIDENCE if evidence is None else evidence)
 
     def native(self, symbols=None, b_size=12, c_align=4):
         temporary = tempfile.TemporaryDirectory()
@@ -826,7 +836,7 @@ class Holdouts(Fixture):
     def test_manifest_holdouts(self):
         units, _, _ = self.held()
         unit = units[0]
-        self.assertEqual(unit["holdouts"], [{"symbol": "b", "start": 0x80003118, "end": 0x80003120}])
+        self.assertEqual(unit["holdouts"], [self.B])
         self.assertEqual(unit["flags"], ["-O2", "-ffunction-sections"])
         self.assertEqual([entry.get("input") for entry in unit["sections"]],
                          [".text.holdout_run_80003110", ".text.holdout_run_80003120", None])
@@ -837,26 +847,80 @@ class Holdouts(Fixture):
         self.assertIsNone(self.load()[0][0]["holdouts"])
         self.assertEqual(self.load()[0][0]["flags"], ["-O2"])
 
-    def test_holdouts_need_the_owners_approval(self):
-        with patch.object(sb, "HOLDOUTS_APPROVED", frozenset({"src/other.c"})), \
-                self.assertRaisesRegex(ValueError, "owner's approval for this file"):
-            self.held(self.held_manifest(approved=("src/other.c",)))
-        # units.json cannot approve another source, or one more, than the tool pins.
-        for approved in (("src/other.c",), ("src/unit.c", "src/other.c")):
-            with self.subTest(approved=approved), \
-                    self.assertRaisesRegex(ValueError, "must list exactly the sources the owner's ruling names"):
-                self.held(self.held_manifest(approved=approved))
+    def test_holdouts_need_a_named_function_sections_profile(self):
+        # The tool adds no flag (owner ruling of 2026-11-20): the profile must carry it.
         manifest = self.held_manifest()
-        del manifest["holdouts_approved"]
-        with self.assertRaisesRegex(ValueError, "owner's approval for this file"):
+        manifest["units"][0]["profile"] = "library"
+        with self.assertRaisesRegex(ValueError, "holdouts need a named ProDG profile whose flags include "
+                                                "-ffunction-sections .*not library"):
             self.held(manifest)
-        for approval in ({"sources": [], "evidence": "x"}, {"sources": ["src/unit.c"], "evidence": " "},
-                         {"sources": ["src/unit.c", "src/unit.c"], "evidence": "x"}, {"sources": ["src/unit.c"]},
-                         {"sources": ["../unit.c"], "evidence": "x"}):
-            manifest = self.held_manifest()
-            manifest["holdouts_approved"] = approval
-            with self.subTest(approval=approval), self.assertRaises(ValueError):
+        # Only a unit with holdouts may use such a profile.
+        manifest = self.held_manifest(runs=(("0x80003110", "0x80003128"),))
+        del manifest["units"][0]["holdouts"]
+        with self.assertRaisesRegex(ValueError, "profile library_holdouts compiles with -ffunction-sections, "
+                                                "which only a unit with holdouts may use"):
+            self.held(manifest)
+
+    def test_any_unit_may_declare_holdouts(self):
+        # No per-file approval list (owner ruling of 2026-11-20); the old one is an unknown field.
+        manifest = self.held_manifest()
+        manifest["units"][0]["source"] = "src/any/other_name.c"
+        comparisons = copy.deepcopy(self.COMPARISONS)
+        comparisons["units"][0]["source"] = "src/any/other_name.c"
+        self.assertEqual(self.held(manifest, comparisons)[0][0]["holdouts"], [self.B])
+        manifest = self.held_manifest()
+        manifest["holdouts_approved"] = {"sources": ["src/unit.c"], "evidence": "x"}
+        with self.assertRaisesRegex(ValueError, "Unknown manifest fields: \\['holdouts_approved'\\]"):
+            self.held(manifest)
+
+    def test_a_holdout_needs_its_holdout_evidence_row(self):
+        b = (0x80003118, 0x80003120)
+        # No source-form row at the holdout's range, or none there that starts with HOLDOUT:.
+        for rows in ({}, {b: []}, {b: ["Draft notes, not the holdout record."]},
+                     {b: ["holdout: lower case"]}, {b: [" HOLDOUT: indented"]},
+                     {(0x80003118, 0x8000311C): ["HOLDOUT: a narrower range"]}):
+            evidence = {key: value for key, value in self.EVIDENCE.items() if key != b}
+            evidence.update(rows)
+            with self.subTest(rows=rows), self.assertRaisesRegex(
+                    ValueError, "holdout b has no source-form row 0x80003118-0x80003120 in evidence.tsv whose "
+                                "evidence starts with HOLDOUT:"):
+                self.held(evidence=evidence)
+        with self.assertRaisesRegex(ValueError, "holdout b has more than one HOLDOUT: row"):
+            self.held(evidence=self.EVIDENCE | {b: ["HOLDOUT: one", "HOLDOUT: two"]})
+        with self.assertRaisesRegex(ValueError, "holdout b's HOLDOUT: row records nothing"):
+            self.held(evidence=self.EVIDENCE | {b: ["HOLDOUT:  "]})
+        # The locator names the holdout's own row, in the one fixed form.
+        for locator in (None, "", "comparisons.json partials", "evidence.tsv source-form 0x80003118",
+                        "evidence.tsv source-form 0x80003118-0x80003120 (b)", "evidence.tsv linker 0x80003118-0x80003120",
+                        "evidence.tsv source-form 0x80003118-0x80003120 ",
+                        "Evidence.tsv source-form 0x80003118-0x80003120"):
+            manifest = self.held_manifest(functions=({"function": "b", "evidence": locator},))
+            with self.subTest(locator=locator), self.assertRaisesRegex(
+                    ValueError, "holdout b needs the evidence locator 'evidence.tsv source-form "
+                                "0x80003118-0x80003120'"):
                 self.held(manifest)
+        manifest = self.held_manifest(functions=({"function": "b", "evidence": self.LOCATORS["c"]},))
+        with self.assertRaisesRegex(ValueError, "holdout b's evidence row 0x80003120-0x80003128 is not its "
+                                                "registered range 0x80003118-0x80003120"):
+            self.held(manifest)
+        # A bare name, or any other entry shape, is refused: every holdout carries its locator.
+        for entry in ("b", {"function": "b"}, {"function": "b", "evidence": self.LOCATORS["b"], "note": "x"}):
+            with self.subTest(entry=entry), self.assertRaisesRegex(ValueError, "a holdout is \\{"):
+                manifest = self.held_manifest()
+                manifest["units"][0]["holdouts"]["functions"] = [entry]
+                self.held(manifest)
+
+    def test_holdout_evidence_reads_source_form_rows(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        (root / "config/GN7E69-rev0").mkdir(parents=True)
+        header = "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
+        (root / "config/GN7E69-rev0/evidence.tsv").write_text(
+            header + "source-form\t0x80003118\t0x80003120\tb\tinferred\t-\t-\tHOLDOUT: tried x; cause y\n"
+                     "function\t0x80003118\t0x80003120\tb\tinferred\texact\texact\tHOLDOUT: not a source-form row\n"
+                     "source-form\t0x80003118\t-\tb\tinferred\t-\t-\tHOLDOUT: unbounded\n")
+        self.assertEqual(sb.holdout_evidence(root), {(0x80003118, 0x80003120): ["HOLDOUT: tried x; cause y"]})
 
     def test_holdout_shapes(self):
         for spec in ({"functions": [], "evidence": "x"}, {"functions": ["b"], "evidence": " "},
@@ -925,8 +989,7 @@ class Holdouts(Fixture):
         sb.link_object(unit)
         self.assertEqual(unit["link_object"], unit["object"].with_suffix(".holdouts.o"))
         self.assertEqual(unit["object"].read_bytes(), native)
-        self.assertEqual(unit["held"], {"dropped": [{"symbol": "b", "start": 0x80003118, "end": 0x80003120,
-                                                     "compiled": 12}],
+        self.assertEqual(unit["held"], {"dropped": [dict(self.B, compiled=12)],
                                         "discarded": {},
                                         "globals": {"b": 0x80003118},
                                         "linked": {"a": 0x80003110, "c": 0x80003120}})
@@ -1065,7 +1128,7 @@ class Holdouts(Fixture):
         self.assertEqual(unit["link_roots"], {"discarded": ["z"], "evidence": "linker row"})
         # The retention link does not run for it: the derived object drops the discarded bodies.
         self.assertIsNone(sb.retention_roots(unit))
-        self.assertEqual(unit["holdouts"], [{"symbol": "b", "start": 0x80003118, "end": 0x80003120}])
+        self.assertEqual(unit["holdouts"], [self.B])
         # Ordinary units keep their roots.
         ordinary = {"link_roots": {"symbols": ["a"], "discarded": ["z"], "evidence": "x"}, "holdouts": None}
         self.assertEqual(sb.retention_roots(ordinary), ["a"])
@@ -1098,8 +1161,7 @@ class Holdouts(Fixture):
         unit = dict(units[0], object=self.discarded_native())
         sb.link_object(unit)
         # z takes no address: the compiled order goes on from a to the holdout b.
-        self.assertEqual(unit["held"], {"dropped": [{"symbol": "b", "start": 0x80003118, "end": 0x80003120,
-                                                     "compiled": 12}],
+        self.assertEqual(unit["held"], {"dropped": [dict(self.B, compiled=12)],
                                         "discarded": {"z": 8},
                                         "globals": {"b": 0x80003118},
                                         "linked": {"a": 0x80003110, "c": 0x80003120}})
@@ -1132,20 +1194,6 @@ class Holdouts(Fixture):
             with self.subTest(where=where), \
                     self.assertRaisesRegex(ValueError, f"discarded function z is referenced from {where}"):
                 sb.link_object(dict(units[0], object=self.discarded_native(extra=extra)))
-
-
-class HoldoutsPin(unittest.TestCase):
-    """The ruling of 2026-11-19 approves exactly the two released hulls; a third needs a code change."""
-    HULLS = {"src/game/cu_8008E978.cpp", "src/game/cu_800EFC68.cpp"}
-
-    def test_the_tool_pins_the_two_hulls(self):
-        self.assertEqual(sb.HOLDOUTS_APPROVED, self.HULLS)
-
-    def test_the_real_units_json_approves_exactly_the_two_hulls(self):
-        manifest = json.loads((ROOT / "config/GN7E69-rev0/units.json").read_text())
-        self.assertEqual(sorted(manifest["holdouts_approved"]["sources"]), sorted(self.HULLS))
-        self.assertEqual(sb.holdouts_approved(manifest["holdouts_approved"]), self.HULLS)
-        self.assertLessEqual({unit["source"] for unit in manifest["units"] if "holdouts" in unit}, self.HULLS)
 
 
 class ReadOnlyDataAfterCode(Fixture):
