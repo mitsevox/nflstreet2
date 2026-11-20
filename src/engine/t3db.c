@@ -211,7 +211,7 @@ extern int _TDbIndexDestroy(TDbIdx_801F9E84 *pIdx);
 extern int fn_8020840C(int a, int b, int c, int d, int ref, TDbResult_801F9718 *pRes);
 extern int fn_802088A8(TDbQry_801F89B8 *pQry);
 extern int fn_802088FC(TDbQry_801F89B8 *pQry);
-extern int fn_8020925C(TDbDb_801F88F0 *pDb, int tbl, TDbQry_801F89B8 *pQry, int a, int b);
+extern int _TDbQryCreateTbl(TDbDb_801F88F0 *pDb, int tbl, TDbQry_801F89B8 *pQry, int a, int b);
 extern int fn_8020A660(int a, TDbQryBuf_801F9858 *pQry, int d, int e, int f, TDbResult_801F9718 *pRes);
 extern int fn_8020B094(int a, int b, int c, int d, int e, int f, int g, TDbResult_801F9718 *pRes);
 extern int _TDbTblResolveColRef(TDbTbl_801F88F0 *pTbl, int col);
@@ -1386,7 +1386,7 @@ int fn_801FA5EC(int db, int tbl, int ref, int a, int b)
     }
     err = fn_801F88F0(db, tbl, &pDb, &pTbl);
     if (err == 7) {
-        return fn_8020925C(pDb, tbl, pQry, a, b);
+        return _TDbQryCreateTbl(pDb, tbl, pQry, a, b);
     }
     if (err == 0) {
         err = 6;

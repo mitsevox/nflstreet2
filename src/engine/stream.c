@@ -793,12 +793,14 @@ void fn_801F7208(StreamTap_801F5DA4 *h)
     unsigned int size = 0;
     int pad;
     int i;
+    StreamRequest_801F5EA4 *req;
 
-    if (fn_801F5DA4(h, &s, &t) != 0 || s->pLast == 0) {
+    if (fn_801F5DA4(h, &s, &t) != 0 || (req = s->pLast) == 0) {
         return;
     }
-    while (s->pLast->mState == 1 || s->pLast->mState == 2) {
-        fn_801F6FA0(h, s->pLast->mID);
+    while (req->mState == 1 || req->mState == 2) {
+        fn_801F6FA0(h, req->mID);
+        req = s->pLast;
     }
     while (s->pFirst != s->pCurrent) {
         fn_801F5FF4(s, s->pFirst);

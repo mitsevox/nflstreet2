@@ -1703,7 +1703,7 @@ static inline void TDbSetField_8020925C(TDbColumn_t *pColumn, unsigned char *pRo
     }
 }
 
-int fn_8020925C(TDbDatabase_t *pDb, int tableId, TDbQuery_t *pQuery, unsigned long long *pSpec,
+int _TDbQryCreateTbl(TDbDatabase_t *pDb, int tableId, TDbQuery_t *pQuery, unsigned long long *pSpec,
                 TDbResult_8020AD1C *pResult)
 {
     TDbResult_8020AD1C result;
@@ -1773,6 +1773,9 @@ int fn_8020925C(TDbDatabase_t *pDb, int tableId, TDbQuery_t *pQuery, unsigned lo
                             }
                         }
                         if (pResult->mErr == 7) {
+                            /* FAKEMATCH: dead store (flow deletes it); it keeps jump.c from inverting
+                               the test over the break, so the target's bne/b pair at 0x80209494 stays. */
+                            bUnique = 0;
                             break;
                         }
                     } else {
