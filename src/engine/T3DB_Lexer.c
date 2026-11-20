@@ -109,8 +109,6 @@ void T3DB_Lexer_GetTokens(TDbLexer_t *pLexer, unsigned int start)
     pLexer->mSrc = p;
 }
 
-#if defined(DECOMP_COMPARE)
-
 /* Scans an integer or fractional literal and stores its numeric payload. */
 char *T3DB_Lexer_Number(TDbLexer_t *pLexer, char *p)
 {
@@ -354,5 +352,3 @@ char *T3DB_Lexer_StringLiteral(TDbLexer_t *pLexer, char *p)
     pLexer->mBufUsed = used;
     return p + 1;
 }
-
-#endif

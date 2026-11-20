@@ -475,7 +475,7 @@ static void fn_801F6540(Stream_801F5DA4 *s, int priority)
     }
 }
 
-int fn_801F685C(int numRequests, int numFilters, int numTaps)
+int STREAM_overhead(int numRequests, int numFilters, int numTaps)
 {
     return sizeof(Stream_801F5DA4) + numRequests * sizeof(StreamRequest_801F5EA4) + numFilters * sizeof(StreamFilter_801F6074) +
            numTaps * sizeof(StreamTap_801F5DA4) + 32;
@@ -484,7 +484,7 @@ int fn_801F685C(int numRequests, int numFilters, int numTaps)
 StreamTap_801F5DA4 *fn_801F687C(int numRequests, int numFilters, int numTaps, void *pMem, int memSize)
 {
     Stream_801F5DA4 *s = pMem;
-    int bufferSize = memSize - fn_801F685C(numRequests, numFilters, numTaps);
+    int bufferSize = memSize - STREAM_overhead(numRequests, numFilters, numTaps);
     char *pBuffer;
     int i;
 

@@ -1101,42 +1101,6 @@
       "address": "0x8025F58C",
       "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long %10 in integer formatter resolves __umoddi3; corresponding target call at0x802653E4 reaches0x8025F58C with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
     },
-    "_ResGetDirInfo": {
-      "address": "0x801EC650",
-      "evidence": "evidence.tsv function and name rows at 0x801EC650: Reads directory offsets and the compressed and expanded sizes for an entry. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResGetBlockOffset": {
-      "address": "0x801EC6C4",
-      "evidence": "evidence.tsv function and name rows at 0x801EC6C4: Chooses the directory offset or the relocated bulk-buffer offset from entry flag 8. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResBlockLoadCompFileAsync": {
-      "address": "0x801EC718",
-      "evidence": "evidence.tsv function and name rows at 0x801EC718: Starts block streaming through the shared 0x8000-byte input buffer and returns the stream request. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResBlockLoadCompFileAsyncBlockCallback": {
-      "address": "0x801EC760",
-      "evidence": "evidence.tsv function and name rows at 0x801EC760: Feeds successive file blocks into the active decompressor and stops it at end of input. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResCalcPad": {
-      "address": "0x801EC894",
-      "evidence": "evidence.tsv function and name rows at 0x801EC894: Computes the bytes needed to align a block size to its alignment. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResFileInsertFunc": {
-      "address": "0x801EC8AC",
-      "evidence": "evidence.tsv function and name rows at 0x801EC8AC: Compares two resource names for insertion into the open-file list. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResFileSearchByFileNameFunc": {
-      "address": "0x801EC8D4",
-      "evidence": "evidence.tsv function and name rows at 0x801EC8D4: Compares a resource name with a search key and stores the matching record. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResAsyncCallbackFunc": {
-      "address": "0x801EC914",
-      "evidence": "evidence.tsv function and name rows at 0x801EC914: Completes a read, handles optional decompression/cache writes, updates load flags, and dispatches or queues the completion. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResGetBaseBlockSize": {
-      "address": "0x801ECBE4",
-      "evidence": "evidence.tsv function and name rows at 0x801ECBE4: Computes metadata payload sizes for TERF, COMP, DIR1 and HSH1/HSH2 blocks. Original bytes remain linked while Resource.c is a registered comparison."
-    },
     "_ResLoadRes": {
       "address": "0x801ECC70",
       "evidence": "evidence.tsv function and name rows at 0x801ECC70: Loads one resource synchronously from loose files, cached/quickload streams, mapped memory or ARAM, with optional decompression. Original bytes remain linked while Resource.c is a registered comparison."
@@ -1153,153 +1117,9 @@
       "address": "0x801EDCD0",
       "evidence": "evidence.tsv function and name rows at 0x801EDCD0: Clears an eligible entry lock and its bulk-buffer address, returning the remaining address. Original bytes remain linked while Resource.c is a registered comparison."
     },
-    "_ResReadTerfBlock": {
-      "address": "0x801EDD68",
-      "evidence": "evidence.tsv function and name rows at 0x801EDD68: Reads the eight-byte TERF block envelope and reports a short-read error. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResReadBlock": {
-      "address": "0x801EDDB0",
-      "evidence": "evidence.tsv function and name rows at 0x801EDDB0: Reads a metadata payload of the requested size and reports a short-read error. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResInitResourceFile": {
-      "address": "0x801EDDF8",
-      "evidence": "evidence.tsv function and name rows at 0x801EDDF8: Parses file-backed TERF metadata, allocates the directory/hash/entry arrays and cleans up failed opens. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResInitRamResourceFile": {
-      "address": "0x801EE38C",
-      "evidence": "evidence.tsv function and name rows at 0x801EE38C: Parses in-memory TERF metadata and moves the DATA area to ARAM for state 3 resources. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResGetResourceBuffer": {
-      "address": "0x801EE700",
-      "evidence": "evidence.tsv function and name rows at 0x801EE700: Selects a mapped entry address or allocates a destination buffer, including loose-file overrides. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResUnprotectAll": {
-      "address": "0x801EE91C",
-      "evidence": "evidence.tsv function and name rows at 0x801EE91C: Clears entry protection on every entry in a resource file. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResInit": {
-      "address": "0x801EE970",
-      "evidence": "evidence.tsv function and name rows at 0x801EE970: Initializes compression, resource locks, the open-file pool and block input buffer. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResShutdown": {
-      "address": "0x801EEA60",
-      "evidence": "evidence.tsv function and name rows at 0x801EEA60: Closes open resources and releases the pool, buffer, locks and compression subsystem. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResOpenDevice": {
-      "address": "0x801EEB44",
-      "evidence": "evidence.tsv function and name rows at 0x801EEB44: Opens or reuses a named device-backed resource file and tracks its reference count. Original bytes remain linked while Resource.c is a registered comparison."
-    },
     "ResOpenRam": {
       "address": "0x801EECD0",
       "evidence": "evidence.tsv function and name rows at 0x801EECD0: Opens or reuses a resource nested inside a loaded parent entry. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResClose": {
-      "address": "0x801EEFAC",
-      "evidence": "evidence.tsv function and name rows at 0x801EEFAC: Releases a resource reference and tears down owned metadata and loaded entries when required. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResLoad": {
-      "address": "0x801EF390",
-      "evidence": "evidence.tsv function and name rows at 0x801EF390: Validates a resource entry, waits for pending work, allocates its destination and loads it synchronously. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResLoadAsync": {
-      "address": "0x801EF548",
-      "evidence": "evidence.tsv function and name rows at 0x801EF548: Validates an entry and begins an asynchronous load into an allocated destination with a user callback. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResLoadToBuffer": {
-      "address": "0x801EF7BC",
-      "evidence": "evidence.tsv function and name rows at 0x801EF7BC: Loads a resource synchronously into a supplied buffer. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResWriteFromBuffer": {
-      "address": "0x801EF92C",
-      "evidence": "evidence.tsv function and name rows at 0x801EF92C: Writes the supplied entry data to its directory offset in the backing file. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResLoadAsyncToBuffer": {
-      "address": "0x801EFAD8",
-      "evidence": "evidence.tsv function and name rows at 0x801EFAD8: Starts an asynchronous entry load into a supplied buffer and records the loaded entry. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResCopyAsyncToBuffer": {
-      "address": "0x801EFD2C",
-      "evidence": "evidence.tsv function and name rows at 0x801EFD2C: Starts an asynchronous entry copy without storing the caller buffer as the loaded entry. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResCopyToBuffer": {
-      "address": "0x801EFF80",
-      "evidence": "evidence.tsv function and name rows at 0x801EFF80: Copies an entry synchronously into a supplied buffer without retaining it in the loaded-entry table. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResUnLoad": {
-      "address": "0x801F010C",
-      "evidence": "evidence.tsv function and name rows at 0x801F010C: Waits for and releases one loaded entry subject to its protection/ownership flags. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResLoadAll": {
-      "address": "0x801F02AC",
-      "evidence": "evidence.tsv function and name rows at 0x801F02AC: Loads entries individually or allocates, expands and maps an entire bulk resource buffer. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResUnLoadAll": {
-      "address": "0x801F08FC",
-      "evidence": "evidence.tsv function and name rows at 0x801F08FC: Releases every loaded entry and the resource bulk allocation when present. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResFindIndexByName": {
-      "address": "0x801F0A8C",
-      "evidence": "evidence.tsv function and name rows at 0x801F0A8C: Hashes a name with HSH1/HSH2 parameters and searches the variable-width hash table for its resource index. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResGetSize": {
-      "address": "0x801F0C50",
-      "evidence": "evidence.tsv function and name rows at 0x801F0C50: Returns a loose override size when present, otherwise the entry expanded size. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResGetNumResources": {
-      "address": "0x801F0D34",
-      "evidence": "evidence.tsv function and name rows at 0x801F0D34: Returns the validated resource count. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResIsLoaded": {
-      "address": "0x801F0DB8",
-      "evidence": "evidence.tsv function and name rows at 0x801F0DB8: Tests entry flag 2 after validating the resource and index. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResIsLoading": {
-      "address": "0x801F0E68",
-      "evidence": "evidence.tsv function and name rows at 0x801F0E68: Tests entry flag 0x10 after validating the resource and index. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResSync": {
-      "address": "0x801F0F18",
-      "evidence": "evidence.tsv function and name rows at 0x801F0F18: Optionally waits for outstanding reads and dispatches timed completions, returning the pending count. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResIsOpen": {
-      "address": "0x801F0F9C",
-      "evidence": "evidence.tsv function and name rows at 0x801F0F9C: Tests whether a name exists in the initialized open-resource list. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResIsMemoryBacked": {
-      "address": "0x801F1008",
-      "evidence": "evidence.tsv function and name rows at 0x801F1008: Verifies that the supplied record is the open record for its name, then tests storage states 2 and 3. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResGetStreamInfo": {
-      "address": "0x801F10B0",
-      "evidence": "evidence.tsv function and name rows at 0x801F10B0: Returns the backing-file handle, entry offset and size, rejecting compressed entries. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResSetFlags": {
-      "address": "0x801F11AC",
-      "evidence": "evidence.tsv function and name rows at 0x801F11AC: Sets resource flags under the resource-list lock. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResClearFlags": {
-      "address": "0x801F1230",
-      "evidence": "evidence.tsv function and name rows at 0x801F1230: Clears resource flags under the resource-list lock. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResCallTimedAsync": {
-      "address": "0x801F12B4",
-      "evidence": "evidence.tsv function and name rows at 0x801F12B4: Drains due requests from the timed ring and invokes their completion callbacks. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResUnprotect": {
-      "address": "0x801F1488",
-      "evidence": "evidence.tsv function and name rows at 0x801F1488: Clears entry protection flag 0x40. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResGetAlignment": {
-      "address": "0x801F149C",
-      "evidence": "evidence.tsv function and name rows at 0x801F149C: Returns the validated resource alignment. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResSetMemFlags": {
-      "address": "0x801F1520",
-      "evidence": "evidence.tsv function and name rows at 0x801F1520: Replaces allocation flags and returns their previous value. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResGetMemAllocFlags": {
-      "address": "0x801F1530",
-      "evidence": "evidence.tsv function and name rows at 0x801F1530: Returns the resource allocation flags. Original bytes remain linked while Resource.c is a registered comparison."
     },
     "_Res_szDiskLabelByHandle": {
       "address": "0x802B17C0",
@@ -1745,45 +1565,9 @@
       "address": "0x801FB0F8",
       "evidence": "evidence.tsv function/name rows at0x801FB0F8; complete measured comparison in its original file; original target code remains linked."
     },
-    "_TDbIOReadIndex": {
-      "address": "0x801FB5C0",
-      "evidence": "evidence.tsv function/name rows at0x801FB5C0; complete measured comparison in its original file; original target code remains linked."
-    },
-    "_TDbIOReadExprNode": {
-      "address": "0x801FB9D0",
-      "evidence": "evidence.tsv function/name rows at0x801FB9D0; complete measured comparison in its original file; original target code remains linked."
-    },
-    "_TDbIOWriteExprNode": {
-      "address": "0x801FBAC4",
-      "evidence": "evidence.tsv function/name rows at0x801FBAC4; complete measured comparison in its original file; original target code remains linked."
-    },
-    "_TDbIOWriteIndex": {
-      "address": "0x801FBC2C",
-      "evidence": "evidence.tsv function/name rows at0x801FBC2C; complete measured comparison in its original file; original target code remains linked."
-    },
-    "_TDbIOWriteTable": {
-      "address": "0x801FBD2C",
-      "evidence": "evidence.tsv function/name rows at0x801FBD2C; complete measured comparison in its original file; original target code remains linked."
-    },
-    "_TDbIOLoadDatabase": {
-      "address": "0x801FBFEC",
-      "evidence": "evidence.tsv function/name rows at0x801FBFEC; complete measured comparison in its original file; original target code remains linked."
-    },
-    "_TDbIOSaveDatabase": {
-      "address": "0x801FC5FC",
-      "evidence": "evidence.tsv function/name rows at0x801FC5FC; complete measured comparison in its original file; original target code remains linked."
-    },
-    "_TDbIOCRC32": {
-      "address": "0x801FC950",
-      "evidence": "evidence.tsv function/name rows at0x801FC950; complete measured comparison in its original file; original target code remains linked."
-    },
     "T3DB_Lexer_Number": {
       "address": "0x80200DD4",
       "evidence": "evidence.tsv function/name rows at0x80200DD4; complete measured comparison in its original file; original target code remains linked."
-    },
-    "T3DB_Lexer_Identifier": {
-      "address": "0x80201030",
-      "evidence": "evidence.tsv function/name rows at0x80201030; complete measured comparison in its original file; original target code remains linked."
     },
     "T3DB_Lexer_StringLiteral": {
       "address": "0x80201C70",
@@ -2109,10 +1893,6 @@
       "address": "0x803EBB60",
       "evidence": "evidence.tsv external row for 0x803EBB60 (Path::IPathToReal::realimp, GoldenEye symbol); its storage stays in the open PATH library files (src/engine/pathinit.c and its neighbours); src/engine/pathreal5.c references it by name."
     },
-    "STREAM_overhead": {
-      "address": "0x801F685C",
-      "evidence": "evidence.tsv function and name rows for 0x801F685C (STREAM_overhead, comparison only until its file is linked); the linked src/engine/pathreal5.c calls it by name."
-    },
     "SpchInit": {
       "address": "0x801F5B30",
       "evidence": "evidence.tsv function/name rows for 0x801F5B30 (src/engine/Speech.cpp, comparison only); original-owned until Speech.cpp links."
@@ -2136,10 +1916,6 @@
     "gLastSubTick": {
       "address": "0x803ECEB0",
       "evidence": "evidence.tsv data/name rows for 0x803ECEB0 (target extent, related name); speech-library storage, original-owned."
-    },
-    "_TDbQryCreateTbl": {
-      "address": "0x8020925C",
-      "evidence": "evidence.tsv function/name rows at 0x8020925C; complete measured comparison in its original file; original target code remains linked."
     },
     "SNDI_spkrconfig": {
       "address": "0x80277B3C",
@@ -18994,7 +18770,8 @@
     },
     {
       "source": "src/engine/t3db_io.c",
-      "profile": "engine_c_fastmath",
+      "profile": "engine_c_fastmath_holdouts",
+      "evidence": "evidence.tsv unit row of src/engine/t3db_io.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole.",
       "sections": [
         {
           "section": ".text",
@@ -19003,26 +18780,65 @@
           "end": "0x801FB0F8"
         },
         {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801FB5C0",
+          "end": "0x801FC9D4"
+        },
+        {
           "section": ".data",
           "placement": ".data4",
           "start": "0x802F9548",
           "end": "0x802F9948"
         }
       ],
-      "evidence": "evidence.tsv whole-file provisional unit and Database file partial linking source-form rows. Native exact prefix only; all remaining complete functions retained in full comparisons."
+      "holdouts": {
+        "functions": [
+          {
+            "function": "_TDbIOReadTableNew",
+            "evidence": "evidence.tsv source-form 0x801FB0F8-0x801FB5C0"
+          }
+        ],
+        "evidence": "x1b merge notes (swarm x1 tracking table): src/engine/t3db_io.c holds out _TDbIOReadTableNew."
+      }
     },
     {
       "source": "src/engine/T3DB_Lexer.c",
-      "profile": "engine_c_fastmath",
+      "profile": "engine_c_fastmath_holdouts",
+      "evidence": "evidence.tsv unit row of src/engine/T3DB_Lexer.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802009B0",
           "end": "0x80200DD4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80201030",
+          "end": "0x80201C70"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1AF0",
+          "end": "0x802B1AF8"
         }
       ],
-      "evidence": "evidence.tsv whole-file provisional unit and Database file partial linking source-form rows. Native exact prefix only; all remaining complete functions retained in full comparisons."
+      "holdouts": {
+        "functions": [
+          {
+            "function": "T3DB_Lexer_Number",
+            "evidence": "evidence.tsv source-form 0x80200DD4-0x80201030"
+          },
+          {
+            "function": "T3DB_Lexer_StringLiteral",
+            "evidence": "evidence.tsv source-form 0x80201C70-0x80201D94"
+          }
+        ],
+        "evidence": "x1b merge notes (swarm x1 tracking table): src/engine/T3DB_Lexer.c holds out T3DB_Lexer_Number, T3DB_Lexer_StringLiteral."
+      }
     },
     {
       "source": "src/engine/vfprintf.c",
@@ -20049,16 +19865,47 @@
     },
     {
       "source": "src/engine/t3db_query.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv linker row 0x80205754-0x80205DB8 for the unchanged native contribution from src/engine/t3db_query.c; existing function/type/compiler evidence and larger-file ownership remain in force. This is a linked native range, not a claim that its original source file is complete or closed.",
+      "profile": "engine_c_fastmath_holdouts",
+      "evidence": "evidence.tsv unit row of src/engine/t3db_query.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80205754",
-          "end": "0x80205DB8"
+          "end": "0x802067D4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802069BC",
+          "end": "0x8020AE88"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020B094",
+          "end": "0x8020B564"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1B90",
+          "end": "0x802B1BB0"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_802067D4",
+            "evidence": "evidence.tsv source-form 0x802067D4-0x802069BC"
+          },
+          {
+            "function": "fn_8020AE88",
+            "evidence": "evidence.tsv source-form 0x8020AE88-0x8020B094"
+          }
+        ],
+        "evidence": "x1b merge notes (swarm x1 tracking table): src/engine/t3db_query.c holds out fn_802067D4, fn_8020AE88."
+      }
     },
     {
       "source": "src/engine/physworld.cpp",
@@ -22691,6 +22538,252 @@
           "end": "0x802B78F0"
         }
       ]
+    },
+    {
+      "source": "src/engine/Resource.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row of src/engine/Resource.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EC650",
+          "end": "0x801ECC70"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EDD68",
+          "end": "0x801EECD0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EEFAC",
+          "end": "0x801F1538"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "_ResLoadRes",
+            "evidence": "evidence.tsv source-form 0x801ECC70-0x801ED634"
+          },
+          {
+            "function": "_ResLoadResAsync",
+            "evidence": "evidence.tsv source-form 0x801ED634-0x801EDC2C"
+          },
+          {
+            "function": "_ResLockRes",
+            "evidence": "evidence.tsv source-form 0x801EDC2C-0x801EDCD0"
+          },
+          {
+            "function": "_ResUnlockRes",
+            "evidence": "evidence.tsv source-form 0x801EDCD0-0x801EDD68"
+          },
+          {
+            "function": "ResOpenRam",
+            "evidence": "evidence.tsv source-form 0x801EECD0-0x801EEFAC"
+          }
+        ],
+        "evidence": "x1b merge notes (swarm x1 tracking table): src/engine/Resource.c holds out _ResLoadRes, _ResLoadResAsync, _ResLockRes, _ResUnlockRes, ResOpenRam."
+      }
+    },
+    {
+      "source": "src/engine/T3DB_Compiler.c",
+      "profile": "engine_c_fastmath_holdouts",
+      "evidence": "evidence.tsv unit row of src/engine/T3DB_Compiler.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801FC9D4",
+          "end": "0x801FCFA0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801FD0A4",
+          "end": "0x801FE534"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801FE5E0",
+          "end": "0x801FFEE4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801FFFC4",
+          "end": "0x802004CC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020071C",
+          "end": "0x802009B0"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_801FCFA0",
+            "evidence": "evidence.tsv source-form 0x801FCFA0-0x801FD0A4"
+          },
+          {
+            "function": "fn_801FE534",
+            "evidence": "evidence.tsv source-form 0x801FE534-0x801FE5E0"
+          },
+          {
+            "function": "fn_801FFEE4",
+            "evidence": "evidence.tsv source-form 0x801FFEE4-0x801FFFC4"
+          },
+          {
+            "function": "fn_802004CC",
+            "evidence": "evidence.tsv source-form 0x802004CC-0x8020071C"
+          }
+        ],
+        "evidence": "x1b merge notes (swarm x1 tracking table): src/engine/T3DB_Compiler.c holds out fn_801FCFA0, fn_801FE534, fn_801FFEE4, fn_802004CC."
+      }
+    },
+    {
+      "source": "src/engine/t3db.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row of src/engine/t3db.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F8878",
+          "end": "0x801F9430"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F9574",
+          "end": "0x801F9E84"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F9FA4",
+          "end": "0x801FA870"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_801F9430",
+            "evidence": "evidence.tsv source-form 0x801F9430-0x801F9574"
+          },
+          {
+            "function": "fn_801F9E84",
+            "evidence": "evidence.tsv source-form 0x801F9E84-0x801F9FA4"
+          }
+        ],
+        "evidence": "x1b merge notes (swarm x1 tracking table): src/engine/t3db.c holds out fn_801F9430, fn_801F9E84."
+      }
+    },
+    {
+      "source": "src/engine/memorycard.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row of src/engine/memorycard.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D3C68",
+          "end": "0x801D4848"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D4D08",
+          "end": "0x801D4FF4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D512C",
+          "end": "0x801D546C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D56A0",
+          "end": "0x801D5840"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AFCC8",
+          "end": "0x802AFCF8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_801D4848",
+            "evidence": "evidence.tsv source-form 0x801D4848-0x801D4A3C"
+          },
+          {
+            "function": "fn_801D4A3C",
+            "evidence": "evidence.tsv source-form 0x801D4A3C-0x801D4D08"
+          },
+          {
+            "function": "fn_801D4FF4",
+            "evidence": "evidence.tsv source-form 0x801D4FF4-0x801D512C"
+          },
+          {
+            "function": "fn_801D546C",
+            "evidence": "evidence.tsv source-form 0x801D546C-0x801D56A0"
+          },
+          {
+            "function": "fn_801D5840",
+            "evidence": "evidence.tsv source-form 0x801D5840-0x801D5D30"
+          }
+        ],
+        "evidence": "x1b merge notes (swarm x1 tracking table): src/engine/memorycard.c holds out fn_801D4848, fn_801D4A3C, fn_801D4FF4, fn_801D546C, fn_801D5840."
+      }
+    },
+    {
+      "source": "src/engine/stream.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row of src/engine/stream.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F5D84",
+          "end": "0x801F62F0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F63EC",
+          "end": "0x801F7208"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F73D4",
+          "end": "0x801F7738"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_801F62F0",
+            "evidence": "evidence.tsv source-form 0x801F62F0-0x801F63EC"
+          },
+          {
+            "function": "fn_801F7208",
+            "evidence": "evidence.tsv source-form 0x801F7208-0x801F73D4"
+          }
+        ],
+        "evidence": "x1b merge notes (swarm x1 tracking table): src/engine/stream.c holds out fn_801F62F0, fn_801F7208."
+      }
     },
     {
       "source": "src/game/cu_8013FF84.cpp",

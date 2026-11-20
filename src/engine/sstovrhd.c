@@ -17,7 +17,7 @@ int SNDSTRM_overheadtap(int requests, int channels)
 
 int SNDSTRM_overhead(int requests, int channels)
 {
-    return SNDSTRM_overheadtap(requests, channels) + fn_801F685C(requests + 2, 1, 1);
+    return SNDSTRM_overheadtap(requests, channels) + STREAM_overhead(requests + 2, 1, 1);
 }
 
 }

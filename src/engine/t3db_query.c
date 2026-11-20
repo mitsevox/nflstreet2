@@ -182,8 +182,6 @@ void fn_80205C44(TDbTable_t *pTable, int row)
 }
 
 
-#if defined(DECOMP_COMPARE)
-
 int fn_802071F8(TDbExpr_t *pExpr, unsigned int column, TDbExpr_t **ppOut);
 int fn_802072E8(TDbExpr_t *pA, TDbExpr_t *pB);
 extern unsigned int lbl_803EBE94;
@@ -2550,5 +2548,3 @@ int fn_8020B094(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_t *pWhere, in
     pResult->mErr = err;
     return err;
 }
-
-#endif

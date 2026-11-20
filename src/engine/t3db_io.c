@@ -308,8 +308,6 @@ int _TDbIOReadTableRow(TDbTable_t *pTable, TDbIOStream_t *pStream, int skip)
     return err;
 }
 
-#if defined(DECOMP_COMPARE)
-
 /* Creates a table from its serialized schema, rows and indexes. */
 int _TDbIOReadTableNew(TDbDatabase_t *pDb, TDbIOTableHdr_t *pHdr, int id,
                 TDbIOStream_t *pStream)
@@ -1000,5 +998,3 @@ unsigned int _TDbIOCRC32(void *pData, unsigned int size, unsigned int crc)
     }
     return crc;
 }
-
-#endif

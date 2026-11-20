@@ -149,7 +149,7 @@ int SNDSTRM_pitchmult(int handle, int value);
 int SNDSTRM_drylevel(int handle, int value);
 int SNDSTRM_fxlevel(int handle, int a, int b);
 int SNDSTRM_modifyhold(int handle, int value);
-int fn_801F685C(int count, int filters, int taps);
+int STREAM_overhead(int count, int filters, int taps);
 int SNDvol(int handle, int value);
 int SNDCTRL_drylevel(int handle, int value);
 int fn_80278070(int handle, int a, int b);

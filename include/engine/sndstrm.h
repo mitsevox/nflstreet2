@@ -106,7 +106,7 @@ int SNDCTRL_lowpass(int voice, int value);
 int SNDPKTPLAY_framesoutstanding(int index);
 void fn_801F6C04(void *tap, int level);
 int fn_801F75C4(void *tap);
-int fn_801F685C(int numRequests, int numFilters, int numTaps);
+int STREAM_overhead(int numRequests, int numFilters, int numTaps);
 
 #ifdef __cplusplus
 }
