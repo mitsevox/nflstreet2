@@ -338,7 +338,7 @@ struct TeamColorRow_t {
 };
 
 extern "C" {
-int fn_8003DEB4(void);
+int PlyrObjsGetCount(void);
 void TeamDbOpenQuery(DbCursor *pObject, int a);
 void TeamDbGetColors(DbCursor *pObject, void *pBuffer);
 int fn_800A7EF4(unsigned char a);
@@ -545,8 +545,8 @@ void ParticleTrailResetAll(void)
 {
     unsigned int i;
 
-    for (i = 0; i < fn_8003DEB4(); i++) {
-        Object_8003DEC4 *pObject = fn_8003DEC4(i);
+    for (i = 0; i < PlyrObjsGetCount(); i++) {
+        Object_8003DEC4 *pObject = PlyrObjsGet(i);
         ParticleTrailSet_t *pData = &pObject->mUnknown5188;
         ParticleTrail_t *pTrail;
         int j;
@@ -621,8 +621,8 @@ void ParticleTrailUpdateAll(void)
 {
     unsigned int i;
 
-    for (i = 0; i < fn_8003DEB4(); i++) {
-        ParticleTrailUpdate(fn_8003DEC4(i));
+    for (i = 0; i < PlyrObjsGetCount(); i++) {
+        ParticleTrailUpdate(PlyrObjsGet(i));
     }
 }
 

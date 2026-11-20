@@ -32,11 +32,11 @@ void ReplayHandleInput(void *p, int a, float c, int b);
 void ReplayUpdate(void *p);
 int ReplayIsShowing(void *p);
 int ReplayIsSuspended(void);
-void fn_8003E1F0(void);
+void PlyrObjsDrawShadows(void);
 void DivotUpdate(void);
-void fn_80057F28(void);
-void fn_800582D0(void);
-void fn_8005BF18(void);
+void InGamePlayCallCreate(void);
+void InGamePlayCallDestroy(void);
+void InGameOverlayReset(void);
 void MemCardScreenSetFlag(unsigned char a);
 void PauseUpdate(void);
 void PauseRequestClose(void);
@@ -282,7 +282,7 @@ int InGame::Init()
     InGameSetInputPaused(0);
     PadInputSetAxisCallback(CamGameGetSideYaw);
     TDbCompilePerformOp(0, "select 'PNIG' into \x82 from 'FNIG'\n", &result);
-    fn_80057F28();
+    InGamePlayCallCreate();
     if (result) {
         fn_800AD910(10, 0.0f);
     } else {
@@ -293,7 +293,7 @@ int InGame::Init()
         }
     }
     GameTextReset();
-    fn_8005BF18();
+    InGameOverlayReset();
     if (!fn_800BA6F8()) {
         CamGameApplyUserCamera();
         if (!result && !fn_800C1E40()) {
@@ -371,7 +371,7 @@ unsigned char InGame::Update()
         fn_800A3120(gFrameTimeScale);
     }
     FileDebugProcess();
-    fn_8003E1F0();
+    PlyrObjsDrawShadows();
     DivotUpdate();
     fn_800A7F6C();
     SndgMusicUpdate();
@@ -417,7 +417,7 @@ int InGame::Shutdown()
     ScreenTransFinish();
     PauseUpdate();
     GlibSyncFrame();
-    fn_800582D0();
+    InGamePlayCallDestroy();
     fn_800AB944(lbl_803EAA8C);
     PlaybookSideClearAll();
     MemCardUtilShutdown();

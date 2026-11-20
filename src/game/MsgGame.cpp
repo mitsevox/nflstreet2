@@ -93,7 +93,7 @@ int MsgMainMenuGetActivePad(void);
 unsigned char GameTextGetBootFinished(void);
 void GameTextSetBootFinished(unsigned char a);
 void TutorialGetHudPosition(float *pX, float *pY, float *pZ);
-int fn_8005902C(void);
+int InGamePauseIsLocked(void);
 int PortDbHasSides(void);
 int TeamLogoGetHandle(int a);
 int fn_8022E558(void);
@@ -545,7 +545,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         pResult->i = 0;
         break;
     case 0x19D:
-        pResult->i = fn_8005902C();
+        pResult->i = InGamePauseIsLocked();
         break;
     case 5:
     case 0xBB:

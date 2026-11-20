@@ -16,7 +16,7 @@
 #include "game/SyncRandGetRange.h"
 
 extern "C" {
-void fn_8003DE74(unsigned char side, int *pList);
+void PlyrObjsSetTeamIds(unsigned char side, int *pList);
 int TDbTblDestroy(int handle, int table);
 void TDbInsertRow(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
 int TDbTblFindUnusedId(int handle, int *pTable);
@@ -665,7 +665,7 @@ void TeamDbLoadSideWithCopies(int team, int *pList, int side, int count)
     Object_8008044C cursor;
     int i;
 
-    fn_8003DE74(side, pList);
+    PlyrObjsSetTeamIds(side, pList);
     DepthChartGetSide(side, &record);
     TeamDbCopyPlayers(team, record.mUnknown, count);
     TeamDbOpen(&query, 0, 0x54415453);
@@ -698,7 +698,7 @@ void TeamDbLoadSide(int team, int *pList, int side, int count)
     Object_8008044C cursor;
     int i;
 
-    fn_8003DE74(side, pList);
+    PlyrObjsSetTeamIds(side, pList);
     DepthChartGetSide(side, &record);
     TeamDbOpen(&query, 0, 0x54415453);
     TeamDbSeekId(&query, team, 0);

@@ -72,15 +72,15 @@ int fn_801783AC(int bit);
 unsigned int SyncRandGetRange(int a, int b);
 float Vec3Distance(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
 void PauseBlock(void);
-int fn_8005BE5C(int value);
+int InGameOverlayOpen(int value);
 void fn_800B9654(void *p, float dt);
 void fn_800B9998(void *p);
 void fn_801488D4(Object_80039F5C *p, Object_80039F5C *pOther);
 void PlyrMgrClearStates(void);
 void fn_8014D67C(void);
-void fn_8005BF5C(void);
+void InGameOverlayShow(void);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
-int fn_8005BFD4(void);
+int InGameOverlayGetState(void);
 void fn_800AD910(int a, float b);
 void ClockRuleEndPeriod(void);
 
@@ -253,7 +253,7 @@ void fn_8014EA90(State_802A1F90 *p, float dt)
         }
         if (p->mUnknown12) {
             PauseBlock();
-            fn_8005BE5C(2);
+            InGameOverlayOpen(2);
         }
     }
     fn_800B9654(p, dt);
@@ -267,7 +267,7 @@ void fn_8014EC74(State_802A1F90 *p)
         if (p->mUnknown12) {
             PlyrMgrClearStates();
             fn_8014D67C();
-            fn_8005BF5C();
+            InGameOverlayShow();
         }
     } else {
         PlyrMgrClearStates();
@@ -283,7 +283,7 @@ void fn_8014EC74(State_802A1F90 *p)
 
 int fn_8014ED30(State_802A1F90 *p)
 {
-    if (!p->mUnknown12 || fn_8005BFD4() == 1) {
+    if (!p->mUnknown12 || InGameOverlayGetState() == 1) {
         return 1;
     }
     return 0;

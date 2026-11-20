@@ -29,9 +29,9 @@ void ReplayChannelsInit(int a);
 void PlyrMgrRegister(int a);
 void PlyrMgrReset(void);
 void PlyrMgrEmptyPass(void);
-int fn_8003DA94(unsigned short count, int a, int b);
-int fn_8003DCC0(int a);
-void fn_8003E118(void);
+int PlyrObjsCreate(unsigned short count, int a, int b);
+int PlyrObjsDestroy(int a);
+void PlyrObjsRegisterState(void);
 void BigObjSetupBigObjects(int a, int b);
 void BigObjShutdownObjects(int a);
 void BigObjCreateAnimBall(int a);
@@ -973,7 +973,7 @@ int Plyr::Init()
     fn_8015E654(1);
     fn_8015E6C4();
     fn_8015E950(1, 1);
-    fn_8003DA94(14, GameObjList::GetListHandle(), 0);
+    PlyrObjsCreate(14, GameObjList::GetListHandle(), 0);
     fn_8015E994();
     ResTrackLabel("PlyrObjsInitFinish");
     ResTrackLabel("PlaStateInitStart");
@@ -988,7 +988,7 @@ int Plyr::Init()
 int Plyr::Shutdown()
 {
     PlyrMgrReset();
-    fn_8003DCC0(GameObjList::GetListHandle());
+    PlyrObjsDestroy(GameObjList::GetListHandle());
     fn_8015E6C8();
     PlaTexCacheShutdown();
     return 1;
@@ -1122,7 +1122,7 @@ int ReplayFrame::Init()
     ReplayChannelsInit(0);
     BallsReplayRegister();
     PlyrStarRegisterReplay();
-    fn_8003E118();
+    PlyrObjsRegisterState();
     BigObjRegisterSave();
     DivotReplayRegister();
     SndgReplayRegister();

@@ -57,7 +57,7 @@ extern int lbl_802CFB74[22];
 extern unsigned char gPlayerObjDrawReady;
 
 int MsgPlayerPickupIsOpen(void);
-int fn_8003DEB4(void);
+int PlyrObjsGetCount(void);
 void PlyrPoseInit(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
 void PlyrPoseFree(Object_8003DEC4 *pPlayer);
 unsigned char CheatFlagsIsSet(int index);
@@ -671,7 +671,7 @@ extern "C" void PlayerLookLoadBonuses(int index, int unused, int id)
 
 extern "C" void PlayerLookSetGear(int player, int slot, int value)
 {
-    Object_8003DEC4 *pPlayer = fn_8003DEC4(player);
+    Object_8003DEC4 *pPlayer = PlyrObjsGet(player);
 
     gPlayerLooks[pPlayer->mUnknown4971].mInfo.mValues[slot] = value;
     gPlayerLooks[pPlayer->mUnknown4971].mUnknown70 = PlayerLookGetHatKind(pPlayer->mUnknown4971);
@@ -697,7 +697,7 @@ extern "C" void PlayerLookApply(int player)
     PlayerLook_t *pRecord;
     unsigned char *pColors;
 
-    pPlayer = fn_8003DEC4(player);
+    pPlayer = PlyrObjsGet(player);
     clearLogo = 0;
     key = pPlayer->mUnknown4970;
     index = pPlayer->mUnknown4971;
@@ -1101,11 +1101,11 @@ extern "C" void PlayerLookGetHeadIds(int index, const char *pName, PlayerHeadIds
 
 extern "C" void PlayerLookHideSwitch28(void)
 {
-    unsigned int count = fn_8003DEB4();
+    unsigned int count = PlyrObjsGetCount();
     unsigned int i;
 
     for (i = 0; i < count; i++) {
-        PlyrSwitchSet(fn_8003DEC4(i)->mUnknown4970, 28, 255);
+        PlyrSwitchSet(PlyrObjsGet(i)->mUnknown4970, 28, 255);
     }
 }
 

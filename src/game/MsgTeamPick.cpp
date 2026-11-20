@@ -75,7 +75,7 @@ void DepthChartRevertSide(int group);
 void DepthChartGetSideNames(int group, int kind, DepthChartText_t **pPairs);
 void DepthChartSwapPending(int group, int kind, int slot);
 int DepthChartCommit(int group);
-void fn_8003DE74(unsigned char side, int *pList);
+void PlyrObjsSetTeamIds(unsigned char side, int *pList);
 int DepthChartScreenIsSideShown(unsigned char a);
 void DepthChartScreenGetSideName(unsigned char a, int b, char *pText, int length);
 void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
@@ -1305,8 +1305,8 @@ void MsgTeamPickShutdown(void)
                     digp[_MsgTeamPick_pPool[i].mTeam][_MsgTeamPick_pPool[i].mSlot] = _MsgTeamPick_pPool[i].mId;
                 }
             }
-            fn_8003DE74(0, digp[0]);
-            fn_8003DE74(1, digp[1]);
+            PlyrObjsSetTeamIds(0, digp[0]);
+            PlyrObjsSetTeamIds(1, digp[1]);
             DepthChartGetSide(0, &records[0]);
             DepthChartGetSide(1, &records[1]);
             if (_MsgTeamPick_bSaveTeams) {

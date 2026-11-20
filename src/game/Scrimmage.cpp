@@ -80,7 +80,7 @@ int fn_800BA6F8(void);
 void fn_800C9FC0(void);
 void fn_800CA3C4(void);
 void PlayerMoveResetAll(void);
-void fn_800DC578(void);
+void PlayerActionAnimResetSteerFrames(void);
 void HuddleGetSpot(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
@@ -470,7 +470,7 @@ extern "C" void ScrmStartPlay(void)
     side = fn_80178308();
     BallPrimeKickUp(BallGetCurrent());
     fn_8010BEA4();
-    fn_800DC578();
+    PlayerActionAnimResetSteerFrames();
     if (fn_800B65A0(side) != 0xFF && fn_80177F70() != 0) {
         GameCamera_t *pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
         PlayBookPlay_t *pRecord = PlayBookGetPlay(side);

@@ -726,8 +726,8 @@ static void _CreatePlayerSetFaceFeature(int index, int value)
         PlayerLookSetHeadType(0, _CreatePlayer_sFace.mUnknown0[index]);
         PlayerLookSetHeadType(1, _CreatePlayer_sFace.mUnknown0[index]);
     }
-    FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(0)->mUnknown4976);
-    FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(1)->mUnknown4976);
+    FaceMorphBuildWeights(&_CreatePlayer_sFace, &PlyrObjsGet(0)->mUnknown4976);
+    FaceMorphBuildWeights(&_CreatePlayer_sFace, &PlyrObjsGet(1)->mUnknown4976);
     PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
     PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
     flag = FaceMorphIsAllowed(&_CreatePlayer_sFace);
@@ -745,8 +745,8 @@ static void _CreatePlayerSetFacialHair(int value)
     PlayerLookSetFace(1, value);
     _CreatePlayer_sFacialHairCursor.FindFchrRow(value, 0);
     _CreatePlayer_sFace.mUnknown0[0] = _CreatePlayer_sFacialHairCursor.GetFchrFhstCode();
-    FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(0)->mUnknown4976);
-    FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(1)->mUnknown4976);
+    FaceMorphBuildWeights(&_CreatePlayer_sFace, &PlyrObjsGet(0)->mUnknown4976);
+    FaceMorphBuildWeights(&_CreatePlayer_sFace, &PlyrObjsGet(1)->mUnknown4976);
     PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
     PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
     flag = FaceMorphIsAllowed(&_CreatePlayer_sFace);
@@ -772,8 +772,8 @@ static int _CreatePlayerUpdateBodyType(unsigned int value)
         _CreatePlayer_sFace.mUnknown0[9] = mode;
         PlayerLookSetBodyType(1, mode);
         PlayerLookSetBodyType(0, mode);
-        FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(0)->mUnknown4976);
-        FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(1)->mUnknown4976);
+        FaceMorphBuildWeights(&_CreatePlayer_sFace, &PlyrObjsGet(0)->mUnknown4976);
+        FaceMorphBuildWeights(&_CreatePlayer_sFace, &PlyrObjsGet(1)->mUnknown4976);
         PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
         PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
         FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);

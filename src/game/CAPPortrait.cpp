@@ -29,8 +29,8 @@ struct PortraitImageRequest_t {
 };
 
 extern "C" {
-AnimSkeleton_t *fn_8003E028(void);
-AnimSkeleton_t *fn_8003E030(void);
+AnimSkeleton_t *PlyrObjsGetBodySkeleton(void);
+AnimSkeleton_t *PlyrObjsGetSkel19(void);
 void PlaDynClutApplyColors(void *p, int id, FMCAPPORTText *pText);
 void *PlaTexCacheGetArchive(void);
 void PortraitRenderQuantize(PortraitJob_t *pObject);
@@ -55,7 +55,7 @@ extern char lbl_802EC080[];
 }
 
 static PortraitSlotTable_t *_Portrait_pSlots = 0;
-static AnimSkeleton_t *(*_Portrait_apGetSkeleton[2])(void) = { fn_8003E028, fn_8003E030 };
+static AnimSkeleton_t *(*_Portrait_apGetSkeleton[2])(void) = { PlyrObjsGetBodySkeleton, PlyrObjsGetSkel19 };
 static int _Portrait_aiSkeletonParam[2] = { 15, 32 };
 static const char *_Portrait_apszArchives[2] = { lbl_802EC038, lbl_802EC044 };
 static ModelLod_802DF190 _Portrait_aLod0[2] = { { 0.5f, 1000, 100000, 0xFFFF }, { 0.0f, 0, 0, 0xFFFF } };

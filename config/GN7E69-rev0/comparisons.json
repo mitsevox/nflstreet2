@@ -2646,9 +2646,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800E3CC0.cpp",
+      "source": "src/game/PlyrTackle.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800E3CC0-0x800EAD44 (src/game/cu_800E3CC0.cpp) and its data rows. The 14 comparison sources of the range are merged into this one translation unit (all 62 functions in address order, the four previously unwritten bodies included); the source is linked with holdouts (units.json), and the non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row 0x800E3CC0-0x800EAD44 (src/game/PlyrTackle.cpp) and its data rows. The 14 comparison sources of the range are merged into this one translation unit (all 62 functions in address order, the four previously unwritten bodies included); the source is linked with holdouts (units.json), and the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -2677,137 +2677,137 @@
       ],
       "functions": [
         {
-          "symbol": "fn_800E3CC0",
+          "symbol": "PlyrAlignCheckSpot",
           "start": "0x800E3CC0",
           "end": "0x800E3DCC"
         },
         {
-          "symbol": "fn_800E3DCC",
+          "symbol": "PlyrAlignGetCallTarget",
           "start": "0x800E3DCC",
           "end": "0x800E4120"
         },
         {
-          "symbol": "fn_800E4120",
+          "symbol": "PlyrAlignStartShuffle",
           "start": "0x800E4120",
           "end": "0x800E4264"
         },
         {
-          "symbol": "fn_800E4264",
+          "symbol": "PlyrAlignTurnPhase",
           "start": "0x800E4264",
           "end": "0x800E4494"
         },
         {
-          "symbol": "fn_800E4494",
+          "symbol": "PlyrAlignEnter",
           "start": "0x800E4494",
           "end": "0x800E459C"
         },
         {
-          "symbol": "fn_800E459C",
+          "symbol": "PlyrAlignUpdate",
           "start": "0x800E459C",
           "end": "0x800E4EE4"
         },
         {
-          "symbol": "fn_800E4EE4",
+          "symbol": "PlyrAlignExit",
           "start": "0x800E4EE4",
           "end": "0x800E513C"
         },
         {
-          "symbol": "fn_800E513C",
+          "symbol": "PlyrAlignInput",
           "start": "0x800E513C",
           "end": "0x800E55B8"
         },
         {
-          "symbol": "fn_800E55B8",
+          "symbol": "PlyrAlignReset",
           "start": "0x800E55B8",
           "end": "0x800E579C"
         },
         {
-          "symbol": "fn_800E579C",
+          "symbol": "PlyrAlignIsFree",
           "start": "0x800E579C",
           "end": "0x800E586C"
         },
         {
-          "symbol": "fn_800E586C",
+          "symbol": "PlyrAlignAvoidTeammates",
           "start": "0x800E586C",
           "end": "0x800E5B04"
         },
         {
-          "symbol": "fn_800E5B04",
+          "symbol": "PlyrEngageTryAnims",
           "start": "0x800E5B04",
           "end": "0x800E5C00"
         },
         {
-          "symbol": "fn_800E5C00",
+          "symbol": "PlyrEngageGetBallSide",
           "start": "0x800E5C00",
           "end": "0x800E5EA4"
         },
         {
-          "symbol": "fn_800E5EA4",
+          "symbol": "PlyrEngageAiWinsShed",
           "start": "0x800E5EA4",
           "end": "0x800E6328"
         },
         {
-          "symbol": "fn_800E6328",
+          "symbol": "PlyrEngagePickMove",
           "start": "0x800E6328",
           "end": "0x800E67AC"
         },
         {
-          "symbol": "fn_800E67AC",
+          "symbol": "PlyrEngageCanShed",
           "start": "0x800E67AC",
           "end": "0x800E68A8"
         },
         {
-          "symbol": "fn_800E68A8",
+          "symbol": "PlyrEngageGetMoveList",
           "start": "0x800E68A8",
           "end": "0x800E6984"
         },
         {
-          "symbol": "fn_800E6984",
+          "symbol": "PlyrEngageGetInputDir",
           "start": "0x800E6984",
           "end": "0x800E6AC8"
         },
         {
-          "symbol": "fn_800E6AC8",
+          "symbol": "PlyrEngageTryShed",
           "start": "0x800E6AC8",
           "end": "0x800E6F48"
         },
         {
-          "symbol": "fn_800E6F48",
+          "symbol": "PlyrWaitEnter",
           "start": "0x800E6F48",
           "end": "0x800E705C"
         },
         {
-          "symbol": "fn_800E705C",
+          "symbol": "PlyrWaitUpdate",
           "start": "0x800E705C",
           "end": "0x800E7330"
         },
         {
-          "symbol": "fn_800E7330",
+          "symbol": "PlyrWaitInput",
           "start": "0x800E7330",
           "end": "0x800E73D4"
         },
         {
-          "symbol": "fn_800E73D4",
+          "symbol": "PlyrTackleIsShallowPath",
           "start": "0x800E73D4",
           "end": "0x800E745C"
         },
         {
-          "symbol": "fn_800E745C",
+          "symbol": "PlyrTackleCanReach",
           "start": "0x800E745C",
           "end": "0x800E7588"
         },
         {
-          "symbol": "fn_800E7588",
+          "symbol": "PlyrTackleStartAnim",
           "start": "0x800E7588",
           "end": "0x800E7B90"
         },
         {
-          "symbol": "fn_800E7B90",
+          "symbol": "PlyrTackleStartMove",
           "start": "0x800E7B90",
           "end": "0x800E7C84"
         },
         {
-          "symbol": "fn_800E7C84",
+          "symbol": "PlyrTackleCanStart",
           "start": "0x800E7C84",
           "end": "0x800E7D80"
         },
@@ -2817,172 +2817,172 @@
           "end": "0x800E7E78"
         },
         {
-          "symbol": "fn_800E7E78",
+          "symbol": "PlyrTackleAimAtCarrier",
           "start": "0x800E7E78",
           "end": "0x800E8098"
         },
         {
-          "symbol": "fn_800E8098",
+          "symbol": "PlyrTackleAiTry",
           "start": "0x800E8098",
           "end": "0x800E815C"
         },
         {
-          "symbol": "fn_800E815C",
+          "symbol": "PlyrTackleStart",
           "start": "0x800E815C",
           "end": "0x800E8420"
         },
         {
-          "symbol": "fn_800E8420",
+          "symbol": "PlyrTackleEnter",
           "start": "0x800E8420",
           "end": "0x800E8554"
         },
         {
-          "symbol": "fn_800E8554",
+          "symbol": "PlyrTackleUpdate",
           "start": "0x800E8554",
           "end": "0x800E86E4"
         },
         {
-          "symbol": "fn_800E86E4",
+          "symbol": "PlyrTackleExit",
           "start": "0x800E86E4",
           "end": "0x800E8740"
         },
         {
-          "symbol": "fn_800E8740",
+          "symbol": "PlyrTackleNotify",
           "start": "0x800E8740",
           "end": "0x800E8748"
         },
         {
-          "symbol": "fn_800E8748",
+          "symbol": "PlyrTackleInput",
           "start": "0x800E8748",
           "end": "0x800E885C"
         },
         {
-          "symbol": "fn_800E885C",
+          "symbol": "PlyrTackleRollKind",
           "start": "0x800E885C",
           "end": "0x800E8898"
         },
         {
-          "symbol": "fn_800E8898",
+          "symbol": "PlyrTackleContest",
           "start": "0x800E8898",
           "end": "0x800E8BE8"
         },
         {
-          "symbol": "fn_800E8BE8",
+          "symbol": "PlyrTurnEnter",
           "start": "0x800E8BE8",
           "end": "0x800E8E04"
         },
         {
-          "symbol": "fn_800E8E04",
+          "symbol": "PlyrTurnUpdate",
           "start": "0x800E8E04",
           "end": "0x800E8ED4"
         },
         {
-          "symbol": "fn_800E8ED4",
+          "symbol": "PlyrContactIsActionAnim",
           "start": "0x800E8ED4",
           "end": "0x800E9010"
         },
         {
-          "symbol": "fn_800E9010",
+          "symbol": "PlyrContactGetSide",
           "start": "0x800E9010",
           "end": "0x800E9024"
         },
         {
-          "symbol": "fn_800E9024",
+          "symbol": "PlyrContactSendHit",
           "start": "0x800E9024",
           "end": "0x800E92DC"
         },
         {
-          "symbol": "fn_800E92DC",
+          "symbol": "PlyrContactCanReact",
           "start": "0x800E92DC",
           "end": "0x800E93CC"
         },
         {
-          "symbol": "fn_800E93CC",
+          "symbol": "PlyrContactCanBeHit",
           "start": "0x800E93CC",
           "end": "0x800E948C"
         },
         {
-          "symbol": "fn_800E948C",
+          "symbol": "PlyrContactPickHeight",
           "start": "0x800E948C",
           "end": "0x800E9504"
         },
         {
-          "symbol": "fn_800E9504",
+          "symbol": "PlyrContactSendCarrierHit",
           "start": "0x800E9504",
           "end": "0x800E9528"
         },
         {
-          "symbol": "fn_800E9528",
+          "symbol": "PlyrContactSendKnock",
           "start": "0x800E9528",
           "end": "0x800E954C"
         },
         {
-          "symbol": "fn_800E954C",
+          "symbol": "PlyrContactSendHitFrom",
           "start": "0x800E954C",
           "end": "0x800E96EC"
         },
         {
-          "symbol": "fn_800E96EC",
+          "symbol": "PlyrContactSendPush",
           "start": "0x800E96EC",
           "end": "0x800E98A4"
         },
         {
-          "symbol": "fn_800E98A4",
+          "symbol": "PlyrContactSendBump",
           "start": "0x800E98A4",
           "end": "0x800E99A8"
         },
         {
-          "symbol": "fn_800E99A8",
+          "symbol": "PlyrContactSendStumble",
           "start": "0x800E99A8",
           "end": "0x800E9B84"
         },
         {
-          "symbol": "fn_800E9B84",
+          "symbol": "PlyrContactSendCarrierAction",
           "start": "0x800E9B84",
           "end": "0x800E9DBC"
         },
         {
-          "symbol": "fn_800E9DBC",
+          "symbol": "PlyrContactCollide",
           "start": "0x800E9DBC",
           "end": "0x800E9E18"
         },
         {
-          "symbol": "fn_800E9E18",
+          "symbol": "CarrierMomentumEnter",
           "start": "0x800E9E18",
           "end": "0x800E9FC0"
         },
         {
-          "symbol": "fn_800E9FC0",
+          "symbol": "CarrierMomentumExit",
           "start": "0x800E9FC0",
           "end": "0x800E9FD8"
         },
         {
-          "symbol": "fn_800E9FD8",
+          "symbol": "CarrierMomentumUpdate",
           "start": "0x800E9FD8",
           "end": "0x800EA1D0"
         },
         {
-          "symbol": "fn_800EA1D0",
+          "symbol": "CarrierMomentumNotify",
           "start": "0x800EA1D0",
           "end": "0x800EA1D8"
         },
         {
-          "symbol": "fn_800EA1D8",
+          "symbol": "CarrierMomentumInput",
           "start": "0x800EA1D8",
           "end": "0x800EA284"
         },
         {
-          "symbol": "fn_800EA284",
+          "symbol": "PlyrContactResolve",
           "start": "0x800EA284",
           "end": "0x800EA6F0"
         },
         {
-          "symbol": "fn_800EA6F0",
+          "symbol": "PlyrContactHitWall",
           "start": "0x800EA6F0",
           "end": "0x800EAC9C"
         },
         {
-          "symbol": "fn_800EAC9C",
+          "symbol": "PlyrContactIsBeforeImpact",
           "start": "0x800EAC9C",
           "end": "0x800EAD44"
         }
@@ -11523,212 +11523,212 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8003BA00",
+          "symbol": "PlyrObjsShadowAdd",
           "start": "0x8003BA00",
           "end": "0x8003BA04"
         },
         {
-          "symbol": "fn_8003BA04",
+          "symbol": "PlyrObjsTrailAdd",
           "start": "0x8003BA04",
           "end": "0x8003BA08"
         },
         {
-          "symbol": "fn_8003BA08",
+          "symbol": "PlyrObjsShadowDelete",
           "start": "0x8003BA08",
           "end": "0x8003BA0C"
         },
         {
-          "symbol": "fn_8003BA0C",
+          "symbol": "PlyrObjsTrailDelete",
           "start": "0x8003BA0C",
           "end": "0x8003BA10"
         },
         {
-          "symbol": "fn_8003BA10",
+          "symbol": "PlyrObjsBuildShadow",
           "start": "0x8003BA10",
           "end": "0x8003BDF0"
         },
         {
-          "symbol": "fn_8003BDF0",
+          "symbol": "PlyrObjsClipShadowToLevel",
           "start": "0x8003BDF0",
           "end": "0x8003BFCC"
         },
         {
-          "symbol": "fn_8003BFCC",
+          "symbol": "PlyrObjsClipShadowQuad",
           "start": "0x8003BFCC",
           "end": "0x8003C8C8"
         },
         {
-          "symbol": "fn_8003C8C8",
+          "symbol": "PlyrObjsShadowGetUV",
           "start": "0x8003C8C8",
           "end": "0x8003C97C"
         },
         {
-          "symbol": "fn_8003C97C",
+          "symbol": "PlyrObjsIntersectLines",
           "start": "0x8003C97C",
           "end": "0x8003CA20"
         },
         {
-          "symbol": "fn_8003CA20",
+          "symbol": "PlyrObjsUpdateShadows",
           "start": "0x8003CA20",
           "end": "0x8003CBFC"
         },
         {
-          "symbol": "fn_8003CBFC",
+          "symbol": "PlyrObjsDrawShadowQuads",
           "start": "0x8003CBFC",
           "end": "0x8003CC20"
         },
         {
-          "symbol": "fn_8003CC20",
+          "symbol": "PlyrObjsDrawShadowClips",
           "start": "0x8003CC20",
           "end": "0x8003CC44"
         },
         {
-          "symbol": "fn_8003CC44",
+          "symbol": "PlyrObjsDrawTrails",
           "start": "0x8003CC44",
           "end": "0x8003CC68"
         },
         {
-          "symbol": "fn_8003CC68",
+          "symbol": "PlyrObjsInitBodySkelPose",
           "start": "0x8003CC68",
           "end": "0x8003CD1C"
         },
         {
-          "symbol": "fn_8003CD1C",
+          "symbol": "PlyrObjsInitSkel19Pose",
           "start": "0x8003CD1C",
           "end": "0x8003CDF8"
         },
         {
-          "symbol": "fn_8003CDF8",
+          "symbol": "PlyrObjsInitSkel5Pose",
           "start": "0x8003CDF8",
           "end": "0x8003CEB0"
         },
         {
-          "symbol": "fn_8003CEB0",
+          "symbol": "PlyrObjsWriteState",
           "start": "0x8003CEB0",
           "end": "0x8003CF88"
         },
         {
-          "symbol": "fn_8003CF88",
+          "symbol": "PlyrObjsReadState",
           "start": "0x8003CF88",
           "end": "0x8003D0C8"
         },
         {
-          "symbol": "fn_8003D0C8",
+          "symbol": "PlyrObjsInitStateTables",
           "start": "0x8003D0C8",
           "end": "0x8003D12C"
         },
         {
-          "symbol": "fn_8003D12C",
+          "symbol": "PlyrObjsLoadSkeletons",
           "start": "0x8003D12C",
           "end": "0x8003D2E0"
         },
         {
-          "symbol": "fn_8003D2E0",
+          "symbol": "PlyrObjsInitLimbChains",
           "start": "0x8003D2E0",
           "end": "0x8003D378"
         },
         {
-          "symbol": "fn_8003D378",
+          "symbol": "PlyrObjsCreatePlayers",
           "start": "0x8003D378",
           "end": "0x8003D958"
         },
         {
-          "symbol": "fn_8003D958",
+          "symbol": "PlyrObjsSetHeadSkeletons",
           "start": "0x8003D958",
           "end": "0x8003D988"
         },
         {
-          "symbol": "fn_8003D988",
+          "symbol": "PlyrObjsResolveTeamIds",
           "start": "0x8003D988",
           "end": "0x8003DA8C"
         },
         {
-          "symbol": "fn_8003DA8C",
+          "symbol": "PlyrObjsGetStreamBits",
           "start": "0x8003DA8C",
           "end": "0x8003DA94"
         },
         {
-          "symbol": "fn_8003DA94",
+          "symbol": "PlyrObjsCreate",
           "start": "0x8003DA94",
           "end": "0x8003DCC0"
         },
         {
-          "symbol": "fn_8003DCC0",
+          "symbol": "PlyrObjsDestroy",
           "start": "0x8003DCC0",
           "end": "0x8003DE74"
         },
         {
-          "symbol": "fn_8003DE74",
+          "symbol": "PlyrObjsSetTeamIds",
           "start": "0x8003DE74",
           "end": "0x8003DEB4"
         },
         {
-          "symbol": "fn_8003DEB4",
+          "symbol": "PlyrObjsGetCount",
           "start": "0x8003DEB4",
           "end": "0x8003DEBC"
         },
         {
-          "symbol": "fn_8003DEBC",
+          "symbol": "PlyrObjsGetPerTeam",
           "start": "0x8003DEBC",
           "end": "0x8003DEC4"
         },
         {
-          "symbol": "fn_8003DEC4",
+          "symbol": "PlyrObjsGet",
           "start": "0x8003DEC4",
           "end": "0x8003DEE4"
         },
         {
-          "symbol": "fn_8003DEE4",
+          "symbol": "PlyrObjsFindByKey",
           "start": "0x8003DEE4",
           "end": "0x8003DF3C"
         },
         {
-          "symbol": "fn_8003DF3C",
+          "symbol": "PlyrObjsGetBySide",
           "start": "0x8003DF3C",
           "end": "0x8003DF7C"
         },
         {
-          "symbol": "fn_8003DF7C",
+          "symbol": "PlyrObjsFindNearest",
           "start": "0x8003DF7C",
           "end": "0x8003E028"
         },
         {
-          "symbol": "fn_8003E028",
+          "symbol": "PlyrObjsGetBodySkeleton",
           "start": "0x8003E028",
           "end": "0x8003E030"
         },
         {
-          "symbol": "fn_8003E030",
+          "symbol": "PlyrObjsGetSkel19",
           "start": "0x8003E030",
           "end": "0x8003E038"
         },
         {
-          "symbol": "fn_8003E038",
+          "symbol": "PlyrObjsGetPlayerRef",
           "start": "0x8003E038",
           "end": "0x8003E0C8"
         },
         {
-          "symbol": "fn_8003E0C8",
+          "symbol": "PlyrObjsFindPlayer",
           "start": "0x8003E0C8",
           "end": "0x8003E118"
         },
         {
-          "symbol": "fn_8003E118",
+          "symbol": "PlyrObjsRegisterState",
           "start": "0x8003E118",
           "end": "0x8003E174"
         },
         {
-          "symbol": "fn_8003E174",
+          "symbol": "PlyrObjsSetDrawFlag",
           "start": "0x8003E174",
           "end": "0x8003E194"
         },
         {
-          "symbol": "fn_8003E194",
+          "symbol": "PlyrObjsSetBodyType",
           "start": "0x8003E194",
           "end": "0x8003E1F0"
         },
         {
-          "symbol": "fn_8003E1F0",
+          "symbol": "PlyrObjsDrawShadows",
           "start": "0x8003E1F0",
           "end": "0x8003E214"
         }
@@ -32356,547 +32356,547 @@
           "end": "0x80056584"
         },
         {
-          "symbol": "fn_80056584",
+          "symbol": "InGameJumpBallGetSlot",
           "start": "0x80056584",
           "end": "0x800566F0"
         },
         {
-          "symbol": "fn_800566F0",
+          "symbol": "InGameJumpBallMsg",
           "start": "0x800566F0",
           "end": "0x80056848"
         },
         {
-          "symbol": "fn_80056848",
+          "symbol": "InGamePlayCallUsesProfileOrder",
           "start": "0x80056848",
           "end": "0x80056880"
         },
         {
-          "symbol": "fn_80056880",
+          "symbol": "InGamePlayCallGetMenuKind",
           "start": "0x80056880",
           "end": "0x8005697C"
         },
         {
-          "symbol": "fn_8005697C",
+          "symbol": "InGamePlayCallGetSideInfo",
           "start": "0x8005697C",
           "end": "0x80056A10"
         },
         {
-          "symbol": "fn_80056A10",
+          "symbol": "InGamePlayCallSelect",
           "start": "0x80056A10",
           "end": "0x80056B2C"
         },
         {
-          "symbol": "fn_80056B2C",
+          "symbol": "InGamePlayCallLoadSlot",
           "start": "0x80056B2C",
           "end": "0x80056DE0"
         },
         {
-          "symbol": "fn_80056DE0",
+          "symbol": "InGamePlayCallBuildArt",
           "start": "0x80056DE0",
           "end": "0x80056ED8"
         },
         {
-          "symbol": "fn_80056ED8",
+          "symbol": "InGamePlayCallShowSlot",
           "start": "0x80056ED8",
           "end": "0x80057044"
         },
         {
-          "symbol": "fn_80057044",
+          "symbol": "InGamePlayCallGetUserTeam",
           "start": "0x80057044",
           "end": "0x800570A4"
         },
         {
-          "symbol": "fn_800570A4",
+          "symbol": "InGamePlayCallOpen",
           "start": "0x800570A4",
           "end": "0x8005740C"
         },
         {
-          "symbol": "fn_8005740C",
+          "symbol": "InGamePlayCallClose",
           "start": "0x8005740C",
           "end": "0x800577DC"
         },
         {
-          "symbol": "fn_800577DC",
+          "symbol": "InGamePlayCallChoose",
           "start": "0x800577DC",
           "end": "0x80057880"
         },
         {
-          "symbol": "fn_80057880",
+          "symbol": "InGamePlayCallToggleFlip",
           "start": "0x80057880",
           "end": "0x800578C0"
         },
         {
-          "symbol": "fn_800578C0",
+          "symbol": "InGamePlayCallSetPage",
           "start": "0x800578C0",
           "end": "0x800579C4"
         },
         {
-          "symbol": "fn_800579C4",
+          "symbol": "InGamePlayCallSetMenu",
           "start": "0x800579C4",
           "end": "0x80057C58"
         },
         {
-          "symbol": "fn_80057C58",
+          "symbol": "InGamePlayCallLoadList",
           "start": "0x80057C58",
           "end": "0x80057F20"
         },
         {
-          "symbol": "fn_80057F20",
+          "symbol": "InGamePlayCallGetDefault",
           "start": "0x80057F20",
           "end": "0x80057F28"
         },
         {
-          "symbol": "fn_80057F28",
+          "symbol": "InGamePlayCallCreate",
           "start": "0x80057F28",
           "end": "0x800582D0"
         },
         {
-          "symbol": "fn_800582D0",
+          "symbol": "InGamePlayCallDestroy",
           "start": "0x800582D0",
           "end": "0x8005845C"
         },
         {
-          "symbol": "fn_8005845C",
+          "symbol": "InGamePlayCallMsg",
           "start": "0x8005845C",
           "end": "0x80058688"
         },
         {
-          "symbol": "fn_80058688",
+          "symbol": "InGamePlayCallStreamSlots",
           "start": "0x80058688",
           "end": "0x80058798"
         },
         {
-          "symbol": "fn_80058798",
+          "symbol": "InGameFindPlayName",
           "start": "0x80058798",
           "end": "0x800588E0"
         },
         {
-          "symbol": "fn_800588E0",
+          "symbol": "InGamePlayCallClearSaved",
           "start": "0x800588E0",
           "end": "0x800588F8"
         },
         {
-          "symbol": "fn_800588F8",
+          "symbol": "InGamePlayCallSetMode",
           "start": "0x800588F8",
           "end": "0x80058930"
         },
         {
-          "symbol": "fn_80058930",
+          "symbol": "InGamePauseGetModeFlags",
           "start": "0x80058930",
           "end": "0x800589D8"
         },
         {
-          "symbol": "fn_800589D8",
+          "symbol": "InGamePauseGetRules",
           "start": "0x800589D8",
           "end": "0x80058CA0"
         },
         {
-          "symbol": "fn_80058CA0",
+          "symbol": "InGamePauseOpen",
           "start": "0x80058CA0",
           "end": "0x80058DA0"
         },
         {
-          "symbol": "fn_80058DA0",
+          "symbol": "InGamePauseClose",
           "start": "0x80058DA0",
           "end": "0x80058E64"
         },
         {
-          "symbol": "fn_80058E64",
+          "symbol": "InGamePauseIgnore",
           "start": "0x80058E64",
           "end": "0x80058E68"
         },
         {
-          "symbol": "fn_80058E68",
+          "symbol": "InGamePauseQuit",
           "start": "0x80058E68",
           "end": "0x80058EAC"
         },
         {
-          "symbol": "fn_80058EAC",
+          "symbol": "InGamePauseRestart",
           "start": "0x80058EAC",
           "end": "0x80058EF4"
         },
         {
-          "symbol": "fn_80058EF4",
+          "symbol": "InGamePauseGetOption",
           "start": "0x80058EF4",
           "end": "0x80058EFC"
         },
         {
-          "symbol": "fn_80058EFC",
+          "symbol": "InGamePauseGetChallengeGoals",
           "start": "0x80058EFC",
           "end": "0x80058FDC"
         },
         {
-          "symbol": "fn_80058FDC",
+          "symbol": "InGamePauseForfeit",
           "start": "0x80058FDC",
           "end": "0x80059004"
         },
         {
-          "symbol": "fn_80059004",
+          "symbol": "InGamePauseIsRestart",
           "start": "0x80059004",
           "end": "0x8005900C"
         },
         {
-          "symbol": "fn_8005900C",
+          "symbol": "InGamePauseIsForfeit",
           "start": "0x8005900C",
           "end": "0x80059014"
         },
         {
-          "symbol": "fn_80059014",
+          "symbol": "InGamePauseClearRestart",
           "start": "0x80059014",
           "end": "0x80059020"
         },
         {
-          "symbol": "fn_80059020",
+          "symbol": "InGamePauseClearForfeit",
           "start": "0x80059020",
           "end": "0x8005902C"
         },
         {
-          "symbol": "fn_8005902C",
+          "symbol": "InGamePauseIsLocked",
           "start": "0x8005902C",
           "end": "0x80059034"
         },
         {
-          "symbol": "fn_80059034",
+          "symbol": "InGamePauseMsg",
           "start": "0x80059034",
           "end": "0x800594F4"
         },
         {
-          "symbol": "fn_800594F4",
+          "symbol": "InGameOptionsMsg",
           "start": "0x800594F4",
           "end": "0x80059664"
         },
         {
-          "symbol": "fn_80059664",
+          "symbol": "InGameScreensDispatch",
           "start": "0x80059664",
           "end": "0x8005993C"
         },
         {
-          "symbol": "fn_8005993C",
+          "symbol": "InGameGetScoreInfo",
           "start": "0x8005993C",
           "end": "0x80059A24"
         },
         {
-          "symbol": "fn_80059A24",
+          "symbol": "InGameScoreMsg",
           "start": "0x80059A24",
           "end": "0x80059A9C"
         },
         {
-          "symbol": "fn_80059A9C",
+          "symbol": "InGameGetPadOrder",
           "start": "0x80059A9C",
           "end": "0x80059B64"
         },
         {
-          "symbol": "fn_80059B64",
+          "symbol": "InGameHudOpen",
           "start": "0x80059B64",
           "end": "0x80059E24"
         },
         {
-          "symbol": "fn_80059E24",
+          "symbol": "InGameGetPadRatings",
           "start": "0x80059E24",
           "end": "0x80059F54"
         },
         {
-          "symbol": "fn_80059F54",
+          "symbol": "InGameGetHudOffsets",
           "start": "0x80059F54",
           "end": "0x80059F80"
         },
         {
-          "symbol": "fn_80059F80",
+          "symbol": "InGameFormatClock",
           "start": "0x80059F80",
           "end": "0x8005A1C0"
         },
         {
-          "symbol": "fn_8005A1C0",
+          "symbol": "InGameGetAudibles",
           "start": "0x8005A1C0",
           "end": "0x8005A2B8"
         },
         {
-          "symbol": "fn_8005A2B8",
+          "symbol": "InGameHudMsg",
           "start": "0x8005A2B8",
           "end": "0x8005A630"
         },
         {
-          "symbol": "fn_8005A630",
+          "symbol": "InGameClockMsg",
           "start": "0x8005A630",
           "end": "0x8005A794"
         },
         {
-          "symbol": "fn_8005A794",
+          "symbol": "InGameQueryStat",
           "start": "0x8005A794",
           "end": "0x8005A7EC"
         },
         {
-          "symbol": "fn_8005A7EC",
+          "symbol": "InGameLeaderSortCategories",
           "start": "0x8005A7EC",
           "end": "0x8005A860"
         },
         {
-          "symbol": "fn_8005A860",
+          "symbol": "InGameLeaderFind",
           "start": "0x8005A860",
           "end": "0x8005A8AC"
         },
         {
-          "symbol": "fn_8005A8AC",
+          "symbol": "InGameLeaderGetPlayer",
           "start": "0x8005A8AC",
           "end": "0x8005A8D0"
         },
         {
-          "symbol": "fn_8005A8D0",
+          "symbol": "InGameLeaderScore",
           "start": "0x8005A8D0",
           "end": "0x8005AB04"
         },
         {
-          "symbol": "fn_8005AB04",
+          "symbol": "InGameLeaderGetCategories",
           "start": "0x8005AB04",
           "end": "0x8005AC18"
         },
         {
-          "symbol": "fn_8005AC18",
+          "symbol": "InGameLeaderGetName",
           "start": "0x8005AC18",
           "end": "0x8005ACC8"
         },
         {
-          "symbol": "fn_8005ACC8",
+          "symbol": "InGameLeaderClose",
           "start": "0x8005ACC8",
           "end": "0x8005ACF0"
         },
         {
-          "symbol": "fn_8005ACF0",
+          "symbol": "InGameLeaderOpen",
           "start": "0x8005ACF0",
           "end": "0x8005ADCC"
         },
         {
-          "symbol": "fn_8005ADCC",
+          "symbol": "InGameLeaderGetInfo",
           "start": "0x8005ADCC",
           "end": "0x8005AE5C"
         },
         {
-          "symbol": "fn_8005AE5C",
+          "symbol": "InGameEndGameApplyChoice",
           "start": "0x8005AE5C",
           "end": "0x8005AEC8"
         },
         {
-          "symbol": "fn_8005AEC8",
+          "symbol": "InGameEndGameGetChoices",
           "start": "0x8005AEC8",
           "end": "0x8005B128"
         },
         {
-          "symbol": "fn_8005B128",
+          "symbol": "InGameEndGameGauntletResult",
           "start": "0x8005B128",
           "end": "0x8005B2BC"
         },
         {
-          "symbol": "fn_8005B2BC",
+          "symbol": "InGameEndGameMsg",
           "start": "0x8005B2BC",
           "end": "0x8005B3CC"
         },
         {
-          "symbol": "fn_8005B3CC",
+          "symbol": "InGameEndGameIsOpen",
           "start": "0x8005B3CC",
           "end": "0x8005B3D4"
         },
         {
-          "symbol": "fn_8005B3D4",
+          "symbol": "InGameGetVenueInfo",
           "start": "0x8005B3D4",
           "end": "0x8005B4B0"
         },
         {
-          "symbol": "fn_8005B4B0",
+          "symbol": "InGameVenueMsg",
           "start": "0x8005B4B0",
           "end": "0x8005B55C"
         },
         {
-          "symbol": "fn_8005B55C",
+          "symbol": "InGameRewardGetTeamCount",
           "start": "0x8005B55C",
           "end": "0x8005B5D8"
         },
         {
-          "symbol": "fn_8005B5D8",
+          "symbol": "InGameRewardClose",
           "start": "0x8005B5D8",
           "end": "0x8005B610"
         },
         {
-          "symbol": "fn_8005B610",
+          "symbol": "InGameRewardFormatLogo",
           "start": "0x8005B610",
           "end": "0x8005B6AC"
         },
         {
-          "symbol": "fn_8005B6AC",
+          "symbol": "InGameRewardFormatPlay",
           "start": "0x8005B6AC",
           "end": "0x8005B730"
         },
         {
-          "symbol": "fn_8005B730",
+          "symbol": "InGameRewardFormat",
           "start": "0x8005B730",
           "end": "0x8005B838"
         },
         {
-          "symbol": "fn_8005B838",
+          "symbol": "InGameRewardGrant",
           "start": "0x8005B838",
           "end": "0x8005B908"
         },
         {
-          "symbol": "fn_8005B908",
+          "symbol": "InGameRewardGrantAll",
           "start": "0x8005B908",
           "end": "0x8005B9FC"
         },
         {
-          "symbol": "fn_8005B9FC",
+          "symbol": "InGameRewardGetTexts",
           "start": "0x8005B9FC",
           "end": "0x8005BA64"
         },
         {
-          "symbol": "fn_8005BA64",
+          "symbol": "InGameRewardSetNameText",
           "start": "0x8005BA64",
           "end": "0x8005BA98"
         },
         {
-          "symbol": "fn_8005BA98",
+          "symbol": "InGameRewardSetOtherNameText",
           "start": "0x8005BA98",
           "end": "0x8005BACC"
         },
         {
-          "symbol": "fn_8005BACC",
+          "symbol": "InGameRewardGetNamePair",
           "start": "0x8005BACC",
           "end": "0x8005BB0C"
         },
         {
-          "symbol": "fn_8005BB0C",
+          "symbol": "InGameRewardGetNameTriple",
           "start": "0x8005BB0C",
           "end": "0x8005BB50"
         },
         {
-          "symbol": "fn_8005BB50",
+          "symbol": "InGameRewardGetNameDouble",
           "start": "0x8005BB50",
           "end": "0x8005BB8C"
         },
         {
-          "symbol": "fn_8005BB8C",
+          "symbol": "InGameRewardGetMedal",
           "start": "0x8005BB8C",
           "end": "0x8005BC10"
         },
         {
-          "symbol": "fn_8005BC10",
+          "symbol": "InGameRewardOpen",
           "start": "0x8005BC10",
           "end": "0x8005BCA8"
         },
         {
-          "symbol": "fn_8005BCA8",
+          "symbol": "InGameRewardMsg",
           "start": "0x8005BCA8",
           "end": "0x8005BE54"
         },
         {
-          "symbol": "fn_8005BE54",
+          "symbol": "InGameRewardSetAlt",
           "start": "0x8005BE54",
           "end": "0x8005BE5C"
         },
         {
-          "symbol": "fn_8005BE5C",
+          "symbol": "InGameOverlayOpen",
           "start": "0x8005BE5C",
           "end": "0x8005BF18"
         },
         {
-          "symbol": "fn_8005BF18",
+          "symbol": "InGameOverlayReset",
           "start": "0x8005BF18",
           "end": "0x8005BF5C"
         },
         {
-          "symbol": "fn_8005BF5C",
+          "symbol": "InGameOverlayShow",
           "start": "0x8005BF5C",
           "end": "0x8005BF98"
         },
         {
-          "symbol": "fn_8005BF98",
+          "symbol": "InGameOverlayHide",
           "start": "0x8005BF98",
           "end": "0x8005BFD4"
         },
         {
-          "symbol": "fn_8005BFD4",
+          "symbol": "InGameOverlayGetState",
           "start": "0x8005BFD4",
           "end": "0x8005BFDC"
         },
         {
-          "symbol": "fn_8005BFDC",
+          "symbol": "InGameOverlayMsg",
           "start": "0x8005BFDC",
           "end": "0x8005C0C0"
         },
         {
-          "symbol": "fn_8005C0C0",
+          "symbol": "InGameResetMsg",
           "start": "0x8005C0C0",
           "end": "0x8005C144"
         },
         {
-          "symbol": "fn_8005C144",
+          "symbol": "InGameFormatCompletions",
           "start": "0x8005C144",
           "end": "0x8005C1A4"
         },
         {
-          "symbol": "fn_8005C1A4",
+          "symbol": "InGameGetPlayerColor",
           "start": "0x8005C1A4",
           "end": "0x8005C1F4"
         },
         {
-          "symbol": "fn_8005C1F4",
+          "symbol": "InGameGetPlayerStats",
           "start": "0x8005C1F4",
           "end": "0x8005C338"
         },
         {
-          "symbol": "fn_8005C338",
+          "symbol": "InGamePlayerStatsMsg",
           "start": "0x8005C338",
           "end": "0x8005C4A4"
         },
         {
-          "symbol": "fn_8005C4A4",
+          "symbol": "InGameGetTimedStats",
           "start": "0x8005C4A4",
           "end": "0x8005C6EC"
         },
         {
-          "symbol": "fn_8005C6EC",
+          "symbol": "InGameTimedStatsMsg",
           "start": "0x8005C6EC",
           "end": "0x8005C844"
         },
         {
-          "symbol": "fn_8005C844",
+          "symbol": "InGameGetOffenseTotals",
           "start": "0x8005C844",
           "end": "0x8005C994"
         },
         {
-          "symbol": "fn_8005C994",
+          "symbol": "InGameOffenseTotalsMsg",
           "start": "0x8005C994",
           "end": "0x8005CAE4"
         },
         {
-          "symbol": "fn_8005CAE4",
+          "symbol": "InGameGetDefenseTotals",
           "start": "0x8005CAE4",
           "end": "0x8005CC50"
         },
         {
-          "symbol": "fn_8005CC50",
+          "symbol": "InGameDefenseTotalsMsg",
           "start": "0x8005CC50",
           "end": "0x8005CD8C"
         },
         {
-          "symbol": "fn_8005CD8C",
+          "symbol": "InGameFormatPossessionCount",
           "start": "0x8005CD8C",
           "end": "0x8005CE10"
         },
         {
-          "symbol": "fn_8005CE10",
+          "symbol": "InGameFormatPossession",
           "start": "0x8005CE10",
           "end": "0x8005D1E4"
         },
         {
-          "symbol": "fn_8005D1E4",
+          "symbol": "InGameScoringSummaryMsg",
           "start": "0x8005D1E4",
           "end": "0x8005D2C8"
         },
         {
-          "symbol": "fn_8005D2C8",
+          "symbol": "InGameSetLegendsUnlocked",
           "start": "0x8005D2C8",
           "end": "0x8005D2D0"
         },
         {
-          "symbol": "fn_8005D2D0",
+          "symbol": "InGameLegendUnlockMsg",
           "start": "0x8005D2D0",
           "end": "0x8005D540"
         },
@@ -32911,12 +32911,12 @@
           "end": "0x8005D5B4"
         },
         {
-          "symbol": "_GLOBAL_.I.lbl_802D4B14",
+          "symbol": "_GLOBAL_.I._InGameScreens_aRecords",
           "start": "0x8005D5B4",
           "end": "0x8005D5E0"
         },
         {
-          "symbol": "_GLOBAL_.D.lbl_802D4B14",
+          "symbol": "_GLOBAL_.D._InGameScreens_aRecords",
           "start": "0x8005D5E0",
           "end": "0x8005D60C"
         }
@@ -32948,72 +32948,72 @@
       ],
       "functions": [
         {
-          "symbol": "fn_800DAEE4",
+          "symbol": "PlayerActionAnimGetTurnSide",
           "start": "0x800DAEE4",
           "end": "0x800DAF5C"
         },
         {
-          "symbol": "fn_800DAF5C",
+          "symbol": "PlayerActionAnimDirectionPhase",
           "start": "0x800DAF5C",
           "end": "0x800DB074"
         },
         {
-          "symbol": "fn_800DB074",
+          "symbol": "PlayerActionAnimReleasePitch",
           "start": "0x800DB074",
           "end": "0x800DB100"
         },
         {
-          "symbol": "fn_800DB100",
+          "symbol": "PlayerActionAnimAdjustToss",
           "start": "0x800DB100",
           "end": "0x800DB308"
         },
         {
-          "symbol": "fn_800DB308",
+          "symbol": "PlayerActionAnimGetReleaseTime",
           "start": "0x800DB308",
           "end": "0x800DB40C"
         },
         {
-          "symbol": "fn_800DB40C",
+          "symbol": "PlayerActionAnimArmPitch",
           "start": "0x800DB40C",
           "end": "0x800DB498"
         },
         {
-          "symbol": "fn_800DB498",
+          "symbol": "PlayerActionAnimArmToss",
           "start": "0x800DB498",
           "end": "0x800DB520"
         },
         {
-          "symbol": "fn_800DB520",
+          "symbol": "PlayerActionAnimPitchInit",
           "start": "0x800DB520",
           "end": "0x800DB60C"
         },
         {
-          "symbol": "fn_800DB60C",
+          "symbol": "PlayerActionAnimPitchTryStart",
           "start": "0x800DB60C",
           "end": "0x800DB688"
         },
         {
-          "symbol": "fn_800DB688",
+          "symbol": "PlayerActionAnimTossUpdate",
           "start": "0x800DB688",
           "end": "0x800DB7A4"
         },
         {
-          "symbol": "fn_800DB7A4",
+          "symbol": "PlayerActionAnimPitchUpdate",
           "start": "0x800DB7A4",
           "end": "0x800DB8B4"
         },
         {
-          "symbol": "fn_800DB8B4",
+          "symbol": "PlayerActionAnimAiConsiderPitch",
           "start": "0x800DB8B4",
           "end": "0x800DBAF0"
         },
         {
-          "symbol": "fn_800DBAF0",
+          "symbol": "PlayerActionAnimIsPitchArmed",
           "start": "0x800DBAF0",
           "end": "0x800DBB74"
         },
         {
-          "symbol": "fn_800DBB74",
+          "symbol": "PlayerActionAnimIsAiPasser",
           "start": "0x800DBB74",
           "end": "0x800DBC4C"
         },
@@ -33028,7 +33028,7 @@
           "end": "0x800DC21C"
         },
         {
-          "symbol": "fn_800DC21C",
+          "symbol": "PlayerActionAnimIsPassPending",
           "start": "0x800DC21C",
           "end": "0x800DC36C"
         },
@@ -33038,162 +33038,162 @@
           "end": "0x800DC578"
         },
         {
-          "symbol": "fn_800DC578",
+          "symbol": "PlayerActionAnimResetSteerFrames",
           "start": "0x800DC578",
           "end": "0x800DC584"
         },
         {
-          "symbol": "fn_800DC584",
+          "symbol": "PlayerActionAnimSetTurnAngle",
           "start": "0x800DC584",
           "end": "0x800DC61C"
         },
         {
-          "symbol": "fn_800DC61C",
+          "symbol": "PlayerActionAnimGetSignedSpeed",
           "start": "0x800DC61C",
           "end": "0x800DC674"
         },
         {
-          "symbol": "fn_800DC674",
+          "symbol": "PlayerActionAnimFindSpeedSample",
           "start": "0x800DC674",
           "end": "0x800DC6A8"
         },
         {
-          "symbol": "fn_800DC6A8",
+          "symbol": "PlayerActionAnimUpdateSpeedBlend",
           "start": "0x800DC6A8",
           "end": "0x800DC6F4"
         },
         {
-          "symbol": "fn_800DC6F4",
+          "symbol": "PlayerActionAnimTurnPhase",
           "start": "0x800DC6F4",
           "end": "0x800DCC14"
         },
         {
-          "symbol": "fn_800DCC14",
+          "symbol": "PlayerActionAnimSpeedBlendPhase",
           "start": "0x800DCC14",
           "end": "0x800DCE2C"
         },
         {
-          "symbol": "fn_800DCE2C",
+          "symbol": "PlayerActionAnimScoreReaction",
           "start": "0x800DCE2C",
           "end": "0x800DD2E8"
         },
         {
-          "symbol": "fn_800DD2E8",
+          "symbol": "PlayerActionAnimReactionPhase",
           "start": "0x800DD2E8",
           "end": "0x800DD5E4"
         },
         {
-          "symbol": "fn_800DD5E4",
+          "symbol": "PlayerActionAnimIsReactionAlt",
           "start": "0x800DD5E4",
           "end": "0x800DD648"
         },
         {
-          "symbol": "fn_800DD648",
+          "symbol": "PlayerActionAnimGetReactionKind",
           "start": "0x800DD648",
           "end": "0x800DD69C"
         },
         {
-          "symbol": "fn_800DD69C",
+          "symbol": "PlayerActionAnimDepthPhase",
           "start": "0x800DD69C",
           "end": "0x800DD780"
         },
         {
-          "symbol": "fn_800DD780",
+          "symbol": "PlayerActionAnimIsVariantFree",
           "start": "0x800DD780",
           "end": "0x800DD830"
         },
         {
-          "symbol": "fn_800DD830",
+          "symbol": "PlayerActionAnimVariantAllowed",
           "start": "0x800DD830",
           "end": "0x800DD838"
         },
         {
-          "symbol": "fn_800DD838",
+          "symbol": "PlayerActionAnimGetIdleMask",
           "start": "0x800DD838",
           "end": "0x800DD92C"
         },
         {
-          "symbol": "fn_800DD92C",
+          "symbol": "PlayerActionAnimLoadVariantList",
           "start": "0x800DD92C",
           "end": "0x800DD994"
         },
         {
-          "symbol": "fn_800DD994",
+          "symbol": "PlayerActionAnimStartVariant",
           "start": "0x800DD994",
           "end": "0x800DDCE4"
         },
         {
-          "symbol": "fn_800DDCE4",
+          "symbol": "PlayerActionAnimApplyVariantFlag",
           "start": "0x800DDCE4",
           "end": "0x800DDD24"
         },
         {
-          "symbol": "fn_800DDD24",
+          "symbol": "PlayerActionAnimIdlePhase",
           "start": "0x800DDD24",
           "end": "0x800DDE6C"
         },
         {
-          "symbol": "fn_800DDE6C",
+          "symbol": "PlayerActionAnimSetTurnKeys",
           "start": "0x800DDE6C",
           "end": "0x800DDEE4"
         },
         {
-          "symbol": "fn_800DDEE4",
+          "symbol": "PlayerActionAnimKeysMatch",
           "start": "0x800DDEE4",
           "end": "0x800DDF34"
         },
         {
-          "symbol": "fn_800DDF34",
+          "symbol": "PlayerActionAnimFindTurnEntry",
           "start": "0x800DDF34",
           "end": "0x800DE19C"
         },
         {
-          "symbol": "fn_800DE19C",
+          "symbol": "PlayerActionAnimTurnInPlacePhase",
           "start": "0x800DE19C",
           "end": "0x800DE364"
         },
         {
-          "symbol": "fn_800DE364",
+          "symbol": "PlayerActionAnimIsFlaggedKey",
           "start": "0x800DE364",
           "end": "0x800DE3B0"
         },
         {
-          "symbol": "fn_800DE3B0",
+          "symbol": "PlayerActionAnimSetupAlign",
           "start": "0x800DE3B0",
           "end": "0x800DE51C"
         },
         {
-          "symbol": "fn_800DE51C",
+          "symbol": "PlayerActionAnimFindAlignTarget",
           "start": "0x800DE51C",
           "end": "0x800DE910"
         },
         {
-          "symbol": "fn_800DE910",
+          "symbol": "PlayerActionAnimBlendAlign",
           "start": "0x800DE910",
           "end": "0x800DEAB0"
         },
         {
-          "symbol": "fn_800DEAB0",
+          "symbol": "PlayerActionAnimBuildAlignCommand",
           "start": "0x800DEAB0",
           "end": "0x800DEC10"
         },
         {
-          "symbol": "fn_800DEC10",
+          "symbol": "PlayerActionAnimUpdatePairAlign",
           "start": "0x800DEC10",
           "end": "0x800DF134"
         },
         {
-          "symbol": "fn_800DF134",
+          "symbol": "PlayerActionAnimShiftPartner",
           "start": "0x800DF134",
           "end": "0x800DF1F4"
         },
         {
-          "symbol": "fn_800DF1F4",
+          "symbol": "PlayerActionAnimGenericPhase",
           "start": "0x800DF1F4",
           "end": "0x800DF654"
         },
         {
-          "symbol": "fn_800DF654",
+          "symbol": "PlayerActionAnimMirrorAlign",
           "start": "0x800DF654",
           "end": "0x800DF6EC"
         }
@@ -33222,222 +33222,222 @@
       ],
       "functions": [
         {
-          "symbol": "fn_800DF6EC",
+          "symbol": "PlayerActionTakeFlag1000",
           "start": "0x800DF6EC",
           "end": "0x800DF710"
         },
         {
-          "symbol": "fn_800DF710",
+          "symbol": "PlayerActionGetJointPose",
           "start": "0x800DF710",
           "end": "0x800DF750"
         },
         {
-          "symbol": "fn_800DF750",
+          "symbol": "PlayerActionMoveBall",
           "start": "0x800DF750",
           "end": "0x800DF7CC"
         },
         {
-          "symbol": "fn_800DF7CC",
+          "symbol": "PlayerActionCharAnimUpdateAttachments",
           "start": "0x800DF7CC",
           "end": "0x800DF9FC"
         },
         {
-          "symbol": "fn_800DF9FC",
+          "symbol": "PlayerActionCharAnimNotify",
           "start": "0x800DF9FC",
           "end": "0x800DFA00"
         },
         {
-          "symbol": "fn_800DFA00",
+          "symbol": "PlayerActionCharAnimLoad",
           "start": "0x800DFA00",
           "end": "0x800DFCEC"
         },
         {
-          "symbol": "fn_800DFCEC",
+          "symbol": "PlayerActionCharAnimEnter",
           "start": "0x800DFCEC",
           "end": "0x800DFD90"
         },
         {
-          "symbol": "fn_800DFD90",
+          "symbol": "PlayerActionCharAnimExit",
           "start": "0x800DFD90",
           "end": "0x800DFED0"
         },
         {
-          "symbol": "fn_800DFED0",
+          "symbol": "PlayerActionCharAnimUpdate",
           "start": "0x800DFED0",
           "end": "0x800E0188"
         },
         {
-          "symbol": "fn_800E0188",
+          "symbol": "PlayerActionCharAnimGetTime",
           "start": "0x800E0188",
           "end": "0x800E01D8"
         },
         {
-          "symbol": "fn_800E01D8",
+          "symbol": "PlayerActionDropBallRelease",
           "start": "0x800E01D8",
           "end": "0x800E0230"
         },
         {
-          "symbol": "fn_800E0230",
+          "symbol": "PlayerActionDropBallPickVariant",
           "start": "0x800E0230",
           "end": "0x800E02D0"
         },
         {
-          "symbol": "fn_800E02D0",
+          "symbol": "PlayerActionDropBallGetSpeed",
           "start": "0x800E02D0",
           "end": "0x800E034C"
         },
         {
-          "symbol": "fn_800E034C",
+          "symbol": "PlayerActionDropBallStart",
           "start": "0x800E034C",
           "end": "0x800E0438"
         },
         {
-          "symbol": "fn_800E0438",
+          "symbol": "PlayerActionDropBallLetGo",
           "start": "0x800E0438",
           "end": "0x800E04C8"
         },
         {
-          "symbol": "fn_800E04C8",
+          "symbol": "PlayerActionDropBallWait",
           "start": "0x800E04C8",
           "end": "0x800E0574"
         },
         {
-          "symbol": "fn_800E0574",
+          "symbol": "PlayerActionDropBallEnter",
           "start": "0x800E0574",
           "end": "0x800E05C0"
         },
         {
-          "symbol": "fn_800E05C0",
+          "symbol": "PlayerActionDropBallUpdate",
           "start": "0x800E05C0",
           "end": "0x800E068C"
         },
         {
-          "symbol": "fn_800E068C",
+          "symbol": "PlayerActionDropBallExit",
           "start": "0x800E068C",
           "end": "0x800E0694"
         },
         {
-          "symbol": "fn_800E0694",
+          "symbol": "PlayerActionCatchResolve",
           "start": "0x800E0694",
           "end": "0x800E0818"
         },
         {
-          "symbol": "fn_800E0818",
+          "symbol": "PlayerActionCatchGetBallPos",
           "start": "0x800E0818",
           "end": "0x800E0850"
         },
         {
-          "symbol": "fn_800E0850",
+          "symbol": "PlayerActionCatchEnter",
           "start": "0x800E0850",
           "end": "0x800E0AD8"
         },
         {
-          "symbol": "fn_800E0AD8",
+          "symbol": "PlayerActionCatchUpdate",
           "start": "0x800E0AD8",
           "end": "0x800E0E8C"
         },
         {
-          "symbol": "fn_800E0E8C",
+          "symbol": "PlayerActionCatchExit",
           "start": "0x800E0E8C",
           "end": "0x800E0EF0"
         },
         {
-          "symbol": "fn_800E0EF0",
+          "symbol": "PlayerActionIsUserCatch",
           "start": "0x800E0EF0",
           "end": "0x800E0F40"
         },
         {
-          "symbol": "fn_800E0F40",
+          "symbol": "PlayerActionIsCatchBlocked",
           "start": "0x800E0F40",
           "end": "0x800E0F48"
         },
         {
-          "symbol": "fn_800E0F48",
+          "symbol": "PlayerActionSegmentsCross",
           "start": "0x800E0F48",
           "end": "0x800E1044"
         },
         {
-          "symbol": "fn_800E1044",
+          "symbol": "PlayerActionRunCrossesLine",
           "start": "0x800E1044",
           "end": "0x800E11C0"
         },
         {
-          "symbol": "fn_800E11C0",
+          "symbol": "PlayerActionIsShallowPath",
           "start": "0x800E11C0",
           "end": "0x800E1248"
         },
         {
-          "symbol": "fn_800E1248",
+          "symbol": "PlayerActionGetInterceptHeading",
           "start": "0x800E1248",
           "end": "0x800E12D4"
         },
         {
-          "symbol": "fn_800E12D4",
+          "symbol": "PlayerActionCanDive",
           "start": "0x800E12D4",
           "end": "0x800E1350"
         },
         {
-          "symbol": "fn_800E1350",
+          "symbol": "PlayerActionTryDive",
           "start": "0x800E1350",
           "end": "0x800E13E4"
         },
         {
-          "symbol": "fn_800E13E4",
+          "symbol": "PlayerActionDiveEnter",
           "start": "0x800E13E4",
           "end": "0x800E1438"
         },
         {
-          "symbol": "fn_800E1438",
+          "symbol": "PlayerActionDiveUpdate",
           "start": "0x800E1438",
           "end": "0x800E1544"
         },
         {
-          "symbol": "fn_800E1544",
+          "symbol": "PlayerActionDiveExit",
           "start": "0x800E1544",
           "end": "0x800E1554"
         },
         {
-          "symbol": "fn_800E1554",
+          "symbol": "PlayerActionDiveIsActive",
           "start": "0x800E1554",
           "end": "0x800E1584"
         },
         {
-          "symbol": "fn_800E1584",
+          "symbol": "PlayerActionAiConsiderDive",
           "start": "0x800E1584",
           "end": "0x800E1778"
         },
         {
-          "symbol": "fn_800E1778",
+          "symbol": "PlayerActionRollAlignChange",
           "start": "0x800E1778",
           "end": "0x800E1870"
         },
         {
-          "symbol": "fn_800E1870",
+          "symbol": "PlayerActionIsNearLine",
           "start": "0x800E1870",
           "end": "0x800E1954"
         },
         {
-          "symbol": "fn_800E1954",
+          "symbol": "PlayerActionAlignDefender",
           "start": "0x800E1954",
           "end": "0x800E2550"
         },
         {
-          "symbol": "fn_800E2550",
+          "symbol": "PlayerActionGetAlignSpot",
           "start": "0x800E2550",
           "end": "0x800E283C"
         },
         {
-          "symbol": "fn_800E283C",
+          "symbol": "PlayerActionFindGap",
           "start": "0x800E283C",
           "end": "0x800E2ABC"
         },
         {
-          "symbol": "fn_800E2ABC",
+          "symbol": "PlayerActionPickLaneTarget",
           "start": "0x800E2ABC",
           "end": "0x800E2F20"
         },
         {
-          "symbol": "fn_800E2F20",
+          "symbol": "PlayerActionIsFacingPoint",
           "start": "0x800E2F20",
           "end": "0x800E2FE4"
         }

@@ -56,7 +56,7 @@ void MsgPlayerSelectStart(int a, int b, int c);
 void MsgStadiumStartGame(int a);
 void MsgTeamPickSetMode(int a, int b);
 void MsgTeamPickSetSources(int a);
-void fn_8005BE54(unsigned char value);
+void InGameRewardSetAlt(unsigned char value);
 int StoryEventsPlaceSpecialPlayers(StevRow_t *pRow, int *pList);
 void StoryEventsSetLineup(int index, int *pList);
 void GameInfoSet(int index, int value);
@@ -668,7 +668,7 @@ void StoryTournamentExitScreen(void)
         StoryTournamentCloseDbs();
         _StoryTournament_bEntered = 0;
     }
-    fn_8005BE54(0);
+    InGameRewardSetAlt(0);
 }
 
 int StoryTournamentRecordResult(void)

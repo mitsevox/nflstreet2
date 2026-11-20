@@ -159,7 +159,7 @@ struct Projection_8003BA10 {
     unsigned char mUnknown673;
 };
 
-/* Object returned by fn_8003DEC4 (0x19F0 bytes, the size PlayerObjAddObjType passes
+/* Object returned by PlyrObjsGet (0x19F0 bytes, the size PlayerObjAddObjType passes
    to ObjNewType_). */
 struct Object_8003DEC4 {
     char mUnknown0[4];
@@ -232,10 +232,10 @@ struct Object_8003DEC4 {
 };
 
 extern "C" {
-Object_8003DEC4 *fn_8003DEC4(int index);
+Object_8003DEC4 *PlyrObjsGet(int index);
 /* The callers zero-extend the index to 8 bits (clrlwi r4,r31,24 at
    0x800A926C). */
-Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index);
+Object_8003DEC4 *PlyrObjsGetBySide(int side, unsigned char index);
 void ParticleTrailStartAfterimage(Object_8003DEC4 *pObject);
 /* Callback registered by PlayerObjAddObjType through ObjSetListObjFunc; its second
    argument is not read. */

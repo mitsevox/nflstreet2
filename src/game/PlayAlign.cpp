@@ -17,7 +17,7 @@ void PlayAlignTeamBegin(PlayBookFormation_t *pObject, int team);
 void PlayAlignResetSetNames(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 void ScrmPlayerSendLineUp(Object_80039F5C *p);
-void fn_800E55B8(Object_80039F5C *p);
+void PlyrAlignReset(Object_80039F5C *p);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_800EFEF8(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
@@ -78,7 +78,7 @@ void PlayAlignPlayer(Object_80039F5C *p, PlayBookPosition_t *pEntry, int side)
         fn_800F03D8(0, p->mpState, &msg, p);
         ScrmPlayerSendLineUp(p);
     } else {
-        fn_800E55B8(p);
+        PlyrAlignReset(p);
     }
 }
 

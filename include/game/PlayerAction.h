@@ -52,7 +52,7 @@ float AnimSeqGetKeyTime(void *p, int flags);
 float AnimSeqGetTime(AnimSeq_t *p);
 int fn_801787A0(void);
 int SyncTimeGetGameTime(void);
-void fn_800DB40C(Record_800DB074 *pRecord, Object_80039F5C *p, Ball_t *pBall);
+void PlayerActionAnimArmPitch(Record_800DB074 *pRecord, Object_80039F5C *p, Ball_t *pBall);
 }
 
 #include "game/Block_801BE60C.h"
@@ -112,7 +112,7 @@ int MathAngleDiff(int a, int b);
 }
 
 #include "game/Object_80039F5C.h"
-#include "game/fn_800DF134.h"
+#include "game/PlayerActionAnimShiftPartner.h"
 #include "game/Object_800EA284.h"
 #include "game/Object_801BBD5C.h"
 #include "game/Block_801BE60C.h"
@@ -239,7 +239,7 @@ struct Block_800E13E4 {
 typedef Record_800EA284 Block_800E11C0;
 
 extern "C" {
-void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, void *pA, void *pB,
+void PlayerActionAnimStartVariant(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, void *pA, void *pB,
                  Object_80039F5C *pOther, Record_800DDCE4 *pRecord, int mask);
 int PlayerLocoFindSampleIndex(Object_801BBD5C *pObject, float value);
 float PlayerLocoUpdateBlendWeights(int index, void *pA, Object_801BBD5C *pObject, int b, float value);
@@ -253,11 +253,11 @@ void fn_8009D1AC(Object_80039F5C *p);
 int fn_8009D1F4(Object_80039F5C *p);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
 void fn_800AE7F0(int event, int team, Object_80039F5C *p);
-void fn_800E01D8(Object_80039F5C *p, Block_800E0230 *pBlock, int a);
-void fn_800E034C(Object_80039F5C *p, Block_800E0230 *pBlock);
-void fn_800E0438(Object_80039F5C *p, Block_800E0230 *pBlock);
-void fn_800E04C8(Object_80039F5C *p, Block_800E0230 *pBlock);
-int fn_800E8898(Object_80039F5C *p, int *pValue);
+void PlayerActionDropBallRelease(Object_80039F5C *p, Block_800E0230 *pBlock, int a);
+void PlayerActionDropBallStart(Object_80039F5C *p, Block_800E0230 *pBlock);
+void PlayerActionDropBallLetGo(Object_80039F5C *p, Block_800E0230 *pBlock);
+void PlayerActionDropBallWait(Object_80039F5C *p, Block_800E0230 *pBlock);
+int PlyrTackleContest(Object_80039F5C *p, int *pValue);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 unsigned int fn_8011E188(void);
@@ -289,7 +289,7 @@ float fn_80178A2C(void);
 Point_8017886C fn_80177FFC(int team);
 int fn_801CFE40(float y, float x);
 void PlyrClearPendingMsg(Object_80039F5C *p, int a);
-void fn_8003E174(int a);
+void PlyrObjsSetDrawFlag(int a);
 int FELoopIsMainFEActive(void);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
@@ -298,7 +298,7 @@ Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a
 void fn_800ACDE4(Object_80039F5C *p, float *pChance, float *pAngle);
 int fn_80178348(void);
 float SyncRandGetFloat(int a);
-int fn_800DFA00(Object_80039F5C *p, float *pValue);
+int PlayerActionCharAnimLoad(Object_80039F5C *p, float *pValue);
 int fn_800B9A90(PostPlayPhase *p);
 }
 
@@ -437,9 +437,9 @@ int fn_800B146C(void);
 void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut);
 int fn_8009F780(void);
 int ScrmOffenseAnyPlaced(void);
-void fn_800E3DCC(Object_80039F5C *p, Point_8017886C *pOut);
+void PlyrAlignGetCallTarget(Object_80039F5C *p, Point_8017886C *pOut);
 void Vec2FromAngle(Point_8017886C *pOut, int angle, float magnitude);
-void fn_800E586C(Object_80039F5C *p, Point_8017886C *pPoint);
+void PlyrAlignAvoidTeammates(Object_80039F5C *p, Point_8017886C *pPoint);
 int PlayerPathIsLaneClear(Object_80039F5C *p, Point_8017886C *pPoint);
 }
 
@@ -481,7 +481,7 @@ void AnimMomentumUpdate(AnimMomentum_t *, Object_80039F5C *);
 void AnimMomentumUpdateLinked(AnimMomentum_t *, Object_80039F5C *);
 float fn_80114EE4(Object_80039F5C *, Object_80039F5C *);
 int fn_800C854C(Object_80039F5C *, unsigned short, unsigned char);
-void fn_800DEC10(Object_80039F5C *, Block_800DE3B0 *);
+void PlayerActionAnimUpdatePairAlign(Object_80039F5C *, Block_800DE3B0 *);
 }
 
 extern "C" int fn_801784C4(void);
@@ -495,81 +495,81 @@ extern "C" int fn_8009F6B4(void);
 extern "C" void PlayAlignGetSetName(int);
 extern "C" float Vec2Magnitude(void *);
 
-extern "C" int fn_800DC584(Object_80039F5C *p, Record_800DC584 *pRecord);
-extern "C" float fn_800DC61C(Object_801BBD5C *pObject, Object_80039F5C *p);
-extern "C" int fn_800DC674(Object_801BBD5C *pObject, Object_80039F5C *p);
-extern "C" float fn_800DC6A8(Object_801BBD5C *pObject, Object_80039F5C *p, int index, void *pA, int b);
-extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
-extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
-extern "C" int fn_800DCE2C(Object_80039F5C *p, unsigned char *pInfo);
-extern "C" int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
-extern "C" int fn_800DD5E4(Object_80039F5C *p);
-extern "C" int fn_800DD648(Object_80039F5C *p);
-extern "C" int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *p, unsigned int mode);
-extern "C" int fn_800DD780(Object_80039F5C *p, int value, unsigned short key);
-extern "C" int fn_800DD830(void *p, int value);
-extern "C" int fn_800DD838(Object_80039F5C *p);
-extern "C" void fn_800DD92C(Table_80089904 *pTable, unsigned short a, unsigned char value);
-extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, void *pA, void *pB,
+extern "C" int PlayerActionAnimSetTurnAngle(Object_80039F5C *p, Record_800DC584 *pRecord);
+extern "C" float PlayerActionAnimGetSignedSpeed(Object_801BBD5C *pObject, Object_80039F5C *p);
+extern "C" int PlayerActionAnimFindSpeedSample(Object_801BBD5C *pObject, Object_80039F5C *p);
+extern "C" float PlayerActionAnimUpdateSpeedBlend(Object_801BBD5C *pObject, Object_80039F5C *p, int index, void *pA, int b);
+extern "C" int PlayerActionAnimTurnPhase(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
+extern "C" int PlayerActionAnimSpeedBlendPhase(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
+extern "C" int PlayerActionAnimScoreReaction(Object_80039F5C *p, unsigned char *pInfo);
+extern "C" int PlayerActionAnimReactionPhase(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
+extern "C" int PlayerActionAnimIsReactionAlt(Object_80039F5C *p);
+extern "C" int PlayerActionAnimGetReactionKind(Object_80039F5C *p);
+extern "C" int PlayerActionAnimDepthPhase(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *p, unsigned int mode);
+extern "C" int PlayerActionAnimIsVariantFree(Object_80039F5C *p, int value, unsigned short key);
+extern "C" int PlayerActionAnimVariantAllowed(void *p, int value);
+extern "C" int PlayerActionAnimGetIdleMask(Object_80039F5C *p);
+extern "C" void PlayerActionAnimLoadVariantList(Table_80089904 *pTable, unsigned short a, unsigned char value);
+extern "C" void PlayerActionAnimStartVariant(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, void *pA, void *pB,
                             Object_80039F5C *pOther, Record_800DDCE4 *pRecord, int mask);
-extern "C" void fn_800DDCE4(Object_80039F5C *p, Record_800DDCE4 *pRecord);
-extern "C" int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *p, unsigned int mode);
-extern "C" void fn_800DDE6C(Object_80039F5C *p);
-extern "C" int fn_800DDEE4(unsigned char *pA, unsigned char *pB);
-extern "C" unsigned short fn_800DDF34(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, int *pAngle, float *pTime, float *pRate);
-extern "C" int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
-extern "C" int fn_800DE364(unsigned int id);
-extern "C" void fn_800DE3B0(Block_800DE3B0 *pBlock, Object_80039F5C *p, Command_800DE3B0 *pCommand);
-extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id);
-extern "C" void fn_800DE910(Object_80039F5C *p, Block_800DE3B0 *pBlock);
-extern "C" void fn_800DEAB0(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key, void *pData, int angle, Entry_800DE51C *pRecord);
-extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock);
-extern "C" void fn_800DF134(Object_80039F5C *p, Point_8017886C offset, int angle, int key);
-extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pData, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
-extern "C" void fn_800DF654(Object_80039F5C *p, Block_801BE60C *pRecord);
-extern "C" int fn_800DF6EC(Object_80039F5C *p);
-extern "C" void fn_800DF710(Object_80039F5C *p, int joint, Vector_80039F5C *pPos, QuatEulerAngles_t *pAngles);
-extern "C" void fn_800DF750(Ball_t *pBall, Vector_80039F5C *pPos, int *pAngles);
-extern "C" void fn_800DF7CC(Object_80039F5C *p, Character_80093BCC *pCharacter, Attachment_800DF7CC *pAttachments, Frame_800DF7CC *pFrame, int index, unsigned int frame);
-extern "C" void fn_800DF9FC(Object_80039F5C *p, void *pRecord, unsigned int value);
-extern "C" int fn_800DFA00(Object_80039F5C *p, float *pValue);
-extern "C" void fn_800DFCEC(Object_80039F5C *p);
-extern "C" int fn_800DFD90(Object_80039F5C *p);
-extern "C" int fn_800DFED0(Object_80039F5C *p);
-extern "C" int fn_800E0188(Object_80039F5C *p, float *pA, float *pB);
-extern "C" void fn_800E01D8(Object_80039F5C *p, Block_800E0230 *pBlock, int a);
-extern "C" void fn_800E0230(Object_80039F5C *p, Block_800E0230 *pBlock);
-extern "C" float fn_800E02D0(Object_80039F5C *p);
-extern "C" void fn_800E034C(Object_80039F5C *p, Block_800E0230 *pBlock);
-extern "C" void fn_800E0438(Object_80039F5C *p, Block_800E0230 *pBlock);
-extern "C" void fn_800E04C8(Object_80039F5C *p, Block_800E0230 *pBlock);
-extern "C" int fn_800E0574(Object_80039F5C *p);
-extern "C" int fn_800E05C0(Object_80039F5C *p);
-extern "C" int fn_800E068C(Object_80039F5C *p);
-extern "C" void fn_800E0694(Object_80039F5C *p, int handle, int index);
-extern "C" void fn_800E0818(int a, Vector_80039F5C *pOut, unsigned char *pIndex);
-extern "C" int fn_800E0850(Object_80039F5C *p);
-extern "C" int fn_800E0AD8(Object_80039F5C *p);
-extern "C" int fn_800E0E8C(Object_80039F5C *p);
-extern "C" int fn_800E0EF0(Object_80039F5C *p);
-extern "C" int fn_800E0F40(Object_80039F5C *p);
-extern "C" int fn_800E0F48(Vector_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC);
-extern "C" int fn_800E1044(Object_80039F5C *p, Vector_80039F5C *pTarget);
-extern "C" int fn_800E11C0(Object_80039F5C *p);
-extern "C" int fn_800E1248(Object_80039F5C *p, Object_80039F5C *pOther);
-extern "C" int fn_800E12D4(Object_80039F5C *p);
-extern "C" int fn_800E1350(Object_80039F5C *p);
-extern "C" int fn_800E13E4(Object_80039F5C *p);
-extern "C" int fn_800E1438(Object_80039F5C *p);
-extern "C" int fn_800E1544(Object_80039F5C *p);
-extern "C" int fn_800E1554(Object_80039F5C *p);
-extern "C" int fn_800E1584(Object_80039F5C *p);
-extern "C" int fn_800E1778(Object_80039F5C *p);
-extern "C" int fn_800E1870(Object_80039F5C *p);
-extern "C" void fn_800E1954(Object_80039F5C *p);
-extern "C" void fn_800E2550(Object_80039F5C *p, Point_8017886C *pOut, int *pAngle);
-extern "C" int fn_800E283C(Object_80039F5C *p, int count, float *pValues, float *pOut, float direction, float target);
-extern "C" void fn_800E2ABC(Object_80039F5C *p);
-extern "C" int fn_800E2F20(Object_80039F5C *p, Point_8017886C *pPoint);
+extern "C" void PlayerActionAnimApplyVariantFlag(Object_80039F5C *p, Record_800DDCE4 *pRecord);
+extern "C" int PlayerActionAnimIdlePhase(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *p, unsigned int mode);
+extern "C" void PlayerActionAnimSetTurnKeys(Object_80039F5C *p);
+extern "C" int PlayerActionAnimKeysMatch(unsigned char *pA, unsigned char *pB);
+extern "C" unsigned short PlayerActionAnimFindTurnEntry(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, int *pAngle, float *pTime, float *pRate);
+extern "C" int PlayerActionAnimTurnInPlacePhase(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
+extern "C" int PlayerActionAnimIsFlaggedKey(unsigned int id);
+extern "C" void PlayerActionAnimSetupAlign(Block_800DE3B0 *pBlock, Object_80039F5C *p, Command_800DE3B0 *pCommand);
+extern "C" void PlayerActionAnimFindAlignTarget(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id);
+extern "C" void PlayerActionAnimBlendAlign(Object_80039F5C *p, Block_800DE3B0 *pBlock);
+extern "C" void PlayerActionAnimBuildAlignCommand(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key, void *pData, int angle, Entry_800DE51C *pRecord);
+extern "C" void PlayerActionAnimUpdatePairAlign(Object_80039F5C *p, Block_800DE3B0 *pBlock);
+extern "C" void PlayerActionAnimShiftPartner(Object_80039F5C *p, Point_8017886C offset, int angle, int key);
+extern "C" int PlayerActionAnimGenericPhase(Table_80089904 *pTable, unsigned short key, void *pData, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
+extern "C" void PlayerActionAnimMirrorAlign(Object_80039F5C *p, Block_801BE60C *pRecord);
+extern "C" int PlayerActionTakeFlag1000(Object_80039F5C *p);
+extern "C" void PlayerActionGetJointPose(Object_80039F5C *p, int joint, Vector_80039F5C *pPos, QuatEulerAngles_t *pAngles);
+extern "C" void PlayerActionMoveBall(Ball_t *pBall, Vector_80039F5C *pPos, int *pAngles);
+extern "C" void PlayerActionCharAnimUpdateAttachments(Object_80039F5C *p, Character_80093BCC *pCharacter, Attachment_800DF7CC *pAttachments, Frame_800DF7CC *pFrame, int index, unsigned int frame);
+extern "C" void PlayerActionCharAnimNotify(Object_80039F5C *p, void *pRecord, unsigned int value);
+extern "C" int PlayerActionCharAnimLoad(Object_80039F5C *p, float *pValue);
+extern "C" void PlayerActionCharAnimEnter(Object_80039F5C *p);
+extern "C" int PlayerActionCharAnimExit(Object_80039F5C *p);
+extern "C" int PlayerActionCharAnimUpdate(Object_80039F5C *p);
+extern "C" int PlayerActionCharAnimGetTime(Object_80039F5C *p, float *pA, float *pB);
+extern "C" void PlayerActionDropBallRelease(Object_80039F5C *p, Block_800E0230 *pBlock, int a);
+extern "C" void PlayerActionDropBallPickVariant(Object_80039F5C *p, Block_800E0230 *pBlock);
+extern "C" float PlayerActionDropBallGetSpeed(Object_80039F5C *p);
+extern "C" void PlayerActionDropBallStart(Object_80039F5C *p, Block_800E0230 *pBlock);
+extern "C" void PlayerActionDropBallLetGo(Object_80039F5C *p, Block_800E0230 *pBlock);
+extern "C" void PlayerActionDropBallWait(Object_80039F5C *p, Block_800E0230 *pBlock);
+extern "C" int PlayerActionDropBallEnter(Object_80039F5C *p);
+extern "C" int PlayerActionDropBallUpdate(Object_80039F5C *p);
+extern "C" int PlayerActionDropBallExit(Object_80039F5C *p);
+extern "C" void PlayerActionCatchResolve(Object_80039F5C *p, int handle, int index);
+extern "C" void PlayerActionCatchGetBallPos(int a, Vector_80039F5C *pOut, unsigned char *pIndex);
+extern "C" int PlayerActionCatchEnter(Object_80039F5C *p);
+extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p);
+extern "C" int PlayerActionCatchExit(Object_80039F5C *p);
+extern "C" int PlayerActionIsUserCatch(Object_80039F5C *p);
+extern "C" int PlayerActionIsCatchBlocked(Object_80039F5C *p);
+extern "C" int PlayerActionSegmentsCross(Vector_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC);
+extern "C" int PlayerActionRunCrossesLine(Object_80039F5C *p, Vector_80039F5C *pTarget);
+extern "C" int PlayerActionIsShallowPath(Object_80039F5C *p);
+extern "C" int PlayerActionGetInterceptHeading(Object_80039F5C *p, Object_80039F5C *pOther);
+extern "C" int PlayerActionCanDive(Object_80039F5C *p);
+extern "C" int PlayerActionTryDive(Object_80039F5C *p);
+extern "C" int PlayerActionDiveEnter(Object_80039F5C *p);
+extern "C" int PlayerActionDiveUpdate(Object_80039F5C *p);
+extern "C" int PlayerActionDiveExit(Object_80039F5C *p);
+extern "C" int PlayerActionDiveIsActive(Object_80039F5C *p);
+extern "C" int PlayerActionAiConsiderDive(Object_80039F5C *p);
+extern "C" int PlayerActionRollAlignChange(Object_80039F5C *p);
+extern "C" int PlayerActionIsNearLine(Object_80039F5C *p);
+extern "C" void PlayerActionAlignDefender(Object_80039F5C *p);
+extern "C" void PlayerActionGetAlignSpot(Object_80039F5C *p, Point_8017886C *pOut, int *pAngle);
+extern "C" int PlayerActionFindGap(Object_80039F5C *p, int count, float *pValues, float *pOut, float direction, float target);
+extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p);
+extern "C" int PlayerActionIsFacingPoint(Object_80039F5C *p, Point_8017886C *pPoint);
 
 #endif

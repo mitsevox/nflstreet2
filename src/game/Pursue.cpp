@@ -43,8 +43,8 @@ int fn_800AC980(Object_80039F5C *p, int value);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
 int PlayerMoveGetKind(Object_80039F5C *p);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
-int fn_800E1584(Object_80039F5C *p);
-int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
+int PlayerActionAiConsiderDive(Object_80039F5C *p);
+int PlyrContactSendPush(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_80110C10(Object_80039F5C *p);
 int fn_80110C68(Object_80039F5C *p);
@@ -100,12 +100,12 @@ int fn_801783AC(int bit);
 float fn_80178A2C(void);
 int fn_800ABDA4(int team);
 int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *other, Vector_80039F5C pos, float distance, int *pOut);
-int fn_800E815C(Object_80039F5C *p, int a, int b);
+int PlyrTackleStart(Object_80039F5C *p, int a, int b);
 int fn_8011E88C(Object_80039F5C *p);
 int fn_8011F1A4(void);
 unsigned int fn_8011F4C8(void);
 Object_80039F5C *PursueGetTarget(void);
-int fn_800E6AC8(Object_80039F5C *p, int mode);
+int PlyrEngageTryShed(Object_80039F5C *p, int mode);
 int fn_800F2C1C(Object_80039F5C *p, int a);
 Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float length, float width, int facing);
 int fn_8011E9B4(Object_80039F5C *p);
@@ -264,7 +264,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
             else chance = 0;
         }
     }
-    if (attempt && SyncRandGetRange(0, 100) < (unsigned int)chance && fn_800E815C(p, 0, 0)) done = 1;
+    if (attempt && SyncRandGetRange(0, 100) < (unsigned int)chance && PlyrTackleStart(p, 0, 0)) done = 1;
     if (done) return;
     float offset[2];
     Object_80039F5C *reference;
@@ -295,7 +295,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
                     Vec2Sub(offset, &reference->mMotion.mPos, &motion->mPos);
                     mode = !(SyncRandGetFloat(0) >= 0.8f) ? 4 : 8;
                 }
-                if (fn_800E6AC8(p, mode)) done = 1;
+                if (PlyrEngageTryShed(p, mode)) done = 1;
                 else state->mUnknown13 += 10;
             }
         }
@@ -334,7 +334,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
         int angle = MathAngleDiff(heading, fn_801CFE40(delta[1], delta[0]));
         if (angle > 0x471C72) {
             int mode = ((state->mUnknown8 - motion->mFacing) & 0xFFFFFF) > 0x800000;
-            if (angle <= 0x5FFFFF) fn_800E6AC8(p, mode);
+            if (angle <= 0x5FFFFF) PlyrEngageTryShed(p, mode);
             else fn_8011E240(reference);
         }
     }
@@ -1018,7 +1018,7 @@ extern "C" void PursueTryBlockReaction(Object_80039F5C *p, Object_80039F5C *pOth
     } else if (SyncRandGetRange(0, 100) < 50) {
         Vec2Sub(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
         if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), pTarget->mMotion.mUnknown32) <= 0x3FFFFF) {
-            fn_800E96EC(p, pTarget);
+            PlyrContactSendPush(p, pTarget);
         }
     }
 }
@@ -1431,7 +1431,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
                     return 0;
                 }
             }
-            if (fn_800E1584(p) != 0) {
+            if (PlayerActionAiConsiderDive(p) != 0) {
                 return 0;
             }
         }

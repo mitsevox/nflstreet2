@@ -12,7 +12,7 @@
 
 extern "C" {
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-void fn_800E9528(Object_80039F5C *p);
+void PlyrContactSendKnock(Object_80039F5C *p);
 void BallRecordBounce(Ball_t *pBall);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int BallStateCheckPlayerHit(Ball_t *pBall, void *pData, int value);
@@ -216,7 +216,7 @@ extern "C" void BallHitPlayerPart(Ball_t *pBall, Object_80039F5C *p, CollideCont
             int id = p->mpState->mId;
 
             if (id != 28 && id != 58 && id != 5) {
-                fn_800E9528(p);
+                PlyrContactSendKnock(p);
             }
         }
     }

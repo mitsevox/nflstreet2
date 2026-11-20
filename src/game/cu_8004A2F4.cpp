@@ -1764,16 +1764,16 @@ void DynObjCacheReset(void); void DynObjCacheFree(void); void DynObjFreeAnimPal(
 int DebugPrintf(const char *, ...);
 void CharRelocateSkeleton(int);
 int CharSkelGetJointByName(AnimSkeleton_t *, const char *);
-Object_80039F5C *fn_8003E0C8(Block_80170E64 *);
+Object_80039F5C *PlyrObjsFindPlayer(Block_80170E64 *);
 CollisionShape *fn_801E71D0(ShapeCollection *, unsigned int);
 void fn_801E9E18(RigidBody *, Vector_80039F5C *, Vector_80039F5C *);
 void Vec3RotateXYZ(void *, void *, int, int, int);
 void Vec2Normalize(void *, void *);
 void Vec3Scale(void *, void *, float);
-int fn_800EA284(Object_80039F5C *, int, int);
+int PlyrContactResolve(Object_80039F5C *, int, int);
 void fn_80178718(Object_80039F5C *);
-void fn_800E954C(Object_80039F5C *, int, int *, int, int *);
-int fn_800EAC9C(Object_80039F5C *);
+void PlyrContactSendHitFrom(Object_80039F5C *, int, int *, int, int *);
+int PlyrContactIsBeforeImpact(Object_80039F5C *);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *, float, float);
 int BallStateGet(Ball_t *, int *);
 int fn_80178508(void *, int, int);
@@ -1907,7 +1907,7 @@ int fn_8004E468(void *unused, RigidBody *pA, RigidBody *pB)
 void fn_8004E4D0(RigidBody *pBody, unsigned int index, RigidBody *pOther,
                  unsigned int otherIndex, unsigned int count, Contact_8004ED44 *pContacts, float step)
 {
-    Object_80039F5C *p = fn_8003E0C8(pBody->mpMetadata->mpBlock);
+    Object_80039F5C *p = PlyrObjsFindPlayer(pBody->mpMetadata->mpBlock);
     CollisionShape *pShape = fn_801E71D0(pBody->mpShapes, index);
     for (unsigned int i = 0; i < count; i++) {
         Vector_80039F5C velocity, delta, normal, point, direction;
@@ -1955,27 +1955,27 @@ void fn_8004E4D0(RigidBody *pBody, unsigned int index, RigidBody *pOther,
                 break;
             case 16: {
                 Object_80039F5C *pPartner = fn_8009BCE8(&p->mUnknown336);
-                if (!fn_800EA284(p, angle, facing)) return;
+                if (!PlyrContactResolve(p, angle, facing)) return;
                 fn_80178718(pPartner);
                 p->mFlags = (p->mFlags | 0x10000) & ~0x80000;
                 return;
             }
             case 17: {
                 Object_80039F5C *pPartner = fn_8009BCE8(&p->mUnknown336);
-                if (!fn_800EA284(p, angle, facing)) return;
+                if (!PlyrContactResolve(p, angle, facing)) return;
                 fn_80178718(p);
                 pPartner->mFlags = (pPartner->mFlags | 0x10000) & ~0x80000;
                 return;
             }
             case 32:
-                fn_800EA284(p, angle, facing);
+                PlyrContactResolve(p, angle, facing);
                 return;
             case 36:
-                fn_800E954C(p, 10, &facing, 1, &angle);
+                PlyrContactSendHitFrom(p, 10, &facing, 1, &angle);
                 break;
             default:
-                if (!fn_800EAC9C(p) && !(p->mMotion.mUnknown28 < PlyrMoveGetRatedSpeed(p, 0.5f, 1.0f)))
-                    fn_800E954C(p, 58, &facing, 3, &angle);
+                if (!PlyrContactIsBeforeImpact(p) && !(p->mMotion.mUnknown28 < PlyrMoveGetRatedSpeed(p, 0.5f, 1.0f)))
+                    PlyrContactSendHitFrom(p, 58, &facing, 3, &angle);
                 break;
             }
             if (!(fabsf(normal.mZ) >= 0.8f)) {
@@ -2057,24 +2057,24 @@ void fn_8004EE18(void *unused, RigidBody *pA, int indexA, RigidBody *pB, int ind
     if ((a->mKind == 3 || a->mKind == 5 || a->mKind == 4) &&
         (b->mKind == 1 || b->mKind == 6 || b->mKind == 0)) {
         position = *pPosA; normal = *pNormal;
-        Hitter_8004C844 *pHitter = (Hitter_8004C844 *)fn_8003E0C8(b->mpBlock);
+        Hitter_8004C844 *pHitter = (Hitter_8004C844 *)PlyrObjsFindPlayer(b->mpBlock);
         if (a->mKind == 5) fn_8004CAA8(a->mpObject, &position.mX, &normal.mX, a->mNames[indexA], b->mType, pHitter);
         else fn_8004C844(a->mpObject, &position.mX, &normal.mX, a->mNames[indexA], b->mType, pHitter);
     } else if ((a->mKind == 1 || a->mKind == 6 || a->mKind == 0) &&
                (b->mKind == 3 || b->mKind == 5 || b->mKind == 4)) {
         position = *pPosB;
         normal.mX = -pNormal->mX; normal.mY = -pNormal->mY; normal.mZ = -pNormal->mZ;
-        Hitter_8004C844 *pHitter = (Hitter_8004C844 *)fn_8003E0C8(a->mpBlock);
+        Hitter_8004C844 *pHitter = (Hitter_8004C844 *)PlyrObjsFindPlayer(a->mpBlock);
         if (b->mKind == 5) fn_8004CAA8(b->mpObject, &position.mX, &normal.mX, b->mNames[indexB], a->mType, pHitter);
         else fn_8004C844(b->mpObject, &position.mX, &normal.mX, b->mNames[indexB], a->mType, pHitter);
     } else if ((a->mKind == 3 || a->mKind == 5 || a->mKind == 4) &&
                (b->mKind == 3 || b->mKind == 5 || b->mKind == 4)) {
         position = *pPosA; normal = *pNormal;
-        Hitter_8004C844 *pHitter = (Hitter_8004C844 *)fn_8003E0C8(b->mpBlock);
+        Hitter_8004C844 *pHitter = (Hitter_8004C844 *)PlyrObjsFindPlayer(b->mpBlock);
         if (a->mKind == 5) fn_8004CAA8(a->mpObject, &position.mX, &normal.mX, a->mNames[indexA], b->mType, pHitter);
         else fn_8004C844(a->mpObject, &position.mX, &normal.mX, a->mNames[indexA], b->mType, pHitter);
         normal.mX = -pNormal->mX; normal.mY = -pNormal->mY; normal.mZ = -pNormal->mZ;
-        pHitter = (Hitter_8004C844 *)fn_8003E0C8(a->mpBlock);
+        pHitter = (Hitter_8004C844 *)PlyrObjsFindPlayer(a->mpBlock);
         if (b->mKind == 5) fn_8004CAA8(b->mpObject, &position.mX, &normal.mX, b->mNames[indexB], a->mType, pHitter);
         else fn_8004C844(b->mpObject, &position.mX, &normal.mX, b->mNames[indexB], a->mType, pHitter);
     }
@@ -2506,7 +2506,7 @@ void fn_80050964(void)
     for (unsigned int team = 0; team < 2; team++) {
         for (unsigned int index = 0; index < 7; index++) {
             RigidBody *pBody = lbl_80308F0C[team * 7 + index];
-            Object_80039F5C *pPlayer = fn_8003E0C8(pBody->mpMetadata->mpBlock);
+            Object_80039F5C *pPlayer = PlyrObjsFindPlayer(pBody->mpMetadata->mpBlock);
             Vector_80039F5C velocity = {0.0f, 0.0f, 0.0f};
             Vector_80039F5C a, b, c, direction;
             QuatEulerAngles_t angles;
@@ -2698,7 +2698,7 @@ void fn_800518E0(Object_80039F5C *pPlayer)
                     }
                 }
             }
-        } else if (pMetadata->mKind == 1 && fn_8003E0C8(pMetadata->mpBlock) == pPlayer) {
+        } else if (pMetadata->mKind == 1 && PlyrObjsFindPlayer(pMetadata->mpBlock) == pPlayer) {
             ownerIndex = i;
         }
     }

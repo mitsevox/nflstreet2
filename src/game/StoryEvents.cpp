@@ -161,7 +161,7 @@ int DbUserGetId(int index);
 int DbUserGetDb(int a);
 int DbUserFindIndex(int a);
 int DbUserGetCurrent(void);
-void fn_8005BE54(unsigned char value);
+void InGameRewardSetAlt(unsigned char value);
 void StoryTournamentClearEvent(void);
 void StoryTournamentBegin(void);
 int MsgGameGetSetupState(void);
@@ -1058,7 +1058,7 @@ void StoryEventsLeaveScreen(int state, int screen)
         _StoryEvents_iResumeState = state;
         _StoryEvents_iResumeScreen = screen;
     }
-    fn_8005BE54(0);
+    InGameRewardSetAlt(0);
 }
 
 void StoryEventsGetDiveEventCount(int dive, int *pCount)
@@ -1130,7 +1130,7 @@ int StoryEventsShowReward(int screen)
 
     if (_StoryEvents_State.mUnknown20 && screen == 5) {
         shown = 1;
-        fn_8005BE54(1);
+        InGameRewardSetAlt(1);
     }
     return shown;
 }

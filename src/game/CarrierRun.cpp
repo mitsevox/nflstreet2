@@ -101,8 +101,8 @@ int fn_8011F1A4(void);
 int fn_8011F4C8(void);
 int fn_80177C38(void);
 float fn_801CFB18(int angle);
-int fn_800E885C(Object_80039F5C *p);
-int fn_800E815C(Object_80039F5C *p, int a, int b);
+int PlyrTackleRollKind(Object_80039F5C *p);
+int PlyrTackleStart(Object_80039F5C *p, int a, int b);
 int fn_80111090(Object_80039F5C *p, int a);
 int BallStateGetPrev(Ball_t *p, int *pOut);
 int BallStateGet(Ball_t *p, int *pOut);
@@ -157,10 +157,10 @@ extern "C" int fn_8009FB60(Object_80039F5C *p);
 extern "C" int fn_800A5C04(Object_80039F5C *p, int a, int b);
 extern "C" float PlayTrackGetPlayIdRate(void);
 extern "C" float PlayTrackGetResult5Rate(void);
-extern "C" int fn_800E1584(Object_80039F5C *p);
+extern "C" int PlayerActionAiConsiderDive(Object_80039F5C *p);
 extern "C" int fn_8009E180(Object_80039F5C *p);
 extern "C" int fn_800F2C1C(Object_80039F5C *p, int a);
-extern "C" int fn_800E6AC8(Object_80039F5C *p, int a);
+extern "C" int PlyrEngageTryShed(Object_80039F5C *p, int a);
 
 extern "C" Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
 
@@ -949,7 +949,7 @@ extern "C" int CarrierRunTryDive(Object_80039F5C *p, Object_80039F5C *pOther, fl
                 && !(fn_80178A08() - fabsf(p->mMotion.mPos.mX) >= 4.0f)) {
                 chance = chance * 3 >> 1;
             }
-            if (SyncRandGetRange(0, 100) < chance && fn_800E815C(p, 2, fn_800E885C(p))) {
+            if (SyncRandGetRange(0, 100) < chance && PlyrTackleStart(p, 2, PlyrTackleRollKind(p))) {
                 StyleTrackerOnStyleFirstDown();
                 return 1;
             }

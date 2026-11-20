@@ -170,7 +170,7 @@ void fn_800EFE1C(int a, State_80039F5C *pQueue);
 void fn_8009C158(Object_80039F5C *p, int a);
 void PlyrInitAnimChannels(Object_80039F5C *p);
 int fn_80178308(void);
-Object_8003DEC4 *fn_8003DEE4(int value);
+Object_8003DEC4 *PlyrObjsFindByKey(int value);
 void fn_8009CF30(void *pDst, AnimPose_t *pPose);
 extern unsigned char _PlyrMgr_aCapsuleBonePairs[11][2];
 void PlyrCollideResetBlock(Block_80170374 *pBlock);
@@ -188,7 +188,7 @@ void PlyrCollideMotion(Object_80039F5C *pA, Object_80039F5C *pB);
 void PlyrCollideContacts(Object_80039F5C *pA, CollideObject_t *pRecordA, Object_80039F5C *pB, CollideObject_t *pRecordB,
                  CollideContactList_t *pContacts);
 void RumbleStart(int channel, int level, int duration);
-int fn_8003DEBC(void);
+int PlyrObjsGetPerTeam(void);
 void fn_8009BC38(Object_80039F5C *p, Object_8003DEC4 *pObject);
 void fn_8009BD48(int *pRef, int a, int b, int c);
 void PlyrMoveCmdClear(PlyrMoveCmd_t *pObject);
@@ -217,7 +217,7 @@ void fn_800C845C(void);
 void PlayerMoveTickAll(void);
 void fn_800C8330(Object_80039F5C *p);
 void fn_800C7794(Object_80039F5C *p);
-void fn_800EA6F0(Object_80039F5C *p);
+void PlyrContactHitWall(Object_80039F5C *p);
 void fn_800C89BC(Object_80039F5C *p);
 void fn_800EFFA0(int a, State_80039F5C *pQueue, Object_80039F5C *p, int flag);
 void fn_800A5E68(Object_80039F5C *p);
@@ -449,7 +449,7 @@ extern "C" int PlyrMgrGetSnapshotSize(void)
 
 extern "C" void PlyrInit(Object_80039F5C *p, PlyrSlot_t *pPlayer, unsigned char team, unsigned char index)
 {
-    Object_8003DEC4 *pObject = fn_8003DF3C(team, index);
+    Object_8003DEC4 *pObject = PlyrObjsGetBySide(team, index);
     Object_800CE674 *pReset = &pPlayer->mObject.mUnknown1240;
 
     fn_8009BC38(p, pObject);
@@ -484,7 +484,7 @@ extern "C" void PlyrInit(Object_80039F5C *p, PlyrSlot_t *pPlayer, unsigned char 
     fn_800CE674(pReset);
     fn_800CE684(pReset);
     PlyrCollideClearExempt(p);
-    SortListAdd(pObject, 1, team * fn_8003DEBC() + index, 2);
+    SortListAdd(pObject, 1, team * PlyrObjsGetPerTeam() + index, 2);
 }
 
 extern "C" void PlyrContactCallback(CollideObject_t *pA, CollideObject_t *pB, CollideContactList_t *pContacts)
@@ -712,7 +712,7 @@ extern "C" void PlyrMgrUpdate(void)
             fn_800C7794(p);
         }
         if (replay == 0) {
-            fn_800EA6F0(p);
+            PlyrContactHitWall(p);
         }
         fn_800C89BC(p);
         fn_800EFFA0(0, &p->mQueue[0], p, active);
@@ -1351,7 +1351,7 @@ extern "C" Object_80039F5C *PlyrFindByPoid(int id)
         code = status;
     }
     if (status != 23) {
-        Object_8003DEC4 *pObject = fn_8003DEE4(value);
+        Object_8003DEC4 *pObject = PlyrObjsFindByKey(value);
         if (pObject != 0) {
             int team = fn_80178308();
             unsigned int i;
@@ -1380,10 +1380,10 @@ extern "C" Object_80039F5C *PlyrFindByPoid(int id)
 
 extern "C" void PlyrAttachModel(Object_80039F5C *p)
 {
-    Object_8003DEC4 *pObject = fn_8003DEE4(p->mUnknown2908);
+    Object_8003DEC4 *pObject = PlyrObjsFindByKey(p->mUnknown2908);
 
     if (pObject == 0) {
-        pObject = fn_8003DEC4((p->mId >> 8 & 0xFF) * 7 + (p->mId >> 16 & 0xFF));
+        pObject = PlyrObjsGet((p->mId >> 8 & 0xFF) * 7 + (p->mId >> 16 & 0xFF));
     }
     p->mpUnknown4 = (Block_80170E64 *)pObject;
     fn_8009CF30(&p->mUnknown16, &pObject->mUnknown44);

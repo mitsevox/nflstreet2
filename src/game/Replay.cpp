@@ -118,8 +118,8 @@ void ReplayCursorSetVisible(unsigned char value);
 void PlyrMgrSetLeadFlags(void);
 void PlyrMgrClearLeadFlags(void);
 void PlyrMgrRefreshModels(void);
-Block_80170E64 *fn_8003DF7C(Vector_80039F5C *pPos, float *pDist);
-void fn_8003E038(Block_80170E64 *pBlock, int *pOut);
+Block_80170E64 *PlyrObjsFindNearest(Vector_80039F5C *pPos, float *pDist);
+void PlyrObjsGetPlayerRef(Block_80170E64 *pBlock, int *pOut);
 Block_80170E64 *BigObjFindNearest(Vector_80039F5C *pPos, float *pDist);
 void PlyrPoseSetBlendFlag(int a);
 void DivotSaveState(void);
@@ -1259,7 +1259,7 @@ static void PrintPlayerDebugLine(int line, char *pBuf, int)
     int id;
     Object_80039F5C *p;
 
-    fn_8003E038(GetHighlightedObject(), &id);
+    PlyrObjsGetPlayerRef(GetHighlightedObject(), &id);
     p = fn_8009BCE8(&id);
     if (p != 0) {
         switch (line) {
@@ -2128,7 +2128,7 @@ extern "C" void ReplayCamGetMoveOffset(Point_8017886C *pOut, unsigned int dir, f
 
 extern "C" Block_80170E64 *ReplayCamFindNearestObject(GameCamera_t *pCamera, float *pDist, unsigned char *pFound)
 {
-    Block_80170E64 *pBest = fn_8003DF7C(&_Replay_Focus.mPos, pDist);
+    Block_80170E64 *pBest = PlyrObjsFindNearest(&_Replay_Focus.mPos, pDist);
     Block_80170E64 *p;
     float dist;
 

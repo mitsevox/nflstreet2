@@ -58,8 +58,8 @@ void DivotRestartRecords(void);
 void AudmonEventClear(void);
 void ClockRuleSnap(void);
 void fn_800C9FC0(void);
-int fn_8005BFD4(void);
-void fn_8005BF18(void);
+int InGameOverlayGetState(void);
+void InGameOverlayReset(void);
 void PauseUnblock(void);
 
 void fn_8014E220(void *p, float dt)
@@ -131,9 +131,9 @@ void fn_8014E48C(State_802A2058 *p, float dt)
         fn_800C9FC0();
         fn_80148A58()->vfn_15();
     }
-    if (fn_8005BFD4() == 3 || fn_8005BFD4() == 4) {
-        if (fn_8005BFD4() != 4) {
-            fn_8005BF18();
+    if (InGameOverlayGetState() == 3 || InGameOverlayGetState() == 4) {
+        if (InGameOverlayGetState() != 4) {
+            InGameOverlayReset();
             PauseUnblock();
         }
         fn_800AD910(3, dt);

@@ -103,8 +103,8 @@ void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800B6714(Object_80039F5C *p, int port);
 int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_800D782C(Object_80039F5C *p);
-int fn_800E0EF0(Object_80039F5C *p);
-int fn_800E0F40(Object_80039F5C *p);
+int PlayerActionIsUserCatch(Object_80039F5C *p);
+int PlayerActionIsCatchBlocked(Object_80039F5C *p);
 void fn_801039D8(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
@@ -697,7 +697,7 @@ float PossCalcCatchChance(Object_80039F5C *p, Object_80039F5C *pReceiver, int fl
     if (rating >= 191.25f) {
         chance += 0.1f;
     }
-    if (fn_800E0EF0(p)) {
+    if (PlayerActionIsUserCatch(p)) {
         chance += 0.15f;
     }
     PossApplyCoverage(p, &chance);
@@ -795,7 +795,7 @@ int PossTryCatch(void *pBall, Object_80039F5C *p, unsigned int move)
             if (flags <= 0xFF) {
                 chance = PossCalcCatchChance(p, pReceiver, flags, angle);
                 if (fn_80178308() == (p->mId >> 8 & 0xFF)) {
-                    if (fn_800E0F40(p)) {
+                    if (PlayerActionIsCatchBlocked(p)) {
                         chance = 0.0f;
                         if (fn_8009704C(p)) {
                             fn_80097028(p);
@@ -1238,7 +1238,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
     if ((p->mId >> 8 & 0xFF) == fn_80178308()) {
         if (result == 4) {
             int special = fn_801BE648(p->mpUnknown792) == 0xE1;
-            StyleTrackerSetCatchFlags(fn_800E0EF0(p), special, PlayerMoveGetKind(p));
+            StyleTrackerSetCatchFlags(PlayerActionIsUserCatch(p), special, PlayerMoveGetKind(p));
             fn_800A8954(7, p->mId >> 8 & 0xFF, p);
         }
         if (result == 3 && fn_8011F518()) {
@@ -1263,7 +1263,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
         if (stolen) {
             if (result == 4) {
                 if (fn_801486A0() != 1) {
-                    if (fn_800E0EF0(p)) {
+                    if (PlayerActionIsUserCatch(p)) {
                         HudShowAlert("User Pick");
                         StyleTrackerOnInterception(1, p);
                     } else {
@@ -1277,7 +1277,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
                 }
                 PossLogBallResult(p);
             } else if (result == 3) {
-                if (fn_800E0EF0(p)) {
+                if (PlayerActionIsUserCatch(p)) {
                     HudShowAlert("User Steal");
                     StyleTrackerFinishPitch(p->mId >> 8 & 0xFF, 1, 1);
                     ReplayEventAdd(gpReplay, 0x35, p, &p->mMotion.mPos, &p->mMotion.mFacing);

@@ -5,7 +5,7 @@
 #include "game/Vec3Magnitude.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/fn_800DF134.h"
+#include "game/PlayerActionAnimShiftPartner.h"
 
 extern "C" {
 extern float gFrameTimeScale;
@@ -142,7 +142,7 @@ void PlyrMoveModeEngage(Object_80039F5C *pObject)
             turned.mX -= delta.mX;
             turned.mY -= delta.mY;
             pMotion->mFacing = (pMotion->mFacing + angle) & 0xFFFFFF;
-            fn_800DF134(pObject, turned, angle, pBlock->mUnknown32);
+            PlayerActionAnimShiftPartner(pObject, turned, angle, pBlock->mUnknown32);
         }
     }
     pControl->mUnknown0 = pObject->mUnknown512.mUnknown0;

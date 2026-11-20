@@ -173,8 +173,8 @@ extern float gFrameTimeScale;
 
 int InGameIsPlaying(void);
 int FELoopIsMainFEActive(void);
-int fn_8003DEB4(void);
-Object_80039F5C *fn_8003E0C8(Block_80170E64 *object);
+int PlyrObjsGetCount(void);
+Object_80039F5C *PlyrObjsFindPlayer(Block_80170E64 *object);
 float MathMapRangeClamped(float x, float hi, float vhi, float lo, float vlo);
 int PlayerLookShowsHair(int index);
 unsigned char PlayerLookHidesHead(int index);
@@ -340,7 +340,7 @@ void fn_801A15C4(Viewport_t *pObject)
     TMBufferReset(lbl_80365D88);
     TMModelResetChannels(&lbl_80365D54);
     for (i = 0; i < lbl_803ECC04; i++) {
-        Object_8003DEC4 *pPlayer = fn_8003DEC4(i);
+        Object_8003DEC4 *pPlayer = PlyrObjsGet(i);
 
         if (pPlayer->mUnknown20 & 8) {
             continue;
@@ -952,7 +952,7 @@ void fn_801A2EC8(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot)
     fn_80234CA4(&pPlayer->mUnknown1164[5], &pPlayer->mUnknown4064[1]);
     if ((pPlayer->mUnknown20 & 0x10) && pSlot->mUnknown8 == 0) {
         if (!(pPlayer->mUnknown20 & 8) && pPlayer->mUnknown820) {
-            if (fn_8003E0C8((Block_80170E64 *)pPlayer)->mpState->mId == 0x32) {
+            if (PlyrObjsFindPlayer((Block_80170E64 *)pPlayer)->mpState->mId == 0x32) {
                 pPlayer->mUnknown820[pPlayer->mUnknown4972 + 2] = -1.0f;
             } else if (pPlayer->mUnknown20 & 0x40000) {
                 float f = pPlayer->mUnknown820[1];
@@ -1260,7 +1260,7 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
             return;
         }
         if (lbl_803EB824 == 1) {
-            fn_800A3B58(fn_8003E0C8((Block_80170E64 *)pPlayer), 1, lbl_803EB825);
+            fn_800A3B58(PlyrObjsFindPlayer((Block_80170E64 *)pPlayer), 1, lbl_803EB825);
             lbl_803EB824 = 0;
         }
         fn_801A2EC8(pPlayer, pSlot);
@@ -1348,8 +1348,8 @@ void fn_801A3FFC(void)
     MatStore(m);
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
-    for (; i < fn_8003DEB4(); i++) {
-        Object_8003DEC4 *pPlayer = fn_8003DEC4(i);
+    for (; i < PlyrObjsGetCount(); i++) {
+        Object_8003DEC4 *pPlayer = PlyrObjsGet(i);
         Projection_8003BA10 *pShadow = &pPlayer->mUnknown4256;
 
         if (pShadow->mUnknown673) {
@@ -1408,8 +1408,8 @@ void fn_801A42D4(void)
     MatStore(m);
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
-    for (; i < fn_8003DEB4(); i++) {
-        Projection_8003BA10 *pShadow = &fn_8003DEC4(i)->mUnknown4256;
+    for (; i < PlyrObjsGetCount(); i++) {
+        Projection_8003BA10 *pShadow = &PlyrObjsGet(i)->mUnknown4256;
         unsigned char k;
 
         if (!pShadow->mUnknown673) {
@@ -1444,8 +1444,8 @@ void fn_801A45CC(void)
 {
     unsigned int i;
 
-    for (i = 0; i < fn_8003DEB4(); i++) {
-        Object_8003DEC4 *pPlayer = fn_8003DEC4(i);
+    for (i = 0; i < PlyrObjsGetCount(); i++) {
+        Object_8003DEC4 *pPlayer = PlyrObjsGet(i);
 
         if (pPlayer->mUnknown1160->mUnknown4 & 1) {
             continue;

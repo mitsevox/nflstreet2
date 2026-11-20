@@ -120,7 +120,7 @@ void DepthChartGetSideNames(int group, int kind, DepthChartText_t **pPairs);
 void DepthChartSwapPending(int group, int kind, int slot);
 void DepthChartSetEntryPair(int group, int value, int index0, int index1);
 int DepthChartFindPlayer(int group, int value, int *pFirst, int *pSecond);
-void fn_8003DE74(unsigned char side, int *pList);
+void PlyrObjsSetTeamIds(unsigned char side, int *pList);
 void CheatFlagsAddUser(int a);
 void CheatFlagsClear(void);
 int DepthChartScreenIsSideShown(unsigned char a);
@@ -2880,8 +2880,8 @@ void MsgTeamSelectExit(void)
             fn_80081F50(&_MsgTeamSelect_aPlayerDb[1], 1, 1);
             ids[1][i] = _MsgTeamSelect_aRoster[1].mEntries[i].mId;
         }
-        fn_8003DE74(0, ids[0]);
-        fn_8003DE74(1, ids[1]);
+        PlyrObjsSetTeamIds(0, ids[0]);
+        PlyrObjsSetTeamIds(1, ids[1]);
     }
 
     if (_MsgTeamSelect_aPlayerDb[0].mUnknown0) {

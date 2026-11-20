@@ -35,7 +35,7 @@ void BootPlayIntroMovies(void);
 void BootShowStartupScreens(void);
 void BootUpdateReset(void);
 int MainFEGroupIsStarted(void *p);
-void fn_8003E1F0(void);
+void PlyrObjsDrawShadows(void);
 int StoryEventsGetCurrentEvent(void);
 int StoryEventsIsWonPickupEvent(void);
 int StoryTournamentIsComplete(void);
@@ -374,7 +374,7 @@ unsigned char FELoop::Update()
     ConUpdateChannel(-1);
     ConProcessChannel(-1);
     FEPlyrUpdate();
-    fn_8003E1F0();
+    PlyrObjsDrawShadows();
     FEPlyrLoadUpdate();
     gFMCAPPORT.Update();
     fn_80219650(gUISMainInfo, &a, &b);

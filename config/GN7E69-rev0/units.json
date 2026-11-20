@@ -3757,9 +3757,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800E3CC0.cpp",
+      "source": "src/game/PlyrTackle.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x800E3CC0-0x800EAD44 (src/game/cu_800E3CC0.cpp) and its data rows; linked with holdouts under the owner rulings of 2026-11-19 and 2026-11-20 (any file, after real attempts).",
+      "evidence": "evidence.tsv unit row 0x800E3CC0-0x800EAD44 (src/game/PlyrTackle.cpp) and its data rows; linked with holdouts under the owner rulings of 2026-11-19 and 2026-11-20 (any file, after real attempts).",
       "sections": [
         {
           "section": ".text",
@@ -3861,83 +3861,83 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_800E3CC0",
+            "function": "PlyrAlignCheckSpot",
             "evidence": "evidence.tsv source-form 0x800E3CC0-0x800E3DCC"
           },
           {
-            "function": "fn_800E3DCC",
+            "function": "PlyrAlignGetCallTarget",
             "evidence": "evidence.tsv source-form 0x800E3DCC-0x800E4120"
           },
           {
-            "function": "fn_800E4264",
+            "function": "PlyrAlignTurnPhase",
             "evidence": "evidence.tsv source-form 0x800E4264-0x800E4494"
           },
           {
-            "function": "fn_800E513C",
+            "function": "PlyrAlignInput",
             "evidence": "evidence.tsv source-form 0x800E513C-0x800E55B8"
           },
           {
-            "function": "fn_800E55B8",
+            "function": "PlyrAlignReset",
             "evidence": "evidence.tsv source-form 0x800E55B8-0x800E579C"
           },
           {
-            "function": "fn_800E5EA4",
+            "function": "PlyrEngageAiWinsShed",
             "evidence": "evidence.tsv source-form 0x800E5EA4-0x800E6328"
           },
           {
-            "function": "fn_800E6328",
+            "function": "PlyrEngagePickMove",
             "evidence": "evidence.tsv source-form 0x800E6328-0x800E67AC"
           },
           {
-            "function": "fn_800E6984",
+            "function": "PlyrEngageGetInputDir",
             "evidence": "evidence.tsv source-form 0x800E6984-0x800E6AC8"
           },
           {
-            "function": "fn_800E6AC8",
+            "function": "PlyrEngageTryShed",
             "evidence": "evidence.tsv source-form 0x800E6AC8-0x800E6F48"
           },
           {
-            "function": "fn_800E705C",
+            "function": "PlyrWaitUpdate",
             "evidence": "evidence.tsv source-form 0x800E705C-0x800E7330"
           },
           {
-            "function": "fn_800E7588",
+            "function": "PlyrTackleStartAnim",
             "evidence": "evidence.tsv source-form 0x800E7588-0x800E7B90"
           },
           {
-            "function": "fn_800E7E78",
+            "function": "PlyrTackleAimAtCarrier",
             "evidence": "evidence.tsv source-form 0x800E7E78-0x800E8098"
           },
           {
-            "function": "fn_800E815C",
+            "function": "PlyrTackleStart",
             "evidence": "evidence.tsv source-form 0x800E815C-0x800E8420"
           },
           {
-            "function": "fn_800E8898",
+            "function": "PlyrTackleContest",
             "evidence": "evidence.tsv source-form 0x800E8898-0x800E8BE8"
           },
           {
-            "function": "fn_800E8BE8",
+            "function": "PlyrTurnEnter",
             "evidence": "evidence.tsv source-form 0x800E8BE8-0x800E8E04"
           },
           {
-            "function": "fn_800E8E04",
+            "function": "PlyrTurnUpdate",
             "evidence": "evidence.tsv source-form 0x800E8E04-0x800E8ED4"
           },
           {
-            "function": "fn_800E954C",
+            "function": "PlyrContactSendHitFrom",
             "evidence": "evidence.tsv source-form 0x800E954C-0x800E96EC"
           },
           {
-            "function": "fn_800E9FD8",
+            "function": "CarrierMomentumUpdate",
             "evidence": "evidence.tsv source-form 0x800E9FD8-0x800EA1D0"
           },
           {
-            "function": "fn_800EA6F0",
+            "function": "PlyrContactHitWall",
             "evidence": "evidence.tsv source-form 0x800EA6F0-0x800EAC9C"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/cu_800E3CC0.cpp: the 19 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/PlyrTackle.cpp: the 19 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       }
     },
     {
@@ -23512,19 +23512,19 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_800DF7CC",
+            "function": "PlayerActionCharAnimUpdateAttachments",
             "evidence": "evidence.tsv source-form 0x800DF7CC-0x800DF9FC"
           },
           {
-            "function": "fn_800E02D0",
+            "function": "PlayerActionDropBallGetSpeed",
             "evidence": "evidence.tsv source-form 0x800E02D0-0x800E034C"
           },
           {
-            "function": "fn_800E1954",
+            "function": "PlayerActionAlignDefender",
             "evidence": "evidence.tsv source-form 0x800E1954-0x800E2550"
           },
           {
-            "function": "fn_800E2ABC",
+            "function": "PlayerActionPickLaneTarget",
             "evidence": "evidence.tsv source-form 0x800E2ABC-0x800E2F20"
           }
         ],
@@ -23606,47 +23606,47 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_800DB688",
+            "function": "PlayerActionAnimTossUpdate",
             "evidence": "evidence.tsv source-form 0x800DB688-0x800DB7A4"
           },
           {
-            "function": "fn_800DBAF0",
+            "function": "PlayerActionAnimIsPitchArmed",
             "evidence": "evidence.tsv source-form 0x800DBAF0-0x800DBB74"
           },
           {
-            "function": "fn_800DC6F4",
+            "function": "PlayerActionAnimTurnPhase",
             "evidence": "evidence.tsv source-form 0x800DC6F4-0x800DCC14"
           },
           {
-            "function": "fn_800DCC14",
+            "function": "PlayerActionAnimSpeedBlendPhase",
             "evidence": "evidence.tsv source-form 0x800DCC14-0x800DCE2C"
           },
           {
-            "function": "fn_800DCE2C",
+            "function": "PlayerActionAnimScoreReaction",
             "evidence": "evidence.tsv source-form 0x800DCE2C-0x800DD2E8"
           },
           {
-            "function": "fn_800DD2E8",
+            "function": "PlayerActionAnimReactionPhase",
             "evidence": "evidence.tsv source-form 0x800DD2E8-0x800DD5E4"
           },
           {
-            "function": "fn_800DD994",
+            "function": "PlayerActionAnimStartVariant",
             "evidence": "evidence.tsv source-form 0x800DD994-0x800DDCE4"
           },
           {
-            "function": "fn_800DDF34",
+            "function": "PlayerActionAnimFindTurnEntry",
             "evidence": "evidence.tsv source-form 0x800DDF34-0x800DE19C"
           },
           {
-            "function": "fn_800DE51C",
+            "function": "PlayerActionAnimFindAlignTarget",
             "evidence": "evidence.tsv source-form 0x800DE51C-0x800DE910"
           },
           {
-            "function": "fn_800DEAB0",
+            "function": "PlayerActionAnimBuildAlignCommand",
             "evidence": "evidence.tsv source-form 0x800DEAB0-0x800DEC10"
           },
           {
-            "function": "fn_800DF1F4",
+            "function": "PlayerActionAnimGenericPhase",
             "evidence": "evidence.tsv source-form 0x800DF1F4-0x800DF654"
           }
         ],
@@ -23768,35 +23768,35 @@
             "evidence": "evidence.tsv source-form 0x80055584-0x80055B2C"
           },
           {
-            "function": "fn_8005740C",
+            "function": "InGamePlayCallClose",
             "evidence": "evidence.tsv source-form 0x8005740C-0x800577DC"
           },
           {
-            "function": "fn_80057C58",
+            "function": "InGamePlayCallLoadList",
             "evidence": "evidence.tsv source-form 0x80057C58-0x80057F20"
           },
           {
-            "function": "fn_8005AB04",
+            "function": "InGameLeaderGetCategories",
             "evidence": "evidence.tsv source-form 0x8005AB04-0x8005AC18"
           },
           {
-            "function": "fn_8005AEC8",
+            "function": "InGameEndGameGetChoices",
             "evidence": "evidence.tsv source-form 0x8005AEC8-0x8005B128"
           },
           {
-            "function": "fn_8005B610",
+            "function": "InGameRewardFormatLogo",
             "evidence": "evidence.tsv source-form 0x8005B610-0x8005B6AC"
           },
           {
-            "function": "fn_8005BCA8",
+            "function": "InGameRewardMsg",
             "evidence": "evidence.tsv source-form 0x8005BCA8-0x8005BE54"
           },
           {
-            "function": "fn_8005C844",
+            "function": "InGameGetOffenseTotals",
             "evidence": "evidence.tsv source-form 0x8005C844-0x8005C994"
           },
           {
-            "function": "fn_8005CAE4",
+            "function": "InGameGetDefenseTotals",
             "evidence": "evidence.tsv source-form 0x8005CAE4-0x8005CC50"
           }
         ],
@@ -24238,15 +24238,15 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8003BA10",
+            "function": "PlyrObjsBuildShadow",
             "evidence": "evidence.tsv source-form 0x8003BA10-0x8003BDF0"
           },
           {
-            "function": "fn_8003BFCC",
+            "function": "PlyrObjsClipShadowQuad",
             "evidence": "evidence.tsv source-form 0x8003BFCC-0x8003C8C8"
           },
           {
-            "function": "fn_8003D378",
+            "function": "PlyrObjsCreatePlayers",
             "evidence": "evidence.tsv source-form 0x8003D378-0x8003D958"
           }
         ],

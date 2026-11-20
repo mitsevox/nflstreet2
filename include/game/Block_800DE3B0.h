@@ -18,7 +18,7 @@ struct Table_800DE51C {
     Entry_800DE51C mEntries[1];
 };
 
-/* Per-key block that fn_801BE60C returns and fn_800DEAB0 fills. */
+/* Per-key block that fn_801BE60C returns and PlayerActionAnimBuildAlignCommand fills. */
 
 struct Block_800DE3B0 {
     float mUnknown0;

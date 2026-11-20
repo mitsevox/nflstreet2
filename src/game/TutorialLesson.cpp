@@ -288,10 +288,10 @@ void FieldLinesEnable(int a);
 void PlyrNameTagEnable(unsigned char enable);
 void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
 int MsgBoxIsClosed(void);
-void fn_80057F28(void);
-void fn_800582D0(void);
-void fn_8005BF18(void);
-int fn_8005BFD4(void);
+void InGamePlayCallCreate(void);
+void InGamePlayCallDestroy(void);
+void InGameOverlayReset(void);
+int InGameOverlayGetState(void);
 void PauseRequestCancel(void);
 void SndgAmbPostCue(int type);
 void SndgSetVolumeOption(int channel, unsigned int level);
@@ -963,7 +963,7 @@ int TutorialFinishCategory(void)
         mode = modes[lesson];
         fn_800AD910(0, 0.0f);
         HudStop();
-        fn_800582D0();
+        InGamePlayCallDestroy();
         TutorialLessonStop();
         TutorialSetLesson(5);
         fn_800C1CA0();
@@ -1030,7 +1030,7 @@ int TutorialFinishCategory(void)
             done = 1;
             fn_800AD910(0, 0.0f);
             HudStop();
-            fn_800582D0();
+            InGamePlayCallDestroy();
             fn_80148644();
             fn_800C1CA0();
             fn_800C1E50();
@@ -1062,7 +1062,7 @@ int TutorialFinishCategory(void)
         fn_8009D984(fn_80178C60());
         StyleTrackerReset();
         gPlayBook.fn_800355FC();
-        fn_80057F28();
+        InGamePlayCallCreate();
         fn_800AD910(1, 0.0f);
         PauseClearBlocks();
         SndgAmbPostCue(3);
@@ -2174,8 +2174,8 @@ int TutorialPostPlay::GetBusy(float dt)
 void TutorialPostPlay::Finish(float dt)
 {
     PlyrMgrClearStates();
-    if (fn_8005BFD4() != 4) {
-        fn_8005BF18();
+    if (InGameOverlayGetState() != 4) {
+        InGameOverlayReset();
     }
     if (mUnknown4 != 0) {
         if (!TutorialFinishCategory()) {

@@ -59,8 +59,8 @@ int ReplayIsShowing(void *p);
 int ReplayIsRecording(void *p);
 void ReplayRequestExit(void *p);
 int ReplayIsHalted(void *p);
-int fn_80059004(void);
-int fn_8005900C(void);
+int InGamePauseIsRestart(void);
+int InGamePauseIsForfeit(void);
 void PauseRequestInit(void);
 void fn_8006F824(int a);
 void fn_800719D4(void);
@@ -280,7 +280,7 @@ int PauseCameraRestore(void)
             CamGameSetModeAll(_Pause_State.mUnknown144);
             CamMainWarpToDest(CamGameGetCamera(_Pause_State.mUnknown140));
         }
-        if (fn_800AD9B4() == 5 && !fn_80059004() && !fn_8005900C()) {
+        if (fn_800AD9B4() == 5 && !InGamePauseIsRestart() && !InGamePauseIsForfeit()) {
             fn_800B4408();
         }
     }

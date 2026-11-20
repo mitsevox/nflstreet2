@@ -115,7 +115,7 @@ int PassIconsAreShown(void);
 int fn_8011F2C4(void);
 void fn_800A5A8C(int a, void *pA, void *pB);
 void fn_800A60D8(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_800E1044(Object_80039F5C *p, Vector_80039F5C *pTarget);
+int PlayerActionRunCrossesLine(Object_80039F5C *p, Vector_80039F5C *pTarget);
 int fn_800FF094(Object_80039F5C *p);
 int fn_800CB708(Object_80039F5C *p, int *pOut, Point_8017886C point, int angle, int a);
 int fn_800CB580(Object_80039F5C *p, int *pOut, Point_8017886C point, int angle, int a);
@@ -1157,7 +1157,7 @@ extern "C" int HuddleMoveUpdate(Object_80039F5C *p) {
     state->mUnknown52--;
     switch (state->mUnknown48) {
     case 0: {
-        if (fn_800E1044(p, (Vector_80039F5C *)&state->mUnknown8)) {
+        if (PlayerActionRunCrossesLine(p, (Vector_80039F5C *)&state->mUnknown8)) {
             p->mUnknown1008Word = 26;
             if (fn_801BE648(p->mpUnknown792) != 203)
                 fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 203, 1.0f, p);

@@ -48,8 +48,8 @@ void fn_80177C44(int value);
 void fn_8011DF90(void);
 int fn_80178308(void);
 void PlayBookRestoreSelection(int team);
-int fn_8005BFD4(void);
-void fn_8005BF18(void);
+int InGameOverlayGetState(void);
+void InGameOverlayReset(void);
 int fn_80178AE0(void);
 void fn_800AD910(int a, float b);
 void ClockRuleEndPeriod(void);
@@ -84,8 +84,8 @@ void fn_801515D0(Class_802A1C98 *p)
 
 void fn_80151628(Class_802A1C98 *p, float dt)
 {
-    if (fn_8005BFD4() != 4) {
-        fn_8005BF18();
+    if (InGameOverlayGetState() != 4) {
+        InGameOverlayReset();
     }
     if (fn_80178AE0() == 2) {
         fn_800AD910(2, dt);

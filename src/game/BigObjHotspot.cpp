@@ -71,7 +71,7 @@ int fn_801486A0(void);
 int fn_80177C38(void);
 void fn_8004CBEC(void *, float, BigObjInst *, BigObj_t *);
 void fn_8004E090(BigObj_t *, int, int);
-void fn_8005D2C8(int);
+void InGameSetLegendsUnlocked(int);
 void AudmonEventPostId(int, void *, int, int, int, int);
 void TeamUnlock(int, int);
 void TeamDbOpenQuery(DbCursor *, int);
@@ -189,7 +189,7 @@ void HotspotRecordCapture(HotspotPlay_t *pPlay)
             _Hotspot_bCaptured = 1;
             _Hotspot_iCaptureBit = bit;
             if (value == 0x3FF) {
-                fn_8005D2C8(1);
+                InGameSetLegendsUnlocked(1);
                 TeamUnlock(DbUserFindIndex(DbUserGetCurrent()), 34);
             }
         }
@@ -358,7 +358,7 @@ int BigObjHotspotFrameUpdate(BigObjInst *pInst, BigObj_t *pOwner, int mode)
         _Hotspot_bCaptured = 0;
         _Hotspot_aLogo[1].mImage.mpUnknownC = 0;
         HotspotInitQueue();
-        fn_8005D2C8(0);
+        InGameSetLegendsUnlocked(0);
     } else if (mode == 3) {
         for (i = 0; i <= 4; i++) {
             if (_Hotspot_aSlot[i].mpObject == pOwner) {
