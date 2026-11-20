@@ -1088,15 +1088,15 @@
     },
     "fn_801E279C__14Class_801E274CP12PhysicsWorld": {
       "address": "0x801E279C",
-      "evidence": "evidence.tsv external row for 0x801E279C (fn_801E279C__14Class_801E274CP14Class_801E8E04) and function row 0x801E279C (comparison unit; original assembly remains linked)."
+      "evidence": "evidence.tsv external row for 0x801E279C (fn_801E279C__14Class_801E274CP12PhysicsWorld) and function row 0x801E279C (comparison unit; original assembly remains linked)."
     },
     "fn_801E2C3C__9BodyGroup": {
       "address": "0x801E2C3C",
-      "evidence": "evidence.tsv external row for 0x801E2C3C (fn_801E2C3C__14Class_801E27A4) and function row 0x801E2C3C (comparison unit; original assembly remains linked)."
+      "evidence": "evidence.tsv external row for 0x801E2C3C (fn_801E2C3C__9BodyGroup) and function row 0x801E2C3C (comparison unit; original assembly remains linked)."
     },
     "fn_801E2C64__9BodyGroupPP13BodyGroupNode": {
       "address": "0x801E2C64",
-      "evidence": "evidence.tsv external row for 0x801E2C64 (fn_801E2C64__14Class_801E27A4PP13Node_801E2878) and function row 0x801E2C64 (comparison unit; original assembly remains linked)."
+      "evidence": "evidence.tsv external row for 0x801E2C64 (fn_801E2C64__9BodyGroupPP13BodyGroupNode) and function row 0x801E2C64 (comparison unit; original assembly remains linked)."
     },
     "_vt.14Class_802A2A40": {
       "address": "0x802A2A40",
