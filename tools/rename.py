@@ -12,7 +12,7 @@ A rename changes, as whole identifiers:
 - config/<target>/evidence.tsv: OLD in the subject column (also as `Class::OLD` or `OLD::member`) and
   GCC 2.95 mangled spellings that carry it (`OLD__14Class_8000ABCD`, `fn_8000ABCD__<len>OLD`), whose
   length prefix is rewritten. The evidence column is a record and is never rewritten.
-- config/<target>/units.json (externals, link_roots, folded) and comparisons.json (function, storage
+- config/<target>/units.json (externals, link_roots, folded, holdouts) and comparisons.json (function, storage
   and discarded symbols): the same, mangled spellings included.
 Every rename needs --evidence: what the code does that gives NEW, recorded as a `name` row at OLD's
 address (a `type` row for a type), origin `inferred` (or --origin). A `name` row for a neutral label

@@ -400,7 +400,17 @@ def configured(root, binary):
         validated, _, _ = sb.load_manifest(compiled, sections, accepted['compiler'])
         unit = validated[0]
         existing = next((u for u in accepted['units'] if u['source'] == candidate['source']), None)
-        if existing and existing['profile'] != candidate['profile']:
+        # A holdouts unit compiles with its named holdouts profile (base flags plus
+        # -ffunction-sections); its comparison entry uses the base profile, which emits the same
+        # instructions in one .text section that a comparison object can place.
+        profiles = accepted['profiles']
+        base = (existing is not None and 'holdouts' in existing
+                and existing['profile'] in profiles and candidate['profile'] in profiles
+                and [f for f in profiles[existing['profile']]['flags'] if f != sb.FUNCTION_SECTIONS]
+                == profiles[candidate['profile']]['flags']
+                and {k: v for k, v in profiles[existing['profile']].items() if k not in ('flags', 'evidence')}
+                == {k: v for k, v in profiles[candidate['profile']].items() if k not in ('flags', 'evidence')})
+        if existing and existing['profile'] != candidate['profile'] and not base:
             raise ValueError('Accepted and comparison source must use the same compiler profile')
         for row in candidate['functions']:
             if set(row) != {'symbol', 'start', 'end'} or not isinstance(row['symbol'], str) or not row['symbol']:
@@ -544,6 +554,9 @@ def reference_addresses(root, manifest, accepted):
                           if any(s['name'] == name and s['shndx'] == sb.SHN_COMMON for s in native_symbols)})
         # A kept local is public only in the derived link object (source_build.keep_object).
         externals.update({name: int(value, 16) for name, value in (u.get('kept_locals') or {}).items()})
+        # A public holdout keeps its original bytes at its target start (source_build.holdout_object).
+        externals.update({row['symbol']: int(row['start'], 16) for row in u.get('holdouts') or []
+                          if row['symbol'] in public})
         accepted_objects.append((u['sections'], native_sections, native_symbols))
     # Public data objects of accepted source resolve at their verified linked placements.
     data_symbols, ambiguous = accepted_data_symbols(accepted_objects, externals)

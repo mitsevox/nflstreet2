@@ -5,7 +5,7 @@
 
 A file is closed (the project's done rule, Lucas 2026-11-04) when:
 - linked: units.json links it and comparisons.json registers nothing in it, so every function in it
-  is exact in the complete build;
+  is exact in the complete build; a file the build links with holdouts is never closed;
 - its name is descriptive: not cu_<address> or any other name built on an address;
 - every function and every label (data object, local static) its object defines has a descriptive
   name, classes included (a method of Class_803EC99C is not named); compiler-generated symbols
@@ -52,6 +52,8 @@ def unit_labels(index, unit):
         raise ValueError(f"{native.relative_to(ROOT)} differs from the build's receipt; rebuild")
     sections, symbols = sb.read_elf(native.read_bytes())
     functions = {f['symbol']: int(f['address'], 16) for f in unit['functions']}
+    # A holdout (source_build.holdout_object) is not linked, but it is the file's function at its target range.
+    functions.update({row['symbol']: int(row['start'], 16) for row in unit.get('holdouts') or []})
     placed = {}
     for placement in unit['sections']:
         start, end = int(placement['start'], 16), int(placement['end'], 16)
@@ -105,7 +107,9 @@ def survey(source_report=ROOT / 'build/source/report.json'):
             names = given.get(address, set()) if address is not None else set()
             if not names & {name, readable, short, short.split('::')[-1]}:
                 unevidenced.append(readable)
-        rows.append({'source': unit['source'], 'linked': 'partly' if unit['source'] in comparisons else 'yes',
+        # A unit with holdouts is linked partly while any remain, whatever comparisons.json says.
+        held = unit['source'] in comparisons or bool(unit.get('holdouts'))
+        rows.append({'source': unit['source'], 'linked': 'partly' if held else 'yes',
                      'file_named': descriptive_file(unit['source']), 'labels': total,
                      'placeholders': unnamed, 'unevidenced': unevidenced})
     for source in sorted(comparisons - {u['source'] for u in report['units']}):

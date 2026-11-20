@@ -28,6 +28,10 @@ NEUTRAL = re.compile(r"(?:fn|lbl)_([0-9A-F]{8})")
 SAFE_PATH = re.compile(r"[A-Za-z0-9_./+-]+")
 LINKER_SYMBOLS = {"__start", "_SDA_BASE_", "_SDA2_BASE_"}
 LINK_TIMEOUT = 600
+# A unit with holdouts compiles each function into its own section, so a holdout's code can be
+# left out of the link while every other function keeps its bytes (holdout_object). The flag
+# comes from the unit's named profile (owner ruling of 2026-11-20); load_manifest requires it.
+FUNCTION_SECTIONS = "-ffunction-sections"
 # Build inputs the report is bound to; tools/progress.py rejects reports from other versions.
 TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/sdk_cc.py", "tools/setup_compiler.py",
                  "tools/baseline.py", "tools/compiler-tools.json", "tools/baseline-tools.json",
@@ -170,7 +174,12 @@ def language_flags(profile):
     return ["-x", profile["language"]] if "language" in profile else []
 
 
-def load_manifest(manifest, sections, compiler_version):
+def load_manifest(manifest, sections, compiler_version, comparisons=None, evidence=None):
+    """Validate the unit manifest; return (units, externals, include directories).
+
+    `comparisons` is the parsed comparisons.json and `evidence` the rows of evidence.tsv (as
+    holdout_evidence reads them); each is read from the repository only when a unit declares
+    holdouts, which must be registered partials there with a HOLDOUT: evidence row each."""
     if manifest.get("schema") != 1 or manifest.get("target") != "GN7E69-rev0":
         raise ValueError("Unit manifest must use schema 1 for target GN7E69-rev0")
     if manifest.get("compiler") != compiler_version:
@@ -225,7 +234,8 @@ def load_manifest(manifest, sections, compiler_version):
     by_name = {section["name"]: section for section in sections}
     units, ranges, sources, followed = [], [], set(), []
     for unit in manifest.get("units", []):
-        if set(unit) - {"link_roots", "folded", "storage", "kept_locals"} != {"source", "profile", "evidence", "sections"} \
+        if set(unit) - {"link_roots", "folded", "storage", "kept_locals", "holdouts"} \
+                != {"source", "profile", "evidence", "sections"} \
                 or not unit["evidence"].strip():
             raise ValueError("Each unit needs exactly source, profile, evidence and sections; "
                              "flags belong to a profile")
@@ -236,17 +246,15 @@ def load_manifest(manifest, sections, compiler_version):
         if unit["profile"] not in profiles:
             raise ValueError(f"Unit {unit['source']} uses unknown profile {unit['profile']}")
         roots = unit.get("link_roots")
-        if roots is not None:
+        # A holdouts unit's link_roots list only its discarded functions; holdout_functions checks them.
+        if roots is not None and "holdouts" not in unit:
             # SDK libraries discard unknown library code; any other unit names each function
             # the linker discards, and retained_layout checks that list exactly. A unit whose
             # roots exist only so the linker drops its folded functions may discard nothing else.
             keys = {"symbols", "evidence"}
             if profiles[unit["profile"]].get("compiler", "prodg") != "mwcc":
                 keys = keys | {"discarded"}
-            def names(values, empty=False):
-                return isinstance(values, list) and (empty or bool(values)) and len(set(values)) == len(values) \
-                    and all(isinstance(n, str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", n)
-                            and n not in LINKER_SYMBOLS and not n.startswith("__original_") for n in values)
+            names = link_root_names
             if not isinstance(roots, dict) or set(roots) != keys \
                     or not isinstance(roots["evidence"], str) or not roots["evidence"].strip() \
                     or not names(roots["symbols"]) \
@@ -264,7 +272,9 @@ def load_manifest(manifest, sections, compiler_version):
             start, end = address(entry["start"]), address(entry["end"])
             if target is None or not target["start"] <= start < end <= target["end"]:
                 raise ValueError(f"{unit['source']} {entry['section']} range is outside {entry['placement']}")
-            if any(entry["section"] == other["section"] for other in placed):
+            # A unit with holdouts maps its code section once per linked run between them.
+            if any(entry["section"] == other["section"] for other in placed) \
+                    and not ("holdouts" in unit and target["kind"] == "code" and "follows" not in entry):
                 raise ValueError(f"{unit['source']} maps {entry['section']} more than once")
             follows = entry.get("follows")
             if "follows" in entry and (target["kind"] != "code" or not isinstance(follows, str)):
@@ -278,8 +288,7 @@ def load_manifest(manifest, sections, compiler_version):
         for entry in placed:
             if entry["follows"] is None:
                 continue
-            code = next((other for other in placed if other["section"] == entry["follows"]
-                         and other is not entry), None)
+            code = followed_code(placed, entry)
             if code is None or code["follows"] is not None or code["placement"] != entry["placement"] \
                     or not code["end"] <= entry["start"]:
                 raise ValueError(f"{unit['source']} {entry['section']} must follow another configured section "
@@ -292,6 +301,25 @@ def load_manifest(manifest, sections, compiler_version):
         kept = kept_symbols(unit.get("kept_locals"), placed, unit["source"])
         if folded and kept and set(folded) & set(kept):
             raise ValueError(f"{unit['source']}: a symbol cannot be both folded and kept")
+        holdouts = None
+        if "holdouts" in unit:
+            if comparisons is None:
+                comparisons = json.loads((ROOT / "config/GN7E69-rev0/comparisons.json").read_text())
+            if evidence is None:
+                evidence = holdout_evidence(ROOT)
+            holdouts = holdout_functions(unit, placed, comparisons, evidence, by_name)
+            for row in holdouts:
+                ranges.append((row["start"], row["end"], f"{unit['source']} holdout {row['symbol']}"))
+        # Owner ruling of 2026-11-20: -ffunction-sections comes from a named profile, never from
+        # the tool. A holdouts unit needs such a ProDG profile, and only a holdouts unit may use one
+        # (its code is linked from the derived object's runs, not from per-function sections).
+        sectioned = FUNCTION_SECTIONS in profiles[unit["profile"]]["flags"]
+        if holdouts and (not sectioned or profiles[unit["profile"]].get("compiler", "prodg") != "prodg"):
+            raise ValueError(f"{unit['source']}: holdouts need a named ProDG profile whose flags include "
+                             f"{FUNCTION_SECTIONS} (for example game_cpp_holdouts), not {unit['profile']}")
+        if sectioned and not holdouts:
+            raise ValueError(f"{unit['source']}: profile {unit['profile']} compiles with {FUNCTION_SECTIONS}, "
+                             "which only a unit with holdouts may use")
         root = profiles[unit["profile"]].get("source_root")
         compile_path = None
         if root:
@@ -308,7 +336,7 @@ def load_manifest(manifest, sections, compiler_version):
                       "compiler_version": versions[unit["profile"]],
                       "include_dirs": profiles[unit["profile"]].get("include_dirs", []),
                       "source_root": root, "compile_path": compile_path, "link_roots": roots,
-                      "folded": folded, "storage": storage, "kept_locals": kept})
+                      "folded": folded, "storage": storage, "kept_locals": kept, "holdouts": holdouts})
     ranges.sort()
     for left, right in zip(ranges, ranges[1:]):
         if right[0] < left[1]:
@@ -317,6 +345,20 @@ def load_manifest(manifest, sections, compiler_version):
         if any(gap_start < end and start < gap_end for start, end, _ in ranges):
             raise ValueError(f"{source} {name}: another configured range lies between it and the code it follows")
     return units, externals, [directory for directory in manifest.get("include_dirs", [])]
+
+
+def followed_code(placed, entry):
+    """The configured section that data entry `entry` follows, or None. A holdouts unit maps its
+    .text once per linked run, so data that follows .text follows the run that ends last."""
+    return max((other for other in placed if other["section"] == entry["follows"] and other is not entry),
+               key=lambda other: other["end"], default=None)
+
+
+def link_root_names(values, empty=False):
+    """Whether `values` is a list of distinct symbol names link_roots may list (non-empty unless `empty`)."""
+    return isinstance(values, list) and (empty or bool(values)) and len(set(values)) == len(values) \
+        and all(isinstance(n, str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", n)
+                and n not in LINKER_SYMBOLS and not n.startswith("__original_") for n in values)
 
 
 def folded_symbols(folded, placed, source):
@@ -569,6 +611,432 @@ def fold_object(native, folded, output):
     return {name: (symbol, section) for name, symbol, section, _ in folds.values()}
 
 
+# Holdouts ----------------------------------------------------------------------------------
+#
+# Owner rulings of 2026-11-19 (the two released hulls) and 2026-11-20 (any file, after real
+# attempts, with every holdout tracked): a file may be linked as one compiled source with only
+# its non-exact functions' code left out. Those functions (the holdouts) stay registered
+# partials in comparisons.json and their target ranges keep the original bytes; every data
+# section of the file is linked whole, so their literal pools and jump tables must compile
+# byte-exact. The unit compiles with -ffunction-sections from its named profile (for example
+# game_cpp_holdouts), and the derived link object
+# (holdout_object) drops each holdout's code section and redirects every reference to it to
+# its target address. Tracking is enforced here: each holdout names its own source-form row in
+# evidence.tsv, at its registered range, whose evidence starts with HOLDOUT: (the forms tried
+# and the cause); build() refuses an exact holdout, and tools/files_closed.py never closes the file.
+
+HOLDOUT_PREFIX = "HOLDOUT:"
+HOLDOUT_LOCATOR = re.compile(r"evidence\.tsv source-form (0x[0-9A-F]{8})-(0x[0-9A-F]{8})")
+
+
+def holdout_evidence(root):
+    """The source-form rows of the target's evidence table: {(start, end): [evidence text]}."""
+    path = Path(root) / "config/GN7E69-rev0/evidence.tsv"
+    rows = {}
+    if path.exists():
+        with path.open() as file:
+            for row in csv.DictReader(file, delimiter="\t"):
+                if row["kind"] == "source-form" and row["start"] != "-" and row["end"] != "-":
+                    rows.setdefault((int(row["start"], 16), int(row["end"], 16)), []).append(row["evidence"] or "")
+    return rows
+
+
+def holdout_record(source, symbol, start, end, locator, evidence):
+    """Check a holdout's evidence locator: `evidence.tsv source-form 0xSTART-0xEND`, the holdout's
+    registered range, naming exactly one row there whose evidence starts with HOLDOUT: and goes
+    on to record the forms tried and the cause."""
+    match = HOLDOUT_LOCATOR.fullmatch(locator) if isinstance(locator, str) else None
+    if not match:
+        raise ValueError(f"{source}: holdout {symbol} needs the evidence locator 'evidence.tsv source-form "
+                         f"0x{start:08X}-0x{end:08X}' naming its {HOLDOUT_PREFIX} row")
+    if (address(match.group(1)), address(match.group(2))) != (start, end):
+        raise ValueError(f"{source}: holdout {symbol}'s evidence row {match.group(1)}-{match.group(2)} is not its "
+                         f"registered range 0x{start:08X}-0x{end:08X}")
+    texts = [text for text in evidence.get((start, end), []) if text.startswith(HOLDOUT_PREFIX)]
+    if not texts:
+        raise ValueError(f"{source}: holdout {symbol} has no source-form row 0x{start:08X}-0x{end:08X} in "
+                         f"evidence.tsv whose evidence starts with {HOLDOUT_PREFIX} (record the forms tried "
+                         "and the cause)")
+    if len(texts) != 1:
+        raise ValueError(f"{source}: holdout {symbol} has more than one {HOLDOUT_PREFIX} row at "
+                         f"0x{start:08X}-0x{end:08X}")
+    if not texts[0][len(HOLDOUT_PREFIX):].strip():
+        raise ValueError(f"{source}: holdout {symbol}'s {HOLDOUT_PREFIX} row records nothing")
+
+
+def holdout_reference(start):
+    """The undefined symbol a derived object's references to the holdout at `start` name."""
+    return f"__holdout_{start:08X}"
+
+
+def holdout_run(start):
+    """The derived object's section, and its global marker, for the code run at `start`."""
+    return f".text.holdout_run_{start:08X}", f"__holdout_run_{start:08X}"
+
+
+def holdout_functions(unit, placed, comparisons, evidence, by_name):
+    """Validate a unit's holdouts; return [{"symbol", "start", "end", "evidence"}] in address order.
+
+    `holdouts` is {"functions": [{"function": symbol or 0xADDRESS, "evidence": locator}],
+    "evidence": locator}. Each entry names one function that comparisons.json registers for the
+    same source; its registered extent is the target range that keeps the original bytes, and its
+    locator names the HOLDOUT: row of evidence.tsv for that range (holdout_record). Any unit may
+    declare holdouts (owner ruling of 2026-11-20). The unit's code entries are the linked runs
+    between them: runs and holdouts tile one contiguous code range, with a holdout between any
+    two runs. Each run is given the derived object's section that links it (`input`). build()
+    checks that none of the holdouts is exact. Read-only data may follow the code (`follows`
+    .text), linked whole after the last run, when the code ends with that run.
+
+    The unit may also list, as `link_roots: {"discarded": [...], "evidence": locator}`, file-static
+    functions SN's linker discarded (the existing discarded-function practice): compiled, their
+    code is dropped like a holdout's, but they have no target range and are never measured.
+    Each must not be a function comparisons.json registers or a neutral label; holdout_object
+    checks that each is one compiled local function that nothing kept references."""
+    source, spec = unit["source"], unit["holdouts"]
+    if not isinstance(spec, dict) or set(spec) != {"functions", "evidence"} \
+            or not isinstance(spec["evidence"], str) or not spec["evidence"].strip() \
+            or not isinstance(spec["functions"], list) or not spec["functions"]:
+        raise ValueError(f"{source}: holdouts need a non-empty functions list and evidence")
+    roots = unit.get("link_roots")
+    # The derived object's run markers are its retention roots, so a holdouts unit's link_roots
+    # name no symbols: only the discarded functions holdout_object drops.
+    if roots is not None and (not isinstance(roots, dict) or set(roots) != {"discarded", "evidence"}
+                              or not isinstance(roots["evidence"], str) or not roots["evidence"].strip()
+                              or not link_root_names(roots["discarded"])):
+        raise ValueError(f"{source}: a holdouts unit's link_roots are a non-empty list of distinct discarded "
+                         "functions and evidence, without symbols")
+    for key in ("folded", "kept_locals"):
+        if key in unit:
+            raise ValueError(f"{source}: holdouts cannot be combined with {key}")
+    rows = [row for entry in comparisons.get("units", []) if entry.get("source") == source
+            for row in entry.get("functions", [])]
+    result = []
+    for entry in spec["functions"]:
+        if not isinstance(entry, dict) or set(entry) != {"function", "evidence"}:
+            raise ValueError(f"{source}: a holdout is {{\"function\": symbol or 0xXXXXXXXX start, \"evidence\": "
+                             f"'evidence.tsv source-form 0xSTART-0xEND'}}, not {entry!r}")
+        item = entry["function"]
+        if not isinstance(item, str) or not item:
+            raise ValueError(f"{source}: a holdout is a function symbol or its 0xXXXXXXXX start")
+        if re.fullmatch(r"0x[0-9A-Fa-f]{8}", item):
+            found = [row for row in rows if address(row["start"]) == address(item)]
+        else:
+            found = [row for row in rows if row["symbol"] == item]
+        if len(found) != 1:
+            raise ValueError(f"{source}: holdout {item} is not one function comparisons.json registers for this file")
+        symbol, start, end = found[0]["symbol"], address(found[0]["start"]), address(found[0]["end"])
+        holdout_record(source, symbol, start, end, entry["evidence"], evidence)
+        result.append({"symbol": symbol, "start": start, "end": end, "evidence": entry["evidence"]})
+    if len({row["symbol"] for row in result}) != len(result):
+        raise ValueError(f"{source}: duplicate holdout")
+    for name in (roots or {}).get("discarded", []):
+        # A discarded function has no target code: it is neither a holdout nor any registered function.
+        if name in {row["symbol"] for row in rows} or NEUTRAL.fullmatch(name):
+            raise ValueError(f"{source}: discarded function {name} has a target range; a discarded function is "
+                             "not a holdout or a registered function")
+    result.sort(key=lambda row: row["start"])
+    code = sorted((entry for entry in placed if entry["kind"] == "code" and entry["follows"] is None),
+                  key=lambda entry: entry["start"])
+    if not code or len({entry["section"] for entry in code}) != 1 \
+            or len({entry["placement"] for entry in code}) != 1:
+        raise ValueError(f"{source}: holdouts need one code section linked in runs of one placement")
+    if code[0]["section"] != ".text":
+        raise ValueError(f"{source}: holdouts link code runs of section .text, not {code[0]['section']}")
+    target = by_name[code[0]["placement"]]
+    pieces = sorted([(entry["start"], entry["end"], "run") for entry in code]
+                    + [(row["start"], row["end"], row["symbol"]) for row in result])
+    for left, right in zip(pieces, pieces[1:]):
+        if right[0] != left[1]:
+            raise ValueError(f"{source}: code runs and holdouts must tile one range; 0x{left[1]:08X} is "
+                             f"followed by 0x{right[0]:08X}")
+        if left[2] == right[2] == "run":
+            raise ValueError(f"{source}: two code runs meet at 0x{right[0]:08X} without a holdout between them")
+    if not target["start"] <= pieces[0][0] < pieces[-1][1] <= target["end"]:
+        raise ValueError(f"{source}: holdouts lie outside {code[0]['placement']}")
+    # Read-only data configured to follow the code (follows) is linked whole, from the derived
+    # object's unchanged data section, after the last run (followed_code); plan() checks its
+    # alignment and the zero padding as for any unit. The code must end with that run: a trailing
+    # holdout would lie between the run and the data.
+    for entry in placed:
+        if entry["follows"] is not None and (entry["follows"] != ".text" or pieces[-1][2] != "run"):
+            raise ValueError(f"{source}: {entry['section']} follows the code, so it must follow .text and the "
+                             "unit's code must end with a linked run, not a holdout")
+    for entry in code:
+        entry["input"] = holdout_run(entry["start"])[0]
+    return result
+
+
+def holdout_object(native, unit, output):
+    """Write the derived link object of a unit with holdouts; return what it dropped and kept.
+
+    `native` was compiled with -ffunction-sections: each code section holds exactly one function.
+    In compiled order, the functions fill the unit's code runs and holdout ranges: a holdout's
+    section stands for its registered target range whatever its compiled size, and every other
+    function follows the previous one at its section alignment. The derived object
+    - merges the function sections of each run, in order, into one section `.text.holdout_run_<start>`
+      (zero padding where a function's alignment needs it), with a global marker
+      `__holdout_run_<start>` so the linker's retention keeps it; symbols and relocations in it
+      move by the function's offset in the run;
+    - drops each holdout's code section, its relocations and the symbols defined in it;
+    - redirects every relocation that reaches a holdout (through its function, a label in it or
+      its section symbol) to a new undefined global `__holdout_<start>`, with the offset into the
+      function added to the addend; plan() resolves it to the holdout's target start, inside the
+      original bytes there. A global holdout name is reported in `globals`, so other units'
+      references to it resolve to the same address;
+    - drops each listed discarded function's code section, its relocations and the symbols defined
+      in it, without an address: the compiled order skips it. Each must be one compiled local
+      function, and a relocation that reaches it from any kept section or a holdout (whose code
+      the target has) fails, as the target's linker could not have discarded it then. An
+      undefined symbol that only discarded functions reference is dropped too, so plan() need
+      not resolve it; one that anything else references stays;
+    Data sections and their relocations are unchanged apart from those redirections. The native
+    object stays the receipt."""
+    source = unit["source"]
+    data = bytes(native)
+    sections, symbols = read_elf(data)
+    tables = [section for section in sections if section["type"] == SHT_SYMTAB]
+    if len(tables) != 1:
+        raise ValueError(f"{source}: holdouts require exactly one symbol table")
+    symtab = tables[0]
+    strtab = sections[symtab["link"]]
+    for section in sections:
+        if section["type"] == 9 and sections[section["info"]]["flags"] & SHF_ALLOC:
+            raise ValueError(f"{source}: holdouts require explicit-addend relocations")
+    code = [section for section in sections if section["flags"] & SHF_ALLOC and section["flags"] & SHF_EXECINSTR
+            and section["size"]]
+    owner = {}
+    for section in code:
+        functions = [symbol for symbol in symbols if symbol["type"] == STT_FUNC and symbol["shndx"] == section["index"]]
+        if section["type"] != SHT_PROGBITS or len(functions) != 1 or functions[0]["value"] \
+                or functions[0]["size"] != section["size"]:
+            raise ValueError(f"{source}: code section {section['name']} is not exactly one function; holdouts "
+                             f"need {FUNCTION_SECTIONS}")
+        owner[section["index"]] = functions[0]
+    names = [symbol["name"] for symbol in owner.values()]
+    held = {row["symbol"]: row for row in unit["holdouts"]}
+    for name in held:
+        if names.count(name) != 1:
+            raise ValueError(f"{source}: holdout {name} is not one compiled function of the unit")
+    discarded = set((unit.get("link_roots") or {}).get("discarded", ()))
+    for name in discarded:
+        if names.count(name) != 1 or name in held \
+                or next(f for f in owner.values() if f["name"] == name)["bind"] != STB_LOCAL:
+            raise ValueError(f"{source}: discarded function {name} is not one compiled local (file-static) "
+                             "function of the unit")
+    runs = sorted((entry for entry in unit["sections"] if entry.get("input")), key=lambda entry: entry["start"])
+    starts = [entry["start"] for entry in runs] + [row["start"] for row in held.values()]
+    cursor, end = min(starts), max([entry["end"] for entry in runs] + [row["end"] for row in held.values()])
+    members = {entry["start"]: [] for entry in runs}
+    dropped, place, linked, gone = [], {}, [], {}
+    for section in code:
+        function = owner[section["index"]]
+        if function["name"] in discarded:
+            place[section["index"]] = ("discarded", function["name"])
+            gone[function["name"]] = section["size"]
+            continue
+        if function["name"] in held:
+            row = held[function["name"]]
+            if cursor != row["start"]:
+                raise ValueError(f"{source}: holdout {row['symbol']} 0x{row['start']:08X} is not where the "
+                                 f"compiled order reaches (0x{cursor:08X})")
+            place[section["index"]] = ("holdout", row["start"])
+            dropped.append(dict(row, compiled=section["size"]))
+            cursor = row["end"]
+            continue
+        run = next((entry for entry in runs if entry["start"] <= cursor < entry["end"]), None)
+        at = -(-cursor // max(section["align"], 1)) * max(section["align"], 1)
+        if run is None or at + section["size"] > run["end"]:
+            raise ValueError(f"{source}: compiled function {function['name']} at 0x{at:08X} does not fit a "
+                             "configured code run")
+        members[run["start"]].append(section)
+        linked.append((function["name"], at))
+        place[section["index"]] = ("run", run["start"], at - run["start"])
+        cursor = at + section["size"]
+    if cursor != end or len(dropped) != len(held):
+        raise ValueError(f"{source}: the compiled functions end at 0x{cursor:08X}, not at the configured "
+                         f"end 0x{end:08X} of the code runs and holdouts")
+    # New section table: unchanged sections keep their order; each run's merged section takes the
+    # place of its first function; relocation sections follow the section table's other entries.
+    new_sections, index_map, run_index = [None], {}, {}
+    removed = {".symtab", ".strtab", ".shstrtab"}
+    for section in sections[1:]:
+        if section["index"] in place:
+            kind = place[section["index"]]
+            if kind[0] == "run" and kind[1] not in run_index:
+                group = members[kind[1]]
+                run = next(entry for entry in runs if entry["start"] == kind[1])
+                body = bytearray()
+                for member in group:
+                    offset = place[member["index"]][2]
+                    body += bytes(offset - len(body)) + member["data"]
+                if len(body) != run["end"] - run["start"]:
+                    raise ValueError(f"{source}: code run 0x{run['start']:08X} compiles to {len(body):#x} bytes, "
+                                     f"not {run['end'] - run['start']:#x}")
+                run_index[kind[1]] = len(new_sections)
+                new_sections.append({"name": run["input"], "type": SHT_PROGBITS, "flags": group[0]["flags"],
+                                     "data": bytes(body), "size": len(body), "link": 0, "info": 0,
+                                     "align": max(max(member["align"], 1) for member in group), "entsize": 0})
+            continue
+        if section["type"] in (SHT_SYMTAB, 4) or section is strtab or section["index"] == shstrndx(data):
+            continue
+        if section["name"] in removed:
+            continue
+        index_map[section["index"]] = len(new_sections)
+        content = None if section["type"] == SHT_NOBITS else data[section["offset"]:section["offset"] + section["size"]]
+        new_sections.append(dict(section, data=content))
+    for start, index in run_index.items():
+        for member in members[start]:
+            index_map[member["index"]] = index
+    # An undefined symbol that only discarded functions' relocations name goes with them: their
+    # code and relocations are dropped, so nothing needs it resolved. One that any other section's
+    # relocation names (a run's, a holdout's, whose code the target has, or a data section's) stays.
+    needed, unneeded = set(), set()
+    for section in sections:
+        if section["type"] != 4:
+            continue
+        discarding = place.get(section["info"], ("",))[0] == "discarded"
+        for at in range(section["offset"], section["offset"] + section["size"], 12):
+            (unneeded if discarding else needed).add(struct.unpack_from(">IIi", data, at)[1] >> 8)
+    unneeded = {index for index in unneeded - needed
+                if index and symbols[index - 1]["shndx"] == SHN_UNDEF and symbols[index - 1]["name"]}
+    # Symbols: same order; run section symbols replace their members' section symbols, symbols
+    # in a holdout's or discarded function's section go, as do undefined symbols only discarded
+    # functions need, and the holdout references and run markers are appended.
+    entries, mapping, run_symbol, first_global = [], {}, {}, None
+    symtab_bytes = data[symtab["offset"]:symtab["offset"] + symtab["size"]]
+    for index, symbol in enumerate(symbols, 1):
+        if index == symtab["info"]:
+            first_global = len(entries) + 1
+        if index in unneeded:
+            continue
+        raw = symtab_bytes[index * 16:index * 16 + 16]
+        name_offset, value, size, info, other, shndx = struct.unpack(">IIIBBH", raw)
+        kind = place.get(shndx)
+        if kind and kind[0] in ("holdout", "discarded"):
+            mapping[index] = (kind[0], kind[1], value)
+            continue
+        if kind:
+            start, offset = kind[1], kind[2]
+            if symbol["type"] == STT_SECTION:
+                if start not in run_symbol:
+                    run_symbol[start] = len(entries) + 1
+                    entries.append(struct.pack(">IIIBBH", 0, 0, 0, STB_LOCAL << 4 | STT_SECTION, 0,
+                                               run_index[start]))
+                mapping[index] = ("symbol", run_symbol[start], offset)
+                continue
+            value, shndx = value + offset, run_index[start]
+            if info == STB_LOCAL << 4 | STT_FUNC:
+                # strip-unused drops an unreferenced local function even inside a kept section, and a
+                # file-static function whose only callers are holdouts has lost its references; as an
+                # untyped label it stays with its run, as the target's linker kept it.
+                info = STB_LOCAL << 4
+        elif 0 < shndx < 0xFF00:
+            if shndx not in index_map:
+                raise ValueError(f"{source}: symbol {symbol['name']} is defined in a section holdouts cannot keep")
+            shndx = index_map[shndx]
+        mapping[index] = ("symbol", len(entries) + 1, 0)
+        entries.append(struct.pack(">IIIBBH", name_offset, value, size, info, other, shndx))
+    if first_global is None:
+        first_global = len(entries) + 1
+    strings = bytearray(data[strtab["offset"]:strtab["offset"] + strtab["size"]])
+    references = {}
+    for row in sorted(held.values(), key=lambda row: row["start"]):
+        references[row["start"]] = len(entries) + 1
+        entries.append(struct.pack(">IIIBBH", len(strings), 0, 0, STB_GLOBAL << 4, 0, SHN_UNDEF))
+        strings += holdout_reference(row["start"]).encode("ascii") + b"\0"
+    for start, index in sorted(run_index.items()):
+        # The marker spans its run, as an original piece's marker does: strip-unused then keeps the
+        # whole run, including file-static functions that only a holdout calls.
+        entries.append(struct.pack(">IIIBBH", len(strings), 0, new_sections[index]["size"], STB_GLOBAL << 4, 0,
+                                   index))
+        strings += holdout_run(start)[1].encode("ascii") + b"\0"
+    # Relocations: a run's members' records merge into one section, moved by each member's offset.
+    relocations = {}
+    for section in sections:
+        if section["type"] != 4:
+            continue
+        target = place.get(section["info"])
+        if target and target[0] == "discarded":
+            continue
+        if target and target[0] == "holdout":
+            # A holdout's code is in the target, so it cannot reach a discarded function either.
+            for at in range(section["offset"], section["offset"] + section["size"], 12):
+                index = struct.unpack_from(">IIi", data, at)[1] >> 8
+                if index and mapping.get(index, ("",))[0] == "discarded":
+                    raise ValueError(f"{source}: discarded function {mapping[index][1]} is referenced from "
+                                     f"{sections[section['info']]['name']}")
+            continue
+        key, base = (("run", target[1]), target[2]) if target else (("section", section["info"]), 0)
+        records = relocations.setdefault(key, bytearray())
+        for at in range(section["offset"], section["offset"] + section["size"], 12):
+            site, info, addend = struct.unpack_from(">IIi", data, at)
+            index = info >> 8
+            if index:
+                if index not in mapping:
+                    raise ValueError(f"{source}: relocation names an unknown symbol")
+                kind, new, delta = mapping[index]
+                if kind == "discarded":
+                    raise ValueError(f"{source}: discarded function {new} is referenced from "
+                                     f"{sections[section['info']]['name']}")
+                if kind == "holdout":
+                    new, delta = references[new], delta
+                index, addend = new, addend + delta
+            records += struct.pack(">IIi", site + base, index << 8 | info & 255, addend)
+    symtab_index = len(new_sections) + sum(1 for records in relocations.values() if records)
+    for (kind, value), records in relocations.items():
+        if not records:
+            continue
+        info = run_index[value] if kind == "run" else index_map.get(value)
+        if info is None:
+            raise ValueError(f"{source}: relocations for a section holdouts cannot keep")
+        new_sections.append({"name": ".rela" + new_sections[info]["name"], "type": 4, "flags": 0,
+                             "data": bytes(records), "size": len(records), "link": symtab_index, "info": info,
+                             "align": 4, "entsize": 12})
+    new_sections.append({"name": ".symtab", "type": SHT_SYMTAB, "flags": 0, "data": bytes(16) + b"".join(entries),
+                         "size": 16 * (len(entries) + 1), "link": symtab_index + 1, "info": first_global,
+                         "align": 4, "entsize": 16})
+    new_sections.append({"name": ".strtab", "type": SHT_STRTAB, "flags": 0, "data": bytes(strings),
+                         "size": len(strings), "link": 0, "info": 0, "align": 1, "entsize": 0})
+    write_elf(data, new_sections, output)
+    return {"dropped": dropped, "discarded": gone,
+            "globals": {owner[index]["name"]: kind[1] for index, kind in place.items()
+                        if kind[0] == "holdout" and owner[index]["bind"] == STB_GLOBAL},
+            "linked": dict(linked)}
+
+
+def shstrndx(data):
+    return struct.unpack_from(">H", data, 50)[0]
+
+
+def write_elf(original, sections, output):
+    """Write a relocatable ELF with the ELF header of `original` and the given sections (index 0 is
+    the null section); a section-name string table is appended."""
+    names = bytearray(b"\0")
+    offsets = []
+    for section in sections[1:]:
+        offsets.append(len(names))
+        names += section["name"].encode("ascii") + b"\0"
+    shstr_name = len(names)
+    names += b".shstrtab\0"
+    body = bytearray(original[:52])
+    headers = [(0,) * 10]
+    for name, section in zip(offsets, sections[1:]):
+        body += bytes(-len(body) % max(4, min(section["align"] or 1, 16)))
+        offset = len(body)
+        if section["type"] != SHT_NOBITS:
+            body += section["data"]
+        headers.append((name, section["type"], section["flags"], 0, offset, section["size"], section["link"],
+                        section["info"], section["align"], section["entsize"]))
+    body += bytes(-len(body) % 4)
+    headers.append((shstr_name, SHT_STRTAB, 0, 0, len(body), len(names), 0, 0, 1, 0))
+    body += names + bytes(-len(names) % 4)
+    struct.pack_into(">I", body, 32, len(body))
+    struct.pack_into(">HHH", body, 46, 40, len(headers), len(headers) - 1)
+    for header in headers:
+        body += struct.pack(">IIIIIIIIII", *header)
+    Path(output).write_bytes(bytes(body))
+
+
 def evidence_rows(root, kind):
     """Bounded rows of one kind in the target's evidence table, as (start, end, subject, edges)."""
     path = Path(root) / "config/GN7E69-rev0/evidence.tsv"
@@ -641,7 +1109,8 @@ def plan(sections, units, objects, externals):
     defined = {}
     for unit in units:
         elf_sections, symbols = objects[unit["source"]]
-        mapped = {entry["section"]: entry for entry in unit["sections"]}
+        # A unit with holdouts links each code run from its own section of the derived object.
+        mapped = {entry.get("input", entry["section"]): entry for entry in unit["sections"]}
         for section in elf_sections:
             if not section["flags"] & SHF_ALLOC or (not section["size"] and section["name"] not in mapped):
                 continue
@@ -677,7 +1146,7 @@ def plan(sections, units, objects, externals):
         for entry in unit["sections"]:
             if entry.get("follows") is None:
                 continue
-            code = mapped[entry["follows"]]
+            code = followed_code(unit["sections"], entry)
             if not code["executable"]:
                 raise ValueError(f"{unit['source']}: {entry['section']} must follow the unit's own code")
             # The data starts at the first boundary of its own alignment after the code; the
@@ -741,9 +1210,18 @@ def plan(sections, units, objects, externals):
             if owner is None:
                 raise ValueError(f"{unit['source']}: storage {name} lies inside a source unit's range")
             owner["symbols"].append({"name": name, "value": start - owner["start"]})
+    # A global holdout's name resolves to its target address for every unit, as its definition
+    # in the original bytes there; references inside its own unit name `__holdout_<start>`.
+    held = {}
+    for unit in units:
+        for name, value in ((unit.get("held") or {}).get("globals") or {}).items():
+            if name in defined or name in held or (name in externals and externals[name] != value):
+                raise ValueError(f"{unit['source']}: holdout {name} is already defined elsewhere")
+            held[name] = value
     resolved = {}
     for unit in units:
         folds = {folded_reference(name): value for name, value in (unit.get("folded") or {}).items()}
+        folds.update({holdout_reference(row["start"]): row["start"] for row in unit.get("holdouts") or []})
         for symbol in objects[unit["source"]][1]:
             name = symbol["name"]
             if symbol["shndx"] != SHN_UNDEF or symbol["bind"] == STB_LOCAL or not name:
@@ -758,6 +1236,8 @@ def plan(sections, units, objects, externals):
                     raise ValueError(f"{unit['source']}: folded reference {name} is ambiguous")
             elif name in defined:
                 continue
+            elif name in held:
+                value = held[name]
             elif name in externals:
                 value = externals[name]
             elif NEUTRAL.fullmatch(name):
@@ -998,9 +1478,20 @@ def check_retention(unit, native, retained):
         raise ValueError(f"{unit['source']}: discarded functions differ from link_roots discarded")
 
 
+def retention_roots(unit):
+    """The unit's link_roots symbols, or None: none at all, or a holdouts unit, whose link_roots
+    only list discarded functions (holdout_object drops them; its run markers are the roots)."""
+    if not unit["link_roots"] or unit.get("holdouts"):
+        return None
+    return unit["link_roots"]["symbols"]
+
+
 def link_object(unit, aliases=()):
-    """Set the object the unit links: the native object, or its folded and/or kept derivative."""
+    """Set the object the unit links: the native object, or its holdouts, folded and/or kept derivative."""
     unit["link_object"], unit["folds"] = unit["object"], {}
+    if unit.get("holdouts"):
+        unit["link_object"] = unit["object"].with_suffix(".holdouts.o")
+        unit["held"] = holdout_object(unit["object"].read_bytes(), unit, unit["link_object"])
     if unit["folded"]:
         unit["link_object"] = unit["object"].with_suffix(".folded.o")
         unit["folds"] = fold_object(unit["object"].read_bytes(), unit["folded"], unit["link_object"])
@@ -1233,17 +1724,20 @@ def build(original, manifest_path, report_path, cache=None):
             raise failures[unit["source"]]
         unit["native_object_sha256"] = sha256(unit["object"])
         link_object(unit, folded_names & set(unit.get("kept_locals") or ()))
+        # A holdouts unit's discarded functions are already gone from its derived object.
         objects[unit["source"]] = (retained_layout(dict(unit, object=unit["link_object"]), compiler, wrapper)
-                                   if unit["link_roots"] else read_elf(unit["link_object"].read_bytes()))
+                                   if retention_roots(unit) else read_elf(unit["link_object"].read_bytes()))
     pieces, defined, resolved = plan(sections, units, objects, externals)
     references = {**externals, **resolved, **{name: value for name, (value, _) in defined.items()}}
     for unit in units:
         check_folded_functions(unit, target, sections, binary, references, compiler, wrapper)
+        check_holdouts(unit, target, sections, binary, references, compiler, wrapper)
     for section in sections:
         for piece in pieces[section["name"]]:
             if "unit" in piece:
                 unit = next(u for u in units if u["source"] == piece["unit"])
-                piece["object"], piece["input"] = unit["link_object"], piece["entry"]["section"]
+                piece["object"] = unit["link_object"]
+                piece["input"] = piece["entry"].get("input", piece["entry"]["section"])
                 continue
             piece["object"] = BUILD / "original" / f"orig_{section['name'].strip('.')}_{piece['start']:08X}.o"
             piece["input"] = section["output"]
@@ -1272,7 +1766,7 @@ def build(original, manifest_path, report_path, cache=None):
     if strip_unused:
         roots = set(original_roots)
         for unit in units:
-            roots.update(unit["link_roots"]["symbols"] if unit["link_roots"] else
+            roots.update(retention_roots(unit) or
                          [symbol["name"] for symbol in objects[unit["source"]][1]
                           if symbol["bind"] == STB_GLOBAL and symbol["shndx"] != SHN_UNDEF])
         keep = BUILD / "keep.txt"
@@ -1355,6 +1849,64 @@ def check_folded_objects(unit, binary, result):
                              f"target bytes at 0x{there:08X}")
 
 
+def check_holdouts(unit, target, sections, binary, references, compiler, wrapper):
+    """A holdout must not be exact. Linked alone at its target start, as the comparisons measure
+    it, a holdout of the target's size must differ from the original bytes there; a holdout of
+    another size differs already. An exact function is linked, not held out."""
+    if not unit.get("holdouts"):
+        return
+    native = unit["object"].read_bytes()
+    elf_sections, symbols = read_elf(native)
+    functions = {symbol["name"]: symbol for symbol in symbols
+                 if symbol["type"] == STT_FUNC and symbol["shndx"] != SHN_UNDEF and symbol["size"]}
+    for row in unit["holdouts"]:
+        if functions[row["symbol"]]["size"] != row["end"] - row["start"]:
+            continue
+        actual = link_holdout(unit, row, native, elf_sections, symbols, functions, target, sections, references,
+                              compiler, wrapper)
+        if actual == dol_bytes(binary, row["start"], row["end"]):
+            raise ValueError(f"{unit['source']}: holdout {row['symbol']} 0x{row['start']:08X} is exact; link it "
+                             "instead of holding it out")
+
+
+def link_holdout(unit, row, native, elf_sections, symbols, functions, target, sections, references, compiler, wrapper):
+    """Link one holdout's compiled body alone at its target start; return the linked bytes."""
+    import diagnostic_object
+    targets = {name: (at, at + functions[name]["size"]) for name, at in unit["held"]["linked"].items()}
+    targets.update({row["symbol"]: (row["start"], row["end"]) for row in unit["holdouts"]})
+    placements = {entry["section"]: entry for entry in unit["sections"] if not entry.get("input")}
+    storage = None
+    if any(symbol["shndx"] == SHN_COMMON for symbol in symbols):
+        # Mapped COMMON symbols, and then each uninitialized object, resolve one by one.
+        nobits = {s["index"]: s["name"] for s in elf_sections if s["type"] == SHT_NOBITS and s["flags"] & SHF_ALLOC}
+        storage = {}
+        for index, symbol in enumerate(symbols):
+            if symbol["shndx"] == SHN_COMMON and symbol["name"] in (unit.get("storage") or {}):
+                storage[index] = unit["storage"][symbol["name"]][0]
+            elif symbol["shndx"] in nobits and symbol["size"] and nobits[symbol["shndx"]] in placements:
+                storage[index] = placements[nobits[symbol["shndx"]]]["start"] + symbol["value"]
+    symbol = functions[row["symbol"]]
+    section = next(s for s in elf_sections if s["index"] == symbol["shndx"])
+    directory = BUILD / "holdouts" / re.sub(r"[^A-Za-z0-9]+", "_", f"{unit['source']}_{row['symbol']}").strip("_")
+    directory.mkdir(parents=True)
+    fragment = directory / "fragment.o"
+    label, objects, script = diagnostic_object.fragment(
+        native, dict(section, name=".text"), symbol["value"], symbol["size"], row["start"], functions, targets,
+        placements, references, fragment, sections, storage)
+    (directory / "link.ld").write_text(
+        f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n"
+        f".text 0x{row['start']:08X} : {{ *(.text) }}\n" + "\n".join(script) + "\n}\n")
+    output = directory / "linked.elf"
+    run("Holdout link", [str(wrapper), str(compiler / "ngcld.exe"), "-T", str(directory / "link.ld"),
+        "-o", str(output), str(fragment), *map(str, objects)], directory / "link.log")
+    linked_sections, linked_symbols = read_elf(output.read_bytes())
+    found = [s for s in linked_symbols if s["name"] == label and s["type"] == STT_FUNC]
+    placed = next((s for s in linked_sections if found and s["index"] == found[0]["shndx"]), None)
+    if not placed or len(found) != 1 or found[0]["value"] != row["start"]:
+        raise ValueError(f"{unit['source']}: holdout {row['symbol']} could not be linked alone at 0x{row['start']:08X}")
+    return placed["data"][row["start"] - placed["addr"]:row["start"] - placed["addr"] + symbol["size"]]
+
+
 def baseline_system():
     system = f"{platform.system().lower()}-{platform.machine().lower()}"
     return {"darwin-arm64": "macos-arm64", "linux-amd64": "linux-x86_64"}.get(system, system)
@@ -1374,7 +1926,15 @@ def compiled_functions(unit, obj):
     placements = {entry["index"]: entry for entry in unit["sections"]}
     functions, seen = [], set()
     for symbol in obj[1]:
-        if symbol["type"] != STT_FUNC or symbol["shndx"] == SHN_UNDEF or symbol["size"] <= 0:
+        # holdout_object leaves a holdouts unit's local functions untyped (sized) so the link keeps them.
+        # Only code placements hold them: ProDG also emits file-static storage (.lcomm in .sbss/.bss)
+        # as untyped sized locals, and those are data, not functions.
+        placed = placements.get(symbol["shndx"])
+        function = symbol["type"] == STT_FUNC or (unit.get("holdouts") and symbol["bind"] == STB_LOCAL
+                                                  and symbol["type"] == 0 and placed is not None
+                                                  and placed["kind"] == "code"
+                                                  and placed.get("executable") is not False)
+        if not function or symbol["shndx"] == SHN_UNDEF or symbol["size"] <= 0:
             continue
         # A kept local's global copy (keep_object) names the same function once more, and its
         # alias for another unit's folded references (`__folded_<name>`) once again.
@@ -1438,6 +1998,12 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                          if unit.get("storage") else None,
                          "kept_locals": {name: f"0x{value:08X}" for name, value in unit["kept_locals"].items()}
                          if unit.get("kept_locals") else None,
+                         # What the derived object dropped: each holdout's target range keeps the
+                         # original bytes, and its compiled size and HOLDOUT: row are recorded.
+                         "holdouts": [{"symbol": row["symbol"], "start": f"0x{row['start']:08X}",
+                                       "end": f"0x{row['end']:08X}", "compiled": row["compiled"],
+                                       "evidence": row["evidence"]}
+                                      for row in unit["held"]["dropped"]] if unit.get("holdouts") else None,
                          "native_object_sha256": unit.get("native_object_sha256"),
                          "link_object_sha256": unit.get("link_object_sha256"),
                          "status": "matched" if identical else "unverified", "sections": entries,
@@ -1473,6 +2039,12 @@ def main():
         print(f"Compile cache ({stats['mode']}): {stats['hits']} reused, {stats['misses']} compiled, "
               f"{stats['audited']} audited against fresh objects")
     code, data = report["totals"]["code"], report["totals"]["data"]
+    for unit in report["units"]:
+        if unit.get("holdouts"):
+            held = sum(int(row["end"], 16) - int(row["start"], 16) for row in unit["holdouts"])
+            print(f"Holdouts: {unit['source']} links {sum(s['kind'] == 'code' and not s.get('follows') for s in unit['sections'])} code run(s); "
+                  f"{len(unit['holdouts'])} function(s), {held} bytes, keep the original bytes: "
+                  + ", ".join(row["symbol"] for row in unit["holdouts"]))
     print(f"Source build verified: {len(report['units'])} unit(s), output SHA-1 {report['output_sha1']}")
     print(f"Source code bytes linked/matched: {code['linked']}/{code['matched']}; "
           f"data: {data['linked']}/{data['matched']}")
