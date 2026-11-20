@@ -45,7 +45,7 @@ extern const char lbl_802A0DDC[];
 extern const char lbl_802A05C8[];
 void fn_801780A8(Point_8017886C point);
 void BallRestAtAngles(Ball_t *pBall, int *pAngles);
-void fn_8013AD9C(Ball_t *pBall, int value);
+void BallSetSpinMode(Ball_t *pBall, int value);
 void BallPrimeKickUp(Ball_t *pBall);
 void fn_8014FFC4(Point_8017886C *pPoint);
 extern const float lbl_802A134C[];
@@ -85,7 +85,7 @@ void ResetBallsAndFieldPositions(void)
         angles[1] = 0xFFC00000;
         angles[2] = 0xFFC00000;
         BallRestAtAngles(pBall, angles);
-        fn_8013AD9C(pBall, 0);
+        BallSetSpinMode(pBall, 0);
         BallPrimeKickUp(pBall);
     }
     for (i = 0; i <= 2; i++) {

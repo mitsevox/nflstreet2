@@ -6,7 +6,7 @@
 #include "game/Ball.h"
 #include "game/ResLoad.h"
 #include "game/fn_800B65A0.h"
-#include "game/fn_8013AD94.h"
+#include "game/BallPhysics.h"
 
 struct BallMarkerObj_t {
     unsigned char mUnknown00[4];
@@ -85,7 +85,7 @@ void BallMarkerUpdateEntry(int index)
         BallGetPosition(pBall, &pEntry->mPosition);
         pEntry->mEnabled = 1;
     } else if ((fn_801486A0() == 1 || fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF)
-               && fn_8013AD94(pBall) != 0 && BallGetLandingPoint(pBall, &pEntry->mPosition) != 0) {
+               && BallGetSpinMode(pBall) != 0 && BallGetLandingPoint(pBall, &pEntry->mPosition) != 0) {
         pEntry->mEnabled = 1;
     }
     pEntry->mPosition.mZ = 0.0f;

@@ -204,8 +204,8 @@ int PlyrMgrSaveSnapshot(PlyrMgr_t *pManager, char *pBuffer);
 int PlyrMgrLoadSnapshot(PlyrMgr_t *pManager, char *pBuffer);
 void AnimChanCopyChannel(void *pDest, void *pSrc);
 void fn_8009C0B8(void *pDest, void *pSrc);
-int fn_8016278C(void);
-Object_80039F5C *fn_80163064(void);
+int PlyrStarGetRingsShown(void);
+Object_80039F5C *PlyrStarGetBallPlayer(void);
 int PassIconsAreShown(void);
 int PassIconsAreLocked(void);
 int PassIconGetSlot(int index, int force);
@@ -615,12 +615,12 @@ extern "C" void PlyrUpdateControlFlag(Object_80039F5C *p, int flag)
     unsigned char *pState = ((PlyrModelView_t *)p->mpUnknown4)->mpUnknown988;
     unsigned char value = 0;
 
-    if ((flag != 0 && fn_8016278C() != 0) || p == fn_80163064()) {
+    if ((flag != 0 && PlyrStarGetRingsShown() != 0) || p == PlyrStarGetBallPlayer()) {
         value = 1;
     }
     pState[28] = value;
     if (flag == 0 && (lbl_803EABA4->fn_800C0420(0) || lbl_803EABA4->fn_800C0420(1))
-        && (fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF) && fn_8016278C() == 1
+        && (fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF) && PlyrStarGetRingsShown() == 1
         && (((PlyrModelView_t *)p->mpUnknown4)->mFlags & 1) && PassIconsAreShown() && fn_80178308() == p->mIdBytes[2]) {
         unsigned char i;
 

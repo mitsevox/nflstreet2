@@ -2095,6 +2095,70 @@
     "XmlFindInElement": {
       "address": "0x80216BFC",
       "evidence": "evidence.tsv function and name rows for 0x80216BFC (XmlFindInElement, a registered holdout of src/engine/xmlread.c, original bytes linked); called by name from src/game/Divot.cpp, src/game/cu_80044F20.cpp, src/game/cu_8004A2F4.cpp (n1e naming wave)."
+    },
+    "StoryTournamentGetTeamName": {
+      "address": "0x80060948",
+      "evidence": "evidence.tsv function and name rows for 0x80060948 (StoryTournamentGetTeamName; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentFindNextRow": {
+      "address": "0x800609EC",
+      "evidence": "evidence.tsv function and name rows for 0x800609EC (StoryTournamentFindNextRow; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentCloseDbs": {
+      "address": "0x80060A9C",
+      "evidence": "evidence.tsv function and name rows for 0x80060A9C (StoryTournamentCloseDbs; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentOpenDbs": {
+      "address": "0x80060B0C",
+      "evidence": "evidence.tsv function and name rows for 0x80060B0C (StoryTournamentOpenDbs; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentFetchSkill": {
+      "address": "0x80060BB4",
+      "evidence": "evidence.tsv function and name rows for 0x80060BB4 (StoryTournamentFetchSkill; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentPurgeRosters": {
+      "address": "0x80060BE0",
+      "evidence": "evidence.tsv function and name rows for 0x80060BE0 (StoryTournamentPurgeRosters; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentGetGameSlot": {
+      "address": "0x80060C14",
+      "evidence": "evidence.tsv function and name rows for 0x80060C14 (StoryTournamentGetGameSlot; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentGetUserTeam": {
+      "address": "0x80060C94",
+      "evidence": "evidence.tsv function and name rows for 0x80060C94 (StoryTournamentGetUserTeam; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentDrawBracket": {
+      "address": "0x80060CD4",
+      "evidence": "evidence.tsv function and name rows for 0x80060CD4 (StoryTournamentDrawBracket; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentAdvanceRound": {
+      "address": "0x80060E7C",
+      "evidence": "evidence.tsv function and name rows for 0x80060E7C (StoryTournamentAdvanceRound; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentIsWon": {
+      "address": "0x8006102C",
+      "evidence": "evidence.tsv function and name rows for 0x8006102C (StoryTournamentIsWon; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentFindUserGame": {
+      "address": "0x80061088",
+      "evidence": "evidence.tsv function and name rows for 0x80061088 (StoryTournamentFindUserGame; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentRestoreOptions": {
+      "address": "0x80061154",
+      "evidence": "evidence.tsv function and name rows for 0x80061154 (StoryTournamentRestoreOptions; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentSetOptions": {
+      "address": "0x800611C0",
+      "evidence": "evidence.tsv function and name rows for 0x800611C0 (StoryTournamentSetOptions; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentLoadCpuTeam": {
+      "address": "0x80061390",
+      "evidence": "evidence.tsv function and name rows for 0x80061390 (StoryTournamentLoadCpuTeam; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
+    },
+    "StoryTournamentLoadUserTeam": {
+      "address": "0x80061408",
+      "evidence": "evidence.tsv function and name rows for 0x80061408 (StoryTournamentLoadUserTeam; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
     }
   },
   "units": [
@@ -8375,9 +8439,9 @@
       }
     },
     {
-      "source": "src/game/cu_801394B0.cpp",
+      "source": "src/game/BallPhysics.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x801394B0-0x8013B874 (src/game/cu_801394B0.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "evidence": "evidence.tsv unit row 0x801394B0-0x8013B874 (src/game/BallPhysics.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -8407,7 +8471,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8013ABE0",
+            "function": "BallResetPhysics",
             "evidence": "evidence.tsv source-form 0x8013ABE0-0x8013AC28"
           }
         ],
@@ -8422,7 +8486,7 @@
           "BallAddClampedE0",
           "BallIsSettled"
         ],
-        "evidence": "evidence.tsv linker rows of the file-static functions of src/game/cu_801394B0.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
+        "evidence": "evidence.tsv linker rows of the file-static functions of src/game/BallPhysics.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
       }
     },
     {
@@ -9939,9 +10003,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80060948.cpp",
+      "source": "src/game/StoryTournament.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80061520-0x80061F04 (src/game/cu_80060948.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80061520-0x80061F04 (src/game/StoryTournament.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -24492,9 +24556,9 @@
       }
     },
     {
-      "source": "src/game/cu_8016174C.cpp",
+      "source": "src/game/PlyrStars.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8016174C-0x80163074 (src/game/cu_8016174C.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "evidence": "evidence.tsv unit row 0x8016174C-0x80163074 (src/game/PlyrStars.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -24548,11 +24612,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8016216C",
+            "function": "PlyrStarFindFreePulse",
             "evidence": "evidence.tsv source-form 0x8016216C-0x801621AC"
           },
           {
-            "function": "fn_8016295C",
+            "function": "PlyrStarProjectOffscreen",
             "evidence": "evidence.tsv source-form 0x8016295C-0x80162D78"
           }
         ],

@@ -15,7 +15,7 @@
 #include "game/AutoDepth.h"
 #include "game/StevTable.h"
 #include "game/FELoop.h"
-#include "game/fn_80061AD4.h"
+#include "game/StoryTournament.h"
 #include "game/GameOptions.h"
 #include "game/TDbCompilePerformOp.h"
 
@@ -162,8 +162,8 @@ int DbUserGetDb(int a);
 int DbUserFindIndex(int a);
 int DbUserGetCurrent(void);
 void fn_8005BE54(unsigned char value);
-void fn_80061ADC(void);
-void fn_80061AE8(void);
+void StoryTournamentClearEvent(void);
+void StoryTournamentBegin(void);
 int MsgGameGetSetupState(void);
 int fn_80178AE0(void);
 }
@@ -953,8 +953,8 @@ void fn_8005EEC4(int *pState, int *pScreen)
     int played;
     int dive;
 
-    if (fn_80061AD4()) {
-        fn_80061ADC();
+    if (StoryTournamentGetEvent()) {
+        StoryTournamentClearEvent();
     }
     if (lbl_803EA5B8) {
         return;
@@ -1117,7 +1117,7 @@ void fn_8005F324(int id)
         EditMenuBegin(2, 0x3FF);
         break;
     case 603:
-        fn_80061AE8();
+        StoryTournamentBegin();
     case 109:
         MsgTeamPickRequestTeamSave();
         break;

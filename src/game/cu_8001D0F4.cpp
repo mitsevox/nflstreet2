@@ -2,7 +2,7 @@
 
 extern "C" {
 int fn_8005F938(unsigned int id, void *pArgs, int unused, int *pResult);
-int fn_800619FC(unsigned int id, void *pArgs, int unused, int *pResult);
+int StoryTournamentScreenMessage(unsigned int id, void *pArgs, int unused, int *pResult);
 int StoryPlayerScreenMsg(unsigned int id, void *pArgs, int unused, int *pResult);
 int GauntletScreenMsg(unsigned int id, void *pArgs, int unused, int *pResult);
 
@@ -12,7 +12,7 @@ int fn_8001D0F4(int group, unsigned int id, MenuArg_t *pArgs, int unused, int *p
     case 1:
         return fn_8005F938(id, pArgs, unused, pResult);
     case 3:
-        return fn_800619FC(id, pArgs, unused, pResult);
+        return StoryTournamentScreenMessage(id, pArgs, unused, pResult);
     case 4:
         return StoryPlayerScreenMsg(id, pArgs, unused, pResult);
     }

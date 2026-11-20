@@ -7,7 +7,7 @@
 
 extern "C" {
 void BallRestAtAngles(Ball_t *pBall, int *pAngles);
-void fn_8013AD9C(Ball_t *pBall, int a);
+void BallSetSpinMode(Ball_t *pBall, int a);
 Point_8017886C fn_80177FE0(void);
 void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void Vec3CrossProduct(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
@@ -28,7 +28,7 @@ void BallPlaceAt(Ball_t *pBall, Vector_80039F5C *pPos)
     BallSetPosition(pBall, pPos);
     BallSetVelocity(pBall, &v);
     BallRestAtAngles(pBall, angles);
-    fn_8013AD9C(pBall, 0);
+    BallSetSpinMode(pBall, 0);
 }
 
 void BallsPark(void)

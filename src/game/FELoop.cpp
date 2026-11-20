@@ -10,7 +10,7 @@
 #include "game/PadInput.h"
 #include "game/GameInfo.h"
 #include "game/DepthChartSide.h"
-#include "game/fn_80061AD4.h"
+#include "game/StoryTournament.h"
 #include "game/GameModeType.h"
 #include "game/MemCardUtil.h"
 #include "game/fn_80218FC4.h"
@@ -38,7 +38,7 @@ int MainFEGroupIsStarted(void *p);
 void fn_8003E1F0(void);
 int fn_8005FC7C(void);
 int fn_800602E8(void);
-int fn_80061CAC(void);
+int StoryTournamentIsComplete(void);
 void MemCardScreenSetFlag(unsigned char a);
 int PlayBookDbOpen(unsigned int id, int a, int b, int c, int d, int e);
 void PlayBookDbClose(unsigned int id, int a);
@@ -236,8 +236,8 @@ static void _FELoopEnterModeScreen(int mode)
         _FELoopEnterMode7();
         break;
     case 10:
-        fn_80061AD4();
-        if (fn_80061CAC()) {
+        StoryTournamentGetEvent();
+        if (StoryTournamentIsComplete()) {
             _FELoopEnterMode10Alt();
         } else {
             _FELoopEnterMode10();

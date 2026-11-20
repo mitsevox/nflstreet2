@@ -95,8 +95,8 @@ GameCamera_t *CamGameGetCamera(int index);
 void CamGameProcess(void);
 void CamGameSetModeAll(int a);
 void CamGameResumeAll(void);
-void fn_80162780(int a, int b);
-unsigned char fn_8016278C(void);
+void PlyrStarSetShown(int a, int b);
+unsigned char PlyrStarGetRingsShown(void);
 void fn_80178370(void);
 void BannerClear(int a);
 void HudHideMashPrompts(void);
@@ -275,7 +275,7 @@ int PauseCameraRestore(void)
                 fn_80096D14(_Pause_State.mUnknown136);
                 _Pause_State.mUnknown136 = -1;
             }
-            fn_80162780(_Pause_bSavedViewFlag, _Pause_bSavedViewFlag);
+            PlyrStarSetShown(_Pause_bSavedViewFlag, _Pause_bSavedViewFlag);
             CamGameSelectCamera(_Pause_State.mUnknown140);
             CamGameSetModeAll(_Pause_State.mUnknown144);
             CamMainWarpToDest(CamGameGetCamera(_Pause_State.mUnknown140));
@@ -405,7 +405,7 @@ void PauseOpenScreenArgs(unsigned short a, unsigned short b, int c, unsigned int
     PadInputSetDefaultHandler();
     if (!keep) {
         PauseCameraStart();
-        _Pause_bSavedViewFlag = fn_8016278C();
+        _Pause_bSavedViewFlag = PlyrStarGetRingsShown();
     }
     _Pause_bOpened = 1;
     if (fn_8002D060(lbl_803EA368)) {

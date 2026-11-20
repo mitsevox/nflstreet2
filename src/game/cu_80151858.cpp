@@ -93,7 +93,7 @@ void fn_800AACB8(Class_80297B90 *pObject);
 void fn_80178F20(ScrmRuleSet *pObject);
 int fn_80149014(void);
 void *SyncStateGetData(void *pHandle);
-void fn_8016306C(unsigned char value);
+void PlyrStarSetBallRingEnabled(unsigned char value);
 
 void fn_80151858(Class_802A2918 *p)
 {
@@ -132,6 +132,6 @@ void fn_80151858(Class_802A2918 *p)
     if (p->mpUnknown1C->mpUnknown36->mUnknown116 != 0) {
         GameOptionsSet(19, 0);
     }
-    fn_8016306C(0);
+    PlyrStarSetBallRingEnabled(0);
 }
 }

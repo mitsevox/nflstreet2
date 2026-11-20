@@ -162,7 +162,7 @@ void ParticlesStopOnLeave(void);
 void ParticleTrailUpdateAll(void);
 unsigned char ParticleTrailSetEnabled(unsigned char a);
 void PassIconObjSetEnabled(int value);
-void fn_80162780(int a, int b);
+void PlyrStarSetShown(int a, int b);
 void fn_80177E6C(int a, int b);
 int fn_80177F70(void);
 int fn_80177F7C(void);
@@ -2757,16 +2757,16 @@ extern "C" void fn_800308A4(Type_803EA368 *pGame)
 {
     lbl_803EC668 = 0;
     lbl_803EC664 = 0;
-    fn_80162780(!(pGame->mUnknownD94 & 0x10000), 0);
+    PlyrStarSetShown(!(pGame->mUnknownD94 & 0x10000), 0);
     PassIconObjSetEnabled(0);
 }
 
 extern "C" void fn_800308E8(Type_803EA368 *p)
 {
     if (fn_800AD9B4() == 4 || PauseIsOpen()) {
-        fn_80162780(0, 0);
+        PlyrStarSetShown(0, 0);
     } else {
-        fn_80162780(1, 1);
+        PlyrStarSetShown(1, 1);
     }
     PassIconObjSetEnabled(1);
 }

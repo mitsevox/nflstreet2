@@ -327,7 +327,7 @@ extern "C" void fn_800E0438(Object_80039F5C *p, Block_800E0230 *pBlock)
             BallSetTarget(pBall, 0);
             BallGetVelocity(pBall, &velocity);
             BallReleaseStill(pBall, 3, 0);
-            fn_8013AD04(pBall, &velocity, 3, 0.0f, 1.0f);
+            BallLaunchWithVelocity(pBall, &velocity, 3, 0.0f, 1.0f);
             break;
         }
         }

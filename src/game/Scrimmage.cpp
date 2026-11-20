@@ -100,7 +100,7 @@ int CamGameGetCurrentSlot(void);
 GameCamera_t *CamGameGetCamera(int index);
 void CamGameSetModeAll(int a);
 int fn_801486A0(void);
-void fn_80162780(int a, int b);
+void PlyrStarSetShown(int a, int b);
 void fn_80164C4C(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int team, int a);
 int fn_801650BC(PlayBookPlay_t *pRecord);
 PlayBookFormation_t *PlayBookGetFormation(int team);
@@ -162,7 +162,7 @@ extern "C" void ScrmAlignTeam(int team)
 {
     PlayAlignTeam(PlayBookGetFormation(team), team, gPlayAlignNormSet);
     ScrmTeamSendLineUp(team);
-    fn_80162780(1, 1);
+    PlyrStarSetShown(1, 1);
 }
 
 extern "C" void ScrmPlayerToHuddle(Object_80039F5C *p)

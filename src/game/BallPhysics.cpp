@@ -1,3 +1,7 @@
+/* Ball flight and bounce physics: gravity, wind, spin and spirals, bounces and ground friction, landing
+   prediction for throws, and the per-state handlers that decide what happens when a thrown, pitched or
+   loose ball hits the ground or touches a player (catch, fumble, incomplete pass). */
+
 #include <math.h>
 
 #include "game/Ball.h"
@@ -13,7 +17,7 @@
 
 /* One of the four 100-byte records that the player object's +792 pointer
    holds (see include/game/fn_801BE60C.h). */
-struct Record_801BE648 {
+struct PlyrAnimRecord_t {
     char mUnknown0[4];
     unsigned short mKey;
     unsigned short mState;
@@ -21,7 +25,7 @@ struct Record_801BE648 {
 };
 
 /* Returned by BallModelGetLinkedObj for the ball's block. */
-struct Object_800400C4 {
+struct BallLinkedObj_t {
     int mUnknown0;
     int mUnknown4;
     float mUnknown8;
@@ -33,7 +37,7 @@ struct Object_800400C4 {
 extern float gFrameTimeScale;
 
 extern "C" {
-Object_800400C4 *BallModelGetLinkedObj(Block_80170E64 *pBlock);
+BallLinkedObj_t *BallModelGetLinkedObj(Block_80170E64 *pBlock);
 BigObj_t *BigObjGet(int index);
 float fn_800A33D0(void);
 int fn_800A33DC(void);
@@ -93,8 +97,8 @@ void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
 void Vec3ScaleAcc(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 int BallIsContactRaised(Ball_t *pBall);
-void fn_8013AD9C(Ball_t *pBall, int a);
-void fn_8013AB24(Ball_t *pBall);
+void BallSetSpinMode(Ball_t *pBall, int a);
+void BallPredictLanding(Ball_t *pBall);
 void PlyrPoseGetAttachTransform(void *pObject, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
 void fn_8009BFD0(Object_80039F5C *p, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
 void Vec3ScaleLength(Vector_80039F5C *pOut, Vector_80039F5C *pIn, float length);
@@ -108,11 +112,11 @@ void BallUpdateGroundPoint(Ball_t *pBall);
 void BallFindLowestPoint(Ball_t *pBall, Vector_80039F5C *pOut, int *pIndex);
 }
 
-float lbl_803EB1B0 = 0.35f;
-float lbl_803EB1B4 = 0.8f;
-float lbl_803EB1B8 = 1.4f;
-float lbl_803EB1BC = 1.25f;
-float lbl_803EB1C0 = 1.25f;
+float _BallPhys_fBounce = 0.35f;
+float _BallPhys_fWindTail = 0.8f;
+float _BallPhys_fWindHead = 1.4f;
+float _BallPhys_fWobbleLift = 1.25f;
+float _BallPhys_fCatchHeight = 1.25f;
 
 static inline void ClearVector(Vector_80039F5C *pV)
 {
@@ -121,10 +125,10 @@ static inline void ClearVector(Vector_80039F5C *pV)
 
 extern "C" {
 
-float fn_8013A2A4(Ball_t *pBall, int index);
-float fn_8013A2D8(Ball_t *pBall, int index);
+float BallGetRestitution(Ball_t *pBall, int index);
+float BallGetFriction(Ball_t *pBall, int index);
 
-int fn_801394B0(Ball_t *pBall)
+int BallIsOverField(Ball_t *pBall)
 {
     Vector_80039F5C pos;
     int result = 1;
@@ -162,27 +166,27 @@ int fn_801394B0(Ball_t *pBall)
     return result;
 }
 
-int fn_80139630(Ball_t *pBall)
+int BallIsOnGround(Ball_t *pBall)
 {
     int result = 0;
 
-    if (pBall->mState.mUnknown94.mZ <= 0.0f && pBall->mState.mUnknown54.mZ <= 0.0f && fn_801394B0(pBall)) {
+    if (pBall->mState.mUnknown94.mZ <= 0.0f && pBall->mState.mUnknown54.mZ <= 0.0f && BallIsOverField(pBall)) {
         result = 1;
     }
     return result;
 }
 
-int fn_8013968C(Ball_t *pBall)
+int BallIsUnsupported(Ball_t *pBall)
 {
     int result = 1;
 
     if (pBall->mState.mUnknown94.mZ <= 0.0f) {
-        result = fn_801394B0(pBall) == 0;
+        result = BallIsOverField(pBall) == 0;
     }
     return result;
 }
 
-void fn_801396D0(Ball_t *pBall, float value)
+void BallApplyGravity(Ball_t *pBall, float value)
 {
     Vector_80039F5C v;
 
@@ -192,7 +196,7 @@ void fn_801396D0(Ball_t *pBall, float value)
     BallApplyImpulse(pBall, &v, &pBall->mState.mPos);
 }
 
-void fn_80139718(Ball_t *pBall, unsigned int time)
+void BallApplySideSpin(Ball_t *pBall, unsigned int time)
 {
     Vector_80039F5C v;
     Vector_80039F5C dir;
@@ -214,16 +218,16 @@ void fn_80139718(Ball_t *pBall, unsigned int time)
     }
 }
 
-void fn_801397FC(Ball_t *pBall, Vector_80039F5C *pOut)
+void BallGetBounceForce(Ball_t *pBall, Vector_80039F5C *pOut)
 {
-    float scale = fn_8013A2A4(pBall, pBall->mState.mUnknownA0);
+    float scale = BallGetRestitution(pBall, pBall->mState.mUnknownA0);
 
     pOut->mY = pOut->mX = 0.0f;
     scale = (scale + 1.0f) * -293.47824f;
     pOut->mZ = pBall->mState.mUnknown54.mZ * scale;
 }
 
-void fn_80139864(Vector_80039F5C *pV, float scale)
+void BallVecAddScaled(Vector_80039F5C *pV, float scale)
 {
     Vector_80039F5C delta;
 
@@ -239,7 +243,7 @@ void fn_80139864(Vector_80039F5C *pV, float scale)
     }
 }
 
-void fn_801398BC(Vector_80039F5C *pV, float scale)
+void BallVecJitter(Vector_80039F5C *pV, float scale)
 {
     Vector_80039F5C delta;
     float size = Vec3Magnitude(pV) * scale;
@@ -250,7 +254,7 @@ void fn_801398BC(Vector_80039F5C *pV, float scale)
     Vec3Add(pV, pV, &delta);
 }
 
-void fn_80139954(Ball_t *pBall, float dt)
+void BallApplyGroundFriction(Ball_t *pBall, float dt)
 {
     Vector_80039F5C pos;
     Quat_801EB488 rot;
@@ -260,7 +264,7 @@ void fn_80139954(Ball_t *pBall, float dt)
     Vector_80039F5C v;
     float size;
 
-    if (!fn_8013968C(pBall)) {
+    if (!BallIsUnsupported(pBall)) {
         pos.mX = pBall->mState.mUnknown28.mX;
         pos.mY = pBall->mState.mUnknown28.mY;
         pos.mZ = pBall->mState.mUnknown28.mZ;
@@ -276,14 +280,14 @@ void fn_80139954(Ball_t *pBall, float dt)
         v.mY = -dir.mY * 293.47824f;
         v.mZ = 0.0f;
         size = Vec3Magnitude(&v);
-        size *= -fn_8013A2D8(pBall, pBall->mState.mUnknownA0);
+        size *= -BallGetFriction(pBall, pBall->mState.mUnknownA0);
         Vec3Normalize(&dir, &dir);
         Vec3Scale(&force, &dir, size);
         BallApplyImpulse(pBall, &force, &pBall->mState.mUnknown94);
     }
 }
 
-void fn_80139A80(Vector_80039F5C *pV, Quat_801EB488 *pRot)
+void BallSpinToQuat(Vector_80039F5C *pV, Quat_801EB488 *pRot)
 {
     Vector_80039F5C axis;
     int angle = (int)(Vec3Magnitude(pV) * 2670176.75f);
@@ -293,7 +297,7 @@ void fn_80139A80(Vector_80039F5C *pV, Quat_801EB488 *pRot)
     QuatNormalize(pRot, pRot);
 }
 
-void fn_80139AF0(Ball_t *pBall, float dt)
+void BallUpdateRotation(Ball_t *pBall, float dt)
 {
     Quat_801EB488 spin;
     Quat_801EB488 rest;
@@ -354,7 +358,7 @@ void fn_80139AF0(Ball_t *pBall, float dt)
     case 0:
     default:
         Vec3Scale(&pBall->mState.mUnknown88, &pBall->mState.mUnknown88, 0.30666667f);
-        fn_80139A80(&pBall->mState.mUnknown88, &spin);
+        BallSpinToQuat(&pBall->mState.mUnknown88, &spin);
         QuatMultiply(&pBall->mState.mUnknown60, &spin, &pBall->mState.mUnknown60);
         QuatIdentity(&rest);
         QuatSubtract(&rest, &rest, &pBall->mState.mUnknown60);
@@ -363,7 +367,7 @@ void fn_80139AF0(Ball_t *pBall, float dt)
             QuatIdentity(&rest);
             QuatSlerp(&pBall->mState.mUnknown60, &pBall->mState.mUnknown60, &rest, (size - 0.5f) / size);
         }
-        if (fn_80139630(pBall)) {
+        if (BallIsOnGround(pBall)) {
             QuatIdentity(&rest);
             QuatSlerp(&pBall->mState.mUnknown60, &pBall->mState.mUnknown60, &rest, 0.8f);
         }
@@ -381,7 +385,7 @@ void fn_80139AF0(Ball_t *pBall, float dt)
     }
 }
 
-void fn_80139F28(Ball_t *pBall)
+void BallClampToWorld(Ball_t *pBall)
 {
     if (fabsf(pBall->mState.mPos.mX) > 42.0f) {
         pBall->mState.mUnknown54.mX = 0.0f;
@@ -396,7 +400,7 @@ void fn_80139F28(Ball_t *pBall)
     pBall->mState.mPos.mZ = pBall->mState.mPos.mZ > 30.0f ? 30.0f : pBall->mState.mPos.mZ;
 }
 
-void fn_8013A00C(Vector_80039F5C *pOut, Vector_80039F5C *pIn, int flip)
+void BallFlipPosition(Vector_80039F5C *pOut, Vector_80039F5C *pIn, int flip)
 {
     if (flip) {
         pOut->mX = -pIn->mX;
@@ -409,7 +413,7 @@ void fn_8013A00C(Vector_80039F5C *pOut, Vector_80039F5C *pIn, int flip)
     }
 }
 
-void fn_8013A048(Quat_801EB488 *pOut, Quat_801EB488 *pIn, int flip)
+void BallFlipRotation(Quat_801EB488 *pOut, Quat_801EB488 *pIn, int flip)
 {
     Quat_801EB488 turn;
     Quat_801EB488 rot;
@@ -427,9 +431,9 @@ void fn_8013A048(Quat_801EB488 *pOut, Quat_801EB488 *pIn, int flip)
     QuatMultiply(pOut, pOut, &rot);
 }
 
-void fn_8013A0EC(Ball_t *pBall, float dt)
+void BallStepFree(Ball_t *pBall, float dt)
 {
-    if (fn_80139630(pBall)) {
+    if (BallIsOnGround(pBall)) {
         float limit = dt * 0.0025f;
 
         if (fabsf(pBall->mState.mUnknown54.mZ) < limit && fabsf(pBall->mState.mUnknown60.mW) >= 0.9999f &&
@@ -442,20 +446,20 @@ void fn_8013A0EC(Ball_t *pBall, float dt)
             ClearVector(&pBall->mState.mUnknown7C);
         }
     }
-    fn_80139718(pBall, (unsigned int)dt);
+    BallApplySideSpin(pBall, (unsigned int)dt);
     Vec3Scale(&pBall->mState.mUnknown70, &pBall->mState.mUnknown7C, 0.0034074076f);
     Vec3Add(&pBall->mState.mUnknown54, &pBall->mState.mUnknown54, &pBall->mState.mUnknown70);
     Vec3ScaleAcc(&pBall->mState.mPos, &pBall->mState.mUnknown54, dt);
-    fn_80139F28(pBall);
-    fn_80139AF0(pBall, dt);
+    BallClampToWorld(pBall);
+    BallUpdateRotation(pBall, dt);
     if (BallIsContactRaised(pBall)) {
-        fn_8013AB24(pBall);
+        BallPredictLanding(pBall);
     }
 }
 
-float fn_8013A2A4(Ball_t *pBall, int index)
+float BallGetRestitution(Ball_t *pBall, int index)
 {
-    float value = lbl_803EB1B0;
+    float value = _BallPhys_fBounce;
 
     if (index == 0 || index == 5) {
         value *= 0.85f;
@@ -466,7 +470,7 @@ float fn_8013A2A4(Ball_t *pBall, int index)
     return value;
 }
 
-float fn_8013A2D8(Ball_t *pBall, int index)
+float BallGetFriction(Ball_t *pBall, int index)
 {
     float value = 0.24f;
 
@@ -476,11 +480,11 @@ float fn_8013A2D8(Ball_t *pBall, int index)
     return value;
 }
 
-void fn_8013A2F4(Ball_t *pBall, int mode, float spin, float rate)
+void BallStartSpin(Ball_t *pBall, int mode, float spin, float rate)
 {
     QuatEulerAngles_t angles;
 
-    fn_8013AD9C(pBall, mode);
+    BallSetSpinMode(pBall, mode);
     pBall->mState.mUnknownE0 = 0.0f;
     if (mode) {
         pBall->mState.mUnknownDC = spin;
@@ -497,26 +501,26 @@ void fn_8013A2F4(Ball_t *pBall, int mode, float spin, float rate)
     }
 }
 
-void fn_8013A3BC(Ball_t *pBall)
+void BallRecordBounce(Ball_t *pBall)
 {
     Block_80170E64 *pBlock = pBall->mpUnknown00;
     int flip;
 
     if (Vec3Magnitude(&pBall->mState.mUnknown54) > 0.3f && pBlock->mUnknown152 == 0) {
         flip = fn_801784C4();
-        fn_8013A00C(&pBlock->mUnknown124, &pBall->mState.mPos, flip);
-        fn_8013A048(&pBlock->mUnknown136, &pBall->mState.mUnknown18, flip);
+        BallFlipPosition(&pBlock->mUnknown124, &pBall->mState.mPos, flip);
+        BallFlipRotation(&pBlock->mUnknown136, &pBall->mState.mUnknown18, flip);
         pBlock->mUnknown152 = 1;
     }
 }
 
-void fn_8013A440(Ball_t *pBall)
+void BallSyncModel(Ball_t *pBall)
 {
     Block_80170E64 *pBlock = pBall->mpUnknown00;
     int flip = fn_801784C4();
 
-    fn_8013A00C(&pBlock->mUnknown4, &pBall->mState.mPos, flip);
-    fn_8013A048(&pBlock->mUnknown108, &pBall->mState.mUnknown18, flip);
+    BallFlipPosition(&pBlock->mUnknown4, &pBall->mState.mPos, flip);
+    BallFlipRotation(&pBlock->mUnknown108, &pBall->mState.mUnknown18, flip);
 }
 
 static void BallGetWindDrift(Vector_80039F5C *pAccel, Vector_80039F5C *pOut, float t)
@@ -534,7 +538,7 @@ static void BallApplyWindForce(Ball_t *pBall, float scale)
     Vector_80039F5C force;
 
     WeatherGetWindVector(&wind);
-    wind.mY *= wind.mY > 0.0f ? lbl_803EB1B4 : lbl_803EB1B8;
+    wind.mY *= wind.mY > 0.0f ? _BallPhys_fWindTail : _BallPhys_fWindHead;
     Vec3Scale(&force, &wind, scale * 0.93913037f);
     BallApplyImpulse(pBall, &force, &pBall->mState.mPos);
 }
@@ -546,7 +550,7 @@ static void BallApplyWindForceDamped(Ball_t *pBall, float scale)
 
     WeatherGetWindVector(&wind);
     if (wind.mY > 0.0f) {
-        wind.mY *= lbl_803EB1B4;
+        wind.mY *= _BallPhys_fWindTail;
     }
     Vec3Scale(&force, &wind, scale * 0.93913037f);
     BallApplyImpulse(pBall, &force, &pBall->mState.mPos);
@@ -558,7 +562,7 @@ void BallApplyContactForce(Ball_t *pBall, float dt)
     Vector_80039F5C jitter;
     float size;
 
-    fn_801397FC(pBall, &force);
+    BallGetBounceForce(pBall, &force);
     size = Vec3Magnitude(&force);
     if (size > 20.0f && SyncRandGetFloat(0) < 0.4f) {
         jitter.mX = SyncRandGetFloat(0) - 0.5f;
@@ -571,10 +575,10 @@ void BallApplyContactForce(Ball_t *pBall, float dt)
         Vec3Add(&force, &force, &jitter);
     }
     if (pBall->mState.mStateArg == 1 && (pBall->mState.mFlags & 0x40)) {
-        fn_80139864(&force, 0.2f);
+        BallVecAddScaled(&force, 0.2f);
     }
     pBall->mState.mFlags &= ~0x40;
-    fn_801398BC(&force, 0.05f);
+    BallVecJitter(&force, 0.05f);
     BallApplyImpulse(pBall, &force, &pBall->mState.mUnknown94);
     pBall->mState.mPos.mZ -= pBall->mState.mUnknown94.mZ;
     pBall->mState.mUnknownE0 = 0.0f;
@@ -593,8 +597,8 @@ static void BallApplyWobble(Ball_t *pBall)
         if (Vec2Magnitude(pVel) > pVel->mZ + pVel->mZ && SyncRandGetFloat(0) < 0.6f) {
             force.mX = -pVel->mX * 440.21735f;
             force.mY = -pVel->mY * 440.21735f;
-            force.mZ = (Vec3Magnitude(pVel) - pVel->mZ) * lbl_803EB1BC * 293.47824f;
-            Vec3Scale(&force, &force, fn_8013A2A4(pBall, pBall->mState.mUnknownA0));
+            force.mZ = (Vec3Magnitude(pVel) - pVel->mZ) * _BallPhys_fWobbleLift * 293.47824f;
+            Vec3Scale(&force, &force, BallGetRestitution(pBall, pBall->mState.mUnknownA0));
             Vec3Sub(&point, &pBall->mState.mPos, &pBall->mState.mUnknown94);
             Vec3Add(&point, &point, &pBall->mState.mPos);
             if (force.mZ > 20.543476f) {
@@ -606,23 +610,23 @@ static void BallApplyWobble(Ball_t *pBall)
     }
 }
 
-void fn_8013A64C(Ball_t *pBall, float dt)
+void BallStepDefault(Ball_t *pBall, float dt)
 {
     BallUpdateGroundPoint(pBall);
     BallStatePreUpdate(pBall, dt);
-    fn_801396D0(pBall, dt);
-    fn_80139954(pBall, dt);
+    BallApplyGravity(pBall, dt);
+    BallApplyGroundFriction(pBall, dt);
 }
 
 void BallStepGroundContact(Ball_t *pBall, float dt)
 {
     BallUpdateGroundPoint(pBall);
-    if (fn_80139630(pBall)) {
+    if (BallIsOnGround(pBall)) {
         if (!Vec3Equal(&pBall->mState.mUnknown28, &pBall->mState.mPos, 1e-07f)) {
             BallStateHitGround(pBall, dt);
         }
         BallUpdateGroundPoint(pBall);
-        fn_8013AD9C(pBall, 0);
+        BallSetSpinMode(pBall, 0);
     }
 }
 
@@ -661,7 +665,7 @@ void BallStepMotion(Ball_t *pBall, float dt)
     pBall->mState.mUnknown34.mW = pBall->mState.mUnknown18.mW;
     pBlock = pBall->mpUnknown00;
     if (!BallGetHolder(pBall)) {
-        fn_8013A0EC(pBall, dt);
+        BallStepFree(pBall, dt);
     } else {
         BallFollowHolder(pBall, dt);
     }
@@ -699,7 +703,7 @@ static void BallAddClampedE0(Ball_t *pBall, float delta)
     }
 }
 
-void fn_8013A9F0(Ball_t *pBall)
+void BallClearPassFlag(Ball_t *pBall)
 {
     pBall->mState.mFlags &= ~8;
 }
@@ -731,10 +735,10 @@ void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_800
     }
 }
 
-void fn_8013AB24(Ball_t *pBall)
+void BallPredictLanding(Ball_t *pBall)
 {
-    BallSolveFallToHeight(pBall, lbl_803EB1C0, &pBall->mState.mUnknown44, &pBall->mState.mUnknown48);
-    pBall->mState.mUnknown48.mZ = lbl_803EB1C0;
+    BallSolveFallToHeight(pBall, _BallPhys_fCatchHeight, &pBall->mState.mUnknown44, &pBall->mState.mUnknown48);
+    pBall->mState.mUnknown48.mZ = _BallPhys_fCatchHeight;
 }
 
 float BallGetHeightAtTime(Ball_t *pBall, float t)
@@ -748,7 +752,7 @@ float BallGetHeightAtTime(Ball_t *pBall, float t)
     return (pos.mZ + t * vel.mZ) - t * g * t * 0.5f;
 }
 
-void fn_8013ABE0(Ball_t *pBall)
+void BallResetPhysics(Ball_t *pBall)
 {
     fn_800A33DC();
     fn_800A33D0();
@@ -768,16 +772,16 @@ void BallLaunchToTarget(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float
     time = Vec2Magnitude(&delta) / speed * gFrameTimeScale;
     delta.mZ += 0.0029814816f * time * time * 0.5f;
     Vec3Scale(&pBall->mState.mUnknown54, &delta, 1.0f / time);
-    fn_8013A2F4(pBall, mode, spin, rate);
+    BallStartSpin(pBall, mode, spin, rate);
 }
 
-void fn_8013AD04(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate)
+void BallLaunchWithVelocity(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate)
 {
     pBall->mState.mUnknown54.mX = pVelocity->mX;
     pBall->mState.mUnknown54.mY = pVelocity->mY;
     pBall->mState.mUnknown54.mZ = pVelocity->mZ;
-    fn_8013AB24(pBall);
-    fn_8013A2F4(pBall, mode, spin, rate);
+    BallPredictLanding(pBall);
+    BallStartSpin(pBall, mode, spin, rate);
 }
 
 static int BallIsSettled(Ball_t *pBall)
@@ -799,24 +803,24 @@ int BallIsContactRaised(Ball_t *pBall)
     return pBall->mState.mUnknown94.mZ > 0.0f;
 }
 
-int fn_8013AD94(Ball_t *pBall)
+int BallGetSpinMode(Ball_t *pBall)
 {
     return pBall->mState.mUnknownD0;
 }
 
-void fn_8013AD9C(Ball_t *pBall, int mode)
+void BallSetSpinMode(Ball_t *pBall, int mode)
 {
     pBall->mState.mUnknownD0 = mode;
 }
 
-int fn_8013ADA4(Object_80039F5C *p)
+int BallPlayerHandsFree(Object_80039F5C *p)
 {
-    Record_801BE648 *pRecords = (Record_801BE648 *)p->mpUnknown792;
+    PlyrAnimRecord_t *pRecords = (PlyrAnimRecord_t *)p->mpUnknown792;
     unsigned char i;
     int result = 1;
 
     for (i = 0; i < 4; i++) {
-        Record_801BE648 *pRecord = &pRecords[i];
+        PlyrAnimRecord_t *pRecord = &pRecords[i];
 
         if (pRecord->mState == 3 || pRecord->mState == 1) {
             switch (pRecord->mKey) {
@@ -837,7 +841,7 @@ int fn_8013ADA4(Object_80039F5C *p)
     return result;
 }
 
-int fn_8013AE1C(Ball_t *pBall, Object_80039F5C *p, unsigned int type, int facing)
+int BallCanPlayerTouch(Ball_t *pBall, Object_80039F5C *p, unsigned int type, int facing)
 {
     Point_8017886C delta;
     unsigned short state = BallStateGet(pBall, 0);
@@ -853,7 +857,7 @@ int fn_8013AE1C(Ball_t *pBall, Object_80039F5C *p, unsigned int type, int facing
             if (PossIsWristNearJoint(pBall, p, 0)) {
                 result = 1;
             }
-            if (!fn_8013ADA4(p)) {
+            if (!BallPlayerHandsFree(p)) {
                 result = 0;
             }
         }
@@ -867,7 +871,7 @@ int fn_8013AE1C(Ball_t *pBall, Object_80039F5C *p, unsigned int type, int facing
             if (PossIsWristNearJoint(pBall, p, 1)) {
                 result = 1;
             }
-            if (!fn_8013ADA4(p)) {
+            if (!BallPlayerHandsFree(p)) {
                 result = 0;
             }
         }
@@ -887,30 +891,30 @@ int fn_8013AE1C(Ball_t *pBall, Object_80039F5C *p, unsigned int type, int facing
     return result;
 }
 
-void fn_8013AF88(Ball_t *pBall)
+void BallStateHeldEnter(Ball_t *pBall)
 {
     Block_80170E64 *pBlock = BallGetModel(pBall);
 
     pBall->mState.mUnknownBC = 0;
     pBall->mState.mUnknownC4 = 1;
-    fn_8013A9F0(pBall);
+    BallClearPassFlag(pBall);
     pBlock->mUnknown20 |= 2;
     pBall->mState.mFlags &= ~0x20;
 }
 
-void fn_8013AFE8(Ball_t *pBall)
+void BallStatePassEnter(Ball_t *pBall)
 {
     PossResetMissedCatch();
     pBall->mState.mFlags = (pBall->mState.mFlags | 8) & ~0x10;
 }
 
-void fn_8013B024(Ball_t *pBall)
+void BallStatePassExit(Ball_t *pBall)
 {
-    fn_8013A9F0(pBall);
+    BallClearPassFlag(pBall);
     AudmonEventPostArgs(0x22, &pBall->mState.mPos, (int)pBall, 0, pBall->mState.mIndex);
 }
 
-void fn_8013B068(Ball_t *pBall)
+void BallStateLooseExit(Ball_t *pBall)
 {
     if (pBall == BallGetCurrent() && pBall->mState.mStateArg != 0) {
         LooseBallBroadcast(BallGetIndex(pBall));
@@ -923,7 +927,7 @@ void BallStateStepTimed(Ball_t *pBall, float dt)
     int counting = 1;
     Object_80039F5C *pHolder = BallGetHolder(pBall);
 
-    fn_8013A64C(pBall, dt);
+    BallStepDefault(pBall, dt);
     pBall->mState.mUnknownC0 = SyncTimeGetGameTime();
     if (fn_801BE648(pHolder->mpUnknown792) == 0xE1) {
         fn_8009BF5C(pHolder, 0, &pos, 0);
@@ -941,19 +945,19 @@ void BallStateStopVelocity(Ball_t *pBall, float dt)
     }
 }
 
-void fn_8013B1E4(Ball_t *pBall, float dt)
+void BallStatePassMove(Ball_t *pBall, float dt)
 {
-    fn_8013A64C(pBall, dt);
+    BallStepDefault(pBall, dt);
     AudmonEventPostArgs(0x21, &pBall->mState.mPos, (int)pBall, 0, pBall->mState.mIndex);
     PossUpdateMissedCatch(pBall);
 }
 
-void fn_8013B230(Ball_t *pBall)
+void BallStateDeadEnter(Ball_t *pBall)
 {
     ClockRuleRestartOnReady();
 }
 
-void fn_8013B250(Ball_t *pBall)
+void BallStateHeldExit(Ball_t *pBall)
 {
     Block_80170E64 *pBlock = BallGetModel(pBall);
 
@@ -963,7 +967,7 @@ void fn_8013B250(Ball_t *pBall)
     pBall->mState.mUnknownCC = pBall->mState.mUnknownB4;
 }
 
-void fn_8013B2A0(Ball_t *pBall, float dt)
+void BallStatePassHitGround(Ball_t *pBall, float dt)
 {
     if (fn_800AD9B4() == 3 && (BallGetCurrent() == pBall || fn_801486A0() == 1)) {
         if (!fn_801783AC(1)) {
@@ -976,12 +980,12 @@ void fn_8013B2A0(Ball_t *pBall, float dt)
     BallApplyContactForce(pBall, dt);
 }
 
-void fn_8013B330(Ball_t *pBall, float dt)
+void BallStateLooseHitGround(Ball_t *pBall, float dt)
 {
     BallApplyContactForce(pBall, dt);
 }
 
-void fn_8013B350(Ball_t *pBall, float dt)
+void BallStatePitchHitGround(Ball_t *pBall, float dt)
 {
     BallSetTarget(pBall, 0);
     if (BallGetCurrent() == pBall && !fn_801787A0()) {
@@ -996,7 +1000,7 @@ void fn_8013B350(Ball_t *pBall, float dt)
     BallApplyContactForce(pBall, dt);
 }
 
-int fn_8013B3EC(Ball_t *pBall, void *pData, unsigned int type)
+int BallStateHandoffTouch(Ball_t *pBall, void *pData, unsigned int type)
 {
     Object_80039F5C *p = (Object_80039F5C *)pData;
     int mode;
@@ -1032,7 +1036,7 @@ int fn_8013B3EC(Ball_t *pBall, void *pData, unsigned int type)
     return 1;
 }
 
-int fn_8013B52C(Ball_t *pBall, void *pData, unsigned int type)
+int BallStateLooseTouch(Ball_t *pBall, void *pData, unsigned int type)
 {
     Object_80039F5C *p = (Object_80039F5C *)pData;
     int arg;
@@ -1041,7 +1045,7 @@ int fn_8013B52C(Ball_t *pBall, void *pData, unsigned int type)
 
     BallStateGet(pBall, &arg);
     if (mode == 3 && arg == 1) {
-        if (fn_8013AE1C(pBall, p, type, 0) &&
+        if (BallCanPlayerTouch(pBall, p, type, 0) &&
             (BallGetStateStartTick(pBall) + 60 < SyncTimeGetGameTime() || fn_801BE648(p->mpUnknown792) == 0x30)) {
             result = 1;
             PossGrabBall(p);
@@ -1052,13 +1056,13 @@ int fn_8013B52C(Ball_t *pBall, void *pData, unsigned int type)
     return result;
 }
 
-int fn_8013B5EC(Ball_t *pBall, void *pData, unsigned int type)
+int BallStatePassTouch(Ball_t *pBall, void *pData, unsigned int type)
 {
     Object_80039F5C *p = (Object_80039F5C *)pData;
     Vector_80039F5C vel;
     int result = 0;
 
-    if (fn_8013AE1C(pBall, p, type, 0)) {
+    if (BallCanPlayerTouch(pBall, p, type, 0)) {
         BallGetVelocity(pBall, &vel);
         if (p->mIdBytes[2] == fn_80178308() && pBall->mState.mUnknownC0 + 5 >= SyncTimeGetGameTime()) {
             result = 1;
@@ -1068,12 +1072,12 @@ int fn_8013B5EC(Ball_t *pBall, void *pData, unsigned int type)
     }
     if (!result) {
         fn_801783D0(0xB, 1);
-        fn_8013AD9C(pBall, 3);
+        BallSetSpinMode(pBall, 3);
     }
     return result;
 }
 
-int fn_8013B6A0(Ball_t *pBall, void *pData, unsigned int type)
+int BallStatePitchTouch(Ball_t *pBall, void *pData, unsigned int type)
 {
     Object_80039F5C *p = (Object_80039F5C *)pData;
     // FAKEMATCH: redundant zero initializer, only to keep the target branch layout
@@ -1081,7 +1085,7 @@ int fn_8013B6A0(Ball_t *pBall, void *pData, unsigned int type)
 
     if (fn_8009BCE8(&pBall->mState.mUnknownB8) == p && pBall->mState.mUnknownC0 + 5 >= SyncTimeGetGameTime()) {
         result = 1;
-    } else if (fn_8013AE1C(pBall, p, type, 1)) {
+    } else if (BallCanPlayerTouch(pBall, p, type, 1)) {
         result = PossTryReceivePitch(pBall, p, type);
     } else {
         result = 0;
@@ -1089,7 +1093,7 @@ int fn_8013B6A0(Ball_t *pBall, void *pData, unsigned int type)
     return result;
 }
 
-void fn_8013B730(Ball_t *pBall, float dt)
+void BallStatePlacedMove(Ball_t *pBall, float dt)
 {
 }
 
@@ -1098,7 +1102,7 @@ void BallStatePlacedUpdate(Ball_t *pBall, float dt)
     Vector_80039F5C pos;
     int angles[3];
     Quat_801EB488 turn;
-    Object_800400C4 *pPlace = BallModelGetLinkedObj(BallGetModel(BallGetCurrent()));
+    BallLinkedObj_t *pPlace = BallModelGetLinkedObj(BallGetModel(BallGetCurrent()));
     BigObj_t *pObject = BigObjGet(pPlace->mUnknown4);
     short *pRot = pObject->mpUnknown220;
 
@@ -1127,7 +1131,7 @@ void BallStatePlacedUpdate(Ball_t *pBall, float dt)
     }
 }
 
-int fn_8013B86C(Ball_t *pBall, void *pData, unsigned int type)
+int BallStatePlacedTouch(Ball_t *pBall, void *pData, unsigned int type)
 {
     return 1;
 }

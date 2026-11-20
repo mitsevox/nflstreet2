@@ -13,7 +13,7 @@
 extern "C" {
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_800E9528(Object_80039F5C *p);
-void fn_8013A3BC(Ball_t *pBall);
+void BallRecordBounce(Ball_t *pBall);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int BallStateCheckPlayerHit(Ball_t *pBall, void *pData, int value);
 int fn_80178348(void);
@@ -198,7 +198,7 @@ extern "C" void BallHitPlayerPart(Ball_t *pBall, Object_80039F5C *p, CollideCont
             break;
         }
         Vec3Sub(&span, &target.mUnknown0, &target.mUnknown12);
-        fn_8013A3BC(pBall);
+        BallRecordBounce(pBall);
         BallDeflect(pBall, &span, &dir, pContact, 1, value);
         if (BallStateGet(pBall, 0) == 4 && flag && p->mpState->mId == 28) {
             BallKickUp(pBall, 1);

@@ -71,7 +71,7 @@ void fn_800B43C8(void);
 void fn_800CC560(int a);
 void BallsSetVisible(int a);
 void BallResetToSpot(void);
-void fn_80162780(int a, int b);
+void PlyrStarSetShown(int a, int b);
 void PlayBookSetupTeams(void);
 void ScrmTeamToHuddle(int a);
 int ClockRuleIsOvertime(void);
@@ -403,7 +403,7 @@ void QuarterEndPhase::OnUpdate(float f)
         _QuarterEnd_pState->mUnknown8 = 0;
         _QuarterEnd_pState->mUnknown10 = 1;
         fn_800AFDD4(QuarterEndOnEvent);
-        fn_80162780(1, 1);
+        PlyrStarSetShown(1, 1);
         if (fn_8009D86C() == 6) {
             HudStop();
         } else if (fn_8009D86C() == 5) {
@@ -454,7 +454,7 @@ void QuarterEndPhase::OnUpdate(float f)
         break;
     case 3:
         if (PauseIsOpen() == 0) {
-            fn_80162780(1, 1);
+            PlyrStarSetShown(1, 1);
             _QuarterEnd_pState->mState = 4;
         }
         break;

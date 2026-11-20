@@ -128,9 +128,9 @@ void BallSetTransferKind(void *pBall, int a);
 int BallGetTransferKind(void *pBall);
 int BallGetLastToucher(void *pBall);
 void BallKickUp(void *pBall, int a);
-void fn_8013AD04(void *pBall, Vector_80039F5C *pVelocity, int a, float b, float c);
+void BallLaunchWithVelocity(void *pBall, Vector_80039F5C *pVelocity, int a, float b, float c);
 int BallIsContactRaised(void *pBall);
-void fn_8013AD9C(void *pBall, int a);
+void BallSetSpinMode(void *pBall, int a);
 void BallStateChange(void *pBall, int a, int b);
 int BallStateGet(void *pBall, int *pOut);
 int BallStateGetPrev(void *pBall, int *pOut);
@@ -977,7 +977,7 @@ void PossTryJarBall(Object_80039F5C *p)
         }
         BallStateChange(pBall, state, unknown);
         BallKickUp(pBall, 1);
-        fn_8013AD9C(pBall, 3);
+        BallSetSpinMode(pBall, 3);
     }
 }
 
@@ -1175,7 +1175,7 @@ void PossStartFumble(void)
     velocity.mY = velocity.mY < -0.1f ? -0.1f : (velocity.mY > 0.15f ? 0.15f : velocity.mY);
     velocity.mZ = velocity.mZ < -0.1f ? -0.1f : (velocity.mZ > 0.15f ? 0.15f : velocity.mZ);
     BallSetVelocity(pBall, &velocity);
-    fn_8013AD04(pBall, &velocity, 1, 2.0f, 1.0f);
+    BallLaunchWithVelocity(pBall, &velocity, 1, 2.0f, 1.0f);
     CamGameSetModeAll(1);
     anim = fn_801BE648(pForcer ? pForcer->mpUnknown792 : pCarrier->mpUnknown792);
     if (fn_801486A0() == 0) {

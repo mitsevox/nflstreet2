@@ -1,39 +1,43 @@
+/* The story-mode tournament event: an eight-team knockout bracket played with drafted teams. Draws the
+   bracket, sets up and starts the player's game with the story player on his team, records the result and
+   plays out the other games, and answers the bracket screen's messages. */
+
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/EditMenu.h"
 #include "game/DepthChart.h"
 #include "game/StevTable.h"
-#include "game/fn_80061AD4.h"
+#include "game/StoryTournament.h"
 #include "game/StoryTeam.h"
 #include "game/GameOptions.h"
 #include "game/TDbCompilePerformOp.h"
 #include "game/FELoop.h"
 
-/* Teams and round of the current match, set by fn_80061520. */
-struct Match_8030A3A4 {
+/* Teams and round of the current match, set by StoryTournamentSetupMatch. */
+struct StoryTournamentMatch_t {
     int mDit1;
     int mDit2;
     int mLvlt;
 };
 
-/* Values saved by fn_800611C0 and restored by fn_80061154. */
-struct Saved_802D4E28 {
+/* Values saved by StoryTournamentSetOptions and restored by StoryTournamentRestoreOptions. */
+struct StoryTournamentOptions_t {
     int mValue0;
     int mValue1;
     int mValue14;
     unsigned char mSaved;
 };
 
-/* Index returned by DbUserFindIndex, and whether fn_80060B0C opened the 'PDFN'
+/* Index returned by DbUserFindIndex, and whether StoryTournamentOpenDbs opened the 'PDFN'
    database; while it is open, queries skip their own open and close. */
-struct State_803EA5F8 {
+struct StoryTournamentState_t {
     signed char mIndex;
     signed char mUnknown1;
     short mUnknown2;
     short mOpen;
 };
 
-struct Block_800619FC {
+struct StoryTournamentArgs_t {
     int *mpGame;
     int *mpDit2;
     int *mpDit1;
@@ -89,44 +93,44 @@ int DbUserGetDb(int a);
 int DbUserGetCurrent(void);
 }
 
-Object_8008044C lbl_8030A2BC;
-DbCursor lbl_8030A2E8;
-DbCursor lbl_8030A314;
-StevRow_t lbl_8030A340;
-Match_8030A3A4 lbl_8030A3A4;
+Object_8008044C _StoryTournament_PlayerDb;
+DbCursor _StoryTournament_UserStats;
+DbCursor _StoryTournament_TeamCursor;
+StevRow_t _StoryTournament_EventRow;
+StoryTournamentMatch_t _StoryTournament_Match;
 
-static unsigned char lbl_803EA5E8 = 0;
-static StevRow_t *lbl_803EA5EC = 0;
-static Object_8008044C *lbl_803EA5F0 = 0;
-static DbCursor *lbl_803EA5F4 = 0;
-static State_803EA5F8 lbl_803EA5F8 = {0, -1, 0, 0};
+static unsigned char _StoryTournament_bEntered = 0;
+static StevRow_t *_StoryTournament_pEvent = 0;
+static Object_8008044C *_StoryTournament_pPlayerDb = 0;
+static DbCursor *_StoryTournament_pUserStats = 0;
+static StoryTournamentState_t _StoryTournament_State = {0, -1, 0, 0};
 
-static Saved_802D4E28 lbl_802D4E28 = {-1, 0, 0, 0};
+static StoryTournamentOptions_t _StoryTournament_SavedOptions = {-1, 0, 0, 0};
 
 /* Round ('LVLT') and row of each of the 15 bracket games. */
-static int lbl_802D4E38[15] = {1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4};
-static int lbl_802D4E74[15] = {0, 0, 1, 0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7};
+static int _StoryTournament_aiGameLevel[15] = {1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4};
+static int _StoryTournament_aiGameRow[15] = {0, 0, 1, 0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7};
 
 extern "C" {
-void fn_80060948(int id, char *pName, int size);
-int fn_800609EC(int team, int lvlt);
-void fn_80060A9C(void);
-void fn_80060B0C(void);
-void fn_80060BB4(void);
-void fn_80060BE0(void);
-int fn_80060C14(int game, int *pLvlt, int *pRow);
-int fn_80060C94(void);
-void fn_80060CD4(void);
-int fn_80060E7C(void);
-int fn_8006102C(void);
-void fn_80061088(int *pDit1, int *pDit2, int *pLvlt);
-void fn_80061154(void);
-void fn_800611C0(int value14, int value1);
-int fn_80061390(int digt);
-int fn_80061408(int digt);
+void StoryTournamentGetTeamName(int id, char *pName, int size);
+int StoryTournamentFindNextRow(int team, int lvlt);
+void StoryTournamentCloseDbs(void);
+void StoryTournamentOpenDbs(void);
+void StoryTournamentFetchSkill(void);
+void StoryTournamentPurgeRosters(void);
+int StoryTournamentGetGameSlot(int game, int *pLvlt, int *pRow);
+int StoryTournamentGetUserTeam(void);
+void StoryTournamentDrawBracket(void);
+int StoryTournamentAdvanceRound(void);
+int StoryTournamentIsWon(void);
+void StoryTournamentFindUserGame(int *pDit1, int *pDit2, int *pLvlt);
+void StoryTournamentRestoreOptions(void);
+void StoryTournamentSetOptions(int value14, int value1);
+int StoryTournamentLoadCpuTeam(int digt);
+int StoryTournamentLoadUserTeam(int digt);
 
 #if defined(DECOMP_COMPARE)
-void fn_80060948(int id, char *pName, int size)
+void StoryTournamentGetTeamName(int id, char *pName, int size)
 {
     char name[18];
 
@@ -134,17 +138,17 @@ void fn_80060948(int id, char *pName, int size)
         *pName = 0;
         return;
     }
-    if (fn_80084034(&lbl_8030A314, id, 0) == 0) {
+    if (fn_80084034(&_StoryTournament_TeamCursor, id, 0) == 0) {
         strncpy(pName, "NFL Draft Team", size);
     } else {
-        DbCursorGetString(&lbl_8030A314, 0x414E4454, (int)name, sizeof(name));
+        DbCursorGetString(&_StoryTournament_TeamCursor, 0x414E4454, (int)name, sizeof(name));
         name[17] = 0;
         strncpy(pName, name, size);
     }
 }
 
 /* Row of the next round's game that the team won, or 0. */
-int fn_800609EC(int team, int lvlt)
+int StoryTournamentFindNextRow(int team, int lvlt)
 {
     int dit1;
     int dit2;
@@ -167,58 +171,58 @@ int fn_800609EC(int team, int lvlt)
     return 0;
 }
 
-void fn_80060A9C(void)
+void StoryTournamentCloseDbs(void)
 {
-    fn_80083F68(&lbl_8030A314);
-    if (lbl_803EA5F8.mOpen) {
+    fn_80083F68(&_StoryTournament_TeamCursor);
+    if (_StoryTournament_State.mOpen) {
         TournamentClose();
-        lbl_803EA5F8.mOpen = 0;
+        _StoryTournament_State.mOpen = 0;
     }
     ExpLevelClose();
-    fn_8008056C(lbl_803EA5F0);
-    lbl_803EA5F0 = 0;
+    fn_8008056C(_StoryTournament_pPlayerDb);
+    _StoryTournament_pPlayerDb = 0;
     StevClose();
-    UserStatsClose(lbl_803EA5F4);
-    lbl_803EA5F4 = 0;
+    UserStatsClose(_StoryTournament_pUserStats);
+    _StoryTournament_pUserStats = 0;
 }
 
-void fn_80060B0C(void)
+void StoryTournamentOpenDbs(void)
 {
-    lbl_803EA5F8.mIndex = DbUserFindIndex(DbUserGetCurrent());
-    lbl_803EA5F0 = &lbl_8030A2BC;
-    fn_8008044C(&lbl_8030A2BC, 0, 0x54415453);
+    _StoryTournament_State.mIndex = DbUserFindIndex(DbUserGetCurrent());
+    _StoryTournament_pPlayerDb = &_StoryTournament_PlayerDb;
+    fn_8008044C(&_StoryTournament_PlayerDb, 0, 0x54415453);
     StevOpen();
     ExpLevelOpen();
-    lbl_803EA5F8.mUnknown2 = 0x7FFF;
-    lbl_803EA5F4 = &lbl_8030A2E8;
-    UserStatsOpen(&lbl_8030A2E8, lbl_803EA5F8.mIndex);
-    lbl_803EA5F8.mOpen = TournamentOpen(lbl_803EA5F8.mIndex);
-    fn_80083E40(&lbl_8030A314, 0, 0x54415453);
+    _StoryTournament_State.mUnknown2 = 0x7FFF;
+    _StoryTournament_pUserStats = &_StoryTournament_UserStats;
+    UserStatsOpen(&_StoryTournament_UserStats, _StoryTournament_State.mIndex);
+    _StoryTournament_State.mOpen = TournamentOpen(_StoryTournament_State.mIndex);
+    fn_80083E40(&_StoryTournament_TeamCursor, 0, 0x54415453);
 }
 
-void fn_80060BB4(void)
+void StoryTournamentFetchSkill(void)
 {
-    lbl_803EA5F8.mUnknown1 = StoryGetLkss(lbl_803EA5F8.mIndex);
+    _StoryTournament_State.mUnknown1 = StoryGetLkss(_StoryTournament_State.mIndex);
 }
 
-void fn_80060BE0(void)
+void StoryTournamentPurgeRosters(void)
 {
     fn_8018C48C(0x54415453);
     fn_8018C48C(0x454D4147);
 }
 
-int fn_80060C14(int game, int *pLvlt, int *pRow)
+int StoryTournamentGetGameSlot(int game, int *pLvlt, int *pRow)
 {
     if (game >= 0 && game <= 14) {
-        *pLvlt = lbl_802D4E38[game];
-        *pRow = lbl_802D4E74[game];
+        *pLvlt = _StoryTournament_aiGameLevel[game];
+        *pRow = _StoryTournament_aiGameRow[game];
         return 1;
     }
     return 0;
 }
 
 /* Winner ('TNIW') of a game the player does not take part in. */
-int fn_80060C50(int dit1, int dit2)
+int StoryTournamentPickWinner(int dit1, int dit2)
 {
     if (dit1 == 0x31) {
         return 1;
@@ -229,7 +233,7 @@ int fn_80060C50(int dit1, int dit2)
     return DbUtilRandomRange(1, 3);
 }
 
-int fn_80060C94(void)
+int StoryTournamentGetUserTeam(void)
 {
     int teams[8];
     int team = 0;
@@ -241,7 +245,7 @@ int fn_80060C94(void)
 }
 
 /* Draws the first round of the bracket. */
-void fn_80060CD4(void)
+void StoryTournamentDrawBracket(void)
 {
     int teams[8];
     int order[8];
@@ -288,7 +292,7 @@ void fn_80060CD4(void)
         order[second - half] = tmp;
     }
     lvlt = TournamentGetRoundCount(8);
-    team = fn_80060C94();
+    team = StoryTournamentGetUserTeam();
     for (i = 0; i < 8; i += 2) {
         dit1 = teams[order[i]];
         dit2 = teams[order[i + 1]];
@@ -302,12 +306,12 @@ void fn_80060CD4(void)
 
 /* Records the current match as won by its second team and plays the rest of
    the round. Returns 1 when that match was the final. */
-int fn_80060E7C(void)
+int StoryTournamentAdvanceRound(void)
 {
     int dit1;
     int dit2;
     int tniw;
-    int lvlt = lbl_8030A3A4.mLvlt;
+    int lvlt = _StoryTournament_Match.mLvlt;
     int done = 0;
     int count;
     int row;
@@ -317,8 +321,8 @@ int fn_80060E7C(void)
     int next;
     int games;
 
-    dit1 = lbl_8030A3A4.mDit1;
-    dit2 = lbl_8030A3A4.mDit2;
+    dit1 = _StoryTournament_Match.mDit1;
+    dit2 = _StoryTournament_Match.mDit2;
     TournamentSetMatchWinner(lvlt, dit1, dit2, 2);
     if (lvlt == 1) {
         TournamentSetMatchWinner(0, dit2, dit2, 2);
@@ -329,11 +333,11 @@ int fn_80060E7C(void)
         next = lvlt - 1;
         for (; row < count; row++) {
             if (TournamentGetMatch(lvlt, row, &dit1, &dit2, &tniw) && tniw == 0) {
-                tniw = fn_80060C50(dit1, dit2);
+                tniw = StoryTournamentPickWinner(dit1, dit2);
                 TournamentSetMatchWinner(lvlt, dit1, dit2, tniw);
             }
         }
-        team = fn_80060C94();
+        team = StoryTournamentGetUserTeam();
         games = TournamentGetLevelMatchCount(lvlt);
         for (row = 0; row < games; row += 2) {
             TournamentGetMatch(lvlt, row, &dit1, &dit2, &tniw);
@@ -358,7 +362,7 @@ int fn_80060E7C(void)
     return done;
 }
 
-int fn_8006102C(void)
+int StoryTournamentIsWon(void)
 {
     int dit1;
     int dit2;
@@ -372,12 +376,12 @@ int fn_8006102C(void)
 }
 
 /* Finds the player's game in the earliest round that has games. */
-void fn_80061088(int *pDit1, int *pDit2, int *pLvlt)
+void StoryTournamentFindUserGame(int *pDit1, int *pDit2, int *pLvlt)
 {
     int tniw;
     int last = TournamentGetRoundCount(8);
     int lvlt = 1;
-    int team = fn_80060C94();
+    int team = StoryTournamentGetUserTeam();
     int count = last + 1;
     int row;
 
@@ -397,38 +401,38 @@ void fn_80061088(int *pDit1, int *pDit2, int *pLvlt)
     }
 }
 
-void fn_80061154(void)
+void StoryTournamentRestoreOptions(void)
 {
-    if (lbl_802D4E28.mSaved) {
-        GameOptionsSet(14, lbl_802D4E28.mValue14);
-        GameOptionsSet(1, lbl_802D4E28.mValue1);
-        if (lbl_802D4E28.mValue0 > -1) {
-            GameOptionsSet(0, lbl_802D4E28.mValue0);
+    if (_StoryTournament_SavedOptions.mSaved) {
+        GameOptionsSet(14, _StoryTournament_SavedOptions.mValue14);
+        GameOptionsSet(1, _StoryTournament_SavedOptions.mValue1);
+        if (_StoryTournament_SavedOptions.mValue0 > -1) {
+            GameOptionsSet(0, _StoryTournament_SavedOptions.mValue0);
         }
-        lbl_802D4E28.mSaved = 0;
+        _StoryTournament_SavedOptions.mSaved = 0;
     }
 }
 
-void fn_800611C0(int value14, int value1)
+void StoryTournamentSetOptions(int value14, int value1)
 {
-    if (!lbl_802D4E28.mSaved) {
-        lbl_802D4E28.mSaved = 1;
-        lbl_802D4E28.mValue14 = GameOptionsGet(14);
-        lbl_802D4E28.mValue1 = GameOptionsGet(1);
-        if (lbl_803EA5F8.mUnknown1 > -1) {
-            lbl_802D4E28.mValue0 = GameOptionsGet(0);
+    if (!_StoryTournament_SavedOptions.mSaved) {
+        _StoryTournament_SavedOptions.mSaved = 1;
+        _StoryTournament_SavedOptions.mValue14 = GameOptionsGet(14);
+        _StoryTournament_SavedOptions.mValue1 = GameOptionsGet(1);
+        if (_StoryTournament_State.mUnknown1 > -1) {
+            _StoryTournament_SavedOptions.mValue0 = GameOptionsGet(0);
         } else {
-            lbl_802D4E28.mValue0 = lbl_803EA5F8.mUnknown1;
+            _StoryTournament_SavedOptions.mValue0 = _StoryTournament_State.mUnknown1;
         }
     }
     GameOptionsSet(14, value14);
     GameOptionsSet(1, value1);
-    if (lbl_803EA5F8.mUnknown1 > -1) {
-        GameOptionsSet(0, lbl_803EA5F8.mUnknown1);
+    if (_StoryTournament_State.mUnknown1 > -1) {
+        GameOptionsSet(0, _StoryTournament_State.mUnknown1);
     }
 }
 
-void fn_80061274(int a, int *pList, int count, Object_8008044C *pObject)
+void StoryTournamentPlaceDrafted(int a, int *pList, int count, Object_8008044C *pObject)
 {
     int *pSlots = 0;
     int list;
@@ -476,12 +480,12 @@ void fn_80061274(int a, int *pList, int count, Object_8008044C *pObject)
     }
 }
 
-int fn_80061390(int digt)
+int StoryTournamentLoadCpuTeam(int digt)
 {
     int list[14];
 
     TournamentGetTeamPlayers(digt, list);
-    fn_80060354(lbl_803EA5EC, list);
+    fn_80060354(_StoryTournament_pEvent, list);
     list[7] = 0x7FFF;
     fn_80060410(0, list);
     DepthChartAutoFill(0, list, 4);
@@ -489,7 +493,7 @@ int fn_80061390(int digt)
     return digt;
 }
 
-int fn_80061408(int digt)
+int StoryTournamentLoadUserTeam(int digt)
 {
     StoryTeamIdBlock_t picks;
     int list[14];
@@ -497,10 +501,10 @@ int fn_80061408(int digt)
     int count;
     int i;
 
-    digt2 = StoryTeamLoadOneToStats(lbl_803EA5F8.mIndex, 1, &picks);
-    if (PlayerDbSeekId(lbl_803EA5F0, picks.mUnknown0, 0)) {
-        DbCursorSetInt(lbl_803EA5F0, 0x44494F50, picks.mUnknown0);
-        DbCursorSetInt(lbl_803EA5F0, 0x44494754, digt2);
+    digt2 = StoryTeamLoadOneToStats(_StoryTournament_State.mIndex, 1, &picks);
+    if (PlayerDbSeekId(_StoryTournament_pPlayerDb, picks.mUnknown0, 0)) {
+        DbCursorSetInt(_StoryTournament_pPlayerDb, 0x44494F50, picks.mUnknown0);
+        DbCursorSetInt(_StoryTournament_pPlayerDb, 0x44494754, digt2);
     }
     count = TournamentGetTeamPlayers(digt, list);
     for (i = 0; i < count && list[i] != picks.mUnknown0; i++) {
@@ -508,76 +512,76 @@ int fn_80061408(int digt)
     list[7] = 0x7FFF;
     fn_80060410(1, list);
     DepthChartAutoFill(1, list, 4);
-    fn_80061274(1, &picks.mUnknown0, 1, lbl_803EA5F0);
+    StoryTournamentPlaceDrafted(1, &picks.mUnknown0, 1, _StoryTournament_pPlayerDb);
     fn_80084A8C(digt, list, 1, 7);
     return digt;
 }
 #endif
 
-void fn_80061520(int dit1, int dit2, int lvlt)
+void StoryTournamentSetupMatch(int dit1, int dit2, int lvlt)
 {
     DepthChartLoad(1);
-    dit2 = fn_80061408(dit2);
-    lbl_8030A3A4.mDit1 = fn_80061390(dit1);
-    lbl_8030A3A4.mDit2 = dit2;
-    lbl_8030A3A4.mLvlt = lvlt;
+    dit2 = StoryTournamentLoadUserTeam(dit2);
+    _StoryTournament_Match.mDit1 = StoryTournamentLoadCpuTeam(dit1);
+    _StoryTournament_Match.mDit2 = dit2;
+    _StoryTournament_Match.mLvlt = lvlt;
     DepthChartSave();
 }
 
-void fn_80061584(void)
+void StoryTournamentStartMatch(void)
 {
     int dit1;
     int dit2;
     int lvlt;
     int saved = fn_8000FCDC();
 
-    fn_800611C0(0, 0x24);
+    StoryTournamentSetOptions(0, 0x24);
     if (TournamentGetLevelMatchCount(1) == 0) {
-        lbl_803EA5EC->mCsos = -1;
+        _StoryTournament_pEvent->mCsos = -1;
     }
-    fn_80061088(&dit1, &dit2, &lvlt);
-    fn_80061520(dit1, dit2, lvlt);
-    if (lbl_803EA5EC->mDive) {
-        lbl_803EA5EC->mDive = 0;
+    StoryTournamentFindUserGame(&dit1, &dit2, &lvlt);
+    StoryTournamentSetupMatch(dit1, dit2, lvlt);
+    if (_StoryTournament_pEvent->mDive) {
+        _StoryTournament_pEvent->mDive = 0;
     }
     fn_80011600(-1, fn_8000FCCC(), saved);
-    UserProfileSelect(lbl_803EA5F8.mIndex, 1);
+    UserProfileSelect(_StoryTournament_State.mIndex, 1);
     GameInfoSet(2, 1);
-    fn_80015D28(lbl_803EA5EC->mDive);
+    fn_80015D28(_StoryTournament_pEvent->mDive);
 }
 
-int fn_8006164C(void)
+int StoryTournamentHasMatches(void)
 {
     return TournamentGetMatchCount() > 0;
 }
 
-int fn_8006167C(void)
+int StoryTournamentFetchEvent(void)
 {
     int result = 100;
 
-    if (StevGetRow(0, StevCountDiveRows(0) - 1, &lbl_8030A340)) {
+    if (StevGetRow(0, StevCountDiveRows(0) - 1, &_StoryTournament_EventRow)) {
         result = 123;
-        lbl_803EA5EC = &lbl_8030A340;
+        _StoryTournament_pEvent = &_StoryTournament_EventRow;
     }
     return result;
 }
 
-void fn_800616D8(void)
+void StoryTournamentRunEvent(void)
 {
-    switch (lbl_803EA5EC->mItes) {
+    switch (_StoryTournament_pEvent->mItes) {
     case 0:
     case 1:
     case 2:
     case 3:
         break;
     case 4:
-        fn_8006164C();
-        fn_80061584();
+        StoryTournamentHasMatches();
+        StoryTournamentStartMatch();
         break;
     }
 }
 
-void fn_8006171C(int game, int *pDit1, int *pUnknown5, int *pDit2, int *pUnknown7, int *pWinner)
+void StoryTournamentGetGame(int game, int *pDit1, int *pUnknown5, int *pDit2, int *pUnknown7, int *pWinner)
 {
     int lvlt;
     int row;
@@ -591,7 +595,7 @@ void fn_8006171C(int game, int *pDit1, int *pUnknown5, int *pDit2, int *pUnknown
     *pWinner = -1;
     *pDit1 = -1;
     *pDit2 = -1;
-    if (fn_80060C14(game, &lvlt, &row)) {
+    if (StoryTournamentGetGameSlot(game, &lvlt, &row)) {
         found = TournamentGetMatch(lvlt, row, &dit1, &dit2, &tniw);
         if (found) {
             *pDit1 = dit1;
@@ -607,8 +611,8 @@ void fn_8006171C(int game, int *pDit1, int *pUnknown5, int *pDit2, int *pUnknown
                 break;
             }
         }
-        if (found && lvlt < lbl_802D4E38[14]) {
-            if (fn_800609EC(dit1, lvlt) < fn_800609EC(dit2, lvlt)) {
+        if (found && lvlt < _StoryTournament_aiGameLevel[14]) {
+            if (StoryTournamentFindNextRow(dit1, lvlt) < StoryTournamentFindNextRow(dit2, lvlt)) {
                 *pDit2 = dit1;
                 *pDit1 = dit2;
             }
@@ -617,7 +621,7 @@ void fn_8006171C(int game, int *pDit1, int *pUnknown5, int *pDit2, int *pUnknown
 }
 
 /* Starts the tournament on first use and returns the player's open game. */
-void fn_8006182C(int *pGame)
+void StoryTournamentEnterScreen(int *pGame)
 {
     int lvlt;
     int row;
@@ -627,79 +631,79 @@ void fn_8006182C(int *pGame)
     int game;
 
     *pGame = 0;
-    if (!lbl_803EA5E8) {
+    if (!_StoryTournament_bEntered) {
         fn_80010150(10);
-        fn_80060BE0();
-        fn_80060B0C();
-        fn_80061154();
-        fn_80060BB4();
-        if (!fn_8006164C()) {
-            fn_80060CD4();
+        StoryTournamentPurgeRosters();
+        StoryTournamentOpenDbs();
+        StoryTournamentRestoreOptions();
+        StoryTournamentFetchSkill();
+        if (!StoryTournamentHasMatches()) {
+            StoryTournamentDrawBracket();
         }
-        lbl_803EA5EC = 0;
-        lbl_803EA5E8 = 1;
+        _StoryTournament_pEvent = 0;
+        _StoryTournament_bEntered = 1;
         FELoopResetIdle();
     }
     for (game = 0; game <= 14; game++) {
-        if (fn_80060C14(game, &lvlt, &row) && TournamentGetMatch(lvlt, row, &dit1, &dit2, &tniw) && tniw == 0 &&
+        if (StoryTournamentGetGameSlot(game, &lvlt, &row) && TournamentGetMatch(lvlt, row, &dit1, &dit2, &tniw) && tniw == 0 &&
             (dit1 == 0x2E || dit2 == 0x2E)) {
             *pGame = game;
         }
     }
 }
 
-void fn_80061918(void)
+void StoryTournamentExitScreen(void)
 {
-    if (lbl_803EA5E8) {
-        if (!fn_8006102C()) {
+    if (_StoryTournament_bEntered) {
+        if (!StoryTournamentIsWon()) {
             if (MsgGameGetSetupState() == 0) {
-                fn_80060BE0();
-                lbl_803EA5EC = 0;
+                StoryTournamentPurgeRosters();
+                _StoryTournament_pEvent = 0;
             } else if (MsgGameGetSetupState() == 1) {
                 FELoopSetResume(1);
-                fn_8006167C();
-                fn_800616D8();
+                StoryTournamentFetchEvent();
+                StoryTournamentRunEvent();
             }
         }
-        fn_80060A9C();
-        lbl_803EA5E8 = 0;
+        StoryTournamentCloseDbs();
+        _StoryTournament_bEntered = 0;
     }
     fn_8005BE54(0);
 }
 
-int fn_8006199C(void)
+int StoryTournamentRecordResult(void)
 {
     int done = 0;
 
-    if (lbl_803EA5EC) {
-        fn_80060B0C();
-        if (!fn_8006102C()) {
-            fn_80060E7C();
+    if (_StoryTournament_pEvent) {
+        StoryTournamentOpenDbs();
+        if (!StoryTournamentIsWon()) {
+            StoryTournamentAdvanceRound();
         }
-        if (fn_8006102C()) {
+        if (StoryTournamentIsWon()) {
             done = 1;
         }
-        fn_80060A9C();
+        StoryTournamentCloseDbs();
     }
     return done;
 }
 
-int fn_800619FC(unsigned int id, Block_800619FC *pBlock, int unused, int *pResult)
+int StoryTournamentScreenMessage(unsigned int id, StoryTournamentArgs_t *pBlock, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_8006182C(pBlock->mpGame);
+        StoryTournamentEnterScreen(pBlock->mpGame);
         break;
     case 0x80000002:
-        fn_80061918();
+        StoryTournamentExitScreen();
         break;
     case 0x80000003: {
         int *pDit2 = pBlock->mpDit2;
         int *pDit1 = pBlock->mpDit1;
 
-        fn_8006171C((int)pBlock->mpGame, pDit1, pBlock->mpUnknown24, pDit2, pBlock->mpUnknown20, pBlock->mpWinner);
-        fn_80060948(*pDit1, pBlock->mpName1->mpText, pBlock->mpName1->mLength);
-        fn_80060948(*pDit2, pBlock->mpName2->mpText, pBlock->mpName2->mLength);
+        StoryTournamentGetGame((int)pBlock->mpGame, pDit1, pBlock->mpUnknown24, pDit2, pBlock->mpUnknown20, pBlock->mpWinner);
+        StoryTournamentGetTeamName(*pDit1, pBlock->mpName1->mpText, pBlock->mpName1->mLength);
+        StoryTournamentGetTeamName(*pDit2, pBlock->mpName2->mpText, pBlock->mpName2->mLength);
         break;
     }
     default:
@@ -708,116 +712,116 @@ int fn_800619FC(unsigned int id, Block_800619FC *pBlock, int unused, int *pResul
     return 1;
 }
 
-StevRow_t *fn_80061AD4(void)
+StevRow_t *StoryTournamentGetEvent(void)
 {
-    return lbl_803EA5EC;
+    return _StoryTournament_pEvent;
 }
 
-void fn_80061ADC(void)
+void StoryTournamentClearEvent(void)
 {
-    lbl_803EA5EC = 0;
+    _StoryTournament_pEvent = 0;
 }
 
-void fn_80061AE8(void)
+void StoryTournamentBegin(void)
 {
     int saved = fn_8000FCDC();
 
-    fn_8006167C();
+    StoryTournamentFetchEvent();
     fn_80011600(-1, fn_8000FCCC(), saved);
-    UserProfileSelect(lbl_803EA5F8.mIndex, 1);
-    if (lbl_803EA5F8.mOpen == 0) {
-        lbl_803EA5F8.mIndex = DbUserFindIndex(DbUserGetCurrent());
-        TournamentOpen(lbl_803EA5F8.mIndex);
+    UserProfileSelect(_StoryTournament_State.mIndex, 1);
+    if (_StoryTournament_State.mOpen == 0) {
+        _StoryTournament_State.mIndex = DbUserFindIndex(DbUserGetCurrent());
+        TournamentOpen(_StoryTournament_State.mIndex);
     }
     TournamentClearMatches();
     TournamentClearPlayers();
-    if (lbl_803EA5F8.mOpen == 0) {
+    if (_StoryTournament_State.mOpen == 0) {
         TournamentClose();
     }
     MsgTeamPickSetMode(2, 0);
     MsgTeamPickSetSources(1);
 }
 
-void fn_80061B90(int team, int *pDigp)
+void StoryTournamentSetTeamPlayers(int team, int *pDigp)
 {
     int teams[8];
     int munt = 0;
     int i;
 
-    fn_80060B0C();
+    StoryTournamentOpenDbs();
     TournamentGetTeamList(teams);
     for (munt = 0; munt <= 7 && teams[munt] != team; munt++) {
     }
-    if (team == fn_80060C94()) {
+    if (team == StoryTournamentGetUserTeam()) {
         for (i = 0; i <= 6 && pDigp[i] != 0; i++) {
         }
     }
     TournamentSetPlayersTeam(pDigp, 7, munt, team);
-    fn_80060A9C();
+    StoryTournamentCloseDbs();
 }
 
-int fn_80061C44(void)
+int StoryTournamentIsActive(void)
 {
     int result;
 
-    if (lbl_803EA5F8.mOpen == 0) {
-        TournamentOpen(lbl_803EA5F8.mIndex = DbUserFindIndex(DbUserGetCurrent()));
+    if (_StoryTournament_State.mOpen == 0) {
+        TournamentOpen(_StoryTournament_State.mIndex = DbUserFindIndex(DbUserGetCurrent()));
     }
-    result = fn_8006164C();
-    if (lbl_803EA5F8.mOpen == 0) {
+    result = StoryTournamentHasMatches();
+    if (_StoryTournament_State.mOpen == 0) {
         TournamentClose();
     }
     return result;
 }
 
-int fn_80061CAC(void)
+int StoryTournamentIsComplete(void)
 {
     int result;
 
-    if (lbl_803EA5F8.mOpen == 0) {
-        TournamentOpen(lbl_803EA5F8.mIndex = DbUserFindIndex(DbUserGetCurrent()));
+    if (_StoryTournament_State.mOpen == 0) {
+        TournamentOpen(_StoryTournament_State.mIndex = DbUserFindIndex(DbUserGetCurrent()));
     }
-    result = fn_8006102C();
-    if (lbl_803EA5F8.mOpen == 0) {
+    result = StoryTournamentIsWon();
+    if (_StoryTournament_State.mOpen == 0) {
         TournamentClose();
     }
     return result;
 }
 
-int fn_80061D14(void)
+int StoryTournamentOnGameEnd(void)
 {
     int result;
 
-    if (lbl_803EA5EC == 0) {
+    if (_StoryTournament_pEvent == 0) {
         result = 0;
     } else {
         int state = fn_80178AE0();
         result = 1;
         if (state == 1) {
-            fn_8006199C();
+            StoryTournamentRecordResult();
         }
     }
     return result;
 }
 
-void fn_80061D64(int index)
+void StoryTournamentForceWin(int index)
 {
     TDbCompilePerformOp(0,
                 "use \x8c insert into 'LTFN' set 'TNIW' = 2 and 'LVLT' = 0 and '1DIT' = 1 and '2DIT' = 2\n",
                 DbUserGetDb(DbUserGetId(index)));
 }
 
-void fn_80061DA0(int index)
+void StoryTournamentClearWin(int index)
 {
     TDbCompilePerformOp(0, "use \x8c delete from 'LTFN' where ('TNIW' = 2)\n", DbUserGetDb(DbUserGetId(index)));
 }
 
-void fn_80061DDC(void)
+void StoryTournamentDropEvent(void)
 {
-    lbl_803EA5EC = 0;
+    _StoryTournament_pEvent = 0;
 }
 
-int fn_80061DE8(void)
+int StoryTournamentCountRows(void)
 {
     int count = 0;
 

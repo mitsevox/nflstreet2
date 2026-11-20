@@ -46,7 +46,7 @@ void fn_800B6474(int index, unsigned char team);
 void fn_800B6714(Object_80039F5C *p, int port);
 void fn_800B6658(Object_80039F5C *p);
 void fn_800BFB88(void *p, float dt);
-void fn_80162780(int a, int b);
+void PlyrStarSetShown(int a, int b);
 void fn_801487C0(int team, unsigned char begin);
 float fn_80178A44(void);
 void fn_801780A8(Point_8017886C pos);
@@ -103,7 +103,7 @@ void fn_8014E31C(void)
 void fn_8014E3B4(State_802A2058 *p, float dt)
 {
     fn_800BFB88(p, dt);
-    fn_80162780(1, 1);
+    PlyrStarSetShown(1, 1);
     fn_801487C0(1, 1);
     fn_801487C0(0, 5);
     Point_8017886C pos = {0.0f, 0.0f};

@@ -14,7 +14,7 @@
 #include "game/GameInfo.h"
 #include "game/EditMenu.h"
 #include "game/DepthChartSide.h"
-#include "game/fn_80061AD4.h"
+#include "game/StoryTournament.h"
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
 #include "game/StoryTeam.h"
@@ -83,7 +83,7 @@ float fn_8005F754(void);
 StevRow_t *fn_8005FC7C(void);
 void fn_8005FCF8(int *pA, int *pB);
 void fn_80060330(int a, int *pList, int count, Object_8008044C *pObject);
-void fn_80061B90(int team, int *pDigp);
+void StoryTournamentSetTeamPlayers(int team, int *pDigp);
 int DbCursorGetValue(DbCursor *pObject, int key);
 void PortDbOpenSides(DbCursor *pObject);
 void PortDbCloseSides(DbCursor *pObject);
@@ -1212,7 +1212,7 @@ int MsgTeamPickInit(int *pController, int *pCount)
     _MsgTeamPick_bClosed = 0;
     _MsgTeamPick_iLastCreatedId = -1;
     _MsgTeamPick_pEventRow = fn_8005FC7C();
-    _MsgTeamPick_pTournamentRow = fn_80061AD4();
+    _MsgTeamPick_pTournamentRow = StoryTournamentGetEvent();
     MsgTeamPickInitState();
     if (_MsgTeamPick_pState->mpUnknown08[_MsgTeamPick_pState->mUnknown15] != 0xFF) {
         *pController = GameTextGetPadPlayer(_MsgTeamPick_pState->mpUnknown08[_MsgTeamPick_pState->mUnknown15]);
@@ -1295,7 +1295,7 @@ void MsgTeamPickShutdown(void)
             fn_8022DCE4(0);
             fn_8022DD18(0);
             for (int team = 0; team < 8; team++) {
-                fn_80061B90(_MsgTeamPick_aiTournamentTeam[team], digp[team]);
+                StoryTournamentSetTeamPlayers(_MsgTeamPick_aiTournamentTeam[team], digp[team]);
             }
         } else {
             DepthChartSide_t records[8];

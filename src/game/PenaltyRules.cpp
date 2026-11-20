@@ -11,7 +11,7 @@
 #include "game/SyncRandGetRange.h"
 #include <math.h>
 #include "game/fn_8009D990.h"
-#include "game/fn_8013AD94.h"
+#include "game/BallPhysics.h"
 #include "game/PenaltySituation.h"
 struct PenaltyKindInfo_t {
   unsigned short mUnknown0, mUnknown2;
@@ -716,7 +716,7 @@ int PenaltySkipInterference(Ball_t *ball, Object_80039F5C *player) {
     reject = 1;
   if (!reject && fn_801783AC(12) == 1)
     reject = 1;
-  if (!reject && fn_8013AD94(ball) != 1)
+  if (!reject && BallGetSpinMode(ball) != 1)
     reject = 1;
   if (!reject && fn_80177C38())
     reject = 1;

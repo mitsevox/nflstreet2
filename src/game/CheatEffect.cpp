@@ -5,8 +5,8 @@ extern "C" {
 void fn_80060458(int index, int level);
 void fn_8006059C(int index);
 void fn_80060674(int index);
-void fn_80061D64(int index);
-void fn_80061DA0(int index);
+void StoryTournamentForceWin(int index);
+void StoryTournamentClearWin(int index);
 unsigned int ChalGetPoints(void);
 void ChalAddPoints(int value);
 void ChalSetDevPointsForSlot(signed char db, int value);
@@ -104,7 +104,7 @@ void CheatEffectApply(signed char db, int id)
         int saved = DbUserGetCurrent();
         DbUserSetCurrent(DbUserGetId(db));
         fn_8006059C(db);
-        fn_80061D64(db);
+        StoryTournamentForceWin(db);
         DbUserSetCurrent(saved);
         break;
     }
@@ -224,7 +224,7 @@ void CheatEffectRemove(signed char db, int id)
     case 8:
         fn_80060674(db);
     case 50:
-        fn_80061DA0(db);
+        StoryTournamentClearWin(db);
         break;
     case 48:
         GauntletReset(db);
@@ -234,7 +234,7 @@ void CheatEffectRemove(signed char db, int id)
     case 53:
     case 54:
         fn_80060674(db);
-        fn_80061DA0(db);
+        StoryTournamentClearWin(db);
         break;
     case 17:
     case 47:

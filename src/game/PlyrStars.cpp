@@ -1,3 +1,7 @@
+/* The coloured markers on the field that show which player each controller runs: a ring under every
+   human-controlled player and the ball carrier, an arrow at the screen edge when he is off screen, and a
+   pulse when control switches. Also records them in replays ("Stars"). */
+
 #include <dolphin/gx/GXPixel.h>
 #include "engine/viewport.h"
 #include "game/Object_80039F5C.h"
@@ -8,7 +12,7 @@
 #include <math.h>
 #include "game/fn_800B65A0.h"
 
-struct Object_801618D8 {
+struct PlyrStar_t {
     unsigned char mUnknown0[4];
     Vector_80039F5C mUnknown4;
     unsigned char mUnknown10[4];
@@ -24,35 +28,35 @@ struct Object_801618D8 {
     Object_80039F5C *mUnknown100;
     int mUnknown104;
 };
-struct Desc_801618D8 {
+struct PlyrStarDesc_t {
     void *mUnknown0;
     int mUnknown4, mUnknown8;
-    Object_801618D8 *mUnknownC;
+    PlyrStar_t *mUnknownC;
 };
 extern "C" {
-static Object_801618D8 *lbl_802E9780[9] = {0};
-static Object_801618D8 *lbl_802E97A4[9] = {0};
-static Object_801618D8 *lbl_802E97C8[9] = {0};
-static float lbl_802E97EC[10][4] = {
+static PlyrStar_t *_PlyrStar_apRing[9] = {0};
+static PlyrStar_t *_PlyrStar_apRingOutline[9] = {0};
+static PlyrStar_t *_PlyrStar_apArrow[9] = {0};
+static float _PlyrStar_afColor[10][4] = {
     {0.2734375f, 0.0f, 0.0f, 1.0f},        {0.0f, 0.0f, 0.390625f, 1.0f},
     {0.2734375f, 0.390625f, 0.0f, 1.0f},   {0.390625f, 0.19921875f, 0.0f, 1.0f},
     {0.19921875f, 0.0f, 0.2734375f, 1.0f}, {0.3515625f, 0.3515625f, 0.0f, 1.0f},
     {0.0f, 0.2734375f, 0.390625f, 1.0f},   {0.0f, 0.19921875f, 0.0f, 1.0f},
     {0.390625f, 0.390625f, 0.390625f, 1.0f}, {0.0f, 0.0f, 0.0f, 1.0f},
 };
-static Object_801618D8 *lbl_8031D2A4[5];
-static unsigned char lbl_803EB388 = 1;
-static unsigned char lbl_803EB389 = 1;
-static unsigned char lbl_803EB38A = 1;
-static unsigned char lbl_803EB38B = 1;
-static Object_801618D8 *lbl_803EB38C = 0;
-static Object_801618D8 *lbl_803EB390 = 0;
-static unsigned char lbl_803EB394 = 1;
-static unsigned char lbl_803EB395 = 1;
-static unsigned char lbl_803EB396 = 0;
-static unsigned char lbl_803EB397 = 1;
-static Object_80039F5C *lbl_803EB398 = 0;
-static int lbl_803ECAEC;
+static PlyrStar_t *_PlyrStar_apPulse[5];
+static unsigned char _PlyrStar_bDrawRing = 1;
+static unsigned char _PlyrStar_bDrawRingOutline = 1;
+static unsigned char _PlyrStar_bDrawBallMarker = 1;
+static unsigned char _PlyrStar_bDrawBallOutline = 1;
+static PlyrStar_t *_PlyrStar_pBallMarker = 0;
+static PlyrStar_t *_PlyrStar_pBallOutline = 0;
+static unsigned char _PlyrStar_bShowRings = 1;
+static unsigned char _PlyrStar_bShowArrows = 1;
+static unsigned char _PlyrStar_uBallPad = 0;
+static unsigned char _PlyrStar_bBallRingEnabled = 1;
+static Object_80039F5C *_PlyrStar_pBallPlayer = 0;
+static int _PlyrStar_iReplayBits;
 Object_80039F5C *BallGetCurrentHolder(void);
 Object_80039F5C *fn_800B6544(int);
 int GameTextGetPadPlayer(int);
@@ -84,9 +88,9 @@ void ModelObjSetModeNop(void *, int);
 void ModelObjRelocateModelRes(int);
 int PlyrGetIndex(Object_80039F5C *);
 int fn_801784C4(void);
-int ObjNewType_(int, int, int, void (*)(Object_801618D8 *, Desc_801618D8 *), void (*)(Object_801618D8 *));
+int ObjNewType_(int, int, int, void (*)(PlyrStar_t *, PlyrStarDesc_t *), void (*)(PlyrStar_t *));
 int ObjDelType(int);
-int ObjSetListObjFunc(void *, int, int, int (*)(Object_801618D8 *));
+int ObjSetListObjFunc(void *, int, int, int (*)(PlyrStar_t *));
 int ObjNewInList(void *, int, int, void *);
 void ObjSetPriority(void *, int, int);
 void ObjRemoveFromList(void *, int);
@@ -94,12 +98,12 @@ void *fn_800C47C4(void);
 void fn_80030ACC(void (*)(BitStream_t *),
                  void (*)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float), int,
                  const char *);
-int fn_8016295C(Vector_80039F5C *, Vector_80039F5C *, int *, float *);
-void fn_80162F28(Object_801618D8 *);
-void fn_80163020(void);
+int PlyrStarProjectOffscreen(Vector_80039F5C *, Vector_80039F5C *, int *, float *);
+void PlyrStarStartPulse(PlyrStar_t *);
+void PlyrStarClearLinks(void);
 
-Object_80039F5C *fn_8016174C(int index, unsigned char *enabled) {
-    Object_801618D8 *item = lbl_802E9780[index];
+Object_80039F5C *PlyrStarFindPlayer(int index, unsigned char *enabled) {
+    PlyrStar_t *item = _PlyrStar_apRing[index];
     Object_80039F5C *current = BallGetCurrentHolder(), *player = 0;
     if (item && (fn_800B65A0(0) != 255 || fn_800B65A0(1) != 255)) {
         if (index != 8) {
@@ -119,7 +123,7 @@ Object_80039F5C *fn_8016174C(int index, unsigned char *enabled) {
                 }
             }
         } else {
-            if (lbl_803EB397) {
+            if (_PlyrStar_bBallRingEnabled) {
                 if (!(item->mUnknown20 & 4)) {
                     if (current && (current->mpUnknown4->mUnknown20 & 1) && (current->mId & 255) == 1 &&
                         !(current->mFlags & 0x400) && fn_800B65A0((current->mId >> 8) & 255) == 255)
@@ -130,7 +134,7 @@ Object_80039F5C *fn_8016174C(int index, unsigned char *enabled) {
                         player = linked;
                 }
             }
-            lbl_803EB398 = player;
+            _PlyrStar_pBallPlayer = player;
         }
     }
     if (player)
@@ -139,7 +143,7 @@ Object_80039F5C *fn_8016174C(int index, unsigned char *enabled) {
         *enabled = 0;
     return player;
 }
-void fn_801618D8(Object_801618D8 *item, Desc_801618D8 *desc) {
+void PlyrStarCreate(PlyrStar_t *item, PlyrStarDesc_t *desc) {
     int kind = desc->mUnknown8;
     // FAKEMATCH: store order of the field initializers below was found by permutation search
     item->mUnknown34 = kind;
@@ -175,12 +179,12 @@ void fn_801618D8(Object_801618D8 *item, Desc_801618D8 *desc) {
     fn_802353D8(item->mUnknown3C, 0x401002);
     ModelObjSetShader(item->mUnknown3C, "Flat");
 }
-void fn_80161A34(Object_801618D8 *item) {
+void PlyrStarDestroy(PlyrStar_t *item) {
     ModelObjReset(item->mUnknown3C);
     if ((item->mUnknown20 & 1) == 0 && item->mUnknownFC)
         ResUnLoad(item->mUnknown24, item->mUnknown28);
 }
-void fn_80161A88(Object_801618D8 *out, Object_801618D8 *in) {
+void PlyrStarCopyState(PlyrStar_t *out, PlyrStar_t *in) {
     out->mUnknown14 = in->mUnknown14;
     out->mUnknown18 = in->mUnknown18;
     out->mUnknown1C = in->mUnknown1C;
@@ -191,39 +195,39 @@ void fn_80161A88(Object_801618D8 *out, Object_801618D8 *in) {
     out->mUnknown100 = in->mUnknown100;
     out->mUnknown104 = in->mUnknown104;
 }
-void fn_80161AD4(void *render, int index) {
+void PlyrStarSetColor(void *render, int index) {
     int context = ConGetCurrentContext();
-    ModelObjSetAmbientColor(render, context, lbl_802E97EC[index][0], lbl_802E97EC[index][1], lbl_802E97EC[index][2],
-                lbl_802E97EC[index][3]);
+    ModelObjSetAmbientColor(render, context, _PlyrStar_afColor[index][0], _PlyrStar_afColor[index][1], _PlyrStar_afColor[index][2],
+                _PlyrStar_afColor[index][3]);
 }
-int fn_80161B38(Object_801618D8 *item) {
-    Object_801618D8 *extra = 0;
+int PlyrStarDraw(PlyrStar_t *item) {
+    PlyrStar_t *extra = 0;
     int draw = 1, valid = 1;
     if (item->mUnknownFC && (item->mUnknown20 & 2)) {
         MatSetStack(VptGetMatrixStack());
         MatPush();
         switch (item->mUnknown28) {
         case 5:
-            if (lbl_803EB394 == 1) {
+            if (_PlyrStar_bShowRings == 1) {
                 float scale = item->mUnknown1C;
                 MatTranslate(&item->mUnknown4);
                 MatRotZ(item->mUnknown14);
                 MatScaleCol(scale, scale, 1.0f);
-                fn_80161AD4(item->mUnknown3C, item->mUnknown30);
-                if (!lbl_803EB388)
+                PlyrStarSetColor(item->mUnknown3C, item->mUnknown30);
+                if (!_PlyrStar_bDrawRing)
                     draw = 0;
-                if (lbl_803EB389) {
-                    extra = lbl_802E97A4[item->mUnknown34];
-                    fn_80161AD4(extra->mUnknown3C, 9);
+                if (_PlyrStar_bDrawRingOutline) {
+                    extra = _PlyrStar_apRingOutline[item->mUnknown34];
+                    PlyrStarSetColor(extra->mUnknown3C, 9);
                 }
             } else
                 valid = 0;
             break;
         case 6:
-            if (lbl_803EB395 && item->mUnknown34 != 8) {
+            if (_PlyrStar_bShowArrows && item->mUnknown34 != 8) {
                 Vector_80039F5C point;
                 float scale;
-                if (fn_8016295C(&item->mUnknown4, &point, &item->mUnknown14, &scale)) {
+                if (PlyrStarProjectOffscreen(&item->mUnknown4, &point, &item->mUnknown14, &scale)) {
                     MatMakeUnit();
                     scale = (scale + item->mUnknown18) * 0.5f;
                     item->mUnknown18 = scale;
@@ -231,7 +235,7 @@ int fn_80161B38(Object_801618D8 *item) {
                     MatRotZ(item->mUnknown14);
                     MatRotX(0x400000);
                     MatScale(item->mUnknown18);
-                    fn_80161AD4(item->mUnknown3C, item->mUnknown30);
+                    PlyrStarSetColor(item->mUnknown3C, item->mUnknown30);
                 } else {
                     valid = 0;
                     item->mUnknown18 = 0.25f;
@@ -242,17 +246,17 @@ int fn_80161B38(Object_801618D8 *item) {
             }
             break;
         case 7:
-            if (lbl_803EB395 == 1) {
+            if (_PlyrStar_bShowArrows == 1) {
                 float scale = item->mUnknown1C * item->mUnknown18;
                 MatTranslate(&item->mUnknown4);
                 MatRotZ(item->mUnknown14);
                 MatScaleCol(scale, scale, 1.0f);
-                fn_80161AD4(item->mUnknown3C, item->mUnknown30);
-                if (!lbl_803EB38A)
+                PlyrStarSetColor(item->mUnknown3C, item->mUnknown30);
+                if (!_PlyrStar_bDrawBallMarker)
                     draw = 0;
-                if (lbl_803EB38B) {
-                    extra = lbl_803EB390;
-                    fn_80161AD4(extra->mUnknown3C, 9);
+                if (_PlyrStar_bDrawBallOutline) {
+                    extra = _PlyrStar_pBallOutline;
+                    PlyrStarSetColor(extra->mUnknown3C, 9);
                 }
             } else
                 valid = 0;
@@ -290,7 +294,7 @@ int fn_80161B38(Object_801618D8 *item) {
     }
     return 0;
 }
-void fn_80161E7C(Object_801618D8 *item, Vec2_t *point, int flip) {
+void PlyrStarSetPosition(PlyrStar_t *item, Vec2_t *point, int flip) {
     item->mUnknown4.mX = point->mX;
     item->mUnknown4.mY = point->mY;
     item->mUnknown4.mZ = 0.0f;
@@ -301,10 +305,10 @@ void fn_80161E7C(Object_801618D8 *item, Vec2_t *point, int flip) {
     }
     item->mUnknown20 |= 2;
 }
-int fn_80161ED4(void) {
+int PlyrStarGetReplayBits(void) {
     return 6;
 }
-void fn_80161EDC(Object_801618D8 *item, BitStream_t *stream) {
+void PlyrStarWriteReplay(PlyrStar_t *item, BitStream_t *stream) {
     if (item) {
         unsigned char active = (item->mUnknown20 >> 1) & 1;
         fn_80191068(stream, active, 1);
@@ -312,7 +316,7 @@ void fn_80161EDC(Object_801618D8 *item, BitStream_t *stream) {
     } else
         fn_80191068(stream, 0, 6);
 }
-void fn_80161F5C(Object_801618D8 *item, BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream_t *d,
+void PlyrStarReadReplay(PlyrStar_t *item, BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream_t *d,
                  float blend) {
     ReadBitStream(a, 6);
     if (d)
@@ -328,36 +332,36 @@ void fn_80161F5C(Object_801618D8 *item, BitStream_t *a, BitStream_t *b, BitStrea
         int id = (int)ReadBitStream(b, 5);
         if (active && id <= 13) {
             Object_80039F5C *player = PlyrGet((unsigned char)(id / 7), (unsigned short)(id % 7));
-            fn_80161E7C(item, (Vec2_t *)&player->mpUnknown4->mUnknown4, 0);
+            PlyrStarSetPosition(item, (Vec2_t *)&player->mpUnknown4->mUnknown4, 0);
         }
     } else
         ReadBitStream(b, 6);
 }
-void fn_80162074(BitStream_t *stream) {
+void PlyrStarWriteReplayAll(BitStream_t *stream) {
     for (unsigned char i = 0; i < 9; ++i)
-        fn_80161EDC(lbl_802E9780[i], stream);
-    fn_80161EDC(lbl_803EB38C, stream);
+        PlyrStarWriteReplay(_PlyrStar_apRing[i], stream);
+    PlyrStarWriteReplay(_PlyrStar_pBallMarker, stream);
 }
-void fn_801620D4(BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream_t *d, float blend) {
+void PlyrStarReadReplayAll(BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream_t *d, float blend) {
     for (unsigned char i = 0; i < 9; ++i)
-        fn_80161F5C(lbl_802E9780[i], a, b, c, d, blend);
-    fn_80161F5C(lbl_803EB38C, a, b, c, d, blend);
+        PlyrStarReadReplay(_PlyrStar_apRing[i], a, b, c, d, blend);
+    PlyrStarReadReplay(_PlyrStar_pBallMarker, a, b, c, d, blend);
 }
-Object_801618D8 *fn_8016216C(void) {
+PlyrStar_t *PlyrStarFindFreePulse(void) {
     unsigned int i = 0;
-    Object_801618D8 *item;
-    while ((item = lbl_8031D2A4[i])->mUnknown100) {
+    PlyrStar_t *item;
+    while ((item = _PlyrStar_apPulse[i])->mUnknown100) {
         if (++i >= 5)
             return 0;
     }
     return item;
 }
-float fn_801621AC(Object_801618D8 *item) {
+float PlyrStarGetPulseScale(PlyrStar_t *item) {
     return 2.5f;
 }
-void fn_801621B8(void) {
+void PlyrStarUpdatePulses(void) {
     for (unsigned int i = 0; i < 5; ++i) {
-        Object_801618D8 *item = lbl_8031D2A4[i];
+        PlyrStar_t *item = _PlyrStar_apPulse[i];
         if (item->mUnknown20 & 2) {
             if (item->mUnknown20 & 4) {
                 if (!(item->mUnknown18 <= 1.0f))
@@ -376,14 +380,14 @@ void fn_801621B8(void) {
             }
             if (item->mUnknown20 & 0x20) {
                 item->mUnknown18 *= 1.1f;
-                fn_80161E7C(item, (Vec2_t *)&item->mUnknown100->mMotion.mPos, fn_801784C4());
+                PlyrStarSetPosition(item, (Vec2_t *)&item->mUnknown100->mMotion.mPos, fn_801784C4());
                 if (!(item->mUnknown18 <= item->mUnknown38)) {
                     item->mUnknown18 = item->mUnknown38;
                     item->mUnknown20 = (item->mUnknown20 & ~0x20) | 0x40;
                 }
             }
             if (item->mUnknown20 & 0x40) {
-                fn_80161E7C(item, (Vec2_t *)&item->mUnknown100->mMotion.mPos, fn_801784C4());
+                PlyrStarSetPosition(item, (Vec2_t *)&item->mUnknown100->mMotion.mPos, fn_801784C4());
                 if (!(item->mUnknown18 <= 1.0f))
                     item->mUnknown18 *= 0.9f;
                 else {
@@ -398,18 +402,18 @@ void fn_801621B8(void) {
         }
     }
 }
-void fn_8016239C(void *arg) {
-    ObjNewType_(8, 264, 34, fn_801618D8, fn_80161A34);
-    ObjSetListObjFunc(arg, 8, 0, fn_80161B38);
-    lbl_803EB398 = 0;
+void PlyrStarRegisterType(void *arg) {
+    ObjNewType_(8, 264, 34, PlyrStarCreate, PlyrStarDestroy);
+    ObjSetListObjFunc(arg, 8, 0, PlyrStarDraw);
+    _PlyrStar_pBallPlayer = 0;
 }
-void fn_80162404(void) {
+void PlyrStarReleaseType(void) {
     VptFlushObjectTrashSync();
     ObjDelType(8);
-    lbl_803EB398 = 0;
+    _PlyrStar_pBallPlayer = 0;
 }
-Object_801618D8 *fn_80162434(void *arg, int index, Object_801618D8 *shared, void *data, int mode) {
-    Desc_801618D8 desc;
+PlyrStar_t *PlyrStarNew(void *arg, int index, PlyrStar_t *shared, void *data, int mode) {
+    PlyrStarDesc_t desc;
     // FAKEMATCH: store order +0, +0xC, +8, +4 chosen to reproduce the target schedule
     desc.mUnknown0 = data;
     desc.mUnknownC = shared;
@@ -417,130 +421,130 @@ Object_801618D8 *fn_80162434(void *arg, int index, Object_801618D8 *shared, void
     desc.mUnknown4 = mode;
     int handle = ObjNewInList(arg, 8, 0, &desc);
     ObjSetPriority(arg, handle, 3);
-    return (Object_801618D8 *)handle;
+    return (PlyrStar_t *)handle;
 }
-void fn_80162494(void *arg, Object_801618D8 *item) {
+void PlyrStarDelete(void *arg, PlyrStar_t *item) {
     if (item) {
         ObjRemoveFromList(arg, (int)item);
         VptTrashObject((int)item);
     }
 }
-void fn_801624D0(void *arg) {
+void PlyrStarInit(void *arg) {
     void *data = fn_800C47C4();
-    fn_8016239C(arg);
-    Object_801618D8 *shared = 0;
+    PlyrStarRegisterType(arg);
+    PlyrStar_t *shared = 0;
     for (unsigned int i = 0; i < 9; ++i) {
-        Object_801618D8 *item = fn_80162434(arg, i, shared, data, 6);
+        PlyrStar_t *item = PlyrStarNew(arg, i, shared, data, 6);
         item->mUnknown18 = 0.25f;
-        lbl_802E97C8[i] = item;
+        _PlyrStar_apArrow[i] = item;
         if (!i)
             shared = item;
     }
-    lbl_803EB38C = fn_80162434(arg, 9, 0, data, 7);
-    lbl_803EB38C->mUnknown18 = 1.0f;
+    _PlyrStar_pBallMarker = PlyrStarNew(arg, 9, 0, data, 7);
+    _PlyrStar_pBallMarker->mUnknown18 = 1.0f;
     for (unsigned int i = 0; i < 5; ++i) {
-        Object_801618D8 *item = fn_80162434(arg, i, lbl_803EB38C, data, 7);
+        PlyrStar_t *item = PlyrStarNew(arg, i, _PlyrStar_pBallMarker, data, 7);
         item->mUnknown18 = 1.0f;
         item->mUnknown20 &= ~2;
-        lbl_8031D2A4[i] = item;
+        _PlyrStar_apPulse[i] = item;
     }
-    lbl_803EB390 = fn_80162434(arg, 9, 0, data, 12);
-    lbl_803EB390->mUnknown18 = 1.0f;
+    _PlyrStar_pBallOutline = PlyrStarNew(arg, 9, 0, data, 12);
+    _PlyrStar_pBallOutline->mUnknown18 = 1.0f;
     shared = 0;
     for (unsigned int i = 0; i < 9; ++i) {
-        Object_801618D8 *item = fn_80162434(arg, i, shared, data, 5);
+        PlyrStar_t *item = PlyrStarNew(arg, i, shared, data, 5);
         item->mUnknown18 = 1.0f;
-        lbl_802E9780[i] = item;
+        _PlyrStar_apRing[i] = item;
         if (!i)
             shared = item;
     }
     shared = 0;
     for (unsigned int i = 0; i < 9; ++i) {
-        Object_801618D8 *item = fn_80162434(arg, i, shared, data, 11);
+        PlyrStar_t *item = PlyrStarNew(arg, i, shared, data, 11);
         item->mUnknown18 = 1.0f;
-        lbl_802E97A4[i] = item;
+        _PlyrStar_apRingOutline[i] = item;
         if (!i)
             shared = item;
     }
 }
-void fn_801626A4(void *arg) {
+void PlyrStarShutdown(void *arg) {
     unsigned int i;
     for (i = 0; i < 9; ++i) {
-        fn_80162494(arg, lbl_802E9780[i]);
-        lbl_802E9780[i] = 0;
-        fn_80162494(arg, lbl_802E97A4[i]);
-        lbl_802E9780[i] = 0;
-        fn_80162494(arg, lbl_802E97C8[i]);
-        lbl_802E97C8[i] = 0;
+        PlyrStarDelete(arg, _PlyrStar_apRing[i]);
+        _PlyrStar_apRing[i] = 0;
+        PlyrStarDelete(arg, _PlyrStar_apRingOutline[i]);
+        _PlyrStar_apRing[i] = 0;
+        PlyrStarDelete(arg, _PlyrStar_apArrow[i]);
+        _PlyrStar_apArrow[i] = 0;
     }
     for (i = 0; i < 5; ++i) {
-        fn_80162494(arg, lbl_8031D2A4[i]);
-        lbl_8031D2A4[i] = 0;
+        PlyrStarDelete(arg, _PlyrStar_apPulse[i]);
+        _PlyrStar_apPulse[i] = 0;
     }
-    fn_80162494(arg, lbl_803EB38C);
-    fn_80162494(arg, lbl_803EB390);
-    fn_80162404();
+    PlyrStarDelete(arg, _PlyrStar_pBallMarker);
+    PlyrStarDelete(arg, _PlyrStar_pBallOutline);
+    PlyrStarReleaseType();
 }
-void fn_80162780(unsigned char a, unsigned char b) {
-    lbl_803EB394 = a;
-    lbl_803EB395 = b;
+void PlyrStarSetShown(unsigned char a, unsigned char b) {
+    _PlyrStar_bShowRings = a;
+    _PlyrStar_bShowArrows = b;
 }
-unsigned char fn_8016278C(void) {
-    return lbl_803EB394;
+unsigned char PlyrStarGetRingsShown(void) {
+    return _PlyrStar_bShowRings;
 }
-void fn_80162794(void) {
+void PlyrStarUpdate(void) {
     Object_80039F5C *current = BallGetCurrentHolder();
-    lbl_803EB38C->mUnknown20 &= ~2;
+    _PlyrStar_pBallMarker->mUnknown20 &= ~2;
     for (unsigned char i = 0; i < 9; ++i) {
-        Object_801618D8 *item = lbl_802E9780[i], *other = lbl_802E97C8[i];
+        PlyrStar_t *item = _PlyrStar_apRing[i], *other = _PlyrStar_apArrow[i];
         unsigned char active = 0;
         if (item) {
             if (fn_800B65A0(0) != 255 || fn_800B65A0(1) != 255)
-                item->mUnknown100 = fn_8016174C(i, &active);
+                item->mUnknown100 = PlyrStarFindPlayer(i, &active);
             if (active == 1) {
                 Object_80039F5C *player = item->mUnknown100;
                 if (player->mFlags & 0x2000000) {
-                    fn_80162F28(item);
+                    PlyrStarStartPulse(item);
                     player->mFlags &= ~0x2000000;
                 }
-                fn_80161E7C(item, (Vec2_t *)&player->mMotion.mPos, fn_801784C4());
+                PlyrStarSetPosition(item, (Vec2_t *)&player->mMotion.mPos, fn_801784C4());
                 other->mUnknown20 |= 2;
                 other->mUnknown4.mX = item->mUnknown4.mX;
                 other->mUnknown4.mY = item->mUnknown4.mY;
                 other->mUnknown4.mZ = item->mUnknown4.mZ;
                 if (player == current) {
-                    lbl_803EB396 = (unsigned char)item->mUnknown2C;
-                    lbl_803EB38C->mUnknown30 = item->mUnknown30;
-                    lbl_803EB38C->mUnknown20 |= 2;
-                    lbl_803EB38C->mUnknown4.mX = item->mUnknown4.mX;
-                    lbl_803EB38C->mUnknown4.mY = item->mUnknown4.mY;
-                    lbl_803EB38C->mUnknown4.mZ = 0.0f;
-                    if (lbl_803EB38C->mUnknown20 & 0x10)
-                        lbl_803EB38C->mUnknown14 = (lbl_803EB38C->mUnknown14 - 0x16C16) & 0xFFFFFF;
+                    _PlyrStar_uBallPad = (unsigned char)item->mUnknown2C;
+                    _PlyrStar_pBallMarker->mUnknown30 = item->mUnknown30;
+                    _PlyrStar_pBallMarker->mUnknown20 |= 2;
+                    _PlyrStar_pBallMarker->mUnknown4.mX = item->mUnknown4.mX;
+                    _PlyrStar_pBallMarker->mUnknown4.mY = item->mUnknown4.mY;
+                    _PlyrStar_pBallMarker->mUnknown4.mZ = 0.0f;
+                    if (_PlyrStar_pBallMarker->mUnknown20 & 0x10)
+                        _PlyrStar_pBallMarker->mUnknown14 = (_PlyrStar_pBallMarker->mUnknown14 - 0x16C16) & 0xFFFFFF;
                     else
-                        lbl_803EB38C->mUnknown14 = 0;
-                    fn_80161A88(lbl_803EB390, lbl_803EB38C);
+                        _PlyrStar_pBallMarker->mUnknown14 = 0;
+                    PlyrStarCopyState(_PlyrStar_pBallOutline, _PlyrStar_pBallMarker);
                 }
             } else {
                 item->mUnknown20 &= ~2;
                 other->mUnknown20 &= ~2;
             }
-            fn_80161A88(lbl_802E97A4[i], item);
+            PlyrStarCopyState(_PlyrStar_apRingOutline[i], item);
         }
     }
-    fn_801621B8();
+    PlyrStarUpdatePulses();
 }
-int fn_8016295C(Vector_80039F5C *input, Vector_80039F5C *out, int *angle, float *scale) {
-    struct Projection_8016295C {
+int PlyrStarProjectOffscreen(Vector_80039F5C *input, Vector_80039F5C *out, int *angle, float *scale) {
+    struct PlyrStarClip_t {
         float mX, mY, mZ, mW;
     };
     int result;
     MatSetStack(VptGetMatrixStack());
     MatPush();
     MatLoadSlot(4);
-    Projection_8016295C point;
+    PlyrStarClip_t point;
     Vector_80039F5C unused;
-    Projection_8016295C original;
+    PlyrStarClip_t original;
     unused.mX = input->mX;
     unused.mY = input->mY;
     unused.mZ = 0.5f;
@@ -620,14 +624,14 @@ int fn_8016295C(Vector_80039F5C *input, Vector_80039F5C *out, int *angle, float 
     MatPop();
     return result;
 }
-void fn_80162D78(void) {
-    lbl_803ECAEC = fn_80161ED4();
-    fn_80030ACC(fn_80162074, fn_801620D4, lbl_803ECAEC * 10, "Stars");
+void PlyrStarRegisterReplay(void) {
+    _PlyrStar_iReplayBits = PlyrStarGetReplayBits();
+    fn_80030ACC(PlyrStarWriteReplayAll, PlyrStarReadReplayAll, _PlyrStar_iReplayBits * 10, "Stars");
 }
-Object_801618D8 *fn_80162DBC(int index) {
-    return lbl_8031D2A4[index];
+PlyrStar_t *PlyrStarGetPulse(int index) {
+    return _PlyrStar_apPulse[index];
 }
-void fn_80162DD0(Object_801618D8 *item, Vector_80039F5C *point) {
+void PlyrStarPlace(PlyrStar_t *item, Vector_80039F5C *point) {
     item->mUnknown4.mX = point->mX;
     item->mUnknown4.mY = point->mY;
     item->mUnknown4.mZ = point->mZ;
@@ -637,60 +641,60 @@ void fn_80162DD0(Object_801618D8 *item, Vector_80039F5C *point) {
     }
     item->mUnknown20 |= 2;
 }
-unsigned int fn_80162E40(int index) {
-    float r = lbl_802E97EC[index][0];
+unsigned int PlyrStarGetColor(int index) {
+    float r = _PlyrStar_afColor[index][0];
     if (!(r <= 1.0f))
         r = 1.0f;
     unsigned char red = (int)(r * 255.0f);
-    float g = lbl_802E97EC[index][1];
+    float g = _PlyrStar_afColor[index][1];
     if (!(g <= 1.0f))
         g = 1.0f;
     unsigned char green = (int)(g * 255.0f);
-    float b = lbl_802E97EC[index][2];
+    float b = _PlyrStar_afColor[index][2];
     if (!(b <= 1.0f))
         b = 1.0f;
     unsigned char blue = (int)(b * 255.0f);
-    float a = lbl_802E97EC[index][3];
+    float a = _PlyrStar_afColor[index][3];
     if (!(a <= 1.0f))
         a = 1.0f;
     return ((unsigned int)(int)(a * 255.0f) << 24) | (red << 16) | (green << 8) | blue;
 }
-void fn_80162F28(Object_801618D8 *source) {
+void PlyrStarStartPulse(PlyrStar_t *source) {
     if (source) {
-        Object_801618D8 *item = fn_8016216C();
+        PlyrStar_t *item = PlyrStarFindFreePulse();
         if (item) {
             item->mUnknown100 = source->mUnknown100;
             item->mUnknown20 |= 0x22;
             item->mUnknown14 = 0;
             item->mUnknown18 = 1.0f;
-            item->mUnknown38 = fn_801621AC(item);
+            item->mUnknown38 = PlyrStarGetPulseScale(item);
             item->mUnknown30 = source->mUnknown30;
             Vec2_t *point = (Vec2_t *)&item->mUnknown100->mMotion.mPos;
-            fn_80161E7C(item, point, fn_801784C4());
+            PlyrStarSetPosition(item, point, fn_801784C4());
         }
     }
 }
-void fn_80162FB8(int index, int ref) {
-    Object_801618D8 *item = index == 255 ? lbl_802E9780[8] : lbl_802E9780[index];
-    fn_80163020();
+void PlyrStarLinkPlayer(int index, int ref) {
+    PlyrStar_t *item = index == 255 ? _PlyrStar_apRing[8] : _PlyrStar_apRing[index];
+    PlyrStarClearLinks();
     if (item) {
         item->mUnknown104 = ref;
         item->mUnknown20 |= 4;
     }
 }
-void fn_80163020(void) {
+void PlyrStarClearLinks(void) {
     for (unsigned char i = 0; i < 9; ++i) {
-        Object_801618D8 *item = lbl_802E9780[i];
+        PlyrStar_t *item = _PlyrStar_apRing[i];
         if (item) {
             item->mUnknown104 = 0;
             item->mUnknown20 &= ~4;
         }
     }
 }
-Object_80039F5C *fn_80163064(void) {
-    return lbl_803EB398;
+Object_80039F5C *PlyrStarGetBallPlayer(void) {
+    return _PlyrStar_pBallPlayer;
 }
-void fn_8016306C(unsigned char value) {
-    lbl_803EB397 = value;
+void PlyrStarSetBallRingEnabled(unsigned char value) {
+    _PlyrStar_bBallRingEnabled = value;
 }
 }

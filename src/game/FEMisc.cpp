@@ -12,8 +12,8 @@ static char _FEMisc_szHelpText[81] = "";
 
 extern "C" {
 
-int fn_80061C44(void);
-int fn_80061CAC(void);
+int StoryTournamentIsActive(void);
+int StoryTournamentIsComplete(void);
 int fn_8005F910(void);
 int fn_8005F938(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int UserProfileFindIndex(int a);
@@ -111,14 +111,14 @@ int FEMiscHandleFunction(unsigned int id, MenuArg_t *pArgs, int unused, int *pRe
         }
         break;
     case 0x148:
-        if (fn_80061C44()) {
+        if (StoryTournamentIsActive()) {
             *pResult = 1;
         } else {
             *pResult = 0;
         }
         break;
     case 0x14E:
-        if (fn_80061CAC()) {
+        if (StoryTournamentIsComplete()) {
             *pResult = 1;
         } else {
             *pResult = 0;

@@ -25,11 +25,11 @@ void fn_80030ACC(void (*pCallback0)(int a), void (*pCallback4)(int a, int b, int
 void SpchIGSetBallCarrier(int id);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_800C47C4(void);
-void fn_8013A440(Ball_t *pBall);
+void BallSyncModel(Ball_t *pBall);
 void BallStepGroundContact(Ball_t *pBall, float step);
 void BallFollowHolder(Ball_t *pBall, float value);
-void fn_8013AB24(Ball_t *pBall);
-void fn_8013ABE0(Ball_t *pBall);
+void BallPredictLanding(Ball_t *pBall);
+void BallResetPhysics(Ball_t *pBall);
 void BallStateUpdate(Ball_t *pBall, float step);
 void BallStateMove(Ball_t *pBall, float step);
 void BallStateChange(Ball_t *pBall, int a, int b);
@@ -99,7 +99,7 @@ int BallBlockSyncModels(void *p, int value)
         Ball_t *pBall = &pSet->mEntries[i];
 
         if (pBall->mpUnknown00) {
-            fn_8013A440(pBall);
+            BallSyncModel(pBall);
         }
     }
     return 0;
@@ -432,7 +432,7 @@ void BallsSyncModels(float step)
     unsigned int i;
 
     for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
-        fn_8013A440(&_Ball_pSet->mEntries[i]);
+        BallSyncModel(&_Ball_pSet->mEntries[i]);
     }
 }
 
@@ -441,7 +441,7 @@ void BallsResetScales(void)
     int i;
 
     for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
-        fn_8013ABE0(&_Ball_pSet->mEntries[i]);
+        BallResetPhysics(&_Ball_pSet->mEntries[i]);
     }
 }
 
@@ -810,7 +810,7 @@ void BallsMirror(void)
         QuatMultiply(&pBall->mState.mUnknown18, &turn, &pBall->mState.mUnknown18);
         QuatFromEuler(&turn, 0, 0, 0x800000);
         QuatMultiply(&pBall->mState.mUnknown34, &turn, &pBall->mState.mUnknown34);
-        fn_8013AB24(pBall);
+        BallPredictLanding(pBall);
     }
 }
 

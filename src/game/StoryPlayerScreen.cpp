@@ -42,7 +42,7 @@ void FEPlyrSetScale(int index, float scale);
 void FEPlyrPlayAnim(int index, int a, int b);
 void FEPlyrSetPlayer(int index, int a, int b);
 void FEPlyrSetPriority(int index, int value);
-void fn_80061DDC(void);
+void StoryTournamentDropEvent(void);
 int fn_800841AC(DbCursor *pObject);
 int fn_800841D8(DbCursor *pObject);
 int fn_80084204(DbCursor *pObject);
@@ -137,7 +137,7 @@ void StoryPlayerScreenRevert(void)
 
 void StoryPlayerScreenEnter(int *pId)
 {
-    fn_80061DDC();
+    StoryTournamentDropEvent();
     if (_StoryPlayerScreen_bActive == 0) {
         _StoryPlayerScreen_bActive = 1;
         _StoryPlayerScreen_iProfile = DbUserFindIndex(DbUserGetCurrent());

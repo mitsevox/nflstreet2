@@ -2290,9 +2290,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80060948.cpp",
+      "source": "src/game/StoryTournament.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80061520-0x80061F04 (src/game/cu_80060948.cpp), source-form row 0x80060948-0x80061520, exact function rows 0x80060948-0x80061520 and the exact .rodata slice row 0x8028F4C8-0x8028F4D8. Draft comparisons only; the full native placements are kept for relocation, only the unlinked .rodata slice is measured, and original bytes remain linked for the 18 unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "evidence": "evidence.tsv unit row 0x80061520-0x80061F04 (src/game/StoryTournament.cpp), source-form row 0x80060948-0x80061520, exact function rows 0x80060948-0x80061520 and the exact .rodata slice row 0x8028F4C8-0x8028F4D8. Draft comparisons only; the full native placements are kept for relocation, only the unlinked .rodata slice is measured, and original bytes remain linked for the 18 unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
       "sections": [
         {
           "section": ".text",
@@ -2339,92 +2339,92 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80060948",
+          "symbol": "StoryTournamentGetTeamName",
           "start": "0x80060948",
           "end": "0x800609EC"
         },
         {
-          "symbol": "fn_800609EC",
+          "symbol": "StoryTournamentFindNextRow",
           "start": "0x800609EC",
           "end": "0x80060A9C"
         },
         {
-          "symbol": "fn_80060A9C",
+          "symbol": "StoryTournamentCloseDbs",
           "start": "0x80060A9C",
           "end": "0x80060B0C"
         },
         {
-          "symbol": "fn_80060B0C",
+          "symbol": "StoryTournamentOpenDbs",
           "start": "0x80060B0C",
           "end": "0x80060BB4"
         },
         {
-          "symbol": "fn_80060BB4",
+          "symbol": "StoryTournamentFetchSkill",
           "start": "0x80060BB4",
           "end": "0x80060BE0"
         },
         {
-          "symbol": "fn_80060BE0",
+          "symbol": "StoryTournamentPurgeRosters",
           "start": "0x80060BE0",
           "end": "0x80060C14"
         },
         {
-          "symbol": "fn_80060C14",
+          "symbol": "StoryTournamentGetGameSlot",
           "start": "0x80060C14",
           "end": "0x80060C50"
         },
         {
-          "symbol": "fn_80060C50",
+          "symbol": "StoryTournamentPickWinner",
           "start": "0x80060C50",
           "end": "0x80060C94"
         },
         {
-          "symbol": "fn_80060C94",
+          "symbol": "StoryTournamentGetUserTeam",
           "start": "0x80060C94",
           "end": "0x80060CD4"
         },
         {
-          "symbol": "fn_80060CD4",
+          "symbol": "StoryTournamentDrawBracket",
           "start": "0x80060CD4",
           "end": "0x80060E7C"
         },
         {
-          "symbol": "fn_80060E7C",
+          "symbol": "StoryTournamentAdvanceRound",
           "start": "0x80060E7C",
           "end": "0x8006102C"
         },
         {
-          "symbol": "fn_8006102C",
+          "symbol": "StoryTournamentIsWon",
           "start": "0x8006102C",
           "end": "0x80061088"
         },
         {
-          "symbol": "fn_80061088",
+          "symbol": "StoryTournamentFindUserGame",
           "start": "0x80061088",
           "end": "0x80061154"
         },
         {
-          "symbol": "fn_80061154",
+          "symbol": "StoryTournamentRestoreOptions",
           "start": "0x80061154",
           "end": "0x800611C0"
         },
         {
-          "symbol": "fn_800611C0",
+          "symbol": "StoryTournamentSetOptions",
           "start": "0x800611C0",
           "end": "0x80061274"
         },
         {
-          "symbol": "fn_80061274",
+          "symbol": "StoryTournamentPlaceDrafted",
           "start": "0x80061274",
           "end": "0x80061390"
         },
         {
-          "symbol": "fn_80061390",
+          "symbol": "StoryTournamentLoadCpuTeam",
           "start": "0x80061390",
           "end": "0x80061408"
         },
         {
-          "symbol": "fn_80061408",
+          "symbol": "StoryTournamentLoadUserTeam",
           "start": "0x80061408",
           "end": "0x80061520"
         }
@@ -11002,7 +11002,7 @@
       ]
     },
     {
-      "source": "src/game/cu_8016174C.cpp",
+      "source": "src/game/PlyrStars.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv source, pool registration, per-function extents and literal rows for cu_8016174C. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
       "sections": [
@@ -11045,172 +11045,172 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8016174C",
+          "symbol": "PlyrStarFindPlayer",
           "start": "0x8016174C",
           "end": "0x801618D8"
         },
         {
-          "symbol": "fn_801618D8",
+          "symbol": "PlyrStarCreate",
           "start": "0x801618D8",
           "end": "0x80161A34"
         },
         {
-          "symbol": "fn_80161A34",
+          "symbol": "PlyrStarDestroy",
           "start": "0x80161A34",
           "end": "0x80161A88"
         },
         {
-          "symbol": "fn_80161A88",
+          "symbol": "PlyrStarCopyState",
           "start": "0x80161A88",
           "end": "0x80161AD4"
         },
         {
-          "symbol": "fn_80161AD4",
+          "symbol": "PlyrStarSetColor",
           "start": "0x80161AD4",
           "end": "0x80161B38"
         },
         {
-          "symbol": "fn_80161B38",
+          "symbol": "PlyrStarDraw",
           "start": "0x80161B38",
           "end": "0x80161E7C"
         },
         {
-          "symbol": "fn_80161E7C",
+          "symbol": "PlyrStarSetPosition",
           "start": "0x80161E7C",
           "end": "0x80161ED4"
         },
         {
-          "symbol": "fn_80161ED4",
+          "symbol": "PlyrStarGetReplayBits",
           "start": "0x80161ED4",
           "end": "0x80161EDC"
         },
         {
-          "symbol": "fn_80161EDC",
+          "symbol": "PlyrStarWriteReplay",
           "start": "0x80161EDC",
           "end": "0x80161F5C"
         },
         {
-          "symbol": "fn_80161F5C",
+          "symbol": "PlyrStarReadReplay",
           "start": "0x80161F5C",
           "end": "0x80162074"
         },
         {
-          "symbol": "fn_80162074",
+          "symbol": "PlyrStarWriteReplayAll",
           "start": "0x80162074",
           "end": "0x801620D4"
         },
         {
-          "symbol": "fn_801620D4",
+          "symbol": "PlyrStarReadReplayAll",
           "start": "0x801620D4",
           "end": "0x8016216C"
         },
         {
-          "symbol": "fn_8016216C",
+          "symbol": "PlyrStarFindFreePulse",
           "start": "0x8016216C",
           "end": "0x801621AC"
         },
         {
-          "symbol": "fn_801621AC",
+          "symbol": "PlyrStarGetPulseScale",
           "start": "0x801621AC",
           "end": "0x801621B8"
         },
         {
-          "symbol": "fn_801621B8",
+          "symbol": "PlyrStarUpdatePulses",
           "start": "0x801621B8",
           "end": "0x8016239C"
         },
         {
-          "symbol": "fn_8016239C",
+          "symbol": "PlyrStarRegisterType",
           "start": "0x8016239C",
           "end": "0x80162404"
         },
         {
-          "symbol": "fn_80162404",
+          "symbol": "PlyrStarReleaseType",
           "start": "0x80162404",
           "end": "0x80162434"
         },
         {
-          "symbol": "fn_80162434",
+          "symbol": "PlyrStarNew",
           "start": "0x80162434",
           "end": "0x80162494"
         },
         {
-          "symbol": "fn_80162494",
+          "symbol": "PlyrStarDelete",
           "start": "0x80162494",
           "end": "0x801624D0"
         },
         {
-          "symbol": "fn_801624D0",
+          "symbol": "PlyrStarInit",
           "start": "0x801624D0",
           "end": "0x801626A4"
         },
         {
-          "symbol": "fn_801626A4",
+          "symbol": "PlyrStarShutdown",
           "start": "0x801626A4",
           "end": "0x80162780"
         },
         {
-          "symbol": "fn_80162780",
+          "symbol": "PlyrStarSetShown",
           "start": "0x80162780",
           "end": "0x8016278C"
         },
         {
-          "symbol": "fn_8016278C",
+          "symbol": "PlyrStarGetRingsShown",
           "start": "0x8016278C",
           "end": "0x80162794"
         },
         {
-          "symbol": "fn_80162794",
+          "symbol": "PlyrStarUpdate",
           "start": "0x80162794",
           "end": "0x8016295C"
         },
         {
-          "symbol": "fn_8016295C",
+          "symbol": "PlyrStarProjectOffscreen",
           "start": "0x8016295C",
           "end": "0x80162D78"
         },
         {
-          "symbol": "fn_80162D78",
+          "symbol": "PlyrStarRegisterReplay",
           "start": "0x80162D78",
           "end": "0x80162DBC"
         },
         {
-          "symbol": "fn_80162DBC",
+          "symbol": "PlyrStarGetPulse",
           "start": "0x80162DBC",
           "end": "0x80162DD0"
         },
         {
-          "symbol": "fn_80162DD0",
+          "symbol": "PlyrStarPlace",
           "start": "0x80162DD0",
           "end": "0x80162E40"
         },
         {
-          "symbol": "fn_80162E40",
+          "symbol": "PlyrStarGetColor",
           "start": "0x80162E40",
           "end": "0x80162F28"
         },
         {
-          "symbol": "fn_80162F28",
+          "symbol": "PlyrStarStartPulse",
           "start": "0x80162F28",
           "end": "0x80162FB8"
         },
         {
-          "symbol": "fn_80162FB8",
+          "symbol": "PlyrStarLinkPlayer",
           "start": "0x80162FB8",
           "end": "0x80163020"
         },
         {
-          "symbol": "fn_80163020",
+          "symbol": "PlyrStarClearLinks",
           "start": "0x80163020",
           "end": "0x80163064"
         },
         {
-          "symbol": "fn_80163064",
+          "symbol": "PlyrStarGetBallPlayer",
           "start": "0x80163064",
           "end": "0x8016306C"
         },
         {
-          "symbol": "fn_8016306C",
+          "symbol": "PlyrStarSetBallRingEnabled",
           "start": "0x8016306C",
           "end": "0x80163074"
         }
@@ -21713,9 +21713,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801394B0.cpp",
+      "source": "src/game/BallPhysics.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801394B0-0x8013B874 for src/game/cu_801394B0.cpp (replacing candidate cu_801394B0), its 57 function extents (evidence grade exact), the exact data rows 0x8029FF28-0x802A00B8 (.rodata literal pools, including four runs no surviving code loads) and 0x803EB1B0-0x803EB1C4 (.sdata floats), and the source-form rows recording the remaining differences. Wholly unlinked draft source: the four unreferenced literal runs are the pools of six functions the target linker discarded, rebuilt from their Xbox prototype counterparts and listed as discarded (linker rows 0x8029FFF8, 0x802A0038, 0x802A005C, 0x802A0094), so the compiled .rodata equals the target. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv provisional unit row 0x801394B0-0x8013B874 for src/game/BallPhysics.cpp (replacing candidate cu_801394B0), its 57 function extents (evidence grade exact), the exact data rows 0x8029FF28-0x802A00B8 (.rodata literal pools, including four runs no surviving code loads) and 0x803EB1B0-0x803EB1C4 (.sdata floats), and the source-form rows recording the remaining differences. Wholly unlinked draft source: the four unreferenced literal runs are the pools of six functions the target linker discarded, rebuilt from their Xbox prototype counterparts and listed as discarded (linker rows 0x8029FFF8, 0x802A0038, 0x802A005C, 0x802A0094), so the compiled .rodata equals the target. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -21738,102 +21738,102 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801394B0",
+          "symbol": "BallIsOverField",
           "start": "0x801394B0",
           "end": "0x80139630"
         },
         {
-          "symbol": "fn_80139630",
+          "symbol": "BallIsOnGround",
           "start": "0x80139630",
           "end": "0x8013968C"
         },
         {
-          "symbol": "fn_8013968C",
+          "symbol": "BallIsUnsupported",
           "start": "0x8013968C",
           "end": "0x801396D0"
         },
         {
-          "symbol": "fn_801396D0",
+          "symbol": "BallApplyGravity",
           "start": "0x801396D0",
           "end": "0x80139718"
         },
         {
-          "symbol": "fn_80139718",
+          "symbol": "BallApplySideSpin",
           "start": "0x80139718",
           "end": "0x801397FC"
         },
         {
-          "symbol": "fn_801397FC",
+          "symbol": "BallGetBounceForce",
           "start": "0x801397FC",
           "end": "0x80139864"
         },
         {
-          "symbol": "fn_80139864",
+          "symbol": "BallVecAddScaled",
           "start": "0x80139864",
           "end": "0x801398BC"
         },
         {
-          "symbol": "fn_801398BC",
+          "symbol": "BallVecJitter",
           "start": "0x801398BC",
           "end": "0x80139954"
         },
         {
-          "symbol": "fn_80139954",
+          "symbol": "BallApplyGroundFriction",
           "start": "0x80139954",
           "end": "0x80139A80"
         },
         {
-          "symbol": "fn_80139A80",
+          "symbol": "BallSpinToQuat",
           "start": "0x80139A80",
           "end": "0x80139AF0"
         },
         {
-          "symbol": "fn_80139AF0",
+          "symbol": "BallUpdateRotation",
           "start": "0x80139AF0",
           "end": "0x80139F28"
         },
         {
-          "symbol": "fn_80139F28",
+          "symbol": "BallClampToWorld",
           "start": "0x80139F28",
           "end": "0x8013A00C"
         },
         {
-          "symbol": "fn_8013A00C",
+          "symbol": "BallFlipPosition",
           "start": "0x8013A00C",
           "end": "0x8013A048"
         },
         {
-          "symbol": "fn_8013A048",
+          "symbol": "BallFlipRotation",
           "start": "0x8013A048",
           "end": "0x8013A0EC"
         },
         {
-          "symbol": "fn_8013A0EC",
+          "symbol": "BallStepFree",
           "start": "0x8013A0EC",
           "end": "0x8013A2A4"
         },
         {
-          "symbol": "fn_8013A2A4",
+          "symbol": "BallGetRestitution",
           "start": "0x8013A2A4",
           "end": "0x8013A2D8"
         },
         {
-          "symbol": "fn_8013A2D8",
+          "symbol": "BallGetFriction",
           "start": "0x8013A2D8",
           "end": "0x8013A2F4"
         },
         {
-          "symbol": "fn_8013A2F4",
+          "symbol": "BallStartSpin",
           "start": "0x8013A2F4",
           "end": "0x8013A3BC"
         },
         {
-          "symbol": "fn_8013A3BC",
+          "symbol": "BallRecordBounce",
           "start": "0x8013A3BC",
           "end": "0x8013A440"
         },
         {
-          "symbol": "fn_8013A440",
+          "symbol": "BallSyncModel",
           "start": "0x8013A440",
           "end": "0x8013A494"
         },
@@ -21843,7 +21843,7 @@
           "end": "0x8013A64C"
         },
         {
-          "symbol": "fn_8013A64C",
+          "symbol": "BallStepDefault",
           "start": "0x8013A64C",
           "end": "0x8013A6A8"
         },
@@ -21868,7 +21868,7 @@
           "end": "0x8013A9F0"
         },
         {
-          "symbol": "fn_8013A9F0",
+          "symbol": "BallClearPassFlag",
           "start": "0x8013A9F0",
           "end": "0x8013AA00"
         },
@@ -21878,7 +21878,7 @@
           "end": "0x8013AB24"
         },
         {
-          "symbol": "fn_8013AB24",
+          "symbol": "BallPredictLanding",
           "start": "0x8013AB24",
           "end": "0x8013AB64"
         },
@@ -21888,7 +21888,7 @@
           "end": "0x8013ABE0"
         },
         {
-          "symbol": "fn_8013ABE0",
+          "symbol": "BallResetPhysics",
           "start": "0x8013ABE0",
           "end": "0x8013AC28"
         },
@@ -21898,7 +21898,7 @@
           "end": "0x8013AD04"
         },
         {
-          "symbol": "fn_8013AD04",
+          "symbol": "BallLaunchWithVelocity",
           "start": "0x8013AD04",
           "end": "0x8013AD78"
         },
@@ -21908,42 +21908,42 @@
           "end": "0x8013AD94"
         },
         {
-          "symbol": "fn_8013AD94",
+          "symbol": "BallGetSpinMode",
           "start": "0x8013AD94",
           "end": "0x8013AD9C"
         },
         {
-          "symbol": "fn_8013AD9C",
+          "symbol": "BallSetSpinMode",
           "start": "0x8013AD9C",
           "end": "0x8013ADA4"
         },
         {
-          "symbol": "fn_8013ADA4",
+          "symbol": "BallPlayerHandsFree",
           "start": "0x8013ADA4",
           "end": "0x8013AE1C"
         },
         {
-          "symbol": "fn_8013AE1C",
+          "symbol": "BallCanPlayerTouch",
           "start": "0x8013AE1C",
           "end": "0x8013AF88"
         },
         {
-          "symbol": "fn_8013AF88",
+          "symbol": "BallStateHeldEnter",
           "start": "0x8013AF88",
           "end": "0x8013AFE8"
         },
         {
-          "symbol": "fn_8013AFE8",
+          "symbol": "BallStatePassEnter",
           "start": "0x8013AFE8",
           "end": "0x8013B024"
         },
         {
-          "symbol": "fn_8013B024",
+          "symbol": "BallStatePassExit",
           "start": "0x8013B024",
           "end": "0x8013B068"
         },
         {
-          "symbol": "fn_8013B068",
+          "symbol": "BallStateLooseExit",
           "start": "0x8013B068",
           "end": "0x8013B0B4"
         },
@@ -21958,57 +21958,57 @@
           "end": "0x8013B1E4"
         },
         {
-          "symbol": "fn_8013B1E4",
+          "symbol": "BallStatePassMove",
           "start": "0x8013B1E4",
           "end": "0x8013B230"
         },
         {
-          "symbol": "fn_8013B230",
+          "symbol": "BallStateDeadEnter",
           "start": "0x8013B230",
           "end": "0x8013B250"
         },
         {
-          "symbol": "fn_8013B250",
+          "symbol": "BallStateHeldExit",
           "start": "0x8013B250",
           "end": "0x8013B2A0"
         },
         {
-          "symbol": "fn_8013B2A0",
+          "symbol": "BallStatePassHitGround",
           "start": "0x8013B2A0",
           "end": "0x8013B330"
         },
         {
-          "symbol": "fn_8013B330",
+          "symbol": "BallStateLooseHitGround",
           "start": "0x8013B330",
           "end": "0x8013B350"
         },
         {
-          "symbol": "fn_8013B350",
+          "symbol": "BallStatePitchHitGround",
           "start": "0x8013B350",
           "end": "0x8013B3EC"
         },
         {
-          "symbol": "fn_8013B3EC",
+          "symbol": "BallStateHandoffTouch",
           "start": "0x8013B3EC",
           "end": "0x8013B52C"
         },
         {
-          "symbol": "fn_8013B52C",
+          "symbol": "BallStateLooseTouch",
           "start": "0x8013B52C",
           "end": "0x8013B5EC"
         },
         {
-          "symbol": "fn_8013B5EC",
+          "symbol": "BallStatePassTouch",
           "start": "0x8013B5EC",
           "end": "0x8013B6A0"
         },
         {
-          "symbol": "fn_8013B6A0",
+          "symbol": "BallStatePitchTouch",
           "start": "0x8013B6A0",
           "end": "0x8013B730"
         },
         {
-          "symbol": "fn_8013B730",
+          "symbol": "BallStatePlacedMove",
           "start": "0x8013B730",
           "end": "0x8013B734"
         },
@@ -22018,7 +22018,7 @@
           "end": "0x8013B86C"
         },
         {
-          "symbol": "fn_8013B86C",
+          "symbol": "BallStatePlacedTouch",
           "start": "0x8013B86C",
           "end": "0x8013B874"
         }

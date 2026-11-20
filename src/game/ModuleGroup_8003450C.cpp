@@ -146,7 +146,7 @@ void PlaTexCacheLoadDefaults(void);
 void PlaTexCacheShutdown(void);
 void EnvSkyObjCreate(void *pOwner);
 void EnvSkyObjDestroy(void *pOwner);
-void fn_80162D78(void);
+void PlyrStarRegisterReplay(void);
 void PlayArtMemInit(void *p);
 void PlayArtMemShutdown(void);
 void PlayBookPostInit(void);
@@ -1121,7 +1121,7 @@ int ReplayFrame::Init()
 {
     fn_80030BC0(0);
     BallsReplayRegister();
-    fn_80162D78();
+    PlyrStarRegisterReplay();
     fn_8003E118();
     BigObjRegisterSave();
     DivotReplayRegister();

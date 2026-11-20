@@ -52,7 +52,7 @@
 #include "game/ReplayEvent.h"
 #include "game/FeatAwards.h"
 #include "game/StevTable.h"
-#include "game/fn_80061AD4.h"
+#include "game/StoryTournament.h"
 #include "game/GameModeType.h"
 #include "game/PauseMenu.h"
 #include "game/AudmonEvent.h"
@@ -729,7 +729,7 @@ extern "C" unsigned short AnimFileLoadSeqVirtualAsync(int id, void *pData, int s
 
 extern "C" void fn_800EFE1C(int a, State_80039F5C *pQueue);
 
-extern "C" void fn_80162780(int a, int b);
+extern "C" void PlyrStarSetShown(int a, int b);
 
 extern "C" void CamGameSelectCamera(int a);
 
@@ -911,7 +911,7 @@ void DivotScatterRandom(void);
 }
 
 extern "C" {
-void fn_801624D0(void *arg);
+void PlyrStarInit(void *arg);
 }
 
 extern "C" {
@@ -955,7 +955,7 @@ void EffectDrawObjDestroy(int handle);
 }
 
 extern "C" {
-void fn_801626A4(void *arg);
+void PlyrStarShutdown(void *arg);
 }
 
 extern "C" {
@@ -987,7 +987,7 @@ void FieldLinesUpdate(void);
 }
 
 extern "C" {
-void fn_80162794(void);
+void PlyrStarUpdate(void);
 }
 
 extern "C" {
@@ -1189,11 +1189,11 @@ void PassIconsShow(int mode);
 }
 
 extern "C" {
-void fn_80162FB8(int index, int ref);
+void PlyrStarLinkPlayer(int index, int ref);
 }
 
 extern "C" {
-void fn_80163020(void);
+void PlyrStarClearLinks(void);
 }
 
 extern "C" {
@@ -1371,7 +1371,7 @@ void fn_80148814(Object_80039F5C *p);
 }
 
 extern "C" {
-void fn_80162780(int a, int b);
+void PlyrStarSetShown(int a, int b);
 }
 
 extern "C" {
@@ -1833,7 +1833,7 @@ extern "C" {
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 }
 
-/* Effect slot returned by fn_80162DBC (laid out as in src/game/cu_8016174C.cpp). */
+/* Effect slot returned by PlyrStarGetPulse (laid out as in src/game/cu_8016174C.cpp). */
 struct Object_801618D8 {
     unsigned char mUnknown0[4];
     Vector_80039F5C mUnknown4;
@@ -1855,7 +1855,7 @@ void PlyrRouteShowTeam(int a, int team);
 }
 
 extern "C" {
-Object_801618D8 *fn_80162DBC(int index);
+Object_801618D8 *PlyrStarGetPulse(int index);
 }
 
 extern "C" Event_800B9F50 *lbl_802D9A84[];
@@ -1982,7 +1982,7 @@ void HotspotFramePlayEffect(BigObj_t *pObject, int index, int apply);
 }
 
 extern "C" {
-int fn_80061DE8(void);
+int StoryTournamentCountRows(void);
 }
 
 extern "C" {
@@ -2200,7 +2200,7 @@ int TutorialFinishCategory(void);
 }
 
 extern "C" {
-int fn_80061D14(void);
+int StoryTournamentOnGameEnd(void);
 }
 
 extern "C" {
@@ -4806,7 +4806,7 @@ int SndgChannelGetStream(int idx);
 }
 
 extern "C" {
-void fn_80162DD0(Object_801618D8 *item, Vector_80039F5C *point);
+void PlyrStarPlace(Object_801618D8 *item, Vector_80039F5C *point);
 }
 
 extern "C" {
@@ -4822,7 +4822,7 @@ void BallPrimeKickUp(Ball_t *pBall);
 }
 
 extern "C" {
-void fn_8013AD9C(Ball_t *pBall, int a);
+void BallSetSpinMode(Ball_t *pBall, int a);
 }
 
 extern "C" {
@@ -8909,7 +8909,7 @@ extern "C" void fn_8009126C(int index)
         GameCamera_t *pCamera;
         int ref;
 
-        fn_80162780(0, 0);
+        PlyrStarSetShown(0, 0);
         CamGameSelectCamera(2);
         p = (Object_80039F5C *)fn_8008FF28((Object_8008FF28 *)pCharacter, (Record_8008FF28 *)pActor);
         fn_8009BD2C(p, &ref);
@@ -11576,7 +11576,7 @@ extern "C" void fn_80096708(int index)
     fn_80096850(index, &pos, &pCamera->mUnknown10C);
     pCamera->mUnknownF8 = pos.mX;
     pCamera->mUnknownFC = pos.mY;
-    fn_80162780(0, 0);
+    PlyrStarSetShown(0, 0);
     CamGameSelectCamera(2);
     CamGameSetModeAll(11);
 }
@@ -18538,7 +18538,7 @@ extern "C" void fn_800A60D8(Object_80039F5C *a, Object_80039F5C *b)
         lbl_803EC94C.mpUnknown0 = b;
         lbl_803EC94C.mUnknown5 = 1;
         lbl_803EC94C.mUnknown4 = fn_800A5F20(b);
-        fn_80162FB8(fn_800B65A0(b->mIdBytes[2]), b->mId);
+        PlyrStarLinkPlayer(fn_800B65A0(b->mIdBytes[2]), b->mId);
         CamMainFollow(CamGameGetCamera(5), 2, b->mId, 0);
     }
 }
@@ -18559,7 +18559,7 @@ extern "C" void fn_800A61A8(void)
     lbl_803EC94C.mpUnknown0 = 0;
     lbl_803EC94C.mUnknown4 = 0;
     lbl_803EC94C.mUnknown5 = 0;
-    fn_80163020();
+    PlyrStarClearLinks();
 }
 
 extern "C" int fn_800A61E0(void)
@@ -20141,7 +20141,7 @@ extern "C" void fn_800A9854(void)
     if (index != 0xFF) {
         fn_800B6988(index);
     }
-    fn_80162780(1, 1);
+    PlyrStarSetShown(1, 1);
 }
 
 extern "C" void fn_800A9B54(int event, Object_80039F5C *p)
@@ -21029,7 +21029,7 @@ void Class_80297B90::vfn_04(float dt)
                 StevRow_t *pRow = fn_8005FC7C();
 
                 if (pRow == 0) {
-                    pRow = fn_80061AD4();
+                    pRow = StoryTournamentGetEvent();
                 }
                 if (pRow != 0) {
                     lbl_803EAA88->mUnknown16 = pRow->mCsos;
@@ -21091,7 +21091,7 @@ void Class_80297B90::vfn_04(float dt)
             }
             SndgMusicFadeOut(250, 0);
             fn_8005FC84();
-            fn_80061D14();
+            StoryTournamentOnGameEnd();
             PlyrNameTagEnable(0);
             FieldLinesEnable(0);
             if (fn_801486A0() != 15 && lbl_803EAA88->mUnknown17 == 0) {
@@ -27385,7 +27385,7 @@ void PostPlayPhase::Finish(float dt)
         } else {
             fn_801783D0(0x15, 1);
             SndgSituationSetFlags(0x400);
-            fn_80162780(1, 1);
+            PlyrStarSetShown(1, 1);
             CamShotRequestStop();
             fn_800AD910(2, dt);
             lbl_803EABA4->fn_800C02EC(0x27);
@@ -27927,13 +27927,13 @@ extern "C" int fn_800B9F50(void)
             p = PlyrGet((unsigned char)team, pEvent->mIndex);
             if (p != 0) {
                 for (i = 0; i <= 4; i++) {
-                    pItem = fn_80162DBC(i);
+                    pItem = PlyrStarGetPulse(i);
                     if (pItem->mUnknown100 == 0) {
                         pItem->mUnknown20 |= 6;
                         pItem->mUnknown100 = p;
                         pItem->mUnknown18 = 5.0f;
                         pItem->mUnknown30 = mode;
-                        fn_80162DD0(pItem, &p->mMotion.mPos);
+                        PlyrStarPlace(pItem, &p->mMotion.mPos);
                         break;
                     }
                 }
@@ -27946,13 +27946,13 @@ extern "C" int fn_800B9F50(void)
                 p = PlyrGet((unsigned char)team, j);
                 if (p != 0 && (unsigned int)(p->mUnknown2914 - 10) <= 2) {
                     for (i = 0; i <= 4; i++) {
-                        pItem = fn_80162DBC(i);
+                        pItem = PlyrStarGetPulse(i);
                         if (pItem->mUnknown100 == 0) {
                             pItem->mUnknown20 |= 6;
                             pItem->mUnknown100 = p;
                             pItem->mUnknown18 = 5.0f;
                             pItem->mUnknown30 = mode;
-                            fn_80162DD0(pItem, &p->mMotion.mPos);
+                            PlyrStarPlace(pItem, &p->mMotion.mPos);
                             break;
                         }
                     }
@@ -27966,13 +27966,13 @@ extern "C" int fn_800B9F50(void)
                 p = PlyrGet((unsigned char)team, j);
                 if (p != 0 && (unsigned int)(p->mUnknown2914 - 13) <= 2) {
                     for (i = 0; i <= 4; i++) {
-                        pItem = fn_80162DBC(i);
+                        pItem = PlyrStarGetPulse(i);
                         if (pItem->mUnknown100 == 0) {
                             pItem->mUnknown20 |= 6;
                             pItem->mUnknown100 = p;
                             pItem->mUnknown18 = 5.0f;
                             pItem->mUnknown30 = mode;
-                            fn_80162DD0(pItem, &p->mMotion.mPos);
+                            PlyrStarPlace(pItem, &p->mMotion.mPos);
                             break;
                         }
                     }
@@ -27983,7 +27983,7 @@ extern "C" int fn_800B9F50(void)
             p = PlyrGet((unsigned char)team, pEvent->mIndex);
             if (p != 0) {
                 for (i = 0; i <= 4; i++) {
-                    pItem = fn_80162DBC(i);
+                    pItem = PlyrStarGetPulse(i);
                     if (pItem->mUnknown100 == p) {
                         pItem->mUnknown30 = 8;
                         pItem->mUnknown100 = 0;
@@ -27998,7 +27998,7 @@ extern "C" int fn_800B9F50(void)
                 p = PlyrGet((unsigned char)team, j);
                 if (p != 0 && (unsigned int)(p->mUnknown2914 - 10) <= 2) {
                     for (i = 0; i <= 4; i++) {
-                        pItem = fn_80162DBC(i);
+                        pItem = PlyrStarGetPulse(i);
                         if (pItem->mUnknown100 == p) {
                             pItem->mUnknown30 = 8;
                             pItem->mUnknown100 = 0;
@@ -28014,7 +28014,7 @@ extern "C" int fn_800B9F50(void)
                 p = PlyrGet((unsigned char)team, j);
                 if (p != 0 && (unsigned int)(p->mUnknown2914 - 13) <= 2) {
                     for (i = 0; i <= 4; i++) {
-                        pItem = fn_80162DBC(i);
+                        pItem = PlyrStarGetPulse(i);
                         if (pItem->mUnknown100 == p) {
                             pItem->mUnknown30 = 8;
                             pItem->mUnknown100 = 0;
@@ -28360,7 +28360,7 @@ extern "C" void fn_800BAAE4(void)
         angles[1] = 0xFFC00000;
         angles[2] = 0xFFC00000;
         BallRestAtAngles(pBall, angles);
-        fn_8013AD9C(pBall, 0);
+        BallSetSpinMode(pBall, 0);
         BallPrimeKickUp(pBall);
         CamGameSetModeAll(1);
     }
@@ -28403,12 +28403,12 @@ extern "C" void fn_800BAD1C(void)
     int i;
 
     for (i = 0; i <= 4; i++) {
-        Object_801618D8 *p = fn_80162DBC(i);
+        Object_801618D8 *p = PlyrStarGetPulse(i);
 
         p->mUnknown100 = 0;
         p->mUnknown20 &= ~2;
     }
-    fn_80162780(0, 1);
+    PlyrStarSetShown(0, 1);
     lbl_803EAB88->mpUnknown178 = lbl_802D9A84[lbl_803EAB88->mUnknownC0];
     lbl_803EAB88->mUnknownE0 = 0;
 }
@@ -28425,12 +28425,12 @@ extern "C" void fn_800BADD4(void)
     int i;
 
     for (i = 0; i <= 4; i++) {
-        Object_801618D8 *p = fn_80162DBC(i);
+        Object_801618D8 *p = PlyrStarGetPulse(i);
 
         p->mUnknown100 = 0;
         p->mUnknown20 &= ~2;
     }
-    fn_80162780(0, 0);
+    PlyrStarSetShown(0, 0);
     PlyrRouteShowTeam(0, fn_80178308());
 }
 
@@ -28713,7 +28713,7 @@ extern "C" void fn_800BB694(int index, unsigned int kind, float value)
     PlayerObjSetDrawReady(1);
     CamShotRequestStop();
     fn_800BB9A4(1, 1);
-    fn_80162780(1, 1);
+    PlyrStarSetShown(1, 1);
     SpchIGPurgeChannel(0);
     SpchIGPurgeChannel(1);
     if (fn_800BA6F8() == 0) {
@@ -29072,7 +29072,7 @@ void PreGamePhase::ShowIntroScreen()
         int show = 1;
 
         if (GameModeTypeGet() == 10) {
-            show = (unsigned int)fn_80061DE8() <= 4;
+            show = (unsigned int)StoryTournamentCountRows() <= 4;
         }
         if (show) {
             fn_80218FC4(gUISMainInfo, 3, 8, 0, 0);
@@ -30306,7 +30306,7 @@ extern "C" void fn_800BED54(unsigned char index)
             ConSetChannelInfo(fn_800B65A0(index), 3, lbl_802ECD44);
             lbl_803EABA8->mSlots[index].mUnknown0 = lbl_803EABA8->mSlots[index].mUnknown4;
             lbl_803EABA8->mUnknownC6 = 1;
-            fn_80162780(1, 1);
+            PlyrStarSetShown(1, 1);
             if (fn_800BAE64() == 0) {
                 short value;
 
@@ -30339,7 +30339,7 @@ extern "C" void fn_800BEFAC(int index)
         if (lbl_803EABA8->mSlots[index].mUnknown8 > 0) {
             lbl_803EABA8->mSlots[index].mUnknown8--;
         } else if (SpchIGAreChannelsIdle() != 0) {
-            fn_80162780(1, 1);
+            PlyrStarSetShown(1, 1);
             lbl_803EABA8->mUnknownC6 = state;
             lbl_803EABA8->mSlots[index].mUnknown0 = lbl_803EABA8->mSlots[index].mUnknown4;
         }
@@ -31700,7 +31700,7 @@ extern "C" void fn_800C1CA0(void)
     SpchIGResumeChannel(0);
     SpchIGResumeChannel(1);
     SpchIGResumeChannel(2);
-    fn_80162780(0, 0);
+    PlyrStarSetShown(0, 0);
     CamShotRequestStop();
     if (fn_800A8740() == 0) {
         fn_800A7A0C(0);
@@ -32280,7 +32280,7 @@ extern "C" void fn_800C34B0(void)
         InGameStateClearActive();
         InGameStateReset();
         PauseClearSavedFlags();
-        fn_80162780(0, 0);
+        PlyrStarSetShown(0, 0);
     }
     if (ScreenTransCanCapture(0x23000) != 0) {
         ScreenTransStart(1, 20, 0x808080, 0);
@@ -32798,7 +32798,7 @@ extern "C" void fn_800C46B0(int handle)
     fn_8022E558();
     fn_800B852C();
     DivotScatterRandom();
-    fn_801624D0((void *)handle);
+    PlyrStarInit((void *)handle);
     BallMarkerCreate(handle);
     ReplayCursorCreate(handle);
     PassIconsCreate((void *)handle);
@@ -32816,7 +32816,7 @@ extern "C" void fn_800C471C(int handle)
     fn_800C442C();
     FieldLinesDestroy();
     EffectDrawObjDestroy(handle);
-    fn_801626A4((void *)handle);
+    PlyrStarShutdown((void *)handle);
     BallMarkerDestroy(handle);
     ReplayCursorDestroy(handle);
     PassIconsDestroy((void *)handle);
@@ -32828,7 +32828,7 @@ extern "C" void fn_800C478C(float dt)
     EnvObjUpdateFades();
     EnvFogRefresh();
     FieldLinesUpdate();
-    fn_80162794();
+    PlyrStarUpdate();
     BallMarkerUpdate();
     fn_8015C114();
 }

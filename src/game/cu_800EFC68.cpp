@@ -1667,7 +1667,7 @@ void fn_80099568(int kind);
 }
 
 extern "C" {
-void fn_8013AD04(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
+void BallLaunchWithVelocity(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
 }
 
 struct Type_803EA368;
@@ -12141,7 +12141,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         target.mX = 0.0f;
         target.mY = 0.02f;
         target.mZ = -0.2f;
-        fn_8013AD04(pBall, &target, 1, spin, side);
+        BallLaunchWithVelocity(pBall, &target, 1, spin, side);
         break;
     case 8:
         speed = gFrameTimeScale * 0.27f;
@@ -12209,7 +12209,7 @@ extern "C" void fn_801039D8(Object_80039F5C *p)
     BallSetVelocity(pBall, &velocity);
     fn_80099568(1);
     BallRelease(pBall, 4, 0);
-    fn_8013AD04(pBall, &velocity, 1, 2.0f, 1.0f);
+    BallLaunchWithVelocity(pBall, &velocity, 1, 2.0f, 1.0f);
     BallSetTarget(pBall, pTarget);
     if (velocity.mY < 0.0f) {
         fn_801783D0(1, 1);

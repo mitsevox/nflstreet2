@@ -293,7 +293,7 @@ void fn_8003E174(int a);
 int FELoopIsMainFEActive(void);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
-void fn_8013AD04(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
+void BallLaunchWithVelocity(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
 Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
 void fn_800ACDE4(Object_80039F5C *p, float *pChance, float *pAngle);
 int fn_80178348(void);
