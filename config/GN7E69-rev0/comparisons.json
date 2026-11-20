@@ -35951,6 +35951,16 @@
           "end": "0x8026BC9C"
         },
         {
+          "symbol": "SNDI_midiparsepitchbend__FiP13SndMidiChan_tii",
+          "start": "0x8026BE48",
+          "end": "0x8026BF04"
+        },
+        {
+          "symbol": "SNDI_midiserver__Fv",
+          "start": "0x8026C0C0",
+          "end": "0x8026C18C"
+        },
+        {
           "symbol": "SNDmidiinit",
           "start": "0x8026C18C",
           "end": "0x8026C23C"

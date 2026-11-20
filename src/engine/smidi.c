@@ -5,19 +5,21 @@
 
 #include "engine/sndbank.h"
 
-/* The controller state of one MIDI channel of a sequence: pitch bend, volume and pan as packed
+/* The controller state of one MIDI channel of a sequence: azimuth, volume and pitch bend as packed
    fields, then the channel's patch. */
 typedef struct SndMidiChan_t {
-    unsigned int mBend : 10;
+    unsigned int mAzimuth : 10;
     unsigned int mVolume : 7;
-    unsigned int mPan : 7;
+    unsigned int mBend : 7;
     signed int mPatch : 8;
 } SndMidiChan_t;
 
-/* One sequence slot: read cursor +0x8, handle +0x10, 16.16 volume +0x14 with its fade step and
-   target, state byte +0x28 and the 16 channel words +0x30. */
+/* One sequence slot: server ticks +0x0 and the sequence position +0x4 they drive (at tempo +0x24),
+   read cursor +0x8, handle +0x10, 16.16 volume +0x14 with its fade step and target, state byte +0x28
+   and the 16 channel words +0x30. */
 typedef struct SndMidiSeq_t {
-    unsigned char unk_0x0[8];
+    unsigned int mTicks;
+    unsigned int mPosition;
     unsigned char *mpData;
     unsigned char *mpLoop;
     int mHandle;
@@ -26,9 +28,9 @@ typedef struct SndMidiSeq_t {
     int mFadeTarget;
     unsigned short m20;
     unsigned short m22;
-    unsigned char unk_0x24[2];
+    unsigned short mTempo;
     unsigned char m26;
-    unsigned char unk_0x27;
+    unsigned char mDelta;
     unsigned char mState;
     unsigned char unk_0x29[3];
     short m2C;
@@ -57,13 +59,16 @@ extern SndMidiState_t lbl_803A6E60;
 int SNDvol(int handle, int vol);
 void SNDSYS_entercritical(void);
 void SNDSYS_leavecritical(void);
-void fn_8026C0C0(void);
+int fn_80277D88(int handle, int bend);
+void fn_8026BF04(int seq);
 
 int SNDseqstop(int handle);
 int SNDmidistopall(void);
 int SNDmidirestore(void);
 
 }
+
+void SNDI_midiserver(void);
 
 int SNDI_midigetseqindex(int handle)
 {
@@ -144,6 +149,44 @@ void SNDI_midiparsenoteoff(int seq, int chan, int key)
     }
 }
 
+void SNDI_midiparsepitchbend(int seq, SndMidiChan_t *chan, int channel, int lsb)
+{
+    SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
+    int value = (*s->mpData++ << 7) + lsb;
+    int i;
+
+    chan->mBend = (unsigned char)(value / 128);
+    for (i = 0; i < 24; i++) {
+        SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+
+        if (note->mSeq == seq && note->mChan == channel) {
+            fn_80277D88(note->mHandle, chan->mBend);
+        }
+    }
+}
+
+void SNDI_midiserver(void)
+{
+    int i;
+
+    for (i = 0; i < 16; i++) {
+        SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[i];
+        unsigned int target;
+
+        if (s->mState != 3) {
+            continue;
+        }
+        if (s->mFadeStep != 0 && SNDI_midiupdatefade(i) != 0) {
+            continue;
+        }
+        target = s->mTicks * s->mTempo / 100;
+        s->mTicks++;
+        for (; s->mPosition <= target && s->mState == 3; s->mPosition++) {
+            fn_8026BF04(i);
+        }
+    }
+}
+
 extern "C" {
 
 int SNDmidiinit(void)
@@ -165,7 +208,7 @@ int SNDmidiinit(void)
         s->mHandle = -1;
         s->mState = 0;
     }
-    SNDSYS_add100hzclient(fn_8026C0C0);
+    SNDSYS_add100hzclient(SNDI_midiserver);
     lbl_803A6C24.m1C4 = (void (*)(void))SNDmidirestore;
     SNDSYS_leavecritical();
     return 0;
@@ -175,7 +218,7 @@ int SNDmidirestore(void)
 {
     SNDSYS_entercritical();
     SNDmidistopall();
-    SNDSYS_remove100hzclient(fn_8026C0C0);
+    SNDSYS_remove100hzclient(SNDI_midiserver);
     lbl_803A6C24.m1C4 = 0;
     SNDSYS_leavecritical();
     return 0;
