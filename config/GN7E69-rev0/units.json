@@ -22540,6 +22540,76 @@
       ]
     },
     {
+      "source": "src/game/StoryEvents.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8005D60C-0x80060948 (src/game/StoryEvents.cpp), its exact function extents, the exact data rows 0x8028ED08-0x8028F4C8, 0x802D4D40-0x802D4E28 and 0x803EA5B8-0x803EA5E8, the .ctors/.dtors words 0x80289A8C/0x80289BCC and the .bss/.sbss rows; linked with holdouts (owner ruling of 2026-11-20), the one holdout keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005D60C",
+          "end": "0x8005DD6C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005DFE8",
+          "end": "0x80060948"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028ED08",
+          "end": "0x8028F4C8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D4D40",
+          "end": "0x802D4E28"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA5B8",
+          "end": "0x803EA5E8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030A0E4",
+          "end": "0x8030A2BC"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC7F0",
+          "end": "0x803EC7F4"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A8C",
+          "end": "0x80289A90"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BCC",
+          "end": "0x80289BD0"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8005DD6C",
+            "evidence": "evidence.tsv source-form 0x8005DD6C-0x8005DFE8"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      }
+    },
+    {
       "source": "src/engine/Resource.c",
       "profile": "engine_c_holdouts",
       "evidence": "evidence.tsv unit row of src/engine/Resource.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole.",

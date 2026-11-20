@@ -1890,7 +1890,7 @@
     {
       "source": "src/game/StoryEvents.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8005D60C-0x80060948 (src/game/StoryEvents.cpp), its 69 exact function extents, the exact data rows 0x8028ED08-0x8028F4C8, 0x802D4D40-0x802D4E28 and 0x803EA5B8-0x803EA5E8, the .ctors/.dtors words 0x80289A8C/0x80289BCC, the .bss and .sbss rows and its source-form rows. Wholly unlinked draft source: the original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x8005D60C-0x80060948 (src/game/StoryEvents.cpp), its 69 exact function extents, the exact data rows 0x8028ED08-0x8028F4C8, 0x802D4D40-0x802D4E28 and 0x803EA5B8-0x803EA5E8, the .ctors/.dtors words 0x80289A8C/0x80289BCC, the .bss and .sbss rows and its source-form rows. The source is linked with holdouts (units.json); the non-exact function stays registered here as its partial.",
       "sections": [
         {
           "section": ".text",
