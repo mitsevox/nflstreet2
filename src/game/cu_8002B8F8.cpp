@@ -28,6 +28,8 @@
 
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #define CLAMP(x, lo, hi) ((x) < (lo) ? (lo) : ((x) > (hi) ? (hi) : (x)))
+/* Compiled-out assert of the release build. */
+#define REPLAY_ASSERT(e) do { } while (0)
 
 /* Camera description set up by fn_8002FDB4 (12 bytes cleared, +4 filled by
    fn_8009BD2C, +8 set to 1) and consumed by fn_8002C300, fn_8002F61C and
@@ -1131,9 +1133,11 @@ extern "C" unsigned char fn_8002D060(Type_803EA368 *p)
     unsigned char result = 0;
 
     if (p != 0) {
-        result = ((p->mUnknownD94 & 0x800000) != 0) | ((p->mUnknownD94 & 0x400000) != 0) |
-                 ((p->mUnknownD94 & 0x800) != 0) | ((p->mUnknownD94 & 0x80) != 0) |
-                 (p->mUnknownD90 == 4);
+        result = (p->mUnknownD90 == 4);
+        result |= (p->mUnknownD94 >> 7) & 1;
+        result |= (p->mUnknownD94 >> 11) & 1;
+        result |= (p->mUnknownD94 >> 22) & 1;
+        result |= (p->mUnknownD94 >> 23) & 1;
     }
     return result;
 }
@@ -1208,6 +1212,8 @@ extern "C" int fn_8002D1B8(Type_803EA368 *p, int value)
 
 extern "C" int fn_8002D228(Type_803EA368 *p)
 {
+    // FAKEMATCH: compiled-out entry assert; its empty do-while keeps the +0xD94 load ahead of +0xD90
+    REPLAY_ASSERT(p != 0);
     return ((p->mUnknownD94 >> 8) & 1) | (((p->mUnknownD94 >> 9) & 1) | (p->mUnknownD90 == 2));
 }
 
