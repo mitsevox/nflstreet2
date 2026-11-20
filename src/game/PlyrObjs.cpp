@@ -158,7 +158,7 @@ void PlayerLookClose();
 int PlaTexCacheGetArchive();
 void fn_8009BD48(int *, int, int, int);
 int PlyrPoseGetStreamBits(int);
-void fn_80030ACC(void (*)(BitStream_t *),
+void ReplayRegisterChannel(void (*)(BitStream_t *),
                  void (*)(BitStream_t *, BitStream_t *, BitStream_t *,
                           BitStream_t *, float),
                  int, const char *);
@@ -1009,7 +1009,7 @@ Object_80039F5C *fn_8003E0C8(Block_80170E64 *object) {
 }
 void fn_8003E118() {
   int size = PlyrPoseGetStreamBits(0) + fn_8003DA8C();
-  fn_80030ACC(fn_8003CEB0, fn_8003CF88, size * lbl_803EA434, "Players");
+  ReplayRegisterChannel(fn_8003CEB0, fn_8003CF88, size * lbl_803EA434, "Players");
 }
 void fn_8003E174(int a) { fn_801A4688(a); }
 void fn_8003E194(int index, int value) {

@@ -109,16 +109,16 @@ struct DivotFeet {
 };
 
 extern "C" {
-extern void *lbl_803EA368;
+extern void *gpReplay;
 
-void fn_80030554(void *pStream, float *pValues, int bits, float scale);
-void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
-void fn_80030ACC(void (*pWrite)(BitStream_t *),
+void ReplayWritePacked3(void *pStream, float *pValues, int bits, float scale);
+void ReplayReadPacked3(void *pStream, float *pValues, int bits, float scale);
+void ReplayRegisterChannel(void (*pWrite)(BitStream_t *),
                  void (*pRead)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float),
                  unsigned int size, const char *pName);
 int InGameIsPaused(void);
 int InGameIsPlaying(void);
-int fn_8002D060(void *p);
+int ReplayIsShowing(void *p);
 void ArrowInit(void *p);
 void ArrowShutdown(void *p);
 void ArrowSetPointBuffer(void *p, void *pData, int a);
@@ -238,7 +238,7 @@ float MathMapRangeClamped(float x, float hi, float vhi, float lo, float vlo)
 void DivotReplayWriteOne(Divot *p, BitStream_t *pStream)
 {
     if (p->mType != DIVOT_TYPE_0) {
-        fn_80030554(pStream, p->mScale, 6, 10.0f);
+        ReplayWritePacked3(pStream, p->mScale, 6, 10.0f);
         fn_80191068(pStream, (unsigned int)(int)(p->mAlpha * 15.0f), 4);
     }
 }
@@ -258,8 +258,8 @@ void DivotReplayReadOne(Divot *p, BitStream_t *pStream0, BitStream_t *pStream1, 
         if (pStream3) {
             ReadBitStream(pStream3, 22);
         }
-        fn_800301C4(pStream1, scale1, 6, 10.0f);
-        fn_800301C4(pStream0, scale0, 6, 10.0f);
+        ReplayReadPacked3(pStream1, scale1, 6, 10.0f);
+        ReplayReadPacked3(pStream0, scale0, 6, 10.0f);
         Vec3Lerp(p->mScale, scale0, scale1, t);
         alpha1 = (float)ReadBitStream(pStream1, 4) * (1.0f / 15.0f);
         alpha0 = (float)ReadBitStream(pStream0, 4) * (1.0f / 15.0f);
@@ -618,7 +618,7 @@ void DivotScatterRandom(void)
 
 void DivotUpdate(void)
 {
-    if (fn_8002D060(lbl_803EA368) || InGameIsPaused()) {
+    if (ReplayIsShowing(gpReplay) || InGameIsPaused()) {
         return;
     }
     for (int type = 0; type < DIVOT_NUM_TYPES; type++) {
@@ -730,7 +730,7 @@ void DivotRestartRecords(void)
 
 void DivotReplayRegister(void)
 {
-    fn_80030ACC(DivotReplayWrite, DivotReplayRead, DivotReplayGetSize(), "Divots");
+    ReplayRegisterChannel(DivotReplayWrite, DivotReplayRead, DivotReplayGetSize(), "Divots");
 }
 
 void DivotSaveState(void)
@@ -796,7 +796,7 @@ Divot *DivotAlloc(int type)
 {
     Divot *p = 0;
 
-    if (InGameIsPlaying() && !fn_8002D060(lbl_803EA368)) {
+    if (InGameIsPlaying() && !ReplayIsShowing(gpReplay)) {
         if (_Divot_aiActiveCount[type] < DivotGetPoolSize(type)) {
             int n;
 

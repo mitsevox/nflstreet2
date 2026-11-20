@@ -57,10 +57,10 @@ void MsgStadiumStartGame(int a);
 void MsgTeamPickSetMode(int a, int b);
 void MsgTeamPickSetSources(int a);
 void fn_8005BE54(unsigned char value);
-int fn_80060354(StevRow_t *pRow, int *pList);
-void fn_80060410(int index, int *pList);
+int StoryEventsPlaceSpecialPlayers(StevRow_t *pRow, int *pList);
+void StoryEventsSetLineup(int index, int *pList);
 void GameInfoSet(int index, int value);
-void fn_80084A8C(int a, int *pList, int b, int c);
+void TeamDbLoadSideWithCopies(int a, int *pList, int b, int c);
 int FormationGetByIndex(int a, int b);
 int *FormationLineupFetchUser(int a, int b);
 int FormationLineupFillTeam(int a, int *pList);
@@ -138,7 +138,7 @@ void StoryTournamentGetTeamName(int id, char *pName, int size)
         *pName = 0;
         return;
     }
-    if (fn_80084034(&_StoryTournament_TeamCursor, id, 0) == 0) {
+    if (TeamDbSeekId(&_StoryTournament_TeamCursor, id, 0) == 0) {
         strncpy(pName, "NFL Draft Team", size);
     } else {
         DbCursorGetString(&_StoryTournament_TeamCursor, 0x414E4454, (int)name, sizeof(name));
@@ -173,7 +173,7 @@ int StoryTournamentFindNextRow(int team, int lvlt)
 
 void StoryTournamentCloseDbs(void)
 {
-    fn_80083F68(&_StoryTournament_TeamCursor);
+    TeamDbClose(&_StoryTournament_TeamCursor);
     if (_StoryTournament_State.mOpen) {
         TournamentClose();
         _StoryTournament_State.mOpen = 0;
@@ -197,7 +197,7 @@ void StoryTournamentOpenDbs(void)
     _StoryTournament_pUserStats = &_StoryTournament_UserStats;
     UserStatsOpen(&_StoryTournament_UserStats, _StoryTournament_State.mIndex);
     _StoryTournament_State.mOpen = TournamentOpen(_StoryTournament_State.mIndex);
-    fn_80083E40(&_StoryTournament_TeamCursor, 0, 0x54415453);
+    TeamDbOpen(&_StoryTournament_TeamCursor, 0, 0x54415453);
 }
 
 void StoryTournamentFetchSkill(void)
@@ -485,11 +485,11 @@ int StoryTournamentLoadCpuTeam(int digt)
     int list[14];
 
     TournamentGetTeamPlayers(digt, list);
-    fn_80060354(_StoryTournament_pEvent, list);
+    StoryEventsPlaceSpecialPlayers(_StoryTournament_pEvent, list);
     list[7] = 0x7FFF;
-    fn_80060410(0, list);
+    StoryEventsSetLineup(0, list);
     DepthChartAutoFill(0, list, 4);
-    fn_80084A8C(digt, list, 0, 7);
+    TeamDbLoadSideWithCopies(digt, list, 0, 7);
     return digt;
 }
 
@@ -510,10 +510,10 @@ int StoryTournamentLoadUserTeam(int digt)
     for (i = 0; i < count && list[i] != picks.mUnknown0; i++) {
     }
     list[7] = 0x7FFF;
-    fn_80060410(1, list);
+    StoryEventsSetLineup(1, list);
     DepthChartAutoFill(1, list, 4);
     StoryTournamentPlaceDrafted(1, &picks.mUnknown0, 1, _StoryTournament_pPlayerDb);
-    fn_80084A8C(digt, list, 1, 7);
+    TeamDbLoadSideWithCopies(digt, list, 1, 7);
     return digt;
 }
 #endif

@@ -43,9 +43,9 @@ void FEPlyrPlayAnim(int index, int a, int b);
 void FEPlyrSetPlayer(int index, int a, int b);
 void FEPlyrSetPriority(int index, int value);
 void StoryTournamentDropEvent(void);
-int fn_800841AC(DbCursor *pObject);
-int fn_800841D8(DbCursor *pObject);
-int fn_80084204(DbCursor *pObject);
+int TeamDbGetColor1(DbCursor *pObject);
+int TeamDbGetColor2(DbCursor *pObject);
+int TeamDbGetColor3(DbCursor *pObject);
 int EditMenuIsStoryTeam(void);
 void MemCardUISetScriptFlag(unsigned char value);
 unsigned char MemCardUIGetScriptFlag(void);
@@ -153,17 +153,17 @@ void StoryPlayerScreenEnter(int *pId)
         _StoryPlayerScreen_bSavedFlag = MemCardUIGetScriptFlag();
         if (StoryTeamGetId(_StoryPlayerScreen_iProfile, pId)) {
             DbCursor cursor;
-            fn_80083E40(&cursor, 0, 0x54415453);
-            fn_80084034(&cursor, *pId, 0);
-            if (!fn_80084438(&cursor)) {
+            TeamDbOpen(&cursor, 0, 0x54415453);
+            TeamDbSeekId(&cursor, *pId, 0);
+            if (!TeamDbGetCtdl(&cursor)) {
                 unsigned char values[3];
-                values[0] = fn_800841AC(&cursor);
-                values[1] = fn_800841D8(&cursor);
-                values[2] = fn_80084204(&cursor);
-                TeamLogoRequestTint(0, 4, fn_80084158(&cursor), 172, values);
-                TeamLogoRequestTint(1, 4, fn_80084158(&cursor), 172, values);
+                values[0] = TeamDbGetColor1(&cursor);
+                values[1] = TeamDbGetColor2(&cursor);
+                values[2] = TeamDbGetColor3(&cursor);
+                TeamLogoRequestTint(0, 4, TeamDbGetLogo(&cursor), 172, values);
+                TeamLogoRequestTint(1, 4, TeamDbGetLogo(&cursor), 172, values);
             }
-            fn_80083F68(&cursor);
+            TeamDbClose(&cursor);
         } else {
             *pId = 0;
         }

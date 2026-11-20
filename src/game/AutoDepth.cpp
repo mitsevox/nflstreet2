@@ -10,10 +10,10 @@
 extern "C" {
 int fn_801486A0(void);
 unsigned int fn_80178DC8(void);
-void fn_80085020(DbCursor *pObject);
-void fn_80085060(DbCursor *pObject);
-int fn_80085080(DbCursor *pObject, int value, int *pResult);
-int fn_800850B8(DbCursor *pObject, int category);
+void TstrDbOpen(DbCursor *pObject);
+void TstrDbClose(DbCursor *pObject);
+int TstrDbSeek(DbCursor *pObject, int value, int *pResult);
+int TstrDbGetPositionValue(DbCursor *pObject, int category);
 unsigned int fn_80081ECC(int category, int *pValues);
 void SndService(void);
 }
@@ -116,7 +116,7 @@ void AutoDepthAllowOnly(int *list)
 void AutoDepthRatePlayer(AutoDepthPlayer_t *record, int *values, DbCursor *query)
 {
     for (int i = 0; i < 14; i++) {
-        int adjustment = fn_800850B8(query, i);
+        int adjustment = TstrDbGetPositionValue(query, i);
         unsigned int value = fn_80081ECC(i, values) * (adjustment + 100) / 200;
         if (record->category == i) value = value * 1.1f;
         record->values[i] = value;
@@ -163,8 +163,8 @@ void AutoDepthBuild(int value, int *list, AutoDepthPlayer_t **pRecords)
     } else {
         records = pRecords;
     }
-    fn_80085020(&first);
-    fn_80085080(&first, value, 0);
+    TstrDbOpen(&first);
+    TstrDbSeek(&first, value, 0);
     fn_8008044C(&second, 0, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
     int i = 0;
     while (list[i] != 32767) i++;
@@ -180,7 +180,7 @@ void AutoDepthBuild(int value, int *list, AutoDepthPlayer_t **pRecords)
         SndService();
     }
     fn_8008056C(&second);
-    fn_80085060(&first);
+    TstrDbClose(&first);
 }
 
 void AutoDepthFree(AutoDepthPlayer_t **pRecords)

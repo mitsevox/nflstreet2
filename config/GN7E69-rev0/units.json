@@ -8236,9 +8236,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002B8F8.cpp",
+      "source": "src/game/Replay.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8002B8F8-0x80030D50 (src/game/cu_8002B8F8.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "evidence": "evidence.tsv unit row 0x8002B8F8-0x80030D50 (src/game/Replay.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -8304,19 +8304,19 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8002BDC4",
+            "function": "ReplayRecordUpdate",
             "evidence": "evidence.tsv source-form 0x8002BDC4-0x8002BE28"
           },
           {
-            "function": "fn_8002D060",
+            "function": "ReplayIsShowing",
             "evidence": "evidence.tsv source-form 0x8002D060-0x8002D0AC"
           },
           {
-            "function": "fn_8002D4A0",
+            "function": "ReplayTestConditions",
             "evidence": "evidence.tsv source-form 0x8002D4A0-0x8002DC00"
           },
           {
-            "function": "fn_8002F74C",
+            "function": "ReplayCamProcess",
             "evidence": "evidence.tsv source-form 0x8002F74C-0x8002F9D8"
           }
         ],
@@ -8330,7 +8330,7 @@
           "SetFocusHeight",
           "_StrippedReplayMovieStart"
         ],
-        "evidence": "evidence.tsv linker rows of the file-static functions of src/game/cu_8002B8F8.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
+        "evidence": "evidence.tsv linker rows of the file-static functions of src/game/Replay.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
       }
     },
     {
@@ -24066,7 +24066,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8005DD6C",
+            "function": "StoryEventsCreateAwayTeam",
             "evidence": "evidence.tsv source-form 0x8005DD6C-0x8005DFE8"
           }
         ],
@@ -24074,9 +24074,9 @@
       }
     },
     {
-      "source": "src/game/cu_800834CC.cpp",
+      "source": "src/game/TeamDb.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/cu_800834CC.cpp), its exact function extents and its .rodata/.data/.sdata/.sbss data rows; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes.",
+      "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/TeamDb.cpp), its exact function extents and its .rodata/.data/.sdata/.sbss data rows; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -24124,15 +24124,15 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_80083C98",
+            "function": "TeamDbOpenByTmur",
             "evidence": "evidence.tsv source-form 0x80083C98-0x80083DE4"
           },
           {
-            "function": "fn_8008463C",
+            "function": "TeamDbGetRandomLogoColors",
             "evidence": "evidence.tsv source-form 0x8008463C-0x800846F4"
           },
           {
-            "function": "fn_800846F4",
+            "function": "TeamDbGetRandomName",
             "evidence": "evidence.tsv source-form 0x800846F4-0x80084808"
           }
         ],

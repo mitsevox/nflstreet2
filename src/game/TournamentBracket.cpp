@@ -28,9 +28,9 @@ void ChalLoadTournamentTeams(int *, int);
 void EditMenuEnd();
 void EditMenuBegin(int, int);
 DbCursor *EditMenuGetTeamCursor(void);
-int fn_800841AC(DbCursor *pObject);
-int fn_800841D8(DbCursor *pObject);
-int fn_80084204(DbCursor *pObject);
+int TeamDbGetColor1(DbCursor *pObject);
+int TeamDbGetColor2(DbCursor *pObject);
+int TeamDbGetColor3(DbCursor *pObject);
 void TeamLogoRequestTint(int, int, int, int, char *);
 int ChalGetTournamentSlot();
 void ChalSetTournamentSlot(int);
@@ -235,12 +235,12 @@ extern "C" void TournBracketEnter(int *pIndex)
     int i;
     EditMenuEnd();
     EditMenuBegin(1, 1023);
-    if (fn_80084438(EditMenuGetTeamCursor()) == 0) {
+    if (TeamDbGetCtdl(EditMenuGetTeamCursor()) == 0) {
         char values[3];
-        values[0] = fn_800841AC(EditMenuGetTeamCursor());
-        values[1] = fn_800841D8(EditMenuGetTeamCursor());
-        values[2] = fn_80084204(EditMenuGetTeamCursor());
-        TeamLogoRequestTint(0, 4, fn_80084158(EditMenuGetTeamCursor()), 172, values);
+        values[0] = TeamDbGetColor1(EditMenuGetTeamCursor());
+        values[1] = TeamDbGetColor2(EditMenuGetTeamCursor());
+        values[2] = TeamDbGetColor3(EditMenuGetTeamCursor());
+        TeamLogoRequestTint(0, 4, TeamDbGetLogo(EditMenuGetTeamCursor()), 172, values);
     }
     _TournBracket_iUserSeed = ChalGetTournamentSlot();
     if (_TournBracket_iUserSeed == -1) {
@@ -306,11 +306,11 @@ extern "C" void TournBracketGetGameInfo(int index, int *pIdA, int *pIdB, Bracket
         } else {
             *ids[i] = TournBracketGetTeam(team);
             DbCursor object;
-            fn_80083E40(&object, 0, 0x54415453);
-            fn_80084034(&object, *ids[i], 0);
-            fn_80083F88(&object, name, 18);
+            TeamDbOpen(&object, 0, 0x54415453);
+            TeamDbSeekId(&object, *ids[i], 0);
+            TeamDbGetName(&object, name, 18);
             strnzcpy(names[i].mUnknown0->mpText, name, names[i].mUnknown0->mLength);
-            fn_80083F68(&object);
+            TeamDbClose(&object);
         }
     }
     *pScoreA = p->mUnknown4[1];

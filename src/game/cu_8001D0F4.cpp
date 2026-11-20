@@ -1,7 +1,7 @@
 #include "game/EditMenu.h"
 
 extern "C" {
-int fn_8005F938(unsigned int id, void *pArgs, int unused, int *pResult);
+int StoryEventsHandleMessage(unsigned int id, void *pArgs, int unused, int *pResult);
 int StoryTournamentScreenMessage(unsigned int id, void *pArgs, int unused, int *pResult);
 int StoryPlayerScreenMsg(unsigned int id, void *pArgs, int unused, int *pResult);
 int GauntletScreenMsg(unsigned int id, void *pArgs, int unused, int *pResult);
@@ -10,7 +10,7 @@ int fn_8001D0F4(int group, unsigned int id, MenuArg_t *pArgs, int unused, int *p
 {
     switch (group) {
     case 1:
-        return fn_8005F938(id, pArgs, unused, pResult);
+        return StoryEventsHandleMessage(id, pArgs, unused, pResult);
     case 3:
         return StoryTournamentScreenMessage(id, pArgs, unused, pResult);
     case 4:

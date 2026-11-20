@@ -1,11 +1,12 @@
+/* The instant replay: records every play into a ring of packed frames that
+   the player, ball, object, particle and sound code write through registered
+   channels, then plays it back with the replay camera, either under the
+   player's control (pause, rewind, step, free camera cursor) or as an
+   automatic replay that picks a scripted camera sequence from the play's
+   recorded events. */
 #include "game/Vec2Distance.h"
 #include "game/ScreenTransition.h"
 #include "game/fn_8009D990.h"
-/* Replay camera and replay recorder of the in-game loop (Xbox data string
-   "REPLAY.C" heads this file's .data; neutral file name). The data and the
-   first four functions are linked from source; the remaining functions
-   0x8002B960-0x80030D50 and the four discarded functions are draft
-   reconstructions compiled only for comparison. */
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -17,7 +18,7 @@
 #include "game/RecordList_8002E7C0.h"
 #include "game/Ball.h"
 #include "game/cammain.h"
-#include "game/cu_8002B8F8.h"
+#include "game/Replay.h"
 #include "game/ReplayEvent.h"
 #include "game/fn_800AD9B4.h"
 #include "game/PlayBookGetPlay.h"
@@ -31,18 +32,18 @@
 /* Compiled-out assert of the release build. */
 #define REPLAY_ASSERT(e) do { } while (0)
 
-/* Camera description set up by fn_8002FDB4 (12 bytes cleared, +4 filled by
-   fn_8009BD2C, +8 set to 1) and consumed by fn_8002C300, fn_8002F61C and
-   fn_8002EA78 (+0 selects the camera mode, +8 attaches it). */
-struct Type_8002FDB4 {
+/* Camera description set up by ReplayCamInitDesc (12 bytes cleared, +4 filled by
+   fn_8009BD2C, +8 set to 1) and consumed by ReplayEnterPlayback, ReplayCamStart and
+   ReplayCamCreate (+0 selects the camera mode, +8 attaches it). */
+struct ReplayCamDesc_t {
     int mUnknown00;
     int mUnknown04;
     unsigned char mUnknown08;
 };
 
-/* One {op, arg} word of a condition list read by fn_8002D4A0; op -1 ends
+/* One {op, arg} word of a condition list read by ReplayTestConditions; op -1 ends
    the list. Ops 0 and 27 read only the low byte of the argument. */
-struct Cond_8002D4A0 {
+struct ReplayCond_t {
     short mOp;
     union {
         short mArg;
@@ -53,29 +54,29 @@ struct Cond_8002D4A0 {
     };
 };
 
-/* One {op, arg} word of a replay camera script (fn_80030D14); op -1 ends it. */
-struct Command_8002DC00 {
+/* One {op, arg} word of a replay camera script (ReplayFindScript); op -1 ends it. */
+struct ReplayCommand_t {
     short mOp;
     short mArg;
 };
 
-/* {id, script} row of the table fn_80030D14 searches; id -1 ends it. */
-struct Script_802CC938 {
+/* {id, script} row of the table ReplayFindScript searches; id -1 ends it. */
+struct ReplayScript_t {
     int mId;
-    Command_8002DC00 *mpCommands;
+    ReplayCommand_t *mpCommands;
 };
 
-/* 12-byte row of the table fn_80030D08 returns: a script id and the
-   condition list fn_8002E950 tests for it; id -1 ends the table. */
-struct Entry_80030D08 {
+/* 12-byte row of the table ReplayGetScriptTable returns: a script id and the
+   condition list ReplayPickScript tests for it; id -1 ends the table. */
+struct ReplayScriptConds_t {
     int mId;
-    Cond_8002D4A0 *mpConds;
+    ReplayCond_t *mpConds;
     int mUnknown08;
 };
 
 /* 0x14-byte focus block of the replay camera at 0x8030660C (cleared as a
-   whole by fn_8002F61C); mPos is the focus point. */
-struct Type_8030660C {
+   whole by ReplayCamStart); mPos is the focus point. */
+struct ReplayFocus_t {
     int mUnknown00;
     Vector_80039F5C mPos;
     int mUnknown10;
@@ -90,9 +91,9 @@ struct Type_80190ED4 {
     int mUnknown0C;
 };
 
-/* 12-byte replay channel record of the lbl_803EC648 pool, registered by
-   fn_80030ACC: write and read callbacks and the record size in bits. */
-struct Type_80030ACC {
+/* 12-byte replay channel record of the _Replay_pChannels pool, registered by
+   ReplayRegisterChannel: write and read callbacks and the record size in bits. */
+struct ReplayChannel_t {
     void (*mpWrite)(Type_80190ED4 *pStream);
     void (*mpRead)(Type_80190ED4 *pStream0, Type_80190ED4 *pStream1, Type_80190ED4 *pStream2,
                    Type_80190ED4 *pStream3, float t);
@@ -233,212 +234,212 @@ static void PrintDebugHelpLine(int line, char *pBuf, int, int *pCount);
 static void SetFocusHeight(unsigned char reset, float height);
 }
 
-void fn_8002B8F8(void);
-void fn_8002B8FC(void);
-unsigned char fn_8002B924(void);
-void fn_8002B92C(void);
-void fn_8002B960(Type_8002B960 *p);
-void fn_8002BAF4(Type_8002B960 *p);
-int fn_8002BC80(Type_803EA368 *p);
-int fn_8002BCD4(Type_803EA368 *p);
-int fn_8002BD44(Type_803EA368 *p);
-int fn_8002BDBC(Type_803EA368 *p);
-void fn_8002BDC4(Type_803EA368 *p);
-int fn_8002BE28(Type_803EA368 *p, int event, int a);
-void fn_8002BE68(Type_803EA368 *p);
-void fn_8002BEF0(Type_803EA368 *p);
-void fn_8002C13C(Type_803EA368 *p);
-int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc);
-int fn_8002C4B0(Type_803EA368 *p);
-void fn_8002C630(Type_803EA368 *p);
-void fn_8002C664(Type_803EA368 *p, int delta);
-void fn_8002C6E0(Type_803EA368 *p, int delta);
-void fn_8002C75C(Type_803EA368 *p);
-void fn_8002C800(Type_803EA368 *p);
-void fn_8002C848(int type);
-void fn_8002C9A4(Type_803EA368 *p);
-int fn_8002D1B8(Type_803EA368 *p, int value);
-void fn_8002D128(Type_803EA368 *p, int value);
-int fn_8002D158(Type_803EA368 *p);
-void fn_8002D160(Type_803EA368 *p, int value);
-int fn_8002D0D0(Type_803EA368 *p);
-void fn_8002D250(Type_803EA368 *p);
-void fn_8002D2D0(void);
-void fn_8002D2D4(void);
-int fn_8002D2D8(void);
-void fn_8002D2E0(Type_803EA368 *p, int a, unsigned int id, float value);
-void fn_8002D2E4(Type_8030660C *pFocus, Block_80170E64 **ppTarget);
-void fn_8002D2E8(Type_803EA368 *p);
-void fn_8002D2EC(void);
-void fn_8002D2F0(Type_803EA368 *p, int id, int value, int index);
-void fn_8002D338(Type_803EA368 *p, Timer_8002E7C0 *pTimer);
-Record_8002E7C0 *fn_8002D3BC(RecordList_8002E7C0 *pList);
-float fn_8002D414(int a, int b);
-int fn_8002D4A0(Cond_8002D4A0 *pCond);
-void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList);
-void fn_8002E75C(Type_803EA368 *p, Timer_8002E7C0 *pTimer);
-void fn_8002E890(RecordList_8002E7C0 *pList);
-void fn_8002E8B8(Type_803EA368 *p, RecordList_8002E7C0 *pList);
-int fn_8002E950(int mode);
-void fn_8002EA18(GameCamera_t *pCamera, CameraDesc_t *pDesc);
-void fn_8002EA38(GameCamera_t *pCamera);
-void fn_8002EA58(void *p, GameCamera_t *pCamera);
-GameCamera_t *fn_8002EA78(Type_8002FDB4 *pDesc);
-void fn_8002EBBC(Object_80039F5C *p);
-void fn_8002EC28(void);
-void fn_8002ED48(Point_8017886C *pOut, unsigned int input, float amount);
-Block_80170E64 *fn_8002EDE8(GameCamera_t *pCamera, float *pDist, unsigned char *pFound);
-void fn_8002EED0(void);
-void fn_8002F1E0(GameCamera_t *pCamera);
-void fn_8002F26C(GameCamera_t *pCamera, unsigned int input, float amount);
-GameCamera_t *fn_8002F61C(Type_8002FDB4 *pDesc);
-void fn_8002F71C(GameCamera_t *pCamera);
-void fn_8002F74C(GameCamera_t *pCamera);
-void fn_8002F9D8(GameCamera_t *pCamera);
-void fn_8002FA04(GameCamera_t *pCamera, int detach);
-void fn_8002FA8C(GameCamera_t *pCamera, int unused, unsigned int input, float amount);
-void fn_8002FC28(GameCamera_t *pCamera, int player, unsigned int input, float amount);
-void fn_8002FDB4(Type_8002FDB4 *pDesc);
-int fn_8002FDFC(void);
-void fn_8002FE34(int index);
-void fn_800300D0(void);
-void fn_800307AC(void);
-void fn_800307C0(Type_803EA368 *p);
-void fn_80030828(Type_803EA368 *p);
-void fn_800308A4(Type_803EA368 *p);
-void fn_800308E8(Type_803EA368 *p);
-void fn_80030940(Type_803EA368 *p);
-void fn_80030C40(void);
-Object_80039F5C *fn_80030C70(Object_80039F5C **ppA, Object_80039F5C **ppB);
-void fn_80030CB0(int value);
-unsigned char fn_80030CC0(Type_803EA368 *p);
-void fn_80030CFC(void);
-float fn_80030D00(void);
-Entry_80030D08 *fn_80030D08(void);
-Command_8002DC00 *fn_80030D14(int id);
+void ReplayDebugWindowOpen(void);
+void ReplayDebugWindowClose(void);
+unsigned char ReplayDebugWindowIsOpen(void);
+void ReplayDebugWindowToggle(void);
+void ReplaySaveGameState(ReplayGameState_t *p);
+void ReplayRestoreGameState(ReplayGameState_t *p);
+int ReplayClear(Type_803EA368 *p);
+int ReplayStartRecording(Type_803EA368 *p);
+int ReplayStopRecording(Type_803EA368 *p);
+int ReplayRecordSkip(Type_803EA368 *p);
+void ReplayRecordUpdate(Type_803EA368 *p);
+int ReplayGetCameraMode(Type_803EA368 *p, int event, int a);
+void ReplayHandlePlayRequest(Type_803EA368 *p);
+void ReplayUpdateAutoPlay(Type_803EA368 *p);
+void ReplayUpdateUserPlay(Type_803EA368 *p);
+int ReplayEnterPlayback(Type_803EA368 *p, ReplayCamDesc_t *pDesc);
+int ReplayExitPlayback(Type_803EA368 *p);
+void ReplayRefreshFrame(Type_803EA368 *p);
+void ReplayStepBackward(Type_803EA368 *p, int delta);
+void ReplayStepForward(Type_803EA368 *p, int delta);
+void ReplayTakeControllerInput(Type_803EA368 *p);
+void ReplayReleaseControllerInput(Type_803EA368 *p);
+void ReplayTriggerMarkEffect(int type);
+void ReplayStartRecordingStub(Type_803EA368 *p);
+int ReplaySeek(Type_803EA368 *p, int value);
+void ReplaySetSpeed(Type_803EA368 *p, int value);
+int ReplayGetStartFrame(Type_803EA368 *p);
+void ReplaySetPlayEnd(Type_803EA368 *p, int value);
+int ReplayGetLength(Type_803EA368 *p);
+void ReplaySetEndHere(Type_803EA368 *p);
+void ReplayDirectorEnter(void);
+void ReplayDirectorExit(void);
+int ReplayDirectorIsActive(void);
+void ReplayDirectorHandleInput(Type_803EA368 *p, int a, unsigned int id, float value);
+void ReplayDirectorUpdateFocus(ReplayFocus_t *pFocus, Block_80170E64 **ppTarget);
+void ReplayDirectorUpdate(Type_803EA368 *p);
+void ReplayShotListStartStub(void);
+void ReplaySetEventMark(Type_803EA368 *p, int id, int value, int index);
+void ReplayInitShotTimer(Type_803EA368 *p, Timer_8002E7C0 *pTimer);
+Record_8002E7C0 *ReplayShotListAdd(RecordList_8002E7C0 *pList);
+float ReplayEventDeltaY(int a, int b);
+int ReplayTestConditions(ReplayCond_t *pCond);
+void ReplayBuildShotList(Type_803EA368 *p, RecordList_8002E7C0 *pList);
+void ReplayStartShot(Type_803EA368 *p, Timer_8002E7C0 *pTimer);
+void ReplayShotListClear(RecordList_8002E7C0 *pList);
+void ReplayShotListStart(Type_803EA368 *p, RecordList_8002E7C0 *pList);
+int ReplayPickScript(int mode);
+void ReplayCamInit(GameCamera_t *pCamera, CameraDesc_t *pDesc);
+void ReplayCamUninit(GameCamera_t *pCamera);
+void ReplayCamUpdate(void *p, GameCamera_t *pCamera);
+GameCamera_t *ReplayCamCreate(ReplayCamDesc_t *pDesc);
+void ReplayCamSetBallHighlight(Object_80039F5C *p);
+void ReplayCamUpdateFocus(void);
+void ReplayCamGetMoveOffset(Point_8017886C *pOut, unsigned int input, float amount);
+Block_80170E64 *ReplayCamFindNearestObject(GameCamera_t *pCamera, float *pDist, unsigned char *pFound);
+void ReplayCamSetFieldMargins(void);
+void ReplayCamApplyDistance(GameCamera_t *pCamera);
+void ReplayCamMoveCursor(GameCamera_t *pCamera, unsigned int input, float amount);
+GameCamera_t *ReplayCamStart(ReplayCamDesc_t *pDesc);
+void ReplayCamPush(GameCamera_t *pCamera);
+void ReplayCamProcess(GameCamera_t *pCamera);
+void ReplayCamProcessAuto(GameCamera_t *pCamera);
+void ReplayCamDestroy(GameCamera_t *pCamera, int detach);
+void ReplayCamHandleInput(GameCamera_t *pCamera, int unused, unsigned int input, float amount);
+void ReplayCamHandleMenuInput(GameCamera_t *pCamera, int player, unsigned int input, float amount);
+void ReplayCamInitDesc(ReplayCamDesc_t *pDesc);
+int ReplayBufferNextFrame(void);
+void ReplayBufferWriteFrame(int index);
+void ReplayReadFrameStub(void);
+void ReplayBufferReset(void);
+void ReplayRecordFrame(Type_803EA368 *p);
+void ReplayBufferFinish(Type_803EA368 *p);
+void ReplayHideGameIcons(Type_803EA368 *p);
+void ReplayShowGameIcons(Type_803EA368 *p);
+void ReplayReadFrame(Type_803EA368 *p);
+void ReplayChannelsShutdown(void);
+Object_80039F5C *ReplayGetFocusPlayers(Object_80039F5C **ppA, Object_80039F5C **ppB);
+void ReplaySetBallIndex(int value);
+unsigned char ReplayIsBufferFull(Type_803EA368 *p);
+void ReplayCamProcessStub(void);
+float ReplayGetFrameBlend(void);
+ReplayScriptConds_t *ReplayGetScriptTable(void);
+ReplayCommand_t *ReplayFindScript(int id);
 }
 
 /* .sdata */
-static int lbl_803EA358 = 0;
-static unsigned char lbl_803EA35C = 0;
-static unsigned char lbl_803EA35D = 0;
-static unsigned int lbl_803EA360 = 0;
-static unsigned char lbl_803EA364 = 0;
-static unsigned char lbl_803EA365 = 0;
-static unsigned char lbl_803EA366 = 0;
-Type_803EA368 *lbl_803EA368 = 0;
-static unsigned char lbl_803EA36C = 0;
-static int lbl_803EA370 = -1;
-static unsigned char lbl_803EA374 = 0;
-static unsigned char lbl_803EA375 = 1;
-static unsigned char lbl_803EA376 = 0;
-static int lbl_803EA378 = 0;
-static int lbl_803EA37C = 0;
-static float lbl_803EA380 = 1.2f;
-static unsigned char lbl_803EA384 = 0;
-static int lbl_803EA388 = 0;
+static int _Replay_iFadeTicks = 0;
+static unsigned char _Replay_bSavedEventFlag1 = 0;
+static unsigned char _Replay_bSavedEventFlag0 = 0;
+static unsigned int _Replay_iPlayFrames = 0;
+static unsigned char _Replay_bSuspended = 0;
+static unsigned char _Replay_bSavedTrails = 0;
+static unsigned char _Replay_bStepped = 0;
+Type_803EA368 *gpReplay = 0;
+static unsigned char _Replay_bDebugWindowOpen = 0;
+static int _Replay_iScript = -1;
+static unsigned char _Replay_bScriptOption = 0;
+static unsigned char _Replay_bDefaultShot = 1;
+static unsigned char _Replay_bScriptFlag = 0;
+static int _Replay_iScriptWeight = 0;
+static int _Replay_iEdgeLimit = 0;
+static float _Replay_fFocusHeight = 1.2f;
+static unsigned char _Replay_bCamActive = 0;
+static int _Replay_iBallIndex = 0;
 
 /* .sbss */
-static int lbl_803EC614;
-static int lbl_803EC618;
-static int lbl_803EC61C;
-static Block_80170E64 *lbl_803EC620;
-static int lbl_803EC624;
-static unsigned char lbl_803EC628;
-static float lbl_803EC62C;
-static float lbl_803EC630;
-static unsigned char lbl_803EC634;
-static float lbl_803EC638;
-static float lbl_803EC63C;
-static float lbl_803EC640;
-static float lbl_803EC644;
-static void *lbl_803EC648;
-static unsigned int lbl_803EC64C;
-static unsigned int lbl_803EC650;
-static unsigned char lbl_803EC654;
-static int lbl_803EC658;
-static int lbl_803EC65C;
-static int lbl_803EC660;
-static Object_80039F5C *lbl_803EC664;
-static Object_80039F5C *lbl_803EC668;
-static float lbl_803EC66C;
+static int _Replay_iCreateCleared;
+static int _Replay_iUnreferenced;
+static int _Replay_iCamYaw;
+static Block_80170E64 *_Replay_pTarget;
+static int _Replay_iTargetTime;
+static unsigned char _Replay_bTargetIsBall;
+static float _Replay_fMaxDist;
+static float _Replay_fCamDist;
+static unsigned char _Replay_bFreeCam;
+static float _Replay_fCamMarginY;
+static float _Replay_fCamMarginX;
+static float _Replay_fViewMarginX;
+static float _Replay_fViewMarginY;
+static void *_Replay_pChannels;
+static unsigned int _Replay_uBufferSize;
+static unsigned int _Replay_uFrameSize;
+static unsigned char _Replay_bWrapped;
+static int _Replay_iFrameCount;
+static int _Replay_iFirstFrame;
+static int _Replay_iFrameIndex;
+static Object_80039F5C *_Replay_pFocusA;
+static Object_80039F5C *_Replay_pFocusB;
+static float _Replay_fFrameBlend;
 
 /* .bss */
-static Type_8030660C lbl_8030660C;
+static ReplayFocus_t _Replay_Focus;
 
 /* .data */
-static char lbl_802CC830[] = "REPLAY.C";
+static char _Replay_szFileTag[] = "REPLAY.C";
 
 /* The replay camera's callbacks; 0x802DBDA0 points to this table. */
-CamTypeDef_t lbl_802CC83C = { fn_8002EA18, fn_8002EA38, fn_8002EA58 };
+CamTypeDef_t _Replay_CamType = { ReplayCamInit, ReplayCamUninit, ReplayCamUpdate };
 
-static Command_8002DC00 lbl_802CC848[] = {
+static ReplayCommand_t _Replay_aScript0Commands[] = {
     { 1, 0 }, { 0x26, 0x2D }, { 0x28, 10000 }, { 5, 14 }, { 0x1A, 0 }, { 0x1B, -6 }, { 0x1C, 4 }, { -1, 0 },
 };
-static Command_8002DC00 lbl_802CC868[] = {
+static ReplayCommand_t _Replay_aScript1Commands[] = {
     { 1, 0 }, { 0x26, 0x2D }, { 0x28, 10000 }, { 5, 14 }, { 0x1A, 0 }, { 0x1B, 6 }, { 0x1C, 4 }, { -1, 0 },
 };
-static Command_8002DC00 lbl_802CC888[] = {
+static ReplayCommand_t _Replay_aScript3Commands[] = {
     { 1, 0 }, { 0x26, 0x2D }, { 0x28, 10000 }, { 5, 14 }, { 0x1A, 1 }, { 0x1B, 6 }, { 0x1C, 3 }, { -1, 0 },
 };
-static Command_8002DC00 lbl_802CC8A8[] = {
+static ReplayCommand_t _Replay_aScript2Commands[] = {
     { 1, 0 }, { 0x26, 0x2D }, { 0x28, 10000 }, { 5, 7 }, { 2, 7 }, { 0x1A, -1 }, { 0x1B, 5 }, { 0x1C, 4 }, { -1, 0 },
 };
-static Command_8002DC00 lbl_802CC8CC[] = {
+static ReplayCommand_t _Replay_aScript5Commands[] = {
     { 1, 0 }, { 0x26, 0x2D }, { 0x28, 10000 }, { 5, 7 }, { 2, 4 }, { 0x1A, 0 }, { 0x1B, -5 }, { 0x1C, 4 }, { -1, 0 },
 };
-static Command_8002DC00 lbl_802CC8F0[] = {
+static ReplayCommand_t _Replay_aScript4Commands[] = {
     { 1, 0 }, { 0x26, 0x2D }, { 0x28, 10000 }, { 5, 7 }, { 2, 3 }, { 0x1A, -1 }, { 0x1B, -6 }, { 0x1C, 4 }, { -1, 0 },
 };
-static Command_8002DC00 lbl_802CC914[] = {
+static ReplayCommand_t _Replay_aScript6Commands[] = {
     { 1, 0 }, { 0x26, 0x2D }, { 0x28, 10000 }, { 5, 7 }, { 2, 0x35 }, { 0x1A, 0 }, { 0x1B, 6 }, { 0x1C, 4 }, { -1, 0 },
 };
 
-static Script_802CC938 lbl_802CC938[] = {
-    { 0, lbl_802CC848 }, { 1, lbl_802CC868 }, { 3, lbl_802CC888 }, { 2, lbl_802CC8A8 },
-    { 4, lbl_802CC8F0 }, { 5, lbl_802CC8CC }, { 6, lbl_802CC914 }, { -1, 0 },
+static ReplayScript_t _Replay_aScripts[] = {
+    { 0, _Replay_aScript0Commands }, { 1, _Replay_aScript1Commands }, { 3, _Replay_aScript3Commands }, { 2, _Replay_aScript2Commands },
+    { 4, _Replay_aScript4Commands }, { 5, _Replay_aScript5Commands }, { 6, _Replay_aScript6Commands }, { -1, 0 },
 };
 
-static Cond_8002D4A0 lbl_803EA38C[] = { { 0x19, 100 }, { -1, 0 } };
-static Cond_8002D4A0 lbl_802CC978[] = { { 3, 7 }, { 0x19, 100 }, { -1, 0 } };
-static Cond_8002D4A0 lbl_802CC984[] = { { 3, 0xB }, { 0x19, 100 }, { -1, 0 } };
-static Cond_8002D4A0 lbl_802CC990[] = { { 3, 4 }, { 0x19, 100 }, { -1, 0 } };
-static Cond_8002D4A0 lbl_802CC99C[] = { { 3, 3 }, { 0x19, 100 }, { -1, 0 } };
-static Cond_8002D4A0 lbl_802CC9A8[] = { { 3, 0x35 }, { 0x19, 100 }, { -1, 0 } };
+static ReplayCond_t _Replay_aScript01Conds[] = { { 0x19, 100 }, { -1, 0 } };
+static ReplayCond_t _Replay_aScript2Conds[] = { { 3, 7 }, { 0x19, 100 }, { -1, 0 } };
+static ReplayCond_t _Replay_aScript3Conds[] = { { 3, 0xB }, { 0x19, 100 }, { -1, 0 } };
+static ReplayCond_t _Replay_aScript5Conds[] = { { 3, 4 }, { 0x19, 100 }, { -1, 0 } };
+static ReplayCond_t _Replay_aScript4Conds[] = { { 3, 3 }, { 0x19, 100 }, { -1, 0 } };
+static ReplayCond_t _Replay_aScript6Conds[] = { { 3, 0x35 }, { 0x19, 100 }, { -1, 0 } };
 
-static Entry_80030D08 lbl_802CC9B4[] = {
-    { 0, lbl_803EA38C, -1 }, { 1, lbl_803EA38C, -1 }, { 2, lbl_802CC978, -1 }, { 3, lbl_802CC984, -1 },
-    { 4, lbl_802CC99C, -1 }, { 5, lbl_802CC990, -1 }, { 6, lbl_802CC9A8, -1 }, { -1, 0, 0 },
+static ReplayScriptConds_t _Replay_aScriptConds[] = {
+    { 0, _Replay_aScript01Conds, -1 }, { 1, _Replay_aScript01Conds, -1 }, { 2, _Replay_aScript2Conds, -1 }, { 3, _Replay_aScript3Conds, -1 },
+    { 4, _Replay_aScript4Conds, -1 }, { 5, _Replay_aScript5Conds, -1 }, { 6, _Replay_aScript6Conds, -1 }, { -1, 0, 0 },
 };
 
 /* Unreferenced on GameCube. The Xbox build has the same eight floats right
-   after its copy of lbl_802CC9B4 (0x5012E0), stored into every player
-   (+0xEEC) by a function next to the fn_80030D14 counterpart that the
+   after its copy of _Replay_aScriptConds (0x5012E0), stored into every player
+   (+0xEEC) by a function next to the ReplayFindScript counterpart that the
    GameCube link discarded. */
-static float lbl_802CCA14[8] = { -1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 3.0f, 1.0f, 0.0f };
+static float _Replay_afPlayerPose[8] = { -1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 3.0f, 1.0f, 0.0f };
 
-extern "C" void fn_8002B8F8(void) {}
+extern "C" void ReplayDebugWindowOpen(void) {}
 
-extern "C" void fn_8002B8FC(void)
+extern "C" void ReplayDebugWindowClose(void)
 {
     DebugWindowClose();
-    lbl_803EA36C = 0;
+    _Replay_bDebugWindowOpen = 0;
 }
 
-extern "C" unsigned char fn_8002B924(void) { return lbl_803EA36C; }
+extern "C" unsigned char ReplayDebugWindowIsOpen(void) { return _Replay_bDebugWindowOpen; }
 
-extern "C" void fn_8002B92C(void)
+extern "C" void ReplayDebugWindowToggle(void)
 {
-    if (fn_8002B924()) {
-        fn_8002B8FC();
+    if (ReplayDebugWindowIsOpen()) {
+        ReplayDebugWindowClose();
     } else {
-        fn_8002B8F8();
+        ReplayDebugWindowOpen();
     }
 }
 
 
 
-extern "C" void fn_8002B960(Type_8002B960 *p)
+extern "C" void ReplaySaveGameState(ReplayGameState_t *p)
 {
     unsigned char team;
     unsigned int i;
@@ -466,7 +467,7 @@ extern "C" void fn_8002B960(Type_8002B960 *p)
     p->mUnknown6B6 = 0;
 }
 
-extern "C" void fn_8002BAF4(Type_8002B960 *p)
+extern "C" void ReplayRestoreGameState(ReplayGameState_t *p)
 {
     unsigned char team;
     unsigned int i;
@@ -494,7 +495,7 @@ extern "C" void fn_8002BAF4(Type_8002B960 *p)
     fn_801782F4(p->mUnknown6A0);
 }
 
-extern "C" int fn_8002BC80(Type_803EA368 *p)
+extern "C" int ReplayClear(Type_803EA368 *p)
 {
     if (p->mUnknownD90 == 2) {
         ReplayEventClearAll(p);
@@ -504,50 +505,50 @@ extern "C" int fn_8002BC80(Type_803EA368 *p)
     return 0;
 }
 
-extern "C" int fn_8002BCD4(Type_803EA368 *p)
+extern "C" int ReplayStartRecording(Type_803EA368 *p)
 {
     if (p->mUnknownD90 == 0) {
-        fn_8002B960(&p->mUnknown000);
+        ReplaySaveGameState(&p->mUnknown000);
         p->mUnknownD8C = -1;
         p->mUnknownD74 = p->mUnknownD70 = SyncTimeGetGameTime();
         p->mUnknownD90 = 1;
         p->mUnknown14B4 = fn_801784C4();
-        fn_80030CB0(BallGetCurrentIndex());
+        ReplaySetBallIndex(BallGetCurrentIndex());
     }
-    fn_8002C9A4(p);
+    ReplayStartRecordingStub(p);
     return 0;
 }
 
-extern "C" int fn_8002BD44(Type_803EA368 *p)
+extern "C" int ReplayStopRecording(Type_803EA368 *p)
 {
     if (p->mUnknownD90 == 1) {
         ReplayEventAdd(p, 0x34, 0, 0, 0);
         p->mUnknownD80 = p->mUnknownD7C = SyncTimeGetGameTime();
-        fn_80030828(p);
+        ReplayBufferFinish(p);
         p->mUnknownD90 = 2;
         p->mUnknownD94 &= ~0x10;
     }
     return 0;
 }
 
-extern "C" int fn_8002BDBC(Type_803EA368 *p)
+extern "C" int ReplayRecordSkip(Type_803EA368 *p)
 {
     return 0;
 }
 
-extern "C" void fn_8002BDC4(Type_803EA368 *p)
+extern "C" void ReplayRecordUpdate(Type_803EA368 *p)
 {
     if (p->mUnknownD94 & 0x10) {
-        fn_8002BDBC(p);
+        ReplayRecordSkip(p);
     } else if (p->mUnknownD90 == 1) {
-        fn_800307C0(p);
+        ReplayRecordFrame(p);
     }
     if (p->mUnknownD94 & 0x20) {
         p->mUnknownD94 &= ~0x10;
     }
 }
 
-extern "C" int fn_8002BE28(Type_803EA368 *p, int event, int a)
+extern "C" int ReplayGetCameraMode(Type_803EA368 *p, int event, int a)
 {
     int result = 3;
 
@@ -565,44 +566,44 @@ extern "C" int fn_8002BE28(Type_803EA368 *p, int event, int a)
     return result;
 }
 
-extern "C" void fn_8002BE68(Type_803EA368 *p)
+extern "C" void ReplayHandlePlayRequest(Type_803EA368 *p)
 {
-    Type_8002FDB4 args;
+    ReplayCamDesc_t args;
 
-    fn_8002FDB4(&args);
+    ReplayCamInitDesc(&args);
     if (p->mUnknownD94 & 0x80) {
-        args.mUnknown00 = fn_8002BE28(p, 7, 0);
-        fn_8002C300(p, &args);
+        args.mUnknown00 = ReplayGetCameraMode(p, 7, 0);
+        ReplayEnterPlayback(p, &args);
     } else if (p->mUnknownD94 & 0x400000) {
-        args.mUnknown00 = fn_8002BE28(p, 0x16, 0);
-        fn_8002C300(p, &args);
+        args.mUnknown00 = ReplayGetCameraMode(p, 0x16, 0);
+        ReplayEnterPlayback(p, &args);
     }
 }
 
-extern "C" void fn_8002BEF0(Type_803EA368 *p)
+extern "C" void ReplayUpdateAutoPlay(Type_803EA368 *p)
 {
     unsigned int i;
 
     p->mUnknownD80 = p->mUnknownD80 > p->mUnknownD7C ? p->mUnknownD7C : p->mUnknownD80;
-    if (fn_800B81A4() != 0xFF && lbl_803EA360 > 0x1D) {
+    if (fn_800B81A4() != 0xFF && _Replay_iPlayFrames > 0x1D) {
         p->mUnknownD94 |= 0x200;
     }
     BallsSetVisible(1);
     for (i = 0; i <= 4; i++) {
         if (p->mUnknown148C[i].mUnknown0 == p->mUnknownD74 && p->mUnknownD78 == 0) {
-            fn_8002C848(p->mUnknown148C[i].mUnknown4);
+            ReplayTriggerMarkEffect(p->mUnknown148C[i].mUnknown4);
         }
     }
     if (p->mUnknownD74 >= p->mUnknownD80 && p->mUnknownD88 != 0) {
-        fn_80030940(p);
+        ReplayReadFrame(p);
         p->mUnknownD88 = 0;
         CamReplayNextRecord();
     }
-    lbl_803EA358 += p->mUnknownD88;
-    if (lbl_803EA358 > 60) {
+    _Replay_iFadeTicks += p->mUnknownD88;
+    if (_Replay_iFadeTicks > 60) {
         EnvObjUpdateFades();
         ParticleTrailUpdateAll();
-        lbl_803EA358 = 0;
+        _Replay_iFadeTicks = 0;
     }
     if (p->mUnknownD88 < 60) {
         ParticleSysUpdate(p->mUnknownD88 / 60.0f);
@@ -615,72 +616,72 @@ extern "C" void fn_8002BEF0(Type_803EA368 *p)
     }
     FieldLinesUpdate();
     if (p->mUnknownD94 & 0x200) {
-        if (lbl_803EA360 > 0x1D) {
-            fn_8002C4B0(p);
+        if (_Replay_iPlayFrames > 0x1D) {
+            ReplayExitPlayback(p);
             AudmonEventPost(0x7F, 0);
             PauseSetPollDelay(4);
         }
     } else if (p->mUnknownD88 > 0) {
-        fn_8002C6E0(p, p->mUnknownD88);
+        ReplayStepForward(p, p->mUnknownD88);
     } else if (p->mUnknownD88 < 0) {
-        fn_8002C664(p, p->mUnknownD88);
+        ReplayStepBackward(p, p->mUnknownD88);
     }
     if (p->mpUnknownDA0) {
-        fn_8002F9D8(p->mpUnknownDA0);
+        ReplayCamProcessAuto(p->mpUnknownDA0);
     }
 }
 
-extern "C" void fn_8002C13C(Type_803EA368 *p)
+extern "C" void ReplayUpdateUserPlay(Type_803EA368 *p)
 {
     unsigned short a;
     unsigned short b;
 
-    lbl_803EA366 = 0;
+    _Replay_bStepped = 0;
     if (p->mUnknownD74 >= p->mUnknownD7C && p->mUnknownD8C == -1) {
         p->mUnknownD94 |= 0x200;
     }
-    if (lbl_803EA364 == 0) {
+    if (_Replay_bSuspended == 0) {
         fn_80219650(gUISMainInfo, &a, &b);
         if (fn_800B81A4() != 0xFF) {
             p->mUnknownD94 |= 0x200;
         }
         FieldLinesUpdate();
         if (p->mUnknownD94 & 0x1000200) {
-            if (lbl_803EA360 > 0x1D) {
-                fn_8002C4B0(p);
+            if (_Replay_iPlayFrames > 0x1D) {
+                ReplayExitPlayback(p);
             }
         } else if (!(p->mUnknownD94 & 0x100) && (p->mUnknownD94 & 0xF000)) {
             if (p->mUnknownD88 > 0) {
-                fn_8002C6E0(p, p->mUnknownD88);
-                lbl_803EA358 += p->mUnknownD88;
+                ReplayStepForward(p, p->mUnknownD88);
+                _Replay_iFadeTicks += p->mUnknownD88;
             } else if (p->mUnknownD88 < 0) {
-                fn_8002C664(p, p->mUnknownD88);
-                lbl_803EA358 -= p->mUnknownD88;
+                ReplayStepBackward(p, p->mUnknownD88);
+                _Replay_iFadeTicks -= p->mUnknownD88;
             }
-            if (lbl_803EA358 > 60) {
+            if (_Replay_iFadeTicks > 60) {
                 EnvObjUpdateFades();
                 ParticleTrailUpdateAll();
-                lbl_803EA358 = 0;
+                _Replay_iFadeTicks = 0;
             }
             ParticleSysUpdate(p->mUnknownD88 / 60.0f);
             ParticlesFlush();
             fn_800A3120(p->mUnknownD88 / 60.0f);
-            lbl_803EA366 = 1;
+            _Replay_bStepped = 1;
         }
         if (p->mUnknownD94 & 0x2000000) {
-            fn_8002D2E8(p);
+            ReplayDirectorUpdate(p);
         }
         if (p->mpUnknownDA0) {
-            fn_8002F74C(p->mpUnknownDA0);
+            ReplayCamProcess(p->mpUnknownDA0);
         }
     }
 }
 
-extern "C" int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc)
+extern "C" int ReplayEnterPlayback(Type_803EA368 *p, ReplayCamDesc_t *pDesc)
 {
     int result = -1;
 
-    lbl_803EA360 = 0;
+    _Replay_iPlayFrames = 0;
     if (p->mUnknownD90 == 2 || (p->mUnknownD94 & 0x400000)) {
         if (p->mUnknownD94 & 0x400000) {
             p->mUnknownD94 |= 0x800000;
@@ -688,8 +689,8 @@ extern "C" int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc)
             SndgSfxPlay(0x77, 0);
             InGamePause();
             PauseBlock();
-            fn_8002B960(&p->mUnknown6B8);
-            fn_8002BAF4(&p->mUnknown000);
+            ReplaySaveGameState(&p->mUnknown6B8);
+            ReplayRestoreGameState(&p->mUnknown000);
             if ((p->mUnknownD94 & 0x2000000) && fn_801784C4()) {
                 fn_80177E6C(0, 0);
             }
@@ -699,9 +700,9 @@ extern "C" int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc)
             DivotSaveState();
             p->mUnknownD78 = 0;
             p->mUnknownD74 = p->mUnknownD70;
-            fn_800308A4(p);
+            ReplayHideGameIcons(p);
             if (!(p->mUnknownD94 & 0x10000)) {
-                fn_80030940(p);
+                ReplayReadFrame(p);
                 SndgMusicResume();
                 SndgMusicSetMode(0xC);
             }
@@ -709,38 +710,38 @@ extern "C" int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc)
             p->mUnknownD90 = 4;
         }
         if (p->mUnknownD94 & 0x2000000) {
-            fn_8002D2D0();
+            ReplayDirectorEnter();
         }
-        fn_8002C75C(p);
-        p->mpUnknownDA0 = fn_8002F61C(pDesc);
-        fn_8002F74C(p->mpUnknownDA0);
+        ReplayTakeControllerInput(p);
+        p->mpUnknownDA0 = ReplayCamStart(pDesc);
+        ReplayCamProcess(p->mpUnknownDA0);
         if (p->mUnknown14B4 && !(p->mUnknownD94 & 0x400000)) {
             CamMainRotate(p->mpUnknownDA0, 0x800000);
             CamMainProcess(p->mpUnknownDA0, 0, 0, 0);
             CamMainWarpToDest(p->mpUnknownDA0);
         }
-        lbl_803EA35C = GameEventFlagsSetFlag1(0);
-        lbl_803EA35D = GameEventFlagsSetFlag0(2);
+        _Replay_bSavedEventFlag1 = GameEventFlagsSetFlag1(0);
+        _Replay_bSavedEventFlag0 = GameEventFlagsSetFlag0(2);
         fn_800A8644();
         ParticlesStopOnEnter();
         result = 0;
     }
-    lbl_803EA365 = ParticleTrailSetEnabled(0);
-    fn_8002B8F8();
+    _Replay_bSavedTrails = ParticleTrailSetEnabled(0);
+    ReplayDebugWindowOpen();
     return result;
 }
 
-extern "C" int fn_8002C4B0(Type_803EA368 *p)
+extern "C" int ReplayExitPlayback(Type_803EA368 *p)
 {
     int result = -1;
     GameCamera_t *pCamera;
 
-    ParticleTrailSetEnabled(lbl_803EA365);
+    ParticleTrailSetEnabled(_Replay_bSavedTrails);
     if (p->mUnknownD90 == 4 || (p->mUnknownD94 & 0x1000000)) {
         if (p->mUnknownD94 & 0x1000000) {
             p->mUnknownD94 &= ~0x800000;
         } else {
-            fn_8002BAF4(&p->mUnknown6B8);
+            ReplayRestoreGameState(&p->mUnknown6B8);
             HudUnhide();
             if ((p->mUnknownD94 & 0x2000000) && fn_801784C4()) {
                 CamGameResumeAll();
@@ -759,7 +760,7 @@ extern "C" int fn_8002C4B0(Type_803EA368 *p)
             DivotRestoreState();
             p->mUnknownD94 &= ~0x1000;
             p->mUnknownD94 &= ~0x10000;
-            fn_800308E8(p);
+            ReplayShowGameIcons(p);
             p->mUnknownD8C = -1;
             p->mUnknownD90 = 2;
             InGameResume();
@@ -767,30 +768,30 @@ extern "C" int fn_8002C4B0(Type_803EA368 *p)
         }
         if (p->mUnknownD94 & 0x2000000) {
             p->mUnknownD94 &= ~0x2000000;
-            fn_8002D2D4();
+            ReplayDirectorExit();
         }
-        fn_8002C800(p);
+        ReplayReleaseControllerInput(p);
         pCamera = p->mpUnknownDA0;
-        fn_8002FA04(pCamera, VptManagerGetCurrentCamera(GameVpt::GetViewport()) == p->mpUnknownDA0);
+        ReplayCamDestroy(pCamera, VptManagerGetCurrentCamera(GameVpt::GetViewport()) == p->mpUnknownDA0);
         p->mpUnknownDA0 = 0;
-        GameEventFlagsSetFlag1(lbl_803EA35C);
-        GameEventFlagsSetFlag0(lbl_803EA35D);
+        GameEventFlagsSetFlag1(_Replay_bSavedEventFlag1);
+        GameEventFlagsSetFlag0(_Replay_bSavedEventFlag0);
         fn_800A866C();
         ParticlesStopOnLeave();
         fn_800711E0();
         result = 0;
     }
-    fn_8002B8FC();
+    ReplayDebugWindowClose();
     return result;
 }
 
-extern "C" void fn_8002C630(Type_803EA368 *p)
+extern "C" void ReplayRefreshFrame(Type_803EA368 *p)
 {
     SyncTimeGetGameTime();
-    fn_80030940(p);
+    ReplayReadFrame(p);
 }
 
-extern "C" void fn_8002C664(Type_803EA368 *p, int delta)
+extern "C" void ReplayStepBackward(Type_803EA368 *p, int delta)
 {
     p->mUnknownD78 += delta;
     while (p->mUnknownD78 <= -60) {
@@ -802,10 +803,10 @@ extern "C" void fn_8002C664(Type_803EA368 *p, int delta)
     if (p->mUnknownD74 == p->mUnknownD70) {
         p->mUnknownD78 = 0;
     }
-    fn_8002C630(p);
+    ReplayRefreshFrame(p);
 }
 
-extern "C" void fn_8002C6E0(Type_803EA368 *p, int delta)
+extern "C" void ReplayStepForward(Type_803EA368 *p, int delta)
 {
     p->mUnknownD78 += delta;
     while (p->mUnknownD78 >= 60) {
@@ -817,10 +818,10 @@ extern "C" void fn_8002C6E0(Type_803EA368 *p, int delta)
     if (p->mUnknownD74 == p->mUnknownD7C) {
         p->mUnknownD78 = 0;
     }
-    fn_8002C630(p);
+    ReplayRefreshFrame(p);
 }
 
-extern "C" void fn_8002C75C(Type_803EA368 *p)
+extern "C" void ReplayTakeControllerInput(Type_803EA368 *p)
 {
     PadInputSaveHandlers(p->mUnknownDA8);
     if (!InGameIsDemo() && p->mUnknownD8C != -1) {
@@ -832,7 +833,7 @@ extern "C" void fn_8002C75C(Type_803EA368 *p)
     }
 }
 
-extern "C" void fn_8002C800(Type_803EA368 *p)
+extern "C" void ReplayReleaseControllerInput(Type_803EA368 *p)
 {
     PadInputRestoreHandlers(p->mUnknownDA8);
     PadInputResetSlot(-1);
@@ -841,7 +842,7 @@ extern "C" void fn_8002C800(Type_803EA368 *p)
     }
 }
 
-extern "C" void fn_8002C848(int type)
+extern "C" void ReplayTriggerMarkEffect(int type)
 {
     switch (type) {
     case 0:
@@ -863,7 +864,7 @@ extern "C" void fn_8002C848(int type)
     }
 }
 
-extern "C" Type_803EA368 *fn_8002C8C0(void)
+extern "C" Type_803EA368 *ReplayCreate(void)
 {
     Type_803EA368 *p;
 
@@ -876,29 +877,29 @@ extern "C" Type_803EA368 *fn_8002C8C0(void)
     p->mUnknownD94 = 0;
     p->mpUnknownDA0 = 0;
     p->mUnknownD90 = 2;
-    fn_8002BC80(p);
+    ReplayClear(p);
     p->mUnknown14B5 = 0;
     p->mUnknownD98 = -1;
-    lbl_803EC614 = 0;
+    _Replay_iCreateCleared = 0;
     memset(p->mUnknown148C, 0, sizeof(p->mUnknown148C));
     ConSetChannelInfo(9, 4, 0);
     return p;
 }
 
-extern "C" void fn_8002C964(Type_803EA368 *p)
+extern "C" void ReplayDestroy(Type_803EA368 *p)
 {
-    fn_8002BD44(p);
-    fn_8002C4B0(p);
-    fn_80030C40();
+    ReplayStopRecording(p);
+    ReplayExitPlayback(p);
+    ReplayChannelsShutdown();
     fn_801D2BD0(p);
 }
 
-extern "C" void fn_8002C9A4(Type_803EA368 *p)
+extern "C" void ReplayStartRecordingStub(Type_803EA368 *p)
 {
 }
 
 
-extern "C" int fn_8002C9A8(Type_803EA368 *p, int msg, int value)
+extern "C" int ReplayHandleCommand(Type_803EA368 *p, int msg, int value)
 {
     int result = -1;
 
@@ -909,18 +910,18 @@ extern "C" int fn_8002C9A8(Type_803EA368 *p, int msg, int value)
         switch (msg) {
         case 3:
             result = 0;
-            fn_8002BD44(p);
+            ReplayStopRecording(p);
             break;
         case 1:
             p->mUnknownD94 |= 2;
             result = 0;
-            fn_8002BC80(p);
+            ReplayClear(p);
             break;
         case 2:
             p->mUnknownD94 |= 4;
             result = 0;
-            fn_8002BCD4(p);
-            fn_800307AC();
+            ReplayStartRecording(p);
+            ReplayBufferReset();
             break;
         default:
             p->mUnknownD94 |= 1 << msg;
@@ -931,7 +932,7 @@ extern "C" int fn_8002C9A8(Type_803EA368 *p, int msg, int value)
     return result;
 }
 
-extern "C" int fn_8002CA74(Type_803EA368 *p, int msg, int value)
+extern "C" int ReplayHandleControl(Type_803EA368 *p, int msg, int value)
 {
     int result = -1;
 
@@ -949,7 +950,7 @@ extern "C" int fn_8002CA74(Type_803EA368 *p, int msg, int value)
             p->mUnknownD94 &= ~0x800;
             p->mUnknownD94 &= ~0x100;
             p->mUnknownD94 |= 0x80;
-            lbl_803EA358 = 0;
+            _Replay_iFadeTicks = 0;
         }
         break;
     case 25:
@@ -984,7 +985,7 @@ extern "C" int fn_8002CA74(Type_803EA368 *p, int msg, int value)
     return result;
 }
 
-extern "C" void fn_8002CBB0(Type_803EA368 *p, int a, unsigned int id, float value)
+extern "C" void ReplayHandleInput(Type_803EA368 *p, int a, unsigned int id, float value)
 {
     if (a == 9) {
         MemCardUtilHandleEvent(9, id, value);
@@ -1005,16 +1006,16 @@ extern "C" void fn_8002CBB0(Type_803EA368 *p, int a, unsigned int id, float valu
                     break;
                 case 8:
                     if (value == 1.0f) {
-                        fn_8002D250(p);
+                        ReplaySetEndHere(p);
                     }
                     break;
                 case 9:
-                    if (value == 1.0f && fn_8002E950(1)) {
+                    if (value == 1.0f && ReplayPickScript(1)) {
                         RecordList_8002E7C0 *pList = &p->mpUnknownDA0->mUnknown128;
 
-                        fn_8002E890(pList);
-                        fn_8002DC00(p, pList);
-                        fn_8002E8B8(p, pList);
+                        ReplayShotListClear(pList);
+                        ReplayBuildShotList(p, pList);
+                        ReplayShotListStart(p, pList);
                         p->mUnknownD74 = p->mUnknownD70;
                         p->mUnknownD78 = 0;
                         CamMainSetMode(p->mpUnknownDA0, 8, 0, 0);
@@ -1032,12 +1033,12 @@ extern "C" void fn_8002CBB0(Type_803EA368 *p, int a, unsigned int id, float valu
             return;
         }
         if (p->mUnknownD94 & 0x800000) {
-            fn_8002FC28(p->mpUnknownDA0, 9, id, value);
+            ReplayCamHandleMenuInput(p->mpUnknownDA0, 9, id, value);
             UISGameHandleInput(9, id, value);
             return;
         }
-        if ((p->mUnknownD94 & 0x2000000) && fn_8002D2D8()) {
-            fn_8002D2E0(p, 9, id, value);
+        if ((p->mUnknownD94 & 0x2000000) && ReplayDirectorIsActive()) {
+            ReplayDirectorHandleInput(p, 9, id, value);
             return;
         }
         if (p->mUnknownD94 & 0x200) {
@@ -1047,11 +1048,11 @@ extern "C" void fn_8002CBB0(Type_803EA368 *p, int a, unsigned int id, float valu
             unsigned short s0;
             unsigned short s1;
 
-            fn_8002FA8C(p->mpUnknownDA0, a, id, value);
+            ReplayCamHandleInput(p->mpUnknownDA0, a, id, value);
             fn_80219650(gUISMainInfo, &s0, &s1);
             UISGameHandleInput(a, id, value);
         }
-        if (id == 0 && lbl_803EA360 > 29) {
+        if (id == 0 && _Replay_iPlayFrames > 29) {
             p->mUnknownD94 |= 0x200;
             HudPost3AOn();
         }
@@ -1090,37 +1091,37 @@ extern "C" void fn_8002CBB0(Type_803EA368 *p, int a, unsigned int id, float valu
             break;
         case 0x15:
             if (value == 1.0f) {
-                fn_8002B92C();
+                ReplayDebugWindowToggle();
             }
             break;
         }
     }
 }
 
-extern "C" void fn_8002CF34(Type_803EA368 *p)
+extern "C" void ReplayUpdate(Type_803EA368 *p)
 {
     int state = p->mUnknownD90;
 
     if (state == 4 || (p->mUnknownD94 & 0x800000)) {
-        lbl_803EA360++;
+        _Replay_iPlayFrames++;
         if (p->mUnknownD94 & 0x10000) {
-            fn_8002BEF0(p);
+            ReplayUpdateAutoPlay(p);
         } else {
-            fn_8002C13C(p);
+            ReplayUpdateUserPlay(p);
         }
     } else {
-        if (state == 1 && fn_800AD9B4() != 3 && fn_80030CC0(p)) {
-            fn_8002BD44(p);
+        if (state == 1 && fn_800AD9B4() != 3 && ReplayIsBufferFull(p)) {
+            ReplayStopRecording(p);
         }
-        fn_8002BDC4(p);
-        fn_8002BE68(p);
+        ReplayRecordUpdate(p);
+        ReplayHandlePlayRequest(p);
     }
     p->mUnknownD94 &= 0x2811950;
 }
 
-extern "C" void fn_8002CFF4(Type_803EA368 *p)
+extern "C" void ReplayStartAutoPlayback(Type_803EA368 *p)
 {
-    Type_8002FDB4 args;
+    ReplayCamDesc_t args;
 
     args.mUnknown00 = 1;
     args.mUnknown04 = 1;
@@ -1128,12 +1129,12 @@ extern "C" void fn_8002CFF4(Type_803EA368 *p)
     p->mUnknownD84 = SysGetSystemTime();
     p->mUnknownD94 = (p->mUnknownD94 | 0x10000) & ~0x40;
     ReplayCursorSetVisible(0);
-    fn_8002C300(p, &args);
+    ReplayEnterPlayback(p, &args);
 }
 
-extern "C" unsigned char fn_8002D058(void) { return lbl_803EA366; }
+extern "C" unsigned char ReplayIsStepping(void) { return _Replay_bStepped; }
 
-extern "C" unsigned char fn_8002D060(Type_803EA368 *p)
+extern "C" unsigned char ReplayIsShowing(Type_803EA368 *p)
 {
     unsigned char result = 0;
 
@@ -1147,7 +1148,7 @@ extern "C" unsigned char fn_8002D060(Type_803EA368 *p)
     return result;
 }
 
-extern "C" int fn_8002D0AC(Type_803EA368 *p)
+extern "C" int ReplayIsRecording(Type_803EA368 *p)
 {
     int result = 0;
 
@@ -1157,7 +1158,7 @@ extern "C" int fn_8002D0AC(Type_803EA368 *p)
     return result;
 }
 
-extern "C" int fn_8002D0D0(Type_803EA368 *p)
+extern "C" int ReplayGetLength(Type_803EA368 *p)
 {
     int result = 0;
 
@@ -1167,7 +1168,7 @@ extern "C" int fn_8002D0D0(Type_803EA368 *p)
     return result;
 }
 
-extern "C" int fn_8002D0FC(Type_803EA368 *p)
+extern "C" int ReplayGetPosition(Type_803EA368 *p)
 {
     int result = 0;
 
@@ -1177,31 +1178,31 @@ extern "C" int fn_8002D0FC(Type_803EA368 *p)
     return result;
 }
 
-extern "C" void fn_8002D128(Type_803EA368 *p, int value)
+extern "C" void ReplaySetSpeed(Type_803EA368 *p, int value)
 {
     p->mUnknownD88 = value;
     p->mUnknownD88 = CLAMP(p->mUnknownD88, -120, 120);
 }
 
-extern "C" int fn_8002D150(Type_803EA368 *p) { return p->mUnknownD88; }
+extern "C" int ReplayGetSpeed(Type_803EA368 *p) { return p->mUnknownD88; }
 
-extern "C" int fn_8002D158(Type_803EA368 *p) { return p->mUnknownD70; }
+extern "C" int ReplayGetStartFrame(Type_803EA368 *p) { return p->mUnknownD70; }
 
-extern "C" void fn_8002D160(Type_803EA368 *p, int value)
+extern "C" void ReplaySetPlayEnd(Type_803EA368 *p, int value)
 {
     p->mUnknownD80 = p->mUnknownD74 + value;
     p->mUnknownD80 = CLAMP(p->mUnknownD80, p->mUnknownD70, p->mUnknownD7C);
 }
 
-extern "C" int fn_8002D198(Type_803EA368 *p)
+extern "C" int ReplayRequestExit(Type_803EA368 *p)
 {
-    if (lbl_803EA360 > 29) {
+    if (_Replay_iPlayFrames > 29) {
         p->mUnknownD94 |= 0x200;
     }
     return 0;
 }
 
-extern "C" int fn_8002D1B8(Type_803EA368 *p, int value)
+extern "C" int ReplaySeek(Type_803EA368 *p, int value)
 {
     if (value < p->mUnknownD70) {
         value = p->mUnknownD70;
@@ -1210,19 +1211,19 @@ extern "C" int fn_8002D1B8(Type_803EA368 *p, int value)
     }
     p->mUnknownD74 = value;
     PlyrPoseSetBlendFlag(0);
-    fn_80030940(p);
+    ReplayReadFrame(p);
     PlyrPoseSetBlendFlag(1);
     return 0;
 }
 
-extern "C" int fn_8002D228(Type_803EA368 *p)
+extern "C" int ReplayIsHalted(Type_803EA368 *p)
 {
     // FAKEMATCH: compiled-out entry assert; its empty do-while keeps the +0xD94 load ahead of +0xD90
     REPLAY_ASSERT(p != 0);
     return ((p->mUnknownD94 >> 8) & 1) | (((p->mUnknownD94 >> 9) & 1) | (p->mUnknownD90 == 2));
 }
 
-extern "C" void fn_8002D250(Type_803EA368 *p)
+extern "C" void ReplaySetEndHere(Type_803EA368 *p)
 {
     if (p->mUnknownD74 - p->mUnknownD70 > 2) {
         p->mUnknownD80 = p->mUnknownD74;
@@ -1230,16 +1231,16 @@ extern "C" void fn_8002D250(Type_803EA368 *p)
     }
 }
 
-extern "C" void fn_8002D274(Type_803EA368 *p)
+extern "C" void ReplayStopAndClear(Type_803EA368 *p)
 {
-    fn_8002C9A8(p, 3, 0);
-    fn_8002C9A8(p, 1, 0);
-    fn_8002CF34(p);
+    ReplayHandleCommand(p, 3, 0);
+    ReplayHandleCommand(p, 1, 0);
+    ReplayUpdate(p);
 }
 
-extern "C" unsigned char fn_8002D2C0(void) { return lbl_803EA364; }
+extern "C" unsigned char ReplayIsSuspended(void) { return _Replay_bSuspended; }
 
-extern "C" void fn_8002D2C8(Type_803EA368 *p, unsigned char value) { p->mUnknown14B5 = value; }
+extern "C" void ReplaySetHoldFlag(Type_803EA368 *p, unsigned char value) { p->mUnknown14B5 = value; }
 
 /* Debug-window callbacks for the highlighted player (Xbox 0x20830 and
    0x209F0, PS2 0x1B4F30). Nothing on GameCube installs them, so the linker
@@ -1320,40 +1321,40 @@ static void PrintDebugHelpLine(int line, char *pBuf, int, int *pCount)
     }
 }
 
-extern "C" void fn_8002D2D0(void) {}
+extern "C" void ReplayDirectorEnter(void) {}
 
-extern "C" void fn_8002D2D4(void) {}
+extern "C" void ReplayDirectorExit(void) {}
 
-extern "C" int fn_8002D2D8(void) { return 0; }
+extern "C" int ReplayDirectorIsActive(void) { return 0; }
 
-extern "C" void fn_8002D2E0(Type_803EA368 *p, int a, unsigned int id, float value) {}
+extern "C" void ReplayDirectorHandleInput(Type_803EA368 *p, int a, unsigned int id, float value) {}
 
-extern "C" void fn_8002D2E4(Type_8030660C *p, Block_80170E64 **ppTarget) {}
+extern "C" void ReplayDirectorUpdateFocus(ReplayFocus_t *p, Block_80170E64 **ppTarget) {}
 
-extern "C" void fn_8002D2E8(Type_803EA368 *p) {}
+extern "C" void ReplayDirectorUpdate(Type_803EA368 *p) {}
 
-extern "C" void fn_8002D2EC(void) {}
+extern "C" void ReplayShotListStartStub(void) {}
 
-extern "C" void fn_8002D2F0(Type_803EA368 *p, int id, int value, int index)
+extern "C" void ReplaySetEventMark(Type_803EA368 *p, int id, int value, int index)
 {
     p->mUnknown148C[index].mUnknown0 = ReplayEventGetTime(p, id);
     p->mUnknown148C[index].mUnknown4 = value;
 }
 
-extern "C" void fn_8002D338(Type_803EA368 *p, Timer_8002E7C0 *pTimer)
+extern "C" void ReplayInitShotTimer(Type_803EA368 *p, Timer_8002E7C0 *pTimer)
 {
-    pTimer->mUnknown00 = fn_8002D158(p);
-    pTimer->mUnknown08 = fn_8002D0D0(p);
+    pTimer->mUnknown00 = ReplayGetStartFrame(p);
+    pTimer->mUnknown08 = ReplayGetLength(p);
     pTimer->mUnknown0C = 45;
     pTimer->mUnknown04 = 0;
     if (ReplayEventExists(p, 0x25)) {
         int end = ReplayEventGetTime(p, 0x25) + 150;
 
-        pTimer->mUnknown08 = end - fn_8002D158(p);
+        pTimer->mUnknown08 = end - ReplayGetStartFrame(p);
     }
 }
 
-extern "C" Record_8002E7C0 *fn_8002D3BC(RecordList_8002E7C0 *pList)
+extern "C" Record_8002E7C0 *ReplayShotListAdd(RecordList_8002E7C0 *pList)
 {
     Record_8002E7C0 *pRecord = 0;
 
@@ -1364,15 +1365,15 @@ extern "C" Record_8002E7C0 *fn_8002D3BC(RecordList_8002E7C0 *pList)
     return pRecord;
 }
 
-extern "C" float fn_8002D414(int a, int b)
+extern "C" float ReplayEventDeltaY(int a, int b)
 {
     float va[3];
     float vb[3];
     float result;
 
-    if (ReplayEventInWindow(lbl_803EA368, a) && ReplayEventInWindow(lbl_803EA368, b)) {
-        ReplayEventGetPos(lbl_803EA368, a, va);
-        ReplayEventGetPos(lbl_803EA368, b, vb);
+    if (ReplayEventInWindow(gpReplay, a) && ReplayEventInWindow(gpReplay, b)) {
+        ReplayEventGetPos(gpReplay, a, va);
+        ReplayEventGetPos(gpReplay, b, vb);
         result = vb[1] - va[1];
     } else {
         result = 0.0f;
@@ -1380,7 +1381,7 @@ extern "C" float fn_8002D414(int a, int b)
     return result;
 }
 
-extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
+extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
 {
     int last = -1;
     int sum = 0;
@@ -1418,31 +1419,31 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
             }
             needMatch = 0;
             matched = 0;
-            if (!ReplayEventInWindow(lbl_803EA368, pCond->mArg)) {
+            if (!ReplayEventInWindow(gpReplay, pCond->mArg)) {
                 ok = 0;
                 break;
             }
             if (last != -1) {
-                if (ordered && ReplayEventGetTime(lbl_803EA368, last) > ReplayEventGetTime(lbl_803EA368, pCond->mArg)) {
+                if (ordered && ReplayEventGetTime(gpReplay, last) > ReplayEventGetTime(gpReplay, pCond->mArg)) {
                     ok = 0;
                 }
-                if (minDy > fn_8002D414(last, pCond->mArg)) {
+                if (minDy > ReplayEventDeltaY(last, pCond->mArg)) {
                     ok = 0;
                 }
-                if (maxDy < fn_8002D414(last, pCond->mArg)) {
+                if (maxDy < ReplayEventDeltaY(last, pCond->mArg)) {
                     ok = 0;
                 }
-                if (minGap > ABS(ReplayEventGetTime(lbl_803EA368, last) - ReplayEventGetTime(lbl_803EA368, pCond->mArg))) {
+                if (minGap > ABS(ReplayEventGetTime(gpReplay, last) - ReplayEventGetTime(gpReplay, pCond->mArg))) {
                     ok = 0;
                 }
-                if (maxGap < ABS(ReplayEventGetTime(lbl_803EA368, last) - ReplayEventGetTime(lbl_803EA368, pCond->mArg))) {
+                if (maxGap < ABS(ReplayEventGetTime(gpReplay, last) - ReplayEventGetTime(gpReplay, pCond->mArg))) {
                     ok = 0;
                 }
             }
             last = pCond->mArg;
             break;
         case 4:
-            if (ReplayEventInWindow(lbl_803EA368, pCond->mArg)) {
+            if (ReplayEventInWindow(gpReplay, pCond->mArg)) {
                 ok = 0;
             }
             break;
@@ -1453,7 +1454,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
                 Object_80039F5C *pObject;
 
                 needMatch = 1;
-                pObject = ReplayEventGetObject(lbl_803EA368, last);
+                pObject = ReplayEventGetObject(gpReplay, last);
                 if (pObject == 0) {
                     ok = 0;
                 } else if (pObject->mUnknown2914 == pCond->mArg) {
@@ -1467,7 +1468,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (ReplayEventGetPos(lbl_803EA368, last, pos) == -1 || pos[0] < pCond->mArg) {
+                if (ReplayEventGetPos(gpReplay, last, pos) == -1 || pos[0] < pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1478,7 +1479,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (ReplayEventGetPos(lbl_803EA368, last, pos) == -1 || pos[0] > pCond->mArg) {
+                if (ReplayEventGetPos(gpReplay, last, pos) == -1 || pos[0] > pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1489,7 +1490,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (ReplayEventGetPos(lbl_803EA368, last, pos) == -1 || pos[1] < pCond->mArg) {
+                if (ReplayEventGetPos(gpReplay, last, pos) == -1 || pos[1] < pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1500,7 +1501,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (ReplayEventGetPos(lbl_803EA368, last, pos) == -1 || pos[1] > pCond->mArg) {
+                if (ReplayEventGetPos(gpReplay, last, pos) == -1 || pos[1] > pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1585,7 +1586,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
             break;
         case 32:
             needMatch = 1;
-            if (ReplayEventGetObject(lbl_803EA368, pCond->mArg)) {
+            if (ReplayEventGetObject(gpReplay, pCond->mArg)) {
                 ok = 0;
             }
             break;
@@ -1602,25 +1603,25 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
         ok = 0;
     }
     if (ok) {
-        lbl_803EA378 = sum;
-        lbl_803EA374 = value374;
-        lbl_803EA376 = flag;
+        _Replay_iScriptWeight = sum;
+        _Replay_bScriptOption = value374;
+        _Replay_bScriptFlag = flag;
         if (hasCall) {
             fn_8009BB50(callA, callB);
         }
     } else {
-        lbl_803EA378 = 0;
+        _Replay_iScriptWeight = 0;
     }
     return ok;
 }
 
-extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
+extern "C" void ReplayBuildShotList(Type_803EA368 *p, RecordList_8002E7C0 *pList)
 {
     Record_8002E7C0 *pRecord = 0;
     Timer_8002E7C0 *pTimer = 0;
     int last = -1;
     int count = 0;
-    Command_8002DC00 *pCmd;
+    ReplayCommand_t *pCmd;
     Vector_80039F5C origin;
     Point_8017886C pt;
     float range[3];
@@ -1630,17 +1631,17 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
     origin.mY = pt.mY;
     origin.mZ = 0.0f;
 
-    pCmd = fn_80030D14(lbl_803EA370);
+    pCmd = ReplayFindScript(_Replay_iScript);
     if (pCmd == 0) {
         return;
     }
     while (pCmd->mOp != -1) {
         switch (pCmd->mOp) {
         case 1:
-            pRecord = fn_8002D3BC(pList);
+            pRecord = ReplayShotListAdd(pList);
             pTimer = &pRecord->mUnknown04;
             pRecord->mUnknown00 = 0;
-            fn_8002D338(p, pTimer);
+            ReplayInitShotTimer(p, pTimer);
             pTimer->mUnknown08 = 0;
             pRecord->mUnknown1C.mUnknown34 = 0;
             pRecord->mUnknown1C.mUnknown00[0] = 0.0f;
@@ -1671,7 +1672,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
             break;
         case 4:
             pRecord->mUnknown00 = pCmd->mArg;
-            lbl_803EA375 = 0;
+            _Replay_bDefaultShot = 0;
             break;
         case 9:
             ReplayEventGetPos(p, pCmd->mArg, pRecord->mUnknown1C.mUnknown1C);
@@ -1722,7 +1723,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
             pRecord->mUnknown1C.mUnknown34 = pCmd->mArg;
             break;
         case 6:
-            lbl_803EA375 = 0;
+            _Replay_bDefaultShot = 0;
         case 0x29:
             pRecord->mUnknown1C.mUnknown3C = pCmd->mArg;
             break;
@@ -1753,7 +1754,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
         case 7: {
             float limit;
             ReplayEventGetPos(p, pCmd->mArg, range);
-            limit = lbl_803EA37C;
+            limit = _Replay_iEdgeLimit;
             if (limit > fn_800A32B4() - (float)fabs(range[0])) {
                 switch (pRecord->mUnknown1C.mUnknown34) {
                 case 0:
@@ -1781,7 +1782,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
             break;
         }
         case 8:
-            lbl_803EA37C = pCmd->mArg;
+            _Replay_iEdgeLimit = pCmd->mArg;
             break;
         /* Placeholder label values: the compare tree needs empty labels
            at 0, 0x20-0x23 and one value above 0x3F; 0x40 is not recovered. */
@@ -1810,9 +1811,9 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
             pTimer->mUnknown08 += pCmd->mArg;
             break;
         case 0x2A:
-            fn_8002D2F0(p, last, pCmd->mArg, count);
+            ReplaySetEventMark(p, last, pCmd->mArg, count);
             count++;
-            lbl_803EA375 = 0;
+            _Replay_bDefaultShot = 0;
             break;
         case 0x2B:
             p->mUnknown148C[count - 1].mUnknown0 += pCmd->mArg;
@@ -1853,7 +1854,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
             break;
         case 0x37:
             pRecord->mUnknown5C.mUnknown3C = pCmd->mArg;
-            lbl_803EA375 = 0;
+            _Replay_bDefaultShot = 0;
             break;
         case 0x38:
             ReplayEventGetPos(p, pCmd->mArg, pRecord->mUnknown5C.mUnknown00);
@@ -1884,26 +1885,26 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
     }
 }
 
-extern "C" void fn_8002E75C(Type_803EA368 *p, Timer_8002E7C0 *pTimer)
+extern "C" void ReplayStartShot(Type_803EA368 *p, Timer_8002E7C0 *pTimer)
 {
     SndgReplayReset();
-    fn_8002D1B8(p, pTimer->mUnknown00 - pTimer->mUnknown04);
-    fn_8002D128(p, pTimer->mUnknown0C);
-    fn_8002D160(p, pTimer->mUnknown08);
+    ReplaySeek(p, pTimer->mUnknown00 - pTimer->mUnknown04);
+    ReplaySetSpeed(p, pTimer->mUnknown0C);
+    ReplaySetPlayEnd(p, pTimer->mUnknown08);
     pTimer->mUnknown10 = 0;
 }
 
-extern "C" Record_8002E7C0 *fn_8002E7C0(RecordList_8002E7C0 *pList)
+extern "C" Record_8002E7C0 *ReplayShotListGetCurrent(RecordList_8002E7C0 *pList)
 {
     return &pList->mUnknown000[pList->mUnknown580];
 }
 
-extern "C" int fn_8002E7D0(RecordList_8002E7C0 *pList)
+extern "C" int ReplayShotListHasNext(RecordList_8002E7C0 *pList)
 {
     return pList->mUnknown580 + 1 < pList->mUnknown57C;
 }
 
-extern "C" void fn_8002E7EC(Type_803EA368 *p, RecordList_8002E7C0 *pList)
+extern "C" void ReplayShotListAdvance(Type_803EA368 *p, RecordList_8002E7C0 *pList)
 {
     Record_8002E7C0 *pCur = &pList->mUnknown000[pList->mUnknown580];
     Record_8002E7C0 *pNext = &pList->mUnknown000[pList->mUnknown580 + 1];
@@ -1919,21 +1920,21 @@ extern "C" void fn_8002E7EC(Type_803EA368 *p, RecordList_8002E7C0 *pList)
         pNext->mUnknown1C.mUnknown00[2] = p->mpUnknownDA0->mHeader.mUnknown04[2];
     }
     pList->mUnknown580++;
-    fn_8002E75C(p, &pList->mUnknown000[pList->mUnknown580].mUnknown04);
+    ReplayStartShot(p, &pList->mUnknown000[pList->mUnknown580].mUnknown04);
 }
 
-extern "C" void fn_8002E890(RecordList_8002E7C0 *pList)
+extern "C" void ReplayShotListClear(RecordList_8002E7C0 *pList)
 {
     memset(pList, 0, sizeof(RecordList_8002E7C0));
 }
 
-extern "C" void fn_8002E8B8(Type_803EA368 *p, RecordList_8002E7C0 *pList)
+extern "C" void ReplayShotListStart(Type_803EA368 *p, RecordList_8002E7C0 *pList)
 {
     BannerClear(7);
     if (pList->mUnknown584 & 1) {
-        fn_8002D2EC();
+        ReplayShotListStartStub();
     }
-    fn_8002E75C(p, &pList->mUnknown000[0].mUnknown04);
+    ReplayStartShot(p, &pList->mUnknown000[0].mUnknown04);
     if (pList->mUnknown584 & 2) {
         fn_800711DC(0);
     } else if (pList->mUnknown584 & 4) {
@@ -1945,33 +1946,33 @@ extern "C" void fn_8002E8B8(Type_803EA368 *p, RecordList_8002E7C0 *pList)
     }
 }
 
-extern "C" int fn_8002E950(int mode)
+extern "C" int ReplayPickScript(int mode)
 {
     int searching = 1;
-    Entry_80030D08 *pEntry = fn_80030D08();
-    Entry_80030D08 *pStart;
+    ReplayScriptConds_t *pEntry = ReplayGetScriptTable();
+    ReplayScriptConds_t *pStart;
 
     switch (mode) {
     case 0:
-        lbl_803EA370 = mode;
+        _Replay_iScript = mode;
         break;
     case 1:
-        lbl_803EA370++;
-        pEntry += lbl_803EA370;
+        _Replay_iScript++;
+        pEntry += _Replay_iScript;
         if (pEntry->mId == -1) {
-            pEntry = fn_80030D08();
+            pEntry = ReplayGetScriptTable();
         }
         break;
     }
     pStart = pEntry;
     while (searching) {
-        if (fn_8002D4A0(pEntry->mpConds)) {
-            lbl_803EA370 = pEntry->mId;
+        if (ReplayTestConditions(pEntry->mpConds)) {
+            _Replay_iScript = pEntry->mId;
             return 1;
         }
         pEntry++;
         if (pEntry->mId == -1) {
-            pEntry = fn_80030D08();
+            pEntry = ReplayGetScriptTable();
         }
         if (pEntry == pStart) {
             searching = 0;
@@ -1980,22 +1981,22 @@ extern "C" int fn_8002E950(int mode)
     return 0;
 }
 
-extern "C" void fn_8002EA18(GameCamera_t *pCamera, CameraDesc_t *pDesc)
+extern "C" void ReplayCamInit(GameCamera_t *pCamera, CameraDesc_t *pDesc)
 {
     CamMainInit(pCamera, pDesc);
 }
 
-extern "C" void fn_8002EA38(GameCamera_t *pCamera)
+extern "C" void ReplayCamUninit(GameCamera_t *pCamera)
 {
     CamMainUninit(pCamera);
 }
 
-extern "C" void fn_8002EA58(void *p, GameCamera_t *pCamera)
+extern "C" void ReplayCamUpdate(void *p, GameCamera_t *pCamera)
 {
     CamMainUpdate(p, pCamera);
 }
 
-extern "C" GameCamera_t *fn_8002EA78(Type_8002FDB4 *pDesc)
+extern "C" GameCamera_t *ReplayCamCreate(ReplayCamDesc_t *pDesc)
 {
     CameraDesc_t desc;
     Object_80039F5C *pObject;
@@ -2020,34 +2021,34 @@ extern "C" GameCamera_t *fn_8002EA78(Type_8002FDB4 *pDesc)
     }
     pCamera = (GameCamera_t *)CamCreate(3, &desc);
     pCamera->mUnknownF5C = 0;
-    if (fn_8002D2D8()) {
-        lbl_803EC634 = 1;
+    if (ReplayDirectorIsActive()) {
+        _Replay_bFreeCam = 1;
     } else {
-        lbl_803EC634 = 0;
+        _Replay_bFreeCam = 0;
     }
     if (pDesc->mUnknown00 == 1) {
         RecordList_8002E7C0 *pList = &pCamera->mUnknown128;
-        Type_803EA368 *p = lbl_803EA368;
+        Type_803EA368 *p = gpReplay;
 
-        fn_8002E890(pList);
-        fn_8002DC00(p, pList);
-        fn_8002E8B8(p, pList);
+        ReplayShotListClear(pList);
+        ReplayBuildShotList(p, pList);
+        ReplayShotListStart(p, pList);
     }
     CamMainSetMode(pCamera, 8, 0, 0);
     if (pObject == 0) {
         if (BallsExist()) {
-            lbl_803EC620 = BallGetModel(BallGetCurrent());
+            _Replay_pTarget = BallGetModel(BallGetCurrent());
         } else {
-            lbl_803EC620 = 0;
+            _Replay_pTarget = 0;
         }
     } else {
-        lbl_803EC620 = pObject->mpUnknown4;
+        _Replay_pTarget = pObject->mpUnknown4;
     }
-    CamMainFollow(pCamera, 5, (int)&lbl_8030660C, 0);
+    CamMainFollow(pCamera, 5, (int)&_Replay_Focus, 0);
     return pCamera;
 }
 
-extern "C" void fn_8002EBBC(Object_80039F5C *p)
+extern "C" void ReplayCamSetBallHighlight(Object_80039F5C *p)
 {
     int on = 0;
     Block_80170E64 *pBlock;
@@ -2063,34 +2064,34 @@ extern "C" void fn_8002EBBC(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_8002EC28(void)
+extern "C" void ReplayCamUpdateFocus(void)
 {
     Object_80039F5C *pA;
     Object_80039F5C *pB;
-    Object_80039F5C *p = fn_80030C70(&pA, &pB);
+    Object_80039F5C *p = ReplayGetFocusPlayers(&pA, &pB);
 
-    if (lbl_803EC620) {
-        if (lbl_803EC628 == 1 && p) {
+    if (_Replay_pTarget) {
+        if (_Replay_bTargetIsBall == 1 && p) {
             if (pA != pB) {
-                float t = fn_80030D00();
+                float t = ReplayGetFrameBlend();
 
                 if (pA == 0) {
-                    Vec3Lerp(&lbl_8030660C.mPos, &p->mpUnknown4->mUnknown4, &lbl_803EC620->mUnknown4, t);
+                    Vec3Lerp(&_Replay_Focus.mPos, &p->mpUnknown4->mUnknown4, &_Replay_pTarget->mUnknown4, t);
                 } else if (pB == 0) {
-                    Vec3Lerp(&lbl_8030660C.mPos, &lbl_803EC620->mUnknown4, &p->mpUnknown4->mUnknown4, t);
+                    Vec3Lerp(&_Replay_Focus.mPos, &_Replay_pTarget->mUnknown4, &p->mpUnknown4->mUnknown4, t);
                 } else {
-                    Vec3Lerp(&lbl_8030660C.mPos, &pB->mpUnknown4->mUnknown4, &pA->mpUnknown4->mUnknown4, t);
+                    Vec3Lerp(&_Replay_Focus.mPos, &pB->mpUnknown4->mUnknown4, &pA->mpUnknown4->mUnknown4, t);
                 }
             } else {
-                Vector_80039F5C *pFocus = &lbl_8030660C.mPos;
+                Vector_80039F5C *pFocus = &_Replay_Focus.mPos;
 
                 pFocus->mX = p->mpUnknown4->mUnknown4.mX;
                 pFocus->mY = p->mpUnknown4->mUnknown4.mY;
                 pFocus->mZ = p->mpUnknown4->mUnknown4.mZ;
             }
         } else {
-            Block_80170E64 *pBlock = lbl_803EC620;
-            Vector_80039F5C *pFocus = &lbl_8030660C.mPos;
+            Block_80170E64 *pBlock = _Replay_pTarget;
+            Vector_80039F5C *pFocus = &_Replay_Focus.mPos;
 
             pFocus->mX = pBlock->mUnknown4.mX;
             pFocus->mY = pBlock->mUnknown4.mY;
@@ -2098,11 +2099,11 @@ extern "C" void fn_8002EC28(void)
         }
     }
     if (BallsExist()) {
-        fn_8002EBBC(p);
+        ReplayCamSetBallHighlight(p);
     }
 }
 
-extern "C" void fn_8002ED48(Point_8017886C *pOut, unsigned int dir, float speed)
+extern "C" void ReplayCamGetMoveOffset(Point_8017886C *pOut, unsigned int dir, float speed)
 {
     pOut->mY = 0.0f;
     pOut->mX = 0.0f;
@@ -2122,17 +2123,17 @@ extern "C" void fn_8002ED48(Point_8017886C *pOut, unsigned int dir, float speed)
         pOut->mY = speed;
         break;
     }
-    Vec2Rotate(pOut, pOut, -lbl_803EC61C);
+    Vec2Rotate(pOut, pOut, -_Replay_iCamYaw);
 }
 
-extern "C" Block_80170E64 *fn_8002EDE8(GameCamera_t *pCamera, float *pDist, unsigned char *pFound)
+extern "C" Block_80170E64 *ReplayCamFindNearestObject(GameCamera_t *pCamera, float *pDist, unsigned char *pFound)
 {
-    Block_80170E64 *pBest = fn_8003DF7C(&lbl_8030660C.mPos, pDist);
+    Block_80170E64 *pBest = fn_8003DF7C(&_Replay_Focus.mPos, pDist);
     Block_80170E64 *p;
     float dist;
 
-    if (lbl_803EC634) {
-        p = BigObjFindNearest(&lbl_8030660C.mPos, &dist);
+    if (_Replay_bFreeCam) {
+        p = BigObjFindNearest(&_Replay_Focus.mPos, &dist);
         if (p && dist < *pDist) {
             *pDist = dist;
             pBest = p;
@@ -2140,9 +2141,9 @@ extern "C" Block_80170E64 *fn_8002EDE8(GameCamera_t *pCamera, float *pDist, unsi
     }
     if (BallsExist()) {
         *pFound = 0;
-        if (fn_80030C70(0, 0) == 0) {
+        if (ReplayGetFocusPlayers(0, 0) == 0) {
             p = BallGetModel(BallGetCurrent());
-            dist = Vec2Distance(&p->mUnknown4, &lbl_8030660C.mPos);
+            dist = Vec2Distance(&p->mUnknown4, &_Replay_Focus.mPos);
             if (dist < *pDist) {
                 *pDist = dist;
                 *pFound = 1;
@@ -2153,115 +2154,115 @@ extern "C" Block_80170E64 *fn_8002EDE8(GameCamera_t *pCamera, float *pDist, unsi
     return pBest;
 }
 
-extern "C" void fn_8002EED0(void)
+extern "C" void ReplayCamSetFieldMargins(void)
 {
     switch (fn_800A3444()) {
     case 9:
-        lbl_803EC638 = -1.5f;
-        lbl_803EC63C = -0.5f;
-        lbl_803EC644 = 3.5f;
-        lbl_803EC640 = 2.5f;
+        _Replay_fCamMarginY = -1.5f;
+        _Replay_fCamMarginX = -0.5f;
+        _Replay_fViewMarginY = 3.5f;
+        _Replay_fViewMarginX = 2.5f;
         break;
     case 2:
-        lbl_803EC638 = -4.0f;
-        lbl_803EC63C = -0.5f;
-        lbl_803EC644 = 6.0f;
-        lbl_803EC640 = 2.5f;
+        _Replay_fCamMarginY = -4.0f;
+        _Replay_fCamMarginX = -0.5f;
+        _Replay_fViewMarginY = 6.0f;
+        _Replay_fViewMarginX = 2.5f;
         break;
     case 7:
-        lbl_803EC638 = -8.5f;
-        lbl_803EC63C = -0.5f;
-        lbl_803EC644 = 10.5f;
-        lbl_803EC640 = 2.5f;
+        _Replay_fCamMarginY = -8.5f;
+        _Replay_fCamMarginX = -0.5f;
+        _Replay_fViewMarginY = 10.5f;
+        _Replay_fViewMarginX = 2.5f;
         break;
     case 1:
-        lbl_803EC638 = -1.0f;
-        lbl_803EC63C = -0.5f;
-        lbl_803EC644 = 3.0f;
-        lbl_803EC640 = 2.5f;
+        _Replay_fCamMarginY = -1.0f;
+        _Replay_fCamMarginX = -0.5f;
+        _Replay_fViewMarginY = 3.0f;
+        _Replay_fViewMarginX = 2.5f;
         break;
     case 5:
-        lbl_803EC638 = -0.5f;
-        lbl_803EC63C = -0.75f;
-        lbl_803EC644 = 2.5f;
-        lbl_803EC640 = 2.75f;
+        _Replay_fCamMarginY = -0.5f;
+        _Replay_fCamMarginX = -0.75f;
+        _Replay_fViewMarginY = 2.5f;
+        _Replay_fViewMarginX = 2.75f;
         break;
     case 3:
-        lbl_803EC638 = -1.0f;
-        lbl_803EC63C = -0.5f;
-        lbl_803EC644 = 3.0f;
-        lbl_803EC640 = 2.5f;
+        _Replay_fCamMarginY = -1.0f;
+        _Replay_fCamMarginX = -0.5f;
+        _Replay_fViewMarginY = 3.0f;
+        _Replay_fViewMarginX = 2.5f;
         break;
     case 11:
-        lbl_803EC638 = -1.0f;
-        lbl_803EC63C = -0.5f;
-        lbl_803EC644 = 3.0f;
-        lbl_803EC640 = 2.5f;
+        _Replay_fCamMarginY = -1.0f;
+        _Replay_fCamMarginX = -0.5f;
+        _Replay_fViewMarginY = 3.0f;
+        _Replay_fViewMarginX = 2.5f;
         break;
     default:
-        lbl_803EC638 = -0.5f;
-        lbl_803EC63C = -0.5f;
-        lbl_803EC644 = 2.5f;
-        lbl_803EC640 = 2.5f;
+        _Replay_fCamMarginY = -0.5f;
+        _Replay_fCamMarginX = -0.5f;
+        _Replay_fViewMarginY = 2.5f;
+        _Replay_fViewMarginX = 2.5f;
         break;
     }
 }
 
-extern "C" void fn_8002F01C(GameCamera_t *pCamera, Type_8030660C *pTarget)
+extern "C" void ReplayCamComputeMaxDistance(GameCamera_t *pCamera, ReplayFocus_t *pTarget)
 {
     float dist = Vec3Distance(&pTarget->mPos, (Vector_80039F5C *)pCamera->mHeader.mUnknown04);
-    float overX = fabsf(pCamera->mHeader.mUnknown04[0]) - (fn_80178A08() + lbl_803EC640 + lbl_803EC63C);
-    float overY = fabsf(pCamera->mHeader.mUnknown04[1]) - (fn_80178A44() + lbl_803EC644 + lbl_803EC638);
+    float overX = fabsf(pCamera->mHeader.mUnknown04[0]) - (fn_80178A08() + _Replay_fViewMarginX + _Replay_fCamMarginX);
+    float overY = fabsf(pCamera->mHeader.mUnknown04[1]) - (fn_80178A44() + _Replay_fViewMarginY + _Replay_fCamMarginY);
     float overZ = fabsf(pCamera->mHeader.mUnknown04[2]) - 9.2f;
     float limitX = 16.0f;
     float limitY = 16.0f;
     float limitZ = 16.0f;
 
     if (overX > 0.0f) {
-        limitX = dist * ((fn_80178A08() + lbl_803EC640 + lbl_803EC63C - fabsf(pTarget->mPos.mX))
+        limitX = dist * ((fn_80178A08() + _Replay_fViewMarginX + _Replay_fCamMarginX - fabsf(pTarget->mPos.mX))
                          / (fabsf(pCamera->mHeader.mUnknown04[0]) - fabsf(pTarget->mPos.mX)));
     }
     if (overY > 0.0f) {
-        limitY = dist * ((fn_80178A44() + lbl_803EC644 + lbl_803EC638 - fabsf(pTarget->mPos.mY))
+        limitY = dist * ((fn_80178A44() + _Replay_fViewMarginY + _Replay_fCamMarginY - fabsf(pTarget->mPos.mY))
                          / (fabsf(pCamera->mHeader.mUnknown04[1]) - fabsf(pTarget->mPos.mY)));
     }
     if (overZ > 0.0f) {
         limitZ = dist * ((9.2f - fabsf(pTarget->mPos.mZ))
                          / (fabsf(pCamera->mHeader.mUnknown04[2]) - fabsf(pTarget->mPos.mZ)));
     }
-    lbl_803EC62C = limitY <= limitX ? limitY : limitX;
-    lbl_803EC62C = limitZ <= lbl_803EC62C ? limitZ : lbl_803EC62C;
+    _Replay_fMaxDist = limitY <= limitX ? limitY : limitX;
+    _Replay_fMaxDist = limitZ <= _Replay_fMaxDist ? limitZ : _Replay_fMaxDist;
 }
 
-extern "C" void fn_8002F1E0(GameCamera_t *pCamera)
+extern "C" void ReplayCamApplyDistance(GameCamera_t *pCamera)
 {
-    if (lbl_803EC630 > lbl_803EC62C) {
-        pCamera->mUnknown30 = lbl_803EC62C;
+    if (_Replay_fCamDist > _Replay_fMaxDist) {
+        pCamera->mUnknown30 = _Replay_fMaxDist;
     } else {
-        pCamera->mUnknown30 = lbl_803EC630;
+        pCamera->mUnknown30 = _Replay_fCamDist;
     }
 }
 
-extern "C" void fn_8002F204(GameCamera_t *pCamera, float amount)
+extern "C" void ReplayCamZoom(GameCamera_t *pCamera, float amount)
 {
-    float v = amount * 0.2f + lbl_803EC630;
+    float v = amount * 0.2f + _Replay_fCamDist;
 
-    if (lbl_803EC634) {
-        lbl_803EC630 = v < 0.0f ? 0.0f : v;
+    if (_Replay_bFreeCam) {
+        _Replay_fCamDist = v < 0.0f ? 0.0f : v;
     } else {
-        lbl_803EC630 = CLAMP(v, 2.0f, lbl_803EC62C);
+        _Replay_fCamDist = CLAMP(v, 2.0f, _Replay_fMaxDist);
     }
 }
 
-extern "C" void fn_8002F26C(GameCamera_t *pCamera, unsigned int input, float amount)
+extern "C" void ReplayCamMoveCursor(GameCamera_t *pCamera, unsigned int input, float amount)
 {
     Point_8017886C offset;
 
-    if ((unsigned int)(SysGetSystemTime() - lbl_803EC624) > 29) {
-        if (lbl_803EC620 == 0) {
+    if ((unsigned int)(SysGetSystemTime() - _Replay_iTargetTime) > 29) {
+        if (_Replay_pTarget == 0) {
             float dist;
             unsigned char flag;
-            Block_80170E64 *pTarget = fn_8002EDE8(pCamera, &dist, &flag);
+            Block_80170E64 *pTarget = ReplayCamFindNearestObject(pCamera, &dist, &flag);
 
             if (pTarget != 0) {
                 Point_8017886C clamped;
@@ -2269,50 +2270,50 @@ extern "C" void fn_8002F26C(GameCamera_t *pCamera, unsigned int input, float amo
                 clamped.mY = CLAMP(pTarget->mUnknown4.mY, -fn_80178A44(), fn_80178A44());
                 if (dist >= 0.25f || clamped.mX != pTarget->mUnknown4.mX
                     || clamped.mY != pTarget->mUnknown4.mY) {
-                    fn_8002ED48(&offset, input, amount * 0.15f);
-                    Vec2Add(&lbl_8030660C.mPos, &lbl_8030660C.mPos, &offset);
+                    ReplayCamGetMoveOffset(&offset, input, amount * 0.15f);
+                    Vec2Add(&_Replay_Focus.mPos, &_Replay_Focus.mPos, &offset);
                 } else {
-                    lbl_803EC620 = pTarget;
-                    lbl_803EC624 = SysGetSystemTime();
-                    lbl_803EC628 = flag;
+                    _Replay_pTarget = pTarget;
+                    _Replay_iTargetTime = SysGetSystemTime();
+                    _Replay_bTargetIsBall = flag;
                     ReplayCursorSetVisible(0);
                 }
             } else {
-                fn_8002ED48(&offset, input, amount * 0.15f);
-                Vec2Add(&lbl_8030660C.mPos, &lbl_8030660C.mPos, &offset);
-                lbl_8030660C.mPos.mX = CLAMP(lbl_8030660C.mPos.mX, -fn_80178A08(), fn_80178A08());
-                lbl_8030660C.mPos.mY = CLAMP(lbl_8030660C.mPos.mY, -fn_80178A44(), fn_80178A44());
+                ReplayCamGetMoveOffset(&offset, input, amount * 0.15f);
+                Vec2Add(&_Replay_Focus.mPos, &_Replay_Focus.mPos, &offset);
+                _Replay_Focus.mPos.mX = CLAMP(_Replay_Focus.mPos.mX, -fn_80178A08(), fn_80178A08());
+                _Replay_Focus.mPos.mY = CLAMP(_Replay_Focus.mPos.mY, -fn_80178A44(), fn_80178A44());
             }
         } else {
             float step = 0.275f;
             if (amount < 0.0f) {
                 step = -step;
             }
-            fn_8002ED48(&offset, input, step);
-            Vec2Add(&lbl_8030660C.mPos, &lbl_8030660C.mPos, &offset);
-            lbl_803EC620 = 0;
+            ReplayCamGetMoveOffset(&offset, input, step);
+            Vec2Add(&_Replay_Focus.mPos, &_Replay_Focus.mPos, &offset);
+            _Replay_pTarget = 0;
             ReplayCursorSetVisible(1);
         }
     }
 }
 
-extern "C" void fn_8002F510(GameCamera_t *pCamera, float amount)
+extern "C" void ReplayCamRotate(GameCamera_t *pCamera, float amount)
 {
     CamMainRotate(pCamera, -(int)((amount + amount) * 46603.37890625f));
 }
 
-extern "C" void fn_8002F550(GameCamera_t *pCamera, float amount)
+extern "C" void ReplayCamPitch(GameCamera_t *pCamera, float amount)
 {
     int base = pCamera->mUnknownD0 & 0xFFFFFF;
     int angle = base + (int)(amount * 37282.703125f);
 
-    if (!lbl_803EC634) {
+    if (!_Replay_bFreeCam) {
         angle = CLAMP(angle, 0xC00000, 0xFF49F5);
     }
     CamMainPitch(pCamera, angle - base);
 }
 
-extern "C" void fn_8002F5D4(GameCamera_t *pCamera, float amount)
+extern "C" void ReplayCamAdjustHeight(GameCamera_t *pCamera, float amount)
 {
     float v = amount * 0.2f + pCamera->mUnknownCC;
 
@@ -2320,22 +2321,22 @@ extern "C" void fn_8002F5D4(GameCamera_t *pCamera, float amount)
     pCamera->mUnknownCC = v;
 }
 
-extern "C" GameCamera_t *fn_8002F61C(Type_8002FDB4 *pDesc)
+extern "C" GameCamera_t *ReplayCamStart(ReplayCamDesc_t *pDesc)
 {
     GameCamera_t *pCamera;
     GameCameraKind1_t *pBase;
 
-    memset(&lbl_8030660C, 0, sizeof(Type_8030660C));
-    lbl_803EC620 = 0;
-    lbl_803EC61C = 0;
-    lbl_803EC624 = SysGetSystemTime();
-    lbl_803EC628 = 1;
-    lbl_803EC62C = 16.0f;
-    pCamera = fn_8002EA78(pDesc);
+    memset(&_Replay_Focus, 0, sizeof(ReplayFocus_t));
+    _Replay_pTarget = 0;
+    _Replay_iCamYaw = 0;
+    _Replay_iTargetTime = SysGetSystemTime();
+    _Replay_bTargetIsBall = 1;
+    _Replay_fMaxDist = 16.0f;
+    pCamera = ReplayCamCreate(pDesc);
     if (pDesc->mUnknown08) {
-        fn_8002F71C(pCamera);
+        ReplayCamPush(pCamera);
     }
-    lbl_803EC630 = pCamera->mUnknown30;
+    _Replay_fCamDist = pCamera->mUnknown30;
     ReplayCursorSetVisible(0);
     pBase = (GameCameraKind1_t *)pCamera;
     pBase->mUnknown90 = 0x200000;
@@ -2352,59 +2353,59 @@ extern "C" GameCamera_t *fn_8002F61C(Type_8002FDB4 *pDesc)
     pBase->mUnknown80 = 0.2f;
     CamSetNearPlane(pCamera, 0.1f);
     pCamera->mUnknown94 |= 4;
-    lbl_803EA384 = 1;
-    fn_8002EED0();
+    _Replay_bCamActive = 1;
+    ReplayCamSetFieldMargins();
     return pCamera;
 }
 
-extern "C" void fn_8002F71C(GameCamera_t *pCamera)
+extern "C" void ReplayCamPush(GameCamera_t *pCamera)
 {
     VptManagerPushCamera(0, pCamera, 0, 0);
 }
 
-extern "C" void fn_8002F74C(GameCamera_t *pCamera)
+extern "C" void ReplayCamProcess(GameCamera_t *pCamera)
 {
-    fn_80030CFC();
-    if (!lbl_803EC634) {
+    ReplayCamProcessStub();
+    if (!_Replay_bFreeCam) {
         Point_8017886C clamped;
         float y;
-        clamped.mX = CLAMP(lbl_8030660C.mPos.mX, -fn_80178A08(), fn_80178A08());
-        clamped.mY = y = CLAMP(lbl_8030660C.mPos.mY, -fn_80178A44(), fn_80178A44());
-        if (clamped.mX != lbl_8030660C.mPos.mX || y != lbl_8030660C.mPos.mY) {
-            lbl_8030660C.mPos.mX = clamped.mX;
-            lbl_8030660C.mPos.mY = y;
-            lbl_803EC620 = 0;
-            lbl_803EC628 = 0;
+        clamped.mX = CLAMP(_Replay_Focus.mPos.mX, -fn_80178A08(), fn_80178A08());
+        clamped.mY = y = CLAMP(_Replay_Focus.mPos.mY, -fn_80178A44(), fn_80178A44());
+        if (clamped.mX != _Replay_Focus.mPos.mX || y != _Replay_Focus.mPos.mY) {
+            _Replay_Focus.mPos.mX = clamped.mX;
+            _Replay_Focus.mPos.mY = y;
+            _Replay_pTarget = 0;
+            _Replay_bTargetIsBall = 0;
             ReplayCursorSetVisible(1);
         }
     }
-    fn_8002EC28();
-    lbl_8030660C.mPos.mZ = lbl_803EA380;
-    if (!lbl_803EC634) {
-        lbl_803EC62C = 16.0f;
-        fn_8002F1E0(pCamera);
+    ReplayCamUpdateFocus();
+    _Replay_Focus.mPos.mZ = _Replay_fFocusHeight;
+    if (!_Replay_bFreeCam) {
+        _Replay_fMaxDist = 16.0f;
+        ReplayCamApplyDistance(pCamera);
         pCamera->mUnknown94 |= 4;
         CamMainProcess(pCamera, 0, 0, 0);
-        fn_8002F01C(pCamera, &lbl_8030660C);
+        ReplayCamComputeMaxDistance(pCamera, &_Replay_Focus);
         pCamera->mUnknown94 |= 4;
     }
-    fn_8002F1E0(pCamera);
-    fn_8002D2E4(&lbl_8030660C, &lbl_803EC620);
-    ReplayCursorSetPos(&lbl_8030660C.mPos.mX, 0);
+    ReplayCamApplyDistance(pCamera);
+    ReplayDirectorUpdateFocus(&_Replay_Focus, &_Replay_pTarget);
+    ReplayCursorSetPos(&_Replay_Focus.mPos.mX, 0);
     CamMainProcess(pCamera, 0, 0, 0);
-    lbl_803EC61C = pCamera->mUnknown38;
-    if (!lbl_803EC634) {
-        pCamera->mHeader.mUnknown04[0] = CLAMP(pCamera->mHeader.mUnknown04[0], -fn_80178A08() - lbl_803EC63C, fn_80178A08() + lbl_803EC63C);
-        pCamera->mHeader.mUnknown04[1] = CLAMP(pCamera->mHeader.mUnknown04[1], -fn_80178A44() - lbl_803EC638, fn_80178A44() + lbl_803EC638);
+    _Replay_iCamYaw = pCamera->mUnknown38;
+    if (!_Replay_bFreeCam) {
+        pCamera->mHeader.mUnknown04[0] = CLAMP(pCamera->mHeader.mUnknown04[0], -fn_80178A08() - _Replay_fCamMarginX, fn_80178A08() + _Replay_fCamMarginX);
+        pCamera->mHeader.mUnknown04[1] = CLAMP(pCamera->mHeader.mUnknown04[1], -fn_80178A44() - _Replay_fCamMarginY, fn_80178A44() + _Replay_fCamMarginY);
     }
 }
 
-extern "C" void fn_8002F9D8(GameCamera_t *pCamera)
+extern "C" void ReplayCamProcessAuto(GameCamera_t *pCamera)
 {
     CamMainProcess(pCamera, 0, 0, 0);
 }
 
-extern "C" void fn_8002FA04(GameCamera_t *pCamera, int detach)
+extern "C" void ReplayCamDestroy(GameCamera_t *pCamera, int detach)
 {
     if (detach) {
         VptManagerPopCamera(0, pCamera);
@@ -2414,28 +2415,28 @@ extern "C" void fn_8002FA04(GameCamera_t *pCamera, int detach)
     if (ScreenTransCanCapture(0x23000)) {
         ScreenTransStart(1, 15, 0x808080, 0);
     }
-    lbl_803EA384 = 0;
+    _Replay_bCamActive = 0;
 }
 
-extern "C" unsigned char fn_8002FA84(void)
+extern "C" unsigned char ReplayCamIsActive(void)
 {
-    return lbl_803EA384;
+    return _Replay_bCamActive;
 }
 
-extern "C" void fn_8002FA8C(GameCamera_t *pCamera, int unused, unsigned int input, float amount)
+extern "C" void ReplayCamHandleInput(GameCamera_t *pCamera, int unused, unsigned int input, float amount)
 {
     switch (input) {
     case 0x12:
-        fn_8002F510(pCamera, amount);
+        ReplayCamRotate(pCamera, amount);
         break;
     case 0x13:
-        fn_8002F550(pCamera, amount);
+        ReplayCamPitch(pCamera, amount);
         break;
     case 0x3A:
-        fn_8002F204(pCamera, 1.0f);
+        ReplayCamZoom(pCamera, 1.0f);
         break;
     case 0x37:
-        fn_8002F204(pCamera, -1.0f);
+        ReplayCamZoom(pCamera, -1.0f);
         break;
     case 8:
         break;
@@ -2443,22 +2444,22 @@ extern "C" void fn_8002FA8C(GameCamera_t *pCamera, int unused, unsigned int inpu
     if (pCamera->mUnknownF5C & 1) {
         switch (input) {
         case 0x36:
-            fn_8002F510(pCamera, 1.0f);
+            ReplayCamRotate(pCamera, 1.0f);
             break;
         case 0x35:
-            fn_8002F510(pCamera, -1.0f);
+            ReplayCamRotate(pCamera, -1.0f);
             break;
         case 0x33:
-            fn_8002F550(pCamera, 1.0f);
+            ReplayCamPitch(pCamera, 1.0f);
             break;
         case 0x34:
-            fn_8002F550(pCamera, -1.0f);
+            ReplayCamPitch(pCamera, -1.0f);
             break;
         case 0x10:
-            fn_8002F510(pCamera, amount);
+            ReplayCamRotate(pCamera, amount);
             break;
         case 0x11:
-            fn_8002F550(pCamera, amount);
+            ReplayCamPitch(pCamera, amount);
             break;
         }
     } else {
@@ -2469,13 +2470,13 @@ extern "C" void fn_8002FA8C(GameCamera_t *pCamera, int unused, unsigned int inpu
         case 0x34:
         case 0x35:
         case 0x36:
-            fn_8002F26C(pCamera, input, amount);
+            ReplayCamMoveCursor(pCamera, input, amount);
             break;
         }
     }
 }
 
-extern "C" void fn_8002FC28(GameCamera_t *pCamera, int player, unsigned int input, float amount)
+extern "C" void ReplayCamHandleMenuInput(GameCamera_t *pCamera, int player, unsigned int input, float amount)
 {
     unsigned int action;
 
@@ -2507,85 +2508,85 @@ extern "C" void fn_8002FC28(GameCamera_t *pCamera, int player, unsigned int inpu
     }
     switch (action) {
     case 0:
-        fn_8002F204(pCamera, -1.0f);
+        ReplayCamZoom(pCamera, -1.0f);
         fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 1:
-        fn_8002F204(pCamera, 1.0f);
+        ReplayCamZoom(pCamera, 1.0f);
         fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 2:
-        fn_8002F5D4(pCamera, 1.0f);
+        ReplayCamAdjustHeight(pCamera, 1.0f);
         fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 3:
-        fn_8002F5D4(pCamera, -1.0f);
+        ReplayCamAdjustHeight(pCamera, -1.0f);
         fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 4:
-        fn_8002F5D4(pCamera, amount);
+        ReplayCamAdjustHeight(pCamera, amount);
         fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 5:
-        fn_8002F510(pCamera, amount);
+        ReplayCamRotate(pCamera, amount);
         fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 6:
-        fn_8002F550(pCamera, amount);
+        ReplayCamPitch(pCamera, amount);
         fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     }
 }
 
-extern "C" void fn_8002FDB4(Type_8002FDB4 *pDesc)
+extern "C" void ReplayCamInitDesc(ReplayCamDesc_t *pDesc)
 {
-    memset(pDesc, 0, sizeof(Type_8002FDB4));
+    memset(pDesc, 0, sizeof(ReplayCamDesc_t));
     fn_8009BD2C(0, &pDesc->mUnknown04);
     pDesc->mUnknown08 = 1;
 }
 
 
 /* Accessors that nothing on GameCube calls; the linker drops them. */
-static Block_80170E64 *GetHighlightedObject(void) { return lbl_803EC620; }
+static Block_80170E64 *GetHighlightedObject(void) { return _Replay_pTarget; }
 
 static void SetFocusHeight(unsigned char reset, float height)
 {
     if (reset) {
-        lbl_803EA380 = 1.2f;
+        _Replay_fFocusHeight = 1.2f;
     } else {
-        lbl_803EA380 = height;
+        _Replay_fFocusHeight = height;
     }
 }
 
-extern "C" int fn_8002FDFC(void)
+extern "C" int ReplayBufferNextFrame(void)
 {
-    if (lbl_803EC660 >= lbl_803EC658) {
-        lbl_803EC654 = 1;
-        lbl_803EC660 = 0;
+    if (_Replay_iFrameIndex >= _Replay_iFrameCount) {
+        _Replay_bWrapped = 1;
+        _Replay_iFrameIndex = 0;
     }
-    return lbl_803EC660++;
+    return _Replay_iFrameIndex++;
 }
 
-extern "C" void fn_8002FE34(int index)
+extern "C" void ReplayBufferWriteFrame(int index)
 {
-    char *pBuffer = ReplayAuxRamGetScratch(index, lbl_803EC650);
+    char *pBuffer = ReplayAuxRamGetScratch(index, _Replay_uFrameSize);
 
     if (pBuffer != 0) {
         Type_80190ED4 stream;
-        Type_80030ACC *pEntry;
+        ReplayChannel_t *pEntry;
 
         fn_80190ED4(&stream, pBuffer, 1);
-        for (pEntry = (Type_80030ACC *)DSGetListNode(lbl_803EC648, 0); pEntry != 0;
-             pEntry = (Type_80030ACC *)DSNextListNode(lbl_803EC648, pEntry)) {
+        for (pEntry = (ReplayChannel_t *)DSGetListNode(_Replay_pChannels, 0); pEntry != 0;
+             pEntry = (ReplayChannel_t *)DSNextListNode(_Replay_pChannels, pEntry)) {
             pEntry->mpWrite(&stream);
         }
         fn_80190EF0(&stream);
-        ReplayAuxRamStoreFrame(pBuffer, index, lbl_803EC650);
+        ReplayAuxRamStoreFrame(pBuffer, index, _Replay_uFrameSize);
     }
 }
 
 
-extern "C" void fn_8002FECC(Type_803EA368 *pGame, char **ppCur, char **ppNext, char **ppPrev, char **ppNext2,
+extern "C" void ReplayBufferGetFrames(Type_803EA368 *pGame, char **ppCur, char **ppNext, char **ppPrev, char **ppNext2,
                             float *pT)
 {
     int ticks;
@@ -2599,56 +2600,56 @@ extern "C" void fn_8002FECC(Type_803EA368 *pGame, char **ppCur, char **ppNext, c
     ticks = (pGame->mUnknownD74 - pGame->mUnknownD70) * 60 + pGame->mUnknownD78;
     frame = ticks / 120;
     *pT = (float)(ticks % 120) * (1.0f / 120.0f);
-    cur = (frame + lbl_803EC65C) % lbl_803EC658;
-    if (lbl_803EC654) {
-        if (cur != lbl_803EC65C) {
+    cur = (frame + _Replay_iFirstFrame) % _Replay_iFrameCount;
+    if (_Replay_bWrapped) {
+        if (cur != _Replay_iFirstFrame) {
             if (cur == 0) {
-                prev = lbl_803EC658 - 1;
+                prev = _Replay_iFrameCount - 1;
             } else {
                 prev = cur - 1;
             }
         }
-        if (cur == lbl_803EC660) {
+        if (cur == _Replay_iFrameIndex) {
             next = cur;
         } else {
-            next = (cur + 1) % lbl_803EC658;
-            if (next != lbl_803EC660) {
-                next2 = (next + 1) % lbl_803EC658;
+            next = (cur + 1) % _Replay_iFrameCount;
+            if (next != _Replay_iFrameIndex) {
+                next2 = (next + 1) % _Replay_iFrameCount;
             }
         }
     } else {
-        if (cur > 0 && cur <= lbl_803EC660) {
+        if (cur > 0 && cur <= _Replay_iFrameIndex) {
             prev = cur - 1;
         }
-        if (cur != lbl_803EC660) {
-            next = (cur + 1) % lbl_803EC658;
+        if (cur != _Replay_iFrameIndex) {
+            next = (cur + 1) % _Replay_iFrameCount;
             next2 = next + 1;
         } else {
             next = cur;
         }
-        if (next2 > lbl_803EC660) {
+        if (next2 > _Replay_iFrameIndex) {
             next2 = -1;
         }
     }
-    *ppCur = ReplayAuxRamLoadFrame(cur, lbl_803EC650);
-    *ppNext = ReplayAuxRamLoadFrame(next, lbl_803EC650);
+    *ppCur = ReplayAuxRamLoadFrame(cur, _Replay_uFrameSize);
+    *ppNext = ReplayAuxRamLoadFrame(next, _Replay_uFrameSize);
     if (prev >= 0) {
-        *ppPrev = ReplayAuxRamLoadFrame(prev, lbl_803EC650);
+        *ppPrev = ReplayAuxRamLoadFrame(prev, _Replay_uFrameSize);
     } else {
-        ReplayAuxRamLoadFrame(cur, lbl_803EC650);
+        ReplayAuxRamLoadFrame(cur, _Replay_uFrameSize);
         *ppPrev = 0;
     }
     if (next2 >= 0) {
-        *ppNext2 = ReplayAuxRamLoadFrame(next2, lbl_803EC650);
+        *ppNext2 = ReplayAuxRamLoadFrame(next2, _Replay_uFrameSize);
     } else {
-        ReplayAuxRamLoadFrame(next, lbl_803EC650);
+        ReplayAuxRamLoadFrame(next, _Replay_uFrameSize);
         *ppNext2 = 0;
     }
 }
 
-extern "C" void fn_800300D0(void) {}
+extern "C" void ReplayReadFrameStub(void) {}
 
-extern "C" void fn_800300D4(void *pStream, float *pValues, int bits, float scale)
+extern "C" void ReplayReadPacked2(void *pStream, float *pValues, int bits, float scale)
 {
     long long value = fn_80190F18(pStream, bits * 2);
     float x = (int)((value << (64 - bits * 2)) >> (64 - bits));
@@ -2659,7 +2660,7 @@ extern "C" void fn_800300D4(void *pStream, float *pValues, int bits, float scale
     pValues[1] = y * scale;
 }
 
-extern "C" void fn_800301C4(void *pStream, float *pValues, int bits, float scale)
+extern "C" void ReplayReadPacked3(void *pStream, float *pValues, int bits, float scale)
 {
     long long value = fn_80190F18(pStream, bits * 3);
     float x = (int)((value << (64 - bits * 3)) >> (64 - bits));
@@ -2672,7 +2673,7 @@ extern "C" void fn_800301C4(void *pStream, float *pValues, int bits, float scale
     pValues[2] = z * scale;
 }
 
-extern "C" void fn_80030304(void *pStream, float *pValues, int bits, float scale)
+extern "C" void ReplayReadPacked4(void *pStream, float *pValues, int bits, float scale)
 {
     long long value = fn_80190F18(pStream, bits * 4);
     float x = (int)((value << (64 - bits * 4)) >> (64 - bits));
@@ -2687,7 +2688,7 @@ extern "C" void fn_80030304(void *pStream, float *pValues, int bits, float scale
     pValues[3] = w * scale;
 }
 
-extern "C" void fn_80030490(void *pStream, float *pValues, int bits, float scale)
+extern "C" void ReplayWritePacked2(void *pStream, float *pValues, int bits, float scale)
 {
     unsigned long long mask = (1ULL << bits) - 1;
     unsigned long long x = ((long long)(int)(pValues[0] * scale) & mask) << bits;
@@ -2696,7 +2697,7 @@ extern "C" void fn_80030490(void *pStream, float *pValues, int bits, float scale
     fn_80191068(pStream, x | y, bits * 2);
 }
 
-extern "C" void fn_80030554(void *pStream, float *pValues, int bits, float scale)
+extern "C" void ReplayWritePacked3(void *pStream, float *pValues, int bits, float scale)
 {
     unsigned long long mask = (1ULL << bits) - 1;
     unsigned long long x = ((long long)(int)(pValues[0] * scale) & mask) << bits * 2;
@@ -2706,7 +2707,7 @@ extern "C" void fn_80030554(void *pStream, float *pValues, int bits, float scale
     fn_80191068(pStream, x | y | z, bits * 3);
 }
 
-extern "C" void fn_8003065C(void *pStream, float *pValues, int bits, float scale)
+extern "C" void ReplayWritePacked4(void *pStream, float *pValues, int bits, float scale)
 {
     unsigned long long mask = (1ULL << bits) - 1;
     unsigned long long x = ((long long)(int)(pValues[0] * scale) & mask) << bits * 3;
@@ -2717,51 +2718,51 @@ extern "C" void fn_8003065C(void *pStream, float *pValues, int bits, float scale
     fn_80191068(pStream, x | y | z | w, bits * 4);
 }
 
-extern "C" void fn_800307AC(void)
+extern "C" void ReplayBufferReset(void)
 {
-    lbl_803EC654 = lbl_803EC660 = lbl_803EC65C = 0;
+    _Replay_bWrapped = _Replay_iFrameIndex = _Replay_iFirstFrame = 0;
 }
 
-extern "C" void fn_800307C0(Type_803EA368 *pGame)
+extern "C" void ReplayRecordFrame(Type_803EA368 *pGame)
 {
     if (((pGame->mUnknownD74 - pGame->mUnknownD70) & 1) == 0) {
-        fn_8002FE34(fn_8002FDFC());
-        if (lbl_803EC654) {
+        ReplayBufferWriteFrame(ReplayBufferNextFrame());
+        if (_Replay_bWrapped) {
             pGame->mUnknownD70 += 2;
         }
     }
     pGame->mUnknownD74++;
 }
 
-extern "C" void fn_80030828(Type_803EA368 *pGame)
+extern "C" void ReplayBufferFinish(Type_803EA368 *pGame)
 {
-    int count = lbl_803EC660 - 1;
+    int count = _Replay_iFrameIndex - 1;
 
-    lbl_803EC660 = count;
-    if (lbl_803EC658 == 0) {
-        lbl_803EC660 = lbl_803EC65C = 0;
+    _Replay_iFrameIndex = count;
+    if (_Replay_iFrameCount == 0) {
+        _Replay_iFrameIndex = _Replay_iFirstFrame = 0;
         count = 1;
-    } else if (lbl_803EC654 == 1) {
+    } else if (_Replay_bWrapped == 1) {
         if (count < 0) {
-            lbl_803EC660 = lbl_803EC658 - 1;
-            lbl_803EC65C = 0;
+            _Replay_iFrameIndex = _Replay_iFrameCount - 1;
+            _Replay_iFirstFrame = 0;
         } else {
-            lbl_803EC65C = (count + 1) % lbl_803EC658;
+            _Replay_iFirstFrame = (count + 1) % _Replay_iFrameCount;
         }
-        count = lbl_803EC658;
+        count = _Replay_iFrameCount;
     }
     pGame->mUnknownD7C = pGame->mUnknownD70 + (count - 1) * 2;
 }
 
-extern "C" void fn_800308A4(Type_803EA368 *pGame)
+extern "C" void ReplayHideGameIcons(Type_803EA368 *pGame)
 {
-    lbl_803EC668 = 0;
-    lbl_803EC664 = 0;
+    _Replay_pFocusB = 0;
+    _Replay_pFocusA = 0;
     PlyrStarSetShown(!(pGame->mUnknownD94 & 0x10000), 0);
     PassIconObjSetEnabled(0);
 }
 
-extern "C" void fn_800308E8(Type_803EA368 *p)
+extern "C" void ReplayShowGameIcons(Type_803EA368 *p)
 {
     if (fn_800AD9B4() == 4 || PauseIsOpen()) {
         PlyrStarSetShown(0, 0);
@@ -2771,16 +2772,16 @@ extern "C" void fn_800308E8(Type_803EA368 *p)
     PassIconObjSetEnabled(1);
 }
 
-extern "C" void fn_80030940(Type_803EA368 *pGame)
+extern "C" void ReplayReadFrame(Type_803EA368 *pGame)
 {
     char *pCur;
     char *pNext;
     char *pPrev;
     char *pNext2;
     Type_80190ED4 streams[4];
-    Type_80030ACC *pRecord;
+    ReplayChannel_t *pRecord;
 
-    fn_8002FECC(pGame, &pCur, &pNext, &pPrev, &pNext2, &lbl_803EC66C);
+    ReplayBufferGetFrames(pGame, &pCur, &pNext, &pPrev, &pNext2, &_Replay_fFrameBlend);
     fn_80190ED4(&streams[0], pCur, 0);
     fn_80190ED4(&streams[1], pNext, 0);
     if (pPrev) {
@@ -2789,18 +2790,18 @@ extern "C" void fn_80030940(Type_803EA368 *pGame)
     if (pNext2) {
         fn_80190ED4(&streams[3], pNext2, 0);
     }
-    for (pRecord = (Type_80030ACC *)DSGetListNode(lbl_803EC648, 0); pRecord;
-         pRecord = (Type_80030ACC *)DSNextListNode(lbl_803EC648, pRecord)) {
+    for (pRecord = (ReplayChannel_t *)DSGetListNode(_Replay_pChannels, 0); pRecord;
+         pRecord = (ReplayChannel_t *)DSNextListNode(_Replay_pChannels, pRecord)) {
         if (pPrev == 0) {
             if (pNext2 == 0) {
-                pRecord->mpRead(&streams[1], &streams[0], 0, 0, lbl_803EC66C);
+                pRecord->mpRead(&streams[1], &streams[0], 0, 0, _Replay_fFrameBlend);
             } else {
-                pRecord->mpRead(&streams[1], &streams[0], 0, &streams[3], lbl_803EC66C);
+                pRecord->mpRead(&streams[1], &streams[0], 0, &streams[3], _Replay_fFrameBlend);
             }
         } else if (pNext2 == 0) {
-            pRecord->mpRead(&streams[1], &streams[0], &streams[2], 0, lbl_803EC66C);
+            pRecord->mpRead(&streams[1], &streams[0], &streams[2], 0, _Replay_fFrameBlend);
         } else {
-            pRecord->mpRead(&streams[1], &streams[0], &streams[2], &streams[3], lbl_803EC66C);
+            pRecord->mpRead(&streams[1], &streams[0], &streams[2], &streams[3], _Replay_fFrameBlend);
         }
     }
     fn_80190EF0(&streams[0]);
@@ -2811,95 +2812,95 @@ extern "C" void fn_80030940(Type_803EA368 *pGame)
     if (pNext2) {
         fn_80190EF0(&streams[3]);
     }
-    fn_800300D0();
+    ReplayReadFrameStub();
 }
 
-extern "C" void fn_80030ACC(void (*pWrite)(Type_80190ED4 *),
+extern "C" void ReplayRegisterChannel(void (*pWrite)(Type_80190ED4 *),
                             void (*pRead)(Type_80190ED4 *, Type_80190ED4 *, Type_80190ED4 *, Type_80190ED4 *, float),
                             unsigned int size, const char *pName)
 {
-    Type_80030ACC *pRecord = (Type_80030ACC *)DSNewListNode(lbl_803EC648);
+    ReplayChannel_t *pRecord = (ReplayChannel_t *)DSNewListNode(_Replay_pChannels);
 
     pRecord->mpWrite = pWrite;
     pRecord->mpRead = pRead;
     pRecord->mSize = size;
-    DSAddListNode(lbl_803EC648, pRecord, 0);
-    lbl_803EC650 += size;
+    DSAddListNode(_Replay_pChannels, pRecord, 0);
+    _Replay_uFrameSize += size;
 }
 
-extern "C" void fn_80030B30(void)
+extern "C" void ReplayBufferInit(void)
 {
-    Type_80030ACC *pRecord;
+    ReplayChannel_t *pRecord;
 
-    for (pRecord = (Type_80030ACC *)DSGetListNode(lbl_803EC648, 0); pRecord;
-         pRecord = (Type_80030ACC *)DSNextListNode(lbl_803EC648, pRecord)) {
-        lbl_803EC650 += pRecord->mSize;
+    for (pRecord = (ReplayChannel_t *)DSGetListNode(_Replay_pChannels, 0); pRecord;
+         pRecord = (ReplayChannel_t *)DSNextListNode(_Replay_pChannels, pRecord)) {
+        _Replay_uFrameSize += pRecord->mSize;
     }
-    lbl_803EC650 = ((((lbl_803EC650 / 2 + 7) / 8 + 7) & ~7) + 31) & ~31;
-    lbl_803EC658 = lbl_803EC64C / lbl_803EC650;
-    ReplayAuxRamInit(lbl_803EC658, lbl_803EC650);
+    _Replay_uFrameSize = ((((_Replay_uFrameSize / 2 + 7) / 8 + 7) & ~7) + 31) & ~31;
+    _Replay_iFrameCount = _Replay_uBufferSize / _Replay_uFrameSize;
+    ReplayAuxRamInit(_Replay_iFrameCount, _Replay_uFrameSize);
 }
 
-extern "C" void fn_80030BC0(int size)
+extern "C" void ReplayChannelsInit(int size)
 {
-    lbl_803EC648 = DSNewList(1, 0, 11, 12, 0, 0);
-    lbl_803EC650 = 0;
-    lbl_803EC64C = 0x400000 - size;
-    if (size > 0x400000 || lbl_803EC64C < 0x3C000) {
-        lbl_803EC64C = 0x3C000;
+    _Replay_pChannels = DSNewList(1, 0, 11, 12, 0, 0);
+    _Replay_uFrameSize = 0;
+    _Replay_uBufferSize = 0x400000 - size;
+    if (size > 0x400000 || _Replay_uBufferSize < 0x3C000) {
+        _Replay_uBufferSize = 0x3C000;
     }
 }
 
-extern "C" void fn_80030C40(void)
+extern "C" void ReplayChannelsShutdown(void)
 {
-    DSDelList(lbl_803EC648);
-    lbl_803EC648 = 0;
+    DSDelList(_Replay_pChannels);
+    _Replay_pChannels = 0;
     ReplayAuxRamShutdown();
 }
 
-extern "C" Object_80039F5C *fn_80030C70(Object_80039F5C **ppA, Object_80039F5C **ppB)
+extern "C" Object_80039F5C *ReplayGetFocusPlayers(Object_80039F5C **ppA, Object_80039F5C **ppB)
 {
     if (ppA && ppB) {
-        *ppA = lbl_803EC664;
-        *ppB = lbl_803EC668;
+        *ppA = _Replay_pFocusA;
+        *ppB = _Replay_pFocusB;
     }
-    if (lbl_803EC664) {
-        return lbl_803EC664;
+    if (_Replay_pFocusA) {
+        return _Replay_pFocusA;
     }
-    return lbl_803EC668;
+    return _Replay_pFocusB;
 }
 
-extern "C" void fn_80030CA4(Object_80039F5C *pA, Object_80039F5C *pB)
+extern "C" void ReplaySetFocusPlayers(Object_80039F5C *pA, Object_80039F5C *pB)
 {
-    lbl_803EC664 = pA;
-    lbl_803EC668 = pB;
+    _Replay_pFocusA = pA;
+    _Replay_pFocusB = pB;
 }
 
-extern "C" void fn_80030CB0(int value) { lbl_803EA388 = value; }
+extern "C" void ReplaySetBallIndex(int value) { _Replay_iBallIndex = value; }
 
-extern "C" int fn_80030CB8(void) { return lbl_803EA388; }
+extern "C" int ReplayGetBallIndex(void) { return _Replay_iBallIndex; }
 
-extern "C" unsigned char fn_80030CC0(Type_803EA368 *pGame)
+extern "C" unsigned char ReplayIsBufferFull(Type_803EA368 *pGame)
 {
-    unsigned char result = lbl_803EC654;
+    unsigned char result = _Replay_bWrapped;
 
-    if (!result && ((pGame->mUnknownD74 - pGame->mUnknownD70) & 1) == 0 && lbl_803EC660 >= lbl_803EC658) {
+    if (!result && ((pGame->mUnknownD74 - pGame->mUnknownD70) & 1) == 0 && _Replay_iFrameIndex >= _Replay_iFrameCount) {
         result = 1;
     }
     return result;
 }
 
-extern "C" void fn_80030CFC(void) {}
+extern "C" void ReplayCamProcessStub(void) {}
 
-extern "C" float fn_80030D00(void) { return lbl_803EC66C; }
+extern "C" float ReplayGetFrameBlend(void) { return _Replay_fFrameBlend; }
 
-extern "C" Entry_80030D08 *fn_80030D08(void) { return lbl_802CC9B4; }
+extern "C" ReplayScriptConds_t *ReplayGetScriptTable(void) { return _Replay_aScriptConds; }
 
-extern "C" Command_8002DC00 *fn_80030D14(int id)
+extern "C" ReplayCommand_t *ReplayFindScript(int id)
 {
-    Script_802CC938 *pEntry;
+    ReplayScript_t *pEntry;
 
-    for (pEntry = lbl_802CC938; pEntry->mId != -1; pEntry++) {
+    for (pEntry = _Replay_aScripts; pEntry->mId != -1; pEntry++) {
         if (pEntry->mId == id) {
             return pEntry->mpCommands;
         }

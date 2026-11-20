@@ -27,7 +27,7 @@ struct PlayerLookColors_t {
     unsigned char mUnknown3;
 };
 
-/* Three bytes read by fn_800840A4. */
+/* Three bytes read by TeamDbGetColors. */
 struct TeamColorRow_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
@@ -61,7 +61,7 @@ int fn_8003DEB4(void);
 void PlyrPoseInit(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
 void PlyrPoseFree(Object_8003DEC4 *pPlayer);
 unsigned char CheatFlagsIsSet(int index);
-int fn_8005FC7C(void);
+int StoryEventsGetCurrentEvent(void);
 void fn_8007BA48(DbCursor *pObject);
 void fn_8007BA88(DbCursor *pObject, int a);
 void fn_8007BB04(DbCursor *pObject);
@@ -84,7 +84,7 @@ int fn_80081E3C(Object_8008044C *pObject);
 int fn_80081FD4(Object_8008044C *pObject, int a);
 int fn_80082280(Object_8008044C *pObject);
 int fn_800822D4(Object_8008044C *pObject);
-void fn_800840A4(DbCursor *pObject, void *pBuffer);
+void TeamDbGetColors(DbCursor *pObject, void *pBuffer);
 void ParticleTrailReset(ParticleTrailSet_t *pObject);
 void fn_8015F6E8(const char *pName, int b, int c, int d, PlayerHeadIds_t *pIds);
 void PlyrSwitchSet(int player, int key, int value);
@@ -462,9 +462,9 @@ extern "C" void PlayerLookLoadDecalColors(int index, unsigned char *pColors, uns
 
     query.mUnknown8 = index + 1;
     query.mUnknown4 = 5;
-    fn_80083E40(&cursor, &query, 0x54415453);
-    fn_800840A4(&cursor, &rgb);
-    fn_80083F68(&cursor);
+    TeamDbOpen(&cursor, &query, 0x54415453);
+    TeamDbGetColors(&cursor, &rgb);
+    TeamDbClose(&cursor);
     pColors[4] = rgb.mUnknown0;
     pColors[5] = rgb.mUnknown1;
     pColors[6] = rgb.mUnknown2;
@@ -479,9 +479,9 @@ extern "C" void PlayerLookLoadHeadDecalColors(int index, unsigned char *pColors,
 
     query.mUnknown8 = index + 1;
     query.mUnknown4 = 5;
-    fn_80083E40(&cursor, &query, 0x54415453);
-    fn_800840A4(&cursor, &rgb);
-    fn_80083F68(&cursor);
+    TeamDbOpen(&cursor, &query, 0x54415453);
+    TeamDbGetColors(&cursor, &rgb);
+    TeamDbClose(&cursor);
     pColors[0] = rgb.mUnknown0;
     pColors[1] = rgb.mUnknown1;
 }
@@ -581,12 +581,12 @@ extern "C" void PlayerLookLoad(int index, int unused, int id, unsigned char flag
 
     PlayerDbSeekId(&_PlayerLook_sPlayerCursor, id, 0);
     value = PlayerDbGetTeamIndex(&_PlayerLook_sPlayerCursor);
-    fn_80083E40(&cursor, 0, 0x54415453);
-    fn_80084034(&cursor, value, 0);
-    fn_800840A4(&cursor, &pColors[20]);
-    gPlayerLooks[index].mUnknown6A = fn_80084158(&cursor);
-    gPlayerLooks[index].mUnknown68 = fn_80084438(&cursor);
-    fn_80083F68(&cursor);
+    TeamDbOpen(&cursor, 0, 0x54415453);
+    TeamDbSeekId(&cursor, value, 0);
+    TeamDbGetColors(&cursor, &pColors[20]);
+    gPlayerLooks[index].mUnknown6A = TeamDbGetLogo(&cursor);
+    gPlayerLooks[index].mUnknown68 = TeamDbGetCtdl(&cursor);
+    TeamDbClose(&cursor);
     fn_800817CC(&_PlayerLook_sPlayerCursor, &gPlayerLooks[index].mInfo);
     if (CheatFlagsIsSet(47) && !GameModeTypeGet()) {
         PlayerLookRandomizeGear(index);
@@ -812,7 +812,7 @@ extern "C" void PlayerLookLoadForPlayer(unsigned int mode, int index, int unused
 {
     int flag = 1;
 
-    if (FELoopIsMainFEActive() && MsgPlayerPickupIsOpen() && fn_8005FC7C()) {
+    if (FELoopIsMainFEActive() && MsgPlayerPickupIsOpen() && StoryEventsGetCurrentEvent()) {
         DbCursor cursor;
 
         DbCursorOpen(&cursor, 0x59414C50, 0x44494750, 0, 0, 0x54415453);

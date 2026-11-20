@@ -874,7 +874,7 @@ void CreatePlayerList::Enter(int a, int *pCount, int *pValue)
     if (a == 1) {
         _CreatePlayerOpen();
     }
-    fn_80083F88(EditMenuGetTeamCursor(), buffer, 18);
+    TeamDbGetName(EditMenuGetTeamCursor(), buffer, 18);
     EditMenuSetName(buffer);
     EditMenuSetHeading("");
     EditMenuSetItemName("");

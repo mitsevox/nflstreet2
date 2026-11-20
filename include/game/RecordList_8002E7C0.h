@@ -3,8 +3,8 @@
 
 #include "game/Object_80039F5C.h"
 
-/* Timing block at Record_8002E7C0 +0x04: filled by fn_8002D338 and the
-   replay script, applied by fn_8002E75C. */
+/* Timing block at Record_8002E7C0 +0x04: filled by ReplayInitShotTimer and the
+   replay script, applied by ReplayStartShot. */
 struct Timer_8002E7C0 {
     int mUnknown00;
     int mUnknown04;
@@ -43,8 +43,8 @@ struct RecordList_8002E7C0 {
 };
 
 extern "C" {
-Record_8002E7C0 *fn_8002E7C0(RecordList_8002E7C0 *pList);
-int fn_8002E7D0(RecordList_8002E7C0 *pList);
+Record_8002E7C0 *ReplayShotListGetCurrent(RecordList_8002E7C0 *pList);
+int ReplayShotListHasNext(RecordList_8002E7C0 *pList);
 }
 
 #endif

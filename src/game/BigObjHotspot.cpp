@@ -74,7 +74,7 @@ void fn_8004E090(BigObj_t *, int, int);
 void fn_8005D2C8(int);
 void AudmonEventPostId(int, void *, int, int, int, int);
 void TeamUnlock(int, int);
-void fn_80083E1C(DbCursor *, int);
+void TeamDbOpenQuery(DbCursor *, int);
 void fn_8009BD2C(Object_80039F5C *, int *);
 int fn_800A3444(void);
 int fn_801485D4(void);
@@ -213,13 +213,13 @@ int HotspotIsNewOwner(HotspotPlay_t *pPlay)
 void HotspotLoadTeamLogos(BigObj_t *)
 {
     DbCursor cursor;
-    fn_80083E1C(&cursor, 0);
+    TeamDbOpenQuery(&cursor, 0);
     for (int i = 0; i <= 1; i++) {
         int id, team;
         MsgGameGetPlayerStatus(i, &id, &team);
         unsigned char *pPalette = 0;
-        fn_80084034(&cursor, i, 0);
-        int value = fn_80084438(&cursor);
+        TeamDbSeekId(&cursor, i, 0);
+        int value = TeamDbGetCtdl(&cursor);
         Texture_t *pTexture = (Texture_t *)LLUIGTexNodeGet(UIGLibraryGetGlobal(1), 4, id);
         if (value == 0) {
             int slot;
@@ -241,7 +241,7 @@ void HotspotLoadTeamLogos(BigObj_t *)
             _Hotspot_aLogo[i].mPalette.mpUnknown8 = (unsigned char *)pTexture->mpPalette;
         }
     }
-    fn_80083F68(&cursor);
+    TeamDbClose(&cursor);
 }
 
 void HotspotCapture(HotspotPlay_t *pPlay)

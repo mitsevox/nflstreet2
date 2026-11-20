@@ -14,8 +14,8 @@ extern "C" {
 
 int StoryTournamentIsActive(void);
 int StoryTournamentIsComplete(void);
-int fn_8005F910(void);
-int fn_8005F938(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int StoryEventsIsNewStory(void);
+int StoryEventsHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int UserProfileFindIndex(int a);
 int GauntletGetCurrentTeam(int a);
 void GauntletStatsOpen(DbCursor *pObject, int a);
@@ -99,7 +99,7 @@ int FEMiscHandleFunction(unsigned int id, MenuArg_t *pArgs, int unused, int *pRe
 {
     switch (id) {
     case 0x173:
-        if (fn_8005F910()) {
+        if (StoryEventsIsNewStory()) {
             *pResult = 1;
             if (!EditMenuIsOpen()) {
                 EditMenuBegin(3, 0x3FF);
@@ -126,7 +126,7 @@ int FEMiscHandleFunction(unsigned int id, MenuArg_t *pArgs, int unused, int *pRe
         break;
     case 0x146:
     case 0x16E:
-        fn_8005F938(id, pArgs, unused, pResult);
+        StoryEventsHandleMessage(id, pArgs, unused, pResult);
         break;
     default:
         return 0;

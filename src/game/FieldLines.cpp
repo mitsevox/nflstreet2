@@ -4,7 +4,7 @@
    pulsing alpha and keeps a minimum on-screen size. */
 #include "game/Vec2Distance.h"
 #include "game/fn_80177FE0.h"
-#include "game/cu_8002B8F8.h"
+#include "game/Replay.h"
 #include "game/PauseMenu.h"
 #include "game/fn_800AD9B4.h"
 #include "game/ResLoad.h"
@@ -43,7 +43,7 @@ struct FieldLineBounds_t {
 };
 
 extern "C" {
-unsigned char fn_8002D060(Type_803EA368 *p);
+unsigned char ReplayIsShowing(Type_803EA368 *p);
 int fn_800BA6F8(void);
 void *fn_800C47C4(void);
 int fn_80177F70(void);
@@ -107,7 +107,7 @@ float FieldLineGetScale(FieldLine_t *p)
 
 int FieldLineDraw(FieldLine_t *p)
 {
-    if (fn_80177F70() && !fn_800BA6F8() && !fn_8002D060(lbl_803EA368) &&
+    if (fn_80177F70() && !fn_800BA6F8() && !ReplayIsShowing(gpReplay) &&
         _FieldLines_abDrawEnable[p->mUnknownF4] == 1 && !PauseIsOpen() && fn_800AD9B4() != 7) {
         float zero = 0.0f;
         if (p->mUnknownE4 > zero) {
@@ -270,7 +270,7 @@ void FieldLinesUpdate(void)
         }
         int ready = 0;
         if (enabled && fn_80177F70() && !fn_800BA6F8()) {
-            ready = !fn_8002D060(lbl_803EA368);
+            ready = !ReplayIsShowing(gpReplay);
         }
         enabled = ready;
         // FAKEMATCH: each case writes y through a local copy qN of the line pointer, loaded before the getter calls

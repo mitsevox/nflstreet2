@@ -17,7 +17,7 @@
 #include "game/Block_8030F42C.h"
 #include "game/Params_80092E54.h"
 #include "game/Frame_800DF7CC.h"
-#include "game/fn_8005FC84.h"
+#include "game/StoryEvents.h"
 #include <string.h>
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
@@ -47,7 +47,7 @@
 #include "game/Block_800B0CFC.h"
 #include "game/Table_80089904.h"
 #include "game/PlayBookTeam.h"
-#include "game/cu_8002B8F8.h"
+#include "game/Replay.h"
 #include "game/BigObjInst.h"
 #include "game/ReplayEvent.h"
 #include "game/FeatAwards.h"
@@ -525,23 +525,23 @@ extern Record_80097518 lbl_8030C2B8[];
 }
 
 extern "C" {
-int fn_8002C9A8(Type_803EA368 *p, int msg, int value);
+int ReplayHandleCommand(Type_803EA368 *p, int msg, int value);
 }
 
 extern "C" {
-int fn_8002CA74(Type_803EA368 *p, int msg, int value);
+int ReplayHandleControl(Type_803EA368 *p, int msg, int value);
 }
 
 extern "C" {
-void fn_8002CF34(Type_803EA368 *p);
+void ReplayUpdate(Type_803EA368 *p);
 }
 
 extern "C" {
-unsigned char fn_8002D060(Type_803EA368 *p);
+unsigned char ReplayIsShowing(Type_803EA368 *p);
 }
 
 extern "C" {
-void fn_8002E890(RecordList_8002E7C0 *pList);
+void ReplayShotListClear(RecordList_8002E7C0 *pList);
 }
 
 extern "C" {
@@ -629,7 +629,7 @@ void fn_8005BF5C(void);
 }
 
 extern "C" {
-void fn_8002CFF4(Type_803EA368 *p);
+void ReplayStartAutoPlayback(Type_803EA368 *p);
 }
 
 extern "C" {
@@ -1548,7 +1548,7 @@ PlayBookFormation_t *PlayBookGetFormation(int team);
 }
 
 extern "C" {
-void fn_80030ACC(void (*pSave)(BitStream_t *pStream),
+void ReplayRegisterChannel(void (*pSave)(BitStream_t *pStream),
                  void (*pLoad)(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
                                BitStream_t *pStream3, float t),
                  int size, const char *pName);
@@ -1960,7 +1960,7 @@ extern unsigned char lbl_803EAB96;
 }
 
 extern "C" {
-Object_80039F5C *fn_800606CC(int type, int position);
+Object_80039F5C *StoryEventsFindLineupPlayer(int type, int position);
 }
 
 extern "C" {
@@ -1986,7 +1986,7 @@ int StoryTournamentCountRows(void);
 }
 
 extern "C" {
-StevRow_t *fn_8005FC7C(void);
+StevRow_t *StoryEventsGetCurrentEvent(void);
 }
 
 extern "C" {
@@ -2848,7 +2848,7 @@ void PlyrMoveClearHold(Object_80039F5C *p);
 }
 
 extern "C" {
-int fn_8002D228(Type_803EA368 *p);
+int ReplayIsHalted(Type_803EA368 *p);
 }
 
 extern "C" {
@@ -2872,7 +2872,7 @@ void ClockRuleEndPeriod(void);
 }
 
 extern "C" {
-int fn_8002E950(int mode);
+int ReplayPickScript(int mode);
 }
 
 extern "C" {
@@ -3663,7 +3663,7 @@ extern unsigned char lbl_803EA8D4;
 
 extern PostPlayPhase *lbl_803EAB84;
 
-extern Type_803EA368 *lbl_803EA368;
+extern Type_803EA368 *gpReplay;
 
 extern "C" {
 int AnimFileGetSlotFromFileNum(int objectType, int fileNum);
@@ -4092,7 +4092,7 @@ void fn_8017813C(Point_8017886C);
 }
 
 extern "C" {
-unsigned char fn_8002FA84(void);
+unsigned char ReplayCamIsActive(void);
 }
 
 extern "C" {
@@ -4703,11 +4703,11 @@ struct EngineParamWords {
 };
 
 extern "C" {
-int fn_8002D0AC(Type_803EA368 *p);
+int ReplayIsRecording(Type_803EA368 *p);
 }
 
 extern "C" {
-void fn_8002D2C8(Type_803EA368 *p, unsigned char value);
+void ReplaySetHoldFlag(Type_803EA368 *p, unsigned char value);
 }
 
 extern "C" {
@@ -5013,7 +5013,7 @@ void GameSetupInit(void);
 }
 
 extern "C" {
-void fn_8002D274(Type_803EA368 *p);
+void ReplayStopAndClear(Type_803EA368 *p);
 }
 
 extern "C" {
@@ -9700,7 +9700,7 @@ extern "C" int fn_80092830(int index)
         pCharacter->mUnknown38C = 5;
         fn_80092380(pCharacter, 1);
         fn_8009126C(index);
-        fn_8002C9A8(lbl_803EA368, 3, 0);
+        ReplayHandleCommand(gpReplay, 3, 0);
     case 5:
         if (fn_80091D34() != 0 || fn_80091C84(index, &remaining) == 0) {
             if ((pCharacter->mUnknown4 != 1 && fn_800AD9B4() == 4) || fn_800AD9B4() == 2) {
@@ -10957,8 +10957,8 @@ extern "C" void fn_80095304(int id, Object_80039F5C **ppObject, unsigned short *
 {
     int found = 0;
 
-    if (ReplayEventExists(lbl_803EA368, id) != 0) {
-        Object_80039F5C *p = ReplayEventGetObject(lbl_803EA368, id);
+    if (ReplayEventExists(gpReplay, id) != 0) {
+        Object_80039F5C *p = ReplayEventGetObject(gpReplay, id);
 
         if (p->mUnknown9[2] != 0) {
             *ppObject = p;
@@ -11198,12 +11198,12 @@ extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_
         fn_80095304(7, ppOut, &count);
         break;
     case 0x544E4F52: /* 'TNOR' */
-        if (ReplayEventExists(lbl_803EA368, 4) && fn_80178348() != fn_80178308()) {
+        if (ReplayEventExists(gpReplay, 4) && fn_80178348() != fn_80178308()) {
             fn_80095304(4, ppOut, &count);
         } else {
-            if (ReplayEventExists(lbl_803EA368, 7)) {
+            if (ReplayEventExists(gpReplay, 7)) {
                 fn_80095304(7, ppOut, &count);
-            } else if (ReplayEventExists(lbl_803EA368, 38)) {
+            } else if (ReplayEventExists(gpReplay, 38)) {
                 fn_80095304(38, ppOut, &count);
             } else {
                 fn_80095304(5, ppOut, &count);
@@ -11230,7 +11230,7 @@ extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_
         fn_80095304(8, ppOut, &count);
         break;
     case 0x50444546: /* 'PDEF' */
-        if (ReplayEventExists(lbl_803EA368, 38)) {
+        if (ReplayEventExists(gpReplay, 38)) {
             fn_80095304(38, ppOut, &count);
         } else {
             fn_80095304(5, ppOut, &count);
@@ -13527,16 +13527,16 @@ extern "C" int fn_8009B1C4(int value, int *pState)
     if (fn_80178AE0() != 2) {
         result = 0;
     }
-    if (fn_8002D060(lbl_803EA368)) {
+    if (ReplayIsShowing(gpReplay)) {
         result = 0;
     }
     if (result) {
-        fn_8002C9A8(lbl_803EA368, 3, 0);
+        ReplayHandleCommand(gpReplay, 3, 0);
         if (InGameIsDemo() == 0) {
             PerPollSingleDevice(ConGetChannelInfo(lbl_803EA990, 0));
         }
         if (PerGetDeviceStatus(ConGetChannelInfo(lbl_803EA990, 0)) == 2) {
-            fn_8002CA74(lbl_803EA368, 10, lbl_803EA990);
+            ReplayHandleControl(gpReplay, 10, lbl_803EA990);
         }
         *pState = 0;
         result = 1;
@@ -13564,16 +13564,16 @@ extern "C" int fn_8009B288(unsigned int *pState)
                 PauseUnblock();
             }
             fn_8005BF5C();
-            fn_8002CFF4(lbl_803EA368);
+            ReplayStartAutoPlayback(gpReplay);
             HudHide();
             *pState = 2;
         }
         break;
     case 2:
         if (fn_800B9B18(lbl_803EAB84) == 2) {
-            fn_8002CA74(lbl_803EA368, 9, 0);
+            ReplayHandleControl(gpReplay, 9, 0);
         }
-        if (fn_8002D060(lbl_803EA368) == 0) {
+        if (ReplayIsShowing(gpReplay) == 0) {
             GameCamera_t *pCamera;
 
             HudUnhide();
@@ -13595,8 +13595,8 @@ extern "C" int fn_8009B288(unsigned int *pState)
 
 extern "C" void fn_8009B3A4(int *pState)
 {
-    if (fn_8002D060(lbl_803EA368)) {
-        fn_8002CA74(lbl_803EA368, 9, 0);
+    if (ReplayIsShowing(gpReplay)) {
+        ReplayHandleControl(gpReplay, 9, 0);
     }
 }
 
@@ -13819,12 +13819,12 @@ extern "C" void fn_8009BA9C(int value)
     for (i = 0; i <= 1; i++) {
         lbl_803EA984[i]->mUnknown4.mUnknown128 = value;
     }
-    fn_8002E890(&list);
+    ReplayShotListClear(&list);
     if (fn_8009B448(value, 0)) {
         lbl_803EA984[0]->mUnknown4.mUnknown127 = 1;
     }
-    fn_8002C9A8(lbl_803EA368, 3, 0);
-    fn_8002CF34(lbl_803EA368);
+    ReplayHandleCommand(gpReplay, 3, 0);
+    ReplayUpdate(gpReplay);
     for (i = 0; i <= 1; i++) {
         if (lbl_803EA984[i]->mUnknown4.mUnknown127 == 0) {
             fn_8009B1B0(lbl_803EA984[i]);
@@ -16669,7 +16669,7 @@ extern "C" void fn_800A1C74(Object_8017886C *result,Object_8017886C *input)
         if(HotspotPollCaptured())PauseOpenScreen(3,22,-1);
         fn_800AE380();
         if(result->mUnknown18&0x2000 || fn_800B2314()&1)fn_8009BA9C((int)result);
-        else fn_8002C9A8(lbl_803EA368,3,0);
+        else ReplayHandleCommand(gpReplay,3,0);
         HudSetDown();
         if(fn_801486A0()!=15)fn_80148A58()->vfn_14();
         lbl_802D7C64[0].mUnknown4=1;
@@ -16898,7 +16898,7 @@ extern "C" int fn_800A2624(void)
 extern "C" int fn_800A262C(void)
 {
     if (CamGameGetCamera(5)->mHeader.mUnknown04[1] <= 0.5f - lbl_8030E6E8.mUnknown2C && CamGameGetCurrentSlot() == 0
-        && fn_8002FA84() == 0 && fn_801784C4() == 0 && (fn_801784C4() != 0 || fn_80140DB4() == 0)) {
+        && ReplayCamIsActive() == 0 && fn_801784C4() == 0 && (fn_801784C4() != 0 || fn_80140DB4() == 0)) {
         lbl_803EA9F8 = 1;
         return 1;
     }
@@ -16909,7 +16909,7 @@ extern "C" int fn_800A262C(void)
 extern "C" int fn_800A26C4(void)
 {
     if (CamGameGetCamera(5)->mHeader.mUnknown04[1] > lbl_8030E6E8.mUnknown2C - 0.5f && CamGameGetCurrentSlot() == 0
-        && fn_8002FA84() == 0 && fn_801784C4() != 0 && (fn_801784C4() == 0 || fn_80140DB4() == 0)) {
+        && ReplayCamIsActive() == 0 && fn_801784C4() != 0 && (fn_801784C4() == 0 || fn_80140DB4() == 0)) {
         lbl_803EA9F8 = 1;
         return 1;
     }
@@ -19923,9 +19923,9 @@ extern "C" void fn_800A9384(int mode)
 {
     unsigned int i;
 
-    fn_8002C9A8(lbl_803EA368, 3, 0);
-    fn_8002C9A8(lbl_803EA368, 1, 0);
-    fn_8002CF34(lbl_803EA368);
+    ReplayHandleCommand(gpReplay, 3, 0);
+    ReplayHandleCommand(gpReplay, 1, 0);
+    ReplayUpdate(gpReplay);
     lbl_8030F42C.mUnknown4 = 0;
     lbl_803EAA84 = 1;
     lbl_8030F42C.mUnknown8 = 0;
@@ -19958,8 +19958,8 @@ extern "C" void fn_800A9478(int skipPlayerReset)
         unsigned int step;
         Vector_80039F5C pos;
 
-        fn_8002C9A8(lbl_803EA368, 3, 0);
-        fn_8002C9A8(lbl_803EA368, 1, 0);
+        ReplayHandleCommand(gpReplay, 3, 0);
+        ReplayHandleCommand(gpReplay, 1, 0);
         BallGetPosition(BallGetCurrent(), &pos);
         if (fn_80178508((Point_8017886C *)&pos, 0, 0) != 1) {
             lost = 1;
@@ -19994,7 +19994,7 @@ extern "C" void fn_800A9478(int skipPlayerReset)
             TutorialSetHudVisible(1);
         }
         if (lost) {
-            fn_8002C9A8(lbl_803EA368, 2, 0);
+            ReplayHandleCommand(gpReplay, 2, 0);
         }
         CamGameResumeAll();
         HudPost3AOn();
@@ -20426,7 +20426,7 @@ extern "C" void fn_800AA348(Entry_800AA80C *pEntries, int index)
         fn_800AA020();
         for (unsigned int j = 0; j < pActor->mUnknown4; j++) {
             int slot = fn_80096440(AnimSeqncrGetPlayerPtr(pActor, j)->mUnknown0);
-            Object_80039F5C *p = fn_800606CC(pEntries[index].mUnknown0, slot);
+            Object_80039F5C *p = StoryEventsFindLineupPlayer(pEntries[index].mUnknown0, slot);
 
             if (p != 0) {
                 p->mUnknown9[2] = 1;
@@ -20739,7 +20739,7 @@ void Class_80297B90::vfn_03()
     lbl_803EAA88->mUnknown10 = 0;
     fn_800AFDD4(fn_800AA93C);
     AudmonEventPost(131, 0);
-    fn_8002C9A8(lbl_803EA368, 3, 0);
+    ReplayHandleCommand(gpReplay, 3, 0);
     lbl_803EAA88->mUnknown4 = 19;
     lbl_803EAA88->mUnknown15 = InGameIsDemo();
     lbl_803EAA88->mUnknown16 = lbl_803EAA88->mUnknownC = lbl_803EAA88->mUnknown8 = -1;
@@ -21026,7 +21026,7 @@ void Class_80297B90::vfn_04(float dt)
         if (lbl_803EAA88->mUnknown4 == 13) {
             lbl_803EAA88->mUnknown16 = -1;
             if (fn_80178AE0() == 1) {
-                StevRow_t *pRow = fn_8005FC7C();
+                StevRow_t *pRow = StoryEventsGetCurrentEvent();
 
                 if (pRow == 0) {
                     pRow = StoryTournamentGetEvent();
@@ -21090,7 +21090,7 @@ void Class_80297B90::vfn_04(float dt)
                 break;
             }
             SndgMusicFadeOut(250, 0);
-            fn_8005FC84();
+            StoryEventsRecordGameResult();
             StoryTournamentOnGameEnd();
             PlyrNameTagEnable(0);
             FieldLinesEnable(0);
@@ -21996,7 +21996,7 @@ extern "C" void fn_800AD31C(float dt)
 
     if (p != 0) {
         if (p->mUnknownC <= 0.0f) {
-            fn_8002C9A8(lbl_803EA368, 5, 0);
+            ReplayHandleCommand(gpReplay, 5, 0);
             p->mUnknown8 = 0;
             PauseUnblock();
         } else {
@@ -22199,7 +22199,7 @@ extern "C" void fn_800AD9C0(float value)
         p->mUnknownC = value;
         p->mUnknown8 = 1;
         PauseBlock();
-        fn_8002C9A8(lbl_803EA368, 4, 0);
+        ReplayHandleCommand(gpReplay, 4, 0);
     }
 }
 
@@ -24856,7 +24856,7 @@ extern "C" void fn_800B3078(void)
     PlayArtStart(1);
     fn_80178320();
     fn_80178308();
-    fn_8002C9A8(lbl_803EA368, 3, 0);
+    ReplayHandleCommand(gpReplay, 3, 0);
     fn_800B30C8();
 }
 
@@ -25574,7 +25574,7 @@ static inline const char *_StrippedQuery_80296D28(void)
 
 extern "C" void fn_800B4A4C(void)
 {
-    fn_80030ACC(fn_800B44D4, fn_800B4628, 0x8C0, "Player Abilities");
+    ReplayRegisterChannel(fn_800B44D4, fn_800B4628, 0x8C0, "Player Abilities");
 }
 
 extern "C" void fn_800B4A88(void)
@@ -27240,7 +27240,7 @@ extern "C" void fn_800B86A4(int index)
     Block_800B95B4 *p = lbl_803EAB78;
 
     if (p->mUnknown160 != 0 && (p->mUnknown164 == 2 || p->mUnknown164 == fn_800B6644(index))
-        && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1) && fn_8002D060(lbl_803EA368) == 0) {
+        && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1) && ReplayIsShowing(gpReplay) == 0) {
         switch (lbl_803EAB78->mUnknown14C) {
         case 0:
             lbl_803EAB78->mUnknown144 = 0;
@@ -27271,15 +27271,15 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
         }
         break;
     case 9:
-        if (lbl_803EAB78->mUnknown151 != 0 && fn_8009B9BC() == 0 && fn_8002D060(lbl_803EA368) == 0
+        if (lbl_803EAB78->mUnknown151 != 0 && fn_8009B9BC() == 0 && ReplayIsShowing(gpReplay) == 0
             && InGameIsDemo() == 0 && InGameIsPaused() == 0 && TeamPromptIsActive() == 0 && PauseRequestIsPending() == 0
             && PauseIsUnblocked() == 1 && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1)) {
-            fn_8002C9A8(lbl_803EA368, 3, 0);
-            if (fn_8002D228(lbl_803EA368) != 0) {
+            ReplayHandleCommand(gpReplay, 3, 0);
+            if (ReplayIsHalted(gpReplay) != 0) {
                 fn_8009BA10(0);
                 fn_8009B924();
                 fn_80094DF0();
-                fn_8002D2C8(lbl_803EA368, 1);
+                ReplaySetHoldFlag(gpReplay, 1);
                 while (BannerIsActive(7) != 0) {
                     BannerClear(7);
                 }
@@ -27288,9 +27288,9 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
                     GameEventFlagsSetFlag3(1);
                     GameEventFlagsSetFlag0(2);
                 }
-                fn_8002CA74(lbl_803EA368, 10, index);
-                fn_8002CA74(lbl_803EA368, 11, 0);
-                fn_8002CA74(lbl_803EA368, 7, 0);
+                ReplayHandleControl(gpReplay, 10, index);
+                ReplayHandleControl(gpReplay, 11, 0);
+                ReplayHandleControl(gpReplay, 7, 0);
             }
         }
         break;
@@ -27341,7 +27341,7 @@ int PostPlayPhase::IsFinished(int busy)
     int result = 0;
 
     if ((lbl_803EAB78->mSequence.mUnknown100 == 0 || lbl_803EAB78->mUnknown148 != 0) && busy == 0
-        && fn_8002D060(lbl_803EA368) == 0) {
+        && ReplayIsShowing(gpReplay) == 0) {
         if (ChallengeIsActive() == 0 || lbl_803EAB78->mUnknown148 == 0) {
             result = 1;
             if (fn_800AE978() != 0 || fn_800AE980() != 0 || fn_8009B9A8(1) != 0 || fn_8009B9A8(0) != 0
@@ -27404,9 +27404,9 @@ void PostPlayPhase::ForceFinish()
 extern "C" void fn_800B8C9C(void)
 {
     if (lbl_803EAB7E == 0) {
-        if (lbl_803EA368->mUnknownD90 != 0) {
+        if (gpReplay->mUnknownD90 != 0) {
             if (fn_800A2160() == 0 || InGameIsDemo() != 0 || fn_800AE978() != 0 || fn_8009B9A8(0) != 0
-                || fn_8002E950(0) == 0) {
+                || ReplayPickScript(0) == 0) {
                 return;
             }
             fn_8009BA10(1);
@@ -27418,10 +27418,10 @@ extern "C" void fn_800B8C9C(void)
 void PostPlayPhase::UpdateCue(float dt)
 {
     fn_800B8C9C();
-    if (fn_8002D228(lbl_803EA368) != 0 && lbl_803EAB7C == 0 && lbl_803EAB7D != 0
+    if (ReplayIsHalted(gpReplay) != 0 && lbl_803EAB7C == 0 && lbl_803EAB7D != 0
         && lbl_803EAB78->mUnknown154 > 45) {
         fn_8009BC30(lbl_803EAB80);
-        if (fn_8002E950(0) != 0) {
+        if (ReplayPickScript(0) != 0) {
             fn_8009BA10(0);
             fn_8009BBD8((int)&lbl_803EAB78->mUnknown104);
         }
@@ -27629,14 +27629,14 @@ void PostPlayPhase::OnEnter(float dt)
     lbl_803EAB78->mUnknown151 = 0;
     OnSequenceStart();
     fn_800C4460(&lbl_803EAB78->mSequence);
-    if (fn_8002D060(lbl_803EA368) == 0) {
+    if (ReplayIsShowing(gpReplay) == 0) {
         fn_800AFDD4(fn_800B876C);
     }
     AudmonEventPost(123, 0);
     PassIconsHide();
     PassIconsClearReplayFlag();
-    if (fn_8002D0AC(lbl_803EA368)) {
-        ReplayEventAdd(lbl_803EA368, 37, 0, &pos, 0);
+    if (ReplayIsRecording(gpReplay)) {
+        ReplayEventAdd(gpReplay, 37, 0, &pos, 0);
     }
     lbl_803EAB78->mUnknown148 = 0;
     lbl_803EAB78->mUnknown14C = 0;
@@ -27666,7 +27666,7 @@ void PostPlayPhase::OnUpdate(float dt)
     HudCycleMashPrompt();
     SpchIGUpdatePlayResult();
     UpdateCue(dt);
-    if (fn_8002D060(lbl_803EA368) == 0) {
+    if (ReplayIsShowing(gpReplay) == 0) {
         fn_800C45C0(&lbl_803EAB78->mSequence, dt);
     }
     if (ChallengeIsActive() != 0 && fn_8009D990(4) == 0) {
@@ -27698,8 +27698,8 @@ void PostPlayPhase::OnExit()
     fn_800B8028();
     fn_8009B924();
     fn_80094DF0();
-    fn_8002C9A8(lbl_803EA368, 3, 0);
-    if (fn_8002D060(lbl_803EA368) == 0) {
+    ReplayHandleCommand(gpReplay, 3, 0);
+    if (ReplayIsShowing(gpReplay) == 0) {
         fn_800AFE20(fn_800B876C);
     }
     fn_800C4568(&lbl_803EAB78->mSequence);
@@ -28343,7 +28343,7 @@ extern "C" void fn_800BAAE4(void)
         fn_80177C50(1);
         fn_80177C44(0);
     }
-    fn_8002C9A8(lbl_803EA368, 3, 0);
+    ReplayHandleCommand(gpReplay, 3, 0);
     if (BallGetCurrentHolder() != 0) {
         BallReleaseStill(BallGetCurrent(), 5, 0);
     }
@@ -28852,7 +28852,7 @@ extern "C" Object_80039F5C *fn_800BBB84(int position, Record_800BAE7C *pRecords,
     Object_80039F5C *p = 0;
 
     if (lbl_803EC98C->mUnknown2A > -1) {
-        p = fn_800606CC(fn_80094564(lbl_803EC98C->mUnknown2A, index), position);
+        p = StoryEventsFindLineupPlayer(fn_80094564(lbl_803EC98C->mUnknown2A, index), position);
     }
     if (p == 0) {
         unsigned int *pUsed = 0;
@@ -29058,7 +29058,7 @@ extern "C" void fn_800BC3F0(void)
     lbl_803EC98C->mUnknown14 = 4;
     lbl_803EC98C->mUnknown2B = 14;
     lbl_803EC98C->mpUnknown10 = lbl_802D9B30;
-    pRow = fn_8005FC7C();
+    pRow = StoryEventsGetCurrentEvent();
     if (pRow != 0 && !(pRow->mCsis & 0x80)) {
         lbl_803EC98C->mUnknown2A = pRow->mCsis;
         lbl_803EC98C->mUnknown14 = 5;
@@ -29771,7 +29771,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
         break;
     }
     case 0x5A:
-        if (fn_80178E10() != 0 && fn_8002D060(lbl_803EA368) == 0 && fn_800BA6F8() == 0 &&
+        if (fn_80178E10() != 0 && ReplayIsShowing(gpReplay) == 0 && fn_800BA6F8() == 0 &&
             fn_800A937C() == 0 && involved && (side != other || !twoPlayer)) {
             lbl_803EABA8->mSlots[side].mUnknown0 = 1;
             ConSetChannelInfo(index, 3, lbl_802ED104);
@@ -29843,7 +29843,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
         break;
     case 0x84:
     case 0x85:
-        if (fn_8002D060(lbl_803EA368) == 0 && involved == 1 && !twoPlayer && value != 0.0f &&
+        if (ReplayIsShowing(gpReplay) == 0 && involved == 1 && !twoPlayer && value != 0.0f &&
             lbl_803EABA8->mUnknownC0 <= 0) {
             fn_800BE808(index, side);
             fn_800BE944(side, index, msg, value);
@@ -30063,12 +30063,12 @@ extern "C" void fn_800BE4C8(int a, unsigned int msg, float value)
             if (fn_800BA6F8()) {
                 switch (msg) {
                 case 94:
-                    if (!fn_8002D060(lbl_803EA368)) {
+                    if (!ReplayIsShowing(gpReplay)) {
                         fn_800BA8CC(1);
                     }
                     break;
                 case 93:
-                    if (!fn_8002D060(lbl_803EA368) && fn_800BAAB8()) {
+                    if (!ReplayIsShowing(gpReplay) && fn_800BAAB8()) {
                         fn_800BA804(1);
                     }
                     break;
@@ -31688,7 +31688,7 @@ extern "C" void fn_800C1CA0(void)
     } else {
         fn_80177B7C(team);
     }
-    fn_8002D274(lbl_803EA368);
+    ReplayStopAndClear(gpReplay);
     PlayTrackReset();
     fn_8022BF68();
     StyleTrackerEndPlay();
@@ -33975,7 +33975,7 @@ extern "C" int fn_800C7118(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
                 StyleTrackerResolveStiffArm(p, 1);
                 fn_800A8954(2, p->mIdBytes[2], p);
                 AudmonEventPostId(97, &p->mMotion.mPos, p->mId, p->mpState->mId, 0, 0);
-                ReplayEventAdd(lbl_803EA368, 59, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                ReplayEventAdd(gpReplay, 59, p, &p->mMotion.mPos, &p->mMotion.mFacing);
             } else if (isTwo) {
                 StyleTrackerBeginHurdle(p, PlayerMoveGetKind(p), 255);
             } else {

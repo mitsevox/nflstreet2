@@ -76,9 +76,9 @@ int TextEntryGetCharSet(int a, char *pText, int length);
 int ChallengeIsActive(void);
 int ChallengeIsPairingGame(void);
 int GameModeTypeIsSpecial(void);
-void fn_80083E1C(DbCursor *pObject, int a);
-int fn_8008400C(DbCursor *pObject);
-int fn_80084360(DbCursor *pObject);
+void TeamDbOpenQuery(DbCursor *pObject, int a);
+int TeamDbGetType(DbCursor *pObject);
+int TeamDbGetTmur(DbCursor *pObject);
 int PlayerDbGetPortraitId(Object_8008044C *pObject);
 void MsgMainMenuGoTo(int a);
 int MsgMainMenuAssignPads(void);
@@ -429,14 +429,14 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         DbCursor cursor;
         char name[32];
 
-        fn_80083E1C(&cursor, 0);
-        if (fn_80084034(&cursor, pArgs[0].i, 0)) {
-            fn_80083F88(&cursor, name, sizeof(name));
+        TeamDbOpenQuery(&cursor, 0);
+        if (TeamDbSeekId(&cursor, pArgs[0].i, 0)) {
+            TeamDbGetName(&cursor, name, sizeof(name));
             strnzcpy(pArgs[1].pParams->mpText, name, pArgs[1].pParams->mLength);
         } else {
             strnzcpy(pArgs[1].pParams->mpText, "", pArgs[1].pParams->mLength);
         }
-        fn_80083F68(&cursor);
+        TeamDbClose(&cursor);
         break;
     }
     case 0x103:
@@ -600,19 +600,19 @@ void MsgGameGetPlayerStatus(int id, int *pStatus, int *pTeam)
         if (result) {
             DbCursorOpen(&cursor, 0x4D414554, 0x44494754, 0, 0, 0x54415453);
         } else {
-            fn_80083E1C(&cursor, 0);
+            TeamDbOpenQuery(&cursor, 0);
         }
-        if (fn_80084034(&cursor, id, 0)) {
-            *pStatus = fn_80084158(&cursor);
+        if (TeamDbSeekId(&cursor, id, 0)) {
+            *pStatus = TeamDbGetLogo(&cursor);
             if (*pStatus == 0) {
                 if (id == GameInfoGet(1)) {
                     *pStatus = 0x85;
                 } else {
                     *pStatus = 0x86;
                 }
-            } else if (!fn_80084438(&cursor)) {
+            } else if (!TeamDbGetCtdl(&cursor)) {
                 if (result) {
-                    team = fn_80084360(&cursor);
+                    team = TeamDbGetTmur(&cursor);
                     if (team != 0 && team != 1) {
                         team = 2;
                     }
@@ -631,7 +631,7 @@ void MsgGameGetPlayerStatus(int id, int *pStatus, int *pTeam)
                 }
             }
         }
-        fn_80083F68(&cursor);
+        TeamDbClose(&cursor);
     } else if (mode == 2 || mode == 4 || mode == 13) {
         if (id == GameInfoGet(1)) {
             *pStatus = 0x85;
@@ -640,13 +640,13 @@ void MsgGameGetPlayerStatus(int id, int *pStatus, int *pTeam)
         }
     } else if (mode == 11) {
         if (id == GameInfoGet(1)) {
-            fn_80083E1C(&cursor, 0);
-            if (fn_80084034(&cursor, id, 0)) {
-                *pStatus = fn_80084158(&cursor);
+            TeamDbOpenQuery(&cursor, 0);
+            if (TeamDbSeekId(&cursor, id, 0)) {
+                *pStatus = TeamDbGetLogo(&cursor);
             } else {
                 *pStatus = 0x85;
             }
-            fn_80083F68(&cursor);
+            TeamDbClose(&cursor);
         } else {
             *pStatus = 0x86;
         }
@@ -654,13 +654,13 @@ void MsgGameGetPlayerStatus(int id, int *pStatus, int *pTeam)
         *pStatus = 0x8E;
     } else {
         if (result) {
-            fn_80083E40(&cursor, 0, 0x54415453);
+            TeamDbOpen(&cursor, 0, 0x54415453);
         } else {
-            fn_80083E1C(&cursor, 0);
+            TeamDbOpenQuery(&cursor, 0);
         }
-        if (fn_80084034(&cursor, id, 0)) {
+        if (TeamDbSeekId(&cursor, id, 0)) {
             if (!result) {
-                if (fn_8008400C(&cursor) != 5) {
+                if (TeamDbGetType(&cursor) != 5) {
                     team = 2;
                 } else if (fn_8022E558() == id) {
                     team = 0;
@@ -668,13 +668,13 @@ void MsgGameGetPlayerStatus(int id, int *pStatus, int *pTeam)
                     team = 1;
                 }
             } else {
-                team = fn_80084360(&cursor);
+                team = TeamDbGetTmur(&cursor);
                 if (team != 0 && team != 1) {
                     team = 2;
                 }
             }
 
-            if (!fn_80084438(&cursor)) {
+            if (!TeamDbGetCtdl(&cursor)) {
                 switch (team) {
                 case 0:
                     *pTeam = TeamLogoGetHandle(0);
@@ -684,9 +684,9 @@ void MsgGameGetPlayerStatus(int id, int *pStatus, int *pTeam)
                     break;
                 }
             }
-            *pStatus = fn_80084158(&cursor);
+            *pStatus = TeamDbGetLogo(&cursor);
         }
-        fn_80083F68(&cursor);
+        TeamDbClose(&cursor);
     }
 }
 

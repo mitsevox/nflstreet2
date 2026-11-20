@@ -329,7 +329,7 @@ void GlowUpdateFlickers(void) { if (_Glow_pFlickers) for (unsigned int i = 0; i 
 int GlowGetFlickerState(unsigned int index) { if (_Glow_pFlickers && index < _Glow_nFlickers) return _Glow_pFlickers[index].mUnknown4; return 1; }
 float GlowGetFlickerTime(unsigned int index) { if (_Glow_pFlickers && index < _Glow_nFlickers) return _Glow_pFlickers[index].mUnknown1C; return 0.0f; }
 }
-/* Three bytes that fn_800840A4 reads from the team's row; the first is the palette index of the
+/* Three bytes that TeamDbGetColors reads from the team's row; the first is the palette index of the
    team colour. */
 struct TeamColorRow_t {
     unsigned char mUnknown0;
@@ -339,8 +339,8 @@ struct TeamColorRow_t {
 
 extern "C" {
 int fn_8003DEB4(void);
-void fn_80083E1C(DbCursor *pObject, int a);
-void fn_800840A4(DbCursor *pObject, void *pBuffer);
+void TeamDbOpenQuery(DbCursor *pObject, int a);
+void TeamDbGetColors(DbCursor *pObject, void *pBuffer);
 int fn_800A7EF4(unsigned char a);
 int fn_800C8744(int team);
 int GameTextGetPadPlayer(int a);
@@ -576,10 +576,10 @@ void ParticleTrailSetTeamColor(Object_80039F5C *pPlayer)
     Object_8003DEC4 *pObject = (Object_8003DEC4 *)pPlayer->mpUnknown4;
     int id = fn_800C8744(pPlayer->mIdBytes[2]);
 
-    fn_80083E1C(&cursor, 0);
-    fn_80084034(&cursor, id, 0);
-    fn_800840A4(&cursor, &row);
-    fn_80083F68(&cursor);
+    TeamDbOpenQuery(&cursor, 0);
+    TeamDbSeekId(&cursor, id, 0);
+    TeamDbGetColors(&cursor, &row);
+    TeamDbClose(&cursor);
     DbColPalGetPrimaryColor(row.mUnknown0, &color);
     pObject->mUnknown5188.mUnknown250.mUnknown0 = color.r / 255.0f;
     pObject->mUnknown5188.mUnknown250.mUnknown4 = color.g / 255.0f;

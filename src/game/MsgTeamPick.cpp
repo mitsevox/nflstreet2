@@ -79,10 +79,10 @@ void fn_8003DE74(unsigned char side, int *pList);
 int DepthChartScreenIsSideShown(unsigned char a);
 void DepthChartScreenGetSideName(unsigned char a, int b, char *pText, int length);
 void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
-float fn_8005F754(void);
-StevRow_t *fn_8005FC7C(void);
-void fn_8005FCF8(int *pA, int *pB);
-void fn_80060330(int a, int *pList, int count, Object_8008044C *pObject);
+float StoryEventsGetRatingScale(void);
+StevRow_t *StoryEventsGetCurrentEvent(void);
+void StoryEventsBuildPickupTables(int *pA, int *pB);
+void StoryEventsCallTeamSetupStub(int a, int *pList, int count, Object_8008044C *pObject);
 void StoryTournamentSetTeamPlayers(int team, int *pDigp);
 int DbCursorGetValue(DbCursor *pObject, int key);
 void PortDbOpenSides(DbCursor *pObject);
@@ -112,11 +112,11 @@ int fn_80082864(void);
 void fn_800828FC(void);
 void fn_800829D8(void);
 int fn_80082AB0(int a, int b, int c);
-int fn_800841AC(DbCursor *pObject);
-int fn_800841D8(DbCursor *pObject);
-int fn_80084204(DbCursor *pObject);
-int fn_800844B8(const char *pName, int a, int b);
-int fn_8008454C(int a, int b, int c);
+int TeamDbGetColor1(DbCursor *pObject);
+int TeamDbGetColor2(DbCursor *pObject);
+int TeamDbGetColor3(DbCursor *pObject);
+int TeamDbInsert(const char *pName, int a, int b);
+int TeamDbCreate(int a, int b, int c);
 int TournamentGetDraftPool1(int *pList, int max);
 int TournamentGetDraftPool0(int *pList, int max);
 int TournamentGetTeamList(int *pList);
@@ -658,9 +658,9 @@ void MsgTeamPickBuildPool(void)
         }
         if (_MsgTeamPick_abSources[2]) {
             MsgTeamPickCreateHoldingTeams();
-            team = fn_800844B8("New Team", 6, 0);
+            team = TeamDbInsert("New Team", 6, 0);
             fn_800828FC();
-            scale = fn_8005F754();
+            scale = StoryEventsGetRatingScale();
         }
         for (i = 0; i < 7; i++) {
             _MsgTeamPick_ascGroupQuota[i] = 2;
@@ -687,7 +687,7 @@ void MsgTeamPickCreateHoldingTeams(void)
 
     DbFileTblLoad(0, 0x43544E52);
     for (i = 0; i < 7; i++) {
-        _MsgTeamPick_aiHoldingTeam[i] = fn_8008454C(6, -1, 0);
+        _MsgTeamPick_aiHoldingTeam[i] = TeamDbCreate(6, -1, 0);
     }
     _MsgTeamPick_iHoldingTeam = 0;
     DbFileTblDestroy(0, 0x43544E52);
@@ -1211,7 +1211,7 @@ int MsgTeamPickInit(int *pController, int *pCount)
 {
     _MsgTeamPick_bClosed = 0;
     _MsgTeamPick_iLastCreatedId = -1;
-    _MsgTeamPick_pEventRow = fn_8005FC7C();
+    _MsgTeamPick_pEventRow = StoryEventsGetCurrentEvent();
     _MsgTeamPick_pTournamentRow = StoryTournamentGetEvent();
     MsgTeamPickInitState();
     if (_MsgTeamPick_pState->mpUnknown08[_MsgTeamPick_pState->mUnknown15] != 0xFF) {
@@ -1239,7 +1239,7 @@ int MsgTeamPickInit(int *pController, int *pCount)
         fn_80148AF8(fn_80148A58());
     }
     fn_8008044C(&_MsgTeamPick_PlayerCursor, 0, 0x54415453);
-    fn_80083E40(&_MsgTeamPick_TeamCursor, 0, 0x54415453);
+    TeamDbOpen(&_MsgTeamPick_TeamCursor, 0, 0x54415453);
 
     if (MsgGameGetSetupState() == 1) {
         _MsgTeamPick_aiDepthValue[0] = MsgTeamPickRandomDepthValue();
@@ -1344,14 +1344,14 @@ void MsgTeamPickShutdown(void)
 
     MsgTeamPickUnregisterPortraits();
     fn_8008056C(&_MsgTeamPick_PlayerCursor);
-    fn_80083F68(&_MsgTeamPick_TeamCursor);
+    TeamDbClose(&_MsgTeamPick_TeamCursor);
     DepthChartSave();
     if (MsgGameGetSetupState() == 0) {
         MsgTeamPickFreePool();
     }
     if (MsgGameGetSetupState() == 1) {
         if (_MsgTeamPick_pTournamentRow == 0 && _MsgTeamPick_pEventRow) {
-            fn_8005FCF8(digp[0], digp[1]);
+            StoryEventsBuildPickupTables(digp[0], digp[1]);
             MsgStadiumStartGame(_MsgTeamPick_pEventRow->mDive);
         }
     } else {
@@ -1656,8 +1656,8 @@ void MsgTeamPickStepShownTeam(int dir, int *pResult, char *pText, int length)
             case -19:
                 break;
             }
-            if (team != -19 && fn_80084034(&_MsgTeamPick_TeamCursor, team, 0)) {
-                fn_80083F88(&_MsgTeamPick_TeamCursor, pText, length);
+            if (team != -19 && TeamDbSeekId(&_MsgTeamPick_TeamCursor, team, 0)) {
+                TeamDbGetName(&_MsgTeamPick_TeamCursor, pText, length);
             }
         } else {
             const char *pName = 0;
@@ -1677,8 +1677,8 @@ void MsgTeamPickStepShownTeam(int dir, int *pResult, char *pText, int length)
             }
         }
     } else {
-        if (fn_80084034(&_MsgTeamPick_TeamCursor, id, 0)) {
-            fn_80083F88(&_MsgTeamPick_TeamCursor, pText, length);
+        if (TeamDbSeekId(&_MsgTeamPick_TeamCursor, id, 0)) {
+            TeamDbGetName(&_MsgTeamPick_TeamCursor, pText, length);
         }
     }
 }
@@ -1761,7 +1761,7 @@ void MsgTeamPickPickPlayer(int id, int *pSlot)
         MsgTeamPickFinishTeam(1);
         if (_MsgTeamPick_pEventRow) {
             int value = _MsgTeamPick_iEventPlayer;
-            fn_80060330(1, &value, 1, &_MsgTeamPick_PlayerCursor);
+            StoryEventsCallTeamSetupStub(1, &value, 1, &_MsgTeamPick_PlayerCursor);
         }
     } else {
         if (_MsgTeamPick_pState->mUnknown15 == _MsgTeamPick_pState->mCount - 1) {
@@ -1908,17 +1908,17 @@ void MsgTeamPickGetTeamLogo(int id, int *pA, int *pB)
         *pA = 0x84;
     }
     if (*pA == -1) {
-        int found = fn_80084034(&_MsgTeamPick_TeamCursor, id, 0);
-        if (fn_80084438(&_MsgTeamPick_TeamCursor) == 0) {
+        int found = TeamDbSeekId(&_MsgTeamPick_TeamCursor, id, 0);
+        if (TeamDbGetCtdl(&_MsgTeamPick_TeamCursor) == 0) {
             unsigned char color[3];
-            color[0] = fn_800841AC(&_MsgTeamPick_TeamCursor);
-            color[1] = fn_800841D8(&_MsgTeamPick_TeamCursor);
-            color[2] = fn_80084204(&_MsgTeamPick_TeamCursor);
-            TeamLogoRequestTint(0, 4, fn_80084158(&_MsgTeamPick_TeamCursor), 0xAC, color);
+            color[0] = TeamDbGetColor1(&_MsgTeamPick_TeamCursor);
+            color[1] = TeamDbGetColor2(&_MsgTeamPick_TeamCursor);
+            color[2] = TeamDbGetColor3(&_MsgTeamPick_TeamCursor);
+            TeamLogoRequestTint(0, 4, TeamDbGetLogo(&_MsgTeamPick_TeamCursor), 0xAC, color);
             *pB = TeamLogoGetHandle(0);
         }
         if (found) {
-            *pA = fn_80084158(&_MsgTeamPick_TeamCursor);
+            *pA = TeamDbGetLogo(&_MsgTeamPick_TeamCursor);
         } else {
             *pA = 0x84;
         }

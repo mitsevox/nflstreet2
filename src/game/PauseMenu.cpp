@@ -50,15 +50,15 @@ struct PauseState_t {
 };
 
 extern "C" {
-extern void *lbl_803EA368;
+extern void *gpReplay;
 extern void *gUISMainInfo;
 
-void fn_8002C9A8(void *p, int a, int b);
-void fn_8002CA74(void *p, int a, int b);
-int fn_8002D060(void *p);
-int fn_8002D0AC(void *p);
-void fn_8002D198(void *p);
-int fn_8002D228(void *p);
+void ReplayHandleCommand(void *p, int a, int b);
+void ReplayHandleControl(void *p, int a, int b);
+int ReplayIsShowing(void *p);
+int ReplayIsRecording(void *p);
+void ReplayRequestExit(void *p);
+int ReplayIsHalted(void *p);
 int fn_80059004(void);
 int fn_8005900C(void);
 void PauseRequestInit(void);
@@ -243,7 +243,7 @@ void PauseCameraStart(void)
     params.mUnknown28 = SyncRandGetRange(1, 3);
     params.mUnknown20 = 2;
     params.mUnknown24 = 0;
-    if (_Pause_State.mPair.mHigh != 7 && ScreenTransGetMode() != 5 && !fn_8002D0AC(lbl_803EA368)
+    if (_Pause_State.mPair.mHigh != 7 && ScreenTransGetMode() != 5 && !ReplayIsRecording(gpReplay)
         && fn_800AD9B4() != 7) {
         params.mUnknown12 |= 2;
     }
@@ -408,8 +408,8 @@ void PauseOpenScreenArgs(unsigned short a, unsigned short b, int c, unsigned int
         _Pause_bSavedViewFlag = PlyrStarGetRingsShown();
     }
     _Pause_bOpened = 1;
-    if (fn_8002D060(lbl_803EA368)) {
-        fn_8002D198(lbl_803EA368);
+    if (ReplayIsShowing(gpReplay)) {
+        ReplayRequestExit(gpReplay);
     }
     InGamePause();
     _Pause_bSavedRumble = RumbleIsEnabled();
@@ -432,7 +432,7 @@ void PauseOpenScreenArgs(unsigned short a, unsigned short b, int c, unsigned int
         fn_8009BA10(0);
     }
     HudHideMashPrompts();
-    fn_8002C9A8(lbl_803EA368, 4, 0);
+    ReplayHandleCommand(gpReplay, 4, 0);
     PauseBlock();
     _Pause_iValue = c;
     UISHeldObjEnable(1);
@@ -447,7 +447,7 @@ void PauseUpdate(void)
         _Pause_iPollDelay--;
     }
     if (PauseIsActive()) {
-        fn_8002C9A8(lbl_803EA368, 4, 0);
+        ReplayHandleCommand(gpReplay, 4, 0);
         switch (_Pause_State.mState) {
         case 1:
             BannerClear(7);
@@ -518,7 +518,7 @@ void PauseClose(void)
     }
     PauseResetState();
     fn_800BA5B0();
-    fn_8002C9A8(lbl_803EA368, 5, 0);
+    ReplayHandleCommand(gpReplay, 5, 0);
     GameEventFlagsSetFlag1(_Pause_bSavedSwap1);
     GameEventFlagsSetFlag0(_Pause_bSavedSwap0);
     PauseCloseHook();
@@ -544,13 +544,13 @@ void PauseClose(void)
         fn_8009BA10(1);
     }
     if (_Pause_bQuit) {
-        fn_8002C9A8(lbl_803EA368, 3, 0);
-        if (fn_8002D228(lbl_803EA368) && !fn_8002D060(lbl_803EA368)) {
+        ReplayHandleCommand(gpReplay, 3, 0);
+        if (ReplayIsHalted(gpReplay) && !ReplayIsShowing(gpReplay)) {
             fn_8009B924();
             fn_80094DF0();
-            fn_8002CA74(lbl_803EA368, 10, PauseGetValue());
-            fn_8002CA74(lbl_803EA368, 11, 0);
-            fn_8002CA74(lbl_803EA368, 7, 0);
+            ReplayHandleControl(gpReplay, 10, PauseGetValue());
+            ReplayHandleControl(gpReplay, 11, 0);
+            ReplayHandleControl(gpReplay, 7, 0);
         }
     } else if (_Pause_bAltAction) {
         fn_800C1CA0();

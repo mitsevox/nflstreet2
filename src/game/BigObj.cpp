@@ -20,11 +20,11 @@
 #include "engine/llquat.h"
 
 extern "C" {
-void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
-void fn_80030304(void *pStream, float *pValues, int bits, float scale);
-void fn_80030554(void *pStream, float *pValues, int bits, float scale);
-void fn_8003065C(void *pStream, float *pValues, int bits, float scale);
-void fn_80030ACC(void (*pSave)(BitStream_t *pStream),
+void ReplayReadPacked3(void *pStream, float *pValues, int bits, float scale);
+void ReplayReadPacked4(void *pStream, float *pValues, int bits, float scale);
+void ReplayWritePacked3(void *pStream, float *pValues, int bits, float scale);
+void ReplayWritePacked4(void *pStream, float *pValues, int bits, float scale);
+void ReplayRegisterChannel(void (*pSave)(BitStream_t *pStream),
                  void (*pLoad)(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
                                BitStream_t *pStream3, float t),
                  int size, const char *pName);
@@ -128,8 +128,8 @@ void BigObjSave(BitStream_t *pStream)
             }
             fn_80191068(pStream, pObject->mUnknown232_31, 1);
             fn_80191068(pStream, pObject->mUnknown300->mUnknown40, 8);
-            fn_80030554(pStream, &pObject->mPos.mX, 17, 256.0f);
-            fn_8003065C(pStream, &pObject->mRot.mX, 12, 1024.0f);
+            ReplayWritePacked3(pStream, &pObject->mPos.mX, 17, 256.0f);
+            ReplayWritePacked4(pStream, &pObject->mRot.mX, 12, 1024.0f);
         }
     }
 }
@@ -165,8 +165,8 @@ void BigObjLoad(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStre
             value = ReadBitStream(pStream1, 8);
             ReadBitStream(pStream0, 8);
             fn_8004E0CC(pObject, 0, value);
-            fn_800301C4(pStream1, &pos1.mX, 17, 256.0f);
-            fn_800301C4(pStream0, &pos0.mX, 17, 256.0f);
+            ReplayReadPacked3(pStream1, &pos1.mX, 17, 256.0f);
+            ReplayReadPacked3(pStream0, &pos0.mX, 17, 256.0f);
             if (Vec3Distance(&pos0, &pos1) > 15.0f) {
                 pObject->mPos.mX = pos0.mX;
                 pObject->mPos.mY = pos0.mY;
@@ -174,20 +174,20 @@ void BigObjLoad(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStre
             } else {
                 Vec3Lerp(&pObject->mPos, &pos0, &pos1, t);
             }
-            fn_80030304(pStream1, &rot1.mX, 12, 1024.0f);
-            fn_80030304(pStream0, &rot0.mX, 12, 1024.0f);
+            ReplayReadPacked4(pStream1, &rot1.mX, 12, 1024.0f);
+            ReplayReadPacked4(pStream0, &rot0.mX, 12, 1024.0f);
             QuatSlerp(&pObject->mRot, &rot0, &rot1, t);
             if (pStream2 != 0) {
                 ReadBitStream(pStream2, 1);
                 ReadBitStream(pStream2, 8);
-                fn_800301C4(pStream2, &pos1.mX, 17, 256.0f);
-                fn_80030304(pStream2, &rot1.mX, 12, 1024.0f);
+                ReplayReadPacked3(pStream2, &pos1.mX, 17, 256.0f);
+                ReplayReadPacked4(pStream2, &rot1.mX, 12, 1024.0f);
             }
             if (pStream3 != 0) {
                 ReadBitStream(pStream3, 1);
                 ReadBitStream(pStream3, 8);
-                fn_800301C4(pStream3, &pos1.mX, 17, 256.0f);
-                fn_80030304(pStream3, &rot1.mX, 12, 1024.0f);
+                ReplayReadPacked3(pStream3, &pos1.mX, 17, 256.0f);
+                ReplayReadPacked4(pStream3, &rot1.mX, 12, 1024.0f);
             }
         }
     }
@@ -567,7 +567,7 @@ AnimSkeleton_t *BigObjGetItemSkeleton(BigObj_t *pObject)
 
 void BigObjRegisterSave(void)
 {
-    fn_80030ACC(BigObjSave, BigObjLoad, BigObjGetSaveSize(), "Animated Big Objects");
+    ReplayRegisterChannel(BigObjSave, BigObjLoad, BigObjGetSaveSize(), "Animated Big Objects");
 }
 
 BigObj_t *BigObjFindByKey(int key, unsigned int count)

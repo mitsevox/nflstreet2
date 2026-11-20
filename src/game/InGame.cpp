@@ -23,15 +23,15 @@ double fabs(double);
 extern char lbl_8030716C[];
 extern char lbl_803072C4[];
 extern float gFrameTimeScale;
-extern void *lbl_803EA368;
+extern void *gpReplay;
 extern void *gUISMainInfo;
 extern void *gUISSubInfo;
 
 void VptManagerMarketCamInit(void);
-void fn_8002CBB0(void *p, int a, float c, int b);
-void fn_8002CF34(void *p);
-int fn_8002D060(void *p);
-int fn_8002D2C0(void);
+void ReplayHandleInput(void *p, int a, float c, int b);
+void ReplayUpdate(void *p);
+int ReplayIsShowing(void *p);
+int ReplayIsSuspended(void);
 void fn_8003E1F0(void);
 void DivotUpdate(void);
 void fn_80057F28(void);
@@ -150,20 +150,20 @@ static void _InGamePadHandler(int a, int b, float c)
         if (b != 0x8F) {
             fn_800AFD58(a, b, c);
             PauseRequestHandleInput(a, b, c);
-            if (!fn_8002D060(lbl_803EA368) || fn_8002D2C0()) {
+            if (!ReplayIsShowing(gpReplay) || ReplayIsSuspended()) {
                 UISGameHandleInput(a, b, c);
             } else {
-                fn_8002CBB0(lbl_803EA368, a, c, b);
+                ReplayHandleInput(gpReplay, a, c, b);
             }
         }
     } else if (b != 0x8F) {
-        if (!fn_8002D060(lbl_803EA368) || fn_8002D2C0()) {
+        if (!ReplayIsShowing(gpReplay) || ReplayIsSuspended()) {
             UISGameHandleInput(a, b, c);
         } else {
-            fn_8002CBB0(lbl_803EA368, a, c, b);
+            ReplayHandleInput(gpReplay, a, c, b);
         }
     }
-    if (!PauseIsOpen() || fn_8002D060(lbl_803EA368) || b == 0x8F) {
+    if (!PauseIsOpen() || ReplayIsShowing(gpReplay) || b == 0x8F) {
         PauseIsOpen();
     } else {
         UISGameRefreshAll();
@@ -364,8 +364,8 @@ unsigned char InGame::Update()
         ConProcessChannel(-1);
     }
     PauseUpdate();
-    fn_8002CF34(lbl_803EA368);
-    if (!fn_8002D060(lbl_803EA368)) {
+    ReplayUpdate(gpReplay);
+    if (!ReplayIsShowing(gpReplay)) {
         ParticlesProcess(gFrameTimeScale);
         ParticleSysUpdate(gFrameTimeScale);
         fn_800A3120(gFrameTimeScale);

@@ -33,7 +33,7 @@ struct CamTypeDefEntry_t {
 extern "C" {
 extern char lbl_802F4884[];
 extern char lbl_802F4890[];
-extern CamTypeDef_t lbl_802CC83C;
+extern CamTypeDef_t _Replay_CamType;
 extern char lbl_8031BDD4[];
 
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
@@ -78,7 +78,7 @@ CamTypeDefEntry_t _CamMainTypeDefs[5] = {
     { lbl_802F4890, 0x8C, 0 },
     { lbl_802F4884, 0x94, 0 },
     { &_CamMain_Type, 0xF58, 0 },
-    { &lbl_802CC83C, 0xF60, 0 },
+    { &_Replay_CamType, 0xF60, 0 },
     { 0, 0, 0 },
 };
 }

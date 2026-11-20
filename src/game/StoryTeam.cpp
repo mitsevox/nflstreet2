@@ -187,7 +187,7 @@ void StoryTeamSyncCreatedPlayer(int index)
     if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);
 }
 
-int fn_8008454C(int type, int logo, const char *pName);
+int TeamDbCreate(int type, int logo, const char *pName);
 unsigned int strlen(const char *pText);
 void fn_8018C48C(int handle);
 void fn_8018C344(int database, int firstTable, int secondTable,
@@ -253,16 +253,16 @@ void StoryTeamCursorClose(DbCursor *pCursor)
 int StoryTeamCreate(void)
 {
     DbCursor cursor;
-    int id = fn_8008454C(6, -1, 0);
-    fn_80083E40(&cursor, 0, 0x54415453);
-    if (fn_80084034(&cursor, id, 0)) {
+    int id = TeamDbCreate(6, -1, 0);
+    TeamDbOpen(&cursor, 0, 0x54415453);
+    if (TeamDbSeekId(&cursor, id, 0)) {
         for (int i = 0; i < 3; i++) {
             char *pText = _StoryTeam_apNames[i];
             int length = strlen(pText);
             DbCursorSetString(&cursor, _StoryTeam_aTeamTags[i + 13], pText, length);
         }
     }
-    fn_80083F68(&cursor);
+    TeamDbClose(&cursor);
     return id;
 }
 

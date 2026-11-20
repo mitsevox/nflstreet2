@@ -17,15 +17,15 @@
 
 extern "C" {
 extern char lbl_8030C070[];
-extern void *lbl_803EA368;
+extern void *gpReplay;
 extern void *gLevelData;
 
 void VptManagerInit(void);
 void VptManagerShutdown(void);
-void *fn_8002C8C0(void);
-void fn_8002C964(void *p);
-void fn_80030B30(void);
-void fn_80030BC0(int a);
+void *ReplayCreate(void);
+void ReplayDestroy(void *p);
+void ReplayBufferInit(void);
+void ReplayChannelsInit(int a);
 void PlyrMgrRegister(int a);
 void PlyrMgrReset(void);
 void PlyrMgrEmptyPass(void);
@@ -1098,15 +1098,15 @@ const char *Replay::GetName() { return "Replay"; }
 int Replay::Init()
 {
     GameState::GetStore();
-    lbl_803EA368 = fn_8002C8C0();
+    gpReplay = ReplayCreate();
     return 1;
 }
 
 int Replay::Shutdown()
 {
     ResSync(0);
-    fn_8002C964(lbl_803EA368);
-    lbl_803EA368 = 0;
+    ReplayDestroy(gpReplay);
+    gpReplay = 0;
     return 1;
 }
 
@@ -1119,7 +1119,7 @@ const char *ReplayFrame::GetName() { return "ReplayFrame"; }
 
 int ReplayFrame::Init()
 {
-    fn_80030BC0(0);
+    ReplayChannelsInit(0);
     BallsReplayRegister();
     PlyrStarRegisterReplay();
     fn_8003E118();
@@ -1129,7 +1129,7 @@ int ReplayFrame::Init()
     ParticleSysReplayRegister();
     fn_800B4A4C();
     fn_800D77F0();
-    fn_80030B30();
+    ReplayBufferInit();
     return 1;
 }
 

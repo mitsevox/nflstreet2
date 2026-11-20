@@ -36,8 +36,8 @@ void BootShowStartupScreens(void);
 void BootUpdateReset(void);
 int MainFEGroupIsStarted(void *p);
 void fn_8003E1F0(void);
-int fn_8005FC7C(void);
-int fn_800602E8(void);
+int StoryEventsGetCurrentEvent(void);
+int StoryEventsIsWonPickupEvent(void);
 int StoryTournamentIsComplete(void);
 void MemCardScreenSetFlag(unsigned char a);
 int PlayBookDbOpen(unsigned int id, int a, int b, int c, int d, int e);
@@ -146,7 +146,7 @@ static void _FELoopEnterMode7()
     int args[2];
 
     FELoopRefreshModeType();
-    args[0] = fn_800602E8() ? 401 : 1;
+    args[0] = StoryEventsIsWonPickupEvent() ? 401 : 1;
     MsgMainMenuGoTo(7);
     fn_80218FC4(gUISMainInfo, 12, 0, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
@@ -232,7 +232,7 @@ static void _FELoopEnterModeScreen(int mode)
         _FELoopEnterMode8();
         break;
     case 7:
-        fn_8005FC7C();
+        StoryEventsGetCurrentEvent();
         _FELoopEnterMode7();
         break;
     case 10:

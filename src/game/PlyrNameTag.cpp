@@ -14,9 +14,9 @@ struct NameTagColor_t {
 };
 
 extern "C" {
-extern void *lbl_803EA368;
+extern void *gpReplay;
 
-int fn_8002D060(void *p);
+int ReplayIsShowing(void *p);
 int fn_800A9680(void);
 int UISGetFont(int a, int b);
 void FontResetRenderState(void);
@@ -78,7 +78,7 @@ int PlyrNameTagDraw(PlyrNameTag_t *pInstance)
 {
     if (_PlyrNameTag_bEnabled && GameOptionsGet(17)) {
         int mode = fn_800AD9B4();
-        if (pInstance->mUnknown28 && pInstance->mUnknown20 && !fn_8002D060(lbl_803EA368) && mode != 4 &&
+        if (pInstance->mUnknown28 && pInstance->mUnknown20 && !ReplayIsShowing(gpReplay) && mode != 4 &&
             mode != 7 && !PauseIsOpen() && !fn_800A9680()) {
             float matrix[4][4];
             float saved[4][4];

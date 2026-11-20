@@ -56,9 +56,9 @@ void ClockRuleEndPeriod(void);
 void fn_8009B924(void);
 void ClockRuleClearFlags(unsigned int mask);
 void fn_8009D8CC(int index);
-int fn_8005FC7C(void);
+int StoryEventsGetCurrentEvent(void);
 unsigned char fn_801529C0(MiniGameSettings_t *p);
-void fn_8006088C(int value);
+void StoryEventsSetRewardPenalty(int value);
 void fn_800AAD58(void *p, float dt);
 void fn_8021956C(void *p, int a, int b, int c);
 
@@ -116,8 +116,8 @@ void fn_801516A8(Class_802A1C30 *p, float dt)
     fn_80148A58()->vfn_12();
     fn_80148A58()->vfn_16(lbl_802DEA78);
     fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
-    if (fn_8005FC7C()) {
-        fn_8006088C(fn_801529C0(&lbl_8031BDD4));
+    if (StoryEventsGetCurrentEvent()) {
+        StoryEventsSetRewardPenalty(fn_801529C0(&lbl_8031BDD4));
     }
     fn_800AAD58(p, dt);
 }

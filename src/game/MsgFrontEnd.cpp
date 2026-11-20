@@ -164,15 +164,15 @@ int PlayerDbGetPortraitId(Object_8008044C *pObject);
 int PlayerDbGetWeight(Object_8008044C *pObject);
 int PlayerDbGetBoostedRating(Object_8008044C *pObject, int index);
 void fn_80082558(int a, int b);
-void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery);
-int fn_80083FBC(DbCursor *pObject);
-int fn_8008406C(DbCursor *pObject, int id, int *pResult);
-int fn_800841AC(DbCursor *pObject);
-int fn_800841D8(DbCursor *pObject);
-int fn_80084204(DbCursor *pObject);
-int fn_800842E8(DbCursor *pObject);
-int fn_80084310(DbCursor *pObject);
-int fn_80084338(DbCursor *pObject);
+void TeamDbOpenQuery(DbCursor *pObject, TeamQuery *pQuery);
+int TeamDbGetId(DbCursor *pObject);
+int TeamDbSeekTmur(DbCursor *pObject, int id, int *pResult);
+int TeamDbGetColor1(DbCursor *pObject);
+int TeamDbGetColor2(DbCursor *pObject);
+int TeamDbGetColor3(DbCursor *pObject);
+int TeamDbGetTrof(DbCursor *pObject);
+int TeamDbGetTrde(DbCursor *pObject);
+int TeamDbGetTrov(DbCursor *pObject);
 void UserStatsOpen(DbCursor *pObject, int index);
 void UserStatsClose(DbCursor *pObject);
 int UserStatsGet(DbCursor *pObject, unsigned int index);
@@ -1544,17 +1544,17 @@ void MsgTeamSelectSeekStart(DbCursor *pObject, int index, int saved)
     int found = 0;
 
     if (saved) {
-        found = fn_8008406C(pObject, index, 0);
+        found = TeamDbSeekTmur(pObject, index, 0);
         if (found) {
-            _MsgTeamSelect_aiTeam[index] = fn_80083FBC(pObject);
+            _MsgTeamSelect_aiTeam[index] = TeamDbGetId(pObject);
         }
     }
     if (!found) {
         if (_MsgTeamSelect_aiTeam[index] != -1) {
-            found = fn_80084034(pObject, _MsgTeamSelect_aiTeam[index], 0);
+            found = TeamDbSeekId(pObject, _MsgTeamSelect_aiTeam[index], 0);
         }
         if (!found) {
-            if (!fn_8008406C(pObject, index, 0)) {
+            if (!TeamDbSeekTmur(pObject, index, 0)) {
                 DbCursorFirst(pObject);
                 MsgTeamSelectRandomize(pObject, index);
             }
@@ -1598,7 +1598,7 @@ unsigned char MsgTeamSelectCountOpen(DbCursor *pObject, int side)
 
     if (DbCursorFirst(pObject)) {
         do {
-            if (!MsgTeamSelectIsLocked(side, fn_80083FBC(pObject))) {
+            if (!MsgTeamSelectIsLocked(side, TeamDbGetId(pObject))) {
                 count++;
             }
         } while (DbCursorNext(pObject));
@@ -1613,11 +1613,11 @@ void MsgTeamSelectRandomize(DbCursor *pObject, int side)
         unsigned int count = DbUtilRandomRange(0, _MsgTeamSelect_auOpenCount[side]);
         while (i < count) {
             MsgTeamSelectCursorNext(pObject);
-            if (!MsgTeamSelectIsLocked(side, fn_80083FBC(pObject))) {
+            if (!MsgTeamSelectIsLocked(side, TeamDbGetId(pObject))) {
                 i++;
             }
         }
-    } while (_MsgTeamSelect_ppWindow[side][1] == fn_80083FBC(pObject));
+    } while (_MsgTeamSelect_ppWindow[side][1] == TeamDbGetId(pObject));
 }
 
 void MsgTeamSelectPickRandom(int side)
@@ -1625,7 +1625,7 @@ void MsgTeamSelectPickRandom(int side)
     MsgTeamSelectRandomize(&_MsgTeamSelect_aTeamCursor[side], side);
     MsgTeamSelectCursorPrev(&_MsgTeamSelect_aTeamCursor[side]);
     for (unsigned int i = 0; i <= 2; i++) {
-        _MsgTeamSelect_ppWindow[side][i] = fn_80083FBC(&_MsgTeamSelect_aTeamCursor[side]);
+        _MsgTeamSelect_ppWindow[side][i] = TeamDbGetId(&_MsgTeamSelect_aTeamCursor[side]);
         MsgTeamSelectCursorNext(&_MsgTeamSelect_aTeamCursor[side]);
     }
 }
@@ -1634,18 +1634,18 @@ void MsgTeamSelectGetTeamInfo(int side, int id, char *pName, int size, int *pA, 
 {
     DbCursor cursor;
 
-    fn_80083E1C(&cursor, 0);
-    fn_80084034(&cursor, id, 0);
+    TeamDbOpenQuery(&cursor, 0);
+    TeamDbSeekId(&cursor, id, 0);
     if (pName) {
-        fn_80083F88(&cursor, pName, size);
+        TeamDbGetName(&cursor, pName, size);
     }
-    *pA = fn_800842E8(&cursor);
-    *pB = fn_80084310(&cursor);
-    *pC = fn_80084338(&cursor);
+    *pA = TeamDbGetTrof(&cursor);
+    *pB = TeamDbGetTrde(&cursor);
+    *pC = TeamDbGetTrov(&cursor);
     if (pFree) {
         *pFree = !MsgTeamSelectIsLocked(side, id);
     }
-    fn_80083F68(&cursor);
+    TeamDbClose(&cursor);
 }
 
 int MsgTeamSelectIsLocked(int side, int id)
@@ -1667,7 +1667,7 @@ int MsgTeamSelectIsLocked(int side, int id)
     } else {
         DbCursor *pObject = &_MsgTeamSelect_aTeamCursor[side];
         int position = DbCursorGetRow(pObject);
-        fn_80084034(pObject, id, 0);
+        TeamDbSeekId(pObject, id, 0);
         result = !DbCursorGetValue(pObject, 0x53495654);
         DbCursorSeek(pObject, position);
     }
@@ -1704,7 +1704,7 @@ void MsgTeamSelectListIds(int side, int *pIds, int count)
 
     if (DbCursorFirst(&_MsgTeamSelect_aTeamCursor[side])) {
         do {
-            pIds[i++] = fn_80083FBC(&_MsgTeamSelect_aTeamCursor[side]);
+            pIds[i++] = TeamDbGetId(&_MsgTeamSelect_aTeamCursor[side]);
         } while (DbCursorNext(&_MsgTeamSelect_aTeamCursor[side]));
     }
     DbCursorFirst(&_MsgTeamSelect_aTeamCursor[side]);
@@ -1720,10 +1720,10 @@ void MsgTeamSelectGetTeam(int side, int index, int *pId, char *pName, int size)
     DbCursor cursor;
 
     *pId = _MsgTeamSelect_apTeamIds[side][index];
-    fn_80083E1C(&cursor, 0);
-    fn_80084034(&cursor, *pId, 0);
-    fn_80083F88(&cursor, pName, size);
-    fn_80083F68(&cursor);
+    TeamDbOpenQuery(&cursor, 0);
+    TeamDbSeekId(&cursor, *pId, 0);
+    TeamDbGetName(&cursor, pName, size);
+    TeamDbClose(&cursor);
 }
 
 void MsgTeamSelectBrowsePlayer(int side, int direction, int *pId, char *pName, int nameSize, int *pPosition, char *pRole,
@@ -2234,10 +2234,10 @@ int MsgTeamSelectHandleMessage(unsigned int id, MenuArg_t *pArgs, int count, int
             DbCursor query;
             int team;
 
-            fn_80083E40(&query, 0, 0x54415453);
-            fn_8008406C(&query, 1, 0);
-            team = fn_80083FBC(&query);
-            fn_80083F68(&query);
+            TeamDbOpen(&query, 0, 0x54415453);
+            TeamDbSeekTmur(&query, 1, 0);
+            team = TeamDbGetId(&query);
+            TeamDbClose(&query);
             if (pArgs[0].i == 1 && pArgs[1].i != team) {
                 MsgTeamSelectSetTeam(1, team);
                 pArgs[0].i = 0;
@@ -2378,7 +2378,7 @@ int MsgTeamEditSelectInit(int *pCount, int *pA, int *pB, int *pC)
     TeamQuery query;
     query.mUnknown0 = 1;
     query.mUnknown4 = 3;
-    fn_80083E40(&_MsgTeamSelect_aTeamCursor[1], &query, 0x54415453);
+    TeamDbOpen(&_MsgTeamSelect_aTeamCursor[1], &query, 0x54415453);
     *pA = 0;
     *pCount = DbCursorGetRowCount(&_MsgTeamSelect_aTeamCursor[1]);
     return 0;
@@ -2389,7 +2389,7 @@ void MsgTeamEditSelectExit(void)
     DbCursor *pQuery = &_MsgTeamSelect_aTeamCursor[1];
 
     if (pQuery->mUnknown0) {
-        fn_80083F68(pQuery);
+        TeamDbClose(pQuery);
     }
     if (MsgGameGetSetupState() == 1) {
         EditMenuBegin(5, _MsgTeamEditSelect_aiTeam[1]);
@@ -2403,18 +2403,18 @@ void MsgTeamEditSelectGetTeamInfo(int mode, int id, char *pName, int nameLength,
     if (mode == 1) {
         DbCursor query;
 
-        fn_80083E40(&query, 0, 0x54415453);
-        fn_80084034(&query, id, 0);
+        TeamDbOpen(&query, 0, 0x54415453);
+        TeamDbSeekId(&query, id, 0);
         if (pName) {
-            fn_80083F88(&query, pName, nameLength);
+            TeamDbGetName(&query, pName, nameLength);
         }
-        *pA = fn_800842E8(&query);
-        *pB = fn_80084310(&query);
-        *pC = fn_80084338(&query);
+        *pA = TeamDbGetTrof(&query);
+        *pB = TeamDbGetTrde(&query);
+        *pC = TeamDbGetTrov(&query);
         if (pMode) {
             *pMode = mode;
         }
-        fn_80083F68(&query);
+        TeamDbClose(&query);
     }
 }
 
@@ -2426,8 +2426,8 @@ void MsgTeamEditSelectGetTeam(int mode, int row, int *pId, char *pName, int name
         int current = DbCursorGetRow(&_MsgTeamSelect_aTeamCursor[1]);
 
         DbCursorSeek(&_MsgTeamSelect_aTeamCursor[1], row);
-        *pId = fn_80083FBC(&_MsgTeamSelect_aTeamCursor[1]);
-        fn_80083F88(&_MsgTeamSelect_aTeamCursor[1], pName, nameLength);
+        *pId = TeamDbGetId(&_MsgTeamSelect_aTeamCursor[1]);
+        TeamDbGetName(&_MsgTeamSelect_aTeamCursor[1], pName, nameLength);
         if (current != -1) {
             DbCursorSeek(&_MsgTeamSelect_aTeamCursor[1], current);
         }
@@ -2439,7 +2439,7 @@ void MsgTeamEditSelectSeekCurrent(int mode, int *pResult)
     int found = 0;
 
     if (mode == 1) {
-        found = fn_80084034(&_MsgTeamSelect_aTeamCursor[1], _MsgTeamEditSelect_aiTeam[1], pResult);
+        found = TeamDbSeekId(&_MsgTeamSelect_aTeamCursor[1], _MsgTeamEditSelect_aiTeam[1], pResult);
     }
     if (!found) {
         *pResult = found;
@@ -2556,8 +2556,8 @@ void MsgTeamSelectQuickSetup(int id0, int id1)
     } else if (id0 == -1) {
         _MsgTeamSelect_aiTeam[0] = 31;
     } else if (id0 == -3) {
-        fn_8008406C(&_MsgTeamSelect_aTeamCursor[0], 0, 0);
-        _MsgTeamSelect_aiTeam[0] = fn_80083FBC(&_MsgTeamSelect_aTeamCursor[0]);
+        TeamDbSeekTmur(&_MsgTeamSelect_aTeamCursor[0], 0, 0);
+        _MsgTeamSelect_aiTeam[0] = TeamDbGetId(&_MsgTeamSelect_aTeamCursor[0]);
     } else {
         _MsgTeamSelect_aiTeam[0] = id0;
     }
@@ -2570,8 +2570,8 @@ void MsgTeamSelectQuickSetup(int id0, int id1)
     } else if (id1 == -1) {
         _MsgTeamSelect_aiTeam[1] = 20;
     } else if (id1 == -3) {
-        fn_8008406C(&_MsgTeamSelect_aTeamCursor[1], 1, 0);
-        _MsgTeamSelect_aiTeam[1] = fn_80083FBC(&_MsgTeamSelect_aTeamCursor[1]);
+        TeamDbSeekTmur(&_MsgTeamSelect_aTeamCursor[1], 1, 0);
+        _MsgTeamSelect_aiTeam[1] = TeamDbGetId(&_MsgTeamSelect_aTeamCursor[1]);
     } else {
         _MsgTeamSelect_aiTeam[1] = id1;
     }
@@ -2678,7 +2678,7 @@ int MsgTeamSelectInit(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         query.mUnknown4 = 1;
         query.mUnknown8 = 0;
     }
-    fn_80083E1C(&_MsgTeamSelect_aTeamCursor[0], &query);
+    TeamDbOpenQuery(&_MsgTeamSelect_aTeamCursor[0], &query);
     if (MsgGameGetSetupState() == 1) {
         _MsgTeamSelect_auOpenCount[0] = MsgTeamSelectCountOpen(&_MsgTeamSelect_aTeamCursor[0], 0);
     }
@@ -2704,22 +2704,22 @@ int MsgTeamSelectInit(int *pCount1, int *pCount0, int *pMode, int *pFlag)
             query.mUnknown8 = 1;
         }
     }
-    fn_80083E1C(&_MsgTeamSelect_aTeamCursor[1], &query);
+    TeamDbOpenQuery(&_MsgTeamSelect_aTeamCursor[1], &query);
     if (MsgGameGetSetupState() == 1) {
         _MsgTeamSelect_auOpenCount[1] = MsgTeamSelectCountOpen(&_MsgTeamSelect_aTeamCursor[1], 1);
     }
 
-    if (fn_8008406C(&_MsgTeamSelect_aTeamCursor[0], 0, 0)) {
-        color[0] = fn_800841AC(&_MsgTeamSelect_aTeamCursor[0]);
-        color[1] = fn_800841D8(&_MsgTeamSelect_aTeamCursor[0]);
-        color[2] = fn_80084204(&_MsgTeamSelect_aTeamCursor[0]);
-        TeamLogoRequestTint(0, 4, fn_80084158(&_MsgTeamSelect_aTeamCursor[0]), 172, color);
+    if (TeamDbSeekTmur(&_MsgTeamSelect_aTeamCursor[0], 0, 0)) {
+        color[0] = TeamDbGetColor1(&_MsgTeamSelect_aTeamCursor[0]);
+        color[1] = TeamDbGetColor2(&_MsgTeamSelect_aTeamCursor[0]);
+        color[2] = TeamDbGetColor3(&_MsgTeamSelect_aTeamCursor[0]);
+        TeamLogoRequestTint(0, 4, TeamDbGetLogo(&_MsgTeamSelect_aTeamCursor[0]), 172, color);
     }
-    if (fn_8008406C(&_MsgTeamSelect_aTeamCursor[1], 1, 0)) {
-        color[0] = fn_800841AC(&_MsgTeamSelect_aTeamCursor[1]);
-        color[1] = fn_800841D8(&_MsgTeamSelect_aTeamCursor[1]);
-        color[2] = fn_80084204(&_MsgTeamSelect_aTeamCursor[1]);
-        TeamLogoRequestTint(1, 4, fn_80084158(&_MsgTeamSelect_aTeamCursor[1]), 172, color);
+    if (TeamDbSeekTmur(&_MsgTeamSelect_aTeamCursor[1], 1, 0)) {
+        color[0] = TeamDbGetColor1(&_MsgTeamSelect_aTeamCursor[1]);
+        color[1] = TeamDbGetColor2(&_MsgTeamSelect_aTeamCursor[1]);
+        color[2] = TeamDbGetColor3(&_MsgTeamSelect_aTeamCursor[1]);
+        TeamLogoRequestTint(1, 4, TeamDbGetLogo(&_MsgTeamSelect_aTeamCursor[1]), 172, color);
     }
 
     _MsgTeamSelect_ppWindow = (int **)fn_801D2B7C(8, 0, 0);
@@ -2729,7 +2729,7 @@ int MsgTeamSelectInit(int *pCount1, int *pCount0, int *pMode, int *pFlag)
 
     if (GameModeTypeGet() == 6) {
         if (_MsgTeamSelect_iMode == 0x6B) {
-            fn_80084034(&_MsgTeamSelect_aTeamCursor[0], _MsgTeamSelect_aiTeam[0], 0);
+            TeamDbSeekId(&_MsgTeamSelect_aTeamCursor[0], _MsgTeamSelect_aiTeam[0], 0);
         } else {
             DbCursorFirst(&_MsgTeamSelect_aTeamCursor[0]);
         }
@@ -2740,19 +2740,19 @@ int MsgTeamSelectInit(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         MsgTeamSelectCursorPrev(&_MsgTeamSelect_aTeamCursor[0]);
     }
     for (j = 0; j < 3; j++) {
-        _MsgTeamSelect_ppWindow[0][j] = fn_80083FBC(&_MsgTeamSelect_aTeamCursor[0]);
+        _MsgTeamSelect_ppWindow[0][j] = TeamDbGetId(&_MsgTeamSelect_aTeamCursor[0]);
         MsgTeamSelectCursorNext(&_MsgTeamSelect_aTeamCursor[0]);
     }
 
     if (GameModeTypeGet() == 6) {
         if (_MsgTeamSelect_iMode == 0x6B) {
-            fn_80084034(&_MsgTeamSelect_aTeamCursor[1], _MsgTeamSelect_aiTeam[1], 0);
+            TeamDbSeekId(&_MsgTeamSelect_aTeamCursor[1], _MsgTeamSelect_aiTeam[1], 0);
         } else if (_MsgTeamSelect_aiTeam[0] != 0) {
             _MsgTeamSelect_aiTeam[1] = _MsgTeamSelect_aiTeam[0];
-            fn_80084034(&_MsgTeamSelect_aTeamCursor[1], _MsgTeamSelect_aiTeam[0], 0);
+            TeamDbSeekId(&_MsgTeamSelect_aTeamCursor[1], _MsgTeamSelect_aiTeam[0], 0);
         } else {
             DbCursorFirst(&_MsgTeamSelect_aTeamCursor[1]);
-            _MsgTeamSelect_aiTeam[1] = fn_80083FBC(&_MsgTeamSelect_aTeamCursor[1]);
+            _MsgTeamSelect_aiTeam[1] = TeamDbGetId(&_MsgTeamSelect_aTeamCursor[1]);
         }
     } else {
         MsgTeamSelectSeekStart(&_MsgTeamSelect_aTeamCursor[1], 1, pair.mUnknown1);
@@ -2761,7 +2761,7 @@ int MsgTeamSelectInit(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         MsgTeamSelectCursorPrev(&_MsgTeamSelect_aTeamCursor[1]);
     }
     for (j = 0; j < 3; j++) {
-        _MsgTeamSelect_ppWindow[1][j] = fn_80083FBC(&_MsgTeamSelect_aTeamCursor[1]);
+        _MsgTeamSelect_ppWindow[1][j] = TeamDbGetId(&_MsgTeamSelect_aTeamCursor[1]);
         MsgTeamSelectCursorNext(&_MsgTeamSelect_aTeamCursor[1]);
     }
 
@@ -2833,18 +2833,18 @@ void MsgTeamSelectExit(void)
 
     if (MsgGameGetSetupState() == 1) {
         id0 = _MsgTeamSelect_aiTeam[0];
-        fn_80084034(&_MsgTeamSelect_aTeamCursor[0], id0, 0);
+        TeamDbSeekId(&_MsgTeamSelect_aTeamCursor[0], id0, 0);
         value0 = DbCursorGetInt(&_MsgTeamSelect_aTeamCursor[0], 0x49524454);
         id1 = _MsgTeamSelect_aiTeam[1];
-        fn_80084034(&_MsgTeamSelect_aTeamCursor[1], id1, 0);
+        TeamDbSeekId(&_MsgTeamSelect_aTeamCursor[1], id1, 0);
         value1 = DbCursorGetInt(&_MsgTeamSelect_aTeamCursor[1], 0x49524454);
     }
     if (_MsgTeamSelect_aTeamCursor[0].mUnknown0) {
-        fn_80083F68(&_MsgTeamSelect_aTeamCursor[0]);
+        TeamDbClose(&_MsgTeamSelect_aTeamCursor[0]);
     }
     DbCursor *pCursor = &_MsgTeamSelect_aTeamCursor[1];
     if (pCursor->mUnknown0) {
-        fn_80083F68(pCursor);
+        TeamDbClose(pCursor);
     }
     if (MsgGameGetSetupState() == 1) {
         GameInfoSet(0, id0);

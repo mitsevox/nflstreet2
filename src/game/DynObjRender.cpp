@@ -61,8 +61,8 @@ struct DynObjInstance {
 struct DynObjPose { unsigned char mUnknown0[8]; Vector_80039F5C mUnknown8; unsigned char mUnknown14[0x4C]; Vector_80039F5C mUnknown60; };
 struct DynObjSkeletonRef { void *mpUnknown0; };
 extern "C" {
-extern void *lbl_803EA368;
-int fn_8002D060(void *);
+extern void *gpReplay;
+int ReplayIsShowing(void *);
 void ConGetCurrentContext(void);
 int DynObjSetupLight(void *, void *);
 void UVScrollFloat(DynObjUVMesh *);
@@ -134,7 +134,7 @@ int DynObjDraw(DynObj *p, int arg)
     if(!(flags&0x3F)) {
         fn_80234AFC(work); fn_80234DC8(work,flags&0xF2000); fn_80234B1C(work);
         fn_80234B20(work,m1,0); fn_80234B80(work); fn_80234DC4(work,0);
-        if(!fn_8002D060(lbl_803EA368)) fn_80233CBC(&s->mUnknownC.mUnknown10[4],0,p->mUnknown13C);
+        if(!ReplayIsShowing(gpReplay)) fn_80233CBC(&s->mUnknownC.mUnknown10[4],0,p->mUnknown13C);
         if(p->mUnknown140) {
             Vector_80039F5C delta;
             void *viewport=VptManagerGetCurrentCamera(GameVpt::GetViewport());
@@ -146,7 +146,7 @@ int DynObjDraw(DynObj *p, int arg)
             copy=color; GXSetChanMatColor(GX_COLOR0A0,copy);
         }
         s->mUnknownC.mUnknown5C=1;
-        unsigned int enabled=fn_8002D060(lbl_803EA368)?(p->mUnknownE8.mBytes[3]&4):(p->mUnknownE8.mBytes[3]&1);
+        unsigned int enabled=ReplayIsShowing(gpReplay)?(p->mUnknownE8.mBytes[3]&4):(p->mUnknownE8.mBytes[3]&1);
         if(enabled) {
             if(p->mpUnknown130) {
                 if(model->mpUnknown8->mpUnknown0->mUnknown11&8) {
@@ -333,7 +333,7 @@ int DynObjDrawChild(DynObjChild *p,int arg)
     if(!(flags&0x3F)) {
         fn_80234AFC(work);fn_80234DC8(work,flags&0xF2000);fn_80234B1C(work);fn_80234B20(work,m1,0);
         fn_80234B80(work);fn_80234DC4(work,0);s->mUnknownC.mUnknown5C=1;
-        unsigned int enabled=fn_8002D060(lbl_803EA368)?(p->mpUnknown50->mUnknownE8.mBytes[3]&4):(p->mpUnknown50->mUnknownE8.mBytes[3]&1);
+        unsigned int enabled=ReplayIsShowing(gpReplay)?(p->mpUnknown50->mUnknownE8.mBytes[3]&4):(p->mpUnknown50->mUnknownE8.mBytes[3]&1);
         if(enabled) {
             if(model->mpUnknown8->mpUnknown0->mUnknown11&8) {
                 fn_80234B88(&s->mUnknownC);TMRenderBindMaterialList(s->mUnknownC.mpUnknownE8);

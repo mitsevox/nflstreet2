@@ -4,7 +4,7 @@
 #include "game/Object_8003DEC4.h"
 #include "game/LevelSurface.h"
 #include "game/fn_80177FE0.h"
-#include "game/cu_8002B8F8.h"
+#include "game/Replay.h"
 #include "game/SndgCrowd.h"
 #include "game/Object_80039F5C.h"
 #include "game/AudmonEvent.h"
@@ -42,7 +42,7 @@ void SndgSoundObjUpdateFromEvent(int type, AudmonEvent_t *pRecord);
 void SndgFadeOutChannelGroup(void);
 void SndgSpchSetPlayFlags(int flags);
 void SndgSituationReset(void);
-unsigned char fn_8002D060(Type_803EA368 *p);
+unsigned char ReplayIsShowing(Type_803EA368 *p);
 int fn_800A9680(void);
 int SndgMusicGetMode(void);
 int fn_801650DC(PlayBookPlay_t *pRecord);
@@ -373,7 +373,7 @@ void fn_8006F850(AudmonEvent_t *p)
     case 13: SndgMusicSetMode(16); break;
     case 12: SndgMusicSetMode(17); break;
     case 15:
-        if (p->mUnknown10.mValue && !fn_8002D060(lbl_803EA368) && !SndgSfxIsPlaying(62)) SndgSfxPlay(62, 0);
+        if (p->mUnknown10.mValue && !ReplayIsShowing(gpReplay) && !SndgSfxIsPlaying(62)) SndgSfxPlay(62, 0);
         break;
     case 17: if (!SndgSfxIsPlaying(60)) SndgSfxPlay(60, 0); break;
     case 20: SndgSfxPlay(61, 0); break;

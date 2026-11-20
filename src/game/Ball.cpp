@@ -21,7 +21,7 @@ void BallModelDelete(int a, Block_80170E64 *pBlock);
 int BallModelGetReplayBits(void);
 void BallModelReplayRecord(Block_80170E64 *pBlock, int a);
 void BallModelReplayPlayback(Block_80170E64 *pBlock, int a, int b, int c, int d, float e);
-void fn_80030ACC(void (*pCallback0)(int a), void (*pCallback4)(int a, int b, int c, int d, float e), int size, const char *pName);
+void ReplayRegisterChannel(void (*pCallback0)(int a), void (*pCallback4)(int a, int b, int c, int d, float e), int size, const char *pName);
 void SpchIGSetBallCarrier(int id);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_800C47C4(void);
@@ -306,7 +306,7 @@ void BallsReplayPlayback(int a, int b, int c, int d, float e)
 void BallsReplayRegister(void)
 {
     _Ball_iEntrySize = BallModelGetReplayBits();
-    fn_80030ACC(BallsReplayRecord, BallsReplayPlayback, _Ball_iEntrySize * _Ball_pSet->mHeader.mCount, "Balls");
+    ReplayRegisterChannel(BallsReplayRecord, BallsReplayPlayback, _Ball_iEntrySize * _Ball_pSet->mHeader.mCount, "Balls");
 }
 
 void BallSetCurrent(unsigned char index)

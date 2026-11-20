@@ -36,10 +36,10 @@ struct TeamLogoPending_t {
 };
 
 extern "C" {
-void fn_80083E1C(DbCursor *pObject, int a);
-int fn_800841AC(DbCursor *pObject);
-int fn_800841D8(DbCursor *pObject);
-int fn_80084204(DbCursor *pObject);
+void TeamDbOpenQuery(DbCursor *pObject, int a);
+int TeamDbGetColor1(DbCursor *pObject);
+int TeamDbGetColor2(DbCursor *pObject);
+int TeamDbGetColor3(DbCursor *pObject);
 void PlaDynClutApplyColors(PaletteDesc_t *pDesc, int id, FMCAPPORTText *pText);
 void GlibSyncFrame(void);
 void *UIGLibraryGetGlobal(int index);
@@ -111,18 +111,18 @@ void TeamLogoTintMatchup(int a, int b)
     int id1;
 
     pObject = UIGLibraryGetGlobal(1);
-    fn_80083E1C(&cursor, 0);
-    fn_80084034(&cursor, a, 0);
-    id0 = fn_80084158(&cursor);
-    color0[0] = fn_800841AC(&cursor);
-    color0[1] = fn_800841D8(&cursor);
-    color0[2] = fn_80084204(&cursor);
-    fn_80084034(&cursor, b, 0);
-    id1 = fn_80084158(&cursor);
-    color1[0] = fn_800841AC(&cursor);
-    color1[1] = fn_800841D8(&cursor);
-    color1[2] = fn_80084204(&cursor);
-    fn_80083F68(&cursor);
+    TeamDbOpenQuery(&cursor, 0);
+    TeamDbSeekId(&cursor, a, 0);
+    id0 = TeamDbGetLogo(&cursor);
+    color0[0] = TeamDbGetColor1(&cursor);
+    color0[1] = TeamDbGetColor2(&cursor);
+    color0[2] = TeamDbGetColor3(&cursor);
+    TeamDbSeekId(&cursor, b, 0);
+    id1 = TeamDbGetLogo(&cursor);
+    color1[0] = TeamDbGetColor1(&cursor);
+    color1[1] = TeamDbGetColor2(&cursor);
+    color1[2] = TeamDbGetColor3(&cursor);
+    TeamDbClose(&cursor);
     UIGLibraryLoadItem(pObject, 4, id0);
     UIGLibraryLoadItem(pObject, 4, id1);
     TeamLogoTintPalette(TeamLogoGetSlot(0), 4, id0, 0xAC, color0);

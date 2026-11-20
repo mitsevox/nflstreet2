@@ -11,7 +11,7 @@
 #include "game/fn_8009D990.h"
 
 #include "game/SndgPathfinder.h"
-#include "game/cu_8002B8F8.h"
+#include "game/Replay.h"
 #include "game/GameCamera.h"
 #include "game/SndgHandles.h"
 #include "game/Object_8017886C.h"
@@ -475,11 +475,11 @@ extern char lbl_802EC000[];
 extern char lbl_802EC00C[];
 
 int abs(int value);
-int fn_8002D060(void *p);
-int fn_8002D0AC(void *p);
-void fn_800300D4(void *pStream, float *pValues, int bits, float scale);
-void fn_80030490(void *pStream, float *pValues, int bits, float scale);
-void fn_80030ACC(void (*write)(void *), void (*read)(void *, void *, void *, void *, float), int size,
+int ReplayIsShowing(void *p);
+int ReplayIsRecording(void *p);
+void ReplayReadPacked2(void *pStream, float *pValues, int bits, float scale);
+void ReplayWritePacked2(void *pStream, float *pValues, int bits, float scale);
+void ReplayRegisterChannel(void (*write)(void *), void (*read)(void *, void *, void *, void *, float), int size,
                  const char *pName);
 int ReplayCursorGetPos(float *pValue);
 void SndgCrowdSetVolume(unsigned char value);
@@ -2280,7 +2280,7 @@ extern "C" void SndgHandleEvent(AudmonEvent_t *p)
 
 extern "C" void SndgListenerUpdate(SndgListener_t *src)
 {
-    if (fn_8002D060(lbl_803EA368) == 0) {
+    if (ReplayIsShowing(gpReplay) == 0) {
         GameCamera_t *obj = CamGameGetCamera(CamGameGetCurrentSlot());
         int angle;
 
@@ -2847,7 +2847,7 @@ extern "C" int SndgReplayFindFreeSlot(void)
 {
     unsigned int i;
 
-    if (lbl_803EA368->mUnknownD94 & 0x10000) {
+    if (gpReplay->mUnknownD94 & 0x10000) {
         return 0;
     }
     for (i = 0; i < 128; i++) {
@@ -2884,7 +2884,7 @@ extern "C" void SndgReplayPlayEntry(SndgReplaySfx_t *pEntry)
 extern "C" void SndgReplayWriteEntry(SndgReplaySfx_t *pEntry, void *pStream)
 {
     fn_80191068(pStream, pEntry->mId, 8);
-    fn_80030490(pStream, &pEntry->mPos.mX, 8, 1.0f);
+    ReplayWritePacked2(pStream, &pEntry->mPos.mX, 8, 1.0f);
     fn_80191068(pStream, pEntry->mUnknown12, 8);
     fn_80191068(pStream, pEntry->mFlags, 1);
 }
@@ -2898,23 +2898,23 @@ extern "C" void SndgReplayReadEntry(SndgReplaySfx_t *pEntry, void *pStream0, voi
     pEntry->mId = fn_80190F18(pStream1, 8);
     pPos = &pEntry->mPos;
     pPos->mX = pPos->mY = pPos->mZ = 0.0f;
-    fn_800300D4(pStream1, &pPos->mX, 8, 1.0f);
+    ReplayReadPacked2(pStream1, &pPos->mX, 8, 1.0f);
     pEntry->mUnknown12 = fn_80190F18(pStream1, 8);
     pEntry->mFlags = (unsigned char)fn_80190F18(pStream1, 1);
 
     fn_80190F18(pStream0, 8);
-    fn_800300D4(pStream0, pos, 8, 1.0f);
+    ReplayReadPacked2(pStream0, pos, 8, 1.0f);
     fn_80190F18(pStream0, 8);
     fn_80190F18(pStream0, 1);
     if (pStream2) {
         fn_80190F18(pStream2, 8);
-        fn_800300D4(pStream2, pos, 8, 1.0f);
+        ReplayReadPacked2(pStream2, pos, 8, 1.0f);
         fn_80190F18(pStream2, 8);
         fn_80190F18(pStream2, 1);
     }
     if (pStream3) {
         fn_80190F18(pStream3, 8);
-        fn_800300D4(pStream3, pos, 8, 1.0f);
+        ReplayReadPacked2(pStream3, pos, 8, 1.0f);
         fn_80190F18(pStream3, 8);
         fn_80190F18(pStream3, 1);
     }
@@ -2948,12 +2948,12 @@ extern "C" void SndgReplayReadFrame(void *pStream0, void *pStream1, void *pStrea
     if (pStream3) {
         fn_80190F18(pStream3, 4);
     }
-    frames = lbl_803EA368->mUnknownD74 - lbl_803EA368->mUnknownD70;
+    frames = gpReplay->mUnknownD74 - gpReplay->mUnknownD70;
     half = frames / 2;
     parity = frames % 2;
     for (i = 0; i < 12; i++) {
         SndgReplayReadEntry(&entry, pStream0, pStream1, pStream2, pStream3, unknown);
-        if ((parity != _SndgReplay_iLastFrameParity || half != _SndgReplay_iLastHalfFrame) && i < count && fn_8002D060(lbl_803EA368)) {
+        if ((parity != _SndgReplay_iLastFrameParity || half != _SndgReplay_iLastHalfFrame) && i < count && ReplayIsShowing(gpReplay)) {
             SndgReplayPlayEntry(&entry);
         }
     }
@@ -2989,7 +2989,7 @@ extern "C" void SndgReplayShutdown(void)
 
 extern "C" void SndgReplayRegister(void)
 {
-    fn_80030ACC(SndgReplayWriteFrame, SndgReplayReadFrame, SndgReplayGetFrameSize(), "Sounds");
+    ReplayRegisterChannel(SndgReplayWriteFrame, SndgReplayReadFrame, SndgReplayGetFrameSize(), "Sounds");
 }
 
 extern "C" int SndgReplayGetFrameSize(void)
@@ -2999,7 +2999,7 @@ extern "C" int SndgReplayGetFrameSize(void)
 
 extern "C" void SndgReplayQueueEntry(SndgReplaySfx_t *pEntry)
 {
-    if (fn_8002D0AC(lbl_803EA368) && _SndgReplay_pQueue->mCount < 12) {
+    if (ReplayIsRecording(gpReplay) && _SndgReplay_pQueue->mCount < 12) {
         _SndgReplay_pQueue->mEntries[_SndgReplay_pQueue->mCount] = *pEntry;
         if (fn_801784C4()) {
             _SndgReplay_pQueue->mEntries[_SndgReplay_pQueue->mCount].mPos.mX = -_SndgReplay_pQueue->mEntries[_SndgReplay_pQueue->mCount].mPos.mX;
@@ -3036,11 +3036,11 @@ extern "C" void SndgReplayReset(void)
 
 extern "C" void SndgReplayUpdate(int unknown)
 {
-    Type_803EA368 *p = lbl_803EA368;
+    Type_803EA368 *p = gpReplay;
     int rate;
     unsigned int i;
 
-    if (!fn_8002D060(p)) {
+    if (!ReplayIsShowing(p)) {
         SndgReplayStopAll();
         return;
     }

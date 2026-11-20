@@ -138,7 +138,7 @@ struct DbFilter {
     int mUnknown32;
 };
 
-/* Query passed to fn_80083E40; fn_80083E40 builds the same default when
+/* Query passed to TeamDbOpen; TeamDbOpen builds the same default when
    none is passed. */
 struct TeamQuery {
     TeamQuery() : mUnknown0(1), mUnknown4(0), mUnknown8(0) {}
@@ -175,12 +175,12 @@ void LogoListClose(DbCursor *pObject);
 void LogoListGetName(DbCursor *pObject, char *pBuffer, int size);
 int LogoListGetId(DbCursor *pObject);
 void LogoListFind(DbCursor *pObject, int a, int *pResult);
-void fn_80083E40(DbCursor *pObject, TeamQuery *pQuery, int tag);
-void fn_80083F68(DbCursor *pObject);
-void fn_80083F88(DbCursor *pObject, char *pBuffer, int size);
-int fn_80084034(DbCursor *pObject, int id, int *pResult);
-int fn_80084158(DbCursor *pObject);
-int fn_80084438(DbCursor *pObject);
+void TeamDbOpen(DbCursor *pObject, TeamQuery *pQuery, int tag);
+void TeamDbClose(DbCursor *pObject);
+void TeamDbGetName(DbCursor *pObject, char *pBuffer, int size);
+int TeamDbSeekId(DbCursor *pObject, int id, int *pResult);
+int TeamDbGetLogo(DbCursor *pObject);
+int TeamDbGetCtdl(DbCursor *pObject);
 }
 
 #endif

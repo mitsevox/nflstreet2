@@ -6,11 +6,11 @@
 #include <math.h>
 
 extern "C" {
-extern void *lbl_803EA368;
+extern void *gpReplay;
 extern unsigned char lbl_803EB874;
-int fn_8002D058(void *p);
-int fn_8002D060(void *p);
-int fn_8002D150(void *p);
+int ReplayIsStepping(void *p);
+int ReplayIsShowing(void *p);
+int ReplayGetSpeed(void *p);
 }
 
 struct UVScrollUV {
@@ -130,9 +130,9 @@ void UVScrollFixed(UVScrollFixedMesh *pMesh, UVScrollState *pScroll)
         if (lbl_803EB874) return;
         if (pScroll->mType == 0) {
             float speed = 1.0f;
-            if (fn_8002D060(lbl_803EA368)) {
-                int rate = fn_8002D150(lbl_803EA368);
-                if (fn_8002D058(lbl_803EA368)) speed = fabs(rate * (1.0f / 60.0f));
+            if (ReplayIsShowing(gpReplay)) {
+                int rate = ReplayGetSpeed(gpReplay);
+                if (ReplayIsStepping(gpReplay)) speed = fabs(rate * (1.0f / 60.0f));
                 else speed = 0.0f;
             }
             pScroll->mTimer += speed;

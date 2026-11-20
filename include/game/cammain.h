@@ -6,7 +6,7 @@
 #include "game/CamInterp.h"
 #include "game/Object_80039F5C.h"
 
-/* Camera type record. _CamMain_Type and the replay camera's lbl_802CC83C
+/* Camera type record. _CamMain_Type and the replay camera's _Replay_CamType
    have this form; _CamMainTypeDefs lists both, and Cam::Init passes that
    list to CamInit. */
 struct CamTypeDef_t {

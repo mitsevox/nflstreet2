@@ -20,8 +20,8 @@ struct PlyrPoseQuant_t {
 };
 
 extern "C" {
-void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
-void fn_80030554(void *pStream, float *pValues, int bits, float scale);
+void ReplayReadPacked3(void *pStream, float *pValues, int bits, float scale);
+void ReplayWritePacked3(void *pStream, float *pValues, int bits, float scale);
 void fn_800ADDFC(Object_8003DEC4 *pObject, PlyrPosePart_t *pElement, int a);
 int fn_800ADD7C(PlyrPosePart_t *pElements, unsigned int index);
 int fn_800ADEFC(PlyrPosePart_t *pElements, unsigned int index);
@@ -133,7 +133,7 @@ void PlyrPoseWrite(AnimPose_t *pPose, BitStream_t *pStream)
     pPose->mUnknown48[57] = saved57[0];
     pPose->mUnknown48[58] = saved57[1];
     pPose->mUnknown48[59] = saved57[2];
-    fn_80030554(pStream, pPose->mUnknown8, 16, 2048.0f);
+    ReplayWritePacked3(pStream, pPose->mUnknown8, 16, 2048.0f);
     fn_80191068(pStream, pPose->mUnknown32 >> 8, 16);
 }
 
@@ -152,7 +152,7 @@ void PlyrPoseRead(AnimPose_t *pPose, BitStream_t *pStream)
         value *= 16;
         *pValue = value - pQuant->mUnknown0 * 16;
     }
-    fn_800301C4(pStream, pPose->mUnknown8, 16, 2048.0f);
+    ReplayReadPacked3(pStream, pPose->mUnknown8, 16, 2048.0f);
     pPose->mUnknown32 = (int)ReadBitStream(pStream, 16) << 8;
 }
 
@@ -585,7 +585,7 @@ void PlyrPoseWriteState(Object_8003DEC4 *pObject, BitStream_t *pStream)
         PlyrPoseWritePart(pObject, 1, pStream);
         PlyrPoseWriteBlend(pObject, pStream);
     }
-    fn_80030554(pStream, pObject->mUnknown4, 16, 256.0f);
+    ReplayWritePacked3(pStream, pObject->mUnknown4, 16, 256.0f);
     fn_80191068(pStream, (pObject->mUnknown36 >> 12) & 0xFFF, 12);
 }
 
@@ -669,15 +669,15 @@ void PlyrPoseReadState(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStrea
     }
 
     if (pStreamC) {
-        fn_800301C4(pStreamC, posB, 16, 256.0f);
+        ReplayReadPacked3(pStreamC, posB, 16, 256.0f);
         ReadBitStream(pStreamC, 12);
     }
     if (pStreamD) {
-        fn_800301C4(pStreamD, posB, 16, 256.0f);
+        ReplayReadPacked3(pStreamD, posB, 16, 256.0f);
         ReadBitStream(pStreamD, 12);
     }
-    fn_800301C4(pStreamB, posB, 16, 256.0f);
-    fn_800301C4(pStreamA, posA, 16, 256.0f);
+    ReplayReadPacked3(pStreamB, posB, 16, 256.0f);
+    ReplayReadPacked3(pStreamA, posA, 16, 256.0f);
     Vec3Lerp(pObject->mUnknown4, posA, posB, t);
     angleB = (int)(ReadBitStream(pStreamB, 12) << 52 >> 40) & 0xFFF000;
     angleA = (int)(ReadBitStream(pStreamA, 12) << 52 >> 40) & 0xFFF000;

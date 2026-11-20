@@ -2,9 +2,9 @@
 #include "game/DbTableCursorInline.h"
 
 extern "C" {
-void fn_80060458(int index, int level);
-void fn_8006059C(int index);
-void fn_80060674(int index);
+void StoryEventsCheatSetLevel(int index, int level);
+void StoryEventsCheatCompleteAll(int index);
+void StoryEventsReset(int index);
 void StoryTournamentForceWin(int index);
 void StoryTournamentClearWin(int index);
 unsigned int ChalGetPoints(void);
@@ -103,25 +103,25 @@ void CheatEffectApply(signed char db, int id)
     case 8: {
         int saved = DbUserGetCurrent();
         DbUserSetCurrent(DbUserGetId(db));
-        fn_8006059C(db);
+        StoryEventsCheatCompleteAll(db);
         StoryTournamentForceWin(db);
         DbUserSetCurrent(saved);
         break;
     }
     case 51:
-        fn_80060458(db, 0);
+        StoryEventsCheatSetLevel(db, 0);
         break;
     case 52:
-        fn_80060458(db, 1);
+        StoryEventsCheatSetLevel(db, 1);
         break;
     case 53:
-        fn_80060458(db, 2);
+        StoryEventsCheatSetLevel(db, 2);
         break;
     case 54:
-        fn_80060458(db, 3);
+        StoryEventsCheatSetLevel(db, 3);
         break;
     case 50:
-        fn_8006059C(db);
+        StoryEventsCheatCompleteAll(db);
         break;
     case 49: {
         unsigned int value = ChalGetPoints();
@@ -222,7 +222,7 @@ void CheatEffectRemove(signed char db, int id)
         UserInfoSetPoints(DbUserGetId(db), 0);
         break;
     case 8:
-        fn_80060674(db);
+        StoryEventsReset(db);
     case 50:
         StoryTournamentClearWin(db);
         break;
@@ -233,7 +233,7 @@ void CheatEffectRemove(signed char db, int id)
     case 52:
     case 53:
     case 54:
-        fn_80060674(db);
+        StoryEventsReset(db);
         StoryTournamentClearWin(db);
         break;
     case 17:

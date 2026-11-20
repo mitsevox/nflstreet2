@@ -261,7 +261,7 @@ int ChallengeIsActive(void);
 int fn_801485D4(void);
 int InGameIsStopped(void);
 int PauseIsOpen(void);
-unsigned char fn_8002D060(void *p);
+unsigned char ReplayIsShowing(void *p);
 void fn_80179144(int a);
 void fn_8017916C(void);
 unsigned int SyncRandGetRange(int stream, int count);
@@ -312,8 +312,8 @@ void DepthChartLoad(int reset);
 void DepthChartRevertSide(int group);
 void PauseSetAltAction(unsigned char value);
 void PauseSetQuitFlag(unsigned char value);
-int fn_8002C9A8(void *p, int msg, int value);
-int fn_8002D228(void *p);
+int ReplayHandleCommand(void *p, int msg, int value);
+int ReplayIsHalted(void *p);
 int TutorialIsActive(void);
 int DepthChartScreenIsSideShown(unsigned char a);
 void DepthChartScreenGetSideName(unsigned char a, int b, char *pText, int length);
@@ -341,7 +341,7 @@ int GameOptionsGet(int a);
 int fn_8017881C(int team);
 int GameTextFindPlayerPad(unsigned int index);
 int GameModeTypeIsSpecial(void);
-extern void *lbl_803EA368;
+extern void *gpReplay;
 
 GameStatsRecord lbl_802D4B14[21] = {
     {1, 2}, {2, 3}, {3, 4}, {4, 5}, {6, 5}, {5, 6}, {7, 9}, {8, 7}, {9, 8}, {10, 10}, {11, 11},
@@ -1009,7 +1009,7 @@ void fn_8005740C(int value1, int *pPair1, int word1, int test1, int value0, int 
     int count = fn_80179138();
 
     if (InGameIsStopped() == 0) {
-        if (PauseIsOpen() == 0 && fn_8002D060(lbl_803EA368) == 0) {
+        if (PauseIsOpen() == 0 && ReplayIsShowing(gpReplay) == 0) {
             if (count == 0 && fn_80177F70() == 6) {
                 fn_80179144(1);
                 count = 1;
@@ -1825,9 +1825,9 @@ int fn_80059034(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
     }
     case 0x8000001B:
         if (fn_800AD9B4() == 4) {
-            fn_8002C9A8(lbl_803EA368, 3, 0);
+            ReplayHandleCommand(gpReplay, 3, 0);
         } else {
-            *pResult = fn_8002D228(lbl_803EA368);
+            *pResult = ReplayIsHalted(gpReplay);
         }
         break;
     case 0x8000001C:
@@ -2066,9 +2066,9 @@ void EnvSelect(int id);
 void EnvGetUIName(char *pText,int size);
 void EnvGetEVLO(char *pText,int size);
 void EnvRelease(void);
-void fn_80083E1C(DbCursor *pObject,TeamQuery *pQuery);
-int fn_8008406C(DbCursor *pObject,int id,int *pResult);
-int fn_80083FBC(DbCursor *pObject);
+void TeamDbOpenQuery(DbCursor *pObject,TeamQuery *pQuery);
+int TeamDbSeekTmur(DbCursor *pObject,int id,int *pResult);
+int TeamDbGetId(DbCursor *pObject);
 void ChalFormatGearReward(char *pText,int size,int id);
 void ChalSetDevPoints(int value);
 int ChalGetDevPoints(void);
@@ -2456,10 +2456,10 @@ void fn_8005B128(int *pResult,int *pId,MenuText_t *pText)
             else if(!GauntletGetTeamsLeft(UserProfileFindIndex(DbUserGetCurrent()))) *pResult=2;
         } else *pResult=0;
         DbCursor query;
-        fn_80083E40(&query,0,0x54415453);
-        if(fn_80084034(&query,*pId,0)) {char name[32];fn_80083F88(&query,name,32);strnzcpy(pText->mpText,name,pText->mLength);}
+        TeamDbOpen(&query,0,0x54415453);
+        if(TeamDbSeekId(&query,*pId,0)) {char name[32];TeamDbGetName(&query,name,32);strnzcpy(pText->mpText,name,pText->mLength);}
         else strnzcpy(pText->mpText,"",pText->mLength);
-        fn_80083F68(&query);
+        TeamDbClose(&query);
     } else *pResult=-1;
 }
 int fn_8005B2BC(unsigned int id,MenuArg_t *pArgs,int unused,int *pResult)
@@ -2502,7 +2502,7 @@ int fn_8005B4B0(unsigned int id,MenuArg_t *pArgs,int unused,int *pResult)
 void fn_8005B55C(int *pResult)
 {
     DbCursor query;
-    fn_80083E1C(&query,0);fn_8008406C(&query,1,0);*pResult=fn_80083FBC(&query);fn_80083F68(&query);fn_800C1E50();
+    TeamDbOpenQuery(&query,0);TeamDbSeekTmur(&query,1,0);*pResult=TeamDbGetId(&query);TeamDbClose(&query);fn_800C1E50();
 }
 void fn_8005B5D8(int clear) {PauseRequestClose();if(clear) fn_800C1CA0();}
 void fn_8005B610(char *pText,int size,int id)
@@ -2611,11 +2611,11 @@ struct Stats_8005CAE4 {
     Object_80039F5C *mpPlayers[4];
     int mValues[4];
 };
-struct Args_8005F8B4;
+struct StoryTextArgs_t;
 extern "C" {
-void fn_8005F8B4(Args_8005F8B4 *p);
-void fn_8005F8F0(int unused);
-void fn_8005F900(int *pHome);
+void StoryEventsCopyRewardText(StoryTextArgs_t *p);
+void StoryEventsClearResult(int unused);
+void StoryEventsGetHomeTeam(int *pHome);
 int ChallengeEvaluateBonus(void);
 int GameOutcomeGet(void);
 int fn_800A8F94(void);
@@ -2657,10 +2657,10 @@ void fn_8005BC10(int value) {
 }
 int fn_8005BCA8(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
-    case 0x80000001:if(lbl_803EA5A8)fn_8005F900(p[0].pi);else fn_8005B55C(p[0].pi);break;
-    case 0x80000002:if(lbl_803EA5A8)fn_8005F8F0(p[0].i);else fn_8005B5D8(p[0].i);break;
+    case 0x80000001:if(lbl_803EA5A8)StoryEventsGetHomeTeam(p[0].pi);else fn_8005B55C(p[0].pi);break;
+    case 0x80000002:if(lbl_803EA5A8)StoryEventsClearResult(p[0].i);else fn_8005B5D8(p[0].i);break;
     case 0x80000003:if(!lbl_803EA5A8)fn_8005B9FC(p[0].pi,(MenuText_t **)(p[1].i+(*p[1].pi+1)*4));break;
-    case 0x80000007:if(lbl_803EA5A8)fn_8005F8B4((Args_8005F8B4 *)p);break;
+    case 0x80000007:if(lbl_803EA5A8)StoryEventsCopyRewardText((StoryTextArgs_t *)p);break;
     case 0x80000004:if(!lbl_803EA5A8)fn_8005BACC(p,p[1].pi,p+2);break;
     case 0x80000008:*result=fn_8005BB8C();break;
     case 0x80000005:if(!lbl_803EA5A8)fn_8005BB0C(p,p[1].pi,p[2].pi,p[3].pi);break;

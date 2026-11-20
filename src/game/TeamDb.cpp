@@ -1,3 +1,8 @@
+/* Game-database helpers for teams and the music playlist: opens, filters
+   and reads the team table (name, logo, colours, type), creates new teams
+   with a random logo, colours and name and fills them with created players,
+   loads a team's depth chart onto a side of the field, and keeps the saved
+   EA Trax playlist rows. */
 #include <string.h>
 
 #include "game/DbCursor.h"
@@ -42,20 +47,20 @@ int DbFileTblDestroy(int a, int tag);
 int SyncRandGetIntRange(int stream, int low, int high);
 }
 
-static int lbl_802D6B08[8] = { 0x54534C50, 0x44494E53, 0, 0, -1, -1, 3, 0 };
-static int lbl_802D6B28[3] = { 0x31434D54, 0x32434D54, 0x33434D54 };
-static int lbl_802D6B34[8] = { 0x4D414554, 0x44524F54, 0, 0, -1, -1, 3, 0 };
-static int lbl_802D6B54[14] = {
+static int _TeamDb_aPlaylistSortKeys[8] = { 0x54534C50, 0x44494E53, 0, 0, -1, -1, 3, 0 };
+static int _TeamDb_aColorColumns[3] = { 0x31434D54, 0x32434D54, 0x33434D54 };
+static int _TeamDb_aTeamSortKeys[8] = { 0x4D414554, 0x44524F54, 0, 0, -1, -1, 3, 0 };
+static int _TeamDb_aPositionColumns[14] = {
     0x5A425150, 0x5A425250, 0x46525750, 0x42525750, 0x4C4C4F50, 0x434C4F50, 0x524C4F50,
     0x4C4C4450, 0x524C4450, 0x46424C50, 0x42424C50, 0x4C424450, 0x43424450, 0x52424450,
 };
 
-static AutoDepthPlayer_t *lbl_803EA7E8 = 0;
-static int lbl_803EC86C;
+static AutoDepthPlayer_t *_TeamDb_pAutoDepth = 0;
+static int _TeamDb_iAutoDepthStream;
 
 extern "C" {
 
-unsigned int fn_800834CC(DbCursor *pObject)
+unsigned int PlaylistDbGetFreeKey(DbCursor *pObject)
 {
     unsigned int i;
 
@@ -67,7 +72,7 @@ unsigned int fn_800834CC(DbCursor *pObject)
     return i;
 }
 
-void fn_8008352C(DbCursor *pObject, Query_8008352C *pQuery)
+void PlaylistDbOpen(DbCursor *pObject, Query_8008352C *pQuery)
 {
     Query_8008352C query;
     void *pColumns = 0;
@@ -87,7 +92,7 @@ void fn_8008352C(DbCursor *pObject, Query_8008352C *pQuery)
         pColumns = 0;
         break;
     case 1:
-        pColumns = lbl_802D6B08;
+        pColumns = _TeamDb_aPlaylistSortKeys;
         break;
     }
 
@@ -96,42 +101,42 @@ void fn_8008352C(DbCursor *pObject, Query_8008352C *pQuery)
     }
 }
 
-int fn_80083664(DbCursor *pObject);
-int fn_80083684(DbCursor *pObject);
-unsigned char fn_800837D8(DbCursor *pObject);
-void fn_80083854(DbCursor *pObject);
+int PlaylistDbFirst(DbCursor *pObject);
+int PlaylistDbNext(DbCursor *pObject);
+unsigned char PlaylistDbGetIstx(DbCursor *pObject);
+void PlaylistDbDeleteRow(DbCursor *pObject);
 
-void fn_800835D0(DbCursor *pObject)
+void PlaylistDbRemoveStationEntries(DbCursor *pObject)
 {
-    int more = fn_80083664(pObject);
+    int more = PlaylistDbFirst(pObject);
 
     while (more) {
-        if (fn_800837D8(pObject) == 0) {
+        if (PlaylistDbGetIstx(pObject) == 0) {
             int row = DbCursorGetRow(pObject);
-            fn_80083854(pObject);
+            PlaylistDbDeleteRow(pObject);
             more = DbCursorSeek(pObject, row);
         } else {
-            more = fn_80083684(pObject);
+            more = PlaylistDbNext(pObject);
         }
     }
 }
 
-void fn_80083644(DbCursor *pObject)
+void PlaylistDbClose(DbCursor *pObject)
 {
     DbCursorClose(pObject);
 }
 
-int fn_80083664(DbCursor *pObject)
+int PlaylistDbFirst(DbCursor *pObject)
 {
     return DbCursorFirst(pObject);
 }
 
-int fn_80083684(DbCursor *pObject)
+int PlaylistDbNext(DbCursor *pObject)
 {
     return DbCursorNext(pObject);
 }
 
-int fn_800836A4(DbCursor *pObject, int a, int b, int c)
+int PlaylistDbFindEntry(DbCursor *pObject, int a, int b, int c)
 {
     int found = 0;
     int more;
@@ -156,22 +161,22 @@ int fn_800836A4(DbCursor *pObject, int a, int b, int c)
     return found;
 }
 
-int fn_800837B8(DbCursor *pObject)
+int PlaylistDbGetCount(DbCursor *pObject)
 {
     return DbCursorGetRowCount(pObject);
 }
 
-unsigned char fn_800837D8(DbCursor *pObject)
+unsigned char PlaylistDbGetIstx(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x58545349);
 }
 
-int fn_80083804(DbCursor *pObject)
+int PlaylistDbGetStationId(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x44495453);
 }
 
-int fn_8008382C(DbCursor *pObject)
+int PlaylistDbGetSongId(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x44494E53);
 }
@@ -195,7 +200,7 @@ static inline void _FilterSetColumn(DbFilter *pFilter, int kind, unsigned int ta
     pFilter->mUnknown16.mValue.mInt = value;
 }
 
-void fn_80083854(DbCursor *pObject)
+void PlaylistDbDeleteRow(DbCursor *pObject)
 {
     int info[4];
     DbFilter arg;
@@ -213,14 +218,14 @@ void fn_80083854(DbCursor *pObject)
     TDbQryDeleteRow(pObject->mUnknown4, (DbQueryTable *)pObject->mUnknown20, &arg, &result, 0);
 }
 
-void fn_80083934(DbCursor *pObject, int a, int b, int c)
+void PlaylistDbAddEntry(DbCursor *pObject, int a, int b, int c)
 {
     DbColumnValue list[5];
     int result[4];
 
     list[0].mColumnTag = 0x4B504C50;
     list[0].mTableTag = 0x54534C50;
-    list[0].mValue = fn_800834CC(pObject);
+    list[0].mValue = PlaylistDbGetFreeKey(pObject);
     list[1].mTableTag = 0x54534C50;
     list[1].mColumnTag = 0x44495453;
     if (a == 0) {
@@ -238,7 +243,7 @@ void fn_80083934(DbCursor *pObject, int a, int b, int c)
     TDbInsertRow(pObject->mUnknown4, pObject->mUnknown8, list, result, 0);
 }
 
-void fn_80083A10(DbCursor *pObject, void *pColumns, int tag, int value)
+void TeamDbOpenByDgid(DbCursor *pObject, void *pColumns, int tag, int value)
 {
     DbFilter arg;
 
@@ -246,7 +251,7 @@ void fn_80083A10(DbCursor *pObject, void *pColumns, int tag, int value)
     DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &arg, tag);
 }
 
-void fn_80083A88(DbCursor *pObject, void *pColumns, int tag)
+void TeamDbOpenTypeZero(DbCursor *pObject, void *pColumns, int tag)
 {
     DbFilter arg;
     int value = 0;
@@ -255,7 +260,7 @@ void fn_80083A88(DbCursor *pObject, void *pColumns, int tag)
     DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &arg, tag);
 }
 
-void fn_80083B00(DbCursor *pObject, void *pColumns, int tag)
+void TeamDbOpenTypeZeroOrFive(DbCursor *pObject, void *pColumns, int tag)
 {
     DbFilter root;
     DbFilter left;
@@ -269,7 +274,7 @@ void fn_80083B00(DbCursor *pObject, void *pColumns, int tag)
     DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
 }
 
-void fn_80083BC4(DbCursor *pObject, void *pColumns, int tag, int logo)
+void TeamDbOpenTypeZeroWithLogo(DbCursor *pObject, void *pColumns, int tag, int logo)
 {
     DbFilter root;
     DbFilter left;
@@ -283,7 +288,7 @@ void fn_80083BC4(DbCursor *pObject, void *pColumns, int tag, int logo)
     DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
 }
 
-void fn_80083C98(DbCursor *pObject, void *pColumns, int tag, unsigned char flag)
+void TeamDbOpenByTmur(DbCursor *pObject, void *pColumns, int tag, unsigned char flag)
 {
     DbFilter root;
     DbFilter left;
@@ -306,17 +311,17 @@ void fn_80083C98(DbCursor *pObject, void *pColumns, int tag, unsigned char flag)
     DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
 }
 
-void fn_80083DE4(int id)
+void TeamDbSetPlayersTgti(int id)
 {
     TDbCompilePerformOp(0, "use 'TATS' update 'YALP' set 'ITGT' = \x85 where 'DIGT' = \x82\n", id, id);
 }
 
-void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery)
+void TeamDbOpenQuery(DbCursor *pObject, TeamQuery *pQuery)
 {
-    fn_80083E40(pObject, pQuery, 0);
+    TeamDbOpen(pObject, pQuery, 0);
 }
 
-void fn_80083E40(DbCursor *pObject, TeamQuery *pQuery, int tag)
+void TeamDbOpen(DbCursor *pObject, TeamQuery *pQuery, int tag)
 {
     void *pColumns = 0;
     TeamQuery query;
@@ -331,7 +336,7 @@ void fn_80083E40(DbCursor *pObject, TeamQuery *pQuery, int tag)
     case 0:
         break;
     case 1:
-        pColumns = lbl_802D6B34;
+        pColumns = _TeamDb_aTeamSortKeys;
         break;
     }
 
@@ -340,65 +345,65 @@ void fn_80083E40(DbCursor *pObject, TeamQuery *pQuery, int tag)
         DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, 0, tag);
         break;
     case 1:
-        fn_80083C98(pObject, pColumns, tag, query.mUnknown8);
+        TeamDbOpenByTmur(pObject, pColumns, tag, query.mUnknown8);
         break;
     case 2:
-        fn_80083A10(pObject, pColumns, tag, query.mUnknown8);
+        TeamDbOpenByDgid(pObject, pColumns, tag, query.mUnknown8);
         break;
     case 3:
-        fn_80083A88(pObject, pColumns, tag);
+        TeamDbOpenTypeZero(pObject, pColumns, tag);
         break;
     case 4:
-        fn_80083B00(pObject, pColumns, tag);
+        TeamDbOpenTypeZeroOrFive(pObject, pColumns, tag);
         break;
     case 5:
-        fn_80083BC4(pObject, pColumns, tag, query.mUnknown8);
+        TeamDbOpenTypeZeroWithLogo(pObject, pColumns, tag, query.mUnknown8);
         break;
     }
 }
 
-void fn_80083F68(DbCursor *pObject)
+void TeamDbClose(DbCursor *pObject)
 {
     DbCursorClose(pObject);
 }
 
-void fn_80083F88(DbCursor *pObject, char *pBuffer, int size)
+void TeamDbGetName(DbCursor *pObject, char *pBuffer, int size)
 {
     DbCursorGetString(pObject, 0x414E4454, (int)pBuffer, size);
 }
 
-int fn_80083FBC(DbCursor *pObject)
+int TeamDbGetId(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x44494754);
 }
 
-int fn_80083FE4(DbCursor *pObject)
+int TeamDbGetToid(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x44494F54);
 }
 
-int fn_8008400C(DbCursor *pObject)
+int TeamDbGetType(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x50595454);
 }
 
-int fn_80084034(DbCursor *pObject, int id, int *pResult)
+int TeamDbSeekId(DbCursor *pObject, int id, int *pResult)
 {
     return DbCursorFindInt(pObject, 0x44494754, id, 0, pResult);
 }
 
-int fn_8008406C(DbCursor *pObject, int id, int *pResult)
+int TeamDbSeekTmur(DbCursor *pObject, int id, int *pResult)
 {
     return DbCursorFindInt(pObject, 0x52554D54, id, 0, pResult);
 }
 
-void fn_800840A4(DbCursor *pObject, unsigned char *pValues)
+void TeamDbGetColors(DbCursor *pObject, unsigned char *pValues)
 {
     DbColumnValue list[4];
     int i;
 
     for (i = 0; i < 3; i++) {
-        list[i].Set(0x4D414554, lbl_802D6B28[i], 0);
+        list[i].Set(0x4D414554, _TeamDb_aColorColumns[i], 0);
     }
     list[3].SetEnd();
     pObject->Read(list);
@@ -407,91 +412,91 @@ void fn_800840A4(DbCursor *pObject, unsigned char *pValues)
     }
 }
 
-int fn_80084158(DbCursor *pObject)
+int TeamDbGetLogo(DbCursor *pObject)
 {
     return DbCursorGetValue(pObject, 0x4C474C54);
 }
 
-void fn_80084180(DbCursor *pObject, int value)
+void TeamDbSetLogo(DbCursor *pObject, int value)
 {
     DbCursorSetValue(pObject, 0x4C474C54, value);
 }
 
-unsigned char fn_800841AC(DbCursor *pObject)
+unsigned char TeamDbGetColor1(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x31434D54);
 }
 
-unsigned char fn_800841D8(DbCursor *pObject)
+unsigned char TeamDbGetColor2(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x32434D54);
 }
 
-unsigned char fn_80084204(DbCursor *pObject)
+unsigned char TeamDbGetColor3(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x33434D54);
 }
 
-void fn_80084230(DbCursor *pObject, unsigned char value)
+void TeamDbSetColor1(DbCursor *pObject, unsigned char value)
 {
     DbCursorSetInt(pObject, 0x31434D54, value);
 }
 
-void fn_8008425C(DbCursor *pObject, unsigned char value)
+void TeamDbSetColor2(DbCursor *pObject, unsigned char value)
 {
     DbCursorSetInt(pObject, 0x32434D54, value);
 }
 
-void fn_80084288(DbCursor *pObject, unsigned char value)
+void TeamDbSetColor3(DbCursor *pObject, unsigned char value)
 {
     DbCursorSetInt(pObject, 0x33434D54, value);
 }
 
-void fn_800842B4(DbCursor *pObject, char *pText, int length)
+void TeamDbSetName(DbCursor *pObject, char *pText, int length)
 {
     DbCursorSetString(pObject, 0x414E4454, pText, length);
 }
 
-int fn_800842E8(DbCursor *pObject)
+int TeamDbGetTrof(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x464F5254);
 }
 
-int fn_80084310(DbCursor *pObject)
+int TeamDbGetTrde(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x45445254);
 }
 
-int fn_80084338(DbCursor *pObject)
+int TeamDbGetTrov(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x564F5254);
 }
 
-int fn_80084360(DbCursor *pObject)
+int TeamDbGetTmur(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x52554D54);
 }
 
-int fn_80084388(void)
+int TeamDbGetRandomId(void)
 {
     DbCursor cursor;
     TeamQuery query;
     int id;
 
     query.mUnknown4 = 3;
-    fn_80083E1C(&cursor, &query);
+    TeamDbOpenQuery(&cursor, &query);
     DbCursorSeek(&cursor, (signed char)SyncRandGetIntRange(1, 0, DbCursorGetRowCount(&cursor) - 1));
     id = DbCursorGetValue(&cursor, 0x44494754);
-    fn_80083F68(&cursor);
+    TeamDbClose(&cursor);
     return id;
 }
 
-int fn_80084438(DbCursor *pObject)
+int TeamDbGetCtdl(DbCursor *pObject)
 {
     return DbCursorGetInt(pObject, 0x4C445443) != 0;
 }
 
-void fn_80084470(DbCursor *pObject, int value)
+void TeamDbSetCtdl(DbCursor *pObject, int value)
 {
     if (value) {
         DbCursorSetInt(pObject, 0x4C445443, 1);
@@ -500,7 +505,7 @@ void fn_80084470(DbCursor *pObject, int value)
     }
 }
 
-int fn_800844B8(const char *pName, int type, int logo)
+int TeamDbInsert(const char *pName, int type, int logo)
 {
     unsigned short count = 1;
     int id;
@@ -514,35 +519,35 @@ int fn_800844B8(const char *pName, int type, int logo)
     return id;
 }
 
-void fn_8008463C(int *pLogo, int *pFirst, int *pSecond, int *pThird);
-void fn_800846F4(int logo, char *pName, int size);
+void TeamDbGetRandomLogoColors(int *pLogo, int *pFirst, int *pSecond, int *pThird);
+void TeamDbGetRandomName(int logo, char *pName, int size);
 
-int fn_8008454C(int type, int logo, const char *pName)
+int TeamDbCreate(int type, int logo, const char *pName)
 {
     char name[33];
     int values[4];
     int id;
 
-    fn_8008463C(&values[0], &values[1], &values[2], &values[3]);
+    TeamDbGetRandomLogoColors(&values[0], &values[1], &values[2], &values[3]);
     if (logo != -1) {
         values[0] = logo;
     }
     if (pName && strlen(pName)) {
         strncpy(name, pName, 33);
     } else {
-        fn_800846F4(values[0], name, 33);
+        TeamDbGetRandomName(values[0], name, 33);
     }
     values[0] += 45;
     if (values[0] < 46 || values[0] > 132) {
         values[0] = DbUtilRandomRange(46, 133);
     }
-    id = fn_800844B8(name, type, values[0]);
+    id = TeamDbInsert(name, type, values[0]);
     TDbCompilePerformOp(0, "use 'TATS' update 'MAET' set '1CMT' = \x85 and '2CMT' = \x85 and '3CMT' = \x85 where 'DIGT' = \x85\n",
                 values[1], values[2], values[3], id);
     return id;
 }
 
-void fn_8008463C(int *pLogo, int *pFirst, int *pSecond, int *pThird)
+void TeamDbGetRandomLogoColors(int *pLogo, int *pFirst, int *pSecond, int *pThird)
 {
     QueryCursor cursor;
     QueryResult result;
@@ -560,7 +565,7 @@ void fn_8008463C(int *pLogo, int *pFirst, int *pSecond, int *pThird)
     }
 }
 
-void fn_800846F4(int logo, char *pName, int size)
+void TeamDbGetRandomName(int logo, char *pName, int size)
 {
     QueryCursor cursor;
     QueryResult result;
@@ -590,7 +595,7 @@ void fn_800846F4(int logo, char *pName, int size)
     }
 }
 
-void fn_80084808(int a, int *pIds, int *pCounts, int count, int *pOut, int total)
+void TeamDbCreatePlayers(int a, int *pIds, int *pCounts, int count, int *pOut, int total)
 {
     int prev;
     int k;
@@ -618,7 +623,7 @@ void fn_80084808(int a, int *pIds, int *pCounts, int count, int *pOut, int total
     fn_800829D8();
 }
 
-void fn_80084908(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned int size)
+void TeamDbAutoPickPlayers(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned int size)
 {
     int *pList = (int *)fn_801D2B7C((size + 1) * 4, 0, 0);
     int *pIds = (int *)fn_801D2B7C(count * 4, 0, 0);
@@ -629,13 +634,13 @@ void fn_80084908(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned
     memcpy(pList, pIn, size * 4);
     MemFill(excluded, sizeof(excluded), 0xFF, 4);
     pList[size] = 0x7FFF;
-    lbl_803EC86C = SyncRandGetRange(0, 5);
-    AutoDepthBuild(lbl_803EC86C, pList, &lbl_803EA7E8);
+    _TeamDb_iAutoDepthStream = SyncRandGetRange(0, 5);
+    AutoDepthBuild(_TeamDb_iAutoDepthStream, pList, &_TeamDb_pAutoDepth);
     for (i = 0; i < count; i++) {
         int id;
         int category;
 
-        AutoDepthSelect(lbl_803EA7E8, pList, excluded, &id, &category);
+        AutoDepthSelect(_TeamDb_pAutoDepth, pList, excluded, &id, &category);
         pIds[i] = id;
         excluded[i] = category;
         for (j = 0; j < size; j++) {
@@ -645,15 +650,15 @@ void fn_80084908(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned
             }
         }
     }
-    AutoDepthFree(&lbl_803EA7E8);
+    AutoDepthFree(&_TeamDb_pAutoDepth);
     memcpy(pOut, pIds, count * 4);
     fn_801D2BD0(pList);
     fn_801D2BD0(pIds);
 }
 
-void fn_80084DAC(int team, int *pIds, unsigned int count);
+void TeamDbCopyPlayers(int team, int *pIds, unsigned int count);
 
-void fn_80084A8C(int team, int *pList, int side, int count)
+void TeamDbLoadSideWithCopies(int team, int *pList, int side, int count)
 {
     DepthChartSide_t record;
     DbCursor query;
@@ -662,11 +667,11 @@ void fn_80084A8C(int team, int *pList, int side, int count)
 
     fn_8003DE74(side, pList);
     DepthChartGetSide(side, &record);
-    fn_80084DAC(team, record.mUnknown, count);
-    fn_80083E40(&query, 0, 0x54415453);
-    fn_80084034(&query, team, 0);
-    int type = fn_8008400C(&query);
-    fn_80083F68(&query);
+    TeamDbCopyPlayers(team, record.mUnknown, count);
+    TeamDbOpen(&query, 0, 0x54415453);
+    TeamDbSeekId(&query, team, 0);
+    int type = TeamDbGetType(&query);
+    TeamDbClose(&query);
     if (side == 0) {
         GameInfoSet(0, team);
         fn_8022A508(0, team, team, type, -1);
@@ -686,7 +691,7 @@ void fn_80084A8C(int team, int *pList, int side, int count)
     fn_8008056C(&cursor);
 }
 
-void fn_80084C24(int team, int *pList, int side, int count)
+void TeamDbLoadSide(int team, int *pList, int side, int count)
 {
     DepthChartSide_t record;
     DbCursor query;
@@ -695,10 +700,10 @@ void fn_80084C24(int team, int *pList, int side, int count)
 
     fn_8003DE74(side, pList);
     DepthChartGetSide(side, &record);
-    fn_80083E40(&query, 0, 0x54415453);
-    fn_80084034(&query, team, 0);
-    int type = fn_8008400C(&query);
-    fn_80083F68(&query);
+    TeamDbOpen(&query, 0, 0x54415453);
+    TeamDbSeekId(&query, team, 0);
+    int type = TeamDbGetType(&query);
+    TeamDbClose(&query);
     if (side == 0) {
         GameInfoSet(0, team);
         fn_8022A508(0, team, team, type, -1);
@@ -718,9 +723,9 @@ void fn_80084C24(int team, int *pList, int side, int count)
     fn_8008056C(&cursor);
 }
 
-int fn_80084F50(int id, int half, int *pList);
+int TeamDbFindDepthSlot(int id, int half, int *pList);
 
-void fn_80084DAC(int team, int *pIds, unsigned int count)
+void TeamDbCopyPlayers(int team, int *pIds, unsigned int count)
 {
     int copy[14];
     unsigned short found = count;
@@ -745,14 +750,14 @@ void fn_80084DAC(int team, int *pIds, unsigned int count)
     }
     for (i = 0; i < count; i++) {
         for (j = 0; j <= 1; j++) {
-            pIds[fn_80084F50(pOldIds[i], j, copy)] = pNewIds[i];
+            pIds[TeamDbFindDepthSlot(pOldIds[i], j, copy)] = pNewIds[i];
         }
     }
     fn_801D2BD0(pNewIds);
     fn_801D2BD0(pOldIds);
 }
 
-int fn_80084F50(int id, int half, int *pList)
+int TeamDbFindDepthSlot(int id, int half, int *pList)
 {
     int i = half == 0 ? 7 : 0;
     int end = half == 0 ? 13 : 6;
@@ -765,34 +770,34 @@ int fn_80084F50(int id, int half, int *pList)
     return i;
 }
 
-void fn_80084FA8(int value)
+void TeamDbLoadLibraryItem(int value)
 {
     UIGLibraryLoadItem(UIGLibraryGetGlobal(1), 4, value);
 }
 
-void fn_80084FE4(int value)
+void TeamDbUnloadLibraryItem(int value)
 {
     UIGLibraryUnLoadItem(UIGLibraryGetGlobal(1), 4, value);
 }
 
-void fn_80085020(DbCursor *pObject)
+void TstrDbOpen(DbCursor *pObject)
 {
     DbCursorOpen(pObject, 0x52545354, 0x59545453, 0, 0, 0x54415453);
 }
 
-void fn_80085060(DbCursor *pObject)
+void TstrDbClose(DbCursor *pObject)
 {
     DbCursorClose(pObject);
 }
 
-int fn_80085080(DbCursor *pObject, int value, int *pResult)
+int TstrDbSeek(DbCursor *pObject, int value, int *pResult)
 {
     return DbCursorFindInt(pObject, 0x59545453, value, 0, pResult);
 }
 
-int fn_800850B8(DbCursor *pObject, int category)
+int TstrDbGetPositionValue(DbCursor *pObject, int category)
 {
-    return DbCursorGetInt(pObject, lbl_802D6B54[category]);
+    return DbCursorGetInt(pObject, _TeamDb_aPositionColumns[category]);
 }
 
 }

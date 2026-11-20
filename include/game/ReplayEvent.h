@@ -1,7 +1,7 @@
 #ifndef GAME_REPLAYEVENT_H
 #define GAME_REPLAYEVENT_H
 
-#include "game/cu_8002B8F8.h"
+#include "game/Replay.h"
 
 /* Event list of the replay object (src/game/ReplayEvent.cpp). */
 extern "C" {

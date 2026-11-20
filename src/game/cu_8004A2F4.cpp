@@ -134,8 +134,8 @@ extern float lbl_803EA4E8;
 extern float lbl_803EA4EC;
 extern float lbl_803EA4F0;
 
-void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
-void fn_80030554(void *pStream, float *pValues, int bits, float scale);
+void ReplayReadPacked3(void *pStream, float *pValues, int bits, float scale);
+void ReplayWritePacked3(void *pStream, float *pValues, int bits, float scale);
 void BigObjClearFlag(BigObj_t *pObject);
 void BigObjSetFlag(BigObj_t *pObject);
 int fn_8004C204(const char *pName);
@@ -215,7 +215,7 @@ void fn_8004A2F4(AnimPose_t *pPose, BitStream_t *pStream, unsigned int count)
     for (i = 0; i < rest; i++) {
         pValue[i] = (bits << (64 - (rest - i) * 12) >> 48) & ~15;
     }
-    fn_800301C4(pStream, pPose->mUnknown8, 16, 512.0f);
+    ReplayReadPacked3(pStream, pPose->mUnknown8, 16, 512.0f);
     pPose->mUnknown32 = (int)ReadBitStream(pStream, 16) << 8;
 }
 
@@ -407,7 +407,7 @@ void fn_8004AA34(AnimPose_t *pPose, BitStream_t *pStream, unsigned int count)
         bits |= (unsigned long long)(pValue[i] >> 4) << (rest - (i + 1)) * 12;
     }
     fn_80191068(pStream, bits, rest * 12);
-    fn_80030554(pStream, pPose->mUnknown8, 16, 512.0f);
+    ReplayWritePacked3(pStream, pPose->mUnknown8, 16, 512.0f);
     fn_80191068(pStream, pPose->mUnknown32 >> 8, 16);
 }
 
@@ -1304,7 +1304,7 @@ extern void *lbl_803EC7D8;
 extern char *lbl_803EC7DC;
 extern unsigned short lbl_803EA4FC;
 extern Cache_8004DA0C *lbl_8030869C[];
-extern void *lbl_803EA368;
+extern void *gpReplay;
 void QuatFromEuler(Quat_801EB488 *, int, int, int);
 void QuatFromEulerYZX(Quat_801EB488 *, int, int, int);
 void QuatMultiply(Quat_801EB488 *, Quat_801EB488 *, void *);
@@ -1334,7 +1334,7 @@ int XmlGetAttrString(void *, const char *, char *, int, const char *);
 int XmlGetAttrInt(void *, const char *, int);
 float XmlGetAttrFloat(void *, const char *, float);
 int XmlGetAttrFloats(void *, const char *, float *, int);
-int fn_8002D060(void *);
+int ReplayIsShowing(void *);
 int ConGetCurrentContext(void);
 void DynObjDrawEnvMap(DynObj *, int);
 int VptGetMatrixStack(void);
@@ -1573,7 +1573,7 @@ int fn_8004D874(DynObj *p, int mode)
 {
     Instance_8004DA0C *pInstance = p->mpRender12C;
     unsigned char flag;
-    if (fn_8002D060(lbl_803EA368)) flag = p->mUnknownE8.mBytes[3] & 4;
+    if (ReplayIsShowing(gpReplay)) flag = p->mUnknownE8.mBytes[3] & 4;
     else flag = p->mUnknownE8.mBytes[3] & 1;
     if (flag) {
         int context = ConGetCurrentContext();

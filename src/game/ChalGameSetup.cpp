@@ -23,9 +23,9 @@ int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int PlayerDbGetRating(Object_8008044C *pObject, int index);
 void PlayerDbSetRating(Object_8008044C *pObject, int index, int value);
-int fn_8008454C(int type, int logo, const char *pName);
-void fn_80084808(int a, int *pIds, int *pCounts, int count, int *pOut, int total);
-void fn_80083DE4(int id);
+int TeamDbCreate(int type, int logo, const char *pName);
+void TeamDbCreatePlayers(int a, int *pIds, int *pCounts, int count, int *pOut, int total);
+void TeamDbSetPlayersTgti(int id);
 void ChallengeSetMode(int mode);
 void GameOutcomeSet(int value);
 int DbUserGetCurrent(void);
@@ -34,12 +34,12 @@ void UserProfileSelect(signed char index, unsigned char pad);
 void TeamFilterSet(int value);
 void MsgChallengeSetFlowState(int value);
 void ChalLoadCurrent(unsigned char id, int level);
-void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery);
+void TeamDbOpenQuery(DbCursor *pObject, TeamQuery *pQuery);
 int ChalHasReward(Challenge_t *pRecord, int id);
-int fn_80084388(void);
+int TeamDbGetRandomId(void);
 void CreateTeamLoadUserTeams(void);
-int fn_8008406C(DbCursor *pObject, int id, int *pResult);
-int fn_80083FBC(DbCursor *pObject);
+int TeamDbSeekTmur(DbCursor *pObject, int id, int *pResult);
+int TeamDbGetId(DbCursor *pObject);
 void MsgTeamSelectSetChallengeTeam(int team, int id);
 void GameInfoSet(int index, int value);
 float SyncRandGetFloat(int stream);
@@ -112,11 +112,11 @@ void ChalGameScaleTeamRatings(int team)
 int ChalGameGenerateTeam(int *pTeam)
 {
     int players[10];
-    int team = fn_8008454C(6, -1, 0);
+    int team = TeamDbCreate(6, -1, 0);
     int counts[7] = {1, 1, 1, 1, 1, 1, 1};
-    fn_80084808(team, _ChalGame_aiGeneratedPositions, counts, 7, players, 10);
+    TeamDbCreatePlayers(team, _ChalGame_aiGeneratedPositions, counts, 7, players, 10);
     ChalGameScaleTeamRatings(team);
-    fn_80083DE4(team);
+    TeamDbSetPlayersTgti(team);
     int gameTeam = ChalGameCopyTeam(team);
     if (pTeam) *pTeam = gameTeam;
     return team;
@@ -135,7 +135,7 @@ void ChalGameStart(unsigned char id)
     ChalLoadCurrent(id, GameOptionsGet(0));
     Challenge_t *pRecord = ChalGetCurrent();
     GameOptionsCopyShadow();
-    fn_80083E1C(&cursor, 0);
+    TeamDbOpenQuery(&cursor, 0);
     int team;
     if (ChalHasReward(pRecord, 4)) {
         _ChalGame_bGeneratedOpponent = 1;
@@ -145,15 +145,15 @@ void ChalGameStart(unsigned char id)
     } else if (_ChalGame_iCachedChallenge == pRecord->mUnknown0 && _ChalGame_iCachedTeam != -1 && _ChalGame_iCachedUser == DbUserGetCurrent()) {
         team = _ChalGame_iCachedTeam;
     } else {
-        team = fn_80084388();
+        team = TeamDbGetRandomId();
         _ChalGame_iCachedChallenge = pRecord->mUnknown0;
         _ChalGame_iCachedTeam = team;
         _ChalGame_iCachedUser = DbUserGetCurrent();
     }
     CreateTeamLoadUserTeams();
-    fn_8008406C(&cursor, 1, 0);
-    int otherTeam = fn_80083FBC(&cursor);
-    fn_80083F68(&cursor);
+    TeamDbSeekTmur(&cursor, 1, 0);
+    int otherTeam = TeamDbGetId(&cursor);
+    TeamDbClose(&cursor);
     MsgTeamSelectSetChallengeTeam(0, team);
     MsgTeamSelectSetChallengeTeam(1, otherTeam);
     switch (pRecord->mUnknown1B8) {
@@ -192,10 +192,10 @@ void ChalGameStartTournament(int team, int value)
     UserProfileSelect(UserProfileFindIndex(DbUserGetCurrent()), 1);
     UserProfileSelect(-1, 0);
     CreateTeamLoadUserTeams();
-    fn_80083E1C(&cursor, 0);
-    fn_8008406C(&cursor, 1, 0);
-    int otherTeam = fn_80083FBC(&cursor);
-    fn_80083F68(&cursor);
+    TeamDbOpenQuery(&cursor, 0);
+    TeamDbSeekTmur(&cursor, 1, 0);
+    int otherTeam = TeamDbGetId(&cursor);
+    TeamDbClose(&cursor);
     MsgTeamSelectSetChallengeTeam(0, team);
     MsgTeamSelectSetChallengeTeam(1, otherTeam);
     GameInfoSet(2, 1);

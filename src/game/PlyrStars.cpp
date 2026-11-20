@@ -95,7 +95,7 @@ int ObjNewInList(void *, int, int, void *);
 void ObjSetPriority(void *, int, int);
 void ObjRemoveFromList(void *, int);
 void *fn_800C47C4(void);
-void fn_80030ACC(void (*)(BitStream_t *),
+void ReplayRegisterChannel(void (*)(BitStream_t *),
                  void (*)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float), int,
                  const char *);
 int PlyrStarProjectOffscreen(Vector_80039F5C *, Vector_80039F5C *, int *, float *);
@@ -626,7 +626,7 @@ int PlyrStarProjectOffscreen(Vector_80039F5C *input, Vector_80039F5C *out, int *
 }
 void PlyrStarRegisterReplay(void) {
     _PlyrStar_iReplayBits = PlyrStarGetReplayBits();
-    fn_80030ACC(PlyrStarWriteReplayAll, PlyrStarReadReplayAll, _PlyrStar_iReplayBits * 10, "Stars");
+    ReplayRegisterChannel(PlyrStarWriteReplayAll, PlyrStarReadReplayAll, _PlyrStar_iReplayBits * 10, "Stars");
 }
 PlyrStar_t *PlyrStarGetPulse(int index) {
     return _PlyrStar_apPulse[index];

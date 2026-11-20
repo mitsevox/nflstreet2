@@ -13,8 +13,8 @@
 
 extern "C" {
 int fn_800A3444(void);
-void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery);
-int fn_80083FE4(DbCursor *pObject);
+void TeamDbOpenQuery(DbCursor *pObject, TeamQuery *pQuery);
+int TeamDbGetToid(DbCursor *pObject);
 void UserStatsOpen(DbCursor *pObject, int index);
 void UserStatsClose(DbCursor *pObject);
 int UserStatsGet(DbCursor *pObject, unsigned int index);
@@ -207,16 +207,16 @@ void FeatAwardAfterGame(void)
         UnlockListOpen(&cursor, 0, 0);
         FeatAwardModeFeat(&cursor, &other, db);
         if (GameModeTypeGet() == 0) {
-            fn_80083E1C(&query, 0);
+            TeamDbOpenQuery(&query, 0);
             if (GameOptionsGet(14) == 0) {
                 FeatAwardSettingFeats(&cursor, &other, db);
             }
-            fn_80084034(&query, i, 0);
-            FeatAwardValueFeat(&cursor, &other, db, 34, fn_80083FE4(&query));
-            fn_80084034(&query, (i + 1) % 2, 0);
-            FeatAwardValueFeat(&cursor, &other, db, 35, fn_80083FE4(&query));
+            TeamDbSeekId(&query, i, 0);
+            FeatAwardValueFeat(&cursor, &other, db, 34, TeamDbGetToid(&query));
+            TeamDbSeekId(&query, (i + 1) % 2, 0);
+            FeatAwardValueFeat(&cursor, &other, db, 35, TeamDbGetToid(&query));
             FeatAwardValueFeat(&cursor, &other, db, 36, fn_800A3444());
-            fn_80083F68(&query);
+            TeamDbClose(&query);
         }
         UnlockListClose(&cursor);
         UnlockStatusClose(&other);

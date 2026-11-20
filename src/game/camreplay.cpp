@@ -73,16 +73,16 @@ struct CamReplayPart_t {
 };
 
 extern "C" {
-extern void *lbl_803EA368;
+extern void *gpReplay;
 
 double fabs(double);
 
-void fn_8002CFF4(void *p);
-void fn_8002D198(void *p);
-Record_8002E7C0 *fn_8002E7C0(RecordList_8002E7C0 *pList);
-int fn_8002E7D0(RecordList_8002E7C0 *pList);
-void fn_8002E7EC(void *p, RecordList_8002E7C0 *pList);
-Object_80039F5C *fn_80030C70(Object_80039F5C **ppA, Object_80039F5C **ppB);
+void ReplayStartAutoPlayback(void *p);
+void ReplayRequestExit(void *p);
+Record_8002E7C0 *ReplayShotListGetCurrent(RecordList_8002E7C0 *pList);
+int ReplayShotListHasNext(RecordList_8002E7C0 *pList);
+void ReplayShotListAdvance(void *p, RecordList_8002E7C0 *pList);
+Object_80039F5C *ReplayGetFocusPlayers(Object_80039F5C **ppA, Object_80039F5C **ppB);
 void PlyrPoseGetBoneTransform(Block_80170E64 *pBlock, int id, float *pOut, int b);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void *BallGetCurrent(void);
@@ -300,9 +300,9 @@ extern "C" void CamReplayStart(CamReplayCamera_t *pCamera)
     pState->mUnknown28 = 1;
     pState->mUnknown29 = 0;
     pState->mUnknown20 = 0.0f;
-    p = fn_80030C70(0, 0);
+    p = ReplayGetFocusPlayers(0, 0);
     if (pCamera->mUnknownA0 == 8) {
-        Record_8002E7C0 *pRecord = fn_8002E7C0(pList);
+        Record_8002E7C0 *pRecord = ReplayShotListGetCurrent(pList);
 
         pState->mUnknown00[0] = pRecord->mUnknown1C.mUnknown00[0];
         pState->mUnknown00[1] = pRecord->mUnknown1C.mUnknown00[1];
@@ -340,14 +340,14 @@ extern "C" void CamReplayUpdate(CamReplayCamera_t *pCamera)
     float dist;
 
     out[0] = out[1] = out[2] = 0.0f;
-    p = fn_80030C70(0, 0);
+    p = ReplayGetFocusPlayers(0, 0);
     pTarget = BallGetModel(BallGetCurrent());
     target[0] = pTarget->mUnknown04[0];
     target[1] = pTarget->mUnknown04[1];
     target[2] = pTarget->mUnknown04[2];
     smooth = !pState->mUnknown28;
     pState->mUnknown28 = 0;
-    pRecord = fn_8002E7C0(&pCamera->mUnknown128);
+    pRecord = ReplayShotListGetCurrent(&pCamera->mUnknown128);
     timer = pRecord->mUnknown04;
     pRecord->mUnknown04.mUnknown10++;
     if (pCamera->mUnknown9C == 15) {
@@ -595,7 +595,7 @@ extern "C" void CamReplayOrbitPos(Record_8002E7C0 *pRecord, float *pOrigin, floa
 extern "C" void CamReplayGetTarget(CamReplayCamera_t *pCamera, Record_8002E7C0 *pRecord, float *pOut)
 {
     CamReplayState_t *pState = &pCamera->mUnknownF8;
-    Object_80039F5C *pObject = fn_80030C70(0, 0);
+    Object_80039F5C *pObject = ReplayGetFocusPlayers(0, 0);
     float target[3];
     float tracked[3];
     int id;
@@ -770,17 +770,17 @@ extern "C" void CamReplayHandleMsg(CamReplayCamera_t *pCamera, int msg)
 
 extern "C" void CamReplayNextRecord(void)
 {
-    void *p = lbl_803EA368;
+    void *p = gpReplay;
     RecordList_8002E7C0 *pList = &_CamReplay_pCamera->mUnknown128;
 
-    if (fn_8002E7D0(pList)) {
-        fn_8002E7EC(p, pList);
+    if (ReplayShotListHasNext(pList)) {
+        ReplayShotListAdvance(p, pList);
         CamMainSetMode(_CamReplay_pCamera, 8, 0, 0);
     } else if (_CamReplay_bRepeat) {
         CamMainSetMode(_CamReplay_pCamera, 8, 0, 0);
-        fn_8002CFF4(lbl_803EA368);
+        ReplayStartAutoPlayback(gpReplay);
     } else {
-        fn_8002D198(p);
+        ReplayRequestExit(p);
         BannerClear(3);
     }
 }

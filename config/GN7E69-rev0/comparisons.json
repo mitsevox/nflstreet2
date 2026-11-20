@@ -1943,332 +1943,332 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8005D60C",
+          "symbol": "StoryEventsClose",
           "start": "0x8005D60C",
           "end": "0x8005D660"
         },
         {
-          "symbol": "fn_8005D660",
+          "symbol": "StoryEventsOpen",
           "start": "0x8005D660",
           "end": "0x8005D6EC"
         },
         {
-          "symbol": "fn_8005D6EC",
+          "symbol": "StoryEventsReadProgress",
           "start": "0x8005D6EC",
           "end": "0x8005D764"
         },
         {
-          "symbol": "fn_8005D764",
+          "symbol": "StoryEventsLoadTeamLogo",
           "start": "0x8005D764",
           "end": "0x8005D7F0"
         },
         {
-          "symbol": "fn_8005D7F0",
+          "symbol": "StoryEventsGetSlotDive",
           "start": "0x8005D7F0",
           "end": "0x8005D804"
         },
         {
-          "symbol": "fn_8005D804",
+          "symbol": "StoryEventsGetDiveSlot",
           "start": "0x8005D804",
           "end": "0x8005D818"
         },
         {
-          "symbol": "fn_8005D818",
+          "symbol": "StoryEventsSyncDatabases",
           "start": "0x8005D818",
           "end": "0x8005D86C"
         },
         {
-          "symbol": "fn_8005D86C",
+          "symbol": "StoryEventsUpdateCompletion",
           "start": "0x8005D86C",
           "end": "0x8005D94C"
         },
         {
-          "symbol": "fn_8005D94C",
+          "symbol": "StoryEventsIsAllComplete",
           "start": "0x8005D94C",
           "end": "0x8005D958"
         },
         {
-          "symbol": "fn_8005D958",
+          "symbol": "StoryEventsIsFinalEvent",
           "start": "0x8005D958",
           "end": "0x8005D990"
         },
         {
-          "symbol": "fn_8005D990",
+          "symbol": "StoryEventsAwardExpPoints",
           "start": "0x8005D990",
           "end": "0x8005DA10"
         },
         {
-          "symbol": "fn_8005DA10",
+          "symbol": "StoryEventsRestoreOptions",
           "start": "0x8005DA10",
           "end": "0x8005DA7C"
         },
         {
-          "symbol": "fn_8005DA7C",
+          "symbol": "StoryEventsOverrideOptions",
           "start": "0x8005DA7C",
           "end": "0x8005DB3C"
         },
         {
-          "symbol": "fn_8005DB3C",
+          "symbol": "StoryEventsUpdateRatingScale",
           "start": "0x8005DB3C",
           "end": "0x8005DB9C"
         },
         {
-          "symbol": "fn_8005DB9C",
+          "symbol": "StoryEventsScalePlayers",
           "start": "0x8005DB9C",
           "end": "0x8005DC10"
         },
         {
-          "symbol": "fn_8005DC10",
+          "symbol": "StoryEventsSetupFinalTeam",
           "start": "0x8005DC10",
           "end": "0x8005DD6C"
         },
         {
-          "symbol": "fn_8005DD6C",
+          "symbol": "StoryEventsCreateAwayTeam",
           "start": "0x8005DD6C",
           "end": "0x8005DFE8"
         },
         {
-          "symbol": "fn_8005DFE8",
+          "symbol": "StoryEventsCopyIds",
           "start": "0x8005DFE8",
           "end": "0x8005E010"
         },
         {
-          "symbol": "fn_8005E010",
+          "symbol": "StoryEventsTeamSetupStub",
           "start": "0x8005E010",
           "end": "0x8005E014"
         },
         {
-          "symbol": "fn_8005E014",
+          "symbol": "StoryEventsCreateHomeTeam",
           "start": "0x8005E014",
           "end": "0x8005E360"
         },
         {
-          "symbol": "fn_8005E360",
+          "symbol": "StoryEventsSetupTeams",
           "start": "0x8005E360",
           "end": "0x8005E43C"
         },
         {
-          "symbol": "fn_8005E43C",
+          "symbol": "StoryEventsSetupMatch",
           "start": "0x8005E43C",
           "end": "0x8005E4A8"
         },
         {
-          "symbol": "fn_8005E4A8",
+          "symbol": "StoryEventsStartEvent",
           "start": "0x8005E4A8",
           "end": "0x8005E728"
         },
         {
-          "symbol": "fn_8005E728",
+          "symbol": "StoryEventsGetEventScreen",
           "start": "0x8005E728",
           "end": "0x8005E798"
         },
         {
-          "symbol": "fn_8005E798",
+          "symbol": "StoryEventsStoreLkss",
           "start": "0x8005E798",
           "end": "0x8005E7E4"
         },
         {
-          "symbol": "fn_8005E7E4",
+          "symbol": "StoryEventsCompleteEvent",
           "start": "0x8005E7E4",
           "end": "0x8005E980"
         },
         {
-          "symbol": "fn_8005E980",
+          "symbol": "StoryEventsGetEventInfo",
           "start": "0x8005E980",
           "end": "0x8005EB20"
         },
         {
-          "symbol": "fn_8005EB20",
+          "symbol": "StoryEventsFindOpenDive",
           "start": "0x8005EB20",
           "end": "0x8005EBF0"
         },
         {
-          "symbol": "fn_8005EBF0",
+          "symbol": "StoryEventsIsDiveDone",
           "start": "0x8005EBF0",
           "end": "0x8005EC14"
         },
         {
-          "symbol": "fn_8005EC14",
+          "symbol": "StoryEventsIsDiveFinished",
           "start": "0x8005EC14",
           "end": "0x8005ECA0"
         },
         {
-          "symbol": "fn_8005ECA0",
+          "symbol": "StoryEventsBuildRewardText",
           "start": "0x8005ECA0",
           "end": "0x8005EEC4"
         },
         {
-          "symbol": "fn_8005EEC4",
+          "symbol": "StoryEventsEnterScreen",
           "start": "0x8005EEC4",
           "end": "0x8005F13C"
         },
         {
-          "symbol": "fn_8005F13C",
+          "symbol": "StoryEventsLeaveScreen",
           "start": "0x8005F13C",
           "end": "0x8005F1F8"
         },
         {
-          "symbol": "fn_8005F1F8",
+          "symbol": "StoryEventsGetDiveEventCount",
           "start": "0x8005F1F8",
           "end": "0x8005F24C"
         },
         {
-          "symbol": "fn_8005F24C",
+          "symbol": "StoryEventsSelectEvent",
           "start": "0x8005F24C",
           "end": "0x8005F29C"
         },
         {
-          "symbol": "fn_8005F29C",
+          "symbol": "StoryEventsStartFirstEvent",
           "start": "0x8005F29C",
           "end": "0x8005F324"
         },
         {
-          "symbol": "fn_8005F324",
+          "symbol": "StoryEventsHandleAction",
           "start": "0x8005F324",
           "end": "0x8005F394"
         },
         {
-          "symbol": "fn_8005F394",
+          "symbol": "StoryEventsShowReward",
           "start": "0x8005F394",
           "end": "0x8005F3E4"
         },
         {
-          "symbol": "fn_8005F3E4",
+          "symbol": "StoryEventsGetTeamLogo",
           "start": "0x8005F3E4",
           "end": "0x8005F4EC"
         },
         {
-          "symbol": "fn_8005F4EC",
+          "symbol": "StoryEventsGetHeroName",
           "start": "0x8005F4EC",
           "end": "0x8005F664"
         },
         {
-          "symbol": "fn_8005F664",
+          "symbol": "StoryEventsGetTeamName",
           "start": "0x8005F664",
           "end": "0x8005F708"
         },
         {
-          "symbol": "fn_8005F708",
+          "symbol": "StoryEventsPlaceInSlot",
           "start": "0x8005F708",
           "end": "0x8005F754"
         },
         {
-          "symbol": "fn_8005F754",
+          "symbol": "StoryEventsGetRatingScale",
           "start": "0x8005F754",
           "end": "0x8005F7C4"
         },
         {
-          "symbol": "fn_8005F7C4",
+          "symbol": "StoryEventsScalePlayerRatings",
           "start": "0x8005F7C4",
           "end": "0x8005F8B4"
         },
         {
-          "symbol": "fn_8005F8B4",
+          "symbol": "StoryEventsCopyRewardText",
           "start": "0x8005F8B4",
           "end": "0x8005F8F0"
         },
         {
-          "symbol": "fn_8005F8F0",
+          "symbol": "StoryEventsClearResult",
           "start": "0x8005F8F0",
           "end": "0x8005F900"
         },
         {
-          "symbol": "fn_8005F900",
+          "symbol": "StoryEventsGetHomeTeam",
           "start": "0x8005F900",
           "end": "0x8005F910"
         },
         {
-          "symbol": "fn_8005F910",
+          "symbol": "StoryEventsIsNewStory",
           "start": "0x8005F910",
           "end": "0x8005F938"
         },
         {
-          "symbol": "fn_8005F938",
+          "symbol": "StoryEventsHandleMessage",
           "start": "0x8005F938",
           "end": "0x8005FC7C"
         },
         {
-          "symbol": "fn_8005FC7C",
+          "symbol": "StoryEventsGetCurrentEvent",
           "start": "0x8005FC7C",
           "end": "0x8005FC84"
         },
         {
-          "symbol": "fn_8005FC84",
+          "symbol": "StoryEventsRecordGameResult",
           "start": "0x8005FC84",
           "end": "0x8005FCF8"
         },
         {
-          "symbol": "fn_8005FCF8",
+          "symbol": "StoryEventsBuildPickupTables",
           "start": "0x8005FCF8",
           "end": "0x80060044"
         },
         {
-          "symbol": "fn_80060044",
+          "symbol": "StoryEventsBuildEventTables",
           "start": "0x80060044",
           "end": "0x80060278"
         },
         {
-          "symbol": "fn_80060278",
+          "symbol": "StoryEventsFreeTables",
           "start": "0x80060278",
           "end": "0x800602D8"
         },
         {
-          "symbol": "fn_800602D8",
+          "symbol": "StoryEventsGetPlayerTable",
           "start": "0x800602D8",
           "end": "0x800602E0"
         },
         {
-          "symbol": "fn_800602E0",
+          "symbol": "StoryEventsGetTeamTable",
           "start": "0x800602E0",
           "end": "0x800602E8"
         },
         {
-          "symbol": "fn_800602E8",
+          "symbol": "StoryEventsIsWonPickupEvent",
           "start": "0x800602E8",
           "end": "0x80060330"
         },
         {
-          "symbol": "fn_80060330",
+          "symbol": "StoryEventsCallTeamSetupStub",
           "start": "0x80060330",
           "end": "0x80060354"
         },
         {
-          "symbol": "fn_80060354",
+          "symbol": "StoryEventsPlaceSpecialPlayers",
           "start": "0x80060354",
           "end": "0x80060410"
         },
         {
-          "symbol": "fn_80060410",
+          "symbol": "StoryEventsSetLineup",
           "start": "0x80060410",
           "end": "0x80060444"
         },
         {
-          "symbol": "fn_80060444",
+          "symbol": "StoryEventsGetLineup",
           "start": "0x80060444",
           "end": "0x80060458"
         },
         {
-          "symbol": "fn_80060458",
+          "symbol": "StoryEventsCheatSetLevel",
           "start": "0x80060458",
           "end": "0x8006059C"
         },
         {
-          "symbol": "fn_8006059C",
+          "symbol": "StoryEventsCheatCompleteAll",
           "start": "0x8006059C",
           "end": "0x80060674"
         },
         {
-          "symbol": "fn_80060674",
+          "symbol": "StoryEventsReset",
           "start": "0x80060674",
           "end": "0x800606CC"
         },
         {
-          "symbol": "fn_800606CC",
+          "symbol": "StoryEventsFindLineupPlayer",
           "start": "0x800606CC",
           "end": "0x8006088C"
         },
         {
-          "symbol": "fn_8006088C",
+          "symbol": "StoryEventsSetRewardPenalty",
           "start": "0x8006088C",
           "end": "0x80060894"
         },
@@ -2278,12 +2278,12 @@
           "end": "0x800608F0"
         },
         {
-          "symbol": "_GLOBAL_.I.lbl_803EA5B8",
+          "symbol": "_GLOBAL_.I._StoryEvents_bActive",
           "start": "0x800608F0",
           "end": "0x8006091C"
         },
         {
-          "symbol": "_GLOBAL_.D.lbl_803EA5B8",
+          "symbol": "_GLOBAL_.D._StoryEvents_bActive",
           "start": "0x8006091C",
           "end": "0x80060948"
         }
@@ -8512,9 +8512,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002B8F8.cpp",
+      "source": "src/game/Replay.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002B8F8-0x80030D50 (src/game/cu_8002B8F8.cpp), its compiler, source-form, name, type and linker rows, the 117 function extents 0x8002B960-0x80030D50 and the .rodata row 0x8028A9C8-0x8028AC28, whose 608 bytes the source reproduces (the 4/3 through the FAKEMATCH stand-in of source-form row 0x8028AC24). The five discarded file-static functions are compiled, not registered or measured. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row 0x8002B8F8-0x80030D50 (src/game/Replay.cpp), its compiler, source-form, name, type and linker rows, the 117 function extents 0x8002B960-0x80030D50 and the .rodata row 0x8028A9C8-0x8028AC28, whose 608 bytes the source reproduces (the 4/3 through the FAKEMATCH stand-in of source-form row 0x8028AC24). The five discarded file-static functions are compiled, not registered or measured. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -8555,587 +8555,587 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8002B960",
+          "symbol": "ReplaySaveGameState",
           "start": "0x8002B960",
           "end": "0x8002BAF4"
         },
         {
-          "symbol": "fn_8002BAF4",
+          "symbol": "ReplayRestoreGameState",
           "start": "0x8002BAF4",
           "end": "0x8002BC80"
         },
         {
-          "symbol": "fn_8002BC80",
+          "symbol": "ReplayClear",
           "start": "0x8002BC80",
           "end": "0x8002BCD4"
         },
         {
-          "symbol": "fn_8002BCD4",
+          "symbol": "ReplayStartRecording",
           "start": "0x8002BCD4",
           "end": "0x8002BD44"
         },
         {
-          "symbol": "fn_8002BD44",
+          "symbol": "ReplayStopRecording",
           "start": "0x8002BD44",
           "end": "0x8002BDBC"
         },
         {
-          "symbol": "fn_8002BDBC",
+          "symbol": "ReplayRecordSkip",
           "start": "0x8002BDBC",
           "end": "0x8002BDC4"
         },
         {
-          "symbol": "fn_8002BDC4",
+          "symbol": "ReplayRecordUpdate",
           "start": "0x8002BDC4",
           "end": "0x8002BE28"
         },
         {
-          "symbol": "fn_8002BE28",
+          "symbol": "ReplayGetCameraMode",
           "start": "0x8002BE28",
           "end": "0x8002BE68"
         },
         {
-          "symbol": "fn_8002BE68",
+          "symbol": "ReplayHandlePlayRequest",
           "start": "0x8002BE68",
           "end": "0x8002BEF0"
         },
         {
-          "symbol": "fn_8002BEF0",
+          "symbol": "ReplayUpdateAutoPlay",
           "start": "0x8002BEF0",
           "end": "0x8002C13C"
         },
         {
-          "symbol": "fn_8002C13C",
+          "symbol": "ReplayUpdateUserPlay",
           "start": "0x8002C13C",
           "end": "0x8002C300"
         },
         {
-          "symbol": "fn_8002C300",
+          "symbol": "ReplayEnterPlayback",
           "start": "0x8002C300",
           "end": "0x8002C4B0"
         },
         {
-          "symbol": "fn_8002C4B0",
+          "symbol": "ReplayExitPlayback",
           "start": "0x8002C4B0",
           "end": "0x8002C630"
         },
         {
-          "symbol": "fn_8002C630",
+          "symbol": "ReplayRefreshFrame",
           "start": "0x8002C630",
           "end": "0x8002C664"
         },
         {
-          "symbol": "fn_8002C664",
+          "symbol": "ReplayStepBackward",
           "start": "0x8002C664",
           "end": "0x8002C6E0"
         },
         {
-          "symbol": "fn_8002C6E0",
+          "symbol": "ReplayStepForward",
           "start": "0x8002C6E0",
           "end": "0x8002C75C"
         },
         {
-          "symbol": "fn_8002C75C",
+          "symbol": "ReplayTakeControllerInput",
           "start": "0x8002C75C",
           "end": "0x8002C800"
         },
         {
-          "symbol": "fn_8002C800",
+          "symbol": "ReplayReleaseControllerInput",
           "start": "0x8002C800",
           "end": "0x8002C848"
         },
         {
-          "symbol": "fn_8002C848",
+          "symbol": "ReplayTriggerMarkEffect",
           "start": "0x8002C848",
           "end": "0x8002C8C0"
         },
         {
-          "symbol": "fn_8002C8C0",
+          "symbol": "ReplayCreate",
           "start": "0x8002C8C0",
           "end": "0x8002C964"
         },
         {
-          "symbol": "fn_8002C964",
+          "symbol": "ReplayDestroy",
           "start": "0x8002C964",
           "end": "0x8002C9A4"
         },
         {
-          "symbol": "fn_8002C9A4",
+          "symbol": "ReplayStartRecordingStub",
           "start": "0x8002C9A4",
           "end": "0x8002C9A8"
         },
         {
-          "symbol": "fn_8002C9A8",
+          "symbol": "ReplayHandleCommand",
           "start": "0x8002C9A8",
           "end": "0x8002CA74"
         },
         {
-          "symbol": "fn_8002CA74",
+          "symbol": "ReplayHandleControl",
           "start": "0x8002CA74",
           "end": "0x8002CBB0"
         },
         {
-          "symbol": "fn_8002CBB0",
+          "symbol": "ReplayHandleInput",
           "start": "0x8002CBB0",
           "end": "0x8002CF34"
         },
         {
-          "symbol": "fn_8002CF34",
+          "symbol": "ReplayUpdate",
           "start": "0x8002CF34",
           "end": "0x8002CFF4"
         },
         {
-          "symbol": "fn_8002CFF4",
+          "symbol": "ReplayStartAutoPlayback",
           "start": "0x8002CFF4",
           "end": "0x8002D058"
         },
         {
-          "symbol": "fn_8002D058",
+          "symbol": "ReplayIsStepping",
           "start": "0x8002D058",
           "end": "0x8002D060"
         },
         {
-          "symbol": "fn_8002D060",
+          "symbol": "ReplayIsShowing",
           "start": "0x8002D060",
           "end": "0x8002D0AC"
         },
         {
-          "symbol": "fn_8002D0AC",
+          "symbol": "ReplayIsRecording",
           "start": "0x8002D0AC",
           "end": "0x8002D0D0"
         },
         {
-          "symbol": "fn_8002D0D0",
+          "symbol": "ReplayGetLength",
           "start": "0x8002D0D0",
           "end": "0x8002D0FC"
         },
         {
-          "symbol": "fn_8002D0FC",
+          "symbol": "ReplayGetPosition",
           "start": "0x8002D0FC",
           "end": "0x8002D128"
         },
         {
-          "symbol": "fn_8002D128",
+          "symbol": "ReplaySetSpeed",
           "start": "0x8002D128",
           "end": "0x8002D150"
         },
         {
-          "symbol": "fn_8002D150",
+          "symbol": "ReplayGetSpeed",
           "start": "0x8002D150",
           "end": "0x8002D158"
         },
         {
-          "symbol": "fn_8002D158",
+          "symbol": "ReplayGetStartFrame",
           "start": "0x8002D158",
           "end": "0x8002D160"
         },
         {
-          "symbol": "fn_8002D160",
+          "symbol": "ReplaySetPlayEnd",
           "start": "0x8002D160",
           "end": "0x8002D198"
         },
         {
-          "symbol": "fn_8002D198",
+          "symbol": "ReplayRequestExit",
           "start": "0x8002D198",
           "end": "0x8002D1B8"
         },
         {
-          "symbol": "fn_8002D1B8",
+          "symbol": "ReplaySeek",
           "start": "0x8002D1B8",
           "end": "0x8002D228"
         },
         {
-          "symbol": "fn_8002D228",
+          "symbol": "ReplayIsHalted",
           "start": "0x8002D228",
           "end": "0x8002D250"
         },
         {
-          "symbol": "fn_8002D250",
+          "symbol": "ReplaySetEndHere",
           "start": "0x8002D250",
           "end": "0x8002D274"
         },
         {
-          "symbol": "fn_8002D274",
+          "symbol": "ReplayStopAndClear",
           "start": "0x8002D274",
           "end": "0x8002D2C0"
         },
         {
-          "symbol": "fn_8002D2C0",
+          "symbol": "ReplayIsSuspended",
           "start": "0x8002D2C0",
           "end": "0x8002D2C8"
         },
         {
-          "symbol": "fn_8002D2C8",
+          "symbol": "ReplaySetHoldFlag",
           "start": "0x8002D2C8",
           "end": "0x8002D2D0"
         },
         {
-          "symbol": "fn_8002D2D0",
+          "symbol": "ReplayDirectorEnter",
           "start": "0x8002D2D0",
           "end": "0x8002D2D4"
         },
         {
-          "symbol": "fn_8002D2D4",
+          "symbol": "ReplayDirectorExit",
           "start": "0x8002D2D4",
           "end": "0x8002D2D8"
         },
         {
-          "symbol": "fn_8002D2D8",
+          "symbol": "ReplayDirectorIsActive",
           "start": "0x8002D2D8",
           "end": "0x8002D2E0"
         },
         {
-          "symbol": "fn_8002D2E0",
+          "symbol": "ReplayDirectorHandleInput",
           "start": "0x8002D2E0",
           "end": "0x8002D2E4"
         },
         {
-          "symbol": "fn_8002D2E4",
+          "symbol": "ReplayDirectorUpdateFocus",
           "start": "0x8002D2E4",
           "end": "0x8002D2E8"
         },
         {
-          "symbol": "fn_8002D2E8",
+          "symbol": "ReplayDirectorUpdate",
           "start": "0x8002D2E8",
           "end": "0x8002D2EC"
         },
         {
-          "symbol": "fn_8002D2EC",
+          "symbol": "ReplayShotListStartStub",
           "start": "0x8002D2EC",
           "end": "0x8002D2F0"
         },
         {
-          "symbol": "fn_8002D2F0",
+          "symbol": "ReplaySetEventMark",
           "start": "0x8002D2F0",
           "end": "0x8002D338"
         },
         {
-          "symbol": "fn_8002D338",
+          "symbol": "ReplayInitShotTimer",
           "start": "0x8002D338",
           "end": "0x8002D3BC"
         },
         {
-          "symbol": "fn_8002D3BC",
+          "symbol": "ReplayShotListAdd",
           "start": "0x8002D3BC",
           "end": "0x8002D414"
         },
         {
-          "symbol": "fn_8002D414",
+          "symbol": "ReplayEventDeltaY",
           "start": "0x8002D414",
           "end": "0x8002D4A0"
         },
         {
-          "symbol": "fn_8002D4A0",
+          "symbol": "ReplayTestConditions",
           "start": "0x8002D4A0",
           "end": "0x8002DC00"
         },
         {
-          "symbol": "fn_8002DC00",
+          "symbol": "ReplayBuildShotList",
           "start": "0x8002DC00",
           "end": "0x8002E75C"
         },
         {
-          "symbol": "fn_8002E75C",
+          "symbol": "ReplayStartShot",
           "start": "0x8002E75C",
           "end": "0x8002E7C0"
         },
         {
-          "symbol": "fn_8002E7C0",
+          "symbol": "ReplayShotListGetCurrent",
           "start": "0x8002E7C0",
           "end": "0x8002E7D0"
         },
         {
-          "symbol": "fn_8002E7D0",
+          "symbol": "ReplayShotListHasNext",
           "start": "0x8002E7D0",
           "end": "0x8002E7EC"
         },
         {
-          "symbol": "fn_8002E7EC",
+          "symbol": "ReplayShotListAdvance",
           "start": "0x8002E7EC",
           "end": "0x8002E890"
         },
         {
-          "symbol": "fn_8002E890",
+          "symbol": "ReplayShotListClear",
           "start": "0x8002E890",
           "end": "0x8002E8B8"
         },
         {
-          "symbol": "fn_8002E8B8",
+          "symbol": "ReplayShotListStart",
           "start": "0x8002E8B8",
           "end": "0x8002E950"
         },
         {
-          "symbol": "fn_8002E950",
+          "symbol": "ReplayPickScript",
           "start": "0x8002E950",
           "end": "0x8002EA18"
         },
         {
-          "symbol": "fn_8002EA18",
+          "symbol": "ReplayCamInit",
           "start": "0x8002EA18",
           "end": "0x8002EA38"
         },
         {
-          "symbol": "fn_8002EA38",
+          "symbol": "ReplayCamUninit",
           "start": "0x8002EA38",
           "end": "0x8002EA58"
         },
         {
-          "symbol": "fn_8002EA58",
+          "symbol": "ReplayCamUpdate",
           "start": "0x8002EA58",
           "end": "0x8002EA78"
         },
         {
-          "symbol": "fn_8002EA78",
+          "symbol": "ReplayCamCreate",
           "start": "0x8002EA78",
           "end": "0x8002EBBC"
         },
         {
-          "symbol": "fn_8002EBBC",
+          "symbol": "ReplayCamSetBallHighlight",
           "start": "0x8002EBBC",
           "end": "0x8002EC28"
         },
         {
-          "symbol": "fn_8002EC28",
+          "symbol": "ReplayCamUpdateFocus",
           "start": "0x8002EC28",
           "end": "0x8002ED48"
         },
         {
-          "symbol": "fn_8002ED48",
+          "symbol": "ReplayCamGetMoveOffset",
           "start": "0x8002ED48",
           "end": "0x8002EDE8"
         },
         {
-          "symbol": "fn_8002EDE8",
+          "symbol": "ReplayCamFindNearestObject",
           "start": "0x8002EDE8",
           "end": "0x8002EED0"
         },
         {
-          "symbol": "fn_8002EED0",
+          "symbol": "ReplayCamSetFieldMargins",
           "start": "0x8002EED0",
           "end": "0x8002F01C"
         },
         {
-          "symbol": "fn_8002F01C",
+          "symbol": "ReplayCamComputeMaxDistance",
           "start": "0x8002F01C",
           "end": "0x8002F1E0"
         },
         {
-          "symbol": "fn_8002F1E0",
+          "symbol": "ReplayCamApplyDistance",
           "start": "0x8002F1E0",
           "end": "0x8002F204"
         },
         {
-          "symbol": "fn_8002F204",
+          "symbol": "ReplayCamZoom",
           "start": "0x8002F204",
           "end": "0x8002F26C"
         },
         {
-          "symbol": "fn_8002F26C",
+          "symbol": "ReplayCamMoveCursor",
           "start": "0x8002F26C",
           "end": "0x8002F510"
         },
         {
-          "symbol": "fn_8002F510",
+          "symbol": "ReplayCamRotate",
           "start": "0x8002F510",
           "end": "0x8002F550"
         },
         {
-          "symbol": "fn_8002F550",
+          "symbol": "ReplayCamPitch",
           "start": "0x8002F550",
           "end": "0x8002F5D4"
         },
         {
-          "symbol": "fn_8002F5D4",
+          "symbol": "ReplayCamAdjustHeight",
           "start": "0x8002F5D4",
           "end": "0x8002F61C"
         },
         {
-          "symbol": "fn_8002F61C",
+          "symbol": "ReplayCamStart",
           "start": "0x8002F61C",
           "end": "0x8002F71C"
         },
         {
-          "symbol": "fn_8002F71C",
+          "symbol": "ReplayCamPush",
           "start": "0x8002F71C",
           "end": "0x8002F74C"
         },
         {
-          "symbol": "fn_8002F74C",
+          "symbol": "ReplayCamProcess",
           "start": "0x8002F74C",
           "end": "0x8002F9D8"
         },
         {
-          "symbol": "fn_8002F9D8",
+          "symbol": "ReplayCamProcessAuto",
           "start": "0x8002F9D8",
           "end": "0x8002FA04"
         },
         {
-          "symbol": "fn_8002FA04",
+          "symbol": "ReplayCamDestroy",
           "start": "0x8002FA04",
           "end": "0x8002FA84"
         },
         {
-          "symbol": "fn_8002FA84",
+          "symbol": "ReplayCamIsActive",
           "start": "0x8002FA84",
           "end": "0x8002FA8C"
         },
         {
-          "symbol": "fn_8002FA8C",
+          "symbol": "ReplayCamHandleInput",
           "start": "0x8002FA8C",
           "end": "0x8002FC28"
         },
         {
-          "symbol": "fn_8002FC28",
+          "symbol": "ReplayCamHandleMenuInput",
           "start": "0x8002FC28",
           "end": "0x8002FDB4"
         },
         {
-          "symbol": "fn_8002FDB4",
+          "symbol": "ReplayCamInitDesc",
           "start": "0x8002FDB4",
           "end": "0x8002FDFC"
         },
         {
-          "symbol": "fn_8002FDFC",
+          "symbol": "ReplayBufferNextFrame",
           "start": "0x8002FDFC",
           "end": "0x8002FE34"
         },
         {
-          "symbol": "fn_8002FE34",
+          "symbol": "ReplayBufferWriteFrame",
           "start": "0x8002FE34",
           "end": "0x8002FECC"
         },
         {
-          "symbol": "fn_8002FECC",
+          "symbol": "ReplayBufferGetFrames",
           "start": "0x8002FECC",
           "end": "0x800300D0"
         },
         {
-          "symbol": "fn_800300D0",
+          "symbol": "ReplayReadFrameStub",
           "start": "0x800300D0",
           "end": "0x800300D4"
         },
         {
-          "symbol": "fn_800300D4",
+          "symbol": "ReplayReadPacked2",
           "start": "0x800300D4",
           "end": "0x800301C4"
         },
         {
-          "symbol": "fn_800301C4",
+          "symbol": "ReplayReadPacked3",
           "start": "0x800301C4",
           "end": "0x80030304"
         },
         {
-          "symbol": "fn_80030304",
+          "symbol": "ReplayReadPacked4",
           "start": "0x80030304",
           "end": "0x80030490"
         },
         {
-          "symbol": "fn_80030490",
+          "symbol": "ReplayWritePacked2",
           "start": "0x80030490",
           "end": "0x80030554"
         },
         {
-          "symbol": "fn_80030554",
+          "symbol": "ReplayWritePacked3",
           "start": "0x80030554",
           "end": "0x8003065C"
         },
         {
-          "symbol": "fn_8003065C",
+          "symbol": "ReplayWritePacked4",
           "start": "0x8003065C",
           "end": "0x800307AC"
         },
         {
-          "symbol": "fn_800307AC",
+          "symbol": "ReplayBufferReset",
           "start": "0x800307AC",
           "end": "0x800307C0"
         },
         {
-          "symbol": "fn_800307C0",
+          "symbol": "ReplayRecordFrame",
           "start": "0x800307C0",
           "end": "0x80030828"
         },
         {
-          "symbol": "fn_80030828",
+          "symbol": "ReplayBufferFinish",
           "start": "0x80030828",
           "end": "0x800308A4"
         },
         {
-          "symbol": "fn_800308A4",
+          "symbol": "ReplayHideGameIcons",
           "start": "0x800308A4",
           "end": "0x800308E8"
         },
         {
-          "symbol": "fn_800308E8",
+          "symbol": "ReplayShowGameIcons",
           "start": "0x800308E8",
           "end": "0x80030940"
         },
         {
-          "symbol": "fn_80030940",
+          "symbol": "ReplayReadFrame",
           "start": "0x80030940",
           "end": "0x80030ACC"
         },
         {
-          "symbol": "fn_80030ACC",
+          "symbol": "ReplayRegisterChannel",
           "start": "0x80030ACC",
           "end": "0x80030B30"
         },
         {
-          "symbol": "fn_80030B30",
+          "symbol": "ReplayBufferInit",
           "start": "0x80030B30",
           "end": "0x80030BC0"
         },
         {
-          "symbol": "fn_80030BC0",
+          "symbol": "ReplayChannelsInit",
           "start": "0x80030BC0",
           "end": "0x80030C40"
         },
         {
-          "symbol": "fn_80030C40",
+          "symbol": "ReplayChannelsShutdown",
           "start": "0x80030C40",
           "end": "0x80030C70"
         },
         {
-          "symbol": "fn_80030C70",
+          "symbol": "ReplayGetFocusPlayers",
           "start": "0x80030C70",
           "end": "0x80030CA4"
         },
         {
-          "symbol": "fn_80030CA4",
+          "symbol": "ReplaySetFocusPlayers",
           "start": "0x80030CA4",
           "end": "0x80030CB0"
         },
         {
-          "symbol": "fn_80030CB0",
+          "symbol": "ReplaySetBallIndex",
           "start": "0x80030CB0",
           "end": "0x80030CB8"
         },
         {
-          "symbol": "fn_80030CB8",
+          "symbol": "ReplayGetBallIndex",
           "start": "0x80030CB8",
           "end": "0x80030CC0"
         },
         {
-          "symbol": "fn_80030CC0",
+          "symbol": "ReplayIsBufferFull",
           "start": "0x80030CC0",
           "end": "0x80030CFC"
         },
         {
-          "symbol": "fn_80030CFC",
+          "symbol": "ReplayCamProcessStub",
           "start": "0x80030CFC",
           "end": "0x80030D00"
         },
         {
-          "symbol": "fn_80030D00",
+          "symbol": "ReplayGetFrameBlend",
           "start": "0x80030D00",
           "end": "0x80030D08"
         },
         {
-          "symbol": "fn_80030D08",
+          "symbol": "ReplayGetScriptTable",
           "start": "0x80030D08",
           "end": "0x80030D14"
         },
         {
-          "symbol": "fn_80030D14",
+          "symbol": "ReplayFindScript",
           "start": "0x80030D14",
           "end": "0x80030D50"
         }
@@ -10203,9 +10203,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800834CC.cpp",
+      "source": "src/game/TeamDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/cu_800834CC.cpp), its individual exact function extents and its .rodata/.data/.sdata/.sbss data rows. The source is linked with holdouts (units.json); the three non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/TeamDb.cpp), its individual exact function extents and its .rodata/.data/.sdata/.sbss data rows. The source is linked with holdouts (units.json); the three non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -10240,307 +10240,307 @@
       ],
       "functions": [
         {
-          "symbol": "fn_800834CC",
+          "symbol": "PlaylistDbGetFreeKey",
           "start": "0x800834CC",
           "end": "0x8008352C"
         },
         {
-          "symbol": "fn_8008352C",
+          "symbol": "PlaylistDbOpen",
           "start": "0x8008352C",
           "end": "0x800835D0"
         },
         {
-          "symbol": "fn_800835D0",
+          "symbol": "PlaylistDbRemoveStationEntries",
           "start": "0x800835D0",
           "end": "0x80083644"
         },
         {
-          "symbol": "fn_80083644",
+          "symbol": "PlaylistDbClose",
           "start": "0x80083644",
           "end": "0x80083664"
         },
         {
-          "symbol": "fn_80083664",
+          "symbol": "PlaylistDbFirst",
           "start": "0x80083664",
           "end": "0x80083684"
         },
         {
-          "symbol": "fn_80083684",
+          "symbol": "PlaylistDbNext",
           "start": "0x80083684",
           "end": "0x800836A4"
         },
         {
-          "symbol": "fn_800836A4",
+          "symbol": "PlaylistDbFindEntry",
           "start": "0x800836A4",
           "end": "0x800837B8"
         },
         {
-          "symbol": "fn_800837B8",
+          "symbol": "PlaylistDbGetCount",
           "start": "0x800837B8",
           "end": "0x800837D8"
         },
         {
-          "symbol": "fn_800837D8",
+          "symbol": "PlaylistDbGetIstx",
           "start": "0x800837D8",
           "end": "0x80083804"
         },
         {
-          "symbol": "fn_80083804",
+          "symbol": "PlaylistDbGetStationId",
           "start": "0x80083804",
           "end": "0x8008382C"
         },
         {
-          "symbol": "fn_8008382C",
+          "symbol": "PlaylistDbGetSongId",
           "start": "0x8008382C",
           "end": "0x80083854"
         },
         {
-          "symbol": "fn_80083854",
+          "symbol": "PlaylistDbDeleteRow",
           "start": "0x80083854",
           "end": "0x80083934"
         },
         {
-          "symbol": "fn_80083934",
+          "symbol": "PlaylistDbAddEntry",
           "start": "0x80083934",
           "end": "0x80083A10"
         },
         {
-          "symbol": "fn_80083A10",
+          "symbol": "TeamDbOpenByDgid",
           "start": "0x80083A10",
           "end": "0x80083A88"
         },
         {
-          "symbol": "fn_80083A88",
+          "symbol": "TeamDbOpenTypeZero",
           "start": "0x80083A88",
           "end": "0x80083B00"
         },
         {
-          "symbol": "fn_80083B00",
+          "symbol": "TeamDbOpenTypeZeroOrFive",
           "start": "0x80083B00",
           "end": "0x80083BC4"
         },
         {
-          "symbol": "fn_80083BC4",
+          "symbol": "TeamDbOpenTypeZeroWithLogo",
           "start": "0x80083BC4",
           "end": "0x80083C98"
         },
         {
-          "symbol": "fn_80083C98",
+          "symbol": "TeamDbOpenByTmur",
           "start": "0x80083C98",
           "end": "0x80083DE4"
         },
         {
-          "symbol": "fn_80083DE4",
+          "symbol": "TeamDbSetPlayersTgti",
           "start": "0x80083DE4",
           "end": "0x80083E1C"
         },
         {
-          "symbol": "fn_80083E1C",
+          "symbol": "TeamDbOpenQuery",
           "start": "0x80083E1C",
           "end": "0x80083E40"
         },
         {
-          "symbol": "fn_80083E40",
+          "symbol": "TeamDbOpen",
           "start": "0x80083E40",
           "end": "0x80083F68"
         },
         {
-          "symbol": "fn_80083F68",
+          "symbol": "TeamDbClose",
           "start": "0x80083F68",
           "end": "0x80083F88"
         },
         {
-          "symbol": "fn_80083F88",
+          "symbol": "TeamDbGetName",
           "start": "0x80083F88",
           "end": "0x80083FBC"
         },
         {
-          "symbol": "fn_80083FBC",
+          "symbol": "TeamDbGetId",
           "start": "0x80083FBC",
           "end": "0x80083FE4"
         },
         {
-          "symbol": "fn_80083FE4",
+          "symbol": "TeamDbGetToid",
           "start": "0x80083FE4",
           "end": "0x8008400C"
         },
         {
-          "symbol": "fn_8008400C",
+          "symbol": "TeamDbGetType",
           "start": "0x8008400C",
           "end": "0x80084034"
         },
         {
-          "symbol": "fn_80084034",
+          "symbol": "TeamDbSeekId",
           "start": "0x80084034",
           "end": "0x8008406C"
         },
         {
-          "symbol": "fn_8008406C",
+          "symbol": "TeamDbSeekTmur",
           "start": "0x8008406C",
           "end": "0x800840A4"
         },
         {
-          "symbol": "fn_800840A4",
+          "symbol": "TeamDbGetColors",
           "start": "0x800840A4",
           "end": "0x80084158"
         },
         {
-          "symbol": "fn_80084158",
+          "symbol": "TeamDbGetLogo",
           "start": "0x80084158",
           "end": "0x80084180"
         },
         {
-          "symbol": "fn_80084180",
+          "symbol": "TeamDbSetLogo",
           "start": "0x80084180",
           "end": "0x800841AC"
         },
         {
-          "symbol": "fn_800841AC",
+          "symbol": "TeamDbGetColor1",
           "start": "0x800841AC",
           "end": "0x800841D8"
         },
         {
-          "symbol": "fn_800841D8",
+          "symbol": "TeamDbGetColor2",
           "start": "0x800841D8",
           "end": "0x80084204"
         },
         {
-          "symbol": "fn_80084204",
+          "symbol": "TeamDbGetColor3",
           "start": "0x80084204",
           "end": "0x80084230"
         },
         {
-          "symbol": "fn_80084230",
+          "symbol": "TeamDbSetColor1",
           "start": "0x80084230",
           "end": "0x8008425C"
         },
         {
-          "symbol": "fn_8008425C",
+          "symbol": "TeamDbSetColor2",
           "start": "0x8008425C",
           "end": "0x80084288"
         },
         {
-          "symbol": "fn_80084288",
+          "symbol": "TeamDbSetColor3",
           "start": "0x80084288",
           "end": "0x800842B4"
         },
         {
-          "symbol": "fn_800842B4",
+          "symbol": "TeamDbSetName",
           "start": "0x800842B4",
           "end": "0x800842E8"
         },
         {
-          "symbol": "fn_800842E8",
+          "symbol": "TeamDbGetTrof",
           "start": "0x800842E8",
           "end": "0x80084310"
         },
         {
-          "symbol": "fn_80084310",
+          "symbol": "TeamDbGetTrde",
           "start": "0x80084310",
           "end": "0x80084338"
         },
         {
-          "symbol": "fn_80084338",
+          "symbol": "TeamDbGetTrov",
           "start": "0x80084338",
           "end": "0x80084360"
         },
         {
-          "symbol": "fn_80084360",
+          "symbol": "TeamDbGetTmur",
           "start": "0x80084360",
           "end": "0x80084388"
         },
         {
-          "symbol": "fn_80084388",
+          "symbol": "TeamDbGetRandomId",
           "start": "0x80084388",
           "end": "0x80084438"
         },
         {
-          "symbol": "fn_80084438",
+          "symbol": "TeamDbGetCtdl",
           "start": "0x80084438",
           "end": "0x80084470"
         },
         {
-          "symbol": "fn_80084470",
+          "symbol": "TeamDbSetCtdl",
           "start": "0x80084470",
           "end": "0x800844B8"
         },
         {
-          "symbol": "fn_800844B8",
+          "symbol": "TeamDbInsert",
           "start": "0x800844B8",
           "end": "0x8008454C"
         },
         {
-          "symbol": "fn_8008454C",
+          "symbol": "TeamDbCreate",
           "start": "0x8008454C",
           "end": "0x8008463C"
         },
         {
-          "symbol": "fn_8008463C",
+          "symbol": "TeamDbGetRandomLogoColors",
           "start": "0x8008463C",
           "end": "0x800846F4"
         },
         {
-          "symbol": "fn_800846F4",
+          "symbol": "TeamDbGetRandomName",
           "start": "0x800846F4",
           "end": "0x80084808"
         },
         {
-          "symbol": "fn_80084808",
+          "symbol": "TeamDbCreatePlayers",
           "start": "0x80084808",
           "end": "0x80084908"
         },
         {
-          "symbol": "fn_80084908",
+          "symbol": "TeamDbAutoPickPlayers",
           "start": "0x80084908",
           "end": "0x80084A8C"
         },
         {
-          "symbol": "fn_80084A8C",
+          "symbol": "TeamDbLoadSideWithCopies",
           "start": "0x80084A8C",
           "end": "0x80084C24"
         },
         {
-          "symbol": "fn_80084C24",
+          "symbol": "TeamDbLoadSide",
           "start": "0x80084C24",
           "end": "0x80084DAC"
         },
         {
-          "symbol": "fn_80084DAC",
+          "symbol": "TeamDbCopyPlayers",
           "start": "0x80084DAC",
           "end": "0x80084F50"
         },
         {
-          "symbol": "fn_80084F50",
+          "symbol": "TeamDbFindDepthSlot",
           "start": "0x80084F50",
           "end": "0x80084FA8"
         },
         {
-          "symbol": "fn_80084FA8",
+          "symbol": "TeamDbLoadLibraryItem",
           "start": "0x80084FA8",
           "end": "0x80084FE4"
         },
         {
-          "symbol": "fn_80084FE4",
+          "symbol": "TeamDbUnloadLibraryItem",
           "start": "0x80084FE4",
           "end": "0x80085020"
         },
         {
-          "symbol": "fn_80085020",
+          "symbol": "TstrDbOpen",
           "start": "0x80085020",
           "end": "0x80085060"
         },
         {
-          "symbol": "fn_80085060",
+          "symbol": "TstrDbClose",
           "start": "0x80085060",
           "end": "0x80085080"
         },
         {
-          "symbol": "fn_80085080",
+          "symbol": "TstrDbSeek",
           "start": "0x80085080",
           "end": "0x800850B8"
         },
         {
-          "symbol": "fn_800850B8",
+          "symbol": "TstrDbGetPositionValue",
           "start": "0x800850B8",
           "end": "0x800850E8"
         }

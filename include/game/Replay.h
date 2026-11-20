@@ -1,12 +1,12 @@
-#ifndef GAME_CU_8002B8F8_H
-#define GAME_CU_8002B8F8_H
+#ifndef GAME_REPLAY_H
+#define GAME_REPLAY_H
 
 #include "game/GameCamera.h"
 #include "game/Object_8017886C.h"
 #include "game/Object_80039F5C.h"
 
 /* 100-byte block of the player object at +0xB54, copied whole by the
-   snapshot functions fn_8002B960 / fn_8002BAF4. It ends where
+   snapshot functions ReplaySaveGameState / ReplayRestoreGameState. It ends where
    Object_80039F5C::mRatings starts. */
 struct Block_80039F5C_B54 {
     int mUnknown00[25];
@@ -18,8 +18,8 @@ struct Block_80039F5C_BB8 {
 };
 
 /* Snapshot of both teams' player blocks and some game state, saved by
-   fn_8002B960 and restored by fn_8002BAF4. */
-struct Type_8002B960 {
+   ReplaySaveGameState and restored by ReplayRestoreGameState. */
+struct ReplayGameState_t {
     Block_80039F5C_B54 mUnknown000[2][7];
     Block_80039F5C_BB8 mUnknown578[2][7];
     int mUnknown690;
@@ -32,7 +32,7 @@ struct Type_8002B960 {
     unsigned char mUnknown6B6;
 };
 
-/* One entry of the five-entry table at +0x148C (filled by fn_8002D2F0). */
+/* One entry of the five-entry table at +0x148C (filled by ReplaySetEventMark). */
 struct Pair_803EA368 {
     int mUnknown0;
     int mUnknown4;
@@ -48,11 +48,11 @@ struct ReplayEvent_t {
     Object_80039F5C *mpObject;
 };
 
-/* The 0x14BC-byte replay object allocated by fn_8002C8C0; lbl_803EA368
+/* The 0x14BC-byte replay object allocated by ReplayCreate; gpReplay
    points to it. */
 struct Type_803EA368 {
-    Type_8002B960 mUnknown000;
-    Type_8002B960 mUnknown6B8;
+    ReplayGameState_t mUnknown000;
+    ReplayGameState_t mUnknown6B8;
     int mUnknownD70;
     int mUnknownD74;
     int mUnknownD78;
@@ -76,6 +76,6 @@ struct Type_803EA368 {
     char mPad14B6[6];
 };
 
-extern Type_803EA368 *lbl_803EA368;
+extern Type_803EA368 *gpReplay;
 
 #endif
