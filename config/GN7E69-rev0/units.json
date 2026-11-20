@@ -4371,6 +4371,40 @@
       }
     },
     {
+      "source": "src/engine/cu_802355E4.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x802355E4-0x80235DD8 (src/engine/cu_802355E4.c), its function, name and source-form rows and the data row 0x802B7198-0x802B71B0 of its whole .rodata; linked with holdouts (owner ruling of 2026-11-20): 16 of 17 functions exact, the holdout fn_80235C90 keeps the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802355E4",
+          "end": "0x80235C90"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80235D0C",
+          "end": "0x80235DD8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7198",
+          "end": "0x802B71B0"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80235C90",
+            "evidence": "evidence.tsv source-form 0x80235C90-0x80235D0C"
+          }
+        ],
+        "evidence": "w1b merge notes (swarm w1 tracking table): src/engine/cu_802355E4.c holds out fn_80235C90 only."
+      }
+    },
+    {
       "source": "src/engine/lllight.c",
       "profile": "engine_c_holdouts",
       "evidence": "evidence.tsv provisional unit row 0x80235DD8-0x80236DD8 (src/engine/lllight.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows and the data row 0x802B71B0-0x802B7220 of its whole .rodata; linked with holdouts (owner ruling of 2026-11-20): 22 of 23 functions exact, the holdout fn_802365E8 keeps the original bytes.",

@@ -34,7 +34,7 @@ void fn_802355E4(void *);
 void fn_80235630(void *, int);
 void fn_80235740(void *, int);
 void fn_80235764(void *, int);
-void fn_80235788(void *, int, int);
+void ModelObjRender(void *, int, int);
 void fn_80235C24(void *, void *);
 void fn_80235C90(void *, int, float, float, float, float);
 void fn_80235D10(void *, float);
@@ -120,7 +120,7 @@ int UISModelDraw(UISModel_t *pObject, int value)
             if (pObject->mUnknown1D4) {
                 fn_802353E8(&pObject->mUnknown48, 0x20000);
             }
-            fn_80235788(&pObject->mUnknown48, context, fn_80236B4C(5));
+            ModelObjRender(&pObject->mUnknown48, context, fn_80236B4C(5));
         } else {
             GXSetCullMode(GX_CULL_FRONT);
             fn_80235C90(&pObject->mUnknown48, context, 0.5f, 0.5f, 0.5f, 0.0f);

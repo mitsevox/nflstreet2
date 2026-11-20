@@ -20649,7 +20649,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802B71A8",
+          "start": "0x802B7198",
           "end": "0x802B71B0"
         }
       ],
@@ -20733,6 +20733,11 @@
           "symbol": "fn_80235D10",
           "start": "0x80235D10",
           "end": "0x80235D74"
+        },
+        {
+          "symbol": "ModelObjRender",
+          "start": "0x80235788",
+          "end": "0x80235B6C"
         }
       ]
     },
