@@ -195,7 +195,7 @@ float fn_80178298(void);
 float fn_801782A4(void);
 void fn_801782B0(void);
 void fn_801782F4(float line);
-unsigned char IsShortOfLineToGain(float range, unsigned char *pWithinRange);
+static unsigned char IsShortOfLineToGain(float range, unsigned char *pWithinRange);
 int fn_80178308(void);
 int fn_80178320(void);
 void fn_8017833C(int value);
@@ -218,7 +218,7 @@ void fn_801787FC(int team, short value);
 int fn_8017881C(int a);
 void fn_8017885C(void);
 void fn_80178878(const Object_8017886C *p);
-int RoundToNearestInt(float value);
+static int RoundToNearestInt(float value);
 int fn_801788D8(int *pValue);
 void fn_801789F8(void);
 void fn_801789FC(float value);
@@ -324,11 +324,11 @@ static void (*lbl_803EB450)(int kind, int a, int b) = 0;
 static unsigned char lbl_803EB454 = 0;
 static int lbl_803EB458 = 0;
 
-static ScrmRuleSet lbl_803ECB24;
-static Class_802A5630 lbl_803ECB28;
-static Object_8017886C *lbl_803ECB34;
+static ScrmRuleSet _Drive_ScrimmageRules;
+static Class_802A5630 _Drive_AltScrimmageRules;
+static Object_8017886C *_Drive_pPlayResult;
 
-static Entry_80361F88 lbl_80361F88[0x61];
+static Entry_80361F88 _Drive_aStatEvents[0x61];
 
 static inline void Negate(Point_8017886C &v)
 {
@@ -921,7 +921,7 @@ extern "C" void fn_801782F4(float line)
     lbl_803EB444->mUnknown08 = line;
 }
 
-extern "C" unsigned char IsShortOfLineToGain(float range, unsigned char *pWithinRange)
+static unsigned char IsShortOfLineToGain(float range, unsigned char *pWithinRange)
 {
     unsigned char isShort = 0;
     float distance;
@@ -1150,7 +1150,7 @@ extern "C" void fn_80178878(const Object_8017886C *p)
     lbl_803EB444->mUnknown6C = *p;
 }
 
-extern "C" int RoundToNearestInt(float value)
+static int RoundToNearestInt(float value)
 {
     if (value > 0.0f) {
         return (int)(value + 0.5f);
@@ -1349,16 +1349,16 @@ extern "C" void fn_80178F20(ScrmRuleSet *pRule)
     if (pRule == 0) {
         switch (GameOptionsGet(14)) {
         case 0:
-            lbl_803EB444->mUnknown3D8 = &lbl_803ECB24;
+            lbl_803EB444->mUnknown3D8 = &_Drive_ScrimmageRules;
             break;
         case 1:
-            lbl_803EB444->mUnknown3D8 = &lbl_803ECB28;
+            lbl_803EB444->mUnknown3D8 = &_Drive_AltScrimmageRules;
             break;
         case 2:
-            lbl_803EB444->mUnknown3D8 = &lbl_803ECB24;
+            lbl_803EB444->mUnknown3D8 = &_Drive_ScrimmageRules;
             break;
         default:
-            lbl_803EB444->mUnknown3D8 = &lbl_803ECB24;
+            lbl_803EB444->mUnknown3D8 = &_Drive_ScrimmageRules;
             break;
         }
     } else {
@@ -1460,19 +1460,19 @@ extern "C" void fn_8017926C(int handle, int tag, int value, int kind)
     int i;
     int isNew = 1;
 
-    lbl_80361F88[lbl_803EB458].mKind = -1;
+    _Drive_aStatEvents[lbl_803EB458].mKind = -1;
     for (i = 0; i < lbl_803EB458; i++) {
-        if (lbl_80361F88[i].mHandle == handle && lbl_80361F88[i].mKind == kind && lbl_80361F88[i].mTag == tag) {
+        if (_Drive_aStatEvents[i].mHandle == handle && _Drive_aStatEvents[i].mKind == kind && _Drive_aStatEvents[i].mTag == tag) {
             isNew = 0;
         }
     }
     if (isNew && lbl_803EB458 < 0x60) {
-        lbl_80361F88[lbl_803EB458].mKind = kind;
-        lbl_80361F88[lbl_803EB458].mValue = value;
-        lbl_80361F88[lbl_803EB458].mHandle = handle;
-        lbl_80361F88[lbl_803EB458].mTag = tag;
+        _Drive_aStatEvents[lbl_803EB458].mKind = kind;
+        _Drive_aStatEvents[lbl_803EB458].mValue = value;
+        _Drive_aStatEvents[lbl_803EB458].mHandle = handle;
+        _Drive_aStatEvents[lbl_803EB458].mTag = tag;
         lbl_803EB458++;
-        lbl_80361F88[lbl_803EB458].mKind = -1;
+        _Drive_aStatEvents[lbl_803EB458].mKind = -1;
     }
 }
 
@@ -2644,7 +2644,7 @@ extern "C" void fn_8017C1F0(Object_8017886C *pResult)
     unsigned char flag = 0;
     int kind;
 
-    lbl_803ECB34 = pResult;
+    _Drive_pPlayResult = pResult;
     fn_8017C4B8();
     fn_8017C1EC();
     lbl_803EB454 = 0;
@@ -2715,7 +2715,7 @@ extern "C" void fn_8017C3E4(unsigned short team, short yards, int handle)
 
 extern "C" void fn_8017C4B8(void)
 {
-    lbl_80361F88[0].mKind = -1;
+    _Drive_aStatEvents[0].mKind = -1;
     lbl_803EB458 = 0;
     if (GameModeTypeGet() != 1) {
         int home;

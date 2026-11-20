@@ -6715,7 +6715,7 @@
     {
       "source": "src/game/cu_80176F18.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row for src/game/cu_80176F18.cpp (replacing candidate cu_80176F18), individual exact function extents, exact data rows for its .rodata literals and vtables, .sdata, .bss and .sbss objects and .ctors word, the compiler, type, source-form, name and linker rows (the linker rows record the two functions the target discarded, which the source keeps unregistered). The .sbss entry 0x803ECB24-0x803ECB38 is a bounding range for the storage list, which places the unit's three .sbss objects individually; its words 0x803ECB2C and 0x803ECB30 belong to src/game/Possession.cpp and are not claimed, and the unit's .sbss membership and placement are provisional. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "evidence": "evidence.tsv provisional unit row for src/game/cu_80176F18.cpp (replacing candidate cu_80176F18), individual exact function extents, exact data rows for its .rodata literals and vtables, .sdata, .bss and .sbss objects and .ctors word, the compiler, type, source-form, name and linker rows (the linker rows record the two functions the target discarded, file-static in the source and unregistered). The .sbss entry 0x803ECB24-0x803ECB38 is a bounding range for the storage list, which places the unit's three .sbss objects individually; its words 0x803ECB2C and 0x803ECB30 belong to src/game/Possession.cpp and are not claimed. Draft comparisons only; original assembly remains linked until the .sbss interleave can be placed.",
       "sections": [
         {
           "section": ".text",
@@ -7648,22 +7648,22 @@
       ],
       "storage": [
         {
-          "symbol": "lbl_80361F88",
+          "symbol": "_Drive_aStatEvents",
           "start": "0x80361F88",
           "end": "0x80362598"
         },
         {
-          "symbol": "lbl_803ECB24",
+          "symbol": "_Drive_ScrimmageRules",
           "start": "0x803ECB24",
           "end": "0x803ECB28"
         },
         {
-          "symbol": "lbl_803ECB28",
+          "symbol": "_Drive_AltScrimmageRules",
           "start": "0x803ECB28",
           "end": "0x803ECB2C"
         },
         {
-          "symbol": "lbl_803ECB34",
+          "symbol": "_Drive_pPlayResult",
           "start": "0x803ECB34",
           "end": "0x803ECB38"
         }
