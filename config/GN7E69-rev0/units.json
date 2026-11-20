@@ -17320,6 +17320,72 @@
       }
     },
     {
+      "source": "src/game/cu_801A14D8.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x801A14D8-0x801A4AD4 (src/game/cu_801A14D8.cpp), its exact function extents, the data rows 0x802AE098-0x802AE528 (.rodata) and 0x802F2934-0x802F3488 (.data) and the linker row of the discarded _PlyrHeadSetModelNow; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes. The .sdata, .sbss and .bss objects it uses stay external original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A14D8",
+          "end": "0x801A1650"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A1978",
+          "end": "0x801A209C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A28E8",
+          "end": "0x801A2EC8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A31F0",
+          "end": "0x801A4AD4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE098",
+          "end": "0x802AE528"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F2934",
+          "end": "0x802F3488"
+        }
+      ],
+      "link_roots": {
+        "discarded": [
+          "_PlyrHeadSetModelNow"
+        ],
+        "evidence": "evidence.tsv linker row 0x802AE51C (_PlyrHeadSetModelNow): file-static function SN's linker discarded; only its 4096.0f pool remains, with its Xbox counterpart NFLBig.xbe 0x1EA2F0."
+      },
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_801A1650",
+            "evidence": "evidence.tsv source-form 0x801A1650-0x801A1978"
+          },
+          {
+            "function": "fn_801A209C",
+            "evidence": "evidence.tsv source-form 0x801A209C-0x801A28E8"
+          },
+          {
+            "function": "fn_801A2EC8",
+            "evidence": "evidence.tsv source-form 0x801A2EC8-0x801A31F0"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      }
+    },
+    {
       "source": "src/game/Statcoll.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv: src/game/Statcoll.cpp unit, data, compiler and source-form rows",

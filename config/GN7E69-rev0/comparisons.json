@@ -22816,7 +22816,7 @@
     {
       "source": "src/game/cu_801A14D8.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801A14D8-0x801A4AD4 (src/game/cu_801A14D8.cpp), its source-form and type rows and the 38 exact function extents. Code-only comparison: the unit's .rodata/.data/.sdata/.sbss/.bss are referenced as externals and stay original bytes; partial functions remain. Original bytes remain linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801A14D8-0x801A4AD4 (src/game/cu_801A14D8.cpp), its source-form and type rows, the exact function extents, the .rodata and .data rows and the linker row of the discarded _PlyrHeadSetModelNow. The unit's .sdata/.sbss/.bss objects are referenced as externals and stay original bytes. The source is linked with holdouts (units.json); the three non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -22828,7 +22828,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802AE098",
-          "end": "0x802AE524"
+          "end": "0x802AE528"
         },
         {
           "section": ".data",
@@ -23028,6 +23028,9 @@
           "start": "0x801A472C",
           "end": "0x801A4AD4"
         }
+      ],
+      "discarded": [
+        "_PlyrHeadSetModelNow"
       ]
     },
     {

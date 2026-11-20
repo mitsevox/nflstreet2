@@ -288,14 +288,13 @@ void fn_80234DC0(Part_8003DEC4 *p, int a);
 int fn_80236B98(int a, float r, float g, float b);
 void fn_80236C10(int a, Vector_801A1650 *pScale, void *p);
 int LLFogEnable(int a);
-void fn_8024E908(int type, int fmt, int count);
-void fn_8024EB28(int a);
+void GXSetCullMode(int a);
 void GXSetChanMatColor(int chan, Color_8024FB58 color);
 void GXSetNumChans(int n);
 void GXSetChanCtrl(int chan, int enable, int amb, int mat, int lights, int diff, int attn);
-void fn_80252034(int type, int src, int dst, int op);
-void fn_802520E0(int enable, int func, int update);
-void fn_80252114(int a);
+void GXSetBlendMode(int type, int src, int dst, int op);
+void GXSetZMode(int enable, int func, int update);
+void GXSetZCompLoc(int a);
 void GXLoadPosMtxImm(float (*pMatrix)[4], int id);
 void GXSetCurrentMtx(int id);
 void GXLoadTexMtxImm(float (*pMatrix)[4], int id, int type);
@@ -454,7 +453,7 @@ void fn_801A1978(Object_8003DEC4 *pPlayer, unsigned int flags)
     GXSetChanCtrl(0, 1, 0, 0, light, 2, 2);
     GXSetChanCtrl(2, 0, 0, 0, light, 0, 2);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    fn_8024EB28(1);
+    GXSetCullMode(1);
     TMRenderSetBlendMode(1);
     fn_80234BF4(0, &pPlayer->mUnknown1164[0], 0);
     light = fn_801A1C10(pPlayer);
@@ -484,7 +483,7 @@ void fn_801A1978(Object_8003DEC4 *pPlayer, unsigned int flags)
     fn_80234BF4(0, &pPlayer->mUnknown1164[8], 0);
     TMRenderSetBlendMode(1);
     TMRenderSetZRange(0.0f, 1.0f);
-    fn_8024EB28(0);
+    GXSetCullMode(0);
 }
 
 int fn_801A1C10(Object_8003DEC4 *pPlayer)
@@ -507,7 +506,7 @@ int fn_801A1C10(Object_8003DEC4 *pPlayer)
         TMRenderBindMaterialList(pPlayer->mUnknown4044);
         TMRenderBindClusterObj(&pPlayer->mUnknown4064[1]);
         TMRenderSetBlendMode(1);
-        fn_8024EB28(0);
+        GXSetCullMode(0);
         fn_801A3300(pPlayer, a, b);
         fn_801A32AC(30, 1.0f, 1.0f, b[0], b[1]);
         GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
@@ -564,7 +563,7 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
     GXSetChanCtrl(2, 0, 0, 0, light, 0, 2);
     TMRenderSetBlendMode(2);
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    fn_8024EB28(1);
+    GXSetCullMode(1);
     index = pPlayer->mUnknown5188.mUnknown554;
     for (i = 0; i < pPlayer->mUnknown5188.mUnknown558; i++) {
         color.a = (pPlayer->mUnknown5188.mUnknown558 - i) * 51 + 25;
@@ -586,7 +585,7 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
     ParticleTrailUpdateAfterimage(pPlayer, gFrameTimeScale);
     TMRenderSetBlendMode(1);
     TMRenderSetZRange(0.0f, 1.0f);
-    fn_8024EB28(0);
+    GXSetCullMode(0);
 }
 
 int fn_801A201C(Object_8003DEC4 *pPlayer)
@@ -1314,10 +1313,10 @@ void fn_801A3FFC(void)
     TMRenderReset();
     i = 0;
     old = LLFogEnable(1);
-    fn_8024EB28(0);
-    fn_80252034(1, 4, 5, 5);
-    fn_80252114(0);
-    fn_802520E0(1, 3, 0);
+    GXSetCullMode(0);
+    GXSetBlendMode(1, 4, 5, 5);
+    GXSetZCompLoc(0);
+    GXSetZMode(1, 3, 0);
     TMRenderSetZRange(0.01f, 0.01f);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -1348,7 +1347,7 @@ void fn_801A3FFC(void)
             unsigned char a;
             int j;
 
-            fn_8024E908(0xA0, 0, 4);
+            GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, 4);
             r = pShadow->mColor[0] * 255.0f;
             g = pShadow->mColor[1] * 255.0f;
             b = pShadow->mColor[2] * 255.0f;
@@ -1361,7 +1360,7 @@ void fn_801A3FFC(void)
         }
     }
     TMRenderSetZRange(0.0f, 1.0f);
-    fn_802520E0(1, 3, 1);
+    GXSetZMode(1, 3, 1);
     LLFogEnable(old);
 }
 
@@ -1375,10 +1374,10 @@ void fn_801A42D4(void)
     TMRenderReset();
     i = 0;
     old = LLFogEnable(1);
-    fn_8024EB28(0);
-    fn_80252034(1, 4, 5, 5);
-    fn_80252114(0);
-    fn_802520E0(1, 3, 0);
+    GXSetCullMode(0);
+    GXSetBlendMode(1, 4, 5, 5);
+    GXSetZCompLoc(0);
+    GXSetZMode(1, 3, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
@@ -1412,7 +1411,7 @@ void fn_801A42D4(void)
             unsigned char a;
             int j;
 
-            fn_8024E908(0xA0, 0, pClip->mCount);
+            GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, pClip->mCount);
             r = pShadow->mColor[0] * 255.0f;
             g = pShadow->mColor[1] * 255.0f;
             b = pShadow->mColor[2] * 255.0f;
@@ -1425,7 +1424,7 @@ void fn_801A42D4(void)
         }
     }
     TMRenderSetZRange(0.0f, 1.0f);
-    fn_802520E0(1, 3, 1);
+    GXSetZMode(1, 3, 1);
     LLFogEnable(old);
 }
 
@@ -1476,6 +1475,73 @@ void fn_801A46E0(Object_8003DEC4 *pPlayer, int id, void (*pCallback)(Object_8003
     lbl_803EB814 = pPlayer;
     pPlayer->mUnknown992 = id;
     fn_8015F82C(id, pPlayer, fn_801A34A4);
+}
+
+static void _PlyrHeadSetModelNow(Object_8003DEC4 *pPlayer, int id)
+{
+    short values[53];
+
+    memset(values, 0, sizeof(values));
+    pPlayer->mUnknown992 = id;
+    if (id == 0xFFFF) {
+        int a;
+        int b;
+        int i;
+
+        PlyrModelAttachLod(fn_8015E2FC(6, 0, 0), fn_8015E2FC(5, 0, 0));
+        PlyrModelAttachLod(fn_8015E2FC(6, 0, 1), fn_8015E2FC(5, 0, 1));
+        for (i = 0; i < 53; i++) {
+            values[i] = pPlayer->mUnknown4976.mValues[i] * 4096.0f;
+        }
+        values[pPlayer->mUnknown4972 + 1] = 0x1000;
+        if (PlayerLookHidesHead(pPlayer->mUnknown4971)) {
+            values[6] = 0x1000;
+        }
+        a = pPlayer->mUnknown1024[0].mUnknown16.mUnknown28;
+        b = pPlayer->mUnknown1024[1].mUnknown16.mUnknown28;
+        TMModelClone(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(6, pPlayer->mUnknown4970, 0));
+        TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(6, pPlayer->mUnknown4970, 1));
+        pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
+        pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
+        fn_80233760(&pPlayer->mUnknown1024[0], values, 53);
+        fn_80233760(&pPlayer->mUnknown1024[1], values, 53);
+        a = pPlayer->mUnknown1024[0].mUnknown16.mUnknown28;
+        b = pPlayer->mUnknown1024[1].mUnknown16.mUnknown28;
+        TMModelClone(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(5, 0, 0));
+        TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(5, 0, 1));
+        pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
+        pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, lbl_803EB81C);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, lbl_803EB81C);
+        fn_801A4690(0);
+        fn_801A46BC();
+    } else {
+        PlyrModelAttachLod(fn_8015E2FC(4, 0, 0), fn_8015E2FC(5, 0, 0));
+        PlyrModelAttachLod(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
+        int a = pPlayer->mUnknown1024[0].mUnknown16.mUnknown28;
+        int b = pPlayer->mUnknown1024[1].mUnknown16.mUnknown28;
+        TMModelClone(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(4, pPlayer->mUnknown4970, 0));
+        TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(4, pPlayer->mUnknown4970, 1));
+        pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
+        pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
+        values[1] = 0x1000;
+        values[pPlayer->mUnknown4972 + 2] = 0x1000;
+        if (PlayerLookHidesHead(pPlayer->mUnknown4971)) {
+            values[7] = 0x1000;
+        }
+        fn_80233760(&pPlayer->mUnknown1024[0], values, 37);
+        fn_80233760(&pPlayer->mUnknown1024[1], values, 37);
+        fn_8015E908(pPlayer->mUnknown1016);
+        TMModelClone(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(5, 0, 0));
+        TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(5, 0, 1));
+        pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
+        pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, lbl_803EB81C);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, lbl_803EB81C);
+        fn_801A4690(0);
+        fn_8015F3FC(0);
+        fn_801A46BC();
+    }
 }
 
 void fn_801A472C(void)
