@@ -380,8 +380,10 @@ void *fn_80273264(void *arg)
         if (lbl_80300850 & 1) {
             SNDSYSI_100hzserver();
             lbl_80300854 += lbl_803A8D60.m1400;
-            Snd::gVariableTimerTick = (int)(lbl_80300854 < 0.0f ? lbl_80300854 - 0.5f : lbl_80300854 + 0.5f);
-            if (lbl_80300854 > 30.0f) {
+            // FAKEMATCH: negated float tests give the target's branch senses (blt to the subtraction,
+            // cror un/eq/lt around the wrap); the plain x < 0 and x > 30 forms reverse both branches.
+            Snd::gVariableTimerTick = (int)(!(lbl_80300854 < 0.0f) ? lbl_80300854 + 0.5f : lbl_80300854 - 0.5f);
+            if (!(lbl_80300854 <= 30.0f)) {
                 lbl_80300854 -= 30.0f;
             }
             SNDSYSI_variabletimerservice();
@@ -425,6 +427,11 @@ int fn_80273458(void)
     return 0;
 }
 
+static inline float _SndClampF(float x, float lo, float hi)
+{
+    return x < lo ? lo : (x <= hi ? x : hi);
+}
+
 int fn_80273648(int mode)
 {
     float rate;
@@ -435,7 +442,7 @@ int fn_80273648(int mode)
     if (Snd::gVariableTimerPeriod == -1.0f) {
         Snd::gVariableTimerPeriod = 20.0f;
     }
-    rate = Snd::gVariableTimerPeriod < 10.0f ? 10.0f : (Snd::gVariableTimerPeriod <= 100.0f ? Snd::gVariableTimerPeriod : 100.0f);
+    rate = _SndClampF(Snd::gVariableTimerPeriod, 10.0f, 100.0f);
     Snd::gVariableTimerPeriod = rate;
     lbl_803A8D60.m1400 = 10.0f / rate;
     if (lbl_803A6C24.m1C.m21 != 0 && lbl_80300858 == 0) {

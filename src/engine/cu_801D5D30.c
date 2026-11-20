@@ -600,7 +600,7 @@ int fn_801D8618(int unused, int dataSize, int headerSize)
 
 int fn_801D8658(int unused, int dataSize, int headerSize)
 {
-    return fn_801D8618(unused, dataSize, headerSize) - 0x40 - headerSize;
+    return fn_801D8618(unused, dataSize, headerSize) - (0x40 + headerSize);
 }
 
 void fn_801D868C(int type, int port, char *pBuffer, int size)
