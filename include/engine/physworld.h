@@ -65,10 +65,10 @@ public:
    world, slot 3 for each body that leaves it. */
 class CollisionSystem {
 public:
-    virtual ~CollisionSystem();
-    virtual void AddBody(RigidBody *pBody);
-    virtual void RemoveBody(RigidBody *pBody);
-    virtual void Update(float dt);
+    virtual ~CollisionSystem() {}
+    virtual void AddBody(RigidBody *pBody) = 0;
+    virtual void RemoveBody(RigidBody *pBody) = 0;
+    virtual int Update(float dt) = 0;
 };
 
 /* The physics world: its body groups and constraints, and the collision system and body

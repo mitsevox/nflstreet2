@@ -35644,7 +35644,7 @@
           "end": "0x801E2D08"
         },
         {
-          "symbol": "GetMaterial__14CollisionShapePfT1",
+          "symbol": "GetMaterial__14CollisionShapePfT1PA3_fP13Vec3_801DE1E0",
           "start": "0x801E2D08",
           "end": "0x801E2D1C"
         },
@@ -35827,6 +35827,82 @@
           "symbol": "GetSupportWeight__8BoxShapeP13Vec3_801DE1E0T1PA3_f",
           "start": "0x801E7028",
           "end": "0x801E7034"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/physcollide.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801E739C-0x801E8478 (src/engine/physcollide.cpp) and its function rows; all 11 bodies compared with the full .rodata 0x802B1498-0x802B1548 (data row); 10 exact and linked, the holdout ContactSystem::ResolveContact keeps the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E739C",
+          "end": "0x801E8478"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1498",
+          "end": "0x802B1548"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__13ContactSystemUiUiffP16CollisionHandler",
+          "start": "0x801E739C",
+          "end": "0x801E7440"
+        },
+        {
+          "symbol": "_._13ContactSystem",
+          "start": "0x801E7440",
+          "end": "0x801E74D8"
+        },
+        {
+          "symbol": "AddBody__13ContactSystemP9RigidBody",
+          "start": "0x801E74D8",
+          "end": "0x801E7530"
+        },
+        {
+          "symbol": "RemoveBody__13ContactSystemP9RigidBody",
+          "start": "0x801E7530",
+          "end": "0x801E7564"
+        },
+        {
+          "symbol": "Update__13ContactSystemf",
+          "start": "0x801E7564",
+          "end": "0x801E7624"
+        },
+        {
+          "symbol": "CollidePair__13ContactSystemP9RigidBodyT1f",
+          "start": "0x801E7624",
+          "end": "0x801E7794"
+        },
+        {
+          "symbol": "Respond__13ContactSystemfP9RigidBodyT2UiP11BodyContacti",
+          "start": "0x801E7794",
+          "end": "0x801E7CFC"
+        },
+        {
+          "symbol": "ApplyRollingFriction__13ContactSystemP9RigidBodyfP13Vec3_801DE1E0T3",
+          "start": "0x801E7CFC",
+          "end": "0x801E7DFC"
+        },
+        {
+          "symbol": "SetCorrectionLimits__13ContactSystemP13Vec3_801DE1E0T1",
+          "start": "0x801E7DFC",
+          "end": "0x801E7E38"
+        },
+        {
+          "symbol": "ResolveContact__13ContactSystemfP9RigidBodyT2P11BodyContactP13Vec3_801DE1E0N55",
+          "start": "0x801E7E38",
+          "end": "0x801E8444"
+        },
+        {
+          "symbol": "_._15CollisionSystem",
+          "start": "0x801E8444",
+          "end": "0x801E8478"
         }
       ]
     }

@@ -29,7 +29,7 @@ CollisionShape::~CollisionShape()
 {
 }
 
-void CollisionShape::GetMaterial(float *pFriction, float *pBounce)
+void CollisionShape::GetMaterial(float *pFriction, float *pBounce, float (*)[4], Vec3_801DE1E0 *)
 {
     *pFriction = mFriction;
     *pBounce = mBounce;

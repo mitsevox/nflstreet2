@@ -18,7 +18,8 @@ public:
     virtual float GetSupportWeight(Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pDirection,
                                    float (*pMatrix)[4]) = 0;
     virtual void Draw(const float pMatrix[4][4], int red, int green, int blue) = 0;
-    virtual void GetMaterial(float *pFriction, float *pBounce);
+    virtual void GetMaterial(float *pFriction, float *pBounce, float (*pMatrix)[4],
+                             Vec3_801DE1E0 *pPoint);
 
     float mFriction;
     float mBounce;
