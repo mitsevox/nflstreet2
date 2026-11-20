@@ -73,6 +73,30 @@
       ],
       "evidence": "game_cpp (its evidence.tsv compiler rows) plus -ffunction-sections, the named profile of a game unit linked with holdouts (owner rulings of 2026-11-20: holdouts for any file after real attempts, and the flag from a named profile, not added by the tool; config README, Holdouts). The flag is a link-layout aid, not a claim about the original build: ProDG then emits one .text.<function> section per function with the same instructions, sizes, alignment and data sections, so the tool can leave the holdouts' code out (source_build.holdout_object), and the complete-output comparison checks the result. Only a unit with holdouts may use it."
     },
+    "engine_c_holdouts": {
+      "flags": [
+        "-O2",
+        "-ffunction-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "engine_c (its evidence.tsv compiler rows) plus -ffunction-sections, the named profile of an engine_c unit linked with holdouts (owner rulings of 2026-11-20: holdouts for any file after real attempts, and the flag from a named profile, not added by the tool; config README, Holdouts). The flag is a link-layout aid, not a claim about the original build: ProDG then emits one .text.<function> section per function with the same instructions, sizes, alignment and data sections, so the tool can leave the holdouts' code out (source_build.holdout_object), and the complete-output comparison checks the result. Only a unit with holdouts may use it."
+    },
+    "sound_cxx_holdouts": {
+      "flags": [
+        "-O2",
+        "-G0",
+        "-fno-strength-reduce",
+        "-mps-float",
+        "-ffunction-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "language": "c++",
+      "evidence": "sound_cxx (its evidence.tsv compiler rows) plus -ffunction-sections, the named profile of a sound_cxx unit linked with holdouts (owner rulings of 2026-11-20: holdouts for any file after real attempts, and the flag from a named profile, not added by the tool; config README, Holdouts). The flag is a link-layout aid, not a claim about the original build: ProDG then emits one .text.<function> section per function with the same instructions, sizes, alignment and data sections, so the tool can leave the holdouts' code out (source_build.holdout_object), and the complete-output comparison checks the result. Only a unit with holdouts may use it."
+    },
     "game_cpp_nobuiltin": {
       "flags": [
         "-O2",
