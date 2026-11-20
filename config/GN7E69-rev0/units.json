@@ -5557,7 +5557,7 @@
             "evidence": "evidence.tsv source-form 0x80270518-0x80270B10"
           }
         ],
-        "evidence": "lane w1j merge notes (swarm/w1/w1j report) holdouts table: src/engine/stagpat.c holds out SNDBANKI_playtimbre; its HOLDOUT: row lists the forms tried and the RTL-dump finding."
+        "evidence": "merge notes of #1370 (w1) holdouts table: src/engine/stagpat.c holds out SNDBANKI_playtimbre; its HOLDOUT: row evidence.tsv source-form 0x80270518-0x80270B10 lists the forms tried and the RTL-dump finding."
       }
     },
     {
@@ -23073,7 +23073,7 @@
             "evidence": "evidence.tsv source-form 0x8026BF04-0x8026C0C0"
           }
         ],
-        "evidence": "lane w1j merge notes (swarm/w1/w1j report) holdouts table: src/engine/smidi.c holds out SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick; their HOLDOUT: rows list the forms tried and the RTL-dump findings."
+        "evidence": "merge notes of #1370 (w1) holdouts table: src/engine/smidi.c holds out SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick; their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the RTL-dump findings."
       }
     },
     {
@@ -24430,7 +24430,7 @@
             "evidence": "evidence.tsv source-form 0x801B64C0-0x801B6578"
           }
         ],
-        "evidence": "w1f lane report (swarm/w1/w1f) and the merge notes of the pull request that links the file"
+        "evidence": "merge notes of #1370 (w1) holdouts table: src/engine/pathevent.c holds out PATHI_serviceevent; its HOLDOUT: row evidence.tsv source-form 0x801B64C0-0x801B6578 lists the forms tried and the RTL-dump finding."
       }
     }
   ]

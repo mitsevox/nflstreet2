@@ -3,8 +3,36 @@
    object with its own static copy of both; cu_8025E148.c includes this block once per object, with
    CLZ_TAB and UDIVMODDI4 naming that object's copies. */
 
-/* FAKEMATCH: the target keeps each 256-byte table in .sdata2 reached through r13; ProDG 3.9.3 puts
-   a const object that size in .rodata at any -G, so the section is named on the table. */
+/* From GCC 2.95.3 libgcc2.c:
+   Copyright (C) 1989, 92-98, 1999 Free Software Foundation, Inc.
+
+This file is part of GNU CC.
+
+GNU CC is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+GNU CC is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with GNU CC; see the file COPYING.  If not, write to
+the Free Software Foundation, 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.  */
+
+/* As a special exception, if you link this library with other files,
+   some of which are compiled with GCC, to produce an executable,
+   this library does not by itself cause the resulting executable
+   to be covered by the GNU General Public License.
+   This exception does not however invalidate any other reasons why
+   the executable file might be covered by the GNU General Public License.  */
+
+/* FAKEMATCH: the target keeps each 256-byte table in .sdata2. ProDG 3.9.3 puts it there only from
+   -G256 and only when the array is declared with its size, but any -G of 8 or more also moves this
+   file's .data and .bss into .sdata/.sbss, so the section is named on the table. */
 static const UQItype CLZ_TAB[] __attribute__ ((section (".sdata2"))) =
 {
   0,1,2,2,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,

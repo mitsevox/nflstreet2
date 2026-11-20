@@ -65,8 +65,9 @@ public:
 int ShapeCollide(CollisionShape *pA, float (*pMatrixA)[4], CollisionShape *pB,
                  float (*pMatrixB)[4], Vec3_801DE1E0 *pContact);
 
-/* The world's collision system: the broad phase, the contact buffer, the handler and the box
-   bodies are kept inside. */
+/* The world's collision system: it keeps the broad phase, the contact buffer and its size, the
+   depth limit and minimum test length, the game's collision handler and the position-correction
+   limits. */
 class ContactSystem : public CollisionSystem {
 public:
     ContactSystem(unsigned int maxBodies, unsigned int maxContacts, float depthLimit,
