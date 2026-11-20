@@ -1,10 +1,7 @@
 #ifndef ENGINE_DBNIOMMODEFUNCS_H
 #define ENGINE_DBNIOMMODEFUNCS_H
 
-/* Five-word function tables 0x802FB3BC, 0x802FB3D0 and 0x802FB3E4: copied whole
-   by 0x802334F0 and word by word by 0x80229718. The slots at +4, +8 and +12 are
-   called through blrl by 0x80229760, 0x80229788 and 0x802297B0; parameter types
-   follow those call sites (register use only). */
+/* The table of five database functions of one game mode. */
 typedef struct DbNiomModeFuncs_t {
     int (*mpUnknown0)(void);
     int (*mpUnknown4)(void **ppData, void *p);

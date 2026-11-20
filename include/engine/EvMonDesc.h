@@ -1,9 +1,9 @@
 #ifndef ENGINE_EVMONDESC_H
 #define ENGINE_EVMONDESC_H
 typedef struct EvMonDesc_t {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
+    int mNumRecords;
+    int mRecordSize;
+    int mNumListeners;
 } EvMonDesc_t;
 #ifdef __cplusplus
 extern "C" {

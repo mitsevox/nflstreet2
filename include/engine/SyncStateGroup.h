@@ -16,7 +16,7 @@ extern "C" {
 int SyncStateShutdown(void);
 void SyncStateOpenGroup(SyncStateGroup_t *p);
 void SyncStateSaveGroup(SyncStateGroup_t *p);
-SyncStateGroup_t *SyncStateEndGroup(SyncStateGroup_t *p);
+SyncStateGroup_t *SyncStateActivateGroup(SyncStateGroup_t *p);
 #ifdef __cplusplus
 }
 #endif

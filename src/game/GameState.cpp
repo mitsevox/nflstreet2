@@ -74,7 +74,7 @@ SyncStateGroup_t *GameState::GetStore()
 void GameState::Activate()
 {
     SyncStateSaveGroup(mpData.mp->mpObject);
-    SyncStateEndGroup(mpData.mp->mpObject);
+    SyncStateActivateGroup(mpData.mp->mpObject);
 }
 
 ModuleDependency *GameStateActivate::GetDependencies() { return sGameStateActivateDependencies; }

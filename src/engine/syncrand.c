@@ -37,8 +37,8 @@ typedef struct SyncRandBitPool_t {
     unsigned char mBits[1];
 } SyncRandBitPool_t;
 
-extern SyncRand_t *_SyncRand_pState;
-extern int _SyncRand_iToggle;
+static SyncRand_t *_SyncRand_pState = 0;
+static int _SyncRand_iToggle = 0;
 extern void *SyncStateGetData(void *pHandle);
 int SyncRandSaveState(void *p, void *pBuffer);
 int SyncRandLoadState(void *p, void *pBuffer);

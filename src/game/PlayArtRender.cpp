@@ -1,6 +1,6 @@
 /* Play art drawing: draws the small play diagrams of the play-select screen (field, player
    icons and letters, routes and route ends) from the play-art textures, which it also loads
-   and frees; ends with the empty shutdown hook of the player icons. */
+   and frees. */
 
 #include "game/Vec2Distance.h"
 #include "game/fn_80177FE0.h"
@@ -256,7 +256,4 @@ extern "C" void PlayArtRenderUnloadTextures(void)
 {
     TMTexLibUnload(&_PlayArtRender_TexLib);
     for(int i=7;i>=0;--i){_PlayArtRender_aTextures[i].mpTexture=0;_PlayArtRender_aTextures[i].mpPalette=0;}
-}
-extern "C" void PlyrIconShutdown(void)
-{
 }

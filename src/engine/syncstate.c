@@ -29,7 +29,7 @@ void SyncStateCopy(void *pDst, const void *pSrc, unsigned int size);
 typedef struct SyncStateHandle_t {
     void **mppOwner;
     int mSize;
-    int mFlags;
+    int mPriority;
     unsigned int mId;
     SyncStateFn_t mpInitFn;
     SyncStateFn_t mpShutdownFn;
@@ -42,7 +42,6 @@ typedef struct SyncStateHandle_t {
     SyncStateGroup_t *mpGroup;
 } SyncStateHandle_t;
 
-/* 24-byte block copied to 0x803A39FC by 0x80237EE8; only +8 is read here. */
 typedef struct SyncStateHeapDesc_t {
     int mUnknown0;
     int mUnknown4;
@@ -52,10 +51,10 @@ typedef struct SyncStateHeapDesc_t {
     int mUnknown20;
 } SyncStateHeapDesc_t;
 
-extern SyncStateHeapDesc_t _SyncState_HeapDesc;
+static SyncStateHeapDesc_t _SyncState_HeapDesc;
 void SyncStateRestoreGroup(SyncStateGroup_t *p);
 void SyncStateNotifyGroup(SyncStateGroup_t *p);
-extern DSList_t *_SyncState_pGroups;
+static DSList_t *_SyncState_pGroups;
 extern void fn_801D277C(int ident);
 extern char *fn_801D27B8(int ident);
 extern void fn_801D2130(void *pConfig);
@@ -69,7 +68,7 @@ extern void *SyncStateGetData(void *pHandle);
 
 int SyncStateCompareHandles(SyncStateHandle_t *pA, SyncStateHandle_t *pB)
 {
-    return pB->mFlags - pA->mFlags;
+    return pB->mPriority - pA->mPriority;
 }
 
 SyncStateHandle_t *SyncStateNewHandle(SyncStateGroup_t *pGroup, void **ppData, int size, int a, unsigned int id)
@@ -77,7 +76,7 @@ SyncStateHandle_t *SyncStateNewHandle(SyncStateGroup_t *pGroup, void **ppData, i
     SyncStateHandle_t *p = DSNewListNode(pGroup->mpHandles);
     memset(p, 0, sizeof(SyncStateHandle_t));
     p->mppOwner = ppData;
-    p->mFlags = a;
+    p->mPriority = a;
     p->mId = id;
     p->mSize = size;
     p->mpGroup = pGroup;
@@ -269,7 +268,7 @@ void SyncStateDelGroup(SyncStateGroup_t *p)
     SyncStateRemoveGroup(p);
 }
 
-SyncStateGroup_t *SyncStateEndGroup(SyncStateGroup_t *p)
+SyncStateGroup_t *SyncStateActivateGroup(SyncStateGroup_t *p)
 {
     // FAKEMATCH: dead initial copy of p, the second register copy of p (mr r30,r31) the target keeps
     SyncStateGroup_t *pFound = p;

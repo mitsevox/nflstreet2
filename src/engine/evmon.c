@@ -34,16 +34,16 @@ typedef struct EvMonTable_t {
     EvMon_t **mppMonitors;
 } EvMonTable_t;
 
-extern EvMonTable_t _EvMon_Table;
-extern unsigned char _EvMon_bInit;
+static EvMonTable_t _EvMon_Table;
+static unsigned char _EvMon_bInit = 0;
 extern void *SyncStateGetData(void *pHandle);
 
-void EvMonInitHeader(int *p, const EvMonDesc_t *q)
+void EvMonInitHeader(EvMon_t *p, const EvMonDesc_t *q)
 {
-    p[0] = q->mUnknown0;
-    p[1] = 0;
-    p[2] = q->mUnknown4;
-    p[3] = q->mUnknown8;
+    p->mNumRecords = q->mNumRecords;
+    p->mNumPosted = 0;
+    p->mRecordSize = q->mRecordSize;
+    p->mNumListeners = q->mNumListeners;
 }
 
 void EvMonInit(int count)
@@ -64,7 +64,7 @@ void EvMonShutdown(void)
 int EvMonCreate(const EvMonDesc_t *pDesc)
 {
     int index = _EvMon_Table.mCount;
-    int size = pDesc->mUnknown0 * pDesc->mUnknown4 + 16 + pDesc->mUnknown8 * 4;
+    int size = pDesc->mNumRecords * pDesc->mRecordSize + 16 + pDesc->mNumListeners * 4;
     void *pHandle = SyncStateRegister(0, (void **)&_EvMon_Table.mppMonitors[index], size, 0, 0x65766D6F);
     EvMonInitHeader(SyncStateGetData(pHandle), pDesc);
     SyncStateCommit(pHandle);
@@ -79,10 +79,10 @@ void EvMonDestroy(int index)
 int EvMonAlloc(const EvMonDesc_t *pDesc)
 {
     int index = _EvMon_Table.mCount;
-    int size = pDesc->mUnknown0 * pDesc->mUnknown4 + 16 + pDesc->mUnknown8 * 4;
+    int size = pDesc->mNumRecords * pDesc->mRecordSize + 16 + pDesc->mNumListeners * 4;
     _EvMon_Table.mppMonitors[index] = fn_801D2B7C(size, 0, 0);
     memset(_EvMon_Table.mppMonitors[index], 0, size);
-    EvMonInitHeader((int *)_EvMon_Table.mppMonitors[index], pDesc);
+    EvMonInitHeader(_EvMon_Table.mppMonitors[index], pDesc);
     _EvMon_Table.mCount++;
     return index;
 }

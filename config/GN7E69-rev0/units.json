@@ -1832,138 +1832,6 @@
       "address": "0x801B6D9C",
       "evidence": "evidence.tsv function and name rows for 0x801B6D9C (PATH library function defined by the comparison source src/engine/pathnode.c, not yet linked; called from src/engine/pathaction.c)."
     },
-    "_SyncRand_pState": {
-      "address": "0x803EC130",
-      "evidence": "evidence.tsv data and name rows for 0x803EC130 (used only by src/engine/syncrand.c; storage not claimed by the unit)."
-    },
-    "_SyncRand_iToggle": {
-      "address": "0x803EC134",
-      "evidence": "evidence.tsv data and name rows for 0x803EC134 (used only by src/engine/syncrand.c; storage not claimed by the unit)."
-    },
-    "_SyncTime_pState": {
-      "address": "0x803EC138",
-      "evidence": "evidence.tsv data and name rows for 0x803EC138 (used only by src/engine/synctime.c; storage not claimed by the unit)."
-    },
-    "_SyncTime_iStep": {
-      "address": "0x803EC13C",
-      "evidence": "evidence.tsv data and name rows for 0x803EC13C (used only by src/engine/synctime.c; storage not claimed by the unit)."
-    },
-    "_EvMon_bInit": {
-      "address": "0x803EC140",
-      "evidence": "evidence.tsv data and name rows for 0x803EC140 (used only by src/engine/evmon.c; storage not claimed by the unit)."
-    },
-    "_EvMon_Table": {
-      "address": "0x803A3A14",
-      "evidence": "evidence.tsv data and name rows for 0x803A3A14 (used only by src/engine/evmon.c; storage not claimed by the unit)."
-    },
-    "_SyncState_pGroups": {
-      "address": "0x803ED030",
-      "evidence": "evidence.tsv data and name rows for 0x803ED030 (used only by src/engine/syncstate.c; storage not claimed by the unit)."
-    },
-    "_SyncState_HeapDesc": {
-      "address": "0x803A39FC",
-      "evidence": "evidence.tsv data and name rows for 0x803A39FC (used only by src/engine/syncstate.c; storage not claimed by the unit)."
-    },
-    "_DbNiom_pEndFunc": {
-      "address": "0x803EBFD8",
-      "evidence": "evidence.tsv data and name rows for 0x803EBFD8 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
-    },
-    "_DbNiom_pLoadFunc": {
-      "address": "0x803EBFDC",
-      "evidence": "evidence.tsv data and name rows for 0x803EBFDC (used only by src/engine/dbniom.c; storage not claimed by the unit)."
-    },
-    "_DbNiom_pResetFunc": {
-      "address": "0x803EBFE0",
-      "evidence": "evidence.tsv data and name rows for 0x803EBFE0 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
-    },
-    "_DbNiom_pCallback": {
-      "address": "0x803EBFE4",
-      "evidence": "evidence.tsv data and name rows for 0x803EBFE4 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
-    },
-    "_DbNiom_iCallbackArg": {
-      "address": "0x803EBFE8",
-      "evidence": "evidence.tsv data and name rows for 0x803EBFE8 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
-    },
-    "_DbNiom_bModeActive": {
-      "address": "0x803EBFEC",
-      "evidence": "evidence.tsv data and name rows for 0x803EBFEC (used only by src/engine/dbniom.c; storage not claimed by the unit)."
-    },
-    "_DbNiom_bEnding": {
-      "address": "0x803EBFED",
-      "evidence": "evidence.tsv data and name rows for 0x803EBFED (used only by src/engine/dbniom.c; storage not claimed by the unit)."
-    },
-    "_DbNiom_pCursor": {
-      "address": "0x803EBFF0",
-      "evidence": "evidence.tsv data and name rows for 0x803EBFF0 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
-    },
-    "_DbNiom_pModeEnd": {
-      "address": "0x803EBFF8",
-      "evidence": "evidence.tsv data and name rows for 0x803EBFF8 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
-    },
-    "_DbNiom_pModeLoad": {
-      "address": "0x803EBFFC",
-      "evidence": "evidence.tsv data and name rows for 0x803EBFFC (used only by src/engine/dbniom.c; storage not claimed by the unit)."
-    },
-    "_DbNiom_pModeReset": {
-      "address": "0x803EC000",
-      "evidence": "evidence.tsv data and name rows for 0x803EC000 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
-    },
-    "_DbNiom_pModeResume": {
-      "address": "0x803EC004",
-      "evidence": "evidence.tsv data and name rows for 0x803EC004 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
-    },
-    "_DbNiom_pModeFn16": {
-      "address": "0x803EC008",
-      "evidence": "evidence.tsv data and name rows for 0x803EC008 (used only by src/engine/dbniom.c; storage not claimed by the unit)."
-    },
-    "_DbEvas_iSize": {
-      "address": "0x803EC0A0",
-      "evidence": "evidence.tsv data and name rows for 0x803EC0A0 (used only by src/engine/dbevas.c; storage not claimed by the unit)."
-    },
-    "_DbEvas_pFileName": {
-      "address": "0x803EC0A4",
-      "evidence": "evidence.tsv data and name rows for 0x803EC0A4 (used only by src/engine/dbevas.c; storage not claimed by the unit)."
-    },
-    "_DbEvas_iMode": {
-      "address": "0x803EC0A8",
-      "evidence": "evidence.tsv data and name rows for 0x803EC0A8 (used only by src/engine/dbevas.c; storage not claimed by the unit)."
-    },
-    "_DbUser_iSize": {
-      "address": "0x803EC0C8",
-      "evidence": "evidence.tsv data and name rows for 0x803EC0C8 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
-    },
-    "_DbUser_pFileName": {
-      "address": "0x803EC0CC",
-      "evidence": "evidence.tsv data and name rows for 0x803EC0CC (used only by src/engine/dbuser.c; storage not claimed by the unit)."
-    },
-    "_DbUser_iMode": {
-      "address": "0x803EC0D0",
-      "evidence": "evidence.tsv data and name rows for 0x803EC0D0 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
-    },
-    "_DbUser_iCurrent": {
-      "address": "0x803EC0D4",
-      "evidence": "evidence.tsv data and name rows for 0x803EC0D4 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
-    },
-    "_DbUser_iCount": {
-      "address": "0x803EC0D8",
-      "evidence": "evidence.tsv data and name rows for 0x803EC0D8 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
-    },
-    "_DbUser_aDbIds": {
-      "address": "0x803ED6E4",
-      "evidence": "evidence.tsv data and name rows for 0x803ED6E4 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
-    },
-    "_DbUser_aEntries": {
-      "address": "0x802FB300",
-      "evidence": "evidence.tsv data and name rows for 0x802FB300 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
-    },
-    "_DbUser_LoadJob": {
-      "address": "0x803A25F0",
-      "evidence": "evidence.tsv data and name rows for 0x803A25F0 (used only by src/engine/dbuser.c; storage not claimed by the unit)."
-    },
-    "_DbUser_SaveJob": {
-      "address": "0x803A260C",
-      "evidence": "evidence.tsv data and name rows for 0x803A260C (used only by src/engine/dbuser.c; storage not claimed by the unit)."
-    },
     "Vec3CrossProduct": {
       "address": "0x802277DC",
       "evidence": "evidence.tsv function and name rows for 0x802277DC (Vec3CrossProduct, registered in comparisons.json, original bytes linked); called by name from src/engine/matrix.c, src/engine/physconstraint.cpp, src/engine/physshape.cpp, src/engine/psysEmitter.c, src/engine/rigidbody.cpp, src/game/BallPlace.cpp, src/game/LevelMesh.cpp, src/game/ParticleSys.cpp, src/game/PlyrCollide.cpp (n1e naming wave)."
@@ -4818,52 +4686,82 @@
     {
       "source": "src/engine/dbocmt.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80229270-0x8022942C (src/engine/dbocmt.c), its function and name rows, the compiler and source-form rows of the range it was split from and the source-form row 0x80229270-0x802293A8; every function exact, complete .text linked (the file compiles no data of its own).",
+      "evidence": "evidence.tsv provisional unit row 0x80229270-0x8022942C (src/engine/dbocmt.c), its function, name and data rows, the compiler and source-form rows of the range it was split from and the source-form rows 0x80229270-0x802293A8 and 0x802B2240-0x802B2267 (FAKEMATCH); every function exact, complete .text and .rodata 0x802B2138-0x802B227C (its query literals) linked. The 'LRTC' queries 0x802B227C-0x802B231C after it keep their original bytes (rule 8, data row 0x802B227C).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80229270",
           "end": "0x8022942C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B2138",
+          "end": "0x802B227C"
         }
       ]
     },
     {
       "source": "src/engine/dboptions.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8022942C-0x80229470 (src/engine/dboptions.c), its function and name rows and the compiler and source-form rows of the range it was split from; every function exact, complete .text linked (the file compiles no data; its query strings stay original bytes).",
+      "evidence": "evidence.tsv provisional unit row 0x8022942C-0x80229470 (src/engine/dboptions.c), its function, name and data rows and the compiler and source-form rows of the range it was split from; every function exact, complete .text and .rodata 0x802B231C-0x802B2338 (its query literal) linked. The 'TPOS'/'TPOG' queries 0x802B2338-0x802B238C after it keep their original bytes (rule 8, data row 0x802B2338).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8022942C",
           "end": "0x80229470"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B231C",
+          "end": "0x802B2338"
         }
       ]
     },
     {
       "source": "src/engine/dbniom.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80229470-0x802297D8 (src/engine/dbniom.c), its function and name rows and the compiler and source-form rows of the range it was split from; every function exact, complete .text linked (the file compiles no data; its query strings and .sdata words stay original bytes).",
+      "evidence": "evidence.tsv provisional unit row 0x80229470-0x802297D8 (src/engine/dbniom.c), its function, name and data rows and the compiler and source-form rows of the range it was split from; every function exact, complete .text, .rodata 0x802B238C-0x802B23AC (its query literal) and .sdata 0x803EBFD8-0x803EC00C (data row 0x803EBFD8) linked. The 'MTTS'/'ASCM' queries 0x802B23AC-0x802B2430 after it keep their original bytes (rule 8, data row 0x802B23AC).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80229470",
           "end": "0x802297D8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B238C",
+          "end": "0x802B23AC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFD8",
+          "end": "0x803EC00C"
         }
       ]
     },
     {
       "source": "src/engine/dbevas.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8022EA74-0x8022EBF0 (src/engine/dbevas.c), its function and name rows and the compiler and source-form rows of the range it was split from; every function exact, complete .text linked (the file compiles no data; its query strings stay original bytes).",
+      "evidence": "evidence.tsv provisional unit row 0x8022EA74-0x8022EBF0 (src/engine/dbevas.c), its function, name and data rows and the compiler and source-form rows of the range it was split from; every function exact, complete .text and .sdata 0x803EC0A0-0x803EC0AC (data row 0x803EC0A0) linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8022EA74",
           "end": "0x8022EBF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC0A0",
+          "end": "0x803EC0AC"
         }
       ]
     },
@@ -4892,13 +4790,43 @@
     {
       "source": "src/engine/dbuser.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8022EFDC-0x8022F80C (src/engine/dbuser.c), its function and name rows, the compiler and source-form rows of the range it was split from and the source-form row 0x8022F1BC-0x8022F53C; every function exact, complete .text linked (the file compiles no data of its own).",
+      "evidence": "evidence.tsv provisional unit row 0x8022EFDC-0x8022F80C (src/engine/dbuser.c), its function, name, data, type and field rows, the compiler and source-form rows of the range it was split from and the source-form row 0x8022F1BC-0x8022F53C; every function exact, complete .text, .rodata 0x802B5D64-0x802B5DD4 (its query literals), .data 0x802FB300-0x802FB310, .sdata 0x803EC0C8-0x803EC0DC, .sdata2 0x803ED6E4-0x803ED6EC and .bss 0x803A25F0-0x803A2628 linked. The 'FNIU' queries 0x802B5DD4-0x802B6038 after it keep their original bytes (rule 8, data row 0x802B5DD4).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8022EFDC",
           "end": "0x8022F80C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B5D64",
+          "end": "0x802B5DD4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FB300",
+          "end": "0x802FB310"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC0C8",
+          "end": "0x803EC0DC"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED6E4",
+          "end": "0x803ED6EC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A25F0",
+          "end": "0x803A2628"
         }
       ]
     },
@@ -5051,7 +4979,7 @@
     {
       "source": "src/engine/syncrand.c",
       "profile": "engine_c_fastmath_nobuiltin",
-      "evidence": "evidence.tsv provisional unit row 0x80236F78-0x8023758C (src/engine/syncrand.c), its function and name rows, the data row 0x802B7224-0x802B723C of its float literals and the compiler row 0x80236F78-0x80238258 (engine_c_fastmath_nobuiltin); every function exact, complete .text and .rodata linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80236F78-0x8023758C (src/engine/syncrand.c), its function and name rows, the data rows 0x802B7224-0x802B723C of its float literals and 0x803EC130-0x803EC138 of its .sdata and the compiler row 0x80236F78-0x80238258 (engine_c_fastmath_nobuiltin); every function exact, complete .text, .rodata and .sdata linked.",
       "sections": [
         {
           "section": ".text",
@@ -5064,45 +4992,81 @@
           "placement": ".data3",
           "start": "0x802B7224",
           "end": "0x802B723C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC130",
+          "end": "0x803EC138"
         }
       ]
     },
     {
       "source": "src/engine/synctime.c",
       "profile": "engine_c_fastmath_nobuiltin",
-      "evidence": "evidence.tsv provisional unit row 0x8023758C-0x80237A30 (src/engine/synctime.c), its function and name rows, the compiler row 0x80236F78-0x80238258 (engine_c_fastmath_nobuiltin) and the source-form row 0x802376D8-0x80237728; every function exact, complete .text linked (the file compiles no data of its own).",
+      "evidence": "evidence.tsv provisional unit row 0x8023758C-0x80237A30 (src/engine/synctime.c), its function, name and data rows (.sdata 0x803EC138-0x803EC140), the compiler row 0x80236F78-0x80238258 (engine_c_fastmath_nobuiltin) and the source-form row 0x802376D8-0x80237728; every function exact, complete .text and .sdata linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8023758C",
           "end": "0x80237A30"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC138",
+          "end": "0x803EC140"
         }
       ]
     },
     {
       "source": "src/engine/syncstate.c",
       "profile": "engine_c_fastmath_nobuiltin",
-      "evidence": "evidence.tsv provisional unit row 0x80237A30-0x80238258 (src/engine/syncstate.c), its function and name rows, the compiler row 0x80236F78-0x80238258 (engine_c_fastmath_nobuiltin) and the source-form rows 0x80237D5C-0x80237E3C and 0x8023811C-0x8023816C (both FAKEMATCH); every function exact, complete .text linked (the file compiles no data of its own).",
+      "evidence": "evidence.tsv provisional unit row 0x80237A30-0x80238258 (src/engine/syncstate.c), its function, name and data rows (.bss 0x803A39FC-0x803A3A14, .sbss 0x803ED030-0x803ED034), the compiler row 0x80236F78-0x80238258 (engine_c_fastmath_nobuiltin) and the source-form rows 0x80237D5C-0x80237E3C and 0x8023811C-0x8023816C (both FAKEMATCH); every function exact, complete .text, .bss and .sbss linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80237A30",
           "end": "0x80238258"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A39FC",
+          "end": "0x803A3A14"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED030",
+          "end": "0x803ED034"
         }
       ]
     },
     {
       "source": "src/engine/evmon.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802382CC-0x8023873C (src/engine/evmon.c), its function and name rows, the compiler and source-form rows of the range it was split from and the source-form row 0x80238680-0x8023873C; every function exact, complete .text linked (the file compiles no data of its own).",
+      "evidence": "evidence.tsv provisional unit row 0x802382CC-0x8023873C (src/engine/evmon.c), its function, name and data rows (.sdata 0x803EC140-0x803EC144, .bss 0x803A3A14-0x803A3A20), the compiler and source-form rows of the range it was split from and the source-form row 0x80238680-0x8023873C; every function exact, complete .text, .sdata and .bss linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802382CC",
           "end": "0x8023873C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC140",
+          "end": "0x803EC144"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A3A14",
+          "end": "0x803A3A20"
         }
       ]
     },
@@ -7025,12 +6989,12 @@
     {
       "source": "src/game/PlyrIconQueue.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A133C-0x801A13A8 (src/game/PlyrIconQueue.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x801A1338-0x801A13A8 (src/game/PlyrIconQueue.cpp), its function, name and data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801A133C",
+          "start": "0x801A1338",
           "end": "0x801A13A8"
         },
         {
@@ -24147,7 +24111,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801A1240",
-          "end": "0x801A133C"
+          "end": "0x801A1338"
         },
         {
           "section": ".rodata",

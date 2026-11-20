@@ -1833,7 +1833,7 @@ extern "C" {
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 }
 
-/* Effect slot returned by PlyrStarGetPulse (laid out as in src/game/cu_8016174C.cpp). */
+/* Effect slot returned by PlyrStarGetPulse (laid out as in src/game/PlyrStars.cpp). */
 struct Object_801618D8 {
     unsigned char mUnknown0[4];
     Vector_80039F5C mUnknown4;
@@ -24014,9 +24014,9 @@ extern "C" void fn_800B1478(void)
 {
     Args_800B1478 args;
 
-    args.mUnknown0 = 75;
-    args.mUnknown4 = 28;
-    args.mUnknown8 = 1;
+    args.mNumRecords = 75;
+    args.mRecordSize = 28;
+    args.mNumListeners = 1;
     lbl_803EAB18 = EvMonCreate(&args);
 }
 

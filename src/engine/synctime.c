@@ -39,8 +39,8 @@ typedef struct SyncTimeSave_t {
     SyncTimeCounter_t mCounter;
 } SyncTimeSave_t;
 
-extern SyncTime_t *_SyncTime_pState;
-extern int _SyncTime_iStep;
+static SyncTime_t *_SyncTime_pState = 0;
+static int _SyncTime_iStep = 1;
 extern void *SyncStateGetData(void *pHandle);
 extern int fn_80238278(const void *p, int size, int seed);
 int SyncTimeSaveState(void *p, void *pBuffer);
