@@ -38469,6 +38469,11 @@
       ],
       "functions": [
         {
+          "symbol": "SNDAEMS_addmodulebank",
+          "start": "0x802697D8",
+          "end": "0x80269990"
+        },
+        {
           "symbol": "fn_80269990",
           "start": "0x80269990",
           "end": "0x802699C8"
