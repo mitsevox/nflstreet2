@@ -550,7 +550,7 @@ static inline void _FxAssert(int)
 }
 #define FX_ASSERT(e) _FxAssert(e)
 
-void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int count)
+void PlyrRenderDrawAfterimages(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int count)
 {
     Color_8024FB58 color = {255};
     unsigned int i = 0;
@@ -1286,7 +1286,7 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
             pSlot->mpUnknown12 = fn_8015E2FC(0, pPlayer->mUnknown1016, 1);
             pSlot->mpUnknown20 = fn_8015E2FC(3, pPlayer->mUnknown4970, pSlot->mUnknown8);
             fn_801A2EC8(pPlayer, pSlot);
-            fn_801A1DEC(pPlayer, pSlot, count);
+            PlyrRenderDrawAfterimages(pPlayer, pSlot, count);
         }
     } else {
         fn_800C2150(pPlayer, &pPlayer->mUnknown280, 0);

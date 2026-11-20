@@ -102,7 +102,7 @@ void ObjRemoveFromList(int, Object_8015C244 *);
 void VptTrashObject(int);
 void VptFlushObjectTrashSync(void);
 void fn_8015BCAC(Object_8015C244 *);
-int fn_8015BF28(Object_8015C244 *, unsigned char *);
+int RouteArrowGetBlockCommand(Object_8015C244 *, unsigned char *);
 
 int fn_8015A39C(Object_8015C244 *p)
 {
@@ -462,7 +462,7 @@ int fn_8015B344(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pP
 
 void fn_8015B834(Object_8015C244 *p, unsigned char *pCommand, int hasOther)
 {
-    if (pCommand[0] == 22) fn_8015BF28(p, pCommand);
+    if (pCommand[0] == 22) RouteArrowGetBlockCommand(p, pCommand);
     switch (pCommand[0]) {
     case 1: case 2: case 3: case 4: case 6: case 27: case 68: case 91:
         if (hasOther) ArrowSetColor(p->mUnknown20, 250, 250, 250);
@@ -574,7 +574,7 @@ void fn_8015BED4(void)
     ObjSetListObjFunc(lbl_803ECA60, 14, 0, fn_8015A39C);
 }
 
-int fn_8015BF28(Object_8015C244 *p, unsigned char *pCommand)
+int RouteArrowGetBlockCommand(Object_8015C244 *p, unsigned char *pCommand)
 {
     Object_80039F5C *pPlayer = p->mpUnknown208;
     Record_8011F4E0 *pInfo = fn_8011F4E0();

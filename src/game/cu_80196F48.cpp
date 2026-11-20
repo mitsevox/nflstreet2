@@ -331,7 +331,7 @@ void fn_80197F84(GlowTexture_t *p)
     ResUnLoad(p->mUnknown0, p->mUnknown4);
 }
 
-void fn_80197FDC(void *unused, Glow_t *p)
+void GlowDraw(void *unused, Glow_t *p)
 {
     float projected[4];
     float visibility = fn_80197D08(projected, &p->mUnknown18);

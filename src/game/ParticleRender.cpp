@@ -52,7 +52,7 @@ void MatPush(void);
 void MatPushUnit(void);
 void MatPop(void);
 void MatRotZ(int a);
-void fn_801DF064(float *pColor, PsysEmitter_t *pEmitter, Particle_t *pParticle);
+void PSysRenderCalcParticleColor(float *pColor, PsysEmitter_t *pEmitter, Particle_t *pParticle);
 float fn_801DF184(PsysEmitter_t *pEmitter, Particle_t *pParticle);
 void TMRenderBindShader(int a);
 void TMRenderSetBlendMode(int a);
@@ -187,7 +187,7 @@ int ParticleRenderEmitter(PsysEmitter_t *pEmitter, int mode)
                 int j;
 
                 fn_80227CC0(&position, &pParticle->mPosition);
-                fn_801DF064(color, pEmitter, pParticle);
+                PSysRenderCalcParticleColor(color, pEmitter, pParticle);
                 scale = (unsigned int)pEmitter->mUnknown35B * 0.01f;
                 color[0] = CLAMP(color[0] * scale, 0.0f, 1.0f);
                 color[1] = CLAMP(color[1] * scale, 0.0f, 1.0f);
@@ -223,7 +223,7 @@ int ParticleRenderEmitter(PsysEmitter_t *pEmitter, int mode)
                 float size;
                 int j;
 
-                fn_801DF064(color, pEmitter, pParticle);
+                PSysRenderCalcParticleColor(color, pEmitter, pParticle);
                 size = fn_801DF184(pEmitter, pParticle);
                 fn_80227CC0(&position, &pParticle->mPosition);
                 MatPushUnit();

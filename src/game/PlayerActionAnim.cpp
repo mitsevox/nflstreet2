@@ -878,6 +878,8 @@ extern "C" int fn_800DCE2C(Object_80039F5C *p, unsigned char *pInfo)
             fn_80178308();
             int valid = 1;
             switch (pInfo[2]) {
+            // FAKEMATCH: the empty case 1 leaves no compare in this switch of the target (it tests 2, 3 and 7);
+            // it only shapes the compare tree (ble after the 2 test) and changes no result
             case 1:
                 break;
             case 2:
@@ -1106,6 +1108,8 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
             weight = 0;
         } else {
             switch (pInfo[5]) {
+            // FAKEMATCH: the empty case labels 4 and 7 (bit numbers of the same mask) leave no compare in
+            // the target; they only put the compare tree root at 5 with the 6 test right of it, and change no result
             case 4: break;
             case 5: weight <<= 2; break;
             case 6: weight <<= 3; break;

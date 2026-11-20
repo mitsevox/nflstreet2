@@ -185,12 +185,12 @@ void MsgPlayerPickupCopyTeam(int db)
     desc.mUnknown4 = 4;
     desc.mUnknown8 = _MsgPlayerPickup_iTeam;
     desc.mUnknown12 = ids[0];
-    fn_8008044C(&_MsgPlayerPickup_TeamCursor, &desc, 0x54415453);
+    PlayerCursorOpen(&_MsgPlayerPickup_TeamCursor, &desc, 0x54415453);
     desc.mUnknown12 = 0;
     desc.mUnknown4 = 1;
     desc.mUnknown8 = _MsgPlayerPickup_iTeam;
     desc.mUnknown0 = 2;
-    fn_8008044C(&_MsgPlayerPickup_RosterCursor, &desc, 0x54415453);
+    PlayerCursorOpen(&_MsgPlayerPickup_RosterCursor, &desc, 0x54415453);
     fn_801FCE10(&result, "use 'TATS' select 'LGLT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &_MsgPlayerPickup_iTeamLGLT,
                 _MsgPlayerPickup_iTeam);
     rows = DbCursorGetRowCount((DbCursor *)&_MsgPlayerPickup_TeamCursor);
@@ -216,7 +216,7 @@ void MsgPlayerPickupCopyTeam(int db)
     desc.mUnknown4 = 1;
     desc.mUnknown8 = _MsgPlayerPickup_iCopyTeam;
     desc.mUnknown0 = 2;
-    fn_8008044C(&_MsgPlayerPickup_PoolCursor, &desc, 0x54415453);
+    PlayerCursorOpen(&_MsgPlayerPickup_PoolCursor, &desc, 0x54415453);
     fn_801F9980(0x54415453, &handle);
     fn_801FCE10(&result, "use 'TATS' select into \x8c * from 'MAET' where 'DIGT' = \x82\n", handle, _MsgPlayerPickup_iTeam);
     fn_801FCE10(&result, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIOT' = \x82 and 'LGLT' = \x82\n", handle,
@@ -378,7 +378,7 @@ unsigned char MsgPlayerPickupInit(void)
         desc.mUnknown8 = TeamFilterGet();
         desc.mUnknown4 = 1;
         desc.mUnknown0 = 2;
-        fn_8008044C(&_MsgPlayerPickup_PoolCursor, &desc, 0x54415453);
+        PlayerCursorOpen(&_MsgPlayerPickup_PoolCursor, &desc, 0x54415453);
         node.Set(11, &left, &right);
         left.Set(6, 0x59414C5044494754LL, 3, _MsgPlayerPickup_iTeam);
         right.SetUnknown32(6, 0x59414C5044494F50LL, 3, 0x10006);
@@ -388,7 +388,7 @@ unsigned char MsgPlayerPickupInit(void)
         desc.mUnknown4 = 1;
         desc.mUnknown8 = _MsgPlayerPickup_iTeam;
         desc.mUnknown0 = 2;
-        fn_8008044C(&_MsgPlayerPickup_RosterCursor, &desc, 0x54415453);
+        PlayerCursorOpen(&_MsgPlayerPickup_RosterCursor, &desc, 0x54415453);
         count = DbCursorGetRowCount((DbCursor *)&_MsgPlayerPickup_PoolCursor);
         _MsgPlayerPickup_bSkipTeam = count == 0;
         rows = DbCursorGetRowCount((DbCursor *)&_MsgPlayerPickup_TeamCursor);

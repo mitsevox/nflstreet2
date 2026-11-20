@@ -2848,7 +2848,7 @@ void PlyrMoveClearHold(Object_80039F5C *p);
 }
 
 extern "C" {
-int fn_8002D228(Type_803EA368 *p);
+int ReplayIsHalted(Type_803EA368 *p);
 }
 
 extern "C" {
@@ -27275,7 +27275,7 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
             && InGameIsDemo() == 0 && InGameIsPaused() == 0 && TeamPromptIsActive() == 0 && PauseRequestIsPending() == 0
             && PauseIsUnblocked() == 1 && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1)) {
             fn_8002C9A8(lbl_803EA368, 3, 0);
-            if (fn_8002D228(lbl_803EA368) != 0) {
+            if (ReplayIsHalted(lbl_803EA368) != 0) {
                 fn_8009BA10(0);
                 fn_8009B924();
                 fn_80094DF0();
@@ -27418,7 +27418,7 @@ extern "C" void fn_800B8C9C(void)
 void PostPlayPhase::UpdateCue(float dt)
 {
     fn_800B8C9C();
-    if (fn_8002D228(lbl_803EA368) != 0 && lbl_803EAB7C == 0 && lbl_803EAB7D != 0
+    if (ReplayIsHalted(lbl_803EA368) != 0 && lbl_803EAB7C == 0 && lbl_803EAB7D != 0
         && lbl_803EAB78->mUnknown154 > 45) {
         fn_8009BC30(lbl_803EAB80);
         if (fn_8002E950(0) != 0) {

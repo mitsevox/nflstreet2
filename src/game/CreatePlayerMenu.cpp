@@ -691,7 +691,7 @@ static void _CreatePlayerQueuePortrait(int id)
     unsigned int color18;
     unsigned int color19;
 
-    fn_8008044C(&object, 0, 0x54415453);
+    PlayerCursorOpen(&object, 0, 0x54415453);
     PlayerDbSeekId(&object, id, 0);
     entryId = PlayerDbGetPortraitId(&object);
     value6E = PlayerDbGetHairStyle(&object);
