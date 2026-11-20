@@ -866,11 +866,11 @@ int fn_8012510C(Directions_8012430C *pValues)
     float next = pValues->mCost[(best + 1) % 8];
     float previous = pValues->mCost[(best - 1) % 8];
     float scale = pValues->mCost[best];
-    float lower = previous;
-    int offset = -0x100000;
-    if (next < previous) {
-        lower = next;
-        offset = 0x100000;
+    float lower = next;
+    int offset = 0x100000;
+    if (!(next < previous)) {
+        lower = previous;
+        offset = -0x100000;
     }
     if (!(scale <= 0.0f)) scale /= lower;
     else if (!(scale >= 0.0f) && !(lower >= 0.0f)) scale = lower / scale;
