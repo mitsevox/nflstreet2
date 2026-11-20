@@ -285,35 +285,6 @@ void fn_80272FB4(void)
     lbl_803B502C();
 }
 
-int fn_802733A0(void)
-{
-    u32 base;
-
-    lbl_803A6C24.m6 = 32;
-    lbl_803A6C24.m0 = 32000;
-    lbl_803A6C24.m2 = 32000;
-    lbl_803A6C24.m4 = 1;
-    lbl_803A6C24.m5 = 4;
-    lbl_803A6C24.mA = 48;
-    lbl_803A6C24.mC = 2;
-    lbl_803A6C24.mE = 544;
-    lbl_803A6C24.m10 = 36;
-    lbl_803A6C24.m1C.mA = 32000;
-    lbl_803A6C24.m1C.mE = 8;
-    lbl_803A6C24.m1C.m12 = 48;
-    lbl_803A6C24.m1C.m21 = 1;
-    lbl_803A6C24.m1C.m22 = 8;
-    lbl_803A6C24.m1C.m23 = 2;
-    lbl_803A6C24.m1C.m25 = 1;
-    lbl_803A6C24.m1C.m28 = 2;
-    lbl_803A6C24.m1C.m2A[0] = 544;
-    lbl_803A6C24.m1C.m2A[1] = 36;
-    base = ARGetBaseAddress() + 256;
-    lbl_803A6C24.m1C.m38 = base;
-    lbl_803A6C24.m1C.m3C = 0x800000 - base;
-    return 0;
-}
-
 void fn_80273040(int index, Stream_802743A0 *stream, Record_803A6DF0 *record)
 {
     unsigned char *source[6];
@@ -394,6 +365,35 @@ void *fn_80273264(void *arg)
         Snd::gMutexUnlockFn();
         OSSleepThread(&lbl_803A8D60.m1DE0);
     }
+}
+
+int fn_802733A0(void)
+{
+    u32 base;
+
+    lbl_803A6C24.m6 = 32;
+    lbl_803A6C24.m0 = 32000;
+    lbl_803A6C24.m2 = 32000;
+    lbl_803A6C24.m4 = 1;
+    lbl_803A6C24.m5 = 4;
+    lbl_803A6C24.mA = 48;
+    lbl_803A6C24.mC = 2;
+    lbl_803A6C24.mE = 544;
+    lbl_803A6C24.m10 = 36;
+    lbl_803A6C24.m1C.mA = 32000;
+    lbl_803A6C24.m1C.mE = 8;
+    lbl_803A6C24.m1C.m12 = 48;
+    lbl_803A6C24.m1C.m21 = 1;
+    lbl_803A6C24.m1C.m22 = 8;
+    lbl_803A6C24.m1C.m23 = 2;
+    lbl_803A6C24.m1C.m25 = 1;
+    lbl_803A6C24.m1C.m28 = 2;
+    lbl_803A6C24.m1C.m2A[0] = 544;
+    lbl_803A6C24.m1C.m2A[1] = 36;
+    base = ARGetBaseAddress() + 256;
+    lbl_803A6C24.m1C.m38 = base;
+    lbl_803A6C24.m1C.m3C = 0x800000 - base;
+    return 0;
 }
 
 int fn_80273458(void)

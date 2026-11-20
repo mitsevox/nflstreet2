@@ -1609,17 +1609,9 @@
       "address": "0x8026B7D8",
       "evidence": "evidence.tsv function and name rows for SNDMEMI_free 0x8026B7D8; the draft src/engine/smemman.c is registered in comparisons.json (one of its five functions, SNDMEMI_allocz, differs), so the original provider stays linked and linked callers resolve this name to it."
     },
-    "MIX_create": {
-      "address": "0x80275BBC",
-      "evidence": "evidence.tsv function and name rows for 0x80275BBC (MIX_create, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks."
-    },
     "MIX_playinit": {
       "address": "0x80275F80",
       "evidence": "evidence.tsv function and name rows for 0x80275F80 (MIX_playinit, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks."
-    },
-    "MIX_stop": {
-      "address": "0x80276278",
-      "evidence": "evidence.tsv function and name rows for 0x80276278 (MIX_stop, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks."
     },
     "sndpps": {
       "address": "0x803B5060",
@@ -1644,10 +1636,6 @@
     "SNDPKTPLAY_overhead": {
       "address": "0x80278AC8",
       "evidence": "evidence.tsv function/name rows for 0x80278AC8 (SNDPKTPLAY_overhead in src/engine/spktplay.c, comparison only until linked); the linked src/engine/sstovrhd.c calls it by name (integration of c16c and c16g)."
-    },
-    "SNDMIX_setdrygain": {
-      "address": "0x80276378",
-      "evidence": "evidence.tsv function/name rows for 0x80276378 (SNDMIX_setdrygain in src/engine/smixer.c, comparison only until linked); src/engine/snddrv.c calls it by name (integration of c15h and c16f)."
     },
     "gInGameGroup": {
       "address": "0x803068B4",
@@ -1704,18 +1692,6 @@
     "_3Snd.MPEGuse_MMX": {
       "address": "0x80300044",
       "evidence": "evidence.tsv data and name rows for 0x80300044 (Snd::MPEGuse_MMX, a .data word read by OpenSynth of src/engine/lbmpeg.cpp; no file defines it yet, its initializer form is open)."
-    },
-    "SNDMIX_setwetgain": {
-      "address": "0x802763AC",
-      "evidence": "evidence.tsv function and name rows for 0x802763AC (SNDMIX_setwetgain, src/engine/smixer.c, comparison only); the fx-level function 0x80271BD4 (src/engine/cu_80271BD4.cpp) calls it (bl at 0x80271CF8)."
-    },
-    "MIX_destroy": {
-      "address": "0x80275E7C",
-      "evidence": "evidence.tsv function and name rows for 0x80275E7C (MIX_destroy, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks (c18 wave)."
-    },
-    "MIX_play": {
-      "address": "0x80276194",
-      "evidence": "evidence.tsv function and name rows for 0x80276194 (MIX_play, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks (c18 wave)."
     },
     "MIX_audioslice": {
       "address": "0x802763E0",
@@ -22457,6 +22433,206 @@
           "end": "0x802B78F0"
         }
       ]
+    },
+    {
+      "source": "src/engine/smixer.c",
+      "profile": "sound_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x802755E0-0x80276798 (src/engine/smixer.c), its compiler rows and the data rows of its data sections; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 2 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802755E0",
+          "end": "0x80275F80"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80276194",
+          "end": "0x802763E0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C1E1C",
+          "end": "0x802C1EAC"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "MIX_playinit",
+            "evidence": "evidence.tsv source-form 0x80275F80-0x80276194"
+          },
+          {
+            "function": "MIX_audioslice",
+            "evidence": "evidence.tsv source-form 0x802763E0-0x80276798"
+          }
+        ],
+        "evidence": "merge notes of the x1 wave (lane x1d) holdouts table; each HOLDOUT: row lists the forms tried and the RTL-dump finding."
+      }
+    },
+    {
+      "source": "src/engine/Font.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row 0x801CCA64-0x801CD79C (src/engine/Font.c), its compiler rows and the data rows of its data sections; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 1 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CCA64",
+          "end": "0x801CD3E4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CD63C",
+          "end": "0x801CD79C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF490",
+          "end": "0x802AF4B0"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_801CD3E4",
+            "evidence": "evidence.tsv source-form 0x801CD3E4-0x801CD63C"
+          }
+        ],
+        "evidence": "merge notes of the x1 wave (lane x1d) holdouts table; each HOLDOUT: row lists the forms tried and the RTL-dump finding."
+      }
+    },
+    {
+      "source": "src/engine/cu_8021625C.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 (src/engine/cu_8021625C.c), its compiler rows and the data rows of its data sections; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 2 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021625C",
+          "end": "0x802166F0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80216860",
+          "end": "0x80216BFC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80216E34",
+          "end": "0x802176E8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1D10",
+          "end": "0x802B1D40"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_802166F0",
+            "evidence": "evidence.tsv source-form 0x802166F0-0x80216860"
+          },
+          {
+            "function": "fn_80216BFC",
+            "evidence": "evidence.tsv source-form 0x80216BFC-0x80216E34"
+          }
+        ],
+        "evidence": "merge notes of the x1 wave (lane x1d) holdouts table; each HOLDOUT: row lists the forms tried and the RTL-dump finding."
+      }
+    },
+    {
+      "source": "src/engine/snddrv.c",
+      "profile": "sound_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), its compiler rows and the data rows of its data sections; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 6 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027257C",
+          "end": "0x802733A0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80273458",
+          "end": "0x80273648"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80273960",
+          "end": "0x802739F8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80273D7C",
+          "end": "0x80273DF8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80274304",
+          "end": "0x80274464"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027474C",
+          "end": "0x802747D8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80274924",
+          "end": "0x802753F0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C1D90",
+          "end": "0x802C1E18"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_802733A0",
+            "evidence": "evidence.tsv source-form 0x802733A0-0x80273458"
+          },
+          {
+            "function": "fn_80273648",
+            "evidence": "evidence.tsv source-form 0x80273648-0x80273960"
+          },
+          {
+            "function": "fn_802739F8",
+            "evidence": "evidence.tsv source-form 0x802739F8-0x80273D7C"
+          },
+          {
+            "function": "fn_80273DF8",
+            "evidence": "evidence.tsv source-form 0x80273DF8-0x80274304"
+          },
+          {
+            "function": "fn_80274464",
+            "evidence": "evidence.tsv source-form 0x80274464-0x8027474C"
+          },
+          {
+            "function": "fn_802747D8",
+            "evidence": "evidence.tsv source-form 0x802747D8-0x80274924"
+          }
+        ],
+        "evidence": "merge notes of the x1 wave (lane x1d) holdouts table; each HOLDOUT: row lists the forms tried and the RTL-dump finding."
+      }
     },
     {
       "source": "src/game/StoryEvents.cpp",

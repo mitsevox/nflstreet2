@@ -3,6 +3,7 @@
    Names from the GoldenEye: Rogue Agent and Medal of Honor: European Assault symbol sets (smixer.c). */
 
 #include "engine/sndlib.h"
+#include "engine/sndutil.h"
 
 extern int lbl_803A6E58;
 extern void (*lbl_803B5020)(void **outputs, int count);
@@ -109,9 +110,9 @@ void MIX_create(Setup_80272EC4 *setup)
 {
     int i;
 
-    fn_802797F4(SNDI_New);
-    fn_80279800(SNDI_Delete);
-    fn_8027980C(SNDI_memcpy);
+    Snd::CODASetNew((void *(*)(unsigned int))SNDI_New);
+    Snd::CODASetDelete(SNDI_Delete);
+    Snd::Coda::System::SetMemCpy((void *(*)(void *, const void *, unsigned int))SNDI_memcpy);
     lbl_803B4E34.m0 = *setup;
     SNDSYS_entercritical();
     MIX_createFxglobals();
