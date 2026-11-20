@@ -172,6 +172,8 @@ void fn_80223460(Node_80223874 *pNode, Uint32 msg, int nArgs, NodeArg_80223460 *
     case -3:
         fn_80223A40(pNode);
         break;
+    /* FAKEMATCH: the empty case -4 leaves no compare in the target; it only moves the decision
+       tree's root to 10 as in the target */
     case -4:
         break;
     case 13: {
