@@ -30754,7 +30754,7 @@
     {
       "source": "src/engine/particleLib.c",
       "profile": "engine_c",
-      "evidence": "particleLib.c over 0x801DD498-0x801DFE0C (NASCAR 2005 symbol-table size/order match: _ParticlePoolInit .. ParticleGetRandom and the ParticleLibInit .. ParticleParmLoad runs; see the function and name rows); evidence.tsv compiler row 0x801DD498-0x801DFE0C, its function rows and the exact .rodata data row 0x802B1080-0x802B10E8. Draft comparisons only; original assembly remains linked. 0x801DD730 (1428 bytes, pool 0x802B1060-0x802B1080 not placed), 0x801DF064, 0x801DF3E4 and 0x801DF620 have no draft. The library state at 0x8039AD10 and the pool table at 0x8039ADAC stay extern (lbl_).",
+      "evidence": "particleLib.c over 0x801DD498-0x801DFE0C (NASCAR 2005 symbol-table size/order match: _ParticlePoolInit .. ParticleGetRandom and the ParticleLibInit .. ParticleParmLoad runs; see the function and name rows); evidence.tsv compiler row 0x801DD498-0x801DFE0C, its function rows and the exact .rodata data row 0x802B1080-0x802B10E8. Draft comparisons only; original assembly remains linked. 0x801DD730 (1428 bytes, pool 0x802B1060-0x802B1080 not placed), 0x801DF620 has no draft. The file-static PSysRenderCalcParticleFrame is compiled but discarded (evidence.tsv linker row 0x802B10E8-0x802B10EC). The library state at 0x8039AD10 and the pool table at 0x8039ADAC stay extern (lbl_).",
       "sections": [
         {
           "section": ".text",
@@ -30985,6 +30985,9 @@
           "start": "0x801DFDE0",
           "end": "0x801DFE0C"
         }
+      ],
+      "discarded": [
+        "PSysRenderCalcParticleFrame"
       ]
     },
     {
@@ -33662,22 +33665,32 @@
     {
       "source": "src/engine/cu_801CDB5C.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CD79C-0x801CE138 (src/engine/cu_801CDB5C.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF4D0-0x802AF4D4. Draft comparisons only; the LLFont statics 0x801CD79C/0x801CD964, the render state 0x803E7600, the quad buffer 0x803E763C, the TLUT tables 0x80383D20/0x80383D40 and objects 0x80383D60/0x80383D80, and the matrix/GX/heap helpers stay external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801CD79C-0x801CE138 (src/engine/cu_801CDB5C.c), its compiler and type rows, exact function rows, the exact data row for its .rodata 0x802AF4B0-0x802AF4D4 and linker row 0x802AF4B0-0x802AF4B8 (discarded FontLLTexelToUV). Draft comparisons only; the render state 0x803E7600, the quad buffer 0x803E763C, the TLUT tables 0x80383D20/0x80383D40 and objects 0x80383D60/0x80383D80, and the matrix/GX/heap helpers stay external; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801CDB5C",
+          "start": "0x801CD79C",
           "end": "0x801CE138"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802AF4D0",
+          "start": "0x802AF4B0",
           "end": "0x802AF4D4"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_801CD79C",
+          "start": "0x801CD79C",
+          "end": "0x801CD964"
+        },
+        {
+          "symbol": "fn_801CD964",
+          "start": "0x801CD964",
+          "end": "0x801CDB5C"
+        },
         {
           "symbol": "fn_801CDB5C",
           "start": "0x801CDB5C",
@@ -33713,6 +33726,9 @@
           "start": "0x801CE134",
           "end": "0x801CE138"
         }
+      ],
+      "discarded": [
+        "FontLLTexelToUV"
       ]
     },
     {

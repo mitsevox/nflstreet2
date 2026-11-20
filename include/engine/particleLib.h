@@ -96,7 +96,7 @@ typedef struct Particle_801DE1E0 {
     float mUnknown34;
     unsigned char mActive;
     unsigned char mUnknown39;
-    char mPad3A[0x3C - 0x3A];
+    unsigned short mUnknown3A;
     float mLife;
     unsigned int mUnknown40;
     float mAge;

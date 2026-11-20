@@ -7,6 +7,7 @@
 #include <dolphin/gx/GXTev.h>
 #include <dolphin/gx/GXTexture.h>
 #include <dolphin/gx/GXTransform.h>
+#include <dolphin/gx/GXVert.h>
 #include <dolphin/os/OSCache.h>
 #include "engine/Font.h"
 #include "engine/SysSetLastErrorFunc.h"
@@ -30,8 +31,79 @@ extern GXTlutObj lbl_80383D80;
 extern FontRenderState_801CCA64 lbl_803E7600;
 extern FontQuad_801CCA64 lbl_803E763C[];
 
-int fn_801CD964(int state, Font_801CCA64 *pFont, FontQuad_801CCA64 *pQuads, unsigned int count,
-                FontColor_801CCA64 *pColor, int a);
+/* The four corners of one glyph quad: positions, then texture coordinates. */
+typedef struct FontVerts_801CD79C {
+    float mPos[4][4];
+    float mUV[4][4];
+} FontVerts_801CD79C;
+
+/* No GameCube code: nothing calls it, and SN ngcld -strip-unused drops the body, while its
+   unsigned int-to-float bias stays in .rodata ahead of the pool of fn_801CD79C (evidence.tsv
+   linker row 0x802AF4B0-0x802AF4B8). fn_801CD79C writes the same texel-to-UV division out. */
+static float FontLLTexelToUV(unsigned int texel, float size)
+{
+    return texel / size;
+}
+
+static void fn_801CD79C(Font_801CCA64 *pFont, FontVerts_801CD79C *pVerts, FontQuad_801CCA64 *pQuad)
+{
+    float texWidth;
+    float texHeight;
+    float u;
+    float v;
+    float u0;
+    float u1;
+    float v0;
+    float v1;
+
+    pVerts->mPos[0][0] = pVerts->mPos[3][0] = pQuad->mX;
+    pVerts->mPos[1][0] = pVerts->mPos[2][0] = pQuad->mX + pQuad->mWidth;
+    pVerts->mPos[0][1] = pVerts->mPos[1][1] = pQuad->mY;
+    pVerts->mPos[2][1] = pVerts->mPos[3][1] = pQuad->mY + pQuad->mHeight;
+    u = pQuad->mU;
+    texWidth = (int)pFont->mpTex->mWidth;
+    u0 = u / texWidth;
+    u1 = (pQuad->mU + pQuad->mWidth) / texWidth;
+    v = pQuad->mV;
+    texHeight = (int)pFont->mpTex->mHeight;
+    v0 = v / texHeight;
+    v1 = (pQuad->mV + pQuad->mHeight) / texHeight;
+    pVerts->mUV[0][0] = pVerts->mUV[3][0] = u0;
+    pVerts->mUV[1][0] = pVerts->mUV[2][0] = u1;
+    pVerts->mUV[0][1] = pVerts->mUV[1][1] = v0;
+    pVerts->mUV[2][1] = pVerts->mUV[3][1] = v1;
+}
+
+static int fn_801CD964(int state, Font_801CCA64 *pFont, FontQuad_801CCA64 *pQuads, unsigned int count,
+                       FontColor_801CCA64 *pColor, int unused)
+{
+    FontVerts_801CD79C verts;
+    GXColor color;
+    unsigned int i;
+
+    color.r = pColor->r * 255.0f;
+    color.g = pColor->g * 255.0f;
+    color.b = pColor->b * 255.0f;
+    color.a = pColor->a * 255.0f;
+    verts.mPos[0][2] = verts.mPos[1][2] = verts.mPos[2][2] = verts.mPos[3][2] = 0.0f;
+    for (i = 0; i < count; i++) {
+        fn_801CD79C(pFont, &verts, &pQuads[i]);
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition3f32(verts.mPos[0][0], verts.mPos[0][1], verts.mPos[0][2]);
+        GXColor4u8(color.r, color.g, color.b, color.a);
+        GXTexCoord2f32(verts.mUV[0][0], verts.mUV[0][1]);
+        GXPosition3f32(verts.mPos[1][0], verts.mPos[1][1], verts.mPos[1][2]);
+        GXColor4u8(color.r, color.g, color.b, color.a);
+        GXTexCoord2f32(verts.mUV[1][0], verts.mUV[1][1]);
+        GXPosition3f32(verts.mPos[2][0], verts.mPos[2][1], verts.mPos[2][2]);
+        GXColor4u8(color.r, color.g, color.b, color.a);
+        GXTexCoord2f32(verts.mUV[2][0], verts.mUV[2][1]);
+        GXPosition3f32(verts.mPos[3][0], verts.mPos[3][1], verts.mPos[3][2]);
+        GXColor4u8(color.r, color.g, color.b, color.a);
+        GXTexCoord2f32(verts.mUV[3][0], verts.mUV[3][1]);
+    }
+    return state;
+}
 
 int fn_801CDB5C(Font_801CCA64 *pFont, const char *pText, unsigned int flags, float maxWidth, float *pPos)
 {

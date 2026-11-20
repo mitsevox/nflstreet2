@@ -751,6 +751,23 @@ void fn_801DEF18(PartObj_801DE1E0 *pObj)
     lbl_8039ADAC.mpPools[index].mFree++;
 }
 
+/* No GameCube code: nothing calls it, and SN ngcld -strip-unused drops the body, while its 60.0f
+   stays in .rodata ahead of the pool of the next function (evidence.tsv linker row 0x802B10E8). */
+static unsigned int PSysRenderCalcParticleFrame(AnimTex_t *pTex, PartObj_801DE1E0 *pObj,
+                                                Particle_801DE1E0 *pParticle)
+{
+    unsigned int frame = 0;
+
+    if (pTex->mFrameCount > 1) {
+        frame = pParticle->mUnknown3A;
+        if (pTex->mAnimated && pObj->mUnknown048) {
+            frame += (int)(pParticle->mAge * 60.0f) / pObj->mUnknown048;
+        }
+        frame %= pTex->mFrameCount;
+    }
+    return frame;
+}
+
 void fn_801DF064(Vec4_801DE1E0 *pColor, PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle)
 {
     float fadeOut;
