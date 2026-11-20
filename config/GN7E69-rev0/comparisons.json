@@ -35597,6 +35597,228 @@
           "end": "0x80270D6C"
         }
       ]
+    },
+    {
+      "source": "src/engine/physshape.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row for src/engine/physshape.cpp; draft comparisons, original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E2CB4",
+          "end": "0x801E7034"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1290",
+          "end": "0x802B1480"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F94E4",
+          "end": "0x802F9508"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__14CollisionShapeffi",
+          "start": "0x801E2CB4",
+          "end": "0x801E2CD4"
+        },
+        {
+          "symbol": "_._14CollisionShape",
+          "start": "0x801E2CD4",
+          "end": "0x801E2D08"
+        },
+        {
+          "symbol": "GetMaterial__14CollisionShapePfT1",
+          "start": "0x801E2D08",
+          "end": "0x801E2D1C"
+        },
+        {
+          "symbol": "ShapeCollide__FP14CollisionShapePA3_fT0T1P13Vec3_801DE1E0",
+          "start": "0x801E2D1C",
+          "end": "0x801E2DA4"
+        },
+        {
+          "symbol": "SegmentPointParam__FP13Vec3_801DE1E0N20",
+          "start": "0x801E2DA4",
+          "end": "0x801E2E78"
+        },
+        {
+          "symbol": "ClosestSegmentParams__FP13Vec3_801DE1E0N30PfT4",
+          "start": "0x801E2E78",
+          "end": "0x801E3024"
+        },
+        {
+          "symbol": "ClosestLineParams__FP13Vec3_801DE1E0N30PfT4",
+          "start": "0x801E3024",
+          "end": "0x801E3144"
+        },
+        {
+          "symbol": "__12CapsuleShapeP13Vec3_801DE1E0T1fff",
+          "start": "0x801E3144",
+          "end": "0x801E31D4"
+        },
+        {
+          "symbol": "GetBounds__12CapsuleShapeP11BoundingBox",
+          "start": "0x801E31D4",
+          "end": "0x801E32B8"
+        },
+        {
+          "symbol": "TestPoint__12CapsuleShapeP13Vec3_801DE1E0PA3_fT1N21Pff",
+          "start": "0x801E32B8",
+          "end": "0x801E3610"
+        },
+        {
+          "symbol": "GetWorldSegment__12CapsuleShapePA3_fP13Vec3_801DE1E0N22",
+          "start": "0x801E3610",
+          "end": "0x801E3690"
+        },
+        {
+          "symbol": "GetSupportWeight__12CapsuleShapeP13Vec3_801DE1E0T1PA3_f",
+          "start": "0x801E3690",
+          "end": "0x801E3710"
+        },
+        {
+          "symbol": "ClosestSurfacePoint__12CapsuleShapeP13Vec3_801DE1E0N41PUc",
+          "start": "0x801E3710",
+          "end": "0x801E39B0"
+        },
+        {
+          "symbol": "ProjectsInside__12CapsuleShapeP13Vec3_801DE1E0N31",
+          "start": "0x801E39B0",
+          "end": "0x801E3A88"
+        },
+        {
+          "symbol": "RingPoints__12CapsuleShapeP13Vec3_801DE1E0N51Uif",
+          "start": "0x801E3A88",
+          "end": "0x801E3DD8"
+        },
+        {
+          "symbol": "__11SphereShapeP13Vec3_801DE1E0fff",
+          "start": "0x801E3DD8",
+          "end": "0x801E3E48"
+        },
+        {
+          "symbol": "GetBounds__11SphereShapeP11BoundingBox",
+          "start": "0x801E3E48",
+          "end": "0x801E3EC0"
+        },
+        {
+          "symbol": "TestPoint__11SphereShapeP13Vec3_801DE1E0PA3_fT1N21Pff",
+          "start": "0x801E3EC0",
+          "end": "0x801E4088"
+        },
+        {
+          "symbol": "__8BoxShapeP13Vec3_801DE1E0fffff",
+          "start": "0x801E4088",
+          "end": "0x801E4118"
+        },
+        {
+          "symbol": "GetBounds__8BoxShapeP11BoundingBox",
+          "start": "0x801E4118",
+          "end": "0x801E4180"
+        },
+        {
+          "symbol": "TestPoint__8BoxShapeP13Vec3_801DE1E0PA3_fT1N21Pff",
+          "start": "0x801E4180",
+          "end": "0x801E47B8"
+        },
+        {
+          "symbol": "SegmentHits__8BoxShapeP13Vec3_801DE1E0N21Uii",
+          "start": "0x801E47B8",
+          "end": "0x801E4D40"
+        },
+        {
+          "symbol": "QuadHits__8BoxShapeP13Vec3_801DE1E0T1Ui",
+          "start": "0x801E4D40",
+          "end": "0x801E4E04"
+        },
+        {
+          "symbol": "GetCornersIn__8BoxShapePA3_fP8BoxShapeT1P13Vec3_801DE1E0",
+          "start": "0x801E4E04",
+          "end": "0x801E501C"
+        },
+        {
+          "symbol": "ClosestSurfacePoint__8BoxShapeP13Vec3_801DE1E0PA3_fT1T1",
+          "start": "0x801E501C",
+          "end": "0x801E5378"
+        },
+        {
+          "symbol": "_ShapeCollideSphereSphere__FP14CollisionShapePA3_fT0T1P13Vec3_801DE1E0",
+          "start": "0x801E5378",
+          "end": "0x801E54BC"
+        },
+        {
+          "symbol": "_ShapeCollideSphereBox__FP14CollisionShapePA3_fT0T1P13Vec3_801DE1E0",
+          "start": "0x801E54BC",
+          "end": "0x801E55D8"
+        },
+        {
+          "symbol": "_ShapeCollideSphereCapsule__FP14CollisionShapePA3_fT0T1P13Vec3_801DE1E0",
+          "start": "0x801E55D8",
+          "end": "0x801E5704"
+        },
+        {
+          "symbol": "_ShapeCollideCapsuleBox__FP14CollisionShapePA3_fT0T1P13Vec3_801DE1E0",
+          "start": "0x801E5704",
+          "end": "0x801E5D48"
+        },
+        {
+          "symbol": "_ShapeCollideBoxBox__FP14CollisionShapePA3_fT0T1P13Vec3_801DE1E0",
+          "start": "0x801E5D48",
+          "end": "0x801E620C"
+        },
+        {
+          "symbol": "_ShapeCollideCapsuleCapsule__FP14CollisionShapePA3_fT0T1P13Vec3_801DE1E0",
+          "start": "0x801E620C",
+          "end": "0x801E6724"
+        },
+        {
+          "symbol": "Draw__11SphereShapePA3_fiii",
+          "start": "0x801E6724",
+          "end": "0x801E69D0"
+        },
+        {
+          "symbol": "Draw__12CapsuleShapePA3_fiii",
+          "start": "0x801E69D0",
+          "end": "0x801E6CE0"
+        },
+        {
+          "symbol": "Draw__8BoxShapePA3_fiii",
+          "start": "0x801E6CE0",
+          "end": "0x801E6FBC"
+        },
+        {
+          "symbol": "_._12CapsuleShape",
+          "start": "0x801E6FBC",
+          "end": "0x801E6FDC"
+        },
+        {
+          "symbol": "_._11SphereShape",
+          "start": "0x801E6FDC",
+          "end": "0x801E6FFC"
+        },
+        {
+          "symbol": "GetSupportWeight__11SphereShapeP13Vec3_801DE1E0T1PA3_f",
+          "start": "0x801E6FFC",
+          "end": "0x801E7008"
+        },
+        {
+          "symbol": "_._8BoxShape",
+          "start": "0x801E7008",
+          "end": "0x801E7028"
+        },
+        {
+          "symbol": "GetSupportWeight__8BoxShapeP13Vec3_801DE1E0T1PA3_f",
+          "start": "0x801E7028",
+          "end": "0x801E7034"
+        }
+      ]
     }
   ]
 }
