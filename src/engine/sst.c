@@ -131,8 +131,7 @@ void SNDSTRMI_framescallback(int unused, unsigned int frames, void *context)
     int passes = 0;
 
     for (;;) {
-        // FAKEMATCH: the target re-reads every request field (the packet player updates them from its callback)
-        volatile SndStreamRequest_t *request = (SndStreamRequest_t *)channel->mRequests.mpFirst;
+        SndStreamRequest_t *request = (SndStreamRequest_t *)channel->mRequests.mpFirst;
 
         if (++passes > 200) {
             SNDSTRMI_removerequest(request->mId);
