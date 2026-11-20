@@ -471,7 +471,7 @@ void EditMenuReloadTeam(void)
     desc.mUnknown8 = _EditMenu_iTeam;
     desc.mUnknown4 = 1;
     desc.mUnknown0 = 1;
-    fn_8008044C(&gEditMenuPlayerCursor, &desc, 0x54415453);
+    PlayerCursorOpen(&gEditMenuPlayerCursor, &desc, 0x54415453);
 }
 
 void EditMenuWaitForSave(void)
@@ -1276,7 +1276,7 @@ void EditMenuBegin(int mode, int value)
     desc.mUnknown8 = _EditMenu_iTeam;
     desc.mUnknown4 = 1;
     desc.mUnknown0 = 1;
-    fn_8008044C(&gEditMenuPlayerCursor, &desc, 0x54415453);
+    PlayerCursorOpen(&gEditMenuPlayerCursor, &desc, 0x54415453);
     UIGLibraryGetGlobal(1);
     CreatePlayerResetOriginals();
 }

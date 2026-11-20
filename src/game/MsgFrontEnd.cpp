@@ -1801,7 +1801,7 @@ void MsgTeamSelectUnloadPortraits(int side)
         void *pList = UIGLibraryGetGlobal(1);
         desc.mUnknown4 = 1;
         desc.mUnknown8 = _MsgTeamSelect_aiTeam[side];
-        fn_8008044C(&list, &desc, 0x54415453);
+        PlayerCursorOpen(&list, &desc, 0x54415453);
         if (DbCursorFirst((DbCursor *)&list)) {
             do {
                 UIGLibraryUnLoadItem(pList, 10, PlayerDbGetPortraitId(&list));
@@ -1819,7 +1819,7 @@ void MsgTeamSelectLoadPortraits(int side)
 
     desc.mUnknown4 = 1;
     desc.mUnknown8 = _MsgTeamSelect_aiTeam[side];
-    fn_8008044C(&list, &desc, 0x54415453);
+    PlayerCursorOpen(&list, &desc, 0x54415453);
     if (DbCursorFirst((DbCursor *)&list)) {
         do {
             UIGLibraryLoadItem(pList, 10, PlayerDbGetPortraitId(&list));
@@ -1848,7 +1848,7 @@ void MsgTeamSelectOpenRoster(unsigned char side)
     desc.mUnknown0 = 1;
     desc.mUnknown4 = 1;
     desc.mUnknown8 = _MsgTeamSelect_aiTeam[side];
-    fn_8008044C(pObject, &desc, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
+    PlayerCursorOpen(pObject, &desc, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
     _MsgTeamSelect_aiBrowseRow[side] = -1;
 }
 

@@ -226,7 +226,7 @@ void StoryEventsOpen(void)
 {
     _StoryEvents_State.mIndex = DbUserFindIndex(DbUserGetCurrent());
     _StoryEvents_pPlayerCursor = &_StoryEvents_PlayerCursor;
-    fn_8008044C(&_StoryEvents_PlayerCursor, 0, 0x54415453);
+    PlayerCursorOpen(&_StoryEvents_PlayerCursor, 0, 0x54415453);
     StevOpen();
     ExpLevelOpen();
     _StoryEvents_State.mUnknown2 = 0x7FFF;
@@ -1458,7 +1458,7 @@ void StoryEventsBuildPickupTables(int *pFirst, int *pSecond)
     {
         Object_8008044C object;
         int found = 0;
-        fn_8008044C(&object, 0, 0x54415453);
+        PlayerCursorOpen(&object, 0, 0x54415453);
         for (i = 0; i <= 12; i++) {
             if (PlayerDbSeekId(&object, ids[i], 0)) {
                 itgt[found++] = DbCursorGetInt(&object, 0x49544754);

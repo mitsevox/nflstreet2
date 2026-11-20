@@ -537,9 +537,9 @@ void SndgEventProcess(AudmonEvent_t *p)
         }
         break;
     case 14: case 21: case 38: case 71: case 91: case 93: case 99: case 111: case 121: case 122: break;
-    // FAKEMATCH: the empty case labels -1, 1, 16 and 19 leave no compare in the target; they only
+    // FAKEMATCH: the empty case labels 0, 1, 16 and 19 leave no compare in the target; they only
     // balance the compare tree like the target's (root 75, then 37 and 102) and change no result
-    case -1: case 1: case 16: case 19: break;
+    case 0: case 1: case 16: case 19: break;
     }
 }
 
@@ -893,9 +893,9 @@ int SndgEventGetFootstepSfx(int unused, int value)
     case 2: case 4: result = choice ? 36 : 38; break;
     case 1: case 10: result = 40; break;
     case 9: break;
-    // FAKEMATCH: the empty case labels -1 and 11 sit on the default arm; they only shape the
+    // FAKEMATCH: the empty surface labels 0 and 15 sit on the default arm; they only shape the
     // compare tree (the bounds checks after 1 and 10) and change no result
-    case -1: case 11:
+    case 0: case 15:
     default: result = 38; break;
     }
     return result;
@@ -908,11 +908,11 @@ int SndgEventGetSurfaceHitSfx(int a, int value)
         return 108;
     case 9:
         return 111;
-    // FAKEMATCH: the empty case labels -1, 1 and 11 sit on the default arm; they only shape the
+    // FAKEMATCH: the empty surface labels 0, 1 and 15 sit on the default arm; they only shape the
     // compare tree (root 3, then 10, then 9) and change no result
-    case -1:
+    case 0:
     case 1:
-    case 11:
+    case 15:
     case 3:
     default:
         return 105;
@@ -923,6 +923,8 @@ int SndgEventGetSurfaceSfx(int value)
 {
     int result = 42;
     switch (value) {
+    // FAKEMATCH: the empty case labels 5 and 7 (surface ids the target sends to the default 44)
+    // leave no compare in the target; they only move the compare tree root to 4 and change no result
     case 0:
     case 1:
     case 5:

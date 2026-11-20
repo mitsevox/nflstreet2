@@ -1749,7 +1749,7 @@ int fn_800F2CB4(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimC
 }
 
 extern "C" {
-int fn_80102A78(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
+int PlayerPassAnimFacingCallback(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 }
 
@@ -7536,7 +7536,7 @@ extern "C" void fn_800BED54(unsigned char index);
 
 extern "C" void fn_800BEFAC(int index);
 
-extern "C" void fn_800BF07C(void);
+extern "C" void PreSnapInitPickTime(void);
 
 extern "C" void fn_800BF174(void);
 
@@ -12145,7 +12145,7 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
     Vector_80039F5C spin;
     Vector_80039F5C toReach;
     Vector_80039F5C reach;
-    Vec2_t toBall;
+    Vec2_t toBall; // the target reserves 8 bytes here: Vec2Sub's third float lands in turn's slot, and turn is assigned afterwards
     int turn;
     float time;
     float reachLength;
@@ -25588,7 +25588,7 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[203] = PlayerActionAnimIdlePhase;
     lbl_8030FB60[193] = PlayerLocoHandleMomentumState;
     lbl_8030FB60[157] = PlayerActionAnimSpeedBlendPhase;
-    lbl_8030FB60[236] = fn_80102A78;
+    lbl_8030FB60[236] = PlayerPassAnimFacingCallback;
     lbl_8030FB60[86] = PlayerActionAnimReactionPhase;
     lbl_8030FB60[176] = fn_8010D834;
     lbl_8030FB60[68] = fn_800F2CB4;
@@ -25602,8 +25602,8 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[159] = PlayerActionAnimSpeedBlendPhase;
     lbl_8030FB60[67] = fn_8009A344;
     lbl_8030FB60[227] = fn_8009A344;
-    lbl_8030FB60[69] = fn_80102A78;
-    lbl_8030FB60[178] = fn_80102A78;
+    lbl_8030FB60[69] = PlayerPassAnimFacingCallback;
+    lbl_8030FB60[178] = PlayerPassAnimFacingCallback;
     lbl_8030FB60[85] = PlayerActionAnimReactionPhase;
     lbl_8030FB60[37] = fn_8010D834;
     lbl_8030FB60[100] = PlayerActionAnimTurnInPlacePhase;
@@ -30347,7 +30347,7 @@ extern "C" void fn_800BEFAC(int index)
     }
 }
 
-extern "C" void fn_800BF07C(void)
+extern "C" void PreSnapInitPickTime(void)
 {
     short value = 0;
     int mode = lbl_803EABA8->mUnknown40;
@@ -30773,7 +30773,7 @@ void PreSnapPhase::OnEnter(float dt)
     lbl_803EABA8->mUnknownC4 = 0;
     lbl_803EABA8->mUnknownC5 = 0;
     lbl_803EABA8->mUnknownC6 = 1;
-    fn_800BF07C();
+    PreSnapInitPickTime();
     lbl_803EABA8->mUnknownA0 = 120;
     lbl_803EABA8->mUnknown44 = -1;
     lbl_803EABA8->mUnknownA8 = 0;

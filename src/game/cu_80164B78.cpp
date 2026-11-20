@@ -386,7 +386,7 @@ void fn_80166110(PlayArtVertex_t *points, PlayArtVertex_t *out, int width, int l
     out[3].mY = out[1].mY + direction.mY;
 }
 
-int fn_801662A8(PlayArtVertex_t *out, int count, int, PlayArtVertex_t *quad)
+int PlayArtAddQuad(PlayArtVertex_t *out, int count, int, PlayArtVertex_t *quad)
 {
     out[count++] = quad[0];
     out[count++] = quad[1];
@@ -445,7 +445,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
             if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
             ends[i+1] = controls[1];
             fn_801660A0(controls, strip, width);
-            count = fn_801662A8(vertices, count, capacity, strip);
+            count = PlayArtAddQuad(vertices, count, capacity, strip);
             if (fabsf(controls[0].mX - controls[1].mX) != zero.mX || fabsf(controls[0].mY - controls[1].mY) != zero.mY) drawn = 1;
         } else if (step->mUnknown10 == 2) {
             for (int j = 0; j < 2; ++j) {
@@ -456,7 +456,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
                 if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
                 ends[i+1] = controls[1];
                 fn_801660A0(controls, strip, width);
-                count = fn_801662A8(vertices, count, capacity, strip);
+                count = PlayArtAddQuad(vertices, count, capacity, strip);
                 if (fabsf(controls[0].mX - controls[1].mX) != zero.mX || fabsf(controls[0].mY - controls[1].mY) != zero.mY) drawn = 1;
             }
         } else if (step->mUnknown10 == -1) stop = 1;
@@ -469,7 +469,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
                 if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
                 ends[i+1] = controls[1];
                 fn_801660A0(controls, strip, width);
-                count = fn_801662A8(vertices, count, capacity, strip);
+                count = PlayArtAddQuad(vertices, count, capacity, strip);
             }
             PlayArtVertex_t axis[2];
             if (step->mUnknown10 == 1) {axis[0] = controls[2]; axis[1] = controls[1];}

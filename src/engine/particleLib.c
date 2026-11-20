@@ -769,7 +769,7 @@ static unsigned int PSysRenderCalcParticleFrame(AnimTex_t *pTex, PartObj_801DE1E
     return frame;
 }
 
-void fn_801DF064(Vec4_801DE1E0 *pColor, PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle)
+void PSysRenderCalcParticleColor(Vec4_801DE1E0 *pColor, PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle)
 {
     float fadeOut;
 

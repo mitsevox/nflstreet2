@@ -95,7 +95,7 @@ void fn_80221D5C(Text_80221BF0 *pText);
 Range_80221D30 *fn_80221D30(Text_80221BF0 *pText, Uint8 Index);
 void fn_80221DB0(Text_80221BF0 *pText);
 
-void fn_80221BF0(Text_80221BF0 *pText, Int32 Offset, Int32 *pA, Int32 *pB)
+void UIGTextGetCursorPos(Text_80221BF0 *pText, Int32 Offset, Int32 *pA, Int32 *pB)
 {
     Font_t **ppFont;
     Range_80221D30 *pRange = NULL;
@@ -298,11 +298,11 @@ void fn_80221DB0(Text_80221BF0 *pText)
 }
 
 void fn_80222764(Text_80221BF0 *pText);
-void fn_802227B0(Text_80221BF0 *pText);
+void UIGLibTextDraw(Text_80221BF0 *pText);
 void fn_80222E0C(Text_80221BF0 *pText);
 void fn_80222E54(Buffer_80222E54 *pDst, Buffer_80222E54 *pSrc);
 
-void fn_80222220(Text_80221BF0 *pText, Uint32 Msg, Int32 Unused, void *pData, void *pOut)
+void UIGLibTextObjAction(Text_80221BF0 *pText, Uint32 Msg, Int32 Unused, void *pData, void *pOut)
 {
     switch (Msg) {
     case -1:
@@ -310,7 +310,7 @@ void fn_80222220(Text_80221BF0 *pText, Uint32 Msg, Int32 Unused, void *pData, vo
         fn_80222764(pText);
         break;
     case -2:
-        fn_802227B0(pText);
+        UIGLibTextDraw(pText);
         break;
     case -3:
         fn_80222E0C(pText);
@@ -419,7 +419,7 @@ void fn_80222220(Text_80221BF0 *pText, Uint32 Msg, Int32 Unused, void *pData, vo
         Int32 X;
         Int32 Y;
 
-        fn_80221BF0(pText, *(Int32 *)pData, &X, &Y);
+        UIGTextGetCursorPos(pText, *(Int32 *)pData, &X, &Y);
         *(Float32 *)pOut = X;
         break;
     }
@@ -427,7 +427,7 @@ void fn_80222220(Text_80221BF0 *pText, Uint32 Msg, Int32 Unused, void *pData, vo
         Int32 X;
         Int32 Y;
 
-        fn_80221BF0(pText, *(Int32 *)pData, &X, &Y);
+        UIGTextGetCursorPos(pText, *(Int32 *)pData, &X, &Y);
         *(Float32 *)pOut = Y;
         break;
     }
@@ -492,7 +492,7 @@ void fn_80222764(Text_80221BF0 *pText)
     fn_80221DB0(pText);
 }
 
-void fn_802227B0(Text_80221BF0 *pText)
+void UIGLibTextDraw(Text_80221BF0 *pText)
 {
     FontColor_t Color;
     Float32 Pos[3];

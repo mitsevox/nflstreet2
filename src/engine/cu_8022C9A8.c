@@ -124,7 +124,7 @@ extern char lbl_802B4A54[];
 extern char lbl_802B4A9C[];
 extern char lbl_802B4AE0[];
 void fn_8022C9B8(void *pPairs);
-void fn_8022CED8(void);
+void DbAssignPendingNodeIds(void);
 int fn_8022D5A4(int key, int mode);
 int fn_8022D710(int a, int b, int c, int row, int value);
 unsigned short fn_8022D6FC(int index);
@@ -549,7 +549,7 @@ int fn_8022D6E8(void);
 void fn_8022D6F0(void);
 unsigned short fn_8022D6FC(int index);
 int fn_8022D710(int a, int b, int c, int row, int value);
-int fn_8022D834(int row, int column);
+int DbTableLookupByte(int row, int column);
 int fn_8022D864(int a, int b, int c, int d);
 int fn_8022D86C(int a, int b, int c, int d);
 int fn_8022D874(int a, int b, int c, int key);
@@ -567,10 +567,10 @@ int fn_8022DD18(int value);
 int fn_8022DD4C(int value);
 int fn_8022DD80(int value);
 int fn_8022DDB4(int a, void *p);
-int fn_8022DDBC(int a, int *pOutA, int *pOutB);
+int DbUpdateSettingsRecord(int a, int *pOutA, int *pOutB);
 int fn_8022E21C(int a, int b);
-int fn_8022E28C(int a, int b, unsigned char *pDone, int *pC, int *pD);
-int fn_8022E484(void);
+int DbRunUpdateChain(int a, int b, unsigned char *pDone, int *pC, int *pD);
+int DbRunLoadChain(void);
 int fn_8022E558(void);
 int fn_8022E560(void);
 int fn_8022E568(void);
@@ -841,7 +841,7 @@ void fn_8022CDF8(void)
     } while (err == 0);
 }
 
-void fn_8022CED8(void)
+void DbAssignPendingNodeIds(void)
 {
     Node_8022CC6C *p;
     int found;
@@ -899,7 +899,7 @@ void fn_8022CED8(void)
             }
             if (done == 1) {
                 p->mUnknown6++;
-                next = fn_8022D834(p->mUnknown4, p->mUnknown6);
+                next = DbTableLookupByte(p->mUnknown4, p->mUnknown6);
                 if (next == 31) {
                     if (p->mUnknown3 != 0) {
                         p->mUnknown0 = p->mUnknown3 - 1;
@@ -995,7 +995,7 @@ int fn_8022D268(int a, int b, int c, void *pPairs, int action, int mode)
         fn_8022CDF8();
         break;
     case 4:
-        fn_8022CED8();
+        DbAssignPendingNodeIds();
         break;
     }
     return 0;
@@ -1143,7 +1143,7 @@ int fn_8022D710(int a, int b, int c, int row, int value)
     return result;
 }
 
-int fn_8022D834(int row, int column)
+int DbTableLookupByte(int row, int column)
 {
     if ((unsigned short)column > 9) {
         return 31;
@@ -1318,7 +1318,7 @@ typedef struct Record_8022DDBC {
     int mUnknown6C;
 } Record_8022DDBC;
 
-int fn_8022DDBC(int a, int *pOutA, int *pOutB)
+int DbUpdateSettingsRecord(int a, int *pOutA, int *pOutB)
 {
     Record_8022DDBC rec;
     int v200;
@@ -1450,7 +1450,7 @@ int fn_8022E21C(int a, int b)
     }
 }
 
-int fn_8022E28C(int a, int b, unsigned char *pDone, int *pC, int *pD)
+int DbRunUpdateChain(int a, int b, unsigned char *pDone, int *pC, int *pD)
 {
     int keyA;
     int keyB;
@@ -1462,7 +1462,7 @@ int fn_8022E28C(int a, int b, unsigned char *pDone, int *pC, int *pD)
     err = 0;
     flag = 1;
     if (a == 0) {
-        err = fn_8022DDBC(b, &keyA, &keyB);
+        err = DbUpdateSettingsRecord(b, &keyA, &keyB);
         if (err == 0 && lbl_803EC078 == 1 && lbl_803EC06C != 0) {
             err = lbl_803EC06C(keyA, keyB, &flag);
         }
@@ -1502,7 +1502,7 @@ int fn_8022E28C(int a, int b, unsigned char *pDone, int *pC, int *pD)
     return err;
 }
 
-int fn_8022E484(void)
+int DbRunLoadChain(void)
 {
     int a;
     int b;

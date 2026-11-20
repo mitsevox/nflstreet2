@@ -363,8 +363,8 @@ extern void fn_8022DB08(void);
 extern int fn_8022DB20(void);
 extern int fn_8022DBF4(int a);
 extern int fn_8022DC38(int a);
-extern int fn_8022E28C(int a, int b, unsigned char *p, int *pA, int *pB);
-extern int fn_8022E484(void);
+extern int DbRunUpdateChain(int a, int b, unsigned char *p, int *pA, int *pB);
+extern int DbRunLoadChain(void);
 extern int fn_8022E9A4(void);
 extern void fn_8022E9C4(void);
 extern int fn_8022E9E4(void);
@@ -375,7 +375,7 @@ extern signed char DbUserFindIndex(int key);
 extern int DbUserGetDb(int key);
 extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
 extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int f);
-extern void fn_802349CC(void *p);
+extern void ScaleBlockReset(void *p);
 extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
 extern void fn_80236F00(void);
 
@@ -979,7 +979,7 @@ int DbManagerEnterMode2(int *pRecord0, int *pRecord1)
                     TDbCompilePerformOp(0, lbl_802B6FB0, &pRecord1[i], pRecord1[i], id1);
                 }
                 if (err == 0) {
-                    err = fn_8022E28C(flag, 0, &result, pRecord0, pRecord1);
+                    err = DbRunUpdateChain(flag, 0, &result, pRecord0, pRecord1);
                 }
             }
         }
@@ -1068,7 +1068,7 @@ int DbManagerMode2Finish(void)
 
     if (err == 0) {
         if (mode == 6) {
-            err = fn_8022E484();
+            err = DbRunLoadChain();
         }
         if (err == 0) {
             err = fn_8022DB20();

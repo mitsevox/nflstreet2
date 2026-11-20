@@ -326,7 +326,7 @@ void CreateTeamCopyStylePlayers(int index, int team, int rumt)
         FMCAPPORTValues values;
         FMCAPPORTText text60, text20;
         int resultIds[2], unknown52, unknown56;
-        fn_8008044C(&object, 0, 0x54415453);
+        PlayerCursorOpen(&object, 0, 0x54415453);
         PlayerDbSeekId(&object, ids[i], 0);
         int value6E = PlayerDbGetHairStyle(&object);
         int value6C = PlayerDbGetPlht(&object);

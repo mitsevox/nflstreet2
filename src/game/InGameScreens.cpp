@@ -2381,7 +2381,7 @@ void InGameLeaderOpen(int team)
 {
     Desc_8008044C desc;
     desc.mUnknown4=1; desc.mUnknown8=team;
-    fn_8008044C(&_InGameScreens_LeaderCursor,&desc,0x454D4147);
+    PlayerCursorOpen(&_InGameScreens_LeaderCursor,&desc,0x454D4147);
     lbl_80309FC4[team].mUnknown4=0; lbl_80309FC4[team].mUnknown0=-3.4028234663852886e38f;
     for(int i=11;i>=0;i--) lbl_80309FC4[team].mStats[i]=0;
     for(int i=0;i<11;i++) {lbl_80309FC4[team].mIndices[i]=i;lbl_80309FC4[team].mValues[i]=0.0f;}

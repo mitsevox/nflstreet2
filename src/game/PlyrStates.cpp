@@ -512,7 +512,7 @@ void fn_8010D090(void);
 void fn_8010D6D4(void);
 void fn_8010D734(void);
 void fn_8010F43C(void);
-void fn_8010F654(void);
+void PlyrTrackTargetUpdate(void);
 void fn_8010FB10(void);
 void fn_8010FB4C(void);
 void fn_8010FC40(void);
@@ -616,7 +616,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)DirectedRunEnter, (void *)fn_800F0900, (void *)DirectedRunUpdate, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_800FD708}},
     {{(void *)fn_80133C50, (void *)fn_80134370, (void *)fn_80133EE8, (void *)fn_801343AC, (void *)fn_800F0908, 0}},
     {{(void *)PlyrEngageEnter, (void *)PlyrEngageExit, (void *)PlyrEngageUpdate, (void *)PlyrEngageInput, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8010F43C, (void *)fn_8010FB10, (void *)fn_8010F654, (void *)fn_8010FB4C, (void *)fn_800F0908, 0}},
+    {{(void *)fn_8010F43C, (void *)fn_8010FB10, (void *)PlyrTrackTargetUpdate, (void *)fn_8010FB4C, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F23EC, (void *)fn_800F0900, (void *)fn_800F24D8, (void *)fn_800F268C, (void *)fn_800F0908, 0}},
     {{(void *)fn_801108D4, (void *)fn_800F0900, (void *)fn_801109A4, (void *)fn_80110B00, (void *)fn_800F0908, 0}},
     {{(void *)CarrierMoveEnter, (void *)CarrierMoveExit, (void *)CarrierMoveUpdate, (void *)CarrierMoveInput, (void *)fn_800F0908, 0}},

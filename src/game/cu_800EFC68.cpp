@@ -3546,7 +3546,7 @@ extern "C" void fn_800FF6D8(Object_80039F5C *p);
 extern "C" void fn_800FF868(Object_80039F5C *p,State_800FFDFC *,Object_80039F5C *other);
 extern "C" void fn_800FF8FC(Object_80039F5C *p, float *out);
 extern "C" int fn_800FFA10(Object_80039F5C *p, Object_80039F5C *other);
-extern "C" void fn_800FFB4C(Object_80039F5C *p, Object_80039F5C *other, float *value, Point_8017886C *out);
+extern "C" void PlyrCalcCarrierOffsetPoint(Object_80039F5C *p, Object_80039F5C *other, float *value, Point_8017886C *out);
 extern "C" void fn_800FFD2C(Object_80039F5C *p, Point_8017886C *point);
 extern "C" int fn_800FFFB0(Object_80039F5C *p);
 extern "C" int fn_80100024(Object_80039F5C *p, int angle, int mode);
@@ -7954,7 +7954,7 @@ extern "C" Object_80039F5C *fn_800F9AF0(unsigned char slot) {
     return p;
 }
 
-extern "C" Object_80039F5C *fn_800F9BD8(int forward, Object_80039F5C *p) {
+extern "C" Object_80039F5C *AssignGetNextSlotPlayer(int forward, Object_80039F5C *p) {
     Record_8011F4E0 *pRecord;
     Object_80039F5C *pResult = 0;
     int id = 0;
@@ -8620,7 +8620,7 @@ extern "C" void fn_800FAECC(void) {
                 Object_80039F5C *pSlot = 0;
                 int done = 0;
                 while (!done && tries <= 2) {
-                    pSlot = fn_800F9BD8(forward, pSlot);
+                    pSlot = AssignGetNextSlotPlayer(forward, pSlot);
                     tries++;
                     if (!pSlot) {
                         done = 1;
@@ -10594,10 +10594,10 @@ int fn_800FFA10(Object_80039F5C *p, Object_80039F5C *other)
 }
 
 extern "C" {
-// FAKEMATCH: empty release form of a debug hook (stripped debug code); only fn_800FFB4C calls it.
+// FAKEMATCH: empty release form of a debug hook (stripped debug code); only PlyrCalcCarrierOffsetPoint calls it.
 static inline void _DebugPoint(Point_8017886C *) {}
 
-void fn_800FFB4C(Object_80039F5C *p, Object_80039F5C *other, float *value, Point_8017886C *out)
+void PlyrCalcCarrierOffsetPoint(Object_80039F5C *p, Object_80039F5C *other, float *value, Point_8017886C *out)
 {
     float factor;
 
@@ -10701,7 +10701,7 @@ extern "C" int fn_800FFE30(Object_80039F5C *p)
         }
         if (fn_800FFA10(p, pOther) != 0) {
             if (!(p->mFlags & 0x4000)) {
-                fn_800FFB4C(p, pOther, &pState->mUnknown4, &point);
+                PlyrCalcCarrierOffsetPoint(p, pOther, &pState->mUnknown4, &point);
                 fn_800FFD2C(p, &point);
                 fn_800FF868(p, pState, pOther);
             }
@@ -11839,7 +11839,7 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_80102A78(List_801018B4_80102A78 *pList, unsigned short animation, void *pData, AnimChannel_t *pEntries,
+extern "C" int PlayerPassAnimFacingCallback(List_801018B4_80102A78 *pList, unsigned short animation, void *pData, AnimChannel_t *pEntries,
                            Object_80039F5C *p, unsigned int mode)
 {
     Entry_801018B4_80102A78 *pEntry = 0;
@@ -16809,7 +16809,7 @@ extern "C" int fn_8010F43C(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_8010F654(Object_80039F5C *p)
+extern "C" int PlyrTrackTargetUpdate(Object_80039F5C *p)
 {
     int result = 0;
     Ball_t *pBall = BallGetCurrent();

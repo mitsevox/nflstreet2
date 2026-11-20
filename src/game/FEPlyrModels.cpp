@@ -109,7 +109,7 @@ void MatStoreSlot(int a);
 void MatCatSlot(int a);
 FEPlyrScene_t *ObjNew(int a, int b, FEPlyrSceneDesc_t *pDesc);
 void Vec3RotateZYX(float *pOut, float *pIn, int a, int b, int c);
-void fn_80234424(int a);
+void ModelLodBalance(int a);
 }
 
 static Object_8008044C _FEPlyr_PlayerCursor;
@@ -293,7 +293,7 @@ static void _FEPlyrDrawModel(int index, float a, float b, float c, float d)
     MatCatSlot(2);
     MatStoreSlot(6);
     MatPop();
-    fn_80234424(0);
+    ModelLodBalance(0);
     PlayerObjDraw(pObject, 1);
     if (_FEPlyr_bPairMode ? index == _FEPlyr_iFrontIndex : index == 0) {
         if (FEPlyrLoadIsShown(pObject)) {
@@ -350,7 +350,7 @@ void FEPlyrInit(int count)
     FEPlyrSceneDesc_t desc;
     FEPlyrScene_t *pView;
 
-    fn_8008044C(&_FEPlyr_PlayerCursor, 0, 0x54415453);
+    PlayerCursorOpen(&_FEPlyr_PlayerCursor, 0, 0x54415453);
     _FEPlyr_iCount = count;
     VptPerspective(_FEPlyr_Projection, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
     fn_8008FCB4(0);

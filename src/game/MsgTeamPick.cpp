@@ -1238,7 +1238,7 @@ int MsgTeamPickInit(int *pController, int *pCount)
     if (fn_801485D4()) {
         fn_80148AF8(fn_80148A58());
     }
-    fn_8008044C(&_MsgTeamPick_PlayerCursor, 0, 0x54415453);
+    PlayerCursorOpen(&_MsgTeamPick_PlayerCursor, 0, 0x54415453);
     TeamDbOpen(&_MsgTeamPick_TeamCursor, 0, 0x54415453);
 
     if (MsgGameGetSetupState() == 1) {

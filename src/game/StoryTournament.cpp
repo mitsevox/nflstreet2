@@ -190,7 +190,7 @@ void StoryTournamentOpenDbs(void)
 {
     _StoryTournament_State.mIndex = DbUserFindIndex(DbUserGetCurrent());
     _StoryTournament_pPlayerDb = &_StoryTournament_PlayerDb;
-    fn_8008044C(&_StoryTournament_PlayerDb, 0, 0x54415453);
+    PlayerCursorOpen(&_StoryTournament_PlayerDb, 0, 0x54415453);
     StevOpen();
     ExpLevelOpen();
     _StoryTournament_State.mUnknown2 = 0x7FFF;

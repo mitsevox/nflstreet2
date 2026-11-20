@@ -4184,7 +4184,7 @@
           "end": "0x800F9BD8"
         },
         {
-          "symbol": "fn_800F9BD8",
+          "symbol": "AssignGetNextSlotPlayer",
           "start": "0x800F9BD8",
           "end": "0x800F9CAC"
         },
@@ -4524,7 +4524,7 @@
           "end": "0x800FFB4C"
         },
         {
-          "symbol": "fn_800FFB4C",
+          "symbol": "PlyrCalcCarrierOffsetPoint",
           "start": "0x800FFB4C",
           "end": "0x800FFD2C"
         },
@@ -4694,7 +4694,7 @@
           "end": "0x80102A78"
         },
         {
-          "symbol": "fn_80102A78",
+          "symbol": "PlayerPassAnimFacingCallback",
           "start": "0x80102A78",
           "end": "0x80102D78"
         },
@@ -5319,7 +5319,7 @@
           "end": "0x8010F654"
         },
         {
-          "symbol": "fn_8010F654",
+          "symbol": "PlyrTrackTargetUpdate",
           "start": "0x8010F654",
           "end": "0x8010FB10"
         },
@@ -10126,7 +10126,7 @@
           "end": "0x800451D0"
         },
         {
-          "symbol": "fn_800451D0",
+          "symbol": "PlaDynClutFillRange",
           "start": "0x800451D0",
           "end": "0x800452F8"
         },
@@ -11365,7 +11365,7 @@
           "end": "0x8007FC70"
         },
         {
-          "symbol": "fn_8007FC70",
+          "symbol": "PlayerRecordCreate",
           "start": "0x8007FC70",
           "end": "0x8007FE04"
         },
@@ -11380,7 +11380,7 @@
           "end": "0x8007FEB8"
         },
         {
-          "symbol": "fn_8007FEB8",
+          "symbol": "PlayerCursorOpenByPlig",
           "start": "0x8007FEB8",
           "end": "0x8007FF30"
         },
@@ -11410,7 +11410,7 @@
           "end": "0x8008044C"
         },
         {
-          "symbol": "fn_8008044C",
+          "symbol": "PlayerCursorOpen",
           "start": "0x8008044C",
           "end": "0x8008056C"
         },
@@ -17515,7 +17515,7 @@
           "end": "0x800BF07C"
         },
         {
-          "symbol": "fn_800BF07C",
+          "symbol": "PreSnapInitPickTime",
           "start": "0x800BF07C",
           "end": "0x800BF174"
         },
@@ -19811,7 +19811,7 @@
           "end": "0x8022D834"
         },
         {
-          "symbol": "fn_8022D834",
+          "symbol": "DbTableLookupByte",
           "start": "0x8022D834",
           "end": "0x8022D864"
         },
@@ -19966,22 +19966,22 @@
           "end": "0x8022EA74"
         },
         {
-          "symbol": "fn_8022CED8",
+          "symbol": "DbAssignPendingNodeIds",
           "start": "0x8022CED8",
           "end": "0x8022D14C"
         },
         {
-          "symbol": "fn_8022DDBC",
+          "symbol": "DbUpdateSettingsRecord",
           "start": "0x8022DDBC",
           "end": "0x8022E21C"
         },
         {
-          "symbol": "fn_8022E28C",
+          "symbol": "DbRunUpdateChain",
           "start": "0x8022E28C",
           "end": "0x8022E484"
         },
         {
-          "symbol": "fn_8022E484",
+          "symbol": "DbRunLoadChain",
           "start": "0x8022E484",
           "end": "0x8022E558"
         }
@@ -20091,7 +20091,7 @@
           "end": "0x80230D8C"
         },
         {
-          "symbol": "fn_8022FEF8",
+          "symbol": "DbCacheWriteColumnKeys",
           "start": "0x8022FEF8",
           "end": "0x8022FFD0"
         },
@@ -20717,17 +20717,17 @@
           "end": "0x80233BB8"
         },
         {
-          "symbol": "fn_80234424",
+          "symbol": "ModelLodBalance",
           "start": "0x80234424",
           "end": "0x802345BC"
         },
         {
-          "symbol": "fn_8023491C",
+          "symbol": "FloatArrayAlloc",
           "start": "0x8023491C",
           "end": "0x80234994"
         },
         {
-          "symbol": "fn_802349CC",
+          "symbol": "ScaleBlockReset",
           "start": "0x802349CC",
           "end": "0x80234A14"
         }
@@ -22452,7 +22452,7 @@
           "end": "0x80197FDC"
         },
         {
-          "symbol": "fn_80197FDC",
+          "symbol": "GlowDraw",
           "start": "0x80197FDC",
           "end": "0x801981D8"
         }
@@ -22670,7 +22670,7 @@
           "end": "0x801662A8"
         },
         {
-          "symbol": "fn_801662A8",
+          "symbol": "PlayArtAddQuad",
           "start": "0x801662A8",
           "end": "0x8016631C"
         },
@@ -27496,17 +27496,17 @@
           "end": "0x80223224"
         },
         {
-          "symbol": "fn_80223224",
+          "symbol": "UIGCurveBuildStrip",
           "start": "0x80223224",
           "end": "0x802233DC"
         },
         {
-          "symbol": "fn_802233DC",
+          "symbol": "UIGCurveGetPoint",
           "start": "0x802233DC",
           "end": "0x80223460"
         },
         {
-          "symbol": "fn_80223460",
+          "symbol": "UIGCurveObjAction",
           "start": "0x80223460",
           "end": "0x80223874"
         },
@@ -28024,7 +28024,7 @@
           "end": "0x801DF064"
         },
         {
-          "symbol": "fn_801DF064",
+          "symbol": "PSysRenderCalcParticleColor",
           "start": "0x801DF064",
           "end": "0x801DF184"
         },
@@ -28385,7 +28385,7 @@
           "end": "0x801D1474"
         },
         {
-          "symbol": "fn_801D1474",
+          "symbol": "_BuildHeapAddrTable",
           "start": "0x801D1474",
           "end": "0x801D1588"
         },
@@ -30714,12 +30714,12 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801CD79C",
+          "symbol": "_FontLLSetupGlyph",
           "start": "0x801CD79C",
           "end": "0x801CD964"
         },
         {
-          "symbol": "fn_801CD964",
+          "symbol": "_FontLLRender",
           "start": "0x801CD964",
           "end": "0x801CDB5C"
         },
@@ -31143,7 +31143,7 @@
           "end": "0x801B3234"
         },
         {
-          "symbol": "fn_801B3234",
+          "symbol": "PATHI_findnodedata",
           "start": "0x801B3234",
           "end": "0x801B3268"
         },
@@ -34596,7 +34596,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80221BF0",
+          "symbol": "UIGTextGetCursorPos",
           "start": "0x80221BF0",
           "end": "0x80221D30"
         },
@@ -34631,12 +34631,12 @@
           "end": "0x80222EC4"
         },
         {
-          "symbol": "fn_80222220",
+          "symbol": "UIGLibTextObjAction",
           "start": "0x80222220",
           "end": "0x80222764"
         },
         {
-          "symbol": "fn_802227B0",
+          "symbol": "UIGLibTextDraw",
           "start": "0x802227B0",
           "end": "0x80222E0C"
         }
