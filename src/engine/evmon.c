@@ -136,16 +136,16 @@ void fn_80238680(int index, AudmonEventFn_t callback)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     unsigned int i;
-    for (i = 0; i < p->mUnknown12 && p->mpUnknown16[i] != 0; i++) {
+    for (i = 0; i < p->mUnknown12 && ((AudmonEventFn_t *)p)[i + 4] != 0; i++) {
     }
-    p->mpUnknown16[i] = callback;
+    ((AudmonEventFn_t *)p)[i + 4] = callback;
 }
 
 void fn_802386DC(int index, AudmonEventFn_t callback)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     unsigned int i;
-    for (i = 0; i < p->mUnknown12 && p->mpUnknown16[i] != callback; i++) {
+    for (i = 0; i < p->mUnknown12 && ((AudmonEventFn_t *)p)[i + 4] != callback; i++) {
     }
-    p->mpUnknown16[i] = 0;
+    ((AudmonEventFn_t *)p)[i + 4] = 0;
 }

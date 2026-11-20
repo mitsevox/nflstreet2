@@ -658,15 +658,17 @@ int fn_8022ED50(int db, int a, int b)
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
         status = fn_801FCE10(0, lbl_802B5CB4, db, &cursor, a, b, 1);
-        pTbl = &tbl;
-        while (status == 0) {
-            status = fn_801FCE10(0, lbl_802B5CF0, &cursor, pTbl);
-            if (status == 0 && fn_801F9A90(db, tbl) != 0) {
-                status = fn_8022ECF4(db, tbl);
-                if (QUERY_STATUS_ACCEPTED(status) == 1) {
-                    status = 0;
+        if (status == 0) {
+            pTbl = &tbl;
+            do {
+                status = fn_801FCE10(0, lbl_802B5CF0, &cursor, pTbl);
+                if (status == 0 && fn_801F9A90(db, tbl) != 0) {
+                    status = fn_8022ECF4(db, tbl);
+                    if (QUERY_STATUS_ACCEPTED(status) == 1) {
+                        status = 0;
+                    }
                 }
-            }
+            } while (status == 0);
         }
         if (QUERY_STATUS_ACCEPTED(status) == 1) {
             if (cursor.mUnknown0 != 0) {

@@ -95,9 +95,9 @@ int SyncTimeCompareState(void *p, void *q)
 int fn_802376D8(void *p, void *pBuffer)
 {
     Timer_80237780 *pTimer = p;
-    TimerState_80237728 *pOut = pBuffer;
-    pOut->mUnknown0 = *pTimer;
-    *(Counter_80237934 *)((char *)pBuffer + 64) = *pTimer->mpUnknown12;
+    *(Timer_80237780 *)pBuffer = *pTimer;
+    pBuffer = (char *)pBuffer + 64;
+    *(Counter_80237934 *)pBuffer = *pTimer->mpUnknown12;
     return 1;
 }
 

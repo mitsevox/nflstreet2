@@ -75,7 +75,7 @@ float fn_8011F4D4(void);
 int fn_801650DC(PlayBookPlay_t *pRecord);
 int fn_8011E9D8(void *);
 void fn_800F0910(int, void *);
-unsigned char fn_800FC014(Object_80039F5C *, void *);
+int fn_800FC014(Object_80039F5C *, void *);
 Object_80039F5C *fn_800FC070(Object_80039F5C *, void *);
 void fn_8009E9EC(int, int, Point_8017886C *);
 float fn_80178A08(void);
@@ -183,9 +183,14 @@ void fn_8015A6E0(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
     fn_8015A588(p, 0, pPoint, &length, &angle);
 }
 
+struct PlayCommand_8015BCAC {
+    unsigned char mType;
+    unsigned char mArgs[3];
+};
+
 void fn_8015A818(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pPoint)
 {
-    unsigned char command[4];
+    PlayCommand_8015BCAC command;
     Object_80039F5C *pPlayer = p->mpUnknown208;
     Point_8017886C origin;
     origin = fn_80177FE0();
@@ -195,14 +200,14 @@ void fn_8015A818(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
     case 254:
         return;
     case 253:
-        memset(command, 0, 4);
-        command[0] = 3; command[1] = 24; command[2] = 96;
-        fn_8015A588(p, command, pPoint, 0, 0);
+        memset(&command, 0, 4);
+        command.mType = 3; command.mArgs[0] = 24; command.mArgs[1] = 96;
+        fn_8015A588(p, &command.mType, pPoint, 0, 0);
         return;
     case 0:
-        memset(command, 0, 4);
-        command[0] = 3; command[1] = 24; command[2] = 32;
-        fn_8015A588(p, command, pPoint, 0, 0);
+        memset(&command, 0, 4);
+        command.mType = 3; command.mArgs[0] = 24; command.mArgs[1] = 32;
+        fn_8015A588(p, &command.mType, pPoint, 0, 0);
         return;
     }
     Object_80039F5C *pOther = fn_800FC070(pPlayer, pCommand);
@@ -489,6 +494,7 @@ void fn_8015B834(Object_8015C244 *p, unsigned char *pCommand, int hasOther)
 void fn_8015BCAC(Object_8015C244 *p)
 {
     Object_80039F5C *pPlayer = p->mpUnknown208;
+    PlayCommand_8015BCAC command;
     ArrowReset(p->mUnknown20);
     Vector_80039F5C point;
     point.mX = p->mUnknown68;
@@ -498,24 +504,24 @@ void fn_8015BCAC(Object_8015C244 *p)
     ArrowAddPoint(p->mUnknown20, &point);
     unsigned char *pCommand = p->mpUnknown76;
     int hasOther = fn_8011E9D8(pCommand);
-    unsigned char command[4];
-    int more;
+    unsigned char more;
     do {
-        *(unsigned int *)command = *(unsigned int *)pCommand;
-        command[0] &= 0x7f;
-        if (p->mUnknown81) fn_800F0910(0, command);
-        if (command[0]) {
-            more = ((pCommand[0] >> 7) ^ 1) & fn_8015B344(p, command, &point, hasOther);
+        command = *(PlayCommand_8015BCAC *)pCommand;
+        command.mType &= 0x7f;
+        if (p->mUnknown81) fn_800F0910(0, &command.mType);
+        if (command.mType) {
+            more = (pCommand[0] >> 7) ^ 1;
+            more &= fn_8015B344(p, &command.mType, &point, hasOther);
             pCommand += 4;
-            if (!pCommand[0]) more = 0;
+            more = pCommand[0] ? more : 0;
         } else more = 0;
     } while (more);
-    fn_8015B834(p, command, hasOther);
+    fn_8015B834(p, &command.mType, hasOther);
     PlayBookPlay_t *pRecord = PlayBookGetPlay(pPlayer->mIdBytes[2]);
     if (fn_801650DC(pRecord)) {
         for (unsigned char i = 0; i <= 2; ++i) {
-            if (pPlayer->mIdBytes[1] == pRecord->mUnknown1C[i][0]) {
-                unsigned short index = fn_800F06F4(0, p->mpUnknown76, 19, 0xffff);
+            if (pPlayer->mIdBytes[1] == *pRecord->mUnknown1C[i]) {
+                int index = fn_800F06F4(0, p->mpUnknown76, 19, 0xffff);
                 if (index == 0xffff && fn_800F06F4(0, p->mpUnknown76, 21, 0xffff) == index) continue;
                 switch (i) {
                 case 0: ArrowSetColor(p->mUnknown20, 205, 8, 16); break;

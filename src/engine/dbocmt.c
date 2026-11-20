@@ -607,7 +607,7 @@ int fn_80229270(void)
     int b;
     int c;
     unsigned char i;
-    int err;
+    int err = 0;
 
     i = 0;
     cursor.mUnknown0 = 0;

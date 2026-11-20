@@ -22,7 +22,7 @@
 #include "engine/dslist.h"
 
 typedef struct Chunk_80237D5C {
-    unsigned int mWords[16];
+    unsigned int mWords[4];
 } Chunk_80237D5C;
 
 void fn_80237D5C(void *pDst, const void *pSrc, unsigned int size);
@@ -180,15 +180,18 @@ void fn_80237D24(Object_80237EE8 *p)
 
 void fn_80237D5C(void *pDst, const void *pSrc, unsigned int size)
 {
-    char *pOut = pDst;
-    const char *pIn = pSrc;
-    while (size >= sizeof(Chunk_80237D5C)) {
-        *(Chunk_80237D5C *)pOut = *(const Chunk_80237D5C *)pIn;
-        pOut += sizeof(Chunk_80237D5C);
-        pIn += sizeof(Chunk_80237D5C);
-        size -= sizeof(Chunk_80237D5C);
+    while (size >= 64) {
+        ((Chunk_80237D5C *)pDst)[0] = ((const Chunk_80237D5C *)pSrc)[0];
+        ((Chunk_80237D5C *)pDst)[1] = ((const Chunk_80237D5C *)pSrc)[1];
+        ((Chunk_80237D5C *)pDst)[2] = ((const Chunk_80237D5C *)pSrc)[2];
+        ((Chunk_80237D5C *)pDst)[3] = ((const Chunk_80237D5C *)pSrc)[3];
+        pDst = (char *)pDst + 64;
+        pSrc = (const char *)pSrc + 64;
+        size -= 64;
     }
-    memcpy(pOut, pIn, size);
+    // FAKEMATCH: __builtin_memcpy for the tail; the file is -fno-builtin (its memset calls are plain), but the
+    // target calls memcpy through the block-move library call (crclr cr1eq at 0x80237E24).
+    __builtin_memcpy(pDst, pSrc, size);
 }
 
 void fn_80237E3C(int count)
