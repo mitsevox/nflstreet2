@@ -868,11 +868,10 @@ class Holdouts(Fixture):
                 self.held(manifest)
         with self.assertRaisesRegex(ValueError, "duplicate holdout"):
             self.held(self.held_manifest(functions=("b", "0x80003118")))
-        for key in ("folded", "kept_locals", "link_roots"):
+        for key in ("folded", "kept_locals"):
             manifest = self.held_manifest()
             value = "0x80003130" if key == "folded" else "0x80003110"
-            manifest["units"][0][key] = {"symbols": {"x": value}, "evidence": "x"} if key != "link_roots" \
-                else {"symbols": ["a"], "discarded": ["z"], "evidence": "x"}
+            manifest["units"][0][key] = {"symbols": {"x": value}, "evidence": "x"}
             with self.subTest(key=key), self.assertRaisesRegex(ValueError, f"cannot be combined with {key}"):
                 self.held(manifest)
         # Data placed after the code (follows) is refused with a message, not left to plan().
@@ -928,6 +927,7 @@ class Holdouts(Fixture):
         self.assertEqual(unit["object"].read_bytes(), native)
         self.assertEqual(unit["held"], {"dropped": [{"symbol": "b", "start": 0x80003118, "end": 0x80003120,
                                                      "compiled": 12}],
+                                        "discarded": {},
                                         "globals": {"b": 0x80003118},
                                         "linked": {"a": 0x80003110, "c": 0x80003120}})
         derived = unit["link_object"].read_bytes()
@@ -1024,6 +1024,114 @@ class Holdouts(Fixture):
         with patch.object(sb, "link_holdout") as linked:
             sb.check_holdouts(unit, *args[1:])
             linked.assert_not_called()
+
+    # Discarded functions: the existing link_roots.discarded practice combined with holdouts.
+    def discarded_manifest(self, discarded=("z",)):
+        manifest = self.held_manifest()
+        manifest["units"][0]["link_roots"] = {"discarded": list(discarded), "evidence": "linker row"}
+        return manifest
+
+    def discarded_native(self, z_bind=sb.STB_LOCAL, extra=()):
+        """Sections 1 .text.a, 2 .text.z (discarded), 3 .text.b (the holdout), 4 .text.c, 5 .rodata;
+        symbols 2 to 6 are the section symbols, then a=7, z=8, b=9, c=10, Label=11, Other=12.
+        `extra` adds (section, offset, symbol, type) relocations."""
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        path = Path(temporary.name) / "unit.o"
+        code = [dict(text(8), name=".text.a", data=bytes(range(8))),
+                dict(text(8), name=".text.z", data=bytes(range(0x80, 0x88))),
+                dict(text(12), name=".text.b", data=bytes(range(0x40, 0x4C))),
+                dict(text(8), name=".text.c", data=bytes(range(8, 16)))]
+        symbols = [{"name": "a", "value": 0, "size": 8, "shndx": 1, "type": sb.STT_FUNC},
+                   {"name": "z", "value": 0, "size": 8, "shndx": 2, "type": sb.STT_FUNC, "bind": z_bind},
+                   {"name": "b", "value": 0, "size": 12, "shndx": 3, "type": sb.STT_FUNC},
+                   {"name": "c", "value": 0, "size": 8, "shndx": 4, "type": sb.STT_FUNC, "bind": sb.STB_LOCAL},
+                   {"name": "Label", "value": 4, "size": 0, "shndx": 3, "bind": sb.STB_LOCAL},
+                   {"name": "Other", "value": 0, "size": 0, "shndx": 0}]
+        sb.write_object(path, code + [rodata(8)], symbols)
+        added = {}
+        for section, offset, symbol, kind in extra:
+            added.setdefault(section, []).append((offset, symbol, kind, 0))
+        with_relocations(path, 1, [(0, 9, 10, 0), (4, 10, 10, 0)] + added.get(1, []))  # a: call b; call c
+        with_relocations(path, 2, ((0, 6, 6, 0), (4, 7, 10, 0)))  # z: its .rodata pool; call a (dropped with z)
+        with_relocations(path, 3, [(0, 7, 10, 0)] + added.get(3, []))  # b: call a (dropped with b)
+        with_relocations(path, 4, [(0, 6, 6, 0), (4, 12, 10, 0)] + added.get(4, []))  # c: .rodata; call Other
+        with_relocations(path, 5, [(0, 4, 1, 4)] + added.get(5, []))  # .rodata: into b's section
+        return path
+
+    def test_manifest_discarded_functions(self):
+        units, _, _ = self.held(self.discarded_manifest())
+        unit = units[0]
+        self.assertEqual(unit["link_roots"], {"discarded": ["z"], "evidence": "linker row"})
+        # The retention link does not run for it: the derived object drops the discarded bodies.
+        self.assertIsNone(sb.retention_roots(unit))
+        self.assertEqual(unit["holdouts"], [{"symbol": "b", "start": 0x80003118, "end": 0x80003120}])
+        # Ordinary units keep their roots.
+        ordinary = {"link_roots": {"symbols": ["a"], "discarded": ["z"], "evidence": "x"}, "holdouts": None}
+        self.assertEqual(sb.retention_roots(ordinary), ["a"])
+        self.assertIsNone(sb.retention_roots({"link_roots": None}))
+
+    def test_discarded_function_shapes(self):
+        for roots in ({"symbols": ["a"], "discarded": ["z"], "evidence": "x"}, {"discarded": [], "evidence": "x"},
+                      {"discarded": ["z"], "evidence": " "}, {"discarded": ["z"]}, {"discarded": "z", "evidence": "x"},
+                      {"discarded": ["z", "z"], "evidence": "x"}, {"discarded": ["not a name"], "evidence": "x"},
+                      ["z"]):
+            manifest = self.held_manifest()
+            manifest["units"][0]["link_roots"] = roots
+            with self.subTest(roots=roots), self.assertRaisesRegex(ValueError, "without symbols"):
+                self.held(manifest)
+        # A discarded function has no target range: not a holdout, a registered function or a neutral label.
+        for name in ("b", "a", "fn_80003130"):
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, f"discarded function {name} has a "
+                                                                             "target range"):
+                self.held(self.discarded_manifest((name,)))
+        # folded and kept_locals stay refused next to discarded functions.
+        for key in ("folded", "kept_locals"):
+            manifest = self.discarded_manifest()
+            value = "0x80003130" if key == "folded" else "0x80003110"
+            manifest["units"][0][key] = {"symbols": {"x": value}, "evidence": "x"}
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError, f"cannot be combined with {key}"):
+                self.held(manifest)
+
+    def test_derived_object_drops_discarded_functions(self):
+        units, _, _ = self.held(self.discarded_manifest())
+        unit = dict(units[0], object=self.discarded_native())
+        sb.link_object(unit)
+        # z takes no address: the compiled order goes on from a to the holdout b.
+        self.assertEqual(unit["held"], {"dropped": [{"symbol": "b", "start": 0x80003118, "end": 0x80003120,
+                                                     "compiled": 12}],
+                                        "discarded": {"z": 8},
+                                        "globals": {"b": 0x80003118},
+                                        "linked": {"a": 0x80003110, "c": 0x80003120}})
+        derived = unit["link_object"].read_bytes()
+        sections, symbols = sb.read_elf(derived)
+        self.assertEqual([(s["name"], s["size"]) for s in sections if s["flags"] & sb.SHF_ALLOC],
+                         [(".text.holdout_run_80003110", 8), (".text.holdout_run_80003120", 8), (".rodata", 8)])
+        self.assertNotIn("z", {s["name"] for s in symbols})
+        # z's relocations (its pool, its call) go with it; .rodata keeps its bytes.
+        self.assertEqual(relocations(derived), [(0, "__holdout_80003118", 10, 0), (4, "c", 10, 0),
+                                                (0, "", 6, 0), (4, "Other", 10, 0),
+                                                (0, "__holdout_80003118", 1, 4)])
+        # Without the declaration, z is a compiled function that fits no run.
+        units, _, _ = self.held()
+        with self.assertRaisesRegex(ValueError, "compiled function z at 0x80003118 does not fit"):
+            sb.link_object(dict(units[0], object=self.discarded_native()))
+
+    def test_discarded_functions_are_unreferenced_file_statics(self):
+        units, _, _ = self.held(self.discarded_manifest())
+        with self.assertRaisesRegex(ValueError, "discarded function z is not one compiled local"):
+            sb.link_object(dict(units[0], object=self.discarded_native(z_bind=sb.STB_GLOBAL)))
+        units, _, _ = self.held(self.discarded_manifest(("y",)))
+        with self.assertRaisesRegex(ValueError, "discarded function y is not one compiled local"):
+            sb.link_object(dict(units[0], object=self.discarded_native()))
+        # Kept code or data, or a holdout (its code is in the target), that reaches z fails,
+        # whether by z's symbol or its section's.
+        units, _, _ = self.held(self.discarded_manifest())
+        for extra, where in (((4, 4, 8, 10),), ".text.c"), (((5, 4, 3, 1),), ".rodata"), \
+                (((1, 0, 8, 10),), ".text.a"), (((3, 4, 8, 10),), ".text.b"):
+            with self.subTest(where=where), \
+                    self.assertRaisesRegex(ValueError, f"discarded function z is referenced from {where}"):
+                sb.link_object(dict(units[0], object=self.discarded_native(extra=extra)))
 
 
 class HoldoutsPin(unittest.TestCase):
