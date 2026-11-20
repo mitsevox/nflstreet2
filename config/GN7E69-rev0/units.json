@@ -13683,12 +13683,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800F9024",
-          "end": "0x800F9BD8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800F9CAC",
           "end": "0x800FA098"
         },
         {
@@ -13802,7 +13796,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8010FB10",
+          "start": "0x8010F654",
           "end": "0x801100E8"
         },
         {
@@ -13975,10 +13969,6 @@
             "evidence": "evidence.tsv source-form 0x800F8D2C-0x800F9024"
           },
           {
-            "function": "fn_800F9BD8",
-            "evidence": "evidence.tsv source-form 0x800F9BD8-0x800F9CAC"
-          },
-          {
             "function": "fn_800FA098",
             "evidence": "evidence.tsv source-form 0x800FA098-0x800FA0DC"
           },
@@ -14061,10 +14051,6 @@
           {
             "function": "fn_8010F43C",
             "evidence": "evidence.tsv source-form 0x8010F43C-0x8010F654"
-          },
-          {
-            "function": "fn_8010F654",
-            "evidence": "evidence.tsv source-form 0x8010F654-0x8010FB10"
           },
           {
             "function": "fn_801100E8",
