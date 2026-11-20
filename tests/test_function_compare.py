@@ -263,6 +263,35 @@ class InPlaceComparisons(ComparisonFixture):
         with self.assertRaisesRegex(ValueError,'same compiler profile'):
             function_compare.configured(self.root,self.binary)
 
+    def test_a_holdouts_unit_compares_with_its_base_profile(self):
+        # The holdouts profile is the base flags plus -ffunction-sections; a sectioned comparison
+        # object cannot be placed, so the comparison entry uses the base profile.
+        self.manifest['profiles']['test_holdouts'] = {'flags': ['-O2', sb.FUNCTION_SECTIONS], 'evidence': 'x'}
+        accepted = {k: v for k, v in self.unit.items() if k != 'functions'}
+        self.manifest['units'] = [dict(accepted, profile='test_holdouts', holdouts={'functions': [], 'evidence': 'x'})]
+        self.write_config()
+        with patch.object(sb, 'load_manifest', wraps=sb.load_manifest) as loaded:
+            units = function_compare.configured(self.root, self.binary)[1]
+        self.assertEqual(units[0]['profile'], 'test')
+        self.assertTrue(loaded.called)
+        # Other flags, another profile setting, or a unit without holdouts still need the same profile.
+        for profile, holdouts in ((['-O1', sb.FUNCTION_SECTIONS], True), (['-O2', sb.FUNCTION_SECTIONS, '-g'], True),
+                                  (['-O2', sb.FUNCTION_SECTIONS], False)):
+            self.manifest['profiles']['test_holdouts'] = {'flags': profile, 'evidence': 'x'}
+            unit = dict(accepted, profile='test_holdouts')
+            if holdouts:
+                unit['holdouts'] = {'functions': [], 'evidence': 'x'}
+            self.manifest['units'] = [unit]; self.write_config()
+            with self.subTest(profile=profile, holdouts=holdouts), \
+                    self.assertRaisesRegex(ValueError, 'same compiler profile'):
+                function_compare.configured(self.root, self.binary)
+        self.manifest['profiles']['test_holdouts'] = {'flags': ['-O2', sb.FUNCTION_SECTIONS], 'evidence': 'x',
+                                                      'language': 'c++'}
+        self.manifest['units'] = [dict(accepted, profile='test_holdouts', holdouts={'functions': [], 'evidence': 'x'})]
+        self.write_config()
+        with self.assertRaisesRegex(ValueError, 'same compiler profile'):
+            function_compare.configured(self.root, self.binary)
+
     def test_discarded_lists_need_distinct_unregistered_descriptive_names(self):
         for bad in ([], ['fn_80000000'], ['Dropped', 'Dropped'], ['fn_80001000'], [''], 'Dropped'):
             self.unit['discarded'] = bad; self.write_config()

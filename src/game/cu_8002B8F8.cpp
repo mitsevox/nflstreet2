@@ -1210,7 +1210,7 @@ extern "C" int fn_8002D1B8(Type_803EA368 *p, int value)
     return 0;
 }
 
-extern "C" int fn_8002D228(Type_803EA368 *p)
+extern "C" int ReplayIsHalted(Type_803EA368 *p)
 {
     // FAKEMATCH: compiled-out entry assert; its empty do-while keeps the +0xD94 load ahead of +0xD90
     REPLAY_ASSERT(p != 0);

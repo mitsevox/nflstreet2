@@ -14,7 +14,7 @@ int DbCursorGetRow(DbCursor *pObject);
 void fn_8007BA88(DbCursor *pCursor, int value);
 void fn_8007BB04(DbCursor *pCursor);
 int fn_8007BBFC(DbCursor *pCursor, int key, int *pResult);
-int fn_8007FC70(int a, int b, int mode, int c);
+int PlayerRecordCreate(int a, int b, int mode, int c);
 void fn_80080138(int a, int b, int mode);
 int fn_8008058C(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
 void fn_80080874(int which);
@@ -257,7 +257,7 @@ int fn_80082414(int index)
         desc.mUnknown4 = 3;
         desc.mUnknown8 = 1;
         desc.mUnknown0 = 0;
-        fn_8008044C(&cursor, &desc, 0x54415453);
+        PlayerCursorOpen(&cursor, &desc, 0x54415453);
         result = DbCursorGetRowCount((DbCursor *)&cursor);
         fn_8008056C(&cursor);
         return result;
@@ -360,7 +360,7 @@ int fn_80082864(void)
     desc.mUnknown4 = 1;
     desc.mUnknown8 = 0x22;
     desc.mUnknown0 = 0;
-    fn_8008044C(&cursor, &desc, 0x54415453);
+    PlayerCursorOpen(&cursor, &desc, 0x54415453);
     count = DbCursorGetRowCount((DbCursor *)&cursor);
     fn_8008056C(&cursor);
     return count;
@@ -408,17 +408,17 @@ void fn_800829D8(void)
 
 int fn_80082A64(int a, int b)
 {
-    return fn_8007FC70(a, fn_8022C8F0(0, 14), 0, b);
+    return PlayerRecordCreate(a, fn_8022C8F0(0, 14), 0, b);
 }
 
 int fn_80082AB0(int a, int b, int c)
 {
-    return fn_8007FC70(b, a, 0, c);
+    return PlayerRecordCreate(b, a, 0, c);
 }
 
 int fn_80082AE4(int a, int b)
 {
-    return fn_8007FC70(b, a, 1, -1);
+    return PlayerRecordCreate(b, a, 1, -1);
 }
 
 void fn_80082B18(Record_80082B18 *pRecord)

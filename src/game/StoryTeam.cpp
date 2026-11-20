@@ -235,7 +235,7 @@ extern char lbl_802EBE24[];
 void StoryPlayerResetById(int id)
 {
     Object_8008044C object;
-    fn_8008044C(&object, 0, 0x54415453);
+    PlayerCursorOpen(&object, 0, 0x54415453);
     if (PlayerDbSeekId(&object, id, 0)) StoryPlayerSetDefaults(&object);
     fn_8008056C(&object);
 }
@@ -295,7 +295,7 @@ void StoryTeamCreatePlayer(int index, int value)
     int unknown52;
     int unknown56;
 
-    fn_8008044C(&object, 0, 0x54415453);
+    PlayerCursorOpen(&object, 0, 0x54415453);
     PlayerDbSeekId(&object, id, 0);
     int value6E = PlayerDbGetHairStyle(&object);
     int value6C = PlayerDbGetPlht(&object);
@@ -352,7 +352,7 @@ void CopyRdrcPlayersToTeam(int index, int team, int rumt)
         FMCAPPORTValues values;
         FMCAPPORTText text60, text20;
         int resultIds[2], unknown52, unknown56;
-        fn_8008044C(&object, 0, 0x54415453);
+        PlayerCursorOpen(&object, 0, 0x54415453);
         PlayerDbSeekId(&object, ids[i], 0);
         int value6E = PlayerDbGetHairStyle(&object);
         int value6C = PlayerDbGetPlht(&object);

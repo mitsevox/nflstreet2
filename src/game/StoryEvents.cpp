@@ -226,7 +226,7 @@ void fn_8005D660(void)
 {
     lbl_802D4D40.mIndex = fn_8022F384(fn_8022F4BC());
     lbl_803EA5CC = &lbl_8030A0E4;
-    fn_8008044C(&lbl_8030A0E4, 0, 0x54415453);
+    PlayerCursorOpen(&lbl_8030A0E4, 0, 0x54415453);
     StevOpen();
     ExpLevelOpen();
     lbl_802D4D40.mUnknown2 = 0x7FFF;
@@ -1160,7 +1160,7 @@ int fn_8005F3E4(int *pResult)
 /* Compiled-out assert of the release build. */
 #define STORY_ASSERT(e) do { } while (0)
 
-void fn_8005F4EC(char *pName, int size)
+void StoryEventsGetHeroName(char *pName, int size)
 {
     unsigned int last = size - 1;
     *pName = 0;
@@ -1387,7 +1387,7 @@ int fn_8005F938(unsigned int id, int *pArgs, int unused, int *pResult)
     }
     case 0x16E: {
         Text_8005F8B4 *pText = (Text_8005F8B4 *)pArgs[0];
-        fn_8005F4EC(pText->mpText, pText->mSize);
+        StoryEventsGetHeroName(pText->mpText, pText->mSize);
         break;
     }
     case 0x146: {
@@ -1458,7 +1458,7 @@ void fn_8005FCF8(int *pFirst, int *pSecond)
     {
         Object_8008044C object;
         int found = 0;
-        fn_8008044C(&object, 0, 0x54415453);
+        PlayerCursorOpen(&object, 0, 0x54415453);
         for (i = 0; i <= 12; i++) {
             if (PlayerDbSeekId(&object, ids[i], 0)) {
                 itgt[found++] = DbCursorGetInt(&object, 0x49544754);

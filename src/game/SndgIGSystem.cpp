@@ -18,7 +18,7 @@ void SndgChannelsDestroyStreams(void);
 void SndgApplyVolumeOptions(void);
 void fn_8006F810(void);
 void fn_8006F820(void);
-void fn_800710C8(void);
+void SndgEventLoadLevelBank(void);
 void fn_80071594(void *pRecord);
 void fn_80071600(void);
 void fn_800716E4(void);
@@ -74,7 +74,7 @@ extern "C" void SndgIGInitAudio(void)
     fn_80071C34(0);
     SndgIGLogStartupInfo();
     SndgApplyVolumeOptions();
-    fn_800710C8();
+    SndgEventLoadLevelBank();
     ResTrackLabel("SpchIGInitStart");
     SpchIGInit();
     ResTrackLabel("SpchIGInitFinish");

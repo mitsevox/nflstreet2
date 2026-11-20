@@ -186,7 +186,7 @@ void fn_80060B0C(void)
 {
     lbl_803EA5F8.mIndex = fn_8022F384(fn_8022F4BC());
     lbl_803EA5F0 = &lbl_8030A2BC;
-    fn_8008044C(&lbl_8030A2BC, 0, 0x54415453);
+    PlayerCursorOpen(&lbl_8030A2BC, 0, 0x54415453);
     StevOpen();
     ExpLevelOpen();
     lbl_803EA5F8.mUnknown2 = 0x7FFF;

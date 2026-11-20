@@ -129,7 +129,7 @@ void fn_80220CFC(int a);
 void fn_80220D04(void);
 void fn_802212C8(void);
 void fn_80222220(void);
-void fn_80223460(void);
+void UIGCurveObjAction(void);
 void fn_80225654(void);
 void fn_802363B0(Viewport_t *pObject);
 void fn_802363E0(Viewport_t *pObject);
@@ -194,7 +194,7 @@ void UISGameSetCallbacks(void *p)
     fn_80218ACC(p, UISGameRepeatResetCB);
     fn_80218AD4(p, 0, fn_8021EFD8);
     fn_80218AD4(p, 1, UISSoundObjAction);
-    fn_80218AD4(p, 2, fn_80223460);
+    fn_80218AD4(p, 2, UIGCurveObjAction);
     fn_80218AD4(p, 3, UISViewObjAction);
     fn_80218AD4(p, 4, fn_80225654);
     fn_80218AD4(p, 5, UISTextTableAction);

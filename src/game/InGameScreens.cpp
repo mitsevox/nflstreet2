@@ -313,7 +313,7 @@ void DepthChartRevertSide(int group);
 void PauseSetAltAction(unsigned char value);
 void PauseSetQuitFlag(unsigned char value);
 int fn_8002C9A8(void *p, int msg, int value);
-int fn_8002D228(void *p);
+int ReplayIsHalted(void *p);
 int TutorialIsActive(void);
 int DepthChartScreenIsSideShown(unsigned char a);
 void DepthChartScreenGetSideName(unsigned char a, int b, char *pText, int length);
@@ -1829,7 +1829,7 @@ int fn_80059034(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
         if (fn_800AD9B4() == 4) {
             fn_8002C9A8(lbl_803EA368, 3, 0);
         } else {
-            *pResult = fn_8002D228(lbl_803EA368);
+            *pResult = ReplayIsHalted(lbl_803EA368);
         }
         break;
     case 0x8000001C:
@@ -2381,7 +2381,7 @@ void fn_8005ACF0(int team)
 {
     Desc_8008044C desc;
     desc.mUnknown4=1; desc.mUnknown8=team;
-    fn_8008044C(&lbl_80309F98,&desc,0x454D4147);
+    PlayerCursorOpen(&lbl_80309F98,&desc,0x454D4147);
     Stats_8005A7EC *p=&lbl_80309FC4[team];
     p->mUnknown4=0; p->mUnknown0=-3.4028234663852886e38f;
     for(int i=11;i>=0;i--) p->mStats[i]=0;
