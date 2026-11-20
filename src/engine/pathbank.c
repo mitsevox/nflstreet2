@@ -11,7 +11,7 @@ extern "C" int fn_801B57C0(Node_801B3FE0 *p, int index)
     if (!entry)
         return -8;
     Record_801B58F0 saved = *entry;
-    fn_801B5DB4(p);
+    PATHI_stop(p);
     int result = p->mUnknown100->fn_801B4594(index);
     p->mUnknown108 -= saved.mUnknown4;
     p->mUnknown10C -= saved.mUnknown8;

@@ -60,10 +60,10 @@ int fn_801B3D28(int id, PathfinderTrackData_t *pData, int a);
 void *fn_801B3DD8(int id);
 void fn_801B45D0(int id, signed char value);
 void fn_801B4728(int a, int b, int c, int d);
-int fn_801B59B0(int id, int a);
-void fn_801B5AB0(int a, unsigned char b);
-int fn_801B5BCC(int id, PathfinderStatus_t *pInfo);
-void fn_801B5CD0(int a);
+int PATH_control(int id, int a);
+void PATH_pause(int a, unsigned char b);
+int PATH_status(int id, PathfinderStatus_t *pInfo);
+void PATH_stop(int a);
 int fn_801B5FC0(int id, int a);
 void fn_8027D3AC(void);
 void fn_8027ECD8(void *p, int b);
@@ -252,7 +252,7 @@ int PathfinderDestroyTrack(int id)
 
 int PathfinderControl(int id, int a)
 {
-    return fn_801B59B0(id, a);
+    return PATH_control(id, a);
 }
 
 int PathfinderEvent(int id, int a)
@@ -272,12 +272,12 @@ void PathfinderFade(int a, int b, int c)
 
 void PathfinderPause(int a, int b)
 {
-    fn_801B5AB0(a, b);
+    PATH_pause(a, b);
 }
 
 void PathfinderStop(int a)
 {
-    fn_801B5CD0(a);
+    PATH_stop(a);
 }
 
 void PathfinderSetStreamValue(int a, int b)
@@ -294,7 +294,7 @@ int PathfinderGetStatus(int id, PathfinderStatus_t *pInfo)
     int result = -1;
 
     if (_Pathfinder_bInit) {
-        result = fn_801B5BCC(id, pInfo);
+        result = PATH_status(id, pInfo);
     }
     return result;
 }

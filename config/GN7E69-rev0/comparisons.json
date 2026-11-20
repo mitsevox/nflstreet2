@@ -32098,51 +32098,6 @@
       ]
     },
     {
-      "source": "src/engine/pathcontrol.c",
-      "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B59B0-0x801B5E10 (src/engine/pathcontrol.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B59B0",
-          "end": "0x801B5E10"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801B59B0",
-          "start": "0x801B59B0",
-          "end": "0x801B5AB0"
-        },
-        {
-          "symbol": "fn_801B5AB0",
-          "start": "0x801B5AB0",
-          "end": "0x801B5BCC"
-        },
-        {
-          "symbol": "fn_801B5BCC",
-          "start": "0x801B5BCC",
-          "end": "0x801B5C88"
-        },
-        {
-          "symbol": "fn_801B5C88",
-          "start": "0x801B5C88",
-          "end": "0x801B5CD0"
-        },
-        {
-          "symbol": "fn_801B5CD0",
-          "start": "0x801B5CD0",
-          "end": "0x801B5DB4"
-        },
-        {
-          "symbol": "fn_801B5DB4",
-          "start": "0x801B5DB4",
-          "end": "0x801B5E10"
-        }
-      ]
-    },
-    {
       "source": "src/engine/pathevent.c",
       "profile": "path_cxx",
       "evidence": "evidence.tsv unit row 0x801B5E5C-0x801B6780 (src/engine/pathevent.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",

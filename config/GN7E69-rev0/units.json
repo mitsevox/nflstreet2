@@ -22348,6 +22348,25 @@
           "end": "0x802AECBC"
         }
       ]
+    },
+    {
+      "source": "src/engine/pathcontrol.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B59B0-0x801B5E10 (src/engine/pathcontrol.c), its compiler, function, name and source-form rows: all six functions exact; .rodata 0x802AECAC-0x802AECB4 is the file's unreferenced \"%s  %s\" string, defined by the file; the file has no other data (the PATH globals it uses stay original-owned).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B59B0",
+          "end": "0x801B5E10"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AECAC",
+          "end": "0x802AECB4"
+        }
+      ]
     }
   ]
 }
