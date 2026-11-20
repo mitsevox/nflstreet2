@@ -35796,6 +35796,97 @@
       ]
     },
     {
+      "source": "src/engine/sst.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function and name rows and the sound_cxx compiler row 0x8026E4C0-0x80270494 (same library); written in w1, original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026D200",
+          "end": "0x8026E4C0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7910",
+          "end": "0x802B7914"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "StreamRemoveFaders__3SndP18SndStreamChannel_t",
+          "start": "0x8026D200",
+          "end": "0x8026D278"
+        },
+        {
+          "symbol": "SNDSTRMI_calcdatarate__FP17SndSampleFormat_t",
+          "start": "0x8026D53C",
+          "end": "0x8026D5B4"
+        },
+        {
+          "symbol": "SNDSTRMI_destroyall__Fv",
+          "start": "0x8026D5B4",
+          "end": "0x8026D610"
+        },
+        {
+          "symbol": "SNDSTRMI_getstreamptr__Fi",
+          "start": "0x8026D610",
+          "end": "0x8026D644"
+        },
+        {
+          "symbol": "SNDSTRMI_removerequest__Fi",
+          "start": "0x8026D644",
+          "end": "0x8026D6AC"
+        },
+        {
+          "symbol": "SNDSTRMI_releasecallback__FPvT0",
+          "start": "0x8026D6AC",
+          "end": "0x8026D6E8"
+        },
+        {
+          "symbol": "SNDSTRMI_framescallback__FiUiPv",
+          "start": "0x8026D6E8",
+          "end": "0x8026D790"
+        },
+        {
+          "symbol": "SNDSTRMI_parsechunk__FiP16SndStreamChunk_t",
+          "start": "0x8026DAE4",
+          "end": "0x8026DB5C"
+        },
+        {
+          "symbol": "SNDSTRMI_numcreated__Fv",
+          "start": "0x8026DDB8",
+          "end": "0x8026DE00"
+        },
+        {
+          "symbol": "SNDSTRMI_queue__FiiPcii",
+          "start": "0x8026E160",
+          "end": "0x8026E280"
+        },
+        {
+          "symbol": "SNDSTRM_create",
+          "start": "0x8026E280",
+          "end": "0x8026E2A8"
+        },
+        {
+          "symbol": "SNDSTRM_destroy",
+          "start": "0x8026E2A8",
+          "end": "0x8026E364"
+        },
+        {
+          "symbol": "SNDSTRM_queuefile",
+          "start": "0x8026E364",
+          "end": "0x8026E388"
+        },
+        {
+          "symbol": "SNDSTRM_purge",
+          "start": "0x8026E388",
+          "end": "0x8026E4C0"
+        }
+      ]
+    },
+    {
       "source": "src/engine/physshape.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801E2CB4-0x801E7034 (src/engine/physshape.cpp) and its function rows; all 39 bodies compared with the full .rodata 0x802B1290-0x802B1480 and .data 0x802F94E4-0x802F9508 (data rows); 36 exact and linked, the holdouts SphereShape::TestPoint, BoxShape::SegmentHits and SphereShape::Draw keep the original bytes.",

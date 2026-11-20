@@ -30,11 +30,11 @@ typedef struct SndEnvStage_t {
     int m4;
 } SndEnvStage_t;
 
-/* The sample-format record of a patch (+0x2 its channel count). */
+/* The sample-format record of a patch or stream: sample rate, channel count and codec. */
 typedef struct SndSampleFormat_t {
-    unsigned char m0;
-    unsigned char m1;
-    unsigned char m2;
+    unsigned short mRate;
+    unsigned char mChannels;
+    unsigned char mCodec;
 } SndSampleFormat_t;
 
 /* The sample-attribute record of a patch: header fields +0x0..+0x9, six per-channel halfwords +0xC,
