@@ -4496,7 +4496,7 @@
           "end": "0x800FFB4C"
         },
         {
-          "symbol": "fn_800FFB4C",
+          "symbol": "PlyrCalcCarrierOffsetPoint",
           "start": "0x800FFB4C",
           "end": "0x800FFD2C"
         },
@@ -4666,7 +4666,7 @@
           "end": "0x80102A78"
         },
         {
-          "symbol": "fn_80102A78",
+          "symbol": "PlayerPassAnimFacingCallback",
           "start": "0x80102A78",
           "end": "0x80102D78"
         },
@@ -17487,7 +17487,7 @@
           "end": "0x800BF07C"
         },
         {
-          "symbol": "fn_800BF07C",
+          "symbol": "PreSnapInitPickTime",
           "start": "0x800BF07C",
           "end": "0x800BF174"
         },
