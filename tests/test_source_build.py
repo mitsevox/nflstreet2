@@ -1552,6 +1552,16 @@ class CompilerFunctionCoverageTests(unittest.TestCase):
         self.assertEqual([function["symbol"] for function in functions],
                          [symbol["name"] for symbol in symbols[:4]])
 
+    def test_holdouts_untyped_locals_count_only_in_code_placements(self):
+        # holdout_object's untyped run locals are functions; a file-static .lcomm object in .sbss is
+        # also an untyped sized local, and stays data.
+        unit = dict(self.unit(), holdouts={"functions": []})
+        unit["sections"] = unit["sections"] + [{"index": 2, "kind": "bss", "start": 0x803EC600, "compiled": 8}]
+        symbols = [{"name": "c", "type": 0, "bind": sb.STB_LOCAL, "shndx": 1, "value": 4, "size": 4},
+                   {"name": "lbl_803EC614", "type": 0, "bind": sb.STB_LOCAL, "shndx": 2, "value": 4, "size": 4}]
+        self.assertEqual(sb.compiled_functions(unit, ([], symbols)),
+                         [{"symbol": "c", "address": "0x80003104", "size": 4}])
+
     def test_defined_functions_outside_placed_code_are_rejected(self):
         for shndx, value, size in ((2, 0, 4), (1, 14, 4), (1, -4, 4)):
             with self.subTest(shndx=shndx, value=value, size=size):
