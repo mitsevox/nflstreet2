@@ -23010,19 +23010,19 @@
     {
       "source": "src/game/cu_8010F43C.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. 21 target whole-function extents and their literal-pool slice retain their evidence; this split permits independent compilation of disjoint partial literal pools and does not claim an original file boundary or whole-unit promotion.",
+      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. 22 target whole-function extents and their literal-pool slice retain their evidence; this split permits independent compilation of disjoint partial literal pools and does not claim an original file boundary or whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8010F43C",
-          "end": "0x80111A28"
+          "end": "0x80111B4C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029ED38",
-          "end": "0x8029EE14"
+          "end": "0x8029EE20"
         }
       ],
       "functions": [
@@ -23130,28 +23130,7 @@
           "symbol": "fn_80111974",
           "start": "0x80111974",
           "end": "0x80111A28"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80111A28.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison-only fragment of the retained provisional cu_800EFC68 grouping: 1 target whole-function extent and the exact literal-pool slice 0x8029EE14-0x8029EE20 they load. The split lets this partial literal pool compile independently; it does not claim an original file boundary or whole-unit promotion.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80111A28",
-          "end": "0x80111B4C"
         },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029EE14",
-          "end": "0x8029EE20"
-        }
-      ],
-      "functions": [
         {
           "symbol": "CatchGetHandReach",
           "start": "0x80111A28",
