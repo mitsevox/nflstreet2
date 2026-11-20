@@ -919,6 +919,8 @@ int fn_80071BDC(int value)
 {
     int result = 42;
     switch (value) {
+    // FAKEMATCH: the empty case labels 5 and 7 (surface ids the target sends to the default 44)
+    // leave no compare in the target; they only move the compare tree root to 4 and change no result
     case 0:
     case 1:
     case 5:
