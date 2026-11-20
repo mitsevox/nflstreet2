@@ -307,17 +307,6 @@
       ],
       "evidence": "evidence.tsv compiler row 0x801CE1F8-0x801CEC90 (engine_c_nogcse), the one file src/engine/llglib.c: engine_c's -O2 plus -fno-gcse (per-file profile, owner baseline of 2026-11-14: per-file flags allowed, no per-function options). In GlibLLInit 0x801CE2F4 the target forms the frame-buffer table address pMode->mpXfb (r31+0x54) separately in each block that indexes it (addi r9,r31,0x54 at 0x801CE508 for VISetNextFrameBuffer; addi r30,r31,0x54 at 0x801CE67C for the two GXCopyDisp calls); with global CSE the compiler hoists one copy to the top of the function and keeps it in a second saved register (stmw r27, 0x40-byte frame). The flag is not given to engine_c because it changes src/engine/list.c (DSAddListNode 0x801C6AA4), src/engine/Font.c (fn_801CD63C) and src/engine/llsystem.c (fn_801F8248, fn_801F8574)."
     },
-    "engine_c_fastmath_holdouts": {
-      "flags": [
-        "-O2",
-        "-ffast-math",
-        "-ffunction-sections"
-      ],
-      "include_dirs": [
-        "include/libc"
-      ],
-      "evidence": "engine_c_fastmath (its evidence.tsv compiler rows) plus -ffunction-sections, the named profile of an engine C unit of that profile linked with holdouts (owner rulings of 2026-11-20: holdouts for any file after real attempts, and the flag from a named profile, not added by the tool; config README, Holdouts). The partials of such a file keep comparing with engine_c_fastmath."
-    },
     "engine_c_fastmath_nobuiltin": {
       "flags": [
         "-O2",
@@ -328,16 +317,6 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler row 0x80236F78-0x80238258 (engine_c_fastmath_nobuiltin): engine_c_fastmath plus -fno-builtin for the synchronised-state files syncrand.c, synctime.c and syncstate.c, which call memset and memcpy with constant sizes as ordinary prototyped calls and compare floats without the IEEE cror of plain -O2."
-    },
-    "engine_c_holdouts": {
-      "flags": [
-        "-O2",
-        "-ffunction-sections"
-      ],
-      "include_dirs": [
-        "include/libc"
-      ],
-      "evidence": "engine_c (its evidence.tsv compiler rows) plus -ffunction-sections, the named profile of a unit of that profile linked with holdouts (owner rulings of 2026-11-20: holdouts for any file after real attempts, and the flag from a named profile, not added by the tool; config README, Holdouts). The partials of such a file keep comparing with engine_c."
     }
   },
   "externals": {
