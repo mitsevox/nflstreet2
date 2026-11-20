@@ -22735,12 +22735,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80055B2C",
-          "end": "0x80056ED8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80057044",
           "end": "0x8005740C"
         },
         {
@@ -22753,90 +22747,42 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80057F20",
-          "end": "0x80059B64"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80059F54",
-          "end": "0x80059F80"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005A794",
           "end": "0x8005AB04"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8005AC18",
-          "end": "0x8005ACF0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005ADCC",
-          "end": "0x8005AE5C"
+          "end": "0x8005AEC8"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8005B128",
-          "end": "0x8005B2BC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005B3CC",
-          "end": "0x8005B3D4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005B4B0",
           "end": "0x8005B610"
         },
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8005B9FC",
-          "end": "0x8005BC10"
+          "start": "0x8005B6AC",
+          "end": "0x8005BCA8"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8005BE54",
-          "end": "0x8005BE5C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005BF18",
-          "end": "0x8005BFDC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005C144",
-          "end": "0x8005C1F4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005C338",
-          "end": "0x8005C4A4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005C6EC",
           "end": "0x8005C844"
         },
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8005D2C8",
+          "start": "0x8005C994",
+          "end": "0x8005CAE4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005CC50",
           "end": "0x8005D60C"
         },
         {
@@ -22889,10 +22835,6 @@
             "evidence": "evidence.tsv source-form 0x80055584-0x80055B2C"
           },
           {
-            "function": "fn_80056ED8",
-            "evidence": "evidence.tsv source-form 0x80056ED8-0x80057044"
-          },
-          {
             "function": "fn_8005740C",
             "evidence": "evidence.tsv source-form 0x8005740C-0x800577DC"
           },
@@ -22901,128 +22843,28 @@
             "evidence": "evidence.tsv source-form 0x80057C58-0x80057F20"
           },
           {
-            "function": "fn_80059B64",
-            "evidence": "evidence.tsv source-form 0x80059B64-0x80059E24"
-          },
-          {
-            "function": "fn_80059E24",
-            "evidence": "evidence.tsv source-form 0x80059E24-0x80059F54"
-          },
-          {
-            "function": "fn_80059F80",
-            "evidence": "evidence.tsv source-form 0x80059F80-0x8005A1C0"
-          },
-          {
-            "function": "fn_8005A1C0",
-            "evidence": "evidence.tsv source-form 0x8005A1C0-0x8005A2B8"
-          },
-          {
-            "function": "fn_8005A2B8",
-            "evidence": "evidence.tsv source-form 0x8005A2B8-0x8005A630"
-          },
-          {
-            "function": "fn_8005A630",
-            "evidence": "evidence.tsv source-form 0x8005A630-0x8005A794"
-          },
-          {
             "function": "fn_8005AB04",
             "evidence": "evidence.tsv source-form 0x8005AB04-0x8005AC18"
-          },
-          {
-            "function": "fn_8005ACF0",
-            "evidence": "evidence.tsv source-form 0x8005ACF0-0x8005ADCC"
-          },
-          {
-            "function": "fn_8005AE5C",
-            "evidence": "evidence.tsv source-form 0x8005AE5C-0x8005AEC8"
           },
           {
             "function": "fn_8005AEC8",
             "evidence": "evidence.tsv source-form 0x8005AEC8-0x8005B128"
           },
           {
-            "function": "fn_8005B2BC",
-            "evidence": "evidence.tsv source-form 0x8005B2BC-0x8005B3CC"
-          },
-          {
-            "function": "fn_8005B3D4",
-            "evidence": "evidence.tsv source-form 0x8005B3D4-0x8005B4B0"
-          },
-          {
             "function": "fn_8005B610",
             "evidence": "evidence.tsv source-form 0x8005B610-0x8005B6AC"
-          },
-          {
-            "function": "fn_8005B6AC",
-            "evidence": "evidence.tsv source-form 0x8005B6AC-0x8005B730"
-          },
-          {
-            "function": "fn_8005B730",
-            "evidence": "evidence.tsv source-form 0x8005B730-0x8005B838"
-          },
-          {
-            "function": "fn_8005B838",
-            "evidence": "evidence.tsv source-form 0x8005B838-0x8005B908"
-          },
-          {
-            "function": "fn_8005B908",
-            "evidence": "evidence.tsv source-form 0x8005B908-0x8005B9FC"
-          },
-          {
-            "function": "fn_8005BC10",
-            "evidence": "evidence.tsv source-form 0x8005BC10-0x8005BCA8"
           },
           {
             "function": "fn_8005BCA8",
             "evidence": "evidence.tsv source-form 0x8005BCA8-0x8005BE54"
           },
           {
-            "function": "fn_8005BE5C",
-            "evidence": "evidence.tsv source-form 0x8005BE5C-0x8005BF18"
-          },
-          {
-            "function": "fn_8005BFDC",
-            "evidence": "evidence.tsv source-form 0x8005BFDC-0x8005C0C0"
-          },
-          {
-            "function": "fn_8005C0C0",
-            "evidence": "evidence.tsv source-form 0x8005C0C0-0x8005C144"
-          },
-          {
-            "function": "fn_8005C1F4",
-            "evidence": "evidence.tsv source-form 0x8005C1F4-0x8005C338"
-          },
-          {
-            "function": "fn_8005C4A4",
-            "evidence": "evidence.tsv source-form 0x8005C4A4-0x8005C6EC"
-          },
-          {
             "function": "fn_8005C844",
             "evidence": "evidence.tsv source-form 0x8005C844-0x8005C994"
           },
           {
-            "function": "fn_8005C994",
-            "evidence": "evidence.tsv source-form 0x8005C994-0x8005CAE4"
-          },
-          {
             "function": "fn_8005CAE4",
             "evidence": "evidence.tsv source-form 0x8005CAE4-0x8005CC50"
-          },
-          {
-            "function": "fn_8005CC50",
-            "evidence": "evidence.tsv source-form 0x8005CC50-0x8005CD8C"
-          },
-          {
-            "function": "fn_8005CD8C",
-            "evidence": "evidence.tsv source-form 0x8005CD8C-0x8005CE10"
-          },
-          {
-            "function": "fn_8005CE10",
-            "evidence": "evidence.tsv source-form 0x8005CE10-0x8005D1E4"
-          },
-          {
-            "function": "fn_8005D1E4",
-            "evidence": "evidence.tsv source-form 0x8005D1E4-0x8005D2C8"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
