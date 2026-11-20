@@ -997,8 +997,9 @@ int fn_802331BC(void)
     int err = fn_801FCE10(0, lbl_802B6FF4, &cursor, 6, 5);
 
     if (err == 0) {
+        int *pId = &id;
         for (;;) {
-            err = fn_801FCE10(0, lbl_802B7050, &cursor, &id);
+            err = fn_801FCE10(0, lbl_802B7050, &cursor, pId);
             if (err != 0) {
                 break;
             }
