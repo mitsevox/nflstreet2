@@ -34561,7 +34561,7 @@
     },
     {
       "source": "src/engine/cu_80221BF0.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv provisional unit row 0x80221BF0-0x80222EC4 (src/engine/cu_80221BF0.c), its function and name rows and the file compiler row. Draft comparisons only; original assembly remains linked. The draft bodies use no compiled static data; 0x80222220 and 0x802227B0, the users of the .rodata 0x802B1FA0-0x802B1FBC, have no body here.",
       "sections": [
         {
@@ -34569,6 +34569,12 @@
           "placement": ".text",
           "start": "0x80221BF0",
           "end": "0x80222EC4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1FA0",
+          "end": "0x802B1FC0"
         }
       ],
       "functions": [
@@ -34606,6 +34612,16 @@
           "symbol": "fn_80222E54",
           "start": "0x80222E54",
           "end": "0x80222EC4"
+        },
+        {
+          "symbol": "fn_80222220",
+          "start": "0x80222220",
+          "end": "0x80222764"
+        },
+        {
+          "symbol": "fn_802227B0",
+          "start": "0x802227B0",
+          "end": "0x80222E0C"
         }
       ]
     },
