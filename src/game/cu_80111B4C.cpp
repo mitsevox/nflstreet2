@@ -206,7 +206,7 @@ void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
 void fn_80102D78(Object_80039F5C *p);
 void fn_801039D8(Object_80039F5C *p);
-void fn_80111A28(Object_80039F5C *p, int angle, float length, Vector_80039F5C *pOut);
+void CatchGetHandReach(Object_80039F5C *p, int angle, float length, Vector_80039F5C *pOut);
 int fn_80113C18(Object_80039F5C *p, void *pState);
 Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
 void fn_80114F64(Object_80039F5C *p, int angle);
@@ -706,11 +706,11 @@ extern "C" int fn_80112C04(Object_80039F5C *p, Ball_t *pBall, int *pAngle, float
     BallSolveFallToHeight(pBall, 2.1f, &highTime, (Vector_80039F5C *)&highLanding);
     fn_80227690(&lowLanding, &lowLanding, &p->mMotion.mPos);
     lowAngle = fn_801CFE40(lowLanding.mY, lowLanding.mX);
-    fn_80111A28(p, lowAngle, lowTime, (Vector_80039F5C *)&lowReach);
+    CatchGetHandReach(p, lowAngle, lowTime, (Vector_80039F5C *)&lowReach);
     fn_80227690(&lowReach, &lowReach, &p->mMotion.mPos);
     fn_80227690(&highLanding, &highLanding, &p->mMotion.mPos);
     highAngle = fn_801CFE40(highLanding.mY, highLanding.mX);
-    fn_80111A28(p, highAngle, highTime, (Vector_80039F5C *)&highReach);
+    CatchGetHandReach(p, highAngle, highTime, (Vector_80039F5C *)&highReach);
     fn_80227690(&highReach, &highReach, &p->mMotion.mPos);
     value = *pValue;
     if (fn_802270A4(&highLanding) > fn_802270A4(&highReach)) {

@@ -2157,6 +2157,14 @@
     "gLastSubTick": {
       "address": "0x803ECEB0",
       "evidence": "evidence.tsv data/name rows for 0x803ECEB0 (target extent, related name); speech-library storage, original-owned."
+    },
+    "CatchGetHandReach": {
+      "address": "0x80111A28",
+      "evidence": "evidence.tsv function and name rows for 0x80111A28 (unlinked; referenced from comparison src/game/cu_80111B4C.cpp)."
+    },
+    "PursuitGetInterceptAngle": {
+      "address": "0x801208C8",
+      "evidence": "evidence.tsv function and name rows for 0x801208C8 (unlinked; referenced from comparisons src/game/cu_80120618.cpp and src/game/cu_801230B8.cpp)."
     }
   },
   "holdouts_approved": {

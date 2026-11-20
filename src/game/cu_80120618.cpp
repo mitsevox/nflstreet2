@@ -9,7 +9,7 @@ extern "C" {
 extern Lookup_8012078C *lbl_803EB09C;
 extern float gPlyrMoveFwdSpeed;
 
-int fn_801208C8(Vector_80039F5C *pA, Vector_80039F5C *pB, float speed, Vector_80039F5C *pDir);
+int PursuitGetInterceptAngle(Vector_80039F5C *pA, Vector_80039F5C *pB, float speed, Vector_80039F5C *pDir);
 int fn_801486A0(void);
 float fn_80178A2C(void);
 float fn_801CFB18(int angle);
@@ -63,7 +63,7 @@ int fn_80120794(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pDir,
     if (speed == 0.0f) {
         return angle;
     }
-    result = fn_801208C8(pA, pB, speed, pDir);
+    result = PursuitGetInterceptAngle(pA, pB, speed, pDir);
     if (result <= 0x7FFFFF && pA->mY > pB->mY && pA->mY > fn_80178A2C()) {
         fn_80237260(0);
         result = result > 0x400000 ? 0x800000 : 0;
@@ -71,7 +71,7 @@ int fn_80120794(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pDir,
     return result;
 }
 
-int fn_801208C8(Vector_80039F5C *pA, Vector_80039F5C *pB, float speed, Vector_80039F5C *pDir)
+int PursuitGetInterceptAngle(Vector_80039F5C *pA, Vector_80039F5C *pB, float speed, Vector_80039F5C *pDir)
 {
     int dirAngle = fn_801CFE40(pDir->mY, pDir->mX);
     float dirLength = fn_802270A4(pDir);
@@ -84,6 +84,7 @@ int fn_801208C8(Vector_80039F5C *pA, Vector_80039F5C *pB, float speed, Vector_80
     float ratio;
     float minSpeed = speed;
     int turn;
+    int result;
 
     fn_80227690(&delta, pA, pB);
     toAngle = fn_801CFE40(delta.mY, delta.mX);
@@ -110,10 +111,12 @@ int fn_801208C8(Vector_80039F5C *pA, Vector_80039F5C *pB, float speed, Vector_80
         target.mZ = pB->mZ;
         fn_80227350(&target, pDir, 120.0f);
         fn_80227690(&toTarget, &target, pA);
-        return fn_801CFE40(toTarget.mY, toTarget.mX) & 0xFFFFFF;
+        result = fn_801CFE40(toTarget.mY, toTarget.mX) & 0xFFFFFF;
+    } else {
+        turn = fn_801CFDD0(ratio);
+        result = (((toAngle - dirAngle) & 0xFFFFFF) <= 0x7FFFFF ? backAngle + turn : backAngle - turn) & 0xFFFFFF;
     }
-    turn = fn_801CFDD0(ratio);
-    return (((toAngle - dirAngle) & 0xFFFFFF) <= 0x7FFFFF ? backAngle + turn : backAngle - turn) & 0xFFFFFF;
+    return result;
 }
 
 int fn_80120A50(Point_8017886C *p, Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pC)

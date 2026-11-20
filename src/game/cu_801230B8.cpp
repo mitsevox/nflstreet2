@@ -79,7 +79,7 @@ int fn_801485D4(void);
 extern const Directions_8012430C lbl_8029F5A0[6];
 
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
-int fn_801208C8(Point_8017886C *pPos, Vector_80039F5C *pTarget, Vector_80039F5C *pVelocity, float speed);
+int PursuitGetInterceptAngle(Point_8017886C *pPos, Vector_80039F5C *pTarget, Vector_80039F5C *pVelocity, float speed);
 float fn_80237260(int a);
 unsigned int fn_802372EC(int a, int b);
 int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C target, unsigned int *pOut, float distance);
@@ -972,7 +972,7 @@ void fn_80125594(Object_80039F5C *p, State_80125594 *pState)
     if (!(p->mMotion.mUnknown28 < PlyrMoveGetRatedSpeed(p, 0.14f, 1.0f))) speed = p->mMotion.mUnknown28;
     else speed = PlyrMoveGetRatedSpeed(p, 0.14f, 1.0f);
     Point_8017886C *pPos = (Point_8017886C *)&p->mMotion.mPos;
-    int predicted = fn_801208C8(pPos, &target, &velocity, speed);
+    int predicted = PursuitGetInterceptAngle(pPos, &target, &velocity, speed);
     Point_8017886C delta;
     fn_80227690(&delta, (Point_8017886C *)&target, pPos);
     int toward = fn_801CFE40(delta.mY, delta.mX);
