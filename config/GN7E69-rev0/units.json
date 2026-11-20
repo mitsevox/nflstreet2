@@ -83,6 +83,17 @@
       ],
       "evidence": "engine_c (its evidence.tsv compiler rows) plus -ffunction-sections, the named profile of an engine_c unit linked with holdouts (owner rulings of 2026-11-20: holdouts for any file after real attempts, and the flag from a named profile, not added by the tool; config README, Holdouts). The flag is a link-layout aid, not a claim about the original build: ProDG then emits one .text.<function> section per function with the same instructions, sizes, alignment and data sections, so the tool can leave the holdouts' code out (source_build.holdout_object), and the complete-output comparison checks the result. Only a unit with holdouts may use it."
     },
+    "engine_c_fastmath_holdouts": {
+      "flags": [
+        "-O2",
+        "-ffast-math",
+        "-ffunction-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "engine_c_fastmath (its evidence.tsv compiler rows) plus -ffunction-sections, the named profile of an engine C unit of that profile linked with holdouts (owner rulings of 2026-11-20: holdouts for any file after real attempts, and the flag from a named profile, not added by the tool; config README, Holdouts). The partials of such a file keep comparing with engine_c_fastmath."
+    },
     "sound_cxx_holdouts": {
       "flags": [
         "-O2",
