@@ -320,7 +320,7 @@ def load_manifest(manifest, sections, compiler_version, comparisons=None, eviden
         if sectioned and not holdouts:
             raise ValueError(f"{unit['source']}: profile {unit['profile']} compiles with {FUNCTION_SECTIONS}, "
                              "which only a unit with holdouts may use")
-        root =profiles[unit["profile"]].get("source_root")
+        root = profiles[unit["profile"]].get("source_root")
         compile_path = None
         if root:
             directory, prefix, depth = source_root(root)
