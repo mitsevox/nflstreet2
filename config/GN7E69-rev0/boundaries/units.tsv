@@ -24,6 +24,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801C1D54	0x801C1F54	auxram.c	5	4	4	4	0	-	-
 0x801C1F54	0x801C1F94	ctype.c	2	2	2	2	0	-	-
 0x801C1F94	0x801C20A0	memory.c	4	4	4	4	0	-	printf.c
+0x801C20F0	0x801C2EB4	sprintf.c	8	8	8	3	5	-	-
 0x801C2EB4	0x801C32CC	string.c	13	11	11	11	0	-	-
 0x801C33E8	0x801C3A44	camera.c	16	14	15	14	0	-	-
 0x801C3A44	0x801C3CE8	camfocus.c	8	8	8	8	0	-	-
@@ -41,9 +42,10 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801C8F14	0x801C9DD8	fileio.c	28	27	28	27	0	-	-
 0x801C9DD8	0x801CB1BC	llfileio.c	24	23	24	23	0	-	-
 0x801CB1BC	0x801CB5D4	fs_cli.c	8	8	8	8	0	-	-
-0x801CB5D4	0x801CBC1C	filemc.c	11	10	10	0	10	-	-
+0x801CB5D4	0x801CBC1C	filemc.c	11	10	10	10	0	-	-
 0x801CBC1C	0x801CBC50	filehost.c	8	7	7	7	0	-	-
 0x801CCA64	0x801CD79C	Font.c	24	23	23	0	23	-	-
+0x801CD79C	0x801CE138	LLFont.c	9	9	9	0	9	-	-
 0x801CE138	0x801CE1E8	glib.c	2	2	3	2	0	-	-
 0x801CE1F8	0x801CEC90	llglib.c	39	35	36	35	0	-	-
 0x801CEC90	0x801CEE54	llrender.c	8	7	8	7	0	-	-
@@ -66,7 +68,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801DB058	0x801DB21C	maddeca.cpp	2	2	2	1	1	-	-
 0x801DB7D4	0x801DB89C	render.c	3	3	3	3	0	-	-
 0x801DCA10	0x801DD474	object.c	24	22	23	22	0	-	-
-0x801DD498	0x801DFE0C	particleLib.c	42	41	51	0	38	-	-
+0x801DD498	0x801DFE0C	particleLib.c	43	42	51	0	39	-	-
 0x801DFE0C	0x801E01FC	psysEmitter.c	4	4	4	4	0	-	-
 0x801E01FC	0x801E052C	psysCollision.c	6	6	8	6	0	-	-
 0x801E052C	0x801E0A1C	colorRamp.c	10	10	10	0	10	-	-
@@ -161,7 +163,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x80266640	0x8026696C	mbtowc_r.c	1	1	1	1	0	-	-
 0x8026696C	0x80266A2C	memchr.c	1	1	1	1	0	-	-
 0x80266A2C	0x80266AF8	dummy.c	3	3	3	3	0	-	tors.c
-0x8026AF64	0x8026B2E0	sevent.cpp	5	5	5	0	5	-	-
+0x8026AF64	0x8026B2E0	sevent.cpp	5	5	5	5	0	-	-
 0x8026EE24	0x8026EEB0	sstovrhd.c	2	2	2	2	0	-	-
 0x8026EF0C	0x8026EF38	sstqreqi.c	1	1	1	1	0	-	-
 0x802753F0	0x8027555C	sfxrevc.c	3	3	3	3	0	-	-

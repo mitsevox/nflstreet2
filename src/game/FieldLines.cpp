@@ -78,9 +78,10 @@ void GXSetNumChans(int a);
 void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
 void GXLoadPosMtxImm(float (*matrix)[4], int a);
 void GXSetCurrentMtx(int a);
-extern FieldLineBounds_t lbl_802CEFF0;
-extern float lbl_803EA4B8;
 
+/* Projected by FieldLineGetScale: a vertical segment of +-0.55556 (the factor of the vertex code) around the line position. */
+static FieldLineBounds_t _FieldLines_ProjBounds = {{0.0f, -0.55556f, 0.0f}, {0, 0, 0, 0}, {0.0f, 0.55556f, 0.0f}, {0, 0, 0, 0}};
+static float _FieldLines_fHeight = 0.72f;
 static int _FieldLines_iObjList;
 static unsigned char _FieldLines_abForceOn[5];
 static unsigned char _FieldLines_abDrawEnable[5];
@@ -92,7 +93,7 @@ float FieldLineGetScale(FieldLine_t *p)
     float extra = 0.0f;
     MatPush();
     MatTranslate(&p->mUnknown4);
-    fn_80234D00(&lbl_802CEFF0, &bounds);
+    fn_80234D00(&_FieldLines_ProjBounds, &bounds);
     float distance = fn_8022781C(&bounds.mUnknown10, &bounds.mUnknown0);
     MatPop();
     if (distance < 0.08f) {
@@ -143,28 +144,28 @@ int FieldLineDraw(FieldLine_t *p)
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
             {
                 float x = fn_80178A08();
-                float y = (1.0f - lbl_803EA4B8) * 0.55556f;
+                float y = (1.0f - _FieldLines_fHeight) * 0.55556f;
                 GXPosition3f32(x, scale * y, zero);
             }
-            GXTexCoord2f32(0.9f, 1.0f - lbl_803EA4B8 * 0.5f);
+            GXTexCoord2f32(0.9f, 1.0f - _FieldLines_fHeight * 0.5f);
             {
                 float x = fn_80178A08();
-                float y = (1.0f - lbl_803EA4B8) * -0.55556f;
+                float y = (1.0f - _FieldLines_fHeight) * -0.55556f;
                 GXPosition3f32(x, scale * y, zero);
             }
-            GXTexCoord2f32(0.9f, lbl_803EA4B8 * 0.5f);
+            GXTexCoord2f32(0.9f, _FieldLines_fHeight * 0.5f);
             {
                 float x = -fn_80178A08();
-                float y = (1.0f - lbl_803EA4B8) * 0.55556f;
+                float y = (1.0f - _FieldLines_fHeight) * 0.55556f;
                 GXPosition3f32(x, scale * y, zero);
             }
-            GXTexCoord2f32(0.1f, 1.0f - lbl_803EA4B8 * 0.5f);
+            GXTexCoord2f32(0.1f, 1.0f - _FieldLines_fHeight * 0.5f);
             {
                 float x = -fn_80178A08();
-                float y = (1.0f - lbl_803EA4B8) * -0.55556f;
+                float y = (1.0f - _FieldLines_fHeight) * -0.55556f;
                 GXPosition3f32(x, scale * y, zero);
             }
-            GXTexCoord2f32(0.1f, lbl_803EA4B8 * 0.5f);
+            GXTexCoord2f32(0.1f, _FieldLines_fHeight * 0.5f);
             fn_80236EC0(state);
         }
         p->mUnknownE4 += p->mUnknownE8;

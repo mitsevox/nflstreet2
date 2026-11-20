@@ -10700,6 +10700,18 @@
           "end": "0x8028D600"
         },
         {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CEFF0",
+          "end": "0x802CF010"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA4B8",
+          "end": "0x803EA4C0"
+        },
+        {
           "section": ".bss",
           "placement": ".bss",
           "start": "0x803078D4",
