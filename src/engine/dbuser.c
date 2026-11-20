@@ -1306,8 +1306,8 @@ int DbUserCreate(void)
         for (i = 0; DbUserFindIdByDb(key = _DbUser_aDbIds[i]) != -1; i++) {
         }
         id = DbUserNewId();
-        _DbUser_aEntries[(signed char)_DbUser_iCount].mUnknown0 = id;
-        _DbUser_aEntries[(signed char)_DbUser_iCount].mUnknown4 = key;
+        _DbUser_aEntries[(signed char)_DbUser_iCount].mId = id;
+        _DbUser_aEntries[(signed char)_DbUser_iCount].mDb = key;
         TDbExtLoadFromResource(key, _DbUser_pFileName, _DbUser_iMode, 0);
         _DbUser_iCount++;
         old = DbUserSetCurrent(id);
@@ -1325,12 +1325,12 @@ void DbUserDelete(int key)
         index = DbUserFindIndex(key);
         if (index != -1) {
             _DbUser_iCount--;
-            TDbExtLoadFromResource(_DbUser_aEntries[index].mUnknown4, _DbUser_pFileName, _DbUser_iMode, 0);
+            TDbExtLoadFromResource(_DbUser_aEntries[index].mDb, _DbUser_pFileName, _DbUser_iMode, 0);
             for (; index < (signed char)_DbUser_iCount; index++) {
                 memcpy(&_DbUser_aEntries[index], &_DbUser_aEntries[index + 1], sizeof(_DbUser_aEntries[0]));
             }
-            _DbUser_aEntries[(signed char)_DbUser_iCount].mUnknown0 = -1;
-            _DbUser_aEntries[(signed char)_DbUser_iCount].mUnknown4 = -1;
+            _DbUser_aEntries[(signed char)_DbUser_iCount].mId = -1;
+            _DbUser_aEntries[(signed char)_DbUser_iCount].mDb = -1;
         }
     }
 }
@@ -1344,11 +1344,11 @@ void DbUserReset(int key)
     if (key != -1) {
         index = DbUserFindIndex(key);
         if (index != -1) {
-            TDbExtLoadFromResource(_DbUser_aEntries[index].mUnknown4, _DbUser_pFileName, _DbUser_iMode, 0);
+            TDbExtLoadFromResource(_DbUser_aEntries[index].mDb, _DbUser_pFileName, _DbUser_iMode, 0);
             id = DbUserNewId();
             old = DbUserSetCurrent(key);
             fn_801FCE10(0, lbl_802B5D64, DbUserGetDb(DbUserGetCurrent()), id);
-            _DbUser_aEntries[index].mUnknown0 = id;
+            _DbUser_aEntries[index].mId = id;
             if (old == key) {
                 DbUserSetCurrent(id);
             } else {
@@ -1367,7 +1367,7 @@ int DbUserGetId(int index)
 {
     int value = -1;
     if (index < (signed char)_DbUser_iCount) {
-        value = _DbUser_aEntries[index].mUnknown0;
+        value = _DbUser_aEntries[index].mId;
     }
     return value;
 }
@@ -1376,7 +1376,7 @@ signed char DbUserFindIndex(int key)
 {
     signed char i;
     for (i = 0; i < (signed char)_DbUser_iCount; i++) {
-        if (key == _DbUser_aEntries[i].mUnknown0) {
+        if (key == _DbUser_aEntries[i].mId) {
             return i;
         }
     }
@@ -1389,7 +1389,7 @@ int DbUserGetDb(int key)
     if (key != -1) {
         int index = DbUserFindIndex(key);
         if (index != -1) {
-            value = _DbUser_aEntries[index].mUnknown4;
+            value = _DbUser_aEntries[index].mDb;
         }
     }
     return value;
@@ -1400,8 +1400,8 @@ int DbUserFindIdByDb(int key)
     unsigned char i = _DbUser_iCount;
 
     while (--i != 255) {
-        if (_DbUser_aEntries[i].mUnknown4 == key) {
-            return _DbUser_aEntries[i].mUnknown0;
+        if (_DbUser_aEntries[i].mDb == key) {
+            return _DbUser_aEntries[i].mId;
         }
     }
     return -1;
@@ -1449,7 +1449,7 @@ int DbUserPostLoad(int a)
         err = fn_801FCE10(0, lbl_802B5D88, DbUserGetDb(DbUserGetCurrent()), &key);
         if (key != DbUserGetCurrent()) {
             if (DbUserFindIndex(key) == -1) {
-                (_DbUser_aEntries + DbUserFindIndex(DbUserGetCurrent()))->mUnknown0 = key;
+                (_DbUser_aEntries + DbUserFindIndex(DbUserGetCurrent()))->mId = key;
                 _DbUser_iCurrent = key;
             } else {
                 err = 1;

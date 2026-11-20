@@ -2,13 +2,13 @@
 #define ENGINE_SYNCSTATEGROUP_H
 #include "engine/list.h"
 typedef struct SyncStateGroup_t {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-    int mUnknown16;
-    DSList_t *mpUnknown20;
-    void *mpUnknown24;
+    int mKey;
+    int mState;
+    int mNumHandles;
+    int mHeapSize;
+    int mHeap;
+    DSList_t *mpHandles;
+    void *mpCopy;
 } SyncStateGroup_t;
 #ifdef __cplusplus
 extern "C" {

@@ -21,22 +21,22 @@
 #include "engine/dslist.h"
 
 typedef struct SyncTimeCounter_t {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
+    int mMode;
+    int mStep;
+    int mTicks;
+    int mPending;
 } SyncTimeCounter_t;
 
 typedef struct SyncTime_t {
-    unsigned int mUnknown0;
-    unsigned int mUnknown4;
-    unsigned int mUnknown8;
-    SyncTimeCounter_t *mpUnknown12;
+    unsigned int mStartTime;
+    unsigned int mGameTime;
+    unsigned int mTime;
+    SyncTimeCounter_t *mpCounter;
 } SyncTime_t;
 
 typedef struct SyncTimeSave_t {
-    SyncTime_t mUnknown0;
-    SyncTimeCounter_t mUnknown16;
+    SyncTime_t mClock;
+    SyncTimeCounter_t mCounter;
 } SyncTimeSave_t;
 
 extern SyncTime_t *_SyncTime_pState;
@@ -59,9 +59,9 @@ int SyncTimeInitState(void *p, int value)
 {
     SyncTime_t *pTimer = p;
 
-    pTimer->mUnknown8 = pTimer->mUnknown0;
-    pTimer->mUnknown4 = pTimer->mUnknown0;
-    pTimer->mpUnknown12 = SyncTimeNewCounter(0, _SyncTime_iStep);
+    pTimer->mTime = pTimer->mStartTime;
+    pTimer->mGameTime = pTimer->mStartTime;
+    pTimer->mpCounter = SyncTimeNewCounter(0, _SyncTime_iStep);
     return 0;
 }
 
@@ -69,7 +69,7 @@ int SyncTimeShutdownState(void *p, int value)
 {
     SyncTime_t *pTimer = p;
 
-    SyncTimeDelCounter(pTimer->mpUnknown12);
+    SyncTimeDelCounter(pTimer->mpCounter);
     return 0;
 }
 
@@ -81,13 +81,13 @@ int SyncTimeCompareState(void *p, void *q)
 
     if (pB != 0) {
         result = 0;
-        result |= pA->mUnknown0 != pB->mUnknown0;
-        result |= pA->mUnknown4 != pB->mUnknown4;
-        result |= pA->mUnknown8 != pB->mUnknown8;
-        result |= SyncTimeCounterGetTicks(pA->mpUnknown12) != SyncTimeCounterGetTicks(pB->mpUnknown12);
+        result |= pA->mStartTime != pB->mStartTime;
+        result |= pA->mGameTime != pB->mGameTime;
+        result |= pA->mTime != pB->mTime;
+        result |= SyncTimeCounterGetTicks(pA->mpCounter) != SyncTimeCounterGetTicks(pB->mpCounter);
     } else {
         result = fn_80238278(pA, sizeof(SyncTime_t), 0);
-        result = fn_80238278(pA->mpUnknown12, sizeof(SyncTimeCounter_t), result);
+        result = fn_80238278(pA->mpCounter, sizeof(SyncTimeCounter_t), result);
     }
     return result;
 }
@@ -97,7 +97,7 @@ int SyncTimeSaveState(void *p, void *pBuffer)
     SyncTime_t *pTimer = p;
     *(SyncTime_t *)pBuffer = *pTimer;
     pBuffer = (char *)pBuffer + 64;
-    *(SyncTimeCounter_t *)pBuffer = *pTimer->mpUnknown12;
+    *(SyncTimeCounter_t *)pBuffer = *pTimer->mpCounter;
     return 1;
 }
 
@@ -106,8 +106,8 @@ int SyncTimeLoadState(void *p, void *pBuffer)
     SyncTime_t *pTimer = p;
     SyncTimeSave_t *pIn = pBuffer;
 
-    *pTimer = pIn->mUnknown0;
-    *pTimer->mpUnknown12 = pIn->mUnknown16;
+    *pTimer = pIn->mClock;
+    *pTimer->mpCounter = pIn->mCounter;
     return 1;
 }
 
@@ -127,15 +127,15 @@ void SyncTimeInit(int a)
     SyncStateSetCallbacks(pHandle, SyncTimeInitState, SyncTimeShutdownState, 0, SyncTimeCompareState);
     SyncStateSetSaveCallbacks(pHandle, SyncTimeSaveState, SyncTimeGetStateSize, SyncTimeLoadState);
     pTimer = SyncStateGetData(pHandle);
-    pTimer->mUnknown4 = 0;
-    pTimer->mUnknown0 = 0;
+    pTimer->mGameTime = 0;
+    pTimer->mStartTime = 0;
     SyncStateCommit(pHandle);
 }
 
 void SyncTimeAdvance(int delta)
 {
     if (_SyncTime_pState != 0) {
-        SyncTimeSetTime(_SyncTime_pState->mUnknown8 + delta);
+        SyncTimeSetTime(_SyncTime_pState->mTime + delta);
     }
 }
 
@@ -146,11 +146,11 @@ void SyncTimeShutdown(void)
 
 void SyncTimeSetTime(unsigned int time)
 {
-    unsigned int old = _SyncTime_pState->mUnknown8;
+    unsigned int old = _SyncTime_pState->mTime;
 
     if (time > old) {
-        _SyncTime_pState->mUnknown8 = time;
-        SyncTimeCounterAddTime(_SyncTime_pState->mpUnknown12, time - old);
+        _SyncTime_pState->mTime = time;
+        SyncTimeCounterAddTime(_SyncTime_pState->mpCounter, time - old);
     }
 }
 
@@ -159,8 +159,8 @@ unsigned int SyncTimeUpdateTicks(void)
     unsigned int value = 0;
 
     if (_SyncTime_pState != 0) {
-        value = SyncTimeCounterUpdate(_SyncTime_pState->mpUnknown12);
-        _SyncTime_pState->mUnknown4 += value;
+        value = SyncTimeCounterUpdate(_SyncTime_pState->mpCounter);
+        _SyncTime_pState->mGameTime += value;
     }
     return value;
 }
@@ -170,7 +170,7 @@ int SyncTimeGetGameTime(void)
     int value = 0;
 
     if (_SyncTime_pState != 0) {
-        value = _SyncTime_pState->mUnknown4 - _SyncTime_pState->mUnknown0;
+        value = _SyncTime_pState->mGameTime - _SyncTime_pState->mStartTime;
     }
     return value;
 }
@@ -200,37 +200,37 @@ void SyncTimeDelCounter(SyncTimeCounter_t *p)
 
 void SyncTimeCounterSetMode(SyncTimeCounter_t *p, int value)
 {
-    p->mUnknown0 = value;
+    p->mMode = value;
 }
 
 void SyncTimeCounterSetStep(SyncTimeCounter_t *p, int value)
 {
-    p->mUnknown4 = value;
+    p->mStep = value;
 }
 
 void SyncTimeCounterAddTime(SyncTimeCounter_t *p, int delta)
 {
-    p->mUnknown12 += delta;
+    p->mPending += delta;
 }
 
 int SyncTimeCounterUpdate(SyncTimeCounter_t *p)
 {
     int value = 0;
 
-    if (p->mUnknown0 == 0) {
-        if (p->mUnknown12 >= p->mUnknown4) {
-            value = p->mUnknown4;
-            p->mUnknown12 -= value;
+    if (p->mMode == 0) {
+        if (p->mPending >= p->mStep) {
+            value = p->mStep;
+            p->mPending -= value;
         }
-    } else if (p->mUnknown0 == 1) {
-        value = p->mUnknown12;
-        p->mUnknown12 = 0;
+    } else if (p->mMode == 1) {
+        value = p->mPending;
+        p->mPending = 0;
     }
-    p->mUnknown8 = value;
+    p->mTicks = value;
     return value;
 }
 
 int SyncTimeCounterGetTicks(SyncTimeCounter_t *p)
 {
-    return p->mUnknown8;
+    return p->mTicks;
 }

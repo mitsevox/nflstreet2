@@ -2,8 +2,8 @@
 #define ENGINE_DBUSERENTRY_H
 
 typedef struct DbUserEntry_t {
-    int mUnknown0;
-    int mUnknown4;
+    int mId;
+    int mDb;
 } DbUserEntry_t;
 
 #endif

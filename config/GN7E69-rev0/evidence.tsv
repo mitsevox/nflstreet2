@@ -42853,3 +42853,53 @@ data	0x803A25F0	0x803A260C	_DbUser_LoadJob	inferred	exact	provisional	.bss objec
 name	0x803A25F0	-	_DbUser_LoadJob	inferred	-	-	Asynchronous load request DbUserLoad fills (database, target, operations, done callback 0x80285A8C) and passes to the T3DB async load 0x801F9228.
 data	0x803A260C	0x803A2628	_DbUser_SaveJob	inferred	exact	provisional	.bss object of src/engine/dbuser.c (DbUserAsync_t, 28 bytes); accessed only by DbUserSave (0x8022F6D0/0x8022F6D4, whole-image scan of r13-relative and lis/addi accesses (n1a, 2026-11-20)).
 name	0x803A260C	-	_DbUser_SaveJob	inferred	-	-	Asynchronous save request DbUserSave fills the same way and passes to the T3DB async save 0x801F92EC.
+field	-	-	SyncRand_t.mNumStreams (+0x00, u8)	inferred	-	-	Stream count: lbz at 0x80236F90 (SyncRandInitState loop bound); SyncRandShutdownState counts it down; SyncRandInit stores the count argument.
+field	-	-	SyncRand_t.mOverride (+0x01, s8)	inferred	-	-	Override byte: lbz/extsb at 0x802372B4/0x802372B8 (SyncRandGetFloat, sign picks 0.0 or 0.9999) and lbz/andi. 128 at 0x80237368/0x8023736C (SyncRandGetRange).
+field	-	-	SyncRand_t.mSeed (+0x04, s32)	inferred	-	-	Seed: lwz at 0x80236FBC (first stream seed in SyncRandInitState), stw at 0x80237240 (SyncRandInit).
+field	-	-	SyncRand_t.mNumDraws (+0x08, s32)	inferred	-	-	Draw count of stream 0: stw 0 at 0x80236FB8 (SyncRandInitState), incremented at 0x80237338 (SyncRandGetRange) and in SyncRandGetFloat; compared by SyncRandCompareState.
+field	-	-	SyncRand_t.mChecksum (+0x0C, s32)	inferred	-	-	Checksum: stw 0 at 0x80236FB0, updated at 0x8023733C ((sum ^ count) + 7 in SyncRandGetRange), seeded by SyncRandInit and returned by SyncRandCompareState without a second state.
+field	-	-	SyncRand_t.mpStreams (+0x14, pointer)	inferred	-	-	Stream pointer array: stw r3,20(r31) at 0x80236FAC (allocation in SyncRandInitState), indexed by every draw.
+field	-	-	SyncRandBitPool_t.mCount (+0x00, u32)	inferred	-	-	Bit count: stw at 0x802374A4 (SyncRandBitPoolNew), lwz at 0x80237438 (SyncRandBitPoolClear) and in SyncRandBitPoolDraw.
+field	-	-	SyncRandBitPool_t.mStream (+0x04, u8)	inferred	-	-	Stream number: stb at 0x802374A8 (SyncRandBitPoolNew), lbz at 0x802374DC (SyncRandBitPoolDraw).
+field	-	-	SyncRandBitPool_t.mBits (+0x08, u8 array)	inferred	-	-	Bit bytes: addi r3,r3,8 at 0x80237440 (SyncRandBitPoolClear), addi r27,r28,8 at 0x802374E0 (SyncRandBitPoolDraw).
+field	-	-	SyncTimeCounter_t.mMode (+0x00, s32)	inferred	-	-	Mode tested against 0 and 1 at 0x802379E4 and 0x80237A08 (SyncTimeCounterUpdate); stored by SyncTimeCounterSetMode.
+field	-	-	SyncTimeCounter_t.mStep (+0x04, s32)	inferred	-	-	Step: stw at 0x802379C4 (SyncTimeCounterSetStep); the amount SyncTimeCounterUpdate takes in mode 0.
+field	-	-	SyncTimeCounter_t.mTicks (+0x08, s32)	inferred	-	-	Last tick count: stw r11,8(r3) at 0x80237A1C (SyncTimeCounterUpdate), lwz at 0x80237A28 (SyncTimeCounterGetTicks).
+field	-	-	SyncTimeCounter_t.mPending (+0x0C, s32)	inferred	-	-	Pending time: lwz/add/stw at 0x802379CC-0x802379D4 (SyncTimeCounterAddTime), reduced by SyncTimeCounterUpdate.
+field	-	-	SyncTime_t.mStartTime (+0x00, u32)	inferred	-	-	Start time: stw at 0x8023780C (SyncTimeInit, 0), lwz at 0x8023791C (subtracted in SyncTimeGetGameTime).
+field	-	-	SyncTime_t.mGameTime (+0x04, u32)	inferred	-	-	Game time: stw at 0x80237814 (SyncTimeInit) and 0x802375AC (SyncTimeInitState), lwz at 0x80237920 (SyncTimeGetGameTime); SyncTimeUpdateTicks adds the ticks to it.
+field	-	-	SyncTime_t.mTime (+0x08, u32)	inferred	-	-	Current time: stw at 0x802375B0 (SyncTimeInitState), lwz at 0x8023789C (SyncTimeSetTime, which stores the later time).
+field	-	-	SyncTime_t.mpCounter (+0x0C, pointer)	inferred	-	-	Tick counter: stw r3,12(r30) at 0x802375B8 (SyncTimeNewCounter result in SyncTimeInitState).
+field	-	-	SyncTimeSave_t.mClock (+0x00, SyncTime_t)	inferred	-	-	Saved clock: lwz 0/4/8/12 of the buffer at 0x80237728-0x80237740 (SyncTimeLoadState).
+field	-	-	SyncTimeSave_t.mCounter (+0x10, SyncTimeCounter_t)	inferred	-	-	Saved counter: addi r10,r4,16 at 0x80237734 and the four words read through it at 0x80237754-0x80237760 (SyncTimeLoadState).
+field	-	-	SyncStateHandle_t.mppOwner (+0x00, pointer)	inferred	-	-	Owner's data pointer address: stw of the incoming r4 at 0x80237A7C (SyncStateNewHandle); SyncStateAttachHandle writes the buffer through it (0x80237AE4) and SyncStateDetachHandle 0.
+field	-	-	SyncStateHandle_t.mSize (+0x04, s32)	inferred	-	-	Buffer size: stw of the incoming r5 at 0x80237A94, the size SyncStateNewHandle allocates and clears.
+field	-	-	SyncStateHandle_t.mFlags (+0x08, s32)	inferred	-	-	Flags/priority word: stw of the incoming r6 at 0x80237A84; SyncStateCompareHandles orders the handle list by it.
+field	-	-	SyncStateHandle_t.mId (+0x0C, u32)	inferred	-	-	FourCC id: stw of the incoming r7 at 0x80237A8C ('rand', 'timg', 'evmo' from the registrations).
+field	-	-	SyncStateHandle_t.mpInitFn (+0x10, SyncStateFn_t)	inferred	-	-	Init callback: stored at 0x80238238 (SyncStateSetCallbacks), called with the buffer and 0 by SyncStateCommit (0x80238200-0x8023820C).
+field	-	-	SyncStateHandle_t.mpShutdownFn (+0x14, SyncStateFn_t)	inferred	-	-	Shutdown callback: stored at 0x8023823C (SyncStateSetCallbacks), called by SyncStateDelHandle (0x80237B58 onward).
+field	-	-	SyncStateHandle_t.mpNotifyFn (+0x18, SyncStateFn_t)	inferred	-	-	Notify callback: stored at 0x80238240 (SyncStateSetCallbacks), called by SyncStateNotifyHandle.
+field	-	-	SyncStateHandle_t.mpCompareFn (+0x1C, SyncStateCompareFn_t)	inferred	-	-	Compare callback: stored at 0x80238234 (SyncStateSetCallbacks), its fifth argument (SyncRandCompareState, SyncTimeCompareState).
+field	-	-	SyncStateHandle_t.mpLoadFn (+0x20, SyncStateLoadFn_t)	inferred	-	-	Load callback: stored at 0x8023824C (SyncStateSetSaveCallbacks, its fourth argument: SyncRandLoadState, SyncTimeLoadState).
+field	-	-	SyncStateHandle_t.mpSizeFn (+0x24, SyncStateSizeFn_t)	inferred	-	-	Size callback: stored at 0x80238250 (SyncStateSetSaveCallbacks, its third argument: SyncRandGetStateSize, SyncTimeGetStateSize).
+field	-	-	SyncStateHandle_t.mpSaveFn (+0x28, SyncStateSaveFn_t)	inferred	-	-	Save callback: stored at 0x80238248 (SyncStateSetSaveCallbacks, its second argument: SyncRandSaveState, SyncTimeSaveState).
+field	-	-	SyncStateHandle_t.mpData (+0x2C, pointer)	inferred	-	-	State buffer: stw of the allocation at 0x80237AAC (SyncStateNewHandle); SyncStateGetData returns it.
+field	-	-	SyncStateHandle_t.mpGroup (+0x30, pointer)	inferred	-	-	Owning group: stw at 0x80237A98 (SyncStateNewHandle).
+field	-	-	SyncStateGroup_t.mKey (+0x00, s32)	inferred	-	-	Group key: stw at 0x80237CE8 (SyncStateAddGroup), compared by SyncStateMatchGroup and read by SyncStateEndGroup.
+field	-	-	SyncStateGroup_t.mState (+0x04, s32)	inferred	-	-	State 0, 1 or 2: stw at 0x80237D00 (SyncStateAddGroup, 1), set by SyncStateOpenGroup (0), SyncStateDetachGroup (1) and SyncStateRestoreGroup (2); tested by SyncStateMatchGroup.
+field	-	-	SyncStateGroup_t.mNumHandles (+0x08, s32)	inferred	-	-	Handle count: stw at 0x80237CF0 (SyncStateAddGroup); SyncStateNewGroup passes the same count to DSNewList for the handle list.
+field	-	-	SyncStateGroup_t.mHeapSize (+0x0C, s32)	inferred	-	-	Heap size: stw at 0x80237CFC (SyncStateAddGroup); the copy size of SyncStateSaveGroup and SyncStateRestoreGroup.
+field	-	-	SyncStateGroup_t.mHeap (+0x10, s32)	inferred	-	-	Heap id: stw at 0x80237CF8 (SyncStateAddGroup); passed to 0x801D27B8 (heap base), 0x801D277C and 0x801D2570.
+field	-	-	SyncStateGroup_t.mpHandles (+0x14, DSList_t pointer)	inferred	-	-	Handle list: lwz r3,20(r30) at 0x80237C2C passed to DSGetListNode; stored by SyncStateNewGroup.
+field	-	-	SyncStateGroup_t.mpCopy (+0x18, pointer)	inferred	-	-	Saved heap copy: stw 0 at 0x80237D04 (SyncStateAddGroup), freed at 0x80238014 (SyncStateFreeCopy), the copy target of SyncStateSaveGroup.
+field	-	-	SyncStateHeapDesc_t.mHeap (+0x08, s32)	inferred	-	-	Heap id: lwz r6,8(r30) at 0x80237F44 (SyncStateNewGroup passes it to SyncStateAddGroup and DSNewList) after 0x801D2130 has filled the copy.
+field	-	-	EvMon_t.mNumRecords (+0x00, u32)	inferred	-	-	Record count: stored at 0x802382D8 (EvMonInitHeader), read by EvMonClear.
+field	-	-	EvMon_t.mNumPosted (+0x04, s32)	inferred	-	-	Posted count: stored 0 at 0x802382D4 (EvMonInitHeader), incremented by EvMonFire, returned by EvMonGetCount, reset by EvMonClear.
+field	-	-	EvMon_t.mRecordSize (+0x08, s32)	inferred	-	-	Record size: stored at 0x802382E0 (EvMonInitHeader); the stride of EvMonGetRecord and EvMonGetCurrentRecord.
+field	-	-	EvMon_t.mNumListeners (+0x0C, u32)	inferred	-	-	Callback count: stored at 0x802382E8 (EvMonInitHeader); bounds the callback array in EvMonFire, EvMonAddListener and EvMonRemoveListener.
+field	-	-	EvMon_t.mpListeners (+0x10, AudmonEventFn_t array)	inferred	-	-	Callback array: word access at 0x802386A0 (EvMonAddListener); EvMonFire calls each non-null slot (blrl at 0x802385C4-0x802385C8).
+field	-	-	EvMonTable_t.mCount (+0x00, s32)	inferred	-	-	Monitor count: stw 0 at 0x8023830C (EvMonInit), incremented by EvMonCreate and EvMonAlloc.
+field	-	-	EvMonTable_t.mCapacity (+0x04, s32)	inferred	-	-	Capacity: stw of the count argument at 0x80238314 (EvMonInit).
+field	-	-	EvMonTable_t.mppMonitors (+0x08, pointer array)	inferred	-	-	Monitor pointers: stw of the allocation at 0x8023832C (EvMonInit), indexed at 0x802384E0-0x802384E4 and by every EvMon function.
+field	-	-	DbUserEntry_t.mId (+0x00, s32)	inferred	-	-	User id: lwzx at 0x8022F378 (DbUserGetId) and 0x8022F3A8 (DbUserFindIndex).
+field	-	-	DbUserEntry_t.mDb (+0x04, s32)	inferred	-	-	Database id: base + 4 formed at 0x8022F408 and lwzx at 0x8022F40C (DbUserGetDb).

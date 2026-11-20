@@ -21,20 +21,20 @@
 #include "engine/dslist.h"
 
 typedef struct SyncRand_t {
-    unsigned char mUnknown0;
-    signed char mUnknown1;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
+    unsigned char mNumStreams;
+    signed char mOverride;
+    int mSeed;
+    int mNumDraws;
+    int mChecksum;
     char mUnknown16[4];
-    void **mpUnknown20;
+    void **mpStreams;
 } SyncRand_t;
 
 typedef struct SyncRandBitPool_t {
-    unsigned int mUnknown0;
-    unsigned char mUnknown4;
+    unsigned int mCount;
+    unsigned char mStream;
     char mUnknown5[3];
-    unsigned char mUnknown8[1];
+    unsigned char mBits[1];
 } SyncRandBitPool_t;
 
 extern SyncRand_t *_SyncRand_pState;
@@ -49,13 +49,13 @@ int SyncRandInitState(void *p, int value)
     int i;
     int seed;
 
-    pRandom->mpUnknown20 = fn_801D2B7C(pRandom->mUnknown0 * 4, 0, 0);
-    pRandom->mUnknown8 = 0;
-    pRandom->mUnknown12 = 0;
-    seed = pRandom->mUnknown4;
-    for (i = 0; i < pRandom->mUnknown0; i++) {
-        pRandom->mpUnknown20[i] = MathNewRandomStream(0, seed);
-        seed = MathGetRandomRange(pRandom->mpUnknown20[i], 0x7FFFFFFF);
+    pRandom->mpStreams = fn_801D2B7C(pRandom->mNumStreams * 4, 0, 0);
+    pRandom->mNumDraws = 0;
+    pRandom->mChecksum = 0;
+    seed = pRandom->mSeed;
+    for (i = 0; i < pRandom->mNumStreams; i++) {
+        pRandom->mpStreams[i] = MathNewRandomStream(0, seed);
+        seed = MathGetRandomRange(pRandom->mpStreams[i], 0x7FFFFFFF);
     }
     return 0;
 }
@@ -64,10 +64,10 @@ int SyncRandShutdownState(void *p, int value)
 {
     SyncRand_t *pRandom = p;
 
-    while (pRandom->mUnknown0-- != 0) {
-        MathDelRandomStream(pRandom->mpUnknown20[pRandom->mUnknown0]);
+    while (pRandom->mNumStreams-- != 0) {
+        MathDelRandomStream(pRandom->mpStreams[pRandom->mNumStreams]);
     }
-    fn_801D2BD0(pRandom->mpUnknown20);
+    fn_801D2BD0(pRandom->mpStreams);
     return 0;
 }
 
@@ -79,11 +79,11 @@ int SyncRandCompareState(void *p, void *q)
 
     if (pB != 0) {
         result = 0;
-        result |= pA->mUnknown0 != pB->mUnknown0;
-        result |= pA->mUnknown4 != pB->mUnknown4;
-        result |= pA->mUnknown8 != pB->mUnknown8;
+        result |= pA->mNumStreams != pB->mNumStreams;
+        result |= pA->mSeed != pB->mSeed;
+        result |= pA->mNumDraws != pB->mNumDraws;
     } else {
-        result = pA->mUnknown12;
+        result = pA->mChecksum;
     }
     return result;
 }
@@ -92,7 +92,7 @@ int SyncRandSaveState(void *p, void *pBuffer)
 {
     SyncRand_t *pRandom = p;
     memcpy(pBuffer, pRandom, sizeof(SyncRand_t));
-    MathCopyRandomStream((char *)pBuffer + 24, pRandom->mpUnknown20[0]);
+    MathCopyRandomStream((char *)pBuffer + 24, pRandom->mpStreams[0]);
     return 1;
 }
 
@@ -100,13 +100,13 @@ int SyncRandLoadState(void *p, void *pBuffer)
 {
     SyncRand_t *pRandom = p;
     memcpy(pRandom, pBuffer, sizeof(SyncRand_t));
-    MathCopyRandomStream(pRandom->mpUnknown20[0], (char *)pBuffer + 24);
+    MathCopyRandomStream(pRandom->mpStreams[0], (char *)pBuffer + 24);
     return 1;
 }
 
 int SyncRandGetStateSize(void *p)
 {
-    return MathGetRandomStreamSize(_SyncRand_pState->mpUnknown20[0]) + sizeof(SyncRand_t);
+    return MathGetRandomStreamSize(_SyncRand_pState->mpStreams[0]) + sizeof(SyncRand_t);
 }
 
 void SyncRandInit(int count, int seed)
@@ -118,9 +118,9 @@ void SyncRandInit(int count, int seed)
     SyncStateSetCallbacks(pHandle, SyncRandInitState, SyncRandShutdownState, 0, SyncRandCompareState);
     SyncStateSetSaveCallbacks(pHandle, SyncRandSaveState, SyncRandGetStateSize, SyncRandLoadState);
     pRandom = SyncStateGetData(pHandle);
-    pRandom->mUnknown0 = count;
-    pRandom->mUnknown4 = seed;
-    pRandom->mUnknown12 = seed;
+    pRandom->mNumStreams = count;
+    pRandom->mSeed = seed;
+    pRandom->mChecksum = seed;
     SyncStateCommit(pHandle);
 }
 
@@ -132,12 +132,12 @@ float SyncRandGetFloat(int stream)
 {
     float value;
 
-    value = MathGetRandom(_SyncRand_pState->mpUnknown20[stream]);
+    value = MathGetRandom(_SyncRand_pState->mpStreams[stream]);
     if (stream == 0) {
-        _SyncRand_pState->mUnknown8++;
-        _SyncRand_pState->mUnknown12++;
-    } else if (_SyncRand_pState->mUnknown1 != 0) {
-        if (_SyncRand_pState->mUnknown1 < 0) {
+        _SyncRand_pState->mNumDraws++;
+        _SyncRand_pState->mChecksum++;
+    } else if (_SyncRand_pState->mOverride != 0) {
+        if (_SyncRand_pState->mOverride < 0) {
             value = 0.0f;
         } else {
             value = 0.9999f;
@@ -150,13 +150,13 @@ unsigned int SyncRandGetRange(int stream, unsigned int count)
 {
     unsigned int value;
 
-    value = MathGetRandomRange(_SyncRand_pState->mpUnknown20[stream], count);
+    value = MathGetRandomRange(_SyncRand_pState->mpStreams[stream], count);
     if (stream == 0) {
-        _SyncRand_pState->mUnknown8++;
-        _SyncRand_pState->mUnknown12 = (_SyncRand_pState->mUnknown12 ^ count) + 7;
-    } else if (_SyncRand_pState->mUnknown1 != 0 && count > 1) {
+        _SyncRand_pState->mNumDraws++;
+        _SyncRand_pState->mChecksum = (_SyncRand_pState->mChecksum ^ count) + 7;
+    } else if (_SyncRand_pState->mOverride != 0 && count > 1) {
         _SyncRand_iToggle = value = 1 - _SyncRand_iToggle;
-        if (!(_SyncRand_pState->mUnknown1 & 0x80)) {
+        if (!(_SyncRand_pState->mOverride & 0x80)) {
             value = count - 1 - value;
         }
     }
@@ -184,8 +184,8 @@ float SyncRandGetFloatRange(int stream, float low, float high)
 void SyncRandBitPoolClear(SyncRandBitPool_t *pBits)
 {
     unsigned int i;
-    unsigned char *pData = pBits->mUnknown8;
-    unsigned int count = (pBits->mUnknown0 + 7) >> 3;
+    unsigned char *pData = pBits->mBits;
+    unsigned int count = (pBits->mCount + 7) >> 3;
 
     for (i = 0; i < count; i++) {
         *pData++ = 0;
@@ -196,8 +196,8 @@ SyncRandBitPool_t *SyncRandBitPoolNew(int stream, unsigned int count)
 {
     SyncRandBitPool_t *pBits = fn_801D2B7C(((count + 7) >> 3) + 8, 0, 0);
 
-    pBits->mUnknown0 = count;
-    pBits->mUnknown4 = stream;
+    pBits->mCount = count;
+    pBits->mStream = stream;
     SyncRandBitPoolClear(pBits);
     return pBits;
 }
@@ -208,14 +208,14 @@ int SyncRandBitPoolDraw(SyncRandBitPool_t *pBits)
     unsigned int index;
     int bit;
     unsigned int start;
-    unsigned char *pData = pBits->mUnknown8;
+    unsigned char *pData = pBits->mBits;
 
-    i = SyncRandGetRange(pBits->mUnknown4, pBits->mUnknown0);
+    i = SyncRandGetRange(pBits->mStream, pBits->mCount);
     index = i >> 3;
     bit = i & 7;
     start = i;
     while ((pData[index] >> bit) & 1) {
-        i = (i + 1) % pBits->mUnknown0;
+        i = (i + 1) % pBits->mCount;
         index = i >> 3;
         bit = i & 7;
         if (i == start) {
