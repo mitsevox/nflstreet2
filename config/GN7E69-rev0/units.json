@@ -262,6 +262,14 @@
     }
   },
   "externals": {
+    "AssignGetFormationPos": {
+      "address": "0x800F97A8",
+      "evidence": "evidence.tsv function and name rows for 0x800F97A8 (unlinked; called from the comparison fragment src/game/cu_800F0960.cpp of the cu_800EFC68 group)."
+    },
+    "AssignGetPassSpeed": {
+      "address": "0x80103DD8",
+      "evidence": "evidence.tsv function and name rows for 0x80103DD8 (unlinked; called from the comparison fragment src/game/cu_800FE444.cpp of the cu_800EFC68 group)."
+    },
     "gPlayerLooks": {
       "address": "0x803078E8",
       "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
