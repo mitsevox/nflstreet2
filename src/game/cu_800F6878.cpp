@@ -98,23 +98,25 @@ extern "C" void fn_800F6AD8(float *p) {
 
 extern "C" void fn_800F6B2C(Object_80039F5C *p, Vector_80039F5C *pDelta) {
     if (p && pDelta) {
-        Vector_80039F5C *pPos = &p->mMotion.mPos;
         Point_8017886C origin;
         Point_8017886C target;
         float limit;
 
         origin = fn_80177FE0();
-        fn_80227638(&target, pPos, pDelta);
+        // FAKEMATCH: mY goes through a pointer to target while mX is accessed directly, as the target's 4(r31) / 16(r1) accesses show
+        Point_8017886C *pTarget = &target;
+        fn_80227638(pTarget, &p->mMotion.mPos, pDelta);
         if (fabsf(target.mX) < 4.0f) {
             limit = origin.mY + lbl_803EAE3C;
+            pTarget->mY = pTarget->mY < limit ? limit : pTarget->mY;
         } else {
             limit = origin.mY - 1.0f;
+            pTarget->mY = pTarget->mY < limit ? limit : pTarget->mY;
         }
-        target.mY = target.mY < limit ? limit : target.mY;
-        target.mY = target.mY > fn_80178A44() - 5.0f ? fn_80178A44() - 5.0f : target.mY;
+        pTarget->mY = pTarget->mY > fn_80178A44() - 5.0f ? fn_80178A44() - 5.0f : pTarget->mY;
         target.mX = target.mX < 2.5f - fn_80178A08() ? 2.5f - fn_80178A08()
                   : (target.mX > fn_80178A08() - 2.5f ? fn_80178A08() - 2.5f : target.mX);
-        fn_80227690(pDelta, &target, pPos);
+        fn_80227690(pDelta, pTarget, &p->mMotion.mPos);
     }
 }
 

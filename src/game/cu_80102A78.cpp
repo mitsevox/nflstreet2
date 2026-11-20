@@ -144,14 +144,14 @@ void SpchIGSetPassTarget(int id);
 int fn_800A7F1C(int team);
 void fn_8010016C(Object_80039F5C *pTarget, Vector_80039F5C *pPos, Object_80039F5C *p, float speed);
 int fn_80100370(Ball_t *pBall, Object_80039F5C *pTarget, float speed, Vector_80039F5C *pOut);
-void fn_80100BF8(Object_80039F5C *p, Vector_80039F5C *pPos, int *pOut, float speed, float a, float b);
+void fn_80100BF8(Object_80039F5C *p, float speed, Vector_80039F5C *pPos, int *pOut, float a, float b);
 void fn_80101130(Object_80039F5C *pTarget, Object_80039F5C *p, short *pCount);
 void fn_80103F80(Ball_t *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, float speed, int angle,
                  float ballSpeed, Vector_80039F5C *pOut, Object_80039F5C *p);
 void BallLaunchToTarget(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
 void fn_80152068(int index, Vector_80039F5C *pOut);
 int TutorialAreMovesDone(unsigned long long mask);
-float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short *pCount, float scale);
+float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, float scale, short *pCount);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 void PenaltyCheckGrounding(Object_80039F5C *p);
 float fn_80178A2C(void);
@@ -335,7 +335,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         if (!(p->mFlags & 0x4000)) {
             fn_80101130(pTarget, p, &pRecord->mUnknown8);
         }
-        speed = fn_80103DD8(p, pTarget, &pRecord->mUnknown8, pRecord->mUnknown0);
+        speed = fn_80103DD8(p, pTarget, pRecord->mUnknown0, &pRecord->mUnknown8);
         pEvent->mUnknown8 = (int)pTarget;
         if (PlayerMoveGetKind(p) != 0) {
             AudmonEventPostId(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
@@ -427,7 +427,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         target.mX = target.mX > fn_80178A08() + limit ? fn_80178A08() + limit : target.mX;
         target.mX = target.mX < -(fn_80178A08() + limit) ? -(fn_80178A08() + limit) : target.mX;
         target.mY = target.mY > fn_80178A44() + limit ? fn_80178A44() + limit : target.mY;
-        fn_80100BF8(p, &target, result, speed, pRecord->mUnknown0, pRecord->mUnknown4);
+        fn_80100BF8(p, speed, &target, result, pRecord->mUnknown0, pRecord->mUnknown4);
         target.mX = target.mX > fn_80178A08() + 3.0f ? fn_80178A08() + 3.0f : target.mX;
         target.mX = target.mX < -(fn_80178A08() + 3.0f) ? -(fn_80178A08() + 3.0f) : target.mX;
         target.mY = target.mY > fn_80178A44() + 2.5f ? fn_80178A44() + 2.5f : target.mY;
@@ -641,7 +641,7 @@ extern "C" int fn_80103D6C(Object_80039F5C *p)
     return result;
 }
 
-extern "C" float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short *pCount, float scale)
+extern "C" float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, float scale, short *pCount)
 {
     Vector_80039F5C delta;
     float factor = 0.0f;

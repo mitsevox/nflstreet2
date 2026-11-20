@@ -54,7 +54,6 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
 
     if (p && pOther && pOut) {
         Ball_t *pBall = BallGetCurrent();
-        Vector_80039F5C *pPos = &p->mMotion.mPos;
         Point_8017886C toBall;
         Block_800F7314 *pBlock = (Block_800F7314 *)&p->mUnknown336;
         Point_8017886C spot;
@@ -62,9 +61,9 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         int heading;
         int direction;
 
-        fn_80227690(&toBall, &pBall->mState.mPos, pPos);
+        fn_80227690(&toBall, &pBall->mState.mPos, &p->mMotion.mPos);
         fn_8009F928(pOther, &spot, 5, pBlock->mUnknown21);
-        fn_80227690(&toSpot, &spot, pPos);
+        fn_80227690(&toSpot, &spot, &p->mMotion.mPos);
         fn_800F6D40(p, pOther, &spot, pOut);
         fn_800F6E30(p, pOther, &spot, pOut);
         fn_800F6B2C(p, pOut);
@@ -147,7 +146,6 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
 
 extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
-        Vector_80039F5C *pPos = &p->mMotion.mPos;
         Point_8017886C toBall;
         Block_800F7314 *pBlock = (Block_800F7314 *)&p->mUnknown336;
         Point_8017886C spot;
@@ -155,9 +153,9 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         int heading;
         int direction;
 
-        fn_80227690(&toBall, &BallGetCurrent()->mState.mPos, pPos);
+        fn_80227690(&toBall, &BallGetCurrent()->mState.mPos, &p->mMotion.mPos);
         fn_8009F928(pOther, &spot, 5, pBlock->mUnknown21);
-        fn_80227690(&toSpot, &spot, pPos);
+        fn_80227690(&toSpot, &spot, &p->mMotion.mPos);
         fn_800F70D0(p, pOther, &spot, pOut);
         fn_800F722C(p, pOther, &spot.mX, &pOut->mX);
         fn_800F6B2C(p, pOut);
@@ -310,7 +308,6 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
 
 extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
-        Vector_80039F5C *pPos = &p->mMotion.mPos;
         Point_8017886C toOther;
         Point_8017886C fromOther;
         Block_800F7314 *pBlock;
@@ -318,8 +315,8 @@ extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         Vector_80039F5C target;
         int angle;
 
-        fn_80227690(&toOther, &pOther->mMotion.mPos, pPos);
-        fn_80227690(&fromOther, pPos, &pOther->mMotion.mPos);
+        fn_80227690(&toOther, &pOther->mMotion.mPos, &p->mMotion.mPos);
+        fn_80227690(&fromOther, &p->mMotion.mPos, &pOther->mMotion.mPos);
         pBlock = (Block_800F7314 *)&p->mUnknown336;
         origin = fn_80177FE0();
         if ((MathAngleDiff(pOther->mMotion.mUnknown32, fromOther.Heading()) < 0xE38E3 && fn_802270A4(&toOther) < 12.0f
@@ -338,7 +335,7 @@ extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         target.mX += pOther->mMotion.mPos.mX;
         target.mZ = 0.0f;
         target.mY += pOther->mMotion.mPos.mY;
-        fn_80227690(pOut, &target, pPos);
+        fn_80227690(pOut, &target, &p->mMotion.mPos);
         angle = fn_80120794(&p->mMotion, (Object_800B26B0 *)&target, &pOther->mMotion.mUnknown40,
                             p->mMotion.mUnknown28, pOther->mMotion.mUnknown28, pOther->mMotion.mUnknown32,
                             fn_802270A4(&toOther));

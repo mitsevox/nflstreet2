@@ -86,7 +86,15 @@ extern "C" void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut)
             unsigned char i;
             unsigned int count;
 
-            GetFormationPoint(pOtherTeam, pOther->mIdBytes[1], &other);
+            {
+                PlayBookPosition_t *pEntry = &pOtherTeam->mUnknown8.mUnknown84[0][pOther->mIdBytes[1]];
+                Point_8017886C *pPoint;
+
+                // FAKEMATCH: mY is stored through a pointer to other while mX is stored directly; this places &other after the first lfs as the target does
+                other.mX = (pOtherTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
+                pPoint = &other;
+                pPoint->mY = (pOtherTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
+            }
             if (fabsf(other.mX) < lbl_803EAE70) {
                 if (p->mUnknown2914 == 16) {
                     if (pOut->mX < -lbl_803EAE70) {

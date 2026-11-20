@@ -1474,8 +1474,10 @@ extern "C" Point_8017886C fn_800F97A8(Object_80039F5C *p) {
     pTeam = PlayBookGetFormation(p->mIdBytes[2]);
     pEntry = &pTeam->mUnknown8.mUnknown84[0][p->mIdBytes[1]];
     point.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
-    point.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
-    fn_80227638(&point, &point, &base);
+    // FAKEMATCH: mY and the transform go through a pointer to point while mX is stored directly; this places &point after the first lfs as the target does
+    Point_8017886C *pPoint = &point;
+    pPoint->mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
+    fn_80227638(pPoint, pPoint, &base);
     return point;
 }
 

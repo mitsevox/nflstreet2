@@ -57,7 +57,7 @@ void PlayerCutGetEndPoint(Object_80039F5C *,Vector_80039F5C *);
 float PlayerCutGetRunSpeed(Object_80039F5C *,float);
 void fn_80103F80(Ball_t *,Vector_80039F5C,Vector_80039F5C,float,int,float,Vector_80039F5C *,Object_80039F5C *);
 void fn_80104328(Object_80039F5C *,unsigned int,int *,Vector_80039F5C *,int *);
-float fn_80103DD8(Object_80039F5C *,Object_80039F5C *,short *,float);
+float fn_80103DD8(Object_80039F5C *,Object_80039F5C *,float,short *);
 int fn_8011E9B4(Object_80039F5C *);
 int fn_800A7F1C(unsigned char);
 unsigned int fn_80100B0C(void);
@@ -236,7 +236,7 @@ void fn_800FE9B4(Object_80039F5C *p, Point_8017886C *point, float *speed)
     s->mUnknown0 = lbl_803EAE76;
     s->mUnknown40 = 180.0f;
     s->mUnknown44 = 1000.0f;
-    direction->mX = direction->mY = 0.0f;
+    s->mUnknown32.mX = direction->mY = 0.0f;
     if (*speed == 0.0f) {
         return;
     }
@@ -957,7 +957,7 @@ void fn_80100B34(Object_80039F5C *p,float *out,float *maximum,float a,float b,fl
     }
 }
 
-void fn_80100BF8(Object_80039F5C *p, Vector_80039F5C *point, Point_8017886C *offset, float, float factor, float skill)
+void fn_80100BF8(Object_80039F5C *p, float, Vector_80039F5C *point, Point_8017886C *offset, float factor, float skill)
 {
     float error = 0.0f;
     float amount = 0.0f;
@@ -1166,7 +1166,7 @@ void fn_80101568(Object_80039F5C *p, unsigned char *kind, Point_8017886C *point,
         if (state->mUnknown0Bytes[0]) {
             speed = gFrameTimeScale * 0.3f;
         } else {
-            speed = fn_80103DD8(p, other, &record->mUnknown8, 0.9f);
+            speed = fn_80103DD8(p, other, 0.9f, &record->mUnknown8);
         }
         if (ball) {
             fn_801007A4(ball, p, other, speed, &target, kind);
