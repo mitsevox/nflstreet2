@@ -36,7 +36,7 @@ int VptManagerPushCamera(void *pObject, void *pItem, int (*a)(void *, void *), i
 int VptManagerPopCamera(void *pObject, void *pItem);
 int VptManagerReplaceCamera(void *pObject, void *pItem, void *pOther);
 void fn_800AD9C0(float value);
-void fn_80141164(float value);
+void CamPlaySetYOffset(float value);
 int fn_80178308(void);
 int fn_80178320(void);
 void *CamCreate(int a, CameraDesc_t *pDesc);
@@ -64,7 +64,7 @@ int _CamGameCreate(void *p, int value)
     _CamGameAdd(pState, 3, 17);
     pState->mSet.mCurrent = 0;
     VptManagerPushCamera(pState->mpObject, pState->mSet.mpCameras[pState->mSet.mCurrent], 0, 0);
-    fn_80141164(0.0f);
+    CamPlaySetYOffset(0.0f);
     return 0;
 }
 

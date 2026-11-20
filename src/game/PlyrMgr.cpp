@@ -124,7 +124,7 @@ void fn_800CE674(Object_800CE674 *p);
 void fn_800CE684(Object_800CE674 *p);
 void fn_800D782C(Object_80039F5C *p);
 void PlyrCollideClearExempt(Object_80039F5C *p);
-void fn_8015C244(void *p);
+void RouteArrowHighlight(void *p);
 void PlyrMoveUpdate(Object_80039F5C *p, float f);
 void ScrmSpotCheckRetreat(void);
 int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
@@ -226,8 +226,8 @@ void fn_800C7D44(Object_80039F5C *p);
 void fn_8011E13C(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 void *fn_800AEE20(Object_80039F5C *p);
-void *fn_8015C170(Object_80039F5C *p, Point_8017886C *pPos, void *pRecord, unsigned char flag);
-void fn_8015C218(void *p);
+void *RouteArrowShow(Object_80039F5C *p, Point_8017886C *pPos, void *pRecord, unsigned char flag);
+void RouteArrowHide(void *p);
 }
 
 extern "C" void PlyrFixWristBones(Object_80039F5C *p)
@@ -1006,10 +1006,10 @@ extern "C" void PlyrRouteShow(int on, int team, int index)
             } else {
                 flip = 0;
             }
-            pBlock->mpUnknown984 = fn_8015C170(p, &pos, pRecord, flip);
+            pBlock->mpUnknown984 = RouteArrowShow(p, &pos, pRecord, flip);
         }
     } else if (pBlock->mpUnknown984 != 0) {
-        fn_8015C218(pBlock->mpUnknown984);
+        RouteArrowHide(pBlock->mpUnknown984);
         pBlock->mpUnknown984 = 0;
     }
 }
@@ -1023,7 +1023,7 @@ extern "C" void PlyrRouteShowHighlighted(int a, int team, int index)
     p = &_PlyrMgr_pManager->mpPlayers[index + team * _PlyrMgr_pManager->mPerTeam].mObject;
     pBlock = (PlyrModelView_t *)p->mpUnknown4;
     if (pBlock->mpUnknown984 != 0) {
-        fn_8015C244(pBlock->mpUnknown984);
+        RouteArrowHighlight(pBlock->mpUnknown984);
     }
 }
 

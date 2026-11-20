@@ -56,7 +56,7 @@ int MsgBoxIsClosed(void);
 void CamGameSetModeAll(int a);
 void CamGameSelectCamera(int a);
 GameCamera_t *CamGameGetCamera(int index);
-void fn_80141164(float value);
+void CamPlaySetYOffset(float value);
 int fn_80178308(void);
 int fn_80178320(void);
 void fn_801486A8(void);
@@ -88,7 +88,7 @@ void fn_801538C8(Class_802A1BC8 *p)
     CamGameSetModeAll(1);
     CamGameSelectCamera(0);
     CamMainWarpToDest(CamGameGetCamera(5));
-    fn_80141164(2.5f);
+    CamPlaySetYOffset(2.5f);
 }
 
 void fn_80153910(Class_802A1BC8 *p, float dt)

@@ -31,8 +31,8 @@ void PlyrIconQueueAdd(float, float, void *, unsigned char);
 void UISViewObjSetDrawFunc(void (*)(int, float, float, float, float));
 void PlyrIconShutdown(void);
 int ResSetMemFlags(int);
-void fn_801A1240(int);
-void fn_801A12E8(void);
+void PlayArtRenderLoadTextures(int);
+void PlayArtRenderUnloadTextures(void);
 
 void PlayArtReadPositions(void *p, unsigned char *input, void *, int a, int b, signed char c, int group, int index)
 {
@@ -146,12 +146,12 @@ void PlayArtStop(void)
 void PlayArtMemInit(int value)
 {
     int saved = ResSetMemFlags(4);
-    fn_801A1240(value);
+    PlayArtRenderLoadTextures(value);
     ResSetMemFlags(saved);
 }
 void PlayArtMemShutdown(void)
 {
-    fn_801A12E8();
+    PlayArtRenderUnloadTextures();
 }
 void PlayArtResetAll(void)
 {

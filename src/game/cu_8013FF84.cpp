@@ -9,53 +9,53 @@
 #include "engine/viewport.h"
 #include "game/Lookup_8012078C.h"
 
-struct Vector_8013FF84 { float mX,mY,mZ; };
-struct Angles_8013FF84 { int mX,mY,mZ; };
-struct View_8013FF84 { Vector_8013FF84 mUnknown0; Angles_8013FF84 mUnknownC; int mUnknown18; };
-struct State_8013FF84 {
+struct CamPlayVec3_t { float mX,mY,mZ; };
+struct CamPlayAngles_t { int mX,mY,mZ; };
+struct CamPlayView_t { CamPlayVec3_t mUnknown0; CamPlayAngles_t mUnknownC; int mUnknown18; };
+struct CamPlayState_t {
     unsigned int mUnknown0[3];
     unsigned int mUnknownC;
     int mUnknown10;
     unsigned char mUnknown14[12];
-    Vector_8013FF84 mUnknown20;
-    Angles_8013FF84 mUnknown2C;
+    CamPlayVec3_t mUnknown20;
+    CamPlayAngles_t mUnknown2C;
     float mUnknown38;
 };
-struct Mode_8013FF84 {
-    View_8013FF84 *mUnknown0;
+struct CamPlayDef_t {
+    CamPlayView_t *mUnknown0;
     int mUnknown4;
     float mUnknown8;
     float mUnknownC[2];
     float mUnknown14[2][2];
-    Vector_8013FF84 mUnknown24;
-    Vector_8013FF84 mUnknown30;
-    Vector_8013FF84 mUnknown3C;
-    Vector_8013FF84 mUnknown48;
-    Vector_8013FF84 mUnknown54;
-    Vector_8013FF84 mUnknown60;
+    CamPlayVec3_t mUnknown24;
+    CamPlayVec3_t mUnknown30;
+    CamPlayVec3_t mUnknown3C;
+    CamPlayVec3_t mUnknown48;
+    CamPlayVec3_t mUnknown54;
+    CamPlayVec3_t mUnknown60;
 };
-struct Entry_8013FF84 {
+struct CamPlayJitter_t {
     unsigned int mUnknown0,mUnknown4;
     float mUnknown8,mUnknownC;
-    Vector_8013FF84 mUnknown10;
+    CamPlayVec3_t mUnknown10;
     unsigned char mUnknown1C,mUnknown1D;
     unsigned char mUnknown1E[2];
 };
-struct Control_8013FF84 {
+struct CamPlayJitterCtl_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1[3];
     unsigned int mUnknown4,mUnknown8,mUnknownC;
 };
-extern "C" Control_8013FF84 lbl_802DBEBC;
-extern "C" Entry_8013FF84 lbl_802DBECC[];
-extern "C" Mode_8013FF84 lbl_802DC718[];
-extern "C" Angles_8013FF84 lbl_8031B6B8;
-extern "C" Vector_8013FF84 lbl_8031B6AC;
-static float lbl_803EB1E4 = 1.0f;
-static unsigned char lbl_803EB1E8 = 0;
-static float lbl_803EB1EC = 120.0f;
-static View_8013FF84 *lbl_803ECA04;
-static float lbl_803ECA08;
+extern "C" CamPlayJitterCtl_t lbl_802DBEBC;
+extern "C" CamPlayJitter_t lbl_802DBECC[];
+extern "C" CamPlayDef_t lbl_802DC718[];
+extern "C" CamPlayAngles_t lbl_8031B6B8;
+extern "C" CamPlayVec3_t lbl_8031B6AC;
+static float _CamPlay_fOrbitDir = 1.0f;
+static unsigned char _CamPlay_bOrbitToggled = 0;
+static float _CamPlay_fBlendFrames = 120.0f;
+static CamPlayView_t *_CamPlay_pViews;
+static float _CamPlay_fYOffset;
 extern "C" {
 void CamPresetSetEaseRates(GameCamera_t *, int);
 unsigned int SyncRandGetRange(unsigned int,unsigned int);
@@ -92,10 +92,10 @@ int fn_80178320(void);
 void CamMainFollowBall(GameCamera_t *);
 void CamMainFollow(void *,int,int,int);
 void AudmonEventPost(int,int);
-void fn_80140DBC(GameCamera_t *,int,int);
-void fn_80140EA0(GameCamera_t *);
+void CamPlayMsgFunc(GameCamera_t *,int,int);
+void CamPlayStart(GameCamera_t *);
 
-void fn_8013FF84(GameCamera_t *camera, Vector_8013FF84 *point)
+void CamPlayApplyJitter(GameCamera_t *camera, CamPlayVec3_t *point)
 {
     unsigned int index = lbl_802DBEBC.mUnknown4;
     if (lbl_802DBEBC.mUnknown0) {
@@ -104,7 +104,7 @@ void fn_8013FF84(GameCamera_t *camera, Vector_8013FF84 *point)
         float scale = 1.0f;
         if (lbl_802DBECC[index].mUnknown1C) scale -= (float)(total / lbl_802DBECC[index].mUnknown4);
         if (ticks >= lbl_802DBECC[index].mUnknown0 && total <= lbl_802DBECC[index].mUnknown4) {
-            Vector_8013FF84 value;
+            CamPlayVec3_t value;
             float low = lbl_802DBECC[index].mUnknown8;
             float range = lbl_802DBECC[index].mUnknownC-low;
             value.mX = scale*(low+range*((float)SyncRandGetRange(1,100)*0.01f));
@@ -113,7 +113,7 @@ void fn_8013FF84(GameCamera_t *camera, Vector_8013FF84 *point)
             value.mX = value.mX < -0.3f ? -0.3f : (value.mX > 0.3f ? 0.3f : value.mX);
             value.mY = value.mY < -0.3f ? -0.3f : (value.mY > 0.3f ? 0.3f : value.mY);
             value.mZ = value.mZ < -0.3f ? -0.3f : (value.mZ > 0.3f ? 0.3f : value.mZ);
-            Vector_8013FF84 *dst = &lbl_802DBECC[index].mUnknown10;
+            CamPlayVec3_t *dst = &lbl_802DBECC[index].mUnknown10;
             dst->mX = value.mX;
             dst->mY = value.mY;
             dst->mZ = value.mZ;
@@ -127,7 +127,7 @@ void fn_8013FF84(GameCamera_t *camera, Vector_8013FF84 *point)
         CamPresetSetEaseRates(camera,2);
     }
 }
-void fn_80140270(Vector_8013FF84 *point, Angles_8013FF84 *angles, Vector_8013FF84 *velocity, int index, int mode)
+void CamPlayPanWithBall(CamPlayVec3_t *point, CamPlayAngles_t *angles, CamPlayVec3_t *velocity, int index, int mode)
 {
     float base = lbl_802DC718[index].mUnknown8;
     float amount = velocity->mX/base*(lbl_802DC718[index].mUnknownC[1]-base);
@@ -148,33 +148,33 @@ void fn_80140270(Vector_8013FF84 *point, Angles_8013FF84 *angles, Vector_8013FF8
         lbl_8031B6AC.mX = point->mX;
     }
 }
-void fn_80140360(GameCamera_t *camera)
+void CamPlayInit(GameCamera_t *camera)
 {
-    lbl_803ECA04 = lbl_802DC718[camera->mUnknown9C].mUnknown0;
+    _CamPlay_pViews = lbl_802DC718[camera->mUnknown9C].mUnknown0;
     camera->mUnknownE0 = 0.0f;
     camera->mUnknownE4 = 0;
     camera->mUnknownE5 = 0;
-    lbl_803EB1E8 = 0;
+    _CamPlay_bOrbitToggled = 0;
     camera->mUnknownF0 = 0.0f;
     camera->mUnknownEC = 0.0f;
     camera->mUnknownE8 = 0.0f;
-    camera->mUnknownDC = fn_80140DBC;
+    camera->mUnknownDC = CamPlayMsgFunc;
     camera->mUnknown94 |= 0x10;
 }
-void fn_801403BC(GameCamera_t *camera) { camera->mUnknown94 &= ~0x10; }
-void fn_801403CC(GameCamera_t *camera)
+void CamPlayUninit(GameCamera_t *camera) { camera->mUnknown94 &= ~0x10; }
+void CamPlayStartOrbit(GameCamera_t *camera)
 {
-    State_8013FF84 *state = (State_8013FF84 *)&camera->mPadF8;
+    CamPlayState_t *state = (CamPlayState_t *)&camera->mPadF8;
     camera->mUnknownE5 = 0;
-    lbl_803EB1E8 = 0;
+    _CamPlay_bOrbitToggled = 0;
     CamFreeClearVelocity(camera);
     if (fn_800AD9B4() == 3) {
         camera->mUnknownE0 = 180.0f;
         camera->mUnknownE4 = 1;
         if (camera->mHeader.mUnknown04[0] > 0.0f) {
-            if (fn_801784C4()) lbl_803EB1E4 = 1.0f; else lbl_803EB1E4 = -1.0f;
+            if (fn_801784C4()) _CamPlay_fOrbitDir = 1.0f; else _CamPlay_fOrbitDir = -1.0f;
         } else {
-            if (fn_801784C4()) lbl_803EB1E4 = -1.0f; else lbl_803EB1E4 = 1.0f;
+            if (fn_801784C4()) _CamPlay_fOrbitDir = -1.0f; else _CamPlay_fOrbitDir = 1.0f;
         }
         state->mUnknown0[2] = 0;
         state->mUnknown0[1] = 0;
@@ -194,22 +194,22 @@ void fn_801403CC(GameCamera_t *camera)
         CamMainWarpToDest(camera);
     }
 }
-unsigned char fn_80140504(GameCamera_t *camera)
+unsigned char CamPlayProcessOrbit(GameCamera_t *camera)
 {
-    State_8013FF84 *state = (State_8013FF84 *)&camera->mPadF8;
-    Angles_8013FF84 angles;
-    Vector_8013FF84 offset;
-    Vector_8013FF84 point;
-    Vector_8013FF84 zero = {0.0f, 0.0f, 0.0f};
+    CamPlayState_t *state = (CamPlayState_t *)&camera->mPadF8;
+    CamPlayAngles_t angles;
+    CamPlayVec3_t offset;
+    CamPlayVec3_t point;
+    CamPlayVec3_t zero = {0.0f, 0.0f, 0.0f};
     float blend = 0.0f;
-    camera->mUnknownE0 += lbl_803EB1E4*6.0f;
+    camera->mUnknownE0 += _CamPlay_fOrbitDir*6.0f;
     if (fabsf(camera->mUnknownE0-180.0f) <= 180.0f && fn_800AD9B4() != 10) {
         blend = fabsf(camera->mUnknownE0-180.0f)*0.0055555557f;
         blend = blend < 0.0f ? 0.0f : (blend > 1.0f ? 1.0f : blend);
-        Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,blend);
+        Orient3Lerp(&angles,&_CamPlay_pViews[1].mUnknownC,&state->mUnknown2C,blend);
         angles.mZ = (int)(camera->mUnknownE0*46603.37890625f);
-        CamMainSetAngle(camera,&angles,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
-        Vec3Lerp(&point,&lbl_803ECA04[1],&state->mUnknown20,blend);
+        CamMainSetAngle(camera,&angles,_CamPlay_pViews[camera->mUnknownA0].mUnknown18);
+        Vec3Lerp(&point,&_CamPlay_pViews[1],&state->mUnknown20,blend);
         float z = point.mZ;
         MatSetStack(VptGetMatrixStack());MatPushUnit();MatTranslate(&zero);
         MatRotZ(-(int)(camera->mUnknownE0*46603.37890625f));
@@ -230,23 +230,23 @@ unsigned char fn_80140504(GameCamera_t *camera)
     }
     return camera->mUnknownE4;
 }
-unsigned char fn_80140700(GameCamera_t *camera) { return camera->mUnknownE4; }
+unsigned char CamPlayIsOrbiting(GameCamera_t *camera) { return camera->mUnknownE4; }
 /* Converts a vector of degrees to the 24-bit integer angle units. */
 #define ANGLES_FROM_DEGREES(dst, degrees) \
     { \
-        Angles_8013FF84 angles_ = {0, 0, 0}; \
+        CamPlayAngles_t angles_ = {0, 0, 0}; \
         angles_.mX = (int)((degrees).mX*46603.37890625f); \
         angles_.mY = (int)((degrees).mY*46603.37890625f); \
         angles_.mZ = (int)((degrees).mZ*46603.37890625f); \
         (dst) = angles_; \
     }
-void fn_80140708(GameCamera_t *camera)
+void CamPlayProcess(GameCamera_t *camera)
 {
-    State_8013FF84 *state = (State_8013FF84 *)&camera->mPadF8;
-    Vector_8013FF84 point;
-    Vector_8013FF84 velocity;
-    Angles_8013FF84 angles;
-    Angles_8013FF84 offset;
+    CamPlayState_t *state = (CamPlayState_t *)&camera->mPadF8;
+    CamPlayVec3_t point;
+    CamPlayVec3_t velocity;
+    CamPlayAngles_t angles;
+    CamPlayAngles_t offset;
     if (BallsExist()) {
         BallGetPosition(BallGetCurrent(),&velocity);
         float bound = lbl_802DC718[camera->mUnknown9C].mUnknown8;
@@ -269,16 +269,16 @@ void fn_80140708(GameCamera_t *camera)
         float blend = 0.0f;
         if (camera->mUnknownA4 == 0 && gameMode == 2) {
             if (state->mUnknown38 < 1.0f) {
-                state->mUnknown38 += 1.0f/lbl_803EB1EC;
+                state->mUnknown38 += 1.0f/_CamPlay_fBlendFrames;
                 state->mUnknown38 = state->mUnknown38 < 0.0f ? 0.0f : (state->mUnknown38 > 1.0f ? 1.0f : state->mUnknown38);
-                Vec3Lerp(&point,&lbl_803ECA04[1],&state->mUnknown20,state->mUnknown38);
-                Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,state->mUnknown38);
+                Vec3Lerp(&point,&_CamPlay_pViews[1],&state->mUnknown20,state->mUnknown38);
+                Orient3Lerp(&angles,&_CamPlay_pViews[1].mUnknownC,&state->mUnknown2C,state->mUnknown38);
                 goto apply;
             }
         } else if (state->mUnknown38 < 1.0f) {
             state->mUnknown38 = 1.0f;
-            Vec3Lerp(&point,&lbl_803ECA04[1],&state->mUnknown20,state->mUnknown38);
-            Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,state->mUnknown38);
+            Vec3Lerp(&point,&_CamPlay_pViews[1],&state->mUnknown20,state->mUnknown38);
+            Orient3Lerp(&angles,&_CamPlay_pViews[1].mUnknownC,&state->mUnknown2C,state->mUnknown38);
         }
         if (fn_801783AC(0)) {
             PlyrFindNearest(&velocity,&extra,fn_80178308());
@@ -289,10 +289,10 @@ void fn_80140708(GameCamera_t *camera)
             }
         }
         if (fn_800BA6F8() && fn_800BAA24()) blend = 0.0f;
-        Vec3Lerp(&point,&lbl_803ECA04[1],&lbl_803ECA04[camera->mUnknownA0],blend);
-        Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,blend);
+        Vec3Lerp(&point,&_CamPlay_pViews[1],&_CamPlay_pViews[camera->mUnknownA0],blend);
+        Orient3Lerp(&angles,&_CamPlay_pViews[1].mUnknownC,&_CamPlay_pViews[camera->mUnknownA0].mUnknownC,blend);
     apply:
-        if (gameMode != 2) fn_80140270(&point,&angles,&velocity,camera->mUnknown9C,camera->mUnknownA0);
+        if (gameMode != 2) CamPlayPanWithBall(&point,&angles,&velocity,camera->mUnknown9C,camera->mUnknownA0);
         if (fn_801486A0() == 0) {
             Vec3Add(&point,&point,&lbl_802DC718[camera->mUnknown9C].mUnknown24);
             ANGLES_FROM_DEGREES(offset, lbl_802DC718[camera->mUnknown9C].mUnknown30);
@@ -310,34 +310,34 @@ void fn_80140708(GameCamera_t *camera)
                 point.mY -= adjustment < 0.0f ? 0.0f : (adjustment > 10.0f ? 10.0f : adjustment);
             }
         }
-        fn_8013FF84(camera,&point);
-        point.mY -= lbl_803ECA08;
+        CamPlayApplyJitter(camera,&point);
+        point.mY -= _CamPlay_fYOffset;
         CamMainSetOffset(camera,&point);
-        CamMainSetAngle(camera,&angles,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
+        CamMainSetAngle(camera,&angles,_CamPlay_pViews[camera->mUnknownA0].mUnknown18);
         break;
     }
     case 5: state->mUnknownC = 0; break;
     }
 }
-unsigned char fn_80140DB4(void) { return lbl_803EB1E8; }
-void fn_80140DBC(GameCamera_t *camera, int message, int)
+unsigned char CamPlayWasOrbitToggled(void) { return _CamPlay_bOrbitToggled; }
+void CamPlayMsgFunc(GameCamera_t *camera, int message, int)
 {
-    State_8013FF84 *state = (State_8013FF84 *)&camera->mPadF8;
+    CamPlayState_t *state = (CamPlayState_t *)&camera->mPadF8;
     switch (message) {
     case 3:
-        if (fn_80140700(camera)) fn_80140504(camera);
-        else fn_80140708(camera);
+        if (CamPlayIsOrbiting(camera)) CamPlayProcessOrbit(camera);
+        else CamPlayProcess(camera);
         break;
-    case 1: fn_80140EA0(camera); break;
-    case 2: camera->mUnknownE5 ^= 1; lbl_803EB1E8 = 1; break;
+    case 1: CamPlayStart(camera); break;
+    case 2: camera->mUnknownE5 ^= 1; _CamPlay_bOrbitToggled = 1; break;
     case 0: case 4: case 11: break;
-    case 5: if (camera->mUnknownE5) fn_801403CC(camera); break;
+    case 5: if (camera->mUnknownE5) CamPlayStartOrbit(camera); break;
     case 6: case 7: case 8: case 9: case 10: state->mUnknownC |= 1u << message; break;
     }
 }
-void fn_80140EA0(GameCamera_t *camera)
+void CamPlayStart(GameCamera_t *camera)
 {
-    State_8013FF84 *state = (State_8013FF84 *)&camera->mPadF8;
+    CamPlayState_t *state = (CamPlayState_t *)&camera->mPadF8;
     state->mUnknown38 = 0.0f;
     state->mUnknown10 = 0;
     state->mUnknown20.mX = camera->mUnknownC4;
@@ -352,8 +352,8 @@ void fn_80140EA0(GameCamera_t *camera)
     case 1:
         if (BallsExist()) CamMainFollowBall(camera);
         if (camera->mUnknownA4 == 0 || camera->mUnknownA4 == 5) break;
-        CamMainSetOffset(camera,&lbl_803ECA04[camera->mUnknownA0]);
-        CamMainSetAngle(camera,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
+        CamMainSetOffset(camera,&_CamPlay_pViews[camera->mUnknownA0]);
+        CamMainSetAngle(camera,&_CamPlay_pViews[camera->mUnknownA0].mUnknownC,_CamPlay_pViews[camera->mUnknownA0].mUnknown18);
         break;
     case 4:
         CamMainFollow(camera,6,0,0);
@@ -363,8 +363,8 @@ void fn_80140EA0(GameCamera_t *camera)
     case 2:
     default:
         if (BallsExist()) CamMainFollowBall(camera);
-        CamMainSetOffset(camera,&lbl_803ECA04[camera->mUnknownA0]);
-        CamMainSetAngle(camera,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
+        CamMainSetOffset(camera,&_CamPlay_pViews[camera->mUnknownA0]);
+        CamMainSetAngle(camera,&_CamPlay_pViews[camera->mUnknownA0].mUnknownC,_CamPlay_pViews[camera->mUnknownA0].mUnknown18);
         break;
     case 10: case 11: case 12: break;
     }
@@ -373,8 +373,8 @@ void fn_80140EA0(GameCamera_t *camera)
         if (mode == 1 && (unsigned int)camera->mUnknownA0 <= 2) camera->mUnknownA0 = 12;
     }
 }
-int fn_80141054(int index) { return lbl_802DC718[index].mUnknown4; }
-void fn_8014106C(int index, unsigned int mode, float *a, float *b)
+int CamPlayGetDefMode(int index) { return lbl_802DC718[index].mUnknown4; }
+void CamPlayGetPosLimits(int index, unsigned int mode, float *a, float *b)
 {
     int alternate = 0;
     switch (mode) {
@@ -388,7 +388,7 @@ void fn_8014106C(int index, unsigned int mode, float *a, float *b)
     b[0] = pb[0];
     b[1] = pb[1];
 }
-void fn_801410F4(unsigned int index)
+void CamPlayStartJitter(unsigned int index)
 {
     if (!lbl_802DBEBC.mUnknown0 && GameOptionsGet(10)) {
         lbl_802DBEBC.mUnknown0 = 1;
@@ -398,5 +398,5 @@ void fn_801410F4(unsigned int index)
         AudmonEventPost(17,0);
     }
 }
-void fn_80141164(float amount) { lbl_803ECA08 = amount; }
+void CamPlaySetYOffset(float amount) { _CamPlay_fYOffset = amount; }
 }

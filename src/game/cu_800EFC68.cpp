@@ -2688,7 +2688,7 @@ float BallGetHeightAtTime(Ball_t *pBall, float t);
 }
 
 extern "C" {
-void fn_801410F4(int a);
+void CamPlayStartJitter(int a);
 }
 
 extern "C" {
@@ -19072,11 +19072,11 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
             if (state->mUnknown28 == 1) {
                 if (BallGetCurrentHolder() == p) {
                     if (state->mUnknown4 >= gPlyrMoveFwdSpeed * 80496.9f || lbl_803EAF91 != 0) {
-                        fn_801410F4(2);
+                        CamPlayStartJitter(2);
                     } else if (state->mUnknown4 >= gPlyrMoveFwdSpeed * 70434.78f) {
-                        fn_801410F4(1);
+                        CamPlayStartJitter(1);
                     } else if (state->mUnknown4 >= gPlyrMoveFwdSpeed * 60372.67f) {
-                        fn_801410F4(0);
+                        CamPlayStartJitter(0);
                     }
                 }
                 if (BallGetCurrentHolder() == p) {

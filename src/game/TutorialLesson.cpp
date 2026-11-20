@@ -357,7 +357,7 @@ int fn_801486A0(void);
 Class_80148A58 * fn_80148A58(void);
 void fn_80149040(Object_80039F5C *pObject);
 void fn_8014F3DC(int a);
-void fn_8015C254(int a);
+void RouteArrowSetEnabled(int a);
 void PlayBookLoadCurrentPlay(int team);
 void PlayBookLoadAudibleTable(void);
 void PlayBookSetFormationType(int team, int kind);
@@ -969,7 +969,7 @@ int TutorialFinishCategory(void)
         fn_800C1CA0();
         fn_800C1E50();
         FieldLinesEnable(1);
-        fn_8015C254(1);
+        RouteArrowSetEnabled(1);
         PlyrNameTagEnable(1);
         if (mode != 15) {
             fn_801485B4();
@@ -1035,7 +1035,7 @@ int TutorialFinishCategory(void)
             fn_800C1CA0();
             fn_800C1E50();
             FieldLinesEnable(1);
-            fn_8015C254(1);
+            RouteArrowSetEnabled(1);
             PlyrNameTagEnable(1);
             TutorialSetLesson(next);
             TutorialSetActiveStep(0);

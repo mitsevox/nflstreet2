@@ -1,4 +1,4 @@
-#include "game/Object_8015C244.h"
+#include "game/RouteArrow.h"
 
 extern "C" {
 void ArrowInit(void *p);
@@ -10,45 +10,45 @@ void ArrowSetEndWidth(void *p, float value);
 void ArrowSetEndBrightness(void *p, float value);
 int fn_801784C4(void);
 
-void fn_8015A248(Object_8015C244 *p, float *pOut)
+void RouteArrowStartAtPlayer(RouteArrow_t *p, float *pOut)
 {
-    Object_80039F5C *pObject = p->mpUnknown208;
+    Object_80039F5C *pObject = p->mpPlayer;
 
     pOut[0] = pObject->mMotion.mPos.mX;
     pOut[1] = pObject->mMotion.mPos.mY;
-    p->mUnknown68 = pOut[0];
-    p->mUnknown72 = pOut[1];
+    p->mStartX = pOut[0];
+    p->mStartY = pOut[1];
     if (fn_801784C4()) {
         pOut[1] = -pOut[1];
         pOut[0] = -pOut[0];
     }
 }
 
-void fn_8015A2B4(Object_8015C244 *p)
+void RouteArrowInit(RouteArrow_t *p)
 {
-    p->mpUnknown208 = 0;
-    ArrowInit(p->mUnknown20);
-    ArrowSetPointBuffer(p->mUnknown20, p->mUnknown88, 10);
-    ArrowSetWidth(p->mUnknown20, 0.1f);
-    ArrowSetColor(p->mUnknown20, 0x80, 0x80, 0);
-    ArrowSetEndWidth(p->mUnknown20, 4.0f);
-    ArrowSetEndBrightness(p->mUnknown20, 1.0f);
-    p->mUnknown80 = 0;
-    p->mUnknown81 = 0;
-    p->mUnknown84 = 10;
+    p->mpPlayer = 0;
+    ArrowInit(p->mArrow);
+    ArrowSetPointBuffer(p->mArrow, p->mPoints, 10);
+    ArrowSetWidth(p->mArrow, 0.1f);
+    ArrowSetColor(p->mArrow, 0x80, 0x80, 0);
+    ArrowSetEndWidth(p->mArrow, 4.0f);
+    ArrowSetEndBrightness(p->mArrow, 1.0f);
+    p->mbShown = 0;
+    p->mbFlip = 0;
+    p->mPendingTurn = 10;
 }
 
-void fn_8015A354(Object_8015C244 *p)
+void RouteArrowShutdown(RouteArrow_t *p)
 {
-    ArrowShutdown(p->mUnknown20);
-    p->mpUnknown208 = 0;
-    p->mUnknown80 = 0;
-    p->mUnknown81 = 0;
-    p->mUnknown84 = 10;
+    ArrowShutdown(p->mArrow);
+    p->mpPlayer = 0;
+    p->mbShown = 0;
+    p->mbFlip = 0;
+    p->mPendingTurn = 10;
 }
 }
 
-#include "game/Object_8015C244.h"
+#include "game/RouteArrow.h"
 #include "game/fn_80177FE0.h"
 #include "game/State_803EB098.h"
 #include "game/PlayBookGetPlay.h"
@@ -63,10 +63,10 @@ extern unsigned char lbl_803ECA68;
 extern unsigned int lbl_803ECA64;
 
 extern int lbl_803ECA60;
-extern Object_8015C244 *lbl_8031C02C[27];
-void fn_8015A248(Object_8015C244 *, float *);
-void fn_8015A2B4(Object_8015C244 *);
-void fn_8015A354(Object_8015C244 *);
+extern RouteArrow_t *lbl_8031C02C[27];
+void RouteArrowStartAtPlayer(RouteArrow_t *, float *);
+void RouteArrowInit(RouteArrow_t *);
+void RouteArrowShutdown(RouteArrow_t *);
 int fn_801784C4(void);
 int fn_80178308(void);
 PlayBookFormation_t *PlayBookGetFormation(int);
@@ -93,32 +93,32 @@ int MathAngleDiff(int, int);
 void *memset(void *, int, unsigned int);
 void PlayerCutGetAnimOffset(int, unsigned char, int, void *);
 int PlayerCutGetMessageTurn(void *);
-int ObjNewType_(int, int, int, void (*)(Object_8015C244 *), void (*)(Object_8015C244 *));
+int ObjNewType_(int, int, int, void (*)(RouteArrow_t *), void (*)(RouteArrow_t *));
 int ObjDelType(int);
-void ObjSetListObjFunc(int, int, int, int (*)(Object_8015C244 *));
-Object_8015C244 *ObjNewInList(int, int, int, void *);
-void ObjSetPriority(int, Object_8015C244 *, int);
-void ObjRemoveFromList(int, Object_8015C244 *);
+void ObjSetListObjFunc(int, int, int, int (*)(RouteArrow_t *));
+RouteArrow_t *ObjNewInList(int, int, int, void *);
+void ObjSetPriority(int, RouteArrow_t *, int);
+void ObjRemoveFromList(int, RouteArrow_t *);
 void VptTrashObject(int);
 void VptFlushObjectTrashSync(void);
-void fn_8015BCAC(Object_8015C244 *);
-int fn_8015BF28(Object_8015C244 *, unsigned char *);
+void RouteArrowBuild(RouteArrow_t *);
+int RouteArrowGetBlockCommand(RouteArrow_t *, unsigned char *);
 
-int fn_8015A39C(Object_8015C244 *p)
+int RouteArrowDraw(RouteArrow_t *p)
 {
-    if (p->mUnknown80 && lbl_803ECA68 == 1) {
-        fn_8015BCAC(p);
-        ArrowDraw(p->mUnknown20);
+    if (p->mbShown && lbl_803ECA68 == 1) {
+        RouteArrowBuild(p);
+        ArrowDraw(p->mArrow);
     }
     return 0;
 }
 
-void fn_8015A3EC(Object_8015C244 *p, Vector_80039F5C *pPoint, int angle)
+void RouteArrowFlushTurn(RouteArrow_t *p, Vector_80039F5C *pPoint, int angle)
 {
     float length = 0.0f;
     int turn = 0;
-    if (p->mUnknown84 == 10) return;
-    switch (p->mUnknown84) {
+    if (p->mPendingTurn == 10) return;
+    switch (p->mPendingTurn) {
     case 0: case 2:
         turn = (unsigned int)(angle - 0x400001) <= 0x7ffffe ? 0x800000 : 0;
         length = 1.0f;
@@ -141,19 +141,19 @@ void fn_8015A3EC(Object_8015C244 *p, Vector_80039F5C *pPoint, int angle)
         Point_8017886C delta;
         Vec2FromAngle(&delta, turn, length);
         Vec2Add(pPoint, pPoint, &delta);
-        ArrowAddPoint(p->mUnknown20, pPoint);
+        ArrowAddPoint(p->mArrow, pPoint);
     }
-    p->mUnknown84 = 10;
+    p->mPendingTurn = 10;
 }
 
-void fn_8015A588(Object_8015C244 *p, unsigned char *pCommand,
+void RouteArrowAddSegment(RouteArrow_t *p, unsigned char *pCommand,
                  Vector_80039F5C *pPoint, float *pLength, int *pAngle)
 {
     int angle;
     float length;
     if (pAngle) { angle = *pAngle; length = *pLength; }
     else { length = (float)(unsigned int)pCommand[1] * 0.125f; angle = (pCommand[2] & 0x7f) << 17; }
-    fn_8015A3EC(p, pPoint, angle);
+    RouteArrowFlushTurn(p, pPoint, angle);
     if (fn_801784C4()) angle += 0x800000;
     Point_8017886C delta;
     Vec2FromAngle(&delta, angle, length);
@@ -162,10 +162,10 @@ void fn_8015A588(Object_8015C244 *p, unsigned char *pCommand,
                 pPoint->mX > fn_80178A08() ? fn_80178A08() : pPoint->mX;
     pPoint->mY = pPoint->mY < -fn_80178A44() ? -fn_80178A44() :
                 pPoint->mY > fn_80178A44() ? fn_80178A44() : pPoint->mY;
-    ArrowAddPoint(p->mUnknown20, pPoint);
+    ArrowAddPoint(p->mArrow, pPoint);
 }
 
-void fn_8015A6E0(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pPoint)
+void RouteArrowAddToSpot(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F5C *pPoint)
 {
     unsigned char index = pCommand[1];
     if (pCommand[0] == 92) index += 14;
@@ -180,18 +180,18 @@ void fn_8015A6E0(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
     float length = Vec2Magnitude(&target);
     int angle = fn_801CFE40(target.mY, target.mX);
     if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
-    fn_8015A588(p, 0, pPoint, &length, &angle);
+    RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
 }
 
-struct PlayCommand_8015BCAC {
+struct RouteArrowCmd_t {
     unsigned char mType;
     unsigned char mArgs[3];
 };
 
-void fn_8015A818(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pPoint)
+void RouteArrowAddBlockPath(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F5C *pPoint)
 {
-    PlayCommand_8015BCAC command;
-    Object_80039F5C *pPlayer = p->mpUnknown208;
+    RouteArrowCmd_t command;
+    Object_80039F5C *pPlayer = p->mpPlayer;
     Point_8017886C origin;
     origin = fn_80177FE0();
     fn_8011F4E0();
@@ -202,12 +202,12 @@ void fn_8015A818(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
     case 253:
         memset(&command, 0, 4);
         command.mType = 3; command.mArgs[0] = 24; command.mArgs[1] = 96;
-        fn_8015A588(p, &command.mType, pPoint, 0, 0);
+        RouteArrowAddSegment(p, &command.mType, pPoint, 0, 0);
         return;
     case 0:
         memset(&command, 0, 4);
         command.mType = 3; command.mArgs[0] = 24; command.mArgs[1] = 32;
-        fn_8015A588(p, &command.mType, pPoint, 0, 0);
+        RouteArrowAddSegment(p, &command.mType, pPoint, 0, 0);
         return;
     }
     Object_80039F5C *pOther = fn_800FC070(pPlayer, pCommand);
@@ -241,7 +241,7 @@ void fn_8015A818(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
         float length = Vec2Magnitude(&delta);
         int angle = fn_801CFE40(delta.mY, delta.mX);
         if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
-        fn_8015A588(p, 0, pPoint, &length, &angle);
+        RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
     }
     Point_8017886C target;
     target.mX = pOther->mMotion.mPos.mX;
@@ -252,23 +252,23 @@ void fn_8015A818(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
     float length = Vec2Magnitude(&delta);
     int angle = fn_801CFE40(delta.mY, delta.mX);
     if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
-    fn_8015A588(p, 0, pPoint, &length, &angle);
+    RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
 }
 
-void fn_8015AB84(Object_8015C244 *p, float distance,
+void RouteArrowAddStraight(RouteArrow_t *p, float distance,
                 unsigned char *pCommand, Vector_80039F5C *pPoint)
 {
     if (fn_801784C4()) distance = -distance;
     pPoint->mY += distance;
-    ArrowAddPoint(p->mUnknown20, pPoint);
+    ArrowAddPoint(p->mArrow, pPoint);
 }
 
-void fn_8015ABE4(Object_8015C244 *p, Vector_80039F5C *pPoint)
+void RouteArrowAddHook(RouteArrow_t *p, Vector_80039F5C *pPoint)
 {
     float length = 1.0f;
     if (fn_801784C4()) length = -1.0f;
-    unsigned short index = fn_800F06F4(0, p->mpUnknown76, 19, 0xffff);
-    int angle = index != 0xffff ? p->mpUnknown76[index * 4 + 2] << 17 : 0x400000;
+    unsigned short index = fn_800F06F4(0, p->mpCommands, 19, 0xffff);
+    int angle = index != 0xffff ? p->mpCommands[index * 4 + 2] << 17 : 0x400000;
     int turn;
     if (MathAngleDiff(angle, 0) <= 0x3fffff) turn = angle - 0x400000;
     else if (MathAngleDiff(angle, 0) > 0x400000) turn = angle + 0x400000;
@@ -277,16 +277,16 @@ void fn_8015ABE4(Object_8015C244 *p, Vector_80039F5C *pPoint)
     Vec2FromAngle(point, turn, length);
     point[2] = 0.0f;
     Vec3Add(point, point, pPoint);
-    ArrowAddPoint(p->mUnknown20, point);
+    ArrowAddPoint(p->mArrow, point);
     Vec2FromAngle(point, angle, length);
     point[2] = 0.0f;
     Vec3Add(pPoint, pPoint, point);
-    ArrowAddPoint(p->mUnknown20, pPoint);
+    ArrowAddPoint(p->mArrow, pPoint);
 }
 
-void fn_8015AD50(Object_8015C244 *p, Vector_80039F5C *pPoint)
+void RouteArrowAddToQuarterback(RouteArrow_t *p, Vector_80039F5C *pPoint)
 {
-    Object_80039F5C *pPlayer = p->mpUnknown208;
+    Object_80039F5C *pPlayer = p->mpPlayer;
     Object_80039F5C *pOther = PlyrGet(fn_80178308(), 0);
     Point_8017886C origin = fn_80177FE0();
     float across = pOther->mMotion.mPos.mX - pPlayer->mMotion.mPos.mX;
@@ -305,7 +305,7 @@ void fn_8015AD50(Object_8015C244 *p, Vector_80039F5C *pPoint)
         length = Vec2Magnitude(&delta);
         angle = fn_801CFE40(delta.mY, delta.mX);
         if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
-        fn_8015A588(p, 0, pPoint, &length, &angle);
+        RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
     }
     target.mX = pOther->mMotion.mPos.mX;
     target.mY = pOther->mMotion.mPos.mY;
@@ -314,17 +314,17 @@ void fn_8015AD50(Object_8015C244 *p, Vector_80039F5C *pPoint)
     length = Vec2Magnitude(&delta);
     angle = fn_801CFE40(delta.mY, delta.mX);
     if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
-    fn_8015A588(p, 0, pPoint, &length, &angle);
+    RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
 }
 
-void fn_8015AF48(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pPoint)
+void RouteArrowAddCut(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F5C *pPoint)
 {
     Point_8017886C delta;
     switch (pCommand[1]) {
     case 5: case 7: case 11: {
         PlayerCutGetAnimOffset(pCommand[1], pCommand[0], 0x400000, &delta);
         float length = Vec2Magnitude(&delta) * 0.5f;
-        PlayCommand_8015BCAC command;
+        RouteArrowCmd_t command;
         memset(&command, 0, 4);
         command.mType = 20; command.mArgs[1] = pCommand[1]; command.mArgs[0] = pCommand[0];
         int angle = PlayerCutGetMessageTurn(&command.mType);
@@ -332,12 +332,12 @@ void fn_8015AF48(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
             if (fn_801784C4()) Vec2FromAngle(&delta, 0xc00000, length);
             else Vec2FromAngle(&delta, 0x400000, length);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-            ArrowAddPoint(p->mUnknown20, pPoint);
+            ArrowAddPoint(p->mArrow, pPoint);
         }
         if (fn_801784C4()) Vec2FromAngle(&delta, angle + 0xc00000, length);
         else Vec2FromAngle(&delta, angle + 0x400000, length);
         pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-        ArrowAddPoint(p->mUnknown20, pPoint);
+        ArrowAddPoint(p->mArrow, pPoint);
         break;
     }
     case 8:
@@ -345,12 +345,12 @@ void fn_8015AF48(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
             if (fn_801784C4()) Vec2FromAngle(&delta, 0x200000, 1.5f);
             else Vec2FromAngle(&delta, 0xa00000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-            ArrowAddPoint(p->mUnknown20, pPoint);
+            ArrowAddPoint(p->mArrow, pPoint);
         } else {
             if (fn_801784C4()) Vec2FromAngle(&delta, 0x600000, 1.5f);
             else Vec2FromAngle(&delta, 0xe00000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-            ArrowAddPoint(p->mUnknown20, pPoint);
+            ArrowAddPoint(p->mArrow, pPoint);
         }
         break;
     case 10:
@@ -360,60 +360,60 @@ void fn_8015AF48(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
             if (fn_801784C4()) Vec2FromAngle(&delta, 0, 1.5f);
             else Vec2FromAngle(&delta, 0x800000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-            ArrowAddPoint(p->mUnknown20, pPoint);
+            ArrowAddPoint(p->mArrow, pPoint);
             if (fn_801784C4()) Vec2FromAngle(&delta, 0xa00000, 1.5f);
             else Vec2FromAngle(&delta, 0x200000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-            ArrowAddPoint(p->mUnknown20, pPoint);
+            ArrowAddPoint(p->mArrow, pPoint);
         } else {
             if (fn_801784C4()) Vec2FromAngle(&delta, 0x800000, 1.5f);
             else Vec2FromAngle(&delta, 0, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-            ArrowAddPoint(p->mUnknown20, pPoint);
+            ArrowAddPoint(p->mArrow, pPoint);
             if (fn_801784C4()) Vec2FromAngle(&delta, 0xe00000, 1.5f);
             else Vec2FromAngle(&delta, 0x600000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-            ArrowAddPoint(p->mUnknown20, pPoint);
+            ArrowAddPoint(p->mArrow, pPoint);
         }
         break;
     }
 }
 
-int fn_8015B344(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pPoint, int hasOther)
+int RouteArrowAddCommand(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F5C *pPoint, int hasOther)
 {
     int more = 1;
     switch (pCommand[0]) {
     case 30:
-        fn_8015A248(p, &pPoint->mX);
+        RouteArrowStartAtPlayer(p, &pPoint->mX);
         more = 0;
     case 3: case 4: case 19: case 26: case 27: case 68: case 72:
-        fn_8015A588(p, pCommand, pPoint, 0, 0);
+        RouteArrowAddSegment(p, pCommand, pPoint, 0, 0);
         break;
-    case 20: fn_8015AF48(p, pCommand + 1, pPoint); break;
+    case 20: RouteArrowAddCut(p, pCommand + 1, pPoint); break;
     case 52:
-        p->mUnknown84 = pCommand[1];
-        if (p->mUnknown84 == 7) fn_8015A3EC(p, pPoint, pCommand[2] << 17);
-        else if (p->mUnknown84 == 8 || p->mUnknown84 == 9) {
-            PlayCommand_8015BCAC command;
+        p->mPendingTurn = pCommand[1];
+        if (p->mPendingTurn == 7) RouteArrowFlushTurn(p, pPoint, pCommand[2] << 17);
+        else if (p->mPendingTurn == 8 || p->mPendingTurn == 9) {
+            RouteArrowCmd_t command;
             memset(&command, 0, 4);
             command.mType = 3; command.mArgs[0] = 8;
-            command.mArgs[1] = p->mUnknown68 > fn_80177FE0().mX ? 64 : 0;
-            fn_8015A588(p, &command.mType, pPoint, 0, 0);
+            command.mArgs[1] = p->mStartX > fn_80177FE0().mX ? 64 : 0;
+            RouteArrowAddSegment(p, &command.mType, pPoint, 0, 0);
         }
         break;
     case 47:
-        if (hasOther) fn_8015ABE4(p, pPoint);
-        else fn_8015A588(p, pCommand, pPoint, 0, 0);
+        if (hasOther) RouteArrowAddHook(p, pPoint);
+        else RouteArrowAddSegment(p, pCommand, pPoint, 0, 0);
         break;
     case 31:
-        if (hasOther) fn_8015ABE4(p, pPoint);
-        else fn_8015AB84(p, -1.0f, pCommand + 1, pPoint);
+        if (hasOther) RouteArrowAddHook(p, pPoint);
+        else RouteArrowAddStraight(p, -1.0f, pCommand + 1, pPoint);
         break;
-    case 33: fn_8015AB84(p, 1.0f, pCommand + 1, pPoint); break;
+    case 33: RouteArrowAddStraight(p, 1.0f, pCommand + 1, pPoint); break;
     case 91:
-        if (p->mUnknown84 == 7) break;
+        if (p->mPendingTurn == 7) break;
     case 1: {
-        if (*(unsigned int *)p->mUnknown20 > 1) break;
+        if (*(unsigned int *)p->mArrow > 1) break;
         Point_8017886C point = {pPoint->mX, pPoint->mY};
         if (fn_801784C4()) { point.mX = -point.mX; point.mY = -point.mY; }
         Point_8017886C target;
@@ -424,11 +424,11 @@ int fn_8015B344(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pP
         int angle = fn_801CFE40(target.mY, target.mX);
         if (MathAngleDiff(angle, 0x400000) > 0x3fffff) break;
         float length = Vec2Magnitude(&target);
-        fn_8015A588(p, 0, pPoint, &length, &angle);
+        RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
         break;
     }
     case 90: {
-        if (*(unsigned int *)p->mUnknown20 > 1) break;
+        if (*(unsigned int *)p->mArrow > 1) break;
         Point_8017886C point = {pPoint->mX, pPoint->mY};
         if (fn_801784C4()) { point.mX = -point.mX; point.mY = -point.mY; }
         Point_8017886C target;
@@ -439,144 +439,144 @@ int fn_8015B344(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pP
         Vec2Sub(&target, &target, &point);
         int angle = fn_801CFE40(target.mY, target.mX);
         float length = Vec2Magnitude(&target);
-        fn_8015A588(p, 0, pPoint, &length, &angle);
-        p->mUnknown64 = 1;
+        RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
+        p->mbMotion = 1;
         break;
     }
     case 85:
-        fn_8015A248(p, &pPoint->mX);
+        RouteArrowStartAtPlayer(p, &pPoint->mX);
         more = 0;
-        fn_8015AD50(p, pPoint);
+        RouteArrowAddToQuarterback(p, pPoint);
         break;
     case 40: case 92:
-        fn_8015A248(p, &pPoint->mX);
-        fn_8015A6E0(p, pCommand, pPoint);
+        RouteArrowStartAtPlayer(p, &pPoint->mX);
+        RouteArrowAddToSpot(p, pCommand, pPoint);
         break;
     case 22:
-        fn_8015A248(p, &pPoint->mX);
-        fn_8015A818(p, pCommand, pPoint);
+        RouteArrowStartAtPlayer(p, &pPoint->mX);
+        RouteArrowAddBlockPath(p, pCommand, pPoint);
         break;
     }
     return more;
 }
 
-void fn_8015B834(Object_8015C244 *p, unsigned char *pCommand, int hasOther)
+void RouteArrowSetStyle(RouteArrow_t *p, unsigned char *pCommand, int hasOther)
 {
-    if (pCommand[0] == 22) fn_8015BF28(p, pCommand);
+    if (pCommand[0] == 22) RouteArrowGetBlockCommand(p, pCommand);
     switch (pCommand[0]) {
     case 1: case 2: case 3: case 4: case 6: case 27: case 68: case 91:
-        if (hasOther) ArrowSetColor(p->mUnknown20, 250, 250, 250);
-        else ArrowSetColor(p->mUnknown20, 224, 141, 18);
-        ArrowSetEnd(p->mUnknown20, 0, 0, 0.0f, 0.0f);
+        if (hasOther) ArrowSetColor(p->mArrow, 250, 250, 250);
+        else ArrowSetColor(p->mArrow, 224, 141, 18);
+        ArrowSetEnd(p->mArrow, 0, 0, 0.0f, 0.0f);
         break;
     case 90:
-        if (hasOther) ArrowSetColor(p->mUnknown20, 250, 250, 250);
-        else ArrowSetColor(p->mUnknown20, 250, 250, 250);
-        ArrowSetEnd(p->mUnknown20, 0, 0, 0.0f, 0.0f);
+        if (hasOther) ArrowSetColor(p->mArrow, 250, 250, 250);
+        else ArrowSetColor(p->mArrow, 250, 250, 250);
+        ArrowSetEnd(p->mArrow, 0, 0, 0.0f, 0.0f);
         break;
     case 18: case 25: case 26:
-        ArrowSetColor(p->mUnknown20, 250, 250, 250);
-        ArrowSetEnd(p->mUnknown20, 0, 0, 0.0f, 0.0f);
+        ArrowSetColor(p->mArrow, 250, 250, 250);
+        ArrowSetEnd(p->mArrow, 0, 0, 0.0f, 0.0f);
         break;
     case 19: case 20: case 21:
-        if (hasOther) ArrowSetColor(p->mUnknown20, 250, 250, 250);
-        else ArrowSetColor(p->mUnknown20, 250, 250, 250);
-        ArrowSetEnd(p->mUnknown20, 0, 0, 0.0f, 0.0f);
+        if (hasOther) ArrowSetColor(p->mArrow, 250, 250, 250);
+        else ArrowSetColor(p->mArrow, 250, 250, 250);
+        ArrowSetEnd(p->mArrow, 0, 0, 0.0f, 0.0f);
         break;
     case 31: case 33: case 47: case 72:
-        if (hasOther) ArrowSetColor(p->mUnknown20, 250, 250, 250);
-        else ArrowSetColor(p->mUnknown20, 250, 250, 250);
-        ArrowSetEnd(p->mUnknown20, 1, 0, 0.0f, 0.0f);
+        if (hasOther) ArrowSetColor(p->mArrow, 250, 250, 250);
+        else ArrowSetColor(p->mArrow, 250, 250, 250);
+        ArrowSetEnd(p->mArrow, 1, 0, 0.0f, 0.0f);
         break;
     case 30:
-        ArrowSetColor(p->mUnknown20, 224, 141, 18);
-        ArrowSetEnd(p->mUnknown20, 0, 0, 0.0f, 0.0f);
+        ArrowSetColor(p->mArrow, 224, 141, 18);
+        ArrowSetEnd(p->mArrow, 0, 0, 0.0f, 0.0f);
         break;
     case 40:
-        ArrowSetColor(p->mUnknown20, 224, 141, 18);
+        ArrowSetColor(p->mArrow, 224, 141, 18);
         switch (pCommand[1]) {
-        case 0: ArrowSetEnd(p->mUnknown20, 2, 0, 8.0f, fn_80178A08()); break;
-        case 1: case 2: ArrowSetEnd(p->mUnknown20, 2, 0, 6.0f, fn_80178A08() * 0.5f); break;
-        case 3: case 4: case 5: ArrowSetEnd(p->mUnknown20, 2, 0, 4.5f, fn_80178A08() * 0.333333343f); break;
-        case 6: case 7: case 8: case 9: ArrowSetEnd(p->mUnknown20, 2, 0, 3.0f, fn_80178A08() * 0.25f); break;
+        case 0: ArrowSetEnd(p->mArrow, 2, 0, 8.0f, fn_80178A08()); break;
+        case 1: case 2: ArrowSetEnd(p->mArrow, 2, 0, 6.0f, fn_80178A08() * 0.5f); break;
+        case 3: case 4: case 5: ArrowSetEnd(p->mArrow, 2, 0, 4.5f, fn_80178A08() * 0.333333343f); break;
+        case 6: case 7: case 8: case 9: ArrowSetEnd(p->mArrow, 2, 0, 3.0f, fn_80178A08() * 0.25f); break;
         }
         break;
     case 92:
-        ArrowSetColor(p->mUnknown20, 224, 141, 18);
+        ArrowSetColor(p->mArrow, 224, 141, 18);
         switch (pCommand[1] + 14) {
-        case 14: ArrowSetEnd(p->mUnknown20, 2, 0, 8.0f, fn_80178A08()); break;
-        case 15: case 16: ArrowSetEnd(p->mUnknown20, 2, 0, 6.0f, fn_80178A08() * 0.5f); break;
-        case 17: case 18: case 19: ArrowSetEnd(p->mUnknown20, 2, 0, 4.5f, fn_80178A08() * 0.333333343f); break;
-        case 20: case 21: case 22: case 23: ArrowSetEnd(p->mUnknown20, 2, 0, 3.0f, fn_80178A08() * 0.25f); break;
+        case 14: ArrowSetEnd(p->mArrow, 2, 0, 8.0f, fn_80178A08()); break;
+        case 15: case 16: ArrowSetEnd(p->mArrow, 2, 0, 6.0f, fn_80178A08() * 0.5f); break;
+        case 17: case 18: case 19: ArrowSetEnd(p->mArrow, 2, 0, 4.5f, fn_80178A08() * 0.333333343f); break;
+        case 20: case 21: case 22: case 23: ArrowSetEnd(p->mArrow, 2, 0, 3.0f, fn_80178A08() * 0.25f); break;
         }
         break;
     case 22:
-        ArrowSetColor(p->mUnknown20, 250, 250, 250);
-        ArrowSetEnd(p->mUnknown20, 4, 0, 0.0f, 0.0f);
+        ArrowSetColor(p->mArrow, 250, 250, 250);
+        ArrowSetEnd(p->mArrow, 4, 0, 0.0f, 0.0f);
         break;
     case 85:
-        ArrowSetColor(p->mUnknown20, 224, 141, 18);
-        ArrowSetEnd(p->mUnknown20, 4, 0, 0.0f, 0.0f);
+        ArrowSetColor(p->mArrow, 224, 141, 18);
+        ArrowSetEnd(p->mArrow, 4, 0, 0.0f, 0.0f);
         break;
     case 52:
         break;
     default:
-        ArrowSetEnd(p->mUnknown20, 4, 0, 0.0f, 0.0f);
+        ArrowSetEnd(p->mArrow, 4, 0, 0.0f, 0.0f);
         break;
     }
 }
 
-void fn_8015BCAC(Object_8015C244 *p)
+void RouteArrowBuild(RouteArrow_t *p)
 {
-    Object_80039F5C *pPlayer = p->mpUnknown208;
-    PlayCommand_8015BCAC command;
-    ArrowReset(p->mUnknown20);
+    Object_80039F5C *pPlayer = p->mpPlayer;
+    RouteArrowCmd_t command;
+    ArrowReset(p->mArrow);
     Vector_80039F5C point;
-    point.mX = p->mUnknown68;
-    point.mY = p->mUnknown72;
+    point.mX = p->mStartX;
+    point.mY = p->mStartY;
     point.mZ = 0.0f;
     if (fn_801784C4()) { point.mY = -point.mY; point.mX = -point.mX; }
-    ArrowAddPoint(p->mUnknown20, &point);
-    unsigned char *pCommand = p->mpUnknown76;
+    ArrowAddPoint(p->mArrow, &point);
+    unsigned char *pCommand = p->mpCommands;
     int hasOther = fn_8011E9D8(pCommand);
     unsigned char more;
     do {
-        command = *(PlayCommand_8015BCAC *)pCommand;
+        command = *(RouteArrowCmd_t *)pCommand;
         command.mType &= 0x7f;
-        if (p->mUnknown81) fn_800F0910(0, &command.mType);
+        if (p->mbFlip) fn_800F0910(0, &command.mType);
         if (command.mType) {
             more = (pCommand[0] >> 7) ^ 1;
-            more &= fn_8015B344(p, &command.mType, &point, hasOther);
+            more &= RouteArrowAddCommand(p, &command.mType, &point, hasOther);
             pCommand += 4;
             more = pCommand[0] ? more : 0;
         } else more = 0;
     } while (more);
-    fn_8015B834(p, &command.mType, hasOther);
+    RouteArrowSetStyle(p, &command.mType, hasOther);
     PlayBookPlay_t *pRecord = PlayBookGetPlay(pPlayer->mIdBytes[2]);
     if (fn_801650DC(pRecord)) {
         for (unsigned char i = 0; i <= 2; ++i) {
             if (pPlayer->mIdBytes[1] == *pRecord->mUnknown1C[i]) {
-                int index = fn_800F06F4(0, p->mpUnknown76, 19, 0xffff);
-                if (index == 0xffff && fn_800F06F4(0, p->mpUnknown76, 21, 0xffff) == index) continue;
+                int index = fn_800F06F4(0, p->mpCommands, 19, 0xffff);
+                if (index == 0xffff && fn_800F06F4(0, p->mpCommands, 21, 0xffff) == index) continue;
                 switch (i) {
-                case 0: ArrowSetColor(p->mUnknown20, 205, 8, 16); break;
-                case 1: ArrowSetColor(p->mUnknown20, 0, 169, 95); break;
-                case 2: ArrowSetColor(p->mUnknown20, 160, 160, 160); break;
+                case 0: ArrowSetColor(p->mArrow, 205, 8, 16); break;
+                case 1: ArrowSetColor(p->mArrow, 0, 169, 95); break;
+                case 2: ArrowSetColor(p->mArrow, 160, 160, 160); break;
                 }
             }
         }
     }
 }
 
-void fn_8015BED4(void)
+void RouteArrowRegisterType(void)
 {
-    ObjNewType_(14, sizeof(Object_8015C244), 27, fn_8015A2B4, fn_8015A354);
-    ObjSetListObjFunc(lbl_803ECA60, 14, 0, fn_8015A39C);
+    ObjNewType_(14, sizeof(RouteArrow_t), 27, RouteArrowInit, RouteArrowShutdown);
+    ObjSetListObjFunc(lbl_803ECA60, 14, 0, RouteArrowDraw);
 }
 
-int fn_8015BF28(Object_8015C244 *p, unsigned char *pCommand)
+int RouteArrowGetBlockCommand(RouteArrow_t *p, unsigned char *pCommand)
 {
-    Object_80039F5C *pPlayer = p->mpUnknown208;
+    Object_80039F5C *pPlayer = p->mpPlayer;
     Record_8011F4E0 *pInfo = fn_8011F4E0();
     int code;
     if (pInfo->mUnknown4) {
@@ -593,20 +593,20 @@ int fn_8015BF28(Object_8015C244 *p, unsigned char *pCommand)
     return 22;
 }
 
-void fn_8015BFAC(void)
+void RouteArrowUnregisterType(void)
 {
     VptFlushObjectTrashSync();
     ObjDelType(14);
 }
 
-Object_8015C244 *fn_8015BFD4(void)
+RouteArrow_t *RouteArrowNew(void)
 {
-    Object_8015C244 *p = ObjNewInList(lbl_803ECA60, 14, 0, 0);
+    RouteArrow_t *p = ObjNewInList(lbl_803ECA60, 14, 0, 0);
     ObjSetPriority(lbl_803ECA60, p, 3);
     return p;
 }
 
-void fn_8015C024(Object_8015C244 *p)
+void RouteArrowDelete(RouteArrow_t *p)
 {
     if (p) {
         ObjRemoveFromList(lbl_803ECA60, p);
@@ -614,74 +614,74 @@ void fn_8015C024(Object_8015C244 *p)
     }
 }
 
-void fn_8015C064(int handle)
+void RouteArrowSysInit(int handle)
 {
     lbl_803ECA60 = handle;
-    fn_8015BED4();
-    Object_8015C244 **p = lbl_8031C02C;
-    Object_8015C244 **pLast = p + 26;
-    do { *p++ = fn_8015BFD4(); } while (p <= pLast);
+    RouteArrowRegisterType();
+    RouteArrow_t **p = lbl_8031C02C;
+    RouteArrow_t **pLast = p + 26;
+    do { *p++ = RouteArrowNew(); } while (p <= pLast);
     lbl_803ECA64 = 0;
     lbl_803ECA68 = 1;
 }
 
-void fn_8015C0C0(void)
+void RouteArrowSysShutdown(void)
 {
-    Object_8015C244 **p = lbl_8031C02C;
-    Object_8015C244 **pLast = p + 26;
-    do { fn_8015C024(*p++); } while (p <= pLast);
+    RouteArrow_t **p = lbl_8031C02C;
+    RouteArrow_t **pLast = p + 26;
+    do { RouteArrowDelete(*p++); } while (p <= pLast);
     lbl_803ECA60 = 0;
-    fn_8015BFAC();
+    RouteArrowUnregisterType();
     lbl_803ECA64 = 0;
 }
 
-void fn_8015C114(void)
+void RouteArrowUpdateHighlights(void)
 {
     for (int i = 0; i < 27; ++i) {
-        Object_8015C244 *p = lbl_8031C02C[i];
-        if (p->mpUnknown208) {
-            if (p->mUnknown48 > 0.1f) p->mUnknown48 *= 0.88f;
-            else p->mUnknown48 = 0.1f;
+        RouteArrow_t *p = lbl_8031C02C[i];
+        if (p->mpPlayer) {
+            if (p->mHighlight > 0.1f) p->mHighlight *= 0.88f;
+            else p->mHighlight = 0.1f;
         }
     }
 }
 
-Object_8015C244 *fn_8015C170(Object_80039F5C *pPlayer, Point_8017886C *pPoint,
+RouteArrow_t *RouteArrowShow(Object_80039F5C *pPlayer, Point_8017886C *pPoint,
                             unsigned char *pCommands, unsigned char flag)
 {
-    Object_8015C244 *p = 0;
+    RouteArrow_t *p = 0;
     for (int i = 0; i < 27; ++i) {
-        if (!lbl_8031C02C[i]->mpUnknown208) {
+        if (!lbl_8031C02C[i]->mpPlayer) {
             ++lbl_803ECA64;
-            lbl_8031C02C[i]->mUnknown80 = 1;
-            lbl_8031C02C[i]->mUnknown81 = flag;
-            lbl_8031C02C[i]->mUnknown84 = 10;
-            lbl_8031C02C[i]->mpUnknown208 = pPlayer;
-            *(Point_8017886C *)&lbl_8031C02C[i]->mUnknown68 = *pPoint;
-            lbl_8031C02C[i]->mpUnknown76 = pCommands;
+            lbl_8031C02C[i]->mbShown = 1;
+            lbl_8031C02C[i]->mbFlip = flag;
+            lbl_8031C02C[i]->mPendingTurn = 10;
+            lbl_8031C02C[i]->mpPlayer = pPlayer;
+            *(Point_8017886C *)&lbl_8031C02C[i]->mStartX = *pPoint;
+            lbl_8031C02C[i]->mpCommands = pCommands;
             p = lbl_8031C02C[i];
             break;
         }
     }
-    p->mUnknown48 = 0.1f;
+    p->mHighlight = 0.1f;
     return p;
 }
 
-void fn_8015C218(Object_8015C244 *p)
+void RouteArrowHide(RouteArrow_t *p)
 {
-    p->mUnknown80 = 0;
-    p->mUnknown81 = 0;
-    p->mUnknown84 = 10;
-    p->mpUnknown208 = 0;
+    p->mbShown = 0;
+    p->mbFlip = 0;
+    p->mPendingTurn = 10;
+    p->mpPlayer = 0;
     --lbl_803ECA64;
 }
 
-void fn_8015C244(Object_8015C244 *p)
+void RouteArrowHighlight(RouteArrow_t *p)
 {
-    p->mUnknown48 = 0.6f;
+    p->mHighlight = 0.6f;
 }
 
-void fn_8015C254(int value)
+void RouteArrowSetEnabled(int value)
 {
     lbl_803ECA68 = value;
 }

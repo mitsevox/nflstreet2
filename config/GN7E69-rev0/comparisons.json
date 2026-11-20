@@ -10566,122 +10566,122 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8015A39C",
+          "symbol": "RouteArrowDraw",
           "start": "0x8015A39C",
           "end": "0x8015A3EC"
         },
         {
-          "symbol": "fn_8015A3EC",
+          "symbol": "RouteArrowFlushTurn",
           "start": "0x8015A3EC",
           "end": "0x8015A588"
         },
         {
-          "symbol": "fn_8015A588",
+          "symbol": "RouteArrowAddSegment",
           "start": "0x8015A588",
           "end": "0x8015A6E0"
         },
         {
-          "symbol": "fn_8015A6E0",
+          "symbol": "RouteArrowAddToSpot",
           "start": "0x8015A6E0",
           "end": "0x8015A818"
         },
         {
-          "symbol": "fn_8015A818",
+          "symbol": "RouteArrowAddBlockPath",
           "start": "0x8015A818",
           "end": "0x8015AB84"
         },
         {
-          "symbol": "fn_8015AB84",
+          "symbol": "RouteArrowAddStraight",
           "start": "0x8015AB84",
           "end": "0x8015ABE4"
         },
         {
-          "symbol": "fn_8015ABE4",
+          "symbol": "RouteArrowAddHook",
           "start": "0x8015ABE4",
           "end": "0x8015AD50"
         },
         {
-          "symbol": "fn_8015AD50",
+          "symbol": "RouteArrowAddToQuarterback",
           "start": "0x8015AD50",
           "end": "0x8015AF48"
         },
         {
-          "symbol": "fn_8015AF48",
+          "symbol": "RouteArrowAddCut",
           "start": "0x8015AF48",
           "end": "0x8015B344"
         },
         {
-          "symbol": "fn_8015B344",
+          "symbol": "RouteArrowAddCommand",
           "start": "0x8015B344",
           "end": "0x8015B834"
         },
         {
-          "symbol": "fn_8015B834",
+          "symbol": "RouteArrowSetStyle",
           "start": "0x8015B834",
           "end": "0x8015BCAC"
         },
         {
-          "symbol": "fn_8015BCAC",
+          "symbol": "RouteArrowBuild",
           "start": "0x8015BCAC",
           "end": "0x8015BED4"
         },
         {
-          "symbol": "fn_8015BED4",
+          "symbol": "RouteArrowRegisterType",
           "start": "0x8015BED4",
           "end": "0x8015BF28"
         },
         {
-          "symbol": "fn_8015BF28",
+          "symbol": "RouteArrowGetBlockCommand",
           "start": "0x8015BF28",
           "end": "0x8015BFAC"
         },
         {
-          "symbol": "fn_8015BFAC",
+          "symbol": "RouteArrowUnregisterType",
           "start": "0x8015BFAC",
           "end": "0x8015BFD4"
         },
         {
-          "symbol": "fn_8015BFD4",
+          "symbol": "RouteArrowNew",
           "start": "0x8015BFD4",
           "end": "0x8015C024"
         },
         {
-          "symbol": "fn_8015C024",
+          "symbol": "RouteArrowDelete",
           "start": "0x8015C024",
           "end": "0x8015C064"
         },
         {
-          "symbol": "fn_8015C064",
+          "symbol": "RouteArrowSysInit",
           "start": "0x8015C064",
           "end": "0x8015C0C0"
         },
         {
-          "symbol": "fn_8015C0C0",
+          "symbol": "RouteArrowSysShutdown",
           "start": "0x8015C0C0",
           "end": "0x8015C114"
         },
         {
-          "symbol": "fn_8015C114",
+          "symbol": "RouteArrowUpdateHighlights",
           "start": "0x8015C114",
           "end": "0x8015C170"
         },
         {
-          "symbol": "fn_8015C170",
+          "symbol": "RouteArrowShow",
           "start": "0x8015C170",
           "end": "0x8015C218"
         },
         {
-          "symbol": "fn_8015C218",
+          "symbol": "RouteArrowHide",
           "start": "0x8015C218",
           "end": "0x8015C244"
         },
         {
-          "symbol": "fn_8015C244",
+          "symbol": "RouteArrowHighlight",
           "start": "0x8015C244",
           "end": "0x8015C254"
         },
         {
-          "symbol": "fn_8015C254",
+          "symbol": "RouteArrowSetEnabled",
           "start": "0x8015C254",
           "end": "0x8015C25C"
         }
@@ -10925,77 +10925,77 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8013FF84",
+          "symbol": "CamPlayApplyJitter",
           "start": "0x8013FF84",
           "end": "0x80140270"
         },
         {
-          "symbol": "fn_80140270",
+          "symbol": "CamPlayPanWithBall",
           "start": "0x80140270",
           "end": "0x80140360"
         },
         {
-          "symbol": "fn_80140360",
+          "symbol": "CamPlayInit",
           "start": "0x80140360",
           "end": "0x801403BC"
         },
         {
-          "symbol": "fn_801403BC",
+          "symbol": "CamPlayUninit",
           "start": "0x801403BC",
           "end": "0x801403CC"
         },
         {
-          "symbol": "fn_801403CC",
+          "symbol": "CamPlayStartOrbit",
           "start": "0x801403CC",
           "end": "0x80140504"
         },
         {
-          "symbol": "fn_80140504",
+          "symbol": "CamPlayProcessOrbit",
           "start": "0x80140504",
           "end": "0x80140700"
         },
         {
-          "symbol": "fn_80140700",
+          "symbol": "CamPlayIsOrbiting",
           "start": "0x80140700",
           "end": "0x80140708"
         },
         {
-          "symbol": "fn_80140708",
+          "symbol": "CamPlayProcess",
           "start": "0x80140708",
           "end": "0x80140DB4"
         },
         {
-          "symbol": "fn_80140DB4",
+          "symbol": "CamPlayWasOrbitToggled",
           "start": "0x80140DB4",
           "end": "0x80140DBC"
         },
         {
-          "symbol": "fn_80140DBC",
+          "symbol": "CamPlayMsgFunc",
           "start": "0x80140DBC",
           "end": "0x80140EA0"
         },
         {
-          "symbol": "fn_80140EA0",
+          "symbol": "CamPlayStart",
           "start": "0x80140EA0",
           "end": "0x80141054"
         },
         {
-          "symbol": "fn_80141054",
+          "symbol": "CamPlayGetDefMode",
           "start": "0x80141054",
           "end": "0x8014106C"
         },
         {
-          "symbol": "fn_8014106C",
+          "symbol": "CamPlayGetPosLimits",
           "start": "0x8014106C",
           "end": "0x801410F4"
         },
         {
-          "symbol": "fn_801410F4",
+          "symbol": "CamPlayStartJitter",
           "start": "0x801410F4",
           "end": "0x80141164"
         },
         {
-          "symbol": "fn_80141164",
+          "symbol": "CamPlaySetYOffset",
           "start": "0x80141164",
           "end": "0x8014116C"
         }
@@ -11248,87 +11248,87 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801A0088",
+          "symbol": "PlayArtRenderBindTextures",
           "start": "0x801A0088",
           "end": "0x801A0108"
         },
         {
-          "symbol": "fn_801A0108",
+          "symbol": "PlayArtRenderLineQuad",
           "start": "0x801A0108",
           "end": "0x801A0270"
         },
         {
-          "symbol": "fn_801A0270",
+          "symbol": "PlayArtRenderDashQuad",
           "start": "0x801A0270",
           "end": "0x801A03E4"
         },
         {
-          "symbol": "fn_801A03E4",
+          "symbol": "PlayArtRenderLineStrip",
           "start": "0x801A03E4",
           "end": "0x801A04D4"
         },
         {
-          "symbol": "fn_801A04D4",
+          "symbol": "PlayArtRenderDashStrip",
           "start": "0x801A04D4",
           "end": "0x801A0614"
         },
         {
-          "symbol": "fn_801A0614",
+          "symbol": "PlayArtRenderTexQuad",
           "start": "0x801A0614",
           "end": "0x801A0788"
         },
         {
-          "symbol": "fn_801A0788",
+          "symbol": "PlayArtRenderSprite",
           "start": "0x801A0788",
           "end": "0x801A07A8"
         },
         {
-          "symbol": "fn_801A07A8",
+          "symbol": "PlayArtRenderField",
           "start": "0x801A07A8",
           "end": "0x801A085C"
         },
         {
-          "symbol": "fn_801A085C",
+          "symbol": "PlayArtRenderRouteEnds",
           "start": "0x801A085C",
           "end": "0x801A09B0"
         },
         {
-          "symbol": "fn_801A09B0",
+          "symbol": "PlayArtRenderPlayerIcons",
           "start": "0x801A09B0",
           "end": "0x801A0B1C"
         },
         {
-          "symbol": "fn_801A0B1C",
+          "symbol": "PlayArtRenderPlayerLetters",
           "start": "0x801A0B1C",
           "end": "0x801A0CA0"
         },
         {
-          "symbol": "fn_801A0CA0",
+          "symbol": "PlayArtRenderRoutes",
           "start": "0x801A0CA0",
           "end": "0x801A0E2C"
         },
         {
-          "symbol": "fn_801A0E2C",
+          "symbol": "PlayArtRenderSetup",
           "start": "0x801A0E2C",
           "end": "0x801A0FAC"
         },
         {
-          "symbol": "fn_801A0FAC",
+          "symbol": "PlayArtRenderDiagram",
           "start": "0x801A0FAC",
           "end": "0x801A105C"
         },
         {
-          "symbol": "fn_801A105C",
+          "symbol": "PlayArtRenderAt",
           "start": "0x801A105C",
           "end": "0x801A1240"
         },
         {
-          "symbol": "fn_801A1240",
+          "symbol": "PlayArtRenderLoadTextures",
           "start": "0x801A1240",
           "end": "0x801A12E8"
         },
         {
-          "symbol": "fn_801A12E8",
+          "symbol": "PlayArtRenderUnloadTextures",
           "start": "0x801A12E8",
           "end": "0x801A1338"
         }

@@ -134,8 +134,8 @@ int fn_801486A0(void);
 int TutorialIsActive(void);
 void TutorialLessonStart(void);
 void TutorialLessonStop(void);
-void fn_8015C064(int a);
-void fn_8015C0C0(void);
+void RouteArrowSysInit(int a);
+void RouteArrowSysShutdown(void);
 void fn_8015E654(int a);
 void fn_8015E6C4(void);
 void fn_8015E6C8(void);
@@ -229,14 +229,14 @@ const char *Arrow::GetName() { return "Arrow"; }
 
 int Arrow::Init()
 {
-    fn_8015C064(GameObjList::GetListHandle());
+    RouteArrowSysInit(GameObjList::GetListHandle());
     FieldArrowInit(GameObjList::GetListHandle());
     return 1;
 }
 
 int Arrow::Shutdown()
 {
-    fn_8015C0C0();
+    RouteArrowSysShutdown();
     FieldArrowShutdown();
     return 1;
 }

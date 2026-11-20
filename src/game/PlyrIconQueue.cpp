@@ -1,6 +1,6 @@
 /* Queue of player icons drawn in a frame: records each icon's screen
    position and state and draws it. */
-extern "C" void fn_801A105C(float x, float y, void *p, unsigned char value);
+extern "C" void PlayArtRenderAt(float x, float y, void *p, unsigned char value);
 
 struct PlyrIconQueueEntry {
     int mUnknown0[17];
@@ -21,7 +21,7 @@ extern "C" void PlyrIconQueueAdd(float x, float y, void *p, unsigned char value)
     pRecord->mUnknown48 = y;
     pRecord->mUnknown4C = p;
     pRecord->mUnknown50 = value;
-    fn_801A105C(x, y, p, value);
+    PlayArtRenderAt(x, y, p, value);
 }
 
 extern "C" void PlyrIconQueueReset(void)

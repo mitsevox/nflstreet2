@@ -263,7 +263,7 @@ void PassIconObjSetEnabled(int value);
 }
 
 extern "C" {
-void fn_8015C254(int a);
+void RouteArrowSetEnabled(int a);
 }
 
 extern "C" {
@@ -995,7 +995,7 @@ void BallMarkerUpdate(void);
 }
 
 extern "C" {
-void fn_8015C114(void);
+void RouteArrowUpdateHighlights(void);
 }
 
 extern "C" {
@@ -4096,7 +4096,7 @@ unsigned char ReplayCamIsActive(void);
 }
 
 extern "C" {
-unsigned char fn_80140DB4(void);
+unsigned char CamPlayWasOrbitToggled(void);
 }
 
 extern "C" {
@@ -4920,7 +4920,7 @@ unsigned char GameEventFlagsSetFlag4(unsigned char value);
 }
 
 extern "C" {
-void fn_8015C254(int value);
+void RouteArrowSetEnabled(int value);
 }
 
 extern "C" {
@@ -9675,7 +9675,7 @@ extern "C" int fn_80092830(int index)
             break;
         }
     case 4:
-        fn_8015C254(0);
+        RouteArrowSetEnabled(0);
         PassIconObjSetEnabled(0);
         lbl_803EA8BF = 1;
         if (lbl_803EC924->mUnknown80.mUnknownE4F[0] != 0) {
@@ -10343,7 +10343,7 @@ extern "C" void fn_800941B8(void)
 extern "C" void fn_800941EC(void)
 {
     if (lbl_803EA8BF) {
-        fn_8015C254(1);
+        RouteArrowSetEnabled(1);
         PassIconObjSetEnabled(1);
         lbl_803EA8BF = 0;
     }
@@ -16898,7 +16898,7 @@ extern "C" int fn_800A2624(void)
 extern "C" int fn_800A262C(void)
 {
     if (CamGameGetCamera(5)->mHeader.mUnknown04[1] <= 0.5f - lbl_8030E6E8.mUnknown2C && CamGameGetCurrentSlot() == 0
-        && ReplayCamIsActive() == 0 && fn_801784C4() == 0 && (fn_801784C4() != 0 || fn_80140DB4() == 0)) {
+        && ReplayCamIsActive() == 0 && fn_801784C4() == 0 && (fn_801784C4() != 0 || CamPlayWasOrbitToggled() == 0)) {
         lbl_803EA9F8 = 1;
         return 1;
     }
@@ -16909,7 +16909,7 @@ extern "C" int fn_800A262C(void)
 extern "C" int fn_800A26C4(void)
 {
     if (CamGameGetCamera(5)->mHeader.mUnknown04[1] > lbl_8030E6E8.mUnknown2C - 0.5f && CamGameGetCurrentSlot() == 0
-        && ReplayCamIsActive() == 0 && fn_801784C4() != 0 && (fn_801784C4() == 0 || fn_80140DB4() == 0)) {
+        && ReplayCamIsActive() == 0 && fn_801784C4() != 0 && (fn_801784C4() == 0 || CamPlayWasOrbitToggled() == 0)) {
         lbl_803EA9F8 = 1;
         return 1;
     }
@@ -30727,7 +30727,7 @@ void PreSnapPhase::OnEnter(float dt)
         GameEventFlagsSetFlag5(1);
     }
     PassIconsHide();
-    fn_8015C254(1);
+    RouteArrowSetEnabled(1);
     PassIconObjSetEnabled(1);
     ParticlesResetEvents();
     fn_8010A220();
@@ -32830,7 +32830,7 @@ extern "C" void fn_800C478C(float dt)
     FieldLinesUpdate();
     PlyrStarUpdate();
     BallMarkerUpdate();
-    fn_8015C114();
+    RouteArrowUpdateHighlights();
 }
 
 extern "C" void *fn_800C47C4(void)

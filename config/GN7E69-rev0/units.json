@@ -2421,15 +2421,15 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8015A818",
+            "function": "RouteArrowAddBlockPath",
             "evidence": "evidence.tsv source-form 0x8015A818-0x8015AB84"
           },
           {
-            "function": "fn_8015B344",
+            "function": "RouteArrowAddCommand",
             "evidence": "evidence.tsv source-form 0x8015B344-0x8015B834"
           },
           {
-            "function": "fn_8015BCAC",
+            "function": "RouteArrowBuild",
             "evidence": "evidence.tsv source-form 0x8015BCAC-0x8015BED4"
           }
         ],
@@ -24184,15 +24184,15 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801A09B0",
+            "function": "PlayArtRenderPlayerIcons",
             "evidence": "evidence.tsv source-form 0x801A09B0-0x801A0B1C"
           },
           {
-            "function": "fn_801A0B1C",
+            "function": "PlayArtRenderPlayerLetters",
             "evidence": "evidence.tsv source-form 0x801A0B1C-0x801A0CA0"
           },
           {
-            "function": "fn_801A105C",
+            "function": "PlayArtRenderAt",
             "evidence": "evidence.tsv source-form 0x801A105C-0x801A1240"
           }
         ],
@@ -24544,11 +24544,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_80140708",
+            "function": "CamPlayProcess",
             "evidence": "evidence.tsv source-form 0x80140708-0x80140DB4"
           },
           {
-            "function": "fn_8014106C",
+            "function": "CamPlayGetPosLimits",
             "evidence": "evidence.tsv source-form 0x8014106C-0x801410F4"
           }
         ],
