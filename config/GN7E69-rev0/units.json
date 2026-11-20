@@ -1269,158 +1269,6 @@
       "address": "0x8018EB20",
       "evidence": "evidence.tsv function/name rows for 0x8018EB20 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
     },
-    "PlyrFixWristBones": {
-      "address": "0x8003830C",
-      "evidence": "evidence.tsv function and name rows for 0x8003830C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrAddParticleEvents": {
-      "address": "0x8003845C",
-      "evidence": "evidence.tsv function and name rows for 0x8003845C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrCreate": {
-      "address": "0x800384DC",
-      "evidence": "evidence.tsv function and name rows for 0x800384DC (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrDestroy": {
-      "address": "0x800385D4",
-      "evidence": "evidence.tsv function and name rows for 0x800385D4 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrRefreshAll": {
-      "address": "0x80038650",
-      "evidence": "evidence.tsv function and name rows for 0x80038650 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrCompareSnapshot": {
-      "address": "0x8003877C",
-      "evidence": "evidence.tsv function and name rows for 0x8003877C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrLoadSnapshot": {
-      "address": "0x80038A00",
-      "evidence": "evidence.tsv function and name rows for 0x80038A00 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrGetSnapshotSize": {
-      "address": "0x80038E50",
-      "evidence": "evidence.tsv function and name rows for 0x80038E50 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrInit": {
-      "address": "0x80038E80",
-      "evidence": "evidence.tsv function and name rows for 0x80038E80 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrContactCallback": {
-      "address": "0x80039044",
-      "evidence": "evidence.tsv function and name rows for 0x80039044 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrUpdatePendingMsg": {
-      "address": "0x8003924C",
-      "evidence": "evidence.tsv function and name rows for 0x8003924C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrAnimUpdateOverlay": {
-      "address": "0x800392DC",
-      "evidence": "evidence.tsv function and name rows for 0x800392DC (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrAnimUpdateHands": {
-      "address": "0x80039364",
-      "evidence": "evidence.tsv function and name rows for 0x80039364 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrAnimPostUpdate": {
-      "address": "0x80039454",
-      "evidence": "evidence.tsv function and name rows for 0x80039454 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrClampBehindLine": {
-      "address": "0x80039458",
-      "evidence": "evidence.tsv function and name rows for 0x80039458 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrKeepInBounds": {
-      "address": "0x800394F4",
-      "evidence": "evidence.tsv function and name rows for 0x800394F4 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrUpdateControlFlag": {
-      "address": "0x8003962C",
-      "evidence": "evidence.tsv function and name rows for 0x8003962C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrClearTeamFlag": {
-      "address": "0x8003977C",
-      "evidence": "evidence.tsv function and name rows for 0x8003977C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrRegister": {
-      "address": "0x800397D0",
-      "evidence": "evidence.tsv function and name rows for 0x800397D0 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrReset": {
-      "address": "0x80039890",
-      "evidence": "evidence.tsv function and name rows for 0x80039890 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrExists": {
-      "address": "0x8003989C",
-      "evidence": "evidence.tsv function and name rows for 0x8003989C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrUpdate": {
-      "address": "0x800398B4",
-      "evidence": "evidence.tsv function and name rows for 0x800398B4 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrEmptyPass": {
-      "address": "0x80039A1C",
-      "evidence": "evidence.tsv function and name rows for 0x80039A1C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrUpdateSkeletons": {
-      "address": "0x80039A38",
-      "evidence": "evidence.tsv function and name rows for 0x80039A38 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrStepStates": {
-      "address": "0x80039AA8",
-      "evidence": "evidence.tsv function and name rows for 0x80039AA8 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrUpdateMotion": {
-      "address": "0x80039B2C",
-      "evidence": "evidence.tsv function and name rows for 0x80039B2C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrTestCollisions": {
-      "address": "0x80039C64",
-      "evidence": "evidence.tsv function and name rows for 0x80039C64 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrRunBrains": {
-      "address": "0x80039CB0",
-      "evidence": "evidence.tsv function and name rows for 0x80039CB0 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrUpdatePoses": {
-      "address": "0x80039D08",
-      "evidence": "evidence.tsv function and name rows for 0x80039D08 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrUpdateModels": {
-      "address": "0x80039F04",
-      "evidence": "evidence.tsv function and name rows for 0x80039F04 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrGet": {
-      "address": "0x80039F5C",
-      "evidence": "evidence.tsv function and name rows for 0x80039F5C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrGetIndex": {
-      "address": "0x80039F8C",
-      "evidence": "evidence.tsv function and name rows for 0x80039F8C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrFindByRole": {
-      "address": "0x80039FE8",
-      "evidence": "evidence.tsv function and name rows for 0x80039FE8 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrGetPerTeam": {
-      "address": "0x8003A06C",
-      "evidence": "evidence.tsv function and name rows for 0x8003A06C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrGetCollideSet": {
-      "address": "0x8003A078",
-      "evidence": "evidence.tsv function and name rows for 0x8003A078 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrMgrReverseAll": {
-      "address": "0x8003A090",
-      "evidence": "evidence.tsv function and name rows for 0x8003A090 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrFindNearest": {
-      "address": "0x8003A130",
-      "evidence": "evidence.tsv function and name rows for 0x8003A130 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
-    "PlyrRouteShow": {
-      "address": "0x8003A1EC",
-      "evidence": "evidence.tsv function and name rows for 0x8003A1EC (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
-    },
     "MemCardFilesFindNameOnPort": {
       "address": "0x8002A86C",
       "evidence": "evidence.tsv function/name rows for 0x8002A86C (target extent, inferred name); the documented holdout of src/game/MemCardFiles.cpp keeps its original bytes until its draft in comparisons.json is linked."
@@ -17429,9 +17277,21 @@
     },
     {
       "source": "src/game/PlyrMgr.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8003830C-0x8003AEA8 (src/game/PlyrMgr.cpp): the fifteen functions 0x8003A394-0x8003AEA8 and the .rodata 0x8028D000-0x8028D06C are linked from source; the rest of the file is comparison-only.",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8003830C-0x8003AEA8 (src/game/PlyrMgr.cpp): the whole file is linked with holdouts (owner ruling of 2026-11-20); its two holdouts keep their original bytes and its .rodata 0x8028CFA0-0x8028D070 is linked whole.",
       "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003830C",
+          "end": "0x8003962C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003977C",
+          "end": "0x8003A1EC"
+        },
         {
           "section": ".text",
           "placement": ".text",
@@ -17441,10 +17301,23 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8028D000",
-          "end": "0x8028D06C"
+          "start": "0x8028CFA0",
+          "end": "0x8028D070"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "PlyrUpdateControlFlag",
+            "evidence": "evidence.tsv source-form 0x8003962C-0x8003977C"
+          },
+          {
+            "function": "PlyrRouteShow",
+            "evidence": "evidence.tsv source-form 0x8003A1EC-0x8003A394"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      }
     },
     {
       "source": "src/game/Statcoll.cpp",
@@ -22604,6 +22477,186 @@
           {
             "function": "fn_8005DD6C",
             "evidence": "evidence.tsv source-form 0x8005DD6C-0x8005DFE8"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      }
+    },
+    {
+      "source": "src/game/cu_800834CC.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/cu_800834CC.cpp), its exact function extents and its .rodata/.data/.sdata/.sbss data rows; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800834CC",
+          "end": "0x80083C98"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80083DE4",
+          "end": "0x8008463C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80084808",
+          "end": "0x800850E8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80293A54",
+          "end": "0x80293D44"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6B08",
+          "end": "0x802D6B8C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7E8",
+          "end": "0x803EA7EC"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC86C",
+          "end": "0x803EC870"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80083C98",
+            "evidence": "evidence.tsv source-form 0x80083C98-0x80083DE4"
+          },
+          {
+            "function": "fn_8008463C",
+            "evidence": "evidence.tsv source-form 0x8008463C-0x800846F4"
+          },
+          {
+            "function": "fn_800846F4",
+            "evidence": "evidence.tsv source-form 0x800846F4-0x80084808"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      }
+    },
+    {
+      "source": "src/game/cu_801A0088.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv provisional/provisional membership, target function/data extents and instruction-supported shared state/source-form records; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A0088",
+          "end": "0x801A09B0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A0CA0",
+          "end": "0x801A105C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A1240",
+          "end": "0x801A1338"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE01C",
+          "end": "0x802AE094"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F2734",
+          "end": "0x802F2754"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036550C",
+          "end": "0x80365574"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_801A09B0",
+            "evidence": "evidence.tsv source-form 0x801A09B0-0x801A0B1C"
+          },
+          {
+            "function": "fn_801A0B1C",
+            "evidence": "evidence.tsv source-form 0x801A0B1C-0x801A0CA0"
+          },
+          {
+            "function": "fn_801A105C",
+            "evidence": "evidence.tsv source-form 0x801A105C-0x801A1240"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+      }
+    },
+    {
+      "source": "src/game/PlyrObjs.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8003BA00-0x8003E214 (src/game/PlyrObjs.cpp), projected geometry and resource group rows and the .rodata row; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003BA00",
+          "end": "0x8003BA10"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003BDF0",
+          "end": "0x8003BFCC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003C8C8",
+          "end": "0x8003D378"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003D958",
+          "end": "0x8003E214"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D070",
+          "end": "0x8028D338"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8003BA10",
+            "evidence": "evidence.tsv source-form 0x8003BA10-0x8003BDF0"
+          },
+          {
+            "function": "fn_8003BFCC",
+            "evidence": "evidence.tsv source-form 0x8003BFCC-0x8003C8C8"
+          },
+          {
+            "function": "fn_8003D378",
+            "evidence": "evidence.tsv source-form 0x8003D378-0x8003D958"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"

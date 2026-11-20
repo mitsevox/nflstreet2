@@ -303,7 +303,7 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
   shiftedB.mY = b->mY;
   fn_8022732C(&shiftedA, axis, shift);
   fn_8022732C(&shiftedB, axis, shift);
-  float maximum = -1000000.0f, minimum = 1000000.0f;
+  float minimum = 1000000.0f, maximum = -1000000.0f;
   for (; i < 4; ++i) {
     if (fn_8003C97C(&shiftedA, &shiftedB, (Point2_t *)p->mPoints[i],
                     (Point2_t *)p->mPoints[(i + 1) % 4], &t, &u) &&

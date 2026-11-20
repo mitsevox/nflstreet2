@@ -51,14 +51,14 @@ int VptGetMatrixStack(void);
 void GXSetNumChans(int);
 void GXSetChanCtrl(int, int, int, int, int, int, int);
 void GXSetChanAmbColor(int, GXColor);
-void fn_8024EB28(int);
-void fn_80252114(int);
-void fn_802520E0(int, int, int);
+void GXSetCullMode(int);
+void GXSetZCompLoc(int);
+void GXSetZMode(int, int, int);
 extern "C" void GXInitTexObjTlut(GXTexObj *, int);
 extern "C" void GXLoadTlut(GXTlutObj *, int);
 extern "C" void GXLoadTexObj(GXTexObj *, int);
 void GXLoadPosMtxImm(Mtx44, int);
-void fn_80252034(int, int, int, int);
+void GXSetBlendMode(int, int, int, int);
 }
 
 extern "C" int fn_801A0088(int)
@@ -226,8 +226,8 @@ extern "C" void fn_801A0E2C(void)
     GXColor c={255,255,255,255};
     TMRenderReset();GXClearVtxDesc();GXSetVtxDesc(GX_VA_POS, GX_DIRECT);GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);GXSetNumChans(1);
     GXSetChanCtrl(0,1,0,1,0,0,2);GXSetChanCtrl(2,0,0,1,0,0,2);GXSetChanAmbColor(0,c);
-    GXSetNumTevStages(1);GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);GXSetNumTexGens(1);GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);fn_8024EB28(0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);fn_80252114(1);fn_802520E0(0,7,0);GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_GREATER, 0);fn_801A0088(0);
+    GXSetNumTevStages(1);GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);GXSetNumTexGens(1);GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);GXSetCullMode(0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);GXSetZCompLoc(1);GXSetZMode(0,7,0);GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_GREATER, 0);fn_801A0088(0);
 }
 extern "C" void fn_801A0FAC(int a,PlayArtState_t *s,unsigned char mirror)
 {
@@ -241,8 +241,8 @@ extern "C" void fn_801A105C(float x,float y,void *input,unsigned char mirror)
     fn_801A0E2C();point=fn_80177FE0();Point_8017886C *pPoint=&point;
     if(fn_80177F70()!=0&&fn_80177F70()!=6){float v=fn_80178298();if(v<fn_80178A2C()&&!fn_800BA6F8()&&!FELoopIsMainFEActive())fn_80178298();}
     GXSetChanAmbColor(4,c);MatSetStack(VptGetMatrixStack());MatPush();MatScaleCol(1.0f,1.0f,0.0f);MatTranslate(pos);MatStore(m);GXLoadPosMtxImm(m,0);
-    GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);fn_80252034(0,0,0,5);int a=fn_801A07A8(0,pPoint);GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);fn_80252034(1,4,5,5);
-    MatStore(m);GXLoadPosMtxImm(m,0);GXSetChanAmbColor(4,c);fn_801A0FAC(a,s,mirror);fn_80252034(0,0,0,5);MatPop();MatStore(m);GXLoadPosMtxImm(m,0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);GXSetBlendMode(0,0,0,5);int a=fn_801A07A8(0,pPoint);GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);GXSetBlendMode(1,4,5,5);
+    MatStore(m);GXLoadPosMtxImm(m,0);GXSetChanAmbColor(4,c);fn_801A0FAC(a,s,mirror);GXSetBlendMode(0,0,0,5);MatPop();MatStore(m);GXLoadPosMtxImm(m,0);
 }
 extern "C" void fn_801A1240(int resource)
 {

@@ -10177,7 +10177,7 @@
     {
       "source": "src/game/cu_800834CC.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/cu_800834CC.cpp), its individual exact function extents and its .rodata/.data/.sdata/.sbss data rows. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/cu_800834CC.cpp), its individual exact function extents and its .rodata/.data/.sdata/.sbss data rows. The source is linked with holdouts (units.json); the three non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -11191,7 +11191,7 @@
     {
       "source": "src/game/cu_801A0088.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional/provisional membership, target function/data extents and instruction-supported shared state/source-form records. Seventeen unlinked native comparisons; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional/provisional membership, target function/data extents and instruction-supported shared state/source-form records. The source is linked with holdouts (units.json); the three non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -11478,7 +11478,7 @@
     {
       "source": "src/game/PlyrObjs.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8003BA00-0x8003E214 (src/game/PlyrObjs.cpp), projected geometry and resource group rows; original assembly linked.",
+      "evidence": "evidence.tsv unit row 0x8003BA00-0x8003E214 (src/game/PlyrObjs.cpp), projected geometry and resource group rows. The source is linked with holdouts (units.json); the three non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -32531,7 +32531,7 @@
     {
       "source": "src/game/PlyrMgr.cpp",
       "profile": "game_cpp",
-      "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. Unregistered functions remain unmeasured; comparison-only source stays unlinked.",
+      "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",

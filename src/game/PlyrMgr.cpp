@@ -230,7 +230,6 @@ void *fn_8015C170(Object_80039F5C *p, Point_8017886C *pPos, void *pRecord, unsig
 void fn_8015C218(void *p);
 }
 
-#if defined(DECOMP_COMPARE)
 extern "C" void PlyrFixWristBones(Object_80039F5C *p)
 {
     if (p->mFlags & 0x04000000) {
@@ -1010,8 +1009,6 @@ extern "C" void PlyrRouteShow(int on, int team, int index)
         pBlock->mpUnknown984 = 0;
     }
 }
-
-#endif
 
 extern "C" void PlyrRouteShowHighlighted(int a, int team, int index)
 {
