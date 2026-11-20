@@ -20996,6 +20996,12 @@
           "end": "0x802FF4B0"
         },
         {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED9C4",
+          "end": "0x803EDDC4"
+        },
+        {
           "section": ".bss",
           "placement": ".bss",
           "start": "0x803A6A08",
@@ -21024,6 +21030,11 @@
           "end": "0x8025E290"
         },
         {
+          "symbol": "__divdi3",
+          "start": "0x8025E290",
+          "end": "0x8025E80C"
+        },
+        {
           "symbol": "__fixunssfdi",
           "start": "0x8025E850",
           "end": "0x8025EA08"
@@ -21044,9 +21055,24 @@
           "end": "0x8025EB54"
         },
         {
+          "symbol": "__moddi3",
+          "start": "0x8025EB54",
+          "end": "0x8025F088"
+        },
+        {
           "symbol": "__pure_virtual",
           "start": "0x8025F088",
           "end": "0x8025F0A8"
+        },
+        {
+          "symbol": "__udivdi3",
+          "start": "0x8025F0A8",
+          "end": "0x8025F58C"
+        },
+        {
+          "symbol": "__umoddi3",
+          "start": "0x8025F58C",
+          "end": "0x8025FA24"
         },
         {
           "symbol": "__cmpdi2",
