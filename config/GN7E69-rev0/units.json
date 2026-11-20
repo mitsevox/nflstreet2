@@ -10652,6 +10652,37 @@
       ]
     },
     {
+      "source": "src/game/FieldLines.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80046920-0x8004732C (src/game/FieldLines.cpp) with its function, name and data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80046920",
+          "end": "0x8004732C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D5AC",
+          "end": "0x8028D600"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803078D4",
+          "end": "0x803078E8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC7B8",
+          "end": "0x803EC7CC"
+        }
+      ]
+    },
+    {
       "source": "src/game/camballmode.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801422C8-0x801422EC (src/game/camballmode.cpp) and its data, compiler and source-form rows.",

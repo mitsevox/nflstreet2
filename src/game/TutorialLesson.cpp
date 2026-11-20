@@ -284,7 +284,7 @@ void PlyrMgrClearStates(void);
 void DepthChartRevertSide(int group);
 void DepthChartSetSide(int group, int *values);
 void BigObjNotifyTypes(int a);
-void fn_8004730C(int a);
+void FieldLinesEnable(int a);
 void PlyrNameTagEnable(unsigned char enable);
 void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
 int MsgBoxIsClosed(void);
@@ -968,7 +968,7 @@ int TutorialFinishCategory(void)
         TutorialSetLesson(5);
         fn_800C1CA0();
         fn_800C1E50();
-        fn_8004730C(1);
+        FieldLinesEnable(1);
         fn_8015C254(1);
         PlyrNameTagEnable(1);
         if (mode != 15) {
@@ -1034,7 +1034,7 @@ int TutorialFinishCategory(void)
             fn_80148644();
             fn_800C1CA0();
             fn_800C1E50();
-            fn_8004730C(1);
+            FieldLinesEnable(1);
             fn_8015C254(1);
             PlyrNameTagEnable(1);
             TutorialSetLesson(next);
@@ -2081,7 +2081,7 @@ void TutorialPostPlay::OnUpdate(float dt)
                         RumbleEnable(1);
                         SndgMusicFadeOut(0xFA, 0);
                         PlyrNameTagEnable(0);
-                        fn_8004730C(0);
+                        FieldLinesEnable(0);
                         InGameStop();
                         mUnknown12 = 0;
                     }

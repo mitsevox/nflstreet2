@@ -122,7 +122,7 @@ void PlyrPoseSetBlendFlag(int a);
 void DivotSaveState(void);
 void DivotRestoreState(void);
 void EnvObjUpdateFades(void);
-void fn_80047050(void);
+void FieldLinesUpdate(void);
 void PauseBlock(void);
 void PauseUnblock(void);
 int PauseIsOpen(void);
@@ -606,7 +606,7 @@ extern "C" void fn_8002BEF0(Type_803EA368 *p)
         ParticlesProcess(1.0f);
         fn_800A3120(p->mUnknownD88 / 60.0f);
     }
-    fn_80047050();
+    FieldLinesUpdate();
     if (p->mUnknownD94 & 0x200) {
         if (lbl_803EA360 > 0x1D) {
             fn_8002C4B0(p);
@@ -637,7 +637,7 @@ extern "C" void fn_8002C13C(Type_803EA368 *p)
         if (fn_800B81A4() != 0xFF) {
             p->mUnknownD94 |= 0x200;
         }
-        fn_80047050();
+        FieldLinesUpdate();
         if (p->mUnknownD94 & 0x1000200) {
             if (lbl_803EA360 > 0x1D) {
                 fn_8002C4B0(p);

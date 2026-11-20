@@ -3510,14 +3510,14 @@ void BallMarkerCreate(int handle);
 void ReplayCursorCreate(int handle);
 void PassIconsCreate(void *pOwner);
 void fn_800C4410(int value);
-void fn_80046E30(int handle);
+void FieldLinesCreate(int handle);
 void EffectDrawObjCreate(int handle);
 void DivotShutdown(void);
 void FldObjRemoveObjType(int handle);
 void EnvObjRemoveObjType(int handle);
 void fn_800B8538(void);
 void fn_800C442C(void);
-void fn_80046FD0(void);
+void FieldLinesDestroy(void);
 void EffectDrawObjDestroy(int handle);
 void fn_801626A4(void *arg);
 void BallMarkerDestroy(int handle);
@@ -3526,7 +3526,7 @@ void PassIconsDestroy(void *pOwner);
 void LightDirUpdate(void);
 void EnvObjUpdateFades(void);
 void EnvFogRefresh(void);
-void fn_80047050(void);
+void FieldLinesUpdate(void);
 void fn_80162794(void);
 void BallMarkerUpdate(void);
 void fn_8015C114(void);
@@ -3594,7 +3594,7 @@ extern "C" void fn_800C46B0(int handle)
     ReplayCursorCreate(handle);
     PassIconsCreate((void *)handle);
     fn_800C4410(0);
-    fn_80046E30(handle);
+    FieldLinesCreate(handle);
     EffectDrawObjCreate(handle);
 }
 
@@ -3605,7 +3605,7 @@ extern "C" void fn_800C471C(int handle)
     EnvObjRemoveObjType(handle);
     fn_800B8538();
     fn_800C442C();
-    fn_80046FD0();
+    FieldLinesDestroy();
     EffectDrawObjDestroy(handle);
     fn_801626A4((void *)handle);
     BallMarkerDestroy(handle);
@@ -3618,7 +3618,7 @@ extern "C" void fn_800C478C(float dt)
     LightDirUpdate();
     EnvObjUpdateFades();
     EnvFogRefresh();
-    fn_80047050();
+    FieldLinesUpdate();
     fn_80162794();
     BallMarkerUpdate();
     fn_8015C114();
@@ -10253,7 +10253,7 @@ extern "C" int fn_800AB2FC(void *p, float dt)
 }
 
 extern "C" {
-void fn_8004730C(unsigned char enabled);
+void FieldLinesEnable(unsigned char enabled);
 void SndgMusicFadeOut(unsigned int delay, int wait);
 void InGameStop(void);
 StevRow_t *fn_8005FC7C(void);
@@ -10302,7 +10302,7 @@ void Class_80297B90::vfn_04(float dt)
         SndgNullHook();
         if (InGameIsDemo() != 0) {
             PlyrNameTagEnable(0);
-            fn_8004730C(0);
+            FieldLinesEnable(0);
             SndgMusicFadeOut(250, 1);
             InGameStop();
             break;
@@ -10424,7 +10424,7 @@ void Class_80297B90::vfn_04(float dt)
             fn_8005FC84();
             fn_80061D14();
             PlyrNameTagEnable(0);
-            fn_8004730C(0);
+            FieldLinesEnable(0);
             if (fn_801486A0() != 15 && lbl_803EAA88->mUnknown17 == 0) {
                 PlayerObjSetDrawReady(0);
             }

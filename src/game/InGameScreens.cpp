@@ -287,7 +287,7 @@ int fn_800B6644(int index);
 unsigned int GameModeTypeGet(void);
 void ChallengeRecordResult(int a, int b);
 void PlyrNameTagEnable(unsigned char enable);
-void fn_8004730C(unsigned char enabled);
+void FieldLinesEnable(unsigned char enabled);
 void InGameStop(void);
 unsigned char PauseGetQuitFlag(void);
 void AudmonEventPostArgs(int type, void *pPos, int a, int b, int c);
@@ -1652,7 +1652,7 @@ void fn_80058DA0(void)
             ChallengeRecordResult(1, 7);
         }
         PlyrNameTagEnable(0);
-        fn_8004730C(0);
+        FieldLinesEnable(0);
         InGameStop();
     } else {
         AudmonEventPostArgs(0x72, 0, PauseGetQuitFlag(), 0, 0);

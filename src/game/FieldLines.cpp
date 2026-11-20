@@ -1,3 +1,7 @@
+/* Field lines: five textured strips drawn across the field at yard positions
+   (object type 17). Each frame the update places them from the field getters
+   and fades them in or out; the list callback draws each visible strip with a
+   pulsing alpha and keeps a minimum on-screen size. */
 #include "game/fn_8022781C.h"
 #include "game/fn_80177FE0.h"
 #include "game/cu_8002B8F8.h"
@@ -9,9 +13,11 @@
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXTev.h>
+#include <dolphin/gx/GXCull.h>
+#include <dolphin/gx/GXPixel.h>
 
 /* The pool allocates 0x128 bytes. Only observed fields are exposed. */
-struct Item_800469EC {
+struct FieldLine_t {
     char mUnknown0[4];
     Vector_80039F5C mUnknown4;
     char mUnknown10[0xC8];
@@ -29,7 +35,7 @@ struct Item_800469EC {
 };
 
 /* Projection writes two three-component bounds with 16-byte stride. */
-struct Bounds_80234D00 {
+struct FieldLineBounds_t {
     Vector_80039F5C mUnknown0;
     char mUnknownC[4];
     Vector_80039F5C mUnknown10;
@@ -52,12 +58,12 @@ void MatPush(void);
 void MatPop(void);
 void MatTranslate(void *p);
 void MatStore(float (*pMatrix)[4]);
-int ObjNewType_(int type, int size, int count, void (*a)(Item_800469EC *), void (*b)(Item_800469EC *));
+int ObjNewType_(int type, int size, int count, void (*a)(FieldLine_t *), void (*b)(FieldLine_t *));
 int ObjDelType(int type);
-void ObjSetListObjFunc(int handle, int type, int a, int (*callback)(Item_800469EC *));
-Item_800469EC *ObjNewInList(int handle, int type, int a, int *pInit);
-void ObjRemoveFromList(int handle, Item_800469EC *p);
-void ObjSetPriority(int handle, Item_800469EC *p, int a);
+void ObjSetListObjFunc(int handle, int type, int a, int (*callback)(FieldLine_t *));
+FieldLine_t *ObjNewInList(int handle, int type, int a, int *pInit);
+void ObjRemoveFromList(int handle, FieldLine_t *p);
+void ObjSetPriority(int handle, FieldLine_t *p, int a);
 void TMRenderReset(void);
 void TMRenderBindTexture(int a, int b, int c);
 void TMRenderSetZRange(float a, float b);
@@ -65,29 +71,24 @@ void TMTexLibLoad(void *p, int a);
 void TMTexLibUnload(void *p);
 int TMTexLibGetTexture(void *p, unsigned int key);
 int TMTexLibGetClut(void *p, unsigned int key, int a);
-void fn_80234D00(Bounds_80234D00 *pIn, Bounds_80234D00 *pOut);
+void fn_80234D00(FieldLineBounds_t *pIn, FieldLineBounds_t *pOut);
 int fn_80236EC0(int a);
-void fn_8024E908(int a, int b, int c);
-void fn_8024EB28(int a);
 void GXSetChanMatColor(int a, GXColor color);
 void GXSetNumChans(int a);
 void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
-void fn_80252034(int a, int b, int c, int d);
-void fn_802520E0(int a, int b, int c);
-void fn_80252114(int a);
 void GXLoadPosMtxImm(float (*matrix)[4], int a);
 void GXSetCurrentMtx(int a);
-extern Bounds_80234D00 lbl_802CEFF0;
+extern FieldLineBounds_t lbl_802CEFF0;
 extern float lbl_803EA4B8;
 
-static int lbl_803EC7B8;
-static unsigned char lbl_803EC7BC[5];
-static unsigned char lbl_803EC7C4[5];
-static Item_800469EC *lbl_803078D4[5];
+static int _FieldLines_iObjList;
+static unsigned char _FieldLines_abForceOn[5];
+static unsigned char _FieldLines_abDrawEnable[5];
+static FieldLine_t *_FieldLines_apLines[5];
 
-float fn_80046920(Item_800469EC *p)
+float FieldLineGetScale(FieldLine_t *p)
 {
-    Bounds_80234D00 bounds;
+    FieldLineBounds_t bounds;
     float extra = 0.0f;
     MatPush();
     MatTranslate(&p->mUnknown4);
@@ -103,20 +104,20 @@ float fn_80046920(Item_800469EC *p)
     return extra + 1.0f;
 }
 
-int fn_800469EC(Item_800469EC *p)
+int FieldLineDraw(FieldLine_t *p)
 {
     if (fn_80177F70() && !fn_800BA6F8() && !fn_8002D060(lbl_803EA368) &&
-        lbl_803EC7C4[p->mUnknownF4] == 1 && !PauseIsOpen() && fn_800AD9B4() != 7) {
+        _FieldLines_abDrawEnable[p->mUnknownF4] == 1 && !PauseIsOpen() && fn_800AD9B4() != 7) {
         float zero = 0.0f;
         if (p->mUnknownE4 > zero) {
-            float scale = fn_80046920(p);
+            float scale = FieldLineGetScale(p);
             float matrix[4][4];
             TMRenderReset();
             int state = fn_80236EC0(0);
-            fn_8024EB28(0);
-            fn_80252034(1, 4, 5, 5);
-            fn_80252114(0);
-            fn_802520E0(0, 3, 0);
+            GXSetCullMode(GX_CULL_NONE);
+            GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
+            GXSetZCompLoc(GX_FALSE);
+            GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
             TMRenderSetZRange(zero, 1.0f);
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -139,7 +140,7 @@ int fn_800469EC(Item_800469EC *p)
             GXLoadPosMtxImm(matrix, 0);
             GXSetCurrentMtx(0);
             MatPop();
-            fn_8024E908(0x98, 0, 4);
+            GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
             {
                 float x = fn_80178A08();
                 float y = (1.0f - lbl_803EA4B8) * 0.55556f;
@@ -175,7 +176,7 @@ int fn_800469EC(Item_800469EC *p)
     return 0;
 }
 
-void fn_80046DEC(Item_800469EC *p, int enabled)
+void FieldLineSetVisible(FieldLine_t *p, int enabled)
 {
     if (enabled) {
         p->mUnknownEC = 0.5f;
@@ -187,15 +188,15 @@ void fn_80046DEC(Item_800469EC *p, int enabled)
     }
 }
 
-void fn_80046E30(int handle)
+void FieldLinesCreate(int handle)
 {
-    lbl_803EC7B8 = handle;
+    _FieldLines_iObjList = handle;
     ObjNewType_(17, 0x128, 5, 0, 0);
-    ObjSetListObjFunc(lbl_803EC7B8, 17, 0, fn_800469EC);
+    ObjSetListObjFunc(_FieldLines_iObjList, 17, 0, FieldLineDraw);
     for (unsigned int i = 0; i <= 4; ++i) {
-        lbl_803EC7C4[i] = 1;
-        Item_800469EC *p = ObjNewInList(lbl_803EC7B8, 17, 0, 0);
-        lbl_803078D4[i] = p;
+        _FieldLines_abDrawEnable[i] = 1;
+        FieldLine_t *p = ObjNewInList(_FieldLines_iObjList, 17, 0, 0);
+        _FieldLines_apLines[i] = p;
         switch (i) {
         case 0:
             p->mUnknownD8 = 1.0f;
@@ -229,7 +230,7 @@ void fn_80046E30(int handle)
         p->mUnknownE4 = 0.0f;
         p->mUnknownEC = 0.0f;
         p->mUnknownF0 = 0.0f;
-        lbl_803EC7BC[i] = 0;
+        _FieldLines_abForceOn[i] = 0;
         TMTexLibLoad(p->mUnknownF8, ResLoad(fn_800C47C4(), 17, 1));
         p->mUnknown120 = TMTexLibGetTexture(p->mUnknownF8, 0xFF000000);
         p->mUnknown124 = TMTexLibGetClut(p->mUnknownF8, 0xFF000000, 0);
@@ -237,17 +238,17 @@ void fn_80046E30(int handle)
     }
 }
 
-void fn_80046FD0(void)
+void FieldLinesDestroy(void)
 {
     for (unsigned int i = 0; i <= 4; ++i) {
-        TMTexLibUnload(lbl_803078D4[i]->mUnknownF8);
-        ObjRemoveFromList(lbl_803EC7B8, lbl_803078D4[i]);
-        VptTrashObject((int)lbl_803078D4[i]);
-        lbl_803078D4[i] = 0;
+        TMTexLibUnload(_FieldLines_apLines[i]->mUnknownF8);
+        ObjRemoveFromList(_FieldLines_iObjList, _FieldLines_apLines[i]);
+        VptTrashObject((int)_FieldLines_apLines[i]);
+        _FieldLines_apLines[i] = 0;
     }
     VptFlushObjectTrashSync();
     ObjDelType(17);
-    lbl_803EC7B8 = 0;
+    _FieldLines_iObjList = 0;
 }
 
 // FAKEMATCH: an inline compare helper; inlined at RTL level its bound stays `>= 2` (a direct `mode >= 2` folds to `> 1`).
@@ -256,10 +257,10 @@ static inline int AtLeast(int value, int lo)
     return value >= lo;
 }
 
-void fn_80047050(void)
+void FieldLinesUpdate(void)
 {
     for (unsigned int i = 0; i <= 4; ++i) {
-        Item_800469EC *p = lbl_803078D4[i];
+        FieldLine_t *p = _FieldLines_apLines[i];
         int enabled = 0;
         int mode = fn_800AD9B4();
         if (mode <= 3) {
@@ -272,41 +273,41 @@ void fn_80047050(void)
         enabled = ready;
         switch ((unsigned int)p->mUnknownF4) {
         case 0: {
-            lbl_803078D4[i]->mUnknown4.mX = 0.0f;
-            Item_800469EC *q0 = lbl_803078D4[i];
+            _FieldLines_apLines[i]->mUnknown4.mX = 0.0f;
+            FieldLine_t *q0 = _FieldLines_apLines[i];
             q0->mUnknown4.mY = fn_801784C4() ? -fn_80178298() : fn_80178298();
-            lbl_803078D4[i]->mUnknown4.mZ = 0.0f;
+            _FieldLines_apLines[i]->mUnknown4.mZ = 0.0f;
             if (!(fn_80178298() < fn_80178A2C()) || !(fn_80178298() > -fn_80178A2C())) {
                 enabled = 0;
             }
             break;
         }
         case 1: {
-            lbl_803078D4[i]->mUnknown4.mX = 0.0f;
-            Item_800469EC *q1 = lbl_803078D4[i];
+            _FieldLines_apLines[i]->mUnknown4.mX = 0.0f;
+            FieldLine_t *q1 = _FieldLines_apLines[i];
             q1->mUnknown4.mY = fn_801784C4() ? -fn_80178A2C() : fn_80178A2C();
-            lbl_803078D4[i]->mUnknown4.mZ = 0.0f;
+            _FieldLines_apLines[i]->mUnknown4.mZ = 0.0f;
             break;
         }
         case 2: {
-            lbl_803078D4[i]->mUnknown4.mX = 0.0f;
-            Item_800469EC *q2 = lbl_803078D4[i];
+            _FieldLines_apLines[i]->mUnknown4.mX = 0.0f;
+            FieldLine_t *q2 = _FieldLines_apLines[i];
             q2->mUnknown4.mY = fn_801784C4() ? fn_80178A2C() : -fn_80178A2C();
-            lbl_803078D4[i]->mUnknown4.mZ = 0.0f;
+            _FieldLines_apLines[i]->mUnknown4.mZ = 0.0f;
             break;
         }
         case 3: {
-            lbl_803078D4[i]->mUnknown4.mX = 0.0f;
-            Item_800469EC *q3 = lbl_803078D4[i];
+            _FieldLines_apLines[i]->mUnknown4.mX = 0.0f;
+            FieldLine_t *q3 = _FieldLines_apLines[i];
             q3->mUnknown4.mY = fn_801784C4() ? -fn_80177FE0().mY : fn_80177FE0().mY;
-            lbl_803078D4[i]->mUnknown4.mZ = 0.0f;
+            _FieldLines_apLines[i]->mUnknown4.mZ = 0.0f;
             break;
         }
         case 4: {
-            lbl_803078D4[i]->mUnknown4.mX = 0.0f;
-            Item_800469EC *q4 = lbl_803078D4[i];
+            _FieldLines_apLines[i]->mUnknown4.mX = 0.0f;
+            FieldLine_t *q4 = _FieldLines_apLines[i];
             q4->mUnknown4.mY = fn_801784C4() ? -fn_80177FFC(fn_80178320()).mY : fn_80177FFC(fn_80178320()).mY;
-            lbl_803078D4[i]->mUnknown4.mZ = 0.0f;
+            _FieldLines_apLines[i]->mUnknown4.mZ = 0.0f;
             if (fn_800AD9B4() != 2) {
                 enabled = 0;
             }
@@ -321,17 +322,17 @@ void fn_80047050(void)
             break;
         }
         }
-        if (lbl_803EC7BC[p->mUnknownF4]) {
+        if (_FieldLines_abForceOn[p->mUnknownF4]) {
             enabled = 1;
         }
-        fn_80046DEC(p, enabled);
+        FieldLineSetVisible(p, enabled);
     }
 }
 
-void fn_8004730C(unsigned char enabled)
+void FieldLinesEnable(unsigned char enabled)
 {
     for (unsigned char i = 0; i <= 4; ++i) {
-        lbl_803EC7C4[i] = enabled;
+        _FieldLines_abDrawEnable[i] = enabled;
     }
 }
 }
