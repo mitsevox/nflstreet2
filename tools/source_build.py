@@ -1927,8 +1927,13 @@ def compiled_functions(unit, obj):
     functions, seen = [], set()
     for symbol in obj[1]:
         # holdout_object leaves a holdouts unit's local functions untyped (sized) so the link keeps them.
+        # Only code placements hold them: ProDG also emits file-static storage (.lcomm in .sbss/.bss)
+        # as untyped sized locals, and those are data, not functions.
+        placed = placements.get(symbol["shndx"])
         function = symbol["type"] == STT_FUNC or (unit.get("holdouts") and symbol["bind"] == STB_LOCAL
-                                                  and symbol["type"] == 0)
+                                                  and symbol["type"] == 0 and placed is not None
+                                                  and placed["kind"] == "code"
+                                                  and placed.get("executable") is not False)
         if not function or symbol["shndx"] == SHN_UNDEF or symbol["size"] <= 0:
             continue
         # A kept local's global copy (keep_object) names the same function once more, and its
