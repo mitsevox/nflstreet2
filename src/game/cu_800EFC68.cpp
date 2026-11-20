@@ -10592,19 +10592,37 @@ int fn_800FFA10(Object_80039F5C *p, Object_80039F5C *other)
 }
 
 extern "C" {
+// FAKEMATCH: empty release form of a debug hook (stripped debug code); only fn_800FFB4C calls it.
+static inline void _DebugPoint(Point_8017886C *) {}
+
 void fn_800FFB4C(Object_80039F5C *p, Object_80039F5C *other, float *value, Point_8017886C *out)
 {
     float factor;
 
     if (*value > 0.0f) {
         factor = MapRange(fn_80178A08() - p->mMotion.mPos.mX, 1.0f, 4.5f, -1.0f, 1.0f);
-        factor = factor < -1.0f ? -1.0f : (factor > 1.0f ? 1.0f : factor);
+        if (factor >= -1.0f) {
+            if (factor > 1.0f) {
+                factor = 1.0f;
+            }
+        } else {
+            factor = -1.0f;
+        }
     } else {
         factor = MapRange(fn_80178A08() + p->mMotion.mPos.mX, 1.0f, 4.5f, -1.0f, 1.0f);
-        factor = factor < -1.0f ? -1.0f : (factor > 1.0f ? 1.0f : factor);
+        if (factor >= -1.0f) {
+            if (factor > 1.0f) {
+                factor = 1.0f;
+            }
+        } else {
+            factor = -1.0f;
+        }
     }
     Point_8017886C delta;
 
+    // FAKEMATCH: stripped debug hook on the offset; taking its address here puts delta in memory before the
+    // scaling, so the products keep the target operand order.
+    _DebugPoint(&delta);
     delta.mX = value[0];
     delta.mY = value[1];
     delta.mX *= factor;
@@ -11822,6 +11840,7 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
 extern "C" int fn_80102A78(List_801018B4_80102A78 *pList, unsigned short animation, void *pData, AnimChannel_t *pEntries,
                            Object_80039F5C *p, unsigned int mode)
 {
+    Entry_801018B4_80102A78 *pEntry = 0;
     int delta = 0;
     unsigned int angle = 0;
     int failed = 0;
@@ -11833,7 +11852,6 @@ extern "C" int fn_80102A78(List_801018B4_80102A78 *pList, unsigned short animati
         unsigned char kind = pRecord->mUnknown1D;
         Point_8017886C point;
         int index;
-        Entry_801018B4_80102A78 *pEntry;
 
         fn_801016A4(p, &kind, &point, (int *)&angle);
         fn_8010176C(p, kind, &point);
@@ -16803,18 +16821,18 @@ extern "C" int fn_8010F654(Object_80039F5C *p)
 
     if (p == BallGetCurrentHolder()) {
         fn_8011E3EC(p, 0);
-        result = 1;
         fn_8011E240(p);
         memset(&message, 0, 4);
         message.mId = 1;
+        result = 1;
         fn_800F053C(0, p->mpState, &message, p);
     } else if (fn_8010D8F4(p)) {
         memset(&message, 0, 4);
         message.mId = 90;
         message.mUnknown1[0] = pCarrier->mMotion.mPos.mX > 0.0f ? lbl_803EAF50 : -lbl_803EAF50;
         message.mUnknown1[1] = lbl_803EAF51;
-        result = 1;
         fn_800F053C(0, p->mpState, &message, p);
+        result = 1;
     } else if (fn_8009FB60(p)) {
         result = 1;
     } else {

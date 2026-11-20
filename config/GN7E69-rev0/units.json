@@ -13462,12 +13462,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800FF538",
-          "end": "0x800FFB4C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800FFD2C",
           "end": "0x80100BF8"
         },
         {
@@ -13480,12 +13474,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801021C0",
-          "end": "0x80102A78"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80102D78",
           "end": "0x80103F80"
         },
         {
@@ -13752,20 +13740,12 @@
             "evidence": "evidence.tsv source-form 0x800FF094-0x800FF538"
           },
           {
-            "function": "fn_800FFB4C",
-            "evidence": "evidence.tsv source-form 0x800FFB4C-0x800FFD2C"
-          },
-          {
             "function": "fn_80100BF8",
             "evidence": "evidence.tsv source-form 0x80100BF8-0x80100EA0"
           },
           {
             "function": "fn_80101CB4",
             "evidence": "evidence.tsv source-form 0x80101CB4-0x801021C0"
-          },
-          {
-            "function": "fn_80102A78",
-            "evidence": "evidence.tsv source-form 0x80102A78-0x80102D78"
           },
           {
             "function": "fn_80103F80",
