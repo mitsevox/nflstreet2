@@ -8,8 +8,8 @@
 #include "engine/llmatrix.h"
 
 extern "C" {
-float fn_802270D4(void *pV);
-void fn_802276B4(void *pOut, void *pA, void *pB);
+float Vec3Magnitude(void *pV);
+void Vec3Sub(void *pOut, void *pA, void *pB);
 float fn_80260B1C(float x);
 float fn_801CFB74(float x);
 float fn_801CFBF4(float x);
@@ -72,17 +72,17 @@ float SegmentPointParam(Vec3_801DE1E0 *pStart, Vec3_801DE1E0 *pEnd, Vec3_801DE1E
     Vec3_801DE1E0 toEnd;
     float along;
 
-    fn_802276B4(&toPoint, pPoint, pStart);
-    fn_802276B4(&toEnd, pEnd, pStart);
-    along = fn_80227704(&toPoint, &toEnd);
+    Vec3Sub(&toPoint, pPoint, pStart);
+    Vec3Sub(&toEnd, pEnd, pStart);
+    along = Vec3DotProduct(&toPoint, &toEnd);
     if (along <= 0.0f) {
         return 0.0f;
     }
-    fn_802276B4(&fromEnd, pPoint, pEnd);
-    if (fn_80227704(&fromEnd, &toEnd) >= 0.0f) {
+    Vec3Sub(&fromEnd, pPoint, pEnd);
+    if (Vec3DotProduct(&fromEnd, &toEnd) >= 0.0f) {
         return 1.0f;
     }
-    return along / fn_80227704(&toEnd, &toEnd);
+    return along / Vec3DotProduct(&toEnd, &toEnd);
 }
 
 static inline void _ClampSegmentParam(float *pParam, float *pOther, Vec3_801DE1E0 *pStart,
@@ -136,14 +136,14 @@ int ClosestLineParams(Vec3_801DE1E0 *pStartA, Vec3_801DE1E0 *pEndA, Vec3_801DE1E
     float oa;
     float denom;
 
-    fn_802276B4(&dirB, pEndB, pStartB);
-    fn_802276B4(&dirA, pEndA, pStartA);
-    fn_802276B4(&offset, pStartA, pStartB);
-    bb = fn_80227704(&dirB, &dirB);
-    aa = fn_80227704(&dirA, &dirA);
-    ab = fn_80227704(&dirB, &dirA);
-    ob = fn_80227704(&offset, &dirB);
-    oa = fn_80227704(&offset, &dirA);
+    Vec3Sub(&dirB, pEndB, pStartB);
+    Vec3Sub(&dirA, pEndA, pStartA);
+    Vec3Sub(&offset, pStartA, pStartB);
+    bb = Vec3DotProduct(&dirB, &dirB);
+    aa = Vec3DotProduct(&dirA, &dirA);
+    ab = Vec3DotProduct(&dirB, &dirA);
+    ob = Vec3DotProduct(&offset, &dirB);
+    oa = Vec3DotProduct(&offset, &dirA);
     denom = aa * bb - ab * ab;
     if (fabsf(denom) < 1e-8f) {
         return 0;
@@ -161,9 +161,9 @@ CapsuleShape::CapsuleShape(Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB, float friction,
                            float radius)
     : CollisionShape(friction, bounce, 1)
 {
-    fn_8022765C(&mCenter, pA, pB);
-    fn_80227264(&mCenter, &mCenter, 0.5f);
-    fn_802276B4(&mHalfAxis, pB, &mCenter);
+    Vec3Add(&mCenter, pA, pB);
+    Vec3Scale(&mCenter, &mCenter, 0.5f);
+    Vec3Sub(&mHalfAxis, pB, &mCenter);
     mRadius = radius;
 }
 
@@ -175,17 +175,17 @@ void CapsuleShape::GetBounds(BoundingBox *pBounds)
     Vec3_801DE1E0 high;
     Vec3_801DE1E0 radius;
 
-    fn_8022765C(&end, &mCenter, &mHalfAxis);
-    fn_802276B4(&start, &mCenter, &mHalfAxis);
+    Vec3Add(&end, &mCenter, &mHalfAxis);
+    Vec3Sub(&start, &mCenter, &mHalfAxis);
     radius.x = mRadius;
     radius.y = mRadius;
     radius.z = mRadius;
-    fn_802276B4(&low, &end, &radius);
-    fn_802276B4(&high, &start, &radius);
+    Vec3Sub(&low, &end, &radius);
+    Vec3Sub(&high, &start, &radius);
     pBounds->SetToPoint(&low);
     pBounds->ExtendToPoint(&high);
-    fn_8022765C(&low, &end, &radius);
-    fn_8022765C(&high, &start, &radius);
+    Vec3Add(&low, &end, &radius);
+    Vec3Add(&high, &start, &radius);
     pBounds->ExtendToPoint(&low);
     pBounds->ExtendToPoint(&high);
 }
@@ -210,15 +210,15 @@ float CapsuleShape::TestPoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4], Vec3_8
     *pDepth = 0.0f;
     weight = 0.2f;
     GetWorldSegment(pMatrix, &end, &start, &axis);
-    fn_802271F0(&axis, &axis);
-    halfLength = fn_802270D4(&mHalfAxis);
-    fn_802276B4(&toPoint, pPoint, &start);
+    Vec3Normalize(&axis, &axis);
+    halfLength = Vec3Magnitude(&mHalfAxis);
+    Vec3Sub(&toPoint, pPoint, &start);
     axisLength = halfLength + halfLength;
-    along = fn_80227704(&toPoint, &axis);
-    fn_80227264(&closest, &axis, along);
-    fn_8022765C(&closest, &closest, &start);
-    fn_802276B4(&offset, pPoint, &closest);
-    dist = fn_802270D4(&offset);
+    along = Vec3DotProduct(&toPoint, &axis);
+    Vec3Scale(&closest, &axis, along);
+    Vec3Add(&closest, &closest, &start);
+    Vec3Sub(&offset, pPoint, &closest);
+    dist = Vec3Magnitude(&offset);
     capped = 0;
     if (dist > mRadius) {
         if (along <= 0.0f) {
@@ -253,14 +253,14 @@ float CapsuleShape::TestPoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4], Vec3_8
             turned.x = axis.y;
             turned.y = axis.z;
             turned.z = axis.x;
-            fn_802277DC(&offset, &turned, &axis);
-            fn_802271F0(&offset, &offset);
+            Vec3CrossProduct(&offset, &turned, &axis);
+            Vec3Normalize(&offset, &offset);
             dist = mRadius * 0.05f;
-            fn_80227264(&offset, &offset, dist);
+            Vec3Scale(&offset, &offset, dist);
         }
-        fn_80227264(&offset, &offset, mRadius / dist);
-        fn_8022765C(pContact, &closest, &offset);
-        fn_802271F0(pNormal, &offset);
+        Vec3Scale(&offset, &offset, mRadius / dist);
+        Vec3Add(pContact, &closest, &offset);
+        Vec3Normalize(pNormal, &offset);
         *pDepth = mRadius - dist;
         weight = 0.7f;
         if (along < length || axisLength - along < length) {
@@ -268,16 +268,16 @@ float CapsuleShape::TestPoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4], Vec3_8
         }
     } else {
         if (dist > mRadius) {
-            fn_80227264(&offset, &offset, mRadius / dist);
+            Vec3Scale(&offset, &offset, mRadius / dist);
             dist = mRadius;
         }
         if (along < halfLength) {
-            fn_8022765C(pContact, &start, &offset);
+            Vec3Add(pContact, &start, &offset);
             pNormal->x = -axis.x;
             pNormal->y = -axis.y;
             pNormal->z = -axis.z;
         } else {
-            fn_8022765C(pContact, &end, &offset);
+            Vec3Add(pContact, &end, &offset);
             pNormal->x = axis.x;
             pNormal->y = axis.y;
             pNormal->z = axis.z;
@@ -300,11 +300,11 @@ void CapsuleShape::GetWorldSegment(float (*pMatrix)[4], Vec3_801DE1E0 *pEnd,
 
     MatPush();
     MatLoad((float *)pMatrix);
-    fn_80227CC0(&center, &mCenter);
-    fn_80227C2C(pHalfAxis, &mHalfAxis);
+    Vec3Mat34Mul(&center, &mCenter);
+    Vec3Mat33Mul(pHalfAxis, &mHalfAxis);
     MatPop();
-    fn_8022765C(pEnd, &center, pHalfAxis);
-    fn_802276B4(pStart, &center, pHalfAxis);
+    Vec3Add(pEnd, &center, pHalfAxis);
+    Vec3Sub(pStart, &center, pHalfAxis);
 }
 
 float CapsuleShape::GetSupportWeight(Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pDirection,
@@ -315,8 +315,8 @@ float CapsuleShape::GetSupportWeight(Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pDire
     Vec3_801DE1E0 axis;
 
     GetWorldSegment(pMatrix, &end, &start, &axis);
-    fn_802271F0(&axis, &axis);
-    if (fabsf(fn_80227704(pDirection, &axis)) < 0.2f) {
+    Vec3Normalize(&axis, &axis);
+    if (fabsf(Vec3DotProduct(pDirection, &axis)) < 0.2f) {
         return 1.0f;
     }
     return 0.0f;
@@ -336,14 +336,14 @@ void CapsuleShape::ClosestSurfacePoint(Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pEn
     int capped;
 
     *pOnSide = 1;
-    halfLength = fn_802270D4(&mHalfAxis);
-    fn_802276B4(&toPoint, pPoint, pStart);
+    halfLength = Vec3Magnitude(&mHalfAxis);
+    Vec3Sub(&toPoint, pPoint, pStart);
     axisLength = halfLength + halfLength;
-    along = fn_80227704(&toPoint, pAxis);
-    fn_80227264(&closest, pAxis, along);
-    fn_8022765C(&closest, &closest, pStart);
-    fn_802276B4(&offset, pPoint, &closest);
-    dist = fn_802270D4(&offset);
+    along = Vec3DotProduct(&toPoint, pAxis);
+    Vec3Scale(&closest, pAxis, along);
+    Vec3Add(&closest, &closest, pStart);
+    Vec3Sub(&offset, pPoint, &closest);
+    dist = Vec3Magnitude(&offset);
     capped = 0;
     if (dist > mRadius) {
         *pOnSide = 0;
@@ -381,21 +381,21 @@ void CapsuleShape::ClosestSurfacePoint(Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pEn
             turned.x = pAxis->y;
             turned.y = pAxis->z;
             turned.z = pAxis->x;
-            fn_802277DC(&offset, &turned, pAxis);
-            fn_802271F0(&offset, &offset);
+            Vec3CrossProduct(&offset, &turned, pAxis);
+            Vec3Normalize(&offset, &offset);
             dist = mRadius * 0.05f;
-            fn_80227264(&offset, &offset, dist);
+            Vec3Scale(&offset, &offset, dist);
         }
-        fn_80227264(&offset, &offset, mRadius / dist);
-        fn_8022765C(pContact, &closest, &offset);
+        Vec3Scale(&offset, &offset, mRadius / dist);
+        Vec3Add(pContact, &closest, &offset);
     } else {
         if (dist > mRadius) {
-            fn_80227264(&offset, &offset, mRadius / dist);
+            Vec3Scale(&offset, &offset, mRadius / dist);
         }
         if (along < halfLength) {
-            fn_8022765C(pContact, pStart, &offset);
+            Vec3Add(pContact, pStart, &offset);
         } else {
-            fn_8022765C(pContact, pEnd, &offset);
+            Vec3Add(pContact, pEnd, &offset);
         }
     }
 }
@@ -406,17 +406,17 @@ int CapsuleShape::ProjectsInside(Vec3_801DE1E0 *pEnd, Vec3_801DE1E0 *pStart,
     Vec3_801DE1E0 toPoint;
     Vec3_801DE1E0 closest;
     Vec3_801DE1E0 offset;
-    float axisLength = fn_802270D4(&mHalfAxis);
+    float axisLength = Vec3Magnitude(&mHalfAxis);
     float along;
 
     axisLength = axisLength + axisLength;
-    fn_802276B4(&toPoint, pPointB, pStart);
-    along = fn_80227704(&toPoint, pAxis);
+    Vec3Sub(&toPoint, pPointB, pStart);
+    along = Vec3DotProduct(&toPoint, pAxis);
     if (along >= 0.0f && along <= axisLength) {
-        fn_80227264(&closest, pAxis, along);
-        fn_8022765C(&closest, &closest, pStart);
-        fn_802276B4(&offset, pPointB, &closest);
-        return fn_80227120(&offset) <= mRadius * mRadius;
+        Vec3Scale(&closest, pAxis, along);
+        Vec3Add(&closest, &closest, pStart);
+        Vec3Sub(&offset, pPointB, &closest);
+        return Vec3MagnitudeSqr(&offset) <= mRadius * mRadius;
     }
     return 0;
 }
@@ -443,25 +443,25 @@ unsigned int CapsuleShape::RingPoints(Vec3_801DE1E0 *pCenter, Vec3_801DE1E0 *pNo
     v.x = pNormal->y;
     v.z = pNormal->x;
     v.y = pNormal->z;
-    fn_802277DC(&u, pNormal, &v);
+    Vec3CrossProduct(&u, pNormal, &v);
     count = 0;
-    fn_802271F0(&u, &u);
-    fn_802277DC(&v, pNormal, &u);
-    fn_80227264(&u, &u, radius);
-    fn_80227264(&v, &v, radius);
-    _CAPSULE_RING_POINT(fn_8022765C, &u)
-    _CAPSULE_RING_POINT(fn_802276B4, &u)
-    _CAPSULE_RING_POINT(fn_8022765C, &v)
-    _CAPSULE_RING_POINT(fn_802276B4, &v)
-    fn_80227264(&u, &u, 0.7071f);
-    fn_80227264(&v, &v, 0.7071f);
-    fn_8022765C(&sum, &u, &v);
-    fn_802276B4(&v, &u, &v);
+    Vec3Normalize(&u, &u);
+    Vec3CrossProduct(&v, pNormal, &u);
+    Vec3Scale(&u, &u, radius);
+    Vec3Scale(&v, &v, radius);
+    _CAPSULE_RING_POINT(Vec3Add, &u)
+    _CAPSULE_RING_POINT(Vec3Sub, &u)
+    _CAPSULE_RING_POINT(Vec3Add, &v)
+    _CAPSULE_RING_POINT(Vec3Sub, &v)
+    Vec3Scale(&u, &u, 0.7071f);
+    Vec3Scale(&v, &v, 0.7071f);
+    Vec3Add(&sum, &u, &v);
+    Vec3Sub(&v, &u, &v);
     u = sum;
-    _CAPSULE_RING_POINT(fn_8022765C, &u)
-    _CAPSULE_RING_POINT(fn_802276B4, &u)
-    _CAPSULE_RING_POINT(fn_8022765C, &v)
-    _CAPSULE_RING_POINT(fn_802276B4, &v)
+    _CAPSULE_RING_POINT(Vec3Add, &u)
+    _CAPSULE_RING_POINT(Vec3Sub, &u)
+    _CAPSULE_RING_POINT(Vec3Add, &v)
+    _CAPSULE_RING_POINT(Vec3Sub, &v)
     return count;
 }
 
@@ -481,8 +481,8 @@ void SphereShape::GetBounds(BoundingBox *pBounds)
     radius.x = mRadius;
     radius.y = mRadius;
     radius.z = mRadius;
-    fn_802276B4(&low, &mCenter, &radius);
-    fn_8022765C(&high, &mCenter, &radius);
+    Vec3Sub(&low, &mCenter, &radius);
+    Vec3Add(&high, &mCenter, &radius);
     pBounds->SetBounds(&low, &high);
 }
 
@@ -497,23 +497,23 @@ float SphereShape::TestPoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4], Vec3_80
 
     MatPush();
     MatLoad((float *)pMatrix);
-    fn_80227CC0(&center, &mCenter);
+    Vec3Mat34Mul(&center, &mCenter);
     MatPop();
-    fn_802276B4(&offset, pPoint, &center);
-    dist = fn_802270D4(&offset);
+    Vec3Sub(&offset, pPoint, &center);
+    dist = Vec3Magnitude(&offset);
     *pDepth = (mRadius - dist) * weight;
     if (dist < 1e-8f) {
         dist = mRadius;
         *pDepth = dist * weight;
         offset = *pDelta;
-        fn_802271F0(&offset, &offset);
-        fn_80227264(&offset, &offset, dist);
+        Vec3Normalize(&offset, &offset);
+        Vec3Scale(&offset, &offset, dist);
         weight = 0.01f;
     }
-    fn_80227264(pNormal, &offset, 1.0f / dist);
-    fn_80227264(pContact, pNormal, mRadius);
-    fn_8022765C(pContact, pContact, &center);
-    if (fn_80227704(pDelta, pNormal) < 0.0f) {
+    Vec3Scale(pNormal, &offset, 1.0f / dist);
+    Vec3Scale(pContact, pNormal, mRadius);
+    Vec3Add(pContact, pContact, &center);
+    if (Vec3DotProduct(pDelta, pNormal) < 0.0f) {
         weight = 0.01f;
     }
     if (fabsf(*pDepth) > length) {
@@ -544,8 +544,8 @@ void BoxShape::GetBounds(BoundingBox *pBounds)
     Vec3_801DE1E0 low;
     Vec3_801DE1E0 high;
 
-    fn_802276B4(&low, &mCenter, &mHalfSize);
-    fn_8022765C(&high, &mCenter, &mHalfSize);
+    Vec3Sub(&low, &mCenter, &mHalfSize);
+    Vec3Add(&high, &mCenter, &mHalfSize);
     pBounds->SetBounds(&low, &high);
 }
 
@@ -578,16 +578,16 @@ float BoxShape::TestPoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4], Vec3_801DE
     origin.x = pMatrix[0][3];
     origin.y = pMatrix[1][3];
     origin.z = pMatrix[2][3];
-    fn_802276B4(&face, pPoint, &origin);
+    Vec3Sub(&face, pPoint, &origin);
     MatLoad((float *)pMatrix);
     MatTranspose();
-    fn_80227C2C(&local, &face);
-    fn_80227C2C(&delta, pDelta);
-    fn_802276B4(&local, &local, &mCenter);
+    Vec3Mat33Mul(&local, &face);
+    Vec3Mat33Mul(&delta, pDelta);
+    Vec3Sub(&local, &local, &mCenter);
     MatPop();
     if (length > 1e-8f && fabsf(local.x) < mHalfSize.x && fabsf(local.y) < mHalfSize.y
         && fabsf(local.z) < mHalfSize.z) {
-        fn_8022765C(&face, &delta, &local);
+        Vec3Add(&face, &delta, &local);
         inside = SegmentHits(&local, &face, &best, 1, 0) == 1;
     }
     if (!inside) {
@@ -598,8 +598,8 @@ float BoxShape::TestPoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4], Vec3_801DE
         } else {
             face.z = -mHalfSize.z;
         }
-        fn_802276B4(&offset, &local, &face);
-        bestDist = fn_80227120(&offset);
+        Vec3Sub(&offset, &local, &face);
+        bestDist = Vec3MagnitudeSqr(&offset);
         best = face;
         face.y = _CLAMP(local.y, -mHalfSize.y, mHalfSize.y);
         face.z = _CLAMP(local.z, -mHalfSize.z, mHalfSize.z);
@@ -608,8 +608,8 @@ float BoxShape::TestPoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4], Vec3_801DE
         } else {
             face.x = -mHalfSize.x;
         }
-        fn_802276B4(&offset, &local, &face);
-        dist = fn_80227120(&offset);
+        Vec3Sub(&offset, &local, &face);
+        dist = Vec3MagnitudeSqr(&offset);
         if (dist < bestDist) {
             bestDist = dist;
             best = face;
@@ -621,8 +621,8 @@ float BoxShape::TestPoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4], Vec3_801DE
         } else {
             face.y = -mHalfSize.y;
         }
-        fn_802276B4(&offset, &local, &face);
-        dist = fn_80227120(&offset);
+        Vec3Sub(&offset, &local, &face);
+        dist = Vec3MagnitudeSqr(&offset);
         if (dist < bestDist) {
             bestDist = dist;
             best = face;
@@ -633,13 +633,13 @@ float BoxShape::TestPoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4], Vec3_801DE
     pNormal->z = 0.0f;
     if (fabsf(fabsf(best.z) - mHalfSize.z) < 1e-8f) {
         pNormal->z = best.z > 0.0f ? 1.0f : -1.0f;
-        *pDepth = mHalfSize.z - fn_80227704(pNormal, &local);
+        *pDepth = mHalfSize.z - Vec3DotProduct(pNormal, &local);
     } else if (fabsf(fabsf(best.x) - mHalfSize.x) < 1e-8f) {
         pNormal->x = best.x > 0.0f ? 1.0f : -1.0f;
-        *pDepth = mHalfSize.x - fn_80227704(pNormal, &local);
+        *pDepth = mHalfSize.x - Vec3DotProduct(pNormal, &local);
     } else {
         pNormal->y = best.y > 0.0f ? 1.0f : -1.0f;
-        *pDepth = mHalfSize.y - fn_80227704(pNormal, &local);
+        *pDepth = mHalfSize.y - Vec3DotProduct(pNormal, &local);
     }
     edges = fabsf(fabsf(best.x) - mHalfSize.x) < length;
     if (fabsf(fabsf(best.y) - mHalfSize.y) < length) {
@@ -668,10 +668,10 @@ float BoxShape::TestPoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4], Vec3_801DE
         *pDepth = 0.0f;
     }
     MatPush();
-    fn_8022765C(&best, &best, &mCenter);
+    Vec3Add(&best, &best, &mCenter);
     MatLoad((float *)pMatrix);
-    fn_80227C2C(pNormal, pNormal);
-    fn_80227CC0(pContact, &best);
+    Vec3Mat33Mul(pNormal, pNormal);
+    Vec3Mat34Mul(pContact, &best);
     MatPop();
     return weight;
 }
@@ -758,17 +758,17 @@ void BoxShape::GetCornersIn(float (*pMatrix)[4], BoxShape *pOther, float (*pOthe
     Vec3_801DE1E0 origin;
 
     MatPush();
-    fn_802276B4(&corner, &pOther->mCenter, &pOther->mHalfSize);
+    Vec3Sub(&corner, &pOther->mCenter, &pOther->mHalfSize);
     MatLoad((float *)pOtherMatrix);
-    fn_80227CC0(&corner, &corner);
+    Vec3Mat34Mul(&corner, &corner);
     origin.x = pMatrix[0][3];
     origin.y = pMatrix[1][3];
     origin.z = pMatrix[2][3];
-    fn_802276B4(&corner, &corner, &origin);
+    Vec3Sub(&corner, &corner, &origin);
     MatLoad((float *)pMatrix);
     MatTranspose();
-    fn_80227C2C(&corner, &corner);
-    fn_802276B4(&corner, &corner, &mCenter);
+    Vec3Mat33Mul(&corner, &corner);
+    Vec3Sub(&corner, &corner, &mCenter);
     axisX.x = pOtherMatrix[0][0];
     axisX.y = pOtherMatrix[1][0];
     axisX.z = pOtherMatrix[2][0];
@@ -778,22 +778,22 @@ void BoxShape::GetCornersIn(float (*pMatrix)[4], BoxShape *pOther, float (*pOthe
     axisZ.x = pOtherMatrix[0][2];
     axisZ.y = pOtherMatrix[1][2];
     axisZ.z = pOtherMatrix[2][2];
-    fn_80227C2C(&axisX, &axisX);
-    fn_80227C2C(&axisY, &axisY);
-    fn_80227C2C(&axisZ, &axisZ);
+    Vec3Mat33Mul(&axisX, &axisX);
+    Vec3Mat33Mul(&axisY, &axisY);
+    Vec3Mat33Mul(&axisZ, &axisZ);
     MatPop();
-    fn_80227264(&axisX, &axisX, pOther->mHalfSize.x + pOther->mHalfSize.x);
-    fn_80227264(&axisY, &axisY, pOther->mHalfSize.y + pOther->mHalfSize.y);
-    fn_80227264(&axisZ, &axisZ, pOther->mHalfSize.z + pOther->mHalfSize.z);
+    Vec3Scale(&axisX, &axisX, pOther->mHalfSize.x + pOther->mHalfSize.x);
+    Vec3Scale(&axisY, &axisY, pOther->mHalfSize.y + pOther->mHalfSize.y);
+    Vec3Scale(&axisZ, &axisZ, pOther->mHalfSize.z + pOther->mHalfSize.z);
     pCorners[0] = corner;
-    fn_8022765C(&pCorners[1], &corner, &axisX);
-    fn_8022765C(&pCorners[2], &pCorners[1], &axisY);
-    fn_8022765C(&pCorners[3], &corner, &axisY);
-    fn_8022765C(&corner, &corner, &axisZ);
+    Vec3Add(&pCorners[1], &corner, &axisX);
+    Vec3Add(&pCorners[2], &pCorners[1], &axisY);
+    Vec3Add(&pCorners[3], &corner, &axisY);
+    Vec3Add(&corner, &corner, &axisZ);
     pCorners[4] = corner;
-    fn_8022765C(&pCorners[5], &corner, &axisX);
-    fn_8022765C(&pCorners[6], &pCorners[5], &axisY);
-    fn_8022765C(&pCorners[7], &corner, &axisY);
+    Vec3Add(&pCorners[5], &corner, &axisX);
+    Vec3Add(&pCorners[6], &pCorners[5], &axisY);
+    Vec3Add(&pCorners[7], &corner, &axisY);
 }
 
 float BoxShape::ClosestSurfacePoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4],
@@ -812,11 +812,11 @@ float BoxShape::ClosestSurfacePoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4],
     origin.x = pMatrix[0][3];
     origin.y = pMatrix[1][3];
     origin.z = pMatrix[2][3];
-    fn_802276B4(&relative, pPoint, &origin);
+    Vec3Sub(&relative, pPoint, &origin);
     MatLoad((float *)pMatrix);
     MatTranspose();
-    fn_80227C2C(&local, &relative);
-    fn_802276B4(&local, &local, &mCenter);
+    Vec3Mat33Mul(&local, &relative);
+    Vec3Sub(&local, &local, &mCenter);
     *pLocal = local;
     face.x = _CLAMP(local.x, -mHalfSize.x, mHalfSize.x);
     face.y = _CLAMP(local.y, -mHalfSize.y, mHalfSize.y);
@@ -825,8 +825,8 @@ float BoxShape::ClosestSurfacePoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4],
     } else {
         face.z = -mHalfSize.z;
     }
-    fn_802276B4(&offset, &local, &face);
-    bestDist = fn_80227120(&offset);
+    Vec3Sub(&offset, &local, &face);
+    bestDist = Vec3MagnitudeSqr(&offset);
     best = face;
     face.y = _CLAMP(local.y, -mHalfSize.y, mHalfSize.y);
     face.z = _CLAMP(local.z, -mHalfSize.z, mHalfSize.z);
@@ -835,8 +835,8 @@ float BoxShape::ClosestSurfacePoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4],
     } else {
         face.x = -mHalfSize.x;
     }
-    fn_802276B4(&offset, &local, &face);
-    dist = fn_80227120(&offset);
+    Vec3Sub(&offset, &local, &face);
+    dist = Vec3MagnitudeSqr(&offset);
     if (dist < bestDist) {
         bestDist = dist;
         best = face;
@@ -848,15 +848,15 @@ float BoxShape::ClosestSurfacePoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4],
     } else {
         face.y = -mHalfSize.y;
     }
-    fn_802276B4(&offset, &local, &face);
-    dist = fn_80227120(&offset);
+    Vec3Sub(&offset, &local, &face);
+    dist = Vec3MagnitudeSqr(&offset);
     if (dist < bestDist) {
         bestDist = dist;
         best = face;
     }
-    fn_8022765C(&best, &best, &mCenter);
+    Vec3Add(&best, &best, &mCenter);
     MatLoad((float *)pMatrix);
-    fn_80227CC0(pOut, &best);
+    Vec3Mat34Mul(pOut, &best);
     bestDist = fn_80260B1C(bestDist);
     MatPop();
     return bestDist;
@@ -874,22 +874,22 @@ static int _ShapeCollideSphereSphere(CollisionShape *pA, float (*pMatrixA)[4], C
 
     MatPush();
     MatLoad((float *)pMatrixA);
-    fn_80227CC0(&centerA, &pSphereA->mCenter);
+    Vec3Mat34Mul(&centerA, &pSphereA->mCenter);
     MatLoad((float *)pMatrixB);
-    fn_80227CC0(&centerB, &pSphereB->mCenter);
+    Vec3Mat34Mul(&centerB, &pSphereB->mCenter);
     MatPop();
-    fn_802276B4(&offset, &centerB, &centerA);
-    distSq = fn_80227120(&offset);
+    Vec3Sub(&offset, &centerB, &centerA);
+    distSq = Vec3MagnitudeSqr(&offset);
     if (distSq < (pSphereA->mRadius + pSphereB->mRadius) * (pSphereA->mRadius + pSphereB->mRadius)) {
         float dist = fn_80260B1C(distSq);
 
         if (dist > 1e-8f) {
             if (pSphereA->mRadius <= pSphereB->mRadius) {
-                fn_80227264(&offset, &offset, pSphereA->mRadius / dist);
-                fn_8022765C(pContact, &centerA, &offset);
+                Vec3Scale(&offset, &offset, pSphereA->mRadius / dist);
+                Vec3Add(pContact, &centerA, &offset);
             } else {
-                fn_80227264(&offset, &offset, -pSphereB->mRadius / dist);
-                fn_8022765C(pContact, &centerB, &offset);
+                Vec3Scale(&offset, &offset, -pSphereB->mRadius / dist);
+                Vec3Add(pContact, &centerB, &offset);
             }
         } else {
             *pContact = centerA;
@@ -910,7 +910,7 @@ static int _ShapeCollideSphereBox(CollisionShape *pA, float (*pMatrixA)[4], Coll
 
     MatPush();
     MatLoad((float *)pMatrixA);
-    fn_80227CC0(&center, &pSphere->mCenter);
+    Vec3Mat34Mul(&center, &pSphere->mCenter);
     MatPop();
     if (pBox->ClosestSurfacePoint(&center, pMatrixB, &local, &surface) < pSphere->mRadius) {
         *pContact = surface;
@@ -940,11 +940,11 @@ static int _ShapeCollideSphereCapsule(CollisionShape *pA, float (*pMatrixA)[4],
 
     MatPush();
     MatLoad((float *)pMatrixA);
-    fn_80227CC0(&center, &pSphere->mCenter);
+    Vec3Mat34Mul(&center, &pSphere->mCenter);
     MatPop();
     inside = 0;
     pCapsule->GetWorldSegment(pMatrixB, &end, &start, &axis);
-    fn_802271F0(&axis, &axis);
+    Vec3Normalize(&axis, &axis);
     pCapsule->ClosestSurfacePoint(&center, &end, &start, &axis, &surface, &inside);
     if (inside) {
         *pContact = center;
@@ -953,8 +953,8 @@ static int _ShapeCollideSphereCapsule(CollisionShape *pA, float (*pMatrixA)[4],
     {
         Vec3_801DE1E0 offset;
 
-        fn_802276B4(&offset, &surface, &center);
-        if (fn_80227120(&offset) < pSphere->mRadius * pSphere->mRadius) {
+        Vec3Sub(&offset, &surface, &center);
+        if (Vec3MagnitudeSqr(&offset) < pSphere->mRadius * pSphere->mRadius) {
             *pContact = surface;
             return 1;
         }
@@ -992,16 +992,16 @@ static int _ShapeCollideCapsuleBox(CollisionShape *pA, float (*pMatrixA)[4], Col
     origin.x = pMatrixB[0][3];
     origin.y = pMatrixB[1][3];
     origin.z = pMatrixB[2][3];
-    fn_802276B4(&relEnd, &end, &origin);
-    fn_802276B4(&relStart, &start, &origin);
+    Vec3Sub(&relEnd, &end, &origin);
+    Vec3Sub(&relStart, &start, &origin);
     MatLoad((float *)pMatrixB);
     MatTranspose();
-    fn_80227C2C(&localEnd, &relEnd);
-    fn_80227C2C(&localStart, &relStart);
-    fn_802276B4(&localEnd, &localEnd, &pBox->mCenter);
-    fn_802276B4(&localStart, &localStart, &pBox->mCenter);
+    Vec3Mat33Mul(&localEnd, &relEnd);
+    Vec3Mat33Mul(&localStart, &relStart);
+    Vec3Sub(&localEnd, &localEnd, &pBox->mCenter);
+    Vec3Sub(&localStart, &localStart, &pBox->mCenter);
     MatPop();
-    fn_802276B4(&dir, &localEnd, &localStart);
+    Vec3Sub(&dir, &localEnd, &localStart);
     absX = fabsf(dir.x);
     absY = fabsf(dir.y);
     absZ = fabsf(dir.z);
@@ -1013,13 +1013,13 @@ static int _ShapeCollideCapsuleBox(CollisionShape *pA, float (*pMatrixA)[4], Col
         side.x = dir.y;
         side.y = -dir.x;
         side.z = 0.0f;
-        fn_802277DC(&offset, &side, &dir);
-        fn_80227264(&offset, &offset, pCapsule->mRadius / fn_802270D4(&offset));
+        Vec3CrossProduct(&offset, &side, &dir);
+        Vec3Scale(&offset, &offset, pCapsule->mRadius / Vec3Magnitude(&offset));
     }
-    fn_8022765C(&quad[0], &localEnd, &offset);
-    fn_802276B4(&quad[1], &localEnd, &offset);
-    fn_802276B4(&quad[2], &localStart, &offset);
-    fn_8022765C(&quad[3], &localStart, &offset);
+    Vec3Add(&quad[0], &localEnd, &offset);
+    Vec3Sub(&quad[1], &localEnd, &offset);
+    Vec3Sub(&quad[2], &localStart, &offset);
+    Vec3Add(&quad[3], &localStart, &offset);
     count += pBox->QuadHits(quad, &points[count], 12);
     if (absX < 1e-8f && absZ < 1e-8f) {
         offset.x = 0.0f;
@@ -1029,13 +1029,13 @@ static int _ShapeCollideCapsuleBox(CollisionShape *pA, float (*pMatrixA)[4], Col
         side.x = dir.z;
         side.y = 0.0f;
         side.z = -dir.x;
-        fn_802277DC(&offset, &side, &dir);
-        fn_80227264(&offset, &offset, pCapsule->mRadius / fn_802270D4(&offset));
+        Vec3CrossProduct(&offset, &side, &dir);
+        Vec3Scale(&offset, &offset, pCapsule->mRadius / Vec3Magnitude(&offset));
     }
-    fn_8022765C(&quad[0], &localEnd, &offset);
-    fn_802276B4(&quad[1], &localEnd, &offset);
-    fn_802276B4(&quad[2], &localStart, &offset);
-    fn_8022765C(&quad[3], &localStart, &offset);
+    Vec3Add(&quad[0], &localEnd, &offset);
+    Vec3Sub(&quad[1], &localEnd, &offset);
+    Vec3Sub(&quad[2], &localStart, &offset);
+    Vec3Add(&quad[3], &localStart, &offset);
     count += pBox->QuadHits(quad, &points[count], 12 - count);
     if (absY < 1e-8f && absZ < 1e-8f) {
         offset.x = 0.0f;
@@ -1045,16 +1045,16 @@ static int _ShapeCollideCapsuleBox(CollisionShape *pA, float (*pMatrixA)[4], Col
         side.x = 0.0f;
         side.y = dir.z;
         side.z = -dir.y;
-        fn_802277DC(&offset, &side, &dir);
-        fn_80227264(&offset, &offset, pCapsule->mRadius / fn_802270D4(&offset));
+        Vec3CrossProduct(&offset, &side, &dir);
+        Vec3Scale(&offset, &offset, pCapsule->mRadius / Vec3Magnitude(&offset));
     }
-    fn_8022765C(&quad[0], &localEnd, &offset);
-    fn_802276B4(&quad[1], &localEnd, &offset);
-    fn_802276B4(&quad[2], &localStart, &offset);
-    fn_8022765C(&quad[3], &localStart, &offset);
+    Vec3Add(&quad[0], &localEnd, &offset);
+    Vec3Sub(&quad[1], &localEnd, &offset);
+    Vec3Sub(&quad[2], &localStart, &offset);
+    Vec3Add(&quad[3], &localStart, &offset);
     count += pBox->QuadHits(quad, &points[count], 12 - count);
     if (count == 0) {
-        fn_802271F0(&axis, &axis);
+        Vec3Normalize(&axis, &axis);
         pBox->ClosestSurfacePoint(&end, pMatrixB, &side, &points[0]);
         if (pCapsule->ProjectsInside(&end, &start, &axis, &points[0])) {
             count = 1;
@@ -1063,30 +1063,30 @@ static int _ShapeCollideCapsuleBox(CollisionShape *pA, float (*pMatrixA)[4], Col
         if (pCapsule->ProjectsInside(&end, &start, &axis, &points[count])) {
             count++;
         }
-        fn_8022765C(&relEnd, &end, &start);
-        fn_80227264(&relEnd, &relEnd, 0.5f);
+        Vec3Add(&relEnd, &end, &start);
+        Vec3Scale(&relEnd, &relEnd, 0.5f);
         pBox->ClosestSurfacePoint(&relEnd, pMatrixB, &side, &points[count]);
         if (pCapsule->ProjectsInside(&end, &start, &axis, &points[count])) {
             count++;
         }
         if (count != 0) {
             for (i = 1; i < count; i++) {
-                fn_8022765C(&points[0], &points[0], &points[i]);
+                Vec3Add(&points[0], &points[0], &points[i]);
             }
-            fn_80227264(pContact, &points[0], 1.0f / (float)count);
+            Vec3Scale(pContact, &points[0], 1.0f / (float)count);
             return 1;
         }
     } else {
         unsigned int j;
 
         for (j = 1; j < count; j++) {
-            fn_8022765C(&points[0], &points[0], &points[j]);
+            Vec3Add(&points[0], &points[0], &points[j]);
         }
-        fn_80227264(&points[0], &points[0], 1.0f / (float)count);
+        Vec3Scale(&points[0], &points[0], 1.0f / (float)count);
         MatPush();
-        fn_8022765C(&points[0], &points[0], &pBox->mCenter);
+        Vec3Add(&points[0], &points[0], &pBox->mCenter);
         MatLoad((float *)pMatrixB);
-        fn_80227CC0(pContact, &points[0]);
+        Vec3Mat34Mul(pContact, &points[0]);
         MatPop();
         return 1;
     }
@@ -1143,13 +1143,13 @@ static int _ShapeCollideBoxBox(CollisionShape *pA, float (*pMatrixA)[4], Collisi
     }
     if (count != 0) {
         for (i = 1; i < count; i++) {
-            fn_8022765C(&points[0], &points[0], &points[i]);
+            Vec3Add(&points[0], &points[0], &points[i]);
         }
-        fn_80227264(&points[0], &points[0], 1.0f / (float)count);
+        Vec3Scale(&points[0], &points[0], 1.0f / (float)count);
         MatPush();
-        fn_8022765C(&points[0], &points[0], &center);
+        Vec3Add(&points[0], &points[0], &center);
         MatLoad((float *)pMatrix);
-        fn_80227CC0(pContact, &points[0]);
+        Vec3Mat34Mul(pContact, &points[0]);
         MatPop();
         return 1;
     }
@@ -1188,8 +1188,8 @@ static int _ShapeCollideCapsuleCapsule(CollisionShape *pA, float (*pMatrixA)[4],
         pointB.x = (startB.x - endB.x) * paramB + endB.x;
         pointB.y = (startB.y - endB.y) * paramB + endB.y;
         pointB.z = (startB.z - endB.z) * paramB + endB.z;
-        fn_802276B4(&offset, &pointB, &pointA);
-        distSq = fn_80227704(&offset, &offset);
+        Vec3Sub(&offset, &pointB, &pointA);
+        distSq = Vec3DotProduct(&offset, &offset);
         if (distSq < (pCapsuleA->mRadius + pCapsuleB->mRadius)
                          * (pCapsuleA->mRadius + pCapsuleB->mRadius)) {
             if (paramA > 0.0f && paramA < 1.0f && paramB > 0.0f && paramB < 1.0f) {
@@ -1197,19 +1197,19 @@ static int _ShapeCollideCapsuleCapsule(CollisionShape *pA, float (*pMatrixA)[4],
 
                 if (dist > 1e-8f) {
                     if (pCapsuleA->mRadius < pCapsuleB->mRadius) {
-                        fn_80227264(&offset, &offset, pCapsuleA->mRadius / dist);
-                        fn_8022765C(pContact, &pointA, &offset);
+                        Vec3Scale(&offset, &offset, pCapsuleA->mRadius / dist);
+                        Vec3Add(pContact, &pointA, &offset);
                     } else {
-                        fn_80227264(&offset, &offset, pCapsuleB->mRadius / dist);
-                        fn_802276B4(pContact, &pointB, &offset);
+                        Vec3Scale(&offset, &offset, pCapsuleB->mRadius / dist);
+                        Vec3Sub(pContact, &pointB, &offset);
                     }
                 } else {
                     *pContact = pointA;
                 }
                 return 1;
             }
-            fn_802271F0(&axisA, &axisA);
-            fn_802271F0(&axisB, &axisB);
+            Vec3Normalize(&axisA, &axisA);
+            Vec3Normalize(&axisB, &axisB);
             count = pCapsuleB->RingPoints(&endA, &axisA, &endB, &startB, &axisB, points, 32,
                                           pCapsuleA->mRadius);
             count += pCapsuleB->RingPoints(&startA, &axisA, &endB, &startB, &axisB,
@@ -1220,9 +1220,9 @@ static int _ShapeCollideCapsuleCapsule(CollisionShape *pA, float (*pMatrixA)[4],
                                            &points[count], 32 - count, pCapsuleB->mRadius);
             if (count != 0) {
                 for (i = 1; i < count; i++) {
-                    fn_8022765C(&points[0], &points[0], &points[i]);
+                    Vec3Add(&points[0], &points[0], &points[i]);
                 }
-                fn_80227264(pContact, &points[0], 1.0f / (float)count);
+                Vec3Scale(pContact, &points[0], 1.0f / (float)count);
                 return 1;
             }
         }
@@ -1230,28 +1230,28 @@ static int _ShapeCollideCapsuleCapsule(CollisionShape *pA, float (*pMatrixA)[4],
         float along;
         float dist;
 
-        fn_802271F0(&axisA, &axisA);
-        fn_802276B4(&pointA, &startB, &startA);
-        along = fn_80227704(&pointA, &axisA);
-        fn_80227264(&pointB, &axisA, along);
-        fn_8022765C(&pointB, &pointB, &startA);
-        fn_802276B4(&offset, &startB, &pointB);
-        dist = fn_802270D4(&offset);
+        Vec3Normalize(&axisA, &axisA);
+        Vec3Sub(&pointA, &startB, &startA);
+        along = Vec3DotProduct(&pointA, &axisA);
+        Vec3Scale(&pointB, &axisA, along);
+        Vec3Add(&pointB, &pointB, &startA);
+        Vec3Sub(&offset, &startB, &pointB);
+        dist = Vec3Magnitude(&offset);
         if (dist < pCapsuleA->mRadius + pCapsuleB->mRadius) {
-            float length = fn_802270D4(&pCapsuleA->mHalfAxis);
+            float length = Vec3Magnitude(&pCapsuleA->mHalfAxis);
             float low;
             float high;
 
             length = length + length;
-            fn_802276B4(&pointA, &endB, &startA);
-            high = fn_80227704(&pointA, &axisA);
+            Vec3Sub(&pointA, &endB, &startA);
+            high = Vec3DotProduct(&pointA, &axisA);
             low = _Clamp(along, 0.0f, length);
             high = _Clamp(high, 0.0f, length);
             if (low != high) {
-                fn_80227264(&pointB, &axisA, (low + high) * 0.5f);
-                fn_8022765C(&pointB, &pointB, &startA);
-                fn_80227264(&offset, &offset, pCapsuleA->mRadius / dist);
-                fn_8022765C(pContact, &pointB, &offset);
+                Vec3Scale(&pointB, &axisA, (low + high) * 0.5f);
+                Vec3Add(&pointB, &pointB, &startA);
+                Vec3Scale(&offset, &offset, pCapsuleA->mRadius / dist);
+                Vec3Add(pContact, &pointB, &offset);
                 return 1;
             }
         }
@@ -1282,8 +1282,8 @@ void SphereShape::Draw(const float pMatrix[4][4], int red, int green, int blue)
         b.y += prevCos;
         MatPush();
         MatLoad((float *)pMatrix);
-        fn_80227CC0(&a, &a);
-        fn_80227CC0(&b, &b);
+        Vec3Mat34Mul(&a, &a);
+        Vec3Mat34Mul(&b, &b);
         MatPop();
         DispatchCollisionDebugLine(&a, &b, red, green, blue);
         a = mCenter;
@@ -1294,8 +1294,8 @@ void SphereShape::Draw(const float pMatrix[4][4], int red, int green, int blue)
         b.z += prevCos;
         MatPush();
         MatLoad((float *)pMatrix);
-        fn_80227CC0(&a, &a);
-        fn_80227CC0(&b, &b);
+        Vec3Mat34Mul(&a, &a);
+        Vec3Mat34Mul(&b, &b);
         MatPop();
         DispatchCollisionDebugLine(&a, &b, red, green, blue);
         a = mCenter;
@@ -1308,8 +1308,8 @@ void SphereShape::Draw(const float pMatrix[4][4], int red, int green, int blue)
         prevCos = c;
         MatPush();
         MatLoad((float *)pMatrix);
-        fn_80227CC0(&a, &a);
-        fn_80227CC0(&b, &b);
+        Vec3Mat34Mul(&a, &a);
+        Vec3Mat34Mul(&b, &b);
         MatPop();
         DispatchCollisionDebugLine(&a, &b, red, green, blue);
     } while (angle <= end);
@@ -1353,11 +1353,11 @@ void CapsuleShape::Draw(const float pMatrix[4][4], int red, int green, int blue)
             side.x = 1.0f;
         }
     }
-    fn_802277DC(&up, &mHalfAxis, &side);
+    Vec3CrossProduct(&up, &mHalfAxis, &side);
     angle = step;
-    fn_802277DC(&side, &mHalfAxis, &up);
-    fn_802271F0(&side, &side);
-    fn_802271F0(&up, &up);
+    Vec3CrossProduct(&side, &mHalfAxis, &up);
+    Vec3Normalize(&side, &side);
+    Vec3Normalize(&up, &up);
     prevSin = fn_801CFB74(0.0f) * mRadius;
     prevCos = fn_801CFBF4(0.0f) * mRadius;
     while (angle <= step + 6.2831855f) {
@@ -1365,26 +1365,26 @@ void CapsuleShape::Draw(const float pMatrix[4][4], int red, int green, int blue)
         float c = fn_801CFBF4(angle) * mRadius;
 
         angle += step;
-        fn_80227264(&sideOffset, &side, s);
-        fn_80227264(&prevSideOffset, &side, prevSin);
+        Vec3Scale(&sideOffset, &side, s);
+        Vec3Scale(&prevSideOffset, &side, prevSin);
         prevSin = s;
-        fn_80227264(&upOffset, &up, c);
-        fn_80227264(&prevUpOffset, &up, prevCos);
+        Vec3Scale(&upOffset, &up, c);
+        Vec3Scale(&prevUpOffset, &up, prevCos);
         prevCos = c;
-        fn_8022765C(&ring, &mCenter, &sideOffset);
-        fn_8022765C(&ring, &ring, &upOffset);
-        fn_8022765C(&prevRing, &mCenter, &prevSideOffset);
-        fn_8022765C(&prevRing, &prevRing, &prevUpOffset);
-        fn_8022765C(&top, &ring, &mHalfAxis);
-        fn_8022765C(&prevTop, &prevRing, &mHalfAxis);
-        fn_802276B4(&bottom, &ring, &mHalfAxis);
-        fn_802276B4(&prevBottom, &prevRing, &mHalfAxis);
+        Vec3Add(&ring, &mCenter, &sideOffset);
+        Vec3Add(&ring, &ring, &upOffset);
+        Vec3Add(&prevRing, &mCenter, &prevSideOffset);
+        Vec3Add(&prevRing, &prevRing, &prevUpOffset);
+        Vec3Add(&top, &ring, &mHalfAxis);
+        Vec3Add(&prevTop, &prevRing, &mHalfAxis);
+        Vec3Sub(&bottom, &ring, &mHalfAxis);
+        Vec3Sub(&prevBottom, &prevRing, &mHalfAxis);
         MatPush();
         MatLoad((float *)pMatrix);
-        fn_80227CC0(&top, &top);
-        fn_80227CC0(&prevTop, &prevTop);
-        fn_80227CC0(&bottom, &bottom);
-        fn_80227CC0(&prevBottom, &prevBottom);
+        Vec3Mat34Mul(&top, &top);
+        Vec3Mat34Mul(&prevTop, &prevTop);
+        Vec3Mat34Mul(&bottom, &bottom);
+        Vec3Mat34Mul(&prevBottom, &prevBottom);
         MatPop();
         DispatchCollisionDebugLine(&top, &prevTop, red, green, blue);
         DispatchCollisionDebugLine(&bottom, &prevBottom, red, green, blue);
@@ -1421,24 +1421,24 @@ void BoxShape::Draw(const float pMatrix[4][4], int red, int green, int blue)
     corners[7].y = mHalfSize.y;
     corners[7].z = -mHalfSize.z;
 
-    fn_8022765C(&corners[0], &corners[0], &mCenter);
-    fn_8022765C(&corners[1], &corners[1], &mCenter);
-    fn_8022765C(&corners[2], &corners[2], &mCenter);
-    fn_8022765C(&corners[3], &corners[3], &mCenter);
-    fn_8022765C(&corners[4], &corners[4], &mCenter);
-    fn_8022765C(&corners[5], &corners[5], &mCenter);
-    fn_8022765C(&corners[6], &corners[6], &mCenter);
-    fn_8022765C(&corners[7], &corners[7], &mCenter);
+    Vec3Add(&corners[0], &corners[0], &mCenter);
+    Vec3Add(&corners[1], &corners[1], &mCenter);
+    Vec3Add(&corners[2], &corners[2], &mCenter);
+    Vec3Add(&corners[3], &corners[3], &mCenter);
+    Vec3Add(&corners[4], &corners[4], &mCenter);
+    Vec3Add(&corners[5], &corners[5], &mCenter);
+    Vec3Add(&corners[6], &corners[6], &mCenter);
+    Vec3Add(&corners[7], &corners[7], &mCenter);
     MatPush();
     MatLoad((float *)pMatrix);
-    fn_80227CC0(&corners[0], &corners[0]);
-    fn_80227CC0(&corners[1], &corners[1]);
-    fn_80227CC0(&corners[2], &corners[2]);
-    fn_80227CC0(&corners[3], &corners[3]);
-    fn_80227CC0(&corners[4], &corners[4]);
-    fn_80227CC0(&corners[5], &corners[5]);
-    fn_80227CC0(&corners[6], &corners[6]);
-    fn_80227CC0(&corners[7], &corners[7]);
+    Vec3Mat34Mul(&corners[0], &corners[0]);
+    Vec3Mat34Mul(&corners[1], &corners[1]);
+    Vec3Mat34Mul(&corners[2], &corners[2]);
+    Vec3Mat34Mul(&corners[3], &corners[3]);
+    Vec3Mat34Mul(&corners[4], &corners[4]);
+    Vec3Mat34Mul(&corners[5], &corners[5]);
+    Vec3Mat34Mul(&corners[6], &corners[6]);
+    Vec3Mat34Mul(&corners[7], &corners[7]);
     MatPop();
     DispatchCollisionDebugLine(&corners[0], &corners[1], red, green, blue);
     DispatchCollisionDebugLine(&corners[1], &corners[2], red, green, blue);

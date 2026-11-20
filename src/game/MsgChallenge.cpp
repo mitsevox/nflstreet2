@@ -11,7 +11,7 @@
 
 extern "C" {
 void ChalGameStart(unsigned char id);
-void fn_8000FCD4(int a);
+void MsgMainMenuSetActivePad(int a);
 void ChallengeSetMode(int value);
 void ChalCloseCursors(void);
 DbCursor *ChalGetTableCursor(void);
@@ -226,7 +226,7 @@ void MsgChallengeStartEntry(int index, int a, int *pResult)
 
     _MsgChallenge_iEntry = index;
     id = ChalGetIdInGroup(_MsgChallenge_iGroup, index + 1);
-    fn_8000FCD4(a);
+    MsgMainMenuSetActivePad(a);
     ChalGameStart(id);
     *pResult = ChalHasReward(ChalGetCurrent(), 4) ? 105 : 107;
 }

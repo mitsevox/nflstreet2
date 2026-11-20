@@ -9,11 +9,11 @@ extern "C" {
 extern SndStreamChannel_t *lbl_803A7648[];
 
 void *memset(void *dest, int ch, unsigned int count);
-int fn_801F6D54(void *tap, char *name, int offset, int tag);
-int fn_801F6E9C(void *tap, char *name, int offset, int tag);
-void fn_801F74D4(void *tap, void *chunk);
-void fn_801F6B84(void *tap);
-void fn_801F7208(void *tap);
+int STREAM_queuefile(void *tap, char *name, int offset, int tag);
+int STREAM_queuemem(void *tap, char *name, int offset, int tag);
+void STREAM_release(void *tap, void *chunk);
+void STREAM_destroy(void *tap);
+void STREAM_kill(void *tap);
 void fn_8027929C(int buffer);
 void fn_802791FC(int buffer);
 void SNDMEMI_free(void *p);
@@ -121,7 +121,7 @@ void SNDSTRMI_releasecallback(void *buffer, void *unused)
 {
     SndStreamBufferTag_t *tag = ((SndStreamBufferTag_t **)buffer)[-1];
 
-    fn_801F74D4(lbl_803A7648[tag->mStream]->mpTap, tag);
+    STREAM_release(lbl_803A7648[tag->mStream]->mpTap, tag);
 }
 
 void SNDSTRMI_framescallback(int unused, unsigned int frames, void *context)
@@ -164,7 +164,7 @@ int SNDSTRMI_parsechunk(int stream, SndStreamChunk_t *chunk)
         fn_8026D790(stream, chunk);
         return 0;
     } else {
-        fn_801F74D4(channel->mpTap, chunk);
+        STREAM_release(channel->mpTap, chunk);
     }
     return 1;
 }
@@ -196,9 +196,9 @@ int SNDSTRMI_queue(int stream, int hold, char *name, int offset, int type)
         return -13;
     }
     if (type == 0) {
-        offset = fn_801F6D54(channel->mpTap, name, offset, 0x6C454353);
+        offset = STREAM_queuefile(channel->mpTap, name, offset, 0x6C454353);
     } else if (type == 1) {
-        offset = fn_801F6E9C(channel->mpTap, name, 0, 0x6C454353);
+        offset = STREAM_queuemem(channel->mpTap, name, 0, 0x6C454353);
     }
     if (offset == 0) {
         return -1;
@@ -250,7 +250,7 @@ int SNDSTRM_destroy(int stream)
     lbl_803A7648[stream] = 0;
     SNDSYS_leavecritical();
     if (shared == 0) {
-        fn_801F6B84(tap);
+        STREAM_destroy(tap);
     }
     return 0;
 }
@@ -277,7 +277,7 @@ int SNDSTRM_purge(int stream)
     }
     channel->mVoice = -1;
     if (channel->mSharedTap == 0) {
-        fn_801F7208(channel->mpTap);
+        STREAM_kill(channel->mpTap);
     }
     if (channel->mQueueAttr.m18[0] != 0) {
         for (i = 0; i < channel->mQueueFormat.mChannels; i++) {

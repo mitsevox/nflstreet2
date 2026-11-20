@@ -3,8 +3,8 @@
    tests whether two movers approach each other, and builds a random scatter
    vector around a surface normal. */
 #include "game/CollideBounce.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_80227638.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Add.h"
 
 extern float gPlyrMoveFwdSpeed;
 
@@ -14,16 +14,16 @@ void MatRotVecToVec(Vector_80039F5C *pFrom, Vector_80039F5C *pTo);
 void MatSetStack(int mode);
 void MatResetStack(void);
 void MatTranspose(void);
-void fn_802271F0(void *pOut, void *pIn);
-void fn_80227248(void *pOut, void *pIn, float scale);
-void fn_80227264(void *pOut, void *pIn, float scale);
-void fn_802272DC(void *pOut, void *pIn, float length);
-void fn_80227384(void *pOut, void *pIn, int angle);
-void fn_8022765C(void *pOut, void *pA, void *pB);
-void fn_80227690(void *pOut, void *pA, void *pB);
-float fn_80227704(void *pA, void *pB);
-void fn_802277DC(void *pOut, void *pA, void *pB);
-void fn_80227C2C(void *pOut, void *pIn);
+void Vec3Normalize(void *pOut, void *pIn);
+void Vec2Scale(void *pOut, void *pIn, float scale);
+void Vec3Scale(void *pOut, void *pIn, float scale);
+void Vec3ScaleLength(void *pOut, void *pIn, float length);
+void Vec2Rotate(void *pOut, void *pIn, int angle);
+void Vec3Add(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
+float Vec3DotProduct(void *pA, void *pB);
+void Vec3CrossProduct(void *pOut, void *pA, void *pB);
+void Vec3Mat33Mul(void *pOut, void *pIn);
 float SyncRandGetFloat(int stream);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_800B2C48(Object_800B26B0 *pA, Object_800B26B0 *pB, int angle, unsigned char *pHitA, unsigned char *pHitB);
@@ -66,19 +66,19 @@ int BounceCheckApproach(BounceSegment_t *pA, BounceSegment_t *pB, unsigned char 
     Vector_80039F5C move;
     Vector_80039F5C otherMove;
 
-    fn_802276B4(&offset, &pA->mUnknown12, &pB->mUnknown12);
-    fn_802276B4(&move, &pA->mUnknown0, &pA->mUnknown12);
+    Vec3Sub(&offset, &pA->mUnknown12, &pB->mUnknown12);
+    Vec3Sub(&move, &pA->mUnknown0, &pA->mUnknown12);
     *pHitA = 0;
     if (move.mX != 0.0f || move.mY != 0.0f) {
-        if (fn_80227704(&move, &offset) < 0.0f) {
+        if (Vec3DotProduct(&move, &offset) < 0.0f) {
             *pHitA = 1;
         }
     }
-    fn_80227264(&offset, &offset, -1.0f);
-    fn_802276B4(&otherMove, &pB->mUnknown0, &pB->mUnknown12);
+    Vec3Scale(&offset, &offset, -1.0f);
+    Vec3Sub(&otherMove, &pB->mUnknown0, &pB->mUnknown12);
     *pHitB = 0;
     if (otherMove.mX != 0.0f || otherMove.mY != 0.0f) {
-        if (fn_80227704(&otherMove, &offset) < 0.0f) {
+        if (Vec3DotProduct(&otherMove, &offset) < 0.0f) {
             *pHitB = 1;
         }
     }
@@ -100,7 +100,7 @@ void BounceBody2D(BounceBody_t *pBody, float *pNormal, float restitution)
     up[1] = 1.0f;
     angle = Heading(pNormal);
     angle = (Heading(up) - angle) & 0xFFFFFF;
-    fn_80227384(&pBody->mUnknown0, &pBody->mUnknown0, angle);
+    Vec2Rotate(&pBody->mUnknown0, &pBody->mUnknown0, angle);
     pBody->mUnknown12.mX = pBody->mUnknown0.mX;
     pBody->mUnknown24.mX = 0.0f;
     axis.mUnknownC = pBody->mUnknown36;
@@ -109,8 +109,8 @@ void BounceBody2D(BounceBody_t *pBody, float *pNormal, float restitution)
     pBody->mUnknown12.mY = axis.mUnknown4;
     pBody->mUnknown24.mY = axis.mUnknown8;
     angle = -angle & 0xFFFFFF;
-    fn_80227384(&pBody->mUnknown12, &pBody->mUnknown12, angle);
-    fn_80227384(&pBody->mUnknown24, &pBody->mUnknown24, angle);
+    Vec2Rotate(&pBody->mUnknown12, &pBody->mUnknown12, angle);
+    Vec2Rotate(&pBody->mUnknown24, &pBody->mUnknown24, angle);
 }
 
 void BounceBody3D(BounceBody_t *pBody, Vector_80039F5C *pNormal, float restitution)
@@ -125,7 +125,7 @@ void BounceBody3D(BounceBody_t *pBody, Vector_80039F5C *pNormal, float restituti
     MatSetStack(3);
     MatResetStack();
     MatRotVecToVec(pNormal, &up);
-    fn_80227C2C(&pBody->mUnknown0, &pBody->mUnknown0);
+    Vec3Mat33Mul(&pBody->mUnknown0, &pBody->mUnknown0);
     pBody->mUnknown12.mX = pBody->mUnknown0.mX * 0.5f;
     pBody->mUnknown12.mY = pBody->mUnknown0.mY * 0.5f;
     pBody->mUnknown24.mX = 0.0f;
@@ -140,8 +140,8 @@ void BounceBody3D(BounceBody_t *pBody, Vector_80039F5C *pNormal, float restituti
     pBody->mUnknown12.mZ = axis.mUnknown4;
     pBody->mUnknown24.mZ = axis.mUnknown8;
     MatTranspose();
-    fn_80227C2C(&pBody->mUnknown12, &pBody->mUnknown12);
-    fn_80227C2C(&pBody->mUnknown24, &pBody->mUnknown24);
+    Vec3Mat33Mul(&pBody->mUnknown12, &pBody->mUnknown12);
+    Vec3Mat33Mul(&pBody->mUnknown24, &pBody->mUnknown24);
 }
 
 void BounceBodyPair2D(BounceBody_t *pA, BounceBody_t *pB, float *pNormal, float restitution)
@@ -155,8 +155,8 @@ void BounceBodyPair2D(BounceBody_t *pA, BounceBody_t *pB, float *pNormal, float 
     up[1] = 1.0f;
     angle = Heading(pNormal);
     angle = (Heading(up) - angle) & 0xFFFFFF;
-    fn_80227384(&pA->mUnknown0, &pA->mUnknown0, angle);
-    fn_80227384(&pB->mUnknown0, &pB->mUnknown0, angle);
+    Vec2Rotate(&pA->mUnknown0, &pA->mUnknown0, angle);
+    Vec2Rotate(&pB->mUnknown0, &pB->mUnknown0, angle);
     pA->mUnknown12.mX = pA->mUnknown0.mX;
     pA->mUnknown24.mX = 0.0f;
     pB->mUnknown12.mX = pB->mUnknown0.mX;
@@ -171,10 +171,10 @@ void BounceBodyPair2D(BounceBody_t *pA, BounceBody_t *pB, float *pNormal, float 
     pB->mUnknown12.mY = axisB.mUnknown4;
     pB->mUnknown24.mY = axisB.mUnknown8;
     angle = -angle & 0xFFFFFF;
-    fn_80227384(&pA->mUnknown12, &pA->mUnknown12, angle);
-    fn_80227384(&pA->mUnknown24, &pA->mUnknown24, angle);
-    fn_80227384(&pB->mUnknown12, &pB->mUnknown12, angle);
-    fn_80227384(&pB->mUnknown24, &pB->mUnknown24, angle);
+    Vec2Rotate(&pA->mUnknown12, &pA->mUnknown12, angle);
+    Vec2Rotate(&pA->mUnknown24, &pA->mUnknown24, angle);
+    Vec2Rotate(&pB->mUnknown12, &pB->mUnknown12, angle);
+    Vec2Rotate(&pB->mUnknown24, &pB->mUnknown24, angle);
 }
 
 void BounceBodyPair3D(BounceBody_t *pA, BounceBody_t *pB, Vector_80039F5C *pNormal, float restitution)
@@ -186,12 +186,12 @@ void BounceBodyPair3D(BounceBody_t *pA, BounceBody_t *pB, Vector_80039F5C *pNorm
     up.mX = 0.0f;
     up.mY = 0.0f;
     up.mZ = 1.0f;
-    fn_802271F0(pNormal, pNormal);
+    Vec3Normalize(pNormal, pNormal);
     MatSetStack(3);
     MatResetStack();
     MatRotVecToVec(pNormal, &up);
-    fn_80227C2C(&pA->mUnknown0, &pA->mUnknown0);
-    fn_80227C2C(&pB->mUnknown0, &pB->mUnknown0);
+    Vec3Mat33Mul(&pA->mUnknown0, &pA->mUnknown0);
+    Vec3Mat33Mul(&pB->mUnknown0, &pB->mUnknown0);
     pA->mUnknown12.mX = pA->mUnknown0.mX;
     pA->mUnknown24.mX = 0.0f;
     pB->mUnknown12.mX = pB->mUnknown0.mX;
@@ -210,10 +210,10 @@ void BounceBodyPair3D(BounceBody_t *pA, BounceBody_t *pB, Vector_80039F5C *pNorm
     pB->mUnknown12.mZ = axisB.mUnknown4;
     pB->mUnknown24.mZ = axisB.mUnknown8;
     MatTranspose();
-    fn_80227C2C(&pA->mUnknown12, &pA->mUnknown12);
-    fn_80227C2C(&pA->mUnknown24, &pA->mUnknown24);
-    fn_80227C2C(&pB->mUnknown12, &pB->mUnknown12);
-    fn_80227C2C(&pB->mUnknown24, &pB->mUnknown24);
+    Vec3Mat33Mul(&pA->mUnknown12, &pA->mUnknown12);
+    Vec3Mat33Mul(&pA->mUnknown24, &pA->mUnknown24);
+    Vec3Mat33Mul(&pB->mUnknown12, &pB->mUnknown12);
+    Vec3Mat33Mul(&pB->mUnknown24, &pB->mUnknown24);
 }
 
 void BounceScatterVector(Vector_80039F5C *pOut, Vector_80039F5C *pNormal, float scale)
@@ -230,9 +230,9 @@ void BounceScatterVector(Vector_80039F5C *pOut, Vector_80039F5C *pNormal, float 
     v.mX = SyncRandGetFloat(0) - 0.5f;
     v.mY = SyncRandGetFloat(0) - 0.5f;
     v.mZ = SyncRandGetFloat(0) * 0.5f;
-    fn_802272DC(&v, &v, scale);
+    Vec3ScaleLength(&v, &v, scale);
     MatTranspose();
-    fn_80227C2C(pOut, &v);
+    Vec3Mat33Mul(pOut, &v);
 }
 
 }

@@ -9,11 +9,11 @@ struct ReplayScreenArgs_t {
 };
 
 extern "C" {
-extern void *lbl_803EA368;
+extern void *gpReplay;
 
-int fn_8002CA74(void *p, int a, int b);
-int fn_8002D0D0(void *p);
-int fn_8002D0FC(void *p);
+int ReplayHandleControl(void *p, int a, int b);
+int ReplayGetLength(void *p);
+int ReplayGetPosition(void *p);
 void HudPost3AOn(void);
 void UISGameLockPad(int value);
 int UISGameUnlockPad(void);
@@ -27,21 +27,21 @@ extern "C" void ReplayScreenEnter(void)
 {
     _ReplayScreen_iSavedValue = UISGameUnlockPad();
     _ReplayScreen_bSavedFlag = UISHeldObjEnable(0);
-    fn_8002CA74(lbl_803EA368, 7, 0);
+    ReplayHandleControl(gpReplay, 7, 0);
 }
 
-extern "C" int ReplayScreenGetPosition(void) { return fn_8002D0D0(lbl_803EA368); }
+extern "C" int ReplayScreenGetPosition(void) { return ReplayGetLength(gpReplay); }
 
 extern "C" void ReplayScreenExit(void)
 {
     UISGameLockPad(_ReplayScreen_iSavedValue);
     _ReplayScreen_iSavedValue = -1;
     UISHeldObjEnable(_ReplayScreen_bSavedFlag);
-    fn_8002CA74(lbl_803EA368, 9, 0);
+    ReplayHandleControl(gpReplay, 9, 0);
     HudPost3AOn();
 }
 
-extern "C" int ReplayScreenGetLength(void) { return fn_8002D0FC(lbl_803EA368); }
+extern "C" int ReplayScreenGetLength(void) { return ReplayGetPosition(gpReplay); }
 
 extern "C" void ReplayScreenNotify(int a, int b, int c) {}
 

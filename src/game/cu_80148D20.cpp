@@ -1,6 +1,6 @@
 #include "game/Class_80148A58.h"
 #include "game/AutoDepth.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 extern "C" {
 int fn_801486A0(void);
@@ -72,7 +72,7 @@ void fn_80148DFC(AutoDepthPlayer_t *pRecords, int count, int *, int *pId, int *p
             if (n > 4) {
                 n = 4;
             }
-            unsigned int pick = fn_802372EC(0, n);
+            unsigned int pick = SyncRandGetRange(0, n);
             *pId = ids[pick];
             *pCategory = categories[pick];
             break;

@@ -29,7 +29,7 @@ int SNDSTRM_status(int stream, SndStreamStatus_t *status)
             if (status->mBuffered == 0) {
                 request = SNDSTRMI_getrequestptr(status->mFirstId);
                 if (request->mDataRate != 0) {
-                    bytes = fn_801F75C4(channel->mpTap);
+                    bytes = STREAM_gettable(channel->mpTap);
                     if (bytes > 4000000) {
                         bytes = 4000000;
                     }

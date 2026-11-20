@@ -2,7 +2,7 @@
    of each new particle (point, directed, cone or line emitters). */
 
 #include "engine/particleLib.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "engine/llmatrix.h"
 
 float fn_801CFB18(int angle);
@@ -35,11 +35,11 @@ void EmitterPrecalcDependantVals(PartObj_801DE1E0 *pObj)
 
     if (pObj->mEmitterType == 3) {
         pCase3 = &pObj->mEmitter.mCase3;
-        fn_802276B4(&dir, &pCase3->mUnknown0C, &pCase3->mUnknown00);
-        fn_802271F0(&pCase3->mUnknown2C, &dir);
-        fn_802277DC(&side, &pCase3->mUnknown18, &pCase3->mUnknown2C);
-        fn_802271F0(&side, &side);
-        fn_802277DC(&pCase3->mUnknown38, &dir, &side);
+        Vec3Sub(&dir, &pCase3->mUnknown0C, &pCase3->mUnknown00);
+        Vec3Normalize(&pCase3->mUnknown2C, &dir);
+        Vec3CrossProduct(&side, &pCase3->mUnknown18, &pCase3->mUnknown2C);
+        Vec3Normalize(&side, &side);
+        Vec3CrossProduct(&pCase3->mUnknown38, &dir, &side);
         pCase3->mUnknown44 = pCase3->mUnknown28 - pCase3->mUnknown24;
     }
 }
@@ -70,7 +70,7 @@ void EmitterGetNewPos(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
         break;
     }
     case 3:
-        fn_80227930(pOut, &pObj->mEmitter.mCase3.mUnknown0C, &pObj->mEmitter.mCase3.mUnknown00, fn_801DE1B8());
+        Vec3Lerp(pOut, &pObj->mEmitter.mCase3.mUnknown0C, &pObj->mEmitter.mCase3.mUnknown00, fn_801DE1B8());
         break;
     }
 }
@@ -124,7 +124,7 @@ void EmitterGetNewDir(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
         MatPushUnit();
         pCase3 = &pObj->mEmitter.mCase3;
         MatRotAxis(&pCase3->mUnknown2C.x, (int)((fn_801DE1B8() * pCase3->mUnknown44 + pCase3->mUnknown24) * 16777216.0f));
-        fn_80227C2C(pOut, &pCase3->mUnknown38);
+        Vec3Mat33Mul(pOut, &pCase3->mUnknown38);
         MatPop();
         break;
     }

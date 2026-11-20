@@ -46,9 +46,9 @@ void fn_8011E240(Object_80039F5C *);
 float fn_80178A08(void);
 int fn_801CFE40(float, float);
 int MathAngleDiff(int, int);
-float fn_8022781C(void *, void *);
-void fn_80227690(void *, void *, void *);
-float fn_802270A4(void *);
+float Vec2Distance(void *, void *);
+void Vec2Sub(void *, void *, void *);
+float Vec2Magnitude(void *);
 int fn_80120794(Object_800B26B0 *, Object_800B26B0 *, float *, float, float, int, float);
 int fn_8011F32C(void);
 Object_80039F5C *BallGetCurrentTarget(void);
@@ -58,7 +58,7 @@ int fn_8011F2F8(void);
 void fn_800C89F0(Object_80039F5C *, int, int, int, float);
 int fn_80124714(Object_80039F5C *, Object_80039F5C *, Object_80039F5C **);
 int fn_80178320(void);
-unsigned int fn_802372EC(unsigned int, unsigned int);
+unsigned int SyncRandGetRange(unsigned int, unsigned int);
 unsigned char PlayBookGetReceiver(int, unsigned char, unsigned char *);
 
 void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, Point_8017886C *pTarget)
@@ -69,8 +69,8 @@ void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, 
     aim->mUnknown8 = 0.4f;
     int fallback = 1;
     if (other) {
-        fn_80227690(delta, &other->mMotion.mPos, &motion->mPos);
-        float distance = fn_802270A4(delta);
+        Vec2Sub(delta, &other->mMotion.mPos, &motion->mPos);
+        float distance = Vec2Magnitude(delta);
         if (!(distance >= 3.25f)) {
             fallback = 0;
             aim->mUnknown10 = fn_801CFE40(delta[1], delta[0]);
@@ -89,7 +89,7 @@ void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, 
         if (p->mUnknown2914 <= 2)
             delta[0] = !(motion->mPos.mX >= point.mX) ? point.mX - 2.0f : point.mX + 2.0f;
         delta[1] = point.mY - 9.0f;
-        fn_80227690(delta, &motion->mPos, delta);
+        Vec2Sub(delta, &motion->mPos, delta);
         aim->mUnknown10 = fn_801CFE40(delta[1], delta[0]);
         aim->mUnknownC = (aim->mUnknown10 - 0x800000) & 0xFFFFFF;
     }
@@ -101,13 +101,13 @@ int fn_80132A4C(Object_80039F5C *p, Object_80039F5C *ball, Object_80039F5C *othe
     float reference[2] = {point[0], point[1]};
     float delta[2];
     int reverse = (angle + 0x800000) & 0xFFFFFF;
-    fn_80227690(delta, &other->mMotion.mPos, &p->mMotion.mPos);
+    Vec2Sub(delta, &other->mMotion.mPos, &p->mMotion.mPos);
     if (MathAngleDiff(reverse, fn_801CFE40(delta[1], delta[0])) <= 0x471C72)
         return 0;
     if (ball && !(ball->mFlags & 0x8000) && !(p->mMotion.mPos.mY + 1.0f >= location->mY) &&
         !(other->mMotion.mPos.mY + 1.0f >= location->mY)) {
-        float a = fn_8022781C(location, &p->mMotion.mPos);
-        float b = fn_8022781C(location, &other->mMotion.mPos);
+        float a = Vec2Distance(location, &p->mMotion.mPos);
+        float b = Vec2Distance(location, &other->mMotion.mPos);
         if (a < b) return 1;
     }
     if (p->mMotion.mPos.mY <= reference[1] - 9.0f || p->mMotion.mPos.mY >= other->mMotion.mPos.mY + 1.0f)
@@ -121,9 +121,9 @@ int fn_80132A4C(Object_80039F5C *p, Object_80039F5C *ball, Object_80039F5C *othe
     } else {
         Object_80039F5C *entry = BallGetCurrentTarget();
         if (entry) {
-            fn_80227690(delta, &other->mMotion.mPos, &entry->mMotion.mPos);
+            Vec2Sub(delta, &other->mMotion.mPos, &entry->mMotion.mPos);
             otherAngle = fn_801CFE40(delta[1], delta[0]);
-            fn_80227690(delta, &p->mMotion.mPos, &entry->mMotion.mPos);
+            Vec2Sub(delta, &p->mMotion.mPos, &entry->mMotion.mPos);
             angle = fn_801CFE40(delta[1], delta[0]);
         }
     }
@@ -177,9 +177,9 @@ void fn_80132C84(Object_80039F5C *p, Object_80039F5C *ball, Mode_80133C50 *s, fl
         }
     }
     s->mUnknown10 = 0x400000;
-    fn_80227690(target, target, &p->mMotion.mPos);
+    Vec2Sub(target, target, &p->mMotion.mPos);
     s->mUnknownC = fn_801CFE40(target[1], target[0]) & 0xFFFFFF;
-    float distance = fn_802270A4(target);
+    float distance = Vec2Magnitude(target);
     if (!(distance <= 3.0f)) {
         if (!(distance >= 6.0f))
             s->mUnknown8 = distance * 0.10000000894069672f + 0.4f;
@@ -210,7 +210,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
             if (index != 255 && active) {
                 Object_80039F5C *candidate = PlyrGet(p->mIdBytes[2], index);
                 if (candidate->mMotion.mPos.mY < point[1] + 2.5f || candidate == ball) {
-                    float distance = fn_8022781C(&p->mMotion.mPos, &candidate->mMotion.mPos);
+                    float distance = Vec2Distance(&p->mMotion.mPos, &candidate->mMotion.mPos);
                     if (!(distance >= nearest)) {
                         ball = candidate;
                         nearest = distance;
@@ -251,15 +251,15 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
     }
     if (other) {
         float delta[2];
-        fn_80227690(delta, &other->mMotion.mPos, &p->mMotion.mPos);
+        Vec2Sub(delta, &other->mMotion.mPos, &p->mMotion.mPos);
         int toward = fn_801CFE40(delta[1], delta[0]);
-        float distance = fn_802270A4(delta);
+        float distance = Vec2Magnitude(delta);
         s->mUnknownC = fn_80120794(&p->mMotion, &other->mMotion,
             &other->mMotion.mUnknown40, p->mMotion.mUnknown28,
             other->mMotion.mUnknown28, other->mMotion.mUnknown32, distance);
-        fn_80227690(delta, &other->mMotion.mPos, reference);
+        Vec2Sub(delta, &other->mMotion.mPos, reference);
         int otherAngle = fn_801CFE40(delta[1], delta[0]);
-        fn_80227690(delta, &p->mMotion.mPos, reference);
+        Vec2Sub(delta, &p->mMotion.mPos, reference);
         int angle = fn_801CFE40(delta[1], delta[0]);
         if (!(s->mUnknown1B & 1) && fn_80132A4C(p, ball, other, point, &location, angle, otherAngle, distance)) {
             s->mUnknown10 = toward;
@@ -270,7 +270,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
                 MathAngleDiff(other->mMotion.mFacing, otherAngle) > 0x6E38E3) {
                 int turn;
                 if (fn_8011E188() <= 59 && MathAngleDiff(otherAngle, toward) > 0xAAAAA) {
-                    fn_80227690(delta, reference, &p->mMotion.mPos);
+                    Vec2Sub(delta, reference, &p->mMotion.mPos);
                     turn = fn_801CFE40(delta[1], delta[0]);
                 } else turn = s->mUnknownC;
                 s->mUnknownC = ((turn - toward) & 0xFFFFFF) <= 0x7FFFFF ? s->mUnknown10 + 0x400000 : s->mUnknown10 - 0x400000;
@@ -299,11 +299,11 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
         float interceptionDistance;
         Object_80039F5C *interceptor = fn_80124C28(p, &interceptionDistance, 0x2E38E3, distance, 0.2f, s->mUnknownC);
         if (!interceptor || interceptor == other) {
-            fn_80227690(delta, &location, &p->mMotion.mPos);
-            float ownDistance = fn_802270A4(delta);
-            fn_80227690(delta, &other->mMotion.mPos, &location);
+            Vec2Sub(delta, &location, &p->mMotion.mPos);
+            float ownDistance = Vec2Magnitude(delta);
+            Vec2Sub(delta, &other->mMotion.mPos, &location);
             s->mUnknown8 = 0.7200000286102295f;
-            if (!(distance <= ownDistance) && !(distance >= fn_802270A4(delta)) &&
+            if (!(distance <= ownDistance) && !(distance >= Vec2Magnitude(delta)) &&
                 MathAngleDiff(otherAngle, angle) <= 0x5FFFFF) {
                 int reverse = angle + 0x800000;
                 int gap = MathAngleDiff(reverse, toward);
@@ -337,8 +337,8 @@ void fn_80133920(Object_80039F5C *p, Object_80039F5C *other)
 {
     if (other) {
         float delta[2];
-        fn_80227690(delta, &other->mMotion.mPos, &p->mMotion.mPos);
-        float distance = fn_802270A4(delta);
+        Vec2Sub(delta, &other->mMotion.mPos, &p->mMotion.mPos);
+        float distance = Vec2Magnitude(delta);
         if (!(distance >= 4.0f)) {
             distance -= 1.0f;
             if (!(distance >= 0.0f)) distance = 0.0f;
@@ -358,8 +358,8 @@ void PlyrSteerAroundBlocker(Object_80039F5C *p, Object_80039F5C *, Aim_801327F4 
         int clear = fn_80124714(p, other, &target);
         if (!clear) {
             float delta[2];
-            fn_80227690(delta, &target->mMotion.mPos, pos);
-            float distance = fn_802270A4(delta);
+            Vec2Sub(delta, &target->mMotion.mPos, pos);
+            float distance = Vec2Magnitude(delta);
             if (!(distance >= 2.25f)) {
                 Vector_80039F5C point;
                 if (target->mUnknown1032 != 4) {
@@ -373,7 +373,7 @@ void PlyrSteerAroundBlocker(Object_80039F5C *p, Object_80039F5C *, Aim_801327F4 
                     point.mX = (target->mMotion.mPos.mX + linked->mMotion.mPos.mX) * 0.5f;
                     point.mY = (target->mMotion.mPos.mY + linked->mMotion.mPos.mY) * 0.5f;
                 }
-                fn_80227690(delta, &point, pos);
+                Vec2Sub(delta, &point, pos);
                 int angle = fn_801CFE40(delta[1], delta[0]);
                 if (MathAngleDiff(angle, aim->mUnknownC) <= 0x271C70) {
                     float amount = distance * 0.4444444477558136f;
@@ -491,7 +491,7 @@ int fn_80133EE8(Object_80039F5C *p)
     }
     int result = 0;
     if (fn_801787A0()) {
-        if ((p->mUnknown1032 != 4 && p->mUnknown1032 != 7) || fn_802372EC(0, 100) <= 9) {
+        if ((p->mUnknown1032 != 4 && p->mUnknown1032 != 7) || SyncRandGetRange(0, 100) <= 9) {
             fn_8011E3EC(p, 0);
             fn_8011E240(p);
         }
@@ -571,7 +571,7 @@ int fn_801343AC(Object_80039F5C *p)
             fn_800B6E68(p, &input);
             Object_80039F5C *other = fn_8009BCE8(&p->mUnknown1036);
             float delta[2];
-            fn_80227690(delta, &other->mMotion.mPos, &p->mMotion.mPos);
+            Vec2Sub(delta, &other->mMotion.mPos, &p->mMotion.mPos);
             if (MathAngleDiff(p->mUnknown512.mUnknown4, fn_801CFE40(delta[1], delta[0])) > 0x600000) {
                 fn_8011E3EC(p, 0);
                 fn_8011E240(p);

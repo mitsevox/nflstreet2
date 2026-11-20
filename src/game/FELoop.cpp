@@ -10,7 +10,7 @@
 #include "game/PadInput.h"
 #include "game/GameInfo.h"
 #include "game/DepthChartSide.h"
-#include "game/fn_80061AD4.h"
+#include "game/StoryTournament.h"
 #include "game/GameModeType.h"
 #include "game/MemCardUtil.h"
 #include "game/fn_80218FC4.h"
@@ -22,23 +22,23 @@ extern float gFrameTimeScale;
 extern void *gUISMainInfo;
 extern void *gUISSubInfo;
 
-void fn_80010150(int a);
-int fn_80010194(void);
-void fn_80011600(int a, int b, int c);
-void fn_80014294(int a, int b);
-void fn_8001442C(void);
-void fn_80015D28(int a);
-int fn_80015F2C(void);
+void MsgMainMenuGoTo(int a);
+int MsgMainMenuIsShown(void);
+void MsgPlayerSelectStart(int a, int b, int c);
+void MsgTeamSelectQuickSetup(int a, int b);
+void MsgTeamSelectNull(void);
+void MsgStadiumStartGame(int a);
+int MsgStartScreenIsShown(void);
 void MsgTeamPickFreePool(void);
 void FEPlyrUpdate(void);
 void BootPlayIntroMovies(void);
 void BootShowStartupScreens(void);
 void BootUpdateReset(void);
 int MainFEGroupIsStarted(void *p);
-void fn_8003E1F0(void);
-int fn_8005FC7C(void);
-int fn_800602E8(void);
-int fn_80061CAC(void);
+void PlyrObjsDrawShadows(void);
+int StoryEventsGetCurrentEvent(void);
+int StoryEventsIsWonPickupEvent(void);
+int StoryTournamentIsComplete(void);
 void MemCardScreenSetFlag(unsigned char a);
 int PlayBookDbOpen(unsigned int id, int a, int b, int c, int d, int e);
 void PlayBookDbClose(unsigned int id, int a);
@@ -71,10 +71,10 @@ void fn_801D6F58(void);
 void ResTrackLabel(const char *pText);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-int fn_802294F4(void);
-int fn_80229554(void);
-void fn_802297B0(void);
-int fn_80232FD4(DepthChartSide_t *pRecord0, DepthChartSide_t *pRecord1);
+int DbNiomIsModeActive(void);
+int DbNiomEndMode(void);
+void DbNiomModeResume(void);
+int DbManagerEnterMode2(DepthChartSide_t *pRecord0, DepthChartSide_t *pRecord1);
 }
 
 static unsigned char _FELoop_uResumeMode = 0;
@@ -125,7 +125,7 @@ static void _FELoopEnterMode8()
 
     FELoopRefreshModeType();
     args[0] = 1;
-    fn_80010150(8);
+    MsgMainMenuGoTo(8);
     fn_80218FC4(gUISMainInfo, 11, 1, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -136,7 +136,7 @@ static void _FELoopEnterMode6()
 
     FELoopRefreshModeType();
     args[0] = 1;
-    fn_80010150(6);
+    MsgMainMenuGoTo(6);
     fn_80218FC4(gUISMainInfo, 8, 2, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -146,8 +146,8 @@ static void _FELoopEnterMode7()
     int args[2];
 
     FELoopRefreshModeType();
-    args[0] = fn_800602E8() ? 401 : 1;
-    fn_80010150(7);
+    args[0] = StoryEventsIsWonPickupEvent() ? 401 : 1;
+    MsgMainMenuGoTo(7);
     fn_80218FC4(gUISMainInfo, 12, 0, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -158,7 +158,7 @@ static void _FELoopEnterMode10()
 
     FELoopRefreshModeType();
     args[0] = 123;
-    fn_80010150(7);
+    MsgMainMenuGoTo(7);
     fn_80218FC4(gUISMainInfo, 12, 0, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -169,7 +169,7 @@ static void _FELoopEnterMode10Alt()
 
     FELoopRefreshModeType();
     args[0] = 604;
-    fn_80010150(7);
+    MsgMainMenuGoTo(7);
     fn_80218FC4(gUISMainInfo, 12, 0, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -180,7 +180,7 @@ static void _FELoopEnterMode11()
 
     FELoopRefreshModeType();
     args[0] = 1;
-    fn_80010150(11);
+    MsgMainMenuGoTo(11);
     fn_80218FC4(gUISMainInfo, 7, 17, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -191,7 +191,7 @@ static void _FELoopEnterMode9()
 
     FELoopRefreshModeType();
     args[0] = 700;
-    fn_80010150(9);
+    MsgMainMenuGoTo(9);
     fn_80218FC4(gUISMainInfo, 13, 0, 1, args);
     fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
@@ -232,12 +232,12 @@ static void _FELoopEnterModeScreen(int mode)
         _FELoopEnterMode8();
         break;
     case 7:
-        fn_8005FC7C();
+        StoryEventsGetCurrentEvent();
         _FELoopEnterMode7();
         break;
     case 10:
-        fn_80061AD4();
-        if (fn_80061CAC()) {
+        StoryTournamentGetEvent();
+        if (StoryTournamentIsComplete()) {
             _FELoopEnterMode10Alt();
         } else {
             _FELoopEnterMode10();
@@ -312,7 +312,7 @@ void FELoopStartGame()
         SndgMusicPumpFrame(1);
         DepthChartGetSide(1, &record1);
         SndgMusicPumpFrame(1);
-        fn_80232FD4(&record0, &record1);
+        DbManagerEnterMode2(&record0, &record1);
         SndgMusicPumpFrame(1);
         GameInfoRead();
         fn_8021956C(gUISSubInfo, 1, 5, 1);
@@ -323,14 +323,14 @@ void FELoopStartGame()
 
 void FELoopConfigureEntry(int a, int b, int c, int d, int e, int f)
 {
-    fn_80010150(a);
+    MsgMainMenuGoTo(a);
     if (b == -1 && c == -1) {
-        fn_80011600(-1, -1, 0);
+        MsgPlayerSelectStart(-1, -1, 0);
     } else {
-        fn_80011600(b, c, 1);
+        MsgPlayerSelectStart(b, c, 1);
     }
-    fn_80014294(d, e);
-    fn_80015D28(f);
+    MsgTeamSelectQuickSetup(d, e);
+    MsgStadiumStartGame(f);
 }
 
 ModuleDependency *FELoop::GetDependencies() { return (ModuleDependency *)sDependencies; }
@@ -348,10 +348,10 @@ int FELoop::Init()
     GameTextReset();
     if (_FELoop_bResume == 1) {
         if (_FELoop_uResumeMode != 3) {
-            fn_802297B0();
+            DbNiomModeResume();
         }
-    } else if (fn_802294F4() == 1) {
-        fn_802297B0();
+    } else if (DbNiomIsModeActive() == 1) {
+        DbNiomModeResume();
         FELoopRefreshModeType();
     }
     _FELoop_uModeType = GameModeTypeGet();
@@ -374,12 +374,12 @@ unsigned char FELoop::Update()
     ConUpdateChannel(-1);
     ConProcessChannel(-1);
     FEPlyrUpdate();
-    fn_8003E1F0();
+    PlyrObjsDrawShadows();
     FEPlyrLoadUpdate();
     gFMCAPPORT.Update();
     fn_80219650(gUISMainInfo, &a, &b);
     if (a == 0 && b == 7) {
-        fn_8001442C();
+        MsgTeamSelectNull();
     }
     RumbleProcess();
     if (flag) {
@@ -390,7 +390,7 @@ unsigned char FELoop::Update()
         if (_FELoop_pFrameCallback) {
             _FELoop_pFrameCallback();
         }
-        if (fn_80010194() || fn_80015F2C()) {
+        if (MsgMainMenuIsShown() || MsgStartScreenIsShown()) {
             if (++_FELoop_uIdleFrames > (int)(60.0f / gFrameTimeScale) * 75) {
                 fn_8021D7B8(gUISMainInfo, 0x80000038, 0, 0);
                 SndgMusicFadeOut(0xFA, 1);
@@ -436,11 +436,11 @@ void FELoopSetResumeMode(unsigned char value)
 void FELoopRefreshModeType()
 {
     FELoopSetResume(0);
-    if (fn_802294F4() == 1) {
+    if (DbNiomIsModeActive() == 1) {
         if (GameInfoIsInitialized()) {
             GameInfoShutdown();
         }
-        fn_80229554();
+        DbNiomEndMode();
     }
     _FELoop_uModeType = GameModeTypeGet();
 }

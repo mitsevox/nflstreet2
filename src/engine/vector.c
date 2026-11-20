@@ -3,8 +3,8 @@
 #include "engine/SysSetLastErrorFunc.h"
 
 extern int fn_801CFD78(float x);
-float fn_8022716C(float *p);
-float fn_80227704(float *pA, float *pB);
+float Vec3InvMagnitude(float *p);
+float Vec3DotProduct(float *pA, float *pB);
 
 static unsigned char _Vec_ModuleActive = 0;
 
@@ -36,5 +36,5 @@ int VecShutdown(void)
 
 int Vec3GetAngle(float *pA, float *pB)
 {
-    return fn_801CFD78(fn_80227704(pA, pB) * fn_8022716C(pA) * fn_8022716C(pB));
+    return fn_801CFD78(Vec3DotProduct(pA, pB) * Vec3InvMagnitude(pA) * Vec3InvMagnitude(pB));
 }

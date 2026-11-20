@@ -8,7 +8,7 @@ int SNDmemlimits(unsigned int start, unsigned int end)
     int result;
 
     SNDSYS_entercritical();
-    result = fn_802751E0(start, end);
+    result = SNDPLATFORM_memlimits(start, end);
     SNDSYS_leavecritical();
     return result;
 }

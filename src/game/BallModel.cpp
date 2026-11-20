@@ -82,25 +82,25 @@ extern "C" {
 unsigned char BallModelReplayReadFrame(BitStream_t *pStream, Vector_80039F5C *pPos, Quat_801EB488 *pRot,
                           Vector_80039F5C *pLinkPos, Quat_801EB488 *pLinkRot, Object_80039F5C **ppObject,
                           int *pIndex, unsigned char *pFlag);
-void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
+void Vec3Lerp(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
-void fn_80030CA4(Object_80039F5C *pA, Object_80039F5C *pB);
+void ReplaySetFocusPlayers(Object_80039F5C *pA, Object_80039F5C *pB);
 }
 
 extern "C" {
 int FELoopIsMainFEActive(void);
-unsigned int fn_80236398(int a);
+unsigned int LLLightGetProjectorColor(int a);
 void BallRenderInit(BallModel_t *p);
 void BallRenderAttach(BallModel_t *p, int index);
 void BallRenderDraw(BallModel_t *p);
 void SimpShadowAdd(int a, Vector_80039F5C *pPos, float value, float *pColor);
-void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
-void fn_80030304(void *pStream, float *pValues, int bits, float scale);
-void fn_80030554(void *pStream, float *pValues, int bits, float scale);
-void fn_8003065C(void *pStream, float *pValues, int bits, float scale);
+void ReplayReadPacked3(void *pStream, float *pValues, int bits, float scale);
+void ReplayReadPacked4(void *pStream, float *pValues, int bits, float scale);
+void ReplayWritePacked3(void *pStream, float *pValues, int bits, float scale);
+void ReplayWritePacked4(void *pStream, float *pValues, int bits, float scale);
 void PlyrPoseGetAttachTransform(Object_8003DEC4 *p, float *pPos, Quat_801EB488 *pRot);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-int fn_80030CB8(void);
+int ReplayGetBallIndex(void);
 void MatSetStack(int a);
 void MatPush(void);
 void MatPushUnit(void);
@@ -213,7 +213,7 @@ extern "C" void BallModelInit(BallModel_t *p, BallModelInit_t *pInit)
         p->mUnknown156 = pInit->mpUnknown8->mUnknown156;
         p->mUnknown160 = pInit->mpUnknown8->mUnknown160;
     }
-    unsigned int packed = fn_80236398(0);
+    unsigned int packed = LLLightGetProjectorColor(0);
     color[0] = (packed & 255) * 0.0078125f;
     color[1] = ((packed >> 8) & 255) * 0.0078125f;
     color[2] = ((packed >> 16) & 255) * 0.0078125f;
@@ -245,7 +245,7 @@ extern "C" unsigned char BallModelReplayReadFrame(BitStream_t *pStream, Vector_8
         Object_8003DEC4 *pPose = (Object_8003DEC4 *)pObject->mpUnknown4;
         pPose->mUnknown44.mUnknown6 = index;
         *pIndex = index;
-        fn_800301C4(pStream, pPose->mUnknown44.mUnknown20, 13, 1024.0f);
+        ReplayReadPacked3(pStream, pPose->mUnknown44.mUnknown20, 13, 1024.0f);
         pPose->mUnknown44.mUnknown36[0] = (int)((ReadBitStream(pStream, 12) << 52) >> 40);
         pPose->mUnknown44.mUnknown36[1] = (int)((ReadBitStream(pStream, 12) << 52) >> 40);
         pPose->mUnknown44.mUnknown36[2] = (int)((ReadBitStream(pStream, 12) << 52) >> 40);
@@ -254,8 +254,8 @@ extern "C" unsigned char BallModelReplayReadFrame(BitStream_t *pStream, Vector_8
         ReadBitStream(pStream, 39);
         ReadBitStream(pStream, 36);
     }
-    fn_800301C4(pStream, &pPos->mX, 16, 256.0f);
-    fn_80030304(pStream, &pRot->mX, 12, 1024.0f);
+    ReplayReadPacked3(pStream, &pPos->mX, 16, 256.0f);
+    ReplayReadPacked4(pStream, &pRot->mX, 12, 1024.0f);
     *pFlag = (unsigned char)ReadBitStream(pStream, 1);
     *ppObject = pObject;
     return changed;
@@ -322,7 +322,7 @@ extern "C" void BallModelReplayRecord(Block_80170E64 *pBlock, BitStream_t *pStre
 {
     int index = BallFindByModel(pBlock);
     Object_80039F5C *pObject = BallGetHolder(BallGet(index));
-    int changed = index == fn_80030CB8();
+    int changed = index == ReplayGetBallIndex();
     fn_80191068(pStream, changed, 1);
     if (changed == 1 && pObject != 0) {
         Object_8003DEC4 *pPose = (Object_8003DEC4 *)pObject->mpUnknown4;
@@ -330,7 +330,7 @@ extern "C" void BallModelReplayRecord(Block_80170E64 *pBlock, BitStream_t *pStre
         fn_8009BD2C(pObject, &reference);
         fn_80191068(pStream, (unsigned int)reference, 32);
         fn_80191068(pStream, (unsigned int)pPose->mUnknown44.mUnknown6, 7);
-        fn_80030554(pStream, pPose->mUnknown44.mUnknown20, 13, 1024.0f);
+        ReplayWritePacked3(pStream, pPose->mUnknown44.mUnknown20, 13, 1024.0f);
         fn_80191068(pStream, pPose->mUnknown44.mUnknown36[0] >> 12, 12);
         fn_80191068(pStream, pPose->mUnknown44.mUnknown36[1] >> 12, 12);
         fn_80191068(pStream, pPose->mUnknown44.mUnknown36[2] >> 12, 12);
@@ -342,11 +342,11 @@ extern "C" void BallModelReplayRecord(Block_80170E64 *pBlock, BitStream_t *pStre
     }
     if (pBlock->mUnknown152 == 1) {
         pBlock->mUnknown152 = 0;
-        fn_80030554(pStream, &pBlock->mUnknown124.mX, 16, 256.0f);
-        fn_8003065C(pStream, &pBlock->mUnknown136.mX, 12, 1024.0f);
+        ReplayWritePacked3(pStream, &pBlock->mUnknown124.mX, 16, 256.0f);
+        ReplayWritePacked4(pStream, &pBlock->mUnknown136.mX, 12, 1024.0f);
     } else {
-        fn_80030554(pStream, &pBlock->mUnknown4.mX, 16, 256.0f);
-        fn_8003065C(pStream, &pBlock->mUnknown108.mX, 12, 1024.0f);
+        ReplayWritePacked3(pStream, &pBlock->mUnknown4.mX, 16, 256.0f);
+        ReplayWritePacked4(pStream, &pBlock->mUnknown108.mX, 12, 1024.0f);
     }
     if (pBlock->mUnknown20 & 2) {
         fn_80191068(pStream, 1, 1);
@@ -386,7 +386,7 @@ extern "C" void BallModelReplayPlayback(Block_80170E64 *pBlock, BitStream_t *pSt
         Object_8003DEC4 *pPose = (Object_8003DEC4 *)pObject0->mpUnknown4;
 
         if (index0 == index1) {
-            fn_80227930(&pBlock->mUnknown4, &linkPos1, &linkPos0, t);
+            Vec3Lerp(&pBlock->mUnknown4, &linkPos1, &linkPos0, t);
             QuatSlerp(&pBlock->mUnknown108, &linkRot1, &linkRot0, t);
         } else {
             pBlock->mUnknown4.mX = linkPos1.mX;
@@ -399,12 +399,12 @@ extern "C" void BallModelReplayPlayback(Block_80170E64 *pBlock, BitStream_t *pSt
             pPose->mUnknown44.mUnknown6 = index1;
         }
     } else {
-        fn_80227930(&pBlock->mUnknown4, &pos1, &pos0, t);
+        Vec3Lerp(&pBlock->mUnknown4, &pos1, &pos0, t);
         QuatSlerp(&pBlock->mUnknown108, &rot1, &rot0, t);
     }
     pBlock->mUnknown660 = LevelFindArea(&pBlock->mUnknown4.mX);
     if (changed0 | changed1) {
-        fn_80030CA4(pObject0, pObject1);
+        ReplaySetFocusPlayers(pObject0, pObject1);
     }
     if (flag) {
         pBlock->mUnknown20 |= 2;

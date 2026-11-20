@@ -92,11 +92,11 @@ void fn_800B9598(PostPlayPhase *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
 void fn_80178F20(ScrmRuleSet *pObject);
 int fn_80149014(Class_802A2918 *p);
-void fn_8016306C(unsigned char value);
+void PlyrStarSetBallRingEnabled(unsigned char value);
 
 void fn_80151A28(Class_802A2918 *p)
 {
-    fn_8016306C(1);
+    PlyrStarSetBallRingEnabled(1);
     if (p->mpUnknown1C->mpUnknown36->mUnknown116 != 0) {
         GameOptionsSet(19, 1);
     }

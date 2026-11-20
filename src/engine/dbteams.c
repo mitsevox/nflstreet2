@@ -4,15 +4,15 @@
  * so the database code can read team records from it; then destroys the database and closes the
  * file again.
  */
-#include "engine/fn_801F8D60.h"
+#include "engine/TDbCreate.h"
 #include "game/ResOpenDevice.h"
 #include <string.h>
 #include "engine/dbteams.h"
 #include "engine/dbutil.h"
-#include "engine/fn_801F9134.h"
+#include "engine/TDbLoad.h"
 #include "engine/tdbiores.h"
 
-extern int fn_801F8CE8(int *pHandle);
+extern int TDbFindUnusedDbId(int *pHandle);
 
 static char *_DbTeams_pFileName = 0;
 static void *_DbTeams_pResource = 0;
@@ -41,9 +41,9 @@ int DbTeamsOpen(void)
         err = 38;
     }
     if (err == 0) {
-        err = fn_801F8CE8(&_DbTeams_iDbId);
+        err = TDbFindUnusedDbId(&_DbTeams_iDbId);
         if (err == 0) {
-            err = fn_801F8D60(_DbTeams_iDbId, -1);
+            err = TDbCreate(_DbTeams_iDbId, -1);
             if (err != 0) {
                 _DbTeams_iDbId = -1;
             }
@@ -62,7 +62,7 @@ int DbTeamsIsOpen(void)
 
 int DbTeamsClose(void)
 {
-    int err = fn_801F8EEC(_DbTeams_iDbId);
+    int err = TDbDestroy(_DbTeams_iDbId);
 
     if (err == 0) {
         _DbTeams_iDbId = -1;
@@ -83,7 +83,7 @@ int DbTeamsLoad(int a, int *pOut)
     int *pState = &_DbTeams_iMode;
 
     *pState = a;
-    err = fn_801F9134(_DbTeams_iDbId, (int)&_DbTeams_pResource, 0, (int)&tdbioresCallback);
+    err = TDbLoad(_DbTeams_iDbId, (int)&_DbTeams_pResource, 0, (int)&tdbioresCallback);
     *pState = -1;
     *pOut = err != 0 ? -1 : _DbTeams_iDbId;
     return err;

@@ -5,7 +5,7 @@
 #include "game/BigObj.h"
 #include "game/BigObjInst.h"
 #include "game/AudmonEvent.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/fn_801D2B7C.h"
 
 struct BigObjPathNode_t {
@@ -35,8 +35,8 @@ void fn_8004D860(int handle, int value);
 int BigObjGetNameNumber(BigObj_t *pObject);
 int fn_801784C4(void);
 void QuatSlerp(float *pOut, float *pA, float *pB, float t);
-void fn_80227264(void *pOut, void *pV, float scale);
-void fn_8022765C(void *pOut, void *pA, void *pB);
+void Vec3Scale(void *pOut, void *pV, float scale);
+void Vec3Add(void *pOut, void *pA, void *pB);
 
 extern float gFrameTimeScale;
 
@@ -148,14 +148,14 @@ int BigObjPathedUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode)
         }
         float step[3];
         float *pFrom = &pData->mUnknown0->mUnknown472->mUnknown8;
-        fn_802276B4(step, &pData->mUnknown4->mUnknown472->mUnknown8, pFrom);
+        Vec3Sub(step, &pData->mUnknown4->mUnknown472->mUnknown8, pFrom);
         pOwner->mUnknown472->mUnknown8 = pFrom[0];
         pOwner->mUnknown472->mUnknown12 = pFrom[1];
         pOwner->mUnknown472->mUnknown16 = pFrom[2];
-        float time = fn_802270D4(step) / pNode->mUnknown4;
+        float time = Vec3Magnitude(step) / pNode->mUnknown4;
         float rate = gFrameTimeScale * 60.0f;
         pData->mUnknown16 = pData->mUnknown12 = (int)(time * rate);
-        fn_80227264(step, step, 1.0f / (float)pData->mUnknown12);
+        Vec3Scale(step, step, 1.0f / (float)pData->mUnknown12);
         pOwner->mUnknown472->mUnknown48 = step[0];
         pOwner->mUnknown472->mUnknown52 = step[1];
         pOwner->mUnknown472->mUnknown56 = step[2];
@@ -167,7 +167,7 @@ int BigObjPathedUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode)
         pData->mUnknown12--;
         float t = (float)pData->mUnknown12 / (float)pData->mUnknown16;
         BigObjInst *pMover = pOwner->mUnknown472;
-        fn_8022765C(&pMover->mUnknown8, &pMover->mUnknown8, &pMover->mUnknown48);
+        Vec3Add(&pMover->mUnknown8, &pMover->mUnknown8, &pMover->mUnknown48);
         QuatSlerp(&pOwner->mUnknown472->mUnknown96, &pData->mUnknown0->mUnknown472->mUnknown96,
                     &pData->mUnknown4->mUnknown472->mUnknown96, t);
         pNode = (BigObjPathNode_t *)pData->mUnknown0->mUnknown472->mUnknown420;

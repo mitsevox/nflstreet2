@@ -1,7 +1,7 @@
 /* The level's ground mesh: relocates the loaded level data and finds the triangle area under a
    position through its area tree. */
 #include "game/LevelData.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 
 /* Plane point with the 16-byte stride of the vector routines. */
 struct LevelPoint_t {
@@ -12,8 +12,8 @@ struct LevelPoint_t {
 };
 
 extern "C" {
-float fn_80227704(LevelPoint_t *pA, LevelPoint_t *pB);
-void fn_802277DC(LevelPoint_t *pOut, LevelPoint_t *pA, LevelPoint_t *pB);
+float Vec3DotProduct(LevelPoint_t *pA, LevelPoint_t *pB);
+void Vec3CrossProduct(LevelPoint_t *pOut, LevelPoint_t *pA, LevelPoint_t *pB);
 
 extern LevelData_t *gLevelData;
 
@@ -89,12 +89,12 @@ int LevelMeshSameSide(LevelPoint_t *pPoint, LevelPoint_t *pRef, LevelPoint_t *pA
     LevelPoint_t crossPoint;
     LevelPoint_t crossRef;
 
-    fn_802276B4(&edge, pB, pA);
-    fn_802276B4(&offset, pPoint, pA);
-    fn_802277DC(&crossPoint, &edge, &offset);
-    fn_802276B4(&offset, pRef, pA);
-    fn_802277DC(&crossRef, &edge, &offset);
-    return fn_80227704(&crossPoint, &crossRef) >= 0.0f;
+    Vec3Sub(&edge, pB, pA);
+    Vec3Sub(&offset, pPoint, pA);
+    Vec3CrossProduct(&crossPoint, &edge, &offset);
+    Vec3Sub(&offset, pRef, pA);
+    Vec3CrossProduct(&crossRef, &edge, &offset);
+    return Vec3DotProduct(&crossPoint, &crossRef) >= 0.0f;
 }
 
 int LevelMeshInArea(LevelArea_t *pEntry, LevelPoint_t *pPoint)

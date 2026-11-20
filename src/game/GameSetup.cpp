@@ -3,7 +3,7 @@
 #include "game/Challenge.h"
 #include "game/Object_8017886C.h"
 #include <string.h>
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 extern "C" {
 void GameOutcomeSet(int value);
@@ -27,7 +27,7 @@ void GameSetupInit(void)
     if (ChallengeIsActive()) {
         fn_801787FC(0, ChalGetCurrent()->mUnknown1AC);
         fn_801787FC(1, ChalGetCurrent()->mUnknown1A8);
-        fn_801FCE10(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n",
+        TDbCompilePerformOp(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n",
                     ChalGetCurrent()->mUnknown1A8, ChalGetCurrent()->mUnknown1AC);
         fn_8017885C();
         memset(&info, 0, sizeof(info));
@@ -55,7 +55,7 @@ void GameSetupInit(void)
         fn_801787FC(0, 0);
         fn_801787FC(1, 0);
         fn_8017885C();
-        fn_801FCE10(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n", 0, 0);
+        TDbCompilePerformOp(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n", 0, 0);
         memset(&info, 0, sizeof(info));
         fn_80178878(&info);
         fn_80177F88(1);

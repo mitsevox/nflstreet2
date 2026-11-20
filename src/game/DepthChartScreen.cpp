@@ -13,12 +13,12 @@ int FormationSlotGetInfo(int a, int b, float *pX, float *pY, int *pValue, char *
 void EditMenuRequest(int mode, int value);
 int CreateTeamExists(int a);
 char *strncpy(char *pDest, const char *pSource, int count);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 
 void FeTeamChooseScreen(int *pResult)
 {
-    if (CreateTeamExists(fn_8022F384(fn_8022F4BC()))) {
+    if (CreateTeamExists(DbUserFindIndex(DbUserGetCurrent()))) {
         if (TeamFilterGet() != 0x3FF) {
             *pResult = 401;
         } else if (MsgChallengeGetFlowState() == 6) {

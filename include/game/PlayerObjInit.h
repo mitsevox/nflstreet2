@@ -15,8 +15,8 @@ struct PlayerObjInit_t {
     int mUnknown18;
 };
 
-/* Full creation record built by fn_8003D378: the PlayerObjInit_t header,
-   model ids, a name and the 53 FMCAPPORT values read by fn_801A3588. */
+/* Full creation record built by PlyrObjsCreatePlayers: the PlayerObjInit_t header,
+   model ids, a name and the 53 FMCAPPORT values read by PlyrRenderInitPlayer. */
 struct Creation_8003D378 {
     PlayerObjInit_t mInit;
     int mUnknown1C;

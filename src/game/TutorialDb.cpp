@@ -5,12 +5,12 @@
 #include <string.h>
 
 #include "game/PlayBookDb.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 extern "C" {
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
-int fn_8022F3D4(int a);
+int DbUserGetDb(int a);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 int TutorialIsComplete(int id);
 void TutorialMarkComplete(int id);
@@ -84,8 +84,8 @@ int TutorialGetStepCount(int id)
     int value = 0;
 
     if (_Tutorial_iProfileDb != -1) {
-        fn_801FCE10(0, "use \x8c select 'GCUT' into \x82 from 'RUUT' where 'NCUT' = \x82\n",
-                    fn_8022F3D4(_Tutorial_iProfileDb), &value, id);
+        TDbCompilePerformOp(0, "use \x8c select 'GCUT' into \x82 from 'RUUT' where 'NCUT' = \x82\n",
+                    DbUserGetDb(_Tutorial_iProfileDb), &value, id);
     }
     return value;
 }
@@ -121,8 +121,8 @@ void TutorialSetStepCount(unsigned int id, unsigned int count)
     }
 
     if (update) {
-        fn_801FCE10(0, "use \x8c update 'RUUT' set 'GCUT' = \x82 where 'NCUT' = \x82\n",
-                    fn_8022F3D4(_Tutorial_iProfileDb), value, id);
+        TDbCompilePerformOp(0, "use \x8c update 'RUUT' set 'GCUT' = \x82 where 'NCUT' = \x82\n",
+                    DbUserGetDb(_Tutorial_iProfileDb), value, id);
     }
 }
 
@@ -142,9 +142,9 @@ int TutorialIsComplete(int id)
     int value = 0;
 
     if (_Tutorial_iProfileDb != -1) {
-        int db = fn_8022F3D4(_Tutorial_iProfileDb);
+        int db = DbUserGetDb(_Tutorial_iProfileDb);
         if (db != -1) {
-            fn_801FCE10(0, "use \x8c select 'MCUT' into \x82 from 'RUUT' where 'NCUT' = \x82\n", db, &value, id);
+            TDbCompilePerformOp(0, "use \x8c select 'MCUT' into \x82 from 'RUUT' where 'NCUT' = \x82\n", db, &value, id);
         }
     }
     return value;
@@ -152,13 +152,13 @@ int TutorialIsComplete(int id)
 
 void TutorialMarkComplete(int id)
 {
-    int db = fn_8022F3D4(_Tutorial_iProfileDb);
+    int db = DbUserGetDb(_Tutorial_iProfileDb);
 
     if (db != -1) {
         int value = 0;
-        fn_801FCE10(0, "use \x8c select 'MCUT' into \x85 from 'RUUT' where 'NCUT' = \x85\n", db, &value, id);
+        TDbCompilePerformOp(0, "use \x8c select 'MCUT' into \x85 from 'RUUT' where 'NCUT' = \x85\n", db, &value, id);
         if (value == 0) {
-            fn_801FCE10(0, "use \x8c update 'RUUT' set 'MCUT' = \x82 where 'NCUT' = \x82\n", db, 1, id);
+            TDbCompilePerformOp(0, "use \x8c update 'RUUT' set 'MCUT' = \x82 where 'NCUT' = \x82\n", db, 1, id);
             if (TutorialAllComplete()) {
                 _Tutorial_bAllComplete = 1;
             }
@@ -170,7 +170,7 @@ void TutorialGetDescription(int id, char *pDest, int count)
 {
     char buffer[80];
 
-    fn_801FCE10(0, "select 'CSDT' into \x88 from 'FNIT' where 'DIDT' = \x82\n", buffer, id);
+    TDbCompilePerformOp(0, "select 'CSDT' into \x88 from 'FNIT' where 'DIDT' = \x82\n", buffer, id);
     strncpy(pDest, buffer, count);
 }
 
@@ -186,7 +186,7 @@ unsigned int TutorialGetPlayIndex(int a, int b, int flag)
     unsigned int count;
     unsigned int i;
 
-    fn_801FCE10(0, "select 'CUUT' into \x82 from 'LPUT' where 'DIUT' = \x82 and 'IGUT' = \x82\n", &id, a, b);
+    TDbCompilePerformOp(0, "select 'CUUT' into \x82 from 'LPUT' where 'DIUT' = \x82 and 'IGUT' = \x82\n", &id, a, b);
     if (flag) {
         tag = 0x31544250;
         kind = 1;
@@ -195,7 +195,7 @@ unsigned int TutorialGetPlayIndex(int a, int b, int flag)
         kind = 11;
     }
     PlayBookDbLoadFormation(tag, kind, 0, &table);
-    fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
+    TDbCompilePerformOp(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
                 &handle, 1, table.mUnknown0);
     count = PlayBookDbCountPlays(tag, handle);
     fn_801C2E18(key, "%02d", id);
@@ -220,7 +220,7 @@ unsigned int TutorialGetOtherPlayIndex(int a, int b, int flag)
     unsigned int count;
     unsigned int i;
 
-    fn_801FCE10(0, "select 'PUUT' into \x82 from 'LPUT' where 'DIUT' = \x82 and 'IGUT' = \x82\n", &id, a, b);
+    TDbCompilePerformOp(0, "select 'PUUT' into \x82 from 'LPUT' where 'DIUT' = \x82 and 'IGUT' = \x82\n", &id, a, b);
     if (flag) {
         tag = 0x31444250;
         kind = 11;
@@ -229,7 +229,7 @@ unsigned int TutorialGetOtherPlayIndex(int a, int b, int flag)
         kind = 1;
     }
     PlayBookDbLoadFormation(tag, kind, 0, &table);
-    fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
+    TDbCompilePerformOp(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
                 &handle, 1, table.mUnknown0);
     count = PlayBookDbCountPlays(tag, handle);
     fn_801C2E18(key, "%02d", id);
@@ -246,7 +246,7 @@ int TutorialGetStepSide(int a, int b)
 {
     int value;
 
-    fn_801FCE10(0, "select 'OPUT' into \x82 from 'LPUT' where 'DIUT' = \x82 and 'IGUT' = \x82\n", &value, a, b);
+    TDbCompilePerformOp(0, "select 'OPUT' into \x82 from 'LPUT' where 'DIUT' = \x82 and 'IGUT' = \x82\n", &value, a, b);
     return value;
 }
 
@@ -254,7 +254,7 @@ float TutorialGetStepOffset(int a, int b)
 {
     float value;
 
-    fn_801FCE10(0, "select 'PSUT' into \x82 from 'LPUT' where 'DIUT' = \x82 and 'IGUT' = \x82\n", &value, a, b);
+    TDbCompilePerformOp(0, "select 'PSUT' into \x82 from 'LPUT' where 'DIUT' = \x82 and 'IGUT' = \x82\n", &value, a, b);
     return value;
 }
 

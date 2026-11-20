@@ -58,7 +58,7 @@ static void _CamFocusUpdate(CamFocus_t *pCam)
     offset[0] = 0.0f;
     offset[1] = 0.0f;
     offset[2] = pCam->mCurDist;
-    fn_80227CC0(pCam->mCam.mHeader.mUnknown04, offset);
+    Vec3Mat34Mul(pCam->mCam.mHeader.mUnknown04, offset);
     MatPop();
 }
 

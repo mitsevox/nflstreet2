@@ -72,8 +72,8 @@ void SFILTER_unpackxapfinit(Node_80279D90 *node, Params_80275F80 *params)
     decoder = (Decoder_8027BA6C *)node;
     node->m0 = SFILTER_unpackxapf;
     node->m4 = SFILTER_unpackxapfrestore;
-    decoder->m30 = SNDPKTPLAYI_voicetopackethandle(fn_80274304(params->m1C));
-    decoder->m38 = fn_80274334(params->m1C);
+    decoder->m30 = SNDPKTPLAYI_voicetopackethandle(SNDDRV_getmastervoice(params->m1C));
+    decoder->m38 = SNDDRV_getsamplechan(params->m1C);
     decoder->m2C = params->m24;
     decoder->m20 = 0;
     decoder->m24 = params->mC;

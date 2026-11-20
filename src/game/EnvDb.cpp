@@ -4,13 +4,13 @@
 
 #include <string.h>
 
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/DbCursor.h"
 #include "game/QueryStatus.h"
 
 extern "C" {
-int fn_8022F358(int index);
-int fn_8022F3D4(int a);
+int DbUserGetId(int index);
+int DbUserGetDb(int a);
 }
 
 static DbCursor _Env_sCursor;
@@ -29,8 +29,8 @@ static void _EnvDbClose(DbCursor *pObject)
 int EnvIsLocked(int index, int id)
 {
     int value;
-    int result = fn_801FCE10(0, "use \x8c select 'KLNE' into \x82 from 'NEKL' where 'DIVE' = \x85\n",
-                             fn_8022F3D4(fn_8022F358(index)), &value, id);
+    int result = TDbCompilePerformOp(0, "use \x8c select 'KLNE' into \x82 from 'NEKL' where 'DIVE' = \x85\n",
+                             DbUserGetDb(DbUserGetId(index)), &value, id);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
         return value == 1;
@@ -40,8 +40,8 @@ int EnvIsLocked(int index, int id)
 
 void EnvSetLocked(int index, int id, int value)
 {
-    fn_801FCE10(0, "use \x8c update 'NEKL' set 'KLNE' = \x82 where 'DIVE' = \x85\n",
-                fn_8022F3D4(fn_8022F358(index)), value, id);
+    TDbCompilePerformOp(0, "use \x8c update 'NEKL' set 'KLNE' = \x82 where 'DIVE' = \x85\n",
+                DbUserGetDb(DbUserGetId(index)), value, id);
 }
 
 void EnvUnlockBonus(int index)

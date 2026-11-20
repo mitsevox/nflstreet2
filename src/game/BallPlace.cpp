@@ -2,15 +2,15 @@
    impulses. */
 
 #include "game/Ball.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/Object_8017886C.h"
 
 extern "C" {
 void BallRestAtAngles(Ball_t *pBall, int *pAngles);
-void fn_8013AD9C(Ball_t *pBall, int a);
+void BallSetSpinMode(Ball_t *pBall, int a);
 Point_8017886C fn_80177FE0(void);
-void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
-void fn_802277DC(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
+void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
+void Vec3CrossProduct(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 
 void BallPlaceAt(Ball_t *pBall, Vector_80039F5C *pPos)
 {
@@ -28,7 +28,7 @@ void BallPlaceAt(Ball_t *pBall, Vector_80039F5C *pPos)
     BallSetPosition(pBall, pPos);
     BallSetVelocity(pBall, &v);
     BallRestAtAngles(pBall, angles);
-    fn_8013AD9C(pBall, 0);
+    BallSetSpinMode(pBall, 0);
 }
 
 void BallsPark(void)
@@ -72,10 +72,10 @@ void BallApplyImpulse(Ball_t *pBall, Vector_80039F5C *pA, Vector_80039F5C *pB)
     Vector_80039F5C offset;
     Vector_80039F5C cross;
 
-    fn_802276B4(&offset, pB, &pBall->mState.mPos);
-    fn_802277DC(&cross, &offset, pA);
-    fn_8022765C(&pBall->mState.mUnknown7C, &pBall->mState.mUnknown7C, pA);
-    fn_8022765C(&pBall->mState.mUnknown88, &pBall->mState.mUnknown88, &cross);
+    Vec3Sub(&offset, pB, &pBall->mState.mPos);
+    Vec3CrossProduct(&cross, &offset, pA);
+    Vec3Add(&pBall->mState.mUnknown7C, &pBall->mState.mUnknown7C, pA);
+    Vec3Add(&pBall->mState.mUnknown88, &pBall->mState.mUnknown88, &cross);
 }
 
 }

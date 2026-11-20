@@ -3,7 +3,7 @@
    PTES, GTES, LPBP, LYLP and their detail tables) into the team's playbook
    records, counts and orders their rows, picks AI plays by weight and stores
    audible choices. */
-#include "engine/fn_801F8D60.h"
+#include "engine/TDbCreate.h"
 #include "engine/tdbext.h"
 #include <stdio.h>
 
@@ -14,8 +14,8 @@
 #include "game/PlayBookTeam.h"
 #include "game/PlayBookDb.h"
 #include <string.h>
-#include "game/fn_801FCE10.h"
-#include "game/fn_802372EC.h"
+#include "game/TDbCompilePerformOp.h"
+#include "game/SyncRandGetRange.h"
 
 extern "C" {
 extern char lbl_802EBDF8[];
@@ -25,7 +25,7 @@ void PlayTrackWeightCandidates(int team, PlayCandidate_t *pList, unsigned int co
 void SortArray(int a, void *pBase, int count, int size,
                  int (*pCompare)(PlayCandidate_t *, PlayCandidate_t *),
                  void (*pSwap)(PlayCandidate_t *, PlayCandidate_t *), int b, int c);
-int fn_801FA0BC(int handle, DbQueryTable *pTables, DbFilter *pFilter, void *pSort, int *pCursor,
+int _TDbQrySelect(int handle, DbQueryTable *pTables, DbFilter *pFilter, void *pSort, int *pCursor,
                 QueryResult *pResult);
 }
 
@@ -94,7 +94,7 @@ void PlayBookDbLoadSetHeader(int tag, int key, int index, PlayBookTeam_t *pTeam,
         DbFilterOperand *pOp = &keyFilter.mUnknown16;
         pOp->Set(3, key);
     }
-    fn_801FA290(tag, tables, &filter, columns);
+    TDbQryGetSingleRow(tag, tables, &filter, columns);
     pObject->mUnknown0 = columns[1].mValue;
     pObject->mUnknown4 = columns[2].mValue;
 }
@@ -115,7 +115,7 @@ void PlayBookDbLoadSetRecord(int tag, int key, PlayBookSet_t *pObject)
 
     filter.mUnknown32 = 0x10003;
     filter.SetOperands(6, ((long long)0x4C544553 << 32) | 0x4C544553, 3, key);
-    fn_801FA290(tag, tables, &filter, columns);
+    TDbQryGetSingleRow(tag, tables, &filter, columns);
     pObject->mUnknown8 = columns[0].mValue;
     pObject->mUnknownC = columns[1].mValue;
     pObject->mUnknownE = columns[2].mValue;
@@ -149,12 +149,12 @@ void PlayBookDbLoadSetPositions(int tag, int key, PlayBookTeam_t *pTeam, PlayBoo
 
     filter.mUnknown32 = 0x10003;
     filter.SetOperands(6, ((long long)0x50544553 << 32) | 0x4C544553, 3, key);
-    status = fn_801FA0BC(tag, tables, &filter, 0, &cursor, 0);
+    status = _TDbQrySelect(tag, tables, &filter, 0, &cursor, 0);
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
         opened = 1;
     }
     if (status == 0) {
-        status = fn_801FA228(cursor, 1, 0, columns);
+        status = TDbQryRetrieve(cursor, 1, 0, columns);
         while (status == 0) {
             unsigned char index = columns[5].mValue;
             if (index <= 6) {
@@ -185,14 +185,14 @@ void PlayBookDbLoadSetPositions(int tag, int key, PlayBookTeam_t *pTeam, PlayBoo
                 }
                 PlayBookDbLoadPositionSteps(tag, index, pObject->mUnknown84[0][index].mUnknownC, pObject);
             }
-            status = fn_801FA228(cursor, 0, 1, columns);
+            status = TDbQryRetrieve(cursor, 0, 1, columns);
         }
     }
     if (opened == 1) {
         if (QUERY_STATUS_ACCEPTED(status) == 1) {
-            status = fn_801FA148(cursor);
+            status = TDbQryDestroy(cursor);
         } else {
-            fn_801FA148(cursor);
+            TDbQryDestroy(cursor);
         }
     }
 }
@@ -225,12 +225,12 @@ void PlayBookDbLoadPositionSteps(int tag, int index, int key, PlayBookSet_t *pOb
     opened = 0;
     filter.mUnknown32 = 0x10003;
     filter.SetOperands(6, ((long long)0x47544553 << 32) | 0x50544553, 3, key);
-    status = fn_801FA0BC(tag, tables, &filter, 0, &cursor, 0);
+    status = _TDbQrySelect(tag, tables, &filter, 0, &cursor, 0);
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
         opened = 1;
     }
     if (status == 0) {
-        status = fn_801FA228(cursor, 1, 0, columns);
+        status = TDbQryRetrieve(cursor, 1, 0, columns);
         row = 0;
         while (status == 0) {
             pObject->mUnknown84[row][index].mUnknown6 = columns[0].mValue;
@@ -244,14 +244,14 @@ void PlayBookDbLoadPositionSteps(int tag, int index, int key, PlayBookSet_t *pOb
             pObject->mUnknown84[row][index].mUnknownA = _PlayBookDb_aAnimCodes[columns[8].mValue];
             pObject->mUnknown84[row][index].mUnknownE = columns[9].mValue;
             row++;
-            status = fn_801FA228(cursor, 0, 1, columns);
+            status = TDbQryRetrieve(cursor, 0, 1, columns);
         }
     }
     if (opened == 1) {
         if (QUERY_STATUS_ACCEPTED(status) == 1) {
-            status = fn_801FA148(cursor);
+            status = TDbQryDestroy(cursor);
         } else {
-            fn_801FA148(cursor);
+            TDbQryDestroy(cursor);
         }
     }
 }
@@ -274,25 +274,25 @@ void PlayBookDbLoadSetSlots(int tag, int key, PlayBookSet_t *pObject)
     filter.mUnknown32 = 0x10003;
     filter.SetOperands(6, ((long long)0x00464753 << 32) | 0x4C544553, 3, key);
     columns[0].mValue = (int)pObject->mUnknown1C[0].mUnknown0;
-    status = fn_801FA0BC(tag, tables, &filter, 0, &cursor, 0);
+    status = _TDbQrySelect(tag, tables, &filter, 0, &cursor, 0);
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
         opened = 1;
     }
     if (status == 0) {
-        status = fn_801FA228(cursor, 1, 0, columns);
+        status = TDbQryRetrieve(cursor, 1, 0, columns);
         while (status == 0) {
             pObject->mUnknown1C[count].mUnknown6 = columns[1].mValue;
             pObject->mUnknown1C[count].mUnknown5 = columns[2].mValue;
             count++;
             columns[0].mValue = (int)pObject->mUnknown1C[count].mUnknown0;
-            status = fn_801FA228(cursor, 0, 1, columns);
+            status = TDbQryRetrieve(cursor, 0, 1, columns);
         }
     }
     if (opened == 1) {
         if (QUERY_STATUS_ACCEPTED(status) == 1) {
-            status = fn_801FA148(cursor);
+            status = TDbQryDestroy(cursor);
         } else {
-            fn_801FA148(cursor);
+            TDbQryDestroy(cursor);
         }
     }
     pObject->mUnknown18 = count;
@@ -326,7 +326,7 @@ void PlayBookDbLoadPlayHeader(int tag, int key, int index, PlayBookPlay_t *pReco
         DbFilterOperand *pOp = &orderFilter.mUnknown16;
         pOp->Set(3, index + 1);
     }
-    fn_801FA290(tag, tables, &filter, columns);
+    TDbQryGetSingleRow(tag, tables, &filter, columns);
     pRecord->mUnknown0 = columns[0].mValue;
     pRecord->mUnknown4 = columns[1].mValue;
     pRecord->mUnknown8 = columns[2].mValue;
@@ -351,7 +351,7 @@ int PlayBookDbLoadPlayRecord(int tag, int key, PlayBookPlay_t *pRecord)
     columns[0].mValue = (int)pRecord->mUnknown1F0;
     filter.mUnknown32 = 0x10003;
     filter.SetOperands(6, ((long long)0x4C594C50 << 32) | 0x4C594C50, 3, key);
-    fn_801FA290(tag, tables, &filter, columns);
+    TDbQryGetSingleRow(tag, tables, &filter, columns);
     pRecord->mUnknownD = columns[1].mValue;
     pRecord->mUnknownC = columns[2].mValue;
     pRecord->mUnknown10 = columns[3].mValue;
@@ -400,7 +400,7 @@ void PlayBookDbLoadPlayHole(int tag, int key, PlayBookPlay_t *pRecord)
 
     filter.mUnknown32 = 0x10003;
     filter.SetOperands(6, ((long long)0x44524C50 << 32) | 0x4C594C50, 3, key);
-    fn_801FA290(tag, tables, &filter, columns);
+    TDbQryGetSingleRow(tag, tables, &filter, columns);
     pRecord->mUnknown1C[0][0] = columns[0].mValue;
 }
 
@@ -420,7 +420,7 @@ void PlayBookDbLoadPlayReceivers(int tag, int key, PlayBookPlay_t *pRecord)
 
     filter.mUnknown32 = 0x10003;
     filter.SetOperands(6, ((long long)0x44504C50 << 32) | 0x4C594C50, 3, key);
-    fn_801FA290(tag, tables, &filter, columns);
+    TDbQryGetSingleRow(tag, tables, &filter, columns);
     pRecord->mUnknown1C[0][0] = columns[0].mValue;
     pRecord->mUnknown1C[0][1] = columns[1].mValue;
     pRecord->mUnknown1C[1][0] = columns[2].mValue;
@@ -454,7 +454,7 @@ void PlayBookDbLoadPlayCommands(int tag, int key, PlayBookPlay_t *pRecord)
 
     filter.mUnknown32 = 0x10003;
     filter.SetOperands(6, ((long long)0x4D434C50 << 32) | 0x4C594C50, 3, key);
-    if (fn_801FA290(tag, tables, &filter, columns) == 0) {
+    if (TDbQryGetSingleRow(tag, tables, &filter, columns) == 0) {
         pRecord->mUnknown28[0][0] = columns[0].mValue;
         pRecord->mUnknown28[1][0] = columns[1].mValue;
         pRecord->mUnknown28[2][0] = columns[2].mValue;
@@ -499,7 +499,7 @@ void PlayBookDbResetState(void)
 
 int PlayBookDbOpen(unsigned int id, int a, int b, int c, int d, int e)
 {
-    int result = fn_801F8D60(id, 0x80000);
+    int result = TDbCreate(id, 0x80000);
 
     if (result == 0) {
         result = TDbExtLoadFromResource(id, lbl_802EBDF8, a, 0);
@@ -509,7 +509,7 @@ int PlayBookDbOpen(unsigned int id, int a, int b, int c, int d, int e)
 
 void PlayBookDbClose(unsigned int id, int a)
 {
-    fn_801F8EEC(id);
+    TDbDestroy(id);
 }
 
 void PlayBookDbLoadPlayScripts(int tag, int key, PlayBookPlay_t *pRecord, int flag)
@@ -531,8 +531,8 @@ void PlayBookDbLoadPlayScripts(int tag, int key, PlayBookPlay_t *pRecord, int fl
         cursor.mUnknown12 = 0;
         ok = 1;
         if (flag) {
-            fn_801FCE10(0, "use \x8c select 'LTES' into \x85 from 'LYLP' where 'LYLP' = \x85\n", tag, &set, key);
-            fn_801FCE10(0, "use \x8c select 'soPE' into \x85 from 'PTES' where 'LTES' = \x85 and 'osop' = \x85\n", tag,
+            TDbCompilePerformOp(0, "use \x8c select 'LTES' into \x85 from 'LYLP' where 'LYLP' = \x85\n", tag, &set, key);
+            TDbCompilePerformOp(0, "use \x8c select 'soPE' into \x85 from 'PTES' where 'LTES' = \x85 and 'osop' = \x85\n", tag,
                         &type, set, i);
             switch (type) {
             case 1:
@@ -549,16 +549,16 @@ void PlayBookDbLoadPlayScripts(int tag, int key, PlayBookPlay_t *pRecord, int fl
             unsigned int count;
             unsigned int tries;
 
-            fn_801FCE10(0, "use \x8c select 'LASP' into \x85 from 'SYLP' where 'LYLP' = \x85 and 'osop' = \x85\n", tag,
+            TDbCompilePerformOp(0, "use \x8c select 'LASP' into \x85 from 'SYLP' where 'LYLP' = \x85 and 'osop' = \x85\n", tag,
                         &list, key, i);
             if (flag) {
-                status = fn_801FCE10(0,
+                status = TDbCompilePerformOp(0,
                                      "use \x8c declare \x8a fastcursor for select 'edoc' into \x83 and '1lav' into \x83 "
                                      "and '2lav' into \x83 and '3lav' into \x83 from 'LASP' where 'LASP' = \x85 and "
                                      "'pets' < \x85 order by 'pets' asc\n",
                                      tag, &cursor, &code, &values[0], &values[1], &values[2], list, 3);
             } else {
-                status = fn_801FCE10(0,
+                status = TDbCompilePerformOp(0,
                                      "use \x8c declare \x8a fastcursor for select 'edoc' into \x83 and '1lav' into \x83 "
                                      "and '2lav' into \x83 and '3lav' into \x83 from 'LASP' where 'LASP' = \x85 order by "
                                      "'pets' asc\n",
@@ -568,7 +568,7 @@ void PlayBookDbLoadPlayScripts(int tag, int key, PlayBookPlay_t *pRecord, int fl
             tries = 0;
             if (status == 0) {
                 do {
-                    status = fn_801FCE10(0, "fetch from \x8a\n", &cursor);
+                    status = TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
                     if (status == 0) {
                         if (code == 0xFF) {
                             break;
@@ -587,7 +587,7 @@ void PlayBookDbLoadPlayScripts(int tag, int key, PlayBookPlay_t *pRecord, int fl
             }
             pRecord->mUnknown38[i][count - 1][0] |= 0x80;
             if (cursor.mUnknown0) {
-                fn_801FCFA0(&cursor);
+                TDbSQLDestroyCursor(&cursor);
             }
         }
     }
@@ -603,7 +603,7 @@ unsigned short PlayBookDbCountFormations(int tag, int kind)
     filter.mUnknown0.mValue.mLong = ((long long)0x4D464250 << 32) | 0x50595446;
     filter.mUnknown16.mKind = 3;
     filter.mUnknown16.mValue.mInt = kind;
-    if (fn_801F9D70(tag, 0x4D464250, &filter, &count) != 0) {
+    if (TDbTblGetCount(tag, 0x4D464250, &filter, &count) != 0) {
         count = 0;
     }
     return count;
@@ -613,28 +613,28 @@ unsigned short PlayBookDbCountFormations(int tag, int kind)
 int CountRows(int tag, unsigned int *pCount, int table)
 {
     *pCount = 0;
-    return fn_801FCE10(0, "use \x8c select count(*) into \x85 from \x8c\n", tag, pCount, table);
+    return TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c\n", tag, pCount, table);
 }
 
 int SelectColumnByKey(int tag, int column, int table, int keyColumn, int key)
 {
     int value = 0;
 
-    fn_801FCE10(0, "use \x8c select \x8c into \x85 from \x8c where \x8c = \x85\n", tag, column, &value, table, keyColumn,
+    TDbCompilePerformOp(0, "use \x8c select \x8c into \x85 from \x8c where \x8c = \x85\n", tag, column, &value, table, keyColumn,
                 key);
     return value;
 }
 
 int UpdateColumnByKey(int tag, int table, int column, int value, int keyColumn, int key)
 {
-    return fn_801FCE10(0, "use \x8c update \x8c set \x8c = \x85 where \x8c = \x85\n", tag, table, column, value,
+    return TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = \x85 where \x8c = \x85\n", tag, table, column, value,
                        keyColumn, key);
 }
 
 int PlayBookDbLoadFormation(int tag, int a, int b, PlayBookFormation_t *pObject)
 {
     memset(pObject, 0, sizeof(*pObject));
-    return fn_801FCE10(0,
+    return TDbCompilePerformOp(0,
                        "use \x8c select 'MFBP' into \x85 and 'eman' into \x88 from 'MFBP' where 'PYTF' = \x82 and "
                        "'_dro' = \x82\n",
                        tag, pObject, pObject->mUnknownCB0, a, b + 1);
@@ -650,7 +650,7 @@ unsigned short PlayBookDbCountSets(int tag, int key)
     filter.mUnknown0.mValue.mLong = ((long long)0x54534250 << 32) | 0x4D464250;
     filter.mUnknown16.mKind = 3;
     filter.mUnknown16.mValue.mInt = key;
-    if (fn_801F9D70(tag, 0x54534250, &filter, &count) != 0) {
+    if (TDbTblGetCount(tag, 0x54534250, &filter, &count) != 0) {
         count = 0;
     }
     return count;
@@ -688,7 +688,7 @@ unsigned short PlayBookDbCountPlays(int tag, int key)
     filter.mUnknown0.mValue.mLong = ((long long)0x4C504250 << 32) | 0x54534250;
     filter.mUnknown16.mKind = 3;
     filter.mUnknown16.mValue.mInt = key;
-    if (fn_801F9D70(tag, 0x4C504250, &filter, &count) != 0) {
+    if (TDbTblGetCount(tag, 0x4C504250, &filter, &count) != 0) {
         count = 0;
     }
     return count;
@@ -718,7 +718,7 @@ int PlayBookDbGetPlayOrder(int tag, int a, int b)
 {
     int value = 1;
 
-    fn_801FCE10(0, "use \x8c select '_dro' into \x85 from 'LPBP' where 'LPBP' = \x82 and 'TSBP' = \x82\n", tag, &value,
+    TDbCompilePerformOp(0, "use \x8c select '_dro' into \x85 from 'LPBP' where 'LPBP' = \x82 and 'TSBP' = \x82\n", tag, &value,
                 b, a);
     return value - 1;
 }
@@ -727,7 +727,7 @@ int PlayBookDbGetSetOrder(int tag, int a, int b)
 {
     int value = 1;
 
-    fn_801FCE10(0, "use \x8c select '_dro' into \x85 from 'TSBP' where 'MFBP' = \x82 and 'TSBP' = \x82\n", tag, &value,
+    TDbCompilePerformOp(0, "use \x8c select '_dro' into \x85 from 'TSBP' where 'MFBP' = \x82 and 'TSBP' = \x82\n", tag, &value,
                 a, b);
     return value - 1;
 }
@@ -736,7 +736,7 @@ int PlayBookDbGetFormationOrder(int tag, int a, int b)
 {
     int value = 1;
 
-    fn_801FCE10(0, "use \x8c select '_dro' into \x85 from 'MFBP' where 'MFBP' = \x82 and 'PYTF' = \x82\n", tag, &value,
+    TDbCompilePerformOp(0, "use \x8c select '_dro' into \x85 from 'MFBP' where 'MFBP' = \x82 and 'PYTF' = \x82\n", tag, &value,
                 b, a);
     return value - 1;
 }
@@ -747,11 +747,11 @@ void PlayBookDbGetPlayPath(int tag, int a, int *pResult)
     int c;
     int d;
 
-    fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'LPBP' where 'LPBP' = \x85\n", tag, &b, a);
+    TDbCompilePerformOp(0, "use \x8c select 'TSBP' into \x85 from 'LPBP' where 'LPBP' = \x85\n", tag, &b, a);
     pResult[2] = PlayBookDbGetPlayOrder(tag, b, a);
-    fn_801FCE10(0, "use \x8c select 'MFBP' into \x85 from 'TSBP' where 'TSBP' = \x85\n", tag, &c, b);
+    TDbCompilePerformOp(0, "use \x8c select 'MFBP' into \x85 from 'TSBP' where 'TSBP' = \x85\n", tag, &c, b);
     pResult[1] = PlayBookDbGetSetOrder(tag, c, b);
-    fn_801FCE10(0, "use \x8c select 'PYTF' into \x85 from 'MFBP' where 'MFBP' = \x85\n", tag, &d, c);
+    TDbCompilePerformOp(0, "use \x8c select 'PYTF' into \x85 from 'MFBP' where 'MFBP' = \x85\n", tag, &d, c);
     pResult[3] = d;
     pResult[0] = PlayBookDbGetFormationOrder(tag, d, c);
 }
@@ -761,7 +761,7 @@ void SelectUABPRecord(int tag, int index, int kind, int *pResult)
 {
     int value = 0;
 
-    fn_801FCE10(0, "use \x8c select 'LPBP' into \x85 from 'UABP' where 'UABP' = \x85 and 'PYTF' = \x85\n", tag, &value,
+    TDbCompilePerformOp(0, "use \x8c select 'LPBP' into \x85 from 'UABP' where 'UABP' = \x85 and 'PYTF' = \x85\n", tag, &value,
                 index + 1, kind);
     PlayBookDbGetPlayPath(tag, value, pResult);
 }
@@ -770,7 +770,7 @@ int CountUABPRows(int tag, int kind)
 {
     int count = 0;
 
-    fn_801FCE10(0, "use \x8c select count('LPBP') into \x85 from 'UABP' where 'PYTF' = \x85\n", tag, &count, kind);
+    TDbCompilePerformOp(0, "use \x8c select count('LPBP') into \x85 from 'UABP' where 'PYTF' = \x85\n", tag, &count, kind);
     return count;
 }
 
@@ -780,7 +780,7 @@ void PlayBookDbSetAudiblePlay(int tag, int a, int b)
         int result[4];
 
         PlayBookDbGetPlayPath(tag, b, result);
-        fn_801FCE10(0, "use \x8c update 'UABP' set 'LPBP' = \x82 where 'UABP' = \x85 and 'PYTF' = \x82\n", tag, b, a + 1,
+        TDbCompilePerformOp(0, "use \x8c update 'UABP' set 'LPBP' = \x82 where 'UABP' = \x85 and 'PYTF' = \x82\n", tag, b, a + 1,
                     result[3]);
     }
 }
@@ -789,7 +789,7 @@ void PlayBookDbSetAudiblePlay(int tag, int a, int b)
    0x1970B0. */
 int SelectLTESAndTSBPByOrder(int tag, int *pResult, int index, int key)
 {
-    return fn_801FCE10(0,
+    return TDbCompilePerformOp(0,
                        "use \x8c select 'LTES' into \x85 and 'TSBP' into \x85 from 'TSBP' where '_dro' = \x82 and "
                        "'MFBP' = \x85\n",
                        tag, &pResult[1], &pResult[0], index + 1, key);
@@ -808,7 +808,7 @@ void SelectTSBPPoints(int tag, int key, Point_8017886C *pPoints)
 
         sprintf(x, "ax%d_", i);
         sprintf(y, "ay%d_", i);
-        status = fn_801FCE10(0, "use \x8c select \x8c into \x85 and \x8c into \x85 from 'TSBP' where 'TSBP' = \x85\n", tag,
+        status = TDbCompilePerformOp(0, "use \x8c select \x8c into \x85 and \x8c into \x85 from 'TSBP' where 'TSBP' = \x85\n", tag,
                              *(int *)x, &xValue, *(int *)y, &yValue, key);
         if (status != 0) {
             break;
@@ -826,7 +826,7 @@ void LoadTSBPObject(int tag, int key, PlayBookTeam_t *pTeam, PlayBookSet_t *pObj
 
     memset(pObject, 0, sizeof(*pObject));
     flags = PlayBookGetLoadFlags();
-    fn_801FCE10(0, "use \x8c select 'MFBP' into \x85 and '_dro' into \x85 from 'TSBP' where 'TSBP' = \x85\n", tag,
+    TDbCompilePerformOp(0, "use \x8c select 'MFBP' into \x85 and '_dro' into \x85 from 'TSBP' where 'TSBP' = \x85\n", tag,
                 &formation, &order, key);
     PlayBookDbLoadSetHeader(tag, formation, order - 1, pTeam, pObject);
     if (pObject->mUnknown4) {
@@ -840,7 +840,7 @@ void LoadTSBPObject(int tag, int key, PlayBookTeam_t *pTeam, PlayBookSet_t *pObj
 
 int SelectLTESName(int tag, char *pName, int set)
 {
-    return fn_801FCE10(0, "use \x8c select 'eman' into \x88 from 'LTES' where 'LTES' = \x85\n", tag, pName, set);
+    return TDbCompilePerformOp(0, "use \x8c select 'eman' into \x88 from 'LTES' where 'LTES' = \x85\n", tag, pName, set);
 }
 
 int _PlayBookDbComparePickWeight(PlayCandidate_t *pA, PlayCandidate_t *pB)
@@ -893,26 +893,26 @@ int PlayBookDbPickAIPlay(int team, int tag, int kind)
     count = 0;
     opened = 0;
     memset(list, 0, sizeof(list));
-    status = fn_801FA0BC(tag, tables, 0, 0, &cursor, 0);
+    status = _TDbQrySelect(tag, tables, 0, 0, &cursor, 0);
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
         opened = 1;
     }
     if (status == 0) {
-        status = fn_801FA228(cursor, 1, 0, columns);
+        status = TDbQryRetrieve(cursor, 1, 0, columns);
         while (status == 0) {
             list[count].mUnknown0 = columns[0].mValue;
             list[count].mUnknown8 = columns[1].mValue;
             list[count].mUnknown4 = columns[2].mValue;
             list[count].mUnknown6 = columns[3].mValue;
             count++;
-            status = fn_801FA228(cursor, 0, 1, columns);
+            status = TDbQryRetrieve(cursor, 0, 1, columns);
         }
     }
     if (opened == 1) {
         if (QUERY_STATUS_ACCEPTED(status) == 1) {
-            status = fn_801FA148(cursor);
+            status = TDbQryDestroy(cursor);
         } else {
-            fn_801FA148(cursor);
+            TDbQryDestroy(cursor);
         }
     }
     if (status != 0) {
@@ -924,7 +924,7 @@ int PlayBookDbPickAIPlay(int team, int tag, int kind)
     for (i = 0; i < count; i++) {
         total += list[i].mUnknown4;
     }
-    pick = fn_802372EC(0, total);
+    pick = SyncRandGetRange(0, total);
     total = 0;
     for (i = 0; i < count; i++) {
         total += list[i].mUnknown4;
@@ -966,7 +966,7 @@ int PlayBookDbHasAIPlay(int tag, int a, int b)
         DbFilterOperand *pOp = &lpbpFilter.mUnknown16;
         pOp->Set(3, b);
     }
-    return fn_801FA290(tag, tables, &filter, columns) != 0x17;
+    return TDbQryGetSingleRow(tag, tables, &filter, columns) != 0x17;
 }
 
 }

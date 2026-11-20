@@ -10,8 +10,8 @@
 #include "engine/TibNew.h"
 
 extern "C" {
-float fn_802270D4(void *pV);
-void fn_802276B4(void *pOut, void *pA, void *pB);
+float Vec3Magnitude(void *pV);
+void Vec3Sub(void *pOut, void *pA, void *pB);
 void ApplyBodyAngularImpulse(RigidBody *pBody, Vec3_801DE1E0 *pImpulse);
 float ComputeBodyRotationalResponse(RigidBody *pBody, Vec3_801DE1E0 *pPoint,
                                     Vec3_801DE1E0 *pDirection);
@@ -218,7 +218,7 @@ void ContactSystem::Respond(float dt, RigidBody *pA, RigidBody *pB, unsigned int
         if (ResolveContact(dt, pA, pB, &pContacts[i], &impulses[hits], &frictions[hits],
                            &correction, &pointsA[hits], &pointsB[hits], &normal)) {
             indices[hits] = i;
-            fn_8022765C(&impulses[hits], &impulses[hits], &frictions[hits]);
+            Vec3Add(&impulses[hits], &impulses[hits], &frictions[hits]);
             hits++;
             if (hits > 15) {
                 break;
@@ -236,14 +236,14 @@ void ContactSystem::Respond(float dt, RigidBody *pA, RigidBody *pB, unsigned int
     }
     if (hits > 1) {
         for (i = 0; i < hits; i++) {
-            fn_80227264(&impulses[i], &impulses[i], 1.0f / (float)hits);
+            Vec3Scale(&impulses[i], &impulses[i], 1.0f / (float)hits);
         }
     }
     if (hits == 0) {
         return;
     }
     if (mode != 0 || (unsigned int)pA->mState <= 1 || (unsigned int)pB->mState <= 1) {
-        fn_80227264(&maxCorrection, &maxCorrection, 2.0f);
+        Vec3Scale(&maxCorrection, &maxCorrection, 2.0f);
     }
     if (mode != 2 && (unsigned int)pA->mState > 1) {
         for (i = 0; i < hits; i++) {
@@ -255,7 +255,7 @@ void ContactSystem::Respond(float dt, RigidBody *pA, RigidBody *pB, unsigned int
         move.x = _CLAMP(maxCorrection.x, mCorrectionMin.x, mCorrectionMax.x);
         move.y = _CLAMP(maxCorrection.y, mCorrectionMin.y, mCorrectionMax.y);
         move.z = _CLAMP(maxCorrection.z, mCorrectionMin.z, mCorrectionMax.z);
-        fn_8022765C(&position, &pA->mPosition, &move);
+        Vec3Add(&position, &pA->mPosition, &move);
         SetBodyPosition(pA, &position);
         UpdateBodyDerivedState(pA);
     }
@@ -272,7 +272,7 @@ void ContactSystem::Respond(float dt, RigidBody *pA, RigidBody *pB, unsigned int
         move.x = _CLAMP(-maxCorrection.x, mCorrectionMin.x, mCorrectionMax.x);
         move.y = _CLAMP(-maxCorrection.y, mCorrectionMin.y, mCorrectionMax.y);
         move.z = _CLAMP(-maxCorrection.z, mCorrectionMin.z, mCorrectionMax.z);
-        fn_8022765C(&position, &pB->mPosition, &move);
+        Vec3Add(&position, &pB->mPosition, &move);
         SetBodyPosition(pB, &position);
         UpdateBodyDerivedState(pB);
     }
@@ -294,7 +294,7 @@ void ContactSystem::ApplyRollingFriction(RigidBody *pBody, float dt, Vec3_801DE1
         if (pShape->GetSupportWeight(pPoint, pDirection, pBody->mTransform) != 0.0f) {
             Vec3_801DE1E0 *pMomentum = &pBody->mAngularMomentum;
             float amount = pBody->mUnknown04C * dt;
-            float length = fn_802270D4(pMomentum);
+            float length = Vec3Magnitude(pMomentum);
             Vec3_801DE1E0 impulse;
 
             if (amount > length) {
@@ -302,7 +302,7 @@ void ContactSystem::ApplyRollingFriction(RigidBody *pBody, float dt, Vec3_801DE1
                 impulse.y = -pMomentum->y;
                 impulse.z = -pMomentum->z;
             } else {
-                fn_80227264(&impulse, pMomentum, -amount / length);
+                Vec3Scale(&impulse, pMomentum, -amount / length);
             }
             ApplyBodyAngularImpulse(pBody, &impulse);
         }
@@ -350,10 +350,10 @@ int ContactSystem::ResolveContact(float dt, RigidBody *pA, RigidBody *pB, BodyCo
     pShapeB = pB->mpShapes->GetShape(pContact->mShapeB);
     GetBodyPointVelocity(pA, &pContact->mPoint, &velocityA);
     GetBodyPointVelocity(pB, &pContact->mPoint, &velocityB);
-    fn_802276B4(&relative, &velocityB, &velocityA);
+    Vec3Sub(&relative, &velocityB, &velocityA);
     approach = 0.0f;
     depthA = 0.0f;
-    speed = fn_802270D4(&relative);
+    speed = Vec3Magnitude(&relative);
     if (speed > 1e-16f) {
         float length = speed * dt;
         float limit;
@@ -362,7 +362,7 @@ int ContactSystem::ResolveContact(float dt, RigidBody *pA, RigidBody *pB, BodyCo
         if (length < mMinTestLength) {
             length = mMinTestLength;
         }
-        fn_80227264(&probeB, &relative, length / speed);
+        Vec3Scale(&probeB, &relative, length / speed);
         probeA.x = -probeB.x;
         probeA.y = -probeB.y;
         probeA.z = -probeB.z;
@@ -411,9 +411,9 @@ int ContactSystem::ResolveContact(float dt, RigidBody *pA, RigidBody *pB, BodyCo
         if (depthA > limit) {
             depthA = limit;
         }
-        fn_80227264(pCorrection, &normalA, -depthA);
+        Vec3Scale(pCorrection, &normalA, -depthA);
         if (weightA > 0.0f && weightB > 0.0f) {
-            approach = -fn_80227704(&normalA, &relative);
+            approach = -Vec3DotProduct(&normalA, &relative);
         }
     }
     if (approach > 0.0f) {
@@ -430,24 +430,24 @@ int ContactSystem::ResolveContact(float dt, RigidBody *pA, RigidBody *pB, BodyCo
         scale = approach / (pA->mInvMass + pB->mInvMass + response + scale);
         pShapeB->GetMaterial(&frictionB, &bounceB, pB->mTransform, pPointB);
         scale *= (bounceA + bounceB) * 0.5f + 1.0f;
-        fn_80227264(&impulse, &normalA, -scale);
+        Vec3Scale(&impulse, &normalA, -scale);
         friction.x = friction.y = friction.z = 0.0f;
-        fn_80227264(&along, &normalA, -approach);
-        fn_802276B4(&tangent, &relative, &along);
-        length = fn_802270D4(&tangent);
+        Vec3Scale(&along, &normalA, -approach);
+        Vec3Sub(&tangent, &relative, &along);
+        length = Vec3Magnitude(&tangent);
         if (length > 1e-6f) {
             float mu;
 
-            fn_80227264(&tangent, &tangent, 1.0f / length);
+            Vec3Scale(&tangent, &tangent, 1.0f / length);
             if (frictionA < 0.2f || frictionB < 0.2f) {
                 mu = frictionB <= frictionA ? frictionB : frictionA;
             } else {
                 mu = (frictionA + frictionB) * 0.5f;
             }
-            fn_802276B4(&probeB, &pA->mForce, &pB->mForce);
-            mu = mu * fn_80227704(&probeB, &normalA) * dt;
+            Vec3Sub(&probeB, &pA->mForce, &pB->mForce);
+            mu = mu * Vec3DotProduct(&probeB, &normalA) * dt;
             if (mu > 0.0) {
-                fn_80227264(&friction, &tangent, mu);
+                Vec3Scale(&friction, &tangent, mu);
             }
         }
         *pImpulse = impulse;

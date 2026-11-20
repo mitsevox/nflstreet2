@@ -3,15 +3,15 @@
 
 #include "game/Ball.h"
 #include "game/BallSweep.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 
 #include <string.h>
 
 extern "C" {
 float fn_80088FFC(Vector_80039F5C *pA0, Vector_80039F5C *pA1, Vector_80039F5C *pB0, Vector_80039F5C *pB1, Vector_80039F5C *pOut);
-void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-void fn_80227350(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
+void Vec3Scale(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
+void Vec3ScaleAcc(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
+void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 
 static int _BallSweep_iSteps = 4;
 static unsigned char _BallSweep_bLinear = 0;
@@ -28,10 +28,10 @@ int BallSweepLinear(Vector_80039F5C *pOut, BallSegment_t *pA, BallSegment_t *pB,
     int result = 0;
     int i;
 
-    fn_80227264(pStep, pStep, 1.0f / _BallSweep_iSteps);
+    Vec3Scale(pStep, pStep, 1.0f / _BallSweep_iSteps);
     for (i = 0; i < _BallSweep_iSteps; i++) {
-        fn_8022765C(&pA->mUnknown0, &pA->mUnknown0, pStep);
-        fn_8022765C(&pA->mUnknown10, &pA->mUnknown10, pStep);
+        Vec3Add(&pA->mUnknown0, &pA->mUnknown0, pStep);
+        Vec3Add(&pA->mUnknown10, &pA->mUnknown10, pStep);
         if (BallSegmentsTouch(pA, pB, limit)) {
             if (i == 0) {
                 result = 1;
@@ -39,7 +39,7 @@ int BallSweepLinear(Vector_80039F5C *pOut, BallSegment_t *pA, BallSegment_t *pB,
             break;
         }
     }
-    fn_80227350(pOut, pStep, i - 1);
+    Vec3ScaleAcc(pOut, pStep, i - 1);
     return result;
 }
 
@@ -56,15 +56,15 @@ int BallSweepBisect(Vector_80039F5C *pPos, BallSegment_t *pA, BallSegment_t *pB,
     first = BallSegmentsTouch(pA, pB, limit);
     hit = first;
     for (i = 0; i < _BallSweep_iSteps; i++) {
-        fn_80227264(pStep, pStep, 0.5f);
+        Vec3Scale(pStep, pStep, 0.5f);
         if (hit == 0) {
-            fn_8022765C(&pos, &pos, pStep);
-            fn_8022765C(&pA->mUnknown0, &pA->mUnknown0, pStep);
-            fn_8022765C(&pA->mUnknown10, &pA->mUnknown10, pStep);
+            Vec3Add(&pos, &pos, pStep);
+            Vec3Add(&pA->mUnknown0, &pA->mUnknown0, pStep);
+            Vec3Add(&pA->mUnknown10, &pA->mUnknown10, pStep);
         } else {
-            fn_802276B4(&pos, &pos, pStep);
-            fn_802276B4(&pA->mUnknown0, &pA->mUnknown0, pStep);
-            fn_802276B4(&pA->mUnknown10, &pA->mUnknown10, pStep);
+            Vec3Sub(&pos, &pos, pStep);
+            Vec3Sub(&pA->mUnknown0, &pA->mUnknown0, pStep);
+            Vec3Sub(&pA->mUnknown10, &pA->mUnknown10, pStep);
         }
         hit = BallSegmentsTouch(pA, pB, limit);
         if (hit == 0) {
@@ -87,21 +87,21 @@ float BallSweepToPart(CollideObject_t *pA, CollideObject_t *pB, unsigned char su
 
     memcpy(&seg, &pA->mpUnknown20->mUnknown10, sizeof(seg));
     pSeg = (BallSegment_t *)&pB->mpUnknown20[sub].mUnknown10;
-    fn_802276B4(&step, &pBall->mState.mPos, &pBall->mState.mUnknown28);
+    Vec3Sub(&step, &pBall->mState.mPos, &pBall->mState.mUnknown28);
     sum = seg.mUnknownC + pSeg->mUnknownC;
     limit = sum * sum;
     pPos->mX = pBall->mState.mUnknown28.mX;
     pPos->mY = pBall->mState.mUnknown28.mY;
     pPos->mZ = pBall->mState.mUnknown28.mZ;
-    fn_802276B4(&seg.mUnknown0, &seg.mUnknown0, &step);
-    fn_802276B4(&seg.mUnknown10, &seg.mUnknown10, &step);
+    Vec3Sub(&seg.mUnknown0, &seg.mUnknown0, &step);
+    Vec3Sub(&seg.mUnknown10, &seg.mUnknown10, &step);
     if (_BallSweep_bLinear) {
         *pHit = BallSweepLinear(pPos, &seg, pSeg, &step, limit);
     } else {
         *pHit = BallSweepBisect(pPos, &seg, pSeg, &step, limit);
     }
-    fn_802276B4(&delta, pPos, &pBall->mState.mUnknown28);
-    return fn_802270D4(&delta);
+    Vec3Sub(&delta, pPos, &pBall->mState.mUnknown28);
+    return Vec3Magnitude(&delta);
 }
 
 }

@@ -8,13 +8,13 @@
 #include "game/FieldMarker.h"
 #include "game/LevelData.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_802372EC.h"
+#include "game/Vec3Magnitude.h"
+#include "game/SyncRandGetRange.h"
 #include <string.h>
 
 extern "C" {
 float SyncRandGetFloat(int stream);
-float fn_802276E8(void *pA, void *pB);
+float Vec2DotProduct(void *pA, void *pB);
 extern LevelData_t *gLevelData;
 extern float gFrameTimeScale;
 }
@@ -102,23 +102,23 @@ static void _FieldMarkerUpdateBeams(float dt)
 static void _FieldMarkerPlaceArrow(FieldMarkerArrow_t *pArrow)
 {
     Vector_80039F5C side, across, toSecond, toThird, toFourth, point;
-    LevelQuad_t *pQuad = (LevelQuad_t *)gLevelData->mUnknown124 + fn_802372EC(1, gLevelData->mUnknown120);
+    LevelQuad_t *pQuad = (LevelQuad_t *)gLevelData->mUnknown124 + SyncRandGetRange(1, gLevelData->mUnknown120);
     float u = SyncRandGetFloat(1);
     float v = SyncRandGetFloat(1);
 
-    fn_802276B4(&toSecond, &pQuad->mPoint[1], &pQuad->mPoint[0]);
-    fn_802276B4(&toThird, &pQuad->mPoint[2], &pQuad->mPoint[0]);
-    fn_802276B4(&toFourth, &pQuad->mPoint[3], &pQuad->mPoint[0]);
-    float third = fn_802276E8(&toSecond, &toThird);
+    Vec3Sub(&toSecond, &pQuad->mPoint[1], &pQuad->mPoint[0]);
+    Vec3Sub(&toThird, &pQuad->mPoint[2], &pQuad->mPoint[0]);
+    Vec3Sub(&toFourth, &pQuad->mPoint[3], &pQuad->mPoint[0]);
+    float third = Vec2DotProduct(&toSecond, &toThird);
     side = toSecond;
-    if (fn_802276E8(&toSecond, &toFourth) > third)
+    if (Vec2DotProduct(&toSecond, &toFourth) > third)
         across = toThird;
     else
         across = toFourth;
-    fn_80227264(&side, &side, u);
-    fn_80227264(&across, &across, v);
-    fn_8022765C(&point, &side, &across);
-    fn_8022765C(&point, &point, &pQuad->mPoint[0]);
+    Vec3Scale(&side, &side, u);
+    Vec3Scale(&across, &across, v);
+    Vec3Add(&point, &side, &across);
+    Vec3Add(&point, &point, &pQuad->mPoint[0]);
     pArrow->mPosition[0] = point.mX;
     pArrow->mPosition[1] = point.mY;
     pArrow->mPosition[2] = point.mZ;

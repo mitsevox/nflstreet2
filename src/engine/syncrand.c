@@ -2,9 +2,9 @@
    in the state registry, which can reset, compare, save and restore it; draws
    from a stream, ranged draws and a no-repeat bit pool built on them. */
 
-#include "engine/Object_80237EE8.h"
-#include "engine/Desc_80238424.h"
-#include "engine/fn_80238680.h"
+#include "engine/SyncStateGroup.h"
+#include "engine/EvMonDesc.h"
+#include "engine/EvMonAddListener.h"
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/gx/GXPixel.h>
 #include <dolphin/os/OSCache.h>
@@ -20,111 +20,111 @@
 #include "engine/llmemory.h"
 #include "engine/dslist.h"
 
-typedef struct Random_80236F78 {
-    unsigned char mUnknown0;
-    signed char mUnknown1;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
+typedef struct SyncRand_t {
+    unsigned char mNumStreams;
+    signed char mOverride;
+    int mSeed;
+    int mNumDraws;
+    int mChecksum;
     char mUnknown16[4];
-    void **mpUnknown20;
-} Random_80236F78;
+    void **mpStreams;
+} SyncRand_t;
 
-typedef struct Bits_80237438 {
-    unsigned int mUnknown0;
-    unsigned char mUnknown4;
+typedef struct SyncRandBitPool_t {
+    unsigned int mCount;
+    unsigned char mStream;
     char mUnknown5[3];
-    unsigned char mUnknown8[1];
-} Bits_80237438;
+    unsigned char mBits[1];
+} SyncRandBitPool_t;
 
-extern Random_80236F78 *lbl_803EC130;
-extern int lbl_803EC134;
-extern void *fn_8023816C(void *pHandle);
+static SyncRand_t *_SyncRand_pState = 0;
+static int _SyncRand_iToggle = 0;
+extern void *SyncStateGetData(void *pHandle);
 int SyncRandSaveState(void *p, void *pBuffer);
 int SyncRandLoadState(void *p, void *pBuffer);
 
-int fn_80236F78(void *p, int value)
+int SyncRandInitState(void *p, int value)
 {
-    Random_80236F78 *pRandom = p;
+    SyncRand_t *pRandom = p;
     int i;
     int seed;
 
-    pRandom->mpUnknown20 = fn_801D2B7C(pRandom->mUnknown0 * 4, 0, 0);
-    pRandom->mUnknown8 = 0;
-    pRandom->mUnknown12 = 0;
-    seed = pRandom->mUnknown4;
-    for (i = 0; i < pRandom->mUnknown0; i++) {
-        pRandom->mpUnknown20[i] = MathNewRandomStream(0, seed);
-        seed = MathGetRandomRange(pRandom->mpUnknown20[i], 0x7FFFFFFF);
+    pRandom->mpStreams = fn_801D2B7C(pRandom->mNumStreams * 4, 0, 0);
+    pRandom->mNumDraws = 0;
+    pRandom->mChecksum = 0;
+    seed = pRandom->mSeed;
+    for (i = 0; i < pRandom->mNumStreams; i++) {
+        pRandom->mpStreams[i] = MathNewRandomStream(0, seed);
+        seed = MathGetRandomRange(pRandom->mpStreams[i], 0x7FFFFFFF);
     }
     return 0;
 }
 
-int fn_8023701C(void *p, int value)
+int SyncRandShutdownState(void *p, int value)
 {
-    Random_80236F78 *pRandom = p;
+    SyncRand_t *pRandom = p;
 
-    while (pRandom->mUnknown0-- != 0) {
-        MathDelRandomStream(pRandom->mpUnknown20[pRandom->mUnknown0]);
+    while (pRandom->mNumStreams-- != 0) {
+        MathDelRandomStream(pRandom->mpStreams[pRandom->mNumStreams]);
     }
-    fn_801D2BD0(pRandom->mpUnknown20);
+    fn_801D2BD0(pRandom->mpStreams);
     return 0;
 }
 
 int SyncRandCompareState(void *p, void *q)
 {
-    Random_80236F78 *pA = p;
-    Random_80236F78 *pB = q;
+    SyncRand_t *pA = p;
+    SyncRand_t *pB = q;
     int result;
 
     if (pB != 0) {
         result = 0;
-        result |= pA->mUnknown0 != pB->mUnknown0;
-        result |= pA->mUnknown4 != pB->mUnknown4;
-        result |= pA->mUnknown8 != pB->mUnknown8;
+        result |= pA->mNumStreams != pB->mNumStreams;
+        result |= pA->mSeed != pB->mSeed;
+        result |= pA->mNumDraws != pB->mNumDraws;
     } else {
-        result = pA->mUnknown12;
+        result = pA->mChecksum;
     }
     return result;
 }
 
 int SyncRandSaveState(void *p, void *pBuffer)
 {
-    Random_80236F78 *pRandom = p;
-    memcpy(pBuffer, pRandom, sizeof(Random_80236F78));
-    MathCopyRandomStream((char *)pBuffer + 24, pRandom->mpUnknown20[0]);
+    SyncRand_t *pRandom = p;
+    memcpy(pBuffer, pRandom, sizeof(SyncRand_t));
+    MathCopyRandomStream((char *)pBuffer + 24, pRandom->mpStreams[0]);
     return 1;
 }
 
 int SyncRandLoadState(void *p, void *pBuffer)
 {
-    Random_80236F78 *pRandom = p;
-    memcpy(pRandom, pBuffer, sizeof(Random_80236F78));
-    MathCopyRandomStream(pRandom->mpUnknown20[0], (char *)pBuffer + 24);
+    SyncRand_t *pRandom = p;
+    memcpy(pRandom, pBuffer, sizeof(SyncRand_t));
+    MathCopyRandomStream(pRandom->mpStreams[0], (char *)pBuffer + 24);
     return 1;
 }
 
-int fn_80237180(void *p)
+int SyncRandGetStateSize(void *p)
 {
-    return MathGetRandomStreamSize(lbl_803EC130->mpUnknown20[0]) + sizeof(Random_80236F78);
+    return MathGetRandomStreamSize(_SyncRand_pState->mpStreams[0]) + sizeof(SyncRand_t);
 }
 
-void fn_802371B0(int count, int seed)
+void SyncRandInit(int count, int seed)
 {
     void *pHandle;
-    Random_80236F78 *pRandom;
+    SyncRand_t *pRandom;
 
-    pHandle = SyncStateRegister(0, (void **)&lbl_803EC130, sizeof(Random_80236F78), 0, 0x72616E64);
-    fn_80238234(pHandle, fn_80236F78, fn_8023701C, 0, SyncRandCompareState);
-    fn_80238248(pHandle, SyncRandSaveState, fn_80237180, SyncRandLoadState);
-    pRandom = fn_8023816C(pHandle);
-    pRandom->mUnknown0 = count;
-    pRandom->mUnknown4 = seed;
-    pRandom->mUnknown12 = seed;
-    fn_802381E0(pHandle);
+    pHandle = SyncStateRegister(0, (void **)&_SyncRand_pState, sizeof(SyncRand_t), 0, 0x72616E64);
+    SyncStateSetCallbacks(pHandle, SyncRandInitState, SyncRandShutdownState, 0, SyncRandCompareState);
+    SyncStateSetSaveCallbacks(pHandle, SyncRandSaveState, SyncRandGetStateSize, SyncRandLoadState);
+    pRandom = SyncStateGetData(pHandle);
+    pRandom->mNumStreams = count;
+    pRandom->mSeed = seed;
+    pRandom->mChecksum = seed;
+    SyncStateCommit(pHandle);
 }
 
-void fn_8023725C(void)
+void SyncRandShutdown(void)
 {
 }
 
@@ -132,12 +132,12 @@ float SyncRandGetFloat(int stream)
 {
     float value;
 
-    value = MathGetRandom(lbl_803EC130->mpUnknown20[stream]);
+    value = MathGetRandom(_SyncRand_pState->mpStreams[stream]);
     if (stream == 0) {
-        lbl_803EC130->mUnknown8++;
-        lbl_803EC130->mUnknown12++;
-    } else if (lbl_803EC130->mUnknown1 != 0) {
-        if (lbl_803EC130->mUnknown1 < 0) {
+        _SyncRand_pState->mNumDraws++;
+        _SyncRand_pState->mChecksum++;
+    } else if (_SyncRand_pState->mOverride != 0) {
+        if (_SyncRand_pState->mOverride < 0) {
             value = 0.0f;
         } else {
             value = 0.9999f;
@@ -146,26 +146,26 @@ float SyncRandGetFloat(int stream)
     return value;
 }
 
-unsigned int fn_802372EC(int stream, unsigned int count)
+unsigned int SyncRandGetRange(int stream, unsigned int count)
 {
     unsigned int value;
 
-    value = MathGetRandomRange(lbl_803EC130->mpUnknown20[stream], count);
+    value = MathGetRandomRange(_SyncRand_pState->mpStreams[stream], count);
     if (stream == 0) {
-        lbl_803EC130->mUnknown8++;
-        lbl_803EC130->mUnknown12 = (lbl_803EC130->mUnknown12 ^ count) + 7;
-    } else if (lbl_803EC130->mUnknown1 != 0 && count > 1) {
-        lbl_803EC134 = value = 1 - lbl_803EC134;
-        if (!(lbl_803EC130->mUnknown1 & 0x80)) {
+        _SyncRand_pState->mNumDraws++;
+        _SyncRand_pState->mChecksum = (_SyncRand_pState->mChecksum ^ count) + 7;
+    } else if (_SyncRand_pState->mOverride != 0 && count > 1) {
+        _SyncRand_iToggle = value = 1 - _SyncRand_iToggle;
+        if (!(_SyncRand_pState->mOverride & 0x80)) {
             value = count - 1 - value;
         }
     }
     return value;
 }
 
-int fn_80237390(int stream, int low, int high)
+int SyncRandGetIntRange(int stream, int low, int high)
 {
-    return fn_802372EC(stream, high - low + 1) + low;
+    return SyncRandGetRange(stream, high - low + 1) + low;
 }
 
 float SyncRandGetFloatRange(int stream, float low, float high)
@@ -181,52 +181,52 @@ float SyncRandGetFloatRange(int stream, float low, float high)
     return range * value + low;
 }
 
-void fn_80237438(Bits_80237438 *pBits)
+void SyncRandBitPoolClear(SyncRandBitPool_t *pBits)
 {
     unsigned int i;
-    unsigned char *pData = pBits->mUnknown8;
-    unsigned int count = (pBits->mUnknown0 + 7) >> 3;
+    unsigned char *pData = pBits->mBits;
+    unsigned int count = (pBits->mCount + 7) >> 3;
 
     for (i = 0; i < count; i++) {
         *pData++ = 0;
     }
 }
 
-Bits_80237438 *fn_80237470(int stream, unsigned int count)
+SyncRandBitPool_t *SyncRandBitPoolNew(int stream, unsigned int count)
 {
-    Bits_80237438 *pBits = fn_801D2B7C(((count + 7) >> 3) + 8, 0, 0);
+    SyncRandBitPool_t *pBits = fn_801D2B7C(((count + 7) >> 3) + 8, 0, 0);
 
-    pBits->mUnknown0 = count;
-    pBits->mUnknown4 = stream;
-    fn_80237438(pBits);
+    pBits->mCount = count;
+    pBits->mStream = stream;
+    SyncRandBitPoolClear(pBits);
     return pBits;
 }
 
-int fn_802374C8(Bits_80237438 *pBits)
+int SyncRandBitPoolDraw(SyncRandBitPool_t *pBits)
 {
     unsigned int i;
     unsigned int index;
     int bit;
     unsigned int start;
-    unsigned char *pData = pBits->mUnknown8;
+    unsigned char *pData = pBits->mBits;
 
-    i = fn_802372EC(pBits->mUnknown4, pBits->mUnknown0);
+    i = SyncRandGetRange(pBits->mStream, pBits->mCount);
     index = i >> 3;
     bit = i & 7;
     start = i;
     while ((pData[index] >> bit) & 1) {
-        i = (i + 1) % pBits->mUnknown0;
+        i = (i + 1) % pBits->mCount;
         index = i >> 3;
         bit = i & 7;
         if (i == start) {
-            fn_80237438(pBits);
+            SyncRandBitPoolClear(pBits);
         }
     }
     pData[index] |= 1 << bit;
     return i;
 }
 
-void fn_8023756C(Bits_80237438 *pBits)
+void SyncRandBitPoolDelete(SyncRandBitPool_t *pBits)
 {
     fn_801D2BD0(pBits);
 }

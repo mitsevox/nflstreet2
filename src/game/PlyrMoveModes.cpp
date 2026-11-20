@@ -2,10 +2,10 @@
    keep an engaged player facing and clear of his opponent, and damp a grounded player's motion. */
 #include <math.h>
 #include "game/fn_800AD9B4.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/fn_800DF134.h"
+#include "game/PlayerActionAnimShiftPartner.h"
 
 extern "C" {
 extern float gFrameTimeScale;
@@ -18,10 +18,10 @@ float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
-void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
-void fn_80227538(Point_8017886C *pOut, int angle, float length);
-int fn_802275D8(void *pA, void *pB, float epsilon);
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Rotate(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
+void Vec2FromAngle(Point_8017886C *pOut, int angle, float length);
+int Vec3Equal(void *pA, void *pB, float epsilon);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 }
 
 static int _PlyrMoveModes_iTurnStep = 0x5B05B;
@@ -54,7 +54,7 @@ int PlyrMoveIsFlaggedGrounded(Object_80039F5C *pObject)
 
 float PlyrMoveGetGroundScale(Object_80039F5C *pObject)
 {
-    return fn_802275D8(&pObject->mMotion.mPos, &pObject->mMotion.mUnknown12, 1e-7f) ? 0.9f : 0.7f;
+    return Vec3Equal(&pObject->mMotion.mPos, &pObject->mMotion.mUnknown12, 1e-7f) ? 0.9f : 0.7f;
 }
 
 void PlyrMoveApplyGroundScale(Object_80039F5C *pObject)
@@ -79,9 +79,9 @@ void PlyrMoveModeEngage(Object_80039F5C *pObject)
     int angle;
     float distance;
 
-    fn_80227690(&delta, &pTarget->mMotion.mPos, pMotion);
+    Vec2Sub(&delta, &pTarget->mMotion.mPos, pMotion);
     angle = fn_801CFE40(delta.mY, delta.mX);
-    distance = fn_802270A4(&delta);
+    distance = Vec2Magnitude(&delta);
     if (pObject->mUnknown545 == 0) {
         if (pBlock->mUnknown20 != 0) {
             Vector_80039F5C joint;
@@ -89,7 +89,7 @@ void PlyrMoveModeEngage(Object_80039F5C *pObject)
             int facing;
 
             fn_8009BF5C(pTarget, 11, &joint, &extra);
-            fn_80227690(&delta, &joint, pMotion);
+            Vec2Sub(&delta, &joint, pMotion);
             facing = fn_801CFE40(delta.mY, delta.mX);
             if (MathAngleDiff(facing, pMotion->mFacing) > 0x38E38) {
                 if (((facing - pMotion->mFacing) & 0xFFFFFF) > 0x800000) {
@@ -115,13 +115,13 @@ void PlyrMoveModeEngage(Object_80039F5C *pObject)
                 limit = 1.25f;
             }
             if (distance < limit) {
-                fn_80227538(&delta, (angle + 0x800000) & 0xFFFFFF, (limit - distance) * 0.2f);
+                Vec2FromAngle(&delta, (angle + 0x800000) & 0xFFFFFF, (limit - distance) * 0.2f);
                 pMotion->mPos.mX += delta.mX;
                 pMotion->mPos.mY += delta.mY;
             }
         }
     } else {
-        fn_80227538(&delta, angle, distance * 0.5f);
+        Vec2FromAngle(&delta, angle, distance * 0.5f);
         if (MathAngleDiff(pBlock->mUnknown60, pMotion->mFacing) > 0x16C16) {
             Point_8017886C center;
             Point_8017886C turned;
@@ -136,13 +136,13 @@ void PlyrMoveModeEngage(Object_80039F5C *pObject)
             center.mY = pMotion->mPos.mY + delta.mY;
             delta.mX = pMotion->mPos.mX - center.mX;
             delta.mY = pMotion->mPos.mY - center.mY;
-            fn_80227384(&turned, &delta, angle);
+            Vec2Rotate(&turned, &delta, angle);
             pMotion->mPos.mX = turned.mX + center.mX;
             pMotion->mPos.mY = turned.mY + center.mY;
             turned.mX -= delta.mX;
             turned.mY -= delta.mY;
             pMotion->mFacing = (pMotion->mFacing + angle) & 0xFFFFFF;
-            fn_800DF134(pObject, turned, angle, pBlock->mUnknown32);
+            PlayerActionAnimShiftPartner(pObject, turned, angle, pBlock->mUnknown32);
         }
     }
     pControl->mUnknown0 = pObject->mUnknown512.mUnknown0;

@@ -7,7 +7,7 @@
 #include "engine/rand.h"
 #include "game/InGame.h"
 #include "game/ResOpenDevice.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/AudmonEvent.h"
 #include "game/GameState.h"
 #include "game/GameModules.h"
@@ -35,8 +35,8 @@ char *strncpy(char *pDest, const char *pSource, int count);
 void ResTrackLabel(const char *pText);
 int ResQuickloadOpenDevice(const char *pName, int unknown);
 int ResQuickloadClose(const char *pName);
-void fn_802371B0(int unknown, int seed);
-void fn_8023725C(void);
+void SyncRandInit(int unknown, int seed);
+void SyncRandShutdown(void);
 }
 
 static ModuleDependency _GameModules_aAnimDataDependencies[] = { &gRes, 0 };
@@ -90,13 +90,13 @@ const char *GRand::GetName() { return "GRand"; }
 
 int GRand::Init()
 {
-    fn_802371B0(2, MathGetRandomSeed());
+    SyncRandInit(2, MathGetRandomSeed());
     return 1;
 }
 
 int GRand::Shutdown()
 {
-    fn_8023725C();
+    SyncRandShutdown();
     return 1;
 }
 
@@ -204,7 +204,7 @@ int ScrmRule::Init()
         int csag;
         int cshg;
 
-        fn_801FCE10(0, "select 'CSAG' into \x85 and 'CSHG' into \x85 from 'FNIG'\n", &csag, &cshg);
+        TDbCompilePerformOp(0, "select 'CSAG' into \x85 and 'CSHG' into \x85 from 'FNIG'\n", &csag, &cshg);
         fn_801787FC(1, csag);
         fn_801787FC(0, cshg);
         fn_8017885C();

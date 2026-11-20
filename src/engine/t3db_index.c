@@ -456,7 +456,7 @@ int _TDbIndexRowUpdated(TDbIndex_t *pIndex, TDbIdxNode_t *pNode, unsigned short 
     if (pIndex->mFilter != 0) {
         _TDbExprTest(pIndex->mFilter, &result, &pIndex->mTable, &row);
         if (result.mValue.i == 0) {
-            fn_80206668(pIndex, pNode, 0);
+            _TDbQryQueryDeleteFixEx(pIndex, pNode, 0);
             _TDbIdxTreeDelete(&pIndex->mTree, pNode);
             __TDbMemPoolFree(&pIndex->mPool, pNode);
             pIndex->mDirty = 1;
@@ -480,7 +480,7 @@ int _TDbIndexRowUpdated(TDbIndex_t *pIndex, TDbIdxNode_t *pNode, unsigned short 
             _TDbIdxCreateKey(&pIndex->mTree, row, pNew);
             if (_TDbIdxCompare(&pIndex->mTree, pNode->mKey, pNew->mKey, pIndex->mTree.mPartCount) != 0) {
                 pIndex->mDirty = 1;
-                fn_80206668(pIndex, pNode, pNew);
+                _TDbQryQueryDeleteFixEx(pIndex, pNode, pNew);
                 _TDbIdxTreeDelete(&pIndex->mTree, pNode);
                 __TDbMemPoolFree(pPool, pNode);
                 pNew->mRow = row;

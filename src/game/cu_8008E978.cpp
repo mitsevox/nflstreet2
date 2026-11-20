@@ -1,4 +1,4 @@
-#include "engine/Desc_80238424.h"
+#include "engine/EvMonDesc.h"
 #include "game/StyleTracker.h"
 #include "game/Step_800C4460.h"
 #include "game/Block_8030E6E8.h"
@@ -9,7 +9,7 @@
 #include "game/PlyrCollide.h"
 #include "game/Object_800EA284.h"
 #include "game/Object_8017886C.h"
-#include "game/fn_8022781C.h"
+#include "game/Vec2Distance.h"
 #include "game/Block_800C9D6C.h"
 #include "game/Block_801BE60C.h"
 #include "game/Block_800AD634.h"
@@ -17,7 +17,7 @@
 #include "game/Block_8030F42C.h"
 #include "game/Params_80092E54.h"
 #include "game/Frame_800DF7CC.h"
-#include "game/fn_8005FC84.h"
+#include "game/StoryEvents.h"
 #include <string.h>
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
@@ -47,12 +47,12 @@
 #include "game/Block_800B0CFC.h"
 #include "game/Table_80089904.h"
 #include "game/PlayBookTeam.h"
-#include "game/cu_8002B8F8.h"
+#include "game/Replay.h"
 #include "game/BigObjInst.h"
 #include "game/ReplayEvent.h"
 #include "game/FeatAwards.h"
 #include "game/StevTable.h"
-#include "game/fn_80061AD4.h"
+#include "game/StoryTournament.h"
 #include "game/GameModeType.h"
 #include "game/PauseMenu.h"
 #include "game/AudmonEvent.h"
@@ -88,10 +88,10 @@
 #include "game/ResLoad.h"
 #include "game/LevelSurface.h"
 #include "game/fn_8021D7B8.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_80218FC4.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_801FCE10.h"
+#include "game/Vec3Magnitude.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/SyncStateRegister.h"
 #include "game/PadInput.h"
 #include "game/fn_80094488.h"
@@ -117,7 +117,7 @@
 #include "game/Lookup_8012078C.h"
 #include "game/AnimFrameHeader.h"
 #include "game/PenaltySituation.h"
-#include "game/fn_80227638.h"
+#include "game/Vec2Add.h"
 #include "game/PlyrNameTag.h"
 #include "game/fn_801F40F4.h"
 #include "game/GameInfo.h"
@@ -263,7 +263,7 @@ void PassIconObjSetEnabled(int value);
 }
 
 extern "C" {
-void fn_8015C254(int a);
+void RouteArrowSetEnabled(int a);
 }
 
 extern "C" {
@@ -295,7 +295,7 @@ int fn_80177F7C(void);
 }
 
 extern "C" {
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 }
 
 extern "C" {
@@ -305,11 +305,11 @@ void BannerClear(int index);
 
 
 extern "C" {
-void fn_80227538(void *pOut, int angle, float length);
+void Vec2FromAngle(void *pOut, int angle, float length);
 }
 
 extern "C" {
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 }
 
 extern "C" {
@@ -321,7 +321,7 @@ unsigned char ParticleTrailSetEnabled(unsigned char a);
 }
 
 extern "C" {
-void fn_8003E174(int a);
+void PlyrObjsSetDrawFlag(int a);
 }
 
 extern "C" {
@@ -525,23 +525,23 @@ extern Record_80097518 lbl_8030C2B8[];
 }
 
 extern "C" {
-int fn_8002C9A8(Type_803EA368 *p, int msg, int value);
+int ReplayHandleCommand(Type_803EA368 *p, int msg, int value);
 }
 
 extern "C" {
-int fn_8002CA74(Type_803EA368 *p, int msg, int value);
+int ReplayHandleControl(Type_803EA368 *p, int msg, int value);
 }
 
 extern "C" {
-void fn_8002CF34(Type_803EA368 *p);
+void ReplayUpdate(Type_803EA368 *p);
 }
 
 extern "C" {
-unsigned char fn_8002D060(Type_803EA368 *p);
+unsigned char ReplayIsShowing(Type_803EA368 *p);
 }
 
 extern "C" {
-void fn_8002E890(RecordList_8002E7C0 *pList);
+void ReplayShotListClear(RecordList_8002E7C0 *pList);
 }
 
 extern "C" {
@@ -613,23 +613,23 @@ extern unsigned char lbl_803EA93C;
 }
 
 extern "C" {
-int fn_8005BE5C(int value);
+int InGameOverlayOpen(int value);
 }
 
 extern "C" {
-void fn_8005BF18(void);
+void InGameOverlayReset(void);
 }
 
 extern "C" {
-int fn_8005BFD4(void);
+int InGameOverlayGetState(void);
 }
 
 extern "C" {
-void fn_8005BF5C(void);
+void InGameOverlayShow(void);
 }
 
 extern "C" {
-void fn_8002CFF4(Type_803EA368 *p);
+void ReplayStartAutoPlayback(Type_803EA368 *p);
 }
 
 extern "C" {
@@ -729,7 +729,7 @@ extern "C" unsigned short AnimFileLoadSeqVirtualAsync(int id, void *pData, int s
 
 extern "C" void fn_800EFE1C(int a, State_80039F5C *pQueue);
 
-extern "C" void fn_80162780(int a, int b);
+extern "C" void PlyrStarSetShown(int a, int b);
 
 extern "C" void CamGameSelectCamera(int a);
 
@@ -849,7 +849,7 @@ extern LevelData_t *gLevelData;
 extern "C" int MathAngleDiff(int a, int b);
 
 extern "C" {
-void fn_80227384(void *pOut, void *pIn, int angle);
+void Vec2Rotate(void *pOut, void *pIn, int angle);
 }
 
 extern "C" {
@@ -891,7 +891,7 @@ typedef State_8011F4EC Record_8011F4EC;
 typedef State_8011F4EC Block_8011F4EC;
 
 extern "C" {
-int fn_8003DEB4(void);
+int PlyrObjsGetCount(void);
 }
 
 extern "C" {
@@ -911,7 +911,7 @@ void DivotScatterRandom(void);
 }
 
 extern "C" {
-void fn_801624D0(void *arg);
+void PlyrStarInit(void *arg);
 }
 
 extern "C" {
@@ -955,7 +955,7 @@ void EffectDrawObjDestroy(int handle);
 }
 
 extern "C" {
-void fn_801626A4(void *arg);
+void PlyrStarShutdown(void *arg);
 }
 
 extern "C" {
@@ -987,7 +987,7 @@ void FieldLinesUpdate(void);
 }
 
 extern "C" {
-void fn_80162794(void);
+void PlyrStarUpdate(void);
 }
 
 extern "C" {
@@ -995,7 +995,7 @@ void BallMarkerUpdate(void);
 }
 
 extern "C" {
-void fn_8015C114(void);
+void RouteArrowUpdateHighlights(void);
 }
 
 extern "C" {
@@ -1003,7 +1003,7 @@ int PossTestCarrierBall(Object_80039F5C *p);
 }
 
 extern "C" {
-void fn_800E9504(Object_80039F5C *p);
+void PlyrContactSendCarrierHit(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -1031,7 +1031,7 @@ int PlayerMoveGetKind(Object_80039F5C *p);
 }
 
 extern "C" {
-int fn_800E1554(Object_80039F5C *p);
+int PlayerActionDiveIsActive(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -1189,11 +1189,11 @@ void PassIconsShow(int mode);
 }
 
 extern "C" {
-void fn_80162FB8(int index, int ref);
+void PlyrStarLinkPlayer(int index, int ref);
 }
 
 extern "C" {
-void fn_80163020(void);
+void PlyrStarClearLinks(void);
 }
 
 extern "C" {
@@ -1353,7 +1353,7 @@ extern unsigned int lbl_802D80D4[14];
 }
 
 extern "C" {
-Object_80039F5C *fn_8003E0C8(Block_80170E64 *object);
+Object_80039F5C *PlyrObjsFindPlayer(Block_80170E64 *object);
 }
 
 extern "C" {
@@ -1371,7 +1371,7 @@ void fn_80148814(Object_80039F5C *p);
 }
 
 extern "C" {
-void fn_80162780(int a, int b);
+void PlyrStarSetShown(int a, int b);
 }
 
 extern "C" {
@@ -1388,23 +1388,23 @@ struct Record_800B49EC {
 };
 
 extern "C" {
-void fn_80238420(int handle);
+void EvMonDestroy(int handle);
 }
 
 extern "C" {
-void fn_8023861C(int handle);
+void EvMonClear(int handle);
 }
 
 extern "C" {
-unsigned int fn_80238604(int handle);
+unsigned int EvMonGetCount(int handle);
 }
 
 extern "C" {
-void *fn_80238540(int handle, int index);
+void *EvMonGetRecord(int handle, int index);
 }
 
 extern "C" {
-void *fn_8023850C(int handle);
+void *EvMonGetCurrentRecord(int handle);
 }
 
 extern "C" {
@@ -1468,7 +1468,7 @@ int fn_80177F70(void);
 }
 
 extern "C" {
-void fn_8016DDDC(int team);
+void ScrmTeamPlaceInHuddle(int team);
 }
 
 extern "C" {
@@ -1484,7 +1484,7 @@ void PlayBookSetFormationType(int team, int kind);
 }
 
 extern "C" {
-void fn_80238680(int handle, int value);
+void EvMonAddListener(int handle, int value);
 }
 
 extern "C" {
@@ -1548,7 +1548,7 @@ PlayBookFormation_t *PlayBookGetFormation(int team);
 }
 
 extern "C" {
-void fn_80030ACC(void (*pSave)(BitStream_t *pStream),
+void ReplayRegisterChannel(void (*pSave)(BitStream_t *pStream),
                  void (*pLoad)(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
                                BitStream_t *pStream3, float t),
                  int size, const char *pName);
@@ -1607,7 +1607,7 @@ void PlayBookLoadAudibles(int team);
 }
 
 extern "C" {
-int fn_8016DD60(void);
+int ScrmIsHuddleFormed(void);
 }
 
 extern "C" {
@@ -1643,7 +1643,7 @@ void fn_8017840C(void);
 }
 
 extern "C" {
-void fn_8016DCD4(int team);
+void ScrmTeamToHuddle(int team);
 }
 
 extern "C" {
@@ -1651,7 +1651,7 @@ void fn_8010A220(void);
 }
 
 extern "C" {
-int fn_80058688(void);
+int InGamePlayCallStreamSlots(void);
 }
 
 extern "C" {
@@ -1664,7 +1664,7 @@ typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void
                                 AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int phase);
 
 extern "C" {
-int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
+int PlayerActionAnimIdlePhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 }
 
@@ -1694,7 +1694,7 @@ int PlayerLocoMoveCmdPhase(Table_80089904 *pTable, unsigned short key, void *pRe
 }
 
 extern "C" {
-int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
+int PlayerActionAnimDirectionPhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 }
 
@@ -1704,37 +1704,37 @@ int PlayerActionAnimFacingCallback(Table_80089904 *pTable, unsigned short key, v
 }
 
 extern "C" {
-int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
+int PlayerActionAnimTurnPhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 }
 
 extern "C" {
-int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
+int PlayerActionAnimSpeedBlendPhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 }
 
 extern "C" {
-int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
+int PlayerActionAnimReactionPhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 }
 
 extern "C" {
-int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
+int PlayerActionAnimDepthPhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 }
 
 extern "C" {
-int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
+int PlayerActionAnimTurnInPlacePhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 }
 
 extern "C" {
-int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
+int PlayerActionAnimGenericPhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 }
 
 extern "C" {
-int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
+int PlyrAlignTurnPhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 }
 
@@ -1833,7 +1833,7 @@ extern "C" {
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 }
 
-/* Effect slot returned by fn_80162DBC (laid out as in src/game/cu_8016174C.cpp). */
+/* Effect slot returned by PlyrStarGetPulse (laid out as in src/game/PlyrStars.cpp). */
 struct Object_801618D8 {
     unsigned char mUnknown0[4];
     Vector_80039F5C mUnknown4;
@@ -1855,7 +1855,7 @@ void PlyrRouteShowTeam(int a, int team);
 }
 
 extern "C" {
-Object_801618D8 *fn_80162DBC(int index);
+Object_801618D8 *PlyrStarGetPulse(int index);
 }
 
 extern "C" Event_800B9F50 *lbl_802D9A84[];
@@ -1960,7 +1960,7 @@ extern unsigned char lbl_803EAB96;
 }
 
 extern "C" {
-Object_80039F5C *fn_800606CC(int type, int position);
+Object_80039F5C *StoryEventsFindLineupPlayer(int type, int position);
 }
 
 extern "C" {
@@ -1982,11 +1982,11 @@ void HotspotFramePlayEffect(BigObj_t *pObject, int index, int apply);
 }
 
 extern "C" {
-int fn_80061DE8(void);
+int StoryTournamentCountRows(void);
 }
 
 extern "C" {
-StevRow_t *fn_8005FC7C(void);
+StevRow_t *StoryEventsGetCurrentEvent(void);
 }
 
 extern "C" {
@@ -2010,15 +2010,15 @@ void CamGameResumeAll(void);
 }
 
 extern "C" {
-int fn_80059004(void);
+int InGamePauseIsRestart(void);
 }
 
 extern "C" {
-void fn_80059014(void);
+void InGamePauseClearRestart(void);
 }
 
 extern "C" {
-void fn_8005BC10(int a);
+void InGameRewardOpen(int a);
 }
 
 extern "C" {
@@ -2026,11 +2026,11 @@ void FeatAwardAfterGame(void);
 }
 
 extern "C" {
-unsigned char fn_8005B3CC(void);
+unsigned char InGameEndGameIsOpen(void);
 }
 
 extern "C" {
-Object_80039F5C *fn_8005A8AC(int index);
+Object_80039F5C *InGameLeaderGetPlayer(int index);
 }
 
 extern "C" {
@@ -2200,7 +2200,7 @@ int TutorialFinishCategory(void);
 }
 
 extern "C" {
-int fn_80061D14(void);
+int StoryTournamentOnGameEnd(void);
 }
 
 extern "C" {
@@ -2424,7 +2424,7 @@ struct Context_800AFC5C {
 };
 
 /* Three words passed by address to EvMonCreate. */
-typedef Desc_80238424 Args_800B1478;
+typedef EvMonDesc_t Args_800B1478;
 
 extern "C" {
 int fn_801D27A0(void);
@@ -2549,7 +2549,7 @@ int ChallengeIsPairingGame(void);
 }
 
 extern "C" {
-int fn_8005900C(void);
+int InGamePauseIsForfeit(void);
 }
 
 extern "C" {
@@ -2636,7 +2636,7 @@ extern "C" {
 extern void **lbl_803EA9E8;
 }
 
-/* Two floats written by fn_80227690. */
+/* Two floats written by Vec2Sub. */
 typedef Point_8017886C Delta_800CC6A8;
 
 /* Halfword-counted set whose 20-byte entries start at +8. */
@@ -2712,7 +2712,7 @@ extern int lbl_803EAC48;
 
 
 extern "C" {
-void fn_80227248(void *pOut, void *pIn, float scale);
+void Vec2Scale(void *pOut, void *pIn, float scale);
 }
 
 extern "C" {
@@ -2754,7 +2754,7 @@ struct Block_800B95B4 {
 };
 
 extern "C" {
-int fn_8023790C(void);
+int SyncTimeGetGameTime(void);
 }
 
 extern "C" {
@@ -2762,7 +2762,7 @@ void PlyrAttachModel(Object_80039F5C *p);
 }
 
 extern "C" {
-void fn_800DC578(void);
+void PlayerActionAnimResetSteerFrames(void);
 }
 
 extern "C" {
@@ -2805,10 +2805,10 @@ extern "C" {
 extern Pool_800B8544 lbl_803EC930;
 }
 
-extern "C" int fn_800E6AC8(Object_80039F5C *p, int a);
+extern "C" int PlyrEngageTryShed(Object_80039F5C *p, int a);
 
 extern "C" {
-int fn_800E815C(Object_80039F5C *p, int a, int b);
+int PlyrTackleStart(Object_80039F5C *p, int a, int b);
 }
 
 extern "C" {
@@ -2832,11 +2832,11 @@ int BallStateGet(Ball_t *p, int *pOut);
 }
 
 extern "C" {
-float fn_8022710C(void *pV);
+float Vec2MagnitudeSqr(void *pV);
 }
 
 extern "C" {
-int fn_800E8098(Object_80039F5C *p, int a);
+int PlyrTackleAiTry(Object_80039F5C *p, int a);
 }
 
 extern "C" {
@@ -2872,7 +2872,7 @@ void ClockRuleEndPeriod(void);
 }
 
 extern "C" {
-int fn_8002E950(int mode);
+int ReplayPickScript(int mode);
 }
 
 extern "C" {
@@ -2939,7 +2939,7 @@ void CamGameSetFocusAll(int a, int b);
 }
 
 extern "C" {
-int fn_8016E764(void);
+int ScrmCanSnap(void);
 }
 
 extern "C" {
@@ -3076,7 +3076,7 @@ extern "C" {
 extern char lbl_802ECD44[];
 }
 
-extern "C" void fn_8016E498(void);
+extern "C" void ScrmStartPlay(void);
 
 extern "C" void HudHidePressPrompt(int team);
 
@@ -3086,13 +3086,13 @@ extern "C" void HudShowPressPrompt(int team);
 
 extern "C" void SpchIGPurgeChannel(int index);
 
-extern "C" int fn_8016EA68(void);
+extern "C" int ScrmOffenseAllPlaced(void);
 
-extern "C" void fn_8016E008(int team);
+extern "C" void ScrmTeamSendLineUp(int team);
 
 extern "C" void HudPost3AOn(void);
 
-extern "C" void fn_8016DB94(int team);
+extern "C" void ScrmAlignTeam(int team);
 
 extern "C" void HudShowEvent31(int index);
 
@@ -3100,10 +3100,10 @@ extern "C" void HudHideEvent3D(int index);
 
 extern "C" char lbl_802ED104[];
 
-extern "C" void fn_80227970(void *, void *, void *, void *, float *, float *);
+extern "C" void Vec3ClosestPointOnSegment(void *, void *, void *, void *, float *, float *);
 
 extern "C" {
-void fn_8016E008(int team);
+void ScrmTeamSendLineUp(int team);
 }
 
 extern "C" {
@@ -3111,7 +3111,7 @@ void PlayAlignPostStartDelays(int team);
 }
 
 extern "C" {
-int fn_8016E928(void);
+int ScrmOffenseIsSet(void);
 }
 
 extern "C" {
@@ -3145,11 +3145,11 @@ extern float lbl_803EAC78;
 extern "C" int fn_801CFE08(float value);
 
 extern "C" {
-void fn_80227384(void *,void *,int);
+void Vec2Rotate(void *,void *,int);
 }
 
 extern "C" {
-float fn_8022710C(void *);
+float Vec2MagnitudeSqr(void *);
 }
 
 extern "C" {
@@ -3177,7 +3177,7 @@ void fn_800F05E4(int,State_80039F5C *,Message_800F01CC *,Object_80039F5C *);
 }
 
 extern "C" {
-void fn_800E9528(void);
+void PlyrContactSendKnock(void);
 }
 
 struct Players_800CD3C0 { Object_80039F5C *mPlayers[7]; };
@@ -3206,11 +3206,11 @@ extern float lbl_803EAC88;
 }
 
 extern "C" {
-void fn_80227970(void *,void *,void *,void *,float *,float *);
+void Vec3ClosestPointOnSegment(void *,void *,void *,void *,float *,float *);
 }
 
 extern "C" {
-float fn_80227890(void *,void *);
+float Vec2DistanceSqr(void *,void *);
 }
 
 extern "C" {
@@ -3234,7 +3234,7 @@ extern float lbl_803EAC90;
 }
 
 extern "C" {
-int fn_800E0F48(void *,void *,void *,void *);
+int PlayerActionSegmentsCross(void *,void *,void *,void *);
 }
 
 struct PoseCompare_8009C220 {
@@ -3522,7 +3522,7 @@ void fn_800518E0(Object_80039F5C *);
 }
 
 extern "C" {
-int fn_800DBAF0(Object_80039F5C *);
+int PlayerActionAnimIsPitchArmed(Object_80039F5C *);
 }
 
 extern "C" {
@@ -3611,7 +3611,7 @@ extern float lbl_803EA8D8;
 }
 
 extern "C" {
-int fn_800E0188(Object_80039F5C *p, float *pA, float *pB);
+int PlayerActionCharAnimGetTime(Object_80039F5C *p, float *pA, float *pB);
 }
 
 extern "C" {
@@ -3646,7 +3646,7 @@ struct AnimSeqCamSample_t;
 
 
 extern "C" {
-void fn_8005BF98(void);
+void InGameOverlayHide(void);
 }
 
 extern unsigned char lbl_803EA8BD;
@@ -3663,7 +3663,7 @@ extern unsigned char lbl_803EA8D4;
 
 extern PostPlayPhase *lbl_803EAB84;
 
-extern Type_803EA368 *lbl_803EA368;
+extern Type_803EA368 *gpReplay;
 
 extern "C" {
 int AnimFileGetSlotFromFileNum(int objectType, int fileNum);
@@ -3704,7 +3704,7 @@ unsigned char *fn_8009CD00(Object_80039F5C *p, void (*pCallback)(Object_80039F5C
 }
 
 extern "C" {
-void fn_80227384(void *, void *, int);
+void Vec2Rotate(void *, void *, int);
 }
 
 extern "C" {
@@ -3716,7 +3716,7 @@ float fn_80260B1C(float value);
 }
 
 extern "C" {
-void fn_80227350(void *pOut, void *pIn, float scale);
+void Vec3ScaleAcc(void *pOut, void *pIn, float scale);
 }
 
 extern "C" {
@@ -3740,7 +3740,7 @@ float fn_80178A68(Vector_80039F5C *pPoint);
 }
 
 extern "C" {
-void fn_8022713C(void *pVec);
+void Vec2InvMagnitude(void *pVec);
 }
 
 extern "C" {
@@ -3934,11 +3934,11 @@ void fn_800FB768(void);
 }
 
 extern "C" {
-void fn_800718A0(void);
+void SndgEventUpdateDelayed(void);
 }
 
 extern "C" {
-void fn_8016EC40(void);
+void ScrmUpdateBallCarrier(void);
 }
 
 extern "C" {
@@ -4092,11 +4092,11 @@ void fn_8017813C(Point_8017886C);
 }
 
 extern "C" {
-unsigned char fn_8002FA84(void);
+unsigned char ReplayCamIsActive(void);
 }
 
 extern "C" {
-unsigned char fn_80140DB4(void);
+unsigned char CamPlayWasOrbitToggled(void);
 }
 
 extern "C" {
@@ -4276,7 +4276,7 @@ float PlayTrackGetFlag11Rate(void);
 }
 
 extern "C" {
-float fn_80227890(void *pA, void *pB);
+float Vec2DistanceSqr(void *pA, void *pB);
 }
 
 extern "C" {
@@ -4394,7 +4394,7 @@ struct Entry_80297E84 {
 };
 
 extern "C" {
-void fn_80071C34(int a);
+void SndgEventSetMusicHold(int a);
 }
 
 
@@ -4508,7 +4508,7 @@ int fn_8011F1F4(void);
 
 
 extern "C" {
-float fn_8016FAB4(void);
+float ScrmSpotGetLine(void);
 }
 
 extern "C" {
@@ -4618,7 +4618,7 @@ void TutorialSetMoveDone(int index, int value);
 }
 
 extern "C" {
-void fn_80227350(void *pOut, void *pV, float scale);
+void Vec3ScaleAcc(void *pOut, void *pV, float scale);
 }
 
 extern "C" {
@@ -4634,7 +4634,7 @@ int fn_80110824(Object_80039F5C *p, int a, int b, int c);
 }
 
 extern "C" {
-void fn_8022732C(void *pPoint, void *pVelocity, float scale);
+void Vec2ScaleAcc(void *pPoint, void *pVelocity, float scale);
 }
 
 extern "C" {
@@ -4686,7 +4686,7 @@ int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 }
 
 extern "C" {
-int fn_800DC21C(Object_80039F5C *p);
+int PlayerActionAnimIsPassPending(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -4703,11 +4703,11 @@ struct EngineParamWords {
 };
 
 extern "C" {
-int fn_8002D0AC(Type_803EA368 *p);
+int ReplayIsRecording(Type_803EA368 *p);
 }
 
 extern "C" {
-void fn_8002D2C8(Type_803EA368 *p, unsigned char value);
+void ReplaySetHoldFlag(Type_803EA368 *p, unsigned char value);
 }
 
 extern "C" {
@@ -4719,7 +4719,7 @@ void SpchIGResetPlayResult(void);
 }
 
 extern "C" {
-int fn_800E1350(Object_80039F5C *p);
+int PlayerActionTryDive(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -4806,7 +4806,7 @@ int SndgChannelGetStream(int idx);
 }
 
 extern "C" {
-void fn_80162DD0(Object_801618D8 *item, Vector_80039F5C *point);
+void PlyrStarPlace(Object_801618D8 *item, Vector_80039F5C *point);
 }
 
 extern "C" {
@@ -4822,7 +4822,7 @@ void BallPrimeKickUp(Ball_t *pBall);
 }
 
 extern "C" {
-void fn_8013AD9C(Ball_t *pBall, int a);
+void BallSetSpinMode(Ball_t *pBall, int a);
 }
 
 extern "C" {
@@ -4876,7 +4876,7 @@ void CamMainMsg(GameCamera_t *pCamera, int msg, int arg);
 }
 
 extern "C" {
-void fn_8016E498(void);
+void ScrmStartPlay(void);
 }
 
 extern "C" {
@@ -4904,7 +4904,7 @@ void SpchIGUpdatePreSnap(void);
 }
 
 extern "C" {
-int fn_8016EA68(void);
+int ScrmOffenseAllPlaced(void);
 }
 
 extern "C" {
@@ -4920,7 +4920,7 @@ unsigned char GameEventFlagsSetFlag4(unsigned char value);
 }
 
 extern "C" {
-void fn_8015C254(int value);
+void RouteArrowSetEnabled(int value);
 }
 
 extern "C" {
@@ -4928,11 +4928,11 @@ void ParticlesResetEvents(void);
 }
 
 extern "C" {
-void fn_8016DB94(int team);
+void ScrmAlignTeam(int team);
 }
 
 extern "C" {
-void fn_8016F6A4(void);
+void ScrmSpotReset(void);
 }
 
 extern "C" {
@@ -4972,7 +4972,7 @@ extern unsigned char lbl_803EABB7;
 }
 
 extern "C" {
-float fn_80227B04(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC);
+float Vec3DistanceSqrToSegment(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC);
 }
 
 extern "C" {
@@ -5013,7 +5013,7 @@ void GameSetupInit(void);
 }
 
 extern "C" {
-void fn_8002D274(Type_803EA368 *p);
+void ReplayStopAndClear(Type_803EA368 *p);
 }
 
 extern "C" {
@@ -5025,11 +5025,11 @@ void BigObjNotifyTypes(unsigned int flags);
 }
 
 extern "C" {
-void fn_800588E0(void);
+void InGamePlayCallClearSaved(void);
 }
 
 extern "C" {
-void fn_80071C34(int value);
+void SndgEventSetMusicHold(int value);
 }
 
 extern "C" {
@@ -5121,7 +5121,7 @@ void GameEventFlagsShutdown(void);
 }
 
 extern "C" {
-void fn_800DEAB0(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key, void *pData, int angle,
+void PlayerActionAnimBuildAlignCommand(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key, void *pData, int angle,
                  Entry_800DE51C *pRecord);
 }
 
@@ -5166,11 +5166,11 @@ extern float lbl_803EABD0;
 }
 
 extern "C" {
-void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock);
+void PlayerActionAnimUpdatePairAlign(Object_80039F5C *p, Block_800DE3B0 *pBlock);
 }
 
 extern "C" {
-void fn_800DF654(Object_80039F5C *p, Block_801BE60C *pRecord);
+void PlayerActionAnimMirrorAlign(Object_80039F5C *p, Block_801BE60C *pRecord);
 }
 
 extern "C" {
@@ -5190,11 +5190,11 @@ extern float lbl_803EABE0;
 }
 
 extern "C" {
-void fn_800E99A8(Object_80039F5C *p, int kind);
+void PlyrContactSendStumble(Object_80039F5C *p, int kind);
 }
 
 extern "C" {
-int fn_800E9B84(Object_80039F5C *p, int kind);
+int PlyrContactSendCarrierAction(Object_80039F5C *p, int kind);
 }
 
 extern "C" {
@@ -5238,7 +5238,7 @@ void SndgSpchSetPlayFlags(int kind);
 }
 
 extern "C" {
-int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
+int PlyrContactSendPush(Object_80039F5C *p, Object_80039F5C *pOther);
 }
 
 extern "C" {
@@ -5266,7 +5266,7 @@ int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **p
 }
 
 extern "C" {
-void fn_8016F6F4(Object_80039F5C *p, int *pValue);
+void ScrmSpotRecordHit(Object_80039F5C *p, int *pValue);
 }
 
 extern "C" {
@@ -5274,7 +5274,7 @@ void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler);
 }
 
 extern "C" {
-float fn_80227890(void *, void *);
+float Vec2DistanceSqr(void *, void *);
 }
 
 extern "C" {
@@ -8206,7 +8206,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             mode=AnimChanIsMirrored(&p->mpUnknown800[index]);
             if(AnimSeqGetOpcodeParameter()==2) selection=1;
             if(mode) selection=selection==2?1:2;
-            if(!fn_800DBAF0(p)) fn_800D7A0C(p,selection);
+            if(!PlayerActionAnimIsPitchArmed(p)) fn_800D7A0C(p,selection);
             return 1;
         }
         case 0xC016:case 0xC01B:case 0xC021:case 0xD004:
@@ -8440,7 +8440,7 @@ extern "C" int fn_8008FF44(int value, int *pData)
             if (count > 1) {
                 unsigned int i;
 
-                pick = fn_802372EC(0, count);
+                pick = SyncRandGetRange(0, count);
                 for (i = 0; i < count; i++) {
                     if (pick != i && lbl_802D73B8[(short)rows[pick][0]].mUnknown8 > lbl_802D73B8[(short)rows[i][0]].mUnknown8) {
                         pick = i;
@@ -8497,7 +8497,7 @@ extern "C" int fn_8008FF44(int value, int *pData)
                         }
                     }
                     started = 1;
-                    fn_8003E174(0);
+                    PlyrObjsSetDrawFlag(0);
                     lbl_803EA8BC = ParticleTrailSetEnabled(0);
                 }
             }
@@ -8540,7 +8540,7 @@ extern "C" void fn_80090284(int *pData)
             fn_800F00D4(0, p->mpState, &message, p);
         }
     }
-    fn_8003E174(1);
+    PlyrObjsSetDrawFlag(1);
     ParticleTrailSetEnabled(lbl_803EA8BC);
     lbl_803EA8C4 = 0;
 }
@@ -8630,7 +8630,7 @@ extern "C" void fn_80090558(Character_80093BCC *pCharacter, Actor_801C009C *pAct
         if (*pItem->mpUnknown10 == 0) {
             lbl_8030C0B4[lbl_803EA8C4].mX = pItem->mUnknown4;
             lbl_8030C0B4[lbl_803EA8C4].mY = -pItem->mUnknownC;
-            fn_80227384(&lbl_8030C0B4[lbl_803EA8C4], &lbl_8030C0B4[lbl_803EA8C4], p->mMotion.mFacing + 0x400000);
+            Vec2Rotate(&lbl_8030C0B4[lbl_803EA8C4], &lbl_8030C0B4[lbl_803EA8C4], p->mMotion.mFacing + 0x400000);
             lbl_8030C0B4[lbl_803EA8C4].mX += p->mMotion.mPos.mX;
             lbl_8030C0B4[lbl_803EA8C4].mY += p->mMotion.mPos.mY;
             if (lbl_803EA8C4 == 0) {
@@ -8698,13 +8698,13 @@ extern "C" void fn_80090558(Character_80093BCC *pCharacter, Actor_801C009C *pAct
                 pos.mY > lbl_802D72B0.mY) {
                 continue;
             }
-            offset = ((float)fn_802372EC(0, 50) * 0.05f + 1.0f) * 2.0f;
+            offset = ((float)SyncRandGetRange(0, 50) * 0.05f + 1.0f) * 2.0f;
             if (lbl_802D72B0.mX - pos.mX <= pos.mX - lbl_802D72A4.mX) {
                 pos.mX = lbl_802D72A4.mX - offset <= pos.mX ? lbl_802D72A4.mX - offset : pos.mX;
             } else {
                 pos.mX = lbl_802D72B0.mX + offset >= pos.mX ? lbl_802D72B0.mX + offset : pos.mX;
             }
-            offset = ((float)fn_802372EC(0, 50) * 0.05f + 1.0f) * 2.0f;
+            offset = ((float)SyncRandGetRange(0, 50) * 0.05f + 1.0f) * 2.0f;
             if (lbl_802D72B0.mY - pos.mY <= pos.mY - lbl_802D72A4.mY) {
                 pos.mY = lbl_802D72A4.mY - offset <= pos.mY ? lbl_802D72A4.mY - offset : pos.mY;
             } else {
@@ -8722,7 +8722,7 @@ extern "C" void fn_80090558(Character_80093BCC *pCharacter, Actor_801C009C *pAct
 /* Two three-float corners of a box (x and y negated when fn_801784C4 is
    set). Each object BigObjInstGet lists whose x and y lie inside the box gets
    x and y moved: past the corner on the side farther from it, by
-   2 * (1 + 0.05 * fn_802372EC(0, 50)), unless already beyond that, and
+   2 * (1 + 0.05 * SyncRandGetRange(0, 50)), unless already beyond that, and
    the result goes to fn_80051B3C for the matching BigObjGet owner. */
 extern "C" void fn_80090BDC(void)
 {
@@ -8744,14 +8744,14 @@ extern "C" void fn_80090BDC(void)
         pos[1] = pObject->mUnknown12;
         pos[2] = pObject->mUnknown16;
         if (pos[0] >= lo[0] && pos[0] <= hi[0] && pos[1] >= lo[1] && pos[1] <= hi[1]) {
-            float margin = 2.0f * (fn_802372EC(0, 50) * 0.05f + 1.0f);
+            float margin = 2.0f * (SyncRandGetRange(0, 50) * 0.05f + 1.0f);
 
             if (hi[0] - pos[0] > pos[0] - lo[0]) {
                 pos[0] = (hi[0] + margin >= pos[0]) ? hi[0] + margin : pos[0];
             } else {
                 pos[0] = (lo[0] - margin <= pos[0]) ? lo[0] - margin : pos[0];
             }
-            margin = 2.0f * (fn_802372EC(0, 50) * 0.05f + 1.0f);
+            margin = 2.0f * (SyncRandGetRange(0, 50) * 0.05f + 1.0f);
             if (hi[1] - pos[1] > pos[1] - lo[1]) {
                 pos[1] = (hi[1] + margin >= pos[1]) ? hi[1] + margin : pos[1];
             } else {
@@ -8909,7 +8909,7 @@ extern "C" void fn_8009126C(int index)
         GameCamera_t *pCamera;
         int ref;
 
-        fn_80162780(0, 0);
+        PlyrStarSetShown(0, 0);
         CamGameSelectCamera(2);
         p = (Object_80039F5C *)fn_8008FF28((Object_8008FF28 *)pCharacter, (Record_8008FF28 *)pActor);
         fn_8009BD2C(p, &ref);
@@ -8970,7 +8970,7 @@ extern "C" int fn_800913E8(Vector_80039F5C *pOut, Character_80093BCC *pCharacter
             pOut->mY = -CurveListEvaluate(time, &pSample->mCurves[2], 0) * scale;
             pOut->mX -= pActor->mUnknown18->mUnknown34;
             pOut->mY += pActor->mUnknown18->mUnknown3C;
-            fn_80227384(pOut, pOut,
+            Vec2Rotate(pOut, pOut,
                         pCamera->mUnknown10C - (int)(pActor->mUnknown18->mUnknown30 * 2670176.75f) + p->mMotion.mFacing + 0x400000);
             pOut->mX += p->mMotion.mPos.mX;
             pOut->mY += p->mMotion.mPos.mY;
@@ -9158,13 +9158,13 @@ extern "C" int fn_80091AD0(Character_80093BCC *pCharacter, Actor_801C009C *pActo
 
                         BallReleaseStill(pBall, 5, 0);
                         BallGetVelocity(pBall, &velocity);
-                        speed = fn_802270D4(&velocity);
+                        speed = Vec3Magnitude(&velocity);
                         if (speed < lbl_803EA8D8) {
                             if (speed != 0.0f) {
-                                fn_80227264(&velocity, &velocity, lbl_803EA8D8 / speed);
+                                Vec3Scale(&velocity, &velocity, lbl_803EA8D8 / speed);
                             } else {
                                 BallGetPosition(pBall, &pos);
-                                fn_80227538((Vec2_t *)&direction, p->mMotion.mFacing, lbl_803EA8D8);
+                                Vec2FromAngle((Vec2_t *)&direction, p->mMotion.mFacing, lbl_803EA8D8);
                                 direction.mZ = 0.0f;
                                 BallSetVelocity(pBall, &direction);
                             }
@@ -9200,7 +9200,7 @@ extern "C" int fn_80091C84(int index, float *pOut)
         float start;
         float end;
 
-        if (p->mIdBytes[3] == 1 && fn_800E0188(p, &start, &end) != 0) {
+        if (p->mIdBytes[3] == 1 && PlayerActionCharAnimGetTime(p, &start, &end) != 0) {
             if (pOut != 0) {
                 *pOut = end - start;
             }
@@ -9348,8 +9348,8 @@ extern "C" float fn_800921B0(Object_80039F5C *p, GameCamera_t *pCamera)
 {
     Vector_80039F5C delta;
 
-    fn_802276B4(&delta, &p->mpUnknown4->mUnknown4, pCamera->mHeader.mUnknown04);
-    return fn_802270D4(&delta);
+    Vec3Sub(&delta, &p->mpUnknown4->mUnknown4, pCamera->mHeader.mUnknown04);
+    return Vec3Magnitude(&delta);
 }
 
 /* Updates bit 0 of every player's +4 block flags. With active set, players
@@ -9472,9 +9472,9 @@ extern "C" void fn_800925F0(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EC924, sizeof(Block_800925F0), 0, 0x616E6D73);
 
-    fn_80238234(pHandle, 0, 0, 0, fn_80092168);
-    fn_80238248(pHandle, fn_800920B8, fn_80092160, fn_800920EC);
-    fn_802381E0(pHandle);
+    SyncStateSetCallbacks(pHandle, 0, 0, 0, fn_80092168);
+    SyncStateSetSaveCallbacks(pHandle, fn_800920B8, fn_80092160, fn_800920EC);
+    SyncStateCommit(pHandle);
     lbl_803EA8BC = 0;
     lbl_803EA8BD = 0;
     lbl_803EA8BE = 0;
@@ -9559,17 +9559,17 @@ extern "C" int fn_800927BC(unsigned char index)
    AnimSeqCamFindCamera finds no sample for the +0xE0 selection, clear its two ids and
    keep +0xE0 set only if AnimSeqCamFindFirstCamera returns a fallback sample; then go to 2
    (flag 1, via fn_80091240), 3 (kind other than 1 with fn_800AD9B4 4, or
-   fn_800AD9B4 2; starts fn_8005BE5C) or 4. 2: wait for fn_8009637C, then 3 or
+   fn_800AD9B4 2; starts InGameOverlayOpen) or 4. 2: wait for fn_8009637C, then 3 or
    4 the same way; like 1, kind 1 counts as ready. 3: in those modes wait for
-   fn_8005BFD4 to report 1, then go to 4. 4: set up the players and objects
+   InGameOverlayGetState to report 1, then go to 4. 4: set up the players and objects
    (fn_80091864, fn_80091AD0, fn_800916E0, fn_80090E4C, fn_80090BDC and the
    rest), and when the block's +0xECF byte is set pass fn_800B9B64 the team
    of the character's first player (fn_8008FF28), or 2 when there is none or
    fn_800B65A0 rejects it with 0xFF, then clear +0xECF; go to 5. 5: once
    fn_80091D34 is set or fn_80091C84 reports nothing left, hand over to 6 in
    those modes, else set 8 and return 0; until then, while fn_80091C84 reports
-   a value under 15 it calls fn_8005BF98 and sets 0x803EA8C8. 6: wait for
-   fn_8005BFD4 to report 1, then set 8 and return 0. States 5 and 6 return at
+   a value under 15 it calls InGameOverlayHide and sets 0x803EA8C8. 6: wait for
+   InGameOverlayGetState to report 1, then set 8 and return 0. States 5 and 6 return at
    once; 8's body runs on a later call. 8: for kinds up to 2 set bit 0 of the
    +0x14 word of the block at +4 of each of the 14 objects whose +0xB byte is
    set; for every kind clear 0x803EA8BD and 0x803EA8C0 and end. On an end it calls
@@ -9630,7 +9630,7 @@ extern "C" int fn_80092830(int index)
             fn_80091240(index);
             pCharacter->mUnknown38C = 2;
         } else if ((pCharacter->mUnknown4 != 1 && fn_800AD9B4() == 4) || fn_800AD9B4() == 2) {
-            fn_8005BE5C(pCharacter->mUnknown4 == 0);
+            InGameOverlayOpen(pCharacter->mUnknown4 == 0);
             pCharacter->mUnknown38C = 3;
             lbl_803EA8BD = 1;
         } else {
@@ -9651,7 +9651,7 @@ extern "C" int fn_80092830(int index)
             }
             if (ready != 0) {
                 if ((pCharacter->mUnknown4 != 1 && fn_800AD9B4() == 4) || fn_800AD9B4() == 2) {
-                    fn_8005BE5C(pCharacter->mUnknown4 == 0);
+                    InGameOverlayOpen(pCharacter->mUnknown4 == 0);
                     pCharacter->mUnknown38C = 3;
                     lbl_803EA8BD = 1;
                 } else {
@@ -9666,16 +9666,16 @@ extern "C" int fn_80092830(int index)
         }
     case 3:
         if ((pCharacter->mUnknown4 != 1 && fn_800AD9B4() == 4) || fn_800AD9B4() == 2) {
-            if (fn_8005BFD4() == 1) {
+            if (InGameOverlayGetState() == 1) {
                 HudPost3AOff();
-                fn_8005BF5C();
+                InGameOverlayShow();
                 pCharacter->mUnknown38C = 4;
                 lbl_803EA8BD = 0;
             }
             break;
         }
     case 4:
-        fn_8015C254(0);
+        RouteArrowSetEnabled(0);
         PassIconObjSetEnabled(0);
         lbl_803EA8BF = 1;
         if (lbl_803EC924->mUnknown80.mUnknownE4F[0] != 0) {
@@ -9700,15 +9700,15 @@ extern "C" int fn_80092830(int index)
         pCharacter->mUnknown38C = 5;
         fn_80092380(pCharacter, 1);
         fn_8009126C(index);
-        fn_8002C9A8(lbl_803EA368, 3, 0);
+        ReplayHandleCommand(gpReplay, 3, 0);
     case 5:
         if (fn_80091D34() != 0 || fn_80091C84(index, &remaining) == 0) {
             if ((pCharacter->mUnknown4 != 1 && fn_800AD9B4() == 4) || fn_800AD9B4() == 2) {
-                if (lbl_803EA8C8 == 0 && fn_80091D34() != 0 && fn_8005BFD4() != 3) {
+                if (lbl_803EA8C8 == 0 && fn_80091D34() != 0 && InGameOverlayGetState() != 3) {
                     break;
                 }
-                if (fn_8005BFD4() != 0) {
-                    fn_8005BF98();
+                if (InGameOverlayGetState() != 0) {
+                    InGameOverlayHide();
                 }
                 if (SpchIGGetSceneSpeaker() != 0) {
                     AudmonEventPostId(0x82, 0, 0, 0, 0, 0);
@@ -9720,14 +9720,14 @@ extern "C" int fn_80092830(int index)
                 result = 0;
             }
         } else if (((pCharacter->mUnknown4 != 1 && fn_800AD9B4() == 4) || fn_800AD9B4() == 2) &&
-                   fn_8005BFD4() != 0 && remaining < 15.0f) {
-            fn_8005BF98();
+                   InGameOverlayGetState() != 0 && remaining < 15.0f) {
+            InGameOverlayHide();
             lbl_803EA8C8 = 1;
         }
         break;
     case 6:
-        if (fn_8005BFD4() == 1) {
-            fn_8005BF18();
+        if (InGameOverlayGetState() == 1) {
+            InGameOverlayReset();
             pCharacter->mUnknown38C = 8;
             lbl_803EA8BD = 0;
             result = 0;
@@ -9740,7 +9740,7 @@ extern "C" int fn_80092830(int index)
             unsigned short i;
 
             for (i = 0; i < 14; i++) {
-                Object_80039F5C *p = fn_8003E0C8((Block_80170E64 *)fn_8003DEC4(i));
+                Object_80039F5C *p = PlyrObjsFindPlayer((Block_80170E64 *)PlyrObjsGet(i));
 
                 if (p->mUnknown9[2] != 0) {
                     p->mpUnknown4->mUnknown20 |= 1;
@@ -10096,7 +10096,7 @@ extern "C" int fn_80093AF0(Object_80039F5C *p)
         offset.mX = -offset.mX;
         offset.mY = -offset.mY;
     }
-    fn_80227690(&delta, &p->mMotion.mPos, &offset);
+    Vec2Sub(&delta, &p->mMotion.mPos, &offset);
     return fn_801CFE40(delta.mY, delta.mX);
 }
 
@@ -10343,7 +10343,7 @@ extern "C" void fn_800941B8(void)
 extern "C" void fn_800941EC(void)
 {
     if (lbl_803EA8BF) {
-        fn_8015C254(1);
+        RouteArrowSetEnabled(1);
         PassIconObjSetEnabled(1);
         lbl_803EA8BF = 0;
     }
@@ -10448,7 +10448,7 @@ extern "C" int fn_800944A4(int kind)
         if ((kind == 1 && fn_80177F7C() != 4) || lbl_802D79D8[kind] == 0) {
             result = 0;
         } else {
-            result = lbl_802D79D8[kind] > fn_802372EC(0, 100) + 1;
+            result = lbl_802D79D8[kind] > SyncRandGetRange(0, 100) + 1;
         }
     }
     return result;
@@ -10518,7 +10518,7 @@ extern "C" int fn_80094698(unsigned int index, int operand, int value, unsigned 
         }
         break;
     case 3:
-        result = (short)fn_802372EC(0, 100) < operand;
+        result = (short)SyncRandGetRange(0, 100) < operand;
         break;
     case 4:
         if (operand != 0) {
@@ -10792,8 +10792,8 @@ extern "C" void fn_80094E80(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EA8DC, 10 * sizeof(Entry_80094BC4), 0, 0x616E6D6D);
 
-    fn_80094C00((Entry_80094BC4 *)fn_8023816C(pHandle), 10);
-    fn_802381E0(pHandle);
+    fn_80094C00((Entry_80094BC4 *)SyncStateGetData(pHandle), 10);
+    SyncStateCommit(pHandle);
     fn_800925F0();
 }
 
@@ -10905,8 +10905,8 @@ extern "C" int fn_80095078(int key, Params_80092E54 *pRequest, Actor_801C009C *p
                 if (fn_80095284(p, pRequest, pActor->mUnknown4) == 0) {
                     float distance;
 
-                    fn_80227690(&delta, &p->mMotion.mPos, &target);
-                    distance = fn_802270A4(&delta);
+                    Vec2Sub(&delta, &p->mMotion.mPos, &target);
+                    distance = Vec2Magnitude(&delta);
                     if (distance < range) {
                         if (pBest == 0) {
                             pBest = p;
@@ -10957,8 +10957,8 @@ extern "C" void fn_80095304(int id, Object_80039F5C **ppObject, unsigned short *
 {
     int found = 0;
 
-    if (ReplayEventExists(lbl_803EA368, id) != 0) {
-        Object_80039F5C *p = ReplayEventGetObject(lbl_803EA368, id);
+    if (ReplayEventExists(gpReplay, id) != 0) {
+        Object_80039F5C *p = ReplayEventGetObject(gpReplay, id);
 
         if (p->mUnknown9[2] != 0) {
             *ppObject = p;
@@ -11198,12 +11198,12 @@ extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_
         fn_80095304(7, ppOut, &count);
         break;
     case 0x544E4F52: /* 'TNOR' */
-        if (ReplayEventExists(lbl_803EA368, 4) && fn_80178348() != fn_80178308()) {
+        if (ReplayEventExists(gpReplay, 4) && fn_80178348() != fn_80178308()) {
             fn_80095304(4, ppOut, &count);
         } else {
-            if (ReplayEventExists(lbl_803EA368, 7)) {
+            if (ReplayEventExists(gpReplay, 7)) {
                 fn_80095304(7, ppOut, &count);
-            } else if (ReplayEventExists(lbl_803EA368, 38)) {
+            } else if (ReplayEventExists(gpReplay, 38)) {
                 fn_80095304(38, ppOut, &count);
             } else {
                 fn_80095304(5, ppOut, &count);
@@ -11230,7 +11230,7 @@ extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_
         fn_80095304(8, ppOut, &count);
         break;
     case 0x50444546: /* 'PDEF' */
-        if (ReplayEventExists(lbl_803EA368, 38)) {
+        if (ReplayEventExists(gpReplay, 38)) {
             fn_80095304(38, ppOut, &count);
         } else {
             fn_80095304(5, ppOut, &count);
@@ -11393,8 +11393,8 @@ extern "C" int fn_80096074(Params_80092E54 *pRequest, int flag)
 
                     spot[0] = pFrame->mUnknown24;
                     spot[1] = pFrame->mUnknown1C;
-                    fn_80227690(delta, &p->mMotion.mPos, spot);
-                    distance = fn_802270A4(delta);
+                    Vec2Sub(delta, &p->mMotion.mPos, spot);
+                    distance = Vec2Magnitude(delta);
                     if (!(pRequest->mUnknown8 & 0x40) && distance >= range) {
                         p = 0;
                     }
@@ -11576,7 +11576,7 @@ extern "C" void fn_80096708(int index)
     fn_80096850(index, &pos, &pCamera->mUnknown10C);
     pCamera->mUnknownF8 = pos.mX;
     pCamera->mUnknownFC = pos.mY;
-    fn_80162780(0, 0);
+    PlyrStarSetShown(0, 0);
     CamGameSelectCamera(2);
     CamGameSetModeAll(11);
 }
@@ -11813,12 +11813,12 @@ extern "C" void fn_80096E74(Object_80039F5C *p, Vector_80039F5C *pOut, Data_8009
     }
     fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, wrist), &wristPos, &angles);
     fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, shoulder), &shoulderPos, &angles);
-    now = fn_8023790C() + 2;
+    now = SyncTimeGetGameTime() + 2;
     t = (float)(pData->mUnknown0 - now) / lbl_803EA934;
     t = t < 0.0f ? 0.0f : (t > 1.0f ? 1.0f : t);
     *pOut = wristPos;
     pOut->mZ += lbl_803EA938;
-    if (pData->mUnknown0 <= fn_8023790C()) {
+    if (pData->mUnknown0 <= SyncTimeGetGameTime()) {
         done = 1;
     }
     if (done != 0) {
@@ -11915,14 +11915,14 @@ extern "C" int fn_80097160(Object_80039F5C *p, float duration)
             pData = (Data_80096E74 *)fn_8009CD00(p, fn_80096E74, firstKind, (unsigned int)duration, 2);
             if (pData != 0) {
                 pData->mUnknown4 = firstKind;
-                pData->mUnknown0 = fn_8023790C() + (unsigned int)duration + 2;
+                pData->mUnknown0 = SyncTimeGetGameTime() + (unsigned int)duration + 2;
             }
         }
         if (pSecond != 0) {
             pData = (Data_80096E74 *)fn_8009CD00(p, fn_80096E74, secondKind, (unsigned int)duration, 2);
             if (pData != 0) {
                 pData->mUnknown4 = secondKind;
-                pData->mUnknown0 = fn_8023790C() + (unsigned int)duration + 2;
+                pData->mUnknown0 = SyncTimeGetGameTime() + (unsigned int)duration + 2;
             }
         }
     }
@@ -11934,9 +11934,9 @@ extern "C" int fn_80097160(Object_80039F5C *p, float duration)
 extern "C" void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn)
 {
     int angle = fn_801CFE40(pIn->mY, pIn->mX);
-    float length = fn_802270A4(pIn);
+    float length = Vec2Magnitude(pIn);
 
-    fn_80227538((Vec2_t *)pOut, (0x1000000 - angle) & 0xFFFFFF, length);
+    Vec2FromAngle((Vec2_t *)pOut, (0x1000000 - angle) & 0xFFFFFF, length);
     pOut->mZ = pIn->mZ;
 }
 
@@ -12101,20 +12101,20 @@ extern "C" void fn_800978F8(Object_80039F5C *p, Item_80097440 *pItem, Vec2_t *pT
     angle = (fn_801CFE40(ballPos.mY, ballPos.mX) + 0x800000) & 0xFFFFFF;
     target.mX = pTarget->mX;
     target.mY = pTarget->mY;
-    fn_80227384(&offset, pPos, angle);
-    fn_80227638(&start, &p->mMotion.mPos, &offset);
-    fn_80227690(&velocity, &target, &start);
+    Vec2Rotate(&offset, pPos, angle);
+    Vec2Add(&start, &p->mMotion.mPos, &offset);
+    Vec2Sub(&velocity, &target, &start);
     lbl_803EC92C->mUnknown4.mUnknownC = time;
     lbl_803EC92C->mUnknown4.mUnknown18 = velocity.mX / time;
     lbl_803EC92C->mUnknown4.mUnknown1C = velocity.mY / time;
-    fn_80227690(&delta, pPos, &pItem->mUnknown14);
+    Vec2Sub(&delta, pPos, &pItem->mUnknown14);
     facing = p->mMotion.mFacing & 0xFFFFFF;
     *pTurn = MathAngleDiff(angle, facing);
     if (((angle - facing) & 0xFFFFFF) > 0x800000) {
         *pTurn = -*pTurn;
     }
-    if (fn_802270A4(&velocity) > 2.0f) {
-        fn_80227538(&velocity, fn_801CFE40(velocity.mY, velocity.mX), 2.0f);
+    if (Vec2Magnitude(&velocity) > 2.0f) {
+        Vec2FromAngle(&velocity, fn_801CFE40(velocity.mY, velocity.mX), 2.0f);
         lbl_803EC92C->mUnknown4.mUnknown18 = velocity.mX / time;
         lbl_803EC92C->mUnknown4.mUnknown1C = velocity.mY / time;
     }
@@ -12145,7 +12145,7 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
     Vector_80039F5C spin;
     Vector_80039F5C toReach;
     Vector_80039F5C reach;
-    Vec2_t toBall; // the target reserves 8 bytes here: fn_80227690's third float lands in turn's slot, and turn is assigned afterwards
+    Vec2_t toBall; // the target reserves 8 bytes here: Vec2Sub's third float lands in turn's slot, and turn is assigned afterwards
     int turn;
     float time;
     float reachLength;
@@ -12161,9 +12161,9 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
     reach.mX = pItem->mUnknown8.mX;
     reach.mY = pItem->mUnknown8.mY;
     reach.mZ = pItem->mUnknown8.mZ;
-    fn_80227690(&reach, &reach, &pItem->mUnknown14);
-    fn_80227248(&reach, &reach, p->mUnknown768);
-    fn_80227638(&reach, &reach, &pItem->mUnknown14);
+    Vec2Sub(&reach, &reach, &pItem->mUnknown14);
+    Vec2Scale(&reach, &reach, p->mUnknown768);
+    Vec2Add(&reach, &reach, &pItem->mUnknown14);
     reach.mZ *= p->mUnknown768;
     time = pItem->mUnknown20;
     *pScale = speed;
@@ -12201,19 +12201,19 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
             time = t;
         }
     }
-    fn_80227264(&drift, &spin, time * (time * 0.5f));
-    fn_80227350(&drift, &velocity, time);
+    Vec3Scale(&drift, &spin, time * (time * 0.5f));
+    Vec3ScaleAcc(&drift, &velocity, time);
     ballPos.mX += drift.mX;
     ballPos.mY += drift.mY;
     landing.mX = ballPos.mX;
     landing.mY = ballPos.mY;
     landing.mZ = ballPos.mZ;
-    fn_80227690(&ballPos, &ballPos, &p->mMotion.mPos);
-    fn_80227384(&ballPos, &ballPos, -p->mMotion.mFacing);
-    fn_802276B4(&toReach, &reach, &pItem->mUnknown14);
-    reachLength = fn_802270A4(&toReach);
-    fn_80227690((Vector_80039F5C *)&toBall, &pItem->mUnknown8, &ballPos);
-    ballLength = fn_802270A4(&ballPos);
+    Vec2Sub(&ballPos, &ballPos, &p->mMotion.mPos);
+    Vec2Rotate(&ballPos, &ballPos, -p->mMotion.mFacing);
+    Vec3Sub(&toReach, &reach, &pItem->mUnknown14);
+    reachLength = Vec2Magnitude(&toReach);
+    Vec2Sub((Vector_80039F5C *)&toBall, &pItem->mUnknown8, &ballPos);
+    ballLength = Vec2Magnitude(&ballPos);
     MathAngleDiff((fn_801CFE40(velocity.mY, velocity.mX) + 0x800000) & 0xFFFFFF,
                   (p->mMotion.mFacing + pItem->mUnknown28 + pItem->mUnknown38) & 0xFFFFFF);
     *pTurn = 0;
@@ -12234,7 +12234,7 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
             bend = fn_801CFDD0(ratio);
         }
         speed = fn_801CFB94(bend);
-        speed = (speed * ballLength + fn_801CFB94(angle) * reachLength) / fn_802270A4(&pItem->mUnknown14);
+        speed = (speed * ballLength + fn_801CFB94(angle) * reachLength) / Vec2Magnitude(&pItem->mUnknown14);
         turn = bend - (fn_801CFE40(pItem->mUnknown14.mY, pItem->mUnknown14.mX) - fn_801CFE40(reach.mY, reach.mX));
         turn = (turn + (fn_801CFE40(ballPos.mY, ballPos.mX) - fn_801CFE40(reach.mY, reach.mX))) & 0xFFFFFF;
         if (turn > 0x800000) {
@@ -12309,7 +12309,7 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
     if (fn_801783AC(11) || fn_801783AC(12)) {
         special = 1;
     }
-    lucky = fn_802372EC(0, 100) < 33;
+    lucky = SyncRandGetRange(0, 100) < 33;
     bestHandle = 0x1FFFFFFF;
     state = BallStateGet(pBall, 0);
     BallGetPosition(pBall, &ballPos);
@@ -12402,7 +12402,7 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
                 } else {
                     reachMax = 0.55f;
                 }
-                reachMax = reachMax < fn_802270A4(&pItem->mUnknown14) ? reachMax : fn_802270A4(&pItem->mUnknown14);
+                reachMax = reachMax < Vec2Magnitude(&pItem->mUnknown14) ? reachMax : Vec2Magnitude(&pItem->mUnknown14);
                 if (pItem->mUnknown6[0] == 1) {
                     limit = 0.35f;
                     reachMax = 0.75f;
@@ -12434,7 +12434,7 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
                     continue;
                 }
                 fall = velocity.mZ - fall;
-                if (MathAngleDiff(pItem->mUnknown30, fn_801CFE40(fall, fn_802270A4(&velocity))) >= pItem->mUnknown34) {
+                if (MathAngleDiff(pItem->mUnknown30, fn_801CFE40(fall, Vec2Magnitude(&velocity))) >= pItem->mUnknown34) {
                     continue;
                 }
                 landing.mX = ballPos.mX + velocity.mX * time;
@@ -12445,16 +12445,16 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
                 if (kind == 1 && fn_80178A68(&landing) <= 0.75f) {
                     continue;
                 }
-                fn_80227690(&reach, &pItem->mUnknown8, &pItem->mUnknown14);
-                fn_80227248(&reach, &reach, p->mUnknown768);
-                fn_80227638(&reach, &reach, &pItem->mUnknown14);
+                Vec2Sub(&reach, &pItem->mUnknown8, &pItem->mUnknown14);
+                Vec2Scale(&reach, &reach, p->mUnknown768);
+                Vec2Add(&reach, &reach, &pItem->mUnknown14);
                 if (pItem->mUnknown6[0] == 1) {
                     angle = heading;
                 } else {
                     angle = facing + fn_800C8BAC(p, 0);
                 }
-                fn_80227384(&reach, &reach, angle);
-                fn_80227638(&reach, &reach, pPos);
+                Vec2Rotate(&reach, &reach, angle);
+                Vec2Add(&reach, &reach, pPos);
                 if (pZone != 0 && loose == 0) {
                     if (fabsf(pZone[0] - reach.mX) >= pZone[3]) {
                         continue;
@@ -12466,11 +12466,11 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
                         continue;
                     }
                 }
-                fn_80227690(&delta, &landing, &reach);
+                Vec2Sub(&delta, &landing, &reach);
                 if (pItem->mUnknown6[1] != 2 && state == 3) {
-                    maxDist = fn_802270A4(&pItem->mUnknown14) * lbl_803EA940 + 0.55f;
+                    maxDist = Vec2Magnitude(&pItem->mUnknown14) * lbl_803EA940 + 0.55f;
                 } else {
-                    maxDist = fn_802270A4(&pItem->mUnknown14) * 0.25f + reachMax;
+                    maxDist = Vec2Magnitude(&pItem->mUnknown14) * 0.25f + reachMax;
                 }
                 if (special != 0 && lucky != 0 && pItem->mUnknown4 == 5) {
                     maxDist = 4.4f;
@@ -12478,7 +12478,7 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
                 if (loose != 0) {
                     maxDist = 5.0f;
                 }
-                dist = fn_802270A4(&delta);
+                dist = Vec2Magnitude(&delta);
                 if (dist > maxDist) {
                     continue;
                 }
@@ -12508,7 +12508,7 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
                         score += 0.2f;
                     }
                 } else {
-                    fn_8022713C(&pItem->mUnknown14);
+                    Vec2InvMagnitude(&pItem->mUnknown14);
                     if (pItem->mUnknown6[0] == 1 && p->mMotion.mUnknown28 < 0.045f) {
                         score += 0.15f;
                     }
@@ -12682,7 +12682,7 @@ extern "C" int fn_80098EAC(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
                     continue;
                 }
                 fall = velocity.mZ - fall;
-                angle = fn_801CFE40(fall, fn_802270A4(&velocity));
+                angle = fn_801CFE40(fall, Vec2Magnitude(&velocity));
                 if (loose == 0 && MathAngleDiff(pItem->mUnknown30, angle) >= pItem->mUnknown34) {
                     continue;
                 }
@@ -12691,21 +12691,21 @@ extern "C" int fn_80098EAC(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
                 if (kind == 1 && fn_80178A68(&landing) <= 0.75f) {
                     continue;
                 }
-                fn_80227690(&reach, &pItem->mUnknown8, &pItem->mUnknown14);
-                fn_80227248(&reach, &reach, p->mUnknown768);
-                fn_80227638(&reach, &reach, &pItem->mUnknown14);
-                fn_80227384(&reach, &reach, facing);
-                fn_80227638(&reach, &reach, pPos);
-                fn_80227690(&delta, &landing, &reach);
-                dist = fn_802270A4(&delta);
-                reachMax = fn_802270A4(&pItem->mUnknown14) * 0.5f;
+                Vec2Sub(&reach, &pItem->mUnknown8, &pItem->mUnknown14);
+                Vec2Scale(&reach, &reach, p->mUnknown768);
+                Vec2Add(&reach, &reach, &pItem->mUnknown14);
+                Vec2Rotate(&reach, &reach, facing);
+                Vec2Add(&reach, &reach, pPos);
+                Vec2Sub(&delta, &landing, &reach);
+                dist = Vec2Magnitude(&delta);
+                reachMax = Vec2Magnitude(&pItem->mUnknown14) * 0.5f;
                 if (reachMax < 0.3f) {
                     reachMax = 0.3f;
                 }
                 if (dist >= reachMax) {
                     continue;
                 }
-                score = (fn_802270A4(&pItem->mUnknown14) * 0.5f - dist) * 0.33333334f;
+                score = (Vec2Magnitude(&pItem->mUnknown14) * 0.5f - dist) * 0.33333334f;
                 if (score > 0.8f) {
                     score = 0.8f;
                 }
@@ -12781,14 +12781,14 @@ extern "C" void fn_80099630(void)
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EC92C, sizeof(Block_80099630), 0, 0x63746368);
     unsigned char i;
 
-    fn_80238234(pHandle, 0, 0, fn_800994E0, 0);
-    fn_8023816C(pHandle);
+    SyncStateSetCallbacks(pHandle, 0, 0, fn_800994E0, 0);
+    SyncStateGetData(pHandle);
     for (i = 0; i <= 2; i++) {
         lbl_8030C2B8[i].mpUnknownBE8 = 0;
         lbl_8030C2B8[i].mUnknown0 = 0;
     }
     lbl_803EA930 = 1;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 extern "C" void fn_800996D4(void)
@@ -12927,7 +12927,7 @@ extern "C" void fn_80099AD0(Object_80039F5C *p, Ball_t *pBall, int a, int mode, 
     }
     facing = p->mMotion.mFacing;
     BallGetLandingPoint(pBall, &delta);
-    fn_80227690(&delta, &delta, &p->mMotion.mPos);
+    Vec2Sub(&delta, &delta, &p->mMotion.mPos);
     angle = fn_801CFE40(delta.mY, delta.mX);
     if (MathAngleDiff(p->mMotion.mFacing, angle) <= 0xAAAA9) {
         p->mMotion.mFacing = angle & 0xFFFFFF;
@@ -13186,7 +13186,7 @@ extern "C" int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRe
                 delta.mX = pBlock->mUnknown18;
                 delta.mY = pBlock->mUnknown1C;
                 delta.mZ = 0.0f;
-                fn_8022765C(&pos, &p->mMotion.mPos, &delta);
+                Vec3Add(&pos, &p->mMotion.mPos, &delta);
                 if (fn_801248D4(p, 0, &pos, 0, 0.5f, 0.5f, 0, 0)) {
                     p->mMotion.mPos.mX += pBlock->mUnknown18;
                     p->mMotion.mPos.mY += pBlock->mUnknown1C;
@@ -13303,7 +13303,7 @@ extern "C" int PlyrRollContestedCatch(Object_80039F5C *p)
     }
     signed char adjust = (rating - 128) * 0.25f;
     chance = chance + adjust;
-    if (chance > (signed char)fn_802372EC(0, 100)) {
+    if (chance > (signed char)SyncRandGetRange(0, 100)) {
         result = 1;
     }
     return result;
@@ -13377,7 +13377,7 @@ extern "C" void fn_8009A8F0(void)
 extern "C" void fn_8009AB34(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EA948, sizeof(Block_8009AB34), 0, 0x63747570);
-    Block_8009AB34 *p = (Block_8009AB34 *)fn_8023816C(pHandle);
+    Block_8009AB34 *p = (Block_8009AB34 *)SyncStateGetData(pHandle);
 
     p->mUnknown0[1] = p->mUnknown0[0] = 0.0f;
     if (fn_800BA6F8() == 0 && GameOptionsGet(8) != 0) {
@@ -13385,7 +13385,7 @@ extern "C" void fn_8009AB34(void)
     } else {
         p->mUnknown8 = 0;
     }
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 extern "C" void fn_8009ABC0(void)
@@ -13527,16 +13527,16 @@ extern "C" int fn_8009B1C4(int value, int *pState)
     if (fn_80178AE0() != 2) {
         result = 0;
     }
-    if (fn_8002D060(lbl_803EA368)) {
+    if (ReplayIsShowing(gpReplay)) {
         result = 0;
     }
     if (result) {
-        fn_8002C9A8(lbl_803EA368, 3, 0);
+        ReplayHandleCommand(gpReplay, 3, 0);
         if (InGameIsDemo() == 0) {
             PerPollSingleDevice(ConGetChannelInfo(lbl_803EA990, 0));
         }
         if (PerGetDeviceStatus(ConGetChannelInfo(lbl_803EA990, 0)) == 2) {
-            fn_8002CA74(lbl_803EA368, 10, lbl_803EA990);
+            ReplayHandleControl(gpReplay, 10, lbl_803EA990);
         }
         *pState = 0;
         result = 1;
@@ -13551,29 +13551,29 @@ extern "C" int fn_8009B288(unsigned int *pState)
     switch (*pState) {
     case 0:
         AudmonEventPost(126, 0);
-        if (fn_8005BE5C(0) == 0) {
-            fn_8005BF18();
-            fn_8005BE5C(0);
+        if (InGameOverlayOpen(0) == 0) {
+            InGameOverlayReset();
+            InGameOverlayOpen(0);
         }
         PauseBlock();
         *pState = 1;
         break;
     case 1:
-        if (fn_8005BFD4() == 1) {
+        if (InGameOverlayGetState() == 1) {
             if (PauseIsUnblocked() == 0) {
                 PauseUnblock();
             }
-            fn_8005BF5C();
-            fn_8002CFF4(lbl_803EA368);
+            InGameOverlayShow();
+            ReplayStartAutoPlayback(gpReplay);
             HudHide();
             *pState = 2;
         }
         break;
     case 2:
         if (fn_800B9B18(lbl_803EAB84) == 2) {
-            fn_8002CA74(lbl_803EA368, 9, 0);
+            ReplayHandleControl(gpReplay, 9, 0);
         }
-        if (fn_8002D060(lbl_803EA368) == 0) {
+        if (ReplayIsShowing(gpReplay) == 0) {
             GameCamera_t *pCamera;
 
             HudUnhide();
@@ -13595,8 +13595,8 @@ extern "C" int fn_8009B288(unsigned int *pState)
 
 extern "C" void fn_8009B3A4(int *pState)
 {
-    if (fn_8002D060(lbl_803EA368)) {
-        fn_8002CA74(lbl_803EA368, 9, 0);
+    if (ReplayIsShowing(gpReplay)) {
+        ReplayHandleControl(gpReplay, 9, 0);
     }
 }
 
@@ -13702,12 +13702,12 @@ extern "C" void CelebrationBlocksInit(void *pData)
     for (i = 0; i <= 1; i++) {
         void *pHandle = SyncStateRegister(0, (void **)&lbl_803EA984[i], sizeof(Block_8009B720), 0, 0x63656C62);
 
-        fn_80238234(pHandle, 0, 0, 0, fn_8009B5E8);
-        fn_80238248(pHandle, fn_8009B628, fn_8009B718, fn_8009B698);
-        pBlock = (Block_8009B720 *)fn_8023816C(pHandle);
+        SyncStateSetCallbacks(pHandle, 0, 0, 0, fn_8009B5E8);
+        SyncStateSetSaveCallbacks(pHandle, fn_8009B628, fn_8009B718, fn_8009B698);
+        pBlock = (Block_8009B720 *)SyncStateGetData(pHandle);
         pBlock->mpUnknown0 = pData;
         fn_8009B1B0(pBlock);
-        fn_802381E0(pHandle);
+        SyncStateCommit(pHandle);
     }
     fn_8009B3E0(pBlock);
 }
@@ -13819,12 +13819,12 @@ extern "C" void fn_8009BA9C(int value)
     for (i = 0; i <= 1; i++) {
         lbl_803EA984[i]->mUnknown4.mUnknown128 = value;
     }
-    fn_8002E890(&list);
+    ReplayShotListClear(&list);
     if (fn_8009B448(value, 0)) {
         lbl_803EA984[0]->mUnknown4.mUnknown127 = 1;
     }
-    fn_8002C9A8(lbl_803EA368, 3, 0);
-    fn_8002CF34(lbl_803EA368);
+    ReplayHandleCommand(gpReplay, 3, 0);
+    ReplayUpdate(gpReplay);
     for (i = 0; i <= 1; i++) {
         if (lbl_803EA984[i]->mUnknown4.mUnknown127 == 0) {
             fn_8009B1B0(lbl_803EA984[i]);
@@ -14121,7 +14121,7 @@ extern "C" signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *
 
     for (i = 0; i < pTable->mCount; i++) {
         Info_80089904 *pInfo = pTable->mEntries[i].mpInfo;
-        int score = fn_802372EC(0, 10);
+        int score = SyncRandGetRange(0, 10);
         const unsigned char *pBytes = &pInfo->mValue;
         int k;
 
@@ -14258,7 +14258,7 @@ extern "C" unsigned char fn_8009C88C(Object_80039F5C *p, Block_8009C6F4 *pBlock)
         pEntry->mpCallback0(p, &pEntry->mUnknown4, pEntry->mUnknown10);
         MatPush();
         MatLoad((float *)p->mUnknown704);
-        fn_80227CC0(&pEntry->mUnknown4, &pEntry->mUnknown4);
+        Vec3Mat34Mul(&pEntry->mUnknown4, &pEntry->mUnknown4);
         MatPop();
         if (fn_8009C7B4(&pEntry->mUnknown4) == 1) {
             fn_8009CE88(p, pBlock, 6);
@@ -14289,9 +14289,9 @@ extern "C" void fn_8009C9D0(Object_80039F5C *p, Vector_80039F5C *pTarget, int bo
     MatScalePos(pObject->mUnknown24);
     MatStore((float *)m);
     MatGetPos((float *)&pos);
-    fn_802276B4(&dir, pTarget, &pos);
+    Vec3Sub(&dir, pTarget, &pos);
     MatTranspose();
-    fn_80227C2C(&dir, &dir);
+    Vec3Mat33Mul(&dir, &dir);
     MatPop();
     angle = -fn_801CFE40(dir.mZ, dir.mX) + 0x400000;
     if (angle > lbl_803EA9A0) {
@@ -14350,7 +14350,7 @@ extern "C" void fn_8009CBD8(Object_80039F5C *p, Vector_80039F5C *pOut)
 
     MatPush();
     MatLoad((float *)pObject->mUnknown44.mUnknown52[13]);
-    fn_80227CC0(pOut, &lbl_802D7C20);
+    Vec3Mat34Mul(pOut, &lbl_802D7C20);
     MatPop();
 }
 
@@ -14407,7 +14407,7 @@ extern "C" unsigned char *fn_8009CD00(Object_80039F5C *p,
     fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, pName), &pos, &angles);
     MatPush();
     MatLoad(p->mUnknown704[0]);
-    fn_80227CC0(&pos, &pos);
+    Vec3Mat34Mul(&pos, &pos);
     MatPop();
     pEntry = fn_8009C6F4(pEntries, pBlock, pCallback, &pos, a, side, b);
     if (pEntry) {
@@ -14506,7 +14506,7 @@ extern "C" int fn_8009D04C(Object_80039F5C *p, Object_80039F5C *pOther, int limi
 {
     Point_8017886C delta;
 
-    fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+    Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
     return MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) < limit;
 }
 
@@ -14523,7 +14523,7 @@ extern "C" void fn_8009D0AC(Object_80039F5C *p)
 
         fn_800BA6F8();
         i = 0;
-        index = fn_802372EC(0, count);
+        index = SyncRandGetRange(0, count);
         pTable = lbl_802D7C2C;
         pRef = &pTable[index];
         while (i < count) {
@@ -14545,7 +14545,7 @@ extern "C" void fn_8009D0AC(Object_80039F5C *p)
         if (i < count) {
             fn_8009CEE4(p, ref, 13, 15, 0);
             p->mUnknown292 = ref;
-            p->mUnknown296 = fn_802372EC(0, 120) + 30;
+            p->mUnknown296 = SyncRandGetRange(0, 120) + 30;
         } else {
             fn_8009D1AC(p);
         }
@@ -14641,7 +14641,7 @@ extern "C" void fn_8009D3F0(Timer_8009D338 *p, unsigned int time)
 extern "C" void fn_8009D474(int a, int b)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EA9A8, sizeof(Block_8009D474), 0, 0x636C636B);
-    Block_8009D474 *p = (Block_8009D474 *)fn_8023816C(pHandle);
+    Block_8009D474 *p = (Block_8009D474 *)SyncStateGetData(pHandle);
 
     p->mUnknown0 = 0;
     p->mUnknown98 = 0;
@@ -14675,7 +14675,7 @@ extern "C" void fn_8009D474(int a, int b)
     p->mEntries[5].mUnknown8 = 1;
     p->mEntries[5].mUnknown10 = b;
     p->mEntries[5].mUnknown4 = b;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 extern "C" int fn_8009D558(unsigned int time)
@@ -14739,7 +14739,7 @@ extern "C" int fn_8009D558(unsigned int time)
             flags |= 1;
         }
     } else if (ChallengeIsPairingGame() != 0) {
-        int done = fn_8005900C();
+        int done = InGamePauseIsForfeit();
         int value;
 
         if (done != 0) {
@@ -14770,7 +14770,7 @@ extern "C" void fn_8009D818(int state)
 
     lbl_803EA9A8->mUnknown0 = state;
     lbl_803EA9A8->mUnknown98 = previous;
-    fn_801FCE10(0, "update 'FNIG' set 'RTQG' = \x85\n", state);
+    TDbCompilePerformOp(0, "update 'FNIG' set 'RTQG' = \x85\n", state);
     lbl_803EA9A8->mUnknown94 &= ~1;
 }
 
@@ -14966,7 +14966,7 @@ extern "C" void fn_8009DD10(State_8011F4EC *p)
         p->mUnknown4[i] = 0;
     }
     if (fn_800B65A0(fn_80178320()) == 0xFF) {
-        fn_802372EC(0, 100);
+        SyncRandGetRange(0, 100);
     }
 }
 
@@ -14984,10 +14984,10 @@ extern "C" int fn_8009DD88(Object_80039F5C *p, Object_80039F5C *pOther)
             float carrierDistance;
             float otherDistance;
 
-            fn_80227690(&carrierDelta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);
-            fn_80227690(&otherDelta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-            carrierDistance = fn_802270A4(&carrierDelta);
-            otherDistance = fn_802270A4(&otherDelta);
+            Vec2Sub(&carrierDelta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);
+            Vec2Sub(&otherDelta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+            carrierDistance = Vec2Magnitude(&carrierDelta);
+            otherDistance = Vec2Magnitude(&otherDelta);
             if (carrierDistance > 3.0f) {
                 result = carrierDistance > otherDistance;
             }
@@ -15000,7 +15000,7 @@ extern "C" void fn_8009DE9C(void)
 {
     State_8011F4EC *p = fn_8011F4EC();
 
-    if (fn_802372EC(0, 100) < 75) {
+    if (SyncRandGetRange(0, 100) < 75) {
         p->mUnknown1C5 = 1;
     } else {
         p->mUnknown1C5 = 0;
@@ -15515,7 +15515,7 @@ extern "C" int fn_8009F058(Object_80039F5C *p, Object_80039F5C *pOther, int angl
 {
     Point_8017886C delta;
 
-    fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+    Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
     return MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) < angle;
 }
 
@@ -15526,7 +15526,7 @@ extern "C" int fn_8009F0B8(Object_80039F5C *p, int angle)
     int heading;
 
     BallGetPosition(BallGetCurrent(), &ball);
-    fn_80227690(&delta, &ball, &p->mMotion.mPos);
+    Vec2Sub(&delta, &ball, &p->mMotion.mPos);
     heading = fn_801CFE40(delta.mY, delta.mX);
     return MathAngleDiff(heading, p->mMotion.mFacing + fn_800C8BAC(p, 0)) < angle;
 }
@@ -15543,9 +15543,9 @@ extern "C" float fn_8009F168(Vector_80039F5C *p, Pair_802270A4 *pVelocity,
                               Vector_80039F5C *pOther, float speed)
 {
     Vector_80039F5C delta;
-    fn_802276B4(&delta, pOther, p);
-    float distance = fn_802270A4(&delta);
-    float velocity = fn_802270A4(pVelocity);
+    Vec3Sub(&delta, pOther, p);
+    float distance = Vec2Magnitude(&delta);
+    float velocity = Vec2Magnitude(pVelocity);
     int angle = fn_801CFE40(pVelocity->mUnknown4, pVelocity->mUnknown0);
     angle = angle - fn_801CFE40(delta.mY, delta.mX);
     float sine = fn_801CFB18(angle);
@@ -15634,7 +15634,7 @@ extern "C" int fn_8009F258(Object_80039F5C *p)
             if (fn_800B65A0(fn_80178308()) != 0xFF && (float)fn_8011E188() < lbl_803EA9BC) {
                 chance = (unsigned int)(chance * lbl_803EA9C0);
             }
-            if (fn_802372EC(0, chance) < rating) {
+            if (SyncRandGetRange(0, chance) < rating) {
                 result = 1;
             }
         }
@@ -15833,8 +15833,8 @@ extern "C" void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned i
                 angle = p->mMotion.mUnknown32;
                 length = gPlyrMoveFwdSpeed * ((1.0f - base) * (p->mRatings[4] / 255.0f) + base) * (float)distance;
             }
-            fn_80227538(&step, angle, length);
-            fn_80227638(pOut, pOut, &step);
+            Vec2FromAngle(&step, angle, length);
+            Vec2Add(pOut, pOut, &step);
         }
     } else if (pOut != 0) {
         pOut->mX = pOut->mY = 0.0f;
@@ -15864,7 +15864,7 @@ extern "C" int fn_8009FB60(Object_80039F5C *p)
         float distance;
 
         BallGetLandingPoint(pBall, &spot);
-        distance = fn_8022781C(&spot, &p->mMotion.mPos);
+        distance = Vec2Distance(&spot, &p->mMotion.mPos);
         if (distance < lbl_803EA9C4) {
             Message_800F01CC message;
 
@@ -15873,7 +15873,7 @@ extern "C" int fn_8009FB60(Object_80039F5C *p)
 
                 // FAKEMATCH: compiled-out assert that the reaction chance is at most 1; its 1.0f enters the pool before 255.0f
                 DEFPRED_ASSERT(lbl_803EA9C8 <= 1.0f);
-                if (fn_802372EC(0, (unsigned int)(lbl_803EA9C8 * 255.0f)) < rating) {
+                if (SyncRandGetRange(0, (unsigned int)(lbl_803EA9C8 * 255.0f)) < rating) {
                     memset(&message, 0, sizeof(message));
                     sent = 1;
                     message.mId = 24;
@@ -15884,7 +15884,7 @@ extern "C" int fn_8009FB60(Object_80039F5C *p)
                 short rating = p->mRatings[3];
                 float chance = ((1.0f - (lbl_803EA9C4 - distance) / lbl_803EA9C4) * lbl_803EA9CC + 1.0f) * 255.0f;
 
-                if (fn_802372EC(0, (unsigned int)chance) < rating) {
+                if (SyncRandGetRange(0, (unsigned int)chance) < rating) {
                     memset(&message, 0, sizeof(message));
                     sent = 1;
                     message.mId = 23;
@@ -15904,7 +15904,7 @@ extern "C" int fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther)
     int value = p->mRatings[8] - (pRatings[0] / 8 + pRatings[3] / 8);
 
     value = value < lbl_803EA9D4 ? lbl_803EA9D4 : (value > lbl_803EA9D8 ? lbl_803EA9D8 : value);
-    if (fn_802372EC(0, lbl_803EA9D0) < value) {
+    if (SyncRandGetRange(0, lbl_803EA9D0) < value) {
         result = 1;
     }
     return result;
@@ -16115,8 +16115,8 @@ void LivePlayPhase::InitState()
 {
     void *handle = SyncStateRegister(0, (void **)&lbl_803EA9E8, 80, 0, 0x64706C79);
 
-    fn_8023816C(handle);
-    fn_802381E0(handle);
+    SyncStateGetData(handle);
+    SyncStateCommit(handle);
 }
 
 void LivePlayPhase::Shutdown()
@@ -16166,9 +16166,9 @@ void LivePlayPhase::OnUpdate(float dt)
         fn_800FB768();
         fn_8009E138();
         fn_800A615C();
-        fn_800718A0();
+        SndgEventUpdateDelayed();
         BallGetCurrentHolder();
-        fn_8016EC40();
+        ScrmUpdateBallCarrier();
     }
     PlyrRouteShowTeam(0,0);
     PlyrRouteShowTeam(0,1);
@@ -16669,7 +16669,7 @@ extern "C" void fn_800A1C74(Object_8017886C *result,Object_8017886C *input)
         if(HotspotPollCaptured())PauseOpenScreen(3,22,-1);
         fn_800AE380();
         if(result->mUnknown18&0x2000 || fn_800B2314()&1)fn_8009BA9C((int)result);
-        else fn_8002C9A8(lbl_803EA368,3,0);
+        else ReplayHandleCommand(gpReplay,3,0);
         HudSetDown();
         if(fn_801486A0()!=15)fn_80148A58()->vfn_14();
         lbl_802D7C64[0].mUnknown4=1;
@@ -16898,7 +16898,7 @@ extern "C" int fn_800A2624(void)
 extern "C" int fn_800A262C(void)
 {
     if (CamGameGetCamera(5)->mHeader.mUnknown04[1] <= 0.5f - lbl_8030E6E8.mUnknown2C && CamGameGetCurrentSlot() == 0
-        && fn_8002FA84() == 0 && fn_801784C4() == 0 && (fn_801784C4() != 0 || fn_80140DB4() == 0)) {
+        && ReplayCamIsActive() == 0 && fn_801784C4() == 0 && (fn_801784C4() != 0 || CamPlayWasOrbitToggled() == 0)) {
         lbl_803EA9F8 = 1;
         return 1;
     }
@@ -16909,7 +16909,7 @@ extern "C" int fn_800A262C(void)
 extern "C" int fn_800A26C4(void)
 {
     if (CamGameGetCamera(5)->mHeader.mUnknown04[1] > lbl_8030E6E8.mUnknown2C - 0.5f && CamGameGetCurrentSlot() == 0
-        && fn_8002FA84() == 0 && fn_801784C4() != 0 && (fn_801784C4() == 0 || fn_80140DB4() == 0)) {
+        && ReplayCamIsActive() == 0 && fn_801784C4() != 0 && (fn_801784C4() == 0 || CamPlayWasOrbitToggled() == 0)) {
         lbl_803EA9F8 = 1;
         return 1;
     }
@@ -17673,7 +17673,7 @@ extern "C" int fn_800A3E84(Object_80039F5C *p, int angle, int unused)
     if (!(p->mFlags & 0x4000)) {
         Object_80039F5C *pOther = fn_8009BCE8(&pTarget->mRef);
         if (pOther)
-            distance = fn_8022781C(&p->mMotion, &pOther->mMotion);
+            distance = Vec2Distance(&p->mMotion, &pOther->mMotion);
         if (pTarget->mMode == 2 && (p->mpState->mId == 30 || p->mpState->mId == 2))
             angle = 0x400000;
         int turn = MathAngleDiff(p->mMotion.mFacing, angle);
@@ -17696,7 +17696,7 @@ extern "C" int fn_800A3E84(Object_80039F5C *p, int angle, int unused)
                     && (pTarget->mMode == 4 || pTarget->mMode == 5))
                     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 185, 1.0f, p);
                 else if (pTarget->mMode == 2 && BallGetCurrentHolder() != 0
-                         && fn_8022781C(&p->mMotion, &BallGetCurrentHolder()->mMotion) < 6.0f
+                         && Vec2Distance(&p->mMotion, &BallGetCurrentHolder()->mMotion) < 6.0f
                          && (p->mpState->mId == 2 || p->mpState->mId == 30))
                     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 185, 1.0f, p);
                 else
@@ -17721,7 +17721,7 @@ extern "C" unsigned short fn_800A414C(Table_80089904 *table, Object_80039F5C *p,
     else
         p->mUnknown1008.mUnknown0 = 1;
     Pair_802270A4 delta;
-    fn_80227690(&delta, &pOther->mMotion, &p->mMotion);
+    Vec2Sub(&delta, &pOther->mMotion, &p->mMotion);
     int heading = fn_801CFE40(delta.mUnknown4, delta.mUnknown0) & 0xFFFFFF;
     int facing = p->mMotion.mUnknown32 & 0xFFFFFF;
     if (MathAngleDiff(heading, facing) <= (int)(lbl_803EAA10 * 46603.38f)) {
@@ -17785,7 +17785,7 @@ extern "C" unsigned short fn_800A4358(Table_80089904 *pTable, Object_80039F5C *p
 
         if (fn_800A432C(&pEntry->mKey, &p->mUnknown1008) && angle >= pEntry->mUnknown16
             && angle <= pEntry->mUnknown20) {
-            if (pBest == 0 || fn_802372EC(0, 100) <= 49) {
+            if (pBest == 0 || SyncRandGetRange(0, 100) <= 49) {
                 pBest = pEntry;
                 index = i;
             }
@@ -17866,10 +17866,10 @@ extern "C" int fn_800A46D8(Object_80039F5C *p, Object_80039F5C *pTarget, int rev
     velocity[1] = pTarget->mMotion.mUnknown44;
     velocity[2] = pTarget->mMotion.mUnknown48;
     if (reverse) {
-        fn_80227384(velocity, velocity, 0x800000);
+        Vec2Rotate(velocity, velocity, 0x800000);
     }
     return fn_80120794(&p->mMotion, &pTarget->mMotion, velocity, p->mMotion.mUnknown28, pTarget->mMotion.mUnknown28,
-                       fn_801CFE40(velocity[1], velocity[0]), fn_8022781C(&p->mMotion, &pTarget->mMotion));
+                       fn_801CFE40(velocity[1], velocity[0]), Vec2Distance(&p->mMotion, &pTarget->mMotion));
 }
 
 extern "C" int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget)
@@ -17880,9 +17880,9 @@ extern "C" int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget)
     if (pTarget->mUnknown344 == 3) {
         angle = (angle + 0x800000) & 0xFFFFFF;
     }
-    fn_80227538(&offset, angle, 2.5f);
-    fn_80227638(&offset, &offset, &pTarget->mMotion.mPos);
-    fn_80227690(&offset, &offset, &p->mMotion.mPos);
+    Vec2FromAngle(&offset, angle, 2.5f);
+    Vec2Add(&offset, &offset, &pTarget->mMotion.mPos);
+    Vec2Sub(&offset, &offset, &p->mMotion.mPos);
     return fn_801CFE40(offset.mY, offset.mX);
 }
 
@@ -17923,9 +17923,9 @@ extern "C" void fn_800A4980(Object_80039F5C *p, Object_80039F5C *pOther, int ind
     Point_8017886C delta;
     float distance;
 
-    fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+    Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
     fn_801CFE40(delta.mY, delta.mX);
-    distance = fn_802270A4(&delta);
+    distance = Vec2Magnitude(&delta);
     if (distance < 3.0f) {
         pParams->mUnknown4 = (int)(pParams->mUnknown4 * distance / 3.0f);
         pParams->mUnknown0 = (int)(pParams->mUnknown0 * distance / 3.0f);
@@ -17991,7 +17991,7 @@ extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind
             } else {
                 skill = rating8;
             }
-            if (fn_802372EC(0, params.mUnknown8) >= skill || fn_800A7ECC(p->mIdBytes[2]) == 0) {
+            if (SyncRandGetRange(0, params.mUnknown8) >= skill || fn_800A7ECC(p->mIdBytes[2]) == 0) {
                 p->mTarget.mRef = pOther->mId;
                 p->mTarget.mMode = kind;
                 if (fn_800A7ECC(p->mIdBytes[2]) == 0 && (kind == 4 || kind == 5)) {
@@ -17999,12 +17999,12 @@ extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind
                 } else {
                     int spread;
 
-                    p->mTarget.mUnknownC = fn_802372EC(0, params.mUnknown0 - params.mUnknown4);
+                    p->mTarget.mUnknownC = SyncRandGetRange(0, params.mUnknown0 - params.mUnknown4);
                     spread = 255 - p->mRatings[5];
                     if (spread < 0) {
                         spread = 0;
                     }
-                    p->mTarget.mUnknownC += fn_802372EC(0, spread / params.mUnknownC);
+                    p->mTarget.mUnknownC += SyncRandGetRange(0, spread / params.mUnknownC);
                     p->mTarget.mUnknownC += params.mUnknown4;
                     p->mTarget.mUnknownC = p->mTarget.mUnknownC < params.mUnknown4 ? params.mUnknown4
                                       : (p->mTarget.mUnknownC > params.mUnknown0 ? params.mUnknown0 : p->mTarget.mUnknownC);
@@ -18037,7 +18037,7 @@ extern "C" int fn_800A50B8(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
 {
     int limit = 256 / (pPair->mUnknown0 + 1);
 
-    return fn_802372EC(0, 256) < limit;
+    return SyncRandGetRange(0, 256) < limit;
 }
 
 extern "C" int fn_800A5104(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
@@ -18083,11 +18083,11 @@ extern "C" int fn_800A517C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
                     break;
                 case 2:
                 case 30:
-                    fn_80227690(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
+                    Vec2Sub(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
                     angle = fn_801CFE40(delta.mY, delta.mX);
-                    distance = fn_802270A4(&delta);
+                    distance = Vec2Magnitude(&delta);
                     if (MathAngleDiff(p->mMotion.mFacing, angle) <= 0x1FFFFF) {
-                        fn_80227690(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
+                        Vec2Sub(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
                         angle = fn_801CFE40(delta.mY, delta.mX);
                         if (distance < 6.0f) {
                             result = 1;
@@ -18100,11 +18100,11 @@ extern "C" int fn_800A517C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
             case 11:
             case 12:
                 if (p->mpState->mId == 2 || p->mpState->mId == 30) {
-                    fn_80227690(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
+                    Vec2Sub(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
                     angle = fn_801CFE40(delta.mY, delta.mX);
-                    distance = fn_802270A4(&delta);
+                    distance = Vec2Magnitude(&delta);
                     if (MathAngleDiff(p->mMotion.mFacing, angle) <= 0x1FFFFF) {
-                        fn_80227690(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
+                        Vec2Sub(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
                         angle = fn_801CFE40(delta.mY, delta.mX);
                         if (distance < 6.0f) {
                             result = 1;
@@ -18131,10 +18131,10 @@ extern "C" int fn_800A535C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
     if (fn_800A7ECC(p->mIdBytes[2]) == 0) {
         result = fn_800A54F4(p, pTarget, pOther, pPair);
     } else if (fn_8009F058(p, pTarget, 0x400000) != 0 && fn_8009F058(pTarget, p, 0x400000) != 0
-               && fn_8022781C(&p->mMotion.mPos, &pTarget->mMotion.mPos) < 7.0f) {
+               && Vec2Distance(&p->mMotion.mPos, &pTarget->mMotion.mPos) < 7.0f) {
         int limit = 256 / (pPair->mUnknown0 + 1);
 
-        if (fn_802372EC(0, 256) < limit) {
+        if (SyncRandGetRange(0, 256) < limit) {
             result = 1;
         }
     }
@@ -18151,7 +18151,7 @@ extern "C" int fn_800A543C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
     } else if (p->mpState->mId == 22 && p->mUnknown336 == pTarget->mId) {
         unsigned char chance = Interpolate(p->mRatings[8], 10, 90, 10);
 
-        if (fn_802372EC(0, 100) < chance) {
+        if (SyncRandGetRange(0, 100) < chance) {
             result = 1;
         }
     }
@@ -18161,7 +18161,7 @@ extern "C" int fn_800A543C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
 extern "C" int fn_800A54F4(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
                            Pair_800A554C *pPair)
 {
-    return fn_80227890(&p->mMotion.mPos, &pTarget->mMotion.mPos) < (float)lbl_803EAA14;
+    return Vec2DistanceSqr(&p->mMotion.mPos, &pTarget->mMotion.mPos) < (float)lbl_803EAA14;
 }
 
 extern "C" int fn_800A554C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
@@ -18188,7 +18188,7 @@ extern "C" int fn_800A55D0(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
     Point_8017886C delta;
     int angle;
 
-    fn_80227690(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
+    Vec2Sub(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
     angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
     p->mUnknown512.mUnknown14 = 1;
     p->mUnknown512.mUnknown8 = angle;
@@ -18276,7 +18276,7 @@ extern "C" int fn_800A5844(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
             Object_80039F5C *pCarrier = BallGetCurrentHolder();
 
             if (pCarrier != 0) {
-                fn_80227690(&delta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);
+                Vec2Sub(&delta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);
                 angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
             } else {
                 angle = 0xC00000;
@@ -18286,13 +18286,13 @@ extern "C" int fn_800A5844(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
             Point_8017886C lead;
             float speed = PlyrMoveGetRatedSpeed(pTarget, 1.0f, 1.0f) * p->mTarget.mUnknownC;
 
-            fn_80227538(&lead, pTarget->mMotion.mUnknown32, speed);
-            fn_80227638(&lead, &lead, &pTarget->mMotion.mPos);
-            fn_80227690(&delta, &lead, &p->mMotion.mPos);
+            Vec2FromAngle(&lead, pTarget->mMotion.mUnknown32, speed);
+            Vec2Add(&lead, &lead, &pTarget->mMotion.mPos);
+            Vec2Sub(&delta, &lead, &p->mMotion.mPos);
             angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
             p->mTarget.mUnknown4 = angle;
             speed = PlyrMoveGetRatedSpeed(p, 1.0f, 1.0f) * p->mTarget.mUnknownC;
-            p->mTarget.mUnknown8 = fn_802270A4(&delta) / speed;
+            p->mTarget.mUnknown8 = Vec2Magnitude(&delta) / speed;
             p->mTarget.mUnknown8 = p->mTarget.mUnknown8 > 1.0f ? 1.0f : p->mTarget.mUnknown8;
             p->mTarget.mUnknown8 = p->mTarget.mUnknown8 < 1e-7f ? 1e-7f : p->mTarget.mUnknown8;
         }
@@ -18538,7 +18538,7 @@ extern "C" void fn_800A60D8(Object_80039F5C *a, Object_80039F5C *b)
         lbl_803EC94C.mpUnknown0 = b;
         lbl_803EC94C.mUnknown5 = 1;
         lbl_803EC94C.mUnknown4 = fn_800A5F20(b);
-        fn_80162FB8(fn_800B65A0(b->mIdBytes[2]), b->mId);
+        PlyrStarLinkPlayer(fn_800B65A0(b->mIdBytes[2]), b->mId);
         CamMainFollow(CamGameGetCamera(5), 2, b->mId, 0);
     }
 }
@@ -18559,7 +18559,7 @@ extern "C" void fn_800A61A8(void)
     lbl_803EC94C.mpUnknown0 = 0;
     lbl_803EC94C.mUnknown4 = 0;
     lbl_803EC94C.mUnknown5 = 0;
-    fn_80163020();
+    PlyrStarClearLinks();
 }
 
 extern "C" int fn_800A61E0(void)
@@ -18605,7 +18605,7 @@ extern "C" Object_80039F5C *fn_800A624C(int team)
         }
     }
     if (p == 0) {
-        p = PlyrGet(team, fn_802372EC(0, count));
+        p = PlyrGet(team, SyncRandGetRange(0, count));
     }
     return p;
 }
@@ -18665,10 +18665,10 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
             float distance;
 
             BallGetPosition(pBall, &ballPos);
-            fn_802276B4(&delta, &pFirst->mMotion.mPos, &ballPos);
-            distance = fn_802270A4(&delta);
-            fn_802276B4(&delta, &pSecond->mMotion.mPos, &ballPos);
-            if (distance < fn_802270A4(&delta)) {
+            Vec3Sub(&delta, &pFirst->mMotion.mPos, &ballPos);
+            distance = Vec2Magnitude(&delta);
+            Vec3Sub(&delta, &pSecond->mMotion.mPos, &ballPos);
+            if (distance < Vec2Magnitude(&delta)) {
                 ppOut[0] = pFirst;
                 ppOut[1] = pSecond;
             } else {
@@ -18920,7 +18920,7 @@ extern "C" void fn_800A6D5C(int team)
 
 extern "C" void fn_800A6DA4(void)
 {
-    lbl_803EAA50 = fn_802372EC(0, 2);
+    lbl_803EAA50 = SyncRandGetRange(0, 2);
 }
 
 extern "C" int fn_800A6DD0(int team)
@@ -18993,7 +18993,7 @@ extern "C" void fn_800A70F4(void)
 
     for (team = 0; team <= 1; team++) {
         void *pHandle = SyncStateRegister(0, (void **)&lbl_803EC954[team], sizeof(Block_800A70F4), 0, 'gbrk' + team);
-        Block_800A70F4 *pBlock = (Block_800A70F4 *)fn_8023816C(pHandle);
+        Block_800A70F4 *pBlock = (Block_800A70F4 *)SyncStateGetData(pHandle);
         unsigned int count;
         unsigned short index;
         unsigned char i;
@@ -19020,7 +19020,7 @@ extern "C" void fn_800A70F4(void)
         for (index = 0; index < count; index++) {
             ParticleTrailSetTeamColor(PlyrGet(team, index));
         }
-        fn_802381E0(pHandle);
+        SyncStateCommit(pHandle);
     }
     lbl_803EC95C = -1;
     lbl_803EAA4D = 0;
@@ -19378,10 +19378,10 @@ extern "C" int fn_800A7FE0(void)
             fn_800A61E8(1);
         }
         lbl_803EAA4D = 0;
-        fn_8003E174(1);
+        PlyrObjsSetDrawFlag(1);
     } else if (lbl_803EAA4F == 0) {
         lbl_803EAA4F = 1;
-        fn_8003E174(0);
+        PlyrObjsSetDrawFlag(0);
         pCharacter = fn_80093BCC(lbl_803EC95C);
         if (lbl_803EAA50 <= 1) {
             pCharacter->mUnknown14[0] = fn_800A624C(fn_80178308());
@@ -19393,10 +19393,10 @@ extern "C" int fn_800A7FE0(void)
             unsigned int count = fn_80178D18(lbl_803EAA4C);
 
             pCharacter->mUnknown14[0] =
-                PlyrGet(lbl_803EAA4C, fn_802372EC(0, count));
+                PlyrGet(lbl_803EAA4C, SyncRandGetRange(0, count));
             do {
                 pCharacter->mUnknown14[1] =
-                    PlyrGet(lbl_803EAA4C, fn_802372EC(0, count));
+                    PlyrGet(lbl_803EAA4C, SyncRandGetRange(0, count));
             } while (pCharacter->mUnknown14[0] == pCharacter->mUnknown14[1]);
         }
         pCharacter->mUnknownE0.mUnknown8.mWord = lbl_803EAA4C == fn_80178308() ? 0 : 1;
@@ -19650,9 +19650,9 @@ extern "C" void fn_800A87E8(void)
         CamGameSelectCamera(0);
         CamGameSetModeAll(1);
         CamMainWarpToDest(CamGameGetCamera(5));
-        fn_8003E174(1);
-        if (fn_8005BFD4() != 4) {
-            fn_8005BF18();
+        PlyrObjsSetDrawFlag(1);
+        if (InGameOverlayGetState() != 4) {
+            InGameOverlayReset();
         }
         ParticleTrailSetEnabled(lbl_803EAA4E);
         if (lbl_803EC954[0]->mUnknown68 != 0 || lbl_803EC954[1]->mUnknown68 != 0) {
@@ -19724,7 +19724,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
                     0);
         if (lbl_803EC954[team]->mUnknown54 == 0) {
             if (event == 9 || event == 14 || event == 16) {
-                fn_80071C34(1);
+                SndgEventSetMusicHold(1);
             }
             fn_800A7A0C(team);
         }
@@ -19753,7 +19753,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
                     0);
         if (lbl_803EC954[other]->mUnknown54 == 0) {
             if (event == 9 || event == 14 || event == 16) {
-                fn_80071C34(1);
+                SndgEventSetMusicHold(1);
             }
             fn_800A7A0C(other);
         }
@@ -19885,7 +19885,7 @@ extern "C" void fn_800A9238(void)
         unsigned int count = fn_80178D18(team);
 
         for (; i < count; i++) {
-            Object_80039F5C *p = fn_8003E0C8((Block_80170E64 *)fn_8003DF3C(team, i));
+            Object_80039F5C *p = PlyrObjsFindPlayer((Block_80170E64 *)PlyrObjsGetBySide(team, i));
             Message_800F01CC message;
 
             fn_800EFE60(0, p->mpState, p);
@@ -19923,9 +19923,9 @@ extern "C" void fn_800A9384(int mode)
 {
     unsigned int i;
 
-    fn_8002C9A8(lbl_803EA368, 3, 0);
-    fn_8002C9A8(lbl_803EA368, 1, 0);
-    fn_8002CF34(lbl_803EA368);
+    ReplayHandleCommand(gpReplay, 3, 0);
+    ReplayHandleCommand(gpReplay, 1, 0);
+    ReplayUpdate(gpReplay);
     lbl_8030F42C.mUnknown4 = 0;
     lbl_803EAA84 = 1;
     lbl_8030F42C.mUnknown8 = 0;
@@ -19958,8 +19958,8 @@ extern "C" void fn_800A9478(int skipPlayerReset)
         unsigned int step;
         Vector_80039F5C pos;
 
-        fn_8002C9A8(lbl_803EA368, 3, 0);
-        fn_8002C9A8(lbl_803EA368, 1, 0);
+        ReplayHandleCommand(gpReplay, 3, 0);
+        ReplayHandleCommand(gpReplay, 1, 0);
         BallGetPosition(BallGetCurrent(), &pos);
         if (fn_80178508((Point_8017886C *)&pos, 0, 0) != 1) {
             lost = 1;
@@ -19994,7 +19994,7 @@ extern "C" void fn_800A9478(int skipPlayerReset)
             TutorialSetHudVisible(1);
         }
         if (lost) {
-            fn_8002C9A8(lbl_803EA368, 2, 0);
+            ReplayHandleCommand(gpReplay, 2, 0);
         }
         CamGameResumeAll();
         HudPost3AOn();
@@ -20077,7 +20077,7 @@ extern "C" void fn_800A9854(void)
     team = fn_80178320();
     count = fn_80178D18(team);
     for (i = 0; i < count; i++) {
-        p = fn_8003E0C8((Block_80170E64 *)fn_8003DF3C(team, i));
+        p = PlyrObjsFindPlayer((Block_80170E64 *)PlyrObjsGetBySide(team, i));
         if (p != pCarrier) {
             p->mFlags &= ~4;
             if (p->mUnknown9[2] != 0) {
@@ -20104,7 +20104,7 @@ extern "C" void fn_800A9854(void)
     team = fn_80178308();
     count = fn_80178D18(team);
     for (i = 0; i < count; i++) {
-        p = fn_8003E0C8((Block_80170E64 *)fn_8003DF3C(team, i));
+        p = PlyrObjsFindPlayer((Block_80170E64 *)PlyrObjsGetBySide(team, i));
         if (p != pCarrier) {
             p->mFlags &= ~4;
             if (p->mUnknown9[2] != 0) {
@@ -20141,7 +20141,7 @@ extern "C" void fn_800A9854(void)
     if (index != 0xFF) {
         fn_800B6988(index);
     }
-    fn_80162780(1, 1);
+    PlyrStarSetShown(1, 1);
 }
 
 extern "C" void fn_800A9B54(int event, Object_80039F5C *p)
@@ -20426,7 +20426,7 @@ extern "C" void fn_800AA348(Entry_800AA80C *pEntries, int index)
         fn_800AA020();
         for (unsigned int j = 0; j < pActor->mUnknown4; j++) {
             int slot = fn_80096440(AnimSeqncrGetPlayerPtr(pActor, j)->mUnknown0);
-            Object_80039F5C *p = fn_800606CC(pEntries[index].mUnknown0, slot);
+            Object_80039F5C *p = StoryEventsFindLineupPlayer(pEntries[index].mUnknown0, slot);
 
             if (p != 0) {
                 p->mUnknown9[2] = 1;
@@ -20535,7 +20535,7 @@ extern "C" void fn_800AA720(Class_80297B90 *p)
             int count = fn_80094374(2);
 
             do {
-                lbl_803EAA88->mpUnknown0->mEntries[0].mUnknown0 = fn_802372EC(0, count);
+                lbl_803EAA88->mpUnknown0->mEntries[0].mUnknown0 = SyncRandGetRange(0, count);
             } while (lbl_803EAA88->mpUnknown0->mEntries[0].mUnknown0 == 1);
         }
         lbl_803EAA88->mUnknown4 = 0;
@@ -20720,11 +20720,11 @@ extern "C" void fn_800AACB8(Class_80297B90 *pObject)
 void Class_80297B90::vfn_01()
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAA88, sizeof(Block_800AACD4), 0, 0x67656E64);
-    Block_800AACD4 *pBlock = (Block_800AACD4 *)fn_8023816C(pHandle);
+    Block_800AACD4 *pBlock = (Block_800AACD4 *)SyncStateGetData(pHandle);
 
     pBlock->mUnknown4 = 0;
     pBlock->mpUnknown0 = 0;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 void Class_80297B90::vfn_02()
@@ -20739,13 +20739,13 @@ void Class_80297B90::vfn_03()
     lbl_803EAA88->mUnknown10 = 0;
     fn_800AFDD4(fn_800AA93C);
     AudmonEventPost(131, 0);
-    fn_8002C9A8(lbl_803EA368, 3, 0);
+    ReplayHandleCommand(gpReplay, 3, 0);
     lbl_803EAA88->mUnknown4 = 19;
     lbl_803EAA88->mUnknown15 = InGameIsDemo();
     lbl_803EAA88->mUnknown16 = lbl_803EAA88->mUnknownC = lbl_803EAA88->mUnknown8 = -1;
     lbl_803EAA88->mUnknown17 = 0;
     fn_800AA720(this);
-    fn_8003E174(0);
+    PlyrObjsSetDrawFlag(0);
     fn_800AAAFC();
     vfn_06();
 }
@@ -20826,13 +20826,13 @@ extern "C" int fn_800AAFEC(void *p, float dt)
     if (ChallengeIsActive() != 0) {
         lbl_803EAA88->mUnknown4 = 16;
         HudPost3AOff();
-        if (fn_80059004() != 0) {
+        if (InGamePauseIsRestart() != 0) {
             fn_800C1CA0();
             fn_8009D964(4, 1);
-            fn_80059014();
+            InGamePauseClearRestart();
         } else {
             ScreenTransStart(1, 30, 0x808080, 0);
-            fn_8005BC10(4);
+            InGameRewardOpen(4);
         }
         return 1;
     }
@@ -20914,7 +20914,7 @@ extern "C" int fn_800AB2FC(void *p, float dt)
 {
     int result = 0;
 
-    if (fn_8005B3CC() != 0) {
+    if (InGameEndGameIsOpen() != 0) {
         if (fn_80092830(lbl_803EAA88->mUnknown8) == 0) {
             Message_800F01CC message;
             Object_80039F5C *pObject;
@@ -20924,9 +20924,9 @@ extern "C" int fn_800AB2FC(void *p, float dt)
             message.mUnknown1[0] = 203;
             message.mUnknown1[1] = 0;
             message.mUnknown1[2] = 255;
-            pObject = fn_8005A8AC(0);
+            pObject = InGameLeaderGetPlayer(0);
             fn_800F00D4(0, pObject->mpState, &message, pObject);
-            pObject = fn_8005A8AC(1);
+            pObject = InGameLeaderGetPlayer(1);
             fn_800F00D4(0, pObject->mpState, &message, pObject);
         }
         result = 1;
@@ -21026,10 +21026,10 @@ void Class_80297B90::vfn_04(float dt)
         if (lbl_803EAA88->mUnknown4 == 13) {
             lbl_803EAA88->mUnknown16 = -1;
             if (fn_80178AE0() == 1) {
-                StevRow_t *pRow = fn_8005FC7C();
+                StevRow_t *pRow = StoryEventsGetCurrentEvent();
 
                 if (pRow == 0) {
-                    pRow = fn_80061AD4();
+                    pRow = StoryTournamentGetEvent();
                 }
                 if (pRow != 0) {
                     lbl_803EAA88->mUnknown16 = pRow->mCsos;
@@ -21090,8 +21090,8 @@ void Class_80297B90::vfn_04(float dt)
                 break;
             }
             SndgMusicFadeOut(250, 0);
-            fn_8005FC84();
-            fn_80061D14();
+            StoryEventsRecordGameResult();
+            StoryTournamentOnGameEnd();
             PlyrNameTagEnable(0);
             FieldLinesEnable(0);
             if (fn_801486A0() != 15 && lbl_803EAA88->mUnknown17 == 0) {
@@ -21135,7 +21135,7 @@ void Class_80297B90::vfn_05()
     fn_800AFE20(fn_800AA93C);
     BallGetModel(BallGetCurrent())->mUnknown20 |= 1;
     BallGetModel(BallGetCurrent())->mUnknown20 &= ~2;
-    fn_8003E174(1);
+    PlyrObjsSetDrawFlag(1);
     fn_800941B8();
     lbl_803EAA88->mUnknown4 = 19;
     lbl_803EAA88->mpUnknown0 = 0;
@@ -21174,8 +21174,8 @@ extern "C" void fn_800ABA90(void)
     fn_800AA010(0);
     fn_800AA1B0(1, 1);
     ResSync(0);
-    fn_8009604C(0, (int)fn_8005A8AC(0));
-    fn_8009604C(1, (int)fn_8005A8AC(1));
+    fn_8009604C(0, (int)InGameLeaderGetPlayer(0));
+    fn_8009604C(1, (int)InGameLeaderGetPlayer(1));
 }
 
 extern "C" void fn_800ABAF0(void)
@@ -21190,8 +21190,8 @@ extern "C" void fn_800ABAF0(void)
     message.mUnknown1[0] = 203;
     message.mUnknown1[1] = 0;
     message.mUnknown1[2] = 255;
-    pObject0 = fn_8005A8AC(0);
-    pObject1 = fn_8005A8AC(1);
+    pObject0 = InGameLeaderGetPlayer(0);
+    pObject1 = InGameLeaderGetPlayer(1);
     for (i = 0; i <= 1; i++) {
         unsigned int count = fn_80178D18((unsigned char)i);
         unsigned int index;
@@ -21246,11 +21246,11 @@ extern "C" void fn_800ABCE8(Block_800ABD1C *p)
 extern "C" void fn_800ABD1C(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAAB8, sizeof(Block_800ABD1C), 0, 0x67736B6C);
-    Block_800ABD1C *p = (Block_800ABD1C *)fn_8023816C(pHandle);
+    Block_800ABD1C *p = (Block_800ABD1C *)SyncStateGetData(pHandle);
 
     fn_800ABCE8(p);
     p->mUnknown4 = 1;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 extern "C" void fn_800ABD7C(void)
@@ -21912,13 +21912,13 @@ extern "C" int fn_800AD0E4(int team)
 
     switch (fn_800ABDA4(team)) {
     case 0:
-        result = fn_802372EC(0, 3) + 2;
+        result = SyncRandGetRange(0, 3) + 2;
         break;
     case 1:
-        result = fn_802372EC(0, 5) + 3;
+        result = SyncRandGetRange(0, 5) + 3;
         break;
     case 2:
-        result = fn_802372EC(0, 4) + 4;
+        result = SyncRandGetRange(0, 4) + 4;
         break;
     }
     return result;
@@ -21996,7 +21996,7 @@ extern "C" void fn_800AD31C(float dt)
 
     if (p != 0) {
         if (p->mUnknownC <= 0.0f) {
-            fn_8002C9A8(lbl_803EA368, 5, 0);
+            ReplayHandleCommand(gpReplay, 5, 0);
             p->mUnknown8 = 0;
             PauseUnblock();
         } else {
@@ -22110,7 +22110,7 @@ static const Mode_80297FC8 lbl_80297FC8[11] = {
 extern "C" void fn_800AD634(float dt)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAAD4, sizeof(Block_800AD634), 0, 0x67706C79);
-    Block_800AD634 *pBlock = (Block_800AD634 *)fn_8023816C(pHandle);
+    Block_800AD634 *pBlock = (Block_800AD634 *)SyncStateGetData(pHandle);
     void (*pEnter)(float);
 
     pBlock->mUnknown0 = 0;
@@ -22119,7 +22119,7 @@ extern "C" void fn_800AD634(float dt)
     if (pEnter != 0) {
         pEnter(dt);
     }
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
     lbl_803EAB90->InitState();
     lbl_803EABA4->InitState();
     lbl_803EA9E4->InitState();
@@ -22199,7 +22199,7 @@ extern "C" void fn_800AD9C0(float value)
         p->mUnknownC = value;
         p->mUnknown8 = 1;
         PauseBlock();
-        fn_8002C9A8(lbl_803EA368, 4, 0);
+        ReplayHandleCommand(gpReplay, 4, 0);
     }
 }
 
@@ -22562,7 +22562,7 @@ extern "C" void fn_800AE380(void)
         lbl_803EAAE8 = 0;
     }
     if (ChallengeIsActive() != 0
-        && (fn_80059004() != 0
+        && (InGamePauseIsRestart() != 0
             || (ChallengeIsActive() != 0 && ChalGetCurrent()->mUnknown1A4 != 0 && fn_8009D990(4) == 0))) {
         lbl_803EAAE8 = 0;
     }
@@ -22759,13 +22759,13 @@ extern "C" void fn_800AEA70(Object_80039F5C *p, Message_800F01CC *pMessages)
 extern "C" void fn_800AEB1C(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAAF4, sizeof(Block_800AEB1C), 0, 0x68727465);
-    Block_800AEB1C *pBlock = (Block_800AEB1C *)fn_8023816C(pHandle);
+    Block_800AEB1C *pBlock = (Block_800AEB1C *)SyncStateGetData(pHandle);
 
     memset(pBlock->mpObjects, 0, sizeof(pBlock->mpObjects));
     memset(pBlock->mMessages, 0, sizeof(pBlock->mMessages));
     pBlock->mUnknown268[0] = 0;
     pBlock->mUnknown268[1] = 0;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 extern "C" void fn_800AEB9C(void)
@@ -23270,10 +23270,10 @@ extern "C" void fn_800AFCB8(int value)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB0C, sizeof(Block_800AFCB8), 0, 0x6A6D7367);
 
-    fn_80238234(pHandle, fn_800AFA60, fn_800AFAAC, 0, fn_800AFAD4);
-    fn_80238248(pHandle, fn_800AFB70, fn_800AFC28, fn_800AFBD8);
-    ((Block_800AFCB8 *)fn_8023816C(pHandle))->mUnknown0 = value;
-    fn_802381E0(pHandle);
+    SyncStateSetCallbacks(pHandle, fn_800AFA60, fn_800AFAAC, 0, fn_800AFAD4);
+    SyncStateSetSaveCallbacks(pHandle, fn_800AFB70, fn_800AFC28, fn_800AFBD8);
+    ((Block_800AFCB8 *)SyncStateGetData(pHandle))->mUnknown0 = value;
+    SyncStateCommit(pHandle);
 }
 
 extern "C" void fn_800AFD54(void)
@@ -23557,8 +23557,8 @@ extern "C" int fn_800B0558(Object_80039F5C *p, Point_8017886C *pPoint)
     spot = fn_80177FE0();
     target.mX = spot.mX + pPoint->mX;
     target.mY = spot.mY + pPoint->mY;
-    fn_80227690(&target, &p->mMotion.mPos, &target);
-    return fn_802270A4(&target) < 0.5f;
+    Vec2Sub(&target, &p->mMotion.mPos, &target);
+    return Vec2Magnitude(&target) < 0.5f;
 }
 
 extern "C" void fn_800B05F0(int index, unsigned char chance)
@@ -23569,7 +23569,7 @@ extern "C" void fn_800B05F0(int index, unsigned char chance)
     unsigned char roll;
 
     fn_80178D18(team);
-    roll = fn_802372EC(0, 4);
+    roll = SyncRandGetRange(0, 4);
     fn_8009BD2C(PlyrGet(team, index), &ref);
     for (i = 0; i <= 4; i++) {
         if (roll < chance) {
@@ -23784,15 +23784,15 @@ extern "C" void fn_800B0CFC(void)
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB14, sizeof(Block_800B0CFC), 0, 0x6D6D6F74);
     Block_800B0CFC *pBlock;
 
-    fn_80238234(pHandle, 0, 0, 0, fn_800B0C70);
-    pBlock = (Block_800B0CFC *)fn_8023816C(pHandle);
+    SyncStateSetCallbacks(pHandle, 0, 0, 0, fn_800B0C70);
+    pBlock = (Block_800B0CFC *)SyncStateGetData(pHandle);
     memset(pBlock, 0, sizeof(Block_800B0CFC));
     fn_8009BD2C(0, &pBlock->mUnknown2D0);
     pBlock->mUnknown2E4 = 1;
     pBlock->mUnknown2D4 = 0;
     pBlock->mUnknown2E5 = 0;
     pBlock->mUnknown2E0 = 2;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 extern "C" void fn_800B0DA0(void)
@@ -23874,7 +23874,7 @@ extern "C" void PlayPickWeightedPlayer(void)
     PlayBookFormation_t *pTeam = PlayBookGetFormation(fn_80178308());
     PlayBookPlay_t *pRecord = PlayBookGetPlay(fn_80178308());
     unsigned int count = fn_80178D18(fn_80178308());
-    unsigned int roll = fn_802372EC(0, 100);
+    unsigned int roll = SyncRandGetRange(0, 100);
 
     for (unsigned char i = 0; i <= 4; i++) {
         total += pRecord->mUnknown28[i][1];
@@ -23942,9 +23942,9 @@ static inline void PickPlay(void)
 {
     short play = fn_8009D990(0) - 2;
 
-    play -= fn_802372EC(0, 3);
+    play -= SyncRandGetRange(0, 3);
     if (play <= 2) {
-        play = fn_802372EC(0, 2) + 3;
+        play = SyncRandGetRange(0, 2) + 3;
     }
     lbl_803EABA4->fn_800C02EC(play);
 }
@@ -24014,27 +24014,27 @@ extern "C" void fn_800B1478(void)
 {
     Args_800B1478 args;
 
-    args.mUnknown0 = 75;
-    args.mUnknown4 = 28;
-    args.mUnknown8 = 1;
+    args.mNumRecords = 75;
+    args.mRecordSize = 28;
+    args.mNumListeners = 1;
     lbl_803EAB18 = EvMonCreate(&args);
 }
 
 extern "C" void fn_800B14B8(void)
 {
-    fn_80238420(lbl_803EAB18);
+    EvMonDestroy(lbl_803EAB18);
     lbl_803EAB18 = 0xFF;
 }
 
 extern "C" void fn_800B14E4(void)
 {
-    fn_8023861C(lbl_803EAB18);
+    EvMonClear(lbl_803EAB18);
 }
 
 extern "C" void fn_800B1508(void)
 {
-    if (fn_80238604(lbl_803EAB18) < 74) {
-        Record_800B15FC *pRecord = (Record_800B15FC *)fn_80238540(lbl_803EAB18, fn_80238604(lbl_803EAB18));
+    if (EvMonGetCount(lbl_803EAB18) < 74) {
+        Record_800B15FC *pRecord = (Record_800B15FC *)EvMonGetRecord(lbl_803EAB18, EvMonGetCount(lbl_803EAB18));
 
         pRecord->mUnknown18 = fn_8009D990(1);
         EvMonFire(lbl_803EAB18, pRecord->mUnknown14 <= 61);
@@ -24056,12 +24056,12 @@ extern "C" void fn_800B1584(int a, const float *pPos)
 
 extern "C" unsigned short fn_800B15D4(void)
 {
-    return fn_80238604(lbl_803EAB18);
+    return EvMonGetCount(lbl_803EAB18);
 }
 
 extern "C" Record_800B15FC *fn_800B15FC(void)
 {
-    Record_800B15FC *pRecord = (Record_800B15FC *)fn_8023850C(lbl_803EAB18);
+    Record_800B15FC *pRecord = (Record_800B15FC *)EvMonGetCurrentRecord(lbl_803EAB18);
 
     memset(pRecord, 0, sizeof(Record_800B15FC));
     fn_8009BD2C(0, &pRecord->mUnknown0);
@@ -24070,12 +24070,12 @@ extern "C" Record_800B15FC *fn_800B15FC(void)
 
 extern "C" Record_800B15FC *fn_800B1648(unsigned short index)
 {
-    return (Record_800B15FC *)fn_80238540(lbl_803EAB18, index);
+    return (Record_800B15FC *)EvMonGetRecord(lbl_803EAB18, index);
 }
 
 extern "C" void fn_800B1670(int value)
 {
-    fn_80238680(lbl_803EAB18, value);
+    EvMonAddListener(lbl_803EAB18, value);
 }
 
 extern "C" void fn_800B1698(Object_80039F5C *pA, Object_80039F5C *pB)
@@ -24084,7 +24084,7 @@ extern "C" void fn_800B1698(Object_80039F5C *pA, Object_80039F5C *pB)
 
     fn_8009BD2C(pA, &pRecord->mUnknown0);
     pRecord->mUnknownC = pA->mMotion.mPos.mX;
-    pRecord->mUnknown10 = fn_8016FAB4();
+    pRecord->mUnknown10 = ScrmSpotGetLine();
     pRecord->mUnknown16 = 0;
     pRecord->mUnknown8 = 0;
     fn_8009BD2C(pB, &pRecord->mUnknown4);
@@ -24110,10 +24110,10 @@ extern "C" void fn_800B1758(int a, unsigned int b, float c)
 extern "C" void fn_800B175C(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB1C, sizeof(int), 0, 0x6F767274);
-    int *pState = (int *)fn_8023816C(pHandle);
+    int *pState = (int *)SyncStateGetData(pHandle);
 
     *pState = 1;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 extern "C" void fn_800B17B4(void)
@@ -24172,7 +24172,7 @@ extern "C" void fn_800B1900(Block_800B21D0 *p)
     int value;
 
     for (unsigned char i = 0; i <= 10; i++) {
-        fn_801FCE10(0, "select \x8c into \x82 from 'TPOG'\n", codes[i], &value);
+        TDbCompilePerformOp(0, "select \x8c into \x82 from 'TPOG'\n", codes[i], &value);
         p->mUnknown4.mUnknown4E[i] = value;
     }
 }
@@ -24425,8 +24425,8 @@ extern "C" void fn_800B21D0(void)
     Block_800B21D0 *p;
     unsigned char i;
 
-    fn_80238234(pHandle, 0, 0, 0, fn_800B19E8);
-    p = (Block_800B21D0 *)fn_8023816C(pHandle);
+    SyncStateSetCallbacks(pHandle, 0, 0, 0, fn_800B19E8);
+    p = (Block_800B21D0 *)SyncStateGetData(pHandle);
     p->mUnknown4.mUnknown5A = 0;
     p->mUnknown4.mUnknown5B = 0;
     p->mUnknown4.mUnknown5D = 0;
@@ -24442,7 +24442,7 @@ extern "C" void fn_800B21D0(void)
     p->mpUnknown0 = 0;
     lbl_803EAB24 = 0;
     fn_800B1900(p);
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 extern "C" void fn_800B22D4(void)
@@ -24638,19 +24638,19 @@ extern "C" void fn_800B26E0(Object_800B26B0 *pMotion)
         if (pMotion->mUnknown52 != 0.0f && maxSpeed != 0.0f) {
             Vec2_t push;
 
-            fn_80227538(&push, pMotion->mUnknown56, pMotion->mUnknown52);
+            Vec2FromAngle(&push, pMotion->mUnknown56, pMotion->mUnknown52);
             float ratio = speed / maxSpeed;
             speed -= ratio * ratio * pMotion->mUnknown52;
             if (speed < 0.0f) {
                 speed = 0.0f;
             }
-            fn_80227538(pVel, pMotion->mUnknown32, speed);
-            fn_80227638(pVel, &push, pVel);
-            speed = fn_802270A4(pVel);
+            Vec2FromAngle(pVel, pMotion->mUnknown32, speed);
+            Vec2Add(pVel, &push, pVel);
+            speed = Vec2Magnitude(pVel);
             if (speed < 1e-7f) {
                 speed = 0.0f;
             } else if (speed > maxSpeed) {
-                fn_80227248(pVel, pVel, maxSpeed / speed);
+                Vec2Scale(pVel, pVel, maxSpeed / speed);
                 Snap(pVel);
                 speed = maxSpeed;
             }
@@ -24663,14 +24663,14 @@ extern "C" void fn_800B26E0(Object_800B26B0 *pMotion)
             if (speed > maxSpeed) {
                 speed = maxSpeed;
             }
-            fn_80227538(pVel, pMotion->mUnknown32, speed);
+            Vec2FromAngle(pVel, pMotion->mUnknown32, speed);
             Snap(pVel);
         }
         if (pMotion->mPos.mZ > 0.0f) {
             pVel->mZ -= 0.0029814816f;
         }
         Snap(pVel);
-        fn_8022765C(&pMotion->mPos, &pMotion->mPos, pVel);
+        Vec3Add(&pMotion->mPos, &pMotion->mPos, pVel);
         pMotion->mUnknown28 = speed;
     }
     pTail->mUnknown80 = 0.0f;
@@ -24686,7 +24686,7 @@ extern "C" void fn_800B2A14(Object_800B26B0 *pMotion, Input_800B2A14 *pInput)
         pMotion->mFacing = (pMotion->mFacing + pInput->mTurnAngle) & 0xFFFFFF;
     }
     if (pInput->mMove) {
-        float speed = fn_802270A4(&pInput->mMove8);
+        float speed = Vec2Magnitude(&pInput->mMove8);
         if (pTail->mUnknown76 != pMotion->mUnknown32) {
             if (pTail->mUnknown80 != 0.0f && speed > 0.05f) {
                 speed *= pMotion->mUnknown28 / pTail->mUnknown80;
@@ -24694,7 +24694,7 @@ extern "C" void fn_800B2A14(Object_800B26B0 *pMotion, Input_800B2A14 *pInput)
                     speed = gPlyrMoveFwdSpeed;
                 }
             }
-            fn_80227538(&pInput->mMove8, pMotion->mUnknown32, speed);
+            Vec2FromAngle(&pInput->mMove8, pMotion->mUnknown32, speed);
         }
         pMotion->mUnknown40 = pInput->mMove8.mX;
         pMotion->mUnknown44 = pInput->mMove8.mY;
@@ -24702,10 +24702,10 @@ extern "C" void fn_800B2A14(Object_800B26B0 *pMotion, Input_800B2A14 *pInput)
         pMotion->mUnknown12.mX = pMotion->mPos.mX;
         pMotion->mUnknown12.mY = pMotion->mPos.mY;
         pMotion->mUnknown12.mZ = pMotion->mPos.mZ;
-        fn_80227638(&pMotion->mPos, &pMotion->mPos, &pMotion->mUnknown40);
+        Vec2Add(&pMotion->mPos, &pMotion->mPos, &pMotion->mUnknown40);
 
         Point_8017886C delta;
-        fn_80227690(&delta, &pMotion->mPos, &pMotion->mUnknown12);
+        Vec2Sub(&delta, &pMotion->mPos, &pMotion->mUnknown12);
         pMotion->mUnknown56 = pMotion->mUnknown32 = delta.Heading();
     } else {
         pMotion->mUnknown28 = pMotion->mUnknown52 = pMotion->mUnknown40 = pMotion->mUnknown44 = 0.0f;
@@ -24744,10 +24744,10 @@ extern "C" int fn_800B2C48(Object_800B26B0 *pA, Object_800B26B0 *pB, int arc, un
     Point_8017886C delta;
     Point_8017886C deltaB;
 
-    fn_80227690(&delta, &pA->mUnknown12, &pB->mUnknown12);
+    Vec2Sub(&delta, &pA->mUnknown12, &pB->mUnknown12);
     int angle = delta.Heading();
 
-    fn_80227690(&delta, &pA->mPos, &pA->mUnknown12);
+    Vec2Sub(&delta, &pA->mPos, &pA->mUnknown12);
     *pHitA = 0;
     if (delta.mX != 0.0f || delta.mY != 0.0f) {
         if (MathAngleDiff(delta.Heading(), (angle + 0x800000) & 0xFFFFFF) < half) {
@@ -24755,7 +24755,7 @@ extern "C" int fn_800B2C48(Object_800B26B0 *pA, Object_800B26B0 *pB, int arc, un
         }
     }
 
-    fn_80227690(&deltaB, &pB->mPos, &pB->mUnknown12);
+    Vec2Sub(&deltaB, &pB->mPos, &pB->mUnknown12);
     *pHitB = 0;
     if (deltaB.mX != 0.0f || deltaB.mY != 0.0f) {
         if (MathAngleDiff(deltaB.Heading(), angle) < half) {
@@ -24774,7 +24774,7 @@ extern "C" void fn_800B2D9C(Object_800B26B0 *pMotion)
 {
     Vec2_t point;
 
-    fn_80227538(&point, pMotion->mFacing, pMotion->mUnknown28);
+    Vec2FromAngle(&point, pMotion->mFacing, pMotion->mUnknown28);
     pMotion->mUnknown40 = point.mX;
     pMotion->mUnknown44 = point.mY;
     pMotion->mUnknown32 = pMotion->mFacing;
@@ -24785,8 +24785,8 @@ extern "C" void fn_800B2DF4(void)
 {
     if (lbl_803EAB34->mUnknown1F == 0) {
         if (fn_80177F70() != 0) {
-            fn_8016DDDC(fn_80178308());
-            fn_8016DDDC(fn_80178320());
+            ScrmTeamPlaceInHuddle(fn_80178308());
+            ScrmTeamPlaceInHuddle(fn_80178320());
             CamMainWarpToDest(CamGameGetCamera(5));
         }
         lbl_803EAB34->mUnknown1F = 1;
@@ -24856,7 +24856,7 @@ extern "C" void fn_800B3078(void)
     PlayArtStart(1);
     fn_80178320();
     fn_80178308();
-    fn_8002C9A8(lbl_803EA368, 3, 0);
+    ReplayHandleCommand(gpReplay, 3, 0);
     fn_800B30C8();
 }
 
@@ -24938,7 +24938,7 @@ extern "C" void fn_800B32A8(float dt)
         CamGameSetFocusAll(1, BallGetCurrentIndex());
         CamMainWarpToDest(CamGameGetCamera(5));
     }
-    if (fn_8016DD60() != 0) {
+    if (ScrmIsHuddleFormed() != 0) {
         fn_800AD910(2, dt);
     }
     fn_8009D888(0, 10);
@@ -24983,10 +24983,10 @@ extern "C" void fn_800B34BC(void)
     params.mUnknown0 = 27;
     params.mUnknown24 = 0;
     while (lbl_803EAB30 == pick) {
-        pick = fn_802372EC(1, 11);
+        pick = SyncRandGetRange(1, 11);
         params.mUnknown28 = pick;
     }
-    if (fn_802372EC(0, 2) != 0) {
+    if (SyncRandGetRange(0, 2) != 0) {
         params.mUnknown12 |= 0x100;
     } else {
         params.mUnknown12 |= 0x200;
@@ -25037,7 +25037,7 @@ extern "C" void fn_800B3644(Class_80297B50 *p)
 void Class_80297B50::vfn_01()
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB34, sizeof(Block_800B3660), 0, 0x7063616C);
-    Block_800B3660 *p = (Block_800B3660 *)fn_8023816C(pHandle);
+    Block_800B3660 *p = (Block_800B3660 *)SyncStateGetData(pHandle);
 
     p->mUnknown18 = 0;
     p->mUnknown1C = 0;
@@ -25051,7 +25051,7 @@ void Class_80297B50::vfn_01()
     p->mUnknown40 = 1;
     p->mUnknown44 = 0;
     p->mUnknown43 = 0;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 void Class_80297B50::vfn_02()
@@ -25122,8 +25122,8 @@ void Class_80297B50::vfn_03()
         lbl_803EAB34->mUnknown1D = 1;
     }
     fn_8010A220();
-    fn_8016DCD4(team);
-    fn_8016DCD4(other);
+    ScrmTeamToHuddle(team);
+    ScrmTeamToHuddle(other);
     AudmonEventPostArgs(111, 0, team, 0, 0);
     lbl_803EAB34->mUnknown40 = fn_8009D9D8(1);
     lbl_803EAB34->mUnknown42 = 1;
@@ -25214,7 +25214,7 @@ void Class_80297B50::vfn_04(float dt)
             AudmonEventPost(20, 0);
         }
     }
-    fn_80058688();
+    InGamePlayCallStreamSlots();
 
     unsigned int limit;
     if (fn_800B65A0(0) == 0xFF && fn_800B65A0(1) == 0xFF && fn_800BA6F8() == 0) {
@@ -25393,7 +25393,7 @@ extern "C" void fn_800B4300(int mode)
         break;
     }
     lbl_803EAB34->mUnknown30 += (4 - GameOptionsGet(0)) * 60;
-    lbl_803EAB34->mUnknown30 += fn_802372EC(0, 4) * 60;
+    lbl_803EAB34->mUnknown30 += SyncRandGetRange(0, 4) * 60;
 }
 
 extern "C" int fn_800B43A4(void)
@@ -25541,7 +25541,7 @@ extern "C" void fn_800B4900(QueryCursor cursor, int index, short *pRatings, void
 {
     int values[10];
     cursor.mUnknown4 = index;
-    fn_801FCE10(0,
+    TDbCompilePerformOp(0,
         "fetch from \x8a 'IGAP' into \x82 and 'MUJP' into \x82 and 'KTBP' into \x82 and "
         "'HTCP' into \x82 and 'DPSP' into \x82 and 'KATP' into \x82 and 'SSPP' into \x82 and "
         "'KLBP' into \x82 and 'VOCP' into \x82 and 'TFDP' into \x82\n",
@@ -25574,7 +25574,7 @@ static inline const char *_StrippedQuery_80296D28(void)
 
 extern "C" void fn_800B4A4C(void)
 {
-    fn_80030ACC(fn_800B44D4, fn_800B4628, 0x8C0, "Player Abilities");
+    ReplayRegisterChannel(fn_800B44D4, fn_800B4628, 0x8C0, "Player Abilities");
 }
 
 extern "C" void fn_800B4A88(void)
@@ -25582,14 +25582,14 @@ extern "C" void fn_800B4A88(void)
     fn_8009C604(lbl_8030FB60, 248);
     lbl_8030FB60[74] = PlayerLocoCyclePhase;
     lbl_8030FB60[77] = PlayerLocoMoveCmdPhase;
-    lbl_8030FB60[73] = fn_800DC6F4;
+    lbl_8030FB60[73] = PlayerActionAnimTurnPhase;
     lbl_8030FB60[84] = PlayerActionAnimFacingCallback;
-    lbl_8030FB60[91] = fn_800DD69C;
-    lbl_8030FB60[203] = fn_800DDD24;
+    lbl_8030FB60[91] = PlayerActionAnimDepthPhase;
+    lbl_8030FB60[203] = PlayerActionAnimIdlePhase;
     lbl_8030FB60[193] = PlayerLocoHandleMomentumState;
-    lbl_8030FB60[157] = fn_800DCC14;
+    lbl_8030FB60[157] = PlayerActionAnimSpeedBlendPhase;
     lbl_8030FB60[236] = PlayerPassAnimFacingCallback;
-    lbl_8030FB60[86] = fn_800DD2E8;
+    lbl_8030FB60[86] = PlayerActionAnimReactionPhase;
     lbl_8030FB60[176] = fn_8010D834;
     lbl_8030FB60[68] = fn_800F2CB4;
     lbl_8030FB60[192] = fn_800D7E9C;
@@ -25598,55 +25598,55 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[43] = PlayerLocoHandleMomentumState;
     lbl_8030FB60[44] = PlayerLocoHandleMomentumState;
     lbl_8030FB60[165] = PlayerLocoHandleMomentumState;
-    lbl_8030FB60[160] = fn_800DCC14;
-    lbl_8030FB60[159] = fn_800DCC14;
+    lbl_8030FB60[160] = PlayerActionAnimSpeedBlendPhase;
+    lbl_8030FB60[159] = PlayerActionAnimSpeedBlendPhase;
     lbl_8030FB60[67] = fn_8009A344;
     lbl_8030FB60[227] = fn_8009A344;
     lbl_8030FB60[69] = PlayerPassAnimFacingCallback;
     lbl_8030FB60[178] = PlayerPassAnimFacingCallback;
-    lbl_8030FB60[85] = fn_800DD2E8;
+    lbl_8030FB60[85] = PlayerActionAnimReactionPhase;
     lbl_8030FB60[37] = fn_8010D834;
-    lbl_8030FB60[100] = fn_800DE19C;
-    lbl_8030FB60[47] = fn_800DE19C;
+    lbl_8030FB60[100] = PlayerActionAnimTurnInPlacePhase;
+    lbl_8030FB60[47] = PlayerActionAnimTurnInPlacePhase;
     lbl_8030FB60[70] = fn_800D7E9C;
     lbl_8030FB60[207] = fn_800D7E9C;
-    lbl_8030FB60[116] = fn_800DE19C;
-    lbl_8030FB60[201] = fn_800DE19C;
-    lbl_8030FB60[82] = fn_800DE19C;
-    lbl_8030FB60[153] = fn_800DE19C;
+    lbl_8030FB60[116] = PlayerActionAnimTurnInPlacePhase;
+    lbl_8030FB60[201] = PlayerActionAnimTurnInPlacePhase;
+    lbl_8030FB60[82] = PlayerActionAnimTurnInPlacePhase;
+    lbl_8030FB60[153] = PlayerActionAnimTurnInPlacePhase;
     lbl_8030FB60[188] = fn_80110C70;
     lbl_8030FB60[185] = fn_800A44C0;
-    lbl_8030FB60[189] = fn_800E4264;
+    lbl_8030FB60[189] = PlyrAlignTurnPhase;
     lbl_8030FB60[206] = fn_8010BC90;
-    lbl_8030FB60[239] = fn_800DE19C;
-    lbl_8030FB60[177] = fn_800DAF5C;
+    lbl_8030FB60[239] = PlayerActionAnimTurnInPlacePhase;
+    lbl_8030FB60[177] = PlayerActionAnimDirectionPhase;
     lbl_8030FB60[154] = fn_80110C70;
     lbl_8030FB60[155] = fn_800A44C0;
-    lbl_8030FB60[217] = fn_800DE19C;
-    lbl_8030FB60[93] = fn_800DF1F4;
-    lbl_8030FB60[94] = fn_800DF1F4;
-    lbl_8030FB60[95] = fn_800DF1F4;
-    lbl_8030FB60[164] = fn_800DF1F4;
-    lbl_8030FB60[96] = fn_800DF1F4;
-    lbl_8030FB60[30] = fn_800DF1F4;
-    lbl_8030FB60[31] = fn_800DF1F4;
-    lbl_8030FB60[202] = fn_800DF1F4;
-    lbl_8030FB60[200] = fn_800DF1F4;
-    lbl_8030FB60[66] = fn_800DF1F4;
-    lbl_8030FB60[172] = fn_800DF1F4;
-    lbl_8030FB60[238] = fn_800DF1F4;
-    lbl_8030FB60[173] = fn_800DF1F4;
-    lbl_8030FB60[175] = fn_800DF1F4;
-    lbl_8030FB60[174] = fn_800DF1F4;
-    lbl_8030FB60[181] = fn_800DF1F4;
-    lbl_8030FB60[186] = fn_800DF1F4;
-    lbl_8030FB60[183] = fn_800DF1F4;
-    lbl_8030FB60[182] = fn_800DF1F4;
-    lbl_8030FB60[184] = fn_800DF1F4;
-    lbl_8030FB60[234] = fn_800DF1F4;
-    lbl_8030FB60[247] = fn_800DF1F4;
-    lbl_8030FB60[135] = fn_800DAF5C;
-    lbl_8030FB60[191] = fn_800DAF5C;
+    lbl_8030FB60[217] = PlayerActionAnimTurnInPlacePhase;
+    lbl_8030FB60[93] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[94] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[95] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[164] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[96] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[30] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[31] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[202] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[200] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[66] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[172] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[238] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[173] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[175] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[174] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[181] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[186] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[183] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[182] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[184] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[234] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[247] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[135] = PlayerActionAnimDirectionPhase;
+    lbl_8030FB60[191] = PlayerActionAnimDirectionPhase;
     lbl_8030FB60[196] = fn_800C3A4C;
     lbl_8030FB60[225] = fn_8009A344;
     lbl_8030FB60[235] = fn_800C3A4C;
@@ -25658,55 +25658,55 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[230] = fn_800C3A4C;
     lbl_8030FB60[229] = fn_800C3A4C;
     lbl_8030FB60[237] = fn_800C3A4C;
-    lbl_8030FB60[79] = fn_800DF1F4;
-    lbl_8030FB60[25] = fn_800DF1F4;
-    lbl_8030FB60[49] = fn_800DF1F4;
-    lbl_8030FB60[52] = fn_800DF1F4;
-    lbl_8030FB60[55] = fn_800DF1F4;
-    lbl_8030FB60[50] = fn_800DF1F4;
-    lbl_8030FB60[53] = fn_800DF1F4;
-    lbl_8030FB60[54] = fn_800DF1F4;
-    lbl_8030FB60[51] = fn_800DF1F4;
-    lbl_8030FB60[106] = fn_800DF1F4;
-    lbl_8030FB60[107] = fn_800DF1F4;
-    lbl_8030FB60[243] = fn_800DF1F4;
-    lbl_8030FB60[59] = fn_800DF1F4;
-    lbl_8030FB60[60] = fn_800DF1F4;
-    lbl_8030FB60[56] = fn_800DF1F4;
-    lbl_8030FB60[61] = fn_800DF1F4;
-    lbl_8030FB60[150] = fn_800DF1F4;
-    lbl_8030FB60[149] = fn_800DF1F4;
-    lbl_8030FB60[151] = fn_800DF1F4;
-    lbl_8030FB60[148] = fn_800DF1F4;
-    lbl_8030FB60[147] = fn_800DF1F4;
-    lbl_8030FB60[146] = fn_800DF1F4;
-    lbl_8030FB60[62] = fn_800DF1F4;
-    lbl_8030FB60[63] = fn_800DF1F4;
+    lbl_8030FB60[79] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[25] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[49] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[52] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[55] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[50] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[53] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[54] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[51] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[106] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[107] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[243] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[59] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[60] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[56] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[61] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[150] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[149] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[151] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[148] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[147] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[146] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[62] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[63] = PlayerActionAnimGenericPhase;
     lbl_8030FB60[214] = fn_80089E70;
-    lbl_8030FB60[161] = fn_800DF1F4;
+    lbl_8030FB60[161] = PlayerActionAnimGenericPhase;
     lbl_8030FB60[144] = fn_800CBBAC;
     lbl_8030FB60[10] = (Handler_800B4D7C)fn_80093D20;
-    lbl_8030FB60[123] = fn_800DF1F4;
-    lbl_8030FB60[120] = fn_800DF1F4;
-    lbl_8030FB60[121] = fn_800DF1F4;
-    lbl_8030FB60[119] = fn_800DF1F4;
-    lbl_8030FB60[125] = fn_800DF1F4;
-    lbl_8030FB60[118] = fn_800DF1F4;
-    lbl_8030FB60[131] = fn_800DF1F4;
-    lbl_8030FB60[130] = fn_800DF1F4;
-    lbl_8030FB60[124] = fn_800DF1F4;
-    lbl_8030FB60[122] = fn_800DF1F4;
-    lbl_8030FB60[231] = fn_800DF1F4;
-    lbl_8030FB60[233] = fn_800DF1F4;
-    lbl_8030FB60[241] = fn_800DF1F4;
-    lbl_8030FB60[242] = fn_800DF1F4;
+    lbl_8030FB60[123] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[120] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[121] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[119] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[125] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[118] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[131] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[130] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[124] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[122] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[231] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[233] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[241] = PlayerActionAnimGenericPhase;
+    lbl_8030FB60[242] = PlayerActionAnimGenericPhase;
     lbl_8030FB60[143] = fn_800CBBAC;
 }
 
 extern "C" void fn_800B4D7C(void)
 {
     fn_8009C604(lbl_8030FB60, 248);
-    lbl_8030FB60[82] = fn_800DDD24;
+    lbl_8030FB60[82] = PlayerActionAnimIdlePhase;
     lbl_8030FB60[74] = PlayerLocoCyclePhase;
     lbl_8030FB60[10] = (Handler_800B4D7C)fn_80093D20;
     lbl_8030FB60[214] = fn_80089E70;
@@ -25719,7 +25719,7 @@ extern "C" void PlyrLoadDbRecord(QueryCursor cursor, int index, void *pData)
     int values[18];
 
     cursor.mUnknown4 = index;
-    fn_801FCE10(0,
+    TDbCompilePerformOp(0,
         "fetch from \x8a 'ANFP' into \x88 and 'ANLP' into \x88 and 'NKNP' into \x88 and "
         "'TGWP' into \x82 and 'TGHP' into \x82 and 'IKSP' into \x82 and 'NAHP' into \x82 and "
         "'SOPP' into \x82 and 'DIGP' into \x82 and 'LCUP' into \x82 and 'LECP' into \x82 and "
@@ -25903,7 +25903,7 @@ extern "C" int fn_800B54D4(Object_80039F5C *p, int mode)
         int angle;
         int turn;
 
-        fn_80227690(&delta, &pNearest->mMotion, pMotion);
+        Vec2Sub(&delta, &pNearest->mMotion, pMotion);
         angle = fn_801CFE40(delta.mY, delta.mX);
         turn = MathAngleDiff(angle, pMotion->mFacing);
         MathAngleDiff((angle + 0x800000) & 0xFFFFFF, pNearest->mMotion.mFacing);
@@ -25915,7 +25915,7 @@ extern "C" int fn_800B54D4(Object_80039F5C *p, int mode)
         otherDistance = fn_80178A2C() - pMotion->mPos.mY;
         limit = 7.0f;
         limit *= fn_801CFB18(p->mMotion.mFacing);
-        if (otherDistance > 0.0f && otherDistance < limit && fn_800E815C(p, 2, mode) != 0) {
+        if (otherDistance > 0.0f && otherDistance < limit && PlyrTackleStart(p, 2, mode) != 0) {
             StyleTrackerOnStyleFirstDown();
             return 1;
         }
@@ -25970,7 +25970,7 @@ extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPo
     vel.mX = pVel->mX;
     vel.mY = pVel->mY;
     if (carried) {
-        fn_8022732C(&pos, &vel, lbl_803EAB44);
+        Vec2ScaleAcc(&pos, &vel, lbl_803EAB44);
     } else {
         fn_800B5764((Vector_80039F5C *)&pos);
         Object_80039F5C *pReceiver = BallGetTarget(BallGetCurrent());
@@ -26008,17 +26008,17 @@ extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPo
 
             offset.mX = p->mMotion.mPos.mX;
             offset.mY = p->mMotion.mPos.mY;
-            fn_80227690(&offset, &offset, &pos);
-            fn_80227384(&offset, &offset, angle);
+            Vec2Sub(&offset, &offset, &pos);
+            Vec2Rotate(&offset, &offset, angle);
             if (carried) {
-                ahead = offset.mX > -(fn_802270A4(&vel) * (int)lbl_803EAB44);
+                ahead = offset.mX > -(Vec2Magnitude(&vel) * (int)lbl_803EAB44);
             }
             drift.mX = p->mMotion.mUnknown40;
             drift.mY = p->mMotion.mUnknown44;
-            fn_80227384(&drift, &drift, angle);
-            fn_8022732C(&offset, &drift, lbl_803EAB44);
+            Vec2Rotate(&drift, &drift, angle);
+            Vec2ScaleAcc(&offset, &drift, lbl_803EAB44);
             if (ahead && offset.mX < 0.0f) {
-                fn_8022732C(&offset, &drift, -lbl_803EAB44);
+                Vec2ScaleAcc(&offset, &drift, -lbl_803EAB44);
                 offset.mX = 0.0f;
             }
             if (fn_8011E9B4(p) == 0) {
@@ -26026,21 +26026,21 @@ extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPo
                     if (pos.mY < line.mY && (pCarrier->mFlags & 0x10000000)) {
                         switch (p->mpState->mId) {
                         case 0x55:
-                            fn_80227248(&offset, &offset, lbl_803EAB4C);
+                            Vec2Scale(&offset, &offset, lbl_803EAB4C);
                             break;
                         case 0x16:
-                            fn_80227248(&offset, &offset, lbl_803EAB48);
+                            Vec2Scale(&offset, &offset, lbl_803EAB48);
                             break;
                         }
                     }
                 } else if (pTarget == p) {
-                    fn_80227248(&offset, &offset, lbl_803EAB4C);
+                    Vec2Scale(&offset, &offset, lbl_803EAB4C);
                 }
             } else {
-                fn_80227248(&offset, &offset, lbl_803EAB48);
+                Vec2Scale(&offset, &offset, lbl_803EAB48);
             }
             if (p->mpUnknown4->mUnknown20 & 0x200) {
-                fn_80227248(&offset, &offset, lbl_803EAB48);
+                Vec2Scale(&offset, &offset, lbl_803EAB48);
             }
             score = fn_80260B1C(offset.mX * offset.mX + offset.mY * offset.mY) - lbl_803EAB50 * offset.mX;
         }
@@ -26235,16 +26235,16 @@ extern "C" void fn_800B62D8(int count)
     Block_800B62D8 *pBlock;
     int i;
 
-    fn_80238234(pHandle, fn_800B5224, fn_800B52D0, 0, fn_800B530C);
-    fn_80238248(pHandle, fn_800B53F4, fn_800B54C0, fn_800B5448);
-    pBlock = (Block_800B62D8 *)fn_8023816C(pHandle);
+    SyncStateSetCallbacks(pHandle, fn_800B5224, fn_800B52D0, 0, fn_800B530C);
+    SyncStateSetSaveCallbacks(pHandle, fn_800B53F4, fn_800B54C0, fn_800B5448);
+    pBlock = (Block_800B62D8 *)SyncStateGetData(pHandle);
     pBlock->mUnknown5 = 1;
     pBlock->mCount = count;
     for (i = 0; i < count; i++) {
         pBlock->mUnknown8[i] = 0xFF;
     }
-    fn_800DC578();
-    fn_802381E0(pHandle);
+    PlayerActionAnimResetSteerFrames();
+    SyncStateCommit(pHandle);
 }
 
 extern "C" void fn_800B63A4(void)
@@ -26470,8 +26470,8 @@ extern "C" void fn_800B6988(int index)
             if (BallGetLandingPoint(pBall, &target) != 0) {
                 Object_80039F5C *pReceiver;
 
-                fn_80227264(&pos, &pos, 1.0f - 0.8f);
-                fn_80227350(&pos, &target, 0.8f);
+                Vec3Scale(&pos, &pos, 1.0f - 0.8f);
+                Vec3ScaleAcc(&pos, &target, 0.8f);
                 pReceiver = BallGetTarget(pBall);
                 if (p->mIdBytes[2] == fn_80178308() && pReceiver != 0 && pReceiver->mUnknown8 == 0xFF
                     && !fn_801783AC(11) && !fn_801783AC(12) && !fn_801783AC(24)) {
@@ -26602,7 +26602,7 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
             stick.mX = 1.0f;
         }
     }
-    speed = fn_802270A4(&stick) > 1.0f ? 1.0f : fn_802270A4(&stick);
+    speed = Vec2Magnitude(&stick) > 1.0f ? 1.0f : Vec2Magnitude(&stick);
     if (stick.mY != 0.0f || stick.mX != 0.0f) {
         ballAngle = 0;
         p->mFlags |= 0x400;
@@ -26612,13 +26612,13 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
         }
         angle &= 0xFFFFFF;
         if (PlayerActionAnimIsPassReady(p) == 0) {
-            if (fn_800DC21C(p) == 1 && p->mUnknown512.mUnknown15 != 1) {
+            if (PlayerActionAnimIsPassPending(p) == 1 && p->mUnknown512.mUnknown15 != 1) {
                 speed *= 0.75f;
             }
             pBall = BallGetCurrent();
             state = BallStateGet(pBall, 0);
             if (BallGetLandingPoint(pBall, &delta) != 0) {
-                fn_80227690(&delta, &delta, &p->mMotion);
+                Vec2Sub(&delta, &delta, &p->mMotion);
                 ballAngle = MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mUnknown32);
             } else {
                 state = 0;
@@ -26662,7 +26662,7 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
             } else {
                 PlayerActionAnimSteerPassReady(p, p->mMotion.mFacing, 0.0f);
             }
-        } else if (fn_800DC21C(p) == 1 && PassIconsAreShown() != 0) {
+        } else if (PlayerActionAnimIsPassPending(p) == 1 && PassIconsAreShown() != 0) {
             PlayerActionAnimSteerPassReady(p, p->mMotion.mFacing, 0.0f);
         }
     }
@@ -26675,7 +26675,7 @@ extern "C" int fn_800B7248(Input_800B6D34 *pInput, Ball_t *pBall, Object_80039F5
     if (p->mUnknown1032 == 4 || p->mUnknown1032 == 6) {
         if (pInput->mUnknown96 & 4) {
             if (fn_8009BCE8(&p->mUnknown1036) != 0) {
-                result = fn_800E6AC8(pTarget, 5);
+                result = PlyrEngageTryShed(pTarget, 5);
                 if (result != 0) {
                     p->mFlags |= 0x4000;
                     return 1;
@@ -26685,7 +26685,7 @@ extern "C" int fn_800B7248(Input_800B6D34 *pInput, Ball_t *pBall, Object_80039F5
             if ((BallGetCurrentHolder() == 0 || BallGetCurrentHolder()->mUnknown2914 != 0) && BallGetCurrentHolder() != 0) {
                 if (BallGetCurrentHolder()->mUnknown2914 != 0 || BallGetCurrentHolder()->mpState->mId == 26) {
                     if (fn_8009BCE8(&p->mUnknown1036) != 0) {
-                        result = fn_800E6AC8(pTarget, 4);
+                        result = PlyrEngageTryShed(pTarget, 4);
                         if (result != 0) {
                             p->mFlags |= 0x4000;
                             return 1;
@@ -26693,7 +26693,7 @@ extern "C" int fn_800B7248(Input_800B6D34 *pInput, Ball_t *pBall, Object_80039F5
                     }
                 }
             } else if (fn_8009BCE8(&p->mUnknown1036) != 0) {
-                result = fn_800E6AC8(pTarget, 8);
+                result = PlyrEngageTryShed(pTarget, 8);
                 if (result != 0) {
                     p->mFlags |= 0x4000;
                     return 1;
@@ -26718,7 +26718,7 @@ extern "C" int fn_800B7370(Object_80039F5C *p, Input_800B6D34 *pInput)
 
 static inline int _AngleBetween(Vector_80039F5C *pDelta, Object_800B26B0 *pTo, Object_800B26B0 *pFrom)
 {
-    fn_80227690(pDelta, pTo, pFrom);
+    Vec2Sub(pDelta, pTo, pFrom);
     return fn_801CFE40(pDelta->mY, pDelta->mX);
 }
 
@@ -26752,7 +26752,7 @@ extern "C" int fn_800B7378(Object_80039F5C *p)
                 minAngle = (int)(minAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * 1398101.0f);
                 maxAngle = (int)(maxAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * 699050.0f);
             }
-            distance = fn_8022710C(&delta);
+            distance = Vec2MagnitudeSqr(&delta);
             if (angle >= minAngle - angleSlack && angle <= maxAngle + angleSlack
                 && distance >= lbl_803EAB66 - rangeSlack && distance <= lbl_803EAB68 + rangeSlack) {
                 result = 1;
@@ -26806,11 +26806,11 @@ extern "C" int fn_800B76E8(Object_80039F5C *p)
             return 0;
         }
     } else {
-        if ((input.mUnknown92 & 1) && fn_800E815C(p, 0, 0) != 0) {
+        if ((input.mUnknown92 & 1) && PlyrTackleStart(p, 0, 0) != 0) {
             p->mFlags |= 0x4000;
             return 0;
         }
-        if ((input.mUnknown92 & 4) && (fn_800E8098(p, 3) != 0 || fn_800F2C1C(p, 0) != 0)) {
+        if ((input.mUnknown92 & 4) && (PlyrTackleAiTry(p, 3) != 0 || fn_800F2C1C(p, 0) != 0)) {
             p->mFlags |= 0x4000;
             return 0;
         }
@@ -26861,15 +26861,15 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
                 return 0;
             }
             if (dive) {
-                if (fn_800E1350(p) != 0) {
+                if (PlayerActionTryDive(p) != 0) {
                     p->mFlags |= 0x4000;
                     return 0;
                 }
-            } else if (fn_800E815C(p, 0, 0) != 0) {
+            } else if (PlyrTackleStart(p, 0, 0) != 0) {
                 p->mFlags |= 0x4000;
                 return 0;
             }
-        } else if (fn_800E1350(p) != 0) {
+        } else if (PlayerActionTryDive(p) != 0) {
             p->mFlags |= 0x4000;
             return 0;
         }
@@ -26882,7 +26882,7 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
         case 1:
             pCarrier = BallGetHolder(pBall);
             if (pCarrier->mpState->mId == 15) {
-                pass = fn_8022781C(&pCarrier->mMotion, &p->mMotion) > 5.0f;
+                pass = Vec2Distance(&pCarrier->mMotion, &p->mMotion) > 5.0f;
             }
             break;
         case 2:
@@ -26907,7 +26907,7 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
             if (fn_8011F1CC() != 0) {
                 pCarrier = BallGetHolder(pBall);
                 if (pCarrier != 0 && (pCarrier->mpState->mId == 18 || pCarrier->mpState->mId == 15)) {
-                    fn_8022781C(&pCarrier->mMotion, &p->mMotion);
+                    Vec2Distance(&pCarrier->mMotion, &p->mMotion);
                 }
             }
             if (fn_800F2C1C(p, 0) != 0) {
@@ -26950,7 +26950,7 @@ extern "C" int fn_800B7CA4(Object_80039F5C *p)
     }
     if ((input.mUnknown92 & 1)
         && ((BallStateGet(pBall, 0) == 4 && fn_800B51D0(p) != 0 && fn_801133FC(p, 1, 1) != 0)
-            || fn_800E815C(p, 0, 0) != 0)) {
+            || PlyrTackleStart(p, 0, 0) != 0)) {
         goto handled;
     }
     if (input.mUnknown92 & 4) {
@@ -27048,7 +27048,7 @@ extern "C" void fn_800B8028(void)
     lbl_803EAB60->mUnknown6[0] = 0xFF;
     lbl_803EAB60->mUnknown6[1] = 0xFF;
     current = fn_8022E558();
-    if (fn_801FCE10(0, "declare \x8a cursor for select * from 'OCMT'\n", &cursor) == 0) {
+    if (TDbCompilePerformOp(0, "declare \x8a cursor for select * from 'OCMT'\n", &cursor) == 0) {
         int id;
         int slot;
         int team;
@@ -27056,9 +27056,9 @@ extern "C" void fn_800B8028(void)
         int status = 0;
 
         while (status == 0) {
-            status = fn_801FCE10(0, "fetch from \x8a 'UNLS' into \x82 and 'digl' into \x82\n", &cursor, &id, &slot);
+            status = TDbCompilePerformOp(0, "fetch from \x8a 'UNLS' into \x82 and 'digl' into \x82\n", &cursor, &id, &slot);
             if (status == 0) {
-                status = fn_801FCE10(0, "select 'DIGT' into \x82 from 'MTTS' where 'UNLS' = \x82\n", &team, id);
+                status = TDbCompilePerformOp(0, "select 'DIGT' into \x82 from 'MTTS' where 'UNLS' = \x82\n", &team, id);
                 if (status == 0) {
                     int other = team != current;
 
@@ -27069,7 +27069,7 @@ extern "C" void fn_800B8028(void)
         }
     }
     if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
     fn_800B64C4();
 }
@@ -27136,7 +27136,7 @@ extern "C" int fn_800B83A0(Object_80039F5C *p)
     if (rating > 99) {
         return 1;
     }
-    return (unsigned short)fn_802372EC(0, 100) <= rating;
+    return (unsigned short)SyncRandGetRange(0, 100) <= rating;
 }
 
 extern "C" int fn_800B83F4(Object_80039F5C *p)
@@ -27149,7 +27149,7 @@ extern "C" int fn_800B83F4(Object_80039F5C *p)
         return 0;
     }
     rating = p->mRatings[0];
-    roll = fn_802372EC(0, 100);
+    roll = SyncRandGetRange(0, 100);
     result = 0;
     if (rating <= 102) {
         result = roll < 90;
@@ -27174,8 +27174,8 @@ extern "C" void fn_800B8494(int value)
     int resultB;
 
     fn_800C8704(&a, &b);
-    fn_801FCE10(0, "select 'DIOT' into \x82 from 'MTTS' where 'DIGT' = \x82\n", &resultA, a);
-    fn_801FCE10(0, "select 'DIOT' into \x82 from 'MTTS' where 'DIGT' = \x82\n", &resultB, b);
+    TDbCompilePerformOp(0, "select 'DIOT' into \x82 from 'MTTS' where 'DIGT' = \x82\n", &resultA, a);
+    TDbCompilePerformOp(0, "select 'DIOT' into \x82 from 'MTTS' where 'DIGT' = \x82\n", &resultB, b);
     if (resultA == resultB) {
         fn_800BD184(lbl_803EAB90, value);
         CamShotRequestStop();
@@ -27224,7 +27224,7 @@ extern "C" void fn_800B8608(void)
     for (i = 0; i < lbl_803EC930.mCount; i++) {
         pRecord = &lbl_803EC930.mpRecords[i];
         memset(pRecord, 0, sizeof(pRecord->mUnknown0));
-        if (pRecord->mUnknownC0 == 0 && pRecord->mUnknownBC <= fn_8023790C()) {
+        if (pRecord->mUnknownC0 == 0 && pRecord->mUnknownBC <= SyncTimeGetGameTime()) {
             pRecord->mUnknownC0 = 1;
         }
     }
@@ -27240,7 +27240,7 @@ extern "C" void fn_800B86A4(int index)
     Block_800B95B4 *p = lbl_803EAB78;
 
     if (p->mUnknown160 != 0 && (p->mUnknown164 == 2 || p->mUnknown164 == fn_800B6644(index))
-        && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1) && fn_8002D060(lbl_803EA368) == 0) {
+        && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1) && ReplayIsShowing(gpReplay) == 0) {
         switch (lbl_803EAB78->mUnknown14C) {
         case 0:
             lbl_803EAB78->mUnknown144 = 0;
@@ -27271,15 +27271,15 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
         }
         break;
     case 9:
-        if (lbl_803EAB78->mUnknown151 != 0 && fn_8009B9BC() == 0 && fn_8002D060(lbl_803EA368) == 0
+        if (lbl_803EAB78->mUnknown151 != 0 && fn_8009B9BC() == 0 && ReplayIsShowing(gpReplay) == 0
             && InGameIsDemo() == 0 && InGameIsPaused() == 0 && TeamPromptIsActive() == 0 && PauseRequestIsPending() == 0
             && PauseIsUnblocked() == 1 && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1)) {
-            fn_8002C9A8(lbl_803EA368, 3, 0);
-            if (ReplayIsHalted(lbl_803EA368) != 0) {
+            ReplayHandleCommand(gpReplay, 3, 0);
+            if (ReplayIsHalted(gpReplay) != 0) {
                 fn_8009BA10(0);
                 fn_8009B924();
                 fn_80094DF0();
-                fn_8002D2C8(lbl_803EA368, 1);
+                ReplaySetHoldFlag(gpReplay, 1);
                 while (BannerIsActive(7) != 0) {
                     BannerClear(7);
                 }
@@ -27288,9 +27288,9 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
                     GameEventFlagsSetFlag3(1);
                     GameEventFlagsSetFlag0(2);
                 }
-                fn_8002CA74(lbl_803EA368, 10, index);
-                fn_8002CA74(lbl_803EA368, 11, 0);
-                fn_8002CA74(lbl_803EA368, 7, 0);
+                ReplayHandleControl(gpReplay, 10, index);
+                ReplayHandleControl(gpReplay, 11, 0);
+                ReplayHandleControl(gpReplay, 7, 0);
             }
         }
         break;
@@ -27341,7 +27341,7 @@ int PostPlayPhase::IsFinished(int busy)
     int result = 0;
 
     if ((lbl_803EAB78->mSequence.mUnknown100 == 0 || lbl_803EAB78->mUnknown148 != 0) && busy == 0
-        && fn_8002D060(lbl_803EA368) == 0) {
+        && ReplayIsShowing(gpReplay) == 0) {
         if (ChallengeIsActive() == 0 || lbl_803EAB78->mUnknown148 == 0) {
             result = 1;
             if (fn_800AE978() != 0 || fn_800AE980() != 0 || fn_8009B9A8(1) != 0 || fn_8009B9A8(0) != 0
@@ -27361,8 +27361,8 @@ int PostPlayPhase::IsFinished(int busy)
 void PostPlayPhase::Finish(float dt)
 {
     PlyrMgrClearStates();
-    if (fn_8005BFD4() != 4) {
-        fn_8005BF18();
+    if (InGameOverlayGetState() != 4) {
+        InGameOverlayReset();
     }
     if (fn_800BA6F8() != 0) {
         if (fn_800BA940() == 1) {
@@ -27385,7 +27385,7 @@ void PostPlayPhase::Finish(float dt)
         } else {
             fn_801783D0(0x15, 1);
             SndgSituationSetFlags(0x400);
-            fn_80162780(1, 1);
+            PlyrStarSetShown(1, 1);
             CamShotRequestStop();
             fn_800AD910(2, dt);
             lbl_803EABA4->fn_800C02EC(0x27);
@@ -27404,9 +27404,9 @@ void PostPlayPhase::ForceFinish()
 extern "C" void fn_800B8C9C(void)
 {
     if (lbl_803EAB7E == 0) {
-        if (lbl_803EA368->mUnknownD90 != 0) {
+        if (gpReplay->mUnknownD90 != 0) {
             if (fn_800A2160() == 0 || InGameIsDemo() != 0 || fn_800AE978() != 0 || fn_8009B9A8(0) != 0
-                || fn_8002E950(0) == 0) {
+                || ReplayPickScript(0) == 0) {
                 return;
             }
             fn_8009BA10(1);
@@ -27418,10 +27418,10 @@ extern "C" void fn_800B8C9C(void)
 void PostPlayPhase::UpdateCue(float dt)
 {
     fn_800B8C9C();
-    if (ReplayIsHalted(lbl_803EA368) != 0 && lbl_803EAB7C == 0 && lbl_803EAB7D != 0
+    if (ReplayIsHalted(gpReplay) != 0 && lbl_803EAB7C == 0 && lbl_803EAB7D != 0
         && lbl_803EAB78->mUnknown154 > 45) {
         fn_8009BC30(lbl_803EAB80);
-        if (fn_8002E950(0) != 0) {
+        if (ReplayPickScript(0) != 0) {
             fn_8009BA10(0);
             fn_8009BBD8((int)&lbl_803EAB78->mUnknown104);
         }
@@ -27595,11 +27595,11 @@ void PostPlayPhase::InitState()
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB78, sizeof(Block_800B95B4), 0, 0x70737470);
     Block_800B95B4 *p;
 
-    fn_80238234(pHandle, 0, 0, 0, fn_800B898C);
-    p = (Block_800B95B4 *)fn_8023816C(pHandle);
+    SyncStateSetCallbacks(pHandle, 0, 0, 0, fn_800B898C);
+    p = (Block_800B95B4 *)SyncStateGetData(pHandle);
     fn_800C4438(&p->mSequence);
     p->mUnknown15C = 30;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 void PostPlayPhase::Shutdown()
@@ -27629,14 +27629,14 @@ void PostPlayPhase::OnEnter(float dt)
     lbl_803EAB78->mUnknown151 = 0;
     OnSequenceStart();
     fn_800C4460(&lbl_803EAB78->mSequence);
-    if (fn_8002D060(lbl_803EA368) == 0) {
+    if (ReplayIsShowing(gpReplay) == 0) {
         fn_800AFDD4(fn_800B876C);
     }
     AudmonEventPost(123, 0);
     PassIconsHide();
     PassIconsClearReplayFlag();
-    if (fn_8002D0AC(lbl_803EA368)) {
-        ReplayEventAdd(lbl_803EA368, 37, 0, &pos, 0);
+    if (ReplayIsRecording(gpReplay)) {
+        ReplayEventAdd(gpReplay, 37, 0, &pos, 0);
     }
     lbl_803EAB78->mUnknown148 = 0;
     lbl_803EAB78->mUnknown14C = 0;
@@ -27666,7 +27666,7 @@ void PostPlayPhase::OnUpdate(float dt)
     HudCycleMashPrompt();
     SpchIGUpdatePlayResult();
     UpdateCue(dt);
-    if (fn_8002D060(lbl_803EA368) == 0) {
+    if (ReplayIsShowing(gpReplay) == 0) {
         fn_800C45C0(&lbl_803EAB78->mSequence, dt);
     }
     if (ChallengeIsActive() != 0 && fn_8009D990(4) == 0) {
@@ -27698,8 +27698,8 @@ void PostPlayPhase::OnExit()
     fn_800B8028();
     fn_8009B924();
     fn_80094DF0();
-    fn_8002C9A8(lbl_803EA368, 3, 0);
-    if (fn_8002D060(lbl_803EA368) == 0) {
+    ReplayHandleCommand(gpReplay, 3, 0);
+    if (ReplayIsShowing(gpReplay) == 0) {
         fn_800AFE20(fn_800B876C);
     }
     fn_800C4568(&lbl_803EAB78->mSequence);
@@ -27809,7 +27809,7 @@ extern "C" int fn_800B9BBC(void)
 {
     int value = 0;
 
-    fn_801FCE10(0, "select 'PYTM' into \x82 from 'NIOM'\n", &value);
+    TDbCompilePerformOp(0, "select 'PYTM' into \x82 from 'NIOM'\n", &value);
     return value;
 }
 
@@ -27817,33 +27817,33 @@ extern "C" unsigned char fn_800B9BFC(void)
 {
     unsigned char value = 0;
 
-    fn_801FCE10(0, "select 'BSPG' into \x80 from 'FNIG'\n", &value);
+    TDbCompilePerformOp(0, "select 'BSPG' into \x80 from 'FNIG'\n", &value);
     return value;
 }
 
 extern "C" void fn_800B9C3C(void)
 {
-    fn_801FCE10(0, "update 'FNIG' set 'BSPG' = \x82\n", 0);
+    TDbCompilePerformOp(0, "update 'FNIG' set 'BSPG' = \x82\n", 0);
 }
 
 extern "C" unsigned char fn_800B9C70(void)
 {
     unsigned char value = 0;
 
-    fn_801FCE10(0, "select 'PNPG' into \x80 from 'FNIG'\n", &value);
+    TDbCompilePerformOp(0, "select 'PNPG' into \x80 from 'FNIG'\n", &value);
     return value;
 }
 
 extern "C" void fn_800B9CB0(void)
 {
-    fn_801FCE10(0, "update 'FNIG' set 'PNPG' = \x82\n", 0);
+    TDbCompilePerformOp(0, "update 'FNIG' set 'PNPG' = \x82\n", 0);
 }
 
 extern "C" int fn_800B9CE4(void)
 {
     int value = 0;
 
-    fn_801FCE10(0, "select 'YTPG' into \x82 from 'FNIG'\n", &value);
+    TDbCompilePerformOp(0, "select 'YTPG' into \x82 from 'FNIG'\n", &value);
     return value;
 }
 
@@ -27927,13 +27927,13 @@ extern "C" int fn_800B9F50(void)
             p = PlyrGet((unsigned char)team, pEvent->mIndex);
             if (p != 0) {
                 for (i = 0; i <= 4; i++) {
-                    pItem = fn_80162DBC(i);
+                    pItem = PlyrStarGetPulse(i);
                     if (pItem->mUnknown100 == 0) {
                         pItem->mUnknown20 |= 6;
                         pItem->mUnknown100 = p;
                         pItem->mUnknown18 = 5.0f;
                         pItem->mUnknown30 = mode;
-                        fn_80162DD0(pItem, &p->mMotion.mPos);
+                        PlyrStarPlace(pItem, &p->mMotion.mPos);
                         break;
                     }
                 }
@@ -27946,13 +27946,13 @@ extern "C" int fn_800B9F50(void)
                 p = PlyrGet((unsigned char)team, j);
                 if (p != 0 && (unsigned int)(p->mUnknown2914 - 10) <= 2) {
                     for (i = 0; i <= 4; i++) {
-                        pItem = fn_80162DBC(i);
+                        pItem = PlyrStarGetPulse(i);
                         if (pItem->mUnknown100 == 0) {
                             pItem->mUnknown20 |= 6;
                             pItem->mUnknown100 = p;
                             pItem->mUnknown18 = 5.0f;
                             pItem->mUnknown30 = mode;
-                            fn_80162DD0(pItem, &p->mMotion.mPos);
+                            PlyrStarPlace(pItem, &p->mMotion.mPos);
                             break;
                         }
                     }
@@ -27966,13 +27966,13 @@ extern "C" int fn_800B9F50(void)
                 p = PlyrGet((unsigned char)team, j);
                 if (p != 0 && (unsigned int)(p->mUnknown2914 - 13) <= 2) {
                     for (i = 0; i <= 4; i++) {
-                        pItem = fn_80162DBC(i);
+                        pItem = PlyrStarGetPulse(i);
                         if (pItem->mUnknown100 == 0) {
                             pItem->mUnknown20 |= 6;
                             pItem->mUnknown100 = p;
                             pItem->mUnknown18 = 5.0f;
                             pItem->mUnknown30 = mode;
-                            fn_80162DD0(pItem, &p->mMotion.mPos);
+                            PlyrStarPlace(pItem, &p->mMotion.mPos);
                             break;
                         }
                     }
@@ -27983,7 +27983,7 @@ extern "C" int fn_800B9F50(void)
             p = PlyrGet((unsigned char)team, pEvent->mIndex);
             if (p != 0) {
                 for (i = 0; i <= 4; i++) {
-                    pItem = fn_80162DBC(i);
+                    pItem = PlyrStarGetPulse(i);
                     if (pItem->mUnknown100 == p) {
                         pItem->mUnknown30 = 8;
                         pItem->mUnknown100 = 0;
@@ -27998,7 +27998,7 @@ extern "C" int fn_800B9F50(void)
                 p = PlyrGet((unsigned char)team, j);
                 if (p != 0 && (unsigned int)(p->mUnknown2914 - 10) <= 2) {
                     for (i = 0; i <= 4; i++) {
-                        pItem = fn_80162DBC(i);
+                        pItem = PlyrStarGetPulse(i);
                         if (pItem->mUnknown100 == p) {
                             pItem->mUnknown30 = 8;
                             pItem->mUnknown100 = 0;
@@ -28014,7 +28014,7 @@ extern "C" int fn_800B9F50(void)
                 p = PlyrGet((unsigned char)team, j);
                 if (p != 0 && (unsigned int)(p->mUnknown2914 - 13) <= 2) {
                     for (i = 0; i <= 4; i++) {
-                        pItem = fn_80162DBC(i);
+                        pItem = PlyrStarGetPulse(i);
                         if (pItem->mUnknown100 == p) {
                             pItem->mUnknown30 = 8;
                             pItem->mUnknown100 = 0;
@@ -28044,7 +28044,7 @@ extern "C" int fn_800B9F50(void)
 extern "C" void fn_800BA3F0(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB88, sizeof(Block_800BA3F0), 0, 0x70726163);
-    Block_800BA3F0 *p = (Block_800BA3F0 *)fn_8023816C(pHandle);
+    Block_800BA3F0 *p = (Block_800BA3F0 *)SyncStateGetData(pHandle);
 
     p->mUnknown17C = fn_800B9BBC();
     if (p->mUnknown17C == 1) {
@@ -28094,7 +28094,7 @@ extern "C" void fn_800BA3F0(void)
         angles[2] = 0xFFC00000;
         BallRestAtAngles(pBall, angles);
     }
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 extern "C" void fn_800BA570(void)
@@ -28343,7 +28343,7 @@ extern "C" void fn_800BAAE4(void)
         fn_80177C50(1);
         fn_80177C44(0);
     }
-    fn_8002C9A8(lbl_803EA368, 3, 0);
+    ReplayHandleCommand(gpReplay, 3, 0);
     if (BallGetCurrentHolder() != 0) {
         BallReleaseStill(BallGetCurrent(), 5, 0);
     }
@@ -28360,7 +28360,7 @@ extern "C" void fn_800BAAE4(void)
         angles[1] = 0xFFC00000;
         angles[2] = 0xFFC00000;
         BallRestAtAngles(pBall, angles);
-        fn_8013AD9C(pBall, 0);
+        BallSetSpinMode(pBall, 0);
         BallPrimeKickUp(pBall);
         CamGameSetModeAll(1);
     }
@@ -28403,12 +28403,12 @@ extern "C" void fn_800BAD1C(void)
     int i;
 
     for (i = 0; i <= 4; i++) {
-        Object_801618D8 *p = fn_80162DBC(i);
+        Object_801618D8 *p = PlyrStarGetPulse(i);
 
         p->mUnknown100 = 0;
         p->mUnknown20 &= ~2;
     }
-    fn_80162780(0, 1);
+    PlyrStarSetShown(0, 1);
     lbl_803EAB88->mpUnknown178 = lbl_802D9A84[lbl_803EAB88->mUnknownC0];
     lbl_803EAB88->mUnknownE0 = 0;
 }
@@ -28425,12 +28425,12 @@ extern "C" void fn_800BADD4(void)
     int i;
 
     for (i = 0; i <= 4; i++) {
-        Object_801618D8 *p = fn_80162DBC(i);
+        Object_801618D8 *p = PlyrStarGetPulse(i);
 
         p->mUnknown100 = 0;
         p->mUnknown20 &= ~2;
     }
-    fn_80162780(0, 0);
+    PlyrStarSetShown(0, 0);
     PlyrRouteShowTeam(0, fn_80178308());
 }
 
@@ -28534,7 +28534,7 @@ extern "C" unsigned int fn_800BB0EC(void)
         unsigned short i;
         int ok;
 
-        index = fn_802372EC(0, lbl_803EC98C->mUnknown2B);
+        index = SyncRandGetRange(0, lbl_803EC98C->mUnknown2B);
         if (checkFirst && fn_80093BAC(index, lbl_803EC98C->mUnknown14)->mUnknown0 == 4) {
             index = (index + 1) % lbl_803EC98C->mUnknown2B;
         }
@@ -28713,7 +28713,7 @@ extern "C" void fn_800BB694(int index, unsigned int kind, float value)
     PlayerObjSetDrawReady(1);
     CamShotRequestStop();
     fn_800BB9A4(1, 1);
-    fn_80162780(1, 1);
+    PlyrStarSetShown(1, 1);
     SpchIGPurgeChannel(0);
     SpchIGPurgeChannel(1);
     if (fn_800BA6F8() == 0) {
@@ -28793,7 +28793,7 @@ extern "C" void fn_800BB9A4(int team, int value)
     unsigned short i;
 
     for (i = 0; i < count; i++) {
-        Object_8003DEC4 *p = fn_8003DEC4(team * 7 + i);
+        Object_8003DEC4 *p = PlyrObjsGet(team * 7 + i);
 
         if (value != 0) {
             p->mUnknown20 |= 1;
@@ -28834,8 +28834,8 @@ extern "C" void fn_800BBA2C(void)
             pBody->mUnknown20 &= ~1;
         }
     } else {
-        fn_8016DDDC(0);
-        fn_8016DDDC(1);
+        ScrmTeamPlaceInHuddle(0);
+        ScrmTeamPlaceInHuddle(1);
         ParticleTrailResetAll();
     }
 }
@@ -28852,7 +28852,7 @@ extern "C" Object_80039F5C *fn_800BBB84(int position, Record_800BAE7C *pRecords,
     Object_80039F5C *p = 0;
 
     if (lbl_803EC98C->mUnknown2A > -1) {
-        p = fn_800606CC(fn_80094564(lbl_803EC98C->mUnknown2A, index), position);
+        p = StoryEventsFindLineupPlayer(fn_80094564(lbl_803EC98C->mUnknown2A, index), position);
     }
     if (p == 0) {
         unsigned int *pUsed = 0;
@@ -28876,7 +28876,7 @@ extern "C" Object_80039F5C *fn_800BBB84(int position, Record_800BAE7C *pRecords,
                 }
                 count = fn_80178D70(team);
                 while (pick == -1) {
-                    pick = fn_802372EC(0, count);
+                    pick = SyncRandGetRange(0, count);
                     if (count > 1 && (*pUsed & (1 << pick)) == (1 << pick)) {
                         pick = -1;
                     } else {
@@ -29058,7 +29058,7 @@ extern "C" void fn_800BC3F0(void)
     lbl_803EC98C->mUnknown14 = 4;
     lbl_803EC98C->mUnknown2B = 14;
     lbl_803EC98C->mpUnknown10 = lbl_802D9B30;
-    pRow = fn_8005FC7C();
+    pRow = StoryEventsGetCurrentEvent();
     if (pRow != 0 && !(pRow->mCsis & 0x80)) {
         lbl_803EC98C->mUnknown2A = pRow->mCsis;
         lbl_803EC98C->mUnknown14 = 5;
@@ -29072,7 +29072,7 @@ void PreGamePhase::ShowIntroScreen()
         int show = 1;
 
         if (GameModeTypeGet() == 10) {
-            show = (unsigned int)fn_80061DE8() <= 4;
+            show = (unsigned int)StoryTournamentCountRows() <= 4;
         }
         if (show) {
             fn_80218FC4(gUISMainInfo, 3, 8, 0, 0);
@@ -29099,14 +29099,14 @@ extern "C" void fn_800BC51C(PreGamePhase *pObject)
 void PreGamePhase::InitState()
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EC98C, sizeof(Block_800BC538), 0, 0x70726567);
-    Block_800BC538 *p = (Block_800BC538 *)fn_8023816C(pHandle);
+    Block_800BC538 *p = (Block_800BC538 *)SyncStateGetData(pHandle);
 
     memset(p, 0, sizeof(Block_800BC538));
     p->mUnknown0 = 0;
     p->mUnknown4 = 0;
     p->mUnknown29 = 2;
     p->mUnknown2C = 0x19000;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 void PreGamePhase::Shutdown()
@@ -29163,7 +29163,7 @@ void PreGamePhase::OnEnter()
         fn_800BBB4C(this);
     }
     fn_800AFDD4(fn_800BB694);
-    fn_8003E174(0);
+    PlyrObjsSetDrawFlag(0);
     fn_800B2670(0);
     fn_800C432C();
     if (fn_800C1E40() == 0) {
@@ -29348,7 +29348,7 @@ void PreGamePhase::OnExit()
     lbl_803EAB95 = 0;
     BallsSetVisible(1);
     fn_800BB5DC();
-    fn_8003E174(1);
+    PlyrObjsSetDrawFlag(1);
     if (lbl_803EC98C->mUnknown8 != -1) {
         fn_80096D14(lbl_803EC98C->mUnknown8);
     }
@@ -29425,7 +29425,7 @@ extern "C" void fn_800BCF7C(void)
     }
     crowd.mUnknown20 = 2;
     crowd.mUnknown24 = 0;
-    crowd.mUnknown28 = fn_802372EC(1, 2);
+    crowd.mUnknown28 = SyncRandGetRange(1, 2);
     crowd.mUnknown32 = 300.0f;
     ambience.mUnknown20 = 2;
     ambience.mUnknown24 = 0;
@@ -29586,7 +29586,7 @@ extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team)
     int result = 0;
     float value;
 
-    if (fn_802270A4(pStick) == 0.0f) {
+    if (Vec2Magnitude(pStick) == 0.0f) {
         if (pStick->mUnknown9 == 1) {
             CamMainMsg(pCamera, 10, 0);
         }
@@ -29666,7 +29666,7 @@ extern "C" void fn_800BD8F4(void)
     CamShotRequestStop();
     fn_800B6408();
     PlayAlignTeam(PlayBookGetFormation(team), team, gPlayAlignNormSet);
-    fn_8016E008(team);
+    ScrmTeamSendLineUp(team);
     PlayAlignPostStartDelays(fn_80178308());
     PlayAlignPostStartDelays(team);
 }
@@ -29705,11 +29705,11 @@ extern "C" void fn_800BDA00(void)
 
 extern "C" void fn_800BDA7C(void)
 {
-    if (lbl_803EABA8->mUnknownC5 != 0 && fn_8016E928() != 0) {
+    if (lbl_803EABA8->mUnknownC5 != 0 && ScrmOffenseIsSet() != 0) {
         if (--lbl_803EABA8->mUnknownA0 <= 0) {
             AudmonEventPost(0x76, 0);
-            lbl_803EABA8->mUnknownA0 = fn_802372EC(0, 120) + 60;
-            if (fn_802372EC(0, 100) <= 24) {
+            lbl_803EABA8->mUnknownA0 = SyncRandGetRange(0, 120) + 60;
+            if (SyncRandGetRange(0, 100) <= 24) {
                 lbl_803EABA8->mUnknown98++;
             }
         }
@@ -29752,7 +29752,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
             if (fn_800C0658() != 0) {
                 ok = 1;
             } else {
-                ok = fn_8016E764();
+                ok = ScrmCanSnap();
             }
         }
         if (ok && fn_800B146C() != 0) {
@@ -29764,14 +29764,14 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
             }
         }
         if (ok == 1) {
-            fn_8016E498();
+            ScrmStartPlay();
         } else {
             fn_800BD958();
         }
         break;
     }
     case 0x5A:
-        if (fn_80178E10() != 0 && fn_8002D060(lbl_803EA368) == 0 && fn_800BA6F8() == 0 &&
+        if (fn_80178E10() != 0 && ReplayIsShowing(gpReplay) == 0 && fn_800BA6F8() == 0 &&
             fn_800A937C() == 0 && involved && (side != other || !twoPlayer)) {
             lbl_803EABA8->mSlots[side].mUnknown0 = 1;
             ConSetChannelInfo(index, 3, lbl_802ED104);
@@ -29843,7 +29843,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
         break;
     case 0x84:
     case 0x85:
-        if (fn_8002D060(lbl_803EA368) == 0 && involved == 1 && !twoPlayer && value != 0.0f &&
+        if (ReplayIsShowing(gpReplay) == 0 && involved == 1 && !twoPlayer && value != 0.0f &&
             lbl_803EABA8->mUnknownC0 <= 0) {
             fn_800BE808(index, side);
             fn_800BE944(side, index, msg, value);
@@ -29949,7 +29949,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
                     AudmonEventPostArgs(0x74, &p->mMotion.mPos, home, 0, 0);
                 }
             } else {
-                p = PlyrGet(team, fn_802372EC(1, PlyrMgrGetPerTeam()));
+                p = PlyrGet(team, SyncRandGetRange(1, PlyrMgrGetPerTeam()));
                 if (p != 0) {
                     AudmonEventPostArgs(0x74, &p->mMotion.mPos, home, 0, 0);
                 }
@@ -30063,12 +30063,12 @@ extern "C" void fn_800BE4C8(int a, unsigned int msg, float value)
             if (fn_800BA6F8()) {
                 switch (msg) {
                 case 94:
-                    if (!fn_8002D060(lbl_803EA368)) {
+                    if (!ReplayIsShowing(gpReplay)) {
                         fn_800BA8CC(1);
                     }
                     break;
                 case 93:
-                    if (!fn_8002D060(lbl_803EA368) && fn_800BAAB8()) {
+                    if (!ReplayIsShowing(gpReplay) && fn_800BAAB8()) {
                         fn_800BA804(1);
                     }
                     break;
@@ -30104,7 +30104,7 @@ extern "C" void fn_800BE72C(PreSnapPhase *p)
 {
     if (fn_800B65A0(fn_80178308()) == 255) {
         if (p->CanSnap() != 0) {
-            fn_8016E498();
+            ScrmStartPlay();
         } else {
             fn_800BDA00();
             fn_800BDA7C();
@@ -30126,7 +30126,7 @@ int PreSnapPhase::CanSnap()
 {
     int result = 0;
 
-    if (lbl_803EABA8->mUnknownC5 != 0 && fn_8016E764() != 0) {
+    if (lbl_803EABA8->mUnknownC5 != 0 && ScrmCanSnap() != 0) {
         result = 1;
     }
     return result;
@@ -30292,11 +30292,11 @@ extern "C" void fn_800BED54(unsigned char index)
         CamGameSetModeAll(lbl_803EABA8->mUnknown44);
         lbl_803EABA8->mUnknownBC = 6;
         lbl_803EABA8->mSlots[index].mUnknown8 = 30;
-        if (fn_8016EA68() == 0) {
+        if (ScrmOffenseAllPlaced() == 0) {
             int team = fn_80178308();
 
             PlayAlignTeam(PlayBookGetFormation(team), team, gPlayAlignNormSet);
-            fn_8016E008(team);
+            ScrmTeamSendLineUp(team);
             fn_800BD958();
         }
         break;
@@ -30306,7 +30306,7 @@ extern "C" void fn_800BED54(unsigned char index)
             ConSetChannelInfo(fn_800B65A0(index), 3, lbl_802ECD44);
             lbl_803EABA8->mSlots[index].mUnknown0 = lbl_803EABA8->mSlots[index].mUnknown4;
             lbl_803EABA8->mUnknownC6 = 1;
-            fn_80162780(1, 1);
+            PlyrStarSetShown(1, 1);
             if (fn_800BAE64() == 0) {
                 short value;
 
@@ -30339,7 +30339,7 @@ extern "C" void fn_800BEFAC(int index)
         if (lbl_803EABA8->mSlots[index].mUnknown8 > 0) {
             lbl_803EABA8->mSlots[index].mUnknown8--;
         } else if (SpchIGAreChannelsIdle() != 0) {
-            fn_80162780(1, 1);
+            PlyrStarSetShown(1, 1);
             lbl_803EABA8->mUnknownC6 = state;
             lbl_803EABA8->mSlots[index].mUnknown0 = lbl_803EABA8->mSlots[index].mUnknown4;
         }
@@ -30365,12 +30365,12 @@ extern "C" void PreSnapInitPickTime(void)
                 value = fn_8009D990(0) - 3;
             } else {
                 value = fn_8009D990(0) - 4;
-                value -= fn_802372EC(0, 4);
+                value -= SyncRandGetRange(0, 4);
             }
             break;
         case 1:
             value = fn_8009D990(0) - 6;
-            value -= fn_802372EC(0, 8);
+            value -= SyncRandGetRange(0, 8);
             break;
         // FAKEMATCH: empty case label; it makes the dispatch tree pivot on 1 as the target does
         case 2:
@@ -30393,10 +30393,10 @@ extern "C" void fn_800BF174(void)
     if (base != 0) {
         value = base - 2;
         if (fn_800BA6F8() == 0) {
-            value -= fn_802372EC(0, 8);
+            value -= SyncRandGetRange(0, 8);
         }
         if (value <= 2) {
-            value = fn_802372EC(0, 2) + 3;
+            value = SyncRandGetRange(0, 2) + 3;
         }
     } else {
         int mode = lbl_803EABA8->mUnknown40;
@@ -30411,23 +30411,23 @@ extern "C" void fn_800BF174(void)
             case 0:
                 if (fn_800BA6F8() != 0) {
                     value = fn_8009D990(0) - 1;
-                    value -= fn_802372EC(0, 4);
+                    value -= SyncRandGetRange(0, 4);
                 } else {
                     value = fn_8009D990(0) - 6;
-                    value -= fn_802372EC(0, 8);
+                    value -= SyncRandGetRange(0, 8);
                 }
                 break;
             case 2:
                 value = fn_8009D990(0);
                 break;
             case 1:
-                value = fn_802372EC(0, 3) + 3;
+                value = SyncRandGetRange(0, 3) + 3;
                 break;
             }
         }
     }
     if (value <= 2) {
-        value = fn_802372EC(0, 3) + 3;
+        value = SyncRandGetRange(0, 3) + 3;
     } else if (value > 39) {
         value = 39;
     }
@@ -30496,7 +30496,7 @@ extern "C" void fn_800BF4B8(void)
             params.mUnknown0 = 27;
             params.mUnknown20 = 2;
             params.mUnknown24 = mode;
-            params.mUnknown28 = fn_802372EC(1, 11);
+            params.mUnknown28 = SyncRandGetRange(1, 11);
             lbl_803EABA8->mUnknown9C = fn_80096A58(&params);
             ResSync(0);
         }
@@ -30629,8 +30629,8 @@ extern "C" int fn_800BF8A8(PreSnapPhase *p)
         if (fn_800A937C() == 0) {
             HudPost3AOn();
         }
-        fn_8016DB94(fn_80178308());
-        fn_8016DB94(fn_80178320());
+        ScrmAlignTeam(fn_80178308());
+        ScrmAlignTeam(fn_80178320());
         fn_800C0330(lbl_803EABA4);
         if (fn_800B65A0(fn_80178308()) == 255 && fn_800A82FC(fn_80178308())) {
             fn_800A7514(fn_80178308());
@@ -30648,7 +30648,7 @@ extern "C" int fn_800BF8A8(PreSnapPhase *p)
     if (fn_800A937C() != 0 && result == 0) {
         result = 1;
         if (fn_800A9648() != 0) {
-            fn_8016E498();
+            ScrmStartPlay();
         }
     }
     return result;
@@ -30689,9 +30689,9 @@ void PreSnapPhase::InitState()
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EABA8, sizeof(Block_800BFAD0), 0, 0x70726570);
 
-    fn_80238234(pHandle, 0, 0, 0, fn_800BF45C);
-    ((Block_800BFAD0 *)fn_8023816C(pHandle))->mUnknown40 = 0;
-    fn_802381E0(pHandle);
+    SyncStateSetCallbacks(pHandle, 0, 0, 0, fn_800BF45C);
+    ((Block_800BFAD0 *)SyncStateGetData(pHandle))->mUnknown40 = 0;
+    SyncStateCommit(pHandle);
 }
 
 void PreSnapPhase::Shutdown()
@@ -30727,14 +30727,14 @@ void PreSnapPhase::OnEnter(float dt)
         GameEventFlagsSetFlag5(1);
     }
     PassIconsHide();
-    fn_8015C254(1);
+    RouteArrowSetEnabled(1);
     PassIconObjSetEnabled(1);
     ParticlesResetEvents();
     fn_8010A220();
     fn_8009DE9C();
     if (fn_801486A0() != 0 && fn_801486A0() != 1) {
-        fn_8016DB94(fn_80178308());
-        fn_8016DB94(fn_80178320());
+        ScrmAlignTeam(fn_80178308());
+        ScrmAlignTeam(fn_80178320());
     }
     fn_8009DEFC(1);
     if (fn_801486A0() != 0) {
@@ -30745,7 +30745,7 @@ void PreSnapPhase::OnEnter(float dt)
     fn_800B0DA4();
     fn_800AEEDC(0);
     fn_800AEEDC(1);
-    fn_8016F6A4();
+    ScrmSpotReset();
     AssignControlledPlayers();
     fn_8011F3A8();
     fn_800AFDD4(fn_800BE4C8);
@@ -30847,7 +30847,7 @@ void PreSnapPhase::OnUpdate(float dt)
     if (fn_800BF8A8(this) == 0 && lbl_803EABA8->mUnknownB8 == -1) {
         fn_800BF9DC(this);
         if (lbl_803EABA8->mUnknownC5 == 0) {
-            lbl_803EABA8->mUnknownC5 = fn_8016EA68() != 0 && lbl_803EABA8->mUnknownC6 != 0;
+            lbl_803EABA8->mUnknownC5 = ScrmOffenseAllPlaced() != 0 && lbl_803EABA8->mUnknownC6 != 0;
             if (lbl_803EABA8->mUnknownC5 != 0) {
                 AudmonEventPost(117, 0);
             }
@@ -30857,7 +30857,7 @@ void PreSnapPhase::OnUpdate(float dt)
         fn_800BE798(this);
         fn_800BF72C(this, dt);
     }
-    if (fn_8016EA68() != 0) {
+    if (ScrmOffenseAllPlaced() != 0) {
         EngineParamWords desc = { 0, 14 };
         fn_802345C4(&desc, 2);
     }
@@ -31101,7 +31101,7 @@ extern "C" QueryCursor fn_800C0698(int index, unsigned short *pValues)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    fn_801FCE10(&result,
+    TDbCompilePerformOp(&result,
                 "declare \x8a cursor for select * from 'AGLP' where ('DIGT' = \x85) and "
                 "(('DIGP' = \x84) or ('DIGP' = \x84) or ('DIGP' = \x84) or ('DIGP' = \x84) or "
                 "('DIGP' = \x84) or ('DIGP' = \x84) or ('DIGP' = \x84))\n",
@@ -31125,7 +31125,7 @@ extern "C" QueryCursor fn_800C0750(int index, unsigned short *pValues)
 extern "C" void fn_800C07C4(QueryCursor cursor)
 {
     if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
 }
 
@@ -31137,7 +31137,7 @@ extern "C" void fn_800C07F0(QueryCursor cursor, int team, unsigned short *pValue
     for (;;) {
         // FAKEMATCH: compiled-out assert on the row count; its empty loop keeps the fetch test at the loop top
         GAMESETUP_ASSERT(i <= 7);
-        if (fn_801FCE10(0, "fetch from \x8a 'DIGP' into \x81\n", &cursor, &id) != 0) {
+        if (TDbCompilePerformOp(0, "fetch from \x8a 'DIGP' into \x81\n", &cursor, &id) != 0) {
             break;
         }
         if (i <= 6) {
@@ -31167,16 +31167,16 @@ static inline QueryCursor _GameSetupDeclareAglp(int id)
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
     if (id >= 0) {
-        fn_801FCE10(&result, "declare \x8a cursor for select * from 'AGLP' where ('DIGP' = \x84)\n", &cursor, id);
+        TDbCompilePerformOp(&result, "declare \x8a cursor for select * from 'AGLP' where ('DIGP' = \x84)\n", &cursor, id);
     } else {
-        fn_801FCE10(&result, "declare \x8a cursor for select * from 'AGLP'\n", &cursor);
+        TDbCompilePerformOp(&result, "declare \x8a cursor for select * from 'AGLP'\n", &cursor);
     }
     return cursor;
 }
 
 static inline int _GameSetupFetchAglp(QueryCursor *pCursor, int *pSkill, int *pForm)
 {
-    return fn_801FCE10(0, "fetch from \x8a 'IKSP' into \x82 and 'CFRP' into \x82\n", pCursor, pSkill, pForm);
+    return TDbCompilePerformOp(0, "fetch from \x8a 'IKSP' into \x82 and 'CFRP' into \x82\n", pCursor, pSkill, pForm);
 }
 
 // FAKEMATCH: release form of an assert macro whose empty inline keeps its float literals in the pool.
@@ -31204,8 +31204,8 @@ extern "C" int fn_800C0910(Object_80039F5C *p, int kind, unsigned char *pLevel)
             float distance;
             int angle;
 
-            fn_80227690(&delta, &p->mMotion.mPos, &pCarrier->mMotion.mPos);
-            distance = fn_802270A4(&delta);
+            Vec2Sub(&delta, &p->mMotion.mPos, &pCarrier->mMotion.mPos);
+            distance = Vec2Magnitude(&delta);
             angle = fn_801CFE40(delta.mY, delta.mX);
             if (distance > 5.0f) {
                 Point_8017886C target;
@@ -31236,16 +31236,16 @@ extern "C" int fn_800C0910(Object_80039F5C *p, int kind, unsigned char *pLevel)
                     if (spread != 0.0f) {
                         spread *= SyncRandGetFloat(0);
                     }
-                    fn_80227538(&offset, fn_802372EC(0, 0x1000000), spread);
-                    fn_80227638(&target, &offset, &target);
+                    Vec2FromAngle(&offset, SyncRandGetRange(0, 0x1000000), spread);
+                    Vec2Add(&target, &offset, &target);
                 }
-                fn_80227690(&delta, &target, &p->mMotion.mPos);
+                Vec2Sub(&delta, &target, &p->mMotion.mPos);
                 targetAngle = fn_801CFE40(delta.mY, delta.mX);
-                targetDistance = fn_802270A4(&delta);
+                targetDistance = Vec2Magnitude(&delta);
                 other = fn_80178320();
-                fn_80227690(&delta, &target, &pCarrier->mMotion.mPos);
+                Vec2Sub(&delta, &target, &pCarrier->mMotion.mPos);
                 carrierAngle = fn_801CFE40(delta.mY, delta.mX);
-                carrierDistance = fn_802270A4(&delta);
+                carrierDistance = Vec2Magnitude(&delta);
                 if (p->mIdBytes[3] == 1) {
                     rating = p->mRatings[4] * 0.003921569f;
                 } else {
@@ -31265,8 +31265,8 @@ extern "C" int fn_800C0910(Object_80039F5C *p, int kind, unsigned char *pLevel)
                         defenderRating = 0.75000006f;
                     }
                     state = pDefender->mpState->mId;
-                    fn_80227690(&delta, &p->mMotion.mPos, &pDefender->mMotion.mPos);
-                    defenderDistance = fn_802270A4(&delta);
+                    Vec2Sub(&delta, &p->mMotion.mPos, &pDefender->mMotion.mPos);
+                    defenderDistance = Vec2Magnitude(&delta);
                     fn_801CFE40(delta.mY, delta.mX);
                     if (state == 22 || state == 40 || state == 92 || state == 85) {
                         float laneDistance;
@@ -31276,17 +31276,17 @@ extern "C" int fn_800C0910(Object_80039F5C *p, int kind, unsigned char *pLevel)
                         int leadAngle;
                         float ratio;
 
-                        fn_80227690(&delta, &target, &pDefender->mMotion.mPos);
-                        laneDistance = fn_802270A4(&delta);
+                        Vec2Sub(&delta, &target, &pDefender->mMotion.mPos);
+                        laneDistance = Vec2Magnitude(&delta);
                         laneAngle = fn_801CFE40(delta.mY, delta.mX);
-                        fn_80227690(&delta, &pDefender->mMotion.mPos, &pCarrier->mMotion.mPos);
+                        Vec2Sub(&delta, &pDefender->mMotion.mPos, &pCarrier->mMotion.mPos);
                         defenderAngle = fn_801CFE40(delta.mY, delta.mX);
-                        defenderGap = fn_802270A4(&delta);
-                        fn_80227248(&delta, &pDefender->mMotion.mUnknown40, 0.0f);
-                        fn_80227638(&delta, &delta, &pDefender->mMotion.mPos);
-                        fn_80227690(&delta, &delta, &pCarrier->mMotion.mPos);
+                        defenderGap = Vec2Magnitude(&delta);
+                        Vec2Scale(&delta, &pDefender->mMotion.mUnknown40, 0.0f);
+                        Vec2Add(&delta, &delta, &pDefender->mMotion.mPos);
+                        Vec2Sub(&delta, &delta, &pCarrier->mMotion.mPos);
                         leadAngle = fn_801CFE40(delta.mY, delta.mX);
-                        fn_802270A4(&delta);
+                        Vec2Magnitude(&delta);
                         if (result != 2) {
                             ratio = laneDistance / carrierDistance;
                             if (laneDistance < targetDistance) {
@@ -31313,7 +31313,7 @@ extern "C" int fn_800C0910(Object_80039F5C *p, int kind, unsigned char *pLevel)
                                 lane.mX = target.mX;
                                 lane.mY = target.mY;
                                 lane.mZ = 0.0f;
-                                if (fn_80227B04(&pCarrier->mMotion.mPos, &lane, &pDefender->mMotion.mPos) < 5.0f) {
+                                if (Vec3DistanceSqrToSegment(&pCarrier->mMotion.mPos, &lane, &pDefender->mMotion.mPos) < 5.0f) {
                                     if (diff <= 0xAAAA9) {
                                         if (kind > 5
                                             || fn_8009F0B8(pDefender, fn_800AD2CC(pDefender->mIdBytes[2], 0))) {
@@ -31523,7 +31523,7 @@ extern "C" float fn_800C146C(Point_8017886C *pOut, Object_80039F5C *pPasser, Obj
                 heading = (pState->mUnknown2 << 17) & 0xFFFFFF;
             } else {
                 heading = (pState->mUnknown2 << 17) & 0xFFFFFF;
-                fn_80227538(&step, heading, (unsigned int)pState->mUnknown1 * 0.125f);
+                Vec2FromAngle(&step, heading, (unsigned int)pState->mUnknown1 * 0.125f);
                 point.mX = receiver.mObject.mMotion.mPos.mX + step.mX;
                 point.mY = receiver.mObject.mMotion.mPos.mY + step.mY;
             }
@@ -31535,10 +31535,10 @@ extern "C" float fn_800C146C(Point_8017886C *pOut, Object_80039F5C *pPasser, Obj
                     penalty = (int)((float)(turn - 0x1F49F4) * (25.0f / (float)MathAngleDiff(0x1F49F4, 0x800000)));
                 }
             }
-            fn_80227690(&delta, &point, &receiver.mObject.mMotion.mPos);
-            length = fn_802270A4(&delta);
+            Vec2Sub(&delta, &point, &receiver.mObject.mMotion.mPos);
+            length = Vec2Magnitude(&delta);
             speed = PlyrMoveGetRatedSpeed(pReceiver, 1.0f, 1.0f);
-            fn_80227538(&dir, heading, speed);
+            Vec2FromAngle(&dir, heading, speed);
             frames = (int)(length / speed);
             remaining -= penalty;
             if (remaining < 0) {
@@ -31582,7 +31582,7 @@ extern "C" float fn_800C146C(Point_8017886C *pOut, Object_80039F5C *pPasser, Obj
             step.mY *= ratio;
             heading = (pNext->mUnknown2 << 17) & 0xFFFFFF;
             speed = PlyrMoveGetRatedSpeed(pReceiver, 1.0f, 1.0f);
-            fn_80227538(&dir, heading, speed);
+            Vec2FromAngle(&dir, heading, speed);
             receiver.mObject.mMotion.mPos.mX += step.mX;
             receiver.mObject.mMotion.mUnknown40 = dir.mX;
             receiver.mObject.mMotion.mPos.mY += step.mY;
@@ -31590,8 +31590,8 @@ extern "C" float fn_800C146C(Point_8017886C *pOut, Object_80039F5C *pPasser, Obj
             receiver.mObject.mMotion.mUnknown28 = speed;
             receiver.mObject.mMotion.mUnknown44 = dir.mY;
             if (remaining < length) {
-                fn_80227538(&back, heading, (float)(length - remaining) * speed * 0.95f);
-                fn_80227690(&receiver.mObject.mMotion.mPos, &receiver.mObject.mMotion.mPos, &back);
+                Vec2FromAngle(&back, heading, (float)(length - remaining) * speed * 0.95f);
+                Vec2Sub(&receiver.mObject.mMotion.mPos, &receiver.mObject.mMotion.mPos, &back);
             }
             remaining -= length;
             break;
@@ -31602,9 +31602,9 @@ extern "C" float fn_800C146C(Point_8017886C *pOut, Object_80039F5C *pPasser, Obj
 
             GetOpenGetRunOnPoint(&receiver.mObject, &step);
             speed = PlyrMoveGetRatedSpeed(pReceiver, 1.0f, 1.0f);
-            fn_80227690(&step, &step, &receiver.mObject.mMotion.mPos);
+            Vec2Sub(&step, &step, &receiver.mObject.mMotion.mPos);
             heading = fn_801CFE40(step.mY, step.mX);
-            fn_80227538(&dir, heading, speed);
+            Vec2FromAngle(&dir, heading, speed);
             receiver.mObject.mMotion.mUnknown40 = dir.mX;
             receiver.mObject.mMotion.mUnknown32 = heading;
             receiver.mObject.mMotion.mUnknown28 = speed;
@@ -31642,8 +31642,8 @@ extern "C" float fn_800C146C(Point_8017886C *pOut, Object_80039F5C *pPasser, Obj
     velocity = *(Vector_80039F5C *)&receiver.mObject.mMotion.mUnknown40;
     fn_80103F80(BallGetCurrent(), pos, velocity, receiver.mObject.mMotion.mUnknown28, receiver.mObject.mMotion.mUnknown32,
                 flight, &landing, &receiver.mObject);
-    fn_80227690(&span, &pReceiver->mMotion.mPos, &pPasser->mMotion.mPos);
-    distance = fn_802270A4(&span);
+    Vec2Sub(&span, &pReceiver->mMotion.mPos, &pPasser->mMotion.mPos);
+    distance = Vec2Magnitude(&span);
     pOut->mX = landing.mX;
     pOut->mY = landing.mY;
     pOut->mX = pOut->mX > fn_80178A08() ? fn_80178A08() : pOut->mX;
@@ -31688,19 +31688,19 @@ extern "C" void fn_800C1CA0(void)
     } else {
         fn_80177B7C(team);
     }
-    fn_8002D274(lbl_803EA368);
+    ReplayStopAndClear(gpReplay);
     PlayTrackReset();
     fn_8022BF68();
     StyleTrackerEndPlay();
     StyleTrackerReset();
-    fn_80071C34(0);
+    SndgEventSetMusicHold(0);
     if (SpchIGIsSceneLineActive()) {
         SpchIGEndSceneLine();
     }
     SpchIGResumeChannel(0);
     SpchIGResumeChannel(1);
     SpchIGResumeChannel(2);
-    fn_80162780(0, 0);
+    PlyrStarSetShown(0, 0);
     CamShotRequestStop();
     if (fn_800A8740() == 0) {
         fn_800A7A0C(0);
@@ -31711,7 +31711,7 @@ extern "C" void fn_800C1CA0(void)
         fn_8009D818(0);
     } else {
         fn_800B4184(1);
-        fn_800588E0();
+        InGamePlayCallClearSaved();
         PlyrMgrResetAll();
         fn_800B63B0();
         fn_8009D818(0);
@@ -31784,7 +31784,7 @@ extern "C" void fn_800C1E5C(int a, unsigned int b, float c)
         delta.mX = -delta.mX;
         delta.mY = -delta.mY;
     }
-    fn_80227384(&delta, &delta, (0x1000000 - CamGameGetCamera(0)->mHeader.mUnknown14[2]) & 0xFFFFFF);
+    Vec2Rotate(&delta, &delta, (0x1000000 - CamGameGetCamera(0)->mHeader.mUnknown14[2]) & 0xFFFFFF);
     pos.mX += delta.mX;
     pos.mY += delta.mY;
     pos.mX = CLAMP(pos.mX, -fn_80178A5C(), fn_80178A5C());
@@ -31854,8 +31854,8 @@ extern "C" void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, in
     }
     MatPush();
     MatCat(pPlayer->mUnknown44.mUnknown52[pBlock->mUnknown1][0]);
-    fn_80227C2C(&back, &back);
-    fn_80227C2C(&side, &side);
+    Vec3Mat33Mul(&back, &back);
+    Vec3Mat33Mul(&side, &side);
     MatGetPos(&pos.mX);
     MatGetRotByOrder(dir, 0);
     if (pBlock->mUnknown2 == 0) {
@@ -31866,25 +31866,25 @@ extern "C" void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, in
         pBlock->mUnknown28[1] = dir[1];
         pBlock->mUnknown28[2] = dir[2];
     }
-    fn_802276B4(&vel, &pos, pBlock->mUnknown4);
+    Vec3Sub(&vel, &pos, pBlock->mUnknown4);
     if (pBlock->mUnknown2 == 0) {
         pBlock->mUnknown16[0] = vel.mX;
         pBlock->mUnknown16[1] = vel.mY;
         pBlock->mUnknown16[2] = vel.mZ;
     }
-    fn_802276B4(&acc, &vel, pBlock->mUnknown16);
-    speed = fn_802270D4(&acc);
-    dotSide = -fn_80227704(&acc, &side);
-    dotBack = -fn_80227704(&acc, &back);
+    Vec3Sub(&acc, &vel, pBlock->mUnknown16);
+    speed = Vec3Magnitude(&acc);
+    dotSide = -Vec3DotProduct(&acc, &side);
+    dotBack = -Vec3DotProduct(&acc, &back);
     v.mX = 0.0f;
     v.mY = fn_801CFB18(pBlock->mUnknown28[0]);
     v.mZ = -fn_801CFB94(pBlock->mUnknown28[0]);
-    fn_80227C2C(&v, &v);
+    Vec3Mat33Mul(&v, &v);
     pitch = -lbl_803EABC0 * v.mZ;
     v.mX = -fn_801CFB94(pBlock->mUnknown28[2]);
     v.mY = fn_801CFB18(pBlock->mUnknown28[2]);
     v.mZ = 0.0f;
-    fn_80227C2C(&v, &v);
+    Vec3Mat33Mul(&v, &v);
     roll = -lbl_803EABC0 * v.mZ;
     MatPop();
     target[0] = (int)(speed * dotBack * lbl_803EABBC * 46603.37890625f) + (int)(pitch * 46603.37890625f);
@@ -31986,8 +31986,8 @@ extern "C" void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, in
     MatPush();
     MatCat(pPlayer->mUnknown44.mUnknown52[pBlock->mUnknown1][0]);
     MatRotZYX(-0x22D82D, 0, -0x1C71C7);
-    fn_80227C2C(&back, &back);
-    fn_80227C2C(&side, &side);
+    Vec3Mat33Mul(&back, &back);
+    Vec3Mat33Mul(&side, &side);
     MatGetPos(&pos.mX);
     MatGetRotByOrder(dir, 0);
     if (pBlock->mUnknown2 == 0) {
@@ -31998,25 +31998,25 @@ extern "C" void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, in
         pBlock->mUnknown28[1] = dir[1];
         pBlock->mUnknown28[2] = dir[2];
     }
-    fn_802276B4(&vel, &pos, pBlock->mUnknown4);
+    Vec3Sub(&vel, &pos, pBlock->mUnknown4);
     if (pBlock->mUnknown2 == 0) {
         pBlock->mUnknown16[0] = vel.mX;
         pBlock->mUnknown16[1] = vel.mY;
         pBlock->mUnknown16[2] = vel.mZ;
     }
-    fn_802276B4(&acc, &vel, pBlock->mUnknown16);
-    speed = fn_802270D4(&acc);
-    dotSide = -fn_80227704(&acc, &side);
-    dotBack = -fn_80227704(&acc, &back);
+    Vec3Sub(&acc, &vel, pBlock->mUnknown16);
+    speed = Vec3Magnitude(&acc);
+    dotSide = -Vec3DotProduct(&acc, &side);
+    dotBack = -Vec3DotProduct(&acc, &back);
     v.mX = 0.0f;
     v.mY = fn_801CFB18(pBlock->mUnknown40[3][0]);
     v.mZ = -fn_801CFB94(pBlock->mUnknown40[3][0]);
-    fn_80227C2C(&v, &v);
+    Vec3Mat33Mul(&v, &v);
     pitch = -lbl_803EABCC * v.mZ;
     v.mX = -fn_801CFB94(pBlock->mUnknown40[3][2] - 0x22D82D);
     v.mY = fn_801CFB18(pBlock->mUnknown40[3][2] - 0x22D82D);
     v.mZ = 0.0f;
-    fn_80227C2C(&v, &v);
+    Vec3Mat33Mul(&v, &v);
     roll = -lbl_803EABCC * v.mZ;
     MatPop();
     target[0] = (int)(speed * dotBack * lbl_803EABC8 * 46603.37890625f) + (int)(pitch * 46603.37890625f);
@@ -32121,7 +32121,7 @@ extern "C" int fn_800C2FDC(Block_80170E64 *p, Block_80170E64 *pOther, float *pBe
     float distanceSq;
     float rangeSq;
 
-    fn_80227690(&delta, &pOther->mUnknown4, &p->mUnknown4);
+    Vec2Sub(&delta, &pOther->mUnknown4, &p->mUnknown4);
     rangeSq = range * range;
     distanceSq = delta.mX * delta.mX + delta.mY * delta.mY;
     if (distanceSq < radiusSq) {
@@ -32131,11 +32131,11 @@ extern "C" int fn_800C2FDC(Block_80170E64 *p, Block_80170E64 *pOther, float *pBe
         }
     } else if (distanceSq < rangeSq &&
                MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mUnknown36) < maxAngle) {
-        fn_80227538((Vec2_t *)&end, p->mUnknown36, range);
+        Vec2FromAngle((Vec2_t *)&end, p->mUnknown36, range);
         end.mX += p->mUnknown4.mX;
         end.mY += p->mUnknown4.mY;
         end.mZ = p->mUnknown4.mZ;
-        fn_80227970(&p->mUnknown4, &end, &pOther->mUnknown4, &closest, &distance, &factor);
+        Vec3ClosestPointOnSegment(&p->mUnknown4, &end, &pOther->mUnknown4, &closest, &distance, &factor);
         if (radiusSq > distance * distance && distanceSq < *pBest) {
             *pBest = distanceSq;
             return 1;
@@ -32252,11 +32252,11 @@ extern "C" void fn_800C34B0(void)
 
 
     if (resume) {
-        fn_801FCE10(0, "select 'PNIG' into \x82 from 'FNIG'\n", &pnig);
-        fn_801FCE10(0, "select 'ELQG' into \x82 from 'FNIG'\n", &elqg);
+        TDbCompilePerformOp(0, "select 'PNIG' into \x82 from 'FNIG'\n", &pnig);
+        TDbCompilePerformOp(0, "select 'ELQG' into \x82 from 'FNIG'\n", &elqg);
     }
-    fn_801FCE10(0, "select 'MITG' into \x82 from 'FNIG'\n", &mitg);
-    fn_801FCE10(0, "select 'RTQG' into \x82 from 'FNIG'\n", &rtqg);
+    TDbCompilePerformOp(0, "select 'MITG' into \x82 from 'FNIG'\n", &mitg);
+    TDbCompilePerformOp(0, "select 'RTQG' into \x82 from 'FNIG'\n", &rtqg);
     fn_8009D964(1, mitg);
     fn_8009D818(rtqg);
     if (pnig <= 120) {
@@ -32266,21 +32266,21 @@ extern "C" void fn_800C34B0(void)
         ClockRuleSetTwoMinuteFlag();
     }
     fn_800CC448();
-    fn_8016DDDC(fn_80178308());
-    fn_8016DDDC(fn_80178320());
+    ScrmTeamPlaceInHuddle(fn_80178308());
+    ScrmTeamPlaceInHuddle(fn_80178320());
     BallPlaceAtSpot();
     fn_800B9BAC(lbl_803EAB84);
     if (lbl_803EABD5 == 0) {
         fn_8009D888(2, 0);
     }
     if (lbl_803EABD5 != 0) {
-        fn_801FCE10(0, "delete from 'MAGI'\n");
+        TDbCompilePerformOp(0, "delete from 'MAGI'\n");
         GameEventFlagsShutdown();
         GameEventFlagsInit();
         InGameStateClearActive();
         InGameStateReset();
         PauseClearSavedFlags();
-        fn_80162780(0, 0);
+        PlyrStarSetShown(0, 0);
     }
     if (ScreenTransCanCapture(0x23000) != 0) {
         ScreenTransStart(1, 20, 0x808080, 0);
@@ -32350,7 +32350,7 @@ extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int
             } else {
                 float limit;
 
-                fn_80227970(&a, &b, &end, &closest, &distance, &factor);
+                Vec3ClosestPointOnSegment(&a, &b, &end, &closest, &distance, &factor);
                 limit = gLevelWallInfo[i].mUnknown0 < 3.0f ? 2.0f : 1.0f;
                 if (distance < limit) {
                     result = 1;
@@ -32359,7 +32359,7 @@ extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int
             }
         } else if (!(fabsf(end.mY) < fn_80178A44())) {
             result = 1;
-        } else if (fn_800E0F48(&start, &end, &a, &b)) {
+        } else if (PlayerActionSegmentsCross(&start, &end, &a, &b)) {
             result = 1;
             break;
         }
@@ -32388,7 +32388,7 @@ extern "C" void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key)
             pBlock->mUnknown1F = 1;
         }
         pBlock->mUnknownC.mUnknown4 = pBlock->mUnknownC.mUnknown0 = 0.0f;
-        fn_800DEAB0(p, pBlock, fn_801BE648(p->mpUnknown792), 0, 0, pRecord);
+        PlayerActionAnimBuildAlignCommand(p, pBlock, fn_801BE648(p->mpUnknown792), 0, 0, pRecord);
     }
 }
 
@@ -32438,9 +32438,9 @@ extern "C" int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA,
 
             if (side != pBlock->mUnknown1E) {
                 pBlock->mUnknown1E = side;
-                fn_800DF654(p, (Block_801BE60C *)pBlock);
+                PlayerActionAnimMirrorAlign(p, (Block_801BE60C *)pBlock);
             }
-            fn_800DEC10(p, pBlock);
+            PlayerActionAnimUpdatePairAlign(p, pBlock);
             AnimMomentumUpdate(&pBlock->mUnknown20, p);
         }
         break;
@@ -32508,7 +32508,7 @@ extern "C" int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *
         break;
     }
     if (pTable != 0) {
-        entry = fn_802372EC(0, pTable->mCount);
+        entry = SyncRandGetRange(0, pTable->mCount);
         for (tries = pTable->mCount; tries != 0; tries--, entry++) {
             Info_80089904 *pInfo;
 
@@ -32550,15 +32550,15 @@ extern "C" int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *
                     if (turn > 0x800000) {
                         turn -= 0x1000000;
                     }
-                    fn_80227690(&target, &pCommand->mUnknown12, &pCommand->mUnknown32);
-                    fn_80227384(&offset, (Point_8017886C *)&target, turn);
-                    fn_80227690(&target, &offset, &target);
-                    fn_80227638(&target, &target, &pCommand->mUnknown12);
+                    Vec2Sub(&target, &pCommand->mUnknown12, &pCommand->mUnknown32);
+                    Vec2Rotate(&offset, (Point_8017886C *)&target, turn);
+                    Vec2Sub(&target, &offset, &target);
+                    Vec2Add(&target, &target, &pCommand->mUnknown12);
                     if (fn_800CD170((Point_8017886C *)&a, (Point_8017886C *)&b, (Point_8017886C *)&target)) {
                         continue;
                     }
                     target.mZ = pCommand->mUnknown12.mZ;
-                    fn_80227970(&a, &b, &target, &point, &distance, &factor);
+                    Vec3ClosestPointOnSegment(&a, &b, &target, &point, &distance, &factor);
                     if (pCommand->mUnknown60 == 224 || pCommand->mUnknown60 == 235) {
                         limit = lbl_803EABE0;
                     } else {
@@ -32567,11 +32567,11 @@ extern "C" int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *
                     if (!(distance < limit)) {
                         continue;
                     }
-                    fn_80227690(&delta, &p->mMotion.mPos, &point);
+                    Vec2Sub(&delta, &p->mMotion.mPos, &point);
                     if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), angle) > 0x3FFFFF) {
                         continue;
                     }
-                    fn_80227970(&a, &b, &p->mMotion.mPos, &closest, &playerDistance, &playerFactor);
+                    Vec3ClosestPointOnSegment(&a, &b, &p->mMotion.mPos, &closest, &playerDistance, &playerFactor);
                     switch (p->mpState->mId) {
                     case 12:
                     case 15:
@@ -32610,7 +32610,7 @@ extern "C" int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *
             p->mUnknown1160.mUnknown16 = best.mX;
             p->mUnknown1160.mUnknown28 = row;
             p->mUnknown1160.mUnknown20 = best.mY;
-            p->mUnknown1160.mUnknown24 = MIN(fn_8022781C(&best, &a), fn_8022781C(&best, &b));
+            p->mUnknown1160.mUnknown24 = MIN(Vec2Distance(&best, &a), Vec2Distance(&best, &b));
             *pValue = pTable->mEntries[entry].mUnknown0;
             if (pB != 0) {
                 *pB = entry;
@@ -32798,7 +32798,7 @@ extern "C" void fn_800C46B0(int handle)
     fn_8022E558();
     fn_800B852C();
     DivotScatterRandom();
-    fn_801624D0((void *)handle);
+    PlyrStarInit((void *)handle);
     BallMarkerCreate(handle);
     ReplayCursorCreate(handle);
     PassIconsCreate((void *)handle);
@@ -32816,7 +32816,7 @@ extern "C" void fn_800C471C(int handle)
     fn_800C442C();
     FieldLinesDestroy();
     EffectDrawObjDestroy(handle);
-    fn_801626A4((void *)handle);
+    PlyrStarShutdown((void *)handle);
     BallMarkerDestroy(handle);
     ReplayCursorDestroy(handle);
     PassIconsDestroy((void *)handle);
@@ -32828,9 +32828,9 @@ extern "C" void fn_800C478C(float dt)
     EnvObjUpdateFades();
     EnvFogRefresh();
     FieldLinesUpdate();
-    fn_80162794();
+    PlyrStarUpdate();
     BallMarkerUpdate();
-    fn_8015C114();
+    RouteArrowUpdateHighlights();
 }
 
 extern "C" void *fn_800C47C4(void)
@@ -32965,22 +32965,22 @@ extern "C" int fn_800C4B6C(Object_80039F5C *p)
             break;
         }
         if (value < fn_800C4A70(p, 0)) {
-            fn_800E9B84(p, kind);
+            PlyrContactSendCarrierAction(p, kind);
             result = 1;
         } else if (value < fn_800C4A70(p, 1)) {
-            fn_800E99A8(p, kind);
+            PlyrContactSendStumble(p, kind);
             result = 1;
         }
         if (result == 0 && (p->mpState->mId >= 34 && p->mpState->mId <= 36) && *pRating < lbl_803EABEA) {
             float roll = SyncRandGetFloat(0);
             value = *pRating * -lbl_803EABEC / lbl_803EABEA + lbl_803EABEC;
             if (roll < value) {
-                fn_800E9B84(p, kind);
+                PlyrContactSendCarrierAction(p, kind);
                 result = 1;
             } else {
                 value = *pRating * -lbl_803EABF0 / lbl_803EABEA + lbl_803EABF0;
                 if (roll < value) {
-                    fn_800E99A8(p, kind);
+                    PlyrContactSendStumble(p, kind);
                     result = 1;
                 }
             }
@@ -33018,7 +33018,7 @@ extern "C" int fn_800C4E30(Object_80039F5C *p, Object_80039F5C *pOther)
     int result = 0;
 
     if (fn_800A851C(fn_80178320(), p) && fn_800A7F30(fn_80178308()) == 0) {
-        result = fn_802372EC(0, 100) < 100;
+        result = SyncRandGetRange(0, 100) < 100;
     }
     if (PossTestCarrierBall(pOther)) {
         result = 0;
@@ -33178,12 +33178,12 @@ extern "C" int fn_800C5418(Object_80039F5C *p, Object_80039F5C *pOther, int valu
             value >>= 1;
         }
     }
-    if (fn_800E1554(pOther)) {
+    if (PlayerActionDiveIsActive(pOther)) {
         value = 100;
     }
     reduction = 0;
     if (value > 0) {
-        fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+        Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         angle = fn_801CFE40(delta.mY, delta.mX);
         switch (p->mUnknown528.mUnknown15) {
         case 6:
@@ -33218,7 +33218,7 @@ extern "C" void fn_800C561C(Object_80039F5C *p, int value)
 {
     Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
 
-    fn_800E9504(p);
+    PlyrContactSendCarrierHit(p);
     if (p->mpState->mId == 10) {
         fn_80178718(fn_8009BCE8(&p->mUnknown560.mUnknown48));
         p->mFlags |= 0x10000;
@@ -33226,7 +33226,7 @@ extern "C" void fn_800C561C(Object_80039F5C *p, int value)
         fn_800C8688(p, pOther, 0, 0);
     }
     if (pOther != 0 && fn_800C5BF0(pOther, value)) {
-        fn_800E9504(pOther);
+        PlyrContactSendCarrierHit(pOther);
     }
 }
 
@@ -33248,7 +33248,7 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
     int ok;
 
     if (pOther != 0 && fn_800C5BF0(pOther, value)) {
-        fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+        Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         canStrip = 0;
         canKnock = 0;
         angle = fn_801CFE40(delta.mY, delta.mX);
@@ -33274,7 +33274,7 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
         if (canStrip || canKnock) {
             stripChance = p->mRatings[2] / 4 + p->mUnknown2904Float * 0.25f;
             stripChance -= (int)(pOther->mRatings[5] / 4 + pOther->mUnknown2904Float * 0.25f);
-            stripChance += fn_802372EC(0, 100 - chance);
+            stripChance += SyncRandGetRange(0, 100 - chance);
             if (stripChance > 50) {
                 stripChance = 50;
             }
@@ -33288,8 +33288,8 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
                 stripChance = lbl_803EAC0C * 100.0f;
             }
             knockChance = stripChance * 2 / 3;
-            roll = fn_802372EC(0, 100);
-            if (stripChance > 0 && stripChance > roll && canStrip && fn_800E96EC(pOther, p)) {
+            roll = SyncRandGetRange(0, 100);
+            if (stripChance > 0 && stripChance > roll && canStrip && PlyrContactSendPush(pOther, p)) {
                 fn_800C51DC(p, pOther);
                 contactApplied = 1;
                 stripped = 1;
@@ -33345,7 +33345,7 @@ extern "C" void fn_800C5B20(Object_80039F5C *p, int value)
         pRecord->mUnknown16 = 0;
         fn_800B1508();
     }
-    if (pOther != 0 && fn_802372EC(0, 255) > pOther->mRatings[0] && fn_800C5BF0(pOther, value)) {
+    if (pOther != 0 && SyncRandGetRange(0, 255) > pOther->mRatings[0] && fn_800C5BF0(pOther, value)) {
         fn_80111354(pOther);
     }
 }
@@ -33475,7 +33475,7 @@ extern "C" int fn_800C5DE4(Object_80039F5C *p, Object_80039F5C *pOther)
         }
         break;
     default:
-        if (fn_8022781C(&pOther->mMotion.mPos, &p->mMotion.mPos) > 3.0f) {
+        if (Vec2Distance(&pOther->mMotion.mPos, &p->mMotion.mPos) > 3.0f) {
             result = 0;
         } else if (!fn_80124714(p, pOther, &pBlocker)) {
             if (pBlocker != 0 && !(pBlocker->mFlags & 0x800)) {
@@ -33557,7 +33557,7 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
             total = ratingScore + speedScore;
             chance = total < 0 ? 0 : (total > 100 ? 100 : total);
             if (pSource == 0 || pSource->mUnknown0 == 0
-                || (fn_8016F6F4(p, &pTarget->mId), !fn_800C68BC(pSource, pTarget->mpState->mId))
+                || (ScrmSpotRecordHit(p, &pTarget->mId), !fn_800C68BC(pSource, pTarget->mpState->mId))
                 || fn_800C8420(pTarget, pSource->mUnknown32)) {
                 if (chance != 0) {
                     chance = fn_800AC584(pTarget->mIdBytes[2], chance);
@@ -33622,7 +33622,7 @@ extern "C" int fn_800C6640(Object_80039F5C *p, Object_800C6640 *pSource, Object_
         pOther = fn_8009BCE8(&pSource->mUnknown40);
     }
     if (pOther != 0 && fn_800C5BF0(p, value) && fn_800C5DE4(pOther, p)) {
-        if (PlayerMoveGetKind(p) || (pOther != 0 && fn_800E1554(pOther))) {
+        if (PlayerMoveGetKind(p) || (pOther != 0 && PlayerActionDiveIsActive(pOther))) {
             return 0;
         }
         if (fn_800A7F30(p->mIdBytes[2]) == 0 && fn_800A851C(pOther->mIdBytes[2], pOther)) {
@@ -33867,7 +33867,7 @@ extern "C" int fn_800C6DF8(Object_80039F5C *p, Object_80039F5C *pOther, int type
         query.mUnknown32 = 0x800000;
     }
     if (type != 94 && type != 234 && !(otherBlocking && fn_800CD2B4(1, pOther)) && !special) {
-        if (fn_802372EC(0, 100) < chance) {
+        if (SyncRandGetRange(0, 100) < chance) {
             kinds[count] = 3;
         } else {
             kinds[count] = 2;
@@ -33951,7 +33951,7 @@ extern "C" int fn_800C7118(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
         } else if (c > 67) {
             types[count] = 5;
             types[count + 1] = 6;
-        } else if (fn_802372EC(0, 100) < 50) {
+        } else if (SyncRandGetRange(0, 100) < 50) {
             types[count] = 5;
             types[count + 1] = 6;
         } else {
@@ -33975,7 +33975,7 @@ extern "C" int fn_800C7118(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
                 StyleTrackerResolveStiffArm(p, 1);
                 fn_800A8954(2, p->mIdBytes[2], p);
                 AudmonEventPostId(97, &p->mMotion.mPos, p->mId, p->mpState->mId, 0, 0);
-                ReplayEventAdd(lbl_803EA368, 59, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                ReplayEventAdd(gpReplay, 59, p, &p->mMotion.mPos, &p->mMotion.mFacing);
             } else if (isTwo) {
                 StyleTrackerBeginHurdle(p, PlayerMoveGetKind(p), 255);
             } else {
@@ -34007,15 +34007,15 @@ extern "C" int fn_800C73E0(Object_80039F5C *p, Object_80039F5C *pOther)
             pBall = BallGetCurrent();
             BallGetPosition(pBall, &ballPos);
             if (fn_801783AC(11) == 1 || fn_801783AC(12) == 1) {
-                if (ballPos.mZ > 0.75f && fn_8022781C(&ballPos, &pOther->mMotion.mPos) < lbl_803EABF4) {
+                if (ballPos.mZ > 0.75f && Vec2Distance(&ballPos, &pOther->mMotion.mPos) < lbl_803EABF4) {
                     return 1;
                 }
             } else {
                 BallGetVelocity(pBall, &ballDir);
-                fn_80227690(&delta, &ballPos, &pOther->mMotion.mPos);
+                Vec2Sub(&delta, &ballPos, &pOther->mMotion.mPos);
                 if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), fn_801CFE40(ballDir.mY, ballDir.mX))
                         < (int)(lbl_803EAC1C * (16777216.0f / 360.0f))
-                    && fn_8022781C(&ballPos, &pOther->mMotion.mPos) < lbl_803EABF4) {
+                    && Vec2Distance(&ballPos, &pOther->mMotion.mPos) < lbl_803EABF4) {
                     return 1;
                 }
             }
@@ -34033,7 +34033,7 @@ extern "C" Object_80039F5C *fn_800C75C0(Object_80039F5C *p)
 
     for (; i < count; i++) {
         Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2] ^ 1, i);
-        float distance = fn_80227890(&pOther->mMotion.mPos, &p->mMotion.mPos);
+        float distance = Vec2DistanceSqr(&pOther->mMotion.mPos, &p->mMotion.mPos);
 
         if (distance < 16.0f && distance < bestDistance && fn_800C73E0(p, pOther)) {
             pBest = pOther;
@@ -34116,7 +34116,7 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
     if (fn_800C769C(p, pOther)) {
         roll = p->mUnknown1222;
     } else {
-        roll = fn_802372EC(0, 100);
+        roll = SyncRandGetRange(0, 100);
     }
     if (blocked) {
         roll = 0;
@@ -34126,7 +34126,7 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
         unsigned int chance2 = fn_800C6640(pOther, 0, p, key, chance);
 
         if (chance2 != 0) {
-            if (fn_800C4EE8(p, pOther, fn_802372EC(0, 100), chance2)) {
+            if (fn_800C4EE8(p, pOther, SyncRandGetRange(0, 100), chance2)) {
                 result = fn_800C7084(pOther, p, 172, 0.9f, 0x88888);
                 if (result) {
                     pOther->mFlags &= ~0x80000;
@@ -34262,7 +34262,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
     if (fn_800C769C(pOther, p)) {
         roll = pOther->mUnknown1222;
     } else {
-        roll = fn_802372EC(0, 100);
+        roll = SyncRandGetRange(0, 100);
     }
     if (blocked) {
         roll = 0;
@@ -34439,7 +34439,7 @@ extern "C" void fn_800C845C(void)
         for (; i < count; i++) {
             Object_80039F5C *p = PlyrGet(team, i);
 
-            if (fn_80227890(&p->mMotion.mPos, &pCarrier->mMotion.mPos) < 16.0f && fn_800C6738(p, pCarrier)
+            if (Vec2DistanceSqr(&p->mMotion.mPos, &pCarrier->mMotion.mPos) < 16.0f && fn_800C6738(p, pCarrier)
                 && fn_800C5DE4(p, pCarrier) && found < 7) {
                 lbl_80317AD8[found] = p;
                 found++;
@@ -34545,7 +34545,7 @@ extern "C" int fn_800C8774(int team)
     int value = 0;
     int field = team == 0 ? 0x43534847 /* 'CSHG' */ : 0x43534147 /* 'CSAG' */;
 
-    fn_801FCE10(0, "select \x8c into \x82 from 'FNIG'\n", field, &value);
+    TDbCompilePerformOp(0, "select \x8c into \x82 from 'FNIG'\n", field, &value);
     return value;
 }
 
@@ -34553,7 +34553,7 @@ extern "C" void fn_800C87CC(int team, int value)
 {
     int field = team == 0 ? 0x43534847 /* 'CSHG' */ : 0x43534147 /* 'CSAG' */;
 
-    fn_801FCE10(0, "update 'FNIG' set \x8c = \x82\n", field, value);
+    TDbCompilePerformOp(0, "update 'FNIG' set \x8c = \x82\n", field, value);
 }
 
 extern "C" int fn_800C8818(int team)
@@ -34561,7 +34561,7 @@ extern "C" int fn_800C8818(int team)
     int id = fn_800C8744(team);
     int result = 0;
 
-    fn_801FCE10(0, "select 'DIOT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &result, id);
+    TDbCompilePerformOp(0, "select 'DIOT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &result, id);
     return result;
 }
 
@@ -34673,7 +34673,7 @@ extern "C" int fn_800C8C1C(Object_80039F5C *p)
         if (lbl_803EAC3C->mEntries[team][i].mUnknown8 != -1) {
             Object_80039F5C *pOther = fn_8009BCE8(&lbl_803EAC3C->mEntries[team][i].mRef);
 
-            if (fn_80227890(&p->mMotion.mPos, &pOther->mMotion.mPos) < 16.0f) {
+            if (Vec2DistanceSqr(&p->mMotion.mPos, &pOther->mMotion.mPos) < 16.0f) {
                 result = 1;
                 break;
             }
@@ -34753,7 +34753,7 @@ extern "C" Object_80039F5C *fn_800C8DBC(int team, Vector_80039F5C *pPos, Object_
             }
         }
         if (valid) {
-            float dist = fn_80227890(pPos, &p->mMotion.mPos);
+            float dist = Vec2DistanceSqr(pPos, &p->mMotion.mPos);
 
             if (fn_800C91F0(p, 0, 1)) {
                 dist -= lbl_803EAC30;
@@ -35171,9 +35171,9 @@ extern "C" void fn_800C9D6C(unsigned char a, unsigned char b)
     Block_800C9D6C *pBlock;
     unsigned char i;
 
-    fn_80238234(pHandle, 0, 0, 0, fn_800C92CC);
-    fn_80238248(pHandle, fn_800C94BC, fn_800C9554, fn_800C9508);
-    pBlock = (Block_800C9D6C *)fn_8023816C(pHandle);
+    SyncStateSetCallbacks(pHandle, 0, 0, 0, fn_800C92CC);
+    SyncStateSetSaveCallbacks(pHandle, fn_800C94BC, fn_800C9554, fn_800C9508);
+    pBlock = (Block_800C9D6C *)SyncStateGetData(pHandle);
     pBlock->mCounts[0] = a;
     pBlock->mCounts[1] = b;
     pBlock->mUnknown104 = 0;
@@ -35181,7 +35181,7 @@ extern "C" void fn_800C9D6C(unsigned char a, unsigned char b)
     for (i = 0; i <= 2; i++) {
         pBlock->mRefs[i] = 0;
     }
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
     fn_800C9E4C(a, b);
 }
 
@@ -35249,8 +35249,8 @@ extern "C" void fn_800CA14C(void)
 {
     unsigned int i;
 
-    for (i = 0; i < fn_8003DEB4(); i++) {
-        fn_8003DEC4(i)->mUnknown20 &= ~0x10000;
+    for (i = 0; i < PlyrObjsGetCount(); i++) {
+        PlyrObjsGet(i)->mUnknown20 &= ~0x10000;
     }
     if (fn_800AD9B4() == 3) {
         unsigned char team;
@@ -35348,7 +35348,7 @@ extern "C" void fn_800CA3C4(void)
         }
     }
     for (i = 0; i <= 2; i++) {
-        j = fn_802372EC(0, 3);
+        j = SyncRandGetRange(0, 3);
         if (j != i) {
             tmp = lbl_803EAC3C->mRefs[i];
             lbl_803EAC3C->mRefs[i] = lbl_803EAC3C->mRefs[j];
@@ -35821,21 +35821,21 @@ extern "C" int fn_800CB228(Object_80039F5C *p, Info_80089904 *pInfo, int angle, 
     heading = (turn + facing) & 0xFFFFFF;
     fn_800CB484(&delta, &origin, &step, lbl_803EAC4C, heading, 1.0f);
     turn = fn_801CFE40(delta.mY, delta.mX);
-    fn_80227690(&toTarget, &target, &p->mMotion.mPos);
+    Vec2Sub(&toTarget, &target, &p->mMotion.mPos);
     bend = MathAngleDiff(fn_801CFE40(toTarget.mY, toTarget.mX), turn);
-    fn_80227538(&arc, (0x400000 - bend) & 0xFFFFFF, fn_802270A4(&toTarget) * (3.7450704e-07f * bend));
-    fn_80227638(&aim, &arc, &target);
-    fn_80227690(&arc, &aim, &p->mMotion.mPos);
-    stepLength = fn_802270A4(&delta);
-    ratio = fn_802270A4(&arc) / stepLength;
+    Vec2FromAngle(&arc, (0x400000 - bend) & 0xFFFFFF, Vec2Magnitude(&toTarget) * (3.7450704e-07f * bend));
+    Vec2Add(&aim, &arc, &target);
+    Vec2Sub(&arc, &aim, &p->mMotion.mPos);
+    stepLength = Vec2Magnitude(&delta);
+    ratio = Vec2Magnitude(&arc) / stepLength;
     if (ratio > 1.2f) {
         ratio = 1.2f;
     } else if (ratio < 0.9f) {
         ratio = 0.9f;
     }
-    fn_80227538(&arc, turn, stepLength * ratio);
-    fn_80227638(&aim, &arc, &p->mMotion.mPos);
-    if (fn_8022781C(&aim, &target) < limit) {
+    Vec2FromAngle(&arc, turn, stepLength * ratio);
+    Vec2Add(&aim, &arc, &p->mMotion.mPos);
+    if (Vec2Distance(&aim, &target) < limit) {
         lbl_803EAC60 = ratio;
         lbl_803EAC5C = (heading - facing) & 0xFFFFFF;
         return 1;
@@ -35851,9 +35851,9 @@ extern "C" void fn_800CB484(Point_8017886C *pOut, Point_8017886C *pFrom, Point_8
     if (flip != 0) {
         pTo->mY = -pTo->mY;
     }
-    fn_80227690(pOut, pTo, pFrom);
-    fn_80227384(pOut, pOut, angle);
-    fn_80227248(pOut, pOut, scale);
+    Vec2Sub(pOut, pTo, pFrom);
+    Vec2Rotate(pOut, pOut, angle);
+    Vec2Scale(pOut, pOut, scale);
 }
 
 extern "C" void fn_800CB504(void)
@@ -35885,8 +35885,8 @@ extern "C" int fn_800CB580(Object_80039F5C *p, int *pIndex, Point_8017886C targe
         }
     }
     facing = p->mMotion.mFacing;
-    fn_80227690(&delta, &target, &p->mMotion.mPos);
-    distance = fn_802270A4(&delta);
+    Vec2Sub(&delta, &target, &p->mMotion.mPos);
+    distance = Vec2Magnitude(&delta);
     MathAngleDiff(facing, angle);
     lbl_803EAC48 = 144;
     lbl_803EAC44 = &lbl_803186D8;
@@ -35897,7 +35897,7 @@ extern "C" int fn_800CB580(Object_80039F5C *p, int *pIndex, Point_8017886C targe
         lbl_803EAC4C = 0;
         pInfo = lbl_803EAC44->mEntries[i].mpInfo;
         limit = 0x238E39;
-        if (!(distance - fn_802270A4(&pInfo->mUnknown20) <= 0.5f)
+        if (!(distance - Vec2Magnitude(&pInfo->mUnknown20) <= 0.5f)
             && MathAngleDiff(MathAngleDiff(pInfo->mUnknown56, 0), MathAngleDiff(facing, angle)) < limit
             && fn_800CADC0(p, pInfo, angle, check) != 0) {
             *pIndex = i;
@@ -35937,10 +35937,10 @@ extern "C" int fn_800CB708(Object_80039F5C *p, int *pIndex, Point_8017886C targe
     }
     aim.mX = target.mX;
     aim.mY = offset + target.mY;
-    fn_80227690(&delta, &aim, &p->mMotion.mPos);
+    Vec2Sub(&delta, &aim, &p->mMotion.mPos);
     goal = fn_80177FFC(p->mIdBytes[2]);
     direction = fn_801CFE40(delta.mY, delta.mX);
-    distance = fn_802270A4(&delta);
+    distance = Vec2Magnitude(&delta);
     turn = MathAngleDiff(facing, direction);
     if (beyond != 2 && turn > 0x18E38E) {
         return 0;
@@ -35996,7 +35996,7 @@ extern "C" int fn_800CB708(Object_80039F5C *p, int *pIndex, Point_8017886C targe
 
         lbl_803EAC4C = 0;
         pInfo = lbl_803EAC44->mEntries[i].mpInfo;
-        length = fn_802270A4(&pInfo->mUnknown20);
+        length = Vec2Magnitude(&pInfo->mUnknown20);
         if (beyond == 2 || !(fabsf(length - distance) >= 2.0f)) {
             int infoAngle = MathAngleDiff(pInfo->mUnknown56, 0);
             int limit = 0x155555;
@@ -36124,8 +36124,8 @@ extern "C" int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pOw
                     step.mY = pTurn->mpInfo->mUnknown24;
                     fn_800CB484(&end, &origin, &step, AnimChanIsMirrored(pRecord),
                                 p->mpUnknown800[pTurn->mRecord].mUnknownC, pRecord->mUnknown2C);
-                    fn_80227638(&end, &p->mMotion.mPos, &end);
-                    fn_80227690(&delta, &pTurn->mTarget, &end);
+                    Vec2Add(&end, &p->mMotion.mPos, &end);
+                    Vec2Sub(&delta, &pTurn->mTarget, &end);
                     pTurn->mSteps = (int)(remaining / lbl_803EAC70);
                     pTurn->mStepX = delta.mX / pTurn->mSteps;
                     pTurn->mStepY = delta.mY / pTurn->mSteps;
@@ -36377,9 +36377,9 @@ extern "C" int fn_800CC6A8(Object_80039F5C *p)
                 Delta_800CC6A8 carrierDelta;
                 int angle;
 
-                fn_80227690(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
+                Vec2Sub(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
                 angle = fn_801CFE40(delta.mY, delta.mX);
-                fn_80227690(&carrierDelta, &pCarrier->mMotion.mPos, &pTarget->mMotion.mPos);
+                Vec2Sub(&carrierDelta, &pCarrier->mMotion.mPos, &pTarget->mMotion.mPos);
                 if (MathAngleDiff(angle, fn_801CFE40(carrierDelta.mY, carrierDelta.mX)) > 0x4E38E3) {
                     result = 0;
                 }
@@ -36580,21 +36580,21 @@ extern "C" int fn_800CCD20(Group_800CC98C *p, Play_800CCEBC *pPlay)
     Delta_800CC6A8 delta;
     Delta_800CC6A8 point;
     Delta_800CC6A8 extra;
-    fn_80227690(&delta, &pPlay->mPoint0, &pPlay->mPoint8);
-    fn_80227384(&delta, &delta, 0x1000000 - pPlay->mUnknown28);
+    Vec2Sub(&delta, &pPlay->mPoint0, &pPlay->mPoint8);
+    Vec2Rotate(&delta, &delta, 0x1000000 - pPlay->mUnknown28);
     int result = 0;
-    float distance = fn_802270A4(&delta);
+    float distance = Vec2Magnitude(&delta);
     int angle = fn_801CFE40(delta.mY, delta.mX);
     point = pPlay->mpUnknown20->mUnknown8;
     if (p->mUnknown57) point.mY = -point.mY;
-    float limit = fn_802270A4(&point);
+    float limit = Vec2Magnitude(&point);
     int pointAngle = fn_801CFE40(point.mY, point.mX);
     if (!(distance >= limit + p->mUnknown44)) {
         if (MathAngleDiff(angle, pointAngle) <= 0x155554) {
             if (p->mUnknown56 != 0) {
-                fn_80227690(&extra, &point, &pPlay->mpUnknown16->mUnknown8);
-                float a = fn_8022710C(&delta);
-                if (!(a > fn_8022710C(&extra))) result = 1;
+                Vec2Sub(&extra, &point, &pPlay->mpUnknown16->mUnknown8);
+                float a = Vec2MagnitudeSqr(&delta);
+                if (!(a > Vec2MagnitudeSqr(&extra))) result = 1;
             } else {
                 result = 1;
             }
@@ -36682,7 +36682,7 @@ extern "C" int fn_800CCF68(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
     pRows = LevelGetData()->mUnknown140;
     for (i = 0; i < count; i++, pRows++) {
         LevelGetWallBase(pRows, &a, &b);
-        if (fn_800E0F48(&start, &end, &a, &b)) {
+        if (PlayerActionSegmentsCross(&start, &end, &a, &b)) {
             result = 1;
             break;
         }
@@ -36747,7 +36747,7 @@ extern "C" int fn_800CD2B4(int mode, Object_80039F5C *p)
     if (mode == 1) {
         Record_800EA284 *pRecord = p->mpUnknown3092->mpUnknown32;
         if (!(pRecord->mUnknown8 >= 1.5f)) {
-            float distance = fn_8022781C(&pRecord->mUnknown32, &pRecord->mUnknown16);
+            float distance = Vec2Distance(&pRecord->mUnknown32, &pRecord->mUnknown16);
             if (!(distance <= 0.0f)) {
                 result = fn_801CFE08(__builtin_fabsf(pRecord->mUnknown32.mZ - pRecord->mUnknown16.mZ) / distance) <= 0x18E38E;
             }
@@ -36860,7 +36860,7 @@ extern "C" Play_800CCEBC *fn_800CD3C0(Group_800CC98C *p, Play_800CCEBC *pOut, un
         }
     }
     if (count != 0) {
-        int chosen = fn_802372EC(0, count);
+        int chosen = SyncRandGetRange(0, count);
 
         result = candidates[chosen].mpPlay;
         *pKey = candidates[chosen].mKey;
@@ -36875,8 +36875,8 @@ extern "C" Play_800CCEBC *fn_800CD8BC(Group_800CC98C *p, Play_800CCEBC *pOut, un
     Delta_800CC6A8 delta;
     Play_800CCEBC *result = 0;
     Object_80039F5C *pB = p->mpUnknown4;
-    fn_80227690(&delta, &p->mpUnknown0->mMotion, &pB->mMotion);
-    if (!(fn_802270A4(&delta) >= p->mUnknown48)) {
+    Vec2Sub(&delta, &p->mpUnknown0->mMotion, &pB->mMotion);
+    if (!(Vec2Magnitude(&delta) >= p->mUnknown48)) {
         int angle = fn_801CFE40(delta.mY, delta.mX);
         if (MathAngleDiff(pB->mMotion.mFacing, angle) < p->mUnknown32
             || (pB->mIdBytes[3] == 1 && pB->mUnknown1032 != 0)) {
@@ -37026,7 +37026,7 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
         Link_800CDE50 *pLink = &pB->mUnknown336Link;
         Object_80039F5C *pOther = fn_8009BCE8(&pLink->mRef);
         pOther->mFlags |= 0x80000;
-        fn_800E9528();
+        PlyrContactSendKnock();
         PlyrCollideRemoveExempt(pOther, pB);
         pLink->mUnknown15 = 1;
         fn_800F05E4(0, pB->mpState, &message, pB);
@@ -37053,7 +37053,7 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
             Link_800CDE50 *pLink = &pC->mUnknown336Link;
             Object_80039F5C *pOther = fn_8009BCE8(&pLink->mRef);
             pOther->mFlags |= 0x80000;
-            fn_800E9528();
+            PlyrContactSendKnock();
             PlyrCollideRemoveExempt(pOther, pC);
             pLink->mUnknown15 = 1;
             fn_800F05E4(0, pC->mpState, &message, pC);
@@ -37130,7 +37130,7 @@ extern "C" int fn_800CE2B8(Query_800CE770 *p)
         }
     }
     p->mUnknown57 = p->mpUnknown0->mUnknown776 == 1;
-    if (p->mUnknown60 != 0 && (unsigned int)fn_802372EC(0, 100) <= 49) {
+    if (p->mUnknown60 != 0 && (unsigned int)SyncRandGetRange(0, 100) <= 49) {
         p->mUnknown57 = p->mUnknown57 == 0;
     }
     if (fn_800CC98C(p, kind)) {
@@ -37319,16 +37319,16 @@ extern "C" void fn_800CE804(Command_800CEE74 *p, Table_80089904 *pTable, int ind
         p->mUnknown12.mY = -p->mUnknown12.mY;
         p->mVector0.mY = -p->mVector0.mY;
     }
-    fn_80227384(&p->mUnknown12, &p->mUnknown12, pAnchor->mAngle);
+    Vec2Rotate(&p->mUnknown12, &p->mUnknown12, pAnchor->mAngle);
     p->mUnknown12.mX += pAnchor->mPoint.mX;
     p->mUnknown12.mY += pAnchor->mPoint.mY;
     p->mVector0.mZ = 0.0f;
-    fn_80227384(&p->mVector0, &p->mVector0, pAnchor->mAngle);
-    fn_802271F0(&p->mVector0, &p->mVector0);
+    Vec2Rotate(&p->mVector0, &p->mVector0, pAnchor->mAngle);
+    Vec3Normalize(&p->mVector0, &p->mVector0);
     Vector_80039F5C delta;
-    if (pAnchor->mUnknown12 == 2) fn_80227264(&delta, &p->mVector0, lbl_803EAC88);
-    else fn_80227264(&delta, &p->mVector0, lbl_803EAC84);
-    fn_8022765C(&p->mUnknown12, &p->mUnknown12, &delta);
+    if (pAnchor->mUnknown12 == 2) Vec3Scale(&delta, &p->mVector0, lbl_803EAC88);
+    else Vec3Scale(&delta, &p->mVector0, lbl_803EAC84);
+    Vec3Add(&p->mUnknown12, &p->mUnknown12, &delta);
     
 
     delta.mX = 0.0f;
@@ -37360,29 +37360,29 @@ extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
         if (difference > 0x800000) difference -= 0x1000000;
         Vector_80039F5C delta;
         Delta_800CC6A8 rotated;
-        fn_80227690(&delta, &pRecord->mUnknown12, &pRecord->mUnknown32);
-        fn_80227384(&rotated, &delta, difference);
-        fn_80227690(&delta, &rotated, &delta);
-        fn_80227638(&delta, &delta, &pRecord->mUnknown12);
+        Vec2Sub(&delta, &pRecord->mUnknown12, &pRecord->mUnknown32);
+        Vec2Rotate(&rotated, &delta, difference);
+        Vec2Sub(&delta, &rotated, &delta);
+        Vec2Add(&delta, &delta, &pRecord->mUnknown12);
         if (fn_800CD170((Delta_800CC6A8 *)&a, (Delta_800CC6A8 *)&b, (Delta_800CC6A8 *)&delta)) continue;
         delta.mZ = pRecord->mUnknown12.mZ;
         float distance;
         float factor;
         int valid = 1;
-        fn_80227970(&a, &b, &delta, &point, &distance, &factor);
+        Vec3ClosestPointOnSegment(&a, &b, &delta, &point, &distance, &factor);
         if (distance >= lbl_803EAC7C) continue;
         if (fn_800CCF68(p, pRecord, &point, angle)) continue;
         if (lbl_803EAC8C != 0) {
-            float current = fn_80227890(&delta, &pRecord->mUnknown32);
-            float chosen = fn_80227890(&point, &pRecord->mUnknown32);
+            float current = Vec2DistanceSqr(&delta, &pRecord->mUnknown32);
+            float chosen = Vec2DistanceSqr(&point, &pRecord->mUnknown32);
             if (!(current <= chosen)) {
                 float chosenLength = fn_80260B1C(chosen);
                 float currentLength = fn_80260B1C(current);
                 if (currentLength - chosenLength >= chosenLength * lbl_803EAC90) {
                     valid = 0;
                 } else if (pRecord->mUnknown60 == 181 || pRecord->mUnknown60 == 186) {
-                    float currentEnd = fn_80227890(&delta, &pRecord->mUnknown48);
-                    float chosenEnd = fn_80227890(&point, &pRecord->mUnknown48);
+                    float currentEnd = Vec2DistanceSqr(&delta, &pRecord->mUnknown48);
+                    float chosenEnd = Vec2DistanceSqr(&point, &pRecord->mUnknown48);
                     if (!(chosenEnd >= currentEnd)) valid = 0;
                 }
             }
@@ -37403,7 +37403,7 @@ extern "C" void fn_800CEDA4(Node_800CCEBC *p, Delta_800CC6A8 *pPoint, int *pAngl
     *pPoint = p->mUnknown8;
     *pAngle = p->mUnknown4;
     if (mirror) pPoint->mY = -pPoint->mY;
-    fn_80227384(pPoint, pPoint, pPlayer->mMotion.mFacing);
+    Vec2Rotate(pPoint, pPoint, pPlayer->mMotion.mFacing);
     pPoint->mX += pPlayer->mMotion.mPos.mX;
     pPoint->mY += pPlayer->mMotion.mPos.mY;
     if (mirror) {
@@ -37447,16 +37447,16 @@ extern "C" void fn_800CEED8(unsigned short key, int index, Command_800CEE74 *pRe
     *pValue = (unsigned int)pInfo->mUnknown20Float;
     unsigned int heading = angle & 0xFFFFFF;
     *pAngle = (*pAngle + pPlayer->mMotion.mFacing) & 0xFFFFFF;
-    fn_80227384(pOut, pOut, pPlayer->mMotion.mFacing);
-    fn_8022765C(pOut, pOut, &pPlayer->mMotion.mPos);
+    Vec2Rotate(pOut, pOut, pPlayer->mMotion.mFacing);
+    Vec3Add(pOut, pOut, &pPlayer->mMotion.mPos);
     Delta_800CC6A8 delta;
-    fn_80227690(&delta, pPoint, &pRecord->mUnknown12);
-    fn_80227638(pOut, pOut, &delta);
+    Vec2Sub(&delta, pPoint, &pRecord->mUnknown12);
+    Vec2Add(pOut, pOut, &delta);
     unsigned int difference = (heading - fn_801CFE40(pRecord->mVector0.mY, pRecord->mVector0.mX)) & 0xFFFFFF;
     *pAngle = (*pAngle + difference) & 0xFFFFFF;
-    fn_80227690(pOut, pOut, pPoint);
-    fn_80227384(pOut, pOut, difference);
-    fn_80227638(pOut, pOut, pPoint);
+    Vec2Sub(pOut, pOut, pPoint);
+    Vec2Rotate(pOut, pOut, difference);
+    Vec2Add(pOut, pOut, pPoint);
 }
 
 extern "C" int fn_800CF090(Object_80039F5C *p)

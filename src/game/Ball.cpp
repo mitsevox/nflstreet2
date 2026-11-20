@@ -7,8 +7,8 @@
 #include "game/Ball.h"
 #include "game/CollideContacts.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_802372EC.h"
+#include "game/Vec3Magnitude.h"
+#include "game/SyncRandGetRange.h"
 #include "game/LevelSurface.h"
 #include "game/SyncStateRegister.h"
 
@@ -21,21 +21,21 @@ void BallModelDelete(int a, Block_80170E64 *pBlock);
 int BallModelGetReplayBits(void);
 void BallModelReplayRecord(Block_80170E64 *pBlock, int a);
 void BallModelReplayPlayback(Block_80170E64 *pBlock, int a, int b, int c, int d, float e);
-void fn_80030ACC(void (*pCallback0)(int a), void (*pCallback4)(int a, int b, int c, int d, float e), int size, const char *pName);
+void ReplayRegisterChannel(void (*pCallback0)(int a), void (*pCallback4)(int a, int b, int c, int d, float e), int size, const char *pName);
 void SpchIGSetBallCarrier(int id);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_800C47C4(void);
-void fn_8013A440(Ball_t *pBall);
+void BallSyncModel(Ball_t *pBall);
 void BallStepGroundContact(Ball_t *pBall, float step);
 void BallFollowHolder(Ball_t *pBall, float value);
-void fn_8013AB24(Ball_t *pBall);
-void fn_8013ABE0(Ball_t *pBall);
+void BallPredictLanding(Ball_t *pBall);
+void BallResetPhysics(Ball_t *pBall);
 void BallStateUpdate(Ball_t *pBall, float step);
 void BallStateMove(Ball_t *pBall, float step);
 void BallStateChange(Ball_t *pBall, int a, int b);
 int BallStateGet(Ball_t *pBall, int *pOut);
 void BallHitPlayerPart(Ball_t *pBall, Object_80039F5C *p, CollideContact_t *pContact, unsigned char sub, Vector_80039F5C *pPos);
-void fn_80227538(Vector_80039F5C *pVector, int angle, float length);
+void Vec2FromAngle(Vector_80039F5C *pVector, int angle, float length);
 float BallSweepToPart(CollideObject_t *pA, CollideObject_t *pB, unsigned char sub, Ball_t *pBall, Vector_80039F5C *pPos, unsigned char *pHit);
 CollideSet_t *StatcollGetSet(void);
 void ParticlesAddBallEvent(int a, Ball_t *pBall);
@@ -47,9 +47,9 @@ int MemFill(void *pDest, int size, int value, int width);
 void QuatIdentity(Quat_801EB488 *pRot);
 void QuatMultiply(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB);
 void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
-void fn_8022765C(float *pOut, float *pA, float *pB);
-void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
-void *fn_8023816C(void *pHandle);
+void Vec3Add(float *pOut, float *pA, float *pB);
+void Vec3Mat33Mul(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
+void *SyncStateGetData(void *pHandle);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 }
@@ -99,7 +99,7 @@ int BallBlockSyncModels(void *p, int value)
         Ball_t *pBall = &pSet->mEntries[i];
 
         if (pBall->mpUnknown00) {
-            fn_8013A440(pBall);
+            BallSyncModel(pBall);
         }
     }
     return 0;
@@ -306,7 +306,7 @@ void BallsReplayPlayback(int a, int b, int c, int d, float e)
 void BallsReplayRegister(void)
 {
     _Ball_iEntrySize = BallModelGetReplayBits();
-    fn_80030ACC(BallsReplayRecord, BallsReplayPlayback, _Ball_iEntrySize * _Ball_pSet->mHeader.mCount, "Balls");
+    ReplayRegisterChannel(BallsReplayRecord, BallsReplayPlayback, _Ball_iEntrySize * _Ball_pSet->mHeader.mCount, "Balls");
 }
 
 void BallSetCurrent(unsigned char index)
@@ -432,7 +432,7 @@ void BallsSyncModels(float step)
     unsigned int i;
 
     for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
-        fn_8013A440(&_Ball_pSet->mEntries[i]);
+        BallSyncModel(&_Ball_pSet->mEntries[i]);
     }
 }
 
@@ -441,7 +441,7 @@ void BallsResetScales(void)
     int i;
 
     for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
-        fn_8013ABE0(&_Ball_pSet->mEntries[i]);
+        BallResetPhysics(&_Ball_pSet->mEntries[i]);
     }
 }
 
@@ -694,12 +694,12 @@ void BallsStart(int count)
 
     CollideSetPairCallback(0, 1, BallCollidePlayer);
     pHandle = SyncStateRegister(0, (void **)&_Ball_pSet, sizeof(BallBlock_t) + (count - 1) * sizeof(Ball_t), 10, 0x62616C6C);
-    fn_80238234(pHandle, BallBlockInit, BallBlockShutdown, BallBlockSyncModels, BallBlockCompare);
-    fn_80238248(pHandle, BallBlockSave, BallBlockGetSaveSize, BallBlockRestore);
-    pSet = (BallBlock_t *)fn_8023816C(pHandle);
+    SyncStateSetCallbacks(pHandle, BallBlockInit, BallBlockShutdown, BallBlockSyncModels, BallBlockCompare);
+    SyncStateSetSaveCallbacks(pHandle, BallBlockSave, BallBlockGetSaveSize, BallBlockRestore);
+    pSet = (BallBlock_t *)SyncStateGetData(pHandle);
     MemFill(pSet, sizeof(BallBlock_t), 0, 4);
     pSet->mHeader.mCount = count;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 int BallGetLandingPoint(Ball_t *pBall, Vector_80039F5C *pOut)
@@ -753,12 +753,12 @@ void BallUpdateCollRecord(CollideObject_t *pRecord)
         MatSetStack(3);
         MatResetStack();
         MatRotQuat(&pBall->mState.mUnknown18);
-        fn_80227C2C(&axis, &axis);
+        Vec3Mat33Mul(&axis, &axis);
         pSub->mUnknown0 = pBall->mState.mPos.mX;
         pSub->mUnknown4 = pBall->mState.mPos.mY;
         pSub->mUnknown8 = pBall->mState.mPos.mZ;
-        fn_8022765C(&pSub->mUnknown10, &pPos->mX, &axis.mX);
-        fn_802276B4(&pSub->mUnknown20, &pPos->mX, &axis.mX);
+        Vec3Add(&pSub->mUnknown10, &pPos->mX, &axis.mX);
+        Vec3Sub(&pSub->mUnknown20, &pPos->mX, &axis.mX);
     }
     if (!(pRecord->mUnknown2C & 2)) {
         pRecord->mUnknown18 = 0.8333334f;
@@ -810,7 +810,7 @@ void BallsMirror(void)
         QuatMultiply(&pBall->mState.mUnknown18, &turn, &pBall->mState.mUnknown18);
         QuatFromEuler(&turn, 0, 0, 0x800000);
         QuatMultiply(&pBall->mState.mUnknown34, &turn, &pBall->mState.mUnknown34);
-        fn_8013AB24(pBall);
+        BallPredictLanding(pBall);
     }
 }
 
@@ -894,9 +894,9 @@ void BallKickUp(Ball_t *pBall, int decay)
         pBall->mState.mUnknownF0 = pBall->mState.mUnknownF0 < 0.0f ? 0.0f : pBall->mState.mUnknownF0;
     }
     if (fabsf(vector.mX) < 1e-7f && fabsf(vector.mY) < 1e-7f) {
-        unsigned char degrees = fn_802372EC(0, 360);
+        unsigned char degrees = SyncRandGetRange(0, 360);
 
-        fn_80227538(&vector, (int)(degrees * 46603.38f), 0.075f);
+        Vec2FromAngle(&vector, (int)(degrees * 46603.38f), 0.075f);
     }
     BallSetVelocity(pBall, &vector);
 }

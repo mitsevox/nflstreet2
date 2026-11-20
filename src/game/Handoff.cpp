@@ -23,10 +23,10 @@
 #include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_8022781C.h"
-#include "game/fn_80227638.h"
-#include "game/fn_802372EC.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Distance.h"
+#include "game/Vec2Add.h"
+#include "game/SyncRandGetRange.h"
 #include <math.h>
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
@@ -69,7 +69,7 @@ extern "C" {
 static unsigned char _Handoff_auHuddleSlots[8] = {0, 1, 2, 3, 4, 5, 6, 0};
 static float _Handoff_fHuddleWalkSpeed = 0.3f;
 extern float gPlyrMoveFwdSpeed;
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
@@ -79,14 +79,14 @@ int fn_800B7FE8(Object_80039F5C *p);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_8010AEC4(Object_80039F5C *p);
-void fn_80227384(void *pOut, void *pIn, int angle);
+void Vec2Rotate(void *pOut, void *pIn, int angle);
 void fn_800D7A0C(Object_80039F5C *p, int a);
 int fn_8011F4C8(void);
 float fn_8011F4D4(void);
 int fn_800CE590(Query_800CE770 *pQuery, Record_800CE608 *pA, Record_800CE608 *pB);
 void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord);
 void PlyrCollideAddExempt(Object_80039F5C *p, Object_80039F5C *pOther);
-void fn_80227538(Point_8017886C *pOut, int angle, float length);
+void Vec2FromAngle(Point_8017886C *pOut, int angle, float length);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
@@ -115,7 +115,7 @@ int PassIconsAreShown(void);
 int fn_8011F2C4(void);
 void fn_800A5A8C(int a, void *pA, void *pB);
 void fn_800A60D8(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_800E1044(Object_80039F5C *p, Vector_80039F5C *pTarget);
+int PlayerActionRunCrossesLine(Object_80039F5C *p, Vector_80039F5C *pTarget);
 int fn_800FF094(Object_80039F5C *p);
 int fn_800CB708(Object_80039F5C *p, int *pOut, Point_8017886C point, int angle, int a);
 int fn_800CB580(Object_80039F5C *p, int *pOut, Point_8017886C point, int angle, int a);
@@ -198,20 +198,20 @@ extern "C" unsigned char TurnToPlayPickDirection(Object_80039F5C *p) {
     Object_80039F5C *pCarrier;
     if (fn_801787A0()) {
         HuddleGetSpot(&delta, &angle, p, 0);
-        fn_80227690(&delta, &delta, &p->mMotion.mPos);
+        Vec2Sub(&delta, &delta, &p->mMotion.mPos);
     } else if (p->mIdBytes[2] == fn_80178320() || p->mpState[1].mId == 33 || p->mpState[1].mId == 31) {
         pCarrier = BallGetCurrentHolder();
         if (!pCarrier)
             goto ball;
-        fn_80227538(&delta, pCarrier->mMotion.mUnknown32, pCarrier->mMotion.mUnknown28 * 15.0f);
-        fn_80227638(&delta, &delta, &pCarrier->mMotion.mPos);
-        fn_80227690(&delta, &delta, &p->mMotion.mPos);
+        Vec2FromAngle(&delta, pCarrier->mMotion.mUnknown32, pCarrier->mMotion.mUnknown28 * 15.0f);
+        Vec2Add(&delta, &delta, &pCarrier->mMotion.mPos);
+        Vec2Sub(&delta, &delta, &p->mMotion.mPos);
     } else if (BallStateGet(BallGetCurrent(), 0) != 5) {
         goto facing;
     } else {
     ball:
         BallGetPosition(BallGetCurrent(), &pos);
-        fn_80227690(&delta, &pos, &p->mMotion.mPos);
+        Vec2Sub(&delta, &pos, &p->mMotion.mPos);
     }
     angle = (fn_801CFE40(delta.mY, delta.mX) - p->mMotion.mFacing) & 0xFFFFFF;
     sector = ((angle + 0x100000) >> 21) & 7;
@@ -372,7 +372,7 @@ extern "C" float HandoffPickSide(Object_80039F5C *p, HandoffBlock_t *state) {
         int sideFlag = 0;
         int wideFlag = 0;
         Point_8017886C delta;
-        fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+        Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         int angle = fn_801CFE40(delta.mY, delta.mX);
         if (fn_8011F1A4() && p->mUnknown2914 == 0) {
             float x = fn_8011F4D4();
@@ -544,7 +544,7 @@ extern "C" int HandoffTryPairAnim(Object_80039F5C *p, Object_80039F5C *pOther, H
         float speed;
         if (state->mUnknown8 == 15) {
             Point_8017886C delta;
-            fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+            Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
             int heading = (fn_801CFE40(delta.mY, delta.mX) - p->mMotion.mFacing) & 0xFFFFFF;
             speed = 0.9f;
             if (heading > 0x800000) {
@@ -620,16 +620,16 @@ extern "C" int HandoffSteer(Object_80039F5C *p, Object_80039F5C *pOther, Handoff
         Vector_80039F5C ballPos;
         Point_8017886C delta;
         BallGetPosition(pBall, &ballPos);
-        fn_80227690(&delta, &pOther->mMotion.mPos, &ballPos);
+        Vec2Sub(&delta, &pOther->mMotion.mPos, &ballPos);
         int angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
-        float distance = fn_802270A4(&delta);
+        float distance = Vec2Magnitude(&delta);
         if (fn_8011F1A4() && p->mUnknown2914 == 0) {
             id = p->mpState->mUnknown2;
             if (id == 0 || id == 2 || id == 4 || id == 6 || id == 8 || id == 10) {
                 Point_8017886C point;
                 point.mX = fn_8011F4D4();
                 point.mY = fn_80177FE0().mY;
-                fn_80227690(&point, &point, &p->mMotion.mPos);
+                Vec2Sub(&point, &point, &p->mMotion.mPos);
                 int pointAngle = fn_801CFE40(point.mY, point.mX) & 0xFFFFFF;
                 if (state->mUnknown8 == 12) {
                     adjust = 0;
@@ -734,9 +734,9 @@ extern "C" int HandoffSteer(Object_80039F5C *p, Object_80039F5C *pOther, Handoff
 extern "C" void HandoffSteerClear(Object_80039F5C *p, Object_80039F5C *pOther, HandoffBlock_t *state) {
     if (p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
         Point_8017886C delta;
-        fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+        Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         fn_801CFE40(delta.mY, delta.mX);
-        float distance = fn_802270A4(&delta);
+        float distance = Vec2Magnitude(&delta);
         if (distance < 2.0f) {
             float speed = distance * 0.5f;
             int turn = (int)((1.0f - speed) * 0x355555);
@@ -935,7 +935,7 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
             HandoffStartAnim(p, state, 3);
         } else {
             Point_8017886C delta;
-            fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
+            Vec2Sub(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
             if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), pOther->mMotion.mUnknown32) > 0x400000
                 && p->mMotion.mPos.mY < pOther->mMotion.mPos.mY) {
                 switch (state->mUnknown8) {
@@ -1131,7 +1131,7 @@ extern "C" void HuddleArrive(Object_80039F5C *p, HuddleBlock_t *pState) {
 
 extern "C" void HuddleSetSpot(HuddleBlock_t *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value) {
     fn_800FF598(pState, p, pPoint, value, 0.0f);
-    pState->mUnknown0 = fn_802372EC(0, 40) + 20;
+    pState->mUnknown0 = SyncRandGetRange(0, 40) + 20;
 }
 
 extern "C" int HuddleMoveEnter(Object_80039F5C *p) {
@@ -1157,16 +1157,16 @@ extern "C" int HuddleMoveUpdate(Object_80039F5C *p) {
     state->mUnknown52--;
     switch (state->mUnknown48) {
     case 0: {
-        if (fn_800E1044(p, (Vector_80039F5C *)&state->mUnknown8)) {
+        if (PlayerActionRunCrossesLine(p, (Vector_80039F5C *)&state->mUnknown8)) {
             p->mUnknown1008Word = 26;
             if (fn_801BE648(p->mpUnknown792) != 203)
                 fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 203, 1.0f, p);
             state->mUnknown48 = 3;
             break;
         }
-        float distance = fn_8022781C(&state->mUnknown8, &p->mMotion.mPos);
+        float distance = Vec2Distance(&state->mUnknown8, &p->mMotion.mPos);
         Point_8017886C delta;
-        fn_80227690(&delta, &state->mUnknown8, &p->mMotion.mPos);
+        Vec2Sub(&delta, &state->mUnknown8, &p->mMotion.mPos);
         if (state->mUnknown49 == 0 && p->mMotion.mUnknown28 < 0.006f) {
             state->mUnknown2 = 3;
             stopped = 1;
@@ -1263,15 +1263,15 @@ extern "C" void HuddleGetSpot(Point_8017886C *pOut, int *pFacing, Object_80039F5
                 base = 2.5f;
             else
                 base = 4.0f;
-            fn_80227538(pOut, 0, fn_802372EC(0, 100) * 0.003f + base);
-            fn_80227384(pOut, pOut, ((_Handoff_auHuddleSlots[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
-            fn_80227690(&offset, &offset, pOut);
+            Vec2FromAngle(pOut, 0, SyncRandGetRange(0, 100) * 0.003f + base);
+            Vec2Rotate(pOut, pOut, ((_Handoff_auHuddleSlots[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
+            Vec2Sub(&offset, &offset, pOut);
             *pFacing = fn_801CFE40(offset.mY, offset.mX);
             if (origin.mY < 3.0f - fn_80178A2C())
                 pOut->mY -= 7.0f;
             else
                 pOut->mY -= 10.0f;
-            fn_80227638(pOut, pOut, &origin);
+            Vec2Add(pOut, pOut, &origin);
         } else {
             offset.mX = 0.0f;
             offset.mY = 0.0f;
@@ -1279,12 +1279,12 @@ extern "C" void HuddleGetSpot(Point_8017886C *pOut, int *pFacing, Object_80039F5
                 base = 2.5f;
             else
                 base = 4.0f;
-            fn_80227538(pOut, 0, fn_802372EC(0, 100) * 0.003f + base);
-            fn_80227384(pOut, pOut, ((_Handoff_auHuddleSlots[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
-            fn_80227690(&offset, &offset, pOut);
+            Vec2FromAngle(pOut, 0, SyncRandGetRange(0, 100) * 0.003f + base);
+            Vec2Rotate(pOut, pOut, ((_Handoff_auHuddleSlots[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
+            Vec2Sub(&offset, &offset, pOut);
             *pFacing = fn_801CFE40(offset.mY, offset.mX);
             pOut->mY += 3.0f;
-            fn_80227638(pOut, pOut, &origin);
+            Vec2Add(pOut, pOut, &origin);
         }
     } else {
         pOut->mX = p->mMotion.mPos.mX;

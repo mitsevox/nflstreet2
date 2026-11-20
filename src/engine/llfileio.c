@@ -41,11 +41,11 @@ extern const char *lbl_803EBC44;
 extern void *File_pAsyncRequestList;
 extern int lbl_803ECEE8;
 extern int lbl_803ECEF4;
-extern Font_801CCA64 *lbl_803ECEF8;
+extern Font_t *lbl_803ECEF8;
 extern Lock_801F8014 File_AsyncRequestListCS;
 extern FileInitParms_t File_InitParms;
 extern Lock_801F8014 File_AsyncThreadActiveCS;
-extern FontColor_801CCA64 lbl_802F4A74;
+extern FontColor_t lbl_802F4A74;
 extern unsigned char lbl_802F4AC0[];
 
 void fn_801F8768(void);
@@ -553,14 +553,14 @@ void FileAsyncCheckError(void)
                 fn_801F8768();
             }
             current = DVDGetDriveStatus();
-            fn_801CD2A4();
-            fn_801CD308(0, lbl_802F4A74);
+            FontResetRenderState();
+            FontSetRenderColor(0, lbl_802F4A74);
             fn_801CDD18();
             _FileDisplayErrorString(&pos, status);
             GlibSwapBuffers();
         } while (current == status);
-        fn_801CD2A4();
-        fn_801CD308(0, lbl_802F4A74);
+        FontResetRenderState();
+        FontSetRenderColor(0, lbl_802F4A74);
         fn_801CDD18();
         pos.y = 0.0f;
         fn_801CDB5C(lbl_803ECEF8, "Loading...", 1, 0.0f, &pos.x);
@@ -575,9 +575,9 @@ void FileAsyncCheckError(void)
 void FileInitErrorMessages(void)
 {
     if (!lbl_803EBC42) {
-        fn_801CCF74(0, 0, (FontHeader_801CCA64 *)lbl_802F4AC0);
-        lbl_803ECEF8 = fn_801CD130(0);
-        fn_801CD20C(lbl_803ECEF8, 0);
+        FontAddFontFromBuffer(0, 0, (FontHeader_t *)lbl_802F4AC0);
+        lbl_803ECEF8 = FontCreateFont(0);
+        FontUploadTextures(lbl_803ECEF8, 0);
         lbl_803EBC42 = 1;
     }
 }

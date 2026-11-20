@@ -15,7 +15,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/ResLoad.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 
 struct SaveSlot {
     int mUnknown0;
@@ -60,7 +60,7 @@ extern char lbl_802EBE50[];
 void fn_801D646C(void);
 void fn_801D6938(SaveFileDesc *, int);
 void fn_801D6924(int (*)(char *, int, MemCardComment *), void (*)(void), void (*)(int, unsigned char **, unsigned int *), void (*)(int));
-int fn_801D5824(int, int);
+int MemCEnableCache(int, int);
 void fn_801D6904(int, int);
 void fn_801D64EC(void);
 int ResGetSize(void *, int);
@@ -176,7 +176,7 @@ void MemCardFilesInit(void)
     fn_801D6938(_MemCardFiles_aFileDescs, 4);
     fn_801D6924(MemCardGetNameFromComment, MemCardNullCallback, MemCardFilesGetIcon, MemCardFilesFreeIcon);
     fn_801D685C("GN7E-69", 0);
-    fn_801D5824(1, 0x8000);
+    MemCEnableCache(1, 0x8000);
     fn_801D6904(1, 1);
 }
 
@@ -213,15 +213,15 @@ int MemCardFilesComputeChecksum(int type, int index)
     request.mTarget = (int)&result;
     switch (type) {
     case 3:
-        fn_8022F478(fn_8022F358((signed char)index));
+        DbUserSetCurrent(DbUserGetId((signed char)index));
         PlayerSaveOnSave(&request, &gChecksumCRC32StreamType);
         break;
     case 2:
-        fn_8022F478(fn_8022F358((signed char)index));
+        DbUserSetCurrent(DbUserGetId((signed char)index));
         DbUserSave(&request, &gChecksumCRC32StreamType);
         break;
     case 1:
-        fn_8022EB94(&result, &gChecksumCRC32StreamType);
+        DbEvasSaveStream(&result, &gChecksumCRC32StreamType);
         break;
     }
     return result;

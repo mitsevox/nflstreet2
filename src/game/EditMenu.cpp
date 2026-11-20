@@ -70,14 +70,14 @@ float FEPlyrSpin(float a);
 void FEPlyrResetPose(int a);
 unsigned char FEPlyrSetPairMode(unsigned char enable, int a, int b);
 void MemCardFilesStoreChecksum(int a, int b);
-void fn_8005F29C(void);
+void StoryEventsStartFirstEvent(void);
 void ChalCloseCursors(void);
 int ChalGetDevPoints(void);
 void ChalSetDevPoints(int a);
 int DbCursorGetRow(DbCursor *pObject);
-int fn_800841AC(DbCursor *pObject);
-int fn_800841D8(DbCursor *pObject);
-int fn_80084204(DbCursor *pObject);
+int TeamDbGetColor1(DbCursor *pObject);
+int TeamDbGetColor2(DbCursor *pObject);
+int TeamDbGetColor3(DbCursor *pObject);
 void fn_8007BA48(DbCursor *pObject);
 void fn_8007BB04(DbCursor *pObject);
 int fn_8007BB84(DbCursor *pCursor, int a, int b, int *pResult);
@@ -127,8 +127,8 @@ void GauntletReset(int a);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 void *UIGLibraryGetGlobal(int index);
 unsigned int UIGFontGetStringWidth(void *a, int b, int c, const char *pText);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 }
 
 static int _EditMenu_iMode = 6;
@@ -232,7 +232,7 @@ void EditMenuBackupTeam(void)
     switch (_EditMenu_iMode) {
     case 4:
         _EditMenu_iSavedPoints = StoryGetDevPoints(_EditMenu_cTeamSlot);
-        StoryTeamBackup(&_EditMenu_iTeamTableCopy, &_EditMenu_iPlayerTableCopy, fn_8022F4BC());
+        StoryTeamBackup(&_EditMenu_iTeamTableCopy, &_EditMenu_iPlayerTableCopy, DbUserGetCurrent());
         break;
     case 3:
         _EditMenu_iSavedPoints = StoryGetDevPoints(_EditMenu_cTeamSlot);
@@ -246,7 +246,7 @@ void EditMenuBackupTeam(void)
         break;
     default:
         _EditMenu_iSavedPoints = ChalGetDevPoints();
-        CreateTeamBackup(&_EditMenu_iTeamTableCopy, &_EditMenu_iPlayerTableCopy, fn_8022F4BC());
+        CreateTeamBackup(&_EditMenu_iTeamTableCopy, &_EditMenu_iPlayerTableCopy, DbUserGetCurrent());
         break;
     }
 }
@@ -374,21 +374,21 @@ void EditMenuOpen(int a, int *pCount, int *pValue)
     }
     *pValue = 0;
     EditMenuEnterScreen(1, pCount, pValue);
-    EditMenuSetLogo(4, fn_80084158(EditMenuGetTeamCursor()));
-    if (fn_80084438(EditMenuGetTeamCursor())) {
+    EditMenuSetLogo(4, TeamDbGetLogo(EditMenuGetTeamCursor()));
+    if (TeamDbGetCtdl(EditMenuGetTeamCursor())) {
         EditMenuSetLogoHandle(-1);
     } else {
         EditMenuSetLogoHandle(0);
     }
     EditMenuSetLogoFlag(0);
     _EditMenu_State.mUnknown96 = -1;
-    _EditMenu_aTeamColors[0] = fn_800841AC(EditMenuGetTeamCursor());
-    _EditMenu_aTeamColors[1] = fn_800841D8(EditMenuGetTeamCursor());
-    _EditMenu_aTeamColors[2] = fn_80084204(EditMenuGetTeamCursor());
-    TeamLogoRequestTint(0, 4, fn_80084158(EditMenuGetTeamCursor()), 172, _EditMenu_aTeamColors);
-    _EditMenu_iShownLogo = fn_80084158(EditMenuGetTeamCursor());
+    _EditMenu_aTeamColors[0] = TeamDbGetColor1(EditMenuGetTeamCursor());
+    _EditMenu_aTeamColors[1] = TeamDbGetColor2(EditMenuGetTeamCursor());
+    _EditMenu_aTeamColors[2] = TeamDbGetColor3(EditMenuGetTeamCursor());
+    TeamLogoRequestTint(0, 4, TeamDbGetLogo(EditMenuGetTeamCursor()), 172, _EditMenu_aTeamColors);
+    _EditMenu_iShownLogo = TeamDbGetLogo(EditMenuGetTeamCursor());
     _EditMenu_iShownLogoHandle = 0;
-    fn_80083F88(EditMenuGetTeamCursor(), buffer, 18);
+    TeamDbGetName(EditMenuGetTeamCursor(), buffer, 18);
     EditMenuSetName(buffer);
     if (!EditMenuIsPlayerCopy()) {
         if (EditMenuIsStoryTeam()) {
@@ -467,7 +467,7 @@ void EditMenuReloadTeam(void)
             _EditMenu_iTeam = CreateTeamLoadToStats(_EditMenu_cTeamSlot, 0);
         }
     }
-    fn_80084034(&gEditMenuTeamCursor, _EditMenu_iTeam, 0);
+    TeamDbSeekId(&gEditMenuTeamCursor, _EditMenu_iTeam, 0);
     desc.mUnknown8 = _EditMenu_iTeam;
     desc.mUnknown4 = 1;
     desc.mUnknown0 = 1;
@@ -520,7 +520,7 @@ void EditMenuClose(unsigned char a)
         _EditMenu_bSaving = 1;
     }
     if (done) {
-        MemCardFilesStoreChecksum(2, fn_8022F384(fn_8022F4BC()));
+        MemCardFilesStoreChecksum(2, DbUserFindIndex(DbUserGetCurrent()));
     }
 }
 
@@ -605,9 +605,9 @@ void EditMenuGetLogo(int a, int *pA, int *pB, int *pC)
     *pB = pState->mUnknown88;
     *pC = pState->mUnknown92;
     EditMenuGetColorIndices(colors);
-    _EditMenu_aTeamColors[0] = fn_800841AC(EditMenuGetTeamCursor());
-    _EditMenu_aTeamColors[1] = fn_800841D8(EditMenuGetTeamCursor());
-    _EditMenu_aTeamColors[2] = fn_80084204(EditMenuGetTeamCursor());
+    _EditMenu_aTeamColors[0] = TeamDbGetColor1(EditMenuGetTeamCursor());
+    _EditMenu_aTeamColors[1] = TeamDbGetColor2(EditMenuGetTeamCursor());
+    _EditMenu_aTeamColors[2] = TeamDbGetColor3(EditMenuGetTeamCursor());
     EditMenuGetColorIndices(colors);
     TeamLogoRequestTint(0, pState->mUnknown80, pState->mUnknown84, 172, colors);
     _EditMenu_iShownLogo = *pA;
@@ -1242,7 +1242,7 @@ void EditMenuBegin(int mode, int value)
     int status;
 
     _EditMenu_iMode = mode;
-    _EditMenu_cTeamSlot = fn_8022F384(fn_8022F4BC());
+    _EditMenu_cTeamSlot = DbUserFindIndex(DbUserGetCurrent());
     _EditMenu_bActive = 1;
     _EditMenu_bPending = 0;
     _EditMenu_bChanged = 0;
@@ -1271,8 +1271,8 @@ void EditMenuBegin(int mode, int value)
         }
         break;
     }
-    fn_80083E40(&gEditMenuTeamCursor, 0, 0x54415453);
-    fn_80084034(&gEditMenuTeamCursor, _EditMenu_iTeam, 0);
+    TeamDbOpen(&gEditMenuTeamCursor, 0, 0x54415453);
+    TeamDbSeekId(&gEditMenuTeamCursor, _EditMenu_iTeam, 0);
     desc.mUnknown8 = _EditMenu_iTeam;
     desc.mUnknown4 = 1;
     desc.mUnknown0 = 1;
@@ -1284,12 +1284,12 @@ void EditMenuBegin(int mode, int value)
 void EditMenuEnd(void)
 {
     if (_EditMenu_bActive) {
-        fn_80083F68(&gEditMenuTeamCursor);
+        TeamDbClose(&gEditMenuTeamCursor);
         fn_8008056C(&gEditMenuPlayerCursor);
         if (EditMenuIsStoryTeam()) {
             fn_8018C48C(0x54415453);
             if (MsgGameGetSetupState() == 1 && EditMenuGetMode() == 3) {
-                fn_8005F29C();
+                StoryEventsStartFirstEvent();
             }
         } else if (!EditMenuIsPlayerCopy()) {
             if (_EditMenu_iMode == 2) {
@@ -1553,11 +1553,11 @@ int EditMenuHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg
         break;
     case 0x126:
         if (pArgs[0].i == 7) {
-            pResult->i = StoryTeamExists(fn_8022F384(fn_8022F4BC()));
+            pResult->i = StoryTeamExists(DbUserFindIndex(DbUserGetCurrent()));
         } else if (pArgs[0].i == 6) {
-            pResult->i = CreateTeamExists(fn_8022F384(fn_8022F4BC()));
+            pResult->i = CreateTeamExists(DbUserFindIndex(DbUserGetCurrent()));
         } else if (pArgs[0].i == 8) {
-            pResult->i = GauntletGetCurrentTeam(fn_8022F384(fn_8022F4BC())) != 0x3FF;
+            pResult->i = GauntletGetCurrentTeam(DbUserFindIndex(DbUserGetCurrent())) != 0x3FF;
         }
         break;
     case 0x125:
@@ -1567,12 +1567,12 @@ int EditMenuHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg
             int team;
 
             CreateTeamClear();
-            team = UserProfileFindIndex(fn_8022F4BC());
+            team = UserProfileFindIndex(DbUserGetCurrent());
             if (StoryTeamExists(team)) {
                 StorySetIndexedFlag(team, 1, 0);
             }
         } else if (pArgs[0].i == 8) {
-            GauntletReset(fn_8022F384(fn_8022F4BC()));
+            GauntletReset(DbUserFindIndex(DbUserGetCurrent()));
         }
         break;
     case 0xF0:
@@ -1589,7 +1589,7 @@ int EditMenuHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg
         pResult->i = _EditMenu_iView;
         break;
     case 0x197:
-        MemCardFilesStoreChecksum(2, fn_8022F384(fn_8022F4BC()));
+        MemCardFilesStoreChecksum(2, DbUserFindIndex(DbUserGetCurrent()));
         break;
     case 0x19A:
         pResult->i = _EditMenu_bPresetPending;

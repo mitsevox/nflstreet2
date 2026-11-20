@@ -2,13 +2,13 @@
    per profile slot, which cheats are unlocked and which are switched on. */
 #include "game/Cheat.h"
 #include "game/DbCursor.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/QueryStatus.h"
 #include <string.h>
 
 extern "C" {
-int fn_8022F358(int index);
-int fn_8022F3D4(int handle);
+int DbUserGetId(int index);
+int DbUserGetDb(int handle);
 int DbCursorGetValue(DbCursor *pObject, int key);
 }
 
@@ -18,7 +18,7 @@ extern "C" {
 void CheatOpenCursor(DbCursor *pObject, int index)
 {
     DbCursorOpen(pObject, 0x53544843, 0x58494843, 0, 0,
-                fn_8022F3D4(fn_8022F358(index)));
+                DbUserGetDb(DbUserGetId(index)));
 }
 
 int CheatCloseCursor(DbCursor *pObject)
@@ -39,8 +39,8 @@ void CheatClearSlot(void)
 int CheatCountUnlocked(void)
 {
     int count;
-    int status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'STHC' where 'LUHC' = 1\n",
-                             fn_8022F3D4(fn_8022F358(_Cheat_iSlot)), &count);
+    int status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from 'STHC' where 'LUHC' = 1\n",
+                             DbUserGetDb(DbUserGetId(_Cheat_iSlot)), &count);
     if (QUERY_STATUS_ACCEPTED(status) && status != 0x17) return count;
     return 0;
 }
@@ -48,8 +48,8 @@ int CheatCountUnlocked(void)
 int CheatAreAllUnlocked(void)
 {
     int count;
-    int status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'STHC' where 'LUHC' = 0\n",
-                             fn_8022F3D4(fn_8022F358(_Cheat_iSlot)), &count);
+    int status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from 'STHC' where 'LUHC' = 0\n",
+                             DbUserGetDb(DbUserGetId(_Cheat_iSlot)), &count);
     if (QUERY_STATUS_ACCEPTED(status) && status != 0x17) {
         if (count) return 0;
     }
@@ -59,8 +59,8 @@ int CheatAreAllUnlocked(void)
 int CheatIsNoneEnabled(void)
 {
     int count;
-    int status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'STHC' where 'NEHC' = 1 and ( 'XIHC' < \x82 or 'XIHC' > \x82 )\n",
-                             fn_8022F3D4(fn_8022F358(_Cheat_iSlot)), &count, 9, 21);
+    int status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from 'STHC' where 'NEHC' = 1 and ( 'XIHC' < \x82 or 'XIHC' > \x82 )\n",
+                             DbUserGetDb(DbUserGetId(_Cheat_iSlot)), &count, 9, 21);
     if (QUERY_STATUS_ACCEPTED(status) && status != 0x17) {
         if (count) return 0;
     }
@@ -71,11 +71,11 @@ int CheatFindByCode(const char *pCode, int unused, char *pName)
 {
     int id;
     if (!pName) {
-        int status = fn_801FCE10(0, "use 'TATS' select 'XIHC' into \x82 from 'DCHC' where 'DCHC' = \x88 and 'UTHC' = 1\n", &id, 0);
+        int status = TDbCompilePerformOp(0, "use 'TATS' select 'XIHC' into \x82 from 'DCHC' where 'DCHC' = \x88 and 'UTHC' = 1\n", &id, 0);
         if (QUERY_STATUS_ACCEPTED(status) && status != 0x17) return id;
         return 56;
     } else {
-        int status = fn_801FCE10(0, "use 'TATS' select 'XIHC' into \x82 and 'ANHC' into \x88 from 'DCHC' where 'DCHC' = \x88 and 'UTHC' = 1\n", &id, pName, pCode);
+        int status = TDbCompilePerformOp(0, "use 'TATS' select 'XIHC' into \x82 and 'ANHC' into \x88 from 'DCHC' where 'DCHC' = \x88 and 'UTHC' = 1\n", &id, pName, pCode);
         if (QUERY_STATUS_ACCEPTED(status) && status != 0x17) return id;
     }
     return 56;
@@ -84,21 +84,21 @@ int CheatFindByCode(const char *pCode, int unused, char *pName)
 int CheatGetUnlockedId(int index)
 {
     int found = 0;
-    int handle = fn_8022F3D4(fn_8022F358(_Cheat_iSlot));
+    int handle = DbUserGetDb(DbUserGetId(_Cheat_iSlot));
     QueryCursor cursor;
     int id;
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    if (fn_801FCE10(0, "use \x8c declare \x8a fastcursor for select 'XIHC' into \x82 from 'STHC' where 'LUHC' = 1\n", handle, &cursor, &id) == 0) {
+    if (TDbCompilePerformOp(0, "use \x8c declare \x8a fastcursor for select 'XIHC' into \x82 from 'STHC' where 'LUHC' = 1\n", handle, &cursor, &id) == 0) {
         cursor.mUnknown4 = index;
         if (cursor.mUnknown0) {
-            int status = fn_801FCE10(0, "fetch from \x8a\n", &cursor);
+            int status = TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
             if (QUERY_STATUS_ACCEPTED(status) == 1 && status != 0x15) found = 1;
         }
     }
-    if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+    if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);
     if (found) return id;
     return 56;
 }
@@ -111,15 +111,15 @@ int CheatGetUnlockedInfo(int index, int *pId, char *pName, int count, int *pEnab
     int enabled;
     int marked;
     int found = 0;
-    int handle = fn_8022F3D4(fn_8022F358(_Cheat_iSlot));
+    int handle = DbUserGetDb(DbUserGetId(_Cheat_iSlot));
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    if (fn_801FCE10(0, "use \x8c declare \x8a fastcursor for select 'XIHC' into \x85 and 'NEHC' into \x85 from 'STHC' where 'LUHC' = 1\n", handle, &cursor, &id, &enabled) == 0) {
+    if (TDbCompilePerformOp(0, "use \x8c declare \x8a fastcursor for select 'XIHC' into \x85 and 'NEHC' into \x85 from 'STHC' where 'LUHC' = 1\n", handle, &cursor, &id, &enabled) == 0) {
         cursor.mUnknown4 = index;
         if (cursor.mUnknown0) {
-            int status = fn_801FCE10(0, "fetch from \x8a\n", &cursor);
+            int status = TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
             if (QUERY_STATUS_ACCEPTED(status) == 1 && status != 0x15) {
                 found = 1;
                 *pId = id;
@@ -127,9 +127,9 @@ int CheatGetUnlockedInfo(int index, int *pId, char *pName, int count, int *pEnab
             }
         }
     }
-    if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+    if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);
     if (found) {
-        if (fn_801FCE10(0, "use 'TATS' select 'ANHC' into \x88 and 'GQHC' into \x82 from 'DCHC' where 'XIHC' = \x82\n", name, &marked, id) == 0) {
+        if (TDbCompilePerformOp(0, "use 'TATS' select 'ANHC' into \x88 and 'GQHC' into \x82 from 'DCHC' where 'XIHC' = \x82\n", name, &marked, id) == 0) {
             strncpy(pName, name, count);
             if (marked) strncat(pName, " *", 2);
         } else {

@@ -18,7 +18,7 @@
 #include "game/fn_800AD9B4.h"
 #include <string.h>
 #include "game/fn_800B65A0.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 /* Partial view of the opaque player block at +336 used by the handlers
    below. */
@@ -34,8 +34,8 @@ void fn_800A8954(int event, int team, Object_80039F5C *p);
 int fn_800C4B6C(Object_80039F5C *p);
 int PlayerMoveGetKind(Object_80039F5C *p);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
-void fn_800DB520(void *pBlock, Object_80039F5C *p, Object_80039F5C *pOther, float value);
-void fn_800DB7A4(void *pBlock, Object_80039F5C *p);
+void PlayerActionAnimPitchInit(void *pBlock, Object_80039F5C *p, Object_80039F5C *pOther, float value);
+void PlayerActionAnimPitchUpdate(void *pBlock, Object_80039F5C *p);
 void CarrierMoveStartWallAnim(Object_80039F5C *p);
 void CarrierMoveStartAnim(Object_80039F5C *p);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
@@ -142,7 +142,7 @@ extern "C" void CarrierMoveStartAnim(Object_80039F5C *p) {
         p->mUnknown1008.mUnknown0 = 1;
     }
     if (mode) {
-        unsigned int roll = fn_802372EC(0, 100);
+        unsigned int roll = SyncRandGetRange(0, 100);
         if (roll <= 32)
             p->mUnknown1008.mUnknown2 = 1;
         else if (roll <= 66)
@@ -257,7 +257,7 @@ extern "C" int CarrierMoveEnter(Object_80039F5C *p)
     }
     pBlock->mUnknown25 = 0;
     pBlock->mUnknown26 = 0;
-    fn_800DB520(pBlock, p, 0, 0.0f);
+    PlayerActionAnimPitchInit(pBlock, p, 0, 0.0f);
     if (mode == 4) {
         CarrierMoveStartWallAnim(p);
     } else {
@@ -275,7 +275,7 @@ extern "C" int CarrierMoveUpdate(Object_80039F5C *p)
     CarrierMoveBlock_t *pBlock = (CarrierMoveBlock_t *)&p->mUnknown336;
 
     pBlock->mUnknown26++;
-    fn_800DB7A4(pBlock, p);
+    PlayerActionAnimPitchUpdate(pBlock, p);
     if (pBlock->mUnknown24) {
         int result = (int)BallFindHeldBy(p);
 
@@ -338,7 +338,7 @@ extern "C" int CarrierMoveInput(Object_80039F5C *p)
     fn_800B65A0(p->mIdBytes[2]);
     fn_800B6D34(p, &input);
     if (input.mUnknown95 & 64) {
-        fn_800DB60C(&pBlock->mRecord, p);
+        PlayerActionAnimPitchTryStart(&pBlock->mRecord, p);
     }
     return 0;
 }

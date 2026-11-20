@@ -60,7 +60,7 @@ int SNDSTRM_setvol(int stream, int speaker, float vol)
                     changed = 1;
                     dst->m38 = vol;
                     dst->m48 = vol * lbl_80300028;
-                    fn_802747D8(index);
+                    SndHalSetVol(index);
                 }
             }
             if (changed) {
@@ -80,7 +80,7 @@ int SNDSTRM_setvol(int stream, int speaker, float vol)
                 if (dst->m38 != vol) {
                     dst->m38 = vol;
                     dst->m48 = vol * lbl_80300028;
-                    fn_802747D8(index);
+                    SndHalSetVol(index);
                     for (i = 0; i < lbl_8030002C; i++) {
                         SNDPLATFORM_setfxlevel(voice, i);
                     }

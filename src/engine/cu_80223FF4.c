@@ -41,8 +41,8 @@ void fn_8022482C(Node_80223874 *pNode, Float32 (*pCoords)[2], GXColor *pColors, 
                  Int32 Count, Callback_8022482C *pVertex, Callback_8022482C *pEnd);
 void fn_80225AAC(Node_80223874 *pNode, Int32 a, Int32 Item);
 void fn_80225B50(Uint32 Flags);
-void fn_80225CBC(Node_80223874 *pNode, Int32 Index, Float32 *pCoord);
-void fn_80225D8C(Node_80223874 *pNode, Int32 Index, Float32 *pCoord);
+void LLUIGVertexSend(Node_80223874 *pNode, Int32 Index, Float32 *pCoord);
+void LLUIGVertexEnd(Node_80223874 *pNode, Int32 Index, Float32 *pCoord);
 void fn_80225928(Node_80223874 *pNode);
 void fn_802258F8(Node_80223874 *pNode);
 void fn_80225AE4(void);
@@ -236,7 +236,7 @@ void fn_80225958(Node_80223874 *pNode, Int32 Item)
             Count = pNode->u.t.unk_10 * 4;
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, Count);
         }
-        fn_8022482C(pNode, lbl_803A0400, lbl_803A1400, &Size, Count, fn_80225CBC, fn_80225D8C);
+        fn_8022482C(pNode, lbl_803A0400, lbl_803A1400, &Size, Count, LLUIGVertexSend, LLUIGVertexEnd);
     }
     GXSetCullMode(GX_CULL_NONE);
     if (bTex) {

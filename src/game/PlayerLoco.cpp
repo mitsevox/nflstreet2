@@ -14,7 +14,7 @@
 #include "game/AnimChanStartAnim.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 
 extern "C" {
 int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
@@ -33,7 +33,7 @@ Object_801BBD5C *AnimFileGetStateData(unsigned short a, unsigned short b);
 void AnimSeqSetDuration(AnimSeq_t *p, float value);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 
 extern void *lbl_803EABA4;
 
@@ -246,9 +246,9 @@ extern "C" int PlayerLocoIsEngaged(Object_80039F5C *p, int a)
                     Object_80039F5C *pOther = fn_8009BCE8(&pBlock->mUnknown4);
                     if (pOther) {
                         Pair_802270A4 delta;
-                        fn_80227690(&delta, &pOther->mMotion, &p->mMotion);
+                        Vec2Sub(&delta, &pOther->mMotion, &p->mMotion);
                         if (MathAngleDiff(fn_801CFE40(delta.mUnknown4, delta.mUnknown0), p->mMotion.mFacing) <= 0x1FFFFF
-                            && fn_802270A4(&delta) < 4.5f) {
+                            && Vec2Magnitude(&delta) < 4.5f) {
                             result = 1;
                         }
                     }

@@ -105,8 +105,8 @@ void SNDSYS_leavecritical(void);
 int SNDCTRL_drylevel(int voice, int level);
 int SNDpitchmult(int voice, int mult);
 int SNDCTRL_timemult(int handle, int mult);
-int fn_80274F5C(int index);
-void fn_802747D8(int index);
+int SNDPLATFORM_stop(int index);
+void SndHalSetVol(int index);
 int SNDPLATFORM_setfxlevel(int index, int slot);
 int fn_80278070(int voice, int bus, int level);
 int fn_802781A8(int voice);
@@ -114,8 +114,8 @@ int SNDCTRL_highpass(int voice, int value);
 int SNDPKTPLAY_overhead(int count);
 int SNDCTRL_lowpass(int voice, int value);
 int SNDPKTPLAY_framesoutstanding(int index);
-void fn_801F6C04(void *tap, int level);
-int fn_801F75C4(void *tap);
+void STREAM_setgreedylevel(void *tap, int level);
+int STREAM_gettable(void *tap);
 int STREAM_overhead(int numRequests, int numFilters, int numTaps);
 
 #ifdef __cplusplus

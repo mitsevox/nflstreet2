@@ -4,24 +4,24 @@
 #include "game/PauseMenu.h"
 #include "game/GameOptions.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/PlyrNameTag.h"
 
-/* Four floats passed by value to fn_801CD308, which copies them into one of
+/* Four floats passed by value to FontSetRenderColor, which copies them into one of
    two slots selected by its first argument. */
 struct NameTagColor_t {
     float mValues[4];
 };
 
 extern "C" {
-extern void *lbl_803EA368;
+extern void *gpReplay;
 
-int fn_8002D060(void *p);
+int ReplayIsShowing(void *p);
 int fn_800A9680(void);
 int UISGetFont(int a, int b);
-void fn_801CD2A4(void);
-int fn_801CD308(int index, NameTagColor_t value);
-void fn_801CD3B0(int a);
+void FontResetRenderState(void);
+int FontSetRenderColor(int index, NameTagColor_t value);
+void FontClearRenderFlags(int a);
 int fn_801CDB5C(int a, const char *b, int c, float d, float *pPosition);
 void fn_801CDD18(void);
 int GlibRenderGetBin(int index);
@@ -38,7 +38,7 @@ int ObjDelType(int a);
 void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(PlyrNameTag_t *));
 int ObjNewInList(int handle, int a, int b, int *pInit);
 void ObjRemoveFromList(int handle, PlyrNameTag_t *pInstance);
-void fn_80227E40(float *pOut, float *pIn);
+void Vec4Mat44Mul(float *pOut, float *pIn);
 int LLFogEnable(int a);
 
 static int _PlyrNameTag_iObjList = 0;
@@ -78,7 +78,7 @@ int PlyrNameTagDraw(PlyrNameTag_t *pInstance)
 {
     if (_PlyrNameTag_bEnabled && GameOptionsGet(17)) {
         int mode = fn_800AD9B4();
-        if (pInstance->mUnknown28 && pInstance->mUnknown20 && !fn_8002D060(lbl_803EA368) && mode != 4 &&
+        if (pInstance->mUnknown28 && pInstance->mUnknown20 && !ReplayIsShowing(gpReplay) && mode != 4 &&
             mode != 7 && !PauseIsOpen() && !fn_800A9680()) {
             float matrix[4][4];
             float saved[4][4];
@@ -88,15 +88,15 @@ int PlyrNameTagDraw(PlyrNameTag_t *pInstance)
 
             GlibRenderSelectBin(GlibRenderGetBin(14));
             state = LLFogEnable(0);
-            fn_801CD2A4();
+            FontResetRenderState();
             if (_PlyrNameTag_bBlackText) {
                 value.mValues[0] = 0.0f;
                 value.mValues[1] = 0.0f;
                 value.mValues[2] = 0.0f;
                 value.mValues[3] = 1.0f;
-                fn_801CD308(0, value);
+                FontSetRenderColor(0, value);
             }
-            fn_801CD3B0(32);
+            FontClearRenderFlags(32);
             fn_801CDD18();
             MatGetSlot(1, saved);
             MatGetSlot(1, matrix);
@@ -185,7 +185,7 @@ void PlyrNameTagUpdatePosition(PlyrNameTag_t *pInstance, void *p)
     point[1] = position[1];
     point[2] = position[2];
     point[3] = 1.0f;
-    fn_80227E40(clip, point);
+    Vec4Mat44Mul(clip, point);
     if (clip[0] > -clip[3] && clip[0] < clip[3] && clip[1] > -clip[3] && clip[1] < clip[3] &&
         clip[2] > -clip[3] && clip[2] < clip[3]) {
         float scale = 1.0f / clip[3];
@@ -194,7 +194,7 @@ void PlyrNameTagUpdatePosition(PlyrNameTag_t *pInstance, void *p)
         clip[2] *= scale;
         clip[3] *= scale;
         MatLoadSlot(1);
-        fn_80227E40(view, clip);
+        Vec4Mat44Mul(view, clip);
         float aspect = VptGetCurrentViewport()->mUnknown208 * 0.75f;
         float width = aspect * 320.0f;
         pInstance->mUnknown4[0] = width * clip[0] + 320.0f;
@@ -217,7 +217,7 @@ void PlyrNameTagReadTextColor(void)
 {
     int value = 0;
 
-    fn_801FCE10(0, "select 'HTWG' into \x85 from 'FNIG'\n", &value);
+    TDbCompilePerformOp(0, "select 'HTWG' into \x85 from 'FNIG'\n", &value);
     if (value == 3) {
         _PlyrNameTag_bBlackText = 1;
     } else {

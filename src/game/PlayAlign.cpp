@@ -6,8 +6,8 @@
 #include "game/Object_8017886C.h"
 #include <string.h>
 #include "game/fn_80178D18.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_80227638.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Add.h"
 #include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include "game/PlayAlign.h"
@@ -16,13 +16,13 @@ extern "C" {
 void PlayAlignTeamBegin(PlayBookFormation_t *pObject, int team);
 void PlayAlignResetSetNames(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
-void fn_8016DF34(Object_80039F5C *p);
-void fn_800E55B8(Object_80039F5C *p);
+void ScrmPlayerSendLineUp(Object_80039F5C *p);
+void PlyrAlignReset(Object_80039F5C *p);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_800EFEF8(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FF6D8(Object_80039F5C *p);
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 void PlyrMgrClearTeamFlag(int team);
 void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 Object_80039F5C *BallGetCurrentHolder(void);
@@ -48,9 +48,9 @@ void PlayAlignPlayer(Object_80039F5C *p, PlayBookPosition_t *pEntry, int side)
         p->mFlags &= ~0x40000;
         fn_800EFEF8(0, p->mpState, p);
         delta = fn_80177FFC(p->mIdBytes[2]);
-        fn_80227638(&delta, side == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10, &delta);
-        fn_80227690(&delta, &p->mMotion.mPos, &delta);
-        if (fn_802270A4(&delta) > 0.5f) {
+        Vec2Add(&delta, side == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10, &delta);
+        Vec2Sub(&delta, &p->mMotion.mPos, &delta);
+        if (Vec2Magnitude(&delta) > 0.5f) {
             memset(&msg, 0, 4);
             msg.mId = 7;
             fn_800F03D8(0, p->mpState, &msg, p);
@@ -76,9 +76,9 @@ void PlayAlignPlayer(Object_80039F5C *p, PlayBookPosition_t *pEntry, int side)
         msg.mUnknown1[1] = 0;
         msg.mUnknown1[2] = 146;
         fn_800F03D8(0, p->mpState, &msg, p);
-        fn_8016DF34(p);
+        ScrmPlayerSendLineUp(p);
     } else {
-        fn_800E55B8(p);
+        PlyrAlignReset(p);
     }
 }
 

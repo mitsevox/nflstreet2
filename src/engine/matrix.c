@@ -9,8 +9,8 @@ extern unsigned char lbl_803EBCB4;
 extern MatStack_t *lbl_803EBCB8;
 extern unsigned int lbl_803EBCBC;
 
-void fn_802277DC(float *pOut, float *pA, float *pB);
-void fn_802271F0(float *pOut, float *p);
+void Vec3CrossProduct(float *pOut, float *pA, float *pB);
+void Vec3Normalize(float *pOut, float *p);
 int Vec3GetAngle(float *pA, float *pB);
 
 int MatDelStack(unsigned int index);
@@ -109,7 +109,7 @@ void MatRotVecToVec(float *pFrom, float *pTo)
 {
     float axis[4];
 
-    fn_802277DC(axis, pFrom, pTo);
-    fn_802271F0(axis, axis);
+    Vec3CrossProduct(axis, pFrom, pTo);
+    Vec3Normalize(axis, axis);
     MatRotAxis(axis, Vec3GetAngle(pFrom, pTo));
 }

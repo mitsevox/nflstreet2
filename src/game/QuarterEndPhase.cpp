@@ -5,7 +5,7 @@
    to the next phase, chosen by the game period. */
 
 #include "game/ScreenTransition.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/SyncStateRegister.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80096A58.h"
@@ -71,9 +71,9 @@ void fn_800B43C8(void);
 void fn_800CC560(int a);
 void BallsSetVisible(int a);
 void BallResetToSpot(void);
-void fn_80162780(int a, int b);
+void PlyrStarSetShown(int a, int b);
 void PlayBookSetupTeams(void);
-void fn_8016DCD4(int a);
+void ScrmTeamToHuddle(int a);
 int ClockRuleIsOvertime(void);
 void fn_80177E6C(int a, int b);
 int fn_80178308(void);
@@ -86,7 +86,7 @@ void CoinTossApplyResultSwapped(void);
 int ResSync(int a);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 void fn_8021956C(void *p, int a, int b, int c);
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 }
 
 static QuarterEndState_t *_QuarterEnd_pState = 0;
@@ -170,7 +170,7 @@ void QuarterEndLoadClip(int a, void *pBuffer, int size)
     memset(&params, 0, sizeof(params));
     params.mUnknown0 = a;
     params.mUnknown8 = 36;
-    index = fn_802372EC(0, 3);
+    index = SyncRandGetRange(0, 3);
     params.mUnknownE0.mUnknown0 = 1;
     params.mUnknownE0.mUnknown4.mWord = _QuarterEnd_aClipVariants[index].mUnknown0;
     params.mUnknownE0.mUnknown8.mWord = _QuarterEnd_aClipVariants[index].mUnknown4;
@@ -332,7 +332,7 @@ void QuarterEndStartVenueEffect(void)
         params.mUnknown0 = 5;
         break;
     }
-    params.mUnknown28 = fn_802372EC(1, 2);
+    params.mUnknown28 = SyncRandGetRange(1, 2);
     params.mUnknown20 = 2;
     params.mUnknown24 = 0;
     params.mUnknown12 |= 0x10;
@@ -346,8 +346,8 @@ void QuarterEndPhase::InitState()
 {
     void *pHandle = SyncStateRegister(0, (void **)&_QuarterEnd_pState, sizeof(QuarterEndState_t), 0, 0x71656E64);
 
-    fn_8023816C(pHandle);
-    fn_802381E0(pHandle);
+    SyncStateGetData(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 void QuarterEndPhase::OnEnter()
@@ -403,7 +403,7 @@ void QuarterEndPhase::OnUpdate(float f)
         _QuarterEnd_pState->mUnknown8 = 0;
         _QuarterEnd_pState->mUnknown10 = 1;
         fn_800AFDD4(QuarterEndOnEvent);
-        fn_80162780(1, 1);
+        PlyrStarSetShown(1, 1);
         if (fn_8009D86C() == 6) {
             HudStop();
         } else if (fn_8009D86C() == 5) {
@@ -412,8 +412,8 @@ void QuarterEndPhase::OnUpdate(float f)
                 fn_800CC560(1);
             }
         } else {
-            fn_8016DCD4(1);
-            fn_8016DCD4(0);
+            ScrmTeamToHuddle(1);
+            ScrmTeamToHuddle(0);
         }
         if (fn_8009D86C() != 6 && fn_8009D86C() == 3) {
             CoinTossApplyResultSwapped();
@@ -454,7 +454,7 @@ void QuarterEndPhase::OnUpdate(float f)
         break;
     case 3:
         if (PauseIsOpen() == 0) {
-            fn_80162780(1, 1);
+            PlyrStarSetShown(1, 1);
             _QuarterEnd_pState->mState = 4;
         }
         break;

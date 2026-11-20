@@ -16,8 +16,8 @@ void ObjRemoveFromList(int handle, int item);
 void ObjSetPriority(int handle, int item, int a);
 void fn_80234DFC(int a, void *pB, int c, int d, const char *pName, int e);
 void fn_80234EA0(void *p, int a);
-void fn_802355E4(void *p);
-void fn_80235DB8(int a);
+void ModelObjReset(void *p);
+void ModelObjRelocateModelRes(int a);
 
 static EnvSkyObj_t *_EnvSkyObj_pSky = 0;
 
@@ -38,15 +38,15 @@ void EnvSkyObjLoadModel(EnvSkyObj_t *pInstance)
 {
     int handle = ResLoad(fn_800A336C(), pInstance->mUnknown1C8, 1);
 
-    fn_80235DB8(handle);
+    ModelObjRelocateModelRes(handle);
     pInstance->mUnknown14 = handle;
     fn_80234DFC(handle, pInstance->mUnknown18, 0, 0, "SkyObj", 1);
 }
 
 void EnvSkyObjFreeModel(EnvSkyObj_t *pInstance)
 {
-    fn_802355E4(&pInstance->mUnknown48);
-    fn_802355E4(&pInstance->mUnknown108);
+    ModelObjReset(&pInstance->mUnknown48);
+    ModelObjReset(&pInstance->mUnknown108);
     fn_80234EA0(pInstance->mUnknown18, 1);
     pInstance->mUnknown14 = 0;
 }

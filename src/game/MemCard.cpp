@@ -13,24 +13,24 @@ int UISGameGetMainViewport(void);
 void VptSetCallback(int a, int b, void *c, int d);
 void MemCardFilesGetSaveTarget(int *pType, void *pSlot);
 int MemCardFilesGetDataSize(int type);
-void fn_8022F478(void);
+void DbUserSetCurrent(void);
 int DbUserSave(SaveRequest_t *pRequest, SaveStreamOps_t *pOps);
 void MemCardFilesGetLoadTarget(int *pType, void *pSlot);
 int MemCardFilesIsUsed(int a, int b);
-void fn_8022F1BC(void);
+void DbUserDelete(void);
 void MemCardFilesRemoveSlot(int a, int b);
-int fn_8022F0D4(void);
+int DbUserCreate(void);
 int PlayerSaveOnLoad(SaveRequest_t *pRequest, SaveStreamOps_t *pOps);
 int DbUserLoad(SaveRequest_t *pRequest, SaveStreamOps_t *pOps);
-int fn_8022EB5C(CardStreamTarget *pTarget, SaveStreamOps_t *pOps);
+int DbEvasLoadStream(CardStreamTarget *pTarget, SaveStreamOps_t *pOps);
 
-int fn_8022F53C(int a);
-int fn_8022F4BC(void);
-int fn_8022F384(int a);
+int DbUserPostLoad(int a);
+int DbUserGetCurrent(void);
+int DbUserFindIndex(int a);
 void MemCardFilesSetLoadTarget(int a, int b);
 void fn_801D6B24(char *p, int size);
 void MemCardFilesAddSlot(int a, int b, unsigned int c, char *d);
-int fn_8022F3D4(int a);
+int DbUserGetDb(int a);
 void DbCheckVersion(int handle);
 void MemCardFilesStoreChecksum(int a, int b);
 int fn_801D6844(void);
@@ -98,17 +98,17 @@ void MemCardBeginSave(void)
 
     switch (type) {
     case 3:
-        fn_8022F358(slot[3]);
-        fn_8022F478();
+        DbUserGetId(slot[3]);
+        DbUserSetCurrent();
         PlayerSaveOnSave(&req, &gCardStreamOps);
         break;
     case 2:
-        fn_8022F358(slot[3]);
-        fn_8022F478();
+        DbUserGetId(slot[3]);
+        DbUserSetCurrent();
         DbUserSave(&req, &gCardStreamOps);
         break;
     case 1:
-        fn_8022EB94(&_MemCard_StreamTarget, &gCardStreamOps);
+        DbEvasSaveStream(&_MemCard_StreamTarget, &gCardStreamOps);
         break;
     }
 }
@@ -144,12 +144,12 @@ void MemCardBeginLoad(void)
     switch (type) {
     case 3:
         if (MemCardFilesIsUsed(3, *(int *)slot)) {
-            fn_8022F358(slot[3]);
-            fn_8022F1BC();
+            DbUserGetId(slot[3]);
+            DbUserDelete();
             MemCardFilesRemoveSlot(type, *(int *)slot);
         }
-        if (fn_8022F0D4() != -1) {
-            fn_8022F478();
+        if (DbUserCreate() != -1) {
+            DbUserSetCurrent();
             handle = PlayerSaveOnLoad(&req, &gCardStreamOps);
         }
         if (handle) {
@@ -158,12 +158,12 @@ void MemCardBeginLoad(void)
         break;
     case 2:
         if (MemCardFilesIsUsed(2, *(int *)slot)) {
-            fn_8022F358(slot[3]);
-            fn_8022F1BC();
+            DbUserGetId(slot[3]);
+            DbUserDelete();
             MemCardFilesRemoveSlot(type, *(int *)slot);
         }
-        if (fn_8022F0D4() != -1) {
-            fn_8022F478();
+        if (DbUserCreate() != -1) {
+            DbUserSetCurrent();
             handle = DbUserLoad(&req, &gCardStreamOps);
         }
         if (handle) {
@@ -171,7 +171,7 @@ void MemCardBeginLoad(void)
         }
         break;
     case 1:
-        handle = fn_8022EB5C(&_MemCard_StreamTarget, &gCardStreamOps);
+        handle = DbEvasLoadStream(&_MemCard_StreamTarget, &gCardStreamOps);
         if (handle) {
             _MemCard_iResult = handle;
         }
@@ -192,26 +192,26 @@ void MemCardFinishLoad(int a, int *b)
 
     switch (type) {
     case 3:
-        a = fn_8022F53C(a);
+        a = DbUserPostLoad(a);
         switch (a) {
         case 0:
-            slot = fn_8022F384(fn_8022F4BC());
+            slot = DbUserFindIndex(DbUserGetCurrent());
             MemCardFilesSetLoadTarget(type, slot);
             fn_801D6B24(date, 17);
             MemCardFilesAddSlot(type, slot, _MemCard_StreamTarget.mChecksum, date);
             MemCardFilesStoreChecksum(type, slot);
             break;
         case 1:
-            fn_8022F4BC();
-            fn_8022F1BC();
+            DbUserGetCurrent();
+            DbUserDelete();
             if (*b >= 0) {
                 *b = -50;
             }
             break;
         case 2: // FAKEMATCH: explicit case 2 shapes the dispatch tree; its body is the default one
         default:
-            fn_8022F4BC();
-            fn_8022F1BC();
+            DbUserGetCurrent();
+            DbUserDelete();
             fn_801D6DE0(fn_801D6844(), type);
             if (*b >= 0) {
                 *b = -100;
@@ -220,29 +220,29 @@ void MemCardFinishLoad(int a, int *b)
         }
         break;
     case 2:
-        a = fn_8022F53C(a);
+        a = DbUserPostLoad(a);
         switch (a) {
         case 0: {
-            int handle = fn_8022F4BC();
-            slot = fn_8022F384(handle);
+            int handle = DbUserGetCurrent();
+            slot = DbUserFindIndex(handle);
             MemCardFilesSetLoadTarget(type, slot);
             fn_801D6B24(date, 17);
             MemCardFilesAddSlot(type, slot, _MemCard_StreamTarget.mChecksum, date);
-            DbCheckVersion(fn_8022F3D4(handle));
+            DbCheckVersion(DbUserGetDb(handle));
             MemCardFilesStoreChecksum(type, slot);
             break;
         }
         case 1:
-            fn_8022F4BC();
-            fn_8022F1BC();
+            DbUserGetCurrent();
+            DbUserDelete();
             if (*b >= 0) {
                 *b = -50;
             }
             break;
         case 2: // FAKEMATCH: explicit case 2 shapes the dispatch tree; its body is the default one
         default:
-            fn_8022F4BC();
-            fn_8022F1BC();
+            DbUserGetCurrent();
+            DbUserDelete();
             fn_801D6DE0(fn_801D6844(), type);
             if (*b >= 0) {
                 *b = -100;
@@ -258,8 +258,8 @@ void MemCardFinishLoad(int a, int *b)
             if (*b >= 0) {
                 *b = -100;
             }
-            fn_8022EBC8();
-            fn_8022EB10();
+            DbEvasUnload();
+            DbEvasLoad();
             GameOptionsInit(1);
             GameOptionsShutdown();
         }

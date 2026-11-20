@@ -7,7 +7,7 @@
 #include "game/Object_8008044C.h"
 #include "game/EditMenu.h"
 #include <string.h>
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 struct PlayerPickupModelLayout_t {
     float mX;
@@ -26,10 +26,10 @@ void FEPlyrSetPosition(int index, float x, float y, float z);
 void FEPlyrSetScale(int index, float scale);
 void FEPlyrSetPlayer(int index, int a, int b);
 void FEPlyrSetPriority(int index, int value);
-int fn_8005FC7C(void);
-void fn_80060278(void);
-int fn_800602D8(void);
-int fn_800602E0(void);
+int StoryEventsGetCurrentEvent(void);
+void StoryEventsFreeTables(void);
+int StoryEventsGetPlayerTable(void);
+int StoryEventsGetTeamTable(void);
 int ChalGetTournamentWon();
 int PlayerDbGetId(Object_8008044C *pObject);
 int PlayerDbGetOriginalId(Object_8008044C *pObject);
@@ -39,9 +39,9 @@ void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size);
 int PlayerDbGetPortraitId(Object_8008044C *pObject);
 int PlayerDbGetWeight(Object_8008044C *pObject);
 int PlayerDbGetBoostedRating(Object_8008044C *pObject, int a);
-int fn_800841AC(DbCursor *pObject);
-int fn_800841D8(DbCursor *pObject);
-int fn_80084204(DbCursor *pObject);
+int TeamDbGetColor1(DbCursor *pObject);
+int TeamDbGetColor2(DbCursor *pObject);
+int TeamDbGetColor3(DbCursor *pObject);
 void FEPlyrLoadReset(int value);
 void PositionAbbrevFormat(int a, char *pText);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
@@ -59,15 +59,15 @@ void StorySetFlag100(int index, int value);
 int StoryGetFlag200(int a);
 void StorySetFlag200(int index, int value);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-int fn_801F967C(int handle, int table);
-int fn_801F9980(int handle, int *pTable);
+int TDbTblDestroy(int handle, int table);
+int TDbTblFindUnusedId(int handle, int *pTable);
 int UIGLibraryLoadItem(void *pObject, int a, int b);
 int UIGLibraryUnLoadItem(void *pObject, int a, int b);
 void *UIGLibraryGetGlobal(int index);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 }
 
 static PlayerPickupModelLayout_t _MsgPlayerPickup_ModelLayout = { 550.0f, 330.0f, 7.0f, 1.0f, 14 };
@@ -104,10 +104,10 @@ void MsgPlayerPickupGetTeamInfo(int *pCount, int *pId, MenuArg_t text)
 
     *pCount = DbCursorGetRowCount((DbCursor *)&_MsgPlayerPickup_RosterCursor);
     *pId = _MsgPlayerPickup_iTeam;
-    fn_80083E40(&cursor, 0, 0x54415453);
-    fn_80084034(&cursor, _MsgPlayerPickup_iTeam, 0);
-    fn_80083F88(&cursor, name, 18);
-    fn_80083F68(&cursor);
+    TeamDbOpen(&cursor, 0, 0x54415453);
+    TeamDbSeekId(&cursor, _MsgPlayerPickup_iTeam, 0);
+    TeamDbGetName(&cursor, name, 18);
+    TeamDbClose(&cursor);
     strnzcpy(text.pParams->mpText, name, text.pParams->mLength + 1);
 }
 
@@ -180,7 +180,7 @@ void MsgPlayerPickupCopyTeam(int db)
     int value;
 
     _MsgPlayerPickup_iTeam = StoryTeamLoadToStats(db, 1, ids, &n);
-    fn_801FCE10(&result, "use 'TATS' insert into 'MAET' * select * from \x8c\n", fn_800602E0());
+    TDbCompilePerformOp(&result, "use 'TATS' insert into 'MAET' * select * from \x8c\n", StoryEventsGetTeamTable());
     desc.mUnknown0 = 2;
     desc.mUnknown4 = 4;
     desc.mUnknown8 = _MsgPlayerPickup_iTeam;
@@ -191,12 +191,12 @@ void MsgPlayerPickupCopyTeam(int db)
     desc.mUnknown8 = _MsgPlayerPickup_iTeam;
     desc.mUnknown0 = 2;
     PlayerCursorOpen(&_MsgPlayerPickup_RosterCursor, &desc, 0x54415453);
-    fn_801FCE10(&result, "use 'TATS' select 'LGLT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &_MsgPlayerPickup_iTeamLGLT,
+    TDbCompilePerformOp(&result, "use 'TATS' select 'LGLT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &_MsgPlayerPickup_iTeamLGLT,
                 _MsgPlayerPickup_iTeam);
     rows = DbCursorGetRowCount((DbCursor *)&_MsgPlayerPickup_TeamCursor);
     _MsgPlayerPickup_bSkipTeam = rows == 0;
     _MsgPlayerPickup_bTeamFull = rows == 6;
-    value = fn_800602D8();
+    value = StoryEventsGetPlayerTable();
     DbCursorOpen(&cursor, value, 0x44494750, 0, 0, 0x54415453);
     n = DbCursorGetRowCount(&cursor);
     fn_80229AA4(0x54415453, 0x59414C50, ids, &count);
@@ -210,19 +210,19 @@ void MsgPlayerPickupCopyTeam(int db)
             DbCursorSetInt(&cursor, 0x44494754, _MsgPlayerPickup_iCopyTeam);
         }
     }
-    fn_801FCE10(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", value);
+    TDbCompilePerformOp(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", value);
     DbCursorClose(&cursor);
     desc.mUnknown12 = 0;
     desc.mUnknown4 = 1;
     desc.mUnknown8 = _MsgPlayerPickup_iCopyTeam;
     desc.mUnknown0 = 2;
     PlayerCursorOpen(&_MsgPlayerPickup_PoolCursor, &desc, 0x54415453);
-    fn_801F9980(0x54415453, &handle);
-    fn_801FCE10(&result, "use 'TATS' select into \x8c * from 'MAET' where 'DIGT' = \x82\n", handle, _MsgPlayerPickup_iTeam);
-    fn_801FCE10(&result, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIOT' = \x82 and 'LGLT' = \x82\n", handle,
+    TDbTblFindUnusedId(0x54415453, &handle);
+    TDbCompilePerformOp(&result, "use 'TATS' select into \x8c * from 'MAET' where 'DIGT' = \x82\n", handle, _MsgPlayerPickup_iTeam);
+    TDbCompilePerformOp(&result, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIOT' = \x82 and 'LGLT' = \x82\n", handle,
                 _MsgPlayerPickup_iCopyTeam, _MsgPlayerPickup_iCopyTeam, _MsgPlayerPickup_iTeamLGLT);
-    fn_801FCE10(&result, "use 'TATS' insert into 'MAET' * select * from \x8c\n", handle);
-    fn_801F967C(0x54415453, handle);
+    TDbCompilePerformOp(&result, "use 'TATS' insert into 'MAET' * select * from \x8c\n", handle);
+    TDbTblDestroy(0x54415453, handle);
     MsgPlayerPickupRegisterPlayers();
 }
 
@@ -359,8 +359,8 @@ unsigned char MsgPlayerPickupInit(void)
     _MsgPlayerPickup_bTeamFull = 0;
     _MsgPlayerPickup_iDropPlayer = 0x7FFF;
     _MsgPlayerPickup_iAddPlayer = 0x7FFF;
-    _MsgPlayerPickup_cProfile = fn_8022F384(fn_8022F4BC());
-    found = fn_8005FC7C();
+    _MsgPlayerPickup_cProfile = DbUserFindIndex(DbUserGetCurrent());
+    found = StoryEventsGetCurrentEvent();
     if (found) {
         _MsgPlayerPickup_bCopyMode = 1;
         MsgPlayerPickupCopyTeam(_MsgPlayerPickup_cProfile);
@@ -418,18 +418,18 @@ unsigned char MsgPlayerPickupInit(void)
     _MsgPlayerPickup_bOpen = 1;
     _MsgPlayerPickup_bChoosingDrop = 0;
     DbCursor cursor;
-    fn_80083E40(&cursor, 0, 0x54415453);
-    fn_80084034(&cursor, _MsgPlayerPickup_iTeam, 0);
-    if (fn_80084438(&cursor) == 0) {
+    TeamDbOpen(&cursor, 0, 0x54415453);
+    TeamDbSeekId(&cursor, _MsgPlayerPickup_iTeam, 0);
+    if (TeamDbGetCtdl(&cursor) == 0) {
         unsigned char color[3];
 
-        color[0] = fn_800841AC(&cursor);
-        color[1] = fn_800841D8(&cursor);
-        color[2] = fn_80084204(&cursor);
-        TeamLogoRequestTint(0, 4, fn_80084158(&cursor), 172, color);
-        TeamLogoRequestTint(1, 4, fn_80084158(&cursor), 172, color);
+        color[0] = TeamDbGetColor1(&cursor);
+        color[1] = TeamDbGetColor2(&cursor);
+        color[2] = TeamDbGetColor3(&cursor);
+        TeamLogoRequestTint(0, 4, TeamDbGetLogo(&cursor), 172, color);
+        TeamLogoRequestTint(1, 4, TeamDbGetLogo(&cursor), 172, color);
     }
-    fn_80083F68(&cursor);
+    TeamDbClose(&cursor);
     return _MsgPlayerPickup_bTeamFull;
 }
 
@@ -482,7 +482,7 @@ void MsgPlayerPickupShutdown(void)
         StoryTeamStoreFromStats(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);
         fn_8018C48C(0x54415453);
         _MsgPlayerPickup_bCopyMode = 0;
-        fn_80060278();
+        StoryEventsFreeTables();
     } else {
         CreateTeamStoreFromStats(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);
         fn_8018C48C(0x54415453);

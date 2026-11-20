@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/Ball.h"
-#include "game/fn_8022781C.h"
+#include "game/Vec2Distance.h"
 
 struct Entry_8015005C {
     int mUnknown0;
@@ -26,7 +26,7 @@ extern "C" {
 Table_8015005C *fn_801530FC(void);
 int BallStateGet(Ball_t *pBall, int *pOut);
 float SyncRandGetFloatRange(int selector, float first, float last);
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 int MathAngleDiff(int a, int b);
 int fn_8015228C(Object_80039F5C *p, unsigned char *pIndex);
 
@@ -57,7 +57,7 @@ int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex)
         if (BallIsVisible(pBall) && BallStateGet(pBall, 0) == 4) {
             Vector_80039F5C position;
             BallGetLandingPoint(pBall, &position);
-            float distance = fn_8022781C(&position, &p->mMotion.mPos);
+            float distance = Vec2Distance(&position, &p->mMotion.mPos);
             score = SyncRandGetFloatRange(0, score, 0.75f);
             if (i == 0) {
                 score += 0.5f;
@@ -66,7 +66,7 @@ int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex)
             unsigned char j;
             for (j = 0; j < players; j++) {
                 Object_80039F5C *pOther = PlyrGet(1, j);
-                if (pOther != p && !(fn_8022781C(&position, &pOther->mMotion.mPos) >= distance)) {
+                if (pOther != p && !(Vec2Distance(&position, &pOther->mMotion.mPos) >= distance)) {
                     closer++;
                 }
             }
@@ -96,14 +96,14 @@ int fn_8015228C(Object_80039F5C *p, unsigned char *pIndex)
             Vector_80039F5C position;
             Point_8017886C delta;
             BallGetLandingPoint(pBall, &position);
-            fn_80227690(&delta, &position, &p->mMotion.mPos);
+            Vec2Sub(&delta, &position, &p->mMotion.mPos);
             int direction = delta.Heading();
             float score = MathAngleDiff(direction, p->mUnknown512.mUnknown4);
             score *= 0.00000011920928955078125f;
             score = 1.0f - score;
             score *= 5.0f;
             score *= p->mUnknown512.mUnknown0;
-            score -= fn_8022781C(&position, &p->mMotion.mPos);
+            score -= Vec2Distance(&position, &p->mMotion.mPos);
             if (!(score <= best)) {
                 *pIndex = i;
                 best = score;

@@ -51,7 +51,7 @@ void fn_800AD910(int a, float b);
 void fn_800B6474(int index, unsigned char team);
 void fn_800B6714(Object_80039F5C *pPlayer, int a);
 void fn_800B6658(Object_80039F5C *pPlayer);
-void fn_80162780(int a, int b);
+void PlyrStarSetShown(int a, int b);
 void fn_80151010(Class_802A1D20 *p);
 
 void fn_80150848(Class_802A1D58 *p, float dt)
@@ -107,7 +107,7 @@ void fn_80150A70(Class_802A1D58 *p)
 void fn_80150A74(Class_802A1D20 *p)
 {
     p->LivePlayPhase::OnEnter();
-    fn_80162780(1, 1);
+    PlyrStarSetShown(1, 1);
     p->mUnknown8 = 0;
     p->mUnknown9 = 0;
     p->mUnknown4 = 0;

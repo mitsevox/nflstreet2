@@ -278,7 +278,7 @@ int SFILTER_timestretchinit(Node_80279D90 *node, unsigned char *data, int index)
     p->mNode.m0 = SFILTER_timestretch;
     p->mNode.m4 = (void (*)(Node_80279D90 *))SFILTER_timestretchrestore;
     if (index >= 0) {
-        p->m20 = SNDPKTPLAYI_voicetopackethandle(fn_80274304(index));
+        p->m20 = SNDPKTPLAYI_voicetopackethandle(SNDDRV_getmastervoice(index));
     } else {
         p->m20 = -1;
     }

@@ -83,8 +83,8 @@ int EditMenuGetMode(void);
 int EditMenuIsStoryTeam(void);
 int EditMenuIsCreateTeam(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 }
 
 extern const MenuEntry_t _Gear_aAreaEntries[];
@@ -830,7 +830,7 @@ void GearPlayerList::Enter(int a, int *pCount, int *pOut)
 {
     char buffer[18];
 
-    fn_80083F88(EditMenuGetTeamCursor(), buffer, 18);
+    TeamDbGetName(EditMenuGetTeamCursor(), buffer, 18);
     EditMenuSetName(buffer);
     EditMenuSetHeading("");
     EditMenuSetItemName("");
@@ -1366,7 +1366,7 @@ void GearDecalTeamList::Enter(int a, int *pCount, int *pOut)
     query.mUnknown4 = 3;
     query.mUnknown0 = 1;
     selected = 0;
-    fn_80083E40(&_Gear_sTeamCursor, &query, 0x54415453);
+    TeamDbOpen(&_Gear_sTeamCursor, &query, 0x54415453);
     *pCount = DbCursorGetRowCount(&_Gear_sTeamCursor);
     switch (mUnknown8) {
     case 0:
@@ -1378,7 +1378,7 @@ void GearDecalTeamList::Enter(int a, int *pCount, int *pOut)
     }
     *pOut = 0;
     for (int more = DbCursorFirst(&_Gear_sTeamCursor); more; more = DbCursorNext(&_Gear_sTeamCursor)) {
-        if (fn_80084158(&_Gear_sTeamCursor) - 1 == selected) {
+        if (TeamDbGetLogo(&_Gear_sTeamCursor) - 1 == selected) {
             *pOut = DbCursorGetRow(&_Gear_sTeamCursor);
             break;
         }
@@ -1392,7 +1392,7 @@ int GearDecalTeamList::Leave(int a, int b, void **pOut)
 
     DbCursorSeek(&_Gear_sTeamCursor, a);
     result = -1;
-    value = fn_80084158(&_Gear_sTeamCursor) - 1;
+    value = TeamDbGetLogo(&_Gear_sTeamCursor) - 1;
     if (b == 0) {
         switch (mUnknown8) {
         case 0:
@@ -1420,7 +1420,7 @@ int GearDecalTeamList::Leave(int a, int b, void **pOut)
         FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     }
-    fn_80083F68(&_Gear_sTeamCursor);
+    TeamDbClose(&_Gear_sTeamCursor);
     return result;
 }
 
@@ -1429,7 +1429,7 @@ void GearDecalTeamList::Highlight(int index)
     int value;
 
     DbCursorSeek(&_Gear_sTeamCursor, index);
-    value = fn_80084158(&_Gear_sTeamCursor) - 1;
+    value = TeamDbGetLogo(&_Gear_sTeamCursor) - 1;
     switch (mUnknown8) {
     case 0:
         PlayerLookSetHeadDecalColors(0, value);
@@ -1449,7 +1449,7 @@ void GearDecalTeamList::GetItem(int index, MenuEntry_t *pOut)
     char name[18];
 
     DbCursorSeek(&_Gear_sTeamCursor, index);
-    fn_80083F88(&_Gear_sTeamCursor, name, 18);
+    TeamDbGetName(&_Gear_sTeamCursor, name, 18);
     strnzcpy(pOut->mName, name, 22);
 }
 
@@ -1689,7 +1689,7 @@ void GearShirtDecalList::GetItem(int index, MenuEntry_t *pOut)
 
 void GearMenuOpen(int a)
 {
-    GearLockOpen(&_Gear_sLockCursor, fn_8022F384(fn_8022F4BC()));
+    GearLockOpen(&_Gear_sLockCursor, DbUserFindIndex(DbUserGetCurrent()));
     _Gear_bFromCreatePlayer = a;
     if (a == 0) {
         EditMenuShowPlayers();

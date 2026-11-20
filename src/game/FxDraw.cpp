@@ -155,7 +155,7 @@ void TMRenderSetBlendMode(int mode);
 void MatSetStack(int stack);
 void MatCatSlot(int slot);
 Mtx44Ptr MatGetCurMatrixPtr(void);
-void fn_8022765C(void *pOut, void *pA, void *pB);
+void Vec3Add(void *pOut, void *pA, void *pB);
 }
 
 /* The ground pulse texture: 0x4C bytes of .bss, of which the draw code uses only the texture
@@ -228,7 +228,7 @@ void FxGroundPulseDraw(float scale, void *position)
         for (unsigned char j = 0; j <= 3; ++j) {
             offset.mX = corners[j].mX * scale;
             offset.mY = corners[j].mY * scale;
-            fn_8022765C(&vertex, position, &offset);
+            Vec3Add(&vertex, position, &offset);
             GXPosition3f32(vertex.mX, vertex.mY, vertex.mZ);
             GXColor4u8(color[0], color[1], color[2], alpha);
             GXTexCoord2f32(_FxDraw_aGroundPulseUVs[j][0], _FxDraw_aGroundPulseUVs[j][1]);

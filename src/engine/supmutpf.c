@@ -84,8 +84,8 @@ void SFILTER_unpackmtpfinit(Node_80279D90 *node, Params_80275F80 *params)
 
     decoder = (SndMtUnpackFilter_t *)node;
     node->m0 = SFILTER_unpackmtpf;
-    decoder->mStream = SNDPKTPLAYI_voicetopackethandle(fn_80274304(params->m1C));
-    decoder->mChannel = fn_80274334(params->m1C);
+    decoder->mStream = SNDPKTPLAYI_voicetopackethandle(SNDDRV_getmastervoice(params->m1C));
+    decoder->mChannel = SNDDRV_getsamplechan(params->m1C);
     decoder->mpPacket = 0;
     decoder->mPacketPosition = 0;
     decoder->mMode = params->m24;

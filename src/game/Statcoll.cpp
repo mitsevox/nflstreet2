@@ -123,9 +123,9 @@ void StatcollStart(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&_Statcoll_pState, sizeof(StatcollState_t), 0, 0x73636F6C);
 
-    fn_80238234(pHandle, StatcollBlockInit, StatcollBlockShutdown, 0, StatcollBlockCompare);
-    fn_80238248(pHandle, StatcollBlockSave, StatcollBlockGetSaveSize, StatcollBlockRestore);
-    fn_802381E0(pHandle);
+    SyncStateSetCallbacks(pHandle, StatcollBlockInit, StatcollBlockShutdown, 0, StatcollBlockCompare);
+    SyncStateSetSaveCallbacks(pHandle, StatcollBlockSave, StatcollBlockGetSaveSize, StatcollBlockRestore);
+    SyncStateCommit(pHandle);
 }
 
 CollideSet_t *StatcollGetSet(void)

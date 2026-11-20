@@ -16,13 +16,13 @@ void SndgShutdown(void);
 void SndgChannelsCreateStreams(int withThird);
 void SndgChannelsDestroyStreams(void);
 void SndgApplyVolumeOptions(void);
-void fn_8006F810(void);
-void fn_8006F820(void);
+void SndgEventInit(void);
+void SndgEventShutdown(void);
 void SndgEventLoadLevelBank(void);
-void fn_80071594(void *pRecord);
-void fn_80071600(void);
-void fn_800716E4(void);
-void fn_80071C34(int value);
+void SndgEventPostRecord(void *pRecord);
+void SndgEventInitRandom(void);
+void SndgEventFreeRandom(void);
+void SndgEventSetMusicHold(int value);
 void SpchIGInit(void);
 void SpchIGShutdown(void);
 int fn_800A350C(void);
@@ -62,16 +62,16 @@ extern "C" void SndgIGInitAudio(void)
     SndgInit(&gSndgIGConfig);
     _SndgIG_iReserved = 0;
     AudmonEventStartInGame();
-    fn_800B1670(fn_80071594);
+    fn_800B1670(SndgEventPostRecord);
     SndgChannelsCreateStreams(GameModeTypeGet() == 11);
     SndgAmbInit();
     SndgAmbPostCue(0);
     if (fn_800A350C()) {
         SndgCrowdTriggerEvent(0, 0);
     }
-    fn_8006F810();
-    fn_80071600();
-    fn_80071C34(0);
+    SndgEventInit();
+    SndgEventInitRandom();
+    SndgEventSetMusicHold(0);
     SndgIGLogStartupInfo();
     SndgApplyVolumeOptions();
     SndgEventLoadLevelBank();
@@ -84,8 +84,8 @@ extern "C" void SndgIGShutdownAudio(void)
 {
     SpchIGShutdown();
     SndgAmbShutdown();
-    fn_8006F820();
-    fn_800716E4();
+    SndgEventShutdown();
+    SndgEventFreeRandom();
     SndgChannelsDestroyStreams();
     SndgShutdown();
 }

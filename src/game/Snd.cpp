@@ -24,14 +24,14 @@ struct SndInitDesc_t {
 };
 
 extern "C" {
-void fn_801F76E8(void);
-void fn_801F7710(void);
+void StreamInit(void);
+void StreamShutdown(void);
 unsigned long OSGetSoundMode(void);
 void SndSetOutputMode(int a, int b);
 void SndSetAllocHeap(int a);
 int SndInit(SndInitDesc_t *pDesc);
 int SndShutdown(void);
-void fn_80071790(void);
+void SndgEventNull(void);
 }
 
 static void *sDependencies[] = { 0 };
@@ -45,7 +45,7 @@ int Snd::Init()
 {
     SndInitDesc_t desc;
 
-    fn_801F76E8();
+    StreamInit();
     desc.mUnknown0 = 0x90301;
     desc.mUnknown4 = 0x12400;
     desc.mUnknown8 = 0xC00000;
@@ -68,13 +68,13 @@ int Snd::Init()
     }
     SndSetAllocHeap(256);
     SndInit(&desc);
-    fn_80071790();
+    SndgEventNull();
     return 1;
 }
 
 int Snd::Shutdown()
 {
     SndShutdown();
-    fn_801F7710();
+    StreamShutdown();
     return 1;
 }

@@ -13,7 +13,7 @@ int SNDCTRL_lowpass(int handle, int value)
     if (handle >= 0) {
         index = -1;
         while (iSNDpatchkey(handle, &index)) {
-            fn_80274D34(index, value);
+            SNDPLATFORM_lowpass(index, value);
         }
     }
     return handle;

@@ -2,11 +2,11 @@
 #include "game/DbTableCursorInline.h"
 
 extern "C" {
-void fn_80060458(int index, int level);
-void fn_8006059C(int index);
-void fn_80060674(int index);
-void fn_80061D64(int index);
-void fn_80061DA0(int index);
+void StoryEventsCheatSetLevel(int index, int level);
+void StoryEventsCheatCompleteAll(int index);
+void StoryEventsReset(int index);
+void StoryTournamentForceWin(int index);
+void StoryTournamentClearWin(int index);
 unsigned int ChalGetPoints(void);
 void ChalAddPoints(int value);
 void ChalSetDevPointsForSlot(signed char db, int value);
@@ -32,10 +32,10 @@ void GauntletMarkTeamBeaten(int a, int b);
 int GauntletGetTeamsLeft(int a);
 void GauntletReset(int a);
 void GauntletAdvance(int a);
-int fn_8022F358(int index);
-int fn_8022F3D4(int handle);
-int fn_8022F478(int value);
-int fn_8022F4BC(void);
+int DbUserGetId(int index);
+int DbUserGetDb(int handle);
+int DbUserSetCurrent(int value);
+int DbUserGetCurrent(void);
 
 void CheatEffectApply(signed char db, int id)
 {
@@ -98,30 +98,30 @@ void CheatEffectApply(signed char db, int id)
         ChalSetDevPointsForSlot(db, 999999);
         break;
     case 7:
-        UserInfoSetPoints(fn_8022F358(db), 9999999);
+        UserInfoSetPoints(DbUserGetId(db), 9999999);
         break;
     case 8: {
-        int saved = fn_8022F4BC();
-        fn_8022F478(fn_8022F358(db));
-        fn_8006059C(db);
-        fn_80061D64(db);
-        fn_8022F478(saved);
+        int saved = DbUserGetCurrent();
+        DbUserSetCurrent(DbUserGetId(db));
+        StoryEventsCheatCompleteAll(db);
+        StoryTournamentForceWin(db);
+        DbUserSetCurrent(saved);
         break;
     }
     case 51:
-        fn_80060458(db, 0);
+        StoryEventsCheatSetLevel(db, 0);
         break;
     case 52:
-        fn_80060458(db, 1);
+        StoryEventsCheatSetLevel(db, 1);
         break;
     case 53:
-        fn_80060458(db, 2);
+        StoryEventsCheatSetLevel(db, 2);
         break;
     case 54:
-        fn_80060458(db, 3);
+        StoryEventsCheatSetLevel(db, 3);
         break;
     case 50:
-        fn_8006059C(db);
+        StoryEventsCheatCompleteAll(db);
         break;
     case 49: {
         unsigned int value = ChalGetPoints();
@@ -135,8 +135,8 @@ void CheatEffectApply(signed char db, int id)
     case 48:
         for (int i = 1; i <= 32; i++) {
             if (i != 19 && i != 22) {
-                GauntletMarkTeamBeaten(UserProfileFindIndex(fn_8022F4BC()), i);
-                GauntletAdvance(UserProfileFindIndex(fn_8022F4BC()));
+                GauntletMarkTeamBeaten(UserProfileFindIndex(DbUserGetCurrent()), i);
+                GauntletAdvance(UserProfileFindIndex(DbUserGetCurrent()));
             }
         }
         break;
@@ -190,7 +190,7 @@ void CheatEffectRemove(signed char db, int id)
         TeamLock(db, 38);
         break;
     case 18: {
-        int handle = fn_8022F3D4(fn_8022F358(db));
+        int handle = DbUserGetDb(DbUserGetId(db));
         DbTableCursor cursor;
         cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
         if (cursor.DbTableCursor::GetColumnInt(0x504C5555) != 0x3FF) {
@@ -202,7 +202,7 @@ void CheatEffectRemove(signed char db, int id)
         break;
     }
     case 19:
-        TutorialSetProfileDb(fn_8022F358(db));
+        TutorialSetProfileDb(DbUserGetId(db));
         if (TutorialAllComplete() == 0) {
             TeamLock(db, 33);
         }
@@ -219,12 +219,12 @@ void CheatEffectRemove(signed char db, int id)
         ChalSetDevPointsForSlot(db, 0);
         break;
     case 7:
-        UserInfoSetPoints(fn_8022F358(db), 0);
+        UserInfoSetPoints(DbUserGetId(db), 0);
         break;
     case 8:
-        fn_80060674(db);
+        StoryEventsReset(db);
     case 50:
-        fn_80061DA0(db);
+        StoryTournamentClearWin(db);
         break;
     case 48:
         GauntletReset(db);
@@ -233,8 +233,8 @@ void CheatEffectRemove(signed char db, int id)
     case 52:
     case 53:
     case 54:
-        fn_80060674(db);
-        fn_80061DA0(db);
+        StoryEventsReset(db);
+        StoryTournamentClearWin(db);
         break;
     case 17:
     case 47:

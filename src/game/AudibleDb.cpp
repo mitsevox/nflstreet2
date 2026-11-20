@@ -5,7 +5,7 @@
 
 #include "game/DbCursor.h"
 #include "game/PlayBookDb.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 extern "C" {
 int DbCursorGetValue(DbCursor *pObject, int key);
@@ -82,7 +82,7 @@ unsigned char AudibleDbGetPlayIndex(DbCursor *pCursor, int column)
 
         sprintf(text, "%02d", number);
         PlayBookDbLoadFormation(tag, mode, 0, &object);
-        fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n",
+        TDbCompilePerformOp(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n",
                     tag, &handle, 1, object.mUnknown0);
         count = PlayBookDbCountPlays(tag, handle);
         for (i = 0; i < count; i++) {

@@ -15,10 +15,10 @@ struct PauseRequest_t {
     unsigned char mPending;
 };
 
-extern void *lbl_803EA368;
+extern void *gpReplay;
 
 extern "C" {
-int fn_8002D060(void *p);
+int ReplayIsShowing(void *p);
 int fn_8009B9A8(int a);
 int fn_8009D86C(void);
 int fn_800A7FD8(void);
@@ -94,7 +94,7 @@ void PauseRequestHandleInput(int a, int b, float c)
     if (b != 0 && b != 0x46) {
         return;
     }
-    if (!PauseRequestIsAllowed(a) || fn_8002D060(lbl_803EA368) || fn_8009B9A8(0)) {
+    if (!PauseRequestIsAllowed(a) || ReplayIsShowing(gpReplay) || fn_8009B9A8(0)) {
         return;
     }
     if (mode == 2 && fn_800A7FD8()) {

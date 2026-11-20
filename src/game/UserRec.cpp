@@ -3,9 +3,9 @@
    totals, keeps the win/loss streak and the list of the ten most recent
    saved records, all through database queries. */
 
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/StyleTracker.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 
 extern "C" {
 int fn_80178AE0(void);
@@ -14,10 +14,10 @@ int fn_80178EA0(int a);
 int fn_80178EE0(int a);
 int fn_800A7E40(unsigned char a);
 int fn_800A7E54(unsigned char a);
-int fn_8022F34C(void);
-int fn_8022F358(int index);
-int fn_8022F3D4(int handle);
-int fn_8022F4BC(void);
+int DbUserGetCount(void);
+int DbUserGetId(int index);
+int DbUserGetDb(int handle);
+int DbUserGetCurrent(void);
 int UserProfileGetFreeKey(int kind, int key, int first, int last);
 }
 
@@ -91,15 +91,15 @@ int UserRecGetGameStat(int kind, int a, int b, int c, int d)
             result = fn_800A7E54(c);
             break;
         case 0:
-            if (fn_801FCE10(0, "select \x8c into \x82 from \x8c where 'DIGT' = \x82\n", b, &result, a, c) != 0) {
+            if (TDbCompilePerformOp(0, "select \x8c into \x82 from \x8c where 'DIGT' = \x82\n", b, &result, a, c) != 0) {
                 return result;
             }
             break;
         case 1:
             if (c == 1) {
-                fn_801FCE10(0, "select 'CSAG' into \x82 from 'FNIG'\n", &result);
+                TDbCompilePerformOp(0, "select 'CSAG' into \x82 from 'FNIG'\n", &result);
             } else {
-                fn_801FCE10(0, "select 'CSHG' into \x82 from 'FNIG'\n", &result);
+                TDbCompilePerformOp(0, "select 'CSHG' into \x82 from 'FNIG'\n", &result);
             }
             break;
         }
@@ -112,8 +112,8 @@ void UserRecUpdateStreak(int index, int a, int b)
 {
     int value;
 
-    fn_8022F478(index);
-    if (fn_801FCE10(0, "use \x8c select 'swSU' into \x82 from 'TSPU'\n", fn_8022F3D4(fn_8022F4BC()), &value) == 0) {
+    DbUserSetCurrent(index);
+    if (TDbCompilePerformOp(0, "use \x8c select 'swSU' into \x82 from 'TSPU'\n", DbUserGetDb(DbUserGetCurrent()), &value) == 0) {
         int up = UserRecGetGameStat(2, 0, 0, a, b);
         int down = UserRecGetGameStat(3, 0, 0, a, b);
         if (up) {
@@ -129,7 +129,7 @@ void UserRecUpdateStreak(int index, int a, int b)
                 value--;
             }
         }
-        fn_801FCE10(0, "use \x8c update 'TSPU' set 'swSU' = \x82\n", fn_8022F3D4(fn_8022F4BC()), value);
+        TDbCompilePerformOp(0, "use \x8c update 'TSPU' set 'swSU' = \x82\n", DbUserGetDb(DbUserGetCurrent()), value);
     }
 }
 
@@ -137,10 +137,10 @@ void UserRecAddStat(int index, int key, int delta)
 {
     int value;
 
-    fn_8022F478(index);
-    if (fn_801FCE10(0, "use \x8c select \x8c into \x82 from 'TSPU'\n", fn_8022F3D4(fn_8022F4BC()), key, &value) == 0) {
+    DbUserSetCurrent(index);
+    if (TDbCompilePerformOp(0, "use \x8c select \x8c into \x82 from 'TSPU'\n", DbUserGetDb(DbUserGetCurrent()), key, &value) == 0) {
         value += delta;
-        fn_801FCE10(0, "use \x8c update 'TSPU' set \x8c = \x82\n", fn_8022F3D4(fn_8022F4BC()), key, value);
+        TDbCompilePerformOp(0, "use \x8c update 'TSPU' set \x8c = \x82\n", DbUserGetDb(DbUserGetCurrent()), key, value);
     }
 }
 
@@ -150,7 +150,7 @@ void UserRecAddRecent(int key)
     int status;
     int code = 0;
 
-    status = fn_801FCE10(0, "use 'EVAS' select 'KPCH' into \x82 from 'HCSH' where 'KUCH' = \x82\n", &value, key);
+    status = TDbCompilePerformOp(0, "use 'EVAS' select 'KPCH' into \x82 from 'HCSH' where 'KUCH' = \x82\n", &value, key);
     if (status != 0 && status != 23) {
         code = status;
     }
@@ -160,13 +160,13 @@ void UserRecAddRecent(int key)
             if (value > 10) {
                 signed char i;
 
-                fn_801FCE10(0, "use 'EVAS' delete from 'HCSH' where 'KPCH' = \x82\n", 1);
+                TDbCompilePerformOp(0, "use 'EVAS' delete from 'HCSH' where 'KPCH' = \x82\n", 1);
                 for (i = 2; i <= 10; i++) {
-                    fn_801FCE10(0, "use 'EVAS' update 'HCSH' set 'KPCH' = \x82 where 'KPCH' = \x82\n", i - 1, i);
+                    TDbCompilePerformOp(0, "use 'EVAS' update 'HCSH' set 'KPCH' = \x82 where 'KPCH' = \x82\n", i - 1, i);
                 }
                 value = 10;
             }
-            fn_801FCE10(0, "use 'EVAS' insert into 'HCSH' set 'KPCH' = \x82 and 'KUCH' = \x82\n", value, key);
+            TDbCompilePerformOp(0, "use 'EVAS' insert into 'HCSH' set 'KPCH' = \x82 and 'KUCH' = \x82\n", value, key);
         }
     }
 }
@@ -175,7 +175,7 @@ extern const char _UserRec_szSelectIntQuery[] = "use \x8c select \x8c into \x82 
 
 int UserRecGetString(int index, int table, int column, char *pText)
 {
-    return fn_801FCE10(0, "use \x8c select \x8c into \x88 from \x8c\n", fn_8022F3D4(fn_8022F358(index)), column, pText, table);
+    return TDbCompilePerformOp(0, "use \x8c select \x8c into \x88 from \x8c\n", DbUserGetDb(DbUserGetId(index)), column, pText, table);
 }
 
 extern const char _UserRec_szSelect89Query[] = "use \x8c select \x8c into \x89 from \x8c\n";
@@ -185,7 +185,7 @@ extern const char _UserRec_szUpdate89Query[] = "use \x8c update \x8c set \x8c = 
 
 int UserRecGetCount(void)
 {
-    return fn_8022F34C();
+    return DbUserGetCount();
 }
 
 int UserRecGetName(int index, char *pText)

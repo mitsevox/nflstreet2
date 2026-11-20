@@ -1,7 +1,7 @@
 /* Credits: reads the credits lines and their line types from the game database, one
    line at a time, for the credits screen. */
 
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 extern "C" {
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
@@ -15,7 +15,7 @@ static int _Credits_iLineType;
 extern "C" {
 int CreditsFetchLine(void)
 {
-    return fn_801FCE10(0, "fetch from \x8a 'ilRC' into \x88 and 'ytRC' into \x82\n", &_Credits_Cursor, _Credits_szLine,
+    return TDbCompilePerformOp(0, "fetch from \x8a 'ilRC' into \x88 and 'ytRC' into \x82\n", &_Credits_Cursor, _Credits_szLine,
                        &_Credits_iLineType) == 0;
 }
 
@@ -28,14 +28,14 @@ void CreditsOpen(void)
         _Credits_Cursor.mUnknown4 = 0;
         _Credits_Cursor.mUnknown8 = -1;
         _Credits_Cursor.mUnknown12 = 0;
-        fn_801FCE10(0, "declare \x8a cursor for select * from 'LRDC'\n", &_Credits_Cursor);
+        TDbCompilePerformOp(0, "declare \x8a cursor for select * from 'LRDC'\n", &_Credits_Cursor);
     }
 }
 
 void CreditsClose(void)
 {
     if (_Credits_Cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&_Credits_Cursor);
+        TDbSQLDestroyCursor(&_Credits_Cursor);
     }
     DbFileTblDestroy(0, 0x4C524443);
     _Credits_szLine[0] = 0;
@@ -46,7 +46,7 @@ void CreditsCountLines(int *pCount)
 {
     int count = 0;
 
-    fn_801FCE10(0, "select count(*) into \x85 from 'LRDC'\n", &count);
+    TDbCompilePerformOp(0, "select count(*) into \x85 from 'LRDC'\n", &count);
     *pCount = count;
 }
 

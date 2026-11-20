@@ -15,7 +15,7 @@ typedef struct TDbIOFileHdr_t {
 
 extern TDbTable_t *_TDbTblFindTable(TDbDatabase_t *pDb, int id);
 extern int _TDbTblDestroy(TDbTable_t *pTable);
-extern int fn_80208204(int dbId, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pResult);
+extern int _TDbQryDeleteRow(int dbId, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pResult);
 int _TDbIOReadExprNode(TDbExpr_t *pExpr, TDbIOStream_t *pStream, int release);
 
 unsigned int crc32_table[256] = { 0 };
@@ -832,7 +832,7 @@ int _TDbIOLoadDatabase(TDbDatabase_t *pDb, int *pTableIds, void *pName,
                                 stmt.mWhere = 0;
                                 stmt.mTables[0] = pTable;
                                 stmt.mTableExprs[0] = 0;
-                                fn_80208204(pTable->mDb->mId, &stmt, &result);
+                                _TDbQryDeleteRow(pTable->mDb->mId, &stmt, &result);
                             }
                             if (pTable != 0) {
                                 err = _TDbIOReadTableAppend(pTable, &tableHdr, id, &stream);

@@ -33,12 +33,12 @@ struct CamTypeDefEntry_t {
 extern "C" {
 extern char lbl_802F4884[];
 extern char lbl_802F4890[];
-extern CamTypeDef_t lbl_802CC83C;
+extern CamTypeDef_t _Replay_CamType;
 extern char lbl_8031BDD4[];
 
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-CamMode_t *fn_80141054(int id);
-void fn_8014106C(int id, int mode, float *pA, float *pB);
+CamMode_t *CamPlayGetDefMode(int id);
+void CamPlayGetPosLimits(int id, int mode, float *pA, float *pB);
 int fn_801486A0(void);
 void fn_801527B8(void *p, Vector_80039F5C *pOut);
 int fn_801784C4(void);
@@ -62,8 +62,8 @@ void MatPop(void);
 void MatRotX(int angle);
 void MatRotZ(int angle);
 void MatTranslate(Vector_80039F5C *pPos);
-void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
-void fn_80227CC0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
+void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
+void Vec3Mat34Mul(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 
 void CamInterpUpdateSnap(CamInterp_t *pInterp, int steps);
 }
@@ -78,7 +78,7 @@ CamTypeDefEntry_t _CamMainTypeDefs[5] = {
     { lbl_802F4890, 0x8C, 0 },
     { lbl_802F4884, 0x94, 0 },
     { &_CamMain_Type, 0xF58, 0 },
-    { &lbl_802CC83C, 0xF60, 0 },
+    { &_Replay_CamType, 0xF60, 0 },
     { 0, 0, 0 },
 };
 }
@@ -147,12 +147,12 @@ void _CamMainCalcFollowPos(GameCamera_t *pCamera, Vector_80039F5C *pTarget, Vect
         CamMainFlipPos(&offset);
     }
     target.mZ = 0.0f;
-    fn_8022765C(pOut, &target, &offset);
+    Vec3Add(pOut, &target, &offset);
     if (pCamera->mUnknown94 & 0x10) {
         float x[2];
         float y[2];
 
-        fn_8014106C(pCamera->mUnknown9C, pCamera->mUnknownA0, x, y);
+        CamPlayGetPosLimits(pCamera->mUnknown9C, pCamera->mUnknownA0, x, y);
         pOut->mX = CLAMP(pOut->mX, x[0], x[1]);
         pOut->mY = CLAMP(pOut->mY, y[0], y[1]);
         pOut->mZ = CLAMP(pOut->mZ, 2.5f, 100.0f);
@@ -589,7 +589,7 @@ void CamMainInit(GameCamera_t *pCamera, CameraDesc_t *pDesc)
     pCamera->mUnknown9C = pDesc->mUnknown04;
     pCamera->mUnknownA0 = -1;
     pCamera->mUnknownDC = 0;
-    fn_80141054(pCamera->mUnknown9C)->mUnknown00(pCamera, pDesc);
+    CamPlayGetDefMode(pCamera->mUnknown9C)->mUnknown00(pCamera, pDesc);
     CamMainSetMode(pCamera, 1, 0, 0);
     CamMainFollow(pCamera, 0, 0, 0);
     pCamera->mUnknown94 |= 4;
@@ -597,7 +597,7 @@ void CamMainInit(GameCamera_t *pCamera, CameraDesc_t *pDesc)
 
 void CamMainUninit(GameCamera_t *pCamera)
 {
-    fn_80141054(pCamera->mUnknown9C)->mUnknown04(pCamera);
+    CamPlayGetDefMode(pCamera->mUnknown9C)->mUnknown04(pCamera);
     _CamMainBaseUninit(pCamera);
 }
 
@@ -653,7 +653,7 @@ void CamEaseVecUpdate(CamEaseVec_t *pEase, int steps)
     offset.mX = 0.0f;
     offset.mY = 0.0f;
     offset.mZ = pEase->mScale.mValue;
-    fn_80227CC0(&pEase->mResult, &offset);
+    Vec3Mat34Mul(&pEase->mResult, &offset);
     MatPop();
 }
 

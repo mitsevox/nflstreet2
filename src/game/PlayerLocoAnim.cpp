@@ -14,7 +14,7 @@
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "game/Object_8017886C.h"
 #include <math.h>
@@ -33,10 +33,10 @@ int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int PlayerLocoIsEngaged(Object_80039F5C *p, int flag);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
-void fn_80227638(Point_8017886C *pOut, Point_8017886C *pA, Point_8017886C *pB);
-void fn_80227690(Point_8017886C *pOut, Point_8017886C *pA, Point_8017886C *pB);
-void fn_80227248(Point_8017886C *pOut, Point_8017886C *pIn, float scale);
-void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
+void Vec2Add(Point_8017886C *pOut, Point_8017886C *pA, Point_8017886C *pB);
+void Vec2Sub(Point_8017886C *pOut, Point_8017886C *pA, Point_8017886C *pB);
+void Vec2Scale(Point_8017886C *pOut, Point_8017886C *pIn, float scale);
+void Vec2Rotate(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
 Point_8017886C fn_80177FFC(int team);
 void fn_8009BEFC(Object_80039F5C *p, int joint, Vector_80039F5C *out, int *scratch);
 int CharSkelGetJointByName(void *p, const char *name);
@@ -230,7 +230,7 @@ int PlayerLocoGetStartSide(Object_80039F5C *p, int check, int value)
         }
         if (BallFindHeldBy(p) == 0) {
             if (check != 0 && fn_800AD9B4() != 2) {
-                value = fn_802372EC(0, 100) < 50;
+                value = SyncRandGetRange(0, 100) < 50;
             }
         } else {
             value = p->mUnknown776 == 1;
@@ -457,7 +457,7 @@ unsigned short PlayerLocoSelectTurnEntry(Table_80089904 *table, Object_80039F5C 
     dir.mX = (float)(signed char)p->mUnknown1008.mUnknown2 * 0.25f;
     dir.mY = (float)(signed char)p->mUnknown1011 * 0.5f;
     facing = p->mMotion.mFacing & 0xFFFFFF;
-    fn_80227690(&dir, &dir, (Point_8017886C *)&p->mMotion.mPos);
+    Vec2Sub(&dir, &dir, (Point_8017886C *)&p->mMotion.mPos);
     heading = dir.Heading();
     if (p->mUnknown1008.mUnknown1 == 1 && (p->mpState->mId == 7 || p->mpState->mId == 63)) {
         heading = *(int *)&p->mpUnknown352;
@@ -480,7 +480,7 @@ unsigned short PlayerLocoSelectTurnEntry(Table_80089904 *table, Object_80039F5C 
             continue;
         }
         if ((side > 0 && info->mUnknown12 > 0) || (side < 0 && info->mUnknown12 < 0)) {
-            if (!best || fn_802372EC(0, 100) < 50) {
+            if (!best || SyncRandGetRange(0, 100) < 50) {
                 best = info;
                 bestIndex = i;
             }
@@ -498,14 +498,14 @@ unsigned short PlayerLocoSelectTurnEntry(Table_80089904 *table, Object_80039F5C 
     int target = (best->mUnknown12 + facing) & 0xFFFFFF;
     off.mX = best->mUnknown28;
     off.mY = best->mUnknown32;
-    fn_80227384(&off, &off, p->mMotion.mFacing);
-    fn_80227690(&dir, &dir, &off);
+    Vec2Rotate(&off, &off, p->mMotion.mFacing);
+    Vec2Sub(&dir, &dir, &off);
     if (((target - dir.Heading()) & 0xFFFFFF) < 0x800000) {
         *pTurn = -*pTurn;
     }
     float rate = 1.0f / best->mUnknown24;
     *pTurn = (int)((float)*pTurn * rate);
-    fn_80227248(pOffset, &dir, rate);
+    Vec2Scale(pOffset, &dir, rate);
     return bestIndex;
 }
 
@@ -539,7 +539,7 @@ int PlayerLocoTurnPhase(Table_80089904 *table, unsigned short key, FEPlyrModel_t
             AnimChannel_t *pEntry = &p->mpUnknown800[block->mUnknown4];
             pEntry->mUnknownC = (pEntry->mUnknownC + block->mUnknown8) & 0xFFFFFF;
         } else {
-            fn_80227638((Point_8017886C *)&p->mMotion.mPos, (Point_8017886C *)&p->mMotion.mPos,
+            Vec2Add((Point_8017886C *)&p->mMotion.mPos, (Point_8017886C *)&p->mMotion.mPos,
                         &block->mUnknownC);
         }
         if (p->mFlags & 4) {

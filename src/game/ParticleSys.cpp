@@ -6,7 +6,7 @@
 #include "game/ParticleSys.h"
 #include <dolphin/mtx.h>
 #include "game/bitstream.h"
-#include "game/cu_8002B8F8.h"
+#include "game/Replay.h"
 #include <math.h>
 #include <string.h>
 #include "game/ParticleRender.h"
@@ -61,12 +61,12 @@ struct PsysPoolItem_t {
 extern "C" {
 extern unsigned char gParticleAnimTexFlag;
 
-int fn_8002D0AC(Type_803EA368 *p);
-void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
-void fn_80030304(void *pStream, float *pValues, int bits, float scale);
-void fn_80030554(void *pStream, float *pValues, int bits, float scale);
-void fn_8003065C(void *pStream, float *pValues, int bits, float scale);
-void fn_80030ACC(void (*pWrite)(BitStream_t *),
+int ReplayIsRecording(Type_803EA368 *p);
+void ReplayReadPacked3(void *pStream, float *pValues, int bits, float scale);
+void ReplayReadPacked4(void *pStream, float *pValues, int bits, float scale);
+void ReplayWritePacked3(void *pStream, float *pValues, int bits, float scale);
+void ReplayWritePacked4(void *pStream, float *pValues, int bits, float scale);
+void ReplayRegisterChannel(void (*pWrite)(BitStream_t *),
                  void (*pRead)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float), int size,
                  const char *pName);
 int fn_8004CB98(int index);
@@ -129,7 +129,7 @@ void ParticleSysSetEffectFile(int index, int file);
 void ParticleSysReplayRegister(void);
 void ParticleSysResetEmitter(PsysEmitter_t *pObject);
 void ParticleSysBuildFrame(Mtx44 m, Vector_80039F5C *pDir, Vector_80039F5C *pPos);
-void fn_802277DC(void *pOut, void *pA, void *pB);
+void Vec3CrossProduct(void *pOut, void *pA, void *pB);
 }
 
 static unsigned char _ParticleSys_bInit = 0;
@@ -241,8 +241,8 @@ void ParticleSysReplayWrite(BitStream_t *pStream)
     fn_80191068(pStream, _ParticleSys_nReplayRecords, 8);
     for (i = 0; i < 6; i++) {
         fn_80191068(pStream, (short)_ParticleSys_aReplayRecords[i].mId, 16);
-        fn_80030554(pStream, _ParticleSys_aReplayRecords[i].mPos, 16, 256.0f);
-        fn_8003065C(pStream, _ParticleSys_aReplayRecords[i].mRot, 12, 1024.0f);
+        ReplayWritePacked3(pStream, _ParticleSys_aReplayRecords[i].mPos, 16, 256.0f);
+        ReplayWritePacked4(pStream, _ParticleSys_aReplayRecords[i].mRot, 12, 1024.0f);
         fn_80191068(pStream, (unsigned int)_ParticleSys_aReplayRecords[i].mpSource, 32);
     }
     _ParticleSys_nReplayRecords = 0;
@@ -272,48 +272,48 @@ void ParticleSysReplayRead(BitStream_t *pStream0, BitStream_t *pStream1, BitStre
     }
     for (i = 0; i < count; i++) {
         record.mId = ReadBitStream(pStream1, 16);
-        fn_800301C4(pStream1, record.mPos, 16, 256.0f);
-        fn_80030304(pStream1, record.mRot, 12, 1024.0f);
+        ReplayReadPacked3(pStream1, record.mPos, 16, 256.0f);
+        ReplayReadPacked4(pStream1, record.mRot, 12, 1024.0f);
         record.mpSource = (ParticleSource_t *)(unsigned int)ReadBitStream(pStream1, 32);
         if (_ParticleSys_anReplayCounts[0] != last.mUnknown0 || _ParticleSys_anReplayCounts[1] != last.mUnknown1) {
             ParticlesSpawnAt(record.mId, record.mPos, record.mRot, record.mpSource);
         }
         ReadBitStream(pStream0, 16);
-        fn_800301C4(pStream0, record.mPos, 16, 256.0f);
-        fn_80030304(pStream0, record.mRot, 12, 1024.0f);
+        ReplayReadPacked3(pStream0, record.mPos, 16, 256.0f);
+        ReplayReadPacked4(pStream0, record.mRot, 12, 1024.0f);
         ReadBitStream(pStream0, 32);
         if (pStream2 != 0) {
             ReadBitStream(pStream2, 16);
-            fn_800301C4(pStream2, record.mPos, 16, 256.0f);
-            fn_80030304(pStream2, record.mRot, 12, 1024.0f);
+            ReplayReadPacked3(pStream2, record.mPos, 16, 256.0f);
+            ReplayReadPacked4(pStream2, record.mRot, 12, 1024.0f);
             ReadBitStream(pStream2, 32);
         }
         if (pStream3 != 0) {
             ReadBitStream(pStream3, 16);
-            fn_800301C4(pStream3, record.mPos, 16, 256.0f);
-            fn_80030304(pStream3, record.mRot, 12, 1024.0f);
+            ReplayReadPacked3(pStream3, record.mPos, 16, 256.0f);
+            ReplayReadPacked4(pStream3, record.mRot, 12, 1024.0f);
             ReadBitStream(pStream3, 32);
         }
     }
     for (i = count; i <= 5; i++) {
         ReadBitStream(pStream1, 16);
-        fn_800301C4(pStream1, record.mPos, 16, 256.0f);
-        fn_80030304(pStream1, record.mRot, 12, 1024.0f);
+        ReplayReadPacked3(pStream1, record.mPos, 16, 256.0f);
+        ReplayReadPacked4(pStream1, record.mRot, 12, 1024.0f);
         ReadBitStream(pStream1, 32);
         ReadBitStream(pStream0, 16);
-        fn_800301C4(pStream0, record.mPos, 16, 256.0f);
-        fn_80030304(pStream0, record.mRot, 12, 1024.0f);
+        ReplayReadPacked3(pStream0, record.mPos, 16, 256.0f);
+        ReplayReadPacked4(pStream0, record.mRot, 12, 1024.0f);
         ReadBitStream(pStream0, 32);
         if (pStream2 != 0) {
             ReadBitStream(pStream2, 16);
-            fn_800301C4(pStream2, record.mPos, 16, 256.0f);
-            fn_80030304(pStream2, record.mRot, 12, 1024.0f);
+            ReplayReadPacked3(pStream2, record.mPos, 16, 256.0f);
+            ReplayReadPacked4(pStream2, record.mRot, 12, 1024.0f);
             ReadBitStream(pStream2, 32);
         }
         if (pStream3 != 0) {
             ReadBitStream(pStream3, 16);
-            fn_800301C4(pStream3, record.mPos, 16, 256.0f);
-            fn_80030304(pStream3, record.mRot, 12, 1024.0f);
+            ReplayReadPacked3(pStream3, record.mPos, 16, 256.0f);
+            ReplayReadPacked4(pStream3, record.mRot, 12, 1024.0f);
             ReadBitStream(pStream3, 32);
         }
     }
@@ -472,8 +472,8 @@ void ParticleSysBuildFrame(Mtx44 m, Vector_80039F5C *pDir, Vector_80039F5C *pPos
         up.mY = -1.0f;
         up.mZ = 0.0f;
     }
-    fn_802277DC(&side, &fwd, &up);
-    fn_802277DC(&up, &side, &fwd);
+    Vec3CrossProduct(&side, &fwd, &up);
+    Vec3CrossProduct(&up, &side, &fwd);
     m[0][0] = side.mX;
     m[0][1] = side.mY;
     m[0][2] = side.mZ;
@@ -574,12 +574,12 @@ AnimTex_t *ParticleSysGetAnimTex(int index)
 
 void ParticleSysReplayRegister(void)
 {
-    fn_80030ACC(ParticleSysReplayWrite, ParticleSysReplayRead, ParticleSysReplayGetSize(), "Replay Particles");
+    ReplayRegisterChannel(ParticleSysReplayWrite, ParticleSysReplayRead, ParticleSysReplayGetSize(), "Replay Particles");
 }
 
 void ParticleSysReplayRecordSpawn(ParticleSpawnRecord_t record)
 {
-    if (fn_8002D0AC(lbl_803EA368)) {
+    if (ReplayIsRecording(gpReplay)) {
         signed char count = _ParticleSys_nReplayRecords;
 
         if (count <= 5) {

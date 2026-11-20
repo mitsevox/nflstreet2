@@ -8,7 +8,7 @@
 #include "engine/ssys.h"
 
 extern "C" {
-int fn_802753AC(SNDSYSOPTS *opts, int mode);
+int SNDPLATFORM_ModeSetUp(SNDSYSOPTS *opts, int mode);
 }
 
 /* A setting changed while the library runs: its value and whether it is pending. */
@@ -198,7 +198,7 @@ int System::Init(int arg)
     gOutputModeNext.mPending = 0;
     lbl_803A6C24.m231 = 0;
     lbl_803A6C24.m234 = 0;
-    fn_802753AC(&opts, outputmode);
+    SNDPLATFORM_ModeSetUp(&opts, outputmode);
     _SndSysSetOpts(&opts);
     SNDSYSI_init(pheap, heapsize, arg);
     return 0;

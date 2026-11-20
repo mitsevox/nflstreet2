@@ -2,7 +2,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include <string.h>
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/SyncStateRegister.h"
 #include "game/fn_800B65A0.h"
 
@@ -89,10 +89,10 @@ void BannerClear(int a);
 void UISGameLockPad(int value);
 int UISGameUnlockPad(void);
 int fn_801CFE40(float y, float x);
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 int fn_8022DDB4(int tag, void *data);
 float SyncRandGetFloat(int stream);
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 
 int CoinTossGetTeamSide(int a);
 void CoinTossOnCallMade(void);
@@ -248,7 +248,7 @@ void CoinTossSendPlayersToSpots(unsigned char *pUnused, CoinTossSpot_t *pA, Coin
             dir.mY = pTable[i].mPos.mY;
             dir.mX = -dir.mX;
             dir.mY = -dir.mY;
-            fn_80227690(&dir, &dir, &pTable[i].mPos);
+            Vec2Sub(&dir, &dir, &pTable[i].mPos);
             angle = fn_801CFE40(dir.mY, dir.mX);
 
             memset(&message, 0, sizeof(message));
@@ -295,22 +295,22 @@ int CoinTossDecide(int mode)
     if (_CoinToss_pState->mUnknown45 == 0) {
         switch (mode) {
         case 2:
-            _CoinToss_pState->mUnknown40 = fn_802372EC(0, 2);
-            _CoinToss_pState->mUnknown41 = fn_802372EC(0, 2);
+            _CoinToss_pState->mUnknown40 = SyncRandGetRange(0, 2);
+            _CoinToss_pState->mUnknown41 = SyncRandGetRange(0, 2);
             _CoinToss_pState->mUnknown42 = 1;
-            _CoinToss_pState->mUnknown43 = fn_802372EC(0, 2);
+            _CoinToss_pState->mUnknown43 = SyncRandGetRange(0, 2);
             break;
         case 0:
             _CoinToss_pState->mUnknown40 = 0;
             _CoinToss_pState->mUnknown41 = 1;
             _CoinToss_pState->mUnknown42 = 1;
-            _CoinToss_pState->mUnknown43 = fn_802372EC(0, 2);
+            _CoinToss_pState->mUnknown43 = SyncRandGetRange(0, 2);
             break;
         case 1:
             _CoinToss_pState->mUnknown40 = 0;
             _CoinToss_pState->mUnknown41 = 0;
             _CoinToss_pState->mUnknown42 = mode;
-            _CoinToss_pState->mUnknown43 = fn_802372EC(0, 2);
+            _CoinToss_pState->mUnknown43 = SyncRandGetRange(0, 2);
             break;
         }
         if (fn_800B65A0(fn_80178308()) != 0xFF || fn_800B65A0(fn_80178320()) != 0xFF) {
@@ -356,8 +356,8 @@ void CoinTossAllocState(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&_CoinToss_pState, sizeof(CoinTossState_t), 0, 0x63746F73);
 
-    memset(fn_8023816C(pHandle), 0, sizeof(CoinTossState_t));
-    fn_802381E0(pHandle);
+    memset(SyncStateGetData(pHandle), 0, sizeof(CoinTossState_t));
+    SyncStateCommit(pHandle);
 }
 
 void CoinTossClearState(void)

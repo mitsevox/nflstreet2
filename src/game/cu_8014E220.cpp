@@ -38,7 +38,7 @@ void fn_800BCC30(void *p);
 void CamGameSetModeAll(int a);
 void CamGameSelectCamera(int a);
 GameCamera_t *CamGameGetCamera(int index);
-void fn_80141164(float value);
+void CamPlaySetYOffset(float value);
 void fn_8014D67C(void);
 int MsgBoxIsClosed(void);
 void fn_800BCB18(void *p, float dt);
@@ -46,7 +46,7 @@ void fn_800B6474(int index, unsigned char team);
 void fn_800B6714(Object_80039F5C *p, int port);
 void fn_800B6658(Object_80039F5C *p);
 void fn_800BFB88(void *p, float dt);
-void fn_80162780(int a, int b);
+void PlyrStarSetShown(int a, int b);
 void fn_801487C0(int team, unsigned char begin);
 float fn_80178A44(void);
 void fn_801780A8(Point_8017886C pos);
@@ -58,8 +58,8 @@ void DivotRestartRecords(void);
 void AudmonEventClear(void);
 void ClockRuleSnap(void);
 void fn_800C9FC0(void);
-int fn_8005BFD4(void);
-void fn_8005BF18(void);
+int InGameOverlayGetState(void);
+void InGameOverlayReset(void);
 void PauseUnblock(void);
 
 void fn_8014E220(void *p, float dt)
@@ -73,7 +73,7 @@ void fn_8014E244(void *p)
     CamGameSetModeAll(1);
     CamGameSelectCamera(0);
     CamMainWarpToDest(CamGameGetCamera(5));
-    fn_80141164(2.5f);
+    CamPlaySetYOffset(2.5f);
     fn_8014D67C();
 }
 
@@ -103,7 +103,7 @@ void fn_8014E31C(void)
 void fn_8014E3B4(State_802A2058 *p, float dt)
 {
     fn_800BFB88(p, dt);
-    fn_80162780(1, 1);
+    PlyrStarSetShown(1, 1);
     fn_801487C0(1, 1);
     fn_801487C0(0, 5);
     Point_8017886C pos = {0.0f, 0.0f};
@@ -131,9 +131,9 @@ void fn_8014E48C(State_802A2058 *p, float dt)
         fn_800C9FC0();
         fn_80148A58()->vfn_15();
     }
-    if (fn_8005BFD4() == 3 || fn_8005BFD4() == 4) {
-        if (fn_8005BFD4() != 4) {
-            fn_8005BF18();
+    if (InGameOverlayGetState() == 3 || InGameOverlayGetState() == 4) {
+        if (InGameOverlayGetState() != 4) {
+            InGameOverlayReset();
             PauseUnblock();
         }
         fn_800AD910(3, dt);

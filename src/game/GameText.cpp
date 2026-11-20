@@ -9,7 +9,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include <string.h>
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 /* The cached database row of the last player looked up by GameTextLoadPlayer. */
 struct GameTextPlayer_t {
@@ -78,7 +78,7 @@ static char _GameText_szDialogText[256];
 static char _GameText_szSavedDialogText[256];
 static char _GameText_aszNames[3][129];
 
-int fn_801F95C8(void);
+int TDbTblDefaultDbGet(void);
 int MsgGameGetPlayerPortrait(int id);
 void *UIGLibraryGetGlobal(int index);
 int UIGLibraryUnLoadItem(void *pObject, int a, int b);
@@ -117,7 +117,7 @@ void GameTextLoadPlayer(int id, unsigned char reload)
         _GameText_sPlayer.mUnknown10 = 0;
         _GameText_sPlayer.mUnknown12 = 0;
         _GameText_sPlayer.mUnknown14 = 0;
-        int result = fn_801FCE10(0, "select 'SOPP' into \x82 and 'NEJP' into \x80 and 'PXSP' into \x82 and "
+        int result = TDbCompilePerformOp(0, "select 'SOPP' into \x82 and 'NEJP' into \x80 and 'PXSP' into \x82 and "
                                     "'DIGT' into \x81 and COL_PLYR_YEARSPRO into \x81 and 'OHFP' into \x80 and "
                                     "'ANFP' into \x88 and 'ANLP' into \x88 from 'YALP' where 'DIGP' = \x82\n",
                                  &position, &_GameText_sPlayer.mUnknown8, &_GameText_sPlayer.mUnknownC,
@@ -128,7 +128,7 @@ void GameTextLoadPlayer(int id, unsigned char reload)
             _GameText_sPlayer.mId = id;
         }
     } else if (reload == 1 && id != 0x7FFF) {
-        fn_801FCE10(0, "select 'NEJP' into \x80 from 'YALP' where 'DIGP' = \x82\n", &_GameText_sPlayer.mUnknown8, id);
+        TDbCompilePerformOp(0, "select 'NEJP' into \x80 from 'YALP' where 'DIGP' = \x82\n", &_GameText_sPlayer.mUnknown8, id);
     }
 }
 
@@ -138,12 +138,12 @@ void GameTextLoadTeam(int id)
     char shortText[16];
     char displayText[24];
     int type = -1;
-    int database = fn_801F95C8();
-    int result = fn_801FCE10(0, "use \x8c select 'PYTT' into \x82 from 'MAET' where 'DIGT' = \x82\n",
+    int database = TDbTblDefaultDbGet();
+    int result = TDbCompilePerformOp(0, "use \x8c select 'PYTT' into \x82 from 'MAET' where 'DIGT' = \x82\n",
                             database, &type, id);
     if ((result == 0 && id != _GameText_sTeam.mId && (unsigned short)id != 0x3FF
          && (unsigned short)id != 0x3F7 && id != 0x3F9) || type == 5) {
-        if (fn_801FCE10(0, "use \x8c select 'ANLT' into \x88 and 'ANST' into \x88 and 'ANDT' into \x88 from 'MAET' where 'DIGT' = \x82\n",
+        if (TDbCompilePerformOp(0, "use \x8c select 'ANLT' into \x88 and 'ANST' into \x88 and 'ANDT' into \x88 from 'MAET' where 'DIGT' = \x82\n",
                         database, text, shortText, displayText, id) == 0) {
             if (type == 5 || type == 18) {
                 _GameText_sTeam.mId = id;
@@ -183,7 +183,7 @@ unsigned char GameTextGetBootFinished(void)
 int GameTextGetTeamFont(int team)
 {
     int font;
-    fn_801FCE10(0, "use 'TATS' select COL_TEAM_FONT_LARGE into \x82 from 'MAET' where 'DIGT' = \x82\n", &font, team);
+    TDbCompilePerformOp(0, "use 'TATS' select COL_TEAM_FONT_LARGE into \x82 from 'MAET' where 'DIGT' = \x82\n", &font, team);
     return 0;
 }
 
@@ -191,7 +191,7 @@ int GameTextFindTeamByCity(int city)
 {
     int team = 0;
     if (city != 3) {
-        fn_801FCE10(0, "select 'DIGT' into \x85 from 'MAET' where 'DIGC' = \x85 and 'DIGD' = \x83\n", &team, city, 31);
+        TDbCompilePerformOp(0, "select 'DIGT' into \x85 from 'MAET' where 'DIGC' = \x85 and 'DIGD' = \x83\n", &team, city, 31);
     }
     return team;
 }
@@ -211,9 +211,9 @@ void GameTextFormatScore(int team, char *pText, int length)
     int score = 0;
     char text[4];
     if (fn_8022E560() == team) {
-        fn_801FCE10(0, "select 'CSAG' into \x82 from 'FNIG'\n", &score);
+        TDbCompilePerformOp(0, "select 'CSAG' into \x82 from 'FNIG'\n", &score);
     } else {
-        fn_801FCE10(0, "select 'CSHG' into \x82 from 'FNIG'\n", &score);
+        TDbCompilePerformOp(0, "select 'CSHG' into \x82 from 'FNIG'\n", &score);
     }
     sprintf(text, "%d", score);
     strncpy(pText, text, length);
@@ -234,7 +234,7 @@ void GameTextFormatTeamRecord(int team, char *pText)
     int wins = 0;
     int losses = 0;
     int ties = 0;
-    fn_801FCE10(0, "select COL_TEAM_SEASWINS into \x82 and COL_TEAM_SEASLOSSES into \x82 and COL_TEAM_SEASTIES "
+    TDbCompilePerformOp(0, "select COL_TEAM_SEASWINS into \x82 and COL_TEAM_SEASLOSSES into \x82 and COL_TEAM_SEASTIES "
                    "into \x82 from 'MAET' where 'DIGT' = \x82\n",
                 &wins, &losses, &ties, team);
     sprintf(pText, "(%d - %d - %d)", wins, losses, ties);
@@ -243,7 +243,7 @@ void GameTextFormatTeamRecord(int team, char *pText)
 int GameTextGetQuarter(void)
 {
     int quarter = 0;
-    fn_801FCE10(0, "select 'RTQG' into \x82 from 'FNIG'\n", &quarter);
+    TDbCompilePerformOp(0, "select 'RTQG' into \x82 from 'FNIG'\n", &quarter);
     return quarter + 1;
 }
 
@@ -414,10 +414,10 @@ int GameTextGetPlayerTeam(int id)
         GameTextLoadPlayer(id, 0);
         team = _GameText_sPlayer.mUnknown10;
         if (team == 0x3F6) {
-            fn_801FCE10(0, "select 'DIOT' into \x82 from TBL_RETIRE where 'DIGP' = \x82\n", &team, id);
+            TDbCompilePerformOp(0, "select 'DIOT' into \x82 from TBL_RETIRE where 'DIGP' = \x82\n", &team, id);
         }
         if (team == 0x3F7) {
-            fn_801FCE10(0, "select COL_DRAFT_PLYRDRAFTTEAMID into \x82 from TBL_DRAFT_PLAYER where 'DIGP' = \x82\n",
+            TDbCompilePerformOp(0, "select COL_DRAFT_PLYRDRAFTTEAMID into \x82 from TBL_DRAFT_PLAYER where 'DIGP' = \x82\n",
                         &team, id);
         }
     }
@@ -428,7 +428,7 @@ unsigned short GameTextGetEditTeam(unsigned short fallback, int base)
 {
     int team = 0x3FF;
     if (CurrentIdIsSet()) {
-        fn_801FCE10(0, "select 'DIGT' into \x82 from 'DIED'\n", &team);
+        TDbCompilePerformOp(0, "select 'DIGT' into \x82 from 'DIED'\n", &team);
         if (team != 0x3FF) {
             unsigned short index = TeamRecordFindIndex(team);
             if (index != 0xFFFF) {
@@ -503,12 +503,12 @@ void GameTextFormatTenths(int value, char *pText)
 void GameTextGetMatchupTeams(int *pHome, int *pAway)
 {
     int team = 0;
-    fn_801FCE10(0, "select 'HDQO' into \x82 from 'TPOS'\n", &team);
+    TDbCompilePerformOp(0, "select 'HDQO' into \x82 from 'TPOS'\n", &team);
     if (team == 0) {
         team = GameTextPickRandomTeam(team);
     }
     *pHome = team;
-    fn_801FCE10(0, "select 'ADQO' into \x82 from 'TPOS'\n", &team);
+    TDbCompilePerformOp(0, "select 'ADQO' into \x82 from 'TPOS'\n", &team);
     if (team == 0) {
         team = GameTextPickRandomTeam(team);
     }
@@ -526,19 +526,19 @@ unsigned short GameTextPickRandomTeam(int type)
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
     if (type == 21) {
-        status = fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGT' into \x81 from 'MAET'\n",
+        status = TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGT' into \x81 from 'MAET'\n",
                              &cursor, &team);
     } else {
-        status = fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGT' into \x81 from 'MAET' "
+        status = TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGT' into \x81 from 'MAET' "
                                       "where 'PYTT' = \x82\n",
                              &cursor, &team, type);
     }
     if (status == 0) {
         cursor.mUnknown4 = DbUtilRandomRange(0, result.mUnknown0 - 1);
-        fn_801FCE10(0, "fetch from \x8a\n", &cursor);
+        TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
     }
     if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
     return team;
 }
@@ -606,7 +606,7 @@ int GameTextFormatPlayerAge(int id, char *pText)
     char text[] = "<string>";
     int age = 0;
     if (id != 0x7FFF) {
-        fn_801FCE10(0, "select 'EGAP' into \x82 from 'YALP' where 'DIGP' = \x82\n", &age, id);
+        TDbCompilePerformOp(0, "select 'EGAP' into \x82 from 'YALP' where 'DIGP' = \x82\n", &age, id);
         sprintf(text, "%d", age);
     } else {
         strcpy(text, " ");
@@ -620,7 +620,7 @@ int GameTextFormatPlayerWeight(int id, char *pText)
     char text[16] = "<EmptyString>";
     int weight = 0;
     if (id != 0x7FFF) {
-        fn_801FCE10(0, "select 'TGWP' into \x82 from 'YALP' where 'DIGP' = \x82\n", &weight, id);
+        TDbCompilePerformOp(0, "select 'TGWP' into \x82 from 'YALP' where 'DIGP' = \x82\n", &weight, id);
         weight += 160;
         sprintf(text, "%d", weight);
     } else {
@@ -635,7 +635,7 @@ int GameTextFormatPlayerHeight(int id, char *pText)
     char text[16] = "<EmptyString>";
     unsigned int height = 0;
     if (id != 0x7FFF) {
-        fn_801FCE10(0, "select 'TGHP' into \x82 from 'YALP' where 'DIGP' = \x82\n", &height, id);
+        TDbCompilePerformOp(0, "select 'TGHP' into \x82 from 'YALP' where 'DIGP' = \x82\n", &height, id);
         sprintf(text, "%d'%d\"", height / 12, height % 12);
     } else {
         strcpy(text, " ");
@@ -649,7 +649,7 @@ int GameTextFormatPlayerYearsPro(int id, char *pText)
     int years = 0;
     char text[] = "<string>";
     if (id != 0x7FFF) {
-        fn_801FCE10(0, "select COL_PLYR_YEARSPRO into \x82 from 'YALP' where 'DIGP' = \x82\n", &years, id);
+        TDbCompilePerformOp(0, "select COL_PLYR_YEARSPRO into \x82 from 'YALP' where 'DIGP' = \x82\n", &years, id);
         if (years > 0) {
             sprintf(text, "%d", years);
         } else {
@@ -694,8 +694,8 @@ int GameTextGetSeasonYear(void)
 {
     int year;
     int week;
-    fn_801FCE10(0, "select COL_SEAS_YEAR into \x82 from TBL_SEASON_INFO\n", &year);
-    fn_801FCE10(0, "select COL_SEAS_WEEKTYPE into \x82 from TBL_SEASON_INFO\n", &week);
+    TDbCompilePerformOp(0, "select COL_SEAS_YEAR into \x82 from TBL_SEASON_INFO\n", &year);
+    TDbCompilePerformOp(0, "select COL_SEAS_WEEKTYPE into \x82 from TBL_SEASON_INFO\n", &week);
     return 0x3FF;
 }
 
@@ -718,12 +718,12 @@ int GameTextShowRosterFill(int player, int team, int stage)
         }
         break;
     case 1: {
-        int found = fn_801FCE10(0, "select 'ANDT' into \x88 from 'MAET' where ('DIGT' = \x82)\n", teamName, team);
+        int found = TDbCompilePerformOp(0, "select 'ANDT' into \x88 from 'MAET' where ('DIGT' = \x82)\n", teamName, team);
         first[0] = 0;
         last[0] = 0;
         slot = 31;
         if (found == 0
-            && fn_801FCE10(0, "select 'ANFP' into \x88 and 'ANLP' into \x88 and 'SOPP' into \x82 from 'YALP' "
+            && TDbCompilePerformOp(0, "select 'ANFP' into \x88 and 'ANLP' into \x88 and 'SOPP' into \x82 from 'YALP' "
                               "where ('DIGP' = \x82)\n",
                            first, last, &slot, player) == 0) {
             sprintf(position, gPlayerPositionAbbrevs[slot]);
@@ -776,15 +776,15 @@ int GameTextGetTeamPlaybook(int team, unsigned char offense)
     unsigned int playbook = 0;
     int result = 0;
     if (offense == 1) {
-        fn_801FCE10(0, "select COL_TEAM_OFFPLAYBOOK into \x85 from 'MAET' where 'DIGT' = \x82\n", &playbook, team);
+        TDbCompilePerformOp(0, "select COL_TEAM_OFFPLAYBOOK into \x85 from 'MAET' where 'DIGT' = \x82\n", &playbook, team);
         if (playbook >= 1) {
             playbook = 0;
         }
     } else {
-        fn_801FCE10(0, "select COL_TEAM_DEFPLAYBOOK into \x85 from 'MAET' where 'DIGT' = \x82\n", &playbook, team);
+        TDbCompilePerformOp(0, "select COL_TEAM_DEFPLAYBOOK into \x85 from 'MAET' where 'DIGT' = \x82\n", &playbook, team);
         playbook = 0;
     }
-    fn_801FCE10(0, "select 'DROB' into \x85 from 'BALP' where 'DIGB' = \x82 and 'FFOB' = \x85\n", &result, playbook,
+    TDbCompilePerformOp(0, "select 'DROB' into \x85 from 'BALP' where 'DIGB' = \x82 and 'FFOB' = \x85\n", &result, playbook,
                 offense);
     return result;
 }
@@ -793,7 +793,7 @@ void GameTextGetSelectedTeamName(char *pText, int length)
 {
     char name[17] = {0};
     if (_GameText_iSelectedTeam != 0x3FF) {
-        if (fn_801FCE10(0, "select 'ANLT' into \x88 from 'MAET' where 'DIGT' = \x85\n", name, _GameText_iSelectedTeam) == 0) {
+        if (TDbCompilePerformOp(0, "select 'ANLT' into \x88 from 'MAET' where 'DIGT' = \x85\n", name, _GameText_iSelectedTeam) == 0) {
             strnzcpy(pText, name, length);
         }
     } else {

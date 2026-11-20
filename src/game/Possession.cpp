@@ -1,6 +1,6 @@
 /* Ball possession rules: catch, pitch and fumble rolls, giving the ball to a player, spotting the ball and the out-of-bounds check.
    Also holds the game clock stop rules (flag word 'clkr') and the per-drive play log behind the play-by-play summary lines. */
-#include "game/fn_8022781C.h"
+#include "game/Vec2Distance.h"
 #include "game/StyleTracker.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_800F06F4.h"
@@ -8,19 +8,19 @@
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
 #include "game/AudmonEvent.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/Object_80039F5C.h"
 #include "game/PostPlayPhase.h"
 #include "game/Point2.h"
 #include <string.h>
-#include "game/fn_802270D4.h"
-#include "game/fn_80227638.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Add.h"
 #include "game/Message_800F01CC.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
 #include "game/Record_8011F4F8.h"
 #include "game/ReplayEvent.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/SyncStateRegister.h"
 #include "game/Object_8017886C.h"
 #include "game/State_803EB098.h"
@@ -71,8 +71,8 @@ void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 unsigned char CheatFlagsIsSet(int index);
 void HotspotResolvePending(Object_80039F5C *p);
 void SndgSpchSetPlayFlags(int a);
-void fn_80071458(Object_80039F5C *p, void *pBall);
-void fn_80071540(Object_80039F5C *p, void *pBall);
+void SndgEventPostBallContact(Object_80039F5C *p, void *pBall);
+void SndgEventPostBallValue(Object_80039F5C *p, void *pBall);
 void fn_80093C3C(int a, short b, Object_80039F5C *p);
 void fn_80097028(Object_80039F5C *p);
 int fn_8009704C(Object_80039F5C *p);
@@ -103,8 +103,8 @@ void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800B6714(Object_80039F5C *p, int port);
 int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_800D782C(Object_80039F5C *p);
-int fn_800E0EF0(Object_80039F5C *p);
-int fn_800E0F40(Object_80039F5C *p);
+int PlayerActionIsUserCatch(Object_80039F5C *p);
+int PlayerActionIsCatchBlocked(Object_80039F5C *p);
 void fn_801039D8(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
@@ -128,9 +128,9 @@ void BallSetTransferKind(void *pBall, int a);
 int BallGetTransferKind(void *pBall);
 int BallGetLastToucher(void *pBall);
 void BallKickUp(void *pBall, int a);
-void fn_8013AD04(void *pBall, Vector_80039F5C *pVelocity, int a, float b, float c);
+void BallLaunchWithVelocity(void *pBall, Vector_80039F5C *pVelocity, int a, float b, float c);
 int BallIsContactRaised(void *pBall);
-void fn_8013AD9C(void *pBall, int a);
+void BallSetSpinMode(void *pBall, int a);
 void BallStateChange(void *pBall, int a, int b);
 int BallStateGet(void *pBall, int *pOut);
 int BallStateGetPrev(void *pBall, int *pOut);
@@ -142,7 +142,7 @@ int fn_801485D4(void);
 int fn_801486A0(void);
 int TutorialIsActive(void);
 void TutorialSetMoveDone(int a, int b);
-float fn_8016FAB4(void);
+float ScrmSpotGetLine(void);
 void DriveLogEndDrive(void);
 void DriveLogAddPlay(int a, short b, short c, int d, int e);
 void DriveLogStampTime(void);
@@ -171,10 +171,10 @@ void HudShowCallout(const char *pText);
 int CharSkelGetJointByName(void *p, const char *pName);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
-void fn_80227538(Point2_t *pOut, int angle, float length);
-void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-void fn_80227690(void *pOut, void *pA, void *pB);
-float fn_802278D0(Vector_80039F5C *pA, Vector_80039F5C *pB);
+void Vec2FromAngle(Point2_t *pOut, int angle, float length);
+void Vec3Scale(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
+void Vec2Sub(void *pOut, void *pA, void *pB);
+float Vec3DistanceSqr(Vector_80039F5C *pA, Vector_80039F5C *pB);
 float SyncRandGetFloat(int stream);
 
 int PossIsCatchInBounds(Object_80039F5C *p);
@@ -186,7 +186,7 @@ void PossStartFumble(void);
 void PossGiveBall(Object_80039F5C *p, void *pBall);
 void PossLogBallResult(Object_80039F5C *p);
 int PossCheckDownedBall(Object_80039F5C *p);
-int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos);
+int ScrmCarrierInEndZone(Object_80039F5C *p, Vector_80039F5C *pPos);
 int fn_8009A5A0(int handle);
 float fn_80178A44(void);
 int BallIsClearOfHands(void *pBall);
@@ -206,12 +206,12 @@ int fn_800B2624(void);
 int fn_800B9A90(void *pHandle);
 void fn_800B9B9C(void *pHandle);
 int fn_800BA6F8(void);
-void fn_8016E498(void);
-int fn_8016E764(void);
+void ScrmStartPlay(void);
+int ScrmCanSnap(void);
 int fn_801787DC(int team);
 int fn_80178AE0(void);
 int fn_80178C24(void);
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 void ClockRuleSetFlags(unsigned int mask);
 unsigned int ClockRuleTestFlags(unsigned int mask);
 void ClockRuleClearFlags(unsigned int mask);
@@ -410,7 +410,7 @@ int PossTestCarrierBall(Object_80039F5C *p)
         Vector_80039F5C pos;
 
         BallGetPosition(BallGetCurrent(), &pos);
-        result = fn_8016EB50(p, &pos);
+        result = ScrmCarrierInEndZone(p, &pos);
     }
     return result;
 }
@@ -429,13 +429,13 @@ int PossIsCatchInBounds(Object_80039F5C *p)
     if (fn_80178508(&p->mMotion.mPos, &zoneInfo, 0) > 2) {
         return 0;
     }
-    fn_80227538(&point, p->mMotion.mFacing, 4.0f);
-    fn_80227638(&point, &point, &p->mMotion.mPos);
+    Vec2FromAngle(&point, p->mMotion.mFacing, 4.0f);
+    Vec2Add(&point, &point, &p->mMotion.mPos);
     if (fn_80178508(&point, &zoneInfo, 0) > 2) {
         return 0;
     }
-    fn_80227538(&point, p->mMotion.mUnknown32, 4.0f);
-    fn_80227638(&point, &point, &p->mMotion.mPos);
+    Vec2FromAngle(&point, p->mMotion.mUnknown32, 4.0f);
+    Vec2Add(&point, &point, &p->mMotion.mPos);
     return fn_80178508(&point, &zoneInfo, 0) <= 2;
 }
 
@@ -550,7 +550,7 @@ void PossClassifyCatch(Object_80039F5C *p, int *pFlags, int *pAngle, int move, i
             } else {
                 *pFlags = 0x100;
                 if (kind == 7) {
-                    ReplayEventInWindow(lbl_803EA368, 0x2A);
+                    ReplayEventInWindow(gpReplay, 0x2A);
                 }
             }
             int ballAngle = fn_801CFE40(velocity.mY, velocity.mX);
@@ -590,7 +590,7 @@ void PossCalcBallTerms(Object_80039F5C *p, float *pA, float *pB, int angle)
     *pB = 0.0f;
     *pA = 0.0f;
     BallGetVelocity(BallGetCurrent(), &velocity);
-    *pB = (fn_802270A4(&velocity) - 0.19f) * 3.3333333f;
+    *pB = (Vec2Magnitude(&velocity) - 0.19f) * 3.3333333f;
     *pB = *pB < 0.0f ? 0.0f : (*pB > 1.0f ? 1.0f : *pB);
     *pA = (angle - 0x200000) / 6291456.0f;
     *pA = *pA < 0.0f ? 0.0f : (*pA > 1.0f ? 1.0f : *pA);
@@ -606,7 +606,7 @@ unsigned short PossApplyCoverage(Object_80039F5C *p, float *pChance)
     for (; i < n && count <= 3; i++) {
         Object_80039F5C *pOther = PlyrGet((p->mId >> 8 & 0xFF) ^ 1, i);
 
-        if (fn_8022781C(&pOther->mMotion.mPos, &p->mMotion.mPos) < 2.5f && !fn_8011E9B4(pOther)) {
+        if (Vec2Distance(&pOther->mMotion.mPos, &p->mMotion.mPos) < 2.5f && !fn_8011E9B4(pOther)) {
             short *pRatings = pOther->mRatings;
             float value = (pRatings[8] + pRatings[5] / 2) / 382.0f;
             unsigned int state;
@@ -697,7 +697,7 @@ float PossCalcCatchChance(Object_80039F5C *p, Object_80039F5C *pReceiver, int fl
     if (rating >= 191.25f) {
         chance += 0.1f;
     }
-    if (fn_800E0EF0(p)) {
+    if (PlayerActionIsUserCatch(p)) {
         chance += 0.15f;
     }
     PossApplyCoverage(p, &chance);
@@ -734,7 +734,7 @@ int PossIsWristNearJoint(void *pUnused, Object_80039F5C *p, int right)
         fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lwrist"), &wrist, 0);
         fn_8009BFF8(p, &a, &b, 0x18);
     }
-    if (fn_802278D0(&wrist, &a) > 0.09f) {
+    if (Vec3DistanceSqr(&wrist, &a) > 0.09f) {
         result = 0;
     }
     return result;
@@ -795,7 +795,7 @@ int PossTryCatch(void *pBall, Object_80039F5C *p, unsigned int move)
             if (flags <= 0xFF) {
                 chance = PossCalcCatchChance(p, pReceiver, flags, angle);
                 if (fn_80178308() == (p->mId >> 8 & 0xFF)) {
-                    if (fn_800E0F40(p)) {
+                    if (PlayerActionIsCatchBlocked(p)) {
                         chance = 0.0f;
                         if (fn_8009704C(p)) {
                             fn_80097028(p);
@@ -836,7 +836,7 @@ int PossTryCatch(void *pBall, Object_80039F5C *p, unsigned int move)
         caught = _Poss_bAllowCatch;
     }
     if (caught == 1) {
-        fn_80071458(p, pBall);
+        SndgEventPostBallContact(p, pBall);
         PossGiveBall(p, pBall);
         BallSetTarget(pBall, 0);
         if (handle == 0xFFFF || !fn_8009A5D4(handle)) {
@@ -844,7 +844,7 @@ int PossTryCatch(void *pBall, Object_80039F5C *p, unsigned int move)
         }
         CamGameSetModeAll(1);
     } else {
-        fn_80071540(p, pBall);
+        SndgEventPostBallValue(p, pBall);
     }
     return caught;
 }
@@ -872,14 +872,14 @@ int PossTryReceivePitch(void *pBall, Object_80039F5C *p)
         return 1;
     }
     if (caught == 1) {
-        fn_80071458(p, pBall);
+        SndgEventPostBallContact(p, pBall);
         Object_80039F5C *pPasser = BallGetCurrentLastHolder();
 
         AudmonEventPostId(0x1E, &p->mMotion.mPos, p->mId, 0, (p->mId >> 8 & 0xFF) == (pPasser->mId >> 8 & 0xFF), 0);
         PossGiveBall(p, pBall);
         PossLogBallResult(p);
     } else {
-        fn_80071540(p, pBall);
+        SndgEventPostBallValue(p, pBall);
     }
     return caught;
 }
@@ -936,10 +936,10 @@ void PossTryJarBall(Object_80039F5C *p)
                     Point2_t toHitter;
                     int ballAngle;
 
-                    fn_80227690(&toHitter, &pHitter->mMotion.mPos, &p->mMotion.mPos);
+                    Vec2Sub(&toHitter, &pHitter->mMotion.mPos, &p->mMotion.mPos);
                     BallGetPosition(pBall, &toBall);
                     toBall.mZ = 0.0f;
-                    fn_80227690(&toBall, &toBall, &p->mMotion.mPos);
+                    Vec2Sub(&toBall, &toBall, &p->mMotion.mPos);
                     ballAngle = fn_801CFE40(toBall.mY, toBall.mX);
                     if (MathAngleDiff(ballAngle, fn_801CFE40(toHitter.mY, toHitter.mX)) <= 0x300000) {
                         chance *= 3.0f;
@@ -977,7 +977,7 @@ void PossTryJarBall(Object_80039F5C *p)
         }
         BallStateChange(pBall, state, unknown);
         BallKickUp(pBall, 1);
-        fn_8013AD9C(pBall, 3);
+        BallSetSpinMode(pBall, 3);
     }
 }
 
@@ -1051,10 +1051,10 @@ void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler)
                 int ballAngle;
                 int angle;
 
-                fn_80227690(&toTackler, &pTackler->mMotion.mPos, &p->mMotion.mPos);
+                Vec2Sub(&toTackler, &pTackler->mMotion.mPos, &p->mMotion.mPos);
                 BallGetPosition(pBall, &toBall);
                 toBall.mZ = 0.0f;
-                fn_80227690(&toBall, &toBall, &p->mMotion.mPos);
+                Vec2Sub(&toBall, &toBall, &p->mMotion.mPos);
                 ballAngle = fn_801CFE40(toBall.mY, toBall.mX);
                 angle = MathAngleDiff(ballAngle, fn_801CFE40(toTackler.mY, toTackler.mX));
             }
@@ -1104,7 +1104,7 @@ void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler)
             fn_800ACE90(p, &chance);
             chance = chance > 95 ? 95 : chance;
         }
-        if (forced || fn_802372EC(0, 100) < chance) {
+        if (forced || SyncRandGetRange(0, 100) < chance) {
             Record_8011F4F8 *pRequest;
 
             state = BallStateGetPrev(pBall, &unknown);
@@ -1138,8 +1138,8 @@ void PossReleaseBall(Object_80039F5C *p)
 
     BallRelease(pBall, 0, 0);
     BallGetVelocity(pBall, &velocity);
-    if (fn_802270D4(&velocity) > 0.2f) {
-        fn_80227264(&velocity, &velocity, 0.5f);
+    if (Vec3Magnitude(&velocity) > 0.2f) {
+        Vec3Scale(&velocity, &velocity, 0.5f);
         BallSetVelocity(pBall, &velocity);
     }
 }
@@ -1175,7 +1175,7 @@ void PossStartFumble(void)
     velocity.mY = velocity.mY < -0.1f ? -0.1f : (velocity.mY > 0.15f ? 0.15f : velocity.mY);
     velocity.mZ = velocity.mZ < -0.1f ? -0.1f : (velocity.mZ > 0.15f ? 0.15f : velocity.mZ);
     BallSetVelocity(pBall, &velocity);
-    fn_8013AD04(pBall, &velocity, 1, 2.0f, 1.0f);
+    BallLaunchWithVelocity(pBall, &velocity, 1, 2.0f, 1.0f);
     CamGameSetModeAll(1);
     anim = fn_801BE648(pForcer ? pForcer->mpUnknown792 : pCarrier->mpUnknown792);
     if (fn_801486A0() == 0) {
@@ -1238,7 +1238,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
     if ((p->mId >> 8 & 0xFF) == fn_80178308()) {
         if (result == 4) {
             int special = fn_801BE648(p->mpUnknown792) == 0xE1;
-            StyleTrackerSetCatchFlags(fn_800E0EF0(p), special, PlayerMoveGetKind(p));
+            StyleTrackerSetCatchFlags(PlayerActionIsUserCatch(p), special, PlayerMoveGetKind(p));
             fn_800A8954(7, p->mId >> 8 & 0xFF, p);
         }
         if (result == 3 && fn_8011F518()) {
@@ -1263,7 +1263,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
         if (stolen) {
             if (result == 4) {
                 if (fn_801486A0() != 1) {
-                    if (fn_800E0EF0(p)) {
+                    if (PlayerActionIsUserCatch(p)) {
                         HudShowAlert("User Pick");
                         StyleTrackerOnInterception(1, p);
                     } else {
@@ -1277,10 +1277,10 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
                 }
                 PossLogBallResult(p);
             } else if (result == 3) {
-                if (fn_800E0EF0(p)) {
+                if (PlayerActionIsUserCatch(p)) {
                     HudShowAlert("User Steal");
                     StyleTrackerFinishPitch(p->mId >> 8 & 0xFF, 1, 1);
-                    ReplayEventAdd(lbl_803EA368, 0x35, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                    ReplayEventAdd(gpReplay, 0x35, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                 } else {
                     StyleTrackerFinishPitch(p->mId >> 8 & 0xFF, 1, 0);
                     HudShowAlert("Stolen Pitch");
@@ -1409,7 +1409,7 @@ void PossLogBallResult(Object_80039F5C *p)
                 target.mX = p->mMotion.mPos.mX;
                 target.mY = p->mMotion.mPos.mY;
                 target.mZ = p->mMotion.mUnknown32;
-                ReplayEventAdd(lbl_803EA368, 3, p, &target, &p->mMotion.mFacing);
+                ReplayEventAdd(gpReplay, 3, p, &target, &p->mMotion.mFacing);
                 pRecord->mUnknown14 = 6;
                 if (p->mpState->mId == 0x1C) {
                     pRecord->mUnknown4 = fn_8009A578(handle);
@@ -1418,7 +1418,7 @@ void PossLogBallResult(Object_80039F5C *p)
                 }
             } else {
                 Object_80039F5C *pReceiver;
-                ReplayEventAdd(lbl_803EA368, 4, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                ReplayEventAdd(gpReplay, 4, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                 pReceiver = BallGetLastHolder(pBall);
                 if (pReceiver) {
                     fn_800A3B58(pReceiver, 0xA, 0);
@@ -1539,7 +1539,7 @@ int PossCheckBallOut(void *pBall, Point2_t *pPos)
                         }
                     } else {
                         if (pPos->mY < fn_80178A2C() && fabs(pPos->mX) >= fn_80178A08()) {
-                            pPos->mY = fn_8016FAB4();
+                            pPos->mY = ScrmSpotGetLine();
                         }
                         if (pCarrier && pCarrier->mFlags & 0x10000000) {
                             int below = 0;
@@ -1664,7 +1664,7 @@ void PossUpdateMissedCatch(PossBallView_t *pEvent)
                 pRecord->mUnknown10 = pTackler->mMotion.mPos.mY;
                 pRecord->mUnknown14 = 0x23;
                 fn_800B1508();
-                ReplayEventAdd(lbl_803EA368, 0x26, pTackler, &pTackler->mMotion.mPos, &pTackler->mMotion.mFacing);
+                ReplayEventAdd(gpReplay, 0x26, pTackler, &pTackler->mMotion.mPos, &pTackler->mMotion.mFacing);
             }
             AudmonEventPostId(0x2F, &pEvent->mUnknownC, pEvent->mUnknownCC, 0, 0, pEvent->mUnknownF4);
             fn_800A8954(8, pEvent->mUnknownCC >> 8 & 0xFF, fn_8009BCE8(&pEvent->mUnknownCC));
@@ -1709,15 +1709,15 @@ extern "C" {
 
 void ClockRuleDbSetTimeouts(int a, int b)
 {
-    fn_801FCE10(0, "update 'FNIG' set 'OTHG' = \x82 and 'OTAG' = \x82\n", a, b);
+    TDbCompilePerformOp(0, "update 'FNIG' set 'OTHG' = \x82 and 'OTAG' = \x82\n", a, b);
 }
 
 void ClockRuleInit(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&_ClockRule_puFlags, sizeof(*_ClockRule_puFlags), 0, 0x636C6B72);
 
-    fn_8023816C(pHandle);
-    fn_802381E0(pHandle);
+    SyncStateGetData(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 void ClockRuleShutdown(void)
@@ -1734,8 +1734,8 @@ void ClockRuleUpdate(unsigned int a)
         flags = 0;
     }
     if (flags & 2) {
-        if (fn_8016E764()) {
-            fn_8016E498();
+        if (ScrmCanSnap()) {
+            ScrmStartPlay();
         }
     }
     if (flags & 1) {
@@ -1780,7 +1780,7 @@ void ClockRuleNextPeriod(void)
             ClockRuleSetFlags(0x40);
             state = 5;
             ClockRuleDbSetTimeouts(2, 2);
-            fn_801FCE10(0, "update 'FNIG' set 'TOFG' = \x83\n", 1);
+            TDbCompilePerformOp(0, "update 'FNIG' set 'TOFG' = \x83\n", 1);
         } else {
             state = 6;
         }
@@ -2061,7 +2061,7 @@ void ClockRuleResetFlags(void)
 void GetPlayerName(unsigned short id, char *pName)
 {
     if (id != 0xFFFF) {
-        fn_801FCE10(0, "select 'ANLP' into \x88 from 'AGLP' where 'DIGP' = \x84\n", pName, id);
+        TDbCompilePerformOp(0, "select 'ANLP' into \x88 from 'AGLP' where 'DIGP' = \x84\n", pName, id);
     } else {
         pName[0] = ' ';
         pName[1] = 0;
@@ -2084,12 +2084,12 @@ void DriveLogInit(void)
     if (resume) {
         int found;
 
-        fn_801FCE10(0, "select 'PNIG' into \x82 from 'FNIG'\n", &found);
+        TDbCompilePerformOp(0, "select 'PNIG' into \x82 from 'FNIG'\n", &found);
         resume = found;
     }
     DriveLogClearSaved();
     if (resume) {
-        fn_801FCE10(0, "select 'MSDG' into \x89 from 'NIBG'\n", &_DriveLog_aLogs[_DriveLog_iCurrent]);
+        TDbCompilePerformOp(0, "select 'MSDG' into \x89 from 'NIBG'\n", &_DriveLog_aLogs[_DriveLog_iCurrent]);
     }
 }
 

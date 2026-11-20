@@ -41,7 +41,7 @@ int SNDbankremove(int bank)
         }
     }
     if (lbl_803A6C24.m1D0[bank].m4 != 0) {
-        fn_80275194(8, (void *)lbl_803A6C24.m1D0[bank].m4);
+        SNDPLATFORM_memfree(8, (void *)lbl_803A6C24.m1D0[bank].m4);
     }
     lbl_803A6C24.m1D0[bank].m0 = 0;
     lbl_803A6C24.m1D0[bank].m8 = 0;

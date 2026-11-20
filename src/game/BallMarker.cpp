@@ -6,7 +6,7 @@
 #include "game/Ball.h"
 #include "game/ResLoad.h"
 #include "game/fn_800B65A0.h"
-#include "game/fn_8013AD94.h"
+#include "game/BallPhysics.h"
 
 struct BallMarkerObj_t {
     unsigned char mUnknown00[4];
@@ -59,14 +59,14 @@ void ObjSetPriority(int handle, BallMarkerObj_t *pObject, int a);
 void TMRenderBindTexture(int a, int b, int c);
 void fn_802353D8(void *p, int flags);
 void fn_80235588(void *p, int a);
-void fn_802355E4(void *p);
-void fn_80235630(void *p, int a);
-void fn_8023570C(void *p, const char *pName);
-void fn_80235740(void *p, int a);
-void fn_80235764(void *p, int a);
-void fn_80235C48(void *p, int a);
-void fn_80235C90(void *p, int a, float b, float c, float d, float e);
-void fn_80235DB8(int a);
+void ModelObjReset(void *p);
+void ModelObjSetModel(void *p, int a);
+void ModelObjSetShader(void *p, const char *pName);
+void ModelObjStoreMatrix(void *p, int a);
+void ModelObjDraw(void *p, int a);
+void ModelObjSetParamNop(void *p, int a);
+void ModelObjSetAmbientColor(void *p, int a, float b, float c, float d, float e);
+void ModelObjRelocateModelRes(int a);
 void BallMarkerObjInit(BallMarkerObj_t *pObject, int *pArgs);
 void BallMarkerObjFree(BallMarkerObj_t *pObject);
 int BallMarkerObjDraw(BallMarkerObj_t *pObject);
@@ -85,7 +85,7 @@ void BallMarkerUpdateEntry(int index)
         BallGetPosition(pBall, &pEntry->mPosition);
         pEntry->mEnabled = 1;
     } else if ((fn_801486A0() == 1 || fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF)
-               && fn_8013AD94(pBall) != 0 && BallGetLandingPoint(pBall, &pEntry->mPosition) != 0) {
+               && BallGetSpinMode(pBall) != 0 && BallGetLandingPoint(pBall, &pEntry->mPosition) != 0) {
         pEntry->mEnabled = 1;
     }
     pEntry->mPosition.mZ = 0.0f;
@@ -157,17 +157,17 @@ void BallMarkerObjInit(BallMarkerObj_t *pObject, int *pArgs)
     pObject->mUnknownD8 = ResLoad(pObject->mpUnknown14, 10, 1);
     BallMarkerUpdateEntry(0);
     pObject->mUnknown10C = lbl_802E989C.mEntries[0].mEnabled;
-    fn_80235DB8(pObject->mUnknownD8);
+    ModelObjRelocateModelRes(pObject->mUnknownD8);
     fn_80235588(pObject->mUnknown18, 6);
-    fn_80235630(pObject->mUnknown18, pObject->mUnknownD8);
-    fn_80235C48(pObject->mUnknown18, 3);
+    ModelObjSetModel(pObject->mUnknown18, pObject->mUnknownD8);
+    ModelObjSetParamNop(pObject->mUnknown18, 3);
     fn_802353D8(pObject->mUnknown18, 0x400008);
-    fn_8023570C(pObject->mUnknown18, "Flat");
+    ModelObjSetShader(pObject->mUnknown18, "Flat");
 }
 
 void BallMarkerObjFree(BallMarkerObj_t *pObject)
 {
-    fn_802355E4(pObject->mUnknown18);
+    ModelObjReset(pObject->mUnknown18);
     if (pObject->mUnknownD8 != 0) {
         ResUnLoad(pObject->mpUnknown14, 10);
     }
@@ -181,10 +181,10 @@ int BallMarkerObjDraw(BallMarkerObj_t *pObject)
         for (unsigned int i = 0; i < lbl_802E989C.mCount; i++) {
             if (lbl_802E989C.mEntries[i].mEnabled != 0) {
                 if (fn_801486A0() == 1 && BallGetCurrentIndex() == i) {
-                    fn_80235C90(pObject->mUnknown18, ConGetCurrentContext(),
+                    ModelObjSetAmbientColor(pObject->mUnknown18, ConGetCurrentContext(),
                                0.341796875f, 0.0f, 0.0f, 1.0f);
                 } else {
-                    fn_80235C90(pObject->mUnknown18, ConGetCurrentContext(),
+                    ModelObjSetAmbientColor(pObject->mUnknown18, ConGetCurrentContext(),
                                0.390625f, 0.19921875f, 0.0f, 1.0f);
                 }
                 MatSetStack(VptGetMatrixStack());
@@ -192,10 +192,10 @@ int BallMarkerObjDraw(BallMarkerObj_t *pObject)
                 MatTranslate(&lbl_802E989C.mEntries[i].mPosition);
                 MatRotX(0x400000);
                 MatScale(lbl_802E989C.mEntries[i].mScale);
-                fn_80235740(pObject->mUnknown18, ConGetCurrentContext());
+                ModelObjStoreMatrix(pObject->mUnknown18, ConGetCurrentContext());
                 MatSetStack(VptGetMatrixStack());
                 MatPop();
-                fn_80235764(pObject->mUnknown18, ConGetCurrentContext());
+                ModelObjDraw(pObject->mUnknown18, ConGetCurrentContext());
             }
         }
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);

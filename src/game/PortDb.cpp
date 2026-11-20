@@ -9,8 +9,8 @@ extern "C" {
 unsigned char PortDbCountSidePlayers(int team);
 int PortDbHasSides(void);
 int GameTextGetPadPlayer(int value);
-void fn_801F9718(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
-int fn_801F9A90(int handle, int table);
+void TDbInsertRow(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
+int TDbTblExists(int handle, int table);
 }
 
 static DbSortKey _PortDb_aSideSortKeys[2] = {
@@ -98,7 +98,7 @@ void PortDbSetControlledPlayer(int key, int value)
         columns[2].mTableTag = 0x4C525443;
         columns[2].mValue = value;
         columns[3].SetEnd();
-        fn_801F9718(pCursor->mUnknown4, pCursor->mUnknown8, columns, result, 0);
+        TDbInsertRow(pCursor->mUnknown4, pCursor->mUnknown8, columns, result, 0);
     } else {
         DbCursorSetValue(pCursor, 0x44494750, value);
     }
@@ -119,7 +119,7 @@ int PortDbGetControlledPlayer(int key)
 
 int PortDbHasSides(void)
 {
-    return fn_801F9A90(0, 0x4F434D54) == 0;
+    return TDbTblExists(0, 0x4F434D54) == 0;
 }
 
 }

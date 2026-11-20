@@ -10,10 +10,10 @@
 extern "C" {
 int fn_801D671C(void);
 void fn_801D6B24(char *pText, int size);
-void fn_801D57E0(int port, char *pText, int size);
+void MemCFormatPort(int port, char *pText, int size);
 int fn_801D6850(void);
 int fn_801D673C(int index);
-void fn_801D5764(int value, char *pText, int size);
+void MemCFormatCardType(int value, char *pText, int size);
 void MemCardFilesGetTypeName(int value, char *pOut, int size);
 unsigned int MemCardFilesGetFileSize(int value);
 int MemCardFilesGetTotalSize(void);
@@ -127,13 +127,13 @@ void MemCardMsgFormat(int value, int index, char *pA, char *pB, int flag, char *
         strcpy(textF, "");
     }
     int key = fn_801D673C(index);
-    fn_801D5764(-1, textB, 12);
+    MemCFormatCardType(-1, textB, 12);
     if (strcmp(pA, "UserID") == 0) {
         strcpy(pA, "User ID");
     }
     if (index != -1) {
-        fn_801D57E0(index, textC, 7);
-        fn_801D5764(key, text, 12);
+        MemCFormatPort(index, textC, 7);
+        MemCFormatCardType(key, text, 12);
     } else {
         strcpy(textC, "invalid");
         strcpy(text, "invalid");

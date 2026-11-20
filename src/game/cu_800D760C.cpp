@@ -13,7 +13,7 @@
 extern "C" {
 unsigned char fn_800D78C4(Object_80039F5C *p, unsigned short id);
 void fn_800D7A4C(Object_80039F5C *p, Block_801BE60C *pBlock);
-void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *pState);
+void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *pState);
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
 int fn_800CA5CC(Object_80039F5C *p, int kind, int apply);
 float fn_800CA9B4(int kind, Object_80039F5C *p);
@@ -118,7 +118,7 @@ extern "C" void fn_800D7BC4(Object_80039F5C *p, Block_801BE60C *pBlock)
         float count = pBlock->mUnknownCHalf;
         unsigned char saved = p->mUnknown512.mUnknown14;
         p->mUnknown512.mUnknown14 = 6;
-        fn_800E7E78(p, pState);
+        PlyrTackleAimAtCarrier(p, pState);
         fn_800D7A4C(p, pBlock);
         int n = (int)count;
         int value = pBlock->mUnknown0Word * pBlock->mUnknownCHalf / n;

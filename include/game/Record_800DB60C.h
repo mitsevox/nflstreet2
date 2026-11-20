@@ -3,7 +3,7 @@
 
 #include "game/Object_80039F5C.h"
 
-/* Record passed as the first argument of fn_800DB60C and fn_800DB40C.
+/* Record passed as the first argument of PlayerActionAnimPitchTryStart and PlayerActionAnimArmPitch.
    The accessed prefix is declared; the original full size is not established. */
 struct Record_800DB60C {
     unsigned char mUnknown0;
@@ -17,7 +17,7 @@ struct Record_800DB60C {
 };
 
 extern "C" {
-void fn_800DB60C(Record_800DB60C *pRecord, Object_80039F5C *p);
+void PlayerActionAnimPitchTryStart(Record_800DB60C *pRecord, Object_80039F5C *p);
 }
 
 #endif

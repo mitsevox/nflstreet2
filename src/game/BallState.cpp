@@ -15,42 +15,42 @@ struct BallStateFuncs_t {
 };
 
 extern "C" {
-void fn_8013A3BC(Ball_t *p);
+void BallRecordBounce(Ball_t *p);
 void BallApplyContactForce(Ball_t *p, float dt);
-void fn_8013A64C(Ball_t *p, float dt);
+void BallStepDefault(Ball_t *p, float dt);
 void BallStepMotion(Ball_t *p, float dt);
-void fn_8013AF88(Ball_t *p);
-void fn_8013AFE8(Ball_t *p);
-void fn_8013B024(Ball_t *p);
-void fn_8013B068(Ball_t *p);
+void BallStateHeldEnter(Ball_t *p);
+void BallStatePassEnter(Ball_t *p);
+void BallStatePassExit(Ball_t *p);
+void BallStateLooseExit(Ball_t *p);
 void BallStateStepTimed(Ball_t *p, float dt);
 void BallStateStopVelocity(Ball_t *p, float dt);
-void fn_8013B1E4(Ball_t *p, float dt);
-void fn_8013B230(Ball_t *p);
-void fn_8013B250(Ball_t *p);
-void fn_8013B2A0(Ball_t *p, float dt);
-void fn_8013B330(Ball_t *p, float dt);
-void fn_8013B350(Ball_t *p, float dt);
-int fn_8013B3EC(Ball_t *p, void *pData, unsigned int type);
-int fn_8013B52C(Ball_t *p, void *pData, unsigned int type);
-int fn_8013B5EC(Ball_t *p, void *pData, unsigned int type);
-int fn_8013B6A0(Ball_t *p, void *pData, unsigned int type);
-void fn_8013B730(Ball_t *p, float dt);
+void BallStatePassMove(Ball_t *p, float dt);
+void BallStateDeadEnter(Ball_t *p);
+void BallStateHeldExit(Ball_t *p);
+void BallStatePassHitGround(Ball_t *p, float dt);
+void BallStateLooseHitGround(Ball_t *p, float dt);
+void BallStatePitchHitGround(Ball_t *p, float dt);
+int BallStateHandoffTouch(Ball_t *p, void *pData, unsigned int type);
+int BallStateLooseTouch(Ball_t *p, void *pData, unsigned int type);
+int BallStatePassTouch(Ball_t *p, void *pData, unsigned int type);
+int BallStatePitchTouch(Ball_t *p, void *pData, unsigned int type);
+void BallStatePlacedMove(Ball_t *p, float dt);
 void BallStatePlacedUpdate(Ball_t *p, float dt);
-int fn_8013B86C(Ball_t *p, void *pData, unsigned int type);
+int BallStatePlacedTouch(Ball_t *p, void *pData, unsigned int type);
 int BallStateIsCurrent(Ball_t *p, void *pData, unsigned int type);
 }
 
 static BallStateFuncs_t _BallState_Handlers[9] = {
     { 0, BallApplyContactForce, 0, 0, 0, BallStateIsCurrent, BallStepMotion },
-    { 0, 0, BallStateStepTimed, fn_8013AF88, fn_8013B250, fn_8013B3EC, BallStepMotion },
-    { 0, fn_8013B350, 0, 0, 0, fn_8013B6A0, BallStepMotion },
-    { 0, fn_8013B350, 0, 0, 0, fn_8013B6A0, BallStepMotion },
-    { 0, fn_8013B2A0, fn_8013B1E4, fn_8013AFE8, fn_8013B024, fn_8013B5EC, BallStepMotion },
-    { 0, fn_8013B330, 0, fn_8013B068, 0, fn_8013B52C, BallStepMotion },
-    { 0, BallApplyContactForce, BallStateStopVelocity, fn_8013B230, 0, fn_8013B3EC, 0 },
-    { 0, BallApplyContactForce, 0, 0, 0, fn_8013B6A0, BallStepMotion },
-    { 0, 0, fn_8013B730, 0, 0, fn_8013B86C, BallStatePlacedUpdate },
+    { 0, 0, BallStateStepTimed, BallStateHeldEnter, BallStateHeldExit, BallStateHandoffTouch, BallStepMotion },
+    { 0, BallStatePitchHitGround, 0, 0, 0, BallStatePitchTouch, BallStepMotion },
+    { 0, BallStatePitchHitGround, 0, 0, 0, BallStatePitchTouch, BallStepMotion },
+    { 0, BallStatePassHitGround, BallStatePassMove, BallStatePassEnter, BallStatePassExit, BallStatePassTouch, BallStepMotion },
+    { 0, BallStateLooseHitGround, 0, BallStateLooseExit, 0, BallStateLooseTouch, BallStepMotion },
+    { 0, BallApplyContactForce, BallStateStopVelocity, BallStateDeadEnter, 0, BallStateHandoffTouch, 0 },
+    { 0, BallApplyContactForce, 0, 0, 0, BallStatePitchTouch, BallStepMotion },
+    { 0, 0, BallStatePlacedMove, 0, 0, BallStatePlacedTouch, BallStatePlacedUpdate },
 };
 
 extern "C" {
@@ -73,7 +73,7 @@ void BallStateHitGround(Ball_t *p, float dt)
 {
     if (_BallState_Handlers[p->mState.mState].mUnknown4) {
         _BallState_Handlers[p->mState.mState].mUnknown4(p, dt);
-        fn_8013A3BC(p);
+        BallRecordBounce(p);
     }
     p->mState.mFlags |= 0x10;
 }
@@ -83,7 +83,7 @@ void BallStateMove(Ball_t *p, float dt)
     if (_BallState_Handlers[p->mState.mState].mUnknown8) {
         _BallState_Handlers[p->mState.mState].mUnknown8(p, dt);
     } else {
-        fn_8013A64C(p, dt);
+        BallStepDefault(p, dt);
     }
 }
 

@@ -20,10 +20,10 @@
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include <string.h>
-#include "game/fn_80227638.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_8022781C.h"
-#include "game/fn_802372EC.h"
+#include "game/Vec2Add.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Distance.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_800F06F4.h"
@@ -36,7 +36,7 @@ float AnimSeqGetOpcodeTime(void *p, int key);
 float AnimSeqGetTimeToOpcode(AnimSeq_t *p, int key);
 int MathAngleDiff(int a, int b);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
-void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
+void Vec2Rotate(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
 void fn_8009BD60(Object_80039F5C *p);
 int fn_800B83F4(Object_80039F5C *p);
 int fn_800C4D54(Object_80039F5C *p);
@@ -190,7 +190,7 @@ extern "C" int PlayerCutEnter(Object_80039F5C *p)
     PlayerCutStartAnim(p);
     PlayerCutGetAnimOffset(p->mpState->mUnknown2, p->mpState->mUnknown1, state->mUnknown8 + state->mUnknown16,
                 &state->mUnknown0);
-    fn_80227638(&state->mUnknown0, &state->mUnknown0, &p->mMotion.mPos);
+    Vec2Add(&state->mUnknown0, &state->mUnknown0, &p->mMotion.mPos);
     if (fn_801BE648(p->mpUnknown792) == 153) {
         fn_800A5A8C(10, p, p);
     }
@@ -338,7 +338,7 @@ extern "C" void PlayerCutGetAnimOffset(int a, unsigned char b, int angle, Point_
         point.mX = pInfo->mUnknown28;
         point.mY = pInfo->mUnknown32;
     }
-    fn_80227384(pOut, &point, angle);
+    Vec2Rotate(pOut, &point, angle);
 }
 
 extern "C" int PlayerCutGetAnimLength(unsigned char a)

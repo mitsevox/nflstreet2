@@ -191,12 +191,12 @@ extern unsigned int iSNDrandom(void);
 extern int SNDpitchmult(int handle, int value);
 extern int SNDstop(int handle);
 extern int SNDvol(int handle, int value);
-extern int fn_80274B50(int index);
-extern int fn_80274CA8(int voice, int value);
-extern void fn_80274924(int voice);
-extern void fn_80274960(int index);
-extern void fn_80274D34(int voice, int value);
-extern void fn_80274E24(int voice, int value);
+extern int SNDPLATFORM_setpitch(int index);
+extern int SNDPLATFORM_timemult(int voice, int value);
+extern void SndHalSetDry(int voice);
+extern void SndHalSetPan(int index);
+extern void SNDPLATFORM_lowpass(int voice, int value);
+extern void SNDPLATFORM_highpass(int voice, int value);
 extern void fn_80268188(int handle, int value);
 
 /* An envelope module's state: the current segment +0x3, the level +0x4 and step +0x8 it drives,
@@ -572,7 +572,7 @@ int fn_802680D4(int voice, int value)
     else if (value > max)
         value = max;
     lbl_803A6C24.mUnknown1CC[voice].mUnknown8E = value;
-    return fn_80274B50(voice);
+    return SNDPLATFORM_setpitch(voice);
 }
 
 int fn_80268130(int voice, int value)
@@ -582,7 +582,7 @@ int fn_80268130(int voice, int value)
     else if (value < 2048)
         value = 2048;
     lbl_803A6C24.mUnknown1CC[voice].mUnknown6E = value;
-    return fn_80274CA8(voice, value);
+    return SNDPLATFORM_timemult(voice, value);
 }
 
 void fn_80268270(int voice, int value)
@@ -591,7 +591,7 @@ void fn_80268270(int voice, int value)
 
     if (v->mUnknown23 == 1) {
         v->mUnknown1C = value;
-        fn_80274960(voice);
+        SndHalSetPan(voice);
     }
 }
 
@@ -603,7 +603,7 @@ void fn_80268354(int voice, int value)
         value = 0;
     else if (value > max)
         value = max;
-    fn_80274D34(voice, value);
+    SNDPLATFORM_lowpass(voice, value);
 }
 
 void fn_8026839C(int voice, int value)
@@ -614,7 +614,7 @@ void fn_8026839C(int voice, int value)
         value = 0;
     else if (value > max)
         value = max;
-    fn_80274E24(voice, value);
+    SNDPLATFORM_highpass(voice, value);
 }
 
 void fn_802683E4(int voice, int value)
@@ -633,7 +633,7 @@ void fn_802683E4(int voice, int value)
     for (i = 0; i < v->mUnknown23; i++) {
         int index = v->mUnknown4[i];
         lbl_803A6C24.mUnknown1CC[index].mUnknown5F = value;
-        fn_80274924(index);
+        SndHalSetDry(index);
     }
 }
 

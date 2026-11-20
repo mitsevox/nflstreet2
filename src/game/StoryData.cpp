@@ -4,15 +4,15 @@
    team and default values. */
 #include <string.h>
 
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/DbCursor.h"
 #include "game/StevTable.h"
 
 extern "C" {
-int fn_8022F358(int index);
-int fn_8022F3D4(int a);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserGetId(int index);
+int DbUserGetDb(int a);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 void fn_8018C48C(int tag);
 int StoryTeamCreate(void);
 void StoryTeamCreatePlayer(int index, int a);
@@ -28,8 +28,8 @@ void StorySetLkss(int index, int value);
 
 static void _StoryReadFlags(int index, int *pFlags)
 {
-    fn_801FCE10(0, "use \x8c select 'GLFS' into \x85 from 'TADS'\n",
-                fn_8022F3D4(fn_8022F358(index)), pFlags);
+    TDbCompilePerformOp(0, "use \x8c select 'GLFS' into \x85 from 'TADS'\n",
+                DbUserGetDb(DbUserGetId(index)), pFlags);
 }
 
 int StoryTestFlag(int index, int mask)
@@ -46,7 +46,7 @@ int StoryTestFlag(int index, int mask)
 
 void StorySetFlag(int index, int mask, int set)
 {
-    int db = fn_8022F3D4(fn_8022F358(index));
+    int db = DbUserGetDb(DbUserGetId(index));
     int flags;
 
     _StoryReadFlags(index, &flags);
@@ -55,7 +55,7 @@ void StorySetFlag(int index, int mask, int set)
     } else {
         flags &= ~mask;
     }
-    fn_801FCE10(0, "use \x8c update 'TADS' set 'GLFS' = \x85\n", db, flags);
+    TDbCompilePerformOp(0, "use \x8c update 'TADS' set 'GLFS' = \x85\n", db, flags);
 }
 
 static int _StoryPlayerCursorIsEmpty(DbCursor *pCursor)
@@ -78,7 +78,7 @@ int StoryGetIndexedFlagMask(int n)
 
 void StoryPlayerCursorOpen(DbCursor *pCursor, int index)
 {
-    DbCursorOpen(pCursor, 0x59505453, 0x44494750, 0, 0, fn_8022F3D4(fn_8022F358(index)));
+    DbCursorOpen(pCursor, 0x59505453, 0x44494750, 0, 0, DbUserGetDb(DbUserGetId(index)));
 }
 
 void StoryPlayerCursorClose(DbCursor *pCursor)
@@ -150,36 +150,36 @@ int StoryGetExpPoints(int index)
 {
     int value = -1;
 
-    fn_801FCE10(0, "use \x8c select 'PPXE' into \x82 from 'TADS'\n",
-                fn_8022F3D4(fn_8022F358(index)), &value);
+    TDbCompilePerformOp(0, "use \x8c select 'PPXE' into \x82 from 'TADS'\n",
+                DbUserGetDb(DbUserGetId(index)), &value);
     return value;
 }
 
 void StorySetExpPoints(int index, int value)
 {
-    fn_801FCE10(0, "use \x8c update 'TADS' set 'PPXE' = \x82\n",
-                fn_8022F3D4(fn_8022F358(index)), value);
+    TDbCompilePerformOp(0, "use \x8c update 'TADS' set 'PPXE' = \x82\n",
+                DbUserGetDb(DbUserGetId(index)), value);
 }
 
 int StoryGetDevPoints(int index)
 {
     int value = -1;
 
-    fn_801FCE10(0, "use \x8c select 'PVED' into \x82 from 'TADS'\n",
-                fn_8022F3D4(fn_8022F358(index)), &value);
+    TDbCompilePerformOp(0, "use \x8c select 'PVED' into \x82 from 'TADS'\n",
+                DbUserGetDb(DbUserGetId(index)), &value);
     return value;
 }
 
 void StorySetDevPoints(int index, int value)
 {
-    fn_801FCE10(0, "use \x8c update 'TADS' set 'PVED' = \x82\n",
-                fn_8022F3D4(fn_8022F358(index)), value);
+    TDbCompilePerformOp(0, "use \x8c update 'TADS' set 'PVED' = \x82\n",
+                DbUserGetDb(DbUserGetId(index)), value);
 }
 
 void StoryClearFlags(int index)
 {
-    fn_801FCE10(0, "use \x8c update 'TADS' set 'GLFS' = \x85\n",
-                fn_8022F3D4(fn_8022F358(index)), 0);
+    TDbCompilePerformOp(0, "use \x8c update 'TADS' set 'GLFS' = \x85\n",
+                DbUserGetDb(DbUserGetId(index)), 0);
 }
 
 /* Deletes the 'YPTS' rows whose 'DIGP' is greater than 0, clears this file's 'TADS'
@@ -187,9 +187,9 @@ void StoryClearFlags(int index)
 static void ResetYptsTadsCetsTables(void)
 {
     DbCursor cursor;
-    int index = fn_8022F384(fn_8022F4BC());
+    int index = DbUserFindIndex(DbUserGetCurrent());
 
-    fn_801FCE10(0, "use \x8c delete from 'YPTS' where 'DIGP' > 0\n", fn_8022F3D4(fn_8022F4BC()));
+    TDbCompilePerformOp(0, "use \x8c delete from 'YPTS' where 'DIGP' > 0\n", DbUserGetDb(DbUserGetCurrent()));
     StoryClearCompletedEvents(index);
     StorySetDevPoints(index, 250);
     StorySetExpPoints(index, 0);
@@ -209,7 +209,7 @@ static void ResetYptsTadsCetsTables(void)
 
 int StoryStartNew(void)
 {
-    int index = fn_8022F384(fn_8022F4BC());
+    int index = DbUserFindIndex(DbUserGetCurrent());
     int result;
 
     fn_8018C48C(0x54415453);
@@ -230,7 +230,7 @@ int StoryStartNew(void)
 
 void StoryClearCompletedEvents(int index)
 {
-    fn_801FCE10(0, "use \x8c delete from 'CETS'\n", fn_8022F3D4(fn_8022F358(index)));
+    TDbCompilePerformOp(0, "use \x8c delete from 'CETS'\n", DbUserGetDb(DbUserGetId(index)));
 }
 
 int StoryCountCompletedEvents(int index)
@@ -238,8 +238,8 @@ int StoryCountCompletedEvents(int index)
     int count;
     int result = -1;
 
-    if (fn_801FCE10(0, "use \x8c select count(*) into \x82 from 'CETS'\n",
-                    fn_8022F3D4(fn_8022F358(index)), &count) == 0) {
+    if (TDbCompilePerformOp(0, "use \x8c select count(*) into \x82 from 'CETS'\n",
+                    DbUserGetDb(DbUserGetId(index)), &count) == 0) {
         result = count;
     }
     return result;
@@ -260,16 +260,16 @@ int StoryIsEventCompleted(int index, int id)
     int value;
     int found = 0;
 
-    _StoryCheckQueryFound(fn_801FCE10(0, "use \x8c select 'NETS' into \x82 from 'CETS' where 'NETS' = \x82\n",
-                                      fn_8022F3D4(fn_8022F358(index)), &value, id),
+    _StoryCheckQueryFound(TDbCompilePerformOp(0, "use \x8c select 'NETS' into \x82 from 'CETS' where 'NETS' = \x82\n",
+                                      DbUserGetDb(DbUserGetId(index)), &value, id),
                           found);
     return found;
 }
 
 void StoryAddCompletedEvent(int index, int id)
 {
-    fn_801FCE10(0, "use \x8c insert into 'CETS' set 'NETS' = \x82\n",
-                fn_8022F3D4(fn_8022F358(index)), id);
+    TDbCompilePerformOp(0, "use \x8c insert into 'CETS' set 'NETS' = \x82\n",
+                DbUserGetDb(DbUserGetId(index)), id);
 }
 
 int StoryCountRemainingEvents(int index)
@@ -313,8 +313,8 @@ int StoryGetLkss(int index)
     int value;
     int result = -1;
 
-    if (fn_801FCE10(0, "use \x8c select 'LKSS' into \x82 from 'TADS'\n",
-                    fn_8022F3D4(fn_8022F358(index)), &value) == 0) {
+    if (TDbCompilePerformOp(0, "use \x8c select 'LKSS' into \x82 from 'TADS'\n",
+                    DbUserGetDb(DbUserGetId(index)), &value) == 0) {
         result = value;
     }
     return result;
@@ -322,8 +322,8 @@ int StoryGetLkss(int index)
 
 void StorySetLkss(int index, int value)
 {
-    fn_801FCE10(0, "use \x8c update 'TADS' set 'LKSS' = \x82\n",
-                fn_8022F3D4(fn_8022F358(index)), value);
+    TDbCompilePerformOp(0, "use \x8c update 'TADS' set 'LKSS' = \x82\n",
+                DbUserGetDb(DbUserGetId(index)), value);
 }
 
 int StoryTestIndexedFlag(int index, int n)

@@ -1,3 +1,5 @@
+/* Memory card manager: watches the card slots, mounts, formats and checks cards, and runs the asynchronous
+   file operations (open, read, write, seek, delete, directory) that the game's save system polls. */
 #include "game/fn_801D2B7C.h"
 #include "engine/memorycard.h"
 #include <dolphin/card.h>
@@ -65,7 +67,7 @@ extern const char lbl_802AFE6C[];
 extern int DateIsYearLeap(int year);
 
 
-static void fn_801D3C68(int *pOffset, int *pChunkSize)
+static void _MemCCacheGetFileOffsetAndChunkSize(int *pOffset, int *pChunkSize)
 {
     int chunk;
 
@@ -77,7 +79,7 @@ static void fn_801D3C68(int *pOffset, int *pChunkSize)
     *pChunkSize = chunk;
 }
 
-static void fn_801D3CA4(s32 chan, s32 result)
+static void _MemCDetachCallback(s32 chan, s32 result)
 {
     CARDUnmount(chan);
     lbl_80384CC0.mRemoved |= 1 << chan;
@@ -85,7 +87,7 @@ static void fn_801D3CA4(s32 chan, s32 result)
     lbl_80384DB8.mType = 0;
 }
 
-static int fn_801D3D04(unsigned int memSize, int sectorSize)
+static int _MemCGetTypeFromCapacityAndSectorSize(unsigned int memSize, int sectorSize)
 {
     int type = -1;
 
@@ -116,7 +118,7 @@ static int fn_801D3D04(unsigned int memSize, int sectorSize)
     return type;
 }
 
-static int fn_801D3D98(const char *pPattern, const char *pName)
+static int _MemCExprMatch(const char *pPattern, const char *pName)
 {
     int i = 0;
     int match = 1;
@@ -138,7 +140,7 @@ static int fn_801D3D98(const char *pPattern, const char *pName)
     return match;
 }
 
-static void fn_801D3E6C(Struct_801D4848 *pEntry, unsigned int seconds)
+static void _MemCConvertFileTime(Struct_801D4848 *pEntry, unsigned int seconds)
 {
     unsigned char daysInMonth[13] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     unsigned int days;
@@ -169,7 +171,7 @@ static void fn_801D3E6C(Struct_801D4848 *pEntry, unsigned int seconds)
     pEntry->mDay = days + 1;
 }
 
-static int fn_801D4108(const char *pGameCode)
+static int _MemCHackDetectSharedFile(const char *pGameCode)
 {
     if (pGameCode[4] == '-') {
         return 0;
@@ -177,10 +179,10 @@ static int fn_801D4108(const char *pGameCode)
     return 1;
 }
 
-void fn_801D4120(void)
+void MemCInit(void)
 {
     CARDInit();
-    // FAKEMATCH: reset/cache stores in struct declaration order, chosen by testing (same in fn_801D444C, fn_801D4E6C, fn_801D4F58, fn_801D5288)
+    // FAKEMATCH: reset/cache stores in struct declaration order, chosen by testing (same in MemCAsyncProbe, MemCAsyncFlush, MemCAsyncClose, _MemCAsyncRead)
     lbl_80384CC0.mMounted = 0;
     lbl_80384CC0.mPresent = 0;
     lbl_80384CC0.mAdded = 0;
@@ -199,7 +201,7 @@ void fn_801D4120(void)
     lbl_803EBCFC = 0;
 }
 
-void fn_801D4198(void)
+void MemCShutdown(void)
 {
     int tries;
     int chan = 0;
@@ -209,13 +211,13 @@ void fn_801D4198(void)
         if ((lbl_80384CC0.mMounted >> chan) & 1) {
             do {
                 tries--;
-            } while (fn_801D466C(chan) == -1);
+            } while (MemCUnMount(chan) == -1);
         }
         chan++;
     } while (chan < 2 && tries > 0);
 }
 
-int fn_801D4204(int port)
+int MemCGetPort(int port)
 {
     int chan = -1;
 
@@ -230,10 +232,10 @@ int fn_801D4204(int port)
     return chan;
 }
 
-static void fn_801D4230(int port)
+static void _MemCRemoveDevice(int port)
 {
     if ((lbl_80384CC0.mMounted >> lbl_80384CD0.mPort) & 1) {
-        // FAKEMATCH: mounted/present bit before the added/removed bit, chosen by testing (all six pairs here and in fn_801D42D4)
+        // FAKEMATCH: mounted/present bit before the added/removed bit, chosen by testing (all six pairs here and in _MemCAddDevice)
         lbl_80384CC0.mMounted &= ~(1 << lbl_80384CD0.mPort);
         lbl_80384CC0.mRemoved |= 1 << lbl_80384CD0.mPort;
     }
@@ -246,7 +248,7 @@ static void fn_801D4230(int port)
     }
 }
 
-static void fn_801D42D4(int unused, int mounted)
+static void _MemCAddDevice(int unused, int mounted)
 {
     if (mounted) {
         if ((lbl_80384CC0.mPresent >> lbl_80384CD0.mPort) & 1) {
@@ -272,7 +274,7 @@ static void fn_801D42D4(int unused, int mounted)
     }
 }
 
-int fn_801D4400(int *pAdded, int *pRemoved)
+int MemCGetDeviceChanges(int *pAdded, int *pRemoved)
 {
     *pAdded = lbl_80384CC0.mAdded;
     *pRemoved = lbl_80384CC0.mRemoved;
@@ -281,7 +283,7 @@ int fn_801D4400(int *pAdded, int *pRemoved)
     return *pAdded != 0 || *pRemoved != 0;
 }
 
-int fn_801D444C(int port)
+int MemCAsyncProbe(int port)
 {
     int result = -1;
     int status;
@@ -291,13 +293,13 @@ int fn_801D444C(int port)
     lbl_80384CD0.mState = 1;
     lbl_80384CD0.mBusy = 1;
     lbl_80384CD0.mResult = -99;
-    status = CARDProbeEx(fn_801D4204(port), &lbl_80384DB8.mMemSize, &lbl_80384DB8.mSectorSize);
+    status = CARDProbeEx(MemCGetPort(port), &lbl_80384DB8.mMemSize, &lbl_80384DB8.mSectorSize);
     lbl_80384CD0.mResult = status;
     // FAKEMATCH: case store orders (busy first, result last; mType before mResult for no card) chosen by testing twelve orders
     switch (status) {
     case CARD_RESULT_READY:
         lbl_80384CD0.mBusy = 0;
-        lbl_80384DB8.mType = fn_801D3D04(lbl_80384DB8.mMemSize, lbl_80384DB8.mSectorSize);
+        lbl_80384DB8.mType = _MemCGetTypeFromCapacityAndSectorSize(lbl_80384DB8.mMemSize, lbl_80384DB8.mSectorSize);
         lbl_80384CD0.mResult = status;
         result = 0;
         break;
@@ -326,7 +328,7 @@ int fn_801D444C(int port)
     return result;
 }
 
-int fn_801D4570(int port)
+int MemCAsyncFormat(int port)
 {
     int status;
 
@@ -344,7 +346,7 @@ int fn_801D4570(int port)
     return 0;
 }
 
-int fn_801D45DC(int port)
+int MemCAsyncMount(int port)
 {
     int status;
 
@@ -352,7 +354,7 @@ int fn_801D45DC(int port)
     lbl_80384CD0.mState = 2;
     lbl_80384CD0.mBusy = 1;
     lbl_80384CD0.mResult = -99;
-    status = CARDMountAsync(port, lbl_80384DE0[port], fn_801D3CA4, 0);
+    status = CARDMountAsync(port, lbl_80384DE0[port], _MemCDetachCallback, 0);
     lbl_80384CD0.mResult = status;
     if (status == CARD_RESULT_READY) {
         lbl_80384CD0.mBusy = 1;
@@ -362,7 +364,7 @@ int fn_801D45DC(int port)
     return 0;
 }
 
-int fn_801D466C(int chan)
+int MemCUnMount(int chan)
 {
     int status = CARDUnmount(chan);
 
@@ -378,7 +380,7 @@ int fn_801D466C(int chan)
     return status;
 }
 
-int fn_801D46C0(int port)
+int MemCAsyncMountAlt(int port)
 {
     lbl_80384CD0.mPort = port;
     lbl_80384CD0.mState = 4;
@@ -387,12 +389,12 @@ int fn_801D46C0(int port)
     return 0;
 }
 
-int fn_801D46E8(int slot)
+int MemCUnMountAlt(int slot)
 {
     return 0;
 }
 
-int fn_801D46F0(int port)
+int MemCAsyncCheck(int port)
 {
     int status;
 
@@ -414,7 +416,7 @@ int fn_801D46F0(int port)
     return 0;
 }
 
-int fn_801D4778(int port)
+int MemCAsyncGetFreeSpace(int port)
 {
     lbl_80384CD0.mPort = port;
     lbl_80384CD0.mState = 8;
@@ -425,7 +427,7 @@ int fn_801D4778(int port)
     return 0;
 }
 
-int fn_801D47E0(int port)
+int MemCAsyncGetFreeEntries(int port)
 {
     lbl_80384CD0.mPort = port;
     lbl_80384CD0.mState = 9;
@@ -436,7 +438,7 @@ int fn_801D47E0(int port)
     return 0;
 }
 
-int fn_801D4848(int port, const char *pGameCode, const char *pPattern, Struct_801D4848 *pEntries,
+int MemCAsyncGetDir(int port, const char *pGameCode, const char *pPattern, Struct_801D4848 *pEntries,
                 unsigned int maxEntries)
 {
     CARDStat stat;
@@ -458,18 +460,18 @@ int fn_801D4848(int port, const char *pGameCode, const char *pPattern, Struct_80
             code[4] = '-';
             strncpy(&code[5], (char *)stat.company, 2);
             code[7] = 0;
-            if (fn_801D4108(pGameCode) == 0) {
+            if (_MemCHackDetectSharedFile(pGameCode) == 0) {
                 found = 0;
                 cmp = strncmp(code, pGameCode, 7);
             } else {
                 cmp = strncmp((char *)stat.company, lbl_802AFCF8, 2);
                 found = 0;
             }
-            if (cmp == 0 && fn_801D3D98(pPattern, stat.fileName)) {
+            if (cmp == 0 && _MemCExprMatch(pPattern, stat.fileName)) {
                 found = 1;
             }
             if (found) {
-                fn_801D3E6C(&pEntries[lbl_80384DB8.mNumEntries], stat.time);
+                _MemCConvertFileTime(&pEntries[lbl_80384DB8.mNumEntries], stat.time);
                 strncpy(pEntries[lbl_80384DB8.mNumEntries].mName, stat.fileName, 32);
                 pEntries[lbl_80384DB8.mNumEntries].mName[31] = 0;
                 pEntries[lbl_80384DB8.mNumEntries].mLength = stat.length;
@@ -485,10 +487,10 @@ int fn_801D4848(int port, const char *pGameCode, const char *pPattern, Struct_80
     return 0;
 }
 
-static void fn_801D4D08(s32 chan, s32 result);
-static void fn_801D4D90(s32 chan, s32 result);
+static void _MemCOpenDeleteCB(s32 chan, s32 result);
+static void _MemCOpenCreateCB(s32 chan, s32 result);
 
-int fn_801D4A3C(int port, const char *pName, int unused, int flags, int size)
+int MemCAsyncOpen(int port, const char *pName, int unused, int flags, int size)
 {
     int fileNo;
     int cmp;
@@ -550,7 +552,7 @@ int fn_801D4A3C(int port, const char *pName, int unused, int flags, int size)
             lbl_80384CD0.mBusy = 0;
         } else {
         create:
-            fn_801D4D08(port, 0);
+            _MemCOpenDeleteCB(port, 0);
         }
         return 0;
     nocard:
@@ -582,11 +584,11 @@ done:
     return 0;
 }
 
-static void fn_801D4D08(s32 chan, s32 result)
+static void _MemCOpenDeleteCB(s32 chan, s32 result)
 {
     if (result == CARD_RESULT_NOFILE || result == CARD_RESULT_READY) {
         lbl_80384CD0.mResult = CARDCreateAsync(chan, lbl_80384CD0.mName, lbl_80384CD0.mSize,
-                                               &lbl_80384CD0.mFileInfo, fn_801D4D90);
+                                               &lbl_80384CD0.mFileInfo, _MemCOpenCreateCB);
         if (lbl_80384CD0.mResult != CARD_RESULT_READY) {
             lbl_80384CD0.mUnknown10 = 1;
         }
@@ -597,7 +599,7 @@ static void fn_801D4D08(s32 chan, s32 result)
     }
 }
 
-static void fn_801D4D90(s32 chan, s32 result)
+static void _MemCOpenCreateCB(s32 chan, s32 result)
 {
     int fileNo = 0;
 
@@ -605,7 +607,7 @@ static void fn_801D4D90(s32 chan, s32 result)
         fileNo = CARDGetFileNo(&lbl_80384CD0.mFileInfo);
         lbl_80384CD0.mResult = CARDGetStatus(chan, fileNo, &lbl_80384CD0.mStat);
         if (lbl_80384CD0.mResult == CARD_RESULT_READY) {
-            if (fn_801D4108(lbl_80384CD0.mName) == 0) {
+            if (_MemCHackDetectSharedFile(lbl_80384CD0.mName) == 0) {
                 // FAKEMATCH: setter order (addresses first, banner last) chosen by testing; plain field stores for the two addresses
                 lbl_80384CD0.mStat.commentAddr = 0;
                 lbl_80384CD0.mStat.iconAddr = 0x40;
@@ -626,7 +628,7 @@ static void fn_801D4D90(s32 chan, s32 result)
     }
 }
 
-int fn_801D4E6C(int handle)
+int MemCAsyncFlush(int handle)
 {
     int offset;
     int chunk;
@@ -634,7 +636,7 @@ int fn_801D4E6C(int handle)
 
     if (lbl_80384CD0.mCache != 0) {
         if (lbl_80384CD0.mCacheDirty) {
-            fn_801D3C68(&offset, &chunk);
+            _MemCCacheGetFileOffsetAndChunkSize(&offset, &chunk);
             lbl_80384CD0.mHandle = handle;
             lbl_80384CD0.mState = 21;
             lbl_80384CD0.mBusy = 1;
@@ -659,7 +661,7 @@ int fn_801D4E6C(int handle)
     return 0;
 }
 
-int fn_801D4F58(int handle)
+int MemCAsyncClose(int handle)
 {
     if (lbl_80384CD0.mCache != 0) {
         fn_801D2BD0(lbl_80384CD0.mCache);
@@ -681,7 +683,7 @@ int fn_801D4F58(int handle)
     return 0;
 }
 
-int fn_801D4FF4(int port, const char *pName)
+int MemCAsyncDelete(int port, const char *pName)
 {
     int fileNo;
 
@@ -718,7 +720,7 @@ int fn_801D4FF4(int port, const char *pName)
     return 0;
 }
 
-int fn_801D512C(int handle, int offset, int whence)
+int MemCAsyncSeek(int handle, int offset, int whence)
 {
     int fileOffset;
     int chunk;
@@ -732,7 +734,7 @@ int fn_801D512C(int handle, int offset, int whence)
         lbl_80384CD0.mCacheValid = 0;
         lbl_80384CD0.mOffset = offset;
         lbl_80384CD0.mCachePos = offset % lbl_80384CD0.mChunkSize;
-        fn_801D3C68(&fileOffset, &chunk);
+        _MemCCacheGetFileOffsetAndChunkSize(&fileOffset, &chunk);
         lbl_80384CD0.mHandle = handle;
         lbl_80384CD0.mState = 20;
         lbl_80384CD0.mBusy = 1;
@@ -763,7 +765,7 @@ int fn_801D512C(int handle, int offset, int whence)
     return 0;
 }
 
-static int fn_801D5288(int handle, char *pBuffer, int length)
+static int _MemCAsyncRead(int handle, char *pBuffer, int length)
 {
     int offset;
     int chunk;
@@ -792,7 +794,7 @@ static int fn_801D5288(int handle, char *pBuffer, int length)
             lbl_80384CD0.mBusy = 0;
             return 0;
         }
-        fn_801D3C68(&offset, &chunk);
+        _MemCCacheGetFileOffsetAndChunkSize(&offset, &chunk);
         lbl_80384CD0.mHandle = handle;
         lbl_80384CD0.mState = 20;
         lbl_80384CD0.mBusy = 1;
@@ -824,13 +826,13 @@ static int fn_801D5288(int handle, char *pBuffer, int length)
     return 0;
 }
 
-int fn_801D5440(int handle, char *pBuffer, int length)
+int MemCAsyncRead(int handle, char *pBuffer, int length)
 {
     lbl_80384CD0.mUnknownD4 = 0;
-    return fn_801D5288(handle, pBuffer, length);
+    return _MemCAsyncRead(handle, pBuffer, length);
 }
 
-static int fn_801D546C(int handle, char *pBuffer, int length)
+static int _MemCAsyncWrite(int handle, char *pBuffer, int length)
 {
     int offset;
     int chunk;
@@ -838,7 +840,7 @@ static int fn_801D546C(int handle, char *pBuffer, int length)
     int status;
 
     if (lbl_80384CD0.mCache != 0) {
-        fn_801D3C68(&offset, &chunk);
+        _MemCCacheGetFileOffsetAndChunkSize(&offset, &chunk);
         count = 0;
         if (!lbl_80384CD0.mCacheValid) {
             lbl_80384CD0.mHandle = handle;
@@ -911,18 +913,18 @@ static int fn_801D546C(int handle, char *pBuffer, int length)
     return 0;
 }
 
-int fn_801D56A0(int handle, char *pBuffer, int length)
+int MemCAsyncWrite(int handle, char *pBuffer, int length)
 {
     lbl_80384CD0.mUnknownD4 = 0;
-    return fn_801D546C(handle, pBuffer, length);
+    return _MemCAsyncWrite(handle, pBuffer, length);
 }
 
-int fn_801D56CC(void)
+int MemCAsyncGetSysInfo(void)
 {
     return -1;
 }
 
-int fn_801D56D4(int handle, unsigned int *pSysInfo)
+int MemCAsyncSetSysInfo(int handle, unsigned int *pSysInfo)
 {
     lbl_80384CD0.mHandle = handle;
     lbl_80384CD0.mState = 23;
@@ -939,7 +941,7 @@ int fn_801D56D4(int handle, unsigned int *pSysInfo)
     return 0;
 }
 
-void fn_801D5764(int type, char *pBuffer, int size)
+void MemCFormatCardType(int type, char *pBuffer, int size)
 {
     switch (type) {
     case 1:
@@ -963,12 +965,12 @@ void fn_801D5764(int type, char *pBuffer, int size)
     }
 }
 
-int fn_801D57E0(int port, char *pBuffer, int size)
+int MemCFormatPort(int port, char *pBuffer, int size)
 {
-    return sprintf(pBuffer, lbl_802AFE6C, fn_801D4204(port) + 'A');
+    return sprintf(pBuffer, lbl_802AFE6C, MemCGetPort(port) + 'A');
 }
 
-int fn_801D5824(int enable, int size)
+int MemCEnableCache(int enable, int size)
 {
     if (enable) {
         lbl_803EBCF8 = size;
@@ -978,7 +980,7 @@ int fn_801D5824(int enable, int size)
     return 0;
 }
 
-int fn_801D5840(int *pResult)
+int MemCAsyncPoll(int *pResult)
 {
     int state = lbl_80384CD0.mState;
     int done = -1;
@@ -1002,7 +1004,7 @@ int fn_801D5840(int *pResult)
             break;
         case 1:
             if (lbl_80384CD0.mResult == -1) {
-                fn_801D444C(lbl_80384CD0.mPort);
+                MemCAsyncProbe(lbl_80384CD0.mPort);
                 if (lbl_80384CD0.mResult == -1) {
                     done = 0;
                 } else {
@@ -1131,12 +1133,12 @@ int fn_801D5840(int *pResult)
             case 1:
                 result = lbl_80384DB8.mType;
                 if (result == 8) {
-                    fn_801D42D4(lbl_80384CD0.mPort, 0);
+                    _MemCAddDevice(lbl_80384CD0.mPort, 0);
                 } else if (result == 0) {
                     result = -2;
-                    fn_801D4230(lbl_80384CD0.mPort);
+                    _MemCRemoveDevice(lbl_80384CD0.mPort);
                 } else {
-                    fn_801D42D4(lbl_80384CD0.mPort, 1);
+                    _MemCAddDevice(lbl_80384CD0.mPort, 1);
                 }
                 break;
             case 2:
@@ -1174,13 +1176,13 @@ pending:
         if (pendingState != -1) {
             switch (pendingState) {
             case 20:
-                fn_801D5288(lbl_80384CD0.mHandle, pRead, length);
+                _MemCAsyncRead(lbl_80384CD0.mHandle, pRead, length);
                 break;
             case 21:
-                fn_801D546C(lbl_80384CD0.mHandle, pWrite, length);
+                _MemCAsyncWrite(lbl_80384CD0.mHandle, pWrite, length);
                 break;
             case 16:
-                fn_801D4E6C(lbl_80384CD0.mHandle);
+                MemCAsyncFlush(lbl_80384CD0.mHandle);
                 break;
             case 19:
                 break;

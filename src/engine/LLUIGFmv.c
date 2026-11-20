@@ -22,13 +22,13 @@ static void *_pToImage = NULL;
 static Uint8 _bAbortPlayback = 0;
 static Uint8 _bIsFinished = 1;
 
-struct StreamTap_801F5DA4 *fn_801F687C(int numRequests, int numFilters, int numTaps, void *pMem,
+struct StreamTap_801F5DA4 *STREAM_create(int numRequests, int numFilters, int numTaps, void *pMem,
                                        int memSize);
-void fn_801F6AC8(struct StreamTap_801F5DA4 *h, int index, unsigned int mask, unsigned int value,
+void STREAM_setfilter(struct StreamTap_801F5DA4 *h, int index, unsigned int mask, unsigned int value,
                  int tap);
-void fn_801F6B84(struct StreamTap_801F5DA4 *h);
-struct StreamTap_801F5DA4 *fn_801F6CE8(struct StreamTap_801F5DA4 *h, int tap);
-int fn_801F6D54(struct StreamTap_801F5DA4 *h, SndFileDesc_t *pFile, int offset,
+void STREAM_destroy(struct StreamTap_801F5DA4 *h);
+struct StreamTap_801F5DA4 *STREAM_taphandle(struct StreamTap_801F5DA4 *h, int tap);
+int STREAM_queuefile(struct StreamTap_801F5DA4 *h, SndFileDesc_t *pFile, int offset,
                 unsigned int endMarker);
 int fn_801DC86C(Uint8 *pY, Uint8 *pU, Uint8 *pV, Int32 a, Int32 b, Int32 c, void *pDst,
                  Int32 Stride, Int32 d);
@@ -214,17 +214,17 @@ void LLUIGFmvStartInstance(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie)
         DCStoreRange(pSub->unk_1C, pSub->unk_00 * pSub->unk_04 * 4);
     }
     pSub->unk_08 = fn_801D2BB0(Heap, 0x4B000, 0, 0);
-    pSub->pStream = fn_801F687C(2, 2, 2, pSub->unk_08, 0x4B000);
+    pSub->pStream = STREAM_create(2, 2, 2, pSub->unk_08, 0x4B000);
     if (UIGFmvHaveSound()) {
-        pSub->pTap = fn_801F6CE8(pSub->pStream, 2);
-        fn_801F6AC8(pSub->pStream, 1, 0xFFFF, 17235, 2);
+        pSub->pTap = STREAM_taphandle(pSub->pStream, 2);
+        STREAM_setfilter(pSub->pStream, 1, 0xFFFF, 17235, 2);
     } else {
         pSub->pTap = (struct StreamTap_801F5DA4 *)-1;
-        fn_801F6AC8(pSub->pStream, 1, 0xFFFF, 17235, -1);
+        STREAM_setfilter(pSub->pStream, 1, 0xFFFF, 17235, -1);
     }
     File.pRes = UIGLibraryGetResFile(pObject, pMovie->unk_3C);
     File.mIndex = pMovie->unk_40;
-    Queued = fn_801F6D54(pSub->pStream, &File, 0, 0);
+    Queued = STREAM_queuefile(pSub->pStream, &File, 0, 0);
     MovieRcmpInitVideo(&pSub->Info, pSub->pStream);
     pSub->unk_30 = 0;
     pSub->unk_34 = 0;
@@ -256,7 +256,7 @@ void LLUIGFmvStopInstance(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie)
             MovieRcmpShutdownAudio(&pSub->Info);
         }
         MovieRcmpShutdownVideo(&pSub->Info);
-        fn_801F6B84(pSub->pStream);
+        STREAM_destroy(pSub->pStream);
         pSub->pStream = NULL;
         pSub->Info.mpAudio = NULL;
         pSub->Info.mpVideo = NULL;

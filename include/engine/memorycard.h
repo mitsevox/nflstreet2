@@ -15,17 +15,17 @@ typedef struct Struct_801D4848 {
     unsigned int mLength;
 } Struct_801D4848;
 
-void fn_801D4120(void);
-void fn_801D4198(void);
-int fn_801D466C(int chan);
-int fn_801D4A3C(int port, const char *pName, int unused, int flags, int size);
-int fn_801D4E6C(int handle);
-int fn_801D4F58(int handle);
-int fn_801D4FF4(int port, const char *pName);
-int fn_801D5440(int handle, char *pBuffer, int length);
-int fn_801D56A0(int handle, char *pBuffer, int length);
-int fn_801D56D4(int handle, unsigned int *pSysInfo);
-void fn_801D5764(int type, char *pBuffer, int size);
-int fn_801D5840(int *pResult);
+void MemCInit(void);
+void MemCShutdown(void);
+int MemCUnMount(int chan);
+int MemCAsyncOpen(int port, const char *pName, int unused, int flags, int size);
+int MemCAsyncFlush(int handle);
+int MemCAsyncClose(int handle);
+int MemCAsyncDelete(int port, const char *pName);
+int MemCAsyncRead(int handle, char *pBuffer, int length);
+int MemCAsyncWrite(int handle, char *pBuffer, int length);
+int MemCAsyncSetSysInfo(int handle, unsigned int *pSysInfo);
+void MemCFormatCardType(int type, char *pBuffer, int size);
+int MemCAsyncPoll(int *pResult);
 
 #endif

@@ -7,7 +7,7 @@
 #include "engine/rigidbody.h"
 #include "engine/physcollection.h"
 #include "engine/llmatrix.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "libc/string.h"
 
 extern "C" {
@@ -123,7 +123,7 @@ void UpdateBodyDerivedState(RigidBody *pBody)
     pBody->mTransform[0][3] = 0.0f;
     pBody->mTransform[1][3] = 0.0f;
     pBody->mTransform[2][3] = 0.0f;
-    fn_80227264(&pBody->mLinearVelocity, &pBody->mLinearMomentum, pBody->mInvMass);
+    Vec3Scale(&pBody->mLinearVelocity, &pBody->mLinearMomentum, pBody->mInvMass);
     MatPush();
     transpose[0][0] = pBody->mTransform[0][0];
     transpose[0][1] = pBody->mTransform[1][0];
@@ -145,7 +145,7 @@ void UpdateBodyDerivedState(RigidBody *pBody)
     MatCat(&pBody->mInvInertia[0][0]);
     MatCat(&transpose[0][0]);
     MatStore(&pBody->mWorldInvInertia[0][0]);
-    fn_80227C2C(&pBody->mAngularVelocity, &pBody->mAngularMomentum);
+    Vec3Mat33Mul(&pBody->mAngularVelocity, &pBody->mAngularMomentum);
     MatPop();
     pBody->mTransform[0][3] = pBody->mPosition.x;
     pBody->mTransform[1][3] = pBody->mPosition.y;
@@ -224,7 +224,7 @@ void SetBodyLinearVelocity(RigidBody *pBody, Vec3_801DE1E0 *pVelocity)
 {
     if (pBody->mInvMass != 0.0f) {
         pBody->mLinearVelocity = *pVelocity;
-        fn_80227264(&pBody->mLinearMomentum, pVelocity, 1.0f / pBody->mInvMass);
+        Vec3Scale(&pBody->mLinearMomentum, pVelocity, 1.0f / pBody->mInvMass);
     }
 }
 
@@ -242,10 +242,10 @@ void AddBodyForceAtPoint(RigidBody *pBody, Vec3_801DE1E0 *pForce, Vec3_801DE1E0 
 {
     Vec3_801DE1E0 offset;
     Vec3_801DE1E0 torque;
-    fn_802276B4(&offset, pPoint, &pBody->mPosition);
-    fn_802277DC(&torque, &offset, pForce);
-    fn_8022765C(&pBody->mForce, &pBody->mForce, pForce);
-    fn_8022765C(&pBody->mTorque, &pBody->mTorque, &torque);
+    Vec3Sub(&offset, pPoint, &pBody->mPosition);
+    Vec3CrossProduct(&torque, &offset, pForce);
+    Vec3Add(&pBody->mForce, &pBody->mForce, pForce);
+    Vec3Add(&pBody->mTorque, &pBody->mTorque, &torque);
 }
 
 // Only states above one accept impulse changes to linear and angular momentum.
@@ -254,10 +254,10 @@ void ApplyBodyImpulseAtPoint(RigidBody *pBody, Vec3_801DE1E0 *pImpulse, Vec3_801
     if ((unsigned int)pBody->mState > 1) {
         Vec3_801DE1E0 offset;
         Vec3_801DE1E0 angularImpulse;
-        fn_802276B4(&offset, pPoint, &pBody->mPosition);
-        fn_802277DC(&angularImpulse, &offset, pImpulse);
-        fn_8022765C(&pBody->mLinearMomentum, &pBody->mLinearMomentum, pImpulse);
-        fn_8022765C(&pBody->mAngularMomentum, &pBody->mAngularMomentum, &angularImpulse);
+        Vec3Sub(&offset, pPoint, &pBody->mPosition);
+        Vec3CrossProduct(&angularImpulse, &offset, pImpulse);
+        Vec3Add(&pBody->mLinearMomentum, &pBody->mLinearMomentum, pImpulse);
+        Vec3Add(&pBody->mAngularMomentum, &pBody->mAngularMomentum, &angularImpulse);
     }
 }
 
@@ -265,7 +265,7 @@ void ApplyBodyImpulseAtPoint(RigidBody *pBody, Vec3_801DE1E0 *pImpulse, Vec3_801
 void ApplyBodyAngularImpulse(RigidBody *pBody, Vec3_801DE1E0 *pImpulse)
 {
     if ((unsigned int)pBody->mState > 1) {
-        fn_8022765C(&pBody->mAngularMomentum, &pBody->mAngularMomentum, pImpulse);
+        Vec3Add(&pBody->mAngularMomentum, &pBody->mAngularMomentum, pImpulse);
     }
 }
 
@@ -273,9 +273,9 @@ void ApplyBodyAngularImpulse(RigidBody *pBody, Vec3_801DE1E0 *pImpulse)
 void GetBodyPointVelocity(RigidBody *pBody, Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pVelocity)
 {
     Vec3_801DE1E0 offset;
-    fn_802276B4(&offset, pPoint, &pBody->mPosition);
-    fn_802277DC(pVelocity, &pBody->mAngularVelocity, &offset);
-    fn_8022765C(pVelocity, pVelocity, &pBody->mLinearVelocity);
+    Vec3Sub(&offset, pPoint, &pBody->mPosition);
+    Vec3CrossProduct(pVelocity, &pBody->mAngularVelocity, &offset);
+    Vec3Add(pVelocity, pVelocity, &pBody->mLinearVelocity);
 }
 
 // Evaluate the rotational contribution along a direction at a world-space point.
@@ -285,14 +285,14 @@ float ComputeBodyRotationalResponse(RigidBody *pBody, Vec3_801DE1E0 *pPoint, Vec
     if (pBody->mState != 0) {
         Vec3_801DE1E0 offset;
         Vec3_801DE1E0 response;
-        fn_802276B4(&offset, pPoint, &pBody->mPosition);
-        fn_802277DC(&response, &offset, pDirection);
+        Vec3Sub(&offset, pPoint, &pBody->mPosition);
+        Vec3CrossProduct(&response, &offset, pDirection);
         MatPush();
         MatLoad(&pBody->mWorldInvInertia[0][0]);
-        fn_80227C2C(&response, &response);
+        Vec3Mat33Mul(&response, &response);
         MatPop();
-        fn_802277DC(&response, &response, &offset);
-        rotationalResponse = fn_80227704(pDirection, &response);
+        Vec3CrossProduct(&response, &response, &offset);
+        rotationalResponse = Vec3DotProduct(pDirection, &response);
     } else {
         rotationalResponse = 0.0f;
     }
@@ -321,7 +321,7 @@ void SetBodyMotionState(RigidBody *pBody, int state)
 float GetBodyKineticEnergy(RigidBody *pBody)
 {
     if (pBody->mInvMass != 0.0f) {
-        return fn_80227120(&pBody->mLinearVelocity) * (1.0f / pBody->mInvMass) * 0.5f;
+        return Vec3MagnitudeSqr(&pBody->mLinearVelocity) * (1.0f / pBody->mInvMass) * 0.5f;
     }
     return 0.0f;
 }

@@ -7,7 +7,7 @@
 #include "game/StoryPlayerScreen.h"
 #include "game/StoryTeam.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 struct StoryModelLayout_t {
     float mPosition[3];
@@ -42,10 +42,10 @@ void FEPlyrSetScale(int index, float scale);
 void FEPlyrPlayAnim(int index, int a, int b);
 void FEPlyrSetPlayer(int index, int a, int b);
 void FEPlyrSetPriority(int index, int value);
-void fn_80061DDC(void);
-int fn_800841AC(DbCursor *pObject);
-int fn_800841D8(DbCursor *pObject);
-int fn_80084204(DbCursor *pObject);
+void StoryTournamentDropEvent(void);
+int TeamDbGetColor1(DbCursor *pObject);
+int TeamDbGetColor2(DbCursor *pObject);
+int TeamDbGetColor3(DbCursor *pObject);
 int EditMenuIsStoryTeam(void);
 void MemCardUISetScriptFlag(unsigned char value);
 unsigned char MemCardUIGetScriptFlag(void);
@@ -62,10 +62,10 @@ int CreateTeamCountStandIns(int a);
 void CreateTeamAddPlayer(int a, int b, int c);
 int StoryTestIndexedFlag(int a, int b);
 void StorySetIndexedFlag(int a, int b, int c);
-int fn_8022F358(int index);
-int fn_8022F384(int a);
-int fn_8022F3D4(int a);
-int fn_8022F4BC(void);
+int DbUserGetId(int index);
+int DbUserFindIndex(int a);
+int DbUserGetDb(int a);
+int DbUserGetCurrent(void);
 
 static StoryModelLayout_t _StoryPlayerScreen_ModelLayout = {{330.0f, 290.0f, 7.0f}, 1.0f, 14};
 static unsigned char _StoryPlayerScreen_bActive = 0;
@@ -78,18 +78,18 @@ void StoryPlayerScreenCopyToSlot8(void)
 {
     int a;
     int b;
-    int handle = fn_8022F3D4(fn_8022F358(_StoryPlayerScreen_iProfile));
+    int handle = DbUserGetDb(DbUserGetId(_StoryPlayerScreen_iProfile));
     void *p1;
     void *p2;
 
-    fn_801FCE10(0, "use \x8c select 'PXSP' into \x85 and 'DIGP' into \x85 from 'YPRC' where 'DIOP' = \x82\n",
+    TDbCompilePerformOp(0, "use \x8c select 'PXSP' into \x85 and 'DIGP' into \x85 from 'YPRC' where 'DIOP' = \x82\n",
                 handle, &a, &b, 0x7FF4);
-    fn_801FCE10(0, "use \x8c update 'YPRC' set 'PXSP' = \x85 where 'DIGP' = \x82\n", handle, 8, b);
+    TDbCompilePerformOp(0, "use \x8c update 'YPRC' set 'PXSP' = \x85 where 'DIGP' = \x82\n", handle, 8, b);
     p1 = fn_801D2B7C(0x20000, 0, 0);
     p2 = fn_801D2B7C(0x400, 0, 0);
-    fn_801FCE10(0, "use \x8c select 'XTPP' into \x89 and 'LPPP' into \x89 from 'PPRC' where 'PXSP' = \x85\n",
+    TDbCompilePerformOp(0, "use \x8c select 'XTPP' into \x89 and 'LPPP' into \x89 from 'PPRC' where 'PXSP' = \x85\n",
                 handle, p1, p2, a);
-    fn_801FCE10(0, "use \x8c update 'PPRC' set 'XTPP' = \x89 and 'LPPP' = \x89 where 'PXSP' = \x85\n", handle,
+    TDbCompilePerformOp(0, "use \x8c update 'PPRC' set 'XTPP' = \x89 and 'LPPP' = \x89 where 'PXSP' = \x85\n", handle,
                 p1, p2, 8);
     fn_801D2BD0(p2);
     fn_801D2BD0(p1);
@@ -137,10 +137,10 @@ void StoryPlayerScreenRevert(void)
 
 void StoryPlayerScreenEnter(int *pId)
 {
-    fn_80061DDC();
+    StoryTournamentDropEvent();
     if (_StoryPlayerScreen_bActive == 0) {
         _StoryPlayerScreen_bActive = 1;
-        _StoryPlayerScreen_iProfile = fn_8022F384(fn_8022F4BC());
+        _StoryPlayerScreen_iProfile = DbUserFindIndex(DbUserGetCurrent());
         FEPlyrShow();
         FEPlyrSetPosition(0, _StoryPlayerScreen_ModelLayout.mPosition[0], _StoryPlayerScreen_ModelLayout.mPosition[1], _StoryPlayerScreen_ModelLayout.mPosition[2]);
         FEPlyrSetAngle(0, 0.0f);
@@ -153,17 +153,17 @@ void StoryPlayerScreenEnter(int *pId)
         _StoryPlayerScreen_bSavedFlag = MemCardUIGetScriptFlag();
         if (StoryTeamGetId(_StoryPlayerScreen_iProfile, pId)) {
             DbCursor cursor;
-            fn_80083E40(&cursor, 0, 0x54415453);
-            fn_80084034(&cursor, *pId, 0);
-            if (!fn_80084438(&cursor)) {
+            TeamDbOpen(&cursor, 0, 0x54415453);
+            TeamDbSeekId(&cursor, *pId, 0);
+            if (!TeamDbGetCtdl(&cursor)) {
                 unsigned char values[3];
-                values[0] = fn_800841AC(&cursor);
-                values[1] = fn_800841D8(&cursor);
-                values[2] = fn_80084204(&cursor);
-                TeamLogoRequestTint(0, 4, fn_80084158(&cursor), 172, values);
-                TeamLogoRequestTint(1, 4, fn_80084158(&cursor), 172, values);
+                values[0] = TeamDbGetColor1(&cursor);
+                values[1] = TeamDbGetColor2(&cursor);
+                values[2] = TeamDbGetColor3(&cursor);
+                TeamLogoRequestTint(0, 4, TeamDbGetLogo(&cursor), 172, values);
+                TeamLogoRequestTint(1, 4, TeamDbGetLogo(&cursor), 172, values);
             }
-            fn_80083F68(&cursor);
+            TeamDbClose(&cursor);
         } else {
             *pId = 0;
         }

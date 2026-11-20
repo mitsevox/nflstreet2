@@ -32,8 +32,8 @@ void fn_801D689C(const char *pSuffix, const char *pPrefix, int unused, int selec
 int fn_801D6AC8(int a);
 int fn_801D6B14(int a);
 unsigned int fn_801D85A8(int a);
-int fn_801D4400(int *pA, int *pB);
-int fn_801D46E8(int slot);
+int MemCGetDeviceChanges(int *pA, int *pB);
+int MemCUnMountAlt(int slot);
 char *strncpy(char *pDst, const char *pSrc, int size);
 int SysGetSystemTime(void);
 void fn_801F8838(void);
@@ -196,14 +196,14 @@ void MemCardUIUnmountAndClearChanges(void)
     if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
         fn_801D6680(fn_801D671C());
     }
-    fn_801D4400(&a, &b);
+    MemCGetDeviceChanges(&a, &b);
 }
 
 int MemCardUIHasPortChanged(void)
 {
     int a = 0;
     int b = 0;
-    int result = fn_801D4400(&a, &b);
+    int result = MemCGetDeviceChanges(&a, &b);
     int slot = fn_801D671C();
 
     if (result != 0) {
@@ -229,7 +229,7 @@ void MemCardUIStartMount(void)
     int a;
     int b;
 
-    fn_801D4400(&a, &b);
+    MemCGetDeviceChanges(&a, &b);
     fn_801D6650(9);
 }
 
@@ -339,7 +339,7 @@ void MemCardUIScanOtherGame(int a)
 
 void MemCardUIRestoreGameCode(void)
 {
-    fn_801D46E8(fn_801D671C());
+    MemCUnMountAlt(fn_801D671C());
     fn_801D685C("GN7E-69", 0);
 }
 
@@ -543,7 +543,7 @@ int MemCardUIProbeNext(int *pSlot)
 
 void MemCardUIGetSlotName(int a, TextRecord_t *pRecord)
 {
-    fn_801D57E0(a, pRecord->mUnknown8, pRecord->mUnknown4);
+    MemCFormatPort(a, pRecord->mUnknown8, pRecord->mUnknown4);
 }
 
 void MemCardUIGetSavePort(int a, int b, int *pOut)

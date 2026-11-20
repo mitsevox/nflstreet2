@@ -8,14 +8,14 @@
 #include <string.h>
 
 extern "C" {
-int fn_8000F870(int module, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
+int MsgFrontEndDispatch(int module, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int MsgStreetEventDispatch(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int fn_8001D0F4(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int fn_8001D180(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int MsgMemCardDispatch(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int MsgTeamDispatch(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int MsgOptionsDispatch(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
-int fn_80059664(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
+int InGameScreensDispatch(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int PopupScreenMsg(int kind, int id, void *pArgs, int c, int *pResult);
 int UISGroup2HandleMsg(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int UISGameMsgDispatch(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
@@ -455,7 +455,7 @@ extern "C" void ScreenMsgDispatch(unsigned int id, int group, int screen, int co
 
     switch (group) {
     case 0:
-        handled = fn_8000F870(screen, id, pArgs, count, pResult);
+        handled = MsgFrontEndDispatch(screen, id, pArgs, count, pResult);
         break;
     case 13:
         handled = MsgStreetEventDispatch(screen, id, pArgs, count, pResult);
@@ -467,7 +467,7 @@ extern "C" void ScreenMsgDispatch(unsigned int id, int group, int screen, int co
         handled = MsgMemCardDispatch(screen, id, pArgs, count, pResult);
         break;
     case 3:
-        handled = fn_80059664(screen, id, pArgs, count, pResult);
+        handled = InGameScreensDispatch(screen, id, pArgs, count, pResult);
         break;
     case 1:
         handled = PopupScreenMsg(screen, id, pArgs, count, pResult);

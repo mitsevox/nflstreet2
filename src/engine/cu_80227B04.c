@@ -1,6 +1,6 @@
-/* Comparison fragment of src/engine/llvector.c: fn_80227B04 and its literal pool. */
+/* Comparison fragment of src/engine/llvector.c: Vec3DistanceSqrToSegment and its literal pool. */
 
-float fn_80227B04(float *pA, float *pB, float *pP)
+float Vec3DistanceSqrToSegment(float *pA, float *pB, float *pP)
 {
     float aPoint[3];
     float ex;

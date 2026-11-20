@@ -6,24 +6,24 @@
 #include "game/CollideContacts.h"
 #include "game/Ball.h"
 #include "game/CollideBounce.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
 
 extern "C" {
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-void fn_800E9528(Object_80039F5C *p);
-void fn_8013A3BC(Ball_t *pBall);
+void PlyrContactSendKnock(Object_80039F5C *p);
+void BallRecordBounce(Ball_t *pBall);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int BallStateCheckPlayerHit(Ball_t *pBall, void *pData, int value);
 int fn_80178348(void);
 int CharSkelGetJointByName(void *p, const char *pName);
-void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-void fn_802271F0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
-void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
-float fn_802278D0(Vector_80039F5C *pA, Vector_80039F5C *pB);
-void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
-void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pPoint, Vector_80039F5C *pOut, float *pDist,
+void Vec3Scale(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
+void Vec3Normalize(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
+void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
+float Vec3DistanceSqr(Vector_80039F5C *pA, Vector_80039F5C *pB);
+void Vec3Lerp(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
+void Vec3ClosestPointOnSegment(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pPoint, Vector_80039F5C *pOut, float *pDist,
                  float *pT);
 }
 
@@ -49,8 +49,8 @@ extern "C" int BallIsClearOfHands(Ball_t *pBall)
             BallGetPosition(pBall, &pos);
             fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lwrist"), &left, 0);
             fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rwrist"), &right, 0);
-            if (fn_802278D0(&pos, &left) > 0.09f) {
-                result = fn_802278D0(&pos, &right) > 0.09f;
+            if (Vec3DistanceSqr(&pos, &left) > 0.09f) {
+                result = Vec3DistanceSqr(&pos, &right) > 0.09f;
             }
         }
     }
@@ -72,21 +72,21 @@ extern "C" void BallDeflect(Ball_t *pBall, Vector_80039F5C *pCenter, Vector_8003
     motion.mUnknown0.mZ = z - pCenter->mZ;
     motion.mUnknown36 = 0.875f;
     BounceBody3D(&motion, pDir, value);
-    if (push && fn_802270D4(&motion.mUnknown12) < 0.040000003f) {
+    if (push && Vec3Magnitude(&motion.mUnknown12) < 0.040000003f) {
         Vector_80039F5C step;
 
         BounceScatterVector(&step, pDir, 0.040000003f);
         if (step.mZ >= 0.0f) {
             step.mZ = 0.0f;
         }
-        fn_8022765C(&motion.mUnknown12, &motion.mUnknown12, &step);
+        Vec3Add(&motion.mUnknown12, &motion.mUnknown12, &step);
     }
-    scale = fn_802270D4(&motion.mUnknown12);
+    scale = Vec3Magnitude(&motion.mUnknown12);
     length = scale;
     if (scale > 0.20000002f) {
         scale = 0.20000002f;
     }
-    fn_80227264(&motion.mUnknown12, &motion.mUnknown12, scale / length);
+    Vec3Scale(&motion.mUnknown12, &motion.mUnknown12, scale / length);
     motion.mUnknown12.mX += pCenter->mX;
     motion.mUnknown12.mY += pCenter->mY;
     motion.mUnknown12.mZ += pCenter->mZ;
@@ -106,9 +106,9 @@ extern "C" void BallGetDeflectNormal(Vector_80039F5C *pOut, Object_80039F5C *p, 
     float dist;
     float value;
 
-    fn_80227970(&pSegment->mUnknown0, &pSegment->mUnknown10, pPos, &nearest, &dist, &value);
-    fn_802276B4(pOut, pPos, &nearest);
-    fn_802271F0(pOut, pOut);
+    Vec3ClosestPointOnSegment(&pSegment->mUnknown0, &pSegment->mUnknown10, pPos, &nearest, &dist, &value);
+    Vec3Sub(pOut, pPos, &nearest);
+    Vec3Normalize(pOut, pOut);
     switch (sub) {
     case 0:
         value = 0.2f;
@@ -138,8 +138,8 @@ extern "C" void BallGetDeflectNormal(Vector_80039F5C *pOut, Object_80039F5C *p, 
     down.mX = 0.0f;
     down.mY = 0.0f;
     down.mZ = -1.0f;
-    fn_80227930(pOut, &down, pOut, value);
-    fn_802271F0(pOut, pOut);
+    Vec3Lerp(pOut, &down, pOut, value);
+    Vec3Normalize(pOut, pOut);
 }
 
 extern "C" void BallHitPlayerPart(Ball_t *pBall, Object_80039F5C *p, CollideContact_t *pContact, unsigned char sub,
@@ -197,8 +197,8 @@ extern "C" void BallHitPlayerPart(Ball_t *pBall, Object_80039F5C *p, CollideCont
             value = 0.08f;
             break;
         }
-        fn_802276B4(&span, &target.mUnknown0, &target.mUnknown12);
-        fn_8013A3BC(pBall);
+        Vec3Sub(&span, &target.mUnknown0, &target.mUnknown12);
+        BallRecordBounce(pBall);
         BallDeflect(pBall, &span, &dir, pContact, 1, value);
         if (BallStateGet(pBall, 0) == 4 && flag && p->mpState->mId == 28) {
             BallKickUp(pBall, 1);
@@ -216,7 +216,7 @@ extern "C" void BallHitPlayerPart(Ball_t *pBall, Object_80039F5C *p, CollideCont
             int id = p->mpState->mId;
 
             if (id != 28 && id != 58 && id != 5) {
-                fn_800E9528(p);
+                PlyrContactSendKnock(p);
             }
         }
     }

@@ -8,7 +8,7 @@
 #include "game/PreGamePhase.h"
 #include "game/fn_800AD9B4.h"
 #include "game/GameModeType.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/InGame.h"
 #include "game/GameModules.h"
 #include "game/TimeScale.h"
@@ -23,20 +23,20 @@ double fabs(double);
 extern char lbl_8030716C[];
 extern char lbl_803072C4[];
 extern float gFrameTimeScale;
-extern void *lbl_803EA368;
+extern void *gpReplay;
 extern void *gUISMainInfo;
 extern void *gUISSubInfo;
 
 void VptManagerMarketCamInit(void);
-void fn_8002CBB0(void *p, int a, float c, int b);
-void fn_8002CF34(void *p);
-int fn_8002D060(void *p);
-int fn_8002D2C0(void);
-void fn_8003E1F0(void);
+void ReplayHandleInput(void *p, int a, float c, int b);
+void ReplayUpdate(void *p);
+int ReplayIsShowing(void *p);
+int ReplayIsSuspended(void);
+void PlyrObjsDrawShadows(void);
 void DivotUpdate(void);
-void fn_80057F28(void);
-void fn_800582D0(void);
-void fn_8005BF18(void);
+void InGamePlayCallCreate(void);
+void InGamePlayCallDestroy(void);
+void InGameOverlayReset(void);
 void MemCardScreenSetFlag(unsigned char a);
 void PauseUpdate(void);
 void PauseRequestClose(void);
@@ -115,8 +115,8 @@ float RemapCheckEntry(int a, int b, char *p);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_802345C4(struct EngineParamWords *pDesc, int count);
 void LLCacheLockedDisable(void);
-void fn_80237830(int a);
-unsigned int fn_802378C8(void);
+void SyncTimeAdvance(int a);
+unsigned int SyncTimeUpdateTicks(void);
 }
 
 /* Argument of fn_802345C4. */
@@ -150,20 +150,20 @@ static void _InGamePadHandler(int a, int b, float c)
         if (b != 0x8F) {
             fn_800AFD58(a, b, c);
             PauseRequestHandleInput(a, b, c);
-            if (!fn_8002D060(lbl_803EA368) || fn_8002D2C0()) {
+            if (!ReplayIsShowing(gpReplay) || ReplayIsSuspended()) {
                 UISGameHandleInput(a, b, c);
             } else {
-                fn_8002CBB0(lbl_803EA368, a, c, b);
+                ReplayHandleInput(gpReplay, a, c, b);
             }
         }
     } else if (b != 0x8F) {
-        if (!fn_8002D060(lbl_803EA368) || fn_8002D2C0()) {
+        if (!ReplayIsShowing(gpReplay) || ReplayIsSuspended()) {
             UISGameHandleInput(a, b, c);
         } else {
-            fn_8002CBB0(lbl_803EA368, a, c, b);
+            ReplayHandleInput(gpReplay, a, c, b);
         }
     }
-    if (!PauseIsOpen() || fn_8002D060(lbl_803EA368) || b == 0x8F) {
+    if (!PauseIsOpen() || ReplayIsShowing(gpReplay) || b == 0x8F) {
         PauseIsOpen();
     } else {
         UISGameRefreshAll();
@@ -281,8 +281,8 @@ int InGame::Init()
     _InGame_iPauseCount = 0;
     InGameSetInputPaused(0);
     PadInputSetAxisCallback(CamGameGetSideYaw);
-    fn_801FCE10(0, "select 'PNIG' into \x82 from 'FNIG'\n", &result);
-    fn_80057F28();
+    TDbCompilePerformOp(0, "select 'PNIG' into \x82 from 'FNIG'\n", &result);
+    InGamePlayCallCreate();
     if (result) {
         fn_800AD910(10, 0.0f);
     } else {
@@ -293,7 +293,7 @@ int InGame::Init()
         }
     }
     GameTextReset();
-    fn_8005BF18();
+    InGameOverlayReset();
     if (!fn_800BA6F8()) {
         CamGameApplyUserCamera();
         if (!result && !fn_800C1E40()) {
@@ -350,9 +350,9 @@ unsigned char InGame::Update()
     TimeScaleUpdate();
     if (_InGame_iPauseCount == 0) {
         _InGame_iFrameCount++;
-        fn_80237830(1);
+        SyncTimeAdvance(1);
     }
-    while ((count = fn_802378C8()) != 0) {
+    while ((count = SyncTimeUpdateTicks()) != 0) {
         float value = count;
 
         handled = 1;
@@ -364,14 +364,14 @@ unsigned char InGame::Update()
         ConProcessChannel(-1);
     }
     PauseUpdate();
-    fn_8002CF34(lbl_803EA368);
-    if (!fn_8002D060(lbl_803EA368)) {
+    ReplayUpdate(gpReplay);
+    if (!ReplayIsShowing(gpReplay)) {
         ParticlesProcess(gFrameTimeScale);
         ParticleSysUpdate(gFrameTimeScale);
         fn_800A3120(gFrameTimeScale);
     }
     FileDebugProcess();
-    fn_8003E1F0();
+    PlyrObjsDrawShadows();
     DivotUpdate();
     fn_800A7F6C();
     SndgMusicUpdate();
@@ -417,7 +417,7 @@ int InGame::Shutdown()
     ScreenTransFinish();
     PauseUpdate();
     GlibSyncFrame();
-    fn_800582D0();
+    InGamePlayCallDestroy();
     fn_800AB944(lbl_803EAA8C);
     PlaybookSideClearAll();
     MemCardUtilShutdown();

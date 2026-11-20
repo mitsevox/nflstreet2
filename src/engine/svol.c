@@ -33,7 +33,7 @@ int SNDvol(int id, int value)
                     pVoice->m38 = level;
                     fn_80278598(voice);
                     changed = 1;
-                    fn_802747D8(voice);
+                    SndHalSetVol(voice);
                 }
             }
             if (changed) {

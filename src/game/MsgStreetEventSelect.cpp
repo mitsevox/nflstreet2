@@ -4,10 +4,10 @@
 
 #include "game/FELoop.h"
 #include "game/EditMenu.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 extern "C" {
-void fn_8000FCD4(int a);
+void MsgMainMenuSetActivePad(int a);
 void fn_801485B4(void);
 void fn_801485C0(void);
 void fn_801485EC(int value);
@@ -27,7 +27,7 @@ void MsgStreetEventSelectInit(int *pCount, int *pValue)
     if (_MsgStreetEventSelect_bOpen == 0) {
         if (DbFileTblLoad(0, 0x5444474D) == 0) {
             *pCount = 6;
-            fn_801FCE10(0, "select count(*) into \x82 from 'TDGM'\n", pCount);
+            TDbCompilePerformOp(0, "select count(*) into \x82 from 'TDGM'\n", pCount);
         }
         if (_MsgStreetEventSelect_iChosen != 15) {
             *pValue = _MsgStreetEventSelect_iChosen;
@@ -63,7 +63,7 @@ void MsgStreetEventSelectGetName(int id, char *pDest, int count)
 {
     char name[32];
 
-    if (fn_801FCE10(0, "select 'NMIU' into \x88 from 'TDGM' where 'DIGM' = \x82\n", name, id) != 0) {
+    if (TDbCompilePerformOp(0, "select 'NMIU' into \x88 from 'TDGM' where 'DIGM' = \x82\n", name, id) != 0) {
         name[0] = '?';
         name[1] = 0;
     }
@@ -74,7 +74,7 @@ void MsgStreetEventSelectGetInfo(int id, int *pValue, char *pDest, int count)
 {
     char name[208];
 
-    if (fn_801FCE10(0, "select 'DMIU' into \x88 and 'PMIU' into \x82 from 'TDGM' where 'DIGM' = \x82\n", name,
+    if (TDbCompilePerformOp(0, "select 'DMIU' into \x88 and 'PMIU' into \x82 from 'TDGM' where 'DIGM' = \x82\n", name,
                     pValue, id) != 0) {
         name[0] = '?';
         name[1] = 0;
@@ -105,7 +105,7 @@ int MsgStreetEventSelectHandleMessage(unsigned int id, MenuArg_t *pArgs, int unu
         break;
     case 0x80000005:
         *pResult = MsgStreetEventSelectSetChoice(pArgs[0].i);
-        fn_8000FCD4(pArgs[1].i);
+        MsgMainMenuSetActivePad(pArgs[1].i);
         break;
     default:
         return 0;

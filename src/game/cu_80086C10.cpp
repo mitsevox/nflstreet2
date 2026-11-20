@@ -2,7 +2,7 @@
 #include "game/DbQueryTable.h"
 #include <string.h>
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 struct Descriptor_80086CE8 {
     unsigned int mTable;
@@ -40,17 +40,17 @@ struct Sort_80086D0C {
 
 extern "C" {
 int fn_80087BA0(int index);
-int fn_801F967C(int handle, int table);
-void fn_801F9718(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
-int fn_801F9980(int handle, int *pTable);
-int fn_801FA0BC(int handle, DbQueryTable *pTables, DbFilter *pFilter,
+int TDbTblDestroy(int handle, int table);
+void TDbInsertRow(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
+int TDbTblFindUnusedId(int handle, int *pTable);
+int _TDbQrySelect(int handle, DbQueryTable *pTables, DbFilter *pFilter,
                 void *pSort, int *pCursor, QueryResult *pResult);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
-int fn_8022F3D4(int handle);
-int fn_8022F4BC(void);
+int DbUserGetDb(int handle);
+int DbUserGetCurrent(void);
 }
 
 static int sTeamColumns[16] = {
@@ -88,12 +88,12 @@ void fn_80086C10(int team)
     int sourcePlayer;
     int table;
     fn_80229AA4(0x54415453, 0x59414C50, &player, &count);
-    fn_801FCE10(0, "use 'TATS' select 'DIGP' into \x85 from 'PRTS'\n", &sourcePlayer);
-    fn_801F9980(0x54415453, &table);
-    fn_801FCE10(&result, "use 'TATS' select into \x8c * from 'PRTS' where ('DIGP' = \x85)\n", table, sourcePlayer);
-    fn_801FCE10(&result, "use 'TATS' update \x8c set 'DIGT' = \x85 and 'DIGP' = \x85\n", table, team, player);
-    fn_801FCE10(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", table);
-    fn_801F967C(0x54415453, table);
+    TDbCompilePerformOp(0, "use 'TATS' select 'DIGP' into \x85 from 'PRTS'\n", &sourcePlayer);
+    TDbTblFindUnusedId(0x54415453, &table);
+    TDbCompilePerformOp(&result, "use 'TATS' select into \x8c * from 'PRTS' where ('DIGP' = \x85)\n", table, sourcePlayer);
+    TDbCompilePerformOp(&result, "use 'TATS' update \x8c set 'DIGT' = \x85 and 'DIGP' = \x85\n", table, team, player);
+    TDbCompilePerformOp(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", table);
+    TDbTblDestroy(0x54415453, table);
 }
 
 const Descriptor_80086CE8 *fn_80086CE8(int index)
@@ -153,14 +153,14 @@ int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
     if (byRow) {
         sort[0].Set(pDescriptor->mTable, pDescriptor->mSortColumn, 0);
         sort[1].SetEnd();
-        if (fn_801FA0BC(0x54415453, tables, 0, sort, &cursor, &queryResult) == 0) {
-            if (fn_801FA228(cursor, 1, id, columns) == 0) {
+        if (_TDbQrySelect(0x54415453, tables, 0, sort, &cursor, &queryResult) == 0) {
+            if (TDbQryRetrieve(cursor, 1, id, columns) == 0) {
                 result = 1;
             }
         }
-        fn_801FA148(cursor);
+        TDbQryDestroy(cursor);
     } else {
-        if (fn_801FA290(0x54415453, tables, 0, columns) == 0) {
+        if (TDbQryGetSingleRow(0x54415453, tables, 0, columns) == 0) {
             result = 1;
         }
     }
@@ -187,7 +187,7 @@ int StoreGetStringById(int id, char *pName, int nameSize)
 {
     char name[36];
     int result = 0;
-    if (fn_801FCE10(0, "select 'IUNS' into \x88 from 'MNTS' where 'IRTS' = \x85\n", name, id) == 0) {
+    if (TDbCompilePerformOp(0, "select 'IUNS' into \x88 from 'MNTS' where 'IRTS' = \x85\n", name, id) == 0) {
         strncpy(pName, name, nameSize);
         result = 1;
     }
@@ -215,7 +215,7 @@ int fn_80087128(int index)
         both.Set(11, &priceFilter, &categoryFilter);
         categoryFilter.Set(6, MakeColumnKey(pDescriptor->mTable, 0x4C544154), 3, category);
     }
-    if (fn_801F9D70(0x54415453, pDescriptor->mTable, pFilter, &count) == 0) {
+    if (TDbTblGetCount(0x54415453, pDescriptor->mTable, pFilter, &count) == 0) {
         result = count;
     }
     return result;
@@ -242,14 +242,14 @@ int fn_8008736C(int index, int id)
     int count;
     int result = 1;
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
-    int db = fn_8022F3D4(fn_8022F4BC());
+    int db = DbUserGetDb(DbUserGetCurrent());
     int category = fn_80087BA0(index);
     int status;
     if (category != 3) {
-        status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85 and \x8c = \x82\n", db, &count,
+        status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85 and \x8c = \x82\n", db, &count,
                 pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mLockedColumn, pDescriptor->mLockedValue, 0x4C544154, category);
     } else {
-        status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85\n", db, &count,
+        status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85\n", db, &count,
                 pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mLockedColumn, pDescriptor->mLockedValue);
     }
     if (status == 0) {
@@ -263,14 +263,14 @@ int fn_80087460(int index, int id)
     int count;
     int result = 1;
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
-    int db = fn_8022F3D4(fn_8022F4BC());
+    int db = DbUserGetDb(DbUserGetCurrent());
     int category = fn_80087BA0(index);
     int status;
     if (category != 3) {
-        status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85 and \x8c = \x82\n", db, &count,
+        status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85 and \x8c = \x82\n", db, &count,
                 pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mFlagColumn36, 1, 0x4C544154, category);
     } else {
-        status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85\n", db, &count,
+        status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85\n", db, &count,
                 pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mFlagColumn36, 1);
     }
     if (status == 0) {
@@ -282,13 +282,13 @@ int fn_80087460(int index, int id)
 void fn_8008754C(int index, int id)
 {
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
-    int db = fn_8022F3D4(fn_8022F4BC());
+    int db = DbUserGetDb(DbUserGetCurrent());
     int category = fn_80087BA0(index);
     if (category != 3) {
-        fn_801FCE10(0, "use \x8c update \x8c set \x8c = 0 where \x8c = \x85 and \x8c = \x82\n", db,
+        TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 where \x8c = \x85 and \x8c = \x82\n", db,
                 pDescriptor->mProfileTable, pDescriptor->mFlagColumn36, pDescriptor->mIdColumn, id, 0x4C544154, category);
     } else {
-        fn_801FCE10(0, "use \x8c update \x8c set \x8c = 0 where \x8c = \x85\n", db,
+        TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 where \x8c = \x85\n", db,
                 pDescriptor->mProfileTable, pDescriptor->mFlagColumn36, pDescriptor->mIdColumn, id);
     }
 }
@@ -296,13 +296,13 @@ void fn_8008754C(int index, int id)
 void fn_80087600(int index, int id)
 {
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
-    int db = fn_8022F3D4(fn_8022F4BC());
+    int db = DbUserGetDb(DbUserGetCurrent());
     int category = fn_80087BA0(index);
     if (category != 3) {
-        fn_801FCE10(0, "use \x8c update \x8c set \x8c = 0 and \x8c = 1 where \x8c = \x85 and \x8c = \x82\n", db,
+        TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 and \x8c = 1 where \x8c = \x85 and \x8c = \x82\n", db,
                 pDescriptor->mProfileTable, pDescriptor->mLockedColumn, pDescriptor->mFlagColumn36, pDescriptor->mIdColumn, id, 0x4C544154, category);
     } else {
-        fn_801FCE10(0, "use \x8c update \x8c set \x8c = 0 and \x8c = 1 where \x8c = \x85\n", db,
+        TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 and \x8c = 1 where \x8c = \x85\n", db,
                 pDescriptor->mProfileTable, pDescriptor->mLockedColumn, pDescriptor->mFlagColumn36, pDescriptor->mIdColumn, id);
     }
 }
@@ -342,15 +342,15 @@ int fn_8008775C(void)
     }
     columns[0].mValue = team;
     columns[16].SetEnd();
-    fn_801F9718(0x54415453, 0x4D414554, columns, 0, 0);
+    TDbInsertRow(0x54415453, 0x4D414554, columns, 0, 0);
     fn_80086C10(team);
     return team;
 }
 
 void fn_80087880(int team)
 {
-    fn_801FCE10(0, "use 'TATS' delete from 'YALP' where 'DIGT' = \x82\n", team);
-    fn_801FCE10(0, "use 'TATS' delete from 'MAET' where 'DIGT' = \x85\n", team);
+    TDbCompilePerformOp(0, "use 'TATS' delete from 'YALP' where 'DIGT' = \x82\n", team);
+    TDbCompilePerformOp(0, "use 'TATS' delete from 'MAET' where 'DIGT' = \x85\n", team);
 }
 
 int fn_800878D8(int index, DbCursor *pCursor, int row)

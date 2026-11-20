@@ -8,8 +8,8 @@
 #include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 #include <string.h>
-#include "game/fn_802270D4.h"
-#include "game/fn_802372EC.h"
+#include "game/Vec3Magnitude.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_800B65A0.h"
 
 #define MIN(a, b) ((a) <= (b) ? (a) : (b))
@@ -28,7 +28,7 @@ void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 int fn_8011F1CC(void);
 int DirectedRunEnter(Object_80039F5C *p);
 int DirectedRunUpdate(Object_80039F5C *p);
@@ -38,10 +38,10 @@ int fn_8009FB60(Object_80039F5C *p);
 int fn_800A5C04(Object_80039F5C *p, int a, int b);
 float PlayTrackGetPlayIdRate(void);
 float PlayTrackGetResult5Rate(void);
-int fn_800E1584(Object_80039F5C *p);
+int PlayerActionAiConsiderDive(Object_80039F5C *p);
 int fn_8009E180(Object_80039F5C *p);
 int fn_800F2C1C(Object_80039F5C *p, int a);
-int fn_800E6AC8(Object_80039F5C *p, int a);
+int PlyrEngageTryShed(Object_80039F5C *p, int a);
 }
 
 extern "C" int DirectedRunEnter(Object_80039F5C *p)
@@ -103,7 +103,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
         if (rating < 0) {
             rating = 0;
         }
-        state->mUnknown16 = state->mUnknown16 + fn_802372EC(0, rating >> 4) + (rating >> 5);
+        state->mUnknown16 = state->mUnknown16 + SyncRandGetRange(0, rating >> 4) + (rating >> 5);
         if (carrier && fn_800B65A0(p->mIdBytes[2]) != 255
             && fn_800B65A0(carrier->mIdBytes[2]) == 255 && !fn_80177C38()) {
             state->mUnknown16 -= (int)MIN((float)state->mUnknown16,
@@ -113,7 +113,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
                                               (float)state->mUnknown16 * PlayTrackGetResult5Rate());
             }
         }
-        if (fn_800E1584(p)) {
+        if (PlayerActionAiConsiderDive(p)) {
             return 0;
         }
         int kind = fn_8009E180(p);
@@ -127,7 +127,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
                 if (!(p->mMotion.mPos.mY >= ball.mY - 1.0f)) {
                     chance <<= 2;
                 }
-                if (fn_802372EC(0, 100) < chance) {
+                if (SyncRandGetRange(0, 100) < chance) {
                     memset(&message, 0, 4);
                     message.mId = 2;
                     fn_800F053C(0, p->mpState, &message, p);
@@ -141,7 +141,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
                 if (!(p->mMotion.mPos.mY >= ball.mY - 1.0f)) {
                     chance <<= 2;
                 }
-                if (fn_802372EC(0, 100) < chance) {
+                if (SyncRandGetRange(0, 100) < chance) {
                     memset(&message, 0, 4);
                     message.mId = 2;
                     fn_800F053C(0, p->mpState, &message, p);
@@ -151,7 +151,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
         } else if (pBlock->mUnknown0 == 4
             && fn_8009BCE8(&pBlock->mUnknown4)->mUnknown1052 == 1) {
             chance = p->mRatings[5] >> 2;
-            if (fn_802372EC(0, 100) < chance) {
+            if (SyncRandGetRange(0, 100) < chance) {
                 memset(&message, 0, 4);
                 message.mId = 2;
                 fn_800F053C(0, p->mpState, &message, p);
@@ -162,8 +162,8 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
     {
         Vector_80039F5C delta;
 
-        fn_80227690(&delta, &p->mMotion.mPos, &state->mUnknown0);
-        if (fn_802270A4(&delta) > state->mUnknown8) {
+        Vec2Sub(&delta, &p->mMotion.mPos, &state->mUnknown0);
+        if (Vec2Magnitude(&delta) > state->mUnknown8) {
             return 1;
         }
     }
@@ -184,11 +184,11 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
         if (!(position.mZ >= 3.3f)) {
             Vector_80039F5C direction;
             BallGetVelocity(pBall, &direction);
-            fn_80227690(&position, &p->mMotion.mPos, &position);
+            Vec2Sub(&position, &p->mMotion.mPos, &position);
             int directionAngle = fn_801CFE40(direction.mY, direction.mX);
             int deltaAngle = fn_801CFE40(position.mY, position.mX);
             if (MathAngleDiff(directionAngle, deltaAngle) <= 0x155554
-                && fn_802372EC(0, 100) <= 4 && fn_800F2C1C(p, 0)) {
+                && SyncRandGetRange(0, 100) <= 4 && fn_800F2C1C(p, 0)) {
                 return 0;
             }
         }
@@ -199,9 +199,9 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
             ratings = 510;
         }
         state->mUnknown20 = 31 - ratings / 32;
-        if (fn_802372EC(0, 100) <= 24 && pBlock->mUnknown0 == 4) {
+        if (SyncRandGetRange(0, 100) <= 24 && pBlock->mUnknown0 == 4) {
             fn_8009BCE8(&pBlock->mUnknown4);
-            if (fn_800E6AC8(p, 8)) {
+            if (PlyrEngageTryShed(p, 8)) {
                 return 0;
             }
         }

@@ -17,7 +17,7 @@
 #include "game/GameModeType.h"
 #include <string.h>
 #include <string.h>
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 /* Four bytes copied as one word from lbl_802CFB1C and passed by value. */
 struct PlayerLookColors_t {
@@ -27,7 +27,7 @@ struct PlayerLookColors_t {
     unsigned char mUnknown3;
 };
 
-/* Three bytes read by fn_800840A4. */
+/* Three bytes read by TeamDbGetColors. */
 struct TeamColorRow_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
@@ -57,11 +57,11 @@ extern int lbl_802CFB74[22];
 extern unsigned char gPlayerObjDrawReady;
 
 int MsgPlayerPickupIsOpen(void);
-int fn_8003DEB4(void);
+int PlyrObjsGetCount(void);
 void PlyrPoseInit(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
 void PlyrPoseFree(Object_8003DEC4 *pPlayer);
 unsigned char CheatFlagsIsSet(int index);
-int fn_8005FC7C(void);
+int StoryEventsGetCurrentEvent(void);
 void fn_8007BA48(DbCursor *pObject);
 void fn_8007BA88(DbCursor *pObject, int a);
 void fn_8007BB04(DbCursor *pObject);
@@ -84,7 +84,7 @@ int fn_80081E3C(Object_8008044C *pObject);
 int fn_80081FD4(Object_8008044C *pObject, int a);
 int fn_80082280(Object_8008044C *pObject);
 int fn_800822D4(Object_8008044C *pObject);
-void fn_800840A4(DbCursor *pObject, void *pBuffer);
+void TeamDbGetColors(DbCursor *pObject, void *pBuffer);
 void ParticleTrailReset(ParticleTrailSet_t *pObject);
 void fn_8015F6E8(const char *pName, int b, int c, int d, PlayerHeadIds_t *pIds);
 void PlyrSwitchSet(int player, int key, int value);
@@ -93,11 +93,11 @@ int PlaTexCacheFindTexture(char *pName);
 void PlaTexCacheSetColors(int index, unsigned char *pColors);
 void PlaTexCacheGetHairTexture(int a, int *pId, int *pPalette);
 int EditMenuIsOpen(void);
-void fn_801A34B0(int a, int b, int c, int d);
-void fn_801A3520(void);
-void fn_801A3588(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit);
-void fn_801A3C40(Object_8003DEC4 *pPlayer);
-void fn_801A3F48(Object_8003DEC4 *pPlayer);
+void PlyrRenderInit(int a, int b, int c, int d);
+void PlyrRenderShutdown(void);
+void PlyrRenderInitPlayer(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit);
+void PlyrRenderDrawPlayer(Object_8003DEC4 *pPlayer);
+void PlyrRenderFreePlayer(Object_8003DEC4 *pPlayer);
 void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 int fn_801486A0(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
@@ -125,9 +125,9 @@ extern "C" void PlayerLookRandomizeGear(int index)
     fn_8007BA88(&cursor, 1);
     c = DbCursorGetRowCount(&cursor);
     fn_8007BB04(&cursor);
-    int x = fn_802372EC(0, a - 1) + 1;
-    int y = fn_802372EC(0, b);
-    int z = fn_802372EC(0, c - 1) + 1;
+    int x = SyncRandGetRange(0, a - 1) + 1;
+    int y = SyncRandGetRange(0, b);
+    int z = SyncRandGetRange(0, c - 1) + 1;
     gPlayerLooks[index].mInfo.mValues[12] = x;
     gPlayerLooks[index].mInfo.mValues[13] = y;
     gPlayerLooks[index].mInfo.mValues[1] = z;
@@ -462,9 +462,9 @@ extern "C" void PlayerLookLoadDecalColors(int index, unsigned char *pColors, uns
 
     query.mUnknown8 = index + 1;
     query.mUnknown4 = 5;
-    fn_80083E40(&cursor, &query, 0x54415453);
-    fn_800840A4(&cursor, &rgb);
-    fn_80083F68(&cursor);
+    TeamDbOpen(&cursor, &query, 0x54415453);
+    TeamDbGetColors(&cursor, &rgb);
+    TeamDbClose(&cursor);
     pColors[4] = rgb.mUnknown0;
     pColors[5] = rgb.mUnknown1;
     pColors[6] = rgb.mUnknown2;
@@ -479,9 +479,9 @@ extern "C" void PlayerLookLoadHeadDecalColors(int index, unsigned char *pColors,
 
     query.mUnknown8 = index + 1;
     query.mUnknown4 = 5;
-    fn_80083E40(&cursor, &query, 0x54415453);
-    fn_800840A4(&cursor, &rgb);
-    fn_80083F68(&cursor);
+    TeamDbOpen(&cursor, &query, 0x54415453);
+    TeamDbGetColors(&cursor, &rgb);
+    TeamDbClose(&cursor);
     pColors[0] = rgb.mUnknown0;
     pColors[1] = rgb.mUnknown1;
 }
@@ -581,12 +581,12 @@ extern "C" void PlayerLookLoad(int index, int unused, int id, unsigned char flag
 
     PlayerDbSeekId(&_PlayerLook_sPlayerCursor, id, 0);
     value = PlayerDbGetTeamIndex(&_PlayerLook_sPlayerCursor);
-    fn_80083E40(&cursor, 0, 0x54415453);
-    fn_80084034(&cursor, value, 0);
-    fn_800840A4(&cursor, &pColors[20]);
-    gPlayerLooks[index].mUnknown6A = fn_80084158(&cursor);
-    gPlayerLooks[index].mUnknown68 = fn_80084438(&cursor);
-    fn_80083F68(&cursor);
+    TeamDbOpen(&cursor, 0, 0x54415453);
+    TeamDbSeekId(&cursor, value, 0);
+    TeamDbGetColors(&cursor, &pColors[20]);
+    gPlayerLooks[index].mUnknown6A = TeamDbGetLogo(&cursor);
+    gPlayerLooks[index].mUnknown68 = TeamDbGetCtdl(&cursor);
+    TeamDbClose(&cursor);
     fn_800817CC(&_PlayerLook_sPlayerCursor, &gPlayerLooks[index].mInfo);
     if (CheatFlagsIsSet(47) && !GameModeTypeGet()) {
         PlayerLookRandomizeGear(index);
@@ -671,7 +671,7 @@ extern "C" void PlayerLookLoadBonuses(int index, int unused, int id)
 
 extern "C" void PlayerLookSetGear(int player, int slot, int value)
 {
-    Object_8003DEC4 *pPlayer = fn_8003DEC4(player);
+    Object_8003DEC4 *pPlayer = PlyrObjsGet(player);
 
     gPlayerLooks[pPlayer->mUnknown4971].mInfo.mValues[slot] = value;
     gPlayerLooks[pPlayer->mUnknown4971].mUnknown70 = PlayerLookGetHatKind(pPlayer->mUnknown4971);
@@ -697,7 +697,7 @@ extern "C" void PlayerLookApply(int player)
     PlayerLook_t *pRecord;
     unsigned char *pColors;
 
-    pPlayer = fn_8003DEC4(player);
+    pPlayer = PlyrObjsGet(player);
     clearLogo = 0;
     key = pPlayer->mUnknown4970;
     index = pPlayer->mUnknown4971;
@@ -812,7 +812,7 @@ extern "C" void PlayerLookLoadForPlayer(unsigned int mode, int index, int unused
 {
     int flag = 1;
 
-    if (FELoopIsMainFEActive() && MsgPlayerPickupIsOpen() && fn_8005FC7C()) {
+    if (FELoopIsMainFEActive() && MsgPlayerPickupIsOpen() && StoryEventsGetCurrentEvent()) {
         DbCursor cursor;
 
         DbCursorOpen(&cursor, 0x59414C50, 0x44494750, 0, 0, 0x54415453);
@@ -1101,11 +1101,11 @@ extern "C" void PlayerLookGetHeadIds(int index, const char *pName, PlayerHeadIds
 
 extern "C" void PlayerLookHideSwitch28(void)
 {
-    unsigned int count = fn_8003DEB4();
+    unsigned int count = PlyrObjsGetCount();
     unsigned int i;
 
     for (i = 0; i < count; i++) {
-        PlyrSwitchSet(fn_8003DEC4(i)->mUnknown4970, 28, 255);
+        PlyrSwitchSet(PlyrObjsGet(i)->mUnknown4970, 28, 255);
     }
 }
 
@@ -1144,25 +1144,25 @@ extern "C" void PlayerObjCreate(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit
     PlyrPoseInit(pPlayer, pInit->mUnknown04, pInit->mUnknown08, pInit->mUnknown10, pInit->mUnknown14);
     pPlayer->mUnknown4956 = pInit->mUnknown18;
     ParticleTrailReset(&pPlayer->mUnknown5188);
-    fn_801A3588(pPlayer, pInit);
+    PlyrRenderInitPlayer(pPlayer, pInit);
 }
 
 extern "C" void PlayerObjDestroy(Object_8003DEC4 *pPlayer)
 {
-    fn_801A3F48(pPlayer);
+    PlyrRenderFreePlayer(pPlayer);
     PlyrPoseFree(pPlayer);
 }
 
 extern "C" void PlayerObjRenderInit(int a, int b)
 {
     gPlayerObjDrawReady = 1;
-    fn_801A34B0(0, 0, a, b);
+    PlyrRenderInit(0, 0, a, b);
 }
 
 extern "C" void PlayerObjRenderShutdown(void)
 {
     gPlayerObjDrawReady = 0;
-    fn_801A3520();
+    PlyrRenderShutdown();
 }
 
 extern "C" void PlayerObjAddObjType(int owner, int type, int count)
@@ -1180,7 +1180,7 @@ extern "C" int PlayerObjDraw(Object_8003DEC4 *pPlayer, int unused)
     if (pItem && pItem->mUnknown28) {
         PlyrNameTagUpdatePosition(pItem, pPlayer->mUnknown4);
     }
-    fn_801A3C40(pPlayer);
+    PlyrRenderDrawPlayer(pPlayer);
     return 0;
 }
 

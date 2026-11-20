@@ -3,12 +3,12 @@
 
 #include "game/CollideContacts.h"
 #include "game/Collide.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 
 extern "C" {
 float fn_80088FFC(float *pA0, float *pA1, float *pB0, float *pB1, float *pOut);
-void fn_802271F0(float *pOut, float *pIn);
-void fn_80227930(float *pOut, float *pA, float *pB, float t);
+void Vec3Normalize(float *pOut, float *pIn);
+void Vec3Lerp(float *pOut, float *pA, float *pB, float t);
 }
 
 static CollideContactList_t _Collide_ContactList;
@@ -71,9 +71,9 @@ void CollideMakeSplitPlane(CollidePlane_t *pPlane, CollideObject_t *pA, CollideO
 {
     float delta[3];
 
-    fn_802276B4(delta, pA, pB);
-    fn_802271F0(&pPlane->mUnknown10, delta);
-    fn_80227930(&pPlane->mUnknown0, &pA->mUnknown0, &pB->mUnknown0, 0.5f);
+    Vec3Sub(delta, pA, pB);
+    Vec3Normalize(&pPlane->mUnknown10, delta);
+    Vec3Lerp(&pPlane->mUnknown0, &pA->mUnknown0, &pB->mUnknown0, 0.5f);
 }
 
 int CollideCapsuleReachesPlane(CollidePlane_t *pPlane, float *pCapsule)

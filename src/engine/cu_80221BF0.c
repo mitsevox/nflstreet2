@@ -64,7 +64,7 @@ typedef struct Text_80221BF0 {
 
 /* Item data of a font library entry (as in src/engine/UIGFont.c). */
 typedef struct UIGFontItem_t {
-    Font_801CCA64 *pFont; /* 0x00 */
+    Font_t *pFont; /* 0x00 */
     Int32 unk_04;   /* 0x04 */
 } UIGFontItem_t;
 
@@ -84,12 +84,12 @@ static inline void ClampIndex(Rgba_802227B0 *pColor, Palette_80220B4C *pPalette)
 
 extern Range_80221D30 lbl_8039F9B8[];
 
-int fn_801CD63C(Font_801CCA64 *pFont, const char *pText, unsigned int flags);
-int fn_801CD750(Font_801CCA64 *pFont, unsigned char c);
-int fn_801CD790(Font_801CCA64 *pFont);
-int fn_801CD398(unsigned int flags);
-int fn_801CD3B0(unsigned int flags);
-int fn_801CD3C8(float x, float y, float z);
+int FontGetTextWidth(Font_t *pFont, const char *pText, unsigned int flags);
+int FontGetCharWidth(Font_t *pFont, unsigned char c);
+int FontGetDescent(Font_t *pFont);
+int FontSetRenderFlags(unsigned int flags);
+int FontClearRenderFlags(unsigned int flags);
+int FontSetShadowOffset(float x, float y, float z);
 
 void fn_80221D5C(Text_80221BF0 *pText);
 Range_80221D30 *fn_80221D30(Text_80221BF0 *pText, Uint8 Index);
@@ -97,14 +97,14 @@ void fn_80221DB0(Text_80221BF0 *pText);
 
 void UIGTextGetCursorPos(Text_80221BF0 *pText, Int32 Offset, Int32 *pA, Int32 *pB)
 {
-    Font_801CCA64 **ppFont;
+    Font_t **ppFont;
     Range_80221D30 *pRange = NULL;
     Uint32 Length;
     Int32 i;
     Int32 j;
     Int32 End;
 
-    ppFont = (Font_801CCA64 **)UIGLibraryGetItemData(UIGLibraryGetGlobal(1), pText->unk_03, pText->unk_02);
+    ppFont = (Font_t **)UIGLibraryGetItemData(UIGLibraryGetGlobal(1), pText->unk_03, pText->unk_02);
     if (pText->Flags & 0x8000) {
         fn_80221DB0(pText);
     }
@@ -121,11 +121,11 @@ void UIGTextGetCursorPos(Text_80221BF0 *pText, Int32 Offset, Int32 *pA, Int32 *p
         }
     }
     if (i >= 0) {
-        *pB = fn_801CD790(*ppFont) * (i - pText->unk_10);
+        *pB = FontGetDescent(*ppFont) * (i - pText->unk_10);
         *pA = 0;
         End = pRange->unk_02;
         for (j = pRange->unk_00; j < End && j < Offset; j++) {
-            *pA += fn_801CD750(*ppFont, pText->pBuffer->pText[j]);
+            *pA += FontGetCharWidth(*ppFont, pText->pBuffer->pText[j]);
         }
     } else {
         *pA = 0;
@@ -149,7 +149,7 @@ void fn_80221D5C(Text_80221BF0 *pText)
 
 void fn_80221DB0(Text_80221BF0 *pText)
 {
-    Font_801CCA64 **ppFont;
+    Font_t **ppFont;
     char *pString;
     char *pLine;
     Int16 Length;
@@ -167,7 +167,7 @@ void fn_80221DB0(Text_80221BF0 *pText)
 
     i = 0;
     NumLines = 0;
-    ppFont = (Font_801CCA64 **)UIGLibraryGetItemData(UIGLibraryGetGlobal(1), pText->unk_03, pText->unk_02);
+    ppFont = (Font_t **)UIGLibraryGetItemData(UIGLibraryGetGlobal(1), pText->unk_03, pText->unk_02);
     LineStart = 0;
     pLine = NULL;
     fn_80221D5C(pText);
@@ -189,7 +189,7 @@ void fn_80221DB0(Text_80221BF0 *pText)
                 LastSpace = LineStart;
                 for (i = LineStart; i < Pos; i++) {
                     ch = pString[i];
-                    CharWidth = fn_801CD750(*ppFont, ch);
+                    CharWidth = FontGetCharWidth(*ppFont, ch);
                     if (ch == ' ' || pString[LastSpace] == ' ') {
                         LastSpace = i;
                     }
@@ -243,23 +243,23 @@ void fn_80221DB0(Text_80221BF0 *pText)
                 if (!(pText->Flags & 0x3000)) {
                     if (pText->Flags & 2) {
                         for (i = LineStart; i < Pos - 1 && Width > pText->unk_14; i++) {
-                            Width -= fn_801CD750(*ppFont, pString[i]);
+                            Width -= FontGetCharWidth(*ppFont, pString[i]);
                         }
                         lbl_8039F9B8[NumLines].unk_00 = i;
                         lbl_8039F9B8[NumLines].unk_02 = Pos;
                     } else if (pText->Flags & 1) {
                         LastSpace = LineStart;
                         for (i = Pos - 1; LastSpace < i && Width > pText->unk_14;) {
-                            Width -= fn_801CD750(*ppFont, pString[i--]);
+                            Width -= FontGetCharWidth(*ppFont, pString[i--]);
                             if (LastSpace < i && Width > pText->unk_14) {
-                                Width -= fn_801CD750(*ppFont, pString[LastSpace++]);
+                                Width -= FontGetCharWidth(*ppFont, pString[LastSpace++]);
                             }
                         }
                         lbl_8039F9B8[NumLines].unk_00 = LastSpace;
                         lbl_8039F9B8[NumLines].unk_02 = i + 1;
                     } else {
                         for (i = Pos - 1; Width > pText->unk_14 && i > 1;) {
-                            Width -= fn_801CD750(*ppFont, pString[i--]);
+                            Width -= FontGetCharWidth(*ppFont, pString[i--]);
                         }
                         lbl_8039F9B8[NumLines].unk_00 = LineStart;
                         lbl_8039F9B8[NumLines].unk_02 = i + 1;
@@ -273,7 +273,7 @@ void fn_80221DB0(Text_80221BF0 *pText)
                 lbl_8039F9B8[NumLines].unk_02 = Pos;
                 lbl_8039F9B8[NumLines].unk_00 = LineStart;
                 NumLines++;
-                Width = fn_801CD63C(*ppFont, &pString[LineStart], pText->Flags);
+                Width = FontGetTextWidth(*ppFont, &pString[LineStart], pText->Flags);
                 if (Width > pText->unk_14) {
                     pText->unk_14 = Width;
                 }
@@ -292,7 +292,7 @@ void fn_80221DB0(Text_80221BF0 *pText)
         *fn_80221D30(pText, Line) = lbl_8039F9B8[Line];
     }
     if (!(pText->Flags & 0x200)) {
-        pText->unk_16 = pText->NumRanges * fn_801CD790(*ppFont);
+        pText->unk_16 = pText->NumRanges * FontGetDescent(*ppFont);
     }
     pText->Flags &= 0x7FFF;
 }
@@ -494,7 +494,7 @@ void fn_80222764(Text_80221BF0 *pText)
 
 void UIGLibTextDraw(Text_80221BF0 *pText)
 {
-    FontColor_801CCA64 Color;
+    FontColor_t Color;
     Float32 Pos[3];
     Rgba_802227B0 Color0;
     Rgba_802227B0 Color1;
@@ -517,15 +517,15 @@ void UIGLibTextDraw(Text_80221BF0 *pText)
     }
     if (pItem->unk_04 != 0) {
         UIGLibrarySetMemInfo(pText->unk_03, pText->unk_02);
-        fn_801CD20C(pItem->pFont, 1);
+        FontUploadTextures(pItem->pFont, 1);
         UIGLibraryClearMemInfo();
         pItem->unk_04 = 0;
     }
     pScale = fn_80220D34();
     Align = (Uint16)pText->Flags & 0xF0;
     Scale = 1.0f / 255.0f;
-    fn_801CD3B0(0xF0);
-    fn_801CD398(Align);
+    FontClearRenderFlags(0xF0);
+    FontSetRenderFlags(Align);
     Color0 = pText->unk_18;
     Color1 = pText->unk_1C;
     if (pText->unk_05 != -1 && pText->unk_04 != -1) {
@@ -541,14 +541,14 @@ void UIGLibTextDraw(Text_80221BF0 *pText)
     Color.g = Scale * (Color0.c[1] + pScale->unk_00[5]) * pScale->unk_00[1];
     Color.b = Scale * (Color0.c[2] + pScale->unk_00[6]) * pScale->unk_00[2];
     Color.a = Scale * (Color0.a + pScale->unk_00[7]) * pScale->unk_00[3];
-    fn_801CD308(0, Color);
+    FontSetRenderColor(0, Color);
     if (pText->Flags & 0x50) {
         Color.r = Scale * (Color1.c[0] + pScale->unk_00[4]) * pScale->unk_00[0];
         Color.g = Scale * (Color1.c[1] + pScale->unk_00[5]) * pScale->unk_00[1];
         Color.b = Scale * (Color1.c[2] + pScale->unk_00[6]) * pScale->unk_00[2];
         Color.a = Scale * (Color1.a + pScale->unk_00[7]) * pScale->unk_00[3];
-        fn_801CD308(1, Color);
-        fn_801CD3C8(pText->unk_0C[0], pText->unk_0C[1], pText->unk_0C[2]);
+        FontSetRenderColor(1, Color);
+        FontSetShadowOffset(pText->unk_0C[0], pText->unk_0C[1], pText->unk_0C[2]);
     }
     if (fn_80220CE4() != 2) {
         fn_801CDD18();
@@ -569,7 +569,7 @@ void UIGLibTextDraw(Text_80221BF0 *pText)
         }
     }
     Bottom = pText->unk_16 + Pos[1];
-    LineHeight = fn_801CD790(pItem->pFont);
+    LineHeight = FontGetDescent(pItem->pFont);
     for (Line = pText->unk_10;
          Line < pText->NumRanges && (!(pText->Flags & 0x200) || Pos[1] + LineHeight <= Bottom); Line++) {
         pRange = fn_80221D30(pText, Line);

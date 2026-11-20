@@ -3,7 +3,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/Ball.h"
-#include "game/fn_8022781C.h"
+#include "game/Vec2Distance.h"
 
 struct Entry_8015005C {
     int mUnknown0;
@@ -45,7 +45,7 @@ extern const char lbl_802A0DDC[];
 extern const char lbl_802A05C8[];
 void fn_801780A8(Point_8017886C point);
 void BallRestAtAngles(Ball_t *pBall, int *pAngles);
-void fn_8013AD9C(Ball_t *pBall, int value);
+void BallSetSpinMode(Ball_t *pBall, int value);
 void BallPrimeKickUp(Ball_t *pBall);
 void fn_8014FFC4(Point_8017886C *pPoint);
 extern const float lbl_802A134C[];
@@ -85,14 +85,14 @@ void ResetBallsAndFieldPositions(void)
         angles[1] = 0xFFC00000;
         angles[2] = 0xFFC00000;
         BallRestAtAngles(pBall, angles);
-        fn_8013AD9C(pBall, 0);
+        BallSetSpinMode(pBall, 0);
         BallPrimeKickUp(pBall);
     }
     for (i = 0; i <= 2; i++) {
         fn_8014FFC4(&pTable->mUnknown92[i]);
         unsigned int j = 0;
         while (j < i) {
-            if (fn_8022781C(&pTable->mUnknown92[i], &pTable->mUnknown92[j]) < 4.0f) {
+            if (Vec2Distance(&pTable->mUnknown92[i], &pTable->mUnknown92[j]) < 4.0f) {
                 fn_8014FFC4(&pTable->mUnknown92[i]);
                 j = 0;
             } else {

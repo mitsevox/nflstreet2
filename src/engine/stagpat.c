@@ -57,7 +57,7 @@ int SNDBANKI_playtimbre(int bank_index, int patch_index, BankVer_t *bank, SndPla
     send = (signed char)opts->m5;
     // FAKEMATCH: found is never set (success leaves by break), as in SNDPKTPLAY_start
     while (!found && (render = SNDI_validrendermode(&cursor, tag)) != 0) {
-        fn_80273D7C(render, &rate, &format);
+        SNDPLATFORM_getvoicerange(render, &rate, &format);
         voice = SNDVOICEI_alloc(tag->m3, tag->mC, &result, rate, format);
         if (voice < 0) {
             continue;
@@ -171,7 +171,7 @@ int SNDBANKI_playtimbre(int bank_index, int patch_index, BankVer_t *bank, SndPla
         for (i = 0; i < lbl_8030002C; i++) {
             rec->m64[i] = send * (1.0f / 127.0f);
         }
-        if (fn_80273DF8((Header_80273DF8 *)tag, (int)bank, voice, opts->mE, opts->m14, opts->m16) >= 0) {
+        if (SNDPLATFORM_playtimbre((Header_80273DF8 *)tag, (int)bank, voice, opts->mE, opts->m14, opts->m16) >= 0) {
             break;
         }
         for (i = 0; i < tag->m3; i++) {

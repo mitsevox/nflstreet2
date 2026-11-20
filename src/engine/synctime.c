@@ -2,9 +2,9 @@
    game time and its tick counter, which the registry can reset, compare, save
    and restore; advancing the clock and reading ticks and elapsed time. */
 
-#include "engine/Object_80237EE8.h"
-#include "engine/Desc_80238424.h"
-#include "engine/fn_80238680.h"
+#include "engine/SyncStateGroup.h"
+#include "engine/EvMonDesc.h"
+#include "engine/EvMonAddListener.h"
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/gx/GXPixel.h>
 #include <dolphin/os/OSCache.h>
@@ -20,217 +20,217 @@
 #include "engine/llmemory.h"
 #include "engine/dslist.h"
 
-typedef struct Counter_80237934 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-} Counter_80237934;
+typedef struct SyncTimeCounter_t {
+    int mMode;
+    int mStep;
+    int mTicks;
+    int mPending;
+} SyncTimeCounter_t;
 
-typedef struct Timer_80237780 {
-    unsigned int mUnknown0;
-    unsigned int mUnknown4;
-    unsigned int mUnknown8;
-    Counter_80237934 *mpUnknown12;
-} Timer_80237780;
+typedef struct SyncTime_t {
+    unsigned int mStartTime;
+    unsigned int mGameTime;
+    unsigned int mTime;
+    SyncTimeCounter_t *mpCounter;
+} SyncTime_t;
 
-typedef struct TimerState_80237728 {
-    Timer_80237780 mUnknown0;
-    Counter_80237934 mUnknown16;
-} TimerState_80237728;
+typedef struct SyncTimeSave_t {
+    SyncTime_t mClock;
+    SyncTimeCounter_t mCounter;
+} SyncTimeSave_t;
 
-extern Timer_80237780 *lbl_803EC138;
-extern int lbl_803EC13C;
-extern void *fn_8023816C(void *pHandle);
+static SyncTime_t *_SyncTime_pState = 0;
+static int _SyncTime_iStep = 1;
+extern void *SyncStateGetData(void *pHandle);
 extern int fn_80238278(const void *p, int size, int seed);
-int fn_802376D8(void *p, void *pBuffer);
-void fn_80237888(unsigned int time);
-void fn_8023792C(void);
-void fn_80237930(void);
-Counter_80237934 *SyncTimeNewCounter(int a, int b);
-void fn_8023799C(Counter_80237934 *p);
-void fn_802379BC(Counter_80237934 *p, int value);
-void fn_802379C4(Counter_80237934 *p, int value);
-void fn_802379CC(Counter_80237934 *p, int delta);
-int fn_802379DC(Counter_80237934 *p);
-int fn_80237A28(Counter_80237934 *p);
+int SyncTimeSaveState(void *p, void *pBuffer);
+void SyncTimeSetTime(unsigned int time);
+void SyncTimeCounterInit(void);
+void SyncTimeCounterShutdown(void);
+SyncTimeCounter_t *SyncTimeNewCounter(int a, int b);
+void SyncTimeDelCounter(SyncTimeCounter_t *p);
+void SyncTimeCounterSetMode(SyncTimeCounter_t *p, int value);
+void SyncTimeCounterSetStep(SyncTimeCounter_t *p, int value);
+void SyncTimeCounterAddTime(SyncTimeCounter_t *p, int delta);
+int SyncTimeCounterUpdate(SyncTimeCounter_t *p);
+int SyncTimeCounterGetTicks(SyncTimeCounter_t *p);
 
-int fn_8023758C(void *p, int value)
+int SyncTimeInitState(void *p, int value)
 {
-    Timer_80237780 *pTimer = p;
+    SyncTime_t *pTimer = p;
 
-    pTimer->mUnknown8 = pTimer->mUnknown0;
-    pTimer->mUnknown4 = pTimer->mUnknown0;
-    pTimer->mpUnknown12 = SyncTimeNewCounter(0, lbl_803EC13C);
+    pTimer->mTime = pTimer->mStartTime;
+    pTimer->mGameTime = pTimer->mStartTime;
+    pTimer->mpCounter = SyncTimeNewCounter(0, _SyncTime_iStep);
     return 0;
 }
 
-int fn_802375D4(void *p, int value)
+int SyncTimeShutdownState(void *p, int value)
 {
-    Timer_80237780 *pTimer = p;
+    SyncTime_t *pTimer = p;
 
-    fn_8023799C(pTimer->mpUnknown12);
+    SyncTimeDelCounter(pTimer->mpCounter);
     return 0;
 }
 
 int SyncTimeCompareState(void *p, void *q)
 {
-    Timer_80237780 *pA = p;
-    Timer_80237780 *pB = q;
+    SyncTime_t *pA = p;
+    SyncTime_t *pB = q;
     int result;
 
     if (pB != 0) {
         result = 0;
-        result |= pA->mUnknown0 != pB->mUnknown0;
-        result |= pA->mUnknown4 != pB->mUnknown4;
-        result |= pA->mUnknown8 != pB->mUnknown8;
-        result |= fn_80237A28(pA->mpUnknown12) != fn_80237A28(pB->mpUnknown12);
+        result |= pA->mStartTime != pB->mStartTime;
+        result |= pA->mGameTime != pB->mGameTime;
+        result |= pA->mTime != pB->mTime;
+        result |= SyncTimeCounterGetTicks(pA->mpCounter) != SyncTimeCounterGetTicks(pB->mpCounter);
     } else {
-        result = fn_80238278(pA, sizeof(Timer_80237780), 0);
-        result = fn_80238278(pA->mpUnknown12, sizeof(Counter_80237934), result);
+        result = fn_80238278(pA, sizeof(SyncTime_t), 0);
+        result = fn_80238278(pA->mpCounter, sizeof(SyncTimeCounter_t), result);
     }
     return result;
 }
 
-int fn_802376D8(void *p, void *pBuffer)
+int SyncTimeSaveState(void *p, void *pBuffer)
 {
-    Timer_80237780 *pTimer = p;
-    *(Timer_80237780 *)pBuffer = *pTimer;
+    SyncTime_t *pTimer = p;
+    *(SyncTime_t *)pBuffer = *pTimer;
     pBuffer = (char *)pBuffer + 64;
-    *(Counter_80237934 *)pBuffer = *pTimer->mpUnknown12;
+    *(SyncTimeCounter_t *)pBuffer = *pTimer->mpCounter;
     return 1;
 }
 
-int fn_80237728(void *p, void *pBuffer)
+int SyncTimeLoadState(void *p, void *pBuffer)
 {
-    Timer_80237780 *pTimer = p;
-    TimerState_80237728 *pIn = pBuffer;
+    SyncTime_t *pTimer = p;
+    SyncTimeSave_t *pIn = pBuffer;
 
-    *pTimer = pIn->mUnknown0;
-    *pTimer->mpUnknown12 = pIn->mUnknown16;
+    *pTimer = pIn->mClock;
+    *pTimer->mpCounter = pIn->mCounter;
     return 1;
 }
 
-int fn_80237778(void *p)
+int SyncTimeGetStateSize(void *p)
 {
     return 32;
 }
 
-void fn_80237780(int a)
+void SyncTimeInit(int a)
 {
     void *pHandle;
-    Timer_80237780 *pTimer;
+    SyncTime_t *pTimer;
 
-    fn_8023792C();
-    lbl_803EC13C = a;
-    pHandle = SyncStateRegister(0, (void **)&lbl_803EC138, sizeof(Timer_80237780), 0, 0x74696D67);
-    fn_80238234(pHandle, fn_8023758C, fn_802375D4, 0, SyncTimeCompareState);
-    fn_80238248(pHandle, fn_802376D8, fn_80237778, fn_80237728);
-    pTimer = fn_8023816C(pHandle);
-    pTimer->mUnknown4 = 0;
-    pTimer->mUnknown0 = 0;
-    fn_802381E0(pHandle);
+    SyncTimeCounterInit();
+    _SyncTime_iStep = a;
+    pHandle = SyncStateRegister(0, (void **)&_SyncTime_pState, sizeof(SyncTime_t), 0, 0x74696D67);
+    SyncStateSetCallbacks(pHandle, SyncTimeInitState, SyncTimeShutdownState, 0, SyncTimeCompareState);
+    SyncStateSetSaveCallbacks(pHandle, SyncTimeSaveState, SyncTimeGetStateSize, SyncTimeLoadState);
+    pTimer = SyncStateGetData(pHandle);
+    pTimer->mGameTime = 0;
+    pTimer->mStartTime = 0;
+    SyncStateCommit(pHandle);
 }
 
-void fn_80237830(int delta)
+void SyncTimeAdvance(int delta)
 {
-    if (lbl_803EC138 != 0) {
-        fn_80237888(lbl_803EC138->mUnknown8 + delta);
+    if (_SyncTime_pState != 0) {
+        SyncTimeSetTime(_SyncTime_pState->mTime + delta);
     }
 }
 
-void fn_80237868(void)
+void SyncTimeShutdown(void)
 {
-    fn_80237930();
+    SyncTimeCounterShutdown();
 }
 
-void fn_80237888(unsigned int time)
+void SyncTimeSetTime(unsigned int time)
 {
-    unsigned int old = lbl_803EC138->mUnknown8;
+    unsigned int old = _SyncTime_pState->mTime;
 
     if (time > old) {
-        lbl_803EC138->mUnknown8 = time;
-        fn_802379CC(lbl_803EC138->mpUnknown12, time - old);
+        _SyncTime_pState->mTime = time;
+        SyncTimeCounterAddTime(_SyncTime_pState->mpCounter, time - old);
     }
 }
 
-unsigned int fn_802378C8(void)
+unsigned int SyncTimeUpdateTicks(void)
 {
     unsigned int value = 0;
 
-    if (lbl_803EC138 != 0) {
-        value = fn_802379DC(lbl_803EC138->mpUnknown12);
-        lbl_803EC138->mUnknown4 += value;
+    if (_SyncTime_pState != 0) {
+        value = SyncTimeCounterUpdate(_SyncTime_pState->mpCounter);
+        _SyncTime_pState->mGameTime += value;
     }
     return value;
 }
 
-int fn_8023790C(void)
+int SyncTimeGetGameTime(void)
 {
     int value = 0;
 
-    if (lbl_803EC138 != 0) {
-        value = lbl_803EC138->mUnknown4 - lbl_803EC138->mUnknown0;
+    if (_SyncTime_pState != 0) {
+        value = _SyncTime_pState->mGameTime - _SyncTime_pState->mStartTime;
     }
     return value;
 }
 
-void fn_8023792C(void)
+void SyncTimeCounterInit(void)
 {
 }
 
-void fn_80237930(void)
+void SyncTimeCounterShutdown(void)
 {
 }
 
-Counter_80237934 *SyncTimeNewCounter(int a, int b)
+SyncTimeCounter_t *SyncTimeNewCounter(int a, int b)
 {
-    Counter_80237934 *p = fn_801D2B7C(sizeof(Counter_80237934), 0, 0);
+    SyncTimeCounter_t *p = fn_801D2B7C(sizeof(SyncTimeCounter_t), 0, 0);
 
-    memset(p, 0, sizeof(Counter_80237934));
-    fn_802379BC(p, a);
-    fn_802379C4(p, b);
+    memset(p, 0, sizeof(SyncTimeCounter_t));
+    SyncTimeCounterSetMode(p, a);
+    SyncTimeCounterSetStep(p, b);
     return p;
 }
 
-void fn_8023799C(Counter_80237934 *p)
+void SyncTimeDelCounter(SyncTimeCounter_t *p)
 {
     fn_801D2BD0(p);
 }
 
-void fn_802379BC(Counter_80237934 *p, int value)
+void SyncTimeCounterSetMode(SyncTimeCounter_t *p, int value)
 {
-    p->mUnknown0 = value;
+    p->mMode = value;
 }
 
-void fn_802379C4(Counter_80237934 *p, int value)
+void SyncTimeCounterSetStep(SyncTimeCounter_t *p, int value)
 {
-    p->mUnknown4 = value;
+    p->mStep = value;
 }
 
-void fn_802379CC(Counter_80237934 *p, int delta)
+void SyncTimeCounterAddTime(SyncTimeCounter_t *p, int delta)
 {
-    p->mUnknown12 += delta;
+    p->mPending += delta;
 }
 
-int fn_802379DC(Counter_80237934 *p)
+int SyncTimeCounterUpdate(SyncTimeCounter_t *p)
 {
     int value = 0;
 
-    if (p->mUnknown0 == 0) {
-        if (p->mUnknown12 >= p->mUnknown4) {
-            value = p->mUnknown4;
-            p->mUnknown12 -= value;
+    if (p->mMode == 0) {
+        if (p->mPending >= p->mStep) {
+            value = p->mStep;
+            p->mPending -= value;
         }
-    } else if (p->mUnknown0 == 1) {
-        value = p->mUnknown12;
-        p->mUnknown12 = 0;
+    } else if (p->mMode == 1) {
+        value = p->mPending;
+        p->mPending = 0;
     }
-    p->mUnknown8 = value;
+    p->mTicks = value;
     return value;
 }
 
-int fn_80237A28(Counter_80237934 *p)
+int SyncTimeCounterGetTicks(SyncTimeCounter_t *p)
 {
-    return p->mUnknown8;
+    return p->mTicks;
 }

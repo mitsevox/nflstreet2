@@ -13,7 +13,7 @@ int SNDstop(int handle)
     if (voice >= 0) {
         index = -1;
         while (iSNDpatchkey(voice, &index)) {
-            fn_80274F5C(index);
+            SNDPLATFORM_stop(index);
         }
     }
     return voice;

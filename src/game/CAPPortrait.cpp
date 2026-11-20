@@ -5,7 +5,7 @@
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/FMCAPPORT.h"
 #include "game/CAPPortrait.h"
 #include "game/Object_80233EAC.h"
@@ -29,19 +29,19 @@ struct PortraitImageRequest_t {
 };
 
 extern "C" {
-AnimSkeleton_t *fn_8003E028(void);
-AnimSkeleton_t *fn_8003E030(void);
+AnimSkeleton_t *PlyrObjsGetBodySkeleton(void);
+AnimSkeleton_t *PlyrObjsGetSkel19(void);
 void PlaDynClutApplyColors(void *p, int id, FMCAPPORTText *pText);
 void *PlaTexCacheGetArchive(void);
 void PortraitRenderQuantize(PortraitJob_t *pObject);
-void fn_801A4690(int a);
-void fn_801A46BC(void);
+void PlyrRenderBindPartTable(int a);
+void PlyrRenderUnbindPartTable(void);
 int ResCopyToBuffer(void *pArchive, int id, void *pDest);
 int ResGetSize(void *pArchive, int id);
 void LLUIGTexNodeSetCreateCallback(void (*pCallback)(int, unsigned int, PortraitImageRequest_t *));
-int fn_8022F358(int index);
-int fn_8022F3D4(int a);
-int fn_8022F4BC(void);
+int DbUserGetId(int index);
+int DbUserGetDb(int a);
+int DbUserGetCurrent(void);
 void fn_802336C4(void *pObject, Object_8023417C *pModel, int b);
 void fn_80233728(void *pObject);
 void fn_80233760(void *pObject, short *pValues, int count);
@@ -55,7 +55,7 @@ extern char lbl_802EC080[];
 }
 
 static PortraitSlotTable_t *_Portrait_pSlots = 0;
-static AnimSkeleton_t *(*_Portrait_apGetSkeleton[2])(void) = { fn_8003E028, fn_8003E030 };
+static AnimSkeleton_t *(*_Portrait_apGetSkeleton[2])(void) = { PlyrObjsGetBodySkeleton, PlyrObjsGetSkel19 };
 static int _Portrait_aiSkeletonParam[2] = { 15, 32 };
 static const char *_Portrait_apszArchives[2] = { lbl_802EC038, lbl_802EC044 };
 static ModelLod_802DF190 _Portrait_aLod0[2] = { { 0.5f, 1000, 100000, 0xFFFF }, { 0.0f, 0, 0, 0xFFFF } };
@@ -173,7 +173,7 @@ void PortraitLoadModels(PortraitJob_t *pObject)
     short values[53];
     unsigned int i;
 
-    fn_801A4690(0);
+    PlyrRenderBindPartTable(0);
     for (i = 0; i < 2; i++) {
         int id = pObject->mUnknown44[i];
 
@@ -209,7 +209,7 @@ void PortraitLoadModels(PortraitJob_t *pObject)
         fn_80233760(pObject->mUnknown520, values, 37);
     }
     fn_8015F3FC(0);
-    fn_801A46BC();
+    PlyrRenderUnbindPartTable();
 }
 
 void PortraitFreeModels(PortraitJob_t *pObject)
@@ -354,10 +354,10 @@ void PortraitReadImage(unsigned int id, PortraitImageRequest_t *pObject)
         void *pUnknown12 = pObject->mpUnknown12;
         void *pBuffer = fn_801D2B7C(0x400, 4, 0);
 
-        fn_801FCE10(0,
+        TDbCompilePerformOp(0,
                     "use \x8c select 'XTPP' into \x89 and 'LPPP' into \x89 from 'PPRC' where "
                     "'PXSP' = \x85\n",
-                    fn_8022F3D4(fn_8022F358((signed char)_Portrait_pSlots->mSlots[id - 0x277].mValue)), pUnknown12, pBuffer, id);
+                    DbUserGetDb(DbUserGetId((signed char)_Portrait_pSlots->mSlots[id - 0x277].mValue)), pUnknown12, pBuffer, id);
         memcpy(pObject->mpUnknown20, pBuffer, 0x200);
         fn_801D2BD0(pBuffer);
     }
@@ -368,10 +368,10 @@ void PortraitJobSave(PortraitJob_t *pObject)
     void *pUnknown4 = pObject->mpUnknown4;
     void *pUnknown8 = pObject->mpUnknown8;
 
-    fn_801FCE10(0,
+    TDbCompilePerformOp(0,
                 "use \x8c update 'PPRC' set 'XTPP' = \x89 and 'LPPP' = \x89 where 'PXSP' = "
                 "\x85\n",
-                fn_8022F3D4(fn_8022F4BC()), pUnknown4, pUnknown8, pObject->mUnknown0);
+                DbUserGetDb(DbUserGetCurrent()), pUnknown4, pUnknown8, pObject->mUnknown0);
     fn_801D2BD0(pUnknown4);
     fn_801D2BD0(pUnknown8);
 }

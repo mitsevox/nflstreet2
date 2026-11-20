@@ -2,7 +2,7 @@
 #include "game/Object_8008044C.h"
 #include "game/Object_801BBD5C.h"
 #include "game/AnimChanStartAnim.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/Table_80089904.h"
 #include "game/fn_801BE60C.h"
 #include <string.h>
@@ -101,7 +101,7 @@ int fn_80089904(FEPlyrModel_t *pRecord, Table_80089904 *pTable,
                 if (current == category || subtype == 1) {
                     score += 500;
                 }
-                score += fn_802372EC(0, 100);
+                score += SyncRandGetRange(0, 100);
                 if (score > best && score >= 2000) {
                     sLast = i;
                     best = score;
@@ -260,7 +260,7 @@ int fn_80089E70(Table_80089904 *pTable, unsigned short event, void *a, void *b,
                 FEPlyrSetPose(0, 16);
                 FEPlyrSetPose(1, 16);
             } else {
-                sCountdown = (fn_802372EC(0, 5) + 10) * 120;
+                sCountdown = (SyncRandGetRange(0, 5) + 10) * 120;
                 sWaiting = 1;
             }
         } else if (sCurrent[index] > 31) {
