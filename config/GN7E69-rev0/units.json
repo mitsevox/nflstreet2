@@ -1748,18 +1748,6 @@
       "address": "0x80277AFC",
       "evidence": "evidence.tsv function and name rows for SNDI_freespkrtable 0x80277AFC; the draft src/engine/satospkr.c is registered in comparisons.json (SNDI_precalcaztospkrvol differs), so the original provider stays linked and linked callers (src/engine/ssysinit.c) resolve this name to it."
     },
-    "SNDSYSI_chanpubinit": {
-      "address": "0x802701D8",
-      "evidence": "evidence.tsv function and name rows for SNDSYSI_chanpubinit 0x802701D8; it is exact but follows the documented holdout SNDSYS_restore in src/engine/ssysinit.c, so it is registered in comparisons.json, its original bytes stay linked and the linked SNDSYSI_init resolves this name to it."
-    },
-    "SNDVOICEI_free": {
-      "address": "0x8026A0E8",
-      "evidence": "evidence.tsv function and name rows for fn_8026A0E8 0x8026A0E8; it is exact or partial but follows the documented holdout fn_8026A0E8 in src/engine/salloc.c, so it is registered in comparisons.json, its original bytes stay linked and linked callers resolve this name to it."
-    },
-    "SNDVOICEI_get": {
-      "address": "0x8026A288",
-      "evidence": "evidence.tsv function and name rows for fn_8026A288 0x8026A288; it is exact or partial but follows the documented holdout fn_8026A0E8 in src/engine/salloc.c, so it is registered in comparisons.json, its original bytes stay linked and linked callers resolve this name to it."
-    },
     "SNDBANKI_playpatch": {
       "address": "0x80270B10",
       "evidence": "evidence.tsv function and name rows for fn_80270B10 0x80270B10; it is exact but follows the unwritten fn_80270518 in src/engine/stagpat.c, so it is registered in comparisons.json, its original bytes stay linked and linked callers (src/engine/sbplay.c) resolve this name to it."
@@ -4385,7 +4373,7 @@
     {
       "source": "src/engine/lllight.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x80235DD8-0x80236DD8 (src/engine/lllight.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows and the data row 0x802B71B0-0x802B7220 of its whole .rodata; linked with holdouts (owner ruling of 2026-11-20): 21 of 23 functions exact, the two holdouts keep the original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x80235DD8-0x80236DD8 (src/engine/lllight.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows and the data row 0x802B71B0-0x802B7220 of its whole .rodata; linked with holdouts (owner ruling of 2026-11-20): 22 of 23 functions exact, the holdout fn_802365E8 keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -4397,7 +4385,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x802368D0",
-          "end": "0x80236C10"
+          "end": "0x80236DD8"
         },
         {
           "section": ".rodata",
@@ -4411,13 +4399,9 @@
           {
             "function": "fn_802365E8",
             "evidence": "evidence.tsv source-form 0x802365E8-0x802368D0"
-          },
-          {
-            "function": "fn_80236C10",
-            "evidence": "evidence.tsv source-form 0x80236C10-0x80236DD8"
           }
         ],
-        "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/lllight.c holds out fn_802365E8 and fn_80236C10."
+        "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/lllight.c holds out fn_802365E8 (fn_80236C10 matched in the x2 fix round)."
       }
     },
     {
@@ -7729,7 +7713,7 @@
           "PrintDebugHelpLine",
           "GetHighlightedObject",
           "SetFocusHeight",
-          "_StrippedEventDelay"
+          "_StrippedReplayMovieStart"
         ],
         "evidence": "evidence.tsv linker rows of the file-static functions of src/game/cu_8002B8F8.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
       }
@@ -15663,7 +15647,7 @@
     {
       "source": "src/engine/dbutil.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8022C894-0x8022C9A8 (src/engine/dbutil.c), its six function/name rows, the .sdata data row 0x803EC040-0x803EC048 and the engine_c compiler row of src/engine/cu_80229270.c it was split from. Complete source file linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8022C894-0x8022C9A8 (src/engine/dbutil.c), its six function/name rows, the .sdata data row 0x803EC040-0x803EC048 and the engine_c compiler row 0x80229270-0x8022EFDC of the range it was split from. Complete source file linked.",
       "sections": [
         {
           "section": ".text",
@@ -20925,8 +20909,8 @@
     },
     {
       "source": "src/engine/salloc.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x80269CE8-0x8026A2DC (src/engine/salloc.c, FIFA Soccer 2005 salloc.o), its function and name rows, the data row of its .data lasthandle 0x802FFCC0-0x802FFCC4 and the sound_cxx compiler row 0x80266E88-0x8026A664; fn_80269CE8 and fn_80269D28 (0x80269CE8-0x8026A0E8) are exact and linked with the .data word. The documented holdout fn_8026A0E8 0x8026A0E8-0x8026A288 and the exact fn_8026A288 after it keep their original bytes and stay comparisons.",
+      "profile": "sound_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x80269CE8-0x8026A2DC (src/engine/salloc.c, FIFA Soccer 2005 salloc.o), its function and name rows, the data row of its .data lasthandle 0x802FFCC0-0x802FFCC4 and the sound_cxx compiler row 0x80266E88-0x8026A664; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): every function exact except the holdout SNDVOICEI_free 0x8026A0E8-0x8026A288, which keeps the original bytes and stays a registered partial; the whole .data is linked.",
       "sections": [
         {
           "section": ".text",
@@ -20935,12 +20919,27 @@
           "end": "0x8026A0E8"
         },
         {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026A288",
+          "end": "0x8026A2DC"
+        },
+        {
           "section": ".data",
           "placement": ".data4",
           "start": "0x802FFCC0",
           "end": "0x802FFCC4"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "SNDVOICEI_free",
+            "evidence": "evidence.tsv source-form 0x8026A0E8-0x8026A288"
+          }
+        ],
+        "evidence": "merge notes of #1368 (x2 fix round) holdouts table: src/engine/salloc.c holds out SNDVOICEI_free; its HOLDOUT: row lists the forms tried and the RTL-dump finding."
+      }
     },
     {
       "source": "src/engine/sballoc.c",
@@ -21465,8 +21464,8 @@
     },
     {
       "source": "src/engine/ssysinit.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026FD28-0x802702D8 (src/engine/ssysinit.c, NASCAR 2005 ssysinit.c), its function and name rows, the data rows of its .data 0x80300030-0x80300038 and its .rodata literal pool 0x802B7A68-0x802B7A74, and the sound_cxx compiler row 0x8026E4C0-0x80270494; SNDSYS_getopts, SNDSYS_setopts and SNDSYSI_init (0x8026FD28-0x802700E0) are exact and linked with the whole .data and the first two literals (0x802B7A68-0x802B7A70). The documented holdout SNDSYS_restore 0x802700E0-0x802701D8 and the exact SNDSYSI_chanpubinit after it (with its literal 0x802B7A70) keep their original bytes and stay comparisons.",
+      "profile": "sound_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x8026FD28-0x802702D8 (src/engine/ssysinit.c, NASCAR 2005 ssysinit.c), its function and name rows, the data rows of its .data 0x80300030-0x80300038 and its .rodata literal pool 0x802B7A68-0x802B7A74, and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): every function exact except the holdout SNDSYS_restore 0x802700E0-0x802701D8, which keeps the original bytes and stays a registered partial; the whole .rodata and .data are linked.",
       "sections": [
         {
           "section": ".text",
@@ -21475,10 +21474,16 @@
           "end": "0x802700E0"
         },
         {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802701D8",
+          "end": "0x802702D8"
+        },
+        {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B7A68",
-          "end": "0x802B7A70"
+          "end": "0x802B7A74"
         },
         {
           "section": ".data",
@@ -21486,7 +21491,16 @@
           "start": "0x80300030",
           "end": "0x80300038"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "SNDSYS_restore",
+            "evidence": "evidence.tsv source-form 0x802700E0-0x802701D8"
+          }
+        ],
+        "evidence": "merge notes of #1368 (x2 fix round) holdouts table: src/engine/ssysinit.c holds out SNDSYS_restore; its HOLDOUT: row lists the forms tried and the RTL-dump finding."
+      }
     },
     {
       "source": "src/engine/ssysserv.c",

@@ -981,12 +981,16 @@ extern "C" void PlyrRouteShow(int on, int team, int index)
 
             offset = fn_80177FE0();
             if (fn_80178308() == ((p->mId >> 8) & 0xFF)) {
-                pos.mX = (pPlay->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
-                pos.mY = (pPlay->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
-                fn_80227638(&pos, &pos, &offset);
+                Point_8017886C *pPos = &pos;
+
+                pPos->mX = (pPlay->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
+                pPos->mY = (pPlay->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
+                fn_80227638(pPos, pPos, &offset);
             } else {
-                pos.mX = p->mMotion.mPos.mX;
-                pos.mY = p->mMotion.mPos.mY;
+                Point_8017886C *pPos = &pos;
+
+                pPos->mX = p->mMotion.mPos.mX;
+                pPos->mY = p->mMotion.mPos.mY;
             }
             flip = pPlay->mUnknown8.mUnknownF;
             pRecord = fn_800AEE20(p);

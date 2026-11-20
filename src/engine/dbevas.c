@@ -442,7 +442,7 @@ int fn_8022D25C(int (*pCallback)(int a));
 
 
 
-/* prototypes of the functions defined in the original src/engine/cu_80229270.c */
+/* prototypes of the db functions in 0x80229270-0x8022F428 (dbocmt.c to dbuser.c) */
 int fn_80229270(void);
 int fn_802293A8(void);
 void fn_802293B0(void);

@@ -125,7 +125,6 @@ int SNDVOICEI_alloc(int count, int priority, int *handle, int first, int last)
     return result;
 }
 
-#if defined(DECOMP_COMPARE)
 static inline void _SndVoiceClear(Voice_803A6C24 *v)
 {
     v->mUnknown6D = 0;
@@ -188,5 +187,4 @@ int SNDVOICEI_get(int handle)
         return index;
     return -8;
 }
-#endif
 }

@@ -142,7 +142,7 @@ void SndgMusicResume(void);
 void fn_8009BB50(int a, int b);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009D818(int state);
-int fn_8009D86C(void);
+unsigned int fn_8009D86C(void);
 void fn_8009D964(int index, int value);
 void fn_800A3120(float a);
 float fn_800A32B4(void);
@@ -2367,11 +2367,12 @@ extern "C" void fn_8002F74C(GameCamera_t *pCamera)
     fn_80030CFC();
     if (!lbl_803EC634) {
         Point_8017886C clamped;
+        float y;
         clamped.mX = CLAMP(lbl_8030660C.mPos.mX, -fn_80178A08(), fn_80178A08());
-        clamped.mY = CLAMP(lbl_8030660C.mPos.mY, -fn_80178A44(), fn_80178A44());
-        if (clamped.mX != lbl_8030660C.mPos.mX || clamped.mY != lbl_8030660C.mPos.mY) {
+        clamped.mY = y = CLAMP(lbl_8030660C.mPos.mY, -fn_80178A44(), fn_80178A44());
+        if (clamped.mX != lbl_8030660C.mPos.mX || y != lbl_8030660C.mPos.mY) {
             lbl_8030660C.mPos.mX = clamped.mX;
-            lbl_8030660C.mPos.mY = clamped.mY;
+            lbl_8030660C.mPos.mY = y;
             lbl_803EC620 = 0;
             lbl_803EC628 = 0;
             ReplayCursorSetVisible(1);
@@ -2906,10 +2907,35 @@ extern "C" Command_8002DC00 *fn_80030D14(int id)
     return 0;
 }
 
-// FAKEMATCH: invented body; only its pool constant 4/3 is target evidence
+/* Replay movie start, discarded by the GameCube link (no caller). Rebuilt from
+   the Xbox build's copy, which plays a named movie at a 4:3 aspect with a
+   finished and an update callback and then points every player at a second
+   pose table. The callees and globals it uses have no identified GameCube
+   counterpart and stay declared only. */
+struct ReplayMoviePlayer {
+    char mPad[0xEEC];
+    const float *mpPose;
+};
+
 extern "C" {
-static float _StrippedEventDelay(void)
+extern unsigned char gReplayMovieDone;
+extern int *gpReplayMovieScreen;
+extern ReplayMoviePlayer **gppReplayMoviePlayers;
+extern const float gReplayMoviePose[8];
+void ReplayMoviePlay(int a, int b, const char *pName, int screen, float aspect, void (*pDone)(void),
+                     void (*pUpdate)(void));
+void ReplayMovieFinished(void);
+void ReplayMovieUpdate(void);
+
+static void _StrippedReplayMovieStart(int a, int b, const char *pName)
 {
-    return 4.0f / 3.0f;
+    int i;
+
+    gReplayMovieDone = 0;
+    ReplayMoviePlay(a, b, pName, *gpReplayMovieScreen, 4.0f / 3.0f, ReplayMovieFinished, ReplayMovieUpdate);
+    for (i = 0; i < 14; i++) {
+        ReplayMoviePlayer *pPlayer = gppReplayMoviePlayers ? gppReplayMoviePlayers[i] : 0;
+        pPlayer->mpPose = gReplayMoviePose;
+    }
 }
 }

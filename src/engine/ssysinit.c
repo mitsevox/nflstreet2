@@ -95,7 +95,6 @@ int SNDSYSI_init(void *memory, int size, int unused)
     return 0;
 }
 
-#if defined(DECOMP_COMPARE)
 int SNDSYS_restore(void)
 {
     int result;
@@ -153,6 +152,5 @@ int SNDSYSI_chanpubinit(void)
     }
     return 0;
 }
-#endif
 
 }

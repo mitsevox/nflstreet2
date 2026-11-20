@@ -442,7 +442,7 @@ int fn_8022D25C(int (*pCallback)(int a));
 
 
 
-/* prototypes of the functions defined in the original src/engine/cu_80229270.c */
+/* prototypes of the db functions in 0x80229270-0x8022F428 (dbocmt.c to dbuser.c) */
 int fn_80229270(void);
 int fn_802293A8(void);
 void fn_802293B0(void);
@@ -1129,7 +1129,7 @@ void fn_80234DFC(int a, Sprite_80234DFC *pSprite, int c, int d, const char *pNam
 
 
 
-/* prototypes of the functions defined in the original src/engine/cu_8022F428.c */
+/* prototypes of the db functions in 0x8022F428-0x802355E4 (dbuser.c to cu_802336C4.c) */
 int fn_8022F428(int key);
 int fn_8022F478(int value);
 int fn_8022F488(int value);
