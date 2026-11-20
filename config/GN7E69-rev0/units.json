@@ -252,6 +252,18 @@
       "language": "c++",
       "evidence": "evidence.tsv compiler rows 0x8027D3AC-0x8027ED6C (src/engine/pathsnd.c) and 0x8027ED6C-0x8027EFAC (src/engine/pathreal5.c): the PATH sound files keep GoldenEye: Rogue Agent's and Medal of Honor: European Assault's .c names, whose symbols for these files are C++-mangled (PATH_vectortosnd__Fv, __Q24Path9PathToSnd, TaskService__Q24Path11PathToReal5ii), and the code uses virtual tables and constructors; -O2 with the default -G 8 follows the r13 small-data accesses of both ranges. The flags are the ones the same sources compiled with as src/engine/cu_8027D3AC.cpp (now pathsnd.c and pathreal5.c) under engine_c. -fno-weak (c18 wave) keeps the inline Path::IPathToReal destructor, its setters and both virtual tables of src/engine/pathreal5.c as that file own local code and .rodata, as the target places them; pathsnd.c measures the same 32 of 41 exact with and without it."
     },
+    "path_cxx_holdouts": {
+      "flags": [
+        "-O2",
+        "-fno-weak",
+        "-ffunction-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "language": "c++",
+      "evidence": "path_cxx (its evidence.tsv compiler rows) plus -ffunction-sections, the named profile of a path_cxx unit linked with holdouts (owner rulings of 2026-11-20: holdouts for any file after real attempts, and the flag from a named profile, not added by the tool; config README, Holdouts), as engine_c_holdouts is for engine_c. The flag is a link-layout aid, not a claim about the original build: ProDG then emits one .text.<function> section per function with the same instructions, sizes, alignment and data sections. Only a unit with holdouts may use it."
+    },
     "engine_cpp_nosda_nosr": {
       "flags": [
         "-O2",
@@ -1775,6 +1787,50 @@
     "SNDVDWriteNoDMA_next": {
       "address": "0x801AD380",
       "evidence": "evidence.tsv name row SNDVDWriteNoDMA_next 0x801AD380 (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801AD380; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
+    },
+    "PATH_addmapfile": {
+      "address": "0x801B2CDC",
+      "evidence": "evidence.tsv function and name rows for 0x801B2CDC (PATH library function defined by the comparison source of its PATH file, not yet linked; called from src/engine/pathfinder.cpp)."
+    },
+    "PATH_createbankobject": {
+      "address": "0x801B3DD8",
+      "evidence": "evidence.tsv function and name rows for 0x801B3DD8 (PATH library function defined by the comparison source of its PATH file, not yet linked; called from src/engine/pathfinder.cpp)."
+    },
+    "PATH_createstreamimp": {
+      "address": "0x801B3B7C",
+      "evidence": "evidence.tsv function and name rows for 0x801B3B7C (PATH library function defined by the comparison source of its PATH file, not yet linked; called from src/engine/pathfinder.cpp)."
+    },
+    "PATH_destroy": {
+      "address": "0x801B2F28",
+      "evidence": "evidence.tsv function and name rows for 0x801B2F28 (PATH library function defined by the comparison source of its PATH file, not yet linked; called from src/engine/pathfinder.cpp)."
+    },
+    "PATH_fade": {
+      "address": "0x801B4728",
+      "evidence": "evidence.tsv function and name rows for 0x801B4728 (PATH library function defined by the comparison source of its PATH file, not yet linked; called from src/engine/pathfinder.cpp)."
+    },
+    "PATH_setallocator": {
+      "address": "0x801B2C18",
+      "evidence": "evidence.tsv function and name rows for 0x801B2C18 (PATH library function defined by the comparison source of its PATH file, not yet linked; called from src/engine/pathfinder.cpp)."
+    },
+    "PATH_setvariable": {
+      "address": "0x801B3084",
+      "evidence": "evidence.tsv function and name rows for 0x801B3084 (PATH library function defined by the comparison source of its PATH file, not yet linked; called from src/game/SndgMusic.cpp, src/game/SndgPathfinder.cpp)."
+    },
+    "PATH_volume": {
+      "address": "0x801B45D0",
+      "evidence": "evidence.tsv function and name rows for 0x801B45D0 (PATH library function defined by the comparison source of its PATH file, not yet linked; called from src/engine/pathfinder.cpp)."
+    },
+    "PATHI_bytesperms": {
+      "address": "0x801B3268",
+      "evidence": "evidence.tsv function and name rows for 0x801B3268 (PATH library function defined by the comparison source src/engine/pathinit.c, not yet linked; called from src/engine/pathtrack.c)."
+    },
+    "PATHI_enternode": {
+      "address": "0x801B6ED0",
+      "evidence": "evidence.tsv function and name rows for 0x801B6ED0 (PATH library function defined by the comparison source src/engine/pathnode.c, not yet linked; called from src/engine/pathaction.c)."
+    },
+    "PATHI_nextnode": {
+      "address": "0x801B6D9C",
+      "evidence": "evidence.tsv function and name rows for 0x801B6D9C (PATH library function defined by the comparison source src/engine/pathnode.c, not yet linked; called from src/engine/pathaction.c)."
     }
   },
   "units": [
@@ -24344,6 +24400,40 @@
           "end": "0x802AECB4"
         }
       ]
+    },
+    {
+      "source": "src/engine/pathevent.c",
+      "profile": "path_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x801B5E5C-0x801B6780 (src/engine/pathevent.c), its function, name, data and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdout fn_801B64C0, whose range keeps the original bytes. .rodata 0x802AECBC-0x802AECFC is the file's \"%s  %s\" string and the PATHI_copyevent message, defined by the file; the PATH globals it uses stay original-owned.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B5E5C",
+          "end": "0x801B64C0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B6578",
+          "end": "0x801B6780"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AECBC",
+          "end": "0x802AECFC"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "PATHI_serviceevent",
+            "evidence": "evidence.tsv source-form 0x801B64C0-0x801B6578"
+          }
+        ],
+        "evidence": "w1f lane report (swarm/w1/w1f) and the merge notes of the pull request that links the file"
+      }
     }
   ]
 }

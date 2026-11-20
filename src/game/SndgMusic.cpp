@@ -94,7 +94,7 @@ int fn_800837B8(DbCursor *p);
 unsigned char fn_800837D8(DbCursor *p);
 int fn_80083804(DbCursor *p);
 int fn_8008382C(DbCursor *p);
-int fn_801B3084(int flags, const char *pName, int value);
+int PATH_setvariable(int flags, const char *pName, int value);
 void GlibVsync(int a);
 void *ResOpenDevice(const char *pName, int flags);
 void ResClose(void *p);
@@ -209,7 +209,7 @@ void SndgMusicTrackCallback(int flags, int event)
 void SndgMusicSetSongNum(int a, int b, int c)
 {
     if (a) {
-        fn_801B3084(0x1000000, "SongNum", c);
+        PATH_setvariable(0x1000000, "SongNum", c);
     }
 }
 
@@ -311,10 +311,10 @@ int SndgMusicPostMode(int mode)
             _SndgMusic_pState->mUnknown11C = mode;
         }
         if (stop) {
-            fn_801B3084(0x1000000, "SongNum", 0);
+            PATH_setvariable(0x1000000, "SongNum", 0);
             SndgPathPauseTrack(0x11000001);
         } else if (start) {
-            fn_801B3084(0x1000000, "SongNum", 1);
+            PATH_setvariable(0x1000000, "SongNum", 1);
             SndgPathResumeTrack(0x11000001);
         }
         if (!blocked) {
@@ -581,7 +581,7 @@ void SndgMusicPlaySong(int a, int b, int c)
         _SndgMusic_pState->mUnknown2C = c;
         _SndgMusic_pState->mUnknown28 = b;
         _SndgMusic_pState->mUnknown30 = c;
-        fn_801B3084(0x1000000, "SongNum", 0);
+        PATH_setvariable(0x1000000, "SongNum", 0);
         SndgMusicPublishSongText();
     }
     _SndgMusic_pState->mUnknown123 = 1;

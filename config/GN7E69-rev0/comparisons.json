@@ -31088,6 +31088,12 @@
           "placement": ".data2",
           "start": "0x80289B40",
           "end": "0x80289B44"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEA18",
+          "end": "0x802AEA58"
         }
       ],
       "functions": [
@@ -31102,6 +31108,11 @@
           "end": "0x801B2C18"
         },
         {
+          "symbol": "PATH_setallocator",
+          "start": "0x801B2C18",
+          "end": "0x801B2C40"
+        },
+        {
           "symbol": "fn_801B2C40",
           "start": "0x801B2C40",
           "end": "0x801B2C94"
@@ -31112,14 +31123,34 @@
           "end": "0x801B2CDC"
         },
         {
+          "symbol": "PATH_addmapfile",
+          "start": "0x801B2CDC",
+          "end": "0x801B2F18"
+        },
+        {
           "symbol": "fn_801B2F18",
           "start": "0x801B2F18",
           "end": "0x801B2F28"
         },
         {
+          "symbol": "PATH_destroy",
+          "start": "0x801B2F28",
+          "end": "0x801B3084"
+        },
+        {
+          "symbol": "PATH_setvariable",
+          "start": "0x801B3084",
+          "end": "0x801B3234"
+        },
+        {
           "symbol": "fn_801B3234",
           "start": "0x801B3234",
           "end": "0x801B3268"
+        },
+        {
+          "symbol": "PATHI_bytesperms",
+          "start": "0x801B3268",
+          "end": "0x801B33DC"
         },
         {
           "symbol": "__static_initialization_and_destruction_0",
@@ -31193,6 +31224,12 @@
           "placement": ".text",
           "start": "0x801B3AD0",
           "end": "0x801B45D0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEA60",
+          "end": "0x802AEB90"
         }
       ],
       "functions": [
@@ -31202,14 +31239,29 @@
           "end": "0x801B3B7C"
         },
         {
+          "symbol": "PATH_createstreamimp",
+          "start": "0x801B3B7C",
+          "end": "0x801B3D28"
+        },
+        {
           "symbol": "fn_801B3D28",
           "start": "0x801B3D28",
           "end": "0x801B3DD8"
         },
         {
+          "symbol": "PATH_createbankobject",
+          "start": "0x801B3DD8",
+          "end": "0x801B3F6C"
+        },
+        {
           "symbol": "fn_801B3F6C",
           "start": "0x801B3F6C",
           "end": "0x801B3FE0"
+        },
+        {
+          "symbol": "PATHI_inittrack",
+          "start": "0x801B3FE0",
+          "end": "0x801B4174"
         },
         {
           "symbol": "fn_801B4174",
@@ -31237,6 +31289,16 @@
           "end": "0x801B44BC"
         },
         {
+          "symbol": "__14Class_801B44BC",
+          "start": "0x801B44BC",
+          "end": "0x801B4514"
+        },
+        {
+          "symbol": "_._14Class_801B44BC",
+          "start": "0x801B4514",
+          "end": "0x801B4548"
+        },
+        {
           "symbol": "fn_801B4548__14Class_801B44BC",
           "start": "0x801B4548",
           "end": "0x801B4564"
@@ -31257,17 +31319,17 @@
           "end": "0x801B457C"
         },
         {
-          "symbol": "fn_801B457C__14Class_801B44BC",
+          "symbol": "fn_801B457C__14Class_801B44BCiPc",
           "start": "0x801B457C",
           "end": "0x801B4584"
         },
         {
-          "symbol": "fn_801B4584__14Class_801B44BC",
+          "symbol": "fn_801B4584__14Class_801B44BCi",
           "start": "0x801B4584",
           "end": "0x801B458C"
         },
         {
-          "symbol": "fn_801B458C__14Class_801B44BC",
+          "symbol": "fn_801B458C__14Class_801B44BCii",
           "start": "0x801B458C",
           "end": "0x801B4594"
         },
@@ -31307,7 +31369,7 @@
           "end": "0x801B45CC"
         },
         {
-          "symbol": "fn_801B45CC__14Class_801B44BC",
+          "symbol": "fn_801B45CC__14Class_801B44BCP17PathName_801B3FE0",
           "start": "0x801B45CC",
           "end": "0x801B45D0"
         }
@@ -31323,13 +31385,34 @@
           "placement": ".text",
           "start": "0x801B45D0",
           "end": "0x801B51AC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEB90",
+          "end": "0x802AEC08"
         }
       ],
       "functions": [
         {
+          "symbol": "PATH_volume",
+          "start": "0x801B45D0",
+          "end": "0x801B4728"
+        },
+        {
+          "symbol": "PATH_fade",
+          "start": "0x801B4728",
+          "end": "0x801B4824"
+        },
+        {
           "symbol": "fn_801B4824",
           "start": "0x801B4824",
           "end": "0x801B4898"
+        },
+        {
+          "symbol": "PATHI_fade",
+          "start": "0x801B4898",
+          "end": "0x801B4960"
         },
         {
           "symbol": "fn_801B4960",
@@ -31340,6 +31423,21 @@
           "symbol": "fn_801B49C4",
           "start": "0x801B49C4",
           "end": "0x801B4A24"
+        },
+        {
+          "symbol": "PATHI_setfadevolume",
+          "start": "0x801B4A24",
+          "end": "0x801B4CE4"
+        },
+        {
+          "symbol": "PATHI_setsfxfadevolume",
+          "start": "0x801B4CE4",
+          "end": "0x801B4F50"
+        },
+        {
+          "symbol": "PATHI_setdrylevelfadevolume",
+          "start": "0x801B4F50",
+          "end": "0x801B51AC"
         }
       ]
     },
@@ -31353,9 +31451,30 @@
           "placement": ".text",
           "start": "0x801B51AC",
           "end": "0x801B59B0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEC08",
+          "end": "0x802AECAC"
         }
       ],
       "functions": [
+        {
+          "symbol": "PATHI_loadbank",
+          "start": "0x801B51AC",
+          "end": "0x801B54BC"
+        },
+        {
+          "symbol": "PATHI_subbankready",
+          "start": "0x801B54BC",
+          "end": "0x801B5634"
+        },
+        {
+          "symbol": "PATHI_loadbankdata",
+          "start": "0x801B5634",
+          "end": "0x801B57C0"
+        },
         {
           "symbol": "fn_801B57C0",
           "start": "0x801B57C0",
@@ -31378,33 +31497,64 @@
           "placement": ".text",
           "start": "0x801B5E5C",
           "end": "0x801B6780"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AECBC",
+          "end": "0x802AECFC"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801B5E5C",
+          "symbol": "PATHI_addevent",
           "start": "0x801B5E5C",
           "end": "0x801B5FC0"
         },
         {
-          "symbol": "fn_801B6334",
+          "symbol": "PATH_event",
+          "start": "0x801B5FC0",
+          "end": "0x801B6138"
+        },
+        {
+          "symbol": "PATHI_copyevent",
+          "start": "0x801B6138",
+          "end": "0x801B6210"
+        },
+        {
+          "symbol": "PATHI_releaseevent",
+          "start": "0x801B6210",
+          "end": "0x801B6334"
+        },
+        {
+          "symbol": "PATHI_removeevent",
           "start": "0x801B6334",
           "end": "0x801B63F0"
         },
         {
-          "symbol": "fn_801B63F0",
+          "symbol": "PATHI_seteventfilter",
           "start": "0x801B63F0",
           "end": "0x801B6460"
         },
         {
-          "symbol": "fn_801B6460",
+          "symbol": "PATHI_clearalleventfilters",
           "start": "0x801B6460",
           "end": "0x801B64C0"
         },
         {
-          "symbol": "fn_801B64C0",
+          "symbol": "PATHI_serviceevent",
           "start": "0x801B64C0",
           "end": "0x801B6578"
+        },
+        {
+          "symbol": "PATHI_serviceeventqueue",
+          "start": "0x801B6578",
+          "end": "0x801B6678"
+        },
+        {
+          "symbol": "PATHI_eventtakespriority",
+          "start": "0x801B6678",
+          "end": "0x801B6780"
         }
       ]
     },
@@ -31418,6 +31568,12 @@
           "placement": ".text",
           "start": "0x801B6780",
           "end": "0x801B7778"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AED00",
+          "end": "0x802AED50"
         }
       ],
       "functions": [
@@ -31425,6 +31581,21 @@
           "symbol": "fn_801B6780",
           "start": "0x801B6780",
           "end": "0x801B67F8"
+        },
+        {
+          "symbol": "PATHI_beatinfo",
+          "start": "0x801B67F8",
+          "end": "0x801B68EC"
+        },
+        {
+          "symbol": "PATHI_calcwaitbeat",
+          "start": "0x801B68EC",
+          "end": "0x801B6A18"
+        },
+        {
+          "symbol": "PATHI_choosesynchtime",
+          "start": "0x801B6A18",
+          "end": "0x801B6CB4"
         },
         {
           "symbol": "fn_801B6CB4",
@@ -31437,9 +31608,29 @@
           "end": "0x801B6D9C"
         },
         {
+          "symbol": "PATHI_nextnode",
+          "start": "0x801B6D9C",
+          "end": "0x801B6ED0"
+        },
+        {
+          "symbol": "PATHI_enternode",
+          "start": "0x801B6ED0",
+          "end": "0x801B7178"
+        },
+        {
           "symbol": "fn_801B7178",
           "start": "0x801B7178",
           "end": "0x801B721C"
+        },
+        {
+          "symbol": "PATHI_seeknextnode",
+          "start": "0x801B721C",
+          "end": "0x801B7460"
+        },
+        {
+          "symbol": "PATHI_queuenode",
+          "start": "0x801B7460",
+          "end": "0x801B7778"
         }
       ]
     },
@@ -31470,6 +31661,16 @@
           "symbol": "fn_801B8580",
           "start": "0x801B8580",
           "end": "0x801B864C"
+        },
+        {
+          "symbol": "PATHI_getvalue",
+          "start": "0x801B864C",
+          "end": "0x801B89B0"
+        },
+        {
+          "symbol": "PATHI_setvalue",
+          "start": "0x801B89B0",
+          "end": "0x801B8C18"
         }
       ]
     },
