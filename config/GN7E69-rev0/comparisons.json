@@ -35733,13 +35733,19 @@
     {
       "source": "src/engine/stagpat.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x80270494-0x80270D6C (src/engine/stagpat.c), its function, name and data rows and the sound_cxx compiler row. fn_80270B10 0x80270B10-0x80270D6C is exact and compiled with DECOMP_COMPARE for comparison only (it follows the unwritten 1528-byte fn_80270518, which keeps its original bytes); fn_80270494 is linked through units.json.",
+      "evidence": "evidence.tsv unit row 0x80270494-0x80270D6C (src/engine/stagpat.c), its function, name and data rows and the sound_cxx compiler row. SNDBANKI_playtimbre 0x80270518-0x80270B10 is the file's holdout (units.json holdouts, HOLDOUT: row); SNDBANKI_findfreekey and SNDBANKI_playpatch are exact and linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80270494",
           "end": "0x80270D6C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7A78",
+          "end": "0x802B7A88"
         },
         {
           "section": ".data",
@@ -35750,79 +35756,9 @@
       ],
       "functions": [
         {
-          "symbol": "SNDBANKI_playpatch",
-          "start": "0x80270B10",
-          "end": "0x80270D6C"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/ssys.cpp",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8026F5F8-0x8026FD28 (src/engine/ssys.cpp, NASCAR 2005 ssys.cpp), its function and name rows and the sound_cxx compiler row 0x8026E4C0-0x80270494; written in w1, original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026F5F8",
-          "end": "0x8026FD28"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SetMaxBanks__Q23Snd6Systemi",
-          "start": "0x8026F5F8",
-          "end": "0x8026F66C"
-        },
-        {
-          "symbol": "CapOutputMode__Q23Snd6SystemQ23Snd10OutputModePb",
-          "start": "0x8026F66C",
-          "end": "0x8026F710"
-        },
-        {
-          "symbol": "SetOutputMode__Q23Snd6SystemQ23Snd10OutputMode",
-          "start": "0x8026F710",
-          "end": "0x8026F788"
-        },
-        {
-          "symbol": "SetVoices__Q23Snd6SystemQ23Snd6Devicei",
-          "start": "0x8026F788",
-          "end": "0x8026F894"
-        },
-        {
-          "symbol": "SetSndInitsAram__Q23Snd6Systemb",
-          "start": "0x8026F894",
-          "end": "0x8026F908"
-        },
-        {
-          "symbol": "SetAbortHandler__Q23Snd6SystemPFPCc_v",
-          "start": "0x8026F908",
-          "end": "0x8026F97C"
-        },
-        {
-          "symbol": "Init__Q23Snd6Systemi",
-          "start": "0x8026F97C",
-          "end": "0x8026FBB4"
-        },
-        {
-          "symbol": "IsInited__Q23Snd6System",
-          "start": "0x8026FBB4",
-          "end": "0x8026FBCC"
-        },
-        {
-          "symbol": "Restore__Q23Snd6System",
-          "start": "0x8026FBCC",
-          "end": "0x8026FBFC"
-        },
-        {
-          "symbol": "SetHeap__Q23Snd6MemoryQ23Snd6DevicePvi",
-          "start": "0x8026FBFC",
-          "end": "0x8026FCAC"
-        },
-        {
-          "symbol": "SetFunctionProfiler__Q23Snd7ProfilePFPCc_vT1",
-          "start": "0x8026FCAC",
-          "end": "0x8026FD28"
+          "symbol": "SNDBANKI_playtimbre",
+          "start": "0x80270518",
+          "end": "0x80270B10"
         }
       ]
     },

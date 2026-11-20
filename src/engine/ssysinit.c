@@ -6,6 +6,7 @@
 
 #include "engine/ssysinit.h"
 #include "engine/sndbank.h"
+#include "engine/ssys.h"
 
 extern "C" {
 
@@ -14,7 +15,6 @@ extern float lbl_80300028;
 extern int lbl_8030002C;
 extern unsigned char lbl_803A7728;
 
-int fn_8026FBB4(void);
 int fn_80273648(int mode);
 int fn_802733A0(void);
 int fn_80273458(void);
@@ -99,7 +99,7 @@ int SNDSYS_restore(void)
 {
     int result;
 
-    if (fn_8026FBB4() == 0) {
+    if (!Snd::System::IsInited()) {
         return -14;
     }
     if (lbl_803A6C24.m18C[10] != 0) {

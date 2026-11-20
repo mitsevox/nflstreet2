@@ -1748,10 +1748,6 @@
       "address": "0x80277AFC",
       "evidence": "evidence.tsv function and name rows for SNDI_freespkrtable 0x80277AFC; the draft src/engine/satospkr.c is registered in comparisons.json (SNDI_precalcaztospkrvol differs), so the original provider stays linked and linked callers (src/engine/ssysinit.c) resolve this name to it."
     },
-    "SNDBANKI_playpatch": {
-      "address": "0x80270B10",
-      "evidence": "evidence.tsv function and name rows for fn_80270B10 0x80270B10; it is exact but follows the unwritten fn_80270518 in src/engine/stagpat.c, so it is registered in comparisons.json, its original bytes stay linked and linked callers (src/engine/sbplay.c) resolve this name to it."
-    },
     "SNQueryData": {
       "address": "0x801ACB9C",
       "evidence": "evidence.tsv name row SNQueryData 0x801ACB9C (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801ACB9C; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
@@ -5290,8 +5286,8 @@
     },
     {
       "source": "src/engine/stagpat.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x80270494-0x80270D6C (src/engine/stagpat.c, NASCAR 2005 stagpat.c), its function and name rows, the data row of its .data 0x80300038-0x8030003C (freekey and padding) and the sound_cxx compiler row 0x8026E4C0-0x80270494 with the d4 source-form row; fn_80270494 (0x80270494-0x80270518) is exact and linked with the .data byte. fn_80270518 (1528 bytes) is not yet written and keeps its original bytes; the exact fn_80270B10 after it stays a comparison.",
+      "profile": "sound_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x80270494-0x80270D6C (src/engine/stagpat.c, NASCAR 2005 stagpat.c), its function and name rows, the data rows of its .rodata literal pool 0x802B7A78-0x802B7A88 and .data 0x80300038-0x8030003C (freekey and padding) and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): SNDBANKI_findfreekey and SNDBANKI_playpatch exact, the holdout SNDBANKI_playtimbre 0x80270518-0x80270B10 keeps the original bytes and stays a registered partial; the whole .rodata and .data are linked.",
       "sections": [
         {
           "section": ".text",
@@ -5300,12 +5296,33 @@
           "end": "0x80270518"
         },
         {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80270B10",
+          "end": "0x80270D6C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7A78",
+          "end": "0x802B7A88"
+        },
+        {
           "section": ".data",
           "placement": ".data4",
           "start": "0x80300038",
           "end": "0x8030003C"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "SNDBANKI_playtimbre",
+            "evidence": "evidence.tsv source-form 0x80270518-0x80270B10"
+          }
+        ],
+        "evidence": "lane w1j merge notes (swarm/w1/w1j report) holdouts table: src/engine/stagpat.c holds out SNDBANKI_playtimbre; its HOLDOUT: row lists the forms tried and the RTL-dump finding."
+      }
     },
     {
       "source": "src/engine/svol.c",
@@ -22780,6 +22797,19 @@
           "placement": ".data3",
           "start": "0x802B79A0",
           "end": "0x802B79C8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/ssys.cpp",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026F5F8-0x8026FD28 (src/engine/ssys.cpp, NASCAR 2005 ssys.cpp), its function and name rows and the sound_cxx compiler row 0x8026E4C0-0x80270494; all 11 functions exact (w1c), promoted from comparison-only in w1j once the linked callers (src/engine/sound.cpp, src/engine/ssysinit.c) call the class methods through include/engine/ssys.h. The object has no data sections; the output-mode strings 0x802B79D8-0x802B7A38 and the pending-change state keep their original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026F5F8",
+          "end": "0x8026FD28"
         }
       ]
     },

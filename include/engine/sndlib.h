@@ -169,17 +169,48 @@ struct State_803A8D60 {
 
 struct Struct_80270E04 {
     short m0;
-    unsigned char mUnknown2[6];
+    unsigned char mUnknown2;
+    signed char m3;
+    unsigned short m4;
+    short m6;
     signed char m8;
     signed char m9;
     signed char mA;
     signed char mB;
-    unsigned char mUnknownC[0xC];
+    signed char mC;
+    signed char mD;
+    unsigned char mE;
+    unsigned char mF;
+    signed char m10;
+    signed char m11;
+    signed char m12;
+    unsigned char m13;
+    signed char m14;
+    signed char m15;
+    unsigned char mUnknown16[2];
     unsigned short m18;
-    unsigned char mUnknown1A[0x4A];
+    signed char m1A;
+    unsigned char m1B;
+    signed char m1C;
+    unsigned char m1D;
+    unsigned char m1E;
+    unsigned char mUnknown1F;
+    int m20;
+    signed char *m24;
+    struct SndEnvStage_t *m28;
+    int m2C;
+    signed char *m30;
+    unsigned char mUnknown34[0x20];
+    unsigned short m54;
+    unsigned short m56;
+    int m58;
+    unsigned char mUnknown5C[4];
+    int m60;
     int *m64;
     int m68;
-    unsigned char mUnknown6C[0x94];
+    unsigned char mUnknown6C[0x50];
+    unsigned short mBC[6];
+    unsigned char mUnknownC8[0x38];
 };
 
 struct Struct_802753AC {
