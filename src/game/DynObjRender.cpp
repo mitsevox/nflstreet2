@@ -12,7 +12,7 @@
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/ResLoad.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/SyncRandGetRange.h"
 #include <dolphin/gx/GXStruct.h>
 typedef float Mtx44[4][4];
@@ -94,7 +94,7 @@ int fn_80234B80(void *); void fn_80234DC4(void *, int); void fn_80234DC8(void *,
 void fn_80234B88(DynObjPacket *); void fn_80234BF4(void *, DynObjPacket *, int);
 void fn_80234CA4(DynObjPacket *, void *); void fn_80234CF0(DynObjPacket *, int, DynObjContext *);
 void fn_80234DC0(DynObjPacket *, int); unsigned int fn_80234D4C(float *, void *, void *, void *);
-void fn_80227C2C(void *, void *); void fn_802271F0(void *, void *); float fn_80227704(void *, void *);
+void Vec3Mat33Mul(void *, void *); void Vec3Normalize(void *, void *); float Vec3DotProduct(void *, void *);
 int fn_8004D5B8(int, const char *, char *, int); void fn_8004D498(int);
 int fn_8004D4B0(int, const char *); int fn_8004D508(int, const char *);
 void fn_8004E090(DynObj *, int, int);
@@ -138,8 +138,8 @@ int DynObjDraw(DynObj *p, int arg)
         if(p->mUnknown140) {
             Vector_80039F5C delta;
             void *viewport=VptManagerGetCurrentCamera(GameVpt::GetViewport());
-            fn_802276B4(&delta,&p->mUnknown4,static_cast<unsigned char *>(viewport)+4);
-            float distance=fn_802270D4(&delta);
+            Vec3Sub(&delta,&p->mUnknown4,static_cast<unsigned char *>(viewport)+4);
+            float distance=Vec3Magnitude(&delta);
             if(distance<=10.0f) color.a=255;
             else if(distance<=25.0f) color.a=(unsigned char)((float)(unsigned int)color.a*(1.0f-(distance-10.0f)*0.06666667f));
             else color.a=0;
@@ -190,9 +190,9 @@ int DynObjIsFacingAway(DynObj *p)
     if(p->mUnknownE8.mWord&16) {
         Vector_80039F5C delta,axis=_DynObj_vUpAxis;
         void *viewport=VptManagerGetCurrentCamera(0);MatPushUnit();MatRotQuat(&p->mpUnknown1D8->mUnknown60);
-        fn_80227C2C(&axis,&axis);MatPop();
-        fn_802276B4(&delta,&p->mpUnknown1D8->mUnknown8,static_cast<unsigned char *>(viewport)+4);
-        fn_802271F0(&delta,&delta);result=fn_80227704(&delta,&axis)<-0.2f;
+        Vec3Mat33Mul(&axis,&axis);MatPop();
+        Vec3Sub(&delta,&p->mpUnknown1D8->mUnknown8,static_cast<unsigned char *>(viewport)+4);
+        Vec3Normalize(&delta,&delta);result=Vec3DotProduct(&delta,&axis)<-0.2f;
     }
     return result;
 }
@@ -204,9 +204,9 @@ int DynObjChildIsFacingAway(DynObjChild *p)
     if(p->mpUnknown50->mUnknownE8.mWord&16) {
         Vector_80039F5C delta,axis=_DynObj_vUpAxis;
         void *viewport=VptManagerGetCurrentCamera(0);MatPushUnit();MatRotQuat(&p->mUnknown3C);
-        fn_80227C2C(&axis,&axis);MatPop();
-        fn_802276B4(&delta,&p->mUnknown30,static_cast<unsigned char *>(viewport)+4);
-        fn_802271F0(&delta,&delta);result=fn_80227704(&delta,&axis)<-0.2f;
+        Vec3Mat33Mul(&axis,&axis);MatPop();
+        Vec3Sub(&delta,&p->mUnknown30,static_cast<unsigned char *>(viewport)+4);
+        Vec3Normalize(&delta,&delta);result=Vec3DotProduct(&delta,&axis)<-0.2f;
     }
     return result;
 }

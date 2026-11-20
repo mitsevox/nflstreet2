@@ -19146,182 +19146,182 @@
       ],
       "functions": [
         {
-          "symbol": "fn_802270A4",
+          "symbol": "Vec2Magnitude",
           "start": "0x802270A4",
           "end": "0x802270D4"
         },
         {
-          "symbol": "fn_802270D4",
+          "symbol": "Vec3Magnitude",
           "start": "0x802270D4",
           "end": "0x8022710C"
         },
         {
-          "symbol": "fn_8022710C",
+          "symbol": "Vec2MagnitudeSqr",
           "start": "0x8022710C",
           "end": "0x80227120"
         },
         {
-          "symbol": "fn_80227120",
+          "symbol": "Vec3MagnitudeSqr",
           "start": "0x80227120",
           "end": "0x8022713C"
         },
         {
-          "symbol": "fn_8022713C",
+          "symbol": "Vec2InvMagnitude",
           "start": "0x8022713C",
           "end": "0x8022716C"
         },
         {
-          "symbol": "fn_8022716C",
+          "symbol": "Vec3InvMagnitude",
           "start": "0x8022716C",
           "end": "0x802271A4"
         },
         {
-          "symbol": "fn_802271A4",
+          "symbol": "Vec2Normalize",
           "start": "0x802271A4",
           "end": "0x802271F0"
         },
         {
-          "symbol": "fn_802271F0",
+          "symbol": "Vec3Normalize",
           "start": "0x802271F0",
           "end": "0x80227248"
         },
         {
-          "symbol": "fn_80227248",
+          "symbol": "Vec2Scale",
           "start": "0x80227248",
           "end": "0x80227264"
         },
         {
-          "symbol": "fn_80227264",
+          "symbol": "Vec3Scale",
           "start": "0x80227264",
           "end": "0x8022728C"
         },
         {
-          "symbol": "fn_8022728C",
+          "symbol": "Vec2ScaleLength",
           "start": "0x8022728C",
           "end": "0x802272DC"
         },
         {
-          "symbol": "fn_802272DC",
+          "symbol": "Vec3ScaleLength",
           "start": "0x802272DC",
           "end": "0x8022732C"
         },
         {
-          "symbol": "fn_8022732C",
+          "symbol": "Vec2ScaleAcc",
           "start": "0x8022732C",
           "end": "0x80227350"
         },
         {
-          "symbol": "fn_80227350",
+          "symbol": "Vec3ScaleAcc",
           "start": "0x80227350",
           "end": "0x80227384"
         },
         {
-          "symbol": "fn_80227384",
+          "symbol": "Vec2Rotate",
           "start": "0x80227384",
           "end": "0x802273E8"
         },
         {
-          "symbol": "fn_802273E8",
+          "symbol": "Vec3RotateXYZ",
           "start": "0x802273E8",
           "end": "0x80227490"
         },
         {
-          "symbol": "fn_80227490",
+          "symbol": "Vec3RotateZYX",
           "start": "0x80227490",
           "end": "0x80227538"
         },
         {
-          "symbol": "fn_80227538",
+          "symbol": "Vec2FromAngle",
           "start": "0x80227538",
           "end": "0x80227594"
         },
         {
-          "symbol": "fn_80227594",
+          "symbol": "Vec2Equal",
           "start": "0x80227594",
           "end": "0x802275D8"
         },
         {
-          "symbol": "fn_802275D8",
+          "symbol": "Vec3Equal",
           "start": "0x802275D8",
           "end": "0x80227638"
         },
         {
-          "symbol": "fn_80227638",
+          "symbol": "Vec2Add",
           "start": "0x80227638",
           "end": "0x8022765C"
         },
         {
-          "symbol": "fn_8022765C",
+          "symbol": "Vec3Add",
           "start": "0x8022765C",
           "end": "0x80227690"
         },
         {
-          "symbol": "fn_80227690",
+          "symbol": "Vec2Sub",
           "start": "0x80227690",
           "end": "0x802276B4"
         },
         {
-          "symbol": "fn_802276B4",
+          "symbol": "Vec3Sub",
           "start": "0x802276B4",
           "end": "0x802276E8"
         },
         {
-          "symbol": "fn_802276E8",
+          "symbol": "Vec2DotProduct",
           "start": "0x802276E8",
           "end": "0x80227704"
         },
         {
-          "symbol": "fn_80227704",
+          "symbol": "Vec3DotProduct",
           "start": "0x80227704",
           "end": "0x8022772C"
         },
         {
-          "symbol": "fn_802277DC",
+          "symbol": "Vec3CrossProduct",
           "start": "0x802277DC",
           "end": "0x8022781C"
         },
         {
-          "symbol": "fn_8022781C",
+          "symbol": "Vec2Distance",
           "start": "0x8022781C",
           "end": "0x8022785C"
         },
         {
-          "symbol": "fn_8022785C",
+          "symbol": "Vec3Distance",
           "start": "0x8022785C",
           "end": "0x80227890"
         },
         {
-          "symbol": "fn_80227890",
+          "symbol": "Vec2DistanceSqr",
           "start": "0x80227890",
           "end": "0x802278D0"
         },
         {
-          "symbol": "fn_802278D0",
+          "symbol": "Vec3DistanceSqr",
           "start": "0x802278D0",
           "end": "0x80227904"
         },
         {
-          "symbol": "fn_80227904",
+          "symbol": "Vec2Lerp",
           "start": "0x80227904",
           "end": "0x80227930"
         },
         {
-          "symbol": "fn_80227930",
+          "symbol": "Vec3Lerp",
           "start": "0x80227930",
           "end": "0x80227970"
         },
         {
-          "symbol": "fn_80227C2C",
+          "symbol": "Vec3Mat33Mul",
           "start": "0x80227C2C",
           "end": "0x80227CC0"
         },
         {
-          "symbol": "fn_80227CC0",
+          "symbol": "Vec3Mat34Mul",
           "start": "0x80227CC0",
           "end": "0x80227D6C"
         },
         {
-          "symbol": "fn_80227E40",
+          "symbol": "Vec4Mat44Mul",
           "start": "0x80227E40",
           "end": "0x80227F14"
         }
@@ -19347,7 +19347,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8022772C",
+          "symbol": "Vec3CosAngle",
           "start": "0x8022772C",
           "end": "0x802277DC"
         }
@@ -19373,7 +19373,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80227970",
+          "symbol": "Vec3ClosestPointOnSegment",
           "start": "0x80227970",
           "end": "0x80227B04"
         }
@@ -19399,7 +19399,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80227B04",
+          "symbol": "Vec3DistanceSqrToSegment",
           "start": "0x80227B04",
           "end": "0x80227C2C"
         }
@@ -19425,7 +19425,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80227D6C",
+          "symbol": "Vec3Mat44Mul",
           "start": "0x80227D6C",
           "end": "0x80227E40"
         }
@@ -20001,37 +20001,37 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8022EBF0",
+          "symbol": "DbTatsCopyInit",
           "start": "0x8022EBF0",
           "end": "0x8022EC48"
         },
         {
-          "symbol": "fn_8022EC48",
+          "symbol": "DbTatsCopyShutdown",
           "start": "0x8022EC48",
           "end": "0x8022EC80"
         },
         {
-          "symbol": "fn_8022EC80",
+          "symbol": "DbTatsCopyOpen",
           "start": "0x8022EC80",
           "end": "0x8022ECCC"
         },
         {
-          "symbol": "fn_8022ECCC",
+          "symbol": "DbTatsCopyClose",
           "start": "0x8022ECCC",
           "end": "0x8022ECF4"
         },
         {
-          "symbol": "fn_8022ECF4",
+          "symbol": "DbTatsCopyTable",
           "start": "0x8022ECF4",
           "end": "0x8022ED30"
         },
         {
-          "symbol": "fn_8022ED30",
+          "symbol": "DbTatsCopyTblDestroy",
           "start": "0x8022ED30",
           "end": "0x8022ED50"
         },
         {
-          "symbol": "fn_8022ED50",
+          "symbol": "DbTatsCopyAllTables",
           "start": "0x8022ED50",
           "end": "0x8022EF14"
         }
@@ -20151,177 +20151,177 @@
       ],
       "functions": [
         {
-          "symbol": "fn_802328A8",
+          "symbol": "DbManagerInitModules",
           "start": "0x802328A8",
           "end": "0x80232950"
         },
         {
-          "symbol": "fn_80232950",
+          "symbol": "DbManagerShutdownModules",
           "start": "0x80232950",
           "end": "0x80232998"
         },
         {
-          "symbol": "fn_80232998",
+          "symbol": "DbManagerPushGameDb",
           "start": "0x80232998",
           "end": "0x802329D0"
         },
         {
-          "symbol": "fn_802329D0",
+          "symbol": "DbManagerPopGameDb",
           "start": "0x802329D0",
           "end": "0x802329F0"
         },
         {
-          "symbol": "fn_802329F0",
+          "symbol": "DbManagerInit",
           "start": "0x802329F0",
           "end": "0x80232A98"
         },
         {
-          "symbol": "fn_80232A98",
+          "symbol": "DbManagerShutdown",
           "start": "0x80232A98",
           "end": "0x80232AF8"
         },
         {
-          "symbol": "fn_80232AF8",
+          "symbol": "DbManagerLoad",
           "start": "0x80232AF8",
           "end": "0x80232B8C"
         },
         {
-          "symbol": "fn_80232B8C",
+          "symbol": "DbManagerSave",
           "start": "0x80232B8C",
           "end": "0x80232DE0"
         },
         {
-          "symbol": "fn_80232DE0",
+          "symbol": "DbManagerEnterMode0",
           "start": "0x80232DE0",
           "end": "0x80232E20"
         },
         {
-          "symbol": "fn_80232E20",
+          "symbol": "DbManagerMode0Leave",
           "start": "0x80232E20",
           "end": "0x80232E70"
         },
         {
-          "symbol": "fn_80232E70",
+          "symbol": "DbManagerMode0Load",
           "start": "0x80232E70",
           "end": "0x80232E78"
         },
         {
-          "symbol": "fn_80232E78",
+          "symbol": "DbManagerMode0Save",
           "start": "0x80232E78",
           "end": "0x80232E80"
         },
         {
-          "symbol": "fn_80232E80",
+          "symbol": "DbManagerMode0Finish",
           "start": "0x80232E80",
           "end": "0x80232EAC"
         },
         {
-          "symbol": "fn_80232EAC",
+          "symbol": "DbManagerMode0Abort",
           "start": "0x80232EAC",
           "end": "0x80232EB4"
         },
         {
-          "symbol": "fn_80232EB4",
+          "symbol": "DbManagerEnterMode1",
           "start": "0x80232EB4",
           "end": "0x80232EF4"
         },
         {
-          "symbol": "fn_80232EF4",
+          "symbol": "DbManagerMode1Leave",
           "start": "0x80232EF4",
           "end": "0x80232F44"
         },
         {
-          "symbol": "fn_80232F44",
+          "symbol": "DbManagerMode1Load",
           "start": "0x80232F44",
           "end": "0x80232F4C"
         },
         {
-          "symbol": "fn_80232F4C",
+          "symbol": "DbManagerMode1Save",
           "start": "0x80232F4C",
           "end": "0x80232F54"
         },
         {
-          "symbol": "fn_80232F54",
+          "symbol": "DbManagerMode1Finish",
           "start": "0x80232F54",
           "end": "0x80232F74"
         },
         {
-          "symbol": "fn_80232F74",
+          "symbol": "DbManagerMode1Abort",
           "start": "0x80232F74",
           "end": "0x80232FD4"
         },
         {
-          "symbol": "fn_80232FD4",
+          "symbol": "DbManagerEnterMode2",
           "start": "0x80232FD4",
           "end": "0x802331BC"
         },
         {
-          "symbol": "fn_802331BC",
+          "symbol": "DbManagerMode2Leave",
           "start": "0x802331BC",
           "end": "0x80233344"
         },
         {
-          "symbol": "fn_80233344",
+          "symbol": "DbManagerMode2Load",
           "start": "0x80233344",
           "end": "0x8023334C"
         },
         {
-          "symbol": "fn_8023334C",
+          "symbol": "DbManagerMode2Save",
           "start": "0x8023334C",
           "end": "0x80233454"
         },
         {
-          "symbol": "fn_80233454",
+          "symbol": "DbManagerMode2Finish",
           "start": "0x80233454",
           "end": "0x802334C4"
         },
         {
-          "symbol": "fn_802334C4",
+          "symbol": "DbManagerMode2Abort",
           "start": "0x802334C4",
           "end": "0x802334F0"
         },
         {
-          "symbol": "fn_802334F0",
+          "symbol": "DbManagerGetModeFuncs",
           "start": "0x802334F0",
           "end": "0x80233568"
         },
         {
-          "symbol": "fn_80233568",
+          "symbol": "DbManagerResultAccept",
           "start": "0x80233568",
           "end": "0x80233578"
         },
         {
-          "symbol": "fn_80233578",
+          "symbol": "DbManagerResultRecord",
           "start": "0x80233578",
           "end": "0x80233580"
         },
         {
-          "symbol": "fn_80233580",
+          "symbol": "DbManagerResultFinish",
           "start": "0x80233580",
           "end": "0x80233588"
         },
         {
-          "symbol": "fn_80233588",
+          "symbol": "DbManagerCreateGameDb",
           "start": "0x80233588",
           "end": "0x80233604"
         },
         {
-          "symbol": "fn_80233604",
+          "symbol": "DbManagerLoadGameDb",
           "start": "0x80233604",
           "end": "0x80233660"
         },
         {
-          "symbol": "fn_80233660",
+          "symbol": "DbManagerSaveGameDb",
           "start": "0x80233660",
           "end": "0x80233694"
         },
         {
-          "symbol": "fn_80233694",
+          "symbol": "DbManagerDestroyGameDb",
           "start": "0x80233694",
           "end": "0x802336BC"
         },
         {
-          "symbol": "fn_802336BC",
+          "symbol": "DbManagerInitHook",
           "start": "0x802336BC",
           "end": "0x802336C4"
         }
@@ -20734,9 +20734,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_802355E4.c",
+      "source": "src/engine/modelobj.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802355E4-0x80235DD8 (src/engine/cu_802355E4.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows and the data row for its .rodata 0x802B71A8-0x802B71B0. Complete reconstructed functions are measured; original bytes remain linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802355E4-0x80235DD8 (src/engine/modelobj.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows and the data row for its .rodata 0x802B71A8-0x802B71B0. Complete reconstructed functions are measured; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -20753,82 +20753,82 @@
       ],
       "functions": [
         {
-          "symbol": "fn_802355E4",
+          "symbol": "ModelObjReset",
           "start": "0x802355E4",
           "end": "0x80235630"
         },
         {
-          "symbol": "fn_80235630",
+          "symbol": "ModelObjSetModel",
           "start": "0x80235630",
           "end": "0x8023570C"
         },
         {
-          "symbol": "fn_8023570C",
+          "symbol": "ModelObjSetShader",
           "start": "0x8023570C",
           "end": "0x80235740"
         },
         {
-          "symbol": "fn_80235740",
+          "symbol": "ModelObjStoreMatrix",
           "start": "0x80235740",
           "end": "0x80235764"
         },
         {
-          "symbol": "fn_80235764",
+          "symbol": "ModelObjDraw",
           "start": "0x80235764",
           "end": "0x80235788"
         },
         {
-          "symbol": "fn_80235B6C",
+          "symbol": "ModelObjSetTextures",
           "start": "0x80235B6C",
           "end": "0x80235C24"
         },
         {
-          "symbol": "fn_80235C24",
+          "symbol": "ModelObjSetTexturesDefault",
           "start": "0x80235C24",
           "end": "0x80235C48"
         },
         {
-          "symbol": "fn_80235C48",
+          "symbol": "ModelObjSetParamNop",
           "start": "0x80235C48",
           "end": "0x80235C4C"
         },
         {
-          "symbol": "fn_80235C4C",
+          "symbol": "ModelObjSetFixedDepth",
           "start": "0x80235C4C",
           "end": "0x80235C90"
         },
         {
-          "symbol": "fn_80235C90",
+          "symbol": "ModelObjSetAmbientColor",
           "start": "0x80235C90",
           "end": "0x80235D0C"
         },
         {
-          "symbol": "fn_80235D0C",
+          "symbol": "ModelObjSetFlagsNop",
           "start": "0x80235D0C",
           "end": "0x80235D10"
         },
         {
-          "symbol": "fn_80235D74",
+          "symbol": "ModelObjSetModeNop",
           "start": "0x80235D74",
           "end": "0x80235D78"
         },
         {
-          "symbol": "fn_80235D78",
+          "symbol": "ModelObjSetEyePos",
           "start": "0x80235D78",
           "end": "0x80235D9C"
         },
         {
-          "symbol": "fn_80235D9C",
+          "symbol": "ModelObjIsModelRes",
           "start": "0x80235D9C",
           "end": "0x80235DB8"
         },
         {
-          "symbol": "fn_80235DB8",
+          "symbol": "ModelObjRelocateModelRes",
           "start": "0x80235DB8",
           "end": "0x80235DD8"
         },
         {
-          "symbol": "fn_80235D10",
+          "symbol": "ModelObjSetDepthOffset",
           "start": "0x80235D10",
           "end": "0x80235D74"
         },
@@ -20859,117 +20859,117 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8023608C",
+          "symbol": "_LLLightGetSetRefs",
           "start": "0x8023608C",
           "end": "0x8023609C"
         },
         {
-          "symbol": "fn_8023609C",
+          "symbol": "_LLLightUpdateLights",
           "start": "0x8023609C",
           "end": "0x80236164"
         },
         {
-          "symbol": "fn_80236258",
+          "symbol": "_LLLightBuildSets",
           "start": "0x80236258",
           "end": "0x802362C4"
         },
         {
-          "symbol": "fn_802362C4",
+          "symbol": "_LLLightGetSceneLight",
           "start": "0x802362C4",
           "end": "0x802362D4"
         },
         {
-          "symbol": "fn_802362D4",
+          "symbol": "LLLightUpdate",
           "start": "0x802362D4",
           "end": "0x8023633C"
         },
         {
-          "symbol": "fn_8023633C",
+          "symbol": "LLLightSetScene",
           "start": "0x8023633C",
           "end": "0x80236368"
         },
         {
-          "symbol": "fn_80236368",
+          "symbol": "LLLightGetSet",
           "start": "0x80236368",
           "end": "0x80236384"
         },
         {
-          "symbol": "fn_80236384",
+          "symbol": "LLLightGetProjectorMatrix",
           "start": "0x80236384",
           "end": "0x80236398"
         },
         {
-          "symbol": "fn_80236398",
+          "symbol": "LLLightGetProjectorColor",
           "start": "0x80236398",
           "end": "0x802363B0"
         },
         {
-          "symbol": "fn_802363B0",
+          "symbol": "LLLightAttachViewport",
           "start": "0x802363B0",
           "end": "0x802363E0"
         },
         {
-          "symbol": "fn_802363E0",
+          "symbol": "LLLightDetachViewport",
           "start": "0x802363E0",
           "end": "0x80236408"
         },
         {
-          "symbol": "fn_80236B98",
+          "symbol": "LLLightLoadSetTinted",
           "start": "0x80236B98",
           "end": "0x80236C04"
         },
         {
-          "symbol": "fn_80236C04",
+          "symbol": "_LLLightClearCurrentSet",
           "start": "0x80236C04",
           "end": "0x80236C10"
         },
         {
-          "symbol": "fn_80235DD8",
+          "symbol": "_LLLightProjectorDirMatrix",
           "start": "0x80235DD8",
           "end": "0x80235EB4"
         },
         {
-          "symbol": "fn_80235EB4",
+          "symbol": "_LLLightProjectorAngleMatrix",
           "start": "0x80235EB4",
           "end": "0x80235F58"
         },
         {
-          "symbol": "fn_80235F58",
+          "symbol": "_LLLightPackColor",
           "start": "0x80235F58",
           "end": "0x8023608C"
         },
         {
-          "symbol": "fn_80236164",
+          "symbol": "_LLLightUpdateProjectors",
           "start": "0x80236164",
           "end": "0x80236258"
         },
         {
-          "symbol": "fn_80236408",
+          "symbol": "LLLightGetProjectorDir",
           "start": "0x80236408",
           "end": "0x802364B4"
         },
         {
-          "symbol": "fn_802364B4",
+          "symbol": "_LLLightFloatToColor",
           "start": "0x802364B4",
           "end": "0x802365E8"
         },
         {
-          "symbol": "fn_802365E8",
+          "symbol": "_LLLightLoadSetScaled",
           "start": "0x802365E8",
           "end": "0x802368D0"
         },
         {
-          "symbol": "fn_802368D0",
+          "symbol": "_LLLightBuildSet",
           "start": "0x802368D0",
           "end": "0x80236B4C"
         },
         {
-          "symbol": "fn_80236B4C",
+          "symbol": "LLLightLoadSet",
           "start": "0x80236B4C",
           "end": "0x80236B98"
         },
         {
-          "symbol": "fn_80236C10",
+          "symbol": "LLLightLoadDirectional",
           "start": "0x80236C10",
           "end": "0x80236DD8"
         }
@@ -25750,247 +25750,247 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8027257C",
+          "symbol": "SNDDRV_freenextframe",
           "start": "0x8027257C",
           "end": "0x80272618"
         },
         {
-          "symbol": "fn_80272618",
+          "symbol": "SNDDRV_mixvoicefree",
           "start": "0x80272618",
           "end": "0x80272644"
         },
         {
-          "symbol": "fn_80272644",
+          "symbol": "SNDDRV_callbackdropvoice",
           "start": "0x80272644",
           "end": "0x8027271C"
         },
         {
-          "symbol": "fn_8027271C",
+          "symbol": "SNDDRV_allocateaxvoice",
           "start": "0x8027271C",
           "end": "0x80272990"
         },
         {
-          "symbol": "fn_80272990",
+          "symbol": "SNDDRV_freeaxvoice",
           "start": "0x80272990",
           "end": "0x80272AA4"
         },
         {
-          "symbol": "fn_80272AA4",
+          "symbol": "SNDDRV_dmaslotenter",
           "start": "0x80272AA4",
           "end": "0x80272B30"
         },
         {
-          "symbol": "fn_80272B30",
+          "symbol": "SNDDRV_dmcallback",
           "start": "0x80272B30",
           "end": "0x80272B7C"
         },
         {
-          "symbol": "fn_80272B7C",
+          "symbol": "SNDDRV_dmapost",
           "start": "0x80272B7C",
           "end": "0x80272C9C"
         },
         {
-          "symbol": "fn_80272C9C",
+          "symbol": "SNDDRV_restoredma",
           "start": "0x80272C9C",
           "end": "0x80272D34"
         },
         {
-          "symbol": "fn_80272D34",
+          "symbol": "SNDDRV_audiocallback",
           "start": "0x80272D34",
           "end": "0x80272EC4"
         },
         {
-          "symbol": "fn_80272EC4",
+          "symbol": "SNDDRV_initmixer",
           "start": "0x80272EC4",
           "end": "0x80272FB4"
         },
         {
-          "symbol": "fn_80272FB4",
+          "symbol": "SNDDRV_restoremixer",
           "start": "0x80272FB4",
           "end": "0x80273040"
         },
         {
-          "symbol": "fn_80273040",
+          "symbol": "SNDDRV_fillbufwithpackets",
           "start": "0x80273040",
           "end": "0x80273264"
         },
         {
-          "symbol": "fn_80273264",
+          "symbol": "SNDDRV_thread",
           "start": "0x80273264",
           "end": "0x802733A0"
         },
         {
-          "symbol": "fn_802733A0",
+          "symbol": "SNDPLATFORM_outputcaps",
           "start": "0x802733A0",
           "end": "0x80273458"
         },
         {
-          "symbol": "fn_80273458",
+          "symbol": "SNDPLATFORM_outputset",
           "start": "0x80273458",
           "end": "0x80273648"
         },
         {
-          "symbol": "fn_80273648",
+          "symbol": "SNDPLATFORM_init",
           "start": "0x80273648",
           "end": "0x80273960"
         },
         {
-          "symbol": "fn_80273960",
+          "symbol": "SNDPLATFORM_restore",
           "start": "0x80273960",
           "end": "0x802739F8"
         },
         {
-          "symbol": "fn_802739F8",
+          "symbol": "iSNDserve",
           "start": "0x802739F8",
           "end": "0x80273D7C"
         },
         {
-          "symbol": "fn_80273D7C",
+          "symbol": "SNDPLATFORM_getvoicerange",
           "start": "0x80273D7C",
           "end": "0x80273DC0"
         },
         {
-          "symbol": "fn_80273DC0",
+          "symbol": "SNDPLATFORM_asyncresolvetimbre",
           "start": "0x80273DC0",
           "end": "0x80273DF8"
         },
         {
-          "symbol": "fn_80273DF8",
+          "symbol": "SNDPLATFORM_playtimbre",
           "start": "0x80273DF8",
           "end": "0x80274304"
         },
         {
-          "symbol": "fn_80274304",
+          "symbol": "SNDDRV_getmastervoice",
           "start": "0x80274304",
           "end": "0x80274334"
         },
         {
-          "symbol": "fn_80274334",
+          "symbol": "SNDDRV_getsamplechan",
           "start": "0x80274334",
           "end": "0x80274398"
         },
         {
-          "symbol": "fn_80274398",
+          "symbol": "SNDPLATFORM_packetoverhead",
           "start": "0x80274398",
           "end": "0x802743A0"
         },
         {
-          "symbol": "fn_802743A0",
+          "symbol": "SNDPLATFORM_packetplaycreate",
           "start": "0x802743A0",
           "end": "0x80274464"
         },
         {
-          "symbol": "fn_80274464",
+          "symbol": "SNDPLATFORM_packetplay",
           "start": "0x80274464",
           "end": "0x8027474C"
         },
         {
-          "symbol": "fn_8027474C",
+          "symbol": "SNDPLATFORM_packetplaydestroy",
           "start": "0x8027474C",
           "end": "0x802747D0"
         },
         {
-          "symbol": "fn_802747D0",
+          "symbol": "SNDPLATFORM_outputlatency",
           "start": "0x802747D0",
           "end": "0x802747D8"
         },
         {
-          "symbol": "fn_802747D8",
+          "symbol": "SndHalSetVol",
           "start": "0x802747D8",
           "end": "0x80274924"
         },
         {
-          "symbol": "fn_80274924",
+          "symbol": "SndHalSetDry",
           "start": "0x80274924",
           "end": "0x80274960"
         },
         {
-          "symbol": "fn_80274960",
+          "symbol": "SndHalSetPan",
           "start": "0x80274960",
           "end": "0x80274B50"
         },
         {
-          "symbol": "fn_80274B50",
+          "symbol": "SNDPLATFORM_setpitch",
           "start": "0x80274B50",
           "end": "0x80274CA8"
         },
         {
-          "symbol": "fn_80274CA8",
+          "symbol": "SNDPLATFORM_timemult",
           "start": "0x80274CA8",
           "end": "0x80274D34"
         },
         {
-          "symbol": "fn_80274D34",
+          "symbol": "SNDPLATFORM_lowpass",
           "start": "0x80274D34",
           "end": "0x80274E24"
         },
         {
-          "symbol": "fn_80274E24",
+          "symbol": "SNDPLATFORM_highpass",
           "start": "0x80274E24",
           "end": "0x80274EAC"
         },
         {
-          "symbol": "fn_80274EAC",
+          "symbol": "SNDPLATFORM_getcurframe",
           "start": "0x80274EAC",
           "end": "0x80274F5C"
         },
         {
-          "symbol": "fn_80274F5C",
+          "symbol": "SNDPLATFORM_stop",
           "start": "0x80274F5C",
           "end": "0x802750B8"
         },
         {
-          "symbol": "fn_802750B8",
+          "symbol": "SNDPLATFORM_filteradd",
           "start": "0x802750B8",
           "end": "0x80275150"
         },
         {
-          "symbol": "fn_80275150",
+          "symbol": "SNDPLATFORM_memalloc",
           "start": "0x80275150",
           "end": "0x80275194"
         },
         {
-          "symbol": "fn_80275194",
+          "symbol": "SNDPLATFORM_memfree",
           "start": "0x80275194",
           "end": "0x802751E0"
         },
         {
-          "symbol": "fn_802751E0",
+          "symbol": "SNDPLATFORM_memlimits",
           "start": "0x802751E0",
           "end": "0x80275234"
         },
         {
-          "symbol": "fn_80275234",
+          "symbol": "SNDPLATFORM_download",
           "start": "0x80275234",
           "end": "0x80275288"
         },
         {
-          "symbol": "fn_80275288",
+          "symbol": "SNDPLATFORM_downloadcomplete",
           "start": "0x80275288",
           "end": "0x80275330"
         },
         {
-          "symbol": "fn_80275330",
+          "symbol": "SNDI_mutexalloc",
           "start": "0x80275330",
           "end": "0x80275358"
         },
         {
-          "symbol": "fn_80275358",
+          "symbol": "SNDI_mutexfree",
           "start": "0x80275358",
           "end": "0x8027535C"
         },
         {
-          "symbol": "fn_8027535C",
+          "symbol": "SNDI_mutexlock",
           "start": "0x8027535C",
           "end": "0x80275384"
         },
         {
-          "symbol": "fn_80275384",
+          "symbol": "SNDI_mutexunlock",
           "start": "0x80275384",
           "end": "0x802753AC"
         },
         {
-          "symbol": "fn_802753AC",
+          "symbol": "SNDPLATFORM_ModeSetUp",
           "start": "0x802753AC",
           "end": "0x802753F0"
         }
@@ -27647,182 +27647,182 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801FC9D4",
+          "symbol": "TDbSQLInit",
           "start": "0x801FC9D4",
           "end": "0x801FCD04"
         },
         {
-          "symbol": "fn_801FCD04",
+          "symbol": "TDbSQLShutdown",
           "start": "0x801FCD04",
           "end": "0x801FCE10"
         },
         {
-          "symbol": "fn_801FCE10",
+          "symbol": "TDbCompilePerformOp",
           "start": "0x801FCE10",
           "end": "0x801FCFA0"
         },
         {
-          "symbol": "fn_801FCFA0",
+          "symbol": "TDbSQLDestroyCursor",
           "start": "0x801FCFA0",
           "end": "0x801FD0A4"
         },
         {
-          "symbol": "fn_801FD0A4",
+          "symbol": "TDBInitParseInfo",
           "start": "0x801FD0A4",
           "end": "0x801FD0E0"
         },
         {
-          "symbol": "fn_801FD0E0",
+          "symbol": "_T3DBEnumColumnLiterals",
           "start": "0x801FD0E0",
           "end": "0x801FD200"
         },
         {
-          "symbol": "fn_801FD200",
+          "symbol": "_T3DBCreateOutputTable",
           "start": "0x801FD200",
           "end": "0x801FD2E8"
         },
         {
-          "symbol": "fn_801FD2E8",
+          "symbol": "_T3DBParse_Ref32",
           "start": "0x801FD2E8",
           "end": "0x801FD3C0"
         },
         {
-          "symbol": "fn_801FD3C0",
+          "symbol": "_T3DBParse_TableColumn",
           "start": "0x801FD3C0",
           "end": "0x801FD47C"
         },
         {
-          "symbol": "fn_801FD47C",
+          "symbol": "_T3DBParse_Into",
           "start": "0x801FD47C",
           "end": "0x801FD97C"
         },
         {
-          "symbol": "fn_801FD97C",
+          "symbol": "_T3DBParse_TableColumnName",
           "start": "0x801FD97C",
           "end": "0x801FDA78"
         },
         {
-          "symbol": "fn_801FDA78",
+          "symbol": "_T3DBParse_TableColumnNames",
           "start": "0x801FDA78",
           "end": "0x801FDC18"
         },
         {
-          "symbol": "fn_801FDC18",
+          "symbol": "_T3DBParse_Join",
           "start": "0x801FDC18",
           "end": "0x801FDDC8"
         },
         {
-          "symbol": "fn_801FDDC8",
+          "symbol": "_T3DBParse_Comparsion",
           "start": "0x801FDDC8",
           "end": "0x801FDF28"
         },
         {
-          "symbol": "fn_801FDF28",
+          "symbol": "_T3DBParse_Value",
           "start": "0x801FDF28",
           "end": "0x801FE484"
         },
         {
-          "symbol": "fn_801FE484",
+          "symbol": "_T3DBParse_Logical",
           "start": "0x801FE484",
           "end": "0x801FE534"
         },
         {
-          "symbol": "fn_801FE534",
+          "symbol": "_T3DBParse_SubEquivalent",
           "start": "0x801FE534",
           "end": "0x801FE5E0"
         },
         {
-          "symbol": "fn_801FE5E0",
+          "symbol": "_T3DBParse_Equivalent",
           "start": "0x801FE5E0",
           "end": "0x801FE840"
         },
         {
-          "symbol": "fn_801FE840",
+          "symbol": "_T3DBParse_Where",
           "start": "0x801FE840",
           "end": "0x801FE8DC"
         },
         {
-          "symbol": "fn_801FE8DC",
+          "symbol": "_T3DBParse_From",
           "start": "0x801FE8DC",
           "end": "0x801FEA04"
         },
         {
-          "symbol": "fn_801FEA04",
+          "symbol": "_T3DBParse_VariableName",
           "start": "0x801FEA04",
           "end": "0x801FEF44"
         },
         {
-          "symbol": "fn_801FEF44",
+          "symbol": "_T3DBParse_VariableNames",
           "start": "0x801FEF44",
           "end": "0x801FF0D4"
         },
         {
-          "symbol": "fn_801FF0D4",
+          "symbol": "_T3DBParse_Set",
           "start": "0x801FF0D4",
           "end": "0x801FF13C"
         },
         {
-          "symbol": "fn_801FF13C",
+          "symbol": "_T3DBParse_Aggregate",
           "start": "0x801FF13C",
           "end": "0x801FF390"
         },
         {
-          "symbol": "fn_801FF390",
+          "symbol": "_T3DBParse_Select",
           "start": "0x801FF390",
           "end": "0x801FF544"
         },
         {
-          "symbol": "fn_801FF544",
+          "symbol": "_T3DBParse_Declare",
           "start": "0x801FF544",
           "end": "0x801FF8BC"
         },
         {
-          "symbol": "fn_801FF8BC",
+          "symbol": "_T3DBParse_Delete",
           "start": "0x801FF8BC",
           "end": "0x801FF8FC"
         },
         {
-          "symbol": "fn_801FF8FC",
+          "symbol": "_T3DBParse_Fetch",
           "start": "0x801FF8FC",
           "end": "0x801FFA6C"
         },
         {
-          "symbol": "fn_801FFA6C",
+          "symbol": "_T3DBParse_Update",
           "start": "0x801FFA6C",
           "end": "0x801FFB68"
         },
         {
-          "symbol": "fn_801FFB68",
+          "symbol": "_T3DBParse_Insert",
           "start": "0x801FFB68",
           "end": "0x801FFDA8"
         },
         {
-          "symbol": "fn_801FFDA8",
+          "symbol": "_T3DBFillFetchedValues",
           "start": "0x801FFDA8",
           "end": "0x801FFE88"
         },
         {
-          "symbol": "fn_801FFE88",
+          "symbol": "_T3DBParse_PatchTableRef",
           "start": "0x801FFE88",
           "end": "0x801FFEE4"
         },
         {
-          "symbol": "fn_801FFEE4",
+          "symbol": "_T3DBFillPartialTableColRefs",
           "start": "0x801FFEE4",
           "end": "0x801FFFC4"
         },
         {
-          "symbol": "fn_801FFFC4",
+          "symbol": "_T3DBParse_Start",
           "start": "0x801FFFC4",
           "end": "0x802004CC"
         },
         {
-          "symbol": "fn_802004CC",
+          "symbol": "_T3DBParse_OrderBy",
           "start": "0x802004CC",
           "end": "0x8020071C"
         },
         {
-          "symbol": "fn_8020071C",
+          "symbol": "_T3DBExec_Aggregate",
           "start": "0x8020071C",
           "end": "0x802009B0"
         }
@@ -28571,197 +28571,197 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801D3C68",
+          "symbol": "_MemCCacheGetFileOffsetAndChunkSize",
           "start": "0x801D3C68",
           "end": "0x801D3CA4"
         },
         {
-          "symbol": "fn_801D3CA4",
+          "symbol": "_MemCDetachCallback",
           "start": "0x801D3CA4",
           "end": "0x801D3D04"
         },
         {
-          "symbol": "fn_801D3D04",
+          "symbol": "_MemCGetTypeFromCapacityAndSectorSize",
           "start": "0x801D3D04",
           "end": "0x801D3D98"
         },
         {
-          "symbol": "fn_801D3D98",
+          "symbol": "_MemCExprMatch",
           "start": "0x801D3D98",
           "end": "0x801D3E6C"
         },
         {
-          "symbol": "fn_801D3E6C",
+          "symbol": "_MemCConvertFileTime",
           "start": "0x801D3E6C",
           "end": "0x801D4108"
         },
         {
-          "symbol": "fn_801D4108",
+          "symbol": "_MemCHackDetectSharedFile",
           "start": "0x801D4108",
           "end": "0x801D4120"
         },
         {
-          "symbol": "fn_801D4120",
+          "symbol": "MemCInit",
           "start": "0x801D4120",
           "end": "0x801D4198"
         },
         {
-          "symbol": "fn_801D4198",
+          "symbol": "MemCShutdown",
           "start": "0x801D4198",
           "end": "0x801D4204"
         },
         {
-          "symbol": "fn_801D4204",
+          "symbol": "MemCGetPort",
           "start": "0x801D4204",
           "end": "0x801D4230"
         },
         {
-          "symbol": "fn_801D4230",
+          "symbol": "_MemCRemoveDevice",
           "start": "0x801D4230",
           "end": "0x801D42D4"
         },
         {
-          "symbol": "fn_801D42D4",
+          "symbol": "_MemCAddDevice",
           "start": "0x801D42D4",
           "end": "0x801D4400"
         },
         {
-          "symbol": "fn_801D4400",
+          "symbol": "MemCGetDeviceChanges",
           "start": "0x801D4400",
           "end": "0x801D444C"
         },
         {
-          "symbol": "fn_801D444C",
+          "symbol": "MemCAsyncProbe",
           "start": "0x801D444C",
           "end": "0x801D4570"
         },
         {
-          "symbol": "fn_801D4570",
+          "symbol": "MemCAsyncFormat",
           "start": "0x801D4570",
           "end": "0x801D45DC"
         },
         {
-          "symbol": "fn_801D45DC",
+          "symbol": "MemCAsyncMount",
           "start": "0x801D45DC",
           "end": "0x801D466C"
         },
         {
-          "symbol": "fn_801D466C",
+          "symbol": "MemCUnMount",
           "start": "0x801D466C",
           "end": "0x801D46C0"
         },
         {
-          "symbol": "fn_801D46C0",
+          "symbol": "MemCAsyncMountAlt",
           "start": "0x801D46C0",
           "end": "0x801D46E8"
         },
         {
-          "symbol": "fn_801D46E8",
+          "symbol": "MemCUnMountAlt",
           "start": "0x801D46E8",
           "end": "0x801D46F0"
         },
         {
-          "symbol": "fn_801D46F0",
+          "symbol": "MemCAsyncCheck",
           "start": "0x801D46F0",
           "end": "0x801D4778"
         },
         {
-          "symbol": "fn_801D4778",
+          "symbol": "MemCAsyncGetFreeSpace",
           "start": "0x801D4778",
           "end": "0x801D47E0"
         },
         {
-          "symbol": "fn_801D47E0",
+          "symbol": "MemCAsyncGetFreeEntries",
           "start": "0x801D47E0",
           "end": "0x801D4848"
         },
         {
-          "symbol": "fn_801D4848",
+          "symbol": "MemCAsyncGetDir",
           "start": "0x801D4848",
           "end": "0x801D4A3C"
         },
         {
-          "symbol": "fn_801D4A3C",
+          "symbol": "MemCAsyncOpen",
           "start": "0x801D4A3C",
           "end": "0x801D4D08"
         },
         {
-          "symbol": "fn_801D4D08",
+          "symbol": "_MemCOpenDeleteCB",
           "start": "0x801D4D08",
           "end": "0x801D4D90"
         },
         {
-          "symbol": "fn_801D4D90",
+          "symbol": "_MemCOpenCreateCB",
           "start": "0x801D4D90",
           "end": "0x801D4E6C"
         },
         {
-          "symbol": "fn_801D4E6C",
+          "symbol": "MemCAsyncFlush",
           "start": "0x801D4E6C",
           "end": "0x801D4F58"
         },
         {
-          "symbol": "fn_801D4F58",
+          "symbol": "MemCAsyncClose",
           "start": "0x801D4F58",
           "end": "0x801D4FF4"
         },
         {
-          "symbol": "fn_801D4FF4",
+          "symbol": "MemCAsyncDelete",
           "start": "0x801D4FF4",
           "end": "0x801D512C"
         },
         {
-          "symbol": "fn_801D512C",
+          "symbol": "MemCAsyncSeek",
           "start": "0x801D512C",
           "end": "0x801D5288"
         },
         {
-          "symbol": "fn_801D5288",
+          "symbol": "_MemCAsyncRead",
           "start": "0x801D5288",
           "end": "0x801D5440"
         },
         {
-          "symbol": "fn_801D5440",
+          "symbol": "MemCAsyncRead",
           "start": "0x801D5440",
           "end": "0x801D546C"
         },
         {
-          "symbol": "fn_801D546C",
+          "symbol": "_MemCAsyncWrite",
           "start": "0x801D546C",
           "end": "0x801D56A0"
         },
         {
-          "symbol": "fn_801D56A0",
+          "symbol": "MemCAsyncWrite",
           "start": "0x801D56A0",
           "end": "0x801D56CC"
         },
         {
-          "symbol": "fn_801D56CC",
+          "symbol": "MemCAsyncGetSysInfo",
           "start": "0x801D56CC",
           "end": "0x801D56D4"
         },
         {
-          "symbol": "fn_801D56D4",
+          "symbol": "MemCAsyncSetSysInfo",
           "start": "0x801D56D4",
           "end": "0x801D5764"
         },
         {
-          "symbol": "fn_801D5764",
+          "symbol": "MemCFormatCardType",
           "start": "0x801D5764",
           "end": "0x801D57E0"
         },
         {
-          "symbol": "fn_801D57E0",
+          "symbol": "MemCFormatPort",
           "start": "0x801D57E0",
           "end": "0x801D5824"
         },
         {
-          "symbol": "fn_801D5824",
+          "symbol": "MemCEnableCache",
           "start": "0x801D5824",
           "end": "0x801D5840"
         },
         {
-          "symbol": "fn_801D5840",
+          "symbol": "MemCAsyncPoll",
           "start": "0x801D5840",
           "end": "0x801D5D30"
         }
@@ -29840,72 +29840,72 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801F5D84",
+          "symbol": "getint",
           "start": "0x801F5D84",
           "end": "0x801F5DA4"
         },
         {
-          "symbol": "fn_801F5DA4",
+          "symbol": "validatehandle",
           "start": "0x801F5DA4",
           "end": "0x801F5DE4"
         },
         {
-          "symbol": "fn_801F5DE4",
+          "symbol": "inbetween",
           "start": "0x801F5DE4",
           "end": "0x801F5E24"
         },
         {
-          "symbol": "fn_801F5E24",
+          "symbol": "decbufferusage",
           "start": "0x801F5E24",
           "end": "0x801F5EA4"
         },
         {
-          "symbol": "fn_801F5EA4",
+          "symbol": "getfreerequest",
           "start": "0x801F5EA4",
           "end": "0x801F5F28"
         },
         {
-          "symbol": "fn_801F5F28",
+          "symbol": "queuerequest",
           "start": "0x801F5F28",
           "end": "0x801F5FA4"
         },
         {
-          "symbol": "fn_801F5FA4",
+          "symbol": "locaterequest",
           "start": "0x801F5FA4",
           "end": "0x801F5FF4"
         },
         {
-          "symbol": "fn_801F5FF4",
+          "symbol": "freerequest",
           "start": "0x801F5FF4",
           "end": "0x801F6074"
         },
         {
-          "symbol": "fn_801F6074",
+          "symbol": "filterchunk",
           "start": "0x801F6074",
           "end": "0x801F60F0"
         },
         {
-          "symbol": "fn_801F60F0",
+          "symbol": "parsechunks",
           "start": "0x801F60F0",
           "end": "0x801F62F0"
         },
         {
-          "symbol": "fn_801F62F0",
+          "symbol": "readcallback",
           "start": "0x801F62F0",
           "end": "0x801F63EC"
         },
         {
-          "symbol": "fn_801F63EC",
+          "symbol": "_StreamReadCallback",
           "start": "0x801F63EC",
           "end": "0x801F6410"
         },
         {
-          "symbol": "fn_801F6410",
+          "symbol": "startnextrequest",
           "start": "0x801F6410",
           "end": "0x801F6540"
         },
         {
-          "symbol": "fn_801F6540",
+          "symbol": "restartstream",
           "start": "0x801F6540",
           "end": "0x801F685C"
         },
@@ -29915,92 +29915,92 @@
           "end": "0x801F687C"
         },
         {
-          "symbol": "fn_801F687C",
+          "symbol": "STREAM_create",
           "start": "0x801F687C",
           "end": "0x801F6AC8"
         },
         {
-          "symbol": "fn_801F6AC8",
+          "symbol": "STREAM_setfilter",
           "start": "0x801F6AC8",
           "end": "0x801F6B84"
         },
         {
-          "symbol": "fn_801F6B84",
+          "symbol": "STREAM_destroy",
           "start": "0x801F6B84",
           "end": "0x801F6C04"
         },
         {
-          "symbol": "fn_801F6C04",
+          "symbol": "STREAM_setgreedylevel",
           "start": "0x801F6C04",
           "end": "0x801F6C78"
         },
         {
-          "symbol": "fn_801F6C78",
+          "symbol": "STREAM_setgreedystate",
           "start": "0x801F6C78",
           "end": "0x801F6CE8"
         },
         {
-          "symbol": "fn_801F6CE8",
+          "symbol": "STREAM_taphandle",
           "start": "0x801F6CE8",
           "end": "0x801F6D54"
         },
         {
-          "symbol": "fn_801F6D54",
+          "symbol": "STREAM_queuefile",
           "start": "0x801F6D54",
           "end": "0x801F6E9C"
         },
         {
-          "symbol": "fn_801F6E9C",
+          "symbol": "STREAM_queuemem",
           "start": "0x801F6E9C",
           "end": "0x801F6FA0"
         },
         {
-          "symbol": "fn_801F6FA0",
+          "symbol": "STREAM_cancelrequest",
           "start": "0x801F6FA0",
           "end": "0x801F7208"
         },
         {
-          "symbol": "fn_801F7208",
+          "symbol": "STREAM_kill",
           "start": "0x801F7208",
           "end": "0x801F73D4"
         },
         {
-          "symbol": "fn_801F73D4",
+          "symbol": "STREAM_get",
           "start": "0x801F73D4",
           "end": "0x801F74D4"
         },
         {
-          "symbol": "fn_801F74D4",
+          "symbol": "STREAM_release",
           "start": "0x801F74D4",
           "end": "0x801F75C4"
         },
         {
-          "symbol": "fn_801F75C4",
+          "symbol": "STREAM_gettable",
           "start": "0x801F75C4",
           "end": "0x801F7604"
         },
         {
-          "symbol": "fn_801F7604",
+          "symbol": "STREAM_state",
           "start": "0x801F7604",
           "end": "0x801F7644"
         },
         {
-          "symbol": "fn_801F7644",
+          "symbol": "STREAM_isendofstream",
           "start": "0x801F7644",
           "end": "0x801F76A0"
         },
         {
-          "symbol": "fn_801F76A0",
+          "symbol": "STREAM_buffersize",
           "start": "0x801F76A0",
           "end": "0x801F76E8"
         },
         {
-          "symbol": "fn_801F76E8",
+          "symbol": "StreamInit",
           "start": "0x801F76E8",
           "end": "0x801F7710"
         },
         {
-          "symbol": "fn_801F7710",
+          "symbol": "StreamShutdown",
           "start": "0x801F7710",
           "end": "0x801F7738"
         }
@@ -30161,247 +30161,247 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801F8878",
+          "symbol": "_TDbTblDefaultDbFind",
           "start": "0x801F8878",
           "end": "0x801F88F0"
         },
         {
-          "symbol": "fn_801F88F0",
+          "symbol": "_TDbTblFindDbTable",
           "start": "0x801F88F0",
           "end": "0x801F89B8"
         },
         {
-          "symbol": "fn_801F89B8",
+          "symbol": "_TDbQryRefGet",
           "start": "0x801F89B8",
           "end": "0x801F8A0C"
         },
         {
-          "symbol": "fn_801F8A0C",
+          "symbol": "TDbSetDefaultInitParms",
           "start": "0x801F8A0C",
           "end": "0x801F8A54"
         },
         {
-          "symbol": "fn_801F8A54",
+          "symbol": "TDbInit",
           "start": "0x801F8A54",
           "end": "0x801F8C64"
         },
         {
-          "symbol": "fn_801F8C64",
+          "symbol": "TDbShutdown",
           "start": "0x801F8C64",
           "end": "0x801F8CE8"
         },
         {
-          "symbol": "fn_801F8CE8",
+          "symbol": "TDbFindUnusedDbId",
           "start": "0x801F8CE8",
           "end": "0x801F8D60"
         },
         {
-          "symbol": "fn_801F8D60",
+          "symbol": "TDbCreate",
           "start": "0x801F8D60",
           "end": "0x801F8EEC"
         },
         {
-          "symbol": "fn_801F8EEC",
+          "symbol": "TDbDestroy",
           "start": "0x801F8EEC",
           "end": "0x801F9014"
         },
         {
-          "symbol": "fn_801F9014",
+          "symbol": "TDbExists",
           "start": "0x801F9014",
           "end": "0x801F9064"
         },
         {
-          "symbol": "fn_801F9064",
+          "symbol": "TDbLoadFromFile",
           "start": "0x801F9064",
           "end": "0x801F9134"
         },
         {
-          "symbol": "fn_801F9134",
+          "symbol": "TDbLoad",
           "start": "0x801F9134",
           "end": "0x801F91AC"
         },
         {
-          "symbol": "fn_801F91AC",
+          "symbol": "TDbSave",
           "start": "0x801F91AC",
           "end": "0x801F9228"
         },
         {
-          "symbol": "fn_801F9228",
+          "symbol": "TDbLoadAsync",
           "start": "0x801F9228",
           "end": "0x801F92EC"
         },
         {
-          "symbol": "fn_801F92EC",
+          "symbol": "TDbSaveAsync",
           "start": "0x801F92EC",
           "end": "0x801F93AC"
         },
         {
-          "symbol": "fn_801F93AC",
+          "symbol": "_TDbAsyncRun",
           "start": "0x801F93AC",
           "end": "0x801F9430"
         },
         {
-          "symbol": "fn_801F9430",
+          "symbol": "TDbTblDefaultDbPush",
           "start": "0x801F9430",
           "end": "0x801F9574"
         },
         {
-          "symbol": "fn_801F9574",
+          "symbol": "TDbTblDefaultDbPop",
           "start": "0x801F9574",
           "end": "0x801F95C8"
         },
         {
-          "symbol": "fn_801F95C8",
+          "symbol": "TDbTblDefaultDbGet",
           "start": "0x801F95C8",
           "end": "0x801F9608"
         },
         {
-          "symbol": "fn_801F9608",
+          "symbol": "TDbTblInfoGetFixedRows",
           "start": "0x801F9608",
           "end": "0x801F967C"
         },
         {
-          "symbol": "fn_801F967C",
+          "symbol": "TDbTblDestroy",
           "start": "0x801F967C",
           "end": "0x801F9718"
         },
         {
-          "symbol": "fn_801F9718",
+          "symbol": "TDbInsertRow",
           "start": "0x801F9718",
           "end": "0x801F97D0"
         },
         {
-          "symbol": "fn_801F97D0",
+          "symbol": "TDbTblRowCopyTrig",
           "start": "0x801F97D0",
           "end": "0x801F9858"
         },
         {
-          "symbol": "fn_801F9858",
+          "symbol": "TDbQryRowCopyTrig",
           "start": "0x801F9858",
           "end": "0x801F9908"
         },
         {
-          "symbol": "fn_801F9908",
+          "symbol": "TDbQryDeleteRow",
           "start": "0x801F9908",
           "end": "0x801F9980"
         },
         {
-          "symbol": "fn_801F9980",
+          "symbol": "TDbTblFindUnusedId",
           "start": "0x801F9980",
           "end": "0x801F9A90"
         },
         {
-          "symbol": "fn_801F9A90",
+          "symbol": "TDbTblExists",
           "start": "0x801F9A90",
           "end": "0x801F9AB8"
         },
         {
-          "symbol": "fn_801F9AB8",
+          "symbol": "TDbTblColEnum",
           "start": "0x801F9AB8",
           "end": "0x801F9BB4"
         },
         {
-          "symbol": "fn_801F9BB4",
+          "symbol": "TDbTblColGetInfo",
           "start": "0x801F9BB4",
           "end": "0x801F9C68"
         },
         {
-          "symbol": "fn_801F9C68",
+          "symbol": "TDbTblColExists",
           "start": "0x801F9C68",
           "end": "0x801F9CC0"
         },
         {
-          "symbol": "fn_801F9CC0",
+          "symbol": "TDbTblInfoGetMaxRows",
           "start": "0x801F9CC0",
           "end": "0x801F9D0C"
         },
         {
-          "symbol": "fn_801F9D0C",
+          "symbol": "TDbTblInfoSetPersistent",
           "start": "0x801F9D0C",
           "end": "0x801F9D70"
         },
         {
-          "symbol": "fn_801F9D70",
+          "symbol": "TDbTblGetCount",
           "start": "0x801F9D70",
           "end": "0x801F9E84"
         },
         {
-          "symbol": "fn_801F9E84",
+          "symbol": "TDbIdxCreate",
           "start": "0x801F9E84",
           "end": "0x801F9FA4"
         },
         {
-          "symbol": "fn_801F9FA4",
+          "symbol": "TDbIdxDestroy",
           "start": "0x801F9FA4",
           "end": "0x801FA038"
         },
         {
-          "symbol": "fn_801FA038",
+          "symbol": "TDbIdxExists",
           "start": "0x801FA038",
           "end": "0x801FA0BC"
         },
         {
-          "symbol": "fn_801FA0BC",
+          "symbol": "_TDbQrySelect",
           "start": "0x801FA0BC",
           "end": "0x801FA148"
         },
         {
-          "symbol": "fn_801FA148",
+          "symbol": "TDbQryDestroy",
           "start": "0x801FA148",
           "end": "0x801FA1C0"
         },
         {
-          "symbol": "fn_801FA1C0",
+          "symbol": "TDbQryGetCount",
           "start": "0x801FA1C0",
           "end": "0x801FA228"
         },
         {
-          "symbol": "fn_801FA228",
+          "symbol": "TDbQryRetrieve",
           "start": "0x801FA228",
           "end": "0x801FA290"
         },
         {
-          "symbol": "fn_801FA290",
+          "symbol": "TDbQryGetSingleRow",
           "start": "0x801FA290",
           "end": "0x801FA3A0"
         },
         {
-          "symbol": "fn_801FA3A0",
+          "symbol": "TDbQrySetRow",
           "start": "0x801FA3A0",
           "end": "0x801FA428"
         },
         {
-          "symbol": "fn_801FA428",
+          "symbol": "TDbQrySetFirstRow",
           "start": "0x801FA428",
           "end": "0x801FA4B0"
         },
         {
-          "symbol": "fn_801FA4B0",
+          "symbol": "TDbQryUpdateExpr",
           "start": "0x801FA4B0",
           "end": "0x801FA5EC"
         },
         {
-          "symbol": "fn_801FA5EC",
+          "symbol": "TDbQryCreateTbl",
           "start": "0x801FA5EC",
           "end": "0x801FA68C"
         },
         {
-          "symbol": "fn_801FA68C",
+          "symbol": "TDbRegisterHandler",
           "start": "0x801FA68C",
           "end": "0x801FA740"
         },
         {
-          "symbol": "fn_801FA740",
+          "symbol": "TDbUnregisterHandler",
           "start": "0x801FA740",
           "end": "0x801FA7B0"
         },
         {
-          "symbol": "fn_801FA7B0",
+          "symbol": "TDbQryUpdateWithHandler",
           "start": "0x801FA7B0",
           "end": "0x801FA844"
         },
         {
-          "symbol": "fn_801FA844",
+          "symbol": "TDbQryColStats",
           "start": "0x801FA844",
           "end": "0x801FA870"
         }
@@ -30573,122 +30573,122 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801CCA64",
+          "symbol": "_FontGetFontListPtr",
           "start": "0x801CCA64",
           "end": "0x801CCAB8"
         },
         {
-          "symbol": "fn_801CCAB8",
+          "symbol": "_FontSearchFontNum",
           "start": "0x801CCAB8",
           "end": "0x801CCADC"
         },
         {
-          "symbol": "fn_801CCADC",
+          "symbol": "_FontLookupGlyph",
           "start": "0x801CCADC",
           "end": "0x801CCB5C"
         },
         {
-          "symbol": "fn_801CCB5C",
+          "symbol": "_FontGetKernAmount",
           "start": "0x801CCB5C",
           "end": "0x801CCBD0"
         },
         {
-          "symbol": "fn_801CCBD0",
+          "symbol": "FontProcessFontFile",
           "start": "0x801CCBD0",
           "end": "0x801CCC24"
         },
         {
-          "symbol": "fn_801CCC24",
+          "symbol": "FontInit",
           "start": "0x801CCC24",
           "end": "0x801CCD0C"
         },
         {
-          "symbol": "fn_801CCD0C",
+          "symbol": "FontShutdown",
           "start": "0x801CCD0C",
           "end": "0x801CCDA4"
         },
         {
-          "symbol": "fn_801CCDA4",
+          "symbol": "FontOpenFileDevice",
           "start": "0x801CCDA4",
           "end": "0x801CCE10"
         },
         {
-          "symbol": "fn_801CCE10",
+          "symbol": "FontCloseFile",
           "start": "0x801CCE10",
           "end": "0x801CCE60"
         },
         {
-          "symbol": "fn_801CCE60",
+          "symbol": "FontAddFont",
           "start": "0x801CCE60",
           "end": "0x801CCF74"
         },
         {
-          "symbol": "fn_801CCF74",
+          "symbol": "FontAddFontFromBuffer",
           "start": "0x801CCF74",
           "end": "0x801CD07C"
         },
         {
-          "symbol": "fn_801CD07C",
+          "symbol": "FontRemoveFont",
           "start": "0x801CD07C",
           "end": "0x801CD130"
         },
         {
-          "symbol": "fn_801CD130",
+          "symbol": "FontCreateFont",
           "start": "0x801CD130",
           "end": "0x801CD20C"
         },
         {
-          "symbol": "fn_801CD20C",
+          "symbol": "FontUploadTextures",
           "start": "0x801CD20C",
           "end": "0x801CD244"
         },
         {
-          "symbol": "fn_801CD244",
+          "symbol": "FontDestroyFont",
           "start": "0x801CD244",
           "end": "0x801CD2A4"
         },
         {
-          "symbol": "fn_801CD2A4",
+          "symbol": "FontResetRenderState",
           "start": "0x801CD2A4",
           "end": "0x801CD308"
         },
         {
-          "symbol": "fn_801CD308",
+          "symbol": "FontSetRenderColor",
           "start": "0x801CD308",
           "end": "0x801CD398"
         },
         {
-          "symbol": "fn_801CD398",
+          "symbol": "FontSetRenderFlags",
           "start": "0x801CD398",
           "end": "0x801CD3B0"
         },
         {
-          "symbol": "fn_801CD3B0",
+          "symbol": "FontClearRenderFlags",
           "start": "0x801CD3B0",
           "end": "0x801CD3C8"
         },
         {
-          "symbol": "fn_801CD3C8",
+          "symbol": "FontSetShadowOffset",
           "start": "0x801CD3C8",
           "end": "0x801CD3E4"
         },
         {
-          "symbol": "fn_801CD3E4",
+          "symbol": "FontDrawText",
           "start": "0x801CD3E4",
           "end": "0x801CD63C"
         },
         {
-          "symbol": "fn_801CD63C",
+          "symbol": "FontGetTextWidth",
           "start": "0x801CD63C",
           "end": "0x801CD750"
         },
         {
-          "symbol": "fn_801CD750",
+          "symbol": "FontGetCharWidth",
           "start": "0x801CD750",
           "end": "0x801CD790"
         },
         {
-          "symbol": "fn_801CD790",
+          "symbol": "FontGetDescent",
           "start": "0x801CD790",
           "end": "0x801CD79C"
         }
@@ -30900,9 +30900,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_8021625C.c",
+      "source": "src/engine/xmlread.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 (src/engine/cu_8021625C.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1D10-0x802B1D40. 12 bodies, partials: 0x802166F0, 0x80216BFC. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 (src/engine/xmlread.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1D10-0x802B1D40. 12 bodies, partials: 0x802166F0, 0x80216BFC. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -30919,62 +30919,62 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8021625C",
+          "symbol": "_XmlDecodeEntity",
           "start": "0x8021625C",
           "end": "0x802163F0"
         },
         {
-          "symbol": "fn_802163F0",
+          "symbol": "_XmlFindAttr",
           "start": "0x802163F0",
           "end": "0x8021658C"
         },
         {
-          "symbol": "fn_8021658C",
+          "symbol": "_XmlSkipTag",
           "start": "0x8021658C",
           "end": "0x802166F0"
         },
         {
-          "symbol": "fn_802166F0",
+          "symbol": "_XmlSkipElement",
           "start": "0x802166F0",
           "end": "0x80216860"
         },
         {
-          "symbol": "fn_80216860",
+          "symbol": "XmlFindPath",
           "start": "0x80216860",
           "end": "0x80216A2C"
         },
         {
-          "symbol": "fn_80216A2C",
+          "symbol": "XmlFindChild",
           "start": "0x80216A2C",
           "end": "0x80216BFC"
         },
         {
-          "symbol": "fn_80216BFC",
+          "symbol": "XmlFindInElement",
           "start": "0x80216BFC",
           "end": "0x80216E34"
         },
         {
-          "symbol": "fn_80216E34",
+          "symbol": "XmlFindNext",
           "start": "0x80216E34",
           "end": "0x80216F3C"
         },
         {
-          "symbol": "fn_80216F3C",
+          "symbol": "XmlGetAttrString",
           "start": "0x80216F3C",
           "end": "0x80217070"
         },
         {
-          "symbol": "fn_80217070",
+          "symbol": "XmlGetAttrInt",
           "start": "0x80217070",
           "end": "0x802171DC"
         },
         {
-          "symbol": "fn_802171DC",
+          "symbol": "XmlGetAttrFloat",
           "start": "0x802171DC",
           "end": "0x8021743C"
         },
         {
-          "symbol": "fn_8021743C",
+          "symbol": "XmlGetAttrFloats",
           "start": "0x8021743C",
           "end": "0x802176E8"
         }
@@ -35391,147 +35391,147 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80205754",
+          "symbol": "_TDbQryUpdateQIdxsFromLits",
           "start": "0x80205754",
           "end": "0x80205880"
         },
         {
-          "symbol": "fn_80205880",
+          "symbol": "_TDbQryCheckQIdxUsage",
           "start": "0x80205880",
           "end": "0x80205A10"
         },
         {
-          "symbol": "fn_80205A10",
+          "symbol": "_TDbQryRebuildQIdx",
           "start": "0x80205A10",
           "end": "0x80205B88"
         },
         {
-          "symbol": "fn_80205B88",
+          "symbol": "_TDbQrySetInUse",
           "start": "0x80205B88",
           "end": "0x80205C08"
         },
         {
-          "symbol": "fn_80205C08",
+          "symbol": "_TDbQryClearInUse",
           "start": "0x80205C08",
           "end": "0x80205C44"
         },
         {
-          "symbol": "fn_80205C44",
+          "symbol": "_TDbQryQIdxRowDelete",
           "start": "0x80205C44",
           "end": "0x80205DB8"
         },
         {
-          "symbol": "fn_80205DB8",
+          "symbol": "_TDbQryPrepComplexFilter",
           "start": "0x80205DB8",
           "end": "0x8020651C"
         },
         {
-          "symbol": "fn_8020651C",
+          "symbol": "_TDbQryQueryDeleteFix",
           "start": "0x8020651C",
           "end": "0x80206668"
         },
         {
-          "symbol": "fn_80206668",
+          "symbol": "_TDbQryQueryDeleteFixEx",
           "start": "0x80206668",
           "end": "0x80206708"
         },
         {
-          "symbol": "fn_80206708",
+          "symbol": "_TDbQryScoreIndexComplex",
           "start": "0x80206708",
           "end": "0x802067D4"
         },
         {
-          "symbol": "fn_802067D4",
+          "symbol": "_TDbQryScoreIndex",
           "start": "0x802067D4",
           "end": "0x802069BC"
         },
         {
-          "symbol": "fn_802069BC",
+          "symbol": "_TDbQryCreateTIdx",
           "start": "0x802069BC",
           "end": "0x80206C9C"
         },
         {
-          "symbol": "fn_80206C9C",
+          "symbol": "_TDbQryCreateQIdxKey",
           "start": "0x80206C9C",
           "end": "0x80206E4C"
         },
         {
-          "symbol": "fn_80206E4C",
+          "symbol": "_TDbQryFreeQIdx",
           "start": "0x80206E4C",
           "end": "0x80206EB8"
         },
         {
-          "symbol": "fn_80206EB8",
+          "symbol": "_TDbQryCreateQIdx",
           "start": "0x80206EB8",
           "end": "0x802071F8"
         },
         {
-          "symbol": "fn_802071F8",
+          "symbol": "_TDbQryCompareIndexCol",
           "start": "0x802071F8",
           "end": "0x802072E8"
         },
         {
-          "symbol": "fn_802072E8",
+          "symbol": "_TDbQryCompareIndexExpr",
           "start": "0x802072E8",
           "end": "0x80207448"
         },
         {
-          "symbol": "fn_80207448",
+          "symbol": "_TDbQryFindJoinColumn",
           "start": "0x80207448",
           "end": "0x802075F4"
         },
         {
-          "symbol": "fn_802075F4",
+          "symbol": "_TDbQrySyncStart",
           "start": "0x802075F4",
           "end": "0x80207988"
         },
         {
-          "symbol": "fn_80207988",
+          "symbol": "_TDbQrySyncSkip",
           "start": "0x80207988",
           "end": "0x80207B8C"
         },
         {
-          "symbol": "fn_80207B8C",
+          "symbol": "_TDbQryPrepSearch",
           "start": "0x80207B8C",
           "end": "0x80207DB4"
         },
         {
-          "symbol": "fn_80207DB4",
+          "symbol": "_TDbQryPrepFree",
           "start": "0x80207DB4",
           "end": "0x80207E24"
         },
         {
-          "symbol": "fn_80207E24",
+          "symbol": "_TDbQryPrepSimple",
           "start": "0x80207E24",
           "end": "0x80208094"
         },
         {
-          "symbol": "fn_80208094",
+          "symbol": "_TDbQryPrepComplex",
           "start": "0x80208094",
           "end": "0x80208204"
         },
         {
-          "symbol": "fn_80208204",
+          "symbol": "_TDbQryDeleteRow",
           "start": "0x80208204",
           "end": "0x8020840C"
         },
         {
-          "symbol": "fn_8020840C",
+          "symbol": "_TDbQryCreate",
           "start": "0x8020840C",
           "end": "0x802087D4"
         },
         {
-          "symbol": "fn_802087D4",
+          "symbol": "_TDbQryDestroy",
           "start": "0x802087D4",
           "end": "0x802088A8"
         },
         {
-          "symbol": "fn_802088A8",
+          "symbol": "_TDbQryGetCount",
           "start": "0x802088A8",
           "end": "0x802088FC"
         },
         {
-          "symbol": "fn_802088FC",
+          "symbol": "_TDbQryRetrieve",
           "start": "0x802088FC",
           "end": "0x8020925C"
         },
@@ -35541,52 +35541,52 @@
           "end": "0x80209E40"
         },
         {
-          "symbol": "fn_80209E40",
+          "symbol": "_TDbQryPrepColLits",
           "start": "0x80209E40",
           "end": "0x80209F34"
         },
         {
-          "symbol": "fn_80209F34",
+          "symbol": "_TDbQryFillFromColLits",
           "start": "0x80209F34",
           "end": "0x8020A3A0"
         },
         {
-          "symbol": "fn_8020A3A0",
+          "symbol": "_TDbQryFillToColLits",
           "start": "0x8020A3A0",
           "end": "0x8020A540"
         },
         {
-          "symbol": "fn_8020A540",
+          "symbol": "_TDbQryClearModFlags",
           "start": "0x8020A540",
           "end": "0x8020A5A8"
         },
         {
-          "symbol": "fn_8020A5A8",
+          "symbol": "_TDbQryCallTriggers",
           "start": "0x8020A5A8",
           "end": "0x8020A660"
         },
         {
-          "symbol": "fn_8020A660",
+          "symbol": "_TDbQryUpdateWithHandler",
           "start": "0x8020A660",
           "end": "0x8020A908"
         },
         {
-          "symbol": "fn_8020A908",
+          "symbol": "_TDbQryRowCopyTrig",
           "start": "0x8020A908",
           "end": "0x8020AD1C"
         },
         {
-          "symbol": "fn_8020AD1C",
+          "symbol": "_TDbQrySetRow",
           "start": "0x8020AD1C",
           "end": "0x8020AE88"
         },
         {
-          "symbol": "fn_8020AE88",
+          "symbol": "_TDbQryUpdateExpr",
           "start": "0x8020AE88",
           "end": "0x8020B094"
         },
         {
-          "symbol": "fn_8020B094",
+          "symbol": "_TDbQryColStats",
           "start": "0x8020B094",
           "end": "0x8020B564"
         }

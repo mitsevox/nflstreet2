@@ -63,8 +63,8 @@ void MatRotZ(int);
 void MatRotY(int);
 void MatRotX(int);
 void MatLoadSlot(int);
-void fn_80227C2C(Vector_80039F5C *, Vector_80039F5C *);
-void fn_80227D6C(Vector_80039F5C *, Vector_80039F5C *);
+void Vec3Mat33Mul(Vector_80039F5C *, Vector_80039F5C *);
+void Vec3Mat44Mul(Vector_80039F5C *, Vector_80039F5C *);
 Glow_t *GlowCreate(int, GlowDesc_t *);
 void GlowInitGroup(int, int);
 void GlowAddGhost(Glow_t *, GlowGhostDesc_t *);
@@ -221,7 +221,7 @@ void GlowInit(void *owner)
                 angle[1] = (int)(input->mUnknownC.mY * 46603.37890625f);
                 angle[2] = (int)((input->mUnknownC.mZ + 90.0f) * 46603.37890625f);
                 MatRotZ(-angle[2]); MatRotY(-angle[1]); MatRotX(-angle[0]);
-                fn_80227C2C(&out, &v); MatPop();
+                Vec3Mat33Mul(&out, &v); MatPop();
                 _Glow_apLevelGlows[i]->mUnknown18.mX = input->mUnknown0.mX;
                 _Glow_apLevelGlows[i]->mUnknown18.mY = input->mUnknown0.mY;
                 _Glow_apLevelGlows[i]->mUnknown18.mZ = input->mUnknown0.mZ;
@@ -270,7 +270,7 @@ void GlowTransformPoint(Vector_80039F5C *out, Vector_80039F5C *in)
 {
     Vector_80039F5C v;
     MatSetStack(VptGetMatrixStack()); MatPush(); MatLoadSlot(3);
-    fn_80227D6C(&v, in); out->mX = v.mX; out->mY = v.mY; out->mZ = v.mZ; MatPop();
+    Vec3Mat44Mul(&v, in); out->mX = v.mX; out->mY = v.mY; out->mZ = v.mZ; MatPop();
 }
 int GlowIsOnScreen(Vector_80039F5C *p)
 {

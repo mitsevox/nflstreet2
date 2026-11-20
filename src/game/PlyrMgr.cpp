@@ -9,7 +9,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Collide.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_8022781C.h"
+#include "game/Vec2Distance.h"
 #include "game/LevelSurface.h"
 #include "game/fn_800AD9B4.h"
 #include "game/Object_8017886C.h"
@@ -19,14 +19,14 @@
 #include "game/fn_801D2B7C.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_801FCE10.h"
+#include "game/Vec3Magnitude.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/SyncStateRegister.h"
 #include "game/PreSnapPhase.h"
 #include "game/PlaySet.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
-#include "game/fn_80227638.h"
+#include "game/Vec2Add.h"
 
 /* Block that +4 of the manager points to (28 bytes). */
 struct PlyrMgrCollideSet_t {
@@ -177,11 +177,11 @@ void PlyrCollideResetBlock(Block_80170374 *pBlock);
 void MatPush(void);
 void MatLoad(void *p);
 void MatPop(void);
-void fn_80227930(void *pOut, void *pA, void *pB, float t);
-float fn_8022785C(void *pA, void *pB);
-void fn_80227CC0(void *pOut, void *pIn);
-void fn_80227264(void *pOut, void *pIn, float scale);
-void fn_8022765C(void *pOut, void *pA, void *pB);
+void Vec3Lerp(void *pOut, void *pA, void *pB, float t);
+float Vec3Distance(void *pA, void *pB);
+void Vec3Mat34Mul(void *pOut, void *pIn);
+void Vec3Scale(void *pOut, void *pIn, float scale);
+void Vec3Add(void *pOut, void *pA, void *pB);
 extern unsigned char _PlyrMgr_uRumbleMax, _PlyrMgr_uRumbleBase, _PlyrMgr_uRumbleDuration;
 extern float _PlyrMgr_fRumbleScale;
 void PlyrCollideMotion(Object_80039F5C *pA, Object_80039F5C *pB);
@@ -952,7 +952,7 @@ extern "C" Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, 
     for (i = 0; i < _PlyrMgr_pManager->mCount; i++) {
         Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         if (((p->mId >> 8) & 0xFF) == (unsigned char)team) {
-            float d = fn_8022781C(&p->mMotion.mPos, pPos);
+            float d = Vec2Distance(&p->mMotion.mPos, pPos);
             if (d < best) {
                 pBest = p;
                 best = d;
@@ -985,7 +985,7 @@ extern "C" void PlyrRouteShow(int on, int team, int index)
 
                 pPos->mX = (pPlay->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
                 pPos->mY = (pPlay->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
-                fn_80227638(pPos, pPos, &offset);
+                Vec2Add(pPos, pPos, &offset);
             } else {
                 Point_8017886C *pPos = &pos;
 
@@ -1125,8 +1125,8 @@ extern "C" void PlyrUpdateCollRecord(CollideObject_t *pRecord)
         pSub->mUnknown24 = pSub->mUnknown14;
         pSub->mUnknown28 = pSub->mUnknown18;
         pSub->mUnknown28 = p->mMotion.mPos.mZ + 1.5f;
-        fn_80227930(pSub, &pSub->mUnknown10, &pSub->mUnknown20, 0.5f);
-        pSub->mUnknownC = fn_8022785C(pSub, &pSub->mUnknown10) + pSub->mUnknown1C;
+        Vec3Lerp(pSub, &pSub->mUnknown10, &pSub->mUnknown20, 0.5f);
+        pSub->mUnknownC = Vec3Distance(pSub, &pSub->mUnknown10) + pSub->mUnknown1C;
         pOther->mUnknownC = pSub->mUnknownC;
     } else {
         int single = pRecord->mUnknown2F == 1;
@@ -1183,8 +1183,8 @@ extern "C" void PlyrUpdateCollRecord(CollideObject_t *pRecord)
             b.mX = pB[0][3];
             b.mY = pB[1][3];
             b.mZ = pB[2][3];
-            fn_80227CC0(&pSub->mUnknown10, &a);
-            fn_80227CC0(&pSub->mUnknown20, &b);
+            Vec3Mat34Mul(&pSub->mUnknown10, &a);
+            Vec3Mat34Mul(&pSub->mUnknown20, &b);
             d = fabsf(pSub->mUnknown10 - pRecord->mUnknown0);
             if (d < radius) {
                 d = radius;
@@ -1198,19 +1198,19 @@ extern "C" void PlyrUpdateCollRecord(CollideObject_t *pRecord)
             switch (i) {
             case 0:
                 if (single) {
-                    pSub->mUnknownC = fn_8022785C(pSub, &pSub->mUnknown10) + pSub->mUnknown1C;
+                    pSub->mUnknownC = Vec3Distance(pSub, &pSub->mUnknown10) + pSub->mUnknown1C;
                     pOther = pRecord->mpUnknown24;
                     pOther->mUnknownC = pSub->mUnknownC;
                 }
                 break;
             case 9:
             case 10:
-                fn_802276B4(&a, &pSub->mUnknown20, &pSub->mUnknown10);
-                fn_80227264(&a, &a, 2.15f);
-                fn_8022765C(&pSub->mUnknown10, &a, &pSub->mUnknown10);
+                Vec3Sub(&a, &pSub->mUnknown20, &pSub->mUnknown10);
+                Vec3Scale(&a, &a, 2.15f);
+                Vec3Add(&pSub->mUnknown10, &a, &pSub->mUnknown10);
                 break;
             }
-            fn_80227930(pSub, &pSub->mUnknown10, &pSub->mUnknown20, 0.5f);
+            Vec3Lerp(pSub, &pSub->mUnknown10, &pSub->mUnknown20, 0.5f);
         }
     }
     MatPop();
@@ -1256,7 +1256,7 @@ extern "C" void PlyrUpdateCollRecord(CollideObject_t *pRecord)
                 break;
             }
             pOther->mUnknown1C = pSub->mUnknown1C;
-            pSub->mUnknownC = fn_8022785C(pSub, &pSub->mUnknown10) + pSub->mUnknown1C;
+            pSub->mUnknownC = Vec3Distance(pSub, &pSub->mUnknown10) + pSub->mUnknown1C;
             pOther->mUnknownC = pSub->mUnknownC;
         }
         pRecord->mUnknown2C |= 2;
@@ -1346,7 +1346,7 @@ extern "C" Object_80039F5C *PlyrFindByPoid(int id)
     int status;
     int code = 0;
 
-    status = fn_801FCE10(0, "use 'EMAG' select 'DIGP' into \x85 from 'YALP' where 'DIOP' = \x82\n", &value, id);
+    status = TDbCompilePerformOp(0, "use 'EMAG' select 'DIGP' into \x85 from 'YALP' where 'DIOP' = \x82\n", &value, id);
     if (status != 0 && status != 23) {
         code = status;
     }

@@ -14,7 +14,7 @@
 #include "game/PlayBookTeam.h"
 #include <string.h>
 #include "game/fn_80178D18.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/fn_800B65A0.h"
 #include "game/Record_800B15FC.h"
 #include "game/Input_800B6D34.h"
@@ -99,7 +99,7 @@ float AnimSeqGetOpcodeTime(AnimScript_t *, int);
 float AnimSeqGetTime(AnimSeq_t *);
 int fn_800E6AC8(Object_80039F5C *, int);
 int fn_8011EC68(Object_80039F5C *, Object_80039F5C *);
-float fn_8022781C(void *, void *);
+float Vec2Distance(void *, void *);
 int fn_800E815C(Object_80039F5C *, int, int);
 int fn_800F0490(int, State_80039F5C *, int);
 void fn_800F05E4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
@@ -241,7 +241,7 @@ int PlyrEngageUpdate(Object_80039F5C *p)
                     s->mUnknownCByte = 1;
                     return 0;
                 }
-            } else if (!(fn_8022781C(&p->mMotion.mPos, &ball->mMotion.mPos) > 5.0f)) {
+            } else if (!(Vec2Distance(&p->mMotion.mPos, &ball->mMotion.mPos) > 5.0f)) {
                 Object_80039F5C *linked = fn_8009BCE8(&p->mUnknown1036);
                 if (linked) {
                     p->mUnknown344 = 1;

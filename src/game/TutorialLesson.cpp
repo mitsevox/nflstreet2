@@ -7,7 +7,7 @@
 #include "engine/cu_80229270.h"
 #include "game/StyleTracker.h"
 #include "game/fn_8021D7B8.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/Object_80039F5C.h"
 #include "game/DepthChart.h"
 #include "game/DepthChartSide.h"
@@ -559,7 +559,7 @@ void TutorialSetupRosters(void)
     unsigned int team;
     unsigned int i;
 
-    fn_801FCE10(0, "select 'GTHG' into \x82 and 'GTAG' into \x82 from 'FNIG'\n", &home, &away);
+    TDbCompilePerformOp(0, "select 'GTHG' into \x82 and 'GTAG' into \x82 from 'FNIG'\n", &home, &away);
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 6; i++) {
             list[i] = PlyrGet((unsigned char)team, i)->mUnknown2908;
@@ -570,7 +570,7 @@ void TutorialSetupRosters(void)
     }
     DepthChartGetSide(0, &records[0]);
     DepthChartGetSide(1, &records[1]);
-    fn_801FCE10(0, "delete from 'AGCD'\n");
+    TDbCompilePerformOp(0, "delete from 'AGCD'\n");
     /* 0x41474344 is 'AGCD', the table cleared by the query above. */
     fn_8022DA44(home, records[0].mUnknown, away, records[1].mUnknown, 0x41474344);
     for (team = 0; team <= 1; team++) {
@@ -581,9 +581,9 @@ void TutorialSetupRosters(void)
         }
     }
     for (i = 0; i < 14; i++) {
-        fn_801FCE10(0, "select 'DIOP' into \x85 from 'YALP' where 'DIGP' = \x85 and 'DIGT' = \x85\n",
+        TDbCompilePerformOp(0, "select 'DIOP' into \x85 from 'YALP' where 'DIGP' = \x85 and 'DIGT' = \x85\n",
                     &records[0].mUnknown[i], records[0].mUnknown[i], home);
-        fn_801FCE10(0, "select 'DIOP' into \x85 from 'YALP' where 'DIGP' = \x85 and 'DIGT' = \x85\n",
+        TDbCompilePerformOp(0, "select 'DIOP' into \x85 from 'YALP' where 'DIGP' = \x85 and 'DIGT' = \x85\n",
                     &records[1].mUnknown[i], records[1].mUnknown[i], away);
     }
     DepthChartSetSide(0, records[0].mUnknown);
@@ -1731,11 +1731,11 @@ void TutorialSetupSession(void)
         cursor.mUnknown4 = 0;
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
-        fn_801FCE10(0, "declare \x8a cursor for select * from 'YALP' where ('DIGT' = \x83) order by 'DIGP'\n", &cursor, team);
+        TDbCompilePerformOp(0, "declare \x8a cursor for select * from 'YALP' where ('DIGT' = \x83) order by 'DIGP'\n", &cursor, team);
         for (unsigned short i = 0; i <= 6; i++) {
-            fn_801FCE10(0, "fetch from \x8a 'DIGP' into \x82 and 'DIOP' into \x82\n", &cursor, &a, &b);
+            TDbCompilePerformOp(0, "fetch from \x8a 'DIGP' into \x82 and 'DIOP' into \x82\n", &cursor, &a, &b);
         }
-        if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+        if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);
     }
 }
 

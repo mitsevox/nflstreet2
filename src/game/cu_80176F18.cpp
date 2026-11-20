@@ -20,7 +20,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/SyncStateRegister.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
@@ -650,7 +650,7 @@ extern "C" void fn_801779D8(void)
 
     GameModeTypeGet();
     if (resume) {
-        fn_801FCE10(0, "select 'SRSG' into \x89 from 'NIBG'\n", pState);
+        TDbCompilePerformOp(0, "select 'SRSG' into \x89 from 'NIBG'\n", pState);
     }
     pState->mUnknown08 = 0.0f;
     pState->mUnknown0C.mX = 0.0f;
@@ -659,7 +659,7 @@ extern "C" void fn_801779D8(void)
     if (ChallengeIsActive()) {
         pState->mUnknown3C = ChalGetCurrent()->mUnknown1AC;
         pState->mUnknown3E = ChalGetCurrent()->mUnknown1A8;
-        fn_801FCE10(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n", pState->mUnknown3E, pState->mUnknown3C);
+        TDbCompilePerformOp(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n", pState->mUnknown3E, pState->mUnknown3C);
         pState->mUnknown30 = ChalGetCurrent()->mUnknown1C1;
     } else {
         pState->mUnknown30 = 1;

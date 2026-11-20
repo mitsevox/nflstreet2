@@ -1,5 +1,5 @@
-#ifndef GAME_FN_801FCE10_H
-#define GAME_FN_801FCE10_H
+#ifndef GAME_TDBCOMPILEPERFORMOP_H
+#define GAME_TDBCOMPILEPERFORMOP_H
 
 struct QueryResult {
     unsigned short mUnknown0;
@@ -20,8 +20,8 @@ struct QueryCursor {
 extern "C" {
 #endif
 
-int fn_801FCE10(void *pResult, const char *pQuery, ...);
-int fn_801FCFA0(struct QueryCursor *pCursor);
+int TDbCompilePerformOp(void *pResult, const char *pQuery, ...);
+int TDbSQLDestroyCursor(struct QueryCursor *pCursor);
 
 #ifdef __cplusplus
 }

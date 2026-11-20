@@ -74,7 +74,7 @@ void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 int DbNiomIsModeActive(void);
 int DbNiomEndMode(void);
 void DbNiomModeResume(void);
-int fn_80232FD4(DepthChartSide_t *pRecord0, DepthChartSide_t *pRecord1);
+int DbManagerEnterMode2(DepthChartSide_t *pRecord0, DepthChartSide_t *pRecord1);
 }
 
 static unsigned char _FELoop_uResumeMode = 0;
@@ -312,7 +312,7 @@ void FELoopStartGame()
         SndgMusicPumpFrame(1);
         DepthChartGetSide(1, &record1);
         SndgMusicPumpFrame(1);
-        fn_80232FD4(&record0, &record1);
+        DbManagerEnterMode2(&record0, &record1);
         SndgMusicPumpFrame(1);
         GameInfoRead();
         fn_8021956C(gUISSubInfo, 1, 5, 1);

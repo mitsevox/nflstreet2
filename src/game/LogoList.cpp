@@ -3,11 +3,11 @@
    id. */
 
 #include "game/DbCursor.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 extern "C" {
-int fn_801F967C(int handle, int table);
-int fn_801F9980(int handle, int *pTable);
+int TDbTblDestroy(int handle, int table);
+int TDbTblFindUnusedId(int handle, int *pTable);
 int DbUserFindIndex(int a);
 int DbUserGetCurrent(void);
 void LogoLockOpen(DbCursor *pObject, signed char a);
@@ -29,14 +29,14 @@ void LogoListOpen(DbCursor *pObject)
     unsigned char a;
 
     a = DbUserFindIndex(DbUserGetCurrent());
-    fn_801F9980(0x54415453, &_LogoList_iTable);
-    fn_801FCE10(&result, "use \x8c select into \x8c * from 'OGOL'\n", 0x54415453, _LogoList_iTable);
+    TDbTblFindUnusedId(0x54415453, &_LogoList_iTable);
+    TDbCompilePerformOp(&result, "use \x8c select into \x8c * from 'OGOL'\n", 0x54415453, _LogoList_iTable);
     LogoLockOpen(&cursor, a);
     if (DbCursorFirst(&cursor)) {
         do {
             if (LogoLockIsLocked(&cursor) == 0) {
                 int id = LogoLockGetId(&cursor);
-                fn_801FCE10(0, "use \x8c update \x8c set 'KLGL' = 0 where 'LGLT' = \x82\n", 0x54415453,
+                TDbCompilePerformOp(0, "use \x8c update \x8c set 'KLGL' = 0 where 'LGLT' = \x82\n", 0x54415453,
                             _LogoList_iTable, id);
             }
         } while (DbCursorNext(&cursor));
@@ -53,7 +53,7 @@ void LogoListOpen(DbCursor *pObject)
 void LogoListClose(DbCursor *pObject)
 {
     DbCursorClose(pObject);
-    fn_801F967C(0x54415453, _LogoList_iTable);
+    TDbTblDestroy(0x54415453, _LogoList_iTable);
 }
 
 void LogoListGetName(DbCursor *pObject, char *pBuffer, int size)

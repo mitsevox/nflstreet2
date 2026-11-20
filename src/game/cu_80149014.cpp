@@ -1,7 +1,7 @@
 #include "game/Class_80148A58.h"
 #include "game/StyleTracker.h"
 #include "game/Object_80039F5C.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/GameModeType.h"
 #include <string.h>
 #include <string.h>
@@ -46,12 +46,12 @@ int fn_80149014(void)
 void fn_80149040(Object_80039F5C *p)
 {
     QueryCursor cursor = {0,0,-1,0};
-    fn_801FCE10(0,"declare \x8A cursor for select * from 'AGLP' where ('DIGP' = \x84)\n",&cursor,p->mUnknown2908);
+    TDbCompilePerformOp(0,"declare \x8A cursor for select * from 'AGLP' where ('DIGP' = \x84)\n",&cursor,p->mUnknown2908);
     PlyrLoadDbRecord(cursor,0,&p->mUnknown2900);
     p->mUnknown508 = p->mUnknown2904Float;
     fn_800B4900(cursor,0,p->mRatings,p->mUnknown3020);
     fn_800B4798(p->mRatings,p->mIdBytes[2],p->mIdBytes[1],&p->mUnknown2900);
-    if(cursor.mUnknown0)fn_801FCFA0(&cursor);
+    if(cursor.mUnknown0)TDbSQLDestroyCursor(&cursor);
     PlyrAttachModel(p);
     fn_800B5150(p);
 }

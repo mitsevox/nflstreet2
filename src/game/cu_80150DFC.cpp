@@ -3,7 +3,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/Ball.h"
-#include "game/fn_8022781C.h"
+#include "game/Vec2Distance.h"
 
 struct Entry_8015005C {
     int mUnknown0;
@@ -92,7 +92,7 @@ void ResetBallsAndFieldPositions(void)
         fn_8014FFC4(&pTable->mUnknown92[i]);
         unsigned int j = 0;
         while (j < i) {
-            if (fn_8022781C(&pTable->mUnknown92[i], &pTable->mUnknown92[j]) < 4.0f) {
+            if (Vec2Distance(&pTable->mUnknown92[i], &pTable->mUnknown92[j]) < 4.0f) {
                 fn_8014FFC4(&pTable->mUnknown92[i]);
                 j = 0;
             } else {

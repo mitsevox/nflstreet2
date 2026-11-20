@@ -1,3 +1,5 @@
+/* Model objects: binds a TM model, its textures and shader to a game object and draws it with the object's
+   blend, depth, fog and lighting settings. */
 #include "engine/SyncStateGroup.h"
 #include "engine/EvMonDesc.h"
 #include "engine/EvMonAddListener.h"
@@ -61,7 +63,7 @@ void fn_802353D8(Object_80235588 *p, int flags);
 void fn_802353E8(Object_80235588 *p, int flags);
 void ModelObjRender(Object_80235588 *p, int handle, int lightMask);
 
-void fn_802355E4(Object_80235588 *p)
+void ModelObjReset(Object_80235588 *p)
 {
     if (p->mpUnknown88 != 0) {
         TMMaterialListFree(p->mUnknown92);
@@ -70,7 +72,7 @@ void fn_802355E4(Object_80235588 *p)
     TMModelReset(&p->mUnknown100);
 }
 
-void fn_80235630(Object_80235588 *p, void *pData)
+void ModelObjSetModel(Object_80235588 *p, void *pData)
 {
     if (p->mpUnknown84 != pData) {
         p->mpUnknown84 = pData;
@@ -93,17 +95,17 @@ void fn_80235630(Object_80235588 *p, void *pData)
     }
 }
 
-void fn_8023570C(Object_80235588 *p, const char *pName)
+void ModelObjSetShader(Object_80235588 *p, const char *pName)
 {
     p->mUnknown184 = TMShaderLibGetShader(pName);
 }
 
-void fn_80235740(Object_80235588 *p, int handle)
+void ModelObjStoreMatrix(Object_80235588 *p, int handle)
 {
     MatStore(p->mUnknown8[0]);
 }
 
-void fn_80235764(Object_80235588 *p, int handle)
+void ModelObjDraw(Object_80235588 *p, int handle)
 {
     ModelObjRender(p, handle, 1);
 }
@@ -211,7 +213,7 @@ void ModelObjRender(Object_80235588 *p, int handle, int lightMask)
     }
 }
 
-void fn_80235B6C(Object_80235588 *p, Element_80235B6C *pElement, int a)
+void ModelObjSetTextures(Object_80235588 *p, Element_80235B6C *pElement, int a)
 {
     Library_80235B6C *pLibrary;
 
@@ -237,22 +239,22 @@ void fn_80235B6C(Object_80235588 *p, Element_80235B6C *pElement, int a)
     }
 }
 
-void fn_80235C24(Object_80235588 *p, Element_80235B6C *pElement)
+void ModelObjSetTexturesDefault(Object_80235588 *p, Element_80235B6C *pElement)
 {
-    fn_80235B6C(p, pElement, 0);
+    ModelObjSetTextures(p, pElement, 0);
 }
 
-void fn_80235C48(Object_80235588 *p, int a)
+void ModelObjSetParamNop(Object_80235588 *p, int a)
 {
 }
 
-void fn_80235C4C(int a, Object_80235588 *p, float value)
+void ModelObjSetFixedDepth(int a, Object_80235588 *p, float value)
 {
     fn_802353D8(p, 0x80000);
     p->mUnknown72 = value;
 }
 
-void fn_80235C90(Object_80235588 *p, int unused, float r, float g, float b, float a)
+void ModelObjSetAmbientColor(Object_80235588 *p, int unused, float r, float g, float b, float a)
 {
     p->mUnknown0 |= 0x20000;
     p->mUnknown76[0] = (unsigned char)(r * 255.0f);
@@ -261,11 +263,11 @@ void fn_80235C90(Object_80235588 *p, int unused, float r, float g, float b, floa
     p->mUnknown76[3] = (unsigned char)(a * 255.0f);
 }
 
-void fn_80235D0C(Object_80235588 *p, int a)
+void ModelObjSetFlagsNop(Object_80235588 *p, int a)
 {
 }
 
-void fn_80235D10(Object_80235588 *p, float value)
+void ModelObjSetDepthOffset(Object_80235588 *p, float value)
 {
     if (!(value <= 0.0f)) {
         fn_802353D8(p, 0x40000);
@@ -275,23 +277,23 @@ void fn_80235D10(Object_80235588 *p, float value)
     }
 }
 
-void fn_80235D74(Object_80235588 *p, int a)
+void ModelObjSetModeNop(Object_80235588 *p, int a)
 {
 }
 
-void fn_80235D78(float *p)
+void ModelObjSetEyePos(float *p)
 {
     lbl_802FB458[0] = p[0];
     lbl_802FB458[1] = p[1];
     lbl_802FB458[2] = p[2];
 }
 
-int fn_80235D9C(unsigned int *p)
+int ModelObjIsModelRes(unsigned int *p)
 {
     return *p == 0x544D646C;
 }
 
-void fn_80235DB8(void *p)
+void ModelObjRelocateModelRes(void *p)
 {
     TMModelResRelocate(p);
 }

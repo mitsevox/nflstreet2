@@ -4,7 +4,7 @@
 #include "game/PlayBookTeam.h"
 #include "game/bitstream.h"
 #include "game/ResLoad.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include <math.h>
 #include "game/fn_800B65A0.h"
 
@@ -68,20 +68,20 @@ void MatScale(float);
 void MatScaleCol(float, float, float);
 void MatLoadSlot(int);
 int fn_801CFE40(float, float);
-void fn_80227E40(void *, void *);
+void Vec4Mat44Mul(void *, void *);
 void TMRenderBindTexture(int, int, int);
 void TMRenderSetZRange(float, float);
 void fn_802353D8(void *, int);
 void fn_80235588(void *, int);
-void fn_802355E4(void *);
-void fn_80235630(void *, int);
-void fn_8023570C(void *, const char *);
-void fn_80235740(void *, int);
-void fn_80235764(void *, int);
-void fn_80235C48(void *, int);
-void fn_80235C90(void *, int, float, float, float, float);
-void fn_80235D74(void *, int);
-void fn_80235DB8(int);
+void ModelObjReset(void *);
+void ModelObjSetModel(void *, int);
+void ModelObjSetShader(void *, const char *);
+void ModelObjStoreMatrix(void *, int);
+void ModelObjDraw(void *, int);
+void ModelObjSetParamNop(void *, int);
+void ModelObjSetAmbientColor(void *, int, float, float, float, float);
+void ModelObjSetModeNop(void *, int);
+void ModelObjRelocateModelRes(int);
 int PlyrGetIndex(Object_80039F5C *);
 int fn_801784C4(void);
 int ObjNewType_(int, int, int, void (*)(Object_801618D8 *, Desc_801618D8 *), void (*)(Object_801618D8 *));
@@ -163,20 +163,20 @@ void fn_801618D8(Object_801618D8 *item, Desc_801618D8 *desc) {
     if (!desc->mUnknownC) {
         item->mUnknownFC = 0;
         item->mUnknownFC = ResLoad(item->mUnknown24, item->mUnknown28, 1);
-        fn_80235DB8(item->mUnknownFC);
+        ModelObjRelocateModelRes(item->mUnknownFC);
     } else {
         item->mUnknown20 |= 1;
         item->mUnknownFC = desc->mUnknownC->mUnknownFC;
     }
     fn_80235588(item->mUnknown3C, 6);
-    fn_80235630(item->mUnknown3C, item->mUnknownFC);
-    fn_80235C48(item->mUnknown3C, 3);
-    fn_80235D74(item->mUnknown3C, 128);
+    ModelObjSetModel(item->mUnknown3C, item->mUnknownFC);
+    ModelObjSetParamNop(item->mUnknown3C, 3);
+    ModelObjSetModeNop(item->mUnknown3C, 128);
     fn_802353D8(item->mUnknown3C, 0x401002);
-    fn_8023570C(item->mUnknown3C, "Flat");
+    ModelObjSetShader(item->mUnknown3C, "Flat");
 }
 void fn_80161A34(Object_801618D8 *item) {
-    fn_802355E4(item->mUnknown3C);
+    ModelObjReset(item->mUnknown3C);
     if ((item->mUnknown20 & 1) == 0 && item->mUnknownFC)
         ResUnLoad(item->mUnknown24, item->mUnknown28);
 }
@@ -193,7 +193,7 @@ void fn_80161A88(Object_801618D8 *out, Object_801618D8 *in) {
 }
 void fn_80161AD4(void *render, int index) {
     int context = ConGetCurrentContext();
-    fn_80235C90(render, context, lbl_802E97EC[index][0], lbl_802E97EC[index][1], lbl_802E97EC[index][2],
+    ModelObjSetAmbientColor(render, context, lbl_802E97EC[index][0], lbl_802E97EC[index][1], lbl_802E97EC[index][2],
                 lbl_802E97EC[index][3]);
 }
 int fn_80161B38(Object_801618D8 *item) {
@@ -265,23 +265,23 @@ int fn_80161B38(Object_801618D8 *item) {
             GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
             TMRenderBindTexture(0, 0, 0);
             if (item->mUnknown28 == 6) {
-                fn_80235740(item->mUnknown3C, ConGetCurrentContext());
+                ModelObjStoreMatrix(item->mUnknown3C, ConGetCurrentContext());
                 TMRenderSetZRange(0.0f, 0.0f);
                 MatSetStack(VptGetMatrixStack());
                 MatPop();
-                fn_80235764(item->mUnknown3C, ConGetCurrentContext());
+                ModelObjDraw(item->mUnknown3C, ConGetCurrentContext());
                 TMRenderSetZRange(0.0f, 1.0f);
             } else {
                 if (extra)
-                    fn_80235740(extra->mUnknown3C, ConGetCurrentContext());
+                    ModelObjStoreMatrix(extra->mUnknown3C, ConGetCurrentContext());
                 if (draw)
-                    fn_80235740(item->mUnknown3C, ConGetCurrentContext());
+                    ModelObjStoreMatrix(item->mUnknown3C, ConGetCurrentContext());
                 MatSetStack(VptGetMatrixStack());
                 MatPop();
                 if (extra)
-                    fn_80235764(extra->mUnknown3C, ConGetCurrentContext());
+                    ModelObjDraw(extra->mUnknown3C, ConGetCurrentContext());
                 if (draw)
-                    fn_80235764(item->mUnknown3C, ConGetCurrentContext());
+                    ModelObjDraw(item->mUnknown3C, ConGetCurrentContext());
             }
         } else {
             MatSetStack(VptGetMatrixStack());
@@ -548,7 +548,7 @@ int fn_8016295C(Vector_80039F5C *input, Vector_80039F5C *out, int *angle, float 
     original.mY = input->mY;
     original.mZ = 0.5f;
     original.mW = 1.0f;
-    fn_80227E40(&point, &original);
+    Vec4Mat44Mul(&point, &original);
     if (point.mX < -point.mW || point.mX > point.mW || point.mY < -point.mW || !(point.mY <= point.mW)) {
         original.mX = point.mX;
         original.mY = point.mY;
@@ -562,12 +562,12 @@ int fn_8016295C(Vector_80039F5C *input, Vector_80039F5C *out, int *angle, float 
             ratio = 1.0f / point.mW;
         point.mX *= ratio;
         point.mY *= ratio;
-        float a = fn_802270D4((Vector_80039F5C *)&original) - 10.25f;
+        float a = Vec3Magnitude((Vector_80039F5C *)&original) - 10.25f;
         a *= 0.11111111f;
         Vec2_t pair;
         pair.mX = point.mX;
         pair.mY = point.mY;
-        float b = (fn_802270A4(&pair) - 1.0f) * 0.5f;
+        float b = (Vec2Magnitude(&pair) - 1.0f) * 0.5f;
         if (!(original.mZ >= 0.0f))
             b = a;
         else if (!(original.mZ > 1.0f))

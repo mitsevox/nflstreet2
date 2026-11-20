@@ -8,7 +8,7 @@
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/GameOptions.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 static int _ChalGame_aiGeneratedPositions[7] = {0, 1, 2, 4, 8, 9, 13};
 static int _ChalGame_iCachedChallenge = -1;
@@ -17,8 +17,8 @@ static int _ChalGame_iCachedUser = -1;
 static unsigned char _ChalGame_bGeneratedOpponent = 0;
 
 extern "C" {
-int fn_801F9980(int handle, int *pTable);
-int fn_801F967C(int handle, int table);
+int TDbTblFindUnusedId(int handle, int *pTable);
+int TDbTblDestroy(int handle, int table);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int PlayerDbGetRating(Object_8008044C *pObject, int index);
@@ -57,18 +57,18 @@ int ChalGameCopyTeam(int sourceTeam)
     int player;
 
     fn_8022C628(0x454D4147, 0x4D414554, &team, &teamCount);
-    fn_801F9980(0x454D4147, &table);
-    fn_801FCE10(&result, "use \x8c select into \x8c.\x8c * from 'MAET' where ('DIGT' = \x82)\n", 0x54415453, 0x454D4147, table, sourceTeam);
-    fn_801FCE10(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIOT' = \x85\n", 0x454D4147, table, team, sourceTeam);
-    fn_801FCE10(&result, "use \x8c insert into 'MAET' * select * from \x8c\n", 0x454D4147, table);
-    fn_801F967C(0x454D4147, table);
-    fn_801FCE10(&result, "use \x8c update 'MAET' set 'RUMT' = \x85 and 'OLFT' = 0 and 'SIVT' = 1 and 'DIGD' = \x82 where ('DIGT' = \x85)\n", 0x454D4147, 3, 8, team);
+    TDbTblFindUnusedId(0x454D4147, &table);
+    TDbCompilePerformOp(&result, "use \x8c select into \x8c.\x8c * from 'MAET' where ('DIGT' = \x82)\n", 0x54415453, 0x454D4147, table, sourceTeam);
+    TDbCompilePerformOp(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIOT' = \x85\n", 0x454D4147, table, team, sourceTeam);
+    TDbCompilePerformOp(&result, "use \x8c insert into 'MAET' * select * from \x8c\n", 0x454D4147, table);
+    TDbTblDestroy(0x454D4147, table);
+    TDbCompilePerformOp(&result, "use \x8c update 'MAET' set 'RUMT' = \x85 and 'OLFT' = 0 and 'SIVT' = 1 and 'DIGD' = \x82 where ('DIGT' = \x85)\n", 0x454D4147, 3, 8, team);
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
     int code = 0;
-    int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c where ('DIGT' = \x85) order by 'DIGP'\n", 0x54415453, &cursor, &player, 0x59414C50, sourceTeam);
+    int status = TDbCompilePerformOp(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c where ('DIGT' = \x85) order by 'DIGP'\n", 0x54415453, &cursor, &player, 0x59414C50, sourceTeam);
     if (status != 0 && status != 23) {
         code = status;
     }
@@ -76,16 +76,16 @@ int ChalGameCopyTeam(int sourceTeam)
         count = result.mUnknown0;
         fn_80229AA4(0x454D4147, 0x59414C50, ids, &count);
         for (unsigned int i = 0; i < count; i++) {
-            fn_801FCE10(0, "fetch from \x8a\n", &cursor);
-            fn_801F9980(0x454D4147, &table);
-            status = fn_801FCE10(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGP' = \x82)\n", 0x54415453, 0x454D4147, table, 0x59414C50, player);
-            status = fn_801FCE10(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIGP' = \x85 and 'DIOP' = \x85 where ('DIGP' = \x82)\n", 0x454D4147, table, sourceTeam, ids[i], player, player);
-            status = fn_801FCE10(&result, "use \x8c insert into 'YALP' * select * from \x8c\n", 0x454D4147, table);
-            status = fn_801FCE10(&result, "use \x8c update 'YALP' set 'ITGT' = \x85 where 'DIGP' = \x82\n", 0x454D4147, sourceTeam, ids[i]);
-            fn_801F967C(0x454D4147, table);
+            TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
+            TDbTblFindUnusedId(0x454D4147, &table);
+            status = TDbCompilePerformOp(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGP' = \x82)\n", 0x54415453, 0x454D4147, table, 0x59414C50, player);
+            status = TDbCompilePerformOp(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIGP' = \x85 and 'DIOP' = \x85 where ('DIGP' = \x82)\n", 0x454D4147, table, sourceTeam, ids[i], player, player);
+            status = TDbCompilePerformOp(&result, "use \x8c insert into 'YALP' * select * from \x8c\n", 0x454D4147, table);
+            status = TDbCompilePerformOp(&result, "use \x8c update 'YALP' set 'ITGT' = \x85 where 'DIGP' = \x82\n", 0x454D4147, sourceTeam, ids[i]);
+            TDbTblDestroy(0x454D4147, table);
         }
     }
-    if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+    if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);
     return team;
 }
 

@@ -13,7 +13,7 @@
 #include "game/PauseMenu.h"
 #include "game/Ball.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 extern "C" {
 extern char lbl_8030C070[];
@@ -177,8 +177,8 @@ void SimpShadowShutdown(void);
 int ResSync(int a);
 void ResTrackLabel(const char *pText);
 void VptFlushObjectTrashSync(void);
-void fn_802363B0(Viewport_t *pObject);
-void fn_802363E0(Viewport_t *pObject);
+void LLLightAttachViewport(Viewport_t *pObject);
+void LLLightDetachViewport(Viewport_t *pObject);
 }
 
 static ModuleDependency sAnimintfDependencies[] = { &gAnimData, &gGameState, 0 };
@@ -741,14 +741,14 @@ const char *Light::GetName() { return "Light"; }
 
 int Light::Init()
 {
-    fn_802363B0(GameVpt::GetViewport());
+    LLLightAttachViewport(GameVpt::GetViewport());
     LevelLightsInit();
     return 1;
 }
 
 int Light::Shutdown()
 {
-    fn_802363E0(GameVpt::GetViewport());
+    LLLightDetachViewport(GameVpt::GetViewport());
     return 1;
 }
 
@@ -920,7 +920,7 @@ void PlayBook::fn_8003549C(int flag)
         e = 59;
         f = 59;
     } else {
-        fn_801FCE10(0, "select 'IPHG' into \x85 and 'IPAG' into \x85 and 'PDHG' into \x85 and 'PDAG' into \x85 from 'FNIG'\n", &c, &d, &e, &f);
+        TDbCompilePerformOp(0, "select 'IPHG' into \x85 and 'IPAG' into \x85 and 'PDHG' into \x85 and 'PDAG' into \x85 from 'FNIG'\n", &c, &d, &e, &f);
     }
     if (flag) {
         PlayBookOpenAndRegister((int)gIGMisc.mData.mp, a, b, c, d, e, f, 1);

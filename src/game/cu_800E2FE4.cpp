@@ -2,7 +2,7 @@
 #include "game/Object_8017886C.h"
 #include "game/AudmonEvent.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/fn_801BE60C.h"
 #include <math.h>
 
@@ -26,7 +26,7 @@ extern "C" {
 extern float lbl_803EAD38, lbl_803EAD3C, lbl_803EAD40, lbl_803EAD44,
     lbl_803EAD48;
 Point_8017886C fn_80177FFC(int);
-void fn_80227690(void *, void *, void *);
+void Vec2Sub(void *, void *, void *);
 int fn_801CFE40(float, float);
 int MathAngleDiff(int, int);
 int fn_800CB708(Object_80039F5C *, int *, Point_8017886C, int, int);
@@ -49,8 +49,8 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
   Point_8017886C delta;
   goal = fn_80177FFC(player->mIdBytes[2]);
   int value;
-  fn_80227690(&delta, target, &player->mMotion.mPos);
-  float distance = fn_802270A4(&delta);
+  Vec2Sub(&delta, target, &player->mMotion.mPos);
+  float distance = Vec2Magnitude(&delta);
   int direction = fn_801CFE40(delta.mY, delta.mX);
   if (!(player->mMotion.mUnknown28 <= 0.006f)) {
     int beyond = target->mY > goal.mY + 2.0f;
@@ -203,9 +203,9 @@ void fn_800E36DC(Object_80039F5C *player) {
   Point_8017886C delta;
   switch (state->mUnknown1E) {
   case 0: {
-    fn_80227690(&delta, &state->mUnknown4[state->mUnknown14],
+    Vec2Sub(&delta, &state->mUnknown4[state->mUnknown14],
                 &player->mMotion.mPos);
-    fn_802270A4(&delta);
+    Vec2Magnitude(&delta);
     fn_801CFE40(delta.mY, delta.mX);
     state->mUnknown1E = 2;
     break;
@@ -231,9 +231,9 @@ void fn_800E36DC(Object_80039F5C *player) {
   }
   case 2: {
     if (PlayerPathIsLaneClear(player, &state->mUnknown4[state->mUnknown14]) == 1) {
-      fn_80227690(&delta, &state->mUnknown4[state->mUnknown14],
+      Vec2Sub(&delta, &state->mUnknown4[state->mUnknown14],
                   &player->mMotion.mPos);
-      float distance = fn_802270A4(&delta);
+      float distance = Vec2Magnitude(&delta);
       int direction = fn_801CFE40(delta.mY, delta.mX);
       if (!(distance <= 0.3f) && MathAngleDiff(direction, 0xC00000) <= 0x2AAAA9) {
         if (player->mUnknown560.mFlags.mBytes[0] ||
@@ -254,7 +254,7 @@ void fn_800E36DC(Object_80039F5C *player) {
         Point_8017886C point = goal;
         Point_8017886C offset;
         point.mY -= 5.0f;
-        fn_80227690(&offset, &point, &player->mMotion.mPos);
+        Vec2Sub(&offset, &point, &player->mMotion.mPos);
         state->mUnknown38 = fn_801CFE40(offset.mY, offset.mX);
         PlayerPathStartSideAnim(player, 1, 2);
         state->mUnknown1E = 1;

@@ -8,7 +8,7 @@
 #include "game/PreGamePhase.h"
 #include "game/fn_800AD9B4.h"
 #include "game/GameModeType.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/InGame.h"
 #include "game/GameModules.h"
 #include "game/TimeScale.h"
@@ -281,7 +281,7 @@ int InGame::Init()
     _InGame_iPauseCount = 0;
     InGameSetInputPaused(0);
     PadInputSetAxisCallback(CamGameGetSideYaw);
-    fn_801FCE10(0, "select 'PNIG' into \x82 from 'FNIG'\n", &result);
+    TDbCompilePerformOp(0, "select 'PNIG' into \x82 from 'FNIG'\n", &result);
     fn_80057F28();
     if (result) {
         fn_800AD910(10, 0.0f);

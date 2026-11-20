@@ -1,6 +1,6 @@
 /* Reads and caches the current game mode type from the game database and tests it against a fixed set of modes. */
 #include "game/GameModeType.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/InGame.h"
 
 extern "C" {
@@ -18,7 +18,7 @@ unsigned int GameModeTypeGet(void)
         int cached = _GameModeType_iCached;
 
         if (cached == 99) {
-            if (fn_801FCE10(0, "select 'PYTM' into \x82 from 'NIOM'\n", &value) != 0) {
+            if (TDbCompilePerformOp(0, "select 'PYTM' into \x82 from 'NIOM'\n", &value) != 0) {
                 value = cached;
             }
             if (InGameIsPlaying() != 0) {

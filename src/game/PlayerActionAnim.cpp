@@ -47,7 +47,7 @@ extern "C" void fn_800DB074(Object_80039F5C *p, Ball_t *pBall, Record_800DB074 *
     Object_80039F5C *pOther = fn_8009BCE8(&pRecord->mUnknown12);
     if (pOther) {
         Point_8017886C delta;
-        fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
+        Vec2Sub(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
         pRecord8011F518->mUnknown12 = fn_801CFE40(delta.mY, delta.mX);
     } else {
         pRecord8011F518->mUnknown12 = p->mMotion.mUnknown32;
@@ -1362,10 +1362,10 @@ extern "C" void fn_800DE3B0(Block_800DE3B0 *pBlock, Object_80039F5C *p, Command_
     pBlock->mUnknown4.mUnknown0 = pCommand->mUnknownC.mUnknown0;
     pBlock->mUnknown4.mUnknown4 = pCommand->mUnknownC.mUnknown4;
     if (pState->mUnknown12 == 1) {
-        fn_80227690(&pBlock->mUnknownC, &pBlock->mUnknown4, &p->mMotion);
+        Vec2Sub(&pBlock->mUnknownC, &pBlock->mUnknown4, &p->mMotion);
         pBlock->mUnknown14 = desired;
     } else {
-        fn_80227690(&pBlock->mUnknownC, &p->mMotion, &old);
+        Vec2Sub(&pBlock->mUnknownC, &p->mMotion, &old);
         pBlock->mUnknown14 = original;
     }
 }
@@ -1465,10 +1465,10 @@ extern "C" void fn_800DE910(Object_80039F5C *p, Block_800DE3B0 *pBlock)
         pEntry->mUnknownC = pBlock->mUnknown14;
     }
     Pair_802270A4 delta;
-    fn_80227384(&delta, p->mUnknown552, -pEntry->mUnknownC);
-    fn_80227638(&pBlock->mUnknownC, &delta, &pBlock->mUnknownC);
-    fn_80227384(&delta, &pBlock->mUnknownC, pBlock->mUnknown14);
-    fn_80227638(&delta, &delta, &pBlock->mUnknown4);
+    Vec2Rotate(&delta, p->mUnknown552, -pEntry->mUnknownC);
+    Vec2Add(&pBlock->mUnknownC, &delta, &pBlock->mUnknownC);
+    Vec2Rotate(&delta, &pBlock->mUnknownC, pBlock->mUnknown14);
+    Vec2Add(&delta, &delta, &pBlock->mUnknown4);
     pMotion->mPos.mX = (delta.mUnknown0 - pMotion->mPos.mX) * pBlock->mUnknown0 + pMotion->mPos.mX;
     pMotion->mPos.mY = (delta.mUnknown4 - pMotion->mPos.mY) * pBlock->mUnknown0 + pMotion->mPos.mY;
     int desired = (pBlock->mUnknown14 + pEntry->mUnknown1C) & 0xFFFFFF;
@@ -1527,22 +1527,22 @@ extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock)
         Point_8017886C delta;
         --pBlock->mUnknown3E;
         if (pState->mUnknown12 == 1) {
-            fn_80227384(&rotated, &pBlock->mUnknownC, pBlock->mUnknown38);
-            fn_80227690(&delta, &rotated, &pBlock->mUnknownC);
-            fn_80227638(&pBlock->mUnknown4, &pBlock->mUnknown4, &delta);
+            Vec2Rotate(&rotated, &pBlock->mUnknownC, pBlock->mUnknown38);
+            Vec2Sub(&delta, &rotated, &pBlock->mUnknownC);
+            Vec2Add(&pBlock->mUnknown4, &pBlock->mUnknown4, &delta);
             pBlock->mUnknownC = rotated;
             pBlock->mUnknown14 += pBlock->mUnknown38;
         } else {
-            fn_80227690(&delta, &pBlock->mUnknown4, &point);
-            fn_80227384(&rotated, &delta, pBlock->mUnknown38);
-            fn_80227690(&delta, &rotated, &delta);
-            fn_80227638(&pBlock->mUnknown4, &pBlock->mUnknown4, &delta);
-            fn_80227384(&rotated, &pBlock->mUnknownC, pBlock->mUnknown38);
-            fn_80227690(&delta, &rotated, &pBlock->mUnknownC);
+            Vec2Sub(&delta, &pBlock->mUnknown4, &point);
+            Vec2Rotate(&rotated, &delta, pBlock->mUnknown38);
+            Vec2Sub(&delta, &rotated, &delta);
+            Vec2Add(&pBlock->mUnknown4, &pBlock->mUnknown4, &delta);
+            Vec2Rotate(&rotated, &pBlock->mUnknownC, pBlock->mUnknown38);
+            Vec2Sub(&delta, &rotated, &pBlock->mUnknownC);
             pBlock->mUnknownC = rotated;
-            fn_80227638(&p->mMotion, &p->mMotion, &delta);
+            Vec2Add(&p->mMotion, &p->mMotion, &delta);
             if (index != 0xFFFF) {
-                fn_80227638(&pOther->mMotion, &pOther->mMotion, &delta);
+                Vec2Add(&pOther->mMotion, &pOther->mMotion, &delta);
                 fn_800DF134(pOther, delta, 0, pBlock->mUnknown18);
             }
         }
@@ -1552,14 +1552,14 @@ extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock)
             Point_8017886C delta;
             Pair_802270A4 rotated;
             Point_8017886C offset;
-            fn_80227690(&delta, &pOther->mMotion, &p->mMotion);
-            fn_80227384(&rotated, &delta, pBlock->mUnknown38);
-            fn_80227638(&pOther->mMotion, &rotated, &p->mMotion);
+            Vec2Sub(&delta, &pOther->mMotion, &p->mMotion);
+            Vec2Rotate(&rotated, &delta, pBlock->mUnknown38);
+            Vec2Add(&pOther->mMotion, &rotated, &p->mMotion);
             pOther->mMotion.mFacing = (pOther->mMotion.mFacing + pBlock->mUnknown38) & 0xFFFFFF;
             pOtherEntry->mUnknownC = (pOtherEntry->mUnknownC + pBlock->mUnknown38) & 0xFFFFFF;
-            fn_80227690(&delta, &pOtherBlock->mUnknown4, &p->mMotion);
-            fn_80227384(&rotated, &delta, pBlock->mUnknown38);
-            fn_80227690(&offset, &rotated, &delta);
+            Vec2Sub(&delta, &pOtherBlock->mUnknown4, &p->mMotion);
+            Vec2Rotate(&rotated, &delta, pBlock->mUnknown38);
+            Vec2Sub(&offset, &rotated, &delta);
             fn_800DF134(pOther, offset, pBlock->mUnknown38, pBlock->mUnknown18);
         }
     } else if (pBlock->mUnknown3E == 0) {
@@ -1567,23 +1567,23 @@ extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock)
         if (pState->mUnknown12 == 1) {
             Pair_802270A4 rotated;
             Point_8017886C delta;
-            fn_80227384(&rotated, (char *)pEntry + 36, pState->mUnknown1C);
-            fn_80227690(&delta, &p->mMotion, &pState->mUnknown14);
-            fn_80227690(&delta, &delta, &rotated);
-            fn_80227638(&pBlock->mUnknown4, &pBlock->mUnknown4, &delta);
-            fn_80227690(&pBlock->mUnknownC, &point, &pBlock->mUnknown4);
+            Vec2Rotate(&rotated, (char *)pEntry + 36, pState->mUnknown1C);
+            Vec2Sub(&delta, &p->mMotion, &pState->mUnknown14);
+            Vec2Sub(&delta, &delta, &rotated);
+            Vec2Add(&pBlock->mUnknown4, &pBlock->mUnknown4, &delta);
+            Vec2Sub(&pBlock->mUnknownC, &point, &pBlock->mUnknown4);
         } else {
-            fn_80227690(&pBlock->mUnknownC, &point, &pBlock->mUnknown4);
+            Vec2Sub(&pBlock->mUnknownC, &point, &pBlock->mUnknown4);
         }
         pBlock->mUnknownC.mUnknown0 /= (float)pBlock->mUnknown3F;
         pBlock->mUnknownC.mUnknown4 /= (float)pBlock->mUnknown3F;
     }
     if (pBlock->mUnknown3E < 0 && pBlock->mUnknown3F > 0) {
         --pBlock->mUnknown3F;
-        fn_80227638(&pBlock->mUnknown4, &pBlock->mUnknown4, &pBlock->mUnknownC);
-        fn_80227638(&p->mMotion, &p->mMotion, &pBlock->mUnknownC);
+        Vec2Add(&pBlock->mUnknown4, &pBlock->mUnknown4, &pBlock->mUnknownC);
+        Vec2Add(&p->mMotion, &p->mMotion, &pBlock->mUnknownC);
         if (index != 0xFFFF) {
-            fn_80227638(&pOther->mMotion, &pOther->mMotion, &pBlock->mUnknownC);
+            Vec2Add(&pOther->mMotion, &pOther->mMotion, &pBlock->mUnknownC);
             fn_800DF134(pOther, *(Point_8017886C *)&pBlock->mUnknownC, 0, pBlock->mUnknown18);
         }
     }

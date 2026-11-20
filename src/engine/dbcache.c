@@ -1,9 +1,9 @@
 /* Partial source: the cache of open table handles that the database queries use. */
 
-#include "engine/fn_801F8D60.h"
+#include "engine/TDbCreate.h"
 #include "engine/tdbext.h"
 #include "engine/dbutil.h"
-#include "engine/fn_801F9134.h"
+#include "engine/TDbLoad.h"
 #include "engine/t3db_cols.h"
 
 #include <dolphin/gx/GXGeometry.h>
@@ -14,7 +14,7 @@
 #include "engine/DbNiomModeFuncs.h"
 #include "game/DbUserSetCurrent.h"
 #include "game/fn_80233CBC.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "engine/texfile.h"
 #include "game/Object_80233EAC.h"
 #include "game/Object_80235588.h"
@@ -32,8 +32,8 @@ typedef struct Block_80233588 {
 } Block_80233588;
 
 extern DbNiomHandlers_t lbl_802FB38C;
-int fn_80233588(Block_80233588 *p);
-int fn_802336BC(void);
+int DbManagerCreateGameDb(Block_80233588 *p);
+int DbManagerInitHook(void);
 
 typedef struct Block_802336C4 {
     void *mpUnknown0;
@@ -297,18 +297,18 @@ extern int ResLoad(void *pData, int index, int a);
 extern int ResCopyToBuffer(void *pArchive, int id, void *pDest);
 extern int ResUnLoad(void *pData, int index);
 extern int ResIsLoaded(void *pData, int index);
-extern int fn_801F9014(int handle);
-extern int fn_801F91AC(int handle, int a, int b);
-extern int fn_801F9430(int a, int *pTable4, int *pTable8);
-extern int fn_801F9574(void);
-extern int fn_801F9980(int handle, int *pTable);
-extern int fn_801F9A90(int handle, int table);
-extern int fn_801F9608(int db, int tbl, unsigned char *pFlag, unsigned short *pValue);
-extern int fn_801F9CC0(int db, int tbl, unsigned short *pOut);
+extern int TDbExists(int handle);
+extern int TDbSave(int handle, int a, int b);
+extern int TDbTblDefaultDbPush(int a, int *pTable4, int *pTable8);
+extern int TDbTblDefaultDbPop(void);
+extern int TDbTblFindUnusedId(int handle, int *pTable);
+extern int TDbTblExists(int handle, int table);
+extern int TDbTblInfoGetFixedRows(int db, int tbl, unsigned char *pFlag, unsigned short *pValue);
+extern int TDbTblInfoGetMaxRows(int db, int tbl, unsigned short *pOut);
 extern int MemFill(void *pDst, unsigned int size, int value, unsigned int width);
-extern int fn_801F9D0C(int handle, int table, int a);
-extern int fn_801FA68C(void *pCallback, int tag);
-extern int fn_801FA740(int tag);
+extern int TDbTblInfoSetPersistent(int handle, int table, int a);
+extern int TDbRegisterHandler(void *pCallback, int tag);
+extern int TDbUnregisterHandler(int tag);
 extern void LLTexCopyFlush(void *pDst, void *pSrc, unsigned int size);
 extern void TMModelResRelocate(void *p);
 extern void *TMModelResGetChunk(void *p, unsigned int tag, void *pOut);
@@ -392,7 +392,7 @@ extern void fn_8022E9C4(void);
 extern int fn_8022E9E4(void);
 extern int DbEvasModuleInit(void);
 extern void DbEvasModuleShutdown(void);
-extern int fn_8022ED50(int a, int b, int c);
+extern int DbTatsCopyAllTables(int a, int b, int c);
 extern signed char DbUserFindIndex(int key);
 extern int DbUserGetDb(int key);
 extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
@@ -402,14 +402,14 @@ extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
 extern void fn_80236F00(void);
 
 void fn_8023123C(void *p, int mode, unsigned char *pDone);
-int fn_80232DE0(void);
-int fn_80232EB4(void);
-int fn_80232EF4(void);
-int fn_802331BC(void);
-void fn_802334F0(int mode, DbNiomModeFuncs_t *pFuncs);
-int fn_80233604(void **ppData, void *p);
-int fn_80233660(int a, int b);
-int fn_80233694(void);
+int DbManagerEnterMode0(void);
+int DbManagerEnterMode1(void);
+int DbManagerMode1Leave(void);
+int DbManagerMode2Leave(void);
+void DbManagerGetModeFuncs(int mode, DbNiomModeFuncs_t *pFuncs);
+int DbManagerLoadGameDb(void **ppData, void *p);
+int DbManagerSaveGameDb(int a, int b);
+int DbManagerDestroyGameDb(void);
 int fn_80233BE4(short *pOut, Model_80233BE4 *pModel, Values_80233C7C *pValues);
 void fn_80233C7C(Values_80233C7C *pValues);
 float fn_80234070(Box_80234070 *pBox);
@@ -574,41 +574,41 @@ int fn_802311C8(int handle);
 void fn_80231208(void);
 int fn_80231A84(void);
 int fn_80231A8C(const char *pWhere, int b, int c, int d, int e, struct QueryCursor *pCursor);
-int fn_802328A8(void);
-void fn_80232950(void);
-int fn_80232998(void);
-int fn_802329D0(void);
-int fn_802329F0(struct Request_802329F0 *p);
-int fn_80232A98(void);
-int fn_80232AF8(void **ppData, void *p);
-int fn_80232B8C(int a, int b);
-int fn_80232DE0(void);
-int fn_80232E20(void);
-int fn_80232E70(void);
-int fn_80232E78(void);
-int fn_80232E80(void);
-int fn_80232EAC(void);
-int fn_80232EB4(void);
-int fn_80232EF4(void);
-int fn_80232F44(void);
-int fn_80232F4C(void);
-int fn_80232F54(void);
-int fn_80232F74(void);
-int fn_80232FD4(int *pRecord0, int *pRecord1);
-int fn_802331BC(void);
-int fn_80233344(void);
-int fn_8023334C(int a, int b);
-int fn_80233454(void);
-int fn_802334C4(void);
-void fn_802334F0(int mode, DbNiomModeFuncs_t *pFuncs);
-int fn_80233568(int a, int b, unsigned char *pDone);
-int fn_80233578(void);
-int fn_80233580(void);
-int fn_80233588(Block_80233588 *p);
-int fn_80233604(void **ppData, void *p);
-int fn_80233660(int a, int b);
-int fn_80233694(void);
-int fn_802336BC(void);
+int DbManagerInitModules(void);
+void DbManagerShutdownModules(void);
+int DbManagerPushGameDb(void);
+int DbManagerPopGameDb(void);
+int DbManagerInit(struct Request_802329F0 *p);
+int DbManagerShutdown(void);
+int DbManagerLoad(void **ppData, void *p);
+int DbManagerSave(int a, int b);
+int DbManagerEnterMode0(void);
+int DbManagerMode0Leave(void);
+int DbManagerMode0Load(void);
+int DbManagerMode0Save(void);
+int DbManagerMode0Finish(void);
+int DbManagerMode0Abort(void);
+int DbManagerEnterMode1(void);
+int DbManagerMode1Leave(void);
+int DbManagerMode1Load(void);
+int DbManagerMode1Save(void);
+int DbManagerMode1Finish(void);
+int DbManagerMode1Abort(void);
+int DbManagerEnterMode2(int *pRecord0, int *pRecord1);
+int DbManagerMode2Leave(void);
+int DbManagerMode2Load(void);
+int DbManagerMode2Save(int a, int b);
+int DbManagerMode2Finish(void);
+int DbManagerMode2Abort(void);
+void DbManagerGetModeFuncs(int mode, DbNiomModeFuncs_t *pFuncs);
+int DbManagerResultAccept(int a, int b, unsigned char *pDone);
+int DbManagerResultRecord(void);
+int DbManagerResultFinish(void);
+int DbManagerCreateGameDb(Block_80233588 *p);
+int DbManagerLoadGameDb(void **ppData, void *p);
+int DbManagerSaveGameDb(int a, int b);
+int DbManagerDestroyGameDb(void);
+int DbManagerInitHook(void);
 void fn_802336C4(Block_802336C4 *pBlock, void *pSource, int a);
 void fn_80233728(Block_802336C4 *pBlock);
 void fn_80233760(Block_802336C4 *pBlock, short *pValues, int count);
@@ -762,11 +762,11 @@ int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache)
         }
     } else {
         for (i = 0; i <= 1; i++) {
-            if (fn_801F9A90(key, lbl_802FB340[i].mTable) == 0) {
+            if (TDbTblExists(key, lbl_802FB340[i].mTable) == 0) {
                 count = 0;
-                err = fn_801F9608(key, lbl_802FB340[i].mTable, &flag, &count);
+                err = TDbTblInfoGetFixedRows(key, lbl_802FB340[i].mTable, &flag, &count);
                 if (err == 0 && flag == 0) {
-                    err = fn_801F9CC0(key, lbl_802FB340[i].mTable, &count);
+                    err = TDbTblInfoGetMaxRows(key, lbl_802FB340[i].mTable, &count);
                 }
                 size = count;
                 if (err != 0) {

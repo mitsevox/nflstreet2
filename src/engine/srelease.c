@@ -19,7 +19,7 @@ int SNDrelease(int handle)
 
                 if (voice->m5E < 0) {
                     if (voice->m0 >= 0) {
-                        fn_80274F5C(cursor);
+                        SNDPLATFORM_stop(cursor);
                         break;
                     }
                 } else if (voice->m5D < voice->m5E) {

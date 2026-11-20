@@ -29,10 +29,10 @@ Mtx44Ptr MatGetCurMatrixPtr(void);
 void MatStore(Mtx44);
 void GXSetProjection(Mtx44, int);
 void GXGetProjectionv(float *);
-float fn_80227704(void *, void *);
-void fn_80227904(float *, float *, float *, float);
-void fn_80227C2C(Vector_80039F5C *, Vector_80039F5C *);
-void fn_80227E40(float *, float *);
+float Vec3DotProduct(void *, void *);
+void Vec2Lerp(float *, float *, float *, float);
+void Vec3Mat33Mul(Vector_80039F5C *, Vector_80039F5C *);
+void Vec4Mat44Mul(float *, float *);
 float SyncRandGetFloat(int);
 unsigned char ParticleTrailIsEnabled(void);
 GlowTexture_t *GlowGetTexture(int);
@@ -144,8 +144,8 @@ void fn_80197680(Glow_t *p)
         MatSetStack(VptGetMatrixStack());
         MatPush();
         MatLoadSlot(3);
-        fn_80227C2C(&facing, &p->mUnknown24);
-        angle = fn_80227704(&facing, &axis);
+        Vec3Mat33Mul(&facing, &p->mUnknown24);
+        angle = Vec3DotProduct(&facing, &axis);
         if (angle < 0.0f) angle = 0.0f;
         MatPop();
     }
@@ -170,10 +170,10 @@ void fn_80197680(Glow_t *p)
             GlowElement_t *record;
             if (i == p->mUnknown36) {
                 record = p->mUnknown0;
-                fn_80227904(center, screen, lbl_803EB758, 1.0f);
+                Vec2Lerp(center, screen, lbl_803EB758, 1.0f);
             } else {
                 record = p->mUnknown3C[i].mUnknown0;
-                fn_80227904(center, screen, lbl_803EB758, p->mUnknown3C[i].mUnknown4);
+                Vec2Lerp(center, screen, lbl_803EB758, p->mUnknown3C[i].mUnknown4);
             }
             GlowTexImage_t *image = &GlowGetTexture(record->mUnknown0)->mUnknown10;
             if (record->mUnknown0 != previous) {
@@ -270,7 +270,7 @@ float fn_80197D08(float *out, Vector_80039F5C *position)
     point[1] = position->mY;
     point[2] = position->mZ;
     point[3] = result = 1.0f;
-    fn_80227E40(clip, point);
+    Vec4Mat44Mul(clip, point);
     float reciprocal = 1.0f / clip[3];
     normalized[0] = clip[0] * reciprocal;
     normalized[1] = clip[1] * reciprocal;

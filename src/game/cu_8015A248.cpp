@@ -54,8 +54,8 @@ void fn_8015A354(Object_8015C244 *p)
 #include "game/PlayBookGetPlay.h"
 #include "game/PlaySet.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_80227638.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec2Add.h"
+#include "game/Vec3Magnitude.h"
 #include "game/fn_800F06F4.h"
 
 extern "C" {
@@ -85,9 +85,9 @@ void ArrowSetColor(void *, unsigned char, unsigned char, unsigned char);
 void ArrowReset(void *);
 void ArrowSetEnd(void *, int, int, float, float);
 void ArrowDraw(void *);
-void fn_80227538(void *, int, float);
-void fn_8022765C(void *, void *, void *);
-void fn_80227690(void *, void *, void *);
+void Vec2FromAngle(void *, int, float);
+void Vec3Add(void *, void *, void *);
+void Vec2Sub(void *, void *, void *);
 int fn_801CFE40(float, float);
 int MathAngleDiff(int, int);
 void *memset(void *, int, unsigned int);
@@ -139,8 +139,8 @@ void fn_8015A3EC(Object_8015C244 *p, Vector_80039F5C *pPoint, int angle)
     if (length != 0.0f) {
         if (fn_801784C4()) turn += 0x800000;
         Point_8017886C delta;
-        fn_80227538(&delta, turn, length);
-        fn_80227638(pPoint, pPoint, &delta);
+        Vec2FromAngle(&delta, turn, length);
+        Vec2Add(pPoint, pPoint, &delta);
         ArrowAddPoint(p->mUnknown20, pPoint);
     }
     p->mUnknown84 = 10;
@@ -156,8 +156,8 @@ void fn_8015A588(Object_8015C244 *p, unsigned char *pCommand,
     fn_8015A3EC(p, pPoint, angle);
     if (fn_801784C4()) angle += 0x800000;
     Point_8017886C delta;
-    fn_80227538(&delta, angle, length);
-    fn_80227638(pPoint, pPoint, &delta);
+    Vec2FromAngle(&delta, angle, length);
+    Vec2Add(pPoint, pPoint, &delta);
     pPoint->mX = pPoint->mX < -fn_80178A08() ? -fn_80178A08() :
                 pPoint->mX > fn_80178A08() ? fn_80178A08() : pPoint->mX;
     pPoint->mY = pPoint->mY < -fn_80178A44() ? -fn_80178A44() :
@@ -176,8 +176,8 @@ void fn_8015A6E0(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
     if (pCommand[0] == 40 && target.mY - origin.mY > 25.0f)
         target.mY = origin.mY + 25.0f;
     if (fn_801784C4()) { target.mY = -target.mY; target.mX = -target.mX; }
-    fn_80227690(&target, &target, pPoint);
-    float length = fn_802270A4(&target);
+    Vec2Sub(&target, &target, pPoint);
+    float length = Vec2Magnitude(&target);
     int angle = fn_801CFE40(target.mY, target.mX);
     if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
     fn_8015A588(p, 0, pPoint, &length, &angle);
@@ -237,8 +237,8 @@ void fn_8015A818(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
         target.mX += pOther->mMotion.mPos.mX;
         if (fn_801784C4()) { target.mX = -target.mX; target.mY = -target.mY; }
         Point_8017886C delta;
-        fn_80227690(&delta, &target, pPoint);
-        float length = fn_802270A4(&delta);
+        Vec2Sub(&delta, &target, pPoint);
+        float length = Vec2Magnitude(&delta);
         int angle = fn_801CFE40(delta.mY, delta.mX);
         if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
         fn_8015A588(p, 0, pPoint, &length, &angle);
@@ -248,8 +248,8 @@ void fn_8015A818(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
     target.mY = pOther->mMotion.mPos.mY;
     if (fn_801784C4()) { target.mX = -target.mX; target.mY = -target.mY; }
     Point_8017886C delta;
-    fn_80227690(&delta, &target, pPoint);
-    float length = fn_802270A4(&delta);
+    Vec2Sub(&delta, &target, pPoint);
+    float length = Vec2Magnitude(&delta);
     int angle = fn_801CFE40(delta.mY, delta.mX);
     if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
     fn_8015A588(p, 0, pPoint, &length, &angle);
@@ -274,13 +274,13 @@ void fn_8015ABE4(Object_8015C244 *p, Vector_80039F5C *pPoint)
     else if (MathAngleDiff(angle, 0) > 0x400000) turn = angle + 0x400000;
     else turn = pPoint->mX < fn_80177FE0().mX ? 0x800000 : 0;
     float point[3];
-    fn_80227538(point, turn, length);
+    Vec2FromAngle(point, turn, length);
     point[2] = 0.0f;
-    fn_8022765C(point, point, pPoint);
+    Vec3Add(point, point, pPoint);
     ArrowAddPoint(p->mUnknown20, point);
-    fn_80227538(point, angle, length);
+    Vec2FromAngle(point, angle, length);
     point[2] = 0.0f;
-    fn_8022765C(pPoint, pPoint, point);
+    Vec3Add(pPoint, pPoint, point);
     ArrowAddPoint(p->mUnknown20, pPoint);
 }
 
@@ -301,8 +301,8 @@ void fn_8015AD50(Object_8015C244 *p, Vector_80039F5C *pPoint)
         if (dx < 0.0f) target.mX = -target.mX;
         target.mX += pOther->mMotion.mPos.mX;
         if (fn_801784C4()) { target.mX = -target.mX; target.mY = -target.mY; }
-        fn_80227690(&delta, &target, pPoint);
-        length = fn_802270A4(&delta);
+        Vec2Sub(&delta, &target, pPoint);
+        length = Vec2Magnitude(&delta);
         angle = fn_801CFE40(delta.mY, delta.mX);
         if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
         fn_8015A588(p, 0, pPoint, &length, &angle);
@@ -310,8 +310,8 @@ void fn_8015AD50(Object_8015C244 *p, Vector_80039F5C *pPoint)
     target.mX = pOther->mMotion.mPos.mX;
     target.mY = pOther->mMotion.mPos.mY;
     if (fn_801784C4()) { target.mX = -target.mX; target.mY = -target.mY; }
-    fn_80227690(&delta, &target, pPoint);
-    length = fn_802270A4(&delta);
+    Vec2Sub(&delta, &target, pPoint);
+    length = Vec2Magnitude(&delta);
     angle = fn_801CFE40(delta.mY, delta.mX);
     if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
     fn_8015A588(p, 0, pPoint, &length, &angle);
@@ -323,32 +323,32 @@ void fn_8015AF48(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
     switch (pCommand[1]) {
     case 5: case 7: case 11: {
         PlayerCutGetAnimOffset(pCommand[1], pCommand[0], 0x400000, &delta);
-        float length = fn_802270A4(&delta) * 0.5f;
+        float length = Vec2Magnitude(&delta) * 0.5f;
         PlayCommand_8015BCAC command;
         memset(&command, 0, 4);
         command.mType = 20; command.mArgs[1] = pCommand[1]; command.mArgs[0] = pCommand[0];
         int angle = PlayerCutGetMessageTurn(&command.mType);
         if (pCommand[1] != 7) {
-            if (fn_801784C4()) fn_80227538(&delta, 0xc00000, length);
-            else fn_80227538(&delta, 0x400000, length);
+            if (fn_801784C4()) Vec2FromAngle(&delta, 0xc00000, length);
+            else Vec2FromAngle(&delta, 0x400000, length);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mUnknown20, pPoint);
         }
-        if (fn_801784C4()) fn_80227538(&delta, angle + 0xc00000, length);
-        else fn_80227538(&delta, angle + 0x400000, length);
+        if (fn_801784C4()) Vec2FromAngle(&delta, angle + 0xc00000, length);
+        else Vec2FromAngle(&delta, angle + 0x400000, length);
         pPoint->mX += delta.mX; pPoint->mY += delta.mY;
         ArrowAddPoint(p->mUnknown20, pPoint);
         break;
     }
     case 8:
         if (pCommand[0] == 2) {
-            if (fn_801784C4()) fn_80227538(&delta, 0x200000, 1.5f);
-            else fn_80227538(&delta, 0xa00000, 1.5f);
+            if (fn_801784C4()) Vec2FromAngle(&delta, 0x200000, 1.5f);
+            else Vec2FromAngle(&delta, 0xa00000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mUnknown20, pPoint);
         } else {
-            if (fn_801784C4()) fn_80227538(&delta, 0x600000, 1.5f);
-            else fn_80227538(&delta, 0xe00000, 1.5f);
+            if (fn_801784C4()) Vec2FromAngle(&delta, 0x600000, 1.5f);
+            else Vec2FromAngle(&delta, 0xe00000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mUnknown20, pPoint);
         }
@@ -357,21 +357,21 @@ void fn_8015AF48(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
         break;
     case 9:
         if (pCommand[0] == 2) {
-            if (fn_801784C4()) fn_80227538(&delta, 0, 1.5f);
-            else fn_80227538(&delta, 0x800000, 1.5f);
+            if (fn_801784C4()) Vec2FromAngle(&delta, 0, 1.5f);
+            else Vec2FromAngle(&delta, 0x800000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mUnknown20, pPoint);
-            if (fn_801784C4()) fn_80227538(&delta, 0xa00000, 1.5f);
-            else fn_80227538(&delta, 0x200000, 1.5f);
+            if (fn_801784C4()) Vec2FromAngle(&delta, 0xa00000, 1.5f);
+            else Vec2FromAngle(&delta, 0x200000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mUnknown20, pPoint);
         } else {
-            if (fn_801784C4()) fn_80227538(&delta, 0x800000, 1.5f);
-            else fn_80227538(&delta, 0, 1.5f);
+            if (fn_801784C4()) Vec2FromAngle(&delta, 0x800000, 1.5f);
+            else Vec2FromAngle(&delta, 0, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mUnknown20, pPoint);
-            if (fn_801784C4()) fn_80227538(&delta, 0xe00000, 1.5f);
-            else fn_80227538(&delta, 0x600000, 1.5f);
+            if (fn_801784C4()) Vec2FromAngle(&delta, 0xe00000, 1.5f);
+            else Vec2FromAngle(&delta, 0x600000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mUnknown20, pPoint);
         }
@@ -420,10 +420,10 @@ int fn_8015B344(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pP
         target.mX = fn_8011F4D4();
         Point_8017886C origin = fn_80177FE0();
         target.mY = origin.mY;
-        fn_80227690(&target, &target, &point);
+        Vec2Sub(&target, &target, &point);
         int angle = fn_801CFE40(target.mY, target.mX);
         if (MathAngleDiff(angle, 0x400000) > 0x3fffff) break;
-        float length = fn_802270A4(&target);
+        float length = Vec2Magnitude(&target);
         fn_8015A588(p, 0, pPoint, &length, &angle);
         break;
     }
@@ -436,9 +436,9 @@ int fn_8015B344(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pP
         if (target.mX < fn_80177FE0().mX) target.mX -= -2.0f;
         else target.mX += -2.0f;
         target.mY = fn_80177FE0().mY + (signed char)pCommand[2] * 0.0625f + -2.0f;
-        fn_80227690(&target, &target, &point);
+        Vec2Sub(&target, &target, &point);
         int angle = fn_801CFE40(target.mY, target.mX);
-        float length = fn_802270A4(&target);
+        float length = Vec2Magnitude(&target);
         fn_8015A588(p, 0, pPoint, &length, &angle);
         p->mUnknown64 = 1;
         break;

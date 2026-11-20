@@ -2,7 +2,7 @@
    the 32 teams are beaten, how many are left, and the run's win/loss and
    game statistics. Also reads rows of the static 'TK' tables. */
 #include "game/DbCursor.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 #include "game/StyleAwardRule.h"
 
@@ -44,7 +44,7 @@ int GauntletGetCurrentTeam(int a)
     int digt;
     int lttg = GauntletGetTeamsLeft(a);
 
-    fn_801FCE10(0, "use \x8c select 'DIGT' into \x85 from 'MTTG' where 'LTTG' = \x82\n",
+    TDbCompilePerformOp(0, "use \x8c select 'DIGT' into \x85 from 'MTTG' where 'LTTG' = \x82\n",
                 DbUserGetDb(DbUserGetId(a)), &digt, lttg);
     return digt;
 }
@@ -53,7 +53,7 @@ int GauntletIsTeamBeaten(int a, int b)
 {
     int fdtg;
 
-    if (fn_801FCE10(0, "use \x8c select 'FDTG' into \x82 from 'NUAG' where 'DIGT' = \x85\n",
+    if (TDbCompilePerformOp(0, "use \x8c select 'FDTG' into \x82 from 'NUAG' where 'DIGT' = \x85\n",
                     DbUserGetDb(DbUserGetId(a)), &fdtg, b) == 0 && fdtg == 1) {
         return 1;
     }
@@ -62,24 +62,24 @@ int GauntletIsTeamBeaten(int a, int b)
 
 int GauntletSetCurrentTeam(int a, int b)
 {
-    return fn_801FCE10(0, "use \x8c update 'MTTG' set 'DIGT' = \x85\n", DbUserGetDb(DbUserGetId(a)), b);
+    return TDbCompilePerformOp(0, "use \x8c update 'MTTG' set 'DIGT' = \x85\n", DbUserGetDb(DbUserGetId(a)), b);
 }
 
 void GauntletMarkTeamBeaten(int a, int b)
 {
-    fn_801FCE10(0, "use \x8c update 'NUAG' set 'FDTG' = 1 where 'DIGT' = \x85\n", DbUserGetDb(DbUserGetId(a)), b);
+    TDbCompilePerformOp(0, "use \x8c update 'NUAG' set 'FDTG' = 1 where 'DIGT' = \x85\n", DbUserGetDb(DbUserGetId(a)), b);
 }
 
 void GauntletClearTeamBeaten(int a, int b)
 {
-    fn_801FCE10(0, "use \x8c update 'NUAG' set 'FDTG' = 0 where 'DIGT' = \x85\n", DbUserGetDb(DbUserGetId(a)), b);
+    TDbCompilePerformOp(0, "use \x8c update 'NUAG' set 'FDTG' = 0 where 'DIGT' = \x85\n", DbUserGetDb(DbUserGetId(a)), b);
 }
 
 int GauntletGetTeamsLeft(int a)
 {
     int lttg;
 
-    fn_801FCE10(0, "use \x8c select 'LTTG' into \x82 from 'MTTG'\n", DbUserGetDb(DbUserGetId(a)), &lttg);
+    TDbCompilePerformOp(0, "use \x8c select 'LTTG' into \x82 from 'MTTG'\n", DbUserGetDb(DbUserGetId(a)), &lttg);
     return lttg;
 }
 
@@ -98,7 +98,7 @@ void GauntletReset(int a)
 
 void GauntletResetTeamsLeft(int a)
 {
-    fn_801FCE10(0, "use \x8c update 'MTTG' set 'LTTG' = 32\n", DbUserGetDb(DbUserGetId(a)));
+    TDbCompilePerformOp(0, "use \x8c update 'MTTG' set 'LTTG' = 32\n", DbUserGetDb(DbUserGetId(a)));
 }
 
 void GauntletAdvance(int a)
@@ -106,7 +106,7 @@ void GauntletAdvance(int a)
     int lttg = GauntletGetTeamsLeft(a) - 1;
     int digt = GauntletGetCurrentTeam(a);
 
-    fn_801FCE10(0, "use \x8c update 'MTTG' set 'LTTG' = \x82 where 'DIGT' = \x85\n",
+    TDbCompilePerformOp(0, "use \x8c update 'MTTG' set 'LTTG' = \x82 where 'DIGT' = \x85\n",
                 DbUserGetDb(DbUserGetId(a)), lttg, digt);
 }
 

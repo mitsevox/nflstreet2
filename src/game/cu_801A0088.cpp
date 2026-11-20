@@ -1,4 +1,4 @@
-#include "game/fn_8022781C.h"
+#include "game/Vec2Distance.h"
 #include "game/fn_80177FE0.h"
 #include "game/PlayArtState.h"
 #include "game/Object_8017886C.h"
@@ -88,7 +88,7 @@ extern "C" int fn_801A0270(int, PlayArtVertex_t *p, QuadPoint_801A0614 *uv, GXCo
     GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
     GXPosition3f32(p[0].mX,p[0].mY,z); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[0].mX,z);
     GXPosition3f32(p[1].mX,p[1].mY,z); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[1].mX,z);
-    float length = fn_8022781C(p,p2) * 0.09f;
+    float length = Vec2Distance(p,p2) * 0.09f;
     GXPosition3f32(p2->mX,p2->mY,z); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[2].mX,length);
     GXPosition3f32(p[3].mX,p[3].mY,z); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[3].mX,length);
     return 0;
@@ -119,7 +119,7 @@ extern "C" int fn_801A04D4(int, PlayArtVertex_t *p, QuadPoint_801A0614 *uv, unsi
         while (n > 0) {
             PlayArtVertex_t *current = &p[i];
             QuadPoint_801A0614 *t = &uv[i & 3];
-            if ((i & 3) == 2) length += fn_8022781C(&p[i-2],current) * 0.09f;
+            if ((i & 3) == 2) length += Vec2Distance(&p[i-2],current) * 0.09f;
             GXPosition3f32(current->mX,current->mY,0.0f); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(t->mX,length);
             ++i; --n;
         }

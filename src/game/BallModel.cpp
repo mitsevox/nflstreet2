@@ -82,14 +82,14 @@ extern "C" {
 unsigned char BallModelReplayReadFrame(BitStream_t *pStream, Vector_80039F5C *pPos, Quat_801EB488 *pRot,
                           Vector_80039F5C *pLinkPos, Quat_801EB488 *pLinkRot, Object_80039F5C **ppObject,
                           int *pIndex, unsigned char *pFlag);
-void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
+void Vec3Lerp(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
 void fn_80030CA4(Object_80039F5C *pA, Object_80039F5C *pB);
 }
 
 extern "C" {
 int FELoopIsMainFEActive(void);
-unsigned int fn_80236398(int a);
+unsigned int LLLightGetProjectorColor(int a);
 void BallRenderInit(BallModel_t *p);
 void BallRenderAttach(BallModel_t *p, int index);
 void BallRenderDraw(BallModel_t *p);
@@ -213,7 +213,7 @@ extern "C" void BallModelInit(BallModel_t *p, BallModelInit_t *pInit)
         p->mUnknown156 = pInit->mpUnknown8->mUnknown156;
         p->mUnknown160 = pInit->mpUnknown8->mUnknown160;
     }
-    unsigned int packed = fn_80236398(0);
+    unsigned int packed = LLLightGetProjectorColor(0);
     color[0] = (packed & 255) * 0.0078125f;
     color[1] = ((packed >> 8) & 255) * 0.0078125f;
     color[2] = ((packed >> 16) & 255) * 0.0078125f;
@@ -386,7 +386,7 @@ extern "C" void BallModelReplayPlayback(Block_80170E64 *pBlock, BitStream_t *pSt
         Object_8003DEC4 *pPose = (Object_8003DEC4 *)pObject0->mpUnknown4;
 
         if (index0 == index1) {
-            fn_80227930(&pBlock->mUnknown4, &linkPos1, &linkPos0, t);
+            Vec3Lerp(&pBlock->mUnknown4, &linkPos1, &linkPos0, t);
             QuatSlerp(&pBlock->mUnknown108, &linkRot1, &linkRot0, t);
         } else {
             pBlock->mUnknown4.mX = linkPos1.mX;
@@ -399,7 +399,7 @@ extern "C" void BallModelReplayPlayback(Block_80170E64 *pBlock, BitStream_t *pSt
             pPose->mUnknown44.mUnknown6 = index1;
         }
     } else {
-        fn_80227930(&pBlock->mUnknown4, &pos1, &pos0, t);
+        Vec3Lerp(&pBlock->mUnknown4, &pos1, &pos0, t);
         QuatSlerp(&pBlock->mUnknown108, &rot1, &rot0, t);
     }
     pBlock->mUnknown660 = LevelFindArea(&pBlock->mUnknown4.mX);

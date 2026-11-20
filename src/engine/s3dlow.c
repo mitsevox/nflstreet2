@@ -32,7 +32,7 @@ int SND3dpos(int id, int offset, int value)
                 if (lbl_803A772C == 0) {
                     record->m1C = 0;
                 }
-                fn_80274960(index);
+                SndHalSetPan(index);
             }
         }
     }

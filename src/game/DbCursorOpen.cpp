@@ -3,12 +3,12 @@
 
 #include "game/DbCursor.h"
 #include "game/DbQueryTable.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 extern "C" {
-int fn_801FA0BC(int handle, DbQueryTable *pTables, DbFilter *pFilter, void *pSort, int *pCursor,
+int _TDbQrySelect(int handle, DbQueryTable *pTables, DbFilter *pFilter, void *pSort, int *pCursor,
                 QueryResult *pResult);
-int fn_801FA148(int cursor);
+int TDbQryDestroy(int cursor);
 
 void DbCheckVersion(int handle)
 {
@@ -19,16 +19,16 @@ void DbCheckVersion(int handle)
 
     tables[0].Set(0x52455653);
     tables[1].Set(-1);
-    fn_801FA0BC(handle, tables, 0, 0, &cursor, &result);
+    _TDbQrySelect(handle, tables, 0, 0, &cursor, &result);
     columns[0].Set(0x52455653, 0x52455653);
     columns[0].mValue = 0;
     columns[1].Set(-1, -1);
     columns[1].mValue = 0;
-    fn_801FA228(cursor, 1, 0, columns);
+    TDbQryRetrieve(cursor, 1, 0, columns);
     if (columns[0].mValue != 0xB2A) {
         *(char *)0 = 0;
     }
-    fn_801FA148(cursor);
+    TDbQryDestroy(cursor);
 }
 
 void DbCursorOpenTable(DbCursor *pObject, int a, int b)
@@ -46,7 +46,7 @@ void DbCursorOpen(DbCursor *pObject, int a, int b, void *c, void *d, int e)
     pObject->mUnknown8 = a;
     tables[0].Set(a, 2, (DbFilter *)d);
     tables[1].Set(-1);
-    fn_801FA0BC(pObject->mUnknown4, tables, 0, c, &pObject->mUnknown0, &result);
+    _TDbQrySelect(pObject->mUnknown4, tables, 0, c, &pObject->mUnknown0, &result);
     if (result.mUnknown0 != 0) {
         pObject->mUnknown16 = 0;
     } else {

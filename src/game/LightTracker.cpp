@@ -8,8 +8,8 @@
 
 extern "C" {
 void MatSetStack(int a);
-void fn_802271F0(float *pOut, float *pIn);
-void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
+void Vec3Normalize(float *pOut, float *pIn);
+void Vec3Mat33Mul(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 }
 
 extern "C" {
@@ -45,11 +45,11 @@ int LightTrackerUpdate(LightTracker_t *pTracker, LightSource_t *pSource, float *
         direction.mY = -pObject->mUnknown12.mZ;
         direction.mZ = pObject->mUnknown12.mY;
         MatSetStack(VptGetMatrixStack());
-        fn_802271F0(&direction.mX, &direction.mX);
+        Vec3Normalize(&direction.mX, &direction.mX);
         direction.mX = -direction.mX;
         direction.mY = -direction.mY;
         direction.mZ = -direction.mZ;
-        fn_80227C2C(&direction, &direction);
+        Vec3Mat33Mul(&direction, &direction);
         pDirection[0] = direction.mX;
         pDirection[1] = direction.mY;
         pDirection[2] = direction.mZ;

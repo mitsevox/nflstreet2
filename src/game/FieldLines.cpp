@@ -2,7 +2,7 @@
    (object type 17). Each frame the update places them from the field getters
    and fades them in or out; the list callback draws each visible strip with a
    pulsing alpha and keeps a minimum on-screen size. */
-#include "game/fn_8022781C.h"
+#include "game/Vec2Distance.h"
 #include "game/fn_80177FE0.h"
 #include "game/cu_8002B8F8.h"
 #include "game/PauseMenu.h"
@@ -94,7 +94,7 @@ float FieldLineGetScale(FieldLine_t *p)
     MatPush();
     MatTranslate(&p->mUnknown4);
     fn_80234D00(&_FieldLines_ProjBounds, &bounds);
-    float distance = fn_8022781C(&bounds.mUnknown10, &bounds.mUnknown0);
+    float distance = Vec2Distance(&bounds.mUnknown10, &bounds.mUnknown0);
     MatPop();
     if (distance < 0.08f) {
         float ratio = 0.08f / distance;

@@ -5,7 +5,7 @@
    registers their save and load streams as "Animated Big Objects", and finds
    objects by index, key, group or distance. */
 #include "game/BigObjDesc.h"
-#include "game/fn_8022781C.h"
+#include "game/Vec2Distance.h"
 #include <string.h>
 
 #include "game/bitstream.h"
@@ -64,9 +64,9 @@ void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
 int ResSetMemFlags(int value);
 int SysGetLastError(void);
-int fn_80227594(float *pA, float *pB, float tolerance);
-float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
-void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
+int Vec2Equal(float *pA, float *pB, float tolerance);
+float Vec3Distance(Vector_80039F5C *pA, Vector_80039F5C *pB);
+void Vec3Lerp(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 void VptTrashObject(BigObj_t *pObject);
 void VptFlushObjectTrash(void);
 void VptFlushObjectTrashSync(void);
@@ -167,12 +167,12 @@ void BigObjLoad(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStre
             fn_8004E0CC(pObject, 0, value);
             fn_800301C4(pStream1, &pos1.mX, 17, 256.0f);
             fn_800301C4(pStream0, &pos0.mX, 17, 256.0f);
-            if (fn_8022785C(&pos0, &pos1) > 15.0f) {
+            if (Vec3Distance(&pos0, &pos1) > 15.0f) {
                 pObject->mPos.mX = pos0.mX;
                 pObject->mPos.mY = pos0.mY;
                 pObject->mPos.mZ = pos0.mZ;
             } else {
-                fn_80227930(&pObject->mPos, &pos0, &pos1, t);
+                Vec3Lerp(&pObject->mPos, &pos0, &pos1, t);
             }
             fn_80030304(pStream1, &rot1.mX, 12, 1024.0f);
             fn_80030304(pStream0, &rot0.mX, 12, 1024.0f);
@@ -367,7 +367,7 @@ void BigObjSyncFromInst(BigObjInst *pLinked, int index)
     if (pLinked->mUnknown428 != 0) {
         pLinked->mUnknown428->mUnknown56 = pLinked->mUnknown32;
     }
-    if (fn_80227594(&pObject->mUnknown336, &pLinked->mUnknown8, 0.05f) == 0) {
+    if (Vec2Equal(&pObject->mUnknown336, &pLinked->mUnknown8, 0.05f) == 0) {
         pObject->mUnknown332 = LevelFindArea(&pLinked->mUnknown8);
         pObject->mUnknown336 = pLinked->mUnknown8;
         pObject->mUnknown340 = pLinked->mUnknown12;
@@ -499,7 +499,7 @@ BigObj_t *BigObjFindNearest(Vector_80039F5C *pPos, float *pDist)
     if (_BigObj_apObjects != 0) {
         for (i = 0; i < _BigObj_uCount; i++) {
             BigObj_t *pObject = _BigObj_apObjects[i];
-            float dist = fn_8022781C(&pObject->mPos, pPos);
+            float dist = Vec2Distance(&pObject->mPos, pPos);
 
             if (dist < best) {
                 pBest = pObject;
@@ -524,7 +524,7 @@ BigObj_t *BigObjFindNearestOfType(Vector_80039F5C *pPos, int type, float *pDist)
             BigObj_t *pObject = _BigObj_apObjects[i];
 
             if (pObject->mUnknown472->mUnknown188 == type) {
-                float dist = fn_8022781C(&pObject->mPos, pPos);
+                float dist = Vec2Distance(&pObject->mPos, pPos);
 
                 if (dist < best) {
                     pBest = pObject;

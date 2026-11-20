@@ -78,7 +78,7 @@ void fn_80234CA4(ModelDrawObject_t *pObject, SkeletonPose_t *p);
 void fn_80234CAC(ModelDrawObject_t *pObject, void *p);
 void fn_80234CF0(ModelDrawObject_t *pObject, int a, ModelPartBinding_t *p);
 void fn_80234DC0(ModelDrawObject_t *pObject, int a);
-int fn_80236B98(int a, float x, float y, float z);
+int LLLightLoadSetTinted(int a, float x, float y, float z);
 void GXSetChanMatColor(int a, GXColor color);
 void GXSetNumChans(int a);
 void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
@@ -418,7 +418,7 @@ void PortraitRenderDrawModels(PortraitJob_t *pObject)
     PortraitRenderSetCamera();
     TMRenderReset();
     GXColor white = {255, 255, 255, 255};
-    mask = fn_80236B98(2, 1.0f, 1.0f, 1.0f);
+    mask = LLLightLoadSetTinted(2, 1.0f, 1.0f, 1.0f);
     GXSetChanMatColor(4, white);
     GXSetNumChans(1);
     GXSetChanCtrl(4, 1, 0, 0, mask, 2, 2);

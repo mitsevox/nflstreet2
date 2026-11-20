@@ -34,13 +34,13 @@ void ObjSetPriority(int handle, ReplayCursor_t *pObject, int b);
 void TMRenderBindTexture(int a, int b, int c);
 void fn_802353D8(void *p, int flags);
 void fn_80235588(void *p, int a);
-void fn_802355E4(void *p);
-void fn_80235630(void *p, int a);
-void fn_80235740(void *p, int a);
-void fn_80235764(void *p, int a);
-void fn_80235C48(void *p, int a);
-void fn_80235C90(void *p, int a, float b, float c, float d, float e);
-void fn_80235DB8(int a);
+void ModelObjReset(void *p);
+void ModelObjSetModel(void *p, int a);
+void ModelObjStoreMatrix(void *p, int a);
+void ModelObjDraw(void *p, int a);
+void ModelObjSetParamNop(void *p, int a);
+void ModelObjSetAmbientColor(void *p, int a, float b, float c, float d, float e);
+void ModelObjRelocateModelRes(int a);
 }
 
 static ReplayCursor_t *_ReplayCursor_pObject = 0;
@@ -55,16 +55,16 @@ void ReplayCursorObjInit(ReplayCursor_t *pObject, int *pArgs)
     pObject->mUnknown20 = (void *)pArgs[0];
     pObject->mUnknown24 = pArgs[1];
     pObject->mUnknown220 = ResLoad(pObject->mUnknown20, pObject->mUnknown24, 1);
-    fn_80235DB8(pObject->mUnknown220);
+    ModelObjRelocateModelRes(pObject->mUnknown220);
     fn_80235588(pObject->mUnknown28, 6);
-    fn_80235630(pObject->mUnknown28, pObject->mUnknown220);
-    fn_80235C48(pObject->mUnknown28, 3);
+    ModelObjSetModel(pObject->mUnknown28, pObject->mUnknown220);
+    ModelObjSetParamNop(pObject->mUnknown28, 3);
     fn_802353D8(pObject->mUnknown28, 0x400008);
 }
 
 void ReplayCursorObjRelease(ReplayCursor_t *pObject)
 {
-    fn_802355E4(pObject->mUnknown28);
+    ModelObjReset(pObject->mUnknown28);
     if (pObject->mUnknown220 != 0) {
         if (ResIsLoaded(pObject->mUnknown20, pObject->mUnknown24)) {
             ResUnLoad(pObject->mUnknown20, pObject->mUnknown24);
@@ -83,12 +83,12 @@ int ReplayCursorObjDraw(ReplayCursor_t *pObject)
         v[1] = pObject->mPos[1];
         v[2] = 0.0f;
         MatTranslate(v);
-        fn_80235740(pObject->mUnknown28, ConGetCurrentContext());
+        ModelObjStoreMatrix(pObject->mUnknown28, ConGetCurrentContext());
         MatSetStack(VptGetMatrixStack());
         MatPop();
-        fn_80235C90(pObject->mUnknown28, ConGetCurrentContext(), 0.25f, 0.25f, 0.75f, 1.0f);
+        ModelObjSetAmbientColor(pObject->mUnknown28, ConGetCurrentContext(), 0.25f, 0.25f, 0.75f, 1.0f);
         TMRenderBindTexture(0, 0, 0);
-        fn_80235764(pObject->mUnknown28, ConGetCurrentContext());
+        ModelObjDraw(pObject->mUnknown28, ConGetCurrentContext());
     }
     return 0;
 }

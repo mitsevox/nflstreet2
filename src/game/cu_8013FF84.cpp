@@ -2,8 +2,8 @@
 #include "game/GameCamera.h"
 #include "game/GameOptions.h"
 #include <string.h>
-#include "game/fn_802270D4.h"
-#include "game/fn_80227638.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Add.h"
 #include "game/PlayBookTeam.h"
 #include <math.h>
 #include "engine/viewport.h"
@@ -59,7 +59,7 @@ static float lbl_803ECA08;
 extern "C" {
 void CamPresetSetEaseRates(GameCamera_t *, int);
 unsigned int SyncRandGetRange(unsigned int,unsigned int);
-void fn_8022765C(void *,void *,void *);
+void Vec3Add(void *,void *,void *);
 int fn_801CFDD0(float);
 void CamFreeClearVelocity(GameCamera_t *);
 int fn_800AD9B4(void);
@@ -68,13 +68,13 @@ void CamMainProcess(void *,int,int,int);
 void CamMainWarpToDest(GameCamera_t *);
 void Orient3Lerp(void *,void *,void *,float);
 void CamMainSetAngle(GameCamera_t *,void *,int);
-void fn_80227930(void *,void *,void *,float);
+void Vec3Lerp(void *,void *,void *,float);
 void MatSetStack(int);
 void MatPushUnit(void);
 void MatTranslate(void *);
 void MatRotZ(int);
 void MatRotX(int);
-void fn_80227CC0(void *,void *);
+void Vec3Mat34Mul(void *,void *);
 void MatPop(void);
 void CamGameSetModeAll(int);
 int BallsExist(void);
@@ -119,7 +119,7 @@ void fn_8013FF84(GameCamera_t *camera, Vector_8013FF84 *point)
             dst->mZ = value.mZ;
             lbl_802DBEBC.mUnknown8 = 0;
         }
-        fn_8022765C(point,point,&lbl_802DBECC[index].mUnknown10);
+        Vec3Add(point,point,&lbl_802DBECC[index].mUnknown10);
         if (lbl_802DBEBC.mUnknownC >= lbl_802DBECC[index].mUnknown4) {
             lbl_802DBEBC.mUnknown8 = 0;
             if (lbl_802DBEBC.mUnknownC >= lbl_802DBECC[index].mUnknown4+10) lbl_802DBEBC.mUnknown0 = 0;
@@ -131,7 +131,7 @@ void fn_80140270(Vector_8013FF84 *point, Angles_8013FF84 *angles, Vector_8013FF8
 {
     float base = lbl_802DC718[index].mUnknown8;
     float amount = velocity->mX/base*(lbl_802DC718[index].mUnknownC[1]-base);
-    float length = fn_802270D4(point);
+    float length = Vec3Magnitude(point);
     int reset = 0;
     switch (mode) {
     case 4: length = -length; break;
@@ -188,7 +188,7 @@ void fn_801403CC(GameCamera_t *camera)
         camera->mUnknownE8 = camera->mHeader.mUnknown04[0];
         camera->mUnknownEC = camera->mHeader.mUnknown04[1];
         camera->mUnknownF0 = camera->mHeader.mUnknown04[2];
-        fn_80227638(&camera->mUnknownE8,&camera->mUnknownE8,&camera->mUnknownC4);
+        Vec2Add(&camera->mUnknownE8,&camera->mUnknownE8,&camera->mUnknownC4);
     } else {
         CamMainProcess(camera,0,0,0);
         CamMainWarpToDest(camera);
@@ -209,14 +209,14 @@ unsigned char fn_80140504(GameCamera_t *camera)
         Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,blend);
         angles.mZ = (int)(camera->mUnknownE0*46603.37890625f);
         CamMainSetAngle(camera,&angles,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
-        fn_80227930(&point,&lbl_803ECA04[1],&state->mUnknown20,blend);
+        Vec3Lerp(&point,&lbl_803ECA04[1],&state->mUnknown20,blend);
         float z = point.mZ;
         MatSetStack(VptGetMatrixStack());MatPushUnit();MatTranslate(&zero);
         MatRotZ(-(int)(camera->mUnknownE0*46603.37890625f));
         MatRotX(0x400000);
         offset.mY = offset.mX = 0.0f;
-        offset.mZ = fn_802270A4(&state->mUnknown20);
-        fn_80227CC0(&point,&offset);
+        offset.mZ = Vec2Magnitude(&state->mUnknown20);
+        Vec3Mat34Mul(&point,&offset);
         MatPop();
         camera->mUnknownCC = z;
         camera->mUnknownC4 = point.mX;
@@ -271,13 +271,13 @@ void fn_80140708(GameCamera_t *camera)
             if (state->mUnknown38 < 1.0f) {
                 state->mUnknown38 += 1.0f/lbl_803EB1EC;
                 state->mUnknown38 = state->mUnknown38 < 0.0f ? 0.0f : (state->mUnknown38 > 1.0f ? 1.0f : state->mUnknown38);
-                fn_80227930(&point,&lbl_803ECA04[1],&state->mUnknown20,state->mUnknown38);
+                Vec3Lerp(&point,&lbl_803ECA04[1],&state->mUnknown20,state->mUnknown38);
                 Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,state->mUnknown38);
                 goto apply;
             }
         } else if (state->mUnknown38 < 1.0f) {
             state->mUnknown38 = 1.0f;
-            fn_80227930(&point,&lbl_803ECA04[1],&state->mUnknown20,state->mUnknown38);
+            Vec3Lerp(&point,&lbl_803ECA04[1],&state->mUnknown20,state->mUnknown38);
             Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,state->mUnknown38);
         }
         if (fn_801783AC(0)) {
@@ -289,17 +289,17 @@ void fn_80140708(GameCamera_t *camera)
             }
         }
         if (fn_800BA6F8() && fn_800BAA24()) blend = 0.0f;
-        fn_80227930(&point,&lbl_803ECA04[1],&lbl_803ECA04[camera->mUnknownA0],blend);
+        Vec3Lerp(&point,&lbl_803ECA04[1],&lbl_803ECA04[camera->mUnknownA0],blend);
         Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,blend);
     apply:
         if (gameMode != 2) fn_80140270(&point,&angles,&velocity,camera->mUnknown9C,camera->mUnknownA0);
         if (fn_801486A0() == 0) {
-            fn_8022765C(&point,&point,&lbl_802DC718[camera->mUnknown9C].mUnknown24);
+            Vec3Add(&point,&point,&lbl_802DC718[camera->mUnknown9C].mUnknown24);
             ANGLES_FROM_DEGREES(offset, lbl_802DC718[camera->mUnknown9C].mUnknown30);
             Orient3Add(&angles,&angles,&offset);
         }
         if (fn_801486A0() == 2) {
-            fn_8022765C(&point,&point,&lbl_802DC718[camera->mUnknown9C].mUnknown54);
+            Vec3Add(&point,&point,&lbl_802DC718[camera->mUnknown9C].mUnknown54);
             ANGLES_FROM_DEGREES(offset, lbl_802DC718[camera->mUnknown9C].mUnknown60);
             Orient3Add(&angles,&angles,&offset);
         } else if (!GameOptionsGet(18) && !fn_800BA6F8() && fn_800AD9B4() == 3 && camera->mUnknownA0 == 1) {

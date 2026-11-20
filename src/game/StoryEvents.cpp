@@ -17,7 +17,7 @@
 #include "game/FELoop.h"
 #include "game/fn_80061AD4.h"
 #include "game/GameOptions.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 /* Index returned by DbUserFindIndex and values read for it by fn_8005D6EC. */
 struct State_802D4D40 {
@@ -154,9 +154,9 @@ void StorySetLkss(int index, int value);
 int SstlGetEntryTag(unsigned int index, char *pEtnr, int size);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 int MemFill(void *pDest, int size, int value, int width);
-int fn_801F967C(int handle, int table);
-int fn_801F9980(int handle, int *pTable);
-int fn_801F9D70(int handle, int table, DbFilter *pFilter, unsigned short *pCount);
+int TDbTblDestroy(int handle, int table);
+int TDbTblFindUnusedId(int handle, int *pTable);
+int TDbTblGetCount(int handle, int table, DbFilter *pFilter, unsigned short *pCount);
 int DbUserGetId(int index);
 int DbUserGetDb(int a);
 int DbUserFindIndex(int a);
@@ -389,17 +389,17 @@ int fn_8005DC10(void)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    fn_801FCE10(&result,
+    TDbCompilePerformOp(&result,
                 "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x82 from 'YALP' where 'DIGT' = \x85 "
                 "order by 'DIGP' desc\n",
                 &cursor, &digp, 0x21);
     count = result.mUnknown0;
     for (i = 0; i < count; i++) {
-        fn_801FCE10(0, "fetch from \x8a\n", &cursor);
+        TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
         ids[i] = digp;
     }
     if (cursor.mUnknown0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
     fn_80084908(0x21, 0, list, 7, ids, 10);
     fn_80060354(lbl_803EA5C8, list);
@@ -589,7 +589,7 @@ void fn_8005E43C(void)
     AutoDepthSetRateCallback(0);
     AutoDepthSetSelectCallback(0);
     fn_80015D28(lbl_803EA5C8->mDive);
-    fn_801FCE10(0, "use 'EMAG' update 'YALP' set 'ITGT' = \x82 where 'DIOP' = \x82\n", 0x21, 0x1FF);
+    TDbCompilePerformOp(0, "use 'EMAG' update 'YALP' set 'ITGT' = \x82 where 'DIOP' = \x82\n", 0x21, 0x1FF);
 }
 
 void fn_8005E4A8(void)
@@ -997,7 +997,7 @@ void fn_8005EEC4(int *pState, int *pScreen)
             if (lbl_803EA5C8->mItes == 0 || lbl_803EA5C8->mItes == 1) {
                 lbl_802D4D40.mUnknown20 = 2;
                 count = 0;
-                fn_801F9D70(DbUserGetDb(DbUserGetId(lbl_802D4D40.mIndex)), 0x59505453, 0, &count);
+                TDbTblGetCount(DbUserGetDb(DbUserGetId(lbl_802D4D40.mIndex)), 0x59505453, 0, &count);
                 if (count == 4) {
                     lbl_803EA5E4 = 1;
                 }
@@ -1467,13 +1467,13 @@ void fn_8005FCF8(int *pFirst, int *pSecond)
         fn_8008056C(&object);
     }
     if (lbl_803EA5D8 != -1) {
-        fn_801F967C(0x54415453, lbl_803EA5D8);
+        TDbTblDestroy(0x54415453, lbl_803EA5D8);
         lbl_803EA5D8 = -1;
     }
-    fn_801F9980(0x54415453, &lbl_803EA5D8);
-    fn_801FCE10(0, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8,
+    TDbTblFindUnusedId(0x54415453, &lbl_803EA5D8);
+    TDbCompilePerformOp(0, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8,
                 ids[0], ids[1], ids[2], ids[3], ids[4], ids[5], ids[6], ids[7], ids[8], ids[9], ids[10], ids[11], ids[12]);
-    fn_801FCE10(0, "use 'TATS' select count(*) into \x82 from \x8c\n", &count, lbl_803EA5D8);
+    TDbCompilePerformOp(0, "use 'TATS' select count(*) into \x82 from \x8c\n", &count, lbl_803EA5D8);
     {
         DbCursor cursor;
         if (GameInfoGet(2) == 0) {
@@ -1497,14 +1497,14 @@ void fn_8005FCF8(int *pFirst, int *pSecond)
         DbCursorClose(&cursor);
     }
     if (lbl_803EA5DC != -1) {
-        fn_801F967C(0x54415453, lbl_803EA5DC);
+        TDbTblDestroy(0x54415453, lbl_803EA5DC);
         lbl_803EA5DC = -1;
     }
-    fn_801F9980(0x54415453, &lbl_803EA5DC);
-    fn_801FCE10(0, "use 'TATS' select into 'TATS'.\x8c * from 'MAET' where ('DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85)\n", lbl_803EA5DC,
+    TDbTblFindUnusedId(0x54415453, &lbl_803EA5DC);
+    TDbCompilePerformOp(0, "use 'TATS' select into 'TATS'.\x8c * from 'MAET' where ('DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85 || 'DIGT' = \x85)\n", lbl_803EA5DC,
                 itgt[0], itgt[1], itgt[2], itgt[3], itgt[4], itgt[5], itgt[6], itgt[7], itgt[8], itgt[9], itgt[10], itgt[11],
                 itgt[12]);
-    fn_801FCE10(0, "use 'TATS' select count(*) into \x82 from \x8c\n", &count, lbl_803EA5DC);
+    TDbCompilePerformOp(0, "use 'TATS' select count(*) into \x82 from \x8c\n", &count, lbl_803EA5DC);
 }
 
 void fn_80060044(int team, int id, int *pList)
@@ -1512,56 +1512,56 @@ void fn_80060044(int team, int id, int *pList)
     QueryResult result;
 
     if (lbl_803EA5D8 != -1) {
-        fn_801F967C(0x54415453, lbl_803EA5D8);
+        TDbTblDestroy(0x54415453, lbl_803EA5D8);
         lbl_803EA5D8 = -1;
     }
-    fn_801F9980(0x54415453, &lbl_803EA5D8);
+    TDbTblFindUnusedId(0x54415453, &lbl_803EA5D8);
     switch (fn_801486A0()) {
     case 1:
-        fn_801FCE10(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1], pList[2],
+        TDbCompilePerformOp(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1], pList[2],
                     pList[3], pList[4], pList[5]);
         break;
     case 0:
-        fn_801FCE10(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1], pList[2],
+        TDbCompilePerformOp(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1], pList[2],
                     pList[3], pList[4]);
         break;
     case 3:
-        fn_801FCE10(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1], pList[2]);
+        TDbCompilePerformOp(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1], pList[2]);
         break;
     case 2:
         if (lbl_803EA5C8->mPes[2] == 2) {
-            fn_801FCE10(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1]);
+            TDbCompilePerformOp(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1]);
         } else {
-            fn_801FCE10(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85)\n", lbl_803EA5D8, pList[0]);
+            TDbCompilePerformOp(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85)\n", lbl_803EA5D8, pList[0]);
         }
         break;
     case 4:
-        fn_801FCE10(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1], pList[2],
+        TDbCompilePerformOp(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1], pList[2],
                     pList[3]);
         break;
     case 5:
     default:
-        fn_801FCE10(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1], pList[2],
+        TDbCompilePerformOp(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", lbl_803EA5D8, pList[0], pList[1], pList[2],
                     pList[3], pList[4], pList[5], pList[6]);
         break;
     }
     if (lbl_803EA5DC != -1) {
-        fn_801F967C(0x54415453, lbl_803EA5DC);
+        TDbTblDestroy(0x54415453, lbl_803EA5DC);
         lbl_803EA5DC = -1;
     }
-    fn_801F9980(0x54415453, &lbl_803EA5DC);
-    fn_801FCE10(&result, "use 'TATS' select into 'TATS'.\x8c * from 'MAET' where 'DIGT' = \x85 or 'DIGT' = \x85\n",
+    TDbTblFindUnusedId(0x54415453, &lbl_803EA5DC);
+    TDbCompilePerformOp(&result, "use 'TATS' select into 'TATS'.\x8c * from 'MAET' where 'DIGT' = \x85 or 'DIGT' = \x85\n",
                 lbl_803EA5DC, team, id);
 }
 
 void fn_80060278(void)
 {
     if (lbl_803EA5D8 != -1) {
-        fn_801F967C(0x54415453, lbl_803EA5D8);
+        TDbTblDestroy(0x54415453, lbl_803EA5D8);
         lbl_803EA5D8 = -1;
     }
     if (lbl_803EA5DC != -1) {
-        fn_801F967C(0x54415453, lbl_803EA5DC);
+        TDbTblDestroy(0x54415453, lbl_803EA5DC);
         lbl_803EA5DC = -1;
     }
 }

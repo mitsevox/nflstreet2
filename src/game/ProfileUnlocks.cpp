@@ -2,11 +2,11 @@
    which offensive and defensive plays are in the user's playbook, and which teams are hidden. */
 
 #include "game/DbCursor.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/QueryStatus.h"
 
 extern "C" {
-int fn_801FA844(int a, void *b, void *c, unsigned long long key, QueryResult *pValue, QueryResult *pResult);
+int TDbQryColStats(int a, void *b, void *c, unsigned long long key, QueryResult *pValue, QueryResult *pResult);
 int DbCursorGetValue(DbCursor *pObject, int key);
 int DbUserGetId(int index);
 int DbUserFindIndex(int a);
@@ -78,7 +78,7 @@ int PlaybookGetMaxOrder(DbCursor *pObject)
     QueryResult result;
     QueryResult value;
 
-    fn_801FA844(pObject->mUnknown4, pObject->mUnknown20, 0,
+    TDbQryColStats(pObject->mUnknown4, pObject->mUnknown20, 0,
                 ((unsigned long long)(unsigned int)pObject->mUnknown8 << 32) | 0x58505355,
                 &value, &result);
     return value.mUnknown4;
@@ -138,7 +138,7 @@ void PlaybookResetOrder(signed char db, int index)
     query.mUnknown4 = 0;
     query.mUnknown8 = -1;
     query.mUnknown12 = 0;
-    int status = fn_801FCE10(0, "use 'TATS' declare \x8a fastcursor for select 'XPSU' into \x85 from \x8c\n",
+    int status = TDbCompilePerformOp(0, "use 'TATS' declare \x8a fastcursor for select 'XPSU' into \x85 from \x8c\n",
                              &query, &value, table);
     if (status == 0) {
         PlaybookOpen(&cursor, db, index);
@@ -146,7 +146,7 @@ void PlaybookResetOrder(signed char db, int index)
         while (open && fetched && row) {
             query.mUnknown4 = i++;
             if (query.mUnknown0 && QUERY_STATUS_ACCEPTED(status) == 1 && status != 0x15) {
-                status = fn_801FCE10(0, "fetch from \x8a\n", &query);
+                status = TDbCompilePerformOp(0, "fetch from \x8a\n", &query);
                 if (QUERY_STATUS_ACCEPTED(status) == 1 && status != 0x15) {
                     DbCursorSetValue(&cursor, 0x58505355, value);
                     row = DbCursorNext(&cursor);
@@ -160,7 +160,7 @@ void PlaybookResetOrder(signed char db, int index)
         PlaybookClose(&cursor);
     }
     if (query.mUnknown0) {
-        fn_801FCFA0(&query);
+        TDbSQLDestroyCursor(&query);
     }
 }
 

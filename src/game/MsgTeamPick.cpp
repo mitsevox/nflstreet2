@@ -22,7 +22,7 @@
 #include <string.h>
 #include <string.h>
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/SyncRandGetRange.h"
 
 /* Pick state allocated by MsgTeamPickAllocState (0x1C bytes) and freed by
@@ -139,8 +139,8 @@ int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 void SortArray(int a, void *pBase, int count, int size, int (*pCompare)(TeamPickPlayer_t *, TeamPickPlayer_t *), int b,
                  int c, int d);
-int fn_801F967C(int handle, int table);
-int fn_801F9980(int handle, int *pTable);
+int TDbTblDestroy(int handle, int table);
+int TDbTblFindUnusedId(int handle, int *pTable);
 int UIGLibraryLoadItem(void *pObject, int a, int b);
 void UIGLibraryUnLoadItem(void *pObject, int a, int b);
 void *UIGLibraryGetGlobal(int index);
@@ -950,27 +950,27 @@ void MsgTeamPickSaveTeam(int *pTeam, int *pIds, const char *pName)
     unsigned int i;
 
     fn_8022C628(0x54415453, 0x4D414554, pTeam, &teamCount);
-    fn_801FCE10(0,
+    TDbCompilePerformOp(0,
                 "use 'TATS' insert into 'MAET' set 'DIGT' = \x82 and 'PYTT' = \x82 and 'DIOT' = \x82 and "
                 "'DROT' = \x82 and 'LGLT' = \x82 and 'SIVT' = \x83 and 'ANDT' = \x88 and 'LDTC' = \x82\n",
                 *pTeam, 6, *pTeam, 0, 0, 1, pName, 1);
     fn_80229AA4(0x54415453, 0x59414C50, newIds, &count);
     for (i = 0; i < 7; i++) {
-        fn_801F9980(0x54415453, &handle);
+        TDbTblFindUnusedId(0x54415453, &handle);
         oldIds[i] = pIds[i];
-        fn_801FCE10(0, "use 'TATS' select into \x8c * from 'YALP' where ('DIGP' = \x82)\n", handle, oldIds[i]);
-        fn_801FCE10(0, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x82 where ('DIGP' = \x82)\n", handle,
+        TDbCompilePerformOp(0, "use 'TATS' select into \x8c * from 'YALP' where ('DIGP' = \x82)\n", handle, oldIds[i]);
+        TDbCompilePerformOp(0, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x82 where ('DIGP' = \x82)\n", handle,
                     *pTeam, newIds[i], oldIds[i]);
-        fn_801FCE10(0, "use 'TATS' insert into \x8c.'YALP' * select * from \x8c\n", 0x54415453, handle);
-        fn_801F967C(0x54415453, handle);
+        TDbCompilePerformOp(0, "use 'TATS' insert into \x8c.'YALP' * select * from \x8c\n", 0x54415453, handle);
+        TDbTblDestroy(0x54415453, handle);
         /* The same copy for the player's depth chart rows ('THCD'), switched off. */
         if (0) {
-            fn_801F9980(0x54415453, &handle);
-            fn_801FCE10(0, "use 'TATS' select into \x8c * from 'THCD' where ('DIGP' = \x82)\n", handle, oldIds[i]);
-            fn_801FCE10(0, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x82 where ('DIGP' = \x82)\n", handle,
+            TDbTblFindUnusedId(0x54415453, &handle);
+            TDbCompilePerformOp(0, "use 'TATS' select into \x8c * from 'THCD' where ('DIGP' = \x82)\n", handle, oldIds[i]);
+            TDbCompilePerformOp(0, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x82 where ('DIGP' = \x82)\n", handle,
                         *pTeam, newIds[i], oldIds[i]);
-            fn_801FCE10(0, "use 'TATS' insert into \x8c.'THCD' * select * from \x8c\n", 0x54415453, handle);
-            fn_801F967C(0x54415453, handle);
+            TDbCompilePerformOp(0, "use 'TATS' insert into \x8c.'THCD' * select * from \x8c\n", 0x54415453, handle);
+            TDbTblDestroy(0x54415453, handle);
         }
     }
     MsgTeamPickRemapDepthIds(oldIds, newIds, pIds);

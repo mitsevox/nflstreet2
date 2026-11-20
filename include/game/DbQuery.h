@@ -3,7 +3,7 @@
 
 #include "game/DbCursor.h"
 
-/* Condition fn_801FA428 applies: the same 40-byte DbFilter node that
+/* Condition TDbQrySetFirstRow applies: the same 40-byte DbFilter node that
    DbCursorOpen takes (left operand +0, right operand +0x10, operator word
    +0x20). This setter stores a table/column pair compared with an integer
    under a caller-given operator word. */
@@ -23,7 +23,7 @@ struct DbExpression : DbFilter {
     }
 };
 
-/* One entry of the table list fn_801FA428 walks; the list ends with mTag -1. */
+/* One entry of the table list TDbQrySetFirstRow walks; the list ends with mTag -1. */
 struct DbTableRef {
     void Set(int tag, int type = 2, DbExpression *filter = 0)
     {
@@ -37,7 +37,7 @@ struct DbTableRef {
     DbExpression *mFilter;
 };
 
-/* Output of fn_801FA428, which reports a row count in the halfword at +0 and a
+/* Output of TDbQrySetFirstRow, which reports a row count in the halfword at +0 and a
    status word at +4. The functions here reserve it and read neither. */
 struct DbQueryResult {
     unsigned short mCount;
@@ -45,6 +45,6 @@ struct DbQueryResult {
     char mUnknown8[8];
 };
 
-extern "C" int fn_801FA428(int, DbTableRef *, DbExpression *, DbColumnValue *, DbQueryResult *, int);
+extern "C" int TDbQrySetFirstRow(int, DbTableRef *, DbExpression *, DbColumnValue *, DbQueryResult *, int);
 
 #endif

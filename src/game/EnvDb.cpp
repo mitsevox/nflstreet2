@@ -4,7 +4,7 @@
 
 #include <string.h>
 
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/DbCursor.h"
 #include "game/QueryStatus.h"
 
@@ -29,7 +29,7 @@ static void _EnvDbClose(DbCursor *pObject)
 int EnvIsLocked(int index, int id)
 {
     int value;
-    int result = fn_801FCE10(0, "use \x8c select 'KLNE' into \x82 from 'NEKL' where 'DIVE' = \x85\n",
+    int result = TDbCompilePerformOp(0, "use \x8c select 'KLNE' into \x82 from 'NEKL' where 'DIVE' = \x85\n",
                              DbUserGetDb(DbUserGetId(index)), &value, id);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
@@ -40,7 +40,7 @@ int EnvIsLocked(int index, int id)
 
 void EnvSetLocked(int index, int id, int value)
 {
-    fn_801FCE10(0, "use \x8c update 'NEKL' set 'KLNE' = \x82 where 'DIVE' = \x85\n",
+    TDbCompilePerformOp(0, "use \x8c update 'NEKL' set 'KLNE' = \x82 where 'DIVE' = \x85\n",
                 DbUserGetDb(DbUserGetId(index)), value, id);
 }
 

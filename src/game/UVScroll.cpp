@@ -205,8 +205,8 @@ void UVScrollFixed(UVScrollFixedMesh *pMesh, UVScrollState *pScroll)
     }
 }
 
-int fn_80236B98(int a, float x, float y, float z);
-void fn_80236C10(int a, float *pScale, float *pDirection);
+int LLLightLoadSetTinted(int a, float x, float y, float z);
+void LLLightLoadDirectional(int a, float *pScale, float *pDirection);
 
 void DynObjDrawEnvMap(DynObj *, int)
 {
@@ -222,12 +222,12 @@ int DynObjSetupLight(LightTracker_t *pTracker, LightSource_t *pSource)
         y = pSource->mUnknown10;
         z = pSource->mUnknown14;
     }
-    int light = fn_80236B98(0, x, y, z);
+    int light = LLLightLoadSetTinted(0, x, y, z);
     if (LightTrackerUpdate(pTracker, pSource, direction, scale)) {
         scale[0] *= x;
         scale[1] *= y;
         scale[2] *= z;
-        fn_80236C10(0, scale, direction);
+        LLLightLoadDirectional(0, scale, direction);
     }
     return light;
 }

@@ -23,7 +23,7 @@ void MatTranslate(float *p);
 void QuatToEulerYZX(int *pAngles, Quat_801EB488 *pRot);
 void QuatFromEulerYZX(Quat_801EB488 *pOut, int a, int b, int c);
 void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
-void fn_80227930(float *pOut, float *pA, float *pB, float t);
+void Vec3Lerp(float *pOut, float *pA, float *pB, float t);
 void fn_802338D4(AnimPose_t *pPose, AnimSkeleton_t *pSkeleton, unsigned int flags);
 }
 
@@ -174,8 +174,8 @@ void AnimBlendPoseAngles(AnimPose_t *pOut, AnimPose_t *pA, AnimPose_t *pPrev, An
 void AnimBlendPose(AnimPose_t *pOut, AnimPose_t *pA, AnimPose_t *pPrev, AnimPose_t *pNext, float t,
                  unsigned char a)
 {
-    fn_80227930(pOut->mUnknown8, pOut->mUnknown8, pA->mUnknown8, t);
-    fn_80227930(pOut->mUnknown20, pOut->mUnknown20, pA->mUnknown20, t);
+    Vec3Lerp(pOut->mUnknown8, pOut->mUnknown8, pA->mUnknown8, t);
+    Vec3Lerp(pOut->mUnknown20, pOut->mUnknown20, pA->mUnknown20, t);
     Orient3Lerp(pOut->mUnknown36, pOut->mUnknown36, pA->mUnknown36, t);
     AnimBlendPoseAngles(pOut, pA, pPrev, pNext, t, a);
 }
@@ -246,8 +246,8 @@ void AnimBlendEntries(Object_8003DEC4 *pObject, AnimBlendList *pBlend, int count
             AnimDecodePose(&pose, pEntry, scale, pObject->mUnknown32, pContext, 0);
             pPair = &pContext->mUnknown4;
         }
-        fn_80227930(pPose->mUnknown8, pose.mUnknown8, pPose->mUnknown8, weight);
-        fn_80227930(pPose->mUnknown20, pose.mUnknown20, pPose->mUnknown20, weight);
+        Vec3Lerp(pPose->mUnknown8, pose.mUnknown8, pPose->mUnknown8, weight);
+        Vec3Lerp(pPose->mUnknown20, pose.mUnknown20, pPose->mUnknown20, weight);
         Orient3Lerp(pPose->mUnknown36, pose.mUnknown36, pPose->mUnknown36, weight);
         OrientLerpAngle(&pPose->mUnknown32, pose.mUnknown32, pPose->mUnknown32, weight);
         if (pContext != 0) {

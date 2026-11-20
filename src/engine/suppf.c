@@ -50,8 +50,8 @@ void SFILTER_unpackpfinit(Node_80279D90 *node, Params_80275F80 *params)
 
     decoder = (SndPcmPacketUnpackFilter_t *)node;
     node->m0 = SFILTER_unpackpf;
-    decoder->mStream = SNDPKTPLAYI_voicetopackethandle(fn_80274304(params->m1C));
-    decoder->mChannel = fn_80274334(params->m1C);
+    decoder->mStream = SNDPKTPLAYI_voicetopackethandle(SNDDRV_getmastervoice(params->m1C));
+    decoder->mChannel = SNDDRV_getsamplechan(params->m1C);
     decoder->mPacketLength = -1;
     decoder->mpPacket = 0;
     decoder->mPosition = 0;

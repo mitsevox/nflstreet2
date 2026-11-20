@@ -80,7 +80,7 @@ void CamDestroy(void *p);
 void CamSetZScale(void *p, float a);
 void CamFreeSetPos(void *p, float a, float b, float c);
 void CamFreeSetAngle(void *p, int a, int b, int c);
-void fn_801CD2A4(void);
+void FontResetRenderState(void);
 void GlibSwapBuffers(void);
 void GlibSyncFrame(void);
 void GlibSetZBufferEnable(int a);
@@ -131,8 +131,8 @@ void fn_802212C8(void);
 void fn_80222220(void);
 void fn_80223460(void);
 void fn_80225654(void);
-void fn_802363B0(Viewport_t *pObject);
-void fn_802363E0(Viewport_t *pObject);
+void LLLightAttachViewport(Viewport_t *pObject);
+void LLLightDetachViewport(Viewport_t *pObject);
 int LLFogEnable(int a);
 }
 
@@ -210,7 +210,7 @@ int UISGameDrawObj(int a, int b)
     UISGameSetDrawMode(0);
     TeamLogoUpdatePending();
     GlibSetZBufferEnable(0);
-    fn_801CD2A4();
+    FontResetRenderState();
     if (FELoopIsMainFEActive()) {
         UIGLibraryProcess(UIGLibraryGetGlobal(1));
     }
@@ -636,7 +636,7 @@ void UISGameInit(void)
             UISGameRefKey(11);
             UISGameRefKey(12);
             UISGameRefKey(13);
-            fn_802363B0(_UISGame_pMainVpt);
+            LLLightAttachViewport(_UISGame_pMainVpt);
         }
         UISHeldObjEnable(1);
     } else if (InGameIsPlaying()) {
@@ -728,7 +728,7 @@ void UISGameShutdown(void)
 
     if (FELoopIsMainFEActive()) {
         if (!flag) {
-            fn_802363E0(_UISGame_pMainVpt);
+            LLLightDetachViewport(_UISGame_pMainVpt);
         }
     } else if (InGameIsPlaying()) {
         PlyrNameTagShutdown();

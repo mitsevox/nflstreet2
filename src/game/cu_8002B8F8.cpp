@@ -1,4 +1,4 @@
-#include "game/fn_8022781C.h"
+#include "game/Vec2Distance.h"
 #include "game/ScreenTransition.h"
 #include "game/fn_8009D990.h"
 /* Replay camera and replay recorder of the in-game loop (Xbox data string
@@ -24,7 +24,7 @@
 #include "game/MemCardUtil.h"
 #include <string.h>
 #include "engine/dslist.h"
-#include "game/fn_80227638.h"
+#include "game/Vec2Add.h"
 
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #define CLAMP(x, lo, hi) ((x) < (lo) ? (lo) : ((x) > (hi) ? (hi) : (x)))
@@ -215,9 +215,9 @@ void RemapCopyTable(int a, int b);
 int SysGetSystemTime(void);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 void fn_802196B4(void *p, int a, int b, int c, float *pD, unsigned char e);
-void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
-float fn_8022785C(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
-void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
+void Vec2Rotate(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
+float Vec3Distance(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
+void Vec3Lerp(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 int SyncTimeGetGameTime(void);
 
 /* Animation state and animation of each player ([team][index]), filled by
@@ -2075,11 +2075,11 @@ extern "C" void fn_8002EC28(void)
                 float t = fn_80030D00();
 
                 if (pA == 0) {
-                    fn_80227930(&lbl_8030660C.mPos, &p->mpUnknown4->mUnknown4, &lbl_803EC620->mUnknown4, t);
+                    Vec3Lerp(&lbl_8030660C.mPos, &p->mpUnknown4->mUnknown4, &lbl_803EC620->mUnknown4, t);
                 } else if (pB == 0) {
-                    fn_80227930(&lbl_8030660C.mPos, &lbl_803EC620->mUnknown4, &p->mpUnknown4->mUnknown4, t);
+                    Vec3Lerp(&lbl_8030660C.mPos, &lbl_803EC620->mUnknown4, &p->mpUnknown4->mUnknown4, t);
                 } else {
-                    fn_80227930(&lbl_8030660C.mPos, &pB->mpUnknown4->mUnknown4, &pA->mpUnknown4->mUnknown4, t);
+                    Vec3Lerp(&lbl_8030660C.mPos, &pB->mpUnknown4->mUnknown4, &pA->mpUnknown4->mUnknown4, t);
                 }
             } else {
                 Vector_80039F5C *pFocus = &lbl_8030660C.mPos;
@@ -2122,7 +2122,7 @@ extern "C" void fn_8002ED48(Point_8017886C *pOut, unsigned int dir, float speed)
         pOut->mY = speed;
         break;
     }
-    fn_80227384(pOut, pOut, -lbl_803EC61C);
+    Vec2Rotate(pOut, pOut, -lbl_803EC61C);
 }
 
 extern "C" Block_80170E64 *fn_8002EDE8(GameCamera_t *pCamera, float *pDist, unsigned char *pFound)
@@ -2142,7 +2142,7 @@ extern "C" Block_80170E64 *fn_8002EDE8(GameCamera_t *pCamera, float *pDist, unsi
         *pFound = 0;
         if (fn_80030C70(0, 0) == 0) {
             p = BallGetModel(BallGetCurrent());
-            dist = fn_8022781C(&p->mUnknown4, &lbl_8030660C.mPos);
+            dist = Vec2Distance(&p->mUnknown4, &lbl_8030660C.mPos);
             if (dist < *pDist) {
                 *pDist = dist;
                 *pFound = 1;
@@ -2209,7 +2209,7 @@ extern "C" void fn_8002EED0(void)
 
 extern "C" void fn_8002F01C(GameCamera_t *pCamera, Type_8030660C *pTarget)
 {
-    float dist = fn_8022785C(&pTarget->mPos, (Vector_80039F5C *)pCamera->mHeader.mUnknown04);
+    float dist = Vec3Distance(&pTarget->mPos, (Vector_80039F5C *)pCamera->mHeader.mUnknown04);
     float overX = fabsf(pCamera->mHeader.mUnknown04[0]) - (fn_80178A08() + lbl_803EC640 + lbl_803EC63C);
     float overY = fabsf(pCamera->mHeader.mUnknown04[1]) - (fn_80178A44() + lbl_803EC644 + lbl_803EC638);
     float overZ = fabsf(pCamera->mHeader.mUnknown04[2]) - 9.2f;
@@ -2270,7 +2270,7 @@ extern "C" void fn_8002F26C(GameCamera_t *pCamera, unsigned int input, float amo
                 if (dist >= 0.25f || clamped.mX != pTarget->mUnknown4.mX
                     || clamped.mY != pTarget->mUnknown4.mY) {
                     fn_8002ED48(&offset, input, amount * 0.15f);
-                    fn_80227638(&lbl_8030660C.mPos, &lbl_8030660C.mPos, &offset);
+                    Vec2Add(&lbl_8030660C.mPos, &lbl_8030660C.mPos, &offset);
                 } else {
                     lbl_803EC620 = pTarget;
                     lbl_803EC624 = SysGetSystemTime();
@@ -2279,7 +2279,7 @@ extern "C" void fn_8002F26C(GameCamera_t *pCamera, unsigned int input, float amo
                 }
             } else {
                 fn_8002ED48(&offset, input, amount * 0.15f);
-                fn_80227638(&lbl_8030660C.mPos, &lbl_8030660C.mPos, &offset);
+                Vec2Add(&lbl_8030660C.mPos, &lbl_8030660C.mPos, &offset);
                 lbl_8030660C.mPos.mX = CLAMP(lbl_8030660C.mPos.mX, -fn_80178A08(), fn_80178A08());
                 lbl_8030660C.mPos.mY = CLAMP(lbl_8030660C.mPos.mY, -fn_80178A44(), fn_80178A44());
             }
@@ -2289,7 +2289,7 @@ extern "C" void fn_8002F26C(GameCamera_t *pCamera, unsigned int input, float amo
                 step = -step;
             }
             fn_8002ED48(&offset, input, step);
-            fn_80227638(&lbl_8030660C.mPos, &lbl_8030660C.mPos, &offset);
+            Vec2Add(&lbl_8030660C.mPos, &lbl_8030660C.mPos, &offset);
             lbl_803EC620 = 0;
             ReplayCursorSetVisible(1);
         }

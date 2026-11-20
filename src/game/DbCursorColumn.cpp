@@ -50,7 +50,7 @@ void DbCursorSetValue(DbCursor *pCursor, int column, int value)
     expression.Set(6, ((unsigned long long)table << 32) | keyColumn, 3, key[0].mValue);
     tables[0].Set(pCursor->mUnknown8);
     tables[1].Set(-1);
-    fn_801FA428(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
+    TDbQrySetFirstRow(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
 }
 
 void DbCursorSetInt(void *pObject, int column, int value)
@@ -75,7 +75,7 @@ void DbCursorSetInt(void *pObject, int column, int value)
     expression.Set(6, ((unsigned long long)table << 32) | keyColumn, 3, key[0].mValue);
     tables[0].Set(pCursor->mUnknown8);
     tables[1].Set(-1);
-    fn_801FA428(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
+    TDbQrySetFirstRow(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
 }
 
 void DbCursorSetFloat(DbCursor *pCursor, int column, float value)
@@ -104,7 +104,7 @@ void DbCursorSetFloat(DbCursor *pCursor, int column, float value)
     expression.Set(6, ((unsigned long long)table << 32) | keyColumn, 3, key[0].mValue);
     tables[0].Set(pCursor->mUnknown8);
     tables[1].Set(-1);
-    fn_801FA428(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
+    TDbQrySetFirstRow(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
 }
 
 void DbCursorSetString(void *pObject, int column, char *pText, int length)
@@ -129,7 +129,7 @@ void DbCursorSetString(void *pObject, int column, char *pText, int length)
     expression.Set(6, ((unsigned long long)table << 32) | keyColumn, 3, key[0].mValue);
     tables[0].Set(pCursor->mUnknown8);
     tables[1].Set(-1);
-    fn_801FA428(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
+    TDbQrySetFirstRow(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
 }
 
 }

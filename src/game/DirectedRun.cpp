@@ -8,7 +8,7 @@
 #include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 #include <string.h>
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/SyncRandGetRange.h"
 #include "game/fn_800B65A0.h"
 
@@ -28,7 +28,7 @@ void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 int fn_8011F1CC(void);
 int DirectedRunEnter(Object_80039F5C *p);
 int DirectedRunUpdate(Object_80039F5C *p);
@@ -162,8 +162,8 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
     {
         Vector_80039F5C delta;
 
-        fn_80227690(&delta, &p->mMotion.mPos, &state->mUnknown0);
-        if (fn_802270A4(&delta) > state->mUnknown8) {
+        Vec2Sub(&delta, &p->mMotion.mPos, &state->mUnknown0);
+        if (Vec2Magnitude(&delta) > state->mUnknown8) {
             return 1;
         }
     }
@@ -184,7 +184,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
         if (!(position.mZ >= 3.3f)) {
             Vector_80039F5C direction;
             BallGetVelocity(pBall, &direction);
-            fn_80227690(&position, &p->mMotion.mPos, &position);
+            Vec2Sub(&position, &p->mMotion.mPos, &position);
             int directionAngle = fn_801CFE40(direction.mY, direction.mX);
             int deltaAngle = fn_801CFE40(position.mY, position.mX);
             if (MathAngleDiff(directionAngle, deltaAngle) <= 0x155554

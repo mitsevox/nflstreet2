@@ -15,7 +15,7 @@
 #include "game/PlayBookTeam.h"
 #include <string.h>
 #include "game/fn_80178D18.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/fn_800B65A0.h"
 #include "game/Record_800B15FC.h"
 #include "game/Input_800B6D34.h"
@@ -74,10 +74,10 @@ int fn_80177F70(void);
 void fn_800C146C(Vec2_t *, Object_80039F5C *, Object_80039F5C *, int, int, int, int, int);
 int TutorialIsActive(void);
 float fn_80178A2C(void);
-void fn_80227538(Vec2_t *, int, float);
+void Vec2FromAngle(Vec2_t *, int, float);
 void fn_800FD68C(Message_800F01CC *, void *, void *);
 void fn_800F00D4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
-void fn_80227690(void *, void *, void *);
+void Vec2Sub(void *, void *, void *);
 int fn_80104688(Object_80039F5C *);
 void fn_801024FC(Object_80039F5C *, int, int, int, int);
 int QbPassHoldOrRun(Object_80039F5C *, float *, float *, unsigned char *);
@@ -143,8 +143,8 @@ void QbPassScoreDirections(Object_80039F5C *p, float *values)
         for (unsigned short i = 0; i < n; ++i) {
             Object_80039F5C *other = PlyrGet(fn_80178320(), i);
             float delta[2];
-            fn_80227690(delta, &other->mMotion.mPos, &p->mMotion.mPos);
-            if (!(fn_802270A4(delta) >= 3.0f)) {
+            Vec2Sub(delta, &other->mMotion.mPos, &p->mMotion.mPos);
+            if (!(Vec2Magnitude(delta) >= 3.0f)) {
                 int angle = fn_801CFE40(delta[1], delta[0]);
                 float *cost = &values[((angle + 0x100000) >> 21) & 7];
                 *cost += 4.0f;
@@ -537,7 +537,7 @@ int QbPassUpdate(Object_80039F5C *player) {
                     if (selected) {
                         if (selected->mpState->mId == 21) {
                             Vec2_t offset;
-                            fn_80227538(&offset, selected->mMotion.mFacing, 10.0f);
+                            Vec2FromAngle(&offset, selected->mMotion.mFacing, 10.0f);
                             offset.mX += selected->mMotion.mPos.mX;
                             offset.mY += selected->mMotion.mPos.mY;
                             Message_800F01CC message;
@@ -549,8 +549,8 @@ int QbPassUpdate(Object_80039F5C *player) {
                         }
                         Vec2_t diff;
 
-                        fn_80227690(&diff, &selected->mMotion.mPos, &player->mMotion.mPos);
-                        fn_802270A4(&diff);
+                        Vec2Sub(&diff, &selected->mMotion.mPos, &player->mMotion.mPos);
+                        Vec2Magnitude(&diff);
                         if (TutorialIsActive())
                             action = 5;
                         fn_801024FC(player, 0, selected->mIdBytes[1], action, fn_80104688(player));
@@ -694,7 +694,7 @@ int QbPassCarrierWillCross(void)
         if ((p->mFlags & 0x200000) && (p->mFlags & 0x8000) &&
             !(p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed < 0.4f))
             return 1;
-        fn_80227538(&step, p->mMotion.mUnknown32, p->mMotion.mUnknown28 * 40.0f);
+        Vec2FromAngle(&step, p->mMotion.mUnknown32, p->mMotion.mUnknown28 * 40.0f);
         ahead.mX = step.mX + p->mMotion.mPos.mX;
         ahead.mY = step.mY + p->mMotion.mPos.mY;
         return ahead.mY < fn_80177FE0().mY;

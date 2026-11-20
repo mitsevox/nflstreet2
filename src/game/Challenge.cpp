@@ -12,7 +12,7 @@
 #include "game/Challenge.h"
 #include "game/Object_8017886C.h"
 #include <string.h>
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 extern "C" {
 
@@ -753,7 +753,7 @@ void ChalSetTournamentWon(int value)
     if (handle != -1) {
         DbCursorSetInt(ChalGetInfoCursor(handle), 0x4D574943, value);
         if (value) {
-            fn_801FCE10(0, "use \x8c update 'TSPU' set 'FNWU' = \x82\n", handle, 1);
+            TDbCompilePerformOp(0, "use \x8c update 'TSPU' set 'FNWU' = \x82\n", handle, 1);
             GameOptionsSet(20, 1);
             UserProfileAddRecordRow(UserProfileFindIndex(index));
         }
@@ -777,7 +777,7 @@ int ChalGetIdInGroup(int a, signed char index)
 {
     int id = 0;
 
-    if (fn_801FCE10(0, "use 'TATS' select 'DIHC' into \x82 from 'LAHC' where 'DFHC' = \x85 and 'ROHC' = \x80\n", &id, a, index) != 0) {
+    if (TDbCompilePerformOp(0, "use 'TATS' select 'DIHC' into \x82 from 'LAHC' where 'DFHC' = \x85 and 'ROHC' = \x80\n", &id, a, index) != 0) {
         return 0;
     }
     return id;
@@ -787,7 +787,7 @@ int ChalGetGearReward(int id)
 {
     int gear = 0;
 
-    if (fn_801FCE10(0, "use 'TATS' select 'GGHC' into \x85 from 'GUHC' where 'IGHC' = \x84\n", &gear, id) == 0) {
+    if (TDbCompilePerformOp(0, "use 'TATS' select 'GGHC' into \x85 from 'GUHC' where 'IGHC' = \x84\n", &gear, id) == 0) {
         gear = fn_8007C46C(gear);
     } else {
         gear = 0;

@@ -6,7 +6,7 @@
 #include "game/fn_80061AD4.h"
 #include "game/StoryTeam.h"
 #include "game/GameOptions.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/FELoop.h"
 
 /* Teams and round of the current match, set by fn_80061520. */
@@ -802,14 +802,14 @@ int fn_80061D14(void)
 
 void fn_80061D64(int index)
 {
-    fn_801FCE10(0,
+    TDbCompilePerformOp(0,
                 "use \x8c insert into 'LTFN' set 'TNIW' = 2 and 'LVLT' = 0 and '1DIT' = 1 and '2DIT' = 2\n",
                 DbUserGetDb(DbUserGetId(index)));
 }
 
 void fn_80061DA0(int index)
 {
-    fn_801FCE10(0, "use \x8c delete from 'LTFN' where ('TNIW' = 2)\n", DbUserGetDb(DbUserGetId(index)));
+    TDbCompilePerformOp(0, "use \x8c delete from 'LTFN' where ('TNIW' = 2)\n", DbUserGetDb(DbUserGetId(index)));
 }
 
 void fn_80061DDC(void)
@@ -821,7 +821,7 @@ int fn_80061DE8(void)
 {
     int count = 0;
 
-    fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LTFN'\n", DbUserGetDb(DbUserGetCurrent()), &count);
+    TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from 'LTFN'\n", DbUserGetDb(DbUserGetCurrent()), &count);
     return count;
 }
 }

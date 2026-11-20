@@ -12,7 +12,7 @@ int SNDCTRL_highpass(int handle, int value)
     if (handle >= 0) {
         index = -1;
         while (iSNDpatchkey(handle, &index)) {
-            fn_80274E24(index, value);
+            SNDPLATFORM_highpass(index, value);
         }
     }
     return handle;

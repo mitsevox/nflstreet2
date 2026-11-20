@@ -7,7 +7,7 @@
 #include "game/Ball.h"
 #include "game/CollideContacts.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/SyncRandGetRange.h"
 #include "game/LevelSurface.h"
 #include "game/SyncStateRegister.h"
@@ -35,7 +35,7 @@ void BallStateMove(Ball_t *pBall, float step);
 void BallStateChange(Ball_t *pBall, int a, int b);
 int BallStateGet(Ball_t *pBall, int *pOut);
 void BallHitPlayerPart(Ball_t *pBall, Object_80039F5C *p, CollideContact_t *pContact, unsigned char sub, Vector_80039F5C *pPos);
-void fn_80227538(Vector_80039F5C *pVector, int angle, float length);
+void Vec2FromAngle(Vector_80039F5C *pVector, int angle, float length);
 float BallSweepToPart(CollideObject_t *pA, CollideObject_t *pB, unsigned char sub, Ball_t *pBall, Vector_80039F5C *pPos, unsigned char *pHit);
 CollideSet_t *StatcollGetSet(void);
 void ParticlesAddBallEvent(int a, Ball_t *pBall);
@@ -47,8 +47,8 @@ int MemFill(void *pDest, int size, int value, int width);
 void QuatIdentity(Quat_801EB488 *pRot);
 void QuatMultiply(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB);
 void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
-void fn_8022765C(float *pOut, float *pA, float *pB);
-void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
+void Vec3Add(float *pOut, float *pA, float *pB);
+void Vec3Mat33Mul(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void *SyncStateGetData(void *pHandle);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
@@ -753,12 +753,12 @@ void BallUpdateCollRecord(CollideObject_t *pRecord)
         MatSetStack(3);
         MatResetStack();
         MatRotQuat(&pBall->mState.mUnknown18);
-        fn_80227C2C(&axis, &axis);
+        Vec3Mat33Mul(&axis, &axis);
         pSub->mUnknown0 = pBall->mState.mPos.mX;
         pSub->mUnknown4 = pBall->mState.mPos.mY;
         pSub->mUnknown8 = pBall->mState.mPos.mZ;
-        fn_8022765C(&pSub->mUnknown10, &pPos->mX, &axis.mX);
-        fn_802276B4(&pSub->mUnknown20, &pPos->mX, &axis.mX);
+        Vec3Add(&pSub->mUnknown10, &pPos->mX, &axis.mX);
+        Vec3Sub(&pSub->mUnknown20, &pPos->mX, &axis.mX);
     }
     if (!(pRecord->mUnknown2C & 2)) {
         pRecord->mUnknown18 = 0.8333334f;
@@ -896,7 +896,7 @@ void BallKickUp(Ball_t *pBall, int decay)
     if (fabsf(vector.mX) < 1e-7f && fabsf(vector.mY) < 1e-7f) {
         unsigned char degrees = SyncRandGetRange(0, 360);
 
-        fn_80227538(&vector, (int)(degrees * 46603.38f), 0.075f);
+        Vec2FromAngle(&vector, (int)(degrees * 46603.38f), 0.075f);
     }
     BallSetVelocity(pBall, &vector);
 }

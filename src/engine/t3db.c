@@ -1,6 +1,9 @@
+/* T3DB database core: creating, loading, saving and destroying the game's databases, the default-database
+   stack, table and index management, and the query entry points (select, retrieve, set, update, delete)
+   that the game's database modules call. */
 #include "engine/t3db_index.h"
-#include "engine/fn_801F8D60.h"
-#include "engine/fn_801F9134.h"
+#include "engine/TDbCreate.h"
+#include "engine/TDbLoad.h"
 typedef struct TDbDefault_803E944C {
     int mDb;
     int mTbl;
@@ -191,38 +194,38 @@ extern void _TDbMemPoolDeinit(TDbPool_803E9654 *pPool);
 extern int TDbExtMemInit(int a, int size, int *pHeap);
 extern void TDbExtMemShutdown(int heap);
 extern int TDbExtMemAlloc(int heap, int size, void *ppOut);
-extern int fn_801F9014(int db);
-extern int fn_801F95C8(void);
+extern int TDbExists(int db);
+extern int TDbTblDefaultDbGet(void);
 extern int _TDbIOSaveDatabase(TDbDb_801F88F0 *pDb, int a, int b);
 extern TDbTbl_801F88F0 *_TDbTblFindTable(TDbDb_801F88F0 *pDb, int tbl);
-void fn_801F93AC(TDbAsync_801F9228 *pReq);
+void _TDbAsyncRun(TDbAsync_801F9228 *pReq);
 extern int _TDbExprPrepare(TDbTerm_801FA4B0 *pTerm, int *pOut, TDbTbl_801F88F0 **ppTbl, int b, int c);
 extern void _TDbExprTest(int a, TDbRowInfo_801FA290 *pInfo, TDbQrySel_801F9858 *pSel, TDbQryRow_801F9858 *pRow);
-extern int fn_80208094(TDbQryBuf_801F9858 *pQry);
-extern int fn_80209E40(TDbQryBuf_801F9858 *pQry, int out);
-extern void fn_8020A3A0(TDbQryBuf_801F9858 *pQry, int out);
-extern int fn_8020AD1C(int a, TDbQryBuf_801F9858 *pQry, int d, int mode, TDbResult_801F9718 *pRes);
-extern int fn_8020AE88(int a, TDbQryBuf_801F9858 *pQry, TDbSelCol_801FA4B0 *pCols, int *pHandles, TDbResult_801F9718 *pRes);
+extern int _TDbQryPrepComplex(TDbQryBuf_801F9858 *pQry);
+extern int _TDbQryPrepColLits(TDbQryBuf_801F9858 *pQry, int out);
+extern void _TDbQryFillToColLits(TDbQryBuf_801F9858 *pQry, int out);
+extern int _TDbQrySetRow(int a, TDbQryBuf_801F9858 *pQry, int d, int mode, TDbResult_801F9718 *pRes);
+extern int _TDbQryUpdateExpr(int a, TDbQryBuf_801F9858 *pQry, TDbSelCol_801FA4B0 *pCols, int *pHandles, TDbResult_801F9718 *pRes);
 extern void _TDbExprFree(int a);
-extern int fn_802075F4(TDbQryBuf_801F9858 *pQry, int a);
-extern int fn_80207988(TDbQryBuf_801F9858 *pQry, int a);
-extern int fn_80207E24(TDbQryBuf_801F9858 *pQry, int a, int b);
+extern int _TDbQrySyncStart(TDbQryBuf_801F9858 *pQry, int a);
+extern int _TDbQrySyncSkip(TDbQryBuf_801F9858 *pQry, int a);
+extern int _TDbQryPrepSimple(TDbQryBuf_801F9858 *pQry, int a, int b);
 extern int _TDbIndexDestroy(TDbIdx_801F9E84 *pIdx);
-extern int fn_8020840C(int a, int b, int c, int d, int ref, TDbResult_801F9718 *pRes);
-extern int fn_802088A8(TDbQry_801F89B8 *pQry);
-extern int fn_802088FC(TDbQry_801F89B8 *pQry);
+extern int _TDbQryCreate(int a, int b, int c, int d, int ref, TDbResult_801F9718 *pRes);
+extern int _TDbQryGetCount(TDbQry_801F89B8 *pQry);
+extern int _TDbQryRetrieve(TDbQry_801F89B8 *pQry);
 extern int _TDbQryCreateTbl(TDbDb_801F88F0 *pDb, int tbl, TDbQry_801F89B8 *pQry, int a, int b);
-extern int fn_8020A660(int a, TDbQryBuf_801F9858 *pQry, int d, int e, int f, TDbResult_801F9718 *pRes);
-extern int fn_8020B094(int a, int b, int c, int d, int e, int f, int g, TDbResult_801F9718 *pRes);
+extern int _TDbQryUpdateWithHandler(int a, TDbQryBuf_801F9858 *pQry, int d, int e, int f, TDbResult_801F9718 *pRes);
+extern int _TDbQryColStats(int a, int b, int c, int d, int e, int f, int g, TDbResult_801F9718 *pRes);
 extern int _TDbTblResolveColRef(TDbTbl_801F88F0 *pTbl, int col);
 extern int _TDbTblInsertRow(TDbTbl_801F88F0 *pTbl, TDbCol_801F9718 *pCols, TDbResult_801F9718 *pRes);
 extern int _TDbTblRowCopyTrig(TDbTbl_801F88F0 *pSrc, TDbTbl_801F88F0 *pDst, TDbResult_801F9718 *pRes);
-extern int fn_80207B8C(int a, int b, int c, TDbQryBuf_801F9858 *pQry);
-extern void fn_80207DB4(TDbQryBuf_801F9858 *pQry);
-extern int fn_80208204(int a, TDbQryBuf_801F9858 *pQry, TDbResult_801F9718 *pRes);
-extern int fn_8020A908(int a, TDbQryBuf_801F9858 *pQry, int d, TDbTbl_801F88F0 *pTbl, TDbResult_801F9718 *pRes);
+extern int _TDbQryPrepSearch(int a, int b, int c, TDbQryBuf_801F9858 *pQry);
+extern void _TDbQryPrepFree(TDbQryBuf_801F9858 *pQry);
+extern int _TDbQryDeleteRow(int a, TDbQryBuf_801F9858 *pQry, TDbResult_801F9718 *pRes);
+extern int _TDbQryRowCopyTrig(int a, TDbQryBuf_801F9858 *pQry, int d, TDbTbl_801F88F0 *pTbl, TDbResult_801F9718 *pRes);
 extern int _TDbIOLoadDatabase(TDbDb_801F88F0 *pDb, void *pFile, int a, int b, int c);
-extern int fn_802087D4(TDbQry_801F89B8 *pQry);
+extern int _TDbQryDestroy(TDbQry_801F89B8 *pQry);
 extern int _TDbTblDestroy(TDbTbl_801F88F0 *pTbl);
 extern void TDbExtMemFree(int heap, void *p, int size);
 extern int lbl_803EBE84;
@@ -256,7 +259,7 @@ static inline void NotifyEnd_801F8A54(void)
 }
 
 /* Finds the open database with this id, in any state. */
-/* FAKEMATCH: inline helper chosen for codegen; with the search loop written in place fn_801F9228 and fn_801F92EC give 95.71% and 95.62% */
+/* FAKEMATCH: inline helper chosen for codegen; with the search loop written in place TDbLoadAsync and TDbSaveAsync give 95.71% and 95.62% */
 static inline TDbDb_801F88F0 *LookupDb_801F9228(int db)
 {
     TDbDb_801F88F0 *pDb;
@@ -284,7 +287,7 @@ static inline TDbDb_801F88F0 *FindDb_801F88F0(int db)
     return pDb;
 }
 
-static int fn_801F8878(int tbl)
+static int _TDbTblDefaultDbFind(int tbl)
 {
     int i;
     int db;
@@ -309,14 +312,14 @@ static int fn_801F8878(int tbl)
     return db;
 }
 
-int fn_801F88F0(int db, int tbl, TDbDb_801F88F0 **ppDb, TDbTbl_801F88F0 **ppTbl)
+int _TDbTblFindDbTable(int db, int tbl, TDbDb_801F88F0 **ppDb, TDbTbl_801F88F0 **ppTbl)
 {
     TDbDb_801F88F0 *pDb;
     int err;
 
     err = 0;
     if (db == 0) {
-        db = fn_801F8878(tbl);
+        db = _TDbTblDefaultDbFind(tbl);
     }
     for (pDb = lbl_803EBE88; pDb != 0; pDb = pDb->pNext) {
         if (db == pDb->mId) {
@@ -342,7 +345,7 @@ int fn_801F88F0(int db, int tbl, TDbDb_801F88F0 **ppDb, TDbTbl_801F88F0 **ppTbl)
     return err;
 }
 
-static int fn_801F89B8(void)
+static int _TDbQryRefGet(void)
 {
     TDbQry_801F89B8 *pHead;
     TDbQry_801F89B8 *pQry;
@@ -366,7 +369,7 @@ static int fn_801F89B8(void)
     return ref;
 }
 
-void fn_801F8A0C(TDbInitParms_801F8A0C *pParms)
+void TDbSetDefaultInitParms(TDbInitParms_801F8A0C *pParms)
 {
     if (pParms != 0) {
         pParms->mHeapSize = 0;
@@ -382,7 +385,7 @@ void fn_801F8A0C(TDbInitParms_801F8A0C *pParms)
     }
 }
 
-int fn_801F8A54(TDbInitParms_801F8A0C *pParms)
+int TDbInit(TDbInitParms_801F8A0C *pParms)
 {
     TDbStrFuncs_801F8A54 *pFuncs;
     int err;
@@ -429,11 +432,11 @@ int fn_801F8A54(TDbInitParms_801F8A0C *pParms)
     return err;
 }
 
-void fn_801F8C64(void)
+void TDbShutdown(void)
 {
     if (lbl_803EBE84 != -1) {
         while (lbl_803EBE88 != 0) {
-            fn_801F8EEC(lbl_803EBE88->mId);
+            TDbDestroy(lbl_803EBE88->mId);
         }
         _TDbMemPoolDeinit(&lbl_803E9670);
         _TDbMemPoolDeinit(&lbl_803E9654);
@@ -444,7 +447,7 @@ void fn_801F8C64(void)
     }
 }
 
-int fn_801F8CE8(int *pDb)
+int TDbFindUnusedDbId(int *pDb)
 {
     unsigned char i;
 
@@ -453,7 +456,7 @@ int fn_801F8CE8(int *pDb)
     }
     for (i = 0; i < 127; i++) {
         *pDb = i | 0xFFFFFF00;
-        if (fn_801F9014(*pDb) == 5) {
+        if (TDbExists(*pDb) == 5) {
             return 0;
         }
     }
@@ -461,7 +464,7 @@ int fn_801F8CE8(int *pDb)
     return 5;
 }
 
-int fn_801F8D60(int db, int size)
+int TDbCreate(int db, int size)
 {
     TDbDb_801F88F0 *pFind;
     TDbDb_801F88F0 *pDb;
@@ -506,7 +509,7 @@ int fn_801F8D60(int db, int size)
     return err;
 }
 
-int fn_801F8EEC(int db)
+int TDbDestroy(int db)
 {
     TDbDb_801F88F0 *pDb;
     TDbDb_801F88F0 *pPrev;
@@ -523,7 +526,7 @@ int fn_801F8EEC(int db)
         for (pQry = lbl_803EBE90; pQry != 0; pQry = pNextQry) {
             pNextQry = pQry->pNext;
             if (pDb == pQry->pDb) {
-                err = fn_802087D4(pQry);
+                err = _TDbQryDestroy(pQry);
                 if (err != 0) {
                     break;
                 }
@@ -555,7 +558,7 @@ int fn_801F8EEC(int db)
     return err;
 }
 
-int fn_801F9014(int db)
+int TDbExists(int db)
 {
     int err;
 
@@ -566,14 +569,14 @@ int fn_801F9014(int db)
     return err;
 }
 
-int fn_801F9064(int db, int file, int a, int b, int c)
+int TDbLoadFromFile(int db, int file, int a, int b, int c)
 {
     TDbDb_801F88F0 *pDb;
     TDbFile_801F9064 desc;
     int err;
 
     if (db == 0) {
-        pDb = FindDb_801F88F0(fn_801F95C8());
+        pDb = FindDb_801F88F0(TDbTblDefaultDbGet());
     } else {
         pDb = FindDb_801F88F0(db);
     }
@@ -587,7 +590,7 @@ int fn_801F9064(int db, int file, int a, int b, int c)
     return err;
 }
 
-int fn_801F9134(int db, int a, int b, int c)
+int TDbLoad(int db, int a, int b, int c)
 {
     TDbDb_801F88F0 *pDb;
     int err;
@@ -606,7 +609,7 @@ int fn_801F9134(int db, int a, int b, int c)
     return err;
 }
 
-int fn_801F91AC(int db, int a, int b)
+int TDbSave(int db, int a, int b)
 {
     TDbDb_801F88F0 *pDb;
     int err;
@@ -621,7 +624,7 @@ int fn_801F91AC(int db, int a, int b)
     return err;
 }
 
-void fn_801F9228(TDbAsync_801F9228 *pReq, void (*pStart)(TDbJob_801F9228 *pJob), int a, int b)
+void TDbLoadAsync(TDbAsync_801F9228 *pReq, void (*pStart)(TDbJob_801F9228 *pJob), int a, int b)
 {
     TDbJob_801F9228 job;
     TDbDb_801F88F0 *pDb;
@@ -632,7 +635,7 @@ void fn_801F9228(TDbAsync_801F9228 *pReq, void (*pStart)(TDbJob_801F9228 *pJob),
     job.mUnk0 = 0;
     job.mUnk14 = a;
     job.mUnk4 = b;
-    job.pRun = fn_801F93AC;
+    job.pRun = _TDbAsyncRun;
     *pReq->pResult = 0x2E;
     pReq->mIsLoad = 1;
     pDb = LookupDb_801F9228(pReq->mDb);
@@ -646,7 +649,7 @@ void fn_801F9228(TDbAsync_801F9228 *pReq, void (*pStart)(TDbJob_801F9228 *pJob),
     }
 }
 
-void fn_801F92EC(TDbAsync_801F9228 *pReq, void (*pStart)(TDbJob_801F9228 *pJob), int a, int b)
+void TDbSaveAsync(TDbAsync_801F9228 *pReq, void (*pStart)(TDbJob_801F9228 *pJob), int a, int b)
 {
     TDbJob_801F9228 job;
     TDbDb_801F88F0 *pDb;
@@ -657,7 +660,7 @@ void fn_801F92EC(TDbAsync_801F9228 *pReq, void (*pStart)(TDbJob_801F9228 *pJob),
     job.mUnk0 = 0;
     job.mUnk14 = a;
     job.mUnk4 = b;
-    job.pRun = fn_801F93AC;
+    job.pRun = _TDbAsyncRun;
     *pReq->pResult = 0x2E;
     pReq->mIsLoad = 0;
     pDb = LookupDb_801F9228(pReq->mDb);
@@ -671,15 +674,15 @@ void fn_801F92EC(TDbAsync_801F9228 *pReq, void (*pStart)(TDbJob_801F9228 *pJob),
     }
 }
 
-void fn_801F93AC(TDbAsync_801F9228 *pReq)
+void _TDbAsyncRun(TDbAsync_801F9228 *pReq)
 {
     int err;
 
     *pReq->pResult = 0x2D;
     if (pReq->mIsLoad != 0) {
-        err = fn_801F9134(pReq->mDb, pReq->mUnkC, pReq->mUnk4, pReq->mUnk10);
+        err = TDbLoad(pReq->mDb, pReq->mUnkC, pReq->mUnk4, pReq->mUnk10);
     } else {
-        err = fn_801F91AC(pReq->mDb, pReq->mUnkC, pReq->mUnk10);
+        err = TDbSave(pReq->mDb, pReq->mUnkC, pReq->mUnk10);
     }
     *pReq->pResult = err;
     if (pReq->pDone != 0) {
@@ -687,7 +690,7 @@ void fn_801F93AC(TDbAsync_801F9228 *pReq)
     }
 }
 
-int fn_801F9430(int db, int *pTbls, int *pDbs)
+int TDbTblDefaultDbPush(int db, int *pTbls, int *pDbs)
 {
     unsigned int i;
     int err;
@@ -721,7 +724,7 @@ int fn_801F9430(int db, int *pTbls, int *pDbs)
     return err;
 }
 
-int fn_801F9574(void)
+int TDbTblDefaultDbPop(void)
 {
     unsigned int i;
     unsigned int n;
@@ -744,7 +747,7 @@ int fn_801F9574(void)
     return err;
 }
 
-int fn_801F95C8(void)
+int TDbTblDefaultDbGet(void)
 {
     int i;
     int db;
@@ -761,14 +764,14 @@ int fn_801F95C8(void)
     return db;
 }
 
-int fn_801F9608(int db, int tbl, unsigned char *pFlag, unsigned short *pValue)
+int TDbTblInfoGetFixedRows(int db, int tbl, unsigned char *pFlag, unsigned short *pValue)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
     unsigned short value;
     int err;
 
-    err = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    err = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     if (err == 0) {
         if (pTbl->mFlags & 8) {
             *pFlag = 1;
@@ -784,14 +787,14 @@ int fn_801F9608(int db, int tbl, unsigned char *pFlag, unsigned short *pValue)
     return err;
 }
 
-int fn_801F967C(int db, int tbl)
+int TDbTblDestroy(int db, int tbl)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
     int err;
 
     if (db == 0) {
-        db = fn_801F95C8();
+        db = TDbTblDefaultDbGet();
     }
     pDb = FindDb_801F88F0(db);
     if (pDb != 0) {
@@ -807,7 +810,7 @@ int fn_801F967C(int db, int tbl)
     return err;
 }
 
-int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, TDbResult_801F9718 *pRes, int cb)
+int TDbInsertRow(int db, int tbl, TDbCol_801F9718 *pCols, TDbResult_801F9718 *pRes, int cb)
 {
     TDbResult_801F9718 res;
     TDbDb_801F88F0 *pDb;
@@ -821,7 +824,7 @@ int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, TDbResult_801F9718 *pRe
         }
         pRes = &res;
     }
-    err = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    err = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     if (err == 0) {
         for (pCol = pCols; pCol->mCol != -1; pCol++) {
             pCol->mIdx = _TDbTblResolveColRef(pTbl, pCol->mCol);
@@ -837,7 +840,7 @@ int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, TDbResult_801F9718 *pRe
     return err;
 }
 
-int fn_801F97D0(int db, int tbl, int dstDb, int dstTbl, TDbResult_801F9718 *pRes, int cb)
+int TDbTblRowCopyTrig(int db, int tbl, int dstDb, int dstTbl, TDbResult_801F9718 *pRes, int cb)
 {
     TDbResult_801F9718 res;
     TDbDb_801F88F0 *pDb;
@@ -849,10 +852,10 @@ int fn_801F97D0(int db, int tbl, int dstDb, int dstTbl, TDbResult_801F9718 *pRes
     if (pRes == 0 && cb == 0) {
         pRes = &res;
     }
-    err = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    err = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     pRes->mErr = err;
     if (err == 0) {
-        err = fn_801F88F0(dstDb, dstTbl, &pDstDb, &pDstTbl);
+        err = _TDbTblFindDbTable(dstDb, dstTbl, &pDstDb, &pDstTbl);
         pRes->mErr = err;
         if (err == 0) {
             err = _TDbTblRowCopyTrig(pTbl, pDstTbl, pRes);
@@ -861,7 +864,7 @@ int fn_801F97D0(int db, int tbl, int dstDb, int dstTbl, TDbResult_801F9718 *pRes
     return err;
 }
 
-int fn_801F9858(int a, int b, int c, int d, int db, int tbl, TDbResult_801F9718 *pRes, int cb)
+int TDbQryRowCopyTrig(int a, int b, int c, int d, int db, int tbl, TDbResult_801F9718 *pRes, int cb)
 {
     TDbResult_801F9718 res;
     TDbQryBuf_801F9858 qry;
@@ -872,19 +875,19 @@ int fn_801F9858(int a, int b, int c, int d, int db, int tbl, TDbResult_801F9718 
     if (pRes == 0 && cb == 0) {
         pRes = &res;
     }
-    pRes->mErr = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    pRes->mErr = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     if (pRes->mErr != 0) {
         return pRes->mErr;
     }
-    err = fn_80207B8C(a, b, c, &qry);
+    err = _TDbQryPrepSearch(a, b, c, &qry);
     if (err == 0) {
-        err = fn_8020A908(a, &qry, d, pTbl, pRes);
-        fn_80207DB4(&qry);
+        err = _TDbQryRowCopyTrig(a, &qry, d, pTbl, pRes);
+        _TDbQryPrepFree(&qry);
     }
     return err;
 }
 
-int fn_801F9908(int a, int b, int c, TDbResult_801F9718 *pRes)
+int TDbQryDeleteRow(int a, int b, int c, TDbResult_801F9718 *pRes)
 {
     TDbResult_801F9718 res;
     TDbQryBuf_801F9858 qry;
@@ -893,18 +896,18 @@ int fn_801F9908(int a, int b, int c, TDbResult_801F9718 *pRes)
     if (pRes == 0) {
         pRes = &res;
     }
-    err = fn_80207B8C(a, b, c, &qry);
+    err = _TDbQryPrepSearch(a, b, c, &qry);
     if (err == 0) {
-        err = fn_80208204(a, &qry, pRes);
+        err = _TDbQryDeleteRow(a, &qry, pRes);
         if (err == 0x17) {
             err = 0;
         }
-        fn_80207DB4(&qry);
+        _TDbQryPrepFree(&qry);
     }
     return err;
 }
 
-int fn_801F9980(int db, unsigned int *pTbl)
+int TDbTblFindUnusedId(int db, unsigned int *pTbl)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *p;
@@ -913,7 +916,7 @@ int fn_801F9980(int db, unsigned int *pTbl)
         return 3;
     }
     if (db == 0) {
-        pDb = FindDb_801F88F0(fn_801F95C8());
+        pDb = FindDb_801F88F0(TDbTblDefaultDbGet());
     } else {
         pDb = FindDb_801F88F0(db);
     }
@@ -937,15 +940,15 @@ int fn_801F9980(int db, unsigned int *pTbl)
     return 0;
 }
 
-int fn_801F9A90(int db, int tbl)
+int TDbTblExists(int db, int tbl)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
 
-    return fn_801F88F0(db, tbl, &pDb, &pTbl);
+    return _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
 }
 
-int fn_801F9AB8(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount)
+int TDbTblColEnum(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
@@ -956,7 +959,7 @@ int fn_801F9AB8(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCoun
 
     i = 0;
     n = 0;
-    err = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    err = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     if (err == 0) {
         if (pCount != 0) {
             if (pCols == 0) {
@@ -983,7 +986,7 @@ int fn_801F9AB8(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCoun
     return err;
 }
 
-int fn_801F9BB4(int db, int tbl, int col, TDbColInfo_801F9AB8 *pInfo)
+int TDbTblColGetInfo(int db, int tbl, int col, TDbColInfo_801F9AB8 *pInfo)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
@@ -991,7 +994,7 @@ int fn_801F9BB4(int db, int tbl, int col, TDbColInfo_801F9AB8 *pInfo)
     int type;
     int err;
 
-    err = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    err = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     if (err == 0) {
         if (pInfo != 0) {
             idx = _TDbTblResolveColRef(pTbl, col);
@@ -1014,13 +1017,13 @@ int fn_801F9BB4(int db, int tbl, int col, TDbColInfo_801F9AB8 *pInfo)
     return err;
 }
 
-int fn_801F9C68(int db, int tbl, int col)
+int TDbTblColExists(int db, int tbl, int col)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
     int err;
 
-    err = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    err = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     if (err == 0) {
         if (_TDbTblResolveColRef(pTbl, col) == 0xFF) {
             err = 9;
@@ -1029,13 +1032,13 @@ int fn_801F9C68(int db, int tbl, int col)
     return err;
 }
 
-int fn_801F9CC0(int db, int tbl, unsigned short *pOut)
+int TDbTblInfoGetMaxRows(int db, int tbl, unsigned short *pOut)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
     int err;
 
-    err = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    err = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     if (err == 0) {
         *pOut = pTbl->mUnk42;
         return 0;
@@ -1043,13 +1046,13 @@ int fn_801F9CC0(int db, int tbl, unsigned short *pOut)
     return err;
 }
 
-int fn_801F9D0C(int db, int tbl, int on)
+int TDbTblInfoSetPersistent(int db, int tbl, int on)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
     int err;
 
-    err = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    err = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     if (err == 0) {
         if (on == 1) {
             pTbl->mFlags |= 2;
@@ -1060,7 +1063,7 @@ int fn_801F9D0C(int db, int tbl, int on)
     return err;
 }
 
-int fn_801F9D70(int db, int tbl, TDbTerm_801FA4B0 *pFilter, unsigned short *pCount)
+int TDbTblGetCount(int db, int tbl, TDbTerm_801FA4B0 *pFilter, unsigned short *pCount)
 {
     TDbQryBuf_801F9858 qry;
     TDbDb_801F88F0 *pDb;
@@ -1069,7 +1072,7 @@ int fn_801F9D70(int db, int tbl, TDbTerm_801FA4B0 *pFilter, unsigned short *pCou
     int err;
 
     n = 0;
-    err = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    err = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     if (err == 0) {
         if (pFilter == 0) {
             n = pTbl->mUnk44 - pTbl->mUnk46;
@@ -1085,9 +1088,9 @@ int fn_801F9D70(int db, int tbl, TDbTerm_801FA4B0 *pFilter, unsigned short *pCou
             qry.mRow.mUnk14 = 2;
             qry.mUnk0 = 1;
             _TDbExprPrepare(pFilter, &qry.mSel.mUnk28, &pTbl, 1, 0);
-            err = fn_80207E24(&qry, 0, 0);
+            err = _TDbQryPrepSimple(&qry, 0, 0);
             if (err == 0) {
-                for (err = fn_802075F4(&qry, 0); err == 0; err = fn_80207988(&qry, 0)) {
+                for (err = _TDbQrySyncStart(&qry, 0); err == 0; err = _TDbQrySyncSkip(&qry, 0)) {
                     n++;
                 }
                 if (err == 0x17) {
@@ -1111,7 +1114,7 @@ static inline TDbIdx_801F9E84 *FindIdx_801F9E84(TDbIdx_801F9E84 *p, int idx)
     return 0;
 }
 
-int fn_801F9E84(int db, int tbl, int idx, TDbIdxCol_801F9E84 *pCols, struct TDbExpr_t *a, int b)
+int TDbIdxCreate(int db, int tbl, int idx, TDbIdxCol_801F9E84 *pCols, struct TDbExpr_t *a, int b)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
@@ -1119,7 +1122,7 @@ int fn_801F9E84(int db, int tbl, int idx, TDbIdxCol_801F9E84 *pCols, struct TDbE
     int err;
 
     pTbl = 0;
-    err = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    err = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     if (idx == 0 || pCols == 0) {
         return 3;
     }
@@ -1141,14 +1144,14 @@ int fn_801F9E84(int db, int tbl, int idx, TDbIdxCol_801F9E84 *pCols, struct TDbE
     return err;
 }
 
-int fn_801F9FA4(int db, int tbl, int idx)
+int TDbIdxDestroy(int db, int tbl, int idx)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
     TDbIdx_801F9E84 *p;
     int err;
 
-    err = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    err = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     if (err == 0) {
         if (idx == 0) {
             return 3;
@@ -1162,13 +1165,13 @@ int fn_801F9FA4(int db, int tbl, int idx)
     return err;
 }
 
-int fn_801FA038(int db, int tbl, int idx)
+int TDbIdxExists(int db, int tbl, int idx)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
     int err;
 
-    err = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    err = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     if (err != 0) {
         return err;
     }
@@ -1178,7 +1181,7 @@ int fn_801FA038(int db, int tbl, int idx)
     return 0;
 }
 
-int fn_801FA0BC(int a, int b, int c, int d, int *pRef, TDbResult_801F9718 *pRes)
+int _TDbQrySelect(int a, int b, int c, int d, int *pRef, TDbResult_801F9718 *pRes)
 {
     TDbResult_801F9718 res;
     int err;
@@ -1186,11 +1189,11 @@ int fn_801FA0BC(int a, int b, int c, int d, int *pRef, TDbResult_801F9718 *pRes)
     if (pRes == 0) {
         pRes = &res;
     }
-    *pRef = fn_801F89B8();
+    *pRef = _TDbQryRefGet();
     if (*pRef == 0) {
         return 0x11;
     }
-    err = fn_8020840C(a, b, c, d, *pRef, pRes);
+    err = _TDbQryCreate(a, b, c, d, *pRef, pRes);
     if (err != 0 && err != 0x17) {
         *pRef = 0;
     }
@@ -1209,7 +1212,7 @@ static inline TDbQry_801F89B8 *FindQry_801FA148(int ref)
     return pQry;
 }
 
-int fn_801FA148(int ref)
+int TDbQryDestroy(int ref)
 {
     TDbQry_801F89B8 *pQry;
 
@@ -1223,10 +1226,10 @@ int fn_801FA148(int ref)
     if (pQry->pDb->mState == 1) {
         return 0x1F;
     }
-    return fn_802087D4(pQry);
+    return _TDbQryDestroy(pQry);
 }
 
-int fn_801FA1C0(int ref)
+int TDbQryGetCount(int ref)
 {
     TDbQry_801F89B8 *pQry;
     int err;
@@ -1235,7 +1238,7 @@ int fn_801FA1C0(int ref)
     if (pQry != 0) {
         err = 0x1F;
         if (pQry->pDb->mState != 1) {
-            err = fn_802088A8(pQry);
+            err = _TDbQryGetCount(pQry);
         }
     } else {
         err = 0x11;
@@ -1243,7 +1246,7 @@ int fn_801FA1C0(int ref)
     return err;
 }
 
-int fn_801FA228(int ref)
+int TDbQryRetrieve(int ref)
 {
     TDbQry_801F89B8 *pQry;
     int err;
@@ -1252,7 +1255,7 @@ int fn_801FA228(int ref)
     if (pQry != 0) {
         err = 0x1F;
         if (pQry->pDb->mState != 1) {
-            err = fn_802088FC(pQry);
+            err = _TDbQryRetrieve(pQry);
         }
     } else {
         err = 0x11;
@@ -1260,43 +1263,43 @@ int fn_801FA228(int ref)
     return err;
 }
 
-int fn_801FA290(int a, int b, int c, int out)
+int TDbQryGetSingleRow(int a, int b, int c, int out)
 {
     TDbRowInfo_801FA290 info;
     TDbQryBuf_801F9858 qry;
     int err;
 
-    err = fn_80207B8C(a, b, c, &qry);
+    err = _TDbQryPrepSearch(a, b, c, &qry);
     if (err == 0) {
         if (qry.mUnk0 == 1) {
-            err = fn_80207E24(&qry, 0, 0);
+            err = _TDbQryPrepSimple(&qry, 0, 0);
         } else {
-            err = fn_80208094(&qry);
+            err = _TDbQryPrepComplex(&qry);
         }
         if (err == 0) {
-            err = fn_802075F4(&qry, 0);
+            err = _TDbQrySyncStart(&qry, 0);
             if (err == 0) {
                 for (_TDbExprTest(qry.mUnk4, &info, &qry.mSel, &qry.mRow); info.mUnk8 == 0;
                      _TDbExprTest(qry.mUnk4, &info, &qry.mSel, &qry.mRow)) {
-                    err = fn_80207988(&qry, qry.mUnk0 - 1);
+                    err = _TDbQrySyncSkip(&qry, qry.mUnk0 - 1);
                     if (err != 0) {
                         break;
                     }
                 }
                 if (err == 0) {
-                    err = fn_80209E40(&qry, out);
+                    err = _TDbQryPrepColLits(&qry, out);
                     if (err == 0) {
-                        fn_8020A3A0(&qry, out);
+                        _TDbQryFillToColLits(&qry, out);
                     }
                 }
             }
         }
-        fn_80207DB4(&qry);
+        _TDbQryPrepFree(&qry);
     }
     return err;
 }
 
-int fn_801FA3A0(int a, int b, int c, int d, TDbResult_801F9718 *pRes, int cb)
+int TDbQrySetRow(int a, int b, int c, int d, TDbResult_801F9718 *pRes, int cb)
 {
     TDbResult_801F9718 res;
     TDbQryBuf_801F9858 qry;
@@ -1308,15 +1311,15 @@ int fn_801FA3A0(int a, int b, int c, int d, TDbResult_801F9718 *pRes, int cb)
         }
         pRes = &res;
     }
-    err = fn_80207B8C(a, b, c, &qry);
+    err = _TDbQryPrepSearch(a, b, c, &qry);
     if (err == 0) {
-        err = fn_8020AD1C(a, &qry, d, 0, pRes);
-        fn_80207DB4(&qry);
+        err = _TDbQrySetRow(a, &qry, d, 0, pRes);
+        _TDbQryPrepFree(&qry);
     }
     return err;
 }
 
-int fn_801FA428(int a, int b, int c, int d, TDbResult_801F9718 *pRes, int cb)
+int TDbQrySetFirstRow(int a, int b, int c, int d, TDbResult_801F9718 *pRes, int cb)
 {
     TDbResult_801F9718 res;
     TDbQryBuf_801F9858 qry;
@@ -1328,15 +1331,15 @@ int fn_801FA428(int a, int b, int c, int d, TDbResult_801F9718 *pRes, int cb)
         }
         pRes = &res;
     }
-    err = fn_80207B8C(a, b, c, &qry);
+    err = _TDbQryPrepSearch(a, b, c, &qry);
     if (err == 0) {
-        err = fn_8020AD1C(a, &qry, d, 1, pRes);
-        fn_80207DB4(&qry);
+        err = _TDbQrySetRow(a, &qry, d, 1, pRes);
+        _TDbQryPrepFree(&qry);
     }
     return err;
 }
 
-int fn_801FA4B0(int a, int b, int c, TDbSelCol_801FA4B0 *pCols, TDbTerm_801FA4B0 *pTerms, TDbResult_801F9718 *pRes, int cb)
+int TDbQryUpdateExpr(int a, int b, int c, TDbSelCol_801FA4B0 *pCols, TDbTerm_801FA4B0 *pTerms, TDbResult_801F9718 *pRes, int cb)
 {
     TDbResult_801F9718 res;
     TDbQryBuf_801F9858 qry;
@@ -1350,7 +1353,7 @@ int fn_801FA4B0(int a, int b, int c, TDbSelCol_801FA4B0 *pCols, TDbTerm_801FA4B0
         }
         pRes = &res;
     }
-    err = fn_80207B8C(a, b, c, &qry);
+    err = _TDbQryPrepSearch(a, b, c, &qry);
     if (err == 0) {
         for (i = 0; pCols[i].mCol != -1; i++) {
             err = _TDbExprPrepare(&pTerms[i], &handles[i], &qry.mSel.pTbl, qry.mUnk0, 0);
@@ -1363,17 +1366,17 @@ int fn_801FA4B0(int a, int b, int c, TDbSelCol_801FA4B0 *pCols, TDbTerm_801FA4B0
             }
         }
         if (err == 0) {
-            err = fn_8020AE88(a, &qry, pCols, handles, pRes);
+            err = _TDbQryUpdateExpr(a, &qry, pCols, handles, pRes);
         }
         for (i = 0; pCols[i].mCol != -1; i++) {
             _TDbExprFree(handles[i]);
         }
-        fn_80207DB4(&qry);
+        _TDbQryPrepFree(&qry);
     }
     return err;
 }
 
-int fn_801FA5EC(int db, int tbl, int ref, int a, int b)
+int TDbQryCreateTbl(int db, int tbl, int ref, int a, int b)
 {
     TDbQry_801F89B8 *pQry;
     TDbDb_801F88F0 *pDb;
@@ -1384,7 +1387,7 @@ int fn_801FA5EC(int db, int tbl, int ref, int a, int b)
     if (pQry == 0) {
         return 0x11;
     }
-    err = fn_801F88F0(db, tbl, &pDb, &pTbl);
+    err = _TDbTblFindDbTable(db, tbl, &pDb, &pTbl);
     if (err == 7) {
         return _TDbQryCreateTbl(pDb, tbl, pQry, a, b);
     }
@@ -1394,7 +1397,7 @@ int fn_801FA5EC(int db, int tbl, int ref, int a, int b)
     return err;
 }
 
-int fn_801FA68C(int db, int tbl)
+int TDbRegisterHandler(int db, int tbl)
 {
     unsigned int i;
     int err;
@@ -1422,7 +1425,7 @@ int fn_801FA68C(int db, int tbl)
     return err;
 }
 
-int fn_801FA740(int tbl)
+int TDbUnregisterHandler(int tbl)
 {
     unsigned int i;
 
@@ -1439,7 +1442,7 @@ int fn_801FA740(int tbl)
     return 0;
 }
 
-int fn_801FA7B0(int a, int b, int c, int d, int e, int f, TDbResult_801F9718 *pRes, int cb)
+int TDbQryUpdateWithHandler(int a, int b, int c, int d, int e, int f, TDbResult_801F9718 *pRes, int cb)
 {
     TDbResult_801F9718 res;
     TDbQryBuf_801F9858 qry;
@@ -1451,20 +1454,20 @@ int fn_801FA7B0(int a, int b, int c, int d, int e, int f, TDbResult_801F9718 *pR
         }
         pRes = &res;
     }
-    err = fn_80207B8C(a, b, c, &qry);
+    err = _TDbQryPrepSearch(a, b, c, &qry);
     if (err == 0) {
-        err = fn_8020A660(a, &qry, d, e, f, pRes);
-        fn_80207DB4(&qry);
+        err = _TDbQryUpdateWithHandler(a, &qry, d, e, f, pRes);
+        _TDbQryPrepFree(&qry);
     }
     return err;
 }
 
-int fn_801FA844(int a, int b, int c, int d, int e, int f, int g, TDbResult_801F9718 *pRes)
+int TDbQryColStats(int a, int b, int c, int d, int e, int f, int g, TDbResult_801F9718 *pRes)
 {
     TDbResult_801F9718 res;
 
     if (pRes == 0) {
         pRes = &res;
     }
-    return fn_8020B094(a, b, c, d, e, f, g, pRes);
+    return _TDbQryColStats(a, b, c, d, e, f, g, pRes);
 }

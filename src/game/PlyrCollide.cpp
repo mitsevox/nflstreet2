@@ -3,8 +3,8 @@
    impulses and contact parts in each player's collision block, and keeps the
    two-entry list of players a player does not collide with. */
 #include "game/PlyrCollide.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_80227638.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Add.h"
 
 extern float gPlyrMoveFwdSpeed;
 
@@ -14,16 +14,16 @@ void MatRotVecToVec(Vector_80039F5C *pFrom, Vector_80039F5C *pTo);
 void MatSetStack(int mode);
 void MatResetStack(void);
 void MatTranspose(void);
-void fn_802271F0(void *pOut, void *pIn);
-void fn_80227248(void *pOut, void *pIn, float scale);
-void fn_80227264(void *pOut, void *pIn, float scale);
-void fn_802272DC(void *pOut, void *pIn, float length);
-void fn_80227384(void *pOut, void *pIn, int angle);
-void fn_8022765C(void *pOut, void *pA, void *pB);
-void fn_80227690(void *pOut, void *pA, void *pB);
-float fn_80227704(void *pA, void *pB);
-void fn_802277DC(void *pOut, void *pA, void *pB);
-void fn_80227C2C(void *pOut, void *pIn);
+void Vec3Normalize(void *pOut, void *pIn);
+void Vec2Scale(void *pOut, void *pIn, float scale);
+void Vec3Scale(void *pOut, void *pIn, float scale);
+void Vec3ScaleLength(void *pOut, void *pIn, float length);
+void Vec2Rotate(void *pOut, void *pIn, int angle);
+void Vec3Add(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
+float Vec3DotProduct(void *pA, void *pB);
+void Vec3CrossProduct(void *pOut, void *pA, void *pB);
+void Vec3Mat33Mul(void *pOut, void *pIn);
 float SyncRandGetFloat(int stream);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_800B2C48(Object_800B26B0 *pA, Object_800B26B0 *pB, int angle, unsigned char *pHitA, unsigned char *pHitB);
@@ -37,7 +37,7 @@ void PlyrCollideResolve2D(Object_80039F5C *pA, Object_80039F5C *pB)
     BounceBody_t bodyB;
     float normal[2];
 
-    fn_80227690(normal, &pA->mMotion.mPos, &pB->mMotion.mPos);
+    Vec2Sub(normal, &pA->mMotion.mPos, &pB->mMotion.mPos);
     bodyA.mUnknown0.mX = pA->mMotion.mUnknown40;
     bodyA.mUnknown0.mY = pA->mMotion.mUnknown44;
     bodyB.mUnknown0.mX = pB->mMotion.mUnknown40;
@@ -48,13 +48,13 @@ void PlyrCollideResolve2D(Object_80039F5C *pA, Object_80039F5C *pB)
     if (!(pA->mFlags & 8) && !PlyrCollideIsExempt(pA, pB)) {
         pA->mMotion.mUnknown40 = bodyA.mUnknown12.mX;
         pA->mMotion.mUnknown44 = bodyA.mUnknown12.mY;
-        pA->mMotion.mUnknown28 = fn_802270A4(&bodyA.mUnknown12);
+        pA->mMotion.mUnknown28 = Vec2Magnitude(&bodyA.mUnknown12);
         pA->mMotion.mUnknown32 = fn_801CFE40(bodyA.mUnknown12.mY, bodyA.mUnknown12.mX);
     }
     if (!(pB->mFlags & 8) && !PlyrCollideIsExempt(pB, pA)) {
         pB->mMotion.mUnknown40 = bodyB.mUnknown12.mX;
         pB->mMotion.mUnknown44 = bodyB.mUnknown12.mY;
-        pB->mMotion.mUnknown28 = fn_802270A4(&bodyB.mUnknown12);
+        pB->mMotion.mUnknown28 = Vec2Magnitude(&bodyB.mUnknown12);
         pB->mMotion.mUnknown32 = fn_801CFE40(bodyB.mUnknown12.mY, bodyB.mUnknown12.mX);
     }
     PlyrCollideRecordImpulse(pA, pB, &bodyA.mUnknown24.mX);
@@ -100,11 +100,11 @@ float PlyrCollideAddImpulse(Block_80170374 *pBlock, Vector_80039F5C *pImpulse, V
     float limit;
 
     pBlock->mFlags.mBytes[0] = 1;
-    fn_8022765C(&pBlock->mUnknown4, &pBlock->mUnknown4, pImpulse);
-    fn_802276B4(&arm, pPoint, pCentre);
-    fn_802277DC(&torque, &arm, pImpulse);
-    fn_8022765C(&pBlock->mUnknown16, &pBlock->mUnknown16, &torque);
-    force = fn_802270D4(pImpulse);
+    Vec3Add(&pBlock->mUnknown4, &pBlock->mUnknown4, pImpulse);
+    Vec3Sub(&arm, pPoint, pCentre);
+    Vec3CrossProduct(&torque, &arm, pImpulse);
+    Vec3Add(&pBlock->mUnknown16, &pBlock->mUnknown16, &torque);
+    force = Vec3Magnitude(pImpulse);
     limit = gPlyrMoveFwdSpeed * 100621.117f;
     if (force > limit) {
         force = limit;
@@ -123,14 +123,14 @@ void CollideWithPoint(Object_80039F5C *p, float *pPoint)
     float normal[2];
     Vector_80039F5C zero;
 
-    fn_80227690(normal, &p->mMotion.mPos, pPoint);
+    Vec2Sub(normal, &p->mMotion.mPos, pPoint);
     body.mUnknown0.mX = p->mMotion.mUnknown40;
     body.mUnknown0.mY = p->mMotion.mUnknown44;
     body.mUnknown36 = p->mUnknown508;
     BounceBody2D(&body, normal, 0.5f);
     p->mMotion.mUnknown40 = body.mUnknown12.mX;
     p->mMotion.mUnknown44 = body.mUnknown12.mY;
-    p->mMotion.mUnknown28 = fn_802270A4(&body.mUnknown12);
+    p->mMotion.mUnknown28 = Vec2Magnitude(&body.mUnknown12);
     p->mMotion.mUnknown32 = fn_801CFE40(body.mUnknown12.mY, body.mUnknown12.mX);
     zero.mX = 0.0f;
     zero.mY = 0.0f;
@@ -314,15 +314,15 @@ void PlyrCollideContacts(Object_80039F5C *pA, CollideObject_t *pRecordA, Object_
         if (!BounceCheckApproach(&segA, &segB, &hitA, &hitB)) {
             continue;
         }
-        fn_802276B4(&bodyA.mUnknown0, &segA.mUnknown0, &segA.mUnknown12);
-        fn_8022765C(&bodyA.mUnknown0, &bodyA.mUnknown0, &pA->mMotion.mUnknown40);
-        fn_8022765C(&bodyA.mUnknown0, &bodyA.mUnknown0, &segA.mUnknown12);
-        fn_802276B4(&bodyA.mUnknown0, &bodyA.mUnknown0, &segA.mUnknown0);
-        fn_802276B4(&bodyB.mUnknown0, &segB.mUnknown0, &segB.mUnknown12);
-        fn_8022765C(&bodyB.mUnknown0, &bodyB.mUnknown0, &pB->mMotion.mUnknown40);
-        fn_8022765C(&bodyB.mUnknown0, &bodyB.mUnknown0, &segB.mUnknown12);
-        fn_802276B4(&bodyB.mUnknown0, &bodyB.mUnknown0, &segB.mUnknown0);
-        fn_802276B4(&normal, &segA.mUnknown12, &segB.mUnknown12);
+        Vec3Sub(&bodyA.mUnknown0, &segA.mUnknown0, &segA.mUnknown12);
+        Vec3Add(&bodyA.mUnknown0, &bodyA.mUnknown0, &pA->mMotion.mUnknown40);
+        Vec3Add(&bodyA.mUnknown0, &bodyA.mUnknown0, &segA.mUnknown12);
+        Vec3Sub(&bodyA.mUnknown0, &bodyA.mUnknown0, &segA.mUnknown0);
+        Vec3Sub(&bodyB.mUnknown0, &segB.mUnknown0, &segB.mUnknown12);
+        Vec3Add(&bodyB.mUnknown0, &bodyB.mUnknown0, &pB->mMotion.mUnknown40);
+        Vec3Add(&bodyB.mUnknown0, &bodyB.mUnknown0, &segB.mUnknown12);
+        Vec3Sub(&bodyB.mUnknown0, &bodyB.mUnknown0, &segB.mUnknown0);
+        Vec3Sub(&normal, &segA.mUnknown12, &segB.mUnknown12);
         bodyA.mUnknown36 = pA->mUnknown508 / pContacts->mCount;
         bodyB.mUnknown36 = pB->mUnknown508 / pContacts->mCount;
         if (PlyrCollideIsLightContact(pContacts, pContact->mUnknownC, pContact->mUnknownD)) {
@@ -330,20 +330,20 @@ void PlyrCollideContacts(Object_80039F5C *pA, CollideObject_t *pRecordA, Object_
             bodyB.mUnknown36 *= 0.35f;
         }
         BounceBodyPair3D(&bodyA, &bodyB, &normal, restitution);
-        fn_80227248(deltaA, &bodyA.mUnknown24, 1.0f / (pA->mUnknown508 * 335.40372f));
-        fn_80227248(deltaB, &bodyB.mUnknown24, 1.0f / (pB->mUnknown508 * 335.40372f));
+        Vec2Scale(deltaA, &bodyA.mUnknown24, 1.0f / (pA->mUnknown508 * 335.40372f));
+        Vec2Scale(deltaB, &bodyB.mUnknown24, 1.0f / (pB->mUnknown508 * 335.40372f));
         if (!(pA->mFlags & 8) && !PlyrCollideIsExempt(pA, pB)) {
-            fn_80227638(&pA->mMotion.mUnknown40, &pA->mMotion.mUnknown40, deltaA);
-            pA->mMotion.mUnknown28 = fn_802270A4(&pA->mMotion.mUnknown40);
+            Vec2Add(&pA->mMotion.mUnknown40, &pA->mMotion.mUnknown40, deltaA);
+            pA->mMotion.mUnknown28 = Vec2Magnitude(&pA->mMotion.mUnknown40);
             pA->mMotion.mUnknown32 = fn_801CFE40(pA->mMotion.mUnknown44, pA->mMotion.mUnknown40);
         }
         if (!(pB->mFlags & 8) && !PlyrCollideIsExempt(pB, pA)) {
-            fn_80227638(&pB->mMotion.mUnknown40, &pB->mMotion.mUnknown40, deltaB);
-            pB->mMotion.mUnknown28 = fn_802270A4(&pB->mMotion.mUnknown40);
+            Vec2Add(&pB->mMotion.mUnknown40, &pB->mMotion.mUnknown40, deltaB);
+            pB->mMotion.mUnknown28 = Vec2Magnitude(&pB->mMotion.mUnknown40);
             pB->mMotion.mUnknown32 = fn_801CFE40(pB->mMotion.mUnknown44, pB->mMotion.mUnknown40);
         }
-        fn_80227638(totalA, totalA, &bodyA.mUnknown24);
-        fn_80227638(totalB, totalB, &bodyB.mUnknown24);
+        Vec2Add(totalA, totalA, &bodyA.mUnknown24);
+        Vec2Add(totalB, totalB, &bodyB.mUnknown24);
         PlyrCollideRecordContact(pContact, &pA->mContact560, 0);
         PlyrCollideRecordContact(pContact, &pB->mContact560, 1);
         if (pContact->mUnknownC == 0 || pContact->mUnknownD == 0) {

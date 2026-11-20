@@ -17,7 +17,7 @@
 #include <string.h>
 #include <string.h>
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/SyncRandGetRange.h"
 
 /* One signed byte per side, copied as a pair. */
@@ -461,10 +461,10 @@ void fn_8000FAD0(int mode)
             case 0:
             case 2:
             case 6:
-                fn_802329F0(&request);
+                DbManagerInit(&request);
                 GameInfoInit();
                 if (lbl_803EB958) {
-                    fn_801FCE10(0, "update 'FNIG' set 'YTPG' = \x82\n", lbl_803EB95C);
+                    TDbCompilePerformOp(0, "update 'FNIG' set 'YTPG' = \x82\n", lbl_803EB95C);
                 }
                 DbOptionsSetTpom(0x544E464F, 2);
                 fn_8022A490(2);
@@ -477,7 +477,7 @@ void fn_8000FAD0(int mode)
             case 12:
                 SndgMusicPumpFrame(1);
                 SndgMusicPumpFrame(0);
-                fn_802329F0(&request);
+                DbManagerInit(&request);
                 SndgMusicPumpFrame(1);
                 SndgMusicPumpFrame(0);
                 GameInfoInit();

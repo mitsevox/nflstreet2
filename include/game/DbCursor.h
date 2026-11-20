@@ -4,7 +4,7 @@
 struct DbCursor;
 
 extern "C" {
-int fn_801FA228(int handle, int a, int b, void *pRecord);
+int TDbQryRetrieve(int handle, int a, int b, void *pRecord);
 }
 
 /* Argument of DbCursorOpen and DbCursorClose. The constructor sets the same
@@ -12,7 +12,7 @@ int fn_801FA228(int handle, int a, int b, void *pRecord);
 struct DbCursor {
     DbCursor() : mUnknown0(0), mUnknown4(0), mUnknown8(-1), mUnknown12(-1), mUnknown16(-1) {}
     ~DbCursor() {}
-    int Read(void *pRecord) { return fn_801FA228(mUnknown0, 0, 0, pRecord); }
+    int Read(void *pRecord) { return TDbQryRetrieve(mUnknown0, 0, 0, pRecord); }
 
     int mUnknown0;
     int mUnknown4;
@@ -22,7 +22,7 @@ struct DbCursor {
     char mUnknown20[24];
 };
 
-/* One entry of the column list passed to fn_801FA228, which fills in mValue.
+/* One entry of the column list passed to TDbQryRetrieve, which fills in mValue.
    The list ends with an entry whose mColumnTag is -1. */
 struct DbColumnValue {
     void Set(int table, int column) { mColumnTag = column; mTableTag = table; }

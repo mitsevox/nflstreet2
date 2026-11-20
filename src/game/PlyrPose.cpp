@@ -58,7 +58,7 @@ void MatGetPos(float *p);
 void MatGetRotByOrder(int *p, int a);
 void QuatIdentity(Quat_801EB488 *pRot);
 void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
-void fn_80227930(float *pOut, float *pA, float *pB, float t);
+void Vec3Lerp(float *pOut, float *pA, float *pB, float t);
 
 float _PlyrPose_afBlinkWeights[7] = {0.75f, 0.9f, 0.95f, 1.0f, 0.95f, 0.9f, 0.75f};
 
@@ -678,7 +678,7 @@ void PlyrPoseReadState(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStrea
     }
     fn_800301C4(pStreamB, posB, 16, 256.0f);
     fn_800301C4(pStreamA, posA, 16, 256.0f);
-    fn_80227930(pObject->mUnknown4, posA, posB, t);
+    Vec3Lerp(pObject->mUnknown4, posA, posB, t);
     angleB = (int)(ReadBitStream(pStreamB, 12) << 52 >> 40) & 0xFFF000;
     angleA = (int)(ReadBitStream(pStreamA, 12) << 52 >> 40) & 0xFFF000;
     OrientLerpAngle(&pObject->mUnknown36, angleA, angleB, t);

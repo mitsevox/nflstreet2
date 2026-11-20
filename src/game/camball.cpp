@@ -67,7 +67,7 @@ Point_8017886C fn_80177FE0(void);
 float fn_80178298(void);
 int fn_801784C4(void);
 void BannerClear(int a);
-void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
+void Vec3Lerp(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 int CamRLerp(int *pValue, int *pVel, int target, int a, int b);
 int CamLerp(float *pValue, float *pVel, float target, float a, float b);
 void CamSetFieldOfView(BallCamera_t *pCamera, float a, float b);
@@ -300,7 +300,7 @@ void CamBallGetHolderTarget(Object_80039F5C *pPlayer, Vector_80039F5C *pOut, flo
         if (_CamBall_aHolderJoints[1].mUnknown0 - _CamBall_aHolderJoints[0].mUnknown0 == 0.0f) {
             f = 0.0f;
         }
-        fn_80227930(pOut, &b, &a, f);
+        Vec3Lerp(pOut, &b, &a, f);
     } else {
         fn_8009BF5C(pPlayer, _CamBall_aHolderJoints[0].mUnknown4, pOut, 0);
     }

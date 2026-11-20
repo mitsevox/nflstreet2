@@ -27,7 +27,7 @@ int AudioVoiceGetMaxMetric(int id)
             if (record->m18 > 0) {
                 value = -7;
             } else {
-                value = fn_80274EAC(index);
+                value = SNDPLATFORM_getcurframe(index);
             }
             if (value >= 0) {
                 metric = (record->m14 - value) * 100 / record->m20;

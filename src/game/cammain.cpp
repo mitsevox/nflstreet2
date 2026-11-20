@@ -62,8 +62,8 @@ void MatPop(void);
 void MatRotX(int angle);
 void MatRotZ(int angle);
 void MatTranslate(Vector_80039F5C *pPos);
-void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
-void fn_80227CC0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
+void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
+void Vec3Mat34Mul(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 
 void CamInterpUpdateSnap(CamInterp_t *pInterp, int steps);
 }
@@ -147,7 +147,7 @@ void _CamMainCalcFollowPos(GameCamera_t *pCamera, Vector_80039F5C *pTarget, Vect
         CamMainFlipPos(&offset);
     }
     target.mZ = 0.0f;
-    fn_8022765C(pOut, &target, &offset);
+    Vec3Add(pOut, &target, &offset);
     if (pCamera->mUnknown94 & 0x10) {
         float x[2];
         float y[2];
@@ -653,7 +653,7 @@ void CamEaseVecUpdate(CamEaseVec_t *pEase, int steps)
     offset.mX = 0.0f;
     offset.mY = 0.0f;
     offset.mZ = pEase->mScale.mValue;
-    fn_80227CC0(&pEase->mResult, &offset);
+    Vec3Mat34Mul(&pEase->mResult, &offset);
     MatPop();
 }
 

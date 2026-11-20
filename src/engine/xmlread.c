@@ -1,9 +1,11 @@
+/* Small markup reader: finds elements by dotted path in a loaded text file and reads their string, integer
+   and float attributes for the game's data files. */
 #include "engine/tmlib.h"
 
 extern unsigned char lbl_802F9E98[];
 extern float fn_80260428(float x, float y);
 
-const unsigned char *fn_8021625C(const unsigned char *p, unsigned char *pOut)
+const unsigned char *_XmlDecodeEntity(const unsigned char *p, unsigned char *pOut)
 {
     *pOut = '~';
     if (*p == '#') {
@@ -47,7 +49,7 @@ const unsigned char *fn_8021625C(const unsigned char *p, unsigned char *pOut)
     return p;
 }
 
-const unsigned char *fn_802163F0(const unsigned char *p, const unsigned char *pName)
+const unsigned char *_XmlFindAttr(const unsigned char *p, const unsigned char *pName)
 {
     const unsigned char *pValue = 0;
 
@@ -108,7 +110,7 @@ const unsigned char *fn_802163F0(const unsigned char *p, const unsigned char *pN
     return pValue;
 }
 
-const unsigned char *fn_8021658C(const unsigned char *p)
+const unsigned char *_XmlSkipTag(const unsigned char *p)
 {
     if (p == 0 || *p != '<') {
         return 0;
@@ -158,7 +160,7 @@ const unsigned char *fn_8021658C(const unsigned char *p)
     return p;
 }
 
-const unsigned char *fn_802166F0(const unsigned char *p)
+const unsigned char *_XmlSkipElement(const unsigned char *p)
 {
     if (p == 0 || *p != '<') {
         return 0;
@@ -211,10 +213,10 @@ const unsigned char *fn_802166F0(const unsigned char *p)
     return p;
 }
 
-const unsigned char *fn_80216A2C(const unsigned char *p, const unsigned char *pPath);
-const unsigned char *fn_80216BFC(const unsigned char *p, const unsigned char *pPath);
+const unsigned char *XmlFindChild(const unsigned char *p, const unsigned char *pPath);
+const unsigned char *XmlFindInElement(const unsigned char *p, const unsigned char *pPath);
 
-const unsigned char *fn_80216860(const unsigned char *p, const unsigned char *pPath)
+const unsigned char *XmlFindPath(const unsigned char *p, const unsigned char *pPath)
 {
     const unsigned char *pResult = 0;
     int i;
@@ -227,15 +229,15 @@ const unsigned char *fn_80216860(const unsigned char *p, const unsigned char *pP
             p++;
         }
         if (p[0] == '<' && p[1] == '?') {
-            p = fn_8021658C(p);
+            p = _XmlSkipTag(p);
             continue;
         }
         if (p[0] == '<' && p[1] == '!') {
-            p = fn_8021658C(p);
+            p = _XmlSkipTag(p);
             continue;
         }
         if (p[0] == '<' && p[1] == '/') {
-            p = fn_8021658C(p);
+            p = _XmlSkipTag(p);
             continue;
         }
         if (*p != 0) {
@@ -261,17 +263,17 @@ const unsigned char *fn_80216860(const unsigned char *p, const unsigned char *pP
                         pResult = p + 1;
                     }
                 } else if (*p != 0) {
-                    pResult = fn_80216BFC(p + 1, pPath + i + 1);
+                    pResult = XmlFindInElement(p + 1, pPath + i + 1);
                 }
                 break;
             }
         }
-        p = fn_8021658C(p - 1);
+        p = _XmlSkipTag(p - 1);
     } while (p != 0);
     return pResult;
 }
 
-const unsigned char *fn_80216A2C(const unsigned char *p, const unsigned char *pPath)
+const unsigned char *XmlFindChild(const unsigned char *p, const unsigned char *pPath)
 {
     const unsigned char *pResult = 0;
     int i;
@@ -284,11 +286,11 @@ const unsigned char *fn_80216A2C(const unsigned char *p, const unsigned char *pP
             p++;
         }
         if (p[0] == '<' && p[1] == '?') {
-            p = fn_802166F0(p);
+            p = _XmlSkipElement(p);
             continue;
         }
         if (p[0] == '<' && p[1] == '!') {
-            p = fn_802166F0(p);
+            p = _XmlSkipElement(p);
             continue;
         }
         if (p[0] == '<' && p[1] == '/') {
@@ -317,17 +319,17 @@ const unsigned char *fn_80216A2C(const unsigned char *p, const unsigned char *pP
                         pResult = p + 1;
                     }
                 } else if (*p != 0) {
-                    pResult = fn_80216A2C(p + 1, pPath + i + 1);
+                    pResult = XmlFindChild(p + 1, pPath + i + 1);
                 }
                 break;
             }
         }
-        p = fn_802166F0(p - 1);
+        p = _XmlSkipElement(p - 1);
     } while (p != 0);
     return pResult;
 }
 
-const unsigned char *fn_80216BFC(const unsigned char *p, const unsigned char *pPath)
+const unsigned char *XmlFindInElement(const unsigned char *p, const unsigned char *pPath)
 {
     const unsigned char *pResult = 0;
     const unsigned char *pEnd = 0;
@@ -343,11 +345,11 @@ const unsigned char *fn_80216BFC(const unsigned char *p, const unsigned char *pP
             p++;
         }
         if (p[0] == '<' && p[1] == '?') {
-            p = fn_802166F0(p);
+            p = _XmlSkipElement(p);
             continue;
         }
         if (p[0] == '<' && p[1] == '!') {
-            p = fn_802166F0(p);
+            p = _XmlSkipElement(p);
             continue;
         }
         if (p[0] == '<' && p[1] == '/') {
@@ -391,17 +393,17 @@ const unsigned char *fn_80216BFC(const unsigned char *p, const unsigned char *pP
                         pResult = p + 1;
                     }
                 } else if (*p != 0) {
-                    pResult = fn_80216A2C(p + 1, pPath + i + 1);
+                    pResult = XmlFindChild(p + 1, pPath + i + 1);
                 }
                 break;
             }
         }
-        p = fn_8021658C(p - 1);
+        p = _XmlSkipTag(p - 1);
     } while (p != 0);
     return pResult;
 }
 
-const unsigned char *fn_80216E34(const unsigned char *pElem)
+const unsigned char *XmlFindNext(const unsigned char *pElem)
 {
     const unsigned char *p;
 
@@ -409,7 +411,7 @@ const unsigned char *fn_80216E34(const unsigned char *pElem)
         pElem++;
     }
     p = pElem;
-    while ((p = fn_802166F0(p)) != 0) {
+    while ((p = _XmlSkipElement(p)) != 0) {
         int i;
 
         while (*p != 0 && *p != '<') {
@@ -428,14 +430,14 @@ const unsigned char *fn_80216E34(const unsigned char *pElem)
     return p;
 }
 
-int fn_80216F3C(const unsigned char *p, const unsigned char *pName, unsigned char *pDst, int maxLen, const unsigned char *pDefault)
+int XmlGetAttrString(const unsigned char *p, const unsigned char *pName, unsigned char *pDst, int maxLen, const unsigned char *pDefault)
 {
     int n;
 
     if (pDst == 0 || maxLen <= 0) {
         return -1;
     }
-    p = fn_802163F0(p, pName);
+    p = _XmlFindAttr(p, pName);
     if (p != 0) {
         unsigned char quote;
 
@@ -450,7 +452,7 @@ int fn_80216F3C(const unsigned char *p, const unsigned char *pName, unsigned cha
         }
         for (n = 1; n < maxLen && *p != quote && *p != 0 && *p != '>'; n++) {
             if (*p == '&') {
-                p = fn_8021625C(p + 1, pDst++);
+                p = _XmlDecodeEntity(p + 1, pDst++);
             } else {
                 *pDst++ = *p++;
             }
@@ -467,12 +469,12 @@ int fn_80216F3C(const unsigned char *p, const unsigned char *pName, unsigned cha
     return n - 1;
 }
 
-int fn_80217070(const unsigned char *p, const unsigned char *pName, int def)
+int XmlGetAttrInt(const unsigned char *p, const unsigned char *pName, int def)
 {
     int sign = 1;
     int value;
 
-    p = fn_802163F0(p, pName);
+    p = _XmlFindAttr(p, pName);
     if (p == 0) {
         return def;
     }
@@ -506,12 +508,12 @@ int fn_80217070(const unsigned char *p, const unsigned char *pName, int def)
     return sign * value;
 }
 
-float fn_802171DC(const unsigned char *p, const unsigned char *pName, float def)
+float XmlGetAttrFloat(const unsigned char *p, const unsigned char *pName, float def)
 {
     int sign = 1;
     float value;
 
-    p = fn_802163F0(p, pName);
+    p = _XmlFindAttr(p, pName);
     if (p == 0) {
         return def;
     }
@@ -553,13 +555,13 @@ float fn_802171DC(const unsigned char *p, const unsigned char *pName, float def)
     return sign * value;
 }
 
-int fn_8021743C(const unsigned char *p, const unsigned char *pName, float *pOut, int count)
+int XmlGetAttrFloats(const unsigned char *p, const unsigned char *pName, float *pOut, int count)
 {
     int i;
     int sign;
     float value = 0.0f;
 
-    p = fn_802163F0(p, pName);
+    p = _XmlFindAttr(p, pName);
     if (p == 0) {
         return 0;
     }

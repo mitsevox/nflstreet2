@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/DbTableCursorInline.h"
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
@@ -164,7 +164,7 @@ int fn_8007BECC(int a, int b)
 {
     int value = 0;
 
-    fn_801FCE10(0, "use 'TATS' select 'DIEG' into \x85 from 'RAEG' where 'ITRG' = \x85 and 'TSBG' = \x88\n",
+    TDbCompilePerformOp(0, "use 'TATS' select 'DIEG' into \x85 from 'RAEG' where 'ITRG' = \x85 and 'TSBG' = \x88\n",
                 &value, a, b);
     return value;
 }
@@ -283,14 +283,14 @@ int fn_8007C46C(int key)
     int max;
     int handle = DbUserGetDb(DbUserGetCurrent());
 
-    fn_801FCE10(0, "use 'TATS' select 'ITIG' into \x82 and 'GPIG' into \x82 and 'LPIG' into \x82 from 'PIRG' where 'YKPG' = \x85\n",
+    TDbCompilePerformOp(0, "use 'TATS' select 'ITIG' into \x82 and 'GPIG' into \x82 and 'LPIG' into \x82 from 'PIRG' where 'YKPG' = \x85\n",
                 &a, &b, &last, key);
-    fn_801FCE10(0, "use \x8c select 'LPIG' into \x82 from 'LPIG' where 'ITIG' = \x82\n", handle, &max, a);
+    TDbCompilePerformOp(0, "use \x8c select 'LPIG' into \x82 from 'LPIG' where 'ITIG' = \x82\n", handle, &max, a);
     if (last != max) {
         int found;
 
         do {
-            found = fn_801FCE10(0, "use 'TATS' select 'YKPG' into \x85 from 'PIRG' where 'ITIG' = \x82 and 'GPIG' = \x82 and 'LPIG' = \x82\n",
+            found = TDbCompilePerformOp(0, "use 'TATS' select 'YKPG' into \x85 from 'PIRG' where 'ITIG' = \x82 and 'GPIG' = \x82 and 'LPIG' = \x82\n",
                                 &key, a, b, max);
             max--;
         } while (found != 0 && max >= 0);

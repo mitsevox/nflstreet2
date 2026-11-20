@@ -18,7 +18,7 @@
 #include "game/EditMenu.h"
 #include "game/HudEvents.h"
 #include "game/Challenge.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/fn_801D2B7C.h"
 
 #include "game/fn_80218FC4.h"
@@ -379,7 +379,7 @@ void GameStatsGather(void)
             int handle = DbUserGetId(UserProfileGetSelected((unsigned char)side));
             DbUserSetCurrent(handle);
             int values[18];
-            int result = fn_801FCE10(0,
+            int result = TDbCompilePerformOp(0,
                 "use \x8c select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'sdSU' into \x82 and 'WSQU' into \x82 and 'WOSU' into \x82 and 'LOSU' into \x82 and 'SOSU' into \x82 and 'AOSU' into \x82 from 'TSPU'\n",
                 DbUserGetDb(handle),
                 &values[0], &values[1], &values[2], &values[3], &values[4], &values[5],
@@ -1236,7 +1236,7 @@ void fn_80057C58(unsigned char team, int index, int flag)
     int tag = flag ? 0x31544250 : 0x31444250;
 
     PlayBookDbLoadFormation(tag, kind, 0, &object);
-    fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
+    TDbCompilePerformOp(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
                 &handle, index + 1, object.mUnknown0);
     unsigned short count = PlayBookDbCountPlays(tag, handle);
     if (flag) {
@@ -1264,10 +1264,10 @@ void fn_80057C58(unsigned char team, int index, int flag)
         cursor.mUnknown4 = 0;
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
-        fn_801FCE10(0, "use \x8c declare \x8a cursor for select * from \x8c where ('XPSU' >= 0) order by 'XPSU' asc\n",
+        TDbCompilePerformOp(0, "use \x8c declare \x8a cursor for select * from \x8c where ('XPSU' >= 0) order by 'XPSU' asc\n",
                     database, &cursor, table);
         i = 0;
-        while (i < count && fn_801FCE10(0, "fetch from \x8a 'DPSU' into \x80\n", &cursor, &number) == 0) {
+        while (i < count && TDbCompilePerformOp(0, "fetch from \x8a 'DPSU' into \x80\n", &cursor, &number) == 0) {
             fn_801C2E18(text, "%02d", number);
             for (unsigned int j = 0; j < count; j++) {
                 PlayBookDbLoadPlay(tag, handle, j, &record);
@@ -1279,7 +1279,7 @@ void fn_80057C58(unsigned char team, int index, int flag)
             }
         }
         if (cursor.mUnknown0) {
-            fn_801FCFA0(&cursor);
+            TDbSQLDestroyCursor(&cursor);
         }
     } else {
         for (i = 0; i < count; i++) {
@@ -1494,7 +1494,7 @@ void fn_80058798(char *pDest, int size, int number, int flag)
     PlayBookDbLoadFormation(tag, kind, 0, &object);
     for (unsigned char index = 0; index <= 3; index++) {
         unsigned int j = 0;
-        fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
+        TDbCompilePerformOp(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
                     &handle, index + 1, object.mUnknown0);
         unsigned short count = PlayBookDbCountPlays(tag, handle);
         fn_801C2E18(text, "%02d", number);
@@ -2285,7 +2285,7 @@ int fn_8005A630(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 int fn_8005A794(int tag, int column, int id)
 {
     int value;
-    if (fn_801FCE10(0,"select \x8c into \x82 from \x8c where 'DIGP' = \x82\n",column,&value,tag,id)) value=0;
+    if (TDbCompilePerformOp(0,"select \x8c into \x82 from \x8c where 'DIGP' = \x82\n",column,&value,tag,id)) value=0;
     return value;
 }
 
@@ -2478,7 +2478,7 @@ unsigned char fn_8005B3CC(void) {return lbl_803EA59F;}
 void fn_8005B3D4(char *pFirst,int firstSize,char *pLast,int lastSize,int *pValue,char *pLabel,int labelSize,int *pResult)
 {
     EnvSelect(fn_800A3444());EnvGetUIName(pFirst,firstSize);EnvGetEVLO(pLast,lastSize);EnvRelease();
-    fn_801FCE10(0,"use 'EVAS' select 'KTFH' into \x82 from 'DFSH' where 'DIVE' = \x80\n",pValue,fn_800A3444());
+    TDbCompilePerformOp(0,"use 'EVAS' select 'KTFH' into \x82 from 'DFSH' where 'DIVE' = \x80\n",pValue,fn_800A3444());
     switch(GameOptionsGet(14)) {
     case 0:fn_801C2E18(pLabel,"Touchdowns");*pResult=GameOptionsGet(1);break;
     case 1:fn_801C2E18(pLabel,"Style Points");*pResult=GameOptionsGet(2);break;

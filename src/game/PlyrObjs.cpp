@@ -3,7 +3,7 @@
    list and its counts, writes and reads the list in the save-state bit
    stream, finds players by index, side or distance, and projects each
    player's drop shadow onto the level ground every frame. */
-#include "game/fn_8022781C.h"
+#include "game/Vec2Distance.h"
 #include "game/FaceFeatures.h"
 #include "game/PlayerObjInit.h"
 #include "game/PlyrNameTag.h"
@@ -14,8 +14,8 @@
 #include "game/Point2.h"
 #include "game/bitstream.h"
 #include "game/PlayerLook.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_80227638.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Add.h"
 #include <math.h>
 struct Region_8003BDF0 {
   unsigned char mUnknown0[128];
@@ -34,14 +34,14 @@ extern int lbl_802CCD8C[3], lbl_802CCD98[3], lbl_802CCDA4[14];
 extern void *lbl_803EAB3C, *lbl_803EA9FC, *lbl_803EAAE0;
 unsigned char PlayerObjIsDrawReady();
 void PlyrPoseGetBoneTransform(Object_8003DEC4 *, int, float *, int *);
-void fn_8022765C(void *, void *, void *);
-void fn_80227690(void *, void *, void *);
-void fn_80227264(void *, void *, float);
-void fn_80227248(void *, void *, float);
-void fn_80227CC0(void *, void *);
-void fn_802271F0(void *, void *);
-void fn_80227C2C(void *, void *);
-float fn_802276E8(void *, void *);
+void Vec3Add(void *, void *, void *);
+void Vec2Sub(void *, void *, void *);
+void Vec3Scale(void *, void *, float);
+void Vec2Scale(void *, void *, float);
+void Vec3Mat34Mul(void *, void *);
+void Vec3Normalize(void *, void *);
+void Vec3Mat33Mul(void *, void *);
+float Vec2DotProduct(void *, void *);
 int Vec3GetAngle(void *, void *);
 void fn_801CFC14(int, float *, float *);
 float fn_801CFD28(int);
@@ -55,15 +55,15 @@ void fn_8003BFCC(Object_8003DEC4 *, float *, Point2_t *, Point2_t *,
 int fn_8003C97C(Point2_t *, Point2_t *, Point2_t *,
                 Point2_t *, float *, float *);
 void fn_8003C8C8(void *, Point2_t *, float *);
-void fn_8022732C(void *, void *, float);
-void fn_80227904(void *, void *, void *, float);
-void fn_80227930(void *, void *, void *, float);
+void Vec2ScaleAcc(void *, void *, float);
+void Vec2Lerp(void *, void *, void *, float);
+void Vec3Lerp(void *, void *, void *, float);
 
 void MatPush();
 void MatLoad();
 void MatPop();
-void fn_80236384(int);
-unsigned int fn_80236398(int);
+void LLLightGetProjectorMatrix(int);
+unsigned int LLLightGetProjectorColor(int);
 void fn_801A3FFC();
 void fn_801A42D4();
 void fn_801A45CC();
@@ -177,22 +177,22 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
   Point2_t direction;
   PlyrPoseGetBoneTransform(object, 4, first, 0);
   PlyrPoseGetBoneTransform(object, 8, center, 0);
-  fn_8022765C(center, center, first);
-  fn_80227264(center, center, 0.5f);
+  Vec3Add(center, center, first);
+  Vec3Scale(center, center, 0.5f);
   PlyrPoseGetBoneTransform(object, 26, first, 0);
-  fn_802276B4(delta, first, center);
-  fn_80227CC0(center, center);
-  fn_80227CC0(delta, delta);
+  Vec3Sub(delta, first, center);
+  Vec3Mat34Mul(center, center);
+  Vec3Mat34Mul(delta, delta);
   delta[2] = 0.0f;
   fn_801CFC14(object->mUnknown36, &direction.mY, &direction.mX);
-  float width = fabsf(fn_802276E8(&direction, axis));
+  float width = fabsf(Vec2DotProduct(&direction, axis));
   if (!(width >= 0.65f))
     width = 0.65f;
-  float length = fn_802270D4(delta);
+  float length = Vec3Magnitude(delta);
   Point2_t forward, backward;
   if (!(length >= 0.4f)) {
     if (!(length <= 0.2f)) {
-      fn_80227264(delta, delta, 1.0f / length);
+      Vec3Scale(delta, delta, 1.0f / length);
       float t = (length - 0.2f) * 5.0f;
       float f = width + t * -width + t * 0.4f;
       float b = width + t * (0.85f - width);
@@ -203,7 +203,7 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
     } else {
       delta[0] += axis->mX * (0.2f - length);
       delta[1] += axis->mY * (0.2f - length);
-      fn_802271F0(delta, delta);
+      Vec3Normalize(delta, delta);
       forward.mX = delta[0] * width;
       forward.mY = delta[1] * width;
       backward.mX = -delta[0] * width;
@@ -214,14 +214,14 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
     forward.mY = delta[1];
     backward.mX = 0.0f;
     backward.mY = 0.0f;
-    fn_80227264(delta, delta, 1.0f / length);
+    Vec3Scale(delta, delta, 1.0f / length);
     backward.mX = -(delta[0] * 0.85f);
     backward.mY = -(delta[1] * 0.85f);
   }
   // FAKEMATCH: reused local; the side vector reuses direction instead of a local of its own
   direction.mX = delta[1];
   direction.mY = -delta[0];
-  fn_80227248(&direction, &direction, width);
+  Vec2Scale(&direction, &direction, width);
   object->mUnknown4256.mColor[0] = color[0];
   object->mUnknown4256.mColor[1] = color[1];
   object->mUnknown4256.mColor[2] = color[2];
@@ -251,21 +251,21 @@ void fn_8003BDF0(Object_8003DEC4 *object, Point2_t *axis, int angle) {
   float first[4], center[4];
   PlyrPoseGetBoneTransform(object, 4, first, 0);
   PlyrPoseGetBoneTransform(object, 8, center, 0);
-  fn_8022765C(center, center, first);
-  fn_80227264(center, center, 0.5f);
+  Vec3Add(center, center, first);
+  Vec3Scale(center, center, 0.5f);
   PlyrPoseGetBoneTransform(object, 26, first, 0);
   first[2] = (first[2] + center[2]) * 0.5f;
   float radius = fabsf(1.0f / fn_801CFD28(angle)) * first[2];
   Projection_8003BA10 *p = &object->mUnknown4256;
-  radius += fn_8022781C(p->mPoints[0], p->mPoints[2]);
+  radius += Vec2Distance(p->mPoints[0], p->mPoints[2]);
   for (unsigned char i = 0; i < regions->mUnknown128; ++i) {
     Point2_t a, b, mid;
     LevelGetQuadBase(regions->mUnknown132[i], &a, &b);
     float scale = LevelGetQuadHeight(regions->mUnknown132[i]);
     mid.mX = (a.mX + b.mX) * 0.5f;
     mid.mY = (a.mY + b.mY) * 0.5f;
-    float extent = fn_8022781C(&mid, &a);
-    if (!(fn_8022781C(&mid, center) >= radius + extent))
+    float extent = Vec2Distance(&mid, &a);
+    if (!(Vec2Distance(&mid, center) >= radius + extent))
       fn_8003BFCC(object, center, axis, &a, &b, angle, scale);
   }
 }
@@ -286,7 +286,7 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
   position[2] = center[2];
   original.mX = position[0];
   original.mY = position[1];
-  fn_80227690(&shifted, &original, axis);
+  Vec2Sub(&shifted, &original, axis);
   if (fn_8003C97C(&original, &shifted, a, b, &t, &u) && t > 0.0f)
     return;
   unsigned char i = 0;
@@ -301,8 +301,8 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
   shiftedA.mY = a->mY;
   shiftedB.mX = b->mX;
   shiftedB.mY = b->mY;
-  fn_8022732C(&shiftedA, axis, shift);
-  fn_8022732C(&shiftedB, axis, shift);
+  Vec2ScaleAcc(&shiftedA, axis, shift);
+  Vec2ScaleAcc(&shiftedB, axis, shift);
   float minimum = 1000000.0f, maximum = -1000000.0f;
   for (; i < 4; ++i) {
     if (fn_8003C97C(&shiftedA, &shiftedB, (Point2_t *)p->mPoints[i],
@@ -327,7 +327,7 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
     original.mY = p->mPoints[i][1];
     shifted.mX = p->mPoints[i][0];
     shifted.mY = p->mPoints[i][1];
-    fn_8022732C(&shifted, axis, -scale / height);
+    Vec2ScaleAcc(&shifted, axis, -scale / height);
     unsigned char count = 0;
     if (fn_8003C97C(&original, &shifted, a, b, &t, &u) && !(t >= 1.0f) &&
         !(u <= 0.0f) && !(u >= 1.0f)) {
@@ -345,8 +345,8 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
                     &t, &u) &&
         !(t <= 0.0f) && !(t >= 1.0f) && !(u <= 0.0f) && !(u >= 1.0f)) {
       accepted = 1;
-      fn_80227930(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
-      fn_80227904(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
+      Vec3Lerp(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
+      Vec2Lerp(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
       parameters[count] = t;
       count = 1;
     }
@@ -357,8 +357,8 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
       if (!(u <= 0.0f))
         accepted = 1;
       if (u < 1.0f) {
-        fn_80227930(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
-        fn_80227904(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
+        Vec3Lerp(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
+        Vec2Lerp(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
         parameters[count] = t;
         ++count;
       } else if (!(minimum > 0.0f)) {
@@ -376,8 +376,8 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
       if (!(u <= 0.0f))
         accepted = 1;
       if (u < 1.0f) {
-        fn_80227930(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
-        fn_80227904(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
+        Vec3Lerp(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
+        Vec2Lerp(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
         parameters[count] = t;
         ++count;
       } else if (!(maximum < 1.0f)) {
@@ -410,9 +410,9 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
   for (i = 0; i < out->mCount; ++i) {
     original.mX = out->mPoints[i][0];
     original.mY = out->mPoints[i][1];
-    fn_80227690(&shifted, out->mPoints[i], axis);
+    Vec2Sub(&shifted, out->mPoints[i], axis);
     if (fn_8003C97C(&original, &shifted, a, b, &t, &u)) {
-      fn_80227904(out->mPoints[i], &shifted, &original, t);
+      Vec2Lerp(out->mPoints[i], &shifted, &original, t);
       out->mPoints[i][2] = t * height * 1.4f;
     }
   }
@@ -425,12 +425,12 @@ void fn_8003C8C8(void *record, Point2_t *offset, float *parameters) {
   };
   View *p = (View *)record;
   Point2_t line;
-  fn_80227690(&line, p->points[0], p->points[3]);
-  fn_80227638(&line, offset, &line);
+  Vec2Sub(&line, p->points[0], p->points[3]);
+  Vec2Add(&line, offset, &line);
   fn_8003C97C((Point2_t *)p->points[0], (Point2_t *)p->points[1],
               offset, &line, parameters, 0);
-  fn_80227690(&line, p->points[1], p->points[0]);
-  fn_80227638(&line, offset, &line);
+  Vec2Sub(&line, p->points[1], p->points[0]);
+  Vec2Add(&line, offset, &line);
   fn_8003C97C((Point2_t *)p->points[1], (Point2_t *)p->points[2],
               offset, &line, parameters + 1, 0);
 }
@@ -450,9 +450,9 @@ int fn_8003C97C(Point2_t *a, Point2_t *b, Point2_t *c,
 }
 int fn_8003CA20() {
   MatPush();
-  fn_80236384(0);
+  LLLightGetProjectorMatrix(0);
   MatLoad();
-  unsigned int value = fn_80236398(0);
+  unsigned int value = LLLightGetProjectorColor(0);
   float color[4];
   color[0] = (float)(value & 255) * 0.0078125f;
   color[1] = (float)((value >> 8) & 255) * 0.0078125f;
@@ -462,9 +462,9 @@ int fn_8003CA20() {
   vector[0] = 0.0f;
   vector[1] = 0.0f;
   vector[2] = 1.0f;
-  fn_80227C2C(vector, vector);
+  Vec3Mat33Mul(vector, vector);
   vector[2] = 0.0f;
-  float length = fn_802270D4(vector);
+  float length = Vec3Magnitude(vector);
   if (!(length >= 0.0001f)) {
     vector[0] = 0.0f;
     vector[1] = 1.0f;
@@ -475,7 +475,7 @@ int fn_8003CA20() {
   angleVector[1] = vector[1];
   angleVector[2] = 1.0f;
   int angle = Vec3GetAngle(angleVector, vector);
-  fn_80227264(vector, vector, 1.0f / length);
+  Vec3Scale(vector, vector, 1.0f / length);
   for (int i = 0; i < lbl_803EA434; ++i)
     fn_8003BA10(lbl_803EA430[i], color, (Point2_t *)vector, angle);
   MatPop();
@@ -972,7 +972,7 @@ Object_8003DEC4 *fn_8003DF7C(Point2_t *point, float *distance) {
   if (lbl_803EA430)
     for (unsigned int i = 0; i < lbl_803EA434; ++i) {
       Object_8003DEC4 *player = lbl_803EA430[i];
-      float current = fn_8022781C(player->mUnknown4, point);
+      float current = Vec2Distance(player->mUnknown4, point);
       if (!(current >= value)) {
         result = player;
         value = current;

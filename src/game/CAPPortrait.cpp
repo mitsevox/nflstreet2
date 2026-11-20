@@ -5,7 +5,7 @@
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/FMCAPPORT.h"
 #include "game/CAPPortrait.h"
 #include "game/Object_80233EAC.h"
@@ -354,7 +354,7 @@ void PortraitReadImage(unsigned int id, PortraitImageRequest_t *pObject)
         void *pUnknown12 = pObject->mpUnknown12;
         void *pBuffer = fn_801D2B7C(0x400, 4, 0);
 
-        fn_801FCE10(0,
+        TDbCompilePerformOp(0,
                     "use \x8c select 'XTPP' into \x89 and 'LPPP' into \x89 from 'PPRC' where "
                     "'PXSP' = \x85\n",
                     DbUserGetDb(DbUserGetId((signed char)_Portrait_pSlots->mSlots[id - 0x277].mValue)), pUnknown12, pBuffer, id);
@@ -368,7 +368,7 @@ void PortraitJobSave(PortraitJob_t *pObject)
     void *pUnknown4 = pObject->mpUnknown4;
     void *pUnknown8 = pObject->mpUnknown8;
 
-    fn_801FCE10(0,
+    TDbCompilePerformOp(0,
                 "use \x8c update 'PPRC' set 'XTPP' = \x89 and 'LPPP' = \x89 where 'PXSP' = "
                 "\x85\n",
                 DbUserGetDb(DbUserGetCurrent()), pUnknown4, pUnknown8, pObject->mUnknown0);

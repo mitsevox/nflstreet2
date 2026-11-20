@@ -1,8 +1,8 @@
-/* Comparison fragment of src/engine/llvector.c: fn_8022772C and its literal pool. */
+/* Comparison fragment of src/engine/llvector.c: Vec3CosAngle and its literal pool. */
 
 extern float fn_80260B1C(float x);
 
-float fn_8022772C(float *pA, float *pB)
+float Vec3CosAngle(float *pA, float *pB)
 {
     float len;
     float inv;

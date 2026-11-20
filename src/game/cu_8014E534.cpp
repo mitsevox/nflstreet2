@@ -70,7 +70,7 @@ void fn_8014F4D8(Class_80148A58 *p, Object_80039F5C *pPlayer, int kind, int valu
 void fn_8009D8CC(int index);
 int fn_801783AC(int bit);
 unsigned int SyncRandGetRange(int a, int b);
-float fn_8022785C(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
+float Vec3Distance(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
 void PauseBlock(void);
 int fn_8005BE5C(int value);
 void fn_800B9654(void *p, float dt);
@@ -238,7 +238,7 @@ void fn_8014EA90(State_802A1F90 *p, float dt)
                 float best = 3.4028235e38f;
                 for (unsigned short i = 0; i <= 4; i++) {
                     Object_80039F5C *pOther = PlyrGet(0, i);
-                    float distance = fn_8022785C(&pOther->mMotion.mPos, &pos);
+                    float distance = Vec3Distance(&pOther->mMotion.mPos, &pos);
                     if (distance < best) {
                         p->mpUnknown4 = pOther;
                         best = distance;

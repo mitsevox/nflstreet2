@@ -129,7 +129,7 @@ void ParticleSysSetEffectFile(int index, int file);
 void ParticleSysReplayRegister(void);
 void ParticleSysResetEmitter(PsysEmitter_t *pObject);
 void ParticleSysBuildFrame(Mtx44 m, Vector_80039F5C *pDir, Vector_80039F5C *pPos);
-void fn_802277DC(void *pOut, void *pA, void *pB);
+void Vec3CrossProduct(void *pOut, void *pA, void *pB);
 }
 
 static unsigned char _ParticleSys_bInit = 0;
@@ -472,8 +472,8 @@ void ParticleSysBuildFrame(Mtx44 m, Vector_80039F5C *pDir, Vector_80039F5C *pPos
         up.mY = -1.0f;
         up.mZ = 0.0f;
     }
-    fn_802277DC(&side, &fwd, &up);
-    fn_802277DC(&up, &side, &fwd);
+    Vec3CrossProduct(&side, &fwd, &up);
+    Vec3CrossProduct(&up, &side, &fwd);
     m[0][0] = side.mX;
     m[0][1] = side.mY;
     m[0][2] = side.mZ;

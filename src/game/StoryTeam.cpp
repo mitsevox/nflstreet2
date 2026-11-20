@@ -10,8 +10,8 @@
 #include "game/DbQueryTable.h"
 #include "game/StoryTeam.h"
 #include <string.h>
-#include "game/fn_801F9908.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbQryDeleteRow.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/DbUserSetCurrent.h"
 
 int _StoryTeam_aTeamTags[16] = {
@@ -25,8 +25,8 @@ int _StoryTeam_aPositions[7] = {0, 1, 2, 4, 8, 9, 13};
 extern "C" {
 int DbUserGetId(int index);
 int DbUserGetDb(int handle);
-int fn_801F9980(int handle, int *pTable);
-int fn_801F967C(int handle, int table);
+int TDbTblFindUnusedId(int handle, int *pTable);
+int TDbTblDestroy(int handle, int table);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int MemCardFilesNeedsSave(int type, int index);
@@ -41,10 +41,10 @@ void StoryTeamClearTables(int handle)
 
     tables[0].Set(0x59505453);
     tables[1].Set(-1);
-    fn_801F9908(handle, tables, 0, &result, 0);
+    TDbQryDeleteRow(handle, tables, 0, &result, 0);
     tables[0].Set(0x4D455453);
     tables[1].Set(-1);
-    fn_801F9908(handle, tables, 0, &result, 0);
+    TDbQryDeleteRow(handle, tables, 0, &result, 0);
 }
 
 void StoryTeamStore(int source, int team, int index)
@@ -55,26 +55,26 @@ void StoryTeamStore(int source, int team, int index)
     int player;
     int destination = DbUserGetDb(DbUserGetId(index));
     StoryTeamClearTables(destination);
-    fn_801F9980(destination, &table);
-    fn_801FCE10(0, "use \x8c select into \x8c.\x8c * from 'MAET' where ('DIGT' = \x82)\n", source, destination, table, team);
-    fn_801FCE10(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIOT' = \x85\n", destination, table, 0, 0);
-    fn_801FCE10(&result, "use \x8c insert into 'METS' * select * from \x8c\n", destination, table);
-    fn_801F967C(destination, table);
+    TDbTblFindUnusedId(destination, &table);
+    TDbCompilePerformOp(0, "use \x8c select into \x8c.\x8c * from 'MAET' where ('DIGT' = \x82)\n", source, destination, table, team);
+    TDbCompilePerformOp(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIOT' = \x85\n", destination, table, 0, 0);
+    TDbCompilePerformOp(&result, "use \x8c insert into 'METS' * select * from \x8c\n", destination, table);
+    TDbTblDestroy(destination, table);
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from 'YALP' where 'DIGT' = \x85 order by 'DIGP'\n", source, &cursor, &player, team);
+    TDbCompilePerformOp(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from 'YALP' where 'DIGT' = \x85 order by 'DIGP'\n", source, &cursor, &player, team);
     unsigned int count = result.mUnknown0;
     for (unsigned int i = 0; i < count; i++) {
-        fn_801FCE10(0, "fetch from \x8a\n", &cursor);
-        fn_801F9980(destination, &table);
-        fn_801FCE10(&result, "use \x8c select into \x8c.\x8c * from 'YALP' where ('DIGP' = \x82)\n", source, destination, table, player);
-        fn_801FCE10(&result, "use \x8c update \x8c set 'DIGT' = \x82 and 'DIGP' = \x82\n", destination, table, 0, i);
-        fn_801FCE10(0, "use \x8c insert into 'YPTS' * select * from \x8c\n", destination, table);
-        fn_801F967C(destination, table);
+        TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
+        TDbTblFindUnusedId(destination, &table);
+        TDbCompilePerformOp(&result, "use \x8c select into \x8c.\x8c * from 'YALP' where ('DIGP' = \x82)\n", source, destination, table, player);
+        TDbCompilePerformOp(&result, "use \x8c update \x8c set 'DIGT' = \x82 and 'DIGP' = \x82\n", destination, table, 0, i);
+        TDbCompilePerformOp(0, "use \x8c insert into 'YPTS' * select * from \x8c\n", destination, table);
+        TDbTblDestroy(destination, table);
     }
-    if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+    if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);
 }
 
 int StoryTeamLoad(int source, int teamTable, int playerTable, int destination,
@@ -90,18 +90,18 @@ int StoryTeamLoad(int source, int teamTable, int playerTable, int destination,
     int player;
     int ytrp;
     fn_8022C628(destination, 0x4D414554, &team, &teamCount);
-    fn_801F9980(destination, &table);
-    fn_801FCE10(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGT' = \x82)\n", source, destination, table, teamTable, 0);
-    fn_801FCE10(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIOT' = \x85\n", destination, table, team, team);
-    fn_801FCE10(&result, "use \x8c insert into 'MAET' * select * from \x8c\n", destination, table);
-    fn_801F967C(destination, table);
-    fn_801FCE10(&result, "use \x8c update 'MAET' set 'RUMT' = \x85 and 'OLFT' = 0 and 'SIVT' = 1 and 'DIGD' = \x82 where ('DIGT' = \x85)\n", destination, rumt, 8, team);
+    TDbTblFindUnusedId(destination, &table);
+    TDbCompilePerformOp(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGT' = \x82)\n", source, destination, table, teamTable, 0);
+    TDbCompilePerformOp(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIOT' = \x85\n", destination, table, team, team);
+    TDbCompilePerformOp(&result, "use \x8c insert into 'MAET' * select * from \x8c\n", destination, table);
+    TDbTblDestroy(destination, table);
+    TDbCompilePerformOp(&result, "use \x8c update 'MAET' set 'RUMT' = \x85 and 'OLFT' = 0 and 'SIVT' = 1 and 'DIGD' = \x82 where ('DIGT' = \x85)\n", destination, rumt, 8, team);
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
     int code = 0;
-    int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c order by 'DIGP'\n", source, &cursor, &player, playerTable);
+    int status = TDbCompilePerformOp(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c order by 'DIGP'\n", source, &cursor, &player, playerTable);
     if (status != 0 && status != 23) {
         code = status;
     }
@@ -114,21 +114,21 @@ int StoryTeamLoad(int source, int teamTable, int playerTable, int destination,
         fn_80229AA4(destination, 0x59414C50, ids, &count);
         for (unsigned int i = 0; i < count; i++) {
             if (destination == 0x54415453) pOriginalIds[i] = ids[i];
-            fn_801FCE10(0, "fetch from \x8a\n", &cursor);
-            fn_801F9980(destination, &table);
-            fn_801FCE10(0, "use \x8c select 'YTRP' into \x85 from \x8c where 'DIGP' = \x82\n", source, &ytrp, playerTable, player);
-            fn_801FCE10(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGP' = \x82)\n", source, destination, table, playerTable, player);
+            TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
+            TDbTblFindUnusedId(destination, &table);
+            TDbCompilePerformOp(0, "use \x8c select 'YTRP' into \x85 from \x8c where 'DIGP' = \x82\n", source, &ytrp, playerTable, player);
+            TDbCompilePerformOp(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGP' = \x82)\n", source, destination, table, playerTable, player);
             if (preserveOriginal) {
-                fn_801FCE10(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIGP' = \x85 where ('DIGP' = \x82)\n", destination, table, team, ids[i], player);
+                TDbCompilePerformOp(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIGP' = \x85 where ('DIGP' = \x82)\n", destination, table, team, ids[i], player);
             } else {
-                fn_801FCE10(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIGP' = \x85 and 'DIOP' = \x85 where ('DIGP' = \x82)\n", destination, table, team, ids[i], pOriginalIds[i], player);
+                TDbCompilePerformOp(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIGP' = \x85 and 'DIOP' = \x85 where ('DIGP' = \x82)\n", destination, table, team, ids[i], pOriginalIds[i], player);
             }
-            fn_801FCE10(&result, "use \x8c insert into 'YALP' * select * from \x8c\n", destination, table);
-            fn_801FCE10(&result, "use \x8c update 'YALP' set 'ITGT' = \x85 where 'DIGP' = \x82\n", destination, team, ids[i]);
-            fn_801F967C(destination, table);
+            TDbCompilePerformOp(&result, "use \x8c insert into 'YALP' * select * from \x8c\n", destination, table);
+            TDbCompilePerformOp(&result, "use \x8c update 'YALP' set 'ITGT' = \x85 where 'DIGP' = \x82\n", destination, team, ids[i]);
+            TDbTblDestroy(destination, table);
         }
     }
-    if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+    if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);
     return team;
 }
 
@@ -166,25 +166,25 @@ void StoryTeamSyncCreatedPlayer(int index)
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
     int code = 0;
-    int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from 'YPTS' order by 'DIGP'\n", handle, &cursor, &player);
+    int status = TDbCompilePerformOp(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from 'YPTS' order by 'DIGP'\n", handle, &cursor, &player);
     if (status != 0 && status != 23) {
         code = status;
     }
     if (status != 23) {
         unsigned int count = result.mUnknown0;
         for (unsigned int i = 0; i < count; i++) {
-            fn_801FCE10(0, "fetch from \x8a\n", &cursor);
-            fn_801FCE10(0, "use \x8c select 'YTRP' into \x85 from 'YPTS' where 'DIGP' = \x82\n", handle, &ytrp, player);
+            TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
+            TDbCompilePerformOp(0, "use \x8c select 'YTRP' into \x85 from 'YPTS' where 'DIGP' = \x82\n", handle, &ytrp, player);
             if (ytrp == 1) {
                 int pxsp = PortraitAllocSlot((unsigned char)index, 1);
-                fn_801FCE10(0, "use \x8c select 'PXSP' into \x85 from 'YPTS' where 'DIGP' = \x82\n", handle, &oldPxsp, player);
-                fn_801FCE10(0, "use \x8c update 'YPTS' set 'PXSP' = \x85 where 'DIGP' = \x82\n", handle, pxsp, player);
-                fn_801FCE10(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", handle, pxsp, oldPxsp);
+                TDbCompilePerformOp(0, "use \x8c select 'PXSP' into \x85 from 'YPTS' where 'DIGP' = \x82\n", handle, &oldPxsp, player);
+                TDbCompilePerformOp(0, "use \x8c update 'YPTS' set 'PXSP' = \x85 where 'DIGP' = \x82\n", handle, pxsp, player);
+                TDbCompilePerformOp(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", handle, pxsp, oldPxsp);
             }
         }
     }
     if (!state) MemCardFilesStoreChecksum(2, index);
-    if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+    if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);
 }
 
 int fn_8008454C(int type, int logo, const char *pName);
@@ -195,7 +195,7 @@ void fn_8018C344(int database, int firstTable, int secondTable,
 void fn_8018C3EC(int firstTable, int secondTable);
 int UserProfileGetSelected(unsigned char index);
 int StoryTestIndexedFlag(int index, int n);
-int fn_801F9D70(int handle, int table, DbFilter *pFilter, unsigned short *pCount);
+int TDbTblGetCount(int handle, int table, DbFilter *pFilter, unsigned short *pCount);
 int DbCursorGetValue(DbCursor *pObject, int key);
 void PlayerDbSetRating(Object_8008044C *pObject, int index, int value);
 int DbUserGetCurrent(void);
@@ -275,7 +275,7 @@ void StoryTeamCreatePlayer(int index, int value)
         request.mSize = 0x96000;
         request.mpName = lbl_802EBE24;
         request.mCount = 1;
-        fn_802329F0(&request);
+        DbManagerInit(&request);
     }
     fn_800828FC();
     int k = DbUtilRandomRange(0, 7);
@@ -283,8 +283,8 @@ void StoryTeamCreatePlayer(int index, int value)
     fn_800829D8();
     if (!busy) DbNiomEndMode();
     StoryPlayerResetById(id);
-    fn_801FCE10(0, "use 'TATS' update 'YALP' set 'YTRP' = \x85 where 'DIGP' = \x85\n", 1, id);
-    fn_801FCE10(0, "use 'TATS' update 'YALP' set 'PXSP' = \x85 where 'DIGP' = \x85\n", 7, id);
+    TDbCompilePerformOp(0, "use 'TATS' update 'YALP' set 'YTRP' = \x85 where 'DIGP' = \x85\n", 1, id);
+    TDbCompilePerformOp(0, "use 'TATS' update 'YALP' set 'PXSP' = \x85 where 'DIGP' = \x85\n", 7, id);
 
     Object_8008044C object;
     FaceFeatures_t block;
@@ -333,20 +333,20 @@ void CopyRdrcPlayersToTeam(int index, int team, int rumt)
     DbUserSetCurrent(DbUserGetId(index));
     DbUserGetDb(DbUserGetId(index));
     arg.Set(6, 0x5244524344494754LL, 2, rumt);
-    fn_801F9D70(0x54415453, 0x52445243, &arg, &total);
+    TDbTblGetCount(0x54415453, 0x52445243, &arg, &total);
     count = total;
     fn_80229AA4(0x54415453, 0x59414C50, ids, &count);
     int player, table;
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
-    fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 from 'RDRC' where 'DIGT' = \x82 order by 'DIGP'\n", &cursor, &player, rumt);
+    TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 from 'RDRC' where 'DIGT' = \x82 order by 'DIGP'\n", &cursor, &player, rumt);
     for (unsigned int i = 0; i < count; i++) {
-        fn_801FCE10(0, "fetch from \x8a\n", &cursor);
-        fn_801F9980(0x54415453, &table);
-        fn_801FCE10(&result, "use 'TATS' select into \x8c * from 'RDRC' where ('DIGP' = \x85)\n", table, player);
-        fn_801FCE10(&result, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x85\n", table, team, ids[i]);
-        fn_801FCE10(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", table);
-        fn_801FCE10(0, "use 'TATS' update 'YALP' set 'PXSP' = \x85 where 'DIGP' = \x85\n", i, ids[i]);
+        TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
+        TDbTblFindUnusedId(0x54415453, &table);
+        TDbCompilePerformOp(&result, "use 'TATS' select into \x8c * from 'RDRC' where ('DIGP' = \x85)\n", table, player);
+        TDbCompilePerformOp(&result, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x85\n", table, team, ids[i]);
+        TDbCompilePerformOp(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", table);
+        TDbCompilePerformOp(0, "use 'TATS' update 'YALP' set 'PXSP' = \x85 where 'DIGP' = \x85\n", i, ids[i]);
         Object_8008044C object;
         FaceFeatures_t block;
         FMCAPPORTValues values;
@@ -375,9 +375,9 @@ void CopyRdrcPlayersToTeam(int index, int team, int rumt)
         gFMCAPPORT.SetEntry(i, 0xFFFF, unknown8, unknown12, 0xA7, &text20,
             resultIds[0], unknown52, unknown56, &text60, &values, value76);
         fn_8008056C(&object);
-        fn_801F967C(0x54415453, table);
+        TDbTblDestroy(0x54415453, table);
     }
-    if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+    if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);
     gFMCAPPORT.Start();
     DbUserSetCurrent(saved);
 }
@@ -386,7 +386,7 @@ int StoryTeamExists(int index)
 {
     unsigned short count = 0;
     int found = 0;
-    fn_801F9D70(DbUserGetDb(DbUserGetId(index)), 0x4D455453, 0, &count);
+    TDbTblGetCount(DbUserGetDb(DbUserGetId(index)), 0x4D455453, 0, &count);
     if (count) found = 1;
     return found;
 }
@@ -431,12 +431,12 @@ void StoryTeamClear(void)
     QueryResult result;
     int pxsp;
     int handle = DbUserGetDb(DbUserGetCurrent());
-    fn_801FCE10(0, "use \x8c select 'PXSP' into \x85 from 'YPTS'\n", handle, &pxsp);
-    fn_801FCE10(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", handle, 7, pxsp);
+    TDbCompilePerformOp(0, "use \x8c select 'PXSP' into \x85 from 'YPTS'\n", handle, &pxsp);
+    TDbCompilePerformOp(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", handle, 7, pxsp);
     StoryTeamClearTables(handle);
     tables[0].Set(0x43455453);
     tables[1].Set(-1);
-    fn_801F9908(handle, tables, 0, &result, 0);
+    TDbQryDeleteRow(handle, tables, 0, &result, 0);
     StorySetNew(DbUserFindIndex(DbUserGetCurrent()), 1);
 }
 
@@ -454,8 +454,8 @@ void StoryTeamRestore(int firstTable, int secondTable)
 {
     int handle = DbUserGetDb(DbUserGetCurrent());
     StoryTeamClearTables(handle);
-    fn_801FCE10(0, "use \x8c insert into \x8c.'METS' * select * from \x8c\n", 0x54415453, handle, firstTable);
-    fn_801FCE10(0, "use \x8c insert into \x8c.'YPTS' * select * from \x8c\n", 0x54415453, handle, secondTable);
+    TDbCompilePerformOp(0, "use \x8c insert into \x8c.'METS' * select * from \x8c\n", 0x54415453, handle, firstTable);
+    TDbCompilePerformOp(0, "use \x8c insert into \x8c.'YPTS' * select * from \x8c\n", 0x54415453, handle, secondTable);
 }
 
 int StoryTeamGetId(int index, int *pTeam)
@@ -470,14 +470,14 @@ int StoryTeamGetId(int index, int *pTeam)
 void StoryPlayerMoveToTeam(int team, int player)
 {
     QueryResult result;
-    fn_801FCE10(&result, "use 'TATS' update 'YALP' set 'DIGT' = \x82 and 'ITGT' = \x82 and 'DIOP' = \x82 and 'DBTP' = \x82 and 'DFTP' = \x82 and 'CDHP' = \x82 where 'DIGP' = \x82\n",
+    TDbCompilePerformOp(&result, "use 'TATS' update 'YALP' set 'DIGT' = \x82 and 'ITGT' = \x82 and 'DIOP' = \x82 and 'DBTP' = \x82 and 'DFTP' = \x82 and 'CDHP' = \x82 where 'DIGP' = \x82\n",
                 team, team, -1, 0, 0, 0, player);
 }
 
 void StoryPlayerDelete(int player, int team)
 {
     QueryResult result;
-    fn_801FCE10(&result, "use 'TATS' delete from 'YALP' where 'DIGT' = \x82 and 'DIGP' = \x82\n", team, player);
+    TDbCompilePerformOp(&result, "use 'TATS' delete from 'YALP' where 'DIGT' = \x82 and 'DIGP' = \x82\n", team, player);
 }
 
 int StoryTeamGetLogo(DbCursor *pCursor)

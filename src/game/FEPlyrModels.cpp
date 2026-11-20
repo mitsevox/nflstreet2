@@ -108,7 +108,7 @@ void MatLoadSlot(int a);
 void MatStoreSlot(int a);
 void MatCatSlot(int a);
 FEPlyrScene_t *ObjNew(int a, int b, FEPlyrSceneDesc_t *pDesc);
-void fn_80227490(float *pOut, float *pIn, int a, int b, int c);
+void Vec3RotateZYX(float *pOut, float *pIn, int a, int b, int c);
 void fn_80234424(int a);
 }
 
@@ -222,7 +222,7 @@ static void _FEPlyrScreenToWorld(float x, float y, float z, float *pOut)
     scale = (limit - pOut[2]) / limit;
     pOut[0] = (x - 427.0f) * scale + 427.0f;
     pOut[1] = (y - 240.0f) * scale + 240.0f;
-    fn_80227490(pOut, pOut, 0x400000, 0, -0x400000);
+    Vec3RotateZYX(pOut, pOut, 0x400000, 0, -0x400000);
 }
 
 static void _FEPlyrBuildTransform(Object_8003DEC4 *pObject);

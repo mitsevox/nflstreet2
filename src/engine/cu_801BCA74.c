@@ -85,11 +85,11 @@ int fn_801BCA74(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *p
     return found;
 }
 
-void fn_80227248(Pair_802270A4 *pOut, Pair_802270A4 *pIn, float scale);
-void fn_80227384(Pair_802270A4 *pOut, Pair_802270A4 *pIn, int angle);
-void fn_80227638(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB);
-void fn_80227690(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB);
-void fn_80227904(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB, float t);
+void Vec2Scale(Pair_802270A4 *pOut, Pair_802270A4 *pIn, float scale);
+void Vec2Rotate(Pair_802270A4 *pOut, Pair_802270A4 *pIn, int angle);
+void Vec2Add(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB);
+void Vec2Sub(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB);
+void Vec2Lerp(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB, float t);
 
 int fn_801BCCAC(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *pAnim, Pair_802270A4 *pOut, int key, int all)
 {
@@ -128,9 +128,9 @@ int fn_801BCCAC(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *p
                 }
                 if (i + 1 < pAnim->mUnknown0 && pAnim->mUnknown4[i + 1].mUnknown9 == index) {
                     if (!(pRecord->mUnknown4C.mUnknown1E & 2)) {
-                        fn_80227904(&offset, &pEntry->mUnknown18, &pAnim->mUnknown4[i + 1].mUnknown18, pRecord->mUnknown4C.mUnknown14);
+                        Vec2Lerp(&offset, &pEntry->mUnknown18, &pAnim->mUnknown4[i + 1].mUnknown18, pRecord->mUnknown4C.mUnknown14);
                     } else {
-                        fn_80227248(&offset, &pEntry->mUnknown18, pRecord->mUnknown4C.mUnknown14);
+                        Vec2Scale(&offset, &pEntry->mUnknown18, pRecord->mUnknown4C.mUnknown14);
                     }
                     pOffset = &offset;
                     i++;
@@ -139,12 +139,12 @@ int fn_801BCCAC(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *p
                     offset.mUnknown4 = pEntry->mUnknown18.mUnknown4;
                     pOffset = &offset;
                 }
-                fn_80227690(&delta, pOffset, &pRecord->mUnknown24);
-                fn_80227638(&pRecord->mUnknown24, &pRecord->mUnknown24, &delta);
-                fn_80227248(&delta, &delta, pRecord->mUnknown2C);
-                fn_80227384(&delta, &delta, pRecord->mUnknownC);
+                Vec2Sub(&delta, pOffset, &pRecord->mUnknown24);
+                Vec2Add(&pRecord->mUnknown24, &pRecord->mUnknown24, &delta);
+                Vec2Scale(&delta, &delta, pRecord->mUnknown2C);
+                Vec2Rotate(&delta, &delta, pRecord->mUnknownC);
                 total += pEntry->mUnknown0;
-                fn_80227904(&sum, &delta, &sum, total != 0.0f ? pEntry->mUnknown0 / total : 0.0f);
+                Vec2Lerp(&sum, &delta, &sum, total != 0.0f ? pEntry->mUnknown0 / total : 0.0f);
             }
         }
     }

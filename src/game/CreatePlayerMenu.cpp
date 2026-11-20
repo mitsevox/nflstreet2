@@ -16,7 +16,7 @@
 #include "game/EditMenu.h"
 #include <string.h>
 #include <string.h>
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 /* Range of one face feature: its values start at mOffset in the
    _CreatePlayer_sFace slot mSlot, and the menu shows mCount of them. */
@@ -544,7 +544,7 @@ static void _CreatePlayerLoadSkillCosts(int position, int skill)
     int loaded = 0;
 
     if (_CreatePlayer_bSkillTable) {
-        loaded = fn_801FCE10(0,
+        loaded = TDbCompilePerformOp(0,
                        "select '10VL' into \x84 and '20VL' into \x84 and '30VL' into \x84 and '40VL' into \x84 and "
                        "'50VL' into \x84 and '60VL' into \x84 and '70VL' into \x84 and '80VL' into \x84 and "
                        "'90VL' into \x84 and '01VL' into \x84 and '11VL' into \x84 and '21VL' into \x84 and "

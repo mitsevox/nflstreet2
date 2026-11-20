@@ -6,18 +6,18 @@
 #include "game/AutoDepth.h"
 #include "game/DepthChartSide.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801F9908.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbQryDeleteRow.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/SyncRandGetRange.h"
 
 extern "C" {
 void fn_8003DE74(unsigned char side, int *pList);
-int fn_801F967C(int handle, int table);
-void fn_801F9718(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
-int fn_801F9980(int handle, int *pTable);
-int fn_801F9A90(int a, int tag);
+int TDbTblDestroy(int handle, int table);
+void TDbInsertRow(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
+int TDbTblFindUnusedId(int handle, int *pTable);
+int TDbTblExists(int a, int tag);
 int MemFill(void *pDest, int size, int value, int width);
-int fn_801F9BB4(int handle, int table, int column, int *pInfo);
+int TDbTblColGetInfo(int handle, int table, int column, int *pInfo);
 void FESndUpdate(int a);
 int DbCursorGetRow(DbCursor *pObject);
 int DbCursorGetValue(DbCursor *pObject, int key);
@@ -202,7 +202,7 @@ void fn_80083854(DbCursor *pObject)
     QueryResult result;
     DbColumnValue list[2];
 
-    fn_801F9BB4(pObject->mUnknown4, pObject->mUnknown8, pObject->mUnknown12, info);
+    TDbTblColGetInfo(pObject->mUnknown4, pObject->mUnknown8, pObject->mUnknown12, info);
     int column = pObject->mUnknown12;
     list[0].Set(-1, column, 0);
     list[1].SetEnd();
@@ -210,7 +210,7 @@ void fn_80083854(DbCursor *pObject)
     int value = list[0].mValue;
 
     _FilterSetColumn(&arg, 6, pObject->mUnknown8, pObject->mUnknown12, info[0], value);
-    fn_801F9908(pObject->mUnknown4, (DbQueryTable *)pObject->mUnknown20, &arg, &result, 0);
+    TDbQryDeleteRow(pObject->mUnknown4, (DbQueryTable *)pObject->mUnknown20, &arg, &result, 0);
 }
 
 void fn_80083934(DbCursor *pObject, int a, int b, int c)
@@ -235,7 +235,7 @@ void fn_80083934(DbCursor *pObject, int a, int b, int c)
     list[3].mTableTag = 0x54534C50;
     list[3].mValue = a;
     list[4].SetEnd();
-    fn_801F9718(pObject->mUnknown4, pObject->mUnknown8, list, result, 0);
+    TDbInsertRow(pObject->mUnknown4, pObject->mUnknown8, list, result, 0);
 }
 
 void fn_80083A10(DbCursor *pObject, void *pColumns, int tag, int value)
@@ -308,7 +308,7 @@ void fn_80083C98(DbCursor *pObject, void *pColumns, int tag, unsigned char flag)
 
 void fn_80083DE4(int id)
 {
-    fn_801FCE10(0, "use 'TATS' update 'YALP' set 'ITGT' = \x85 where 'DIGT' = \x82\n", id, id);
+    TDbCompilePerformOp(0, "use 'TATS' update 'YALP' set 'ITGT' = \x85 where 'DIGT' = \x82\n", id, id);
 }
 
 void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery)
@@ -506,7 +506,7 @@ int fn_800844B8(const char *pName, int type, int logo)
     int id;
 
     fn_8022C628(0x54415453, 0x4D414554, &id, &count);
-    fn_801FCE10(0,
+    TDbCompilePerformOp(0,
                 "use 'TATS' insert into 'MAET' set 'DIGT' = \x82 and 'PYTT' = \x82 and 'DIOT' = \x82 and "
                 "'DROT' = \x82 and 'LGLT' = \x82 and 'SIVT' = \x83 and 'RUMT' = \x85 and 'ANDT' = \x88 and "
                 "'LDTC' = \x82\n",
@@ -537,7 +537,7 @@ int fn_8008454C(int type, int logo, const char *pName)
         values[0] = DbUtilRandomRange(46, 133);
     }
     id = fn_800844B8(name, type, values[0]);
-    fn_801FCE10(0, "use 'TATS' update 'MAET' set '1CMT' = \x85 and '2CMT' = \x85 and '3CMT' = \x85 where 'DIGT' = \x85\n",
+    TDbCompilePerformOp(0, "use 'TATS' update 'MAET' set '1CMT' = \x85 and '2CMT' = \x85 and '3CMT' = \x85 where 'DIGT' = \x85\n",
                 values[1], values[2], values[3], id);
     return id;
 }
@@ -551,12 +551,12 @@ void fn_8008463C(int *pLogo, int *pFirst, int *pSecond, int *pThird)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    fn_801FCE10(&result, "use 'TATS' declare \x8a cursor for select * from 'LTPS'\n", &cursor);
+    TDbCompilePerformOp(&result, "use 'TATS' declare \x8a cursor for select * from 'LTPS'\n", &cursor);
     cursor.mUnknown4 = SyncRandGetIntRange(1, 0, result.mUnknown0 - 1);
-    fn_801FCE10(0, "use 'TATS' fetch from \x8a 'LGLT' into \x85 and '1CMT' into \x85 and '2CMT' into \x85 and '3CMT' into \x85\n",
+    TDbCompilePerformOp(0, "use 'TATS' fetch from \x8a 'LGLT' into \x85 and '1CMT' into \x85 and '2CMT' into \x85 and '3CMT' into \x85\n",
                 &cursor, pLogo, pFirst, pSecond, pThird);
     if (cursor.mUnknown0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
 }
 
@@ -566,7 +566,7 @@ void fn_800846F4(int logo, char *pName, int size)
     QueryResult result;
     int flag = 0;
 
-    if (fn_801F9A90(0, 0x43544E52)) {
+    if (TDbTblExists(0, 0x43544E52)) {
         flag = 1;
         DbFileTblLoad(0, 0x43544E52);
     }
@@ -574,16 +574,16 @@ void fn_800846F4(int logo, char *pName, int size)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    fn_801FCE10(&result, "declare \x8a cursor for select * from 'CTNR' where ('LGLT' = \x82)\n", &cursor, logo);
+    TDbCompilePerformOp(&result, "declare \x8a cursor for select * from 'CTNR' where ('LGLT' = \x82)\n", &cursor, logo);
     int count = result.mUnknown0;
     if (count > 0) {
         cursor.mUnknown4 = SyncRandGetIntRange(1, 0, count - 1);
-        fn_801FCE10(0, "fetch from \x8a 'ETNR' into \x88\n", &cursor, pName);
+        TDbCompilePerformOp(0, "fetch from \x8a 'ETNR' into \x88\n", &cursor, pName);
     } else {
         strncpy(pName, "Playaz", size);
     }
     if (cursor.mUnknown0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
     if (flag) {
         DbFileTblDestroy(0, 0x43544E52);
@@ -732,13 +732,13 @@ void fn_80084DAC(int team, int *pIds, unsigned int count)
 
     fn_80229AA4(0x54415453, 0x59414C50, pNewIds, &found);
     for (i = 0; i < count; i++) {
-        fn_801F9980(0x54415453, &table);
+        TDbTblFindUnusedId(0x54415453, &table);
         pOldIds[i] = pIds[i];
-        fn_801FCE10(0, "use 'TATS' select into \x8c * from 'YALP' where ('DIGP' = \x82)\n", table, pOldIds[i]);
-        fn_801FCE10(0, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x82 where ('DIGP' = \x82)\n", table, team,
+        TDbCompilePerformOp(0, "use 'TATS' select into \x8c * from 'YALP' where ('DIGP' = \x82)\n", table, pOldIds[i]);
+        TDbCompilePerformOp(0, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x82 where ('DIGP' = \x82)\n", table, team,
                     pNewIds[i], pOldIds[i]);
-        fn_801FCE10(0, "use 'TATS' insert into \x8c.'YALP' * select * from \x8c\n", 0x54415453, table);
-        fn_801F967C(0x54415453, table);
+        TDbCompilePerformOp(0, "use 'TATS' insert into \x8c.'YALP' * select * from \x8c\n", 0x54415453, table);
+        TDbTblDestroy(0x54415453, table);
     }
     for (i = 0; i < 14; i++) {
         copy[i] = pIds[i];

@@ -1963,6 +1963,138 @@
     "_DbUser_SaveJob": {
       "address": "0x803A260C",
       "evidence": "evidence.tsv data and name rows for 0x803A260C (used only by src/engine/dbuser.c; storage not claimed by the unit)."
+    },
+    "Vec3CrossProduct": {
+      "address": "0x802277DC",
+      "evidence": "evidence.tsv function and name rows for 0x802277DC (Vec3CrossProduct, registered in comparisons.json, original bytes linked); called by name from src/engine/matrix.c, src/engine/physconstraint.cpp, src/engine/physshape.cpp, src/engine/psysEmitter.c, src/engine/rigidbody.cpp, src/game/BallPlace.cpp, src/game/LevelMesh.cpp, src/game/ParticleSys.cpp, src/game/PlyrCollide.cpp (n1e naming wave)."
+    },
+    "Vec2Distance": {
+      "address": "0x8022781C",
+      "evidence": "evidence.tsv function and name rows for 0x8022781C (Vec2Distance, registered in comparisons.json, original bytes linked); called by name from src/game/BigObj.cpp, src/game/FieldLines.cpp, src/game/Handoff.cpp, src/game/LooseBall.cpp, src/game/OptionRun.cpp, src/game/PlayerActionStates.cpp, src/game/PlyrMgr.cpp, src/game/PlyrObjs.cpp, src/game/PlyrStates.cpp, src/game/Possession.cpp, src/game/Pursue.cpp, src/game/RouteRun.cpp, src/game/cu_8002B8F8.cpp, src/game/cu_8008E978.cpp, src/game/cu_800E3CC0.cpp, src/game/cu_800EFC68.cpp, src/game/cu_801A0088.cpp (n1e naming wave)."
+    },
+    "Vec3Distance": {
+      "address": "0x8022785C",
+      "evidence": "evidence.tsv function and name rows for 0x8022785C (Vec3Distance, registered in comparisons.json, original bytes linked); called by name from src/game/BigObj.cpp, src/game/LooseBall.cpp, src/game/PlyrMgr.cpp, src/game/SndgPathfinder.cpp, src/game/SpchIGMissedCatch.cpp, src/game/cu_8002B8F8.cpp, src/game/cu_800EFC68.cpp (n1e naming wave)."
+    },
+    "Vec2DistanceSqr": {
+      "address": "0x80227890",
+      "evidence": "evidence.tsv function and name rows for 0x80227890 (Vec2DistanceSqr, registered in comparisons.json, original bytes linked); called by name from src/game/CarrierRun.cpp, src/game/Divot.cpp, src/game/cu_8008E978.cpp, src/game/cu_800EFC68.cpp (n1e naming wave)."
+    },
+    "Vec3DistanceSqr": {
+      "address": "0x802278D0",
+      "evidence": "evidence.tsv function and name rows for 0x802278D0 (Vec3DistanceSqr, registered in comparisons.json, original bytes linked); called by name from src/game/BallCollide.cpp, src/game/Divot.cpp, src/game/Possession.cpp (n1e naming wave)."
+    },
+    "Vec2Lerp": {
+      "address": "0x80227904",
+      "evidence": "evidence.tsv function and name rows for 0x80227904 (Vec2Lerp, registered in comparisons.json, original bytes linked); called by name from src/game/PlyrObjs.cpp, src/game/cu_800EFC68.cpp (n1e naming wave)."
+    },
+    "Vec3Lerp": {
+      "address": "0x80227930",
+      "evidence": "evidence.tsv function and name rows for 0x80227930 (Vec3Lerp, registered in comparisons.json, original bytes linked); called by name from src/engine/psysEmitter.c, src/game/AnimBlend.cpp, src/game/ArrowDraw.cpp, src/game/BallCollide.cpp, src/game/BallModel.cpp, src/game/BigObj.cpp, src/game/BigObjAnim.cpp, src/game/CollideContacts.cpp, src/game/Divot.cpp, src/game/PlyrMgr.cpp, src/game/PlyrObjs.cpp, src/game/PlyrPose.cpp, src/game/camball.cpp, src/game/camreplay.cpp, src/game/cu_8002B8F8.cpp, src/game/cu_800EFC68.cpp, src/game/cu_8013FF84.cpp, src/game/cu_801A14D8.cpp (n1e naming wave)."
+    },
+    "Vec3Mat33Mul": {
+      "address": "0x80227C2C",
+      "evidence": "evidence.tsv function and name rows for 0x80227C2C (Vec3Mat33Mul, registered in comparisons.json, original bytes linked); called by name from src/engine/lllight.c, src/engine/physconstraint.cpp, src/engine/physshape.cpp, src/engine/psysEmitter.c, src/engine/rigidbody.cpp, src/game/Ball.cpp, src/game/CollideBounce.cpp, src/game/DynObjRender.cpp, src/game/GlowTrail.cpp, src/game/LightTracker.cpp, src/game/ParticleRender.cpp, src/game/PlyrObjs.cpp, src/game/camcurve.cpp, src/game/cu_8008E978.cpp (n1e naming wave)."
+    },
+    "Vec3Mat34Mul": {
+      "address": "0x80227CC0",
+      "evidence": "evidence.tsv function and name rows for 0x80227CC0 (Vec3Mat34Mul, registered in comparisons.json, original bytes linked); called by name from src/engine/camfocus.c, src/engine/physaabb.cpp, src/engine/physconstraint.cpp, src/engine/physshape.cpp, src/game/BallRest.cpp, src/game/ParticleRender.cpp, src/game/PlyrMgr.cpp, src/game/PlyrObjs.cpp, src/game/Weather.cpp, src/game/cammain.cpp, src/game/cu_8008E978.cpp, src/game/cu_8013FF84.cpp (n1e naming wave)."
+    },
+    "Vec3ClosestPointOnSegment": {
+      "address": "0x80227970",
+      "evidence": "evidence.tsv function and name rows for 0x80227970 (Vec3ClosestPointOnSegment, registered in comparisons.json, original bytes linked); called by name from src/game/BallCollide.cpp, src/game/RouteRun.cpp, src/game/cu_8008E978.cpp, src/game/cu_800EFC68.cpp (n1e naming wave)."
+    },
+    "Vec3DistanceSqrToSegment": {
+      "address": "0x80227B04",
+      "evidence": "evidence.tsv function and name rows for 0x80227B04 (Vec3DistanceSqrToSegment, registered in comparisons.json, original bytes linked); called by name from src/game/PlayerActionStates.cpp, src/game/cu_8008E978.cpp (n1e naming wave)."
+    },
+    "Vec3Mat44Mul": {
+      "address": "0x80227D6C",
+      "evidence": "evidence.tsv function and name rows for 0x80227D6C (Vec3Mat44Mul, registered in comparisons.json, original bytes linked); called by name from src/game/GlowTrail.cpp (n1e naming wave)."
+    },
+    "Vec4Mat44Mul": {
+      "address": "0x80227E40",
+      "evidence": "evidence.tsv function and name rows for 0x80227E40 (Vec4Mat44Mul, registered in comparisons.json, original bytes linked); called by name from src/game/PlyrNameTag.cpp, src/game/cu_8016174C.cpp (n1e naming wave)."
+    },
+    "SNDPLATFORM_outputcaps": {
+      "address": "0x802733A0",
+      "evidence": "evidence.tsv function and name rows for 0x802733A0 (SNDPLATFORM_outputcaps, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/ssysinit.c (n1e naming wave)."
+    },
+    "SNDPLATFORM_init": {
+      "address": "0x80273648",
+      "evidence": "evidence.tsv function and name rows for 0x80273648 (SNDPLATFORM_init, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/ssysinit.c (n1e naming wave)."
+    },
+    "iSNDserve": {
+      "address": "0x802739F8",
+      "evidence": "evidence.tsv function and name rows for 0x802739F8 (iSNDserve, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/sserver.c (n1e naming wave)."
+    },
+    "SNDPLATFORM_playtimbre": {
+      "address": "0x80273DF8",
+      "evidence": "evidence.tsv function and name rows for 0x80273DF8 (SNDPLATFORM_playtimbre, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/stagpat.c (n1e naming wave)."
+    },
+    "SndHalSetVol": {
+      "address": "0x802747D8",
+      "evidence": "evidence.tsv function and name rows for 0x802747D8 (SndHalSetVol, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/sserver.c, src/engine/sstvol.c, src/engine/svol.c (n1e naming wave)."
+    },
+    "TDbSQLDestroyCursor": {
+      "address": "0x801FCFA0",
+      "evidence": "evidence.tsv function and name rows for 0x801FCFA0 (TDbSQLDestroyCursor, a registered holdout of src/engine/T3DB_Compiler.c, original bytes linked); called by name from src/engine/dbmanager.c, src/engine/dbocmt.c, src/engine/dbtatscopy.c, src/game/ChalGameSetup.cpp, src/game/Cheat.cpp, src/game/CreateTeamDb.cpp, src/game/CreditsTable.cpp, src/game/ExpLevel.cpp, src/game/FormationLineup.cpp, src/game/GameText.cpp, src/game/InGameScreens.cpp, src/game/PlayBookDb.cpp, src/game/ProfileUnlocks.cpp, src/game/Records.cpp, src/game/StevTable.cpp, src/game/StoryEvents.cpp, src/game/StoryTeam.cpp, src/game/TournamentDb.cpp, src/game/TutorialLesson.cpp, src/game/cu_800834CC.cpp, src/game/cu_8008E978.cpp (n1e naming wave)."
+    },
+    "FontDrawText": {
+      "address": "0x801CD3E4",
+      "evidence": "evidence.tsv function and name rows for 0x801CD3E4 (FontDrawText, a registered holdout of src/engine/Font.c, original bytes linked); called by name from src/engine/cu_801CDB5C.c (n1e naming wave)."
+    },
+    "Vec3CosAngle": {
+      "address": "0x8022772C",
+      "evidence": "evidence.tsv function and name rows for 0x8022772C (Vec3CosAngle, registered in comparisons.json, original bytes linked); called by name from src/engine/cu_801C3EFC.c, src/engine/cu_8022772C.c (n1e naming wave)."
+    },
+    "MemCAsyncOpen": {
+      "address": "0x801D4A3C",
+      "evidence": "evidence.tsv function and name rows for 0x801D4A3C (MemCAsyncOpen, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/cu_801D5D30.c (n1e naming wave)."
+    },
+    "MemCAsyncDelete": {
+      "address": "0x801D4FF4",
+      "evidence": "evidence.tsv function and name rows for 0x801D4FF4 (MemCAsyncDelete, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/cu_801D5D30.c (n1e naming wave)."
+    },
+    "MemCAsyncPoll": {
+      "address": "0x801D5840",
+      "evidence": "evidence.tsv function and name rows for 0x801D5840 (MemCAsyncPoll, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/cu_801D5D30.c (n1e naming wave)."
+    },
+    "SNDPLATFORM_packetplay": {
+      "address": "0x80274464",
+      "evidence": "evidence.tsv function and name rows for 0x80274464 (SNDPLATFORM_packetplay, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/spktplay.c (n1e naming wave)."
+    },
+    "STREAM_kill": {
+      "address": "0x801F7208",
+      "evidence": "evidence.tsv function and name rows for 0x801F7208 (STREAM_kill, a registered holdout of src/engine/stream.c, original bytes linked); called by name from src/engine/sst.c (n1e naming wave)."
+    },
+    "TDbTblDefaultDbPush": {
+      "address": "0x801F9430",
+      "evidence": "evidence.tsv function and name rows for 0x801F9430 (TDbTblDefaultDbPush, a registered holdout of src/engine/t3db.c, original bytes linked); called by name from src/engine/cu_802311C8.c, src/engine/cu_802336C4.c, src/engine/dbcache.c, src/engine/dbmanager.c, src/engine/dbuser.c, src/game/SysModules.cpp (n1e naming wave)."
+    },
+    "TDbIdxCreate": {
+      "address": "0x801F9E84",
+      "evidence": "evidence.tsv function and name rows for 0x801F9E84 (TDbIdxCreate, a registered holdout of src/engine/t3db.c, original bytes linked); called by name from src/engine/T3DB_Compiler.c (n1e naming wave)."
+    },
+    "_TDbQryUpdateExpr": {
+      "address": "0x8020AE88",
+      "evidence": "evidence.tsv function and name rows for 0x8020AE88 (_TDbQryUpdateExpr, a registered holdout of src/engine/t3db_query.c, original bytes linked); called by name from src/engine/t3db.c (n1e naming wave)."
+    },
+    "DbManagerMode2Leave": {
+      "address": "0x802331BC",
+      "evidence": "evidence.tsv function and name rows for 0x802331BC (DbManagerMode2Leave, a registered holdout of src/engine/dbmanager.c, original bytes linked); called by name from src/engine/cu_802311C8.c, src/engine/cu_802336C4.c, src/engine/dbcache.c, src/engine/dbuser.c (n1e naming wave)."
+    },
+    "DbTatsCopyAllTables": {
+      "address": "0x8022ED50",
+      "evidence": "evidence.tsv function and name rows for 0x8022ED50 (DbTatsCopyAllTables, a registered holdout of src/engine/dbtatscopy.c, original bytes linked); called by name from src/engine/cu_802297D8.c, src/engine/cu_8022C9A8.c, src/engine/cu_802311C8.c, src/engine/cu_802336C4.c, src/engine/dbcache.c, src/engine/dbevas.c, src/engine/dbmanager.c, src/engine/dbniom.c, src/engine/dbocmt.c, src/engine/dboptions.c, src/engine/dbuser.c (n1e naming wave)."
+    },
+    "ModelObjSetAmbientColor": {
+      "address": "0x80235C90",
+      "evidence": "evidence.tsv function and name rows for 0x80235C90 (ModelObjSetAmbientColor, a registered holdout of src/engine/modelobj.c, original bytes linked); called by name from src/game/BallMarker.cpp, src/game/EnvObj.cpp, src/game/EnvRender.cpp, src/game/FldObj.cpp, src/game/ReplayCursor.cpp, src/game/UISModel.cpp, src/game/cu_8004A2F4.cpp, src/game/cu_8016174C.cpp (n1e naming wave)."
+    },
+    "XmlFindInElement": {
+      "address": "0x80216BFC",
+      "evidence": "evidence.tsv function and name rows for 0x80216BFC (XmlFindInElement, a registered holdout of src/engine/xmlread.c, original bytes linked); called by name from src/game/Divot.cpp, src/game/cu_80044F20.cpp, src/game/cu_8004A2F4.cpp (n1e naming wave)."
     }
   },
   "units": [
@@ -4686,7 +4818,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8022ED50",
+            "function": "DbTatsCopyAllTables",
             "evidence": "evidence.tsv source-form 0x8022ED50-0x8022EF14"
           }
         ],
@@ -4727,7 +4859,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_802331BC",
+            "function": "DbManagerMode2Leave",
             "evidence": "evidence.tsv source-form 0x802331BC-0x80233344"
           }
         ],
@@ -4735,9 +4867,9 @@
       }
     },
     {
-      "source": "src/engine/cu_802355E4.c",
+      "source": "src/engine/modelobj.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x802355E4-0x80235DD8 (src/engine/cu_802355E4.c), its function, name and source-form rows and the data row 0x802B7198-0x802B71B0 of its whole .rodata; linked with holdouts (owner ruling of 2026-11-20): 16 of 17 functions exact, the holdout fn_80235C90 keeps the original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x802355E4-0x80235DD8 (src/engine/modelobj.c), its function, name and source-form rows and the data row 0x802B7198-0x802B71B0 of its whole .rodata; linked with holdouts (owner ruling of 2026-11-20): 16 of 17 functions exact, the holdout fn_80235C90 keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -4761,11 +4893,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_80235C90",
+            "function": "ModelObjSetAmbientColor",
             "evidence": "evidence.tsv source-form 0x80235C90-0x80235D0C"
           }
         ],
-        "evidence": "w1b merge notes (swarm w1 tracking table): src/engine/cu_802355E4.c holds out fn_80235C90 only."
+        "evidence": "w1b merge notes (swarm w1 tracking table): src/engine/modelobj.c holds out fn_80235C90 only."
       }
     },
     {
@@ -4795,7 +4927,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_802365E8",
+            "function": "_LLLightLoadSetScaled",
             "evidence": "evidence.tsv source-form 0x802365E8-0x802368D0"
           }
         ],
@@ -20425,11 +20557,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_802067D4",
+            "function": "_TDbQryScoreIndex",
             "evidence": "evidence.tsv source-form 0x802067D4-0x802069BC"
           },
           {
-            "function": "fn_8020AE88",
+            "function": "_TDbQryUpdateExpr",
             "evidence": "evidence.tsv source-form 0x8020AE88-0x8020B094"
           }
         ],
@@ -23672,7 +23804,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801CD3E4",
+            "function": "FontDrawText",
             "evidence": "evidence.tsv source-form 0x801CD3E4-0x801CD63C"
           }
         ],
@@ -23680,9 +23812,9 @@
       }
     },
     {
-      "source": "src/engine/cu_8021625C.c",
+      "source": "src/engine/xmlread.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 (src/engine/cu_8021625C.c), its compiler rows and the data rows of its data sections; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 2 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 (src/engine/xmlread.c), its compiler rows and the data rows of its data sections; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 2 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
       "sections": [
         {
           "section": ".text",
@@ -23712,11 +23844,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_802166F0",
+            "function": "_XmlSkipElement",
             "evidence": "evidence.tsv source-form 0x802166F0-0x80216860"
           },
           {
-            "function": "fn_80216BFC",
+            "function": "XmlFindInElement",
             "evidence": "evidence.tsv source-form 0x80216BFC-0x80216E34"
           }
         ],
@@ -23780,27 +23912,27 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_802733A0",
+            "function": "SNDPLATFORM_outputcaps",
             "evidence": "evidence.tsv source-form 0x802733A0-0x80273458"
           },
           {
-            "function": "fn_80273648",
+            "function": "SNDPLATFORM_init",
             "evidence": "evidence.tsv source-form 0x80273648-0x80273960"
           },
           {
-            "function": "fn_802739F8",
+            "function": "iSNDserve",
             "evidence": "evidence.tsv source-form 0x802739F8-0x80273D7C"
           },
           {
-            "function": "fn_80273DF8",
+            "function": "SNDPLATFORM_playtimbre",
             "evidence": "evidence.tsv source-form 0x80273DF8-0x80274304"
           },
           {
-            "function": "fn_80274464",
+            "function": "SNDPLATFORM_packetplay",
             "evidence": "evidence.tsv source-form 0x80274464-0x8027474C"
           },
           {
-            "function": "fn_802747D8",
+            "function": "SndHalSetVol",
             "evidence": "evidence.tsv source-form 0x802747D8-0x80274924"
           }
         ],
@@ -24146,19 +24278,19 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801FCFA0",
+            "function": "TDbSQLDestroyCursor",
             "evidence": "evidence.tsv source-form 0x801FCFA0-0x801FD0A4"
           },
           {
-            "function": "fn_801FE534",
+            "function": "_T3DBParse_SubEquivalent",
             "evidence": "evidence.tsv source-form 0x801FE534-0x801FE5E0"
           },
           {
-            "function": "fn_801FFEE4",
+            "function": "_T3DBFillPartialTableColRefs",
             "evidence": "evidence.tsv source-form 0x801FFEE4-0x801FFFC4"
           },
           {
-            "function": "fn_802004CC",
+            "function": "_T3DBParse_OrderBy",
             "evidence": "evidence.tsv source-form 0x802004CC-0x8020071C"
           }
         ],
@@ -24192,11 +24324,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801F9430",
+            "function": "TDbTblDefaultDbPush",
             "evidence": "evidence.tsv source-form 0x801F9430-0x801F9574"
           },
           {
-            "function": "fn_801F9E84",
+            "function": "TDbIdxCreate",
             "evidence": "evidence.tsv source-form 0x801F9E84-0x801F9FA4"
           }
         ],
@@ -24242,23 +24374,23 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801D4848",
+            "function": "MemCAsyncGetDir",
             "evidence": "evidence.tsv source-form 0x801D4848-0x801D4A3C"
           },
           {
-            "function": "fn_801D4A3C",
+            "function": "MemCAsyncOpen",
             "evidence": "evidence.tsv source-form 0x801D4A3C-0x801D4D08"
           },
           {
-            "function": "fn_801D4FF4",
+            "function": "MemCAsyncDelete",
             "evidence": "evidence.tsv source-form 0x801D4FF4-0x801D512C"
           },
           {
-            "function": "fn_801D546C",
+            "function": "_MemCAsyncWrite",
             "evidence": "evidence.tsv source-form 0x801D546C-0x801D56A0"
           },
           {
-            "function": "fn_801D5840",
+            "function": "MemCAsyncPoll",
             "evidence": "evidence.tsv source-form 0x801D5840-0x801D5D30"
           }
         ],
@@ -24292,11 +24424,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801F62F0",
+            "function": "readcallback",
             "evidence": "evidence.tsv source-form 0x801F62F0-0x801F63EC"
           },
           {
-            "function": "fn_801F7208",
+            "function": "STREAM_kill",
             "evidence": "evidence.tsv source-form 0x801F7208-0x801F73D4"
           }
         ],

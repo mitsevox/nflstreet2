@@ -5,14 +5,14 @@
 #include "engine/dbteams.h"
 #include "engine/tdbext.h"
 #include "engine/dbutil.h"
-#include "engine/fn_801F9134.h"
+#include "engine/TDbLoad.h"
 #include "engine/cu_80229270.h"
 
 #include "engine/DbNiomModeFuncs.h"
 #include "engine/llmemory.h"
 #include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/QueryStatus.h"
 #include "engine/t3db.h"
 #include "engine/t3db_cols.h"
@@ -38,11 +38,11 @@ extern int _DbUser_iMode;
 extern int _DbUser_iCurrent;
 extern unsigned char _DbUser_iCount;
 extern DbUserEntry_t _DbUser_aEntries[];
-extern int fn_801F91AC(int handle, int a, int b);
-extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
-extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
+extern int TDbSave(int handle, int a, int b);
+extern int TDbInsertRow(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
+extern int TDbLoadFromFile(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
 extern TDbIODevice_t tdbiofioCallback;
-extern int fn_801F967C(int db, int tbl);
+extern int TDbTblDestroy(int db, int tbl);
 signed char DbUserFindIndex(int key);
 
 extern const unsigned char lbl_802AEF10[];
@@ -62,7 +62,7 @@ extern char lbl_802B4EC4[];
 extern char lbl_802B37E4[];
 extern char lbl_802B3824[];
 int fn_8022C0E0(struct QueryCursor cursor, int a);
-extern int fn_801FA1C0(int ref, unsigned short *pCount);
+extern int TDbQryGetCount(int ref, unsigned short *pCount);
 extern int fn_80230D8C(int id, int a, int b);
 extern char lbl_802B3610[];
 extern char lbl_802B3698[];
@@ -70,13 +70,13 @@ extern char lbl_802B479C[];
 extern char lbl_802B4828[];
 extern char lbl_802B5CB4[];
 extern char lbl_802B5CF0[];
-extern int fn_801F9014(int db);
+extern int TDbExists(int db);
 extern char lbl_802B3888[];
 extern char lbl_802B36C4[];
-extern int fn_801F9A90(int db, int tbl);
-extern int fn_801F9AB8(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount);
-extern int fn_801F9C68(int db, int tbl, int col);
-int fn_8022ED30(int db, int tbl);
+extern int TDbTblExists(int db, int tbl);
+extern int TDbTblColEnum(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount);
+extern int TDbTblColExists(int db, int tbl, int col);
+int DbTatsCopyTblDestroy(int db, int tbl);
 extern char lbl_802B5A48[];
 extern char lbl_802B5AB0[];
 extern char lbl_802B5ACC[];
@@ -199,7 +199,7 @@ typedef struct Record_8022A304 {
     char mUnknown16[2];
 } Record_8022A304;
 
-/* Ends a column list for fn_801F9718. */
+/* Ends a column list for TDbInsertRow. */
 static inline void fn_801F9718_SetEnd(TDbCol_801F9718 *pCol)
 {
     pCol->mCol = -1;
@@ -580,13 +580,13 @@ int DbEvasLoad(void);
 int DbEvasLoadStream(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps);
 int DbEvasSaveStream(void *pTarget, struct SaveStreamOps_t *pOps);
 int DbEvasUnload(void);
-int fn_8022EBF0(int a, const char *pName, int b);
-void fn_8022EC48(void);
-int fn_8022EC80(void);
-int fn_8022ECCC(void);
-int fn_8022ECF4(int a, int b);
-int fn_8022ED30(int db, int tbl);
-int fn_8022ED50(int db, int a, int b);
+int DbTatsCopyInit(int a, const char *pName, int b);
+void DbTatsCopyShutdown(void);
+int DbTatsCopyOpen(void);
+int DbTatsCopyClose(void);
+int DbTatsCopyTable(int a, int b);
+int DbTatsCopyTblDestroy(int db, int tbl);
+int DbTatsCopyAllTables(int db, int a, int b);
 int DbFileInit(const char *pName);
 void DbFileShutdown(void);
 int DbFileTblLoad(int db, int file);
@@ -629,7 +629,7 @@ void DbEvasShutdown(void)
 
 int DbEvasLoad(void)
 {
-    int result = fn_801F8D60(0x45564153, _DbEvas_iSize);
+    int result = TDbCreate(0x45564153, _DbEvas_iSize);
     if (result == 0) {
         result = TDbExtLoadFromResource(0x45564153, _DbEvas_pFileName, _DbEvas_iMode, 0);
     }
@@ -638,15 +638,15 @@ int DbEvasLoad(void)
 
 int DbEvasLoadStream(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps)
 {
-    return fn_801F9134(0x45564153, (int)pTarget, 0, (int)pOps);
+    return TDbLoad(0x45564153, (int)pTarget, 0, (int)pOps);
 }
 
 int DbEvasSaveStream(void *pTarget, struct SaveStreamOps_t *pOps)
 {
-    return fn_801F91AC(0x45564153, (int)pTarget, (int)pOps);
+    return TDbSave(0x45564153, (int)pTarget, (int)pOps);
 }
 
 int DbEvasUnload(void)
 {
-    return fn_801F8EEC(0x45564153);
+    return TDbDestroy(0x45564153);
 }

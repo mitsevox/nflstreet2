@@ -9,7 +9,7 @@
 #include "game/GameModeType.h"
 #include "game/ResOpenDevice.h"
 #include "game/fn_801F40F4.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/SyncRandGetRange.h"
 #include "game/Object_80039F5C.h"
 #include "engine/spchevnt.h"
@@ -568,13 +568,13 @@ extern "C" void SpchIGFindNearestOpponent(int handle)
         }
         pOther = PlyrGet(team, 0);
         *pNearest = pOther->mId;
-        fn_802276B4(&delta, &pObject->mMotion.mPos, &pOther->mMotion.mPos);
-        best = fn_802270D4(&delta);
+        Vec3Sub(&delta, &pObject->mMotion.mPos, &pOther->mMotion.mPos);
+        best = Vec3Magnitude(&delta);
         count = fn_80178D18(team);
         for (i = 1; i < count; i++) {
             pOther = PlyrGet(team, i);
-            fn_802276B4(&delta, &pObject->mMotion.mPos, &pOther->mMotion.mPos);
-            distance = fn_802270D4(&delta);
+            Vec3Sub(&delta, &pObject->mMotion.mPos, &pOther->mMotion.mPos);
+            distance = Vec3Magnitude(&delta);
             if (distance < best) {
                 best = distance;
                 *pNearest = pOther->mId;

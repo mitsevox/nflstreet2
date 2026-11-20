@@ -6,14 +6,14 @@
 #include "engine/dbteams.h"
 #include "engine/tdbext.h"
 #include "engine/dbutil.h"
-#include "engine/fn_801F9134.h"
+#include "engine/TDbLoad.h"
 #include "engine/cu_80229270.h"
 
 #include "engine/DbNiomModeFuncs.h"
 #include "engine/llmemory.h"
 #include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/QueryStatus.h"
 #include "engine/t3db.h"
 #include "engine/t3db_cols.h"
@@ -39,11 +39,11 @@ extern int _DbUser_iMode;
 extern int _DbUser_iCurrent;
 extern unsigned char _DbUser_iCount;
 extern DbUserEntry_t _DbUser_aEntries[];
-extern int fn_801F91AC(int handle, int a, int b);
-extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
-extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
+extern int TDbSave(int handle, int a, int b);
+extern int TDbInsertRow(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
+extern int TDbLoadFromFile(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
 extern TDbIODevice_t tdbiofioCallback;
-extern int fn_801F967C(int db, int tbl);
+extern int TDbTblDestroy(int db, int tbl);
 signed char DbUserFindIndex(int key);
 
 extern const unsigned char lbl_802AEF10[];
@@ -63,7 +63,7 @@ extern char lbl_802B4EC4[];
 extern char lbl_802B37E4[];
 extern char lbl_802B3824[];
 int fn_8022C0E0(struct QueryCursor cursor, int a);
-extern int fn_801FA1C0(int ref, unsigned short *pCount);
+extern int TDbQryGetCount(int ref, unsigned short *pCount);
 extern int fn_80230D8C(int id, int a, int b);
 extern char lbl_802B3610[];
 extern char lbl_802B3698[];
@@ -71,13 +71,13 @@ extern char lbl_802B479C[];
 extern char lbl_802B4828[];
 extern char lbl_802B5CB4[];
 extern char lbl_802B5CF0[];
-extern int fn_801F9014(int db);
+extern int TDbExists(int db);
 extern char lbl_802B3888[];
 extern char lbl_802B36C4[];
-extern int fn_801F9A90(int db, int tbl);
-extern int fn_801F9AB8(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount);
-extern int fn_801F9C68(int db, int tbl, int col);
-int fn_8022ED30(int db, int tbl);
+extern int TDbTblExists(int db, int tbl);
+extern int TDbTblColEnum(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount);
+extern int TDbTblColExists(int db, int tbl, int col);
+int DbTatsCopyTblDestroy(int db, int tbl);
 extern char lbl_802B5A48[];
 extern char lbl_802B5AB0[];
 extern char lbl_802B5ACC[];
@@ -200,7 +200,7 @@ typedef struct Record_8022A304 {
     char mUnknown16[2];
 } Record_8022A304;
 
-/* Ends a column list for fn_801F9718. */
+/* Ends a column list for TDbInsertRow. */
 static inline void fn_801F9718_SetEnd(TDbCol_801F9718 *pCol)
 {
     pCol->mCol = -1;
@@ -581,13 +581,13 @@ int DbEvasLoad(void);
 int DbEvasLoadStream(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps);
 int DbEvasSaveStream(void *pTarget, struct SaveStreamOps_t *pOps);
 int DbEvasUnload(void);
-int fn_8022EBF0(int a, const char *pName, int b);
-void fn_8022EC48(void);
-int fn_8022EC80(void);
-int fn_8022ECCC(void);
-int fn_8022ECF4(int a, int b);
-int fn_8022ED30(int db, int tbl);
-int fn_8022ED50(int db, int a, int b);
+int DbTatsCopyInit(int a, const char *pName, int b);
+void DbTatsCopyShutdown(void);
+int DbTatsCopyOpen(void);
+int DbTatsCopyClose(void);
+int DbTatsCopyTable(int a, int b);
+int DbTatsCopyTblDestroy(int db, int tbl);
+int DbTatsCopyAllTables(int db, int a, int b);
 int DbFileInit(const char *pName);
 void DbFileShutdown(void);
 int DbFileTblLoad(int db, int file);
@@ -603,10 +603,10 @@ int DbUserGetId(int index);
 signed char DbUserFindIndex(int key);
 int DbUserGetDb(int key);
 
-#include "engine/fn_801F8D60.h"
+#include "engine/TDbCreate.h"
 #include "engine/tdbext.h"
 #include "engine/dbutil.h"
-#include "engine/fn_801F9134.h"
+#include "engine/TDbLoad.h"
 
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXTev.h>
@@ -616,7 +616,7 @@ int DbUserGetDb(int key);
 #include "engine/DbNiomModeFuncs.h"
 #include "game/DbUserSetCurrent.h"
 #include "game/fn_80233CBC.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "engine/texfile.h"
 #include "game/Object_80233EAC.h"
 #include "game/Object_80235588.h"
@@ -634,8 +634,8 @@ typedef struct Block_80233588 {
 } Block_80233588;
 
 extern DbNiomHandlers_t lbl_802FB38C;
-int fn_80233588(Block_80233588 *p);
-int fn_802336BC(void);
+int DbManagerCreateGameDb(Block_80233588 *p);
+int DbManagerInitHook(void);
 
 typedef struct Block_802336C4 {
     void *mpUnknown0;
@@ -881,15 +881,15 @@ extern int ResLoad(void *pData, int index, int a);
 extern int ResCopyToBuffer(void *pArchive, int id, void *pDest);
 extern int ResUnLoad(void *pData, int index);
 extern int ResIsLoaded(void *pData, int index);
-extern int fn_801F9014(int handle);
-extern int fn_801F91AC(int handle, int a, int b);
-extern int fn_801F9430(int a, int *pTable4, int *pTable8);
-extern int fn_801F9574(void);
-extern int fn_801F9980(int handle, int *pTable);
-extern int fn_801F9A90(int handle, int table);
-extern int fn_801F9D0C(int handle, int table, int a);
-extern int fn_801FA68C(void *pCallback, int tag);
-extern int fn_801FA740(int tag);
+extern int TDbExists(int handle);
+extern int TDbSave(int handle, int a, int b);
+extern int TDbTblDefaultDbPush(int a, int *pTable4, int *pTable8);
+extern int TDbTblDefaultDbPop(void);
+extern int TDbTblFindUnusedId(int handle, int *pTable);
+extern int TDbTblExists(int handle, int table);
+extern int TDbTblInfoSetPersistent(int handle, int table, int a);
+extern int TDbRegisterHandler(void *pCallback, int tag);
+extern int TDbUnregisterHandler(int tag);
 extern void LLTexCopyFlush(void *pDst, void *pSrc, unsigned int size);
 extern void TMModelResRelocate(void *p);
 extern void *TMModelResGetChunk(void *p, unsigned int tag, void *pOut);
@@ -971,7 +971,7 @@ extern void fn_8022E9C4(void);
 extern int fn_8022E9E4(void);
 extern int DbEvasModuleInit(void);
 extern void DbEvasModuleShutdown(void);
-extern int fn_8022ED50(int a, int b, int c);
+extern int DbTatsCopyAllTables(int a, int b, int c);
 extern signed char DbUserFindIndex(int key);
 extern int DbUserGetDb(int key);
 extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
@@ -981,14 +981,14 @@ extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
 extern void fn_80236F00(void);
 
 void fn_8023123C(void *p, int mode, unsigned char *pDone);
-int fn_80232DE0(void);
-int fn_80232EB4(void);
-int fn_80232EF4(void);
-int fn_802331BC(void);
-void fn_802334F0(int mode, DbNiomModeFuncs_t *pFuncs);
-int fn_80233604(void **ppData, void *p);
-int fn_80233660(int a, int b);
-int fn_80233694(void);
+int DbManagerEnterMode0(void);
+int DbManagerEnterMode1(void);
+int DbManagerMode1Leave(void);
+int DbManagerMode2Leave(void);
+void DbManagerGetModeFuncs(int mode, DbNiomModeFuncs_t *pFuncs);
+int DbManagerLoadGameDb(void **ppData, void *p);
+int DbManagerSaveGameDb(int a, int b);
+int DbManagerDestroyGameDb(void);
 int fn_80233BE4(short *pOut, Model_80233BE4 *pModel, Values_80233C7C *pValues);
 void fn_80233C7C(Values_80233C7C *pValues);
 float fn_80234070(Box_80234070 *pBox);
@@ -1153,41 +1153,41 @@ int fn_802311C8(int handle);
 void fn_80231208(void);
 int fn_80231A84(void);
 int fn_80231A8C(const char *pWhere, int b, int c, int d, int e, struct QueryCursor *pCursor);
-int fn_802328A8(void);
-void fn_80232950(void);
-int fn_80232998(void);
-int fn_802329D0(void);
-int fn_802329F0(struct Request_802329F0 *p);
-int fn_80232A98(void);
-int fn_80232AF8(void **ppData, void *p);
-int fn_80232B8C(int a, int b);
-int fn_80232DE0(void);
-int fn_80232E20(void);
-int fn_80232E70(void);
-int fn_80232E78(void);
-int fn_80232E80(void);
-int fn_80232EAC(void);
-int fn_80232EB4(void);
-int fn_80232EF4(void);
-int fn_80232F44(void);
-int fn_80232F4C(void);
-int fn_80232F54(void);
-int fn_80232F74(void);
-int fn_80232FD4(int *pRecord0, int *pRecord1);
-int fn_802331BC(void);
-int fn_80233344(void);
-int fn_8023334C(int a, int b);
-int fn_80233454(void);
-int fn_802334C4(void);
-void fn_802334F0(int mode, DbNiomModeFuncs_t *pFuncs);
-int fn_80233568(int a, int b, unsigned char *pDone);
-int fn_80233578(void);
-int fn_80233580(void);
-int fn_80233588(Block_80233588 *p);
-int fn_80233604(void **ppData, void *p);
-int fn_80233660(int a, int b);
-int fn_80233694(void);
-int fn_802336BC(void);
+int DbManagerInitModules(void);
+void DbManagerShutdownModules(void);
+int DbManagerPushGameDb(void);
+int DbManagerPopGameDb(void);
+int DbManagerInit(struct Request_802329F0 *p);
+int DbManagerShutdown(void);
+int DbManagerLoad(void **ppData, void *p);
+int DbManagerSave(int a, int b);
+int DbManagerEnterMode0(void);
+int DbManagerMode0Leave(void);
+int DbManagerMode0Load(void);
+int DbManagerMode0Save(void);
+int DbManagerMode0Finish(void);
+int DbManagerMode0Abort(void);
+int DbManagerEnterMode1(void);
+int DbManagerMode1Leave(void);
+int DbManagerMode1Load(void);
+int DbManagerMode1Save(void);
+int DbManagerMode1Finish(void);
+int DbManagerMode1Abort(void);
+int DbManagerEnterMode2(int *pRecord0, int *pRecord1);
+int DbManagerMode2Leave(void);
+int DbManagerMode2Load(void);
+int DbManagerMode2Save(int a, int b);
+int DbManagerMode2Finish(void);
+int DbManagerMode2Abort(void);
+void DbManagerGetModeFuncs(int mode, DbNiomModeFuncs_t *pFuncs);
+int DbManagerResultAccept(int a, int b, unsigned char *pDone);
+int DbManagerResultRecord(void);
+int DbManagerResultFinish(void);
+int DbManagerCreateGameDb(Block_80233588 *p);
+int DbManagerLoadGameDb(void **ppData, void *p);
+int DbManagerSaveGameDb(int a, int b);
+int DbManagerDestroyGameDb(void);
+int DbManagerInitHook(void);
 void fn_802336C4(Block_802336C4 *pBlock, void *pSource, int a);
 void fn_80233728(Block_802336C4 *pBlock);
 void fn_80233760(Block_802336C4 *pBlock, short *pValues, int count);
@@ -1311,7 +1311,7 @@ int DbUserCreate(void)
         TDbExtLoadFromResource(key, _DbUser_pFileName, _DbUser_iMode, 0);
         _DbUser_iCount++;
         old = DbUserSetCurrent(id);
-        fn_801FCE10(0, lbl_802B5D64, DbUserGetDb(DbUserGetCurrent()), id);
+        TDbCompilePerformOp(0, lbl_802B5D64, DbUserGetDb(DbUserGetCurrent()), id);
         DbUserSetCurrent(old);
     }
     return id;
@@ -1347,7 +1347,7 @@ void DbUserReset(int key)
             TDbExtLoadFromResource(_DbUser_aEntries[index].mDb, _DbUser_pFileName, _DbUser_iMode, 0);
             id = DbUserNewId();
             old = DbUserSetCurrent(key);
-            fn_801FCE10(0, lbl_802B5D64, DbUserGetDb(DbUserGetCurrent()), id);
+            TDbCompilePerformOp(0, lbl_802B5D64, DbUserGetDb(DbUserGetCurrent()), id);
             _DbUser_aEntries[index].mId = id;
             if (old == key) {
                 DbUserSetCurrent(id);
@@ -1431,7 +1431,7 @@ int DbUserOpenDatabases(void)
     int err = 0;
     unsigned int i;
 
-    for (i = 0; i <= 1 && (err = fn_801F8D60(_DbUser_aDbIds[i], _DbUser_iSize)) == 0; i++) {
+    for (i = 0; i <= 1 && (err = TDbCreate(_DbUser_aDbIds[i], _DbUser_iSize)) == 0; i++) {
         err = TDbExtLoadFromResource(_DbUser_aDbIds[i], _DbUser_pFileName, _DbUser_iMode, 0);
         if (err != 0) {
             break;
@@ -1446,7 +1446,7 @@ int DbUserPostLoad(int a)
     int err;
 
     if (a == 0) {
-        err = fn_801FCE10(0, lbl_802B5D88, DbUserGetDb(DbUserGetCurrent()), &key);
+        err = TDbCompilePerformOp(0, lbl_802B5D88, DbUserGetDb(DbUserGetCurrent()), &key);
         if (key != DbUserGetCurrent()) {
             if (DbUserFindIndex(key) == -1) {
                 (_DbUser_aEntries + DbUserFindIndex(DbUserGetCurrent()))->mId = key;
@@ -1481,8 +1481,8 @@ typedef struct DbUserAsync_t {
 
 extern DbUserAsync_t _DbUser_LoadJob;
 extern DbUserAsync_t _DbUser_SaveJob;
-extern void fn_801F9228(DbUserAsync_t *pReq, void (*pStart)(void *pJob), int a, int b);
-extern void fn_801F92EC(DbUserAsync_t *pReq, void (*pStart)(void *pJob), int a, int b);
+extern void TDbLoadAsync(DbUserAsync_t *pReq, void (*pStart)(void *pJob), int a, int b);
+extern void TDbSaveAsync(DbUserAsync_t *pReq, void (*pStart)(void *pJob), int a, int b);
 extern void fn_80285A24(void *pJob);
 extern void fn_80285A8C(void);
 
@@ -1497,9 +1497,9 @@ int DbUserLoad(DbUserSaveRequest_t *pRequest, void *pOps)
         _DbUser_LoadJob.mUnknownC = pRequest->mTarget;
         _DbUser_LoadJob.mpUnknown10 = pOps;
         _DbUser_LoadJob.pDone = fn_80285A8C;
-        fn_801F9228(&_DbUser_LoadJob, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
+        TDbLoadAsync(&_DbUser_LoadJob, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
     } else {
-        result = DbUserPostLoad(fn_801F9134(DbUserGetDb(DbUserGetCurrent()), pRequest->mTarget, 0, (int)pOps));
+        result = DbUserPostLoad(TDbLoad(DbUserGetDb(DbUserGetCurrent()), pRequest->mTarget, 0, (int)pOps));
     }
     return result;
 }
@@ -1515,9 +1515,9 @@ int DbUserSave(DbUserSaveRequest_t *pRequest, void *pOps)
         _DbUser_SaveJob.mUnknownC = pRequest->mTarget;
         _DbUser_SaveJob.mpUnknown10 = pOps;
         _DbUser_SaveJob.pDone = fn_80285A8C;
-        fn_801F92EC(&_DbUser_SaveJob, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
+        TDbSaveAsync(&_DbUser_SaveJob, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
     } else {
-        result = fn_801F91AC(DbUserGetDb(DbUserGetCurrent()), pRequest->mTarget, (int)pOps);
+        result = TDbSave(DbUserGetDb(DbUserGetCurrent()), pRequest->mTarget, (int)pOps);
     }
     return result;
 }
@@ -1528,7 +1528,7 @@ int DbUserCloseDatabases(void)
     unsigned int i;
 
     for (i = 0; i <= 1; i++) {
-        err = fn_801F8EEC(_DbUser_aDbIds[i]);
+        err = TDbDestroy(_DbUser_aDbIds[i]);
         if (err != 0) {
             break;
         }
@@ -1542,7 +1542,7 @@ int DbUserSetName(int value, char *pName)
     int old = DbUserSetCurrent(value);
 
     if (DbUserGetDb(DbUserGetCurrent()) != -1) {
-        err = fn_801FCE10(0, lbl_802B5DB0, DbUserGetDb(DbUserGetCurrent()), pName);
+        err = TDbCompilePerformOp(0, lbl_802B5DB0, DbUserGetDb(DbUserGetCurrent()), pName);
     }
     DbUserSetCurrent(old);
     return err;

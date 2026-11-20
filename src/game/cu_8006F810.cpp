@@ -11,7 +11,7 @@
 #include "game/Ball.h"
 #include "game/PlayBookDb.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/GameModeType.h"
 #include "game/SyncRandGetRange.h"
 
@@ -86,7 +86,7 @@ void FileDebugProcess(void);
 void SndService(void);
 int SndPatchOver(int handle);
 unsigned int SysGetSystemTime(void);
-void fn_80227690(void *out, void *a, void *b);
+void Vec2Sub(void *out, void *a, void *b);
 int SyncRandBitPoolNew(int a, int b);
 int SyncRandBitPoolDraw(int handle);
 void SyncRandBitPoolDelete(int handle);
@@ -742,10 +742,10 @@ void fn_80071458(Object_80039F5C *p, Ball_t *ball)
     int nearby = 0;
     BallGetVelocity(ball, &velocity);
     if (p->mIdBytes[3] == 1) {
-        fn_80227690(&delta, &pos, &p->mMotion);
-        nearby = fn_802270A4(&delta) < 0.3f;
+        Vec2Sub(&delta, &pos, &p->mMotion);
+        nearby = Vec2Magnitude(&delta) < 0.3f;
     }
-    AudmonEventPostArgs(28, &pos, (unsigned int)(fn_802270D4(&velocity) * 65536.0f), nearby, ball->mState.mIndex);
+    AudmonEventPostArgs(28, &pos, (unsigned int)(Vec3Magnitude(&velocity) * 65536.0f), nearby, ball->mState.mIndex);
 }
 
 void fn_80071540(int *value, Ball_t *ball)

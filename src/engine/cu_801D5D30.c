@@ -159,28 +159,28 @@ void fn_801D6294(int result)
 
 void fn_801D6318(void)
 {
-    fn_801D4E6C(lbl_80398DFC.mHandle);
+    MemCAsyncFlush(lbl_80398DFC.mHandle);
 }
 
 void fn_801D6340(void)
 {
-    fn_801D4F58(lbl_80398DFC.mHandle);
+    MemCAsyncClose(lbl_80398DFC.mHandle);
 }
 
 void fn_801D6368(const char *pName, const char *pExtra)
 {
     fn_801D83F0(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), pName, pExtra);
-    fn_801D4FF4(lbl_803ECF14, lbl_80398DFC.mFileName);
+    MemCAsyncDelete(lbl_803ECF14, lbl_80398DFC.mFileName);
 }
 
 void fn_801D63B0(void)
 {
-    fn_801D4A3C(lbl_803ECF14, lbl_80398DFC.mFileName, 4, 0, 0);
+    MemCAsyncOpen(lbl_803ECF14, lbl_80398DFC.mFileName, 4, 0, 0);
 }
 
 void fn_801D63E8(int size)
 {
-    fn_801D4A3C(lbl_803ECF14, lbl_80398DFC.mFileName, 4, 1, size);
+    MemCAsyncOpen(lbl_803ECF14, lbl_80398DFC.mFileName, 4, 1, size);
 }
 
 unsigned int fn_801D6420(Struct_801D4848 *pEntry)
@@ -196,7 +196,7 @@ void fn_801D646C(void)
     memset(&lbl_80398DFC, 0, sizeof(lbl_80398DFC));
     lbl_803EBD00 = 0x1001;
     lbl_803EBD04 = 0;
-    fn_801D4120();
+    MemCInit();
     for (i = 1; i >= 0; i--) {
         lbl_80398DE0.mCardType[i] = -1;
     }
@@ -209,10 +209,10 @@ void fn_801D64EC(void)
 {
     int result = 0;
 
-    while (fn_801D5840(&result) == 0) {
+    while (MemCAsyncPoll(&result) == 0) {
     }
     lbl_803EBD00 = 0x103C;
-    fn_801D4198();
+    MemCShutdown();
     lbl_803ECF14 = -1;
     lbl_803EBD18 = 0;
     lbl_803EBD19 = 0;
@@ -230,7 +230,7 @@ void fn_801D654C(int enable)
         }
     } else {
         result = 0;
-        while (fn_801D5840(&result) == 0) {
+        while (MemCAsyncPoll(&result) == 0) {
         }
         lbl_803EBD08 = -1;
     }
@@ -275,7 +275,7 @@ void fn_801D6680(int port)
             lbl_803EBD2C[i].mCount = 0;
         }
     }
-    fn_801D466C(port);
+    MemCUnMount(port);
 }
 
 void fn_801D6714(int port)
@@ -489,7 +489,7 @@ void fn_801D6E04(int value)
 void fn_801D6E10(char *pBuffer, int length)
 {
     if (lbl_803EBD00 == 0x1011) {
-        fn_801D56A0(lbl_80398DFC.mHandle, pBuffer, length);
+        MemCAsyncWrite(lbl_80398DFC.mHandle, pBuffer, length);
         fn_801D5D30(0x1012);
     }
 }
@@ -498,7 +498,7 @@ void fn_801D6E54(char *pBuffer, int length)
 {
     if (lbl_803EBD00 == 0x1006) {
         lbl_80398DFC.mReadLength = length;
-        fn_801D5440(lbl_80398DFC.mHandle, pBuffer, length);
+        MemCAsyncRead(lbl_80398DFC.mHandle, pBuffer, length);
         fn_801D5D30(0x1007);
     }
 }
@@ -528,10 +528,10 @@ int fn_801D6EA0(unsigned char *pIdle)
 void fn_801D6EFC(void)
 {
     if (lbl_803EBD00 == 0x1011) {
-        fn_801D4E6C(lbl_80398DFC.mHandle);
+        MemCAsyncFlush(lbl_80398DFC.mHandle);
         fn_801D5D30(0x1015);
     } else if (lbl_803EBD00 == 0x1006) {
-        fn_801D4E6C(lbl_80398DFC.mHandle);
+        MemCAsyncFlush(lbl_80398DFC.mHandle);
         fn_801D5D30(0x100A);
     }
 }
@@ -568,7 +568,7 @@ int fn_801D85A8(int unused)
 
 int fn_801D85B0(int handle)
 {
-    return fn_801D5440(handle, lbl_80398F00, sizeof(lbl_80398F00));
+    return MemCAsyncRead(handle, lbl_80398F00, sizeof(lbl_80398F00));
 }
 
 int fn_801D85DC(void)
@@ -582,7 +582,7 @@ int fn_801D85E4(int handle)
 
     info[0] = 0x40;
     info[1] = 0;
-    return fn_801D56D4(handle, info);
+    return MemCAsyncSetSysInfo(handle, info);
 }
 
 int fn_801D8618(int unused, int dataSize, int headerSize)
@@ -605,5 +605,5 @@ int fn_801D8658(int unused, int dataSize, int headerSize)
 
 void fn_801D868C(int type, int port, char *pBuffer, int size)
 {
-    fn_801D5764(type, pBuffer, size);
+    MemCFormatCardType(type, pBuffer, size);
 }

@@ -7,7 +7,7 @@
 #include "game/StoryPlayerScreen.h"
 #include "game/StoryTeam.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 struct StoryModelLayout_t {
     float mPosition[3];
@@ -82,14 +82,14 @@ void StoryPlayerScreenCopyToSlot8(void)
     void *p1;
     void *p2;
 
-    fn_801FCE10(0, "use \x8c select 'PXSP' into \x85 and 'DIGP' into \x85 from 'YPRC' where 'DIOP' = \x82\n",
+    TDbCompilePerformOp(0, "use \x8c select 'PXSP' into \x85 and 'DIGP' into \x85 from 'YPRC' where 'DIOP' = \x82\n",
                 handle, &a, &b, 0x7FF4);
-    fn_801FCE10(0, "use \x8c update 'YPRC' set 'PXSP' = \x85 where 'DIGP' = \x82\n", handle, 8, b);
+    TDbCompilePerformOp(0, "use \x8c update 'YPRC' set 'PXSP' = \x85 where 'DIGP' = \x82\n", handle, 8, b);
     p1 = fn_801D2B7C(0x20000, 0, 0);
     p2 = fn_801D2B7C(0x400, 0, 0);
-    fn_801FCE10(0, "use \x8c select 'XTPP' into \x89 and 'LPPP' into \x89 from 'PPRC' where 'PXSP' = \x85\n",
+    TDbCompilePerformOp(0, "use \x8c select 'XTPP' into \x89 and 'LPPP' into \x89 from 'PPRC' where 'PXSP' = \x85\n",
                 handle, p1, p2, a);
-    fn_801FCE10(0, "use \x8c update 'PPRC' set 'XTPP' = \x89 and 'LPPP' = \x89 where 'PXSP' = \x85\n", handle,
+    TDbCompilePerformOp(0, "use \x8c update 'PPRC' set 'XTPP' = \x89 and 'LPPP' = \x89 where 'PXSP' = \x85\n", handle,
                 p1, p2, 8);
     fn_801D2BD0(p2);
     fn_801D2BD0(p1);

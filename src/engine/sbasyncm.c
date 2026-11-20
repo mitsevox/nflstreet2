@@ -39,7 +39,7 @@ void SNDBANKI_asyncloadmem100hz(void)
 {
     SndBankAsyncMem_t *state = &sndbams;
 
-    if (fn_80275288(state->m4) != 0 || state->m4 <= 0) {
+    if (SNDPLATFORM_downloadcomplete(state->m4) != 0 || state->m4 <= 0) {
         SndBankSlot_t *slot = &lbl_803A6C24.m1D0[state->m2];
         BankVer_t *bank = slot->m0;
         int size;
@@ -48,7 +48,7 @@ void SNDBANKI_asyncloadmem100hz(void)
             if (size > 0x10000) {
                 size = 0x10000;
             }
-            state->m4 = fn_80275234(512, (unsigned int)((char *)bank + bank->m8 + bank->m10 + state->m10),
+            state->m4 = SNDPLATFORM_download(512, (unsigned int)((char *)bank + bank->m8 + bank->m10 + state->m10),
                                     slot->m4 + state->m10, size);
             state->m10 += size;
         } else {
@@ -71,7 +71,7 @@ int SNDBANK_asyncloadmem(int *handle, BankVer_t *bank)
     slot->m0 = bank;
     slot->m4 = 0;
     if (bank->mC != 0) {
-        if ((slot->m4 = (int)fn_80275150(512, bank->mC + 48)) == 0) {
+        if ((slot->m4 = (int)SNDPLATFORM_memalloc(512, bank->mC + 48)) == 0) {
             slot->m0 = 0;
             result = -6;
             goto out;

@@ -155,14 +155,14 @@ void ObjRemoveFromList(int handle, int item);
 void VptTrashObject(int handle);
 double fabs(double x);
 int ResFindIndexByName(void *pData, char *pName);
-void *fn_80216860(int handle, const char *pName);
-void *fn_80216BFC(void *pNode, const char *pName);
-void *fn_80216E34(void *pNode);
-int fn_80216F3C(void *pNode, const char *pName, char *pOut, int size, const char *pDefault);
-int fn_80217070(void *pNode, const char *pName, int value);
-float fn_80227890(Vector_80039F5C *pA, float *pB);
-float fn_802278D0(Divot *pA, Divot *pB);
-void fn_80227930(float *pOut, float *pA, float *pB, float t);
+void *XmlFindPath(int handle, const char *pName);
+void *XmlFindInElement(void *pNode, const char *pName);
+void *XmlFindNext(void *pNode);
+int XmlGetAttrString(void *pNode, const char *pName, char *pOut, int size, const char *pDefault);
+int XmlGetAttrInt(void *pNode, const char *pName, int value);
+float Vec2DistanceSqr(Vector_80039F5C *pA, float *pB);
+float Vec3DistanceSqr(Divot *pA, Divot *pB);
+void Vec3Lerp(float *pOut, float *pA, float *pB, float t);
 int VptGetMatrixStack(void);
 void VptFlushObjectTrashSync(void);
 float SyncRandGetFloat(int stream);
@@ -260,7 +260,7 @@ void DivotReplayReadOne(Divot *p, BitStream_t *pStream0, BitStream_t *pStream1, 
         }
         fn_800301C4(pStream1, scale1, 6, 10.0f);
         fn_800301C4(pStream0, scale0, 6, 10.0f);
-        fn_80227930(p->mScale, scale0, scale1, t);
+        Vec3Lerp(p->mScale, scale0, scale1, t);
         alpha1 = (float)ReadBitStream(pStream1, 4) * (1.0f / 15.0f);
         alpha0 = (float)ReadBitStream(pStream0, 4) * (1.0f / 15.0f);
         p->mAlpha = (alpha0 - alpha1) * t + alpha1;
@@ -422,7 +422,7 @@ int DivotIsAreaFree(Divot *pDivot, float radius)
 
             range *= range;
             for (int i = _Divot_aiPoolSize[type] - 1; i >= 0; i--, p++) {
-                if (p->mActive && fn_802278D0(pDivot, p) < range) {
+                if (p->mActive && Vec3DistanceSqr(pDivot, p) < range) {
                     free = 0;
                     break;
                 }
@@ -494,15 +494,15 @@ void DivotLoadVariants(void)
     for (int i = 0; i < DIVOT_NUM_TYPES; i++) {
         counts[i] = 0;
     }
-    for (pSurface = fn_80216860(ResLoad(fn_800A336C(), fn_800A33A4(), 1), "surface"); pSurface;
-         pSurface = fn_80216E34(pSurface)) {
-        int surface = fn_80217070(pSurface, "surfType", DIVOT_SURFACE_NONE);
+    for (pSurface = XmlFindPath(ResLoad(fn_800A336C(), fn_800A33A4(), 1), "surface"); pSurface;
+         pSurface = XmlFindNext(pSurface)) {
+        int surface = XmlGetAttrInt(pSurface, "surfType", DIVOT_SURFACE_NONE);
 
-        for (pDivot = fn_80216BFC(pSurface, "divot"); pDivot; pDivot = fn_80216E34(pDivot)) {
-            int type = fn_80217070(pDivot, "type", DIVOT_TYPE_1);
+        for (pDivot = XmlFindInElement(pSurface, "divot"); pDivot; pDivot = XmlFindNext(pDivot)) {
+            int type = XmlGetAttrInt(pDivot, "type", DIVOT_TYPE_1);
             int ref;
 
-            fn_80216F3C(pDivot, "tideRef", name, 31, "");
+            XmlGetAttrString(pDivot, "tideRef", name, 31, "");
             ref = ResFindIndexByName((void *)DivotGetLevelResource(), name);
             if (surface != DIVOT_SURFACE_NONE && type != DIVOT_TYPE_1 && ref != -1) {
                 _Divot_aaucSurfaceVariants[type][surface]++;
@@ -889,7 +889,7 @@ void DivotOnFootstep(Object_80039F5C *pPlayer, Vector_80039F5C *pPos, int foot0)
             pLast = _Divot_aFeet[slot].mFoot1;
             pSkip = &_Divot_aabSkipStep[slot][1];
         }
-        if (fn_80227890(pPos, pLast) >= 0.65f * 0.65f) {
+        if (Vec2DistanceSqr(pPos, pLast) >= 0.65f * 0.65f) {
             pLast[0] = pPos->mX;
             pLast[1] = pPos->mY;
             if (!PauseIsOpen()) {
@@ -1103,7 +1103,7 @@ unsigned char PlaDynClutFindColorName(void *pNode)
     char name[16];
     unsigned char color = 0xFF;
 
-    if (fn_80216F3C(pNode, "colorname", name, 15, 0) > 0) {
+    if (XmlGetAttrString(pNode, "colorname", name, 15, 0) > 0) {
         for (int i = 0; i < 25; i++) {
             if (strnicmp(name, _PlaDynClut_aszColorNames[i], 15) == 0) {
                 color = i;
@@ -1119,7 +1119,7 @@ unsigned char PlaDynClutFindLevelName(void *pNode)
     char name[16];
     unsigned char level = 0;
 
-    if (fn_80216F3C(pNode, "levelname", name, 15, 0) > 0) {
+    if (XmlGetAttrString(pNode, "levelname", name, 15, 0) > 0) {
         for (int i = 0; i < 4; i++) {
             if (strnicmp(name, _PlaDynClut_aszLevelNames[i], 15) == 0) {
                 level = i;
@@ -1136,15 +1136,15 @@ void PlaDynClutParseEntry(void *pNode, ColorEntry *pEntry)
     char *pTo;
 
     text[0] = 0;
-    pEntry->mColor = fn_80217070(pNode, "colornum", 0xFF);
+    pEntry->mColor = XmlGetAttrInt(pNode, "colornum", 0xFF);
     if (pEntry->mColor == 0xFF) {
         pEntry->mColor = PlaDynClutFindColorName(pNode);
     }
-    pEntry->mLevel = fn_80217070(pNode, "level", 0xFF);
+    pEntry->mLevel = XmlGetAttrInt(pNode, "level", 0xFF);
     if (pEntry->mLevel == 0xFF) {
         pEntry->mLevel = PlaDynClutFindLevelName(pNode);
     }
-    fn_80216F3C(pNode, "range", text, 15, 0);
+    XmlGetAttrString(pNode, "range", text, 15, 0);
     if ((pTo = strchr(text, '-')) != 0) {
         *pTo = 0;
         pTo++;
@@ -1153,24 +1153,24 @@ void PlaDynClutParseEntry(void *pNode, ColorEntry *pEntry)
     }
     pEntry->mFrom = atoi(text);
     pEntry->mTo = atoi(pTo);
-    fn_80216F3C(pNode, "type", text, 15, 0);
+    XmlGetAttrString(pNode, "type", text, 15, 0);
     if (strnicmp(text, "set", 15) == 0) {
         if (pEntry->mColor == 0xFF) {
-            pEntry->mColor = fn_80217070(pNode, "palindex", 0xFF);
+            pEntry->mColor = XmlGetAttrInt(pNode, "palindex", 0xFF);
             pEntry->mMode = 1;
         } else {
             pEntry->mMode = 0;
         }
     } else if (strnicmp(text, "blendfrom", 15) == 0) {
         if (pEntry->mColor == 0xFF) {
-            pEntry->mColor = fn_80217070(pNode, "palindex", 0xFF);
+            pEntry->mColor = XmlGetAttrInt(pNode, "palindex", 0xFF);
             pEntry->mMode = 5;
         } else {
             pEntry->mMode = 3;
         }
     } else if (strnicmp(text, "blendto", 15) == 0) {
         if (pEntry->mColor == 0xFF) {
-            pEntry->mColor = fn_80217070(pNode, "palindex", 0xFF);
+            pEntry->mColor = XmlGetAttrInt(pNode, "palindex", 0xFF);
             pEntry->mMode = 6;
         } else {
             pEntry->mMode = 4;

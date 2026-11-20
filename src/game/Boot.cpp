@@ -47,11 +47,11 @@ int PerGetDeviceStatus(int a);
 unsigned int PerGetDeviceTypeT(int a);
 void PerCheckConnectSingle(unsigned char a);
 int PerIsDeviceConnected(unsigned char a);
-int fn_801F687C(int a, int b, int c, void *pBuffer, int size);
-void fn_801F6AC8(int a, int b, int c, int d, int e);
-void fn_801F6B84(int a);
-int fn_801F6CE8(int a, int b);
-int fn_801F6D54(int a, struct MovieStreamDesc_t *pDesc, int b, int c);
+int STREAM_create(int a, int b, int c, void *pBuffer, int size);
+void STREAM_setfilter(int a, int b, int c, int d, int e);
+void STREAM_destroy(int a);
+int STREAM_taphandle(int a, int b);
+int STREAM_queuefile(int a, struct MovieStreamDesc_t *pDesc, int b, int c);
 int fn_801F8758(int a);
 void fn_801F8768(void);
 void fn_801F87FC(int a);
@@ -66,7 +66,7 @@ struct PerDeviceData_t {
     unsigned char mUnknown8[24];
 };
 
-/* Second argument of fn_801F6D54. */
+/* Second argument of STREAM_queuefile. */
 struct MovieStreamDesc_t {
     void *mpUnknown0;
     int mUnknown4;
@@ -323,13 +323,13 @@ static unsigned char _BootPlayMovie(int index, int a, int b, int c, int d, void 
     if (pBuffer == 0) {
         pBuffer = fn_801D2B7C(0x100000, 0, 0);
     }
-    handle = fn_801F687C(2, 2, 2, pBuffer, 0x100000);
-    unknown0 = fn_801F6CE8(handle, 2);
-    fn_801F6AC8(handle, 1, 0xFFFF, 0x4353, 2);
+    handle = STREAM_create(2, 2, 2, pBuffer, 0x100000);
+    unknown0 = STREAM_taphandle(handle, 2);
+    STREAM_setfilter(handle, 1, 0xFFFF, 0x4353, 2);
     _Boot_pMovieFile = ResOpenDevice(lbl_802EC09C, 0x2C);
     desc.mpUnknown0 = _Boot_pMovieFile;
     desc.mUnknown4 = index;
-    unknown1 = fn_801F6D54(handle, &desc, 0, 0);
+    unknown1 = STREAM_queuefile(handle, &desc, 0, 0);
     if (b == 1) {
         GlibSwitchToDouble(1);
     } else {
@@ -341,7 +341,7 @@ static unsigned char _BootPlayMovie(int index, int a, int b, int c, int d, void 
     _Boot_bMovieAbort = 0;
     MovieRcmpPlay(handle, unknown0, unknown1, _BootMovieCallback, a == 1);
     GlibSwitchToSingle();
-    fn_801F6B84(handle);
+    STREAM_destroy(handle);
     fn_801D2BD0(pBuffer);
     ResClose(_Boot_pMovieFile);
     return _Boot_bMovieAbort;

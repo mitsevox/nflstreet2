@@ -20,7 +20,7 @@ extern char lbl_802F24C8[];
 
 void fn_802353CC(void *p);
 void fn_802353D0(void *p);
-void fn_8023633C(void *p);
+void LLLightSetScene(void *p);
 int fn_800A3444(void);
 
 void LevelLightsInit(void);
@@ -43,51 +43,51 @@ void LevelLightsSelect(int id)
 {
     switch (id) {
     case 0:
-        fn_8023633C(lbl_802EF31C);
+        LLLightSetScene(lbl_802EF31C);
         _LevelLights_iCurrent = id;
         break;
     case 2:
-        fn_8023633C(lbl_802F052C);
+        LLLightSetScene(lbl_802F052C);
         _LevelLights_iCurrent = 1;
         break;
     case 3:
-        fn_8023633C(lbl_802EF7A0);
+        LLLightSetScene(lbl_802EF7A0);
         _LevelLights_iCurrent = 2;
         break;
     case 1:
-        fn_8023633C(lbl_802EFC24);
+        LLLightSetScene(lbl_802EFC24);
         _LevelLights_iCurrent = 3;
         break;
     case 4:
-        fn_8023633C(lbl_802F00A8);
+        LLLightSetScene(lbl_802F00A8);
         _LevelLights_iCurrent = id;
         break;
     case 5:
-        fn_8023633C(lbl_802F09B0);
+        LLLightSetScene(lbl_802F09B0);
         _LevelLights_iCurrent = id;
         break;
     case 6:
-        fn_8023633C(lbl_802F0E34);
+        LLLightSetScene(lbl_802F0E34);
         _LevelLights_iCurrent = id;
         break;
     case 9:
-        fn_8023633C(lbl_802F12B8);
+        LLLightSetScene(lbl_802F12B8);
         _LevelLights_iCurrent = 9;
         break;
     case 7:
-        fn_8023633C(lbl_802F173C);
+        LLLightSetScene(lbl_802F173C);
         _LevelLights_iCurrent = id;
         break;
     case 8:
-        fn_8023633C(lbl_802F1BC0);
+        LLLightSetScene(lbl_802F1BC0);
         _LevelLights_iCurrent = id;
         break;
     case 10:
-        fn_8023633C(lbl_802F2044);
+        LLLightSetScene(lbl_802F2044);
         _LevelLights_iCurrent = id;
         break;
     case 11:
-        fn_8023633C(lbl_802F24C8);
+        LLLightSetScene(lbl_802F24C8);
         _LevelLights_iCurrent = id;
         break;
     }
@@ -98,7 +98,7 @@ void LevelLightsSelect(int id)
 void LevelLightsSelectFrontEnd(void)
 {
     _LevelLights_pColors = lbl_802EEEE0;
-    fn_8023633C(lbl_802EEDD0);
+    LLLightSetScene(lbl_802EEDD0);
     _LevelLights_iCurrent = 0;
     LevelLightsApplyColors();
 }

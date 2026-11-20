@@ -89,7 +89,7 @@ void BannerClear(int a);
 void UISGameLockPad(int value);
 int UISGameUnlockPad(void);
 int fn_801CFE40(float y, float x);
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 int fn_8022DDB4(int tag, void *data);
 float SyncRandGetFloat(int stream);
 void *SyncStateGetData(void *pHandle);
@@ -248,7 +248,7 @@ void CoinTossSendPlayersToSpots(unsigned char *pUnused, CoinTossSpot_t *pA, Coin
             dir.mY = pTable[i].mPos.mY;
             dir.mX = -dir.mX;
             dir.mY = -dir.mY;
-            fn_80227690(&dir, &dir, &pTable[i].mPos);
+            Vec2Sub(&dir, &dir, &pTable[i].mPos);
             angle = fn_801CFE40(dir.mY, dir.mX);
 
             memset(&message, 0, sizeof(message));

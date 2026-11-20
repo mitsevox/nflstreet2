@@ -10,16 +10,16 @@
 
 /* 8-byte item allocated by UIGFontCreateFont. */
 typedef struct UIGFontItem_t {
-    Font_801CCA64 *pFont; /* 0x00 */
+    Font_t *pFont; /* 0x00 */
     Int32 unk_04;   /* 0x04 */
 } UIGFontItem_t;
 
-int fn_801CCDA4(const char *pName, int mode);
-int fn_801CCE10(int handle);
-int fn_801CCE60(void *pFile, int id);
-int fn_801CD07C(int id);
-int fn_801CD244(Font_801CCA64 *pFont);
-int fn_801CD63C(Font_801CCA64 *pFont, const char *pText, unsigned int flags);
+int FontOpenFileDevice(const char *pName, int mode);
+int FontCloseFile(int handle);
+int FontAddFont(void *pFile, int id);
+int FontRemoveFont(int id);
+int FontDestroyFont(Font_t *pFont);
+int FontGetTextWidth(Font_t *pFont, const char *pText, unsigned int flags);
 int ResGetNumResources(ResFile_t *pRes);
 
 void UIGFontCreateFontLibrary(UIGLibrary_t *pObject, Int16 a)
@@ -27,7 +27,7 @@ void UIGFontCreateFontLibrary(UIGLibrary_t *pObject, Int16 a)
     int Handle;
 
     if (a != -1 && UIGLibraryGetData(pObject, a) == 0) {
-        Handle = fn_801CCDA4((const char *)UIGLibraryGetFilename(pObject, a), 44);
+        Handle = FontOpenFileDevice((const char *)UIGLibraryGetFilename(pObject, a), 44);
         UIGLibrarySetData(pObject, a, Handle);
         UIGLibrarySelfManagedInit(pObject, a, ResGetNumResources((ResFile_t *)Handle));
     }
@@ -40,7 +40,7 @@ void UIGFontDestroyFontLibrary(UIGLibrary_t *pObject, Int16 a)
     if (a != -1) {
         Handle = UIGLibraryGetData(pObject, a);
         if (Handle != 0) {
-            fn_801CCE10(Handle);
+            FontCloseFile(Handle);
             UIGLibrarySetData(pObject, a, 0);
         }
     }
@@ -54,9 +54,9 @@ void UIGFontCreateFont(UIGLibrary_t *pObject, Int16 a, Int16 b, Int32 c)
     if (a != -1 && b != -1) {
         Handle = UIGLibraryGetData(pObject, a);
         if (Handle != 0 && UIGLibraryGetItemData(pObject, a, b) == 0) {
-            fn_801CCE60((void *)Handle, b);
+            FontAddFont((void *)Handle, b);
             pItem = fn_801D2B7C(sizeof(UIGFontItem_t), 0, 0);
-            pItem->pFont = fn_801CD130(b);
+            pItem->pFont = FontCreateFont(b);
             pItem->unk_04 = 1;
             UIGLibrarySetItemData(pObject, a, b, (Int32)pItem);
         }
@@ -70,8 +70,8 @@ void UIGFontDestroyFont(UIGLibrary_t *pObject, Int16 a, Int16 b)
     if (a != -1 && b != -1) {
         pItem = (UIGFontItem_t *)UIGLibraryGetItemData(pObject, a, b);
         if (pItem != NULL) {
-            fn_801CD244(pItem->pFont);
-            fn_801CD07C(b);
+            FontDestroyFont(pItem->pFont);
+            FontRemoveFont(b);
             UIGLibrarySetItemData(pObject, a, b, 0);
             fn_801D2BD0(pItem);
         }
@@ -90,12 +90,12 @@ Uint32 UIGFontGetStringWidth(UIGLibrary_t *pObject, Int32 a, Int32 b, const char
         UIGLibraryLoadItem(pObject, a, b);
         pItem = (UIGFontItem_t *)UIGLibraryGetItemData(pObject, a, b);
     }
-    return fn_801CD63C(pItem->pFont, pText, 0);
+    return FontGetTextWidth(pItem->pFont, pText, 0);
 }
 
-Font_801CCA64 *UIGFontGetFont(UIGLibrary_t *pObject, Int32 a, Int16 b, Int32 c)
+Font_t *UIGFontGetFont(UIGLibrary_t *pObject, Int32 a, Int16 b, Int32 c)
 {
-    Font_801CCA64 *pResult = NULL;
+    Font_t *pResult = NULL;
     UIGFontItem_t *pItem;
 
     UIGLibraryLoadItem(pObject, a, b);
@@ -105,7 +105,7 @@ Font_801CCA64 *UIGFontGetFont(UIGLibrary_t *pObject, Int32 a, Int16 b, Int32 c)
     }
     if (pItem->unk_04 != 0 && c != 0) {
         UIGLibrarySetMemInfo(a, b);
-        fn_801CD20C(pResult, 0);
+        FontUploadTextures(pResult, 0);
         UIGLibraryClearMemInfo();
         pItem->unk_04 = 0;
     }

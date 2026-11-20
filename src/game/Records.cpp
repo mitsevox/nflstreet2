@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 struct RecordsRow_t {
     char mUnknown0[20];
@@ -94,18 +94,18 @@ void RecordsSumColumns(int type)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    if (fn_801FCE10(0, "use 'EVAS' declare \x8a fastcursor for select 'KPSH' into \x82 and \x8c into \x82 and \x8c into \x82 from 'RCSH'\n", &cursor, &key, tagA, &a, tagB, &b) == 0) {
+    if (TDbCompilePerformOp(0, "use 'EVAS' declare \x8a fastcursor for select 'KPSH' into \x82 and \x8c into \x82 and \x8c into \x82 from 'RCSH'\n", &cursor, &key, tagA, &a, tagB, &b) == 0) {
         int status;
         do {
-            status = fn_801FCE10(0, "fetch from \x8a\n", &cursor);
+            status = TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
             if (type == 7) {
                 value = a + b;
             }
-            fn_801FCE10(0, "use 'EVAS' update 'RCSH' set 'CSSH' = \x82 where 'KPSH' = \x82\n", value, key);
+            TDbCompilePerformOp(0, "use 'EVAS' update 'RCSH' set 'CSSH' = \x82 where 'KPSH' = \x82\n", value, key);
         } while (status == 0);
     }
     if (cursor.mUnknown0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
 }
 
@@ -115,7 +115,7 @@ void RecordsOpenCategory(int type)
     int tag = -1;
     if (_Records_iCategory != -1) {
         if (_Records_sCursor.mUnknown0) {
-            fn_801FCFA0(&_Records_sCursor);
+            TDbSQLDestroyCursor(&_Records_sCursor);
         }
         _Records_iCategory = -1;
     }
@@ -124,16 +124,16 @@ void RecordsOpenCategory(int type)
     _Records_sCursor.mUnknown8 = -1;
     _Records_sCursor.mUnknown12 = 0;
     if (type == 6) {
-        fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'DFSH'.'KTFH' into \x82 and 'DFSH'.'KUFH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'DFSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'DFSH'.'KUFH' order by 'DFSH'.'DIVE' asc\n",
+        TDbCompilePerformOp(&result, "use 'EVAS' declare \x8a fastcursor for select 'DFSH'.'KTFH' into \x82 and 'DFSH'.'KUFH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'DFSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'DFSH'.'KUFH' order by 'DFSH'.'DIVE' asc\n",
                     &_Records_sCursor, &_Records_sRow.mUnknown32, &_Records_sRow.mUnknown108, _Records_sRow.mUnknown0);
     } else if (type == 4) {
-        fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'KTSH'.'TPTH' into \x82 and 'KTSH'.'KUTH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'KTSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'KTSH'.'KUTH' order by 'KTSH'.'TPTH' desc and 'RCSH'.'KUSH' asc\n",
+        TDbCompilePerformOp(&result, "use 'EVAS' declare \x8a fastcursor for select 'KTSH'.'TPTH' into \x82 and 'KTSH'.'KUTH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'KTSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'KTSH'.'KUTH' order by 'KTSH'.'TPTH' desc and 'RCSH'.'KUSH' asc\n",
                     &_Records_sCursor, &_Records_sRow.mUnknown32, &_Records_sRow.mUnknown108, _Records_sRow.mUnknown0);
     } else if (type == 2) {
-        fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'SWSH'.'SWWH' into \x82 and 'SWSH'.'KUWH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'SWSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'SWSH'.'KUWH' order by 'SWSH'.'SWWH' desc and 'RCSH'.'KUSH' asc\n",
+        TDbCompilePerformOp(&result, "use 'EVAS' declare \x8a fastcursor for select 'SWSH'.'SWWH' into \x82 and 'SWSH'.'KUWH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'SWSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'SWSH'.'KUWH' order by 'SWSH'.'SWWH' desc and 'RCSH'.'KUSH' asc\n",
                     &_Records_sCursor, &_Records_sRow.mUnknown24, &_Records_sRow.mUnknown108, _Records_sRow.mUnknown0);
     } else if (type == 0) {
-        fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'HCSH'.'KUCH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'HCSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'HCSH'.'KUCH' order by 'KPCH' desc\n",
+        TDbCompilePerformOp(&result, "use 'EVAS' declare \x8a fastcursor for select 'HCSH'.'KUCH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'HCSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'HCSH'.'KUCH' order by 'KPCH' desc\n",
                     &_Records_sCursor, &_Records_sRow.mUnknown108, _Records_sRow.mUnknown0);
     } else if (type >= 18 && type <= 21) {
         int count = 5;
@@ -150,10 +150,10 @@ void RecordsOpenCategory(int type)
             count = 10;
             break;
         }
-        fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'CCSH'.'SRCH' into \x82 and 'CCSH'.'UCCH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'CCSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'CCSH'.'UCCH' where 'CCSH'.'TRCH' = \x83 order by 'CCSH'.'SRCH' desc\n",
+        TDbCompilePerformOp(&result, "use 'EVAS' declare \x8a fastcursor for select 'CCSH'.'SRCH' into \x82 and 'CCSH'.'UCCH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'CCSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'CCSH'.'UCCH' where 'CCSH'.'TRCH' = \x83 order by 'CCSH'.'SRCH' desc\n",
                     &_Records_sCursor, &_Records_sRow.mUnknown96, &_Records_sRow.mUnknown108, _Records_sRow.mUnknown0, count);
     } else if (type == 22) {
-        fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'BJSH'.'SJSH' into \x82 and 'BJSH'.'UBJH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'BJSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'BJSH'.'UBJH' order by 'BJSH'.'SJSH' desc\n",
+        TDbCompilePerformOp(&result, "use 'EVAS' declare \x8a fastcursor for select 'BJSH'.'SJSH' into \x82 and 'BJSH'.'UBJH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'BJSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'BJSH'.'UBJH' order by 'BJSH'.'SJSH' desc\n",
                     &_Records_sCursor, &_Records_sRow.mUnknown100, &_Records_sRow.mUnknown108, _Records_sRow.mUnknown0);
     } else {
         switch (type) {
@@ -207,7 +207,7 @@ void RecordsOpenCategory(int type)
             tag = -1;
             break;
         }
-        fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'KUSH' into \x88 and 'WGSH' into \x82 and 'PTSH' into \x82 and 'TPSH' into \x82 and 'TRSH' into \x82 and 'TDSH' into \x82 and 'TSSH' into \x82 and 'CISH' into \x82 and 'RFSH' into \x82 and 'GTSH' into \x82 and '2TSH' into \x82 and 'TTSH' into \x82 and 'KSSH' into \x82 and 'WQSH' into \x82 and 'WOSH' into \x82 and 'LOSH' into \x82 and 'SOSH' into \x82 and 'AOSH' into \x82 and 'CSSH' into \x82 from 'RCSH' order by \x8c desc and 'KUSH' asc\n",
+        TDbCompilePerformOp(&result, "use 'EVAS' declare \x8a fastcursor for select 'KUSH' into \x88 and 'WGSH' into \x82 and 'PTSH' into \x82 and 'TPSH' into \x82 and 'TRSH' into \x82 and 'TDSH' into \x82 and 'TSSH' into \x82 and 'CISH' into \x82 and 'RFSH' into \x82 and 'GTSH' into \x82 and '2TSH' into \x82 and 'TTSH' into \x82 and 'KSSH' into \x82 and 'WQSH' into \x82 and 'WOSH' into \x82 and 'LOSH' into \x82 and 'SOSH' into \x82 and 'AOSH' into \x82 and 'CSSH' into \x82 from 'RCSH' order by \x8c desc and 'KUSH' asc\n",
                     &_Records_sCursor, _Records_sRow.mUnknown0, &_Records_sRow.mUnknown20, &_Records_sRow.mUnknown28,
                     &_Records_sRow.mUnknown40, &_Records_sRow.mUnknown44, &_Records_sRow.mUnknown48, &_Records_sRow.mUnknown52,
                     &_Records_sRow.mUnknown56, &_Records_sRow.mUnknown60, &_Records_sRow.mUnknown64, &_Records_sRow.mUnknown68,
@@ -230,7 +230,7 @@ void RecordsFetchRow(int row)
 {
     QueryResult result;
     _Records_sCursor.mUnknown4 = row;
-    fn_801FCE10(&result, "fetch from \x8a\n", &_Records_sCursor);
+    TDbCompilePerformOp(&result, "fetch from \x8a\n", &_Records_sCursor);
     _Records_iRow = row;
 }
 
@@ -318,7 +318,7 @@ void RecordsEnd(void)
 {
     if (_Records_iCategory != -1) {
         if (_Records_sCursor.mUnknown0) {
-            fn_801FCFA0(&_Records_sCursor);
+            TDbSQLDestroyCursor(&_Records_sCursor);
         }
         _Records_iCategory = -1;
     }
@@ -352,7 +352,7 @@ void RecordsPrune(void)
     int type;
 
     RecordsBegin();
-    fn_801FCE10(&result, "use 'EVAS' update 'RCSH' set 'UFSH' = 0\n");
+    TDbCompilePerformOp(&result, "use 'EVAS' update 'RCSH' set 'UFSH' = 0\n");
     for (type = 0; type <= 23; type++) {
         int status = 0;
         RecordsOpenCategory(type);
@@ -367,93 +367,93 @@ void RecordsPrune(void)
         case 21:
             for (count = 0, status = 0; status == 0 && count <= 9; count++) {
                 RecordsFetchRow(count);
-                status = fn_801FCE10(&result, "use 'EVAS' update 'RCSH' set 'UFSH' = 1 where 'KPSH' = \x82\n", _Records_sRow.mUnknown108);
+                status = TDbCompilePerformOp(&result, "use 'EVAS' update 'RCSH' set 'UFSH' = 1 where 'KPSH' = \x82\n", _Records_sRow.mUnknown108);
             }
             break;
         default:
             for (count = 0, status = 0; status == 0 && count <= 9; count++) {
                 RecordsFetchRow(count);
-                status = fn_801FCE10(&result, "use 'EVAS' update 'RCSH' set 'UFSH' = 1 where 'KUSH' = \x88\n", _Records_sRow.mUnknown0);
+                status = TDbCompilePerformOp(&result, "use 'EVAS' update 'RCSH' set 'UFSH' = 1 where 'KUSH' = \x88\n", _Records_sRow.mUnknown0);
             }
             break;
         }
     }
-    fn_801FCE10(&result, "use 'EVAS' delete from 'RCSH' where 'UFSH' = 0\n");
+    TDbCompilePerformOp(&result, "use 'EVAS' delete from 'RCSH' where 'UFSH' = 0\n");
     flag |= result.mUnknown0 != 0;
 
-    fn_801FCE10(&result, "use 'EVAS' select count(*) into \x82 from 'BGSH'\n", &count);
+    TDbCompilePerformOp(&result, "use 'EVAS' select count(*) into \x82 from 'BGSH'\n", &count);
     if (count > 10) {
         cursor.mUnknown0 = 0;
         cursor.mUnknown4 = 0;
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
-        fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'KPGH' into \x82 from 'BGSH' order by 'TPGH' asc\n", &cursor, &key);
+        TDbCompilePerformOp(&result, "use 'EVAS' declare \x8a fastcursor for select 'KPGH' into \x82 from 'BGSH' order by 'TPGH' asc\n", &cursor, &key);
         while (count > 10) {
             cursor.mUnknown4 = 0;
-            fn_801FCE10(&result, "fetch from \x8a\n", &cursor);
-            fn_801FCE10(&result, "use 'EVAS' delete from 'BGSH' where 'KPGH' = \x82\n", key);
+            TDbCompilePerformOp(&result, "fetch from \x8a\n", &cursor);
+            TDbCompilePerformOp(&result, "use 'EVAS' delete from 'BGSH' where 'KPGH' = \x82\n", key);
             flag |= result.mUnknown0 != 0;
             count--;
         }
         if (cursor.mUnknown0) {
-            fn_801FCFA0(&cursor);
+            TDbSQLDestroyCursor(&cursor);
         }
     }
 
-    fn_801FCE10(&result, "use 'EVAS' select count(*) into \x82 from 'TGSH'\n", &count);
+    TDbCompilePerformOp(&result, "use 'EVAS' select count(*) into \x82 from 'TGSH'\n", &count);
     if (count > 10) {
         cursor.mUnknown0 = 0;
         cursor.mUnknown4 = 0;
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
-        fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'KPGH' into \x82 from 'TGSH' order by 'TPGH' asc\n", &cursor, &key);
+        TDbCompilePerformOp(&result, "use 'EVAS' declare \x8a fastcursor for select 'KPGH' into \x82 from 'TGSH' order by 'TPGH' asc\n", &cursor, &key);
         while (count > 10) {
             cursor.mUnknown4 = 0;
-            fn_801FCE10(&result, "fetch from \x8a\n", &cursor);
-            fn_801FCE10(&result, "use 'EVAS' delete from 'TGSH' where 'KPGH' = \x82\n", key);
+            TDbCompilePerformOp(&result, "fetch from \x8a\n", &cursor);
+            TDbCompilePerformOp(&result, "use 'EVAS' delete from 'TGSH' where 'KPGH' = \x82\n", key);
             flag |= result.mUnknown0 != 0;
             count--;
         }
         if (cursor.mUnknown0) {
-            fn_801FCFA0(&cursor);
+            TDbSQLDestroyCursor(&cursor);
         }
     }
 
-    fn_801FCE10(&result, "use 'EVAS' select count(*) into \x82 from 'SWSH'\n", &count);
+    TDbCompilePerformOp(&result, "use 'EVAS' select count(*) into \x82 from 'SWSH'\n", &count);
     if (count > 10) {
         cursor.mUnknown0 = 0;
         cursor.mUnknown4 = 0;
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
-        fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'KPWH' into \x82 from 'SWSH' order by 'SWWH' asc\n", &cursor, &key);
+        TDbCompilePerformOp(&result, "use 'EVAS' declare \x8a fastcursor for select 'KPWH' into \x82 from 'SWSH' order by 'SWWH' asc\n", &cursor, &key);
         while (count > 10) {
             cursor.mUnknown4 = 0;
-            fn_801FCE10(&result, "fetch from \x8a\n", &cursor);
-            fn_801FCE10(&result, "use 'EVAS' delete from 'SWSH' where 'KPWH' = \x82\n", key);
+            TDbCompilePerformOp(&result, "fetch from \x8a\n", &cursor);
+            TDbCompilePerformOp(&result, "use 'EVAS' delete from 'SWSH' where 'KPWH' = \x82\n", key);
             flag |= result.mUnknown0 != 0;
             count--;
         }
         if (cursor.mUnknown0) {
-            fn_801FCFA0(&cursor);
+            TDbSQLDestroyCursor(&cursor);
         }
     }
 
-    fn_801FCE10(&result, "use 'EVAS' select count(*) into \x82 from 'KTSH'\n", &count);
+    TDbCompilePerformOp(&result, "use 'EVAS' select count(*) into \x82 from 'KTSH'\n", &count);
     if (count > 10) {
         cursor.mUnknown0 = 0;
         cursor.mUnknown4 = 0;
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
-        fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'KPTH' into \x82 from 'KTSH' order by 'TPTH' asc\n", &cursor, &key);
+        TDbCompilePerformOp(&result, "use 'EVAS' declare \x8a fastcursor for select 'KPTH' into \x82 from 'KTSH' order by 'TPTH' asc\n", &cursor, &key);
         while (count > 10) {
             cursor.mUnknown4 = 0;
-            fn_801FCE10(&result, "fetch from \x8a\n", &cursor);
-            fn_801FCE10(&result, "use 'EVAS' delete from 'KTSH' where 'KPTH' = \x82\n", key);
+            TDbCompilePerformOp(&result, "fetch from \x8a\n", &cursor);
+            TDbCompilePerformOp(&result, "use 'EVAS' delete from 'KTSH' where 'KPTH' = \x82\n", key);
             flag |= result.mUnknown0 != 0;
             count--;
         }
         if (cursor.mUnknown0) {
-            fn_801FCFA0(&cursor);
+            TDbSQLDestroyCursor(&cursor);
         }
     }
 

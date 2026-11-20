@@ -39,7 +39,7 @@ void SNDSYSI_100hzserver(void)
     int i;
 
     lbl_803A6C24.m170++;
-    fn_802739F8();
+    iSNDserve();
     for (i = 0; i < lbl_803A6C24.m16A; i++) {
         lbl_803A6C24.m174[i]();
     }
@@ -56,7 +56,7 @@ void SNDSYSI_100hzserver(void)
             }
             voice->m8A = 0;
             iSNDcalcpitch(i);
-            fn_80274B50(i);
+            SNDPLATFORM_setpitch(i);
         }
         changed = 0;
         if (voice->m7C != 0) {
@@ -104,7 +104,7 @@ void SNDSYSI_100hzserver(void)
         }
         if (changed) {
             fn_80278598(i);
-            fn_802747D8(i);
+            SndHalSetVol(i);
         }
     }
 }
@@ -113,12 +113,12 @@ namespace Snd {
 
 void DefaultMutexLockFn(void)
 {
-    fn_8027535C();
+    SNDI_mutexlock();
 }
 
 void DefaultMutexUnlockFn(void)
 {
-    fn_80275384();
+    SNDI_mutexunlock();
 }
 
 }

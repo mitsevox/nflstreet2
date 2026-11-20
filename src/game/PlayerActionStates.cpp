@@ -25,7 +25,7 @@ extern "C" void fn_800DF750(Ball_t *pBall, Vector_80039F5C *pPos, int *pAngles)
     Vector_80039F5C old;
     Vector_80039F5C delta;
     BallGetPosition(pBall, &old);
-    fn_802276B4(&delta, pPos, &old);
+    Vec3Sub(&delta, pPos, &old);
     BallSetPrevPosition(pBall, &old);
     BallSetPosition(pBall, pPos);
     BallSetRotation(pBall, pAngles);
@@ -594,17 +594,17 @@ extern "C" int fn_800E1044(Object_80039F5C *p, Vector_80039F5C *pTarget)
         Vector_80039F5C end;
         Vector_80039F5C start;
         unsigned short i;
-        fn_80227690(&end, pTarget, &p->mMotion.mPos);
-        fn_802271A4(&end, &end);
-        fn_80227248(&end, &end, p->mMotion.mUnknown28 * fn_8009BB54(0));
-        fn_80227638(&end, &end, &p->mMotion.mPos);
+        Vec2Sub(&end, pTarget, &p->mMotion.mPos);
+        Vec2Normalize(&end, &end);
+        Vec2Scale(&end, &end, p->mMotion.mUnknown28 * fn_8009BB54(0));
+        Vec2Add(&end, &end, &p->mMotion.mPos);
         end.mZ = 0.0f;
         start = p->mMotion.mPos;
         start.mZ = 0.0f;
         for (i = 0; i < fn_80094488() - 1; i++) {
             if (fn_800E0F48(&p->mMotion.mPos, &end, fn_80094490(i), fn_80094490(i + 1)) ||
-                fn_80227B04(&start, &end, fn_80094490(i)) < 4.0f ||
-                fn_80227B04(&start, &end, fn_80094490(i + 1)) < 4.0f) {
+                Vec3DistanceSqrToSegment(&start, &end, fn_80094490(i)) < 4.0f ||
+                Vec3DistanceSqrToSegment(&start, &end, fn_80094490(i + 1)) < 4.0f) {
                 result = 1;
                 break;
             }
@@ -617,7 +617,7 @@ extern "C" int fn_800E11C0(Object_80039F5C *p)
 {
     int result = 0;
     Block_800E11C0 *pBlock = p->mpUnknown3092->mpUnknown32;
-    float distance = fn_8022781C(&pBlock->mUnknown32, &pBlock->mUnknown16);
+    float distance = Vec2Distance(&pBlock->mUnknown32, &pBlock->mUnknown16);
     if (distance > 0.0f) {
         result = fn_801CFE08(fabsf(pBlock->mUnknown32.mZ - pBlock->mUnknown16.mZ) / distance) <= 0x155555;
     }
@@ -630,7 +630,7 @@ extern "C" int fn_800E1248(Object_80039F5C *p, Object_80039F5C *pOther)
     if (p && pOther) {
         result = fn_80120794(&p->mMotion, &pOther->mMotion, &pOther->mMotion.mUnknown40, 0.2f,
                              pOther->mMotion.mUnknown28, pOther->mMotion.mUnknown32,
-                             fn_8022781C(&pOther->mMotion, &p->mMotion));
+                             Vec2Distance(&pOther->mMotion, &p->mMotion));
     }
     return result;
 }
@@ -744,14 +744,14 @@ extern "C" int fn_800E1584(Object_80039F5C *p)
         int special = fn_80178308() == fn_80178348() && !(p->mMotion.mPos.mY >= fn_80177FE0().mY) &&
             (pOther->mpState->mId == 1 || pOther->mpState->mId == 18);
         if (special) {
-            if (!(fn_8022781C(&p->mMotion, &pOther->mMotion) >= 3.0f) &&
+            if (!(Vec2Distance(&p->mMotion, &pOther->mMotion) >= 3.0f) &&
                 MathAngleDiff(fn_800E1248(p, pOther), p->mMotion.mUnknown32) < (int)(angle * 46603.37890625f) &&
                 !(SyncRandGetFloat(0) >= chance) && fn_800E1350(p)) {
                 result = 1;
             }
         } else {
             if (!(p->mMotion.mPos.mY >= pOther->mMotion.mPos.mY) &&
-                !(fn_8022781C(&p->mMotion, &pOther->mMotion) >= 3.0f) &&
+                !(Vec2Distance(&p->mMotion, &pOther->mMotion) >= 3.0f) &&
                 MathAngleDiff(fn_800E1248(p, pOther), p->mMotion.mUnknown32) < (int)(angle * 46603.37890625f) &&
                 !(SyncRandGetFloat(0) >= 0.1f) && fn_800E1350(p)) {
                 result = 1;
@@ -840,7 +840,7 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
     Point_8017886C own;
     own.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
     own.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
-    fn_80227638(&own, &own, &goal);
+    Vec2Add(&own, &own, &goal);
     if (fn_8009F780() && fn_801BE648(p->mpUnknown792) != 86) {
     pBlock->mUnknown49 = 0;
     if (pTactics->mUnknown4) {
@@ -853,7 +853,7 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
             PlayBookPosition_t *pMarkedEntry = PlaySetGetEntry(pMarkedTeam, pMarked->mIdBytes[1], 0);
             marked.mX = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mX;
             marked.mY = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mY;
-            fn_80227638(&marked, &marked, &goal);
+            Vec2Add(&marked, &marked, &goal);
         }
     }
     switch (p->mUnknown2914) {
@@ -922,7 +922,7 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
             PlayBookPosition_t *pMarkedEntry = PlaySetGetEntry(pMarkedTeam, pMarked->mIdBytes[1], 0);
             marked.mX = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mX;
             marked.mY = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mY;
-            fn_80227638(&marked, &marked, &goal);
+            Vec2Add(&marked, &marked, &goal);
         }
                 if ((slot == 1 && marked.mX < goal.mX + 6.0f) || (slot == 5 && !(marked.mX <= goal.mX - 6.0f))) {
                     pBlock->mUnknown40.mX = slot == 1 ? own.mX - 3.5f : own.mX + 3.5f;
@@ -946,7 +946,7 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
             PlayBookPosition_t *pMarkedEntry = PlaySetGetEntry(pMarkedTeam, pMarked->mIdBytes[1], 0);
             marked.mX = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mX;
             marked.mY = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mY;
-            fn_80227638(&marked, &marked, &goal);
+            Vec2Add(&marked, &marked, &goal);
         }
                 if ((slot == 2 && marked.mX < goal.mX + 6.0f) || (slot == 4 && !(marked.mX <= goal.mX - 6.0f))) {
                     pBlock->mUnknown40.mX = slot == 2 ? own.mX - 2.0f : own.mX + 2.0f;
@@ -982,7 +982,7 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
             PlayBookPosition_t *pMarkedEntry = PlaySetGetEntry(pMarkedTeam, pMarked->mIdBytes[1], 0);
             marked.mX = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mX;
             marked.mY = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mY;
-            fn_80227638(&marked, &marked, &goal);
+            Vec2Add(&marked, &marked, &goal);
         }
             if (!(own.mX <= goal.mX) && !(marked.mX <= own.mX + 3.0f)) {
                 if (pRight && !pRight->mUnknown361[24] && (!pSpecial || !specialRight)) {
@@ -1008,9 +1008,9 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
     }
     if (!pBlock->mUnknown0) {
         Point_8017886C delta;
-        if (pBlock->mUnknown49) fn_80227690(&delta, &pBlock->mUnknown40, &p->mMotion);
-        else fn_80227690(&delta, &own, &p->mMotion);
-        if (!(fn_802270A4(&delta) <= 1.0f) && !pBlock->mUnknown24) pBlock->mUnknown1 = 1;
+        if (pBlock->mUnknown49) Vec2Sub(&delta, &pBlock->mUnknown40, &p->mMotion);
+        else Vec2Sub(&delta, &own, &p->mMotion);
+        if (!(Vec2Magnitude(&delta) <= 1.0f) && !pBlock->mUnknown24) pBlock->mUnknown1 = 1;
     }
     } else if (pBlock->mUnknown49 && !pBlock->mUnknown0) {
         pBlock->mUnknown49 = 0;
@@ -1027,7 +1027,7 @@ extern "C" void fn_800E2550(Object_80039F5C *p, Point_8017886C *pOut, int *pAngl
     PlayBookPosition_t *pEntry = PlaySetGetEntry(pTeam, p->mIdBytes[1], 0);
     pOut->mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
     pOut->mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
-    fn_80227638(pOut, pOut, &point);
+    Vec2Add(pOut, pOut, &point);
     pOut->mX = !(pOut->mX >= 1.0f - fn_80178A08()) ? 1.0f - fn_80178A08()
         : (pOut->mX > fn_80178A08() - 1.0f ? fn_80178A08() - 1.0f : pOut->mX);
     pOut->mY = !(pOut->mY >= 1.0f - fn_80178A44()) ? 1.0f - fn_80178A44()
@@ -1037,7 +1037,7 @@ extern "C" void fn_800E2550(Object_80039F5C *p, Point_8017886C *pOut, int *pAngl
         Object_80039F5C *pOther = pBlock->mpUnknown36;
         if (pOther) {
             Point_8017886C delta;
-            fn_80227690(&delta, &p->mMotion, &pOther->mMotion);
+            Vec2Sub(&delta, &p->mMotion, &pOther->mMotion);
             fn_801CFE40(delta.mY, delta.mX);
             switch (p->mUnknown2914) {
             case 17:
@@ -1159,7 +1159,7 @@ extern "C" void fn_800E2ABC(Object_80039F5C *p)
     if ((pRecord->mUnknown4 & ~0x80) == 30) {
         Point_8017886C velocity;
         float value = (float)(pRecord->mUnknown5 >> 3) + (float)(pRecord->mUnknown5 & 7) * 0.1428571492433548f;
-        fn_80227538(&velocity, (pRecord->mUnknown6 & 0x7F) << 17, value);
+        Vec2FromAngle(&velocity, (pRecord->mUnknown6 & 0x7F) << 17, value);
         target.mX = (target.mY - p->mMotion.mPos.mY) * velocity.mX;
         target.mX /= velocity.mY;
         target.mX = (point.mX - p->mMotion.mPos.mX) * 0.0833333358168602f + target.mX;
@@ -1243,7 +1243,7 @@ extern "C" int fn_800E2F20(Object_80039F5C *p, Point_8017886C *pPoint)
         delta.mY = pPoint->mY;
         if (!(fabsf(delta.mY - p->mMotion.mPos.mY) >= 1.0f)) {
             delta.mY = p->mMotion.mPos.mY;
-            fn_80227690(&delta, &delta, &p->mMotion.mPos);
+            Vec2Sub(&delta, &delta, &p->mMotion.mPos);
             unsigned int diff = MathAngleDiff(p->mMotion.mFacing, delta.Heading()) - 0x271C72;
             result = diff <= 0x31C71B;
         }

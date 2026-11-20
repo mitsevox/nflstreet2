@@ -79,14 +79,14 @@ void MatPop(void);
 void MatPush(void);
 void MatTranslate(void *);
 void MatRotZ(int);
-void fn_80227CC0(void *, void *);
+void Vec3Mat34Mul(void *, void *);
 float *MatGetCurMatrixPtr(void);
 void GXLoadPosMtxImm(float *, int);
 float *MatInvertRigid(void);
 int fn_801784C4(void);
 int fn_800A33E8(void);
-void fn_80227538(void *, int, float);
-void fn_8022765C(void *, void *, void *);
+void Vec2FromAngle(void *, int, float);
+void Vec3Add(void *, void *, void *);
 void MatCat(void *);
 void TMClipMatrix(int);
 unsigned int TMClipBBox(void *, void *, int);
@@ -137,7 +137,7 @@ void WeatherUpdateParticles(WeatherParticle_t *entries, unsigned int count, floa
     WeatherParticle_t *entry = &entries[i];
     entry->mUnknown0.mZ += speed * step;
     if (!(entry->mUnknown0.mZ > 0.0f)) {
-      fn_80227CC0(&_Weather_aSplashes[i], &entry->mUnknown0);
+      Vec3Mat34Mul(&_Weather_aSplashes[i], &entry->mUnknown0);
       _Weather_aSplashes[i].mUnknownC.r = _Weather_auSplashColor[0];
       _Weather_aSplashes[i].mUnknownC.g = _Weather_auSplashColor[1];
       _Weather_aSplashes[i].mUnknownC.b = _Weather_auSplashColor[2];
@@ -145,7 +145,7 @@ void WeatherUpdateParticles(WeatherParticle_t *entries, unsigned int count, floa
       _Weather_aSplashes[i].mUnknown0.mZ = 0.0f;
       entry->mUnknown0.mZ += 8.0f;
     } else if (!(entry->mUnknown0.mZ <= 8.0f)) {
-      fn_80227CC0(&_Weather_aSplashes[i], &entry->mUnknown0);
+      Vec3Mat34Mul(&_Weather_aSplashes[i], &entry->mUnknown0);
       _Weather_aSplashes[i].mUnknownC.r = _Weather_auSplashColor[0];
       _Weather_aSplashes[i].mUnknownC.g = _Weather_auSplashColor[1];
       _Weather_aSplashes[i].mUnknownC.b = _Weather_auSplashColor[2];
@@ -251,7 +251,7 @@ void WeatherGetFrustumBounds(float *matrix, WeatherBounds_t *bounds, float a, fl
     if (!(i & 2))
       point.mY = -point.mY;
     point.mZ = v->mZ;
-    fn_80227CC0(&transformed, &point);
+    Vec3Mat34Mul(&transformed, &point);
     if (!(transformed.mZ >= bounds->mUnknown0[2]))
       bounds->mUnknown0[2] = transformed.mZ;
     if (!(transformed.mZ <= bounds->mUnknown10[2]))
@@ -320,9 +320,9 @@ void WeatherGetDrawBounds(WeatherBounds_t *bounds, float *matrix,
 }
 void WeatherUpdateDrift(float a, float b, float step) {
   Vector_80039F5C v;
-  fn_80227538(&v, fn_800A33E8(), (a * b) * step);
+  Vec2FromAngle(&v, fn_800A33E8(), (a * b) * step);
   v.mZ = 0.0f;
-  fn_8022765C(&_Weather_vDrift, &_Weather_vDrift, &v);
+  Vec3Add(&_Weather_vDrift, &_Weather_vDrift, &v);
   float *position = &_Weather_vDrift.mX;
   for (int i = 0; i < 2; ++i) {
     if (!(position[i] < 8.0f))

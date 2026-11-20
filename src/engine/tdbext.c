@@ -2,7 +2,7 @@
    loads databases such as rosters, stats and saves from resource files. */
 
 #include "engine/tdbext.h"
-#include "engine/fn_801F9134.h"
+#include "engine/TDbLoad.h"
 #include "engine/tdbiores.h"
 #include "engine/t3db_table.h"
 #include "game/fn_801D2B7C.h"
@@ -104,7 +104,7 @@ int TDbExtLoadFromResource(int db, void *pPath, int mode, int flags)
     file.mMode = mode;
     file.mpStream = ResOpenDevice(pPath, 0x2C);
     if (file.mpStream != 0) {
-        err = fn_801F9134(db, (int)&file, flags, (int)&tdbioresCallback);
+        err = TDbLoad(db, (int)&file, flags, (int)&tdbioresCallback);
         if (isOpen == 0) {
             if (err == 0) {
                 if (ResClose(file.mpStream)) {

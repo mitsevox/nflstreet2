@@ -252,7 +252,7 @@ void TMBlendFlushBuffer(void);
 void TMBlendEnd(void);
 void TMBlendBindModel2(Record_8020F2C4 *pDst, Record_8020F2C4 *pSrc);
 int TMBlendGeomAll(void);
-void fn_80227930(Vector_801A1650 *pOut, float *pA, float *pB, float t);
+void Vec3Lerp(Vector_801A1650 *pOut, float *pA, float *pB, float t);
 void fn_802336C4(void *p, void *q, int a);
 void fn_80233728(void *p);
 void fn_80233760(void *p, short *pValues, int count);
@@ -285,8 +285,8 @@ void fn_80234CA4(Part_8003DEC4 *p, Joints_8003DEC4 *pJoints);
 void fn_80234CAC(Part_8003DEC4 *p, void *q);
 void fn_80234CF0(Part_8003DEC4 *p, int a, void *q);
 void fn_80234DC0(Part_8003DEC4 *p, int a);
-int fn_80236B98(int a, float r, float g, float b);
-void fn_80236C10(int a, Vector_801A1650 *pScale, void *p);
+int LLLightLoadSetTinted(int a, float r, float g, float b);
+void LLLightLoadDirectional(int a, Vector_801A1650 *pScale, void *p);
 int LLFogEnable(int a);
 void GXSetCullMode(int a);
 void GXSetChanMatColor(int chan, Color_8024FB58 color);
@@ -351,7 +351,7 @@ void fn_801A15C4(Viewport_t *pObject)
     }
 }
 
-/* Returns the fn_80236B98 light for the player's colour. The colour starts
+/* Returns the LLLightLoadSetTinted light for the player's colour. The colour starts
    at white; when the +0xC colour of the record at +0x3CC changes, it fades
    over fifteen steps from the colour reached so far to the new one. The
    result is scaled by the +0x19B0 colour (a decaying pulse over thirty
@@ -425,17 +425,17 @@ int fn_801A1650(Object_8003DEC4 *pPlayer)
         b *= pPlayer->mUnknown5188.mUnknown574;
     }
     if (flash) {
-        fn_80227930(&color, lbl_802F29B0, lbl_802F29BC, StyleTrackerGetMeterFraction(pPlayer->mUnknown4968));
+        Vec3Lerp(&color, lbl_802F29B0, lbl_802F29BC, StyleTrackerGetMeterFraction(pPlayer->mUnknown4968));
         r = color.x;
         g = color.y;
         b = color.z;
     }
-    light = fn_80236B98(1, r, g, b);
+    light = LLLightLoadSetTinted(1, r, g, b);
     if (LightTrackerUpdate(&pPlayer->mUnknown4960, (LightSource_t *)pPlayer->mUnknown972, block, &scale.x)) {
         scale.x *= r;
         scale.y *= g;
         scale.z *= b;
-        fn_80236C10(0, &scale, block);
+        LLLightLoadDirectional(0, &scale, block);
     }
     return light;
 }
@@ -564,8 +564,8 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
     float fraction = StyleTrackerGetMeterFraction(pPlayer->mUnknown4968);
     // FAKEMATCH: compiled-out range assert on the meter fraction; its 1.0f enters the pool before 0.0f
     FX_ASSERT(fraction <= 1.0f && fraction >= 0.0f);
-    fn_80227930(&v, lbl_802F29B0, lbl_802F29BC, fraction);
-    light = fn_80236B98(1, v.x, v.y, v.z);
+    Vec3Lerp(&v, lbl_802F29B0, lbl_802F29BC, fraction);
+    light = LLLightLoadSetTinted(1, v.x, v.y, v.z);
     GXSetChanMatColor(0, color);
     GXSetNumChans(1);
     GXSetChanCtrl(0, 1, 0, 0, light, 2, 2);

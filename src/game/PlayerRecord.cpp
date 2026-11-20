@@ -1,7 +1,7 @@
 /* Reads one player's full record (ratings and attributes) from the PLAY table of the stats database. */
 
 #include "game/QueryStatus.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 /* Record filled by PlayerRecordRead; PlayerSavePrepare allocates and clears 0x100 bytes for it. */
 struct PlayerRecord_t {
@@ -94,7 +94,7 @@ int PlayerRecordRead(int id, void *pBuffer)
 {
     PlayerRecord_t *pRecord = (PlayerRecord_t *)pBuffer;
     int found = 0;
-    int result = fn_801FCE10(0,
+    int result = TDbCompilePerformOp(0,
         "use 'TATS' select 'EGAP' into \x83 and "
         "'IGAP' into \x83 and "
         "'OTAP' into \x83 and "

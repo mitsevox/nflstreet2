@@ -40,7 +40,7 @@ void fn_8011F5AC(int index);
 
 int MathAngleDiff(int a, int b);
 int fn_801CFE40(float y, float x);
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 void fn_801061E8(Object_80039F5C *p, Ball_t *pBall);
 int fn_80106580(Object_80039F5C *p, int a);
 int fn_80106618(Object_80039F5C *p);
@@ -125,9 +125,9 @@ int MathAngleDiff(int a, int b);
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
 #include <string.h>
-#include "game/fn_802270D4.h"
-#include "game/fn_80227638.h"
-#include "game/fn_8022781C.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Add.h"
+#include "game/Vec2Distance.h"
 #include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "engine/llquat.h"
@@ -268,10 +268,10 @@ void PossReleaseBall(Object_80039F5C *p);
 int fn_80178308(void);
 int fn_801CFE08(float value);
 int MathAngleDiff(int a, int b);
-void fn_802271A4(Vector_80039F5C *pOut, Vector_80039F5C *p);
-void fn_80227248(void *pOut, void *p, float scale);
-void fn_80227690(void *pOut, void *pA, void *pB);
-float fn_80227B04(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC);
+void Vec2Normalize(Vector_80039F5C *pOut, Vector_80039F5C *p);
+void Vec2Scale(void *pOut, void *p, float scale);
+void Vec2Sub(void *pOut, void *pA, void *pB);
+float Vec3DistanceSqrToSegment(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC);
 }
 
 extern float gPlyrMoveFwdSpeed;
@@ -339,7 +339,7 @@ struct State_800DE3B0 {
 extern "C" {
 void AnimSeqSetSpeed(void *p, float value);
 float MathInverse(float value);
-void fn_80227384(void *pOut, void *p, int angle);
+void Vec2Rotate(void *pOut, void *p, int angle);
 }
 extern float lbl_803EAD20;
 
@@ -438,7 +438,7 @@ void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut);
 int fn_8009F780(void);
 int fn_8016EADC(void);
 void fn_800E3DCC(Object_80039F5C *p, Point_8017886C *pOut);
-void fn_80227538(Point_8017886C *pOut, int angle, float magnitude);
+void Vec2FromAngle(Point_8017886C *pOut, int angle, float magnitude);
 void fn_800E586C(Object_80039F5C *p, Point_8017886C *pPoint);
 int PlayerPathIsLaneClear(Object_80039F5C *p, Point_8017886C *pPoint);
 }
@@ -493,7 +493,7 @@ extern "C" void HotspotFrameTouch(void *, Object_80039F5C *);
 extern "C" int fn_8009F778(Object_80039F5C *);
 extern "C" int fn_8009F6B4(void);
 extern "C" void PlayAlignGetSetName(int);
-extern "C" float fn_802270A4(void *);
+extern "C" float Vec2Magnitude(void *);
 
 extern "C" int fn_800DC584(Object_80039F5C *p, Record_800DC584 *pRecord);
 extern "C" float fn_800DC61C(Object_801BBD5C *pObject, Object_80039F5C *p);

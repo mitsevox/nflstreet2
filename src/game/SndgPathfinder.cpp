@@ -25,7 +25,7 @@
 #include "game/ResLoad.h"
 #include "game/fn_801F40F4.h"
 #include "game/LevelSurface.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 
 void *operator new(unsigned int size, int unknown);
 
@@ -593,9 +593,9 @@ int SndAemsLoadBank(void *pData, int b, int c);
 void SndAemsUnloadBank(int handle);
 int SysGetSystemTime(void);
 int Vec3GetAngle(Vector_80039F5C *a, Vector_80039F5C *b);
-int fn_802275D8(Vector_80039F5C *a, Vector_80039F5C *b, float eps);
-void fn_80227690(void *pOut, void *a, void *b);
-float fn_8022785C(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
+int Vec3Equal(Vector_80039F5C *a, Vector_80039F5C *b, float eps);
+void Vec2Sub(void *pOut, void *a, void *b);
+float Vec3Distance(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
 unsigned int SyncRandGetRange(int a, int b);
 void SndgReplayReadEntry(SndgReplaySfx_t *pEntry, void *pStream0, void *pStream1, void *pStream2, void *pStream3,
                  float unknown);
@@ -1275,7 +1275,7 @@ extern "C" float SndgAmbCameraDistance(Vector_80039F5C *pPos)
         position.mX = -position.mX;
         position.mY = -position.mY;
     }
-    return fn_8022785C(&position, pPos);
+    return Vec3Distance(&position, pPos);
 }
 
 #define MIN(a, b) ((a) <= (b) ? (a) : (b))
@@ -1302,7 +1302,7 @@ extern "C" int SndgAmbType4CalcParams(Sound0 *pEntry, void *pObject, int index, 
     height = position.mZ;
     BallGetLandingPoint((Ball_t *)pObject, &other);
     result = 1;
-    distance = fn_8022785C(&position, &other);
+    distance = Vec3Distance(&position, &other);
     if (init) {
         _SndgAmb_afType4Range[index] = distance;
         if (fn_800A8444(fn_80178308()) == 0) {
@@ -2179,11 +2179,11 @@ extern "C" void SndgCalcPan(Vector_80039F5C *a, Vector_80039F5C *b, int angle, u
     Vec2 delta;
     int rot;
 
-    fn_80227690(&delta, b, a);
+    Vec2Sub(&delta, b, a);
     rot = (fn_801CFE40(delta.y, delta.x) - angle + 0x400000) & 0xFFFFFF;
     *pOut0 = -(((rot - 0x400000) & 0xFFFFFF) / 256);
 
-    fn_802276B4(&dir, b, a);
+    Vec3Sub(&dir, b, a);
     flat.mX = dir.mX;
     flat.mY = dir.mY;
     flat.mZ = 0.0f;
@@ -2239,7 +2239,7 @@ extern "C" void SndgHandleBallEvent(AudmonEvent_t *p)
     case 0x20: {
         Vector_80039F5C vec;
         BallGetVelocity((Ball_t *)p->mUnknown10.mpObject, &vec);
-        if (fn_802270D4(&vec) > 0.42f) {
+        if (Vec3Magnitude(&vec) > 0.42f) {
             fn_800717E0(&p->mPos);
         }
         SndgAmbObjCreate(4, (unsigned char)p->mUnknown18, &p->mPos, p->mUnknown10.mpObject);
@@ -2311,8 +2311,8 @@ extern "C" void SndgCenterPanNear(Vector_80039F5C *origin, Vector_80039F5C *pos,
     float dist;
     short scale;
 
-    fn_802276B4(&delta, pos, origin);
-    dist = fn_802270D4(&delta);
+    Vec3Sub(&delta, pos, origin);
+    dist = Vec3Magnitude(&delta);
     if (dist < 5.0f) {
         scale = (short)(dist * 51.0f);
         *span = (*span * scale) / 255;
@@ -2433,13 +2433,13 @@ extern "C" unsigned char SndgListenerAttenuate(SndgListener_t *src, Vector_80039
     if (src->mParams) {
         float level = volume;
 
-        if (pos && !fn_802275D8(pos, &_Sndg_vNoPosition, 1e-7f)) {
+        if (pos && !Vec3Equal(pos, &_Sndg_vNoPosition, 1e-7f)) {
             Vector_80039F5C delta;
             float dist;
             SndgFalloff_t *params;
 
-            fn_802276B4(&delta, pos, &src->mOrigin);
-            dist = fn_802270D4(&delta);
+            Vec3Sub(&delta, pos, &src->mOrigin);
+            dist = Vec3Magnitude(&delta);
             params = src->mParams;
             if (dist > params->mDistance && params->mFactor > 0.0f) {
                 float t = (dist + (1.0f - params->mFactor) * (params->mDistance - dist)) / params->mDistance;
@@ -2527,7 +2527,7 @@ extern "C" void SndgChannelUpdatePan(int idx)
         unsigned short pan;
         short span;
 
-        if (!fn_802275D8(&e->mPosition, &_Sndg_vNoPosition, 1e-7f)) {
+        if (!Vec3Equal(&e->mPosition, &_Sndg_vNoPosition, 1e-7f)) {
             SndgCalcPan(&e->mSource.mOrigin, &e->mPosition, e->mSource.mAngle, &pan, &span);
             SndgCenterPanNear(&e->mSource.mOrigin, &e->mPosition, &pan, &span);
         } else {

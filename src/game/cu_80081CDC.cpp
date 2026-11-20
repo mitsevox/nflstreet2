@@ -5,7 +5,7 @@
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/Row_8007BC34.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/SyncRandGetRange.h"
 
 
@@ -379,13 +379,13 @@ void fn_800828FC(void)
     lbl_8030BC88.mUnknown4 = 0;
     lbl_8030BC88.mUnknown8 = -1;
     lbl_8030BC88.mUnknown12 = 0;
-    fn_801FCE10(&result, "declare \x8a cursor for select 'ANFP' from 'MNFS'\n", &lbl_8030BC88);
+    TDbCompilePerformOp(&result, "declare \x8a cursor for select 'ANFP' from 'MNFS'\n", &lbl_8030BC88);
     lbl_803EA7DC = result.mUnknown0;
     lbl_8030BC98.mUnknown0 = 0;
     lbl_8030BC98.mUnknown4 = 0;
     lbl_8030BC98.mUnknown8 = -1;
     lbl_8030BC98.mUnknown12 = 0;
-    fn_801FCE10(&result, "declare \x8a cursor for select 'ANLP' from 'MNLS'\n", &lbl_8030BC98);
+    TDbCompilePerformOp(&result, "declare \x8a cursor for select 'ANLP' from 'MNLS'\n", &lbl_8030BC98);
     lbl_803EA7E0 = result.mUnknown0;
     lbl_803EA7D8 = 1;
 }
@@ -393,10 +393,10 @@ void fn_800828FC(void)
 void fn_800829D8(void)
 {
     if (lbl_8030BC98.mUnknown0) {
-        fn_801FCFA0(&lbl_8030BC98);
+        TDbSQLDestroyCursor(&lbl_8030BC98);
     }
     if (lbl_8030BC88.mUnknown0) {
-        fn_801FCFA0(&lbl_8030BC88);
+        TDbSQLDestroyCursor(&lbl_8030BC88);
     }
     SndgMusicPumpFrame(0);
     DbFileTblDestroy(0, 0x4D4E4653);
@@ -507,9 +507,9 @@ void fn_80082C64(Record_80082B18 *pRecord)
     unsigned int i;
 
     lbl_8030BC88.mUnknown4 = SyncRandGetRange(0, lbl_803EA7DC);
-    fn_801FCE10(0, "fetch from \x8a 'ANFP' into \x88\n", &lbl_8030BC88, pFirst);
+    TDbCompilePerformOp(0, "fetch from \x8a 'ANFP' into \x88\n", &lbl_8030BC88, pFirst);
     lbl_8030BC98.mUnknown4 = SyncRandGetRange(0, lbl_803EA7E0);
-    fn_801FCE10(0, "fetch from \x8a 'ANLP' into \x88\n", &lbl_8030BC98, pLast);
+    TDbCompilePerformOp(0, "fetch from \x8a 'ANLP' into \x88\n", &lbl_8030BC98, pLast);
     for (i = 0; i < 15; i++) {
         if (pLast) {
             pUpper[i] = toupper(pLast[i]);
@@ -528,9 +528,9 @@ void fn_80082D30(Record_80082B18 *pRecord)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    fn_801FCE10(&result, "use 'TATS' declare \x8a cursor for select * from 'ECAF' where 'IKSP' = \x85\n", &cursor, skin);
+    TDbCompilePerformOp(&result, "use 'TATS' declare \x8a cursor for select * from 'ECAF' where 'IKSP' = \x85\n", &cursor, skin);
     cursor.mUnknown4 = SyncRandGetRange(0, result.mUnknown0);
-    fn_801FCE10(0,
+    TDbCompilePerformOp(0,
                 "fetch from \x8a 'CFRP' into \x82 and 'THLP' into \x82 and 'PTEP' into \x82 and 'XELP' into \x82 "
                 "and 'HFFP' into \x82 and 'BEFP' into \x82 and 'AEFP' into \x82 and 'OMFP' into \x82 and 'PLFP' "
                 "into \x82 and 'CJFP' into \x82 and 'YEFP' into \x82 and 'ONFP' into \x82 and 'RAHP' into \x82 "
@@ -540,7 +540,7 @@ void fn_80082D30(Record_80082B18 *pRecord)
                 &pRecord->mUnknown4C, &pRecord->mUnknown50, &pRecord->mUnknown54, &pRecord->mUnknown58,
                 &pRecord->mUnknown5C, &pRecord->mUnknown60, &pRecord->mUnknown64, &pRecord->mUnknown68);
     if (cursor.mUnknown0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
 }
 
@@ -554,13 +554,13 @@ void fn_80082E48(Record_80082B18 *pRecord)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    fn_801FCE10(&result,
+    TDbCompilePerformOp(&result,
                 "use 'TATS' declare \x8a cursor for select * from 'YALP' inner join 'MAET' on 'YALP'.'DIGT' = "
                 "'MAET'.'DIGT' where 'YALP'.'OPBP' = \x85 and 'MAET'.'PYTT' = \x82\n",
                 &cursor, pRecord->mUnknown14, 0);
     count = result.mUnknown0;
     cursor.mUnknown4 = SyncRandGetRange(0, count);
-    fn_801FCE10(0,
+    TDbCompilePerformOp(0,
                 "fetch from \x8a 'TAHP' into \x82 and 'ROHP' into \x82 and 'RWEP' into \x82 and 'APSP' into \x82 "
                 "and 'TRSP' into \x82 and 'TNPP' into \x82 and 'RAUP' into \x82 and 'LULP' into \x82 and 'WBEP' "
                 "into \x82 and 'DNHP' into \x82 and 'DHRP' into \x82 and 'TRWP' into \x82 and 'LWLP' into \x82 "
@@ -574,7 +574,7 @@ void fn_80082E48(Record_80082B18 *pRecord)
                 &pRecord->mUnknownAC, &pRecord->mUnknownB0, &pRecord->mUnknownB4, &pRecord->mUnknownB8,
                 &pRecord->mUnknownBC, &pRecord->mUnknownC0, &pRecord->mUnknown1C, &pRecord->mUnknown20);
     cursor.mUnknown4 = SyncRandGetRange(0, count);
-    fn_801FCE10(0,
+    TDbCompilePerformOp(0,
                 "fetch from \x8a 'DPSP' into \x82 and 'IGAP' into \x82 and 'MUJP' into \x82 and 'HTCP' into \x82 "
                 "and 'KTBP' into \x82 and 'KATP' into \x82 and 'SSPP' into \x82 and 'KLBP' into \x82 and 'VOCP' "
                 "into \x82 and 'TFDP' into \x82 and 'PMIP' into \x82 and 'NSPP' into \x82 and 'LECP' into \x82 "
@@ -589,7 +589,7 @@ void fn_80082E48(Record_80082B18 *pRecord)
                 &pRecord->mUnknown114, &pRecord->mUnknown118, &pRecord->mUnknown11C);
     pRecord->mUnknown18 = SyncRandGetRange(0, 100);
     if (cursor.mUnknown0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
 }
 
@@ -631,7 +631,7 @@ void fn_80083070(Record_80082B18 *pRecord)
 
 void fn_8008318C(int handle, Record_80082B18 *pRecord, int team, int offset)
 {
-    fn_801FCE10(0,
+    TDbCompilePerformOp(0,
                 "use 'TATS' insert into \x8c set 'DIGP' = \x82 and 'DIOP' = \x82 and 'ANFP' = \x88 and 'ANLP' = "
                 "\x88 and 'DIGT' = \x82 and 'ITGT' = \x82 and 'YTRP' = \x82 and 'SOPP' = \x82 and 'OPBP' = \x82 "
                 "and 'NEJP' = \x82 and 'RVOP' = \x82 and 'EGAP' = \x82 and 'CFRP' = \x82 and 'XELP' = \x82 and "

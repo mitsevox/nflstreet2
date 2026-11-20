@@ -2,7 +2,7 @@
    their names and list order, and clears the new flag once the gear menu has shown
    one. */
 
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/DbCursor.h"
 #include "game/QueryStatus.h"
 
@@ -18,7 +18,7 @@ extern "C" {
 int DecalCountUnlocked(int index)
 {
     int count;
-    int result = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LCDL' where 'LLCD' = 0\n",
+    int result = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from 'LCDL' where 'LLCD' = 0\n",
                              DbUserGetDb(DbUserGetId(index)), &count);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
@@ -30,7 +30,7 @@ int DecalCountUnlocked(int index)
 int DecalCountNew(int index)
 {
     int count;
-    int result = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LCDL' where 'WNRG' != 0\n",
+    int result = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from 'LCDL' where 'WNRG' != 0\n",
                              DbUserGetDb(DbUserGetId(index)), &count);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {

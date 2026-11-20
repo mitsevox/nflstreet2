@@ -13,7 +13,7 @@ int SNDSTRM_setgreedylevel(int stream, int level)
     if (channel == 0) {
         return -8;
     }
-    fn_801F6C04(channel->mpTap, level);
+    STREAM_setgreedylevel(channel->mpTap, level);
     return 0;
 }
 

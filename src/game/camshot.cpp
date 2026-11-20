@@ -13,8 +13,8 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_80227638.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Add.h"
 
 // FAKEMATCH: release form of an assert macro (empty loop, condition discarded).
 #define CAMSHOT_ASSERT(e) do { } while (0)
@@ -116,7 +116,7 @@ void GameTextSetLastPlayer(unsigned short);
 int ScreenTransCanCapture(int);
 void CamSetFieldOfView(void *, float, float);
 int fn_801CFE40(float, float);
-void fn_80227490(void *, void *, int, int, int);
+void Vec3RotateZYX(void *, void *, int, int, int);
 void CamShotHandleMsg(GameCamera_t *, int);
 void CamShotSetTeamBlockFlag(int, int);
 void CamShotSetTeamPlayerFlag(int, int);
@@ -182,16 +182,16 @@ extern "C" void CamShotUpdateFollow(CamShotCamera_t *p)
     p->mHeader.mUnknown04[1] = b->mPosition.mResult.mY;
     p->mHeader.mUnknown04[2] = b->mPosition.mResult.mZ;
     Vector_80039F5C v;
-    fn_802276B4(&v, &target->mResult, p->mHeader.mUnknown04);
+    Vec3Sub(&v, &target->mResult, p->mHeader.mUnknown04);
     s->mTarget.mX = target->mResult.mX;
     s->mTarget.mY = target->mResult.mY;
     s->mTarget.mZ = target->mResult.mZ;
     int yaw = -fn_801CFE40(v.mY, v.mX) + 0x400000;
     p->mHeader.mUnknown14[2] = yaw;
-    fn_80227490(&v, &v, yaw, 0, 0);
+    Vec3RotateZYX(&v, &v, yaw, 0, 0);
     p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
     CamSetFieldOfView(p, fov->mValue, p->mHeader.mUnknown24);
-    fn_802270D4(&v);
+    Vec3Magnitude(&v);
 }
 extern "C" void CamShotEndFollow(CamShotCamera_t *p)
 {
@@ -219,13 +219,13 @@ extern "C" void CamShotUpdateFixed(CamShotCamera_t *p)
     p->mHeader.mUnknown04[1] = b->mY.mValue;
     p->mHeader.mUnknown04[2] = b->mZ.mValue;
     Vector_80039F5C v;
-    fn_802276B4(&v, target, p->mHeader.mUnknown04);
+    Vec3Sub(&v, target, p->mHeader.mUnknown04);
     s->mTarget.mX = target->mX; s->mTarget.mY = target->mY; s->mTarget.mZ = target->mZ;
     int yaw = -fn_801CFE40(v.mY, v.mX) + 0x400000;
     p->mHeader.mUnknown14[2] = yaw;
-    fn_80227490(&v, &v, yaw, 0, 0);
+    Vec3RotateZYX(&v, &v, yaw, 0, 0);
     p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
-    fn_802270D4(&v);
+    Vec3Magnitude(&v);
     CamSetFieldOfView(p, fov->mValue, p->mHeader.mUnknown24);
 }
 extern "C" void CamShotEndFixed(CamShotCamera_t *) {}
@@ -336,7 +336,7 @@ extern "C" void CamShotAddFixed(CamShotState_t *s, CamShotFixedDesc_t *d)
     Vector_80039F5C pos, end;
     pos.mX = d->mPosition.mX; pos.mY = d->mPosition.mY; pos.mZ = d->mPosition.mZ;
     end.mX = d->mEndPosition.mX; end.mY = d->mEndPosition.mY; end.mZ = d->mEndPosition.mZ;
-    if (d->mFlags & 1) { Point_8017886C point; point = fn_80177FE0(); fn_80227638(&pos, &pos, &point); fn_80227638(&end, &end, &point); }
+    if (d->mFlags & 1) { Point_8017886C point; point = fn_80177FE0(); Vec2Add(&pos, &pos, &point); Vec2Add(&end, &end, &point); }
     b->mCallback = d->mCallback;
     pTarget->mX = d->mTarget.mX; pTarget->mY = d->mTarget.mY; pTarget->mZ = d->mTarget.mZ;
     b->mUnknown70 = d->mUnknown48; b->mUnknown72 = d->mUnknown4A;
@@ -358,7 +358,7 @@ extern "C" void CamShotAddFollow(CamShotState_t *s, CamShotFollowDesc_t *d)
     z.mX = d->mEndAngles.mX; z.mY = d->mEndAngles.mY; z.mZ = d->mEndAngles.mZ;
     pos.mX = d->mPosition.mX; pos.mY = d->mPosition.mY; pos.mZ = d->mPosition.mZ;
     target.mX = d->mTarget.mX; target.mY = d->mTarget.mY; target.mZ = d->mTarget.mZ;
-    if (d->mFlags & 1) { Point_8017886C point; point = fn_80177FE0(); fn_80227638(&pos, &pos, &point); fn_80227638(&target, &target, &point); }
+    if (d->mFlags & 1) { Point_8017886C point; point = fn_80177FE0(); Vec2Add(&pos, &pos, &point); Vec2Add(&target, &target, &point); }
     if (d->mRef) {
         Object_80039F5C *p = fn_8009BCE8(&d->mRef);
         if (p->mIdBytes[3] == 1) target.mZ += p->mUnknown2900 * 0.027777778f - 2.03f;

@@ -60,16 +60,16 @@ void fn_80234EA0(void *p, int a);
 void fn_802353D8(void *p, int flags);
 void fn_802353F8(void *p, int a);
 void fn_80235588(void *p, int a);
-void fn_802355E4(void *p);
-void fn_80235630(void *p, int a);
-void fn_80235740(void *p, int a);
-void fn_80235764(void *p, int a);
-void fn_80235B6C(void *p, void *q, int a);
-void fn_80235C48(void *p, int a);
-void fn_80235C4C(int a, void *p, float b);
-void fn_80235C90(void *p, int a, float b, float c, float d, float e);
-void fn_80235D0C(void *p, int a);
-void fn_80235DB8(int a);
+void ModelObjReset(void *p);
+void ModelObjSetModel(void *p, int a);
+void ModelObjStoreMatrix(void *p, int a);
+void ModelObjDraw(void *p, int a);
+void ModelObjSetTextures(void *p, void *q, int a);
+void ModelObjSetParamNop(void *p, int a);
+void ModelObjSetFixedDepth(int a, void *p, float b);
+void ModelObjSetAmbientColor(void *p, int a, float b, float c, float d, float e);
+void ModelObjSetFlagsNop(void *p, int a);
+void ModelObjRelocateModelRes(int a);
 }
 
 static FldObjLayerDesc_t _FldObj_aLayers[5] = {
@@ -91,7 +91,7 @@ int FldObjLoadModel(void *pData, int index)
 {
     int handle = ResLoad(pData, index, 1);
 
-    fn_80235DB8(handle);
+    ModelObjRelocateModelRes(handle);
     return handle;
 }
 
@@ -108,20 +108,20 @@ void FldObjInit(FldObj_t *pObject, int *pArgs)
                     _FldObj_aLayers[i].mUnknown4);
         TMTexLibSetFilterParm((TMTexLib_t *)&pObject->mUnknown4C0[i], &_FldObj_TexFilter);
         fn_80235588(&pObject->mUnknown2C[i], 6);
-        fn_80235630(&pObject->mUnknown2C[i], pObject->mUnknown4AC[i]);
-        fn_80235B6C(&pObject->mUnknown2C[i], &pObject->mUnknown4C0[i], 1);
+        ModelObjSetModel(&pObject->mUnknown2C[i], pObject->mUnknown4AC[i]);
+        ModelObjSetTextures(&pObject->mUnknown2C[i], &pObject->mUnknown4C0[i], 1);
         fn_802353D8(&pObject->mUnknown2C[i], _FldObj_aLayers[i].mUnknown10);
-        fn_80235C48(&pObject->mUnknown2C[i], _FldObj_aLayers[i].mUnknown8);
-        fn_80235D0C(&pObject->mUnknown2C[i], _FldObj_aLayers[i].mUnknown18);
+        ModelObjSetParamNop(&pObject->mUnknown2C[i], _FldObj_aLayers[i].mUnknown8);
+        ModelObjSetFlagsNop(&pObject->mUnknown2C[i], _FldObj_aLayers[i].mUnknown18);
         fn_802353F8(&pObject->mUnknown2C[i], 0);
     }
     fn_80235588(&pObject->mUnknown2C[5], 6);
-    fn_80235630(&pObject->mUnknown2C[5], pObject->mUnknown4AC[4]);
-    fn_80235B6C(&pObject->mUnknown2C[5], &pObject->mUnknown4C0[4], 1);
-    fn_80235C48(&pObject->mUnknown2C[5], _FldObj_aLayers[4].mUnknown8);
+    ModelObjSetModel(&pObject->mUnknown2C[5], pObject->mUnknown4AC[4]);
+    ModelObjSetTextures(&pObject->mUnknown2C[5], &pObject->mUnknown4C0[4], 1);
+    ModelObjSetParamNop(&pObject->mUnknown2C[5], _FldObj_aLayers[4].mUnknown8);
     fn_802353F8(&pObject->mUnknown2C[5], 0x20000000);
     fn_802353D8(&pObject->mUnknown2C[5], 0x60040B);
-    fn_80235D0C(&pObject->mUnknown2C[5], _FldObj_aLayers[4].mUnknown18);
+    ModelObjSetFlagsNop(&pObject->mUnknown2C[5], _FldObj_aLayers[4].mUnknown18);
 }
 
 void FldObjRelease(FldObj_t *pObject)
@@ -129,9 +129,9 @@ void FldObjRelease(FldObj_t *pObject)
     unsigned int i;
 
     for (i = 0; i < 5; i++) {
-        fn_802355E4(&pObject->mUnknown2C[i]);
+        ModelObjReset(&pObject->mUnknown2C[i]);
     }
-    fn_802355E4(&pObject->mUnknown2C[5]);
+    ModelObjReset(&pObject->mUnknown2C[5]);
     for (i = 0; i < 5; i++) {
         fn_80234EA0(&pObject->mUnknown4C0[i], _FldObj_aLayers[i].mUnknown4);
         ResUnLoad(pObject->mpUnknown14, pObject->mUnknown18[i]);
@@ -149,12 +149,12 @@ void FldObjDrawLayer(FldObj_t *pObject, int index, void *pPos, float scale)
             MatPush();
             MatTranslate(pPos);
         }
-        fn_80235740(pSub, handle);
-        fn_80235C90(pSub, handle, 1.0f, 1.0f, 1.0f, scale * _FldObj_aLayers[index].mUnknown14);
+        ModelObjStoreMatrix(pSub, handle);
+        ModelObjSetAmbientColor(pSub, handle, 1.0f, 1.0f, 1.0f, scale * _FldObj_aLayers[index].mUnknown14);
         if (_FldObj_aLayers[index].mUnknownC > 0.0f) {
-            fn_80235C4C(handle, pSub, _FldObj_aLayers[index].mUnknownC);
+            ModelObjSetFixedDepth(handle, pSub, _FldObj_aLayers[index].mUnknownC);
         }
-        fn_80235764(pSub, handle);
+        ModelObjDraw(pSub, handle);
         if (pPos != 0) {
             MatPop();
         }
@@ -172,12 +172,12 @@ void FldObjDrawShadowPass(FldObj_t *pObject, float scale, void *pPos)
             MatPush();
             MatTranslate(pPos);
         }
-        fn_80235740(pSub, handle);
-        fn_80235C90(pSub, handle, 0.5f, 0.5f, 0.5f, scale * _FldObj_aLayers[4].mUnknown14);
+        ModelObjStoreMatrix(pSub, handle);
+        ModelObjSetAmbientColor(pSub, handle, 0.5f, 0.5f, 0.5f, scale * _FldObj_aLayers[4].mUnknown14);
         if (_FldObj_aLayers[4].mUnknownC > 0.0f) {
-            fn_80235C4C(handle, pSub, _FldObj_aLayers[4].mUnknownC);
+            ModelObjSetFixedDepth(handle, pSub, _FldObj_aLayers[4].mUnknownC);
         }
-        fn_80235764(pSub, handle);
+        ModelObjDraw(pSub, handle);
         if (pPos != 0) {
             MatPop();
         }

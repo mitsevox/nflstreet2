@@ -7,7 +7,7 @@
 #include "game/Object_8008044C.h"
 #include "game/EditMenu.h"
 #include <string.h>
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 struct PlayerPickupModelLayout_t {
     float mX;
@@ -59,8 +59,8 @@ void StorySetFlag100(int index, int value);
 int StoryGetFlag200(int a);
 void StorySetFlag200(int index, int value);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-int fn_801F967C(int handle, int table);
-int fn_801F9980(int handle, int *pTable);
+int TDbTblDestroy(int handle, int table);
+int TDbTblFindUnusedId(int handle, int *pTable);
 int UIGLibraryLoadItem(void *pObject, int a, int b);
 int UIGLibraryUnLoadItem(void *pObject, int a, int b);
 void *UIGLibraryGetGlobal(int index);
@@ -180,7 +180,7 @@ void MsgPlayerPickupCopyTeam(int db)
     int value;
 
     _MsgPlayerPickup_iTeam = StoryTeamLoadToStats(db, 1, ids, &n);
-    fn_801FCE10(&result, "use 'TATS' insert into 'MAET' * select * from \x8c\n", fn_800602E0());
+    TDbCompilePerformOp(&result, "use 'TATS' insert into 'MAET' * select * from \x8c\n", fn_800602E0());
     desc.mUnknown0 = 2;
     desc.mUnknown4 = 4;
     desc.mUnknown8 = _MsgPlayerPickup_iTeam;
@@ -191,7 +191,7 @@ void MsgPlayerPickupCopyTeam(int db)
     desc.mUnknown8 = _MsgPlayerPickup_iTeam;
     desc.mUnknown0 = 2;
     fn_8008044C(&_MsgPlayerPickup_RosterCursor, &desc, 0x54415453);
-    fn_801FCE10(&result, "use 'TATS' select 'LGLT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &_MsgPlayerPickup_iTeamLGLT,
+    TDbCompilePerformOp(&result, "use 'TATS' select 'LGLT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &_MsgPlayerPickup_iTeamLGLT,
                 _MsgPlayerPickup_iTeam);
     rows = DbCursorGetRowCount((DbCursor *)&_MsgPlayerPickup_TeamCursor);
     _MsgPlayerPickup_bSkipTeam = rows == 0;
@@ -210,19 +210,19 @@ void MsgPlayerPickupCopyTeam(int db)
             DbCursorSetInt(&cursor, 0x44494754, _MsgPlayerPickup_iCopyTeam);
         }
     }
-    fn_801FCE10(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", value);
+    TDbCompilePerformOp(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", value);
     DbCursorClose(&cursor);
     desc.mUnknown12 = 0;
     desc.mUnknown4 = 1;
     desc.mUnknown8 = _MsgPlayerPickup_iCopyTeam;
     desc.mUnknown0 = 2;
     fn_8008044C(&_MsgPlayerPickup_PoolCursor, &desc, 0x54415453);
-    fn_801F9980(0x54415453, &handle);
-    fn_801FCE10(&result, "use 'TATS' select into \x8c * from 'MAET' where 'DIGT' = \x82\n", handle, _MsgPlayerPickup_iTeam);
-    fn_801FCE10(&result, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIOT' = \x82 and 'LGLT' = \x82\n", handle,
+    TDbTblFindUnusedId(0x54415453, &handle);
+    TDbCompilePerformOp(&result, "use 'TATS' select into \x8c * from 'MAET' where 'DIGT' = \x82\n", handle, _MsgPlayerPickup_iTeam);
+    TDbCompilePerformOp(&result, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIOT' = \x82 and 'LGLT' = \x82\n", handle,
                 _MsgPlayerPickup_iCopyTeam, _MsgPlayerPickup_iCopyTeam, _MsgPlayerPickup_iTeamLGLT);
-    fn_801FCE10(&result, "use 'TATS' insert into 'MAET' * select * from \x8c\n", handle);
-    fn_801F967C(0x54415453, handle);
+    TDbCompilePerformOp(&result, "use 'TATS' insert into 'MAET' * select * from \x8c\n", handle);
+    TDbTblDestroy(0x54415453, handle);
     MsgPlayerPickupRegisterPlayers();
 }
 
