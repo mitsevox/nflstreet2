@@ -156,6 +156,12 @@ extern int lbl_803EAB80;
 extern float gPlyrMoveFwdSpeed;
 }
 
+static inline int _AngleBetween(Vector_80039F5C *pDelta, Object_800B26B0 *pTo, Object_800B26B0 *pFrom)
+{
+    fn_80227690(pDelta, pTo, pFrom);
+    return fn_801CFE40(pDelta->mY, pDelta->mX);
+}
+
 extern "C" int fn_800B7378(Object_80039F5C *p)
 {
     int result = 0;
@@ -178,8 +184,7 @@ extern "C" int fn_800B7378(Object_80039F5C *p)
         if (pCarrier != 0 && fn_801BE648(pCarrier->mpUnknown792) != 0x54
             && fn_801BE648(pCarrier->mpUnknown792) != 0x45 && fn_801BE648(pCarrier->mpUnknown792) != 0xB2
             && fn_801BE648(pCarrier->mpUnknown792) != 0x4D && (unsigned int)pCarrier->mMotion.mFacing <= 0x800000) {
-            fn_80227690(&delta, &p->mMotion, &pCarrier->mMotion);
-            angle = fn_801CFE40(delta.mY, delta.mX);
+            angle = _AngleBetween(&delta, &p->mMotion, &pCarrier->mMotion);
             if (MathAngleDiff(pCarrier->mMotion.mFacing, 0) <= 0x3FFFFF) {
                 minAngle = (int)(minAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * 699050.0f);
                 maxAngle = (int)(maxAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * 1398101.0f);
@@ -235,13 +240,21 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
         }
         if (loose || !dive) {
             if (BallStateGet(pBall, 0) == 4 && fn_800B51D0(p) != 0 && fn_801133FC(p, 1, 1) != 0) {
-                goto handled;
+                p->mFlags |= 0x4000;
+                return 0;
             }
-            if (!dive ? fn_800E815C(p, 0, 0) : fn_800E1350(p)) {
-                goto handled;
+            if (dive) {
+                if (fn_800E1350(p) != 0) {
+                    p->mFlags |= 0x4000;
+                    return 0;
+                }
+            } else if (fn_800E815C(p, 0, 0) != 0) {
+                p->mFlags |= 0x4000;
+                return 0;
             }
         } else if (fn_800E1350(p) != 0) {
-            goto handled;
+            p->mFlags |= 0x4000;
+            return 0;
         }
     }
     if (input.mUnknown92 & 4) {
@@ -263,13 +276,15 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
             break;
         }
         if (pass) {
+            int fast = (input.mUnknown96 & 1) ? fn_8009A6EC(p) : (input.mUnknown96 & 0x10);
             int mode = 1;
 
-            if ((input.mUnknown96 & 1) ? fn_8009A6EC(p) : (input.mUnknown96 & 0x10)) {
+            if (fast) {
                 mode = 3;
             }
             if (fn_801133FC(p, mode, 0) != 0) {
-                goto handled;
+                p->mFlags |= 0x4000;
+                return 0;
             }
         } else {
             if (fn_8011F1CC() != 0) {
@@ -279,7 +294,8 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
                 }
             }
             if (fn_800F2C1C(p, 0) != 0) {
-                goto handled;
+                p->mFlags |= 0x4000;
+                return 0;
             }
         }
     }
@@ -289,17 +305,16 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
     if ((input.mUnknown93 & 0x20)
         && (BallStateGet(pBall, 0) == 5 || fn_801486A0() == 0 || fn_801486A0() == 1 || fn_801486A0() == 2)
         && fn_80125510(p, 0) != 0) {
-    handled:
         p->mFlags |= 0x4000;
         return 0;
     }
-    if (input.mUnknown93 & 0x10) {
-        fn_800B6988(p->mUnknown8);
-    } else {
+    if (!(input.mUnknown93 & 0x10)) {
         if (fn_800B7370(p, &input) != 0) {
             return 0;
         }
         fn_800B6E68(p, &input);
+    } else {
+        fn_800B6988(p->mUnknown8);
     }
     return 0;
 }
@@ -324,12 +339,19 @@ extern "C" void fn_800B8028(void)
         int slot;
         int team;
 
-        while (fn_801FCE10(0, "fetch from \x8a 'UNLS' into \x82 and 'digl' into \x82\n", &cursor, &id, &slot) == 0) {
-            if (fn_801FCE10(0, "select 'DIGT' into \x82 from 'MTTS' where 'UNLS' = \x82\n", &team, id) != 0) {
-                break;
+        int status = 0;
+
+        while (status == 0) {
+            status = fn_801FCE10(0, "fetch from \x8a 'UNLS' into \x82 and 'digl' into \x82\n", &cursor, &id, &slot);
+            if (status == 0) {
+                status = fn_801FCE10(0, "select 'DIGT' into \x82 from 'MTTS' where 'UNLS' = \x82\n", &team, id);
+                if (status == 0) {
+                    int other = team != current;
+
+                    fn_800B6474((unsigned char)slot, other);
+                    fn_800F181C((unsigned char)slot, 0);
+                }
             }
-            fn_800B6474((unsigned char)slot, team != current);
-            fn_800F181C((unsigned char)slot, 0);
         }
     }
     if (cursor.mUnknown0 != 0) {

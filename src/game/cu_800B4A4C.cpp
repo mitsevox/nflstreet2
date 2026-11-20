@@ -107,10 +107,11 @@ extern float lbl_803EAB5C;
 extern Block_800B62D8 *lbl_803EAB60;
 }
 
-extern "C" void fn_800B4DE4(QueryCursor cursor, int index, void *pData)
+extern "C" void PlyrLoadDbRecord(QueryCursor cursor, int index, void *pData)
 {
     Record_800B4DE4 *pOut = (Record_800B4DE4 *)pData;
-    int values[16];
+    // FAKEMATCH: values[0] and values[1] are never used; they put the 16 query slots at the target's stack offsets.
+    int values[18];
 
     cursor.mUnknown4 = index;
     fn_801FCE10(0,
@@ -120,37 +121,37 @@ extern "C" void fn_800B4DE4(QueryCursor cursor, int index, void *pData)
         "'1TGS' into \x82 and '2TGS' into \x82 and '3TGS' into \x82 and '4TGS' into \x82 and "
         "'NSPP' into \x82 and 'TBYP' into \x82 and 'XELP' into \x82 and 'TLFP' into \x82\n",
         &cursor, pOut->mUnknown27, pOut->mUnknown48, pOut->mUnknown69,
-        &values[0], &values[1], &values[2], &values[3], &values[4], &values[5], &values[6], &values[7],
-        &values[8], &values[9], &values[10], &values[11], &values[12], &values[13], &values[14], &values[15]);
+        &values[2], &values[3], &values[4], &values[5], &values[6], &values[7], &values[9], &values[10],
+        &values[12], &values[13], &values[14], &values[15], &values[11], &values[16], &values[8], &values[17]);
     strcpy(pOut->mUnknown69, pOut->mUnknown48);
-    pOut->mUnknown20 = values[13];
+    pOut->mUnknown20 = values[16];
     if (GameModeTypeGet() == 0) {
         if (CheatFlagsIsSet(30) || CheatFlagsIsSet(34)) {
-            pOut->mUnknown0 = (float)values[1] * 0.33;
+            pOut->mUnknown0 = (float)values[3] * 0.33;
         } else if (CheatFlagsIsSet(31)) {
-            pOut->mUnknown0 = (float)values[1] * 1.5;
+            pOut->mUnknown0 = (float)values[3] * 1.5;
         } else if (CheatFlagsIsSet(44)) {
-            pOut->mUnknown0 = (float)values[1] * (fn_80237260(0) + 0.5f);
+            pOut->mUnknown0 = (float)values[3] * (fn_80237260(0) + 0.5f);
         } else {
-            pOut->mUnknown0 = (float)values[1];
+            pOut->mUnknown0 = (float)values[3];
         }
     } else {
-        pOut->mUnknown0 = (float)values[1];
+        pOut->mUnknown0 = (float)values[3];
     }
-    pOut->mUnknown4 = (float)values[0] + 160.0f;
-    pOut->mUnknown12 = values[2];
-    pOut->mUnknown13 = values[3];
-    pOut->mUnknown16 = values[4];
-    pOut->mUnknown8 = values[5];
-    pOut->mUnknown22 = values[14];
-    pOut->mUnknown17 = values[6];
-    pOut->mUnknown18 = values[7];
-    pOut->mUnknown19 = values[12];
-    pOut->mUnknown23 = values[8];
-    pOut->mUnknown24 = values[9];
-    pOut->mUnknown25 = values[10];
-    pOut->mUnknown26 = values[11];
-    pOut->mUnknown21 = values[15];
+    pOut->mUnknown4 = (float)values[2] + 160.0f;
+    pOut->mUnknown12 = values[4];
+    pOut->mUnknown13 = values[5];
+    pOut->mUnknown16 = values[6];
+    pOut->mUnknown8 = values[7];
+    pOut->mUnknown22 = values[8];
+    pOut->mUnknown17 = values[9];
+    pOut->mUnknown18 = values[10];
+    pOut->mUnknown19 = values[11];
+    pOut->mUnknown23 = values[12];
+    pOut->mUnknown24 = values[13];
+    pOut->mUnknown25 = values[14];
+    pOut->mUnknown26 = values[15];
+    pOut->mUnknown21 = values[17];
 }
 
 extern "C" void fn_800B5150(Object_80039F5C *p)

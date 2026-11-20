@@ -12,7 +12,7 @@ void HudHideEvent3D(int index);
 int ConSetChannelInfo(int a, int b, void *p);
 int fn_800C8744(int team);
 unsigned short fn_800C0660(unsigned short *p, int value);
-void fn_800B4DE4(QueryCursor cursor, int index, void *pData);
+void PlyrLoadDbRecord(QueryCursor cursor, int index, void *pData);
 void fn_800B4900(QueryCursor cursor, int index, short *pRatings, void *pOut);
 void fn_800B4798(short *pRatings, int team, int index, float *pOut);
 void fn_800A6F04(int team);
@@ -78,7 +78,7 @@ extern "C" void fn_800C07F0(QueryCursor cursor, unsigned char team, unsigned sho
             unsigned short index = fn_800C0660(pValues, id);
             Object_80039F5C *p = PlyrGet(team, index);
 
-            fn_800B4DE4(cursor, i, &p->mUnknown2900);
+            PlyrLoadDbRecord(cursor, i, &p->mUnknown2900);
             p->mUnknown508 = p->mUnknown2904Float;
             fn_800B4900(cursor, i, p->mRatings, p->mUnknown3020);
             fn_800B4798(p->mRatings, team, (unsigned char)index, &p->mUnknown2900);
