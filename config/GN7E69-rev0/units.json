@@ -1970,7 +1970,7 @@
     },
     "Vec2Distance": {
       "address": "0x8022781C",
-      "evidence": "evidence.tsv function and name rows for 0x8022781C (Vec2Distance, registered in comparisons.json, original bytes linked); called by name from src/game/BigObj.cpp, src/game/FieldLines.cpp, src/game/Handoff.cpp, src/game/LooseBall.cpp, src/game/OptionRun.cpp, src/game/PlayerActionStates.cpp, src/game/PlyrMgr.cpp, src/game/PlyrObjs.cpp, src/game/PlyrStates.cpp, src/game/Possession.cpp, src/game/Pursue.cpp, src/game/RouteRun.cpp, src/game/Replay.cpp, src/game/cu_8008E978.cpp, src/game/cu_800E3CC0.cpp, src/game/cu_800EFC68.cpp, src/game/cu_801A0088.cpp (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x8022781C (Vec2Distance, registered in comparisons.json, original bytes linked); called by name from src/game/BigObj.cpp, src/game/FieldLines.cpp, src/game/Handoff.cpp, src/game/LooseBall.cpp, src/game/OptionRun.cpp, src/game/PlayerActionStates.cpp, src/game/PlyrMgr.cpp, src/game/PlyrObjs.cpp, src/game/PlyrStates.cpp, src/game/Possession.cpp, src/game/Pursue.cpp, src/game/RouteRun.cpp, src/game/Replay.cpp, src/game/cu_8008E978.cpp, src/game/PlyrTackle.cpp, src/game/cu_800EFC68.cpp, src/game/PlayArtRender.cpp (n1e naming wave)."
     },
     "Vec3Distance": {
       "address": "0x8022785C",
@@ -1990,7 +1990,7 @@
     },
     "Vec3Lerp": {
       "address": "0x80227930",
-      "evidence": "evidence.tsv function and name rows for 0x80227930 (Vec3Lerp, registered in comparisons.json, original bytes linked); called by name from src/engine/psysEmitter.c, src/game/AnimBlend.cpp, src/game/ArrowDraw.cpp, src/game/BallCollide.cpp, src/game/BallModel.cpp, src/game/BigObj.cpp, src/game/BigObjAnim.cpp, src/game/CollideContacts.cpp, src/game/Divot.cpp, src/game/PlyrMgr.cpp, src/game/PlyrObjs.cpp, src/game/PlyrPose.cpp, src/game/camball.cpp, src/game/camreplay.cpp, src/game/Replay.cpp, src/game/cu_800EFC68.cpp, src/game/cu_8013FF84.cpp, src/game/cu_801A14D8.cpp (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x80227930 (Vec3Lerp, registered in comparisons.json, original bytes linked); called by name from src/engine/psysEmitter.c, src/game/AnimBlend.cpp, src/game/ArrowDraw.cpp, src/game/BallCollide.cpp, src/game/BallModel.cpp, src/game/BigObj.cpp, src/game/BigObjAnim.cpp, src/game/CollideContacts.cpp, src/game/Divot.cpp, src/game/PlyrMgr.cpp, src/game/PlyrObjs.cpp, src/game/PlyrPose.cpp, src/game/camball.cpp, src/game/camreplay.cpp, src/game/Replay.cpp, src/game/cu_800EFC68.cpp, src/game/camplay.cpp, src/game/PlyrRender.cpp (n1e naming wave)."
     },
     "Vec3Mat33Mul": {
       "address": "0x80227C2C",
@@ -1998,7 +1998,7 @@
     },
     "Vec3Mat34Mul": {
       "address": "0x80227CC0",
-      "evidence": "evidence.tsv function and name rows for 0x80227CC0 (Vec3Mat34Mul, registered in comparisons.json, original bytes linked); called by name from src/engine/camfocus.c, src/engine/physaabb.cpp, src/engine/physconstraint.cpp, src/engine/physshape.cpp, src/game/BallRest.cpp, src/game/ParticleRender.cpp, src/game/PlyrMgr.cpp, src/game/PlyrObjs.cpp, src/game/Weather.cpp, src/game/cammain.cpp, src/game/cu_8008E978.cpp, src/game/cu_8013FF84.cpp (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x80227CC0 (Vec3Mat34Mul, registered in comparisons.json, original bytes linked); called by name from src/engine/camfocus.c, src/engine/physaabb.cpp, src/engine/physconstraint.cpp, src/engine/physshape.cpp, src/game/BallRest.cpp, src/game/ParticleRender.cpp, src/game/PlyrMgr.cpp, src/game/PlyrObjs.cpp, src/game/Weather.cpp, src/game/cammain.cpp, src/game/cu_8008E978.cpp, src/game/camplay.cpp (n1e naming wave)."
     },
     "Vec3ClosestPointOnSegment": {
       "address": "0x80227970",
@@ -2014,7 +2014,7 @@
     },
     "Vec4Mat44Mul": {
       "address": "0x80227E40",
-      "evidence": "evidence.tsv function and name rows for 0x80227E40 (Vec4Mat44Mul, registered in comparisons.json, original bytes linked); called by name from src/game/PlyrNameTag.cpp, src/game/cu_8016174C.cpp (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x80227E40 (Vec4Mat44Mul, registered in comparisons.json, original bytes linked); called by name from src/game/PlyrNameTag.cpp, src/game/PlyrStars.cpp (n1e naming wave)."
     },
     "SNDPLATFORM_outputcaps": {
       "address": "0x802733A0",
@@ -2090,7 +2090,7 @@
     },
     "ModelObjSetAmbientColor": {
       "address": "0x80235C90",
-      "evidence": "evidence.tsv function and name rows for 0x80235C90 (ModelObjSetAmbientColor, a registered holdout of src/engine/modelobj.c, original bytes linked); called by name from src/game/BallMarker.cpp, src/game/EnvObj.cpp, src/game/EnvRender.cpp, src/game/FldObj.cpp, src/game/ReplayCursor.cpp, src/game/UISModel.cpp, src/game/cu_8004A2F4.cpp, src/game/cu_8016174C.cpp (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x80235C90 (ModelObjSetAmbientColor, a registered holdout of src/engine/modelobj.c, original bytes linked); called by name from src/game/BallMarker.cpp, src/game/EnvObj.cpp, src/game/EnvRender.cpp, src/game/FldObj.cpp, src/game/ReplayCursor.cpp, src/game/UISModel.cpp, src/game/cu_8004A2F4.cpp, src/game/PlyrStars.cpp (n1e naming wave)."
     },
     "XmlFindInElement": {
       "address": "0x80216BFC",
@@ -13517,19 +13517,6 @@
       ]
     },
     {
-      "source": "src/game/cu_801A1338.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A1338-0x801A133C (src/game/cu_801A1338.cpp) and its source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801A1338",
-          "end": "0x801A133C"
-        }
-      ]
-    },
-    {
       "source": "src/game/LightDir.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8019B368-0x8019B43C (src/game/LightDir.cpp) and its data and source-form rows.",
@@ -24160,7 +24147,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801A1240",
-          "end": "0x801A1338"
+          "end": "0x801A133C"
         },
         {
           "section": ".rodata",
