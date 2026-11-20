@@ -123,6 +123,72 @@
 #include "game/GameInfo.h"
 #include "game/Block_800DE3B0.h"
 
+/* Two 8-byte records whose word +4 fn_80096D14 decrements. */
+struct Slot_80096D14 {
+    int mUnknown0;
+    int mUnknown4;
+};
+
+struct Record_800B8544;
+/* The record array and its count, set by fn_800B8544. */
+struct Pool_800B8544 {
+    Record_800B8544 *mpRecords;
+    unsigned char mCount;
+};
+
+/* .sbss words at 0x803EC94C: a player pointer followed by two bytes. */
+struct Block_803EC94C {
+    Object_80039F5C *mpUnknown0;
+    unsigned char mUnknown4;
+    unsigned char mUnknown5;
+};
+
+struct Keys_800A3C14;
+struct Table_800AF71C;
+struct Block_800BC538;
+
+/* The unit's uninitialized objects after the static-init ones, declared here first and in address
+   order: ProDG emits uninitialized globals in the order of their first declaration, and the target
+   holds them in this order (.sbss 0x803EC91C-0x803EC99C, .bss 0x8030C0B4-0x8030EFB4; evidence.tsv
+   data rows). Defined after lbl_803EC918 at the end of the file. */
+extern void *lbl_803EC91C;
+extern void *lbl_803EC920;
+extern Block_800925F0 *lbl_803EC924;
+extern Object_8017886C *lbl_803EC928;
+extern Block_80099630 *lbl_803EC92C;
+extern Pool_800B8544 lbl_803EC930;
+extern void *lbl_803EC938;
+extern int lbl_803EC93C;
+extern int lbl_803EC940;
+extern Keys_800A3C14 *lbl_803EC944;
+extern int lbl_803EC948;
+extern Block_803EC94C lbl_803EC94C;
+extern Block_800A70F4 *lbl_803EC954[2];
+extern int lbl_803EC95C;
+extern char *lbl_803EC960;
+extern char *lbl_803EC964[2];
+extern int lbl_803EC96C;
+extern int lbl_803EC970;
+extern int lbl_803EC974;
+extern Table_800AF71C *lbl_803EC978;
+extern Item_800AF82C *lbl_803EC97C;
+extern int lbl_803EC980;
+extern int lbl_803EC984[2];
+extern Block_800BC538 *lbl_803EC98C;
+extern int lbl_803EC990[2];
+extern int lbl_803EC998;
+
+extern Vector_80039F5C lbl_8030C0B4[10];
+extern float lbl_8030C12C[14];
+extern Slot_8009418C lbl_8030C164[2];
+extern Params_80092E54 lbl_8030C184;
+extern int lbl_8030C270[14];
+extern Slot_80096D14 lbl_8030C2A8[2];
+extern Record_80097518 lbl_8030C2B8[3];
+extern Entry_80219044 lbl_8030E6D0;
+extern Callbacks_8030E6DC lbl_8030E6DC;
+extern Block_8030E6E8 lbl_8030E6E8;
+
 
 
 /* 16-byte records of the .data tables used by fn_80093E38, fn_80093E4C,
@@ -173,12 +239,6 @@ struct Block_80096954 {
     void *mpUnknown8;
     unsigned char mUnknownC[4];
     Playback_80096DA8 mUnknown10[2];
-};
-
-/* Two 8-byte records whose word +4 fn_80096D14 decrements. */
-struct Slot_80096D14 {
-    int mUnknown0;
-    int mUnknown4;
 };
 
 typedef Item_80097440 Item_8009A63C;
@@ -1111,13 +1171,6 @@ extern unsigned char lbl_803EAC41;
 extern "C" {
 extern float lbl_803EC918;
 }
-
-/* .sbss words at 0x803EC94C: a player pointer followed by two bytes. */
-struct Block_803EC94C {
-    Object_80039F5C *mpUnknown0;
-    unsigned char mUnknown4;
-    unsigned char mUnknown5;
-};
 
 extern "C" {
 void CamMainFollowBall(GameCamera_t *pCamera);
@@ -2676,12 +2729,6 @@ struct Record_800B8544 {
     unsigned int mUnknownBC;
     unsigned char mUnknownC0;
     unsigned char mUnknownC1[3];
-};
-
-/* The record array and its count, set by fn_800B8544. */
-struct Pool_800B8544 {
-    Record_800B8544 *mpRecords;
-    unsigned char mCount;
 };
 
 /* Allocated through fn_80238174 under the id 'pstp' (fn_800B95B4, 360
@@ -11733,8 +11780,7 @@ extern "C" void fn_80096E1C(void)
     }
 }
 
-/* fn_8009CD00 callback that puts the reach target at the origin; nothing
-   in the game passes it. */
+// FAKEMATCH: invented name and body; only its constant pool (the 0.0f word 0x80296158) is evidenced
 extern "C" {
 static void _ReachClearTarget(Object_80039F5C *p, Vector_80039F5C *pOut, Data_80096E74 *pData)
 {
@@ -13379,7 +13425,7 @@ extern "C" int fn_8009AD30(Object_80039F5C *p, int value)
 
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
-static float Stripped_80296380(float x)
+static float _StrippedClampNegativeToOne(float x)
 {
     return x < 0.0f ? 1.0f : x;
 }
@@ -13784,7 +13830,7 @@ extern "C" void fn_8009BB50(int a, int b)
 
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
-static float Stripped_802963D8(float x, int i)
+static float _StrippedPositiveToCount(float x, int i)
 {
     if (x > 0.0f)
         return (float)i;
@@ -17340,7 +17386,7 @@ extern "C" int fn_800A350C(void)
 
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
-static float Stripped_80296710(float x)
+static float _StrippedScaleClampZero(float x)
 {
     float y = x * 0.16296296f;
 
@@ -17487,7 +17533,7 @@ extern "C" void fn_800A3B58(Object_80039F5C *p, int a, int b)
 }
 
 extern "C" {
-static void Stripped_8029674C(Object_80039F5C *p, unsigned char index, unsigned short key)
+static void _StrippedSetPhaseIndex(Object_80039F5C *p, unsigned char index, unsigned short key)
 {
     p->mUnknown1012[0] = index;
     p->mUnknown1012[1] = 0;
@@ -17597,7 +17643,7 @@ extern "C" int fn_800A3E00(Object_80039F5C *p)
 
 // FAKEMATCH: the record is a parameter; the Xbox counterpart fills a static record that has no GameCube counterpart
 extern "C" {
-static Record_80296754 *Stripped_80296754(Record_80296754 *pRecord, const unsigned char *pData)
+static Record_80296754 *_StrippedInitKeyRecord(Record_80296754 *pRecord, const unsigned char *pData)
 {
     pRecord->mpKeys2C = lbl_803EC944;
     pRecord->mUnknownC = 0;
@@ -19499,7 +19545,7 @@ extern "C" int fn_800A851C(int team, Object_80039F5C *p)
 
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
-static float Stripped_8029687C(unsigned int u, float x)
+static float _StrippedReplaceOne(unsigned int u, float x)
 {
     if (x == 1.0f)
         return (float)u;
@@ -21665,7 +21711,7 @@ extern "C" void fn_800ACAF8(int team, unsigned int *pValue)
 
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
-static void Stripped_802969A0(float *p)
+static void _StrippedFillFourScales(float *p)
 {
     p[0] = 1.0f;
     p[1] = 0.75f;
@@ -22720,13 +22766,13 @@ extern "C" void fn_800AEB9C(void)
 
 // FAKEMATCH: invented bodies; only their constant pools are evidenced
 extern "C" {
-static void Stripped_80296A4C(float *p)
+static void _StrippedFillHalfThree(float *p)
 {
     p[0] = 0.5f;
     p[1] = 3.0f;
 }
 
-static void Stripped_80296A54(float *p)
+static void _StrippedFillZeroThree(float *p)
 {
     p[0] = 0.0f;
     p[1] = 3.0f;
@@ -22959,12 +23005,12 @@ extern "C" void fn_800AF304(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_80
 
 // FAKEMATCH: invented bodies; only their constant pools are evidenced
 extern "C" {
-static void Stripped_80296A64(float *p)
+static void _StrippedClearFirst(float *p)
 {
     p[0] = 0.0f;
 }
 
-static void Stripped_80296A68(float *p)
+static void _StrippedFillZeroLimits(float *p)
 {
     p[0] = 0.0f;
     p[1] = 3.5f;
@@ -24516,7 +24562,7 @@ extern "C" void fn_800B2670(unsigned char value)
 
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
-static void Stripped_80296B78(float *p)
+static void _StrippedClearValue(float *p)
 {
     p[0] = 0.0f;
 }
@@ -28557,7 +28603,7 @@ extern "C" void fn_800BB24C(void)
 
 // FAKEMATCH: invented body; only its constant pool is evidenced
 extern "C" {
-static void Stripped_80297330(float *p)
+static void _StrippedFillExtent(float *p)
 {
     p[0] = 120.0f;
     p[1] = 20.0f;
@@ -37531,6 +37577,46 @@ PreGamePhase lbl_803EC910;
 PreSnapPhase lbl_803EC914;
 
 float lbl_803EC918 = 100.0f / gFrameTimeScale;
+
+/* .sbss 0x803EC91C-0x803EC99C and .bss 0x8030C0B4-0x8030EFB4 (declared in address order after the
+   includes). Neutral address labels; lbl_803EC984 and lbl_803EC998 are words no code references. */
+void *lbl_803EC91C;
+void *lbl_803EC920;
+Block_800925F0 *lbl_803EC924;
+Object_8017886C *lbl_803EC928;
+Block_80099630 *lbl_803EC92C;
+Pool_800B8544 lbl_803EC930;
+void *lbl_803EC938;
+int lbl_803EC93C;
+int lbl_803EC940;
+Keys_800A3C14 *lbl_803EC944;
+int lbl_803EC948;
+Block_803EC94C lbl_803EC94C;
+Block_800A70F4 *lbl_803EC954[2];
+int lbl_803EC95C;
+char *lbl_803EC960;
+char *lbl_803EC964[2];
+int lbl_803EC96C;
+int lbl_803EC970;
+int lbl_803EC974;
+Table_800AF71C *lbl_803EC978;
+Item_800AF82C *lbl_803EC97C;
+int lbl_803EC980;
+int lbl_803EC984[2];
+Block_800BC538 *lbl_803EC98C;
+int lbl_803EC990[2];
+int lbl_803EC998;
+
+Vector_80039F5C lbl_8030C0B4[10];
+float lbl_8030C12C[14];
+Slot_8009418C lbl_8030C164[2];
+Params_80092E54 lbl_8030C184;
+int lbl_8030C270[14];
+Slot_80096D14 lbl_8030C2A8[2];
+Record_80097518 lbl_8030C2B8[3];
+Entry_80219044 lbl_8030E6D0;
+Callbacks_8030E6DC lbl_8030E6DC;
+Block_8030E6E8 lbl_8030E6E8;
 
 unsigned int lbl_8030C084[12] = {
     (unsigned int)(gFrameTimeScale * 5416666.5f),

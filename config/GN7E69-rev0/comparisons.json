@@ -11917,13 +11917,13 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8030C070",
-          "end": "0x8030C0B4"
+          "end": "0x8030EFB4"
         },
         {
           "section": ".sbss",
           "placement": ".sbss",
           "start": "0x803EC900",
-          "end": "0x803EC91C"
+          "end": "0x803EC99C"
         },
         {
           "section": ".ctors",
@@ -18947,19 +18947,19 @@
       ],
       "discarded": [
         "_ReachClearTarget",
-        "Stripped_8029674C",
-        "Stripped_80296754",
-        "Stripped_80296380",
-        "Stripped_802963D8",
-        "Stripped_80296710",
-        "Stripped_8029687C",
-        "Stripped_802969A0",
-        "Stripped_80296A4C",
-        "Stripped_80296A54",
-        "Stripped_80296A64",
-        "Stripped_80296A68",
-        "Stripped_80296B78",
-        "Stripped_80297330"
+        "_StrippedSetPhaseIndex",
+        "_StrippedInitKeyRecord",
+        "_StrippedClampNegativeToOne",
+        "_StrippedPositiveToCount",
+        "_StrippedScaleClampZero",
+        "_StrippedReplaceOne",
+        "_StrippedFillFourScales",
+        "_StrippedFillHalfThree",
+        "_StrippedFillZeroThree",
+        "_StrippedClearFirst",
+        "_StrippedFillZeroLimits",
+        "_StrippedClearValue",
+        "_StrippedFillExtent"
       ]
     },
     {

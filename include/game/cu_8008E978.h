@@ -78,8 +78,6 @@ struct Block_800925F0 {
     Block_800920EC mUnknown80;
 };
 
-extern Block_800925F0 *lbl_803EC924;
-
 /* 16-byte records of the two-entry table cleared by fn_8009418C. */
 struct Slot_8009418C {
     int mUnknown0;
@@ -87,8 +85,6 @@ struct Slot_8009418C {
     int mUnknown8;
     int mUnknownC;
 };
-
-extern Slot_8009418C lbl_8030C164[2];
 
 /* One of the two 48-byte records at +16 of the block fn_80096954
    allocates. */
