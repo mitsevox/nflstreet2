@@ -124,7 +124,7 @@ int SNDBANK_asyncloadmem(int *pHandle, void *pData);
 int SNDBANK_asyncloadmemdone(void);
 int SNDBANK_play(int handle, int a, void *b);
 int SNDbankremove(int handle);
-void fn_8026C280(void);
+int SNDmidistopall(void);
 int SNDover(int handle);
 int SNDpitchmult(int handle, int value);
 void SNDplaysetdef(SndPatchOpts_t *pOpts);
@@ -150,8 +150,8 @@ int SNDvol(int handle, int value);
 
 void _StreamMUTEX_init(void);
 int SNDsetoutputchannels(int count);
-void fn_8026C18C(void);
-void fn_8026C23C(void);
+int SNDmidiinit(void);
+int SNDmidirestore(void);
 
 int SndInit(SndInitDesc_t *pDesc);
 int SndShutdown(void);
@@ -358,7 +358,7 @@ int SndInit(SndInitDesc_t *pDesc)
         Snd::Memory::SetHeap(Snd::DEVICE_MAIN, pHeap, pDesc->mUnknown4);
         Snd::System::Init(pDesc->mUnknown0);
         _Snd_ModuleInfo.mUnk0 = pDesc->mUnknown0;
-        fn_8026C18C();
+        SNDmidiinit();
         _Snd_ModuleInfo.pBankList = DSNewList(1, 0, pDesc->mUnknown16, sizeof(SndBankInfo_t), 0, 0);
         _Snd_ModuleInfo.pSeqList = DSNewList(1, 0, pDesc->mUnknown20, sizeof(SndSeqInfo_t), 0, 0);
         _Snd_ModuleInfo.pStreamList = DSNewList(1, 0, pDesc->mUnknown22, sizeof(SndStream_t), 0, 0);
@@ -411,7 +411,7 @@ void SndUnloadAll(void)
 
     if (_Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         SND_LOCK();
-        fn_8026C280();
+        SNDmidistopall();
         SND_UNLOCK();
         // FAKEMATCH: node tested twice per pass (target keeps the loop test at the top)
         do {
@@ -453,7 +453,7 @@ int SndShutdown(void)
     if (_Snd_ModuleInfo.mStatus.mFlags.mActive) {
         if (_Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
             SND_LOCK();
-            fn_8026C280();
+            SNDmidistopall();
             SND_UNLOCK();
             SndUnloadAll();
             DSDelList(_Snd_ModuleInfo.pSeqList);
@@ -462,7 +462,7 @@ int SndShutdown(void)
                 DSDelList(_Snd_ModuleInfo.pAemsBankList);
                 _Snd_ModuleInfo.pAemsBankList = 0;
             }
-            fn_8026C23C();
+            SNDmidirestore();
             Snd::System::Restore();
             Csis::System::Restore();
             delete pIAllocator;

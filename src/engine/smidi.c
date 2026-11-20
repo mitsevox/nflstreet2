@@ -59,9 +59,9 @@ extern SndMidiState_t lbl_803A6E60;
 int SNDvol(int handle, int vol);
 void SNDSYS_entercritical(void);
 void SNDSYS_leavecritical(void);
-int fn_80277D88(int handle, int bend);
-void fn_8026BA60(int seq, SndMidiChan_t *chan, int channel, int key);
-void fn_8026BC9C(int seq, SndMidiChan_t *chan, int channel, int control);
+int SNDpitchbend(int handle, int value);
+int SND3dpos(int handle, unsigned short azimuth, int elevation);
+int SNDI_pantoazimuth(int pan);
 
 int SNDseqstop(int handle);
 int SNDmidistopall(void);
@@ -133,6 +133,55 @@ int SNDI_midiseqover(int seq)
     return over;
 }
 
+void SNDI_midiparsenoteon(int seq, SndMidiChan_t *chan, int channel, int key)
+{
+    static int lastnote = 0;
+    SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
+    SndMidiNote_t *note = 0;
+    SndPlayOpts_t opts;
+    int found = 0;
+    int last;
+    int bank;
+    int patch;
+    int i;
+
+    i = ++lastnote;
+    for (last = i + 24; i < last; i++) {
+        lastnote = i % 24;
+        note = &lbl_803A6E60.mNotes[lastnote];
+        if (SNDVOICEI_get(note->mHandle) < 0) {
+            found = 1;
+            break;
+        }
+    }
+    if (found) {
+        SNDplaysetdef(&opts);
+        opts.m0 = chan->mVolume * (short)(s->mVolume >> 16) >> 7;
+        opts.m3 = *s->mpData;
+        opts.m8 = (chan->mAzimuth << 6) + s->m20;
+        opts.mC = s->m22;
+        opts.m1 = chan->mBend;
+        if (channel == 9 && s->m2E >= 0) {
+            opts.m2 = 60;
+            bank = s->m2E;
+            patch = key;
+        } else {
+            bank = s->m2C;
+            opts.m2 = key;
+            patch = chan->mPatch;
+        }
+        note->mHandle = SNDBANK_play(bank, patch, &opts);
+        note->mFlags = *s->mpData++;
+        if (note->mHandle >= 0) {
+            note->mSeq = seq;
+            note->mChan = channel;
+            note->mKey = key;
+        }
+    } else {
+        s->mpData++;
+    }
+}
+
 void SNDI_midiparsenoteoff(int seq, int chan, int key)
 {
     SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
@@ -150,6 +199,47 @@ void SNDI_midiparsenoteoff(int seq, int chan, int key)
     }
 }
 
+void SNDI_midiparsecontrol(int seq, SndMidiChan_t *chan, int channel, int control)
+{
+    SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
+    int i;
+
+    if (control == 20) {
+        s->mpData++;
+        s->mpLoop = s->mpData;
+    } else if (control == 30) {
+        if (s->m26 > 126) {
+            s->m26 = *s->mpData;
+        }
+        if (s->m26 != 0) {
+            s->m26--;
+            s->mpData = s->mpLoop;
+        } else {
+            s->mpData++;
+        }
+    } else if (control == 7) {
+        chan->mVolume = *s->mpData++;
+        for (i = 0; i < 24; i++) {
+            SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+
+            if (note->mSeq == seq && note->mChan == channel) {
+                SNDvol(note->mHandle, chan->mVolume * (short)(s->mVolume >> 16) >> 7);
+            }
+        }
+    } else if (control == 10) {
+        chan->mAzimuth = SNDI_pantoazimuth(*s->mpData++) >> 6;
+        for (i = 0; i < 24; i++) {
+            SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+
+            if (note->mSeq == seq && note->mChan == channel) {
+                SND3dpos(note->mHandle, (chan->mAzimuth << 6) + s->m20, 0);
+            }
+        }
+    } else {
+        s->mpData++;
+    }
+}
+
 void SNDI_midiparsepitchbend(int seq, SndMidiChan_t *chan, int channel, int lsb)
 {
     SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
@@ -161,7 +251,7 @@ void SNDI_midiparsepitchbend(int seq, SndMidiChan_t *chan, int channel, int lsb)
         SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
 
         if (note->mSeq == seq && note->mChan == channel) {
-            fn_80277D88(note->mHandle, chan->mBend);
+            SNDpitchbend(note->mHandle, chan->mBend);
         }
     }
 }
@@ -198,13 +288,13 @@ void SNDI_midiprocesstick(int seq)
         chan = &s->mChans[channel];
         switch (status & 0xF0) {
         case 0x90:
-            fn_8026BA60(seq, chan, channel, data);
+            SNDI_midiparsenoteon(seq, chan, channel, data);
             break;
         case 0x80:
             SNDI_midiparsenoteoff(seq, channel, data);
             break;
         case 0xB0:
-            fn_8026BC9C(seq, chan, channel, data);
+            SNDI_midiparsecontrol(seq, chan, channel, data);
             break;
         case 0xC0:
             chan->mPatch = data;

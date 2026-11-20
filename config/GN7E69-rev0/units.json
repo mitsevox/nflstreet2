@@ -22801,6 +22801,60 @@
       ]
     },
     {
+      "source": "src/engine/smidi.c",
+      "profile": "sound_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c, NASCAR 2005 smidi.c), its function and name rows, the data row of its .data 0x802FFCD0-0x802FFCD4 and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 10 of 13 functions exact, the holdouts SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick keep the original bytes and stay registered partials; the whole .data is linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026B898",
+          "end": "0x8026BA60"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026BBF0",
+          "end": "0x8026BC9C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026BE48",
+          "end": "0x8026BF04"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026C0C0",
+          "end": "0x8026C39C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFCD0",
+          "end": "0x802FFCD4"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "SNDI_midiparsenoteon__FiP13SndMidiChan_tii",
+            "evidence": "evidence.tsv source-form 0x8026BA60-0x8026BBF0"
+          },
+          {
+            "function": "SNDI_midiparsecontrol__FiP13SndMidiChan_tii",
+            "evidence": "evidence.tsv source-form 0x8026BC9C-0x8026BE48"
+          },
+          {
+            "function": "SNDI_midiprocesstick__Fi",
+            "evidence": "evidence.tsv source-form 0x8026BF04-0x8026C0C0"
+          }
+        ],
+        "evidence": "lane w1j merge notes (swarm/w1/w1j report) holdouts table: src/engine/smidi.c holds out SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick; their HOLDOUT: rows list the forms tried and the RTL-dump findings."
+      }
+    },
+    {
       "source": "src/engine/ssys.cpp",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x8026F5F8-0x8026FD28 (src/engine/ssys.cpp, NASCAR 2005 ssys.cpp), its function and name rows and the sound_cxx compiler row 0x8026E4C0-0x80270494; all 11 functions exact (w1c), promoted from comparison-only in w1j once the linked callers (src/engine/sound.cpp, src/engine/ssysinit.c) call the class methods through include/engine/ssys.h. The object has no data sections; the output-mode strings 0x802B79D8-0x802B7A38 and the pending-change state keep their original bytes.",
