@@ -24560,9 +24560,9 @@
       }
     },
     {
-      "source": "src/game/cu_8016DB94.cpp",
+      "source": "src/game/Scrimmage.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8016DB94-0x8016FB10 (src/game/cu_8016DB94.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "evidence": "evidence.tsv unit row 0x8016DB94-0x8016FB10 (src/game/Scrimmage.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -24586,7 +24586,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8016E15C",
+            "function": "ScrmSnapBall",
             "evidence": "evidence.tsv source-form 0x8016E15C-0x8016E498"
           }
         ],
@@ -24597,7 +24597,7 @@
           "ScrmDefenseIsStill",
           "ScrmDefenseIsStillNearLine"
         ],
-        "evidence": "evidence.tsv linker rows of the file-static functions of src/game/cu_8016DB94.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
+        "evidence": "evidence.tsv linker rows of the file-static functions of src/game/Scrimmage.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
       }
     },
     {

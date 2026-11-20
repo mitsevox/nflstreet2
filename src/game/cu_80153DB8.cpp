@@ -34,7 +34,7 @@ void PlayBookLoadAudibles(int team);
 void fn_800AD910(int a, float b);
 void fn_8009D888(int index, int value);
 void CamGameResumeAll(void);
-void fn_8016DDDC(int team);
+void ScrmTeamPlaceInHuddle(int team);
 void fn_801790D0(int team, float a, float b);
 int fn_801787A0(void);
 void HudShowAlert(const char *pText);
@@ -70,8 +70,8 @@ void fn_80153EA8(Class_802A1B18 *p)
 {
     fn_8009D888(0, 10);
     CamGameResumeAll();
-    fn_8016DDDC(fn_80178308());
-    fn_8016DDDC(fn_80178320());
+    ScrmTeamPlaceInHuddle(fn_80178308());
+    ScrmTeamPlaceInHuddle(fn_80178320());
     fn_801790D0(fn_80178308(), 0.0f, 0.0f);
     fn_801790D0(fn_80178320(), 18.0f, 0.0f);
 }

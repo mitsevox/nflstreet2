@@ -436,7 +436,7 @@ int fn_800B0F98(void);
 int fn_800B146C(void);
 void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut);
 int fn_8009F780(void);
-int fn_8016EADC(void);
+int ScrmOffenseAnyPlaced(void);
 void fn_800E3DCC(Object_80039F5C *p, Point_8017886C *pOut);
 void Vec2FromAngle(Point_8017886C *pOut, int angle, float magnitude);
 void fn_800E586C(Object_80039F5C *p, Point_8017886C *pPoint);
@@ -469,7 +469,7 @@ int AnimFileGetStateQueryIndex(int state, unsigned int slot);
 }
 extern "C" int BallStateGet(Ball_t *, int);
 extern "C" void fn_800ADBC0(Object_80039F5C *, int, int, int);
-extern "C" void fn_8016DBE4(Object_80039F5C *);
+extern "C" void ScrmPlayerToHuddle(Object_80039F5C *);
 extern float gFrameTimeScale;
 
 struct Table_800DE51C { char mUnknown0[4]; unsigned short mCount; char mUnknown6[2]; Entry_800DE51C mEntries[1]; };

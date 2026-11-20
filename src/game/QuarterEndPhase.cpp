@@ -73,7 +73,7 @@ void BallsSetVisible(int a);
 void BallResetToSpot(void);
 void fn_80162780(int a, int b);
 void PlayBookSetupTeams(void);
-void fn_8016DCD4(int a);
+void ScrmTeamToHuddle(int a);
 int ClockRuleIsOvertime(void);
 void fn_80177E6C(int a, int b);
 int fn_80178308(void);
@@ -412,8 +412,8 @@ void QuarterEndPhase::OnUpdate(float f)
                 fn_800CC560(1);
             }
         } else {
-            fn_8016DCD4(1);
-            fn_8016DCD4(0);
+            ScrmTeamToHuddle(1);
+            ScrmTeamToHuddle(0);
         }
         if (fn_8009D86C() != 6 && fn_8009D86C() == 3) {
             CoinTossApplyResultSwapped();

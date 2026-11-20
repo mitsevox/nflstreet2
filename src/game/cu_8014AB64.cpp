@@ -62,7 +62,7 @@ int FormationLineupApplyUser(int formation, int team);
 void fn_800B3EFC(int team);
 void fn_800AD910(int a, float b);
 void CamGameResumeAll(void);
-void fn_8016DDDC(int team);
+void ScrmTeamPlaceInHuddle(int team);
 Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, int team);
 int fn_8011F1CC(void);
 void HudShowAlert(const char *pText);
@@ -214,8 +214,8 @@ void fn_8014B028(void *p, float dt)
     } else {
         fn_8009D888(0, 10);
         CamGameResumeAll();
-        fn_8016DDDC(fn_80178308());
-        fn_8016DDDC(fn_80178320());
+        ScrmTeamPlaceInHuddle(fn_80178308());
+        ScrmTeamPlaceInHuddle(fn_80178320());
         fn_8009D944(1);
         fn_8009D944(0);
         short value = 9 - SyncRandGetRange(0, 5);

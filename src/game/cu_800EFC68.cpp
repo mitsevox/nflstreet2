@@ -598,7 +598,7 @@ int fn_8009FE24(Object_80039F5C *p);
 }
 
 extern "C" {
-void fn_8016DF34(Object_80039F5C *p);
+void ScrmPlayerSendLineUp(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -2164,7 +2164,7 @@ int PlyrMoveIsFacingHeading(Object_80039F5C *p);
 }
 
 extern "C" {
-void fn_8016DBE4(Object_80039F5C *p);
+void ScrmPlayerToHuddle(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -2206,7 +2206,7 @@ int fn_800B0F98(void);
 }
 
 extern "C" {
-int fn_8016E928(void);
+int ScrmOffenseIsSet(void);
 }
 
 /* View of the block at player +336 as the animation callbacks use it. */
@@ -2692,7 +2692,7 @@ void fn_801410F4(int a);
 }
 
 extern "C" {
-void fn_8016F6F4(Object_80039F5C *p, Object_80039F5C *pOther);
+void ScrmSpotRecordHit(Object_80039F5C *p, Object_80039F5C *pOther);
 }
 
 extern "C" {
@@ -9405,7 +9405,7 @@ extern "C" int fn_800FCC24(Object_80039F5C *p) {
             message.mUnknown1[1] = pBlock->mUnknown20 >> 16;
             fn_800F03D8(0, p->mpState, &message, p);
         }
-        fn_8016DF34(p);
+        ScrmPlayerSendLineUp(p);
     }
     return result;
 }
@@ -14921,7 +14921,7 @@ extern "C" int fn_8010A640(Object_80039F5C *p) {
                     fn_800CC388(p);
                 } else if (pBlock->mUnknown52State == 5) {
                     fn_80177F70();
-                    fn_8016DBE4(p);
+                    ScrmPlayerToHuddle(p);
                 } else {
                     int result;
 
@@ -15015,7 +15015,7 @@ extern "C" int fn_8010AFB8(Object_80039F5C *p) {
             }
         }
     } else {
-        if (fn_800B65A0(p->mIdBytes[2]) == 0xFF && pBlock->mUnknown7 == 0 && fn_8016E928() && fn_801486A0() != 2) {
+        if (fn_800B65A0(p->mIdBytes[2]) == 0xFF && pBlock->mUnknown7 == 0 && ScrmOffenseIsSet() && fn_801486A0() != 2) {
             if (SyncRandGetFloat(0) < 0.5f) {
                 fn_8010B1FC(p, 2, 0);
             }
@@ -19080,7 +19080,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
                     }
                 }
                 if (BallGetCurrentHolder() == p) {
-                    fn_8016F6F4(p, fn_8009BCE8(&state->mRef));
+                    ScrmSpotRecordHit(p, fn_8009BCE8(&state->mRef));
                 }
                 state->mUnknown28 = 0;
             }

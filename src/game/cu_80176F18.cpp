@@ -142,8 +142,8 @@ void CamGameResumeAll(void);
 CollideSet_t *StatcollGetSet(void);
 int fn_801486A0(void);
 int fn_801650DC(PlayBookPlay_t *pRecord);
-void fn_8016F7F8(void);
-int fn_8016FAD8(float *pOut);
+void ScrmSpotUpdate(void);
+int ScrmSpotGetFirstHit(float *pOut);
 void ClockRuleInit(void);
 void ClockRuleShutdown(void);
 void ClockRuleUpdate(unsigned int value);
@@ -712,7 +712,7 @@ extern "C" void fn_80177B7C(int a)
 
 extern "C" void fn_80177BCC(float value)
 {
-    fn_8016F7F8();
+    ScrmSpotUpdate();
     ClockRuleUpdate(value);
     PenaltyCheckPassInterference();
 }
@@ -2228,7 +2228,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
     case 0x61797567:
         result = 2;
         fn_80179874(id, startY, ballY, sideX);
-        if (fn_8016FAD8(&toGo)) {
+        if (ScrmSpotGetFirstHit(&toGo)) {
             fn_8017937C(id, 0x68797567, (int)(ballY - toGo));
         }
         if (ballY > fn_80178A2C() && mode != 6) {

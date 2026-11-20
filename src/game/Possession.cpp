@@ -142,7 +142,7 @@ int fn_801485D4(void);
 int fn_801486A0(void);
 int TutorialIsActive(void);
 void TutorialSetMoveDone(int a, int b);
-float fn_8016FAB4(void);
+float ScrmSpotGetLine(void);
 void DriveLogEndDrive(void);
 void DriveLogAddPlay(int a, short b, short c, int d, int e);
 void DriveLogStampTime(void);
@@ -186,7 +186,7 @@ void PossStartFumble(void);
 void PossGiveBall(Object_80039F5C *p, void *pBall);
 void PossLogBallResult(Object_80039F5C *p);
 int PossCheckDownedBall(Object_80039F5C *p);
-int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos);
+int ScrmCarrierInEndZone(Object_80039F5C *p, Vector_80039F5C *pPos);
 int fn_8009A5A0(int handle);
 float fn_80178A44(void);
 int BallIsClearOfHands(void *pBall);
@@ -206,8 +206,8 @@ int fn_800B2624(void);
 int fn_800B9A90(void *pHandle);
 void fn_800B9B9C(void *pHandle);
 int fn_800BA6F8(void);
-void fn_8016E498(void);
-int fn_8016E764(void);
+void ScrmStartPlay(void);
+int ScrmCanSnap(void);
 int fn_801787DC(int team);
 int fn_80178AE0(void);
 int fn_80178C24(void);
@@ -410,7 +410,7 @@ int PossTestCarrierBall(Object_80039F5C *p)
         Vector_80039F5C pos;
 
         BallGetPosition(BallGetCurrent(), &pos);
-        result = fn_8016EB50(p, &pos);
+        result = ScrmCarrierInEndZone(p, &pos);
     }
     return result;
 }
@@ -1539,7 +1539,7 @@ int PossCheckBallOut(void *pBall, Point2_t *pPos)
                         }
                     } else {
                         if (pPos->mY < fn_80178A2C() && fabs(pPos->mX) >= fn_80178A08()) {
-                            pPos->mY = fn_8016FAB4();
+                            pPos->mY = ScrmSpotGetLine();
                         }
                         if (pCarrier && pCarrier->mFlags & 0x10000000) {
                             int below = 0;
@@ -1734,8 +1734,8 @@ void ClockRuleUpdate(unsigned int a)
         flags = 0;
     }
     if (flags & 2) {
-        if (fn_8016E764()) {
-            fn_8016E498();
+        if (ScrmCanSnap()) {
+            ScrmStartPlay();
         }
     }
     if (flags & 1) {

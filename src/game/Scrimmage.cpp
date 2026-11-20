@@ -1,3 +1,7 @@
+/* Runs each play from huddle to whistle: sends players to the huddle and lines them up, decides when the
+   ball can be snapped and snaps it, watches the ball carrier for touchdowns, tackles and line crossings, and
+   tracks the forward-progress spot where the ball is marked. */
+
 #include <math.h>
 #include "game/StyleTracker.h"
 #include "game/PreSnapPhase.h"
@@ -27,7 +31,7 @@
 
 /* Player block at +336 as written after HuddleGetSpot: the point and facing it
    returned and two flag bytes. */
-struct State_8016DDDC {
+struct ScrmHuddleSpot_t {
     char mUnknown0[8];
     Point_8017886C mPoint;
     int mFacing;
@@ -37,8 +41,8 @@ struct State_8016DDDC {
     unsigned char mUnknown50;
 };
 
-/* Player block at +336 as read for the states checked by fn_8016EC40. */
-struct State_8016EC40 {
+/* Player block at +336 as read for the states checked by ScrmUpdateBallCarrier. */
+struct ScrmCatchState_t {
     char mUnknown0[8];
     int mUnknown8;
     char mUnknown12[7];
@@ -139,29 +143,29 @@ void fn_8017C8B0(unsigned short team, int value);
 void fn_8017C8DC(unsigned short team, int value);
 void fn_8017C934(unsigned short team, int value);
 void fn_8017C960(unsigned short team, int value);
-int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos);
-float fn_8016FAB4(void);
+int ScrmCarrierInEndZone(Object_80039F5C *p, Vector_80039F5C *pPos);
+float ScrmSpotGetLine(void);
 int MathAngleDiff(int a, int b);
 
-void fn_8016DBE4(Object_80039F5C *p);
-void fn_8016DF34(Object_80039F5C *p);
-void fn_8016E008(int team);
-void fn_8016E064(void);
-int fn_8016E154(Object_80039F5C *p);
-void fn_8016E15C(void);
-int fn_8016E928(void);
-void fn_8016F6A4(void);
-void fn_8016F99C(void);
+void ScrmPlayerToHuddle(Object_80039F5C *p);
+void ScrmPlayerSendLineUp(Object_80039F5C *p);
+void ScrmTeamSendLineUp(int team);
+void ScrmLogSnap(void);
+int ScrmGetSnapFlag(Object_80039F5C *p);
+void ScrmSnapBall(void);
+int ScrmOffenseIsSet(void);
+void ScrmSpotReset(void);
+void ScrmSpotMark(void);
 }
 
-extern "C" void fn_8016DB94(int team)
+extern "C" void ScrmAlignTeam(int team)
 {
     PlayAlignTeam(PlayBookGetFormation(team), team, gPlayAlignNormSet);
-    fn_8016E008(team);
+    ScrmTeamSendLineUp(team);
     fn_80162780(1, 1);
 }
 
-extern "C" void fn_8016DBE4(Object_80039F5C *p)
+extern "C" void ScrmPlayerToHuddle(Object_80039F5C *p)
 {
     Message_800F01CC message;
     Message_800F01CC ballMessage;
@@ -183,7 +187,7 @@ extern "C" void fn_8016DBE4(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_8016DCD4(int team)
+extern "C" void ScrmTeamToHuddle(int team)
 {
     unsigned char i;
     unsigned int count;
@@ -192,14 +196,14 @@ extern "C" void fn_8016DCD4(int team)
         count = fn_80178D70(team);
         for (i = 0; i < count; i++) {
             Object_80039F5C *p = PlyrGet(team, i);
-            fn_8016DBE4(p);
+            ScrmPlayerToHuddle(p);
             p->mFlags |= 0x10;
         }
     }
     fn_8011DF90();
 }
 
-extern "C" int fn_8016DD60(void)
+extern "C" int ScrmIsHuddleFormed(void)
 {
     int result = 1;
 
@@ -218,7 +222,7 @@ extern "C" int fn_8016DD60(void)
     return result;
 }
 
-extern "C" void fn_8016DDDC(int team)
+extern "C" void ScrmTeamPlaceInHuddle(int team)
 {
     unsigned char i;
     unsigned int count = fn_80178D70(team);
@@ -227,13 +231,13 @@ extern "C" void fn_8016DDDC(int team)
         Object_80039F5C *p = PlyrGet(team, i);
         Point_8017886C point;
         int facing;
-        State_8016DDDC *pState;
+        ScrmHuddleSpot_t *pState;
 
         switch (p->mpState->mId) {
         case 13:
         case 14:
             HuddleGetSpot(&point, &facing, p, 1);
-            pState = (State_8016DDDC *)&p->mUnknown336;
+            pState = (ScrmHuddleSpot_t *)&p->mUnknown336;
             pState->mPoint.mX = point.mX;
             pState->mPoint.mY = point.mY;
             pState->mFacing = facing;
@@ -246,9 +250,9 @@ extern "C" void fn_8016DDDC(int team)
                 BallReleaseStill(BallFindHeldBy(p), 5, 0);
             }
             fn_800EFE60(0, p->mpState, p);
-            fn_8016DBE4(p);
+            ScrmPlayerToHuddle(p);
             HuddleGetSpot(&point, &facing, p, 1);
-            pState = (State_8016DDDC *)&p->mUnknown336;
+            pState = (ScrmHuddleSpot_t *)&p->mUnknown336;
             pState->mPoint.mX = point.mX;
             pState->mPoint.mY = point.mY;
             pState->mFacing = facing;
@@ -261,7 +265,7 @@ extern "C" void fn_8016DDDC(int team)
     }
 }
 
-extern "C" void fn_8016DF34(Object_80039F5C *p)
+extern "C" void ScrmPlayerSendLineUp(Object_80039F5C *p)
 {
     if (fn_801486A0() != 0 && fn_801486A0() != 1) {
         if (fn_80178308() == (p->mId >> 8 & 0xFF)) {
@@ -288,17 +292,17 @@ extern "C" void fn_8016DF34(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_8016E008(int team)
+extern "C" void ScrmTeamSendLineUp(int team)
 {
     unsigned char i;
     unsigned int count = fn_80178D70(team);
 
     for (i = 0; i < count; i++) {
-        fn_8016DF34(PlyrGet(team, i));
+        ScrmPlayerSendLineUp(PlyrGet(team, i));
     }
 }
 
-extern "C" void fn_8016E064(void)
+extern "C" void ScrmLogSnap(void)
 {
     int team = fn_80178308();
     Point_8017886C pos;
@@ -324,12 +328,12 @@ extern "C" void fn_8016E064(void)
     fn_800B1508();
 }
 
-extern "C" int fn_8016E154(Object_80039F5C *p)
+extern "C" int ScrmGetSnapFlag(Object_80039F5C *p)
 {
     return 1;
 }
 
-extern "C" void fn_8016E15C(void)
+extern "C" void ScrmSnapBall(void)
 {
     Point_8017886C pos;
 
@@ -363,7 +367,7 @@ extern "C" void fn_8016E15C(void)
         }
         memset(&message, 0, 4);
         message.mId = 56;
-        message.mUnknown1[0] = fn_8016E154(pCarrier);
+        message.mUnknown1[0] = ScrmGetSnapFlag(pCarrier);
         fn_800F00D4(0, pPasser->mpState, &message, pPasser);
 
         defense = fn_80178320();
@@ -395,7 +399,7 @@ extern "C" void fn_8016E15C(void)
     }
 }
 
-extern "C" void fn_8016E498(void)
+extern "C" void ScrmStartPlay(void)
 {
     int team = fn_80178308();
     unsigned short i = 0;
@@ -444,7 +448,7 @@ extern "C" void fn_8016E498(void)
     fn_800AEEDC(1);
     fn_800B6C98();
     ClockRuleSnap();
-    fn_8016E15C();
+    ScrmSnapBall();
     fn_8011E068();
     PlyrMgrStepStates();
     fn_8002C9A8(lbl_803EA368, 1, 0);
@@ -452,7 +456,7 @@ extern "C" void fn_8016E498(void)
         fn_8002C9A8(lbl_803EA368, 2, 0);
         ReplayEventAdd(lbl_803EA368, 2, 0, &ballPos, 0);
     }
-    fn_8016E064();
+    ScrmLogSnap();
     fn_80120618();
     fn_800C9FC0();
     fn_800CA3C4();
@@ -481,7 +485,7 @@ extern "C" void fn_8016E498(void)
     fn_800A0230();
 }
 
-extern "C" int fn_8016E764(void)
+extern "C" int ScrmCanSnap(void)
 {
     bool allowed = true;
     int mode = fn_801486A0();
@@ -496,7 +500,7 @@ extern "C" int fn_8016E764(void)
     result = 0;
     if (fn_800B65A0(fn_80178308()) != 0xFF) {
         if (fn_8017886C()->mUnknown1D == -2 || BallStateGet(BallGetCurrent(), 0) == 6 || !allowed) {
-            if (fn_8016E928() != 0) {
+            if (ScrmOffenseIsSet() != 0) {
                 result = 1;
             }
         }
@@ -508,7 +512,7 @@ extern "C" int fn_8016E764(void)
             result = 1;
         }
         if (result == 0 && (short)fn_8009D990(0) <= (short)lbl_803EABA4->fn_800C02E0() && fn_800B1200() != 0 &&
-            fn_8016E928() != 0) {
+            ScrmOffenseIsSet() != 0) {
             result = 1;
         }
     }
@@ -522,7 +526,7 @@ extern "C" int fn_8016E764(void)
     return result;
 }
 
-extern "C" int fn_8016E928(void)
+extern "C" int ScrmOffenseIsSet(void)
 {
     int team = fn_80178308();
     int busy = 0;
@@ -567,7 +571,7 @@ extern "C" int fn_8016E928(void)
     return 1;
 }
 
-extern "C" int fn_8016EA68(void)
+extern "C" int ScrmOffenseAllPlaced(void)
 {
     int team = fn_80178308();
     unsigned short i;
@@ -581,7 +585,7 @@ extern "C" int fn_8016EA68(void)
     return 1;
 }
 
-extern "C" int fn_8016EADC(void)
+extern "C" int ScrmOffenseAnyPlaced(void)
 {
     int team = fn_80178308();
     unsigned short i;
@@ -644,7 +648,7 @@ static int ScrmDefenseIsStillNearLine(void)
     return still;
 }
 
-extern "C" int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos)
+extern "C" int ScrmCarrierInEndZone(Object_80039F5C *p, Vector_80039F5C *pPos)
 {
     Ball_t *pBall;
 
@@ -671,7 +675,7 @@ extern "C" int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos)
     return 0;
 }
 
-extern "C" void fn_8016EC40(Object_80039F5C *p)
+extern "C" void ScrmUpdateBallCarrier(Object_80039F5C *p)
 {
     Object_80039F5C *pOwner = 0;
     float margin = 0.0f;
@@ -702,7 +706,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
             if (p != 0) {
                 switch (p->mpState->mId) {
                 case 26:
-                    if (((State_8016EC40 *)&p->mUnknown336)->mUnknown8 == 14) {
+                    if (((ScrmCatchState_t *)&p->mUnknown336)->mUnknown8 == 14) {
                         crossed = 0;
                     }
                     break;
@@ -774,7 +778,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
         }
     }
 
-    if (p != 0 && fn_8016EB50(p, &ballPos) && BallGetTransferKind(pBall) == 0) {
+    if (p != 0 && ScrmCarrierInEndZone(p, &ballPos) && BallGetTransferKind(pBall) == 0) {
         int conversion = 0;
 
         if (fn_800A8F84(0) == 2 || fn_800A8F84(1) == 2) {
@@ -798,7 +802,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                         fn_8017C934(p->mIdBytes[2], 1);
                         break;
                     case 4:
-                        if (((State_8016EC40 *)&p->mUnknown336)->mUnknown19 != 0) {
+                        if (((ScrmCatchState_t *)&p->mUnknown336)->mUnknown19 != 0) {
                             AudmonEventPostId(52, &p->mMotion.mPos, p->mId, 0, 0, 0);
                             fn_8017C960(p->mIdBytes[2], 1);
                         }
@@ -885,7 +889,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                 fn_80178718(fn_8009BCE8(&pOwner->mUnknown560.mUnknown48));
             }
             x = p->mMotion.mPos.mX;
-            line = fn_8016FAB4();
+            line = ScrmSpotGetLine();
             if (line > fn_80178A2C()) {
                 if (x < 0.5f - fn_80178A08() || x > fn_80178A08() - 0.5f) {
                     x = fn_80178A08() - 0.5f;
@@ -961,7 +965,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_8016F6A4(void)
+extern "C" void ScrmSpotReset(void)
 {
     Info_ScrmState *pState = fn_801787D0();
 
@@ -975,7 +979,7 @@ extern "C" void fn_8016F6A4(void)
     pState->mUnknown1C = 0;
 }
 
-extern "C" void fn_8016F6F4(Object_80039F5C *p, int *pValue)
+extern "C" void ScrmSpotRecordHit(Object_80039F5C *p, int *pValue)
 {
     Info_ScrmState *pState = fn_801787D0();
     Vector_80039F5C ballPos;
@@ -991,7 +995,7 @@ extern "C" void fn_8016F6F4(Object_80039F5C *p, int *pValue)
     }
 }
 
-extern "C" void fn_8016F780(void)
+extern "C" void ScrmSpotCheckRetreat(void)
 {
     int mode = fn_800AD9B4();
     Info_ScrmState *pState = fn_801787D0();
@@ -1001,12 +1005,12 @@ extern "C" void fn_8016F780(void)
 
         if (p != 0 && p->mIdBytes[3] == 1 && p->mUnknown512.mUnknown14 != 0 &&
             MathAngleDiff(p->mUnknown512.mUnknown4, 0x400000) > 0x400000) {
-            fn_8016F99C();
+            ScrmSpotMark();
         }
     }
 }
 
-extern "C" void fn_8016F7F8(void)
+extern "C" void ScrmSpotUpdate(void)
 {
     int mode = fn_800AD9B4();
     Info_ScrmState *pState = fn_801787D0();
@@ -1034,27 +1038,27 @@ extern "C" void fn_8016F7F8(void)
                 }
                 if (p->mUnknown1160.mUnknown0 != 0.0f || (p->mFlags & 0x10000)) {
                     if (pState->mUnknown04 > pState->mUnknown00) {
-                        fn_8016F99C();
+                        ScrmSpotMark();
                     }
                 } else if (pState->mUnknown14 == -100 || pState->mUnknown14 > 5) {
-                    fn_8016F99C();
+                    ScrmSpotMark();
                 } else {
                     pState->mUnknown00 = pState->mUnknown04;
                 }
             } else {
-                fn_8016F6A4();
+                ScrmSpotReset();
                 pState->mUnknown10 = p->mId;
                 pState->mUnknown00 = pState->mUnknown04 = ballPos.mY;
                 pState->mUnknown1C = 0;
                 pState->mUnknown18 = 400.0f;
             }
         } else if (pState->mUnknown10 != 0) {
-            fn_8016F6A4();
+            ScrmSpotReset();
         }
     }
 }
 
-extern "C" void fn_8016F99C(void)
+extern "C" void ScrmSpotMark(void)
 {
     Info_ScrmState *pState = fn_801787D0();
     Ball_t *pBall = BallGetCurrent();
@@ -1082,12 +1086,12 @@ extern "C" void fn_8016F99C(void)
     pState->mUnknown14 = -100;
 }
 
-extern "C" float fn_8016FAB4(void)
+extern "C" float ScrmSpotGetLine(void)
 {
     return fn_801787D0()->mUnknown00;
 }
 
-extern "C" int fn_8016FAD8(float *pOut)
+extern "C" int ScrmSpotGetFirstHit(float *pOut)
 {
     Info_ScrmState *pState = fn_801787D0();
 

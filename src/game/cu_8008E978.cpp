@@ -1468,7 +1468,7 @@ int fn_80177F70(void);
 }
 
 extern "C" {
-void fn_8016DDDC(int team);
+void ScrmTeamPlaceInHuddle(int team);
 }
 
 extern "C" {
@@ -1607,7 +1607,7 @@ void PlayBookLoadAudibles(int team);
 }
 
 extern "C" {
-int fn_8016DD60(void);
+int ScrmIsHuddleFormed(void);
 }
 
 extern "C" {
@@ -1643,7 +1643,7 @@ void fn_8017840C(void);
 }
 
 extern "C" {
-void fn_8016DCD4(int team);
+void ScrmTeamToHuddle(int team);
 }
 
 extern "C" {
@@ -2939,7 +2939,7 @@ void CamGameSetFocusAll(int a, int b);
 }
 
 extern "C" {
-int fn_8016E764(void);
+int ScrmCanSnap(void);
 }
 
 extern "C" {
@@ -3076,7 +3076,7 @@ extern "C" {
 extern char lbl_802ECD44[];
 }
 
-extern "C" void fn_8016E498(void);
+extern "C" void ScrmStartPlay(void);
 
 extern "C" void HudHidePressPrompt(int team);
 
@@ -3086,13 +3086,13 @@ extern "C" void HudShowPressPrompt(int team);
 
 extern "C" void SpchIGPurgeChannel(int index);
 
-extern "C" int fn_8016EA68(void);
+extern "C" int ScrmOffenseAllPlaced(void);
 
-extern "C" void fn_8016E008(int team);
+extern "C" void ScrmTeamSendLineUp(int team);
 
 extern "C" void HudPost3AOn(void);
 
-extern "C" void fn_8016DB94(int team);
+extern "C" void ScrmAlignTeam(int team);
 
 extern "C" void HudShowEvent31(int index);
 
@@ -3103,7 +3103,7 @@ extern "C" char lbl_802ED104[];
 extern "C" void Vec3ClosestPointOnSegment(void *, void *, void *, void *, float *, float *);
 
 extern "C" {
-void fn_8016E008(int team);
+void ScrmTeamSendLineUp(int team);
 }
 
 extern "C" {
@@ -3111,7 +3111,7 @@ void PlayAlignPostStartDelays(int team);
 }
 
 extern "C" {
-int fn_8016E928(void);
+int ScrmOffenseIsSet(void);
 }
 
 extern "C" {
@@ -3938,7 +3938,7 @@ void fn_800718A0(void);
 }
 
 extern "C" {
-void fn_8016EC40(void);
+void ScrmUpdateBallCarrier(void);
 }
 
 extern "C" {
@@ -4508,7 +4508,7 @@ int fn_8011F1F4(void);
 
 
 extern "C" {
-float fn_8016FAB4(void);
+float ScrmSpotGetLine(void);
 }
 
 extern "C" {
@@ -4876,7 +4876,7 @@ void CamMainMsg(GameCamera_t *pCamera, int msg, int arg);
 }
 
 extern "C" {
-void fn_8016E498(void);
+void ScrmStartPlay(void);
 }
 
 extern "C" {
@@ -4904,7 +4904,7 @@ void SpchIGUpdatePreSnap(void);
 }
 
 extern "C" {
-int fn_8016EA68(void);
+int ScrmOffenseAllPlaced(void);
 }
 
 extern "C" {
@@ -4928,11 +4928,11 @@ void ParticlesResetEvents(void);
 }
 
 extern "C" {
-void fn_8016DB94(int team);
+void ScrmAlignTeam(int team);
 }
 
 extern "C" {
-void fn_8016F6A4(void);
+void ScrmSpotReset(void);
 }
 
 extern "C" {
@@ -5266,7 +5266,7 @@ int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **p
 }
 
 extern "C" {
-void fn_8016F6F4(Object_80039F5C *p, int *pValue);
+void ScrmSpotRecordHit(Object_80039F5C *p, int *pValue);
 }
 
 extern "C" {
@@ -16168,7 +16168,7 @@ void LivePlayPhase::OnUpdate(float dt)
         fn_800A615C();
         fn_800718A0();
         BallGetCurrentHolder();
-        fn_8016EC40();
+        ScrmUpdateBallCarrier();
     }
     PlyrRouteShowTeam(0,0);
     PlyrRouteShowTeam(0,1);
@@ -24084,7 +24084,7 @@ extern "C" void fn_800B1698(Object_80039F5C *pA, Object_80039F5C *pB)
 
     fn_8009BD2C(pA, &pRecord->mUnknown0);
     pRecord->mUnknownC = pA->mMotion.mPos.mX;
-    pRecord->mUnknown10 = fn_8016FAB4();
+    pRecord->mUnknown10 = ScrmSpotGetLine();
     pRecord->mUnknown16 = 0;
     pRecord->mUnknown8 = 0;
     fn_8009BD2C(pB, &pRecord->mUnknown4);
@@ -24785,8 +24785,8 @@ extern "C" void fn_800B2DF4(void)
 {
     if (lbl_803EAB34->mUnknown1F == 0) {
         if (fn_80177F70() != 0) {
-            fn_8016DDDC(fn_80178308());
-            fn_8016DDDC(fn_80178320());
+            ScrmTeamPlaceInHuddle(fn_80178308());
+            ScrmTeamPlaceInHuddle(fn_80178320());
             CamMainWarpToDest(CamGameGetCamera(5));
         }
         lbl_803EAB34->mUnknown1F = 1;
@@ -24938,7 +24938,7 @@ extern "C" void fn_800B32A8(float dt)
         CamGameSetFocusAll(1, BallGetCurrentIndex());
         CamMainWarpToDest(CamGameGetCamera(5));
     }
-    if (fn_8016DD60() != 0) {
+    if (ScrmIsHuddleFormed() != 0) {
         fn_800AD910(2, dt);
     }
     fn_8009D888(0, 10);
@@ -25122,8 +25122,8 @@ void Class_80297B50::vfn_03()
         lbl_803EAB34->mUnknown1D = 1;
     }
     fn_8010A220();
-    fn_8016DCD4(team);
-    fn_8016DCD4(other);
+    ScrmTeamToHuddle(team);
+    ScrmTeamToHuddle(other);
     AudmonEventPostArgs(111, 0, team, 0, 0);
     lbl_803EAB34->mUnknown40 = fn_8009D9D8(1);
     lbl_803EAB34->mUnknown42 = 1;
@@ -28834,8 +28834,8 @@ extern "C" void fn_800BBA2C(void)
             pBody->mUnknown20 &= ~1;
         }
     } else {
-        fn_8016DDDC(0);
-        fn_8016DDDC(1);
+        ScrmTeamPlaceInHuddle(0);
+        ScrmTeamPlaceInHuddle(1);
         ParticleTrailResetAll();
     }
 }
@@ -29666,7 +29666,7 @@ extern "C" void fn_800BD8F4(void)
     CamShotRequestStop();
     fn_800B6408();
     PlayAlignTeam(PlayBookGetFormation(team), team, gPlayAlignNormSet);
-    fn_8016E008(team);
+    ScrmTeamSendLineUp(team);
     PlayAlignPostStartDelays(fn_80178308());
     PlayAlignPostStartDelays(team);
 }
@@ -29705,7 +29705,7 @@ extern "C" void fn_800BDA00(void)
 
 extern "C" void fn_800BDA7C(void)
 {
-    if (lbl_803EABA8->mUnknownC5 != 0 && fn_8016E928() != 0) {
+    if (lbl_803EABA8->mUnknownC5 != 0 && ScrmOffenseIsSet() != 0) {
         if (--lbl_803EABA8->mUnknownA0 <= 0) {
             AudmonEventPost(0x76, 0);
             lbl_803EABA8->mUnknownA0 = SyncRandGetRange(0, 120) + 60;
@@ -29752,7 +29752,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
             if (fn_800C0658() != 0) {
                 ok = 1;
             } else {
-                ok = fn_8016E764();
+                ok = ScrmCanSnap();
             }
         }
         if (ok && fn_800B146C() != 0) {
@@ -29764,7 +29764,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
             }
         }
         if (ok == 1) {
-            fn_8016E498();
+            ScrmStartPlay();
         } else {
             fn_800BD958();
         }
@@ -30104,7 +30104,7 @@ extern "C" void fn_800BE72C(PreSnapPhase *p)
 {
     if (fn_800B65A0(fn_80178308()) == 255) {
         if (p->CanSnap() != 0) {
-            fn_8016E498();
+            ScrmStartPlay();
         } else {
             fn_800BDA00();
             fn_800BDA7C();
@@ -30126,7 +30126,7 @@ int PreSnapPhase::CanSnap()
 {
     int result = 0;
 
-    if (lbl_803EABA8->mUnknownC5 != 0 && fn_8016E764() != 0) {
+    if (lbl_803EABA8->mUnknownC5 != 0 && ScrmCanSnap() != 0) {
         result = 1;
     }
     return result;
@@ -30292,11 +30292,11 @@ extern "C" void fn_800BED54(unsigned char index)
         CamGameSetModeAll(lbl_803EABA8->mUnknown44);
         lbl_803EABA8->mUnknownBC = 6;
         lbl_803EABA8->mSlots[index].mUnknown8 = 30;
-        if (fn_8016EA68() == 0) {
+        if (ScrmOffenseAllPlaced() == 0) {
             int team = fn_80178308();
 
             PlayAlignTeam(PlayBookGetFormation(team), team, gPlayAlignNormSet);
-            fn_8016E008(team);
+            ScrmTeamSendLineUp(team);
             fn_800BD958();
         }
         break;
@@ -30629,8 +30629,8 @@ extern "C" int fn_800BF8A8(PreSnapPhase *p)
         if (fn_800A937C() == 0) {
             HudPost3AOn();
         }
-        fn_8016DB94(fn_80178308());
-        fn_8016DB94(fn_80178320());
+        ScrmAlignTeam(fn_80178308());
+        ScrmAlignTeam(fn_80178320());
         fn_800C0330(lbl_803EABA4);
         if (fn_800B65A0(fn_80178308()) == 255 && fn_800A82FC(fn_80178308())) {
             fn_800A7514(fn_80178308());
@@ -30648,7 +30648,7 @@ extern "C" int fn_800BF8A8(PreSnapPhase *p)
     if (fn_800A937C() != 0 && result == 0) {
         result = 1;
         if (fn_800A9648() != 0) {
-            fn_8016E498();
+            ScrmStartPlay();
         }
     }
     return result;
@@ -30733,8 +30733,8 @@ void PreSnapPhase::OnEnter(float dt)
     fn_8010A220();
     fn_8009DE9C();
     if (fn_801486A0() != 0 && fn_801486A0() != 1) {
-        fn_8016DB94(fn_80178308());
-        fn_8016DB94(fn_80178320());
+        ScrmAlignTeam(fn_80178308());
+        ScrmAlignTeam(fn_80178320());
     }
     fn_8009DEFC(1);
     if (fn_801486A0() != 0) {
@@ -30745,7 +30745,7 @@ void PreSnapPhase::OnEnter(float dt)
     fn_800B0DA4();
     fn_800AEEDC(0);
     fn_800AEEDC(1);
-    fn_8016F6A4();
+    ScrmSpotReset();
     AssignControlledPlayers();
     fn_8011F3A8();
     fn_800AFDD4(fn_800BE4C8);
@@ -30847,7 +30847,7 @@ void PreSnapPhase::OnUpdate(float dt)
     if (fn_800BF8A8(this) == 0 && lbl_803EABA8->mUnknownB8 == -1) {
         fn_800BF9DC(this);
         if (lbl_803EABA8->mUnknownC5 == 0) {
-            lbl_803EABA8->mUnknownC5 = fn_8016EA68() != 0 && lbl_803EABA8->mUnknownC6 != 0;
+            lbl_803EABA8->mUnknownC5 = ScrmOffenseAllPlaced() != 0 && lbl_803EABA8->mUnknownC6 != 0;
             if (lbl_803EABA8->mUnknownC5 != 0) {
                 AudmonEventPost(117, 0);
             }
@@ -30857,7 +30857,7 @@ void PreSnapPhase::OnUpdate(float dt)
         fn_800BE798(this);
         fn_800BF72C(this, dt);
     }
-    if (fn_8016EA68() != 0) {
+    if (ScrmOffenseAllPlaced() != 0) {
         EngineParamWords desc = { 0, 14 };
         fn_802345C4(&desc, 2);
     }
@@ -32266,8 +32266,8 @@ extern "C" void fn_800C34B0(void)
         ClockRuleSetTwoMinuteFlag();
     }
     fn_800CC448();
-    fn_8016DDDC(fn_80178308());
-    fn_8016DDDC(fn_80178320());
+    ScrmTeamPlaceInHuddle(fn_80178308());
+    ScrmTeamPlaceInHuddle(fn_80178320());
     BallPlaceAtSpot();
     fn_800B9BAC(lbl_803EAB84);
     if (lbl_803EABD5 == 0) {
@@ -33557,7 +33557,7 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
             total = ratingScore + speedScore;
             chance = total < 0 ? 0 : (total > 100 ? 100 : total);
             if (pSource == 0 || pSource->mUnknown0 == 0
-                || (fn_8016F6F4(p, &pTarget->mId), !fn_800C68BC(pSource, pTarget->mpState->mId))
+                || (ScrmSpotRecordHit(p, &pTarget->mId), !fn_800C68BC(pSource, pTarget->mpState->mId))
                 || fn_800C8420(pTarget, pSource->mUnknown32)) {
                 if (chance != 0) {
                     chance = fn_800AC584(pTarget->mIdBytes[2], chance);

@@ -226,7 +226,7 @@ extern "C" int fn_800DFED0(Object_80039F5C *p)
                 int mode = fn_800AD9B4();
                 fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
                 fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
-                if (mode == 4) fn_8016DBE4(p);
+                if (mode == 4) ScrmPlayerToHuddle(p);
                 p->mUnknown512.mUnknown14 = 1;
                 p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
                 p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
@@ -1069,7 +1069,7 @@ extern "C" void fn_800E2550(Object_80039F5C *p, Point_8017886C *pOut, int *pAngl
                 fn_800FE03C(p, pOut);
             }
         }
-    } else if (pBlock->mUnknown49 && fn_8009F780() && fn_8016EADC()) {
+    } else if (pBlock->mUnknown49 && fn_8009F780() && ScrmOffenseAnyPlaced()) {
         pOut->mX = pBlock->mUnknown40.mX;
         pOut->mY = pBlock->mUnknown40.mY;
     } else {

@@ -16,7 +16,7 @@ extern "C" {
 void PlayAlignTeamBegin(PlayBookFormation_t *pObject, int team);
 void PlayAlignResetSetNames(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
-void fn_8016DF34(Object_80039F5C *p);
+void ScrmPlayerSendLineUp(Object_80039F5C *p);
 void fn_800E55B8(Object_80039F5C *p);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_800EFEF8(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
@@ -76,7 +76,7 @@ void PlayAlignPlayer(Object_80039F5C *p, PlayBookPosition_t *pEntry, int side)
         msg.mUnknown1[1] = 0;
         msg.mUnknown1[2] = 146;
         fn_800F03D8(0, p->mpState, &msg, p);
-        fn_8016DF34(p);
+        ScrmPlayerSendLineUp(p);
     } else {
         fn_800E55B8(p);
     }

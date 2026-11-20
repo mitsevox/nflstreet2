@@ -126,7 +126,7 @@ void fn_800D782C(Object_80039F5C *p);
 void PlyrCollideClearExempt(Object_80039F5C *p);
 void fn_8015C244(void *p);
 void PlyrMoveUpdate(Object_80039F5C *p, float f);
-void fn_8016F780(void);
+void ScrmSpotCheckRetreat(void);
 int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
 int fn_801BCCAC(void *a, void *b, int c, void *d, int e, int f);
 unsigned short fn_801BE648(void *p);
@@ -766,7 +766,7 @@ extern "C" void PlyrMgrUpdateMotion(float dt)
     int count;
     Object_80039F5C *p;
 
-    fn_8016F780();
+    ScrmSpotCheckRetreat();
     count = _PlyrMgr_pManager->mCount;
     for (i = 0; i < count; i++) {
         p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
