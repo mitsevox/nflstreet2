@@ -19936,6 +19936,26 @@
           "symbol": "fn_8022EA4C",
           "start": "0x8022EA4C",
           "end": "0x8022EA74"
+        },
+        {
+          "symbol": "fn_8022CED8",
+          "start": "0x8022CED8",
+          "end": "0x8022D14C"
+        },
+        {
+          "symbol": "fn_8022DDBC",
+          "start": "0x8022DDBC",
+          "end": "0x8022E21C"
+        },
+        {
+          "symbol": "fn_8022E28C",
+          "start": "0x8022E28C",
+          "end": "0x8022E484"
+        },
+        {
+          "symbol": "fn_8022E484",
+          "start": "0x8022E484",
+          "end": "0x8022E558"
         }
       ]
     },

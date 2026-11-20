@@ -53,7 +53,16 @@ extern void fn_80231208(void);
 int fn_8022F3D4(int key);
 extern const int lbl_803ED6E4[2];
 extern char lbl_802B5D64[];
+extern char lbl_802B5308[];
+extern char lbl_802B54DC[];
+extern char lbl_802B5500[];
+extern char lbl_802B5564[];
+extern const float lbl_802B56EC[];
+extern const float lbl_802B56F0[];
 extern char lbl_802B56F4[];
+extern char lbl_802B5994[];
+extern char lbl_802B59A8[];
+extern char lbl_802B59F0[];
 extern char lbl_802B5744[];
 extern char lbl_802B4EA0[];
 extern char lbl_802B4EC4[];
@@ -258,9 +267,10 @@ extern Record_8022D5A4 *lbl_803EC05C;
 extern unsigned short lbl_803EC060;
 extern int lbl_803EC064;
 extern int lbl_803EC068;
-extern int lbl_803EC06C;
-extern int lbl_803EC070;
-extern int lbl_803EC074;
+extern int (*lbl_803EC06C)(int a, int b, unsigned char *pFlag);
+extern int (*lbl_803EC070)(int a, int b, int c, int d);
+extern int (*lbl_803EC074)(int a, int b, int c, int d);
+extern unsigned char lbl_803EC078;
 extern int lbl_803EC07C;
 extern int lbl_803EC080;
 
@@ -473,8 +483,8 @@ float fn_80229C98(int index);
 float fn_80229CB0(int index);
 float fn_80229CC4(int index, int item);
 float fn_80229CE4(int index);
-int fn_80229E78(void);
-int fn_80229E80(void);
+int fn_80229E78(int a, int b, int c, int d);
+int fn_80229E80(int a, int b, int c, int d);
 void fn_8022A304(void);
 int fn_8022A428(int a);
 int fn_8022A490(unsigned int count);
@@ -493,15 +503,15 @@ void fn_8022B200(void);
 int fn_8022BF60(void);
 int fn_8022BF68(void);
 int fn_8022C02C(int a, int b, int c, int d);
-int fn_8022C098(int a);
+int fn_8022C098(int a, int b, int c, int d);
 int fn_8022C0E0(struct QueryCursor cursor, int a);
 int fn_8022C214(Callbacks_8022C214 *pCallbacks);
 void fn_8022C3C8(void);
 int fn_8022C410(int a);
 int fn_8022C518(int a);
 int fn_8022C628(int db, int tbl, int *pIds, unsigned short *pCount);
-int fn_8022C81C(int a);
-int fn_8022C858(int a);
+int fn_8022C81C(int a, int b, int c, int d);
+int fn_8022C858(int a, int b, int c, int d);
 void DbUtilRandomInit(void);
 void DbUtilRandomShutdown(void);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
@@ -540,12 +550,12 @@ void fn_8022D6F0(void);
 unsigned short fn_8022D6FC(int index);
 int fn_8022D710(int a, int b, int c, int row, int value);
 int fn_8022D834(int row, int column);
-int fn_8022D864(void);
-int fn_8022D86C(void);
+int fn_8022D864(int a, int b, int c, int d);
+int fn_8022D86C(int a, int b, int c, int d);
 int fn_8022D874(int a, int b, int c, int key);
 int fn_8022D8F8(int a, int *p, int tag);
 int fn_8022DA44(int a, int *b, int c, int *d, int e);
-int fn_8022DA90(int *p);
+int fn_8022DA90(void **p);
 void fn_8022DB08(void);
 int fn_8022DB20(void);
 int fn_8022DBF4(int value);
@@ -557,7 +567,10 @@ int fn_8022DD18(int value);
 int fn_8022DD4C(int value);
 int fn_8022DD80(int value);
 int fn_8022DDB4(int a, void *p);
+int fn_8022DDBC(int a, int *pOutA, int *pOutB);
 int fn_8022E21C(int a, int b);
+int fn_8022E28C(int a, int b, unsigned char *pDone, int *pC, int *pD);
+int fn_8022E484(void);
 int fn_8022E558(void);
 int fn_8022E560(void);
 int fn_8022E568(void);
@@ -828,6 +841,88 @@ void fn_8022CDF8(void)
     } while (err == 0);
 }
 
+void fn_8022CED8(void)
+{
+    Node_8022CC6C *p;
+    int found;
+    unsigned short i;
+    int resultA;
+    int resultB;
+    int done;
+    unsigned short count;
+    int next;
+
+    while (lbl_803EC054 != 0) {
+        p = lbl_803EC054;
+        found = 0;
+        for (i = 0; i < lbl_803EC060 && found == 0; i++) {
+            if (p->mUnknown1 == lbl_803EC05C[i].mUnknown2 || p->mUnknown5 != 0) {
+                if (p->mUnknown0 == lbl_803EC05C[i].mUnknown3 || p->mUnknown5 != 0) {
+                    resultA = 0;
+                    resultB = 0;
+                    if (lbl_803EC048 != 0 && p->mUnknown5 != 3) {
+                        resultA = lbl_803EC048(lbl_803EC05C[i].mUnknown0);
+                    }
+                    if (lbl_803EC04C != 0 && p->mUnknown5 != 2) {
+                        resultB = lbl_803EC04C(lbl_803EC05C[i].mUnknown0);
+                    }
+                    if (fn_8022CC98(&lbl_803EC058, lbl_803EC05C[i].mUnknown0) == 0 && resultA == 0
+                        && resultB == 0) {
+                        fn_8022CCC4(&lbl_803EC054, p);
+                        found = 1;
+                        p->mUnknown8 = lbl_803EC05C[i].mUnknown0;
+                        fn_8022CD0C(&lbl_803EC058, p);
+                    }
+                }
+            }
+        }
+        if (found == 0) {
+            done = 0;
+            count = fn_8022D6FC(p->mUnknown1);
+            if (p->mUnknown0 < p->mUnknown3) {
+                if (p->mUnknown0 != 0) {
+                    p->mUnknown0--;
+                    fn_8022CAEC(&lbl_803EC054);
+                } else {
+                    done = 1;
+                }
+            } else {
+                p->mUnknown0++;
+                if (p->mUnknown0 >= count) {
+                    if (p->mUnknown3 != 0) {
+                        p->mUnknown0 = p->mUnknown3 - 1;
+                    } else {
+                        done = 1;
+                    }
+                }
+                fn_8022CAEC(&lbl_803EC054);
+            }
+            if (done == 1) {
+                p->mUnknown6++;
+                next = fn_8022D834(p->mUnknown4, p->mUnknown6);
+                if (next == 31) {
+                    if (p->mUnknown3 != 0) {
+                        p->mUnknown0 = p->mUnknown3 - 1;
+                        p->mUnknown1 = p->mUnknown4;
+                        p->mUnknown6 = 0;
+                        p->mUnknown3--;
+                    } else if (p->mUnknown5 == 0) {
+                        p->mUnknown5 = done;
+                    } else if (p->mUnknown5 == 1) {
+                        p->mUnknown5 = 2;
+                    } else {
+                        return;
+                    }
+                } else {
+                    p->mUnknown1 = next;
+                    p->mUnknown0 = p->mUnknown3;
+                    fn_8022CAEC(&lbl_803EC054);
+                }
+            }
+        }
+    }
+}
+
 int fn_8022D14C(int a)
 {
     return 0;
@@ -1050,18 +1145,18 @@ int fn_8022D710(int a, int b, int c, int row, int value)
 
 int fn_8022D834(int row, int column)
 {
-    if ((unsigned short)column <= 9) {
-        return lbl_802FAA50[row][column][0];
+    if ((unsigned short)column > 9) {
+        return 31;
     }
-    return 31;
+    return lbl_802FAA50[row][column][0];
 }
 
-int fn_8022D864(void)
+int fn_8022D864(int a, int b, int c, int d)
 {
     return 0;
 }
 
-int fn_8022D86C(void)
+int fn_8022D86C(int a, int b, int c, int d)
 {
     return 0;
 }
@@ -1107,7 +1202,7 @@ int fn_8022DA44(int a, int *b, int c, int *d, int e)
     return 0;
 }
 
-int fn_8022DA90(int *p)
+int fn_8022DA90(void **p)
 {
     unsigned char found;
     int result = fn_801FCE10(0, lbl_802B4EA0, &found);
@@ -1192,6 +1287,156 @@ int fn_8022DDB4(int a, void *p)
     return 0;
 }
 
+typedef struct Record_8022DDBC {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    int mUnknownC;
+    int mUnknown10;
+    int mUnknown14;
+    int mUnknown18;
+    int mUnknown1C;
+    int mUnknown20;
+    int mUnknown24;
+    int mUnknown28;
+    int mUnknown2C;
+    int mUnknown30;
+    int mUnknown34;
+    int mUnknown38;
+    int mUnknown3C;
+    int mUnknown40;
+    int mUnknown44;
+    int mUnknown48;
+    int mUnknown4C;
+    int mUnknown50;
+    int mUnknown54;
+    int mUnknown58;
+    int mUnknown5C;
+    int mUnknown60;
+    float mUnknown64;
+    int mUnknown68;
+    int mUnknown6C;
+} Record_8022DDBC;
+
+int fn_8022DDBC(int a, int *pOutA, int *pOutB)
+{
+    Record_8022DDBC rec;
+    int v200;
+    int v204;
+    int err;
+
+    *pOutA = 1023;
+    *pOutB = 1023;
+    err = fn_801FCE10(0, lbl_802B5308, &rec.mUnknown64, &rec.mUnknown0, &rec.mUnknown4, &rec.mUnknown8, &rec.mUnknownC, &rec.mUnknown10, &rec.mUnknown14, &rec.mUnknown18, &rec.mUnknown1C, &rec.mUnknown20, &rec.mUnknown24,
+                      &rec.mUnknown28, &rec.mUnknown2C, &rec.mUnknown30, &rec.mUnknown34, &rec.mUnknown38, &rec.mUnknown3C, &rec.mUnknown40, &rec.mUnknown44, &rec.mUnknown48, &rec.mUnknown50, &rec.mUnknown54, &rec.mUnknown58, &rec.mUnknown5C,
+                      &rec.mUnknown68);
+    rec.mUnknown0 = a;
+    if (err == 0) {
+        if (a == 0) {
+            if (rec.mUnknown4 == 2047) {
+                rec.mUnknown4 = 780;
+            }
+            if (rec.mUnknown8 == 15) {
+                rec.mUnknown8 = 0;
+            }
+            if (rec.mUnknownC == 127) {
+                rec.mUnknownC = 0;
+            }
+            if (rec.mUnknown10 == 127) {
+                rec.mUnknown10 = 78;
+            }
+            if (rec.mUnknown14 == 127) {
+                rec.mUnknown14 = 0;
+            }
+            if (rec.mUnknown18 == -1) {
+                rec.mUnknown18 = 0x1680000;
+            }
+            if (rec.mUnknown28 == 4) {
+                rec.mUnknown28 = 3;
+            }
+            if (rec.mUnknown40 == 4) {
+                rec.mUnknown40 = 3;
+            }
+            if (rec.mUnknown2C == 3) {
+                rec.mUnknown2C = 2;
+            }
+            if (rec.mUnknown44 == 3) {
+                rec.mUnknown44 = 2;
+            }
+            if (err == 0) {
+                if (rec.mUnknown30 == 255) {
+                    rec.mUnknown30 = 0;
+                }
+                if (rec.mUnknown48 == 255) {
+                    rec.mUnknown48 = 0;
+                }
+                if (rec.mUnknown50 == -1) {
+                    rec.mUnknown50 = 0;
+                }
+                if (rec.mUnknown54 == 15) {
+                    rec.mUnknown54 = 0;
+                }
+                if (rec.mUnknown54 == 1023) {
+                    err = fn_801FCE10(0, lbl_802B54DC, &rec.mUnknown54);
+                }
+                if (err == 0) {
+                    if (rec.mUnknown5C == 15) {
+                        rec.mUnknown5C = 0;
+                    }
+                    if (rec.mUnknown64 == lbl_802B56EC[0]) {
+                        rec.mUnknown64 = lbl_802B56F0[0];
+                    }
+                    if (rec.mUnknown68 == 255) {
+                        rec.mUnknown68 = 0;
+                    }
+                }
+            }
+        }
+        if (err == 0) {
+            if (rec.mUnknown20 == 63 || rec.mUnknown24 == 63) {
+                err = fn_801FCE10(0, lbl_802B5500, &v200, &v204, rec.mUnknown1C);
+                if (err == 0) {
+                    if (rec.mUnknown20 == 63) {
+                        rec.mUnknown20 = v200;
+                    }
+                    if (rec.mUnknown24 == 63) {
+                        rec.mUnknown24 = v204;
+                    }
+                }
+            }
+            if (err == 0) {
+                if (rec.mUnknown38 == 63 || rec.mUnknown3C == 63) {
+                    err = fn_801FCE10(0, lbl_802B5500, &v200, &v204, rec.mUnknown34);
+                    if (err == 0) {
+                        if (rec.mUnknown38 == 63) {
+                            rec.mUnknown38 = v200;
+                        }
+                        if (rec.mUnknown3C == 63) {
+                            rec.mUnknown3C = v204;
+                        }
+                    }
+                }
+                if (err == 0) {
+                    err = fn_801FCE10(0, lbl_802B5564, rec.mUnknown64, rec.mUnknown0, rec.mUnknown4, rec.mUnknown8, rec.mUnknownC, rec.mUnknown10, rec.mUnknown14, rec.mUnknown18, rec.mUnknown1C, rec.mUnknown20,
+                                      rec.mUnknown24, rec.mUnknown28, rec.mUnknown2C, rec.mUnknown30, rec.mUnknown34, rec.mUnknown38, rec.mUnknown3C, rec.mUnknown40, rec.mUnknown44, rec.mUnknown48, rec.mUnknown50, rec.mUnknown54,
+                                      rec.mUnknown58, rec.mUnknown5C, rec.mUnknown68);
+                    lbl_803EC07C = rec.mUnknown1C;
+                    lbl_803EC080 = rec.mUnknown34;
+                    if (err == 0) {
+                        if (pOutA != 0) {
+                            *pOutA = rec.mUnknown1C;
+                        }
+                        if (pOutB != 0) {
+                            *pOutB = rec.mUnknown34;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return err;
+}
+
 int fn_8022E21C(int a, int b)
 {
     if (a != 1023 && b != 1023) {
@@ -1203,6 +1448,85 @@ int fn_8022E21C(int a, int b)
         }
         return fn_801FCE10(0, lbl_802B5744, value);
     }
+}
+
+int fn_8022E28C(int a, int b, unsigned char *pDone, int *pC, int *pD)
+{
+    int keyA;
+    int keyB;
+    unsigned char flag;
+    int err;
+
+    keyA = 0;
+    keyB = 0;
+    err = 0;
+    flag = 1;
+    if (a == 0) {
+        err = fn_8022DDBC(b, &keyA, &keyB);
+        if (err == 0 && lbl_803EC078 == 1 && lbl_803EC06C != 0) {
+            err = lbl_803EC06C(keyA, keyB, &flag);
+        }
+        if (err == 0 && flag == 1) {
+            err = fn_801FCE10(0, lbl_802B5994);
+            if (err == 0) {
+                err = fn_801FCE10(0, lbl_802B59A8);
+                if (err == 0) {
+                    err = fn_8022E21C(keyA, keyB);
+                }
+            }
+            fn_8022DA44(keyA, pC, keyB, pD, 0x41474344);
+            lbl_803EC078 = 1;
+        }
+        if (err != 0) {
+            flag = 0;
+        }
+    }
+    if (err == 0 && flag == 1) {
+        if (lbl_803EC070 != 0) {
+            err = lbl_803EC070(keyA, keyB, a, b);
+        }
+        if (err == 0) {
+            err = fn_8022C02C(keyA, keyB, a, b);
+            if (err == 0) {
+                err = fn_80229E78(keyA, keyB, a, b);
+                if (err == 0) {
+                    err = fn_8022C81C(keyA, keyB, a, b);
+                    if (err == 0) {
+                        err = fn_8022D864(keyA, keyB, a, b);
+                    }
+                }
+            }
+        }
+    }
+    *pDone = (err == 0) ? flag : 0;
+    return err;
+}
+
+int fn_8022E484(void)
+{
+    int a;
+    int b;
+    int c;
+    int d;
+    int err;
+
+    err = fn_801FCE10(0, lbl_802B59F0, &a, &b, &c, &d);
+    if (lbl_803EC074 != 0) {
+        err = lbl_803EC074(a, b, c, d);
+    }
+    if (err == 0) {
+        err = fn_8022D86C(a, b, c, d);
+        if (err == 0) {
+            err = fn_8022C858(a, b, c, d);
+            if (err == 0) {
+                err = fn_80229E80(a, b, c, d);
+                if (err == 0) {
+                    err = fn_8022C098(a, b, c, d);
+                }
+            }
+        }
+    }
+    return err;
 }
 
 int fn_8022E558(void)
