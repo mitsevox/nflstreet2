@@ -8,6 +8,12 @@ float fn_80178A2C(void);
 extern Block_8030F42C lbl_8030F42C;
 }
 
+/* Release-build assert: the check is passed to an empty inline function and compiles to nothing. */
+static inline void _ScrimAssert(int)
+{
+}
+#define SCRIM_ASSERT(e) _ScrimAssert(e)
+
 extern "C" void fn_800A9D84(Point_8017886C *pOut)
 {
     int midRound = lbl_8030F42C.mUnknown0 >= 3 && lbl_8030F42C.mUnknown0 <= 5;
@@ -51,6 +57,8 @@ extern "C" void fn_800A9D84(Point_8017886C *pOut)
             if (lbl_8030F42C.mUnknown4 > 4) {
                 pOut->mY -= 10.33f - d;
             } else if (lbl_8030F42C.mUnknown4 > 3) {
+                // FAKEMATCH: compiled-out assert that d is inside the 10.33 band; its 1.0f enters the pool before 0.5f
+                SCRIM_ASSERT(d / 10.33f < 1.0f);
                 pOut->mY -= (10.33f - d) * 0.5f;
             }
         }
