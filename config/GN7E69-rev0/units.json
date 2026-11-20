@@ -19580,6 +19580,25 @@
       ]
     },
     {
+      "source": "src/engine/sevent.cpp",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026AF64-0x8026B2E0 (src/engine/sevent.cpp), its function and name rows, its type and field rows, the data rows of its .data 0x802FFCC4-0x802FFCCC, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026AF64",
+          "end": "0x8026B2E0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFCC4",
+          "end": "0x802FFCCC"
+        }
+      ]
+    },
+    {
       "source": "src/engine/smemlmt.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x8026B4D8-0x8026B520 (src/engine/smemlmt.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",

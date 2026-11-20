@@ -7,6 +7,7 @@
 #include "engine/dslist.h"
 #include "engine/IAllocator.h"
 #include "engine/csis.h"
+#include "engine/sevent.h"
 
 struct SndSeqInfo_t {
     ResFile_t *pRes;
@@ -136,8 +137,6 @@ int SNDBANK_asyncloadmem(int *pHandle, void *pData);
 int SNDBANK_asyncloadmemdone(void);
 int SNDBANK_play(int handle, int a, void *b);
 int SNDbankremove(int handle);
-void fn_8026B124(void *p);
-void fn_8026B250(void);
 void fn_8026C280(void);
 int SNDover(int handle);
 int SNDpitchmult(int handle, int value);
@@ -835,7 +834,7 @@ int SndAemsLoadSystem(ResFile_t *pRes, unsigned int index, int bank)
         result = Csis::System::Subscribe(_Snd_ModuleInfo.pAemsSystem);
         _Snd_ModuleInfo.pAemsStreams = fn_801D2B7C(ResGetSize(pRes, index + 1), 0, 0);
         ResLoadToBuffer(pRes, index + 1, _Snd_ModuleInfo.pAemsStreams);
-        fn_8026B124(_Snd_ModuleInfo.pAemsStreams);
+        Snd::Aems::AddAems1CompatibilitySystem(_Snd_ModuleInfo.pAemsStreams);
     }
     return result;
 }
@@ -847,7 +846,7 @@ int SndAemsUnloadSystem(void)
     result = 0;
     if (SND_READY()) {
         if (_Snd_ModuleInfo.pAemsStreams != 0) {
-            fn_8026B250();
+            Snd::Aems::RemoveAems1CompatibilitySystem();
             fn_801D2BD0(_Snd_ModuleInfo.pAemsStreams);
             _Snd_ModuleInfo.pAemsStreams = 0;
         }
