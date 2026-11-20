@@ -1435,7 +1435,11 @@ ResFile_t *ResOpenRam(ResFile_t *pParent, unsigned int index, int heap, int mode
             pRes->mBaseAddr = ResLoad(pParent, index, heap);
             pRes->pExtra = pParent;
             pRes->mIndex = index;
-            err = _ResInitRamResourceFile(pRes, pName, ResGetSize(pRes->pExtra, pRes->mIndex));
+            {
+                unsigned int size = ResGetSize(pRes->pExtra, pRes->mIndex);
+
+                err = _ResInitRamResourceFile(pRes, pName, size);
+            }
             if (err != 0) {
                 goto done;
             }

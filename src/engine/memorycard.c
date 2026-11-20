@@ -440,7 +440,7 @@ int fn_801D4848(int port, const char *pGameCode, const char *pPattern, Struct_80
                 unsigned int maxEntries)
 {
     CARDStat stat;
-    char code[8];
+    char code[12];
     unsigned int fileNo;
     int status;
     int found;
@@ -510,11 +510,12 @@ int fn_801D4A3C(int port, const char *pName, int unused, int flags, int size)
     }
     if (lbl_803EBCF8 != 0) {
         lbl_80384CD0.mCache = fn_801D2B7C(lbl_803EBCF8, 0, 0);
-        lbl_80384CD0.mCacheValid = 0;
+        // FAKEMATCH: mCacheValid cleared last (search over the 120 orders of the five clears; same Dirty-then-Valid order as the other cache resets)
         lbl_80384CD0.mChunkSize = lbl_803EBCF8;
         lbl_80384CD0.mOffset = 0;
         lbl_80384CD0.mCachePos = 0;
         lbl_80384CD0.mCacheDirty = 0;
+        lbl_80384CD0.mCacheValid = 0;
         if (lbl_80384CD0.mCache == 0) {
             return -1;
         }
@@ -527,8 +528,10 @@ int fn_801D4A3C(int port, const char *pName, int unused, int flags, int size)
                 goto fail;
             }
             if (lbl_80384CD0.mResult != CARD_RESULT_NOFILE) {
-                if (memcmp(lbl_80384CD0.mStat.company, lbl_802AFCF8, 2) == 0
-                    && (cmp = strncmp(lbl_80384CD0.mStat.fileName, pName, 32)) == 0) {
+                if (memcmp(lbl_80384CD0.mStat.company, lbl_802AFCF8, 2) != 0
+                    || (cmp = strncmp(lbl_80384CD0.mStat.fileName, pName, 32)) != 0) {
+                    lbl_80384CD0.mResult = CARD_RESULT_NOFILE;
+                } else {
                     lbl_80384CD0.mResult = CARDFastDelete(port, fileNo);
                     if (lbl_80384CD0.mResult == CARD_RESULT_READY
                         || lbl_80384CD0.mResult == CARD_RESULT_NOFILE) {
@@ -539,13 +542,12 @@ int fn_801D4A3C(int port, const char *pName, int unused, int flags, int size)
                     }
                     return -1;
                 }
-                lbl_80384CD0.mResult = CARD_RESULT_NOFILE;
             }
         }
         if (lbl_80384CD0.mResult != CARD_RESULT_NOFILE) {
         fail:
-            lbl_80384CD0.mBusy = 0;
             lbl_80384CD0.mUnknown10 = 1;
+            lbl_80384CD0.mBusy = 0;
         } else {
         create:
             fn_801D4D08(port, 0);
@@ -559,7 +561,7 @@ int fn_801D4A3C(int port, const char *pName, int unused, int flags, int size)
     for (fileNo = 0; fileNo < 127; fileNo++) {
         lbl_80384CD0.mResult = CARDGetStatus(port, fileNo, &lbl_80384CD0.mStat);
         if (lbl_80384CD0.mResult != CARD_RESULT_READY && lbl_80384CD0.mResult != CARD_RESULT_NOFILE) {
-            break;
+            goto done;
         }
         if (lbl_80384CD0.mResult != CARD_RESULT_NOFILE) {
             if (memcmp(lbl_80384CD0.mStat.company, lbl_802AFCF8, 2) == 0
@@ -574,8 +576,9 @@ int fn_801D4A3C(int port, const char *pName, int unused, int flags, int size)
             lbl_80384CD0.mResult = CARD_RESULT_NOFILE;
         }
     }
-    lbl_80384CD0.mBusy = 0;
+done:
     lbl_80384CD0.mUnknown10 = 1;
+    lbl_80384CD0.mBusy = 0;
     return 0;
 }
 
