@@ -30356,6 +30356,7 @@ extern "C" void fn_800BF07C(void)
         mode = 0;
     }
     if (fn_8011F32C() != 0 || fn_8011F228() != 0 || fn_800B119C() == 0) {
+        // FAKEMATCH: redundant zero store (value is already 0); it lengthens the life of value so mode takes r31 as in the target
         value = 0;
     } else {
         switch (mode) {
@@ -30371,6 +30372,7 @@ extern "C" void fn_800BF07C(void)
             value = fn_8009D990(0) - 6;
             value -= fn_802372EC(0, 8);
             break;
+        // FAKEMATCH: empty case label; it makes the dispatch tree pivot on 1 as the target does
         case 2:
             break;
         }
@@ -30752,6 +30754,7 @@ void PreSnapPhase::OnEnter(float dt)
     for (i = 0; i <= 1; i++) {
         Slot_800BFAD0 *pSlot = &lbl_803EABA8->mSlots[i];
 
+        // FAKEMATCH: order of the independent slot-clear stores chosen to reproduce the target's sched2 order (+0x1C third, floats last)
         pSlot->mUnknown0 = 0;
         pSlot->mUnknown4 = 0;
         pSlot->mUnknown1C = 0;

@@ -12635,7 +12635,7 @@
             "evidence": "evidence.tsv source-form 0x800CE218-0x800CE2B8"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 64 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 62 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [
@@ -13844,7 +13844,7 @@
             "evidence": "evidence.tsv source-form 0x8012510C-0x801251FC"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/cu_800EFC68.cpp: the 54 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/cu_800EFC68.cpp: the 52 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [
