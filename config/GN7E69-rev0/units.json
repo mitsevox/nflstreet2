@@ -262,14 +262,6 @@
     }
   },
   "externals": {
-    "AssignGetFormationPos": {
-      "address": "0x800F97A8",
-      "evidence": "evidence.tsv function and name rows for 0x800F97A8 (unlinked; called from the comparison fragment src/game/cu_800F0960.cpp of the cu_800EFC68 group)."
-    },
-    "AssignGetPassSpeed": {
-      "address": "0x80103DD8",
-      "evidence": "evidence.tsv function and name rows for 0x80103DD8 (unlinked; called from the comparison fragment src/game/cu_800FE444.cpp of the cu_800EFC68 group)."
-    },
     "gPlayerLooks": {
       "address": "0x803078E8",
       "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
@@ -1736,15 +1728,15 @@
     },
     "BallSolveFallToHeight": {
       "address": "0x8013AA00",
-      "evidence": "evidence.tsv function and name rows for 0x8013AA00 (unlinked; referenced from comparison and linked src/game/cu_801074B4.cpp, src/game/cu_800B4A4C.cpp, src/game/cu_80111B4C.cpp, src/game/cu_800F0960.cpp, src/game/LooseBall.cpp, src/game/cu_800EFC68.cpp)."
+      "evidence": "evidence.tsv function and name rows for 0x8013AA00 (unlinked; referenced from comparison src/game/cu_800B4A4C.cpp and linked src/game/LooseBall.cpp and src/game/cu_800EFC68.cpp)."
     },
     "BallGetHeightAtTime": {
       "address": "0x8013AB64",
-      "evidence": "evidence.tsv function and name rows for 0x8013AB64 (unlinked; referenced from comparison src/game/cu_80111B4C.cpp)."
+      "evidence": "evidence.tsv function and name rows for 0x8013AB64 (unlinked; referenced from linked src/game/cu_800EFC68.cpp)."
     },
     "BallLaunchToTarget": {
       "address": "0x8013AC28",
-      "evidence": "evidence.tsv function and name rows for 0x8013AC28 (unlinked; referenced from comparison src/game/cu_80104C9C.cpp, src/game/cu_80102A78.cpp)."
+      "evidence": "evidence.tsv function and name rows for 0x8013AC28 (unlinked; referenced from linked src/game/cu_800EFC68.cpp)."
     },
     "BallIsContactRaised": {
       "address": "0x8013AD78",
@@ -2157,14 +2149,6 @@
     "gLastSubTick": {
       "address": "0x803ECEB0",
       "evidence": "evidence.tsv data/name rows for 0x803ECEB0 (target extent, related name); speech-library storage, original-owned."
-    },
-    "CatchGetHandReach": {
-      "address": "0x80111A28",
-      "evidence": "evidence.tsv function and name rows for 0x80111A28 (unlinked; referenced from comparison src/game/cu_80111B4C.cpp)."
-    },
-    "PursuitGetInterceptAngle": {
-      "address": "0x801208C8",
-      "evidence": "evidence.tsv function and name rows for 0x801208C8 (unlinked; referenced from comparisons src/game/cu_80120618.cpp and src/game/cu_801230B8.cpp)."
     }
   },
   "holdouts_approved": {
@@ -12965,6 +12949,398 @@
           "end": "0x803EAE14"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800EFC68-0x80125F3C (src/game/cu_800EFC68.cpp) and its data rows; holdouts approved by the owner ruling of 2026-11-19 (holdouts_approved).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800EFC68",
+          "end": "0x800F1858"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F1C68",
+          "end": "0x800F30AC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F3284",
+          "end": "0x800F3344"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F3838",
+          "end": "0x800F4AD4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F4E14",
+          "end": "0x800F6370"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F6790",
+          "end": "0x800F69C0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F6AD8",
+          "end": "0x800F6B2C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F6C90",
+          "end": "0x800F6E30"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F70D0",
+          "end": "0x800F722C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F7B64",
+          "end": "0x800F8828"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F88E4",
+          "end": "0x800F8D2C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F9024",
+          "end": "0x800F9BD8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F9CAC",
+          "end": "0x800FA098"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FA0DC",
+          "end": "0x800FA300"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FAD10",
+          "end": "0x800FAD2C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FB768",
+          "end": "0x800FBB70"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FBF74",
+          "end": "0x800FC7A0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FCA78",
+          "end": "0x800FCE58"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FCFC0",
+          "end": "0x800FD2AC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FD3F0",
+          "end": "0x800FDAC8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FDFD8",
+          "end": "0x800FEB60"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FEDBC",
+          "end": "0x800FF094"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FF538",
+          "end": "0x800FFB4C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FFD2C",
+          "end": "0x80100BF8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80100EA0",
+          "end": "0x80101CB4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801021C0",
+          "end": "0x80102A78"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80102D78",
+          "end": "0x80103F80"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80104328",
+          "end": "0x80104D98"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801050DC",
+          "end": "0x80106C24"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801074B4",
+          "end": "0x80109E48"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80109F34",
+          "end": "0x8010A2DC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8010A4E8",
+          "end": "0x8010BED4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8010BF5C",
+          "end": "0x8010F43C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8010FB10",
+          "end": "0x801100E8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801101DC",
+          "end": "0x80110B00"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80110C10",
+          "end": "0x80113C20"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801147D4",
+          "end": "0x80114EE4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80114F64",
+          "end": "0x8011569C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801163B4",
+          "end": "0x80116410"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80116880",
+          "end": "0x8011BAE0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8011C4E0",
+          "end": "0x8011E484"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8011E7CC",
+          "end": "0x80120384"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012055C",
+          "end": "0x80121918"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80121BE8",
+          "end": "0x80121CB0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80122670",
+          "end": "0x801227DC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80123024",
+          "end": "0x8012510C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801251FC",
+          "end": "0x80125F3C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DF88",
+          "end": "0x8029F660"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DAAC4",
+          "end": "0x802DB04C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EAE14",
+          "end": "0x803EB0B0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC9E8",
+          "end": "0x803EC9F4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80319ED8",
+          "end": "0x8031AABC"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289ADC",
+          "end": "0x80289AE0"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          "fn_800F1858",
+          "fn_800F30AC",
+          "fn_800F3344",
+          "fn_800F4AD4",
+          "fn_800F6370",
+          "fn_800F69C0",
+          "fn_800F6B2C",
+          "fn_800F6E30",
+          "fn_800F722C",
+          "fn_800F7314",
+          "fn_800F7798",
+          "fn_800F8828",
+          "fn_800F8D2C",
+          "fn_800F9BD8",
+          "fn_800FA098",
+          "fn_800FA300",
+          "fn_800FAD2C",
+          "fn_800FAECC",
+          "fn_800FB314",
+          "fn_800FBB70",
+          "fn_800FC7A0",
+          "fn_800FCE58",
+          "fn_800FD2AC",
+          "fn_800FDAC8",
+          "fn_800FEB60",
+          "fn_800FF094",
+          "fn_800FFB4C",
+          "fn_80100BF8",
+          "fn_80101CB4",
+          "fn_80102A78",
+          "fn_80103F80",
+          "fn_80104D98",
+          "fn_80106C24",
+          "fn_80109E48",
+          "fn_8010A2DC",
+          "fn_8010BED4",
+          "fn_8010F43C",
+          "fn_8010F654",
+          "fn_801100E8",
+          "fn_80110B00",
+          "fn_80113C20",
+          "fn_80113E74",
+          "fn_80114EE4",
+          "fn_8011569C",
+          "fn_80116410",
+          "fn_801167C4",
+          "fn_8011BAE0",
+          "fn_8011BCDC",
+          "fn_8011E484",
+          "fn_80120384",
+          "fn_80121918",
+          "fn_80121CB0",
+          "fn_801227DC",
+          "fn_8012510C"
+        ],
+        "evidence": "comparisons.json partials of src/game/cu_800EFC68.cpp: the 54 functions whose compiled bytes differ from the target keep the original bytes."
+      },
+      "link_roots": {
+        "discarded": [
+          "_StrippedScaleByEight",
+          "_StrippedClampNonNegative",
+          "_StrippedScaleTenPlusFive"
+        ],
+        "evidence": "evidence.tsv linker and source-form rows 0x8029E1F0, 0x8029EBB8 and 0x8029F040: file-static functions SN's linker discarded; only their constant pools remain."
+      }
     },
     {
       "source": "src/game/MemCardUtil.cpp",

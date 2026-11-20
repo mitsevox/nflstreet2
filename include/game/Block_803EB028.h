@@ -7,7 +7,7 @@ struct Block_803EB028 {
     int mUnknown0;
     char mUnknown4[80];
     unsigned int mUnknown84;
-    char mUnknown88[1];
+    unsigned char mUnknown88;
     unsigned char mUnknown89;
     unsigned char mUnknown90;
     char mUnknown91[1];
