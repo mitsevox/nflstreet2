@@ -815,7 +815,8 @@ class Holdouts(Fixture):
         return sb.load_manifest(manifest or self.held_manifest(), self.sections, "3.9.3",
                                 comparisons or self.COMPARISONS, self.EVIDENCE if evidence is None else evidence)
 
-    def native(self, symbols=None, b_size=12, c_align=4):
+    def native(self, symbols=None, b_size=12, c_align=4, a_relocations=((0, 7, 10, 0), (4, 4, 10, 0)),
+               b_relocations=((0, 6, 10, 0),)):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         path = Path(temporary.name) / "unit.o"
@@ -827,8 +828,8 @@ class Holdouts(Fixture):
             if symbol["name"] == "b":
                 symbol["size"] = b_size
         sb.write_object(path, code + [rodata(8)], symbols)
-        with_relocations(path, 1, ((0, 7, 10, 0), (4, 4, 10, 0)))  # a: call b; branch to c's section
-        with_relocations(path, 2, ((0, 6, 10, 0),))                # b: call a (dropped with b)
+        with_relocations(path, 1, a_relocations)  # a, by default: call b; branch to c's section
+        with_relocations(path, 2, b_relocations)  # b, by default: call a (dropped with b)
         with_relocations(path, 3, ((0, 5, 6, 0), (4, 10, 10, 0)))  # c: .rodata; call Other
         with_relocations(path, 4, ((0, 3, 1, 4), (4, 9, 1, 0)))    # .rodata: into b's section; Label
         return path
@@ -1019,6 +1020,29 @@ class Holdouts(Fixture):
                           (0x80003120, ".text.holdout_run_80003120", None), (0x80003128, None, [])])
         self.assertEqual(defined["__holdout_run_80003120"], (0x80003120, "src/unit.c"))
         self.assertNotIn("b", defined)
+
+    def test_a_static_only_a_holdout_calls_stays_linked_at_its_address(self):
+        # a calls b only; the holdout b is c's only caller, so c loses every reference with b. ngcld
+        # -strip-unused drops an unreferenced local function even in a kept section, which would
+        # shift the run; c stays as an untyped sized local and the run marker spans the whole run.
+        units, _, _ = self.held()
+        unit = dict(units[0], object=self.native(a_relocations=((0, 7, 10, 0),), b_relocations=((0, 8, 10, 0),)))
+        sb.link_object(unit)
+        derived = unit["link_object"].read_bytes()
+        sections, symbols = sb.read_elf(derived)
+        self.assertNotIn("c", {name for _, name, _, _ in relocations(derived)})
+        run_c = next(s["index"] for s in sections if s["name"] == ".text.holdout_run_80003120")
+        named = {s["name"]: (s["bind"], s["type"], s["shndx"], s["value"], s["size"]) for s in symbols if s["name"]}
+        self.assertEqual(named["c"], (sb.STB_LOCAL, 0, run_c, 0, 8))
+        self.assertEqual(named["a"], (sb.STB_GLOBAL, sb.STT_FUNC, named["a"][2], 0, 8))
+        self.assertEqual(named["__holdout_run_80003120"], (sb.STB_GLOBAL, 0, run_c, 0, 8))
+        self.assertEqual(named["__holdout_run_80003110"][4], 8)
+        pieces, _, _ = sb.plan(self.sections, [unit], {"src/unit.c": (sections, symbols)}, {"Other": 0x80003104})
+        self.assertIn((0x80003120, ".text.holdout_run_80003120"),
+                      [(p["start"], p.get("entry", {}).get("input")) for p in pieces[".init"]])
+        # The function inventory still lists c at its target address.
+        self.assertIn({"symbol": "c", "address": "0x80003120", "size": 8},
+                      sb.compiled_functions(unit, (sections, symbols)))
 
     def test_other_units_resolve_a_global_holdout_to_its_target(self):
         units, _, _ = self.held()

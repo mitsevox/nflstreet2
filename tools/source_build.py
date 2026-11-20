@@ -925,6 +925,11 @@ def holdout_object(native, unit, output):
                 mapping[index] = ("symbol", run_symbol[start], offset)
                 continue
             value, shndx = value + offset, run_index[start]
+            if info == STB_LOCAL << 4 | STT_FUNC:
+                # strip-unused drops an unreferenced local function even inside a kept section, and a
+                # file-static function whose only callers are holdouts has lost its references; as an
+                # untyped label it stays with its run, as the target's linker kept it.
+                info = STB_LOCAL << 4
         elif 0 < shndx < 0xFF00:
             if shndx not in index_map:
                 raise ValueError(f"{source}: symbol {symbol['name']} is defined in a section holdouts cannot keep")
@@ -940,7 +945,10 @@ def holdout_object(native, unit, output):
         entries.append(struct.pack(">IIIBBH", len(strings), 0, 0, STB_GLOBAL << 4, 0, SHN_UNDEF))
         strings += holdout_reference(row["start"]).encode("ascii") + b"\0"
     for start, index in sorted(run_index.items()):
-        entries.append(struct.pack(">IIIBBH", len(strings), 0, 0, STB_GLOBAL << 4, 0, index))
+        # The marker spans its run, as an original piece's marker does: strip-unused then keeps the
+        # whole run, including file-static functions that only a holdout calls.
+        entries.append(struct.pack(">IIIBBH", len(strings), 0, new_sections[index]["size"], STB_GLOBAL << 4, 0,
+                                   index))
         strings += holdout_run(start)[1].encode("ascii") + b"\0"
     # Relocations: a run's members' records merge into one section, moved by each member's offset.
     relocations = {}
@@ -1918,7 +1926,10 @@ def compiled_functions(unit, obj):
     placements = {entry["index"]: entry for entry in unit["sections"]}
     functions, seen = [], set()
     for symbol in obj[1]:
-        if symbol["type"] != STT_FUNC or symbol["shndx"] == SHN_UNDEF or symbol["size"] <= 0:
+        # holdout_object leaves a holdouts unit's local functions untyped (sized) so the link keeps them.
+        function = symbol["type"] == STT_FUNC or (unit.get("holdouts") and symbol["bind"] == STB_LOCAL
+                                                  and symbol["type"] == 0)
+        if not function or symbol["shndx"] == SHN_UNDEF or symbol["size"] <= 0:
             continue
         # A kept local's global copy (keep_object) names the same function once more, and its
         # alias for another unit's folded references (`__folded_<name>`) once again.
