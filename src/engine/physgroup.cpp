@@ -1,3 +1,7 @@
+/* Body groups of the rigid-body physics world: a group keeps its bodies in a pool list, tells
+   the world when a body joins or leaves, and is stepped as one integrable system, its state and
+   derivative being those of its awake bodies one after another. */
+
 #include "engine/dslist.h"
 #include "engine/physworld.h"
 
@@ -9,20 +13,20 @@ void DSDelListNode(void *pool, void *item);
 void *DSNextListNode(void *pool, void *item);
 }
 
-Class_801E274C::Class_801E274C() : mpOwner(0)
+WorldSystem::WorldSystem() : mpOwner(0)
 {
 }
 
-Class_801E274C::~Class_801E274C()
+WorldSystem::~WorldSystem()
 {
 }
 
-void Class_801E274C::fn_801E279C(PhysicsWorld *pOwner)
+void WorldSystem::SetOwner(PhysicsWorld *pOwner)
 {
     mpOwner = pOwner;
 }
 
-BodyGroup::BodyGroup(int count) : mpUnknown8(0), mpNodes(0), mUnknown10(1)
+BodyGroup::BodyGroup(int count) : mpIntegrator(0), mpNodes(0), mUnknown10(1)
 {
     mpNodes = DSNewList(1, 0, count, sizeof(BodyGroupNode), 0, 0);
 }
@@ -31,15 +35,15 @@ BodyGroup::~BodyGroup()
 {
     DSDelList(mpNodes);
     mpNodes = 0;
-    mpUnknown8 = 0;
+    mpIntegrator = 0;
 }
 
-void BodyGroup::fn_801E2870(Class_801E299C *p)
+void BodyGroup::SetIntegrator(Integrator *pIntegrator)
 {
-    mpUnknown8 = p;
+    mpIntegrator = pIntegrator;
 }
 
-int BodyGroup::fn_801E2878(RigidBody *pMember)
+int BodyGroup::AddBody(RigidBody *pMember)
 {
     BodyGroupNode *pNode = (BodyGroupNode *)DSNewListNode(mpNodes);
 
@@ -54,7 +58,7 @@ int BodyGroup::fn_801E2878(RigidBody *pMember)
     return 1;
 }
 
-int BodyGroup::fn_801E28FC(RigidBody *pMember)
+int BodyGroup::RemoveBody(RigidBody *pMember)
 {
     BodyGroupNode *pNode;
 
@@ -75,17 +79,17 @@ int BodyGroup::fn_801E28FC(RigidBody *pMember)
     return 0;
 }
 
-int BodyGroup::vfn_05(int a, int b)
+int BodyGroup::Step(int start, int end)
 {
-    int first = mpUnknown8->vfn_02();
-    int second = vfn_08(a, b);
+    int stepped = mpIntegrator->Step((void *)start, (void *)end);
+    int after = AfterStep(start, end);
 
-    return first || second;
+    return stepped || after;
 }
 
-int BodyGroup::vfn_06()
+void BodyGroup::Restore()
 {
-    return mpUnknown8->vfn_03();
+    mpIntegrator->Restore();
 }
 
 int BodyGroup::GetState(float *pState)
@@ -128,7 +132,7 @@ int BodyGroup::GetDerivative(void *pStart, float *pRate)
     int count = 0;
     int n;
 
-    vfn_07();
+    ApplyForces(pStart);
     for (pNode = (BodyGroupNode *)DSGetListNode(mpNodes, 0); pNode;
          pNode = (BodyGroupNode *)DSNextListNode(mpNodes, pNode)) {
         if (pNode->mpMember->mState == 2) {
@@ -140,12 +144,12 @@ int BodyGroup::GetDerivative(void *pStart, float *pRate)
     return count;
 }
 
-BodyGroupNode *BodyGroup::fn_801E2C3C()
+BodyGroupNode *BodyGroup::FirstNode()
 {
     return (BodyGroupNode *)DSGetListNode(mpNodes, 0);
 }
 
-RigidBody *BodyGroup::fn_801E2C64(BodyGroupNode **ppNode)
+RigidBody *BodyGroup::NextBody(BodyGroupNode **ppNode)
 {
     RigidBody *pMember = 0;
 

@@ -53,12 +53,12 @@ int PhysicsWorld::AddGroup(BodyGroup *pGroup)
         DSDelListNode(mpGroups, pNode);
         return 0;
     }
-    pIter = pGroup->fn_801E2C3C();
-    for (pMember = pGroup->fn_801E2C64(&pIter); pMember;
-         pMember = pGroup->fn_801E2C64(&pIter)) {
+    pIter = pGroup->FirstNode();
+    for (pMember = pGroup->NextBody(&pIter); pMember;
+         pMember = pGroup->NextBody(&pIter)) {
         NotifyBodyAdded(pMember);
     }
-    pGroup->fn_801E279C(this);
+    pGroup->SetOwner(this);
     return 1;
 }
 
@@ -75,14 +75,14 @@ int PhysicsWorld::RemoveGroup(BodyGroup *pGroup)
         }
     }
     if (pNode) {
-        pIter = pGroup->fn_801E2C3C();
-        for (pMember = pGroup->fn_801E2C64(&pIter); pMember;
-         pMember = pGroup->fn_801E2C64(&pIter)) {
+        pIter = pGroup->FirstNode();
+        for (pMember = pGroup->NextBody(&pIter); pMember;
+         pMember = pGroup->NextBody(&pIter)) {
             NotifyBodyRemoved(pMember);
         }
         DSRemoveListNode(mpGroups, pNode);
         DSDelListNode(mpGroups, pNode);
-        pGroup->fn_801E279C(0);
+        pGroup->SetOwner(0);
         return 1;
     }
     return 0;
@@ -169,7 +169,7 @@ void PhysicsWorld::Step(PhysicsTime *pStart, PhysicsTime *pEnd)
     do {
         for (pNode = (PhysicsWorldNode *)DSGetListNode(mpGroups, 0); pNode;
              pNode = (PhysicsWorldNode *)DSNextListNode(mpGroups, pNode)) {
-            if (((BodyGroup *)pNode->mpItem)->vfn_05((int)&start, (int)&end)) {
+            if (((BodyGroup *)pNode->mpItem)->Step((int)&start, (int)&end)) {
                 moved = 1;
             }
         }
@@ -189,10 +189,10 @@ void PhysicsWorld::Step(PhysicsTime *pStart, PhysicsTime *pEnd)
         for (pNode = (PhysicsWorldNode *)DSGetListNode(mpGroups, 0); pNode;
              pNode = (PhysicsWorldNode *)DSNextListNode(mpGroups, pNode)) {
             BodyGroup *pGroup = (BodyGroup *)pNode->mpItem;
-            BodyGroupNode *pIter = pGroup->fn_801E2C3C();
+            BodyGroupNode *pIter = pGroup->FirstNode();
             RigidBody *pBody;
 
-            for (pBody = pGroup->fn_801E2C64(&pIter); pBody; pBody = pGroup->fn_801E2C64(&pIter)) {
+            for (pBody = pGroup->NextBody(&pIter); pBody; pBody = pGroup->NextBody(&pIter)) {
                 mpController->UpdateSleepState(pBody, dt);
             }
         }

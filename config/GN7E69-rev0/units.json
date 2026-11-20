@@ -926,18 +926,6 @@
       "address": "0x80307470",
       "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gTutorialGame. InGame dependency pointer written at 0x80032B7C."
     },
-    "fn_801E279C__14Class_801E274CP12PhysicsWorld": {
-      "address": "0x801E279C",
-      "evidence": "evidence.tsv external row for 0x801E279C (fn_801E279C__14Class_801E274CP12PhysicsWorld) and function row 0x801E279C (comparison unit; original assembly remains linked)."
-    },
-    "fn_801E2C3C__9BodyGroup": {
-      "address": "0x801E2C3C",
-      "evidence": "evidence.tsv external row for 0x801E2C3C (fn_801E2C3C__9BodyGroup) and function row 0x801E2C3C (comparison unit; original assembly remains linked)."
-    },
-    "fn_801E2C64__9BodyGroupPP13BodyGroupNode": {
-      "address": "0x801E2C64",
-      "evidence": "evidence.tsv external row for 0x801E2C64 (fn_801E2C64__9BodyGroupPP13BodyGroupNode) and function row 0x801E2C64 (comparison unit; original assembly remains linked)."
-    },
     "_vt.14Class_802A2A40": {
       "address": "0x802A2A40",
       "evidence": "evidence.tsv external row for 0x802A2A40 (_vt.14Class_802A2A40)."
@@ -2161,6 +2149,38 @@
     "gLastSubTick": {
       "address": "0x803ECEB0",
       "evidence": "evidence.tsv data/name rows for 0x803ECEB0 (target extent, related name); speech-library storage, original-owned."
+    },
+    "SNQueryData": {
+      "address": "0x801ACB9C",
+      "evidence": "evidence.tsv name row SNQueryData 0x801ACB9C (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801ACB9C; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
+    },
+    "SNRead": {
+      "address": "0x801ACC24",
+      "evidence": "evidence.tsv name row SNRead 0x801ACC24 (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801ACC24; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
+    },
+    "SNWrite": {
+      "address": "0x801ACDE0",
+      "evidence": "evidence.tsv name row SNWrite 0x801ACDE0 (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801ACDE0; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
+    },
+    "SNDVDRead_init": {
+      "address": "0x801AD11C",
+      "evidence": "evidence.tsv name row SNDVDRead_init 0x801AD11C (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801AD11C; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
+    },
+    "SNDVDReadAsync_next": {
+      "address": "0x801AD16C",
+      "evidence": "evidence.tsv name row SNDVDReadAsync_next 0x801AD16C (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801AD16C; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
+    },
+    "SNDVDReadSync_next": {
+      "address": "0x801AD1DC",
+      "evidence": "evidence.tsv name row SNDVDReadSync_next 0x801AD1DC (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801AD1DC; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
+    },
+    "SNDVDWrite_init": {
+      "address": "0x801AD244",
+      "evidence": "evidence.tsv name row SNDVDWrite_init 0x801AD244 (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801AD244; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
+    },
+    "SNDVDWriteNoDMA_next": {
+      "address": "0x801AD380",
+      "evidence": "evidence.tsv name row SNDVDWriteNoDMA_next 0x801AD380 (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801AD380; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
     }
   },
   "units": [
@@ -15687,6 +15707,25 @@
           "placement": ".text",
           "start": "0x80201EC8",
           "end": "0x80203444"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/physgroup.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801E274C-0x801E2CB4 (src/engine/physgroup.cpp), its fifteen function extents and name rows, the exact vtable data row 0x802B1200-0x802B1290 and the compiler row 0x801E274C-0x801E2CB4. Complete native text and rodata; no writable section.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E274C",
+          "end": "0x801E2CB4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1200",
+          "end": "0x802B1290"
         }
       ]
     },

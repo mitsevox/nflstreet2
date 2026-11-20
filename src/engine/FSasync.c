@@ -44,14 +44,14 @@ int g_bDoFSACK;
 int g_nFSLastError;
 FSResult_t g_FsResult;
 
-extern int fn_801ACB9C(void);
-extern int fn_801ACC24(void *buf, int size);
-extern int fn_801ACDE0(void *buf, int size);
-extern void fn_801AD11C(void);
-extern void fn_801AD16C(u8 *buf, u32 size);
-extern void fn_801AD1DC(u8 *buf, u32 size);
-extern void fn_801AD244(int size);
-extern void fn_801AD380(void *data, int size);
+extern int SNQueryData(void);
+extern int SNRead(void *buf, int size);
+extern int SNWrite(void *buf, int size);
+extern void SNDVDRead_init(void);
+extern void SNDVDReadAsync_next(u8 *buf, u32 size);
+extern void SNDVDReadSync_next(u8 *buf, u32 size);
+extern void SNDVDWrite_init(int size);
+extern void SNDVDWriteNoDMA_next(void *data, int size);
 
 static inline u16 _FSSwap16(u16 value)
 {
@@ -84,8 +84,8 @@ void DoFSReadHeader(int handle, u8 *buf, u32 size, int offset)
     packet.mHandle = handle;
     packet.mOffset = offset;
     packet.mSize = size;
-    fn_801AD244(sizeof(packet));
-    fn_801AD380(&packet, sizeof(packet));
+    SNDVDWrite_init(sizeof(packet));
+    SNDVDWriteNoDMA_next(&packet, sizeof(packet));
 }
 
 void InitReadCounts(void)
@@ -118,8 +118,8 @@ void PCreadAsyncNext(void)
         size = g_nRemainderCnt;
         g_nRemainderCnt = 0;
     }
-    fn_801AD11C();
-    fn_801AD16C(buf, size);
+    SNDVDRead_init();
+    SNDVDReadAsync_next(buf, size);
 }
 
 int CompleteAsync(void);
@@ -146,7 +146,7 @@ void ReadSyncNext(void)
     u32 size;
 
     buf = g_pBuffer;
-    while (fn_801ACB9C() == 0)
+    while (SNQueryData() == 0)
         ;
     PI_INTSR = 0x1000;
     InitReadCounts();
@@ -158,8 +158,8 @@ void ReadSyncNext(void)
         size = g_nRemainderCnt;
         g_nRemainderCnt = 0;
     }
-    fn_801AD11C();
-    fn_801AD1DC(buf, size);
+    SNDVDRead_init();
+    SNDVDReadSync_next(buf, size);
 }
 
 void PCrwSyncFSACK(void);
@@ -167,11 +167,11 @@ void PCrwSyncFSACK(void);
 static inline void _FSDrainReadBlocks(void)
 {
     while (--g_nBlockCnt != -1) {
-        fn_801AD1DC(g_pBuffer, 0x400);
+        SNDVDReadSync_next(g_pBuffer, 0x400);
         g_pBuffer += 0x400;
     }
     if (g_nRemainderCnt) {
-        fn_801AD1DC(g_pBuffer, g_nRemainderCnt);
+        SNDVDReadSync_next(g_pBuffer, g_nRemainderCnt);
         g_nRemainderCnt = 0;
     }
     EXI2_CPR = 0;
@@ -197,12 +197,12 @@ void PCrwAsyncFSACK(void)
     int size;
 
     reply = &g_FsResult;
-    while ((size = fn_801ACB9C()) == 0)
+    while ((size = SNQueryData()) == 0)
         ;
-    fn_801ACC24(reply, size);
+    SNRead(reply, size);
     reply->mUnknown2 = 0;
     g_nFSLastError = reply->mResult;
-    fn_801ACDE0(reply, 8);
+    SNWrite(reply, 8);
     g_nRWasyncPhase = 0;
     if (g_FSCBFunc) {
         g_FSCBFunc(g_nFSLastError);
@@ -218,12 +218,12 @@ void PCrwSyncFSACK(void)
 
     reply = &g_FsResult;
     if (g_bDoFSACK) {
-        while ((size = fn_801ACB9C()) == 0)
+        while ((size = SNQueryData()) == 0)
             ;
-        fn_801ACC24(reply, size);
+        SNRead(reply, size);
         reply->mUnknown2 = 0;
         g_nFSLastError = reply->mResult;
-        fn_801ACDE0(reply, 8);
+        SNWrite(reply, 8);
         g_nRWasyncPhase = 0;
         if (g_FSCBFunc) {
             g_FSCBFunc(g_nFSLastError);
@@ -304,7 +304,7 @@ void EXI2TCHandler(__OSInterrupt interrupt, OSContext *context)
         }
         return;
     }
-    fn_801AD16C(buf, size);
+    SNDVDReadAsync_next(buf, size);
 }
 
 void SNInitEXI2TCHandler(void)

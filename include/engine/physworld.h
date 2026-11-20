@@ -2,7 +2,7 @@
 #define ENGINE_PHYSWORLD_H
 
 /* The rigid-body physics world (src/engine/physworld.cpp) and the body groups it steps
-   (src/engine/cu_801E274C.cpp). */
+   (src/engine/physgroup.cpp). */
 
 #include "engine/rigidbody.h"
 #include "engine/physconstraint.h"
@@ -15,45 +15,48 @@ struct BodyGroupNode {
     RigidBody *mpMember;
 };
 
-/* Object at +8 of a group (defined in another file). */
-class Class_801E299C {
+/* Steps a system's state vector through time (the interface src/engine/physstep.cpp defines
+   for its EulerIntegrator). */
+class Integrator {
 public:
-    int mUnknown0;
+    virtual ~Integrator();
+    virtual int Step(void *pStart, void *pStep) = 0;
+    virtual void Restore() = 0;
 
-    virtual void vfn_01();
-    virtual int vfn_02();
-    virtual int vfn_03();
+    IntegrableSystem *mpSystem;
 };
 
-class Class_801E274C : public IntegrableSystem {
+/* A system the physics world owns and steps. */
+class WorldSystem : public IntegrableSystem {
 public:
-    Class_801E274C();
-    virtual ~Class_801E274C();
-    virtual int vfn_05(int a, int b) = 0;
-    virtual int vfn_06() = 0;
-    void fn_801E279C(PhysicsWorld *pOwner);
+    WorldSystem();
+    virtual ~WorldSystem();
+    virtual int Step(int start, int end) = 0;
+    virtual void Restore() = 0;
+    void SetOwner(PhysicsWorld *pOwner);
 
     PhysicsWorld *mpOwner;
 };
 
-class BodyGroup : public Class_801E274C {
+/* A group of rigid bodies stepped as one system by its integrator. */
+class BodyGroup : public WorldSystem {
 public:
     BodyGroup(int count);
     virtual int GetState(float *pState);
     virtual int SetState(float *pState);
     virtual int GetDerivative(void *pStart, float *pRate);
     virtual ~BodyGroup();
-    virtual int vfn_05(int a, int b);
-    virtual int vfn_06();
-    virtual void vfn_07() = 0;
-    virtual int vfn_08(int a, int b) = 0;
-    void fn_801E2870(Class_801E299C *p);
-    int fn_801E2878(RigidBody *pMember);
-    int fn_801E28FC(RigidBody *pMember);
-    BodyGroupNode *fn_801E2C3C();
-    RigidBody *fn_801E2C64(BodyGroupNode **ppNode);
+    virtual int Step(int start, int end);
+    virtual void Restore();
+    virtual void ApplyForces(void *pStart) = 0;
+    virtual int AfterStep(int start, int end) = 0;
+    void SetIntegrator(Integrator *pIntegrator);
+    int AddBody(RigidBody *pMember);
+    int RemoveBody(RigidBody *pMember);
+    BodyGroupNode *FirstNode();
+    RigidBody *NextBody(BodyGroupNode **ppNode);
 
-    Class_801E299C *mpUnknown8;
+    Integrator *mpIntegrator;
     void *mpNodes;
     unsigned char mUnknown10;
 };

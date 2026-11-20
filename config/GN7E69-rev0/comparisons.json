@@ -26717,9 +26717,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801AA640.c",
+      "source": "src/engine/ppcdown.c",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AA640-0x801AC6B0 (src/engine/cu_801AA640.c), linker rows 0x801AA634-0x801AA640 and 0x801AC6A8-0x801AC6B0, assembly and compiler rows 0x801AA640-0x801AC6B0, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; 0x801AA81C, 0x801AAA6C, 0x801ABD9C, 0x801ABF30, 0x801ABFBC and 0x801AC074 (an end or start resting on layout, with no reference to the start of 0x801AAA6C, 0x801ABF30 or 0x801AC074) stay in the asm source without a comparison entry. Hand-written libsn runtime as top-level asm; the .text placement includes the section end padding 0x801AC6A8-0x801AC6B0. Comparison-only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801AA640-0x801AC6B0 (src/engine/ppcdown.c), linker rows 0x801AA634-0x801AA640 and 0x801AC6A8-0x801AC6B0, assembly and compiler rows 0x801AA640-0x801AC6B0, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; 0x801AA81C, 0x801AAA6C, 0x801ABD9C, 0x801ABF30, 0x801ABFBC and 0x801AC074 (an end or start resting on layout, with no reference to the start of 0x801AAA6C, 0x801ABF30 or 0x801AC074) stay in the asm source without a comparison entry. Hand-written libsn runtime as top-level asm; the .text placement includes the section end padding 0x801AC6A8-0x801AC6B0. Comparison-only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -26937,15 +26937,15 @@
       ]
     },
     {
-      "source": "src/engine/cu_801AC6B0.c",
+      "source": "src/engine/fileserver.c",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AC6B0-0x801AD424 (src/engine/cu_801AC6B0.c), linker row 0x801AC6A8-0x801AC6B0, assembly and compiler rows 0x801AC6B0-0x801AD424, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; the twelve file-server entries 0x801AC9A0-0x801AC9F8 (provisional/open rows that say not to count them independently) and 0x801AD244, 0x801AD2A8 and 0x801AD318 (ends or starts resting on layout) stay in the asm source without a comparison entry, as does 0x801AC8B0, whose lis/ori pairs address the twelve entries (a registered function may not reference an unregistered same-file function). Hand-written libsn runtime as top-level asm. Comparison-only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801AC6B0-0x801ACA00 (src/engine/fileserver.c), linker row 0x801AC6A8-0x801AC6B0, assembly row 0x801AC6B0-0x801ACA00, compiler row 0x801AC6B0-0x801AD424, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; the twelve file-server entries 0x801AC9A0-0x801AC9F8 (provisional/open rows that say not to count them independently) and 0x801AC8B0, whose lis/ori pairs address the twelve entries (a registered function may not reference an unregistered same-file function), stay in the asm source without a comparison entry. Hand-written libsn runtime as top-level asm. Comparison-only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801AC6B0",
-          "end": "0x801AD424"
+          "end": "0x801ACA00"
         }
       ],
       "functions": [
@@ -26958,104 +26958,119 @@
           "symbol": "fn_801AC974",
           "start": "0x801AC974",
           "end": "0x801AC9A0"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/proview.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x801ACA00-0x801AD424 (src/engine/proview.c), assembly row 0x801ACA00-0x801AD424, compiler row 0x801AC6B0-0x801AD424, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; 0x801AD244, 0x801AD2A8 and 0x801AD318 (ends or starts resting on layout) stay in the asm source without a comparison entry. Hand-written libsn runtime as top-level asm. Comparison-only; original bytes stay linked.",
+      "sections": [
         {
-          "symbol": "fn_801ACA00",
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801ACA00",
+          "end": "0x801AD424"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "SNInitComm",
           "start": "0x801ACA00",
           "end": "0x801ACB54"
         },
         {
-          "symbol": "fn_801ACB54",
+          "symbol": "SNInitInterrupts",
           "start": "0x801ACB54",
           "end": "0x801ACB9C"
         },
         {
-          "symbol": "fn_801ACB9C",
+          "symbol": "SNQueryData",
           "start": "0x801ACB9C",
           "end": "0x801ACC24"
         },
         {
-          "symbol": "fn_801ACC24",
+          "symbol": "SNRead",
           "start": "0x801ACC24",
           "end": "0x801ACDE0"
         },
         {
-          "symbol": "fn_801ACDE0",
+          "symbol": "SNWrite",
           "start": "0x801ACDE0",
           "end": "0x801ACF78"
         },
         {
-          "symbol": "fn_801ACF78",
+          "symbol": "SNOpen",
           "start": "0x801ACF78",
           "end": "0x801ACF7C"
         },
         {
-          "symbol": "fn_801ACF7C",
+          "symbol": "SNClose",
           "start": "0x801ACF7C",
           "end": "0x801ACF80"
         },
         {
-          "symbol": "fn_801ACF80",
+          "symbol": "SNHandler",
           "start": "0x801ACF80",
           "end": "0x801ACFD4"
         },
         {
-          "symbol": "fn_801ACFD4",
+          "symbol": "SNSelect",
           "start": "0x801ACFD4",
           "end": "0x801ACFEC"
         },
         {
-          "symbol": "fn_801ACFEC",
+          "symbol": "SNDeselect",
           "start": "0x801ACFEC",
           "end": "0x801AD000"
         },
         {
-          "symbol": "fn_801AD000",
+          "symbol": "SNWiggleSelect",
           "start": "0x801AD000",
           "end": "0x801AD028"
         },
         {
-          "symbol": "fn_801AD028",
+          "symbol": "SNSync",
           "start": "0x801AD028",
           "end": "0x801AD03C"
         },
         {
-          "symbol": "fn_801AD03C",
+          "symbol": "SNRead8",
           "start": "0x801AD03C",
           "end": "0x801AD07C"
         },
         {
-          "symbol": "fn_801AD07C",
+          "symbol": "SNWrite8",
           "start": "0x801AD07C",
           "end": "0x801AD0B0"
         },
         {
-          "symbol": "fn_801AD0B0",
+          "symbol": "SNRead32",
           "start": "0x801AD0B0",
           "end": "0x801AD0EC"
         },
         {
-          "symbol": "fn_801AD0EC",
+          "symbol": "SNWrite32",
           "start": "0x801AD0EC",
           "end": "0x801AD11C"
         },
         {
-          "symbol": "fn_801AD11C",
+          "symbol": "SNDVDRead_init",
           "start": "0x801AD11C",
           "end": "0x801AD16C"
         },
         {
-          "symbol": "fn_801AD16C",
+          "symbol": "SNDVDReadAsync_next",
           "start": "0x801AD16C",
           "end": "0x801AD1DC"
         },
         {
-          "symbol": "fn_801AD1DC",
+          "symbol": "SNDVDReadSync_next",
           "start": "0x801AD1DC",
           "end": "0x801AD244"
         },
         {
-          "symbol": "fn_801AD380",
+          "symbol": "SNDVDWriteNoDMA_next",
           "start": "0x801AD380",
           "end": "0x801AD424"
         }
@@ -28796,102 +28811,6 @@
           "symbol": "PerJoyDriverPollPADs",
           "start": "0x801E26FC",
           "end": "0x801E274C"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801E274C.cpp",
-      "profile": "game_cpp",
-      "evidence": "E3 lane draft of the C++ container classes over 0x801E274C-0x801E2CB4 (no NASCAR match); evidence.tsv function rows and the compiler row for this range, plus the exact data row 0x802B1200-0x802B1290 (vtables). Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801E274C",
-          "end": "0x801E2CB4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1200",
-          "end": "0x802B1290"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__14Class_801E274C",
-          "start": "0x801E274C",
-          "end": "0x801E2768"
-        },
-        {
-          "symbol": "_._14Class_801E274C",
-          "start": "0x801E2768",
-          "end": "0x801E279C"
-        },
-        {
-          "symbol": "fn_801E279C__14Class_801E274CP12PhysicsWorld",
-          "start": "0x801E279C",
-          "end": "0x801E27A4"
-        },
-        {
-          "symbol": "__9BodyGroupi",
-          "start": "0x801E27A4",
-          "end": "0x801E2818"
-        },
-        {
-          "symbol": "_._9BodyGroup",
-          "start": "0x801E2818",
-          "end": "0x801E2870"
-        },
-        {
-          "symbol": "fn_801E2870__9BodyGroupP14Class_801E299C",
-          "start": "0x801E2870",
-          "end": "0x801E2878"
-        },
-        {
-          "symbol": "fn_801E2878__9BodyGroupP9RigidBody",
-          "start": "0x801E2878",
-          "end": "0x801E28FC"
-        },
-        {
-          "symbol": "fn_801E28FC__9BodyGroupP9RigidBody",
-          "start": "0x801E28FC",
-          "end": "0x801E299C"
-        },
-        {
-          "symbol": "vfn_05__9BodyGroupii",
-          "start": "0x801E299C",
-          "end": "0x801E2A28"
-        },
-        {
-          "symbol": "vfn_06__9BodyGroup",
-          "start": "0x801E2A28",
-          "end": "0x801E2A60"
-        },
-        {
-          "symbol": "GetState__9BodyGroupPf",
-          "start": "0x801E2A60",
-          "end": "0x801E2AF4"
-        },
-        {
-          "symbol": "SetState__9BodyGroupPf",
-          "start": "0x801E2AF4",
-          "end": "0x801E2B88"
-        },
-        {
-          "symbol": "GetDerivative__9BodyGroupPvPf",
-          "start": "0x801E2B88",
-          "end": "0x801E2C3C"
-        },
-        {
-          "symbol": "fn_801E2C3C__9BodyGroup",
-          "start": "0x801E2C3C",
-          "end": "0x801E2C64"
-        },
-        {
-          "symbol": "fn_801E2C64__9BodyGroupPP13BodyGroupNode",
-          "start": "0x801E2C64",
-          "end": "0x801E2CB4"
         }
       ]
     },
