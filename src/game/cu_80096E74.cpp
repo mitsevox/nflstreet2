@@ -16,11 +16,19 @@ Entry_8009C684 *fn_8009C6F4(Entry_800AF82C *pEntries, Block_8009C6F4 *pBlock,
 extern float lbl_803EA934;
 extern float lbl_803EA938;
 
+extern "C" {
+/* fn_8009CD00 callback that puts the reach target at the origin; nothing
+   in the game passes it. */
+static void _ReachClearTarget(Object_80039F5C *p, Vector_80039F5C *pOut, Data_80096E74 *pData)
+{
+    pOut->mX = pOut->mY = pOut->mZ = 0.0f;
+}
+}
+
 /* fn_8009CD00 callback: puts pOut at the wrist joint of the side pData
    names (1 = right), raised by lbl_803EA938, and once pData's end time has
    passed calls fn_8009CE88 on that side's +200 (right) or +108 block. The
    clamped progress t is computed but never used. */
-
 
 extern "C" void fn_80096E74(Object_80039F5C *p, Vector_80039F5C *pOut, Data_80096E74 *pData)
 {

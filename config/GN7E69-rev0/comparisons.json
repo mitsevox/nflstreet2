@@ -34664,7 +34664,7 @@
     {
       "source": "src/game/cu_80096E74.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extents fn_80096E74 and fn_8009CD00 and the literal-pool slice 0x80296158-0x80296198 they reference (fn_8009CD00 passes the lwrist/rwrist names of that slice); split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. The .text placement spans both registered extents and the unregistered bodies between them. No original file boundary or whole-unit promotion is claimed.",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extents fn_80096E74 and fn_8009CD00 and the literal-pool slice 0x80296158-0x80296198 they reference (fn_8009CD00 passes the lwrist/rwrist names of that slice); the slice's first word 0x80296158 is the pool of the discarded _ReachClearTarget (linker row 0x80296158-0x8029615C); split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. The .text placement spans both registered extents and the unregistered bodies between them. No original file boundary or whole-unit promotion is claimed.",
       "sections": [
         {
           "section": ".text",
@@ -34690,6 +34690,9 @@
           "start": "0x8009CD00",
           "end": "0x8009CDEC"
         }
+      ],
+      "discarded": [
+        "_ReachClearTarget"
       ]
     },
     {
