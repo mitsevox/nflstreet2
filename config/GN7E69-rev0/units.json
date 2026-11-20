@@ -22451,13 +22451,19 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800E0818",
-          "end": "0x800E0850"
+          "end": "0x800E1954"
         },
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800E0AD8",
-          "end": "0x800E1870"
+          "start": "0x800E2550",
+          "end": "0x800E283C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E2F20",
+          "end": "0x800E2FE4"
         },
         {
           "section": ".rodata",
@@ -22485,20 +22491,8 @@
             "evidence": "evidence.tsv source-form 0x800E0694-0x800E0818"
           },
           {
-            "function": "fn_800E0850",
-            "evidence": "evidence.tsv source-form 0x800E0850-0x800E0AD8"
-          },
-          {
-            "function": "fn_800E1870",
-            "evidence": "evidence.tsv source-form 0x800E1870-0x800E1954"
-          },
-          {
             "function": "fn_800E1954",
             "evidence": "evidence.tsv source-form 0x800E1954-0x800E2550"
-          },
-          {
-            "function": "fn_800E2550",
-            "evidence": "evidence.tsv source-form 0x800E2550-0x800E283C"
           },
           {
             "function": "fn_800E283C",
@@ -22507,10 +22501,6 @@
           {
             "function": "fn_800E2ABC",
             "evidence": "evidence.tsv source-form 0x800E2ABC-0x800E2F20"
-          },
-          {
-            "function": "fn_800E2F20",
-            "evidence": "evidence.tsv source-form 0x800E2F20-0x800E2FE4"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
@@ -22525,12 +22515,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800DAEE4",
-          "end": "0x800DAF5C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DB074",
           "end": "0x800DB688"
         },
         {
@@ -22549,18 +22533,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800DD5E4",
-          "end": "0x800DD69C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DD780",
-          "end": "0x800DD838"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DD92C",
           "end": "0x800DD994"
         },
         {
@@ -22609,10 +22581,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_800DAF5C",
-            "evidence": "evidence.tsv source-form 0x800DAF5C-0x800DB074"
-          },
-          {
             "function": "fn_800DB688",
             "evidence": "evidence.tsv source-form 0x800DB688-0x800DB7A4"
           },
@@ -22635,14 +22603,6 @@
           {
             "function": "fn_800DD2E8",
             "evidence": "evidence.tsv source-form 0x800DD2E8-0x800DD5E4"
-          },
-          {
-            "function": "fn_800DD69C",
-            "evidence": "evidence.tsv source-form 0x800DD69C-0x800DD780"
-          },
-          {
-            "function": "fn_800DD838",
-            "evidence": "evidence.tsv source-form 0x800DD838-0x800DD92C"
           },
           {
             "function": "fn_800DD994",

@@ -31,7 +31,7 @@ extern "C" int fn_800DAF5C(Table_80089904 *pTable, int key, void *pContext,
     Point_8017886C direction;
     direction.mX = (signed char)p->mUnknown1008.mUnknown1 * 0.1f;
     direction.mY = (signed char)p->mUnknown1008.mUnknown2 * 0.1f;
-    int angle = (fn_801CFE40(direction.mY, direction.mX) - p->mMotion.mFacing) & 0xFFFFFF;
+    int angle = (direction.Heading() - p->mMotion.mFacing) & 0xFFFFFF;
     int foot = PlayerLocoGetLowerAnkle(p);
     unsigned char side = (unsigned char)fn_800DAEE4(p);
     int index = PlayerLocoFindTableEntry(pTable, angle, foot, side);
@@ -795,7 +795,8 @@ extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA,
 
 extern "C" int fn_800DCE2C(Object_80039F5C *p, unsigned char *pInfo)
 {
-    Point_8017886C point = fn_80177FE0();
+    Point_8017886C point;
+    point = fn_80177FE0();
     int result = 0;
     unsigned int chance;
     switch (pInfo[3]) {
@@ -806,94 +807,98 @@ extern "C" int fn_800DCE2C(Object_80039F5C *p, unsigned char *pInfo)
     case 5: chance = 5; break;
     default: chance = 0; break;
     }
-    if ((unsigned int)fn_802372EC(0, 100) >= chance) {
-        return result;
-    }
-    unsigned char role = p->mUnknown2914;
-    int check = 0;
-    if (fn_80177F70()) {
-        switch (pInfo[0]) {
-        case 1: result = 1; check = 1; break;
-        case 12:
-            if ((unsigned int)(role - 1) <= 1) {
-                result = !(fabsf(point.mX - p->mMotion.mPos.mX) >= 6.0f) ? 2 : 1;
-                check = 1;
-            }
-            if ((unsigned int)(role - 13) <= 2) {
-                if (fn_80178308() == p->mIdBytes[2]) {
-                    result = 0; check = 0;
-                } else {
+    if ((unsigned int)fn_802372EC(0, 100) < chance) {
+        unsigned char role = p->mUnknown2914;
+        int check = 0;
+        if (fn_80177F70()) {
+            switch (pInfo[0]) {
+            case 1: result = 1; check = 1; break;
+            case 12:
+                if ((unsigned int)(role - 1) <= 1) {
+                    result = !(fabsf(point.mX - p->mMotion.mPos.mX) >= 6.0f) ? 2 : 1;
+                    check = 1;
+                }
+                if ((unsigned int)(role - 13) <= 2) {
+                    if (fn_80178308() == p->mIdBytes[2]) {
+                        result = 0; check = 0;
+                    } else {
+                        result = 2; check = 1;
+                    }
+                }
+                if (role == 16 || role == 18 || role == 17) {
                     result = 2; check = 1;
                 }
-            }
-            if (role == 16 || role == 18 || role == 17) {
-                result = 2; check = 1;
-            }
-            break;
-        case 7:
-            if (p->mIdBytes[2] == fn_80178320()) { result = 2; check = 1; }
-            break;
-        case 4:
-            if (role == 5 || role == 9 || role == 6 || role == 8 || role == 7 || role == 4 || role == 24) {
-                result = !(fabsf(point.mX - p->mMotion.mPos.mX) >= 6.0f) ? 2 : 1;
-                check = 1;
-            }
-            break;
-        case 5:
-            if (role == 3) {
-                if (!(fabsf(point.mY - p->mMotion.mPos.mY) >= 3.0f)) { result = 2; check = 1; }
-            } else if ((unsigned int)(role - 1) <= 1 || role == 4 || role == 25) {
-                if (!(fabsf(point.mX - p->mMotion.mPos.mX) <= 6.0f)) { result = 2; check = 1; }
-            }
-            break;
-        case 6:
-            if (role == 7 || role == 24) { result = 3; check = 1; }
-            break;
-        }
-    } else if (p->mIdBytes[2] == fn_80178308() && fn_801787A0()) {
-        if (pInfo[0] == 8) {
-            result = 3;
-            switch (pInfo[2]) {
-            case 2:
-                if (!(p->mMotion.mPos.mX <= point.mX + 0.25f)) result = 0;
-                break;
-            case 3:
-                if (!(p->mMotion.mPos.mX >= point.mX + 0.25f)) result = 0;
-                break;
-            case 4:
-                if (p->mIdBytes[2] == 1) result = 0;
                 break;
             case 7:
-                result = 0;
+                if (p->mIdBytes[2] == fn_80178320()) { result = 2; check = 1; }
+                break;
+            case 4:
+                if (role == 5 || role == 9 || role == 6 || role == 8 || role == 7 || role == 4 || role == 24) {
+                    result = !(fabsf(point.mX - p->mMotion.mPos.mX) >= 6.0f) ? 2 : 1;
+                    check = 1;
+                }
+                break;
+            case 5:
+                if (role == 3) {
+                    if (!(fabsf(point.mY - p->mMotion.mPos.mY) >= 3.0f)) { result = 2; check = 1; }
+                } else if ((unsigned int)(role - 1) <= 1 || role == 4 || role == 25) {
+                    if (!(fabsf(point.mX - p->mMotion.mPos.mX) <= 6.0f)) { result = 2; check = 1; }
+                }
+                break;
+            case 6:
+                if (role == 7 || role == 24) { result = 3; check = 1; }
                 break;
             }
-        }
-    } else if (pInfo[0] == 2) {
-        result = 3; check = 1;
-    }
-    if (check == 1) {
-        fn_80178308();
-        int valid = 1;
-        switch (pInfo[2]) {
-        case 2:
-            if (role != 7 && role != 24 && !(p->mMotion.mPos.mX < point.mX + 0.25f) &&
-                !(p->mMotion.mPos.mY < point.mY - 3.0f)) valid = 0;
-            break;
-        case 3:
-            if (role == 7 || role == 24 || p->mMotion.mPos.mX < point.mX + 0.25f) {
-                valid = 0;
-            } else if (!(p->mMotion.mPos.mY >= point.mY - 3.0f)) {
-                valid = 0;
+        } else if (p->mIdBytes[2] == fn_80178308() && fn_801787A0()) {
+            if (pInfo[0] == 8) {
+                result = 3;
+                switch (pInfo[2]) {
+                case 1:
+                    break;
+                case 2:
+                    if (!(p->mMotion.mPos.mX <= point.mX + 0.25f)) result = 0;
+                    break;
+                case 3:
+                    if (!(p->mMotion.mPos.mX >= point.mX + 0.25f)) result = 0;
+                    break;
+                case 4:
+                    if (p->mIdBytes[2] == 1) result = 0;
+                    break;
+                case 7:
+                    result = 0;
+                    break;
+                }
+                check = 0;
             }
-            break;
-        case 7:
-            valid = 0;
-            if (!(p->mMotion.mPos.mY - point.mY >= 2.5f)) {
-                valid = fabsf(p->mMotion.mPos.mX - point.mX) > 9.0f;
-            }
-            break;
+        } else if (pInfo[0] == 2) {
+            result = 3; check = 1;
         }
-        if (!valid) result = 0;
+        if (check == 1) {
+            fn_80178308();
+            int valid = 1;
+            switch (pInfo[2]) {
+            case 1:
+                break;
+            case 2:
+                if (role != 7 && role != 24 && !(p->mMotion.mPos.mX < point.mX + 0.25f) &&
+                    !(p->mMotion.mPos.mY < point.mY - 3.0f)) valid = 0;
+                break;
+            case 3:
+                if (role == 7 || role == 24 || p->mMotion.mPos.mX < point.mX + 0.25f) {
+                    valid = 0;
+                } else if (!(p->mMotion.mPos.mY >= point.mY - 3.0f)) {
+                    valid = 0;
+                }
+                break;
+            case 7:
+                valid = 0;
+                if (!(p->mMotion.mPos.mY - point.mY >= 2.5f)) {
+                    valid = fabsf(p->mMotion.mPos.mX - point.mX) > 9.0f;
+                }
+                break;
+            }
+            if (!valid) result = 0;
+        }
     }
     return result;
 }
@@ -992,7 +997,8 @@ extern "C" int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pA,
 {
     if (mode == 0) {
         fn_8009BD60(p);
-        Point_8017886C point = fn_80177FE0();
+        Point_8017886C point;
+        point = fn_80177FE0();
         if (point.mY - p->mMotion.mPos.mY > 2.5f || fn_801486A0() == 3 || fn_801486A0() == 2) {
             p->mUnknown1008.mUnknown0 = 2;
         } else {
@@ -1050,6 +1056,10 @@ extern "C" int fn_800DD838(Object_80039F5C *p)
             break;
         case 2:
             result = 2;
+            break;
+        case 6:
+        case 7:
+        case 8:
             break;
         case 4:
         case 9:

@@ -263,10 +263,11 @@ extern "C" void fn_800E0230(Object_80039F5C *p, Block_800E0230 *pBlock)
 extern "C" float fn_800E02D0(Object_80039F5C *p)
 {
     float value;
-    if (fn_80124C28(p, &value, 0x355555, 5.0f, 0.5f, p->mMotion.mFacing)) {
-        return (1.0f - value * 0.2f) * 0.5f + 0.5f;
+    if (!fn_80124C28(p, &value, 0x355555, 5.0f, 0.5f, p->mMotion.mFacing)) {
+        return 0.5f;
     }
-    return 0.5f;
+    float result = 1.0f - value * 0.2f;
+    return result * 0.5f + 0.5f;
 }
 
 extern "C" void fn_800E034C(Object_80039F5C *p, Block_800E0230 *pBlock)
@@ -396,10 +397,13 @@ extern "C" void fn_800E0818(int a, Vector_80039F5C *pOut, unsigned char *pIndex)
 extern "C" int fn_800E0850(Object_80039F5C *p)
 {
     Block_800E0850 *pBlock = (Block_800E0850 *)&p->mUnknown336;
-    pBlock->mUnknown0 = 0;
-    pBlock->mUnknown2 = 0;
+    Block_801718E8 *pMove = &p->mUnknown1160;
+    Vector_80039F5C velocity;
+    Vector_80039F5C pos;
     unsigned char index;
     int handle;
+    pBlock->mUnknown0 = 0;
+    pBlock->mUnknown2 = 0;
     fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &index, &handle);
     float time = fn_8009A270(handle);
     if (fn_801BE648(p->mpUnknown792) == 224) {
@@ -408,28 +412,28 @@ extern "C" int fn_800E0850(Object_80039F5C *p)
     }
     Ball_t *pBall = BallGet(index);
     BallGetPosition(pBall, &pBlock->mUnknown4);
-    Vector_80039F5C velocity;
     BallGetVelocity(pBall, &velocity);
-    float drop = time * 0.002981481608003378f;
-    drop = time * drop;
-    drop *= 0.5f;
-    float z = velocity.mZ * time - drop;
+    float drop = time * 0.002981481608003378f * time * 0.5f;
     pBlock->mUnknown4.mX = velocity.mX * time + pBlock->mUnknown4.mX;
-    pBlock->mUnknown4.mZ += z;
     pBlock->mUnknown4.mY = velocity.mY * time + pBlock->mUnknown4.mY;
+    pBlock->mUnknown4.mZ += velocity.mZ * time - drop;
     pBlock->mUnknown16 = (unsigned int)time;
     pBlock->mUnknown24 = (int)(time * 0.8f);
     pBlock->mUnknown20 = (int)(p->mpState->mUnknown3[0] << 16);
     if (pBlock->mUnknown20 > 0x800000) pBlock->mUnknown20 -= 0x1000000;
     if (pBlock->mUnknown24) pBlock->mUnknown20 /= pBlock->mUnknown24;
     if (fn_8009A578(handle) == 5) {
-        Vector_80039F5C pos = p->mMotion.mPos;
+        pos = p->mMotion.mPos;
         pos.mZ = (float)p->mMotion.mUnknown32;
     }
-    pBlock->mUnknown28 = (p->mFlags & 0x4000) != 0;
+    if (p->mFlags & 0x4000) {
+        pBlock->mUnknown28 = 1;
+    } else {
+        pBlock->mUnknown28 = 0;
+    }
     fn_800A3B58(p, 4, 0);
     if (fn_801BE648(p->mpUnknown792) == 227) {
-        p->mUnknown1160.mUnknown54 = 1;
+        pMove->mUnknown54 = 1;
         PlayerMoveBegin(p, 1, 28);
     }
     if (fn_801BE648(p->mpUnknown792) == 224 || fn_801BE648(p->mpUnknown792) == 225) {
@@ -761,12 +765,9 @@ extern "C" int fn_800E1778(Object_80039F5C *p)
 extern "C" int fn_800E1870(Object_80039F5C *p)
 {
     int result = 0;
-    int inArea = 0;
-    if (!(p->mMotion.mPos.mY >= fn_80177FFC(p->mIdBytes[2]).mY + 2.0f) &&
+    int inArea = !(p->mMotion.mPos.mY >= fn_80177FFC(p->mIdBytes[2]).mY + 2.0f) &&
         !(p->mMotion.mPos.mY <= fn_80177FFC(p->mIdBytes[2]).mY + 1.0f) &&
-        !(fabsf(p->mMotion.mPos.mX) >= 8.0f)) {
-        inArea = (unsigned int)(p->mUnknown2914 - 4) <= 8;
-    }
+        !(fabsf(p->mMotion.mPos.mX) >= 8.0f) && (unsigned int)(p->mUnknown2914 - 4) <= 8;
     if (inArea) {
         result = 1;
     }
@@ -788,7 +789,8 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
     marked.mY = 0.0f;
     marked.mX = 0.0f;
     Record_8011F4E0 *pTactics = fn_8011F4E0();
-    Point_8017886C goal = fn_80177FFC(p->mIdBytes[2]);
+    Point_8017886C goal;
+    goal = fn_80177FFC(p->mIdBytes[2]);
     Object_80039F5C *pLeft = 0, *pRight = 0, *pSpecial = 0, *pMarked = 0;
     unsigned int count = fn_80178D18(fn_80178320());
     for (unsigned char i = 0; i < count; i++) {
@@ -978,22 +980,18 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
 
 extern "C" void fn_800E2550(Object_80039F5C *p, Point_8017886C *pOut, int *pAngle)
 {
-    Point_8017886C point = fn_80177FFC(p->mIdBytes[2]);
+    Point_8017886C point;
+    point = fn_80177FFC(p->mIdBytes[2]);
     Block_800E1954 *pBlock = (Block_800E1954 *)&p->mUnknown336;
     PlayBookFormation_t *pTeam = PlayBookGetFormation(fn_80178320());
     PlayBookPosition_t *pEntry = PlaySetGetEntry(pTeam, p->mIdBytes[1], 0);
-    *pOut = pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18 : pEntry->mUnknown10;
+    pOut->mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
+    pOut->mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
     fn_80227638(pOut, pOut, &point);
-    if (!(pOut->mX >= 1.0f - fn_80178A08())) {
-        pOut->mX = 1.0f - fn_80178A08();
-    } else if (pOut->mX > fn_80178A08() - 1.0f) {
-        pOut->mX = fn_80178A08() - 1.0f;
-    }
-    if (!(pOut->mY >= 1.0f - fn_80178A44())) {
-        pOut->mY = 1.0f - fn_80178A44();
-    } else if (pOut->mY > fn_80178A44() - 1.0f) {
-        pOut->mY = fn_80178A44() - 1.0f;
-    }
+    pOut->mX = !(pOut->mX >= 1.0f - fn_80178A08()) ? 1.0f - fn_80178A08()
+        : (pOut->mX > fn_80178A08() - 1.0f ? fn_80178A08() - 1.0f : pOut->mX);
+    pOut->mY = !(pOut->mY >= 1.0f - fn_80178A44()) ? 1.0f - fn_80178A44()
+        : (pOut->mY > fn_80178A44() - 1.0f ? fn_80178A44() - 1.0f : pOut->mY);
     if (pBlock->mpUnknown36) {
         fn_8011F4E0();
         Object_80039F5C *pOther = pBlock->mpUnknown36;
@@ -1001,10 +999,22 @@ extern "C" void fn_800E2550(Object_80039F5C *p, Point_8017886C *pOut, int *pAngl
             Point_8017886C delta;
             fn_80227690(&delta, &p->mMotion, &pOther->mMotion);
             fn_801CFE40(delta.mY, delta.mX);
-            if (p->mUnknown2914 >= 17 && p->mUnknown2914 <= 18) {
-                pBlock->mUnknown78 = pTeam->mUnknown8.mUnknown4 == 11;
-            } else {
-                pBlock->mUnknown78 = !fn_8009FE24(p);
+            switch (p->mUnknown2914) {
+            case 17:
+            case 18:
+                if (pTeam->mUnknown8.mUnknown4 == 11) {
+                    pBlock->mUnknown78 = 1;
+                } else {
+                    pBlock->mUnknown78 = 0;
+                }
+                break;
+            default:
+                if (fn_8009FE24(p)) {
+                    pBlock->mUnknown78 = 0;
+                } else {
+                    pBlock->mUnknown78 = 1;
+                }
+                break;
             }
             int ref = fn_800B0F98();
             if (fn_800B146C() && fn_8009BCE8(&ref) == pBlock->mpUnknown36) pBlock->mUnknown78 = 1;
@@ -1020,7 +1030,8 @@ extern "C" void fn_800E2550(Object_80039F5C *p, Point_8017886C *pOut, int *pAngl
             }
         }
     } else if (pBlock->mUnknown49 && fn_8009F780() && fn_8016EADC()) {
-        *pOut = pBlock->mUnknown40;
+        pOut->mX = pBlock->mUnknown40.mX;
+        pOut->mY = pBlock->mUnknown40.mY;
     } else {
         fn_800E3DCC(p, pOut);
     }
@@ -1091,7 +1102,8 @@ extern "C" int fn_800E283C(Object_80039F5C *p, int count, float *pValues, float 
 extern "C" void fn_800E2ABC(Object_80039F5C *p)
 {
     Block_800E1954 *pBlock = (Block_800E1954 *)&p->mUnknown336;
-    Point_8017886C point = fn_80177FFC(p->mIdBytes[2]);
+    Point_8017886C point;
+    point = fn_80177FFC(p->mIdBytes[2]);
     float random = fn_80237260(0);
     Point_8017886C target;
     target.mY = point.mY + 1.4f + random;
@@ -1179,12 +1191,14 @@ extern "C" int fn_800E2F20(Object_80039F5C *p, Point_8017886C *pPoint)
 {
     int result = 0;
     if (fn_801BE648(p->mpUnknown792) == 86) {
-        Point_8017886C delta = *pPoint;
+        Point_8017886C delta;
+        delta.mX = pPoint->mX;
+        delta.mY = pPoint->mY;
         if (!(fabsf(delta.mY - p->mMotion.mPos.mY) >= 1.0f)) {
             delta.mY = p->mMotion.mPos.mY;
             fn_80227690(&delta, &delta, &p->mMotion.mPos);
-            int angle = fn_801CFE40(delta.mY, delta.mX);
-            result = (unsigned int)(MathAngleDiff(p->mMotion.mFacing, angle) - 0x271C72) <= 0x31C71B;
+            unsigned int diff = MathAngleDiff(p->mMotion.mFacing, delta.Heading()) - 0x271C72;
+            result = diff <= 0x31C71B;
         }
     }
     return result;
