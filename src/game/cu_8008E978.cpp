@@ -9726,15 +9726,15 @@ extern char lbl_8031BDD4[];
 
 extern "C" void fn_800AA348(Entry_800AA80C *pEntries, int index)
 {
+    // FAKEMATCH: redundant zero initializer of the roster index; the second loop sets it again
+    unsigned int i = 0;
     int winner = fn_80178AE0();
 
     if (!(lbl_803EAA88->mUnknown16 & 0x80)) {
         Actor_801C009C *pActor = fn_80093BAC(pEntries[index].mUnknown0, 5);
-        unsigned short i;
-
         fn_800AA020();
-        for (i = 0; i < pActor->mUnknown4; i++) {
-            int slot = fn_80096440(AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown0);
+        for (unsigned int j = 0; j < pActor->mUnknown4; j++) {
+            int slot = fn_80096440(AnimSeqncrGetPlayerPtr(pActor, j)->mUnknown0);
             Object_80039F5C *p = fn_800606CC(pEntries[index].mUnknown0, slot);
 
             if (p != 0) {
@@ -9771,7 +9771,6 @@ extern "C" void fn_800AA348(Entry_800AA80C *pEntries, int index)
             if (pEntries != 0) {
                 unsigned char winnerSide = winner;
                 unsigned char loserSide = loser;
-                unsigned int i;
 
                 for (i = 0; i <= 6; i++) {
                     fn_8009604C(i, (int)PlyrGet(winnerSide, i));
@@ -9976,8 +9975,10 @@ extern "C" void fn_800AAAFC(void)
     } else {
         lbl_803EAA88->mUnknown14 = 0;
     }
+    unsigned int size = 0x16000;
+
     for (i = 0; i <= 1; i++) {
-        lbl_803EC964[i] = lbl_803EC960 + i * 0x16000;
+        lbl_803EC964[i] = lbl_803EC960 + i * size;
     }
     fn_800AA010(0);
 }
@@ -13489,13 +13490,10 @@ extern "C" int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut)
 extern "C" int fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     int result = 0;
-    int value = p->mRatings[8] - (pOther->mRatings[0] / 8 + pOther->mRatings[3] / 8);
+    short *pRatings = pOther->mRatings;
+    int value = p->mRatings[8] - (pRatings[0] / 8 + pRatings[3] / 8);
 
-    if (value < lbl_803EA9D4) {
-        value = lbl_803EA9D4;
-    } else if (value > lbl_803EA9D8) {
-        value = lbl_803EA9D8;
-    }
+    value = value < lbl_803EA9D4 ? lbl_803EA9D4 : (value > lbl_803EA9D8 ? lbl_803EA9D8 : value);
     if (fn_802372EC(0, lbl_803EA9D0) < value) {
         result = 1;
     }

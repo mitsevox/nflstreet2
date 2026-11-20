@@ -100,7 +100,8 @@ extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind
                     if (spread < 0) {
                         spread = 0;
                     }
-                    p->mTarget.mUnknownC = p->mTarget.mUnknownC + fn_802372EC(0, spread / params.mUnknownC) + params.mUnknown4;
+                    p->mTarget.mUnknownC += fn_802372EC(0, spread / params.mUnknownC);
+                    p->mTarget.mUnknownC += params.mUnknown4;
                     p->mTarget.mUnknownC = p->mTarget.mUnknownC < params.mUnknown4 ? params.mUnknown4
                                       : (p->mTarget.mUnknownC > params.mUnknown0 ? params.mUnknown0 : p->mTarget.mUnknownC);
                 }

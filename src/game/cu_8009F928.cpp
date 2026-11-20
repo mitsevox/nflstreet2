@@ -110,12 +110,17 @@ extern "C" void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned i
     }
 }
 
+/* Release-build assert: the check is passed to an empty inline function and compiles to nothing. */
+static inline void _DefPredAssert(int)
+{
+}
+#define DEFPRED_ASSERT(e) _DefPredAssert(e)
+
 /* Rolls whether p reacts to a loose ball (ball state 4 with play bit 24, 11
    or 12) within lbl_803EA9C4 of it: a p on the fn_80178320() side rolls
    rating 8 against lbl_803EA9C8 and sends message 24; otherwise p rolls
    rating 3 against a distance-weighted chance and sends message 23 with
    the ball index. Returns whether a message was sent. */
-
 
 extern "C" int fn_8009FB60(Object_80039F5C *p)
 {
@@ -134,6 +139,8 @@ extern "C" int fn_8009FB60(Object_80039F5C *p)
             if (p->mIdBytes[2] == fn_80178320()) {
                 short rating = p->mRatings[8];
 
+                // FAKEMATCH: compiled-out assert that the reaction chance is at most 1; its 1.0f enters the pool before 255.0f
+                DEFPRED_ASSERT(lbl_803EA9C8 <= 1.0f);
                 if (fn_802372EC(0, (unsigned int)(lbl_803EA9C8 * 255.0f)) < rating) {
                     memset(&message, 0, sizeof(message));
                     sent = 1;
