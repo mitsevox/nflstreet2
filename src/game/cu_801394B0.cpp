@@ -519,7 +519,7 @@ void fn_8013A440(Ball_t *pBall)
     fn_8013A048(&pBlock->mUnknown108, &pBall->mState.mUnknown18, flip);
 }
 
-void BallGetWindDrift(Vector_80039F5C *pAccel, Vector_80039F5C *pOut, float t)
+static void BallGetWindDrift(Vector_80039F5C *pAccel, Vector_80039F5C *pOut, float t)
 {
     Vector_80039F5C wind;
 
@@ -528,7 +528,7 @@ void BallGetWindDrift(Vector_80039F5C *pAccel, Vector_80039F5C *pOut, float t)
     fn_80227264(pOut, pAccel, 0.5f * t * t);
 }
 
-void BallApplyWindForce(Ball_t *pBall, float scale)
+static void BallApplyWindForce(Ball_t *pBall, float scale)
 {
     Vector_80039F5C wind;
     Vector_80039F5C force;
@@ -539,7 +539,7 @@ void BallApplyWindForce(Ball_t *pBall, float scale)
     BallApplyImpulse(pBall, &force, &pBall->mState.mPos);
 }
 
-void BallApplyWindForceDamped(Ball_t *pBall, float scale)
+static void BallApplyWindForceDamped(Ball_t *pBall, float scale)
 {
     Vector_80039F5C wind;
     Vector_80039F5C force;
@@ -581,7 +581,7 @@ void BallApplyContactForce(Ball_t *pBall, float dt)
     AudmonEventPostArgs(0x1F, &pBall->mState.mPos, (unsigned int)(force.mZ * 65536.0f), 0, 0);
 }
 
-void BallApplyWobble(Ball_t *pBall)
+static void BallApplyWobble(Ball_t *pBall)
 {
     Vector_80039F5C *pVel = &pBall->mState.mUnknown54;
     Vector_80039F5C force;
@@ -686,7 +686,7 @@ void BallRestAtAngles(Ball_t *pBall, int *pAngles)
     pBall->mState.mUnknown34 = pBall->mState.mUnknown18;
 }
 
-void BallAddClampedE0(Ball_t *pBall, float delta)
+static void BallAddClampedE0(Ball_t *pBall, float delta)
 {
     float value = pBall->mState.mUnknownE0 + delta;
 
@@ -780,7 +780,7 @@ void fn_8013AD04(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin
     fn_8013A2F4(pBall, mode, spin, rate);
 }
 
-int BallIsSettled(Ball_t *pBall)
+static int BallIsSettled(Ball_t *pBall)
 {
     if (BallGetHolder(pBall)) {
         return 0;
