@@ -1,18 +1,22 @@
-"""Tests for the file-closing tools: naming, rename, the constant check, the dump flag and the
-sibling tables."""
+"""Tests for the file-closing tools: naming, rename, the constant check, the dump flag, the
+sibling tables, and how the closed-file count and comparisons see a unit's holdouts."""
 from pathlib import Path
 import struct
 import sys
+import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
 import closes
+import files_closed
 import function_compare
 import naming
 import prodg_cc
 import rename
 import sibling_tables
+import source_build as sb
 
 
 def ppc(*words):
@@ -301,6 +305,44 @@ class SiblingTables(unittest.TestCase):
         starts = [int(line.split('\t')[0], 16) for line in lines[1:]]
         self.assertEqual(starts, sorted(starts))
         self.assertEqual(len(starts), len(set(starts)), 'one row per GameCube function')
+
+
+class HoldoutReport(unittest.TestCase):
+    """A report unit with holdouts (source_build.holdout_object): a is linked, b (global) and c
+    (local) keep the original bytes at their target starts."""
+
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        native = self.root / 'build/source/obj/unit000_src_unit_c.o'
+        native.parent.mkdir(parents=True)
+        code = [{'name': f'.text.{n}', 'type': sb.SHT_PROGBITS, 'flags': sb.SHF_ALLOC | sb.SHF_EXECINSTR,
+                 'size': 8, 'align': 4, 'data': bytes(8)} for n in 'abc']
+        sb.write_object(native, code, [
+            {'name': 'a', 'value': 0, 'size': 8, 'shndx': 1, 'type': sb.STT_FUNC},
+            {'name': 'b', 'value': 0, 'size': 8, 'shndx': 2, 'type': sb.STT_FUNC},
+            {'name': 'c', 'value': 0, 'size': 8, 'shndx': 3, 'type': sb.STT_FUNC, 'bind': sb.STB_LOCAL}])
+        self.unit = {'source': 'src/unit.c', 'native_object_sha256': sb.sha256(native),
+                     'functions': [{'symbol': 'a', 'address': '0x80003110'}],
+                     'sections': [{'section': '.text', 'start': '0x80003110', 'end': '0x80003118', 'compiled': 8}],
+                     'holdouts': [{'symbol': 'b', 'start': '0x80003118', 'end': '0x80003120', 'compiled': 8},
+                                  {'symbol': 'c', 'start': '0x80003120', 'end': '0x80003128', 'compiled': 8}]}
+
+    def test_files_closed_checks_holdout_names_at_their_target_starts(self):
+        with patch.object(files_closed, 'ROOT', self.root):
+            labels = files_closed.unit_labels(0, self.unit)
+            self.assertEqual(sorted(labels), [('a', 0x80003110, True), ('b', 0x80003118, True),
+                                              ('c', 0x80003120, True)])
+            # Without the holdouts row only the linked function is the file's.
+            self.assertEqual(files_closed.unit_labels(0, dict(self.unit, holdouts=None)), [('a', 0x80003110, True)])
+
+    def test_a_public_holdout_resolves_at_its_target_start_for_other_files(self):
+        references, ambiguous = function_compare.reference_addresses(self.root, {'externals': {}}, [self.unit])
+        self.assertEqual((references, ambiguous), ({'a': 0x80003110, 'b': 0x80003118}, set()))
+        references, _ = function_compare.reference_addresses(self.root, {'externals': {}},
+                                                             [dict(self.unit, holdouts=None)])
+        self.assertEqual(references, {'a': 0x80003110})
 
 
 if __name__ == '__main__':

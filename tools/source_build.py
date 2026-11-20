@@ -599,8 +599,16 @@ def fold_object(native, folded, output):
 # (holdout_object) drops each holdout's code section and redirects every reference to it to
 # its target address.
 
+# The ruling approves exactly the two released hulls. units.json's holdouts_approved must list
+# exactly these sources, so a further use needs a new owner ruling and a change here (and in
+# tests/test_source_build.py, which pins the real config to this set).
+HOLDOUTS_APPROVED = frozenset({"src/game/cu_8008E978.cpp", "src/game/cu_800EFC68.cpp"})
+
+
 def holdouts_approved(approval):
-    """The sources the owner approved for holdouts: {"sources": [...], "evidence": locator}."""
+    """The sources the owner approved for holdouts: {"sources": [...], "evidence": locator}.
+
+    A present list must equal HOLDOUTS_APPROVED; without one, no unit may hold out functions."""
     if approval is None:
         return set()
     if not isinstance(approval, dict) or set(approval) != {"sources", "evidence"} \
@@ -610,6 +618,10 @@ def holdouts_approved(approval):
         raise ValueError("holdouts_approved needs a list of distinct sources and the owner's approval as evidence")
     for source in approval["sources"]:
         repository_path(source)
+    if set(approval["sources"]) != HOLDOUTS_APPROVED:
+        raise ValueError("holdouts_approved must list exactly the sources the owner's ruling names ("
+                         + ", ".join(sorted(HOLDOUTS_APPROVED)) + "); a further use needs a new owner "
+                         "ruling and a change to source_build.HOLDOUTS_APPROVED")
     return set(approval["sources"])
 
 
@@ -642,6 +654,11 @@ def holdout_functions(unit, placed, approved, comparisons, by_name):
     for key in ("folded", "kept_locals", "link_roots"):
         if key in unit:
             raise ValueError(f"{source}: holdouts cannot be combined with {key}")
+    # plan() places a follows entry after a section the native object names; a holdouts unit's
+    # code is linked from the derived object's run sections instead, so the two cannot combine.
+    if any(entry["follows"] is not None for entry in placed):
+        raise ValueError(f"{source}: holdouts cannot be combined with follows; link each data section whole "
+                         "in its own placement")
     rows = [row for entry in comparisons.get("units", []) if entry.get("source") == source
             for row in entry.get("functions", [])]
     result = []
@@ -664,6 +681,8 @@ def holdout_functions(unit, placed, approved, comparisons, by_name):
     if not code or len({entry["section"] for entry in code}) != 1 \
             or len({entry["placement"] for entry in code}) != 1:
         raise ValueError(f"{source}: holdouts need one code section linked in runs of one placement")
+    if code[0]["section"] != ".text":
+        raise ValueError(f"{source}: holdouts link code runs of section .text, not {code[0]['section']}")
     target = by_name[code[0]["placement"]]
     pieces = sorted([(entry["start"], entry["end"], "run") for entry in code]
                     + [(row["start"], row["end"], row["symbol"]) for row in result])

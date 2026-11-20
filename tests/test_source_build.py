@@ -782,6 +782,13 @@ class Holdouts(Fixture):
         {"symbol": "c", "start": "0x80003120", "end": "0x80003128"}]},
         {"source": "src/other.c", "functions": [{"symbol": "d", "start": "0x80003130", "end": "0x80003138"}]}]}
 
+    def setUp(self):
+        super().setUp()
+        # The fixture's file stands in for the two hulls the ruling pins (HoldoutsPin checks the real ones).
+        pinned = patch.object(sb, "HOLDOUTS_APPROVED", frozenset({"src/unit.c"}))
+        pinned.start()
+        self.addCleanup(pinned.stop)
+
     def held_manifest(self, functions=("b",), runs=(("0x80003110", "0x80003118"), ("0x80003120", "0x80003128")),
                       approved=("src/unit.c",)):
         manifest = copy.deepcopy(self.manifest)
@@ -831,8 +838,14 @@ class Holdouts(Fixture):
         self.assertEqual(self.load()[0][0]["flags"], ["-O2"])
 
     def test_holdouts_need_the_owners_approval(self):
-        with self.assertRaisesRegex(ValueError, "owner's approval for this file"):
+        with patch.object(sb, "HOLDOUTS_APPROVED", frozenset({"src/other.c"})), \
+                self.assertRaisesRegex(ValueError, "owner's approval for this file"):
             self.held(self.held_manifest(approved=("src/other.c",)))
+        # units.json cannot approve another source, or one more, than the tool pins.
+        for approved in (("src/other.c",), ("src/unit.c", "src/other.c")):
+            with self.subTest(approved=approved), \
+                    self.assertRaisesRegex(ValueError, "must list exactly the sources the owner's ruling names"):
+                self.held(self.held_manifest(approved=approved))
         manifest = self.held_manifest()
         del manifest["holdouts_approved"]
         with self.assertRaisesRegex(ValueError, "owner's approval for this file"):
@@ -862,6 +875,18 @@ class Holdouts(Fixture):
                 else {"symbols": ["a"], "discarded": ["z"], "evidence": "x"}
             with self.subTest(key=key), self.assertRaisesRegex(ValueError, f"cannot be combined with {key}"):
                 self.held(manifest)
+        # Data placed after the code (follows) is refused with a message, not left to plan().
+        manifest = self.held_manifest()
+        manifest["units"][0]["sections"][-1] = {"section": ".rodata", "placement": ".init", "start": "0x80003128",
+                                                "end": "0x80003130", "follows": ".text"}
+        with self.assertRaisesRegex(ValueError, "holdouts cannot be combined with follows"):
+            self.held(manifest)
+        # The runs are the unit's .text.
+        manifest = self.held_manifest()
+        for entry in manifest["units"][0]["sections"][:2]:
+            entry["section"] = ".init"
+        with self.assertRaisesRegex(ValueError, "code runs of section .text, not .init"):
+            self.held(manifest)
 
     def test_holdouts_are_registered_partials_of_the_same_file(self):
         with self.assertRaisesRegex(ValueError, "holdout x is not one function comparisons.json registers"):
@@ -999,6 +1024,20 @@ class Holdouts(Fixture):
         with patch.object(sb, "link_holdout") as linked:
             sb.check_holdouts(unit, *args[1:])
             linked.assert_not_called()
+
+
+class HoldoutsPin(unittest.TestCase):
+    """The ruling of 2026-11-19 approves exactly the two released hulls; a third needs a code change."""
+    HULLS = {"src/game/cu_8008E978.cpp", "src/game/cu_800EFC68.cpp"}
+
+    def test_the_tool_pins_the_two_hulls(self):
+        self.assertEqual(sb.HOLDOUTS_APPROVED, self.HULLS)
+
+    def test_the_real_units_json_approves_exactly_the_two_hulls(self):
+        manifest = json.loads((ROOT / "config/GN7E69-rev0/units.json").read_text())
+        self.assertEqual(sorted(manifest["holdouts_approved"]["sources"]), sorted(self.HULLS))
+        self.assertEqual(sb.holdouts_approved(manifest["holdouts_approved"]), self.HULLS)
+        self.assertLessEqual({unit["source"] for unit in manifest["units"] if "holdouts" in unit}, self.HULLS)
 
 
 class ReadOnlyDataAfterCode(Fixture):
