@@ -149,7 +149,7 @@ struct Block_800BC538;
 
 /* The unit's uninitialized objects after the static-init ones, declared here first and in address
    order: ProDG emits uninitialized globals in the order of their first declaration, and the target
-   holds them in this order (.sbss 0x803EC91C-0x803EC99C, .bss 0x8030C0B4-0x8030EFB4; evidence.tsv
+   holds them in this order (.sbss 0x803EC91C-0x803EC99C, .bss 0x8030C0B4-0x803192BC; evidence.tsv
    data rows). Defined after lbl_803EC918 at the end of the file. */
 extern void *lbl_803EC91C;
 extern void *lbl_803EC920;
@@ -188,6 +188,48 @@ extern Record_80097518 lbl_8030C2B8[3];
 extern Entry_80219044 lbl_8030E6D0;
 extern Callbacks_8030E6DC lbl_8030E6DC;
 extern Block_8030E6E8 lbl_8030E6E8;
+
+struct Item_800C2F94;
+
+typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void *pRecord,
+                                AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int phase);
+
+/* 8-byte records of the three 50-entry lists at 0x8030FF40. */
+struct Entry_800C3130 {
+    Item_800C2F94 *mpUnknown0;
+    short mUnknown4;
+    short mUnknown6;
+};
+
+/* 3044-byte records of the array at 0x803103F0. */
+struct Record_800C432C {
+    Table_80089904 mTable;
+    unsigned char mUnknown12[3032];
+};
+
+extern Callback_800A3530 lbl_8030EFB4[11];
+extern int lbl_8030EFE0[265];
+extern Object_80039F5C *lbl_8030F404[2][2];
+extern int lbl_8030F414[6];
+extern Block_8030F42C lbl_8030F42C;
+extern FeatAward_t lbl_8030F45C;
+extern Entry_80219044 lbl_8030F504;
+extern Entry_80219044 lbl_8030F510;
+extern int (*lbl_8030F51C[6])(Table_80089904 *pTable, unsigned short key, void *pRecord,
+                              AnimChannel_t *pEntries, PlyrSlot_t *p, unsigned int phase);
+extern AnimBlendList lbl_8030F534;
+extern void *lbl_8030F958[11];
+extern int lbl_8030F984[22];
+extern unsigned char lbl_8030F9DC[15];
+extern unsigned char lbl_8030F9EC[15];
+extern Source_800AF2AC lbl_8030F9FC[32];
+extern Block_800B21D0 lbl_8030FAFC;
+extern Handler_800B4D7C lbl_8030FB60[248];
+extern Entry_800C3130 lbl_8030FF40[3][50];
+extern Record_800C432C lbl_803103F0[10];
+extern Object_80039F5C *lbl_80317AD8[7];
+extern Record_800C432C lbl_80317AF4;
+extern Record_800C432C lbl_803186D8;
 
 
 
@@ -1660,9 +1702,6 @@ void SndgNullHook(void);
 
 extern "C" const char *lbl_802D87A4[];
 
-typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void *pRecord,
-                                AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int phase);
-
 extern "C" {
 int PlayerActionAnimIdlePhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
@@ -2915,19 +2954,6 @@ void HudCycleMashPrompt(void);
 struct Item_800C2F94 {
     unsigned char mUnknown0[8];
     float mUnknown8;
-};
-
-/* 8-byte records of the three 50-entry lists at 0x8030FF40. */
-struct Entry_800C3130 {
-    Item_800C2F94 *mpUnknown0;
-    short mUnknown4;
-    short mUnknown6;
-};
-
-/* 3044-byte records of the array at 0x803103F0. */
-struct Record_800C432C {
-    Table_80089904 mTable;
-    unsigned char mUnknown12[3032];
 };
 
 extern "C" {
@@ -5354,11 +5380,11 @@ extern float lbl_802DA69C[];
 }
 
 extern "C" {
-extern Table_80089904 lbl_80317AF4;
+extern Record_800C432C lbl_80317AF4;
 }
 
 extern "C" {
-extern Table_80089904 lbl_803186D8;
+extern Record_800C432C lbl_803186D8;
 }
 
 extern "C" {
@@ -35858,8 +35884,8 @@ extern "C" void fn_800CB484(Point_8017886C *pOut, Point_8017886C *pFrom, Point_8
 
 extern "C" void fn_800CB504(void)
 {
-    AnimFileGetStateAnimList(1, 143, &lbl_80317AF4);
-    AnimFileGetStateAnimList(1, 144, &lbl_803186D8);
+    AnimFileGetStateAnimList(1, 143, &lbl_80317AF4.mTable);
+    AnimFileGetStateAnimList(1, 144, &lbl_803186D8.mTable);
     lbl_803EAC44 = 0;
     lbl_803EAC48 = 0;
     lbl_803EAC4C = 0;
@@ -35889,7 +35915,7 @@ extern "C" int fn_800CB580(Object_80039F5C *p, int *pIndex, Point_8017886C targe
     distance = Vec2Magnitude(&delta);
     MathAngleDiff(facing, angle);
     lbl_803EAC48 = 144;
-    lbl_803EAC44 = &lbl_803186D8;
+    lbl_803EAC44 = &lbl_803186D8.mTable;
     for (i = 0; i < lbl_803EAC44->mCount; i++) {
         Info_80089904 *pInfo;
         int limit;
@@ -35989,7 +36015,7 @@ extern "C" int fn_800CB708(Object_80039F5C *p, int *pIndex, Point_8017886C targe
         }
     }
     lbl_803EAC48 = 143;
-    lbl_803EAC44 = &lbl_80317AF4;
+    lbl_803EAC44 = &lbl_80317AF4.mTable;
     for (i = 0; i < lbl_803EAC44->mCount; i++) {
         Info_80089904 *pInfo;
         float length;
@@ -37593,7 +37619,7 @@ PreSnapPhase lbl_803EC914;
 
 float lbl_803EC918 = 100.0f / gFrameTimeScale;
 
-/* .sbss 0x803EC91C-0x803EC99C and .bss 0x8030C0B4-0x8030EFB4 (declared in address order after the
+/* .sbss 0x803EC91C-0x803EC99C and .bss 0x8030C0B4-0x803192BC (declared in address order after the
    includes). Neutral address labels; lbl_803EC984 and lbl_803EC998 are words no code references. */
 void *lbl_803EC91C;
 void *lbl_803EC920;
@@ -37632,6 +37658,29 @@ Record_80097518 lbl_8030C2B8[3];
 Entry_80219044 lbl_8030E6D0;
 Callbacks_8030E6DC lbl_8030E6DC;
 Block_8030E6E8 lbl_8030E6E8;
+Callback_800A3530 lbl_8030EFB4[11];
+int lbl_8030EFE0[265];
+Object_80039F5C *lbl_8030F404[2][2];
+int lbl_8030F414[6];
+Block_8030F42C lbl_8030F42C;
+FeatAward_t lbl_8030F45C;
+Entry_80219044 lbl_8030F504;
+Entry_80219044 lbl_8030F510;
+int (*lbl_8030F51C[6])(Table_80089904 *pTable, unsigned short key, void *pRecord,
+                       AnimChannel_t *pEntries, PlyrSlot_t *p, unsigned int phase);
+AnimBlendList lbl_8030F534;
+void *lbl_8030F958[11];
+int lbl_8030F984[22];
+unsigned char lbl_8030F9DC[15];
+unsigned char lbl_8030F9EC[15];
+Source_800AF2AC lbl_8030F9FC[32];
+Block_800B21D0 lbl_8030FAFC;
+Handler_800B4D7C lbl_8030FB60[248];
+Entry_800C3130 lbl_8030FF40[3][50];
+Record_800C432C lbl_803103F0[10];
+Object_80039F5C *lbl_80317AD8[7];
+Record_800C432C lbl_80317AF4;
+Record_800C432C lbl_803186D8;
 
 unsigned int lbl_8030C084[12] = {
     (unsigned int)(gFrameTimeScale * 5416666.5f),
@@ -37647,3 +37696,277 @@ unsigned int lbl_8030C084[12] = {
     200000000,
     75000000,
 };
+
+/* An anim-state handler table as fn_801BE030 registers it: handler count and table. */
+struct AnimStateHandlers_t {
+    unsigned short mCount;
+    void *mpHandlers;
+};
+
+extern Table_800AA80C lbl_802D810C;
+
+/* .sdata 0x803EA8AC-0x803EAC98, defined in address order. Neutral address labels; the words no code
+   references are the unused objects of evidence.tsv's data rows. */
+int lbl_803EA8AC = 0;
+void *lbl_803EA8B0 = 0;
+float lbl_803EA8B4 = 0.49f;
+float lbl_803EA8B8 = 0.39f;
+unsigned char lbl_803EA8BC = 0;
+unsigned char lbl_803EA8BD = 0;
+unsigned char lbl_803EA8BE = 0;
+unsigned char lbl_803EA8BF = 0;
+unsigned char lbl_803EA8C0 = 0;
+int lbl_803EA8C4 = 0;
+unsigned char lbl_803EA8C8 = 0;
+int lbl_803EA8CC = 0;
+unsigned int lbl_803EA8D0 = 0;
+unsigned char lbl_803EA8D4 = 0;
+unsigned char lbl_803EA8D5 = 0;
+float lbl_803EA8D8 = 0.0095f;
+Entry_80094BC4 *lbl_803EA8DC = 0;
+int lbl_803EA8E0[2] = {0, -1};
+int lbl_803EA8E8[2] = {1, -1};
+int lbl_803EA8F0[2] = {2, -1};
+int lbl_803EA8F8[2] = {4, -1};
+int lbl_803EA900[2] = {3, -1};
+int lbl_803EA908[2] = {19, -1};
+int lbl_803EA910[2] = {20, -1};
+int lbl_803EA918[2] = {18, -1};
+Block_80096954 *lbl_803EA920 = 0;
+int lbl_803EA924[2] = {19, 56};
+float lbl_803EA92C = 0.5f;
+unsigned char lbl_803EA930 = 1;
+float lbl_803EA934 = 6.0f;
+float lbl_803EA938 = 1.0f;
+unsigned char lbl_803EA93C = 0;
+unsigned char lbl_803EA93D = 1;
+float lbl_803EA940 = 0.75f;
+unsigned char lbl_803EA944 = 0;
+Block_8009AB34 *lbl_803EA948 = 0;
+float lbl_803EA94C = 2.0f;
+float lbl_803EA950 = 0.5f;
+float lbl_803EA954 = 4.0f;
+float lbl_803EA958 = 1.0f;
+float lbl_803EA95C = 4.0f;
+float lbl_803EA960 = 1.0f;
+float lbl_803EA964 = 4.0f;
+float lbl_803EA968 = 1.0f;
+float lbl_803EA96C = 2.0f;
+float lbl_803EA970 = 1.0f;
+float lbl_803EA974 = 2.0f;
+float lbl_803EA978 = 0.75f;
+float lbl_803EA97C = 4.0f;
+float lbl_803EA980 = 1.0f;
+Block_8009B720 *lbl_803EA984[2] = {0, 0};
+unsigned char lbl_803EA98C = 0;
+int lbl_803EA990 = -1;
+char lbl_803EA994[7] = "Replay";
+unsigned char lbl_803EA99B = 0;
+int lbl_803EA99C = -1398101;
+int lbl_803EA9A0 = 1398101;
+int lbl_803EA9A4 = 5126371;
+Block_8009D474 *lbl_803EA9A8 = 0;
+float lbl_803EA9AC = 9.5f;
+float lbl_803EA9B0 = 5.0f;
+float lbl_803EA9B4 = 10.0f;
+float lbl_803EA9B8 = -6.0f;
+float lbl_803EA9BC = 90.0f;
+float lbl_803EA9C0 = 0.5f;
+float lbl_803EA9C4 = 15.0f;
+float lbl_803EA9C8 = 2.0f;
+float lbl_803EA9CC = 2.0f;
+int lbl_803EA9D0 = 392;
+int lbl_803EA9D4 = 12;
+int lbl_803EA9D8 = 255;
+int lbl_803EA9DC = 0;
+unsigned char lbl_803EA9E0 = 0;
+LivePlayPhase *lbl_803EA9E4 = &lbl_803EC900;
+void **lbl_803EA9E8 = 0;
+unsigned int lbl_803EA9EC = 0;
+unsigned char lbl_803EA9F0 = 0;
+void *lbl_803EA9F4 = 0;
+unsigned char lbl_803EA9F8 = 0;
+AnimStateHandlers_t lbl_803EA9FC = {11, lbl_8030EFB4};
+float lbl_803EAA04 = 2.0f;
+float lbl_803EAA08 = 7.0f;
+float lbl_803EAA0C = 80.0f;
+float lbl_803EAA10 = 30.0f;
+unsigned int lbl_803EAA14 = 0x40;
+unsigned char lbl_803EAA18 = 4;
+void (*lbl_803EAA1C[2])(int team) = {fn_800A6750, fn_800A67B8};
+void (*lbl_803EAA24[2])(int team) = {fn_800A680C, fn_800A69BC};
+void (*lbl_803EAA2C[2])(int team) = {fn_800A6B6C, fn_800A6C10};
+int lbl_803EAA34[2] = {0, 0};
+int lbl_803EAA3C[2] = {8, -8};
+int lbl_803EAA44[2] = {0, 0};
+unsigned char lbl_803EAA4C = 0;
+unsigned char lbl_803EAA4D = 0;
+unsigned char lbl_803EAA4E = 0;
+unsigned char lbl_803EAA4F = 0;
+unsigned char lbl_803EAA50 = 0;
+unsigned char lbl_803EAA51 = 0;
+float lbl_803EAA54 = 1.15f;
+float lbl_803EAA58 = 1.0f;
+float lbl_803EAA5C = 1.0f;
+float lbl_803EAA60 = 1.0f;
+float lbl_803EAA64 = 1.0f;
+float lbl_803EAA68 = 1.0f;
+float lbl_803EAA6C = 1.0f;
+float lbl_803EAA70 = 1.15f;
+float lbl_803EAA74 = 1.0f;
+float lbl_803EAA78 = 1.0f;
+float lbl_803EAA7C = 1.0f;
+float lbl_803EAA80 = 1.0f;
+unsigned char lbl_803EAA84 = 0;
+unsigned char lbl_803EAA85 = 0;
+Block_800AACD4 *lbl_803EAA88 = 0;
+Class_80297B90 *lbl_803EAA8C = &lbl_803EC904;
+int lbl_803EAA90 = 0;
+unsigned int lbl_803EAA94 = 0;
+unsigned char lbl_803EAA98 = 0;
+unsigned char lbl_803EAA99 = 0;
+unsigned char lbl_803EAA9A = 0;
+unsigned int lbl_803EAA9C = 0;
+Table_800AA80C *lbl_803EAAA0 = &lbl_802D810C;
+int lbl_803EAAA4 = 0;
+float lbl_803EAAA8 = -0.25f;
+float lbl_803EAAAC = -0.25f;
+float lbl_803EAAB0 = -0.25f;
+float lbl_803EAAB4 = -0.25f;
+Block_800ABD1C *lbl_803EAAB8 = 0;
+float lbl_803EAABC = 1.5f;
+float lbl_803EAAC0 = 0.8f;
+float lbl_803EAAC4 = 1.1f;
+float lbl_803EAAC8 = 2.0f;
+unsigned short lbl_803EAACC[3] = {0x3C, 0x19, 0xA};
+Block_800AD634 *lbl_803EAAD4 = 0;
+unsigned char lbl_803EAAD8[4] = {0, 0, 1, 0};
+unsigned char lbl_803EAADC[4] = {0, 1, 0, 0};
+AnimStateHandlers_t lbl_803EAAE0 = {6, lbl_8030F51C};
+unsigned char lbl_803EAAE8 = 0;
+unsigned char lbl_803EAAE9 = 0;
+int lbl_803EAAEC = 0;
+unsigned char lbl_803EAAF0 = 0;
+unsigned char lbl_803EAAF1 = 0;
+Block_800AEB1C *lbl_803EAAF4 = 0;
+int lbl_803EAAF8[2] = {31, 33};
+void *lbl_803EAB00 = 0;
+unsigned char lbl_803EAB04 = 0;
+int lbl_803EAB08 = 4;
+Block_800AFCB8 *lbl_803EAB0C = 0;
+unsigned char lbl_803EAB10[4] = {0x1B, 0x44, 1, 0x1F};
+Block_800B0CFC *lbl_803EAB14 = 0;
+int lbl_803EAB18 = 255;
+int *lbl_803EAB1C = 0;
+Block_800B21D0 *lbl_803EAB20 = 0;
+int lbl_803EAB24 = 0;
+int lbl_803EAB28 = 25;
+unsigned char lbl_803EAB2C = 0;
+unsigned char lbl_803EAB2D = 0;
+int lbl_803EAB30 = 0;
+Block_800B3660 *lbl_803EAB34 = 0;
+Class_80297B50 *lbl_803EAB38 = &lbl_803EC908;
+AnimStateHandlers_t lbl_803EAB3C = {248, lbl_8030FB60};
+unsigned char lbl_803EAB44 = 0xA;
+float lbl_803EAB48 = 2.0f;
+float lbl_803EAB4C = 0.75f;
+float lbl_803EAB50 = 0.2f;
+float lbl_803EAB54 = 0.5f;
+unsigned char lbl_803EAB58 = 8;
+unsigned char lbl_803EAB59 = 1;
+unsigned char lbl_803EAB5A = 1;
+float lbl_803EAB5C = 80.0f;
+Block_800B62D8 *lbl_803EAB60 = 0;
+unsigned char lbl_803EAB64 = 0x3C;
+unsigned char lbl_803EAB65 = 0x78;
+short lbl_803EAB66 = 4;
+short lbl_803EAB68 = 100;
+short lbl_803EAB6A = 10;
+short lbl_803EAB6C = 0;
+float lbl_803EAB70 = 6.0f;
+unsigned char lbl_803EAB74 = 0;
+Block_800B95B4 *lbl_803EAB78 = 0;
+unsigned char lbl_803EAB7C = 0;
+unsigned char lbl_803EAB7D = 0;
+unsigned char lbl_803EAB7E = 0;
+int lbl_803EAB80 = -1;
+PostPlayPhase *lbl_803EAB84 = &lbl_803EC90C;
+Block_800BA3F0 *lbl_803EAB88 = 0;
+int lbl_803EAB8C = 15;
+PreGamePhase *lbl_803EAB90 = &lbl_803EC910;
+unsigned char lbl_803EAB94 = 0;
+unsigned char lbl_803EAB95 = 0;
+unsigned char lbl_803EAB96 = 1;
+unsigned int lbl_803EAB98 = 0;
+unsigned int lbl_803EAB9C = 0;
+unsigned char lbl_803EABA0 = 0;
+unsigned char lbl_803EABA1 = 0;
+unsigned char lbl_803EABA2 = 0;
+unsigned char lbl_803EABA3 = 0;
+PreSnapPhase *lbl_803EABA4 = &lbl_803EC914;
+Block_800BFAD0 *lbl_803EABA8 = 0;
+float lbl_803EABAC[2] = {0.0f, 0.0f};
+unsigned char lbl_803EABB4 = 0;
+unsigned char lbl_803EABB5 = 0xA;
+unsigned char lbl_803EABB6 = 0xA;
+unsigned char lbl_803EABB7 = 0x3C;
+unsigned char lbl_803EABB8 = 0;
+unsigned char lbl_803EABB9 = 0;
+float lbl_803EABBC = 70000.0f;
+float lbl_803EABC0 = 0.9f;
+float lbl_803EABC4 = 0.9f;
+float lbl_803EABC8 = 50000.0f;
+float lbl_803EABCC = 0.9f;
+float lbl_803EABD0 = 0.9f;
+unsigned char lbl_803EABD4 = 0;
+unsigned char lbl_803EABD5 = 0;
+float lbl_803EABD8 = 35.0f;
+float lbl_803EABDC = 2.0f;
+float lbl_803EABE0 = 9.0f;
+int lbl_803EABE4 = 0;
+unsigned char lbl_803EABE8 = 0;
+short lbl_803EABEA = 100;
+float lbl_803EABEC = 0.5f;
+float lbl_803EABF0 = 0.9f;
+float lbl_803EABF4 = 5.0f;
+unsigned int lbl_803EABF8 = 0x50;
+float lbl_803EABFC = 100.0f;
+float lbl_803EAC00 = 70.0f;
+float lbl_803EAC04 = 110.0f;
+float lbl_803EAC08 = 3.0f;
+float lbl_803EAC0C = 1.0f;
+float lbl_803EAC10 = 15.0f;
+float lbl_803EAC14 = 0.6f;
+float lbl_803EAC18 = 5.0f;
+float lbl_803EAC1C = 45.0f;
+float lbl_803EAC20 = 1.0f;
+float lbl_803EAC24 = 1.0f;
+float lbl_803EAC28 = 1.0f;
+float lbl_803EAC2C = 4.0f;
+float lbl_803EAC30 = 25.0f;
+float lbl_803EAC34 = 900.0f;
+float lbl_803EAC38 = 16.0f;
+Block_800C9D6C *lbl_803EAC3C = 0;
+unsigned char lbl_803EAC40 = 0xA;
+unsigned char lbl_803EAC41 = 0xA;
+Table_80089904 *lbl_803EAC44 = 0;
+int lbl_803EAC48 = 0;
+unsigned char lbl_803EAC4C = 0;
+Point_8017886C lbl_803EAC50 = {0.0f, 0.0f};
+int lbl_803EAC58 = 0;
+int lbl_803EAC5C = 0;
+float lbl_803EAC60 = 1.0f;
+unsigned char lbl_803EAC64 = 0;
+unsigned char lbl_803EAC65 = 0;
+float lbl_803EAC68 = 1.8f;
+float lbl_803EAC6C = 1.4f;
+float lbl_803EAC70 = 2.0f;
+float lbl_803EAC74 = 45.0f;
+float lbl_803EAC78 = 1.75f;
+float lbl_803EAC7C = 3.0625f;
+float lbl_803EAC80 = 115.0f;
+float lbl_803EAC84 = 0.0f;
+float lbl_803EAC88 = 0.0f;
+unsigned char lbl_803EAC8C = 1;
+float lbl_803EAC90 = 0.7f;
+int lbl_803EAC94 = 0;
