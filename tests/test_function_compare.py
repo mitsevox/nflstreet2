@@ -1151,7 +1151,25 @@ class SectionBaseReferences(unittest.TestCase):
             'a pointer word is a referent, not a base': dict(relocations=[(8, 1, 0x10020)]),
             'a displacement relocation is a referent': dict(relocations=[(10, 109, 0x10020)]),
             'the section is not placed': dict(relocations=self.pair(0x10020), placed=False),
-            'the section is not placed whole': dict(relocations=self.pair(0x10020), extent=self.BSS - 0x20)}
+            'the section is not placed whole': dict(relocations=self.pair(0x10020), extent=self.BSS - 0x20),
+            # The low half alone (no high half to refuse): its own compiled-size bound must refuse.
+            'a lone low half whose use is past the compiled section, inside the placement': dict(
+                relocations=[(6, 4, 0x10020)], bss=self.BSS - 0x100),
+            # An update form moves the base: from .bss+size+0x10, lbzu reaches the last byte, and the
+            # second access, counted from the moved base, lies 16 KiB before the section.
+            'an lbzu moves the base out of the section': dict(
+                relocations=self.pair(self.BSS + 0x10), uses=[0x8C7F0000 | -0x7FFF & 0xFFFF, self.lbz(-0x7FFF)]),
+            'an stwu moves the base out of the section': dict(
+                relocations=self.pair(self.BSS + 0x10), uses=[0x967F0000 | -0x7FF0 & 0xFFFF, self.lwz(-0x7FF0)])}
+        # Every update form through the base, even one landing inside, cannot be followed: D-form
+        # lwzu lbzu stwu stbu lhzu lhau sthu lfsu lfdu stfsu stfdu (rD r3 or f1), and their indexed
+        # forms lwzux ... stfdux (rA r31, rB r4) after an in-range use.
+        for opcode in (33, 35, 37, 39, 41, 43, 45, 49, 51, 53, 55):
+            cases[f'update form, opcode {opcode}'] = dict(
+                relocations=self.pair(0x10020), uses=[opcode << 26 | 3 << 21 | 31 << 16 | -0x3FB8 & 0xFFFF])
+        for extended in (55, 119, 183, 247, 311, 375, 439, 567, 631, 695, 759):
+            cases[f'indexed update form, extended opcode {extended}'] = dict(
+                relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), 31 << 26 | 3 << 21 | 31 << 16 | 4 << 11 | extended << 1])
         for reason, arguments in cases.items():
             with self.subTest(reason), self.assertRaisesRegex(ValueError, refused):
                 self.fragment(**arguments)
