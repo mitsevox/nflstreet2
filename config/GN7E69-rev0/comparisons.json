@@ -25877,7 +25877,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x803A8D40",
-          "end": "0x803B4E20"
+          "end": "0x803A8D44"
         }
       ],
       "functions": [
