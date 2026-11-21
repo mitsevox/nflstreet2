@@ -1257,10 +1257,11 @@ def plan(sections, units, objects, externals):
         for name, (start, end) in (unit.get("storage") or {}).items():
             compiled = (unit.get("statics") or {}).get(name)
             if compiled is not None:
-                holder = next(s for s in sections if s["start"] <= start < end <= s["end"])
-                if holder["kind"] != "bss" or holder["name"] != compiled:
+                holder = next((s for s in sections if s["start"] <= start < end <= s["end"]), None)
+                if holder is None or holder["kind"] != "bss" or holder["name"] != compiled:
+                    where = holder["name"] if holder else "outside every target section"
                     raise ValueError(f"{unit['source']}: file static {name} of {compiled} must lie in the "
-                                     f"uninitialized target section {compiled}, not {holder['name']}")
+                                     f"uninitialized target section {compiled}, not {where}")
                 name = storage_reference(start)
             if name in defined or name in externals:
                 raise ValueError(f"{unit['source']}: symbol {name} is already defined elsewhere")

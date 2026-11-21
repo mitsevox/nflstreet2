@@ -13,6 +13,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 import source_build as sb
+import toolchain
 
 
 def synthetic_dol():
@@ -723,10 +724,15 @@ class FileStaticStorage(Fixture):
         for message, rows in cases:
             with self.subTest(message=message), self.assertRaisesRegex(ValueError, message):
                 self.derive(self.storage(rows))
-        # A global object, a local in initialized data, and a name defined twice are not file statics.
+        # A global object, a local in initialized data, and a name defined twice are not file statics;
+        # nor are a sized symbol of another type (a function) in .bss, a size-0 label in .bss, and an
+        # object that runs past the end of its section.
         for symbols in ([dict(self.STATICS[1], bind=sb.STB_GLOBAL), self.STATICS[2]],
                         [dict(self.STATICS[1], shndx=2), self.STATICS[2]],
-                        [self.STATICS[1], self.STATICS[2], dict(self.STATICS[2], value=0)]):
+                        [self.STATICS[1], self.STATICS[2], dict(self.STATICS[2], value=0)],
+                        [dict(self.STATICS[1], type=sb.STT_FUNC), self.STATICS[2]],
+                        [dict(self.STATICS[1], size=0), self.STATICS[2]],
+                        [self.STATICS[1], dict(self.STATICS[2], value=6)]):
             with self.subTest(symbols=symbols), self.assertRaisesRegex(ValueError, "not a compiled COMMON symbol"):
                 self.derive(symbols=symbols, relocations=[])
         # The alignment rule uses the section's alignment at offset 0.
@@ -762,6 +768,11 @@ class FileStaticStorage(Fixture):
             [dict(self.ROWS[0], start="0x80004010", end="0x80004014"), self.ROWS[1]]))
         units[0]["statics"] = statics
         with self.assertRaisesRegex(ValueError, "must lie in the uninitialized target section .bss, not .data2"):
+            sb.plan(self.sections, units, objects, externals)
+        units, externals, _ = self.load(self.storage_manifest())
+        units[0]["statics"] = statics
+        units[0]["storage"]["s_First"] = (0x90000000, 0x90000004)  # past load_manifest: in no target section
+        with self.assertRaisesRegex(ValueError, "uninitialized target section .bss, not outside every target"):
             sb.plan(self.sections, units, objects, externals)
         units, externals, _ = self.load(self.storage_manifest())
         units[0]["statics"] = {"s_First": ".sbss", "s_Second": ".bss"}
@@ -1279,6 +1290,52 @@ class Holdouts(Fixture):
         with patch.object(sb, "link_holdout") as linked:
             sb.check_holdouts(unit, *args[1:])
             linked.assert_not_called()
+
+    def test_a_lone_holdout_link_resolves_mapped_file_statics_to_their_rows(self):
+        # The holdout b (lis r3 / addi r3 to a file static of .sbss) is linked alone at its target
+        # start by the real linker. The static must resolve to its storage row, or an exact holdout
+        # would read as different and pass the "is exact" refusal by default.
+        compilers = toolchain.recorded("compilers")
+        compiler = compilers / "ProDG/3.9.3" if compilers else sb.ROOT / "build/toolchain/ProDG/3.9.3"
+        wrapper = toolchain.recorded("wibo") or sb.ROOT / "build/toolchain/wibo"
+        if not ((compiler / "ngcld.exe").is_file() and wrapper.is_file()):
+            self.skipTest("The pinned linker is installed by build.py configure")
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        native = Path(temporary.name) / "unit.o"
+        code = bytes.fromhex("3c60000038630000")
+        sb.write_object(native, [dict(text(8), name=".text.a"), dict(text(8), name=".text.b", data=code),
+                                 dict(text(8), name=".text.c"), rodata(8), bss(8, name=".sbss")],
+                        [{"name": "a", "value": 0, "size": 8, "shndx": 1, "type": sb.STT_FUNC},
+                         {"name": "b", "value": 0, "size": 8, "shndx": 2, "type": sb.STT_FUNC},
+                         {"name": "c", "value": 0, "size": 8, "shndx": 3, "type": sb.STT_FUNC,
+                          "bind": sb.STB_LOCAL},
+                         {"name": "s_Static", "value": 0, "size": 4, "shndx": 5, "bind": sb.STB_LOCAL,
+                          "type": sb.STT_OBJECT}])
+        # Symbols: 1 the file, 2-6 the section symbols, 7 a, 8 b, 9 c, 10 s_Static (ADDR16_HA, ADDR16_LO).
+        with_relocations(native, 2, ((2, 10, 6, 0), (6, 10, 4, 0)))
+        binary = bytearray(self.binary)
+        binary[0x118:0x120] = bytes.fromhex("3c60800038635010")  # lis r3, 0x8000; addi r3, r3, 0x5010
+
+        def check(row_start):
+            manifest = self.held_manifest()
+            end = f"0x{int(row_start, 16) + 4:08X}"
+            manifest["units"][0]["storage"] = [{"symbol": "s_Static", "start": row_start, "end": end}]
+            unit = dict(self.held(manifest)[0][0], object=native)
+            sb.link_object(unit)
+            self.assertEqual(unit["statics"], {"s_Static": ".sbss"})
+            build = Path(temporary.name) / f"build_{row_start}"
+            with patch.object(sb, "BUILD", build):
+                sb.check_holdouts(unit, TARGET, self.sections, bytes(binary), {}, compiler, wrapper)
+            elf = build / "holdouts/src_unit_c_b/linked.elf"
+            placed = next(s for s in sb.read_elf(elf.read_bytes())[0] if s.get("data") and s["addr"] == 0x80003118)
+            return placed["data"][:8]
+
+        # The row the target encodes: the lone link is exact, so the holdout is refused.
+        with self.assertRaisesRegex(ValueError, "holdout b 0x80003118 is exact; link it"):
+            check("0x80005010")
+        # Another row: the static resolves there, the bytes differ, and the holdout is accepted.
+        self.assertEqual(check("0x80005024"), bytes.fromhex("3c60800038635024"))
 
     # Read-only data directly after the unit's code (follows), as for any unit.
     def following_manifest(self, start="0x80003128", end="0x80003130", **held):
