@@ -2309,7 +2309,7 @@
     {
       "source": "src/game/RouteArrow.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x8015A248-0x8015C25C (src/game/RouteArrow.cpp) and its data rows; one source linked with holdouts (owner ruling of 2026-11-20): the former three-function linked prefix and the 21 exact later functions are linked (source-form rows 0x8015AF48-0x8015B344 and 0x8015B834-0x8015BCAC), the three holdouts keep the original bytes; .rodata 0x802A3E40-0x802A3EF8 whole.",
+      "evidence": "evidence.tsv provisional unit row 0x8015A248-0x8015C25C (src/game/RouteArrow.cpp) and its data rows (.rodata 0x802A3E40-0x802A3EF8, .bss 0x8031C02C-0x8031C098, .sbss 0x803ECA60-0x803ECA6C); one source linked with holdouts (owner ruling of 2026-11-20), the non-exact functions keeping their original bytes; every data section linked whole.",
       "sections": [
         {
           "section": ".text",
@@ -2340,6 +2340,18 @@
           "placement": ".data3",
           "start": "0x802A3E40",
           "end": "0x802A3EF8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031C02C",
+          "end": "0x8031C098"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA60",
+          "end": "0x803ECA6C"
         }
       ],
       "holdouts": {
@@ -3331,6 +3343,12 @@
           "placement": ".data2",
           "start": "0x80289B64",
           "end": "0x80289B68"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC740",
+          "end": "0x802CC750"
         }
       ]
     },
@@ -3571,6 +3589,12 @@
           "placement": ".data2",
           "start": "0x80289B7C",
           "end": "0x80289B80"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC750",
+          "end": "0x802CC75C"
         }
       ]
     },
@@ -4704,13 +4728,19 @@
     {
       "source": "src/game/AnimMirror.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019D83C-0x8019D994 (src/game/AnimMirror.cpp) and its function rows.",
+      "evidence": "evidence.tsv unit row 0x8019D83C-0x8019D994 (src/game/AnimMirror.cpp), its function rows and the .data row 0x802F2684-0x802F26FC (_AnimMirror_aiBoneMap); complete .text and .data linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8019D83C",
           "end": "0x8019D994"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F2684",
+          "end": "0x802F26FC"
         }
       ]
     },
@@ -10998,7 +11028,7 @@
     {
       "source": "src/game/BallMarker.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded src/game/BallMarker.cpp unit, readonly pool, shared-state view, callback item layout, declarations and source-form rows. Original translation-unit extent remains provisional; the shared mutable state stays external; the helper 0x80163074 is part of this source.",
+      "evidence": "evidence.tsv bounded src/game/BallMarker.cpp unit, readonly pool, the .data row 0x802E989C-0x802E98E0 (_BallMarker_Table), callback item layout, declarations and source-form rows. Original translation-unit extent remains provisional; the helper 0x80163074 is part of this source.",
       "sections": [
         {
           "section": ".text",
@@ -11011,6 +11041,12 @@
           "placement": ".data3",
           "start": "0x802A4598",
           "end": "0x802A45D4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E989C",
+          "end": "0x802E98E0"
         }
       ]
     },
@@ -24179,7 +24215,7 @@
     {
       "source": "src/game/PlayArtRender.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv provisional/provisional membership, target function/data extents and instruction-supported shared state/source-form records; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes.",
+      "evidence": "evidence.tsv provisional/provisional membership, target function/data extents (.rodata 0x802AE01C-0x802AE094, .data 0x802F2734-0x802F2934, .sdata 0x803EB7D8-0x803EB7E8, .bss 0x8036550C-0x80365574) and instruction-supported shared state/source-form records; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes; every data section linked whole.",
       "sections": [
         {
           "section": ".text",
@@ -24209,13 +24245,19 @@
           "section": ".data",
           "placement": ".data4",
           "start": "0x802F2734",
-          "end": "0x802F2754"
+          "end": "0x802F2934"
         },
         {
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8036550C",
           "end": "0x80365574"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB7D8",
+          "end": "0x803EB7E8"
         }
       ],
       "holdouts": {
@@ -24576,6 +24618,18 @@
           "placement": ".sbss",
           "start": "0x803ECA04",
           "end": "0x803ECA0C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DBEBC",
+          "end": "0x802DBF2C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B6AC",
+          "end": "0x8031B6C4"
         }
       ],
       "holdouts": {

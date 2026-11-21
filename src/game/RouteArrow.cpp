@@ -62,12 +62,12 @@ void RouteArrowShutdown(RouteArrow_t *p)
 #include "game/Vec3Magnitude.h"
 #include "game/fn_800F06F4.h"
 
-extern "C" {
-extern unsigned char lbl_803ECA68;
-extern unsigned int lbl_803ECA64;
+static int _RouteArrow_iObjList;
+static unsigned int _RouteArrow_uNumShown;
+static unsigned char _RouteArrow_bEnabled;
+static RouteArrow_t *_RouteArrow_apArrows[27];
 
-extern int lbl_803ECA60;
-extern RouteArrow_t *lbl_8031C02C[27];
+extern "C" {
 void RouteArrowStartAtPlayer(RouteArrow_t *, float *);
 void RouteArrowInit(RouteArrow_t *);
 void RouteArrowShutdown(RouteArrow_t *);
@@ -110,7 +110,7 @@ int RouteArrowGetBlockCommand(RouteArrow_t *, unsigned char *);
 
 int RouteArrowDraw(RouteArrow_t *p)
 {
-    if (p->mbShown && lbl_803ECA68 == 1) {
+    if (p->mbShown && _RouteArrow_bEnabled == 1) {
         RouteArrowBuild(p);
         ArrowDraw(p->mArrow);
     }
@@ -575,7 +575,7 @@ void RouteArrowBuild(RouteArrow_t *p)
 void RouteArrowRegisterType(void)
 {
     ObjNewType_(14, sizeof(RouteArrow_t), 27, RouteArrowInit, RouteArrowShutdown);
-    ObjSetListObjFunc(lbl_803ECA60, 14, 0, RouteArrowDraw);
+    ObjSetListObjFunc(_RouteArrow_iObjList, 14, 0, RouteArrowDraw);
 }
 
 int RouteArrowGetBlockCommand(RouteArrow_t *p, unsigned char *pCommand)
@@ -605,44 +605,44 @@ void RouteArrowUnregisterType(void)
 
 RouteArrow_t *RouteArrowNew(void)
 {
-    RouteArrow_t *p = ObjNewInList(lbl_803ECA60, 14, 0, 0);
-    ObjSetPriority(lbl_803ECA60, p, 3);
+    RouteArrow_t *p = ObjNewInList(_RouteArrow_iObjList, 14, 0, 0);
+    ObjSetPriority(_RouteArrow_iObjList, p, 3);
     return p;
 }
 
 void RouteArrowDelete(RouteArrow_t *p)
 {
     if (p) {
-        ObjRemoveFromList(lbl_803ECA60, p);
+        ObjRemoveFromList(_RouteArrow_iObjList, p);
         VptTrashObject((int)p);
     }
 }
 
 void RouteArrowSysInit(int handle)
 {
-    lbl_803ECA60 = handle;
+    _RouteArrow_iObjList = handle;
     RouteArrowRegisterType();
-    RouteArrow_t **p = lbl_8031C02C;
+    RouteArrow_t **p = _RouteArrow_apArrows;
     RouteArrow_t **pLast = p + 26;
     do { *p++ = RouteArrowNew(); } while (p <= pLast);
-    lbl_803ECA64 = 0;
-    lbl_803ECA68 = 1;
+    _RouteArrow_uNumShown = 0;
+    _RouteArrow_bEnabled = 1;
 }
 
 void RouteArrowSysShutdown(void)
 {
-    RouteArrow_t **p = lbl_8031C02C;
+    RouteArrow_t **p = _RouteArrow_apArrows;
     RouteArrow_t **pLast = p + 26;
     do { RouteArrowDelete(*p++); } while (p <= pLast);
-    lbl_803ECA60 = 0;
+    _RouteArrow_iObjList = 0;
     RouteArrowUnregisterType();
-    lbl_803ECA64 = 0;
+    _RouteArrow_uNumShown = 0;
 }
 
 void RouteArrowUpdateHighlights(void)
 {
     for (int i = 0; i < 27; ++i) {
-        RouteArrow_t *p = lbl_8031C02C[i];
+        RouteArrow_t *p = _RouteArrow_apArrows[i];
         if (p->mpPlayer) {
             if (p->mHighlight > 0.1f) p->mHighlight *= 0.88f;
             else p->mHighlight = 0.1f;
@@ -655,15 +655,15 @@ RouteArrow_t *RouteArrowShow(Object_80039F5C *pPlayer, Point_8017886C *pPoint,
 {
     RouteArrow_t *p = 0;
     for (int i = 0; i < 27; ++i) {
-        if (!lbl_8031C02C[i]->mpPlayer) {
-            ++lbl_803ECA64;
-            lbl_8031C02C[i]->mbShown = 1;
-            lbl_8031C02C[i]->mbFlip = flag;
-            lbl_8031C02C[i]->mPendingTurn = 10;
-            lbl_8031C02C[i]->mpPlayer = pPlayer;
-            *(Point_8017886C *)&lbl_8031C02C[i]->mStartX = *pPoint;
-            lbl_8031C02C[i]->mpCommands = pCommands;
-            p = lbl_8031C02C[i];
+        if (!_RouteArrow_apArrows[i]->mpPlayer) {
+            ++_RouteArrow_uNumShown;
+            _RouteArrow_apArrows[i]->mbShown = 1;
+            _RouteArrow_apArrows[i]->mbFlip = flag;
+            _RouteArrow_apArrows[i]->mPendingTurn = 10;
+            _RouteArrow_apArrows[i]->mpPlayer = pPlayer;
+            *(Point_8017886C *)&_RouteArrow_apArrows[i]->mStartX = *pPoint;
+            _RouteArrow_apArrows[i]->mpCommands = pCommands;
+            p = _RouteArrow_apArrows[i];
             break;
         }
     }
@@ -677,7 +677,7 @@ void RouteArrowHide(RouteArrow_t *p)
     p->mbFlip = 0;
     p->mPendingTurn = 10;
     p->mpPlayer = 0;
-    --lbl_803ECA64;
+    --_RouteArrow_uNumShown;
 }
 
 void RouteArrowHighlight(RouteArrow_t *p)
@@ -687,6 +687,6 @@ void RouteArrowHighlight(RouteArrow_t *p)
 
 void RouteArrowSetEnabled(int value)
 {
-    lbl_803ECA68 = value;
+    _RouteArrow_bEnabled = value;
 }
 }

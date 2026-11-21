@@ -33,8 +33,9 @@ struct BallMarkerTable_t {
     BallMarkerObj_t *mpObject;
 };
 
+static BallMarkerTable_t _BallMarker_Table = {0};
+
 extern "C" {
-extern BallMarkerTable_t lbl_802E989C;
 int fn_800BA6F8(void);
 int fn_800BA864(void);
 int fn_800C47C4(void);
@@ -75,7 +76,7 @@ int BallMarkerObjDraw(BallMarkerObj_t *pObject);
 // is shown, and a scale that grows with the ball's height.
 void BallMarkerUpdateEntry(int index)
 {
-    BallMarkerEntry_t *pEntry = &lbl_802E989C.mEntries[index];
+    BallMarkerEntry_t *pEntry = &_BallMarker_Table.mEntries[index];
     Ball_t *pBall;
 
     pEntry->mEnabled = 0;
@@ -131,22 +132,22 @@ void BallMarkerCreate(int handle)
     BallMarkerRegister(handle);
     desc = data;
     if (fn_801486A0() == 1) {
-        lbl_802E989C.mCount = 3;
+        _BallMarker_Table.mCount = 3;
     } else {
-        lbl_802E989C.mCount = 1;
+        _BallMarker_Table.mCount = 1;
     }
-    lbl_802E989C.mpObject = (BallMarkerObj_t *)ObjNewInList(handle, 18, 0, &desc);
-    ObjSetPriority(handle, lbl_802E989C.mpObject, 3);
+    _BallMarker_Table.mpObject = (BallMarkerObj_t *)ObjNewInList(handle, 18, 0, &desc);
+    ObjSetPriority(handle, _BallMarker_Table.mpObject, 3);
 }
 
 void BallMarkerDestroy(int handle)
 {
-    if (lbl_802E989C.mpObject != 0) {
-        ObjRemoveFromList(handle, lbl_802E989C.mpObject);
-        VptTrashObject((int)lbl_802E989C.mpObject);
-        lbl_802E989C.mpObject = 0;
+    if (_BallMarker_Table.mpObject != 0) {
+        ObjRemoveFromList(handle, _BallMarker_Table.mpObject);
+        VptTrashObject((int)_BallMarker_Table.mpObject);
+        _BallMarker_Table.mpObject = 0;
     }
-    lbl_802E989C.mCount = 0;
+    _BallMarker_Table.mCount = 0;
     BallMarkerUnregister();
 }
 
@@ -156,7 +157,7 @@ void BallMarkerObjInit(BallMarkerObj_t *pObject, int *pArgs)
     pObject->mpUnknown14 = (void *)pArgs[0];
     pObject->mUnknownD8 = ResLoad(pObject->mpUnknown14, 10, 1);
     BallMarkerUpdateEntry(0);
-    pObject->mUnknown10C = lbl_802E989C.mEntries[0].mEnabled;
+    pObject->mUnknown10C = _BallMarker_Table.mEntries[0].mEnabled;
     ModelObjRelocateModelRes(pObject->mUnknownD8);
     fn_80235588(pObject->mUnknown18, 6);
     ModelObjSetModel(pObject->mUnknown18, pObject->mUnknownD8);
@@ -178,8 +179,8 @@ int BallMarkerObjDraw(BallMarkerObj_t *pObject)
     if (pObject->mUnknownD8 != 0 && pObject->mUnknown10C != 0) {
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
         TMRenderBindTexture(0, 0, 0);
-        for (unsigned int i = 0; i < lbl_802E989C.mCount; i++) {
-            if (lbl_802E989C.mEntries[i].mEnabled != 0) {
+        for (unsigned int i = 0; i < _BallMarker_Table.mCount; i++) {
+            if (_BallMarker_Table.mEntries[i].mEnabled != 0) {
                 if (fn_801486A0() == 1 && BallGetCurrentIndex() == i) {
                     ModelObjSetAmbientColor(pObject->mUnknown18, ConGetCurrentContext(),
                                0.341796875f, 0.0f, 0.0f, 1.0f);
@@ -189,9 +190,9 @@ int BallMarkerObjDraw(BallMarkerObj_t *pObject)
                 }
                 MatSetStack(VptGetMatrixStack());
                 MatPush();
-                MatTranslate(&lbl_802E989C.mEntries[i].mPosition);
+                MatTranslate(&_BallMarker_Table.mEntries[i].mPosition);
                 MatRotX(0x400000);
-                MatScale(lbl_802E989C.mEntries[i].mScale);
+                MatScale(_BallMarker_Table.mEntries[i].mScale);
                 ModelObjStoreMatrix(pObject->mUnknown18, ConGetCurrentContext());
                 MatSetStack(VptGetMatrixStack());
                 MatPop();
@@ -205,11 +206,11 @@ int BallMarkerObjDraw(BallMarkerObj_t *pObject)
 
 void BallMarkerUpdate(void)
 {
-    if (lbl_802E989C.mpObject != 0) {
-        lbl_802E989C.mpObject->mUnknown10C = 0;
-        for (unsigned int i = 0; i < lbl_802E989C.mCount; i++) {
+    if (_BallMarker_Table.mpObject != 0) {
+        _BallMarker_Table.mpObject->mUnknown10C = 0;
+        for (unsigned int i = 0; i < _BallMarker_Table.mCount; i++) {
             BallMarkerUpdateEntry(i);
-            lbl_802E989C.mpObject->mUnknown10C |= lbl_802E989C.mEntries[i].mEnabled;
+            _BallMarker_Table.mpObject->mUnknown10C |= _BallMarker_Table.mEntries[i].mEnabled;
         }
     }
 }
