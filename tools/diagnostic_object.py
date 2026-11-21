@@ -23,6 +23,20 @@ def access_width(word):
     return 4 * (32 - ((word >> 21) & 31)) if opcode in (46, 47) else ACCESS_WIDTH[opcode]
 
 
+def stores_register(word, register):
+    """Whether a multiple or string store, through any rA, can write `register` to memory: stmw stores
+    rS..r31, stswi stores rS onward for NB bytes (32 when NB is 0), wrapping from r31 to r0, and
+    stswx stores a length held in XER, which cannot be known here."""
+    opcode, source = word >> 26, (word >> 21) & 31
+    if opcode == 47:
+        return source <= register
+    extended = (word >> 1) & 0x3FF
+    if opcode == 31 and extended == 725:
+        count = (word >> 11) & 31 or 32
+        return (register - source) % 32 < (count + 3) // 4
+    return opcode == 31 and extended == 661
+
+
 def base_uses(code, at, register, strict=False):
     """The (displacement, width) of each D-form access through `register` after the instruction at
     `at` set it to an address, until an instruction overwrites it, a call clobbers it (a volatile
@@ -30,14 +44,17 @@ def base_uses(code, at, register, strict=False):
     indexed), or when a branch, or a call that a callee-saved base survives, ends the straight line
     while the register still holds the address: later loads through it cannot be followed. With
     `strict` (register_base), storing the address itself to memory is also None, as it is passed
-    on, and so is an update form (lwzu, stwu, ...) through it, which moves the register to the
-    accessed address so that later displacements no longer count from the address."""
+    on: a store of the register, or a stmw, stswi or stswx through any register whose range can
+    cover it (stores_register). So is an update form (lwzu, stwu, ...) through it, which moves the
+    register to the accessed address so that later displacements no longer count from the address."""
     uses = []
     for position in range(at + 4, len(code) - 3, 4):
         word = struct.unpack_from('>I', code, position)[0]
         opcode, target, base = word >> 26, (word >> 21) & 31, (word >> 16) & 31
+        if strict and stores_register(word, register):
+            return None
         if opcode in ACCESS_WIDTH and base == register:
-            if strict and (opcode in UPDATES or opcode in STORES and (target == register or opcode == 47 and target <= register)):
+            if strict and (opcode in UPDATES or opcode in STORES and target == register):
                 return None
             displacement = word & 0xFFFF
             uses.append((displacement - 0x10000 if displacement & 0x8000 else displacement, access_width(word)))
@@ -68,7 +85,8 @@ def register_base(code, at, value, size):
     returns. GCC forms object+0x10000 for an object
     larger than 32 KiB and addresses its fields with negative displacements, so such a base lies
     past the section's end. A low half on a load or store is the accessed address itself, not a
-    base, and a base that is passed on, stored, indexed, moved by an update form, overwritten any
+    base, and a base that is passed on, stored (also by an stmw, stswi or stswx through any register
+    whose range can cover it), indexed, moved by an update form, overwritten any
     other way or live across a branch, or a callee-saved base live past a call, cannot be bounded."""
     if at % 4 != 2 or not 0 <= at - 2 <= len(code) - 4:
         return False
