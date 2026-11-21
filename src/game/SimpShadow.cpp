@@ -48,7 +48,7 @@ void GXLoadPosMtxImm(Mtx44 m, int a);
 void GXSetCurrentMtx(int a);
 }
 
-extern int lbl_803EBC98;
+extern int gGlibRenderMarkCursor;
 
 static SimpShadowEntry *_SimpShadow_apEntries[96];
 static ResTexture _SimpShadow_aTextures[1];
@@ -209,7 +209,7 @@ void SimpShadowDrawAll(void)
                 cursor = SimpShadowDrawQuad(cursor, _SimpShadow_apEntries[i], &scale);
             }
         }
-        lbl_803EBC98 = cursor;
+        gGlibRenderMarkCursor = cursor;
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
         GXSetChanMatColor(4, color);
     }

@@ -52,7 +52,7 @@ typedef struct TDbDb_801F88F0 {
     struct TDbDb_801F88F0 *pNext;
     TDbTbl_801F88F0 *pTables;
     int mId;
-    int mHeap;
+    void *mHeap;
     unsigned char mState;
 } TDbDb_801F88F0;
 
@@ -178,22 +178,16 @@ extern TDbPool_803E9654 lbl_803E9654;
 extern TDbPool_803E9654 lbl_803E9670;
 extern TDbPool_803E9654 lbl_803E968C;
 extern TDbPool_803E9654 _tDbIndexPool;
-extern unsigned int (*lbl_803EBE70)(const char *s);
-extern int (*lbl_803EBE74)(const char *a, const char *b, unsigned int n);
-extern char *(*lbl_803EBE78)(char *dst, const char *src);
-extern char *(*lbl_803EBE7C)(char *dst, const char *src, unsigned int n);
-extern void (*_tDbMemAllocInfoCallback)(TDbEvent_801F8A54 *pEvent);
-extern int _tDbGlobalMemoryHeapID;
 
 extern unsigned int strlen(const char *s);
 extern int strncmp(const char *a, const char *b, unsigned int n);
 extern char *strcpy(char *dst, const char *src);
 extern char *strncpy(char *dst, const char *src, unsigned int n);
-extern int _TDbMemPoolInit(TDbPool_803E9654 *pPool, int heap, int size, unsigned short max, unsigned short grow);
+extern int _TDbMemPoolInit(TDbPool_803E9654 *pPool, void *pHeap, int size, unsigned short max, unsigned short grow);
 extern void _TDbMemPoolDeinit(TDbPool_803E9654 *pPool);
-extern int TDbExtMemInit(int a, int size, int *pHeap);
-extern void TDbExtMemShutdown(int heap);
-extern int TDbExtMemAlloc(int heap, int size, void *ppOut);
+extern int TDbExtMemInit(int a, int size, void **ppHeap);
+extern void TDbExtMemShutdown(void *pHeap);
+extern int TDbExtMemAlloc(void *pHeap, int size, void *ppOut);
 extern int TDbExists(int db);
 extern int TDbTblDefaultDbGet(void);
 extern int _TDbIOSaveDatabase(TDbDb_801F88F0 *pDb, int a, int b);
@@ -227,10 +221,17 @@ extern int _TDbQryRowCopyTrig(int a, TDbQryBuf_801F9858 *pQry, int d, TDbTbl_801
 extern int _TDbIOLoadDatabase(TDbDb_801F88F0 *pDb, void *pFile, int a, int b, int c);
 extern int _TDbQryDestroy(TDbQry_801F89B8 *pQry);
 extern int _TDbTblDestroy(TDbTbl_801F88F0 *pTbl);
-extern void TDbExtMemFree(int heap, void *p, int size);
-extern int lbl_803EBE84;
-extern TDbDb_801F88F0 *lbl_803EBE88;
-extern TDbQry_801F89B8 *lbl_803EBE90;
+extern void TDbExtMemFree(void *pHeap, void *p, int size);
+unsigned int (*TDbStrlen)(const char *s) = 0;
+int (*TDbStrncmp)(const char *a, const char *b, unsigned int n) = 0;
+char *(*TDbStrcpy)(char *dst, const char *src) = 0;
+char *(*TDbStrncpy)(char *dst, const char *src, unsigned int n) = 0;
+void (*_tDbMemAllocInfoCallback)(TDbEvent_801F8A54 *pEvent) = 0;
+int _tDbDefaultDbStackUsed = -1;
+TDbDb_801F88F0 *_tDbDatabaseList = 0;
+void *_tDbGlobalMemoryHeapID = 0;
+TDbQry_801F89B8 *_tDbQueries = 0;
+const char *_tDbstrEmptyString = "";
 
 static inline void Notify_801F8A54(int type, int a, int b)
 {
@@ -264,7 +265,7 @@ static inline TDbDb_801F88F0 *LookupDb_801F9228(int db)
 {
     TDbDb_801F88F0 *pDb;
 
-    for (pDb = lbl_803EBE88; pDb != 0; pDb = pDb->pNext) {
+    for (pDb = _tDbDatabaseList; pDb != 0; pDb = pDb->pNext) {
         if (db == pDb->mId) {
             break;
         }
@@ -276,7 +277,7 @@ static inline TDbDb_801F88F0 *FindDb_801F88F0(int db)
 {
     TDbDb_801F88F0 *pDb;
 
-    for (pDb = lbl_803EBE88; pDb != 0; pDb = pDb->pNext) {
+    for (pDb = _tDbDatabaseList; pDb != 0; pDb = pDb->pNext) {
         if (db == pDb->mId) {
             break;
         }
@@ -293,7 +294,7 @@ static int _TDbTblDefaultDbFind(int tbl)
     int db;
     int fallback;
 
-    i = lbl_803EBE84;
+    i = _tDbDefaultDbStackUsed;
     db = 0;
     fallback = 0;
     while (i != 0) {
@@ -321,7 +322,7 @@ int _TDbTblFindDbTable(int db, int tbl, TDbDb_801F88F0 **ppDb, TDbTbl_801F88F0 *
     if (db == 0) {
         db = _TDbTblDefaultDbFind(tbl);
     }
-    for (pDb = lbl_803EBE88; pDb != 0; pDb = pDb->pNext) {
+    for (pDb = _tDbDatabaseList; pDb != 0; pDb = pDb->pNext) {
         if (db == pDb->mId) {
             break;
         }
@@ -352,7 +353,7 @@ static int _TDbQryRefGet(void)
     int ref;
 
     ref = 1;
-    pHead = lbl_803EBE90;
+    pHead = _tDbQueries;
     pQry = pHead;
     while (pQry != 0) {
         if (ref == pQry->mRef) {
@@ -395,8 +396,8 @@ int TDbInit(TDbInitParms_801F8A0C *pParms)
         lbl_803E95DC[i].mDb = 0;
         lbl_803E95DC[i].mTbl = 0;
     }
-    lbl_803EBE84 = 0;
-    lbl_803EBE88 = 0;
+    _tDbDefaultDbStackUsed = 0;
+    _tDbDatabaseList = 0;
     err = TDbExtMemInit(-1, pParms->mHeapSize, &_tDbGlobalMemoryHeapID);
     if (err == 0) {
         Notify_801F8A54(err, -1, -1);
@@ -418,15 +419,15 @@ int TDbInit(TDbInitParms_801F8A0C *pParms)
         NotifyEnd_801F8A54();
         pFuncs = pParms->pStrFuncs;
         if (pFuncs != 0) {
-            lbl_803EBE70 = (pFuncs->pStrlen != 0) ? pFuncs->pStrlen : strlen;
-            lbl_803EBE74 = (pFuncs->pStrncmp != 0) ? pFuncs->pStrncmp : strncmp;
-            lbl_803EBE78 = (pFuncs->pStrcpy != 0) ? pFuncs->pStrcpy : strcpy;
-            lbl_803EBE7C = (pFuncs->pStrncpy != 0) ? pFuncs->pStrncpy : strncpy;
+            TDbStrlen = (pFuncs->pStrlen != 0) ? pFuncs->pStrlen : strlen;
+            TDbStrncmp = (pFuncs->pStrncmp != 0) ? pFuncs->pStrncmp : strncmp;
+            TDbStrcpy = (pFuncs->pStrcpy != 0) ? pFuncs->pStrcpy : strcpy;
+            TDbStrncpy = (pFuncs->pStrncpy != 0) ? pFuncs->pStrncpy : strncpy;
         } else {
-            lbl_803EBE70 = strlen;
-            lbl_803EBE74 = strncmp;
-            lbl_803EBE78 = strcpy;
-            lbl_803EBE7C = strncpy;
+            TDbStrlen = strlen;
+            TDbStrncmp = strncmp;
+            TDbStrcpy = strcpy;
+            TDbStrncpy = strncpy;
         }
     }
     return err;
@@ -434,16 +435,16 @@ int TDbInit(TDbInitParms_801F8A0C *pParms)
 
 void TDbShutdown(void)
 {
-    if (lbl_803EBE84 != -1) {
-        while (lbl_803EBE88 != 0) {
-            TDbDestroy(lbl_803EBE88->mId);
+    if (_tDbDefaultDbStackUsed != -1) {
+        while (_tDbDatabaseList != 0) {
+            TDbDestroy(_tDbDatabaseList->mId);
         }
         _TDbMemPoolDeinit(&lbl_803E9670);
         _TDbMemPoolDeinit(&lbl_803E9654);
         _TDbMemPoolDeinit(&_tDbIndexPool);
         _TDbMemPoolDeinit(&lbl_803E968C);
         TDbExtMemShutdown(_tDbGlobalMemoryHeapID);
-        lbl_803EBE84 = -1;
+        _tDbDefaultDbStackUsed = -1;
     }
 }
 
@@ -468,10 +469,10 @@ int TDbCreate(int db, int size)
 {
     TDbDb_801F88F0 *pFind;
     TDbDb_801F88F0 *pDb;
-    int heap;
+    void *heap;
     int err;
 
-    for (pFind = lbl_803EBE88; pFind != 0; pFind = pFind->pNext) {
+    for (pFind = _tDbDatabaseList; pFind != 0; pFind = pFind->pNext) {
         if (db == pFind->mId) {
             break;
         }
@@ -495,10 +496,10 @@ int TDbCreate(int db, int size)
         pDb->mId = db;
         pDb->mHeap = heap;
         pDb->mState = 0;
-        if (lbl_803EBE88 == 0) {
-            lbl_803EBE88 = pDb;
+        if (_tDbDatabaseList == 0) {
+            _tDbDatabaseList = pDb;
         } else {
-            pDb->pNext = lbl_803EBE88;
+            pDb->pNext = _tDbDatabaseList;
             while (pDb->pNext->pNext != 0) {
                 pDb->pNext = pDb->pNext->pNext;
             }
@@ -517,13 +518,13 @@ int TDbDestroy(int db)
     TDbQry_801F89B8 *pNextQry;
     TDbTbl_801F88F0 *pTbl;
     TDbTbl_801F88F0 *pNextTbl;
-    int heap;
+    void *heap;
     int err;
 
     err = 0;
     pDb = FindDb_801F88F0(db);
     if (pDb != 0) {
-        for (pQry = lbl_803EBE90; pQry != 0; pQry = pNextQry) {
+        for (pQry = _tDbQueries; pQry != 0; pQry = pNextQry) {
             pNextQry = pQry->pNext;
             if (pDb == pQry->pDb) {
                 err = _TDbQryDestroy(pQry);
@@ -541,10 +542,10 @@ int TDbDestroy(int db)
             pDb->pTables = pNextTbl;
         }
         if (err == 0) {
-            if (pDb == lbl_803EBE88) {
-                lbl_803EBE88 = pDb->pNext;
+            if (pDb == _tDbDatabaseList) {
+                _tDbDatabaseList = pDb->pNext;
             } else {
-                for (pPrev = lbl_803EBE88; pPrev->pNext != pDb; pPrev = pPrev->pNext) {
+                for (pPrev = _tDbDatabaseList; pPrev->pNext != pDb; pPrev = pPrev->pNext) {
                 }
                 pPrev->pNext = pDb->pNext;
             }
@@ -595,7 +596,7 @@ int TDbLoad(int db, int a, int b, int c)
     TDbDb_801F88F0 *pDb;
     int err;
 
-    for (pDb = lbl_803EBE88; pDb != 0; pDb = pDb->pNext) {
+    for (pDb = _tDbDatabaseList; pDb != 0; pDb = pDb->pNext) {
         if (db == pDb->mId) {
             break;
         }
@@ -700,25 +701,25 @@ int TDbTblDefaultDbPush(int db, int *pTbls, int *pDbs)
     if (FindDb_801F88F0(db) == 0) {
         err = 5;
     } else {
-        if ((unsigned int)lbl_803EBE84 < 50) {
-            lbl_803E944C[lbl_803EBE84].mDb = db;
-            lbl_803E944C[lbl_803EBE84].mTbl = 0;
-            lbl_803EBE84++;
+        if ((unsigned int)_tDbDefaultDbStackUsed < 50) {
+            lbl_803E944C[_tDbDefaultDbStackUsed].mDb = db;
+            lbl_803E944C[_tDbDefaultDbStackUsed].mTbl = 0;
+            _tDbDefaultDbStackUsed++;
             if (pTbls != 0 && pDbs != 0) {
                 for (; pDbs[i] != -1 && pTbls[i] != -1; i++) {
-                    if ((unsigned int)(lbl_803EBE84 + i + 1) >= 50) {
+                    if ((unsigned int)(_tDbDefaultDbStackUsed + i + 1) >= 50) {
                         err = 2;
                         break;
                     }
-                    lbl_803E944C[lbl_803EBE84 + i].mDb = pDbs[i];
-                    lbl_803E944C[lbl_803EBE84 + i].mTbl = pTbls[i];
+                    lbl_803E944C[_tDbDefaultDbStackUsed + i].mDb = pDbs[i];
+                    lbl_803E944C[_tDbDefaultDbStackUsed + i].mTbl = pTbls[i];
                 }
             }
         } else {
             err = 2;
         }
         if (err == 0) {
-            lbl_803EBE84 += i;
+            _tDbDefaultDbStackUsed += i;
         }
     }
     return err;
@@ -731,7 +732,7 @@ int TDbTblDefaultDbPop(void)
     int err;
 
     err = 5;
-    i = lbl_803EBE84;
+    i = _tDbDefaultDbStackUsed;
     if (i != 0) {
         n = i;
         do {
@@ -742,7 +743,7 @@ int TDbTblDefaultDbPop(void)
                 break;
             }
         } while (i != 0);
-        lbl_803EBE84 = n;
+        _tDbDefaultDbStackUsed = n;
     }
     return err;
 }
@@ -753,7 +754,7 @@ int TDbTblDefaultDbGet(void)
     int db;
 
     db = 0;
-    i = lbl_803EBE84;
+    i = _tDbDefaultDbStackUsed;
     while (i != 0) {
         i--;
         if (lbl_803E944C[i].mTbl == 0) {
@@ -1204,7 +1205,7 @@ static inline TDbQry_801F89B8 *FindQry_801FA148(int ref)
 {
     TDbQry_801F89B8 *pQry;
 
-    for (pQry = lbl_803EBE90; pQry != 0; pQry = pQry->pNext) {
+    for (pQry = _tDbQueries; pQry != 0; pQry = pQry->pNext) {
         if (ref == pQry->mRef) {
             break;
         }

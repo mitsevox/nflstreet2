@@ -51,11 +51,15 @@ struct CamPlayJitterCtl_t {
     unsigned char mUnknown1[3];
     unsigned int mUnknown4,mUnknown8,mUnknownC;
 };
-extern "C" CamPlayJitterCtl_t lbl_802DBEBC;
-extern "C" CamPlayJitter_t lbl_802DBECC[];
+static CamPlayJitterCtl_t _CamPlay_Jitter = {0, {0, 0, 0}, 0, 0, 0};
+static CamPlayJitter_t _CamPlay_aJitterDefs[3] = {
+    {1, 20, -0.1f, 0.1f, {0.0f, 0.0f, 0.0f}, 1, 0, {0, 0}},
+    {1, 20, -0.2f, 0.2f, {0.0f, 0.0f, 0.0f}, 1, 0, {0, 0}},
+    {1, 20, -0.3f, 0.3f, {0.0f, 0.0f, 0.0f}, 1, 1, {0, 0}},
+};
 extern "C" CamPlayDef_t lbl_802DC718[];
-extern "C" CamPlayAngles_t lbl_8031B6B8;
-extern "C" CamPlayVec3_t lbl_8031B6AC;
+static CamPlayVec3_t _CamPlay_PanPoint;
+static CamPlayAngles_t _CamPlay_PanAngles;
 static float _CamPlay_fOrbitDir = 1.0f;
 static unsigned char _CamPlay_bOrbitToggled = 0;
 static float _CamPlay_fBlendFrames = 120.0f;
@@ -102,32 +106,32 @@ void CamPlayStart(GameCamera_t *);
 
 void CamPlayApplyJitter(GameCamera_t *camera, CamPlayVec3_t *point)
 {
-    unsigned int index = lbl_802DBEBC.mUnknown4;
-    if (lbl_802DBEBC.mUnknown0) {
-        unsigned int ticks = ++lbl_802DBEBC.mUnknown8;
-        unsigned int total = ++lbl_802DBEBC.mUnknownC;
+    unsigned int index = _CamPlay_Jitter.mUnknown4;
+    if (_CamPlay_Jitter.mUnknown0) {
+        unsigned int ticks = ++_CamPlay_Jitter.mUnknown8;
+        unsigned int total = ++_CamPlay_Jitter.mUnknownC;
         float scale = 1.0f;
-        if (lbl_802DBECC[index].mUnknown1C) scale -= (float)(total / lbl_802DBECC[index].mUnknown4);
-        if (ticks >= lbl_802DBECC[index].mUnknown0 && total <= lbl_802DBECC[index].mUnknown4) {
+        if (_CamPlay_aJitterDefs[index].mUnknown1C) scale -= (float)(total / _CamPlay_aJitterDefs[index].mUnknown4);
+        if (ticks >= _CamPlay_aJitterDefs[index].mUnknown0 && total <= _CamPlay_aJitterDefs[index].mUnknown4) {
             CamPlayVec3_t value;
-            float low = lbl_802DBECC[index].mUnknown8;
-            float range = lbl_802DBECC[index].mUnknownC-low;
+            float low = _CamPlay_aJitterDefs[index].mUnknown8;
+            float range = _CamPlay_aJitterDefs[index].mUnknownC-low;
             value.mX = scale*(low+range*((float)SyncRandGetRange(1,100)*0.01f));
             value.mZ = scale*(low+range*((float)SyncRandGetRange(1,100)*0.01f));
-            value.mY = lbl_802DBECC[index].mUnknown1D == 1 ? scale*(low+range*((float)SyncRandGetRange(1,100)*0.01f)) : 0.0f;
+            value.mY = _CamPlay_aJitterDefs[index].mUnknown1D == 1 ? scale*(low+range*((float)SyncRandGetRange(1,100)*0.01f)) : 0.0f;
             value.mX = value.mX < -0.3f ? -0.3f : (value.mX > 0.3f ? 0.3f : value.mX);
             value.mY = value.mY < -0.3f ? -0.3f : (value.mY > 0.3f ? 0.3f : value.mY);
             value.mZ = value.mZ < -0.3f ? -0.3f : (value.mZ > 0.3f ? 0.3f : value.mZ);
-            CamPlayVec3_t *dst = &lbl_802DBECC[index].mUnknown10;
+            CamPlayVec3_t *dst = &_CamPlay_aJitterDefs[index].mUnknown10;
             dst->mX = value.mX;
             dst->mY = value.mY;
             dst->mZ = value.mZ;
-            lbl_802DBEBC.mUnknown8 = 0;
+            _CamPlay_Jitter.mUnknown8 = 0;
         }
-        Vec3Add(point,point,&lbl_802DBECC[index].mUnknown10);
-        if (lbl_802DBEBC.mUnknownC >= lbl_802DBECC[index].mUnknown4) {
-            lbl_802DBEBC.mUnknown8 = 0;
-            if (lbl_802DBEBC.mUnknownC >= lbl_802DBECC[index].mUnknown4+10) lbl_802DBEBC.mUnknown0 = 0;
+        Vec3Add(point,point,&_CamPlay_aJitterDefs[index].mUnknown10);
+        if (_CamPlay_Jitter.mUnknownC >= _CamPlay_aJitterDefs[index].mUnknown4) {
+            _CamPlay_Jitter.mUnknown8 = 0;
+            if (_CamPlay_Jitter.mUnknownC >= _CamPlay_aJitterDefs[index].mUnknown4+10) _CamPlay_Jitter.mUnknown0 = 0;
         }
         CamPresetSetEaseRates(camera,2);
     }
@@ -143,14 +147,14 @@ void CamPlayPanWithBall(CamPlayVec3_t *point, CamPlayAngles_t *angles, CamPlayVe
     case 3: reset = 1; break;
     }
     if (reset) {
-        angles->mZ = lbl_8031B6B8.mZ;
-        point->mX = lbl_8031B6AC.mX;
+        angles->mZ = _CamPlay_PanAngles.mZ;
+        point->mX = _CamPlay_PanPoint.mX;
     } else {
         angles->mZ -= fn_801CFDD0(amount/length);
         if (mode == 4) amount = -amount;
         point->mX += amount;
-        lbl_8031B6B8.mZ = angles->mZ;
-        lbl_8031B6AC.mX = point->mX;
+        _CamPlay_PanAngles.mZ = angles->mZ;
+        _CamPlay_PanPoint.mX = point->mX;
     }
 }
 void CamPlayInit(GameCamera_t *camera)
@@ -351,7 +355,7 @@ void CamPlayStart(GameCamera_t *camera)
     state->mUnknown2C.mY = camera->mUnknownD4;
     state->mUnknown2C.mZ = camera->mUnknownD8;
     CamFreeClearVelocity(camera);
-    lbl_802DBEBC.mUnknown0 = 0;
+    _CamPlay_Jitter.mUnknown0 = 0;
     switch (camera->mUnknownA0) {
     case 1:
         if (BallsExist()) CamMainFollowBall(camera);
@@ -394,11 +398,11 @@ void CamPlayGetPosLimits(int index, unsigned int mode, float *a, float *b)
 }
 void CamPlayStartJitter(unsigned int index)
 {
-    if (!lbl_802DBEBC.mUnknown0 && GameOptionsGet(10)) {
-        lbl_802DBEBC.mUnknown0 = 1;
-        lbl_802DBEBC.mUnknown4 = index;
-        lbl_802DBEBC.mUnknown8 = 100;
-        lbl_802DBEBC.mUnknownC = 0;
+    if (!_CamPlay_Jitter.mUnknown0 && GameOptionsGet(10)) {
+        _CamPlay_Jitter.mUnknown0 = 1;
+        _CamPlay_Jitter.mUnknown4 = index;
+        _CamPlay_Jitter.mUnknown8 = 100;
+        _CamPlay_Jitter.mUnknownC = 0;
         AudmonEventPost(17,0);
     }
 }

@@ -8,14 +8,18 @@
 
 typedef int (*AnimUserOpcodeCallback_t)(void *pUser, int op, unsigned int state);
 
-extern unsigned char _Anim_ModuleActive;
-extern AnimUserOpcodeCallback_t _Anim_pUserOpcodeCallback;
-extern AnimUserOpcodeCallback_t _Anim_pUserOpcodeSkipCallback;
-extern int _Anim_SeqVersion;
-extern signed char _Anim_UserDataStackPosition;
-extern signed char _Anim_UserStateStackPosition;
-extern void *_Anim_pCurrentUserData[];
-extern unsigned int _Anim_UserCallbackState[];
+static unsigned char _Anim_ModuleActive = 0;
+static AnimUserOpcodeCallback_t _Anim_pUserOpcodeCallback = 0;
+static AnimUserOpcodeCallback_t _Anim_pUserOpcodeSkipCallback = 0;
+
+/* The animation sequence file version in use. */
+static int _Anim_SeqVersion = 1;
+
+/* The stacks of game data handed to the user opcode callback, and their tops. */
+static void *_Anim_pCurrentUserData[3];
+static unsigned int _Anim_UserCallbackState[3];
+static signed char _Anim_UserDataStackPosition;
+static signed char _Anim_UserStateStackPosition;
 
 int _AnimDoUserOpcodeCallback(int op)
 {

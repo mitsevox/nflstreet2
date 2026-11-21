@@ -2,16 +2,16 @@
 
 #include "engine/SysSetLastErrorFunc.h"
 
-extern unsigned char lbl_803EBBE8;
+static unsigned char _Curve_ModuleActive = 0;
 
 int CurveInit(void)
 {
     int error = 0;
 
-    if (lbl_803EBBE8) {
+    if (_Curve_ModuleActive) {
         error = 0x1E0001;
     } else {
-        lbl_803EBBE8 = 1;
+        _Curve_ModuleActive = 1;
     }
     SysSetLastErrorFunc(error);
     return error;
@@ -21,8 +21,8 @@ int CurveShutdown(void)
 {
     int error = 0;
 
-    if (lbl_803EBBE8) {
-        lbl_803EBBE8 = 0;
+    if (_Curve_ModuleActive) {
+        _Curve_ModuleActive = 0;
     } else {
         error = 0x1E0002;
     }

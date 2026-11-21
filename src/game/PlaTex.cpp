@@ -6,12 +6,24 @@
 #include "game/Row_8007BC34.h"
 #include "game/PlaTex.h"
 
+static char *_PlaTex_apBodyTypeNames[4] = {"HEAVY", "MUSCULAR", "ATHLETIC", "ATHLETIC"};
+static char _PlaTex_aaDefaultPartNames[32][15] = {
+    "", "", "", "", "", "", "", "",
+    "", "TORSO", "SPAD", "BICEP", "", "ELBOW", "FOREARM", "",
+    "HAND", "HAND", "", "KNEE", "UPPERSHIN", "LOWERSHIN", "", "",
+    "", "", "", "", "", "", "", "",
+};
+static int _PlaTex_aiSlotBodyParts[32] = {
+    2, 1, 34, 34, 0, 34, 34, 34, 34, 3, 4, 5, 6, 7, 8, 9,
+    10, 10, 11, 12, 13, 14, 15, 34, 34, 34, 34, 34, 34, 34, 34, 34,
+};
+static char _PlaTex_aaBodyPartNames[16][15] = {
+    "HAIR", "HAT", "EYE", "TORSO", "SPAD", "BICEP", "LOWERBICEP", "ELBOW",
+    "FOREARM", "WRIST", "HAND", "THIGH", "KNEE", "UPPERSHIN", "LOWERSHIN", "SHOE",
+};
+
 extern "C" {
-extern char *lbl_802CF010[4];
-extern char lbl_802CF020[32][15];
-extern int lbl_802CF200[32];
-extern char lbl_802CF280[16][15];
-extern unsigned char lbl_802CF370[18];
+extern unsigned char gPlayerLookColorRemap[18];
 
 int PlaTexFindDynClut(Row_8007BC34 *pRow);
 int fn_8007BF14(int index);
@@ -25,11 +37,11 @@ void PlaTexRemapColors(unsigned char *pColors)
     int i;
 
     for (i = 0; i < 18; i++) {
-        if (lbl_802CF370[i] >= 20 && lbl_802CF370[i] <= 22) {
-            pColors[i] = pColors[lbl_802CF370[i]];
-        } else if (lbl_802CF370[i] == 240) {
+        if (gPlayerLookColorRemap[i] >= 20 && gPlayerLookColorRemap[i] <= 22) {
+            pColors[i] = pColors[gPlayerLookColorRemap[i]];
+        } else if (gPlayerLookColorRemap[i] == 240) {
             pColors[i] = 117;
-        } else if (lbl_802CF370[i] == 241) {
+        } else if (gPlayerLookColorRemap[i] == 241) {
             pColors[i] = 127;
         }
     }
@@ -66,7 +78,7 @@ void PlaTexBuildPartIds(Row_8007BC34 *pRow, PlayerLook_t *pRecord, int *pIds, in
         if (pRow->mUnknown52[10]) {
             int id;
 
-            fn_801C2D88(name, sizeof(name), "PLATEX_%s_%02d_%s", pRow->mName, pRecord->mUnknown72, lbl_802CF280[10]);
+            fn_801C2D88(name, sizeof(name), "PLATEX_%s_%02d_%s", pRow->mName, pRecord->mUnknown72, _PlaTex_aaBodyPartNames[10]);
             i = 17;
             id = PlaTexCacheFindTexture(name);
             if (slot == 6) {
@@ -77,7 +89,7 @@ void PlaTexBuildPartIds(Row_8007BC34 *pRow, PlayerLook_t *pRecord, int *pIds, in
         }
     } else {
         for (i = 0; i < 32; i++) {
-            int part = lbl_802CF200[i];
+            int part = _PlaTex_aiSlotBodyParts[i];
 
             if (part == 34 || !pRow->mUnknown52[part]) {
                 continue;
@@ -88,14 +100,14 @@ void PlaTexBuildPartIds(Row_8007BC34 *pRow, PlayerLook_t *pRecord, int *pIds, in
             }
             if (pRow->mUnknown75) {
                 strncat(name, "_", sizeof(name) - 1 - strlen(name));
-                strncat(name, lbl_802CF010[pRecord->mUnknown78], sizeof(name) - 1 - strlen(name));
+                strncat(name, _PlaTex_apBodyTypeNames[pRecord->mUnknown78], sizeof(name) - 1 - strlen(name));
             }
             if (pRow->mUnknown73) {
                 fn_801C2D88(number, sizeof(number), "_%02d", pRecord->mUnknown72);
                 strncat(name, number, sizeof(name) - 1 - strlen(name));
             }
             strncat(name, "_", sizeof(name) - 1 - strlen(name));
-            strncat(name, lbl_802CF280[part], sizeof(name) - 1 - strlen(name));
+            strncat(name, _PlaTex_aaBodyPartNames[part], sizeof(name) - 1 - strlen(name));
             pIds[i] = PlaTexCacheFindTexture(name);
             pPalettes[i] = palette;
         }
@@ -122,7 +134,7 @@ void PlaTexSetArmArtIds(int *pIds, int part, PlayerLook_t *pRecord)
         pIds[30] = pRecord->mInfo.mUnknown04 * 3 + 15843;
         pIds[29] = pRecord->mInfo.mUnknown05 * 3 + 16110;
         break;
-    case 16: /* HAND parts (lbl_802CF020) take no extra ids */
+    case 16: /* HAND parts (_PlaTex_aaDefaultPartNames) take no extra ids */
     case 17:
         break;
     }
@@ -144,13 +156,13 @@ void PlaTexBuildDefaultIds(int *pIds, PlayerLook_t *pRecord)
     unsigned int i;
 
     for (i = 0; i <= 31; i++) {
-        if (pIds[i] != -1 || !strlen(lbl_802CF020[i])) {
+        if (pIds[i] != -1 || !strlen(_PlaTex_aaDefaultPartNames[i])) {
             continue;
         }
         if (PlaTexIsAwayPart(i) && !pRecord->mUnknown93) {
-            fn_801C2D88(name, sizeof(name), "PLATEX_%s_AWAY_%s%02d", lbl_802CF020[i], lbl_802CF010[pRecord->mUnknown78], pRecord->mUnknown72);
+            fn_801C2D88(name, sizeof(name), "PLATEX_%s_AWAY_%s%02d", _PlaTex_aaDefaultPartNames[i], _PlaTex_apBodyTypeNames[pRecord->mUnknown78], pRecord->mUnknown72);
         } else {
-            fn_801C2D88(name, sizeof(name), "PLATEX_%s_%s%02d", lbl_802CF020[i], lbl_802CF010[pRecord->mUnknown78], pRecord->mUnknown72);
+            fn_801C2D88(name, sizeof(name), "PLATEX_%s_%s%02d", _PlaTex_aaDefaultPartNames[i], _PlaTex_apBodyTypeNames[pRecord->mUnknown78], pRecord->mUnknown72);
         }
         pIds[i] = PlaTexCacheFindTexture(name);
         PlaTexSetArmArtIds(pIds, i, pRecord);

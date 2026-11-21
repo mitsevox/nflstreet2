@@ -97,8 +97,17 @@ struct PlyrSaveView_t {
     PlyrSaveWords404_t mUnknown4528[2];
 };
 
+static unsigned char _PlyrMgr_uRumbleMax = 0xFF;
+static unsigned char _PlyrMgr_uRumbleBase = 15;
+static unsigned char _PlyrMgr_uRumbleDuration = 10;
+static float _PlyrMgr_fRumbleScale = 0.1f;
+static PlyrMgr_t *_PlyrMgr_pManager = 0;
+
+static unsigned char _PlyrMgr_aCapsuleBonePairs[11][2] = {
+    {9, 13}, {21, 22}, {22, 24}, {15, 16}, {16, 18}, {5, 6}, {6, 7}, {1, 2}, {2, 3}, {17, 18}, {23, 24},
+};
+
 extern "C" {
-extern PlyrMgr_t *_PlyrMgr_pManager;
 
 Point_8017886C fn_80177FFC(int team);
 int fn_800A7FD8(void);
@@ -172,7 +181,6 @@ void PlyrInitAnimChannels(Object_80039F5C *p);
 int fn_80178308(void);
 Object_8003DEC4 *PlyrObjsFindByKey(int value);
 void fn_8009CF30(void *pDst, AnimPose_t *pPose);
-extern unsigned char _PlyrMgr_aCapsuleBonePairs[11][2];
 void PlyrCollideResetBlock(Block_80170374 *pBlock);
 void MatPush(void);
 void MatLoad(void *p);
@@ -182,8 +190,6 @@ float Vec3Distance(void *pA, void *pB);
 void Vec3Mat34Mul(void *pOut, void *pIn);
 void Vec3Scale(void *pOut, void *pIn, float scale);
 void Vec3Add(void *pOut, void *pA, void *pB);
-extern unsigned char _PlyrMgr_uRumbleMax, _PlyrMgr_uRumbleBase, _PlyrMgr_uRumbleDuration;
-extern float _PlyrMgr_fRumbleScale;
 void PlyrCollideMotion(Object_80039F5C *pA, Object_80039F5C *pB);
 void PlyrCollideContacts(Object_80039F5C *pA, CollideObject_t *pRecordA, Object_80039F5C *pB, CollideObject_t *pRecordB,
                  CollideContactList_t *pContacts);

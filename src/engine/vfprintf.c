@@ -135,7 +135,6 @@ itoa (unsigned int value, char *buf, int base)
   strrev (buf);
 }
 
-#if defined(DECOMP_COMPARE)
 
 /* Formats finite and nonfinite doubles in the shared decimal buffer. */
 char *
@@ -417,6 +416,7 @@ _vfprintf_r(void *data, RuntimeFile_t *fp, const char *fmt0, va_list ap)
 	double value;
 	double exponent;
 	int strip;
+	char expstr[7];	/* buffer for exponent string */
 
 #define	quad_t	  long long
 #define	u_quad_t  unsigned long long
@@ -902,4 +902,3 @@ char *add_separators(char *dst, char *start, char *end, int *pLen)
     return dst;
 }
 
-#endif

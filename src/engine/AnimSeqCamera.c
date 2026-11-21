@@ -3,10 +3,11 @@
 
 #include "engine/AnimSeqCamera.h"
 
-extern unsigned short _uLastGroupIndex;
-extern unsigned short _uLastSubGroupIndex;
-extern unsigned short _uLastIndex;
-extern AnimSeqncrBank_t *_pLastSeq;
+/* The camera sequence selected last (-1: none). */
+static unsigned short _uLastGroupIndex = 0xFFFF;
+static unsigned short _uLastSubGroupIndex = 0xFFFF;
+static unsigned short _uLastIndex = 0xFFFF;
+static AnimSeqncrBank_t *_pLastSeq = 0;
 
 void AnimSeqCamResetLast(void)
 {

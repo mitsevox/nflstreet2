@@ -2,9 +2,10 @@
 
 #include "engine/tmlib.h"
 
-extern unsigned char lbl_802F9D7C[];
+/* The size of each shader parameter type. */
+static unsigned char _TMShaderParm_SizeTable[] = { 0, 2, 1, 1, 1, 1, 1, 2, 3, 4, 1, 1, 0 };
 
 int TMShaderParmGetSize(int type)
 {
-    return lbl_802F9D7C[type];
+    return _TMShaderParm_SizeTable[type];
 }

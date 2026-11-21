@@ -48,7 +48,6 @@ struct AnimBlendList {
     unsigned short mUnknown0;
     char mUnknown2[2];
     AnimBlendEntry mUnknown4[24];
-    char mUnknown1060[4];
 };
 
 extern "C" {

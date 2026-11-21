@@ -3,15 +3,20 @@
 
 #include "engine/tmlib.h"
 
-extern Pool_801C750C *lbl_803EBF10;
-extern TMRegistry_t lbl_8039B52C;
-extern TMShader_t *lbl_803ECFD0;
+/* The node pool the shaders are allocated from. */
+static Pool_801C750C *_TMShaderLib_pNodes = 0;
+
+/* The registered shader libraries. */
+static TMRegistry_t _TMShaderLib_Registry;
+
+/* The shader used when a lookup names none. */
+static TMShader_t *_TMShaderLib_pNullShader;
 
 static TMShader_t *_TMShaderLibAddShader(TMRegistry_t *pLib, TMShaderDef_t *pDef)
 {
     TMShader_t *pShader;
 
-    pShader = DSNewNode(lbl_803EBF10);
+    pShader = DSNewNode(_TMShaderLib_pNodes);
     TMShaderNew(pShader, pDef);
     TMRegistryAddEntry(pLib, pDef->mName, pShader);
     return pShader;
@@ -32,7 +37,7 @@ void TMShaderLibFree(TMRegistry_t *pLib)
     for (i = 0; i < count; i++) {
         pShader = TMRegistryGetDataByIndex(pLib, i);
         TMShaderDelete(pShader);
-        DSDelNode(lbl_803EBF10, pShader);
+        DSDelNode(_TMShaderLib_pNodes, pShader);
     }
     TMRegistryFree(pLib);
 }
@@ -48,36 +53,36 @@ TMShader_t *TMShaderLibAddShader(TMRegistry_t *pLib, TMShaderDef_t *pDef, TMShad
 
 void TMShaderLibRegistryInit(int maxShaders, int maxLibs)
 {
-    TMRegistryAlloc(&lbl_8039B52C, maxLibs, 1, 1);
-    lbl_803EBF10 = DSNewNodeHandler(1, maxShaders, sizeof(TMShader_t), 0);
+    TMRegistryAlloc(&_TMShaderLib_Registry, maxLibs, 1, 1);
+    _TMShaderLib_pNodes = DSNewNodeHandler(1, maxShaders, sizeof(TMShader_t), 0);
 }
 
 void TMShaderLibRegistryShutdown(void)
 {
-    TMRegistryFree(&lbl_8039B52C);
-    DSDelNodeHandler(lbl_803EBF10);
-    lbl_803EBF10 = 0;
+    TMRegistryFree(&_TMShaderLib_Registry);
+    DSDelNodeHandler(_TMShaderLib_pNodes);
+    _TMShaderLib_pNodes = 0;
 }
 
 void TMShaderLibRegister(const char *pName, TMRegistry_t *pLib)
 {
-    TMRegistryAddEntry(&lbl_8039B52C, pName, pLib);
+    TMRegistryAddEntry(&_TMShaderLib_Registry, pName, pLib);
 }
 
 void TMShaderLibUnregister(const char *pName)
 {
-    TMRegistryRemoveEntryByName(&lbl_8039B52C, pName);
+    TMRegistryRemoveEntryByName(&_TMShaderLib_Registry, pName);
 }
 
 TMShader_t *TMShaderLibGetShader(const char *pPath)
 {
     if (pPath == 0) {
-        return lbl_803ECFD0;
+        return _TMShaderLib_pNullShader;
     }
-    return TMRegistrySearchPath(&lbl_8039B52C, pPath);
+    return TMRegistrySearchPath(&_TMShaderLib_Registry, pPath);
 }
 
 void TMShaderLibSetNullShader(TMShader_t *pShader)
 {
-    lbl_803ECFD0 = pShader;
+    _TMShaderLib_pNullShader = pShader;
 }

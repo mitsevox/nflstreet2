@@ -24,12 +24,12 @@ int SFILTER_unpackf(Node_80279D90 *node, int count, float *a, float *b, int flag
     decoder->m20 = pos + count;
     if (decoder->m20 < decoder->m24) {
         if (decoder->m28 != 0) {
-            lbl_803B4E34.m1E4(count, (short *)(decoder->m1C + (pos << 1)), b);
+            sndmix.m1E4(count, (short *)(decoder->m1C + (pos << 1)), b);
         }
     } else {
         n = decoder->m24 - pos;
         if (decoder->m28 != 0) {
-            lbl_803B4E34.m1E4(n, (short *)(decoder->m1C + (pos << 1)), b);
+            sndmix.m1E4(n, (short *)(decoder->m1C + (pos << 1)), b);
         }
         memset(b + n, 0, (count - n) * 4);
     }

@@ -33,7 +33,7 @@ typedef struct AnimFrameCache_t {
 typedef void (*AnimFrameCacheCustomFunc_t)(AnimFileFormat_t *pFile, int a, unsigned char *pDest, unsigned int source,
                                   unsigned int size, int group);
 
-extern AnimFrameCacheCustomFunc_t _AnimFrameCache_CustomFunc;
+static AnimFrameCacheCustomFunc_t _AnimFrameCache_CustomFunc;
 
 void AnimFrameCacheRestoreSources(AnimFrameCache_t *cache);
 

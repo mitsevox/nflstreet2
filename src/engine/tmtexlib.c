@@ -3,7 +3,8 @@
 
 #include "engine/tmlib.h"
 
-extern TMRegistry_t lbl_8039B53C;
+/* The registered texture libraries. */
+static TMRegistry_t _TMTexLib_Registry;
 
 static void _TMTexLibInitTexNodes(TMTexLib_t *pLib, TexFileHeader_t *pTex, int count, int bInit)
 {
@@ -168,23 +169,23 @@ void TMTexLibUnload(TMTexLib_t *pLib)
 
 void TMTexLibRegistryInit(int maxLibs)
 {
-    TMRegistryAlloc(&lbl_8039B53C, maxLibs, 1, 1);
+    TMRegistryAlloc(&_TMTexLib_Registry, maxLibs, 1, 1);
 }
 
 void TMTexLibRegistryShutdown(void)
 {
-    TMRegistryFree(&lbl_8039B53C);
+    TMRegistryFree(&_TMTexLib_Registry);
 }
 
 void TMTexLibRegistryReset(void)
 {
-    TMRegistryReset(&lbl_8039B53C);
+    TMRegistryReset(&_TMTexLib_Registry);
 }
 
 void TMTexLibRegister(const char *pName, TMTexLib_t *pLib)
 {
     if (pLib != 0) {
-        TMRegistryAddEntry(&lbl_8039B53C, pName, pLib);
+        TMRegistryAddEntry(&_TMTexLib_Registry, pName, pLib);
     }
 }
 
@@ -215,7 +216,7 @@ TMTexNode_t *TMTexLibGetTexNode(TMTexLib_t *pLib, const char *pName)
     if (pLib != 0) {
         return TMRegistryGetDataByName(&pLib->mRegistry, pName);
     }
-    return TMRegistrySearchPath(&lbl_8039B53C, pName);
+    return TMRegistrySearchPath(&_TMTexLib_Registry, pName);
 }
 
 TMTexture_t *TMTexLibGetTexture(TMTexLib_t *pLib, const char *pName)

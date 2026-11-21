@@ -3,13 +3,20 @@
 
 #include "engine/tmlib.h"
 
-extern TMBlendChannelSource_t lbl_8039B720;
-extern TMBlendChannel_t lbl_8039B730[];
-extern unsigned char lbl_8039B7E0[];
+typedef struct TMBlendChannelState_t {
+    TMBlendChannelSource_t mSource;
+    TMBlendChannel_t maChannels[6];
+} TMBlendChannelState_t;
+
+/* The attribute bindings and the six working channels. */
+static TMBlendChannelState_t _TMBlendChannel_State;
+
+/* Scratch memory that TMBlendChannelBegin splits between the channels. */
+static unsigned char _TMBlendChannel_Scratchpad[0x4000] __attribute__((aligned(32)));
 
 static void *_TMBlendChannelGetInData(TMGeomAttr_t *pAttr, int index)
 {
-    void **ppInputs = lbl_8039B720.mppInputs;
+    void **ppInputs = _TMBlendChannel_State.mSource.mppInputs;
 
     if (ppInputs != 0 && ppInputs[index] != 0) {
         return ppInputs[index];
@@ -30,13 +37,13 @@ static unsigned char *_TMBlendChannelSetSpr(int id, unsigned char *pData, int ca
 
 TMBlendChannel_t *TMBlendChannelGetBuffer(int id)
 {
-    return &lbl_8039B730[id];
+    return &_TMBlendChannel_State.maChannels[id];
 }
 
 int TMBlendChannelSet(int id, int index)
 {
     TMBlendChannel_t *pChannel = TMBlendChannelGetBuffer(id);
-    TMGeomAttr_t *pAttr = &lbl_8039B720.mpAttrs[index];
+    TMGeomAttr_t *pAttr = &_TMBlendChannel_State.mSource.mpAttrs[index];
     int size;
 
     pChannel->mpAttr = pAttr;
@@ -60,21 +67,21 @@ unsigned char *TMBlendChannelSetMem(int id, unsigned char *pData, int size)
 
 void TMBlendChannelSetChannels(TMGeomAttr_t *pAttrs, void **ppInputs, void **ppOutputs, int numAttrs)
 {
-    lbl_8039B720.mNumAttrs = numAttrs;
+    _TMBlendChannel_State.mSource.mNumAttrs = numAttrs;
     if (numAttrs != 0) {
-        lbl_8039B720.mpAttrs = pAttrs;
-        lbl_8039B720.mppInputs = ppInputs;
-        lbl_8039B720.mppOutputs = ppOutputs;
+        _TMBlendChannel_State.mSource.mpAttrs = pAttrs;
+        _TMBlendChannel_State.mSource.mppInputs = ppInputs;
+        _TMBlendChannel_State.mSource.mppOutputs = ppOutputs;
     } else {
-        lbl_8039B720.mpAttrs = 0;
-        lbl_8039B720.mppInputs = 0;
-        lbl_8039B720.mppOutputs = 0;
+        _TMBlendChannel_State.mSource.mpAttrs = 0;
+        _TMBlendChannel_State.mSource.mppInputs = 0;
+        _TMBlendChannel_State.mSource.mppOutputs = 0;
     }
 }
 
 void TMBlendChannelSetOverride(int index, void *pOutput)
 {
-    void **ppOutputs = lbl_8039B720.mppOutputs;
+    void **ppOutputs = _TMBlendChannel_State.mSource.mppOutputs;
 
     if (ppOutputs != 0) {
         ppOutputs[index] = pOutput;
@@ -86,7 +93,7 @@ void TMBlendChannelBegin(void)
     unsigned char *p;
 
     TMBlendChannelSetChannels(0, 0, 0, 0);
-    p = _TMBlendChannelSetSpr(0, lbl_8039B7E0, 0x1000);
+    p = _TMBlendChannelSetSpr(0, _TMBlendChannel_Scratchpad, 0x1000);
     p = _TMBlendChannelSetSpr(2, p, 0x1000);
     p = _TMBlendChannelSetSpr(3, p, 0);
     p = _TMBlendChannelSetSpr(4, p, 0x1000);

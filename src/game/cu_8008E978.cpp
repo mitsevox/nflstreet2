@@ -25,6 +25,7 @@
 #include "engine/vptmanager.h"
 #include "engine/animchan.h"
 #include "game/GameCamera.h"
+#include "game/CamInterp.h"
 #include "game/Class_80148A58.h"
 #include "game/Entry_800B206C.h"
 #include "game/Block_800B21D0.h"
@@ -149,7 +150,7 @@ struct Block_800BC538;
 
 /* The unit's uninitialized objects after the static-init ones, declared here first and in address
    order: ProDG emits uninitialized globals in the order of their first declaration, and the target
-   holds them in this order (.sbss 0x803EC91C-0x803EC99C, .bss 0x8030C0B4-0x8030EFB4; evidence.tsv
+   holds them in this order (.sbss 0x803EC91C-0x803EC99C, .bss 0x8030C0B4-0x803192BC; evidence.tsv
    data rows). Defined after lbl_803EC918 at the end of the file. */
 extern void *lbl_803EC91C;
 extern void *lbl_803EC920;
@@ -188,6 +189,48 @@ extern Record_80097518 lbl_8030C2B8[3];
 extern Entry_80219044 lbl_8030E6D0;
 extern Callbacks_8030E6DC lbl_8030E6DC;
 extern Block_8030E6E8 lbl_8030E6E8;
+
+struct Item_800C2F94;
+
+typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void *pRecord,
+                                AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int phase);
+
+/* 8-byte records of the three 50-entry lists at 0x8030FF40. */
+struct Entry_800C3130 {
+    Item_800C2F94 *mpUnknown0;
+    short mUnknown4;
+    short mUnknown6;
+};
+
+/* 3044-byte records of the array at 0x803103F0. */
+struct Record_800C432C {
+    Table_80089904 mTable;
+    unsigned char mUnknown12[3032];
+};
+
+extern Callback_800A3530 lbl_8030EFB4[11];
+extern int lbl_8030EFE0[265];
+extern Object_80039F5C *lbl_8030F404[2][2];
+extern int lbl_8030F414[6];
+extern Block_8030F42C lbl_8030F42C;
+extern FeatAward_t lbl_8030F45C;
+extern Entry_80219044 lbl_8030F504;
+extern Entry_80219044 lbl_8030F510;
+extern int (*lbl_8030F51C[6])(Table_80089904 *pTable, unsigned short key, void *pRecord,
+                              AnimChannel_t *pEntries, PlyrSlot_t *p, unsigned int phase);
+extern AnimBlendList lbl_8030F534;
+extern void *lbl_8030F958[11];
+extern int lbl_8030F984[22];
+extern unsigned char lbl_8030F9DC[15];
+extern unsigned char lbl_8030F9EC[15];
+extern Source_800AF2AC lbl_8030F9FC[32];
+extern Block_800B21D0 lbl_8030FAFC;
+extern Handler_800B4D7C lbl_8030FB60[248];
+extern Entry_800C3130 lbl_8030FF40[3][50];
+extern Record_800C432C lbl_803103F0[10];
+extern Object_80039F5C *lbl_80317AD8[7];
+extern Record_800C432C lbl_80317AF4;
+extern Record_800C432C lbl_803186D8;
 
 
 
@@ -866,7 +909,7 @@ extern Callback_800A3530 lbl_8030EFB4[11];
 }
 
 extern "C" {
-extern int (*lbl_802D7E4C[21])(Object_80039F5C *p, Object_80039F5C *pTarget,
+extern int (*lbl_802D7E4C[11])(Object_80039F5C *p, Object_80039F5C *pTarget,
                                 Object_80039F5C *pOther, Pair_800A554C *pPair);
 }
 
@@ -1659,9 +1702,6 @@ void SndgNullHook(void);
 }
 
 extern "C" const char *lbl_802D87A4[];
-
-typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void *pRecord,
-                                AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int phase);
 
 extern "C" {
 int PlayerActionAnimIdlePhase(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
@@ -2915,19 +2955,6 @@ void HudCycleMashPrompt(void);
 struct Item_800C2F94 {
     unsigned char mUnknown0[8];
     float mUnknown8;
-};
-
-/* 8-byte records of the three 50-entry lists at 0x8030FF40. */
-struct Entry_800C3130 {
-    Item_800C2F94 *mpUnknown0;
-    short mUnknown4;
-    short mUnknown6;
-};
-
-/* 3044-byte records of the array at 0x803103F0. */
-struct Record_800C432C {
-    Table_80089904 mTable;
-    unsigned char mUnknown12[3032];
 };
 
 extern "C" {
@@ -5126,19 +5153,11 @@ void PlayerActionAnimBuildAlignCommand(Object_80039F5C *p, Block_800DE3B0 *pBloc
 }
 
 extern "C" {
-extern int lbl_802D9D10[9][3][2];
+extern int lbl_802D9D10[10][3][2];
 }
 
 extern "C" {
-extern int lbl_802D9DF8[];
-}
-
-extern "C" {
-extern int lbl_802D9E00[5][3][2];
-}
-
-extern "C" {
-extern int lbl_802D9E88[];
+extern int lbl_802D9E00[6][3][2];
 }
 
 extern "C" {
@@ -5354,11 +5373,11 @@ extern float lbl_802DA69C[];
 }
 
 extern "C" {
-extern Table_80089904 lbl_80317AF4;
+extern Record_800C432C lbl_80317AF4;
 }
 
 extern "C" {
-extern Table_80089904 lbl_803186D8;
+extern Record_800C432C lbl_803186D8;
 }
 
 extern "C" {
@@ -31905,9 +31924,9 @@ extern "C" void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, in
         pBlock->mUnknown148[i][0] = (int)(pBlock->mUnknown148[i][0] * lbl_803EABC4 + target[0]);
         pBlock->mUnknown148[i][1] = (int)(pBlock->mUnknown148[i][1] * lbl_803EABC4 + target[1]);
         pBlock->mUnknown148[i][2] = (int)(pBlock->mUnknown148[i][2] * lbl_803EABC4 + target[2]);
-        fn_800C210C(lbl_802D9DF8, 0, &pBlock->mUnknown148[i][0]);
-        fn_800C210C(lbl_802D9DF8, 0, &pBlock->mUnknown148[i][1]);
-        fn_800C210C(lbl_802D9DF8, 0, &pBlock->mUnknown148[i][2]);
+        fn_800C210C(lbl_802D9D10[9][2], 0, &pBlock->mUnknown148[i][0]);
+        fn_800C210C(lbl_802D9D10[9][2], 0, &pBlock->mUnknown148[i][1]);
+        fn_800C210C(lbl_802D9D10[9][2], 0, &pBlock->mUnknown148[i][2]);
         if (fn_800C210C(lbl_802D9D10[i][0], 0, &angles[0])) {
             pBlock->mUnknown148[i][0] = 0;
         }
@@ -32042,9 +32061,9 @@ extern "C" void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, in
     pBlock->mUnknown100[i][0] = (int)(pBlock->mUnknown100[i][0] * lbl_803EABD0 + target[0]);
     pBlock->mUnknown100[i][1] = (int)(pBlock->mUnknown100[i][1] * lbl_803EABD0 + target[1]);
     pBlock->mUnknown100[i][2] = (int)(pBlock->mUnknown100[i][2] * lbl_803EABD0 + target[2]);
-    fn_800C210C(lbl_802D9E88, 0, &pBlock->mUnknown100[i][0]);
-    fn_800C210C(lbl_802D9E88, 0, &pBlock->mUnknown100[i][1]);
-    fn_800C210C(lbl_802D9E88, 0, &pBlock->mUnknown100[i][2]);
+    fn_800C210C(lbl_802D9E00[5][2], 0, &pBlock->mUnknown100[i][0]);
+    fn_800C210C(lbl_802D9E00[5][2], 0, &pBlock->mUnknown100[i][1]);
+    fn_800C210C(lbl_802D9E00[5][2], 0, &pBlock->mUnknown100[i][2]);
     if (fn_800C210C(lbl_802D9E00[i][0], 0, &angles[0])) {
         pBlock->mUnknown100[i][0] = 0;
     }
@@ -35858,8 +35877,8 @@ extern "C" void fn_800CB484(Point_8017886C *pOut, Point_8017886C *pFrom, Point_8
 
 extern "C" void fn_800CB504(void)
 {
-    AnimFileGetStateAnimList(1, 143, &lbl_80317AF4);
-    AnimFileGetStateAnimList(1, 144, &lbl_803186D8);
+    AnimFileGetStateAnimList(1, 143, &lbl_80317AF4.mTable);
+    AnimFileGetStateAnimList(1, 144, &lbl_803186D8.mTable);
     lbl_803EAC44 = 0;
     lbl_803EAC48 = 0;
     lbl_803EAC4C = 0;
@@ -35889,7 +35908,7 @@ extern "C" int fn_800CB580(Object_80039F5C *p, int *pIndex, Point_8017886C targe
     distance = Vec2Magnitude(&delta);
     MathAngleDiff(facing, angle);
     lbl_803EAC48 = 144;
-    lbl_803EAC44 = &lbl_803186D8;
+    lbl_803EAC44 = &lbl_803186D8.mTable;
     for (i = 0; i < lbl_803EAC44->mCount; i++) {
         Info_80089904 *pInfo;
         int limit;
@@ -35989,7 +36008,7 @@ extern "C" int fn_800CB708(Object_80039F5C *p, int *pIndex, Point_8017886C targe
         }
     }
     lbl_803EAC48 = 143;
-    lbl_803EAC44 = &lbl_80317AF4;
+    lbl_803EAC44 = &lbl_80317AF4.mTable;
     for (i = 0; i < lbl_803EAC44->mCount; i++) {
         Info_80089904 *pInfo;
         float length;
@@ -37593,7 +37612,7 @@ PreSnapPhase lbl_803EC914;
 
 float lbl_803EC918 = 100.0f / gFrameTimeScale;
 
-/* .sbss 0x803EC91C-0x803EC99C and .bss 0x8030C0B4-0x8030EFB4 (declared in address order after the
+/* .sbss 0x803EC91C-0x803EC99C and .bss 0x8030C0B4-0x803192BC (declared in address order after the
    includes). Neutral address labels; lbl_803EC984 and lbl_803EC998 are words no code references. */
 void *lbl_803EC91C;
 void *lbl_803EC920;
@@ -37632,6 +37651,29 @@ Record_80097518 lbl_8030C2B8[3];
 Entry_80219044 lbl_8030E6D0;
 Callbacks_8030E6DC lbl_8030E6DC;
 Block_8030E6E8 lbl_8030E6E8;
+Callback_800A3530 lbl_8030EFB4[11];
+int lbl_8030EFE0[265];
+Object_80039F5C *lbl_8030F404[2][2];
+int lbl_8030F414[6];
+Block_8030F42C lbl_8030F42C;
+FeatAward_t lbl_8030F45C;
+Entry_80219044 lbl_8030F504;
+Entry_80219044 lbl_8030F510;
+int (*lbl_8030F51C[6])(Table_80089904 *pTable, unsigned short key, void *pRecord,
+                       AnimChannel_t *pEntries, PlyrSlot_t *p, unsigned int phase);
+AnimBlendList lbl_8030F534;
+void *lbl_8030F958[11];
+int lbl_8030F984[22];
+unsigned char lbl_8030F9DC[15];
+unsigned char lbl_8030F9EC[15];
+Source_800AF2AC lbl_8030F9FC[32];
+Block_800B21D0 lbl_8030FAFC;
+Handler_800B4D7C lbl_8030FB60[248];
+Entry_800C3130 lbl_8030FF40[3][50];
+Record_800C432C lbl_803103F0[10];
+Object_80039F5C *lbl_80317AD8[7];
+Record_800C432C lbl_80317AF4;
+Record_800C432C lbl_803186D8;
 
 unsigned int lbl_8030C084[12] = {
     (unsigned int)(gFrameTimeScale * 5416666.5f),
@@ -37647,3 +37689,503 @@ unsigned int lbl_8030C084[12] = {
     200000000,
     75000000,
 };
+
+/* An anim-state handler table as fn_801BE030 registers it: handler count and table. */
+struct AnimStateHandlers_t {
+    unsigned short mCount;
+    void *mpHandlers;
+};
+
+extern Table_800AA80C lbl_802D810C;
+
+/* .sdata 0x803EA8AC-0x803EAC98, defined in address order. Neutral address labels; the words no code
+   references are the unused objects of evidence.tsv's data rows. */
+int lbl_803EA8AC = 0;
+void *lbl_803EA8B0 = 0;
+float lbl_803EA8B4 = 0.49f;
+float lbl_803EA8B8 = 0.39f;
+unsigned char lbl_803EA8BC = 0;
+unsigned char lbl_803EA8BD = 0;
+unsigned char lbl_803EA8BE = 0;
+unsigned char lbl_803EA8BF = 0;
+unsigned char lbl_803EA8C0 = 0;
+int lbl_803EA8C4 = 0;
+unsigned char lbl_803EA8C8 = 0;
+int lbl_803EA8CC = 0;
+unsigned int lbl_803EA8D0 = 0;
+unsigned char lbl_803EA8D4 = 0;
+unsigned char lbl_803EA8D5 = 0;
+float lbl_803EA8D8 = 0.0095f;
+Entry_80094BC4 *lbl_803EA8DC = 0;
+int lbl_803EA8E0[2] = {0, -1};
+int lbl_803EA8E8[2] = {1, -1};
+int lbl_803EA8F0[2] = {2, -1};
+int lbl_803EA8F8[2] = {4, -1};
+int lbl_803EA900[2] = {3, -1};
+int lbl_803EA908[2] = {19, -1};
+int lbl_803EA910[2] = {20, -1};
+int lbl_803EA918[2] = {18, -1};
+Block_80096954 *lbl_803EA920 = 0;
+int lbl_803EA924[2] = {19, 56};
+float lbl_803EA92C = 0.5f;
+unsigned char lbl_803EA930 = 1;
+float lbl_803EA934 = 6.0f;
+float lbl_803EA938 = 1.0f;
+unsigned char lbl_803EA93C = 0;
+unsigned char lbl_803EA93D = 1;
+float lbl_803EA940 = 0.75f;
+unsigned char lbl_803EA944 = 0;
+Block_8009AB34 *lbl_803EA948 = 0;
+float lbl_803EA94C = 2.0f;
+float lbl_803EA950 = 0.5f;
+float lbl_803EA954 = 4.0f;
+float lbl_803EA958 = 1.0f;
+float lbl_803EA95C = 4.0f;
+float lbl_803EA960 = 1.0f;
+float lbl_803EA964 = 4.0f;
+float lbl_803EA968 = 1.0f;
+float lbl_803EA96C = 2.0f;
+float lbl_803EA970 = 1.0f;
+float lbl_803EA974 = 2.0f;
+float lbl_803EA978 = 0.75f;
+float lbl_803EA97C = 4.0f;
+float lbl_803EA980 = 1.0f;
+Block_8009B720 *lbl_803EA984[2] = {0, 0};
+unsigned char lbl_803EA98C = 0;
+int lbl_803EA990 = -1;
+char lbl_803EA994[7] = "Replay";
+unsigned char lbl_803EA99B = 0;
+int lbl_803EA99C = -1398101;
+int lbl_803EA9A0 = 1398101;
+int lbl_803EA9A4 = 5126371;
+Block_8009D474 *lbl_803EA9A8 = 0;
+float lbl_803EA9AC = 9.5f;
+float lbl_803EA9B0 = 5.0f;
+float lbl_803EA9B4 = 10.0f;
+float lbl_803EA9B8 = -6.0f;
+float lbl_803EA9BC = 90.0f;
+float lbl_803EA9C0 = 0.5f;
+float lbl_803EA9C4 = 15.0f;
+float lbl_803EA9C8 = 2.0f;
+float lbl_803EA9CC = 2.0f;
+int lbl_803EA9D0 = 392;
+int lbl_803EA9D4 = 12;
+int lbl_803EA9D8 = 255;
+int lbl_803EA9DC = 0;
+unsigned char lbl_803EA9E0 = 0;
+LivePlayPhase *lbl_803EA9E4 = &lbl_803EC900;
+void **lbl_803EA9E8 = 0;
+unsigned int lbl_803EA9EC = 0;
+unsigned char lbl_803EA9F0 = 0;
+void *lbl_803EA9F4 = 0;
+unsigned char lbl_803EA9F8 = 0;
+AnimStateHandlers_t lbl_803EA9FC = {11, lbl_8030EFB4};
+float lbl_803EAA04 = 2.0f;
+float lbl_803EAA08 = 7.0f;
+float lbl_803EAA0C = 80.0f;
+float lbl_803EAA10 = 30.0f;
+unsigned int lbl_803EAA14 = 0x40;
+unsigned char lbl_803EAA18 = 4;
+void (*lbl_803EAA1C[2])(int team) = {fn_800A6750, fn_800A67B8};
+void (*lbl_803EAA24[2])(int team) = {fn_800A680C, fn_800A69BC};
+void (*lbl_803EAA2C[2])(int team) = {fn_800A6B6C, fn_800A6C10};
+int lbl_803EAA34[2] = {0, 0};
+int lbl_803EAA3C[2] = {8, -8};
+int lbl_803EAA44[2] = {0, 0};
+unsigned char lbl_803EAA4C = 0;
+unsigned char lbl_803EAA4D = 0;
+unsigned char lbl_803EAA4E = 0;
+unsigned char lbl_803EAA4F = 0;
+unsigned char lbl_803EAA50 = 0;
+unsigned char lbl_803EAA51 = 0;
+float lbl_803EAA54 = 1.15f;
+float lbl_803EAA58 = 1.0f;
+float lbl_803EAA5C = 1.0f;
+float lbl_803EAA60 = 1.0f;
+float lbl_803EAA64 = 1.0f;
+float lbl_803EAA68 = 1.0f;
+float lbl_803EAA6C = 1.0f;
+float lbl_803EAA70 = 1.15f;
+float lbl_803EAA74 = 1.0f;
+float lbl_803EAA78 = 1.0f;
+float lbl_803EAA7C = 1.0f;
+float lbl_803EAA80 = 1.0f;
+unsigned char lbl_803EAA84 = 0;
+unsigned char lbl_803EAA85 = 0;
+Block_800AACD4 *lbl_803EAA88 = 0;
+Class_80297B90 *lbl_803EAA8C = &lbl_803EC904;
+int lbl_803EAA90 = 0;
+unsigned int lbl_803EAA94 = 0;
+unsigned char lbl_803EAA98 = 0;
+unsigned char lbl_803EAA99 = 0;
+unsigned char lbl_803EAA9A = 0;
+unsigned int lbl_803EAA9C = 0;
+Table_800AA80C *lbl_803EAAA0 = &lbl_802D810C;
+int lbl_803EAAA4 = 0;
+float lbl_803EAAA8 = -0.25f;
+float lbl_803EAAAC = -0.25f;
+float lbl_803EAAB0 = -0.25f;
+float lbl_803EAAB4 = -0.25f;
+Block_800ABD1C *lbl_803EAAB8 = 0;
+float lbl_803EAABC = 1.5f;
+float lbl_803EAAC0 = 0.8f;
+float lbl_803EAAC4 = 1.1f;
+float lbl_803EAAC8 = 2.0f;
+unsigned short lbl_803EAACC[3] = {0x3C, 0x19, 0xA};
+Block_800AD634 *lbl_803EAAD4 = 0;
+unsigned char lbl_803EAAD8[4] = {0, 0, 1, 0};
+unsigned char lbl_803EAADC[4] = {0, 1, 0, 0};
+AnimStateHandlers_t lbl_803EAAE0 = {6, lbl_8030F51C};
+unsigned char lbl_803EAAE8 = 0;
+unsigned char lbl_803EAAE9 = 0;
+int lbl_803EAAEC = 0;
+unsigned char lbl_803EAAF0 = 0;
+unsigned char lbl_803EAAF1 = 0;
+Block_800AEB1C *lbl_803EAAF4 = 0;
+int lbl_803EAAF8[2] = {31, 33};
+void *lbl_803EAB00 = 0;
+unsigned char lbl_803EAB04 = 0;
+int lbl_803EAB08 = 4;
+Block_800AFCB8 *lbl_803EAB0C = 0;
+unsigned char lbl_803EAB10[4] = {0x1B, 0x44, 1, 0x1F};
+Block_800B0CFC *lbl_803EAB14 = 0;
+int lbl_803EAB18 = 255;
+int *lbl_803EAB1C = 0;
+Block_800B21D0 *lbl_803EAB20 = 0;
+int lbl_803EAB24 = 0;
+int lbl_803EAB28 = 25;
+unsigned char lbl_803EAB2C = 0;
+unsigned char lbl_803EAB2D = 0;
+int lbl_803EAB30 = 0;
+Block_800B3660 *lbl_803EAB34 = 0;
+Class_80297B50 *lbl_803EAB38 = &lbl_803EC908;
+AnimStateHandlers_t lbl_803EAB3C = {248, lbl_8030FB60};
+unsigned char lbl_803EAB44 = 0xA;
+float lbl_803EAB48 = 2.0f;
+float lbl_803EAB4C = 0.75f;
+float lbl_803EAB50 = 0.2f;
+float lbl_803EAB54 = 0.5f;
+unsigned char lbl_803EAB58 = 8;
+unsigned char lbl_803EAB59 = 1;
+unsigned char lbl_803EAB5A = 1;
+float lbl_803EAB5C = 80.0f;
+Block_800B62D8 *lbl_803EAB60 = 0;
+unsigned char lbl_803EAB64 = 0x3C;
+unsigned char lbl_803EAB65 = 0x78;
+short lbl_803EAB66 = 4;
+short lbl_803EAB68 = 100;
+short lbl_803EAB6A = 10;
+short lbl_803EAB6C = 0;
+float lbl_803EAB70 = 6.0f;
+unsigned char lbl_803EAB74 = 0;
+Block_800B95B4 *lbl_803EAB78 = 0;
+unsigned char lbl_803EAB7C = 0;
+unsigned char lbl_803EAB7D = 0;
+unsigned char lbl_803EAB7E = 0;
+int lbl_803EAB80 = -1;
+PostPlayPhase *lbl_803EAB84 = &lbl_803EC90C;
+Block_800BA3F0 *lbl_803EAB88 = 0;
+int lbl_803EAB8C = 15;
+PreGamePhase *lbl_803EAB90 = &lbl_803EC910;
+unsigned char lbl_803EAB94 = 0;
+unsigned char lbl_803EAB95 = 0;
+unsigned char lbl_803EAB96 = 1;
+unsigned int lbl_803EAB98 = 0;
+unsigned int lbl_803EAB9C = 0;
+unsigned char lbl_803EABA0 = 0;
+unsigned char lbl_803EABA1 = 0;
+unsigned char lbl_803EABA2 = 0;
+unsigned char lbl_803EABA3 = 0;
+PreSnapPhase *lbl_803EABA4 = &lbl_803EC914;
+Block_800BFAD0 *lbl_803EABA8 = 0;
+float lbl_803EABAC[2] = {0.0f, 0.0f};
+unsigned char lbl_803EABB4 = 0;
+unsigned char lbl_803EABB5 = 0xA;
+unsigned char lbl_803EABB6 = 0xA;
+unsigned char lbl_803EABB7 = 0x3C;
+unsigned char lbl_803EABB8 = 0;
+unsigned char lbl_803EABB9 = 0;
+float lbl_803EABBC = 70000.0f;
+float lbl_803EABC0 = 0.9f;
+float lbl_803EABC4 = 0.9f;
+float lbl_803EABC8 = 50000.0f;
+float lbl_803EABCC = 0.9f;
+float lbl_803EABD0 = 0.9f;
+unsigned char lbl_803EABD4 = 0;
+unsigned char lbl_803EABD5 = 0;
+float lbl_803EABD8 = 35.0f;
+float lbl_803EABDC = 2.0f;
+float lbl_803EABE0 = 9.0f;
+int lbl_803EABE4 = 0;
+unsigned char lbl_803EABE8 = 0;
+short lbl_803EABEA = 100;
+float lbl_803EABEC = 0.5f;
+float lbl_803EABF0 = 0.9f;
+float lbl_803EABF4 = 5.0f;
+unsigned int lbl_803EABF8 = 0x50;
+float lbl_803EABFC = 100.0f;
+float lbl_803EAC00 = 70.0f;
+float lbl_803EAC04 = 110.0f;
+float lbl_803EAC08 = 3.0f;
+float lbl_803EAC0C = 1.0f;
+float lbl_803EAC10 = 15.0f;
+float lbl_803EAC14 = 0.6f;
+float lbl_803EAC18 = 5.0f;
+float lbl_803EAC1C = 45.0f;
+float lbl_803EAC20 = 1.0f;
+float lbl_803EAC24 = 1.0f;
+float lbl_803EAC28 = 1.0f;
+float lbl_803EAC2C = 4.0f;
+float lbl_803EAC30 = 25.0f;
+float lbl_803EAC34 = 900.0f;
+float lbl_803EAC38 = 16.0f;
+Block_800C9D6C *lbl_803EAC3C = 0;
+unsigned char lbl_803EAC40 = 0xA;
+unsigned char lbl_803EAC41 = 0xA;
+Table_80089904 *lbl_803EAC44 = 0;
+int lbl_803EAC48 = 0;
+unsigned char lbl_803EAC4C = 0;
+Point_8017886C lbl_803EAC50 = {0.0f, 0.0f};
+int lbl_803EAC58 = 0;
+int lbl_803EAC5C = 0;
+float lbl_803EAC60 = 1.0f;
+unsigned char lbl_803EAC64 = 0;
+unsigned char lbl_803EAC65 = 0;
+float lbl_803EAC68 = 1.8f;
+float lbl_803EAC6C = 1.4f;
+float lbl_803EAC70 = 2.0f;
+float lbl_803EAC74 = 45.0f;
+float lbl_803EAC78 = 1.75f;
+float lbl_803EAC7C = 3.0625f;
+float lbl_803EAC80 = 115.0f;
+float lbl_803EAC84 = 0.0f;
+float lbl_803EAC88 = 0.0f;
+unsigned char lbl_803EAC8C = 1;
+float lbl_803EAC90 = 0.7f;
+int lbl_803EAC94 = 0;
+
+/* .data 0x802D7094-0x802DA864, defined in address order. Neutral address labels. The camera shot
+   records, their lists and the defense-name table are read by no code in this build. */
+extern "C" {
+void CamInterpUpdateEaseInOut(CamInterp_t *pInterp, int steps);
+void CamInterpUpdateSine(CamInterp_t *pInterp, int steps);
+void CamInterpUpdateLinear(CamInterp_t *pInterp, int steps);
+void CamInterpUpdateSnap(CamInterp_t *pInterp, int steps);
+}
+
+struct Shot_802D87CC {
+    float mValues[14];
+    CamInterpFunc_t mpInterp[4];
+    unsigned int mWords[4];
+    void (*mpCallback)(int value);
+    int mTail[2];
+};
+
+struct Shot_802D8840 {
+    float mValues[14];
+    CamInterpFunc_t mpInterp[4];
+    int mTail[5];
+};
+
+struct ShotEntry_802D8830 {
+    int mKind;
+    void *mpShot;
+};
+
+struct Shot_802D9E9C {
+    float mValues[29];
+    CamInterpFunc_t mpInterp[3];
+    int mTail[5];
+};
+
+struct Record_802DA7C8 {
+    float mValues[5];
+    unsigned char mBytes[4];
+    int mTail[6];
+};
+
+AnimFileBufferDef_t lbl_802D7094[5] = {{0xA000, 0, {0, 0}, 0}, {0xA000, 0, {0, 0}, 0}, {0x3000, 0, {0, 0}, 0}, {0x1800, 0, {0, 0}, 0}, {0x1800, 0, {0, 0}, 0}};
+AnimFileConfig_t lbl_802D70D0 = {0, 1, 0xF, 5, 8, 0, 0, 2, lbl_802D7094};
+AnimFileBufferDef_t lbl_802D70E8[7] = {{0xF000, 0, {0, 0}, 0}, {0xF000, 0, {0, 0}, 0}, {0x1800, 0, {0, 0}, 0}, {0x1800, 0, {0, 0}, 0}, {0x1800, 0, {0, 0}, 0}, {0x3C00, 0, {0, 0}, 0}, {0x3C00, 0, {0, 0}, 0}};
+AnimFileConfig_t lbl_802D713C = {0, 1, 0x1E, 7, 0x36, 0, 0, 2, lbl_802D70E8};
+int lbl_802D7154[30] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29};
+int lbl_802D71CC[3] = {21, 5, 1};
+Entry_802D71D8 lbl_802D71D8[17] = {81, 0, 0, 64, 1, 0, 72, 1, 0, 73, 1, 0, 78, 0, 0, 79, 0, 0, 80, 0, 0, 65, 1, 0, 66, 1, 0, 67, 1, 0, 68, 1, 0, 69, 1, 0, 70, 1, 0, 74, 1, 0, 82, 1, 0, 75, 1, 0, -1, 0, 0};
+Vector_80039F5C lbl_802D72A4 = {0.0f, 0.0f, 0.0f};
+Vector_80039F5C lbl_802D72B0 = {0.0f, 0.0f, 0.0f};
+State_802D72BC lbl_802D72BC = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+Entry_8009B87C lbl_802D72C8 = {fn_8008FF44, fn_80090244, fn_80090284, (float (*)(int *))fn_8009036C};
+Record_80093E4C lbl_802D72D8[14] = {0, 105, 0, 0, 0, 0, 0, 1, 103, 0, 0, 0, 0, 0, 2, 111, 0, 0, 0, 0, 0, 3, 122, 0, 0, 0, 0, 0, 4, 102, 0, 0, 0, 0, 0, 5, 106, 0, 0, 0, 0, 0, 6, 100, 0, 0, 0, 0, 0, 7, 121, 0, 0, 0, 0, 0, 8, 109, 0, 0, 0, 0, 0, 9, 104, 0, 0, 0, 0, 0, 10, 108, 0, 0, 0, 0, 0, 11, 101, 0, 0, 0, 0, 0, 12, 110, 0, 0, 0, 0, 0, 13, 107, 0, 0, 0, 0, 0};
+Record_80093E4C lbl_802D73B8[66] = {0, 7, 0, 0, 0, 0, 0, 1, 8, 0, 0, 0, 0, 0, 2, 13, 0, 0, 0, 0, 0, 3, 14, 0, 0, 0, 0, 0, 4, 9, 0, 0, 0, 0, 0, 5, 10, 0, 0, 0, 0, 0, 6, 11, 0, 0, 0, 0, 0, 7, 12, 0, 0, 0, 0, 0, 8, 31, 0, 0, 0, 0, 0, 9, 59, 0, 0, 0, 0, 0, 10, 34, 0, 0, 0, 0, 0, 11, 33, 0, 0, 0, 0, 0, 12, 19, 0, 0, 0, 0, 0, 13, 32, 0, 0, 0, 0, 0, 14, 15, 0, 0, 0, 0, 0, 15, 16, 0, 0, 0, 0, 0, 16, 30, 0, 0, 0, 0, 0, 17, 21, 0, 0, 0, 0, 0, 18, 27, 0, 0, 0, 0, 0, 19, 28, 0, 0, 0, 0, 0, 20, 26, 0, 0, 0, 0, 0, 21, 23, 0, 0, 0, 0, 0, 22, 22, 0, 0, 0, 0, 0, 23, 24, 0, 0, 0, 0, 0, 24, 25, 0, 0, 0, 0, 0, 25, 18, 0, 0, 0, 0, 0, 26, 29, 0, 0, 0, 0, 0, 27, 117, 0, 0, 0, 0, 0, 28, 41, 0, 0, 0, 0, 0, 29, 50, 0, 0, 0, 0, 0, 30, 58, 0, 0, 0, 0, 0, 31, 54, 0, 0, 0, 0, 0, 32, 61, 0, 0, 0, 0, 0, 34, 43, 0, 0, 0, 0, 0, 34, 43, 0, 0, 0, 0, 0, 35, 44, 0, 0, 0, 0, 0, 36, 48, 0, 0, 0, 0, 0, 37, 35, 0, 0, 0, 0, 0, 38, 36, 0, 0, 0, 0, 0, 39, 60, 0, 0, 0, 0, 0, 40, 42, 0, 0, 0, 0, 0, 41, 47, 0, 0, 0, 0, 0, 42, 49, 0, 0, 0, 0, 0, 43, 63, 0, 0, 0, 0, 0, 44, 64, 0, 0, 0, 0, 0, 45, 45, 0, 0, 0, 0, 0, 46, 37, 0, 0, 0, 0, 0, 47, 38, 0, 0, 0, 0, 0, 48, 39, 0, 0, 0, 0, 0, 49, 40, 0, 0, 0, 0, 0, 50, 55, 0, 0, 0, 0, 0, 51, 56, 0, 0, 0, 0, 0, 52, 57, 0, 0, 0, 0, 0, 53, 52, 0, 0, 0, 0, 0, 54, 46, 0, 0, 0, 0, 0, 55, 116, 0, 0, 0, 0, 0, 56, 51, 0, 0, 0, 0, 0, 57, 1, 0, 0, 0, 0, 0, 58, 2, 0, 0, 0, 0, 0, 59, 120, 0, 0, 0, 0, 0, 60, 119, 0, 0, 0, 0, 0, 61, 3, 0, 0, 0, 0, 0, 62, 4, 0, 0, 0, 0, 0, 63, 5, 0, 0, 0, 0, 0, 64, 6, 0, 0, 0, 0, 0, 65, 118, 0, 0, 0, 0, 0};
+Record_80093E4C lbl_802D77D8[3] = {0, 124, 0, 0, 0, 0, 0, 1, 999, 0, 0, 0, 0, 0, 2, 123, 0, 0, 0, 0, 0};
+Record_80093E4C lbl_802D7808[13] = {0, 125, 0, 0, 0, 0, 0, 1, 126, 0, 0, 0, 0, 0, 2, 127, 0, 0, 0, 0, 0, 3, 128, 0, 0, 0, 0, 0, 4, 129, 0, 0, 0, 0, 0, 5, 130, 0, 0, 0, 0, 0, 6, 131, 0, 0, 0, 0, 0, 7, 132, 0, 0, 0, 0, 0, 8, 133, 0, 0, 0, 0, 0, 9, 134, 0, 0, 0, 0, 0, 10, 135, 0, 0, 0, 0, 0, 11, 136, 0, 0, 0, 0, 0, 12, 137, 0, 0, 0, 0, 0};
+Record_80093FD4 lbl_802D78D8[13] = {125, 511, 32767, 126, 511, 32767, 127, 511, 32767, 128, 511, 32767, 129, 511, 32767, 130, 511, 32767, 131, 511, 32767, 132, 511, 32767, 133, 511, 32767, 134, 511, 507, 135, 511, 507, 136, 511, 507, 137, 504, 32767};
+int lbl_802D7974[5][5] = {0, 1, 2, -1, -1, 3, 4, 5, 6, 7, 8, -1, -1, -1, -1, 9, 10, 11, -1, -1, 12, -1, -1, -1, -1};
+unsigned int lbl_802D79D8[14] = {0, 0x21, 0x21, 0x21, 0, 0x21, 0, 0, 0x21, 0, 0, 0, 0, 0};
+Script_802D7A10 lbl_802D7A10[6] = {
+    {"Gamebreaker", 7, 8, 134},
+    {"Gamebreaker", 9, 10, 136},
+    {"Post Game", 11, 12, 164},
+    {"Post Play", 13, 14, 167},
+    {"Pre Game", 15, 16, 233},
+    {"Story Mode", 17, 18, 247}
+};
+Shot_802D9E9C lbl_802D7AD0 = {{0.0f, 0.0f, 0.5f, 70.5f, 0.0f, 40.0f, 90.5f, 0.0f, -20.0f, 4.0f, 6.0f, 0.0f, 0.0f, 1.1f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 20.0f, 0.0f, 0.0f, 0.0f}, {CamInterpUpdateSine, CamInterpUpdateSine, CamInterpUpdateEaseInOut}, {0, 0, 0, 8, 0}};
+int lbl_802D7B64[6] = {5, 6, 7, 8, 9, -1};
+int lbl_802D7B7C[4] = {10, 11, 12, -1};
+int lbl_802D7B8C[4] = {13, 14, 15, -1};
+int lbl_802D7B9C[3] = {16, 17, -1};
+float lbl_802D7BA8[10] = {0.25f, 0.25f, 0.25f, 0.25f, 0.25f, 0.25f, 0.25f, 0.25f, 0.25f, 0.25f};
+float lbl_802D7BD0[10] = {0.2f, 0.2f, 0.2f, 0.2f, 0.1f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f};
+Entry_8009B87C lbl_802D7BF8 = {fn_8009B1C4, (int (*)(int *))fn_8009B288, fn_8009B3A4, 0};
+int lbl_802D7C08[3] = {2318413, 0, 0};
+int lbl_802D7C14[3] = {2097152, 0, 0};
+Vector_80039F5C lbl_802D7C20 = {0.0f, 0.0f, 2.0f};
+int lbl_802D7C2C[14] = {1, 65537, 131073, 196609, 262145, 327681, 393217, 257, 65793, 131329, 196865, 262401, 327937, 393473};
+Block_802D7C64 lbl_802D7C64[1] = {18, 0, 1, 0};
+Vector_80039F5C lbl_802D7C70[12] = {-50.0f, -25.0f, 50.0f, -260.0f, -70.0f, 40.0f, 70.0f, -120.0f, 120.0f, -40.0f, 50.0f, 10.0f, 100.0f, -80.0f, 50.0f, 0.1f, 0.1f, 1.0f, 50.0f, 5.0f, 20.0f, -45.0f, 0.0f, 40.0f, -1.0f, -1.0f, 0.4f, -7.0f, 1.0f, 4.0f, -10.0f, 3.0f, 9.0f, 0.05f, 0.1f, 0.4f};
+Vector_80039F5C lbl_802D7D00[12] = {-700.0f, -2000.0f, 400.0f, -700.0f, -2000.0f, 400.0f, -700.0f, -2000.0f, 400.0f, -700.0f, -2000.0f, 400.0f, -700.0f, -2000.0f, 400.0f, -700.0f, -2000.0f, 400.0f, -700.0f, -2000.0f, 400.0f, -700.0f, -2000.0f, 400.0f, -700.0f, -2000.0f, 400.0f, -700.0f, 100.0f, 400.0f, -700.0f, -2000.0f, 400.0f, -700.0f, -2000.0f, 400.0f};
+unsigned char lbl_802D7D90[12][4] = {0xC8, 0x82, 0x50, 0x26, 0xB9, 0xE1, 0x41, 0x14, 0, 0, 0, 0, 0xC8, 0x82, 0x50, 0xD, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAE, 0xBB, 0x7D, 0x1A, 0, 0, 0, 0, 0x7D, 0xC8, 0x7D, 0x33, 0xB4, 0xC8, 0xC8, 0x33, 0, 0, 0, 0};
+int lbl_802D7DC0[12] = {1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0};
+unsigned char lbl_802D7DF0[12][4] = {{0x64, 0x64, 0x64, 0x66}, {0x64, 0x64, 0x64, 0x40}, {0x64, 0x64, 0x64, 0x15}, {0xDC, 0xDC, 0xDC, 0x5A}, {0x64, 0x64, 0x64, 0x5A}, {0xC8, 0xC8, 0xC8, 0x73}, {0xC8, 0xC8, 0xC8, 0x8C}, {0xB9, 0xB9, 0xB9, 0x8C}, {0xC8, 0xC8, 0xC8, 0x73}, {0xDC, 0xDC, 0xDC, 0x5A}, {0x64, 0x64, 0x64, 0x8C}, {0xDC, 0xDC, 0xDC, 0x73}};
+void (*lbl_802D7E20[11])(Object_80039F5C *p, Object_80039F5C *pOther, int index,
+                                 Params_800A4E8C *pParams) = {fn_800A481C, 0, fn_800A4950, 0, fn_800A4980, fn_800A4980, fn_800A481C, fn_800A481C, fn_800A481C, fn_800A481C, fn_800A4E64};
+int (*lbl_802D7E4C[11])(Object_80039F5C *p, Object_80039F5C *pTarget,
+                               Object_80039F5C *pOther, Pair_800A554C *pPair) = {fn_800A506C, fn_800A50B8, fn_800A517C, fn_800A506C, fn_800A535C, fn_800A535C, fn_800A506C, fn_800A506C, fn_800A506C, fn_800A5104, fn_800A543C};
+int (*lbl_802D7E78[11])(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState) = {fn_800A563C, fn_800A55D0, fn_800A5844, (int (*)(Object_80039F5C *, Object_80039F5C *, int *))fn_800A55C0, fn_800A5690, fn_800A5718, fn_800A563C, fn_800A563C, fn_800A563C, fn_800A57A4, fn_800A5A04};
+float lbl_802D7EA4[11] = {28.0f, 12.0f, 12.0f, 12.0f, 12.0f, 12.0f, 28.0f, 28.0f, 28.0f, 12.0f, 25.0f};
+float lbl_802D7ED0[11] = {20.0f, 4.0f, 4.0f, 4.0f, 4.0f, 4.0f, 20.0f, 20.0f, 20.0f, 4.0f, 20.0f};
+int lbl_802D7EFC[2][3] = {0, 114, 115, 1, 112, 113};
+unsigned int lbl_802D7F14[8][7] = {0xC, 0xD, 0xE, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x50503034, 9, 0xA, 0xB, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x50503034, 0x14, 0x15, 0x16, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x50503032, 0x12, 0x13, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x50503034, 0xF, 0x10, 0x11, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x50503034, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0xFFFFFFFF, 0x50503032, 6, 7, 8, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x50503132, 0, 1, 2, 3, 4, 5, 0x50503131};
+unsigned int lbl_802D7FF4[14] = {0x50503031, 0x50503034, 0x50503035, 0x50503033, 0x50503036, 0x50503032, 0x50503037, 0x50503134, 0x50503038, 0x50503130, 0x50503039, 0x50503131, 0x50503132, 0x50503133};
+unsigned int lbl_802D802C[14] = {0x50503031, 0x50503034, 0x50503032, 0x50503033, 0x50503036, 0x50503035, 0x50503037, 0x50503134, 0x50503039, 0x50503130, 0x50503038, 0x50503131, 0x50503133, 0x50503132};
+unsigned int lbl_802D8064[14] = {0x50503031, 0x50503037, 0x50503032, 0x50503033, 0x50503036, 0x50503034, 0x50503035, 0x50503134, 0x50503039, 0x50503130, 0x50503038, 0x50503131, 0x50503133, 0x50503132};
+unsigned int lbl_802D809C[14] = {0x50503031, 0x50503035, 0x50503032, 0x50503033, 0x50503036, 0x50503034, 0x50503037, 0x50503134, 0x50503039, 0x50503130, 0x50503038, 0x50503131, 0x50503133, 0x50503132};
+unsigned int lbl_802D80D4[14] = {0x50503031, 0x50503035, 0x50503034, 0x50503033, 0x50503036, 0x50503032, 0x50503037, 0x50503134, 0x50503039, 0x50503130, 0x50503038, 0x50503131, 0x50503133, 0x50503132};
+Table_800AA80C lbl_802D810C = {0, fn_800AA648, fn_800AA6D8, 0, 1, 0, 0, 0, 9999, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1f};
+Table_800AA80C lbl_802D8194 = {0, fn_800AA648, fn_800AA6D8, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 9999, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1f};
+float lbl_802D821C[10][2] = {0.3f, 0.7f, 0.3f, 0.7f, 0.3f, 0.7f, 0.3f, 0.7f, 0.0f, 1.0f, 0.3f, 0.7f, 0.3f, 0.7f, 0.3f, 0.7f, 0.0f, 1.0f, 0.3f, 0.7f};
+float lbl_802D826C[10][2] = {0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f};
+unsigned char lbl_802D82BC[11][2] = {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 0xA, 0xA, 0xB, 0xB};
+unsigned char lbl_802D82D4[12] = {0xFF, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xA};
+Record_802D82E0 lbl_802D82E0[15] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 6, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 3, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 3, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0};
+Item_800AF82C lbl_802D840C[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x1D, 0xFF, 0xFF, 0xFF, 0x1C, 1, 0, 0, 0x1D, 0xFF, 0xFF, 0xFF, 0xE3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x83, 0xFF, 0xFF, 0xFF, 0x1C, 1, 0, 0, 0x34, 0xFF, 0xFF, 0xFF, 0xCC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x83, 0xFF, 0xFF, 0xFF, 0xE3, 0, 0, 0, 0x83, 0xFF, 0xFF, 0xFF, 0x7D, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFB, 0, 0, 0, 0x10, 0, 0, 0xFF, 0xFF, 0x40, 0, 0, 8, 0, 0, 0xFF, 0xF8, 0, 0, 0, 8, 0, 0, 0xFF, 0xE0, 0, 0, 0, 0x40, 0, 0, 0xFF, 0xE0, 0, 0, 0, 0x30, 0, 0, 0xFF, 0xE8, 0, 0, 0, 0x40, 0, 0, 0xFF, 0xF4, 0, 0, 0, 0x48, 0, 0, 0xFF, 0xF4, 0, 0, 0, 0xC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xE8, 0, 0, 0, 0x1C, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xEC, 0, 0, 0, 0x18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xE8, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFB, 0, 0, 0, 0x10, 0, 0, 0xFF, 0xF8, 0, 0, 0, 0, 0xC0, 0, 0xFF, 0xF8, 0, 0, 0, 8, 0, 0, 0xFF, 0xE0, 0, 0, 0, 0x40, 0, 0, 0xFF, 0xD0, 0, 0, 0, 0x20, 0, 0, 0xFF, 0xC0, 0, 0, 0, 0x18, 0, 0, 0xFF, 0xF4, 0, 0, 0, 0x48, 0, 0, 0xFF, 0xF4, 0, 0, 0, 0xC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xE4, 0, 0, 0, 0x18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xEC, 0, 0, 0, 0x18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFC, 0, 0, 0, 0x18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFB, 0xFE, 0xFF, 0xFF, 0xB, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x5C, 0xFE, 0xFF, 0xFF, 0x16, 2, 0, 0, 0, 0, 0, 0, 0x71, 4, 0, 0, 0x8F, 0xFB, 0xFF, 0xFF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+Vector_80039F5C lbl_802D870C[3] = {0.02f, 0.02f, 0.02f, 0.2f, 0.2f, 0.2f, 0.5f, 0.5f, 0.5f};
+Vector_80039F5C lbl_802D8730[3] = {0.05f, 0.05f, 0.05f, 0.3f, 0.3f, 0.3f, 0.5f, 0.5f, 0.5f};
+const char *lbl_802D8754[2][5] = {"M1ri", "M2ri", "M3ri", "M4ri", "M5ri", "M1le", "M2le", "M3le", "M4le", "M5le"};
+unsigned int lbl_802D877C[10] = {0x49474150, 0x4D554A50, 0x4B544250, 0x48544350, 0x44505350, 0x4B415450, 0x53535050, 0x4B4C4250, 0x564F4350, 0x54464450};
+const char *lbl_802D87A4[10] = {"O-Moves", "Jumping", "Run Power", "Catching", "Speed", "Tackling", "Passing", "Blocking", "Coverage", "D-Moves"};
+Shot_802D87CC lbl_802D87CC = {{-29.5f, 62.0f, 3.0f, -29.5f, 62.0f, 3.0f, 0.0f, 0.0f, 15.0f, 55.0f, 55.0f, 0.0f, 225.0f, 225.0f}, {CamInterpUpdateSine, CamInterpUpdateSine, CamInterpUpdateSine, CamInterpUpdateEaseInOut}, {0xF0000, 0xFFFFFFF, 0x6, 0x100}, fn_800B8494, {1, 0}};
+ShotEntry_802D8830 lbl_802D8830[2] = {{0, &lbl_802D87CC}, {1, 0}};
+Shot_802D8840 lbl_802D8840 = {{2.0f, -18.0f, 2.0f, 6.0f, -16.0f, 0.6f, 0.0f, -10.0f, 0.1f, 60.0f, 60.0f, 0.0f, 200.0f, -1.0f}, {CamInterpUpdateSine, CamInterpUpdateSine, CamInterpUpdateSine, CamInterpUpdateEaseInOut}, {0, 0, 0, 1, 0}};
+ShotEntry_802D8830 lbl_802D889C[2] = {{0, &lbl_802D8840}, {0, 0}};
+const char *lbl_802D88AC[216] = {
+    "4-3", "Strong Zone", "4-3", "Lightning", "Nickel", "Cover 2", "4-3", "CB Blitz",
+    "4-3", "Man Lock", "Nickel", "NB Blitz", "3-4", "Drop Zone", "4-3", "Lightning",
+    "Nickel", "Cover 2", "4-3", "Strong Zone", "4-3", "Lightning", "Nickel", "Cover 2",
+    "4-3", "CB Blitz", "4-3", "Man Lock", "Nickel", "NB Blitz", "3-4", "Drop Zone",
+    "4-3", "Lightning", "Nickel", "Cover 2", "3-4", "Safe", "4-3", "Lightning",
+    "Nickel", "Safe", "3-4", "Weak Blitz", "4-3", "CB Blitz", "Nickel", "NB Blitz",
+    "3-4", "Drop Zone", "4-3", "Cover 2", "4-3", "Under 4", "3-4", "Safe",
+    "4-3", "Lightning", "Nickel", "Safe", "3-4", "Weak Blitz", "4-3", "CB Blitz",
+    "Nickel", "NB Blitz", "3-4", "Drop Zone", "4-3", "Cover 2", "4-3", "Under 4",
+    "4-3", "Cover 2", "Nickel", "Cover 2", "Nickel", "SS Blitz", "3-4", "Safe",
+    "4-3", "Strong Zone", "Nickel", "Safe", "Nickel", "Cover 2", "Nickel", "Robber",
+    "Nickel", "Double Slot", "4-3", "Cover 2", "Nickel", "Cover 2", "Nickel", "SS Blitz",
+    "3-4", "Safe", "4-3", "Strong Zone", "Nickel", "Safe", "Nickel", "Cover 2",
+    "Nickel", "Robber", "Nickel", "Double Slot", "Nickel", "Double Z", "Nickel", "Cover 2",
+    "Dime", "Double Wide", "4-3", "Lightning", "Nickel", "Cover 4", "Nickel", "Double Slot",
+    "Nickel", "Double X", "Nickel", "NB Blitz", "Dime", "Double Wide", "Nickel", "Double Z",
+    "Nickel", "Cover 2", "Dime", "Double Wide", "4-3", "Lightning", "Nickel", "Cover 4",
+    "Nickel", "Double Slot", "Nickel", "Double X", "Nickel", "NB Blitz", "Dime", "Double Wide",
+    "3-4", "Safe", "4-3", "Lightning", "Nickel", "Cover 4", "4-3", "Double TE",
+    "4-3", "Safe", "Nickel", "Cover 4", "3-4", "Drop Zone", "4-3", "Lightning",
+    "4-3", "Lightning", "3-4", "Safe", "4-3", "Lightning", "Nickel", "Cover 4",
+    "4-3", "Double TE", "4-3", "Safe", "Nickel", "Cover 4", "3-4", "Drop Zone",
+    "4-3", "Lightning", "4-3", "Lightning", "3-4", "Safe", "4-3", "Safe",
+    "Nickel", "Cover 4", "4-3", "Safe", "4-3", "Lightning", "Nickel", "Cover 4",
+    "3-4", "Safe", "4-3", "Lightning", "Nickel", "Cover 4", "3-4", "Safe",
+    "4-3", "Safe", "Nickel", "Cover 4", "4-3", "Safe", "4-3", "Lightning",
+    "Nickel", "Cover 4", "3-4", "Safe", "4-3", "Lightning", "Nickel", "Cover 4"
+};
+Event_800B9F50 lbl_802D8C0C[21] = {{128, 3, 7370}, {129, 4, 7370}, {135, 3, 8530}, {135, 4, 8530}, {130, 3, 12290}, {136, 3, 12290}, {130, 4, 12290}, {136, 4, 12290}, {128, 5, 12290}, {135, 5, 13590}, {130, 5, 15940}, {136, 5, 15940}, {128, 2, 15940}, {135, 2, 16740}, {130, 2, 19860}, {136, 2, 19860}, {129, 4, 19860}, {135, 4, 19860}, {130, 4, 32000}, {136, 4, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D8C60[37] = {{128, 2, 6850}, {135, 2, 7270}, {130, 2, 9170}, {136, 2, 9170}, {128, 7, 9500}, {135, 7, 10440}, {0, 3, 11500}, {2, 3, 12790}, {130, 7, 12790}, {136, 7, 12790}, {128, 8, 12790}, {135, 8, 13500}, {0, 1, 13500}, {2, 1, 15050}, {130, 8, 15050}, {136, 8, 15050}, {128, 3, 15050}, {128, 4, 15050}, {135, 3, 16910}, {135, 4, 16910}, {0, 7, 17390}, {0, 10, 17390}, {2, 7, 20920}, {2, 10, 20920}, {136, 3, 20920}, {136, 4, 20920}, {130, 3, 20920}, {130, 4, 20920}, {129, 1, 20920}, {135, 1, 22270}, {128, 7, 22740}, {135, 7, 23420}, {130, 7, 32000}, {136, 7, 32000}, {130, 1, 32000}, {136, 1, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D8CF4[25] = {{128, 0, 7000}, {135, 0, 7600}, {130, 0, 8100}, {136, 0, 8100}, {128, 3, 8100}, {129, 4, 8100}, {135, 3, 8100}, {135, 4, 8100}, {130, 3, 11870}, {130, 4, 11870}, {136, 3, 11870}, {136, 4, 11870}, {129, 4, 11870}, {135, 4, 15940}, {130, 4, 20110}, {136, 4, 20110}, {128, 5, 20000}, {135, 5, 20000}, {130, 5, 21830}, {136, 5, 21830}, {129, 4, 21830}, {135, 4, 21830}, {130, 4, 32000}, {136, 4, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D8D58[27] = {{129, 5, 9450}, {135, 5, 11950}, {130, 5, 12950}, {136, 5, 12950}, {128, 3, 14850}, {128, 4, 14850}, {135, 3, 16950}, {135, 4, 16950}, {130, 3, 19950}, {130, 4, 19950}, {136, 3, 19950}, {136, 4, 19950}, {128, 1, 21450}, {128, 2, 21450}, {135, 1, 24250}, {135, 2, 24250}, {130, 1, 25550}, {130, 2, 25450}, {136, 1, 25450}, {136, 2, 25450}, {128, 0, 25950}, {130, 0, 27850}, {129, 5, 29850}, {135, 5, 30850}, {130, 5, 34850}, {136, 5, 34850}, {10, 0, 37000}};
+Event_800B9F50 lbl_802D8DC4[31] = {{128, 0, 6300}, {130, 0, 9700}, {129, 1, 9700}, {130, 1, 11700}, {3, 0, 13200}, {4, 0, 14800}, {128, 6, 15200}, {128, 7, 15200}, {128, 8, 15200}, {128, 9, 15200}, {128, 10, 15200}, {135, 6, 18700}, {135, 7, 18700}, {135, 8, 18700}, {135, 9, 18700}, {135, 10, 18700}, {130, 6, 19700}, {130, 7, 19700}, {130, 8, 19700}, {130, 9, 19700}, {130, 10, 19700}, {136, 6, 19700}, {136, 7, 19700}, {136, 8, 19700}, {136, 9, 19700}, {136, 10, 19700}, {129, 1, 20500}, {135, 1, 23000}, {130, 1, 24500}, {136, 1, 24500}, {10, 0, 27000}};
+Event_800B9F50 lbl_802D8E40[31] = {{129, 5, 3100}, {0, 6, 4900}, {0, 9, 5800}, {130, 5, 7300}, {2, 6, 7300}, {2, 9, 7300}, {129, 5, 8000}, {135, 5, 8600}, {130, 5, 11500}, {136, 5, 11500}, {128, 3, 14100}, {128, 4, 14100}, {135, 3, 15700}, {135, 4, 15700}, {130, 3, 18500}, {130, 4, 18500}, {136, 3, 18500}, {136, 4, 18500}, {128, 1, 20500}, {128, 2, 20500}, {135, 1, 22000}, {135, 2, 22000}, {130, 1, 23500}, {130, 2, 23500}, {136, 1, 23500}, {136, 2, 23500}, {129, 5, 24700}, {135, 5, 26000}, {136, 5, 27800}, {130, 5, 27800}, {10, 0, 30000}};
+Event_800B9F50 lbl_802D8EBC[29] = {{128, 7, 2200}, {128, 8, 2200}, {135, 7, 6520}, {135, 8, 6520}, {130, 7, 15460}, {130, 8, 15460}, {136, 7, 15460}, {136, 8, 15460}, {129, 1, 15460}, {135, 1, 16180}, {128, 7, 18070}, {128, 8, 18070}, {135, 7, 18070}, {135, 8, 18070}, {128, 0, 19870}, {129, 1, 21930}, {135, 1, 21930}, {128, 7, 23170}, {128, 8, 23170}, {135, 7, 23170}, {135, 8, 23170}, {130, 1, 32000}, {136, 1, 32000}, {130, 7, 32000}, {130, 8, 32000}, {136, 7, 32000}, {136, 8, 32000}, {130, 0, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D8F30[25] = {{128, 5, 8100}, {135, 5, 9300}, {130, 5, 10500}, {136, 5, 10500}, {128, 10, 11550}, {128, 9, 12000}, {135, 10, 13000}, {135, 9, 13000}, {128, 2, 15300}, {135, 2, 15600}, {130, 2, 17500}, {136, 2, 17500}, {130, 10, 17500}, {130, 9, 17500}, {136, 10, 17500}, {136, 9, 17500}, {129, 1, 18000}, {135, 1, 19000}, {128, 2, 20500}, {135, 2, 20500}, {130, 1, 23500}, {136, 1, 23500}, {130, 2, 23500}, {136, 2, 23500}, {10, 0, 25000}};
+Event_800B9F50 lbl_802D8F94[17] = {{128, 0, 5100}, {128, 1, 6790}, {135, 1, 6790}, {0, 1, 8530}, {0, 2, 8530}, {2, 1, 10000}, {130, 0, 10000}, {2, 2, 10000}, {5, 0, 10000}, {6, 0, 12890}, {130, 1, 12890}, {136, 1, 12890}, {129, 5, 12890}, {135, 5, 14670}, {130, 5, 32000}, {136, 5, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D8FD8[29] = {{128, 4, 3600}, {128, 3, 4400}, {128, 5, 4400}, {130, 4, 6500}, {130, 3, 6500}, {130, 5, 6500}, {128, 6, 9750}, {128, 7, 10450}, {135, 6, 12150}, {135, 7, 12150}, {130, 6, 13500}, {130, 7, 13500}, {136, 6, 13500}, {136, 7, 13500}, {128, 2, 13500}, {135, 2, 13800}, {0, 5, 15900}, {130, 2, 17500}, {136, 2, 17500}, {2, 5, 17500}, {129, 1, 18500}, {135, 1, 19900}, {128, 2, 20300}, {135, 2, 20300}, {130, 1, 22500}, {136, 1, 22500}, {130, 2, 22500}, {136, 2, 22500}, {10, 0, 24000}};
+Event_800B9F50 lbl_802D904C[21] = {{128, 5, 8500}, {128, 3, 8500}, {135, 5, 9800}, {135, 3, 9800}, {130, 5, 13000}, {130, 3, 13000}, {136, 5, 13000}, {136, 3, 13000}, {128, 4, 14400}, {135, 4, 15600}, {130, 4, 19000}, {136, 4, 19000}, {128, 1, 20100}, {135, 1, 21100}, {130, 1, 23400}, {136, 1, 23400}, {129, 5, 23600}, {135, 5, 24100}, {130, 5, 28400}, {136, 5, 28400}, {10, 0, 29000}};
+Event_800B9F50 lbl_802D90A0[33] = {{128, 9, 3230}, {128, 2, 4580}, {128, 9, 6700}, {128, 2, 7300}, {135, 9, 8290}, {135, 2, 8290}, {130, 9, 11330}, {130, 2, 11330}, {136, 9, 11330}, {136, 2, 11330}, {128, 8, 11330}, {135, 8, 12170}, {0, 2, 13070}, {2, 2, 14540}, {130, 8, 14540}, {136, 8, 14540}, {128, 10, 14540}, {128, 5, 15440}, {135, 10, 16750}, {135, 5, 16750}, {130, 10, 18170}, {130, 5, 18170}, {136, 10, 18170}, {136, 5, 18170}, {129, 1, 18170}, {135, 1, 18170}, {128, 10, 21480}, {128, 5, 21480}, {130, 10, 32000}, {130, 5, 32000}, {130, 1, 32000}, {136, 1, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D9124[29] = {{129, 3, 10}, {129, 4, 10}, {135, 3, 3370}, {135, 4, 3370}, {130, 3, 5850}, {136, 3, 5850}, {130, 4, 5850}, {136, 4, 5850}, {128, 1, 5850}, {135, 1, 5850}, {130, 1, 9290}, {136, 1, 9290}, {129, 3, 9290}, {129, 4, 9290}, {135, 3, 11510}, {135, 4, 11510}, {129, 3, 14300}, {129, 4, 14300}, {135, 3, 14300}, {135, 4, 14300}, {130, 3, 19810}, {130, 4, 19810}, {129, 3, 19810}, {129, 4, 19810}, {130, 3, 32000}, {136, 3, 32000}, {130, 4, 32000}, {136, 4, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D9198[29] = {{128, 0, 4570}, {135, 0, 6530}, {130, 0, 10860}, {136, 0, 10860}, {128, 6, 10860}, {128, 7, 10860}, {128, 8, 10860}, {128, 9, 10860}, {128, 10, 10860}, {130, 6, 13940}, {130, 7, 13940}, {130, 8, 13940}, {130, 9, 13940}, {130, 10, 13940}, {3, 0, 13940}, {4, 0, 18950}, {129, 1, 18950}, {135, 1, 21040}, {128, 9, 23400}, {128, 10, 23400}, {0, 2, 25240}, {0, 3, 25240}, {2, 2, 32000}, {2, 3, 32000}, {130, 9, 32000}, {130, 10, 32000}, {130, 1, 32000}, {136, 1, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D920C[12] = {{129, 4, 1}, {135, 4, 5880}, {135, 4, 9060}, {136, 4, 11000}, {130, 4, 11000}, {128, 5, 11000}, {135, 5, 13650}, {136, 5, 17750}, {130, 5, 17750}, {135, 4, 17750}, {136, 4, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D923C[33] = {{129, 1, 3750}, {130, 1, 5000}, {128, 2, 7750}, {128, 6, 8100}, {135, 2, 8600}, {135, 6, 8700}, {130, 2, 11000}, {130, 6, 11000}, {136, 2, 11000}, {136, 6, 11000}, {128, 7, 12500}, {135, 7, 13000}, {0, 4, 16500}, {2, 4, 19000}, {130, 7, 19000}, {136, 7, 19000}, {128, 0, 19540}, {129, 1, 21440}, {135, 1, 22000}, {130, 0, 23000}, {130, 1, 23000}, {136, 1, 23000}, {129, 1, 24000}, {128, 2, 26500}, {128, 6, 27000}, {128, 7, 27500}, {135, 1, 28000}, {130, 1, 29000}, {136, 1, 29000}, {130, 2, 29000}, {130, 6, 29000}, {130, 7, 29000}, {10, 0, 29000}};
+Event_800B9F50 lbl_802D92C0[29] = {{129, 5, 3900}, {135, 5, 5000}, {130, 5, 6000}, {136, 5, 6000}, {128, 3, 8570}, {135, 3, 9300}, {0, 8, 11000}, {2, 8, 13500}, {130, 3, 13500}, {136, 3, 13500}, {128, 2, 15500}, {135, 2, 17100}, {0, 4, 19200}, {130, 2, 22000}, {136, 2, 22000}, {2, 4, 22000}, {128, 1, 22300}, {135, 1, 22900}, {130, 1, 26500}, {136, 1, 26500}, {129, 5, 28700}, {135, 5, 29300}, {0, 5, 30200}, {130, 5, 32000}, {136, 5, 32000}, {2, 5, 32000}, {0, 6, 34000}, {2, 6, 35500}, {10, 0, 36000}};
+Event_800B9F50 lbl_802D9334[25] = {{128, 4, 6000}, {128, 3, 6000}, {128, 5, 7000}, {128, 2, 7000}, {130, 4, 8500}, {130, 3, 8500}, {130, 5, 8500}, {130, 2, 8500}, {128, 6, 11550}, {128, 7, 12050}, {135, 6, 13750}, {135, 7, 13750}, {130, 6, 15000}, {130, 7, 15000}, {136, 6, 15000}, {136, 7, 15000}, {129, 1, 14500}, {130, 1, 15000}, {128, 5, 17850}, {130, 5, 20000}, {129, 1, 24000}, {135, 1, 24500}, {130, 1, 27500}, {136, 1, 27500}, {10, 0, 29000}};
+Event_800B9F50 lbl_802D9398[23] = {{129, 1, 9170}, {135, 1, 10680}, {130, 1, 13050}, {136, 1, 13050}, {128, 5, 13050}, {135, 5, 13590}, {130, 5, 18200}, {136, 5, 18200}, {128, 6, 18200}, {128, 7, 18200}, {128, 8, 18200}, {128, 9, 18200}, {128, 10, 18200}, {130, 6, 21670}, {130, 7, 21670}, {130, 8, 21670}, {130, 9, 21670}, {130, 10, 21670}, {129, 1, 21670}, {135, 1, 21670}, {130, 1, 32000}, {136, 1, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D93F4[49] = {{128, 1, 5940}, {0, 6, 10780}, {2, 6, 12620}, {130, 1, 12620}, {128, 6, 12620}, {128, 7, 12620}, {128, 8, 12620}, {128, 9, 12620}, {128, 10, 12620}, {130, 6, 14730}, {130, 7, 14730}, {130, 8, 14730}, {130, 9, 14730}, {130, 10, 14730}, {3, 0, 14730}, {4, 0, 19650}, {128, 3, 19650}, {128, 4, 19650}, {128, 2, 19650}, {135, 3, 20850}, {135, 4, 20850}, {135, 2, 20850}, {136, 2, 22800}, {136, 3, 22800}, {136, 4, 22800}, {130, 2, 22800}, {130, 3, 22800}, {130, 4, 22800}, {0, 7, 22800}, {0, 10, 22800}, {0, 4, 22800}, {2, 7, 24780}, {2, 10, 24780}, {2, 4, 24780}, {129, 0, 24780}, {130, 0, 29370}, {128, 6, 29370}, {128, 7, 29370}, {128, 8, 29370}, {128, 9, 29370}, {128, 10, 29370}, {135, 0, 30620}, {130, 6, 42000}, {130, 7, 42000}, {130, 8, 42000}, {130, 9, 42000}, {130, 10, 42000}, {136, 0, 42000}, {10, 0, 42000}};
+Event_800B9F50 lbl_802D94B8[14] = {{129, 2, 4190}, {135, 2, 7730}, {128, 3, 8990}, {135, 3, 10170}, {130, 3, 15320}, {136, 3, 15320}, {128, 1, 15320}, {135, 1, 15320}, {130, 1, 19000}, {136, 1, 19000}, {135, 2, 22010}, {130, 2, 32000}, {136, 2, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D94F0[29] = {{128, 4, 6500}, {128, 5, 6700}, {128, 1, 6900}, {128, 2, 8300}, {128, 3, 8500}, {130, 4, 9500}, {130, 5, 9500}, {130, 1, 9500}, {130, 2, 9500}, {130, 3, 9500}, {129, 3, 14200}, {135, 3, 15900}, {130, 3, 24000}, {136, 3, 24000}, {128, 2, 24500}, {135, 2, 26400}, {0, 4, 28850}, {0, 8, 29850}, {2, 4, 30700}, {2, 8, 30700}, {130, 2, 30700}, {136, 2, 30700}, {0, 5, 34000}, {2, 5, 36000}, {128, 2, 37200}, {135, 2, 37200}, {130, 2, 39000}, {136, 2, 39000}, {10, 0, 40000}};
+Event_800B9F50 lbl_802D9564[35] = {{129, 0, 9940}, {130, 0, 12940}, {129, 0, 15140}, {130, 0, 18940}, {128, 6, 19940}, {128, 7, 19940}, {128, 8, 19940}, {128, 9, 19940}, {128, 10, 19940}, {130, 6, 22930}, {130, 7, 22930}, {130, 8, 22930}, {130, 9, 22930}, {130, 10, 22930}, {0, 3, 22940}, {0, 0, 22940}, {2, 3, 25940}, {2, 0, 25940}, {128, 7, 26040}, {128, 8, 26040}, {128, 9, 26040}, {135, 7, 26040}, {135, 8, 26040}, {135, 9, 26040}, {130, 7, 27940}, {130, 8, 27940}, {130, 9, 27940}, {136, 7, 27940}, {136, 8, 27940}, {136, 9, 27940}, {129, 0, 28940}, {135, 0, 29540}, {130, 0, 31940}, {136, 0, 31940}, {10, 0, 33000}};
+Event_800B9F50 lbl_802D95F0[39] = {{129, 2, 6690}, {135, 2, 7990}, {130, 2, 12990}, {136, 2, 12990}, {128, 3, 13890}, {135, 3, 14890}, {130, 3, 16190}, {136, 3, 16190}, {0, 8, 16690}, {2, 8, 17690}, {128, 2, 18190}, {130, 2, 19790}, {128, 0, 21590}, {130, 0, 27590}, {128, 6, 27740}, {128, 7, 27740}, {128, 8, 27740}, {128, 9, 27740}, {128, 10, 27740}, {135, 6, 29040}, {135, 7, 29040}, {135, 8, 29040}, {135, 9, 29040}, {135, 10, 29040}, {136, 6, 31930}, {136, 7, 31930}, {136, 8, 31930}, {136, 9, 31930}, {136, 10, 31930}, {130, 6, 31930}, {130, 7, 31930}, {130, 8, 31930}, {130, 9, 31930}, {130, 10, 31930}, {128, 5, 34190}, {135, 5, 34890}, {130, 5, 36190}, {136, 5, 36190}, {10, 0, 37000}};
+Event_800B9F50 lbl_802D968C[15] = {{128, 2, 6690}, {135, 2, 9000}, {130, 2, 11720}, {136, 2, 11720}, {128, 9, 11720}, {135, 9, 12990}, {0, 4, 14770}, {2, 4, 16490}, {130, 9, 16490}, {136, 9, 16490}, {129, 1, 16490}, {135, 1, 16780}, {130, 1, 32000}, {136, 1, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D96C8[21] = {{129, 3, 3110}, {135, 3, 4090}, {130, 3, 6170}, {136, 3, 6170}, {128, 5, 6170}, {135, 5, 6870}, {130, 5, 9010}, {136, 5, 9010}, {128, 4, 9010}, {135, 4, 9750}, {130, 4, 13720}, {136, 4, 13720}, {129, 3, 13720}, {135, 3, 13720}, {130, 3, 16670}, {136, 3, 16670}, {128, 1, 16670}, {135, 1, 17530}, {130, 1, 32000}, {136, 1, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D971C[25] = {{128, 8, 5990}, {128, 7, 6360}, {135, 8, 7350}, {135, 7, 7350}, {0, 2, 7350}, {2, 2, 9000}, {130, 8, 9000}, {136, 8, 9000}, {130, 7, 9000}, {136, 7, 9000}, {128, 2, 9000}, {135, 2, 9850}, {0, 5, 12180}, {2, 5, 13570}, {130, 2, 13570}, {136, 2, 13570}, {129, 1, 13570}, {135, 1, 15310}, {128, 2, 15310}, {135, 2, 17140}, {130, 2, 32000}, {136, 2, 32000}, {130, 1, 32000}, {136, 1, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D9780[29] = {{128, 3, 4690}, {128, 4, 4690}, {128, 5, 4690}, {130, 3, 6290}, {130, 4, 6290}, {130, 5, 6290}, {129, 3, 6990}, {135, 3, 8890}, {0, 8, 10890}, {130, 3, 15690}, {136, 3, 15690}, {2, 8, 15690}, {128, 5, 16690}, {128, 4, 17190}, {135, 5, 19190}, {135, 4, 19190}, {130, 5, 20290}, {130, 4, 20290}, {136, 5, 20290}, {136, 4, 20290}, {128, 1, 21690}, {135, 1, 22790}, {130, 1, 24690}, {136, 1, 24690}, {129, 3, 25690}, {135, 3, 26190}, {130, 3, 29190}, {136, 3, 29190}, {10, 0, 30000}};
+Event_800B9F50 lbl_802D97F4[17] = {{129, 2, 7710}, {130, 2, 8710}, {128, 3, 9190}, {128, 4, 9190}, {128, 5, 9190}, {130, 3, 12190}, {130, 4, 12190}, {130, 5, 12190}, {128, 1, 13090}, {135, 1, 13890}, {130, 1, 15390}, {136, 1, 15390}, {129, 2, 16610}, {135, 2, 19310}, {130, 2, 21410}, {136, 2, 21410}, {10, 0, 22000}};
+Event_800B9F50 lbl_802D9838[23] = {{129, 5, 7410}, {135, 5, 8710}, {130, 5, 14390}, {136, 5, 14390}, {128, 1, 15210}, {128, 2, 15710}, {135, 1, 18410}, {135, 2, 18410}, {130, 1, 20210}, {130, 2, 20210}, {136, 1, 20210}, {136, 2, 20210}, {128, 4, 20410}, {135, 4, 22310}, {0, 10, 23710}, {130, 4, 25390}, {136, 4, 25390}, {2, 10, 25390}, {129, 5, 26710}, {135, 5, 27210}, {130, 5, 29500}, {136, 5, 29500}, {10, 0, 30000}};
+Event_800B9F50 lbl_802D9894[15] = {{128, 2, 5210}, {135, 2, 6300}, {0, 4, 7930}, {2, 4, 9590}, {130, 2, 9590}, {136, 2, 9590}, {128, 9, 9590}, {135, 9, 10400}, {130, 9, 14120}, {136, 9, 14120}, {129, 1, 14120}, {135, 1, 15010}, {130, 1, 32000}, {136, 1, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D98D0[27] = {{129, 3, 1790}, {129, 4, 1790}, {135, 3, 3200}, {135, 4, 3200}, {130, 3, 8410}, {136, 3, 8410}, {130, 4, 8410}, {136, 4, 8410}, {128, 1, 8410}, {135, 1, 9530}, {130, 1, 10860}, {136, 1, 10860}, {128, 5, 10860}, {135, 5, 11690}, {130, 5, 17030}, {136, 5, 17030}, {128, 0, 17030}, {129, 3, 17940}, {129, 4, 17940}, {135, 3, 19380}, {135, 4, 19380}, {130, 4, 32000}, {136, 4, 32000}, {130, 3, 32000}, {136, 3, 32000}, {130, 0, 32000}, {10, 0, 32000}};
+Event_800B9F50 lbl_802D993C[31] = {{128, 2, 7920}, {135, 2, 12050}, {130, 2, 14270}, {136, 2, 14270}, {128, 10, 14270}, {135, 10, 15250}, {130, 10, 18330}, {136, 10, 18330}, {128, 4, 18330}, {135, 4, 20630}, {0, 10, 21070}, {2, 10, 23190}, {136, 4, 23190}, {130, 4, 23190}, {128, 10, 23190}, {128, 5, 23650}, {128, 2, 24000}, {135, 10, 24910}, {135, 5, 24910}, {135, 2, 24910}, {129, 1, 26390}, {135, 1, 26390}, {130, 1, 34000}, {136, 1, 34000}, {130, 10, 34000}, {130, 5, 34000}, {130, 2, 34000}, {136, 10, 34000}, {136, 5, 34000}, {136, 2, 34000}, {10, 0, 34000}};
+Event_800B9F50 lbl_802D99B8[23] = {{129, 4, 6510}, {135, 4, 9510}, {130, 4, 11210}, {136, 4, 11210}, {128, 3, 12210}, {135, 3, 14010}, {130, 3, 17210}, {136, 3, 17210}, {128, 1, 18610}, {128, 2, 18610}, {135, 1, 20710}, {135, 2, 20710}, {130, 1, 22210}, {130, 2, 22210}, {136, 1, 22210}, {136, 2, 22210}, {129, 4, 23510}, {135, 4, 23510}, {130, 4, 25810}, {136, 4, 25810}, {128, 0, 26510}, {130, 0, 28510}, {10, 0, 30000}};
+Event_800B9F50 lbl_802D9A14[13] = {{128, 2, 3310}, {135, 2, 5210}, {130, 2, 7210}, {136, 2, 7210}, {128, 7, 10610}, {135, 7, 11610}, {130, 7, 15210}, {136, 7, 15210}, {129, 1, 15710}, {135, 1, 20510}, {130, 1, 21210}, {136, 1, 21210}, {10, 0, 23000}};
+Event_800B9F50 lbl_802D9A48[15] = {{128, 0, 3210}, {130, 0, 5510}, {129, 5, 6010}, {135, 5, 8110}, {130, 5, 10010}, {136, 5, 10010}, {128, 4, 10910}, {135, 4, 12210}, {130, 4, 14810}, {136, 4, 14810}, {129, 5, 15810}, {135, 5, 16910}, {130, 5, 22210}, {136, 5, 22210}, {10, 0, 26000}};
+Event_800B9F50 *lbl_802D9A84[36] = {lbl_802D8C0C, lbl_802D8C60, lbl_802D8CF4, lbl_802D8D58, lbl_802D8DC4, lbl_802D8E40, lbl_802D8EBC, lbl_802D8F30, lbl_802D8F94, lbl_802D8FD8, lbl_802D904C, lbl_802D90A0, lbl_802D9124, lbl_802D9198, lbl_802D920C, lbl_802D923C, lbl_802D92C0, lbl_802D9334, lbl_802D9398, lbl_802D93F4, lbl_802D94B8, lbl_802D94F0, lbl_802D9564, lbl_802D95F0, lbl_802D968C, lbl_802D96C8, lbl_802D971C, lbl_802D9780, lbl_802D97F4, lbl_802D9838, lbl_802D9894, lbl_802D98D0, lbl_802D993C, lbl_802D99B8, lbl_802D9A14, lbl_802D9A48};
+unsigned short lbl_802D9B14[14] = {0xFFFF, 0x32, 0, 0xFFFF, 0xFFFF, 0xFFD8, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0, 0};
+Record_800BAE7C lbl_802D9B30[6] = {0, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1f, 1, 0, 0, 0, 1, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1f, 1, 0, 0, 0, 0, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1f, 1, 0, 0, 0, 1, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1f, 1, 0, 0, 0, 0, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1f, 1, 0, 0, 0, 9999, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0f, 0, 0, 0, 0};
+int lbl_802D9D10[10][3][2] = {-1864135, 1864135, 0, 0, -1864135, 1864135, -1864135, 1864135, 0, 0, -1864135, 1864135, -932067, 2656392, 0, 0, -1864135, 1864135, -932067, 2656392, 0, 0, -1864135, 1864135, -932067, 2656392, 0, 0, -1864135, 1864135, -233016, 2796202, 0, 0, -1398101, 1398101, -233016, 2796202, 0, 0, -1398101, 1398101, -233016, 2796202, 0, 0, -1398101, 1398101, -233016, 2796202, 0, 0, -1398101, 1398101, -2097152, 2097152, 0, 0, -2097152, 2097152};
+int lbl_802D9E00[6][3][2] = {-2283565, -2283565, 0, 0, -1864135, -1864135, -289873, -289873, -139344, -139344, 4684105, 4684105, -289873, -289873, 139344, 139344, -4684105, -4684105, -1127801, 1598495, -71303, -71303, -31224, -31224, 1514609, 1514609, 3262, 3262, 22369, 22369, -2097152, 2097152, 0, 0, -2097152, 2097152};
+int lbl_802D9E90[3] = {0, 0, 0};
+Shot_802D9E9C lbl_802D9E9C = {{0.0f, 0.0f, 0.5f, 70.0f, 0.0f, 20.0f, 70.0f, 0.0f, 20.0f, 110.0f, 60.0f, 0.0f, 0.0f, 1.4f, 85.0f, 0.0f, 270.0f, 70.0f, 0.0f, 270.0f, 20.0f, 40.0f, 0.0f, 0.0f, 60.0f, 60.0f, 0.0f, 280.0f, 280.0f}, {CamInterpUpdateLinear, CamInterpUpdateLinear, CamInterpUpdateSnap}, {0, 0, 0, 0, 0}};
+Shot_802D9E9C lbl_802D9F30 = {{0.0f, 0.0f, 0.5f, 70.0f, 0.0f, 20.0f, 70.0f, 0.0f, 20.0f, 90.0f, 60.0f, 0.0f, 0.0f, 1.4f, 85.0f, 0.0f, 270.0f, 70.0f, 0.0f, 270.0f, 20.0f, 40.0f, 0.0f, 0.0f, 60.0f, 60.0f, 0.0f, 280.0f, 280.0f}, {CamInterpUpdateLinear, CamInterpUpdateLinear, CamInterpUpdateSnap}, {0, 0, 0, 0, 0}};
+Shot_802D9E9C lbl_802D9FC4 = {{0.0f, 50.0f, 0.5f, 70.0f, 0.0f, 180.0f, 85.0f, 0.0f, 180.0f, 130.0f, 120.0f, 10.0f, 0.0f, 1.4f, 85.0f, 0.0f, 270.0f, 70.0f, 0.0f, 270.0f, 30.0f, 0.0f, 0.0f, 0.0f, 60.0f, 60.0f, 0.0f, 280.0f, 280.0f}, {CamInterpUpdateLinear, CamInterpUpdateLinear, CamInterpUpdateSnap}, {0, 0, 0, 0, 0}};
+Shot_802D9E9C lbl_802DA058 = {{0.0f, 0.0f, 0.5f, 70.0f, 0.0f, 50.0f, 75.0f, 0.0f, 50.0f, 110.0f, 60.0f, 0.0f, 0.0f, 1.4f, 60.0f, 0.0f, 290.0f, 60.0f, 0.0f, 230.0f, 60.0f, 60.0f, 0.0f, 0.0f, 60.0f, 60.0f, 0.0f, 280.0f, 280.0f}, {CamInterpUpdateLinear, CamInterpUpdateLinear, CamInterpUpdateSnap}, {0, 0, 0, 0, 0}};
+Shot_802D9E9C lbl_802DA0EC = {{0.0f, -60.0f, 0.5f, 85.0f, 0.0f, 20.0f, 87.0f, 0.0f, 5.0f, 130.0f, 125.0f, -25.0f, -60.0f, 3.0f, 90.0f, 0.0f, 270.0f, 90.0f, 0.0f, 270.0f, 8.0f, 8.0f, 0.0f, 0.0f, 50.0f, 60.0f, 0.0f, 280.0f, 280.0f}, {CamInterpUpdateLinear, CamInterpUpdateLinear, CamInterpUpdateSine}, {0, 0, 0, 0, 0}};
+Shot_802D9E9C lbl_802DA180 = {{0.0f, -50.0f, 0.5f, 86.0f, 0.0f, 10.0f, 88.0f, 0.0f, -10.0f, 110.0f, 110.0f, 0.0f, 0.0f, 14.0f, 85.0f, 0.0f, 270.0f, 85.0f, 0.0f, 270.0f, 0.0f, 0.0f, 0.0f, 0.0f, 60.0f, 60.0f, 0.0f, 280.0f, 280.0f}, {CamInterpUpdateLinear, CamInterpUpdateLinear, CamInterpUpdateSine}, {0, 0, 0, 0, 0}};
+Shot_802D9E9C *lbl_802DA214[42] = {
+    &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C,
+    &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C,
+    &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C,
+    &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C,
+    &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802DA058, &lbl_802D9F30, &lbl_802D9E9C,
+    &lbl_802D9E9C, &lbl_802D9FC4, &lbl_802D9E9C, &lbl_802DA180, &lbl_802DA180, &lbl_802DA0EC,
+    &lbl_802DA180, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802D9E9C, &lbl_802DA180
+};
+float lbl_802DA2BC[14] = {1.0f, 1.0f, 1.0f, 1.0f, 0.9f, 0.95f, 0.9f, 0.9f, 0.95f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+float lbl_802DA2F4[14] = {1.0f, 1.0f, 1.0f, 1.0f, 0.9f, 0.95f, 0.9f, 0.9f, 0.95f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+float lbl_802DA32C[14] = {1.0f, 1.0f, 1.0f, 1.0f, 0.95f, 0.85f, 0.95f, 0.95f, 0.95f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+float lbl_802DA364[14] = {0.0f, 0.0f, 0.0f, 0.0f, 0.8f, 0.0f, 0.5f, 0.8f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+float lbl_802DA39C[14][2] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.04f, 0.09f, 0.01f, 0.04f, 0.06f, 0.07f, 0.1f, 0.15f, 0.15f, 0.25f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.02f, 0.05f, 0.0f, 0.0f};
+float lbl_802DA40C[14][2] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.01f, 0.01f, 0.05f, 0.08f, 0.02f, 0.03f, 0.08f, 0.09f, 0.2f, 0.3f, 0.65f, 0.85f, 0.0f, 0.0f, 0.02f, 0.03f, 0.01f, 0.01f, 0.03f, 0.06f, 0.0f, 0.0f};
+float lbl_802DA47C[14][2] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.03f, 0.07f, 0.02f, 0.03f, 0.08f, 0.11f, 0.2f, 0.3f, 0.65f, 0.85f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.04f, 0.07f, 0.0f, 0.0f};
+float lbl_802DA4EC[14][2] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.01f, 0.03f, 0.0f, 0.0f, 0.04f, 0.06f, 0.2f, 0.3f, 0.55f, 0.85f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+float lbl_802DA55C[14][2] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.04f, 0.08f, 0.0f, 0.0f, 0.05f, 0.08f, 0.2f, 0.3f, 0.45f, 0.65f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+float lbl_802DA5CC[14][2] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+float lbl_802DA63C[14] = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+int lbl_802DA674[4] = {12582915, 6291457, 3145728, 19573420};
+int lbl_802DA684[3] = {393216, 1310720, 2228224};
+int lbl_802DA690[3] = {262144, 262144, 262144};
+float lbl_802DA69C[13] = {2.5f, 2.5f, 1.2f, 2.5f, 1.2f, 1.2f, 1.5f, 1.2f, 1.2f, 1.5f, 1.2f, 1.5f, 1.2f};
+float lbl_802DA6D0[11] = {-10.0f, 7.0f, 6.0f, -4.0f, -2.0f, 0.0f, 2.0f, 4.0f, 11.0f, 8.0f, 10.0f};
+float lbl_802DA6FC[7] = {0.0f, 0.2f, 0.4f, 0.6f, 0.8f, 1.0f, 0.0f};
+int lbl_802DA718[4] = {22, 40, 92, 85};
+Point_8017886C lbl_802DA728[10] = {-1000.0f, 1000.0f, -1000.0f, 0.0f, 0.0f, 1000.0f, -1000.0f, -3.0f, -4.0f, 4.0f, 3.0f, 1000.0f, -1000.0f, -7.0f, -7.0f, 0.0f, 0.0f, 7.0f, 7.0f, 1000.0f};
+Point_8017886C lbl_802DA778[10] = {-1.0f, 1.0f, -1.0f, 0.1f, -0.1f, 1.0f, -1.0f, -0.23f, -0.43f, 0.43f, 0.23f, 1.0f, -1.0f, -0.4f, -0.6f, 0.1f, -0.1f, 0.6f, 0.4f, 1.0f};
+Record_802DA7C8 lbl_802DA7C8 = {{0.0f, 0.1f, 0.0f, 0.0f, 0.0f}, {1, 0, 0, 0}, {66, 0, 0, 0, 0, 0}};
+Record_802DA7C8 lbl_802DA7F8 = {{0.0f, 0.1f, 0.0f, 0.0f, 0.0f}, {1, 0, 0, 0}, {66, 0, 0, 0, 0, 0}};
+Record_802DA7C8 lbl_802DA828 = {{0.0f, 0.1f, 0.0f, 0.0f, 0.0f}, {1, 0, 0, 0}, {66, 0, 0, 0, 0, 0}};
+Record_802DA7C8 *lbl_802DA858[3] = {&lbl_802DA7C8, &lbl_802DA7F8, &lbl_802DA828};

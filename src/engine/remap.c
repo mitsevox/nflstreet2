@@ -6,14 +6,17 @@
 #include "engine/remap.h"
 #include "game/fn_801D2B7C.h"
 
-extern unsigned char lbl_803EBD7C;
-extern Lock_801F8014 lbl_8039ADF4;
-extern unsigned int lbl_803ECF58;
-extern unsigned int lbl_803ECF5C;
-extern unsigned int lbl_803ECF60;
-extern unsigned int lbl_803ECF64;
-extern unsigned int lbl_803ECF68;
-extern unsigned char *lbl_803ECF6C;
+static unsigned char _Remap_ModuleActive = 0;
+
+static Lock_801F8014 _Remap_CS;
+
+/* The table geometry RemapInit was given and the table block it allocated. */
+static unsigned int _Remap_NumTables;
+static unsigned int _Remap_NumEntries;
+static unsigned int _Remap_NumInputs;
+static unsigned int _Remap_BytesPerTable;
+static unsigned int _Remap_ArraySize;
+static unsigned char *_pRemap_TableArray;
 extern unsigned int Per_MaxAxis;
 extern unsigned char Per_BtnMask[8];
 
@@ -24,27 +27,27 @@ int RemapInit(unsigned int numTables, unsigned int numEntries, unsigned int numI
 {
     int err = 0;
 
-    if (lbl_803EBD7C == 0) {
-        fn_801F7FA8(&lbl_8039ADF4);
-        fn_801F8014(&lbl_8039ADF4);
-        lbl_803ECF58 = numTables;
-        lbl_803ECF5C = numEntries;
-        lbl_803ECF60 = numInputs;
-        lbl_803ECF6C = 0;
-        lbl_803ECF64 = numEntries * numInputs * 2;
-        lbl_803ECF68 = lbl_803ECF64 * numTables;
-        if (lbl_803ECF68 != 0) {
-            lbl_803ECF6C = fn_801D2BB0(1, lbl_803ECF68, 0, 0);
-            if (lbl_803ECF6C == 0) {
+    if (_Remap_ModuleActive == 0) {
+        fn_801F7FA8(&_Remap_CS);
+        fn_801F8014(&_Remap_CS);
+        _Remap_NumTables = numTables;
+        _Remap_NumEntries = numEntries;
+        _Remap_NumInputs = numInputs;
+        _pRemap_TableArray = 0;
+        _Remap_BytesPerTable = numEntries * numInputs * 2;
+        _Remap_ArraySize = _Remap_BytesPerTable * numTables;
+        if (_Remap_ArraySize != 0) {
+            _pRemap_TableArray = fn_801D2BB0(1, _Remap_ArraySize, 0, 0);
+            if (_pRemap_TableArray == 0) {
                 err = SysGetLastError();
             } else {
-                MemFill(lbl_803ECF6C, lbl_803ECF68, 0, 2);
-                lbl_803EBD7C = 1;
+                MemFill(_pRemap_TableArray, _Remap_ArraySize, 0, 2);
+                _Remap_ModuleActive = 1;
             }
         } else {
-            lbl_803EBD7C = 1;
+            _Remap_ModuleActive = 1;
         }
-        fn_801F809C(&lbl_8039ADF4);
+        fn_801F809C(&_Remap_CS);
     } else {
         err = 0x180001;
     }
@@ -56,14 +59,14 @@ int RemapShutdown(void)
 {
     int err = 0;
 
-    if (lbl_803EBD7C != 0) {
-        fn_801F8014(&lbl_8039ADF4);
-        if (lbl_803ECF6C != 0) {
-            fn_801D2BD0(lbl_803ECF6C);
+    if (_Remap_ModuleActive != 0) {
+        fn_801F8014(&_Remap_CS);
+        if (_pRemap_TableArray != 0) {
+            fn_801D2BD0(_pRemap_TableArray);
         }
-        fn_801F809C(&lbl_8039ADF4);
-        fn_801F80D0(&lbl_8039ADF4);
-        lbl_803EBD7C = 0;
+        fn_801F809C(&_Remap_CS);
+        fn_801F80D0(&_Remap_CS);
+        _Remap_ModuleActive = 0;
     } else {
         err = 0x180002;
     }
@@ -75,10 +78,10 @@ int RemapSetupEntries(unsigned int table, unsigned int start, unsigned int count
 {
     int err = 0;
 
-    if (start + count <= lbl_803ECF5C && table < lbl_803ECF58 && count != 0) {
+    if (start + count <= _Remap_NumEntries && table < _Remap_NumTables && count != 0) {
         // FAKEMATCH: called through an unprototyped type, as a call with no prototype in scope compiles
-        ((void *(*)())memcpy)((unsigned short *)(lbl_803ECF6C + table * lbl_803ECF64) + start * lbl_803ECF60, pData,
-                    count * lbl_803ECF60 * sizeof(unsigned short));
+        ((void *(*)())memcpy)((unsigned short *)(_pRemap_TableArray + table * _Remap_BytesPerTable) + start * _Remap_NumInputs, pData,
+                    count * _Remap_NumInputs * sizeof(unsigned short));
     } else {
         err = 0x180003;
     }
@@ -90,8 +93,8 @@ int RemapCopyTable(unsigned int dst, unsigned int src)
 {
     int err = 0x180003;
 
-    if (src < lbl_803ECF58 && dst < lbl_803ECF58) {
-        RemapSetupEntries(dst, 0, lbl_803ECF5C, lbl_803ECF6C + src * lbl_803ECF64);
+    if (src < _Remap_NumTables && dst < _Remap_NumTables) {
+        RemapSetupEntries(dst, 0, _Remap_NumEntries, _pRemap_TableArray + src * _Remap_BytesPerTable);
         err = 0;
     }
     return err;
@@ -107,9 +110,9 @@ float RemapCheckEntry(unsigned int table, unsigned int entry, unsigned char *pIn
     unsigned char index;
     unsigned int i;
 
-    if (table < lbl_803ECF58 && entry < lbl_803ECF5C) {
-        pCode = (unsigned short *)(lbl_803ECF6C + table * lbl_803ECF64) + entry * lbl_803ECF60;
-        for (i = 0; i < lbl_803ECF60; i++) {
+    if (table < _Remap_NumTables && entry < _Remap_NumEntries) {
+        pCode = (unsigned short *)(_pRemap_TableArray + table * _Remap_BytesPerTable) + entry * _Remap_NumInputs;
+        for (i = 0; i < _Remap_NumInputs; i++) {
             code = pCode[i];
             if (code == 0) {
                 break;

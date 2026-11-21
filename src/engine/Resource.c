@@ -86,45 +86,15 @@ extern void *fn_801D310C(void *pAddr, int size, int ident, int flags);
 extern int ResLooseFileOpen(ResFile_t *pRes, int index);
 extern void AuxRamDownload(void *pDest, unsigned int source, unsigned int length);
 extern int fn_801C2D88(char *pBuffer, unsigned int size, const char *pFormat, ...);
-extern char _Res_szDiskLabelByHandle[];
-extern char _Res_szDiskLabelByName[];
-extern char _Res_szRamLabelByHandle[];
-extern char _Res_szRamLabelByName[];
-extern char _Res_szNameFormat[];
-extern char _Res_szAramLabelByHandle[];
-extern char _Res_szAramLabelByName[];
 
 extern void *FileReadAsync(int handle, void *pBuffer, int size, int priority,
                          void (*pDone)(int, int, void *), void *pArg);
 extern int ResLooseFileExists(ResFile_t *pRes, int index);
 extern void *memmove(void *pDst, const void *pSrc, unsigned int size);
-extern char _Res_szLoadAllLabelByHandle[];
-extern char _Res_szLoadAllLabelByName[];
 
 extern Lock_801F8014 _Res_sAsyncCountLock;
 extern Lock_801F8014 _Res_sResourceLock;
-extern unsigned char _Res_bModuleActive;
-extern int _Res_iAsyncLoadCount;
-extern int _Res_iAsyncOverride;
-extern void (*_Res_pAsyncDebugProc)(ResFile_t *pRes, int index, ResAsyncEvent_t *pEvent, int a, int b);
-extern int _Res_iAsyncDebugParm;
-extern void (*_Res_pLoopingCallback)(int type);
-extern void (*_Res_pErrorCallback)(char *pName, int err);
-extern unsigned char _Res_bCachingEnabled;
-extern unsigned char _Res_bLooseFileSupport;
-extern unsigned int _Res_uTimedAsyncTick;
-extern int _Res_iTimedAsyncPut;
-extern int _Res_iTimedAsyncGet;
-extern int _Res_uMemAllocFlags;
-extern void *_Res_pBlockLoadBuffer;
-extern ResCodecBuffer_t _Res_sBlockInput;
-extern ResCodecBuffer_t _Res_sBlockOutput;
-extern ResBlockDecoder_t *_Res_pBlockDecompressor;
-extern int _Res_iBlockBytesRead;
-extern ResRequest_t *_Res_pBlockRequest;
-extern ResRequest_t *_Res_apTimedAsyncRequests[16];
 extern void *_Res_pResourceFileList;
-extern char _Res_szIndexFormat[];
 
 extern unsigned int strlen(const char *s);
 extern char *strcpy(char *pDst, const char *pSrc);
@@ -165,9 +135,31 @@ extern int GCmpIsBlockCodec(int codec);
 extern void GCmpSetLabel(const char *pName);
 extern void GCmpDecompress(int codec, ResCodecBuffer_t *pSrc, ResCodecBuffer_t *pDst);
 extern void DCFlushRange(void *p, unsigned int size);
-extern char _Res_szModuleID[];
 extern int GCmpShutdown(void);
 extern int GCmpIsActive(void);
+
+static char _Res_szModuleID[] = "RESOURCE.LIB";
+char _Res_ResidentString[] = "Resident";
+unsigned char _Res_bModuleActive = 0;
+static int _Res_iAsyncLoadCount = 0;
+static int _Res_iAsyncOverride = 0;
+static void (*_Res_pAsyncDebugProc)(ResFile_t *pRes, int index, ResAsyncEvent_t *pEvent, int a, int b) = 0;
+static int _Res_iAsyncDebugParm = 0;
+static void (*_Res_pLoopingCallback)(int type) = 0;
+static void (*_Res_pErrorCallback)(char *pName, int err) = 0;
+static unsigned char _Res_bCachingEnabled = 0;
+static unsigned int _Res_uTimedAsyncTick = 0;
+static int _Res_iTimedAsyncPut = 0;
+static int _Res_iTimedAsyncGet = 0;
+static unsigned char _Res_bLooseFileSupport = 0;
+static int _Res_uMemAllocFlags = 0;
+static ResCodecBuffer_t _Res_sBlockInput;
+static ResCodecBuffer_t _Res_sBlockOutput;
+static ResRequest_t *_Res_apTimedAsyncRequests[16];
+static ResBlockDecoder_t *_Res_pBlockDecompressor;
+static int _Res_iBlockBytesRead;
+static ResRequest_t *_Res_pBlockRequest;
+static void *_Res_pBlockLoadBuffer;
 
 void ResClearFlags(ResFile_t *pRes, unsigned int flags);
 void ResCallTimedAsync(unsigned int time);
@@ -543,9 +535,9 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
                     cache = 0;
                 }
                 if (pRes->pName == 0) {
-                    fn_801C2D88(label, sizeof(label), _Res_szDiskLabelByHandle, index, pRes->mFile);
+                    fn_801C2D88(label, sizeof(label), "RLR:%i:%i", index, pRes->mFile);
                 } else {
-                    fn_801C2D88(label, sizeof(label), _Res_szDiskLabelByName, index, pRes->pName);
+                    fn_801C2D88(label, sizeof(label), "RLR%i:%s", index, pRes->pName);
                 }
                 label[31] = 0;
                 GCmpSetLabel(label);
@@ -582,9 +574,9 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
             src.mPos = 0;
             dst.mSize = size;
             if (pRes->pName == 0) {
-                fn_801C2D88(label, sizeof(label), _Res_szRamLabelByHandle, index, pRes->mFile);
+                fn_801C2D88(label, sizeof(label), "RLR-%i-%i", index, pRes->mFile);
             } else {
-                fn_801C2D88(label, sizeof(label), _Res_szRamLabelByName, index, pRes->pName);
+                fn_801C2D88(label, sizeof(label), "%i%s", index, pRes->pName);
             }
             label[31] = 0;
             GCmpSetLabel(label);
@@ -608,11 +600,11 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
     } else if (pRes->mState == 3) {
         char name[16];
 
-        fn_801C2D88(name, 15, _Res_szNameFormat, pRes->pName);
+        fn_801C2D88(name, 15, "%s", pRes->pName);
         name[9] = name[12];
         name[10] = name[13];
         name[11] = 0;
-        sprintf(name + strlen(name), _Res_szIndexFormat, index);
+        sprintf(name + strlen(name), "%04d", index);
         address = pRes->mBaseAddr + pRes->mBaseOffset + _ResGetBlockOffset(pRes, index);
         if (codec != 0) {
             unsigned int alignedSize;
@@ -634,9 +626,9 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
             dst.mSize = size;
             dst.pData = fn_801D2BB0(1, dst.mSize, _Res_uMemAllocFlags, 0);
             if (pRes->pName == 0) {
-                fn_801C2D88(label, sizeof(label), _Res_szAramLabelByHandle, index, pRes->mFile);
+                fn_801C2D88(label, sizeof(label), "RLR;%i;%i", index, pRes->mFile);
             } else {
-                fn_801C2D88(label, sizeof(label), _Res_szAramLabelByName, index, pRes->pName);
+                fn_801C2D88(label, sizeof(label), "RLR%i;%s", index, pRes->pName);
             }
             label[31] = 0;
             GCmpSetLabel(label);
@@ -1222,7 +1214,7 @@ static void *_ResGetResourceBuffer(ResFile_t *pRes, unsigned int index, int heap
     if (_Res_bLooseFileSupport != 0 && ResLooseFileGetSize(pRes, index, &size) != 0) {
         if (pRes->pDir[index].mSize < size) {
             strnzcpy(name, pRes->pName, 0xB);
-            sprintf(name + strlen(name), _Res_szIndexFormat, index);
+            sprintf(name + strlen(name), "%04d", index);
             if (noFlags != 0) {
                 p = fn_801D2BB0(heap, size, 0, 0);
             } else {
@@ -1246,7 +1238,7 @@ static void *_ResGetResourceBuffer(ResFile_t *pRes, unsigned int index, int heap
     } else {
         _ResGetDirInfo(pRes, index, &offset, &prevSize, &size);
         strnzcpy(name, pRes->pName, 0xB);
-        sprintf(name + strlen(name), _Res_szIndexFormat, index);
+        sprintf(name + strlen(name), "%04d", index);
         if (noFlags != 0) {
             p = fn_801D2BB0(heap, size, 0, 0);
         } else {
@@ -2046,9 +2038,9 @@ int ResLoadAll(ResFile_t *pRes, int heap, int bulk)
                         dst.mSize = size;
                         dst.pData = pDst;
                         if (pRes->pName == 0) {
-                            fn_801C2D88(label, sizeof(label), _Res_szLoadAllLabelByHandle, index, pRes->mFile);
+                            fn_801C2D88(label, sizeof(label), "RLA:%i:%i", index, pRes->mFile);
                         } else {
-                            fn_801C2D88(label, sizeof(label), _Res_szLoadAllLabelByName, index, pRes->pName);
+                            fn_801C2D88(label, sizeof(label), "RLA%i:%s", index, pRes->pName);
                         }
                         label[31] = 0;
                         GCmpSetLabel(label);

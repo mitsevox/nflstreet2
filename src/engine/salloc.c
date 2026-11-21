@@ -6,7 +6,8 @@
 
 extern "C" {
 
-extern short lbl_803A6C04[];
+/* The voices SNDVOICEI_alloc has picked for the request in progress. */
+short sndvoicereserved[6];
 
 void SNDstop(int handle);
 
@@ -15,7 +16,7 @@ int SNDVOICEI_isreserved(int value, int count)
     int i;
 
     for (i = 0; i < count; i++) {
-        if (lbl_803A6C04[i] == value)
+        if (sndvoicereserved[i] == value)
             return 1;
     }
     return 0;
@@ -35,7 +36,7 @@ int SNDVOICEI_alloc(int count, int priority, int *handle, int first, int last)
     Voice_803A6C24 *p;
 
     for (i = 0; i < count; i++) {
-        lbl_803A6C04[i] = -1;
+        sndvoicereserved[i] = -1;
     }
     lasthandle += 256;
     if (lasthandle < 0) {
@@ -52,7 +53,7 @@ int SNDVOICEI_alloc(int count, int priority, int *handle, int first, int last)
             }
         }
         if (best >= 0) {
-            lbl_803A6C04[found++] = best;
+            sndvoicereserved[found++] = best;
         }
     }
     for (i = found; i < count; i++) {
@@ -78,7 +79,7 @@ int SNDVOICEI_alloc(int count, int priority, int *handle, int first, int last)
             }
         }
         if (best >= 0) {
-            lbl_803A6C04[found++] = best;
+            sndvoicereserved[found++] = best;
             if (found >= count) {
                 break;
             }
@@ -88,21 +89,21 @@ int SNDVOICEI_alloc(int count, int priority, int *handle, int first, int last)
         do {
             sorted = 1;
             for (i = 0; i < found - 1; i++) {
-                if (lbl_803A6C04[i] > lbl_803A6C04[i + 1]) {
-                    short t = lbl_803A6C04[i];
-                    lbl_803A6C04[i] = lbl_803A6C04[i + 1];
-                    lbl_803A6C04[i + 1] = t;
+                if (sndvoicereserved[i] > sndvoicereserved[i + 1]) {
+                    short t = sndvoicereserved[i];
+                    sndvoicereserved[i] = sndvoicereserved[i + 1];
+                    sndvoicereserved[i + 1] = t;
                     sorted = 0;
                 }
             }
         } while (sorted == 0);
-        *handle = lasthandle | lbl_803A6C04[0];
-        result = lbl_803A6C04[0];
+        *handle = lasthandle | sndvoicereserved[0];
+        result = sndvoicereserved[0];
         for (i = 0; i < found; i++) {
             int h;
 
-            p = &lbl_803A6C24.mUnknown1CC[lbl_803A6C04[i]];
-            h = lbl_803A6C24.mUnknown1CC[lbl_803A6C04[i]].mUnknown0;
+            p = &lbl_803A6C24.mUnknown1CC[sndvoicereserved[i]];
+            h = lbl_803A6C24.mUnknown1CC[sndvoicereserved[i]].mUnknown0;
             if (p->mUnknown6D != 0) {
                 if (h < 0) {
                     h = lbl_803A6C24.mUnknown1CC[p->m28].mUnknown0;
@@ -113,13 +114,13 @@ int SNDVOICEI_alloc(int count, int priority, int *handle, int first, int last)
             p->m2C = lbl_803A6C24.m170;
             p->m2A = priority;
         }
-        lbl_803A6C24.mUnknown1CC[lbl_803A6C04[0]].mUnknown0 = *handle;
-        lbl_803A6C24.mUnknown1CC[lbl_803A6C04[0]].mUnknown4[0] = lbl_803A6C04[0];
-        lbl_803A6C24.mUnknown1CC[lbl_803A6C04[0]].m28 = -1;
+        lbl_803A6C24.mUnknown1CC[sndvoicereserved[0]].mUnknown0 = *handle;
+        lbl_803A6C24.mUnknown1CC[sndvoicereserved[0]].mUnknown4[0] = sndvoicereserved[0];
+        lbl_803A6C24.mUnknown1CC[sndvoicereserved[0]].m28 = -1;
         for (i = 1; i < found; i++) {
-            lbl_803A6C24.mUnknown1CC[lbl_803A6C04[0]].mUnknown4[i] = lbl_803A6C04[i];
-            lbl_803A6C24.mUnknown1CC[lbl_803A6C04[i]].mUnknown0 = -1;
-            lbl_803A6C24.mUnknown1CC[lbl_803A6C04[i]].m28 = lbl_803A6C04[0];
+            lbl_803A6C24.mUnknown1CC[sndvoicereserved[0]].mUnknown4[i] = sndvoicereserved[i];
+            lbl_803A6C24.mUnknown1CC[sndvoicereserved[i]].mUnknown0 = -1;
+            lbl_803A6C24.mUnknown1CC[sndvoicereserved[i]].m28 = sndvoicereserved[0];
         }
     }
     return result;

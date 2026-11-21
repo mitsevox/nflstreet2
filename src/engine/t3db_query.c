@@ -13,7 +13,7 @@ int _TDbQryUpdateQIdxsFromLits(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLits, unsi
     unsigned int i;
     unsigned int lit;
 
-    for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
+    for (pQuery = _tDbQueries; pQuery != 0; pQuery = pQuery->mNext) {
         if (pQuery->mState != 3) {
             continue;
         }
@@ -154,7 +154,7 @@ void _TDbQryQIdxRowDelete(TDbTable_t *pTable, int row)
     TDbIdxNode_t *pNext;
     unsigned int found;
 
-    for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
+    for (pQuery = _tDbQueries; pQuery != 0; pQuery = pQuery->mNext) {
         found = 0;
         if (pQuery->mState == 3) {
             found = TDbStmtTableSlot_80205C44(pQuery->mSource.mQIdx->mStmt, pTable);
@@ -186,9 +186,9 @@ void _TDbQryQIdxRowDelete(TDbTable_t *pTable, int row)
 
 int _TDbQryCompareIndexCol(TDbExpr_t *pExpr, unsigned int column, TDbExpr_t **ppOut);
 int _TDbQryCompareIndexExpr(TDbExpr_t *pA, TDbExpr_t *pB);
-extern unsigned int lbl_803EBE94;
+extern unsigned int _tDbstrEmptyString;
 extern TDbMemPool_t lbl_803E968C;
-extern int lbl_802F9B78[];
+static int _TDbQry_aSwappedOps[6] = { 0x10004, 0x10005, 0x10003, 0x10001, 0x10002, 0x10006 };
 
 int _TDbQryPrepComplexFilter(TDbStmt_80205754 *pStmt, TDbExpr_t *pSrc, TDbExpr_t **ppDst, int top)
 {
@@ -407,7 +407,7 @@ void _TDbQryQueryDeleteFix(TDbTable_t *pTable, int row)
     TDbIdxNode_t *pNode;
     unsigned int found;
 
-    for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
+    for (pQuery = _tDbQueries; pQuery != 0; pQuery = pQuery->mNext) {
         if (pQuery->mState == 0) {
             continue;
         }
@@ -436,7 +436,7 @@ void _TDbQryQueryDeleteFixEx(TDbIndex_t *pIndex, TDbIdxNode_t *pOld, TDbIdxNode_
 {
     TDbQuery_t *pQuery;
 
-    for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
+    for (pQuery = _tDbQueries; pQuery != 0; pQuery = pQuery->mNext) {
         if ((pQuery->mState == 1 || pQuery->mState == 2) && pIndex == pQuery->mSource.mIndex &&
             pOld == pQuery->mCur) {
             if (pNew == 0) {
@@ -630,7 +630,7 @@ void _TDbQryCreateQIdxKey(TDbQIdx_80205880 *pQIdx, TDbIdxNode_t **ppNode)
                 if (pColumn->mType > 1) {
                     pKey[i] = 0;
                 } else {
-                    pKey[i] = lbl_803EBE94;
+                    pKey[i] = _tDbstrEmptyString;
                 }
             }
         } else {
@@ -804,7 +804,7 @@ unsigned char _TDbQryFindJoinColumn(TDbExpr_t *pExpr, unsigned int table, unsign
                     tmp = pExpr->mRight;
                     pExpr->mRight = pExpr->mLeft;
                     pExpr->mLeft = tmp;
-                    pExpr->mOp = lbl_802F9B78[pExpr->mOp - 0x10001];
+                    pExpr->mOp = _TDbQry_aSwappedOps[pExpr->mOp - 0x10001];
                     *ppSeek = pExpr;
                     column = pExpr->mRight.mValue.l;
                     *pOtherTable = pExpr->mLeft.mValue.l >> 32;
@@ -1357,8 +1357,8 @@ int _TDbQryCreate(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_t *pWhere, 
             }
             if (err == 0) {
                 pQuery->mCallbackArg = arg;
-                pQuery->mNext = lbl_803EBE90;
-                lbl_803EBE90 = pQuery;
+                pQuery->mNext = _tDbQueries;
+                _tDbQueries = pQuery;
             }
         }
     }
@@ -1371,10 +1371,10 @@ int _TDbQryCreate(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_t *pWhere, 
 
 int _TDbQryDestroy(TDbQuery_t *pQuery)
 {
-    if (lbl_803EBE90 == pQuery) {
-        lbl_803EBE90 = pQuery->mNext;
+    if (_tDbQueries == pQuery) {
+        _tDbQueries = pQuery->mNext;
     } else {
-        TDbQuery_t *pPrev = lbl_803EBE90;
+        TDbQuery_t *pPrev = _tDbQueries;
 
         while (pPrev->mNext != pQuery) {
             pPrev = pPrev->mNext;
@@ -2089,7 +2089,7 @@ void _TDbQryClearModFlags(void)
 {
     TDbQuery_t *pQuery;
 
-    for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
+    for (pQuery = _tDbQueries; pQuery != 0; pQuery = pQuery->mNext) {
         switch (pQuery->mState) {
         case 0:
             pQuery->mSource.mTable->mFlags &= ~4;
@@ -2109,7 +2109,7 @@ void _TDbQryCallTriggers(void)
 {
     TDbQuery_t *pQuery;
 
-    for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
+    for (pQuery = _tDbQueries; pQuery != 0; pQuery = pQuery->mNext) {
         if (pQuery->mCallback == 0) {
             continue;
         }
@@ -2488,11 +2488,11 @@ int _TDbQryColStats(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_t *pWhere
                         switch (pColumn->mType) {
                         case TDB_TYPE_STRING:
                             if (value.s != 0) {
-                                if (!bHave || lbl_803EBE74(value.s, pStats->mMin.s, pColumn->mBitCount >> 3) < 0) {
+                                if (!bHave || TDbStrncmp(value.s, pStats->mMin.s, pColumn->mBitCount >> 3) < 0) {
                                     strncpy(pStats->mMin.s, value.s, pColumn->mBitCount >> 3);
                                     pStats->mMin.s[pColumn->mBitCount >> 3] = 0;
                                 }
-                                if (!bHave || lbl_803EBE74(value.s, pStats->mMax.s, pColumn->mBitCount >> 3) > 0) {
+                                if (!bHave || TDbStrncmp(value.s, pStats->mMax.s, pColumn->mBitCount >> 3) > 0) {
                                     bHave = 1;
                                     strncpy(pStats->mMax.s, value.s, pColumn->mBitCount >> 3);
                                     pStats->mMin.s[pColumn->mBitCount >> 3] = 0;

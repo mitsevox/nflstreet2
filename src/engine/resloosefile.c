@@ -9,28 +9,25 @@ extern int FileClose(int handle);
 extern int FileExistsFileDevice(const char *pName, int device);
 extern int FileGetLength(int handle);
 
-extern char lbl_802B19AC[];
-extern char lbl_802B19B0[];
-extern char lbl_802B19B8[];
 extern char lbl_803E933C[];
-extern ResFile_t *lbl_803EBDE8;
-extern int lbl_803EBDEC;
 
 static void _ResLooseFileGetName(ResFile_t *pFile, int index)
 {
+    static ResFile_t *_ResLooseFile_PrevRes = 0;
+    static int _ResLooseFile_PrevIndex = -1;
     char name[5];
     char *p;
 
-    if (pFile == lbl_803EBDE8 && index == lbl_803EBDEC) {
+    if (pFile == _ResLooseFile_PrevRes && index == _ResLooseFile_PrevIndex) {
         return;
     }
-    sprintf(name, lbl_802B19AC, index);
+    sprintf(name, "%4X", index);
     for (p = name; *p == ' '; p++) {
         *p = '0';
     }
-    sprintf(lbl_803E933C, lbl_802B19B0, lbl_802B19B8, pFile->pName, name);
-    lbl_803EBDE8 = pFile;
-    lbl_803EBDEC = index;
+    sprintf(lbl_803E933C, "%s%s\\%s", "looseres\\", pFile->pName, name);
+    _ResLooseFile_PrevRes = pFile;
+    _ResLooseFile_PrevIndex = index;
 }
 
 int ResLooseFileExists(ResFile_t *pFile, int index)

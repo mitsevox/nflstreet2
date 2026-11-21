@@ -30,7 +30,6 @@ typedef struct Block_80233588 {
     int mUnknown8;
 } Block_80233588;
 
-extern DbNiomHandlers_t lbl_802FB38C;
 int DbManagerCreateGameDb(Block_80233588 *p);
 int DbManagerInitHook(void);
 
@@ -218,35 +217,12 @@ typedef struct Entry_802FB310 {
 extern char lbl_802B5D88[];
 extern char lbl_802B5DB0[];
 extern char lbl_802B6520[];
-extern char lbl_802B6E10[];
-extern char lbl_802B6E34[];
-extern char lbl_802B6E74[];
-extern char lbl_802B6E90[];
-extern char lbl_802B6EA0[];
-extern char lbl_802B6EE0[];
-extern char lbl_802B6F00[];
-extern char lbl_802B6F30[];
-extern char lbl_802B6F54[];
-extern char lbl_802B6F78[];
-extern char lbl_802B6FB0[];
-extern char lbl_802B6FF4[];
-extern char lbl_802B7050[];
-extern char lbl_802B706C[];
-extern char lbl_802B709C[];
-extern char lbl_802B70DC[];
-extern char lbl_802B70FC[];
 extern char lbl_802B7128[];
 extern char lbl_802B7130[];
 extern char lbl_802B7154[];
 extern char lbl_802B715C[];
 extern DbUserEntry_t _DbUser_aEntries[];
 extern Entry_802FB310 lbl_802FB310[];
-extern int lbl_802FB398[];
-extern int lbl_802FB3A4[];
-extern int lbl_802FB3B0[];
-extern DbNiomModeFuncs_t lbl_802FB3BC;
-extern DbNiomModeFuncs_t lbl_802FB3D0;
-extern DbNiomModeFuncs_t lbl_802FB3E4;
 extern int lbl_802FB3F8[];
 extern void *lbl_803A2648[];
 extern Table_803E96E8 lbl_803E96E8;
@@ -661,6 +637,14 @@ void fn_802353F8(Object_80235588 *p, int flags);
 void fn_80235510(Object_80235588 *p, int mode);
 void fn_80235588(Object_80235588 *p, int a);
 
+static DbNiomHandlers_t _DbManager_Handlers = { DbManagerShutdown, DbManagerLoad, DbManagerSave };
+static int _DbManager_aResultFuncs[3] = { (int)DbManagerResultAccept, (int)DbManagerResultRecord, (int)DbManagerResultFinish };
+static int _DbManager_aSaveTables[3] = { 0x45564153, 0x45564153, -1 };
+static int _DbManager_aOptionTables[3] = { 0x54504F53, 0x54504F47, -1 };
+static DbNiomModeFuncs_t _DbManager_Mode0Funcs = { DbManagerMode0Leave, DbManagerMode0Load, DbManagerMode0Save, DbManagerMode0Finish, DbManagerMode0Abort };
+static DbNiomModeFuncs_t _DbManager_Mode1Funcs = { DbManagerMode1Leave, DbManagerMode1Load, DbManagerMode1Save, DbManagerMode1Finish, DbManagerMode1Abort };
+static DbNiomModeFuncs_t _DbManager_Mode2Funcs = { DbManagerMode2Leave, DbManagerMode2Load, DbManagerMode2Save, DbManagerMode2Finish, DbManagerMode2Abort };
+
 int DbManagerInitModules(void)
 {
     int err;
@@ -695,7 +679,7 @@ int DbManagerInitModules(void)
     if ((err = fn_8022D154()) != 0) {
         return err;
     }
-    return fn_8022DA90(lbl_802FB398);
+    return fn_8022DA90(_DbManager_aResultFuncs);
 }
 
 void DbManagerShutdownModules(void)
@@ -715,7 +699,7 @@ void DbManagerShutdownModules(void)
 
 int DbManagerPushGameDb(void)
 {
-    return TDbTblDefaultDbPush(0x454D4147, lbl_802FB3B0, lbl_802FB3A4);
+    return TDbTblDefaultDbPush(0x454D4147, _DbManager_aOptionTables, _DbManager_aSaveTables);
 }
 
 int DbManagerPopGameDb(void)
@@ -726,7 +710,7 @@ int DbManagerPopGameDb(void)
 int DbManagerInit(struct Request_802329F0 *p)
 {
     int result;
-    DbNiomSetHandlers(&lbl_802FB38C);
+    DbNiomSetHandlers(&_DbManager_Handlers);
     result = DbManagerCreateGameDb((Block_80233588 *)&p->mSize);
     if (result == 0) {
         result = DbManagerPushGameDb();
@@ -779,7 +763,7 @@ int DbManagerLoad(void **ppData, void *p)
         return err;
     }
     mode = 0;
-    if ((err = TDbCompilePerformOp(0, lbl_802B6E10, &mode)) != 0) {
+    if ((err = TDbCompilePerformOp(0, "select 'ASCM' into \202 from 'NIOM'\n", &mode)) != 0) {
         return err;
     }
     DbManagerGetModeFuncs(mode, &funcs);
@@ -792,7 +776,7 @@ int DbManagerSave(int a, int b)
     struct QueryCursor cursor;
     int mode;
     int id;
-    int err = TDbCompilePerformOp(0, lbl_802B6E10, &mode);
+    int err = TDbCompilePerformOp(0, "select 'ASCM' into \202 from 'NIOM'\n", &mode);
 
     if (err == 0) {
         if (mode != 2) {
@@ -800,14 +784,14 @@ int DbManagerSave(int a, int b)
             cursor.mUnknown4 = 0;
             cursor.mUnknown8 = -1;
             cursor.mUnknown12 = 0;
-            err = TDbCompilePerformOp(0, lbl_802B6E34, &cursor, 1);
+            err = TDbCompilePerformOp(0, "declare \212 cursor for select * from 'LBAT' where ('OIFT' = \202)\n", &cursor, 1);
             if (err == 0) {
                 do {
-                    err = TDbCompilePerformOp(0, lbl_802B6E74, &cursor, &id);
+                    err = TDbCompilePerformOp(0, "fetch from \212 'FERT' into \202\n", &cursor, &id);
                     if (err != 0) {
                         break;
                     }
-                    err = TDbCompilePerformOp(0, lbl_802B6E90, id);
+                    err = TDbCompilePerformOp(0, "delete from \214\n", id);
                 } while (err == 0);
             }
             if (QUERY_STATUS_ACCEPTED(err) == 1) {
@@ -825,10 +809,10 @@ int DbManagerSave(int a, int b)
             cursor.mUnknown4 = 0;
             cursor.mUnknown8 = -1;
             cursor.mUnknown12 = 0;
-            err = TDbCompilePerformOp(0, lbl_802B6EA0, &cursor, 0);
+            err = TDbCompilePerformOp(0, "declare \212 cursor for select * from 'LBAT' where ('EPFT' = \202)\n", &cursor, 0);
             if (err == 0) {
                 do {
-                    err = TDbCompilePerformOp(0, lbl_802B6E74, &cursor, &id);
+                    err = TDbCompilePerformOp(0, "fetch from \212 'FERT' into \202\n", &cursor, &id);
                     if (err != 0) {
                         break;
                     }
@@ -856,13 +840,13 @@ int DbManagerSave(int a, int b)
 
 int DbManagerEnterMode0(void)
 {
-    DbNiomSetModeFuncs(&lbl_802FB3BC);
-    return TDbCompilePerformOp(0, lbl_802B6EE0, 0);
+    DbNiomSetModeFuncs(&_DbManager_Mode0Funcs);
+    return TDbCompilePerformOp(0, "update 'NIOM' set 'ASCM' = \202\n", 0);
 }
 
 int DbManagerMode0Leave(void)
 {
-    int err = TDbCompilePerformOp(0, lbl_802B6F00, 0, 4);
+    int err = TDbCompilePerformOp(0, "update 'NIOM' set 'ASPM' = \202 and 'ASCM' = \202\n", 0, 4);
 
     if (err == 0) {
         DbNiomClearModeFuncs();
@@ -897,13 +881,13 @@ int DbManagerMode0Abort(void)
 
 int DbManagerEnterMode1(void)
 {
-    DbNiomSetModeFuncs(&lbl_802FB3D0);
-    return TDbCompilePerformOp(0, lbl_802B6EE0, 1);
+    DbNiomSetModeFuncs(&_DbManager_Mode1Funcs);
+    return TDbCompilePerformOp(0, "update 'NIOM' set 'ASCM' = \202\n", 1);
 }
 
 int DbManagerMode1Leave(void)
 {
-    int err = TDbCompilePerformOp(0, lbl_802B6F00, 1, 4);
+    int err = TDbCompilePerformOp(0, "update 'NIOM' set 'ASPM' = \202 and 'ASCM' = \202\n", 1, 4);
 
     if (err == 0) {
         DbNiomClearModeFuncs();
@@ -929,7 +913,7 @@ int DbManagerMode1Finish(void)
 int DbManagerMode1Abort(void)
 {
     int mode;
-    int err = TDbCompilePerformOp(0, lbl_802B6F30, &mode);
+    int err = TDbCompilePerformOp(0, "select 'ASPM' into \202 from 'NIOM'\n", &mode);
 
     if (err == 0) {
         if (mode == 4) {
@@ -953,8 +937,8 @@ int DbManagerEnterMode2(int *pRecord0, int *pRecord1)
     unsigned int i;
     int err;
 
-    DbNiomSetModeFuncs(&lbl_802FB3E4);
-    err = TDbCompilePerformOp(0, lbl_802B6F54, &flag);
+    DbNiomSetModeFuncs(&_DbManager_Mode2Funcs);
+    err = TDbCompilePerformOp(0, "select 'PNIG' into \203 from 'FNIG'\n", &flag);
     if (err == 0) {
         if (flag == 0) {
             err = fn_8022C518(0x07000000);
@@ -969,14 +953,14 @@ int DbManagerEnterMode2(int *pRecord0, int *pRecord1)
             }
             id0 = 0;
             id1 = 0;
-            if (err == 0 && (err = TDbCompilePerformOp(0, lbl_802B6F78, &id0, 0)) == 0
-                && (err = TDbCompilePerformOp(0, lbl_802B6F78, &id1, 1)) == 0
+            if (err == 0 && (err = TDbCompilePerformOp(0, "select 'DIGT' into \202 from 'MTTS' where ('UNLS' = \202)\n", &id0, 0)) == 0
+                && (err = TDbCompilePerformOp(0, "select 'DIGT' into \202 from 'MTTS' where ('UNLS' = \202)\n", &id1, 1)) == 0
                 && (err = fn_8022DBF4(id0)) == 0 && (err = fn_8022DC38(id1)) == 0) {
                 for (i = 0; i <= 13; i++) {
-                    TDbCompilePerformOp(0, lbl_802B6FB0, &pRecord0[i], pRecord0[i], id0);
+                    TDbCompilePerformOp(0, "select 'DIGP' into \205 from 'YALP' where 'DIOP' = \205 and 'DIGT' = \205\n", &pRecord0[i], pRecord0[i], id0);
                 }
                 for (i = 0; i <= 13; i++) {
-                    TDbCompilePerformOp(0, lbl_802B6FB0, &pRecord1[i], pRecord1[i], id1);
+                    TDbCompilePerformOp(0, "select 'DIGP' into \205 from 'YALP' where 'DIOP' = \205 and 'DIGT' = \205\n", &pRecord1[i], pRecord1[i], id1);
                 }
                 if (err == 0) {
                     err = DbRunUpdateChain(flag, 0, &result, pRecord0, pRecord1);
@@ -984,7 +968,7 @@ int DbManagerEnterMode2(int *pRecord0, int *pRecord1)
             }
         }
         if (err == 0) {
-            err = TDbCompilePerformOp(0, lbl_802B6EE0, 2);
+            err = TDbCompilePerformOp(0, "update 'NIOM' set 'ASCM' = \202\n", 2);
         }
     }
     return err;
@@ -994,16 +978,16 @@ int DbManagerMode2Leave(void)
 {
     struct QueryCursor cursor;
     int id;
-    int err = TDbCompilePerformOp(0, lbl_802B6FF4, &cursor, 6, 5);
+    int err = TDbCompilePerformOp(0, "use 'TATS' declare \212 cursor for select 'DIGT' from 'MAET' where 'PYTT' = \202 or 'PYTT' = \202\n", &cursor, 6, 5);
 
     if (err == 0) {
         int *pId = &id;
         for (;;) {
-            err = TDbCompilePerformOp(0, lbl_802B7050, &cursor, pId);
+            err = TDbCompilePerformOp(0, "fetch from \212 'DIGT' into \205\n", &cursor, pId);
             if (err != 0) {
                 break;
             }
-            err = TDbCompilePerformOp(0, lbl_802B706C, id);
+            err = TDbCompilePerformOp(0, "use 'TATS' delete from 'YALP' where 'DIGT' = \202\n", id);
             if (err != 0) {
                 break;
             }
@@ -1019,12 +1003,12 @@ int DbManagerMode2Leave(void)
         TDbSQLDestroyCursor(&cursor);
     }
     if (err == 0) {
-        err = TDbCompilePerformOp(0, lbl_802B709C, 6, 5);
+        err = TDbCompilePerformOp(0, "use 'TATS' delete from 'MAET' where 'PYTT' = \202 or 'PYTT' = \202\n", 6, 5);
         if (QUERY_STATUS_ACCEPTED(err) == 1) {
             err = 0;
         }
         if (err == 0) {
-            err = TDbCompilePerformOp(0, lbl_802B6F00, 2, 4);
+            err = TDbCompilePerformOp(0, "update 'NIOM' set 'ASPM' = \202 and 'ASCM' = \202\n", 2, 4);
             if (err == 0) {
                 DbNiomClearModeFuncs();
             }
@@ -1040,23 +1024,23 @@ int DbManagerMode2Load(void)
 
 int DbManagerMode2Save(int a, int b)
 {
-    int err = TDbCompilePerformOp(0, lbl_802B6F00, 4, 1);
+    int err = TDbCompilePerformOp(0, "update 'NIOM' set 'ASPM' = \202 and 'ASCM' = \202\n", 4, 1);
 
     if (err == 0) {
-        err = TDbCompilePerformOp(0, lbl_802B70DC, 1);
+        err = TDbCompilePerformOp(0, "update 'FNIG' set 'PNIG' = \203\n", 1);
     }
     if (err == 0) {
         err = DbManagerSaveGameDb(a, b);
     }
     if (err == 0) {
-        err = TDbCompilePerformOp(0, lbl_802B6F00, 1, 2);
+        err = TDbCompilePerformOp(0, "update 'NIOM' set 'ASPM' = \202 and 'ASCM' = \202\n", 1, 2);
     } else {
-        TDbCompilePerformOp(0, lbl_802B6F00, 1, 2);
+        TDbCompilePerformOp(0, "update 'NIOM' set 'ASPM' = \202 and 'ASCM' = \202\n", 1, 2);
     }
     if (err == 0) {
-        err = TDbCompilePerformOp(0, lbl_802B70DC, 0);
+        err = TDbCompilePerformOp(0, "update 'FNIG' set 'PNIG' = \203\n", 0);
     } else {
-        TDbCompilePerformOp(0, lbl_802B70DC, 0);
+        TDbCompilePerformOp(0, "update 'FNIG' set 'PNIG' = \203\n", 0);
     }
     return err;
 }
@@ -1064,7 +1048,7 @@ int DbManagerMode2Save(int a, int b)
 int DbManagerMode2Finish(void)
 {
     int mode;
-    int err = TDbCompilePerformOp(0, lbl_802B70FC, &mode);
+    int err = TDbCompilePerformOp(0, "select 'RTQG' into \202 from 'FNIG'\n", &mode);
 
     if (err == 0) {
         if (mode == 6) {
@@ -1097,13 +1081,13 @@ void DbManagerGetModeFuncs(int mode, DbNiomModeFuncs_t *pFuncs)
 {
     switch (mode) {
     case 0:
-        *pFuncs = lbl_802FB3BC;
+        *pFuncs = _DbManager_Mode0Funcs;
         break;
     case 1:
-        *pFuncs = lbl_802FB3D0;
+        *pFuncs = _DbManager_Mode1Funcs;
         break;
     case 2:
-        *pFuncs = lbl_802FB3E4;
+        *pFuncs = _DbManager_Mode2Funcs;
         break;
     }
 }

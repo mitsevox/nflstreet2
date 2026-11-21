@@ -262,7 +262,7 @@ int _TDbTblDestroy(TDbTable_t *pTable)
 {
     TDbQuery_t *pQuery;
 
-    for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
+    for (pQuery = _tDbQueries; pQuery != 0; pQuery = pQuery->mNext) {
         if (pQuery->mState == 3) {
             unsigned int j;
 
@@ -369,7 +369,7 @@ int _TDbTblInsertRow(TDbTable_t *pTable, TDbLitRef_t *pValues, TDbResult_8020AD1
         if (err == 0) {
             TDbQuery_t *pQuery;
 
-            for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
+            for (pQuery = _tDbQueries; pQuery != 0; pQuery = pQuery->mNext) {
                 if (pQuery->mState == 3 && _TDbQryCheckQIdxUsage(pTable, 0xFF, pQuery->mSource.mQIdx) != 0) {
                     _TDbQryRebuildQIdx(pQuery->mSource.mQIdx, &pQuery->mCur);
                 }

@@ -10562,6 +10562,18 @@
           "placement": ".data3",
           "start": "0x802A3E40",
           "end": "0x802A3EF8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031C02C",
+          "end": "0x8031C098"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA60",
+          "end": "0x803ECA6C"
         }
       ],
       "functions": [
@@ -10896,7 +10908,7 @@
     {
       "source": "src/game/camplay.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional camera grouping, exact function extents, direct type/field observations and bounded rodata/sdata/sbss accesses. External initialized mode/jitter tables remain original and unclaimed. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv provisional camera grouping, exact function extents, direct type/field observations and bounded rodata/data/sdata/bss/sbss accesses; the camera view and definition tables after the jitter definitions remain original and unclaimed. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -10921,6 +10933,18 @@
           "placement": ".sbss",
           "start": "0x803ECA04",
           "end": "0x803ECA0C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DBEBC",
+          "end": "0x802DBF2C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B6AC",
+          "end": "0x8031B6C4"
         }
       ],
       "functions": [
@@ -11237,13 +11261,19 @@
           "section": ".data",
           "placement": ".data4",
           "start": "0x802F2734",
-          "end": "0x802F2754"
+          "end": "0x802F2934"
         },
         {
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8036550C",
           "end": "0x80365574"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB7D8",
+          "end": "0x803EB7E8"
         }
       ],
       "functions": [
@@ -11519,6 +11549,18 @@
           "placement": ".data3",
           "start": "0x8028D070",
           "end": "0x8028D338"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCD8C",
+          "end": "0x802CCDDC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA410",
+          "end": "0x803EA43C"
         }
       ],
       "functions": [
@@ -11943,6 +11985,18 @@
           "end": "0x800CF84C"
         },
         {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D7094",
+          "end": "0x802DA864"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA8AC",
+          "end": "0x803EAC98"
+        },
+        {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296038",
@@ -11952,7 +12006,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8030C070",
-          "end": "0x8030EFB4"
+          "end": "0x803192BC"
         },
         {
           "section": ".sbss",
@@ -19997,6 +20051,18 @@
           "placement": ".text",
           "start": "0x8022EBF0",
           "end": "0x8022EF14"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B5C8C",
+          "end": "0x802B5D0C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC0B0",
+          "end": "0x803EC0BC"
         }
       ],
       "functions": [
@@ -20147,6 +20213,18 @@
           "placement": ".text",
           "start": "0x802328A8",
           "end": "0x802336C4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B6E10",
+          "end": "0x802B7120"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FB38C",
+          "end": "0x802FB3F8"
         }
       ],
       "functions": [
@@ -20749,6 +20827,12 @@
           "placement": ".data3",
           "start": "0x802B7198",
           "end": "0x802B71B0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC0F8",
+          "end": "0x803EC0FC"
         }
       ],
       "functions": [
@@ -20855,6 +20939,24 @@
           "placement": ".data3",
           "start": "0x802B71B0",
           "end": "0x802B7220"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC100",
+          "end": "0x803EC110"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED028",
+          "end": "0x803ED02C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A2868",
+          "end": "0x803A39FC"
         }
       ],
       "functions": [
@@ -22180,7 +22282,7 @@
     {
       "source": "src/game/PlyrRender.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801A14D8-0x801A4AD4 (src/game/PlyrRender.cpp), its source-form and type rows, the exact function extents, the .rodata and .data rows and the linker row of the discarded _PlyrHeadSetModelNow. The unit's .sdata/.sbss/.bss objects are referenced as externals and stay original bytes. The source is linked with holdouts (units.json); the three non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv provisional unit row 0x801A14D8-0x801A4AD4 (src/game/PlyrRender.cpp), its source-form and type rows, the exact function extents, the .rodata, .data, .bss, .sdata and .sbss data rows and the linker row of the discarded _PlyrHeadSetModelNow. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -22199,6 +22301,24 @@
           "placement": ".data4",
           "start": "0x802F2934",
           "end": "0x802F3488"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365AB4",
+          "end": "0x80365DC0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB7E8",
+          "end": "0x803EB830"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECC00",
+          "end": "0x803ECC14"
         }
       ],
       "functions": [
@@ -25746,6 +25866,18 @@
           "placement": ".data3",
           "start": "0x802C1D90",
           "end": "0x802C1E18"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300850",
+          "end": "0x8030085C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A8D40",
+          "end": "0x803A8D44"
         }
       ],
       "functions": [
@@ -27643,6 +27775,12 @@
           "placement": ".text",
           "start": "0x801FC9D4",
           "end": "0x802009B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039B43C",
+          "end": "0x8039B48C"
         }
       ],
       "functions": [
@@ -28554,7 +28692,7 @@
     {
       "source": "src/engine/memorycard.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D3C68-0x801D5D30 (src/engine/memorycard.c), its function rows and the exact .rodata data row 0x802AFCC8-0x802AFCF8. Draft comparisons only; original assembly remains linked. The string constants after 0x802AFCF8 stay extern (lbl_), and MemCAsyncPoll 0x801D5840 is drafted (partial, 99.65%: pending-tail store order and one cross-jumped branch in the case-2 result switch; see the store-block source-form row).",
+      "evidence": "evidence.tsv compiler row 0x801D3C68-0x801D5D30 (src/engine/memorycard.c), its function rows and the exact .rodata data row 0x802AFCC8-0x802AFCF8. Draft comparisons only; original assembly remains linked. The file's strings are literals (.rodata 0x802AFCC8-0x802AFEC8, data row 0x802AFCF8), and MemCAsyncPoll 0x801D5840 is drafted (partial, 99.65%: pending-tail store order and one cross-jumped branch in the case-2 result switch; see the store-block source-form row).",
       "sections": [
         {
           "section": ".text",
@@ -28566,7 +28704,19 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802AFCC8",
-          "end": "0x802AFCF8"
+          "end": "0x802AFEC8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBCF8",
+          "end": "0x803EBD00"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80384CC0",
+          "end": "0x80398DE0"
         }
       ],
       "functions": [
@@ -29322,6 +29472,36 @@
           "placement": ".text",
           "start": "0x801EC650",
           "end": "0x801F1538"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B17C0",
+          "end": "0x802B1828"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9508",
+          "end": "0x802F9524"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD80",
+          "end": "0x803EBDB4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039AE14",
+          "end": "0x8039AE8C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF70",
+          "end": "0x803ECF80"
         }
       ],
       "functions": [
@@ -29836,6 +30016,18 @@
           "placement": ".text",
           "start": "0x801F5D84",
           "end": "0x801F7738"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039B3D8",
+          "end": "0x8039B3F8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFA0",
+          "end": "0x803ECFA4"
         }
       ],
       "functions": [
@@ -30157,6 +30349,18 @@
           "placement": ".text",
           "start": "0x801F8878",
           "end": "0x801FA870"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1AEC",
+          "end": "0x802B1AF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBE70",
+          "end": "0x803EBE98"
         }
       ],
       "functions": [
@@ -30569,6 +30773,18 @@
           "placement": ".data3",
           "start": "0x802AF490",
           "end": "0x802AF4B0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBC58",
+          "end": "0x803EBC5C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80383CD0",
+          "end": "0x80383D18"
         }
       ],
       "functions": [
@@ -30915,6 +31131,12 @@
           "placement": ".data3",
           "start": "0x802B1D10",
           "end": "0x802B1D40"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9E98",
+          "end": "0x802F9F98"
         }
       ],
       "functions": [
@@ -31853,6 +32075,18 @@
           "placement": ".data3",
           "start": "0x8028CFA0",
           "end": "0x8028D070"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCC94",
+          "end": "0x802CCCAC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA3F0",
+          "end": "0x803EA3FC"
         }
       ],
       "functions": [
@@ -32298,7 +32532,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x80309F98",
-          "end": "0x80309FC4"
+          "end": "0x8030A0E4"
         },
         {
           "section": ".sbss",
@@ -33711,6 +33945,12 @@
           "placement": ".data3",
           "start": "0x802C1E1C",
           "end": "0x802C1EAC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803B4E34",
+          "end": "0x803B5044"
         }
       ],
       "functions": [
@@ -34310,6 +34550,12 @@
           "placement": ".data4",
           "start": "0x802FFCC0",
           "end": "0x802FFCC4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6C04",
+          "end": "0x803A6C10"
         }
       ],
       "functions": [
@@ -35387,6 +35633,12 @@
           "placement": ".data3",
           "start": "0x802B1B90",
           "end": "0x802B1BB0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9B78",
+          "end": "0x802F9B90"
         }
       ],
       "functions": [
@@ -35829,6 +36081,12 @@
           "placement": ".data4",
           "start": "0x802FFCD0",
           "end": "0x802FFCD4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6E60",
+          "end": "0x803A7624"
         }
       ],
       "functions": [

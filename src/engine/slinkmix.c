@@ -5,11 +5,11 @@
 
 void SNDSYS_linkmaincpumixer(void)
 {
-    lbl_803B5028 = MIX_create;
-    lbl_803B502C = MIX_destroy;
-    lbl_803B5030 = MIX_audioslice;
-    lbl_803B5034 = MIX_playinit;
-    lbl_803B5038 = MIX_play;
-    lbl_803B503C = MIX_stop;
-    lbl_803B5040 = MIX_setpitch;
+    MIXinitfn = MIX_create;
+    MIXrestorefn = MIX_destroy;
+    MIXaudioslicefn = MIX_audioslice;
+    MIXplayinitfn = MIX_playinit;
+    MIXplayfn = MIX_play;
+    MIXstopfn = MIX_stop;
+    MIXsetpitchfn = MIX_setpitch;
 }

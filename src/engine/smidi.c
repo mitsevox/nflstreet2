@@ -50,11 +50,12 @@ typedef struct SndMidiNote_t {
 typedef struct SndMidiState_t {
     SndMidiSeq_t mSeqs[16];
     SndMidiNote_t mNotes[24];
+    unsigned char unk_0x7C0[4];
 } SndMidiState_t;
 
 extern "C" {
 
-extern SndMidiState_t lbl_803A6E60;
+extern SndMidiState_t sndms;
 
 int SNDvol(int handle, int vol);
 void SNDSYS_entercritical(void);
@@ -69,6 +70,9 @@ int SNDmidirestore(void);
 
 }
 
+/* The sequence and note slots. */
+SndMidiState_t sndms;
+
 void SNDI_midiserver(void);
 
 int SNDI_midigetseqindex(int handle)
@@ -82,7 +86,7 @@ int SNDI_midigetseqindex(int handle)
     if (index > 15) {
         return -8;
     }
-    if (lbl_803A6E60.mSeqs[index].mHandle != handle) {
+    if (sndms.mSeqs[index].mHandle != handle) {
         return -8;
     }
     return index;
@@ -90,7 +94,7 @@ int SNDI_midigetseqindex(int handle)
 
 int SNDI_midiupdatefade(int seq)
 {
-    SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
+    SndMidiSeq_t *s = &sndms.mSeqs[seq];
     int i;
 
     s->mVolume += s->mFadeStep;
@@ -108,7 +112,7 @@ int SNDI_midiupdatefade(int seq)
         return 1;
     }
     for (i = 0; i < 24; i++) {
-        SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+        SndMidiNote_t *note = &sndms.mNotes[i];
 
         if (note->mSeq == seq && note->mHandle > -1) {
             SNDvol(note->mHandle, s->mChans[note->mChan].mVolume * (short)(s->mVolume >> 16) >> 7);
@@ -123,7 +127,7 @@ int SNDI_midiseqover(int seq)
     int i;
 
     for (i = 0; i < 24; i++) {
-        SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+        SndMidiNote_t *note = &sndms.mNotes[i];
 
         if (note->mSeq == seq && note->mHandle >= 0 && SNDVOICEI_get(note->mHandle) >= 0) {
             over = 0;
@@ -136,7 +140,7 @@ int SNDI_midiseqover(int seq)
 void SNDI_midiparsenoteon(int seq, SndMidiChan_t *chan, int channel, int key)
 {
     static int lastnote = 0;
-    SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
+    SndMidiSeq_t *s = &sndms.mSeqs[seq];
     SndMidiNote_t *note = 0;
     SndPlayOpts_t opts;
     int found = 0;
@@ -148,7 +152,7 @@ void SNDI_midiparsenoteon(int seq, SndMidiChan_t *chan, int channel, int key)
     i = ++lastnote;
     for (last = i + 24; i < last; i++) {
         lastnote = i % 24;
-        note = &lbl_803A6E60.mNotes[lastnote];
+        note = &sndms.mNotes[lastnote];
         if (SNDVOICEI_get(note->mHandle) < 0) {
             found = 1;
             break;
@@ -184,12 +188,12 @@ void SNDI_midiparsenoteon(int seq, SndMidiChan_t *chan, int channel, int key)
 
 void SNDI_midiparsenoteoff(int seq, int chan, int key)
 {
-    SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
+    SndMidiSeq_t *s = &sndms.mSeqs[seq];
     int i;
 
     s->mpData++;
     for (i = 0; i < 24; i++) {
-        SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+        SndMidiNote_t *note = &sndms.mNotes[i];
 
         if (note->mSeq == seq && note->mChan == chan && note->mKey == key && !(note->mFlags & 0x80)) {
             SNDrelease(note->mHandle);
@@ -201,7 +205,7 @@ void SNDI_midiparsenoteoff(int seq, int chan, int key)
 
 void SNDI_midiparsecontrol(int seq, SndMidiChan_t *chan, int channel, int control)
 {
-    SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
+    SndMidiSeq_t *s = &sndms.mSeqs[seq];
     int i;
 
     if (control == 20) {
@@ -220,7 +224,7 @@ void SNDI_midiparsecontrol(int seq, SndMidiChan_t *chan, int channel, int contro
     } else if (control == 7) {
         chan->mVolume = *s->mpData++;
         for (i = 0; i < 24; i++) {
-            SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+            SndMidiNote_t *note = &sndms.mNotes[i];
 
             if (note->mSeq == seq && note->mChan == channel) {
                 SNDvol(note->mHandle, chan->mVolume * (short)(s->mVolume >> 16) >> 7);
@@ -229,7 +233,7 @@ void SNDI_midiparsecontrol(int seq, SndMidiChan_t *chan, int channel, int contro
     } else if (control == 10) {
         chan->mAzimuth = SNDI_pantoazimuth(*s->mpData++) >> 6;
         for (i = 0; i < 24; i++) {
-            SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+            SndMidiNote_t *note = &sndms.mNotes[i];
 
             if (note->mSeq == seq && note->mChan == channel) {
                 SND3dpos(note->mHandle, (chan->mAzimuth << 6) + s->m20, 0);
@@ -242,13 +246,13 @@ void SNDI_midiparsecontrol(int seq, SndMidiChan_t *chan, int channel, int contro
 
 void SNDI_midiparsepitchbend(int seq, SndMidiChan_t *chan, int channel, int lsb)
 {
-    SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
+    SndMidiSeq_t *s = &sndms.mSeqs[seq];
     int value = (*s->mpData++ << 7) + lsb;
     int i;
 
     chan->mBend = (unsigned char)(value / 128);
     for (i = 0; i < 24; i++) {
-        SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+        SndMidiNote_t *note = &sndms.mNotes[i];
 
         if (note->mSeq == seq && note->mChan == channel) {
             SNDpitchbend(note->mHandle, chan->mBend);
@@ -258,7 +262,7 @@ void SNDI_midiparsepitchbend(int seq, SndMidiChan_t *chan, int channel, int lsb)
 
 void SNDI_midiprocesstick(int seq)
 {
-    SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[seq];
+    SndMidiSeq_t *s = &sndms.mSeqs[seq];
     int delta;
     int status;
     int data;
@@ -323,7 +327,7 @@ void SNDI_midiserver(void)
     int i;
 
     for (i = 0; i < 16; i++) {
-        SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[i];
+        SndMidiSeq_t *s = &sndms.mSeqs[i];
         unsigned int target;
 
         if (s->mState != 3) {
@@ -348,7 +352,7 @@ int SNDmidiinit(void)
 
     SNDSYS_entercritical();
     for (i = 0; i < 24; i++) {
-        SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+        SndMidiNote_t *note = &sndms.mNotes[i];
 
         note->mChan = -1;
         note->mKey = 0;
@@ -356,7 +360,7 @@ int SNDmidiinit(void)
         note->mHandle = -1;
     }
     for (i = 0; i < 16; i++) {
-        SndMidiSeq_t *s = &lbl_803A6E60.mSeqs[i];
+        SndMidiSeq_t *s = &sndms.mSeqs[i];
 
         s->mHandle = -1;
         s->mState = 0;
@@ -383,7 +387,7 @@ int SNDmidistopall(void)
 
     SNDSYS_entercritical();
     for (i = 0; i < 16; i++) {
-        SNDseqstop(lbl_803A6E60.mSeqs[i].mHandle);
+        SNDseqstop(sndms.mSeqs[i].mHandle);
     }
     SNDSYS_leavecritical();
     return 0;
@@ -399,10 +403,10 @@ int SNDseqstop(int handle)
     if (seq < 0) {
         return seq;
     }
-    s = &lbl_803A6E60.mSeqs[seq];
+    s = &sndms.mSeqs[seq];
     if (s->mState != 0) {
         for (i = 0; i < 24; i++) {
-            SndMidiNote_t *note = &lbl_803A6E60.mNotes[i];
+            SndMidiNote_t *note = &sndms.mNotes[i];
 
             if (note->mSeq == seq) {
                 if (note->mHandle >= 0) {

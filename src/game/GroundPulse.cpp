@@ -1,7 +1,8 @@
 /* An orange pulse drawn on the ground that grows and then disappears. */
 
+static float _GroundPulse_aPosition[3];
+
 extern "C" {
-extern char lbl_8031B7D0[];
 extern unsigned char gParticles_bInit;
 
 void FxGroundPulseDraw(float scale, void *pObject);
@@ -26,6 +27,6 @@ void GroundPulseUpdate(void)
 void GroundPulseDraw(void)
 {
     if (_GroundPulse_bActive == 1) {
-        FxGroundPulseDraw(_GroundPulse_fScale, lbl_8031B7D0);
+        FxGroundPulseDraw(_GroundPulse_fScale, _GroundPulse_aPosition);
     }
 }

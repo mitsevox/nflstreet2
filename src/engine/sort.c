@@ -10,7 +10,8 @@ typedef struct SortInterface_t {
 } SortInterface_t;
 
 extern SortInterface_t lbl_803E943C[2];
-extern unsigned char lbl_803EBE20;
+/* Set by SortInit, cleared by SortShutdown. */
+static unsigned char _Sort_ModuleActive = 0;
 
 static void _SortInitInterface(void)
 {
@@ -25,11 +26,11 @@ int SortInit(void)
 {
     int err = 0;
 
-    if (!lbl_803EBE20) {
+    if (!_Sort_ModuleActive) {
         _SortInitInterface();
         SortInitBubbleModule();
         SortInitQuickModule();
-        lbl_803EBE20 = 1;
+        _Sort_ModuleActive = 1;
     } else {
         err = 0x170001;
     }
@@ -41,8 +42,8 @@ int SortShutdown(void)
 {
     int err = 0;
 
-    if (lbl_803EBE20) {
-        lbl_803EBE20 = 0;
+    if (_Sort_ModuleActive) {
+        _Sort_ModuleActive = 0;
     } else {
         err = 0x170002;
     }
