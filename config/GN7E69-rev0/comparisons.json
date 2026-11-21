@@ -11549,6 +11549,18 @@
           "placement": ".data3",
           "start": "0x8028D070",
           "end": "0x8028D338"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCD8C",
+          "end": "0x802CCDDC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA410",
+          "end": "0x803EA43C"
         }
       ],
       "functions": [
@@ -31901,6 +31913,18 @@
           "placement": ".data3",
           "start": "0x8028CFA0",
           "end": "0x8028D070"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCC94",
+          "end": "0x802CCCAC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA3F0",
+          "end": "0x803EA3FC"
         }
       ],
       "functions": [
