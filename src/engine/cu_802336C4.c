@@ -36,7 +36,6 @@ typedef struct Block_80233588 {
     int mUnknown8;
 } Block_80233588;
 
-extern DbNiomHandlers_t lbl_802FB38C;
 int DbManagerCreateGameDb(Block_80233588 *p);
 int DbManagerInitHook(void);
 
@@ -277,12 +276,6 @@ extern const float lbl_802B7168[];
 extern const float lbl_802B7170[];
 extern DbUserEntry_t _DbUser_aEntries[];
 extern Entry_802FB310 lbl_802FB310[];
-extern int lbl_802FB398[];
-extern int lbl_802FB3A4[];
-extern int lbl_802FB3B0[];
-extern DbNiomModeFuncs_t lbl_802FB3BC;
-extern DbNiomModeFuncs_t lbl_802FB3D0;
-extern DbNiomModeFuncs_t lbl_802FB3E4;
 extern unsigned int lbl_802FB3F8[];
 extern Box_80234070 lbl_802FB418;
 extern unsigned int lbl_803A2628[8];

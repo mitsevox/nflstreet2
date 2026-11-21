@@ -52,7 +52,7 @@ typedef struct TDbDb_801F88F0 {
     struct TDbDb_801F88F0 *pNext;
     TDbTbl_801F88F0 *pTables;
     int mId;
-    int mHeap;
+    void *mHeap;
     unsigned char mState;
 } TDbDb_801F88F0;
 
@@ -183,11 +183,11 @@ extern unsigned int strlen(const char *s);
 extern int strncmp(const char *a, const char *b, unsigned int n);
 extern char *strcpy(char *dst, const char *src);
 extern char *strncpy(char *dst, const char *src, unsigned int n);
-extern int _TDbMemPoolInit(TDbPool_803E9654 *pPool, int heap, int size, unsigned short max, unsigned short grow);
+extern int _TDbMemPoolInit(TDbPool_803E9654 *pPool, void *pHeap, int size, unsigned short max, unsigned short grow);
 extern void _TDbMemPoolDeinit(TDbPool_803E9654 *pPool);
-extern int TDbExtMemInit(int a, int size, int *pHeap);
-extern void TDbExtMemShutdown(int heap);
-extern int TDbExtMemAlloc(int heap, int size, void *ppOut);
+extern int TDbExtMemInit(int a, int size, void **ppHeap);
+extern void TDbExtMemShutdown(void *pHeap);
+extern int TDbExtMemAlloc(void *pHeap, int size, void *ppOut);
 extern int TDbExists(int db);
 extern int TDbTblDefaultDbGet(void);
 extern int _TDbIOSaveDatabase(TDbDb_801F88F0 *pDb, int a, int b);
@@ -221,7 +221,7 @@ extern int _TDbQryRowCopyTrig(int a, TDbQryBuf_801F9858 *pQry, int d, TDbTbl_801
 extern int _TDbIOLoadDatabase(TDbDb_801F88F0 *pDb, void *pFile, int a, int b, int c);
 extern int _TDbQryDestroy(TDbQry_801F89B8 *pQry);
 extern int _TDbTblDestroy(TDbTbl_801F88F0 *pTbl);
-extern void TDbExtMemFree(int heap, void *p, int size);
+extern void TDbExtMemFree(void *pHeap, void *p, int size);
 unsigned int (*TDbStrlen)(const char *s) = 0;
 int (*TDbStrncmp)(const char *a, const char *b, unsigned int n) = 0;
 char *(*TDbStrcpy)(char *dst, const char *src) = 0;
@@ -229,7 +229,7 @@ char *(*TDbStrncpy)(char *dst, const char *src, unsigned int n) = 0;
 void (*_tDbMemAllocInfoCallback)(TDbEvent_801F8A54 *pEvent) = 0;
 int _tDbDefaultDbStackUsed = -1;
 TDbDb_801F88F0 *_tDbDatabaseList = 0;
-int _tDbGlobalMemoryHeapID = 0;
+void *_tDbGlobalMemoryHeapID = 0;
 TDbQry_801F89B8 *_tDbQueries = 0;
 const char *_tDbstrEmptyString = "";
 
@@ -469,7 +469,7 @@ int TDbCreate(int db, int size)
 {
     TDbDb_801F88F0 *pFind;
     TDbDb_801F88F0 *pDb;
-    int heap;
+    void *heap;
     int err;
 
     for (pFind = _tDbDatabaseList; pFind != 0; pFind = pFind->pNext) {
@@ -518,7 +518,7 @@ int TDbDestroy(int db)
     TDbQry_801F89B8 *pNextQry;
     TDbTbl_801F88F0 *pTbl;
     TDbTbl_801F88F0 *pNextTbl;
-    int heap;
+    void *heap;
     int err;
 
     err = 0;

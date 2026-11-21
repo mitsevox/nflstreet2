@@ -19833,7 +19833,7 @@
     {
       "source": "src/engine/vfprintf.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv provisional whole-file grouping and exact function rows; native first-three-function prefix plus complete digit alphabet, scratch allocations and staging state. Later full bodies remain measured behind DECOMP_COMPARE; no whole-file closure. Linked with holdouts (da1c; owner ruling of 2026-11-20, config README Holdouts): the five later bodies compile with the file, _vfwrite and vfprintf (exact) link, fftoa, _vfprintf_r and add_separators keep their original bytes, and the whole .rodata 0x802B7538-0x802B7608 links.",
+      "evidence": "evidence.tsv provisional whole-file grouping and exact function rows; native first-three-function prefix plus complete digit alphabet, scratch allocations and staging state. Linked with holdouts (da1c; owner ruling of 2026-11-20, config README Holdouts): all eight bodies compile with the file; strround, strrev, itoa, _vfwrite, vfprintf and _vfprintf_r are exact and link as the runs 0x8026247C-0x802625A0 and 0x80262A88-0x80264424 (_vfprintf_r since the da1 fix round: source-form row _vfprintf_r expstr local); fftoa and add_separators keep their original bytes (their HOLDOUT: rows); the whole .rodata 0x802B7538-0x802B7608 links. No whole-file closure.",
       "sections": [
         {
           "section": ".text",
@@ -19845,7 +19845,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80262A88",
-          "end": "0x80262C34"
+          "end": "0x80264424"
         },
         {
           "section": ".rodata",
@@ -19879,15 +19879,11 @@
             "evidence": "evidence.tsv source-form 0x802625A0-0x80262A88"
           },
           {
-            "function": "_vfprintf_r",
-            "evidence": "evidence.tsv source-form 0x80262C34-0x80264424"
-          },
-          {
             "function": "add_separators",
             "evidence": "evidence.tsv source-form 0x80264424-0x802645AC"
           }
         ],
-        "evidence": "da1c merge notes (swarm o1/da1/da1c report): src/engine/vfprintf.c holds out fftoa, _vfprintf_r and add_separators (their HOLDOUT: rows); linked with holdouts so its .rodata 0x802B7538-0x802B7608 and the exact _vfwrite and vfprintf link."
+        "evidence": "da1c merge notes (swarm o1/da1/da1c report) and the da1 fix round (PR #1376): src/engine/vfprintf.c holds out fftoa and add_separators (their HOLDOUT: rows); _vfprintf_r matched in the fix round and links. Linked with holdouts so its .rodata 0x802B7538-0x802B7608 and the exact _vfwrite, vfprintf and _vfprintf_r link."
       }
     },
     {
@@ -20598,7 +20594,7 @@
     {
       "source": "src/engine/maddec.cpp",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801DA52C-0x801DB058 (src/engine/maddec.cpp), its function, name and data rows; 0x801DA7E8-0x801DB058 and the file's data are linked except the two code tables 0x802B0060-0x802B0E50, which only the holdout reads, the documented holdout 0x801DA52C-0x801DA7E8 (the table initializer) keeps its original bytes and stays a comparison. Linked with holdouts (da1c; owner ruling of 2026-11-20, config README Holdouts): madinit__Fv keeps the original bytes and its draft is compiled with the file, so the code tables 0x802B0060-0x802B0E50 link with quanttbl as the whole .rodata 0x802B0060-0x802B0F50.",
+      "evidence": "evidence.tsv unit row 0x801DA52C-0x801DB058 (src/engine/maddec.cpp), its function, name and data rows. Linked with holdouts (da1c; owner ruling of 2026-11-20, config README Holdouts): madinit__Fv 0x801DA52C-0x801DA7E8 (the table initializer) is the holdout; it keeps its original bytes and stays a comparison. Its draft is compiled with the file, so .text 0x801DA7E8-0x801DB058 and all of the file's data link, including the two VLC code tables 0x802B0060-0x802B0E50 that only madinit reads, as part of the whole .rodata 0x802B0060-0x802B0F50.",
       "sections": [
         {
           "section": ".text",

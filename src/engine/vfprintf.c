@@ -416,6 +416,7 @@ _vfprintf_r(void *data, RuntimeFile_t *fp, const char *fmt0, va_list ap)
 	double value;
 	double exponent;
 	int strip;
+	char expstr[7];	/* buffer for exponent string */
 
 #define	quad_t	  long long
 #define	u_quad_t  unsigned long long
