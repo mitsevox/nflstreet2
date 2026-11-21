@@ -21,15 +21,14 @@
 struct CardStreamTarget;
 struct SaveStreamOps_t;
 #include "engine/DbUserEntry.h"
-extern char lbl_802B5C8C[];
 extern char lbl_803A1C60[];
 extern float lbl_803A20A4[][13];
 extern char *_DbEvas_pFileName;
 extern int _DbEvas_iMode;
 extern int _DbEvas_iSize;
-extern char *lbl_803EC0B4;
-extern int lbl_803EC0B8;
-extern int lbl_803EC0B0;
+static int _DbTatsCopy_iSize = 0;
+static char *_DbTatsCopy_pFileName = 0;
+static int _DbTatsCopy_iMode = -1;
 extern int _DbUser_iSize;
 extern char *_DbUser_pFileName;
 extern int _DbUser_iMode;
@@ -66,8 +65,6 @@ extern char lbl_802B3610[];
 extern char lbl_802B3698[];
 extern char lbl_802B479C[];
 extern char lbl_802B4828[];
-extern char lbl_802B5CB4[];
-extern char lbl_802B5CF0[];
 extern int TDbExists(int db);
 extern char lbl_802B3888[];
 extern char lbl_802B36C4[];
@@ -602,25 +599,25 @@ int DbUserGetDb(int key);
 
 int DbTatsCopyInit(int a, const char *pName, int b)
 {
-    lbl_803EC0B4 = DbUtilAlloc(strlen(pName) + 1, 1);
-    strcpy(lbl_803EC0B4, pName);
-    lbl_803EC0B8 = b;
+    _DbTatsCopy_pFileName = DbUtilAlloc(strlen(pName) + 1, 1);
+    strcpy(_DbTatsCopy_pFileName, pName);
+    _DbTatsCopy_iMode = b;
     return 0;
 }
 
 void DbTatsCopyShutdown(void)
 {
-    DbUtilFree(lbl_803EC0B4);
-    lbl_803EC0B0 = 0;
-    lbl_803EC0B4 = 0;
-    lbl_803EC0B8 = -1;
+    DbUtilFree(_DbTatsCopy_pFileName);
+    _DbTatsCopy_iSize = 0;
+    _DbTatsCopy_pFileName = 0;
+    _DbTatsCopy_iMode = -1;
 }
 
 int DbTatsCopyOpen(void)
 {
-    int result = TDbCreate(0x54415453, lbl_803EC0B0);
+    int result = TDbCreate(0x54415453, _DbTatsCopy_iSize);
     if (result == 0) {
-        result = TDbExtLoadFromResource(0x54415453, lbl_803EC0B4, lbl_803EC0B8, 0);
+        result = TDbExtLoadFromResource(0x54415453, _DbTatsCopy_pFileName, _DbTatsCopy_iMode, 0);
     }
     return result;
 }
@@ -632,7 +629,7 @@ int DbTatsCopyClose(void)
 
 int DbTatsCopyTable(int a, int b)
 {
-    return TDbCompilePerformOp(0, lbl_802B5C8C, a, b, b);
+    return TDbCompilePerformOp(0, "use 'TATS' select into \214.\214 * from \214\n", a, b, b);
 }
 
 int DbTatsCopyTblDestroy(int db, int tbl)
@@ -657,11 +654,11 @@ int DbTatsCopyAllTables(int db, int a, int b)
         cursor.mUnknown4 = 0;
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
-        status = TDbCompilePerformOp(0, lbl_802B5CB4, db, &cursor, a, b, 1);
+        status = TDbCompilePerformOp(0, "use \214 declare \212 cursor for select * from \214 where (\214 = \202)\n", db, &cursor, a, b, 1);
         if (status == 0) {
             pTbl = &tbl;
             do {
-                status = TDbCompilePerformOp(0, lbl_802B5CF0, &cursor, pTbl);
+                status = TDbCompilePerformOp(0, "fetch from \212 'FERT' into \202\n", &cursor, pTbl);
                 if (status == 0 && TDbTblExists(db, tbl) != 0) {
                     status = DbTatsCopyTable(db, tbl);
                     if (QUERY_STATUS_ACCEPTED(status) == 1) {
