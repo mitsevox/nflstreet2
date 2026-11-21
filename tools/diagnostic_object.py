@@ -4,6 +4,19 @@ import struct
 import source_build as sb
 
 
+# R_PPC_ADDR16_LO, _HI and _HA: the halves of an address formed in a register (lis/addi).
+ADDRESS_HALVES = (4, 5, 6)
+
+
+def base_reaches(kind, value, size, extent):
+    """An address formed in a register is a base, not a referent: the instruction that uses it adds
+    a signed 16-bit displacement. GCC forms object+0x10000 for a large object and then addresses
+    its fields with negative displacements, so the section offset lies past the section's end.
+    Such a base still locates the section's own placement when the compiled section is placed
+    whole and a displacement from the base can reach back into the placement."""
+    return kind in ADDRESS_HALVES and size <= extent and -0x8000 < value < extent + 0x8000
+
+
 def fragment(native, section, offset, size, target_start, functions, targets, placements, externals, output, target_sections,
              storage=None):
     sections, symbols = sb.read_elf(native)
@@ -64,7 +77,8 @@ def fragment(native, section, offset, size, target_start, functions, targets, pl
                     address = storage[mapped[0]] + value - symbols[mapped[0]]['value']
                 else:
                     placement = placements.get(owned['name'])
-                    if placement is None or not 0 <= value < placement['end'] - placement['start']:
+                    extent = None if placement is None else placement['end'] - placement['start']
+                    if extent is None or not (0 <= value < extent or base_reaches(kind, value, owned['size'], extent)):
                         raise ValueError('Same-file data reference lacks target placement')
                     address = placement['start'] + value
             if not 0 <= address <= 0xFFFFFFFF:

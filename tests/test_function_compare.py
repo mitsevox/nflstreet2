@@ -1052,4 +1052,81 @@ class CodeDataAndStorageComparisons(ComparisonFixture):
         with self.assertRaisesRegex(ValueError, 'Uninitialized data reference lacks an evidenced storage address'):
             diagnostic_object.fragment(*arguments, {})
 
+
+class SectionBaseReferences(unittest.TestCase):
+    """A large object addressed from a base formed past its end (lis/addi of .bss+0x10020, then
+    negative displacements; snddrv.c's driver state) resolves to the section's own placement.
+    The compiler is not needed: the native object is written directly."""
+    BSS = 0xC0E0
+    START = 0x803A8D40
+
+    def setUp(self):
+        self.directory = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.directory)
+
+    def native(self, relocations, bss=BSS):
+        # .text: lis r31,0; addi r31,r31,0; lwz r3,-0x3F40(r31); .bss: one uninitialized section.
+        path = self.directory / 'native.o'
+        sb.write_object(path, [
+            {'name': '.text', 'type': sb.SHT_PROGBITS, 'flags': sb.SHF_ALLOC | sb.SHF_EXECINSTR, 'size': 12,
+             'data': bytes.fromhex('3fe00000 3bff0000 807fc0c0'.replace(' ', '')), 'align': 4},
+            {'name': '.bss', 'type': sb.SHT_NOBITS, 'flags': sb.SHF_ALLOC | sb.SHF_WRITE, 'size': bss, 'align': 32}])
+        data = bytearray(path.read_bytes())
+        shoff = struct.unpack_from('>I', data, 32)[0]
+        _, count, strings_index = struct.unpack_from('>HHH', data, 46)
+        headers = [list(struct.unpack_from('>IIIIIIIIII', data, shoff + i * 40)) for i in range(count)]
+        data = data[:shoff]
+        names = headers[strings_index]
+        strings = data[names[4]:names[4] + names[5]]
+        name = len(strings)
+        strings += b'.rela.text\0'
+        names[4], names[5] = len(data), len(strings)
+        data += strings + b'\0' * (-len(strings) % 4)
+        at = len(data)
+        bss_symbol = 3  # null, file, .text, .bss section symbols
+        for position, kind, addend in relocations:
+            data += struct.pack('>IIi', position, (bss_symbol << 8) | kind, addend)
+        symtab = next(i for i, h in enumerate(headers) if h[1] == sb.SHT_SYMTAB)
+        headers.append([name, 4, 0, 0, at, len(relocations) * 12, symtab, 1, 4, 12])
+        struct.pack_into('>I', data, 32, len(data))
+        struct.pack_into('>H', data, 48, len(headers))
+        for header in headers:
+            data += struct.pack('>IIIIIIIIII', *header)
+        return bytes(data)
+
+    def fragment(self, relocations, bss=BSS, extent=BSS, storage=None, placed=True):
+        native = self.native(relocations, bss)
+        sections, _ = sb.read_elf(native)
+        text = next(s for s in sections if s['name'] == '.text')
+        placements = {'.bss': {'section': '.bss', 'start': self.START, 'end': self.START + extent}} if placed else {}
+        output = self.directory / 'fragment.o'
+        diagnostic_object.fragment(native, text, 0, 12, 0x80272CC0, {}, {}, placements, {}, output, [], storage)
+        return {s['name']: s['value'] for s in sb.read_elf(output.read_bytes())[1]
+                if s['name'].startswith('__comparison_reference_')}
+
+    def pair(self, addend):
+        return [(2, 6, addend), (6, 4, addend)]  # R_PPC_ADDR16_HA, R_PPC_ADDR16_LO
+
+    def test_base_past_section_end_resolves_to_section_placement(self):
+        self.assertEqual(self.fragment(self.pair(0x10020)), {'__comparison_reference_803B8D60': 0x803B8D60})
+        # R_PPC_ADDR16_HI forms the same base; so does one reaching back from the last reachable offset.
+        self.assertEqual(self.fragment([(2, 5, 0x10020)]), {'__comparison_reference_803B8D60': 0x803B8D60})
+        self.assertEqual(self.fragment(self.pair(self.BSS + 0x7FFF)), {'__comparison_reference_803BCE1F': 0x803BCE1F})
+        self.assertEqual(self.fragment(self.pair(-0x7FFF)), {'__comparison_reference_803A0D41': 0x803A0D41})
+
+    def test_references_outside_every_placement_still_fail_closed(self):
+        refused = 'Same-file data reference lacks target placement'
+        cases = {'no displacement reaches the section': dict(relocations=self.pair(self.BSS + 0x8000)),
+                 'no displacement reaches back from below': dict(relocations=self.pair(-0x8000)),
+                 'a pointer word is a referent, not a base': dict(relocations=[(8, 1, 0x10020)]),
+                 'a displacement relocation is a referent': dict(relocations=[(10, 109, 0x10020)]),
+                 'the section is not placed': dict(relocations=self.pair(0x10020), placed=False),
+                 'the section is not placed whole': dict(relocations=self.pair(0x10020), extent=self.BSS - 0x20)}
+        for reason, arguments in cases.items():
+            with self.subTest(reason), self.assertRaisesRegex(ValueError, refused):
+                self.fragment(**arguments)
+        # With a storage map each object resolves alone, so a base between objects is unresolved.
+        with self.assertRaisesRegex(ValueError, 'Uninitialized data reference lacks an evidenced storage address'):
+            self.fragment(self.pair(0x10020), storage={})
+
 if __name__=='__main__':unittest.main()
