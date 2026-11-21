@@ -33207,13 +33207,25 @@
     {
       "source": "src/engine/saemsamb.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x802697D8-0x802699F4 (src/engine/saemsamb.c); draft comparisons only, original assembly remains linked. Part of the former src/engine/cu_80266A2C.c (split by c16a).",
+      "evidence": "evidence.tsv provisional unit row 0x802697D8-0x802699F4, the sound_cxx compiler row, constructor and sndaems data rows and the source-form row for the unresolved branch in SNDAEMS_addmodulebank. The two generated functions and the constructor word are exact as comparisons; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802697D8",
           "end": "0x802699F4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6BCC",
+          "end": "0x803A6C04"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B4C",
+          "end": "0x80289B50"
         }
       ],
       "functions": [
@@ -33223,12 +33235,12 @@
           "end": "0x80269990"
         },
         {
-          "symbol": "fn_80269990",
+          "symbol": "__static_initialization_and_destruction_0",
           "start": "0x80269990",
           "end": "0x802699C8"
         },
         {
-          "symbol": "fn_802699C8",
+          "symbol": "_GLOBAL_.I.SNDAEMS_addmodulebank",
           "start": "0x802699C8",
           "end": "0x802699F4"
         }

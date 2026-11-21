@@ -1,29 +1,36 @@
-/* Partial source of the sound library's module bank registration (saemsamb.c). */
+/* Registers AEMS sound-module banks and initializes the sound module player's shared state. */
 
 struct BankVer_t;
 
 extern "C" {
-typedef struct Object_803A6BCC {
-    int mUnknown0;
-    int mUnknown4;
-    unsigned char mUnknown8[32];
-    int mUnknown28;
-    int mUnknown2C;
-    void (*mpLockCallback)(void);
-} Object_803A6BCC;
 
-extern Object_803A6BCC lbl_803A6BCC;
+struct SndAemsTimerClient_t;
+struct SndAemsModuleBankLink_t;
+
+struct SndAemsState_t {
+    SndAemsTimerClient_t *mpTimerClients;
+    SndAemsModuleBankLink_t *mpModuleBanks;
+    unsigned char unk_0x8[0x20];
+    int unk_0x28;
+    int unk_0x2C;
+    void (*mpBeforeAddBank)(void);
+    void (*mpBeforeRemoveBank)(void);
+
+    SndAemsState_t() : mpTimerClients(0), mpModuleBanks(0), unk_0x28(0), unk_0x2C(0) {}
+};
+
+extern SndAemsState_t sndaems;
 
 typedef struct SndAemsModuleBank_t {
     unsigned char unk_0x0[0x14];
-    int mAllocParam;
+    int mAllocArgument;
     int mHeaderSize;
     unsigned char unk_0x1C[4];
     int mBankOffsetA;
     int mBankSizeA;
     int mBankOffsetB;
     int mBankSizeB;
-    int mModuleOffset;
+    int mFixupHeaderOffset;
     unsigned char unk_0x34[8];
     int mHandle;
     int mBankA;
@@ -50,8 +57,8 @@ int SNDAEMS_addmodulebank(SndAemsModuleBank_t *data, char *name, int arg,
     int result;
 
     bank = data;
-    if (lbl_803A6BCC.mpLockCallback != 0) {
-        lbl_803A6BCC.mpLockCallback();
+    if (sndaems.mpBeforeAddBank != 0) {
+        sndaems.mpBeforeAddBank();
     }
     data->mHandle = fn_80269484();
     if (data->mBankOffsetA != 0) {
@@ -80,23 +87,23 @@ int SNDAEMS_addmodulebank(SndAemsModuleBank_t *data, char *name, int arg,
         sizeB = data->mBankSizeB;
     }
     size = result;
-    result = (int)alloc(data, size + sizeB, data->mAllocParam);
+    result = (int)alloc(data, size + sizeB, data->mAllocArgument);
     if (result == 0) {
         result = -6;
         goto fail;
     }
     moved = (SndAemsModuleBank_t *)result;
     if (moved != data) {
-        bank = moved;
         SNDI_memcpy(moved, data, data->mHeaderSize);
-        if (resultA != 0) {
-            SNDbankheadercopy((char *)bank + bank->mHeaderSize, bank->mBankA);
-        }
+        bank = moved;
+    }
+    if (resultA != 0 && moved != data) {
+        SNDbankheadercopy((char *)bank + bank->mHeaderSize, bank->mBankA);
     }
     if (resultB > 0 && (moved != data || resultA == 7)) {
         SNDbankheadercopy((char *)moved + size, bank->mBankB);
     }
-    fn_802694AC(bank, (char *)data + bank->mModuleOffset, name, arg);
+    fn_802694AC(bank, (char *)data + bank->mFixupHeaderOffset, name, arg);
     return bank->mHandle;
 
 fail:
@@ -109,18 +116,5 @@ fail:
     return result;
 }
 
-void fn_80269990(int a, int b)
-{
-    if (b == 0xFFFF && a != 0) {
-        lbl_803A6BCC.mUnknown0 = 0;
-        lbl_803A6BCC.mUnknown4 = 0;
-        lbl_803A6BCC.mUnknown28 = 0;
-        lbl_803A6BCC.mUnknown2C = 0;
-    }
-}
-
-void fn_802699C8(void)
-{
-    fn_80269990(1, 0xFFFF);
-}
+SndAemsState_t sndaems;
 }
