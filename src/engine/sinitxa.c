@@ -7,12 +7,12 @@ extern "C" {
 
 void MIXI_initunpackxa(void)
 {
-    lbl_803B4E34.m18[1][0] = SFILTER_unpackxafinit;
-    lbl_803B4E34.m60[1][0] = 44;
-    lbl_803B4E34.m60[1][1] = 84;
-    lbl_803B4E34.m18[1][1] = SFILTER_unpackxalfinit;
-    lbl_803B4E34.m18[1][2] = SFILTER_unpackxapfinit;
-    lbl_803B4E34.m60[1][2] = 60;
+    sndmix.m18[1][0] = SFILTER_unpackxafinit;
+    sndmix.m60[1][0] = 44;
+    sndmix.m60[1][1] = 84;
+    sndmix.m18[1][1] = SFILTER_unpackxalfinit;
+    sndmix.m18[1][2] = SFILTER_unpackxapfinit;
+    sndmix.m60[1][2] = 60;
 }
 
 }

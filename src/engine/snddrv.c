@@ -3,6 +3,8 @@
 
 #include "engine/sndlib.h"
 
+/* The audio-callback count: the driver thread runs the 100 Hz server on every other callback. */
+static int everyother = 0;
 
 void SNDDRV_freenextframe(void)
 {
@@ -214,17 +216,18 @@ void SNDDRV_restoredma(int key)
 
 void SNDDRV_audiocallback(void **buffers, void *unused)
 {
+    static float *ptr;
     BOOL enabled = OSEnableInterrupts();
     int i;
     int j;
 
     if (lbl_803A8D60.mC048 != 0) {
         for (i = 0; i < lbl_8030002C; i++) {
-            if (lbl_803B4E34.m14[i] != 0) {
+            if (sndmix.m14[i] != 0) {
                 float *dst = MIX_getwetbuffer(i);
                 int *src = (int *)buffers[0];
 
-                lbl_803A8D40 = dst;
+                ptr = dst;
                 for (j = 0; j < 160; j++) {
                     dst[j] = src[j];
                 }
@@ -241,7 +244,7 @@ void SNDDRV_audiocallback(void **buffers, void *unused)
         }
     }
     OSWakeupThread(&lbl_803A8D60.m1DE0);
-    lbl_80300850++;
+    everyother++;
     OSRestoreInterrupts(enabled);
 }
 
@@ -260,7 +263,7 @@ void SNDDRV_initmixer(void)
     setup.m0 = lbl_803A6C24.m1C.mA;
     setup.m4 = SNDDRV_mixvoicefree;
     setup.mA = 0;
-    lbl_803B5028(&setup);
+    MIXinitfn(&setup);
     SNDSYS_entercritical();
     for (i = 0; i < setup.m9; i++) {
         void *buffer = SNDMEMI_allocz(672);
@@ -282,7 +285,7 @@ void SNDDRV_restoremixer(void)
         SNDMEMI_free(lbl_803A8D60.mC050[i]);
     }
     SNDSYS_leavecritical();
-    lbl_803B502C();
+    MIXrestorefn();
 }
 
 void SNDDRV_fillbufwithpackets(int index, Stream_802743A0 *stream, Record_803A6DF0 *record)
@@ -339,23 +342,25 @@ void SNDDRV_fillbufwithpackets(int index, Stream_802743A0 *stream, Record_803A6D
 
 void *SNDDRV_thread(void *arg)
 {
+    static float curTick = 0.1f;
+
     for (;;) {
         Snd::gMutexLockFn();
         if (lbl_803A6C24.m220 != 0) {
             lbl_803A6C24.m220();
         }
         if (lbl_803A8D60.mC048 != 0) {
-            lbl_803B5030(lbl_803A8D60.mC068, 160);
+            MIXaudioslicefn(lbl_803A8D60.mC068, 160);
             SNDPKTPLAYI_flushcallbackdata();
         }
-        if (lbl_80300850 & 1) {
+        if (everyother & 1) {
             SNDSYSI_100hzserver();
-            lbl_80300854 += lbl_803A8D60.m1400;
+            curTick += lbl_803A8D60.m1400;
             // FAKEMATCH: negated float tests give the target's branch senses (blt to the subtraction,
             // cror un/eq/lt around the wrap); the plain x < 0 and x > 30 forms reverse both branches.
-            Snd::gVariableTimerTick = (int)(!(lbl_80300854 < 0.0f) ? lbl_80300854 + 0.5f : lbl_80300854 - 0.5f);
-            if (!(lbl_80300854 <= 30.0f)) {
-                lbl_80300854 -= 30.0f;
+            Snd::gVariableTimerTick = (int)(!(curTick < 0.0f) ? curTick + 0.5f : curTick - 0.5f);
+            if (!(curTick <= 30.0f)) {
+                curTick -= 30.0f;
             }
             SNDSYSI_variabletimerservice();
         }
@@ -434,6 +439,7 @@ static inline float _SndClampF(float x, float lo, float hi)
 
 int SNDPLATFORM_init(int mode)
 {
+    static int araminited = 0;
     float rate;
     int i;
 
@@ -445,10 +451,10 @@ int SNDPLATFORM_init(int mode)
     rate = _SndClampF(Snd::gVariableTimerPeriod, 10.0f, 100.0f);
     Snd::gVariableTimerPeriod = rate;
     lbl_803A8D60.m1400 = 10.0f / rate;
-    if (lbl_803A6C24.m1C.m21 != 0 && lbl_80300858 == 0) {
+    if (lbl_803A6C24.m1C.m21 != 0 && araminited == 0) {
         ARInit(0, 0);
         ARQInit();
-        lbl_80300858 = 1;
+        araminited = 1;
     }
     for (i = 0; i < 64; i++) {
         lbl_803A8D60.m9E30[i].m0 = -1;
@@ -821,7 +827,7 @@ int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, Info_8027
     record->m23 = info->m2;
     if (record->m24 & 4) {
         for (i = 0; i < record->m23; i++) {
-            lbl_803B5034(record->m4[i] - lbl_803A6C24.m1C.m12, record->m22, 0, 0, 0, p->m18[i], record->m23, 0, -1,
+            MIXplayinitfn(record->m4[i] - lbl_803A6C24.m1C.m12, record->m22, 0, 0, 0, p->m18[i], record->m23, 0, -1,
                          -1, 0, 0, p->m7, i);
         }
         SNDPLATFORM_setpitch(record->m4[0]);
@@ -833,7 +839,7 @@ int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, Info_8027
         SNDPLATFORM_lowpass(record->m4[0], b);
         SNDPLATFORM_highpass(record->m4[0], c);
         for (i = 0; i < record->m23; i++) {
-            lbl_803B5038(record->m4[i] - lbl_803A6C24.m1C.m12);
+            MIXplayfn(record->m4[i] - lbl_803A6C24.m1C.m12);
         }
     } else {
         Stream_802743A0 *block = lbl_803A8D60.m1410[stream];
@@ -974,7 +980,7 @@ int SNDPLATFORM_setpitch(int index)
         pitch = (record->m20 << 15) / lbl_803A6C24.m1C.mA;
         pitch = pitch * record->m8E >> 11;
         for (i = 0; i < record->m23; i++) {
-            lbl_803B5040(record->m4[i] - lbl_803A6C24.m1C.m12, pitch);
+            MIXsetpitchfn(record->m4[i] - lbl_803A6C24.m1C.m12, pitch);
         }
     }
     return 0;
@@ -1063,7 +1069,7 @@ int SNDPLATFORM_stop(int index)
         }
     } else {
         for (i = 0; i < record->m23; i++) {
-            lbl_803B503C(record->m4[i] - lbl_803A6C24.m1C.m12);
+            MIXstopfn(record->m4[i] - lbl_803A6C24.m1C.m12);
             SNDVOICEI_free(record->m4[i]);
         }
     }

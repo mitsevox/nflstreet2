@@ -25746,6 +25746,18 @@
           "placement": ".data3",
           "start": "0x802C1D90",
           "end": "0x802C1E18"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300850",
+          "end": "0x8030085C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A8D40",
+          "end": "0x803A8D44"
         }
       ],
       "functions": [
@@ -29836,6 +29848,12 @@
           "placement": ".text",
           "start": "0x801F5D84",
           "end": "0x801F7738"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039B3D8",
+          "end": "0x8039B3F8"
         }
       ],
       "functions": [
@@ -33711,6 +33729,12 @@
           "placement": ".data3",
           "start": "0x802C1E1C",
           "end": "0x802C1EAC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803B4E34",
+          "end": "0x803B5044"
         }
       ],
       "functions": [
@@ -35829,6 +35853,12 @@
           "placement": ".data4",
           "start": "0x802FFCD0",
           "end": "0x802FFCD4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6E60",
+          "end": "0x803A7624"
         }
       ],
       "functions": [
