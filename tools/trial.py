@@ -57,9 +57,9 @@ def unit_for(source, binary):
 
 
 def linked_storage(sections, symbols, placements, mapped):
-    """For a linked file with a COMMON storage map: {symbol index: address} for each COMMON symbol,
-    at the address the build defined it, and for each named object of its placed uninitialized
-    sections, at its placement start plus its offset, as the build linked them."""
+    """For a linked file with a storage map: {symbol index: address} for each COMMON symbol and
+    each mapped file static, at the address the build defined it, and for each named object of its
+    placed uninitialized sections, at its placement start plus its offset, as the build linked them."""
     nobits = {s['index']: s['name'] for s in sections if s['type'] == sb.SHT_NOBITS and s['flags'] & sb.SHF_ALLOC}
     bound = {}
     for index, symbol in enumerate(symbols):
@@ -68,6 +68,12 @@ def linked_storage(sections, symbols, placements, mapped):
                 raise SystemExit(f"trial: COMMON symbol {symbol['name']} is not in the build's storage map")
             bound[index] = mapped[symbol['name']]
         elif symbol['shndx'] in nobits and symbol['name'] and symbol['size'] and symbol['type'] in (0, 1):
+            if nobits[symbol['shndx']] not in placements:
+                # A section the storage map places: each file static at its mapped address.
+                if symbol['bind'] != sb.STB_LOCAL or symbol['name'] not in mapped:
+                    raise SystemExit(f"trial: file static {symbol['name']} is not in the build's storage map")
+                bound[index] = mapped[symbol['name']]
+                continue
             bound[index] = placements[nobits[symbol['shndx']]]['start'] + symbol['value']
     return bound
 

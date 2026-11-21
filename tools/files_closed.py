@@ -78,6 +78,12 @@ def unit_labels(index, unit):
             found.append((name, None, False))
             continue
         section = sections[symbol['shndx']]
+        storage = unit.get('storage') or {}
+        if section['type'] == sb.SHT_NOBITS and symbol['bind'] == sb.STB_LOCAL and name in storage \
+                and section['name'] not in placed:
+            # A file static the storage map places (source_build.common_object) is at its mapped address.
+            found.append((name, int(storage[name], 16), False))
+            continue
         if section['flags'] & sb.SHF_EXECINSTR:
             continue  # A label inside code (an assembly routine's local label) is not a data object.
         start = placed.get(section['name'])
