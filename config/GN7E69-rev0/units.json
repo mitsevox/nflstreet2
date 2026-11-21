@@ -17187,6 +17187,25 @@
       ]
     },
     {
+      "source": "src/engine/sf_tan.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional sf_tan.c unit row, exact tanf function and _Tan_fZero data rows, callee ABI, source-form, type and field rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026118C",
+          "end": "0x8026120C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC46C",
+          "end": "0x803EC470"
+        }
+      ]
+    },
+    {
       "source": "src/engine/sf_scalbn.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit/function/name/type/field/data/compiler/source-form rows for sf_scalbn.c; complete native284-byte function and16-byte scalar pool match target under unchanged engine_c.",

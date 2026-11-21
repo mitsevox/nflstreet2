@@ -97,6 +97,7 @@ Update a row in the PR that changes it: a new file name, a link that moves a fil
 
 - `src/engine/vfiprintf.c` (`0x802645AC-0x80265D2C`) is the complete integer-only C formatter and its byte staging writer and fixed-locale accessors: all four functions (6,016 code bytes),172 initialized data bytes and128 uninitialized staging bytes are linked together. Both source-file edges and original buffer-allocation edges remain provisional. Shared reentrancy context, multibyte limit and decimal grouping helper retain their existing providers.
 
+- `src/engine/sf_tan.c` (0x8026118C-0x8026120C): 128-byte angle-to-tangent wrapper and its four-byte zero factor. It dispatches to the original tangent kernel, reducing larger finite angles first. Both historical file edges are provisional.
 - `src/engine/sf_scalbn.c` (0x8026120C-0x80261328): complete 284-byte single-precision power-of-two scaling routine and its 16-byte scalar pool; separated from the floating-point survey, with both historical file edges provisional.
 
 - `src/engine/kf_sin.c` (0x80261414-0x802614C0): complete 172-byte reduced-angle sine kernel with optional tail correction and seven four-byte scalar factors; separated from the multi-file floating-point survey, with historical file edges provisional.

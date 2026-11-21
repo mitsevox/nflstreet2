@@ -151,7 +151,9 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x8025FAF8	0x8025FAF8	0x8025FAF8	alignment	0	0	libgcc2.c	libgcc2.c
 .text	-	0x8025FBD4	0x80260E24	open	-	-	libgcc2.c	sf_ceil.c
 .text	-	0x80260EE8	0x80260FC4	open	-	-	sf_ceil.c	sf_fabs.c
-.text	-	0x80260FE8	0x8026120C	open	-	-	sf_fabs.c	sf_scalbn.c
+.text	0x80260FE8	0x80260FE8	0x80260FE8	alignment	0	0	sf_fabs.c	sf_floor.c
+.text	-	0x802610B0	0x8026118C	open	-	-	sf_floor.c	sf_tan.c
+.text	-	0x8026120C	0x8026120C	open	-	-	sf_tan.c	sf_scalbn.c
 .text	-	0x80261328	0x80261328	open	-	-	sf_scalbn.c	kf_cos.c
 .text	0x80261414	0x80261414	0x80261414	alignment	0	0	kf_cos.c	kf_sin.c
 .text	-	0x802614C0	0x80261A24	open	-	-	kf_sin.c	sf_copysign.c
