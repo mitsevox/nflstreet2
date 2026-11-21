@@ -29854,6 +29854,12 @@
           "placement": ".bss",
           "start": "0x8039B3D8",
           "end": "0x8039B3F8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFA0",
+          "end": "0x803ECFA4"
         }
       ],
       "functions": [
@@ -34334,6 +34340,12 @@
           "placement": ".data4",
           "start": "0x802FFCC0",
           "end": "0x802FFCC4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6C04",
+          "end": "0x803A6C10"
         }
       ],
       "functions": [

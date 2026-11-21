@@ -15090,13 +15090,19 @@
     {
       "source": "src/engine/sort.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801F5100-0x801F524C (src/engine/sort.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801F5100-0x801F524C (src/engine/sort.c) and its data rows (da1a: the .sdata 0x803EBE20-0x803EBE24, _Sort_ModuleActive); every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801F5100",
           "end": "0x801F524C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBE20",
+          "end": "0x803EBE24"
         }
       ]
     },
@@ -21574,7 +21580,7 @@
     {
       "source": "src/engine/salloc.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x80269CE8-0x8026A2DC (src/engine/salloc.c, FIFA Soccer 2005 salloc.o), its function and name rows, the data row of its .data lasthandle 0x802FFCC0-0x802FFCC4 and the sound_cxx compiler row 0x80266E88-0x8026A664; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): every function exact except the holdout SNDVOICEI_free 0x8026A0E8-0x8026A288, which keeps the original bytes and stays a registered partial; the whole .data is linked.",
+      "evidence": "evidence.tsv unit row 0x80269CE8-0x8026A2DC (src/engine/salloc.c, FIFA Soccer 2005 salloc.o), its function and name rows, the data rows of its .data lasthandle 0x802FFCC0-0x802FFCC4 and its .bss sndvoicereserved 0x803A6C04-0x803A6C10 (da1a) and the sound_cxx compiler row 0x80266E88-0x8026A664; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): every function exact except the holdout SNDVOICEI_free 0x8026A0E8-0x8026A288, which keeps the original bytes and stays a registered partial; the whole .data and .bss are linked.",
       "sections": [
         {
           "section": ".text",
@@ -21593,6 +21599,12 @@
           "placement": ".data4",
           "start": "0x802FFCC0",
           "end": "0x802FFCC4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6C04",
+          "end": "0x803A6C10"
         }
       ],
       "holdouts": {
@@ -24503,7 +24515,7 @@
     {
       "source": "src/engine/stream.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/stream.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole (the .bss 0x8039B3D8-0x8039B3F8, _Stream_ReadLock, da1a).",
+      "evidence": "evidence.tsv unit row of src/engine/stream.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole (da1a: the .bss 0x8039B3D8-0x8039B3F8, _Stream_SeekReadCS, and the .sbss 0x803ECFA0-0x803ECFA4, requestidcounter; their data rows).",
       "sections": [
         {
           "section": ".text",
@@ -24528,6 +24540,12 @@
           "placement": ".bss",
           "start": "0x8039B3D8",
           "end": "0x8039B3F8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFA0",
+          "end": "0x803ECFA4"
         }
       ],
       "holdouts": {
