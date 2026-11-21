@@ -74,7 +74,7 @@ typedef struct TMShaderDef_t {
     int mbAllocConsts;
     int mUnknown14;
     int mNumParms;
-    TMShaderParmDef_t mParms[1];
+    TMShaderParmDef_t mParms[0];
 } TMShaderDef_t;
 
 typedef struct TMShader_t TMShader_t;

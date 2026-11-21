@@ -6,7 +6,8 @@
 extern int DSGetNodeHandlerStat(Pool_801C750C *pPool, int a);
 
 extern Pool_801C750C *lbl_803E96C4[9];
-extern TMMaterial_t *lbl_803EBEE0;
+/* The material selected last. */
+static TMMaterial_t *_TMMaterial_pSelect = 0;
 
 static int _TMMaterialGetTexState(TMMaterial_t *pMaterial, const char *pName)
 {
@@ -87,12 +88,12 @@ void TMMaterialReset(TMMaterial_t *pMaterial)
 
 void TMMaterialSelect(TMMaterial_t *pMaterial)
 {
-    lbl_803EBEE0 = pMaterial;
+    _TMMaterial_pSelect = pMaterial;
 }
 
 void TMMaterialBindTextureClut(const char *pName, TMTexture_t *pTexture, TMClut_t *pClut)
 {
-    TMMaterial_t *pMaterial = lbl_803EBEE0;
+    TMMaterial_t *pMaterial = _TMMaterial_pSelect;
 
     if (pMaterial != 0) {
         int index = _TMMaterialGetTexState(pMaterial, pName);
@@ -106,7 +107,7 @@ void TMMaterialBindTextureClut(const char *pName, TMTexture_t *pTexture, TMClut_
 
 void TMMaterialBindClut(const char *pName, TMClut_t *pClut)
 {
-    TMMaterial_t *pMaterial = lbl_803EBEE0;
+    TMMaterial_t *pMaterial = _TMMaterial_pSelect;
 
     if (pMaterial != 0) {
         int index = _TMMaterialGetTexState(pMaterial, pName);
@@ -119,7 +120,7 @@ void TMMaterialBindClut(const char *pName, TMClut_t *pClut)
 
 void TMMaterialBindShaderRef(const char *pPath)
 {
-    if (lbl_803EBEE0 != 0) {
+    if (_TMMaterial_pSelect != 0) {
         TMShader_t *pShader = TMShaderLibGetShader(pPath);
 
         if (pShader != 0) {
@@ -130,7 +131,7 @@ void TMMaterialBindShaderRef(const char *pPath)
 
 void TMMaterialBindShader(TMShader_t *pShader)
 {
-    TMMaterial_t *pMaterial = lbl_803EBEE0;
+    TMMaterial_t *pMaterial = _TMMaterial_pSelect;
 
     if (pMaterial != 0 && pShader != 0) {
         pMaterial->mpShader = pShader;
@@ -140,7 +141,7 @@ void TMMaterialBindShader(TMShader_t *pShader)
 
 void TMMaterialSetMatDef(TMMaterialDef_t *pDef)
 {
-    TMMaterial_t *pMaterial = lbl_803EBEE0;
+    TMMaterial_t *pMaterial = _TMMaterial_pSelect;
     int i;
 
     if (pMaterial != 0) {

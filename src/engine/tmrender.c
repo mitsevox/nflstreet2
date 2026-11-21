@@ -12,49 +12,58 @@
 #include "engine/tmlib.h"
 #include "game/fn_801D2B7C.h"
 
-extern TMTexture_t lbl_8039B4B0;
-extern GXTlutObj lbl_8039B4E0;
-extern GXTlutObj lbl_8039B508;
-extern int lbl_802F9C08[4];
-extern unsigned char lbl_803EBEF0;
-extern TMTexture_t *lbl_803EBEF4;
-extern void *lbl_803EBEF8;
-extern void *lbl_803EBEFC;
-extern unsigned char lbl_803EBF00;
+/* Set by TMRenderInit and cleared by TMRenderShutdown. */
+static unsigned char _TMRender_bInitialized = 0;
+
+/* The texture bound when a material names none. */
+static TMTexture_t *_TMRender_pDefaultTexture = 0;
+
+/* The texture transform bound to each of the four texture coordinates (-2: none yet). */
+static int _TMRender_TexXFormIdx[4] = { -2, -2, -2, -2 };
+
+/* The palette data of the 32-bit indirect palettes and whether they are enabled. */
+static void *_TMRender_pRemapClutData16 = 0;
+static void *_TMRender_pRemapClutData256 = 0;
+static unsigned char _TMRender_b32BitIndirectClutsEnabled = 0;
+
+/* The null texture and the palettes of the 4-bit and 8-bit indirect textures. */
+static TMTexture_t _TMRender_NullTexture;
+static TMClut_t _TMRender_RemapClut16;
+static TMClut_t _TMRender_RemapClut256;
 
 void TMRenderDisable32BitIndirectCluts(void)
 {
-    if (lbl_803EBF00) {
-        fn_801D2BD0(lbl_803EBEF8);
-        lbl_803EBEF8 = 0;
-        fn_801D2BD0(lbl_803EBEFC);
-        lbl_803EBEFC = 0;
-        lbl_803EBF00 = 0;
+    if (_TMRender_b32BitIndirectClutsEnabled) {
+        fn_801D2BD0(_TMRender_pRemapClutData16);
+        _TMRender_pRemapClutData16 = 0;
+        fn_801D2BD0(_TMRender_pRemapClutData256);
+        _TMRender_pRemapClutData256 = 0;
+        _TMRender_b32BitIndirectClutsEnabled = 0;
     }
 }
 
 void TMRenderInit(void)
 {
-    TMTextureMakeNullTexture(&lbl_8039B4B0);
-    TMRenderSetDefaultTexture(&lbl_8039B4B0);
+    TMTextureMakeNullTexture(&_TMRender_NullTexture);
+    TMRenderSetDefaultTexture(&_TMRender_NullTexture);
     TMRenderReset();
-    lbl_803EBEF0 = 1;
+    _TMRender_bInitialized = 1;
 }
 
 void TMRenderShutdown(void)
 {
-    TMTextureTexDelete(&lbl_8039B4B0);
-    lbl_803EBEF0 = 0;
-    lbl_803EBEF4 = 0;
+    TMTextureTexDelete(&_TMRender_NullTexture);
+    _TMRender_bInitialized = 0;
+    _TMRender_pDefaultTexture = 0;
     TMRenderDisable32BitIndirectCluts();
 }
 
 void TMRenderSetDefaultTexture(TMTexture_t *pTexture)
 {
     if (pTexture != 0) {
-        lbl_803EBEF4 = pTexture;
+        _TMRender_pDefaultTexture = pTexture;
     } else {
-        lbl_803EBEF4 = &lbl_8039B4B0;
+        _TMRender_pDefaultTexture = &_TMRender_NullTexture;
     }
 }
 
@@ -194,10 +203,10 @@ void TMRenderBindTexture(GXTexMapID id, TMTexture_t *pTexture, TMClut_t *pClut)
                 GXTexMapID indirectId = id + 4;
 
                 if (GXGetTexObjFmt(&pTexture->mObj) == GX_TF_C4) {
-                    GXLoadTlut(&lbl_8039B4E0, id);
+                    GXLoadTlut(&_TMRender_RemapClut16.u.maTlut[0], id);
                     GXInitTexObjTlut(&pTexture->mObj, id);
                 } else {
-                    GXLoadTlut(&lbl_8039B508, id);
+                    GXLoadTlut(&_TMRender_RemapClut256.u.maTlut[0], id);
                     GXInitTexObjTlut(&pTexture->mObj, id);
                 }
                 GXLoadTexObj(&pClut->u.mObj, indirectId);
@@ -215,8 +224,8 @@ void TMRenderBindTexture(GXTexMapID id, TMTexture_t *pTexture, TMClut_t *pClut)
             GXLoadTexObj(&pTexture->mObj, id + 4);
             GXInitTexObjTlut(&pTexture->mObj, id);
         }
-    } else if (lbl_803EBEF4 != 0) {
-        TMRenderBindTexture(id, lbl_803EBEF4, 0);
+    } else if (_TMRender_pDefaultTexture != 0) {
+        TMRenderBindTexture(id, _TMRender_pDefaultTexture, 0);
     }
 }
 
@@ -297,10 +306,10 @@ void TMRenderBindMaterialList(TMMaterialList_t *pList)
 void TMRenderBindTexXformList(void *pTexXForm)
 {
     lbl_803E96E8.mpTexXForm = pTexXForm;
-    lbl_802F9C08[0] = -2;
-    lbl_802F9C08[1] = -2;
-    lbl_802F9C08[2] = -2;
-    lbl_802F9C08[3] = -2;
+    _TMRender_TexXFormIdx[0] = -2;
+    _TMRender_TexXFormIdx[1] = -2;
+    _TMRender_TexXFormIdx[2] = -2;
+    _TMRender_TexXFormIdx[3] = -2;
 }
 
 void TMRenderSetBlendMode(unsigned int mode)

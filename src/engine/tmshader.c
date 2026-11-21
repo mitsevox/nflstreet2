@@ -3,7 +3,8 @@
 
 #include "engine/tmlib.h"
 
-extern TMShader_t *lbl_803EBF08;
+/* The shader selected last. */
+static TMShader_t *_TMShader_pSelect = 0;
 
 void TMShaderNew(TMShader_t *pShader, TMShaderDef_t *pDef)
 {
@@ -58,5 +59,5 @@ void TMShaderSetUnbindFunc(TMShader_t *pShader, TMShaderFunc_t unbindFunc)
 
 void TMShaderSelect(TMShader_t *pShader)
 {
-    lbl_803EBF08 = pShader;
+    _TMShader_pSelect = pShader;
 }
