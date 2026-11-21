@@ -6,11 +6,13 @@
 
 extern int SysGetSystemTime(void);
 
-extern unsigned char lbl_803EBE9C;
-extern void *lbl_803ECFAC;
-extern int lbl_803ECFB0;
-extern int lbl_803ECFB4;
-extern int lbl_803ECFB8;
+static unsigned char _Task_ModuleActive = 0;
+
+/* The task list, the system time of the last clock reset, and two words TaskInit clears. */
+static void *_Task_pList;
+static int _Task_iClockStart;
+static int _Task_iUnused0;
+static int _Task_iUnused1;
 
 void TaskResetClock(void);
 
@@ -23,18 +25,18 @@ int TaskInit(int count)
 {
     int err = 0;
 
-    if (lbl_803EBE9C == 0) {
-        lbl_803ECFAC = DSNewList(1, 0, count, 0x2C, TaskCompareKey, 0);
-        if (lbl_803ECFAC == 0) {
+    if (_Task_ModuleActive == 0) {
+        _Task_pList = DSNewList(1, 0, count, 0x2C, TaskCompareKey, 0);
+        if (_Task_pList == 0) {
             err = SysGetLastError();
         }
         TaskResetClock();
-        lbl_803EBE9C = 1;
+        _Task_ModuleActive = 1;
     } else {
         err = 0x80001;
     }
-    lbl_803ECFB4 = 0;
-    lbl_803ECFB8 = 0;
+    _Task_iUnused0 = 0;
+    _Task_iUnused1 = 0;
     SysSetLastErrorFunc(err);
     return err;
 }
@@ -43,11 +45,11 @@ int TaskShutdown(void)
 {
     int err = 0;
 
-    if (lbl_803EBE9C != 0) {
-        if (lbl_803ECFAC != 0) {
-            DSDelList(lbl_803ECFAC);
+    if (_Task_ModuleActive != 0) {
+        if (_Task_pList != 0) {
+            DSDelList(_Task_pList);
         }
-        lbl_803EBE9C = 0;
+        _Task_ModuleActive = 0;
     } else {
         err = 0x80002;
     }
@@ -57,5 +59,5 @@ int TaskShutdown(void)
 
 void TaskResetClock(void)
 {
-    lbl_803ECFB0 = SysGetSystemTime();
+    _Task_iClockStart = SysGetSystemTime();
 }

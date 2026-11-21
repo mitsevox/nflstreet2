@@ -32,10 +32,10 @@ typedef struct ResStream_t {
 } ResStream_t;
 
 extern Lock_801F8014 _ResStream_Lock;
-extern int _ResStream_iNumStreams;
-extern ResStream_t *_ResStream_pStreams;
-extern unsigned char _ResStream_bShutdown;
-extern volatile int _ResStream_iNumPending;
+static int _ResStream_iNumStreams = 0;
+static ResStream_t *_ResStream_pStreams = 0;
+static unsigned char _ResStream_bShutdown = 0;
+static volatile int _ResStream_iNumPending = 0;
 
 
 void ResStreamReadDone(int a, int b, int c, int d, ResStream_t *loader);

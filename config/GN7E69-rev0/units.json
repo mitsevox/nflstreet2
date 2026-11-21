@@ -1008,38 +1008,6 @@
       "address": "0x802CC670",
       "evidence": "evidence.tsv external row 0x802CC670: destructor table formed by lis/addi at 0x8023E8BC/0x8023E8C0 in exit; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
     },
-    "_Anim_ModuleActive": {
-      "address": "0x803EBB78",
-      "evidence": "evidence.tsv data/name rows for 0x803EBB78 (target extent, related name)."
-    },
-    "_Anim_pUserOpcodeCallback": {
-      "address": "0x803EBB7C",
-      "evidence": "evidence.tsv data/name rows for 0x803EBB7C (target extent, related name)."
-    },
-    "_Anim_pUserOpcodeSkipCallback": {
-      "address": "0x803EBB80",
-      "evidence": "evidence.tsv data/name rows for 0x803EBB80 (target extent, related name)."
-    },
-    "_Anim_SeqVersion": {
-      "address": "0x803EBB84",
-      "evidence": "evidence.tsv data/name rows for 0x803EBB84 (target extent, related name)."
-    },
-    "_Anim_UserDataStackPosition": {
-      "address": "0x803ECEB4",
-      "evidence": "evidence.tsv data/name rows for 0x803ECEB4 (target extent, related name)."
-    },
-    "_Anim_UserStateStackPosition": {
-      "address": "0x803ECEB5",
-      "evidence": "evidence.tsv data/name rows for 0x803ECEB5 (target extent, related name)."
-    },
-    "_Anim_pCurrentUserData": {
-      "address": "0x8037E840",
-      "evidence": "evidence.tsv data/name rows for 0x8037E840 (target extent, related name)."
-    },
-    "_Anim_UserCallbackState": {
-      "address": "0x8037E84C",
-      "evidence": "evidence.tsv data/name rows for 0x8037E84C (target extent, related name)."
-    },
     "_AnimCache_nCaches": {
       "address": "0x803ED618",
       "evidence": "evidence.tsv data/name rows for 0x803ED618 (target extent, related name)."
@@ -1052,61 +1020,9 @@
       "address": "0x803ED620",
       "evidence": "evidence.tsv data/name rows for 0x803ED620 (target extent, related name)."
     },
-    "_AnimCache_Initialized": {
-      "address": "0x803EBBA8",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBA8 (target extent, related name)."
-    },
-    "_AnimFrameCache_CustomFunc": {
-      "address": "0x803ECEC0",
-      "evidence": "evidence.tsv data/name rows for 0x803ECEC0 (target extent, related name)."
-    },
-    "_AnimSequencer_ModuleActive": {
-      "address": "0x803EBBAC",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBAC (target extent, related name)."
-    },
-    "_AnimSequencer_fTicksPerSecond": {
-      "address": "0x803EBBB0",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBB0 (target extent, related name)."
-    },
-    "_uLastGroupIndex": {
-      "address": "0x803EBBB4",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBB4 (target extent, related name)."
-    },
-    "_uLastSubGroupIndex": {
-      "address": "0x803EBBB6",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBB6 (target extent, related name)."
-    },
-    "_uLastIndex": {
-      "address": "0x803EBBB8",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBB8 (target extent, related name)."
-    },
-    "_pLastSeq": {
-      "address": "0x803EBBBC",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBBC (target extent, related name)."
-    },
     "_ResStream_Lock": {
       "address": "0x803D4F98",
       "evidence": "evidence.tsv data/name rows for 0x803D4F98 (target extent, inferred name)."
-    },
-    "_ResStream_iNumStreams": {
-      "address": "0x803EBBC0",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBC0 (target extent, inferred name)."
-    },
-    "_ResStream_pStreams": {
-      "address": "0x803EBBC4",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBC4 (target extent, inferred name)."
-    },
-    "_ResStream_bShutdown": {
-      "address": "0x803EBBC8",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBC8 (target extent, inferred name)."
-    },
-    "_ResStream_iNumPending": {
-      "address": "0x803EBBCC",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBCC (target extent, inferred name)."
-    },
-    "_AnimFile_RelocateFunc": {
-      "address": "0x803ECEB8",
-      "evidence": "evidence.tsv data/name rows for 0x803ECEB8 (target extent, related name)."
     },
     "iSPCH_EACrandom": {
       "address": "0x801B1934",
@@ -2413,13 +2329,19 @@
     {
       "source": "src/engine/llmoviercmp.cpp",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801D94A0-0x801D9634 (src/engine/llmoviercmp.cpp) and its function rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801D94A0-0x801D9634 (src/engine/llmoviercmp.cpp) and its function rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBD4C-0x803EBD50, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801D94A0",
           "end": "0x801D9634"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD4C",
+          "end": "0x803EBD50"
         }
       ]
     },
@@ -4917,7 +4839,7 @@
     {
       "source": "src/engine/modelobj.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x802355E4-0x80235DD8 (src/engine/modelobj.c), its function, name and source-form rows and the data row 0x802B7198-0x802B71B0 of its whole .rodata; linked with holdouts (owner ruling of 2026-11-20): 16 of 17 functions exact, the holdout fn_80235C90 keeps the original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x802355E4-0x80235DD8 (src/engine/modelobj.c), its function, name and source-form rows and the data row 0x802B7198-0x802B71B0 of its whole .rodata; linked with holdouts (owner ruling of 2026-11-20): 16 of 17 functions exact, the holdout fn_80235C90 keeps the original bytes. It owns and links its data (da1c): .rodata 0x802B7198-0x802B71B0, .sdata 0x803EC0F8-0x803EC0FC, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
@@ -4936,6 +4858,12 @@
           "placement": ".data3",
           "start": "0x802B7198",
           "end": "0x802B71B0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC0F8",
+          "end": "0x803EC0FC"
         }
       ],
       "holdouts": {
@@ -14629,65 +14557,107 @@
     {
       "source": "src/engine/anim.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/anim.c), its function rows and the compiler row 0x801B9D00-0x801C1D84; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/anim.c), its function rows and the compiler row 0x801B9D00-0x801C1D84; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBB78-0x803EBB88, .bss 0x8037E840-0x8037E858, .sbss 0x803ECEB4-0x803ECEB8, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B9D00",
           "end": "0x801B9F00"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBB78",
+          "end": "0x803EBB88"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037E840",
+          "end": "0x8037E858"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEB4",
+          "end": "0x803ECEB8"
         }
       ]
     },
     {
       "source": "src/engine/animcache.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BF5E8-0x801BF94C (src/engine/animcache.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801BF5E8-0x801BF94C (src/engine/animcache.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBBA8-0x803EBBAC, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801BF5E8",
           "end": "0x801BF94C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBBA8",
+          "end": "0x803EBBAC"
         }
       ]
     },
     {
       "source": "src/engine/animframecache.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BF94C-0x801BFEF8 (src/engine/animframecache.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801BF94C-0x801BFEF8 (src/engine/animframecache.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sbss 0x803ECEC0-0x803ECEC4, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801BF94C",
           "end": "0x801BFEF8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEC0",
+          "end": "0x803ECEC4"
         }
       ]
     },
     {
       "source": "src/engine/AnimSequencer.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BFEF8-0x801BFFA8 (src/engine/AnimSequencer.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801BFEF8-0x801BFFA8 (src/engine/AnimSequencer.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBBAC-0x803EBBB4, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801BFEF8",
           "end": "0x801BFFA8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBBAC",
+          "end": "0x803EBBB4"
         }
       ]
     },
     {
       "source": "src/engine/AnimSeqCamera.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BFFA8-0x801C01DC (src/engine/AnimSeqCamera.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801BFFA8-0x801C01DC (src/engine/AnimSeqCamera.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBBB4-0x803EBBC0, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801BFFA8",
           "end": "0x801C01DC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBBB4",
+          "end": "0x803EBBC0"
         }
       ]
     },
@@ -14765,7 +14735,7 @@
     {
       "source": "src/engine/camera.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C33E8-0x801C3A44 (src/engine/camera.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C33E8-0x801C3A44 (src/engine/camera.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .rodata 0x802AF0B8-0x802AF0C4, .sdata 0x803EBBD4-0x803EBBD8, .sbss 0x803ECECC-0x803ECED8, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
@@ -14778,6 +14748,18 @@
           "placement": ".data3",
           "start": "0x802AF0B8",
           "end": "0x802AF0C4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBBD4",
+          "end": "0x803EBBD8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECECC",
+          "end": "0x803ECED8"
         }
       ]
     },
@@ -14803,20 +14785,26 @@
     {
       "source": "src/engine/Curve.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C4F64-0x801C5008 (src/engine/Curve.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C4F64-0x801C5008 (src/engine/Curve.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBBE8-0x803EBBEC, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801C4F64",
           "end": "0x801C5008"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBBE8",
+          "end": "0x803EBBEC"
         }
       ]
     },
     {
       "source": "src/engine/context.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C5B9C-0x801C6584 (src/engine/context.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C5B9C-0x801C6584 (src/engine/context.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .rodata 0x802AF168-0x802AF184, .sdata 0x803EBBEC-0x803EBBF8, .sbss 0x803ECED8-0x803ECEE4, .bss 0x8037F860-0x8037F880, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
@@ -14829,19 +14817,43 @@
           "placement": ".data3",
           "start": "0x802AF168",
           "end": "0x802AF184"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBBEC",
+          "end": "0x803EBBF8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECED8",
+          "end": "0x803ECEE4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037F860",
+          "end": "0x8037F880"
         }
       ]
     },
     {
       "source": "src/engine/ds.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C6584-0x801C665C (src/engine/ds.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C6584-0x801C665C (src/engine/ds.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBC00-0x803EBC10, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801C6584",
           "end": "0x801C665C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBC00",
+          "end": "0x803EBC10"
         }
       ]
     },
@@ -14906,13 +14918,19 @@
     {
       "source": "src/engine/glib.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CE138-0x801CE1F8 (src/engine/glib.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801CE138-0x801CE1F8 (src/engine/glib.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBC60-0x803EBC68, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801CE138",
           "end": "0x801CE1F8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBC60",
+          "end": "0x803EBC68"
         }
       ]
     },
@@ -14938,13 +14956,19 @@
     {
       "source": "src/engine/maths.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CEF48-0x801CEFF0 (src/engine/maths.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801CEF48-0x801CEFF0 (src/engine/maths.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBCB0-0x803EBCB4, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801CEF48",
           "end": "0x801CEFF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBCB0",
+          "end": "0x803EBCB4"
         }
       ]
     },
@@ -15008,13 +15032,19 @@
     {
       "source": "src/engine/matrix.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801D0110-0x801D03D0 (src/engine/matrix.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801D0110-0x801D03D0 (src/engine/matrix.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBCB4-0x803EBCC0, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801D0110",
           "end": "0x801D03D0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBCB4",
+          "end": "0x803EBCC0"
         }
       ]
     },
@@ -15047,13 +15077,19 @@
     {
       "source": "src/engine/render.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801DB7D4-0x801DB900 (src/engine/render.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801DB7D4-0x801DB900 (src/engine/render.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sbss 0x803ECF30-0x803ECF4C, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801DB7D4",
           "end": "0x801DB900"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF30",
+          "end": "0x803ECF4C"
         }
       ]
     },
@@ -15216,13 +15252,25 @@
     {
       "source": "src/engine/task.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8020CFA0-0x8020D0CC (src/engine/task.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x8020CFA0-0x8020D0CC (src/engine/task.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBE9C-0x803EBEA0, .sbss 0x803ECFAC-0x803ECFBC, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8020CFA0",
           "end": "0x8020D0CC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBE9C",
+          "end": "0x803EBEA0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFAC",
+          "end": "0x803ECFBC"
         }
       ]
     },
@@ -15254,13 +15302,19 @@
     {
       "source": "src/engine/tmmodelres.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8020EA18-0x8020ED10 (src/engine/tmmodelres.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x8020EA18-0x8020ED10 (src/engine/tmmodelres.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sbss 0x803ECFC4-0x803ECFD0, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8020EA18",
           "end": "0x8020ED10"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFC4",
+          "end": "0x803ECFD0"
         }
       ]
     },
@@ -16060,26 +16114,38 @@
     {
       "source": "src/engine/resstream.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801C10E0-0x801C1D54 (src/engine/resstream.c, asynchronous loader with no NASCAR 2005 counterpart), function rows, compiler row engine_c_fastmath and source-form rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C10E0-0x801C1D54 (src/engine/resstream.c, asynchronous loader with no NASCAR 2005 counterpart), function rows, compiler row engine_c_fastmath and source-form rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBBC0-0x803EBBD0, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801C10E0",
           "end": "0x801C1D54"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBBC0",
+          "end": "0x803EBBD0"
         }
       ]
     },
     {
       "source": "src/engine/object.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801DCA10-0x801DD498 (src/engine/object.c, NASCAR 2005 object.c), compiler row and function rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801DCA10-0x801DD498 (src/engine/object.c, NASCAR 2005 object.c), compiler row and function rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBD50-0x803EBD54, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801DCA10",
           "end": "0x801DD498"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD50",
+          "end": "0x803EBD54"
         }
       ]
     },
@@ -16227,7 +16293,7 @@
     {
       "source": "src/engine/remap.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801EC1B4-0x801EC650 (src/engine/remap.c), its compiler, function and name rows and the exact .rodata data row 0x802B17A0-0x802B17C0; every function and data placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv provisional unit row 0x801EC1B4-0x801EC650 (src/engine/remap.c), its compiler, function and name rows and the exact .rodata data row 0x802B17A0-0x802B17C0; every function and data placement exact, promoted from comparison-only. It owns and links its data (da1c): .rodata 0x802B17A0-0x802B17C0, .sdata 0x803EBD7C-0x803EBD80, .bss 0x8039ADF4-0x8039AE14, .sbss 0x803ECF58-0x803ECF70, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
@@ -16240,19 +16306,43 @@
           "placement": ".data3",
           "start": "0x802B17A0",
           "end": "0x802B17C0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD7C",
+          "end": "0x803EBD80"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039ADF4",
+          "end": "0x8039AE14"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF58",
+          "end": "0x803ECF70"
         }
       ]
     },
     {
       "source": "src/engine/animemot.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x801BA818-0x801BAD98 (src/engine/animemot.c), its function and name rows and the existing engine_c_fastmath compiler row; every function and data placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv provisional unit row 0x801BA818-0x801BAD98 (src/engine/animemot.c), its function and name rows and the existing engine_c_fastmath compiler row; every function and data placement exact, promoted from comparison-only. It owns and links its data (da1c): .sbss 0x803ECEB8-0x803ECEBC, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801BA818",
           "end": "0x801BAD98"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEB8",
+          "end": "0x803ECEBC"
         }
       ]
     },
@@ -16832,7 +16922,7 @@
     {
       "source": "src/engine/tmclusterobj.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80213444-0x80213A38 (src/engine/tmclusterobj.c), its compiler and source-form rows, the exact function rows and the exact data row for .rodata 0x802B1C48-0x802B1C58; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x80213444-0x80213A38 (src/engine/tmclusterobj.c), its compiler and source-form rows, the exact function rows and the exact data row for .rodata 0x802B1C48-0x802B1C58; every function exact, promoted from comparison-only. It owns and links its data (da1c): .rodata 0x802B1C48-0x802B1C58, .sbss 0x803ECFD4-0x803ECFE8, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
@@ -16845,6 +16935,12 @@
           "placement": ".data3",
           "start": "0x802B1C48",
           "end": "0x802B1C58"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFD4",
+          "end": "0x803ECFE8"
         }
       ]
     },
@@ -23977,7 +24073,7 @@
     {
       "source": "src/engine/Font.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801CCA64-0x801CD79C (src/engine/Font.c), its compiler rows and the data rows of its data sections; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 1 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "evidence": "evidence.tsv unit row 0x801CCA64-0x801CD79C (src/engine/Font.c), its compiler rows and the data rows of its data sections; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 1 non-exact functions keep the original bytes and stay registered partials in comparisons.json. It owns and links its data (da1c): .rodata 0x802AF490-0x802AF4B0, .sdata 0x803EBC58-0x803EBC5C, .bss 0x80383CD0-0x80383D18, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
@@ -23996,6 +24092,18 @@
           "placement": ".data3",
           "start": "0x802AF490",
           "end": "0x802AF4B0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBC58",
+          "end": "0x803EBC5C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80383CD0",
+          "end": "0x80383D18"
         }
       ],
       "holdouts": {
