@@ -55,6 +55,8 @@ extern "C" void fn_800DF7CC(Object_80039F5C *p, Character_80093BCC *pCharacter, 
             if (pAttachments[index].mFrame != -1) {
                 pAttachments[index].mFrame = -1;
                 switch ((unsigned int)pFrame->mUnknown20) {
+                // FAKEMATCH: the empty 'NONE' label leaves no compare in the target (it tests only 'COIN' and
+                // 'BALL'); it does nothing, like the missing default, and only shapes the compare tree
                 case 0x4E4F4E45:
                 case 0x434F494E:
                     break;
@@ -70,6 +72,8 @@ extern "C" void fn_800DF7CC(Object_80039F5C *p, Character_80093BCC *pCharacter, 
             }
         }
         switch ((unsigned int)pFrame->mUnknown20) {
+        // FAKEMATCH: the empty 'NONE' label leaves no compare in the target (it tests only 'COIN' and 'BALL');
+        // it does nothing, like the missing default, and only shapes the compare tree
         case 0x4E4F4E45:
         case 0x434F494E:
             break;
