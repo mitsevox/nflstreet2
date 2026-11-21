@@ -159,12 +159,15 @@ struct State_803A8D60 {
     int m9DEC;
     unsigned char mUnknown9DF0[0x40];
     Transfer_803B2B90 m9E30[64];
-    unsigned char mUnknownAE30[0x1218];
+    unsigned char mUnknownAE30[0x1000];
+    OSMutex mBE30;
+    unsigned char mUnknownBE48[0x200];
     unsigned char mC048;
     unsigned char mC049;
     unsigned char mUnknownC04A[6];
     void *mC050[6];
     void *mC068[4];
+    unsigned char mUnknownC078[0x48];
 };
 
 struct Struct_80270E04 {
@@ -261,7 +264,7 @@ extern "C" {
 extern const unsigned short lbl_802B7A98[];
 extern const short lbl_802B7AF0[2][3][16];
 extern unsigned short SNDDRV_dolbypl2balances[256][4];
-extern State_803A8D60 lbl_803A8D60;
+extern State_803A8D60 snddrv;
 extern int sndmixwritelog;
 extern void (*MIXoutputfn)(void **outputs, int count);
 extern int _Mix_iUnused;
@@ -274,7 +277,6 @@ extern void (*MIXplayfn)(int index);
 extern void (*MIXstopfn)(int index);
 extern void (*MIXsetpitchfn)(int index, int value);
 extern int lbl_8030002C;
-extern OSMutex lbl_803B4B90;
 extern Node_803B4E20 **fxBusesLinkList;
 /* The effect bus state of sfxrevc.c (8 bytes): the per-bus wet buffers and a word the
    mixer clears after mixing a voice into a bus. */

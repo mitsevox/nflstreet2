@@ -24279,7 +24279,7 @@
     {
       "source": "src/engine/snddrv.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), its compiler rows and the data rows of its data sections (.rodata; .data 0x80300850-0x8030085C everyother, curTick, araminited and .bss 0x803A8D40-0x803A8D44 ptr, da1a; the driver state 0x803A8D60 stays an extern, see the ptr.36 data row); linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 6 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "evidence": "evidence.tsv unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), its compiler rows and the data rows of its data sections (.rodata; .data 0x80300850-0x8030085C everyother, curTick, araminited and .bss 0x803A8D40-0x803B4E20 ptr and the driver state snddrv, da1; see their data rows); linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 6 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
       "sections": [
         {
           "section": ".text",
@@ -24339,7 +24339,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x803A8D40",
-          "end": "0x803A8D44"
+          "end": "0x803B4E20"
         }
       ],
       "holdouts": {

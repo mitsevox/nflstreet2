@@ -17,7 +17,7 @@ int SNDPLATFORM_setfxlevel(int index, int slot)
             if (i == 5) {
                 level = 0.0f;
             }
-            SNDDRV_DSPMixerSetAuxBus(lbl_803A8D60.m0[pRec->m4[i]].m3C, (unsigned short)(level * 32767.0f), 1);
+            SNDDRV_DSPMixerSetAuxBus(snddrv.m0[pRec->m4[i]].m3C, (unsigned short)(level * 32767.0f), 1);
         }
     } else if (pRec->m24 & 4) {
         level = pRec->m48 * pRec->m64[slot];
