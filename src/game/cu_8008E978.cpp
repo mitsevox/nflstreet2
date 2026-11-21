@@ -3772,10 +3772,6 @@ extern float lbl_802D7BD0[];
 }
 
 extern "C" {
-float fn_80260E24(float a);
-}
-
-extern "C" {
 float fn_80260FE8(float a);
 }
 
@@ -13356,7 +13352,7 @@ extern "C" void fn_8009A8F0(void)
         unsigned int steps;
 
         if ((high == score0 && fn_800B65A0(1) != 0xFF) || (high == score1 && fn_800B65A0(0) != 0xFF)) {
-            ratio = fn_80260E24(ratio);
+            ratio = ceilf(ratio);
         } else {
             ratio = fn_80260FE8(ratio);
         }
