@@ -1052,4 +1052,160 @@ class CodeDataAndStorageComparisons(ComparisonFixture):
         with self.assertRaisesRegex(ValueError, 'Uninitialized data reference lacks an evidenced storage address'):
             diagnostic_object.fragment(*arguments, {})
 
+
+class SectionBaseReferences(unittest.TestCase):
+    """A large object addressed from a base formed past its end (lis/addi of .bss+0x10020, then
+    negative displacements; snddrv.c's driver state) resolves to the section's own placement when
+    every use of the base lands inside the compiled section. The compiler is not needed: the native
+    object is written directly."""
+    BSS = 0xC0E0
+    START = 0x803A8D40
+    LIS, ADDI = 0x3FE00000, 0x3BFF0000  # lis r31,0; addi r31,r31,0 (the relocations fill the halves)
+
+    @staticmethod
+    def lwz(displacement):  # lwz r3,displacement(r31)
+        return 0x807F0000 | displacement & 0xFFFF
+
+    @staticmethod
+    def lbz(displacement):  # lbz r3,displacement(r31)
+        return 0x887F0000 | displacement & 0xFFFF
+
+    def setUp(self):
+        self.directory = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.directory)
+
+    def native(self, relocations, bss, code):
+        path = self.directory / 'native.o'
+        sb.write_object(path, [
+            {'name': '.text', 'type': sb.SHT_PROGBITS, 'flags': sb.SHF_ALLOC | sb.SHF_EXECINSTR, 'size': 4 * len(code),
+             'data': b''.join(struct.pack('>I', word) for word in code), 'align': 4},
+            {'name': '.bss', 'type': sb.SHT_NOBITS, 'flags': sb.SHF_ALLOC | sb.SHF_WRITE, 'size': bss, 'align': 32}])
+        data = bytearray(path.read_bytes())
+        shoff = struct.unpack_from('>I', data, 32)[0]
+        _, count, strings_index = struct.unpack_from('>HHH', data, 46)
+        headers = [list(struct.unpack_from('>IIIIIIIIII', data, shoff + i * 40)) for i in range(count)]
+        data = data[:shoff]
+        names = headers[strings_index]
+        strings = data[names[4]:names[4] + names[5]]
+        name = len(strings)
+        strings += b'.rela.text\0'
+        names[4], names[5] = len(data), len(strings)
+        data += strings + b'\0' * (-len(strings) % 4)
+        at = len(data)
+        bss_symbol = 3  # null, file, .text, .bss section symbols
+        for position, kind, addend in relocations:
+            data += struct.pack('>IIi', position, (bss_symbol << 8) | kind, addend)
+        symtab = next(i for i, h in enumerate(headers) if h[1] == sb.SHT_SYMTAB)
+        headers.append([name, 4, 0, 0, at, len(relocations) * 12, symtab, 1, 4, 12])
+        struct.pack_into('>I', data, 32, len(data))
+        struct.pack_into('>H', data, 48, len(headers))
+        for header in headers:
+            data += struct.pack('>IIIIIIIIII', *header)
+        return bytes(data)
+
+    def fragment(self, relocations, bss=BSS, extent=BSS, storage=None, placed=True, uses=None):
+        # Default body: lis r31; addi r31; lwz r3,-0x3FB8(r31) (snddrv's 0x803C/-0x72A0 base, field 0xC068).
+        code = [self.LIS, self.ADDI] + (uses if uses is not None else [self.lwz(-0x3FB8)])
+        native = self.native(relocations, bss, code)
+        sections, _ = sb.read_elf(native)
+        text = next(s for s in sections if s['name'] == '.text')
+        placements = {'.bss': {'section': '.bss', 'start': self.START, 'end': self.START + extent}} if placed else {}
+        output = self.directory / 'fragment.o'
+        diagnostic_object.fragment(native, text, 0, 4 * len(code), 0x80272CC0, {}, {}, placements, {}, output, [], storage)
+        return {s['name']: s['value'] for s in sb.read_elf(output.read_bytes())[1]
+                if s['name'].startswith('__comparison_reference_')}
+
+    def pair(self, addend, high=6):
+        return [(2, high, addend), (6, 4, addend)]  # R_PPC_ADDR16_HA (or _HI) on the lis, _LO on the addi
+
+    def test_base_past_section_end_resolves_to_section_placement(self):
+        self.assertEqual(self.fragment(self.pair(0x10020)), {'__comparison_reference_803B8D60': 0x803B8D60})
+        self.assertEqual(self.fragment(self.pair(0x10020, high=5)), {'__comparison_reference_803B8D60': 0x803B8D60})
+        # Window edges: the last byte of the section from the farthest base above, the first from below.
+        self.assertEqual(self.fragment(self.pair(self.BSS + 0x7FFF), uses=[self.lbz(-0x8000)]),
+                         {'__comparison_reference_803BCE1F': 0x803BCE1F})
+        self.assertEqual(self.fragment(self.pair(-0x7FFF), uses=[self.lbz(0x7FFF)]),
+                         {'__comparison_reference_803A0D41': 0x803A0D41})
+        # A placement longer than the compiled section, with every use inside the compiled bytes.
+        self.assertEqual(self.fragment(self.pair(0x10020), extent=self.BSS + 0x20), {'__comparison_reference_803B8D60': 0x803B8D60})
+        # A string store whose range stops short of the base (r31) does not store it: stswi r28,r1,8
+        # stores only r28-r29.
+        self.assertEqual(self.fragment(self.pair(0x10020), uses=[self.lwz(-0x3FB8), 0x7F8145AA]),
+                         {'__comparison_reference_803B8D60': 0x803B8D60})
+
+    def test_references_outside_every_placement_still_fail_closed(self):
+        refused = 'Same-file data reference lacks target placement'
+        blr, mr, beq = 0x4E800020, 0x7FE3FB78, 0x41820008  # mr r3,r31 passes the base on; beq +8
+
+        def stmw(source, displacement, address=31):  # stmw rS,displacement(rA)
+            return 47 << 26 | source << 21 | address << 16 | displacement & 0xFFFF
+
+        def stswi(source, address, count):  # stswi rS,rA,NB
+            return 31 << 26 | source << 21 | address << 16 | count << 11 | 725 << 1
+
+        cases = {
+            'one byte past the end from the farthest base': dict(relocations=self.pair(self.BSS + 0x8000), uses=[self.lbz(-0x8000)]),
+            'one byte before the start': dict(relocations=self.pair(-0x8000), uses=[self.lbz(0x7FFF)]),
+            'a word straddling the end': dict(relocations=self.pair(self.BSS + 0x7FFF), uses=[self.lwz(-0x8000)]),
+            # lwz r3,X@l(r31) past the end, then lwz r4,-0x7100(r3): r3 is loaded data, not a base.
+            'a low half on a load is the accessed address': dict(relocations=[(2, 6, self.BSS + 0x7000), (10, 4, self.BSS + 0x7000)],
+                                                                 uses=[self.lwz(0), 0x80830000 | -0x7100 & 0xFFFF]),
+            'a base whose use lands past the end': dict(relocations=self.pair(self.BSS + 0x7000), uses=[self.lwz(0)]),
+            'one use inside, one past the end': dict(relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), self.lwz(-0x3F40)]),
+            'a base passed on cannot be bounded': dict(relocations=self.pair(0x10020), uses=[mr, self.lwz(-0x3FB8)]),
+            'a base live across a branch cannot be bounded': dict(relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), beq, self.lwz(0)]),
+            'a base stored to memory is passed on': dict(relocations=self.pair(0x10020), uses=[0x93FF0000 | -0x3FB8 & 0xFFFF]),
+            'a base with no use': dict(relocations=self.pair(0x10020), uses=[blr]),
+            'a high half without its low half': dict(relocations=[(2, 6, 0x10020)]),
+            'a high half whose low half names another offset': dict(relocations=[(2, 6, 0x10020), (6, 4, 0x10024)]),
+            'a use past the compiled section, inside the placement': dict(relocations=self.pair(0x10020), bss=self.BSS - 0x100),
+            'a pointer word is a referent, not a base': dict(relocations=[(8, 1, 0x10020)]),
+            'a displacement relocation is a referent': dict(relocations=[(10, 109, 0x10020)]),
+            'the section is not placed': dict(relocations=self.pair(0x10020), placed=False),
+            'the section is not placed whole': dict(relocations=self.pair(0x10020), extent=self.BSS - 0x20),
+            # The low half alone (no high half to refuse): its own compiled-size bound must refuse.
+            'a lone low half whose use is past the compiled section, inside the placement': dict(
+                relocations=[(6, 4, 0x10020)], bss=self.BSS - 0x100),
+            # An update form moves the base: from .bss+size+0x10, lbzu reaches the last byte, and the
+            # second access, counted from the moved base, lies 16 KiB before the section.
+            'an lbzu moves the base out of the section': dict(
+                relocations=self.pair(self.BSS + 0x10), uses=[0x8C7F0000 | -0x7FFF & 0xFFFF, self.lbz(-0x7FFF)]),
+            'an stwu moves the base out of the section': dict(
+                relocations=self.pair(self.BSS + 0x10), uses=[0x967F0000 | -0x7FF0 & 0xFFFF, self.lwz(-0x7FF0)]),
+            # A multiple or string store whose register range covers the base writes it to memory,
+            # whatever its address register. The spill through r1 is reloaded into r3 and used 0x9000
+            # past the base, which nothing here can bound.
+            'an stmw through the base stores the base': dict(relocations=self.pair(0x10020), uses=[stmw(30, -0x3FB8)]),
+            'an stmw range from r20 covers the base': dict(relocations=self.pair(0x10020), uses=[stmw(20, -0x3FB8)]),
+            'an stmw through r1 spills the base, reloaded and used past the end': dict(
+                relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), stmw(30, 8, 1), 0x8061000C, 0x80839000, blr]),
+            'an stmw through r1 spills the base, with only an in-range use': dict(
+                relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), stmw(30, 8, 1)]),
+            'an stswi through r1 stores r29-r31': dict(relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), stswi(29, 1, 12)]),
+            'an stswx stores a length that cannot be known': dict(
+                relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), 31 << 26 | 20 << 21 | 1 << 16 | 4 << 11 | 661 << 1])}
+        # Every update form through the base, even one landing inside, cannot be followed: D-form
+        # lwzu lbzu stwu stbu lhzu lhau sthu lfsu lfdu stfsu stfdu (rD r3 or f1), and their indexed
+        # forms lwzux ... stfdux (rA r31, rB r4) after an in-range use.
+        for opcode in (33, 35, 37, 39, 41, 43, 45, 49, 51, 53, 55):
+            cases[f'update form, opcode {opcode}'] = dict(
+                relocations=self.pair(0x10020), uses=[opcode << 26 | 3 << 21 | 31 << 16 | -0x3FB8 & 0xFFFF])
+        for extended in (55, 119, 183, 247, 311, 375, 439, 567, 631, 695, 759):
+            cases[f'indexed update form, extended opcode {extended}'] = dict(
+                relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), 31 << 26 | 3 << 21 | 31 << 16 | 4 << 11 | extended << 1])
+        for reason, arguments in cases.items():
+            with self.subTest(reason), self.assertRaisesRegex(ValueError, refused):
+                self.fragment(**arguments)
+        # With a storage map each object resolves alone, so a base between objects is unresolved.
+        with self.assertRaisesRegex(ValueError, 'Uninitialized data reference lacks an evidenced storage address'):
+            self.fragment(self.pair(0x10020), storage={})
+        # stswi wraps from r31 to r0. From a base in r5, stswi r30,r1,0 (32 bytes) stores r30-r31 and
+        # r0-r5, so it stores the base; stswi r30,r1,16 stores only r30-r31 and r0-r1.
+        self.LIS, self.ADDI = 0x3CA00000, 0x38A50000  # lis r5,0; addi r5,r5,0
+        lwz = 0x80650000 | -0x3FB8 & 0xFFFF  # lwz r3,-0x3FB8(r5)
+        accepted = {'__comparison_reference_803B8D60': 0x803B8D60}
+        self.assertEqual(self.fragment(self.pair(0x10020), uses=[lwz, stswi(30, 1, 16)]), accepted)
+        with self.assertRaisesRegex(ValueError, refused):
+            self.fragment(self.pair(0x10020), uses=[lwz, stswi(30, 1, 0)])
+
 if __name__=='__main__':unittest.main()
