@@ -664,7 +664,7 @@ class FileStaticStorage(Fixture):
                                                 (6, "__storage_80005024", 109, 0)])
         native_sections, native_symbols = sb.read_elf(native)
         sections, symbols = sb.read_elf(derived)
-        self.assertEqual(next(s for s in sections if s["name"] == ".bss")["size"], 0)
+        self.assertEqual([(s["size"], s["align"]) for s in sections if s["name"] == ".bss"], [(0, 1)])
         self.assertEqual([(s["name"], s["data"]) for s in sections if s["type"] == sb.SHT_PROGBITS],
                          [(s["name"], s["data"]) for s in native_sections if s["type"] == sb.SHT_PROGBITS])
         mapped = {s["name"]: s for s in symbols if s["name"].startswith(("s_", "__storage_"))}

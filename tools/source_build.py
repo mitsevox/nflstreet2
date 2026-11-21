@@ -441,8 +441,9 @@ def common_object(native, storage, output, source):
     relocation that reaches the section, through a static or the section symbol, must land
     inside one mapped static's extent; it is redirected to a new undefined global
     `__storage_<start>` with the offset into the static as its addend, which plan() defines at
-    the static's target start. The section's size becomes 0 and the statics become local
-    absolute symbols at their target addresses, so the linker allocates nothing for them.
+    the static's target start. The section's size becomes 0 and its alignment 1, and the statics
+    become local absolute symbols at their target addresses, so the linker allocates nothing for
+    them and cannot pad the output section for them either.
     Section bytes, other relocations and every other symbol are unchanged. Writes `output` and
     returns {static name: compiled section name}."""
     data = bytearray(native)
@@ -514,7 +515,10 @@ def common_object(native, storage, output, source):
             struct.pack_into(">H", data, at + 14, SHN_ABS)
         shoff = struct.unpack_from(">I", data, 32)[0]
         for index in mapped:
+            # Size 0 and alignment 1: the linker still sees the input section (and may place it
+            # as an orphan in the output section of its name), but it can neither take nor pad bytes.
             struct.pack_into(">I", data, shoff + index * 40 + 20, 0)
+            struct.pack_into(">I", data, shoff + index * 40 + 32, 1)
     for index in commons.values():
         at = symtab["offset"] + index * 16
         struct.pack_into(">II", data, at + 4, 0, 0)
