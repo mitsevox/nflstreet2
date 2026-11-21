@@ -10074,7 +10074,7 @@
     {
       "source": "src/game/PlayerLook.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80047E28-0x8004A2F4 (src/game/PlayerLook.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80047E28-0x8004A2F4 (src/game/PlayerLook.cpp) and its data rows, among them the six .data objects 0x802CF370-0x802CFBCC linked with the file's .data. The record arrays gPlayerLooks 0x803078E8 and gPlayerLookBonuses 0x80308368 stay original bytes: they lie outside the file's linked .bss 0x80307720-0x80307778.",
       "sections": [
         {
           "section": ".text",
@@ -10105,6 +10105,12 @@
           "placement": ".data2",
           "start": "0x80289BC0",
           "end": "0x80289BC4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CF370",
+          "end": "0x802CFBCC"
         }
       ]
     },
@@ -14579,7 +14585,7 @@
     {
       "source": "src/game/PlaTex.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800478DC-0x80047E28 (src/game/PlaTex.cpp) and its data row 0x8028D674-0x8028D73C.",
+      "evidence": "evidence.tsv unit row 0x800478DC-0x80047E28 (src/game/PlaTex.cpp) and its data rows 0x8028D654-0x8028D674 and 0x8028D674-0x8028D73C (.rodata) and 0x802CF010-0x802CF370 (.data, four objects); complete .text, .rodata and .data linked.",
       "sections": [
         {
           "section": ".text",
@@ -14590,8 +14596,14 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8028D674",
+          "start": "0x8028D654",
           "end": "0x8028D73C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CF010",
+          "end": "0x802CF370"
         }
       ]
     },
@@ -18135,7 +18147,7 @@
     {
       "source": "src/game/PlyrRender.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x801A14D8-0x801A4AD4 (src/game/PlyrRender.cpp), its exact function extents, the data rows 0x802AE098-0x802AE528 (.rodata) and 0x802F2934-0x802F3488 (.data) and the linker row of the discarded _PlyrHeadSetModelNow; linked with holdouts (owner ruling of 2026-11-20), its one holdout keeping its original bytes. The .sdata, .sbss and .bss objects it uses stay external original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x801A14D8-0x801A4AD4 (src/game/PlyrRender.cpp), its exact function extents, the data rows 0x802AE098-0x802AE528 (.rodata), 0x802F2934-0x802F3488 (.data), 0x80365AB4-0x80365DC0 (.bss), 0x803EB7E8-0x803EB830 (.sdata) and 0x803ECC00-0x803ECC14 (.sbss) and the linker row of the discarded _PlyrHeadSetModelNow; linked with holdouts (owner ruling of 2026-11-20), its one holdout keeping its original bytes; every data section linked whole.",
       "sections": [
         {
           "section": ".text",
@@ -18160,6 +18172,24 @@
           "placement": ".data4",
           "start": "0x802F2934",
           "end": "0x802F3488"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365AB4",
+          "end": "0x80365DC0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB7E8",
+          "end": "0x803EB830"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECC00",
+          "end": "0x803ECC14"
         }
       ],
       "link_roots": {
@@ -23747,7 +23777,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x80309F98",
-          "end": "0x80309FC4"
+          "end": "0x8030A0E4"
         },
         {
           "section": ".sbss",

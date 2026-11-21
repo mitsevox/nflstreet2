@@ -2004,7 +2004,7 @@ struct Stats_8005A7EC {
 struct Weight_8005A8D0 {int mTag;int mColumn;float mWeight;};
 struct Category_8005AB04 {char mName[20];unsigned char mEnabled;unsigned int mCount;int mIndices[2];};
 Object_8008044C _InGameScreens_LeaderCursor;
-extern Stats_8005A7EC lbl_80309FC4[2];
+static Stats_8005A7EC _InGameScreens_aLeaderStats[2];
 static const Weight_8005A8D0 _InGameScreens_aLeaderStatWeights[12] = {
     {0x464F4750, 0x64746167, 6.0f}, {0x464F4750, 0x64747567, 6.0f}, {0x464F4750, 0x64746367, 6.0f},
     {0x464F4750, 0x6E696167, 0.0f}, {0x464F4750, 0x75667567, 0.0f}, {0x45444750, 0x6E697367, 6.0f},
@@ -2295,13 +2295,13 @@ void InGameLeaderSortCategories(int team)
     do {
         swapped=0;
         for (int i=0;i<10;i++) {
-            if (!(lbl_80309FC4[team].mValues[i]>=lbl_80309FC4[team].mValues[i+1])) {
-                float value=lbl_80309FC4[team].mValues[i];
-                lbl_80309FC4[team].mValues[i]=lbl_80309FC4[team].mValues[i+1];
-                lbl_80309FC4[team].mValues[i+1]=value;
-                int index=lbl_80309FC4[team].mIndices[i];
-                lbl_80309FC4[team].mIndices[i]=lbl_80309FC4[team].mIndices[i+1];
-                lbl_80309FC4[team].mIndices[i+1]=index;
+            if (!(_InGameScreens_aLeaderStats[team].mValues[i]>=_InGameScreens_aLeaderStats[team].mValues[i+1])) {
+                float value=_InGameScreens_aLeaderStats[team].mValues[i];
+                _InGameScreens_aLeaderStats[team].mValues[i]=_InGameScreens_aLeaderStats[team].mValues[i+1];
+                _InGameScreens_aLeaderStats[team].mValues[i+1]=value;
+                int index=_InGameScreens_aLeaderStats[team].mIndices[i];
+                _InGameScreens_aLeaderStats[team].mIndices[i]=_InGameScreens_aLeaderStats[team].mIndices[i+1];
+                _InGameScreens_aLeaderStats[team].mIndices[i+1]=index;
                 swapped=1;
             }
         }
@@ -2311,7 +2311,7 @@ void InGameLeaderSortCategories(int team)
 int InGameLeaderFind(int team)
 {
     InGameLeaderOpen(team); InGameLeaderScore(team); InGameLeaderClose();
-    return lbl_80309FC4[team].mUnknown4;
+    return _InGameScreens_aLeaderStats[team].mUnknown4;
 }
 Object_80039F5C *InGameLeaderGetPlayer(int team)
 {
@@ -2337,11 +2337,11 @@ void InGameLeaderScore(int team)
             }
             Object_80039F5C *p=PlyrFindById(row);
             if(p && p->mUnknown9[2]) sum+=1.0f;
-            if(!(sum<=lbl_80309FC4[team].mUnknown0)) {
-                lbl_80309FC4[team].mUnknown0=sum;
-                lbl_80309FC4[team].mUnknown4=row;
-                for(int i=0;i<12;i++) lbl_80309FC4[team].mStats[i]=values[i];
-                for(int i=0;i<11;i++) lbl_80309FC4[team].mValues[i]=scores[i];
+            if(!(sum<=_InGameScreens_aLeaderStats[team].mUnknown0)) {
+                _InGameScreens_aLeaderStats[team].mUnknown0=sum;
+                _InGameScreens_aLeaderStats[team].mUnknown4=row;
+                for(int i=0;i<12;i++) _InGameScreens_aLeaderStats[team].mStats[i]=values[i];
+                for(int i=0;i<11;i++) _InGameScreens_aLeaderStats[team].mValues[i]=scores[i];
             }
         } while(fn_8008201C(&_InGameScreens_LeaderCursor,1,team,&row,0));
     }
@@ -2353,14 +2353,14 @@ void InGameLeaderGetCategories(int team, MenuArg_t *pNames, int *pValues)
     unsigned int count=0;
     int i=0;
     do {
-        int category=lbl_80309FC4[team].mIndices[i++];
+        int category=_InGameScreens_aLeaderStats[team].mIndices[i++];
         if(_InGameScreens_aLeaderCategories[category].mEnabled) {
             MenuText_t *pText=((MenuText_t **)pNames[0].pi)[*pNames[0].pi+count+1];
             strncpy(pText->mpText,_InGameScreens_aLeaderCategories[category].mName,pText->mLength);
             int value=0;
             for(unsigned int j=0;j<_InGameScreens_aLeaderCategories[category].mCount;j++) {
                 int index=_InGameScreens_aLeaderCategories[category].mIndices[j];
-                if(index!=13) value+=lbl_80309FC4[team].mStats[index];
+                if(index!=13) value+=_InGameScreens_aLeaderStats[team].mStats[index];
             }
             pValues[count++]=value;
         }
@@ -2370,7 +2370,7 @@ void InGameLeaderGetCategories(int team, MenuArg_t *pNames, int *pValues)
 void InGameLeaderGetName(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize)
 {
     int key;
-    PlayerDbSeekId(&_InGameScreens_LeaderCursor,lbl_80309FC4[team].mUnknown4,&key);
+    PlayerDbSeekId(&_InGameScreens_LeaderCursor,_InGameScreens_aLeaderStats[team].mUnknown4,&key);
     *pId=fn_800C8744(team);
     char first[16],last[16];
     PlayerDbGetFirstName(&_InGameScreens_LeaderCursor,first,12); strncpy(pFirst,first,firstSize);
@@ -2382,9 +2382,9 @@ void InGameLeaderOpen(int team)
     Desc_8008044C desc;
     desc.mUnknown4=1; desc.mUnknown8=team;
     PlayerCursorOpen(&_InGameScreens_LeaderCursor,&desc,0x454D4147);
-    lbl_80309FC4[team].mUnknown4=0; lbl_80309FC4[team].mUnknown0=-3.4028234663852886e38f;
-    for(int i=11;i>=0;i--) lbl_80309FC4[team].mStats[i]=0;
-    for(int i=0;i<11;i++) {lbl_80309FC4[team].mIndices[i]=i;lbl_80309FC4[team].mValues[i]=0.0f;}
+    _InGameScreens_aLeaderStats[team].mUnknown4=0; _InGameScreens_aLeaderStats[team].mUnknown0=-3.4028234663852886e38f;
+    for(int i=11;i>=0;i--) _InGameScreens_aLeaderStats[team].mStats[i]=0;
+    for(int i=0;i<11;i++) {_InGameScreens_aLeaderStats[team].mIndices[i]=i;_InGameScreens_aLeaderStats[team].mValues[i]=0.0f;}
 }
 void InGameLeaderGetInfo(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize,MenuArg_t *pNames,int *pValues)
 {
