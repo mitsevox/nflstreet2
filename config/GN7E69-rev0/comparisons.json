@@ -21029,7 +21029,7 @@
     {
       "source": "src/engine/cu_80260B1C.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional survey row 0x80260B1C-0x80260E24, retained function/name/compiler/source-form rows and .sdata2 0x803EDEDC-0x803EDEE4. One draft comparison remains. The independent ceilf, magnitude and sign-copy files are linked separately.",
+      "evidence": "evidence.tsv provisional survey row 0x80260B1C-0x80260E24, retained function/name/compiler/source-form rows and .sdata2 0x803EDEDC-0x803EDEE4. One draft comparison remains. The independent ceilf, floorf, magnitude and sign-copy files are linked separately.",
       "sections": [
         {
           "section": ".text",
