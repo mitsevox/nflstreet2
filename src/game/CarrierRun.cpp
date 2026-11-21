@@ -107,6 +107,7 @@ int fn_80111090(Object_80039F5C *p, int a);
 int BallStateGetPrev(Ball_t *p, int *pOut);
 int BallStateGet(Ball_t *p, int *pOut);
 float fn_80260FE8(float a);
+float fn_80260E24(float a);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
 int fn_8011F32C(void);

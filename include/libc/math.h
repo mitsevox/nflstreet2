@@ -37,7 +37,6 @@ extern "C" {
 #endif
 float sqrtf(float x);
 float fabsf(float x);
-float ceilf(float x);
 #ifdef __cplusplus
 }
 #endif

@@ -42,6 +42,7 @@ int fn_800B83F4(Object_80039F5C *p);
 int fn_800C4D54(Object_80039F5C *p);
 int fn_80112928(Object_80039F5C *p);
 float fn_80260FE8(float a);
+float fn_80260E24(float a);
 extern float gPlyrMoveFwdSpeed;
 
 void PlayerCutStartAnim(Object_80039F5C *p);
@@ -163,7 +164,7 @@ extern "C" void PlayerCutPostTurn(Object_80039F5C *p, int angle)
         message.mUnknown1[0] = 2;
     }
     message.mUnknown1[2] = 0;
-    unsigned short value = (unsigned short)ceilf(fn_80260FE8((float)((float)MathAngleDiff(angle, p->mMotion.mFacing)
+    unsigned short value = (unsigned short)fn_80260E24(fn_80260FE8((float)((float)MathAngleDiff(angle, p->mMotion.mFacing)
                                                    * 0.000021457672119140625f * (16.0 / 180.0))) * 0.5f);
 
     switch (value) {

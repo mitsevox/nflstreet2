@@ -16409,25 +16409,6 @@
       ]
     },
     {
-      "source": "src/engine/sf_ceil.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional whole-file row 0x80260E24-0x80260EE8, exact function and small-data placements, and engine_c compiler row at 0x80260E24. The placement includes both four-byte probe operands at 0x803EC454-0x803EC45C.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80260E24",
-          "end": "0x80260EE8"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC454",
-          "end": "0x803EC45C"
-        }
-      ]
-    },
-    {
       "source": "src/engine/fabsf.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional whole-file row 0x80260FC4-0x80260FE8, exact function extent, inferred name/ABI/type fields and unchanged compiler profile; no static data. Remaining survey bytes stay original.",
