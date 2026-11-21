@@ -135,7 +135,6 @@ itoa (unsigned int value, char *buf, int base)
   strrev (buf);
 }
 
-#if defined(DECOMP_COMPARE)
 
 /* Formats finite and nonfinite doubles in the shared decimal buffer. */
 char *
@@ -902,4 +901,3 @@ char *add_separators(char *dst, char *start, char *end, int *pLen)
     return dst;
 }
 
-#endif
