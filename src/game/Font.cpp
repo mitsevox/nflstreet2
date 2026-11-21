@@ -1,7 +1,16 @@
 #include "game/Module.h"
 
+struct FontParams_t {
+    int mMaxFonts;
+    int mUnk4;
+    int mHeap;
+    unsigned short mUnkC;
+    unsigned short mUnkE;
+};
+
+static FontParams_t _Font_Params = {11, 1, 1, 640, 480};
+
 extern "C" {
-extern char lbl_802CC740[];
 extern char lbl_802EBE50[];
 
 int FontInit(void *);
@@ -18,7 +27,7 @@ const char *Font::GetName() { return "Font"; }
 
 int Font::Init()
 {
-    FontInit(lbl_802CC740);
+    FontInit(&_Font_Params);
     FileInitErrorMessages(lbl_802EBE50, 3);
     return 1;
 }

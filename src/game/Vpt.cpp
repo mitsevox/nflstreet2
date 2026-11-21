@@ -1,7 +1,16 @@
 #include "game/Module.h"
 
+struct VptInitBlock_t {
+    int mUnknown0;
+    int mUnknown4;
+    unsigned short mUnknown8;
+    unsigned char mUnknown10;
+    unsigned char mUnknown11;
+};
+
+static VptInitBlock_t _Vpt_InitBlock = {5, 6, 40, 0, 12};
+
 extern "C" {
-extern char lbl_802CC750[];
 
 int VptInit(void *);
 int VptShutdown(void);
@@ -16,7 +25,7 @@ const char *Vpt::GetName() { return "Vpt"; }
 
 int Vpt::Init()
 {
-    VptInit(lbl_802CC750);
+    VptInit(&_Vpt_InitBlock);
     return 1;
 }
 

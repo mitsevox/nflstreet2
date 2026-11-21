@@ -10562,6 +10562,18 @@
           "placement": ".data3",
           "start": "0x802A3E40",
           "end": "0x802A3EF8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031C02C",
+          "end": "0x8031C098"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA60",
+          "end": "0x803ECA6C"
         }
       ],
       "functions": [
@@ -10896,7 +10908,7 @@
     {
       "source": "src/game/camplay.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional camera grouping, exact function extents, direct type/field observations and bounded rodata/sdata/sbss accesses. External initialized mode/jitter tables remain original and unclaimed. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv provisional camera grouping, exact function extents, direct type/field observations and bounded rodata/data/sdata/bss/sbss accesses; the camera view and definition tables after the jitter definitions remain original and unclaimed. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -10921,6 +10933,18 @@
           "placement": ".sbss",
           "start": "0x803ECA04",
           "end": "0x803ECA0C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DBEBC",
+          "end": "0x802DBF2C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B6AC",
+          "end": "0x8031B6C4"
         }
       ],
       "functions": [
@@ -11237,13 +11261,19 @@
           "section": ".data",
           "placement": ".data4",
           "start": "0x802F2734",
-          "end": "0x802F2754"
+          "end": "0x802F2934"
         },
         {
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8036550C",
           "end": "0x80365574"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB7D8",
+          "end": "0x803EB7E8"
         }
       ],
       "functions": [
@@ -11519,6 +11549,18 @@
           "placement": ".data3",
           "start": "0x8028D070",
           "end": "0x8028D338"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCD8C",
+          "end": "0x802CCDDC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA410",
+          "end": "0x803EA43C"
         }
       ],
       "functions": [
@@ -22240,7 +22282,7 @@
     {
       "source": "src/game/PlyrRender.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801A14D8-0x801A4AD4 (src/game/PlyrRender.cpp), its source-form and type rows, the exact function extents, the .rodata and .data rows and the linker row of the discarded _PlyrHeadSetModelNow. The unit's .sdata/.sbss/.bss objects are referenced as externals and stay original bytes. The source is linked with holdouts (units.json); the three non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv provisional unit row 0x801A14D8-0x801A4AD4 (src/game/PlyrRender.cpp), its source-form and type rows, the exact function extents, the .rodata, .data, .bss, .sdata and .sbss data rows and the linker row of the discarded _PlyrHeadSetModelNow. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -22259,6 +22301,24 @@
           "placement": ".data4",
           "start": "0x802F2934",
           "end": "0x802F3488"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365AB4",
+          "end": "0x80365DC0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB7E8",
+          "end": "0x803EB830"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECC00",
+          "end": "0x803ECC14"
         }
       ],
       "functions": [
@@ -32015,6 +32075,18 @@
           "placement": ".data3",
           "start": "0x8028CFA0",
           "end": "0x8028D070"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCC94",
+          "end": "0x802CCCAC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA3F0",
+          "end": "0x803EA3FC"
         }
       ],
       "functions": [
@@ -32460,7 +32532,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x80309F98",
-          "end": "0x80309FC4"
+          "end": "0x8030A0E4"
         },
         {
           "section": ".sbss",

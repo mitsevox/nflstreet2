@@ -24,13 +24,39 @@ static const char *_PlayArtRender_apTexNames[8] = {"PLYR", "PLTR", "TBAR", "ARRW
 static PlayArtTexLib_t _PlayArtRender_TexLib;
 static PlayArtTexEntry_t _PlayArtRender_aTextures[8];
 
+static PlayArtVertex_t _PlayArtRender_aRouteEndUVs[4] = {
+    {0.0f, 1.0f}, {1.0f, 1.0f}, {0.0f, 0.0f}, {1.0f, 0.0f},
+};
+static PlayArtVertex_t _PlayArtRender_aaIconUVs[4][4] = {
+    {{0.0f, 0.5f}, {0.5f, 0.5f}, {0.0f, 0.0f}, {0.5f, 0.0f}},
+    {{0.5f, 0.5f}, {1.0f, 0.5f}, {0.5f, 0.0f}, {1.0f, 0.0f}},
+    {{0.0f, 1.0f}, {0.5f, 1.0f}, {0.0f, 5.0f}, {0.5f, 5.0f}},
+    {{0.5f, 0.5f}, {1.0f, 0.5f}, {0.0f, 0.0f}, {0.5f, 0.0f}},
+};
+static PlayArtVertex_t _PlayArtRender_aaLetterUVs[5][4] = {
+    {{0.0f, 0.0f}, {0.0f, 0.5f}, {0.25f, 0.0f}, {0.25f, 0.5f}},
+    {{0.25f, 0.0f}, {0.25f, 0.5f}, {0.5f, 0.0f}, {0.5f, 0.5f}},
+    {{0.5f, 0.0f}, {0.5f, 0.5f}, {0.75f, 0.0f}, {0.75f, 0.5f}},
+    {{0.75f, 0.0f}, {0.75f, 0.5f}, {1.0f, 0.0f}, {1.0f, 0.5f}},
+    {{0.0f, 0.5f}, {0.0f, 1.0f}, {0.25f, 0.5f}, {0.25f, 1.0f}},
+};
+static PlayArtQuadPoint_t _PlayArtRender_aRouteUVs[4] = {
+    {0.0f, 0.0f}, {1.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f},
+};
+static PlayArtVertex_t _PlayArtRender_aUnusedUVs[4] = {
+    {0.0f, 0.0f}, {1.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f},
+};
+static Mtx44 _PlayArtRender_MirrorMtx = {
+    {-1.0f, 0.0f, 0.0f, 120.0f},
+    {0.0f, 1.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f},
+};
+
+static int _PlayArtRender_iUnused = 0;
+static unsigned char _PlayArtRender_aIconRows[6] = {2, 3, 0, 0, 1, 0};
+
 extern "C" {
-extern PlayArtVertex_t lbl_802F2754[4];
-extern PlayArtVertex_t lbl_802F2774[4][4];
-extern PlayArtVertex_t lbl_802F27F4[5][4];
-extern PlayArtQuadPoint_t lbl_802F2894[4];
-extern Mtx44 lbl_802F28F4;
-extern unsigned char lbl_803EB7DC[6];
 int fn_800BA6F8(void);
 int FELoopIsMainFEActive(void);
 int fn_80177F70(void);
@@ -169,7 +195,7 @@ extern "C" int PlayArtRenderRouteEnds(int a,PlayArtState_t *s,int)
                 switch (kind) {case 1:texture=2;break;case 2:texture=3;break;case 3:case 4:case 5:texture=4;break;default:texture=3;break;}
                 PlayArtQuadPoint_t p[4];
                 for (signed char k = 0; k <= 3; ++k) {p[k].mX = s->mUnknown970[i][j][k].mX;p[k].mY = s->mUnknown970[i][j][k].mY;}
-                a = PlayArtRenderTexQuad(a,p,lbl_802F2754,&s->mUnknown2020[i],texture);
+                a = PlayArtRenderTexQuad(a,p,_PlayArtRender_aRouteEndUVs,&s->mUnknown2020[i],texture);
             }
         }
     }
@@ -187,7 +213,7 @@ extern "C" int PlayArtRenderPlayerIcons(int a,PlayArtState_t *s,int mirror)
             else {r[0]=s->mUnknown2084[i][0];r[2]=s->mUnknown2084[i][2];}
             r[1]=s->mUnknown2084[i][1];r[3]=s->mUnknown2084[i][3];
             p[0].mX=r[0];p[0].mY=r[1];p[1].mX=r[0];p[1].mY=r[3];p[2].mX=r[2];p[2].mY=r[1];p[3].mX=r[2];p[3].mY=r[3];
-            a=PlayArtRenderTexQuad(a,p,lbl_802F2774[lbl_803EB7DC[s->mUnknown2134[i]]],&s->mUnknown204C[i],0);
+            a=PlayArtRenderTexQuad(a,p,_PlayArtRender_aaIconUVs[_PlayArtRender_aIconRows[s->mUnknown2134[i]]],&s->mUnknown204C[i],0);
         }
     }
     return a;
@@ -203,7 +229,7 @@ extern "C" void PlayArtRenderPlayerLetters(int a,PlayArtState_t *s,int mirror)
             int texture;switch(kind){case 0:texture=0;break;case 1:texture=1;break;case 2:texture=2;break;case 3:texture=3;break;default:texture=4;break;}
             r[3]=s->mUnknown2178[i][3];r[1]=s->mUnknown2178[i][1];
             p[0].mX=r[0];p[0].mY=r[1];p[1].mX=r[0];p[1].mY=r[3];p[2].mX=r[2];p[2].mY=r[1];p[3].mX=r[2];p[3].mY=r[3];
-            a=PlayArtRenderSprite(a,p,lbl_802F27F4[texture],&s->mUnknown204C[flag],1);
+            a=PlayArtRenderSprite(a,p,_PlayArtRender_aaLetterUVs[texture],&s->mUnknown204C[flag],1);
         }
     }
 }
@@ -218,8 +244,8 @@ extern "C" int PlayArtRenderRoutes(int a,PlayArtState_t *s,int)
         if (n) {
             int next=s->mUnknown1E10[i][0];
             if(mode!=next){mode=next;if(!mode){tiled=0;GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP5, GX_COLOR0A0);}else{tiled=1;GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP6, GX_COLOR0A0);}}
-            if(n==4){if(tiled)a=PlayArtRenderDashQuad(a,(PlayArtVertex_t *)s+start,lbl_802F2894,&s->mUnknown2020[i]);else a=PlayArtRenderLineQuad(a,(PlayArtVertex_t *)s+start,lbl_802F2894,&s->mUnknown2020[i]);}
-            else {if(tiled)a=PlayArtRenderDashStrip(a,(PlayArtVertex_t *)s+start,lbl_802F2894,n,&s->mUnknown2020[i]);else a=PlayArtRenderLineStrip(a,(PlayArtVertex_t *)s+start,lbl_802F2894,n,&s->mUnknown2020[i]);}
+            if(n==4){if(tiled)a=PlayArtRenderDashQuad(a,(PlayArtVertex_t *)s+start,_PlayArtRender_aRouteUVs,&s->mUnknown2020[i]);else a=PlayArtRenderLineQuad(a,(PlayArtVertex_t *)s+start,_PlayArtRender_aRouteUVs,&s->mUnknown2020[i]);}
+            else {if(tiled)a=PlayArtRenderDashStrip(a,(PlayArtVertex_t *)s+start,_PlayArtRender_aRouteUVs,n,&s->mUnknown2020[i]);else a=PlayArtRenderLineStrip(a,(PlayArtVertex_t *)s+start,_PlayArtRender_aRouteUVs,n,&s->mUnknown2020[i]);}
         }
     }
     return a;
@@ -234,7 +260,7 @@ extern "C" void PlayArtRenderSetup(void)
 }
 extern "C" void PlayArtRenderDiagram(int a,PlayArtState_t *s,unsigned char mirror)
 {
-    Mtx44 m;MatPush();if(mirror)MatCat(lbl_802F28F4);MatStore(m);GXLoadPosMtxImm(m,0);
+    Mtx44 m;MatPush();if(mirror)MatCat(_PlayArtRender_MirrorMtx);MatStore(m);GXLoadPosMtxImm(m,0);
     a=PlayArtRenderPlayerIcons(a,s,0);a=PlayArtRenderRoutes(a,s,0);a=PlayArtRenderRouteEnds(a,s,0);
     MatPop();MatStore(m);GXLoadPosMtxImm(m,0);PlayArtRenderPlayerLetters(a,s,mirror);
 }

@@ -136,30 +136,35 @@ PlyrRenderPart_t _PlyrRender_aParts[56] = {
 
 static unsigned char _PlyrRender_aJointFlags[30] = {0};
 
+static PlyrRenderSlot_t _PlyrRender_aSlots[14];
+static Record_8020F2C4 _PlyrRender_BlendModel;
+static char _PlyrRender_aBlendBuffer[16];
+static char _PlyrRender_aShadowTexLib[40];
+
+static Viewport_t *_PlyrRender_pViewport;
+static unsigned int _PlyrRender_uNumSlots;
+static int _PlyrRender_iShadowTexture;
+static int _PlyrRender_iShadowClut;
+static int _PlyrRender_pShadowTexData;
+
+static unsigned char _PlyrRender_bHideFlagged = 1;
+static float _PlyrRender_fFarDistance = 2.0f;
+static unsigned char _PlyrRender_bLodsUpdated = 0;
+static unsigned int _PlyrRender_uHeadModelSize = 16000;
+static int _PlyrRender_aiUnused[2] = {0, 0};
+static float _PlyrRender_fFaceDepthBias = -0.0012f;
+static float _PlyrRender_fHairDepthBias = -0.0024f;
+static float _PlyrRender_fFaceDepthBiasNear = -0.0002f;
+static float _PlyrRender_fHairDepthBiasNear = -0.0004f;
+static void (*_PlyrRender_pHeadModelCallback)(Object_8003DEC4 *pPlayer) = 0;
+static Object_8003DEC4 *_PlyrRender_pHeadModelPlayer = 0;
+static unsigned char _PlyrRender_bHeadModelReady = 0;
+static PlyrRenderPartTable_t _PlyrRender_aPartTables[1] = {{56, _PlyrRender_aParts}};
+static unsigned char _PlyrRender_bPendingPlayerCall = 0;
+static unsigned char _PlyrRender_ucPendingPlayerArg = 0;
+static int _PlyrRender_iUnused = -1;
+
 extern "C" {
-extern Record_8020F2C4 lbl_80365D54;
-extern char lbl_80365D88[16];
-extern char lbl_80365D98[];
-extern PlyrRenderSlot_t lbl_80365AB4[14];
-extern Viewport_t *lbl_803ECC00;
-extern unsigned int lbl_803ECC04;
-extern int lbl_803ECC08;
-extern int lbl_803ECC0C;
-extern int lbl_803ECC10;
-extern unsigned char lbl_803EB7E8;
-extern float lbl_803EB7EC;
-extern unsigned char lbl_803EB7F0;
-extern unsigned int lbl_803EB7F4;
-extern float lbl_803EB800;
-extern float lbl_803EB804;
-extern float lbl_803EB808;
-extern float lbl_803EB80C;
-extern void (*lbl_803EB810)(Object_8003DEC4 *pPlayer);
-extern Object_8003DEC4 *lbl_803EB814;
-extern unsigned char lbl_803EB818;
-extern PlyrRenderPartTable_t lbl_803EB81C[1];
-extern unsigned char lbl_803EB824;
-extern unsigned char lbl_803EB825;
 extern float gFrameTimeScale;
 
 int InGameIsPlaying(void);
@@ -306,17 +311,17 @@ void PlyrRenderLoadShadowTexture(void)
 {
     void *p = ResGetSize(PlaTexCacheGetArchive(), 0);
 
-    lbl_803ECC10 = fn_801D2BB0(InGameIsPlaying() ? 0x40 : 1, p, 2, 0);
-    ResLoadToBuffer(PlaTexCacheGetArchive(), 0, lbl_803ECC10);
-    TMTexLibLoad(lbl_80365D98, lbl_803ECC10);
-    lbl_803ECC08 = TMTexLibGetTexture(lbl_80365D98, 0xFF000000);
-    lbl_803ECC0C = TMTexLibGetClut(lbl_80365D98, 0xFF000000, 0);
+    _PlyrRender_pShadowTexData = fn_801D2BB0(InGameIsPlaying() ? 0x40 : 1, p, 2, 0);
+    ResLoadToBuffer(PlaTexCacheGetArchive(), 0, _PlyrRender_pShadowTexData);
+    TMTexLibLoad(_PlyrRender_aShadowTexLib, _PlyrRender_pShadowTexData);
+    _PlyrRender_iShadowTexture = TMTexLibGetTexture(_PlyrRender_aShadowTexLib, 0xFF000000);
+    _PlyrRender_iShadowClut = TMTexLibGetClut(_PlyrRender_aShadowTexLib, 0xFF000000, 0);
 }
 
 void PlyrRenderUnloadShadowTexture(void)
 {
-    TMTexLibUnload(lbl_80365D98);
-    fn_801D2BD0(lbl_803ECC10);
+    TMTexLibUnload(_PlyrRender_aShadowTexLib);
+    fn_801D2BD0(_PlyrRender_pShadowTexData);
     if (FELoopIsMainFEActive()) {
         ResUnLoad(PlaTexCacheGetArchive(), 0);
         PlaTexCacheCloseArchive();
@@ -327,9 +332,9 @@ void PlyrRenderVptCallback(Viewport_t *pObject)
 {
     unsigned int i;
 
-    TMBufferReset(lbl_80365D88);
-    TMModelResetChannels(&lbl_80365D54);
-    for (i = 0; i < lbl_803ECC04; i++) {
+    TMBufferReset(_PlyrRender_aBlendBuffer);
+    TMModelResetChannels(&_PlyrRender_BlendModel);
+    for (i = 0; i < _PlyrRender_uNumSlots; i++) {
         Object_8003DEC4 *pPlayer = PlyrObjsGet(i);
 
         if (pPlayer->mUnknown20 & 8) {
@@ -434,9 +439,9 @@ void PlyrRenderDrawModel(Object_8003DEC4 *pPlayer, unsigned int flags)
     color.a = 255;
     TMRenderReset();
     if (pPlayer->mUnknown20 & 8) {
-        depth = 1.0f - pPlayer->mUnknown4216.mUnknown16 * lbl_803EB808;
+        depth = 1.0f - pPlayer->mUnknown4216.mUnknown16 * _PlyrRender_fFaceDepthBiasNear;
     } else {
-        depth = 1.0f - pPlayer->mUnknown4216.mUnknown16 * lbl_803EB800;
+        depth = 1.0f - pPlayer->mUnknown4216.mUnknown16 * _PlyrRender_fFaceDepthBias;
     }
     light = PlyrRenderCalcLight(pPlayer);
     GXSetChanMatColor(0, color);
@@ -462,9 +467,9 @@ void PlyrRenderDrawModel(Object_8003DEC4 *pPlayer, unsigned int flags)
         TMRenderSetBlendMode(1);
     }
     if (pPlayer->mUnknown20 & 8) {
-        depth = 1.0f - pPlayer->mUnknown4216.mUnknown16 * lbl_803EB80C;
+        depth = 1.0f - pPlayer->mUnknown4216.mUnknown16 * _PlyrRender_fHairDepthBiasNear;
     } else {
-        depth = 1.0f - pPlayer->mUnknown4216.mUnknown16 * lbl_803EB804;
+        depth = 1.0f - pPlayer->mUnknown4216.mUnknown16 * _PlyrRender_fHairDepthBias;
     }
     TMRenderSetZRange(0.0f, depth);
     fn_80234BF4(0, &pPlayer->mUnknown1164[6], 0);
@@ -491,7 +496,7 @@ int PlyrHeadDrawFace(Object_8003DEC4 *pPlayer)
             result = PlyrHeadBlendFace(pPlayer);
         }
         if (result) {
-            TMRenderBindModel(&lbl_80365D54);
+            TMRenderBindModel(&_PlyrRender_BlendModel);
         } else {
             TMRenderBindModel(&pSlot->mpUnknown16->mUnknown16);
         }
@@ -517,7 +522,7 @@ int PlyrHeadDrawFace(Object_8003DEC4 *pPlayer)
 void PlyrHeadDrawFaceAlpha(Object_8003DEC4 *pPlayer, int flag)
 {
     if (flag) {
-        TMRenderBindModel(&lbl_80365D54);
+        TMRenderBindModel(&_PlyrRender_BlendModel);
         TMRenderBindMaterialList(pPlayer->mUnknown4044);
         TMRenderBindClusterObj(&pPlayer->mUnknown4064[1]);
         TMRenderGeomNode(4, 0);
@@ -582,10 +587,10 @@ int PlyrHeadBlendFace(Object_8003DEC4 *pPlayer)
 {
     int result = 0;
 
-    if (TMBufferGetFreeSpace(lbl_80365D88) > 0xCE3 && TMBlendSetWeightsFloat(pPlayer->mUnknown820, pPlayer->mUnknown816) > 0) {
+    if (TMBufferGetFreeSpace(_PlyrRender_aBlendBuffer) > 0xCE3 && TMBlendSetWeightsFloat(pPlayer->mUnknown820, pPlayer->mUnknown816) > 0) {
         result = 1;
-        TMBlendBegin(lbl_80365D88);
-        TMBlendBindModel2(&pPlayer->mUnknown1024[0].mUnknown16, &lbl_80365D54);
+        TMBlendBegin(_PlyrRender_aBlendBuffer);
+        TMBlendBindModel2(&pPlayer->mUnknown1024[0].mUnknown16, &_PlyrRender_BlendModel);
         TMBlendGeomAll();
         TMBlendEnd();
         TMBlendFlushBuffer();
@@ -803,7 +808,7 @@ unsigned int PlyrRenderGetHideFlags(Object_8003DEC4 *pPlayer)
     unsigned int flags = 0;
     unsigned int state = pPlayer->mUnknown4216.mUnknown20;
 
-    if ((state & 0x3F) || (lbl_803EB7E8 && (state & 0x2000))) {
+    if ((state & 0x3F) || (_PlyrRender_bHideFlagged && (state & 0x2000))) {
         if (!(pPlayer->mUnknown20 & 8)) {
             flags = 1;
         }
@@ -874,8 +879,8 @@ void PlyrHeadBuildModel(Object_8003DEC4 *pPlayer, int unused)
             values[7] = 0x1000;
         }
     }
-    fn_802336C4(&pPlayer->mUnknown1024[0], fn_8015E2FC(6, 0, 0), lbl_803EB7F4);
-    fn_802336C4(&pPlayer->mUnknown1024[1], fn_8015E2FC(6, 0, 1), lbl_803EB7F4 >> 1);
+    fn_802336C4(&pPlayer->mUnknown1024[0], fn_8015E2FC(6, 0, 0), _PlyrRender_uHeadModelSize);
+    fn_802336C4(&pPlayer->mUnknown1024[1], fn_8015E2FC(6, 0, 1), _PlyrRender_uHeadModelSize >> 1);
     if (pPlayer->mUnknown992 == 0xFFFF) {
         fn_80233760(&pPlayer->mUnknown1024[0], values, 53);
         fn_80233760(&pPlayer->mUnknown1024[1], values, 53);
@@ -898,14 +903,14 @@ void PlyrHeadBuildModel(Object_8003DEC4 *pPlayer, int unused)
     TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(5, 0, 1));
     pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
     pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
-    TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, lbl_803EB81C);
-    TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, lbl_803EB81C);
+    TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, _PlyrRender_aPartTables);
+    TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, _PlyrRender_aPartTables);
     PlyrRenderBindPartTable(0);
     fn_8015F3FC(0);
-    if (lbl_80365D54.mUnknown0 == 0) {
-        TMModelClone(&lbl_80365D54, &pPlayer->mUnknown1024[0].mUnknown16);
-        TMModelAllocChannels(&lbl_80365D54);
-        TMBufferNew(lbl_80365D88, 0x7404, 0x20);
+    if (_PlyrRender_BlendModel.mUnknown0 == 0) {
+        TMModelClone(&_PlyrRender_BlendModel, &pPlayer->mUnknown1024[0].mUnknown16);
+        TMModelAllocChannels(&_PlyrRender_BlendModel);
+        TMBufferNew(_PlyrRender_aBlendBuffer, 0x7404, 0x20);
     }
     fn_8015E9F4(pPlayer->mUnknown4970, &pPlayer->mUnknown996);
     fn_8015EB4C(pPlayer->mUnknown4970, pPlayer->mUnknown1004);
@@ -1010,9 +1015,9 @@ void PlyrRenderFreeLod(Object_8003DEC4 *pPlayer)
 
 void PlyrRenderAddSlot(Object_8003DEC4 *pPlayer)
 {
-    pPlayer->mUnknown1160 = &lbl_80365AB4[lbl_803ECC04];
-    lbl_80365AB4[lbl_803ECC04].mpUnknown0 = pPlayer;
-    lbl_803ECC04++;
+    pPlayer->mUnknown1160 = &_PlyrRender_aSlots[_PlyrRender_uNumSlots];
+    _PlyrRender_aSlots[_PlyrRender_uNumSlots].mpUnknown0 = pPlayer;
+    _PlyrRender_uNumSlots++;
 }
 
 void PlyrRenderLoadTexMtx(int id, float sx, float sy, float tx, float ty)
@@ -1051,14 +1056,14 @@ void PlyrHeadGetEyeOffsets(Object_8003DEC4 *pPlayer, float *pA, float *pB)
 
 void PlyrHeadOnModelLoaded(Object_8003DEC4 *pPlayer)
 {
-    lbl_803EB818 = 1;
+    _PlyrRender_bHeadModelReady = 1;
 }
 
 void PlyrRenderInit(int a, int b, int c, int d)
 {
     fn_802341AC();
-    lbl_803ECC04 = 0;
-    TMModelReset(&lbl_80365D54);
+    _PlyrRender_uNumSlots = 0;
+    TMModelReset(&_PlyrRender_BlendModel);
     PlyrRenderLoadShadowTexture();
     memset(_PlyrRender_aJointFlags, 0, sizeof(_PlyrRender_aJointFlags));
     _PlyrRender_aJointFlags[15] = 1;
@@ -1067,19 +1072,19 @@ void PlyrRenderInit(int a, int b, int c, int d)
 
 void PlyrRenderNewFrame(void)
 {
-    lbl_803EB7F0 = 0;
+    _PlyrRender_bLodsUpdated = 0;
 }
 
 void PlyrRenderShutdown(void)
 {
     fn_802341B8();
-    TMModelFreeChannels(&lbl_80365D54);
-    lbl_80365D54.mUnknown0 = 0;
-    TMBufferDelete(lbl_80365D88);
+    TMModelFreeChannels(&_PlyrRender_BlendModel);
+    _PlyrRender_BlendModel.mUnknown0 = 0;
+    TMBufferDelete(_PlyrRender_aBlendBuffer);
     PlyrRenderUnloadShadowTexture();
-    if (lbl_803ECC00) {
-        VptRemoveCallback(lbl_803ECC00, PlyrRenderVptCallback);
-        lbl_803ECC00 = 0;
+    if (_PlyrRender_pViewport) {
+        VptRemoveCallback(_PlyrRender_pViewport, PlyrRenderVptCallback);
+        _PlyrRender_pViewport = 0;
     }
 }
 
@@ -1189,9 +1194,9 @@ void PlyrRenderDrawPlayer(Object_8003DEC4 *pPlayer)
     unsigned int flags;
     unsigned int lod;
 
-    if (!lbl_803EB7F0) {
+    if (!_PlyrRender_bLodsUpdated) {
         PlyrRenderUpdateLods();
-        lbl_803EB7F0 = 1;
+        _PlyrRender_bLodsUpdated = 1;
     }
     flags = PlyrRenderGetHideFlags(pPlayer);
     ConGetCurrentContext();
@@ -1206,7 +1211,7 @@ void PlyrRenderDrawPlayer(Object_8003DEC4 *pPlayer)
     if (!(pPlayer->mUnknown20 & 8) && fn_800A2624()) {
         lod = 1;
     }
-    if (pPlayer->mUnknown4216.mUnknown12 > lbl_803EB7EC) {
+    if (pPlayer->mUnknown4216.mUnknown12 > _PlyrRender_fFarDistance) {
         flags |= 4;
     }
     if (lod <= 1) {
@@ -1236,9 +1241,9 @@ void PlyrRenderDrawPlayer(Object_8003DEC4 *pPlayer)
         if ((pPlayer->mUnknown20 & 8) && !FEPlyrLoadIsShown(pPlayer)) {
             return;
         }
-        if (lbl_803EB824 == 1) {
-            fn_800A3B58(PlyrObjsFindPlayer((Block_80170E64 *)pPlayer), 1, lbl_803EB825);
-            lbl_803EB824 = 0;
+        if (_PlyrRender_bPendingPlayerCall == 1) {
+            fn_800A3B58(PlyrObjsFindPlayer((Block_80170E64 *)pPlayer), 1, _PlyrRender_ucPendingPlayerArg);
+            _PlyrRender_bPendingPlayerCall = 0;
         }
         PlyrRenderBindParts(pPlayer, pSlot);
         if (FEPlyrLoadIsActive()) {
@@ -1320,7 +1325,7 @@ void PlyrRenderDrawShadows(void)
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-    TMRenderBindTexture(0, lbl_803ECC08, lbl_803ECC0C);
+    TMRenderBindTexture(0, _PlyrRender_iShadowTexture, _PlyrRender_iShadowClut);
     MatStore(m);
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
@@ -1379,7 +1384,7 @@ void PlyrRenderDrawClippedShadows(void)
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-    TMRenderBindTexture(0, lbl_803ECC08, lbl_803ECC0C);
+    TMRenderBindTexture(0, _PlyrRender_iShadowTexture, _PlyrRender_iShadowClut);
     MatStore(m);
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
@@ -1436,18 +1441,18 @@ void PlyrRenderDrawTrails(void)
 
 void PlyrRenderSetViewport(Viewport_t *pObject)
 {
-    lbl_803ECC00 = pObject;
+    _PlyrRender_pViewport = pObject;
     VptSetCallback(pObject, 2, PlyrRenderVptCallback, 0);
 }
 
 void PlyrRenderSetHideFlagged(unsigned char enable)
 {
-    lbl_803EB7E8 = enable;
+    _PlyrRender_bHideFlagged = enable;
 }
 
 void PlyrRenderBindPartTable(int index)
 {
-    fn_802345BC(&lbl_803EB81C[index]);
+    fn_802345BC(&_PlyrRender_aPartTables[index]);
 }
 
 void PlyrRenderUnbindPartTable(void)
@@ -1457,9 +1462,9 @@ void PlyrRenderUnbindPartTable(void)
 
 void PlyrHeadSetModel(Object_8003DEC4 *pPlayer, int id, void (*pCallback)(Object_8003DEC4 *pPlayer))
 {
-    lbl_803EB810 = pCallback;
-    lbl_803EB818 = 0;
-    lbl_803EB814 = pPlayer;
+    _PlyrRender_pHeadModelCallback = pCallback;
+    _PlyrRender_bHeadModelReady = 0;
+    _PlyrRender_pHeadModelPlayer = pPlayer;
     pPlayer->mUnknown992 = id;
     fn_8015F82C(id, pPlayer, PlyrHeadOnModelLoaded);
 }
@@ -1498,8 +1503,8 @@ static void _PlyrHeadSetModelNow(Object_8003DEC4 *pPlayer, int id)
         TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(5, 0, 1));
         pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
         pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
-        TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, lbl_803EB81C);
-        TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, lbl_803EB81C);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, _PlyrRender_aPartTables);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, _PlyrRender_aPartTables);
         PlyrRenderBindPartTable(0);
         PlyrRenderUnbindPartTable();
     } else {
@@ -1523,8 +1528,8 @@ static void _PlyrHeadSetModelNow(Object_8003DEC4 *pPlayer, int id)
         TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(5, 0, 1));
         pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
         pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
-        TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, lbl_803EB81C);
-        TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, lbl_803EB81C);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, _PlyrRender_aPartTables);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, _PlyrRender_aPartTables);
         PlyrRenderBindPartTable(0);
         fn_8015F3FC(0);
         PlyrRenderUnbindPartTable();
@@ -1536,11 +1541,11 @@ void PlyrHeadProcessModel(void)
     Object_8003DEC4 *pPlayer;
     short values[53];
 
-    if (!lbl_803EB814 || !lbl_803EB818) {
+    if (!_PlyrRender_pHeadModelPlayer || !_PlyrRender_bHeadModelReady) {
         return;
     }
     memset(values, 0, sizeof(values));
-    pPlayer = lbl_803EB814;
+    pPlayer = _PlyrRender_pHeadModelPlayer;
     if (pPlayer->mUnknown992 == 0xFFFF) {
         int a;
         int b;
@@ -1569,8 +1574,8 @@ void PlyrHeadProcessModel(void)
         TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(5, 0, 1));
         pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
         pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
-        TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, lbl_803EB81C);
-        TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, lbl_803EB81C);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, _PlyrRender_aPartTables);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, _PlyrRender_aPartTables);
         PlyrRenderBindPartTable(0);
         PlyrRenderUnbindPartTable();
     } else {
@@ -1594,15 +1599,15 @@ void PlyrHeadProcessModel(void)
         TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(5, 0, 1));
         pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
         pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
-        TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, lbl_803EB81C);
-        TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, lbl_803EB81C);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, _PlyrRender_aPartTables);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, _PlyrRender_aPartTables);
         PlyrRenderBindPartTable(0);
         fn_8015F3FC(0);
         PlyrRenderUnbindPartTable();
     }
-    lbl_803EB810(pPlayer);
-    lbl_803EB810 = 0;
-    lbl_803EB814 = 0;
-    lbl_803EB818 = 0;
+    _PlyrRender_pHeadModelCallback(pPlayer);
+    _PlyrRender_pHeadModelCallback = 0;
+    _PlyrRender_pHeadModelPlayer = 0;
+    _PlyrRender_bHeadModelReady = 0;
 }
 }
