@@ -11,7 +11,8 @@ int GlibGetXFBHeight(void);
 int DVDGetDriveStatus(void);
 }
 
-extern unsigned char lbl_803EBD4C;
+/* Draws the movie frame with doubled Y lines (otherwise by codec type). */
+static unsigned char _MovieRcmp_bDoubleYLines = 1;
 
 void MovieRcmpRenderInit(Shape_t *pShape)
 {
@@ -37,7 +38,7 @@ void MovieRcmpRenderShape(Shape_t *pShape, int type)
     pPlanes[0] = pData;
     pPlanes[1] = pData + pShape->mWidth * pShape->mHeight;
     pPlanes[2] = pPlanes[1] + (pShape->mWidth / 2) * (pShape->mHeight / 2);
-    if (lbl_803EBD4C != 0) {
+    if (_MovieRcmp_bDoubleYLines != 0) {
         yuvrenderDoubleYLines(pPlanes);
     } else if (type == 4 || type == 5) {
         yuvrenderVP6YLines(pPlanes);

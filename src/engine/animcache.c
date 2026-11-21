@@ -17,7 +17,7 @@ typedef struct AnimCacheObjType_t {
 extern unsigned int _AnimCache_nCaches;
 extern int _AnimCache_MemoryHeap;
 extern AnimCacheObjType_t *_AnimCache_pCaches;
-extern unsigned char _AnimCache_Initialized;
+static unsigned char _AnimCache_Initialized = 0;
 
 void AnimCacheClearObjectType(unsigned int index);
 

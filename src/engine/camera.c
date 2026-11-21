@@ -18,11 +18,13 @@ typedef struct CamType_t {
     void (*mpPreProcess)(Cam_t *pCam);
 } CamType_t;
 
-extern unsigned char lbl_803EBBD4;
-extern unsigned char lbl_803ECECC;
-extern unsigned char lbl_803ECECD;
-extern CamType_t *lbl_803ECED0;
-extern float lbl_803ECED4;
+static unsigned char _Cam_ModuleActive = 0;
+
+/* The camera object type, the number of camera types, their table and the default aspect ratio. */
+static unsigned char _Cam_ObjTypeIndex;
+static unsigned char _Cam_NumCameraTypes;
+static CamType_t *_Cam_pCameraList;
+static float _Cam_DefaultAspect;
 
 int ObjNewType_(int type, unsigned int size, int count, void (*pAdd)(Cam_t *), void (*pDelete)(Cam_t *));
 int ObjDelType(int type);
@@ -38,25 +40,25 @@ static inline int _CamMulFixed24(int a, int b)
 
 static void _CamAddFunc(Cam_t *pCam)
 {
-    lbl_803ECED0[pCam->mHeader.mType].mpFuncs->mpAdd(pCam);
+    _Cam_pCameraList[pCam->mHeader.mType].mpFuncs->mpAdd(pCam);
     pCam->mHeader.mUnknown20 = 45.0f;
-    pCam->mHeader.mUnknown24 = lbl_803ECED4;
+    pCam->mHeader.mUnknown24 = _Cam_DefaultAspect;
     pCam->mpViewport = 0;
 }
 
 static void _CamDeleteFunc(Cam_t *pCam)
 {
-    lbl_803ECED0[pCam->mHeader.mType].mpFuncs->mpDelete(pCam);
+    _Cam_pCameraList[pCam->mHeader.mType].mpFuncs->mpDelete(pCam);
 }
 
 static void _CamProcessFunc(Viewport_t *pViewport, void *pArg)
 {
     Cam_t *pCam = pArg;
 
-    if (lbl_803ECED0[pCam->mHeader.mType].mpPreProcess) {
-        lbl_803ECED0[pCam->mHeader.mType].mpPreProcess(pCam);
+    if (_Cam_pCameraList[pCam->mHeader.mType].mpPreProcess) {
+        _Cam_pCameraList[pCam->mHeader.mType].mpPreProcess(pCam);
     }
-    lbl_803ECED0[pCam->mHeader.mType].mpFuncs->mpProcess(pViewport, pCam);
+    _Cam_pCameraList[pCam->mHeader.mType].mpFuncs->mpProcess(pViewport, pCam);
 }
 
 int CamInit(int count, int numTypes, CamType_t *pTypes, int type)
@@ -65,18 +67,18 @@ int CamInit(int count, int numTypes, CamType_t *pTypes, int type)
     unsigned int maxSize = 0;
     int i;
 
-    if (!lbl_803EBBD4) {
-        lbl_803ECECC = type;
-        lbl_803ECED4 = 1.3333334f;
-        lbl_803ECECD = numTypes;
-        lbl_803ECED0 = pTypes;
+    if (!_Cam_ModuleActive) {
+        _Cam_ObjTypeIndex = type;
+        _Cam_DefaultAspect = 1.3333334f;
+        _Cam_NumCameraTypes = numTypes;
+        _Cam_pCameraList = pTypes;
         for (i = 0; i < numTypes; i++) {
             if (pTypes[i].mSize > maxSize) {
                 maxSize = pTypes[i].mSize;
             }
         }
         error = ObjNewType_(type, maxSize, count, _CamAddFunc, _CamDeleteFunc);
-        lbl_803EBBD4 = 1;
+        _Cam_ModuleActive = 1;
     } else {
         error = 0xB0001;
     }
@@ -88,9 +90,9 @@ int CamShutdown(void)
 {
     int error = 0;
 
-    if (lbl_803EBBD4) {
-        ObjDelType(lbl_803ECECC);
-        lbl_803EBBD4 = 0;
+    if (_Cam_ModuleActive) {
+        ObjDelType(_Cam_ObjTypeIndex);
+        _Cam_ModuleActive = 0;
     } else {
         error = 0xB0002;
     }
@@ -100,7 +102,7 @@ int CamShutdown(void)
 
 Cam_t *CamCreate(int a, int b)
 {
-    return ObjNew(lbl_803ECECC, a, b);
+    return ObjNew(_Cam_ObjTypeIndex, a, b);
 }
 
 void CamDestroy(Cam_t *pCam)
@@ -246,5 +248,5 @@ void CamSetZScale(Cam_t *pCam, float scale)
 
 void CamSetDefaultAspect(float aspect)
 {
-    lbl_803ECED4 = aspect;
+    _Cam_DefaultAspect = aspect;
 }

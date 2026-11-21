@@ -19,7 +19,7 @@ extern void *DSNewNode(void *pPool);
 extern void DSDelNode(void *pPool, void *pElement);
 extern void *memset(void *pDst, int value, unsigned int size);
 
-extern unsigned char lbl_803EBD50;
+static unsigned char _Obj_ModuleActive = 0;
 extern int lbl_803ED640;
 extern ObjType_t *lbl_803ED644;
 
@@ -169,9 +169,9 @@ int _ObjListTraverseFunc(void *pNode, void *pContext)
 
 int ObjInit(int count)
 {
-    if (lbl_803EBD50 == 0) {
+    if (_Obj_ModuleActive == 0) {
         if (_ObjNewTypeList(count) != 0) {
-            lbl_803EBD50 = 1;
+            _Obj_ModuleActive = 1;
             return 0;
         }
         return SysGetLastError();
@@ -181,11 +181,11 @@ int ObjInit(int count)
 
 int ObjShutdown(void)
 {
-    if (lbl_803EBD50 == 0) {
+    if (_Obj_ModuleActive == 0) {
         return 0x90002;
     }
     _ObjDelTypeList();
-    lbl_803EBD50 = 0;
+    _Obj_ModuleActive = 0;
     return 0;
 }
 

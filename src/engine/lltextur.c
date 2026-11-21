@@ -45,7 +45,7 @@ void LLTexPadToPow2(Texture_t *pTex)
         break;
     }
     size = (pTex->mWidth * pTex->mHeight * bpp) >> 3;
-    pImage = fn_801D2BB0(lbl_803EBEBC, size, 4, 0);
+    pImage = fn_801D2BB0(_Tex_ImageHeap, size, 4, 0);
     memcpy(pImage, pTex->mpImage, size);
     fn_801D2BD0(pTex->mpImage);
     pTex->mpImage = pImage;
@@ -56,7 +56,7 @@ void LLTexPadToPow2(Texture_t *pTex)
     srcPitch = (pTex->mWidth * bpp) >> 3;
     dstPitch = width * bpp / 8;
     size = height * dstPitch;
-    pDst = fn_801D2BB0(lbl_803EBEBC, size, 0, 0);
+    pDst = fn_801D2BB0(_Tex_ImageHeap, size, 0, 0);
     MemFill(pDst, size, 0, 1);
     for (y = 0; y < pTex->mHeight; y++) {
         memcpy(pDst + y * dstPitch, pTex->mpImage + y * srcPitch, srcPitch);

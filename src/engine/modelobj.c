@@ -55,7 +55,8 @@ extern void TMRenderBindMaterialList(void *pList);
 extern void TMRenderGeomAll(void);
 extern void TMRenderGeomNode(int state, int arg);
 extern int LLFogEnable(int enable);
-extern int lbl_803EC0F8;
+/* Model objects are drawn only while this is set. */
+static int _ModelObj_bRenderEnabled = 1;
 typedef struct Owner_80235328 Owner_80235328;
 void fn_80235328(Owner_80235328 *pOwner, int key);
 void fn_802353D4(Object_80235588 *p, int flags);
@@ -121,7 +122,7 @@ void ModelObjRender(Object_80235588 *p, int handle, int lightMask)
     int fog = 0;
     GXBool zUpdate = 1;
 
-    if (lbl_803EC0F8 != 0 && p->mpUnknown84 != 0) {
+    if (_ModelObj_bRenderEnabled != 0 && p->mpUnknown84 != 0) {
         /* FAKEMATCH: the target stores red with the initializer word and the other three
            bytes through a pointer register (addi r9,r1,12); the original form is not known. */
         GXColor color = {128};

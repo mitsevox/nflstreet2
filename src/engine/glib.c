@@ -3,8 +3,10 @@
 #include "engine/llglib.h"
 #include "engine/SysSetLastErrorFunc.h"
 
-extern unsigned char lbl_803EBC60;
-extern int lbl_803EBC64;
+static unsigned char _Glib_ModuleActive = 0;
+
+/* The TV mode GlibGetTvMode returns. */
+static int _Glib_iTvMode = 0;
 
 int GlibLLInit(GlibConfig_t *pConfig);
 int GlibLLShutdown(void);
@@ -13,9 +15,9 @@ int GlibInit(GlibConfig_t *pConfig)
 {
     int result;
 
-    if (!lbl_803EBC60) {
+    if (!_Glib_ModuleActive) {
         result = GlibLLInit(pConfig);
-        lbl_803EBC60 = 1;
+        _Glib_ModuleActive = 1;
     } else {
         result = 0xE0001;
     }
@@ -27,9 +29,9 @@ int GlibShutdown(void)
 {
     int result;
 
-    if (lbl_803EBC60) {
+    if (_Glib_ModuleActive) {
         result = GlibLLShutdown();
-        lbl_803EBC60 = 0;
+        _Glib_ModuleActive = 0;
     } else {
         result = 0xE0002;
     }
@@ -39,10 +41,10 @@ int GlibShutdown(void)
 
 int GlibGetTvMode(void)
 {
-    return lbl_803EBC64;
+    return _Glib_iTvMode;
 }
 
 void GlibSetTvMode(int value)
 {
-    lbl_803EBC64 = value;
+    _Glib_iTvMode = value;
 }

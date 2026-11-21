@@ -13,27 +13,28 @@ void QuatSlerp(float *pOut, float *pA, float *pB, float t);
 
 extern unsigned char lbl_803E9288[];
 
-extern Mtx *lbl_803ECFD4[2];
-extern int lbl_803ECFDC;
-extern int lbl_803ECFE0;
-extern int lbl_803ECFE4;
+/* The two matrix buffers used in turn, the one in use, their capacity and the matrices used. */
+static Mtx *_TMClusterObj_pMatrixBuffer[2];
+static int _TMClusterObj_iCurMatrixBuffer;
+static int _TMClusterObj_nMatrices;
+static int _TMClusterObj_iCurMatrix;
 
 void TMClusterObjInit(int maxMatrices, int numBuffers)
 {
     Mtx *pBuffer = fn_801D2B7C(sizeof(Mtx) * maxMatrices * numBuffers, 0, 0);
 
-    lbl_803ECFD4[0] = pBuffer;
-    lbl_803ECFD4[1] = pBuffer;
+    _TMClusterObj_pMatrixBuffer[0] = pBuffer;
+    _TMClusterObj_pMatrixBuffer[1] = pBuffer;
     if (numBuffers == 2) {
-        lbl_803ECFD4[1] = pBuffer + maxMatrices;
+        _TMClusterObj_pMatrixBuffer[1] = pBuffer + maxMatrices;
     }
-    lbl_803ECFE0 = maxMatrices;
+    _TMClusterObj_nMatrices = maxMatrices;
     TMClusterObjResetMatrices();
 }
 
 void TMClusterObjShutdown(void)
 {
-    fn_801D2BD0(lbl_803ECFD4[0]);
+    fn_801D2BD0(_TMClusterObj_pMatrixBuffer[0]);
 }
 
 void TMClusterObjInitObj(TMClusterObj_t *pObj)
@@ -45,17 +46,17 @@ void TMClusterObjInitObj(TMClusterObj_t *pObj)
 
 void TMClusterObjResetMatrices(void)
 {
-    lbl_803ECFDC = !lbl_803ECFDC;
-    lbl_803ECFE4 = 0;
+    _TMClusterObj_iCurMatrixBuffer = !_TMClusterObj_iCurMatrixBuffer;
+    _TMClusterObj_iCurMatrix = 0;
 }
 
 void TMClusterObjAllocMatrices(TMClusterObj_t *pObj, int numMatrices)
 {
-    int used = lbl_803ECFE4;
-    Mtx *pBuffer = lbl_803ECFD4[lbl_803ECFDC];
+    int used = _TMClusterObj_iCurMatrix;
+    Mtx *pBuffer = _TMClusterObj_pMatrixBuffer[_TMClusterObj_iCurMatrixBuffer];
 
     numMatrices = (numMatrices + 1) & ~1;
-    lbl_803ECFE4 = used + numMatrices;
+    _TMClusterObj_iCurMatrix = used + numMatrices;
     pObj->mNumMatrices = numMatrices;
     pObj->mpMatrices = pBuffer + used;
 }
