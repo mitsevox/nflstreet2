@@ -3094,7 +3094,7 @@
     {
       "source": "src/game/cu_8000DCD8.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8000DCD8.cpp, the function rows 0x8000DCD8-0x8000EE78, the data row 0x8000EE78-0x8000F870 and the data rows of its .sdata, .sbss and .bss objects.",
+      "evidence": "evidence.tsv unit row src/game/cu_8000DCD8.cpp, the function rows 0x8000DCD8-0x8000EE78, the data row 0x8000EE78-0x8000F870 and the data rows of its .sdata, .sbss and .bss objects. The source is linked with holdouts (units.json, whose storage map places the same COMMON and .sbss statics); the non-exact function stays registered here as its partial.",
       "sections": [
         {
           "section": ".text",
@@ -3250,32 +3250,32 @@
           "end": "0x8000EB3C"
         },
         {
-          "symbol": "fn_8000EB3C__Fv",
+          "symbol": "fn_8000EB3C",
           "start": "0x8000EB3C",
           "end": "0x8000EB5C"
         },
         {
-          "symbol": "fn_8000EB5C__Fv",
+          "symbol": "fn_8000EB5C",
           "start": "0x8000EB5C",
           "end": "0x8000EB80"
         },
         {
-          "symbol": "fn_8000EB80__Fv",
+          "symbol": "fn_8000EB80",
           "start": "0x8000EB80",
           "end": "0x8000EBA4"
         },
         {
-          "symbol": "fn_8000EBA4__Fi",
+          "symbol": "fn_8000EBA4",
           "start": "0x8000EBA4",
           "end": "0x8000EC14"
         },
         {
-          "symbol": "fn_8000EC14__Fv",
+          "symbol": "fn_8000EC14",
           "start": "0x8000EC14",
           "end": "0x8000EC38"
         },
         {
-          "symbol": "fn_8000EC38__Fv",
+          "symbol": "fn_8000EC38",
           "start": "0x8000EC38",
           "end": "0x8000EC44"
         },
@@ -3477,12 +3477,12 @@
           "end": "0x803ECE30"
         },
         {
-          "symbol": "lbl_803ECE30",
+          "symbol": "_Appear_iSavedHairStyle",
           "start": "0x803ECE30",
           "end": "0x803ECE34"
         },
         {
-          "symbol": "lbl_803ECE34",
+          "symbol": "_Appear_iLastItem",
           "start": "0x803ECE34",
           "end": "0x803ECE38"
         }
@@ -6743,7 +6743,7 @@
     {
       "source": "src/game/cu_80176F18.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row for src/game/cu_80176F18.cpp (replacing candidate cu_80176F18), individual exact function extents, exact data rows for its .rodata literals and vtables, .sdata, .bss and .sbss objects and .ctors word, the compiler, type, source-form, name and linker rows (the linker rows record the two functions the target discarded, file-static in the source and unregistered). The .sbss entry 0x803ECB24-0x803ECB38 is a bounding range for the storage list, which places the unit's three .sbss objects individually; its words 0x803ECB2C and 0x803ECB30 belong to src/game/Possession.cpp and are not claimed. Draft comparisons only; original assembly remains linked until the .sbss interleave can be placed.",
+      "evidence": "evidence.tsv provisional unit row for src/game/cu_80176F18.cpp (replacing candidate cu_80176F18), individual exact function extents, exact data rows for its .rodata literals and vtables, .sdata, .bss and .sbss objects and .ctors word, the compiler, type, source-form, name and linker rows (the linker rows record the two functions the target discarded, file-static in the source and unregistered). The .sbss entry 0x803ECB24-0x803ECB38 is a bounding range for the storage list, which places the unit's three .sbss objects individually; its words 0x803ECB2C and 0x803ECB30 belong to src/game/Possession.cpp and are not claimed. The source is linked with holdouts (units.json, with the same three .sbss statics in its storage map); the non-exact function stays registered here as its partial.",
       "sections": [
         {
           "section": ".text",
