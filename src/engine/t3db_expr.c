@@ -5,7 +5,7 @@
 #include "engine/t3db.h"
 
 
-extern double fn_8025FBD4(double x);
+extern double sqrt(double x);
 typedef void (*TDbOpFunc_t)(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r);
 
 
@@ -430,7 +430,7 @@ static void _TDbOpFMathROUND_FLOAT(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)
 static void _TDbOpFMathSQRT_FLOAT(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)
 {
     r->mType = TDB_TYPE_FLOAT;
-    r->mValue.f = fn_8025FBD4(a->mValue.f);
+    r->mValue.f = sqrt(a->mValue.f);
 }
 
 static void _TDbOpFMathMKPCT_FLOAT(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)

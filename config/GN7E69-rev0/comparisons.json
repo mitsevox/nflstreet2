@@ -21001,32 +21001,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_8025FBD4.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8025FBD4-0x80260B1C (src/engine/cu_8025FBD4.c), its compiler, source-form, type, function and name rows and the exact .sdata2 data row 0x803EDDC8-0x803EDDD8. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8025FBD4",
-          "end": "0x80260B1C"
-        },
-        {
-          "section": ".sdata2",
-          "placement": ".data6",
-          "start": "0x803EDDC8",
-          "end": "0x803EDDD8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8025FBD4",
-          "start": "0x8025FBD4",
-          "end": "0x8025FDE8"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_80260B1C.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional survey row 0x80260B1C-0x80260FC4, retained function/name/compiler/source-form rows and .sdata2 0x803EDEDC-0x803EDEE4. One draft comparison remains; original assembly stays linked. Independent magnitude and sign-copy files are linked separately; the intervening survey tail 0x80260FE8-0x80261A24 is unreconstructed.",

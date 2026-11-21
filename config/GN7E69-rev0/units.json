@@ -16390,6 +16390,25 @@
       ]
     },
     {
+      "source": "src/engine/e_sqrt.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8025FBD4-0x8025FDE8, the sqrt function/name/compiler/source-form/type/field rows, and data/name rows for one and tiny at 0x803EDDC8-0x803EDDD8.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025FBD4",
+          "end": "0x8025FDE8"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDDC8",
+          "end": "0x803EDDD8"
+        }
+      ]
+    },
+    {
       "source": "src/engine/fabsf.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional whole-file row 0x80260FC4-0x80260FE8, exact function extent, inferred name/ABI/type fields and unchanged compiler profile; no static data. Remaining survey bytes stay original.",
