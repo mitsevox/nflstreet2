@@ -19997,6 +19997,18 @@
           "placement": ".text",
           "start": "0x8022EBF0",
           "end": "0x8022EF14"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B5C8C",
+          "end": "0x802B5D0C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC0B0",
+          "end": "0x803EC0BC"
         }
       ],
       "functions": [
@@ -20147,6 +20159,18 @@
           "placement": ".text",
           "start": "0x802328A8",
           "end": "0x802336C4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B6E10",
+          "end": "0x802B7120"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FB38C",
+          "end": "0x802FB3F8"
         }
       ],
       "functions": [
@@ -27643,6 +27667,12 @@
           "placement": ".text",
           "start": "0x801FC9D4",
           "end": "0x802009B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039B43C",
+          "end": "0x8039B48C"
         }
       ],
       "functions": [
@@ -28567,6 +28597,18 @@
           "placement": ".data3",
           "start": "0x802AFCC8",
           "end": "0x802AFCF8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBCF8",
+          "end": "0x803EBD00"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80384CC0",
+          "end": "0x80398DE0"
         }
       ],
       "functions": [

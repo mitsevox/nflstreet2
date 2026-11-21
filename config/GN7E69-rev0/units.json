@@ -4831,6 +4831,18 @@
           "placement": ".text",
           "start": "0x8022EBF0",
           "end": "0x8022ED50"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B5C8C",
+          "end": "0x802B5D0C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC0B0",
+          "end": "0x803EC0BC"
         }
       ],
       "holdouts": {
@@ -4902,6 +4914,18 @@
           "placement": ".text",
           "start": "0x80233344",
           "end": "0x802336C4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B6E10",
+          "end": "0x802B7120"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FB38C",
+          "end": "0x802FB3F8"
         }
       ],
       "holdouts": {
@@ -14856,7 +14880,7 @@
     {
       "source": "src/engine/llfileio.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C9DD8-0x801CB1BC (src/engine/llfileio.c) and its data rows; every function and data placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C9DD8-0x801CB1BC (src/engine/llfileio.c) and its data rows; every function and data placement exact, promoted from comparison-only. The file links its .rodata, .data (_File_FontColor), .sdata (ModuleLoaded.._File_strGameName) and .sbss (device.39.._FileErrorFont); the font image 0x802F4AC0 stays original bytes (data row 0x802F4A74 .data).",
       "sections": [
         {
           "section": ".text",
@@ -14869,6 +14893,24 @@
           "placement": ".data3",
           "start": "0x802AF19C",
           "end": "0x802AF358"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4A74",
+          "end": "0x802F4A84"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBC38",
+          "end": "0x803EBC48"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEE8",
+          "end": "0x803ECEFC"
         }
       ]
     },
@@ -15055,13 +15097,25 @@
     {
       "source": "src/engine/resloosefile.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801F3308-0x801F34C0 (src/engine/resloosefile.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801F3308-0x801F34C0 (src/engine/resloosefile.c) and its data rows; every function exact, promoted from comparison-only. The file links its .rodata (the path literals) and .sdata (the two statics of _ResLooseFileGetName); the 256-byte path buffer lbl_803E933C is COMMON storage and keeps its original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801F3308",
           "end": "0x801F34C0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B19AC",
+          "end": "0x802B19C4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBDE8",
+          "end": "0x803EBDF0"
         }
       ]
     },
@@ -15973,7 +16027,7 @@
     {
       "source": "src/engine/GCmp.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8027F0DC-0x8027FB2C (src/engine/GCmp.c), its function and name rows and its .rodata/.sdata/.sbss data rows; every function and data placement exact.",
+      "evidence": "evidence.tsv unit row 0x8027F0DC-0x8027FB2C (src/engine/GCmp.c), its function and name rows and its .rodata/.data/.sdata/.sbss data rows; every function and data placement exact.",
       "sections": [
         {
           "section": ".text",
@@ -15986,6 +16040,12 @@
           "placement": ".data3",
           "start": "0x802C2838",
           "end": "0x802C2848"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803018A8",
+          "end": "0x803018C8"
         },
         {
           "section": ".sdata",
@@ -16056,13 +16116,25 @@
     {
       "source": "src/engine/ResTracker.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F2310-0x801F284C (src/engine/ResTracker.c), its function and name rows; every function and allocated placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv provisional unit row 0x801F2310-0x801F284C (src/engine/ResTracker.c), its function, name and data rows; every function and allocated placement exact, promoted from comparison-only. The file links its .rodata (the log-format literals) and .sdata (ResTrackerSize..bResTrackInit).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801F2310",
           "end": "0x801F284C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1828",
+          "end": "0x802B19A4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBDB8",
+          "end": "0x803EBDD4"
         }
       ]
     },
@@ -24344,6 +24416,12 @@
           "placement": ".text",
           "start": "0x8020071C",
           "end": "0x802009B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039B43C",
+          "end": "0x8039B48C"
         }
       ],
       "holdouts": {
@@ -24440,6 +24518,18 @@
           "placement": ".data3",
           "start": "0x802AFCC8",
           "end": "0x802AFCF8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBCF8",
+          "end": "0x803EBD00"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80384CC0",
+          "end": "0x80398DE0"
         }
       ],
       "holdouts": {
