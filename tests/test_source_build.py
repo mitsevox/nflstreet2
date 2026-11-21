@@ -1279,6 +1279,30 @@ class Holdouts(Fixture):
         with self.assertRaisesRegex(ValueError, "holdouts cannot be combined with folded"):
             self.held(manifest)
 
+    def test_holdouts_may_keep_a_table_of_a_whole_data_section(self):
+        # The other half of the real use (_vt.10FchrCursor): a local object of .rodata, which a
+        # holdouts unit links whole, is kept with its global copy and folded alias typed as objects.
+        table = {"name": "Table", "value": 0, "size": 8, "shndx": 4, "type": sb.STT_OBJECT, "bind": sb.STB_LOCAL}
+        units, _, _ = self.held(self.kept_manifest({"c": "0x80003120", "Table": "0x80004008"}))
+        unit = dict(units[0], object=self.native(self.SYMBOLS + [table]))
+        sb.link_object(unit, {"c", "Table"})
+        sections, symbols = sb.read_elf(unit["link_object"].read_bytes())
+        rodata_index = next(s["index"] for s in sections if s["name"] == ".rodata")
+        named = [(s["name"], s["bind"], s["type"], s["shndx"], s["value"], s["size"]) for s in symbols
+                 if s["name"] in ("Table", sb.folded_reference("Table"))]
+        self.assertEqual(named, [("Table", sb.STB_LOCAL, sb.STT_OBJECT, rodata_index, 0, 8),
+                                 ("Table", sb.STB_GLOBAL, sb.STT_OBJECT, rodata_index, 0, 8),
+                                 (sb.folded_reference("Table"), sb.STB_GLOBAL, sb.STT_OBJECT, rodata_index, 0, 8)])
+        _, defined, _ = sb.plan(self.sections, [unit], {"src/unit.c": (sections, symbols)}, {"Other": 0x80003104})
+        self.assertEqual(defined["Table"], (0x80004008, "src/unit.c"))
+        # A kept table at another address than its placement is refused.
+        units, _, _ = self.held(self.kept_manifest({"c": "0x80003120", "Table": "0x8000400C"}))
+        unit = dict(units[0], object=self.native(self.SYMBOLS + [table]))
+        sb.link_object(unit, {"c", "Table"})
+        with self.assertRaises(ValueError):
+            sb.plan(self.sections, [unit], {"src/unit.c": sb.read_elf(unit["link_object"].read_bytes())},
+                    {"Other": 0x80003104})
+
     def test_a_kept_local_is_never_a_holdout(self):
         # Inside the holdout's range: refused when the manifest loads, before anything compiles.
         with self.assertRaisesRegex(ValueError, "kept local b lies in holdout b 0x80003118-0x80003120; "
@@ -1527,9 +1551,17 @@ class Holdouts(Fixture):
         manifest["units"][0]["folded"] = {"symbols": {"x": "0x80003130"}, "evidence": "x"}
         with self.assertRaisesRegex(ValueError, "cannot be combined with folded"):
             self.held(manifest)
+        # kept_locals next to discarded functions loads. "x" is no compiled symbol: this checks
+        # manifest loading only (test_holdouts_may_keep_a_local_of_a_linked_run accepts a real one).
         manifest = self.discarded_manifest()
         manifest["units"][0]["kept_locals"] = {"symbols": {"x": "0x80003110"}, "evidence": "x"}
         self.assertEqual(self.held(manifest)[0][0]["kept_locals"], {"x": 0x80003110})
+        # A discarded function cannot be kept: the derived object no longer defines it.
+        manifest = self.discarded_manifest()
+        manifest["units"][0]["kept_locals"] = {"symbols": {"z": "0x80003110"}, "evidence": "x"}
+        unit = dict(self.held(manifest)[0][0], object=self.discarded_native())
+        with self.assertRaisesRegex(ValueError, "Kept local z is not one local function"):
+            sb.link_object(unit)
 
     def test_derived_object_drops_discarded_functions(self):
         units, _, _ = self.held(self.discarded_manifest())
