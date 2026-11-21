@@ -711,7 +711,8 @@ void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_800
 
     t *= 112495.65f;
     t = t < 0.0f ? 0.0f : t;
-    t = vz * 335.40372f + sqrtf(t);
+    t = sqrtf(t);
+    t = vz * 335.40372f + t;
     if (t > 0.0f) {
         fn_80227248(&pos, &pBall->mState.mUnknown70, 0.5f * t * t);
         fn_8022732C(&pos, &pBall->mState.mUnknown54, t);
