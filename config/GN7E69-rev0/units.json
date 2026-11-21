@@ -12881,6 +12881,18 @@
           "end": "0x800CF84C"
         },
         {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D7094",
+          "end": "0x802DA864"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA8AC",
+          "end": "0x803EAC98"
+        },
+        {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296038",
@@ -12890,7 +12902,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8030C070",
-          "end": "0x8030EFB4"
+          "end": "0x803192BC"
         },
         {
           "section": ".sbss",
@@ -14811,13 +14823,19 @@
     {
       "source": "src/engine/llrender.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CEC90-0x801CEE54 (src/engine/llrender.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801CEC90-0x801CEE54 (src/engine/llrender.c) and its data rows (.rodata 0x802AF4E8, .sdata 0x803EBC90); every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801CEC90",
           "end": "0x801CEE54"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBC90",
+          "end": "0x803EBCA8"
         },
         {
           "section": ".rodata",

@@ -11943,6 +11943,18 @@
           "end": "0x800CF84C"
         },
         {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D7094",
+          "end": "0x802DA864"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA8AC",
+          "end": "0x803EAC98"
+        },
+        {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296038",
@@ -11952,7 +11964,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8030C070",
-          "end": "0x8030EFB4"
+          "end": "0x803192BC"
         },
         {
           "section": ".sbss",
