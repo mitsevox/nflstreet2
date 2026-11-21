@@ -15064,13 +15064,19 @@
     {
       "source": "src/engine/maddeca.cpp",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801DB058-0x801DB21C (src/engine/maddeca.cpp) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801DB058-0x801DB21C (src/engine/maddeca.cpp) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .rodata 0x802B0F50-0x802B1050, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801DB058",
           "end": "0x801DB21C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B0F50",
+          "end": "0x802B1050"
         }
       ]
     },
@@ -16261,7 +16267,7 @@
     {
       "source": "src/engine/texture.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8020DB34-0x8020E7EC (src/engine/texture.c), its function and name rows; every function and allocated placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv provisional unit row 0x8020DB34-0x8020E7EC (src/engine/texture.c), its function and name rows; every function and allocated placement exact, promoted from comparison-only. It owns and links its data (da1c): .data 0x802F9BF0-0x802F9C08, .rodata 0x802B1BC4-0x802B1BD4, .sdata 0x803EBEB8-0x803EBED0, .sbss 0x803ECFBC-0x803ECFC4, each with its evidence.tsv data rows.",
       "sections": [
         {
           "section": ".text",
@@ -16274,6 +16280,24 @@
           "placement": ".data4",
           "start": "0x802F9BF0",
           "end": "0x802F9C08"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1BC4",
+          "end": "0x802B1BD4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBEB8",
+          "end": "0x803EBED0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFBC",
+          "end": "0x803ECFC4"
         }
       ]
     },
@@ -20532,8 +20556,8 @@
     },
     {
       "source": "src/engine/maddec.cpp",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801DA52C-0x801DB058 (src/engine/maddec.cpp), its function, name and data rows; 0x801DA7E8-0x801DB058 and the file's data are linked except the two code tables 0x802B0060-0x802B0E50, which only the holdout reads, the documented holdout 0x801DA52C-0x801DA7E8 (the table initializer) keeps its original bytes and stays a comparison.",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row 0x801DA52C-0x801DB058 (src/engine/maddec.cpp), its function, name and data rows; 0x801DA7E8-0x801DB058 and the file's data are linked except the two code tables 0x802B0060-0x802B0E50, which only the holdout reads, the documented holdout 0x801DA52C-0x801DA7E8 (the table initializer) keeps its original bytes and stays a comparison. Linked with holdouts (da1c; owner ruling of 2026-11-20, config README Holdouts): madinit__Fv keeps the original bytes and its draft is compiled with the file, so the code tables 0x802B0060-0x802B0E50 link with quanttbl as the whole .rodata 0x802B0060-0x802B0F50.",
       "sections": [
         {
           "section": ".text",
@@ -20544,7 +20568,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802B0E50",
+          "start": "0x802B0060",
           "end": "0x802B0F50"
         },
         {
@@ -20565,7 +20589,16 @@
           "start": "0x803ECF1C",
           "end": "0x803ECF30"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "madinit__Fv",
+            "evidence": "evidence.tsv source-form 0x801DA52C-0x801DA7E8"
+          }
+        ],
+        "evidence": "da1c merge notes (swarm o1/da1/da1c report): src/engine/maddec.cpp holds out madinit__Fv (its HOLDOUT: row), linked with holdouts so its whole .rodata, the two VLC code tables only madinit reads, links."
+      }
     },
     {
       "source": "src/engine/animwgt.c",

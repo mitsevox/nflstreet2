@@ -11,7 +11,13 @@ extern int madvlctbl2[256];
 extern int madvlctbl3[256];
 extern int madquant[64];
 extern int idctinput[64];
-extern const int lbl_802B0F50[64];
+/* The zigzag order of the 8x8 DCT coefficients. */
+static const int zigzag[64] = {
+    0, 8, 1, 2, 9, 16, 24, 17, 10, 3, 4, 11, 18, 25, 32, 40,
+    33, 26, 19, 12, 5, 6, 13, 20, 27, 34, 41, 48, 56, 49, 42, 35,
+    28, 21, 14, 7, 15, 22, 29, 36, 43, 50, 57, 58, 51, 44, 37, 30,
+    23, 31, 38, 45, 52, 59, 60, 53, 46, 39, 47, 54, 61, 62, 55, 63
+};
 
 void discardbits(int count)
 {
@@ -71,7 +77,7 @@ int madvlcdecode(void)
         }
         discardbits(length);
         i += (code >> 16) & 0x3F;
-        idctinput[lbl_802B0F50[i]] = (code >> 22) * madquant[lbl_802B0F50[i]];
+        idctinput[zigzag[i]] = (code >> 22) * madquant[zigzag[i]];
         i++;
     }
 }

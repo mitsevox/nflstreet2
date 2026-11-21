@@ -39,7 +39,7 @@ unsigned short TexGetNumMaterials(TexFileHeader_t *pTex);
 unsigned short TexGetNumPalettes(TexFileHeader_t *pTex);
 const char *TexGetMaterialNameByIndex(TexFileHeader_t *pTex, unsigned short index);
 
-extern int lbl_803EBEBC;
+extern int _Tex_ImageHeap;
 
 void MatStore(Mtx44 mtx);
 void MemFill(void *p, unsigned int size, int c, int d);
