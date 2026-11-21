@@ -298,9 +298,6 @@ def load_manifest(manifest, sections, compiler_version, comparisons=None, eviden
         storage = storage_symbols(unit.get("storage"), sections, unit["source"])
         for name, (start, end) in (storage or {}).items():
             ranges.append((start, end, f"{unit['source']} storage {name}"))
-        kept = kept_symbols(unit.get("kept_locals"), placed, unit["source"])
-        if folded and kept and set(folded) & set(kept):
-            raise ValueError(f"{unit['source']}: a symbol cannot be both folded and kept")
         holdouts = None
         if "holdouts" in unit:
             if comparisons is None:
@@ -310,6 +307,9 @@ def load_manifest(manifest, sections, compiler_version, comparisons=None, eviden
             holdouts = holdout_functions(unit, placed, comparisons, evidence, by_name)
             for row in holdouts:
                 ranges.append((row["start"], row["end"], f"{unit['source']} holdout {row['symbol']}"))
+        kept = kept_symbols(unit.get("kept_locals"), placed, unit["source"], holdouts)
+        if folded and kept and set(folded) & set(kept):
+            raise ValueError(f"{unit['source']}: a symbol cannot be both folded and kept")
         # Owner ruling of 2026-11-20: -ffunction-sections comes from a named profile, never from
         # the tool. A holdouts unit needs such a ProDG profile, and only a holdouts unit may use one
         # (its code is linked from the derived object's runs, not from per-function sections).
@@ -549,13 +549,15 @@ def check_storage(units, data, sections):
                                  "in the target")
 
 
-def kept_symbols(kept, placed, source):
+def kept_symbols(kept, placed, source, holdouts=None):
     """Validate a unit's kept local copies; return {name: address} or None.
 
     `kept_locals` is {"symbols": {name: address}, "evidence": locator}. Each name is a local
     function (or table) the unit defines at that address in its own code (or data), the one copy
     the original linker kept for the same-named references of other files; keep_object checks the
-    compiled object and plan() the placed address."""
+    compiled object and plan() the placed address. In a unit with `holdouts` (holdout_functions'
+    rows) a kept copy must be linked: in one of the code runs or a data section, never inside a
+    holdout, whose range keeps the original bytes."""
     if kept is None:
         return None
     if not isinstance(kept, dict) or set(kept) != {"symbols", "evidence"} \
@@ -567,13 +569,17 @@ def kept_symbols(kept, placed, source):
         if not name or NEUTRAL.fullmatch(name) or name in LINKER_SYMBOLS:
             raise ValueError(f"{source}: kept local {name!r} must be a descriptive name")
         result[name] = address(value)
+        for row in holdouts or ():
+            if row["start"] <= result[name] < row["end"]:
+                raise ValueError(f"{source}: kept local {name} lies in holdout {row['symbol']} "
+                                 f"0x{row['start']:08X}-0x{row['end']:08X}; a kept copy must be in a linked run")
         if not any(entry["follows"] is None and entry["start"] <= result[name] < entry["end"]
                    for entry in placed):
             raise ValueError(f"{source}: kept local {name} lies outside the unit's sections")
     return result
 
 
-def keep_object(native, kept, output, aliases=()):
+def keep_object(native, kept, output, aliases=(), runs=False):
     """Model the original linker keeping one file's local copy for other files' references.
 
     For each kept name, which must be exactly one local function (in code) or object (in data)
@@ -581,7 +587,11 @@ def keep_object(native, kept, output, aliases=()):
     appended, so other units' undefined references to the name resolve to this copy. A name in
     `aliases` is also another unit's folded duplicate of this copy and gets a second global,
     `__folded_<name>`, the name that unit's folded references use. Section bytes, relocations and
-    the existing symbols are unchanged. Writes the derived object and returns {name: (symbol, section)}."""
+    the existing symbols are unchanged. With `runs`, `native` is a holdouts unit's derived object
+    (holdout_object), whose run sections hold its local functions as untyped sized labels; such a
+    label in a run is a kept function, and its global copy is typed as one. A holdout's own
+    symbols are gone from that object, so a holdout cannot be kept. Writes the derived object and
+    returns {name: (symbol, section)}."""
     data = bytearray(native)
     sections, symbols = read_elf(bytes(data))
     tables = [section for section in sections if section["type"] == SHT_SYMTAB]
@@ -593,15 +603,19 @@ def keep_object(native, kept, output, aliases=()):
         found = [symbol for symbol in symbols if symbol["name"] == name]
         symbol = found[0] if len(found) == 1 else None
         section = sections[symbol["shndx"]] if symbol and 0 < symbol["shndx"] < len(sections) else None
-        if symbol is None or symbol["bind"] != STB_LOCAL or symbol["type"] not in (STT_FUNC, STT_OBJECT) \
+        kind = symbol["type"] if symbol else None
+        if runs and kind == 0 and section is not None and section["flags"] & SHF_EXECINSTR \
+                and section["name"].startswith(".text.holdout_run_"):
+            kind = STT_FUNC
+        if symbol is None or symbol["bind"] != STB_LOCAL or kind not in (STT_FUNC, STT_OBJECT) \
                 or section is None or section["type"] != SHT_PROGBITS or not section["flags"] & SHF_ALLOC \
-                or bool(section["flags"] & SHF_EXECINSTR) != (symbol["type"] == STT_FUNC) \
+                or bool(section["flags"] & SHF_EXECINSTR) != (kind == STT_FUNC) \
                 or not symbol["size"] or symbol["value"] + symbol["size"] > section["size"]:
             raise ValueError(f"Kept local {name} is not one local function or object defined in the unit")
         result[name] = (symbol, section)
         for alias in [name] + ([folded_reference(name)] if name in aliases else []):
             added.append(struct.pack(">IIIBBH", strtab["size"] + len(names), symbol["value"], symbol["size"],
-                                     STB_GLOBAL << 4 | symbol["type"], 0, symbol["shndx"]))
+                                     STB_GLOBAL << 4 | kind, 0, symbol["shndx"]))
             names += alias.encode("ascii") + b"\0"
     append_symbols(data, symtab, strtab, added, names, output)
     return result
@@ -788,9 +802,9 @@ def holdout_functions(unit, placed, comparisons, evidence, by_name):
                               or not link_root_names(roots["discarded"])):
         raise ValueError(f"{source}: a holdouts unit's link_roots are a non-empty list of distinct discarded "
                          "functions and evidence, without symbols")
-    for key in ("folded", "kept_locals"):
-        if key in unit:
-            raise ValueError(f"{source}: holdouts cannot be combined with {key}")
+    # kept_locals may go with holdouts (each use needs its own owner approval); folded may not.
+    if "folded" in unit:
+        raise ValueError(f"{source}: holdouts cannot be combined with folded")
     rows = [row for entry in comparisons.get("units", []) if entry.get("source") == source
             for row in entry.get("functions", [])]
     result = []
@@ -1602,7 +1616,8 @@ def link_object(unit, aliases=()):
         unit["link_object"] = derived
     if unit.get("kept_locals"):
         derived = unit["link_object"].with_suffix(".kept.o")
-        keep_object(unit["link_object"].read_bytes(), unit["kept_locals"], derived, aliases)
+        keep_object(unit["link_object"].read_bytes(), unit["kept_locals"], derived, aliases,
+                    runs=bool(unit.get("holdouts")))
         unit["link_object"] = derived
     unit["link_object_sha256"] = sha256(unit["link_object"])
 

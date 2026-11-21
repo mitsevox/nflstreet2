@@ -3,6 +3,7 @@
 import copy
 import hashlib
 import json
+import shutil
 import struct
 import sys
 import tempfile
@@ -1107,12 +1108,11 @@ class Holdouts(Fixture):
                 self.held(manifest)
         with self.assertRaisesRegex(ValueError, "duplicate holdout"):
             self.held(self.held_manifest(functions=("b", "0x80003118")))
-        for key in ("folded", "kept_locals"):
-            manifest = self.held_manifest()
-            value = "0x80003130" if key == "folded" else "0x80003110"
-            manifest["units"][0][key] = {"symbols": {"x": value}, "evidence": "x"}
-            with self.subTest(key=key), self.assertRaisesRegex(ValueError, f"cannot be combined with {key}"):
-                self.held(manifest)
+        # folded stays refused; kept_locals may go with holdouts (test_holdouts_may_keep_a_local_of_a_linked_run).
+        manifest = self.held_manifest()
+        manifest["units"][0]["folded"] = {"symbols": {"x": "0x80003130"}, "evidence": "x"}
+        with self.assertRaisesRegex(ValueError, "cannot be combined with folded"):
+            self.held(manifest)
         # The runs are the unit's .text.
         manifest = self.held_manifest()
         for entry in manifest["units"][0]["sections"][:2]:
@@ -1230,6 +1230,69 @@ class Holdouts(Fixture):
         self.assertEqual(resolved["b"], 0x80003118)
         with self.assertRaisesRegex(ValueError, "holdout b is already defined elsewhere"):
             sb.plan(self.sections, [unit, caller], objects, {"Other": 0x80003104, "b": 0x80003100})
+
+    def kept_manifest(self, symbols=None):
+        manifest = self.held_manifest()
+        manifest["units"][0]["kept_locals"] = {"symbols": symbols or {"c": "0x80003120"},
+                                               "evidence": "another file's references resolve to this copy"}
+        return manifest
+
+    def test_holdouts_may_keep_a_local_of_a_linked_run(self):
+        # The local function c of the second run is the one copy another file's references use
+        # (kept_locals); b stays a holdout. Only this combination is allowed: folded stays refused.
+        units, _, _ = self.held(self.kept_manifest())
+        self.assertEqual((units[0]["kept_locals"], units[0]["holdouts"]), ({"c": 0x80003120}, [self.B]))
+        unit = dict(units[0], object=self.native())
+        sb.link_object(unit, {"c"})
+        self.assertEqual(unit["link_object"].suffixes[-2:], [".kept", ".o"])
+        sections, symbols = sb.read_elf(unit["link_object"].read_bytes())
+        run_c = next(s["index"] for s in sections if s["name"] == ".text.holdout_run_80003120")
+        named = [(s["name"], s["bind"], s["type"], s["shndx"], s["value"], s["size"]) for s in symbols
+                 if s["name"] in ("c", sb.folded_reference("c"))]
+        # The run's untyped local stays; its global copy and the folded alias are typed functions.
+        self.assertEqual(named, [("c", sb.STB_LOCAL, 0, run_c, 0, 8),
+                                 ("c", sb.STB_GLOBAL, sb.STT_FUNC, run_c, 0, 8),
+                                 (sb.folded_reference("c"), sb.STB_GLOBAL, sb.STT_FUNC, run_c, 0, 8)])
+        caller = {"source": "src/other.c", "sections": [], "holdouts": None}
+        objects = {"src/unit.c": (sections, symbols),
+                   "src/other.c": ([], [{"name": "c", "value": 0, "size": 0, "bind": sb.STB_GLOBAL,
+                                         "type": 0, "shndx": sb.SHN_UNDEF}])}
+        _, defined, resolved = sb.plan(self.sections, [unit, caller], objects, {"Other": 0x80003104})
+        self.assertEqual(defined["c"], (0x80003120, "src/unit.c"))
+        self.assertNotIn("c", resolved)
+        # The inventory lists c once.
+        self.assertEqual([f for f in sb.compiled_functions(unit, (sections, symbols)) if f["symbol"] == "c"],
+                         [{"symbol": "c", "address": "0x80003120", "size": 8}])
+        manifest = self.kept_manifest()
+        manifest["units"][0]["folded"] = {"symbols": {"x": "0x80003130"}, "evidence": "x"}
+        with self.assertRaisesRegex(ValueError, "holdouts cannot be combined with folded"):
+            self.held(manifest)
+
+    def test_a_kept_local_is_never_a_holdout(self):
+        # Inside the holdout's range: refused when the manifest loads, before anything compiles.
+        with self.assertRaisesRegex(ValueError, "kept local b lies in holdout b 0x80003118-0x80003120; "
+                                                "a kept copy must be in a linked run"):
+            self.held(self.kept_manifest({"b": "0x80003118"}))
+        with self.assertRaisesRegex(ValueError, "kept local Label lies in holdout b"):
+            self.held(self.kept_manifest({"Label": "0x8000311C"}))
+        # Outside every range of the unit.
+        with self.assertRaisesRegex(ValueError, "kept local c lies outside the unit's sections"):
+            self.held(self.kept_manifest({"c": "0x80003130"}))
+        # The derived object no longer defines a holdout's symbols, so keep_object cannot keep one,
+        # and outside a run an untyped local is not a function.
+        units, _, _ = self.held(self.kept_manifest())
+        unit = dict(units[0], object=self.native(), kept_locals={"b": 0x80003120})
+        with self.assertRaisesRegex(ValueError, "Kept local b is not one local function"):
+            sb.link_object(unit)
+        held = Path(tempfile.mkdtemp()) / "unit.holdouts.o"
+        self.addCleanup(shutil.rmtree, held.parent)
+        sb.holdout_object(self.native().read_bytes(), units[0], held)
+        with self.assertRaisesRegex(ValueError, "Kept local c is not one local function"):
+            sb.keep_object(held.read_bytes(), {"c": 0x80003120}, held.with_suffix(".kept.o"))
+        # A global function of a run is not a local of the unit.
+        unit = dict(units[0], object=self.native(), kept_locals={"a": 0x80003110})
+        with self.assertRaisesRegex(ValueError, "Kept local a is not one local function"):
+            sb.link_object(unit)
 
     def test_compiled_layout_must_fill_the_runs(self):
         units, _, _ = self.held()
@@ -1402,13 +1465,14 @@ class Holdouts(Fixture):
             with self.subTest(name=name), self.assertRaisesRegex(ValueError, f"discarded function {name} has a "
                                                                              "target range"):
                 self.held(self.discarded_manifest((name,)))
-        # folded and kept_locals stay refused next to discarded functions.
-        for key in ("folded", "kept_locals"):
-            manifest = self.discarded_manifest()
-            value = "0x80003130" if key == "folded" else "0x80003110"
-            manifest["units"][0][key] = {"symbols": {"x": value}, "evidence": "x"}
-            with self.subTest(key=key), self.assertRaisesRegex(ValueError, f"cannot be combined with {key}"):
-                self.held(manifest)
+        # folded stays refused next to discarded functions; a kept local in a run is allowed.
+        manifest = self.discarded_manifest()
+        manifest["units"][0]["folded"] = {"symbols": {"x": "0x80003130"}, "evidence": "x"}
+        with self.assertRaisesRegex(ValueError, "cannot be combined with folded"):
+            self.held(manifest)
+        manifest = self.discarded_manifest()
+        manifest["units"][0]["kept_locals"] = {"symbols": {"x": "0x80003110"}, "evidence": "x"}
+        self.assertEqual(self.held(manifest)[0][0]["kept_locals"], {"x": 0x80003110})
 
     def test_derived_object_drops_discarded_functions(self):
         units, _, _ = self.held(self.discarded_manifest())
