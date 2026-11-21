@@ -1055,21 +1055,30 @@ class CodeDataAndStorageComparisons(ComparisonFixture):
 
 class SectionBaseReferences(unittest.TestCase):
     """A large object addressed from a base formed past its end (lis/addi of .bss+0x10020, then
-    negative displacements; snddrv.c's driver state) resolves to the section's own placement.
-    The compiler is not needed: the native object is written directly."""
+    negative displacements; snddrv.c's driver state) resolves to the section's own placement when
+    every use of the base lands inside the compiled section. The compiler is not needed: the native
+    object is written directly."""
     BSS = 0xC0E0
     START = 0x803A8D40
+    LIS, ADDI = 0x3FE00000, 0x3BFF0000  # lis r31,0; addi r31,r31,0 (the relocations fill the halves)
+
+    @staticmethod
+    def lwz(displacement):  # lwz r3,displacement(r31)
+        return 0x807F0000 | displacement & 0xFFFF
+
+    @staticmethod
+    def lbz(displacement):  # lbz r3,displacement(r31)
+        return 0x887F0000 | displacement & 0xFFFF
 
     def setUp(self):
         self.directory = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.directory)
 
-    def native(self, relocations, bss=BSS):
-        # .text: lis r31,0; addi r31,r31,0; lwz r3,-0x3F40(r31); .bss: one uninitialized section.
+    def native(self, relocations, bss, code):
         path = self.directory / 'native.o'
         sb.write_object(path, [
-            {'name': '.text', 'type': sb.SHT_PROGBITS, 'flags': sb.SHF_ALLOC | sb.SHF_EXECINSTR, 'size': 12,
-             'data': bytes.fromhex('3fe00000 3bff0000 807fc0c0'.replace(' ', '')), 'align': 4},
+            {'name': '.text', 'type': sb.SHT_PROGBITS, 'flags': sb.SHF_ALLOC | sb.SHF_EXECINSTR, 'size': 4 * len(code),
+             'data': b''.join(struct.pack('>I', word) for word in code), 'align': 4},
             {'name': '.bss', 'type': sb.SHT_NOBITS, 'flags': sb.SHF_ALLOC | sb.SHF_WRITE, 'size': bss, 'align': 32}])
         data = bytearray(path.read_bytes())
         shoff = struct.unpack_from('>I', data, 32)[0]
@@ -1094,34 +1103,55 @@ class SectionBaseReferences(unittest.TestCase):
             data += struct.pack('>IIIIIIIIII', *header)
         return bytes(data)
 
-    def fragment(self, relocations, bss=BSS, extent=BSS, storage=None, placed=True):
-        native = self.native(relocations, bss)
+    def fragment(self, relocations, bss=BSS, extent=BSS, storage=None, placed=True, uses=None):
+        # Default body: lis r31; addi r31; lwz r3,-0x3FB8(r31) (snddrv's 0x803C/-0x72A0 base, field 0xC068).
+        code = [self.LIS, self.ADDI] + (uses if uses is not None else [self.lwz(-0x3FB8)])
+        native = self.native(relocations, bss, code)
         sections, _ = sb.read_elf(native)
         text = next(s for s in sections if s['name'] == '.text')
         placements = {'.bss': {'section': '.bss', 'start': self.START, 'end': self.START + extent}} if placed else {}
         output = self.directory / 'fragment.o'
-        diagnostic_object.fragment(native, text, 0, 12, 0x80272CC0, {}, {}, placements, {}, output, [], storage)
+        diagnostic_object.fragment(native, text, 0, 4 * len(code), 0x80272CC0, {}, {}, placements, {}, output, [], storage)
         return {s['name']: s['value'] for s in sb.read_elf(output.read_bytes())[1]
                 if s['name'].startswith('__comparison_reference_')}
 
-    def pair(self, addend):
-        return [(2, 6, addend), (6, 4, addend)]  # R_PPC_ADDR16_HA, R_PPC_ADDR16_LO
+    def pair(self, addend, high=6):
+        return [(2, high, addend), (6, 4, addend)]  # R_PPC_ADDR16_HA (or _HI) on the lis, _LO on the addi
 
     def test_base_past_section_end_resolves_to_section_placement(self):
         self.assertEqual(self.fragment(self.pair(0x10020)), {'__comparison_reference_803B8D60': 0x803B8D60})
-        # R_PPC_ADDR16_HI forms the same base; so does one reaching back from the last reachable offset.
-        self.assertEqual(self.fragment([(2, 5, 0x10020)]), {'__comparison_reference_803B8D60': 0x803B8D60})
-        self.assertEqual(self.fragment(self.pair(self.BSS + 0x7FFF)), {'__comparison_reference_803BCE1F': 0x803BCE1F})
-        self.assertEqual(self.fragment(self.pair(-0x7FFF)), {'__comparison_reference_803A0D41': 0x803A0D41})
+        self.assertEqual(self.fragment(self.pair(0x10020, high=5)), {'__comparison_reference_803B8D60': 0x803B8D60})
+        # Window edges: the last byte of the section from the farthest base above, the first from below.
+        self.assertEqual(self.fragment(self.pair(self.BSS + 0x7FFF), uses=[self.lbz(-0x8000)]),
+                         {'__comparison_reference_803BCE1F': 0x803BCE1F})
+        self.assertEqual(self.fragment(self.pair(-0x7FFF), uses=[self.lbz(0x7FFF)]),
+                         {'__comparison_reference_803A0D41': 0x803A0D41})
+        # A placement longer than the compiled section, with every use inside the compiled bytes.
+        self.assertEqual(self.fragment(self.pair(0x10020), extent=self.BSS + 0x20), {'__comparison_reference_803B8D60': 0x803B8D60})
 
     def test_references_outside_every_placement_still_fail_closed(self):
         refused = 'Same-file data reference lacks target placement'
-        cases = {'no displacement reaches the section': dict(relocations=self.pair(self.BSS + 0x8000)),
-                 'no displacement reaches back from below': dict(relocations=self.pair(-0x8000)),
-                 'a pointer word is a referent, not a base': dict(relocations=[(8, 1, 0x10020)]),
-                 'a displacement relocation is a referent': dict(relocations=[(10, 109, 0x10020)]),
-                 'the section is not placed': dict(relocations=self.pair(0x10020), placed=False),
-                 'the section is not placed whole': dict(relocations=self.pair(0x10020), extent=self.BSS - 0x20)}
+        blr, mr, beq = 0x4E800020, 0x7FE3FB78, 0x41820008  # mr r3,r31 passes the base on; beq +8
+        cases = {
+            'one byte past the end from the farthest base': dict(relocations=self.pair(self.BSS + 0x8000), uses=[self.lbz(-0x8000)]),
+            'one byte before the start': dict(relocations=self.pair(-0x8000), uses=[self.lbz(0x7FFF)]),
+            'a word straddling the end': dict(relocations=self.pair(self.BSS + 0x7FFF), uses=[self.lwz(-0x8000)]),
+            # lwz r3,X@l(r31) past the end, then lwz r4,-0x7100(r3): r3 is loaded data, not a base.
+            'a low half on a load is the accessed address': dict(relocations=[(2, 6, self.BSS + 0x7000), (10, 4, self.BSS + 0x7000)],
+                                                                 uses=[self.lwz(0), 0x80830000 | -0x7100 & 0xFFFF]),
+            'a base whose use lands past the end': dict(relocations=self.pair(self.BSS + 0x7000), uses=[self.lwz(0)]),
+            'one use inside, one past the end': dict(relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), self.lwz(-0x3F40)]),
+            'a base passed on cannot be bounded': dict(relocations=self.pair(0x10020), uses=[mr, self.lwz(-0x3FB8)]),
+            'a base live across a branch cannot be bounded': dict(relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), beq, self.lwz(0)]),
+            'a base stored to memory is passed on': dict(relocations=self.pair(0x10020), uses=[0x93FF0000 | -0x3FB8 & 0xFFFF]),
+            'a base with no use': dict(relocations=self.pair(0x10020), uses=[blr]),
+            'a high half without its low half': dict(relocations=[(2, 6, 0x10020)]),
+            'a high half whose low half names another offset': dict(relocations=[(2, 6, 0x10020), (6, 4, 0x10024)]),
+            'a use past the compiled section, inside the placement': dict(relocations=self.pair(0x10020), bss=self.BSS - 0x100),
+            'a pointer word is a referent, not a base': dict(relocations=[(8, 1, 0x10020)]),
+            'a displacement relocation is a referent': dict(relocations=[(10, 109, 0x10020)]),
+            'the section is not placed': dict(relocations=self.pair(0x10020), placed=False),
+            'the section is not placed whole': dict(relocations=self.pair(0x10020), extent=self.BSS - 0x20)}
         for reason, arguments in cases.items():
             with self.subTest(reason), self.assertRaisesRegex(ValueError, refused):
                 self.fragment(**arguments)

@@ -4,17 +4,72 @@ import struct
 import source_build as sb
 
 
-# R_PPC_ADDR16_LO, _HI and _HA: the halves of an address formed in a register (lis/addi).
-ADDRESS_HALVES = (4, 5, 6)
+# Bytes a D-form load or store moves, by primary opcode: lwz lwzu lbz lbzu stw stwu stb stbu lhz lhzu
+# lha lhau sth sthu lfs lfsu lfd lfdu stfs stfsu stfd stfdu; lmw and stmw (46, 47) move four bytes
+# for each register from rD to r31 (access_width). Any other instruction that carries a low-half
+# relocation (addi, ori) takes the address.
+ACCESS_WIDTH = {32: 4, 33: 4, 34: 1, 35: 1, 36: 4, 37: 4, 38: 1, 39: 1, 40: 2, 41: 2, 42: 2, 43: 2, 44: 2, 45: 2,
+                46: None, 47: None, 48: 4, 49: 4, 50: 8, 51: 8, 52: 4, 53: 4, 54: 8, 55: 8}
+STORES = {36, 37, 38, 39, 44, 45, 47, 52, 53, 54, 55}
+VOLATILE = set(range(0, 13))  # r0 and r3-r12 do not survive a call (r1, r2 are never a pool base).
+BLR = 0x4E800020
 
 
-def base_reaches(kind, value, size, extent):
-    """An address formed in a register is a base, not a referent: the instruction that uses it adds
-    a signed 16-bit displacement. GCC forms object+0x10000 for a large object and then addresses
-    its fields with negative displacements, so the section offset lies past the section's end.
-    Such a base still locates the section's own placement when the compiled section is placed
-    whole and a displacement from the base can reach back into the placement."""
-    return kind in ADDRESS_HALVES and size <= extent and -0x8000 < value < extent + 0x8000
+def access_width(word):
+    opcode = word >> 26
+    return 4 * (32 - ((word >> 21) & 31)) if opcode in (46, 47) else ACCESS_WIDTH[opcode]
+
+
+def base_uses(code, at, register, stored_escapes=False):
+    """The (displacement, width) of each D-form access through `register` after the instruction at
+    `at` set it to an address, until an instruction overwrites it, a call clobbers it (a volatile
+    register) or the function returns. None when the address is used any other way (passed on,
+    indexed), or when a branch, or a call that a callee-saved base survives, ends the straight line
+    while the register still holds the address: later loads through it cannot be followed. With
+    `stored_escapes`, storing the address itself to memory is also None: it is passed on."""
+    uses = []
+    for position in range(at + 4, len(code) - 3, 4):
+        word = struct.unpack_from('>I', code, position)[0]
+        opcode, target, base = word >> 26, (word >> 21) & 31, (word >> 16) & 31
+        if opcode in ACCESS_WIDTH and base == register:
+            if stored_escapes and opcode in STORES and (target == register or opcode == 47 and target <= register):
+                return None
+            displacement = word & 0xFFFF
+            uses.append((displacement - 0x10000 if displacement & 0x8000 else displacement, access_width(word)))
+            if opcode not in STORES and (target == register or opcode == 46 and target <= register):
+                break
+            continue
+        if word == BLR:
+            break
+        if opcode == 18 and word & 1 and register in VOLATILE:  # bl clobbers a volatile base.
+            break
+        if opcode in (16, 18, 19):  # Any other branch: the address may still be used beyond it.
+            return None
+        if register in ((word >> 16) & 31, (word >> 11) & 31) or target == register:
+            return None
+    return uses
+
+
+# R_PPC_ADDR16_LO, and R_PPC_ADDR16_HI/_HA: the low and high halves of an address formed in a register (lis/addi).
+ADDRESS_LOW = 4
+ADDRESS_HIGH = (5, 6)
+
+
+def register_base(code, at, value, size):
+    """Whether the R_PPC_ADDR16_LO at byte `at` of `code` forms a base register whose every use lands
+    in the compiled section's [0, size): the relocation must sit in the low half of an addi, and
+    every displacement load or store through the register it sets, until the register is redefined
+    or the function returns, must lie inside the section. GCC forms object+0x10000 for an object
+    larger than 32 KiB and addresses its fields with negative displacements, so such a base lies
+    past the section's end. A low half on a load or store is the accessed address itself, not a
+    base, and a base that is passed on, stored, indexed or live across a branch cannot be bounded."""
+    if at % 4 != 2 or not 0 <= at - 2 <= len(code) - 4:
+        return False
+    word = struct.unpack_from('>I', code, at - 2)[0]
+    if word >> 26 != 14:  # addi rD, rA, symbol@l
+        return False
+    uses = base_uses(code, at - 2, (word >> 21) & 31, stored_escapes=True)
+    return bool(uses) and all(0 <= value + d and value + d + w <= size for d, w in uses)
 
 
 def fragment(native, section, offset, size, target_start, functions, targets, placements, externals, output, target_sections,
@@ -23,6 +78,7 @@ def fragment(native, section, offset, size, target_start, functions, targets, pl
     referenced = {}
     relocations = []
     small_references = set()
+    native_relocations = []
     for relocation_section in sections:
         if relocation_section['type'] == 9 and relocation_section['info'] == section['index']:
             raise ValueError('Comparison requires explicit-addend PowerPC relocations')
@@ -30,64 +86,75 @@ def fragment(native, section, offset, size, target_start, functions, targets, pl
             continue
         for at in range(relocation_section['offset'], relocation_section['offset'] + relocation_section['size'], 12):
             position, info, addend = struct.unpack_from('>IIi', native, at)
-            if not offset <= position < offset + size:
-                continue
-            index, kind = info >> 8, info & 255
-            if not 0 < index <= len(symbols):
-                raise ValueError('Invalid native relocation symbol')
-            symbol = symbols[index - 1]
-            name = symbol['name']
-            value = symbol['value'] + addend
-            if symbol['shndx'] == sb.SHN_COMMON:
-                # COMMON storage has no section; only an evidenced storage address locates it.
-                if storage is None or index - 1 not in storage:
-                    raise ValueError(f'Comparison common symbol {name} lacks an evidenced storage address')
-                address = storage[index - 1] + addend
-            elif symbol['shndx'] == sb.SHN_UNDEF:
-                neutral = sb.NEUTRAL.fullmatch(name)
-                if name in externals:
-                    address = externals[name] + addend
-                elif neutral:
-                    address = int(neutral[1], 16) + addend
-                else:
-                    raise ValueError(f'Unresolved comparison reference {name}')
-            elif symbol['shndx'] == sb.SHN_ABS:
-                address = value
+            if offset <= position < offset + size:
+                native_relocations.append((position, info, addend))
+    # Only code holds a register base (register_base); a data fragment's offsets stay inside the section.
+    code = section['data'][offset:offset + size] if section['flags'] & sb.SHF_EXECINSTR else b''
+    for position, info, addend in native_relocations:
+        index, kind = info >> 8, info & 255
+        if not 0 < index <= len(symbols):
+            raise ValueError('Invalid native relocation symbol')
+        symbol = symbols[index - 1]
+        name = symbol['name']
+        value = symbol['value'] + addend
+        if symbol['shndx'] == sb.SHN_COMMON:
+            # COMMON storage has no section; only an evidenced storage address locates it.
+            if storage is None or index - 1 not in storage:
+                raise ValueError(f'Comparison common symbol {name} lacks an evidenced storage address')
+            address = storage[index - 1] + addend
+        elif symbol['shndx'] == sb.SHN_UNDEF:
+            neutral = sb.NEUTRAL.fullmatch(name)
+            if name in externals:
+                address = externals[name] + addend
+            elif neutral:
+                address = int(neutral[1], 16) + addend
             else:
-                owned = next(s for s in sections if s['index'] == symbol['shndx'])
-                if owned['flags'] & sb.SHF_EXECINSTR:
-                    if owned['index'] == section['index'] and offset <= value < offset + size:
-                        address = target_start + value - offset
-                    else:
-                        functions_at = [f for f in functions.values() if f['shndx'] == owned['index']
-                                        and f['value'] <= value < f['value'] + f['size']]
-                        if len(functions_at) != 1 or functions_at[0]['name'] not in targets:
-                            raise ValueError('Same-file code reference lacks target identity')
-                        function = functions_at[0]
-                        a, b = targets[function['name']]
-                        address = a + value - function['value']
-                        if not a <= address < b:
-                            raise ValueError('Same-file code reference exceeds evidenced target function')
-                elif storage is not None and owned['type'] == sb.SHT_NOBITS:
-                    # With a storage map, uninitialized objects resolve individually, not by section.
-                    mapped = [i for i in storage if symbols[i]['shndx'] == owned['index']
-                              and symbols[i]['value'] <= value < symbols[i]['value'] + symbols[i]['size']]
-                    if len(mapped) != 1:
-                        raise ValueError('Uninitialized data reference lacks an evidenced storage address')
-                    address = storage[mapped[0]] + value - symbols[mapped[0]]['value']
+                raise ValueError(f'Unresolved comparison reference {name}')
+        elif symbol['shndx'] == sb.SHN_ABS:
+            address = value
+        else:
+            owned = next(s for s in sections if s['index'] == symbol['shndx'])
+            if owned['flags'] & sb.SHF_EXECINSTR:
+                if owned['index'] == section['index'] and offset <= value < offset + size:
+                    address = target_start + value - offset
                 else:
-                    placement = placements.get(owned['name'])
-                    extent = None if placement is None else placement['end'] - placement['start']
-                    if extent is None or not (0 <= value < extent or base_reaches(kind, value, owned['size'], extent)):
-                        raise ValueError('Same-file data reference lacks target placement')
-                    address = placement['start'] + value
-            if not 0 <= address <= 0xFFFFFFFF:
-                raise ValueError('Comparison relocation exceeds target address space')
-            alias = f'__comparison_reference_{address:08X}'
-            referenced[alias] = address
-            if kind in (32, 106, 107, 109, 116):
-                small_references.add(alias)
-            relocations.append((position-offset, kind, alias))
+                    functions_at = [f for f in functions.values() if f['shndx'] == owned['index']
+                                    and f['value'] <= value < f['value'] + f['size']]
+                    if len(functions_at) != 1 or functions_at[0]['name'] not in targets:
+                        raise ValueError('Same-file code reference lacks target identity')
+                    function = functions_at[0]
+                    a, b = targets[function['name']]
+                    address = a + value - function['value']
+                    if not a <= address < b:
+                        raise ValueError('Same-file code reference exceeds evidenced target function')
+            elif storage is not None and owned['type'] == sb.SHT_NOBITS:
+                # With a storage map, uninitialized objects resolve individually, not by section.
+                mapped = [i for i in storage if symbols[i]['shndx'] == owned['index']
+                          and symbols[i]['value'] <= value < symbols[i]['value'] + symbols[i]['size']]
+                if len(mapped) != 1:
+                    raise ValueError('Uninitialized data reference lacks an evidenced storage address')
+                address = storage[mapped[0]] + value - symbols[mapped[0]]['value']
+            else:
+                placement = placements.get(owned['name'])
+                extent = None if placement is None else placement['end'] - placement['start']
+                # An offset outside the section is accepted only for a register base whose uses all
+                # land in the compiled section, placed whole; a high half needs such a low half on
+                # the same symbol and addend.
+                if extent is None or not (0 <= value < extent or owned['size'] <= extent and (
+                        kind == ADDRESS_LOW and register_base(code, position - offset, value, owned['size'])
+                        or kind in ADDRESS_HIGH and any(
+                            other >> 8 == index and other & 255 == ADDRESS_LOW and more == addend
+                            and register_base(code, at - offset, value, owned['size'])
+                            for at, other, more in native_relocations))):
+                    raise ValueError('Same-file data reference lacks target placement')
+                address = placement['start'] + value
+        if not 0 <= address <= 0xFFFFFFFF:
+            raise ValueError('Comparison relocation exceeds target address space')
+        alias = f'__comparison_reference_{address:08X}'
+        referenced[alias] = address
+        if kind in (32, 106, 107, 109, 116):
+            small_references.add(alias)
+        relocations.append((position-offset, kind, alias))
     # An isolated comparison starts at its evidenced target address, which need not be an
     # original section boundary. Prevent the linker from inserting a prefix before its bytes.
     fragment_section = dict(section, size=size, data=section['data'][offset:offset+size],
