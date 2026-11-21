@@ -11546,7 +11546,7 @@
           "_._10FchrCursor": "0x80083454",
           "_vt.10FchrCursor": "0x802938C0"
         },
-        "evidence": "evidence.tsv source-form row CreatePlayerMenu FchrCursor linkage and data row 0x8000A2B8-0x8000A360: the implicit destructor and vtable of FchrCursor are local to both this file and src/game/cu_80081CDC.cpp; the target keeps only the latter's destructor 0x80083454, this file's references resolve to 0x80083454 and 0x802938C0, and its vtable copy stays unreferenced in place."
+        "evidence": "evidence.tsv source-form row CreatePlayerMenu FchrCursor linkage and data row 0x8000A2B8-0x8000A360: the implicit destructor and vtable of FchrCursor are local to both this file and src/game/cu_80081CDC.cpp; the target keeps only the latter's destructor 0x80083454, this file's references resolve to 0x80083454 and 0x802938C0, and its vtable copy stays unreferenced in place. src/game/cu_80081CDC.cpp is linked and keeps those two copies (its kept_locals), so the folded references resolve to its kept copies through __folded_<name>."
       }
     },
     {
@@ -24913,6 +24913,81 @@
           }
         ],
         "evidence": "merge notes of the pull request that links the file (t1 holdout table; the HOLDOUT: row is x1a's)"
+      }
+    },
+    {
+      "source": "src/game/cu_80081CDC.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv bounded unit row for src/game/cu_80081CDC.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes, and keeping its FchrCursor destructor and vtable for src/game/CreatePlayerMenu.cpp's folded references (kept_locals with holdouts, t1 tool change).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80081CDC",
+          "end": "0x80082688"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008274C",
+          "end": "0x800827EC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80082864",
+          "end": "0x800834CC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80292E38",
+          "end": "0x80293968"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7D8",
+          "end": "0x803EA7E4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BC2C",
+          "end": "0x8030BC58"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AB0",
+          "end": "0x80289AB4"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BF0",
+          "end": "0x80289BF4"
+        }
+      ],
+      "kept_locals": {
+        "symbols": {
+          "_._10FchrCursor": "0x80083454",
+          "_vt.10FchrCursor": "0x802938C0"
+        },
+        "evidence": "evidence.tsv source-form rows cu_80081CDC FchrCursor destructor and CreatePlayerMenu FchrCursor linkage: under -fno-weak the implicit FchrCursor destructor and vtable are local to this file and to src/game/CreatePlayerMenu.cpp, and the target keeps only this file's copies, the destructor 0x80083454 and the vtable 0x802938C0, for both files' references; CreatePlayerMenu.cpp's folded map resolves to them through __folded_<name>."
+      },
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80082688",
+            "evidence": "evidence.tsv source-form 0x80082688-0x8008274C"
+          },
+          {
+            "function": "fn_800827EC",
+            "evidence": "evidence.tsv source-form 0x800827EC-0x80082864"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (t1 holdout table)"
       }
     }
   ]

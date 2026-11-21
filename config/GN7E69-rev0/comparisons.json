@@ -9844,7 +9844,7 @@
     {
       "source": "src/game/cu_80081CDC.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded unit row for src/game/cu_80081CDC.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows. Draft comparison only; original assembly remains linked until the whole range matches and passes review.",
+      "evidence": "evidence.tsv bounded unit row for src/game/cu_80081CDC.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -10030,7 +10030,7 @@
           "end": "0x80082B18"
         },
         {
-          "symbol": "fn_80082B18",
+          "symbol": "PlayerRecordSetDefaults",
           "start": "0x80082B18",
           "end": "0x80082C64"
         },
