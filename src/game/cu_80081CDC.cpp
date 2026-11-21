@@ -421,7 +421,7 @@ int fn_80082AE4(int a, int b)
     return PlayerRecordCreate(b, a, 1, -1);
 }
 
-void fn_80082B18(Record_80082B18 *pRecord)
+void PlayerRecordSetDefaults(Record_80082B18 *pRecord)
 {
     pRecord->mUnknown00 = 0x7FFF;
     pRecord->mUnknown04 = 0;

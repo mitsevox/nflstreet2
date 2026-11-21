@@ -15,7 +15,7 @@ int DbFileTblLoad(int, int);
 int DbFileTblDestroy(int, int);
 int DbUserGetId(int);
 int DbUserGetDb(int);
-void fn_80082B18(Record_80082B18 *);
+void PlayerRecordSetDefaults(Record_80082B18 *);
 void fn_80082C64(Record_80082B18 *);
 void fn_80082D30(Record_80082B18 *);
 void fn_80082E48(Record_80082B18 *);
@@ -81,7 +81,7 @@ extern "C" int PlayerRecordCreate(int source, int value, int reset, int start)
     Record_80082B18 record;
     first[0] = 0;
     last[0] = 0;
-    fn_80082B18(&record);
+    PlayerRecordSetDefaults(&record);
     record.mUnknown04 = first;
     record.mUnknown08 = last;
     record.mUnknown0C = other;

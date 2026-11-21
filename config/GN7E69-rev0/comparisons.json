@@ -10030,7 +10030,7 @@
           "end": "0x80082B18"
         },
         {
-          "symbol": "fn_80082B18",
+          "symbol": "PlayerRecordSetDefaults",
           "start": "0x80082B18",
           "end": "0x80082C64"
         },
