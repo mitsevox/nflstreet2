@@ -33600,31 +33600,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_80285A24.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80285A24-0x80285A90 (src/engine/cu_80285A24.c), its compiler, function and name rows. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80285A24",
-          "end": "0x80285A90"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80285A24",
-          "start": "0x80285A24",
-          "end": "0x80285A8C"
-        },
-        {
-          "symbol": "fn_80285A8C",
-          "start": "0x80285A8C",
-          "end": "0x80285A90"
-        }
-      ]
-    },
-    {
       "source": "src/engine/smixer.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x802755E0-0x80276798 (src/engine/smixer.c), the sound_cxx compiler rows and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",

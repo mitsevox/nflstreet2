@@ -1480,8 +1480,8 @@ extern DbUserAsync_t lbl_803A25F0;
 extern DbUserAsync_t lbl_803A260C;
 extern void fn_801F9228(DbUserAsync_t *pReq, void (*pStart)(void *pJob), int a, int b);
 extern void fn_801F92EC(DbUserAsync_t *pReq, void (*pStart)(void *pJob), int a, int b);
-extern void fn_80285A24(void *pJob);
-extern void fn_80285A8C(void);
+extern void DbSaveThreadStart(void *pJob);
+extern void DbSaveThreadOnComplete(void);
 
 int DbUserLoad(DbUserSaveRequest_t *pRequest, void *pOps)
 {
@@ -1493,8 +1493,8 @@ int DbUserLoad(DbUserSaveRequest_t *pRequest, void *pOps)
         lbl_803A25F0.mUnknown8 = pRequest->mUnknown0;
         lbl_803A25F0.mUnknownC = pRequest->mTarget;
         lbl_803A25F0.mpUnknown10 = pOps;
-        lbl_803A25F0.pDone = fn_80285A8C;
-        fn_801F9228(&lbl_803A25F0, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
+        lbl_803A25F0.pDone = DbSaveThreadOnComplete;
+        fn_801F9228(&lbl_803A25F0, DbSaveThreadStart, pRequest->mUnknown4, pRequest->mUnknown8);
     } else {
         result = fn_8022F53C(fn_801F9134(fn_8022F3D4(fn_8022F4BC()), pRequest->mTarget, 0, (int)pOps));
     }
@@ -1511,8 +1511,8 @@ int DbUserSave(DbUserSaveRequest_t *pRequest, void *pOps)
         lbl_803A260C.mUnknown8 = pRequest->mUnknown0;
         lbl_803A260C.mUnknownC = pRequest->mTarget;
         lbl_803A260C.mpUnknown10 = pOps;
-        lbl_803A260C.pDone = fn_80285A8C;
-        fn_801F92EC(&lbl_803A260C, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
+        lbl_803A260C.pDone = DbSaveThreadOnComplete;
+        fn_801F92EC(&lbl_803A260C, DbSaveThreadStart, pRequest->mUnknown4, pRequest->mUnknown8);
     } else {
         result = fn_801F91AC(fn_8022F3D4(fn_8022F4BC()), pRequest->mTarget, (int)pOps);
     }
