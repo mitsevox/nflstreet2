@@ -22,7 +22,7 @@ int SFILTER_unpacklf(Node_80279D90 *node, int count, float *a, float *b, int fla
             n = count;
         }
         if (decoder->m2C != 0) {
-            lbl_803B4E34.m1E4(n, (short *)(decoder->m1C + (decoder->m20 << 1)), b);
+            sndmix.m1E4(n, (short *)(decoder->m1C + (decoder->m20 << 1)), b);
         }
         b += n;
         decoder->m20 += n;

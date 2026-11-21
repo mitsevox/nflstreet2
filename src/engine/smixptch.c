@@ -5,7 +5,7 @@
 
 void MIX_setpitch(int index, int value)
 {
-    Record_803B5010 *record = &lbl_803B4E34.m1DC[index];
+    Record_803B5010 *record = &sndmix.m1DC[index];
     Node_80279D90 *node;
     int flag = 0;
 
@@ -15,7 +15,7 @@ void MIX_setpitch(int index, int value)
     node = record->m50;
     if (node == 0) {
         record->m50 = (Node_80279D90 *)SNDMEMI_allocz(60);
-        if (lbl_803B4E34.mE > 49) {
+        if (sndmix.mE > 49) {
             flag = 1;
         }
         record->m50->m4 = 0;

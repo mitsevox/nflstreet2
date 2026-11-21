@@ -6,13 +6,32 @@
 #include "engine/sndutil.h"
 
 extern int lbl_803A6E58;
-extern void (*lbl_803B5020)(void **outputs, int count);
 
 extern "C" {
 void MIXI_interpolateto0(float *last, float *dst);
 void MIXI_interpolatemix(float *src, float *dst, float from, float to);
 int SNDMIXI_volramp(Record_803B5010 *record);
 }
+
+/* The mixer state: the setup, the filter-chain creators and sizes, the bus buffers, the voice records
+   and the mix and decode functions. */
+Struct_803B4E34 sndmix;
+int sndmixwritelog;
+/* Called with the output buffers after each audio slice while the sound system's flag +0x234 is set. */
+void (*MIXoutputfn)(void **outputs, int count);
+// FAKEMATCH: an unused word that keeps the mixer hooks below at their target offsets; nothing in this
+// build reads or writes it.
+int _Mix_iUnused;
+
+/* The mixer hooks the sound driver calls, installed by SNDSYS_linkmaincpumixer. */
+void (*MIXinitfn)(Setup_80272EC4 *setup);
+void (*MIXrestorefn)(void);
+void (*MIXaudioslicefn)(void **buffers, int count);
+void (*MIXplayinitfn)(int index, int a, int b, int c, int d, void *p, int count, int e, int f, int g, int h,
+                      int j, int k, int slot);
+void (*MIXplayfn)(int index);
+void (*MIXstopfn)(int index);
+void (*MIXsetpitchfn)(int index, int value);
 
 void MIXI_interpolateto0(float *last, float *dst)
 {
@@ -65,32 +84,32 @@ int SNDMIXI_volramp(Record_803B5010 *record)
 {
     int i;
 
-    if (record->m40->m0(record->m40, 16, (float *)lbl_803B4E34.mB0[0], (float *)lbl_803B4E34.mB0[1], 0) <= 0) {
+    if (record->m40->m0(record->m40, 16, (float *)sndmix.mB0[0], (float *)sndmix.mB0[1], 0) <= 0) {
         for (i = 0; i < lbl_8030002C; i++) {
             record->m34[i] = record->m38[i];
         }
-        for (i = 0; i < lbl_803B4E34.m0.m9; i++) {
+        for (i = 0; i < sndmix.m0.m9; i++) {
             record->m4[i] = record->m1C[i];
         }
         return 0;
     }
-    record->m3C = ((float *)lbl_803B4E34.mB0[1])[15];
+    record->m3C = ((float *)sndmix.mB0[1])[15];
     for (i = 0; i < lbl_8030002C; i++) {
-        if (lbl_803B4E34.m14[i] != 0) {
+        if (sndmix.m14[i] != 0) {
             if (record->m34[i] != record->m38[i]) {
-                MIXI_interpolatemix((float *)lbl_803B4E34.mB0[1], lbl_803B4E24.m0[i], record->m34[i], record->m38[i]);
+                MIXI_interpolatemix((float *)sndmix.mB0[1], sndfx.m0[i], record->m34[i], record->m38[i]);
                 record->m34[i] = record->m38[i];
             } else if (record->m38[i] != 0.0f) {
-                lbl_803B4E34.m1E0(16, (float *)lbl_803B4E34.mB0[1], lbl_803B4E24.m0[i], record->m38[i]);
+                sndmix.m1E0(16, (float *)sndmix.mB0[1], sndfx.m0[i], record->m38[i]);
             }
         }
     }
-    for (i = 0; i < lbl_803B4E34.m0.m9; i++) {
+    for (i = 0; i < sndmix.m0.m9; i++) {
         if (record->m4[i] != record->m1C[i]) {
-            MIXI_interpolatemix((float *)lbl_803B4E34.mB0[1], (float *)lbl_803B4E34.mD0[i], record->m4[i], record->m1C[i]);
+            MIXI_interpolatemix((float *)sndmix.mB0[1], (float *)sndmix.mD0[i], record->m4[i], record->m1C[i]);
             record->m4[i] = record->m1C[i];
         } else if (record->m1C[i] != 0.0f) {
-            lbl_803B4E34.m1E0(16, (float *)lbl_803B4E34.mB0[1], (float *)lbl_803B4E34.mD0[i], record->m1C[i]);
+            sndmix.m1E0(16, (float *)sndmix.mB0[1], (float *)sndmix.mD0[i], record->m1C[i]);
         }
     }
     return 16;
@@ -113,44 +132,44 @@ void MIX_create(Setup_80272EC4 *setup)
     Snd::CODASetNew((void *(*)(unsigned int))SNDI_New);
     Snd::CODASetDelete(SNDI_Delete);
     Snd::Coda::System::SetMemCpy((void *(*)(void *, const void *, unsigned int))SNDI_memcpy);
-    lbl_803B4E34.m0 = *setup;
+    sndmix.m0 = *setup;
     SNDSYS_entercritical();
     MIX_createFxglobals();
     for (i = 0; i < lbl_8030002C; i++) {
-        lbl_803B4E34.m14[i] = 0;
+        sndmix.m14[i] = 0;
     }
     for (i = 0; i < 2; i++) {
         void *buffer = SNDMEMI_allocz(2748);
 
-        lbl_803B4E34.mA8[i] = buffer;
-        lbl_803B4E34.mB0[i] = (int *)buffer + 2;
-        while ((u32)lbl_803B4E34.mB0[i] & 0x3F) {
-            lbl_803B4E34.mB0[i]++;
+        sndmix.mA8[i] = buffer;
+        sndmix.mB0[i] = (int *)buffer + 2;
+        while ((u32)sndmix.mB0[i] & 0x3F) {
+            sndmix.mB0[i]++;
         }
     }
-    for (i = 0; i < lbl_803B4E34.m0.m9; i++) {
+    for (i = 0; i < sndmix.m0.m9; i++) {
         void *buffer = SNDMEMI_allocz(704);
 
-        lbl_803B4E34.mB8[i] = buffer;
-        lbl_803B4E34.mD0[i] = (int *)buffer;
-        while ((u32)lbl_803B4E34.mD0[i] & 0x3F) {
-            lbl_803B4E34.mD0[i]++;
+        sndmix.mB8[i] = buffer;
+        sndmix.mD0[i] = (int *)buffer;
+        while ((u32)sndmix.mD0[i] & 0x3F) {
+            sndmix.mD0[i]++;
         }
     }
-    if (lbl_803B4E34.m0.m8 != 0) {
+    if (sndmix.m0.m8 != 0) {
         float *p;
 
-        lbl_803B4E34.m1DC = (Record_803B5010 *)SNDMEMI_allocz(
-            lbl_803B4E34.m0.m8 * sizeof(Record_803B5010) + lbl_8030002C * sizeof(float) * lbl_803B4E34.m0.m8 +
-            lbl_8030002C * sizeof(float) * lbl_803B4E34.m0.m8);
-        memset(lbl_803B4E34.m1DC, 0,
-               lbl_803B4E34.m0.m8 * sizeof(Record_803B5010) + lbl_8030002C * sizeof(float) * lbl_803B4E34.m0.m8 +
-            lbl_8030002C * sizeof(float) * lbl_803B4E34.m0.m8);
-        p = (float *)&lbl_803B4E34.m1DC[lbl_803B4E34.m0.m8];
-        for (i = 0; i < lbl_803B4E34.m0.m8; i++) {
-            lbl_803B4E34.m1DC[i].m34 = p;
+        sndmix.m1DC = (Record_803B5010 *)SNDMEMI_allocz(
+            sndmix.m0.m8 * sizeof(Record_803B5010) + lbl_8030002C * sizeof(float) * sndmix.m0.m8 +
+            lbl_8030002C * sizeof(float) * sndmix.m0.m8);
+        memset(sndmix.m1DC, 0,
+               sndmix.m0.m8 * sizeof(Record_803B5010) + lbl_8030002C * sizeof(float) * sndmix.m0.m8 +
+            lbl_8030002C * sizeof(float) * sndmix.m0.m8);
+        p = (float *)&sndmix.m1DC[sndmix.m0.m8];
+        for (i = 0; i < sndmix.m0.m8; i++) {
+            sndmix.m1DC[i].m34 = p;
             p += lbl_8030002C;
-            lbl_803B4E34.m1DC[i].m38 = p;
+            sndmix.m1DC[i].m38 = p;
             p += lbl_8030002C;
         }
     }
@@ -159,13 +178,13 @@ void MIX_create(Setup_80272EC4 *setup)
     MIXI_initunpackxa();
     MIXI_initunpackmt();
     MIX_reset();
-    for (i = 0; i < lbl_803B4E34.m0.m9; i++) {
-        lbl_803B4E34.m104[i] = 0;
-        SFILTER_ft24_32init(&lbl_803B4E34.m134[i]);
-        lbl_803B4E34.m134[i].m18 = 0;
-        lbl_803B4E34.m134[i].m1A = 0;
-        SFILTER_add(&lbl_803B4E34.m104[i], &lbl_803B4E34.m134[i]);
-        memset(lbl_803B4E34.mD0[i], 0, 640);
+    for (i = 0; i < sndmix.m0.m9; i++) {
+        sndmix.m104[i] = 0;
+        SFILTER_ft24_32init(&sndmix.m134[i]);
+        sndmix.m134[i].m18 = 0;
+        sndmix.m134[i].m1A = 0;
+        SFILTER_add(&sndmix.m104[i], &sndmix.m134[i]);
+        memset(sndmix.mD0[i], 0, 640);
     }
 }
 
@@ -175,20 +194,20 @@ void MIX_destroy(void)
 
     SNDSYS_entercritical();
     MIX_destroyFxglobals();
-    if (lbl_803B4E34.m1DC != 0) {
-        SNDMEMI_free(lbl_803B4E34.m1DC);
-        lbl_803B4E34.m1DC = 0;
+    if (sndmix.m1DC != 0) {
+        SNDMEMI_free(sndmix.m1DC);
+        sndmix.m1DC = 0;
     }
     for (i = 0; i < 2; i++) {
-        if (lbl_803B4E34.mA8[i] != 0) {
-            SNDMEMI_free(lbl_803B4E34.mA8[i]);
-            lbl_803B4E34.mA8[i] = 0;
+        if (sndmix.mA8[i] != 0) {
+            SNDMEMI_free(sndmix.mA8[i]);
+            sndmix.mA8[i] = 0;
         }
     }
-    for (i = 0; i < lbl_803B4E34.m0.m9; i++) {
-        if (lbl_803B4E34.mB8[i] != 0) {
-            SNDMEMI_free(lbl_803B4E34.mB8[i]);
-            lbl_803B4E34.mB8[i] = 0;
+    for (i = 0; i < sndmix.m0.m9; i++) {
+        if (sndmix.mB8[i] != 0) {
+            SNDMEMI_free(sndmix.mB8[i]);
+            sndmix.mB8[i] = 0;
         }
     }
     SNDMIX_setmasterlowpass(2.0f);
@@ -197,15 +216,15 @@ void MIX_destroy(void)
 
 void MIX_reset(void)
 {
-    lbl_803B4E34.m1E0 = mixc;
-    lbl_803B4E34.m1E4 = decode16x87;
-    lbl_803B4E34.mC = 320;
+    sndmix.m1E0 = mixc;
+    sndmix.m1E4 = decode16x87;
+    sndmix.mC = 320;
 }
 
 void MIX_playinit(int index, int type, int mode, int a, int b, void *data, int c, int d, int e, int f, int g, int h,
                  int k, int slot)
 {
-    Record_803B5010 *record = &lbl_803B4E34.m1DC[index];
+    Record_803B5010 *record = &sndmix.m1DC[index];
     Params_80275F80 params;
     int table = 0;
     int kind;
@@ -239,8 +258,8 @@ void MIX_playinit(int index, int type, int mode, int a, int b, void *data, int c
     } else if (mode == 0) {
         table = 2;
     }
-    if (lbl_803B4E34.m18[kind][table] != 0) {
-        record->m48 = (Node_80279D90 *)SNDMEMI_allocz(lbl_803B4E34.m60[kind][table]);
+    if (sndmix.m18[kind][table] != 0) {
+        record->m48 = (Node_80279D90 *)SNDMEMI_allocz(sndmix.m60[kind][table]);
         params.m0 = a;
         params.m24 = k;
         params.m4 = b;
@@ -253,7 +272,7 @@ void MIX_playinit(int index, int type, int mode, int a, int b, void *data, int c
         record->m48->m4 = 0;
         record->m48->m18 = 240;
         record->m48->m1A = slot;
-        lbl_803B4E34.m18[kind][table](record->m48, &params);
+        sndmix.m18[kind][table](record->m48, &params);
         record->m44 = params.m28;
         SFILTER_add(&record->m40, record->m48);
     }
@@ -273,7 +292,7 @@ void MIX_playinit(int index, int type, int mode, int a, int b, void *data, int c
 
 void MIX_play(int index)
 {
-    Record_803B5010 *record = &lbl_803B4E34.m1DC[index];
+    Record_803B5010 *record = &sndmix.m1DC[index];
     int i;
 
     record->m1 = 0;
@@ -281,7 +300,7 @@ void MIX_play(int index)
     for (i = 0; i < lbl_8030002C; i++) {
         record->m34[i] = record->m38[i];
     }
-    for (i = 0; i < lbl_803B4E34.m0.m9; i++) {
+    for (i = 0; i < sndmix.m0.m9; i++) {
         record->m4[i] = record->m1C[i];
     }
     record->m0 = 2;
@@ -290,20 +309,20 @@ void MIX_play(int index)
 void MIXI_stop(int index)
 {
     MIX_stop(index);
-    lbl_803B4E34.m0.m4(index);
+    sndmix.m0.m4(index);
 }
 
 void MIX_stop(int index)
 {
-    Record_803B5010 *record = &lbl_803B4E34.m1DC[index];
+    Record_803B5010 *record = &sndmix.m1DC[index];
     Node_80279D90 *next;
     int i;
 
     for (i = 0; i < lbl_8030002C; i++) {
-        lbl_803B4E34.m100[i] += record->m34[i] * record->m3C;
+        sndmix.m100[i] += record->m34[i] * record->m3C;
     }
-    for (i = 0; i < lbl_803B4E34.m0.m9; i++) {
-        lbl_803B4E34.mE8[i] += record->m4[i] * record->m3C;
+    for (i = 0; i < sndmix.m0.m9; i++) {
+        sndmix.mE8[i] += record->m4[i] * record->m3C;
     }
     do {
         if (record->m40->m4 != 0) {
@@ -318,14 +337,14 @@ void MIX_stop(int index)
 
 void SNDMIX_setdrygain(int index, int channel, float value)
 {
-    lbl_803B4E34.m1DC[index].m1C[channel] = value;
-    lbl_803B4E34.m1DC[index].m1 = 1;
+    sndmix.m1DC[index].m1C[channel] = value;
+    sndmix.m1DC[index].m1 = 1;
 }
 
 void SNDMIX_setwetgain(int index, int slot, float value)
 {
-    lbl_803B4E34.m1DC[index].m38[slot] = value;
-    lbl_803B4E34.m1DC[index].m1 = 1;
+    sndmix.m1DC[index].m38[slot] = value;
+    sndmix.m1DC[index].m1 = 1;
 }
 
 void MIX_audioslice(void **outputs, int count)
@@ -338,18 +357,18 @@ void MIX_audioslice(void **outputs, int count)
     int j;
 
     for (i = 0; i < lbl_8030002C; i++) {
-        if (lbl_803B4E34.m14[i] != 0 && lbl_803B4E34.m100[i] != 0.0f) {
-            MIXI_interpolateto0(&lbl_803B4E34.m100[i], lbl_803B4E24.m0[i]);
+        if (sndmix.m14[i] != 0 && sndmix.m100[i] != 0.0f) {
+            MIXI_interpolateto0(&sndmix.m100[i], sndfx.m0[i]);
         }
     }
-    for (i = 0; i < lbl_803B4E34.m0.m9; i++) {
-        memset(lbl_803B4E34.mD0[i], 0, count * 4);
-        if (lbl_803B4E34.mE8[i] != 0.0f) {
-            MIXI_interpolateto0(&lbl_803B4E34.mE8[i], (float *)lbl_803B4E34.mD0[i]);
+    for (i = 0; i < sndmix.m0.m9; i++) {
+        memset(sndmix.mD0[i], 0, count * 4);
+        if (sndmix.mE8[i] != 0.0f) {
+            MIXI_interpolateto0(&sndmix.mE8[i], (float *)sndmix.mD0[i]);
         }
     }
-    for (i = 0; i < lbl_803B4E34.m0.m8; i++) {
-        record = &lbl_803B4E34.m1DC[i];
+    for (i = 0; i < sndmix.m0.m8; i++) {
+        record = &sndmix.m1DC[i];
         if (record->m0 == 2) {
             if (record->m1 != 0) {
                 done = SNDMIXI_volramp(record);
@@ -360,39 +379,39 @@ void MIX_audioslice(void **outputs, int count)
                 left = count;
             }
             if (left != 0) {
-                n = record->m40->m0(record->m40, left, (float *)lbl_803B4E34.mB0[0], (float *)lbl_803B4E34.mB0[1], 0);
+                n = record->m40->m0(record->m40, left, (float *)sndmix.mB0[0], (float *)sndmix.mB0[1], 0);
                 if (n < 0) {
                     MIXI_stop(i);
                 } else if (n != 0) {
-                    record->m3C = ((float *)lbl_803B4E34.mB0[1])[n - 1];
-                    for (j = 0; j < lbl_803B4E34.m0.m9; j++) {
+                    record->m3C = ((float *)sndmix.mB0[1])[n - 1];
+                    for (j = 0; j < sndmix.m0.m9; j++) {
                         if (record->m1C[j] != 0.0f) {
-                            lbl_803B4E34.m1E0(n, (float *)lbl_803B4E34.mB0[1], (float *)lbl_803B4E34.mD0[j] + done,
+                            sndmix.m1E0(n, (float *)sndmix.mB0[1], (float *)sndmix.mD0[j] + done,
                                               record->m1C[j]);
                         }
                     }
                     for (j = 0; j < lbl_8030002C; j++) {
-                        if (lbl_803B4E34.m14[j] != 0 && record->m38[j] != 0.0f) {
-                            lbl_803B4E34.m1E0(n, (float *)lbl_803B4E34.mB0[1], lbl_803B4E24.m0[j] + done, record->m38[j]);
-                            lbl_803B4E24.m4 = 0;
+                        if (sndmix.m14[j] != 0 && record->m38[j] != 0.0f) {
+                            sndmix.m1E0(n, (float *)sndmix.mB0[1], sndfx.m0[j] + done, record->m38[j]);
+                            sndfx.m4 = 0;
                         }
                     }
                 }
             }
         }
     }
-    if (lbl_803B4E34.m10 != 0) {
-        lbl_803B4E34.m10(count);
+    if (sndmix.m10 != 0) {
+        sndmix.m10(count);
     }
-    for (i = 0; i < lbl_803B4E34.m0.m9; i++) {
-        if (lbl_803B4E34.m11C[i] != 0) {
-            lbl_803B4E34.m11C[i]->m0(lbl_803B4E34.m11C[i], count, (float *)lbl_803B4E34.mD0[i], (float *)lbl_803B4E34.mB0[0], 0);
-            lbl_803B4E34.m104[i]->m0(lbl_803B4E34.m104[i], count, (float *)lbl_803B4E34.mB0[0], (float *)outputs[i], 0);
+    for (i = 0; i < sndmix.m0.m9; i++) {
+        if (sndmix.m11C[i] != 0) {
+            sndmix.m11C[i]->m0(sndmix.m11C[i], count, (float *)sndmix.mD0[i], (float *)sndmix.mB0[0], 0);
+            sndmix.m104[i]->m0(sndmix.m104[i], count, (float *)sndmix.mB0[0], (float *)outputs[i], 0);
         } else {
-            lbl_803B4E34.m104[i]->m0(lbl_803B4E34.m104[i], count, (float *)lbl_803B4E34.mD0[i], (float *)outputs[i], 0);
+            sndmix.m104[i]->m0(sndmix.m104[i], count, (float *)sndmix.mD0[i], (float *)outputs[i], 0);
         }
     }
     if (lbl_803A6E58 != 0) {
-        lbl_803B5020(outputs, count);
+        MIXoutputfn(outputs, count);
     }
 }

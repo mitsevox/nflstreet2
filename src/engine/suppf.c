@@ -34,7 +34,7 @@ int SFILTER_unpackpf(Node_80279D90 *node, int count, float *a, float *b, int fla
             n = count;
         }
         if (decoder->mConvert != 0) {
-            lbl_803B4E34.m1E4(n, (short *)(decoder->mpPacket + (decoder->mPosition << 1)), b);
+            sndmix.m1E4(n, (short *)(decoder->mpPacket + (decoder->mPosition << 1)), b);
         }
         b += n;
         decoder->mPosition += n;

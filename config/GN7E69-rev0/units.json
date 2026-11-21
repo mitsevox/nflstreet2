@@ -1320,10 +1320,6 @@
       "address": "0x8025FA98",
       "evidence": "evidence.tsv external row for 0x8025FA98 (_restgpr_24)."
     },
-    "SNDDRV_dolbypl2balances": {
-      "address": "0x80300050",
-      "evidence": "evidence.tsv data and name rows for 0x80300050 (2048-byte balance table read by src/engine/sdspmix.c and by snddrv.c code; storage not claimed by either unit)."
-    },
     "gCallbacks": {
       "address": "0x8037E0A0",
       "evidence": "evidence.tsv data/name rows for 0x8037E0A0 (target extent, related name); speech-library storage, original-owned."
@@ -15086,13 +15082,19 @@
     {
       "source": "src/engine/sort.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801F5100-0x801F524C (src/engine/sort.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801F5100-0x801F524C (src/engine/sort.c) and its data rows (da1a: the .sdata 0x803EBE20-0x803EBE24, _Sort_ModuleActive); every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801F5100",
           "end": "0x801F524C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBE20",
+          "end": "0x803EBE24"
         }
       ]
     },
@@ -21654,7 +21656,7 @@
     {
       "source": "src/engine/sdspmix.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x80271D34-0x8027257C (src/engine/sdspmix.c), its eight function and name rows, the data rows of its .rodata constant 0x802C1D88-0x802C1D8C and its .bss 0x803A7734-0x803A8D38 (__MIXChannel, numoutputchannels), and the sound_cxx compiler row 0x802714A8-0x8027CF9C; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x80271D34-0x8027257C (src/engine/sdspmix.c), its eight function and name rows, the data rows of its .rodata constant 0x802C1D88-0x802C1D8C and its .data 0x80300050-0x80300850 (SNDDRV_dolbypl2balances, da1a), its .bss 0x803A7734-0x803A8D38 (__MIXChannel, numoutputchannels), and the sound_cxx compiler row 0x802714A8-0x8027CF9C; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -21673,6 +21675,12 @@
           "placement": ".bss",
           "start": "0x803A7734",
           "end": "0x803A8D38"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300050",
+          "end": "0x80300850"
         }
       ]
     },
@@ -21812,7 +21820,7 @@
     {
       "source": "src/engine/salloc.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x80269CE8-0x8026A2DC (src/engine/salloc.c, FIFA Soccer 2005 salloc.o), its function and name rows, the data row of its .data lasthandle 0x802FFCC0-0x802FFCC4 and the sound_cxx compiler row 0x80266E88-0x8026A664; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): every function exact except the holdout SNDVOICEI_free 0x8026A0E8-0x8026A288, which keeps the original bytes and stays a registered partial; the whole .data is linked.",
+      "evidence": "evidence.tsv unit row 0x80269CE8-0x8026A2DC (src/engine/salloc.c, FIFA Soccer 2005 salloc.o), its function and name rows, the data rows of its .data lasthandle 0x802FFCC0-0x802FFCC4 and its .bss sndvoicereserved 0x803A6C04-0x803A6C10 (da1a) and the sound_cxx compiler row 0x80266E88-0x8026A664; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): every function exact except the holdout SNDVOICEI_free 0x8026A0E8-0x8026A288, which keeps the original bytes and stays a registered partial; the whole .data and .bss are linked.",
       "sections": [
         {
           "section": ".text",
@@ -21831,6 +21839,12 @@
           "placement": ".data4",
           "start": "0x802FFCC0",
           "end": "0x802FFCC4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6C04",
+          "end": "0x803A6C10"
         }
       ],
       "holdouts": {
@@ -22433,7 +22447,7 @@
     {
       "source": "src/engine/sfxrevc.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x802753F0-0x8027555C (src/engine/sfxrevc.c), its three function and name rows and the data and name rows of its .data word 0x80300E98-0x80300E9C (fxGlobalsCreated), and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
+      "evidence": "evidence.tsv unit row 0x802753F0-0x8027555C (src/engine/sfxrevc.c), its three function and name rows and the data and name rows of its .data 0x80300860-0x80300E9C (tablecopyto, mapchannel, filtersizetable, filtermodsizetable, fxGlobalsCreated) and its .bss 0x803B4E20-0x803B4E34 (fxBusesLinkList, sndfx, modlist, conlist; da1a), and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
       "sections": [
         {
           "section": ".text",
@@ -22444,8 +22458,14 @@
         {
           "section": ".data",
           "placement": ".data4",
-          "start": "0x80300E98",
+          "start": "0x80300860",
           "end": "0x80300E9C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803B4E20",
+          "end": "0x803B4E34"
         }
       ]
     },
@@ -23600,7 +23620,7 @@
     {
       "source": "src/engine/smidi.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c, NASCAR 2005 smidi.c), its function and name rows, the data row of its .data 0x802FFCD0-0x802FFCD4 and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 10 of 13 functions exact, the holdouts SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick keep the original bytes and stay registered partials; the whole .data is linked.",
+      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c, NASCAR 2005 smidi.c), its function and name rows, the data rows of its .data 0x802FFCD0-0x802FFCD4 and its .bss 0x803A6E60-0x803A7624 (sndms, da1a) and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 10 of 13 functions exact, the holdouts SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick keep the original bytes and stay registered partials; the whole .data and .bss are linked.",
       "sections": [
         {
           "section": ".text",
@@ -23631,6 +23651,12 @@
           "placement": ".data4",
           "start": "0x802FFCD0",
           "end": "0x802FFCD4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6E60",
+          "end": "0x803A7624"
         }
       ],
       "holdouts": {
@@ -24053,7 +24079,7 @@
     {
       "source": "src/engine/smixer.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x802755E0-0x80276798 (src/engine/smixer.c), its compiler rows and the data rows of its data sections; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 2 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "evidence": "evidence.tsv unit row 0x802755E0-0x80276798 (src/engine/smixer.c), its compiler rows and the data rows of its data sections (.rodata, and the .bss 0x803B4E34-0x803B5044: sndmix, sndmixwritelog, MIXoutputfn, the FAKEMATCH word _Mix_iUnused and the seven mixer hooks, da1a); linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 2 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
       "sections": [
         {
           "section": ".text",
@@ -24072,6 +24098,12 @@
           "placement": ".data3",
           "start": "0x802C1E1C",
           "end": "0x802C1EAC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803B4E34",
+          "end": "0x803B5044"
         }
       ],
       "holdouts": {
@@ -24187,7 +24219,7 @@
     {
       "source": "src/engine/snddrv.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), its compiler rows and the data rows of its data sections; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 6 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "evidence": "evidence.tsv unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), its compiler rows and the data rows of its data sections (.rodata; .data 0x80300850-0x8030085C everyother, curTick, araminited and .bss 0x803A8D40-0x803A8D44 ptr, da1a; the driver state 0x803A8D60 stays an extern, see the ptr.36 data row); linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 6 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
       "sections": [
         {
           "section": ".text",
@@ -24236,6 +24268,18 @@
           "placement": ".data3",
           "start": "0x802C1D90",
           "end": "0x802C1E18"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300850",
+          "end": "0x8030085C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A8D40",
+          "end": "0x803A8D44"
         }
       ],
       "holdouts": {
@@ -24789,7 +24833,7 @@
     {
       "source": "src/engine/stream.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/stream.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole.",
+      "evidence": "evidence.tsv unit row of src/engine/stream.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole (da1a: the .bss 0x8039B3D8-0x8039B3F8, _Stream_SeekReadCS, and the .sbss 0x803ECFA0-0x803ECFA4, requestidcounter; their data rows).",
       "sections": [
         {
           "section": ".text",
@@ -24808,6 +24852,18 @@
           "placement": ".text",
           "start": "0x801F73D4",
           "end": "0x801F7738"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039B3D8",
+          "end": "0x8039B3F8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFA0",
+          "end": "0x803ECFA4"
         }
       ],
       "holdouts": {

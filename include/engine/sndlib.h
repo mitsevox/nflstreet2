@@ -262,31 +262,30 @@ extern const unsigned short lbl_802B7A98[];
 extern const short lbl_802B7AF0[2][3][16];
 extern unsigned short SNDDRV_dolbypl2balances[256][4];
 extern State_803A8D60 lbl_803A8D60;
-extern void (*lbl_803B5028)(Setup_80272EC4 *setup);
-extern void (*lbl_803B502C)(void);
-extern void (*lbl_803B5030)(void **buffers, int count);
-extern void (*lbl_803B5034)(int index, int a, int b, int c, int d, void *p, int count, int e, int f, int g, int h,
-                            int j, int k, int slot);
-extern void (*lbl_803B5038)(int index);
-extern void (*lbl_803B503C)(int index);
-extern void (*lbl_803B5040)(int index, int value);
+extern int sndmixwritelog;
+extern void (*MIXoutputfn)(void **outputs, int count);
+extern int _Mix_iUnused;
+extern void (*MIXinitfn)(Setup_80272EC4 *setup);
+extern void (*MIXrestorefn)(void);
+extern void (*MIXaudioslicefn)(void **buffers, int count);
+extern void (*MIXplayinitfn)(int index, int a, int b, int c, int d, void *p, int count, int e, int f, int g, int h,
+                             int j, int k, int slot);
+extern void (*MIXplayfn)(int index);
+extern void (*MIXstopfn)(int index);
+extern void (*MIXsetpitchfn)(int index, int value);
 extern int lbl_8030002C;
 extern OSMutex lbl_803B4B90;
-extern Node_803B4E20 **lbl_803B4E20;
-/* The effect bus state of sfxrevc.c (GoldenEye sndfx, 8 bytes): the per-bus wet buffers and a word the
+extern Node_803B4E20 **fxBusesLinkList;
+/* The effect bus state of sfxrevc.c (8 bytes): the per-bus wet buffers and a word the
    mixer clears after mixing a voice into a bus. */
 typedef struct SndFx_t {
     float **m0;
     int m4;
 } SndFx_t;
 
-extern SndFx_t lbl_803B4E24;
-extern int lbl_80300850;
-extern float lbl_80300854;
-extern int lbl_80300858;
+extern SndFx_t sndfx;
 extern unsigned char lbl_803A7728;
 extern int lbl_803A772C;
-extern float *lbl_803A8D40;
 
 void SNDSYSI_variabletimerservice(void);
 void SNDSYSI_100hzserver(void);
