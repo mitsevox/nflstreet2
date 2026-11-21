@@ -11,6 +11,9 @@ import source_build as sb
 ACCESS_WIDTH = {32: 4, 33: 4, 34: 1, 35: 1, 36: 4, 37: 4, 38: 1, 39: 1, 40: 2, 41: 2, 42: 2, 43: 2, 44: 2, 45: 2,
                 46: None, 47: None, 48: 4, 49: 4, 50: 8, 51: 8, 52: 4, 53: 4, 54: 8, 55: 8}
 STORES = {36, 37, 38, 39, 44, 45, 47, 52, 53, 54, 55}
+# The update forms, which also write the accessed address to rA: lwzu lbzu stwu stbu lhzu lhau sthu lfsu lfdu stfsu
+# stfdu. Their indexed forms (lwzux, ...) are X-form instructions with the base in rA, which base_uses refuses.
+UPDATES = {33, 35, 37, 39, 41, 43, 45, 49, 51, 53, 55}
 VOLATILE = set(range(0, 13))  # r0 and r3-r12 do not survive a call (r1, r2 are never a pool base).
 BLR = 0x4E800020
 
@@ -20,19 +23,21 @@ def access_width(word):
     return 4 * (32 - ((word >> 21) & 31)) if opcode in (46, 47) else ACCESS_WIDTH[opcode]
 
 
-def base_uses(code, at, register, stored_escapes=False):
+def base_uses(code, at, register, strict=False):
     """The (displacement, width) of each D-form access through `register` after the instruction at
     `at` set it to an address, until an instruction overwrites it, a call clobbers it (a volatile
     register) or the function returns. None when the address is used any other way (passed on,
     indexed), or when a branch, or a call that a callee-saved base survives, ends the straight line
     while the register still holds the address: later loads through it cannot be followed. With
-    `stored_escapes`, storing the address itself to memory is also None: it is passed on."""
+    `strict` (register_base), storing the address itself to memory is also None, as it is passed
+    on, and so is an update form (lwzu, stwu, ...) through it, which moves the register to the
+    accessed address so that later displacements no longer count from the address."""
     uses = []
     for position in range(at + 4, len(code) - 3, 4):
         word = struct.unpack_from('>I', code, position)[0]
         opcode, target, base = word >> 26, (word >> 21) & 31, (word >> 16) & 31
         if opcode in ACCESS_WIDTH and base == register:
-            if stored_escapes and opcode in STORES and (target == register or opcode == 47 and target <= register):
+            if strict and (opcode in UPDATES or opcode in STORES and (target == register or opcode == 47 and target <= register)):
                 return None
             displacement = word & 0xFFFF
             uses.append((displacement - 0x10000 if displacement & 0x8000 else displacement, access_width(word)))
@@ -58,17 +63,19 @@ ADDRESS_HIGH = (5, 6)
 def register_base(code, at, value, size):
     """Whether the R_PPC_ADDR16_LO at byte `at` of `code` forms a base register whose every use lands
     in the compiled section's [0, size): the relocation must sit in the low half of an addi, and
-    every displacement load or store through the register it sets, until the register is redefined
-    or the function returns, must lie inside the section. GCC forms object+0x10000 for an object
+    every displacement load or store through the register it sets must lie inside the section,
+    until a load redefines the register, a call clobbers it (a volatile register) or the function
+    returns. GCC forms object+0x10000 for an object
     larger than 32 KiB and addresses its fields with negative displacements, so such a base lies
     past the section's end. A low half on a load or store is the accessed address itself, not a
-    base, and a base that is passed on, stored, indexed or live across a branch cannot be bounded."""
+    base, and a base that is passed on, stored, indexed, moved by an update form, overwritten any
+    other way or live across a branch, or a callee-saved base live past a call, cannot be bounded."""
     if at % 4 != 2 or not 0 <= at - 2 <= len(code) - 4:
         return False
     word = struct.unpack_from('>I', code, at - 2)[0]
     if word >> 26 != 14:  # addi rD, rA, symbol@l
         return False
-    uses = base_uses(code, at - 2, (word >> 21) & 31, stored_escapes=True)
+    uses = base_uses(code, at - 2, (word >> 21) & 31, strict=True)
     return bool(uses) and all(0 <= value + d and value + d + w <= size for d, w in uses)
 
 
