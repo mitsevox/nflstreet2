@@ -1572,10 +1572,6 @@
       "address": "0x802F4794",
       "evidence": "evidence.tsv data/name rows for 0x802F4794 (target extent, related name); speech-library storage, original-owned."
     },
-    "GBAFanServiceLink": {
-      "address": "0x802857D8",
-      "evidence": "evidence.tsv function/name rows for 0x802857D8 (target extent, related name); src/engine/gbafan.c is comparison-only, so src/engine/PJoyDrvr.c calls the original bytes."
-    },
     "PerJoyDriverPollPADs": {
       "address": "0x801E26FC",
       "evidence": "evidence.tsv function and name rows for 0x801E26FC (PerJoyDriverPollPADs in src/engine/PJoyDrvr.c, a comparison-only file); the linked src/engine/llperiph.c calls it and registers it as a callback, so it resolves to the original bytes."
@@ -22390,6 +22386,31 @@
           "symbol": "_state",
           "start": "0x803E990C",
           "end": "0x803EA28C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/gbafan.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x802857D8-0x80285808 (src/engine/gbafan.c), the function and name rows, the compiler row and the data/name rows for the .sdata state and .sbss condition. Promoted with both file statics.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802857D8",
+          "end": "0x80285808"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC590",
+          "end": "0x803EC594"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED4BC",
+          "end": "0x803ED4C4"
         }
       ]
     },

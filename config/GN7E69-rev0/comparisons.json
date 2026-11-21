@@ -33580,26 +33580,6 @@
       ]
     },
     {
-      "source": "src/engine/gbafan.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802857D8-0x80285808 (src/engine/gbafan.c), its compiler, function and name rows. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802857D8",
-          "end": "0x80285808"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "GBAFanServiceLink",
-          "start": "0x802857D8",
-          "end": "0x80285808"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_80285A24.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80285A24-0x80285A90 (src/engine/cu_80285A24.c), its compiler, function and name rows. Draft comparisons only; original assembly remains linked.",
