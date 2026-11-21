@@ -341,7 +341,7 @@ int _TDbIdxCompare(TDbIdxTree_t *pTree, unsigned int *pKeyA, unsigned int *pKeyB
             pColumn = &pParts[i].mTable->mColumns[pParts[i].mColumn];
             switch (pColumn->mType) {
             case TDB_TYPE_STRING:
-                result = lbl_803EBE74((char *)pKeyA[i], (char *)pKeyB[i], pColumn->mBitCount >> 3);
+                result = TDbStrncmp((char *)pKeyA[i], (char *)pKeyB[i], pColumn->mBitCount >> 3);
                 break;
             case TDB_TYPE_INT:
                 result = (int)pKeyA[i] > (int)pKeyB[i] ? 1 : (int)pKeyA[i] < (int)pKeyB[i] ? -1 : 0;
@@ -647,7 +647,7 @@ int _TDbIndexDestroy(TDbIndex_t *pIndex)
     if (pIndex->mLocked) {
         pIndex->mId = 0;
         pIndex->mDestroyed = 1;
-        for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
+        for (pQuery = _tDbQueries; pQuery != 0; pQuery = pQuery->mNext) {
             if (pQuery->mState == 1 && pQuery->mSource.mIndex == pIndex) {
                 pQuery->mState = 2;
             }

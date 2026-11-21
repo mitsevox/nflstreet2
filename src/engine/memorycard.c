@@ -59,11 +59,6 @@ static Struct_80384CD0 _MemCOp;
 static Struct_80384DB8 _MemCCard;
 static char _MemCWorkArea[2][0xA000] __attribute__((aligned(32)));
 
-extern const char lbl_802AFCF8[];
-extern const char lbl_802AFCFC[];
-extern const char lbl_802AFE50[];
-extern const char lbl_802AFE5C[];
-extern const char lbl_802AFE6C[];
 extern int DateIsYearLeap(int year);
 
 
@@ -464,7 +459,7 @@ int MemCAsyncGetDir(int port, const char *pGameCode, const char *pPattern, Struc
                 found = 0;
                 cmp = strncmp(code, pGameCode, 7);
             } else {
-                cmp = strncmp((char *)stat.company, lbl_802AFCF8, 2);
+                cmp = strncmp((char *)stat.company, "69", 2);
                 found = 0;
             }
             if (cmp == 0 && _MemCExprMatch(pPattern, stat.fileName)) {
@@ -500,7 +495,7 @@ int MemCAsyncOpen(int port, const char *pName, int unused, int flags, int size)
     _MemCOp.mBusy = 1;
     _MemCOp.mResult = -99;
     _MemCOp.mSize = (size + 0x1FFF) & ~0x1FFF;
-    sprintf(_MemCOp.mName, lbl_802AFCFC, pName);
+    sprintf(_MemCOp.mName, "%s", pName);
     _MemCOp.mPos = 0;
     _MemCOp.mLength = _MemCOp.mSize;
     if (_MemCOp.mCache != 0) {
@@ -511,6 +506,9 @@ int MemCAsyncOpen(int port, const char *pName, int unused, int flags, int size)
         _MemCOp.mCacheValid = 0;
     }
     if (_iFileCacheSize != 0) {
+        // FAKEMATCH: unused trace message; its string stays in .rodata where the target keeps it
+        const char *pDebugMsg = "Allocated FileCache in MemCAsyncOpen()";
+
         _MemCOp.mCache = fn_801D2B7C(_iFileCacheSize, 0, 0);
         // FAKEMATCH: mCacheValid cleared last (search over the 120 orders of the five clears; same Dirty-then-Valid order as the other cache resets)
         _MemCOp.mChunkSize = _iFileCacheSize;
@@ -530,7 +528,7 @@ int MemCAsyncOpen(int port, const char *pName, int unused, int flags, int size)
                 goto fail;
             }
             if (_MemCOp.mResult != CARD_RESULT_NOFILE) {
-                if (memcmp(_MemCOp.mStat.company, lbl_802AFCF8, 2) != 0
+                if (memcmp(_MemCOp.mStat.company, "69", 2) != 0
                     || (cmp = strncmp(_MemCOp.mStat.fileName, pName, 32)) != 0) {
                     _MemCOp.mResult = CARD_RESULT_NOFILE;
                 } else {
@@ -566,7 +564,7 @@ int MemCAsyncOpen(int port, const char *pName, int unused, int flags, int size)
             goto done;
         }
         if (_MemCOp.mResult != CARD_RESULT_NOFILE) {
-            if (memcmp(_MemCOp.mStat.company, lbl_802AFCF8, 2) == 0
+            if (memcmp(_MemCOp.mStat.company, "69", 2) == 0
                 && strncmp(_MemCOp.mStat.fileName, pName, 32) == 0) {
                 _MemCOp.mResult = CARDFastOpen(port, fileNo, &_MemCOp.mFileInfo);
                 if (_MemCOp.mResult == CARD_RESULT_READY) {
@@ -630,6 +628,8 @@ static void _MemCOpenCreateCB(s32 chan, s32 result)
 
 int MemCAsyncFlush(int handle)
 {
+    // FAKEMATCH: unused trace message; the string stays in .rodata where the target keeps it
+    const char *pDebugMsg = "MemCAsyncFlush: writing cache";
     int offset;
     int chunk;
     int status;
@@ -695,7 +695,7 @@ int MemCAsyncDelete(int port, const char *pName)
         _MemCOp.mResult = CARDGetStatus(port, fileNo, &_MemCOp.mStat);
         if (_MemCOp.mResult == CARD_RESULT_READY || _MemCOp.mResult == CARD_RESULT_NOFILE) {
             if (_MemCOp.mResult != CARD_RESULT_NOFILE) {
-                if (memcmp(_MemCOp.mStat.company, lbl_802AFCF8, 2) != 0
+                if (memcmp(_MemCOp.mStat.company, "69", 2) != 0
                     || strncmp(_MemCOp.mStat.fileName, pName, 32) != 0) {
                     _MemCOp.mResult = CARD_RESULT_NOFILE;
                 } else {
@@ -722,6 +722,8 @@ int MemCAsyncDelete(int port, const char *pName)
 
 int MemCAsyncSeek(int handle, int offset, int whence)
 {
+    // FAKEMATCH: unused trace message; the string stays in .rodata where the target keeps it
+    const char *pDebugMsg = "MemCAsyncSeek: prefetching cache";
     int fileOffset;
     int chunk;
     int status;
@@ -767,6 +769,9 @@ int MemCAsyncSeek(int handle, int offset, int whence)
 
 static int _MemCAsyncRead(int handle, char *pBuffer, int length)
 {
+    // FAKEMATCH: unused trace messages; the strings stay in .rodata where the target keeps them
+    const char *pDebugMsg0 = "MemCAsyncRead: cache hit";
+    const char *pDebugMsg1 = "MemCAsyncRead: loading cache & add queued read";
     int offset;
     int chunk;
     int count;
@@ -834,6 +839,10 @@ int MemCAsyncRead(int handle, char *pBuffer, int length)
 
 static int _MemCAsyncWrite(int handle, char *pBuffer, int length)
 {
+    // FAKEMATCH: unused trace messages; the strings stay in .rodata where the target keeps them
+    const char *pDebugMsg0 = "MemCAsyncWrite: prefetching cache & add queued write";
+    const char *pDebugMsg1 = "MemCAsyncWrite: cache full; flushing & add queued write";
+    const char *pDebugMsg2 = "MemCAsyncWrite: cache full; flushing";
     int offset;
     int chunk;
     int count;
@@ -950,24 +959,24 @@ void MemCFormatCardType(int type, char *pBuffer, int size)
     case 4:
     case 5:
     case 6:
-        sprintf(pBuffer, lbl_802AFE50);
+        sprintf(pBuffer, "Memory Card");
         break;
     case 7:
-        sprintf(pBuffer, lbl_802AFE50);
+        sprintf(pBuffer, "Memory Card");
         break;
     case -1:
     case 0:
-        sprintf(pBuffer, lbl_802AFE50);
+        sprintf(pBuffer, "Memory Card");
         break;
     case 8:
-        sprintf(pBuffer, lbl_802AFE5C);
+        sprintf(pBuffer, "other device");
         break;
     }
 }
 
 int MemCFormatPort(int port, char *pBuffer, int size)
 {
-    return sprintf(pBuffer, lbl_802AFE6C, MemCGetPort(port) + 'A');
+    return sprintf(pBuffer, "Slot %c", MemCGetPort(port) + 'A');
 }
 
 int MemCEnableCache(int enable, int size)
@@ -982,6 +991,10 @@ int MemCEnableCache(int enable, int size)
 
 int MemCAsyncPoll(int *pResult)
 {
+    // FAKEMATCH: unused trace messages; the strings stay in .rodata where the target keeps them
+    const char *pDebugMsg0 = "Dispatching Deferred read";
+    const char *pDebugMsg1 = "Dispatching Deferred write";
+    const char *pDebugMsg2 = "Dispatching Deferred flush";
     int state = _MemCOp.mState;
     int done = -1;
     int result = 0;

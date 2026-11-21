@@ -1112,10 +1112,6 @@
       "address": "0x801B1934",
       "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x801B1934; original-owned provider, no added storage or body."
     },
-    "_tDbMemAllocInfoCallback": {
-      "address": "0x803EBE80",
-      "evidence": "evidence.tsv data/name rows for _tDbMemAllocInfoCallback: optional three-word memory-event callback; original-owned storage."
-    },
     "__udivdi3": {
       "address": "0x8025F0A8",
       "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long /10 in integer formatter resolves __udivdi3; corresponding target call at0x80265404 reaches0x8025F0A8 with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
@@ -1143,130 +1139,6 @@
     "ResOpenRam": {
       "address": "0x801EECD0",
       "evidence": "evidence.tsv function and name rows at 0x801EECD0: Opens or reuses a resource nested inside a loaded parent entry. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_Res_szDiskLabelByHandle": {
-      "address": "0x802B17C0",
-      "evidence": "evidence.tsv data/name rows 0x802B17C0: disk decompression label with numeric file handle; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_szDiskLabelByName": {
-      "address": "0x802B17CC",
-      "evidence": "evidence.tsv data/name rows 0x802B17CC: disk decompression label with resource name; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_szRamLabelByHandle": {
-      "address": "0x802B17D8",
-      "evidence": "evidence.tsv data/name rows 0x802B17D8: mapped-memory decompression label with numeric file handle; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_szRamLabelByName": {
-      "address": "0x802B17E4",
-      "evidence": "evidence.tsv data/name rows 0x802B17E4: mapped-memory decompression label with resource name; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_szNameFormat": {
-      "address": "0x802B17EC",
-      "evidence": "evidence.tsv data/name rows 0x802B17EC: bounded resource-name formatter for ARAM temporary label; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_szIndexFormat": {
-      "address": "0x802B17F0",
-      "evidence": "evidence.tsv data/name rows 0x802B17F0: four-digit resource index suffix; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_szAramLabelByHandle": {
-      "address": "0x802B17F8",
-      "evidence": "evidence.tsv data/name rows 0x802B17F8: ARAM decompression label with numeric file handle; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_szAramLabelByName": {
-      "address": "0x802B1804",
-      "evidence": "evidence.tsv data/name rows 0x802B1804: ARAM decompression label with resource name; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_szLoadAllLabelByHandle": {
-      "address": "0x802B1810",
-      "evidence": "evidence.tsv data/name rows 0x802B1810: bulk-load decompression label with numeric file handle; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_szLoadAllLabelByName": {
-      "address": "0x802B181C",
-      "evidence": "evidence.tsv data/name rows 0x802B181C: bulk-load decompression label with resource name; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_szModuleID": {
-      "address": "0x802F9508",
-      "evidence": "evidence.tsv data/name rows 0x802F9508: RESOURCE.LIB; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_bModuleActive": {
-      "address": "0x803EBD80",
-      "evidence": "evidence.tsv data/name rows 0x803EBD80: initialization guard; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_iAsyncLoadCount": {
-      "address": "0x803EBD84",
-      "evidence": "evidence.tsv data/name rows 0x803EBD84: in-flight async load count protected by count lock; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_iAsyncOverride": {
-      "address": "0x803EBD88",
-      "evidence": "evidence.tsv data/name rows 0x803EBD88: positive value makes public async loads use synchronous loading unless resource flag 4; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_pAsyncDebugProc": {
-      "address": "0x803EBD8C",
-      "evidence": "evidence.tsv data/name rows 0x803EBD8C: optional async lifecycle event hook; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_iAsyncDebugParm": {
-      "address": "0x803EBD90",
-      "evidence": "evidence.tsv data/name rows 0x803EBD90: fifth argument to optional async event hook; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_pLoopingCallback": {
-      "address": "0x803EBD94",
-      "evidence": "evidence.tsv data/name rows 0x803EBD94: long resource-wait notification hook; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_pErrorCallback": {
-      "address": "0x803EBD98",
-      "evidence": "evidence.tsv data/name rows 0x803EBD98: resource-open error notification hook; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_bCachingEnabled": {
-      "address": "0x803EBD9C",
-      "evidence": "evidence.tsv data/name rows 0x803EBD9C: resource cache enable flag; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_uTimedAsyncTick": {
-      "address": "0x803EBDA0",
-      "evidence": "evidence.tsv data/name rows 0x803EBDA0: current timed-async dispatch tick; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_iTimedAsyncPut": {
-      "address": "0x803EBDA4",
-      "evidence": "evidence.tsv data/name rows 0x803EBDA4: 16-entry timed completion FIFO producer index; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_iTimedAsyncGet": {
-      "address": "0x803EBDA8",
-      "evidence": "evidence.tsv data/name rows 0x803EBDA8: 16-entry timed completion FIFO consumer index; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_bLooseFileSupport": {
-      "address": "0x803EBDAC",
-      "evidence": "evidence.tsv data/name rows 0x803EBDAC: enable separate-file resource overrides; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_uMemAllocFlags": {
-      "address": "0x803EBDB0",
-      "evidence": "evidence.tsv data/name rows 0x803EBDB0: default resource allocation flags; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_pBlockDecompressor": {
-      "address": "0x803ECF70",
-      "evidence": "evidence.tsv data/name rows 0x803ECF70: current block codec state; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_iBlockBytesRead": {
-      "address": "0x803ECF74",
-      "evidence": "evidence.tsv data/name rows 0x803ECF74: accumulated bytes delivered to block codec; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_pBlockRequest": {
-      "address": "0x803ECF78",
-      "evidence": "evidence.tsv data/name rows 0x803ECF78: request retained by active block callback; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_pBlockLoadBuffer": {
-      "address": "0x803ECF7C",
-      "evidence": "evidence.tsv data/name rows 0x803ECF7C: 0x8000-byte streaming read buffer; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_sBlockInput": {
-      "address": "0x8039AE14",
-      "evidence": "evidence.tsv data/name rows 0x8039AE14: codec input stream record; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_sBlockOutput": {
-      "address": "0x8039AE30",
-      "evidence": "evidence.tsv data/name rows 0x8039AE30: codec output stream record; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_apTimedAsyncRequests": {
-      "address": "0x8039AE4C",
-      "evidence": "evidence.tsv data/name rows 0x8039AE4C: 16-entry timed completion request FIFO; original storage remains externally linked for the partial Resource.c reconstruction."
     },
     "_Res_sAsyncCountLock": {
       "address": "0x803E92FC",
@@ -1430,10 +1302,6 @@
     },
     "_tDbIndexPool": {
       "address": "0x803E96A8",
-      "evidence": "evidence.tsv data/name rows: shared database state remains externally owned; IO consumer does not claim its native storage."
-    },
-    "_tDbGlobalMemoryHeapID": {
-      "address": "0x803EBE8C",
       "evidence": "evidence.tsv data/name rows: shared database state remains externally owned; IO consumer does not claim its native storage."
     },
     "vfprintf": {
@@ -20695,6 +20563,12 @@
           "placement": ".data3",
           "start": "0x802B1B90",
           "end": "0x802B1BB0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9B78",
+          "end": "0x802F9B90"
         }
       ],
       "holdouts": {
@@ -23982,6 +23856,12 @@
           "placement": ".data3",
           "start": "0x802B1D10",
           "end": "0x802B1D40"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9E98",
+          "end": "0x802F9F98"
         }
       ],
       "holdouts": {
@@ -24354,6 +24234,36 @@
           "placement": ".text",
           "start": "0x801EEFAC",
           "end": "0x801F1538"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B17C0",
+          "end": "0x802B1828"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9508",
+          "end": "0x802F9524"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD80",
+          "end": "0x803EBDB4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039AE14",
+          "end": "0x8039AE8C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF70",
+          "end": "0x803ECF80"
         }
       ],
       "holdouts": {
@@ -24468,6 +24378,18 @@
           "placement": ".text",
           "start": "0x801F9FA4",
           "end": "0x801FA870"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1AEC",
+          "end": "0x802B1AF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBE70",
+          "end": "0x803EBE98"
         }
       ],
       "holdouts": {
@@ -24517,7 +24439,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802AFCC8",
-          "end": "0x802AFCF8"
+          "end": "0x802AFEC8"
         },
         {
           "section": ".sdata",

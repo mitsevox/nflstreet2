@@ -28584,7 +28584,7 @@
     {
       "source": "src/engine/memorycard.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D3C68-0x801D5D30 (src/engine/memorycard.c), its function rows and the exact .rodata data row 0x802AFCC8-0x802AFCF8. Draft comparisons only; original assembly remains linked. The string constants after 0x802AFCF8 stay extern (lbl_), and MemCAsyncPoll 0x801D5840 is drafted (partial, 99.65%: pending-tail store order and one cross-jumped branch in the case-2 result switch; see the store-block source-form row).",
+      "evidence": "evidence.tsv compiler row 0x801D3C68-0x801D5D30 (src/engine/memorycard.c), its function rows and the exact .rodata data row 0x802AFCC8-0x802AFCF8. Draft comparisons only; original assembly remains linked. The file's strings are literals (.rodata 0x802AFCC8-0x802AFEC8, data row 0x802AFCF8), and MemCAsyncPoll 0x801D5840 is drafted (partial, 99.65%: pending-tail store order and one cross-jumped branch in the case-2 result switch; see the store-block source-form row).",
       "sections": [
         {
           "section": ".text",
@@ -28596,7 +28596,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802AFCC8",
-          "end": "0x802AFCF8"
+          "end": "0x802AFEC8"
         },
         {
           "section": ".sdata",
@@ -29364,6 +29364,36 @@
           "placement": ".text",
           "start": "0x801EC650",
           "end": "0x801F1538"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B17C0",
+          "end": "0x802B1828"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9508",
+          "end": "0x802F9524"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD80",
+          "end": "0x803EBDB4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039AE14",
+          "end": "0x8039AE8C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF70",
+          "end": "0x803ECF80"
         }
       ],
       "functions": [
@@ -30199,6 +30229,18 @@
           "placement": ".text",
           "start": "0x801F8878",
           "end": "0x801FA870"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1AEC",
+          "end": "0x802B1AF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBE70",
+          "end": "0x803EBE98"
         }
       ],
       "functions": [
@@ -30957,6 +30999,12 @@
           "placement": ".data3",
           "start": "0x802B1D10",
           "end": "0x802B1D40"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9E98",
+          "end": "0x802F9F98"
         }
       ],
       "functions": [
@@ -35429,6 +35477,12 @@
           "placement": ".data3",
           "start": "0x802B1B90",
           "end": "0x802B1BB0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9B78",
+          "end": "0x802F9B90"
         }
       ],
       "functions": [

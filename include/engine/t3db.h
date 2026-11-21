@@ -276,9 +276,9 @@ extern void (*_tDbMemAllocInfoCallback)(TDbMemEvent_t *pEvent);
 extern unsigned int crc32_table[256];
 extern TDbMemPool_t lbl_803E9654;
 extern TDbMemPool_t _tDbIndexPool;
-extern int (*lbl_803EBE74)(const char *a, const char *b, int size);
+extern int (*TDbStrncmp)(const char *a, const char *b, int size);
 extern void *_tDbGlobalMemoryHeapID;
-extern TDbQuery_t *lbl_803EBE90;
+extern TDbQuery_t *_tDbQueries;
 
 void _TDbIOInitCRCTable(void);
 int _TDbIOWriteBuffer(TDbIOStream_t *pStream, void *pData, unsigned int size);
