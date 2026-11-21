@@ -20855,6 +20855,24 @@
           "placement": ".data3",
           "start": "0x802B71B0",
           "end": "0x802B7220"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC100",
+          "end": "0x803EC110"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED028",
+          "end": "0x803ED02C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A2868",
+          "end": "0x803A39FC"
         }
       ],
       "functions": [

@@ -4951,7 +4951,7 @@
     {
       "source": "src/engine/lllight.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x80235DD8-0x80236DD8 (src/engine/lllight.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows and the data row 0x802B71B0-0x802B7220 of its whole .rodata; linked with holdouts (owner ruling of 2026-11-20): 22 of 23 functions exact, the holdout fn_802365E8 keeps the original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x80235DD8-0x80236DD8 (src/engine/lllight.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows and the data rows of its whole .rodata 0x802B71B0-0x802B7220, .sdata 0x803EC100-0x803EC110, .sbss 0x803ED028-0x803ED02C and .bss 0x803A2868-0x803A39FC (_LLLight_State); linked with holdouts (owner ruling of 2026-11-20): 22 of 23 functions exact, the holdout fn_802365E8 keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -4970,6 +4970,24 @@
           "placement": ".data3",
           "start": "0x802B71B0",
           "end": "0x802B7220"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC100",
+          "end": "0x803EC110"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED028",
+          "end": "0x803ED02C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A2868",
+          "end": "0x803A39FC"
         }
       ],
       "holdouts": {
@@ -15534,7 +15552,7 @@
     {
       "source": "src/engine/tmblend.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80214718-0x80214D40 (src/engine/tmblend.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x80214718-0x80214D40 (src/engine/tmblend.c) and its data rows, including its .bss 0x8039B600-0x8039B71C (_TMBlend_BlendState); every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -15547,19 +15565,31 @@
           "placement": ".data3",
           "start": "0x802B1C98",
           "end": "0x802B1C9C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039B600",
+          "end": "0x8039B71C"
         }
       ]
     },
     {
       "source": "src/engine/tmblendchannel.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80214D40-0x80214F58 (src/engine/tmblendchannel.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x80214D40-0x80214F58 (src/engine/tmblendchannel.c) and its data rows, including its .bss 0x8039B720-0x8039F7E0 (_TMBlendChannel_State, _TMBlendChannel_Scratchpad); every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80214D40",
           "end": "0x80214F58"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039B720",
+          "end": "0x8039F7E0"
         }
       ]
     },

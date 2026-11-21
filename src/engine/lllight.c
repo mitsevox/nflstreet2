@@ -63,13 +63,24 @@ typedef struct LLLightState_t {
     LLLightScene_t *mpUnknown0;
     GXLightObj mUnknown4[4];
     unsigned int mUnknown260[4];
-    LLLightSet_t mUnknown276[1];
+    LLLightSet_t mUnknown276[16];
 } LLLightState_t;
 
-extern LLLightState_t lbl_803A2868;
-extern LLLightSet_t *lbl_803EC108;
-extern int lbl_803ED028;
-extern float lbl_803EC100;
+/* The longest shear a projector's direction matrix may have. */
+static float _LLLight_fMaxShear = 1.5f;
+
+static int _LLLight_iUnused0 = 0;
+
+/* The light set loaded into the hardware last, or 0 once the sets are rebuilt. */
+static LLLightSet_t *_LLLight_pCurrentSet = 0;
+
+static int _LLLight_iUnused1 = 0;
+
+/* The GX light mask of the current set. */
+static int _LLLight_iCurrentMask;
+
+/* The scene, its projector light objects and colours, and the sixteen light sets. */
+static LLLightState_t _LLLight_State;
 extern float Vec2Magnitude(float *p);
 extern void Vec2ScaleLength(float *pOut, float *p, float length);
 extern void fn_801CFC14(int angle, float *pFirst, float *pSecond);
@@ -101,8 +112,8 @@ void _LLLightProjectorDirMatrix(float m[4][4], float *pDir)
     m[3][3] = 1.0f;
     shear[0] = m[0][2];
     shear[1] = m[1][2];
-    if (!(Vec2Magnitude(shear) <= lbl_803EC100)) {
-        Vec2ScaleLength(shear, shear, lbl_803EC100);
+    if (!(Vec2Magnitude(shear) <= _LLLight_fMaxShear)) {
+        Vec2ScaleLength(shear, shear, _LLLight_fMaxShear);
         m[0][2] = shear[0];
         m[1][2] = shear[1];
     }
@@ -213,34 +224,34 @@ LLLight_t *_LLLightGetSceneLight(LLLightScene_t *pScene, int index)
 
 void LLLightUpdate(Viewport_t *pObject)
 {
-    if (lbl_803A2868.mpUnknown0 != 0) {
+    if (_LLLight_State.mpUnknown0 != 0) {
         MatSetStack(VptGetMatrixStack());
-        _LLLightUpdateLights(lbl_803A2868.mpUnknown0);
-        _LLLightBuildSets(lbl_803A2868.mpUnknown0, lbl_803A2868.mUnknown276);
-        _LLLightUpdateProjectors(lbl_803A2868.mpUnknown0, lbl_803A2868.mUnknown4, lbl_803A2868.mUnknown260);
+        _LLLightUpdateLights(_LLLight_State.mpUnknown0);
+        _LLLightBuildSets(_LLLight_State.mpUnknown0, _LLLight_State.mUnknown276);
+        _LLLightUpdateProjectors(_LLLight_State.mpUnknown0, _LLLight_State.mUnknown4, _LLLight_State.mUnknown260);
         _LLLightClearCurrentSet();
     }
 }
 
 void LLLightSetScene(LLLightScene_t *pScene)
 {
-    lbl_803A2868.mpUnknown0 = pScene;
+    _LLLight_State.mpUnknown0 = pScene;
     LLLightUpdate(0);
 }
 
 LLLightSet_t *LLLightGetSet(int index)
 {
-    return &lbl_803A2868.mUnknown276[index];
+    return &_LLLight_State.mUnknown276[index];
 }
 
 GXLightObj *LLLightGetProjectorMatrix(int index)
 {
-    return &lbl_803A2868.mUnknown4[index];
+    return &_LLLight_State.mUnknown4[index];
 }
 
 unsigned int LLLightGetProjectorColor(int index)
 {
-    return lbl_803A2868.mUnknown260[index];
+    return _LLLight_State.mUnknown260[index];
 }
 
 void LLLightAttachViewport(Viewport_t *pObject)
@@ -380,8 +391,8 @@ int LLLightLoadSet(int index)
     LLLightSet_t *pSet = LLLightGetSet(index);
     int mask = _LLLightLoadSetScaled(pSet, 1.0f, 1.0f, 1.0f);
 
-    lbl_803EC108 = pSet;
-    lbl_803ED028 = mask;
+    _LLLight_pCurrentSet = pSet;
+    _LLLight_iCurrentMask = mask;
     return mask;
 }
 
@@ -390,14 +401,14 @@ int LLLightLoadSetTinted(int index, float r, float g, float b)
     LLLightSet_t *pSet = LLLightGetSet(index);
     int mask = _LLLightLoadSetScaled(pSet, r, g, b);
 
-    lbl_803EC108 = pSet;
-    lbl_803ED028 = mask;
+    _LLLight_pCurrentSet = pSet;
+    _LLLight_iCurrentMask = mask;
     return mask;
 }
 
 void _LLLightClearCurrentSet(void)
 {
-    lbl_803EC108 = 0;
+    _LLLight_pCurrentSet = 0;
 }
 
 void LLLightLoadDirectional(int index, float *pColor, float *pDir)
