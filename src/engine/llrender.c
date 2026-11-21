@@ -10,10 +10,12 @@ typedef struct RenderMark_t {
     int mWords[4];
 } RenderMark_t;
 
-extern RenderBin_t *lbl_803EBC90;
-extern RenderMark_t *lbl_803EBC98;
-extern RenderBin_t *lbl_803EBCA0;
-extern int lbl_803EBCA4;
+static RenderBin_t *_GlibRender_pCurrentBin = 0;
+static int _GlibRender_iUnused0 = 0;
+RenderMark_t *gGlibRenderMarkCursor = 0;
+static int _GlibRender_iUnused1 = 0;
+static RenderBin_t *_GlibRender_pBinList = 0;
+static int _GlibRender_iNumBins = 0;
 
 
 void GlibRenderFlush(void);
@@ -21,8 +23,8 @@ void GlibRenderFlush(void);
 void GlibRenderSetBinList(RenderBin_t *pBins, int numBins)
 {
     GlibRenderFlush();
-    lbl_803EBCA0 = pBins;
-    lbl_803EBCA4 = numBins;
+    _GlibRender_pBinList = pBins;
+    _GlibRender_iNumBins = numBins;
 }
 
 void GlibRenderSetDefaultBin(void)
@@ -31,23 +33,23 @@ void GlibRenderSetDefaultBin(void)
 
 RenderBin_t *GlibRenderGetBin(int index)
 {
-    return &lbl_803EBCA0[index];
+    return &_GlibRender_pBinList[index];
 }
 
 RenderMark_t *GlibRenderSelectBin(RenderBin_t *pBin)
 {
-    RenderBin_t *pCurrent = lbl_803EBC90;
+    RenderBin_t *pCurrent = _GlibRender_pCurrentBin;
 
     if (pCurrent != pBin) {
         if (pCurrent) {
-            pCurrent->mpMark = lbl_803EBC98++;
+            pCurrent->mpMark = gGlibRenderMarkCursor++;
         }
         if (pBin && pBin->mpMark) {
             pBin->mpMark = 0;
         }
-        lbl_803EBC90 = pBin;
+        _GlibRender_pCurrentBin = pBin;
     }
-    return lbl_803EBC98;
+    return gGlibRenderMarkCursor;
 }
 
 int GlibRenderInit(void)

@@ -14913,13 +14913,19 @@
     {
       "source": "src/engine/llrender.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CEC90-0x801CEE54 (src/engine/llrender.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801CEC90-0x801CEE54 (src/engine/llrender.c) and its data rows (.rodata 0x802AF4E8, .sdata 0x803EBC90); every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801CEC90",
           "end": "0x801CEE54"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBC90",
+          "end": "0x803EBCA8"
         },
         {
           "section": ".rodata",
