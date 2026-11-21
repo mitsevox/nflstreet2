@@ -1128,10 +1128,21 @@ class SectionBaseReferences(unittest.TestCase):
                          {'__comparison_reference_803A0D41': 0x803A0D41})
         # A placement longer than the compiled section, with every use inside the compiled bytes.
         self.assertEqual(self.fragment(self.pair(0x10020), extent=self.BSS + 0x20), {'__comparison_reference_803B8D60': 0x803B8D60})
+        # A string store whose range stops short of the base (r31) does not store it: stswi r28,r1,8
+        # stores only r28-r29.
+        self.assertEqual(self.fragment(self.pair(0x10020), uses=[self.lwz(-0x3FB8), 0x7F8145AA]),
+                         {'__comparison_reference_803B8D60': 0x803B8D60})
 
     def test_references_outside_every_placement_still_fail_closed(self):
         refused = 'Same-file data reference lacks target placement'
         blr, mr, beq = 0x4E800020, 0x7FE3FB78, 0x41820008  # mr r3,r31 passes the base on; beq +8
+
+        def stmw(source, displacement, address=31):  # stmw rS,displacement(rA)
+            return 47 << 26 | source << 21 | address << 16 | displacement & 0xFFFF
+
+        def stswi(source, address, count):  # stswi rS,rA,NB
+            return 31 << 26 | source << 21 | address << 16 | count << 11 | 725 << 1
+
         cases = {
             'one byte past the end from the farthest base': dict(relocations=self.pair(self.BSS + 0x8000), uses=[self.lbz(-0x8000)]),
             'one byte before the start': dict(relocations=self.pair(-0x8000), uses=[self.lbz(0x7FFF)]),
@@ -1160,7 +1171,19 @@ class SectionBaseReferences(unittest.TestCase):
             'an lbzu moves the base out of the section': dict(
                 relocations=self.pair(self.BSS + 0x10), uses=[0x8C7F0000 | -0x7FFF & 0xFFFF, self.lbz(-0x7FFF)]),
             'an stwu moves the base out of the section': dict(
-                relocations=self.pair(self.BSS + 0x10), uses=[0x967F0000 | -0x7FF0 & 0xFFFF, self.lwz(-0x7FF0)])}
+                relocations=self.pair(self.BSS + 0x10), uses=[0x967F0000 | -0x7FF0 & 0xFFFF, self.lwz(-0x7FF0)]),
+            # A multiple or string store whose register range covers the base writes it to memory,
+            # whatever its address register. The spill through r1 is reloaded into r3 and used 0x9000
+            # past the base, which nothing here can bound.
+            'an stmw through the base stores the base': dict(relocations=self.pair(0x10020), uses=[stmw(30, -0x3FB8)]),
+            'an stmw range from r20 covers the base': dict(relocations=self.pair(0x10020), uses=[stmw(20, -0x3FB8)]),
+            'an stmw through r1 spills the base, reloaded and used past the end': dict(
+                relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), stmw(30, 8, 1), 0x8061000C, 0x80839000, blr]),
+            'an stmw through r1 spills the base, with only an in-range use': dict(
+                relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), stmw(30, 8, 1)]),
+            'an stswi through r1 stores r29-r31': dict(relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), stswi(29, 1, 12)]),
+            'an stswx stores a length that cannot be known': dict(
+                relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), 31 << 26 | 20 << 21 | 1 << 16 | 4 << 11 | 661 << 1])}
         # Every update form through the base, even one landing inside, cannot be followed: D-form
         # lwzu lbzu stwu stbu lhzu lhau sthu lfsu lfdu stfsu stfdu (rD r3 or f1), and their indexed
         # forms lwzux ... stfdux (rA r31, rB r4) after an in-range use.
@@ -1176,5 +1199,13 @@ class SectionBaseReferences(unittest.TestCase):
         # With a storage map each object resolves alone, so a base between objects is unresolved.
         with self.assertRaisesRegex(ValueError, 'Uninitialized data reference lacks an evidenced storage address'):
             self.fragment(self.pair(0x10020), storage={})
+        # stswi wraps from r31 to r0. From a base in r5, stswi r30,r1,0 (32 bytes) stores r30-r31 and
+        # r0-r5, so it stores the base; stswi r30,r1,16 stores only r30-r31 and r0-r1.
+        self.LIS, self.ADDI = 0x3CA00000, 0x38A50000  # lis r5,0; addi r5,r5,0
+        lwz = 0x80650000 | -0x3FB8 & 0xFFFF  # lwz r3,-0x3FB8(r5)
+        accepted = {'__comparison_reference_803B8D60': 0x803B8D60}
+        self.assertEqual(self.fragment(self.pair(0x10020), uses=[lwz, stswi(30, 1, 16)]), accepted)
+        with self.assertRaisesRegex(ValueError, refused):
+            self.fragment(self.pair(0x10020), uses=[lwz, stswi(30, 1, 0)])
 
 if __name__=='__main__':unittest.main()
