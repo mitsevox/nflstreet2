@@ -11943,6 +11943,12 @@
           "end": "0x800CF84C"
         },
         {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D7094",
+          "end": "0x802DA864"
+        },
+        {
           "section": ".sdata",
           "placement": ".data5",
           "start": "0x803EA8AC",

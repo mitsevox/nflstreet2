@@ -27,6 +27,7 @@ struct Block_802D7C64 {
     int mUnknown0;
     unsigned char mUnknown4;
     unsigned char mUnknown5;
+    int mUnknown8;
 };
 
 #endif
