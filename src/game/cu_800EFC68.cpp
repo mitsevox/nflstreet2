@@ -1458,10 +1458,6 @@ extern "C" {
 float fn_801CFB94(int);
 }
 
-extern "C" {
-float fn_80260B1C(float);
-}
-
 extern "C" void fn_80227248(void *pOut, void *p, float scale);
 
 extern "C" void fn_80227904(void *pOut, void *pA, void *pB, float t);
@@ -3409,10 +3405,6 @@ void fn_800B6D34(Object_80039F5C *p, Input_800B6D34 *pInput);
 }
 
 extern "C" float fn_8022781C(void *pA, void *pB);
-
-extern "C" {
-float fn_80260B1C(float x);
-}
 
 extern "C" {
 int MathRLerp(int a, int b, float factor);
@@ -10041,7 +10033,7 @@ void fn_800FE564(Object_80039F5C *p, Object_80039F5C *other, Object_80039F5C *ta
     if (disc < 0.0000001f) {
         return;
     }
-    disc = fn_80260B1C(disc);
+    disc = sqrtf(disc);
     if (aa < 0.0000001f) {
         aa = 0.0000001f;
     }
@@ -25728,7 +25720,7 @@ Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsi
             if (!(distance >= minimum)) { minimum = distance; pBest = pOther; }
         }
     }
-    *pOut = fn_80260B1C(minimum);
+    *pOut = sqrtf(minimum);
     return pBest;
 }
 }
@@ -25750,7 +25742,7 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsi
             if (!(distance >= minimum)) { minimum = distance; pBest = pOther; }
         }
     }
-    *pOut = fn_80260B1C(minimum);
+    *pOut = sqrtf(minimum);
     return pBest;
 }
 }

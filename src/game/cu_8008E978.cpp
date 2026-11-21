@@ -3214,10 +3214,6 @@ float fn_80227890(void *,void *);
 }
 
 extern "C" {
-float fn_80260B1C(float);
-}
-
-extern "C" {
 extern float lbl_803EAC74;
 }
 
@@ -3709,10 +3705,6 @@ void fn_80227384(void *, void *, int);
 
 extern "C" {
 float SyncRandGetFloat(int a);
-}
-
-extern "C" {
-float fn_80260B1C(float value);
 }
 
 extern "C" {
@@ -4635,10 +4627,6 @@ int fn_80110824(Object_80039F5C *p, int a, int b, int c);
 
 extern "C" {
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
-}
-
-extern "C" {
-float fn_80260B1C(float x);
 }
 
 extern "C" {
@@ -12181,7 +12169,7 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
             float target = height < 0.0f ? reach.mZ - 0.03f : reach.mZ + 0.03f;
             float t = ((startPos.mZ - target) * 0.005962963f + velocity.mZ * velocity.mZ) * 112495.65f;
 
-            t = fn_80260B1C(t >= 0.0f ? t : 0.0f);
+            t = sqrtf(t >= 0.0f ? t : 0.0f);
             t = velocity.mZ * 335.40372f + t;
             float longest;
             float shortest;
@@ -26042,7 +26030,7 @@ extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPo
             if (p->mpUnknown4->mUnknown20 & 0x200) {
                 fn_80227248(&offset, &offset, lbl_803EAB48);
             }
-            score = fn_80260B1C(offset.mX * offset.mX + offset.mY * offset.mY) - lbl_803EAB50 * offset.mX;
+            score = sqrtf(offset.mX * offset.mX + offset.mY * offset.mY) - lbl_803EAB50 * offset.mX;
         }
         if (score < best) {
             pBest = p;
@@ -32215,7 +32203,7 @@ extern "C" Entry_800C3130 *fn_800C31E4(Object_80039F5C *p, float *pDistance, int
         }
     }
     if (pResult != 0) {
-        *pDistance = fn_80260B1C(best);
+        *pDistance = sqrtf(best);
     }
     return pResult;
 }
@@ -37376,8 +37364,8 @@ extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
             float current = fn_80227890(&delta, &pRecord->mUnknown32);
             float chosen = fn_80227890(&point, &pRecord->mUnknown32);
             if (!(current <= chosen)) {
-                float chosenLength = fn_80260B1C(chosen);
-                float currentLength = fn_80260B1C(current);
+                float chosenLength = sqrtf(chosen);
+                float currentLength = sqrtf(current);
                 if (currentLength - chosenLength >= chosenLength * lbl_803EAC90) {
                     valid = 0;
                 } else if (pRecord->mUnknown60 == 181 || pRecord->mUnknown60 == 186) {

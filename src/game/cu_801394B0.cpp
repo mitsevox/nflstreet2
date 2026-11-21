@@ -71,7 +71,6 @@ void fn_80227248(void *pOut, void *p, float scale);
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
 unsigned int fn_8023790C(void);
-float fn_80260B1C(float x);
 void BallStateChange(Ball_t *pBall, int state, int arg);
 int BallStateGet(Ball_t *pBall, int *pArg);
 int fn_800A3444(void);
@@ -712,7 +711,7 @@ void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_800
 
     t *= 112495.65f;
     t = t < 0.0f ? 0.0f : t;
-    t = vz * 335.40372f + fn_80260B1C(t);
+    t = vz * 335.40372f + sqrtf(t);
     if (t > 0.0f) {
         fn_80227248(&pos, &pBall->mState.mUnknown70, 0.5f * t * t);
         fn_8022732C(&pos, &pBall->mState.mUnknown54, t);

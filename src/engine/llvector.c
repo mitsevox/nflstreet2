@@ -1,7 +1,8 @@
 /* Low-level vector math: 2D/3D vector length, normalise, scale, rotate, compare, add, subtract, dot and
    cross products, distance, interpolation and matrix transforms on float arrays. */
 
-extern float fn_80260B1C(float x);
+#include <math.h>
+
 extern float MathInvSqrt(float x);
 extern void fn_801CFC14(int angle, float *pFirst, float *pSecond);
 extern void fn_801CFCD0(int *pAngles, float *pFirst, float *pSecond);
@@ -10,12 +11,12 @@ extern double fabs(double x);
 
 float fn_802270A4(float *p)
 {
-    return fn_80260B1C(p[0] * p[0] + p[1] * p[1]);
+    return sqrtf(p[0] * p[0] + p[1] * p[1]);
 }
 
 float fn_802270D4(float *p)
 {
-    return fn_80260B1C(p[0] * p[0] + p[1] * p[1] + p[2] * p[2]);
+    return sqrtf(p[0] * p[0] + p[1] * p[1] + p[2] * p[2]);
 }
 
 float fn_8022710C(float *p)

@@ -1,4 +1,4 @@
-/* Partial source for the floating-point range 0x80260B1C-0x80260FC4 (neutral file name). */
+/* Computes single-precision square roots for vector lengths and other game math. */
 
 /*
  * ====================================================
@@ -13,6 +13,8 @@
 
 /* Float versions: conversion to float by Ian Lance Taylor, Cygnus Support, ian@cygnus.com. */
 
+#include <math.h>
+
 typedef int int32_t;
 typedef unsigned int u_int32_t;
 
@@ -20,14 +22,14 @@ typedef union
 {
   float value;
   u_int32_t word;
-} ieee_float_shape_type;
+} FloatSqrtBits_t;
 
-#define GET_FLOAT_WORD(i,d) do { ieee_float_shape_type gf_u; gf_u.value = (d); (i) = gf_u.word; } while (0)
-#define SET_FLOAT_WORD(d,i) do { ieee_float_shape_type sf_u; sf_u.word = (i); (d) = sf_u.value; } while (0)
+#define GET_FLOAT_WORD(i,d) do { FloatSqrtBits_t gf_u; gf_u.value = (d); (i) = gf_u.word; } while (0)
+#define SET_FLOAT_WORD(d,i) do { FloatSqrtBits_t sf_u; sf_u.word = (i); (d) = sf_u.value; } while (0)
 
 static const float one = 1.0, tiny = 1.0e-30;
 
-float fn_80260B1C(float x)
+float sqrtf(float x)
 {
 	float z;
 	int32_t sign = (int)0x80000000;

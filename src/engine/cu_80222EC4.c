@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include <dolphin/gx/GXBump.h>
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXDispList.h>
@@ -22,8 +24,6 @@
 /* Partial source for the engine range 0x80222EC4-0x80223B00 (neutral file
    name): curve helpers and the first node update path. Functions without a
    body here keep their original bytes. */
-
-extern float fn_80260B1C(float x);
 
 extern Point_80222EC4 lbl_8039FDB8[];
 extern Point_80222EC4 lbl_803A00D8[];
@@ -78,7 +78,7 @@ void fn_8022306C(Point_80222EC4 *pA, Point_80222EC4 *pB, Point_80222EC4 *pLeft, 
     dx = pA->mX - pB->mX;
     normal.mX = dy;
     normal.mY = dx;
-    len = fn_80260B1C(dy * dy + dx * dx);
+    len = sqrtf(dy * dy + dx * dx);
     if (len != 0.0f) {
         normal.mX /= len;
         normal.mY /= len;
@@ -87,7 +87,7 @@ void fn_8022306C(Point_80222EC4 *pA, Point_80222EC4 *pB, Point_80222EC4 *pLeft, 
     if (pDir != 0 && useDir != 0) {
         offset.mX = (pDir->mX + normal.mX) * 0.5f;
         offset.mY = (pDir->mY + normal.mY) * 0.5f;
-        len = fn_80260B1C(offset.mX * offset.mX + offset.mY * offset.mY);
+        len = sqrtf(offset.mX * offset.mX + offset.mY * offset.mY);
         if (len != 0.0f) {
             offset.mX /= len;
             offset.mY /= len;
