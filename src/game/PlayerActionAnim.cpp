@@ -1060,6 +1060,8 @@ extern "C" int PlayerActionAnimGetIdleMask(Object_80039F5C *p)
         case 2:
             result = 2;
             break;
+        // FAKEMATCH: the empty case labels 6, 7 and 8 leave no compare in the target (it tests 5, 2, 1, 4, 9
+        // and 10); they keep result unchanged like the missing default and only shape the compare tree
         case 6:
         case 7:
         case 8:
