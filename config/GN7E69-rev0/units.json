@@ -24918,7 +24918,7 @@
     {
       "source": "src/game/cu_80081CDC.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv bounded unit row for src/game/cu_80081CDC.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes, and keeping its FchrCursor destructor and vtable for src/game/CreatePlayerMenu.cpp's folded references (kept_locals with holdouts, t1 tool change).",
+      "evidence": "evidence.tsv bounded unit row for src/game/cu_80081CDC.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes, and keeping its FchrCursor destructor and vtable for src/game/CreatePlayerMenu.cpp's folded references (kept_locals with holdouts, t1 tool change).",
       "sections": [
         {
           "section": ".text",
@@ -24936,12 +24936,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80082864",
-          "end": "0x80082B18"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80082C64",
           "end": "0x800834CC"
         },
         {
@@ -24991,10 +24985,6 @@
           {
             "function": "fn_800827EC",
             "evidence": "evidence.tsv source-form 0x800827EC-0x80082864"
-          },
-          {
-            "function": "fn_80082B18",
-            "evidence": "evidence.tsv source-form 0x80082B18-0x80082C64"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (t1 holdout table)"

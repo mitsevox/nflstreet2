@@ -460,8 +460,6 @@ void fn_80082B18(Record_80082B18 *pRecord)
     pRecord->mUnknown10C = 0x55;
     pRecord->mUnknown110 = 0x1A0;
     pRecord->mUnknown114 = 3;
-    pRecord->mUnknown9C = 0x7F;
-    pRecord->mUnknownA4 = 7;
     pRecord->mUnknownE4 = 0x7F;
     pRecord->mUnknownE8 = 0x7F;
     pRecord->mUnknownEC = 0x7F;
@@ -486,15 +484,17 @@ void fn_80082B18(Record_80082B18 *pRecord)
     pRecord->mUnknown90 = 0x7F;
     pRecord->mUnknown94 = 0x7F;
     pRecord->mUnknown98 = 0x7F;
+    pRecord->mUnknown9C = 0x7F;
     pRecord->mUnknownA0 = 0;
+    pRecord->mUnknownA4 = 7;
     pRecord->mUnknownA8 = 0;
     pRecord->mUnknownAC = 0;
     pRecord->mUnknownB0 = 0;
     pRecord->mUnknownB4 = 0;
-    pRecord->mUnknown28 = 0xF;
-    pRecord->mUnknownC0 = 0;
     pRecord->mUnknownB8 = 0;
     pRecord->mUnknownBC = 0;
+    pRecord->mUnknownC0 = 0;
+    pRecord->mUnknown28 = 0xF;
 }
 
 /* Fetches a randomly chosen first and last name through the two name cursors
