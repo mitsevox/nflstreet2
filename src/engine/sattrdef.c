@@ -20,8 +20,8 @@ int SND_attrsetdef(SndSampleAttr_t *p)
     p->m7 = 2;
     p->m8 = 512;
     for (i = 0; i < 4; i++) {
-        p->m48[i] = 0;
-        p->m58[i] = 0;
+        p->mDataBlocks[i] = 0;
+        p->mDataBlockSizes[i] = 0;
     }
     for (i = 0; i < 6; i++) {
         p->mC[i] = 0;

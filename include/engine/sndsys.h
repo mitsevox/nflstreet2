@@ -36,17 +36,17 @@ typedef struct TIMESTRETCHSTATE {
 } TIMESTRETCHSTATE;
 
 typedef struct SndMemEntry_t {
-    unsigned int m0;
-    int m4;
+    unsigned int mOffset;
+    int mSize;
 } SndMemEntry_t;
 
 typedef struct SndMemPool_t {
-    char *m0;
-    SndMemEntry_t *m4;
-    int m8;
-    unsigned int mC;
-    int m10;
-    int m14;
+    char *mBase;
+    SndMemEntry_t *mEntries;
+    int mHeapSize;
+    unsigned int mFreeEndOffset;
+    int mLowWaterFreeBytes;
+    int mNegativeEntryCount;
 } SndMemPool_t;
 
 typedef struct Parser_8027823C {
