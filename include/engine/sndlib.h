@@ -214,8 +214,8 @@ struct Struct_80270E04 {
     struct SndEnvStage_t *m28;
     int m2C;
     signed char *m30;
-    int mUserDataIds[4];
-    int mUserDataValues[4];
+    unsigned char *mUserDataPayloads[4];
+    unsigned int mUserDataSizes[4];
     unsigned short m54;
     unsigned short m56;
     int m58;

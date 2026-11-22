@@ -6,13 +6,13 @@ extern "C" {
 
 typedef struct SndBankUserDataMessage_t {
     int mEvent;
-    int mId;
-    int mValue;
+    unsigned char *mPayload;
+    unsigned int mPayloadSize;
     // FAKEMATCH: two unwritten words that give the target's 0x48-byte frame; whether the callbacks read them is not established
     int unk_0xC[2];
 } SndBankUserDataMessage_t;
 
-/* Dispatch a message for each user-data pair in the parsed patch. */
+/* Dispatch a message for each user-data payload in the parsed patch. */
 void SNDBANKI_userdatacallback(SNDIPATCHHEADER *patch, int event)
 {
     SndBankUserDataMessage_t message;
@@ -21,8 +21,8 @@ void SNDBANKI_userdatacallback(SNDIPATCHHEADER *patch, int event)
     while (patch->mUserDataCount > 0) {
         patch->mUserDataCount--;
         message.mEvent = event;
-        message.mId = patch->mUserDataIds[patch->mUserDataCount];
-        message.mValue = patch->mUserDataValues[patch->mUserDataCount];
+        message.mPayload = patch->mUserDataPayloads[patch->mUserDataCount];
+        message.mPayloadSize = patch->mUserDataSizes[patch->mUserDataCount];
         for (i = 0; i < lbl_803A6C24.mBankUserDataCallbackCount; i++) {
             lbl_803A6C24.mBankUserDataCallbacks[i](&message);
         }
