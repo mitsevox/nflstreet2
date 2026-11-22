@@ -3,21 +3,25 @@
 
 #include "game/EditMenu.h"
 
+struct Block_800619FC;
+struct StoryPlayerMsgArgs_t;
+struct GauntletMsgArgs_t;
+
 extern "C" {
-int fn_8005F938(unsigned int id, void *pArgs, int unused, int *pResult);
-int fn_800619FC(unsigned int id, void *pArgs, int unused, int *pResult);
-int StoryPlayerScreenMsg(unsigned int id, void *pArgs, int unused, int *pResult);
-int GauntletScreenMsg(unsigned int id, void *pArgs, int unused, int *pResult);
+int fn_8005F938(unsigned int id, int *pArgs, int count, int *pResult);
+int fn_800619FC(unsigned int id, Block_800619FC *pArgs, int count, int *pResult);
+int StoryPlayerScreenMsg(unsigned int id, StoryPlayerMsgArgs_t *pArgs, int count, int *pResult);
+int GauntletScreenMsg(unsigned int id, GauntletMsgArgs_t *pArgs, int count, int *pResult);
 
 int MsgStoryModeDispatch(int screen, unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (screen) {
     case 1:
-        return fn_8005F938(id, pArgs, count, pResult);
+        return fn_8005F938(id, reinterpret_cast<int *>(pArgs), count, pResult);
     case 3:
-        return fn_800619FC(id, pArgs, count, pResult);
+        return fn_800619FC(id, reinterpret_cast<Block_800619FC *>(pArgs), count, pResult);
     case 4:
-        return StoryPlayerScreenMsg(id, pArgs, count, pResult);
+        return StoryPlayerScreenMsg(id, reinterpret_cast<StoryPlayerMsgArgs_t *>(pArgs), count, pResult);
     }
     return 0;
 }
@@ -26,7 +30,7 @@ int MsgGauntletDispatch(int screen, unsigned int id, MenuArg_t *pArgs, int count
 {
     switch (screen) {
     case 0:
-        return GauntletScreenMsg(id, pArgs, count, pResult);
+        return GauntletScreenMsg(id, reinterpret_cast<GauntletMsgArgs_t *>(pArgs), count, pResult);
     }
     return 0;
 }
