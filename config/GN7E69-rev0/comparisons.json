@@ -31824,38 +31824,6 @@
       ]
     },
     {
-      "source": "src/game/Statcoll.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80143F40-0x801442FC (src/game/Statcoll.cpp), its function rows and its .sdata and .sbss data rows. 0x80143F8C-0x801442FC and both data words are linked; the comparison measures only the draft function 0x80143F40.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80143F40",
-          "end": "0x801442FC"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB220",
-          "end": "0x803EB224"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ECA0C",
-          "end": "0x803ECA10"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "StatcollBlockInit",
-          "start": "0x80143F40",
-          "end": "0x80143F8C"
-        }
-      ]
-    },
-    {
       "source": "src/game/BigObj.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800400CC-0x80041210 (src/game/BigObj.cpp), the BigObj draft source-form row 0x800400CC-0x80040154 and the exact function rows 0x800400CC-0x80040154. Draft comparisons only; the file's .rodata, .sdata and .sbss placements are fully covered by its linked source and used only for relocation, and original bytes remain linked for the two unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",

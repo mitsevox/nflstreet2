@@ -1069,10 +1069,6 @@
       "address": "0x8002A86C",
       "evidence": "evidence.tsv function/name rows for 0x8002A86C (target extent, inferred name); the documented holdout of src/game/MemCardFiles.cpp keeps its original bytes until its draft in comparisons.json is linked."
     },
-    "StatcollBlockInit": {
-      "address": "0x80143F40",
-      "evidence": "evidence.tsv function and name rows for 0x80143F40 (documented holdout of src/game/Statcoll.cpp: draft registered in comparisons.json, original bytes linked)."
-    },
     "BigObjDefaultUpdate": {
       "address": "0x800400CC",
       "evidence": "evidence.tsv function and name rows for 0x800400CC (exact in comparisons.json; precedes the holdout 0x800400D4 of src/game/BigObj.cpp, so its original bytes stay linked)."
@@ -18723,12 +18719,12 @@
     {
       "source": "src/game/Statcoll.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv: src/game/Statcoll.cpp unit, data, compiler and source-form rows",
+      "evidence": "evidence.tsv unit row 0x80143F40-0x801442FC and its data, compiler and source-form rows; all eight functions and both data words linked from the native object.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80143F8C",
+          "start": "0x80143F40",
           "end": "0x801442FC"
         },
         {

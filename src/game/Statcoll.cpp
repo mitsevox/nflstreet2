@@ -19,23 +19,23 @@ extern "C" {
 int MemFill(void *pDest, int size, int value, int width);
 int fn_80238278(const void *p, int size, int seed);
 
-int StatcollBlockInit(void *p, int value);
-
 static int _Statcoll_iUnused = 0;
 static StatcollState_t *_Statcoll_pState;
 
-#if defined(DECOMP_COMPARE)
+/* Clear the collision snapshot before its collision set and value buffer are installed. */
 int StatcollBlockInit(void *p, int value)
 {
     StatcollState_t *pState = (StatcollState_t *)p;
 
-    MemFill(pState, sizeof(StatcollState_t), 0, 4);
-    _Statcoll_iUnused = 0;
-    pState->mpSet = 0;
+    // FAKEMATCH: the one-pass block keeps the return-zero load between the pointer stores.
+    do {
+        MemFill(p, sizeof(StatcollState_t), 0, 4);
+        _Statcoll_iUnused = 0;
+    } while (false);
     pState->mpValues = 0;
+    pState->mpSet = 0;
     return 0;
 }
-#endif
 
 int StatcollBlockShutdown(void *p, int value)
 {
