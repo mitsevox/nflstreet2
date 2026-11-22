@@ -1,10 +1,11 @@
 /* Statcoll: the collision-set block of the Statcoll game module. On start it
    allocates a small state holding a collision set and a value array and
    registers the callbacks that clear, free, compare, save and size that
-   state with the game-state block manager. The ball code and the per-frame
-   collision update test other sets against the set it returns. */
+   state with the game-state block manager. Ball and player code test against
+   the set, and the per-frame collision update advances it. */
 #include <string.h>
 
+#include "engine/llmemory.h"
 #include "game/Collide.h"
 #include "game/fn_801D2B7C.h"
 #include "game/SyncStateRegister.h"
@@ -16,26 +17,25 @@ struct StatcollState_t {
 };
 
 extern "C" {
-int MemFill(void *pDest, int size, int value, int width);
 int fn_80238278(const void *p, int size, int seed);
-
-int StatcollBlockInit(void *p, int value);
 
 static int _Statcoll_iUnused = 0;
 static StatcollState_t *_Statcoll_pState;
 
-#if defined(DECOMP_COMPARE)
+/* Clear the collision snapshot before its collision set and value buffer are installed. */
 int StatcollBlockInit(void *p, int value)
 {
     StatcollState_t *pState = (StatcollState_t *)p;
 
-    MemFill(pState, sizeof(StatcollState_t), 0, 4);
-    _Statcoll_iUnused = 0;
-    pState->mpSet = 0;
+    // FAKEMATCH: the one-pass block keeps the return-zero load between the pointer stores.
+    do {
+        MemFill((char *)p, sizeof(StatcollState_t), 0, 4);
+        _Statcoll_iUnused = 0;
+    } while (false);
     pState->mpValues = 0;
+    pState->mpSet = 0;
     return 0;
 }
-#endif
 
 int StatcollBlockShutdown(void *p, int value)
 {

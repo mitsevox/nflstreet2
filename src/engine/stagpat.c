@@ -8,7 +8,6 @@ extern "C" {
 
 int randrange(int range);
 int SNDover(int handle);
-int SNDI_validrendermode(int *mode, Struct_80270E04 *header);
 int SNDVOICEI_alloc(int count, int priority, int *handle, int rate, int format);
 int SNDI_pantoazimuth(int pan);
 extern const unsigned char lbl_802C1F68[][6][6];

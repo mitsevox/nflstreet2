@@ -31525,38 +31525,6 @@
       ]
     },
     {
-      "source": "src/game/Statcoll.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80143F40-0x801442FC (src/game/Statcoll.cpp), its function rows and its .sdata and .sbss data rows. 0x80143F8C-0x801442FC and both data words are linked; the comparison measures only the draft function 0x80143F40.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80143F40",
-          "end": "0x801442FC"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB220",
-          "end": "0x803EB224"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ECA0C",
-          "end": "0x803ECA10"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "StatcollBlockInit",
-          "start": "0x80143F40",
-          "end": "0x80143F8C"
-        }
-      ]
-    },
-    {
       "source": "src/game/BigObj.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800400CC-0x80041210 (src/game/BigObj.cpp), the BigObj draft source-form row 0x800400CC-0x80040154 and the exact function rows 0x800400CC-0x80040154. Draft comparisons only; the file's .rodata, .sdata and .sbss placements are fully covered by its linked source and used only for relocation, and original bytes remain linked for the two unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
@@ -33549,7 +33517,7 @@
     {
       "source": "src/engine/spktplay.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80278A68-0x80279648 (src/engine/spktplay.c), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x80278A68-0x80279648 (src/engine/spktplay.c), its function, name and data rows and the sound_cxx compiler evidence. SNDPKTPLAY_start remains a comparison while its original bytes link; evidence.tsv source-form 0x80278BF0-0x80279048.",
       "sections": [
         {
           "section": ".text",
@@ -33562,78 +33530,19 @@
           "placement": ".data3",
           "start": "0x802C20A0",
           "end": "0x802C20B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803B5060",
+          "end": "0x803B53E4"
         }
       ],
       "functions": [
         {
-          "symbol": "SNDPKTPLAYI_gethighchannel",
-          "start": "0x80278A68",
-          "end": "0x80278ABC"
-        },
-        {
-          "symbol": "SNDPKTPLAYI_overhead",
-          "start": "0x80278ABC",
-          "end": "0x80278AC8"
-        },
-        {
-          "symbol": "SNDPKTPLAY_overhead",
-          "start": "0x80278AC8",
-          "end": "0x80278AFC"
-        },
-        {
-          "symbol": "SNDPKTPLAY_create",
-          "start": "0x80278AFC",
-          "end": "0x80278BF0"
-        },
-        {
           "symbol": "SNDPKTPLAY_start",
           "start": "0x80278BF0",
           "end": "0x80279048"
-        },
-        {
-          "symbol": "SNDPKTPLAY_submit",
-          "start": "0x80279048",
-          "end": "0x80279170"
-        },
-        {
-          "symbol": "SNDPKTPLAY_submitspace",
-          "start": "0x80279170",
-          "end": "0x802791D0"
-        },
-        {
-          "symbol": "SNDPKTPLAY_framesoutstanding",
-          "start": "0x802791D0",
-          "end": "0x802791F4"
-        },
-        {
-          "symbol": "SNDPKTPLAY_purge",
-          "start": "0x802791F4",
-          "end": "0x802791FC"
-        },
-        {
-          "symbol": "SNDPKTPLAY_stop",
-          "start": "0x802791FC",
-          "end": "0x8027929C"
-        },
-        {
-          "symbol": "SNDPKTPLAY_destroy",
-          "start": "0x8027929C",
-          "end": "0x802792F0"
-        },
-        {
-          "symbol": "SNDPKTPLAYI_get",
-          "start": "0x802792F0",
-          "end": "0x8027952C"
-        },
-        {
-          "symbol": "SNDPKTPLAYI_freeframes",
-          "start": "0x8027952C",
-          "end": "0x80279598"
-        },
-        {
-          "symbol": "SNDPKTPLAYI_flushcallbackdata",
-          "start": "0x80279598",
-          "end": "0x80279648"
         }
       ]
     },
@@ -34718,7 +34627,7 @@
     {
       "source": "src/engine/srender.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x802796DC-0x80279798 (src/engine/srender.c), the sound_cxx compiler rows and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802796DC-0x80279798 (src/engine/srender.c), the sound_cxx compiler rows and the function, name and source-form rows of SNDI_validrendermode. The body is 184 bytes versus the target's 188 (85.00% objdiff); separate mask comparisons and loop register allocation remain different. The whole target extent remains registered and original executable bytes stay linked.",
       "sections": [
         {
           "section": ".text",
