@@ -129,6 +129,19 @@
       ],
       "evidence": "evidence.tsv compiler rows 0x80227F14-0x802288F8 and 0x802288F8-0x80228E44 (engine_c): ProDG 3.9.3 cc1 -O2 (default -G 8) reproduces every instruction and data byte of both units; -O1, -O3, -Os and -G0 change them. Same flags as the uistudio profile; a separate profile because uistudio's scope evidence and source root are the UI Studio library, and these units include SDK headers that need include/libc."
     },
+    "engine_libm": {
+      "flags": [
+        "-O2",
+        "-msafe-sda",
+        "-G",
+        "1024"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "language": "c++",
+      "evidence": "evidence.tsv compiler row 0x80261A58-0x802622DC (kf_rem_pio2.c): ProDG 3.9.3 cc1plus folds the scalar constants into the native .sdata pool without retained duplicates, while -msafe-sda and the larger small-data threshold give the target r13 addressing of the pool and both tables. Default -G8 leaves absolute table loads and disabling -msafe-sda leaves absolute literal loads. The comparable MVP 2005 profile also matches this function; extra options are not distinguished here."
+    },
     "engine_c_fastmath": {
       "flags": [
         "-O2",
@@ -339,6 +352,19 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler row 0x80236F78-0x80238258 (engine_c_fastmath_nobuiltin): engine_c_fastmath plus -fno-builtin for the synchronised-state files syncrand.c, synctime.c and syncstate.c, which call memset and memcpy with constant sizes as ordinary prototyped calls and compare floats without the IEEE cror of plain -O2."
+    },
+    "engine_libm_c": {
+      "flags": [
+        "-O2",
+        "-msafe-sda",
+        "-G",
+        "1024",
+        "-fno-builtin"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler rows 0x802614C0-0x802616D4 and 0x802616D4-0x80261A24: ProDG 3.9.3 cc1 with -msafe-sda places the observed conversion biases and operands in small data; -G 1024 permits the reducer's indexed small-data tables and also matches the tangent kernel with its explicit table placement. The C front end retains both files' read-only scalar definitions. -fno-builtin preserves each target fabsf call."
     }
   },
   "externals": {
@@ -17127,6 +17153,31 @@
       ]
     },
     {
+      "source": "src/engine/ef_rem_pio2.c",
+      "profile": "engine_libm_c",
+      "evidence": "evidence.tsv provisional whole-file row 0x802616D4-0x80261A24, exact function, compiler, data and name rows for both native small-data sections and the shared angle-reduction ABI.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802616D4",
+          "end": "0x80261A24"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC4E0",
+          "end": "0x803EC518"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDFCC",
+          "end": "0x803EE38C"
+        }
+      ]
+    },
+    {
       "source": "src/engine/copysignf.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional whole-file row 0x80261A24-0x80261A58, exact function extent, inferred name/ABI/type fields and unchanged compiler profile; no static data. Adjacent survey bytes stay original.",
@@ -19853,6 +19904,31 @@
           "placement": ".data5",
           "start": "0x803EC4A4",
           "end": "0x803EC4C0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/kf_tan.c",
+      "profile": "engine_libm_c",
+      "evidence": "evidence.tsv unit/function/name/data/type/field/compiler/source-form rows for kf_tan.c; complete 532-byte tangent kernel and both native scalar and coefficient pools.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802614C0",
+          "end": "0x802616D4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC4C0",
+          "end": "0x803EC4E0"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDF8C",
+          "end": "0x803EDFCC"
         }
       ]
     },
@@ -25659,6 +25735,31 @@
         ],
         "evidence": "merge notes of the pull request that links the file (t1 holdout table)"
       }
+    },
+    {
+      "source": "src/engine/kf_rem_pio2.c",
+      "profile": "engine_libm",
+      "evidence": "evidence.tsv unit row 0x80261A58-0x802622DC, exact function and native .sdata/.sdata2 extents, ABI, source provenance and compiler rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80261A58",
+          "end": "0x802622DC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC518",
+          "end": "0x803EC540"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EE38C",
+          "end": "0x803EE3C4"
+        }
+      ]
     }
   ]
 }

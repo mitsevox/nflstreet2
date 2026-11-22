@@ -2,7 +2,7 @@
 #define ENGINE_FLOAT_ANGLE_REDUCTION_H
 
 typedef struct FloatAngleReduction_t {
-    /* FAKEMATCH: Volatile on the head preserves the sine and cosine callers' stack loads. */
+    /* FAKEMATCH: Volatile on the head preserves the trigonometric wrappers' stack loads. */
     volatile float head;
     float tail;
 } FloatAngleReduction_t;
@@ -11,7 +11,10 @@ typedef struct FloatAngleReduction_t {
 extern "C" {
 #endif
 
-int fn_802616D4(float x, FloatAngleReduction_t *reduced);
+int __ieee754_rem_pio2f(float angle, FloatAngleReduction_t *reduced);
+int __kernel_rem_pio2f(float *inputChunks, void *result, int chunkExponent,
+                     int chunkCount, int precision, const int *twoOverPi);
+float __kernel_tanf(float angle, float tail, int mode);
 
 #ifdef __cplusplus
 }

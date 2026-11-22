@@ -48,7 +48,7 @@ float cosf(float x)
         return x - x;
     }
 
-    quadrant = fn_802616D4(x, &reduced);
+    quadrant = __ieee754_rem_pio2f(x, &reduced);
     switch (quadrant & 3) {
     case 0:
         return __kernel_cosf(reduced.head, reduced.tail);

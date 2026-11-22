@@ -44,7 +44,7 @@ float sinf(float x)
     } else if (magnitude >= 0x7f800000) {
         return x - x;
     } else {
-        quadrant = fn_802616D4(x, &reduced);
+        quadrant = __ieee754_rem_pio2f(x, &reduced);
         switch (quadrant & 3) {
         case 0:
             return __kernel_sinf(reduced.head, reduced.tail, 1);

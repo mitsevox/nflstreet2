@@ -2635,7 +2635,10 @@ address	size	sibling_name	how	sibling_file	unit
 0x8026120C	284	scalbnf	name	sf_scalbn.c	sf_scalbn.c
 0x80261328	236	__kernel_cosf	name	kf_cos.c	kf_cos.c
 0x80261414	172	__kernel_sinf	name	kf_sin.c	kf_sin.c
+0x802614C0	532	__kernel_tanf	name	kf_tan.c	kf_tan.c
+0x802616D4	848	__ieee754_rem_pio2f	name	ef_rem_pio2.c	ef_rem_pio2.c
 0x80261A24	52	copysignf	name	sf_copysign.c	sf_copysign.c
+0x80261A58	2180	__kernel_rem_pio2f	name	kf_rem_pio2.c	kf_rem_pio2.c
 0x802622DC	52	vprintf	name	vprintf.c	vprintf.c
 0x802623A8	152	bsearch	name	bsearch.c	bsearch.c
 0x8026247C	92	strround	name	vfprintf.c	vfprintf.c
