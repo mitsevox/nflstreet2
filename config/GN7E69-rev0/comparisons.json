@@ -34298,43 +34298,6 @@
       ]
     },
     {
-      "source": "src/engine/salloc.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x80269CE8-0x8026A2DC (src/engine/salloc.c), its function, name and data rows and the sound_cxx compiler row 0x80266E88-0x8026A664. SNDVOICEI_free 0x8026A0E8-0x8026A288 (99.03%) is the file's holdout (units.json holdouts, HOLDOUT: row); SNDVOICEI_get is exact and linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80269CE8",
-          "end": "0x8026A2DC"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FFCC0",
-          "end": "0x802FFCC4"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A6C04",
-          "end": "0x803A6C10"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SNDVOICEI_free",
-          "start": "0x8026A0E8",
-          "end": "0x8026A288"
-        },
-        {
-          "symbol": "SNDVOICEI_get",
-          "start": "0x8026A288",
-          "end": "0x8026A2DC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/sbadd.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x8026A40C-0x8026A664 (src/engine/sbadd.c); draft comparisons only, original assembly remains linked. Part of the former src/engine/cu_80266A2C.c (split by c16a).",

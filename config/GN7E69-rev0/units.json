@@ -379,6 +379,17 @@
       ],
       "language": "c++",
       "evidence": "evidence.tsv compiler row 0x80271B74-0x80271BD4. The existing sound_cxx flags reproduce the destructor. ProDG 3.9.3 -fdata-sections emits the codec tables as individual native sections, preserving the target order on both sides of the interleaved vtable when linking the unchanged compiler object. lbmpeg.cpp uses the same profile (evidence.tsv compiler row 0x80271624-0x80271B74)."
+    },
+    "engine_c_sda_nobuiltin": {
+      "flags": [
+        "-O2",
+        "-msafe-sda",
+        "-fno-builtin"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler row 0x80260428-0x80260B1C: ProDG 3.9.3 cc1 at -O2 emits the retained scalar declarations, -msafe-sda places generated operands including the signed conversion bias in small data, and -fno-builtin keeps the target fabsf call."
     }
   },
   "externals": {
@@ -513,10 +524,6 @@
     "__CARDVendorID": {
       "address": "0x803EC2C0",
       "evidence": "Complete BFBB CARDMount native retained operand resolved against original target; source name corroborated by pinned donor declaration and actual call/access context."
-    },
-    "__DVDPrintFatalMessage": {
-      "address": "0x80242018",
-      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
     },
     "__ArenaLo": {
       "address": "0x803FE4E0",
@@ -5183,6 +5190,37 @@
           "placement": ".text",
           "start": "0x80241F20",
           "end": "0x80242018"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/dvd/dvdFatal.c",
+      "profile": "dolphin_dvd_release",
+      "evidence": "evidence.tsv unit row 0x80242018-0x80242048 and function, name, compiler and data rows. The one retained dispatcher, eight diagnostic strings, two initialized pointers and the callback word are native. Trailing string alignment is separate.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80242018",
+          "end": "0x80242048"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FD428",
+          "end": "0x802FD855"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC1D8",
+          "end": "0x803EC1E0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED170",
+          "end": "0x803ED174"
         }
       ]
     },
@@ -22190,19 +22228,13 @@
     },
     {
       "source": "src/engine/salloc.c",
-      "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x80269CE8-0x8026A2DC (src/engine/salloc.c, FIFA Soccer 2005 salloc.o), its function and name rows, the data rows of its .data lasthandle 0x802FFCC0-0x802FFCC4 and its .bss sndvoicereserved 0x803A6C04-0x803A6C10 (da1a) and the sound_cxx compiler row 0x80266E88-0x8026A664; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): every function exact except the holdout SNDVOICEI_free 0x8026A0E8-0x8026A288, which keeps the original bytes and stays a registered partial; the whole .data and .bss are linked.",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit 0x80269CE8-0x8026A2DC, same-size FIFA Soccer 2005 and NASCAR 2005 allocator file, complete native text, data and bss, and the labeled timestamp source form at 0x8026A0E8-0x8026A288.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80269CE8",
-          "end": "0x8026A0E8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026A288",
           "end": "0x8026A2DC"
         },
         {
@@ -22217,16 +22249,7 @@
           "start": "0x803A6C04",
           "end": "0x803A6C10"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "SNDVOICEI_free",
-            "evidence": "evidence.tsv source-form 0x8026A0E8-0x8026A288"
-          }
-        ],
-        "evidence": "merge notes of #1368 (x2 fix round) holdouts table: src/engine/salloc.c holds out SNDVOICEI_free; its HOLDOUT: row lists the forms tried and the RTL-dump finding."
-      }
+      ]
     },
     {
       "source": "src/engine/sballoc.c",
@@ -25964,6 +25987,31 @@
         ],
         "evidence": "merge notes of the pull request that links the file (t1 holdout table)"
       }
+    },
+    {
+      "source": "src/engine/ef_pow.c",
+      "profile": "engine_c_sda_nobuiltin",
+      "evidence": "Whole powf routine and complete native scalar and table sections, with unit, compiler and data evidence in evidence.tsv.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260428",
+          "end": "0x80260B1C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC3B0",
+          "end": "0x803EC440"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDE58",
+          "end": "0x803EDEDC"
+        }
+      ]
     },
     {
       "source": "src/engine/kf_rem_pio2.c",

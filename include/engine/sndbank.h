@@ -42,7 +42,7 @@ void SndHalSetDry(int index);
 void iSNDcalcpitch(int index);
 int fn_80270E04(char **cursor, Struct_80270E04 *out);
 void fn_80278598(int index);
-void SNDstop(int handle);
+int SNDstop(int handle);
 int fn_8026C3F4(BankVer_t *bank, void *patch, SndSampleFormat_t *format, SndSampleAttr_t *attr, void *desc,
                 unsigned char *out);
 
