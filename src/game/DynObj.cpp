@@ -1957,7 +1957,7 @@ void PhysPushPlayer(RigidBody *pBody, unsigned int index, RigidBody *pOther,
     Object_80039F5C *p = PlyrObjsFindPlayer(((Metadata_8004ED44 *)pBody->mpOwner)->mpBlock);
     CollisionShape *pShape = pBody->mpShapes->GetShape(index);
     for (unsigned int i = 0; i < count; i++) {
-        Vector_80039F5C velocity, delta, normal, point, direction;
+        Vector_80039F5C direction, normal, velocity, point, delta;
         float distance;
         GetBodyPointVelocity(pBody, &pContacts[i].mPoint, (Vec3_801DE1E0 *)&velocity);
         float speed = Vec3Magnitude(&velocity);
@@ -1966,9 +1966,10 @@ void PhysPushPlayer(RigidBody *pBody, unsigned int index, RigidBody *pOther,
         Vec3Scale(&delta, &velocity, -(length / speed));
         pShape->TestPoint((Vec3_801DE1E0 *)&pContacts[i].mPoint, pBody->mTransform, (Vec3_801DE1E0 *)&delta, (Vec3_801DE1E0 *)&normal, (Vec3_801DE1E0 *)&point, &distance, length);
         int code = fn_801BE648(p->mpUnknown792);
+        int state = p->mpState->mId;
         if ((code == 0xB5 || code == 0xBA || code == 0xC5 || code == 0xC3 || code == 0xC4 ||
              code == 0xD2 || code == 0xE0 || code == 0xE5 || code == 0xE4 || code == 0xE6 ||
-             code == 0xEB || code == 0xE1 || code == 0xED || code == 0xEC || p->mpState->mId == 0x32) &&
+             code == 0xEB || code == 0xE1 || code == 0xED || code == 0xEC || state == 0x32) &&
             (p->mFlags & 8)) return;
         if (!fn_801784C4()) {
             Vec3RotateXYZ(&direction, &normal, 0, 0, 0x800000);
@@ -1983,14 +1984,14 @@ void PhysPushPlayer(RigidBody *pBody, unsigned int index, RigidBody *pOther,
             direction.mY = -direction.mY;
         } else {
             if (!(distance >= 0.0001f)) distance += 0.05555f;
-            if (p->mMotion.mUnknown40 * direction.mX >= 0.0f ||
-                fabsf(distance * direction.mX) >= fabsf(p->mMotion.mUnknown40))
-                p->mMotion.mPos.mX += direction.mX * distance;
-            else p->mMotion.mPos.mX = p->mMotion.mUnknown12.mX;
-            if (p->mMotion.mUnknown44 * direction.mY >= 0.0f ||
-                fabsf(distance * direction.mY) >= fabsf(p->mMotion.mUnknown44))
-                p->mMotion.mPos.mY += direction.mY * distance;
-            else p->mMotion.mPos.mY = p->mMotion.mUnknown12.mY;
+            if (!(p->mMotion.mUnknown40 * direction.mX >= 0.0f) &&
+                !(fabsf(distance * direction.mX) >= fabsf(p->mMotion.mUnknown40)))
+                p->mMotion.mPos.mX = p->mMotion.mUnknown12.mX;
+            else p->mMotion.mPos.mX += direction.mX * distance;
+            if (!(p->mMotion.mUnknown44 * direction.mY >= 0.0f) &&
+                !(fabsf(distance * direction.mY) >= fabsf(p->mMotion.mUnknown44)))
+                p->mMotion.mPos.mY = p->mMotion.mUnknown12.mY;
+            else p->mMotion.mPos.mY += direction.mY * distance;
         }
         int angle = fn_801CFE40(direction.mY, direction.mX);
         int facing = (angle + 0x800000) & 0xFFFFFF;
@@ -2026,14 +2027,14 @@ void PhysPushPlayer(RigidBody *pBody, unsigned int index, RigidBody *pOther,
                 break;
             }
             if (!(fabsf(normal.mZ) >= 0.8f)) {
-                if (MathAngleDiff(p->mMotion.mUnknown32, facing) <= 0x200000) {
-                    p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
-                    p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
-                    p->mUnknown512.mUnknown0 = 0.0f;
-                } else {
+                if (MathAngleDiff(p->mMotion.mUnknown32, facing) > 0x200000) {
                     p->mUnknown512.mUnknown14 = 4;
                     p->mUnknown512.mUnknown4 = angle;
                     p->mUnknown512.mUnknown8 = angle;
+                } else {
+                    p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
+                    p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+                    p->mUnknown512.mUnknown0 = 0.0f;
                 }
             }
         }
@@ -2044,15 +2045,15 @@ void PhysHitBall(Vector_80039F5C *pImpulse)
 {
     Ball_t *pBall = BallGetCurrent();
     if (BallStateGet(pBall, 0) != 1) {
-        Vector_80039F5C position, impulse, noise;
+        Vector_80039F5C position, noise, impulse;
         BallGetPosition(pBall, &position);
-        impulse = *pImpulse;
+        impulse.mX = pImpulse->mX;
+        impulse.mY = pImpulse->mY;
+        impulse.mZ = pImpulse->mZ;
         if (fn_801784C4()) { impulse.mX = -impulse.mX; impulse.mY = -impulse.mY; }
         if (BallStateGet(pBall, 0) == 4) {
-            float scale;
-            if (!(Vec3Magnitude(&impulse) <= 30.0f)) scale = 4.15f;
-            else scale = 5.0f;
-            Vec3Scale(&impulse, &impulse, scale);
+            if (!(Vec3Magnitude(&impulse) <= 30.0f)) Vec3Scale(&impulse, &impulse, 4.15f);
+            else Vec3Scale(&impulse, &impulse, 5.0f);
         } else Vec3Scale(&impulse, &impulse, 5.0f);
         float force = Vec3Magnitude(&impulse) * SyncRandGetFloat(0);
         noise.mX = force * (SyncRandGetFloat(0) - 0.5f);
@@ -2061,16 +2062,16 @@ void PhysHitBall(Vector_80039F5C *pImpulse)
         if (!(fabsf(impulse.mX) >= 0.05f) && !(fabsf(impulse.mY) >= 0.05f) && !(impulse.mZ <= 0.0f)) {
             impulse.mX += pBall->mState.mUnknown54.mX;
             impulse.mY += pBall->mState.mUnknown54.mY;
-            if (fn_80178508(&pBall->mState, 0, 1) > 2 && !lbl_803EA530) lbl_803EA530 = 1;
+            if (fn_80178508(&pBall->mState.mPos, 0, 1) > 2 && !lbl_803EA530) lbl_803EA530 = 1;
         }
-        if (impulse.mX * pBall->mState.mUnknown54.mX >= 0.0f) impulse.mX = 0.0f;
-        else position.mX = pBall->mState.mUnknown28.mX;
-        if (impulse.mY * pBall->mState.mUnknown54.mY >= 0.0f) impulse.mY = 0.0f;
-        else position.mY = pBall->mState.mUnknown28.mY;
-        if (impulse.mZ * pBall->mState.mUnknown54.mZ >= 0.0f) impulse.mZ = 0.0f;
-        else position.mZ = pBall->mState.mUnknown28.mZ;
+        if (!(impulse.mX * pBall->mState.mUnknown54.mX >= 0.0f)) position.mX = pBall->mState.mUnknown28.mX;
+        else impulse.mX = 0.0f;
+        if (!(impulse.mY * pBall->mState.mUnknown54.mY >= 0.0f)) position.mY = pBall->mState.mUnknown28.mY;
+        else impulse.mY = 0.0f;
+        if (!(impulse.mZ * pBall->mState.mUnknown54.mZ >= 0.0f)) position.mZ = pBall->mState.mUnknown28.mZ;
+        else impulse.mZ = 0.0f;
         Vec3Add(&impulse, &impulse, &noise);
-        BallApplyImpulse(pBall, &impulse, (Vector_80039F5C *)&pBall->mState);
+        BallApplyImpulse(pBall, &impulse, &pBall->mState.mPos);
         BallSetPosition(pBall, &position);
         fn_801783D0(24, 1);
     }
