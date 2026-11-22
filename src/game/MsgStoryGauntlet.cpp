@@ -3,13 +3,13 @@
 
 #include "game/EditMenu.h"
 
-struct Block_800619FC;
+struct StoryTournamentArgs_t;
 struct StoryPlayerMsgArgs_t;
 struct GauntletMsgArgs_t;
 
 extern "C" {
 int StoryEventsHandleMessage(unsigned int id, int *pArgs, int count, int *pResult);
-int StoryTournamentScreenMessage(unsigned int id, Block_800619FC *pArgs, int count, int *pResult);
+int StoryTournamentScreenMessage(unsigned int id, StoryTournamentArgs_t *pArgs, int count, int *pResult);
 int StoryPlayerScreenMsg(unsigned int id, StoryPlayerMsgArgs_t *pArgs, int count, int *pResult);
 int GauntletScreenMsg(unsigned int id, GauntletMsgArgs_t *pArgs, int count, int *pResult);
 
@@ -19,7 +19,7 @@ int MsgStoryModeDispatch(int screen, unsigned int id, MenuArg_t *pArgs, int coun
     case 1:
         return StoryEventsHandleMessage(id, reinterpret_cast<int *>(pArgs), count, pResult);
     case 3:
-        return StoryTournamentScreenMessage(id, reinterpret_cast<Block_800619FC *>(pArgs), count, pResult);
+        return StoryTournamentScreenMessage(id, reinterpret_cast<StoryTournamentArgs_t *>(pArgs), count, pResult);
     case 4:
         return StoryPlayerScreenMsg(id, reinterpret_cast<StoryPlayerMsgArgs_t *>(pArgs), count, pResult);
     }
