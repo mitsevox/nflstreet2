@@ -13,6 +13,7 @@
  */
 
 #include "cmath.h"
+#include "engine/float_angle_reduction.h"
 #include "engine/kernel_cosf.h"
 #include "engine/kernel_sinf.h"
 
@@ -30,17 +31,9 @@ typedef union FloatCosineInputBits_t {
 static float _Cos_fZero = 0.0f;
 static const float one = 1.0f;
 
-typedef struct FloatCosineReduced_t {
-    /* FAKEMATCH: Qualifying the head preserves the target load order after reduction. */
-    volatile float head;
-    float tail;
-} FloatCosineReduced_t;
-
-extern int fn_802616D4(float x, FloatCosineReduced_t *reduced);
-
 float cosf(float x)
 {
-    FloatCosineReduced_t reduced;
+    FloatAngleReduction_t reduced;
     float zero = _Cos_fZero;
     int magnitude;
     int quadrant;

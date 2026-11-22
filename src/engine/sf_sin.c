@@ -12,6 +12,7 @@
  */
 
 #include "cmath.h"
+#include "engine/float_angle_reduction.h"
 #include "engine/kernel_cosf.h"
 #include "engine/kernel_sinf.h"
 
@@ -26,19 +27,11 @@ typedef union FloatSinfBits_t {
     (out) = bits.word; \
 } while (0)
 
-typedef struct FloatSinfReduced_t {
-    /* FAKEMATCH: The volatile head keeps the two loads at their target stack offsets. */
-    volatile float head;
-    float tail;
-} FloatSinfReduced_t;
-
 static float _Sinf_fZero = 0.0f;
-
-extern int fn_802616D4(float x, FloatSinfReduced_t *reduced);
 
 float sinf(float x)
 {
-    FloatSinfReduced_t reduced;
+    FloatAngleReduction_t reduced;
     float zero = _Sinf_fZero;
     int magnitude;
     int quadrant;
