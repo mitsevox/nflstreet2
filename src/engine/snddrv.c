@@ -1008,7 +1008,7 @@ void SNDPLATFORM_lowpass(int index, int value)
         float cutoff = (float)value * (1.0f / ((float)lbl_803A6C24.m1C.mA * 0.5f));
 
         for (i = 0; i < record->m23; i++) {
-            fn_80276938(record->m4[i] - lbl_803A6C24.m1C.m12, cutoff);
+            MIX_setlowpass(record->m4[i] - lbl_803A6C24.m1C.m12, cutoff);
         }
     }
 }

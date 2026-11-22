@@ -308,7 +308,6 @@ void SNDDRV_audiocallback(void **buffers, void *unused);
 void *SNDDRV_thread(void *arg);
 int SNDPLATFORM_init(int mode);
 void SndHalSetDry(int index);
-void fn_80276938(int index, float value);
 void SNDI_aztospkrvol(unsigned short angle, float *levels);
 void fn_8027981C(int count);
 
@@ -396,6 +395,7 @@ void MIX_filteradd(int index, int slot, Desc_80276798 *desc);
 int MIX_getframe(int index);
 void MIX_sethighpass(int index, int value);
 void MIX_setpitch(int index, int value);
+void MIX_setlowpass(int index, float cutoff);
 void MIX_settimemult(int index, int value);
 }
 
