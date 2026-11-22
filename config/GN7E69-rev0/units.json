@@ -10052,6 +10052,32 @@
       ]
     },
     {
+      "source": "src/game/MsgStoryGauntlet.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8001D0F4-0x8001D2D8 (src/game/MsgStoryGauntlet.cpp), its function, data and source-form rows",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8001D0F4",
+          "end": "0x8001D1BC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x8001D1BC",
+          "end": "0x8001D2D8",
+          "follows": ".text"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4504",
+          "end": "0x802F4598"
+        }
+      ]
+    },
+    {
       "source": "src/game/MsgMemCardDispatch.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8001D2D8-0x8001D314 (src/game/MsgMemCardDispatch.cpp) and its source-form rows.",

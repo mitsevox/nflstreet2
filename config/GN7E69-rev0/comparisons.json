@@ -8446,44 +8446,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8001D0F4.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8001D0F4.cpp, the function rows 0x8001D0F4-0x8001D1BC, the data row 0x8001D1BC-0x8001D2D8 (data_8001D1BC) and the data rows 0x802F4504-0x802F4598. Draft comparison only: the source does not reproduce the unreferenced tail 0x8001D2AC-0x8001D2D8 (six strings of functions discarded from this build, whose Xbox prototype counterparts 0x179250 and 0x179310 (the users of \"/\", \"%d_%d\" and \"%s %d\") call Xbox library code, and one zero word), so the .rodata from 0x8001D2AC differs (see the source-form row cu_8001D0F4 unreproduced strings), and the unit stays unlinked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8001D0F4",
-          "end": "0x8001D1BC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".text",
-          "start": "0x8001D1BC",
-          "end": "0x8001D2D8",
-          "follows": ".text"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802F4504",
-          "end": "0x802F4598"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8001D0F4",
-          "start": "0x8001D0F4",
-          "end": "0x8001D180"
-        },
-        {
-          "symbol": "fn_8001D180",
-          "start": "0x8001D180",
-          "end": "0x8001D1BC"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_8002B8F8.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8002B8F8-0x80030D50 (src/game/cu_8002B8F8.cpp), its compiler, source-form, name, type and linker rows, the 117 function extents 0x8002B960-0x80030D50 and the .rodata row 0x8028A9C8-0x8028AC28, whose 608 bytes the source reproduces (the 4/3 through the FAKEMATCH stand-in of source-form row 0x8028AC24). The five discarded file-static functions are compiled, not registered or measured. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
