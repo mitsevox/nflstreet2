@@ -63,7 +63,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 
 - `src/game/MemCardFiles.cpp` (0x80029500-0x8002A9B8) manages save slots and the names shown for files on each controller port. The final name search still uses original code.
 - `src/game/FormationLineupEdit.cpp` (0x800857D0-0x80085D7C) edits saved formation lineups, including swapping players across a team's formations and committing the changes. The edit helpers after 0x8008593C are still comparison-only.
-- `src/engine/crc32.c` (0x80238258-0x802382CC) supplies a memory comparison wrapper and a table-driven game-state checksum. Both functions are still comparison-only.
+- `src/game/Statcoll.cpp` (0x80143F40-0x801442FC) registers the collision-set state used by the ball and the per-frame collision update. Its initialization callback still uses original code.
 
 ## Nintendo SDK and runtimes (`src/dolphin/`, `src/engine/`)
 
