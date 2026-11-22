@@ -34986,7 +34986,7 @@
     {
       "source": "src/engine/srender.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x802796DC-0x80279798 (src/engine/srender.c), the sound_cxx compiler rows and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802796DC-0x80279798 (src/engine/srender.c), the sound_cxx compiler rows and the function, name and source-form rows of SNDI_validrendermode. The body is 184 bytes versus the target's 188 (85.00% objdiff); separate mask comparisons and loop register allocation remain different. The whole target extent remains registered and original executable bytes stay linked.",
       "sections": [
         {
           "section": ".text",
