@@ -32,6 +32,7 @@ typedef union FloatRemainderBits_t {
 } while (0)
 
 static const float _Fmod_fOne = 1.0f;
+/* FAKEMATCH: Place the signed-zero table in the target's read-only small-data section. */
 static const float _Fmod_afSignedZero[] __attribute__((section(".sdata2"))) = {0.0f, -0.0f};
 
 float fmodf(float x, float y)

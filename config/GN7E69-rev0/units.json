@@ -129,6 +129,16 @@
       ],
       "evidence": "evidence.tsv compiler rows 0x80227F14-0x802288F8 and 0x802288F8-0x80228E44 (engine_c): ProDG 3.9.3 cc1 -O2 (default -G 8) reproduces every instruction and data byte of both units; -O1, -O3, -Os and -G0 change them. Same flags as the uistudio profile; a separate profile because uistudio's scope evidence and source root are the UI Studio library, and these units include SDK headers that need include/libc."
     },
+    "engine_c_nobuiltin": {
+      "flags": [
+        "-O2",
+        "-fno-builtin"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "ProDG 3.9.3 engine_c with whole-file -fno-builtin. See the ef_asin.c compiler row at 0x80260034: disabling builtins preserves the target call to the linked fabsf routine."
+    },
     "engine_c_fastmath": {
       "flags": [
         "-O2",
@@ -320,6 +330,10 @@
     }
   },
   "externals": {
+    "sqrtf": {
+      "address": "0x80260B1C",
+      "evidence": "evidence.tsv sqrtf external row. Both arccosine calls and the arcsine call target the original square-root entry."
+    },
     "gPlayerLooks": {
       "address": "0x803078E8",
       "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
@@ -1803,10 +1817,6 @@
     "PlayerRecordCreate": {
       "address": "0x8007FC70",
       "evidence": "evidence.tsv function/name rows for 0x8007FC70 (target extent, inferred name); called from other files while its own file is unlinked."
-    },
-    "sqrtf": {
-      "address": "0x80260B1C",
-      "evidence": "evidence.tsv external 0x80260B1C sqrtf. Target calls at 0x8025FEFC and 0x8025FFF4 use the original-backed single-precision square root."
     }
   },
   "units": [
@@ -16428,6 +16438,31 @@
           "placement": ".text",
           "start": "0x80260FC4",
           "end": "0x80260FE8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/ef_asin.c",
+      "profile": "engine_c_nobuiltin",
+      "evidence": "evidence.tsv provisional whole-file ef_asin.c unit at 0x80260034, exact .text, function/field/name rows, and exact .sdata and .sdata2 pools.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260034",
+          "end": "0x80260260"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC36C",
+          "end": "0x803EC3AC"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDE10",
+          "end": "0x803EDE4C"
         }
       ]
     },
