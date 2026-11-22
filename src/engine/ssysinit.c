@@ -98,6 +98,7 @@ int SNDSYSI_init(void *memory, int size, int unused)
 int SNDSYS_restore(void)
 {
     int result;
+    // FAKEMATCH: share the zero for platform restore and the initialized flag to match register allocation.
     int zero = 0;
 
     if (!Snd::System::IsInited()) {
