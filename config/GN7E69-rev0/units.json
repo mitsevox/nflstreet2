@@ -22214,6 +22214,19 @@
       }
     },
     {
+      "source": "src/engine/sbadd.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026A40C-0x8026A664 (src/engine/sbadd.c), its function and name rows, the callback source-form row and the sound_cxx compiler row 0x80266E88-0x8027D3AC. Both functions are exact; the object owns only .text.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026A40C",
+          "end": "0x8026A664"
+        }
+      ]
+    },
+    {
       "source": "src/engine/sballoc.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x8026A664-0x8026A6E8 (src/engine/sballoc.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",

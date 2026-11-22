@@ -7,6 +7,8 @@
 #include "engine/sndlib.h"
 #include "engine/sndsample.h"
 
+typedef Struct_80270E04 SNDIPATCHHEADER;
+
 /* A loaded sound bank's header: patch count and the self-relative offsets of its patches. */
 typedef struct BankVer_t {
     unsigned char unk_0x0[6];
@@ -36,7 +38,8 @@ extern "C" {
 void *memmove(void *dst, const void *src, unsigned int n);
 
 int SNDVOICEI_get(int handle);
-void fn_8026A40C(void *message, int value);
+void SNDBANKI_userdatacallback(SNDIPATCHHEADER *patch, int event);
+int SNDbankadd(int *handle, BankVer_t *bank);
 int SNDBANKI_playpatch(BankVer_t *bank, void *patch, int bank_index, int patch_index, SndPlayOpts_t *opts);
 void SndHalSetDry(int index);
 void iSNDcalcpitch(int index);

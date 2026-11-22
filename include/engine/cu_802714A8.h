@@ -156,11 +156,13 @@ typedef struct Struct_803A6C24 {
     signed char m16A;
     signed char m16B;
     short m16C;
-    unsigned char m16E;
+    signed char mBankUserDataCallbackCount;
     unsigned char m16F;
     volatile unsigned int m170;
     void (*m174[6])(void);
-    void (*m18C[13])(void);
+    void (*m18C[6])(void);
+    void (*mBankUserDataCallbacks[4])(void *);
+    void (*m1B4[3])(void);
     int (*m1C0)(int bank);
     void (*m1C4)(void);
     void (*m1C8)(void);

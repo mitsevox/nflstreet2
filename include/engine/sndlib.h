@@ -200,7 +200,8 @@ struct Struct_80270E04 {
     unsigned char m13;
     signed char m14;
     signed char m15;
-    unsigned char mUnknown16[2];
+    unsigned char unk_0x16;
+    signed char mUserDataCount;
     unsigned short m18;
     signed char m1A;
     unsigned char m1B;
@@ -213,7 +214,8 @@ struct Struct_80270E04 {
     struct SndEnvStage_t *m28;
     int m2C;
     signed char *m30;
-    unsigned char mUnknown34[0x20];
+    int mUserDataIds[4];
+    int mUserDataValues[4];
     unsigned short m54;
     unsigned short m56;
     int m58;
