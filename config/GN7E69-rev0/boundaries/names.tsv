@@ -2624,6 +2624,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x8025FB34	52	eh_context_initialize	size	libgcc2.c	libgcc2.c
 0x8025FB68	108	eh_context_static	size	libgcc2.c	libgcc2.c
 0x8025FBD4	532	sqrt	name	e_sqrt.c	e_sqrt.c
+0x80260428	1780	powf	name	ef_pow.c	ef_pow.c
 0x80260B1C	248	sqrtf	name	ef_sqrt.c	ef_sqrt.c
 0x80260C14	528	atanf	name	sf_atan.c	sf_atan.c
 0x80260E24	196	ceilf	name	sf_ceil.c	sf_ceil.c

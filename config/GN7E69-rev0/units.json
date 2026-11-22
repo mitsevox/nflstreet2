@@ -339,6 +339,17 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler row 0x80236F78-0x80238258 (engine_c_fastmath_nobuiltin): engine_c_fastmath plus -fno-builtin for the synchronised-state files syncrand.c, synctime.c and syncstate.c, which call memset and memcpy with constant sizes as ordinary prototyped calls and compare floats without the IEEE cror of plain -O2."
+    },
+    "engine_c_sda_nobuiltin": {
+      "flags": [
+        "-O2",
+        "-msafe-sda",
+        "-fno-builtin"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler row 0x80260428-0x80260B1C: ProDG 3.9.3 cc1 at -O2 emits the retained scalar declarations, -msafe-sda places generated operands including the signed conversion bias in small data, and -fno-builtin keeps the target fabsf call."
     }
   },
   "externals": {
@@ -25671,6 +25682,31 @@
         ],
         "evidence": "merge notes of the pull request that links the file (t1 holdout table)"
       }
+    },
+    {
+      "source": "src/engine/ef_pow.c",
+      "profile": "engine_c_sda_nobuiltin",
+      "evidence": "Whole powf routine and complete native scalar and table sections, with unit, compiler and data evidence in evidence.tsv.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260428",
+          "end": "0x80260B1C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC3B0",
+          "end": "0x803EC440"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDE58",
+          "end": "0x803EDEDC"
+        }
+      ]
     }
   ]
 }
