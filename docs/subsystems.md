@@ -97,6 +97,8 @@ Update a row in the PR that changes it: a new file name, a link that moves a fil
 
 - `src/engine/sf_scalbn.c` (0x8026120C-0x80261328): complete 284-byte single-precision power-of-two scaling routine and its 16-byte scalar pool; separated from the floating-point survey, with both historical file edges provisional.
 
+- `src/engine/sf_sin.c` (0x802610B0-0x8026118C): 220-byte single-precision sine wrapper and four-byte zero operand. It dispatches directly for small angles and selects a signed sine or cosine kernel after reducing larger finite angles. Both historical file edges are provisional.
+
 - `src/engine/kf_sin.c` (0x80261414-0x802614C0): complete 172-byte reduced-angle sine kernel with optional tail correction and seven four-byte scalar factors; separated from the multi-file floating-point survey, with historical file edges provisional.
 
 - `src/engine/kf_cos.c` (0x80261328-0x80261414): complete 236-byte reduced-angle cosine kernel with low-part correction and nine four-byte scalar factors; separated from the floating-point survey, with both historical file edges provisional.

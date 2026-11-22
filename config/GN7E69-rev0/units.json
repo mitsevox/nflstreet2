@@ -18894,6 +18894,25 @@
       ]
     },
     {
+      "source": "src/engine/sf_sin.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional sf_sin.c unit row, exact sinf function, four-byte positive zero operand, and type, field, external and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802610B0",
+          "end": "0x8026118C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC468",
+          "end": "0x803EC46C"
+        }
+      ]
+    },
+    {
       "source": "src/engine/kf_sin.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit/function/name/type/field/data/compiler/source-form rows for kf_sin.c; complete sine kernel and observed scalar factors.",
