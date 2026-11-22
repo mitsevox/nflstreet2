@@ -9909,7 +9909,7 @@
     {
       "source": "src/game/DynObj.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/DynObj.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .bss (0x803084B8-0x8030865C), .ctors and .dtors words; linked with holdouts (owner ruling of 2026-11-20): 103 of 121 functions exact, the holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/DynObj.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .bss (0x803084B8-0x8030865C), .ctors and .dtors words; linked with holdouts (owner ruling of 2026-11-20): 105 of 121 functions exact, the holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -9963,12 +9963,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8004EA80",
-          "end": "0x8004EE18"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8004F20C",
           "end": "0x8004F2D0"
         },
         {
@@ -9993,12 +9987,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80050CCC",
-          "end": "0x80050F14"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005122C",
           "end": "0x80051E14"
         },
         {
@@ -10065,10 +10053,6 @@
             "evidence": "evidence.tsv source-form 0x8004E4D0-0x8004EA80"
           },
           {
-            "function": "OnImpulse__20PhysCollisionHandlerP9RigidBodyUiT1UiP13Vec3_801DE1E0N25",
-            "evidence": "evidence.tsv source-form 0x8004EE18-0x8004F20C"
-          },
-          {
             "function": "PhysAddCapsule",
             "evidence": "evidence.tsv source-form 0x8004F2D0-0x8004F3A4"
           },
@@ -10095,13 +10079,9 @@
           {
             "function": "PhysUpdatePlayers",
             "evidence": "evidence.tsv source-form 0x80050964-0x80050CCC"
-          },
-          {
-            "function": "PhysDebugDraw",
-            "evidence": "evidence.tsv source-form 0x80050F14-0x8005122C"
           }
         ],
-        "evidence": "fd1a merge notes (swarm fd1 tracking table) and the fd1 fix round (PR #1394): src/game/DynObj.cpp holds out the 18 functions listed here, each with its HOLDOUT: source-form row in evidence.tsv."
+        "evidence": "fd1a merge notes (swarm fd1 tracking table) and the fd1 fix round (PR #1394): src/game/DynObj.cpp holds out the 16 functions listed here, each with its HOLDOUT: source-form row in evidence.tsv."
       }
     },
     {

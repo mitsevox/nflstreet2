@@ -2107,30 +2107,28 @@ void PhysCollisionHandler::OnImpulse(RigidBody *pA, unsigned int indexA, RigidBo
 {
     PhysBodyOwner_t *a = ((PhysBodyOwner_t *)pA->mpOwner);
     PhysBodyOwner_t *b = ((PhysBodyOwner_t *)pB->mpOwner);
-    Vector_80039F5C position, normal;
+    Vector_80039F5C normal, position;
     if ((a->mKind == 3 || a->mKind == 5 || a->mKind == 4) &&
         (b->mKind == 1 || b->mKind == 6 || b->mKind == 0)) {
-        position = *(Vector_80039F5C *)pPosA; normal = *(Vector_80039F5C *)pNormal;
-        BigObjHitter_t *pHitter = (BigObjHitter_t *)PlyrObjsFindPlayer(b->mpBlock);
-        if (a->mKind == 5) BigObjHitStatic(a->mpObject, &position.mX, &normal.mX, a->mNames[indexA], b->mType, pHitter);
-        else BigObjHit(a->mpObject, &position.mX, &normal.mX, a->mNames[indexA], b->mType, pHitter);
+        normal.mX = pNormal->x; normal.mY = pNormal->y; normal.mZ = pNormal->z;
+        position.mX = pPosA->x; position.mY = pPosA->y; position.mZ = pPosA->z;
+        if (a->mKind == 5) BigObjHitStatic(a->mpObject, &position.mX, &normal.mX, a->mNames[indexA], b->mType, (BigObjHitter_t *)PlyrObjsFindPlayer(b->mpBlock));
+        else BigObjHit(a->mpObject, &position.mX, &normal.mX, a->mNames[indexA], b->mType, (BigObjHitter_t *)PlyrObjsFindPlayer(b->mpBlock));
     } else if ((a->mKind == 1 || a->mKind == 6 || a->mKind == 0) &&
                (b->mKind == 3 || b->mKind == 5 || b->mKind == 4)) {
-        position = *(Vector_80039F5C *)pPosB;
         normal.mX = -pNormal->x; normal.mY = -pNormal->y; normal.mZ = -pNormal->z;
-        BigObjHitter_t *pHitter = (BigObjHitter_t *)PlyrObjsFindPlayer(a->mpBlock);
-        if (b->mKind == 5) BigObjHitStatic(b->mpObject, &position.mX, &normal.mX, b->mNames[indexB], a->mType, pHitter);
-        else BigObjHit(b->mpObject, &position.mX, &normal.mX, b->mNames[indexB], a->mType, pHitter);
+        position.mX = pPosB->x; position.mY = pPosB->y; position.mZ = pPosB->z;
+        if (b->mKind == 5) BigObjHitStatic(b->mpObject, &position.mX, &normal.mX, b->mNames[indexB], a->mType, (BigObjHitter_t *)PlyrObjsFindPlayer(a->mpBlock));
+        else BigObjHit(b->mpObject, &position.mX, &normal.mX, b->mNames[indexB], a->mType, (BigObjHitter_t *)PlyrObjsFindPlayer(a->mpBlock));
     } else if ((a->mKind == 3 || a->mKind == 5 || a->mKind == 4) &&
                (b->mKind == 3 || b->mKind == 5 || b->mKind == 4)) {
-        position = *(Vector_80039F5C *)pPosA; normal = *(Vector_80039F5C *)pNormal;
-        BigObjHitter_t *pHitter = (BigObjHitter_t *)PlyrObjsFindPlayer(b->mpBlock);
-        if (a->mKind == 5) BigObjHitStatic(a->mpObject, &position.mX, &normal.mX, a->mNames[indexA], b->mType, pHitter);
-        else BigObjHit(a->mpObject, &position.mX, &normal.mX, a->mNames[indexA], b->mType, pHitter);
+        normal.mX = pNormal->x; normal.mY = pNormal->y; normal.mZ = pNormal->z;
+        position.mX = pPosA->x; position.mY = pPosA->y; position.mZ = pPosA->z;
+        if (a->mKind == 5) BigObjHitStatic(a->mpObject, &position.mX, &normal.mX, a->mNames[indexA], b->mType, (BigObjHitter_t *)PlyrObjsFindPlayer(b->mpBlock));
+        else BigObjHit(a->mpObject, &position.mX, &normal.mX, a->mNames[indexA], b->mType, (BigObjHitter_t *)PlyrObjsFindPlayer(b->mpBlock));
         normal.mX = -pNormal->x; normal.mY = -pNormal->y; normal.mZ = -pNormal->z;
-        pHitter = (BigObjHitter_t *)PlyrObjsFindPlayer(a->mpBlock);
-        if (b->mKind == 5) BigObjHitStatic(b->mpObject, &position.mX, &normal.mX, b->mNames[indexB], a->mType, pHitter);
-        else BigObjHit(b->mpObject, &position.mX, &normal.mX, b->mNames[indexB], a->mType, pHitter);
+        if (b->mKind == 5) BigObjHitStatic(b->mpObject, &position.mX, &normal.mX, b->mNames[indexB], a->mType, (BigObjHitter_t *)PlyrObjsFindPlayer(a->mpBlock));
+        else BigObjHit(b->mpObject, &position.mX, &normal.mX, b->mNames[indexB], a->mType, (BigObjHitter_t *)PlyrObjsFindPlayer(a->mpBlock));
     }
     if (a->mKind != 5 && b->mKind == 6) {
         Vector_80039F5C impulse;
@@ -2238,6 +2236,9 @@ void PhysLoadObject(int handle, BigObj_t *pObject, int objectIndex)
     if (ObjParseFindPath(handle, "collision")) {
         Vector_80039F5C *pPos = (Vector_80039F5C *)&pState->mState.mUnknown0;
         void *pRot = &pState->mState.mUnknown88;
+        Vector_80039F5C inertia, velocity, acceleration, initial;
+        float matrix[16];
+        char type[32];
         lbl_80308B0C[lbl_803EA520] = pPos;
         pState->mUnknown408 = ObjParseGetFloat(handle, "aeroConst");
         pState->mUnknown412 = ObjParseGetFloat(handle, "spinDamp");
@@ -2247,14 +2248,12 @@ void PhysLoadObject(int handle, BigObj_t *pObject, int objectIndex)
             while (ObjParseNext(handle)) {}
         }
         ObjParseSetCursor(handle, cursor);
-        int kind;
-        if (mass <= 0.0f) kind = 2;
-        else kind = 0;
-        ShapeCollection *pSet = new (0) ShapeCollection(20, kind);
-        char names[20][32];
-        char type[32];
-        Vector_80039F5C a, b;
+        ShapeCollection *pSet;
+        if (!(mass <= 0.0f)) pSet = new (0) ShapeCollection(20, 0);
+        else pSet = new (0) ShapeCollection(20, 2);
         if (ObjParseFindChild(handle, "primitive")) {
+            char names[20][32];
+            Vector_80039F5C a, b, c;
             unsigned char count = 0;
             do {
                 ObjParseGetString(handle, "name", names[count], 32);
@@ -2268,10 +2267,10 @@ void PhysLoadObject(int handle, BigObj_t *pObject, int objectIndex)
                     PhysAddCapsule(handle, pSet, pState, &a, &b, friction, bounce, radius);
                 } else if (!strcmp(type, "BOX")) {
                     ObjParseGetVector(handle, "PRIM_BOX_MIN", &a.mX);
-                    ObjParseGetVector(handle, "PRIM_BOX_MAX", &b.mX);
+                    ObjParseGetVector(handle, "PRIM_BOX_MAX", &c.mX);
                     float friction = ObjParseGetFloat(handle, "friction");
                     float bounce = ObjParseGetFloat(handle, "bounce");
-                    PhysAddBox(handle, pSet, pState, &a, &b, friction, bounce);
+                    PhysAddBox(handle, pSet, pState, &a, &c, friction, bounce);
                 } else if (!strcmp(type, "SPHERE")) {
                     ObjParseGetVector(handle, "PRIM_SPH_POS", &a.mX);
                     float radius = ObjParseGetFloat(handle, "PRIM_SPH_RADIUS");
@@ -2284,54 +2283,62 @@ void PhysLoadObject(int handle, BigObj_t *pObject, int objectIndex)
             PhysSetShapeNames(&lbl_80308F64[lbl_803EA524], names, count);
         }
         ObjParseRewind(handle);
-        Vector_80039F5C inertia, velocity, acceleration;
         RigidBody *pBody;
-        PhysBodyOwner_t *pMetadata = &lbl_80308F64[lbl_803EA524];
         if (ObjParseFindPath(handle, "physics")) {
-            float matrix[12];
             if (ObjParseGetMatrix(handle, "moi", matrix)) {
                 inertia.mX = matrix[0] * 3.0f;
                 inertia.mY = matrix[10] * 3.0f;
                 inertia.mZ = matrix[5] * 3.0f;
             } else {
-                inertia.mX = inertia.mZ = 0.6640654802322388f;
+                inertia.mX = 0.6640654802322388f;
                 inertia.mY = 1.3281309604644775f;
+                inertia.mZ = 0.6640654802322388f;
             }
             mass = ObjParseGetFloat(handle, "mass");
-            if (mass <= 0.0f) pMetadata->mKind = 4;
-            else pMetadata->mKind = 3;
-            pMetadata->mpObject = pObject;
-            pMetadata->mUnknown2 = 1;
-            pMetadata->mUnknown16 = objectIndex;
-            pMetadata->mType = lbl_803EA524;
-            pMetadata->mUnknown22 = -1;
-            pMetadata->mUnknown20 = 0xFFFF;
-            float threshold = ObjParseGetFloat(handle, "dThres");
-            pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, pMetadata, mass, threshold);
-            Vector_80039F5C initial;
-            if (!ObjParseGetVector(handle, "iVel", &initial.mX)) {
-                velocity.mX = velocity.mY = velocity.mZ = 0.0f;
-                acceleration.mX = acceleration.mY = acceleration.mZ = 0.0f;
+            if (!(mass <= 0.0f)) lbl_80308F64[lbl_803EA524].mKind = 3;
+            else lbl_80308F64[lbl_803EA524].mKind = 4;
+            lbl_80308F64[lbl_803EA524].mpObject = pObject;
+            lbl_80308F64[lbl_803EA524].mUnknown2 = 1;
+            lbl_80308F64[lbl_803EA524].mUnknown16 = objectIndex;
+            lbl_80308F64[lbl_803EA524].mType = lbl_803EA524;
+            lbl_80308F64[lbl_803EA524].mUnknown22 = -1;
+            lbl_80308F64[lbl_803EA524].mUnknown20 = 0xFFFF;
+            pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &lbl_80308F64[lbl_803EA524], mass,
+                                      ObjParseGetFloat(handle, "dThres"));
+            if (ObjParseGetVector(handle, "iVel", &initial.mX)) SetBodyLinearVelocity(pBody, &initial);
+            else {
+                velocity.mX = 0.0f;
+                velocity.mY = 0.0f;
+                velocity.mZ = 0.0f;
+                acceleration.mX = 0.0f;
+                acceleration.mY = 0.0f;
+                acceleration.mZ = 0.0f;
                 SetBodyAngularMomentum(pBody, (Vec3_801DE1E0 *)&velocity); SetBodyLinearMomentum(pBody, &acceleration);
-            } else SetBodyLinearVelocity(pBody, &initial);
+            }
             SetBodyPosition(pBody, (Vec3_801DE1E0 *)pPos); SetBodyOrientation(pBody, (Vec4_801DE1E0 *)pRot);
             if (!(mass <= 0.0f)) {
-                if (!ObjParseGetInt(handle, "enable")) SetBodyMotionState(pBody, 3);
-                else SetBodyMotionState(pBody, 2);
+                if (ObjParseGetInt(handle, "enable")) SetBodyMotionState(pBody, 2);
+                else SetBodyMotionState(pBody, 3);
             }
         } else {
-            inertia.mX = inertia.mZ = 0.6640654802322388f;
+            mass = 0.0f;
+            inertia.mX = 0.6640654802322388f;
             inertia.mY = 1.3281309604644775f;
-            pMetadata->mKind = 5;
-            pMetadata->mpObject = pObject;
-            pMetadata->mUnknown2 = 1;
-            pMetadata->mType = lbl_803EA524;
-            pMetadata->mUnknown16 = objectIndex;
-            pMetadata->mUnknown22 = -1;
-            pMetadata->mUnknown20 = 0xFFFF;
-            pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, pMetadata, 0.0f, 2.0f);
-            velocity.mX = velocity.mY = velocity.mZ = 0.0f;
-            acceleration.mX = acceleration.mY = acceleration.mZ = 0.0f;
+            inertia.mZ = 0.6640654802322388f;
+            lbl_80308F64[lbl_803EA524].mKind = 5;
+            lbl_80308F64[lbl_803EA524].mpObject = pObject;
+            lbl_80308F64[lbl_803EA524].mUnknown2 = 1;
+            lbl_80308F64[lbl_803EA524].mType = lbl_803EA524;
+            lbl_80308F64[lbl_803EA524].mUnknown16 = objectIndex;
+            lbl_80308F64[lbl_803EA524].mUnknown22 = -1;
+            lbl_80308F64[lbl_803EA524].mUnknown20 = 0xFFFF;
+            pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &lbl_80308F64[lbl_803EA524], mass, 2.0f);
+            velocity.mX = 0.0f;
+            velocity.mY = 0.0f;
+            velocity.mZ = 0.0f;
+            acceleration.mX = 0.0f;
+            acceleration.mY = 0.0f;
+            acceleration.mZ = 0.0f;
             SetBodyAngularMomentum(pBody, (Vec3_801DE1E0 *)&velocity); SetBodyLinearMomentum(pBody, &acceleration);
             SetBodyPosition(pBody, (Vec3_801DE1E0 *)pPos); SetBodyOrientation(pBody, (Vec4_801DE1E0 *)pRot);
         }
@@ -2361,47 +2368,41 @@ void PhysLoadObject(int handle, BigObj_t *pObject, int objectIndex)
 
 void PhysAddPlayers(void)
 {
+    Vector_80039F5C velocity, force, a, b, inertia;
+    Quat_801EB488 rotation;
     Vector_80039F5C position = {0.0f, 0.0f, 3.0f};
     Object_8008044C query;
     fn_8008040C(&query, 0);
     for (unsigned int team = 0; team < 2; team++) {
         for (unsigned int index = 0; index < 7; index++) {
             float radius = 0.45f;
-            Object_80039F5C *pPlayer = PlyrGet(team, index);
+            Object_80039F5C *pPlayer = PlyrGet((unsigned char)team, index);
             Block_80170E64 *pBlock = pPlayer->mpUnknown4;
             Object_8003DEC4 *pModel = (Object_8003DEC4 *)pBlock;
             PlayerDbSeekId(&query, pModel->mUnknown4956, 0);
             float height = PlayerDbGetHeight(&query) * 0.02631579f;
             float mass = 150.0f;
             int slot = team * 7 + index;
-            Vector_80039F5C inertia;
             inertia.mX = mass * height * height * (1.0f / 12.0f) + mass * (radius * 0.5f) * (radius * 0.5f);
             inertia.mY = mass * radius * radius * 0.5f;
             inertia.mZ = inertia.mX;
-            Vector_80039F5C a, b;
-            a.mX = 0.0f;
+            a.mX = a.mZ = 0.0f;
             a.mY = height * 0.5f;
-            a.mZ = 0.0f;
-            b.mX = 0.0f;
+            b.mX = b.mZ = 0.0f;
             b.mY = -a.mY;
-            b.mZ = 0.0f;
             lbl_80308AD4[slot] = new (0) CapsuleShape((Vec3_801DE1E0 *)&a, (Vec3_801DE1E0 *)&b, 0.5f, 0.6f, radius);
             ShapeCollection *pSet = new (0) ShapeCollection(1, 1);
             pSet->AddShape(lbl_80308AD4[slot]);
-            PhysBodyOwner_t *pMetadata = &lbl_80308F64[lbl_803EA524];
-            pMetadata->mpBlock = pBlock;
-            pMetadata->mKind = 1;
-            pMetadata->mpObject = 0;
-            pMetadata->mUnknown2 = 1;
-            pMetadata->mUnknown20 = 0xFFFF;
-            pMetadata->mType = lbl_803EA524;
-            pMetadata->mUnknown22 = slot;
-            RigidBody *pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, pMetadata, mass, 0.4f);
-            Vector_80039F5C velocity;
-            velocity.mX = velocity.mY = velocity.mZ = 0.0f;
-            Vector_80039F5C force;
-            force.mX = force.mY = force.mZ = 0.0f;
-            Quat_801EB488 rotation;
+            lbl_80308F64[lbl_803EA524].mpBlock = pBlock;
+            lbl_80308F64[lbl_803EA524].mKind = 1;
+            lbl_80308F64[lbl_803EA524].mpObject = 0;
+            lbl_80308F64[lbl_803EA524].mUnknown2 = 1;
+            lbl_80308F64[lbl_803EA524].mUnknown20 = 0xFFFF;
+            lbl_80308F64[lbl_803EA524].mType = lbl_803EA524;
+            lbl_80308F64[lbl_803EA524].mUnknown22 = slot;
+            RigidBody *pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &lbl_80308F64[lbl_803EA524], mass, 0.4f);
+            velocity.mZ = velocity.mY = velocity.mX = 0.0f;
+            force.mZ = force.mY = force.mX = 0.0f;
             QuatFromEuler(&rotation, 0, 0, 0);
             SetBodyPose(pBody, (Vec3_801DE1E0 *)&position, (Vec4_801DE1E0 *)&rotation);
             position.mZ += 5.0f;
@@ -2414,38 +2415,35 @@ void PhysAddPlayers(void)
     }
     fn_8008056C(&query);
 }
+
 void PhysAddBall(void)
 {
+    Vector_80039F5C velocity, force, center, center2, inertia;
+    Quat_801EB488 rotation;
     Vector_80039F5C position = {0.0f, 0.0f, 3.0f};
     BallGetModel(BallGetCurrent());
     float radius = 0.12f;
     float length = 0.2f;
     float mass = 1.0f;
-    Vector_80039F5C inertia;
     inertia.mX = mass * (radius * radius * 0.25f + length * length * (1.0f / 12.0f));
     inertia.mY = inertia.mX;
     inertia.mZ = mass * radius * radius * 0.5f;
-    Vector_80039F5C centers[2];
-    centers[0].mX = centers[0].mY = centers[0].mZ = 0.0f;
-    centers[1].mX = centers[1].mY = centers[1].mZ = 0.0f;
-    lbl_803EA51C = new (0) SphereShape((Vec3_801DE1E0 *)&centers[0], 0.1f, 1.0f, 0.15f);
+    center.mX = center.mY = center.mZ = 0.0f;
+    center2.mX = center2.mY = center2.mZ = 0.0f;
+    lbl_803EA51C = new (0) SphereShape((Vec3_801DE1E0 *)&center, 0.1f, 1.0f, 0.15f);
     ShapeCollection *pSet = new (0) ShapeCollection(1, 1);
     pSet->AddShape(lbl_803EA51C);
-    PhysBodyOwner_t *pMetadata = &lbl_80308F64[lbl_803EA524];
-    pMetadata->mpBlock = 0;
-    pMetadata->mpObject = 0;
-    pMetadata->mKind = 6;
-    pMetadata->mUnknown22 = -1;
-    pMetadata->mUnknown2 = 1;
-    pMetadata->mUnknown20 = 0xFFFF;
-    pMetadata->mType = lbl_803EA524;
-    RigidBody *pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, pMetadata, mass, 0.4f);
-    Vector_80039F5C velocity;
-    velocity.mX = velocity.mY = velocity.mZ = 0.0f;
-    Vector_80039F5C force;
-    force.mX = force.mY = force.mZ = 0.0f;
+    lbl_80308F64[lbl_803EA524].mpBlock = 0;
+    lbl_80308F64[lbl_803EA524].mpObject = 0;
+    lbl_80308F64[lbl_803EA524].mKind = 6;
+    lbl_80308F64[lbl_803EA524].mUnknown22 = -1;
+    lbl_80308F64[lbl_803EA524].mUnknown2 = 1;
+    lbl_80308F64[lbl_803EA524].mUnknown20 = 0xFFFF;
+    lbl_80308F64[lbl_803EA524].mType = lbl_803EA524;
+    RigidBody *pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &lbl_80308F64[lbl_803EA524], mass, 0.4f);
+    velocity.mZ = velocity.mY = velocity.mX = 0.0f;
+    force.mZ = force.mY = force.mX = 0.0f;
     SetBodyPosition(pBody, (Vec3_801DE1E0 *)&position);
-    Quat_801EB488 rotation;
     QuatFromEuler(&rotation, 0, 0, 0);
     SetBodyOrientation(pBody, (Vec4_801DE1E0 *)&rotation);
     SetBodyMotionState(pBody, 1);
@@ -2552,15 +2550,16 @@ void PhysUpdatePlayers(void)
 {
     for (unsigned int team = 0; team < 2; team++) {
         for (unsigned int index = 0; index < 7; index++) {
-            RigidBody *pBody = lbl_80308F0C[team * 7 + index];
+            RigidBody *pBody = lbl_80308F0C[index + team * 7];
             Object_80039F5C *pPlayer = PlyrObjsFindPlayer(((PhysBodyOwner_t *)pBody->mpOwner)->mpBlock);
-            Vector_80039F5C velocity;
+            Vector_80039F5C velocity, direction;
+            Quat_801EB488 rotation, oldRotation;
+            QuatEulerAngles_t oldAngles;
+            Vector_80039F5C a, b, c;
+            QuatEulerAngles_t angles;
             velocity.mX = 0.0f;
             velocity.mY = 0.0f;
             velocity.mZ = 0.0f;
-            Vector_80039F5C a, b, c, direction;
-            QuatEulerAngles_t angles;
-            Quat_801EB488 rotation, oldRotation;
             fn_8009BF5C(pPlayer, 0, &a, &angles);
             fn_8009BF5C(pPlayer, 4, &b, 0);
             fn_8009BF5C(pPlayer, 8, &c, 0);
@@ -2573,8 +2572,8 @@ void PhysUpdatePlayers(void)
                 a.mX = -a.mX;
                 a.mY = -a.mY;
                 angles.mUnknown8 += 0x800000;
-            }
-            QuatFromEuler(&rotation, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+                QuatFromEuler(&rotation, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+            } else QuatFromEuler(&rotation, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
             GetBodyOrientation(pBody, &oldRotation);
             Vec3Sub(&direction, &a, &pBody->mPosition);
             float length = Vec3Magnitude(&direction);
@@ -2583,10 +2582,10 @@ void PhysUpdatePlayers(void)
             velocity.mX = angles.mUnknown0 * 0.000021457672119140625f;
             velocity.mY = angles.mUnknown4 * 0.000021457672119140625f;
             velocity.mZ = angles.mUnknown8 * 0.000021457672119140625f;
-            QuatToEuler(&angles, &oldRotation.mX);
-            velocity.mX -= angles.mUnknown0 * 0.000021457672119140625f;
-            velocity.mY -= angles.mUnknown4 * 0.000021457672119140625f;
-            velocity.mZ -= angles.mUnknown8 * 0.000021457672119140625f;
+            QuatToEuler(&oldAngles, &oldRotation.mX);
+            velocity.mX -= oldAngles.mUnknown0 * 0.000021457672119140625f;
+            velocity.mY -= oldAngles.mUnknown4 * 0.000021457672119140625f;
+            velocity.mZ -= oldAngles.mUnknown8 * 0.000021457672119140625f;
             SetBodyPose(pBody, (Vec3_801DE1E0 *)&a, (Vec4_801DE1E0 *)&rotation);
             SetBodyLinearVelocity(pBody, &direction);
             SetBodyAngularMomentum(pBody, (Vec3_801DE1E0 *)&velocity);
@@ -2656,7 +2655,7 @@ void PhysDebugDraw(void)
     Collision_pDebugLineProc = PhysDebugLine;
     BodyGroupNode *pNode = lbl_803EA514->FirstNode();
     RigidBody *pBody;
-    while ((pBody = lbl_803EA514->NextBody(&pNode)) != 0) {
+    for (pBody = lbl_803EA514->NextBody(&pNode); pBody != 0; pBody = lbl_803EA514->NextBody(&pNode)) {
         ShapeCollection *pShapes = pBody->mpShapes;
         if (!pShapes) continue;
         if ((unsigned int)pBody->mState <= 1) {
