@@ -21,11 +21,11 @@ struct BigObjPool_t {
 extern "C" {
 int BigObjSyncFromInst(BigObjInst *pObject, int index);
 int BigObjHasSkeleton(int index);
-void fn_8004A8C4(BigObjPhysics_t *pExtra, BigObj_t *pItem, int a);
-void fn_8004A8E8(BigObj_t *pItem, void *a, int b, void *c);
-void fn_8004A908(BigObjInst *pObject, int index);
-void fn_8004C684(void *pOwner, BigObjInst *pObject);
-void fn_8004C7B8(BigObjInst *pObject);
+void BigObjAnimBlend(BigObjPhysics_t *pExtra, BigObj_t *pItem, int a);
+void BigObjAnimBlendRoot(BigObj_t *pItem, void *a, int b, void *c);
+void BigObjAnimInitObject(BigObjInst *pObject, int index);
+void BigObjParseBehavior(void *pOwner, BigObjInst *pObject);
+void BigObjFreeEvents(BigObjInst *pObject);
 void AnimChanProcess(void *a, void *b, float c, BigObjInst *pObject);
 int AnimMotCreateWeightList(void *a, void *b, void *c);
 int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
@@ -58,7 +58,7 @@ int BigObjPoolDestroy(void *p, int value)
     unsigned short i;
 
     for (i = 0; i < pPool->mMaxObjects; i++) {
-        fn_8004C7B8(&pPool->mObjects[i]);
+        BigObjFreeEvents(&pPool->mObjects[i]);
     }
     fn_801D2BD0(pPool->mObjects);
     pPool->mObjects = 0;
@@ -129,25 +129,25 @@ BigObjInst *BigObjInstCreate(void *pOwner, BigObjPlacement_t *pDesc)
         pObject->mUnknown428 = 0;
     }
     pObject->mUnknown0 = pDesc->mUnknown0;
-    fn_8004A908(pObject, _BigObjInst_pPool->mCount);
-    pObject->mUnknown8 = pDesc->mUnknown4;
-    pObject->mUnknown12 = pDesc->mUnknown8;
-    pObject->mUnknown16 = pDesc->mUnknown12;
-    QuatFromEulerYZX(&pObject->mUnknown96, (int)(pDesc->mUnknown20 * 46603.3789f), (int)(pDesc->mUnknown24 * 46603.3789f),
+    BigObjAnimInitObject(pObject, _BigObjInst_pPool->mCount);
+    pObject->mState.mUnknown0 = pDesc->mUnknown4;
+    pObject->mState.mUnknown4 = pDesc->mUnknown8;
+    pObject->mState.mUnknown8 = pDesc->mUnknown12;
+    QuatFromEulerYZX(&pObject->mState.mUnknown88, (int)(pDesc->mUnknown20 * 46603.3789f), (int)(pDesc->mUnknown24 * 46603.3789f),
                 (int)(pDesc->mUnknown16 * 46603.3789f));
-    pObject->mUnknown32 = (int)((pDesc->mUnknown24 - 90.0f) * 46603.3789f);
+    pObject->mState.mUnknown24 = (int)((pDesc->mUnknown24 - 90.0f) * 46603.3789f);
     if (pObject->mUnknown428 != 0) {
-        pObject->mUnknown428->mUnknown56 = pObject->mUnknown32;
+        pObject->mUnknown428->mUnknown56 = pObject->mState.mUnknown24;
     }
-    pObject->mUnknown112 = pObject->mUnknown8;
-    pObject->mUnknown116 = pObject->mUnknown12;
-    pObject->mUnknown120 = pObject->mUnknown16;
-    pObject->mUnknown124 = pObject->mUnknown96;
-    pObject->mUnknown128 = pObject->mUnknown100;
-    pObject->mUnknown132 = pObject->mUnknown104;
-    pObject->mUnknown136 = pObject->mUnknown108;
-    pObject->mUnknown140 = pObject->mUnknown32;
-    fn_8004C684(pOwner, pObject);
+    pObject->mState.mUnknown104 = pObject->mState.mUnknown0;
+    pObject->mState.mUnknown108 = pObject->mState.mUnknown4;
+    pObject->mState.mUnknown112 = pObject->mState.mUnknown8;
+    pObject->mState.mUnknown116 = pObject->mState.mUnknown88;
+    pObject->mState.mUnknown120 = pObject->mState.mUnknown92;
+    pObject->mState.mUnknown124 = pObject->mState.mUnknown96;
+    pObject->mState.mUnknown128 = pObject->mState.mUnknown100;
+    pObject->mState.mUnknown132 = pObject->mState.mUnknown24;
+    BigObjParseBehavior(pOwner, pObject);
     if (pObject->mUnknown184 != 0) {
         pObject->mUnknown184(pObject, BigObjGet(_BigObjInst_pPool->mCount), 0);
     }
@@ -184,11 +184,11 @@ int BigObjInstSimulateAll(float dt)
             fn_801BE420(pExtra->mUnknown1300, pExtra->mUnknown48, pExtra->mUnknown60, pObject, dt);
             AnimChanProcess(pExtra->mUnknown48, pExtra->mUnknown60, dt, pObject);
             a = AnimMotCreateWeightList(pExtra->mUnknown48, pExtra->mUnknown60, pExtra->mUnknown1300);
-            fn_8004A8C4(pExtra, BigObjGet(i), a);
-            pExtra->mUnknown32 = fn_801BCA74(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown36, 0xFFFF, 1);
-            pExtra->mUnknown33 = fn_801BCCAC(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown40,
+            BigObjAnimBlend(pExtra, BigObjGet(i), a);
+            pExtra->mSpin.mUnknown0 = fn_801BCA74(pExtra->mUnknown48, pExtra->mUnknown60, a, &pExtra->mSpin.mUnknown4, 0xFFFF, 1);
+            pExtra->mSpin.mUnknown1 = fn_801BCCAC(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown40,
                                              fn_801BE648(pObject->mUnknown428->mUnknown1300), 1);
-            fn_8004A8E8(BigObjGet(i), pExtra->mUnknown60, pExtra->mUnknown52, pExtra->mUnknown1300);
+            BigObjAnimBlendRoot(BigObjGet(i), pExtra->mUnknown60, pExtra->mUnknown52, pExtra->mUnknown1300);
         }
     }
     return 0;

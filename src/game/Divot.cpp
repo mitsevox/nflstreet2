@@ -6,7 +6,7 @@
    data blocks. The file starts with a clamped linear map, also holds the
    on-field arrow objects (object type 16), and ends with the colour-entry
    parser used by the dynamic palette code that follows it. */
-#include "game/DynClut_80044F20.h"
+#include "game/PlaDynClutOps.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/bitstream.h"

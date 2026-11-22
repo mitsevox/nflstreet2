@@ -1,9 +1,9 @@
 #ifndef GAME_BIGOBJNODE_H
 #define GAME_BIGOBJNODE_H
 
-/* Emitter record allocated per "particle" block of fn_8004BD20 and linked
+/* Emitter record allocated per "particle" block of BigObjParseSwapEvent and linked
    through mpNext from +128 of its node. */
-struct Emitter_8004BD20 {
+struct BigObjEmitter_t {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
@@ -12,7 +12,7 @@ struct Emitter_8004BD20 {
     float mUnknown36;
     unsigned char mUnknown40;
     char mUnknown41[3];
-    Emitter_8004BD20 *mpNext;
+    BigObjEmitter_t *mpNext;
 };
 
 /* Element of the list at +312 of BigObjInst (include/game/BigObjInst.h),
@@ -39,7 +39,7 @@ struct BigObjNode_t {
     int mUnknown120;
     unsigned char mUnknown124;
     char mUnknown125[3];
-    Emitter_8004BD20 *mUnknown128;
+    BigObjEmitter_t *mUnknown128;
     BigObjNode_t *mpNext;
 };
 

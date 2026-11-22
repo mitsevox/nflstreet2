@@ -977,10 +977,6 @@
       "address": "0x801E8C78",
       "evidence": "Target constructor initializes u32+0/f32+4 and vptr+8; inferred class contract."
     },
-    "_vt.11PhysicsTime": {
-      "address": "0x8028DD58",
-      "evidence": "evidence.tsv external row for 0x8028DD58 (_vt.11PhysicsTime, the PhysicsTime vtable in the game rodata) and source-form row 0x801E92D0 (include/engine/phystime.h #pragma interface); src/engine/physworld.cpp references it from the inlined destructors of PhysicsWorld::Step."
-    },
     "fn_801E8D14__11PhysicsTimef": {
       "address": "0x801E8D14",
       "evidence": "Target member increments u32+0/f32+4 with f1 delta; inferred member contract."
@@ -1021,38 +1017,6 @@
       "address": "0x8025F58C",
       "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long %10 in integer formatter resolves __umoddi3; corresponding target call at0x802653E4 reaches0x8025F58C with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
     },
-    "_ResLoadRes": {
-      "address": "0x801ECC70",
-      "evidence": "evidence.tsv function and name rows at 0x801ECC70: Loads one resource synchronously from loose files, cached/quickload streams, mapped memory or ARAM, with optional decompression. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResLoadResAsync": {
-      "address": "0x801ED634",
-      "evidence": "evidence.tsv function and name rows at 0x801ED634: Creates an asynchronous request, handles timed completion and starts ordinary or block-compressed reads. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResLockRes": {
-      "address": "0x801EDC2C",
-      "evidence": "evidence.tsv function and name rows at 0x801EDC2C: Marks an entry locked and maps its bulk-buffer address when entry flag 8 is set. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_ResUnlockRes": {
-      "address": "0x801EDCD0",
-      "evidence": "evidence.tsv function and name rows at 0x801EDCD0: Clears an eligible entry lock and its bulk-buffer address, returning the remaining address. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "ResOpenRam": {
-      "address": "0x801EECD0",
-      "evidence": "evidence.tsv function and name rows at 0x801EECD0: Opens or reuses a resource nested inside a loaded parent entry. Original bytes remain linked while Resource.c is a registered comparison."
-    },
-    "_Res_sAsyncCountLock": {
-      "address": "0x803E92FC",
-      "evidence": "evidence.tsv data/name rows 0x803E92FC: recursive lock for async count; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_sResourceLock": {
-      "address": "0x803E931C",
-      "evidence": "evidence.tsv data/name rows 0x803E931C: recursive lock for resource pool and metadata; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
-    "_Res_pResourceFileList": {
-      "address": "0x803ED668",
-      "evidence": "evidence.tsv data/name rows 0x803ED668: open-resource pool returned by DS allocator; original storage remains externally linked for the partial Resource.c reconstruction."
-    },
     "StevQueryRowCount": {
       "address": "0x8018EA3C",
       "evidence": "evidence.tsv function/name rows for 0x8018EA3C (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
@@ -1068,14 +1032,6 @@
     "MemCardFilesFindNameOnPort": {
       "address": "0x8002A86C",
       "evidence": "evidence.tsv function/name rows for 0x8002A86C (target extent, inferred name); the documented holdout of src/game/MemCardFiles.cpp keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "BigObjDefaultUpdate": {
-      "address": "0x800400CC",
-      "evidence": "evidence.tsv function and name rows for 0x800400CC (exact in comparisons.json; precedes the holdout 0x800400D4 of src/game/BigObj.cpp, so its original bytes stay linked)."
-    },
-    "BigObjLinkGroup": {
-      "address": "0x800400D4",
-      "evidence": "evidence.tsv function and name rows for 0x800400D4 (documented holdout of src/game/BigObj.cpp: draft registered in comparisons.json, original bytes linked)."
     },
     "CamInterpUpdateEaseInOut": {
       "address": "0x8013CC7C",
@@ -1547,11 +1503,11 @@
     },
     "ModelObjSetAmbientColor": {
       "address": "0x80235C90",
-      "evidence": "evidence.tsv function and name rows for 0x80235C90 (ModelObjSetAmbientColor, a registered holdout of src/engine/modelobj.c, original bytes linked); called by name from src/game/BallMarker.cpp, src/game/EnvObj.cpp, src/game/EnvRender.cpp, src/game/FldObj.cpp, src/game/ReplayCursor.cpp, src/game/UISModel.cpp, src/game/cu_8004A2F4.cpp, src/game/PlyrStars.cpp (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x80235C90 (ModelObjSetAmbientColor, a registered holdout of src/engine/modelobj.c, original bytes linked); called by name from src/game/BallMarker.cpp, src/game/EnvObj.cpp, src/game/EnvRender.cpp, src/game/FldObj.cpp, src/game/ReplayCursor.cpp, src/game/UISModel.cpp, src/game/DynObj.cpp, src/game/PlyrStars.cpp (n1e naming wave)."
     },
     "XmlFindInElement": {
       "address": "0x80216BFC",
-      "evidence": "evidence.tsv function and name rows for 0x80216BFC (XmlFindInElement, a registered holdout of src/engine/xmlread.c, original bytes linked); called by name from src/game/Divot.cpp, src/game/cu_80044F20.cpp, src/game/cu_8004A2F4.cpp (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x80216BFC (XmlFindInElement, a registered holdout of src/engine/xmlread.c, original bytes linked); called by name from src/game/Divot.cpp, src/game/PlaDynClutOps.cpp, src/game/DynObj.cpp (n1e naming wave)."
     },
     "StoryTournamentGetTeamName": {
       "address": "0x80060948",
@@ -1672,6 +1628,10 @@
     "ScaleBlockReset": {
       "address": "0x802349CC",
       "evidence": "evidence.tsv function/name rows for 0x802349CC (target extent, inferred name); called from other files while its own file is unlinked."
+    },
+    "fn_801E8CA0__11PhysicsTimef": {
+      "address": "0x801E8CA0",
+      "evidence": "Target member stores the f1 time as whole ticks u32+0 (fctiwz) and the remaining fraction f32+4; called by 0x800504EC on the time object 0x803084B8; inferred member contract."
     }
   },
   "units": [
@@ -9860,6 +9820,184 @@
           "end": "0x802CFBCC"
         }
       ]
+    },
+    {
+      "source": "src/game/DynObj.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/DynObj.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .bss (0x803084B8-0x8030865C), .ctors and .dtors words; linked with holdouts (owner ruling of 2026-11-20): 105 of 121 functions exact, the holdouts keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004A2F4",
+          "end": "0x8004ABF4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004AD3C",
+          "end": "0x8004BD20"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004C204",
+          "end": "0x8004C844"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004CB98",
+          "end": "0x8004CBEC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004CE6C",
+          "end": "0x8004D144"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004D2F8",
+          "end": "0x8004D3A8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004D498",
+          "end": "0x8004DC88"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004DF68",
+          "end": "0x8004E4D0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004EA80",
+          "end": "0x8004F2D0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004F3A4",
+          "end": "0x8004F56C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004F710",
+          "end": "0x8004F754"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800508A0",
+          "end": "0x80050964"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80050CCC",
+          "end": "0x80051E14"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D7A0",
+          "end": "0x8028DD70"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803084B8",
+          "end": "0x8030865C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A84",
+          "end": "0x80289A88"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BC4",
+          "end": "0x80289BC8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "BigObjAnimReplayBlend",
+            "evidence": "evidence.tsv source-form 0x8004ABF4-0x8004AD3C"
+          },
+          {
+            "function": "BigObjParseSwapEvent",
+            "evidence": "evidence.tsv source-form 0x8004BD20-0x8004C204"
+          },
+          {
+            "function": "BigObjHit",
+            "evidence": "evidence.tsv source-form 0x8004C844-0x8004CAA8"
+          },
+          {
+            "function": "BigObjHitStatic",
+            "evidence": "evidence.tsv source-form 0x8004CAA8-0x8004CB98"
+          },
+          {
+            "function": "BigObjEmitParticles",
+            "evidence": "evidence.tsv source-form 0x8004CBEC-0x8004CE6C"
+          },
+          {
+            "function": "DynObjChildSpawn",
+            "evidence": "evidence.tsv source-form 0x8004D144-0x8004D2F8"
+          },
+          {
+            "function": "ObjParseOpen",
+            "evidence": "evidence.tsv source-form 0x8004D3A8-0x8004D498"
+          },
+          {
+            "function": "DynObjParseRender",
+            "evidence": "evidence.tsv source-form 0x8004DC88-0x8004DF68"
+          },
+          {
+            "function": "PhysPushPlayer",
+            "evidence": "evidence.tsv source-form 0x8004E4D0-0x8004EA80"
+          },
+          {
+            "function": "PhysAddCapsule",
+            "evidence": "evidence.tsv source-form 0x8004F2D0-0x8004F3A4"
+          },
+          {
+            "function": "PhysSetShapeNames",
+            "evidence": "evidence.tsv source-form 0x8004F56C-0x8004F710"
+          },
+          {
+            "function": "PhysLoadObject",
+            "evidence": "evidence.tsv source-form 0x8004F754-0x8004FF8C"
+          },
+          {
+            "function": "PhysAddPlayers",
+            "evidence": "evidence.tsv source-form 0x8004FF8C-0x800502C0"
+          },
+          {
+            "function": "PhysAddBall",
+            "evidence": "evidence.tsv source-form 0x800502C0-0x800504EC"
+          },
+          {
+            "function": "PhysInit",
+            "evidence": "evidence.tsv source-form 0x800504EC-0x800508A0"
+          },
+          {
+            "function": "PhysUpdatePlayers",
+            "evidence": "evidence.tsv source-form 0x80050964-0x80050CCC"
+          }
+        ],
+        "evidence": "fd1a merge notes (swarm fd1 tracking table) and the fd1 fix round (PR #1394): src/game/DynObj.cpp holds out the 16 functions listed here, each with its HOLDOUT: source-form row in evidence.tsv."
+      }
     },
     {
       "source": "src/game/CollideContacts.cpp",
@@ -18686,7 +18824,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80040154",
+          "start": "0x800400CC",
           "end": "0x80041210"
         },
         {
@@ -18966,6 +19104,60 @@
           "end": "0x803078D4"
         }
       ]
+    },
+    {
+      "source": "src/game/PlaDynClutOps.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x80044F20-0x80046004 (src/game/PlaDynClutOps.cpp) and the exact .rodata data row 0x8028D568-0x8028D588; linked with holdouts (owner ruling of 2026-11-20): 7 of 13 functions exact, the six blend/scale handlers keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80044F20",
+          "end": "0x800452F8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80045F64",
+          "end": "0x80046004"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D568",
+          "end": "0x8028D588"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "PlaDynClutBlendRange",
+            "evidence": "evidence.tsv source-form 0x800452F8-0x80045524"
+          },
+          {
+            "function": "PlaDynClutBlendPaletteToEnd",
+            "evidence": "evidence.tsv source-form 0x80045524-0x80045714"
+          },
+          {
+            "function": "PlaDynClutBlendStartToPalette",
+            "evidence": "evidence.tsv source-form 0x80045714-0x80045904"
+          },
+          {
+            "function": "PlaDynClutBlendSourceToEnd",
+            "evidence": "evidence.tsv source-form 0x80045904-0x80045B30"
+          },
+          {
+            "function": "PlaDynClutBlendStartToSource",
+            "evidence": "evidence.tsv source-form 0x80045B30-0x80045D5C"
+          },
+          {
+            "function": "PlaDynClutScaleRange",
+            "evidence": "evidence.tsv source-form 0x80045D5C-0x80045F64"
+          }
+        ],
+        "evidence": "fd1a merge notes (swarm fd1 tracking table): src/game/PlaDynClutOps.cpp holds out PlaDynClutBlendRange, PlaDynClutBlendPaletteToEnd, PlaDynClutBlendStartToPalette, PlaDynClutBlendSourceToEnd, PlaDynClutBlendStartToSource, PlaDynClutScaleRange."
+      }
     },
     {
       "source": "src/game/PenaltyRules.cpp",
@@ -24986,25 +25178,13 @@
     },
     {
       "source": "src/engine/Resource.c",
-      "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/Resource.c and its function, name, compiler and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole.",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801EC650-0x801F1538 (src/engine/Resource.c), its compiler, function, name, data and source-form rows; every function exact (lane fd1c matched the five former holdouts, source-form rows 0x801ECC70, 0x801ED634, 0x801EDC2C, 0x801EDCD0, 0x801EECD0) and every data section the file compiles linked whole; the file defines the _Res_sAsyncCountLock, _Res_sResourceLock and _Res_pResourceFileList COMMON globals and the unit storage map places each at its exact data row.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801EC650",
-          "end": "0x801ECC70"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801EDD68",
-          "end": "0x801EECD0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801EEFAC",
           "end": "0x801F1538"
         },
         {
@@ -25038,31 +25218,23 @@
           "end": "0x803ECF80"
         }
       ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "_ResLoadRes",
-            "evidence": "evidence.tsv source-form 0x801ECC70-0x801ED634"
-          },
-          {
-            "function": "_ResLoadResAsync",
-            "evidence": "evidence.tsv source-form 0x801ED634-0x801EDC2C"
-          },
-          {
-            "function": "_ResLockRes",
-            "evidence": "evidence.tsv source-form 0x801EDC2C-0x801EDCD0"
-          },
-          {
-            "function": "_ResUnlockRes",
-            "evidence": "evidence.tsv source-form 0x801EDCD0-0x801EDD68"
-          },
-          {
-            "function": "ResOpenRam",
-            "evidence": "evidence.tsv source-form 0x801EECD0-0x801EEFAC"
-          }
-        ],
-        "evidence": "x1b merge notes (swarm x1 tracking table): src/engine/Resource.c holds out _ResLoadRes, _ResLoadResAsync, _ResLockRes, _ResUnlockRes, ResOpenRam."
-      }
+      "storage": [
+        {
+          "symbol": "_Res_sAsyncCountLock",
+          "start": "0x803E92FC",
+          "end": "0x803E931C"
+        },
+        {
+          "symbol": "_Res_sResourceLock",
+          "start": "0x803E931C",
+          "end": "0x803E933C"
+        },
+        {
+          "symbol": "_Res_pResourceFileList",
+          "start": "0x803ED668",
+          "end": "0x803ED66C"
+        }
+      ]
     },
     {
       "source": "src/engine/T3DB_Compiler.c",
@@ -25317,12 +25489,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80140DB4",
-          "end": "0x8014106C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801410F4",
           "end": "0x8014116C"
         },
         {
@@ -25361,10 +25527,6 @@
           {
             "function": "CamPlayProcess",
             "evidence": "evidence.tsv source-form 0x80140708-0x80140DB4"
-          },
-          {
-            "function": "CamPlayGetPosLimits",
-            "evidence": "evidence.tsv source-form 0x8014106C-0x801410F4"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"

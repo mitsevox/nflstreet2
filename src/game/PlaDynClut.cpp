@@ -1,6 +1,6 @@
 /* Player dynamic colour tables: loads pladyncl.dat and recolours jersey and gear textures with a
    team's colours. */
-#include "game/DynClut_80044F20.h"
+#include "game/PlaDynClutOps.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/ResLoad.h"
@@ -27,19 +27,19 @@ extern "C" {
 void PlaDynClutLoadEntry(void *pData, int index, PlaDynClutEntry_t *pEntry)
 {
     ResGetSize(pData, index);
-    fn_80044F20((void *)ResLoad(pData, index, 1), pEntry);
+    PlaDynClutParseOps((void *)ResLoad(pData, index, 1), pEntry);
     ResUnLoad(pData, index);
 }
 
 void PlaDynClutApply(void *p, PlaDynClutEntry_t *pEntry, PlaDynClutPalettes_t *pPalettes)
 {
-    State_80045084 state;
+    PlaDynClutTable_t state;
 
-    fn_80045084(p, &state);
+    PlaDynClutBeginTable(p, &state);
     for (int i = 0; i < pEntry->mCount; i++) {
-        fn_80045F64(&pEntry->mpEntries[i], &state, pPalettes);
+        PlaDynClutApplyOp(&pEntry->mpEntries[i], &state, pPalettes);
     }
-    fn_800450A8(p, &state);
+    PlaDynClutEndTable(p, &state);
 }
 
 void PlaDynClutOpen(void)

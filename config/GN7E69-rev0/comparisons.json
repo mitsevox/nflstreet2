@@ -9111,9 +9111,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8004A2F4.cpp",
+      "source": "src/game/DynObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0–0x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/cu_8004A2F4.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names. Static initializer 0x80051D0C and its .ctors/.dtors stubs 0x80051DBC/0x80051DE8 are registered from the file's definition of the Time_801E8C78 object 0x803084B8 (.bss 0x803084B8-0x803084C4) with the .ctors word 0x80289A84 and .dtors word 0x80289BC4.",
+      "evidence": "evidence.tsv unit row src/game/DynObj.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0–0x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/DynObj.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names. Static initializer 0x80051D0C and its .ctors/.dtors stubs 0x80051DBC/0x80051DE8 are registered from the file's definition of the Time_801E8C78 object 0x803084B8 (.bss 0x803084B8-0x803084C4) with the .ctors word 0x80289A84 and .dtors word 0x80289BC4.",
       "sections": [
         {
           "section": ".text",
@@ -9148,574 +9148,579 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8004A2F4",
+          "symbol": "BigObjAnimReadPose",
           "start": "0x8004A2F4",
           "end": "0x8004A474"
         },
         {
-          "symbol": "fn_8004A474",
+          "symbol": "BigObjAnimPlayVariant",
           "start": "0x8004A474",
           "end": "0x8004A4F0"
         },
         {
-          "symbol": "fn_8004A4F0",
+          "symbol": "BigObjAnimPlayMatchedVariant",
           "start": "0x8004A4F0",
           "end": "0x8004A56C"
         },
         {
-          "symbol": "fn_8004A56C",
+          "symbol": "BigObjAnimOnVariant",
           "start": "0x8004A56C",
           "end": "0x8004A5AC"
         },
         {
-          "symbol": "fn_8004A5AC",
+          "symbol": "BigObjAnimOnMatchedVariant",
           "start": "0x8004A5AC",
           "end": "0x8004A5EC"
         },
         {
-          "symbol": "fn_8004A5EC",
+          "symbol": "BigObjAnimOnSequence",
           "start": "0x8004A5EC",
           "end": "0x8004A680"
         },
         {
-          "symbol": "fn_8004A680",
+          "symbol": "BigObjAnimPoseFromSkeleton",
           "start": "0x8004A680",
           "end": "0x8004A6EC"
         },
         {
-          "symbol": "fn_8004A6EC",
+          "symbol": "BigObjAnimPickVariant",
           "start": "0x8004A6EC",
           "end": "0x8004A7A8"
         },
         {
-          "symbol": "fn_8004A7A8",
+          "symbol": "BigObjAnimPickMatchedVariant",
           "start": "0x8004A7A8",
           "end": "0x8004A870"
         },
         {
-          "symbol": "fn_8004A870",
+          "symbol": "BigObjAnimInitHandlers",
           "start": "0x8004A870",
           "end": "0x8004A8C4"
         },
         {
-          "symbol": "fn_8004A8C4",
+          "symbol": "BigObjAnimBlend",
           "start": "0x8004A8C4",
           "end": "0x8004A8E8"
         },
         {
-          "symbol": "fn_8004A8E8",
+          "symbol": "BigObjAnimBlendRoot",
           "start": "0x8004A8E8",
           "end": "0x8004A908"
         },
         {
-          "symbol": "fn_8004A908",
+          "symbol": "BigObjAnimInitObject",
           "start": "0x8004A908",
           "end": "0x8004A9FC"
         },
         {
-          "symbol": "fn_8004A9FC",
+          "symbol": "BigObjAnimRegisterHandlers",
           "start": "0x8004A9FC",
           "end": "0x8004AA34"
         },
         {
-          "symbol": "fn_8004AA34",
+          "symbol": "BigObjAnimWritePose",
           "start": "0x8004AA34",
           "end": "0x8004ABF4"
         },
         {
-          "symbol": "fn_8004ABF4",
+          "symbol": "BigObjAnimReplayBlend",
           "start": "0x8004ABF4",
           "end": "0x8004AD3C"
         },
         {
-          "symbol": "fn_8004AD3C",
+          "symbol": "BigObjAnimLoadResident",
           "start": "0x8004AD3C",
           "end": "0x8004AF84"
         },
         {
-          "symbol": "fn_8004AF84",
+          "symbol": "BigObjAnimClearFlags",
           "start": "0x8004AF84",
           "end": "0x8004AF94"
         },
         {
-          "symbol": "fn_8004AF94",
+          "symbol": "BigObjAnimRestart",
           "start": "0x8004AF94",
           "end": "0x8004B020"
         },
         {
-          "symbol": "fn_8004B020",
+          "symbol": "BigObjFindNameId",
           "start": "0x8004B020",
           "end": "0x8004B088"
         },
         {
-          "symbol": "fn_8004B088",
+          "symbol": "BigObjRestoreState",
           "start": "0x8004B088",
           "end": "0x8004B1A0"
         },
         {
-          "symbol": "fn_8004B1A0",
+          "symbol": "BigObjKeepInBounds",
           "start": "0x8004B1A0",
           "end": "0x8004B354"
         },
         {
-          "symbol": "fn_8004B354",
+          "symbol": "BigObjOnAnimEvent",
           "start": "0x8004B354",
           "end": "0x8004BA44"
         },
         {
-          "symbol": "fn_8004BA44",
+          "symbol": "BigObjParseAnimEvent",
           "start": "0x8004BA44",
           "end": "0x8004BD20"
         },
         {
-          "symbol": "fn_8004BD20",
+          "symbol": "BigObjParseSwapEvent",
           "start": "0x8004BD20",
           "end": "0x8004C204"
         },
         {
-          "symbol": "fn_8004C204",
+          "symbol": "BigObjFindPartId",
           "start": "0x8004C204",
           "end": "0x8004C270"
         },
         {
-          "symbol": "fn_8004C270",
+          "symbol": "BigObjFindSwapState",
           "start": "0x8004C270",
           "end": "0x8004C2FC"
         },
         {
-          "symbol": "fn_8004C2FC",
+          "symbol": "BigObjFindEmotionState",
           "start": "0x8004C2FC",
           "end": "0x8004C368"
         },
         {
-          "symbol": "fn_8004C368",
+          "symbol": "BigObjFindTypeId",
           "start": "0x8004C368",
           "end": "0x8004C3D4"
         },
         {
-          "symbol": "fn_8004C3D4",
+          "symbol": "BigObjFindBehaviorId",
           "start": "0x8004C3D4",
           "end": "0x8004C440"
         },
         {
-          "symbol": "fn_8004C440",
+          "symbol": "BigObjFindEventType",
           "start": "0x8004C440",
           "end": "0x8004C4AC"
         },
         {
-          "symbol": "fn_8004C4AC",
+          "symbol": "BigObjFindSoundId",
           "start": "0x8004C4AC",
           "end": "0x8004C518"
         },
         {
-          "symbol": "fn_8004C518",
+          "symbol": "BigObjParseEvents",
           "start": "0x8004C518",
           "end": "0x8004C5E0"
         },
         {
-          "symbol": "fn_8004C5E0",
+          "symbol": "BigObjEffectSlotAcquire",
           "start": "0x8004C5E0",
           "end": "0x8004C684"
         },
         {
-          "symbol": "fn_8004C684",
+          "symbol": "BigObjParseBehavior",
           "start": "0x8004C684",
           "end": "0x8004C7B8"
         },
         {
-          "symbol": "fn_8004C7B8",
+          "symbol": "BigObjFreeEvents",
           "start": "0x8004C7B8",
           "end": "0x8004C844"
         },
         {
-          "symbol": "fn_8004C844",
+          "symbol": "BigObjHit",
           "start": "0x8004C844",
           "end": "0x8004CAA8"
         },
         {
-          "symbol": "fn_8004CAA8",
+          "symbol": "BigObjHitStatic",
           "start": "0x8004CAA8",
           "end": "0x8004CB98"
         },
         {
-          "symbol": "fn_8004CB98",
+          "symbol": "BigObjEffectSlotCount",
           "start": "0x8004CB98",
           "end": "0x8004CBB0"
         },
         {
-          "symbol": "fn_8004CBB0",
+          "symbol": "BigObjEffectSlotsReset",
           "start": "0x8004CBB0",
           "end": "0x8004CBE8"
         },
         {
-          "symbol": "fn_8004CBE8",
+          "symbol": "BigObjEffectsUpdate",
           "start": "0x8004CBE8",
           "end": "0x8004CBEC"
         },
         {
-          "symbol": "fn_8004CBEC",
+          "symbol": "BigObjEmitParticles",
           "start": "0x8004CBEC",
           "end": "0x8004CE6C"
         },
         {
-          "symbol": "fn_8004CE6C",
+          "symbol": "BigObjUpdatePartTimers",
           "start": "0x8004CE6C",
           "end": "0x8004CEE8"
         },
         {
-          "symbol": "fn_8004CEE8",
+          "symbol": "DynObjChildFollow",
           "start": "0x8004CEE8",
           "end": "0x8004CFCC"
         },
         {
-          "symbol": "fn_8004CFCC",
+          "symbol": "DynObjChildCreateList",
           "start": "0x8004CFCC",
           "end": "0x8004D068"
         },
         {
-          "symbol": "fn_8004D068",
+          "symbol": "DynObjChildDestroyList",
           "start": "0x8004D068",
           "end": "0x8004D0F4"
         },
         {
-          "symbol": "fn_8004D0F4",
+          "symbol": "DynObjChildInit",
           "start": "0x8004D0F4",
           "end": "0x8004D118"
         },
         {
-          "symbol": "fn_8004D118",
+          "symbol": "DynObjChildShutdown",
           "start": "0x8004D118",
           "end": "0x8004D144"
         },
         {
-          "symbol": "fn_8004D144",
+          "symbol": "DynObjChildSpawn",
           "start": "0x8004D144",
           "end": "0x8004D2F8"
         },
         {
-          "symbol": "fn_8004D2F8",
+          "symbol": "DynObjChildUpdate",
           "start": "0x8004D2F8",
           "end": "0x8004D334"
         },
         {
-          "symbol": "fn_8004D334",
+          "symbol": "ObjParseFind",
           "start": "0x8004D334",
           "end": "0x8004D3A8"
         },
         {
-          "symbol": "fn_8004D3A8",
+          "symbol": "ObjParseOpen",
           "start": "0x8004D3A8",
           "end": "0x8004D498"
         },
         {
-          "symbol": "fn_8004D498",
+          "symbol": "ObjParseRewind",
           "start": "0x8004D498",
           "end": "0x8004D4B0"
         },
         {
-          "symbol": "fn_8004D4B0",
+          "symbol": "ObjParseFindPath",
           "start": "0x8004D4B0",
           "end": "0x8004D508"
         },
         {
-          "symbol": "fn_8004D508",
+          "symbol": "ObjParseFindChild",
           "start": "0x8004D508",
           "end": "0x8004D560"
         },
         {
-          "symbol": "fn_8004D560",
+          "symbol": "ObjParseNext",
           "start": "0x8004D560",
           "end": "0x8004D5B8"
         },
         {
-          "symbol": "fn_8004D5B8",
+          "symbol": "ObjParseGetString",
           "start": "0x8004D5B8",
           "end": "0x8004D5F0"
         },
         {
-          "symbol": "fn_8004D5F0",
+          "symbol": "ObjParseGetInt",
           "start": "0x8004D5F0",
           "end": "0x8004D624"
         },
         {
-          "symbol": "fn_8004D624",
+          "symbol": "ObjParseGetFloat",
           "start": "0x8004D624",
           "end": "0x8004D65C"
         },
         {
-          "symbol": "fn_8004D65C",
+          "symbol": "ObjParseGetMatrix",
           "start": "0x8004D65C",
           "end": "0x8004D6F4"
         },
         {
-          "symbol": "fn_8004D6F4",
+          "symbol": "ObjParseGetFloats",
           "start": "0x8004D6F4",
           "end": "0x8004D728"
         },
         {
-          "symbol": "fn_8004D728",
+          "symbol": "ObjParseGetVector",
           "start": "0x8004D728",
           "end": "0x8004D798"
         },
         {
-          "symbol": "fn_8004D798",
+          "symbol": "ObjParseInit",
           "start": "0x8004D798",
           "end": "0x8004D818"
         },
         {
-          "symbol": "fn_8004D818",
+          "symbol": "ObjParseShutdown",
           "start": "0x8004D818",
           "end": "0x8004D84C"
         },
         {
-          "symbol": "fn_8004D84C",
+          "symbol": "ObjParseGetCursor",
           "start": "0x8004D84C",
           "end": "0x8004D860"
         },
         {
-          "symbol": "fn_8004D860",
+          "symbol": "ObjParseSetCursor",
           "start": "0x8004D860",
           "end": "0x8004D874"
         },
         {
-          "symbol": "fn_8004D874",
+          "symbol": "DynObjDrawModel",
           "start": "0x8004D874",
           "end": "0x8004D994"
         },
         {
-          "symbol": "fn_8004D994",
+          "symbol": "DynObjFindModel",
           "start": "0x8004D994",
           "end": "0x8004DA0C"
         },
         {
-          "symbol": "fn_8004DA0C",
+          "symbol": "DynObjLoadModel",
           "start": "0x8004DA0C",
           "end": "0x8004DC08"
         },
         {
-          "symbol": "fn_8004DC08",
+          "symbol": "DynObjFreeModel",
           "start": "0x8004DC08",
           "end": "0x8004DC88"
         },
         {
-          "symbol": "fn_8004DC88",
+          "symbol": "DynObjParseRender",
           "start": "0x8004DC88",
           "end": "0x8004DF68"
         },
         {
-          "symbol": "fn_8004DF68",
+          "symbol": "DynObjShutdown",
           "start": "0x8004DF68",
           "end": "0x8004DFDC"
         },
         {
-          "symbol": "fn_8004DFDC",
+          "symbol": "DynObjModelCacheReset",
           "start": "0x8004DFDC",
           "end": "0x8004E018"
         },
         {
-          "symbol": "fn_8004E018",
+          "symbol": "DynObjModelCacheFree",
           "start": "0x8004E018",
           "end": "0x8004E090"
         },
         {
-          "symbol": "fn_8004E090",
+          "symbol": "DynObjSetPartState",
           "start": "0x8004E090",
           "end": "0x8004E0CC"
         },
         {
-          "symbol": "fn_8004E0CC",
+          "symbol": "DynObjSetPart",
           "start": "0x8004E0CC",
           "end": "0x8004E0F4"
         },
         {
-          "symbol": "fn_8004E0F4",
+          "symbol": "DynObjFindSkeleton",
           "start": "0x8004E0F4",
           "end": "0x8004E16C"
         },
         {
-          "symbol": "fn_8004E16C",
+          "symbol": "DynObjLoadSkeleton",
           "start": "0x8004E16C",
           "end": "0x8004E2B4"
         },
         {
-          "symbol": "fn_8004E2B4",
+          "symbol": "DynObjFreeSkeleton",
           "start": "0x8004E2B4",
           "end": "0x8004E320"
         },
         {
-          "symbol": "fn_8004E320",
+          "symbol": "DynObjSkeletonCacheReset",
           "start": "0x8004E320",
           "end": "0x8004E358"
         },
         {
-          "symbol": "fn_8004E358",
+          "symbol": "DynObjSkeletonCacheFree",
           "start": "0x8004E358",
           "end": "0x8004E3CC"
         },
         {
-          "symbol": "fn_8004E3CC",
+          "symbol": "DynObjGetRootAngles",
           "start": "0x8004E3CC",
           "end": "0x8004E468"
         },
         {
-          "symbol": "fn_8004E468",
+          "symbol": "IgnorePair__20PhysCollisionHandlerP9RigidBodyT1",
           "start": "0x8004E468",
           "end": "0x8004E4D0"
         },
         {
-          "symbol": "fn_8004E4D0",
+          "symbol": "PhysPushPlayer",
           "start": "0x8004E4D0",
           "end": "0x8004EA80"
         },
         {
-          "symbol": "fn_8004EA80",
+          "symbol": "PhysHitBall",
           "start": "0x8004EA80",
           "end": "0x8004ED44"
         },
         {
-          "symbol": "fn_8004ED44",
+          "symbol": "OnContacts__20PhysCollisionHandlerfP9RigidBodyT2UiP11BodyContact",
           "start": "0x8004ED44",
           "end": "0x8004EE18"
         },
         {
-          "symbol": "fn_8004EE18",
+          "symbol": "OnImpulse__20PhysCollisionHandlerP9RigidBodyUiT1UiP13Vec3_801DE1E0N25",
           "start": "0x8004EE18",
           "end": "0x8004F20C"
         },
         {
-          "symbol": "fn_8004F20C",
+          "symbol": "ApplyForces__13PhysBodyGroupPv",
           "start": "0x8004F20C",
           "end": "0x8004F2D0"
         },
         {
-          "symbol": "fn_8004F2D0",
+          "symbol": "PhysAddCapsule",
           "start": "0x8004F2D0",
           "end": "0x8004F3A4"
         },
         {
-          "symbol": "fn_8004F3A4",
+          "symbol": "PhysAddBox",
           "start": "0x8004F3A4",
           "end": "0x8004F4B4"
         },
         {
-          "symbol": "fn_8004F4B4",
+          "symbol": "PhysAddSphere",
           "start": "0x8004F4B4",
           "end": "0x8004F56C"
         },
         {
-          "symbol": "fn_8004F56C",
+          "symbol": "PhysSetShapeNames",
           "start": "0x8004F56C",
           "end": "0x8004F710"
         },
         {
-          "symbol": "fn_8004F710",
+          "symbol": "PhysFreeShapeNames",
           "start": "0x8004F710",
           "end": "0x8004F754"
         },
         {
-          "symbol": "fn_8004F754",
+          "symbol": "PhysLoadObject",
           "start": "0x8004F754",
           "end": "0x8004FF8C"
         },
         {
-          "symbol": "fn_8004FF8C",
+          "symbol": "PhysAddPlayers",
           "start": "0x8004FF8C",
           "end": "0x800502C0"
         },
         {
-          "symbol": "fn_800502C0",
+          "symbol": "PhysAddBall",
           "start": "0x800502C0",
           "end": "0x800504EC"
         },
         {
-          "symbol": "fn_800508A0",
+          "symbol": "PhysInit",
+          "start": "0x800504EC",
+          "end": "0x800508A0"
+        },
+        {
+          "symbol": "PhysUpdateBallRest",
           "start": "0x800508A0",
           "end": "0x80050960"
         },
         {
-          "symbol": "fn_80050964",
+          "symbol": "PhysDebugLine",
+          "start": "0x80050960",
+          "end": "0x80050964"
+        },
+        {
+          "symbol": "PhysUpdatePlayers",
           "start": "0x80050964",
           "end": "0x80050CCC"
         },
         {
-          "symbol": "fn_80050CCC",
+          "symbol": "PhysUpdateBall",
           "start": "0x80050CCC",
           "end": "0x80050DA0"
         },
         {
-          "symbol": "fn_80050DA0",
+          "symbol": "PhysUpdateObjects",
           "start": "0x80050DA0",
           "end": "0x80050F14"
         },
         {
-          "symbol": "fn_80050F14",
+          "symbol": "PhysDebugDraw",
           "start": "0x80050F14",
           "end": "0x8005122C"
         },
         {
-          "symbol": "fn_8005164C",
-          "start": "0x8005164C",
-          "end": "0x80051680"
-        },
-        {
-          "symbol": "fn_80051680",
-          "start": "0x80051680",
-          "end": "0x800516B4"
-        },
-        {
-          "symbol": "fn_800516B4",
-          "start": "0x800516B4",
-          "end": "0x800516E4"
-        },
-        {
-          "symbol": "fn_800516E4",
-          "start": "0x800516E4",
-          "end": "0x80051724"
-        },
-        {
-          "symbol": "fn_80051724",
-          "start": "0x80051724",
-          "end": "0x80051810"
-        },
-        {
-          "symbol": "fn_80051810",
-          "start": "0x80051810",
-          "end": "0x80051880"
-        },
-        {
-          "symbol": "fn_80051880",
-          "start": "0x80051880",
-          "end": "0x800518E0"
-        },
-        {
-          "symbol": "fn_800518E0",
-          "start": "0x800518E0",
-          "end": "0x80051B3C"
-        },
-        {
-          "symbol": "fn_80051B3C",
-          "start": "0x80051B3C",
-          "end": "0x80051B88"
-        },
-        {
-          "symbol": "fn_80051B88",
-          "start": "0x80051B88",
-          "end": "0x80051D0C"
-        },
-        {
-          "symbol": "fn_80051DB4",
-          "start": "0x80051DB4",
-          "end": "0x80051DBC"
-        },
-        {
-          "symbol": "fn_8005122C",
+          "symbol": "PhysUpdate",
           "start": "0x8005122C",
           "end": "0x80051308"
         },
         {
-          "symbol": "_._11PhysicsTime",
-          "start": "0x80051D60",
-          "end": "0x80051D94"
+          "symbol": "PhysShutdown",
+          "start": "0x80051308",
+          "end": "0x8005164C"
+        },
+        {
+          "symbol": "PhysIsBall",
+          "start": "0x8005164C",
+          "end": "0x80051680"
+        },
+        {
+          "symbol": "PhysIsPlayer",
+          "start": "0x80051680",
+          "end": "0x800516B4"
+        },
+        {
+          "symbol": "PhysSetBodyPose",
+          "start": "0x800516B4",
+          "end": "0x800516E4"
+        },
+        {
+          "symbol": "PhysSleepBody",
+          "start": "0x800516E4",
+          "end": "0x80051724"
+        },
+        {
+          "symbol": "PhysApplyImpulse",
+          "start": "0x80051724",
+          "end": "0x80051810"
+        },
+        {
+          "symbol": "PhysDampLinear",
+          "start": "0x80051810",
+          "end": "0x80051880"
+        },
+        {
+          "symbol": "PhysDampAngular",
+          "start": "0x80051880",
+          "end": "0x800518E0"
+        },
+        {
+          "symbol": "PhysPlayerHitObject",
+          "start": "0x800518E0",
+          "end": "0x80051B3C"
+        },
+        {
+          "symbol": "PhysSetObjectPosition",
+          "start": "0x80051B3C",
+          "end": "0x80051B88"
+        },
+        {
+          "symbol": "PhysPushObjects",
+          "start": "0x80051B88",
+          "end": "0x80051D0C"
         },
         {
           "symbol": "__static_initialization_and_destruction_0",
@@ -9723,12 +9728,27 @@
           "end": "0x80051D60"
         },
         {
-          "symbol": "_GLOBAL_.I.fn_8004A2F4",
+          "symbol": "_._11PhysicsTime",
+          "start": "0x80051D60",
+          "end": "0x80051D94"
+        },
+        {
+          "symbol": "_._13PhysBodyGroup",
+          "start": "0x80051D94",
+          "end": "0x80051DB4"
+        },
+        {
+          "symbol": "AfterStep__13PhysBodyGroupii",
+          "start": "0x80051DB4",
+          "end": "0x80051DBC"
+        },
+        {
+          "symbol": "_GLOBAL_.I.BigObjAnimReadPose",
           "start": "0x80051DBC",
           "end": "0x80051DE8"
         },
         {
-          "symbol": "_GLOBAL_.D.fn_8004A2F4",
+          "symbol": "_GLOBAL_.D.BigObjAnimReadPose",
           "start": "0x80051DE8",
           "end": "0x80051E14"
         }
@@ -10044,9 +10064,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80044F20.cpp",
+      "source": "src/game/PlaDynClutOps.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x80044F20-0x80046004 (src/game/cu_80044F20.cpp), its compiler, type and source-form rows, the 13 target-exact function boundaries (6 bodies exact, 7 partial) and the exact .rodata data row 0x8028D568-0x8028D588. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80044F20-0x80046004 (src/game/PlaDynClutOps.cpp), its compiler, type and source-form rows, the 13 target-exact function boundaries (6 bodies exact, 7 partial) and the exact .rodata data row 0x8028D568-0x8028D588. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -10063,27 +10083,27 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80044F20",
+          "symbol": "PlaDynClutParseOps",
           "start": "0x80044F20",
           "end": "0x80045020"
         },
         {
-          "symbol": "fn_80045020",
+          "symbol": "PlaDynClutFindPalette",
           "start": "0x80045020",
           "end": "0x80045084"
         },
         {
-          "symbol": "fn_80045084",
+          "symbol": "PlaDynClutBeginTable",
           "start": "0x80045084",
           "end": "0x800450A8"
         },
         {
-          "symbol": "fn_800450A8",
+          "symbol": "PlaDynClutEndTable",
           "start": "0x800450A8",
           "end": "0x800450D8"
         },
         {
-          "symbol": "fn_800450D8",
+          "symbol": "PlaDynClutSetRange",
           "start": "0x800450D8",
           "end": "0x800451D0"
         },
@@ -10093,37 +10113,37 @@
           "end": "0x800452F8"
         },
         {
-          "symbol": "fn_800452F8",
+          "symbol": "PlaDynClutBlendRange",
           "start": "0x800452F8",
           "end": "0x80045524"
         },
         {
-          "symbol": "fn_80045524",
+          "symbol": "PlaDynClutBlendPaletteToEnd",
           "start": "0x80045524",
           "end": "0x80045714"
         },
         {
-          "symbol": "fn_80045714",
+          "symbol": "PlaDynClutBlendStartToPalette",
           "start": "0x80045714",
           "end": "0x80045904"
         },
         {
-          "symbol": "fn_80045904",
+          "symbol": "PlaDynClutBlendSourceToEnd",
           "start": "0x80045904",
           "end": "0x80045B30"
         },
         {
-          "symbol": "fn_80045B30",
+          "symbol": "PlaDynClutBlendStartToSource",
           "start": "0x80045B30",
           "end": "0x80045D5C"
         },
         {
-          "symbol": "fn_80045D5C",
+          "symbol": "PlaDynClutScaleRange",
           "start": "0x80045D5C",
           "end": "0x80045F64"
         },
         {
-          "symbol": "fn_80045F64",
+          "symbol": "PlaDynClutApplyOp",
           "start": "0x80045F64",
           "end": "0x80046004"
         }
@@ -29074,301 +29094,6 @@
       ]
     },
     {
-      "source": "src/engine/Resource.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv Resource.c unit row 0x801EC650-0x801F1538; all 50 complete source bodies retain full original extents under the unchanged engine_c profile. Documented partials remain measured; original assembly stays linked pending complete native text and data placement.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801EC650",
-          "end": "0x801F1538"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B17C0",
-          "end": "0x802B1828"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802F9508",
-          "end": "0x802F9524"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBD80",
-          "end": "0x803EBDB4"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8039AE14",
-          "end": "0x8039AE8C"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ECF70",
-          "end": "0x803ECF80"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_ResGetDirInfo",
-          "start": "0x801EC650",
-          "end": "0x801EC6C4"
-        },
-        {
-          "symbol": "_ResGetBlockOffset",
-          "start": "0x801EC6C4",
-          "end": "0x801EC718"
-        },
-        {
-          "symbol": "_ResBlockLoadCompFileAsync",
-          "start": "0x801EC718",
-          "end": "0x801EC760"
-        },
-        {
-          "symbol": "_ResBlockLoadCompFileAsyncBlockCallback",
-          "start": "0x801EC760",
-          "end": "0x801EC894"
-        },
-        {
-          "symbol": "_ResCalcPad",
-          "start": "0x801EC894",
-          "end": "0x801EC8AC"
-        },
-        {
-          "symbol": "_ResFileInsertFunc",
-          "start": "0x801EC8AC",
-          "end": "0x801EC8D4"
-        },
-        {
-          "symbol": "_ResFileSearchByFileNameFunc",
-          "start": "0x801EC8D4",
-          "end": "0x801EC914"
-        },
-        {
-          "symbol": "_ResAsyncCallbackFunc",
-          "start": "0x801EC914",
-          "end": "0x801ECBE4"
-        },
-        {
-          "symbol": "_ResGetBaseBlockSize",
-          "start": "0x801ECBE4",
-          "end": "0x801ECC70"
-        },
-        {
-          "symbol": "_ResLoadRes",
-          "start": "0x801ECC70",
-          "end": "0x801ED634"
-        },
-        {
-          "symbol": "_ResLoadResAsync",
-          "start": "0x801ED634",
-          "end": "0x801EDC2C"
-        },
-        {
-          "symbol": "_ResLockRes",
-          "start": "0x801EDC2C",
-          "end": "0x801EDCD0"
-        },
-        {
-          "symbol": "_ResUnlockRes",
-          "start": "0x801EDCD0",
-          "end": "0x801EDD68"
-        },
-        {
-          "symbol": "_ResReadTerfBlock",
-          "start": "0x801EDD68",
-          "end": "0x801EDDB0"
-        },
-        {
-          "symbol": "_ResReadBlock",
-          "start": "0x801EDDB0",
-          "end": "0x801EDDF8"
-        },
-        {
-          "symbol": "_ResInitResourceFile",
-          "start": "0x801EDDF8",
-          "end": "0x801EE38C"
-        },
-        {
-          "symbol": "_ResInitRamResourceFile",
-          "start": "0x801EE38C",
-          "end": "0x801EE700"
-        },
-        {
-          "symbol": "_ResGetResourceBuffer",
-          "start": "0x801EE700",
-          "end": "0x801EE91C"
-        },
-        {
-          "symbol": "_ResUnprotectAll",
-          "start": "0x801EE91C",
-          "end": "0x801EE970"
-        },
-        {
-          "symbol": "ResInit",
-          "start": "0x801EE970",
-          "end": "0x801EEA60"
-        },
-        {
-          "symbol": "ResShutdown",
-          "start": "0x801EEA60",
-          "end": "0x801EEB44"
-        },
-        {
-          "symbol": "ResOpenDevice",
-          "start": "0x801EEB44",
-          "end": "0x801EECD0"
-        },
-        {
-          "symbol": "ResOpenRam",
-          "start": "0x801EECD0",
-          "end": "0x801EEFAC"
-        },
-        {
-          "symbol": "ResClose",
-          "start": "0x801EEFAC",
-          "end": "0x801EF390"
-        },
-        {
-          "symbol": "ResLoad",
-          "start": "0x801EF390",
-          "end": "0x801EF548"
-        },
-        {
-          "symbol": "ResLoadAsync",
-          "start": "0x801EF548",
-          "end": "0x801EF7BC"
-        },
-        {
-          "symbol": "ResLoadToBuffer",
-          "start": "0x801EF7BC",
-          "end": "0x801EF92C"
-        },
-        {
-          "symbol": "ResWriteFromBuffer",
-          "start": "0x801EF92C",
-          "end": "0x801EFAD8"
-        },
-        {
-          "symbol": "ResLoadAsyncToBuffer",
-          "start": "0x801EFAD8",
-          "end": "0x801EFD2C"
-        },
-        {
-          "symbol": "ResCopyAsyncToBuffer",
-          "start": "0x801EFD2C",
-          "end": "0x801EFF80"
-        },
-        {
-          "symbol": "ResCopyToBuffer",
-          "start": "0x801EFF80",
-          "end": "0x801F010C"
-        },
-        {
-          "symbol": "ResUnLoad",
-          "start": "0x801F010C",
-          "end": "0x801F02AC"
-        },
-        {
-          "symbol": "ResLoadAll",
-          "start": "0x801F02AC",
-          "end": "0x801F08FC"
-        },
-        {
-          "symbol": "ResUnLoadAll",
-          "start": "0x801F08FC",
-          "end": "0x801F0A8C"
-        },
-        {
-          "symbol": "ResFindIndexByName",
-          "start": "0x801F0A8C",
-          "end": "0x801F0C50"
-        },
-        {
-          "symbol": "ResGetSize",
-          "start": "0x801F0C50",
-          "end": "0x801F0D34"
-        },
-        {
-          "symbol": "ResGetNumResources",
-          "start": "0x801F0D34",
-          "end": "0x801F0DB8"
-        },
-        {
-          "symbol": "ResIsLoaded",
-          "start": "0x801F0DB8",
-          "end": "0x801F0E68"
-        },
-        {
-          "symbol": "ResIsLoading",
-          "start": "0x801F0E68",
-          "end": "0x801F0F18"
-        },
-        {
-          "symbol": "ResSync",
-          "start": "0x801F0F18",
-          "end": "0x801F0F9C"
-        },
-        {
-          "symbol": "ResIsOpen",
-          "start": "0x801F0F9C",
-          "end": "0x801F1008"
-        },
-        {
-          "symbol": "ResIsMemoryBacked",
-          "start": "0x801F1008",
-          "end": "0x801F10B0"
-        },
-        {
-          "symbol": "ResGetStreamInfo",
-          "start": "0x801F10B0",
-          "end": "0x801F11AC"
-        },
-        {
-          "symbol": "ResSetFlags",
-          "start": "0x801F11AC",
-          "end": "0x801F1230"
-        },
-        {
-          "symbol": "ResClearFlags",
-          "start": "0x801F1230",
-          "end": "0x801F12B4"
-        },
-        {
-          "symbol": "ResCallTimedAsync",
-          "start": "0x801F12B4",
-          "end": "0x801F1488"
-        },
-        {
-          "symbol": "ResUnprotect",
-          "start": "0x801F1488",
-          "end": "0x801F149C"
-        },
-        {
-          "symbol": "ResGetAlignment",
-          "start": "0x801F149C",
-          "end": "0x801F1520"
-        },
-        {
-          "symbol": "ResSetMemFlags",
-          "start": "0x801F1520",
-          "end": "0x801F1530"
-        },
-        {
-          "symbol": "ResGetMemAllocFlags",
-          "start": "0x801F1530",
-          "end": "0x801F1538"
-        }
-      ]
-    },
-    {
       "source": "src/engine/reswrite.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x801F17E0-0x801F2310 (src/engine/reswrite.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
@@ -31521,49 +31246,6 @@
           "symbol": "CamInterpUpdateEaseInOut",
           "start": "0x8013CC7C",
           "end": "0x8013CD58"
-        }
-      ]
-    },
-    {
-      "source": "src/game/BigObj.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800400CC-0x80041210 (src/game/BigObj.cpp), the BigObj draft source-form row 0x800400CC-0x80040154 and the exact function rows 0x800400CC-0x80040154. Draft comparisons only; the file's .rodata, .sdata and .sbss placements are fully covered by its linked source and used only for relocation, and original bytes remain linked for the two unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800400CC",
-          "end": "0x80041210"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8028D38C",
-          "end": "0x8028D400"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EA480",
-          "end": "0x803EA488"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803EC784",
-          "end": "0x803EC790"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "BigObjDefaultUpdate",
-          "start": "0x800400CC",
-          "end": "0x800400D4"
-        },
-        {
-          "symbol": "BigObjLinkGroup",
-          "start": "0x800400D4",
-          "end": "0x80040154"
         }
       ]
     },

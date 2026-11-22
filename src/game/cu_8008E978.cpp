@@ -790,7 +790,7 @@ extern "C" int fn_801784C4(void);
 
 extern "C" BigObjInst *BallModelGetLinkedObj(Block_80170E64 *pBlock);
 
-extern "C" int fn_8004AF94(BigObjInst *pBall, int a, int b, int c, unsigned char index);
+extern "C" int BigObjAnimRestart(BigObjInst *pBall, int a, int b, int c, unsigned char index);
 
 extern "C" void BallStateChange(Ball_t *pBall, int a, int b);
 
@@ -2110,7 +2110,7 @@ void PlyrMgrTestCollisions(void);
 }
 
 extern "C" {
-void fn_8005122C(float dt);
+void PhysUpdate(float dt);
 }
 
 extern "C" {
@@ -3517,7 +3517,7 @@ int AnimWgtShutdown(void);
 }
 
 extern "C" {
-void fn_8004AD3C(void *);
+void BigObjAnimLoadResident(void *);
 }
 
 extern "C" {
@@ -3541,7 +3541,7 @@ int AnimChanIsMirrored(AnimChannel_t *);
 }
 
 extern "C" {
-void fn_800518E0(Object_80039F5C *);
+void PhysPlayerHitObject(Object_80039F5C *);
 }
 
 extern "C" {
@@ -3608,7 +3608,7 @@ int fn_801784C4(void);
 }
 
 extern "C" {
-void fn_80051B3C(BigObj_t *pOwner, float *pPos);
+void PhysSetObjectPosition(BigObj_t *pOwner, float *pPos);
 }
 
 extern int lbl_803EA8CC;
@@ -8179,7 +8179,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             p->mUnknown1240.mUnknown0=(short)AnimSeqGetOpcodeParameter();
             p->mUnknown1240.mUnknown2=(signed char)AnimSeqGetOpcodeParameter();
             if(p->mUnknown1240.mUnknown2==7) {
-                fn_800518E0(p);AudmonEventPostId(46,&p->mMotion.mPos,p->mId,0,0,0);
+                PhysPlayerHitObject(p);AudmonEventPostId(46,&p->mMotion.mPos,p->mId,0,0,0);
             } else {
                 fn_800C8688(p,0,p->mUnknown1240.mUnknown0,0);
                 if(fn_800C8694(p) && p->mpState->mId==16) p->mFlags|=0x10000;
@@ -8393,7 +8393,7 @@ extern "C" void fn_8008FDC0(void)
     fn_8008EB18(81,0,0);fn_8008EB18(64,0,lbl_803EC91C);
     fn_8008EB18(72,0,lbl_803EC91C);fn_8008EB18(73,0,lbl_803EC91C);
     fn_8008EB18(78,0,0);fn_8008EB18(79,0,0);fn_8008EB18(80,0,0);
-    fn_8008F9F0(0);fn_8004AD3C(lbl_803EC920);
+    fn_8008F9F0(0);BigObjAnimLoadResident(lbl_803EC920);
 }
 
 extern "C" void fn_8008FE5C(void) {}
@@ -8722,7 +8722,7 @@ extern "C" void fn_80090558(Character_80093BCC *pCharacter, Actor_801C009C *pAct
    set). Each object BigObjInstGet lists whose x and y lie inside the box gets
    x and y moved: past the corner on the side farther from it, by
    2 * (1 + 0.05 * SyncRandGetRange(0, 50)), unless already beyond that, and
-   the result goes to fn_80051B3C for the matching BigObjGet owner. */
+   the result goes to PhysSetObjectPosition for the matching BigObjGet owner. */
 extern "C" void fn_80090BDC(void)
 {
     float lo[3];
@@ -8739,9 +8739,9 @@ extern "C" void fn_80090BDC(void)
     for (i = 0; i < BigObjGetCount(); i++) {
         BigObjInst *pObject = BigObjInstGet(i);
 
-        pos[0] = pObject->mUnknown8;
-        pos[1] = pObject->mUnknown12;
-        pos[2] = pObject->mUnknown16;
+        pos[0] = pObject->mState.mUnknown0;
+        pos[1] = pObject->mState.mUnknown4;
+        pos[2] = pObject->mState.mUnknown8;
         if (pos[0] >= lo[0] && pos[0] <= hi[0] && pos[1] >= lo[1] && pos[1] <= hi[1]) {
             float margin = 2.0f * (SyncRandGetRange(0, 50) * 0.05f + 1.0f);
 
@@ -8756,7 +8756,7 @@ extern "C" void fn_80090BDC(void)
             } else {
                 pos[1] = (lo[1] - margin <= pos[1]) ? lo[1] - margin : pos[1];
             }
-            fn_80051B3C(BigObjGet(i), pos);
+            PhysSetObjectPosition(BigObjGet(i), pos);
         }
     }
 }
@@ -8987,19 +8987,19 @@ extern "C" void fn_80091578(Character_80093BCC *pCharacter, Entry_80091644 *pEnt
 
     fn_80091EC0(pCharacter, fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4), pCharacter->mUnknown14[0],
                 &pos, &angle);
-    fn_800B267C((Object_800B26B0 *)&pBall->mUnknown8);
+    fn_800B267C((Object_800B26B0 *)&pBall->mState.mUnknown0);
     if (fn_801784C4() != 0) {
         angle = (angle + 0x800000) & 0xFFFFFF;
-        pBall->mUnknown8 = -pos.mX;
-        pBall->mUnknown12 = -pos.mY;
-        pBall->mUnknown16 = pos.mZ;
-        pBall->mUnknown32 = angle;
+        pBall->mState.mUnknown0 = -pos.mX;
+        pBall->mState.mUnknown4 = -pos.mY;
+        pBall->mState.mUnknown8 = pos.mZ;
+        pBall->mState.mUnknown24 = angle;
         pBall->mUnknown428->mUnknown56 = angle;
     } else {
-        pBall->mUnknown8 = pos.mX;
-        pBall->mUnknown12 = pos.mY;
-        pBall->mUnknown16 = pos.mZ;
-        pBall->mUnknown32 = angle;
+        pBall->mState.mUnknown0 = pos.mX;
+        pBall->mState.mUnknown4 = pos.mY;
+        pBall->mState.mUnknown8 = pos.mZ;
+        pBall->mState.mUnknown24 = angle;
         pBall->mUnknown428->mUnknown56 = angle;
     }
 }
@@ -9029,7 +9029,7 @@ extern "C" int fn_800916E0(int index)
         if (pActor->mpUnknown20[i].mId == 0x4A4D4100) {
             Block_80170E64 *pBlock = BallGetModel(BallGetCurrent());
 
-            pBlock->mUnknown680 = fn_8004AF94(BallModelGetLinkedObj(pBlock), pCharacter->mUnknown4, pCharacter->mUnknown0, 0, i);
+            pBlock->mUnknown680 = BigObjAnimRestart(BallModelGetLinkedObj(pBlock), pCharacter->mUnknown4, pCharacter->mUnknown0, 0, i);
             BallSetVisible(BallGetCurrent(), 1);
             BallStateChange(BallGetCurrent(), 8, 0);
         }
@@ -22073,7 +22073,7 @@ extern "C" void fn_800AD550(float dt)
         CollideSetUpdate(StatcollGetSet());
         PlyrMgrTestCollisions();
     }
-    fn_8005122C(dt);
+    PhysUpdate(dt);
     BallsProcessCollision(dt);
 }
 
