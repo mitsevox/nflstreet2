@@ -1,5 +1,6 @@
 /* Queues streamed audio for each voice channel and delivers its release and playback callbacks. */
 
+#include "engine/sndbank.h"
 #include "engine/sndsys.h"
 
 /* Release-style assertion form for the vacant-slot branch. */
@@ -9,7 +10,6 @@ extern "C" {
 
 SndPacketPlayers_t sndpps;
 
-int SNDPLATFORM_packetplaycreate(int index, void *stream);
 int SNDstop(int handle);
 void SNDPKTPLAYI_flushcallbackdata(void);
 int SNDPKTPLAY_purge(int index, int a, int b);
@@ -17,10 +17,8 @@ void SNDI_checkplayopts(SndPlayOpts_t *opts);
 void iSNDcalcpitch(int index);
 int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, Info_80274464 *info, Struct_80274464 *p);
 void SNDVOICEI_free(int value);
-void SNDPLATFORM_getvoicerange(unsigned int flags, int *a, int *b);
 extern float lbl_80300028;
 int SNDVOICEI_alloc(int count, int priority, int *handle, int rate, int format);
-int SNDI_validrendermode(int *mode, SndPatchHeader_t *header);
 void SetDefaultAzimuths(Record_803A6DF0 *p);
 int SNDPKTPLAYI_gethighchannel(int index, int count);
 
@@ -48,9 +46,8 @@ int SNDPKTPLAY_overhead(int count)
     return SNDPKTPLAYI_overhead(count) + SNDPLATFORM_packetoverhead();
 }
 
-int SNDPKTPLAY_create(void (*release)(int value, void *context), void (*callback)(int index, int value, void *context),
-                      void *context, void *memory,
-                      unsigned int size)
+int SNDPKTPLAY_create(SndPacketReleaseFn_t release, SndPacketFramesDoneFn_t callback, void *context,
+                      void *memory, unsigned int size)
 {
     SndPacketPlayer_t *stream;
     void *voice;
@@ -67,7 +64,7 @@ int SNDPKTPLAY_create(void (*release)(int value, void *context), void (*callback
 found:
     // FAKEMATCH: compiled-out assert; its empty do-while keeps the slot search apart from the voice setup
     SND_ASSERT(size >= (unsigned int)SNDPKTPLAY_overhead(8));
-    if (SNDPLATFORM_packetplaycreate(i, memory) < 0) {
+    if (SNDPLATFORM_packetplaycreate(i, (Stream_802743A0 *)memory) < 0) {
         SNDSYS_leavecritical();
         return -6;
     }
@@ -91,7 +88,7 @@ int SNDPKTPLAY_start(int index, Info_80274464 *info, Struct_80274464 *params, Sn
     SndPacketPlayer_t *stream;
     Record_803A6DF0 *record;
     Record_803A6DF0 *channel;
-    SndPatchHeader_t header;
+    SNDIPATCHHEADER header;
     int rate;
     int format;
     int handle;
@@ -311,7 +308,7 @@ unsigned char *SNDPKTPLAYI_get(int index, int channel, int *count, int *last)
             event = &sndpps.mEvents[sndpps.mEventCount];
             event->mKind = 1;
             event->mPlayerIndex = index;
-            event->mValue = (int)oldest->mChannelData[0];
+            event->mPayload.mpBuffer = oldest->mChannelData[0];
             sndpps.mEventCount++;
         }
         stream->mRetireIndex++;
@@ -364,7 +361,7 @@ void SNDPKTPLAYI_freeframes(int index, int channel, int value)
             event = &sndpps.mEvents[sndpps.mEventCount];
             event->mKind = 0;
             event->mPlayerIndex = index;
-            event->mValue = value;
+            event->mPayload.mFrames = value;
             sndpps.mEventCount++;
         }
     }
@@ -380,9 +377,9 @@ void SNDPKTPLAYI_flushcallbackdata(void)
         event = &sndpps.mEvents[i];
         stream = sndpps.mPlayers[event->mPlayerIndex];
         if (event->mKind == 0) {
-            stream->mFramesDoneCallback(event->mPlayerIndex, event->mValue, stream->mCallbackContext);
+            stream->mFramesDoneCallback(event->mPlayerIndex, event->mPayload.mFrames, stream->mCallbackContext);
         } else {
-            stream->mReleaseCallback(event->mValue, stream->mCallbackContext);
+            stream->mReleaseCallback(event->mPayload.mpBuffer, stream->mCallbackContext);
         }
     }
     sndpps.mEventCount = 0;

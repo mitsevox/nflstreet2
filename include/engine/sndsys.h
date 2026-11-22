@@ -75,6 +75,9 @@ typedef struct SndPacketEntry_t {
     void *mChannelData[6];
 } SndPacketEntry_t;
 
+typedef void (*SndPacketReleaseFn_t)(void *buffer, void *context);
+typedef void (*SndPacketFramesDoneFn_t)(int index, unsigned int frames, void *context);
+
 typedef struct SndPacketPlayer_t {
     // FAKEMATCH: the packet-queue members are volatile for the target's re-reads and access order
     int mVoiceHandle;
@@ -92,28 +95,21 @@ typedef struct SndPacketPlayer_t {
     volatile int mQueuedFrames;
     volatile int mActiveFrames;
     void *mVoiceMemory;
-    void (*mReleaseCallback)(int value, void *context);
-    void (*mFramesDoneCallback)(int index, int value, void *context);
+    SndPacketReleaseFn_t mReleaseCallback;
+    SndPacketFramesDoneFn_t mFramesDoneCallback;
     void *mCallbackContext;
     Info_80274464 mFormat;
     void *mChannelBuffers[6];
     SndPacketEntry_t mEntries[1];
 } SndPacketPlayer_t;
 
-/* A patch header (256 bytes; SNDPKTPLAY_start builds one on its stack): channel count +0x3 and the
-   render flags +0x18 that SNDI_validrendermode tests; the rest is not established. */
-typedef struct SndPatchHeader_t {
-    unsigned char mUnknown0[3];
-    unsigned char m3;
-    unsigned char mUnknown4[0x14];
-    unsigned short m18;
-    unsigned char mUnknown1A[0xE6];
-} SndPatchHeader_t;
-
 typedef struct SndPacketEvent_t {
     unsigned short mKind;
     unsigned short mPlayerIndex;
-    int mValue;
+    union {
+        void *mpBuffer;
+        unsigned int mFrames;
+    } mPayload;
 } SndPacketEvent_t;
 
 typedef struct SndPacketPlayers_t {

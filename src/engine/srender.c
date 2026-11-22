@@ -1,10 +1,11 @@
 /* Finds the next sound output mode that meets a patch's playback requirements. */
 
+#include "engine/sndbank.h"
 #include "engine/sndsys.h"
 
 extern "C" {
 
-int SNDI_validrendermode(int *modeCursor, SndPatchHeader_t *header)
+int SNDI_validrendermode(int *modeCursor, const SNDIPATCHHEADER *header)
 {
     int result = 0;
     // FAKEMATCH: reuse the index for the first mask and keep the branch-local cursor reloads.
