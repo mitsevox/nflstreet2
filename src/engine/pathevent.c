@@ -172,7 +172,10 @@ extern "C" int PATHI_serviceevent(int index)
     if (p->mUnknown8 > lbl_803EBB3C)
         return 0;
     unsigned int i = p->mUnknown10;
-    Event_801B845C *entry = &p->mUnknown14[i];
+    // The packed actions immediately follow the sequence header.
+    // FAKEMATCH: Integer address addition reproduces ProDG's indexed add operand order.
+    Event_801B845C *entry = reinterpret_cast<Event_801B845C *>(
+        i * sizeof(Event_801B845C) + reinterpret_cast<unsigned long long>(p->mUnknown14));
     for (; i < p->mUnknownF; ++entry, ++i) {
         if ((entry->mUnknown4 & 0x10000) || fn_801B7880(p, entry)) {
             ++count;

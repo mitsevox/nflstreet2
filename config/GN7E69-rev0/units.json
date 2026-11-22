@@ -25338,19 +25338,13 @@
     },
     {
       "source": "src/engine/pathevent.c",
-      "profile": "path_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x801B5E5C-0x801B6780 (src/engine/pathevent.c), its function, name, data and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdout fn_801B64C0, whose range keeps the original bytes. .rodata 0x802AECBC-0x802AECFC is the file's \"%s  %s\" string and the PATHI_copyevent message, defined by the file; the PATH globals it uses stay original-owned.",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B5E5C-0x801B6780 (src/engine/pathevent.c), the event-service address calculation row, and the exact literal pool 0x802AECBC-0x802AECFC. The ordinary PATH profile supplies all ten functions and both literals from one native object.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B5E5C",
-          "end": "0x801B64C0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B6578",
           "end": "0x801B6780"
         },
         {
@@ -25359,16 +25353,7 @@
           "start": "0x802AECBC",
           "end": "0x802AECFC"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "PATHI_serviceevent",
-            "evidence": "evidence.tsv source-form 0x801B64C0-0x801B6578"
-          }
-        ],
-        "evidence": "merge notes of #1370 (w1) holdouts table: src/engine/pathevent.c holds out PATHI_serviceevent; its HOLDOUT: row evidence.tsv source-form 0x801B64C0-0x801B6578 lists the forms tried and the RTL-dump finding."
-      }
+      ]
     },
     {
       "source": "src/game/cu_80176F18.cpp",
