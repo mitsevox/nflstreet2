@@ -27,29 +27,35 @@ typedef struct ConChannel_t {
     float *mpPrev;
 } ConChannel_t;
 
-extern unsigned char lbl_803EBBEC;
-extern ConChannel_t *lbl_803EBBF0;
-extern ConCallback_t lbl_803EBBF4;
-extern unsigned int lbl_803ECED8;
-extern unsigned int lbl_803ECEDC;
-extern char *lbl_803ECEE0;
+static unsigned char _Context_ModuleActive = 0;
+
+/* The context channels, and the message callback. */
+static ConChannel_t *_pCon_Channel = 0;
+static ConCallback_t _Con_pMsgFunc = 0;
+
+/* The channel count, the bytes of each channel's current and previous data, and that data. */
+static unsigned int _Con_NumChannels;
+static unsigned int _Con_DataSize;
+static char *_pCon_Data;
+
+static Lock_801F8014 _Context_CS;
+
 extern int lbl_803ED624;
-extern Lock_801F8014 lbl_8037F860;
 
 int MemFill(void *pDest, int size, int value, int width);
 
 static void _ConClearChannel(unsigned int channel)
 {
-    if (lbl_803EBBEC && lbl_803EBBF0) {
-        memset(lbl_803EBBF0[channel].mpCur, 0, lbl_803ECEDC);
-        memset(lbl_803EBBF0[channel].mpPrev, 0, lbl_803ECEDC);
+    if (_Context_ModuleActive && _pCon_Channel) {
+        memset(_pCon_Channel[channel].mpCur, 0, _Con_DataSize);
+        memset(_pCon_Channel[channel].mpPrev, 0, _Con_DataSize);
     }
 }
 
 static void _ConUpdateChannel(unsigned int channel)
 {
-    if ((lbl_803EBBF0[channel].mFlags & 1) && lbl_803EBBF0[channel].mpUpdate) {
-        lbl_803EBBF0[channel].mpUpdate(channel, lbl_803EBBF0[channel].mpPrev, lbl_803EBBF0[channel].mpCur);
+    if ((_pCon_Channel[channel].mFlags & 1) && _pCon_Channel[channel].mpUpdate) {
+        _pCon_Channel[channel].mpUpdate(channel, _pCon_Channel[channel].mpPrev, _pCon_Channel[channel].mpCur);
     }
 }
 
@@ -123,36 +129,36 @@ int ConInit(unsigned int count, int size)
     int error = 0;
     unsigned int i;
 
-    if (!lbl_803EBBEC) {
-        fn_801F7FA8(&lbl_8037F860);
-        fn_801F8014(&lbl_8037F860);
-        lbl_803EBBF4 = 0;
-        lbl_803ECED8 = count;
-        lbl_803EBBF0 = fn_801D2BB0(1, count * sizeof(ConChannel_t), 0, 0);
-        if (!lbl_803EBBF0) {
+    if (!_Context_ModuleActive) {
+        fn_801F7FA8(&_Context_CS);
+        fn_801F8014(&_Context_CS);
+        _Con_pMsgFunc = 0;
+        _Con_NumChannels = count;
+        _pCon_Channel = fn_801D2BB0(1, count * sizeof(ConChannel_t), 0, 0);
+        if (!_pCon_Channel) {
             error = SysGetLastError();
         } else {
-            lbl_803ECEDC = size * sizeof(float);
-            lbl_803ECEE0 = fn_801D2BB0(1, count * (lbl_803ECEDC + lbl_803ECEDC), 0, 0);
-            if (!lbl_803ECEE0) {
-                fn_801D2BD0(lbl_803EBBF0);
+            _Con_DataSize = size * sizeof(float);
+            _pCon_Data = fn_801D2BB0(1, count * (_Con_DataSize + _Con_DataSize), 0, 0);
+            if (!_pCon_Data) {
+                fn_801D2BD0(_pCon_Channel);
                 error = SysGetLastError();
             } else {
-                MemFill(lbl_803ECEE0, count * (lbl_803ECEDC + lbl_803ECEDC), 0, 4);
-                MemFill(lbl_803EBBF0, count * sizeof(ConChannel_t), 0, 4);
-                for (i = 0; i < lbl_803ECED8; i++) {
-                    lbl_803EBBF0[i].mpCur = (float *)(lbl_803ECEE0 + i * (lbl_803ECEDC + lbl_803ECEDC));
-                    lbl_803EBBF0[i].mpPrev = (float *)(lbl_803ECEE0 + i * (lbl_803ECEDC + lbl_803ECEDC) + lbl_803ECEDC);
-                    lbl_803EBBF0[i].mFlags = 0;
-                    lbl_803EBBF0[i].mMapping = -1;
-                    lbl_803EBBF0[i].mpEntries = 0;
-                    lbl_803EBBF0[i].mpCallback = 0;
-                    lbl_803EBBF0[i].mpUpdate = 0;
+                MemFill(_pCon_Data, count * (_Con_DataSize + _Con_DataSize), 0, 4);
+                MemFill(_pCon_Channel, count * sizeof(ConChannel_t), 0, 4);
+                for (i = 0; i < _Con_NumChannels; i++) {
+                    _pCon_Channel[i].mpCur = (float *)(_pCon_Data + i * (_Con_DataSize + _Con_DataSize));
+                    _pCon_Channel[i].mpPrev = (float *)(_pCon_Data + i * (_Con_DataSize + _Con_DataSize) + _Con_DataSize);
+                    _pCon_Channel[i].mFlags = 0;
+                    _pCon_Channel[i].mMapping = -1;
+                    _pCon_Channel[i].mpEntries = 0;
+                    _pCon_Channel[i].mpCallback = 0;
+                    _pCon_Channel[i].mpUpdate = 0;
                 }
-                lbl_803EBBEC = 1;
+                _Context_ModuleActive = 1;
             }
         }
-        fn_801F809C(&lbl_8037F860);
+        fn_801F809C(&_Context_CS);
     } else {
         error = 0x1A0001;
     }
@@ -164,14 +170,14 @@ int ConShutdown(void)
 {
     int error = 0;
 
-    if (lbl_803EBBEC) {
-        fn_801F8014(&lbl_8037F860);
-        fn_801D2BD0(lbl_803ECEE0);
-        fn_801D2BD0(lbl_803EBBF0);
-        lbl_803EBBF0 = 0;
-        fn_801F809C(&lbl_8037F860);
-        fn_801F80D0(&lbl_8037F860);
-        lbl_803EBBEC = 0;
+    if (_Context_ModuleActive) {
+        fn_801F8014(&_Context_CS);
+        fn_801D2BD0(_pCon_Data);
+        fn_801D2BD0(_pCon_Channel);
+        _pCon_Channel = 0;
+        fn_801F809C(&_Context_CS);
+        fn_801F80D0(&_Context_CS);
+        _Context_ModuleActive = 0;
     } else {
         error = 0x1A0002;
     }
@@ -183,12 +189,12 @@ int ConUpdateChannel(unsigned int channel)
 {
     int error = 0;
 
-    if (!lbl_803EBBEC) {
+    if (!_Context_ModuleActive) {
         error = 0x1A0002;
-    } else if (channel < lbl_803ECED8) {
+    } else if (channel < _Con_NumChannels) {
         _ConUpdateChannel(channel);
     } else if (channel == (unsigned int)-1) {
-        for (channel = 0; channel < lbl_803ECED8; channel++) {
+        for (channel = 0; channel < _Con_NumChannels; channel++) {
             _ConUpdateChannel(channel);
         }
     } else {
@@ -211,15 +217,15 @@ int ConProcessChannel(unsigned int channel)
     float value;
     float prevValue;
 
-    if (!lbl_803EBBEC) {
+    if (!_Context_ModuleActive) {
         error = 0x1A0002;
-    } else if (channel < lbl_803ECED8) {
-        pEntry = lbl_803EBBF0[channel].mpEntries;
-        mapping = lbl_803EBBF0[channel].mMapping;
-        pCur = lbl_803EBBF0[channel].mpCur;
-        pPrev = lbl_803EBBF0[channel].mpPrev;
-        callback = lbl_803EBBF0[channel].mpCallback;
-        if (pEntry && (lbl_803EBBF0[channel].mFlags & 1)) {
+    } else if (channel < _Con_NumChannels) {
+        pEntry = _pCon_Channel[channel].mpEntries;
+        mapping = _pCon_Channel[channel].mMapping;
+        pCur = _pCon_Channel[channel].mpCur;
+        pPrev = _pCon_Channel[channel].mpPrev;
+        callback = _pCon_Channel[channel].mpCallback;
+        if (pEntry && (_pCon_Channel[channel].mFlags & 1)) {
             while (!(pEntry->mFlags & 0x8000)) {
                 value = _ConProcessContextEntry(pEntry, mapping, pCur, &active);
                 if (active == 1) {
@@ -230,11 +236,11 @@ int ConProcessChannel(unsigned int channel)
                         }
                     }
                     if (active == 1) {
-                        if (lbl_803EBBF4) {
+                        if (_Con_pMsgFunc) {
                             if (pEntry->mFlags) {
-                                lbl_803EBBF4(channel, pEntry->mId, value);
+                                _Con_pMsgFunc(channel, pEntry->mId, value);
                             } else {
-                                lbl_803EBBF4(-1, pEntry->mId, value);
+                                _Con_pMsgFunc(-1, pEntry->mId, value);
                             }
                         }
                         callback(channel, pEntry->mId, value);
@@ -244,7 +250,7 @@ int ConProcessChannel(unsigned int channel)
             }
         }
     } else if (channel == (unsigned int)-1) {
-        for (channel = 0; channel < lbl_803ECED8; channel++) {
+        for (channel = 0; channel < _Con_NumChannels; channel++) {
             if ((error = ConProcessChannel(channel)) != 0) {
                 break;
             }
@@ -260,37 +266,37 @@ int ConSetChannelInfo(unsigned int channel, unsigned int type, unsigned int valu
 {
     int error = 0;
 
-    if (!lbl_803EBBEC) {
+    if (!_Context_ModuleActive) {
         error = 0x1A0002;
-    } else if (channel < lbl_803ECED8) {
+    } else if (channel < _Con_NumChannels) {
         switch (type) {
         case 0:
-            lbl_803EBBF0[channel].mMapping = value;
+            _pCon_Channel[channel].mMapping = value;
             _ConClearChannel(channel);
             break;
         case 1:
-            lbl_803EBBF0[channel].mpCallback = (ConCallback_t)value;
+            _pCon_Channel[channel].mpCallback = (ConCallback_t)value;
             break;
         case 2:
-            lbl_803EBBF0[channel].mpUpdate = (ConUpdate_t)value;
+            _pCon_Channel[channel].mpUpdate = (ConUpdate_t)value;
             break;
         case 4:
             if (!value) {
-                lbl_803EBBF0[channel].mFlags &= ~1;
+                _pCon_Channel[channel].mFlags &= ~1;
             } else {
-                lbl_803EBBF0[channel].mFlags |= 1;
+                _pCon_Channel[channel].mFlags |= 1;
             }
             _ConClearChannel(channel);
             break;
         case 3:
-            lbl_803EBBF0[channel].mpEntries = (ConEntry_t *)value;
+            _pCon_Channel[channel].mpEntries = (ConEntry_t *)value;
             _ConPatchInverseDeadZone((ConEntry_t *)value);
             break;
         case 5:
             if (!value) {
-                lbl_803EBBF0[channel].mFlags &= ~0x100;
+                _pCon_Channel[channel].mFlags &= ~0x100;
             } else {
-                lbl_803EBBF0[channel].mFlags |= 0x100;
+                _pCon_Channel[channel].mFlags |= 0x100;
             }
             break;
         default:
@@ -298,8 +304,8 @@ int ConSetChannelInfo(unsigned int channel, unsigned int type, unsigned int valu
             break;
         }
     } else if (channel == (unsigned int)-1) {
-        for (channel = 0; channel < lbl_803ECED8; channel++) {
-            if (!(lbl_803EBBF0[channel].mFlags & 0x100)) {
+        for (channel = 0; channel < _Con_NumChannels; channel++) {
+            if (!(_pCon_Channel[channel].mFlags & 0x100)) {
                 if ((error = ConSetChannelInfo(channel, type, value)) != 0) {
                     break;
                 }
@@ -317,29 +323,29 @@ unsigned int ConGetChannelInfo(unsigned int channel, unsigned int type)
     unsigned int value = 0;
     int error = 0;
 
-    if (!lbl_803EBBEC) {
+    if (!_Context_ModuleActive) {
         error = 0x1A0002;
-    } else if (channel < lbl_803ECED8) {
+    } else if (channel < _Con_NumChannels) {
         switch (type) {
         case 0:
-            value = lbl_803EBBF0[channel].mMapping;
+            value = _pCon_Channel[channel].mMapping;
             break;
         case 1:
-            value = (unsigned int)lbl_803EBBF0[channel].mpCallback;
+            value = (unsigned int)_pCon_Channel[channel].mpCallback;
             break;
         case 2:
-            value = (unsigned int)lbl_803EBBF0[channel].mpUpdate;
+            value = (unsigned int)_pCon_Channel[channel].mpUpdate;
             break;
         case 4:
-            if (lbl_803EBBF0[channel].mFlags & 1) {
+            if (_pCon_Channel[channel].mFlags & 1) {
                 value = 1;
             }
             break;
         case 3:
-            value = (unsigned int)lbl_803EBBF0[channel].mpEntries;
+            value = (unsigned int)_pCon_Channel[channel].mpEntries;
             break;
         case 5:
-            if (lbl_803EBBF0[channel].mFlags & 0x100) {
+            if (_pCon_Channel[channel].mFlags & 0x100) {
                 value = 1;
             }
             break;

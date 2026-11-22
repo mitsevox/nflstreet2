@@ -7,16 +7,17 @@
 #include "engine/slinklst.h"
 #include "engine/cu_802714A8.h"
 #include "engine/sndvoice.h"
+#include "engine/sndsample.h"
 
 /* One queued stream request: linked on its channel's request list. */
 typedef struct SndStreamRequest_t {
     SndLinkNode_t mLink;
-    unsigned char unk_0x8[4];
+    int mData;
     int mId;
     unsigned int mDataRate;
-    unsigned int unk_0x14;
-    unsigned int unk_0x18;
-    unsigned int unk_0x1C;
+    volatile unsigned int unk_0x14;
+    volatile unsigned int unk_0x18;
+    volatile unsigned int unk_0x1C;
     int mHold;
     unsigned char mActive;
     unsigned char unk_0x25[3];
@@ -34,19 +35,28 @@ typedef struct SndStreamSpeaker_t {
     float mStep;
 } SndStreamSpeaker_t;
 
+/* An effect send of a stream channel: set on the channel's voice when its word +0x10 is set. */
+typedef struct SndStreamTapSend_t {
+    unsigned char unk_0x0[0x10];
+    int m10;
+    unsigned char unk_0x14[4];
+} SndStreamTapSend_t;
+
 /* One stream channel, found through the channel table by its index. */
 typedef struct SndStreamChannel_t {
     void *mpTap;
     int mVoice;
     int mBuffer;
-    unsigned char unk_0xC[6];
+    int mNextId;
+    unsigned char mState;
+    signed char mSharedTap;
     unsigned char mPanned;
     unsigned char unk_0x13;
-    unsigned short mPlayRate;
-    unsigned char mChannels;
-    unsigned char unk_0x17;
-    unsigned short mQueueRate;
-    unsigned char unk_0x1A[0xD6];
+    SndSampleFormat_t mFormat;
+    SndSampleFormat_t mQueueFormat;
+    SndSampleAttr_t mAttr;
+    SndSampleAttr_t mQueueAttr;
+    unsigned char unk_0xEC[4];
     unsigned char mDryLevel;
     unsigned char unk_0xF1[7];
     short mPitchMult;
@@ -55,7 +65,7 @@ typedef struct SndStreamChannel_t {
     short mLowPass;
     short mHighPass;
     float *mpFxLevels;
-    unsigned char unk_0x108[0x18];
+    SndStreamTapSend_t mSends[1];
     SndLinkList_t mRequests;
     SndLinkList_t mFreeRequests;
     SndStreamRequest_t *mpCurrent;
@@ -95,8 +105,8 @@ void SNDSYS_leavecritical(void);
 int SNDCTRL_drylevel(int voice, int level);
 int SNDpitchmult(int voice, int mult);
 int SNDCTRL_timemult(int handle, int mult);
-int fn_80274F5C(int index);
-void fn_802747D8(int index);
+int SNDPLATFORM_stop(int index);
+void SndHalSetVol(int index);
 int SNDPLATFORM_setfxlevel(int index, int slot);
 int fn_80278070(int voice, int bus, int level);
 int fn_802781A8(int voice);
@@ -104,8 +114,8 @@ int SNDCTRL_highpass(int voice, int value);
 int SNDPKTPLAY_overhead(int count);
 int SNDCTRL_lowpass(int voice, int value);
 int SNDPKTPLAY_framesoutstanding(int index);
-void fn_801F6C04(void *tap, int level);
-int fn_801F75C4(void *tap);
+void STREAM_setgreedylevel(void *tap, int level);
+int STREAM_gettable(void *tap);
 int STREAM_overhead(int numRequests, int numFilters, int numTaps);
 
 #ifdef __cplusplus

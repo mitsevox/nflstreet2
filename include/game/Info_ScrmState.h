@@ -1,7 +1,7 @@
 #ifndef GAME_INFO_SCRMSTATE_H
 #define GAME_INFO_SCRMSTATE_H
 
-/* Returned by fn_801787D0; the layout is that read by fn_8016F6A4. */
+/* Returned by fn_801787D0; the layout is that read by ScrmSpotReset. */
 struct Info_ScrmState {
     float mUnknown00;
     float mUnknown04;

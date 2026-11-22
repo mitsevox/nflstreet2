@@ -1,7 +1,7 @@
 #include "game/Class_802A2B68.h"
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 struct Info_8014F3E4 {
     Object_80039F5C *mpUnknown0;
@@ -71,25 +71,25 @@ void fn_8014F19C(Class_802A2B68 *p)
         cursor.mUnknown4 = 0;
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
-        fn_801FCE10(&result, lbl_802A0E98, &cursor, &score, &key,
+        TDbCompilePerformOp(&result, lbl_802A0E98, &cursor, &score, &key,
                     (unsigned char)((unsigned int)lbl_803EB2D8 / 60));
         cursor.mUnknown4 = 0;
-        fn_801FCE10(0, lbl_802A0F24, &cursor);
+        TDbCompilePerformOp(0, lbl_802A0F24, &cursor);
         if (cursor.mUnknown0) {
-            fn_801FCFA0(&cursor);
+            TDbSQLDestroyCursor(&cursor);
         }
         if (score < p->mpUnknown1C->mpUnknown34[i].mUnknown4) {
             int id = 0;
-            int status = fn_801FCE10(0, lbl_802A0F34, &id, name);
+            int status = TDbCompilePerformOp(0, lbl_802A0F34, &id, name);
             if (status == 23) {
                 id = UserProfileGetFreeKey(0x52435348, 0x4B505348, 0, 255);
                 if (id == -1) {
                     continue;
                 }
-                fn_801FCE10(0, lbl_802A0F74, id, name);
+                TDbCompilePerformOp(0, lbl_802A0F74, id, name);
             }
             if (id != -1) {
-                fn_801FCE10(&result, lbl_802A1074,
+                TDbCompilePerformOp(&result, lbl_802A1074,
                             p->mpUnknown1C->mpUnknown34[i].mUnknown4, id, key);
             }
         }

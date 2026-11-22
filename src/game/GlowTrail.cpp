@@ -39,7 +39,7 @@ struct GlowGroup_t { unsigned int mUnknown0; int mUnknown4; Glow_t *mUnknown8; u
 extern "C" {
 extern LevelData_t *gLevelData;
 extern const Vector_80039F5C gParticleSys_vUp;
-unsigned int fn_802372EC(int, unsigned int);
+unsigned int SyncRandGetRange(int, unsigned int);
 int strcmp(const char *, const char *);
 void *fn_801D2B7C(unsigned int, int, int);
 void fn_801D2BD0(void *);
@@ -63,8 +63,8 @@ void MatRotZ(int);
 void MatRotY(int);
 void MatRotX(int);
 void MatLoadSlot(int);
-void fn_80227C2C(Vector_80039F5C *, Vector_80039F5C *);
-void fn_80227D6C(Vector_80039F5C *, Vector_80039F5C *);
+void Vec3Mat33Mul(Vector_80039F5C *, Vector_80039F5C *);
+void Vec3Mat44Mul(Vector_80039F5C *, Vector_80039F5C *);
 Glow_t *GlowCreate(int, GlowDesc_t *);
 void GlowInitGroup(int, int);
 void GlowAddGhost(Glow_t *, GlowGhostDesc_t *);
@@ -141,7 +141,7 @@ void GlowFlickerUpdate(GlowFlicker_t *p)
                 range = (unsigned int)((p->mUnknown10 - p->mUnknownC) * 100.0f);
                 base = (unsigned int)(p->mUnknownC * 100.0f);
             }
-            p->mUnknown20 = (float)(fn_802372EC(1, range) + base) * 0.01f;
+            p->mUnknown20 = (float)(SyncRandGetRange(1, range) + base) * 0.01f;
         } else p->mUnknown1C += 0.01666666753590107f;
     }
 }
@@ -221,7 +221,7 @@ void GlowInit(void *owner)
                 angle[1] = (int)(input->mUnknownC.mY * 46603.37890625f);
                 angle[2] = (int)((input->mUnknownC.mZ + 90.0f) * 46603.37890625f);
                 MatRotZ(-angle[2]); MatRotY(-angle[1]); MatRotX(-angle[0]);
-                fn_80227C2C(&out, &v); MatPop();
+                Vec3Mat33Mul(&out, &v); MatPop();
                 _Glow_apLevelGlows[i]->mUnknown18.mX = input->mUnknown0.mX;
                 _Glow_apLevelGlows[i]->mUnknown18.mY = input->mUnknown0.mY;
                 _Glow_apLevelGlows[i]->mUnknown18.mZ = input->mUnknown0.mZ;
@@ -270,7 +270,7 @@ void GlowTransformPoint(Vector_80039F5C *out, Vector_80039F5C *in)
 {
     Vector_80039F5C v;
     MatSetStack(VptGetMatrixStack()); MatPush(); MatLoadSlot(3);
-    fn_80227D6C(&v, in); out->mX = v.mX; out->mY = v.mY; out->mZ = v.mZ; MatPop();
+    Vec3Mat44Mul(&v, in); out->mX = v.mX; out->mY = v.mY; out->mZ = v.mZ; MatPop();
 }
 int GlowIsOnScreen(Vector_80039F5C *p)
 {
@@ -329,7 +329,7 @@ void GlowUpdateFlickers(void) { if (_Glow_pFlickers) for (unsigned int i = 0; i 
 int GlowGetFlickerState(unsigned int index) { if (_Glow_pFlickers && index < _Glow_nFlickers) return _Glow_pFlickers[index].mUnknown4; return 1; }
 float GlowGetFlickerTime(unsigned int index) { if (_Glow_pFlickers && index < _Glow_nFlickers) return _Glow_pFlickers[index].mUnknown1C; return 0.0f; }
 }
-/* Three bytes that fn_800840A4 reads from the team's row; the first is the palette index of the
+/* Three bytes that TeamDbGetColors reads from the team's row; the first is the palette index of the
    team colour. */
 struct TeamColorRow_t {
     unsigned char mUnknown0;
@@ -338,9 +338,9 @@ struct TeamColorRow_t {
 };
 
 extern "C" {
-int fn_8003DEB4(void);
-void fn_80083E1C(DbCursor *pObject, int a);
-void fn_800840A4(DbCursor *pObject, void *pBuffer);
+int PlyrObjsGetCount(void);
+void TeamDbOpenQuery(DbCursor *pObject, int a);
+void TeamDbGetColors(DbCursor *pObject, void *pBuffer);
 int fn_800A7EF4(unsigned char a);
 int fn_800C8744(int team);
 int GameTextGetPadPlayer(int a);
@@ -545,8 +545,8 @@ void ParticleTrailResetAll(void)
 {
     unsigned int i;
 
-    for (i = 0; i < fn_8003DEB4(); i++) {
-        Object_8003DEC4 *pObject = fn_8003DEC4(i);
+    for (i = 0; i < PlyrObjsGetCount(); i++) {
+        Object_8003DEC4 *pObject = PlyrObjsGet(i);
         ParticleTrailSet_t *pData = &pObject->mUnknown5188;
         ParticleTrail_t *pTrail;
         int j;
@@ -576,10 +576,10 @@ void ParticleTrailSetTeamColor(Object_80039F5C *pPlayer)
     Object_8003DEC4 *pObject = (Object_8003DEC4 *)pPlayer->mpUnknown4;
     int id = fn_800C8744(pPlayer->mIdBytes[2]);
 
-    fn_80083E1C(&cursor, 0);
-    fn_80084034(&cursor, id, 0);
-    fn_800840A4(&cursor, &row);
-    fn_80083F68(&cursor);
+    TeamDbOpenQuery(&cursor, 0);
+    TeamDbSeekId(&cursor, id, 0);
+    TeamDbGetColors(&cursor, &row);
+    TeamDbClose(&cursor);
     DbColPalGetPrimaryColor(row.mUnknown0, &color);
     pObject->mUnknown5188.mUnknown250.mUnknown0 = color.r / 255.0f;
     pObject->mUnknown5188.mUnknown250.mUnknown4 = color.g / 255.0f;
@@ -621,8 +621,8 @@ void ParticleTrailUpdateAll(void)
 {
     unsigned int i;
 
-    for (i = 0; i < fn_8003DEB4(); i++) {
-        ParticleTrailUpdate(fn_8003DEC4(i));
+    for (i = 0; i < PlyrObjsGetCount(); i++) {
+        ParticleTrailUpdate(PlyrObjsGet(i));
     }
 }
 

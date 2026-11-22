@@ -4,7 +4,7 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/llmatrix.h"
 #include "engine/llquat.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 
 typedef struct Limit_801C3EFC {
     int mRange[3][2];
@@ -47,12 +47,12 @@ int fn_801CFD78(float x);
 void QuatMultiply(float *pDst, float *pA, float *pB);
 void QuatFromAxisAngle(float *pQuat, float *pAxis, int angle);
 void QuatFromEuler(float *pQuat, int z, int y, int x);
-void fn_802271F0(float *pOut, float *p);
-void fn_80227490(float *pOut, float *p, int x, int y, int z);
-float fn_80227704(float *pA, float *pB);
-float fn_8022772C(float *pA, float *pB);
-void fn_802277DC(float *pOut, float *pA, float *pB);
-void fn_80227C2C(float *pOut, float *p);
+void Vec3Normalize(float *pOut, float *p);
+void Vec3RotateZYX(float *pOut, float *p, int x, int y, int z);
+float Vec3DotProduct(float *pA, float *pB);
+float Vec3CosAngle(float *pA, float *pB);
+void Vec3CrossProduct(float *pOut, float *pA, float *pB);
+void Vec3Mat33Mul(float *pOut, float *p);
 
 int fn_801C3EFC(int *pLimits, int rest, int *pAngle)
 {
@@ -134,16 +134,16 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
             jointPos[0] = mats[i][3];
             jointPos[1] = mats[i][7];
             jointPos[2] = mats[i][11];
-            fn_802276B4(toEnd, endPos, jointPos);
-            fn_802276B4(toTarget, pTarget, jointPos);
+            Vec3Sub(toEnd, endPos, jointPos);
+            Vec3Sub(toTarget, pTarget, jointPos);
             MatLoad(mats[i]);
             MatTranspose();
-            fn_80227C2C(toEnd, toEnd);
-            fn_80227C2C(toTarget, toTarget);
-            c = fn_8022772C(toEnd, toTarget);
+            Vec3Mat33Mul(toEnd, toEnd);
+            Vec3Mat33Mul(toTarget, toTarget);
+            c = Vec3CosAngle(toEnd, toTarget);
             if (!(c >= 1.0f)) {
-                fn_802277DC(axis, toTarget, toEnd);
-                fn_802271F0(axis, axis);
+                Vec3CrossProduct(axis, toTarget, toEnd);
+                Vec3Normalize(axis, axis);
                 rot[0] = -fn_801CFD78(c);
                 QuatFromAxisAngle(q, axis, rot[0]);
                 QuatFromEuler(cur, angles[bone][2], angles[bone][1], angles[bone][0]);
@@ -229,20 +229,20 @@ void fn_801C4550(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     pos[0] = base[3];
     pos[1] = base[7];
     pos[2] = base[11];
-    fn_802276B4(dir, pTarget, pos);
+    Vec3Sub(dir, pTarget, pos);
     MatPush();
     fn_801C3EFC_Rot(pAngles[bone].x, pAngles[bone].y, pAngles[bone].z);
     MatStore(joint);
-    fn_80227C2C(up, lbl_802F48A8);
+    Vec3Mat33Mul(up, lbl_802F48A8);
     MatPop();
     up[0] = 0.0f;
-    fn_802271F0(up, up);
+    Vec3Normalize(up, up);
     MatPush();
     MatTranspose();
-    fn_80227C2C(fwd, up);
-    fn_80227C2C(dir, dir);
+    Vec3Mat33Mul(fwd, up);
+    Vec3Mat33Mul(dir, dir);
     MatPop();
-    fn_80227490(dir, dir, 0, 0, *pYaw);
+    Vec3RotateZYX(dir, dir, 0, 0, *pYaw);
     if (!(dir[2] >= lbl_803EBBE0)) {
         d = __builtin_fabs(dir[0]);
         dir[2] = !(d >= lbl_803EBBDC) ? 1.0f - d : lbl_803EBBE0;
@@ -250,11 +250,11 @@ void fn_801C4550(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     if (!(dir[1] <= lbl_803EBBE4)) {
         dir[1] = lbl_803EBBE4;
     }
-    fn_80227490(dir, dir, 0, 0, -*pYaw);
-    fn_802271F0(dir, dir);
-    if (!(fn_80227704(lbl_802F489C, dir) >= 0.9999f)) {
-        fn_802277DC(side, fwd, dir);
-        fn_802277DC(up, dir, side);
+    Vec3RotateZYX(dir, dir, 0, 0, -*pYaw);
+    Vec3Normalize(dir, dir);
+    if (!(Vec3DotProduct(lbl_802F489C, dir) >= 0.9999f)) {
+        Vec3CrossProduct(side, fwd, dir);
+        Vec3CrossProduct(up, dir, side);
         MatMakeUnitMatrix(rot);
         MatSetAxes(rot, side, up, dir);
         MatGetRotFromMatrixZYX(angles, rot);

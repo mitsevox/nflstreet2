@@ -9,7 +9,7 @@
 #include "game/fn_801D2B7C.h"
 #include <string.h>
 #include "game/fn_8021D7B8.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_800AD9B4.h"
 
 #include <string.h>
@@ -86,15 +86,15 @@ void EATraxDbFindSong(DbCursor *p, int id, int *pResult);
 void EATraxDbGetArtist(DbCursor *p, char *pBuffer, int size);
 void EATraxDbGetTitle(DbCursor *p, char *pBuffer, int size);
 void EATraxDbGetAlbum(DbCursor *p, char *pBuffer, int size);
-void fn_8008352C(DbCursor *p, Query_8008352C *pQuery);
-void fn_800835D0(DbCursor *p);
-void fn_80083644(DbCursor *p);
-int fn_800836A4(DbCursor *p, int a, int b, int c);
-int fn_800837B8(DbCursor *p);
-unsigned char fn_800837D8(DbCursor *p);
-int fn_80083804(DbCursor *p);
-int fn_8008382C(DbCursor *p);
-int fn_801B3084(int flags, const char *pName, int value);
+void PlaylistDbOpen(DbCursor *p, Query_8008352C *pQuery);
+void PlaylistDbRemoveStationEntries(DbCursor *p);
+void PlaylistDbClose(DbCursor *p);
+int PlaylistDbFindEntry(DbCursor *p, int a, int b, int c);
+int PlaylistDbGetCount(DbCursor *p);
+unsigned char PlaylistDbGetIstx(DbCursor *p);
+int PlaylistDbGetStationId(DbCursor *p);
+int PlaylistDbGetSongId(DbCursor *p);
+int PATH_setvariable(int flags, const char *pName, int value);
 void GlibVsync(int a);
 void *ResOpenDevice(const char *pName, int flags);
 void ResClose(void *p);
@@ -209,7 +209,7 @@ void SndgMusicTrackCallback(int flags, int event)
 void SndgMusicSetSongNum(int a, int b, int c)
 {
     if (a) {
-        fn_801B3084(0x1000000, "SongNum", c);
+        PATH_setvariable(0x1000000, "SongNum", c);
     }
 }
 
@@ -311,10 +311,10 @@ int SndgMusicPostMode(int mode)
             _SndgMusic_pState->mUnknown11C = mode;
         }
         if (stop) {
-            fn_801B3084(0x1000000, "SongNum", 0);
+            PATH_setvariable(0x1000000, "SongNum", 0);
             SndgPathPauseTrack(0x11000001);
         } else if (start) {
-            fn_801B3084(0x1000000, "SongNum", 1);
+            PATH_setvariable(0x1000000, "SongNum", 1);
             SndgPathResumeTrack(0x11000001);
         }
         if (!blocked) {
@@ -339,9 +339,9 @@ void SndgMusicShufflePlaylist(void)
     DbCursor cursor;
     unsigned int i;
     _SndgMusic_pState->mUnknown120 = 0;
-    fn_8008352C(&cursor, 0);
-    fn_800835D0(&cursor);
-    unsigned int count = fn_800837B8(&cursor);
+    PlaylistDbOpen(&cursor, 0);
+    PlaylistDbRemoveStationEntries(&cursor);
+    unsigned int count = PlaylistDbGetCount(&cursor);
     for (i = 0; i < 40; ++i) {
         if (i < count) {
             _SndgMusic_pState->mUnknownF1[i] = i;
@@ -352,7 +352,7 @@ void SndgMusicShufflePlaylist(void)
     if (count) {
         for (int round = 0; round <= 7; ++round) {
             for (i = 0; i < count - 1; ++i) {
-                int k = i + fn_802372EC(1, count - i);
+                int k = i + SyncRandGetRange(1, count - i);
                 signed char first = _SndgMusic_pState->mUnknownF1[i];
                 signed char second = _SndgMusic_pState->mUnknownF1[k];
                 _SndgMusic_pState->mUnknownF1[k] = first;
@@ -364,7 +364,7 @@ void SndgMusicShufflePlaylist(void)
         _SndgMusic_pState->mUnknown121 = 0;
         SndgMusicStop();
     }
-    fn_80083644(&cursor);
+    PlaylistDbClose(&cursor);
     _SndgMusic_pState->mUnknown12A = count;
 }
 
@@ -388,16 +388,16 @@ void SndgMusicSelectNextSong(void)
         query.mUnknown4 = 0;
         query.mUnknown8 = 0;
         query.mUnknown0 = 1;
-        fn_8008352C(&cursor, &query);
-        if (fn_800837B8(&cursor)) {
+        PlaylistDbOpen(&cursor, &query);
+        if (PlaylistDbGetCount(&cursor)) {
             DbCursorSeek(&cursor, SndgMusicNextPlaylistIndex());
-            _SndgMusic_pState->mUnknown122 = fn_800837D8(&cursor);
-            _SndgMusic_pState->mUnknown28 = fn_80083804(&cursor);
-            _SndgMusic_pState->mUnknown2C = fn_8008382C(&cursor);
+            _SndgMusic_pState->mUnknown122 = PlaylistDbGetIstx(&cursor);
+            _SndgMusic_pState->mUnknown28 = PlaylistDbGetStationId(&cursor);
+            _SndgMusic_pState->mUnknown2C = PlaylistDbGetSongId(&cursor);
         } else {
             _SndgMusic_pState->mUnknown121 = 0;
         }
-        fn_80083644(&cursor);
+        PlaylistDbClose(&cursor);
     }
 }
 
@@ -470,12 +470,12 @@ void SndgMusicInit(void)
     _SndgMusic_pState->mUnknown122 = 1;
     _SndgMusic_pState->mUnknown127 = 1;
     DbCursor cursor;
-    fn_8008352C(&cursor, 0);
-    _SndgMusic_pState->mUnknown12A = fn_800837B8(&cursor);
+    PlaylistDbOpen(&cursor, 0);
+    _SndgMusic_pState->mUnknown12A = PlaylistDbGetCount(&cursor);
     if (_SndgMusic_pState->mUnknown12A) {
         _SndgMusic_pState->mUnknown121 = 1;
     }
-    fn_80083644(&cursor);
+    PlaylistDbClose(&cursor);
     if (SndEnabled()) {
         _SndgMusic_pState->mpUnknown20 = ResOpenDevice(lbl_802EBF88, 44);
         _SndgMusic_pState->mUnknown24 = SndgPathLoadMap(_SndgMusic_pState->mpUnknown20, 1);
@@ -581,7 +581,7 @@ void SndgMusicPlaySong(int a, int b, int c)
         _SndgMusic_pState->mUnknown2C = c;
         _SndgMusic_pState->mUnknown28 = b;
         _SndgMusic_pState->mUnknown30 = c;
-        fn_801B3084(0x1000000, "SongNum", 0);
+        PATH_setvariable(0x1000000, "SongNum", 0);
         SndgMusicPublishSongText();
     }
     _SndgMusic_pState->mUnknown123 = 1;
@@ -678,15 +678,15 @@ void SndgMusicContinue(void)
             int next = 1;
             if (_SndgMusic_pState->mUnknown123) {
                 DbCursor cursor;
-                fn_8008352C(&cursor, 0);
-                if (fn_800836A4(&cursor, _SndgMusic_pState->mUnknown122, _SndgMusic_pState->mUnknown28,
+                PlaylistDbOpen(&cursor, 0);
+                if (PlaylistDbFindEntry(&cursor, _SndgMusic_pState->mUnknown122, _SndgMusic_pState->mUnknown28,
                                _SndgMusic_pState->mUnknown2C)) {
                     next = 0;
                     SndgMusicPublishSongText();
                 } else {
                     SndgMusicStop();
                 }
-                fn_80083644(&cursor);
+                PlaylistDbClose(&cursor);
             }
             if (next) {
                 SndgMusicSelectNextSong();

@@ -1,19 +1,19 @@
-#ifndef GAME_FN_80238174_H
-#define GAME_FN_80238174_H
+#ifndef GAME_SYNCSTATEREGISTER_H
+#define GAME_SYNCSTATEREGISTER_H
 
-typedef int (*Callback_80238234)(void *p, int value);
-typedef int (*Callback1C_80238234)(void *p, void *q);
-typedef int (*Callback20_80238248)(void *p, void *pBuffer);
-typedef int (*Callback24_80238248)(void *p);
-typedef int (*Callback28_80238248)(void *p, void *pBuffer);
+typedef int (*SyncStateFn_t)(void *p, int value);
+typedef int (*SyncStateCompareFn_t)(void *p, void *q);
+typedef int (*SyncStateLoadFn_t)(void *p, void *pBuffer);
+typedef int (*SyncStateSizeFn_t)(void *p);
+typedef int (*SyncStateSaveFn_t)(void *p, void *pBuffer);
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 void *SyncStateRegister(int a, void **ppData, int size, int b, unsigned int id);
-void fn_802381E0(void *pHandle);
-void fn_80238234(void *pHandle, Callback_80238234 pCallback10, Callback_80238234 pCallback14, Callback_80238234 pCallback18, Callback1C_80238234 pCallback1C);
-void fn_80238248(void *pHandle, Callback28_80238248 pCallback28, Callback24_80238248 pCallback24, Callback20_80238248 pCallback20);
+void SyncStateCommit(void *pHandle);
+void SyncStateSetCallbacks(void *pHandle, SyncStateFn_t pCallback10, SyncStateFn_t pCallback14, SyncStateFn_t pCallback18, SyncStateCompareFn_t pCallback1C);
+void SyncStateSetSaveCallbacks(void *pHandle, SyncStateSaveFn_t pCallback28, SyncStateSizeFn_t pCallback24, SyncStateLoadFn_t pCallback20);
 #ifdef __cplusplus
 }
 #endif

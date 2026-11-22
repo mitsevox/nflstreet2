@@ -7,7 +7,7 @@ int SNDPROFILE_outputlatency(void)
     int latency;
 
     if (lbl_803A6C24.m168 != 0) {
-        latency = fn_802747D0();
+        latency = SNDPLATFORM_outputlatency();
     } else {
         latency = 0;
     }

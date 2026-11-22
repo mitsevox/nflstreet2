@@ -13,8 +13,8 @@
 
 extern "C" {
 int fn_800A3444(void);
-void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery);
-int fn_80083FE4(DbCursor *pObject);
+void TeamDbOpenQuery(DbCursor *pObject, TeamQuery *pQuery);
+int TeamDbGetToid(DbCursor *pObject);
 void UserStatsOpen(DbCursor *pObject, int index);
 void UserStatsClose(DbCursor *pObject);
 int UserStatsGet(DbCursor *pObject, unsigned int index);
@@ -35,9 +35,9 @@ int UserRecGetName(int index, char *pText);
 signed char UserProfileFindIndex(int a);
 signed char UserProfileGetSelected(unsigned char index);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-int fn_8022F358(signed char index);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserGetId(signed char index);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 int CheatIsNoneEnabled(void);
 }
 
@@ -89,7 +89,7 @@ void FeatAwardStatFeats(DbCursor *pCursor, DbCursor *pOther, signed char pad)
                 }
                 if (count >= record.mUnknown144) {
                     UnlockStatusSetCurrent(pOther, 1);
-                    UserInfoAddPoints(fn_8022F358(pad), record.mUnknown148);
+                    UserInfoAddPoints(DbUserGetId(pad), record.mUnknown148);
                     pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
@@ -151,7 +151,7 @@ void FeatAwardSettingFeats(DbCursor *pCursor, DbCursor *pOther, int db)
                     pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
-                    UserRecGetName(fn_8022F384(db), pEntry->mText);
+                    UserRecGetName(DbUserFindIndex(db), pEntry->mText);
                     pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
@@ -175,7 +175,7 @@ void FeatAwardValueFeat(DbCursor *pCursor, DbCursor *pOther, int db, int key, in
                     pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
-                    UserRecGetName(fn_8022F384(db), pEntry->mText);
+                    UserRecGetName(DbUserFindIndex(db), pEntry->mText);
                     pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
@@ -199,7 +199,7 @@ void FeatAwardAfterGame(void)
         if (pad == -1) {
             continue;
         }
-        db = fn_8022F358(pad);
+        db = DbUserGetId(pad);
         UnlockStatusOpenDb(&other, db);
         UnlockListOpen(&cursor, 1, 0);
         FeatAwardStatFeats(&cursor, &other, pad);
@@ -207,16 +207,16 @@ void FeatAwardAfterGame(void)
         UnlockListOpen(&cursor, 0, 0);
         FeatAwardModeFeat(&cursor, &other, db);
         if (GameModeTypeGet() == 0) {
-            fn_80083E1C(&query, 0);
+            TeamDbOpenQuery(&query, 0);
             if (GameOptionsGet(14) == 0) {
                 FeatAwardSettingFeats(&cursor, &other, db);
             }
-            fn_80084034(&query, i, 0);
-            FeatAwardValueFeat(&cursor, &other, db, 34, fn_80083FE4(&query));
-            fn_80084034(&query, (i + 1) % 2, 0);
-            FeatAwardValueFeat(&cursor, &other, db, 35, fn_80083FE4(&query));
+            TeamDbSeekId(&query, i, 0);
+            FeatAwardValueFeat(&cursor, &other, db, 34, TeamDbGetToid(&query));
+            TeamDbSeekId(&query, (i + 1) % 2, 0);
+            FeatAwardValueFeat(&cursor, &other, db, 35, TeamDbGetToid(&query));
             FeatAwardValueFeat(&cursor, &other, db, 36, fn_800A3444());
-            fn_80083F68(&query);
+            TeamDbClose(&query);
         }
         UnlockListClose(&cursor);
         UnlockStatusClose(&other);
@@ -238,7 +238,7 @@ void FeatAwardEAGameSaveFeats(void)
     for (i = 0; i <= 5; i++) {
         if (_Feat_abEAGameSave[i] == 1 && UnlockListSeek(&cursor, 0, _Feat_aiEAGameKey[i], 0) == 1) {
             for (j = 0; j < UserRecGetCount(); j++) {
-                db = fn_8022F358(j);
+                db = DbUserGetId(j);
                 index = UnlockListGetIndex(&cursor);
                 UnlockStatusOpenDb(&other, db);
                 if (UnlockStatusGet(&other, index) == 0) {
@@ -248,7 +248,7 @@ void FeatAwardEAGameSaveFeats(void)
                     pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
-                    UserRecGetName(fn_8022F384(db), pEntry->mText);
+                    UserRecGetName(DbUserFindIndex(db), pEntry->mText);
                     pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
@@ -267,7 +267,7 @@ void FeatAwardNewUserFeats(void)
     FeatAward_t *pEntry;
     int db;
 
-    db = fn_8022F4BC();
+    db = DbUserGetCurrent();
     UnlockStatusOpenDb(&other, db);
     UnlockListOpen(&cursor, 0, 0);
     if (UnlockListSeek(&cursor, 0, 39, 0)) {
@@ -277,7 +277,7 @@ void FeatAwardNewUserFeats(void)
         pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
         _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
         fn_801C2E18(pEntry->mName, record.mName);
-        UserRecGetName(fn_8022F384(db), pEntry->mText);
+        UserRecGetName(DbUserFindIndex(db), pEntry->mText);
         pEntry->mCredits = record.mUnknown148;
         _Feat_uAwardedCount++;
         UnlockStatusClose(&other);
@@ -296,7 +296,7 @@ void FeatAwardAllUsersFeat(void)
 
     UnlockListOpen(&cursor, 0, 0);
     for (i = 0; i < UserRecGetCount(); i++) {
-        db = fn_8022F358(i);
+        db = DbUserGetId(i);
         UnlockStatusOpenDb(&other, db);
         if (FeatAwardByKey(&cursor, &other, 38, &entry, db)) {
             _Feat_apAwarded[_Feat_uAwardedCount] = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
@@ -343,7 +343,7 @@ int FeatAwardCurrentUserModeFeat(FeatAward_t *pEntry)
     int mode;
     int key;
 
-    db = fn_8022F4BC();
+    db = DbUserGetCurrent();
 
     UnlockListOpen(&cursor, 0, 0);
     UnlockStatusOpenDb(&other, db);

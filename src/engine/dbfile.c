@@ -8,8 +8,8 @@
 #include "engine/tdbiofio.h"
 #include <string.h>
 
-extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
-extern int fn_801F967C(int db, int tbl);
+extern int TDbLoadFromFile(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
+extern int TDbTblDestroy(int db, int tbl);
 
 static char *_DbFile_pFileName = 0;
 
@@ -28,10 +28,10 @@ void DbFileShutdown(void)
 
 int DbFileTblLoad(int db, int file)
 {
-    return fn_801F9064(db, file, _DbFile_pFileName, 3, &tdbiofioCallback);
+    return TDbLoadFromFile(db, file, _DbFile_pFileName, 3, &tdbiofioCallback);
 }
 
 int DbFileTblDestroy(int db, int tbl)
 {
-    return fn_801F967C(db, tbl);
+    return TDbTblDestroy(db, tbl);
 }

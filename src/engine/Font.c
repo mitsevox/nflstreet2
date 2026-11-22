@@ -10,15 +10,15 @@
 #include "game/ResLoad.h"
 #include <string.h>
 
-typedef struct FontParams_801CCA64 {
+typedef struct FontParams_t {
     int mMaxFonts;
     int mUnk4;
     int mHeap;
     unsigned short mUnkC;
     unsigned short mUnkE;
-} FontParams_801CCA64;
+} FontParams_t;
 
-typedef struct FontState_801CCA64 {
+typedef struct FontState_t {
     unsigned char mNumFonts;
     void *mpList;
     void *mpBuffer;
@@ -31,29 +31,32 @@ typedef struct FontState_801CCA64 {
     void *mpPalette0;
     void *mpPalette1;
     void *mpPalette2;
-} FontState_801CCA64;
+} FontState_t;
 
-extern Lock_801F8014 lbl_80383CD0;
-extern FontState_801CCA64 lbl_80383CF0;
-extern FontRenderState_801CCA64 lbl_803E7600;
-extern unsigned char lbl_803EBC58;
+unsigned char Font_ModuleActive = 0;
+
+/* The font library's lock and its state (fonts loaded, their list, heap and palettes). */
+static Lock_801F8014 _Font_CS;
+static FontState_t _Font_State;
+
+extern FontRenderState_t lbl_803E7600;
 
 void *memset();
 
 
-static int fn_801CCAB8(FontEntry_801CCA64 *pEntry, int *pId, FontEntry_801CCA64 **ppResult);
+static int _FontSearchFontNum(FontEntry_t *pEntry, int *pId, FontEntry_t **ppResult);
 
-static FontEntry_801CCA64 *fn_801CCA64(int id)
+static FontEntry_t *_FontGetFontListPtr(int id)
 {
-    FontEntry_801CCA64 *pEntry;
+    FontEntry_t *pEntry;
 
-    if (DSSearchList(lbl_80383CF0.mpList, 0, &id, &pEntry, (DSListSearchFn_t)fn_801CCAB8) != 2) {
+    if (DSSearchList(_Font_State.mpList, 0, &id, &pEntry, (DSListSearchFn_t)_FontSearchFontNum) != 2) {
         pEntry = 0;
     }
     return pEntry;
 }
 
-static int fn_801CCAB8(FontEntry_801CCA64 *pEntry, int *pId, FontEntry_801CCA64 **ppResult)
+static int _FontSearchFontNum(FontEntry_t *pEntry, int *pId, FontEntry_t **ppResult)
 {
     int result = -1;
 
@@ -64,12 +67,12 @@ static int fn_801CCAB8(FontEntry_801CCA64 *pEntry, int *pId, FontEntry_801CCA64 
     return result;
 }
 
-static FontGlyph_801CCA64 *fn_801CCADC(Font_801CCA64 *pFont, unsigned int c)
+static FontGlyph_t *_FontLookupGlyph(Font_t *pFont, unsigned int c)
 {
-    FontGlyph_801CCA64 *pGlyphs = pFont->mpGlyphs;
+    FontGlyph_t *pGlyphs = pFont->mpGlyphs;
     unsigned int count = pFont->mpHeader->mNumGlyphs;
-    FontGlyph_801CCA64 *pResult;
-    FontGlyph_801CCA64 *pGlyph;
+    FontGlyph_t *pResult;
+    FontGlyph_t *pGlyph;
     unsigned int half;
 
     if (c - ' ' < count && pGlyphs[c - ' '].mCode == c) {
@@ -92,10 +95,10 @@ static FontGlyph_801CCA64 *fn_801CCADC(Font_801CCA64 *pFont, unsigned int c)
     return pResult;
 }
 
-static int fn_801CCB5C(Font_801CCA64 *pFont, int first, int second)
+static int _FontGetKernAmount(Font_t *pFont, int first, int second)
 {
-    FontKernTable_801CCA64 *pKern = pFont->mpKern;
-    FontKernPair_801CCA64 *pPair;
+    FontKernTable_t *pKern = pFont->mpKern;
+    FontKernPair_t *pPair;
     int amount = 0;
     int i;
 
@@ -112,7 +115,7 @@ static int fn_801CCB5C(Font_801CCA64 *pFont, int first, int second)
     return amount;
 }
 
-int fn_801CCBD0(FontEntry_801CCA64 *pEntry, FontHeader_801CCA64 *pData)
+int FontProcessFontFile(FontEntry_t *pEntry, FontHeader_t *pData)
 {
     int error = 0;
 
@@ -124,25 +127,25 @@ int fn_801CCBD0(FontEntry_801CCA64 *pEntry, FontHeader_801CCA64 *pData)
     return error;
 }
 
-int fn_801CCC24(FontParams_801CCA64 *pParams)
+int FontInit(FontParams_t *pParams)
 {
     int error = 0;
 
-    if (!lbl_803EBC58) {
-        fn_801F7FA8(&lbl_80383CD0);
-        fn_801F8014(&lbl_80383CD0);
-        lbl_80383CF0.mNumFonts = 0;
-        lbl_80383CF0.mpList = DSNewList(pParams->mHeap, 0, pParams->mMaxFonts, sizeof(FontEntry_801CCA64), 0, 0);
-        lbl_80383CF0.mUnk10 = pParams->mUnk4;
-        lbl_80383CF0.mHeap = pParams->mHeap;
-        lbl_80383CF0.mUnk14 = pParams->mUnkC;
-        lbl_80383CF0.mUnk16 = pParams->mUnkE;
-        lbl_80383CF0.mUnk18 = pParams->mUnkC;
-        lbl_80383CF0.mUnk1A = pParams->mUnkE;
-        lbl_80383CF0.mpBuffer = fn_801D2BB0(lbl_80383CF0.mHeap, 0x100, 0, 0);
-        fn_801CD2A4();
-        lbl_803EBC58 = 1;
-        fn_801F809C(&lbl_80383CD0);
+    if (!Font_ModuleActive) {
+        fn_801F7FA8(&_Font_CS);
+        fn_801F8014(&_Font_CS);
+        _Font_State.mNumFonts = 0;
+        _Font_State.mpList = DSNewList(pParams->mHeap, 0, pParams->mMaxFonts, sizeof(FontEntry_t), 0, 0);
+        _Font_State.mUnk10 = pParams->mUnk4;
+        _Font_State.mHeap = pParams->mHeap;
+        _Font_State.mUnk14 = pParams->mUnkC;
+        _Font_State.mUnk16 = pParams->mUnkE;
+        _Font_State.mUnk18 = pParams->mUnkC;
+        _Font_State.mUnk1A = pParams->mUnkE;
+        _Font_State.mpBuffer = fn_801D2BB0(_Font_State.mHeap, 0x100, 0, 0);
+        FontResetRenderState();
+        Font_ModuleActive = 1;
+        fn_801F809C(&_Font_CS);
     } else {
         error = 0x110001;
     }
@@ -150,18 +153,18 @@ int fn_801CCC24(FontParams_801CCA64 *pParams)
     return error;
 }
 
-int fn_801CCD0C(void)
+int FontShutdown(void)
 {
     int error = 0;
 
-    if (lbl_803EBC58) {
-        fn_801F8014(&lbl_80383CD0);
-        DSDelList(lbl_80383CF0.mpList);
-        fn_801F809C(&lbl_80383CD0);
-        fn_801F80D0(&lbl_80383CD0);
-        lbl_803EBC58 = 0;
-        fn_801D2BD0(lbl_80383CF0.mpBuffer);
-        memset(&lbl_80383CF0, 0, sizeof(FontState_801CCA64));
+    if (Font_ModuleActive) {
+        fn_801F8014(&_Font_CS);
+        DSDelList(_Font_State.mpList);
+        fn_801F809C(&_Font_CS);
+        fn_801F80D0(&_Font_CS);
+        Font_ModuleActive = 0;
+        fn_801D2BD0(_Font_State.mpBuffer);
+        memset(&_Font_State, 0, sizeof(FontState_t));
     } else {
         error = 0x110002;
     }
@@ -169,13 +172,13 @@ int fn_801CCD0C(void)
     return error;
 }
 
-int fn_801CCDA4(const char *pName, int mode)
+int FontOpenFileDevice(const char *pName, int mode)
 {
     int handle = 0;
     int error = 0;
     void *result;
 
-    if (!lbl_803EBC58) {
+    if (!Font_ModuleActive) {
         error = 0x110002;
     } else if (result = ResOpenDevice(pName, mode)) {
         handle = (int)result;
@@ -186,11 +189,11 @@ int fn_801CCDA4(const char *pName, int mode)
     return handle;
 }
 
-int fn_801CCE10(int handle)
+int FontCloseFile(int handle)
 {
     int error;
 
-    if (!lbl_803EBC58) {
+    if (!Font_ModuleActive) {
         error = 0x110002;
     } else {
         error = ResClose((void *)handle);
@@ -199,115 +202,115 @@ int fn_801CCE10(int handle)
     return error;
 }
 
-int fn_801CCE60(void *pFile, int id)
+int FontAddFont(void *pFile, int id)
 {
     int error;
-    FontEntry_801CCA64 *pEntry = 0;
-    FontHeader_801CCA64 *pData;
+    FontEntry_t *pEntry = 0;
+    FontHeader_t *pData;
 
-    if (!lbl_803EBC58) {
+    if (!Font_ModuleActive) {
         error = 0x110002;
     } else {
-        if (lbl_80383CF0.mNumFonts == 0) {
-            fn_801CDE98(&lbl_80383CF0.mpPalette0, &lbl_80383CF0.mpPalette1, &lbl_80383CF0.mpPalette2);
+        if (_Font_State.mNumFonts == 0) {
+            fn_801CDE98(&_Font_State.mpPalette0, &_Font_State.mpPalette1, &_Font_State.mpPalette2);
         }
-        if (!(pEntry = DSNewListNode(lbl_80383CF0.mpList))) {
+        if (!(pEntry = DSNewListNode(_Font_State.mpList))) {
             error = SysGetLastError();
         } else {
-            if (pData = (FontHeader_801CCA64 *)ResLoad(pFile, id, lbl_80383CF0.mHeap)) {
+            if (pData = (FontHeader_t *)ResLoad(pFile, id, _Font_State.mHeap)) {
                 pEntry->mHandle = id;
                 pEntry->mId = id;
                 pEntry->mpFile = pFile;
-                error = fn_801CCBD0(pEntry, pData);
-                DSAddListNode(lbl_80383CF0.mpList, pEntry, 0);
+                error = FontProcessFontFile(pEntry, pData);
+                DSAddListNode(_Font_State.mpList, pEntry, 0);
             } else {
                 error = SysGetLastError();
             }
-            lbl_80383CF0.mNumFonts++;
+            _Font_State.mNumFonts++;
         }
     }
     if (error && pEntry) {
-        DSDelListNode(lbl_80383CF0.mpList, pEntry);
+        DSDelListNode(_Font_State.mpList, pEntry);
     }
     SysSetLastErrorFunc(error);
     return error;
 }
 
-int fn_801CCF74(void *pFile, int id, FontHeader_801CCA64 *pData)
+int FontAddFontFromBuffer(void *pFile, int id, FontHeader_t *pData)
 {
     int error;
-    FontEntry_801CCA64 *pEntry = 0;
+    FontEntry_t *pEntry = 0;
 
-    if (!lbl_803EBC58) {
+    if (!Font_ModuleActive) {
         error = 0x110002;
     } else {
-        if (lbl_80383CF0.mNumFonts == 0) {
-            fn_801CDE98(&lbl_80383CF0.mpPalette0, &lbl_80383CF0.mpPalette1, &lbl_80383CF0.mpPalette2);
+        if (_Font_State.mNumFonts == 0) {
+            fn_801CDE98(&_Font_State.mpPalette0, &_Font_State.mpPalette1, &_Font_State.mpPalette2);
         }
-        if (!(pEntry = DSNewListNode(lbl_80383CF0.mpList))) {
+        if (!(pEntry = DSNewListNode(_Font_State.mpList))) {
             error = SysGetLastError();
         } else {
             if (pData) {
                 pEntry->mpFile = pFile;
                 pEntry->mHandle = id;
                 pEntry->mId = id;
-                error = fn_801CCBD0(pEntry, pData);
-                DSAddListNode(lbl_80383CF0.mpList, pEntry, 0);
+                error = FontProcessFontFile(pEntry, pData);
+                DSAddListNode(_Font_State.mpList, pEntry, 0);
             } else {
                 error = SysGetLastError();
             }
-            lbl_80383CF0.mNumFonts++;
+            _Font_State.mNumFonts++;
         }
     }
     if (error && pEntry) {
-        DSDelListNode(lbl_80383CF0.mpList, pEntry);
+        DSDelListNode(_Font_State.mpList, pEntry);
     }
     SysSetLastErrorFunc(error);
     return error;
 }
 
-int fn_801CD07C(int id)
+int FontRemoveFont(int id)
 {
     int error;
-    FontEntry_801CCA64 *pEntry;
+    FontEntry_t *pEntry;
 
-    if (!lbl_803EBC58) {
+    if (!Font_ModuleActive) {
         error = 0x110002;
     } else {
-        if (pEntry = fn_801CCA64(id)) {
+        if (pEntry = _FontGetFontListPtr(id)) {
             error = ResUnLoad(pEntry->mpFile, pEntry->mHandle);
-            DSDelListNode(lbl_80383CF0.mpList, pEntry);
-            lbl_80383CF0.mNumFonts--;
+            DSDelListNode(_Font_State.mpList, pEntry);
+            _Font_State.mNumFonts--;
         } else {
             error = 0x110004;
         }
-        if (lbl_80383CF0.mNumFonts == 0) {
-            fn_801CDFE4(lbl_80383CF0.mpPalette0, lbl_80383CF0.mpPalette1, lbl_80383CF0.mpPalette2);
+        if (_Font_State.mNumFonts == 0) {
+            fn_801CDFE4(_Font_State.mpPalette0, _Font_State.mpPalette1, _Font_State.mpPalette2);
         }
     }
     SysSetLastErrorFunc(error);
     return error;
 }
 
-Font_801CCA64 *fn_801CD130(int id)
+Font_t *FontCreateFont(int id)
 {
-    Font_801CCA64 *pFont = 0;
+    Font_t *pFont = 0;
     int error = 0;
-    FontEntry_801CCA64 *pEntry;
-    FontHeader_801CCA64 *pData;
+    FontEntry_t *pEntry;
+    FontHeader_t *pData;
 
-    if (!lbl_803EBC58) {
+    if (!Font_ModuleActive) {
         error = 0x110002;
-    } else if (pEntry = fn_801CCA64(id)) {
-        pFont = fn_801D2BB0(lbl_80383CF0.mHeap, sizeof(Font_801CCA64), 0, 0);
-        memset(pFont, 0, sizeof(Font_801CCA64));
+    } else if (pEntry = _FontGetFontListPtr(id)) {
+        pFont = fn_801D2BB0(_Font_State.mHeap, sizeof(Font_t), 0, 0);
+        memset(pFont, 0, sizeof(Font_t));
         pFont->mpEntry = pEntry;
         pData = pEntry->mpData;
         pFont->mpHeader = pData;
-        pFont->mpGlyphs = (FontGlyph_801CCA64 *)((char *)pData + pData->mGlyphOffset);
-        pFont->mpTex = (FontTexHeader_801CCA64 *)((char *)pData + pData->mTexOffset);
+        pFont->mpGlyphs = (FontGlyph_t *)((char *)pData + pData->mGlyphOffset);
+        pFont->mpTex = (FontTexHeader_t *)((char *)pData + pData->mTexOffset);
         if (pData->mKernOffset) {
-            pFont->mpKern = (FontKernTable_801CCA64 *)((char *)pData + pData->mKernOffset);
+            pFont->mpKern = (FontKernTable_t *)((char *)pData + pData->mKernOffset);
         } else {
             pFont->mpKern = 0;
         }
@@ -319,16 +322,16 @@ Font_801CCA64 *fn_801CD130(int id)
     return pFont;
 }
 
-void fn_801CD20C(Font_801CCA64 *pFont, int a)
+void FontUploadTextures(Font_t *pFont, int a)
 {
-    fn_801CDFE8(pFont, lbl_80383CF0.mpPalette0, lbl_80383CF0.mpPalette1, lbl_80383CF0.mpPalette2, a);
+    fn_801CDFE8(pFont, _Font_State.mpPalette0, _Font_State.mpPalette1, _Font_State.mpPalette2, a);
 }
 
-int fn_801CD244(Font_801CCA64 *pFont)
+int FontDestroyFont(Font_t *pFont)
 {
     int error;
 
-    if (!lbl_803EBC58) {
+    if (!Font_ModuleActive) {
         error = 0x110002;
     } else {
         fn_801CE108(pFont);
@@ -338,7 +341,7 @@ int fn_801CD244(Font_801CCA64 *pFont)
     return error;
 }
 
-int fn_801CD2A4(void)
+int FontResetRenderState(void)
 {
     lbl_803E7600.mFlags = 0;
     lbl_803E7600.mColor.r = 1.0f;
@@ -355,10 +358,10 @@ int fn_801CD2A4(void)
     return 0;
 }
 
-int fn_801CD308(int which, FontColor_801CCA64 color)
+int FontSetRenderColor(int which, FontColor_t color)
 {
     int error = 0;
-    FontColor_801CCA64 *pDst;
+    FontColor_t *pDst;
 
     switch (which) {
     case 0:
@@ -380,19 +383,19 @@ done:
     return error;
 }
 
-int fn_801CD398(unsigned int flags)
+int FontSetRenderFlags(unsigned int flags)
 {
     lbl_803E7600.mFlags |= flags;
     return 0;
 }
 
-int fn_801CD3B0(unsigned int flags)
+int FontClearRenderFlags(unsigned int flags)
 {
     lbl_803E7600.mFlags &= ~flags;
     return 0;
 }
 
-int fn_801CD3C8(float x, float y, float z)
+int FontSetShadowOffset(float x, float y, float z)
 {
     lbl_803E7600.mShadowOffset[0] = x;
     lbl_803E7600.mShadowOffset[1] = y;
@@ -400,8 +403,8 @@ int fn_801CD3C8(float x, float y, float z)
     return 0;
 }
 
-void fn_801CD3E4(Font_801CCA64 *pFont, const char *pText, unsigned int flags, float maxWidth,
-                 FontQuad_801CCA64 *pQuads, unsigned int *pCount)
+void FontDrawText(Font_t *pFont, const char *pText, unsigned int flags, float maxWidth,
+                 FontQuad_t *pQuads, unsigned int *pCount)
 {
     int error = 0;
     int kern;
@@ -415,10 +418,10 @@ void fn_801CD3E4(Font_801CCA64 *pFont, const char *pText, unsigned int flags, fl
     int x;
     int prev;
     unsigned char c;
-    FontGlyph_801CCA64 *pGlyph;
-    FontQuad_801CCA64 *pQuad;
+    FontGlyph_t *pGlyph;
+    FontQuad_t *pQuad;
 
-    if (!lbl_803EBC58) {
+    if (!Font_ModuleActive) {
         error = 0x110002;
     } else {
         kern = (flags & 4) == 0;
@@ -445,9 +448,9 @@ void fn_801CD3E4(Font_801CCA64 *pFont, const char *pText, unsigned int flags, fl
                     break;
                 }
                 c = pText[i];
-                if (pGlyph = fn_801CCADC(pFont, c)) {
+                if (pGlyph = _FontLookupGlyph(pFont, c)) {
                     if (prev != -1 && kern) {
-                        x += fn_801CCB5C(pFont, prev, c);
+                        x += _FontGetKernAmount(pFont, prev, c);
                     }
                     pQuad->mX = x + pGlyph->mOffsetX;
                     pQuad->mY = y + pGlyph->mOffsetY;
@@ -478,7 +481,7 @@ void fn_801CD3E4(Font_801CCA64 *pFont, const char *pText, unsigned int flags, fl
     SysSetLastErrorFunc(error);
 }
 
-int fn_801CD63C(Font_801CCA64 *pFont, const char *pText, unsigned int flags)
+int FontGetTextWidth(Font_t *pFont, const char *pText, unsigned int flags)
 {
     int error = 0;
     int maxWidth = 0;
@@ -488,9 +491,9 @@ int fn_801CD63C(Font_801CCA64 *pFont, const char *pText, unsigned int flags)
     int prev;
     int width;
     unsigned char c;
-    FontGlyph_801CCA64 *pGlyph;
+    FontGlyph_t *pGlyph;
 
-    if (!lbl_803EBC58) {
+    if (!Font_ModuleActive) {
         error = 0x110002;
     } else {
         kern = (flags & 4) == 0;
@@ -505,9 +508,9 @@ int fn_801CD63C(Font_801CCA64 *pFont, const char *pText, unsigned int flags)
                     break;
                 }
                 c = pText[i];
-                if (pGlyph = fn_801CCADC(pFont, c)) {
+                if (pGlyph = _FontLookupGlyph(pFont, c)) {
                     if (prev != -1 && kern) {
-                        width += fn_801CCB5C(pFont, prev, c);
+                        width += _FontGetKernAmount(pFont, prev, c);
                     }
                     width += pGlyph->mAdvance;
                 }
@@ -523,18 +526,18 @@ int fn_801CD63C(Font_801CCA64 *pFont, const char *pText, unsigned int flags)
     return maxWidth;
 }
 
-int fn_801CD750(Font_801CCA64 *pFont, unsigned char c)
+int FontGetCharWidth(Font_t *pFont, unsigned char c)
 {
     int width = 0;
-    FontGlyph_801CCA64 *pGlyph;
+    FontGlyph_t *pGlyph;
 
-    if (pGlyph = fn_801CCADC(pFont, c)) {
+    if (pGlyph = _FontLookupGlyph(pFont, c)) {
         width = pGlyph->mAdvance;
     }
     return width;
 }
 
-int fn_801CD790(Font_801CCA64 *pFont)
+int FontGetDescent(Font_t *pFont)
 {
     return pFont->mpHeader->mHeight;
 }

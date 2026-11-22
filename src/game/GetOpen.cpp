@@ -20,10 +20,10 @@
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include <string.h>
-#include "game/fn_80227638.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_8022781C.h"
-#include "game/fn_802372EC.h"
+#include "game/Vec2Add.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Distance.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_800F06F4.h"
@@ -38,14 +38,14 @@ int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_80178320(void);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 int fn_80177F70(void);
 float fn_80178298(void);
 float fn_80178A08(void);
 float fn_80178A2C(void);
 float fn_80178A44(void);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
-void fn_80227538(Point_8017886C *pOut, int angle, float length);
+void Vec2FromAngle(Point_8017886C *pOut, int angle, float length);
 void fn_8009BD60(Object_80039F5C *p);
 int fn_80112928(Object_80039F5C *p);
 int fn_80178308(void);
@@ -128,7 +128,7 @@ extern "C" int GetOpenIsOpenToCarrier(Object_80039F5C *p, float a, float b)
     delta.mX = delta.mY = 0.0f;
     carrier = BallGetCurrentHolder();
     if (carrier) {
-        fn_80227690(&delta, &carrier->mMotion.mPos, &p->mMotion.mPos);
+        Vec2Sub(&delta, &carrier->mMotion.mPos, &p->mMotion.mPos);
     }
     if (carrier && p->mMotion.mPos.mY > a && p->mMotion.mPos.mY < b
         && (float)(int)state->mUnknown36 < state->mUnknown20
@@ -137,10 +137,10 @@ extern "C" int GetOpenIsOpenToCarrier(Object_80039F5C *p, float a, float b)
         unsigned int total = fn_80178D18(fn_80178320());
         for (i = 0; i < total; ++i) {
             Object_80039F5C *other = PlyrGet(fn_80178320(), i);
-            fn_80227690(&offset, &other->mMotion.mPos, &p->mMotion.mPos);
+            Vec2Sub(&offset, &other->mMotion.mPos, &p->mMotion.mPos);
             int otherAngle = fn_801CFE40(offset.mY, offset.mX);
             angle = fn_801CFE40(delta.mY, delta.mX);
-            if (MathAngleDiff(otherAngle, angle) <= 0x555554 && fn_802270A4(&offset) < 5.0f) {
+            if (MathAngleDiff(otherAngle, angle) <= 0x555554 && Vec2Magnitude(&offset) < 5.0f) {
                 count = 1;
                 break;
             }
@@ -157,9 +157,9 @@ extern "C" int GetOpenIsOpenToCarrier(Object_80039F5C *p, float a, float b)
                 Object_80039F5C *other = PlyrGet(fn_80178308(), i);
                 if (other != p) {
                     Point_8017886C toOther;
-                    fn_80227690(&toOther, &other->mMotion.mPos, &p->mMotion.mPos);
+                    Vec2Sub(&toOther, &other->mMotion.mPos, &p->mMotion.mPos);
                     int otherAngle = fn_801CFE40(toOther.mY, toOther.mX);
-                    if (MathAngleDiff(otherAngle, angle) <= 0x555554 && fn_802270A4(&toOther) < 5.0f) {
+                    if (MathAngleDiff(otherAngle, angle) <= 0x555554 && Vec2Magnitude(&toOther) < 5.0f) {
                         ++count;
                         break;
                     }
@@ -291,7 +291,7 @@ extern "C" int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, floa
                         best = grid[i][j];
                         bestX = i;
                         bestY = j;
-                    } else if (grid[i][j] == best && fn_802372EC(0, 100) <= 19) {
+                    } else if (grid[i][j] == best && SyncRandGetRange(0, 100) <= 19) {
                         bestX = i;
                         bestY = j;
                     }
@@ -329,7 +329,7 @@ extern "C" void GetOpenGetRunOnPoint(Object_80039F5C *p, Point_8017886C *pOut)
     float a, b;
 
     GetOpenGetDepthRange(&a, &b);
-    fn_80227538(pOut, p->mMotion.mUnknown32, 5.0f);
+    Vec2FromAngle(pOut, p->mMotion.mUnknown32, 5.0f);
     pOut->mX += p->mMotion.mPos.mX;
     pOut->mY += p->mMotion.mPos.mY;
     fn_80177FE0();
@@ -439,7 +439,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
                 }
                 ++state->mUnknown36;
                 if (!fn_80103D6C(p) && MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0x71C70
-                    && !state->mUnknown40 && fn_802372EC(0, state->mUnknown32) < state->mUnknown36) {
+                    && !state->mUnknown40 && SyncRandGetRange(0, state->mUnknown32) < state->mUnknown36) {
                     p->mUnknown512.mUnknown14 = 0;
                     fn_8009BD60(p);
                     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 152, 1.0f, p);
@@ -453,7 +453,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
             }
             Point_8017886C point, delta;
             if (GetOpenFindOpenSpot(&point, p, b, a)) {
-                fn_80227690(&delta, &point, &p->mMotion.mPos);
+                Vec2Sub(&delta, &point, &p->mMotion.mPos);
                 PlayerCutPostTurn(p, fn_801CFE40(delta.mY, delta.mX));
                 memset(&message, 0, 4);
                 message.mId = 19;

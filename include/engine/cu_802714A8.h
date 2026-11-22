@@ -147,7 +147,7 @@ typedef struct Struct_803A6C24 {
     unsigned char mUnknown12[0xA];
     Params_803A6C40 m1C;
     void *(*mB8)(int size);
-    // FAKEMATCH: volatile only for the target's reload of the release callback in fn_80275194
+    // FAKEMATCH: volatile only for the target's reload of the release callback in SNDPLATFORM_memfree
     void (*volatile mBC)(void *p);
     unsigned char mUnknownC0[0xC];
     Params_803A6C40 mCC;
@@ -170,6 +170,10 @@ typedef struct Struct_803A6C24 {
     short m1D8[6][6];
     void (*m220)(void);
     void (*m224)(void);
+    unsigned char mUnknown228[9];
+    unsigned char m231;
+    unsigned char mUnknown232[2];
+    int m234;
 } Struct_803A6C24;
 
 typedef struct Setup_80272EC4 {
@@ -310,19 +314,19 @@ extern void *(*lbl_803B53E4)(int size);
 extern void (*lbl_803B53E8)(void *p);
 extern int (*lbl_80301000)(void *dst, void *src, int size);
 extern Struct_803A6C24 lbl_803A6C24;
-extern Struct_803B4E34 lbl_803B4E34;
+extern Struct_803B4E34 sndmix;
 
 int SNDI_memcpy(void *dst, void *src, int size);
 
-int fn_80274304(int index);
-int fn_80274334(int index);
-int fn_80274398(void);
-void fn_80274960(int index);
-int fn_80274B50(int index);
-void fn_80274D34(int index, int value);
-void fn_80274E24(int index, int value);
-int fn_8027474C(int index);
-int fn_802750B8(int index, Desc_80276798 *desc);
+int SNDDRV_getmastervoice(int index);
+int SNDDRV_getsamplechan(int index);
+int SNDPLATFORM_packetoverhead(void);
+void SndHalSetPan(int index);
+int SNDPLATFORM_setpitch(int index);
+void SNDPLATFORM_lowpass(int index, int value);
+void SNDPLATFORM_highpass(int index, int value);
+int SNDPLATFORM_packetplaydestroy(int index);
+int SNDPLATFORM_filteradd(int index, Desc_80276798 *desc);
 
 void decode16x87(int count, short *src, float *dst);
 unsigned char *SNDPKTPLAYI_get(int index, int channel, int *length, int *b);

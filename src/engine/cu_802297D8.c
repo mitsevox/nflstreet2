@@ -3,55 +3,52 @@
 #include "engine/dbteams.h"
 #include "engine/tdbext.h"
 #include "engine/dbutil.h"
-#include "engine/fn_801F9134.h"
+#include "engine/TDbLoad.h"
 #include "engine/cu_80229270.h"
 
-#include "engine/Funcs_802FB3BC.h"
+#include "engine/DbNiomModeFuncs.h"
 #include "engine/llmemory.h"
 #include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/QueryStatus.h"
 #include "engine/t3db.h"
 #include "engine/t3db_cols.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 
 #include <string.h>
 
 struct CardStreamTarget;
 struct SaveStreamOps_t;
-#include "engine/Entry_802FB300.h"
+#include "engine/DbUserEntry.h"
 extern char lbl_802B5C8C[];
 extern char lbl_803A1C60[];
 extern float lbl_803A20A4[][13];
-extern char *lbl_803EC0A4;
-extern int lbl_803EC0A8;
-extern int lbl_803EC0A0;
-extern char *lbl_803EC0B4;
-extern int lbl_803EC0B8;
-extern int lbl_803EC0B0;
-extern int lbl_803EC0C8;
-extern char *lbl_803EC0CC;
-extern int lbl_803EC0D0;
-extern int lbl_803EC0D4;
-extern unsigned char lbl_803EC0D8;
-extern Entry_802FB300 lbl_802FB300[];
-extern int fn_801F91AC(int handle, int a, int b);
-extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
-extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
+extern char *_DbEvas_pFileName;
+extern int _DbEvas_iMode;
+extern int _DbEvas_iSize;
+extern int _DbUser_iSize;
+extern char *_DbUser_pFileName;
+extern int _DbUser_iMode;
+extern int _DbUser_iCurrent;
+extern unsigned char _DbUser_iCount;
+extern DbUserEntry_t _DbUser_aEntries[];
+extern int TDbSave(int handle, int a, int b);
+extern int TDbInsertRow(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
+extern int TDbLoadFromFile(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
 extern TDbIODevice_t tdbiofioCallback;
-extern int fn_801F967C(int db, int tbl);
-signed char fn_8022F384(int key);
+extern int TDbTblDestroy(int db, int tbl);
+signed char DbUserFindIndex(int key);
 
 extern const unsigned char lbl_802AEF10[];
 extern int fn_802297D8(void *p, int tag);
 extern int fn_8022D8F8(int a, int *p, int c);
 int fn_8022DB20(void);
-extern int fn_8022F428(int key);
-extern int fn_8022F4BC(void);
+extern int DbUserFindIdByDb(int key);
+extern int DbUserGetCurrent(void);
 extern void fn_80231208(void);
-int fn_8022F3D4(int key);
-extern const int lbl_803ED6E4[2];
+int DbUserGetDb(int key);
+extern const int _DbUser_aDbIds[2];
 extern char lbl_802B5D64[];
 extern char lbl_802B56F4[];
 extern char lbl_802B5744[];
@@ -60,7 +57,7 @@ extern char lbl_802B4EC4[];
 extern char lbl_802B37E4[];
 extern char lbl_802B3824[];
 int fn_8022C0E0(struct QueryCursor cursor, int a);
-extern int fn_801FA1C0(int ref, unsigned short *pCount);
+extern int TDbQryGetCount(int ref, unsigned short *pCount);
 extern int fn_80230D8C(int id, int a, int b);
 extern char lbl_802B3610[];
 extern char lbl_802B3698[];
@@ -68,13 +65,13 @@ extern char lbl_802B479C[];
 extern char lbl_802B4828[];
 extern char lbl_802B5CB4[];
 extern char lbl_802B5CF0[];
-extern int fn_801F9014(int db);
+extern int TDbExists(int db);
 extern char lbl_802B3888[];
 extern char lbl_802B36C4[];
-extern int fn_801F9A90(int db, int tbl);
-extern int fn_801F9AB8(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount);
-extern int fn_801F9C68(int db, int tbl, int col);
-int fn_8022ED30(int db, int tbl);
+extern int TDbTblExists(int db, int tbl);
+extern int TDbTblColEnum(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount);
+extern int TDbTblColExists(int db, int tbl, int col);
+int DbTatsCopyTblDestroy(int db, int tbl);
 extern char lbl_802B5A48[];
 extern char lbl_802B5AB0[];
 extern char lbl_802B5ACC[];
@@ -115,12 +112,12 @@ extern char lbl_802B4A54[];
 extern char lbl_802B4A9C[];
 extern char lbl_802B4AE0[];
 void fn_8022C9B8(void *pPairs);
-void fn_8022CED8(void);
+void DbAssignPendingNodeIds(void);
 int fn_8022D5A4(int key, int mode);
 int fn_8022D710(int a, int b, int c, int row, int value);
 unsigned short fn_8022D6FC(int index);
 
-#include "engine/Handlers_802294D8.h"
+#include "engine/DbNiomHandlers.h"
 
 typedef struct Object_8022A59C {
     unsigned short mUnknown0;
@@ -197,7 +194,7 @@ typedef struct Record_8022A304 {
     char mUnknown16[2];
 } Record_8022A304;
 
-/* Ends a column list for fn_801F9718. */
+/* Ends a column list for TDbInsertRow. */
 static inline void fn_801F9718_SetEnd(TDbCol_801F9718 *pCol)
 {
     pCol->mCol = -1;
@@ -223,20 +220,26 @@ extern Entry_803A2390 lbl_803A2390[];
 extern char lbl_803A23E8[];
 extern char lbl_803A2474[];
 extern struct QueryCursor lbl_803A25E0;
-extern int (*lbl_803EBFD8)(void);
-extern void *lbl_803EBFDC;
-extern void *lbl_803EBFE0;
-extern void (*lbl_803EBFE4)(int);
-extern int lbl_803EBFE8;
-extern unsigned char lbl_803EBFEC;
-extern unsigned char lbl_803EBFED;
-extern Object_8022A59C *lbl_803EBFF0;
-extern int (*lbl_803EBFF8)(void);
-extern int (*lbl_803EBFFC)(void **ppData, void *p);
-extern int (*lbl_803EC000)(int a, int b);
-extern int (*lbl_803EC004)(void);
-extern int (*lbl_803EC008)(void);
+extern int (*_DbNiom_pEndFunc)(void);
+extern void *_DbNiom_pLoadFunc;
+extern void *_DbNiom_pResetFunc;
+extern void (*_DbNiom_pCallback)(int);
+extern int _DbNiom_iCallbackArg;
+extern unsigned char _DbNiom_bModeActive;
+extern unsigned char _DbNiom_bEnding;
+extern Object_8022A59C *_DbNiom_pCursor;
+extern int (*_DbNiom_pModeEnd)(void);
+extern int (*_DbNiom_pModeLoad)(void **ppData, void *p);
+extern int (*_DbNiom_pModeReset)(int a, int b);
+extern int (*_DbNiom_pModeResume)(void);
+extern int (*_DbNiom_pModeFn16)(void);
 extern int lbl_803EC020[2];
+extern int TDbQryGetSingleRow(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
+                       TDbCol_801F9718 *pCols);
+extern int TDbQrySetFirstRow(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
+                       TDbCol_801F9718 *pCols, void *pResult, int callback);
+/* Set index per column letter ('A'/'a' first); neutral label. */
+extern unsigned char lbl_802FA614[];
 extern int *lbl_803EC010[1];
 extern unsigned char lbl_803EC014[1];
 extern TDbCol_801F9718 **lbl_803EC018[1];
@@ -264,7 +267,7 @@ extern int lbl_803EC074;
 extern int lbl_803EC07C;
 extern int lbl_803EC080;
 
-int fn_80229674(void);
+int DbNiomCloseCursor(void);
 int fn_8022A59C(int a, Object_8022A59C **ppOut);
 int fn_8022AB6C(Object_8022A59C *p, int a, int b);
 int fn_8022AC80(Object_8022A59C *p);
@@ -443,30 +446,30 @@ int fn_8022D25C(int (*pCallback)(int a));
 
 
 /* prototypes of the db functions in 0x80229270-0x8022F428 (dbocmt.c to dbuser.c) */
-int fn_80229270(void);
-int fn_802293A8(void);
-void fn_802293B0(void);
-int fn_802293B4(int a, int b);
-int fn_802293FC(void);
-int fn_8022942C(void);
-void fn_80229434(void);
-int fn_80229438(int column, int value);
-int fn_80229470(void);
-void fn_80229494(void);
-void fn_802294D8(Handlers_802294D8 *p);
-int fn_802294F4(void);
-int fn_802294FC(int *p);
-int fn_80229554(void);
-int fn_802295C0(void);
-int fn_802295F8(int a);
-int fn_80229644(int a, int b);
-int fn_80229674(void);
-int fn_802296B4(int a, int b);
-void fn_80229718(Funcs_802FB3BC *pFuncs);
-void fn_80229744(void);
-int fn_80229760(void **ppData, void *p);
-int fn_80229788(int a, int b);
-int fn_802297B0(void);
+int DbOcmtRenumber(void);
+int DbOcmtModuleInit(void);
+void DbOcmtModuleShutdown(void);
+int DbOcmtInsert(int a, int b);
+int DbOcmtClear(void);
+int DbOptionsModuleInit(void);
+void DbOptionsModuleShutdown(void);
+int DbOptionsSetTpom(int column, int value);
+int DbNiomInit(void);
+void DbNiomShutdown(void);
+void DbNiomSetHandlers(DbNiomHandlers_t *p);
+int DbNiomIsModeActive(void);
+int DbNiomBeginMode(int *p);
+int DbNiomEndMode(void);
+int DbNiomRunCallback(void);
+int DbNiomOpenCursor(int a);
+int DbNiomReadCursor(int a, int b);
+int DbNiomCloseCursor(void);
+int DbNiomReadOnce(int a, int b);
+void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs);
+void DbNiomClearModeFuncs(void);
+int DbNiomModeLoad(void **ppData, void *p);
+int DbNiomModeReset(int a, int b);
+int DbNiomModeResume(void);
 int fn_802299FC(void);
 int fn_80229A70(void);
 float fn_80229C98(int index);
@@ -539,7 +542,7 @@ int fn_8022D6E8(void);
 void fn_8022D6F0(void);
 unsigned short fn_8022D6FC(int index);
 int fn_8022D710(int a, int b, int c, int row, int value);
-int fn_8022D834(int row, int column);
+int DbTableLookupByte(int row, int column);
 int fn_8022D864(void);
 int fn_8022D86C(void);
 int fn_8022D874(int a, int b, int c, int key);
@@ -570,35 +573,35 @@ int fn_8022E9A4(void);
 void fn_8022E9C4(void);
 int fn_8022E9E4(void);
 void fn_8022EA4C(void);
-int fn_8022EA74(void);
-void fn_8022EA7C(void);
-int fn_8022EA80(int a, const char *pName, int b);
-void fn_8022EAD8(void);
-int fn_8022EB10(void);
-int fn_8022EB5C(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps);
-int fn_8022EB94(void *pTarget, struct SaveStreamOps_t *pOps);
-int fn_8022EBC8(void);
-int fn_8022EBF0(int a, const char *pName, int b);
-void fn_8022EC48(void);
-int fn_8022EC80(void);
-int fn_8022ECCC(void);
-int fn_8022ECF4(int a, int b);
-int fn_8022ED30(int db, int tbl);
-int fn_8022ED50(int db, int a, int b);
+int DbEvasModuleInit(void);
+void DbEvasModuleShutdown(void);
+int DbEvasInit(int a, const char *pName, int b);
+void DbEvasShutdown(void);
+int DbEvasLoad(void);
+int DbEvasLoadStream(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps);
+int DbEvasSaveStream(void *pTarget, struct SaveStreamOps_t *pOps);
+int DbEvasUnload(void);
+int DbTatsCopyInit(int a, const char *pName, int b);
+void DbTatsCopyShutdown(void);
+int DbTatsCopyOpen(void);
+int DbTatsCopyClose(void);
+int DbTatsCopyTable(int a, int b);
+int DbTatsCopyTblDestroy(int db, int tbl);
+int DbTatsCopyAllTables(int db, int a, int b);
 int DbFileInit(const char *pName);
 void DbFileShutdown(void);
 int DbFileTblLoad(int db, int file);
 int DbFileTblDestroy(int db, int tbl);
-int fn_8022EFDC(void);
+int DbUserNewId(void);
 int DbUserInit(int a, const char *pName, int b);
-void fn_8022F094(void);
-int fn_8022F0D4(void);
-void fn_8022F1BC(int key);
-void fn_8022F294(int key);
-int fn_8022F34C(void);
-int fn_8022F358(int index);
-signed char fn_8022F384(int key);
-int fn_8022F3D4(int key);
+void DbUserShutdown(void);
+int DbUserCreate(void);
+void DbUserDelete(int key);
+void DbUserReset(int key);
+int DbUserGetCount(void);
+int DbUserGetId(int index);
+signed char DbUserFindIndex(int key);
+int DbUserGetDb(int key);
 
 int fn_802299FC(void)
 {
@@ -687,12 +690,12 @@ void fn_8022A304(void)
 
 int fn_8022A428(int a)
 {
-    return fn_801FCE10(0, lbl_802B2F64, a, 1023, 1023, 31, -1, 3, 15, 7, -1, 0);
+    return TDbCompilePerformOp(0, lbl_802B2F64, a, 1023, 1023, 31, -1, 3, 15, 7, -1, 0);
 }
 
 int fn_8022A490(unsigned int count)
 {
-    int err = fn_801FCE10(0, lbl_802B3010);
+    int err = TDbCompilePerformOp(0, lbl_802B3010);
 
     if (err == 0) {
         int id = 0;
@@ -711,12 +714,12 @@ int fn_8022A490(unsigned int count)
 
 int fn_8022A508(int a, int b, int c, int d, int e)
 {
-    return fn_801FCE10(0, lbl_802B30D0, b, c, d, e, a);
+    return TDbCompilePerformOp(0, lbl_802B30D0, b, c, d, e, a);
 }
 
 int fn_8022A558(int a, int b, int c, int d)
 {
-    return fn_801FCE10(0, lbl_802B3180, b, c, d, a);
+    return TDbCompilePerformOp(0, lbl_802B3180, b, c, d, a);
 }
 
 int fn_8022A59C(int a, Object_8022A59C **ppOut)
@@ -747,18 +750,18 @@ int fn_8022AB6C(Object_8022A59C *p, int a, int b)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    err = fn_801FCE10(0, lbl_802B3524, &cursor);
+    err = TDbCompilePerformOp(0, lbl_802B3524, &cursor);
     if (err == 0) {
         err = fn_8022A624(p, cursor, a, b);
     }
     if (QUERY_STATUS_ACCEPTED(err) == 1) {
         if (cursor.mUnknown0 != 0) {
-            err = fn_801FCFA0(&cursor);
+            err = TDbSQLDestroyCursor(&cursor);
         } else {
             err = 0;
         }
     } else if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
     return err;
 }
@@ -792,7 +795,7 @@ int fn_8022ACEC(int key, int unused, int col, int value, int index)
     aCols[1].mUnk4 = table;
     aCols[1].mUnk0 = value;
     fn_801F9718_SetEnd(&aCols[2]);
-    return fn_801F9718(0, table, aCols, 0, 0);
+    return TDbInsertRow(0, table, aCols, 0, 0);
 }
 
 int fn_8022AD64(int db, TDbCol_801F9718 **ppCols, unsigned char *pCount)
@@ -806,10 +809,10 @@ int fn_8022AD64(int db, TDbCol_801F9718 **ppCols, unsigned char *pCount)
     unsigned char i;
 
     n = 1;
-    hasP = fn_801F9C68(0, db, 0x44494750) == 0;
-    hasT = fn_801F9C68(0, db, 0x44494754) == 0;
+    hasP = TDbTblColExists(0, db, 0x44494750) == 0;
+    hasT = TDbTblColExists(0, db, 0x44494754) == 0;
     count = 254;
-    status = fn_801F9AB8(0, db, aInfo, &count);
+    status = TDbTblColEnum(0, db, aInfo, &count);
     if (!hasP && !hasT) {
         n = 0;
     }
@@ -871,11 +874,11 @@ int fn_8022AF5C(int key, int unused, int col, int value, int set, int index)
     aCols[1].mUnk4 = table;
     aCols[1].mUnk0 = value;
     fn_801F9718_SetEnd(&aCols[2]);
-    err = fn_801F9718(0, table, aCols, 0, 0);
+    err = TDbInsertRow(0, table, aCols, 0, 0);
     if (err == 19) {
         err = fn_8022AF54(set, index);
         if (err == 0) {
-            err = fn_801F9718(0, table, aCols, 0, 0);
+            err = TDbInsertRow(0, table, aCols, 0, 0);
         }
     }
     return err;
@@ -902,7 +905,7 @@ int fn_8022B02C(Callbacks_8022B02C *pCallbacks)
         count = lbl_803EC014[i];
         for (j = 0; j < count; j++) {
             table = lbl_803EC010[i][j];
-            if (fn_801F9A90(0, table) == 0) {
+            if (TDbTblExists(0, table) == 0) {
                 status = fn_8022AD64(table, &lbl_803EC018[i][j], &lbl_803EC01C[i][j]);
             } else {
                 lbl_803EC018[i][j] = 0;
@@ -918,7 +921,7 @@ int fn_8022B02C(Callbacks_8022B02C *pCallbacks)
     }
     for (i = 0; i < 1 && status == 0; i++) {
         table = lbl_803EC020[i];
-        if (fn_801F9A90(0, table) == 0) {
+        if (TDbTblExists(0, table) == 0) {
             status = fn_8022AD64(table, &lbl_803EC024[i], &lbl_803ED01C[i]);
         } else {
             lbl_803ED01C[i] = 0;
@@ -960,6 +963,156 @@ void fn_8022B200(void)
     lbl_803EC02C = 0;
 }
 
+/* The 64-bit column key of col in table (table word high, column id low). */
+static inline unsigned long long _DbColKey(unsigned int table, unsigned int col)
+{
+    return ((unsigned long long)table << 32) | col;
+}
+
+/* Writes value into column col of the 'DIGP' row key of the set selected by the column's
+   third letter; when no row matched (23) the row is added through 0x8022AF5C. Returns 131
+   for a column letter without a set. */
+int fn_8022B2CC(int key, unsigned int col, int value)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    TDbCol_801F9718 aCols[2];
+    TDbExpr_t expr;
+    unsigned int c;
+    int index;
+    int table;
+    int err;
+
+    c = (col >> 8) & 0xFF;
+    if (c > 96) {
+        index = lbl_802FA614[c - 97];
+    } else {
+        index = lbl_802FA614[c - 65];
+    }
+    if (index < 0) {
+        return 131;
+    }
+    table = lbl_803EC010[0][index];
+    aCols[0].mUnk0 = value;
+    aCols[0].mUnk4 = table;
+    aCols[0].mCol = col;
+    fn_801F9718_SetEnd(&aCols[1]);
+    expr.mLeft.mType = 6;
+    expr.mLeft.mValue.l = _DbColKey(table, 0x44494750);
+    expr.mRight.mType = 3;
+    expr.mRight.mValue.i = key;
+    expr.mOp = 0x10003;
+    aTables[0].mId = table;
+    aTables[0].mJoinType = 2;
+    aTables[0].mExpr = &expr;
+    aTables[1].mId = -1;
+    aTables[1].mJoinType = 2;
+    aTables[1].mExpr = 0;
+    err = TDbQrySetFirstRow(0, aTables, 0, aCols, 0, 0);
+    if (err == 23) {
+        err = fn_8022AF5C(key, -1, col, value, 0, index);
+    }
+    return err;
+}
+
+/* Reads column col of the 'DIGP' row key of the set selected by the column's third letter
+   into *pOut; returns 131 for a letter without a set, 132 when no row matched. */
+int fn_8022B414(int key, unsigned int col, int *pOut)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    TDbCol_801F9718 aCols[2];
+    TDbExpr_t expr;
+    unsigned int c;
+    int index;
+    int table;
+    int err;
+    int ok;
+
+    *pOut = 0;
+    c = (col >> 8) & 0xFF;
+    if (c > 96) {
+        index = lbl_802FA614[c - 97];
+    } else {
+        index = lbl_802FA614[c - 65];
+    }
+    if (index >= 0) {
+        table = lbl_803EC010[0][index];
+        aCols[0].mUnk0 = 0;
+        aCols[0].mUnk4 = table;
+        aCols[0].mCol = col;
+        fn_801F9718_SetEnd(&aCols[1]);
+        expr.mLeft.mType = 6;
+        expr.mLeft.mValue.l = _DbColKey(table, 0x44494750);
+        expr.mRight.mType = 3;
+        expr.mRight.mValue.i = key;
+        expr.mOp = 0x10003;
+        aTables[0].mId = table;
+        aTables[0].mJoinType = 2;
+        aTables[0].mExpr = &expr;
+        aTables[1].mId = -1;
+        aTables[1].mJoinType = 2;
+        aTables[1].mExpr = 0;
+        err = TDbQryGetSingleRow(0, aTables, 0, aCols);
+        ok = 0;
+        if (err == 0 || err == 23 || err == 21 || err == 20) {
+            ok = 1;
+        }
+        if (ok == 1) {
+            if (err == 0) {
+                *pOut = aCols[0].mUnk0;
+            } else {
+                err = 132;
+            }
+        }
+    } else {
+        err = 131;
+    }
+    return err;
+}
+
+/* Reads column col of the row of the first table whose 'DIGT' column equals value; returns
+   0 with the value in *pOut, 132 when the query ended without a row, or the query error. */
+int fn_8022B7A4(int value, int col, int *pOut)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    TDbCol_801F9718 aCols[2];
+    TDbExpr_t expr;
+    int table;
+    int err;
+    int ok;
+
+    err = 0;
+    *pOut = err;
+    table = lbl_803EC020[0];
+    aCols[0].mUnk0 = err;
+    aCols[0].mUnk4 = table;
+    aCols[0].mCol = col;
+    fn_801F9718_SetEnd(&aCols[1]);
+    expr.mLeft.mType = 6;
+    expr.mLeft.mValue.l = _DbColKey(table, 0x44494754);
+    expr.mRight.mType = 3;
+    expr.mRight.mValue.i = value;
+    expr.mOp = 0x10003;
+    aTables[0].mId = table;
+    aTables[0].mJoinType = 2;
+    aTables[0].mExpr = &expr;
+    aTables[1].mId = -1;
+    aTables[1].mJoinType = 2;
+    aTables[1].mExpr = 0;
+    err = TDbQryGetSingleRow(0, aTables, 0, aCols);
+    ok = 0;
+    if (err == 0 || err == 23 || err == 21 || err == 20) {
+        ok = 1;
+    }
+    if (ok == 1) {
+        if (err == 0) {
+            *pOut = aCols[0].mUnk0;
+        } else {
+            err = 132;
+        }
+    }
+    return err;
+}
+
 int fn_8022BF60(void)
 {
     return 0;
@@ -971,19 +1124,19 @@ int fn_8022BF68(void)
     unsigned char i;
 
     for (i = 0; i <= 4; i++) {
-        err = fn_801FCE10(0, lbl_802B35D4, lbl_802FA600[i]);
+        err = TDbCompilePerformOp(0, lbl_802B35D4, lbl_802FA600[i]);
         if (err != 0) {
             break;
         }
     }
     if (err == 0) {
-        err = fn_801FCE10(0, lbl_802B35D4, lbl_803EC020[0]);
+        err = TDbCompilePerformOp(0, lbl_802B35D4, lbl_803EC020[0]);
     }
     if (err == 0) {
-        err = fn_801FCE10(0, lbl_802B35E4);
+        err = TDbCompilePerformOp(0, lbl_802B35E4);
     }
     if (err == 0) {
-        err = fn_801FCE10(0, lbl_802B35F8);
+        err = TDbCompilePerformOp(0, lbl_802B35F8);
     }
     return err;
 }
@@ -1024,14 +1177,14 @@ int fn_8022C0E0(struct QueryCursor cursor, int a)
     unsigned short i;
 
     pIds = 0;
-    status = fn_801FA1C0(cursor.mUnknown0, &total);
+    status = TDbQryGetCount(cursor.mUnknown0, &total);
     if (status == 0) {
         pIds = DbUtilAlloc(total * 4, 0);
     }
     count = 0;
     if (status == 0) {
         while (status == 0) {
-            status = fn_801FCE10(0, lbl_802B3610, &cursor, &id);
+            status = TDbCompilePerformOp(0, lbl_802B3610, &cursor, &id);
             if (status == 0) {
                 pIds[count] = id;
                 count++;
@@ -1069,9 +1222,9 @@ int fn_8022C214(Callbacks_8022C214 *pCallbacks)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    status = fn_801FCE10(0, lbl_802B3698, &cursor);
+    status = TDbCompilePerformOp(0, lbl_802B3698, &cursor);
     while (status == 0) {
-        status = fn_801FCE10(0, lbl_802B36C4, &cursor, &index, &a, &b, &c, &d);
+        status = TDbCompilePerformOp(0, lbl_802B36C4, &cursor, &index, &a, &b, &c, &d);
         if (status == 0) {
             lbl_803A2390[index].mUnknown0 = a;
             lbl_803A2390[index].mUnknown2 = b;
@@ -1081,21 +1234,21 @@ int fn_8022C214(Callbacks_8022C214 *pCallbacks)
     }
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
         if (cursor.mUnknown0 != 0) {
-            status = fn_801FCFA0(&cursor);
+            status = TDbSQLDestroyCursor(&cursor);
         } else {
             status = 0;
         }
     } else if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
     if (status == 0) {
-        status = fn_8022ED30(0, 0x53525054);
+        status = DbTatsCopyTblDestroy(0, 0x53525054);
     } else {
-        fn_8022ED30(0, 0x53525054);
+        DbTatsCopyTblDestroy(0, 0x53525054);
     }
     lbl_803EC030 = 0;
     if (status == 0) {
-        lbl_803EC030 = fn_801F9A90(0, 0x53525054) == 0;
+        lbl_803EC030 = TDbTblExists(0, 0x53525054) == 0;
         if (pCallbacks != 0) {
             lbl_803EC034 = pCallbacks->mpUnknown0;
             lbl_803EC038 = pCallbacks->mpUnknown4;
@@ -1121,18 +1274,18 @@ int fn_8022C410(int a)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    status = fn_801FCE10(0, lbl_802B37E4, &cursor, 0);
+    status = TDbCompilePerformOp(0, lbl_802B37E4, &cursor, 0);
     if (status == 0) {
         status = fn_8022C0E0(cursor, a);
     }
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
         if (cursor.mUnknown0 != 0) {
-            status = fn_801FCFA0(&cursor);
+            status = TDbSQLDestroyCursor(&cursor);
         } else {
             status = 0;
         }
     } else if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
     return status;
 }
@@ -1146,18 +1299,18 @@ int fn_8022C518(int a)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    status = fn_801FCE10(0, lbl_802B3824, &cursor, 0, 5, 1);
+    status = TDbCompilePerformOp(0, lbl_802B3824, &cursor, 0, 5, 1);
     if (status == 0) {
         status = fn_8022C0E0(cursor, a);
     }
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
         if (cursor.mUnknown0 != 0) {
-            status = fn_801FCFA0(&cursor);
+            status = TDbSQLDestroyCursor(&cursor);
         } else {
             status = 0;
         }
     } else if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
     return status;
 }
@@ -1176,13 +1329,13 @@ int fn_8022C628(int db, int tbl, int *pIds, unsigned short *pCount)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    status = fn_801FCE10(0, lbl_802B3888, db, &cursor, tbl);
+    status = TDbCompilePerformOp(0, lbl_802B3888, db, &cursor, tbl);
     prev = -1;
     next = -1;
     last = 1023;
     count = 0;
     while (status == 0 && count < *pCount) {
-        status = fn_801FCE10(0, lbl_802B3610, &cursor, &id);
+        status = TDbCompilePerformOp(0, lbl_802B3610, &cursor, &id);
         if (status == 0) {
             if (id > prev + 1) {
                 next = prev + 1;
@@ -1198,12 +1351,12 @@ int fn_8022C628(int db, int tbl, int *pIds, unsigned short *pCount)
     }
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
         if (cursor.mUnknown0 != 0) {
-            status = fn_801FCFA0(&cursor);
+            status = TDbSQLDestroyCursor(&cursor);
         } else {
             status = 0;
         }
     } else if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
     if (status == 0 && count < *pCount) {
         next = last + 1;

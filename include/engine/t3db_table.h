@@ -18,16 +18,16 @@ typedef struct TDbHandler_8020A660 {
 /* Defined in the T3DB query and index sources. */
 void _TDbDataSetBitData(unsigned int *pData, unsigned int bitOffset, unsigned int bitCount, unsigned int *pValue);
 int _TDbIndexZap(TDbIndex_t *pIndex);
-int fn_80205754(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLits, unsigned int *pMask);
-int fn_80205880(TDbTable_t *pTable, unsigned char column, TDbQIdx_80205880 *pQIdx);
-int fn_80205A10(TDbQIdx_80205880 *pQIdx, TDbIdxNode_t **ppCur);
-int fn_80205B88(TDbStmt_80205754 *pStmt);
-void fn_80205C08(TDbStmt_80205754 *pStmt);
-int fn_80207E24(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_t *pCols, int create);
+int _TDbQryUpdateQIdxsFromLits(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLits, unsigned int *pMask);
+int _TDbQryCheckQIdxUsage(TDbTable_t *pTable, unsigned char column, TDbQIdx_80205880 *pQIdx);
+int _TDbQryRebuildQIdx(TDbQIdx_80205880 *pQIdx, TDbIdxNode_t **ppCur);
+int _TDbQrySetInUse(TDbStmt_80205754 *pStmt);
+void _TDbQryClearInUse(TDbStmt_80205754 *pStmt);
+int _TDbQryPrepSimple(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_t *pCols, int create);
 
-int fn_80209F34(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLits, unsigned int *pMask);
-void fn_8020A540(void);
-void fn_8020A5A8(void);
+int _TDbQryFillFromColLits(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLits, unsigned int *pMask);
+void _TDbQryClearModFlags(void);
+void _TDbQryCallTriggers(void);
 void _TDbTblCallInsertTriggers(TDbTable_t *pTable, int row);
 void _TDbTblGetFullRow(TDbTable_t *pTable, int row, TDbLitRef_t *pValues);
 void _TDbBlobGetData(TDbTable_t *pTable, TDbColumn_t *pColumn, void *pRow, unsigned char *pOut);

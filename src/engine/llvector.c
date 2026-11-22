@@ -1,97 +1,98 @@
 /* Low-level vector math: 2D/3D vector length, normalise, scale, rotate, compare, add, subtract, dot and
    cross products, distance, interpolation and matrix transforms on float arrays. */
 
-extern float fn_80260B1C(float x);
+#include <math.h>
+
 extern float MathInvSqrt(float x);
 extern void fn_801CFC14(int angle, float *pFirst, float *pSecond);
 extern void fn_801CFCD0(int *pAngles, float *pFirst, float *pSecond);
 extern void MatStore(float m[4][4]);
 extern double fabs(double x);
 
-float fn_802270A4(float *p)
+float Vec2Magnitude(float *p)
 {
-    return fn_80260B1C(p[0] * p[0] + p[1] * p[1]);
+    return sqrtf(p[0] * p[0] + p[1] * p[1]);
 }
 
-float fn_802270D4(float *p)
+float Vec3Magnitude(float *p)
 {
-    return fn_80260B1C(p[0] * p[0] + p[1] * p[1] + p[2] * p[2]);
+    return sqrtf(p[0] * p[0] + p[1] * p[1] + p[2] * p[2]);
 }
 
-float fn_8022710C(float *p)
+float Vec2MagnitudeSqr(float *p)
 {
     return p[0] * p[0] + p[1] * p[1];
 }
 
-float fn_80227120(float *p)
+float Vec3MagnitudeSqr(float *p)
 {
     return p[0] * p[0] + p[1] * p[1] + p[2] * p[2];
 }
 
-float fn_8022713C(float *p)
+float Vec2InvMagnitude(float *p)
 {
     return MathInvSqrt(p[0] * p[0] + p[1] * p[1]);
 }
 
-float fn_8022716C(float *p)
+float Vec3InvMagnitude(float *p)
 {
     return MathInvSqrt(p[0] * p[0] + p[1] * p[1] + p[2] * p[2]);
 }
 
-void fn_802271A4(float *pOut, float *p)
+void Vec2Normalize(float *pOut, float *p)
 {
-    float scale = fn_8022713C(p);
+    float scale = Vec2InvMagnitude(p);
 
     pOut[0] = p[0] * scale;
     pOut[1] = p[1] * scale;
 }
 
-void fn_802271F0(float *pOut, float *p)
+void Vec3Normalize(float *pOut, float *p)
 {
-    float scale = fn_8022716C(p);
+    float scale = Vec3InvMagnitude(p);
 
-    pOut[0] = p[0] * scale;
-    pOut[1] = p[1] * scale;
-    pOut[2] = p[2] * scale;
-}
-
-void fn_80227248(float *pOut, float *p, float scale)
-{
-    pOut[0] = p[0] * scale;
-    pOut[1] = p[1] * scale;
-}
-
-void fn_80227264(float *pOut, float *p, float scale)
-{
     pOut[0] = p[0] * scale;
     pOut[1] = p[1] * scale;
     pOut[2] = p[2] * scale;
 }
 
-void fn_8022728C(float *pOut, float *p, float length)
+void Vec2Scale(float *pOut, float *p, float scale)
 {
-    fn_80227248(pOut, p, length / fn_802270A4(p));
+    pOut[0] = p[0] * scale;
+    pOut[1] = p[1] * scale;
 }
 
-void fn_802272DC(float *pOut, float *p, float length)
+void Vec3Scale(float *pOut, float *p, float scale)
 {
-    fn_80227264(pOut, p, length / fn_802270D4(p));
+    pOut[0] = p[0] * scale;
+    pOut[1] = p[1] * scale;
+    pOut[2] = p[2] * scale;
 }
 
-void fn_8022732C(float *pOut, float *p, float scale)
+void Vec2ScaleLength(float *pOut, float *p, float length)
+{
+    Vec2Scale(pOut, p, length / Vec2Magnitude(p));
+}
+
+void Vec3ScaleLength(float *pOut, float *p, float length)
+{
+    Vec3Scale(pOut, p, length / Vec3Magnitude(p));
+}
+
+void Vec2ScaleAcc(float *pOut, float *p, float scale)
 {
     pOut[0] += p[0] * scale;
     pOut[1] += p[1] * scale;
 }
 
-void fn_80227350(float *pOut, float *p, float scale)
+void Vec3ScaleAcc(float *pOut, float *p, float scale)
 {
     pOut[0] += p[0] * scale;
     pOut[1] += p[1] * scale;
     pOut[2] += p[2] * scale;
 }
 
-void fn_80227384(float *pOut, float *p, int angle)
+void Vec2Rotate(float *pOut, float *p, int angle)
 {
     float s;
     float c;
@@ -106,7 +107,7 @@ void fn_80227384(float *pOut, float *p, int angle)
     pOut[1] = c * y + s * x;
 }
 
-void fn_802273E8(float *pOut, float *p, int a, int b, int c)
+void Vec3RotateXYZ(float *pOut, float *p, int a, int b, int c)
 {
     float first[3];
     float second[3];
@@ -129,7 +130,7 @@ void fn_802273E8(float *pOut, float *p, int a, int b, int c)
     pOut[2] = first[0] * y0 + second[0] * z1;
 }
 
-void fn_80227490(float *pOut, float *p, int a, int b, int c)
+void Vec3RotateZYX(float *pOut, float *p, int a, int b, int c)
 {
     float first[3];
     float second[3];
@@ -152,7 +153,7 @@ void fn_80227490(float *pOut, float *p, int a, int b, int c)
     pOut[2] = z1;
 }
 
-void fn_80227538(float *pOut, int angle, float length)
+void Vec2FromAngle(float *pOut, int angle, float length)
 {
     float first;
     float second;
@@ -162,7 +163,7 @@ void fn_80227538(float *pOut, int angle, float length)
     pOut[1] = first * length;
 }
 
-int fn_80227594(float *pA, float *pB, float eps)
+int Vec2Equal(float *pA, float *pB, float eps)
 {
     float dx = fabs(pA[0] - pB[0]);
     float dy = fabs(pA[1] - pB[1]);
@@ -170,7 +171,7 @@ int fn_80227594(float *pA, float *pB, float eps)
     return dx < eps && dy < eps;
 }
 
-int fn_802275D8(float *pA, float *pB, float eps)
+int Vec3Equal(float *pA, float *pB, float eps)
 {
     float dx = fabs(pA[0] - pB[0]);
     float dy = fabs(pA[1] - pB[1]);
@@ -179,45 +180,45 @@ int fn_802275D8(float *pA, float *pB, float eps)
     return dx < eps && dy < eps && dz < eps;
 }
 
-void fn_80227638(float *pOut, float *pA, float *pB)
+void Vec2Add(float *pOut, float *pA, float *pB)
 {
     pOut[0] = pA[0] + pB[0];
     pOut[1] = pA[1] + pB[1];
 }
 
-void fn_8022765C(float *pOut, float *pA, float *pB)
+void Vec3Add(float *pOut, float *pA, float *pB)
 {
     pOut[0] = pA[0] + pB[0];
     pOut[1] = pA[1] + pB[1];
     pOut[2] = pA[2] + pB[2];
 }
 
-void fn_80227690(float *pOut, float *pA, float *pB)
+void Vec2Sub(float *pOut, float *pA, float *pB)
 {
     pOut[0] = pA[0] - pB[0];
     pOut[1] = pA[1] - pB[1];
 }
 
-void fn_802276B4(float *pOut, float *pA, float *pB)
+void Vec3Sub(float *pOut, float *pA, float *pB)
 {
     pOut[0] = pA[0] - pB[0];
     pOut[1] = pA[1] - pB[1];
     pOut[2] = pA[2] - pB[2];
 }
 
-float fn_802276E8(float *pA, float *pB)
+float Vec2DotProduct(float *pA, float *pB)
 {
     return pA[0] * pB[0] + pA[1] * pB[1];
 }
 
-float fn_80227704(float *pA, float *pB)
+float Vec3DotProduct(float *pA, float *pB)
 {
     return pA[0] * pB[0] + pA[1] * pB[1] + pA[2] * pB[2];
 }
 
 #if defined(DECOMP_COMPARE)
 
-void fn_802277DC(float *pOut, float *pA, float *pB)
+void Vec3CrossProduct(float *pOut, float *pA, float *pB)
 {
     float x = pA[1] * pB[2] - pA[2] * pB[1];
     float y = pA[2] * pB[0] - pA[0] * pB[2];
@@ -228,39 +229,39 @@ void fn_802277DC(float *pOut, float *pA, float *pB)
     pOut[2] = z;
 }
 
-float fn_8022781C(float *pA, float *pB)
+float Vec2Distance(float *pA, float *pB)
 {
     float d[2];
 
-    fn_80227690(d, pA, pB);
-    return fn_802270A4(d);
+    Vec2Sub(d, pA, pB);
+    return Vec2Magnitude(d);
 }
 
-float fn_8022785C(float *pA, float *pB)
+float Vec3Distance(float *pA, float *pB)
 {
     float d[3];
 
-    fn_802276B4(d, pA, pB);
-    return fn_802270D4(d);
+    Vec3Sub(d, pA, pB);
+    return Vec3Magnitude(d);
 }
 
-float fn_80227890(float *pA, float *pB)
+float Vec2DistanceSqr(float *pA, float *pB)
 {
     float d[2];
 
-    fn_80227690(d, pA, pB);
-    return fn_8022710C(d);
+    Vec2Sub(d, pA, pB);
+    return Vec2MagnitudeSqr(d);
 }
 
-float fn_802278D0(float *pA, float *pB)
+float Vec3DistanceSqr(float *pA, float *pB)
 {
     float d[3];
 
-    fn_802276B4(d, pA, pB);
-    return fn_80227120(d);
+    Vec3Sub(d, pA, pB);
+    return Vec3MagnitudeSqr(d);
 }
 
-void fn_80227904(float *pOut, float *pA, float *pB, float t)
+void Vec2Lerp(float *pOut, float *pA, float *pB, float t)
 {
     float x = pB[0];
     float y = pB[1];
@@ -269,7 +270,7 @@ void fn_80227904(float *pOut, float *pA, float *pB, float t)
     pOut[1] = (pA[1] - y) * t + y;
 }
 
-void fn_80227930(float *pOut, float *pA, float *pB, float t)
+void Vec3Lerp(float *pOut, float *pA, float *pB, float t)
 {
     float x = pB[0];
     float y = pB[1];
@@ -280,7 +281,7 @@ void fn_80227930(float *pOut, float *pA, float *pB, float t)
     pOut[2] = (pA[2] - z) * t + z;
 }
 
-void fn_80227C2C(float *pOut, float *p)
+void Vec3Mat33Mul(float *pOut, float *p)
 {
     float m[4][4];
     float x;
@@ -296,7 +297,7 @@ void fn_80227C2C(float *pOut, float *p)
     pOut[2] = m[2][0] * x + m[2][1] * y + m[2][2] * z;
 }
 
-void fn_80227CC0(float *pOut, float *p)
+void Vec3Mat34Mul(float *pOut, float *p)
 {
     float m[4][4];
     float x;
@@ -312,7 +313,7 @@ void fn_80227CC0(float *pOut, float *p)
     pOut[2] = m[2][0] * x + m[2][1] * y + m[2][2] * z + m[2][3];
 }
 
-void fn_80227E40(float *pOut, float *p)
+void Vec4Mat44Mul(float *pOut, float *p)
 {
     float m[4][4];
     float x;

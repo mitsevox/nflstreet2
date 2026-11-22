@@ -7,12 +7,12 @@
 
 extern "C" {
 int DbCursorGetValue(DbCursor *pCursor, int column);
-int fn_801FA148(int cursor);
-int fn_801FA1C0(int cursor, unsigned short *pCount);
+int TDbQryDestroy(int cursor);
+int TDbQryGetCount(int cursor, unsigned short *pCount);
 
 int DbCursorClose(DbCursor *pCursor)
 {
-    int status = fn_801FA148(pCursor->mUnknown0);
+    int status = TDbQryDestroy(pCursor->mUnknown0);
     pCursor->mUnknown0 = 0;
     pCursor->mUnknown4 = 0;
     pCursor->mUnknown8 = -1;
@@ -24,7 +24,7 @@ int DbCursorClose(DbCursor *pCursor)
 int DbCursorGetRowCount(DbCursor *pCursor)
 {
     unsigned short count;
-    fn_801FA1C0(pCursor->mUnknown0, &count);
+    TDbQryGetCount(pCursor->mUnknown0, &count);
     return count;
 }
 
@@ -37,7 +37,7 @@ int DbCursorFirst(DbCursor *pCursor)
 {
     pCursor->mUnknown16 = -1;
     int result = 0;
-    int status = fn_801FA228(pCursor->mUnknown0, 1, 0, 0);
+    int status = TDbQryRetrieve(pCursor->mUnknown0, 1, 0, 0);
     if (status != 20 && status != 21) {
         pCursor->mUnknown16 = 0;
         result = 1;
@@ -49,7 +49,7 @@ int DbCursorLast(DbCursor *pCursor)
 {
     pCursor->mUnknown16 = -1;
     int result = 0;
-    int status = fn_801FA228(pCursor->mUnknown0, 2, 0, 0);
+    int status = TDbQryRetrieve(pCursor->mUnknown0, 2, 0, 0);
     if (status != 20 && status != 21) {
         pCursor->mUnknown16 = DbCursorGetRowCount(pCursor) - 1;
         result = 1;
@@ -61,7 +61,7 @@ int DbCursorNext(DbCursor *pCursor)
 {
     int result = 0;
     if (pCursor->mUnknown16 != -1) {
-        int status = fn_801FA228(pCursor->mUnknown0, 0, 1, 0);
+        int status = TDbQryRetrieve(pCursor->mUnknown0, 0, 1, 0);
         if (status != 20 && status != 21) {
             pCursor->mUnknown16++;
             result = 1;
@@ -76,7 +76,7 @@ int DbCursorPrev(DbCursor *pCursor)
 {
     int result = 0;
     if (pCursor->mUnknown16 != -1) {
-        int status = fn_801FA228(pCursor->mUnknown0, 0, -1, 0);
+        int status = TDbQryRetrieve(pCursor->mUnknown0, 0, -1, 0);
         if (status != 20 && status != 21) {
             pCursor->mUnknown16--;
             result = 1;
@@ -93,10 +93,10 @@ int DbCursorSeek(DbCursor *pCursor, int row)
     int status;
     if (row < 0) {
         pCursor->mUnknown16 = DbCursorGetRowCount(pCursor) + row;
-        status = fn_801FA228(pCursor->mUnknown0, 2, row + 1, 0);
+        status = TDbQryRetrieve(pCursor->mUnknown0, 2, row + 1, 0);
     } else {
         pCursor->mUnknown16 = row;
-        status = fn_801FA228(pCursor->mUnknown0, 1, row, 0);
+        status = TDbQryRetrieve(pCursor->mUnknown0, 1, row, 0);
     }
     if (status != 20 && status != 21) {
         result = 1;
@@ -127,7 +127,7 @@ int DbCursorFindRow(DbCursor *pCursor, DbColumnValue *pColumns,
             pValues[i] = pColumns[i].mValue;
         }
         while (valid) {
-            fn_801FA228(pCursor->mUnknown0, 0, 0, pColumns);
+            TDbQryRetrieve(pCursor->mUnknown0, 0, 0, pColumns);
             found = 1;
             for (i = 0; i < count; i++) {
                 if (pValues[i] != pColumns[i].mValue) {
@@ -189,7 +189,7 @@ int DbCursorGetValue(DbCursor *pCursor, int column)
     columns[0].mTableTag = -1;
     columns[0].mValue = 0;
     columns[1].SetEnd();
-    fn_801FA228(pCursor->mUnknown0, 0, 0, columns);
+    TDbQryRetrieve(pCursor->mUnknown0, 0, 0, columns);
     return columns[0].mValue;
 }
 
@@ -201,7 +201,7 @@ int DbCursorGetInt(void *pObject, int column)
     columns[0].mTableTag = -1;
     columns[0].mValue = 0;
     columns[1].SetEnd();
-    fn_801FA228(pCursor->mUnknown0, 0, 0, columns);
+    TDbQryRetrieve(pCursor->mUnknown0, 0, 0, columns);
     return columns[0].mValue;
 }
 

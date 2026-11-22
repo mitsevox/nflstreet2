@@ -14,7 +14,7 @@
 #include "game/GameInfo.h"
 #include "game/EditMenu.h"
 #include "game/DepthChartSide.h"
-#include "game/fn_80061AD4.h"
+#include "game/StoryTournament.h"
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
 #include "game/StoryTeam.h"
@@ -22,8 +22,8 @@
 #include <string.h>
 #include <string.h>
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801FCE10.h"
-#include "game/fn_802372EC.h"
+#include "game/TDbCompilePerformOp.h"
+#include "game/SyncRandGetRange.h"
 
 /* Pick state allocated by MsgTeamPickAllocState (0x1C bytes) and freed by
    MsgTeamPickFreeState: mCount pick lists of mSize player ids, with a pick
@@ -68,22 +68,22 @@ struct TeamPickCaptain_t {
 struct DepthChartText_t;
 
 extern "C" {
-void fn_80015D28(int id);
+void MsgStadiumStartGame(int id);
 void FESndUpdate(int a);
 void DepthChartCyclePending(int group, int kind, int slot, int code, int a, int b);
 void DepthChartRevertSide(int group);
 void DepthChartGetSideNames(int group, int kind, DepthChartText_t **pPairs);
 void DepthChartSwapPending(int group, int kind, int slot);
 int DepthChartCommit(int group);
-void fn_8003DE74(unsigned char side, int *pList);
+void PlyrObjsSetTeamIds(unsigned char side, int *pList);
 int DepthChartScreenIsSideShown(unsigned char a);
 void DepthChartScreenGetSideName(unsigned char a, int b, char *pText, int length);
 void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
-float fn_8005F754(void);
-StevRow_t *fn_8005FC7C(void);
-void fn_8005FCF8(int *pA, int *pB);
-void fn_80060330(int a, int *pList, int count, Object_8008044C *pObject);
-void fn_80061B90(int team, int *pDigp);
+float StoryEventsGetRatingScale(void);
+StevRow_t *StoryEventsGetCurrentEvent(void);
+void StoryEventsBuildPickupTables(int *pA, int *pB);
+void StoryEventsCallTeamSetupStub(int a, int *pList, int count, Object_8008044C *pObject);
+void StoryTournamentSetTeamPlayers(int team, int *pDigp);
 int DbCursorGetValue(DbCursor *pObject, int key);
 void PortDbOpenSides(DbCursor *pObject);
 void PortDbCloseSides(DbCursor *pObject);
@@ -112,11 +112,11 @@ int fn_80082864(void);
 void fn_800828FC(void);
 void fn_800829D8(void);
 int fn_80082AB0(int a, int b, int c);
-int fn_800841AC(DbCursor *pObject);
-int fn_800841D8(DbCursor *pObject);
-int fn_80084204(DbCursor *pObject);
-int fn_800844B8(const char *pName, int a, int b);
-int fn_8008454C(int a, int b, int c);
+int TeamDbGetColor1(DbCursor *pObject);
+int TeamDbGetColor2(DbCursor *pObject);
+int TeamDbGetColor3(DbCursor *pObject);
+int TeamDbInsert(const char *pName, int a, int b);
+int TeamDbCreate(int a, int b, int c);
 int TournamentGetDraftPool1(int *pList, int max);
 int TournamentGetDraftPool0(int *pList, int max);
 int TournamentGetTeamList(int *pList);
@@ -139,8 +139,8 @@ int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 void SortArray(int a, void *pBase, int count, int size, int (*pCompare)(TeamPickPlayer_t *, TeamPickPlayer_t *), int b,
                  int c, int d);
-int fn_801F967C(int handle, int table);
-int fn_801F9980(int handle, int *pTable);
+int TDbTblDestroy(int handle, int table);
+int TDbTblFindUnusedId(int handle, int *pTable);
 int UIGLibraryLoadItem(void *pObject, int a, int b);
 void UIGLibraryUnLoadItem(void *pObject, int a, int b);
 void *UIGLibraryGetGlobal(int index);
@@ -153,8 +153,8 @@ void fn_8022DCE4(int a);
 void fn_8022DD18(int a);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 
 TeamPickState_t *_MsgTeamPick_pState = 0;
 TeamPickPlayer_t *_MsgTeamPick_pPool = 0;
@@ -264,7 +264,7 @@ int MsgTeamPickGetPlayerGroup(int index)
 
 int MsgTeamPickRandomDepthValue(void)
 {
-    return fn_802372EC(0, 5);
+    return SyncRandGetRange(0, 5);
 }
 
 TeamPickPlayer_t *MsgTeamPickFindPlayer(int id, int *pIndex)
@@ -319,7 +319,7 @@ int MsgTeamPickFillGroupQuotas(int teamId)
         fn_80080874(2);
     }
     while (n < _MsgTeamPick_iPoolCount && n < total) {
-        i = fn_802372EC(0, 7);
+        i = SyncRandGetRange(0, 7);
         if (counts[i] > used[i]) {
             fn_8008058C(&id, &pos, &value, _MsgTeamPick_aaiGroupPositions[i][0], _MsgTeamPick_aaiGroupPositions[i][1], _MsgTeamPick_aaiGroupPositions[i][2], 2);
             fn_8008082C(used[i], 2);
@@ -380,11 +380,11 @@ int MsgTeamPickFillRandomGroups(int n, int teamId, float scale)
         }
         for (int k = 0; k < max && n < _MsgTeamPick_iPoolCount; k++, n++) {
             int pick;
-            int second = (fn_802372EC(0, 6) && count1) ? 1 : 0;
+            int second = (SyncRandGetRange(0, 6) && count1) ? 1 : 0;
             if (second == 1) {
-                pick = count0 + fn_802372EC(0, count1);
+                pick = count0 + SyncRandGetRange(0, count1);
             } else {
-                pick = fn_802372EC(0, count0);
+                pick = SyncRandGetRange(0, count0);
             }
             for (;;) {
                 int found = 0;
@@ -479,7 +479,7 @@ int MsgTeamPickFillRemaining(int start, int teamId, float scale)
             }
             seq++;
         } else {
-            pick = fn_802372EC(0, range);
+            pick = SyncRandGetRange(0, range);
             if (pick < total) {
                 for (;;) {
                     int taken = 0;
@@ -487,7 +487,7 @@ int MsgTeamPickFillRemaining(int start, int teamId, float scale)
                         fn_8008082C(pick, 0);
                         fn_8008079C(0);
                     } else if (pick < count0 + count1) {
-                        fn_8008082C(fn_802372EC(0, 11), 1);
+                        fn_8008082C(SyncRandGetRange(0, 11), 1);
                         fn_8008079C(1);
                         if (fn_800827EC(id, team)) taken = 1;
                     }
@@ -513,7 +513,7 @@ int MsgTeamPickFillRemaining(int start, int teamId, float scale)
         } else if (_MsgTeamPick_abSources[2]) {
             range--;
             int group = (pos + 1) % 7;
-            int index = fn_802372EC(0, _MsgTeamPick_aiGroupSize[group]);
+            int index = SyncRandGetRange(0, _MsgTeamPick_aiGroupSize[group]);
             pos = _MsgTeamPick_aaiGroupPositions[group][index];
             _MsgTeamPick_pPool[n].mUnknownC = pos;
             MsgTeamPickCreatePlayer(&_MsgTeamPick_pPool[n], pos, scale, teamId);
@@ -546,7 +546,7 @@ int MsgTeamPickBuildTournamentPool(void)
     int i;
     unsigned int j;
 
-    index = fn_8022F384(fn_8022F4BC());
+    index = DbUserFindIndex(DbUserGetCurrent());
     digt = StoryTeamLoadOneToStats(index, 1, (StoryTeamIdBlock_t *)ids);
     if (PlayerDbSeekId(&_MsgTeamPick_PlayerCursor, ids[0], 0)) {
         DbCursorSetInt(&_MsgTeamPick_PlayerCursor, 0x44494F50, ids[0]);
@@ -618,7 +618,7 @@ int MsgTeamPickAddEventPlayer(void)
     int valueC;
     int ok = 0;
 
-    index = fn_8022F384(fn_8022F4BC());
+    index = DbUserFindIndex(DbUserGetCurrent());
     digt = StoryTeamLoadOneToStats(index, 1, &ids);
     if (PlayerDbSeekId(&_MsgTeamPick_PlayerCursor, ids.mUnknown0, 0)) {
         DbCursorSetInt(&_MsgTeamPick_PlayerCursor, 0x44494F50, ids.mUnknown0);
@@ -658,9 +658,9 @@ void MsgTeamPickBuildPool(void)
         }
         if (_MsgTeamPick_abSources[2]) {
             MsgTeamPickCreateHoldingTeams();
-            team = fn_800844B8("New Team", 6, 0);
+            team = TeamDbInsert("New Team", 6, 0);
             fn_800828FC();
-            scale = fn_8005F754();
+            scale = StoryEventsGetRatingScale();
         }
         for (i = 0; i < 7; i++) {
             _MsgTeamPick_ascGroupQuota[i] = 2;
@@ -687,7 +687,7 @@ void MsgTeamPickCreateHoldingTeams(void)
 
     DbFileTblLoad(0, 0x43544E52);
     for (i = 0; i < 7; i++) {
-        _MsgTeamPick_aiHoldingTeam[i] = fn_8008454C(6, -1, 0);
+        _MsgTeamPick_aiHoldingTeam[i] = TeamDbCreate(6, -1, 0);
     }
     _MsgTeamPick_iHoldingTeam = 0;
     DbFileTblDestroy(0, 0x43544E52);
@@ -950,27 +950,27 @@ void MsgTeamPickSaveTeam(int *pTeam, int *pIds, const char *pName)
     unsigned int i;
 
     fn_8022C628(0x54415453, 0x4D414554, pTeam, &teamCount);
-    fn_801FCE10(0,
+    TDbCompilePerformOp(0,
                 "use 'TATS' insert into 'MAET' set 'DIGT' = \x82 and 'PYTT' = \x82 and 'DIOT' = \x82 and "
                 "'DROT' = \x82 and 'LGLT' = \x82 and 'SIVT' = \x83 and 'ANDT' = \x88 and 'LDTC' = \x82\n",
                 *pTeam, 6, *pTeam, 0, 0, 1, pName, 1);
     fn_80229AA4(0x54415453, 0x59414C50, newIds, &count);
     for (i = 0; i < 7; i++) {
-        fn_801F9980(0x54415453, &handle);
+        TDbTblFindUnusedId(0x54415453, &handle);
         oldIds[i] = pIds[i];
-        fn_801FCE10(0, "use 'TATS' select into \x8c * from 'YALP' where ('DIGP' = \x82)\n", handle, oldIds[i]);
-        fn_801FCE10(0, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x82 where ('DIGP' = \x82)\n", handle,
+        TDbCompilePerformOp(0, "use 'TATS' select into \x8c * from 'YALP' where ('DIGP' = \x82)\n", handle, oldIds[i]);
+        TDbCompilePerformOp(0, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x82 where ('DIGP' = \x82)\n", handle,
                     *pTeam, newIds[i], oldIds[i]);
-        fn_801FCE10(0, "use 'TATS' insert into \x8c.'YALP' * select * from \x8c\n", 0x54415453, handle);
-        fn_801F967C(0x54415453, handle);
+        TDbCompilePerformOp(0, "use 'TATS' insert into \x8c.'YALP' * select * from \x8c\n", 0x54415453, handle);
+        TDbTblDestroy(0x54415453, handle);
         /* The same copy for the player's depth chart rows ('THCD'), switched off. */
         if (0) {
-            fn_801F9980(0x54415453, &handle);
-            fn_801FCE10(0, "use 'TATS' select into \x8c * from 'THCD' where ('DIGP' = \x82)\n", handle, oldIds[i]);
-            fn_801FCE10(0, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x82 where ('DIGP' = \x82)\n", handle,
+            TDbTblFindUnusedId(0x54415453, &handle);
+            TDbCompilePerformOp(0, "use 'TATS' select into \x8c * from 'THCD' where ('DIGP' = \x82)\n", handle, oldIds[i]);
+            TDbCompilePerformOp(0, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x82 where ('DIGP' = \x82)\n", handle,
                         *pTeam, newIds[i], oldIds[i]);
-            fn_801FCE10(0, "use 'TATS' insert into \x8c.'THCD' * select * from \x8c\n", 0x54415453, handle);
-            fn_801F967C(0x54415453, handle);
+            TDbCompilePerformOp(0, "use 'TATS' insert into \x8c.'THCD' * select * from \x8c\n", 0x54415453, handle);
+            TDbTblDestroy(0x54415453, handle);
         }
     }
     MsgTeamPickRemapDepthIds(oldIds, newIds, pIds);
@@ -1081,7 +1081,7 @@ void MsgTeamPickInitSixCaptains(void)
     }
     if (!GameModeTypeIsSpecial()) {
         for (i = 0; i < 6; i++) {
-            unsigned char j = i + fn_802372EC(0, 6 - i);
+            unsigned char j = i + SyncRandGetRange(0, 6 - i);
             unsigned char id = _MsgTeamPick_pState->mpUnknown08[i];
 
             _MsgTeamPick_pState->mpUnknown08[i] = _MsgTeamPick_pState->mpUnknown08[j];
@@ -1160,7 +1160,7 @@ void MsgTeamPickInitSevenCaptains(void)
     }
     if (!GameModeTypeIsSpecial()) {
         for (i = 0; i < 4; i++) {
-            unsigned char j = i + fn_802372EC(0, 4 - i);
+            unsigned char j = i + SyncRandGetRange(0, 4 - i);
             unsigned char id = _MsgTeamPick_pState->mpUnknown08[i];
 
             _MsgTeamPick_pState->mpUnknown08[i] = _MsgTeamPick_pState->mpUnknown08[j];
@@ -1211,8 +1211,8 @@ int MsgTeamPickInit(int *pController, int *pCount)
 {
     _MsgTeamPick_bClosed = 0;
     _MsgTeamPick_iLastCreatedId = -1;
-    _MsgTeamPick_pEventRow = fn_8005FC7C();
-    _MsgTeamPick_pTournamentRow = fn_80061AD4();
+    _MsgTeamPick_pEventRow = StoryEventsGetCurrentEvent();
+    _MsgTeamPick_pTournamentRow = StoryTournamentGetEvent();
     MsgTeamPickInitState();
     if (_MsgTeamPick_pState->mpUnknown08[_MsgTeamPick_pState->mUnknown15] != 0xFF) {
         *pController = GameTextGetPadPlayer(_MsgTeamPick_pState->mpUnknown08[_MsgTeamPick_pState->mUnknown15]);
@@ -1239,7 +1239,7 @@ int MsgTeamPickInit(int *pController, int *pCount)
         fn_80148AF8(fn_80148A58());
     }
     PlayerCursorOpen(&_MsgTeamPick_PlayerCursor, 0, 0x54415453);
-    fn_80083E40(&_MsgTeamPick_TeamCursor, 0, 0x54415453);
+    TeamDbOpen(&_MsgTeamPick_TeamCursor, 0, 0x54415453);
 
     if (MsgGameGetSetupState() == 1) {
         _MsgTeamPick_aiDepthValue[0] = MsgTeamPickRandomDepthValue();
@@ -1295,7 +1295,7 @@ void MsgTeamPickShutdown(void)
             fn_8022DCE4(0);
             fn_8022DD18(0);
             for (int team = 0; team < 8; team++) {
-                fn_80061B90(_MsgTeamPick_aiTournamentTeam[team], digp[team]);
+                StoryTournamentSetTeamPlayers(_MsgTeamPick_aiTournamentTeam[team], digp[team]);
             }
         } else {
             DepthChartSide_t records[8];
@@ -1305,8 +1305,8 @@ void MsgTeamPickShutdown(void)
                     digp[_MsgTeamPick_pPool[i].mTeam][_MsgTeamPick_pPool[i].mSlot] = _MsgTeamPick_pPool[i].mId;
                 }
             }
-            fn_8003DE74(0, digp[0]);
-            fn_8003DE74(1, digp[1]);
+            PlyrObjsSetTeamIds(0, digp[0]);
+            PlyrObjsSetTeamIds(1, digp[1]);
             DepthChartGetSide(0, &records[0]);
             DepthChartGetSide(1, &records[1]);
             if (_MsgTeamPick_bSaveTeams) {
@@ -1344,15 +1344,15 @@ void MsgTeamPickShutdown(void)
 
     MsgTeamPickUnregisterPortraits();
     fn_8008056C(&_MsgTeamPick_PlayerCursor);
-    fn_80083F68(&_MsgTeamPick_TeamCursor);
+    TeamDbClose(&_MsgTeamPick_TeamCursor);
     DepthChartSave();
     if (MsgGameGetSetupState() == 0) {
         MsgTeamPickFreePool();
     }
     if (MsgGameGetSetupState() == 1) {
         if (_MsgTeamPick_pTournamentRow == 0 && _MsgTeamPick_pEventRow) {
-            fn_8005FCF8(digp[0], digp[1]);
-            fn_80015D28(_MsgTeamPick_pEventRow->mDive);
+            StoryEventsBuildPickupTables(digp[0], digp[1]);
+            MsgStadiumStartGame(_MsgTeamPick_pEventRow->mDive);
         }
     } else {
         GameTextSetSetupActive(0);
@@ -1656,8 +1656,8 @@ void MsgTeamPickStepShownTeam(int dir, int *pResult, char *pText, int length)
             case -19:
                 break;
             }
-            if (team != -19 && fn_80084034(&_MsgTeamPick_TeamCursor, team, 0)) {
-                fn_80083F88(&_MsgTeamPick_TeamCursor, pText, length);
+            if (team != -19 && TeamDbSeekId(&_MsgTeamPick_TeamCursor, team, 0)) {
+                TeamDbGetName(&_MsgTeamPick_TeamCursor, pText, length);
             }
         } else {
             const char *pName = 0;
@@ -1677,8 +1677,8 @@ void MsgTeamPickStepShownTeam(int dir, int *pResult, char *pText, int length)
             }
         }
     } else {
-        if (fn_80084034(&_MsgTeamPick_TeamCursor, id, 0)) {
-            fn_80083F88(&_MsgTeamPick_TeamCursor, pText, length);
+        if (TeamDbSeekId(&_MsgTeamPick_TeamCursor, id, 0)) {
+            TeamDbGetName(&_MsgTeamPick_TeamCursor, pText, length);
         }
     }
 }
@@ -1761,7 +1761,7 @@ void MsgTeamPickPickPlayer(int id, int *pSlot)
         MsgTeamPickFinishTeam(1);
         if (_MsgTeamPick_pEventRow) {
             int value = _MsgTeamPick_iEventPlayer;
-            fn_80060330(1, &value, 1, &_MsgTeamPick_PlayerCursor);
+            StoryEventsCallTeamSetupStub(1, &value, 1, &_MsgTeamPick_PlayerCursor);
         }
     } else {
         if (_MsgTeamPick_pState->mUnknown15 == _MsgTeamPick_pState->mCount - 1) {
@@ -1908,17 +1908,17 @@ void MsgTeamPickGetTeamLogo(int id, int *pA, int *pB)
         *pA = 0x84;
     }
     if (*pA == -1) {
-        int found = fn_80084034(&_MsgTeamPick_TeamCursor, id, 0);
-        if (fn_80084438(&_MsgTeamPick_TeamCursor) == 0) {
+        int found = TeamDbSeekId(&_MsgTeamPick_TeamCursor, id, 0);
+        if (TeamDbGetCtdl(&_MsgTeamPick_TeamCursor) == 0) {
             unsigned char color[3];
-            color[0] = fn_800841AC(&_MsgTeamPick_TeamCursor);
-            color[1] = fn_800841D8(&_MsgTeamPick_TeamCursor);
-            color[2] = fn_80084204(&_MsgTeamPick_TeamCursor);
-            TeamLogoRequestTint(0, 4, fn_80084158(&_MsgTeamPick_TeamCursor), 0xAC, color);
+            color[0] = TeamDbGetColor1(&_MsgTeamPick_TeamCursor);
+            color[1] = TeamDbGetColor2(&_MsgTeamPick_TeamCursor);
+            color[2] = TeamDbGetColor3(&_MsgTeamPick_TeamCursor);
+            TeamLogoRequestTint(0, 4, TeamDbGetLogo(&_MsgTeamPick_TeamCursor), 0xAC, color);
             *pB = TeamLogoGetHandle(0);
         }
         if (found) {
-            *pA = fn_80084158(&_MsgTeamPick_TeamCursor);
+            *pA = TeamDbGetLogo(&_MsgTeamPick_TeamCursor);
         } else {
             *pA = 0x84;
         }

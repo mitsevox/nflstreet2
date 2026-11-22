@@ -12,8 +12,8 @@
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/ResLoad.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_802372EC.h"
+#include "game/Vec3Magnitude.h"
+#include "game/SyncRandGetRange.h"
 #include <dolphin/gx/GXStruct.h>
 typedef float Mtx44[4][4];
 #include <dolphin/os/OSCache.h>
@@ -61,8 +61,8 @@ struct DynObjInstance {
 struct DynObjPose { unsigned char mUnknown0[8]; Vector_80039F5C mUnknown8; unsigned char mUnknown14[0x4C]; Vector_80039F5C mUnknown60; };
 struct DynObjSkeletonRef { void *mpUnknown0; };
 extern "C" {
-extern void *lbl_803EA368;
-int fn_8002D060(void *);
+extern void *gpReplay;
+int ReplayIsShowing(void *);
 void ConGetCurrentContext(void);
 int DynObjSetupLight(void *, void *);
 void UVScrollFloat(DynObjUVMesh *);
@@ -94,7 +94,7 @@ int fn_80234B80(void *); void fn_80234DC4(void *, int); void fn_80234DC8(void *,
 void fn_80234B88(DynObjPacket *); void fn_80234BF4(void *, DynObjPacket *, int);
 void fn_80234CA4(DynObjPacket *, void *); void fn_80234CF0(DynObjPacket *, int, DynObjContext *);
 void fn_80234DC0(DynObjPacket *, int); unsigned int fn_80234D4C(float *, void *, void *, void *);
-void fn_80227C2C(void *, void *); void fn_802271F0(void *, void *); float fn_80227704(void *, void *);
+void Vec3Mat33Mul(void *, void *); void Vec3Normalize(void *, void *); float Vec3DotProduct(void *, void *);
 int fn_8004D5B8(int, const char *, char *, int); void fn_8004D498(int);
 int fn_8004D4B0(int, const char *); int fn_8004D508(int, const char *);
 void fn_8004E090(DynObj *, int, int);
@@ -134,19 +134,19 @@ int DynObjDraw(DynObj *p, int arg)
     if(!(flags&0x3F)) {
         fn_80234AFC(work); fn_80234DC8(work,flags&0xF2000); fn_80234B1C(work);
         fn_80234B20(work,m1,0); fn_80234B80(work); fn_80234DC4(work,0);
-        if(!fn_8002D060(lbl_803EA368)) fn_80233CBC(&s->mUnknownC.mUnknown10[4],0,p->mUnknown13C);
+        if(!ReplayIsShowing(gpReplay)) fn_80233CBC(&s->mUnknownC.mUnknown10[4],0,p->mUnknown13C);
         if(p->mUnknown140) {
             Vector_80039F5C delta;
             void *viewport=VptManagerGetCurrentCamera(GameVpt::GetViewport());
-            fn_802276B4(&delta,&p->mUnknown4,static_cast<unsigned char *>(viewport)+4);
-            float distance=fn_802270D4(&delta);
+            Vec3Sub(&delta,&p->mUnknown4,static_cast<unsigned char *>(viewport)+4);
+            float distance=Vec3Magnitude(&delta);
             if(distance<=10.0f) color.a=255;
             else if(distance<=25.0f) color.a=(unsigned char)((float)(unsigned int)color.a*(1.0f-(distance-10.0f)*0.06666667f));
             else color.a=0;
             copy=color; GXSetChanMatColor(GX_COLOR0A0,copy);
         }
         s->mUnknownC.mUnknown5C=1;
-        unsigned int enabled=fn_8002D060(lbl_803EA368)?(p->mUnknownE8.mBytes[3]&4):(p->mUnknownE8.mBytes[3]&1);
+        unsigned int enabled=ReplayIsShowing(gpReplay)?(p->mUnknownE8.mBytes[3]&4):(p->mUnknownE8.mBytes[3]&1);
         if(enabled) {
             if(p->mpUnknown130) {
                 if(model->mpUnknown8->mpUnknown0->mUnknown11&8) {
@@ -190,9 +190,9 @@ int DynObjIsFacingAway(DynObj *p)
     if(p->mUnknownE8.mWord&16) {
         Vector_80039F5C delta,axis=_DynObj_vUpAxis;
         void *viewport=VptManagerGetCurrentCamera(0);MatPushUnit();MatRotQuat(&p->mpUnknown1D8->mUnknown60);
-        fn_80227C2C(&axis,&axis);MatPop();
-        fn_802276B4(&delta,&p->mpUnknown1D8->mUnknown8,static_cast<unsigned char *>(viewport)+4);
-        fn_802271F0(&delta,&delta);result=fn_80227704(&delta,&axis)<-0.2f;
+        Vec3Mat33Mul(&axis,&axis);MatPop();
+        Vec3Sub(&delta,&p->mpUnknown1D8->mUnknown8,static_cast<unsigned char *>(viewport)+4);
+        Vec3Normalize(&delta,&delta);result=Vec3DotProduct(&delta,&axis)<-0.2f;
     }
     return result;
 }
@@ -204,9 +204,9 @@ int DynObjChildIsFacingAway(DynObjChild *p)
     if(p->mpUnknown50->mUnknownE8.mWord&16) {
         Vector_80039F5C delta,axis=_DynObj_vUpAxis;
         void *viewport=VptManagerGetCurrentCamera(0);MatPushUnit();MatRotQuat(&p->mUnknown3C);
-        fn_80227C2C(&axis,&axis);MatPop();
-        fn_802276B4(&delta,&p->mUnknown30,static_cast<unsigned char *>(viewport)+4);
-        fn_802271F0(&delta,&delta);result=fn_80227704(&delta,&axis)<-0.2f;
+        Vec3Mat33Mul(&axis,&axis);MatPop();
+        Vec3Sub(&delta,&p->mUnknown30,static_cast<unsigned char *>(viewport)+4);
+        Vec3Normalize(&delta,&delta);result=Vec3DotProduct(&delta,&axis)<-0.2f;
     }
     return result;
 }
@@ -215,7 +215,7 @@ int DynObjChildIsFacingAway(DynObjChild *p)
 void DynObjChildPickFrame(DynObjChild *p,DynObj *owner)
 {
     DynObjInstance *s=owner->mpUnknown12C;
-    unsigned int index=fn_802372EC(1,s->mpUnknown0->mpUnknown144->mUnknown10);
+    unsigned int index=SyncRandGetRange(1,s->mpUnknown0->mpUnknown144->mUnknown10);
     p->mUnknown6C=index;
     if((unsigned char)index==owner->mUnknownFC && s->mpUnknown0->mpUnknown144->mUnknown10>1) {
         p->mUnknown6C=index+1;
@@ -251,7 +251,7 @@ void DynObjRenderInit(void *data,int handle,DynObj *p)
             } else {
                 p->mUnknownF4=ResFindIndexByName(data,behavior);
                 s->mpUnknown0->mpUnknown144=reinterpret_cast<DynObjTexHeader *>(ResLoad(data,p->mUnknownF4,1));
-                p->mUnknownFC=fn_802372EC(1,s->mpUnknown0->mpUnknown144->mUnknown10);
+                p->mUnknownFC=SyncRandGetRange(1,s->mpUnknown0->mpUnknown144->mUnknown10);
             }
             if(s->mpUnknown0->mpUnknown144)TMTexLibLoad(&s->mpUnknown0->mUnknown14C,reinterpret_cast<int>(s->mpUnknown0->mpUnknown144));
             s->mpUnknown0->mpUnknown148=TMModelResGetChunk(s->mpUnknown0->mpUnknown0,0x4D61746C,0);
@@ -333,7 +333,7 @@ int DynObjDrawChild(DynObjChild *p,int arg)
     if(!(flags&0x3F)) {
         fn_80234AFC(work);fn_80234DC8(work,flags&0xF2000);fn_80234B1C(work);fn_80234B20(work,m1,0);
         fn_80234B80(work);fn_80234DC4(work,0);s->mUnknownC.mUnknown5C=1;
-        unsigned int enabled=fn_8002D060(lbl_803EA368)?(p->mpUnknown50->mUnknownE8.mBytes[3]&4):(p->mpUnknown50->mUnknownE8.mBytes[3]&1);
+        unsigned int enabled=ReplayIsShowing(gpReplay)?(p->mpUnknown50->mUnknownE8.mBytes[3]&4):(p->mpUnknown50->mUnknownE8.mBytes[3]&1);
         if(enabled) {
             if(model->mpUnknown8->mpUnknown0->mUnknown11&8) {
                 fn_80234B88(&s->mUnknownC);TMRenderBindMaterialList(s->mUnknownC.mpUnknownE8);

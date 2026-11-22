@@ -7,7 +7,7 @@
 #include "engine/cu_80229270.h"
 #include "game/StyleTracker.h"
 #include "game/fn_8021D7B8.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/Object_80039F5C.h"
 #include "game/DepthChart.h"
 #include "game/DepthChartSide.h"
@@ -288,15 +288,15 @@ void FieldLinesEnable(int a);
 void PlyrNameTagEnable(unsigned char enable);
 void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
 int MsgBoxIsClosed(void);
-void fn_80057F28(void);
-void fn_800582D0(void);
-void fn_8005BF18(void);
-int fn_8005BFD4(void);
+void InGamePlayCallCreate(void);
+void InGamePlayCallDestroy(void);
+void InGameOverlayReset(void);
+int InGameOverlayGetState(void);
 void PauseRequestCancel(void);
 void SndgAmbPostCue(int type);
 void SndgSetVolumeOption(int channel, unsigned int level);
 void SndgApplyVolumeOptions(void);
-void fn_8006F824(int a);
+void SndgEventSetSfx5Volume(int a);
 void SndgMusicFadeOut(int a, int b);
 int SndgMusicIsPaused(void);
 void SndgMusicResume(void);
@@ -342,7 +342,7 @@ void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_8011DF90(void);
 void BallPrimeKickUp(Ball_t *pBall);
 void BallRestAtAngles(Ball_t *pBall, int *pAngles);
-void fn_8013AD9C(Ball_t *pBall, int a);
+void BallSetSpinMode(Ball_t *pBall, int a);
 int BallStateGet(Ball_t *pBall, int *pOut);
 void CamMainWarpToDest(GameCamera_t *pCamera);
 void CamGameSelectCamera(int a);
@@ -357,7 +357,7 @@ int fn_801486A0(void);
 Class_80148A58 * fn_80148A58(void);
 void fn_80149040(Object_80039F5C *pObject);
 void fn_8014F3DC(int a);
-void fn_8015C254(int a);
+void RouteArrowSetEnabled(int a);
 void PlayBookLoadCurrentPlay(int team);
 void PlayBookLoadAudibleTable(void);
 void PlayBookSetFormationType(int team, int kind);
@@ -559,7 +559,7 @@ void TutorialSetupRosters(void)
     unsigned int team;
     unsigned int i;
 
-    fn_801FCE10(0, "select 'GTHG' into \x82 and 'GTAG' into \x82 from 'FNIG'\n", &home, &away);
+    TDbCompilePerformOp(0, "select 'GTHG' into \x82 and 'GTAG' into \x82 from 'FNIG'\n", &home, &away);
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 6; i++) {
             list[i] = PlyrGet((unsigned char)team, i)->mUnknown2908;
@@ -570,7 +570,7 @@ void TutorialSetupRosters(void)
     }
     DepthChartGetSide(0, &records[0]);
     DepthChartGetSide(1, &records[1]);
-    fn_801FCE10(0, "delete from 'AGCD'\n");
+    TDbCompilePerformOp(0, "delete from 'AGCD'\n");
     /* 0x41474344 is 'AGCD', the table cleared by the query above. */
     fn_8022DA44(home, records[0].mUnknown, away, records[1].mUnknown, 0x41474344);
     for (team = 0; team <= 1; team++) {
@@ -581,9 +581,9 @@ void TutorialSetupRosters(void)
         }
     }
     for (i = 0; i < 14; i++) {
-        fn_801FCE10(0, "select 'DIOP' into \x85 from 'YALP' where 'DIGP' = \x85 and 'DIGT' = \x85\n",
+        TDbCompilePerformOp(0, "select 'DIOP' into \x85 from 'YALP' where 'DIGP' = \x85 and 'DIGT' = \x85\n",
                     &records[0].mUnknown[i], records[0].mUnknown[i], home);
-        fn_801FCE10(0, "select 'DIOP' into \x85 from 'YALP' where 'DIGP' = \x85 and 'DIGT' = \x85\n",
+        TDbCompilePerformOp(0, "select 'DIOP' into \x85 from 'YALP' where 'DIGP' = \x85 and 'DIGT' = \x85\n",
                     &records[1].mUnknown[i], records[1].mUnknown[i], away);
     }
     DepthChartSetSide(0, records[0].mUnknown);
@@ -963,13 +963,13 @@ int TutorialFinishCategory(void)
         mode = modes[lesson];
         fn_800AD910(0, 0.0f);
         HudStop();
-        fn_800582D0();
+        InGamePlayCallDestroy();
         TutorialLessonStop();
         TutorialSetLesson(5);
         fn_800C1CA0();
         fn_800C1E50();
         FieldLinesEnable(1);
-        fn_8015C254(1);
+        RouteArrowSetEnabled(1);
         PlyrNameTagEnable(1);
         if (mode != 15) {
             fn_801485B4();
@@ -1030,12 +1030,12 @@ int TutorialFinishCategory(void)
             done = 1;
             fn_800AD910(0, 0.0f);
             HudStop();
-            fn_800582D0();
+            InGamePlayCallDestroy();
             fn_80148644();
             fn_800C1CA0();
             fn_800C1E50();
             FieldLinesEnable(1);
-            fn_8015C254(1);
+            RouteArrowSetEnabled(1);
             PlyrNameTagEnable(1);
             TutorialSetLesson(next);
             TutorialSetActiveStep(0);
@@ -1062,7 +1062,7 @@ int TutorialFinishCategory(void)
         fn_8009D984(fn_80178C60());
         StyleTrackerReset();
         gPlayBook.fn_800355FC();
-        fn_80057F28();
+        InGamePlayCallCreate();
         fn_800AD910(1, 0.0f);
         PauseClearBlocks();
         SndgAmbPostCue(3);
@@ -1731,11 +1731,11 @@ void TutorialSetupSession(void)
         cursor.mUnknown4 = 0;
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
-        fn_801FCE10(0, "declare \x8a cursor for select * from 'YALP' where ('DIGT' = \x83) order by 'DIGP'\n", &cursor, team);
+        TDbCompilePerformOp(0, "declare \x8a cursor for select * from 'YALP' where ('DIGT' = \x83) order by 'DIGP'\n", &cursor, team);
         for (unsigned short i = 0; i <= 6; i++) {
-            fn_801FCE10(0, "fetch from \x8a 'DIGP' into \x82 and 'DIOP' into \x82\n", &cursor, &a, &b);
+            TDbCompilePerformOp(0, "fetch from \x8a 'DIGP' into \x82 and 'DIOP' into \x82\n", &cursor, &a, &b);
         }
-        if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+        if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);
     }
 }
 
@@ -1893,7 +1893,7 @@ void TutorialPreSnap::OnEnter(float dt)
     angles[1] = 0xFFC00000;
     angles[2] = 0xFFC00000;
     BallRestAtAngles(pBall, angles);
-    fn_8013AD9C(pBall, 0);
+    BallSetSpinMode(pBall, 0);
     BallPrimeKickUp(pBall);
     PreSnapPhase::OnEnter(dt);
     fn_8009E01C();
@@ -2035,7 +2035,7 @@ void TutorialPostPlay::OnUpdate(float dt)
         } else {
             RumbleEnable(0);
             RumbleStopAll();
-            fn_8006F824(1);
+            SndgEventSetSfx5Volume(1);
             ShowResults();
             mUnknown5 = 1;
         }
@@ -2144,7 +2144,7 @@ void TutorialPostPlay::OnExit()
     angles[1] = 0xFFC00000;
     angles[2] = 0xFFC00000;
     BallRestAtAngles(pBall, angles);
-    fn_8013AD9C(pBall, 0);
+    BallSetSpinMode(pBall, 0);
     BallPrimeKickUp(pBall);
     CamGameSetModeAll(1);
     CamGameSelectCamera(0);
@@ -2174,8 +2174,8 @@ int TutorialPostPlay::GetBusy(float dt)
 void TutorialPostPlay::Finish(float dt)
 {
     PlyrMgrClearStates();
-    if (fn_8005BFD4() != 4) {
-        fn_8005BF18();
+    if (InGameOverlayGetState() != 4) {
+        InGameOverlayReset();
     }
     if (mUnknown4 != 0) {
         if (!TutorialFinishCategory()) {

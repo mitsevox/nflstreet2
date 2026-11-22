@@ -6,15 +6,18 @@
 #include <dolphin/gx/GXTev.h>
 #include "engine/tmlib.h"
 
-extern TMShaderDef_t lbl_802F9C18;
-extern TMShaderDef_t lbl_802F9C34;
-extern TMShaderDef_t lbl_802F9C50;
-extern TMShaderDef_t lbl_802F9C80;
-extern TMShaderDef_t lbl_802F9CB0;
-extern TMShaderDef_t lbl_802F9CF4;
-extern TMShaderDef_t lbl_802F9D38;
-extern TMRegistry_t lbl_8039B54C;
-extern TMShader_t lbl_8039B55C;
+/* The stock shader definitions: name, constant allocation, then the parameters. */
+static TMShaderDef_t _TMShaderStock_NullDef = { "NULL", 0, 0, 0 };
+static TMShaderDef_t _TMShaderStock_FlatDef = { "Flat", 0, 0, 0 };
+static TMShaderDef_t _TMShaderStock_ReplaceDef = { "Replace", 0, 0, 1, { { "base", 1, 0, 0 } } };
+static TMShaderDef_t _TMShaderStock_OnePassDef = { "OnePass", 0, 0, 1, { { "base", 1, 0, 0 } } };
+static TMShaderDef_t _TMShaderStock_OnePassTXDef = { "OnePassTX", 0, 0, 2, { { "base", 1, 0, 0 }, { "texxform", 6, 0, 0 } } };
+static TMShaderDef_t _TMShaderStock_TwoPassDef = { "TwoPass", 0, 0, 2, { { "base", 1, 0, 0 }, { "over", 1, 1, 1 } } };
+static TMShaderDef_t _TMShaderStock_SpecularEnvMapDef = { "SpecularEnvMap", 0, 0, 2, { { "base", 1, 0, 0 }, { "scale", 3, 0, 0 } } };
+
+/* The stock shader library and the null shader. */
+static TMRegistry_t _TMShaderStock_ShaderLib;
+static TMShader_t _TMShaderStock_NullShader;
 
 static void _TMShaderStockBind_Null(TMShader_t *pShader)
 {
@@ -82,13 +85,13 @@ static void _TMShaderStockCreateShaders(TMRegistry_t *pLib)
 {
     TMShader_t *pShader;
 
-    TMShaderLibAddShader(pLib, &lbl_802F9C18, _TMShaderStockBind_Null);
-    TMShaderLibAddShader(pLib, &lbl_802F9C34, _TMShaderStockBind_Flat);
-    TMShaderLibAddShader(pLib, &lbl_802F9C80, _TMShaderStockBind_OnePass);
-    TMShaderLibAddShader(pLib, &lbl_802F9CF4, _TMShaderStockBind_TwoPass);
-    TMShaderLibAddShader(pLib, &lbl_802F9D38, _TMShaderStockBind_SpecularEnvMap);
-    TMShaderLibAddShader(pLib, &lbl_802F9C50, _TMShaderStockBind_Replace);
-    pShader = TMShaderLibAddShader(pLib, &lbl_802F9CB0, _TMShaderStockBind_OnePass);
+    TMShaderLibAddShader(pLib, &_TMShaderStock_NullDef, _TMShaderStockBind_Null);
+    TMShaderLibAddShader(pLib, &_TMShaderStock_FlatDef, _TMShaderStockBind_Flat);
+    TMShaderLibAddShader(pLib, &_TMShaderStock_OnePassDef, _TMShaderStockBind_OnePass);
+    TMShaderLibAddShader(pLib, &_TMShaderStock_TwoPassDef, _TMShaderStockBind_TwoPass);
+    TMShaderLibAddShader(pLib, &_TMShaderStock_SpecularEnvMapDef, _TMShaderStockBind_SpecularEnvMap);
+    TMShaderLibAddShader(pLib, &_TMShaderStock_ReplaceDef, _TMShaderStockBind_Replace);
+    pShader = TMShaderLibAddShader(pLib, &_TMShaderStock_OnePassTXDef, _TMShaderStockBind_OnePass);
     TMShaderSetUnbindFunc(pShader, _TMShaderStockBind_OnePassTXDef);
 }
 
@@ -99,17 +102,17 @@ static void _TMShaderStockBind_OnePassTXDef(TMShader_t *pShader)
 
 void TMShaderStockInit(void)
 {
-    TMShaderNew(&lbl_8039B55C, &lbl_802F9C18);
-    TMShaderSetBindFunc(&lbl_8039B55C, _TMShaderStockBind_Null);
-    TMShaderLibSetNullShader(&lbl_8039B55C);
-    TMShaderLibAlloc(&lbl_8039B54C, 16);
-    _TMShaderStockCreateShaders(&lbl_8039B54C);
-    TMShaderLibRegister("stock", &lbl_8039B54C);
+    TMShaderNew(&_TMShaderStock_NullShader, &_TMShaderStock_NullDef);
+    TMShaderSetBindFunc(&_TMShaderStock_NullShader, _TMShaderStockBind_Null);
+    TMShaderLibSetNullShader(&_TMShaderStock_NullShader);
+    TMShaderLibAlloc(&_TMShaderStock_ShaderLib, 16);
+    _TMShaderStockCreateShaders(&_TMShaderStock_ShaderLib);
+    TMShaderLibRegister("stock", &_TMShaderStock_ShaderLib);
 }
 
 void TMShaderStockShutdown(void)
 {
-    TMShaderLibFree(&lbl_8039B54C);
-    TMShaderDelete(&lbl_8039B55C);
+    TMShaderLibFree(&_TMShaderStock_ShaderLib);
+    TMShaderDelete(&_TMShaderStock_NullShader);
     TMShaderLibSetNullShader(0);
 }

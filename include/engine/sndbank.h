@@ -5,6 +5,7 @@
    (sballoc.c to sbvalid.c), the play-option, client, server and utility files after them. */
 
 #include "engine/sndlib.h"
+#include "engine/sndsample.h"
 
 /* A loaded sound bank's header: patch count and the self-relative offsets of its patches. */
 typedef struct BankVer_t {
@@ -30,32 +31,6 @@ typedef struct SndEnvStage_t {
     int m4;
 } SndEnvStage_t;
 
-/* The sample-format record of a patch (+0x2 its channel count). */
-typedef struct SndSampleFormat_t {
-    unsigned char m0;
-    unsigned char m1;
-    unsigned char m2;
-} SndSampleFormat_t;
-
-/* The sample-attribute record of a patch: header fields +0x0..+0x9, six per-channel halfwords +0xC,
-   per-channel buffers +0x18 and their sizes +0x30, two four-word tables +0x48 and +0x58. */
-typedef struct SndSampleAttr_t {
-    unsigned short m0;
-    unsigned char m2;
-    unsigned char m3;
-    unsigned char m4;
-    unsigned char m5;
-    unsigned char m6;
-    unsigned char m7;
-    unsigned short m8;
-    unsigned char mUnknownA[2];
-    short mC[6];
-    void *m18[6];
-    int m30[6];
-    int m48[4];
-    int m58[4];
-} SndSampleAttr_t;
-
 extern "C" {
 
 void *memmove(void *dst, const void *src, unsigned int n);
@@ -63,7 +38,7 @@ void *memmove(void *dst, const void *src, unsigned int n);
 int SNDVOICEI_get(int handle);
 void fn_8026A40C(void *message, int value);
 int SNDBANKI_playpatch(BankVer_t *bank, void *patch, int bank_index, int patch_index, SndPlayOpts_t *opts);
-void fn_80274924(int index);
+void SndHalSetDry(int index);
 void iSNDcalcpitch(int index);
 int fn_80270E04(char **cursor, Struct_80270E04 *out);
 void fn_80278598(int index);

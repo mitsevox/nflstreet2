@@ -16,7 +16,7 @@
 #include "game/EditMenu.h"
 #include <string.h>
 #include <string.h>
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 /* Range of one face feature: its values start at mOffset in the
    _CreatePlayer_sFace slot mSlot, and the menu shows mCount of them. */
@@ -544,7 +544,7 @@ static void _CreatePlayerLoadSkillCosts(int position, int skill)
     int loaded = 0;
 
     if (_CreatePlayer_bSkillTable) {
-        loaded = fn_801FCE10(0,
+        loaded = TDbCompilePerformOp(0,
                        "select '10VL' into \x84 and '20VL' into \x84 and '30VL' into \x84 and '40VL' into \x84 and "
                        "'50VL' into \x84 and '60VL' into \x84 and '70VL' into \x84 and '80VL' into \x84 and "
                        "'90VL' into \x84 and '01VL' into \x84 and '11VL' into \x84 and '21VL' into \x84 and "
@@ -726,8 +726,8 @@ static void _CreatePlayerSetFaceFeature(int index, int value)
         PlayerLookSetHeadType(0, _CreatePlayer_sFace.mUnknown0[index]);
         PlayerLookSetHeadType(1, _CreatePlayer_sFace.mUnknown0[index]);
     }
-    FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(0)->mUnknown4976);
-    FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(1)->mUnknown4976);
+    FaceMorphBuildWeights(&_CreatePlayer_sFace, &PlyrObjsGet(0)->mUnknown4976);
+    FaceMorphBuildWeights(&_CreatePlayer_sFace, &PlyrObjsGet(1)->mUnknown4976);
     PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
     PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
     flag = FaceMorphIsAllowed(&_CreatePlayer_sFace);
@@ -745,8 +745,8 @@ static void _CreatePlayerSetFacialHair(int value)
     PlayerLookSetFace(1, value);
     _CreatePlayer_sFacialHairCursor.FindFchrRow(value, 0);
     _CreatePlayer_sFace.mUnknown0[0] = _CreatePlayer_sFacialHairCursor.GetFchrFhstCode();
-    FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(0)->mUnknown4976);
-    FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(1)->mUnknown4976);
+    FaceMorphBuildWeights(&_CreatePlayer_sFace, &PlyrObjsGet(0)->mUnknown4976);
+    FaceMorphBuildWeights(&_CreatePlayer_sFace, &PlyrObjsGet(1)->mUnknown4976);
     PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
     PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
     flag = FaceMorphIsAllowed(&_CreatePlayer_sFace);
@@ -772,8 +772,8 @@ static int _CreatePlayerUpdateBodyType(unsigned int value)
         _CreatePlayer_sFace.mUnknown0[9] = mode;
         PlayerLookSetBodyType(1, mode);
         PlayerLookSetBodyType(0, mode);
-        FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(0)->mUnknown4976);
-        FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(1)->mUnknown4976);
+        FaceMorphBuildWeights(&_CreatePlayer_sFace, &PlyrObjsGet(0)->mUnknown4976);
+        FaceMorphBuildWeights(&_CreatePlayer_sFace, &PlyrObjsGet(1)->mUnknown4976);
         PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
         PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
         FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
@@ -874,7 +874,7 @@ void CreatePlayerList::Enter(int a, int *pCount, int *pValue)
     if (a == 1) {
         _CreatePlayerOpen();
     }
-    fn_80083F88(EditMenuGetTeamCursor(), buffer, 18);
+    TeamDbGetName(EditMenuGetTeamCursor(), buffer, 18);
     EditMenuSetName(buffer);
     EditMenuSetHeading("");
     EditMenuSetItemName("");

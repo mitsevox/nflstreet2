@@ -1,10 +1,15 @@
 /* PATH tracks (pathtrack.c): creates and initializes stream and bank tracks, finds a track by its
    handle, reports track counts and status, and the Path::IPathTrack base class defaults. */
 
+#include <string.h>
+#include "engine/pathfinder.h"
 #include "engine/pathlib.h"
 
 extern "C" int fn_801B3AD0(int flags, PathfinderTrackData_t *data, int value)
 {
+    // FAKEMATCH: unused string local; emits the unreferenced "%s  %s" that starts the target .rodata
+    const char *header = "%s  %s";
+
     int acquired;
     if (++lbl_803EBB24 == 1 && lbl_803EBB38)
         acquired = 1;
@@ -23,6 +28,36 @@ extern "C" int fn_801B3AD0(int flags, PathfinderTrackData_t *data, int value)
     lbl_803EBB28 = 0;
     --lbl_803EBB24;
     return result;
+}
+
+extern "C" Class_801B44BC *PATH_createstreamimp(int flags, int a, float b)
+{
+    int acquired;
+    if (++lbl_803EBB24 == 1 && lbl_803EBB38)
+        acquired = 1;
+    else {
+        --lbl_803EBB24;
+        acquired = 0;
+    }
+    if (!acquired)
+        return 0;
+    if (!fn_801B34DC(flags))
+        return 0;
+    Class_801B44BC *track = 0;
+    Node_801B3FE0 *p = fn_801B4174(flags);
+    if (p) {
+        int rate = PATHI_bytesperms(p->mUnknown0);
+        int result = lbl_803EBB64->vfn_02(&track, a, b, rate);
+        if (track && result >= 0) {
+            p->mUnknown100 = track;
+            track->vfn_22(p->mUnknownD0);
+            track->fn_801B45CC(&p->mUnknown50);
+            track->fn_801B459C(PATHI_trackinfo(p->mUnknown0));
+        }
+    }
+    lbl_803EBB28 = 0;
+    --lbl_803EBB24;
+    return track;
 }
 
 extern "C" int fn_801B3D28(int flags, PathfinderTrackData_t *data, int value)
@@ -47,16 +82,89 @@ extern "C" int fn_801B3D28(int flags, PathfinderTrackData_t *data, int value)
     return result;
 }
 
+extern "C" Class_801B44BC *PATH_createbankobject(int flags)
+{
+    int acquired;
+    if (++lbl_803EBB24 == 1 && lbl_803EBB38)
+        acquired = 1;
+    else {
+        --lbl_803EBB24;
+        acquired = 0;
+    }
+    if (!acquired)
+        return 0;
+    if (!fn_801B34DC(flags))
+        return 0;
+    Class_801B44BC *track = 0;
+    Node_801B3FE0 *p = fn_801B4174(flags);
+    if (p) {
+        lbl_803EBB64->vfn_03(&track, p->mUnknown104);
+        if (track) {
+            p->mUnknown8.halves.high = lbl_803EBB28->mUnknown10;
+            p->mUnknown100 = track;
+            track->vfn_22(p->mUnknownD0);
+            track->fn_801B45CC(&p->mUnknown50);
+            track->fn_801B459C(PATHI_trackinfo(p->mUnknown0));
+        }
+    }
+    lbl_803EBB28 = 0;
+    --lbl_803EBB24;
+    return track;
+}
+
 extern "C" int fn_801B3F6C(int flags, PathfinderTrackData_t *data)
 {
     if (!fn_801B34DC(flags))
         return -8;
-    int result = fn_801B3FE0(flags, data);
+    int result = PATHI_inittrack(flags, data);
     if (result < 0)
         return result;
     Node_801B3FE0 *p = fn_801B4174(flags);
     lbl_803EBB28->mUnknown40[p->mUnknown0] = p;
     return 0;
+}
+
+extern "C" int PATHI_inittrack(int flags, PathfinderTrackData_t *data)
+{
+    int track = 0;
+    if (!(flags & 0x00FFFFFF) || !(flags & 0x0F000000) || !(flags & 0xF0000000))
+        return -8;
+    Bank_801B3480 *bank = lbl_803EBB28;
+    // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1, as in pathcontrol.c
+    for (track = 0; track < 24 && (((flags >> track) ^ 1) & 1); ++track)
+        ;
+    if (bank->mUnknown40[track])
+        return -13;
+    Node_801B3FE0 *p = (Node_801B3FE0 *)fn_801B2C40(sizeof(Node_801B3FE0));
+    if (!p)
+        return -108;
+    memset(p, 0, sizeof(Node_801B3FE0));
+    p->mUnknown0 = track;
+    p->mUnknown8.bits.flag20 = 0;
+    p->mUnknown2 = lbl_803EBB3A;
+    p->mUnknown3 = 127;
+    p->mUnknown18 = -1;
+    p->mUnknown19 = -1;
+    p->mUnknown1A = -1;
+    p->mUnknown24 = -1;
+    p->mUnknown25 = -1;
+    p->mUnknown26 = -1;
+    p->mUnknown30 = -1;
+    p->mUnknown31 = -1;
+    p->mUnknown8.bits.mUnknown7 = -1;
+    p->mUnknownF0 = -1;
+    p->mUnknownF4 = 0xBEDFACED;
+    p->mUnknown110 = 1;
+    p->mUnknown4 = -1;
+    p->mUnknown8.bits.mUnknown1 = lbl_803EBB44;
+    p->mUnknown8.bits.flag1 = (flags & 0xF0000000) == 0x10000000;
+    p->mUnknown6 = -1;
+    p->mUnknown4C = -1;
+    p->mUnknown50.mUnknown0 = data->mpData;
+    p->mUnknown50.mUnknown4 = data->mUnknown4;
+    strcpy(p->mUnknownD0, "TibTrack");
+    lbl_803EBB28->mUnknown40[track] = p;
+    return track;
 }
 
 extern "C" Node_801B3FE0 *fn_801B4174(unsigned int flags)
@@ -147,6 +255,27 @@ extern "C" int fn_801B43CC(int state)
     return i;
 }
 
+Class_801B44BC::Class_801B44BC()
+{
+    mUnknown0 = 0;
+    mUnknown4 = 0;
+    mUnknown8 = 0;
+    mUnknownC = 127;
+    mUnknown10 = 127;
+    mUnknown14 = 1;
+    mUnknown18 = 0;
+    mUnknown1C = 1;
+    mUnknown58 = -1;
+    mUnknown5C = 0;
+    mUnknown20 = 0;
+    mUnknown64 = 0;
+    mUnknown60 = 0;
+}
+
+Class_801B44BC::~Class_801B44BC()
+{
+}
+
 int Class_801B44BC::fn_801B4548()
 {
     Data_801B4548 *p = mUnknown5C;
@@ -164,16 +293,16 @@ int Class_801B44BC::fn_801B4564()
 Record_801B58F0 *Class_801B44BC::fn_801B456C(int index)
 { return 0; }
 
-int Class_801B44BC::fn_801B4574()
+Record_801B58F0 *Class_801B44BC::fn_801B4574()
 { return 0; }
 
-int Class_801B44BC::fn_801B457C()
+int Class_801B44BC::fn_801B457C(int index, char *data)
 { return -8; }
 
-int Class_801B44BC::fn_801B4584()
+int Class_801B44BC::fn_801B4584(int index)
 { return -8; }
 
-int Class_801B44BC::fn_801B458C()
+int Class_801B44BC::fn_801B458C(int index, int header)
 { return -8; }
 
 int Class_801B44BC::fn_801B4594(int index)
@@ -197,5 +326,5 @@ int Class_801B44BC::fn_801B45BC()
 int Class_801B44BC::fn_801B45C4()
 { return mUnknown20; }
 
-void Class_801B44BC::fn_801B45CC()
+void Class_801B44BC::fn_801B45CC(PathName_801B3FE0 *path)
 {}

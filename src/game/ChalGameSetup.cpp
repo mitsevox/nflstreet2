@@ -8,7 +8,7 @@
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/GameOptions.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 static int _ChalGame_aiGeneratedPositions[7] = {0, 1, 2, 4, 8, 9, 13};
 static int _ChalGame_iCachedChallenge = -1;
@@ -17,30 +17,30 @@ static int _ChalGame_iCachedUser = -1;
 static unsigned char _ChalGame_bGeneratedOpponent = 0;
 
 extern "C" {
-int fn_801F9980(int handle, int *pTable);
-int fn_801F967C(int handle, int table);
+int TDbTblFindUnusedId(int handle, int *pTable);
+int TDbTblDestroy(int handle, int table);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int PlayerDbGetRating(Object_8008044C *pObject, int index);
 void PlayerDbSetRating(Object_8008044C *pObject, int index, int value);
-int fn_8008454C(int type, int logo, const char *pName);
-void fn_80084808(int a, int *pIds, int *pCounts, int count, int *pOut, int total);
-void fn_80083DE4(int id);
+int TeamDbCreate(int type, int logo, const char *pName);
+void TeamDbCreatePlayers(int a, int *pIds, int *pCounts, int count, int *pOut, int total);
+void TeamDbSetPlayersTgti(int id);
 void ChallengeSetMode(int mode);
 void GameOutcomeSet(int value);
-int fn_8022F4BC(void);
+int DbUserGetCurrent(void);
 signed char UserProfileFindIndex(int db);
 void UserProfileSelect(signed char index, unsigned char pad);
 void TeamFilterSet(int value);
 void MsgChallengeSetFlowState(int value);
 void ChalLoadCurrent(unsigned char id, int level);
-void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery);
+void TeamDbOpenQuery(DbCursor *pObject, TeamQuery *pQuery);
 int ChalHasReward(Challenge_t *pRecord, int id);
-int fn_80084388(void);
+int TeamDbGetRandomId(void);
 void CreateTeamLoadUserTeams(void);
-int fn_8008406C(DbCursor *pObject, int id, int *pResult);
-int fn_80083FBC(DbCursor *pObject);
-void fn_8001441C(int team, int id);
+int TeamDbSeekTmur(DbCursor *pObject, int id, int *pResult);
+int TeamDbGetId(DbCursor *pObject);
+void MsgTeamSelectSetChallengeTeam(int team, int id);
 void GameInfoSet(int index, int value);
 float SyncRandGetFloat(int stream);
 void fn_800A2F3C(int value);
@@ -57,18 +57,18 @@ int ChalGameCopyTeam(int sourceTeam)
     int player;
 
     fn_8022C628(0x454D4147, 0x4D414554, &team, &teamCount);
-    fn_801F9980(0x454D4147, &table);
-    fn_801FCE10(&result, "use \x8c select into \x8c.\x8c * from 'MAET' where ('DIGT' = \x82)\n", 0x54415453, 0x454D4147, table, sourceTeam);
-    fn_801FCE10(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIOT' = \x85\n", 0x454D4147, table, team, sourceTeam);
-    fn_801FCE10(&result, "use \x8c insert into 'MAET' * select * from \x8c\n", 0x454D4147, table);
-    fn_801F967C(0x454D4147, table);
-    fn_801FCE10(&result, "use \x8c update 'MAET' set 'RUMT' = \x85 and 'OLFT' = 0 and 'SIVT' = 1 and 'DIGD' = \x82 where ('DIGT' = \x85)\n", 0x454D4147, 3, 8, team);
+    TDbTblFindUnusedId(0x454D4147, &table);
+    TDbCompilePerformOp(&result, "use \x8c select into \x8c.\x8c * from 'MAET' where ('DIGT' = \x82)\n", 0x54415453, 0x454D4147, table, sourceTeam);
+    TDbCompilePerformOp(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIOT' = \x85\n", 0x454D4147, table, team, sourceTeam);
+    TDbCompilePerformOp(&result, "use \x8c insert into 'MAET' * select * from \x8c\n", 0x454D4147, table);
+    TDbTblDestroy(0x454D4147, table);
+    TDbCompilePerformOp(&result, "use \x8c update 'MAET' set 'RUMT' = \x85 and 'OLFT' = 0 and 'SIVT' = 1 and 'DIGD' = \x82 where ('DIGT' = \x85)\n", 0x454D4147, 3, 8, team);
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
     int code = 0;
-    int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c where ('DIGT' = \x85) order by 'DIGP'\n", 0x54415453, &cursor, &player, 0x59414C50, sourceTeam);
+    int status = TDbCompilePerformOp(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c where ('DIGT' = \x85) order by 'DIGP'\n", 0x54415453, &cursor, &player, 0x59414C50, sourceTeam);
     if (status != 0 && status != 23) {
         code = status;
     }
@@ -76,16 +76,16 @@ int ChalGameCopyTeam(int sourceTeam)
         count = result.mUnknown0;
         fn_80229AA4(0x454D4147, 0x59414C50, ids, &count);
         for (unsigned int i = 0; i < count; i++) {
-            fn_801FCE10(0, "fetch from \x8a\n", &cursor);
-            fn_801F9980(0x454D4147, &table);
-            status = fn_801FCE10(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGP' = \x82)\n", 0x54415453, 0x454D4147, table, 0x59414C50, player);
-            status = fn_801FCE10(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIGP' = \x85 and 'DIOP' = \x85 where ('DIGP' = \x82)\n", 0x454D4147, table, sourceTeam, ids[i], player, player);
-            status = fn_801FCE10(&result, "use \x8c insert into 'YALP' * select * from \x8c\n", 0x454D4147, table);
-            status = fn_801FCE10(&result, "use \x8c update 'YALP' set 'ITGT' = \x85 where 'DIGP' = \x82\n", 0x454D4147, sourceTeam, ids[i]);
-            fn_801F967C(0x454D4147, table);
+            TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
+            TDbTblFindUnusedId(0x454D4147, &table);
+            status = TDbCompilePerformOp(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGP' = \x82)\n", 0x54415453, 0x454D4147, table, 0x59414C50, player);
+            status = TDbCompilePerformOp(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIGP' = \x85 and 'DIOP' = \x85 where ('DIGP' = \x82)\n", 0x454D4147, table, sourceTeam, ids[i], player, player);
+            status = TDbCompilePerformOp(&result, "use \x8c insert into 'YALP' * select * from \x8c\n", 0x454D4147, table);
+            status = TDbCompilePerformOp(&result, "use \x8c update 'YALP' set 'ITGT' = \x85 where 'DIGP' = \x82\n", 0x454D4147, sourceTeam, ids[i]);
+            TDbTblDestroy(0x454D4147, table);
         }
     }
-    if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+    if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);
     return team;
 }
 
@@ -112,11 +112,11 @@ void ChalGameScaleTeamRatings(int team)
 int ChalGameGenerateTeam(int *pTeam)
 {
     int players[10];
-    int team = fn_8008454C(6, -1, 0);
+    int team = TeamDbCreate(6, -1, 0);
     int counts[7] = {1, 1, 1, 1, 1, 1, 1};
-    fn_80084808(team, _ChalGame_aiGeneratedPositions, counts, 7, players, 10);
+    TeamDbCreatePlayers(team, _ChalGame_aiGeneratedPositions, counts, 7, players, 10);
     ChalGameScaleTeamRatings(team);
-    fn_80083DE4(team);
+    TeamDbSetPlayersTgti(team);
     int gameTeam = ChalGameCopyTeam(team);
     if (pTeam) *pTeam = gameTeam;
     return team;
@@ -128,34 +128,34 @@ void ChalGameStart(unsigned char id)
     _ChalGame_bGeneratedOpponent = 0;
     ChallengeSetMode(0);
     GameOutcomeSet(2);
-    UserProfileSelect(UserProfileFindIndex(fn_8022F4BC()), 1);
+    UserProfileSelect(UserProfileFindIndex(DbUserGetCurrent()), 1);
     UserProfileSelect(-1, 0);
     TeamFilterSet(1023);
     MsgChallengeSetFlowState(5);
     ChalLoadCurrent(id, GameOptionsGet(0));
     Challenge_t *pRecord = ChalGetCurrent();
     GameOptionsCopyShadow();
-    fn_80083E1C(&cursor, 0);
+    TeamDbOpenQuery(&cursor, 0);
     int team;
     if (ChalHasReward(pRecord, 4)) {
         _ChalGame_bGeneratedOpponent = 1;
         team = 0;
     } else if (pRecord->mUnknown198) {
         team = pRecord->mUnknown198;
-    } else if (_ChalGame_iCachedChallenge == pRecord->mUnknown0 && _ChalGame_iCachedTeam != -1 && _ChalGame_iCachedUser == fn_8022F4BC()) {
+    } else if (_ChalGame_iCachedChallenge == pRecord->mUnknown0 && _ChalGame_iCachedTeam != -1 && _ChalGame_iCachedUser == DbUserGetCurrent()) {
         team = _ChalGame_iCachedTeam;
     } else {
-        team = fn_80084388();
+        team = TeamDbGetRandomId();
         _ChalGame_iCachedChallenge = pRecord->mUnknown0;
         _ChalGame_iCachedTeam = team;
-        _ChalGame_iCachedUser = fn_8022F4BC();
+        _ChalGame_iCachedUser = DbUserGetCurrent();
     }
     CreateTeamLoadUserTeams();
-    fn_8008406C(&cursor, 1, 0);
-    int otherTeam = fn_80083FBC(&cursor);
-    fn_80083F68(&cursor);
-    fn_8001441C(0, team);
-    fn_8001441C(1, otherTeam);
+    TeamDbSeekTmur(&cursor, 1, 0);
+    int otherTeam = TeamDbGetId(&cursor);
+    TeamDbClose(&cursor);
+    MsgTeamSelectSetChallengeTeam(0, team);
+    MsgTeamSelectSetChallengeTeam(1, otherTeam);
     switch (pRecord->mUnknown1B8) {
     case 0:
         GameInfoSet(2, 1);
@@ -189,15 +189,15 @@ void ChalGameStartTournament(int team, int value)
     GameOutcomeSet(2);
     TeamFilterSet(1023);
     MsgChallengeSetFlowState(6);
-    UserProfileSelect(UserProfileFindIndex(fn_8022F4BC()), 1);
+    UserProfileSelect(UserProfileFindIndex(DbUserGetCurrent()), 1);
     UserProfileSelect(-1, 0);
     CreateTeamLoadUserTeams();
-    fn_80083E1C(&cursor, 0);
-    fn_8008406C(&cursor, 1, 0);
-    int otherTeam = fn_80083FBC(&cursor);
-    fn_80083F68(&cursor);
-    fn_8001441C(0, team);
-    fn_8001441C(1, otherTeam);
+    TeamDbOpenQuery(&cursor, 0);
+    TeamDbSeekTmur(&cursor, 1, 0);
+    int otherTeam = TeamDbGetId(&cursor);
+    TeamDbClose(&cursor);
+    MsgTeamSelectSetChallengeTeam(0, team);
+    MsgTeamSelectSetChallengeTeam(1, otherTeam);
     GameInfoSet(2, 1);
     fn_800A2F3C(value);
     GameOptionsSet(14, 0);

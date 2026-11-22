@@ -3,8 +3,8 @@
    along the arrow and an optional dashed body. */
 #include "game/Object_80039F5C.h"
 #include "game/Point2.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_80227638.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Add.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXGeometry.h>
@@ -43,12 +43,12 @@ void MatStore(Mtx44 m);
 void TMRenderReset(void);
 void TMRenderSetBlendMode(int a);
 void TMRenderSetZRange(float a, float b);
-void fn_802271F0(Vector_80039F5C *pOut, Vector_80039F5C *pV);
-void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-void fn_80227538(Point2_t *pOut, int angle, float length);
-int fn_802275D8(Vector_80039F5C *pA, Vector_80039F5C *pB, float epsilon);
-void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
-void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
+void Vec3Normalize(Vector_80039F5C *pOut, Vector_80039F5C *pV);
+void Vec3Scale(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
+void Vec2FromAngle(Point2_t *pOut, int angle, float length);
+int Vec3Equal(Vector_80039F5C *pA, Vector_80039F5C *pB, float epsilon);
+void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
+void Vec3Lerp(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 int LLFogEnable(int a);
 void GXSetNumChans(int a);
 void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
@@ -108,25 +108,25 @@ int ArrowDrawSegment(int unused, ArrowPath *pTrail, unsigned int index, Vector_8
 
     width0 = ArrowGetWidth(pTrail, index - 1);
     width1 = ArrowGetWidth(pTrail, index);
-    fn_802276B4(&side, &pTrail->mpPoints[index], &pTrail->mpPoints[index - 1]);
+    Vec3Sub(&side, &pTrail->mpPoints[index], &pTrail->mpPoints[index - 1]);
     x = side.mX;
     side.mX = side.mY;
     side.mY = -x;
     side.mZ = 0.0f;
-    fn_802271F0(&side, &side);
-    fn_80227264(&side0, &side, width0);
-    fn_80227264(&side1, &side, width1);
-    fn_8022765C(&left0, &pTrail->mpPoints[index - 1], &side0);
-    fn_802276B4(&right0, &pTrail->mpPoints[index - 1], &side0);
-    fn_8022765C(&left1, &pTrail->mpPoints[index], &side1);
-    fn_802276B4(&right1, &pTrail->mpPoints[index], &side1);
+    Vec3Normalize(&side, &side);
+    Vec3Scale(&side0, &side, width0);
+    Vec3Scale(&side1, &side, width1);
+    Vec3Add(&left0, &pTrail->mpPoints[index - 1], &side0);
+    Vec3Sub(&right0, &pTrail->mpPoints[index - 1], &side0);
+    Vec3Add(&left1, &pTrail->mpPoints[index], &side1);
+    Vec3Sub(&right1, &pTrail->mpPoints[index], &side1);
     ArrowGetColor(pTrail, index - 1, color);
     if (pTrail->mDashed) {
         for (i = 0; i < 15; i++) {
-            fn_80227930(&a0, &left1, &left0, (i * 2) / 29.0f);
-            fn_80227930(&b0, &right1, &right0, (i * 2) / 29.0f);
-            fn_80227930(&a1, &left1, &left0, (i * 2 + 1) / 29.0f);
-            fn_80227930(&b1, &right1, &right0, (i * 2 + 1) / 29.0f);
+            Vec3Lerp(&a0, &left1, &left0, (i * 2) / 29.0f);
+            Vec3Lerp(&b0, &right1, &right0, (i * 2) / 29.0f);
+            Vec3Lerp(&a1, &left1, &left0, (i * 2 + 1) / 29.0f);
+            Vec3Lerp(&b1, &right1, &right0, (i * 2 + 1) / 29.0f);
             _ArrowDrawQuad(&a1, &a0, &b0, &b1, color);
         }
     } else {
@@ -159,19 +159,19 @@ int ArrowDrawHead(int unused, ArrowPath *pTrail, unsigned int index)
 
     width = ArrowGetWidth(pTrail, index);
     ArrowGetColor(pTrail, index - 1, color);
-    fn_802276B4(&direction, &pTrail->mpPoints[index], &pTrail->mpPoints[index - 1]);
-    fn_802271F0(&direction, &direction);
+    Vec3Sub(&direction, &pTrail->mpPoints[index], &pTrail->mpPoints[index - 1]);
+    Vec3Normalize(&direction, &direction);
     width *= 3.0f;
-    fn_80227264(&forward, &direction, width);
+    Vec3Scale(&forward, &direction, width);
     t = direction.mX;
     direction.mX = direction.mY;
     direction.mY = -t;
     direction.mZ = 0.0f;
-    fn_802271F0(&direction, &direction);
-    fn_80227264(&direction, &direction, width);
-    fn_8022765C(&tip, &pTrail->mpPoints[index], &forward);
-    fn_8022765C(&left, &pTrail->mpPoints[index], &direction);
-    fn_802276B4(&right, &pTrail->mpPoints[index], &direction);
+    Vec3Normalize(&direction, &direction);
+    Vec3Scale(&direction, &direction, width);
+    Vec3Add(&tip, &pTrail->mpPoints[index], &forward);
+    Vec3Add(&left, &pTrail->mpPoints[index], &direction);
+    Vec3Sub(&right, &pTrail->mpPoints[index], &direction);
     pPoints = pTrail->mpPoints;
     _ArrowDrawQuad(&left, &tip, &right, &pPoints[index], color);
     return 0;
@@ -192,20 +192,20 @@ int ArrowDrawBlockEnd(int unused, ArrowPath *pTrail, unsigned int index)
 
     width = ArrowGetWidth(pTrail, index);
     ArrowGetColor(pTrail, index - 1, color);
-    fn_802276B4(&direction, &pTrail->mpPoints[index], &pTrail->mpPoints[index - 1]);
-    fn_802271F0(&direction, &direction);
-    fn_80227264(&direction, &direction, width + width);
-    fn_802276B4(&base, &pTrail->mpPoints[index], &direction);
+    Vec3Sub(&direction, &pTrail->mpPoints[index], &pTrail->mpPoints[index - 1]);
+    Vec3Normalize(&direction, &direction);
+    Vec3Scale(&direction, &direction, width + width);
+    Vec3Sub(&base, &pTrail->mpPoints[index], &direction);
     side.mX = -direction.mY;
     side.mY = direction.mX;
     side.mZ = 0.0f;
-    fn_8022765C(&corner1, &base, &side);
-    fn_8022765C(&corner0, &pTrail->mpPoints[index], &side);
+    Vec3Add(&corner1, &base, &side);
+    Vec3Add(&corner0, &pTrail->mpPoints[index], &side);
     side.mX = direction.mY;
     side.mY = -direction.mX;
     side.mZ = 0.0f;
-    fn_8022765C(&corner3, &base, &side);
-    fn_8022765C(&corner2, &pTrail->mpPoints[index], &side);
+    Vec3Add(&corner3, &base, &side);
+    Vec3Add(&corner2, &pTrail->mpPoints[index], &side);
     _ArrowDrawQuad(&corner0, &corner1, &corner3, &corner2, color);
     return 0;
 }
@@ -246,8 +246,8 @@ int ArrowDrawEllipseEnd(int unused, ArrowPath *pTrail, unsigned int index)
         phase = angle * 360.0f / steps * (16777216.0f / 360.0f);
         fn_801CFC14(phase, &first, &second);
         radius = b * a * MathInvSqrt(a * a * second * second + b * b * first * first);
-        fn_80227538(&vertex.mXY, phase + offset, radius);
-        fn_80227638(&vertex.mXY, &vertex.mXY, &center);
+        Vec2FromAngle(&vertex.mXY, phase + offset, radius);
+        Vec2Add(&vertex.mXY, &vertex.mXY, &center);
         GXPosition3f32(vertex.mXY.mX, vertex.mXY.mY, vertex.mZ);
         GXColor4u8(color[0], color[1], color[2], 50);
     }
@@ -262,7 +262,7 @@ void ArrowRemoveRepeatedPoints(ArrowPath *pTrail)
     unsigned int removed = 0;
 
     for (i = 0; i < pTrail->mCount - removed - 1; i++) {
-        if (fn_802275D8(&pTrail->mpPoints[i], &pTrail->mpPoints[i + 1], 1e-7f)) {
+        if (Vec3Equal(&pTrail->mpPoints[i], &pTrail->mpPoints[i + 1], 1e-7f)) {
             for (j = i + 1; j < pTrail->mCount - removed - 1; j++) {
                 pTrail->mpPoints[j].mX = pTrail->mpPoints[j + 1].mX;
                 pTrail->mpPoints[j].mY = pTrail->mpPoints[j + 1].mY;

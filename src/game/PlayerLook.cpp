@@ -17,9 +17,9 @@
 #include "game/GameModeType.h"
 #include <string.h>
 #include <string.h>
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
-/* Four bytes copied as one word from lbl_802CFB1C and passed by value. */
+/* Four bytes copied as one word from _PlayerLook_aDecalColors and passed by value. */
 struct PlayerLookColors_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
@@ -27,7 +27,7 @@ struct PlayerLookColors_t {
     unsigned char mUnknown3;
 };
 
-/* Three bytes read by fn_800840A4. */
+/* Three bytes read by TeamDbGetColors. */
 struct TeamColorRow_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
@@ -46,22 +46,91 @@ struct PlayerLookBonuses_t {
     short mValues[10];
 };
 
+extern "C" unsigned char gPlayerLookColorRemap[18] = {
+    0x14, 0x15, 0xF1, 0xF1, 0x14, 0x15, 0x16, 0x14, 0x15, 0x16, 0x14, 0x14, 0x14, 0x14, 0x14, 0x15, 0x14, 0x15,
+};
+
+static PlayerLookSwitch_t _PlayerLook_aDefaultSwitches[27] = {
+    {5, 0}, {6, 0xFF}, {7, 0}, {8, 0}, {9, 0}, {0xA, 0}, {0xB, 0}, {0xC, 0}, {0xD, 0},
+    {0xE, 0}, {0xF, 0}, {0x10, 0}, {0x11, 0}, {0x12, 0}, {0x13, 0xFF}, {0x14, 0xFF}, {0x1B, 0xFF}, {0, 0},
+    {0x1C, 0xFF}, {0x19, 0xFF}, {0x15, 0xFF}, {0x16, 0xFF}, {0x17, 0xFF}, {0x18, 0xFF}, {0x1D, 0xFF}, {0x1E, 0xFF}, {0xFFFF, 0xFF},
+};
+
+static PlayerLookSwitch_t _PlayerLook_aaItemSwitches[45][9] = {
+    {{5, 4}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{5, 5}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{5, 6}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{5, 7}, {7, 2}, {8, 2}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{5, 7}, {6, 3}, {7, 2}, {8, 2}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{5, 0xA}, {7, 6}, {8, 6}, {0x18, 0}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{5, 0xB}, {7, 7}, {8, 7}, {9, 6}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{5, 9}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{5, 0xC}, {6, 2}, {7, 8}, {8, 8}, {9, 7}, {0xA, 5}, {0xB, 5}, {0xFFFF, 0xFF}, {0, 0}},
+    {{5, 7}, {7, 4}, {8, 4}, {9, 4}, {0xA, 3}, {0xB, 3}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}},
+    {{5, 7}, {6, 3}, {7, 4}, {8, 4}, {9, 4}, {0xA, 3}, {0xB, 3}, {0xFFFF, 0xFF}, {0, 0}},
+    {{5, 8}, {7, 5}, {8, 5}, {9, 5}, {0xA, 4}, {0xB, 4}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}},
+    {{5, 8}, {6, 1}, {7, 5}, {8, 5}, {9, 5}, {0xA, 4}, {0xB, 4}, {0xFFFF, 0xFF}, {0, 0}},
+    {{5, 8}, {6, 0}, {7, 5}, {8, 5}, {9, 5}, {0xA, 4}, {0xB, 4}, {0, 0xFF}, {0xFFFF, 0xFF}},
+    {{0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{5, 3}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{5, 0}, {7, 0}, {8, 0}, {9, 0}, {0xA, 0}, {0xB, 0}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}},
+    {{5, 0}, {7, 0}, {8, 0}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{5, 0}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{5, 1}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{5, 2}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{7, 1}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{8, 1}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{9, 1}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{9, 2}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0xA, 1}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0xB, 2}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0xA, 2}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0xB, 1}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{9, 9}, {0xA, 6}, {0xB, 6}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{9, 8}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0xE, 1}, {0xF, 2}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0xE, 0}, {0xF, 1}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0xE, 3}, {0xF, 4}, {0x10, 2}, {0x11, 2}, {0x12, 2}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}},
+    {{0xE, 2}, {0xF, 3}, {0x10, 1}, {0x11, 1}, {0x12, 1}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}},
+    {{0x11, 3}, {0x12, 3}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0x12, 4}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0x11, 4}, {0x12, 5}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0x1B, 0}, {0, 1}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0x1B, 0}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0x1C, 0}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0x1D, 0}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0x1E, 0}, {0xFFFF, 0xFF}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+};
+
+static int _PlayerLook_aiItemSwitchList[54] = {
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+    18, 19, 20, 21, 255, 24, 25, 255, 255, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+    39, 40, 40, 40, 41, 41, 40, 40, 40, 42, 42, 42, 42, 42, 255, 255, 43, 44,
+};
+
+static PlayerLookColors_t _PlayerLook_aDecalColors[22] = {
+    {0x11, 0x10, 0x10, 0x13}, {0xFF, 0xFF, 0xFF, 0x17}, {0x19, 0x18, 0x1A, 0x1B}, {0x1D, 0x1C, 0x1E, 0x1F}, {0x1D, 0x1C, 0x1E, 0x1F}, {0xFF, 0xFF, 0xFF, 0xFF}, {0x2D, 0x2C, 0x2E, 0xFF}, {0x25, 0x24, 0x26, 0xFF},
+    {0x31, 0x30, 0x30, 0x33}, {0x1D, 0x1C, 0x1E, 0x1F}, {0x1D, 0x1C, 0x1E, 0x1F}, {0x21, 0x20, 0x20, 0x23}, {0x21, 0x20, 0x20, 0x23}, {0x21, 0x20, 0x20, 0x23}, {0xFF, 0xFF, 0xFF, 3}, {0xD, 0xC, 0xE, 0xFF},
+    {1, 0, 2, 3}, {1, 0, 2, 3}, {1, 0, 2, 3}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {9, 8, 0xA, 0xB},
+};
+
+static int _PlayerLook_aiListLogoKind[22] = {
+    0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 1, 0,
+};
+
 extern "C" {
 extern PlayerLook_t gPlayerLooks[14];
 extern PlayerLookBonuses_t gPlayerLookBonuses[14];
-extern PlayerLookSwitch_t lbl_802CF382[];
-extern PlayerLookSwitch_t lbl_802CF3EE[45][9];
-extern int lbl_802CFA44[54];
-extern PlayerLookColors_t lbl_802CFB1C[22];
-extern int lbl_802CFB74[22];
 extern unsigned char gPlayerObjDrawReady;
 
 int MsgPlayerPickupIsOpen(void);
-int fn_8003DEB4(void);
+int PlyrObjsGetCount(void);
 void PlyrPoseInit(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
 void PlyrPoseFree(Object_8003DEC4 *pPlayer);
 unsigned char CheatFlagsIsSet(int index);
-int fn_8005FC7C(void);
+int StoryEventsGetCurrentEvent(void);
 void fn_8007BA48(DbCursor *pObject);
 void fn_8007BA88(DbCursor *pObject, int a);
 void fn_8007BB04(DbCursor *pObject);
@@ -84,7 +153,7 @@ int fn_80081E3C(Object_8008044C *pObject);
 int fn_80081FD4(Object_8008044C *pObject, int a);
 int fn_80082280(Object_8008044C *pObject);
 int fn_800822D4(Object_8008044C *pObject);
-void fn_800840A4(DbCursor *pObject, void *pBuffer);
+void TeamDbGetColors(DbCursor *pObject, void *pBuffer);
 void ParticleTrailReset(ParticleTrailSet_t *pObject);
 void fn_8015F6E8(const char *pName, int b, int c, int d, PlayerHeadIds_t *pIds);
 void PlyrSwitchSet(int player, int key, int value);
@@ -93,11 +162,11 @@ int PlaTexCacheFindTexture(char *pName);
 void PlaTexCacheSetColors(int index, unsigned char *pColors);
 void PlaTexCacheGetHairTexture(int a, int *pId, int *pPalette);
 int EditMenuIsOpen(void);
-void fn_801A34B0(int a, int b, int c, int d);
-void fn_801A3520(void);
-void fn_801A3588(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit);
-void fn_801A3C40(Object_8003DEC4 *pPlayer);
-void fn_801A3F48(Object_8003DEC4 *pPlayer);
+void PlyrRenderInit(int a, int b, int c, int d);
+void PlyrRenderShutdown(void);
+void PlyrRenderInitPlayer(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit);
+void PlyrRenderDrawPlayer(Object_8003DEC4 *pPlayer);
+void PlyrRenderFreePlayer(Object_8003DEC4 *pPlayer);
 void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 int fn_801486A0(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
@@ -125,9 +194,9 @@ extern "C" void PlayerLookRandomizeGear(int index)
     fn_8007BA88(&cursor, 1);
     c = DbCursorGetRowCount(&cursor);
     fn_8007BB04(&cursor);
-    int x = fn_802372EC(0, a - 1) + 1;
-    int y = fn_802372EC(0, b);
-    int z = fn_802372EC(0, c - 1) + 1;
+    int x = SyncRandGetRange(0, a - 1) + 1;
+    int y = SyncRandGetRange(0, b);
+    int z = SyncRandGetRange(0, c - 1) + 1;
     gPlayerLooks[index].mInfo.mValues[12] = x;
     gPlayerLooks[index].mInfo.mValues[13] = y;
     gPlayerLooks[index].mInfo.mValues[1] = z;
@@ -138,7 +207,7 @@ extern "C" void PlayerLookApplySwitchList(int player, int index)
     PlayerLookSwitch_t pair;
     int i;
 
-    for (i = 0, pair = lbl_802CF3EE[index][0]; pair.mKey != 0xFFFF; pair = lbl_802CF3EE[index][++i]) {
+    for (i = 0, pair = _PlayerLook_aaItemSwitches[index][0]; pair.mKey != 0xFFFF; pair = _PlayerLook_aaItemSwitches[index][++i]) {
         PlyrSwitchSet(player, pair.mKey, pair.mValue);
     }
 }
@@ -179,8 +248,8 @@ extern "C" void PlayerLookApplyItemSwitches(Row_8007BC34 *pRow, PlayerGear_t *pI
         }
         break;
     default:
-        if (lbl_802CFA44[pRow->mUnknown64] != 255) {
-            PlayerLookApplySwitchList(player, lbl_802CFA44[pRow->mUnknown64]);
+        if (_PlayerLook_aiItemSwitchList[pRow->mUnknown64] != 255) {
+            PlayerLookApplySwitchList(player, _PlayerLook_aiItemSwitchList[pRow->mUnknown64]);
         }
         break;
     }
@@ -327,7 +396,7 @@ extern "C" void PlayerLookSetJerseyDecal(Row_8007BC34 *pRow, int offset, unsigne
         pIds[24] = id;
         pPalettes[23] = -1;
         pPalettes[24] = -1;
-        PlayerLookColors_t colors = lbl_802CFB1C[pRow->mUnknown64];
+        PlayerLookColors_t colors = _PlayerLook_aDecalColors[pRow->mUnknown64];
         if (pRow->mUnknown71) {
             if (pRow->mUnknown72) {
                 PlyrSwitchSet(player, 19, colors.mUnknown3);
@@ -440,7 +509,7 @@ extern "C" void PlayerLookSetJerseyDecals(Row_8007BC34 *pRow, PlayerGear_t *pInf
     } else if (pRow->mUnknown76) {
         PlayerLookSetJerseyDecal(pRow, pInfo->mUnknown0C, home, player, pIds, pPalettes);
     } else {
-        PlayerLookColors_t colors = lbl_802CFB1C[pRow->mUnknown64];
+        PlayerLookColors_t colors = _PlayerLook_aDecalColors[pRow->mUnknown64];
         int kind;
 
         kind = pRow->mUnknown71 ? pInfo->mUnknown09 : 0;
@@ -462,9 +531,9 @@ extern "C" void PlayerLookLoadDecalColors(int index, unsigned char *pColors, uns
 
     query.mUnknown8 = index + 1;
     query.mUnknown4 = 5;
-    fn_80083E40(&cursor, &query, 0x54415453);
-    fn_800840A4(&cursor, &rgb);
-    fn_80083F68(&cursor);
+    TeamDbOpen(&cursor, &query, 0x54415453);
+    TeamDbGetColors(&cursor, &rgb);
+    TeamDbClose(&cursor);
     pColors[4] = rgb.mUnknown0;
     pColors[5] = rgb.mUnknown1;
     pColors[6] = rgb.mUnknown2;
@@ -479,9 +548,9 @@ extern "C" void PlayerLookLoadHeadDecalColors(int index, unsigned char *pColors,
 
     query.mUnknown8 = index + 1;
     query.mUnknown4 = 5;
-    fn_80083E40(&cursor, &query, 0x54415453);
-    fn_800840A4(&cursor, &rgb);
-    fn_80083F68(&cursor);
+    TeamDbOpen(&cursor, &query, 0x54415453);
+    TeamDbGetColors(&cursor, &rgb);
+    TeamDbClose(&cursor);
     pColors[0] = rgb.mUnknown0;
     pColors[1] = rgb.mUnknown1;
 }
@@ -518,7 +587,7 @@ extern "C" int PlayerLookMapHatKind(unsigned int type)
 
 extern "C" int PlayerLookItemKeepsLogo(int type)
 {
-    return lbl_802CFB74[lbl_802CFA44[type]] == 1;
+    return _PlayerLook_aiListLogoKind[_PlayerLook_aiItemSwitchList[type]] == 1;
 }
 
 extern "C" int PlayerLookGetHatKind(int index)
@@ -581,12 +650,12 @@ extern "C" void PlayerLookLoad(int index, int unused, int id, unsigned char flag
 
     PlayerDbSeekId(&_PlayerLook_sPlayerCursor, id, 0);
     value = PlayerDbGetTeamIndex(&_PlayerLook_sPlayerCursor);
-    fn_80083E40(&cursor, 0, 0x54415453);
-    fn_80084034(&cursor, value, 0);
-    fn_800840A4(&cursor, &pColors[20]);
-    gPlayerLooks[index].mUnknown6A = fn_80084158(&cursor);
-    gPlayerLooks[index].mUnknown68 = fn_80084438(&cursor);
-    fn_80083F68(&cursor);
+    TeamDbOpen(&cursor, 0, 0x54415453);
+    TeamDbSeekId(&cursor, value, 0);
+    TeamDbGetColors(&cursor, &pColors[20]);
+    gPlayerLooks[index].mUnknown6A = TeamDbGetLogo(&cursor);
+    gPlayerLooks[index].mUnknown68 = TeamDbGetCtdl(&cursor);
+    TeamDbClose(&cursor);
     fn_800817CC(&_PlayerLook_sPlayerCursor, &gPlayerLooks[index].mInfo);
     if (CheatFlagsIsSet(47) && !GameModeTypeGet()) {
         PlayerLookRandomizeGear(index);
@@ -671,7 +740,7 @@ extern "C" void PlayerLookLoadBonuses(int index, int unused, int id)
 
 extern "C" void PlayerLookSetGear(int player, int slot, int value)
 {
-    Object_8003DEC4 *pPlayer = fn_8003DEC4(player);
+    Object_8003DEC4 *pPlayer = PlyrObjsGet(player);
 
     gPlayerLooks[pPlayer->mUnknown4971].mInfo.mValues[slot] = value;
     gPlayerLooks[pPlayer->mUnknown4971].mUnknown70 = PlayerLookGetHatKind(pPlayer->mUnknown4971);
@@ -697,7 +766,7 @@ extern "C" void PlayerLookApply(int player)
     PlayerLook_t *pRecord;
     unsigned char *pColors;
 
-    pPlayer = fn_8003DEC4(player);
+    pPlayer = PlyrObjsGet(player);
     clearLogo = 0;
     key = pPlayer->mUnknown4970;
     index = pPlayer->mUnknown4971;
@@ -713,8 +782,8 @@ extern "C" void PlayerLookApply(int player)
     ids[28] = 0x3DE2;
     ids[29] = 0x3EEE;
     ids[30] = 0x3DE3;
-    for (i = 0; lbl_802CF382[i].mKey != 0xFFFF; i++) {
-        PlyrSwitchSet(key, lbl_802CF382[i].mKey, lbl_802CF382[i].mValue);
+    for (i = 0; _PlayerLook_aDefaultSwitches[i].mKey != 0xFFFF; i++) {
+        PlyrSwitchSet(key, _PlayerLook_aDefaultSwitches[i].mKey, _PlayerLook_aDefaultSwitches[i].mValue);
     }
     pColors = gPlayerLooks[index].mUnknown7A;
     PlaTexRemapColors(pColors);
@@ -812,7 +881,7 @@ extern "C" void PlayerLookLoadForPlayer(unsigned int mode, int index, int unused
 {
     int flag = 1;
 
-    if (FELoopIsMainFEActive() && MsgPlayerPickupIsOpen() && fn_8005FC7C()) {
+    if (FELoopIsMainFEActive() && MsgPlayerPickupIsOpen() && StoryEventsGetCurrentEvent()) {
         DbCursor cursor;
 
         DbCursorOpen(&cursor, 0x59414C50, 0x44494750, 0, 0, 0x54415453);
@@ -931,7 +1000,7 @@ extern "C" int PlayerLookGetAccessoryModel(int index)
         result = (a - 1) / 2;
         result = result * 13;
         result = result + b;
-        result = result * 3 + lbl_802CFB74[lbl_802CFA44[row.mUnknown64]];
+        result = result * 3 + _PlayerLook_aiListLogoKind[_PlayerLook_aiItemSwitchList[row.mUnknown64]];
         result = result * 4 + gPlayerLooks[index].mUnknown78;
         result = result * 2;
         result = result + 1;
@@ -1101,11 +1170,11 @@ extern "C" void PlayerLookGetHeadIds(int index, const char *pName, PlayerHeadIds
 
 extern "C" void PlayerLookHideSwitch28(void)
 {
-    unsigned int count = fn_8003DEB4();
+    unsigned int count = PlyrObjsGetCount();
     unsigned int i;
 
     for (i = 0; i < count; i++) {
-        PlyrSwitchSet(fn_8003DEC4(i)->mUnknown4970, 28, 255);
+        PlyrSwitchSet(PlyrObjsGet(i)->mUnknown4970, 28, 255);
     }
 }
 
@@ -1144,25 +1213,25 @@ extern "C" void PlayerObjCreate(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit
     PlyrPoseInit(pPlayer, pInit->mUnknown04, pInit->mUnknown08, pInit->mUnknown10, pInit->mUnknown14);
     pPlayer->mUnknown4956 = pInit->mUnknown18;
     ParticleTrailReset(&pPlayer->mUnknown5188);
-    fn_801A3588(pPlayer, pInit);
+    PlyrRenderInitPlayer(pPlayer, pInit);
 }
 
 extern "C" void PlayerObjDestroy(Object_8003DEC4 *pPlayer)
 {
-    fn_801A3F48(pPlayer);
+    PlyrRenderFreePlayer(pPlayer);
     PlyrPoseFree(pPlayer);
 }
 
 extern "C" void PlayerObjRenderInit(int a, int b)
 {
     gPlayerObjDrawReady = 1;
-    fn_801A34B0(0, 0, a, b);
+    PlyrRenderInit(0, 0, a, b);
 }
 
 extern "C" void PlayerObjRenderShutdown(void)
 {
     gPlayerObjDrawReady = 0;
-    fn_801A3520();
+    PlyrRenderShutdown();
 }
 
 extern "C" void PlayerObjAddObjType(int owner, int type, int count)
@@ -1180,7 +1249,7 @@ extern "C" int PlayerObjDraw(Object_8003DEC4 *pPlayer, int unused)
     if (pItem && pItem->mUnknown28) {
         PlyrNameTagUpdatePosition(pItem, pPlayer->mUnknown4);
     }
-    fn_801A3C40(pPlayer);
+    PlyrRenderDrawPlayer(pPlayer);
     return 0;
 }
 

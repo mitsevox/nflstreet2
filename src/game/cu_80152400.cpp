@@ -1,6 +1,6 @@
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 struct Entry_8015005C {
     int mUnknown0;
@@ -87,27 +87,27 @@ void fn_8015247C(Class_802A2918 *p)
         cursor.mUnknown4 = 0;
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
-        fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'SJSH' into \x85 and 'KPSH' into \x82 from 'BJSH' order by 'SJSH' asc and 'KPSH' asc\n",
+        TDbCompilePerformOp(&result, "use 'EVAS' declare \x8a fastcursor for select 'SJSH' into \x85 and 'KPSH' into \x82 from 'BJSH' order by 'SJSH' asc and 'KPSH' asc\n",
                     &cursor, &score, &key);
         cursor.mUnknown4 = 0;
-        fn_801FCE10(0, lbl_802A0F24, &cursor);
+        TDbCompilePerformOp(0, lbl_802A0F24, &cursor);
         if (cursor.mUnknown0) {
-            fn_801FCFA0(&cursor);
+            TDbSQLDestroyCursor(&cursor);
         }
         MiniGameSlotInfo_t info;
         fn_80152940(p, i, &info);
         if (score < (unsigned int)info.mUnknown8) {
             int id = 0;
-            int status = fn_801FCE10(0, lbl_802A0F34, &id, name);
+            int status = TDbCompilePerformOp(0, lbl_802A0F34, &id, name);
             if (status == 23) {
                 id = UserProfileGetFreeKey(0x52435348, 0x4B505348, 0, 255);
                 if (id == -1) {
                     continue;
                 }
-                fn_801FCE10(0, lbl_802A0F74, id, name);
+                TDbCompilePerformOp(0, lbl_802A0F74, id, name);
             }
             if (id != -1) {
-                fn_801FCE10(&result, "use 'EVAS' update 'BJSH' set 'SJSH' = \x85 and 'UBJH' = \x82 where 'KPSH' = \x82\n",
+                TDbCompilePerformOp(&result, "use 'EVAS' update 'BJSH' set 'SJSH' = \x85 and 'UBJH' = \x82 where 'KPSH' = \x82\n",
                             info.mUnknown8, id, key);
             }
         }

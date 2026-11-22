@@ -3,12 +3,13 @@
 
 #include "engine/tmlib.h"
 
-extern Pool_801C750C *lbl_803EBEE8;
+/* The node pool the materials are allocated from. */
+static Pool_801C750C *_TMMaterialList_pNodes = 0;
 
 static TMMaterial_t *_TMMaterialListAllocNode(TMMaterial_t *pMaterial)
 {
     if (pMaterial == 0) {
-        pMaterial = DSNewNode(lbl_803EBEE8);
+        pMaterial = DSNewNode(_TMMaterialList_pNodes);
         pMaterial->mRefCount = 0;
         pMaterial->mNumParms = 0;
         pMaterial->mpParms = 0;
@@ -23,22 +24,22 @@ static void _TMMaterialListFreeNode(TMMaterial_t *pMaterial)
     if (pMaterial != 0) {
         if (--pMaterial->mRefCount <= 0) {
             TMMaterialReset(pMaterial);
-            DSDelNode(lbl_803EBEE8, pMaterial);
+            DSDelNode(_TMMaterialList_pNodes, pMaterial);
         }
     }
 }
 
 void TMMaterialListInit(int maxMaterials)
 {
-    lbl_803EBEE8 = DSNewNodeHandler(1, maxMaterials, sizeof(TMMaterial_t), 0);
+    _TMMaterialList_pNodes = DSNewNodeHandler(1, maxMaterials, sizeof(TMMaterial_t), 0);
     TMMaterialSelect(0);
 }
 
 void TMMaterialListShutdown(void)
 {
     TMMaterialSelect(0);
-    DSDelNodeHandler(lbl_803EBEE8);
-    lbl_803EBEE8 = 0;
+    DSDelNodeHandler(_TMMaterialList_pNodes);
+    _TMMaterialList_pNodes = 0;
 }
 
 void TMMaterialListAlloc(TMMaterialList_t *pList, unsigned int numMaterials)

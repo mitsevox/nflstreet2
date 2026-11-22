@@ -13,25 +13,25 @@
 #include "game/PauseMenu.h"
 #include "game/Ball.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 extern "C" {
 extern char lbl_8030C070[];
-extern void *lbl_803EA368;
+extern void *gpReplay;
 extern void *gLevelData;
 
 void VptManagerInit(void);
 void VptManagerShutdown(void);
-void *fn_8002C8C0(void);
-void fn_8002C964(void *p);
-void fn_80030B30(void);
-void fn_80030BC0(int a);
+void *ReplayCreate(void);
+void ReplayDestroy(void *p);
+void ReplayBufferInit(void);
+void ReplayChannelsInit(int a);
 void PlyrMgrRegister(int a);
 void PlyrMgrReset(void);
 void PlyrMgrEmptyPass(void);
-int fn_8003DA94(unsigned short count, int a, int b);
-int fn_8003DCC0(int a);
-void fn_8003E118(void);
+int PlyrObjsCreate(unsigned short count, int a, int b);
+int PlyrObjsDestroy(int a);
+void PlyrObjsRegisterState(void);
 void BigObjSetupBigObjects(int a, int b);
 void BigObjShutdownObjects(int a);
 void BigObjCreateAnimBall(int a);
@@ -134,8 +134,8 @@ int fn_801486A0(void);
 int TutorialIsActive(void);
 void TutorialLessonStart(void);
 void TutorialLessonStop(void);
-void fn_8015C064(int a);
-void fn_8015C0C0(void);
+void RouteArrowSysInit(int a);
+void RouteArrowSysShutdown(void);
 void fn_8015E654(int a);
 void fn_8015E6C4(void);
 void fn_8015E6C8(void);
@@ -146,7 +146,7 @@ void PlaTexCacheLoadDefaults(void);
 void PlaTexCacheShutdown(void);
 void EnvSkyObjCreate(void *pOwner);
 void EnvSkyObjDestroy(void *pOwner);
-void fn_80162D78(void);
+void PlyrStarRegisterReplay(void);
 void PlayArtMemInit(void *p);
 void PlayArtMemShutdown(void);
 void PlayBookPostInit(void);
@@ -171,14 +171,14 @@ void TeamLogoInit(void);
 void TeamLogoShutdown(void);
 void FldObjAddObjType(int a);
 void LevelLightsInit(void);
-void fn_801A4650(Viewport_t *pObject);
+void PlyrRenderSetViewport(Viewport_t *pObject);
 void SimpShadowInit(void);
 void SimpShadowShutdown(void);
 int ResSync(int a);
 void ResTrackLabel(const char *pText);
 void VptFlushObjectTrashSync(void);
-void fn_802363B0(Viewport_t *pObject);
-void fn_802363E0(Viewport_t *pObject);
+void LLLightAttachViewport(Viewport_t *pObject);
+void LLLightDetachViewport(Viewport_t *pObject);
 }
 
 static ModuleDependency sAnimintfDependencies[] = { &gAnimData, &gGameState, 0 };
@@ -229,14 +229,14 @@ const char *Arrow::GetName() { return "Arrow"; }
 
 int Arrow::Init()
 {
-    fn_8015C064(GameObjList::GetListHandle());
+    RouteArrowSysInit(GameObjList::GetListHandle());
     FieldArrowInit(GameObjList::GetListHandle());
     return 1;
 }
 
 int Arrow::Shutdown()
 {
-    fn_8015C0C0();
+    RouteArrowSysShutdown();
     FieldArrowShutdown();
     return 1;
 }
@@ -741,14 +741,14 @@ const char *Light::GetName() { return "Light"; }
 
 int Light::Init()
 {
-    fn_802363B0(GameVpt::GetViewport());
+    LLLightAttachViewport(GameVpt::GetViewport());
     LevelLightsInit();
     return 1;
 }
 
 int Light::Shutdown()
 {
-    fn_802363E0(GameVpt::GetViewport());
+    LLLightDetachViewport(GameVpt::GetViewport());
     return 1;
 }
 
@@ -920,7 +920,7 @@ void PlayBook::fn_8003549C(int flag)
         e = 59;
         f = 59;
     } else {
-        fn_801FCE10(0, "select 'IPHG' into \x85 and 'IPAG' into \x85 and 'PDHG' into \x85 and 'PDAG' into \x85 from 'FNIG'\n", &c, &d, &e, &f);
+        TDbCompilePerformOp(0, "select 'IPHG' into \x85 and 'IPAG' into \x85 and 'PDHG' into \x85 and 'PDAG' into \x85 from 'FNIG'\n", &c, &d, &e, &f);
     }
     if (flag) {
         PlayBookOpenAndRegister((int)gIGMisc.mData.mp, a, b, c, d, e, f, 1);
@@ -973,14 +973,14 @@ int Plyr::Init()
     fn_8015E654(1);
     fn_8015E6C4();
     fn_8015E950(1, 1);
-    fn_8003DA94(14, GameObjList::GetListHandle(), 0);
+    PlyrObjsCreate(14, GameObjList::GetListHandle(), 0);
     fn_8015E994();
     ResTrackLabel("PlyrObjsInitFinish");
     ResTrackLabel("PlaStateInitStart");
     PlyrMgrRegister(14);
     ResTrackLabel("PlaStateInitFinish");
     PlyrMgrEmptyPass();
-    fn_801A4650(GameVpt::GetViewport());
+    PlyrRenderSetViewport(GameVpt::GetViewport());
     fn_8004FF8C();
     return 1;
 }
@@ -988,7 +988,7 @@ int Plyr::Init()
 int Plyr::Shutdown()
 {
     PlyrMgrReset();
-    fn_8003DCC0(GameObjList::GetListHandle());
+    PlyrObjsDestroy(GameObjList::GetListHandle());
     fn_8015E6C8();
     PlaTexCacheShutdown();
     return 1;
@@ -1098,15 +1098,15 @@ const char *Replay::GetName() { return "Replay"; }
 int Replay::Init()
 {
     GameState::GetStore();
-    lbl_803EA368 = fn_8002C8C0();
+    gpReplay = ReplayCreate();
     return 1;
 }
 
 int Replay::Shutdown()
 {
     ResSync(0);
-    fn_8002C964(lbl_803EA368);
-    lbl_803EA368 = 0;
+    ReplayDestroy(gpReplay);
+    gpReplay = 0;
     return 1;
 }
 
@@ -1119,17 +1119,17 @@ const char *ReplayFrame::GetName() { return "ReplayFrame"; }
 
 int ReplayFrame::Init()
 {
-    fn_80030BC0(0);
+    ReplayChannelsInit(0);
     BallsReplayRegister();
-    fn_80162D78();
-    fn_8003E118();
+    PlyrStarRegisterReplay();
+    PlyrObjsRegisterState();
     BigObjRegisterSave();
     DivotReplayRegister();
     SndgReplayRegister();
     ParticleSysReplayRegister();
     fn_800B4A4C();
     fn_800D77F0();
-    fn_80030B30();
+    ReplayBufferInit();
     return 1;
 }
 

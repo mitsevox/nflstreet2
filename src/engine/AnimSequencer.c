@@ -5,8 +5,10 @@
 #include "engine/AnimSeqCamera.h"
 #include "engine/SysSetLastErrorFunc.h"
 
-extern unsigned char _AnimSequencer_ModuleActive;
-extern float _AnimSequencer_fTicksPerSecond;
+static unsigned char _AnimSequencer_ModuleActive = 0;
+
+/* Sequencer ticks per second of animation time. */
+static float _AnimSequencer_fTicksPerSecond = 60.0f;
 
 int AnimSequencerInit(float rate)
 {

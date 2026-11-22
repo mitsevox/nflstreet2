@@ -2,13 +2,13 @@
    their names and list order, and clears the new flag once the gear menu has shown
    one. */
 
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/DbCursor.h"
 #include "game/QueryStatus.h"
 
 extern "C" {
-int fn_8022F358(int index);
-int fn_8022F3D4(int a);
+int DbUserGetId(int index);
+int DbUserGetDb(int a);
 }
 
 static int _Decal_aFindSort[8] = { 0x4C43444C, 0x494C4344, 0, 0, -1, -1, 3, 0 };
@@ -18,8 +18,8 @@ extern "C" {
 int DecalCountUnlocked(int index)
 {
     int count;
-    int result = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LCDL' where 'LLCD' = 0\n",
-                             fn_8022F3D4(fn_8022F358(index)), &count);
+    int result = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from 'LCDL' where 'LLCD' = 0\n",
+                             DbUserGetDb(DbUserGetId(index)), &count);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
         return count;
@@ -30,8 +30,8 @@ int DecalCountUnlocked(int index)
 int DecalCountNew(int index)
 {
     int count;
-    int result = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LCDL' where 'WNRG' != 0\n",
-                             fn_8022F3D4(fn_8022F358(index)), &count);
+    int result = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from 'LCDL' where 'WNRG' != 0\n",
+                             DbUserGetDb(DbUserGetId(index)), &count);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
         return count;
@@ -54,7 +54,7 @@ unsigned char DecalIsNew(int index, int a)
     DbCursor cursor;
     unsigned char result = 0;
 
-    DbCursorOpen(&cursor, 0x4C43444C, 0x494C4344, 0, 0, fn_8022F3D4(fn_8022F358(index)));
+    DbCursorOpen(&cursor, 0x4C43444C, 0x494C4344, 0, 0, DbUserGetDb(DbUserGetId(index)));
     if (DbCursorFindValue(&cursor, 0x494C4344, a, 0, 0)) {
         result = DbCursorGetInt(&cursor, 0x574E5247) != 0;
     }
@@ -66,7 +66,7 @@ void DecalClearNew(int index, int a)
 {
     DbCursor cursor;
 
-    DbCursorOpen(&cursor, 0x4C43444C, 0x494C4344, 0, 0, fn_8022F3D4(fn_8022F358(index)));
+    DbCursorOpen(&cursor, 0x4C43444C, 0x494C4344, 0, 0, DbUserGetDb(DbUserGetId(index)));
     if (DbCursorFindValue(&cursor, 0x494C4344, a, 0, 0)) {
         DbCursorSetInt(&cursor, 0x574E5247, 0);
     }
@@ -78,7 +78,7 @@ int DecalFindIndex(int index, int a)
     DbCursor cursor;
     int value;
     int found;
-    int handle = fn_8022F3D4(fn_8022F358(index));
+    int handle = DbUserGetDb(DbUserGetId(index));
     DbFilter arg;
 
     arg.Set(6, 0x4C43444C4C4C4344LL, 3);
@@ -96,7 +96,7 @@ int DecalGetIdAt(int index, int a)
 {
     int result = 0x1F;
     DbCursor cursor;
-    int handle = fn_8022F3D4(fn_8022F358(index));
+    int handle = DbUserGetDb(DbUserGetId(index));
     DbFilter arg;
 
     arg.Set(6, 0x4C43444C4C4C4344LL, 3);

@@ -39,7 +39,7 @@ double fabs(double);
 
 void BootHandleReset(void);
 int MainFEGroupIsFirstStart(void *p);
-void fn_8000FCD4(int a);
+void MsgMainMenuSetActivePad(int a);
 void PlyrNameTagInit(int handle);
 void PlyrNameTagShutdown(void);
 void InGameStateReset(void);
@@ -80,7 +80,7 @@ void CamDestroy(void *p);
 void CamSetZScale(void *p, float a);
 void CamFreeSetPos(void *p, float a, float b, float c);
 void CamFreeSetAngle(void *p, int a, int b, int c);
-void fn_801CD2A4(void);
+void FontResetRenderState(void);
 void GlibSwapBuffers(void);
 void GlibSyncFrame(void);
 void GlibSetZBufferEnable(int a);
@@ -128,11 +128,11 @@ void fn_80220CDC(int a);
 void fn_80220CFC(int a);
 void fn_80220D04(void);
 void fn_802212C8(void);
-void fn_80222220(void);
+void UIGLibTextObjAction(void);
 void UIGCurveObjAction(void);
 void fn_80225654(void);
-void fn_802363B0(Viewport_t *pObject);
-void fn_802363E0(Viewport_t *pObject);
+void LLLightAttachViewport(Viewport_t *pObject);
+void LLLightDetachViewport(Viewport_t *pObject);
 int LLFogEnable(int a);
 }
 
@@ -200,7 +200,7 @@ void UISGameSetCallbacks(void *p)
     fn_80218AD4(p, 5, UISTextTableAction);
     fn_80218AD4(p, 6, UISModelObjAction);
     fn_80218AD4(p, 7, UISGameObjSlot7);
-    fn_80218AD4(p, 8, fn_80222220);
+    fn_80218AD4(p, 8, UIGLibTextObjAction);
 }
 
 int UISGameDrawObj(int a, int b)
@@ -210,7 +210,7 @@ int UISGameDrawObj(int a, int b)
     UISGameSetDrawMode(0);
     TeamLogoUpdatePending();
     GlibSetZBufferEnable(0);
-    fn_801CD2A4();
+    FontResetRenderState();
     if (FELoopIsMainFEActive()) {
         UIGLibraryProcess(UIGLibraryGetGlobal(1));
     }
@@ -636,7 +636,7 @@ void UISGameInit(void)
             UISGameRefKey(11);
             UISGameRefKey(12);
             UISGameRefKey(13);
-            fn_802363B0(_UISGame_pMainVpt);
+            LLLightAttachViewport(_UISGame_pMainVpt);
         }
         UISHeldObjEnable(1);
     } else if (InGameIsPlaying()) {
@@ -728,7 +728,7 @@ void UISGameShutdown(void)
 
     if (FELoopIsMainFEActive()) {
         if (!flag) {
-            fn_802363E0(_UISGame_pMainVpt);
+            LLLightDetachViewport(_UISGame_pMainVpt);
         }
     } else if (InGameIsPlaying()) {
         PlyrNameTagShutdown();
@@ -793,7 +793,7 @@ void UISGameHandleInput(int a, unsigned int id, float value)
         }
         if (UISGameRepeatInput(&a, &id, &value)) {
             if ((id == 7 || id == 0) && FELoopIsMainFEActive()) {
-                fn_8000FCD4(a);
+                MsgMainMenuSetActivePad(a);
             }
             fn_802196B4(gUISMainInfo, a, id, 1, &value, _UISGame_bInputFlag);
         }

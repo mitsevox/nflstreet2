@@ -72,7 +72,7 @@ struct Weight_80042530 {
 };
 
 /* 0x34-byte record copied by TMModelClone; the static at 0x80365D54 in
-   src/game/cu_801A14D8.cpp has the same layout. */
+   src/game/PlyrRender.cpp has the same layout. */
 struct Record_8020F2C4 {
     int mUnknown0;
     char mUnknown4[24];
@@ -86,7 +86,7 @@ struct Block_8003DEC4 {
     Record_8020F2C4 mUnknown16;
 };
 
-struct Slot_801A3284;
+struct PlyrRenderSlot_t;
 
 /* Joint list of a model: four bytes per joint, the first a joint kind. The list is a variable-length
    array at the start of the table (indexing it as an array member keeps base-first indexed loads). */
@@ -159,7 +159,7 @@ struct Projection_8003BA10 {
     unsigned char mUnknown673;
 };
 
-/* Object returned by fn_8003DEC4 (0x19F0 bytes, the size PlayerObjAddObjType passes
+/* Object returned by PlyrObjsGet (0x19F0 bytes, the size PlayerObjAddObjType passes
    to ObjNewType_). */
 struct Object_8003DEC4 {
     char mUnknown0[4];
@@ -206,7 +206,7 @@ struct Object_8003DEC4 {
         int mUnknown1016;
         int mUnknown1020;
         Block_8003DEC4 mUnknown1024[2];
-        Slot_801A3284 *mUnknown1160;
+        PlyrRenderSlot_t *mUnknown1160;
         Part_8003DEC4 mUnknown1164[12];
         char mUnknown4044[16];
         ModelTexSlot_t *mUnknown4060;
@@ -232,10 +232,10 @@ struct Object_8003DEC4 {
 };
 
 extern "C" {
-Object_8003DEC4 *fn_8003DEC4(int index);
+Object_8003DEC4 *PlyrObjsGet(int index);
 /* The callers zero-extend the index to 8 bits (clrlwi r4,r31,24 at
    0x800A926C). */
-Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index);
+Object_8003DEC4 *PlyrObjsGetBySide(int side, unsigned char index);
 void ParticleTrailStartAfterimage(Object_8003DEC4 *pObject);
 /* Callback registered by PlayerObjAddObjType through ObjSetListObjFunc; its second
    argument is not read. */

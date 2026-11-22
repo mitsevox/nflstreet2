@@ -28,8 +28,8 @@ extern unsigned short lbl_80383D20[16];
 extern unsigned short lbl_80383D40[16];
 extern GXTlutObj lbl_80383D60;
 extern GXTlutObj lbl_80383D80;
-extern FontRenderState_801CCA64 lbl_803E7600;
-extern FontQuad_801CCA64 lbl_803E763C[];
+extern FontRenderState_t lbl_803E7600;
+extern FontQuad_t lbl_803E763C[];
 
 /* The four corners of one glyph quad: positions, then texture coordinates. */
 typedef struct FontVerts_801CD79C {
@@ -43,7 +43,7 @@ static float FontLLTexelToUV(unsigned int texel, float size)
     return texel / size;
 }
 
-static void _FontLLSetupGlyph(Font_801CCA64 *pFont, FontVerts_801CD79C *pVerts, FontQuad_801CCA64 *pQuad)
+static void _FontLLSetupGlyph(Font_t *pFont, FontVerts_801CD79C *pVerts, FontQuad_t *pQuad)
 {
     float texWidth;
     float texHeight;
@@ -89,8 +89,8 @@ static inline void _FontLLSendQuad(FontVerts_801CD79C *pVerts, GXColor *pColor)
     GXTexCoord2f32(pVerts->mUV[3][0], pVerts->mUV[3][1]);
 }
 
-static int _FontLLRender(int state, Font_801CCA64 *pFont, FontQuad_801CCA64 *pQuads, unsigned int count,
-                       FontColor_801CCA64 *pColor, int unused)
+static int _FontLLRender(int state, Font_t *pFont, FontQuad_t *pQuads, unsigned int count,
+                       FontColor_t *pColor, int unused)
 {
     FontVerts_801CD79C verts;
     GXColor color;
@@ -109,15 +109,15 @@ static int _FontLLRender(int state, Font_801CCA64 *pFont, FontQuad_801CCA64 *pQu
     return state;
 }
 
-int fn_801CDB5C(Font_801CCA64 *pFont, const char *pText, unsigned int flags, float maxWidth, float *pPos)
+int fn_801CDB5C(Font_t *pFont, const char *pText, unsigned int flags, float maxWidth, float *pPos)
 {
-    FontQuad_801CCA64 *pQuads = lbl_803E763C;
+    FontQuad_t *pQuads = lbl_803E763C;
     float mtx[4][4];
     unsigned int count;
     int state = 0;
 
     count = 0;
-    fn_801CD3E4(pFont, pText, flags, maxWidth, pQuads, &count);
+    FontDrawText(pFont, pText, flags, maxWidth, pQuads, &count);
     if (count) {
         MatSetStack(VptGetMatrixStack());
         MatPush();
@@ -205,7 +205,7 @@ void fn_801CDFE4(void *pTlut0, void *pTlut1, void *pTlut2)
 {
 }
 
-void fn_801CDFE8(Font_801CCA64 *pFont, void *pTlut0, void *pTlut1, void *pTlut2, int a)
+void fn_801CDFE8(Font_t *pFont, void *pTlut0, void *pTlut1, void *pTlut2, int a)
 {
     FontTexInfo_801CDB5C info;
 
@@ -223,13 +223,13 @@ void fn_801CDFE8(Font_801CCA64 *pFont, void *pTlut0, void *pTlut1, void *pTlut2,
     }
 }
 
-void fn_801CE108(Font_801CCA64 *pFont)
+void fn_801CE108(Font_t *pFont)
 {
     if (pFont->mpTexObj) {
         fn_801D2BD0(pFont->mpTexObj);
     }
 }
 
-void fn_801CE134(Font_801CCA64 *pFont)
+void fn_801CE134(Font_t *pFont)
 {
 }

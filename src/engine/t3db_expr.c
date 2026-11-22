@@ -5,7 +5,7 @@
 #include "engine/t3db.h"
 
 
-extern double fn_8025FBD4(double x);
+extern double sqrt(double x);
 typedef void (*TDbOpFunc_t)(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r);
 
 
@@ -18,37 +18,37 @@ static void _TDbOpNone(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)
 static void _TDbOpRelatLT_STRING(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)
 {
     r->mType = TDB_TYPE_UINT;
-    r->mValue.u = lbl_803EBE74(a->mValue.s, b->mValue.s, a->mSize) == -1;
+    r->mValue.u = TDbStrncmp(a->mValue.s, b->mValue.s, a->mSize) == -1;
 }
 
 static void _TDbOpRelatLE_STRING(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)
 {
     r->mType = TDB_TYPE_UINT;
-    r->mValue.u = lbl_803EBE74(a->mValue.s, b->mValue.s, a->mSize) != 1;
+    r->mValue.u = TDbStrncmp(a->mValue.s, b->mValue.s, a->mSize) != 1;
 }
 
 static void _TDbOpRelatEQ_STRING(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)
 {
     r->mType = TDB_TYPE_UINT;
-    r->mValue.u = lbl_803EBE74(a->mValue.s, b->mValue.s, a->mSize) == 0;
+    r->mValue.u = TDbStrncmp(a->mValue.s, b->mValue.s, a->mSize) == 0;
 }
 
 static void _TDbOpRelatGT_STRING(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)
 {
     r->mType = TDB_TYPE_UINT;
-    r->mValue.u = lbl_803EBE74(a->mValue.s, b->mValue.s, a->mSize) == 1;
+    r->mValue.u = TDbStrncmp(a->mValue.s, b->mValue.s, a->mSize) == 1;
 }
 
 static void _TDbOpRelatGE_STRING(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)
 {
     r->mType = TDB_TYPE_UINT;
-    r->mValue.u = lbl_803EBE74(a->mValue.s, b->mValue.s, a->mSize) != -1;
+    r->mValue.u = TDbStrncmp(a->mValue.s, b->mValue.s, a->mSize) != -1;
 }
 
 static void _TDbOpRelatNE_STRING(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)
 {
     r->mType = TDB_TYPE_UINT;
-    r->mValue.u = lbl_803EBE74(a->mValue.s, b->mValue.s, a->mSize) != 0;
+    r->mValue.u = TDbStrncmp(a->mValue.s, b->mValue.s, a->mSize) != 0;
 }
 
 static void _TDbOpLogicAND_STRING(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)
@@ -430,7 +430,7 @@ static void _TDbOpFMathROUND_FLOAT(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)
 static void _TDbOpFMathSQRT_FLOAT(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)
 {
     r->mType = TDB_TYPE_FLOAT;
-    r->mValue.f = fn_8025FBD4(a->mValue.f);
+    r->mValue.f = sqrt(a->mValue.f);
 }
 
 static void _TDbOpFMathMKPCT_FLOAT(TDbValue_t *a, TDbValue_t *b, TDbValue_t *r)

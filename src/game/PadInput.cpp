@@ -22,7 +22,7 @@ void PerCheckConnectSingle(unsigned char a);
 int PerIsDeviceConnected(unsigned char a);
 int RemapSetupEntries(int a, int b, int count, char *p);
 float RemapCheckEntry(int a, int b, char *p);
-int fn_8023790C(void);
+int SyncTimeGetGameTime(void);
 }
 
 static char *_PadInput_apRemapStandard[4] = {lbl_802EC198, lbl_802EC198, lbl_802EC198, lbl_802EC198};
@@ -126,7 +126,7 @@ void PadInputRead(int slot, InputValues *pPrevious, InputValues *pCurrent)
     int handle;
     int ready;
 
-    fn_8023790C();
+    SyncTimeGetGameTime();
     handle = ConGetChannelInfo(slot, 0);
     ready = PadInputIsDeviceReady(handle);
     if (ready) {

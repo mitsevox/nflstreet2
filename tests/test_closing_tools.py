@@ -218,6 +218,30 @@ class ConstantCheck(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'f uses .rodata\\+0x0'):
             function_compare.check_literals('src/x.c', 'f', [('.rodata', (0, 4))], swapped, bytes(dol))
 
+    def test_item_outside_the_linked_section_fails_closed(self):
+        # A 0x100-byte .data whose linked bytes are all wrong, in a DOL that loads well past it. A base
+        # formed past the section with unknown uses (span None) gives an empty item past the end.
+        dol = bytearray(0x100 + 0x9000)
+        struct.pack_into('>I', dol, 0, 0x100)
+        struct.pack_into('>I', dol, 0x48, 0x80003100)
+        struct.pack_into('>I', dol, 0x90, 0x9000)
+        dol[0x100:0x200] = b'\x11' * 0x100
+        resolved = {'.data': (0x80003100, b'\x22' * 0x100)}
+        sections = [{'name': '.data', 'index': 1, 'size': 0x100}]
+        item = function_compare.literal_extent(sections, [], [], '.data', 0x8100, None, bytes(dol[0x100:0x200]))
+        self.assertEqual(item, (0x8100, 0x100))
+        outside = 'do not lie inside its 0x100 linked bytes'
+        for reason, extent in {'past the end, unknown use': item, 'empty': (0x80, 0x80), 'below the start': (-4, 0),
+                               'straddling the end': (0xFC, 0x104)}.items():
+            with self.subTest(reason), self.assertRaisesRegex(ValueError, outside):
+                function_compare.check_literals('src/x.c', 'f', [('.data', extent)], resolved, bytes(dol))
+        # An item inside the section is still compared, and one the original does not load fails cleanly.
+        with self.assertRaisesRegex(ValueError, 'which holds 22222222 where the original holds 11111111'):
+            function_compare.check_literals('src/x.c', 'f', [('.data', (0, 4))], resolved, bytes(dol))
+        with self.assertRaisesRegex(ValueError, 'which the original does not load'):
+            function_compare.check_literals('src/x.c', 'f', [('.data', (0, 4))], {'.data': (0x90000000, b'\x22' * 0x100)},
+                                            bytes(dol))
+
 
 class DumpFlag(unittest.TestCase):
     def options(self, *extra):
@@ -306,6 +330,44 @@ class SiblingTables(unittest.TestCase):
         starts = [int(line.split('\t')[0], 16) for line in lines[1:]]
         self.assertEqual(starts, sorted(starts))
         self.assertEqual(len(starts), len(set(starts)), 'one row per GameCube function')
+
+
+class FileStaticReport(unittest.TestCase):
+    """A report unit whose .sbss file statics the storage map places (source_build.common_object),
+    beside a .bss placed as one configured range."""
+
+    def test_files_closed_locates_mapped_statics_at_their_rows(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            native = root / 'build/source/obj/unit000_src_unit_c.o'
+            native.parent.mkdir(parents=True)
+            nobits = [{'name': name, 'type': sb.SHT_NOBITS, 'flags': sb.SHF_ALLOC | sb.SHF_WRITE, 'size': 8, 'align': 4}
+                      for name in ('.sbss', '.bss')]
+            sb.write_object(native, nobits, [
+                {'name': 's_Mapped', 'value': 4, 'size': 4, 'shndx': 1, 'bind': sb.STB_LOCAL},
+                {'name': 's_Unmapped', 'value': 0, 'size': 4, 'shndx': 1, 'bind': sb.STB_LOCAL},
+                {'name': 's_Placed', 'value': 4, 'size': 4, 'shndx': 2, 'bind': sb.STB_LOCAL}])
+            unit = {'source': 'src/unit.c', 'native_object_sha256': sb.sha256(native), 'functions': [],
+                    'sections': [{'section': '.bss', 'start': '0x80005000', 'end': '0x80005008', 'compiled': 8}],
+                    'storage': {'s_Mapped': '0x803EC010', 's_Placed': '0x80006000'}}
+            with patch.object(files_closed, 'ROOT', root):
+                labels = sorted(files_closed.unit_labels(0, unit))
+            # A row locates a static of an unplaced section; a placed section's static stays at its
+            # placement, and an unmapped static of an unplaced section stays unlocated.
+            self.assertEqual(labels, [('s_Mapped', 0x803EC010, False), ('s_Placed', 0x80005004, False),
+                                      ('s_Unmapped', None, False)])
+
+    def test_trial_binds_mapped_statics_and_refuses_unmapped_ones(self):
+        import trial
+        sections = [{'index': 1, 'name': '.sbss', 'type': sb.SHT_NOBITS, 'flags': sb.SHF_ALLOC},
+                    {'index': 2, 'name': '.bss', 'type': sb.SHT_NOBITS, 'flags': sb.SHF_ALLOC}]
+        symbols = [{'name': 's_Mapped', 'value': 4, 'size': 4, 'shndx': 1, 'type': 0, 'bind': sb.STB_LOCAL},
+                   {'name': 's_Placed', 'value': 4, 'size': 4, 'shndx': 2, 'type': 0, 'bind': sb.STB_LOCAL}]
+        placements = {'.bss': {'start': 0x80005000}}
+        self.assertEqual(trial.linked_storage(sections, symbols, placements, {'s_Mapped': 0x803EC010}),
+                         {0: 0x803EC010, 1: 0x80005004})
+        with self.assertRaisesRegex(SystemExit, 'file static s_Mapped is not in the build'):
+            trial.linked_storage(sections, symbols, placements, {})
 
 
 class HoldoutReport(unittest.TestCase):

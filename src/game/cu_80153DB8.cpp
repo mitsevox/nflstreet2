@@ -4,7 +4,7 @@
 #include "game/AudmonEvent.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 class Class_802A1B18 : public Class_80297B50 {
 };
@@ -34,7 +34,7 @@ void PlayBookLoadAudibles(int team);
 void fn_800AD910(int a, float b);
 void fn_8009D888(int index, int value);
 void CamGameResumeAll(void);
-void fn_8016DDDC(int team);
+void ScrmTeamPlaceInHuddle(int team);
 void fn_801790D0(int team, float a, float b);
 int fn_801787A0(void);
 void HudShowAlert(const char *pText);
@@ -51,7 +51,7 @@ void fn_80153DBC(Class_802A1B18 *p, float dt)
 {
     int team = fn_80178308();
     int other = !team;
-    unsigned int flag = fn_802372EC(0, 100) & 1;
+    unsigned int flag = SyncRandGetRange(0, 100) & 1;
 
     PlayBookSetFormationType(team, 1);
     PlayBookSetFormationType(other, 11);
@@ -70,8 +70,8 @@ void fn_80153EA8(Class_802A1B18 *p)
 {
     fn_8009D888(0, 10);
     CamGameResumeAll();
-    fn_8016DDDC(fn_80178308());
-    fn_8016DDDC(fn_80178320());
+    ScrmTeamPlaceInHuddle(fn_80178308());
+    ScrmTeamPlaceInHuddle(fn_80178320());
     fn_801790D0(fn_80178308(), 0.0f, 0.0f);
     fn_801790D0(fn_80178320(), 18.0f, 0.0f);
 }

@@ -298,9 +298,6 @@ def load_manifest(manifest, sections, compiler_version, comparisons=None, eviden
         storage = storage_symbols(unit.get("storage"), sections, unit["source"])
         for name, (start, end) in (storage or {}).items():
             ranges.append((start, end, f"{unit['source']} storage {name}"))
-        kept = kept_symbols(unit.get("kept_locals"), placed, unit["source"])
-        if folded and kept and set(folded) & set(kept):
-            raise ValueError(f"{unit['source']}: a symbol cannot be both folded and kept")
         holdouts = None
         if "holdouts" in unit:
             if comparisons is None:
@@ -310,6 +307,9 @@ def load_manifest(manifest, sections, compiler_version, comparisons=None, eviden
             holdouts = holdout_functions(unit, placed, comparisons, evidence, by_name)
             for row in holdouts:
                 ranges.append((row["start"], row["end"], f"{unit['source']} holdout {row['symbol']}"))
+        kept = kept_symbols(unit.get("kept_locals"), placed, unit["source"], holdouts)
+        if folded and kept and set(folded) & set(kept):
+            raise ValueError(f"{unit['source']}: a symbol cannot be both folded and kept")
         # Owner ruling of 2026-11-20: -ffunction-sections comes from a named profile, never from
         # the tool. A holdouts unit needs such a ProDG profile, and only a holdouts unit may use one
         # (its code is linked from the derived object's runs, not from per-function sections).
@@ -384,26 +384,29 @@ def folded_symbols(folded, placed, source):
 
 
 def storage_symbols(storage, sections, source):
-    """Validate a unit's COMMON storage map; return {name: (start, end)} or None.
+    """Validate a unit's storage map; return {name: (start, end)} or None.
 
     `storage` lists {"symbol", "start", "end"} rows. A COMMON symbol has no section, so the
     original linker chose its address: after every file's .bss, or among one file's own
-    uninitialized objects. Each row gives one such symbol the target extent an evidenced storage
-    map records for it. The extent lies in one uninitialized or initialized data section, outside
-    every configured range (load_manifest checks overlaps), and plan() checks it against the
-    compiled object; build() checks it against the evidence table."""
+    uninitialized objects. A file static (a local object in the file's .bss or .sbss) may be
+    mapped too, when the target interleaves that section's objects with other storage so that
+    the section cannot be placed as one range (owner ruling of 2026-11-20 on #1368, questions 1
+    and 5). Each row gives one such symbol the target extent an evidenced storage map records
+    for it. The extent lies in one uninitialized or initialized data section, outside every
+    configured range (load_manifest checks overlaps); common_object and plan() check it against
+    the compiled object, and build() checks it against the evidence table."""
     if storage is None:
         return None
     if not isinstance(storage, list) or not storage:
-        raise ValueError(f"{source}: storage must list COMMON symbols with their target extents")
+        raise ValueError(f"{source}: storage must list COMMON symbols or file statics with their target extents")
     result = {}
     for row in storage:
         if not isinstance(row, dict) or set(row) != {"symbol", "start", "end"} \
                 or not isinstance(row["symbol"], str) or not row["symbol"]:
             raise ValueError(f"{source}: storage rows need symbol, start and end")
         name = row["symbol"]
-        if NEUTRAL.fullmatch(name) or name in LINKER_SYMBOLS or name.startswith("__original_"):
-            raise ValueError(f"{source}: storage symbol {name} must be the compiled COMMON name")
+        if NEUTRAL.fullmatch(name) or name in LINKER_SYMBOLS or name.startswith(("__original_", "__storage_")):
+            raise ValueError(f"{source}: storage symbol {name} must be the compiled COMMON or file-static name")
         if name in result:
             raise ValueError(f"{source}: duplicate storage symbol {name}")
         start, end = address(row["start"]), address(row["end"])
@@ -414,22 +417,44 @@ def storage_symbols(storage, sections, source):
     return result
 
 
+def storage_reference(start):
+    """The undefined global a mapped file static's references name; plan() defines it at `start`."""
+    return f"__storage_{start:08X}"
+
+
 def common_object(native, storage, output, source):
-    """Model the original linker's allocation of a unit's mapped COMMON symbols.
+    """Model the original linker's allocation of a unit's mapped COMMON symbols and file statics.
 
     Every COMMON symbol of the object must have exactly one storage row, at its compiled size
-    and COMMON alignment (the symbol value), and every row must name such a symbol. The derived
-    object differs from `native` only in those symbol table entries: each becomes an undefined
-    global reference, which the link resolves to the definition plan() places at its storage
-    address. Relocations, section bytes and every other symbol are unchanged. (ngcld 3.9.3 links
-    a COMMON symbol against such a definition but warns, L0016, when the COMMON is small enough
-    for small data and the definition lies outside a small-data section.) Writes `output`."""
+    and COMMON alignment (the symbol value), and every row must name such a symbol or a mapped
+    file static. In the derived object each mapped COMMON symbol's table entry becomes an
+    undefined global reference, which the link resolves to the definition plan() places at its
+    storage address. (ngcld 3.9.3 links a COMMON symbol against such a definition but warns,
+    L0016, when the COMMON is small enough for small data and the definition lies outside a
+    small-data section.)
+
+    A file static is a local, sized, untyped or object symbol of an uninitialized (.bss/.sbss)
+    section. Its row must give its compiled size, at its compiled alignment (the section's, or
+    the largest power of two dividing its offset when that is smaller). Mapping one file static
+    of a section maps the section: every other symbol defined in it must be a mapped file static
+    too (the section is placed by the map, never also as a configured range), and every
+    relocation that reaches the section, through a static or the section symbol, must land
+    inside one mapped static's extent; it is redirected to a new undefined global
+    `__storage_<start>` with the offset into the static as its addend, which plan() defines at
+    the static's target start. The section's size becomes 0 and its alignment 1, and the statics
+    become local absolute symbols at their target addresses, so the linker allocates nothing for
+    them and cannot pad the output section for them either.
+    Section bytes, other relocations and every other symbol are unchanged. Writes `output` and
+    returns {static name: compiled section name}."""
     data = bytearray(native)
     sections, symbols = read_elf(bytes(data))
     tables = [section for section in sections if section["type"] == SHT_SYMTAB]
     if len(tables) != 1:
-        raise ValueError(f"{source}: COMMON storage requires exactly one symbol table")
-    commons = {}
+        raise ValueError(f"{source}: storage requires exactly one symbol table")
+    symtab, strtab = tables[0], sections[tables[0]["link"]]
+    commons, statics = {}, {}
+    nobits = {section["index"]: section for section in sections
+              if section["type"] == SHT_NOBITS and section["flags"] & SHF_ALLOC}
     for index, symbol in enumerate(symbols, 1):
         if symbol["shndx"] != SHN_COMMON:
             continue
@@ -441,14 +466,72 @@ def common_object(native, storage, output, source):
                 or start % max(symbol["value"], 1):
             raise ValueError(f"{source}: storage {name} differs from its compiled COMMON size or alignment")
         commons[name] = index
-    if set(storage) != set(commons):
-        raise ValueError(f"{source}: storage names a symbol that is not a compiled COMMON symbol: "
-                         f"{sorted(set(storage) - set(commons))}")
+    for name in sorted(set(storage) - set(commons), key=lambda name: storage[name]):
+        found = [index for index, symbol in enumerate(symbols, 1) if symbol["name"] == name]
+        symbol = symbols[found[0] - 1] if len(found) == 1 else None
+        section = nobits.get(symbol["shndx"]) if symbol else None
+        if symbol is None or section is None or symbol["bind"] != STB_LOCAL \
+                or symbol["type"] not in (0, STT_OBJECT) or not symbol["size"] \
+                or symbol["value"] + symbol["size"] > section["size"]:
+            raise ValueError(f"{source}: storage names a symbol that is not a compiled COMMON symbol "
+                             f"or file static: {name}")
+        start, end = storage[name]
+        align = max(section["align"], 1)
+        if symbol["value"]:
+            align = min(align, symbol["value"] & -symbol["value"])
+        if end - start != symbol["size"] or start % align:
+            raise ValueError(f"{source}: storage {name} differs from its compiled size or alignment")
+        statics[found[0]] = (name, symbol, section, len(symbols) + 1 + len(statics))
+    mapped = {section["index"] for _, _, section, _ in statics.values()}
+    for index, symbol in enumerate(symbols, 1):
+        if symbol["shndx"] in mapped and symbol["type"] != STT_SECTION and index not in statics:
+            section = nobits[symbol["shndx"]]["name"]
+            raise ValueError(f"{source}: file static {symbol['name'] or '(unnamed)'} in {section} has no "
+                             f"placement; a section with mapped file statics is placed wholly by the map")
+    if statics:
+        extents = sorted(statics.items(), key=lambda item: item[1][1]["value"])
+        for section in sections:
+            if section["type"] == 9 and sections[section["info"]]["flags"] & SHF_ALLOC:
+                raise ValueError(f"{source}: file-static storage requires explicit-addend relocations")
+            if section["type"] != 4:
+                continue
+            for at in range(section["offset"], section["offset"] + section["size"], 12):
+                site, info, addend = struct.unpack_from(">IIi", data, at)
+                index = info >> 8
+                if not 0 < index <= len(symbols) or symbols[index - 1]["shndx"] not in mapped:
+                    continue
+                reached = symbols[index - 1]["value"] + addend
+                owner = next((item for number, item in extents
+                              if item[2]["index"] == symbols[index - 1]["shndx"]
+                              and (index == number or symbols[index - 1]["type"] == STT_SECTION)
+                              and item[1]["value"] <= reached < item[1]["value"] + item[1]["size"]), None)
+                if owner is None:
+                    raise ValueError(f"{source}: a relocation reaches {nobits[symbols[index - 1]['shndx']]['name']} "
+                                     "outside its mapped file statics")
+                struct.pack_into(">Ii", data, at + 4, owner[3] << 8 | info & 255, reached - owner[1]["value"])
+        for index, (name, symbol, section, _) in statics.items():
+            at = symtab["offset"] + index * 16
+            struct.pack_into(">I", data, at + 4, storage[name][0])
+            struct.pack_into(">H", data, at + 14, SHN_ABS)
+        shoff = struct.unpack_from(">I", data, 32)[0]
+        for index in mapped:
+            # Size 0 and alignment 1: the linker still sees the input section (and may place it
+            # as an orphan in the output section of its name), but it can neither take nor pad bytes.
+            struct.pack_into(">I", data, shoff + index * 40 + 20, 0)
+            struct.pack_into(">I", data, shoff + index * 40 + 32, 1)
     for index in commons.values():
-        at = tables[0]["offset"] + index * 16
+        at = symtab["offset"] + index * 16
         struct.pack_into(">II", data, at + 4, 0, 0)
         struct.pack_into(">H", data, at + 14, SHN_UNDEF)
-    Path(output).write_bytes(bytes(data))
+    if not statics:
+        Path(output).write_bytes(bytes(data))
+        return {}
+    added, names = [], b""
+    for name, _, _, _ in sorted(statics.values(), key=lambda item: item[3]):
+        added.append(struct.pack(">IIIBBH", strtab["size"] + len(names), 0, 0, STB_GLOBAL << 4, 0, SHN_UNDEF))
+        names += storage_reference(storage[name][0]).encode("ascii") + b"\0"
+    append_symbols(data, symtab, strtab, added, names, output)
+    return {name: section["name"] for name, _, section, _ in statics.values()}
 
 
 def check_storage(units, data, sections):
@@ -466,13 +549,15 @@ def check_storage(units, data, sections):
                                  "in the target")
 
 
-def kept_symbols(kept, placed, source):
+def kept_symbols(kept, placed, source, holdouts=None):
     """Validate a unit's kept local copies; return {name: address} or None.
 
     `kept_locals` is {"symbols": {name: address}, "evidence": locator}. Each name is a local
     function (or table) the unit defines at that address in its own code (or data), the one copy
     the original linker kept for the same-named references of other files; keep_object checks the
-    compiled object and plan() the placed address."""
+    compiled object and plan() the placed address. In a unit with `holdouts` (holdout_functions'
+    rows) a kept copy must be linked: in one of the code runs or a data section, never inside a
+    holdout, whose range keeps the original bytes."""
     if kept is None:
         return None
     if not isinstance(kept, dict) or set(kept) != {"symbols", "evidence"} \
@@ -484,13 +569,17 @@ def kept_symbols(kept, placed, source):
         if not name or NEUTRAL.fullmatch(name) or name in LINKER_SYMBOLS:
             raise ValueError(f"{source}: kept local {name!r} must be a descriptive name")
         result[name] = address(value)
+        for row in holdouts or ():
+            if row["start"] <= result[name] < row["end"]:
+                raise ValueError(f"{source}: kept local {name} lies in holdout {row['symbol']} "
+                                 f"0x{row['start']:08X}-0x{row['end']:08X}; a kept copy must be in a linked run")
         if not any(entry["follows"] is None and entry["start"] <= result[name] < entry["end"]
                    for entry in placed):
             raise ValueError(f"{source}: kept local {name} lies outside the unit's sections")
     return result
 
 
-def keep_object(native, kept, output, aliases=()):
+def keep_object(native, kept, output, aliases=(), runs=False):
     """Model the original linker keeping one file's local copy for other files' references.
 
     For each kept name, which must be exactly one local function (in code) or object (in data)
@@ -498,7 +587,11 @@ def keep_object(native, kept, output, aliases=()):
     appended, so other units' undefined references to the name resolve to this copy. A name in
     `aliases` is also another unit's folded duplicate of this copy and gets a second global,
     `__folded_<name>`, the name that unit's folded references use. Section bytes, relocations and
-    the existing symbols are unchanged. Writes the derived object and returns {name: (symbol, section)}."""
+    the existing symbols are unchanged. With `runs`, `native` is a holdouts unit's derived object
+    (holdout_object), whose run sections hold its local functions as untyped sized labels; such a
+    label in a run is a kept function, and its global copy is typed as one. A holdout's own
+    symbols are gone from that object, so a holdout cannot be kept. Writes the derived object and
+    returns {name: (symbol, section)}."""
     data = bytearray(native)
     sections, symbols = read_elf(bytes(data))
     tables = [section for section in sections if section["type"] == SHT_SYMTAB]
@@ -510,15 +603,19 @@ def keep_object(native, kept, output, aliases=()):
         found = [symbol for symbol in symbols if symbol["name"] == name]
         symbol = found[0] if len(found) == 1 else None
         section = sections[symbol["shndx"]] if symbol and 0 < symbol["shndx"] < len(sections) else None
-        if symbol is None or symbol["bind"] != STB_LOCAL or symbol["type"] not in (STT_FUNC, STT_OBJECT) \
+        kind = symbol["type"] if symbol else None
+        if runs and kind == 0 and section is not None and section["flags"] & SHF_EXECINSTR \
+                and section["name"].startswith(".text.holdout_run_"):
+            kind = STT_FUNC
+        if symbol is None or symbol["bind"] != STB_LOCAL or kind not in (STT_FUNC, STT_OBJECT) \
                 or section is None or section["type"] != SHT_PROGBITS or not section["flags"] & SHF_ALLOC \
-                or bool(section["flags"] & SHF_EXECINSTR) != (symbol["type"] == STT_FUNC) \
+                or bool(section["flags"] & SHF_EXECINSTR) != (kind == STT_FUNC) \
                 or not symbol["size"] or symbol["value"] + symbol["size"] > section["size"]:
             raise ValueError(f"Kept local {name} is not one local function or object defined in the unit")
         result[name] = (symbol, section)
         for alias in [name] + ([folded_reference(name)] if name in aliases else []):
             added.append(struct.pack(">IIIBBH", strtab["size"] + len(names), symbol["value"], symbol["size"],
-                                     STB_GLOBAL << 4 | symbol["type"], 0, symbol["shndx"]))
+                                     STB_GLOBAL << 4 | kind, 0, symbol["shndx"]))
             names += alias.encode("ascii") + b"\0"
     append_symbols(data, symtab, strtab, added, names, output)
     return result
@@ -705,9 +802,9 @@ def holdout_functions(unit, placed, comparisons, evidence, by_name):
                               or not link_root_names(roots["discarded"])):
         raise ValueError(f"{source}: a holdouts unit's link_roots are a non-empty list of distinct discarded "
                          "functions and evidence, without symbols")
-    for key in ("folded", "kept_locals"):
-        if key in unit:
-            raise ValueError(f"{source}: holdouts cannot be combined with {key}")
+    # kept_locals may go with holdouts (each use needs its own owner approval); folded may not.
+    if "folded" in unit:
+        raise ValueError(f"{source}: holdouts cannot be combined with folded")
     rows = [row for entry in comparisons.get("units", []) if entry.get("source") == source
             for row in entry.get("functions", [])]
     result = []
@@ -1111,6 +1208,11 @@ def plan(sections, units, objects, externals):
         elf_sections, symbols = objects[unit["source"]]
         # A unit with holdouts links each code run from its own section of the derived object.
         mapped = {entry.get("input", entry["section"]): entry for entry in unit["sections"]}
+        # A section whose file statics the storage map places (common_object) has no range of its own.
+        for name, compiled in (unit.get("statics") or {}).items():
+            if compiled in mapped:
+                raise ValueError(f"{unit['source']}: {compiled} is placed by the storage map (file static "
+                                 f"{name}) and cannot also have a configured range")
         for section in elf_sections:
             if not section["flags"] & SHF_ALLOC or (not section["size"] and section["name"] not in mapped):
                 continue
@@ -1163,8 +1265,18 @@ def plan(sections, units, objects, externals):
                                  f"before {entry['section']} is not zero")
         by_index = {entry["index"]: entry for entry in unit["sections"]}
         # Mapped COMMON symbols are undefined references in the link object (common_object), and
-        # the unit defines them at their storage addresses.
-        for name, (start, _) in (unit.get("storage") or {}).items():
+        # the unit defines them at their storage addresses; a mapped file static's references name
+        # `__storage_<start>` instead, which stays private to the unit. A file static lies in a
+        # target section of its compiled section's uninitialized kind and name (.sbss in .sbss).
+        for name, (start, end) in (unit.get("storage") or {}).items():
+            compiled = (unit.get("statics") or {}).get(name)
+            if compiled is not None:
+                holder = next((s for s in sections if s["start"] <= start < end <= s["end"]), None)
+                if holder is None or holder["kind"] != "bss" or holder["name"] != compiled:
+                    where = holder["name"] if holder else "outside every target section"
+                    raise ValueError(f"{unit['source']}: file static {name} of {compiled} must lie in the "
+                                     f"uninitialized target section {compiled}, not {where}")
+                name = storage_reference(start)
             if name in defined or name in externals:
                 raise ValueError(f"{unit['source']}: symbol {name} is already defined elsewhere")
             defined[name] = (start, unit["source"])
@@ -1209,6 +1321,8 @@ def plan(sections, units, objects, externals):
                          if "unit" not in piece and piece["start"] <= start < end <= piece["end"]), None)
             if owner is None:
                 raise ValueError(f"{unit['source']}: storage {name} lies inside a source unit's range")
+            if name in (unit.get("statics") or {}):
+                name = storage_reference(start)
             owner["symbols"].append({"name": name, "value": start - owner["start"]})
     # A global holdout's name resolves to its target address for every unit, as its definition
     # in the original bytes there; references inside its own unit name `__holdout_<start>`.
@@ -1499,11 +1613,12 @@ def link_object(unit, aliases=()):
             raise ValueError(f"{unit['source']}: a folded function needs link_roots so the linker drops its body")
     if unit.get("storage"):
         derived = unit["object"].with_suffix(".common.o")
-        common_object(unit["link_object"].read_bytes(), unit["storage"], derived, unit["source"])
+        unit["statics"] = common_object(unit["link_object"].read_bytes(), unit["storage"], derived, unit["source"])
         unit["link_object"] = derived
     if unit.get("kept_locals"):
         derived = unit["link_object"].with_suffix(".kept.o")
-        keep_object(unit["link_object"].read_bytes(), unit["kept_locals"], derived, aliases)
+        keep_object(unit["link_object"].read_bytes(), unit["kept_locals"], derived, aliases,
+                    runs=bool(unit.get("holdouts")))
         unit["link_object"] = derived
     unit["link_object_sha256"] = sha256(unit["link_object"])
 
@@ -1876,12 +1991,14 @@ def link_holdout(unit, row, native, elf_sections, symbols, functions, target, se
     targets.update({row["symbol"]: (row["start"], row["end"]) for row in unit["holdouts"]})
     placements = {entry["section"]: entry for entry in unit["sections"] if not entry.get("input")}
     storage = None
-    if any(symbol["shndx"] == SHN_COMMON for symbol in symbols):
-        # Mapped COMMON symbols, and then each uninitialized object, resolve one by one.
+    if any(symbol["shndx"] == SHN_COMMON for symbol in symbols) or unit.get("statics"):
+        # Mapped COMMON symbols and file statics, and then each uninitialized object, resolve one by one.
         nobits = {s["index"]: s["name"] for s in elf_sections if s["type"] == SHT_NOBITS and s["flags"] & SHF_ALLOC}
         storage = {}
         for index, symbol in enumerate(symbols):
-            if symbol["shndx"] == SHN_COMMON and symbol["name"] in (unit.get("storage") or {}):
+            mapped = symbol["shndx"] == SHN_COMMON or (symbol["shndx"] in nobits and symbol["bind"] == STB_LOCAL
+                                                      and symbol["name"] in (unit.get("statics") or {}))
+            if mapped and symbol["name"] in (unit.get("storage") or {}):
                 storage[index] = unit["storage"][symbol["name"]][0]
             elif symbol["shndx"] in nobits and symbol["size"] and nobits[symbol["shndx"]] in placements:
                 storage[index] = placements[nobits[symbol["shndx"]]]["start"] + symbol["value"]

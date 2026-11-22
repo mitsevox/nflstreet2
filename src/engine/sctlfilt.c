@@ -12,7 +12,7 @@ int SNDCTRL_filteradd(int handle, Desc_80276798 *desc)
     if (handle >= 0) {
         index = -1;
         while (iSNDpatchkey(handle, &index)) {
-            fn_802750B8(index, desc);
+            SNDPLATFORM_filteradd(index, desc);
         }
     }
     return handle;

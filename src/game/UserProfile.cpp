@@ -4,10 +4,10 @@
    rows (high scores, style, streak and venue bests) to the save database,
    and the profile name shown for each pad. */
 
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/StyleTracker.h"
 #include <string.h>
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 #include "game/GameModeType.h"
 #include "game/Cheat.h"
 #include "libc/string.h"
@@ -15,20 +15,20 @@
 extern "C" {
 int UserRecGetCount(void);
 int UserRecGetName(int, char *);
-int fn_8022F358(int);
+int DbUserGetId(int);
 void ChalCloseCursors(void);
-void fn_8022F1BC(int);
+void DbUserDelete(int);
 void MemCardFilesRemoveSlot(int, int);
 void MemCardFilesCopySlot(int, int, int, int);
-void fn_80011894(int);
+void MsgPlayerSelectRemoveProfile(int);
 int UserRecGetGameStat(int, int, int, int, int);
 void UserRecAddStat(int, int, int);
 void UserRecUpdateStreak(int, int, int);
 void RecordsPrune(void);
-void fn_8022F294(int);
-int fn_8022F0D4(int);
-int fn_8022F794(int, char *);
-int fn_8022F3D4(int);
+void DbUserReset(int);
+int DbUserCreate(int);
+int DbUserSetName(int, char *);
+int DbUserGetDb(int);
 void MemCardFilesResetSlot(int, int, int);
 void MemCardFilesRenameSlot(int, int, char *);
 int CheatIsNoneEnabled(void);
@@ -80,9 +80,9 @@ extern "C" {
 void UserProfileDelete(signed char index)
 {
     int count = UserRecGetCount();
-    int db = fn_8022F358(index);
+    int db = DbUserGetId(index);
     ChalCloseCursors();
-    fn_8022F1BC(db);
+    DbUserDelete(db);
     for (int i = index; i < count; i = (signed char)(i + 1)) {
         MemCardFilesRemoveSlot(2, i);
         int next = i + 1;
@@ -97,7 +97,7 @@ void UserProfileDelete(signed char index)
             else if (_UserProfile_aSelected[pad] == index) _UserProfile_aSelected[pad] = -1;
         }
     }
-    fn_80011894(index);
+    MsgPlayerSelectRemoveProfile(index);
 }
 int UserProfileFindIndex(int db)
 {
@@ -105,7 +105,7 @@ int UserProfileFindIndex(int db)
     signed char i = 0;
     int searching = 1;
     while (searching && i < count) {
-        if (fn_8022F358((int)i) == db) searching = 0;
+        if (DbUserGetId((int)i) == db) searching = 0;
         else i++;
     }
     return i;
@@ -117,15 +117,15 @@ void UserProfileAddGameStats(void)
         int value;
         if (UserProfileGetSelected(0) != -1) {
             value = UserRecGetGameStat(p->mKind, p->mTable, p->mColumn, 0, 1);
-            UserRecAddStat(fn_8022F358(UserProfileGetSelected(0)), p->mProfileColumn, value);
+            UserRecAddStat(DbUserGetId(UserProfileGetSelected(0)), p->mProfileColumn, value);
         }
         if (UserProfileGetSelected(1) != -1) {
             value = UserRecGetGameStat(p->mKind, p->mTable, p->mColumn, 1, 0);
-            UserRecAddStat(fn_8022F358(UserProfileGetSelected(1)), p->mProfileColumn, value);
+            UserRecAddStat(DbUserGetId(UserProfileGetSelected(1)), p->mProfileColumn, value);
         }
     }
-    if (UserProfileGetSelected(0) != -1) UserRecUpdateStreak(fn_8022F358(UserProfileGetSelected(0)), 0, 1);
-    if (UserProfileGetSelected(1) != -1) UserRecUpdateStreak(fn_8022F358(UserProfileGetSelected(1)), 1, 0);
+    if (UserProfileGetSelected(0) != -1) UserRecUpdateStreak(DbUserGetId(UserProfileGetSelected(0)), 0, 1);
+    if (UserProfileGetSelected(1) != -1) UserRecUpdateStreak(DbUserGetId(UserProfileGetSelected(1)), 1, 0);
 }
 void UserProfileSaveAllRecords(unsigned char *pFlags)
 {
@@ -181,11 +181,11 @@ void UserProfileCreate(int index, char *pName, int)
 {
     int count = UserRecGetCount();
     int db;
-    if (index <= count - 1) { db = fn_8022F358(index); fn_8022F294(db); }
-    else { index = count; db = fn_8022F0D4(count); }
-    fn_8022F794(db, pName);
+    if (index <= count - 1) { db = DbUserGetId(index); DbUserReset(db); }
+    else { index = count; db = DbUserCreate(count); }
+    DbUserSetName(db, pName);
     UserProfileTouch(index);
-    fn_8022F478(fn_8022F358(index));
+    DbUserSetCurrent(DbUserGetId(index));
     MemCardFilesResetSlot(2, index, 0);
     MemCardFilesRenameSlot(2, index, pName);
 }
@@ -196,10 +196,10 @@ int UserProfileSaveRecords(unsigned char pad, int allowCreate)
     int changed = 0; int code = 0; unsigned char busy = 0; // FAKEMATCH: code is a dead store target
     int selected = UserProfileGetSelected(pad);
     UserRecGetName(selected, name);
-    int db = fn_8022F358(selected);
-    fn_8022F478(db);
-    int token = fn_8022F3D4(db);
-    int status = fn_801FCE10(0, "use \x8C select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'sdSU' into \x82 and 'FNWU' into \x82 and 'WSQU' into \x82 and 'WOSU' into \x82 and 'LOSU' into \x82 and 'SOSU' into \x82 and 'AOSU' into \x82 from 'TSPU'\n", token, &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12, &v13, &v14, &v15, &v16, &v17, &v18);
+    int db = DbUserGetId(selected);
+    DbUserSetCurrent(db);
+    int token = DbUserGetDb(db);
+    int status = TDbCompilePerformOp(0, "use \x8C select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'sdSU' into \x82 and 'FNWU' into \x82 and 'WSQU' into \x82 and 'WOSU' into \x82 and 'LOSU' into \x82 and 'SOSU' into \x82 and 'AOSU' into \x82 from 'TSPU'\n", token, &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12, &v13, &v14, &v15, &v16, &v17, &v18);
     if (v1 < 0) v1 = 0;
     if (GameModeTypeGet() == 0) {
         if (UserProfileGetSelected(0) != -1) {
@@ -210,19 +210,19 @@ int UserProfileSaveRecords(unsigned char pad, int allowCreate)
         }
     }
     if (status == 0 && !busy) {
-        status = fn_801FCE10(&result, "use 'EVAS' select 'KPSH' into \x82 from 'RCSH' where 'KUSH' = \x88\n", &id, name);
+        status = TDbCompilePerformOp(&result, "use 'EVAS' select 'KPSH' into \x82 from 'RCSH' where 'KUSH' = \x88\n", &id, name);
         if (status != 0 && status != 23) code = status; // FAKEMATCH: dead store of the error status
         if (status == 23) {
             if (allowCreate) {
                 id = UserProfileGetFreeKey(0x52435348, 0x4B505348, 0, 255);
                 if (id != -1) {
-                fn_801FCE10(&result, "use 'EVAS' insert into 'RCSH' set 'KPSH' = \x82 and 'KUSH' = \x88 and 'WGSH' = \x82 and 'LGSH' = \x82 and 'PTSH' = \x82 and 'TPSH' = \x82 and 'TRSH' = \x82 and 'TDSH' = \x82 and 'TSSH' = \x82 and 'CISH' = \x82 and 'RFSH' = \x82 and 'GTSH' = \x82 and '2TSH' = \x82 and 'TTSH' = \x82 and 'KSSH' = \x82 and 'WQSH' = \x82 and 'WOSH' = \x82 and 'LOSH' = \x82 and 'SOSH' = \x82 and 'AOSH' = \x82\n", id, name, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v14, v15, v16, v17, v18);
+                TDbCompilePerformOp(&result, "use 'EVAS' insert into 'RCSH' set 'KPSH' = \x82 and 'KUSH' = \x88 and 'WGSH' = \x82 and 'LGSH' = \x82 and 'PTSH' = \x82 and 'TPSH' = \x82 and 'TRSH' = \x82 and 'TDSH' = \x82 and 'TSSH' = \x82 and 'CISH' = \x82 and 'RFSH' = \x82 and 'GTSH' = \x82 and '2TSH' = \x82 and 'TTSH' = \x82 and 'KSSH' = \x82 and 'WQSH' = \x82 and 'WOSH' = \x82 and 'LOSH' = \x82 and 'SOSH' = \x82 and 'AOSH' = \x82\n", id, name, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v14, v15, v16, v17, v18);
                 changed = 1; // FAKEMATCH: set after the insert call (order found by search; same result)
                 }
             } else id = -1;
         } else {
             changed = 1;
-            fn_801FCE10(&result, "use 'EVAS' update 'RCSH' set 'KUSH' = \x88 and 'WGSH' = \x82 and 'LGSH' = \x82 and 'PTSH' = \x82 and 'TPSH' = \x82 and 'TRSH' = \x82 and 'TDSH' = \x82 and 'TSSH' = \x82 and 'CISH' = \x82 and 'RFSH' = \x82 and 'GTSH' = \x82 and '2TSH' = \x82 and 'TTSH' = \x82 and 'KSSH' = \x82 and 'WQSH' = \x82 and 'WOSH' = \x82 and 'LOSH' = \x82 and 'SOSH' = \x82 and 'AOSH' = \x82 where 'KUSH' = \x88\n", name, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v14, v15, v16, v17, v18, name);
+            TDbCompilePerformOp(&result, "use 'EVAS' update 'RCSH' set 'KUSH' = \x88 and 'WGSH' = \x82 and 'LGSH' = \x82 and 'PTSH' = \x82 and 'TPSH' = \x82 and 'TRSH' = \x82 and 'TDSH' = \x82 and 'TSSH' = \x82 and 'CISH' = \x82 and 'RFSH' = \x82 and 'GTSH' = \x82 and '2TSH' = \x82 and 'TTSH' = \x82 and 'KSSH' = \x82 and 'WQSH' = \x82 and 'WOSH' = \x82 and 'LOSH' = \x82 and 'SOSH' = \x82 and 'AOSH' = \x82 where 'KUSH' = \x88\n", name, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v14, v15, v16, v17, v18, name);
         }
     } else id = -1;
     if (id != -1 && !fn_801485D4()) {
@@ -240,13 +240,13 @@ int UserProfileSaveRecords(unsigned char pad, int allowCreate)
 int UserProfileGetFreeKey(int kind, int key, int first, int last)
 {
     QueryResult result; int found = -1; int value = -1; int scratch; int code = 0; // FAKEMATCH: code is a dead store target
-    fn_801FCE10(&result, "use 'EVAS' select max(\x8C) into \x82 from \x8C\n", key, &value, kind);
+    TDbCompilePerformOp(&result, "use 'EVAS' select max(\x8C) into \x82 from \x8C\n", key, &value, kind);
     if (value < last) found = value + 1;
     else {
-        fn_801FCE10(&result, "use 'EVAS' select count(*) into \x82 from \x8C\n", &value, kind);
+        TDbCompilePerformOp(&result, "use 'EVAS' select count(*) into \x82 from \x8C\n", &value, kind);
         if (value < last) {
             for (value = first; value <= last; value++) {
-                int status = fn_801FCE10(&result, "use 'EVAS' select \x8C into \x82 from \x8C where \x8C = \x82\n", key, &scratch, kind, key, value);
+                int status = TDbCompilePerformOp(&result, "use 'EVAS' select \x8C into \x82 from \x8C where \x8C = \x82\n", key, &scratch, kind, key, value);
                 if (status != 0 && status != 23) code = status; // FAKEMATCH: dead store of the error status
                 if (status == 23) { found = value; break; }
             }
@@ -257,49 +257,49 @@ int UserProfileGetFreeKey(int kind, int key, int first, int last)
 void UserProfileSetVenueRecord(int event, int id, int value)
 {
     QueryResult result; int previous;
-    if (fn_801FCE10(&result, "use 'EVAS' select 'KTFH' into \x82 from 'DFSH' where 'DIVE' = \x82\n", &previous, event) == 0 && value > previous)
-        fn_801FCE10(&result, "use 'EVAS' update 'DFSH' set 'KUFH' = \x82 and 'KTFH' = \x82 where 'DIVE' = \x82\n", id, value, event);
+    if (TDbCompilePerformOp(&result, "use 'EVAS' select 'KTFH' into \x82 from 'DFSH' where 'DIVE' = \x82\n", &previous, event) == 0 && value > previous)
+        TDbCompilePerformOp(&result, "use 'EVAS' update 'DFSH' set 'KUFH' = \x82 and 'KTFH' = \x82 where 'DIVE' = \x82\n", id, value, event);
 }
 void UserProfileAddBGSHRecord(int id, int value)
 {
     QueryResult result; int previous;
-    if (fn_801FCE10(&result, "use 'EVAS' select min('TPGH') into \x82 from 'BGSH'\n", &previous) == 0 && value > previous) {
+    if (TDbCompilePerformOp(&result, "use 'EVAS' select min('TPGH') into \x82 from 'BGSH'\n", &previous) == 0 && value > previous) {
         int key = UserProfileGetFreeKey(0x42475348, 0x4B504748, 0, 15);
-        fn_801FCE10(&result, "use 'EVAS' insert into 'BGSH' set 'KPGH' = \x82 and 'KUGH' = \x82 and 'TPGH' = \x82\n", key, id, value);
+        TDbCompilePerformOp(&result, "use 'EVAS' insert into 'BGSH' set 'KPGH' = \x82 and 'KUGH' = \x82 and 'TPGH' = \x82\n", key, id, value);
     }
 }
 void UserProfileAddTGSHRecord(int id, int value)
 {
     QueryResult result; int previous;
-    if (fn_801FCE10(&result, "use 'EVAS' select min('TPGH') into \x82 from 'TGSH'\n", &previous) == 0 && value > previous) {
+    if (TDbCompilePerformOp(&result, "use 'EVAS' select min('TPGH') into \x82 from 'TGSH'\n", &previous) == 0 && value > previous) {
         int key = UserProfileGetFreeKey(0x54475348, 0x4B504748, 0, 15);
-        fn_801FCE10(&result, "use 'EVAS' insert into 'TGSH' set 'KPGH' = \x82 and 'KPSH' = \x82 and 'TPGH' = \x82\n", key, id, value);
+        TDbCompilePerformOp(&result, "use 'EVAS' insert into 'TGSH' set 'KPGH' = \x82 and 'KPSH' = \x82 and 'TPGH' = \x82\n", key, id, value);
     }
 }
 void UserProfileUpdateStreakRecord(int id, int value, int retry)
 {
     QueryResult result; int minimum, previous;
-    if (fn_801FCE10(&result, "use 'EVAS' select min('SWWH') into \x82 from 'SWSH'\n", &minimum) != 0) return;
-    if (fn_801FCE10(&result, "use 'EVAS' select 'SWWH' into \x82 from 'SWSH' where 'KUWH' = \x82 and 'CIWH' = 1\n", &previous, id) == 23) {
+    if (TDbCompilePerformOp(&result, "use 'EVAS' select min('SWWH') into \x82 from 'SWSH'\n", &minimum) != 0) return;
+    if (TDbCompilePerformOp(&result, "use 'EVAS' select 'SWWH' into \x82 from 'SWSH' where 'KUWH' = \x82 and 'CIWH' = 1\n", &previous, id) == 23) {
         if (value > minimum) {
             int key = UserProfileGetFreeKey(0x53575348, 0x4B505748, 0, 15);
-            fn_801FCE10(&result, "use 'EVAS' insert into 'SWSH' set 'KPWH' = \x82 and 'KUWH' = \x82 and 'SWWH' = \x82 and 'CIWH' = 1\n", key, id, value);
+            TDbCompilePerformOp(&result, "use 'EVAS' insert into 'SWSH' set 'KPWH' = \x82 and 'KUWH' = \x82 and 'SWWH' = \x82 and 'CIWH' = 1\n", key, id, value);
         }
     } else if (value <= 0) {
-        fn_801FCE10(&result, "use 'EVAS' update 'SWSH' set 'CIWH' = 0 where 'KUWH' = \x82 and 'CIWH' = 1\n", id);
+        TDbCompilePerformOp(&result, "use 'EVAS' update 'SWSH' set 'CIWH' = 0 where 'KUWH' = \x82 and 'CIWH' = 1\n", id);
     } else if (value >= previous) {
-        fn_801FCE10(&result, "use 'EVAS' update 'SWSH' set 'SWWH' = \x82 where 'KUWH' = \x82 and 'CIWH' = 1\n", value, id);
+        TDbCompilePerformOp(&result, "use 'EVAS' update 'SWSH' set 'SWWH' = \x82 where 'KUWH' = \x82 and 'CIWH' = 1\n", value, id);
     } else {
-        fn_801FCE10(&result, "use 'EVAS' update 'SWSH' set 'CIWH' = 0 where 'KUWH' = \x82 and 'CIWH' = 1\n", id);
+        TDbCompilePerformOp(&result, "use 'EVAS' update 'SWSH' set 'CIWH' = 0 where 'KUWH' = \x82 and 'CIWH' = 1\n", id);
         if (!retry) UserProfileUpdateStreakRecord(id, value, 1);
     }
 }
 void UserProfileAddStyleRecord(int id, int value)
 {
     QueryResult result; int previous;
-    if (fn_801FCE10(&result, "use 'EVAS' select min('TPTH') into \x82 from 'KTSH'\n", &previous) == 0 && value > previous) {
+    if (TDbCompilePerformOp(&result, "use 'EVAS' select min('TPTH') into \x82 from 'KTSH'\n", &previous) == 0 && value > previous) {
         int key = UserProfileGetFreeKey(0x4B545348, 0x4B505448, 0, 15);
-        fn_801FCE10(&result, "use 'EVAS' insert into 'KTSH' set 'KPTH' = \x82 and 'KUTH' = \x82 and 'TPTH' = \x82\n", key, id, value);
+        TDbCompilePerformOp(&result, "use 'EVAS' insert into 'KTSH' set 'KPTH' = \x82 and 'KUTH' = \x82 and 'TPTH' = \x82\n", key, id, value);
     }
 }
 void UserProfileAddRecordRow(int index)
@@ -307,16 +307,16 @@ void UserProfileAddRecordRow(int index)
     // FAKEMATCH: code only receives a dead store of the error status below
     char name[32]; int id = 0; int code = 0; int v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12 = 0;
     UserRecGetName(index, name);
-    int db = fn_8022F358(index);
-    fn_8022F478(db);
-    int token = fn_8022F3D4(db);
-    int status = fn_801FCE10(0, "use 'EVAS' select 'KPSH' into \x82 from 'RCSH' where 'KUSH' = \x88\n", &id, name);
+    int db = DbUserGetId(index);
+    DbUserSetCurrent(db);
+    int token = DbUserGetDb(db);
+    int status = TDbCompilePerformOp(0, "use 'EVAS' select 'KPSH' into \x82 from 'RCSH' where 'KUSH' = \x88\n", &id, name);
     if (status != 0 && status != 23) code = status; // FAKEMATCH: dead store of the error status
     if (status == 23) {
         id = UserProfileGetFreeKey(0x52435348, 0x4B505348, 0, 255);
         if (id == -1) return;
-        if (fn_801FCE10(0, "use \x8C select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'FNWU' into \x82 from 'TSPU'\n", token, &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12) == 0)
-            fn_801FCE10(0, "use 'EVAS' insert into 'RCSH' set 'KPSH' = \x82 and 'KUSH' = \x88 and 'WGSH' = \x82 and 'LGSH' = \x82 and 'PTSH' = \x82 and 'TPSH' = \x82 and 'TRSH' = \x82 and 'TDSH' = \x82 and 'TSSH' = \x82 and 'CISH' = \x82 and 'RFSH' = \x82 and 'GTSH' = \x82 and '2TSH' = \x82 and 'TTSH' = \x82 and 'CNWH' = \x82\n", id, name, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12);
+        if (TDbCompilePerformOp(0, "use \x8C select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'FNWU' into \x82 from 'TSPU'\n", token, &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12) == 0)
+            TDbCompilePerformOp(0, "use 'EVAS' insert into 'RCSH' set 'KPSH' = \x82 and 'KUSH' = \x88 and 'WGSH' = \x82 and 'LGSH' = \x82 and 'PTSH' = \x82 and 'TPSH' = \x82 and 'TRSH' = \x82 and 'TDSH' = \x82 and 'TSSH' = \x82 and 'CISH' = \x82 and 'RFSH' = \x82 and 'GTSH' = \x82 and '2TSH' = \x82 and 'TTSH' = \x82 and 'CNWH' = \x82\n", id, name, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12);
     }
     if (id != -1) UserRecAddRecent(id);
 }

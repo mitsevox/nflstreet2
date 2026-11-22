@@ -3,7 +3,7 @@
 #include "engine/animTexLib.h"
 #include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 
 /* Pool of particle systems created from one template (0x6E4 bytes). */
 typedef struct Pool_801DE1E0 {
@@ -305,7 +305,7 @@ static void fn_801DE04C(PartObj_801DE1E0 *pObj)
     float y;
     float z;
 
-    fn_80227264(&force, &lbl_8039AD10.mUnknown78, -(pObj->mUnknown090 * pObj->mUnknown094));
+    Vec3Scale(&force, &lbl_8039AD10.mUnknown78, -(pObj->mUnknown090 * pObj->mUnknown094));
     x = force.x;
     y = force.y;
     z = force.z;
@@ -327,7 +327,7 @@ static void fn_801DE114(PartObj_801DE1E0 *pObj)
     float y;
     float z;
 
-    fn_80227264(&force, &lbl_8039AD10.mUnknown78, pObj->mUnknown098 * pObj->mUnknown090);
+    Vec3Scale(&force, &lbl_8039AD10.mUnknown78, pObj->mUnknown098 * pObj->mUnknown090);
     x = force.x;
     y = force.y;
     z = force.z;
@@ -378,7 +378,7 @@ void fn_801DE1E0(Desc_801DE1E0 *pDesc)
     }
     fn_801DD498();
     lbl_8039AD10.mUnknown74 = pDesc->mUnknown0C;
-    fn_80227264(&lbl_8039AD10.mUnknown78, &lbl_802F94C4, pDesc->mUnknown0C);
+    Vec3Scale(&lbl_8039AD10.mUnknown78, &lbl_802F94C4, pDesc->mUnknown0C);
     lbl_8039AD10.mUnknown1C = pDesc->mUnknown1C;
     lbl_8039AD10.mUnknown18 = 0;
     MatPush();
@@ -391,7 +391,7 @@ void fn_801DE1E0(Desc_801DE1E0 *pDesc)
         MatRotX(0x400000);
         break;
     }
-    fn_80227C2C(&lbl_8039AD10.mUnknown78, &lbl_8039AD10.mUnknown78);
+    Vec3Mat33Mul(&lbl_8039AD10.mUnknown78, &lbl_8039AD10.mUnknown78);
     MatStore(lbl_8039AD10.mUnknown20);
     MatPop();
     lbl_8039AD10.mUnknown8C.mppUnknown0 = 0;
@@ -631,7 +631,7 @@ int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps)
         steps = 1;
     }
     if (pObj->mUnknown044) {
-        pObj->mUnknown3A8 = fn_802270D4(&pObj->mUnknown39C);
+        pObj->mUnknown3A8 = Vec3Magnitude(&pObj->mUnknown39C);
         lbl_803ECF4C = pObj->mUnknown3A8 * pObj->mUnknown200 + 1.0f;
     }
     for (i = 0; i < steps; i++) {
@@ -786,14 +786,14 @@ void PSysRenderCalcParticleColor(Vec4_801DE1E0 *pColor, PartObj_801DE1E0 *pObj, 
     if (pObj->mUnknown042) {
         if (!(pParticle->mAgeRatio < pObj->mUnknown0EC)) {
             if (pObj->mUnknown060 == 2) {
-                fn_80227264(pColor, pColor, (1.0f - pParticle->mAgeRatio) / fadeOut);
+                Vec3Scale(pColor, pColor, (1.0f - pParticle->mAgeRatio) / fadeOut);
             } else {
                 pColor->w *= (1.0f - pParticle->mAgeRatio) / fadeOut;
             }
         }
         if (!(pParticle->mAgeRatio >= pObj->mUnknown0E8)) {
             if (pObj->mUnknown060 == 2) {
-                fn_80227264(pColor, pColor, pParticle->mAgeRatio / pObj->mUnknown0E8);
+                Vec3Scale(pColor, pColor, pParticle->mAgeRatio / pObj->mUnknown0E8);
             } else {
                 pColor->w *= pParticle->mAgeRatio / pObj->mUnknown0E8;
             }

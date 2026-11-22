@@ -1,7 +1,7 @@
 #include "game/Class_80148A58.h"
 #include "game/StyleTracker.h"
 #include "game/Object_80039F5C.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/GameModeType.h"
 #include <string.h>
 #include <string.h>
@@ -28,7 +28,7 @@ int fn_800C8744(int team);
 int fn_8022B414(int handle, unsigned int tag, int *pValue);
 int fn_8022B7A4(int handle, unsigned int tag, int *pValue);
 int fn_801C2D88(char *pText, int capacity, const char *pFormat, ...);
-int fn_802372EC(int first, int last);
+int SyncRandGetRange(int first, int last);
 int fn_801486A0(void);
 void fn_8017767C(void);
 void fn_80177F88(int value);
@@ -46,12 +46,12 @@ int fn_80149014(void)
 void fn_80149040(Object_80039F5C *p)
 {
     QueryCursor cursor = {0,0,-1,0};
-    fn_801FCE10(0,"declare \x8A cursor for select * from 'AGLP' where ('DIGP' = \x84)\n",&cursor,p->mUnknown2908);
+    TDbCompilePerformOp(0,"declare \x8A cursor for select * from 'AGLP' where ('DIGP' = \x84)\n",&cursor,p->mUnknown2908);
     PlyrLoadDbRecord(cursor,0,&p->mUnknown2900);
     p->mUnknown508 = p->mUnknown2904Float;
     fn_800B4900(cursor,0,p->mRatings,p->mUnknown3020);
     fn_800B4798(p->mRatings,p->mIdBytes[2],p->mIdBytes[1],&p->mUnknown2900);
-    if(cursor.mUnknown0)fn_801FCFA0(&cursor);
+    if(cursor.mUnknown0)TDbSQLDestroyCursor(&cursor);
     PlyrAttachModel(p);
     fn_800B5150(p);
 }
@@ -159,7 +159,7 @@ int fn_801498EC(Class_80148A58 *,int team,int index,int value)
 const char *fn_8014993C(Class_80148A58 *,int kind)
 {
     unsigned char index=0;
-    if(lbl_802DDC20[kind].mCount>1)index=fn_802372EC(0,lbl_802DDC20[kind].mCount);
+    if(lbl_802DDC20[kind].mCount>1)index=SyncRandGetRange(0,lbl_802DDC20[kind].mCount);
     return lbl_802DDC20[kind].mpText[index];
 }
 

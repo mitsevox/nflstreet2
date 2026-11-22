@@ -4,6 +4,10 @@
 #include "engine/sndaems.h"
 #include "engine/sndvoice.h"
 
+namespace Snd {
+extern float gVariableTimerPeriod;
+}
+
 extern "C" {
 
 typedef struct Range_80267114 {
@@ -187,13 +191,73 @@ extern unsigned int iSNDrandom(void);
 extern int SNDpitchmult(int handle, int value);
 extern int SNDstop(int handle);
 extern int SNDvol(int handle, int value);
-extern int fn_80274B50(int index);
-extern int fn_80274CA8(int voice, int value);
-extern void fn_80274924(int voice);
-extern void fn_80274960(int index);
-extern void fn_80274D34(int voice, int value);
-extern void fn_80274E24(int voice, int value);
+extern int SNDPLATFORM_setpitch(int index);
+extern int SNDPLATFORM_timemult(int voice, int value);
+extern void SndHalSetDry(int voice);
+extern void SndHalSetPan(int index);
+extern void SNDPLATFORM_lowpass(int voice, int value);
+extern void SNDPLATFORM_highpass(int voice, int value);
 extern void fn_80268188(int handle, int value);
+
+/* An envelope module's state: the current segment +0x3, the level +0x4 and step +0x8 it drives,
+   the start level +0xC and the segments' (time, level) pairs from +0x18. */
+typedef struct EnvelopeSegment_80267858 {
+    float mTime;
+    float mLevel;
+} EnvelopeSegment_80267858;
+
+typedef struct EnvelopeState_80267858 {
+    unsigned char mUnknown0[3];
+    unsigned char mSegment;
+    float mTime;
+    float mStep;
+    float mStart;
+    unsigned char mUnknown10[8];
+    EnvelopeSegment_80267858 mSegments[1];
+} EnvelopeState_80267858;
+
+/* A scale module's inputs: the input count, the scale factor and the input values. */
+typedef struct ScaleState_80267EC4 {
+    unsigned char mCount;
+    unsigned char mUnknown1[3];
+    float mScale;
+    int mValues[1];
+} ScaleState_80267EC4;
+
+typedef struct Scale2State_80267F80 {
+    float mScale;
+    int mA;
+    int mB;
+} Scale2State_80267F80;
+
+/* A player module's output reset: the playing output +0xE, whether one plays +0xF and the
+   output records from +0x1C. */
+typedef struct PlayerOutput_80268774 {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+} PlayerOutput_80268774;
+
+typedef struct PlayerState_80268774 {
+    unsigned char mUnknown0[14];
+    unsigned char mOutput;
+    unsigned char mPlaying;
+    signed char mUnknown10;
+    unsigned char mUnknown11[11];
+    PlayerOutput_80268774 mOutputs[1];
+} PlayerState_80268774;
+
+/* A loaded module bank on the bank list: its handle and, 20 bytes in, its list link. */
+typedef struct ModuleBank_80269260 {
+    int mHandle;
+    unsigned char mUnknown4[16];
+    void *mpLink;
+} ModuleBank_80269260;
+
+extern void *lbl_803A6BD0;
+extern int fn_802692B8(int handle);
+extern void SNDSYS_entercritical(void);
+extern void SNDSYS_leavecritical(void);
 
 int fn_80266E88(int *p)
 {
@@ -366,6 +430,12 @@ int fn_80267814(Object_80267814 *p)
     return 0;
 }
 
+void SNDAEMSI_envelopeprogramsegment(EnvelopeState_80267858 *p)
+{
+    p->mTime = p->mSegments[p->mSegment].mTime;
+    p->mStep = Snd::gVariableTimerPeriod * ((p->mSegments[p->mSegment].mLevel - p->mStart) / p->mTime);
+}
+
 int fn_80267D84(Args_80267D84 *p)
 {
     int index = p->mValues[0];
@@ -432,6 +502,24 @@ int fn_80267EA8(int *p)
     return b;
 }
 
+int SNDAEMSI_updatescale(ScaleState_80267EC4 *p)
+{
+    float value = p->mValues[0];
+    int i;
+
+    for (i = 1; i < p->mCount; i++)
+        value *= p->mValues[i];
+    value *= p->mScale;
+    return (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+}
+
+int SNDAEMSI_updatescale2(Scale2State_80267F80 *p)
+{
+    float value = (float)p->mA * (float)p->mB * p->mScale;
+
+    return (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+}
+
 int fn_8026801C(Args_80267D84 *p)
 {
     int i;
@@ -484,7 +572,7 @@ int fn_802680D4(int voice, int value)
     else if (value > max)
         value = max;
     lbl_803A6C24.mUnknown1CC[voice].mUnknown8E = value;
-    return fn_80274B50(voice);
+    return SNDPLATFORM_setpitch(voice);
 }
 
 int fn_80268130(int voice, int value)
@@ -494,7 +582,7 @@ int fn_80268130(int voice, int value)
     else if (value < 2048)
         value = 2048;
     lbl_803A6C24.mUnknown1CC[voice].mUnknown6E = value;
-    return fn_80274CA8(voice, value);
+    return SNDPLATFORM_timemult(voice, value);
 }
 
 void fn_80268270(int voice, int value)
@@ -503,7 +591,7 @@ void fn_80268270(int voice, int value)
 
     if (v->mUnknown23 == 1) {
         v->mUnknown1C = value;
-        fn_80274960(voice);
+        SndHalSetPan(voice);
     }
 }
 
@@ -515,7 +603,7 @@ void fn_80268354(int voice, int value)
         value = 0;
     else if (value > max)
         value = max;
-    fn_80274D34(voice, value);
+    SNDPLATFORM_lowpass(voice, value);
 }
 
 void fn_8026839C(int voice, int value)
@@ -526,7 +614,7 @@ void fn_8026839C(int voice, int value)
         value = 0;
     else if (value > max)
         value = max;
-    fn_80274E24(voice, value);
+    SNDPLATFORM_highpass(voice, value);
 }
 
 void fn_802683E4(int voice, int value)
@@ -545,7 +633,7 @@ void fn_802683E4(int voice, int value)
     for (i = 0; i < v->mUnknown23; i++) {
         int index = v->mUnknown4[i];
         lbl_803A6C24.mUnknown1CC[index].mUnknown5F = value;
-        fn_80274924(index);
+        SndHalSetDry(index);
     }
 }
 
@@ -695,6 +783,19 @@ void fn_802686CC(Object_802686CC *p)
     }
 }
 
+int SNDAEMSI_playerresetoutputs(PlayerState_80268774 *p)
+{
+    p->mUnknown10 = -1;
+    if (p->mPlaying != 0) {
+        PlayerOutput_80268774 *outputs = p->mOutputs;
+        int output = p->mOutput;
+
+        outputs[output].mUnknown4 = 0;
+        outputs[output].mUnknown0 = 0;
+    }
+    return 0;
+}
+
 int fn_80268F54(Object_80268F54 *p)
 {
     int i;
@@ -758,5 +859,13 @@ void fn_80269048(int *values, Object_80269048 *p)
     for (i = 0; i < p->mUnknown18; i++)
         p->mUnknown1C[i] = values[i];
     p->mUnknown19 = 1;
+}
+
+void SNDAEMSI_restore(void)
+{
+    SNDSYS_entercritical();
+    while (lbl_803A6BD0 != 0)
+        fn_802692B8(((ModuleBank_80269260 *)((char *)lbl_803A6BD0 - 20))->mHandle);
+    SNDSYS_leavecritical();
 }
 }

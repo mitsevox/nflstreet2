@@ -3,55 +3,54 @@
 #include "engine/dbteams.h"
 #include "engine/tdbext.h"
 #include "engine/dbutil.h"
-#include "engine/fn_801F9134.h"
+#include "engine/TDbLoad.h"
 #include "engine/cu_80229270.h"
 
-#include "engine/Funcs_802FB3BC.h"
+#include "engine/DbNiomModeFuncs.h"
 #include "engine/llmemory.h"
 #include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/QueryStatus.h"
 #include "engine/t3db.h"
 #include "engine/t3db_cols.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 
 #include <string.h>
 
 struct CardStreamTarget;
 struct SaveStreamOps_t;
-#include "engine/Entry_802FB300.h"
-extern char lbl_802B5C8C[];
+#include "engine/DbUserEntry.h"
 extern char lbl_803A1C60[];
 extern float lbl_803A20A4[][13];
-extern char *lbl_803EC0A4;
-extern int lbl_803EC0A8;
-extern int lbl_803EC0A0;
-extern char *lbl_803EC0B4;
-extern int lbl_803EC0B8;
-extern int lbl_803EC0B0;
-extern int lbl_803EC0C8;
-extern char *lbl_803EC0CC;
-extern int lbl_803EC0D0;
-extern int lbl_803EC0D4;
-extern unsigned char lbl_803EC0D8;
-extern Entry_802FB300 lbl_802FB300[];
-extern int fn_801F91AC(int handle, int a, int b);
-extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
-extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
+extern char *_DbEvas_pFileName;
+extern int _DbEvas_iMode;
+extern int _DbEvas_iSize;
+static int _DbTatsCopy_iSize = 0;
+static char *_DbTatsCopy_pFileName = 0;
+static int _DbTatsCopy_iMode = -1;
+extern int _DbUser_iSize;
+extern char *_DbUser_pFileName;
+extern int _DbUser_iMode;
+extern int _DbUser_iCurrent;
+extern unsigned char _DbUser_iCount;
+extern DbUserEntry_t _DbUser_aEntries[];
+extern int TDbSave(int handle, int a, int b);
+extern int TDbInsertRow(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
+extern int TDbLoadFromFile(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
 extern TDbIODevice_t tdbiofioCallback;
-extern int fn_801F967C(int db, int tbl);
-signed char fn_8022F384(int key);
+extern int TDbTblDestroy(int db, int tbl);
+signed char DbUserFindIndex(int key);
 
 extern const unsigned char lbl_802AEF10[];
 extern int fn_802297D8(void *p, int tag);
 extern int fn_8022D8F8(int a, int *p, int c);
 int fn_8022DB20(void);
-extern int fn_8022F428(int key);
-extern int fn_8022F4BC(void);
+extern int DbUserFindIdByDb(int key);
+extern int DbUserGetCurrent(void);
 extern void fn_80231208(void);
-int fn_8022F3D4(int key);
-extern const int lbl_803ED6E4[2];
+int DbUserGetDb(int key);
+extern const int _DbUser_aDbIds[2];
 extern char lbl_802B5D64[];
 extern char lbl_802B56F4[];
 extern char lbl_802B5744[];
@@ -60,21 +59,19 @@ extern char lbl_802B4EC4[];
 extern char lbl_802B37E4[];
 extern char lbl_802B3824[];
 int fn_8022C0E0(struct QueryCursor cursor, int a);
-extern int fn_801FA1C0(int ref, unsigned short *pCount);
+extern int TDbQryGetCount(int ref, unsigned short *pCount);
 extern int fn_80230D8C(int id, int a, int b);
 extern char lbl_802B3610[];
 extern char lbl_802B3698[];
 extern char lbl_802B479C[];
 extern char lbl_802B4828[];
-extern char lbl_802B5CB4[];
-extern char lbl_802B5CF0[];
-extern int fn_801F9014(int db);
+extern int TDbExists(int db);
 extern char lbl_802B3888[];
 extern char lbl_802B36C4[];
-extern int fn_801F9A90(int db, int tbl);
-extern int fn_801F9AB8(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount);
-extern int fn_801F9C68(int db, int tbl, int col);
-int fn_8022ED30(int db, int tbl);
+extern int TDbTblExists(int db, int tbl);
+extern int TDbTblColEnum(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount);
+extern int TDbTblColExists(int db, int tbl, int col);
+int DbTatsCopyTblDestroy(int db, int tbl);
 extern char lbl_802B5A48[];
 extern char lbl_802B5AB0[];
 extern char lbl_802B5ACC[];
@@ -115,12 +112,12 @@ extern char lbl_802B4A54[];
 extern char lbl_802B4A9C[];
 extern char lbl_802B4AE0[];
 void fn_8022C9B8(void *pPairs);
-void fn_8022CED8(void);
+void DbAssignPendingNodeIds(void);
 int fn_8022D5A4(int key, int mode);
 int fn_8022D710(int a, int b, int c, int row, int value);
 unsigned short fn_8022D6FC(int index);
 
-#include "engine/Handlers_802294D8.h"
+#include "engine/DbNiomHandlers.h"
 
 typedef struct Object_8022A59C {
     unsigned short mUnknown0;
@@ -197,7 +194,7 @@ typedef struct Record_8022A304 {
     char mUnknown16[2];
 } Record_8022A304;
 
-/* Ends a column list for fn_801F9718. */
+/* Ends a column list for TDbInsertRow. */
 static inline void fn_801F9718_SetEnd(TDbCol_801F9718 *pCol)
 {
     pCol->mCol = -1;
@@ -223,19 +220,19 @@ extern Entry_803A2390 lbl_803A2390[];
 extern char lbl_803A23E8[];
 extern char lbl_803A2474[];
 extern struct QueryCursor lbl_803A25E0;
-extern int (*lbl_803EBFD8)(void);
-extern void *lbl_803EBFDC;
-extern void *lbl_803EBFE0;
-extern void (*lbl_803EBFE4)(int);
-extern int lbl_803EBFE8;
-extern unsigned char lbl_803EBFEC;
-extern unsigned char lbl_803EBFED;
-extern Object_8022A59C *lbl_803EBFF0;
-extern int (*lbl_803EBFF8)(void);
-extern int (*lbl_803EBFFC)(void **ppData, void *p);
-extern int (*lbl_803EC000)(int a, int b);
-extern int (*lbl_803EC004)(void);
-extern int (*lbl_803EC008)(void);
+extern int (*_DbNiom_pEndFunc)(void);
+extern void *_DbNiom_pLoadFunc;
+extern void *_DbNiom_pResetFunc;
+extern void (*_DbNiom_pCallback)(int);
+extern int _DbNiom_iCallbackArg;
+extern unsigned char _DbNiom_bModeActive;
+extern unsigned char _DbNiom_bEnding;
+extern Object_8022A59C *_DbNiom_pCursor;
+extern int (*_DbNiom_pModeEnd)(void);
+extern int (*_DbNiom_pModeLoad)(void **ppData, void *p);
+extern int (*_DbNiom_pModeReset)(int a, int b);
+extern int (*_DbNiom_pModeResume)(void);
+extern int (*_DbNiom_pModeFn16)(void);
 extern int lbl_803EC020[2];
 extern int *lbl_803EC010[1];
 extern unsigned char lbl_803EC014[1];
@@ -264,7 +261,7 @@ extern int lbl_803EC074;
 extern int lbl_803EC07C;
 extern int lbl_803EC080;
 
-int fn_80229674(void);
+int DbNiomCloseCursor(void);
 int fn_8022A59C(int a, Object_8022A59C **ppOut);
 int fn_8022AB6C(Object_8022A59C *p, int a, int b);
 int fn_8022AC80(Object_8022A59C *p);
@@ -443,30 +440,30 @@ int fn_8022D25C(int (*pCallback)(int a));
 
 
 /* prototypes of the db functions in 0x80229270-0x8022F428 (dbocmt.c to dbuser.c) */
-int fn_80229270(void);
-int fn_802293A8(void);
-void fn_802293B0(void);
-int fn_802293B4(int a, int b);
-int fn_802293FC(void);
-int fn_8022942C(void);
-void fn_80229434(void);
-int fn_80229438(int column, int value);
-int fn_80229470(void);
-void fn_80229494(void);
-void fn_802294D8(Handlers_802294D8 *p);
-int fn_802294F4(void);
-int fn_802294FC(int *p);
-int fn_80229554(void);
-int fn_802295C0(void);
-int fn_802295F8(int a);
-int fn_80229644(int a, int b);
-int fn_80229674(void);
-int fn_802296B4(int a, int b);
-void fn_80229718(Funcs_802FB3BC *pFuncs);
-void fn_80229744(void);
-int fn_80229760(void **ppData, void *p);
-int fn_80229788(int a, int b);
-int fn_802297B0(void);
+int DbOcmtRenumber(void);
+int DbOcmtModuleInit(void);
+void DbOcmtModuleShutdown(void);
+int DbOcmtInsert(int a, int b);
+int DbOcmtClear(void);
+int DbOptionsModuleInit(void);
+void DbOptionsModuleShutdown(void);
+int DbOptionsSetTpom(int column, int value);
+int DbNiomInit(void);
+void DbNiomShutdown(void);
+void DbNiomSetHandlers(DbNiomHandlers_t *p);
+int DbNiomIsModeActive(void);
+int DbNiomBeginMode(int *p);
+int DbNiomEndMode(void);
+int DbNiomRunCallback(void);
+int DbNiomOpenCursor(int a);
+int DbNiomReadCursor(int a, int b);
+int DbNiomCloseCursor(void);
+int DbNiomReadOnce(int a, int b);
+void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs);
+void DbNiomClearModeFuncs(void);
+int DbNiomModeLoad(void **ppData, void *p);
+int DbNiomModeReset(int a, int b);
+int DbNiomModeResume(void);
 int fn_802299FC(void);
 int fn_80229A70(void);
 float fn_80229C98(int index);
@@ -539,7 +536,7 @@ int fn_8022D6E8(void);
 void fn_8022D6F0(void);
 unsigned short fn_8022D6FC(int index);
 int fn_8022D710(int a, int b, int c, int row, int value);
-int fn_8022D834(int row, int column);
+int DbTableLookupByte(int row, int column);
 int fn_8022D864(void);
 int fn_8022D86C(void);
 int fn_8022D874(int a, int b, int c, int key);
@@ -570,77 +567,77 @@ int fn_8022E9A4(void);
 void fn_8022E9C4(void);
 int fn_8022E9E4(void);
 void fn_8022EA4C(void);
-int fn_8022EA74(void);
-void fn_8022EA7C(void);
-int fn_8022EA80(int a, const char *pName, int b);
-void fn_8022EAD8(void);
-int fn_8022EB10(void);
-int fn_8022EB5C(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps);
-int fn_8022EB94(void *pTarget, struct SaveStreamOps_t *pOps);
-int fn_8022EBC8(void);
-int fn_8022EBF0(int a, const char *pName, int b);
-void fn_8022EC48(void);
-int fn_8022EC80(void);
-int fn_8022ECCC(void);
-int fn_8022ECF4(int a, int b);
-int fn_8022ED30(int db, int tbl);
-int fn_8022ED50(int db, int a, int b);
+int DbEvasModuleInit(void);
+void DbEvasModuleShutdown(void);
+int DbEvasInit(int a, const char *pName, int b);
+void DbEvasShutdown(void);
+int DbEvasLoad(void);
+int DbEvasLoadStream(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps);
+int DbEvasSaveStream(void *pTarget, struct SaveStreamOps_t *pOps);
+int DbEvasUnload(void);
+int DbTatsCopyInit(int a, const char *pName, int b);
+void DbTatsCopyShutdown(void);
+int DbTatsCopyOpen(void);
+int DbTatsCopyClose(void);
+int DbTatsCopyTable(int a, int b);
+int DbTatsCopyTblDestroy(int db, int tbl);
+int DbTatsCopyAllTables(int db, int a, int b);
 int DbFileInit(const char *pName);
 void DbFileShutdown(void);
 int DbFileTblLoad(int db, int file);
 int DbFileTblDestroy(int db, int tbl);
-int fn_8022EFDC(void);
+int DbUserNewId(void);
 int DbUserInit(int a, const char *pName, int b);
-void fn_8022F094(void);
-int fn_8022F0D4(void);
-void fn_8022F1BC(int key);
-void fn_8022F294(int key);
-int fn_8022F34C(void);
-int fn_8022F358(int index);
-signed char fn_8022F384(int key);
-int fn_8022F3D4(int key);
+void DbUserShutdown(void);
+int DbUserCreate(void);
+void DbUserDelete(int key);
+void DbUserReset(int key);
+int DbUserGetCount(void);
+int DbUserGetId(int index);
+signed char DbUserFindIndex(int key);
+int DbUserGetDb(int key);
 
-int fn_8022EBF0(int a, const char *pName, int b)
+int DbTatsCopyInit(int a, const char *pName, int b)
 {
-    lbl_803EC0B4 = DbUtilAlloc(strlen(pName) + 1, 1);
-    strcpy(lbl_803EC0B4, pName);
-    lbl_803EC0B8 = b;
+    _DbTatsCopy_pFileName = DbUtilAlloc(strlen(pName) + 1, 1);
+    strcpy(_DbTatsCopy_pFileName, pName);
+    _DbTatsCopy_iMode = b;
     return 0;
 }
 
-void fn_8022EC48(void)
+void DbTatsCopyShutdown(void)
 {
-    DbUtilFree(lbl_803EC0B4);
-    lbl_803EC0B0 = 0;
-    lbl_803EC0B4 = 0;
-    lbl_803EC0B8 = -1;
+    DbUtilFree(_DbTatsCopy_pFileName);
+    _DbTatsCopy_iSize = 0;
+    _DbTatsCopy_pFileName = 0;
+    _DbTatsCopy_iMode = -1;
 }
 
-int fn_8022EC80(void)
+int DbTatsCopyOpen(void)
 {
-    int result = fn_801F8D60(0x54415453, lbl_803EC0B0);
+    int result = TDbCreate(0x54415453, _DbTatsCopy_iSize);
     if (result == 0) {
-        result = TDbExtLoadFromResource(0x54415453, lbl_803EC0B4, lbl_803EC0B8, 0);
+        result = TDbExtLoadFromResource(0x54415453, _DbTatsCopy_pFileName, _DbTatsCopy_iMode, 0);
     }
     return result;
 }
 
-int fn_8022ECCC(void)
+int DbTatsCopyClose(void)
 {
-    return fn_801F8EEC(0x54415453);
+    return TDbDestroy(0x54415453);
 }
 
-int fn_8022ECF4(int a, int b)
+int DbTatsCopyTable(int a, int b)
 {
-    return fn_801FCE10(0, lbl_802B5C8C, a, b, b);
+    return TDbCompilePerformOp(0, "use 'TATS' select into \214.\214 * from \214\n", a, b, b);
 }
 
-int fn_8022ED30(int db, int tbl)
+int DbTatsCopyTblDestroy(int db, int tbl)
 {
-    return fn_801F967C(db, tbl);
+    return TDbTblDestroy(db, tbl);
 }
 
-int fn_8022ED50(int db, int a, int b)
+int DbTatsCopyAllTables(int db, int a, int b)
 {
     struct QueryCursor cursor;
     int tbl;
@@ -648,8 +645,8 @@ int fn_8022ED50(int db, int a, int b)
     int status = 0;
     int opened = 0;
 
-    if (fn_801F9014(0x54415453) != 0) {
-        status = fn_8022EC80();
+    if (TDbExists(0x54415453) != 0) {
+        status = DbTatsCopyOpen();
         opened = status == 0;
     }
     if (status == 0) {
@@ -657,13 +654,13 @@ int fn_8022ED50(int db, int a, int b)
         cursor.mUnknown4 = 0;
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
-        status = fn_801FCE10(0, lbl_802B5CB4, db, &cursor, a, b, 1);
+        status = TDbCompilePerformOp(0, "use \214 declare \212 cursor for select * from \214 where (\214 = \202)\n", db, &cursor, a, b, 1);
         if (status == 0) {
             pTbl = &tbl;
             do {
-                status = fn_801FCE10(0, lbl_802B5CF0, &cursor, pTbl);
-                if (status == 0 && fn_801F9A90(db, tbl) != 0) {
-                    status = fn_8022ECF4(db, tbl);
+                status = TDbCompilePerformOp(0, "fetch from \212 'FERT' into \202\n", &cursor, pTbl);
+                if (status == 0 && TDbTblExists(db, tbl) != 0) {
+                    status = DbTatsCopyTable(db, tbl);
                     if (QUERY_STATUS_ACCEPTED(status) == 1) {
                         status = 0;
                     }
@@ -672,19 +669,19 @@ int fn_8022ED50(int db, int a, int b)
         }
         if (QUERY_STATUS_ACCEPTED(status) == 1) {
             if (cursor.mUnknown0 != 0) {
-                status = fn_801FCFA0(&cursor);
+                status = TDbSQLDestroyCursor(&cursor);
             } else {
                 status = 0;
             }
         } else if (cursor.mUnknown0 != 0) {
-            fn_801FCFA0(&cursor);
+            TDbSQLDestroyCursor(&cursor);
         }
     }
     if (opened == 1) {
         if (status == 0) {
-            status = fn_8022ECCC();
+            status = DbTatsCopyClose();
         } else {
-            fn_8022ECCC();
+            DbTatsCopyClose();
         }
     }
     return status;

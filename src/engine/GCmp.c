@@ -48,7 +48,7 @@ extern int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 static unsigned char _GCmpModuleActive = 0;
 static int _GCmpNumTypes = 0;
 static GCmpCodec_t **_GCmpTypes;
-extern char lbl_803018A8[];
+static char _GCmp_szLabel[32] = "GCMP.LIB";
 extern GCmpCodec_t lbl_803018C8;
 extern GCmpCodec_t lbl_803018F0;
 extern GCmpCodec_t lbl_80301918;
@@ -339,9 +339,9 @@ int GCmpWrite(GCmpBuffer_t *pBuffer, void *pIn, unsigned int size)
 void GCmpSetLabel(const char *pName)
 {
     if (pName == 0) {
-        strnzcpy(lbl_803018A8, "GCMP.LIB", 32);
+        strnzcpy(_GCmp_szLabel, "GCMP.LIB", 32);
     } else {
-        fn_801C2D88(lbl_803018A8, 32, "%s", pName);
-        lbl_803018A8[31] = 0;
+        fn_801C2D88(_GCmp_szLabel, 32, "%s", pName);
+        _GCmp_szLabel[31] = 0;
     }
 }

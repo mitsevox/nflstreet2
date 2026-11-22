@@ -1,7 +1,9 @@
+/* T3DB SQL compiler: parses the game's database statements (select, insert, update, delete, declare cursor,
+   fetch) into query operations and runs them. */
 #include <string.h>
 #include <stdarg.h>
 #include "engine/t3db.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 typedef struct TDbSQLPool_801FC9D4 {
     unsigned int mItemSize;
@@ -41,41 +43,41 @@ typedef struct TDbParseInfo_801FC9D4 {
     TDbLexer_t mLexer;
 } TDbParseInfo_801FC9D4;
 
-extern TDbSQLPool_801FC9D4 lbl_8039B43C[5];
+static TDbSQLPool_801FC9D4 __T3DB_Compiler_SQLStack[5];
 
-extern int fn_801F9718(int db, unsigned int tableId, TDbLitRef_t *pColRefs, struct QueryResult *pResult,
+extern int TDbInsertRow(int db, unsigned int tableId, TDbLitRef_t *pColRefs, struct QueryResult *pResult,
                        int a);
-extern int fn_801F97D0(int db, unsigned int tableId, int srcDb, int srcTable, struct QueryResult *pResult,
+extern int TDbTblRowCopyTrig(int db, unsigned int tableId, int srcDb, int srcTable, struct QueryResult *pResult,
                        int a);
-extern int fn_801F9858(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
+extern int TDbQryRowCopyTrig(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
                        TDbLitRef_t *pColRefs, int srcDb, int srcTable, struct QueryResult *pResult,
                        int a);
-extern int fn_801F9908(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
+extern int TDbQryDeleteRow(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
                        struct QueryResult *pResult, int a);
-extern int fn_801F9AB8(int db, unsigned int tableId, TDbColumn_t *pColumns, unsigned int *pCount);
-extern int fn_801F9D70(int handle, int table, TDbExpr_t *pFilter, unsigned short *pCount);
-extern int fn_801F9E84(int db, unsigned int tableId, unsigned int index, TDbIdxColumnDef_t *pOrder,
+extern int TDbTblColEnum(int db, unsigned int tableId, TDbColumn_t *pColumns, unsigned int *pCount);
+extern int TDbTblGetCount(int handle, int table, TDbExpr_t *pFilter, unsigned short *pCount);
+extern int TDbIdxCreate(int db, unsigned int tableId, unsigned int index, TDbIdxColumnDef_t *pOrder,
                        TDbExpr_t *pWhere, unsigned char unique);
-extern int fn_801FA0BC(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere, void *pOrder,
+extern int _TDbQrySelect(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere, void *pOrder,
                        int *pCursor, struct QueryResult *pResult);
-extern int fn_801FA148(int cursor);
-extern int fn_801FA228(int handle, int a, int b, void *pRecord);
-extern int fn_801FA290(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
+extern int TDbQryDestroy(int cursor);
+extern int TDbQryRetrieve(int handle, int a, int b, void *pRecord);
+extern int TDbQryGetSingleRow(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
                        TDbLitRef_t *pColRefs);
-extern int fn_801FA3A0(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
+extern int TDbQrySetRow(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
                        TDbLitRef_t *pColRefs, struct QueryResult *pResult, int a);
-extern int fn_801FA5EC(int db, int b, int cursor, void *pRow, struct QueryResult *pResult);
-extern int fn_801FA844(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
+extern int TDbQryCreateTbl(int db, int b, int cursor, void *pRow, struct QueryResult *pResult);
+extern int TDbQryColStats(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
                        unsigned long long column, TDbSQLAggregate_8020071C *pAgg, struct QueryResult *pResult);
 extern void TDbUtilFillTableColRefsForTableColLits(TDbLitRef_t *pLits, unsigned long long *pOut);
 
-void fn_801FD0A4(TDbParseInfo_801FC9D4 *pInfo);
-int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbExpr_t **ppExpr);
-void fn_801FFEE4(TDbParseInfo_801FC9D4 *pInfo);
-void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, struct QueryResult *pResult);
-int fn_802004CC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbIdxColumnDef_t *pOrder,
+void TDBInitParseInfo(TDbParseInfo_801FC9D4 *pInfo);
+int _T3DBParse_Equivalent(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbExpr_t **ppExpr);
+void _T3DBFillPartialTableColRefs(TDbParseInfo_801FC9D4 *pInfo);
+void _T3DBParse_Start(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, struct QueryResult *pResult);
+int _T3DBParse_OrderBy(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbIdxColumnDef_t *pOrder,
                 int count);
-void fn_8020071C(int db, TDbParseInfo_801FC9D4 *pInfo, struct QueryResult *pResult);
+void _T3DBExec_Aggregate(int db, TDbParseInfo_801FC9D4 *pInfo, struct QueryResult *pResult);
 
 static inline int TDbSQLPoolInit_801FC9D4(TDbSQLPool_801FC9D4 *pPool, unsigned int itemSize, unsigned int count)
 {
@@ -123,13 +125,13 @@ static inline void TDbSQLPoolPut_801FCE10(TDbSQLPool_801FC9D4 *pPool, unsigned i
 static inline void TDbParseInfoRelease_801FCE10(TDbParseInfo_801FC9D4 *pInfo)
 {
     pInfo->mState = 0;
-    TDbSQLPoolPut_801FCE10(&lbl_8039B43C[1], pInfo->mColRefCount);
+    TDbSQLPoolPut_801FCE10(&__T3DB_Compiler_SQLStack[1], pInfo->mColRefCount);
     if (pInfo->mVars != 0) {
-        TDbSQLPoolPut_801FCE10(&lbl_8039B43C[2], pInfo->mColRefCount);
+        TDbSQLPoolPut_801FCE10(&__T3DB_Compiler_SQLStack[2], pInfo->mColRefCount);
     }
-    TDbSQLPoolPut_801FCE10(&lbl_8039B43C[3], pInfo->mTableRefCount);
-    TDbSQLPoolPut_801FCE10(&lbl_8039B43C[4], pInfo->mExprCount);
-    TDbSQLPoolPut_801FCE10(&lbl_8039B43C[0], 1);
+    TDbSQLPoolPut_801FCE10(&__T3DB_Compiler_SQLStack[3], pInfo->mTableRefCount);
+    TDbSQLPoolPut_801FCE10(&__T3DB_Compiler_SQLStack[4], pInfo->mExprCount);
+    TDbSQLPoolPut_801FCE10(&__T3DB_Compiler_SQLStack[0], 1);
 }
 
 static inline void TDbLexNext_801FD3C0(TDbLexer_t *pLexer)
@@ -142,19 +144,19 @@ static inline void TDbLexNext_801FD3C0(TDbLexer_t *pLexer)
     T3DB_Lexer_GetTokens(pLexer, 1);
 }
 
-int fn_801FC9D4(int parseCount, int colRefCount, int countC, int tableRefCount, int countE)
+int TDbSQLInit(int parseCount, int colRefCount, int countC, int tableRefCount, int countE)
 {
     int err;
 
-    err = TDbSQLPoolInit_801FC9D4(&lbl_8039B43C[2], 0xC, countC);
+    err = TDbSQLPoolInit_801FC9D4(&__T3DB_Compiler_SQLStack[2], 0xC, countC);
     if (err == 0) {
-        err = TDbSQLPoolInit_801FC9D4(&lbl_8039B43C[1], sizeof(TDbLitRef_t), colRefCount);
+        err = TDbSQLPoolInit_801FC9D4(&__T3DB_Compiler_SQLStack[1], sizeof(TDbLitRef_t), colRefCount);
         if (err == 0) {
-            err = TDbSQLPoolInit_801FC9D4(&lbl_8039B43C[4], 0x28, countE);
+            err = TDbSQLPoolInit_801FC9D4(&__T3DB_Compiler_SQLStack[4], 0x28, countE);
             if (err == 0) {
-                err = TDbSQLPoolInit_801FC9D4(&lbl_8039B43C[3], 0xC, tableRefCount);
+                err = TDbSQLPoolInit_801FC9D4(&__T3DB_Compiler_SQLStack[3], 0xC, tableRefCount);
                 if (err == 0) {
-                    err = TDbSQLPoolInit_801FC9D4(&lbl_8039B43C[0], sizeof(TDbParseInfo_801FC9D4), parseCount);
+                    err = TDbSQLPoolInit_801FC9D4(&__T3DB_Compiler_SQLStack[0], sizeof(TDbParseInfo_801FC9D4), parseCount);
                 }
             }
         }
@@ -162,24 +164,24 @@ int fn_801FC9D4(int parseCount, int colRefCount, int countC, int tableRefCount, 
     return err;
 }
 
-void fn_801FCD04(void)
+void TDbSQLShutdown(void)
 {
-    TDbSQLPoolFree_801FCD04(&lbl_8039B43C[2]);
-    TDbSQLPoolFree_801FCD04(&lbl_8039B43C[1]);
-    TDbSQLPoolFree_801FCD04(&lbl_8039B43C[4]);
-    TDbSQLPoolFree_801FCD04(&lbl_8039B43C[3]);
-    TDbSQLPoolFree_801FCD04(&lbl_8039B43C[0]);
+    TDbSQLPoolFree_801FCD04(&__T3DB_Compiler_SQLStack[2]);
+    TDbSQLPoolFree_801FCD04(&__T3DB_Compiler_SQLStack[1]);
+    TDbSQLPoolFree_801FCD04(&__T3DB_Compiler_SQLStack[4]);
+    TDbSQLPoolFree_801FCD04(&__T3DB_Compiler_SQLStack[3]);
+    TDbSQLPoolFree_801FCD04(&__T3DB_Compiler_SQLStack[0]);
 }
 
-int fn_801FCE10(void *pResult, const char *pQuery, ...)
+int TDbCompilePerformOp(void *pResult, const char *pQuery, ...)
 {
     struct QueryResult local;
     TDbParseInfo_801FC9D4 *pInfo;
     TDbLexer_t *pLexer;
 
-    pInfo = TDbSQLPoolGet_801FCE10(&lbl_8039B43C[0]);
+    pInfo = TDbSQLPoolGet_801FCE10(&__T3DB_Compiler_SQLStack[0]);
     pLexer = &pInfo->mLexer;
-    fn_801FD0A4(pInfo);
+    TDBInitParseInfo(pInfo);
     if (pResult == 0) {
         pResult = &local;
     }
@@ -191,14 +193,14 @@ int fn_801FCE10(void *pResult, const char *pQuery, ...)
     pLexer->mBufUsed = 0;
     T3DB_Lexer_GetTokens(pLexer, 0);
     va_start(pInfo->mArgs, pQuery);
-    fn_801FFFC4(pInfo, pLexer, -1, pResult);
+    _T3DBParse_Start(pInfo, pLexer, -1, pResult);
     if (pInfo->mState != 2) {
         TDbParseInfoRelease_801FCE10(pInfo);
     }
     return ((struct QueryResult *)pResult)->mUnknown4;
 }
 
-int fn_801FCFA0(struct QueryCursor *pCursor)
+int TDbSQLDestroyCursor(struct QueryCursor *pCursor)
 {
     TDbParseInfo_801FC9D4 *pInfo;
     unsigned int n;
@@ -206,8 +208,8 @@ int fn_801FCFA0(struct QueryCursor *pCursor)
 
     if (pCursor->mUnknown12 != 0) {
         ((TDbParseInfo_801FC9D4 *)pCursor->mUnknown12)->mState = 10;
-        n = lbl_8039B43C[0].mUsed;
-        pInfo = (TDbParseInfo_801FC9D4 *)((unsigned char *)lbl_8039B43C[0].mItems + n * lbl_8039B43C[0].mItemSize);
+        n = __T3DB_Compiler_SQLStack[0].mUsed;
+        pInfo = (TDbParseInfo_801FC9D4 *)((unsigned char *)__T3DB_Compiler_SQLStack[0].mItems + n * __T3DB_Compiler_SQLStack[0].mItemSize);
         i = n - 1;
         if (n != 0) {
             do {
@@ -220,10 +222,10 @@ int fn_801FCFA0(struct QueryCursor *pCursor)
         }
     }
     pCursor->mUnknown12 = 0;
-    return fn_801FA148(pCursor->mUnknown0);
+    return TDbQryDestroy(pCursor->mUnknown0);
 }
 
-void fn_801FD0A4(TDbParseInfo_801FC9D4 *pInfo)
+void TDBInitParseInfo(TDbParseInfo_801FC9D4 *pInfo)
 {
     pInfo->mColRefCount = 0;
     pInfo->mUnknown18 = -1;
@@ -239,7 +241,7 @@ void fn_801FD0A4(TDbParseInfo_801FC9D4 *pInfo)
     pInfo->mVars = 0;
 }
 
-void fn_801FD0E0(int db, TDbParseInfo_801FC9D4 *pInfo, unsigned char *pData, int size)
+void _T3DBEnumColumnLiterals(int db, TDbParseInfo_801FC9D4 *pInfo, unsigned char *pData, int size)
 {
     TDbColumn_t columns[0xFE];
     unsigned int count;
@@ -249,9 +251,9 @@ void fn_801FD0E0(int db, TDbParseInfo_801FC9D4 *pInfo, unsigned char *pData, int
     count = 0xFE;
     memset(pData, 0, size);
     if (pInfo->mTableRefCount == 2) {
-        fn_801F9AB8(db, pInfo->mTableRefs->mId, columns, &count);
+        TDbTblColEnum(db, pInfo->mTableRefs->mId, columns, &count);
         columns[count].mUnknown8 = -1;
-        pInfo->mColRefs = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[1]);
+        pInfo->mColRefs = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[1]);
         pRef = pInfo->mColRefs;
         for (pColumn = columns; pColumn->mUnknown8 != -1; pColumn++, pRef++) {
             pRef->mId = pColumn->mUnknown8;
@@ -262,37 +264,37 @@ void fn_801FD0E0(int db, TDbParseInfo_801FC9D4 *pInfo, unsigned char *pData, int
                 pData += bytes;
             }
             pInfo->mColRefCount++;
-            TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[1], 1);
+            TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[1], 1);
         }
         pRef->mId = -1;
         pRef->mTableId = -1;
     }
 }
 
-void fn_801FD200(int db, TDbParseInfo_801FC9D4 *pInfo, void *pOrder, struct QueryResult *pResult)
+void _T3DBCreateOutputTable(int db, TDbParseInfo_801FC9D4 *pInfo, void *pOrder, struct QueryResult *pResult)
 {
     unsigned long long row[0xFE];
     unsigned char literals[0x800];
     int cursor;
 
-    pResult->mUnknown4 = fn_801FA0BC(db, pInfo->mTableRefs, pInfo->mWhere, pOrder, &cursor, pResult);
+    pResult->mUnknown4 = _TDbQrySelect(db, pInfo->mTableRefs, pInfo->mWhere, pOrder, &cursor, pResult);
     if (pResult->mUnknown4 == 0 || pResult->mUnknown4 == 0x17 || pResult->mUnknown4 == 0x15 || pResult->mUnknown4 == 0x14) {
         if (pInfo->mColRefCount == 0) {
-            fn_801FD0E0(db, pInfo, literals, sizeof(literals));
+            _T3DBEnumColumnLiterals(db, pInfo, literals, sizeof(literals));
             TDbUtilFillTableColRefsForTableColLits(pInfo->mColRefs, row);
         } else {
             TDbUtilFillTableColRefsForTableColLits(pInfo->mColRefs, row);
         }
-        pResult->mUnknown4 = fn_801FA5EC(pInfo->mUnknown14, pInfo->mUnknown18, cursor, row, pResult);
+        pResult->mUnknown4 = TDbQryCreateTbl(pInfo->mUnknown14, pInfo->mUnknown18, cursor, row, pResult);
     }
     if (pResult->mUnknown4 == 0) {
-        pResult->mUnknown4 = fn_801FA148(cursor);
+        pResult->mUnknown4 = TDbQryDestroy(cursor);
     } else {
-        fn_801FA148(cursor);
+        TDbQryDestroy(cursor);
     }
 }
 
-unsigned int fn_801FD2E8(TDbParseInfo_801FC9D4 *pInfo, TDbToken_t *pToken)
+unsigned int _T3DBParse_Ref32(TDbParseInfo_801FC9D4 *pInfo, TDbToken_t *pToken)
 {
     unsigned int value;
 
@@ -311,16 +313,16 @@ unsigned int fn_801FD2E8(TDbParseInfo_801FC9D4 *pInfo, TDbToken_t *pToken)
     return value;
 }
 
-int fn_801FD3C0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbToken_t *pToken,
+int _T3DBParse_TableColumn(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbToken_t *pToken,
                 unsigned int *pTable, unsigned int *pColumn)
 {
     TDbToken_t *pNext = &pLexer->mTokens[1];
 
-    *pTable = fn_801FD2E8(pInfo, pToken);
+    *pTable = _T3DBParse_Ref32(pInfo, pToken);
     if (pNext->mType == 0x3E) {
         TDbLexNext_801FD3C0(pLexer);
         TDbLexNext_801FD3C0(pLexer);
-        *pColumn = fn_801FD2E8(pInfo, &pLexer->mTokens[0]);
+        *pColumn = _T3DBParse_Ref32(pInfo, &pLexer->mTokens[0]);
     } else {
         *pColumn = *pTable;
         *pTable = -1;
@@ -328,7 +330,7 @@ int fn_801FD3C0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
     return result;
 }
 
-int fn_801FD47C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbSQLVar_801FD47C *pVar)
+int _T3DBParse_Into(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbSQLVar_801FD47C *pVar)
 {
     TDbLexNext_801FD3C0(pLexer);
     TDbLexNext_801FD3C0(pLexer);
@@ -385,7 +387,7 @@ int fn_801FD47C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
     return result;
 }
 
-int fn_801FD97C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbLitRef_t *pRef,
+int _T3DBParse_TableColumnName(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbLitRef_t *pRef,
                 TDbSQLVar_801FD47C *pVar, int mode)
 {
     unsigned int table;
@@ -393,12 +395,12 @@ int fn_801FD97C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
     unsigned int zero = 0; // FAKEMATCH: the zero of the three clears held in one local, for the target callee-saved zero (li r27,0)
 
     TDbLexNext_801FD3C0(pLexer);
-    result = fn_801FD3C0(pInfo, pLexer, result, &pLexer->mTokens[0], &table, &column);
+    result = _T3DBParse_TableColumn(pInfo, pLexer, result, &pLexer->mTokens[0], &table, &column);
     pRef->mTableId = table;
     pRef->mId = column;
     pRef->mUnknown0 = zero;
     if (pLexer->mTokens[1].mType == 0x17 && (mode == 0 || mode == 2)) {
-        result = fn_801FD47C(pInfo, pLexer, result, pVar);
+        result = _T3DBParse_Into(pInfo, pLexer, result, pVar);
         if (pVar->mType == 0) {
             pRef->mUnknown0 = pVar->mValue;
         } else if (pVar->mType == 1) {
@@ -411,32 +413,32 @@ int fn_801FD97C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
     return result;
 }
 
-int fn_801FDA78(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, int mode)
+int _T3DBParse_TableColumnNames(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, int mode)
 {
     unsigned int n;
 
-    pInfo->mColRefs = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[1]);
-    pInfo->mVars = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[2]);
+    pInfo->mColRefs = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[1]);
+    pInfo->mVars = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[2]);
     n = pInfo->mColRefCount++;
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[1], 1);
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[2], 1);
-    result = fn_801FD97C(pInfo, pLexer, result, &pInfo->mColRefs[n], &pInfo->mVars[n], mode);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[1], 1);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[2], 1);
+    result = _T3DBParse_TableColumnName(pInfo, pLexer, result, &pInfo->mColRefs[n], &pInfo->mVars[n], mode);
     while (pLexer->mTokens[1].mType == 0x38) {
         TDbLexNext_801FD3C0(pLexer);
         n = pInfo->mColRefCount++;
-        TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[1], 1);
-        TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[2], 1);
-        result = fn_801FD97C(pInfo, pLexer, result, &pInfo->mColRefs[n], &pInfo->mVars[n], mode);
+        TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[1], 1);
+        TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[2], 1);
+        result = _T3DBParse_TableColumnName(pInfo, pLexer, result, &pInfo->mColRefs[n], &pInfo->mVars[n], mode);
     }
     n = pInfo->mColRefCount++;
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[1], 1);
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[2], 1);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[1], 1);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[2], 1);
     pInfo->mColRefs[n].mTableId = -1;
     pInfo->mColRefs[n].mId = -1;
     return result;
 }
 
-int fn_801FDC18(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
+int _T3DBParse_Join(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     TDbSQLTableRef_801FDC18 *pRef;
     TDbExpr_t *pExpr;
@@ -444,7 +446,7 @@ int fn_801FDC18(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 
     while (pLexer->mTokens[1].mType == 0x1A || pLexer->mTokens[1].mType == 0x18) {
         n = pInfo->mTableRefCount++;
-        TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[3], 1);
+        TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[3], 1);
         pRef = &pInfo->mTableRefs[n];
         TDbLexNext_801FD3C0(pLexer);
         if (pLexer->mTokens[0].mType == 0x18) {
@@ -455,16 +457,16 @@ int fn_801FDC18(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
         }
         TDbLexNext_801FD3C0(pLexer);
         TDbLexNext_801FD3C0(pLexer);
-        pRef->mId = fn_801FD2E8(pInfo, &pLexer->mTokens[0]);
+        pRef->mId = _T3DBParse_Ref32(pInfo, &pLexer->mTokens[0]);
         TDbLexNext_801FD3C0(pLexer);
-        pInfo->mExprs = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[4]);
-        result = fn_801FE5E0(pInfo, pLexer, result, &pExpr);
+        pInfo->mExprs = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[4]);
+        result = _T3DBParse_Equivalent(pInfo, pLexer, result, &pExpr);
         pRef->mExpr = pExpr;
     }
     return result;
 }
 
-int fn_801FDDC8(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, unsigned int *pOp)
+int _T3DBParse_Comparsion(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, unsigned int *pOp)
 {
     TDbLexNext_801FD3C0(pLexer);
     switch (pLexer->mTokens[0].mType) {
@@ -493,7 +495,7 @@ int fn_801FDDC8(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, un
     return result;
 }
 
-int fn_801FDF28(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbValue_t *pValue)
+int _T3DBParse_Value(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbValue_t *pValue)
 {
     unsigned int table;
     unsigned int column;
@@ -559,7 +561,7 @@ int fn_801FDF28(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
     case 0x2F:
     case 0xC:
     case 0x33:
-        result = fn_801FD3C0(pInfo, pLexer, result, &pLexer->mTokens[0], &table, &column);
+        result = _T3DBParse_TableColumn(pInfo, pLexer, result, &pLexer->mTokens[0], &table, &column);
         pValue->mType = TDB_TYPE_COLUMN;
         pValue->mValue.l = (unsigned long long)table << 32 | column;
         break;
@@ -570,7 +572,7 @@ int fn_801FDF28(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
     return result;
 }
 
-int fn_801FE484(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, int *pOp)
+int _T3DBParse_Logical(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, int *pOp)
 {
     TDbToken_t *pNext = &pLexer->mTokens[1];
 
@@ -590,11 +592,11 @@ int fn_801FE484(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, in
     return result;
 }
 
-int fn_801FE534(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbExpr_t *pExpr)
+int _T3DBParse_SubEquivalent(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbExpr_t *pExpr)
 {
-    result = fn_801FDF28(pInfo, pLexer, result, &pExpr->mLeft);
-    result = fn_801FDDC8(pInfo, pLexer, result, (unsigned int *)&pExpr->mOp);
-    result = fn_801FDF28(pInfo, pLexer, result, &pExpr->mRight);
+    result = _T3DBParse_Value(pInfo, pLexer, result, &pExpr->mLeft);
+    result = _T3DBParse_Comparsion(pInfo, pLexer, result, (unsigned int *)&pExpr->mOp);
+    result = _T3DBParse_Value(pInfo, pLexer, result, &pExpr->mRight);
     if ((pExpr->mLeft.mType == TDB_TYPE_COLUMN && (int)pExpr->mLeft.mValue.l == -1) ||
         (pExpr->mRight.mType == TDB_TYPE_COLUMN && (int)pExpr->mRight.mValue.l == -1)) {
         pExpr->mLeft.mValue.u = pExpr->mRight.mValue.u = 1;
@@ -604,7 +606,7 @@ int fn_801FE534(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
     return result;
 }
 
-int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbExpr_t **ppExpr)
+int _T3DBParse_Equivalent(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbExpr_t **ppExpr)
 {
     TDbToken_t *pNext = &pLexer->mTokens[1];
     TDbExpr_t *pExpr;
@@ -616,27 +618,27 @@ int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
     pExpr = 0;
     if (pNext->mType == 0x3C) {
         TDbLexNext_801FD3C0(pLexer);
-        result = fn_801FE5E0(pInfo, pLexer, result, &pExpr);
+        result = _T3DBParse_Equivalent(pInfo, pLexer, result, &pExpr);
         TDbLexNext_801FD3C0(pLexer);
     } else if (pNext->mType == 0xF) {
         TDbLexNext_801FD3C0(pLexer);
         *ppExpr = pExpr = va_arg(pInfo->mArgs, TDbExpr_t *);
     } else {
         n = pInfo->mExprCount++;
-        TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[4], 1);
+        TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[4], 1);
         *ppExpr = pExpr = &pInfo->mExprs[n];
-        result = fn_801FE534(pInfo, pLexer, result, pExpr);
+        result = _T3DBParse_SubEquivalent(pInfo, pLexer, result, pExpr);
     }
     *ppExpr = pExpr;
-    result = fn_801FE484(pInfo, pLexer, result, &op);
+    result = _T3DBParse_Logical(pInfo, pLexer, result, &op);
     if (op != -1) {
         n = pInfo->mExprCount++;
-        TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[4], 1);
+        TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[4], 1);
         pAnd = &pInfo->mExprs[n];
         pAnd->mLeft.mType = TDB_TYPE_EXPR_UINT;
         pAnd->mLeft.mValue.p = pExpr;
         pAnd->mOp = op;
-        result = fn_801FE5E0(pInfo, pLexer, result, &pRight);
+        result = _T3DBParse_Equivalent(pInfo, pLexer, result, &pRight);
         pAnd->mRight.mType = TDB_TYPE_EXPR_UINT;
         pAnd->mRight.mValue.p = pRight;
         *ppExpr = pAnd;
@@ -652,19 +654,19 @@ int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
     return result;
 }
 
-int fn_801FE840(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
+int _T3DBParse_Where(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     TDbToken_t *pNext = &pLexer->mTokens[1];
 
     if (pNext->mType == 0x14) {
         TDbLexNext_801FD3C0(pLexer);
-        pInfo->mExprs = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[4]);
-        result = fn_801FE5E0(pInfo, pLexer, result, &pInfo->mWhere);
+        pInfo->mExprs = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[4]);
+        result = _T3DBParse_Equivalent(pInfo, pLexer, result, &pInfo->mWhere);
     }
     return result;
 }
 
-int fn_801FE8DC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
+int _T3DBParse_From(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     TDbSQLTableRef_801FDC18 *pRef;
     unsigned int joinType;
@@ -673,23 +675,23 @@ int fn_801FE8DC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
     joinType = 2;
     TDbLexNext_801FD3C0(pLexer);
     TDbLexNext_801FD3C0(pLexer);
-    pInfo->mTableRefs = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[3]);
+    pInfo->mTableRefs = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[3]);
     n = pInfo->mTableRefCount++;
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[3], 1);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[3], 1);
     pRef = &pInfo->mTableRefs[n];
-    pRef->mId = fn_801FD2E8(pInfo, &pLexer->mTokens[0]);
+    pRef->mId = _T3DBParse_Ref32(pInfo, &pLexer->mTokens[0]);
     pRef->mJoinType = joinType;
     pRef->mExpr = 0;
-    result = fn_801FDC18(pInfo, pLexer, result);
+    result = _T3DBParse_Join(pInfo, pLexer, result);
     n = pInfo->mTableRefCount++;
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[3], 1);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[3], 1);
     pRef = &pInfo->mTableRefs[n];
     pRef->mId = -1;
     pRef->mJoinType = joinType;
     return result;
 }
 
-int fn_801FEA04(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbLitRef_t *pRef,
+int _T3DBParse_VariableName(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbLitRef_t *pRef,
                 TDbSQLVar_801FD47C *pVar)
 {
     unsigned int table;
@@ -697,7 +699,7 @@ int fn_801FEA04(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
     unsigned int value;
 
     TDbLexNext_801FD3C0(pLexer);
-    result = fn_801FD3C0(pInfo, pLexer, result, &pLexer->mTokens[0], &table, &column);
+    result = _T3DBParse_TableColumn(pInfo, pLexer, result, &pLexer->mTokens[0], &table, &column);
     TDbLexNext_801FD3C0(pLexer);
     TDbLexNext_801FD3C0(pLexer);
     switch (pLexer->mTokens[0].mType) {
@@ -773,38 +775,38 @@ int fn_801FEA04(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
     return result;
 }
 
-int fn_801FEF44(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
+int _T3DBParse_VariableNames(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     unsigned int n;
 
-    pInfo->mColRefs = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[1]);
-    pInfo->mVars = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[2]);
+    pInfo->mColRefs = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[1]);
+    pInfo->mVars = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[2]);
     n = pInfo->mColRefCount++;
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[1], 1);
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[2], 1);
-    result = fn_801FEA04(pInfo, pLexer, result, &pInfo->mColRefs[n], &pInfo->mVars[n]);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[1], 1);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[2], 1);
+    result = _T3DBParse_VariableName(pInfo, pLexer, result, &pInfo->mColRefs[n], &pInfo->mVars[n]);
     while (pLexer->mTokens[1].mType == 0x38) {
         TDbLexNext_801FD3C0(pLexer);
         n = pInfo->mColRefCount++;
-        TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[1], 1);
-        TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[2], 1);
-        result = fn_801FEA04(pInfo, pLexer, result, &pInfo->mColRefs[n], &pInfo->mVars[n]);
+        TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[1], 1);
+        TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[2], 1);
+        result = _T3DBParse_VariableName(pInfo, pLexer, result, &pInfo->mColRefs[n], &pInfo->mVars[n]);
     }
     n = pInfo->mColRefCount++;
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[1], 1);
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[2], 1);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[1], 1);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[2], 1);
     pInfo->mColRefs[n].mTableId = -1;
     pInfo->mColRefs[n].mId = -1;
     return result;
 }
 
-int fn_801FF0D4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
+int _T3DBParse_Set(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     TDbLexNext_801FD3C0(pLexer);
-    return fn_801FEF44(pInfo, pLexer, result);
+    return _T3DBParse_VariableNames(pInfo, pLexer, result);
 }
 
-int fn_801FF13C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
+int _T3DBParse_Aggregate(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     TDbLitRef_t *pRef;
     unsigned int n;
@@ -812,13 +814,13 @@ int fn_801FF13C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 
     TDbLexNext_801FD3C0(pLexer);
     pInfo->mState = 8;
-    pInfo->mColRefs = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[1]);
-    pInfo->mVars = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[2]);
+    pInfo->mColRefs = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[1]);
+    pInfo->mVars = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[2]);
     while (1) {
         op = pLexer->mTokens[0].mType;
         n = pInfo->mColRefCount++;
-        TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[1], 1);
-        TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[2], 1);
+        TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[1], 1);
+        TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[2], 1);
         pRef = &pInfo->mColRefs[n];
         TDbLexNext_801FD3C0(pLexer);
         TDbLexNext_801FD3C0(pLexer);
@@ -828,13 +830,13 @@ int fn_801FF13C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
             pRef->mId = 1;
             pRef->mUnknown0 = 0;
         } else {
-            result = fn_801FD3C0(pInfo, pLexer, result, &pLexer->mTokens[0], &pRef->mTableId,
+            result = _T3DBParse_TableColumn(pInfo, pLexer, result, &pLexer->mTokens[0], &pRef->mTableId,
                                  (unsigned int *)&pRef->mId);
             pRef->mUnknown0 = 1;
         }
         pRef->mColumn = op;
         TDbLexNext_801FD3C0(pLexer);
-        result = fn_801FD47C(pInfo, pLexer, result, &pInfo->mVars[n]);
+        result = _T3DBParse_Into(pInfo, pLexer, result, &pInfo->mVars[n]);
         if (pLexer->mTokens[1].mType != 0x38) {
             break;
         }
@@ -842,19 +844,19 @@ int fn_801FF13C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
         TDbLexNext_801FD3C0(pLexer);
     }
     n = pInfo->mColRefCount++;
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[1], 1);
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[2], 1);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[1], 1);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[2], 1);
     pInfo->mColRefs[n].mId = -1;
     return result;
 }
 
-int fn_801FF390(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
+int _T3DBParse_Select(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     unsigned int id;
     unsigned int type = pLexer->mTokens[1].mType;
 
     if (type - 0x2B <= 3) {
-        result = fn_801FF13C(pInfo, pLexer, result);
+        result = _T3DBParse_Aggregate(pInfo, pLexer, result);
     } else if (type == 0x17) {
         if (pInfo->mState == 1) {
             pInfo->mState = 5;
@@ -863,28 +865,28 @@ int fn_801FF390(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
         }
         TDbLexNext_801FD3C0(pLexer);
         TDbLexNext_801FD3C0(pLexer);
-        id = fn_801FD2E8(pInfo, &pLexer->mTokens[0]);
+        id = _T3DBParse_Ref32(pInfo, &pLexer->mTokens[0]);
         if (pLexer->mTokens[1].mType == 0x3E) {
             TDbLexNext_801FD3C0(pLexer);
             pInfo->mUnknown14 = id;
             TDbLexNext_801FD3C0(pLexer);
-            id = fn_801FD2E8(pInfo, &pLexer->mTokens[0]);
+            id = _T3DBParse_Ref32(pInfo, &pLexer->mTokens[0]);
         }
         pInfo->mUnknown18 = id;
         if (pLexer->mTokens[1].mType == 0x41) {
             TDbLexNext_801FD3C0(pLexer);
             pInfo->mColRefCount = 0;
         } else {
-            result = fn_801FDA78(pInfo, pLexer, result, 1);
+            result = _T3DBParse_TableColumnNames(pInfo, pLexer, result, 1);
         }
     } else {
-        result = fn_801FDA78(pInfo, pLexer, result, 0);
+        result = _T3DBParse_TableColumnNames(pInfo, pLexer, result, 0);
     }
-    result = fn_801FE8DC(pInfo, pLexer, result);
-    return fn_801FE840(pInfo, pLexer, result);
+    result = _T3DBParse_From(pInfo, pLexer, result);
+    return _T3DBParse_Where(pInfo, pLexer, result);
 }
 
-int fn_801FF544(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, unsigned char *pFlag)
+int _T3DBParse_Declare(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, unsigned char *pFlag)
 {
     TDbSQLTableRef_801FDC18 *pRef;
     struct QueryCursor *pCursor;
@@ -904,14 +906,14 @@ int fn_801FF544(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, un
         pInfo->mUnknown1C = va_arg(pInfo->mArgs, unsigned int);
         TDbLexNext_801FD3C0(pLexer);
         TDbLexNext_801FD3C0(pLexer);
-        pInfo->mTableRefs = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[3]);
+        pInfo->mTableRefs = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[3]);
         n = pInfo->mTableRefCount++;
-        TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[3], 1);
+        TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[3], 1);
         pRef = &pInfo->mTableRefs[n];
-        pRef->mId = fn_801FD2E8(pInfo, &pLexer->mTokens[0]);
+        pRef->mId = _T3DBParse_Ref32(pInfo, &pLexer->mTokens[0]);
         pRef->mJoinType = 2;
         pRef->mExpr = 0;
-        result = fn_801FE840(pInfo, pLexer, result);
+        result = _T3DBParse_Where(pInfo, pLexer, result);
         break;
     case 0xA:
         TDbLexNext_801FD3C0(pLexer);
@@ -929,23 +931,23 @@ int fn_801FF544(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, un
         TDbLexNext_801FD3C0(pLexer);
         if (pLexer->mTokens[1].mType == 0x41) {
             TDbLexNext_801FD3C0(pLexer);
-            result = fn_801FE8DC(pInfo, pLexer, result);
-            result = fn_801FE840(pInfo, pLexer, result);
+            result = _T3DBParse_From(pInfo, pLexer, result);
+            result = _T3DBParse_Where(pInfo, pLexer, result);
         } else {
-            result = fn_801FF390(pInfo, pLexer, result);
+            result = _T3DBParse_Select(pInfo, pLexer, result);
         }
         break;
     }
     return result;
 }
 
-int fn_801FF8BC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
+int _T3DBParse_Delete(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
-    result = fn_801FE8DC(pInfo, pLexer, result);
-    return fn_801FE840(pInfo, pLexer, result);
+    result = _T3DBParse_From(pInfo, pLexer, result);
+    return _T3DBParse_Where(pInfo, pLexer, result);
 }
 
-int fn_801FF8FC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
+int _T3DBParse_Fetch(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     struct QueryCursor *pCursor;
     TDbParseInfo_801FC9D4 *pOther;
@@ -960,60 +962,60 @@ int fn_801FF8FC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
         pInfo->mColRefs = pOther->mColRefs;
         pInfo->mVars = pOther->mVars;
     } else {
-        result = fn_801FDA78(pInfo, pLexer, result, 2);
-        pInfo->mTableRefs = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[3]);
+        result = _T3DBParse_TableColumnNames(pInfo, pLexer, result, 2);
+        pInfo->mTableRefs = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[3]);
         pInfo->mTableRefCount++;
-        TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[3], 1);
+        TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[3], 1);
         pInfo->mTableRefs->mId = ((struct QueryCursor *)pInfo->mUnknown1C)->mUnknown8;
-        fn_801FFEE4(pInfo);
+        _T3DBFillPartialTableColRefs(pInfo);
     }
     return result;
 }
 
-int fn_801FFA6C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
+int _T3DBParse_Update(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     TDbSQLTableRef_801FDC18 *pRef;
 
     TDbLexNext_801FD3C0(pLexer);
-    pInfo->mTableRefs = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[3]);
+    pInfo->mTableRefs = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[3]);
     pInfo->mTableRefCount++;
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[3], 1);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[3], 1);
     pRef = pInfo->mTableRefs;
-    pRef->mId = fn_801FD2E8(pInfo, &pLexer->mTokens[0]);
+    pRef->mId = _T3DBParse_Ref32(pInfo, &pLexer->mTokens[0]);
     pRef->mJoinType = 2;
     pRef->mExpr = 0;
     pInfo->mTableRefCount++;
-    TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[3], 1);
+    TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[3], 1);
     pRef = &pInfo->mTableRefs[1];
     pRef->mJoinType = 2;
     pRef->mId = -1;
-    result = fn_801FF0D4(pInfo, pLexer, result);
-    return fn_801FE840(pInfo, pLexer, result);
+    result = _T3DBParse_Set(pInfo, pLexer, result);
+    return _T3DBParse_Where(pInfo, pLexer, result);
 }
 
-int fn_801FFB68(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
+int _T3DBParse_Insert(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
 {
     TDbSQLTableRef_801FDC18 *pRef;
     unsigned int id;
 
     TDbLexNext_801FD3C0(pLexer);
     TDbLexNext_801FD3C0(pLexer);
-    id = fn_801FD2E8(pInfo, &pLexer->mTokens[0]);
+    id = _T3DBParse_Ref32(pInfo, &pLexer->mTokens[0]);
     if (pLexer->mTokens[1].mType == 0x3E) {
         TDbLexNext_801FD3C0(pLexer);
         pInfo->mUnknown14 = id;
         TDbLexNext_801FD3C0(pLexer);
-        id = fn_801FD2E8(pInfo, &pLexer->mTokens[0]);
+        id = _T3DBParse_Ref32(pInfo, &pLexer->mTokens[0]);
     }
     if (pLexer->mTokens[1].mType == 0x1E) {
-        pInfo->mTableRefs = TDbSQLPoolCur_801FD0E0(&lbl_8039B43C[3]);
+        pInfo->mTableRefs = TDbSQLPoolCur_801FD0E0(&__T3DB_Compiler_SQLStack[3]);
         pInfo->mTableRefCount++;
-        TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[3], 1);
+        TDbSQLPoolAdd_801FD0E0(&__T3DB_Compiler_SQLStack[3], 1);
         pRef = pInfo->mTableRefs;
         pRef->mId = id;
         pRef->mJoinType = 2;
         pRef->mExpr = 0;
-        result = fn_801FF0D4(pInfo, pLexer, result);
+        result = _T3DBParse_Set(pInfo, pLexer, result);
     } else {
         pInfo->mUnknown18 = id;
         if (pLexer->mTokens[1].mType == 0x41) {
@@ -1022,17 +1024,17 @@ int fn_801FFB68(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result)
             pInfo->mColRefCount = 0;
         } else {
             pInfo->mState = 7;
-            result = fn_801FDA78(pInfo, pLexer, result, 1);
+            result = _T3DBParse_TableColumnNames(pInfo, pLexer, result, 1);
         }
         TDbLexNext_801FD3C0(pLexer);
         TDbLexNext_801FD3C0(pLexer);
-        result = fn_801FE8DC(pInfo, pLexer, result);
-        result = fn_801FE840(pInfo, pLexer, result);
+        result = _T3DBParse_From(pInfo, pLexer, result);
+        result = _T3DBParse_Where(pInfo, pLexer, result);
     }
     return result;
 }
 
-void fn_801FFDA8(TDbParseInfo_801FC9D4 *pInfo)
+void _T3DBFillFetchedValues(TDbParseInfo_801FC9D4 *pInfo)
 {
     TDbLitRef_t *pRef = pInfo->mColRefs;
     TDbSQLVar_801FD47C *pVar = pInfo->mVars;
@@ -1077,7 +1079,7 @@ void fn_801FFDA8(TDbParseInfo_801FC9D4 *pInfo)
     }
 }
 
-void fn_801FFE88(TDbParseInfo_801FC9D4 *pInfo)
+void _T3DBParse_PatchTableRef(TDbParseInfo_801FC9D4 *pInfo)
 {
     unsigned int id = pInfo->mTableRefs->mId;
     unsigned int i = pInfo->mColRefCount;
@@ -1099,7 +1101,7 @@ static inline unsigned long long TDbColumnValue_801FFEE4(unsigned int table, uns
     return ((unsigned long long)table << 32) | column;
 }
 
-void fn_801FFEE4(TDbParseInfo_801FC9D4 *pInfo)
+void _T3DBFillPartialTableColRefs(TDbParseInfo_801FC9D4 *pInfo)
 {
     unsigned int id = pInfo->mTableRefs->mId;
     TDbExpr_t *pExpr = pInfo->mExprs;
@@ -1113,10 +1115,10 @@ void fn_801FFEE4(TDbParseInfo_801FC9D4 *pInfo)
             pExpr->mRight.mValue.l = TDbColumnValue_801FFEE4(id, (unsigned int)pExpr->mRight.mValue.l);
         }
     }
-    fn_801FFE88(pInfo);
+    _T3DBParse_PatchTableRef(pInfo);
 }
 
-void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, struct QueryResult *pResult)
+void _T3DBParse_Start(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, struct QueryResult *pResult)
 {
     TDbIdxColumnDef_t order[8];
     unsigned char unique;
@@ -1125,23 +1127,23 @@ void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, s
 
     if (pLexer->mTokens[0].mType == 0x1F) {
         TDbLexNext_801FD3C0(pLexer);
-        db = fn_801FD2E8(pInfo, &pLexer->mTokens[0]);
+        db = _T3DBParse_Ref32(pInfo, &pLexer->mTokens[0]);
         pInfo->mUnknown14 = db;
         TDbLexNext_801FD3C0(pLexer);
     }
     switch (pLexer->mTokens[0].mType) {
     case 0x24:
     case 0x25:
-        result = fn_801FF544(pInfo, pLexer, result, &unique);
-        fn_802004CC(pInfo, pLexer, result, order, 8);
-        fn_801FFEE4(pInfo);
+        result = _T3DBParse_Declare(pInfo, pLexer, result, &unique);
+        _T3DBParse_OrderBy(pInfo, pLexer, result, order, 8);
+        _T3DBFillPartialTableColRefs(pInfo);
         switch (pInfo->mState) {
         case 3:
-            pResult->mUnknown4 = fn_801F9E84(db, pInfo->mTableRefs->mId, pInfo->mUnknown1C, order, pInfo->mWhere, unique);
+            pResult->mUnknown4 = TDbIdxCreate(db, pInfo->mTableRefs->mId, pInfo->mUnknown1C, order, pInfo->mWhere, unique);
             break;
         case 5:
             ((struct QueryCursor *)pInfo->mUnknown1C)->mUnknown4 = 0;
-            fn_801FD200(db, pInfo, order, pResult);
+            _T3DBCreateOutputTable(db, pInfo, order, pResult);
             if (pResult->mUnknown4 == 0 || pResult->mUnknown4 == 0x17 || pResult->mUnknown4 == 0x15 || pResult->mUnknown4 == 0x14) {
                 pInfo->mTableRefs[0].mId = pInfo->mUnknown18;
                 pInfo->mTableRefs[0].mJoinType = 2;
@@ -1150,7 +1152,7 @@ void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, s
                 pInfo->mTableRefs[1].mJoinType = 2;
                 pInfo->mTableRefs[1].mExpr = 0;
                 ((struct QueryCursor *)pInfo->mUnknown1C)->mUnknown8 = pInfo->mUnknown18;
-                pResult->mUnknown4 = fn_801FA0BC(pInfo->mUnknown14, pInfo->mTableRefs, 0, order,
+                pResult->mUnknown4 = _TDbQrySelect(pInfo->mUnknown14, pInfo->mTableRefs, 0, order,
                                             (int *)pInfo->mUnknown1C, pResult);
             }
             break;
@@ -1158,7 +1160,7 @@ void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, s
         case 2:
             ((struct QueryCursor *)pInfo->mUnknown1C)->mUnknown4 = 0;
             ((struct QueryCursor *)pInfo->mUnknown1C)->mUnknown8 = pInfo->mTableRefs->mId;
-            pResult->mUnknown4 = fn_801FA0BC(db, pInfo->mTableRefs, pInfo->mWhere, order, (int *)pInfo->mUnknown1C,
+            pResult->mUnknown4 = _TDbQrySelect(db, pInfo->mTableRefs, pInfo->mWhere, order, (int *)pInfo->mUnknown1C,
                                         pResult);
             if (pResult->mUnknown4 != 0 && pResult->mUnknown4 != 0x17 && pResult->mUnknown4 != 0x15 && pResult->mUnknown4 != 0x14 &&
                 pInfo->mState == 2) {
@@ -1169,17 +1171,17 @@ void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, s
         }
         break;
     case 0x11:
-        result = fn_801FF390(pInfo, pLexer, result);
-        fn_801FFEE4(pInfo);
+        result = _T3DBParse_Select(pInfo, pLexer, result);
+        _T3DBFillPartialTableColRefs(pInfo);
         if (pInfo->mState == 8) {
-            fn_8020071C(db, pInfo, pResult);
+            _T3DBExec_Aggregate(db, pInfo, pResult);
         } else if (pInfo->mUnknown18 != -1) {
-            fn_802004CC(pInfo, pLexer, result, order, 8);
-            fn_801FD200(db, pInfo, order, pResult);
+            _T3DBParse_OrderBy(pInfo, pLexer, result, order, 8);
+            _T3DBCreateOutputTable(db, pInfo, order, pResult);
         } else {
-            pResult->mUnknown4 = fn_801FA290(db, pInfo->mTableRefs, pInfo->mWhere, pInfo->mColRefs);
+            pResult->mUnknown4 = TDbQryGetSingleRow(db, pInfo->mTableRefs, pInfo->mWhere, pInfo->mColRefs);
             if (pResult->mUnknown4 == 0) {
-                fn_801FFDA8(pInfo);
+                _T3DBFillFetchedValues(pInfo);
                 pResult->mUnknown0 = 1;
             } else {
                 pResult->mUnknown0 = 0;
@@ -1187,42 +1189,42 @@ void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, s
         }
         break;
     case 0x1C:
-        fn_801FFA6C(pInfo, pLexer, result);
-        fn_801FFEE4(pInfo);
-        pResult->mUnknown4 = fn_801FA3A0(db, pInfo->mTableRefs, pInfo->mWhere, pInfo->mColRefs, pResult, 0);
+        _T3DBParse_Update(pInfo, pLexer, result);
+        _T3DBFillPartialTableColRefs(pInfo);
+        pResult->mUnknown4 = TDbQrySetRow(db, pInfo->mTableRefs, pInfo->mWhere, pInfo->mColRefs, pResult, 0);
         break;
     case 0x12:
-        fn_801FFB68(pInfo, pLexer, result);
-        fn_801FFEE4(pInfo);
+        _T3DBParse_Insert(pInfo, pLexer, result);
+        _T3DBFillPartialTableColRefs(pInfo);
         if (pInfo->mState == 7) {
-            pResult->mUnknown4 = fn_801F9858(db, pInfo->mTableRefs, pInfo->mWhere, pInfo->mColRefs, pInfo->mUnknown14,
+            pResult->mUnknown4 = TDbQryRowCopyTrig(db, pInfo->mTableRefs, pInfo->mWhere, pInfo->mColRefs, pInfo->mUnknown14,
                                         pInfo->mUnknown18, pResult, 0);
         } else if (pInfo->mState == 6) {
             if (pInfo->mWhere != 0 || pInfo->mTableRefCount > 2) {
                 unsigned char data[0x800];
 
-                fn_801FD0E0(db, pInfo, data, sizeof(data));
-                pResult->mUnknown4 = fn_801F9858(db, pInfo->mTableRefs, pInfo->mWhere, pInfo->mColRefs,
+                _T3DBEnumColumnLiterals(db, pInfo, data, sizeof(data));
+                pResult->mUnknown4 = TDbQryRowCopyTrig(db, pInfo->mTableRefs, pInfo->mWhere, pInfo->mColRefs,
                                             pInfo->mUnknown14, pInfo->mUnknown18, pResult, 0);
             } else {
-                pResult->mUnknown4 = fn_801F97D0(db, pInfo->mTableRefs->mId, pInfo->mUnknown14, pInfo->mUnknown18,
+                pResult->mUnknown4 = TDbTblRowCopyTrig(db, pInfo->mTableRefs->mId, pInfo->mUnknown14, pInfo->mUnknown18,
                                             pResult, 0);
             }
         } else {
-            pResult->mUnknown4 = fn_801F9718(db, pInfo->mTableRefs->mId, pInfo->mColRefs, pResult, 0);
+            pResult->mUnknown4 = TDbInsertRow(db, pInfo->mTableRefs->mId, pInfo->mColRefs, pResult, 0);
         }
         break;
     case 0x15:
-        fn_801FF8BC(pInfo, pLexer, result);
-        fn_801FFEE4(pInfo);
-        pResult->mUnknown4 = fn_801F9908(db, pInfo->mTableRefs, pInfo->mWhere, pResult, 0);
+        _T3DBParse_Delete(pInfo, pLexer, result);
+        _T3DBFillPartialTableColRefs(pInfo);
+        pResult->mUnknown4 = TDbQryDeleteRow(db, pInfo->mTableRefs, pInfo->mWhere, pResult, 0);
         break;
     case 0x13:
-        fn_801FF8FC(pInfo, pLexer, result);
+        _T3DBParse_Fetch(pInfo, pLexer, result);
         pCursor = (struct QueryCursor *)pInfo->mUnknown1C;
-        pResult->mUnknown4 = fn_801FA228(pCursor->mUnknown0, 1, pCursor->mUnknown4++, pInfo->mColRefs);
+        pResult->mUnknown4 = TDbQryRetrieve(pCursor->mUnknown0, 1, pCursor->mUnknown4++, pInfo->mColRefs);
         if (pResult->mUnknown4 == 0) {
-            fn_801FFDA8(pInfo);
+            _T3DBFillFetchedValues(pInfo);
             pResult->mUnknown0 = 1;
         } else {
             pResult->mUnknown0 = 0;
@@ -1234,7 +1236,7 @@ void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, s
     }
 }
 
-int fn_802004CC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbIdxColumnDef_t *pOrder,
+int _T3DBParse_OrderBy(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TDbIdxColumnDef_t *pOrder,
                 int count)
 {
     TDbToken_t *pNext = &pLexer->mTokens[1];
@@ -1246,7 +1248,7 @@ int fn_802004CC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
         do {
             more = 0;
             TDbLexNext_801FD3C0(pLexer);
-            result = fn_801FD3C0(pInfo, pLexer, result, &pLexer->mTokens[0], &pOrder->mTableId,
+            result = _T3DBParse_TableColumn(pInfo, pLexer, result, &pLexer->mTokens[0], &pOrder->mTableId,
                                  (unsigned int *)&pOrder->mId);
             if (pOrder->mTableId == -1) {
                 pOrder->mTableId = pInfo->mTableRefs->mId;
@@ -1283,7 +1285,7 @@ int fn_802004CC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int result, TD
 }
 
 
-void fn_8020071C(int db, TDbParseInfo_801FC9D4 *pInfo, struct QueryResult *pResult)
+void _T3DBExec_Aggregate(int db, TDbParseInfo_801FC9D4 *pInfo, struct QueryResult *pResult)
 {
     TDbSQLAggregate_8020071C agg;
     int map[4];
@@ -1317,10 +1319,10 @@ void fn_8020071C(int db, TDbParseInfo_801FC9D4 *pInfo, struct QueryResult *pResu
                 }
             }
             if (count == 1 && map[0] != -1 && pInfo->mTableRefCount <= 2) {
-                pResult->mUnknown4 = fn_801F9D70(db, pInfo->mTableRefs->mId, pInfo->mWhere, &pResult->mUnknown0);
+                pResult->mUnknown4 = TDbTblGetCount(db, pInfo->mTableRefs->mId, pInfo->mWhere, &pResult->mUnknown0);
                 pInfo->mColRefs->mUnknown0 = pResult->mUnknown0;
             } else {
-                pResult->mUnknown4 = fn_801FA844(db, pInfo->mTableRefs, pInfo->mWhere,
+                pResult->mUnknown4 = TDbQryColStats(db, pInfo->mTableRefs, pInfo->mWhere,
                                             (unsigned long long)pRef->mTableId << 32 | (unsigned int)pRef->mId,
                                             &agg, pResult);
                 pResult->mUnknown0 = agg.mCount;
@@ -1351,6 +1353,6 @@ void fn_8020071C(int db, TDbParseInfo_801FC9D4 *pInfo, struct QueryResult *pResu
         i++;
     }
     if (pResult->mUnknown4 == 0 || pResult->mUnknown4 == 0x17 || pResult->mUnknown4 == 0x15 || pResult->mUnknown4 == 0x14) {
-        fn_801FFDA8(pInfo);
+        _T3DBFillFetchedValues(pInfo);
     }
 }

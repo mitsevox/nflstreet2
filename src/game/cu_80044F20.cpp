@@ -6,9 +6,9 @@
 #include <dolphin/gx/GXManage.h>
 
 extern "C" {
-void *fn_80216BFC(void *pNode, const char *pName);
-void *fn_80216E34(void *pNode);
-int fn_80217070(void *pNode, const char *pName, int value);
+void *XmlFindInElement(void *pNode, const char *pName);
+void *XmlFindNext(void *pNode);
+int XmlGetAttrInt(void *pNode, const char *pName, int value);
 void DCStoreRange(void *p, int size);
 }
 
@@ -111,11 +111,11 @@ void fn_80044F20(void *pData, PlaDynClutEntry_t *pEntry)
     void *pFirst;
     int count = 0;
 
-    pNode = fn_80216BFC(pData, "dynclut");
-    fn_80217070(pNode, "version", 0);
-    pNode = fn_80216BFC(pNode, "operations");
-    pNode = fn_80216BFC(pNode, "op");
-    for (pFirst = pNode; pNode; pNode = fn_80216E34(pNode)) {
+    pNode = XmlFindInElement(pData, "dynclut");
+    XmlGetAttrInt(pNode, "version", 0);
+    pNode = XmlFindInElement(pNode, "operations");
+    pNode = XmlFindInElement(pNode, "op");
+    for (pFirst = pNode; pNode; pNode = XmlFindNext(pNode)) {
         count++;
     }
     pEntry->mCount = count;
@@ -127,7 +127,7 @@ void fn_80044F20(void *pData, PlaDynClutEntry_t *pEntry)
     pNode = pFirst;
     for (int i = 0; i < pEntry->mCount; i++) {
         PlaDynClutParseEntry(pNode, &pEntry->mpEntries[i]);
-        pNode = fn_80216E34(pNode);
+        pNode = XmlFindNext(pNode);
     }
 }
 

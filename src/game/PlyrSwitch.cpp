@@ -43,7 +43,7 @@ int PlyrSwitchGet(int index, int key);
 
 void PlyrSwitchSet(int index, int key, int value)
 {
-    Object_8003DEC4 *pObject = fn_8003DEC4(index);
+    Object_8003DEC4 *pObject = PlyrObjsGet(index);
     fn_80233CBC(&pObject->mUnknown1164[_PlyrSwitch_aKeyParts[key][1]].mUnknown20, key, value);
     switch (key) {
     case 6:
@@ -77,7 +77,7 @@ void PlyrSwitchSet(int index, int key, int value)
 
 int PlyrSwitchGet(int index, int key)
 {
-    Object_8003DEC4 *pObject = fn_8003DEC4(index);
+    Object_8003DEC4 *pObject = PlyrObjsGet(index);
     return pObject->mUnknown1164[_PlyrSwitch_aKeyParts[key][1]].mUnknown20.mUnknown8[key];
 }
 }

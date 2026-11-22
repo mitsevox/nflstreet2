@@ -2,7 +2,7 @@
    (the game builds one for each "constraint" in an object's physics data). */
 
 #include "engine/rigidbody.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 
 #include "engine/physconstraint.h"
 #include "engine/llmatrix.h"
@@ -48,34 +48,34 @@ void PointConstraint::Solve(float dt)
     pMatrixA = mpBodyA->mTransform[0];
     pMatrixB = mpBodyB->mTransform[0];
     MatLoad(pMatrixA);
-    fn_80227CC0(&pointA, &mAnchorA);
+    Vec3Mat34Mul(&pointA, &mAnchorA);
     MatLoad(pMatrixB);
-    fn_80227CC0(&pointB, &mAnchorB);
+    Vec3Mat34Mul(&pointB, &mAnchorB);
     GetBodyPointVelocity(mpBodyA, &pointA, &velA);
     GetBodyPointVelocity(mpBodyB, &pointB, &velB);
-    fn_802276B4(&error, &velB, &velA);
-    fn_802276B4(&delta, &pointB, &pointA);
-    fn_80227264(&delta, &delta, 1.0f);
-    fn_8022765C(&error, &error, &delta);
-    length = fn_802270D4(&error);
+    Vec3Sub(&error, &velB, &velA);
+    Vec3Sub(&delta, &pointB, &pointA);
+    Vec3Scale(&delta, &delta, 1.0f);
+    Vec3Add(&error, &error, &delta);
+    length = Vec3Magnitude(&error);
     if (!(length <= 1e-06f)) {
-        fn_80227264(&normal, &error, 1.0f / length);
-        fn_802276B4(&armA, &pointA, &mpBodyA->mPosition);
-        fn_802276B4(&armB, &pointB, &mpBodyB->mPosition);
+        Vec3Scale(&normal, &error, 1.0f / length);
+        Vec3Sub(&armA, &pointA, &mpBodyA->mPosition);
+        Vec3Sub(&armB, &pointB, &mpBodyB->mPosition);
         pInertiaA = mpBodyA->mWorldInvInertia[0];
         pInertiaB = mpBodyB->mWorldInvInertia[0];
-        fn_802277DC(&crossA, &armA, &normal);
-        fn_802277DC(&crossB, &armB, &normal);
+        Vec3CrossProduct(&crossA, &armA, &normal);
+        Vec3CrossProduct(&crossB, &armB, &normal);
         MatLoad(pInertiaA);
-        fn_80227C2C(&turnA, &crossA);
+        Vec3Mat33Mul(&turnA, &crossA);
         MatLoad(pInertiaB);
-        fn_80227C2C(&turnB, &crossB);
-        fn_802277DC(&crossA, &turnA, &armA);
-        fn_802277DC(&crossB, &turnB, &armB);
+        Vec3Mat33Mul(&turnB, &crossB);
+        Vec3CrossProduct(&crossA, &turnA, &armA);
+        Vec3CrossProduct(&crossB, &turnB, &armB);
         invMassA = mpBodyA->mInvMass;
         invMassB = mpBodyB->mInvMass;
-        dotA = fn_80227704(&normal, &crossA);
-        fn_80227264(&impulse, &normal, length / (invMassA + invMassB + dotA + fn_80227704(&normal, &crossB)));
+        dotA = Vec3DotProduct(&normal, &crossA);
+        Vec3Scale(&impulse, &normal, length / (invMassA + invMassB + dotA + Vec3DotProduct(&normal, &crossB)));
         ApplyBodyImpulseAtPoint(mpBodyA, &impulse, &pointA);
         impulse.x = -impulse.x;
         impulse.y = -impulse.y;

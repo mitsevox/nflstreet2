@@ -6,6 +6,7 @@
 
 #include "engine/ssysinit.h"
 #include "engine/sndbank.h"
+#include "engine/ssys.h"
 
 extern "C" {
 
@@ -14,13 +15,12 @@ extern float lbl_80300028;
 extern int lbl_8030002C;
 extern unsigned char lbl_803A7728;
 
-int fn_8026FBB4(void);
-int fn_80273648(int mode);
-int fn_802733A0(void);
-int fn_80273458(void);
-int fn_80273960(int flag);
-void fn_80275330(void);
-void fn_80275358(void);
+int SNDPLATFORM_init(int mode);
+int SNDPLATFORM_outputcaps(void);
+int SNDPLATFORM_outputset(void);
+int SNDPLATFORM_restore(int flag);
+void SNDI_mutexalloc(void);
+void SNDI_mutexfree(void);
 void SNDI_spkrconfig(void);
 void SNDI_precalcaztospkrvol(void);
 void SNDI_freespkrtable(void);
@@ -37,7 +37,7 @@ int SNDSYS_getopts(SNDSYSOPTS *opts)
         lbl_803A6C24.m1C.m13 = 0;
         lbl_803A6C24.m1C.m14 = -1.0f;
         lbl_803A6C24.mCC = lbl_803A6C24.m1C;
-        ret = fn_802733A0();
+        ret = SNDPLATFORM_outputcaps();
         gotcaps = 1;
     }
     *opts = *(SNDSYSOPTS *)&lbl_803A6C24;
@@ -48,7 +48,7 @@ int SNDSYS_setopts(SNDSYSOPTS *opts)
 {
     lbl_803A6C24.m1C = opts->mParams;
     ((SNDSYSOPTS *)&lbl_803A6C24)->mMem = opts->mMem;
-    fn_80273458();
+    SNDPLATFORM_outputset();
     lbl_803A6C24.mCC = lbl_803A6C24.m1C;
     return 0;
 }
@@ -71,7 +71,7 @@ int SNDSYSI_init(void *memory, int size, int unused)
         SNDSYS_setopts((SNDSYSOPTS *)&lbl_803A6C24);
     }
     SNDI_randomseed(lbl_803A6C24.m1C.m4);
-    fn_80275330();
+    SNDI_mutexalloc();
     lbl_803A6C24.m168 = 1;
     SNDSYS_entercritical();
     SNDSYSI_chanpubinit();
@@ -82,10 +82,10 @@ int SNDSYSI_init(void *memory, int size, int unused)
     lbl_803A6C24.m16E = 0;
     lbl_803A6C24.m16A = 0;
     lbl_803A6C24.m16B = 0;
-    result = fn_80273648(0);
+    result = SNDPLATFORM_init(0);
     if (result < 0) {
-        fn_80273960(0);
-        fn_80275358();
+        SNDPLATFORM_restore(0);
+        SNDI_mutexfree();
         lbl_803A6C24.m168 = 0;
         return result;
     }
@@ -99,7 +99,7 @@ int SNDSYS_restore(void)
 {
     int result;
 
-    if (fn_8026FBB4() == 0) {
+    if (!Snd::System::IsInited()) {
         return -14;
     }
     if (lbl_803A6C24.m18C[10] != 0) {
@@ -121,14 +121,14 @@ int SNDSYS_restore(void)
     if (lbl_803A6C24.m1C0 != 0) {
         lbl_803A6C24.m1C0(-1);
     }
-    fn_80273960(0);
+    SNDPLATFORM_restore(0);
     SNDSYS_entercritical();
     SNDMEMI_free(lbl_803A6C24.m1CC);
     SNDMEMI_free(lbl_803A6C24.m1D0);
     SNDSYS_leavecritical();
     result = SNDMEMI_restore();
     lbl_803A6C24.m168 = 0;
-    fn_80275358();
+    SNDI_mutexfree();
     return result;
 }
 

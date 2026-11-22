@@ -2,7 +2,7 @@
    loads databases such as rosters, stats and saves from resource files. */
 
 #include "engine/tdbext.h"
-#include "engine/fn_801F9134.h"
+#include "engine/TDbLoad.h"
 #include "engine/tdbiores.h"
 #include "engine/t3db_table.h"
 #include "game/fn_801D2B7C.h"
@@ -20,34 +20,43 @@ extern int fn_801D2570(int handle);
 extern void *fn_801D310C(void *p, int size, int flags, int d);
 extern int ResIsOpen(void *pPath);
 
-extern MemPoolDesc_t lbl_8039B498;
-extern void *lbl_803EBEA8;
-extern unsigned char lbl_803EBEAC;
-extern unsigned char lbl_803EBEAD;
-extern int lbl_803EBEB0;
+/* A heap that replaces the one each allocation names, when set. */
+static void *_TDbExt_pOverrideHeap = 0;
+
+/* Set by TDbExtInit and cleared by TDbExtShutdown. */
+static unsigned char _TDbExt_bInitialized = 0;
+
+/* Whether the database heap was already active at TDbExtInit (then it is not created or destroyed here). */
+static unsigned char _TDbExt_bHeapActive = 0;
+
+/* The allocation flags of the database's memory. */
+static int _TDbExt_uMemFlags = 0;
+
+/* The database heap's description, copied at TDbExtInit. */
+static MemPoolDesc_t _TDbExt_HeapDesc;
 
 void TDbExtInit(MemPoolDesc_t *pParams)
 {
-    lbl_8039B498 = *pParams;
-    lbl_803EBEAD = fn_801D2700(pParams->mUnknown8);
-    if (lbl_803EBEAD == 0) {
-        fn_801D2130(&lbl_8039B498);
+    _TDbExt_HeapDesc = *pParams;
+    _TDbExt_bHeapActive = fn_801D2700(pParams->mUnknown8);
+    if (_TDbExt_bHeapActive == 0) {
+        fn_801D2130(&_TDbExt_HeapDesc);
     }
-    lbl_803EBEAC = 1;
-    lbl_803EBEA8 = 0;
+    _TDbExt_bInitialized = 1;
+    _TDbExt_pOverrideHeap = 0;
 }
 
 void TDbExtShutdown(void)
 {
-    if (lbl_803EBEAD == 0) {
-        fn_801D2570(lbl_8039B498.mUnknown8);
+    if (_TDbExt_bHeapActive == 0) {
+        fn_801D2570(_TDbExt_HeapDesc.mUnknown8);
     }
-    lbl_803EBEAC = 0;
+    _TDbExt_bInitialized = 0;
 }
 
 int TDbExtMemInit(int a, int b, int *pHandle)
 {
-    *pHandle = lbl_8039B498.mUnknown8;
+    *pHandle = _TDbExt_HeapDesc.mUnknown8;
     return 0;
 }
 
@@ -60,10 +69,10 @@ int TDbExtMemAlloc(void *pHeap, int size, void *ppMem)
 {
     void *pMem;
 
-    if (lbl_803EBEA8 != 0) {
-        pHeap = lbl_803EBEA8;
+    if (_TDbExt_pOverrideHeap != 0) {
+        pHeap = _TDbExt_pOverrideHeap;
     }
-    pMem = fn_801D2BB0((int)pHeap, size, lbl_803EBEB0, 0);
+    pMem = fn_801D2BB0((int)pHeap, size, _TDbExt_uMemFlags, 0);
     *(void **)ppMem = pMem;
     return pMem ? 0 : 2;
 }
@@ -71,10 +80,10 @@ int TDbExtMemAlloc(void *pHeap, int size, void *ppMem)
 int TDbExtMemAllocTemp(void *pHeap, int size, void *ppMem)
 {
     void *pMem;
-    int flags = lbl_803EBEB0;
+    int flags = _TDbExt_uMemFlags;
 
-    if (lbl_803EBEA8 != 0) {
-        pHeap = lbl_803EBEA8;
+    if (_TDbExt_pOverrideHeap != 0) {
+        pHeap = _TDbExt_pOverrideHeap;
     }
     pMem = fn_801D2BB0((int)pHeap, size, (flags & ~4) | 2, 0);
     *(void **)ppMem = pMem;
@@ -83,7 +92,7 @@ int TDbExtMemAllocTemp(void *pHeap, int size, void *ppMem)
 
 int TDbExtMemRealloc(void *pHeap, void *pOld, int oldSize, int newSize, void *ppMem)
 {
-    void *pMem = fn_801D310C(pOld, newSize, lbl_803EBEB0, 0);
+    void *pMem = fn_801D310C(pOld, newSize, _TDbExt_uMemFlags, 0);
 
     *(void **)ppMem = pMem;
     return pMem ? 0 : 2;
@@ -104,7 +113,7 @@ int TDbExtLoadFromResource(int db, void *pPath, int mode, int flags)
     file.mMode = mode;
     file.mpStream = ResOpenDevice(pPath, 0x2C);
     if (file.mpStream != 0) {
-        err = fn_801F9134(db, (int)&file, flags, (int)&tdbioresCallback);
+        err = TDbLoad(db, (int)&file, flags, (int)&tdbioresCallback);
         if (isOpen == 0) {
             if (err == 0) {
                 if (ResClose(file.mpStream)) {

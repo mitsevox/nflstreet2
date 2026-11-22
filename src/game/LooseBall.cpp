@@ -16,10 +16,10 @@
 #include "game/fn_800F06F4.h"
 #include <string.h>
 #include "game/fn_80178D18.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_8022781C.h"
-#include "game/fn_80227638.h"
-#include "game/fn_802372EC.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Distance.h"
+#include "game/Vec2Add.h"
+#include "game/SyncRandGetRange.h"
 #include <math.h>
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
@@ -63,7 +63,7 @@ static float _LooseBall_fThreatAngle = 15.0f;
 static AnimStateAnimList_t _LooseBall_AnimTable;
 extern float gPlyrMoveFwdSpeed;
 int PlyrRollContestedCatch(Object_80039F5C *p);
-float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
+float Vec3Distance(Vector_80039F5C *pA, Vector_80039F5C *pB);
 int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
                 float f);
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
@@ -71,16 +71,16 @@ Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsi
 void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 int CharSkelGetJointByName(void *p, const char *pName);
 int BallStateCheckPlayerHit(Ball_t *pBall, void *pData, int value);
-void fn_80227690(void *pOut, void *pA, void *pB);
-void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
+void Vec3Scale(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
+void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
 void fn_8009A8D4(void *p);
 int fn_800B78DC(Object_80039F5C *p);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-void fn_80227384(void *pOut, void *pIn, int angle);
-void fn_80227350(void *pOut, void *pV, float scale);
+void Vec2Rotate(void *pOut, void *pIn, int angle);
+void Vec3ScaleAcc(void *pOut, void *pV, float scale);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
 void PlyrFindNearest(void *pPos, float *pExtra, int team);
 void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
@@ -111,8 +111,8 @@ extern "C" int LooseBallTryEngage(Object_80039F5C *p, Ball_t *pBall) {
     Point_8017886C delta;
     float distance;
     BallGetPosition(pBall, &pos);
-    fn_80227690(&delta, &pos, &p->mMotion.mPos);
-    if (fn_802270A4(&delta) > _LooseBall_fEngageMinDist) {
+    Vec2Sub(&delta, &pos, &p->mMotion.mPos);
+    if (Vec2Magnitude(&delta) > _LooseBall_fEngageMinDist) {
         Object_80039F5C *pOther = fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1),
                                               (int)(_LooseBall_fEngageAngle * 46603.37890625f), &distance, 1);
         if (pOther && distance < _LooseBall_fEngageRange)
@@ -138,8 +138,8 @@ extern "C" void LooseBallPredictPos(Vector_80039F5C *pOut, Ball_t *pBall, float 
     Vector_80039F5C velocity;
     BallGetPosition(pBall, pOut);
     BallGetVelocity(pBall, &velocity);
-    fn_80227264(&step, &velocity, scale);
-    fn_8022765C(pOut, pOut, &step);
+    Vec3Scale(&step, &velocity, scale);
+    Vec3Add(pOut, pOut, &step);
 }
 
 extern "C" int LooseBallStartAnim(Object_80039F5C *p, int a, int b, int c) {
@@ -261,7 +261,7 @@ extern "C" int LooseBallFindAnim(Object_80039F5C *p, LooseBallBlock_t *state, Ba
     state->mUnknown44 = -1;
     if (!fn_801787A0() && (force || ballPos.mZ < 0.5f)) {
         BallGetVelocity(pCurrent, &velocity);
-        if (!force && (fn_802270D4(&velocity) >= 100.0f || !LooseBallCanReach(p, pCurrent)))
+        if (!force && (Vec3Magnitude(&velocity) >= 100.0f || !LooseBallCanReach(p, pCurrent)))
             goto done;
         AnimFileGetStateAnimList(1, 48, (Table_80089904 *)&_LooseBall_AnimTable);
         for (signed char i = 0; i < _LooseBall_AnimTable.mCount; i++) {
@@ -294,16 +294,16 @@ extern "C" int LooseBallFindAnim(Object_80039F5C *p, LooseBallBlock_t *state, Ba
                     continue;
                 }
             }
-            if (fn_8022781C(&target, &p->mMotion.mPos) < 0.75f || fn_8022781C(&ballPos, &p->mMotion.mPos) < 0.75f)
+            if (Vec2Distance(&target, &p->mMotion.mPos) < 0.75f || Vec2Distance(&ballPos, &p->mMotion.mPos) < 0.75f)
                 force = 1;
             offset.mX = pInfo->mUnknown8Float;
             offset.mY = pInfo->mUnknown12Float;
             offset.mZ = pInfo->mUnknown16Float;
-            fn_80227384(&offset, &offset, p->mMotion.mFacing);
-            fn_8022765C(&offset, &offset, &p->mMotion.mPos);
-            fn_802276B4(&offset, &target, &offset);
-            dist = fn_802270A4(&offset);
-            float reach = fn_802270A4(&pInfo->mUnknown8Float);
+            Vec2Rotate(&offset, &offset, p->mMotion.mFacing);
+            Vec3Add(&offset, &offset, &p->mMotion.mPos);
+            Vec3Sub(&offset, &target, &offset);
+            dist = Vec2Magnitude(&offset);
+            float reach = Vec2Magnitude(&pInfo->mUnknown8Float);
             reach = MIN(reach, 0.75f);
             if (type != 2 && type != 5)
                 reach = MIN(reach * 2.0f, 0.75f);
@@ -313,11 +313,11 @@ extern "C" int LooseBallFindAnim(Object_80039F5C *p, LooseBallBlock_t *state, Ba
             if (ratio >= best)
                 continue;
             best = ratio;
-            fn_80227264(&state->mUnknown0, &offset, 0.75f / (state->mUnknown24 * dist));
+            Vec3Scale(&state->mUnknown0, &offset, 0.75f / (state->mUnknown24 * dist));
             state->mUnknown12.mX = target.mX;
             state->mUnknown12.mY = target.mY;
             state->mUnknown12.mZ = target.mZ;
-            fn_80227350(&state->mUnknown12, &offset, 0.75f / dist - 1.0f);
+            Vec3ScaleAcc(&state->mUnknown12, &offset, 0.75f / dist - 1.0f);
             state->mUnknown0.mZ = 0.0f;
             state->mUnknown44 = i;
             state->mUnknown45 = type;
@@ -347,8 +347,8 @@ extern "C" void LooseBallSteer(Object_80039F5C *p, LooseBallBlock_t *state, Vect
     delta.mX = CLAMP(pTarget->mX, -fn_80178A08(), fn_80178A08());
     delta.mY = CLAMP(pTarget->mY, -fn_80178A44(), fn_80178A44());
     delta.mZ = pTarget->mZ;
-    fn_802276B4(&delta, &delta, &p->mMotion.mPos);
-    float dist = fn_802270D4(&delta);
+    Vec3Sub(&delta, &delta, &p->mMotion.mPos);
+    float dist = Vec3Magnitude(&delta);
     state->mUnknown36 = fn_801CFE40(delta.mY, delta.mX);
     if (LooseBallCanChase(p, state)) {
         state->mUnknown32 = 0.72f;
@@ -389,14 +389,14 @@ extern "C" void LooseBallBroadcast(int id) {
         int count = fn_80178D70(team);
         for (int i = 0; i < count; i++) {
             pOther = PlyrGet(team, (unsigned char)i);
-            fn_802276B4(&delta, &pos, &pOther->mMotion.mPos);
+            Vec3Sub(&delta, &pos, &pOther->mMotion.mPos);
             memset(&message, 0, 4);
             message.mId = 57;
             message.mUnknown1[0] = id;
             int value = fn_8009F0B8(pOther, 0x3C71C7) ? _LooseBall_iPriorityFacing : _LooseBall_iPriorityBase;
-            value += (unsigned int)(fn_802270A4(&delta) * _LooseBall_fPriorityPerDist);
+            value += (unsigned int)(Vec2Magnitude(&delta) * _LooseBall_fPriorityPerDist);
             value += (int)((255 - pOther->mRatings[0]) * _LooseBall_fPriorityPerRating);
-            value += fn_802372EC(0, _LooseBall_iPriorityRandom);
+            value += SyncRandGetRange(0, _LooseBall_iPriorityRandom);
             if ((pOther->mFlags & 0x400) || !fn_801486A0())
                 value = 0;
             switch (pOther->mpState->mId) {
@@ -476,7 +476,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
     } else {
         BallSolveFallToHeight(pBall, 0.0f, 0, &ballPos);
         ballPos.mZ = 0.0f;
-        distance = fn_8022785C(&ballPos, &p->mMotion.mPos);
+        distance = Vec3Distance(&ballPos, &p->mMotion.mPos);
         LooseBallPredictPos(&target, pBall, distance * _LooseBall_fLeadScale);
     }
     if (state->mUnknown40 != 0xFFFF) {
@@ -487,24 +487,24 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
         if (kind == 5) {
             if ((state->mUnknown24 -= 1.0f) > 0.0f) {
                 LooseBallPredictPos(&predicted, pBall, state->mUnknown24);
-                fn_802276B4(&delta, &predicted, &state->mUnknown12);
-                distance = fn_802270A4(&delta);
+                Vec3Sub(&delta, &predicted, &state->mUnknown12);
+                distance = Vec2Magnitude(&delta);
                 if (distance > 0.05f) {
-                    fn_80227350(&state->mUnknown0, &delta, 0.05f / (state->mUnknown24 * distance));
-                    fn_80227350(&state->mUnknown12, &delta, 0.05f / distance);
+                    Vec3ScaleAcc(&state->mUnknown0, &delta, 0.05f / (state->mUnknown24 * distance));
+                    Vec3ScaleAcc(&state->mUnknown12, &delta, 0.05f / distance);
                 } else {
-                    fn_80227350(&state->mUnknown0, &delta, 1.0f / state->mUnknown24);
+                    Vec3ScaleAcc(&state->mUnknown0, &delta, 1.0f / state->mUnknown24);
                     state->mUnknown12.mX = predicted.mX;
                     state->mUnknown12.mY = predicted.mY;
                     state->mUnknown12.mZ = predicted.mZ;
                 }
                 state->mUnknown0.mZ = 0.0f;
-                fn_8022765C(&p->mMotion.mPos, &p->mMotion.mPos, &state->mUnknown0);
+                Vec3Add(&p->mMotion.mPos, &p->mMotion.mPos, &state->mUnknown0);
             } else if (!fn_801787A0()) {
                 fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "LFOOTBALL"), &left, 0);
                 fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "RFOOTBALL"), &right, 0);
                 float reach = (p->mFlags & 0x400) ? 0.4f : 0.15f;
-                if (fn_8022785C(&target, &right) < reach || fn_8022785C(&target, &left) < reach)
+                if (Vec3Distance(&target, &right) < reach || Vec3Distance(&target, &left) < reach)
                     BallStateCheckPlayerHit(pBall, p, 4);
             }
         }
@@ -566,7 +566,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
                 Object_80039F5C *pOther = fn_801244F0(p, team, 0, fn_80178D18(team), &distance, 0);
                 if (pOther) {
                     Point_8017886C offset;
-                    fn_80227690(&offset, &ballPos, &pOther->mMotion.mPos);
+                    Vec2Sub(&offset, &ballPos, &pOther->mMotion.mPos);
                     int angle = fn_801CFE40(offset.mY, offset.mX);
                     if (pOther->mMotion.mUnknown28 != 0.0f && distance < _LooseBall_fThreatRange &&
                         MathAngleDiff(angle, pOther->mMotion.mUnknown32) < (int)(_LooseBall_fThreatAngle * 46603.37890625f) &&

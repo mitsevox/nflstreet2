@@ -4,7 +4,7 @@
 #include <dolphin/gx/GXStruct.h>
 
 /* Font file header; glyph, kerning and texture data follow at the given offsets. */
-typedef struct FontHeader_801CCA64 {
+typedef struct FontHeader_t {
     int mMagic;
     unsigned char mUnk4[6];
     unsigned short mNumGlyphs;
@@ -14,9 +14,9 @@ typedef struct FontHeader_801CCA64 {
     int mGlyphOffset;
     int mKernOffset;
     int mTexOffset;
-} FontHeader_801CCA64;
+} FontHeader_t;
 
-typedef struct FontGlyph_801CCA64 {
+typedef struct FontGlyph_t {
     unsigned short mCode;
     unsigned char mWidth;
     unsigned char mHeight;
@@ -26,82 +26,82 @@ typedef struct FontGlyph_801CCA64 {
     signed char mOffsetX;
     signed char mOffsetY;
     unsigned char mUnkB;
-} FontGlyph_801CCA64;
+} FontGlyph_t;
 
-typedef struct FontKernPair_801CCA64 {
+typedef struct FontKernPair_t {
     unsigned short mFirst;
     unsigned short mSecond;
     signed char mAmount;
     unsigned char mPad[3];
-} FontKernPair_801CCA64;
+} FontKernPair_t;
 
-typedef struct FontKernTable_801CCA64 {
+typedef struct FontKernTable_t {
     int mCount;
-    FontKernPair_801CCA64 mPairs[1];
-} FontKernTable_801CCA64;
+    FontKernPair_t mPairs[1];
+} FontKernTable_t;
 
-typedef struct FontTexHeader_801CCA64 {
+typedef struct FontTexHeader_t {
     unsigned char mUnk0[4];
     unsigned short mWidth;
     unsigned short mHeight;
     unsigned char mUnk8[8];
     unsigned char mImage[1];
-} FontTexHeader_801CCA64;
+} FontTexHeader_t;
 
-typedef struct FontEntry_801CCA64 {
+typedef struct FontEntry_t {
     void *mpFile;
     int mHandle;
     int mId;
-    FontHeader_801CCA64 *mpData;
-} FontEntry_801CCA64;
+    FontHeader_t *mpData;
+} FontEntry_t;
 
-typedef struct Font_801CCA64 {
-    FontEntry_801CCA64 *mpEntry;
-    FontHeader_801CCA64 *mpHeader;
-    FontGlyph_801CCA64 *mpGlyphs;
-    FontKernTable_801CCA64 *mpKern;
-    FontTexHeader_801CCA64 *mpTex;
+typedef struct Font_t {
+    FontEntry_t *mpEntry;
+    FontHeader_t *mpHeader;
+    FontGlyph_t *mpGlyphs;
+    FontKernTable_t *mpKern;
+    FontTexHeader_t *mpTex;
     unsigned char mUnk14[4];
     GXTexObj *mpTexObj;
     unsigned char mUnk1C[0xC];
-} Font_801CCA64;
+} Font_t;
 
-typedef struct FontQuad_801CCA64 {
+typedef struct FontQuad_t {
     int mX;
     int mY;
     int mWidth;
     int mHeight;
     unsigned short mU;
     unsigned short mV;
-} FontQuad_801CCA64;
+} FontQuad_t;
 
-typedef struct FontColor_801CCA64 {
+typedef struct FontColor_t {
     float r;
     float g;
     float b;
     float a;
-} FontColor_801CCA64;
+} FontColor_t;
 
-typedef struct FontRenderState_801CCA64 {
+typedef struct FontRenderState_t {
     unsigned int mFlags;
-    FontColor_801CCA64 mColor;
-    FontColor_801CCA64 mShadowColor;
+    FontColor_t mColor;
+    FontColor_t mShadowColor;
     float mShadowOffset[3];
-} FontRenderState_801CCA64;
+} FontRenderState_t;
 
-int fn_801CCF74(void *pFile, int id, FontHeader_801CCA64 *pData);
-Font_801CCA64 *fn_801CD130(int id);
-void fn_801CD20C(Font_801CCA64 *pFont, int a);
-int fn_801CD2A4(void);
-int fn_801CD308(int which, FontColor_801CCA64 color);
-void fn_801CD3E4(Font_801CCA64 *pFont, const char *pText, unsigned int flags, float maxWidth,
-                 FontQuad_801CCA64 *pQuads, unsigned int *pCount);
-int fn_801CDB5C(Font_801CCA64 *pFont, const char *pText, unsigned int flags, float maxWidth, float *pPos);
+int FontAddFontFromBuffer(void *pFile, int id, FontHeader_t *pData);
+Font_t *FontCreateFont(int id);
+void FontUploadTextures(Font_t *pFont, int a);
+int FontResetRenderState(void);
+int FontSetRenderColor(int which, FontColor_t color);
+void FontDrawText(Font_t *pFont, const char *pText, unsigned int flags, float maxWidth,
+                 FontQuad_t *pQuads, unsigned int *pCount);
+int fn_801CDB5C(Font_t *pFont, const char *pText, unsigned int flags, float maxWidth, float *pPos);
 void fn_801CDD18(void);
 void fn_801CDE98(void **ppTlut0, void **ppTlut1, void **ppTlut2);
 void fn_801CDFE4(void *pTlut0, void *pTlut1, void *pTlut2);
-void fn_801CDFE8(Font_801CCA64 *pFont, void *pTlut0, void *pTlut1, void *pTlut2, int a);
-void fn_801CE108(Font_801CCA64 *pFont);
-void fn_801CE134(Font_801CCA64 *pFont);
+void fn_801CDFE8(Font_t *pFont, void *pTlut0, void *pTlut1, void *pTlut2, int a);
+void fn_801CE108(Font_t *pFont);
+void fn_801CE134(Font_t *pFont);
 
 #endif

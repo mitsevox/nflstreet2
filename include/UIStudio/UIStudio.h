@@ -176,7 +176,11 @@ typedef struct UISInfo_t {
     UISControlFncT *pControlFnc;    /* 0x1C */
     Uint8 unk_20[0x04];
     void *pCallback24;              /* 0x24 */
-    Uint8 unk_28[0x14];
+    Uint8 unk_28[0x04];
+    void (*pCallback2C)(void);              /* 0x2C: called before the screens are drawn */
+    void (*pCallback30)(void);              /* 0x30: called after the screens are drawn */
+    void (*pCallback34)(Uint16, Uint16);    /* 0x34: called before each screen (group, screen) */
+    void (*pCallback38)(Uint16, Uint16);    /* 0x38: called after each screen (group, screen) */
     Uint32 ActiveScreen;            /* 0x3C: index into Screens, -1 when none */
     Uint8 unk_40[0x04];
     Int32 NumScreens;               /* 0x44 */

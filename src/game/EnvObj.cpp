@@ -40,8 +40,8 @@ void ObjRemoveFromList(int handle, void *pItem);
 void ObjSetPriority(int handle, void *pItem, int b);
 void fn_80234DCC(int a, void *p, const char *pName, int b);
 void fn_80234EA0(void *p, int a);
-void fn_80235C90(void *p, int a, float b, float c, float d, float e);
-void fn_80235DB8(int a);
+void ModelObjSetAmbientColor(void *p, int a, float b, float c, float d, float e);
+void ModelObjRelocateModelRes(int a);
 }
 
 static EnvObj *_EnvObj_pMain = 0;
@@ -55,7 +55,7 @@ void EnvObjAttachModel(void)
     int handle = ResLoad(pData, index, 1);
     EnvObj *pObject;
 
-    fn_80235DB8(handle);
+    ModelObjRelocateModelRes(handle);
     pObject = _EnvObj_pMain;
     pObject->mpUnknown18 = pData;
     pObject->mUnknown1C = index;
@@ -135,7 +135,7 @@ void EnvObjUpdateFades(void)
         } else {
             value = a * 0.5f / b + 0.5f;
         }
-        fn_80235C90(pElement, 0, 1.0f, 1.0f, 1.0f, value * 0.5f);
+        ModelObjSetAmbientColor(pElement, 0, 1.0f, 1.0f, 1.0f, value * 0.5f);
     }
 }
 }

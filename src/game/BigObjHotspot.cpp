@@ -71,10 +71,10 @@ int fn_801486A0(void);
 int fn_80177C38(void);
 void fn_8004CBEC(void *, float, BigObjInst *, BigObj_t *);
 void fn_8004E090(BigObj_t *, int, int);
-void fn_8005D2C8(int);
+void InGameSetLegendsUnlocked(int);
 void AudmonEventPostId(int, void *, int, int, int, int);
 void TeamUnlock(int, int);
-void fn_80083E1C(DbCursor *, int);
+void TeamDbOpenQuery(DbCursor *, int);
 void fn_8009BD2C(Object_80039F5C *, int *);
 int fn_800A3444(void);
 int fn_801485D4(void);
@@ -91,10 +91,10 @@ unsigned char *fn_80220BFC(int, int);
 void *LLUIGTexNodeGet(void *, int, int);
 void TMTexLibReplaceClut(void *, TexFilePalette_t *, int, void *);
 void TMTexLibReplaceTexture(void *, void *, int, TexFileImage_t *, int, int);
-int fn_8022F358(int);
-int fn_8022F384(int);
-int fn_8022F3D4(int);
-int fn_8022F4BC(void);
+int DbUserGetId(int);
+int DbUserFindIndex(int);
+int DbUserGetDb(int);
+int DbUserGetCurrent(void);
 
 int HotspotClassifyPlay(HotspotPlay_t *pPlay)
 {
@@ -178,7 +178,7 @@ void HotspotRecordCapture(HotspotPlay_t *pPlay)
     unsigned int index = fn_800A3444();
     int db = UserProfileGetSelected(_PlayerRefTeam(pPlay->mRef));
     if (fn_801485D4() == 0 && TutorialIsActive() == 0 && db != -1 && index <= 9) {
-        int handle = fn_8022F3D4(fn_8022F358(db));
+        int handle = DbUserGetDb(DbUserGetId(db));
         int bit = 1 << index;
         DbTableCursor cursor;
         cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
@@ -189,8 +189,8 @@ void HotspotRecordCapture(HotspotPlay_t *pPlay)
             _Hotspot_bCaptured = 1;
             _Hotspot_iCaptureBit = bit;
             if (value == 0x3FF) {
-                fn_8005D2C8(1);
-                TeamUnlock(fn_8022F384(fn_8022F4BC()), 34);
+                InGameSetLegendsUnlocked(1);
+                TeamUnlock(DbUserFindIndex(DbUserGetCurrent()), 34);
             }
         }
     }
@@ -213,13 +213,13 @@ int HotspotIsNewOwner(HotspotPlay_t *pPlay)
 void HotspotLoadTeamLogos(BigObj_t *)
 {
     DbCursor cursor;
-    fn_80083E1C(&cursor, 0);
+    TeamDbOpenQuery(&cursor, 0);
     for (int i = 0; i <= 1; i++) {
         int id, team;
         MsgGameGetPlayerStatus(i, &id, &team);
         unsigned char *pPalette = 0;
-        fn_80084034(&cursor, i, 0);
-        int value = fn_80084438(&cursor);
+        TeamDbSeekId(&cursor, i, 0);
+        int value = TeamDbGetCtdl(&cursor);
         Texture_t *pTexture = (Texture_t *)LLUIGTexNodeGet(UIGLibraryGetGlobal(1), 4, id);
         if (value == 0) {
             int slot;
@@ -241,7 +241,7 @@ void HotspotLoadTeamLogos(BigObj_t *)
             _Hotspot_aLogo[i].mPalette.mpUnknown8 = (unsigned char *)pTexture->mpPalette;
         }
     }
-    fn_80083F68(&cursor);
+    TeamDbClose(&cursor);
 }
 
 void HotspotCapture(HotspotPlay_t *pPlay)
@@ -358,7 +358,7 @@ int BigObjHotspotFrameUpdate(BigObjInst *pInst, BigObj_t *pOwner, int mode)
         _Hotspot_bCaptured = 0;
         _Hotspot_aLogo[1].mImage.mpUnknownC = 0;
         HotspotInitQueue();
-        fn_8005D2C8(0);
+        InGameSetLegendsUnlocked(0);
     } else if (mode == 3) {
         for (i = 0; i <= 4; i++) {
             if (_Hotspot_aSlot[i].mpObject == pOwner) {

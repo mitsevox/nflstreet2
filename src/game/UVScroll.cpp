@@ -6,11 +6,11 @@
 #include <math.h>
 
 extern "C" {
-extern void *lbl_803EA368;
+extern void *gpReplay;
 extern unsigned char lbl_803EB874;
-int fn_8002D058(void *p);
-int fn_8002D060(void *p);
-int fn_8002D150(void *p);
+int ReplayIsStepping(void *p);
+int ReplayIsShowing(void *p);
+int ReplayGetSpeed(void *p);
 }
 
 struct UVScrollUV {
@@ -130,9 +130,9 @@ void UVScrollFixed(UVScrollFixedMesh *pMesh, UVScrollState *pScroll)
         if (lbl_803EB874) return;
         if (pScroll->mType == 0) {
             float speed = 1.0f;
-            if (fn_8002D060(lbl_803EA368)) {
-                int rate = fn_8002D150(lbl_803EA368);
-                if (fn_8002D058(lbl_803EA368)) speed = fabs(rate * (1.0f / 60.0f));
+            if (ReplayIsShowing(gpReplay)) {
+                int rate = ReplayGetSpeed(gpReplay);
+                if (ReplayIsStepping(gpReplay)) speed = fabs(rate * (1.0f / 60.0f));
                 else speed = 0.0f;
             }
             pScroll->mTimer += speed;
@@ -205,8 +205,8 @@ void UVScrollFixed(UVScrollFixedMesh *pMesh, UVScrollState *pScroll)
     }
 }
 
-int fn_80236B98(int a, float x, float y, float z);
-void fn_80236C10(int a, float *pScale, float *pDirection);
+int LLLightLoadSetTinted(int a, float x, float y, float z);
+void LLLightLoadDirectional(int a, float *pScale, float *pDirection);
 
 void DynObjDrawEnvMap(DynObj *, int)
 {
@@ -222,12 +222,12 @@ int DynObjSetupLight(LightTracker_t *pTracker, LightSource_t *pSource)
         y = pSource->mUnknown10;
         z = pSource->mUnknown14;
     }
-    int light = fn_80236B98(0, x, y, z);
+    int light = LLLightLoadSetTinted(0, x, y, z);
     if (LightTrackerUpdate(pTracker, pSource, direction, scale)) {
         scale[0] *= x;
         scale[1] *= y;
         scale[2] *= z;
-        fn_80236C10(0, scale, direction);
+        LLLightLoadDirectional(0, scale, direction);
     }
     return light;
 }

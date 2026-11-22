@@ -1,8 +1,8 @@
-/* Comparison fragment of src/engine/llvector.c: fn_80227D6C and its literal pool. */
+/* Comparison fragment of src/engine/llvector.c: Vec3Mat44Mul and its literal pool. */
 
 extern void MatStore(float m[4][4]);
 
-void fn_80227D6C(float *pOut, float *pV)
+void Vec3Mat44Mul(float *pOut, float *pV)
 {
     float m[4][4];
     float x;

@@ -1,13 +1,15 @@
 /* Camera mode that plays camera moves stored as animation curves of a character or of a
    playback clip. */
 
+#include <math.h>
+
 #include "game/GameCamera.h"
 #include "game/cammain.h"
 #include "game/Class_80297B90.h"
 #include "game/PreGamePhase.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_8008E978.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/fn_800AD9B4.h"
 #include "engine/viewport.h"
 #include "engine/AnimSeqCamSample.h"
@@ -30,13 +32,13 @@ void MatStore(float (*)[4]); void MatLoad(float (*)[4]); void MatRotZ(int);
 void QuatFromAxisAngle(float *,Vector_80039F5C *,int);
 void QuatMultiply(float *,float *,float *);
 void QuatToMatrix(float (*)[4],float *);
-void fn_8022765C(void *,void *,void *);
-float fn_80227120(void *); float fn_80227704(void *,void *);
-void fn_80227264(void *,void *,float);
-void fn_80227C2C(void *,void *);
-void fn_80227384(void *,void *,int);
-void fn_80227490(void *,void *,int,int,int);
-int fn_801CFE40(float,float); float fn_80260B1C(float);
+void Vec3Add(void *,void *,void *);
+float Vec3MagnitudeSqr(void *); float Vec3DotProduct(void *,void *);
+void Vec3Scale(void *,void *,float);
+void Vec3Mat33Mul(void *,void *);
+void Vec2Rotate(void *,void *,int);
+void Vec3RotateZYX(void *,void *,int,int,int);
+int fn_801CFE40(float,float);
 void CamCurveOffsetPosition(float,float,float,Vector_80039F5C *,CamCurveState_t *,Actor_801C009C *);
 void CamCurveConvertAngles(CamCurveAngles_t *,CamCurveState_t *,Actor_801C009C *,int,int,int);
 CamCurveActorEntry_t *CamCurveGetActorEntry(GameCamera_t *);
@@ -127,31 +129,31 @@ extern "C" void CamCurveApplyActorCurves(GameCamera_t *camera, Actor_801C009C *a
     up.mY=-CurveListEvaluate(t,&sample->mCurves[8],0);
     up.mZ=CurveListEvaluate(t,&sample->mCurves[7],0);
     up.mX*=camera->mUnknownF4; up.mY*=camera->mUnknownF4; up.mZ*=camera->mUnknownF4;
-    fn_802276B4(&up,&up,&position);
+    Vec3Sub(&up,&up,&position);
     look.mX=CurveListEvaluate(t,&sample->mCurves[3],0);
     look.mY=-CurveListEvaluate(t,&sample->mCurves[5],0);
     look.mZ=CurveListEvaluate(t,&sample->mCurves[4],0);
     look.mX*=camera->mUnknownF4; look.mY*=camera->mUnknownF4; look.mZ*=camera->mUnknownF4;
-    fn_802276B4(&direction,&position,&look); fn_802276B4(&look,&look,&position);
-    if (fn_80227120(&look)<0.0001f) { look.mX=0.0f; look.mY=1.0f; look.mZ=0.0f; }
-    if (fn_80227120(&up)<0.0001f) { up.mX=0.0f; up.mY=0.0f; up.mZ=1.0f; }
+    Vec3Sub(&direction,&position,&look); Vec3Sub(&look,&look,&position);
+    if (Vec3MagnitudeSqr(&look)<0.0001f) { look.mX=0.0f; look.mY=1.0f; look.mZ=0.0f; }
+    if (Vec3MagnitudeSqr(&up)<0.0001f) { up.mX=0.0f; up.mY=0.0f; up.mZ=1.0f; }
     MatPush(); MatLoad(matrix);
-    fn_802276B4(&position,&position,&base); fn_80227C2C(&position,&position);
-    fn_8022765C(&position,&position,&base); fn_8022765C(&position,&position,&offset);
-    fn_80227C2C(&up,&up); fn_80227C2C(&look,&look); MatPop();
-    float dot = fn_80227704(&up,&look); float length = fn_80227120(&look);
-    fn_80227264(&projection,&look,dot/length); fn_802276B4(&up,&up,&projection);
+    Vec3Sub(&position,&position,&base); Vec3Mat33Mul(&position,&position);
+    Vec3Add(&position,&position,&base); Vec3Add(&position,&position,&offset);
+    Vec3Mat33Mul(&up,&up); Vec3Mat33Mul(&look,&look); MatPop();
+    float dot = Vec3DotProduct(&up,&look); float length = Vec3MagnitudeSqr(&look);
+    Vec3Scale(&projection,&look,dot/length); Vec3Sub(&up,&up,&projection);
     position.mX-=actor->mUnknown18->mUnknown34; position.mY+=actor->mUnknown18->mUnknown3C;
-    fn_80227384(&position,&position,camera->mUnknown10C-(int)(actor->mUnknown18->mUnknown30*2670176.75f)+0x400000);
-    fn_80227384(&look,&look,camera->mUnknown10C-(int)(actor->mUnknown18->mUnknown30*2670176.75f)+0x400000);
-    fn_80227384(&up,&up,camera->mUnknown10C-(int)(actor->mUnknown18->mUnknown30*2670176.75f)+0x400000);
-    fn_80227384(&direction,&direction,camera->mUnknown10C-(int)(actor->mUnknown18->mUnknown30*2670176.75f)+0x400000);
-    MatPushUnit(); MatRotZ(0x400000); fn_80227C2C(&direction,&direction); MatPop();
+    Vec2Rotate(&position,&position,camera->mUnknown10C-(int)(actor->mUnknown18->mUnknown30*2670176.75f)+0x400000);
+    Vec2Rotate(&look,&look,camera->mUnknown10C-(int)(actor->mUnknown18->mUnknown30*2670176.75f)+0x400000);
+    Vec2Rotate(&up,&up,camera->mUnknown10C-(int)(actor->mUnknown18->mUnknown30*2670176.75f)+0x400000);
+    Vec2Rotate(&direction,&direction,camera->mUnknown10C-(int)(actor->mUnknown18->mUnknown30*2670176.75f)+0x400000);
+    MatPushUnit(); MatRotZ(0x400000); Vec3Mat33Mul(&direction,&direction); MatPop();
     angles.mY=0;
     angles.mZ=fn_801CFE40(direction.mY,direction.mX);
-    float horizontal=fn_80260B1C(direction.mX*direction.mX+direction.mY*direction.mY);
+    float horizontal=sqrtf(direction.mX*direction.mX+direction.mY*direction.mY);
     angles.mX=fn_801CFE40(-direction.mZ,horizontal);
-    fn_80227490(&up,&up,-angles.mZ,0,0); fn_80227490(&up,&up,0,0,-angles.mX);
+    Vec3RotateZYX(&up,&up,-angles.mZ,0,0); Vec3RotateZYX(&up,&up,0,0,-angles.mX);
     angles.mY=fn_801CFE40(up.mZ,up.mX)-0x400000;
     CamCurveOffsetPosition(position.mX,position.mY,position.mZ,&result,reinterpret_cast<CamCurveState_t *>(camera->mPadF8),actor);
     CamCurveConvertAngles(&resultAngles,reinterpret_cast<CamCurveState_t *>(camera->mPadF8),actor,angles.mX,angles.mY,angles.mZ);
@@ -193,23 +195,23 @@ extern "C" void CamCurveApplyPlaybackCurves(GameCamera_t *camera, Actor_801C009C
     up.mX=CurveListEvaluate(t,&sample->mCurves[6],0);
     up.mY=-CurveListEvaluate(t,&sample->mCurves[8],0);
     up.mZ=CurveListEvaluate(t,&sample->mCurves[7],0);
-    fn_802276B4(&up,&up,&position);
+    Vec3Sub(&up,&up,&position);
     look.mX=CurveListEvaluate(t,&sample->mCurves[3],0);
     look.mY=-CurveListEvaluate(t,&sample->mCurves[5],0);
     look.mZ=CurveListEvaluate(t,&sample->mCurves[4],0);
-    fn_802276B4(&look,&look,&position);
-    if (fn_80227120(&look)<0.0001f) { look.mX=0.0f; look.mY=1.0f; look.mZ=0.0f; }
-    if (fn_80227120(&up)<0.0001f) { up.mX=0.0f; up.mY=0.0f; up.mZ=1.0f; }
+    Vec3Sub(&look,&look,&position);
+    if (Vec3MagnitudeSqr(&look)<0.0001f) { look.mX=0.0f; look.mY=1.0f; look.mZ=0.0f; }
+    if (Vec3MagnitudeSqr(&up)<0.0001f) { up.mX=0.0f; up.mY=0.0f; up.mZ=1.0f; }
     MatPush(); MatLoad(matrix);
-    fn_802276B4(&position,&position,&base); fn_80227C2C(&position,&position);
-    fn_8022765C(&position,&position,&base); fn_8022765C(&position,&position,&offset);
-    fn_80227C2C(&up,&up); fn_80227C2C(&look,&look); MatPop();
-    float dot=fn_80227704(&up,&look); float length=fn_80227120(&look);
-    fn_80227264(&projection,&look,dot/length); fn_802276B4(&up,&up,&projection);
+    Vec3Sub(&position,&position,&base); Vec3Mat33Mul(&position,&position);
+    Vec3Add(&position,&position,&base); Vec3Add(&position,&position,&offset);
+    Vec3Mat33Mul(&up,&up); Vec3Mat33Mul(&look,&look); MatPop();
+    float dot=Vec3DotProduct(&up,&look); float length=Vec3MagnitudeSqr(&look);
+    Vec3Scale(&projection,&look,dot/length); Vec3Sub(&up,&up,&projection);
     angles.mZ=fn_801CFE40(look.mY,look.mX)-0x400000;
-    fn_80227490(&look,&look,-angles.mZ,0,0);
+    Vec3RotateZYX(&look,&look,-angles.mZ,0,0);
     angles.mX=fn_801CFE40(look.mZ,look.mY);
-    fn_80227490(&up,&up,-angles.mZ,0,0); fn_80227490(&up,&up,0,0,-angles.mX);
+    Vec3RotateZYX(&up,&up,-angles.mZ,0,0); Vec3RotateZYX(&up,&up,0,0,-angles.mX);
     angles.mY=fn_801CFE40(up.mZ,up.mX)-0x400000;
     CamCurveOffsetPosition(position.mX,position.mY,position.mZ,&result,reinterpret_cast<CamCurveState_t *>(camera->mPadF8),actor);
     CamCurveConvertAngles(&resultAngles,reinterpret_cast<CamCurveState_t *>(camera->mPadF8),actor,angles.mX,angles.mY,angles.mZ);

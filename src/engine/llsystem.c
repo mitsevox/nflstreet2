@@ -3,6 +3,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/pad.h>
 #include <dolphin/ai.h>
+#include <math.h>
 #include "engine/system.h"
 #include "game/fn_801D2B7C.h"
 
@@ -15,7 +16,6 @@ extern int GlibGetTvMode(void);
 extern int DateIsYearLeap(int year);
 extern int DateGetNumDaysInYear(int year);
 extern int DateGetNumDaysInMonth(int month, int year);
-extern float fn_80260FE8(float x);
 
 extern int lbl_803EBE50;
 extern int lbl_803EBE54;
@@ -213,9 +213,9 @@ void fn_801F8248(void)
     secs = OSTicksToSeconds(OSGetTime());
     enabled = OSDisableInterrupts();
     lbl_8039B430.mSeconds = secs % 60;
-    lbl_8039B430.mMinutes = (long long)fn_80260FE8(secs * (1.0f / 60.0f)) % 60;
-    lbl_8039B430.mHours = (long long)fn_80260FE8(secs * (1.0f / 3600.0f)) % 24;
-    days = fn_80260FE8(secs * (1.0f / 86400.0f));
+    lbl_8039B430.mMinutes = (long long)floorf(secs * (1.0f / 60.0f)) % 60;
+    lbl_8039B430.mHours = (long long)floorf(secs * (1.0f / 3600.0f)) % 24;
+    days = floorf(secs * (1.0f / 86400.0f));
     lbl_8039B430.mYear = 0;
     daysInYear = 366;
     while (days >= daysInYear) {

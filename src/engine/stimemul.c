@@ -21,7 +21,7 @@ int SNDCTRL_timemult(int handle, int mult)
         index = -1;
         while (iSNDpatchkey(voice, &index)) {
             lbl_803A6C24.m1CC[index].m6E = mult;
-            fn_80274CA8(index, mult);
+            SNDPLATFORM_timemult(index, mult);
         }
     }
     return 0;

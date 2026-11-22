@@ -14,11 +14,11 @@ struct GauntletMsgArgs_t {
 };
 
 extern "C" {
-int fn_8022F4BC(void);
+int DbUserGetCurrent(void);
 int UserProfileFindIndex(int a);
 int GauntletGetTeamsLeft(int a);
 int GauntletIsTeamBeaten(int a, int b);
-int fn_8022F384(int a);
+int DbUserFindIndex(int a);
 void EnvSetLocked(int a, int b, int c);
 void GauntletAdvance(int a);
 
@@ -32,27 +32,27 @@ void GauntletScreenEnter(int *pOut)
 {
     int value;
 
-    if (GauntletGetTeamsLeft(UserProfileFindIndex(fn_8022F4BC())) > 24) {
+    if (GauntletGetTeamsLeft(UserProfileFindIndex(DbUserGetCurrent())) > 24) {
         value = 8;
-    } else if (GauntletGetTeamsLeft(UserProfileFindIndex(fn_8022F4BC())) > 16) {
+    } else if (GauntletGetTeamsLeft(UserProfileFindIndex(DbUserGetCurrent())) > 16) {
         value = 16;
-    } else if (GauntletGetTeamsLeft(UserProfileFindIndex(fn_8022F4BC())) > 8) {
+    } else if (GauntletGetTeamsLeft(UserProfileFindIndex(DbUserGetCurrent())) > 8) {
         value = 24;
-    } else if (GauntletGetTeamsLeft(UserProfileFindIndex(fn_8022F4BC())) > 0) {
+    } else if (GauntletGetTeamsLeft(UserProfileFindIndex(DbUserGetCurrent())) > 0) {
         value = 32;
     } else {
         value = 33;
     }
     *pOut = value;
-    if (GauntletIsTeamBeaten(UserProfileFindIndex(fn_8022F4BC()), 34) != 0) {
-        EnvSetLocked(fn_8022F384(fn_8022F4BC()), 11, 0);
+    if (GauntletIsTeamBeaten(UserProfileFindIndex(DbUserGetCurrent()), 34) != 0) {
+        EnvSetLocked(DbUserFindIndex(DbUserGetCurrent()), 11, 0);
     }
 }
 
 void GauntletScreenGetTeam(int index, int *pOut, int *pFlag)
 {
     *pOut = _GauntletScreen_acTeamOrder[index];
-    if (GauntletIsTeamBeaten(UserProfileFindIndex(fn_8022F4BC()), *pOut) != 0) {
+    if (GauntletIsTeamBeaten(UserProfileFindIndex(DbUserGetCurrent()), *pOut) != 0) {
         *pFlag = 1;
     } else {
         *pFlag = 0;
@@ -80,9 +80,9 @@ int GauntletScreenMsg(unsigned int id, GauntletMsgArgs_t *pBlock, int unused, in
         _GauntletScreen_iSelection = pBlock->mUnknown0.mValue;
         break;
     case 0x80000005:
-        if (GauntletGetTeamsLeft(UserProfileFindIndex(fn_8022F4BC())) == -1) {
+        if (GauntletGetTeamsLeft(UserProfileFindIndex(DbUserGetCurrent())) == -1) {
             *pResult = 1;
-            GauntletAdvance(UserProfileFindIndex(fn_8022F4BC()));
+            GauntletAdvance(UserProfileFindIndex(DbUserGetCurrent()));
         } else {
             *pResult = 0;
         }

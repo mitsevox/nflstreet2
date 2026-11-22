@@ -71,9 +71,9 @@ void TMTexLibRegister(const char *pName, BallTexLib *pElement);
 void fn_80233D64(Object_80233EAC *pObject, BallModelLod *pDesc, const char *pName, int a,
                  void *pData, void *p);
 unsigned int fn_80234D4C(float *pBox, void *m, void *p, void *q);
-void *fn_80236384(int a);
-int fn_80236B98(int a, float x, float y, float z);
-void fn_80236C10(int a, float *p, float *q);
+void *LLLightGetProjectorMatrix(int a);
+int LLLightLoadSetTinted(int a, float x, float y, float z);
+void LLLightLoadDirectional(int a, float *p, float *q);
 void GXSetChanMatColor(int a, GXColor color);
 void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
 }
@@ -141,7 +141,7 @@ void BallRenderDraw(BallRenderObj *pObject)
     int result;
     Object_8023417C *pResult;
 
-    pUnknown = fn_80236384(0);
+    pUnknown = LLLightGetProjectorMatrix(0);
     TMRenderReset();
     x = y = z = 1.0f;
     if (pObject->mpUnknown294 != 0) {
@@ -155,12 +155,12 @@ void BallRenderDraw(BallRenderObj *pObject)
         z *= pObject->mUnknown2A0;
     }
     color.a = pObject->mUnknown28C * 128.0f;
-    mask = fn_80236B98(4, x, y, z);
+    mask = LLLightLoadSetTinted(4, x, y, z);
     if (LightTrackerUpdate(&pObject->mUnknown2AC, pObject->mpUnknown294, unknown28, unknown38)) {
         unknown38[0] *= x;
         unknown38[1] *= y;
         unknown38[2] *= z;
-        fn_80236C10(0, unknown38, unknown28);
+        LLLightLoadDirectional(0, unknown38, unknown28);
     }
     GXSetChanMatColor(4, color);
     GXSetChanCtrl(0, 1, 0, 0, mask, 2, 2);

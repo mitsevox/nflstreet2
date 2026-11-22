@@ -10,13 +10,12 @@
 #include "game/PlayArtPlayer.h"
 #include <string.h>
 #include "game/DbQueryTable.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 extern "C" PlayArtVertex_t lbl_8031D2B8[], lbl_8031D308[];
 
 extern "C" {
-void fn_802271A4(void *, void *);
-float fn_80260B1C(float);
+void Vec2Normalize(void *, void *);
 
 extern int lbl_802E9964[];
 extern PlayArtVertex_t lbl_802E98FC[];
@@ -26,9 +25,9 @@ extern unsigned char lbl_803EB3D3,lbl_803EB3D7,lbl_803EB3DB,lbl_803EB3DF,lbl_803
 extern unsigned char lbl_803EB3EB,lbl_803EB3EF,lbl_803EB3F3,lbl_803EB3F7,lbl_803EB3FB,lbl_803EB3FF,lbl_803EB403,lbl_803EB407,lbl_803EB40B;
 int fn_80177F70(void);
 int PauseIsOpen(void);
-void fn_80227638(void *, void *, void *);
-float fn_8022781C(void *, void *);
-int fn_801FA0BC(int, DbQueryTable *, DbFilter *, void *, int *, QueryResult *);
+void Vec2Add(void *, void *, void *);
+float Vec2Distance(void *, void *);
+int _TDbQrySelect(int, DbQueryTable *, DbFilter *, void *, int *, QueryResult *);
 int fn_801C2E18(char *, const char *, ...);
 int DbTextToTag(const char *);
 int fn_80178308(void);
@@ -187,10 +186,10 @@ int fn_801651E0(void *handle, int, signed char, int id, PlayArtPlayer_t *records
         {0,0x50544553,0x736F5044,0}, {0,0x50544553,0x736F5045,0}, {0,-1,-1,0}
     };
     int cursor;
-    int status = fn_801FA0BC((int)handle, tables, 0, 0, &cursor, 0);
+    int status = _TDbQrySelect((int)handle, tables, 0, 0, &cursor, 0);
     int opened = status == 0 || status == 23 || status == 21 || status == 20;
     if (!status) {
-        status = fn_801FA228(cursor, 1, 0, columns);
+        status = TDbQryRetrieve(cursor, 1, 0, columns);
         while (!status) {
             PlayArtPlayer_t *record = &records[columns[0].mValue];
             record->mUnknown18Word = columns[4].mValue;
@@ -198,10 +197,10 @@ int fn_801651E0(void *handle, int, signed char, int id, PlayArtPlayer_t *records
             record->mUnknown10 = columns[1].mValue;
             record->mUnknownC = (float)columns[3].mValue;
             record->mUnknown14Word = columns[5].mValue;
-            status = fn_801FA228(cursor, 0, 1, columns);
+            status = TDbQryRetrieve(cursor, 0, 1, columns);
         }
     }
-    if (opened) fn_801FA148(cursor);
+    if (opened) TDbQryDestroy(cursor);
     return 1;
 }
 
@@ -215,22 +214,22 @@ int fn_80165464(void *handle, int, int id, PlayArtPlayer_t *records)
     DbColumnValue counts[2] = {{0,0x53594C50,0x746E6361,0},{0,-1,-1,0}};
     DbColumnValue ids[3] = {{0,0x4C545241,0x4C545241,0},{0,0x4C545241,0x6F736F70,0},{0,-1,-1,0}};
     int cursor;
-    int status = fn_801FA0BC((int)handle, plays, 0, 0, &cursor, 0);
+    int status = _TDbQrySelect((int)handle, plays, 0, 0, &cursor, 0);
     int opened = status == 0 || status == 23 || status == 21 || status == 20;
     if (!status) {
-        status = fn_801FA228(cursor, 1, 0, ids);
+        status = TDbQryRetrieve(cursor, 1, 0, ids);
         route.mUnknown16.mValue.mInt = ids[0].mValue;
         while (!status) {
             PlayArtPlayer_t *record = &records[ids[1].mValue];
             route.mUnknown16.mKind = 3;
             record->mUnknown0Word = route.mUnknown16.mValue.mInt;
-            fn_801FA290((int)handle, routes, 0, counts);
+            TDbQryGetSingleRow((int)handle, routes, 0, counts);
             record->mUnknown4Word = counts[0].mValue;
-            status = fn_801FA228(cursor, 0, 1, ids);
+            status = TDbQryRetrieve(cursor, 0, 1, ids);
             route.mUnknown16.mValue.mInt = ids[0].mValue;
         }
     }
-    if (opened) fn_801FA148(cursor);
+    if (opened) TDbQryDestroy(cursor);
     return 1;
 }
 
@@ -278,7 +277,7 @@ int fn_80165890(void *handle, PlayArtPlayer_t *records, int first, unsigned char
             int axTag = DbTextToTag(ax), ayTag = DbTextToTag(ay), atTag = DbTextToTag(at);
             int auTag = DbTextToTag(au), avTag = DbTextToTag(av), ctTag = DbTextToTag(ct);
             int spTag = DbTextToTag(sp), ltTag = DbTextToTag(lt), lsTag = DbTextToTag(ls);
-            int status = fn_801FCE10(0, "use \x8c select \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x85 and \x8c into \x85 and \x8c into \x85 and \x8c into \x85 from 'LTRA' where 'LTRA' = \x85\n",
+            int status = TDbCompilePerformOp(0, "use \x8c select \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x85 and \x8c into \x85 and \x8c into \x85 and \x8c into \x85 from 'LTRA' where 'LTRA' = \x85\n",
                 (int)handle, axTag,&x,ayTag,&y,atTag,&type,auTag,&u,avTag,&v,ctTag,&link,spTag,&speed,ltTag,&arrow,lsTag,&color,record->mUnknown0Word);
             if (!status) {
                 PlayArtStep_t *step = &record->mUnknown1C[j];
@@ -325,13 +324,13 @@ void fn_80165DF8(PlayArtVertex_t *a, PlayArtVertex_t *b, PlayArtVertex_t *left, 
                 int width, PlayArtVertex_t *prior, int average)
 {
     PlayArtVertex_t normal = {a->mY - b->mY, a->mX - b->mX};
-    fn_802271A4(&normal, &normal);
+    Vec2Normalize(&normal, &normal);
     float half = (float)width * 0.25f;
     PlayArtVertex_t offset;
     if (prior && average) {
         offset.mX = (normal.mX + prior->mX) * 0.5f;
         offset.mY = (normal.mY + prior->mY) * 0.5f;
-        fn_802271A4(&offset, &offset);
+        Vec2Normalize(&offset, &offset);
     } else offset = normal;
     offset.mX *= half;
     offset.mY *= half;
@@ -367,7 +366,7 @@ void fn_80166110(PlayArtVertex_t *points, PlayArtVertex_t *out, int width, int l
     PlayArtVertex_t direction;
     direction.mY = points[0].mY - points[1].mY;
     direction.mX = points[0].mX - points[1].mX;
-    float magnitude = fn_80260B1C(direction.mX * direction.mX + direction.mY * direction.mY);
+    float magnitude = sqrtf(direction.mX * direction.mX + direction.mY * direction.mY);
     if (magnitude != 0.0f) {direction.mX /= magnitude; direction.mY /= magnitude;}
     PlayArtVertex_t side;
     side.mX = -direction.mY;
@@ -422,14 +421,14 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
         PlayArtVertex_t zero = {0.0f, 0.0f};
         if (step->mUnknown10 == 1) {
             controls[0] = starts[i];
-            fn_80227638(&controls[1], &step->mUnknown0, starts);
-            fn_80227638(&controls[2], &step->mUnknown8, starts);
+            Vec2Add(&controls[1], &step->mUnknown0, starts);
+            Vec2Add(&controls[2], &step->mUnknown8, starts);
             if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
             if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
             if (controls[2].mX < 4.0f) controls[2].mX = 4.0f; else if (!(controls[2].mX <= 116.0f)) controls[2].mX = 116.0f;
             if (controls[2].mY < 4.0f) controls[2].mY = 4.0f; else if (!(controls[2].mY <= 96.0f)) controls[2].mY = 96.0f;
             ends[i+1] = controls[2];
-            int samples = (int)(fn_8022781C(&controls[0], &controls[1]) * 0.175f + 2.0f);
+            int samples = (int)(Vec2Distance(&controls[0], &controls[1]) * 0.175f + 2.0f);
             if (samples > 8) samples = 8;
             fn_80165F78(controls, strip, samples, width);
             for (int j = 0; j < samples; ++j) {
@@ -440,7 +439,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
             drawn = 1;
         } else if (step->mUnknown10 == 0) {
             controls[0] = starts[i];
-            fn_80227638(&controls[1], &step->mUnknown0, starts);
+            Vec2Add(&controls[1], &step->mUnknown0, starts);
             if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
             if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
             ends[i+1] = controls[1];
@@ -450,8 +449,8 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
         } else if (step->mUnknown10 == 2) {
             for (int j = 0; j < 2; ++j) {
                 controls[0] = starts[i];
-                if (!j) fn_80227638(&controls[1], &step->mUnknown0, starts);
-                else fn_80227638(&controls[1], &step->mUnknown8, starts);
+                if (!j) Vec2Add(&controls[1], &step->mUnknown0, starts);
+                else Vec2Add(&controls[1], &step->mUnknown8, starts);
                 if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
                 if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
                 ends[i+1] = controls[1];

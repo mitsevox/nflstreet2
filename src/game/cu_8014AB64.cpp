@@ -5,7 +5,7 @@
 #include "game/fn_8021D7B8.h"
 #include "game/PauseMenu.h"
 #include "game/fn_800B65A0.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include <string.h>
 
 struct PlaybookTeamView {
@@ -62,13 +62,13 @@ int FormationLineupApplyUser(int formation, int team);
 void fn_800B3EFC(int team);
 void fn_800AD910(int a, float b);
 void CamGameResumeAll(void);
-void fn_8016DDDC(int team);
+void ScrmTeamPlaceInHuddle(int team);
 Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, int team);
 int fn_8011F1CC(void);
 void HudShowAlert(const char *pText);
 void PlyrMgrClearStates(void);
-int fn_8005BFD4(void);
-void fn_8005BF18(void);
+int InGameOverlayGetState(void);
+void InGameOverlayReset(void);
 void ClockRuleEndPeriod(void);
 void fn_800C02EC(void *p, short value);
 
@@ -214,11 +214,11 @@ void fn_8014B028(void *p, float dt)
     } else {
         fn_8009D888(0, 10);
         CamGameResumeAll();
-        fn_8016DDDC(fn_80178308());
-        fn_8016DDDC(fn_80178320());
+        ScrmTeamPlaceInHuddle(fn_80178308());
+        ScrmTeamPlaceInHuddle(fn_80178320());
         fn_8009D944(1);
         fn_8009D944(0);
-        short value = 9 - fn_802372EC(0, 5);
+        short value = 9 - SyncRandGetRange(0, 5);
         fn_800C02EC(lbl_803EABA4, value);
     }
 }
@@ -234,7 +234,7 @@ void fn_8014B0D0(void *p, float dt)
     fn_800BFB88(p, dt);
     fn_801487C0(fn_80178308(), 3);
     fn_801487C0(fn_80178320(), 2);
-    short value = 9 - fn_802372EC(0, 5);
+    short value = 9 - SyncRandGetRange(0, 5);
     fn_800C02EC(lbl_803EABA4, value);
     Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C pos;
@@ -288,8 +288,8 @@ void fn_8014B350(void *p, float dt)
 void fn_8014B38C(void *p, float dt)
 {
     PlyrMgrClearStates();
-    if (fn_8005BFD4() != 4) {
-        fn_8005BF18();
+    if (InGameOverlayGetState() != 4) {
+        InGameOverlayReset();
     }
     if (fn_8009D990(1)) {
         fn_800AD910(5, dt);

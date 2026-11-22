@@ -17,7 +17,7 @@ struct GameOptionsDefault_t {
 extern "C" {
 extern void *gUISMainInfo;
 
-int fn_801FA428(int file, DbTableRef *pTables, DbExpression *pExpression,
+int TDbQrySetFirstRow(int file, DbTableRef *pTables, DbExpression *pExpression,
                 DbColumnValue *pList, DbQueryResult *pResult, int a);
 void SndgSetVolumeOption(int channel, unsigned char level);
 void SndgApplyVolumeOptions(void);
@@ -89,7 +89,7 @@ static inline int WriteRecord(DbCursor *pCursor,
                    0x00010003, key[0].mValue);
     tables[0].Set(table);
     tables[1].Set(-1);
-    return fn_801FA428(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
+    return TDbQrySetFirstRow(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
 }
 
 void GameOptionsOpenCursor(void);

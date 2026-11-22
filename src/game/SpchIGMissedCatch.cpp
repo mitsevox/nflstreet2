@@ -9,7 +9,7 @@ extern "C" {
 void SpchIGGetPlayerCategory(int *pResult, int value);
 int fn_80178308(void);
 int fn_80178320(void);
-float fn_8022785C(Vector_80039F5C *pPosition, Vector_80039F5C *pOther);
+float Vec3Distance(Vector_80039F5C *pPosition, Vector_80039F5C *pOther);
 }
 
 static int _SpchIG_iMissedCatchPlayer = 0;
@@ -34,7 +34,7 @@ extern "C" void SpchIGSayMissedCatch(Vector_80039F5C *pOther)
             break;
         }
     }
-    if (fn_8022785C(&position, pOther) <= 4.0f) {
+    if (Vec3Distance(&position, pOther) <= 4.0f) {
         return;
     }
     SpchIGGetPlayerCategory(&result, _SpchIG_iMissedCatchPlayer);

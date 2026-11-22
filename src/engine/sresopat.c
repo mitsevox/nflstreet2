@@ -12,7 +12,7 @@ int SNDBANKI_asyncresolvepatch(int mask, void *patch, int base, int *count)
     do {
         more = fn_80270E04(&cursor, &info);
         if (info.m18 & mask) {
-            fn_80273DC0(&info, base, count);
+            SNDPLATFORM_asyncresolvetimbre(&info, base, count);
             fn_8026A40C(&info, 0);
         }
     } while (more != 0);

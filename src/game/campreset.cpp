@@ -32,7 +32,7 @@ void CamGameSetModeAll(int a);
 void CamGameChangeType(int index, int id);
 int fn_801784C4(void);
 int fn_801CFE40(float y, float x);
-void fn_80227490(float *pOut, float *pIn, int a0, int a1, int a2);
+void Vec3RotateZYX(float *pOut, float *pIn, int a0, int a1, int a2);
 
 void CamPresetInit(GameCamera_t *pCamera, CameraDesc_t *pDesc);
 void CamPresetUninit(GameCamera_t *pCamera);
@@ -107,7 +107,7 @@ int CamGameGetHeading(int index)
     dir[0] = dir[1] = dir[2] = out[0] = out[1] = out[2] = 0.0f;
     pCamera = CamGameGetCamera(index);
     dir[2] = -1.0f;
-    fn_80227490(out, dir, pCamera->mHeader.mUnknown14[2], pCamera->mHeader.mUnknown14[1], pCamera->mHeader.mUnknown14[0]);
+    Vec3RotateZYX(out, dir, pCamera->mHeader.mUnknown14[2], pCamera->mHeader.mUnknown14[1], pCamera->mHeader.mUnknown14[0]);
     out[1] = -out[1];
     return fn_801CFE40(out[1], out[0]);
 }

@@ -17,7 +17,7 @@ extern const float lbl_803ED6A8;
 
 int fn_800A83E0(int a);
 unsigned char fn_800C1E48(void);
-int fn_80162E40(int a);
+int PlyrStarGetColor(int a);
 int GameTextGetPadPlayer(int a);
 
 unsigned char HudIsEvent31Shown(int index);
@@ -268,14 +268,14 @@ extern "C" void HudShowPlayerPopup(HudPopupPlayer_t *pObject, int a, const char 
 
     strncpy(_Hud_aPopupText, pText, 79);
     if (pObject != 0) {
-        rgb = fn_80162E40(8);
+        rgb = PlyrStarGetColor(8);
         red = (rgb & 0xFF0000) >> 16;
         green = (rgb & 0xFF00) >> 8;
         blue = rgb & 0xFF;
         if (pObject->mUnknown8 != 0xFF) {
             int index = GameTextGetPadPlayer(pObject->mUnknown8);
             if (index != -1) {
-                rgb = fn_80162E40(_Hud_aiTeamColorIndex[index]);
+                rgb = PlyrStarGetColor(_Hud_aiTeamColorIndex[index]);
                 red = (rgb & 0xFF0000) >> 16;
                 green = (rgb & 0xFF00) >> 8;
                 blue = rgb & 0xFF;
@@ -308,7 +308,7 @@ extern "C" int HudLookupColor(int key, unsigned char *pRed, unsigned char *pGree
     *pBlue = 0;
     if (key == 0xFE) {
         found = 1;
-        rgb = fn_80162E40(8);
+        rgb = PlyrStarGetColor(8);
         *pRed = (rgb & 0xFF0000) >> 16;
         *pGreen = (rgb & 0xFF00) >> 8;
         *pBlue = rgb & 0xFF;
@@ -316,7 +316,7 @@ extern "C" int HudLookupColor(int key, unsigned char *pRed, unsigned char *pGree
         int index = GameTextGetPadPlayer(key);
         if (index != -1) {
             found = 1;
-            rgb = fn_80162E40(_Hud_aiTeamColorIndex[index]);
+            rgb = PlyrStarGetColor(_Hud_aiTeamColorIndex[index]);
             *pRed = (rgb & 0xFF0000) >> 16;
             *pGreen = (rgb & 0xFF00) >> 8;
             *pBlue = rgb & 0xFF;

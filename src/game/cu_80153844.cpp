@@ -6,7 +6,7 @@
 #include "game/fn_8009D990.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/ScrmRuleSet.h"
 #include "game/cammain.h"
 
@@ -56,7 +56,7 @@ int MsgBoxIsClosed(void);
 void CamGameSetModeAll(int a);
 void CamGameSelectCamera(int a);
 GameCamera_t *CamGameGetCamera(int index);
-void fn_80141164(float value);
+void CamPlaySetYOffset(float value);
 int fn_80178308(void);
 int fn_80178320(void);
 void fn_801486A8(void);
@@ -88,7 +88,7 @@ void fn_801538C8(Class_802A1BC8 *p)
     CamGameSetModeAll(1);
     CamGameSelectCamera(0);
     CamMainWarpToDest(CamGameGetCamera(5));
-    fn_80141164(2.5f);
+    CamPlaySetYOffset(2.5f);
 }
 
 void fn_80153910(Class_802A1BC8 *p, float dt)
@@ -119,8 +119,8 @@ void fn_801539A0(Class_802A1B58 *p, float dt)
     fn_801487C0(0, fn_80148A58()->vfn_05(0));
     fn_801487C0(1, fn_80148A58()->vfn_05(1));
     do {
-        pRules->mpUnknown52->mUnknown8 = fn_802372EC(0, 3);
-    } while (pRules->mpUnknown52->mUnknown8 == pRules->mpUnknown52->mUnknown0[team] && fn_802372EC(0, 100) > 20);
+        pRules->mpUnknown52->mUnknown8 = SyncRandGetRange(0, 3);
+    } while (pRules->mpUnknown52->mUnknown8 == pRules->mpUnknown52->mUnknown0[team] && SyncRandGetRange(0, 100) > 20);
     pRules->mpUnknown52->mUnknown0[team] = pRules->mpUnknown52->mUnknown8;
     ((Class_802A27F0 *)fn_80148A58())->vfn_35(fn_80178308(), 1);
     ((Class_802A27F0 *)fn_80148A58())->vfn_35(fn_80178320(), 0);

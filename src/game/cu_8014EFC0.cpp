@@ -87,8 +87,8 @@ void fn_800B9598(PostPlayPhase *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
 void fn_80178F20(ScrmRuleSet *pObject);
 void fn_800A8738(int value);
-int fn_8005FC7C(void);
-void fn_8006088C(int value);
+int StoryEventsGetCurrentEvent(void);
+void StoryEventsSetRewardPenalty(int value);
 int fn_8014FF34(Class_802A2B68 *p);
 int fn_80149014(Class_802A2B68 *p);
 void fn_8014DA90(Class_802A2B68 *p);
@@ -99,8 +99,8 @@ void fn_8014EFC0(Class_802A2B68 *p)
     if (p->mpUnknown1C->mUnknown2C != 1) {
         GameOptionsSet(14, p->mpUnknown1C->mUnknown2C);
     }
-    if (fn_8005FC7C()) {
-        fn_8006088C(fn_8014FF34(p));
+    if (StoryEventsGetCurrentEvent()) {
+        StoryEventsSetRewardPenalty(fn_8014FF34(p));
     }
     if (fn_80149014(p)) {
         fn_8014DA90(p);

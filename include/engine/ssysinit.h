@@ -6,15 +6,20 @@
 
 #include "engine/cu_802714A8.h"
 
-/* The memory callbacks of the options (+0xB8): the allocator and the release function. */
+/* The callbacks of the options (+0xB8): the allocator, the release function, the abort handler and
+   the two function-profiler hooks (set by ssys.cpp). */
 typedef struct SndSysMemOpts_t {
     void *(*mpAlloc)(int size);
     void (*mpFree)(void *p);
-    unsigned char unk_0x8[0xC];
+    void (*mpAbort)(const char *message);
+    void (*mpProfileEnter)(const char *name);
+    void (*mpProfileExit)(const char *name);
 } SndSysMemOpts_t;
 
 typedef struct SNDSYSOPTS {
-    unsigned char unk_0x0[0x1C];
+    unsigned char unk_0x0[5];
+    unsigned char m5;
+    unsigned char unk_0x6[0x16];
     Params_803A6C40 mParams;
     SndSysMemOpts_t mMem;
 } SNDSYSOPTS;

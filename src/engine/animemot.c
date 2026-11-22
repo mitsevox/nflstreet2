@@ -4,7 +4,7 @@
 
 #include "engine/animemot.h"
 
-extern void (*_AnimFile_RelocateFunc)(AnimFileFormat_t *pFile);
+static void (*_AnimFile_RelocateFunc)(AnimFileFormat_t *pFile);
 
 void *AnimFileGetFramePerState(AnimFileFormat_t *pFile, int a, int b, unsigned int index, int group);
 

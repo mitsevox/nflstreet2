@@ -12,8 +12,8 @@
 #include <string.h>
 #include "game/fn_800F06F4.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_802372EC.h"
+#include "game/Vec3Magnitude.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 
 #define MIN(a, b) ((a) <= (b) ? (a) : (b))
@@ -57,10 +57,10 @@ float fn_80178A44(void);
 int CharSkelGetJointByName(void *p, const char *pName);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 float SyncRandGetFloat(int stream);
-float fn_8022781C(Vector_80039F5C *pA, Vector_80039F5C *pB);
-void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pPoint, Vector_80039F5C *pOut, float *pDist,
+float Vec2Distance(Vector_80039F5C *pA, Vector_80039F5C *pB);
+void Vec3ClosestPointOnSegment(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pPoint, Vector_80039F5C *pOut, float *pDist,
                  float *pT);
 void fn_800FD724(Object_80039F5C *p);
 }
@@ -97,11 +97,11 @@ extern "C" int RouteRunAvoidDefenders(Object_80039F5C *p, RouteRunBlock_t *pBloc
         if (pOther->mFlags & 0x4000) {
             check = 1;
         }
-        if (check && !(fn_8022781C(&p->mMotion.mPos, &pOther->mMotion.mPos) > _RouteRun_fAvoidRadius)) {
+        if (check && !(Vec2Distance(&p->mMotion.mPos, &pOther->mMotion.mPos) > _RouteRun_fAvoidRadius)) {
             Point_8017886C delta;
             int dir;
 
-            fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+            Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
             dir = fn_801CFE40(delta.mY, delta.mX);
             if (MathAngleDiff(dir, angle) < (int)(_RouteRun_fAvoidConeDeg * 46603.38f)) {
                 int offset = (int)(p->mUnknown560.mFlags.mBytes[0] ? _RouteRun_fAvoidTurnWideDeg : _RouteRun_fAvoidTurnDeg);
@@ -159,7 +159,7 @@ extern "C" int RouteRunSidestepDefender(Object_80039F5C *p, RouteRunBlock_t *pBl
             Point_8017886C delta;
             int diff;
 
-            fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+            Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
             diff = fn_801CFE40(delta.mY, delta.mX);
             diff = MathAngleDiff(p->mMotion.mUnknown32, diff);
             if (diff <= bestDiff) {
@@ -171,7 +171,7 @@ extern "C" int RouteRunSidestepDefender(Object_80039F5C *p, RouteRunBlock_t *pBl
         }
     }
     if (pBest) {
-        float dist = fn_8022781C(&p->mMotion.mPos, &pBest->mMotion.mPos);
+        float dist = Vec2Distance(&p->mMotion.mPos, &pBest->mMotion.mPos);
         float value = 17.0f;
 
         value += (3.75f - dist) * 2.1333334f;
@@ -216,12 +216,12 @@ extern "C" int RouteRunAvoidWalls(Object_80039F5C *p, RouteRunBlock_t *pBlock)
         LevelGetWallBase(&pLevel->mUnknown140[i], &a, &b);
         b.mZ = 0.0f;
         a.mZ = 0.0f;
-        fn_80227970(&a, &b, &p->mMotion.mPos, &nearest, &dist, &t);
+        Vec3ClosestPointOnSegment(&a, &b, &p->mMotion.mPos, &nearest, &dist, &t);
         if (dist < _RouteRun_fEdgeMargin * _RouteRun_fEdgeMargin) {
             Point_8017886C delta;
             int dir;
 
-            fn_80227690(&delta, &nearest, &p->mMotion.mPos);
+            Vec2Sub(&delta, &nearest, &p->mMotion.mPos);
             dir = fn_801CFE40(delta.mY, delta.mX);
             if (MathAngleDiff(dir, p->mMotion.mUnknown32) <= 0x3FFFFF) {
                 if ((dir - p->mMotion.mUnknown32 & 0xFFFFFF) <= 0x7FFFFF) {
@@ -275,7 +275,7 @@ extern "C" int RouteRunCanSprint(Object_80039F5C *p, RouteRunBlock_t *pBlock)
 
         delta.mX = pBlock->mUnknown0 - p->mMotion.mPos.mX;
         delta.mY = pBlock->mUnknown4 - p->mMotion.mPos.mY;
-        if (fn_802270A4(&delta) < 1.0f
+        if (Vec2Magnitude(&delta) < 1.0f
             && MathAngleDiff(p->mMotion.mUnknown32, p->mpState[1].mUnknown2 << 17 & 0xFFFFFF) > 0x155555) {
             ok = 0;
         }
@@ -315,8 +315,8 @@ extern "C" int RouteRunEnter(Object_80039F5C *p)
 
         delta.mX = pBlock->mUnknown0;
         delta.mY = pBlock->mUnknown4;
-        fn_80227690(&delta, &delta, &p->mMotion.mPos);
-        pBlock->mUnknown8 = fn_802270A4(&delta);
+        Vec2Sub(&delta, &delta, &p->mMotion.mPos);
+        pBlock->mUnknown8 = Vec2Magnitude(&delta);
         pBlock->mUnknown16 = fn_801CFE40(delta.mY, delta.mX);
     }
     pBlock->mUnknown24 = 0;
@@ -385,7 +385,7 @@ extern "C" int RouteRunUpdate(Object_80039F5C *p)
 
             delta.mX = pBlock->mUnknown0 - p->mMotion.mPos.mX;
             delta.mY = pBlock->mUnknown4 - p->mMotion.mPos.mY;
-            dist = fn_802270A4(&delta);
+            dist = Vec2Magnitude(&delta);
             if (dist > 2.5f && dist < 6.0f) {
                 Object_80039F5C *pCarrier;
 
@@ -395,11 +395,11 @@ extern "C" int RouteRunUpdate(Object_80039F5C *p)
                     int side;
 
                     BallGetPosition(BallGetCurrent(), &delta);
-                    fn_80227690(&delta, &delta, &p->mMotion.mPos);
+                    Vec2Sub(&delta, &delta, &p->mMotion.mPos);
                     dir = fn_801CFE40(delta.mY, delta.mX);
                     side = MathAngleDiff(p->mMotion.mFacing, dir + 0x400000) <= 0x3FFFFF;
                     pBlock->mUnknown34 = side ? 19 : 18;
-                    pBlock->mUnknown32 = fn_802372EC(0, 40) + 40;
+                    pBlock->mUnknown32 = SyncRandGetRange(0, 40) + 40;
                     AudmonEventPostId(98, &p->mMotion.mPos, p->mId, 0, 0, 0);
                     pBlock->mUnknown60 = 1;
                     pBlock->mUnknown61 = 1;

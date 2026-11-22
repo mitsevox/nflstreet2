@@ -216,7 +216,7 @@ Point_8017886C fn_80178070(void);
 int fn_801787DC(int);
 void HudShowPlayLeader(int);
 int UserProfileGetSelected(unsigned char);
-int fn_8022F358(int);
+int DbUserGetId(int);
 void UserInfoAddPoints(int, unsigned int);
 void TkTableOpen(DbCursor *, int);
 void TkTableClose(DbCursor *);
@@ -1399,7 +1399,7 @@ extern "C" void StyleTrackerStartRunEffect(void) {
     Object_80039F5C *p = _StyleTracker_pState->mpRunEffectPlayer;
 
     if (p != 0) {
-        ReplayEventAdd(lbl_803EA368, 56, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+        ReplayEventAdd(gpReplay, 56, p, &p->mMotion.mPos, &p->mMotion.mFacing);
     }
 }
 
@@ -2117,7 +2117,7 @@ extern "C" int StyleTrackerUpdateRun(int active, int a, int b) {
                     float distance = (float)fabs(_StyleTracker_pState->mpRunPlayer->mMotion.mPos.mX) + 6.0f;
                     if (!(distance <= fn_800A32B4())) {
                         Object_80039F5C *p = _StyleTracker_pState->mpRunEffectPlayer;
-                        ReplayEventAdd(lbl_803EA368, 57, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                        ReplayEventAdd(gpReplay, 57, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                         _StyleTracker_pState->mRunEffectActive = 0;
                     }
                 }
@@ -2151,7 +2151,7 @@ extern "C" int StyleTrackerUpdateRun(int active, int a, int b) {
             StyleTrackerResetRun();
             if (_StyleTracker_pState->mRunEffectActive) {
                 Object_80039F5C *p = _StyleTracker_pState->mpRunEffectPlayer;
-                ReplayEventAdd(lbl_803EA368, 57, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                ReplayEventAdd(gpReplay, 57, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                 _StyleTracker_pState->mRunEffectActive = 0;
             }
         }
@@ -2698,9 +2698,9 @@ extern "C" void StyleTrackerInit(void) {
         }
     }
     pHandle = SyncStateRegister(0, (void **)&_StyleTracker_pState, sizeof(StyleTrackerState_t), 0, 0x7472636B);
-    fn_80238234(pHandle, StyleTrackerCreateState, StyleTrackerDestroyState, 0, StyleTrackerCompareState);
-    fn_80238248(pHandle, StyleTrackerSaveState, StyleTrackerGetStateSize, StyleTrackerLoadState);
-    fn_802381E0(pHandle);
+    SyncStateSetCallbacks(pHandle, StyleTrackerCreateState, StyleTrackerDestroyState, 0, StyleTrackerCompareState);
+    SyncStateSetSaveCallbacks(pHandle, StyleTrackerSaveState, StyleTrackerGetStateSize, StyleTrackerLoadState);
+    SyncStateCommit(pHandle);
     StyleTrackerReset();
 }
 
@@ -2730,7 +2730,7 @@ extern "C" unsigned int StyleTrackerAddProfilePoints(int side, unsigned int valu
     unsigned int result = 0;
     if (index != -1) {
         result = (unsigned int)((float)value * _StyleTracker_fProfilePointScale);
-        UserInfoAddPoints(fn_8022F358(index), result);
+        UserInfoAddPoints(DbUserGetId(index), result);
     }
     return result;
 }

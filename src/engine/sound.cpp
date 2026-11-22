@@ -8,6 +8,7 @@
 #include "engine/IAllocator.h"
 #include "engine/csis.h"
 #include "engine/sevent.h"
+#include "engine/ssys.h"
 
 struct SndSeqInfo_t {
     ResFile_t *pRes;
@@ -102,13 +103,6 @@ static IAllocator *pIAllocator;
 
 static SndModuleInfo_t _Snd_ModuleInfo;
 
-namespace Snd {
-class System {
-public:
-    static int VectorToCsisMutex(void);
-};
-}
-
 extern "C" {
 int sprintf(char *s, const char *format, ...);
 void DCFlushRange(void *addr, unsigned long nBytes);
@@ -122,13 +116,6 @@ void FileDebugProcess(void);
 void *fn_801D310C(void *pAddr, int size, int ident, int flags);
 unsigned long OSGetSoundMode(void);
 void SNDSYS_linkmaincpumixer(void);
-void fn_8026F5F8(int a);
-void fn_8026F710(int mode);
-void fn_8026F788(int a, int b);
-void fn_8026F894(int a);
-void fn_8026F908(void (*pAbort)(const char *pMessage));
-void fn_8026FBFC(int a, int b, int c);
-void fn_8026FCAC(int a, int b);
 int fn_802692B8(int handle);
 int fn_802697D8(void *pData, char *pName, int b, void *(*pAlloc)(void *, int, int));
 int SNDautovol(int handle, int time, int vol);
@@ -137,7 +124,7 @@ int SNDBANK_asyncloadmem(int *pHandle, void *pData);
 int SNDBANK_asyncloadmemdone(void);
 int SNDBANK_play(int handle, int a, void *b);
 int SNDbankremove(int handle);
-void fn_8026C280(void);
+int SNDmidistopall(void);
 int SNDover(int handle);
 int SNDpitchmult(int handle, int value);
 void SNDplaysetdef(SndPatchOpts_t *pOpts);
@@ -163,10 +150,8 @@ int SNDvol(int handle, int value);
 
 void _StreamMUTEX_init(void);
 int SNDsetoutputchannels(int count);
-void fn_8026F97C(int a);
-void fn_8026C18C(void);
-void fn_8026C23C(void);
-void fn_8026FBCC(void);
+int SNDmidiinit(void);
+int SNDmidirestore(void);
 
 int SndInit(SndInitDesc_t *pDesc);
 int SndShutdown(void);
@@ -370,10 +355,10 @@ int SndInit(SndInitDesc_t *pDesc)
         Csis::System::SetAllocator((Allocator *)pIAllocator);
         Csis::System::Init();
         Snd::System::VectorToCsisMutex();
-        fn_8026FBFC(0, (int)pHeap, pDesc->mUnknown4);
-        fn_8026F97C(pDesc->mUnknown0);
+        Snd::Memory::SetHeap(Snd::DEVICE_MAIN, pHeap, pDesc->mUnknown4);
+        Snd::System::Init(pDesc->mUnknown0);
         _Snd_ModuleInfo.mUnk0 = pDesc->mUnknown0;
-        fn_8026C18C();
+        SNDmidiinit();
         _Snd_ModuleInfo.pBankList = DSNewList(1, 0, pDesc->mUnknown16, sizeof(SndBankInfo_t), 0, 0);
         _Snd_ModuleInfo.pSeqList = DSNewList(1, 0, pDesc->mUnknown20, sizeof(SndSeqInfo_t), 0, 0);
         _Snd_ModuleInfo.pStreamList = DSNewList(1, 0, pDesc->mUnknown22, sizeof(SndStream_t), 0, 0);
@@ -394,26 +379,27 @@ int SndInitParms(SndInitDesc_t *pDesc)
 {
     SNDSYS_linkmaincpumixer();
     if (OSGetSoundMode() == 0) {
-        fn_8026F710(0);
+        Snd::System::SetOutputMode(Snd::OUTPUT_MONO);
     } else {
         switch (_Snd_ModuleInfo.mUnk50) {
         case 1:
         case 2:
         default:
-            fn_8026F710(1);
+            Snd::System::SetOutputMode(Snd::OUTPUT_STEREO);
             break;
         case 3:
-            fn_8026F710(8);
+            Snd::System::SetOutputMode(Snd::OUTPUT_SURROUND);
             break;
         }
     }
-    fn_8026FBFC(2, pDesc->mUnknown8, pDesc->mUnknown12);
-    fn_8026F894(0);
-    fn_8026F788(0, pDesc->mUnknown24);
-    fn_8026F5F8(pDesc->mUnknown16);
-    fn_8026F908(_SndAbort);
+    Snd::Memory::SetHeap(Snd::DEVICE_ARAM, (void *)pDesc->mUnknown8, pDesc->mUnknown12);
+    Snd::System::SetSndInitsAram(false);
+    Snd::System::SetVoices(Snd::DEVICE_MAIN, pDesc->mUnknown24);
+    Snd::System::SetMaxBanks(pDesc->mUnknown16);
+    Snd::System::SetAbortHandler(_SndAbort);
     if (pDesc->mUnknown40 != 0) {
-        fn_8026FCAC(pDesc->mUnknown40, pDesc->mUnknown44);
+        Snd::Profile::SetFunctionProfiler((void (*)(const char *))pDesc->mUnknown40,
+                                           (void (*)(const char *))pDesc->mUnknown44);
     }
     return 0;
 }
@@ -425,7 +411,7 @@ void SndUnloadAll(void)
 
     if (_Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
         SND_LOCK();
-        fn_8026C280();
+        SNDmidistopall();
         SND_UNLOCK();
         // FAKEMATCH: node tested twice per pass (target keeps the loop test at the top)
         do {
@@ -467,7 +453,7 @@ int SndShutdown(void)
     if (_Snd_ModuleInfo.mStatus.mFlags.mActive) {
         if (_Snd_ModuleInfo.mStatus.mFlags.mEnabled) {
             SND_LOCK();
-            fn_8026C280();
+            SNDmidistopall();
             SND_UNLOCK();
             SndUnloadAll();
             DSDelList(_Snd_ModuleInfo.pSeqList);
@@ -476,8 +462,8 @@ int SndShutdown(void)
                 DSDelList(_Snd_ModuleInfo.pAemsBankList);
                 _Snd_ModuleInfo.pAemsBankList = 0;
             }
-            fn_8026C23C();
-            fn_8026FBCC();
+            SNDmidirestore();
+            Snd::System::Restore();
             Csis::System::Restore();
             delete pIAllocator;
             DSDelList(_Snd_ModuleInfo.pStreamList);

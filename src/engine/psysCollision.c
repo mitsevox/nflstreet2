@@ -11,14 +11,14 @@ static void _calcGroundCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pPar
             return;
         }
         pParticle->mPos.y = height;
-        fn_80227264(&pParticle->mVel, &pParticle->mVel, pObj->mUnknown288);
+        Vec3Scale(&pParticle->mVel, &pParticle->mVel, pObj->mUnknown288);
         pParticle->mVel.y = -pParticle->mVel.y;
     } else {
         if (pParticle->mPos.z >= height) {
             return;
         }
         pParticle->mPos.z = height;
-        fn_80227264(&pParticle->mVel, &pParticle->mVel, pObj->mUnknown288);
+        Vec3Scale(&pParticle->mVel, &pParticle->mVel, pObj->mUnknown288);
         pParticle->mVel.z = -pParticle->mVel.z;
     }
 }
@@ -30,18 +30,18 @@ static void _calcPlaneCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pPart
     float depth;
     float speed;
 
-    depth = fn_80227704(pNormal, &pParticle->mPos) + distance;
+    depth = Vec3DotProduct(pNormal, &pParticle->mPos) + distance;
     if (depth >= 0.0f) {
         return;
     }
-    fn_80227264(&push, pNormal, depth * -1.0f);
-    fn_8022765C(&pParticle->mPos, &pParticle->mPos, &push);
-    speed = fn_80227704(pNormal, &pParticle->mVel);
+    Vec3Scale(&push, pNormal, depth * -1.0f);
+    Vec3Add(&pParticle->mPos, &pParticle->mPos, &push);
+    speed = Vec3DotProduct(pNormal, &pParticle->mVel);
     if (speed >= 0.0f) {
         return;
     }
-    fn_80227264(&bounce, pNormal, speed * (-1.0f - pObj->mUnknown288));
-    fn_8022765C(&pParticle->mVel, &pParticle->mVel, &bounce);
+    Vec3Scale(&bounce, pNormal, speed * (-1.0f - pObj->mUnknown288));
+    Vec3Add(&pParticle->mVel, &pParticle->mVel, &bounce);
 }
 
 /* Copy only the payload selected by the destination collision type. */
@@ -65,7 +65,7 @@ void PsysColPrecalcDependantVals(PartObj_801DE1E0 *pObj)
 
     if (pObj->mCollisionType == 2) {
         pPlane = &pObj->mCollision.mPlane;
-        pPlane->mDistance = -fn_80227704(&pPlane->mNormal, &pPlane->mPoint);
+        pPlane->mDistance = -Vec3DotProduct(&pPlane->mNormal, &pPlane->mPoint);
     }
 }
 

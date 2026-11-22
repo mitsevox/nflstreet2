@@ -6,7 +6,7 @@
 #include "engine/dbutil.h"
 #include <string.h>
 #include "engine/dbtats.h"
-#include "engine/fn_801F8D60.h"
+#include "engine/TDbCreate.h"
 #include "engine/tdbext.h"
 
 
@@ -33,7 +33,7 @@ void DbTatsShutdown(void)
 
 int DbTatsLoad(void)
 {
-    int err = fn_801F8D60(0x54415453, _DbTats_iSize);
+    int err = TDbCreate(0x54415453, _DbTats_iSize);
 
     if (err == 0) {
         err = TDbExtLoadFromResource(0x54415453, _DbTats_pFileName, _DbTats_iMode, 0);
@@ -43,5 +43,5 @@ int DbTatsLoad(void)
 
 int DbTatsUnload(void)
 {
-    return fn_801F8EEC(0x54415453);
+    return TDbDestroy(0x54415453);
 }

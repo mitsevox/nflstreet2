@@ -12,7 +12,7 @@
 #include "game/Challenge.h"
 #include "game/Object_8017886C.h"
 #include <string.h>
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 extern "C" {
 
@@ -185,9 +185,9 @@ int UserProfileFindIndex(int a);
 void UserProfileAddRecordRow(int index);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_8022B7A4(int handle, int tag, void *pValue);
-int fn_8022F358(int index);
-int fn_8022F3D4(int handle);
-int fn_8022F4BC(void);
+int DbUserGetId(int index);
+int DbUserGetDb(int handle);
+int DbUserGetCurrent(void);
 
 extern const unsigned char lbl_802AEF10[];
 
@@ -633,11 +633,11 @@ void ChalLoadCurrent(unsigned char id, int level)
 int ChalGetProgress(int id, int *pA, int *pB)
 {
     int result = 0;
-    int index = fn_8022F4BC();
+    int index = DbUserGetCurrent();
     int handle;
 
     *pB = 3;
-    handle = fn_8022F3D4(index);
+    handle = DbUserGetDb(index);
     *pA = 7;
     if (handle != -1) {
         DbCursor *pObject = ChalGetProgressCursor(handle);
@@ -669,7 +669,7 @@ int ChalGetProgress(int id, int *pA, int *pB)
 
 void ChalSetProgress(int id, int a, int b, int c)
 {
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
 
     if (handle != -1) {
         DbCursor *pObject = ChalGetProgressCursor(handle);
@@ -688,7 +688,7 @@ void ChalSetProgress(int id, int a, int b, int c)
 
 unsigned int ChalGetPoints(void)
 {
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
     unsigned int result;
 
     if (handle == -1) {
@@ -701,7 +701,7 @@ unsigned int ChalGetPoints(void)
 
 void ChalAddPoints(int value)
 {
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
 
     if (handle != -1) {
         DbCursor *pObject = ChalGetInfoCursor(handle);
@@ -712,7 +712,7 @@ void ChalAddPoints(int value)
 
 int ChalGetTournamentSlot(void)
 {
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
     int result;
 
     if (handle == -1) {
@@ -725,7 +725,7 @@ int ChalGetTournamentSlot(void)
 
 void ChalSetTournamentSlot(int value)
 {
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
 
     if (handle != -1) {
         DbCursorSetInt(ChalGetInfoCursor(handle), 0x54524943, value);
@@ -734,7 +734,7 @@ void ChalSetTournamentSlot(int value)
 
 int ChalGetTournamentWon(void)
 {
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
     int result;
 
     if (handle == -1) {
@@ -747,13 +747,13 @@ int ChalGetTournamentWon(void)
 
 void ChalSetTournamentWon(int value)
 {
-    int index = fn_8022F4BC();
-    int handle = fn_8022F3D4(index);
+    int index = DbUserGetCurrent();
+    int handle = DbUserGetDb(index);
 
     if (handle != -1) {
         DbCursorSetInt(ChalGetInfoCursor(handle), 0x4D574943, value);
         if (value) {
-            fn_801FCE10(0, "use \x8c update 'TSPU' set 'FNWU' = \x82\n", handle, 1);
+            TDbCompilePerformOp(0, "use \x8c update 'TSPU' set 'FNWU' = \x82\n", handle, 1);
             GameOptionsSet(20, 1);
             UserProfileAddRecordRow(UserProfileFindIndex(index));
         }
@@ -777,7 +777,7 @@ int ChalGetIdInGroup(int a, signed char index)
 {
     int id = 0;
 
-    if (fn_801FCE10(0, "use 'TATS' select 'DIHC' into \x82 from 'LAHC' where 'DFHC' = \x85 and 'ROHC' = \x80\n", &id, a, index) != 0) {
+    if (TDbCompilePerformOp(0, "use 'TATS' select 'DIHC' into \x82 from 'LAHC' where 'DFHC' = \x85 and 'ROHC' = \x80\n", &id, a, index) != 0) {
         return 0;
     }
     return id;
@@ -787,7 +787,7 @@ int ChalGetGearReward(int id)
 {
     int gear = 0;
 
-    if (fn_801FCE10(0, "use 'TATS' select 'GGHC' into \x85 from 'GUHC' where 'IGHC' = \x84\n", &gear, id) == 0) {
+    if (TDbCompilePerformOp(0, "use 'TATS' select 'GGHC' into \x85 from 'GUHC' where 'IGHC' = \x84\n", &gear, id) == 0) {
         gear = fn_8007C46C(gear);
     } else {
         gear = 0;
@@ -798,7 +798,7 @@ int ChalGetGearReward(int id)
 int ChalGetDevPointsAt(int index)
 {
     int result = 0;
-    int handle = fn_8022F3D4(index);
+    int handle = DbUserGetDb(index);
 
     if (handle != -1) {
         result = DbCursorGetInt(ChalGetInfoCursor(handle), 0x50444943);
@@ -808,12 +808,12 @@ int ChalGetDevPointsAt(int index)
 
 int ChalGetDevPoints(void)
 {
-    return ChalGetDevPointsAt(fn_8022F4BC());
+    return ChalGetDevPointsAt(DbUserGetCurrent());
 }
 
 void ChalSetDevPoints(int value)
 {
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
 
     if (handle != -1) {
         DbCursorSetInt(ChalGetInfoCursor(handle), 0x50444943, value);
@@ -822,7 +822,7 @@ void ChalSetDevPoints(int value)
 
 void ChalSetDevPointsForSlot(int index, int value)
 {
-    int handle = fn_8022F3D4(fn_8022F358(index));
+    int handle = DbUserGetDb(DbUserGetId(index));
 
     if (handle != -1) {
         DbCursorSetInt(ChalGetInfoCursor(handle), 0x50444943, value);
@@ -1150,7 +1150,7 @@ int ChalHasReward(Challenge_t *pRecord, int id)
 
 void ChalSetTournamentScore(int id, int a, int b)
 {
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
     DbTableCursor cursor;
 
     cursor.OpenTable(0x47505443, 0x4D475443, 0, 0, handle);
@@ -1161,7 +1161,7 @@ void ChalSetTournamentScore(int id, int a, int b)
 
 void ChalGetTournamentScore(int id, short *pA, short *pB)
 {
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
     DbTableCursor cursor;
 
     cursor.OpenTable(0x47505443, 0x4D475443, 0, 0, handle);
@@ -1172,7 +1172,7 @@ void ChalGetTournamentScore(int id, short *pA, short *pB)
 
 void ChalSaveTournamentTeams(int *pValues, int count)
 {
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
     DbTableCursor cursor;
     int i;
 
@@ -1185,7 +1185,7 @@ void ChalSaveTournamentTeams(int *pValues, int count)
 
 void ChalLoadTournamentTeams(int *pValues, int count)
 {
-    int handle = fn_8022F3D4(fn_8022F4BC());
+    int handle = DbUserGetDb(DbUserGetCurrent());
     DbTableCursor cursor;
     int i;
 

@@ -10,15 +10,15 @@
 
 extern "C" {
 
-int fn_802743A0(int index, void *stream);
+int SNDPLATFORM_packetplaycreate(int index, void *stream);
 int SNDstop(int handle);
 void SNDPKTPLAYI_flushcallbackdata(void);
 int SNDPKTPLAY_purge(int index, int a, int b);
 void SNDI_checkplayopts(SndPlayOpts_t *opts);
 void iSNDcalcpitch(int index);
-int fn_80274464(int stream, int index, int a, int b, int c, Info_80274464 *info, Struct_80274464 *p);
+int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, Info_80274464 *info, Struct_80274464 *p);
 void SNDVOICEI_free(int value);
-void fn_80273D7C(unsigned int flags, int *a, int *b);
+void SNDPLATFORM_getvoicerange(unsigned int flags, int *a, int *b);
 extern float lbl_80300028;
 int SNDVOICEI_alloc(int count, int priority, int *handle, int rate, int format);
 int SNDI_validrendermode(int *mode, SndPatchHeader_t *header);
@@ -46,7 +46,7 @@ int SNDPKTPLAYI_overhead(int count)
 
 int SNDPKTPLAY_overhead(int count)
 {
-    return SNDPKTPLAYI_overhead(count) + fn_80274398();
+    return SNDPKTPLAYI_overhead(count) + SNDPLATFORM_packetoverhead();
 }
 
 int SNDPKTPLAY_create(void (*release)(int value, void *context), void (*callback)(int index, int value, void *context),
@@ -68,13 +68,13 @@ int SNDPKTPLAY_create(void (*release)(int value, void *context), void (*callback
 found:
     // FAKEMATCH: compiled-out assert; its empty do-while keeps the slot search apart from the voice setup
     SND_ASSERT(size >= (unsigned int)SNDPKTPLAY_overhead(8));
-    if (fn_802743A0(i, memory) < 0) {
+    if (SNDPLATFORM_packetplaycreate(i, memory) < 0) {
         SNDSYS_leavecritical();
         return -6;
     }
     voice = memory;
-    memory = (char *)memory + fn_80274398();
-    size -= fn_80274398();
+    memory = (char *)memory + SNDPLATFORM_packetoverhead();
+    size -= SNDPLATFORM_packetoverhead();
     stream = (SndPacketPlayer_t *)memory;
     stream->m40 = (size - 156) / 32;
     stream->m50 = voice;
@@ -129,7 +129,7 @@ int SNDPKTPLAY_start(int index, Info_80274464 *info, Struct_80274464 *params, Sn
     }
     // FAKEMATCH: found is never set (success leaves by break); without the test 80.87%
     while (!found && (render = SNDI_validrendermode(&cursor, &header)) != 0) {
-        fn_80273D7C(render, &rate, &format);
+        SNDPLATFORM_getvoicerange(render, &rate, &format);
         voice = SNDVOICEI_alloc(count, 101, &handle, rate, format);
         if (voice < 0) {
             stream->m0 = -9;
@@ -195,7 +195,7 @@ int SNDPKTPLAY_start(int index, Info_80274464 *info, Struct_80274464 *params, Sn
         }
         record->m8A = 0;
         iSNDcalcpitch(voice);
-        result = fn_80274464(index, voice, opts->mE, opts->m14, opts->m16, info, params);
+        result = SNDPLATFORM_packetplay(index, voice, opts->mE, opts->m14, opts->m16, info, params);
         if (result >= 0) {
             break;
         }
@@ -282,7 +282,7 @@ int SNDPKTPLAY_stop(int index)
 int SNDPKTPLAY_destroy(int index)
 {
     SNDSYS_entercritical();
-    fn_8027474C(index);
+    SNDPLATFORM_packetplaydestroy(index);
     sndpps.m304[index] = 0;
     SNDSYS_leavecritical();
     return 0;

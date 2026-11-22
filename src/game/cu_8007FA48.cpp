@@ -2,20 +2,20 @@
 #include "game/Object_8008044C.h"
 #include "game/Record_80082B18.h"
 #include "game/DbQuery.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 
 extern "C" {
 extern int lbl_802D68D0[];
 extern int lbl_802D6950[];
 extern int lbl_802D6990[];
-int fn_801F95C8(void);
-int fn_801FA0BC(int, void *, void *, void *, void *, int *, void *);
-int fn_801FA148(int);
+int TDbTblDefaultDbGet(void);
+int _TDbQrySelect(int, void *, void *, void *, void *, int *, void *);
+int TDbQryDestroy(int);
 int DbFileTblLoad(int, int);
 int DbFileTblDestroy(int, int);
-int fn_8022F358(int);
-int fn_8022F3D4(int);
-void fn_80082B18(Record_80082B18 *);
+int DbUserGetId(int);
+int DbUserGetDb(int);
+void PlayerRecordSetDefaults(Record_80082B18 *);
 void fn_80082C64(Record_80082B18 *);
 void fn_80082D30(Record_80082B18 *);
 void fn_80082E48(Record_80082B18 *);
@@ -42,15 +42,15 @@ extern "C" int fn_8007FA48(int table, int column, int *out, unsigned short *coun
     int row;
     int result;
     if (start < 0)
-        result = fn_801FCE10(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c order by 'DIGP' asc\n", table, &cursor, &row, column);
+        result = TDbCompilePerformOp(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c order by 'DIGP' asc\n", table, &cursor, &row, column);
     else
-        result = fn_801FCE10(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c where 'DIGP' >= \x82 order by 'DIGP' asc\n", table, &cursor, &row, column, start);
+        result = TDbCompilePerformOp(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c where 'DIGP' >= \x82 order by 'DIGP' asc\n", table, &cursor, &row, column, start);
     int previous = start;
     int high = 0x7FFF;
     int next = -1;
     unsigned short filled = 0;
     while (result == 0 && filled < *count) {
-        result = fn_801FCE10(0, "fetch from \x8a\n", &cursor);
+        result = TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
         if (result != 0) break;
         if (row > previous + 1) {
             next = previous + 1;
@@ -64,9 +64,9 @@ extern "C" int fn_8007FA48(int table, int column, int *out, unsigned short *coun
     int valid = 0;
     if (result == 0 || result == 23 || result == 21 || result == 20) valid = 1;
     if (valid == 1) {
-        if (cursor.mUnknown0 != 0) result = fn_801FCFA0(&cursor);
+        if (cursor.mUnknown0 != 0) result = TDbSQLDestroyCursor(&cursor);
         else result = 0;
-    } else if (cursor.mUnknown0 != 0) fn_801FCFA0(&cursor);
+    } else if (cursor.mUnknown0 != 0) TDbSQLDestroyCursor(&cursor);
     if (result == 0 && filled < *count) {
         next = high == 0x7FFF ? 0 : high + 1;
         while (filled < *count && next <= 0x7F14) out[filled++] = next++;
@@ -81,7 +81,7 @@ extern "C" int PlayerRecordCreate(int source, int value, int reset, int start)
     Record_80082B18 record;
     first[0] = 0;
     last[0] = 0;
-    fn_80082B18(&record);
+    PlayerRecordSetDefaults(&record);
     record.mUnknown04 = first;
     record.mUnknown08 = last;
     record.mUnknown0C = other;
@@ -182,7 +182,7 @@ extern "C" void fn_80080084(int value, int handle, int table, DbColumnValue *col
     tables[1].Set(-1);
     unsigned long long column = 0x44494750;
     node.Set(6, ((unsigned long long)table << 32) | column, 3, value);
-    fn_801FA428(handle, tables, 0, columns, &result, 0);
+    TDbQrySetFirstRow(handle, tables, 0, columns, &result, 0);
 }
 
 extern "C" void fn_80080138(int selector, int index, int mode)
@@ -197,11 +197,11 @@ extern "C" void fn_80080138(int selector, int index, int mode)
             destination = 0x54415453;
             DbFileTblLoad(destination, from);
             created = 1;
-        } else destination = fn_8022F3D4(fn_8022F358(index));
+        } else destination = DbUserGetDb(DbUserGetId(index));
         source = 0x54415453;
         to = 0x59414C50;
     } else {
-        source = fn_8022F3D4(fn_8022F358(index));
+        source = DbUserGetDb(DbUserGetId(index));
         destination = 0x54415453;
         from = 0x59414C50;
         to = 0x52475250;
@@ -221,9 +221,9 @@ extern "C" void fn_80080138(int selector, int index, int mode)
     }
     tables[1].Set(-1);
     char unknown[16];
-    int result = fn_801FA0BC(source, tables, 0, 0, 0, &cursor, unknown);
+    int result = _TDbQrySelect(source, tables, 0, 0, 0, &cursor, unknown);
     if (result != 23) {
-        if (fn_801FA228(cursor, 1, 0, columns) == 0) {
+        if (TDbQryRetrieve(cursor, 1, 0, columns) == 0) {
             do {
                 for (int i = 21; i >= 0; --i) columns[i].mTableTag = to;
                 columns[22].mTableTag = -1;
@@ -232,16 +232,16 @@ extern "C" void fn_80080138(int selector, int index, int mode)
                 for (int i = 21; i >= 0; --i) columns[i].mTableTag = from;
                 columns[22].mColumnTag = 0x44494750;
                 columns[22].mTableTag = from;
-            } while (fn_801FA228(cursor, 0, 1, columns) == 0);
+            } while (TDbQryRetrieve(cursor, 0, 1, columns) == 0);
         }
     }
-    fn_801FA148(cursor);
+    TDbQryDestroy(cursor);
     if (created) DbFileTblDestroy(0x54415453, from);
 }
 
 extern "C" void fn_8008040C(Object_8008044C *p, Desc_8008044C *desc)
 {
-    int tag = fn_801F95C8();
+    int tag = TDbTblDefaultDbGet();
     PlayerCursorOpen(p, desc, tag);
 }
 extern "C" void PlayerCursorOpen(Object_8008044C *p, Desc_8008044C *desc, int tag)
@@ -285,9 +285,9 @@ extern "C" int fn_8008058C(int *id, int *pos, int *value, int a, int b, int c, i
         lbl_8030BC58.mUnknown12 = 0;
         lbl_8030BC58.mUnknown4 = 0;
         if (a != 255 && a != -1)
-            fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('DIGT' >= 1 && 'DIGT' <= 32) order by 'DIGP' asc\n", &lbl_8030BC58, id, pos, value, a, b, c);
+            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('DIGT' >= 1 && 'DIGT' <= 32) order by 'DIGP' asc\n", &lbl_8030BC58, id, pos, value, a, b, c);
         else
-            fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('DIGT' >= 1 && 'DIGT' <= 32) order by 'DIGP' asc\n", &lbl_8030BC58, id, pos, value);
+            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('DIGT' >= 1 && 'DIGT' <= 32) order by 'DIGP' asc\n", &lbl_8030BC58, id, pos, value);
         break;
     case 1:
         lbl_8030BC68.mUnknown0 = 0;
@@ -295,9 +295,9 @@ extern "C" int fn_8008058C(int *id, int *pos, int *value, int a, int b, int c, i
         lbl_8030BC68.mUnknown12 = 0;
         lbl_8030BC68.mUnknown4 = 0;
         if (a != 255 && a != -1)
-            fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('DIGT' = \x82) order by 'DIGP' asc\n", &lbl_8030BC68, id, pos, value, a, b, c, 34);
+            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('DIGT' = \x82) order by 'DIGP' asc\n", &lbl_8030BC68, id, pos, value, a, b, c, 34);
         else
-            fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('DIGT' = \x82) order by 'DIGP' asc\n", &lbl_8030BC68, id, pos, value, 34);
+            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('DIGT' = \x82) order by 'DIGP' asc\n", &lbl_8030BC68, id, pos, value, 34);
         break;
     case 2:
         lbl_8030BC78.mUnknown0 = 0;
@@ -305,9 +305,9 @@ extern "C" int fn_8008058C(int *id, int *pos, int *value, int a, int b, int c, i
         lbl_8030BC78.mUnknown12 = 0;
         lbl_8030BC78.mUnknown4 = 0;
         if (a != 255 && a != -1)
-            fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('YTRP' = \x82) order by 'DIGP' asc\n", &lbl_8030BC78, id, pos, value, a, b, c, 1);
+            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('YTRP' = \x82) order by 'DIGP' asc\n", &lbl_8030BC78, id, pos, value, a, b, c, 1);
         else
-            fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('YTRP' = \x82) order by 'DIGP' asc\n", &lbl_8030BC78, id, pos, value, 1);
+            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('YTRP' = \x82) order by 'DIGP' asc\n", &lbl_8030BC78, id, pos, value, 1);
         break;
     }
     return result;
@@ -315,9 +315,9 @@ extern "C" int fn_8008058C(int *id, int *pos, int *value, int a, int b, int c, i
 extern "C" void fn_8008079C(int which)
 {
     switch (which) {
-    case 0: fn_801FCE10(0, "fetch from \x8a\n", &lbl_8030BC58); break;
-    case 1: fn_801FCE10(0, "fetch from \x8a\n", &lbl_8030BC68); break;
-    case 2: fn_801FCE10(0, "fetch from \x8a\n", &lbl_8030BC78); break;
+    case 0: TDbCompilePerformOp(0, "fetch from \x8a\n", &lbl_8030BC58); break;
+    case 1: TDbCompilePerformOp(0, "fetch from \x8a\n", &lbl_8030BC68); break;
+    case 2: TDbCompilePerformOp(0, "fetch from \x8a\n", &lbl_8030BC78); break;
     }
 }
 extern "C" void fn_8008082C(unsigned short value, int which)
@@ -331,8 +331,8 @@ extern "C" void fn_8008082C(unsigned short value, int which)
 extern "C" void fn_80080874(int which)
 {
     switch (which) {
-    case 0: if (lbl_8030BC58.mUnknown0) fn_801FCFA0(&lbl_8030BC58); break;
-    case 1: if (lbl_8030BC68.mUnknown0) fn_801FCFA0(&lbl_8030BC68); break;
-    case 2: if (lbl_8030BC78.mUnknown0) fn_801FCFA0(&lbl_8030BC78); break;
+    case 0: if (lbl_8030BC58.mUnknown0) TDbSQLDestroyCursor(&lbl_8030BC58); break;
+    case 1: if (lbl_8030BC68.mUnknown0) TDbSQLDestroyCursor(&lbl_8030BC68); break;
+    case 2: if (lbl_8030BC78.mUnknown0) TDbSQLDestroyCursor(&lbl_8030BC78); break;
     }
 }

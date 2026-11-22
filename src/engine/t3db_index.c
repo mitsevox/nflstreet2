@@ -341,7 +341,7 @@ int _TDbIdxCompare(TDbIdxTree_t *pTree, unsigned int *pKeyA, unsigned int *pKeyB
             pColumn = &pParts[i].mTable->mColumns[pParts[i].mColumn];
             switch (pColumn->mType) {
             case TDB_TYPE_STRING:
-                result = lbl_803EBE74((char *)pKeyA[i], (char *)pKeyB[i], pColumn->mBitCount >> 3);
+                result = TDbStrncmp((char *)pKeyA[i], (char *)pKeyB[i], pColumn->mBitCount >> 3);
                 break;
             case TDB_TYPE_INT:
                 result = (int)pKeyA[i] > (int)pKeyB[i] ? 1 : (int)pKeyA[i] < (int)pKeyB[i] ? -1 : 0;
@@ -456,7 +456,7 @@ int _TDbIndexRowUpdated(TDbIndex_t *pIndex, TDbIdxNode_t *pNode, unsigned short 
     if (pIndex->mFilter != 0) {
         _TDbExprTest(pIndex->mFilter, &result, &pIndex->mTable, &row);
         if (result.mValue.i == 0) {
-            fn_80206668(pIndex, pNode, 0);
+            _TDbQryQueryDeleteFixEx(pIndex, pNode, 0);
             _TDbIdxTreeDelete(&pIndex->mTree, pNode);
             __TDbMemPoolFree(&pIndex->mPool, pNode);
             pIndex->mDirty = 1;
@@ -480,7 +480,7 @@ int _TDbIndexRowUpdated(TDbIndex_t *pIndex, TDbIdxNode_t *pNode, unsigned short 
             _TDbIdxCreateKey(&pIndex->mTree, row, pNew);
             if (_TDbIdxCompare(&pIndex->mTree, pNode->mKey, pNew->mKey, pIndex->mTree.mPartCount) != 0) {
                 pIndex->mDirty = 1;
-                fn_80206668(pIndex, pNode, pNew);
+                _TDbQryQueryDeleteFixEx(pIndex, pNode, pNew);
                 _TDbIdxTreeDelete(&pIndex->mTree, pNode);
                 __TDbMemPoolFree(pPool, pNode);
                 pNew->mRow = row;
@@ -647,7 +647,7 @@ int _TDbIndexDestroy(TDbIndex_t *pIndex)
     if (pIndex->mLocked) {
         pIndex->mId = 0;
         pIndex->mDestroyed = 1;
-        for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
+        for (pQuery = _tDbQueries; pQuery != 0; pQuery = pQuery->mNext) {
             if (pQuery->mState == 1 && pQuery->mSource.mIndex == pIndex) {
                 pQuery->mState = 2;
             }

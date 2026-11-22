@@ -1,7 +1,7 @@
 /* Experience levels: opens the level table and answers which level a points total reaches,
    the points a level needs, and a level's name and other values. */
 
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/QueryStatus.h"
 
 extern "C" {
@@ -25,17 +25,17 @@ int ExpLevelQueryForPoints(int ppxe)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    if (fn_801FCE10(0,
+    if (TDbCompilePerformOp(0,
                     "declare \x8a fastcursor for select 'VLXE' into \x85 from 'LPXE' where 'PPXE' <= \x82 "
                     "order by 'PPXE' desc\n",
                     &cursor, &value, ppxe) == 0) {
-        result = fn_801FCE10(0, "fetch from \x8a\n", &cursor);
+        result = TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
         if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
             found = value;
         }
     }
     if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
     return found;
 }
@@ -44,7 +44,7 @@ int SelectLpxePpxe(int vlxe)
 {
     int value;
     int found = -1;
-    int result = fn_801FCE10(0, "select 'PPXE' into \x82 from 'LPXE' where 'VLXE' = \x85\n", &value, vlxe);
+    int result = TDbCompilePerformOp(0, "select 'PPXE' into \x82 from 'LPXE' where 'VLXE' = \x85\n", &value, vlxe);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
         found = value;
@@ -56,7 +56,7 @@ int ExpLevelQueryScft(int vlxe)
 {
     int value;
     int found = 0;
-    int result = fn_801FCE10(0, "select 'TFCS' into \x82 from 'LPXE' where 'VLXE' = \x85\n", &value, vlxe);
+    int result = TDbCompilePerformOp(0, "select 'TFCS' into \x82 from 'LPXE' where 'VLXE' = \x85\n", &value, vlxe);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
         found = value;
@@ -68,7 +68,7 @@ int ExpLevelQueryLvbn(int vlxe)
 {
     int value;
     int found = 0;
-    int result = fn_801FCE10(0, "select 'NBVL' into \x82 from 'LPXE' where 'VLXE' = \x85\n", &value, vlxe);
+    int result = TDbCompilePerformOp(0, "select 'NBVL' into \x82 from 'LPXE' where 'VLXE' = \x85\n", &value, vlxe);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
         found = value;
@@ -80,7 +80,7 @@ int ExpLevelQueryName(int vlxe, char *pName, int size)
 {
     char name[33];
     int found = 0;
-    int result = fn_801FCE10(0, "select 'NLXE' into \x88 from 'LPXE' where 'VLXE' = \x85\n", name, vlxe);
+    int result = TDbCompilePerformOp(0, "select 'NLXE' into \x88 from 'LPXE' where 'VLXE' = \x85\n", name, vlxe);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
         strncpy(pName, name, size);

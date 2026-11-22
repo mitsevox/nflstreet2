@@ -15,20 +15,20 @@ typedef struct Vec4_801DE1E0 {
 } Vec4_801DE1E0;
 
 /* Vector helpers of src/engine/llvector.c, which defines them with float *
-   parameters; they are declared with void * here, as game/fn_802270D4.h
-   declares fn_802270A4, fn_802270D4 and fn_802276B4 of the same file. */
+   parameters; they are declared with void * here, as game/Vec3Magnitude.h
+   declares Vec2Magnitude, Vec3Magnitude and Vec3Sub of the same file. */
 #ifdef __cplusplus
 extern "C" {
 #endif
-float fn_80227120(void *pV);
-void fn_802271F0(void *pOut, void *pV);
-void fn_80227264(void *pOut, void *pV, float scale);
-void fn_8022765C(void *pOut, void *pA, void *pB);
-float fn_80227704(void *pA, void *pB);
-void fn_802277DC(void *pOut, void *pA, void *pB);
-void fn_80227930(void *pOut, void *pA, void *pB, float t);
-void fn_80227C2C(void *pOut, void *pV);
-void fn_80227CC0(void *pOut, void *pV);
+float Vec3MagnitudeSqr(void *pV);
+void Vec3Normalize(void *pOut, void *pV);
+void Vec3Scale(void *pOut, void *pV, float scale);
+void Vec3Add(void *pOut, void *pA, void *pB);
+float Vec3DotProduct(void *pA, void *pB);
+void Vec3CrossProduct(void *pOut, void *pA, void *pB);
+void Vec3Lerp(void *pOut, void *pA, void *pB, float t);
+void Vec3Mat33Mul(void *pOut, void *pV);
+void Vec3Mat34Mul(void *pOut, void *pV);
 #ifdef __cplusplus
 }
 #endif

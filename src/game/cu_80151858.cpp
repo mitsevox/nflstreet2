@@ -92,8 +92,8 @@ void fn_800B9598(PostPlayPhase *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
 void fn_80178F20(ScrmRuleSet *pObject);
 int fn_80149014(void);
-void *fn_8023816C(void *pHandle);
-void fn_8016306C(unsigned char value);
+void *SyncStateGetData(void *pHandle);
+void PlyrStarSetBallRingEnabled(unsigned char value);
 
 void fn_80151858(Class_802A2918 *p)
 {
@@ -104,7 +104,7 @@ void fn_80151858(Class_802A2918 *p)
     p->mpUnknown1C = new (0) Object_8015005C;
     if (allocate) {
         pHandle = SyncStateRegister(0, (void **)&p->mpUnknown1C->mpUnknown36, sizeof(Table_8015005C), 0, 0x4D474A42);
-        pTable = (Table_8015005C *)fn_8023816C(pHandle);
+        pTable = (Table_8015005C *)SyncStateGetData(pHandle);
     } else {
         p->mpUnknown1C->mpUnknown36 = (Table_8015005C *)fn_801D2B7C(sizeof(Table_8015005C), 0, 0);
         pTable = p->mpUnknown1C->mpUnknown36;
@@ -120,7 +120,7 @@ void fn_80151858(Class_802A2918 *p)
         GameOptionsSet(14, 0);
     }
     if (allocate) {
-        fn_802381E0(pHandle);
+        SyncStateCommit(pHandle);
     }
     fn_80178F20(&p->mpUnknown1C->mUnknown32);
     fn_800BC51C(&p->mpUnknown1C->mUnknown0);
@@ -132,6 +132,6 @@ void fn_80151858(Class_802A2918 *p)
     if (p->mpUnknown1C->mpUnknown36->mUnknown116 != 0) {
         GameOptionsSet(19, 0);
     }
-    fn_8016306C(0);
+    PlyrStarSetBallRingEnabled(0);
 }
 }

@@ -62,10 +62,10 @@ int TMShaderLibAddShader(ShaderTable_t *pTable, ShaderDesc_t *pShader, void (*pS
 void TMShaderLibRegister(const char *pName, ShaderTable_t *pTable);
 void TMShaderLibUnregister(const char *pName);
 int TMShaderLibGetShader(const char *pName);
-void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-void fn_8022765C(float *pOut, float *pA, float *pB);
-void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
-void fn_80227CC0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
+void Vec3Scale(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
+void Vec3Add(float *pOut, float *pA, float *pB);
+void Vec3Mat33Mul(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
+void Vec3Mat34Mul(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void GXSetNumChans(int a);
 void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
 
@@ -186,7 +186,7 @@ int ParticleRenderEmitter(PsysEmitter_t *pEmitter, int mode)
                 float size;
                 int j;
 
-                fn_80227CC0(&position, &pParticle->mPosition);
+                Vec3Mat34Mul(&position, &pParticle->mPosition);
                 PSysRenderCalcParticleColor(color, pEmitter, pParticle);
                 scale = (unsigned int)pEmitter->mUnknown35B * 0.01f;
                 color[0] = CLAMP(color[0] * scale, 0.0f, 1.0f);
@@ -197,9 +197,9 @@ int ParticleRenderEmitter(PsysEmitter_t *pEmitter, int mode)
                 MatPushUnit();
                 MatRotZ((int)(pParticle->mUnknown50 * 46603.38f));
                 for (j = 0; j < 4; j++) {
-                    fn_80227264(&corner, &_ParticleRender_aCorners[j], size);
-                    fn_80227C2C(&corner, &corner);
-                    fn_8022765C(&vertex.mX, &position.mX, &corner.mX);
+                    Vec3Scale(&corner, &_ParticleRender_aCorners[j], size);
+                    Vec3Mat33Mul(&corner, &corner);
+                    Vec3Add(&vertex.mX, &position.mX, &corner.mX);
                     GXPosition3f32(vertex.mX, vertex.mY, vertex.mZ);
                     GXColor4u8(color[0] * 255.0f, color[1] * 255.0f, color[2] * 255.0f, color[3] * 255.0f);
                     GXTexCoord2f32(coords[j][0], coords[j][1]);
@@ -225,13 +225,13 @@ int ParticleRenderEmitter(PsysEmitter_t *pEmitter, int mode)
 
                 PSysRenderCalcParticleColor(color, pEmitter, pParticle);
                 size = fn_801DF184(pEmitter, pParticle);
-                fn_80227CC0(&position, &pParticle->mPosition);
+                Vec3Mat34Mul(&position, &pParticle->mPosition);
                 MatPushUnit();
                 MatRotZ((int)(pParticle->mUnknown50 * 46603.38f));
                 for (j = 0; j < 4; j++) {
-                    fn_80227264(&corner, &_ParticleRender_aCorners[j], size);
-                    fn_80227C2C(&corner, &corner);
-                    fn_8022765C(&vertex.mX, &position.mX, &corner.mX);
+                    Vec3Scale(&corner, &_ParticleRender_aCorners[j], size);
+                    Vec3Mat33Mul(&corner, &corner);
+                    Vec3Add(&vertex.mX, &position.mX, &corner.mX);
                     GXPosition3f32(vertex.mX, vertex.mY, vertex.mZ);
                     GXColor4u8(color[0] * 255.0f, color[1] * 255.0f, color[2] * 255.0f, color[3] * 255.0f);
                 }

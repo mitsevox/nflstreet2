@@ -15,7 +15,7 @@
 #include "game/PlayBookTeam.h"
 #include <string.h>
 #include "game/fn_80178D18.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/fn_800B65A0.h"
 #include "game/Record_800B15FC.h"
 #include "game/Input_800B6D34.h"
@@ -56,7 +56,7 @@ Object_80039F5C *BallGetCurrentHolder(void);
 void QbPassResetTarget(Object_80039F5C *);
 void fn_800D7A0C(Object_80039F5C *, int);
 unsigned char PlayBookGetReceiver(int, unsigned char, unsigned char *);
-unsigned int fn_802372EC(unsigned int, unsigned int);
+unsigned int SyncRandGetRange(unsigned int, unsigned int);
 int fn_80178320(void);
 int fn_800AD9B4(void);
 int PassIconsAreShown(void);
@@ -74,10 +74,10 @@ int fn_80177F70(void);
 void fn_800C146C(Vec2_t *, Object_80039F5C *, Object_80039F5C *, int, int, int, int, int);
 int TutorialIsActive(void);
 float fn_80178A2C(void);
-void fn_80227538(Vec2_t *, int, float);
+void Vec2FromAngle(Vec2_t *, int, float);
 void fn_800FD68C(Message_800F01CC *, void *, void *);
 void fn_800F00D4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
-void fn_80227690(void *, void *, void *);
+void Vec2Sub(void *, void *, void *);
 int fn_80104688(Object_80039F5C *);
 void fn_801024FC(Object_80039F5C *, int, int, int, int);
 int QbPassHoldOrRun(Object_80039F5C *, float *, float *, unsigned char *);
@@ -143,8 +143,8 @@ void QbPassScoreDirections(Object_80039F5C *p, float *values)
         for (unsigned short i = 0; i < n; ++i) {
             Object_80039F5C *other = PlyrGet(fn_80178320(), i);
             float delta[2];
-            fn_80227690(delta, &other->mMotion.mPos, &p->mMotion.mPos);
-            if (!(fn_802270A4(delta) >= 3.0f)) {
+            Vec2Sub(delta, &other->mMotion.mPos, &p->mMotion.mPos);
+            if (!(Vec2Magnitude(delta) >= 3.0f)) {
                 int angle = fn_801CFE40(delta[1], delta[0]);
                 float *cost = &values[((angle + 0x100000) >> 21) & 7];
                 *cost += 4.0f;
@@ -172,7 +172,7 @@ int QbPassPickRandomReceiver(Object_80039F5C *p, PlyrModeState_t *s,
         if (!(SyncRandGetFloat(0) <= threshold)) {
             *out = 0;
             do {
-                unsigned int n = fn_802372EC(0, 3);
+                unsigned int n = SyncRandGetRange(0, 3);
                 if (indexes[n] != 255 && s->mUnknown30[n]) {
                     *out = PlyrGet(p->mIdBytes[2], indexes[n]);
                     *choice = s->mUnknown23[n];
@@ -315,7 +315,7 @@ int QbPassEnter(Object_80039F5C *player) {
         float rating = (float)(player->mRatings[4] + player->mRatings[0]) * 0.5f;
         rating *= 0.0039215689f;
         state->mUnknown1B = (int)(rating * 29.0f);
-        if (fn_802372EC(0, 31) <= state->mUnknown1B)
+        if (SyncRandGetRange(0, 31) <= state->mUnknown1B)
             state->mUnknown1C = 29;
         else
             state->mUnknown1C = 0;
@@ -378,7 +378,7 @@ int QbPassUpdate(Object_80039F5C *player) {
             int limit = 255 - player->mRatings[6];
             if (limit < 0)
                 limit = 0;
-            state->mUnknown0 = state->mUnknown0 + fn_802372EC(0, (limit >> 5) + 1) + 3;
+            state->mUnknown0 = state->mUnknown0 + SyncRandGetRange(0, (limit >> 5) + 1) + 3;
             if (player->mUnknown2914)
                 state->mUnknown0 *= 2;
             int value = 0;
@@ -435,7 +435,7 @@ int QbPassUpdate(Object_80039F5C *player) {
                     indices[i] = PlayBookGetReceiver(player->mIdBytes[2], i, 0);
                     total += state->mUnknown2D[i];
                 }
-                total = fn_802372EC(0, total);
+                total = SyncRandGetRange(0, total);
                 if (!state->mUnknown28) {
                     for (i = 0; i < 3; ++i) {
                         total -= state->mUnknown2D[i];
@@ -537,7 +537,7 @@ int QbPassUpdate(Object_80039F5C *player) {
                     if (selected) {
                         if (selected->mpState->mId == 21) {
                             Vec2_t offset;
-                            fn_80227538(&offset, selected->mMotion.mFacing, 10.0f);
+                            Vec2FromAngle(&offset, selected->mMotion.mFacing, 10.0f);
                             offset.mX += selected->mMotion.mPos.mX;
                             offset.mY += selected->mMotion.mPos.mY;
                             Message_800F01CC message;
@@ -549,8 +549,8 @@ int QbPassUpdate(Object_80039F5C *player) {
                         }
                         Vec2_t diff;
 
-                        fn_80227690(&diff, &selected->mMotion.mPos, &player->mMotion.mPos);
-                        fn_802270A4(&diff);
+                        Vec2Sub(&diff, &selected->mMotion.mPos, &player->mMotion.mPos);
+                        Vec2Magnitude(&diff);
                         if (TutorialIsActive())
                             action = 5;
                         fn_801024FC(player, 0, selected->mIdBytes[1], action, fn_80104688(player));
@@ -606,7 +606,7 @@ void QbPassResetTarget(Object_80039F5C *p)
     s->mUnknown2C = -1;
     for (unsigned int i = 3; i != 0; --i)
         s->mUnknown1D[i - 1] = 2;
-    s->mUnknown4 = fn_802372EC(0, 255 - p->mRatings[4]);
+    s->mUnknown4 = SyncRandGetRange(0, 255 - p->mRatings[4]);
 }
 
 int QbPassHoldOrRun(Object_80039F5C *p, float *values, float *costs, unsigned char *choices)
@@ -630,7 +630,7 @@ int QbPassHoldOrRun(Object_80039F5C *p, float *values, float *costs, unsigned ch
             selection = i;
         }
     }
-    if (!fn_802372EC(0, 85) && !(s->mUnknown14 < 2.0f) && !(s->mUnknown14 > 3.0f)) {
+    if (!SyncRandGetRange(0, 85) && !(s->mUnknown14 < 2.0f) && !(s->mUnknown14 > 3.0f)) {
         fn_801024FC(p, 4, choices[selection], 12, 0);
         return 1;
     }
@@ -694,7 +694,7 @@ int QbPassCarrierWillCross(void)
         if ((p->mFlags & 0x200000) && (p->mFlags & 0x8000) &&
             !(p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed < 0.4f))
             return 1;
-        fn_80227538(&step, p->mMotion.mUnknown32, p->mMotion.mUnknown28 * 40.0f);
+        Vec2FromAngle(&step, p->mMotion.mUnknown32, p->mMotion.mUnknown28 * 40.0f);
         ahead.mX = step.mX + p->mMotion.mPos.mX;
         ahead.mY = step.mY + p->mMotion.mPos.mY;
         return ahead.mY < fn_80177FE0().mY;

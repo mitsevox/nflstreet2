@@ -2,7 +2,7 @@
 
 #include "engine/SysSetLastErrorFunc.h"
 
-extern unsigned char lbl_803EBCB0;
+static unsigned char _Math_ModuleActive = 0;
 
 void MathLLInit(void);
 
@@ -10,9 +10,9 @@ int MathInit(void)
 {
     int result = 0;
 
-    if (!lbl_803EBCB0) {
+    if (!_Math_ModuleActive) {
         MathLLInit();
-        lbl_803EBCB0 = 1;
+        _Math_ModuleActive = 1;
     } else {
         result = 0x40001;
     }
@@ -24,8 +24,8 @@ int MathShutdown(void)
 {
     int result = 0;
 
-    if (lbl_803EBCB0) {
-        lbl_803EBCB0 = result;
+    if (_Math_ModuleActive) {
+        _Math_ModuleActive = result;
     } else {
         result = 0x40002;
     }

@@ -2,7 +2,7 @@
    equal, random, custom); finds the rows whose tests all pass for a set of
    values. */
 
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 
 struct CondTable_t {
     char mUnknown0[4];
@@ -55,7 +55,7 @@ int CondTableTestCode(int index, unsigned short code, short value, unsigned shor
         }
         break;
     case 0xA000:
-        if ((short)fn_802372EC(1, value) < operand) {
+        if ((short)SyncRandGetRange(1, value) < operand) {
             result = 1;
         }
         break;

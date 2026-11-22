@@ -9,11 +9,11 @@ extern char gMainFEGroup[];
 
 int MainFEGroupIsStarted(void *p);
 int MainFEGroupIsFirstStart(void *p);
-void fn_80237E3C(int a);
-Object_80237EE8 *fn_80237EE8(int a, int b, int c, MemPoolDesc_t desc);
-void fn_8023808C(Object_80237EE8 *pObject);
-void fn_802382F0(int a);
-void fn_80238358(void);
+void SyncStateInit(int a);
+SyncStateGroup_t *SyncStateNewGroup(int a, int b, int c, MemPoolDesc_t desc);
+void SyncStateDelGroup(SyncStateGroup_t *pObject);
+void EvMonInit(int a);
+void EvMonShutdown(void);
 }
 
 static void *sGameStateDependencies[] = { 0 };
@@ -41,13 +41,13 @@ int GameState::Init()
         arg1 = 56;
         arg = 4;
     }
-    fn_80237E3C(3);
-    mpData.mp->mpObject = fn_80237EE8(0, arg1, arg2, *MemPoolGetDesc(4));
-    fn_80237F98(mpData.mp->mpObject);
+    SyncStateInit(3);
+    mpData.mp->mpObject = SyncStateNewGroup(0, arg1, arg2, *MemPoolGetDesc(4));
+    SyncStateOpenGroup(mpData.mp->mpObject);
     if (MainFEGroupIsFirstStart(gMainFEGroup)) {
         mpData.mp->mUnknown4 = 0;
     } else {
-        fn_802382F0(arg);
+        EvMonInit(arg);
         mpData.mp->mUnknown4 = 1;
     }
     return 1;
@@ -55,26 +55,26 @@ int GameState::Init()
 
 int GameState::Shutdown()
 {
-    fn_8023808C(mpData.mp->mpObject);
-    fn_80237E78();
+    SyncStateDelGroup(mpData.mp->mpObject);
+    SyncStateShutdown();
     mpData.mp->mpObject = 0;
     if (mpData.mp->mUnknown4) {
-        fn_80238358();
+        EvMonShutdown();
     }
     delete mpData.mp;
     mpData.mp = 0;
     return 1;
 }
 
-Object_80237EE8 *GameState::GetStore()
+SyncStateGroup_t *GameState::GetStore()
 {
     return gGameState.mpData.mp->mpObject;
 }
 
 void GameState::Activate()
 {
-    fn_80237FA4(mpData.mp->mpObject);
-    SyncStateEndGroup(mpData.mp->mpObject);
+    SyncStateSaveGroup(mpData.mp->mpObject);
+    SyncStateActivateGroup(mpData.mp->mpObject);
 }
 
 ModuleDependency *GameStateActivate::GetDependencies() { return sGameStateActivateDependencies; }

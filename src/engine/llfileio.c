@@ -33,20 +33,23 @@ typedef struct FileFontPos_t {
 extern FileStreamInfo_t *File_StreamInfo;
 extern Lock_801F8014 *File_HandleInUseCS;
 extern int File_uMemFlags;
-extern FileAsyncRequest_t *lbl_803EBC3C;
-extern unsigned char lbl_803EBC40;
-extern unsigned char lbl_803EBC41;
-extern unsigned char lbl_803EBC42;
-extern const char *lbl_803EBC44;
 extern void *File_pAsyncRequestList;
-extern int lbl_803ECEE8;
-extern int lbl_803ECEF4;
-extern Font_801CCA64 *lbl_803ECEF8;
 extern Lock_801F8014 File_AsyncRequestListCS;
 extern FileInitParms_t File_InitParms;
 extern Lock_801F8014 File_AsyncThreadActiveCS;
-extern FontColor_801CCA64 lbl_802F4A74;
 extern unsigned char lbl_802F4AC0[];
+
+unsigned char ModuleLoaded = 1;
+static FileAsyncRequest_t *_pFile_CurRequest = 0;
+static unsigned char _File_CDVDCheck = 1;
+static unsigned char _File_HostActive = 1;
+static unsigned char _bFileFontInitialized = 0;
+static const char *_File_strGameName = 0;
+static FontColor_t _File_FontColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+static char *_File_SrcFilename;
+static char *_File_DstFilename;
+static int _File_Infos;
+static Font_t *_FileErrorFont;
 
 void fn_801F8768(void);
 int SysGetSystemTime(void);
@@ -181,7 +184,7 @@ static int _FileStartAsyncRequest(FileAsyncRequest_t *pAsync)
             if (pAsync->mSize > File_StreamInfo[pAsync->mHandle].mLength - pAsync->mPos) {
                 pAsync->mSize = File_StreamInfo[pAsync->mHandle].mLength - pAsync->mPos;
             }
-            lbl_803EBC3C = pAsync;
+            _pFile_CurRequest = pAsync;
             pAsync->mState = 1;
             if ((result = FilePerformRead(pAsync->mHandle, pAsync->mPos, pAsync->mpBuffer, pAsync->mSize)) < 0) {
                 pAsync->mState = busy;
@@ -255,8 +258,8 @@ void _FileProcessRequestFinish(FileAsyncRequest_t *pAsync)
 static void _FileCDVDCallback(int result)
 {
     fn_801F8014(&File_AsyncRequestListCS);
-    lbl_803EBC40 = 1;
-    _FileProcessRequestFinish(lbl_803EBC3C);
+    _File_CDVDCheck = 1;
+    _FileProcessRequestFinish(_pFile_CurRequest);
     fn_801F809C(&File_AsyncRequestListCS);
 }
 
@@ -337,7 +340,7 @@ int FilePerformRead(int handle, int pos, void *pBuffer, int size)
 
     switch (File_StreamInfo[handle].mDevType) {
     case 1:
-        lbl_803EBC40 = 0;
+        _File_CDVDCheck = 0;
         result = CDVD_read(File_StreamInfo[handle].mDevHandle, pBuffer, pos, size);
         if (result != size) {
             error = 0xA0007;
@@ -401,6 +404,7 @@ int FilePerformWrite(int handle, int pos, void *pBuffer, int size)
 
 int FileQueueAsyncRequest(FileAsyncRequest_t *pAsync)
 {
+    static int device;
     int busy = 0;
     FileAsyncRequest_t *pNode;
 
@@ -414,9 +418,9 @@ int FileQueueAsyncRequest(FileAsyncRequest_t *pAsync)
         }
     }
     if (!busy) {
-        lbl_803ECEE8 = File_StreamInfo[pAsync->mHandle].mDevType;
-        if (lbl_803ECEE8 != 4) {
-            _FileStartIO(lbl_803ECEE8);
+        device = File_StreamInfo[pAsync->mHandle].mDevType;
+        if (device != 4) {
+            _FileStartIO(device);
         }
     }
     fn_801F809C(&File_AsyncThreadActiveCS);
@@ -452,7 +456,7 @@ void FileAsyncWaitStream(int handle)
 
 void FileAsyncSetErrorGameName(const char *pName)
 {
-    lbl_803EBC44 = pName;
+    _File_strGameName = pName;
 }
 
 static void _FileDisplayErrorString(FileFontPos_t *pPos, unsigned int status)
@@ -460,40 +464,40 @@ static void _FileDisplayErrorString(FileFontPos_t *pPos, unsigned int status)
     switch (status) {
     case 5:
         pPos->y = -40.0f;
-        fn_801CDB5C(lbl_803ECEF8, "The Disc Cover is open.", 1, 0.0f, &pPos->x);
+        fn_801CDB5C(_FileErrorFont, "The Disc Cover is open.", 1, 0.0f, &pPos->x);
         pPos->y = 0.0f;
-        fn_801CDB5C(lbl_803ECEF8, "If you want to continue the game,", 1, 0.0f, &pPos->x);
+        fn_801CDB5C(_FileErrorFont, "If you want to continue the game,", 1, 0.0f, &pPos->x);
         pPos->y = 40.0f;
-        fn_801CDB5C(lbl_803ECEF8, "please close the Disc Cover.", 1, 0.0f, &pPos->x);
+        fn_801CDB5C(_FileErrorFont, "please close the Disc Cover.", 1, 0.0f, &pPos->x);
         break;
     case 4:
     case 6:
         pPos->y = -40.0f;
-        fn_801CDB5C(lbl_803ECEF8, "Please insert the", 1, 0.0f, &pPos->x);
+        fn_801CDB5C(_FileErrorFont, "Please insert the", 1, 0.0f, &pPos->x);
         pPos->y = 0.0f;
-        if (lbl_803EBC44) {
-            fn_801CDB5C(lbl_803ECEF8, lbl_803EBC44, 1, 0.0f, &pPos->x);
+        if (_File_strGameName) {
+            fn_801CDB5C(_FileErrorFont, _File_strGameName, 1, 0.0f, &pPos->x);
         } else {
-            fn_801CDB5C(lbl_803ECEF8, "appropriate", 1, 0.0f, &pPos->x);
+            fn_801CDB5C(_FileErrorFont, "appropriate", 1, 0.0f, &pPos->x);
         }
         pPos->y = 40.0f;
-        fn_801CDB5C(lbl_803ECEF8, "Game Disc.", 1, 0.0f, &pPos->x);
+        fn_801CDB5C(_FileErrorFont, "Game Disc.", 1, 0.0f, &pPos->x);
         break;
     case 11:
         pPos->y = -40.0f;
-        fn_801CDB5C(lbl_803ECEF8, "The Game Disc could not be read.", 1, 0.0f, &pPos->x);
+        fn_801CDB5C(_FileErrorFont, "The Game Disc could not be read.", 1, 0.0f, &pPos->x);
         pPos->y = 0.0f;
-        fn_801CDB5C(lbl_803ECEF8, "Please read the Nintendo GameCube\260", 1, 0.0f, &pPos->x);
+        fn_801CDB5C(_FileErrorFont, "Please read the Nintendo GameCube\260", 1, 0.0f, &pPos->x);
         pPos->y = 40.0f;
-        fn_801CDB5C(lbl_803ECEF8, "Instruction Booklet for more information.", 1, 0.0f, &pPos->x);
+        fn_801CDB5C(_FileErrorFont, "Instruction Booklet for more information.", 1, 0.0f, &pPos->x);
         break;
     case -1:
         pPos->y = -40.0f;
-        fn_801CDB5C(lbl_803ECEF8, "An error has occurred.", 1, 0.0f, &pPos->x);
+        fn_801CDB5C(_FileErrorFont, "An error has occurred.", 1, 0.0f, &pPos->x);
         pPos->y = 0.0f;
-        fn_801CDB5C(lbl_803ECEF8, "Turn the power off and refer to the Nintendo GameCube\260", 1, 0.0f, &pPos->x);
+        fn_801CDB5C(_FileErrorFont, "Turn the power off and refer to the Nintendo GameCube\260", 1, 0.0f, &pPos->x);
         pPos->y = 40.0f;
-        fn_801CDB5C(lbl_803ECEF8, "Instruction Booklet for further instructions.", 1, 0.0f, &pPos->x);
+        fn_801CDB5C(_FileErrorFont, "Instruction Booklet for further instructions.", 1, 0.0f, &pPos->x);
         break;
     }
 }
@@ -553,17 +557,17 @@ void FileAsyncCheckError(void)
                 fn_801F8768();
             }
             current = DVDGetDriveStatus();
-            fn_801CD2A4();
-            fn_801CD308(0, lbl_802F4A74);
+            FontResetRenderState();
+            FontSetRenderColor(0, _File_FontColor);
             fn_801CDD18();
             _FileDisplayErrorString(&pos, status);
             GlibSwapBuffers();
         } while (current == status);
-        fn_801CD2A4();
-        fn_801CD308(0, lbl_802F4A74);
+        FontResetRenderState();
+        FontSetRenderColor(0, _File_FontColor);
         fn_801CDD18();
         pos.y = 0.0f;
-        fn_801CDB5C(lbl_803ECEF8, "Loading...", 1, 0.0f, &pos.x);
+        fn_801CDB5C(_FileErrorFont, "Loading...", 1, 0.0f, &pos.x);
         GlibSwapBuffers();
         MatPop();
         SysSetSystemTime(level);
@@ -574,11 +578,11 @@ void FileAsyncCheckError(void)
 
 void FileInitErrorMessages(void)
 {
-    if (!lbl_803EBC42) {
-        fn_801CCF74(0, 0, (FontHeader_801CCA64 *)lbl_802F4AC0);
-        lbl_803ECEF8 = fn_801CD130(0);
-        fn_801CD20C(lbl_803ECEF8, 0);
-        lbl_803EBC42 = 1;
+    if (!_bFileFontInitialized) {
+        FontAddFontFromBuffer(0, 0, (FontHeader_t *)lbl_802F4AC0);
+        _FileErrorFont = FontCreateFont(0);
+        FontUploadTextures(_FileErrorFont, 0);
+        _bFileFontInitialized = 1;
     }
 }
 
@@ -615,15 +619,15 @@ void FileLLInit(FileInitParms_t *pConfig)
     int i;
     int j;
 
-    lbl_803EBC41 = 1;
+    _File_HostActive = 1;
     pTable = FileGetDeviceList();
     for (i = 0; i < pTable->mCount; i++) {
         pList = pTable->mpList[i];
         for (j = 0; j < pList->mCount; j++) {
             if (pList->mDevice[j] == 1) {
                 done = 1;
-                CDVD_init(pConfig->mNumFiles, pConfig->mUnk400, lbl_803ECEF4, _FileCDVDCallback);
-                lbl_803EBC41 = 0;
+                CDVD_init(pConfig->mNumFiles, pConfig->mUnk400, _File_Infos, _FileCDVDCallback);
+                _File_HostActive = 0;
                 break;
             }
         }
@@ -649,7 +653,7 @@ int FileHostCheckActive(void)
 {
     fn_801F8768();
     FileAsyncCheckError();
-    return lbl_803EBC41;
+    return _File_HostActive;
 }
 
 int FileGetSize(int handle)

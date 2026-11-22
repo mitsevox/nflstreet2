@@ -5,7 +5,8 @@
 #include "engine/tmlib.h"
 #include <dolphin/os.h>
 
-extern TMBlendState_t lbl_8039B600;
+/* The geometry, output buffer and weights of the blend in progress. */
+static TMBlendState_t _TMBlend_BlendState;
 
 static unsigned int _TMBlendBuildTargetList(TMGeomNode_t *pNode, int baseIndex, short *pWeights, unsigned int numWeights, TMBlendTarget_t *pItems, unsigned int maxItems)
 {
@@ -99,13 +100,13 @@ static unsigned int _TMBlendGeom(TMBuffer_t *pBuffer, TMBlendTarget_t *pItems, u
 
 void TMBlendSetWeights(short *pWeights, unsigned int numWeights)
 {
-    lbl_8039B600.mNumWeights = numWeights;
-    lbl_8039B600.mpWeights = pWeights;
+    _TMBlend_BlendState.mNumWeights = numWeights;
+    _TMBlend_BlendState.mpWeights = pWeights;
 }
 
 int TMBlendSetWeightsFloat(float *pWeights, unsigned int numWeights)
 {
-    TMBlendState_t *pState = &lbl_8039B600;
+    TMBlendState_t *pState = &_TMBlend_BlendState;
     int numActive = 0;
     unsigned int i;
     float scale = 4096.0f;
@@ -124,7 +125,7 @@ int TMBlendSetWeightsFloat(float *pWeights, unsigned int numWeights)
 
 void TMBlendBegin(TMBuffer_t *pBuffer)
 {
-    TMBlendState_t *pState = &lbl_8039B600;
+    TMBlendState_t *pState = &_TMBlend_BlendState;
 
     _TMBlendReset();
     pState->mpBuffer = pBuffer;
@@ -136,11 +137,11 @@ void TMBlendBegin(TMBuffer_t *pBuffer)
 
 void TMBlendFlushBuffer(void)
 {
-    TMBuffer_t *pBuffer = lbl_8039B600.mpBuffer;
+    TMBuffer_t *pBuffer = _TMBlend_BlendState.mpBuffer;
 
     if (pBuffer != 0) {
-        DCFlushRange(pBuffer->mpData + lbl_8039B600.mFlushed, pBuffer->mUsed - lbl_8039B600.mFlushed);
-        lbl_8039B600.mFlushed = pBuffer->mUsed;
+        DCFlushRange(pBuffer->mpData + _TMBlend_BlendState.mFlushed, pBuffer->mUsed - _TMBlend_BlendState.mFlushed);
+        _TMBlend_BlendState.mFlushed = pBuffer->mUsed;
     }
 }
 
@@ -157,7 +158,7 @@ void TMBlendBindModel(TMModel_t *pModel)
 
 void TMBlendBindModel2(TMModel_t *pBase, TMModel_t *pModel)
 {
-    TMBlendState_t *pState = &lbl_8039B600;
+    TMBlendState_t *pState = &_TMBlend_BlendState;
 
     if (pModel != 0 && pModel->mpGeom != 0) {
         pState->mpGeom = pModel->mpGeom;
@@ -171,7 +172,7 @@ void TMBlendBindModel2(TMModel_t *pBase, TMModel_t *pModel)
 
 void TMBlendSetMaxActiveTargets(unsigned int maxItems)
 {
-    lbl_8039B600.mMaxItems = maxItems;
+    _TMBlend_BlendState.mMaxItems = maxItems;
 }
 
 int TMBlendGeom(int nodeIndex)
@@ -181,15 +182,15 @@ int TMBlendGeom(int nodeIndex)
     TMGeomNode_t *pNode;
     unsigned int numItems;
 
-    if (lbl_8039B600.mpGeom != 0) {
-        pNode = &lbl_8039B600.mpGeom->mpNodes[nodeIndex];
+    if (_TMBlend_BlendState.mpGeom != 0) {
+        pNode = &_TMBlend_BlendState.mpGeom->mpNodes[nodeIndex];
         if (pNode->mNumLods != 0) {
-            numItems = _TMBlendBuildTargetList(pNode, lbl_8039B600.mBaseIndex, lbl_8039B600.mpWeights, lbl_8039B600.mNumWeights, aItems, 128);
+            numItems = _TMBlendBuildTargetList(pNode, _TMBlend_BlendState.mBaseIndex, _TMBlend_BlendState.mpWeights, _TMBlend_BlendState.mNumWeights, aItems, 128);
             if (numItems != 0) {
-                if (lbl_8039B600.mMaxItems != 0) {
-                    numItems = _TMBlendClampTargets(aItems, numItems, lbl_8039B600.mMaxItems);
+                if (_TMBlend_BlendState.mMaxItems != 0) {
+                    numItems = _TMBlendClampTargets(aItems, numItems, _TMBlend_BlendState.mMaxItems);
                 }
-                result = _TMBlendGeom(lbl_8039B600.mpBuffer, aItems, numItems);
+                result = _TMBlendGeom(_TMBlend_BlendState.mpBuffer, aItems, numItems);
             }
         }
     }
@@ -199,7 +200,7 @@ int TMBlendGeom(int nodeIndex)
 int TMBlendGeomAll(void)
 {
     int total = 0;
-    TMGeom_t *pGeom = lbl_8039B600.mpGeom;
+    TMGeom_t *pGeom = _TMBlend_BlendState.mpGeom;
     int numNodes;
     int i;
 

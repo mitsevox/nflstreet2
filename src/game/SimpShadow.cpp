@@ -35,10 +35,10 @@ void MatScaleCol(float x, float y, float z);
 void MatStore(Mtx44 m);
 int MemFill(void *pDest, int size, int value, int width);
 void TMRenderReset(void);
-void fn_802271A4(Vector_80039F5C *pOut, Vector_80039F5C *p);
-void fn_80227384(Vector_80039F5C *pOut, Vector_80039F5C *p, int a);
-void *fn_80236384(int a);
-void fn_80236408(int a, Vector_80039F5C *pOut);
+void Vec2Normalize(Vector_80039F5C *pOut, Vector_80039F5C *p);
+void Vec2Rotate(Vector_80039F5C *pOut, Vector_80039F5C *p, int a);
+void *LLLightGetProjectorMatrix(int a);
+void LLLightGetProjectorDir(int a, Vector_80039F5C *pOut);
 void GXSetChanMatColor(int a, GXColor color);
 void GXSetNumChans(int a);
 void GXSetChanCtrl(int a, int b, int c, int d, int e, int f, int g);
@@ -48,7 +48,7 @@ void GXLoadPosMtxImm(Mtx44 m, int a);
 void GXSetCurrentMtx(int a);
 }
 
-extern int lbl_803EBC98;
+extern int gGlibRenderMarkCursor;
 
 static SimpShadowEntry *_SimpShadow_apEntries[96];
 static ResTexture _SimpShadow_aTextures[1];
@@ -183,11 +183,11 @@ void SimpShadowDrawAll(void)
         MatSetStack(VptGetMatrixStack());
         GXLoadTexObj(&_SimpShadow_TexObj, 0);
         MatPush();
-        MatCat((float (*)[4])fn_80236384(0));
-        fn_80236408(0, &scale);
+        MatCat((float (*)[4])LLLightGetProjectorMatrix(0));
+        LLLightGetProjectorDir(0, &scale);
         scale.mZ = 0.0f;
-        fn_80227384(&scale, &scale, 0x200000);
-        fn_802271A4(&scale, &scale);
+        Vec2Rotate(&scale, &scale, 0x200000);
+        Vec2Normalize(&scale, &scale);
         MatStore(mtx);
         GXLoadPosMtxImm(mtx, 0);
         GXSetCurrentMtx(0);
@@ -209,7 +209,7 @@ void SimpShadowDrawAll(void)
                 cursor = SimpShadowDrawQuad(cursor, _SimpShadow_apEntries[i], &scale);
             }
         }
-        lbl_803EBC98 = cursor;
+        gGlibRenderMarkCursor = cursor;
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
         GXSetChanMatColor(4, color);
     }

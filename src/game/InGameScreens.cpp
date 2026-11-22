@@ -6,7 +6,7 @@
    (Continue, Rematch, Exit), team stat leaders, the scoring summary of each
    possession, challenge rewards and the NFL Legends unlock message. */
 #include "game/GameModeType.h"
-#include "game/fn_8022F478.h"
+#include "game/DbUserSetCurrent.h"
 #include "game/Cheat.h"
 #include "game/GameOptions.h"
 #include "game/fn_8009D990.h"
@@ -18,7 +18,7 @@
 #include "game/EditMenu.h"
 #include "game/HudEvents.h"
 #include "game/Challenge.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/fn_801D2B7C.h"
 
 #include "game/fn_80218FC4.h"
@@ -111,7 +111,7 @@ struct Entry_803EA58C {
     char *mpText;
 };
 
-/* Message arguments sent by fn_80056ED8 (0x80000011). */
+/* Message arguments sent by InGamePlayCallShowSlot (0x80000011). */
 struct Args_80056ED8 {
     int mSide;
     int mRow;
@@ -153,7 +153,7 @@ struct Table_803EA594 {
     unsigned char mUnknown58[2][4];
 };
 
-extern "C" unsigned char lbl_803EA588;
+extern "C" unsigned char _InGameScreens_bRecordsChanged;
 
 struct GameStatsRecord {
     int type;
@@ -165,7 +165,7 @@ struct GameStatsRecord {
 
     void SetValue(int player, int incoming)
     {
-        lbl_803EA588 = 1;
+        _InGameScreens_bRecordsChanged = 1;
         value[player] = incoming;
         if (side == 2 || incoming > value[side])
             side = player;
@@ -190,7 +190,7 @@ struct GameStatsArgs_t {
 };
 
 extern "C" {
-int fn_8022F3D4(int handle);
+int DbUserGetDb(int handle);
 int CheatIsNoneEnabled(void);
 void UserProfileAddGameStats(void);
 void UserProfileSaveAllRecords(unsigned char *flags);
@@ -205,7 +205,7 @@ int fn_801788D8(int *pValue);
 int fn_800A7E40(unsigned char side);
 int fn_800A7E54(unsigned char side);
 int FeatAwardGameCredits(int side);
-int fn_8022F384(int a);
+int DbUserFindIndex(int a);
 void GauntletStatsOpen(DbCursor *pObject, int a);
 void GauntletStatsClose(DbCursor *pObject);
 void GauntletStatsAdd(DbCursor *pObject, int index, int delta);
@@ -215,7 +215,7 @@ int GameTextGetHomeTeam(void);
 int fn_801787DC(int team);
 int fn_80178EE0(int team);
 int fn_80178AE0(void);
-void *fn_8022F4BC(void);
+void *DbUserGetCurrent(void);
 extern char lbl_8031BDD4[];
 extern void *gUISMainInfo;
 
@@ -261,10 +261,10 @@ int ChallengeIsActive(void);
 int fn_801485D4(void);
 int InGameIsStopped(void);
 int PauseIsOpen(void);
-unsigned char fn_8002D060(void *p);
+unsigned char ReplayIsShowing(void *p);
 void fn_80179144(int a);
 void fn_8017916C(void);
-unsigned int fn_802372EC(int stream, int count);
+unsigned int SyncRandGetRange(int stream, int count);
 void fn_800B41BC(int a, int b, int c);
 int FormationLineupApplyUser(int formation, int team);
 void fn_800B4184(int a);
@@ -277,10 +277,10 @@ int PlayBookDbLoadFormation(int tag, int a, int b, PlayBookFormation_t *pObject)
 unsigned short PlayBookDbCountPlays(int tag, int handle);
 void *fn_801D2BB0(int a, int size, int c, int d);
 int UserProfileGetSelected(int index);
-int fn_8022F358(int index);
-int fn_8022F488(int a);
+int DbUserGetId(int index);
+int DbUserSelect(int a);
 int fn_800BA6F8(void);
-void fn_800588F8(int a, int b);
+void InGamePlayCallSetMode(int a, int b);
 int PauseGetValue(void);
 int ConGetChannelInfo(int a, int b);
 int fn_800B6644(int index);
@@ -312,7 +312,7 @@ void DepthChartLoad(int reset);
 void DepthChartRevertSide(int group);
 void PauseSetAltAction(unsigned char value);
 void PauseSetQuitFlag(unsigned char value);
-int fn_8002C9A8(void *p, int msg, int value);
+int ReplayHandleCommand(void *p, int msg, int value);
 int ReplayIsHalted(void *p);
 int TutorialIsActive(void);
 int DepthChartScreenIsSideShown(unsigned char a);
@@ -321,93 +321,93 @@ int fn_80178D70(int team);
 void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
 int OptAudioHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int OptionsScreenMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005A2B8(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005A630(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_80059A24(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005B2BC(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005BCA8(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005B4B0(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005C0C0(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005C338(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005C6EC(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005C994(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005CC50(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005D1E4(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005D2D0(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005BFDC(int group, unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameHudMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameClockMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameScoreMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameEndGameMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameRewardMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameVenueMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameResetMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGamePlayerStatsMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameTimedStatsMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameOffenseTotalsMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameDefenseTotalsMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameScoringSummaryMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameLegendUnlockMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameOverlayMsg(int group, unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int fn_800C8744(int team);
 void GameTextGetTeamDisplayName(int id, char *pText, int size);
 int GameOptionsGet(int a);
 int fn_8017881C(int team);
 int GameTextFindPlayerPad(unsigned int index);
 int GameModeTypeIsSpecial(void);
-extern void *lbl_803EA368;
+extern void *gpReplay;
 
-GameStatsRecord lbl_802D4B14[21] = {
+GameStatsRecord _InGameScreens_aRecords[21] = {
     {1, 2}, {2, 3}, {3, 4}, {4, 5}, {6, 5}, {5, 6}, {7, 9}, {8, 7}, {9, 8}, {10, 10}, {11, 11},
     {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 17},
 };
-unsigned char lbl_803EC7EC[2];
+unsigned char _InGameScreens_aRecordsBroken[2];
 
-unsigned char lbl_803EA588 = 0;
-State_803EA58C *lbl_803EA58C = 0;
-State_803EA590 *lbl_803EA590 = 0;
-Table_803EA594 *lbl_803EA594 = 0;
-static unsigned char lbl_803EA598 = 0;
-static unsigned char lbl_803EA599 = 100;
-static unsigned short lbl_803EA59A = 15;
-static unsigned char lbl_803EA59C = 0;
-static unsigned char lbl_803EA59D = 0;
-static unsigned char lbl_803EA59E = 0;
-static unsigned char lbl_803EA59F = 0;
-static int lbl_803EA5A0[2] = {0,0};
-static unsigned char lbl_803EA5A8 = 0;
-static int lbl_803EA5AC = 4;
-static int lbl_803EA5B0 = 3;
-static unsigned char lbl_803EA5B4 = 0;
-static unsigned char lbl_803EA5B5 = 0;
+unsigned char _InGameScreens_bRecordsChanged = 0;
+State_803EA58C *_InGameScreens_pPlayCall = 0;
+State_803EA590 *_InGameScreens_pPlayArt = 0;
+Table_803EA594 *_InGameScreens_pPlayLists = 0;
+static unsigned char _InGameScreens_bPlayClockStarted = 0;
+static unsigned char _InGameScreens_uPickRumbleStrength = 100;
+static unsigned short _InGameScreens_uPickRumbleTime = 15;
+static unsigned char _InGameScreens_bQuitChosen = 0;
+static unsigned char _InGameScreens_bRestartChosen = 0;
+static unsigned char _InGameScreens_bForfeitChosen = 0;
+static unsigned char _InGameScreens_bEndGameOpen = 0;
+static int _InGameScreens_aEndChoices[2] = {0,0};
+static unsigned char _InGameScreens_bAltRewards = 0;
+static int _InGameScreens_iOverlayState = 4;
+static int _InGameScreens_iOverlayScreen = 3;
+static unsigned char _InGameScreens_bResetPending = 0;
+static unsigned char _InGameScreens_bLegendsUnlocked = 0;
 
 void GameStatsGather(void)
 {
     for (int i = 0; i <= 20; ++i) {
-        memset(lbl_802D4B14[i].value, 0, 8);
-        lbl_802D4B14[i].side = 2;
-        lbl_802D4B14[i].exceeded = 0;
+        memset(_InGameScreens_aRecords[i].value, 0, 8);
+        _InGameScreens_aRecords[i].side = 2;
+        _InGameScreens_aRecords[i].exceeded = 0;
     }
     for (int side = 0; side <= 1; ++side) {
         if (UserProfileGetSelected((unsigned char)side) != -1) {
-            int handle = fn_8022F358(UserProfileGetSelected((unsigned char)side));
-            fn_8022F478(handle);
+            int handle = DbUserGetId(UserProfileGetSelected((unsigned char)side));
+            DbUserSetCurrent(handle);
             int values[18];
-            int result = fn_801FCE10(0,
+            int result = TDbCompilePerformOp(0,
                 "use \x8c select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'sdSU' into \x82 and 'WSQU' into \x82 and 'WOSU' into \x82 and 'LOSU' into \x82 and 'SOSU' into \x82 and 'AOSU' into \x82 from 'TSPU'\n",
-                fn_8022F3D4(handle),
+                DbUserGetDb(handle),
                 &values[0], &values[1], &values[2], &values[3], &values[4], &values[5],
                 &values[6], &values[7], &values[8], &values[9], &values[10], &values[11],
                 &values[12], &values[13], &values[14], &values[15], &values[16], &values[17]);
             int score = StyleTrackerGetTotal(side);
             if (result == 0) {
-                lbl_802D4B14[0].SetValue(side, values[0]);
-                lbl_802D4B14[1].SetValue(side, values[1]);
-                lbl_802D4B14[2].SetValue(side, values[2]);
-                lbl_802D4B14[3].SetValue(side, score);
-                lbl_802D4B14[4].SetValue(side, score);
-                lbl_802D4B14[5].SetValue(side, values[11]);
-                lbl_802D4B14[6].SetValue(side, values[3] + values[4]);
-                lbl_802D4B14[7].SetValue(side, values[3]);
-                lbl_802D4B14[8].SetValue(side, values[4]);
-                lbl_802D4B14[9].SetValue(side, values[5]);
-                lbl_802D4B14[10].SetValue(side, values[6]);
-                lbl_802D4B14[11].SetValue(side, values[7]);
-                lbl_802D4B14[12].SetValue(side, values[8]);
-                lbl_802D4B14[13].SetValue(side, values[9]);
-                lbl_802D4B14[14].SetValue(side, values[10]);
-                lbl_802D4B14[15].SetValue(side, values[12]);
-                lbl_802D4B14[16].SetValue(side, values[13]);
-                lbl_802D4B14[17].SetValue(side, values[14]);
-                lbl_802D4B14[18].SetValue(side, values[15]);
-                lbl_802D4B14[19].SetValue(side, values[16]);
-                lbl_802D4B14[20].SetValue(side, values[17]);
+                _InGameScreens_aRecords[0].SetValue(side, values[0]);
+                _InGameScreens_aRecords[1].SetValue(side, values[1]);
+                _InGameScreens_aRecords[2].SetValue(side, values[2]);
+                _InGameScreens_aRecords[3].SetValue(side, score);
+                _InGameScreens_aRecords[4].SetValue(side, score);
+                _InGameScreens_aRecords[5].SetValue(side, values[11]);
+                _InGameScreens_aRecords[6].SetValue(side, values[3] + values[4]);
+                _InGameScreens_aRecords[7].SetValue(side, values[3]);
+                _InGameScreens_aRecords[8].SetValue(side, values[4]);
+                _InGameScreens_aRecords[9].SetValue(side, values[5]);
+                _InGameScreens_aRecords[10].SetValue(side, values[6]);
+                _InGameScreens_aRecords[11].SetValue(side, values[7]);
+                _InGameScreens_aRecords[12].SetValue(side, values[8]);
+                _InGameScreens_aRecords[13].SetValue(side, values[9]);
+                _InGameScreens_aRecords[14].SetValue(side, values[10]);
+                _InGameScreens_aRecords[15].SetValue(side, values[12]);
+                _InGameScreens_aRecords[16].SetValue(side, values[13]);
+                _InGameScreens_aRecords[17].SetValue(side, values[14]);
+                _InGameScreens_aRecords[18].SetValue(side, values[15]);
+                _InGameScreens_aRecords[19].SetValue(side, values[16]);
+                _InGameScreens_aRecords[20].SetValue(side, values[17]);
             }
         }
     }
@@ -444,7 +444,7 @@ void GameStatsCheckRecords(unsigned char *anyExceeded)
     if (!unavailable) {
         if (update)
             UserProfileAddGameStats();
-        memset(lbl_803EC7EC, 0, 2);
+        memset(_InGameScreens_aRecordsBroken, 0, 2);
         if (update && (UserProfileGetSelected(0) != -1 || UserProfileGetSelected(1) != -1)) {
             for (side = 0; side <= 1; ++side) {
                 if (UserProfileGetSelected((unsigned char)side) != -1)
@@ -456,39 +456,39 @@ void GameStatsCheckRecords(unsigned char *anyExceeded)
             RecordsBegin();
             for (i = 0; i <= 20; ++i) {
                 row = 0;
-                if (lbl_802D4B14[i].type == 6)
+                if (_InGameScreens_aRecords[i].type == 6)
                     row = fn_800A3444();
-                RecordsSeekRow(lbl_802D4B14[i].type, row);
-                current = RecordsGetValue(lbl_802D4B14[i].column);
-                RecordsGetText(lbl_802D4B14[i].type, row, 1, holder, 32);
-                if (lbl_802D4B14[i].type == 6) {
-                    lbl_802D4B14[i].exceeded = lbl_802D4B14[i].value[lbl_802D4B14[i].side] > current;
-                    lbl_803EC7EC[lbl_802D4B14[i].side] |= lbl_802D4B14[i].exceeded;
+                RecordsSeekRow(_InGameScreens_aRecords[i].type, row);
+                current = RecordsGetValue(_InGameScreens_aRecords[i].column);
+                RecordsGetText(_InGameScreens_aRecords[i].type, row, 1, holder, 32);
+                if (_InGameScreens_aRecords[i].type == 6) {
+                    _InGameScreens_aRecords[i].exceeded = _InGameScreens_aRecords[i].value[_InGameScreens_aRecords[i].side] > current;
+                    _InGameScreens_aRecordsBroken[_InGameScreens_aRecords[i].side] |= _InGameScreens_aRecords[i].exceeded;
                 } else {
-                    RecordsSeekRow(lbl_802D4B14[i].type, row + 1);
-                    other = RecordsGetValue(lbl_802D4B14[i].column);
-                    if (lbl_802D4B14[i].type == 4) {
-                        lbl_802D4B14[i].exceeded = lbl_802D4B14[i].value[lbl_802D4B14[i].side] > current;
+                    RecordsSeekRow(_InGameScreens_aRecords[i].type, row + 1);
+                    other = RecordsGetValue(_InGameScreens_aRecords[i].column);
+                    if (_InGameScreens_aRecords[i].type == 4) {
+                        _InGameScreens_aRecords[i].exceeded = _InGameScreens_aRecords[i].value[_InGameScreens_aRecords[i].side] > current;
                     } else {
-                        lbl_802D4B14[i].exceeded = lbl_802D4B14[i].value[lbl_802D4B14[i].side] > current &&
-                                                   (stricmp(holder, names[lbl_802D4B14[i].side]) || current == other);
+                        _InGameScreens_aRecords[i].exceeded = _InGameScreens_aRecords[i].value[_InGameScreens_aRecords[i].side] > current &&
+                                                   (stricmp(holder, names[_InGameScreens_aRecords[i].side]) || current == other);
                     }
                 }
-                if (lbl_802D4B14[i].exceeded && i <= 15 && !fn_801485D4())
+                if (_InGameScreens_aRecords[i].exceeded && i <= 15 && !fn_801485D4())
                     *anyExceeded = 1;
-                if (lbl_802D4B14[i].type != 6) {
-                    RecordsSeekRow(lbl_802D4B14[i].type, 9);
-                    current = RecordsGetValue(lbl_802D4B14[i].column);
+                if (_InGameScreens_aRecords[i].type != 6) {
+                    RecordsSeekRow(_InGameScreens_aRecords[i].type, 9);
+                    current = RecordsGetValue(_InGameScreens_aRecords[i].column);
                     for (side = 0; side <= 1; ++side) {
-                        if (lbl_802D4B14[i].value[side] > current)
-                            lbl_803EC7EC[side] = 1;
+                        if (_InGameScreens_aRecords[i].value[side] > current)
+                            _InGameScreens_aRecordsBroken[side] = 1;
                     }
                 }
             }
             RecordsEnd();
         }
         if (update)
-            UserProfileSaveAllRecords(lbl_803EC7EC);
+            UserProfileSaveAllRecords(_InGameScreens_aRecordsBroken);
     }
 }
 
@@ -497,13 +497,13 @@ void GameStatsGetRecords(int *values, int *exceeded)
     RecordsBegin();
     for (int i = 0; i < 16; i++) {
         int row;
-        if (lbl_802D4B14[i].type == 6)
+        if (_InGameScreens_aRecords[i].type == 6)
             row = fn_800A3444();
         else
             row = 0;
-        RecordsSeekRow(lbl_802D4B14[i].type, row);
-        values[i] = RecordsGetValue(lbl_802D4B14[i].column);
-        exceeded[i] = lbl_802D4B14[i].exceeded;
+        RecordsSeekRow(_InGameScreens_aRecords[i].type, row);
+        values[i] = RecordsGetValue(_InGameScreens_aRecords[i].column);
+        exceeded[i] = _InGameScreens_aRecords[i].exceeded;
     }
     RecordsEnd();
 }
@@ -587,7 +587,7 @@ void GameStatsFill(int *pHandles, int *pStats1, int *pStats0, int *pMode, char *
         unsigned int score1;
         unsigned int score0;
 
-        GauntletStatsOpen(&cursor, (signed char)fn_8022F384((int)fn_8022F4BC()));
+        GauntletStatsOpen(&cursor, (signed char)DbUserFindIndex((int)DbUserGetCurrent()));
         if (GameOptionsGet(14) == 1) {
             score1 = StyleTrackerGetTotal(1);
             score0 = StyleTrackerGetTotal(0);
@@ -653,7 +653,7 @@ void GameStatsUpdateRecords(void)
     GameStatsCheckRecords(&anyExceeded);
 }
 
-void fn_80056584(int index, char *pOut, int b, char *pText0, int size0, char *pText1, int size1,
+void InGameJumpBallGetSlot(int index, char *pOut, int b, char *pText0, int size0, char *pText1, int size1,
                  char *pText2, int size2, int *pColor, int unused, char *pText, int length, int *pId)
 {
     MiniGameSlotInfo_t info;
@@ -678,13 +678,13 @@ void fn_80056584(int index, char *pOut, int b, char *pText0, int size0, char *pT
     pColor[2] = blue;
 }
 
-int fn_800566F0(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
+int InGameJumpBallMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000004:
         break;
     case 0x80000001:
-        fn_80056584(pArgs[0].i, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength, pArgs[3].pParams->mpText,
+        InGameJumpBallGetSlot(pArgs[0].i, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength, pArgs[3].pParams->mpText,
                     pArgs[3].pParams->mLength, pArgs[5].pParams->mpText, pArgs[5].pParams->mLength,
                     pArgs[7].pParams->mpText, pArgs[7].pParams->mLength,
                     (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4), pArgs[1].pi[1], pArgs[8].pParams->mpText,
@@ -708,7 +708,7 @@ int fn_800566F0(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
     return 1;
 }
 
-int fn_80056848(void)
+int InGamePlayCallUsesProfileOrder(void)
 {
     switch (fn_801486A0()) {
     case 3:
@@ -718,12 +718,12 @@ int fn_80056848(void)
     return 1;
 }
 
-int fn_80056880(int team)
+int InGamePlayCallGetMenuKind(int team)
 {
     int value;
     int count = fn_80179138();
 
-    switch (lbl_803EA58C->mUnknown46[team]) {
+    switch (_InGameScreens_pPlayCall->mUnknown46[team]) {
     case 0:
         value = 0;
         break;
@@ -763,17 +763,17 @@ int fn_80056880(int team)
     return value;
 }
 
-void fn_8005697C(int team, int *pA, int *pB, int *pC, int *pD, int *pE)
+void InGamePlayCallGetSideInfo(int team, int *pA, int *pB, int *pC, int *pD, int *pE)
 {
-    *pA = lbl_803EA58C->mUnknown8[team];
-    *pB = lbl_803EA58C->mUnknown44[team];
-    *pC = fn_80056880(team);
-    *pD = lbl_803EA58C->mUnknown10[team];
-    pE[0] = lbl_803EA58C->mUnknown18[team].mUnknown0;
-    pE[1] = lbl_803EA58C->mUnknown18[team].mUnknown4;
+    *pA = _InGameScreens_pPlayCall->mUnknown8[team];
+    *pB = _InGameScreens_pPlayCall->mUnknown44[team];
+    *pC = InGamePlayCallGetMenuKind(team);
+    *pD = _InGameScreens_pPlayCall->mUnknown10[team];
+    pE[0] = _InGameScreens_pPlayCall->mUnknown18[team].mUnknown0;
+    pE[1] = _InGameScreens_pPlayCall->mUnknown18[team].mUnknown4;
 }
 
-int fn_80056A10(int side, int a, int b, int c)
+int InGamePlayCallSelect(int side, int a, int b, int c)
 {
     int result = 0;
     int team = 1;
@@ -782,27 +782,27 @@ int fn_80056A10(int side, int a, int b, int c)
     if (side == 0) {
         team = 0;
     }
-    if (lbl_803EA58C->mUnknown46[team] <= 3) {
+    if (_InGameScreens_pPlayCall->mUnknown46[team] <= 3) {
         if (fn_80178308() == team) {
-            limit = lbl_803EA594->mUnknown40[team][lbl_803EA58C->mUnknown46[team]];
+            limit = _InGameScreens_pPlayLists->mUnknown40[team][_InGameScreens_pPlayCall->mUnknown46[team]];
         } else {
-            limit = lbl_803EA594->mUnknown48[team][lbl_803EA58C->mUnknown46[team]];
+            limit = _InGameScreens_pPlayLists->mUnknown48[team][_InGameScreens_pPlayCall->mUnknown46[team]];
         }
-        int per = lbl_803EA58C->mUnknown4E;
+        int per = _InGameScreens_pPlayCall->mUnknown4E;
         c %= per;
         int value = (a * 2 + b) * per + c;
         if (value < limit) {
             result = 1;
             switch (side) {
             case 1:
-                lbl_803EA58C->mUnknown40[1] = value;
-                lbl_803EA58C->mUnknown48[1] = lbl_803EA58C->mUnknown46[1];
-                lbl_803EA58C->mUnknown4C[1] = lbl_803EA58C->mUnknown4A[1];
+                _InGameScreens_pPlayCall->mUnknown40[1] = value;
+                _InGameScreens_pPlayCall->mUnknown48[1] = _InGameScreens_pPlayCall->mUnknown46[1];
+                _InGameScreens_pPlayCall->mUnknown4C[1] = _InGameScreens_pPlayCall->mUnknown4A[1];
                 break;
             case 0:
-                lbl_803EA58C->mUnknown40[0] = value;
-                lbl_803EA58C->mUnknown48[0] = lbl_803EA58C->mUnknown46[0];
-                lbl_803EA58C->mUnknown4C[0] = lbl_803EA58C->mUnknown4A[0];
+                _InGameScreens_pPlayCall->mUnknown40[0] = value;
+                _InGameScreens_pPlayCall->mUnknown48[0] = _InGameScreens_pPlayCall->mUnknown46[0];
+                _InGameScreens_pPlayCall->mUnknown4C[0] = _InGameScreens_pPlayCall->mUnknown4A[0];
                 break;
             }
         }
@@ -811,145 +811,145 @@ int fn_80056A10(int side, int a, int b, int c)
 }
 
 
-void fn_80056B2C(int team, unsigned int a, int b)
+void InGamePlayCallLoadSlot(int team, unsigned int a, int b)
 {
     unsigned char limit;
 
     if (fn_80178308() == team) {
-        limit = lbl_803EA594->mUnknown40[team][lbl_803EA58C->mUnknown46[team]];
+        limit = _InGameScreens_pPlayLists->mUnknown40[team][_InGameScreens_pPlayCall->mUnknown46[team]];
     } else {
-        limit = lbl_803EA594->mUnknown48[team][lbl_803EA58C->mUnknown46[team]];
+        limit = _InGameScreens_pPlayLists->mUnknown48[team][_InGameScreens_pPlayCall->mUnknown46[team]];
     }
     unsigned int index = a + b;
     if (index < limit) {
-        lbl_803EA590->mUnknown4[team] = PlayBookGetDatabase(team);
-        lbl_803EA590->mpTeam[team] = PlayBookGetTeam(team);
+        _InGameScreens_pPlayArt->mUnknown4[team] = PlayBookGetDatabase(team);
+        _InGameScreens_pPlayArt->mpTeam[team] = PlayBookGetTeam(team);
         if (fn_80178308() == team) {
-            lbl_803EA590->mpSlots[team][b].mUnknownEBC =
-                lbl_803EA594->mpUnknown0[team][lbl_803EA58C->mUnknown46[team]][index];
+            _InGameScreens_pPlayArt->mpSlots[team][b].mUnknownEBC =
+                _InGameScreens_pPlayLists->mpUnknown0[team][_InGameScreens_pPlayCall->mUnknown46[team]][index];
         } else {
-            lbl_803EA590->mpSlots[team][b].mUnknownEBC =
-                lbl_803EA594->mpUnknown20[team][lbl_803EA58C->mUnknown46[team]][index];
+            _InGameScreens_pPlayArt->mpSlots[team][b].mUnknownEBC =
+                _InGameScreens_pPlayLists->mpUnknown20[team][_InGameScreens_pPlayCall->mUnknown46[team]][index];
         }
-        PlayBookSetIndices(team, 0, lbl_803EA58C->mUnknown46[team], lbl_803EA590->mpSlots[team][b].mUnknownEBC);
+        PlayBookSetIndices(team, 0, _InGameScreens_pPlayCall->mUnknown46[team], _InGameScreens_pPlayArt->mpSlots[team][b].mUnknownEBC);
         PlayBookLoadCurrentPlay(team);
-        lbl_803EA590->mpSlots[team][b].mpHandle = PlayBookGetFormation(team);
+        _InGameScreens_pPlayArt->mpSlots[team][b].mpHandle = PlayBookGetFormation(team);
         PlayBookSetLoadFlags(5);
-        PlayBookDbLoadSetByOrder(lbl_803EA590->mUnknown4[team], lbl_803EA590->mpSlots[team][b].mpHandle->mUnknown0,
-                    lbl_803EA58C->mUnknown46[team], lbl_803EA590->mpTeam[team],
-                    &lbl_803EA590->mpSlots[team][b].mUnknown8);
+        PlayBookDbLoadSetByOrder(_InGameScreens_pPlayArt->mUnknown4[team], _InGameScreens_pPlayArt->mpSlots[team][b].mpHandle->mUnknown0,
+                    _InGameScreens_pPlayCall->mUnknown46[team], _InGameScreens_pPlayArt->mpTeam[team],
+                    &_InGameScreens_pPlayArt->mpSlots[team][b].mUnknown8);
         PlayBookClearLoadFlags(5);
         PlayBookSetLoadFlags(2);
-        lbl_803EA590->mpSlots[team][b].mUnknown4 =
-            PlayBookDbLoadPlay(lbl_803EA590->mUnknown4[team], lbl_803EA590->mpSlots[team][b].mUnknown8.mUnknown0,
-                        lbl_803EA590->mpSlots[team][b].mUnknownEBC, &lbl_803EA590->mpSlots[team][b].mUnknownCB0);
+        _InGameScreens_pPlayArt->mpSlots[team][b].mUnknown4 =
+            PlayBookDbLoadPlay(_InGameScreens_pPlayArt->mUnknown4[team], _InGameScreens_pPlayArt->mpSlots[team][b].mUnknown8.mUnknown0,
+                        _InGameScreens_pPlayArt->mpSlots[team][b].mUnknownEBC, &_InGameScreens_pPlayArt->mpSlots[team][b].mUnknownCB0);
         PlayBookClearLoadFlags(2);
-        fn_801C2E18(lbl_803EA58C->mpTexts[team][b], "%s",
-                    lbl_803EA590->mpSlots[team][b].mUnknownCB0.mUnknown1F3);
+        fn_801C2E18(_InGameScreens_pPlayCall->mpTexts[team][b], "%s",
+                    _InGameScreens_pPlayArt->mpSlots[team][b].mUnknownCB0.mUnknown1F3);
     } else {
-        lbl_803EA590->mpSlots[team][b].mUnknownEBC = -1;
-        fn_801C2E18(lbl_803EA58C->mpTexts[team][b], "%s", "Locked");
+        _InGameScreens_pPlayArt->mpSlots[team][b].mUnknownEBC = -1;
+        fn_801C2E18(_InGameScreens_pPlayCall->mpTexts[team][b], "%s", "Locked");
     }
 }
 
-void fn_80056DE0(int team, int index)
+void InGamePlayCallBuildArt(int team, int index)
 {
-    if (lbl_803EA590->mpSlots[team][index].mUnknownEBC != -1) {
-        PlayArtReadPositions(lbl_803EA590->mUnknown4[team], &lbl_803EA590->mpSlots[team][index].mUnknown8,
-                    &lbl_803EA590->mpSlots[team][index].mUnknownCB0,
-                    lbl_803EA590->mpSlots[team][index].mUnknownCB0.mUnknown4,
-                    lbl_803EA590->mpSlots[team][index].mUnknown4,
-                    lbl_803EA590->mpSlots[team][index].mUnknownEBC, team, index);
-        PlayArtReadRoutes(lbl_803EA590->mUnknown4[team], &lbl_803EA590->mpSlots[team][index].mUnknownCB0,
-                    lbl_803EA590->mpSlots[team][index].mUnknownCB0.mUnknown4,
-                    lbl_803EA590->mpSlots[team][index].mUnknownCB0.mUnknown0, team, index);
-        PlayArtBuild(lbl_803EA590->mUnknown4[team], &lbl_803EA590->mpSlots[team][index].mUnknownCB0,
-                    lbl_803EA590->mpSlots[team][index].mUnknownCB0.mUnknown4,
-                    lbl_803EA590->mpSlots[team][index].mUnknown4,
-                    lbl_803EA590->mpSlots[team][index].mUnknownCB0.mUnknown0, team, index, 0, 11,
-                    &lbl_803EA590->mpSlots[team][index].mUnknown8);
+    if (_InGameScreens_pPlayArt->mpSlots[team][index].mUnknownEBC != -1) {
+        PlayArtReadPositions(_InGameScreens_pPlayArt->mUnknown4[team], &_InGameScreens_pPlayArt->mpSlots[team][index].mUnknown8,
+                    &_InGameScreens_pPlayArt->mpSlots[team][index].mUnknownCB0,
+                    _InGameScreens_pPlayArt->mpSlots[team][index].mUnknownCB0.mUnknown4,
+                    _InGameScreens_pPlayArt->mpSlots[team][index].mUnknown4,
+                    _InGameScreens_pPlayArt->mpSlots[team][index].mUnknownEBC, team, index);
+        PlayArtReadRoutes(_InGameScreens_pPlayArt->mUnknown4[team], &_InGameScreens_pPlayArt->mpSlots[team][index].mUnknownCB0,
+                    _InGameScreens_pPlayArt->mpSlots[team][index].mUnknownCB0.mUnknown4,
+                    _InGameScreens_pPlayArt->mpSlots[team][index].mUnknownCB0.mUnknown0, team, index);
+        PlayArtBuild(_InGameScreens_pPlayArt->mUnknown4[team], &_InGameScreens_pPlayArt->mpSlots[team][index].mUnknownCB0,
+                    _InGameScreens_pPlayArt->mpSlots[team][index].mUnknownCB0.mUnknown4,
+                    _InGameScreens_pPlayArt->mpSlots[team][index].mUnknown4,
+                    _InGameScreens_pPlayArt->mpSlots[team][index].mUnknownCB0.mUnknown0, team, index, 0, 11,
+                    &_InGameScreens_pPlayArt->mpSlots[team][index].mUnknown8);
     }
 }
 
-void fn_80056ED8(int team, int a, int b)
+void InGamePlayCallShowSlot(int team, int a, int b)
 {
     Args_80056ED8 args;
 
-    PlayArtSetFlip(team, lbl_803EA58C->mUnknown4A[team], b);
-    fn_80056B2C(team, a, b);
-    fn_80056DE0(team, b);
+    PlayArtSetFlip(team, _InGameScreens_pPlayCall->mUnknown4A[team], b);
+    InGamePlayCallLoadSlot(team, a, b);
+    InGamePlayCallBuildArt(team, b);
     args.mSide = team != 0;
-    args.mRow = b % (lbl_803EA58C->mUnknown4E * 2) / lbl_803EA58C->mUnknown4E;
-    args.mColumn = b % (lbl_803EA58C->mUnknown4E * 2) % lbl_803EA58C->mUnknown4E;
-    args.mpEntry = &lbl_803EA58C->mpEntries[team][b];
-    args.mpEntry->mpText = lbl_803EA58C->mpTexts[team][b];
-    args.mpEntry->mUnknown4 = strlen(lbl_803EA58C->mpTexts[team][b]);
+    args.mRow = b % (_InGameScreens_pPlayCall->mUnknown4E * 2) / _InGameScreens_pPlayCall->mUnknown4E;
+    args.mColumn = b % (_InGameScreens_pPlayCall->mUnknown4E * 2) % _InGameScreens_pPlayCall->mUnknown4E;
+    args.mpEntry = &_InGameScreens_pPlayCall->mpEntries[team][b];
+    args.mpEntry->mpText = _InGameScreens_pPlayCall->mpTexts[team][b];
+    args.mpEntry->mUnknown4 = strlen(_InGameScreens_pPlayCall->mpTexts[team][b]);
     if (fn_80178308() == team) {
-        args.mLocked = a + b >= lbl_803EA594->mUnknown40[team][lbl_803EA58C->mUnknown46[team]];
+        args.mLocked = a + b >= _InGameScreens_pPlayLists->mUnknown40[team][_InGameScreens_pPlayCall->mUnknown46[team]];
     } else {
-        args.mLocked = a + b >= lbl_803EA594->mUnknown48[team][lbl_803EA58C->mUnknown46[team]];
+        args.mLocked = a + b >= _InGameScreens_pPlayLists->mUnknown48[team][_InGameScreens_pPlayCall->mUnknown46[team]];
     }
     fn_8021D7B8(gUISMainInfo, 0x80000011, 5, &args);
 }
 
-int fn_80057044(void)
+int InGamePlayCallGetUserTeam(void)
 {
     int value = -1;
 
     if (fn_801486A0() == 3) {
         value = fn_80178320();
-        lbl_803EA58C->mUnknown4F = value;
-    } else if (lbl_803EA58C->mUnknown4F != 2) {
-        value = lbl_803EA58C->mUnknown4F;
+        _InGameScreens_pPlayCall->mUnknown4F = value;
+    } else if (_InGameScreens_pPlayCall->mUnknown4F != 2) {
+        value = _InGameScreens_pPlayCall->mUnknown4F;
     }
     return value;
 }
 
 
-void fn_800570A4(int *pSide, int *pTable, int *pMode, int *pFlag, int *pType, int *pState, int *pIsMode6)
+void InGamePlayCallOpen(int *pSide, int *pTable, int *pMode, int *pFlag, int *pType, int *pState, int *pIsMode6)
 {
     if (fn_80177F7C() == 6 && (fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF)) {
         fn_80177D78();
     }
-    if (!lbl_803EA598) {
+    if (!_InGameScreens_bPlayClockStarted) {
         fn_8009D964(2, 0);
-        lbl_803EA598 = 1;
+        _InGameScreens_bPlayClockStarted = 1;
     }
-    if (lbl_803EA58C->mUnknown50 == 0) {
+    if (_InGameScreens_pPlayCall->mUnknown50 == 0) {
         *pFlag = 0;
-        lbl_803EA58C->mUnknown2C = GameInfoGet(1);
-        lbl_803EA58C->mUnknown28 = GameInfoGet(0);
-        lbl_803EA58C->mUnknown40[1] = 0;
-        lbl_803EA58C->mUnknown40[0] = 0;
-        lbl_803EA58C->mUnknown42[1] = 0;
-        lbl_803EA58C->mUnknown42[0] = 0;
+        _InGameScreens_pPlayCall->mUnknown2C = GameInfoGet(1);
+        _InGameScreens_pPlayCall->mUnknown28 = GameInfoGet(0);
+        _InGameScreens_pPlayCall->mUnknown40[1] = 0;
+        _InGameScreens_pPlayCall->mUnknown40[0] = 0;
+        _InGameScreens_pPlayCall->mUnknown42[1] = 0;
+        _InGameScreens_pPlayCall->mUnknown42[0] = 0;
         fn_800B4434();
         int id = fn_800B65A0(1);
         if (id == 0xFF) {
-            lbl_803EA58C->mUnknown4 = -1;
+            _InGameScreens_pPlayCall->mUnknown4 = -1;
         } else {
-            lbl_803EA58C->mUnknown4 = GameTextGetPadPlayer(id);
+            _InGameScreens_pPlayCall->mUnknown4 = GameTextGetPadPlayer(id);
         }
         id = fn_800B65A0(0);
         if (id == 0xFF) {
-            lbl_803EA58C->mUnknown0 = -1;
+            _InGameScreens_pPlayCall->mUnknown0 = -1;
         } else {
-            lbl_803EA58C->mUnknown0 = GameTextGetPadPlayer(id);
+            _InGameScreens_pPlayCall->mUnknown0 = GameTextGetPadPlayer(id);
         }
-        lbl_803EA590->mUnknown0[0] = 0;
-        lbl_803EA590->mUnknown0[1] = 0;
-        lbl_803EA590->mUnknown2[0] = 0;
-        lbl_803EA590->mUnknown2[1] = 0;
-        lbl_803EA590->mUnknown1C[0] = 0;
-        lbl_803EA590->mUnknown1C[1] = 0;
-        lbl_803EA58C->mUnknown46[0] = 5;
-        lbl_803EA58C->mUnknown46[1] = 5;
-        lbl_803EA58C->mUnknown48[0] = 5;
-        lbl_803EA58C->mUnknown48[1] = 5;
-        lbl_803EA58C->mUnknown4A[0] = 0;
-        lbl_803EA58C->mUnknown4A[1] = 0;
-        lbl_803EA58C->mUnknown4C[0] = 0;
-        lbl_803EA58C->mUnknown4C[1] = 0;
+        _InGameScreens_pPlayArt->mUnknown0[0] = 0;
+        _InGameScreens_pPlayArt->mUnknown0[1] = 0;
+        _InGameScreens_pPlayArt->mUnknown2[0] = 0;
+        _InGameScreens_pPlayArt->mUnknown2[1] = 0;
+        _InGameScreens_pPlayArt->mUnknown1C[0] = 0;
+        _InGameScreens_pPlayArt->mUnknown1C[1] = 0;
+        _InGameScreens_pPlayCall->mUnknown46[0] = 5;
+        _InGameScreens_pPlayCall->mUnknown46[1] = 5;
+        _InGameScreens_pPlayCall->mUnknown48[0] = 5;
+        _InGameScreens_pPlayCall->mUnknown48[1] = 5;
+        _InGameScreens_pPlayCall->mUnknown4A[0] = 0;
+        _InGameScreens_pPlayCall->mUnknown4A[1] = 0;
+        _InGameScreens_pPlayCall->mUnknown4C[0] = 0;
+        _InGameScreens_pPlayCall->mUnknown4C[1] = 0;
         if (PlayBookGetTeam(0)->mUnknown30) {
             PlayBookToggleFlip(0);
         }
@@ -958,17 +958,17 @@ void fn_800570A4(int *pSide, int *pTable, int *pMode, int *pFlag, int *pType, in
         }
     } else {
         *pFlag = 1;
-        lbl_803EA58C->mUnknown50 = 0;
+        _InGameScreens_pPlayCall->mUnknown50 = 0;
     }
     *pSide = fn_80178308() != 0;
     for (unsigned char i = 0; i <= 7; i++) {
         pTable[i] = -1;
     }
-    if (lbl_803EA58C->mUnknown0 != -1) {
-        pTable[lbl_803EA58C->mUnknown0] = 0;
+    if (_InGameScreens_pPlayCall->mUnknown0 != -1) {
+        pTable[_InGameScreens_pPlayCall->mUnknown0] = 0;
     }
-    if (lbl_803EA58C->mUnknown4 != -1) {
-        pTable[lbl_803EA58C->mUnknown4] = 1;
+    if (_InGameScreens_pPlayCall->mUnknown4 != -1) {
+        pTable[_InGameScreens_pPlayCall->mUnknown4] = 1;
     }
     fn_800B3C54();
     *pMode = fn_8009D990(3);
@@ -999,142 +999,142 @@ void fn_800570A4(int *pSide, int *pTable, int *pMode, int *pFlag, int *pType, in
             break;
         }
     }
-    *pState = fn_80057044();
+    *pState = InGamePlayCallGetUserTeam();
     *pIsMode6 = fn_80177F70() == 6;
 }
 
 
-void fn_8005740C(int value1, int *pPair1, int word1, int test1, int value0, int *pPair0, int word0, int test0)
+void InGamePlayCallClose(int value1, int *pPair1, int word1, int test1, int value0, int *pPair0, int word0, int test0)
 {
     int count = fn_80179138();
 
     if (InGameIsStopped() == 0) {
-        if (PauseIsOpen() == 0 && fn_8002D060(lbl_803EA368) == 0) {
+        if (PauseIsOpen() == 0 && ReplayIsShowing(gpReplay) == 0) {
             if (count == 0 && fn_80177F70() == 6) {
                 fn_80179144(1);
                 count = 1;
             }
-            lbl_803EA58C->mUnknown50 = 0;
+            _InGameScreens_pPlayCall->mUnknown50 = 0;
             if (count == 1 || count == 2) {
                 fn_8017916C();
             }
-            if (lbl_803EA58C->mUnknown4A[0] != lbl_803EA58C->mUnknown4C[0]) {
+            if (_InGameScreens_pPlayCall->mUnknown4A[0] != _InGameScreens_pPlayCall->mUnknown4C[0]) {
                 PlayBookToggleFlip(0);
             }
-            if (lbl_803EA58C->mUnknown4A[1] != lbl_803EA58C->mUnknown4C[1]) {
+            if (_InGameScreens_pPlayCall->mUnknown4A[1] != _InGameScreens_pPlayCall->mUnknown4C[1]) {
                 PlayBookToggleFlip(1);
             }
-            if (lbl_803EA58C->mUnknown42[0]) {
+            if (_InGameScreens_pPlayCall->mUnknown42[0]) {
                 if (fn_80178308() == 0) {
-                    PlayBookSetIndices(0, 0, lbl_803EA58C->mUnknown48[0],
-                                lbl_803EA594->mpUnknown0[0][lbl_803EA58C->mUnknown48[0]][lbl_803EA58C->mUnknown40[0]]);
+                    PlayBookSetIndices(0, 0, _InGameScreens_pPlayCall->mUnknown48[0],
+                                _InGameScreens_pPlayLists->mpUnknown0[0][_InGameScreens_pPlayCall->mUnknown48[0]][_InGameScreens_pPlayCall->mUnknown40[0]]);
                 } else {
-                    PlayBookSetIndices(0, 0, lbl_803EA58C->mUnknown48[0],
-                                lbl_803EA594->mpUnknown20[0][lbl_803EA58C->mUnknown48[0]][lbl_803EA58C->mUnknown40[0]]);
+                    PlayBookSetIndices(0, 0, _InGameScreens_pPlayCall->mUnknown48[0],
+                                _InGameScreens_pPlayLists->mpUnknown20[0][_InGameScreens_pPlayCall->mUnknown48[0]][_InGameScreens_pPlayCall->mUnknown40[0]]);
                 }
                 PlayBookLoadCurrentPlay(0);
                 fn_800B41BC(0, 0, 0);
             } else {
                 if (fn_80178308() == 0) {
                     PlayBookSetIndices(0, 0, 0,
-                                lbl_803EA594->mpUnknown0[0][0][(unsigned char)fn_802372EC(0, lbl_803EA594->mUnknown40[0][0])]);
+                                _InGameScreens_pPlayLists->mpUnknown0[0][0][(unsigned char)SyncRandGetRange(0, _InGameScreens_pPlayLists->mUnknown40[0][0])]);
                 } else {
                     PlayBookSetIndices(0, 0, 0,
-                                lbl_803EA594->mpUnknown20[0][0][(unsigned char)fn_802372EC(0, lbl_803EA594->mUnknown48[0][0])]);
+                                _InGameScreens_pPlayLists->mpUnknown20[0][0][(unsigned char)SyncRandGetRange(0, _InGameScreens_pPlayLists->mUnknown48[0][0])]);
                 }
                 PlayBookLoadCurrentPlay(0);
                 fn_800B41BC(0, 0, 0);
             }
             FormationLineupApplyUser(PlayBookGetTeam(0)->mUnknown40, 0);
-            if (lbl_803EA58C->mUnknown42[1]) {
+            if (_InGameScreens_pPlayCall->mUnknown42[1]) {
                 if (fn_80178308() == 1) {
-                    PlayBookSetIndices(1, 0, lbl_803EA58C->mUnknown48[1],
-                                lbl_803EA594->mpUnknown0[1][lbl_803EA58C->mUnknown48[1]][lbl_803EA58C->mUnknown40[1]]);
+                    PlayBookSetIndices(1, 0, _InGameScreens_pPlayCall->mUnknown48[1],
+                                _InGameScreens_pPlayLists->mpUnknown0[1][_InGameScreens_pPlayCall->mUnknown48[1]][_InGameScreens_pPlayCall->mUnknown40[1]]);
                 } else {
-                    PlayBookSetIndices(1, 0, lbl_803EA58C->mUnknown48[1],
-                                lbl_803EA594->mpUnknown20[1][lbl_803EA58C->mUnknown48[1]][lbl_803EA58C->mUnknown40[1]]);
+                    PlayBookSetIndices(1, 0, _InGameScreens_pPlayCall->mUnknown48[1],
+                                _InGameScreens_pPlayLists->mpUnknown20[1][_InGameScreens_pPlayCall->mUnknown48[1]][_InGameScreens_pPlayCall->mUnknown40[1]]);
                 }
                 PlayBookLoadCurrentPlay(1);
                 fn_800B41BC(1, 0, 0);
             } else {
                 if (fn_80178308() == 1) {
                     PlayBookSetIndices(1, 0, 0,
-                                lbl_803EA594->mpUnknown0[1][0][(unsigned char)fn_802372EC(0, lbl_803EA594->mUnknown40[1][0])]);
+                                _InGameScreens_pPlayLists->mpUnknown0[1][0][(unsigned char)SyncRandGetRange(0, _InGameScreens_pPlayLists->mUnknown40[1][0])]);
                 } else {
                     PlayBookSetIndices(1, 0, 0,
-                                lbl_803EA594->mpUnknown20[1][0][(unsigned char)fn_802372EC(0, lbl_803EA594->mUnknown48[1][0])]);
+                                _InGameScreens_pPlayLists->mpUnknown20[1][0][(unsigned char)SyncRandGetRange(0, _InGameScreens_pPlayLists->mUnknown48[1][0])]);
                 }
                 PlayBookLoadCurrentPlay(1);
                 fn_800B41BC(1, 0, 0);
             }
             FormationLineupApplyUser(PlayBookGetTeam(1)->mUnknown40, 1);
         } else {
-            lbl_803EA58C->mUnknown50 = 1;
-            lbl_803EA58C->mUnknown8[0] = word0;
-            lbl_803EA58C->mUnknown8[1] = word1;
-            lbl_803EA58C->mUnknown44[0] = test0 == 1;
-            lbl_803EA58C->mUnknown44[1] = test1 == 1;
-            lbl_803EA58C->mUnknown10[0] = value0;
-            lbl_803EA58C->mUnknown10[1] = value1;
-            lbl_803EA58C->mUnknown18[0].mUnknown0 = pPair0[0];
-            lbl_803EA58C->mUnknown18[0].mUnknown4 = pPair0[1];
-            lbl_803EA58C->mUnknown18[1].mUnknown0 = pPair1[0];
-            lbl_803EA58C->mUnknown18[1].mUnknown4 = pPair1[1];
+            _InGameScreens_pPlayCall->mUnknown50 = 1;
+            _InGameScreens_pPlayCall->mUnknown8[0] = word0;
+            _InGameScreens_pPlayCall->mUnknown8[1] = word1;
+            _InGameScreens_pPlayCall->mUnknown44[0] = test0 == 1;
+            _InGameScreens_pPlayCall->mUnknown44[1] = test1 == 1;
+            _InGameScreens_pPlayCall->mUnknown10[0] = value0;
+            _InGameScreens_pPlayCall->mUnknown10[1] = value1;
+            _InGameScreens_pPlayCall->mUnknown18[0].mUnknown0 = pPair0[0];
+            _InGameScreens_pPlayCall->mUnknown18[0].mUnknown4 = pPair0[1];
+            _InGameScreens_pPlayCall->mUnknown18[1].mUnknown0 = pPair1[0];
+            _InGameScreens_pPlayCall->mUnknown18[1].mUnknown4 = pPair1[1];
         }
-        lbl_803EA590->mUnknown1C[0] = 0;
-        lbl_803EA590->mUnknown1C[1] = 0;
+        _InGameScreens_pPlayArt->mUnknown1C[0] = 0;
+        _InGameScreens_pPlayArt->mUnknown1C[1] = 0;
         fn_800B4184(0);
     }
 }
 
 
-int fn_800577DC(int side, int a, int *pPos)
+int InGamePlayCallChoose(int side, int a, int *pPos)
 {
-    int ok = fn_80056A10(side, a, pPos[0], pPos[1]);
+    int ok = InGamePlayCallSelect(side, a, pPos[0], pPos[1]);
 
     if (ok) {
         int pad;
         if (side == 0) {
-            lbl_803EA58C->mUnknown42[0] = 1;
+            _InGameScreens_pPlayCall->mUnknown42[0] = 1;
             pad = fn_800B65D0(0);
         } else {
-            lbl_803EA58C->mUnknown42[1] = 1;
+            _InGameScreens_pPlayCall->mUnknown42[1] = 1;
             pad = fn_800B65D0(1);
         }
         if (pad != 0xFF) {
             unsigned char enabled = RumbleIsEnabled();
             RumbleEnable(1);
-            RumbleStart(pad, lbl_803EA599, lbl_803EA59A);
+            RumbleStart(pad, _InGameScreens_uPickRumbleStrength, _InGameScreens_uPickRumbleTime);
             RumbleEnable(enabled);
         }
     }
     return ok;
 }
 
-void fn_80057880(int team)
+void InGamePlayCallToggleFlip(int team)
 {
-    lbl_803EA58C->mUnknown4A[team] = !lbl_803EA58C->mUnknown4A[team];
+    _InGameScreens_pPlayCall->mUnknown4A[team] = !_InGameScreens_pPlayCall->mUnknown4A[team];
     PlayBookToggleFlip(team);
 }
 
-void fn_800578C0(int side, int a)
+void InGamePlayCallSetPage(int side, int a)
 {
     int team = 1;
 
     if (side == 0) {
         team = 0;
     }
-    if (lbl_803EA590->mUnknown1C[team]) {
-        lbl_803EA590->mUnknown0[team] = (a + a) * lbl_803EA58C->mUnknown4E;
-        lbl_803EA590->mUnknown2[team] = 0;
+    if (_InGameScreens_pPlayArt->mUnknown1C[team]) {
+        _InGameScreens_pPlayArt->mUnknown0[team] = (a + a) * _InGameScreens_pPlayCall->mUnknown4E;
+        _InGameScreens_pPlayArt->mUnknown2[team] = 0;
         if (fn_80178308() == team) {
-            if (lbl_803EA590->mUnknown0[team] + lbl_803EA58C->mUnknown4E * 2 >
-                lbl_803EA594->mUnknown40[team][lbl_803EA58C->mUnknown46[team]]) {
+            if (_InGameScreens_pPlayArt->mUnknown0[team] + _InGameScreens_pPlayCall->mUnknown4E * 2 >
+                _InGameScreens_pPlayLists->mUnknown40[team][_InGameScreens_pPlayCall->mUnknown46[team]]) {
                 PlayArtResetTeam(team);
             }
         } else {
-            if (lbl_803EA590->mUnknown0[team] + lbl_803EA58C->mUnknown4E * 2 >
-                lbl_803EA594->mUnknown48[team][lbl_803EA58C->mUnknown46[team]]) {
+            if (_InGameScreens_pPlayArt->mUnknown0[team] + _InGameScreens_pPlayCall->mUnknown4E * 2 >
+                _InGameScreens_pPlayLists->mUnknown48[team][_InGameScreens_pPlayCall->mUnknown46[team]]) {
                 PlayArtResetTeam(team);
             }
         }
@@ -1142,84 +1142,84 @@ void fn_800578C0(int side, int a)
 }
 
 
-void fn_800579C4(int side, int mode, int *pPages)
+void InGamePlayCallSetMenu(int side, int mode, int *pPages)
 {
     int team = 1;
 
     if (side == 0) {
         team = 0;
     }
-    if (team != lbl_803EA58C->mUnknown4F) {
-        lbl_803EA590->mUnknown1C[team] = 1;
+    if (team != _InGameScreens_pPlayCall->mUnknown4F) {
+        _InGameScreens_pPlayArt->mUnknown1C[team] = 1;
     }
     if (side == fn_80178308()) {
         switch (mode) {
         case 0:
-            lbl_803EA58C->mUnknown46[team] = mode;
+            _InGameScreens_pPlayCall->mUnknown46[team] = mode;
             if (team == fn_80178308()) {
-                *pPages = (lbl_803EA594->mUnknown40[team][0] + lbl_803EA58C->mUnknown4E * 2 - 1) / (lbl_803EA58C->mUnknown4E * 2);
+                *pPages = (_InGameScreens_pPlayLists->mUnknown40[team][0] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
             } else {
-                *pPages = (lbl_803EA594->mUnknown48[team][0] + lbl_803EA58C->mUnknown4E * 2 - 1) / (lbl_803EA58C->mUnknown4E * 2);
+                *pPages = (_InGameScreens_pPlayLists->mUnknown48[team][0] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
             }
             break;
         case 1:
-            lbl_803EA58C->mUnknown46[team] = mode;
-            *pPages = (lbl_803EA594->mUnknown40[team][1] + lbl_803EA58C->mUnknown4E * 2 - 1) / (lbl_803EA58C->mUnknown4E * 2);
+            _InGameScreens_pPlayCall->mUnknown46[team] = mode;
+            *pPages = (_InGameScreens_pPlayLists->mUnknown40[team][1] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
             break;
         case 2:
-            lbl_803EA58C->mUnknown46[team] = mode;
-            *pPages = (lbl_803EA594->mUnknown40[team][2] + lbl_803EA58C->mUnknown4E * 2 - 1) / (lbl_803EA58C->mUnknown4E * 2);
+            _InGameScreens_pPlayCall->mUnknown46[team] = mode;
+            *pPages = (_InGameScreens_pPlayLists->mUnknown40[team][2] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
             break;
         case 3:
-            lbl_803EA58C->mUnknown46[team] = mode;
-            *pPages = (lbl_803EA594->mUnknown40[team][3] + lbl_803EA58C->mUnknown4E * 2 - 1) / (lbl_803EA58C->mUnknown4E * 2);
+            _InGameScreens_pPlayCall->mUnknown46[team] = mode;
+            *pPages = (_InGameScreens_pPlayLists->mUnknown40[team][3] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
             break;
         case -1:
         default:
-            lbl_803EA590->mUnknown1C[team] = 0;
-            lbl_803EA58C->mUnknown46[team] = 5;
+            _InGameScreens_pPlayArt->mUnknown1C[team] = 0;
+            _InGameScreens_pPlayCall->mUnknown46[team] = 5;
             *pPages = 1;
             break;
         }
     } else {
         switch (mode) {
         case 0:
-            lbl_803EA58C->mUnknown46[team] = mode;
+            _InGameScreens_pPlayCall->mUnknown46[team] = mode;
             if (team == fn_80178308()) {
-                *pPages = (lbl_803EA594->mUnknown40[team][0] + lbl_803EA58C->mUnknown4E * 2 - 1) / (lbl_803EA58C->mUnknown4E * 2);
+                *pPages = (_InGameScreens_pPlayLists->mUnknown40[team][0] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
             } else {
-                *pPages = (lbl_803EA594->mUnknown48[team][0] + lbl_803EA58C->mUnknown4E * 2 - 1) / (lbl_803EA58C->mUnknown4E * 2);
+                *pPages = (_InGameScreens_pPlayLists->mUnknown48[team][0] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
             }
             break;
         case 4:
-            lbl_803EA58C->mUnknown46[team] = 1;
-            *pPages = (lbl_803EA594->mUnknown48[team][1] + lbl_803EA58C->mUnknown4E * 2 - 1) / (lbl_803EA58C->mUnknown4E * 2);
+            _InGameScreens_pPlayCall->mUnknown46[team] = 1;
+            *pPages = (_InGameScreens_pPlayLists->mUnknown48[team][1] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
             break;
         case 5:
-            lbl_803EA58C->mUnknown46[team] = 3;
-            *pPages = (lbl_803EA594->mUnknown48[team][3] + lbl_803EA58C->mUnknown4E * 2 - 1) / (lbl_803EA58C->mUnknown4E * 2);
+            _InGameScreens_pPlayCall->mUnknown46[team] = 3;
+            *pPages = (_InGameScreens_pPlayLists->mUnknown48[team][3] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
             break;
         case 6:
-            lbl_803EA58C->mUnknown46[team] = 2;
-            *pPages = (lbl_803EA594->mUnknown48[team][2] + lbl_803EA58C->mUnknown4E * 2 - 1) / (lbl_803EA58C->mUnknown4E * 2);
+            _InGameScreens_pPlayCall->mUnknown46[team] = 2;
+            *pPages = (_InGameScreens_pPlayLists->mUnknown48[team][2] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
             break;
         case -1:
         default:
-            lbl_803EA590->mUnknown1C[team] = 0;
-            lbl_803EA58C->mUnknown46[team] = 5;
+            _InGameScreens_pPlayArt->mUnknown1C[team] = 0;
+            _InGameScreens_pPlayCall->mUnknown46[team] = 5;
             *pPages = 1;
             break;
         }
     }
-    if (lbl_803EA590->mUnknown1C[team]) {
+    if (_InGameScreens_pPlayArt->mUnknown1C[team]) {
         PlayArtResetTeam(team);
-        lbl_803EA590->mUnknown0[team] = 0;
-        lbl_803EA590->mUnknown2[team] = 0;
+        _InGameScreens_pPlayArt->mUnknown0[team] = 0;
+        _InGameScreens_pPlayArt->mUnknown2[team] = 0;
     }
 }
 
 
-void fn_80057C58(unsigned char team, int index, int flag)
+void InGamePlayCallLoadList(unsigned char team, int index, int flag)
 {
     PlayBookFormation_t object;
     QueryCursor cursor;
@@ -1236,27 +1236,27 @@ void fn_80057C58(unsigned char team, int index, int flag)
     int tag = flag ? 0x31544250 : 0x31444250;
 
     PlayBookDbLoadFormation(tag, kind, 0, &object);
-    fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
+    TDbCompilePerformOp(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
                 &handle, index + 1, object.mUnknown0);
     unsigned short count = PlayBookDbCountPlays(tag, handle);
     if (flag) {
-        lbl_803EA594->mpUnknown0[team][index] = (signed char *)fn_801D2BB0(0x40, count, 0, 0);
-        pList = lbl_803EA594->mpUnknown0[team][index];
+        _InGameScreens_pPlayLists->mpUnknown0[team][index] = (signed char *)fn_801D2BB0(0x40, count, 0, 0);
+        pList = _InGameScreens_pPlayLists->mpUnknown0[team][index];
         table = 0x504F5355;
-        pFirst = &lbl_803EA594->mUnknown40[team][index];
-        pCount = &lbl_803EA594->mUnknown50[team][index];
+        pFirst = &_InGameScreens_pPlayLists->mUnknown40[team][index];
+        pCount = &_InGameScreens_pPlayLists->mUnknown50[team][index];
     } else {
-        lbl_803EA594->mpUnknown20[team][index] = (signed char *)fn_801D2BB0(0x40, count, 0, 0);
-        pList = lbl_803EA594->mpUnknown20[team][index];
+        _InGameScreens_pPlayLists->mpUnknown20[team][index] = (signed char *)fn_801D2BB0(0x40, count, 0, 0);
+        pList = _InGameScreens_pPlayLists->mpUnknown20[team][index];
         table = 0x50445355;
-        pFirst = &lbl_803EA594->mUnknown48[team][index];
-        pCount = &lbl_803EA594->mUnknown58[team][index];
+        pFirst = &_InGameScreens_pPlayLists->mUnknown48[team][index];
+        pCount = &_InGameScreens_pPlayLists->mUnknown58[team][index];
     }
-    if (fn_800B65A0(team) != 0xFF && fn_80056848()) {
+    if (fn_800B65A0(team) != 0xFF && InGamePlayCallUsesProfileOrder()) {
         int database;
         int id = UserProfileGetSelected(team);
         if (id != -1) {
-            database = fn_8022F488(fn_8022F358(id));
+            database = DbUserSelect(DbUserGetId(id));
         } else {
             database = 0x454D4147;
         }
@@ -1264,10 +1264,10 @@ void fn_80057C58(unsigned char team, int index, int flag)
         cursor.mUnknown4 = 0;
         cursor.mUnknown8 = -1;
         cursor.mUnknown12 = 0;
-        fn_801FCE10(0, "use \x8c declare \x8a cursor for select * from \x8c where ('XPSU' >= 0) order by 'XPSU' asc\n",
+        TDbCompilePerformOp(0, "use \x8c declare \x8a cursor for select * from \x8c where ('XPSU' >= 0) order by 'XPSU' asc\n",
                     database, &cursor, table);
         i = 0;
-        while (i < count && fn_801FCE10(0, "fetch from \x8a 'DPSU' into \x80\n", &cursor, &number) == 0) {
+        while (i < count && TDbCompilePerformOp(0, "fetch from \x8a 'DPSU' into \x80\n", &cursor, &number) == 0) {
             fn_801C2E18(text, "%02d", number);
             for (unsigned int j = 0; j < count; j++) {
                 PlayBookDbLoadPlay(tag, handle, j, &record);
@@ -1279,7 +1279,7 @@ void fn_80057C58(unsigned char team, int index, int flag)
             }
         }
         if (cursor.mUnknown0) {
-            fn_801FCFA0(&cursor);
+            TDbSQLDestroyCursor(&cursor);
         }
     } else {
         for (i = 0; i < count; i++) {
@@ -1293,13 +1293,13 @@ void fn_80057C58(unsigned char team, int index, int flag)
     }
 }
 
-int fn_80057F20(void)
+int InGamePlayCallGetDefault(void)
 {
     return -1;
 }
 
 
-void fn_80057F28(void)
+void InGamePlayCallCreate(void)
 {
     unsigned char i;
     unsigned char team;
@@ -1310,143 +1310,143 @@ void fn_80057F28(void)
     case 1:
         return;
     }
-    lbl_803EA58C = (State_803EA58C *)fn_801D2BB0(0x40, sizeof(State_803EA58C), 0, 0);
-    memset(lbl_803EA58C, 0, sizeof(State_803EA58C));
+    _InGameScreens_pPlayCall = (State_803EA58C *)fn_801D2BB0(0x40, sizeof(State_803EA58C), 0, 0);
+    memset(_InGameScreens_pPlayCall, 0, sizeof(State_803EA58C));
     if (fn_800BA6F8() == 0 &&
         (GameModeTypeIsSpecial() != 0 || fn_800B65A0(0) == 0xFF || fn_800B65A0(1) == 0xFF || fn_801486A0() == 3)) {
-        lbl_803EA58C->mUnknown4E = 4;
+        _InGameScreens_pPlayCall->mUnknown4E = 4;
         if (GameModeTypeIsSpecial()) {
-            if (fn_80057F20()) {
-                lbl_803EA58C->mUnknown4F = 1;
+            if (InGamePlayCallGetDefault()) {
+                _InGameScreens_pPlayCall->mUnknown4F = 1;
             } else {
-                lbl_803EA58C->mUnknown4F = 0;
+                _InGameScreens_pPlayCall->mUnknown4F = 0;
             }
         } else if (fn_800B65A0(0) != 0xFF) {
-            lbl_803EA58C->mUnknown4F = 1;
+            _InGameScreens_pPlayCall->mUnknown4F = 1;
         } else {
-            lbl_803EA58C->mUnknown4F = 0;
+            _InGameScreens_pPlayCall->mUnknown4F = 0;
         }
     } else {
-        lbl_803EA58C->mUnknown4E = 2;
-        lbl_803EA58C->mUnknown4F = 2;
+        _InGameScreens_pPlayCall->mUnknown4E = 2;
+        _InGameScreens_pPlayCall->mUnknown4F = 2;
     }
-    lbl_803EA58C->mpEntries[0] =
-        (Entry_803EA58C *)fn_801D2BB0(0x40, lbl_803EA58C->mUnknown4E * 2 * sizeof(Entry_803EA58C), 0, 0);
-    lbl_803EA58C->mpEntries[1] =
-        (Entry_803EA58C *)fn_801D2BB0(0x40, lbl_803EA58C->mUnknown4E * 2 * sizeof(Entry_803EA58C), 0, 0);
-    lbl_803EA58C->mpTexts[0] = (char **)fn_801D2BB0(0x40, lbl_803EA58C->mUnknown4E * 2 * sizeof(char *), 0, 0);
-    for (i = 0; i < lbl_803EA58C->mUnknown4E * 2; i++) {
-        lbl_803EA58C->mpTexts[0][i] = (char *)fn_801D2BB0(0x40, 25, 0, 0);
+    _InGameScreens_pPlayCall->mpEntries[0] =
+        (Entry_803EA58C *)fn_801D2BB0(0x40, _InGameScreens_pPlayCall->mUnknown4E * 2 * sizeof(Entry_803EA58C), 0, 0);
+    _InGameScreens_pPlayCall->mpEntries[1] =
+        (Entry_803EA58C *)fn_801D2BB0(0x40, _InGameScreens_pPlayCall->mUnknown4E * 2 * sizeof(Entry_803EA58C), 0, 0);
+    _InGameScreens_pPlayCall->mpTexts[0] = (char **)fn_801D2BB0(0x40, _InGameScreens_pPlayCall->mUnknown4E * 2 * sizeof(char *), 0, 0);
+    for (i = 0; i < _InGameScreens_pPlayCall->mUnknown4E * 2; i++) {
+        _InGameScreens_pPlayCall->mpTexts[0][i] = (char *)fn_801D2BB0(0x40, 25, 0, 0);
     }
-    lbl_803EA58C->mpTexts[1] = (char **)fn_801D2BB0(0x40, lbl_803EA58C->mUnknown4E * 2 * sizeof(char *), 0, 0);
-    for (i = 0; i < lbl_803EA58C->mUnknown4E * 2; i++) {
-        lbl_803EA58C->mpTexts[1][i] = (char *)fn_801D2BB0(0x40, 25, 0, 0);
+    _InGameScreens_pPlayCall->mpTexts[1] = (char **)fn_801D2BB0(0x40, _InGameScreens_pPlayCall->mUnknown4E * 2 * sizeof(char *), 0, 0);
+    for (i = 0; i < _InGameScreens_pPlayCall->mUnknown4E * 2; i++) {
+        _InGameScreens_pPlayCall->mpTexts[1][i] = (char *)fn_801D2BB0(0x40, 25, 0, 0);
     }
-    lbl_803EA58C->mUnknown46[0] = 5;
-    lbl_803EA58C->mUnknown46[1] = 5;
-    lbl_803EA58C->mUnknown48[0] = 5;
-    lbl_803EA58C->mUnknown48[1] = 5;
-    lbl_803EA58C->mUnknown8[0] = 0;
-    lbl_803EA58C->mUnknown8[1] = 0;
-    lbl_803EA590 = (State_803EA590 *)fn_801D2BB0(0x40, sizeof(State_803EA590), 0, 0);
-    memset(lbl_803EA590, 0, sizeof(State_803EA590));
-    lbl_803EA590->mUnknown1E = 0;
-    lbl_803EA590->mpSlots[0] =
-        (Slot_803EA590 *)fn_801D2BB0(0x40, lbl_803EA58C->mUnknown4E * 2 * sizeof(Slot_803EA590), 0, 0);
-    lbl_803EA590->mpSlots[1] =
-        (Slot_803EA590 *)fn_801D2BB0(0x40, lbl_803EA58C->mUnknown4E * 2 * sizeof(Slot_803EA590), 0, 0);
-    lbl_803EA594 = (Table_803EA594 *)fn_801D2BB0(0x40, sizeof(Table_803EA594), 0, 0);
+    _InGameScreens_pPlayCall->mUnknown46[0] = 5;
+    _InGameScreens_pPlayCall->mUnknown46[1] = 5;
+    _InGameScreens_pPlayCall->mUnknown48[0] = 5;
+    _InGameScreens_pPlayCall->mUnknown48[1] = 5;
+    _InGameScreens_pPlayCall->mUnknown8[0] = 0;
+    _InGameScreens_pPlayCall->mUnknown8[1] = 0;
+    _InGameScreens_pPlayArt = (State_803EA590 *)fn_801D2BB0(0x40, sizeof(State_803EA590), 0, 0);
+    memset(_InGameScreens_pPlayArt, 0, sizeof(State_803EA590));
+    _InGameScreens_pPlayArt->mUnknown1E = 0;
+    _InGameScreens_pPlayArt->mpSlots[0] =
+        (Slot_803EA590 *)fn_801D2BB0(0x40, _InGameScreens_pPlayCall->mUnknown4E * 2 * sizeof(Slot_803EA590), 0, 0);
+    _InGameScreens_pPlayArt->mpSlots[1] =
+        (Slot_803EA590 *)fn_801D2BB0(0x40, _InGameScreens_pPlayCall->mUnknown4E * 2 * sizeof(Slot_803EA590), 0, 0);
+    _InGameScreens_pPlayLists = (Table_803EA594 *)fn_801D2BB0(0x40, sizeof(Table_803EA594), 0, 0);
     for (team = 0; team <= 1; team++) {
         for (index = 0; index <= 3; index++) {
-            lbl_803EA594->mpUnknown20[team][index] = 0;
-            lbl_803EA594->mpUnknown0[team][index] = 0;
-            lbl_803EA594->mUnknown48[team][index] = 0;
-            lbl_803EA594->mUnknown40[team][index] = 0;
+            _InGameScreens_pPlayLists->mpUnknown20[team][index] = 0;
+            _InGameScreens_pPlayLists->mpUnknown0[team][index] = 0;
+            _InGameScreens_pPlayLists->mUnknown48[team][index] = 0;
+            _InGameScreens_pPlayLists->mUnknown40[team][index] = 0;
         }
     }
     for (team = 0; team <= 1; team++) {
         for (index = 0; index <= 3; index++) {
-            fn_80057C58(team, index, 1);
-            fn_80057C58(team ^ 1, index, 0);
+            InGamePlayCallLoadList(team, index, 1);
+            InGamePlayCallLoadList(team ^ 1, index, 0);
         }
     }
 }
 
 
-void fn_800582D0(void)
+void InGamePlayCallDestroy(void)
 {
     unsigned char i;
     unsigned char team;
     unsigned char index;
 
-    lbl_803EA598 = 0;
-    if (lbl_803EA58C) {
+    _InGameScreens_bPlayClockStarted = 0;
+    if (_InGameScreens_pPlayCall) {
         for (team = 0; team <= 1; team++) {
             for (index = 0; index <= 3; index++) {
-                if (lbl_803EA594->mpUnknown20[team][index]) {
-                    fn_801D2BD0(lbl_803EA594->mpUnknown20[team][index]);
+                if (_InGameScreens_pPlayLists->mpUnknown20[team][index]) {
+                    fn_801D2BD0(_InGameScreens_pPlayLists->mpUnknown20[team][index]);
                 }
-                if (lbl_803EA594->mpUnknown0[team][index]) {
-                    fn_801D2BD0(lbl_803EA594->mpUnknown0[team][index]);
+                if (_InGameScreens_pPlayLists->mpUnknown0[team][index]) {
+                    fn_801D2BD0(_InGameScreens_pPlayLists->mpUnknown0[team][index]);
                 }
             }
         }
-        fn_801D2BD0(lbl_803EA594);
-        lbl_803EA594 = 0;
-        fn_801D2BD0(lbl_803EA590->mpSlots[0]);
-        fn_801D2BD0(lbl_803EA590->mpSlots[1]);
-        fn_801D2BD0(lbl_803EA590);
-        lbl_803EA590 = 0;
-        fn_801D2BD0(lbl_803EA58C->mpEntries[0]);
-        fn_801D2BD0(lbl_803EA58C->mpEntries[1]);
-        for (i = 0; i < lbl_803EA58C->mUnknown4E * 2; i++) {
-            fn_801D2BD0(lbl_803EA58C->mpTexts[0][i]);
+        fn_801D2BD0(_InGameScreens_pPlayLists);
+        _InGameScreens_pPlayLists = 0;
+        fn_801D2BD0(_InGameScreens_pPlayArt->mpSlots[0]);
+        fn_801D2BD0(_InGameScreens_pPlayArt->mpSlots[1]);
+        fn_801D2BD0(_InGameScreens_pPlayArt);
+        _InGameScreens_pPlayArt = 0;
+        fn_801D2BD0(_InGameScreens_pPlayCall->mpEntries[0]);
+        fn_801D2BD0(_InGameScreens_pPlayCall->mpEntries[1]);
+        for (i = 0; i < _InGameScreens_pPlayCall->mUnknown4E * 2; i++) {
+            fn_801D2BD0(_InGameScreens_pPlayCall->mpTexts[0][i]);
         }
-        fn_801D2BD0(lbl_803EA58C->mpTexts[0]);
-        for (i = 0; i < lbl_803EA58C->mUnknown4E * 2; i++) {
-            fn_801D2BD0(lbl_803EA58C->mpTexts[1][i]);
+        fn_801D2BD0(_InGameScreens_pPlayCall->mpTexts[0]);
+        for (i = 0; i < _InGameScreens_pPlayCall->mUnknown4E * 2; i++) {
+            fn_801D2BD0(_InGameScreens_pPlayCall->mpTexts[1][i]);
         }
-        fn_801D2BD0(lbl_803EA58C->mpTexts[1]);
-        fn_801D2BD0(lbl_803EA58C);
-        lbl_803EA58C = 0;
+        fn_801D2BD0(_InGameScreens_pPlayCall->mpTexts[1]);
+        fn_801D2BD0(_InGameScreens_pPlayCall);
+        _InGameScreens_pPlayCall = 0;
     }
 }
 
-int fn_8005845C(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
+int InGamePlayCallMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000002:
-        fn_8005740C(pArgs[0].i, (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4), pArgs[2].i, pArgs[3].i, pArgs[4].i,
+        InGamePlayCallClose(pArgs[0].i, (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4), pArgs[2].i, pArgs[3].i, pArgs[4].i,
                     (int *)(pArgs[5].i + (*pArgs[5].pi + 1) * 4), pArgs[6].i, pArgs[7].i);
         break;
     case 0x80000003:
-        *pResult = fn_800577DC(pArgs[0].i, pArgs[1].i, (int *)(pArgs[2].i + (*pArgs[2].pi + 1) * 4));
+        *pResult = InGamePlayCallChoose(pArgs[0].i, pArgs[1].i, (int *)(pArgs[2].i + (*pArgs[2].pi + 1) * 4));
         break;
     case 0x80000004:
-        fn_80057880(pArgs[0].i);
+        InGamePlayCallToggleFlip(pArgs[0].i);
         break;
     case 0x80000005:
-        fn_800578C0(pArgs[0].i, pArgs[1].i);
+        InGamePlayCallSetPage(pArgs[0].i, pArgs[1].i);
         break;
     case 0x80000001:
-        fn_800570A4(pArgs[0].pi, (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4), pArgs[2].pi, pArgs[3].pi,
+        InGamePlayCallOpen(pArgs[0].pi, (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4), pArgs[2].pi, pArgs[3].pi,
                     pArgs[4].pi, pArgs[5].pi, pArgs[6].pi);
         break;
     case 0x80000008:
         *pResult = fn_800BA6F8();
         break;
     case 0x80000006:
-        fn_800579C4(pArgs[0].i, pArgs[1].i, pArgs[2].pi);
+        InGamePlayCallSetMenu(pArgs[0].i, pArgs[1].i, pArgs[2].pi);
         break;
     case 0x80000007:
-        fn_8005697C(pArgs[0].i, pArgs[1].pi, pArgs[2].pi, pArgs[3].pi, pArgs[4].pi,
+        InGamePlayCallGetSideInfo(pArgs[0].i, pArgs[1].pi, pArgs[2].pi, pArgs[3].pi, pArgs[4].pi,
                     (int *)(pArgs[5].i + (*pArgs[5].pi + 1) * 4));
         break;
     case 0x80000009:
-        *pResult = fn_80057F20();
+        *pResult = InGamePlayCallGetDefault();
         break;
     case 0x8000000A:
-        fn_800588F8(pArgs[0].i, pArgs[1].i);
+        InGamePlayCallSetMode(pArgs[0].i, pArgs[1].i);
         break;
     default:
         return 0;
@@ -1454,34 +1454,34 @@ int fn_8005845C(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
     return 1;
 }
 
-int fn_80058688(void)
+int InGamePlayCallStreamSlots(void)
 {
     int result = 0;
 
-    if (lbl_803EA590) {
+    if (_InGameScreens_pPlayArt) {
         for (unsigned char pass = 0; pass < 1; pass++) {
-            unsigned char team = lbl_803EA590->mUnknown1E;
+            unsigned char team = _InGameScreens_pPlayArt->mUnknown1E;
             unsigned char other = !team;
-            if (lbl_803EA590->mUnknown1C[team]) {
-                if (lbl_803EA590->mUnknown2[team] < lbl_803EA58C->mUnknown4E * 2) {
+            if (_InGameScreens_pPlayArt->mUnknown1C[team]) {
+                if (_InGameScreens_pPlayArt->mUnknown2[team] < _InGameScreens_pPlayCall->mUnknown4E * 2) {
                     result = 1;
-                    fn_80056ED8(team, lbl_803EA590->mUnknown0[team], lbl_803EA590->mUnknown2[team]);
-                    lbl_803EA590->mUnknown2[team]++;
+                    InGamePlayCallShowSlot(team, _InGameScreens_pPlayArt->mUnknown0[team], _InGameScreens_pPlayArt->mUnknown2[team]);
+                    _InGameScreens_pPlayArt->mUnknown2[team]++;
                 }
-            } else if (lbl_803EA590->mUnknown1C[other]) {
-                if (lbl_803EA590->mUnknown2[other] < lbl_803EA58C->mUnknown4E * 2) {
+            } else if (_InGameScreens_pPlayArt->mUnknown1C[other]) {
+                if (_InGameScreens_pPlayArt->mUnknown2[other] < _InGameScreens_pPlayCall->mUnknown4E * 2) {
                     result = 1;
-                    fn_80056ED8(other, lbl_803EA590->mUnknown0[other], lbl_803EA590->mUnknown2[other]);
-                    lbl_803EA590->mUnknown2[other]++;
+                    InGamePlayCallShowSlot(other, _InGameScreens_pPlayArt->mUnknown0[other], _InGameScreens_pPlayArt->mUnknown2[other]);
+                    _InGameScreens_pPlayArt->mUnknown2[other]++;
                 }
             }
-            lbl_803EA590->mUnknown1E = !lbl_803EA590->mUnknown1E;
+            _InGameScreens_pPlayArt->mUnknown1E = !_InGameScreens_pPlayArt->mUnknown1E;
         }
     }
     return result;
 }
 
-void fn_80058798(char *pDest, int size, int number, int flag)
+void InGameFindPlayName(char *pDest, int size, int number, int flag)
 {
     PlayBookFormation_t object;
     PlayBookPlay_t record;
@@ -1494,7 +1494,7 @@ void fn_80058798(char *pDest, int size, int number, int flag)
     PlayBookDbLoadFormation(tag, kind, 0, &object);
     for (unsigned char index = 0; index <= 3; index++) {
         unsigned int j = 0;
-        fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
+        TDbCompilePerformOp(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
                     &handle, index + 1, object.mUnknown0);
         unsigned short count = PlayBookDbCountPlays(tag, handle);
         fn_801C2E18(text, "%02d", number);
@@ -1516,14 +1516,14 @@ void fn_80058798(char *pDest, int size, int number, int flag)
     }
 }
 
-void fn_800588E0(void)
+void InGamePlayCallClearSaved(void)
 {
-    if (lbl_803EA58C) {
-        lbl_803EA58C->mUnknown50 = 0;
+    if (_InGameScreens_pPlayCall) {
+        _InGameScreens_pPlayCall->mUnknown50 = 0;
     }
 }
 
-void fn_800588F8(int a, int b)
+void InGamePlayCallSetMode(int a, int b)
 {
     if (b == 7) {
         fn_80179144(1);
@@ -1532,7 +1532,7 @@ void fn_800588F8(int a, int b)
     }
 }
 
-int fn_80058930(int *pA, int *pB)
+int InGamePauseGetModeFlags(int *pA, int *pB)
 {
     int mode = fn_801486A0();
     int active = 1;
@@ -1554,7 +1554,7 @@ int fn_80058930(int *pA, int *pB)
 }
 
 
-void fn_800589D8(int *pCount, char *pTitle, int titleSize, char *pLine1, int size1, char *pLine2, int size2,
+void InGamePauseGetRules(int *pCount, char *pTitle, int titleSize, char *pLine1, int size1, char *pLine2, int size2,
                  char *pLine3, int size3, char *pLine4, int size4, char *pLine5, int size5, char *pLine6, int size6,
                  char *pLine7, int size7, char *pLine8, int size8)
 {
@@ -1609,11 +1609,11 @@ void fn_800589D8(int *pCount, char *pTitle, int titleSize, char *pLine1, int siz
 }
 
 
-void fn_80058CA0(char *pText, int size, int *pActive, int *pSide)
+void InGamePauseOpen(char *pText, int size, int *pActive, int *pSide)
 {
-    lbl_803EA59C = 0;
-    lbl_803EA59D = 0;
-    lbl_803EA59E = 0;
+    _InGameScreens_bQuitChosen = 0;
+    _InGameScreens_bRestartChosen = 0;
+    _InGameScreens_bForfeitChosen = 0;
     int pad = PauseGetValue();
     int value = 0;
     fn_8021D7B8(gUISMainInfo, 0x8000000E, 1, &value);
@@ -1642,10 +1642,10 @@ void fn_80058CA0(char *pText, int size, int *pActive, int *pSide)
     }
 }
 
-void fn_80058DA0(void)
+void InGamePauseClose(void)
 {
     PauseRequestClose();
-    if (lbl_803EA59C) {
+    if (_InGameScreens_bQuitChosen) {
         if (GameModeTypeGet() == 6) {
             ChallengeRecordResult(1, 7);
         }
@@ -1664,22 +1664,22 @@ void fn_80058DA0(void)
     }
 }
 
-void fn_80058E64(void)
+void InGamePauseIgnore(void)
 {
 }
 
-void fn_80058E68(void)
+void InGamePauseQuit(void)
 {
-    lbl_803EA59C = 1;
+    _InGameScreens_bQuitChosen = 1;
     PassIconsHide();
     PassIconsClearReplayFlag();
     AudmonEventPost(0x72, 0);
     SndgMusicFadeOut(250, 0);
 }
 
-void fn_80058EAC(void)
+void InGamePauseRestart(void)
 {
-    lbl_803EA59D = 1;
+    _InGameScreens_bRestartChosen = 1;
     fn_8009D8CC(4);
     fn_8009D964(4, 0);
     fn_800AE988();
@@ -1687,12 +1687,12 @@ void fn_80058EAC(void)
     PauseBlock();
 }
 
-int fn_80058EF4(int a)
+int InGamePauseGetOption(int a)
 {
     return 0;
 }
 
-void fn_80058EFC(int *pCount, MenuText_t *pName, MenuText_t *pText0, MenuText_t *pText1,
+void InGamePauseGetChallengeGoals(int *pCount, MenuText_t *pName, MenuText_t *pText0, MenuText_t *pText1,
                  MenuText_t *pText2, MenuText_t *pText3, int *pResults, MenuArg_t team)
 {
     MenuText_t *pTeam = team.pParams;
@@ -1711,58 +1711,58 @@ void fn_80058EFC(int *pCount, MenuText_t *pName, MenuText_t *pText0, MenuText_t 
     ChallengeSendGoalList(0);
 }
 
-void fn_80058FDC(int a)
+void InGamePauseForfeit(int a)
 {
-    lbl_803EA59E = 1;
+    _InGameScreens_bForfeitChosen = 1;
     fn_80178B1C(a);
 }
 
-unsigned char fn_80059004(void)
+unsigned char InGamePauseIsRestart(void)
 {
-    return lbl_803EA59D;
+    return _InGameScreens_bRestartChosen;
 }
 
-unsigned char fn_8005900C(void)
+unsigned char InGamePauseIsForfeit(void)
 {
-    return lbl_803EA59E;
+    return _InGameScreens_bForfeitChosen;
 }
 
-void fn_80059014(void)
+void InGamePauseClearRestart(void)
 {
-    lbl_803EA59D = 0;
+    _InGameScreens_bRestartChosen = 0;
 }
 
-void fn_80059020(void)
+void InGamePauseClearForfeit(void)
 {
-    lbl_803EA59E = 0;
+    _InGameScreens_bForfeitChosen = 0;
 }
 
-int fn_8005902C(void)
+int InGamePauseIsLocked(void)
 {
     return 0;
 }
 
 
-int fn_80059034(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
+int InGamePauseMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_80058CA0(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength, pArgs[1].pi, pArgs[2].pi);
+        InGamePauseOpen(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength, pArgs[1].pi, pArgs[2].pi);
         break;
     case 0x80000002:
-        fn_80058DA0();
+        InGamePauseClose();
         break;
     case 0x80000003:
-        fn_80058E64();
+        InGamePauseIgnore();
         break;
     case 0x80000004:
-        fn_80058E68();
+        InGamePauseQuit();
         break;
     case 0x80000008:
-        fn_80058EAC();
+        InGamePauseRestart();
         break;
     case 0x80000009:
-        fn_80058FDC(1);
+        InGamePauseForfeit(1);
         break;
     case 0x80000015:
         PauseNullHook(1);
@@ -1780,7 +1780,7 @@ int fn_80059034(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
         DepthChartRevertSide(pArgs[0].i);
         break;
     case 0x80000012:
-        *pResult = fn_80058EF4(pArgs[0].i);
+        *pResult = InGamePauseGetOption(pArgs[0].i);
         break;
     case 0x8000000E:
         *pResult = 1;
@@ -1795,7 +1795,7 @@ int fn_80059034(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
         *pResult = ChallengeIsActive();
         break;
     case 0x80000005:
-        fn_80058EFC(pArgs[0].pi, pArgs[1].pParams, pArgs[2].pParams, pArgs[3].pParams, pArgs[4].pParams,
+        InGamePauseGetChallengeGoals(pArgs[0].pi, pArgs[1].pParams, pArgs[2].pParams, pArgs[3].pParams, pArgs[4].pParams,
                     pArgs[5].pParams, (int *)(pArgs[6].i + (*pArgs[6].pi + 1) * 4), pArgs[7]);
         break;
     case 0x8000000D:
@@ -1803,10 +1803,10 @@ int fn_80059034(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
         *pResult = 0;
         break;
     case 0x80000017:
-        *pResult = fn_80058930(pArgs[0].pi, pArgs[1].pi);
+        *pResult = InGamePauseGetModeFlags(pArgs[0].pi, pArgs[1].pi);
         break;
     case 0x80000018:
-        fn_800589D8(pArgs[0].pi, pArgs[1].pParams->mpText, pArgs[1].pParams->mLength, pArgs[2].pParams->mpText,
+        InGamePauseGetRules(pArgs[0].pi, pArgs[1].pParams->mpText, pArgs[1].pParams->mLength, pArgs[2].pParams->mpText,
                     pArgs[2].pParams->mLength, pArgs[3].pParams->mpText, pArgs[3].pParams->mLength,
                     pArgs[4].pParams->mpText, pArgs[4].pParams->mLength, pArgs[5].pParams->mpText,
                     pArgs[5].pParams->mLength, pArgs[6].pParams->mpText, pArgs[6].pParams->mLength,
@@ -1825,9 +1825,9 @@ int fn_80059034(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
     }
     case 0x8000001B:
         if (fn_800AD9B4() == 4) {
-            fn_8002C9A8(lbl_803EA368, 3, 0);
+            ReplayHandleCommand(gpReplay, 3, 0);
         } else {
-            *pResult = ReplayIsHalted(lbl_803EA368);
+            *pResult = ReplayIsHalted(gpReplay);
         }
         break;
     case 0x8000001C:
@@ -1853,7 +1853,7 @@ int fn_80059034(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 }
 
 
-int fn_800594F4(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
+int InGameOptionsMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:
@@ -1880,57 +1880,57 @@ int fn_800594F4(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
     return 1;
 }
 
-int fn_80059664(int group, unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
+int InGameScreensDispatch(int group, unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (group) {
     case 2:
-        return fn_8005845C(id, pArgs, unused, pResult);
+        return InGamePlayCallMsg(id, pArgs, unused, pResult);
     case 0:
-        return fn_80059034(id, pArgs, unused, pResult);
+        return InGamePauseMsg(id, pArgs, unused, pResult);
     case 3:
-        return fn_8005A2B8(id, pArgs, unused, pResult);
+        return InGameHudMsg(id, pArgs, unused, pResult);
     case 0x10:
-        return fn_8005A630(id, pArgs, unused, pResult);
+        return InGameClockMsg(id, pArgs, unused, pResult);
     case 5:
-        return fn_80059A24(id, pArgs, unused, pResult);
+        return InGameScoreMsg(id, pArgs, unused, pResult);
     case 6:
         return GameStatsMsg(id, (GameStatsArgs_t *)pArgs, unused, pResult);
     case 7:
-        return fn_8005B2BC(id, pArgs, unused, pResult);
+        return InGameEndGameMsg(id, pArgs, unused, pResult);
     case 0xA:
-        return fn_8005BCA8(id, pArgs, unused, pResult);
+        return InGameRewardMsg(id, pArgs, unused, pResult);
     case 8:
-        return fn_8005B4B0(id, pArgs, unused, pResult);
+        return InGameVenueMsg(id, pArgs, unused, pResult);
     case 0xB:
-        return fn_800594F4(id, pArgs, unused, pResult);
+        return InGameOptionsMsg(id, pArgs, unused, pResult);
     case 0xF:
-        return fn_8005C0C0(id, pArgs, unused, pResult);
+        return InGameResetMsg(id, pArgs, unused, pResult);
     case 0x13:
-        return fn_800566F0(id, pArgs, unused, pResult);
+        return InGameJumpBallMsg(id, pArgs, unused, pResult);
     case 0x14:
-        return fn_8005C338(id, pArgs, unused, pResult);
+        return InGamePlayerStatsMsg(id, pArgs, unused, pResult);
     case 0x12:
-        return fn_8005C6EC(id, pArgs, unused, pResult);
+        return InGameTimedStatsMsg(id, pArgs, unused, pResult);
     case 0x11:
-        return fn_8005C994(id, pArgs, unused, pResult);
+        return InGameOffenseTotalsMsg(id, pArgs, unused, pResult);
     case 0x18:
-        return fn_8005CC50(id, pArgs, unused, pResult);
+        return InGameDefenseTotalsMsg(id, pArgs, unused, pResult);
     case 0x19:
-        return fn_8005D1E4(id, pArgs, unused, pResult);
+        return InGameScoringSummaryMsg(id, pArgs, unused, pResult);
     case 0x16:
-        return fn_8005D2D0(id, pArgs, unused, pResult);
+        return InGameLegendUnlockMsg(id, pArgs, unused, pResult);
     case 9:
-        return fn_8005BFDC(9, id, pArgs, unused, pResult);
+        return InGameOverlayMsg(9, id, pArgs, unused, pResult);
     case 0xC:
-        return fn_8005BFDC(0xC, id, pArgs, unused, pResult);
+        return InGameOverlayMsg(0xC, id, pArgs, unused, pResult);
     case 0x17:
-        return fn_8005BFDC(0x17, id, pArgs, unused, pResult);
+        return InGameOverlayMsg(0x17, id, pArgs, unused, pResult);
     }
     return 0;
 }
 
 
-int fn_8005993C(int *pId1, int *pId0, char *pName1, int size1, char *pName0, int size0,
+int InGameGetScoreInfo(int *pId1, int *pId0, char *pName1, int size1, char *pName0, int size0,
                 int *pValue1, int *pValue0)
 {
     int ok = 1;
@@ -1957,17 +1957,17 @@ int fn_8005993C(int *pId1, int *pId0, char *pName1, int size1, char *pName0, int
     return ok;
 }
 
-int fn_80059A24(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
+int InGameScoreMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     if (id == 0x80000001) {
-        *pResult = fn_8005993C(pArgs[0].pi, pArgs[1].pi, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength,
+        *pResult = InGameGetScoreInfo(pArgs[0].pi, pArgs[1].pi, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength,
                                pArgs[3].pParams->mpText, pArgs[3].pParams->mLength, pArgs[4].pi, pArgs[5].pi);
         return 1;
     }
     return 0;
 }
 
-void fn_80059A9C(int *pList)
+void InGameGetPadOrder(int *pList)
 {
     unsigned int i;
     int high = 3;
@@ -2003,15 +2003,15 @@ struct Stats_8005A7EC {
 };
 struct Weight_8005A8D0 {int mTag;int mColumn;float mWeight;};
 struct Category_8005AB04 {char mName[20];unsigned char mEnabled;unsigned int mCount;int mIndices[2];};
-Object_8008044C lbl_80309F98;
-extern Stats_8005A7EC lbl_80309FC4[2];
-static const Weight_8005A8D0 lbl_8028EAE8[12] = {
+Object_8008044C _InGameScreens_LeaderCursor;
+static Stats_8005A7EC _InGameScreens_aLeaderStats[2];
+static const Weight_8005A8D0 _InGameScreens_aLeaderStatWeights[12] = {
     {0x464F4750, 0x64746167, 6.0f}, {0x464F4750, 0x64747567, 6.0f}, {0x464F4750, 0x64746367, 6.0f},
     {0x464F4750, 0x6E696167, 0.0f}, {0x464F4750, 0x75667567, 0.0f}, {0x45444750, 0x6E697367, 6.0f},
     {0x45444750, 0x66666C67, 3.0f}, {0x45444750, 0x72666C67, 3.0f}, {0x45444750, 0x6B736C67, 3.0f},
     {0x45444750, 0x61746467, 1.0f}, {0x45444750, 0x74697367, 6.0f}, {0x45444750, 0x74666C67, 6.0f},
 };
-static const Category_8005AB04 lbl_8028EB78[11] = {
+static const Category_8005AB04 _InGameScreens_aLeaderCategories[11] = {
     {"Tackles", 1, 1, {9, 13}},
     {"Rushing TDs", 1, 1, {1, 13}},
     {"Receiving TDs", 1, 1, {2, 13}},
@@ -2024,8 +2024,8 @@ static const Category_8005AB04 lbl_8028EB78[11] = {
     {"Thrown INTs", 0, 1, {3, 13}},
     {"Fumbles", 0, 1, {4, 13}},
 };
-extern int lbl_802D4D0C[4];
-extern const char *lbl_802D4D1C[9];
+extern int _InGameScreens_aHudOffsets[4];
+extern const char *_InGameScreens_apRewardFormats[9];
 extern const float lbl_803ED6A4,lbl_803ED6A8;
 void fn_800A7B5C(void);
 void fn_800B823C(int side);
@@ -2054,7 +2054,7 @@ void fn_800C1E50(void);
 int ChallengeIsPairingGame(void);
 int ChallengeEvaluateGoals(void);
 int fn_80178AE0(void);
-void *fn_8022F4BC(void);
+void *DbUserGetCurrent(void);
 void *UserProfileFindIndex(void *p);
 int GauntletScreenGetSelection(void);
 void GauntletMarkTeamBeaten(void *p,int id);
@@ -2066,9 +2066,9 @@ void EnvSelect(int id);
 void EnvGetUIName(char *pText,int size);
 void EnvGetEVLO(char *pText,int size);
 void EnvRelease(void);
-void fn_80083E1C(DbCursor *pObject,TeamQuery *pQuery);
-int fn_8008406C(DbCursor *pObject,int id,int *pResult);
-int fn_80083FBC(DbCursor *pObject);
+void TeamDbOpenQuery(DbCursor *pObject,TeamQuery *pQuery);
+int TeamDbSeekTmur(DbCursor *pObject,int id,int *pResult);
+int TeamDbGetId(DbCursor *pObject);
 void ChalFormatGearReward(char *pText,int size,int id);
 void ChalSetDevPoints(int value);
 int ChalGetDevPoints(void);
@@ -2083,45 +2083,45 @@ int ChalHasMedalGoal(Challenge_t *pRecord);
 int ChallengeBonusGet(void);
 void ChalCloseCursors(void);
 
-void fn_80059B64(int *pList, int *pValues, MenuArg_t *pNames, int *pScores, int *pZero, int *pModes, int *pState, int *pFlags, int *pEnabled, int *pLast);
-void fn_80059E24(float *pValues);
-void fn_80059F54(int *pA, int *pB, int *pC, int *pD);
-void fn_80059F80(char *pText, int *pRed, int *pGreen, int *pBlue);
-void fn_8005A1C0(unsigned int team, int *pEnabled, MenuText_t **pNames, int *pMode, MenuText_t **ppText);
-int fn_8005A2B8(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005A630(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8005A794(int tag, int column, int id);
-void fn_8005A7EC(int team);
-int fn_8005A860(int team);
-Object_80039F5C *fn_8005A8AC(int team);
-void fn_8005A8D0(int team);
-void fn_8005AB04(int team, MenuArg_t *pNames, int *pValues);
-void fn_8005AC18(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize);
-void fn_8005ACF0(int team);
-void fn_8005ACC8(void);
-void fn_8005ADCC(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize,MenuArg_t *pNames,int *pValues);
-void fn_8005AE5C(int index);
-void fn_8005AEC8(int *pEnabled,int *pCount,MenuText_t *pFirst,MenuText_t *pSecond,int *pAllowed);
-void fn_8005B128(int *pResult,int *pId,MenuText_t *pText);
-int fn_8005B2BC(unsigned int id,MenuArg_t *pArgs,int unused,int *pResult);
-void fn_8005B3D4(char *pFirst,int firstSize,char *pLast,int lastSize,int *pValue,char *pLabel,int labelSize,int *pResult);
-int fn_8005B4B0(unsigned int id,MenuArg_t *pArgs,int unused,int *pResult);
-void fn_8005B55C(int *pResult);
-void fn_8005B610(char *pText,int size,int id);
-void fn_8005B6AC(char *pText,int size,int id,int defensive);
-int fn_8005B730(char *pText,int size,int kind,int value);
-void fn_8005B838(int kind,int value);
-int fn_8005B908(MenuText_t **pText);
-void fn_8005B9FC(int *pResult,MenuText_t **pNames);
+void InGameHudOpen(int *pList, int *pValues, MenuArg_t *pNames, int *pScores, int *pZero, int *pModes, int *pState, int *pFlags, int *pEnabled, int *pLast);
+void InGameGetPadRatings(float *pValues);
+void InGameGetHudOffsets(int *pA, int *pB, int *pC, int *pD);
+void InGameFormatClock(char *pText, int *pRed, int *pGreen, int *pBlue);
+void InGameGetAudibles(unsigned int team, int *pEnabled, MenuText_t **pNames, int *pMode, MenuText_t **ppText);
+int InGameHudMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameClockMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int InGameQueryStat(int tag, int column, int id);
+void InGameLeaderSortCategories(int team);
+int InGameLeaderFind(int team);
+Object_80039F5C *InGameLeaderGetPlayer(int team);
+void InGameLeaderScore(int team);
+void InGameLeaderGetCategories(int team, MenuArg_t *pNames, int *pValues);
+void InGameLeaderGetName(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize);
+void InGameLeaderOpen(int team);
+void InGameLeaderClose(void);
+void InGameLeaderGetInfo(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize,MenuArg_t *pNames,int *pValues);
+void InGameEndGameApplyChoice(int index);
+void InGameEndGameGetChoices(int *pEnabled,int *pCount,MenuText_t *pFirst,MenuText_t *pSecond,int *pAllowed);
+void InGameEndGameGauntletResult(int *pResult,int *pId,MenuText_t *pText);
+int InGameEndGameMsg(unsigned int id,MenuArg_t *pArgs,int unused,int *pResult);
+void InGameGetVenueInfo(char *pFirst,int firstSize,char *pLast,int lastSize,int *pValue,char *pLabel,int labelSize,int *pResult);
+int InGameVenueMsg(unsigned int id,MenuArg_t *pArgs,int unused,int *pResult);
+void InGameRewardGetTeamCount(int *pResult);
+void InGameRewardFormatLogo(char *pText,int size,int id);
+void InGameRewardFormatPlay(char *pText,int size,int id,int defensive);
+int InGameRewardFormat(char *pText,int size,int kind,int value);
+void InGameRewardGrant(int kind,int value);
+int InGameRewardGrantAll(MenuText_t **pText);
+void InGameRewardGetTexts(int *pResult,MenuText_t **pNames);
 
-void fn_80059B64(int *pList, int *pValues, MenuArg_t *pNames, int *pScores, int *pZero, int *pModes, int *pState, int *pFlags, int *pEnabled, int *pLast)
+void InGameHudOpen(int *pList, int *pValues, MenuArg_t *pNames, int *pScores, int *pZero, int *pModes, int *pState, int *pFlags, int *pEnabled, int *pLast)
 {
     if (ChallengeIsActive()) {
         if (ChalGetCurrent()->mUnknown1C3) { StyleTrackerSetMeterFraction(0, lbl_803ED6A4, 0); fn_800A7B5C(); }
         if (ChalGetCurrent()->mUnknown1C2) { StyleTrackerSetMeterFraction(1, lbl_803ED6A4, 0); fn_800A7B5C(); }
     }
     fn_800B823C(0); fn_800B823C(1);
-    fn_80059A9C(pList);
+    InGameGetPadOrder(pList);
     pValues[0] = GameTextGetHomeTeam(); pValues[1] = GameTextGetAwayTeam();
     if (GameOptionsGet(14) != 1) {
         {MenuText_t *pText = ((MenuText_t **)pNames[0].pi)[*pNames[0].pi + 1];
@@ -2150,7 +2150,7 @@ void fn_80059B64(int *pList, int *pValues, MenuArg_t *pNames, int *pScores, int 
     pLast[0] = 0; pLast[1] = 0;
 }
 
-void fn_80059E24(float *pValues)
+void InGameGetPadRatings(float *pValues)
 {
     int lo = 0, hi = 3;
     unsigned int i;
@@ -2173,12 +2173,12 @@ void fn_80059E24(float *pValues)
     }
 }
 
-void fn_80059F54(int *pA, int *pB, int *pC, int *pD)
+void InGameGetHudOffsets(int *pA, int *pB, int *pC, int *pD)
 {
-    *pA = lbl_802D4D0C[0]; *pB = lbl_802D4D0C[1]; *pC = lbl_802D4D0C[2]; *pD = lbl_802D4D0C[3];
+    *pA = _InGameScreens_aHudOffsets[0]; *pB = _InGameScreens_aHudOffsets[1]; *pC = _InGameScreens_aHudOffsets[2]; *pD = _InGameScreens_aHudOffsets[3];
 }
 
-void fn_80059F80(char *pText, int *pRed, int *pGreen, int *pBlue)
+void InGameFormatClock(char *pText, int *pRed, int *pGreen, int *pBlue)
 {
     int key;
     int mode = fn_801486A0();
@@ -2205,7 +2205,7 @@ void fn_80059F80(char *pText, int *pRed, int *pGreen, int *pBlue)
     }
 }
 
-void fn_8005A1C0(unsigned int team, int *pEnabled, MenuText_t **pNames, int *pMode, MenuText_t **ppText)
+void InGameGetAudibles(unsigned int team, int *pEnabled, MenuText_t **pNames, int *pMode, MenuText_t **ppText)
 {
     MenuText_t *pText = *ppText;
     for (unsigned int i = 0; i < 4; i++) {
@@ -2225,11 +2225,11 @@ void fn_8005A1C0(unsigned int team, int *pEnabled, MenuText_t **pNames, int *pMo
     }
 }
 
-int fn_8005A2B8(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
+int InGameHudMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_80059B64((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4), (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4), &pArgs[2],
+        InGameHudOpen((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4), (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4), &pArgs[2],
                    (int *)(pArgs[3].i + (*pArgs[3].pi + 1) * 4), (int *)(pArgs[4].i + (*pArgs[4].pi + 1) * 4),
                    (int *)(pArgs[5].i + (*pArgs[5].pi + 1) * 4), pArgs[6].pi,
                    (int *)(pArgs[7].i + (*pArgs[7].pi + 1) * 4), pArgs[8].pi,
@@ -2248,166 +2248,166 @@ int fn_8005A2B8(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
         ((int *)(pArgs[5].i + (*pArgs[5].pi + 1) * 4))[0] = 0;
         ((int *)(pArgs[5].i + (*pArgs[5].pi + 1) * 4))[1] = 0;
         break;
-    case 0x80000002: fn_80059E24((float *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
-    case 0x80000005: fn_80059F54(pArgs[0].pi,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
+    case 0x80000002: InGameGetPadRatings((float *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
+    case 0x80000005: InGameGetHudOffsets(pArgs[0].pi,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
     case 0x80000007:
         if (ChallengeIsActive()) *pResult = ChalGetCurrent()->mUnknown1A4;
         else {int mode = fn_801486A0(); if (mode == 2 || mode == 4) *pResult = 1; else *pResult = fn_80178C24();}
         break;
-    case 0x80000006: fn_80059F80(pArgs[0].pParams->mpText,0,0,0); break;
+    case 0x80000006: InGameFormatClock(pArgs[0].pParams->mpText,0,0,0); break;
     case 0x80000009:
         {MenuText_t *pText = pArgs[4].pParams;
-        fn_8005A1C0(pArgs[0].i, (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4),
+        InGameGetAudibles(pArgs[0].i, (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4),
                    (MenuText_t **)(pArgs[2].i + (*pArgs[2].pi + 1) * 4), pArgs[3].pi, &pText);}
         break;
-    case 0x80000003: fn_80059A9C((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
+    case 0x80000003: InGameGetPadOrder((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
     default: return 0;
     }
     return 1;
 }
 
-int fn_8005A630(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
+int InGameClockMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch(id) {
     case 0x80000001: break;
-    case 0x80000003: fn_80059A9C((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
-    case 0x80000005: fn_80059E24((float *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
+    case 0x80000003: InGameGetPadOrder((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
+    case 0x80000005: InGameGetPadRatings((float *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
     case 0x80000002: {int mode=fn_801486A0(); if(mode==2||mode==4) *pResult=1; else *pResult=fn_80178C24();} break;
-    case 0x80000004: fn_80059F80(pArgs[0].pParams->mpText,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
+    case 0x80000004: InGameFormatClock(pArgs[0].pParams->mpText,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
     case 0x80000006: {MenuText_t *pText=pArgs[4].pParams;
-        fn_8005A1C0(pArgs[0].i,(int *)(pArgs[1].i+(*pArgs[1].pi+1)*4),
+        InGameGetAudibles(pArgs[0].i,(int *)(pArgs[1].i+(*pArgs[1].pi+1)*4),
                    (MenuText_t **)(pArgs[2].i+(*pArgs[2].pi+1)*4),pArgs[3].pi,&pText);} break;
     default:return 0;
     }
     return 1;
 }
 
-int fn_8005A794(int tag, int column, int id)
+int InGameQueryStat(int tag, int column, int id)
 {
     int value;
-    if (fn_801FCE10(0,"select \x8c into \x82 from \x8c where 'DIGP' = \x82\n",column,&value,tag,id)) value=0;
+    if (TDbCompilePerformOp(0,"select \x8c into \x82 from \x8c where 'DIGP' = \x82\n",column,&value,tag,id)) value=0;
     return value;
 }
 
-void fn_8005A7EC(int team)
+void InGameLeaderSortCategories(int team)
 {
     int swapped;
     do {
         swapped=0;
         for (int i=0;i<10;i++) {
-            if (!(lbl_80309FC4[team].mValues[i]>=lbl_80309FC4[team].mValues[i+1])) {
-                float value=lbl_80309FC4[team].mValues[i];
-                lbl_80309FC4[team].mValues[i]=lbl_80309FC4[team].mValues[i+1];
-                lbl_80309FC4[team].mValues[i+1]=value;
-                int index=lbl_80309FC4[team].mIndices[i];
-                lbl_80309FC4[team].mIndices[i]=lbl_80309FC4[team].mIndices[i+1];
-                lbl_80309FC4[team].mIndices[i+1]=index;
+            if (!(_InGameScreens_aLeaderStats[team].mValues[i]>=_InGameScreens_aLeaderStats[team].mValues[i+1])) {
+                float value=_InGameScreens_aLeaderStats[team].mValues[i];
+                _InGameScreens_aLeaderStats[team].mValues[i]=_InGameScreens_aLeaderStats[team].mValues[i+1];
+                _InGameScreens_aLeaderStats[team].mValues[i+1]=value;
+                int index=_InGameScreens_aLeaderStats[team].mIndices[i];
+                _InGameScreens_aLeaderStats[team].mIndices[i]=_InGameScreens_aLeaderStats[team].mIndices[i+1];
+                _InGameScreens_aLeaderStats[team].mIndices[i+1]=index;
                 swapped=1;
             }
         }
     } while(swapped==1);
 }
 
-int fn_8005A860(int team)
+int InGameLeaderFind(int team)
 {
-    fn_8005ACF0(team); fn_8005A8D0(team); fn_8005ACC8();
-    return lbl_80309FC4[team].mUnknown4;
+    InGameLeaderOpen(team); InGameLeaderScore(team); InGameLeaderClose();
+    return _InGameScreens_aLeaderStats[team].mUnknown4;
 }
-Object_80039F5C *fn_8005A8AC(int team)
+Object_80039F5C *InGameLeaderGetPlayer(int team)
 {
-    return PlyrFindById(fn_8005A860(team));
+    return PlyrFindById(InGameLeaderFind(team));
 }
 
-void fn_8005A8D0(int team)
+void InGameLeaderScore(int team)
 {
     int row;
     float scores[11];
     int values[12];
-    if (fn_8008201C(&lbl_80309F98,0,team,&row,0)) {
+    if (fn_8008201C(&_InGameScreens_LeaderCursor,0,team,&row,0)) {
         do {
-            for (int i=0;i<12;i++) values[i]=fn_8005A794(lbl_8028EAE8[i].mTag,lbl_8028EAE8[i].mColumn,row);
+            for (int i=0;i<12;i++) values[i]=InGameQueryStat(_InGameScreens_aLeaderStatWeights[i].mTag,_InGameScreens_aLeaderStatWeights[i].mColumn,row);
             float sum=0.0f;
             for (int i=0;i<11;i++) {
                 float value=0.0f;
-                for (unsigned int j=0;j<lbl_8028EB78[i].mCount;j++) {
-                    int index=lbl_8028EB78[i].mIndices[j];
-                    if(index!=13) value += values[index]*lbl_8028EAE8[index].mWeight;
+                for (unsigned int j=0;j<_InGameScreens_aLeaderCategories[i].mCount;j++) {
+                    int index=_InGameScreens_aLeaderCategories[i].mIndices[j];
+                    if(index!=13) value += values[index]*_InGameScreens_aLeaderStatWeights[index].mWeight;
                 }
                 scores[i]=value; sum+=value;
             }
             Object_80039F5C *p=PlyrFindById(row);
             if(p && p->mUnknown9[2]) sum+=1.0f;
-            if(!(sum<=lbl_80309FC4[team].mUnknown0)) {
-                lbl_80309FC4[team].mUnknown0=sum;
-                lbl_80309FC4[team].mUnknown4=row;
-                for(int i=0;i<12;i++) lbl_80309FC4[team].mStats[i]=values[i];
-                for(int i=0;i<11;i++) lbl_80309FC4[team].mValues[i]=scores[i];
+            if(!(sum<=_InGameScreens_aLeaderStats[team].mUnknown0)) {
+                _InGameScreens_aLeaderStats[team].mUnknown0=sum;
+                _InGameScreens_aLeaderStats[team].mUnknown4=row;
+                for(int i=0;i<12;i++) _InGameScreens_aLeaderStats[team].mStats[i]=values[i];
+                for(int i=0;i<11;i++) _InGameScreens_aLeaderStats[team].mValues[i]=scores[i];
             }
-        } while(fn_8008201C(&lbl_80309F98,1,team,&row,0));
+        } while(fn_8008201C(&_InGameScreens_LeaderCursor,1,team,&row,0));
     }
 }
 
-void fn_8005AB04(int team, MenuArg_t *pNames, int *pValues)
+void InGameLeaderGetCategories(int team, MenuArg_t *pNames, int *pValues)
 {
-    fn_8005A7EC(team);
+    InGameLeaderSortCategories(team);
     unsigned int count=0;
     int i=0;
     do {
-        int category=lbl_80309FC4[team].mIndices[i++];
-        if(lbl_8028EB78[category].mEnabled) {
+        int category=_InGameScreens_aLeaderStats[team].mIndices[i++];
+        if(_InGameScreens_aLeaderCategories[category].mEnabled) {
             MenuText_t *pText=((MenuText_t **)pNames[0].pi)[*pNames[0].pi+count+1];
-            strncpy(pText->mpText,lbl_8028EB78[category].mName,pText->mLength);
+            strncpy(pText->mpText,_InGameScreens_aLeaderCategories[category].mName,pText->mLength);
             int value=0;
-            for(unsigned int j=0;j<lbl_8028EB78[category].mCount;j++) {
-                int index=lbl_8028EB78[category].mIndices[j];
-                if(index!=13) value+=lbl_80309FC4[team].mStats[index];
+            for(unsigned int j=0;j<_InGameScreens_aLeaderCategories[category].mCount;j++) {
+                int index=_InGameScreens_aLeaderCategories[category].mIndices[j];
+                if(index!=13) value+=_InGameScreens_aLeaderStats[team].mStats[index];
             }
             pValues[count++]=value;
         }
     } while(count<4);
 }
 
-void fn_8005AC18(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize)
+void InGameLeaderGetName(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize)
 {
     int key;
-    PlayerDbSeekId(&lbl_80309F98,lbl_80309FC4[team].mUnknown4,&key);
+    PlayerDbSeekId(&_InGameScreens_LeaderCursor,_InGameScreens_aLeaderStats[team].mUnknown4,&key);
     *pId=fn_800C8744(team);
     char first[16],last[16];
-    PlayerDbGetFirstName(&lbl_80309F98,first,12); strncpy(pFirst,first,firstSize);
-    PlayerDbGetLastName(&lbl_80309F98,last,15); strncpy(pLast,last,lastSize);
+    PlayerDbGetFirstName(&_InGameScreens_LeaderCursor,first,12); strncpy(pFirst,first,firstSize);
+    PlayerDbGetLastName(&_InGameScreens_LeaderCursor,last,15); strncpy(pLast,last,lastSize);
 }
-void fn_8005ACC8(void) {fn_8008056C(&lbl_80309F98);}
-void fn_8005ACF0(int team)
+void InGameLeaderClose(void) {fn_8008056C(&_InGameScreens_LeaderCursor);}
+void InGameLeaderOpen(int team)
 {
     Desc_8008044C desc;
     desc.mUnknown4=1; desc.mUnknown8=team;
-    PlayerCursorOpen(&lbl_80309F98,&desc,0x454D4147);
-    lbl_80309FC4[team].mUnknown4=0; lbl_80309FC4[team].mUnknown0=-3.4028234663852886e38f;
-    for(int i=11;i>=0;i--) lbl_80309FC4[team].mStats[i]=0;
-    for(int i=0;i<11;i++) {lbl_80309FC4[team].mIndices[i]=i;lbl_80309FC4[team].mValues[i]=0.0f;}
+    PlayerCursorOpen(&_InGameScreens_LeaderCursor,&desc,0x454D4147);
+    _InGameScreens_aLeaderStats[team].mUnknown4=0; _InGameScreens_aLeaderStats[team].mUnknown0=-3.4028234663852886e38f;
+    for(int i=11;i>=0;i--) _InGameScreens_aLeaderStats[team].mStats[i]=0;
+    for(int i=0;i<11;i++) {_InGameScreens_aLeaderStats[team].mIndices[i]=i;_InGameScreens_aLeaderStats[team].mValues[i]=0.0f;}
 }
-void fn_8005ADCC(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize,MenuArg_t *pNames,int *pValues)
+void InGameLeaderGetInfo(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize,MenuArg_t *pNames,int *pValues)
 {
     int side=team!=0;
-    fn_8005ACF0(side); fn_8005A8D0(side);
-    fn_8005AC18(side,pId,pFirst,firstSize,pLast,lastSize); fn_8005AB04(side,pNames,pValues); fn_8005ACC8();
+    InGameLeaderOpen(side); InGameLeaderScore(side);
+    InGameLeaderGetName(side,pId,pFirst,firstSize,pLast,lastSize); InGameLeaderGetCategories(side,pNames,pValues); InGameLeaderClose();
 }
 
-void fn_8005AE5C(int index)
+void InGameEndGameApplyChoice(int index)
 {
-    switch(lbl_803EA5A0[index]) {
+    switch(_InGameScreens_aEndChoices[index]) {
     case 1: break;
     case 2:
         if(GameModeTypeGet()==8) {fn_800C1CA0();fn_8017833C(1);fn_80178354(1);}
         else fn_800C1CA0();
         break;
     }
-    lbl_803EA5A0[0]=lbl_803EA5A0[1]=0;
+    _InGameScreens_aEndChoices[0]=_InGameScreens_aEndChoices[1]=0;
 }
 
-void fn_8005AEC8(int *pEnabled,int *pCount,MenuText_t *pFirst,MenuText_t *pSecond,int *pAllowed)
+void InGameEndGameGetChoices(int *pEnabled,int *pCount,MenuText_t *pFirst,MenuText_t *pSecond,int *pAllowed)
 {
-    fn_800C1E50();fn_80059020();
+    fn_800C1E50();InGamePauseClearForfeit();
     int enabled;
     if(GameModeTypeIsSpecial()) enabled=0;
     else if(ChallengeIsPairingGame() && !ChallengeEvaluateGoals()) enabled=0;
@@ -2419,120 +2419,120 @@ void fn_8005AEC8(int *pEnabled,int *pCount,MenuText_t *pFirst,MenuText_t *pSecon
     else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
     if((score1<score0 && fn_800B65A0(1)!=255)||(score0<score1 && fn_800B65A0(0)!=255)) *pAllowed=0; else *pAllowed=1;
     if(GameModeTypeGet()==8) {
-        if(score1>score0) {*pCount=1;strncpy(pFirst->mpText,"Continue",pFirst->mLength);lbl_803EA5A0[0]=3;}
-        else {*pCount=2;strncpy(pFirst->mpText,"Rematch",pFirst->mLength);lbl_803EA5A0[0]=2;
-              strncpy(pSecond->mpText,"Exit",pSecond->mLength);lbl_803EA5A0[1]=1;}
+        if(score1>score0) {*pCount=1;strncpy(pFirst->mpText,"Continue",pFirst->mLength);_InGameScreens_aEndChoices[0]=3;}
+        else {*pCount=2;strncpy(pFirst->mpText,"Rematch",pFirst->mLength);_InGameScreens_aEndChoices[0]=2;
+              strncpy(pSecond->mpText,"Exit",pSecond->mLength);_InGameScreens_aEndChoices[1]=1;}
         return;
     }
     if(GameModeTypeGet()==11) {
         if(*pEnabled==1) {
-            *pCount=2;strncpy(pFirst->mpText,"Rematch",pFirst->mLength);lbl_803EA5A0[0]=2;
-            strncpy(pSecond->mpText,"Continue",pSecond->mLength);lbl_803EA5A0[1]=1;
+            *pCount=2;strncpy(pFirst->mpText,"Rematch",pFirst->mLength);_InGameScreens_aEndChoices[0]=2;
+            strncpy(pSecond->mpText,"Continue",pSecond->mLength);_InGameScreens_aEndChoices[1]=1;
         } else {
-            *pCount=1;strncpy(pFirst->mpText,"Continue",pSecond->mLength);lbl_803EA5A0[0]=1;lbl_803EA5A0[1]=0;
+            *pCount=1;strncpy(pFirst->mpText,"Continue",pSecond->mLength);_InGameScreens_aEndChoices[0]=1;_InGameScreens_aEndChoices[1]=0;
         }
     } else {
         if(*pEnabled==1) {
-            *pCount=2;strncpy(pFirst->mpText,"Rematch",pFirst->mLength);lbl_803EA5A0[0]=2;
-            strncpy(pSecond->mpText,"Exit",pSecond->mLength);lbl_803EA5A0[1]=1;
+            *pCount=2;strncpy(pFirst->mpText,"Rematch",pFirst->mLength);_InGameScreens_aEndChoices[0]=2;
+            strncpy(pSecond->mpText,"Exit",pSecond->mLength);_InGameScreens_aEndChoices[1]=1;
         } else {
-            *pCount=1;strncpy(pFirst->mpText,"Exit",pSecond->mLength);lbl_803EA5A0[0]=1;lbl_803EA5A0[1]=0;
+            *pCount=1;strncpy(pFirst->mpText,"Exit",pSecond->mLength);_InGameScreens_aEndChoices[0]=1;_InGameScreens_aEndChoices[1]=0;
         }
     }
 }
 
-void fn_8005B128(int *pResult,int *pId,MenuText_t *pText)
+void InGameEndGameGauntletResult(int *pResult,int *pId,MenuText_t *pText)
 {
     unsigned int score1,score0;
     if(GameOptionsGet(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
     else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
     if(GameModeTypeGet()==8) {
         if(score1>score0) {
-            void *p=UserProfileFindIndex(fn_8022F4BC());
+            void *p=UserProfileFindIndex(DbUserGetCurrent());
             GauntletMarkTeamBeaten(p,GauntletScreenGetSelection());
-            GauntletAdvance(UserProfileFindIndex(fn_8022F4BC()));
+            GauntletAdvance(UserProfileFindIndex(DbUserGetCurrent()));
             *pResult=1;
-            if(GauntletIsTeamBeaten(UserProfileFindIndex(fn_8022F4BC()),34)) *pResult=3;
-            else if(!GauntletGetTeamsLeft(UserProfileFindIndex(fn_8022F4BC()))) *pResult=2;
+            if(GauntletIsTeamBeaten(UserProfileFindIndex(DbUserGetCurrent()),34)) *pResult=3;
+            else if(!GauntletGetTeamsLeft(UserProfileFindIndex(DbUserGetCurrent()))) *pResult=2;
         } else *pResult=0;
         DbCursor query;
-        fn_80083E40(&query,0,0x54415453);
-        if(fn_80084034(&query,*pId,0)) {char name[32];fn_80083F88(&query,name,32);strnzcpy(pText->mpText,name,pText->mLength);}
+        TeamDbOpen(&query,0,0x54415453);
+        if(TeamDbSeekId(&query,*pId,0)) {char name[32];TeamDbGetName(&query,name,32);strnzcpy(pText->mpText,name,pText->mLength);}
         else strnzcpy(pText->mpText,"",pText->mLength);
-        fn_80083F68(&query);
+        TeamDbClose(&query);
     } else *pResult=-1;
 }
-int fn_8005B2BC(unsigned int id,MenuArg_t *pArgs,int unused,int *pResult)
+int InGameEndGameMsg(unsigned int id,MenuArg_t *pArgs,int unused,int *pResult)
 {
     switch(id) {
-    case 0x80000001:lbl_803EA59F=1;fn_8005AEC8(pArgs[0].pi,pArgs[1].pi,pArgs[2].pParams,pArgs[3].pParams,pArgs[4].pi);break;
-    case 0x80000003:fn_8005ADCC(pArgs[0].i,pArgs[1].pi,pArgs[2].pParams->mpText,pArgs[2].pParams->mLength,
+    case 0x80000001:_InGameScreens_bEndGameOpen=1;InGameEndGameGetChoices(pArgs[0].pi,pArgs[1].pi,pArgs[2].pParams,pArgs[3].pParams,pArgs[4].pi);break;
+    case 0x80000003:InGameLeaderGetInfo(pArgs[0].i,pArgs[1].pi,pArgs[2].pParams->mpText,pArgs[2].pParams->mLength,
         pArgs[3].pParams->mpText,pArgs[3].pParams->mLength,&pArgs[4],(int *)(pArgs[5].i+(*pArgs[5].pi+1)*4));break;
-    case 0x80000002:fn_8005AE5C(pArgs[0].i);lbl_803EA59F=0;break;
-    case 0x80000004:fn_8005B128(pArgs[0].pi,pArgs[1].pi,pArgs[2].pParams);break;
+    case 0x80000002:InGameEndGameApplyChoice(pArgs[0].i);_InGameScreens_bEndGameOpen=0;break;
+    case 0x80000004:InGameEndGameGauntletResult(pArgs[0].pi,pArgs[1].pi,pArgs[2].pParams);break;
     default:return 0;
     }
     return 1;
 }
-unsigned char fn_8005B3CC(void) {return lbl_803EA59F;}
-void fn_8005B3D4(char *pFirst,int firstSize,char *pLast,int lastSize,int *pValue,char *pLabel,int labelSize,int *pResult)
+unsigned char InGameEndGameIsOpen(void) {return _InGameScreens_bEndGameOpen;}
+void InGameGetVenueInfo(char *pFirst,int firstSize,char *pLast,int lastSize,int *pValue,char *pLabel,int labelSize,int *pResult)
 {
     EnvSelect(fn_800A3444());EnvGetUIName(pFirst,firstSize);EnvGetEVLO(pLast,lastSize);EnvRelease();
-    fn_801FCE10(0,"use 'EVAS' select 'KTFH' into \x82 from 'DFSH' where 'DIVE' = \x80\n",pValue,fn_800A3444());
+    TDbCompilePerformOp(0,"use 'EVAS' select 'KTFH' into \x82 from 'DFSH' where 'DIVE' = \x80\n",pValue,fn_800A3444());
     switch(GameOptionsGet(14)) {
     case 0:fn_801C2E18(pLabel,"Touchdowns");*pResult=GameOptionsGet(1);break;
     case 1:fn_801C2E18(pLabel,"Style Points");*pResult=GameOptionsGet(2);break;
     }
 }
-int lbl_802D4D0C[4] = {0, 0, 0x40, 0x40};
-const char *lbl_802D4D1C[9] = {
+int _InGameScreens_aHudOffsets[4] = {0, 0, 0x40, 0x40};
+const char *_InGameScreens_apRewardFormats[9] = {
     "", "", "", "The %s offensive play", "A new NFL player", "The %s logo", "A new NFL Legend player",
     "The %s defensive play", "Impact Gear Modifier",
 };
-int fn_8005B4B0(unsigned int id,MenuArg_t *pArgs,int unused,int *pResult)
+int InGameVenueMsg(unsigned int id,MenuArg_t *pArgs,int unused,int *pResult)
 {
     switch(id) {
-    case 0x80000001:fn_8005B3D4(pArgs[0].pParams->mpText,pArgs[0].pParams->mLength,pArgs[1].pParams->mpText,
+    case 0x80000001:InGameGetVenueInfo(pArgs[0].pParams->mpText,pArgs[0].pParams->mLength,pArgs[1].pParams->mpText,
         pArgs[1].pParams->mLength,pArgs[2].pi,pArgs[3].pParams->mpText,pArgs[3].pParams->mLength,pArgs[4].pi);break;
     case 0x80000002:EnvSelect(fn_800A3444());EnvGetUIName(pArgs[0].pParams->mpText,pArgs[0].pParams->mLength);EnvRelease();break;
     default:return 0;
     }
     return 1;
 }
-void fn_8005B55C(int *pResult)
+void InGameRewardGetTeamCount(int *pResult)
 {
     DbCursor query;
-    fn_80083E1C(&query,0);fn_8008406C(&query,1,0);*pResult=fn_80083FBC(&query);fn_80083F68(&query);fn_800C1E50();
+    TeamDbOpenQuery(&query,0);TeamDbSeekTmur(&query,1,0);*pResult=TeamDbGetId(&query);TeamDbClose(&query);fn_800C1E50();
 }
-void fn_8005B5D8(int clear) {PauseRequestClose();if(clear) fn_800C1CA0();}
-void fn_8005B610(char *pText,int size,int id)
+void InGameRewardClose(int clear) {PauseRequestClose();if(clear) fn_800C1CA0();}
+void InGameRewardFormatLogo(char *pText,int size,int id)
 {
     char name[24];DbCursor query;
     LogoListOpen(&query);LogoListFind(&query,id+45,0);LogoListGetName(&query,name,21);LogoListClose(&query);
-    fn_801C2D88(pText,size,lbl_802D4D1C[5],name);
+    fn_801C2D88(pText,size,_InGameScreens_apRewardFormats[5],name);
 }
-void fn_8005B6AC(char *pText,int size,int id,int defensive)
+void InGameRewardFormatPlay(char *pText,int size,int id,int defensive)
 {
-    char name[64];fn_80058798(name,64,(unsigned char)id,defensive);
-    if(defensive) fn_801C2D88(pText,size,lbl_802D4D1C[3],name);
-    else fn_801C2D88(pText,size,lbl_802D4D1C[7],name);
+    char name[64];InGameFindPlayName(name,64,(unsigned char)id,defensive);
+    if(defensive) fn_801C2D88(pText,size,_InGameScreens_apRewardFormats[3],name);
+    else fn_801C2D88(pText,size,_InGameScreens_apRewardFormats[7],name);
 }
-int fn_8005B730(char *pText,int size,int kind,int value)
+int InGameRewardFormat(char *pText,int size,int kind,int value)
 {
     int result=0;char text[256];text[0]=0;
     if(kind==1) result=value;
     else
     switch(kind) {
     case 2:ChalFormatGearReward(text,255,value);break;
-    case 3:fn_8005B6AC(text,255,value,1);break;
-    case 7:fn_8005B6AC(text,255,value,0);break;
-    case 5:fn_8005B610(text,255,value);break;
-    default:strnzcpy(text,lbl_802D4D1C[kind],255);break;
+    case 3:InGameRewardFormatPlay(text,255,value,1);break;
+    case 7:InGameRewardFormatPlay(text,255,value,0);break;
+    case 5:InGameRewardFormatLogo(text,255,value);break;
+    default:strnzcpy(text,_InGameScreens_apRewardFormats[kind],255);break;
     }
     if((int)strlen(text)>0) strncpy(pText,text,size);
     return result;
 }
-void fn_8005B838(int kind,int value)
+void InGameRewardGrant(int kind,int value)
 {
     switch(kind) {
     case 1:ChalSetDevPoints(ChalGetDevPoints()+value);break;
@@ -2545,32 +2545,32 @@ void fn_8005B838(int kind,int value)
     case 6:break;
     }
 }
-int fn_8005B908(MenuText_t **pText)
+int InGameRewardGrantAll(MenuText_t **pText)
 {
     int result=0;Challenge_t *p=ChalGetCurrent();
     if(ChalHasMedalGoal(p)) {
         ChalMedalGoal_t *pGoal=&p->mUnknown20C;
         int index=ChallengeBonusGet();
         if(index<3) {
-            result=fn_8005B730(pText[0]->mpText,pText[0]->mLength,pGoal->mUnknown1C,pGoal->mUnknown20[index]);
-            fn_8005B838(pGoal->mUnknown1C,pGoal->mUnknown20[index]);
+            result=InGameRewardFormat(pText[0]->mpText,pText[0]->mLength,pGoal->mUnknown1C,pGoal->mUnknown20[index]);
+            InGameRewardGrant(pGoal->mUnknown1C,pGoal->mUnknown20[index]);
         }
     } else {
         int n=0;
         for(int i=0;i<2;i++) {
             if(p->mUnknown1F4[i].mId) {
-                result+=fn_8005B730(pText[n]->mpText,pText[n]->mLength,p->mUnknown1F4[i].mId,p->mUnknown1F4[i].mUnknown4);
-                fn_8005B838(p->mUnknown1F4[i].mId,p->mUnknown1F4[i].mUnknown4);
+                result+=InGameRewardFormat(pText[n]->mpText,pText[n]->mLength,p->mUnknown1F4[i].mId,p->mUnknown1F4[i].mUnknown4);
+                InGameRewardGrant(p->mUnknown1F4[i].mId,p->mUnknown1F4[i].mUnknown4);
                 if(strlen(pText[n]->mpText)) n++;
             }
         }
     }
     return result;
 }
-void fn_8005B9FC(int *pResult,MenuText_t **pNames)
+void InGameRewardGetTexts(int *pResult,MenuText_t **pNames)
 {
     for(int i=0;i<4;i++) strnzcpy(pNames[i]->mpText,"",pNames[i]->mLength);
-    *pResult=fn_8005B908(pNames);ChalCloseCursors();
+    *pResult=InGameRewardGrantAll(pNames);ChalCloseCursors();
 }
 
 }
@@ -2611,11 +2611,11 @@ struct Stats_8005CAE4 {
     Object_80039F5C *mpPlayers[4];
     int mValues[4];
 };
-struct Args_8005F8B4;
+struct StoryTextArgs_t;
 extern "C" {
-void fn_8005F8B4(Args_8005F8B4 *p);
-void fn_8005F8F0(int unused);
-void fn_8005F900(int *pHome);
+void StoryEventsCopyRewardText(StoryTextArgs_t *p);
+void StoryEventsClearResult(int unused);
+void StoryEventsGetHomeTeam(int *pHome);
 int ChallengeEvaluateBonus(void);
 int GameOutcomeGet(void);
 int fn_800A8F94(void);
@@ -2635,64 +2635,64 @@ void fn_80155CF0(Class_80148A58 *,int,int *,int *);
 void fn_80155C44(Class_80148A58 *,int,int,Record_8005CE10 *);
 int fn_80155D38(Class_80148A58 *,int);
 
-void fn_8005BA64(MenuArg_t *p) {strncpy(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
-void fn_8005BA98(MenuArg_t *p) {strncpy(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
-void fn_8005BACC(MenuArg_t *p,int *pValue,MenuArg_t *pOther) {fn_8005BA64(p);fn_8005BA98(pOther);*pValue=0;}
-void fn_8005BB0C(MenuArg_t *p,int *a,int *b,int *c) {fn_8005BA64(p);*a=0;*b=0;*c=0;}
-void fn_8005BB50(MenuArg_t *p,int *a,int *b) {fn_8005BA64(p);*a=0;*b=0;}
-int fn_8005BB8C(void) {
+void InGameRewardSetNameText(MenuArg_t *p) {strncpy(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
+void InGameRewardSetOtherNameText(MenuArg_t *p) {strncpy(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
+void InGameRewardGetNamePair(MenuArg_t *p,int *pValue,MenuArg_t *pOther) {InGameRewardSetNameText(p);InGameRewardSetOtherNameText(pOther);*pValue=0;}
+void InGameRewardGetNameTriple(MenuArg_t *p,int *a,int *b,int *c) {InGameRewardSetNameText(p);*a=0;*b=0;*c=0;}
+void InGameRewardGetNameDouble(MenuArg_t *p,int *a,int *b) {InGameRewardSetNameText(p);*a=0;*b=0;}
+int InGameRewardGetMedal(void) {
     int value=0;
-    if(!lbl_803EA5A8) {
+    if(!_InGameScreens_bAltRewards) {
         if(ChalHasMedalGoal(ChalGetCurrent())) {switch(ChallengeBonusGet()) {case 0:value=1;break;case 1:value=2;break;case 2:value=3;break;}}
     }
     return value;
 }
-void fn_8005BC10(int value) {
+void InGameRewardOpen(int value) {
     int won=0;
-    if(fn_8005900C()) {ChallengeRecordResult(0,0);fn_80059020();}
+    if(InGamePauseIsForfeit()) {ChallengeRecordResult(0,0);InGamePauseClearForfeit();}
     else {int a=ChallengeEvaluateGoals();int b=ChallengeEvaluateBonus();ChallengeRecordResult(a,b);}
     if(GameOutcomeGet()==0) won=1;
     int args[2];args[0]=won;args[1]=value;
     PauseOpenScreenArgs(3,10,-1,2,args,0);
 }
-int fn_8005BCA8(unsigned int id,MenuArg_t *p,int unused,int *result) {
+int InGameRewardMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
-    case 0x80000001:if(lbl_803EA5A8)fn_8005F900(p[0].pi);else fn_8005B55C(p[0].pi);break;
-    case 0x80000002:if(lbl_803EA5A8)fn_8005F8F0(p[0].i);else fn_8005B5D8(p[0].i);break;
-    case 0x80000003:if(!lbl_803EA5A8)fn_8005B9FC(p[0].pi,(MenuText_t **)(p[1].i+(*p[1].pi+1)*4));break;
-    case 0x80000007:if(lbl_803EA5A8)fn_8005F8B4((Args_8005F8B4 *)p);break;
-    case 0x80000004:if(!lbl_803EA5A8)fn_8005BACC(p,p[1].pi,p+2);break;
-    case 0x80000008:*result=fn_8005BB8C();break;
-    case 0x80000005:if(!lbl_803EA5A8)fn_8005BB0C(p,p[1].pi,p[2].pi,p[3].pi);break;
-    case 0x80000006:if(!lbl_803EA5A8)fn_8005BB50(p+1,p[1].pi,p[2].pi);break;
+    case 0x80000001:if(_InGameScreens_bAltRewards)StoryEventsGetHomeTeam(p[0].pi);else InGameRewardGetTeamCount(p[0].pi);break;
+    case 0x80000002:if(_InGameScreens_bAltRewards)StoryEventsClearResult(p[0].i);else InGameRewardClose(p[0].i);break;
+    case 0x80000003:if(!_InGameScreens_bAltRewards)InGameRewardGetTexts(p[0].pi,(MenuText_t **)(p[1].i+(*p[1].pi+1)*4));break;
+    case 0x80000007:if(_InGameScreens_bAltRewards)StoryEventsCopyRewardText((StoryTextArgs_t *)p);break;
+    case 0x80000004:if(!_InGameScreens_bAltRewards)InGameRewardGetNamePair(p,p[1].pi,p+2);break;
+    case 0x80000008:*result=InGameRewardGetMedal();break;
+    case 0x80000005:if(!_InGameScreens_bAltRewards)InGameRewardGetNameTriple(p,p[1].pi,p[2].pi,p[3].pi);break;
+    case 0x80000006:if(!_InGameScreens_bAltRewards)InGameRewardGetNameDouble(p+1,p[1].pi,p[2].pi);break;
     default:return 0;
     }
     return 1;
 }
-void fn_8005BE54(unsigned char value) {lbl_803EA5A8=value;}
-int fn_8005BE5C(int value) {
+void InGameRewardSetAlt(unsigned char value) {_InGameScreens_bAltRewards=value;}
+int InGameOverlayOpen(int value) {
     int ok=1;
-    if(lbl_803EA5B0==3) {
-        lbl_803EA5B0=value;
+    if(_InGameScreens_iOverlayScreen==3) {
+        _InGameScreens_iOverlayScreen=value;
         switch(value) {
-        case 0:fn_80218FC4(gUISMainInfo,3,9,0,0);lbl_803EA5AC=0;break;
-        case 1:fn_80218FC4(gUISMainInfo,3,12,0,0);lbl_803EA5AC=0;break;
-        case 2:fn_80218FC4(gUISMainInfo,3,23,0,0);lbl_803EA5AC=0;break;
+        case 0:fn_80218FC4(gUISMainInfo,3,9,0,0);_InGameScreens_iOverlayState=0;break;
+        case 1:fn_80218FC4(gUISMainInfo,3,12,0,0);_InGameScreens_iOverlayState=0;break;
+        case 2:fn_80218FC4(gUISMainInfo,3,23,0,0);_InGameScreens_iOverlayState=0;break;
         default:ok=0;break;
         }
     } else ok=0;
     return ok;
 }
-void fn_8005BF18(void) {fn_8021D7B8(gUISMainInfo,0x8000001C,0,0);lbl_803EA5AC=4;lbl_803EA5B0=3;}
-void fn_8005BF5C(void) {fn_8021D7B8(gUISMainInfo,0x80000029,0,0);lbl_803EA5AC=2;}
-void fn_8005BF98(void) {fn_8021D7B8(gUISMainInfo,0x8000002A,0,0);lbl_803EA5AC=0;}
-int fn_8005BFD4(void) {return lbl_803EA5AC;}
-int fn_8005BFDC(int group,unsigned int id,MenuArg_t *p,int unused,int *result) {
+void InGameOverlayReset(void) {fn_8021D7B8(gUISMainInfo,0x8000001C,0,0);_InGameScreens_iOverlayState=4;_InGameScreens_iOverlayScreen=3;}
+void InGameOverlayShow(void) {fn_8021D7B8(gUISMainInfo,0x80000029,0,0);_InGameScreens_iOverlayState=2;}
+void InGameOverlayHide(void) {fn_8021D7B8(gUISMainInfo,0x8000002A,0,0);_InGameScreens_iOverlayState=0;}
+int InGameOverlayGetState(void) {return _InGameScreens_iOverlayState;}
+int InGameOverlayMsg(int group,unsigned int id,MenuArg_t *p,int unused,int *result) {
     int ret=1;
     if(id==0x80000002) {
-        switch(lbl_803EA5AC) {
-        case 0:lbl_803EA5AC=1;break;
-        case 2:lbl_803EA5AC=3;break;
+        switch(_InGameScreens_iOverlayState) {
+        case 0:_InGameScreens_iOverlayState=1;break;
+        case 2:_InGameScreens_iOverlayState=3;break;
         default:ret=0;break;
         }
     } else {
@@ -2705,18 +2705,18 @@ int fn_8005BFDC(int group,unsigned int id,MenuArg_t *p,int unused,int *result) {
     }
     return ret;
 }
-int fn_8005C0C0(unsigned int id,MenuArg_t *,int,int *) {
-    switch(id){case 0x80000001: break; case 0x80000002: if(lbl_803EA5B4) {
-        fn_800C1CA0();if(GameModeTypeGet()==8) {fn_8017833C(1);fn_80178354(1);}lbl_803EA5B4=0;
+int InGameResetMsg(unsigned int id,MenuArg_t *,int,int *) {
+    switch(id){case 0x80000001: break; case 0x80000002: if(_InGameScreens_bResetPending) {
+        fn_800C1CA0();if(GameModeTypeGet()==8) {fn_8017833C(1);fn_80178354(1);}_InGameScreens_bResetPending=0;
     }
     PauseRequestClose(); break; default: return 0;}
     return 1;
 }
-void fn_8005C144(int team,char *text,int size) {int a=fn_80178EE0(team);int b=fn_80178EA0(team);fn_801C2D88(text,size,"%d for %d",a,b);}
-void fn_8005C1A4(int team,unsigned char index,int *color) {
+void InGameFormatCompletions(int team,char *text,int size) {int a=fn_80178EE0(team);int b=fn_80178EA0(team);fn_801C2D88(text,size,"%d for %d",a,b);}
+void InGameGetPlayerColor(int team,unsigned char index,int *color) {
     HudLookupColor(fn_80155130(fn_80148A58(),team,index),(unsigned char *)(color+0),(unsigned char *)(color+1),(unsigned char *)(color+2));
 }
-int fn_8005C1F4(int team,unsigned char index,char *name,int nameSize,char *text,int size,char *first,char *second,char *third,char *fourth,int firstSize,int secondSize) {
+int InGameGetPlayerStats(int team,unsigned char index,char *name,int nameSize,char *text,int size,char *first,char *second,char *third,char *fourth,int firstSize,int secondSize) {
     int result=0;Object_80039F5C *p=PlyrGet(team,index);
     *name=0;*first=0;*second=0;*third=0;*fourth=0;*text=0;
     if(p && p->mUnknown9[2]) {
@@ -2728,18 +2728,18 @@ int fn_8005C1F4(int team,unsigned char index,char *name,int nameSize,char *text,
     }
     return result;
 }
-int fn_8005C338(unsigned int id,MenuArg_t *p,int unused,int *result) {
+int InGamePlayerStatsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
     case 0x80000006:break;
     case 0x80000001:GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
-    case 0x80000002:fn_8005C144((unsigned char)p[0].i,p[1].pParams->mpText,p[1].pParams->mLength);break;
-    case 0x80000003:fn_8005C1A4((unsigned char)p[0].i,(unsigned char)p[1].i,(int *)(p[2].i+(*p[2].pi+1)*4));break;
-    case 0x80000004:*result=fn_8005C1F4((unsigned char)p[0].i,(unsigned char)p[1].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength,p[4].pParams->mpText,p[5].pParams->mpText,p[6].pParams->mpText,p[7].pParams->mpText,p[4].pParams->mLength,p[5].pParams->mLength);break;
+    case 0x80000002:InGameFormatCompletions((unsigned char)p[0].i,p[1].pParams->mpText,p[1].pParams->mLength);break;
+    case 0x80000003:InGameGetPlayerColor((unsigned char)p[0].i,(unsigned char)p[1].i,(int *)(p[2].i+(*p[2].pi+1)*4));break;
+    case 0x80000004:*result=InGameGetPlayerStats((unsigned char)p[0].i,(unsigned char)p[1].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength,p[4].pParams->mpText,p[5].pParams->mpText,p[6].pParams->mpText,p[7].pParams->mpText,p[4].pParams->mLength,p[5].pParams->mLength);break;
     case 0x80000005:*result=fn_80178D70((unsigned char)p[0].i);break;
     default:return 0;
     }return 1;
 }
-void fn_8005C4A4(int team,char *name,int nameSize,char *first,int firstSize,char *time,int timeSize,char *last,int lastSize,int *color,int unused,char *text,int textSize,int *result) {
+void InGameGetTimedStats(int team,char *name,int nameSize,char *first,int firstSize,char *time,int timeSize,char *last,int lastSize,int *color,int unused,char *text,int textSize,int *result) {
     unsigned char foundTeam=0,foundIndex=0;bool found=false;
     Stats_8005C4A4 stats;fn_8014F3E4(fn_80148A58(),team,&stats);
     unsigned int minutes=stats.mTime/60,seconds=stats.mTime%60;
@@ -2758,26 +2758,26 @@ void fn_8005C4A4(int team,char *name,int nameSize,char *first,int firstSize,char
     } else {*name=0;*result=0;}
     unsigned char r=0,g=0,b=0;HudLookupColor(stats.mColor,&r,&g,&b);color[0]=r;color[1]=g;color[2]=b;
 }
-int fn_8005C6EC(unsigned int id,MenuArg_t *p,int unused,int *result) {
+int InGameTimedStatsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
     case 0x80000004:break;
-    case 0x80000001:fn_8005C4A4((unsigned char)p[0].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength,p[5].pParams->mpText,p[5].pParams->mLength,p[7].pParams->mpText,p[7].pParams->mLength,(int *)(p[1].i+(*p[1].pi+1)*4),p[1].pi[1],p[8].pParams->mpText,p[8].pParams->mLength,result);strncpy(p[4].pParams->mpText,"Time of Possession",p[4].pParams->mLength);strncpy(p[6].pParams->mpText,"Tackles",p[6].pParams->mLength);break;
+    case 0x80000001:InGameGetTimedStats((unsigned char)p[0].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength,p[5].pParams->mpText,p[5].pParams->mLength,p[7].pParams->mpText,p[7].pParams->mLength,(int *)(p[1].i+(*p[1].pi+1)*4),p[1].pi[1],p[8].pParams->mpText,p[8].pParams->mLength,result);strncpy(p[4].pParams->mpText,"Time of Possession",p[4].pParams->mLength);strncpy(p[6].pParams->mpText,"Tackles",p[6].pParams->mLength);break;
     case 0x80000002:*result=6;break;
     case 0x80000003:GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
     default:return 0;
     }return 1;
 }
-void fn_8005C844(int team,int *value,char *score,char *first,char *second,char *third,int *values,unsigned char scoreSize,unsigned char textSize) {
+void InGameGetOffenseTotals(int team,int *value,char *score,char *first,char *second,char *third,int *values,unsigned char scoreSize,unsigned char textSize) {
     Stats_8005C844 stats;fn_8014BA20(fn_80148A58(),team,&stats);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
     fn_801C2D88(score,scoreSize,"%d",stats.mValues[0]);*value=GameInfoGet(team!=0);
     fn_80148A58()->vfn_19(team,0,first,textSize);fn_80148A58()->vfn_19(team,1,second,textSize);fn_80148A58()->vfn_19(team,2,third,textSize);
 }
-int fn_8005C994(unsigned int id,MenuArg_t *p,int unused,int *result) {
+int InGameOffenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
     case 0x80000003: {
         MenuText_t **texts=(MenuText_t **)(p[3].i+(*p[3].pi+1)*4);
-        fn_8005C844((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,texts[0]->mpText,texts[1]->mpText,texts[2]->mpText,(int *)(p[4].i+(*p[4].pi+1)*4),(unsigned char)p[2].pParams->mLength,(unsigned char)texts[0]->mLength);
+        InGameGetOffenseTotals((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,texts[0]->mpText,texts[1]->mpText,texts[2]->mpText,(int *)(p[4].i+(*p[4].pi+1)*4),(unsigned char)p[2].pParams->mLength,(unsigned char)texts[0]->mLength);
         MenuText_t **labels=(MenuText_t **)(p[5].i+(*p[5].pi+1)*4);
         strncpy(labels[0]->mpText,"TDs",labels[0]->mLength);strncpy(labels[1]->mpText,"Fumble Recs",labels[1]->mLength);strncpy(labels[2]->mpText,"INTs",labels[2]->mLength);
         break;
@@ -2788,7 +2788,7 @@ int fn_8005C994(unsigned int id,MenuArg_t *p,int unused,int *result) {
     }
     return 1;
 }
-void fn_8005CAE4(int team,int *value,char *score,char *first,char *second,char *third,unsigned char scoreSize,unsigned char textSize,int *values) {
+void InGameGetDefenseTotals(int team,int *value,char *score,char *first,char *second,char *third,unsigned char scoreSize,unsigned char textSize,int *values) {
     Stats_8005CAE4 stats;
     DbCursor cursor;
     fn_8014CCE8(fn_80148A58(),team,&stats);
@@ -2796,10 +2796,10 @@ void fn_8005CAE4(int team,int *value,char *score,char *first,char *second,char *
     fn_80148A58()->vfn_19(team,0,first,textSize);fn_80148A58()->vfn_19(team,1,second,textSize);fn_80148A58()->vfn_19(team,2,third,textSize);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
 }
-int fn_8005CC50(unsigned int id,MenuArg_t *p,int unused,int *result) {
+int InGameDefenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
     case 0x80000003: {
-        fn_8005CAE4((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[3].pParams->mpText,p[4].pParams->mpText,p[5].pParams->mpText,(unsigned char)p[2].pParams->mLength,(unsigned char)p[3].pParams->mLength,(int *)(p[6].i+(*p[6].pi+1)*4));
+        InGameGetDefenseTotals((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[3].pParams->mpText,p[4].pParams->mpText,p[5].pParams->mpText,(unsigned char)p[2].pParams->mLength,(unsigned char)p[3].pParams->mLength,(int *)(p[6].i+(*p[6].pi+1)*4));
         MenuText_t **labels=(MenuText_t **)(p[7].i+(*p[7].pi+1)*4);
         strncpy(labels[0]->mpText,"TDs",labels[0]->mLength);strncpy(labels[1]->mpText,"Tackles",labels[1]->mLength);strncpy(labels[2]->mpText,"INTs",labels[2]->mLength);
         break;
@@ -2810,10 +2810,10 @@ int fn_8005CC50(unsigned int id,MenuArg_t *p,int unused,int *result) {
     }
     return 1;
 }
-void fn_8005CD8C(int team,int *other,char *text,int size) {
+void InGameFormatPossessionCount(int team,int *other,char *text,int size) {
     DbCursor query; int value;fn_80155CF0(fn_80148A58(),team,other,&value);fn_801C2D88(text,size,"%d",value);
 }
-void fn_8005CE10(int team,int index,char *ordinal,int ordinalSize,char *text,int size) {
+void InGameFormatPossession(int team,int index,char *ordinal,int ordinalSize,char *text,int size) {
     Record_8005CE10 record;fn_80155C44(fn_80148A58(),team,index,&record);
     unsigned int value=record.mOrdinal;
     Object_80039F5C *p=PlyrFindById(record.mPlayer),*other=PlyrFindById(record.mOther);
@@ -2834,22 +2834,22 @@ void fn_8005CE10(int team,int index,char *ordinal,int ordinalSize,char *text,int
     fn_801C2D88(text,size,"%s%s\n%s%s",event,player,conversion,outcome);
     }
 }
-int fn_8005D1E4(unsigned int id,MenuArg_t *p,int unused,int *result) {
+int InGameScoringSummaryMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
-    case 0x80000002:fn_8005CD8C((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[2].pParams->mLength);*result=fn_80155D38(fn_80148A58(),(unsigned char)p[0].i);break;
-    case 0x80000003:fn_8005CE10((unsigned char)p[0].i,(unsigned char)p[1].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength);break;
+    case 0x80000002:InGameFormatPossessionCount((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[2].pParams->mLength);*result=fn_80155D38(fn_80148A58(),(unsigned char)p[0].i);break;
+    case 0x80000003:InGameFormatPossession((unsigned char)p[0].i,(unsigned char)p[1].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength);break;
     case 0x80000001:if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
     default:return 0;
     }return 1;
 }
-void fn_8005D2C8(unsigned char value) {lbl_803EA5B5=value;}
-int fn_8005D2D0(unsigned int id,MenuArg_t *p,int unused,int *result) {
+void InGameSetLegendsUnlocked(unsigned char value) {_InGameScreens_bLegendsUnlocked=value;}
+int InGameLegendUnlockMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
     case 0x80000001: {
         char name[20]="";const char *extra="";char *text=p[1].pParams->mpText;int size=p[1].pParams->mLength;
         *p[0].pi=fn_800A3444();
         switch(fn_800A3444()) {case 0:fn_801C2E18(name,"Randall Cunningham");break;case 1:fn_801C2E18(name,"Mike Singletary");break;case 2:fn_801C2E18(name,"Cris Carter");break;case 3:fn_801C2E18(name,"Jack Lambert");break;case 4:fn_801C2E18(name,"Anthony Munoz");break;case 5:fn_801C2E18(name,"Darrell Green");break;case 6:fn_801C2E18(name,"Mean Joe Greene");break;case 7:fn_801C2E18(name,"Bo Jackson");break;case 8:fn_801C2E18(name,"Joey Browner");break;case 9:fn_801C2E18(name,"Sterling Sharpe");break;default:fn_801C2E18(name,"Super Secret");break;}
-        if(lbl_803EA5B5) {lbl_803EA5B5=0;extra="\n\nYou have unlocked the NFL Legends Team!";}
+        if(_InGameScreens_bLegendsUnlocked) {_InGameScreens_bLegendsUnlocked=0;extra="\n\nYou have unlocked the NFL Legends Team!";}
         fn_801C2D88(text,size,"You have unlocked\n%s for\nthe Pickup Pool!%s",name,extra);break;
     }
     case 0x80000002:break;

@@ -3,7 +3,7 @@
    list and its counts, writes and reads the list in the save-state bit
    stream, finds players by index, side or distance, and projects each
    player's drop shadow onto the level ground every frame. */
-#include "game/fn_8022781C.h"
+#include "game/Vec2Distance.h"
 #include "game/FaceFeatures.h"
 #include "game/PlayerObjInit.h"
 #include "game/PlyrNameTag.h"
@@ -14,34 +14,42 @@
 #include "game/Point2.h"
 #include "game/bitstream.h"
 #include "game/PlayerLook.h"
-#include "game/fn_802270D4.h"
-#include "game/fn_80227638.h"
+#include "game/Vec3Magnitude.h"
+#include "game/Vec2Add.h"
 #include <math.h>
 struct Region_8003BDF0 {
   unsigned char mUnknown0[128];
   unsigned int mUnknown128;
   unsigned char (*mUnknown132)[48];
 };
+static void *_PlyrObjs_pHandleA = 0;
+static void *_PlyrObjs_pHandleB = 0;
+static void *_PlyrObjs_pHandleC = 0;
+static AnimSkeleton_t *_PlyrObjs_pBodySkel = 0;
+static AnimSkeleton_t *_PlyrObjs_apMirrorSkels[2] = {0, 0};
+static AnimSkeleton_t *_PlyrObjs_pSkel19 = 0;
+static AnimSkeleton_t *_PlyrObjs_pSkel5 = 0;
+static Object_8003DEC4 **_PlyrObjs_ppPlayers = 0;
+static unsigned short _PlyrObjs_uNumPlayers = 0;
+static unsigned short _PlyrObjs_uTeamSize = 0;
+static unsigned char _PlyrObjs_bShadowPhase = 1;
+
+static int _PlyrObjs_aiBone21Offset[3] = {0, 0, 0};
+static int _PlyrObjs_aiBone15Offset[3] = {0, 0, 0};
+static int _PlyrObjs_aiDefaultPlayerIds[14] = {4, 1, 7, 6, 3, 0, 5, 10, 15, 17, 11, 13, 12, 16};
+
 extern "C" {
-extern void *lbl_803EA410, *lbl_803EA414, *lbl_803EA418;
-extern AnimSkeleton_t *lbl_803EA41C;
-extern AnimSkeleton_t *lbl_803EA420[2];
-extern AnimSkeleton_t *lbl_803EA428, *lbl_803EA42C;
-extern Object_8003DEC4 **lbl_803EA430;
-extern unsigned short lbl_803EA434, lbl_803EA436;
-extern unsigned char lbl_803EA438;
-extern int lbl_802CCD8C[3], lbl_802CCD98[3], lbl_802CCDA4[14];
 extern void *lbl_803EAB3C, *lbl_803EA9FC, *lbl_803EAAE0;
 unsigned char PlayerObjIsDrawReady();
 void PlyrPoseGetBoneTransform(Object_8003DEC4 *, int, float *, int *);
-void fn_8022765C(void *, void *, void *);
-void fn_80227690(void *, void *, void *);
-void fn_80227264(void *, void *, float);
-void fn_80227248(void *, void *, float);
-void fn_80227CC0(void *, void *);
-void fn_802271F0(void *, void *);
-void fn_80227C2C(void *, void *);
-float fn_802276E8(void *, void *);
+void Vec3Add(void *, void *, void *);
+void Vec2Sub(void *, void *, void *);
+void Vec3Scale(void *, void *, float);
+void Vec2Scale(void *, void *, float);
+void Vec3Mat34Mul(void *, void *);
+void Vec3Normalize(void *, void *);
+void Vec3Mat33Mul(void *, void *);
+float Vec2DotProduct(void *, void *);
 int Vec3GetAngle(void *, void *);
 void fn_801CFC14(int, float *, float *);
 float fn_801CFD28(int);
@@ -49,24 +57,24 @@ Region_8003BDF0 *LevelGetData();
 int LevelFindArea(float *);
 void LevelGetQuadBase(void *, void *, void *);
 float LevelGetQuadHeight(void *);
-void fn_8003BDF0(Object_8003DEC4 *, Point2_t *, int);
-void fn_8003BFCC(Object_8003DEC4 *, float *, Point2_t *, Point2_t *,
+void PlyrObjsClipShadowToLevel(Object_8003DEC4 *, Point2_t *, int);
+void PlyrObjsClipShadowQuad(Object_8003DEC4 *, float *, Point2_t *, Point2_t *,
                  Point2_t *, int, float);
-int fn_8003C97C(Point2_t *, Point2_t *, Point2_t *,
+int PlyrObjsIntersectLines(Point2_t *, Point2_t *, Point2_t *,
                 Point2_t *, float *, float *);
-void fn_8003C8C8(void *, Point2_t *, float *);
-void fn_8022732C(void *, void *, float);
-void fn_80227904(void *, void *, void *, float);
-void fn_80227930(void *, void *, void *, float);
+void PlyrObjsShadowGetUV(void *, Point2_t *, float *);
+void Vec2ScaleAcc(void *, void *, float);
+void Vec2Lerp(void *, void *, void *, float);
+void Vec3Lerp(void *, void *, void *, float);
 
 void MatPush();
 void MatLoad();
 void MatPop();
-void fn_80236384(int);
-unsigned int fn_80236398(int);
-void fn_801A3FFC();
-void fn_801A42D4();
-void fn_801A45CC();
+void LLLightGetProjectorMatrix(int);
+unsigned int LLLightGetProjectorColor(int);
+void PlyrRenderDrawShadows();
+void PlyrRenderDrawClippedShadows();
+void PlyrRenderDrawTrails();
 void PlyrPoseWriteState(Object_8003DEC4 *, BitStream_t *);
 void PlyrPoseReadState(Object_8003DEC4 *, BitStream_t *, BitStream_t *, BitStream_t *,
                  BitStream_t *, float);
@@ -87,33 +95,33 @@ void fn_8015F484(AnimSkeleton_t *, AnimSkeleton_t **, AnimSkeleton_t *,
                  AnimSkeleton_t *);
 int PlayerDbSeekOriginalId(Object_8008044C *, int, int *);
 int PlayerDbGetId(Object_8008044C *);
-void fn_8003BA00();
-void fn_8003BA04();
-void fn_8003BA08();
-void fn_8003BA0C();
+void PlyrObjsShadowAdd();
+void PlyrObjsTrailAdd();
+void PlyrObjsShadowDelete();
+void PlyrObjsTrailDelete();
 void ObjNewType_(int, int, int, void (*)(), void (*)());
 void ObjSetListObjFunc(int, int, int, int (*)(void));
 void *ObjNewInList(int, int, int, void *);
 void *ObjNew(int, int, void *);
 void ObjSetPriority(int, void *, int);
 void ObjRemoveFromList(int, void *);
-int fn_8003CBFC();
-int fn_8003CC20();
-int fn_8003CC44();
+int PlyrObjsDrawShadowQuads();
+int PlyrObjsDrawShadowClips();
+int PlyrObjsDrawTrails();
 void PlayerObjAddObjType(int, int, int);
-void fn_801A4688(int);
+void PlyrRenderSetHideFlagged(int);
 int fn_8015E440(int, int);
 void fn_80234A14(void *, int);
-void fn_801A3514();
-void fn_8003D0C8(int);
+void PlyrRenderNewFrame();
+void PlyrObjsInitStateTables(int);
 void PlyrStatesRegister(int, int);
-void fn_8003D12C();
-void fn_8003D2E0();
+void PlyrObjsLoadSkeletons();
+void PlyrObjsInitLimbChains();
 void PlayerObjRenderInit(int, int);
 void PlayerLookOpen();
-void fn_8003D988(int, int *, int);
+void PlyrObjsResolveTeamIds(int, int *, int);
 void PlaTexCacheStart();
-int fn_8003D378(int, int);
+int PlyrObjsCreatePlayers(int, int);
 void ResTrackPause();
 void ResTrackResume();
 int SysGetLastError();
@@ -136,7 +144,7 @@ PlyrNameTag_t *PlyrNameTagNew(int);
 void PlyrNameTagSetText(PlyrNameTag_t *, const char *);
 void PlaTexCacheSetFace(int, const char *, int);
 void PlaTexCacheSetCapFace(int, int, int, int, int);
-void fn_8003D958();
+void PlyrObjsSetHeadSkeletons();
 
 void PlaTexCacheLoadAllNow();
 int fn_800A3420();
@@ -158,15 +166,15 @@ void PlayerLookClose();
 int PlaTexCacheGetArchive();
 void fn_8009BD48(int *, int, int, int);
 int PlyrPoseGetStreamBits(int);
-void fn_80030ACC(void (*)(BitStream_t *),
+void ReplayRegisterChannel(void (*)(BitStream_t *),
                  void (*)(BitStream_t *, BitStream_t *, BitStream_t *,
                           BitStream_t *, float),
                  int, const char *);
-void fn_8003BA00() {}
-void fn_8003BA04() {}
-void fn_8003BA08() {}
-void fn_8003BA0C() {}
-void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
+void PlyrObjsShadowAdd() {}
+void PlyrObjsTrailAdd() {}
+void PlyrObjsShadowDelete() {}
+void PlyrObjsTrailDelete() {}
+void PlyrObjsBuildShadow(Object_8003DEC4 *object, float *color, Point2_t *axis,
                  int angle) {
   if (PlayerObjIsDrawReady() && (object->mUnknown20 & 1) &&
       !(object->mUnknown20 & 2))
@@ -177,22 +185,22 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
   Point2_t direction;
   PlyrPoseGetBoneTransform(object, 4, first, 0);
   PlyrPoseGetBoneTransform(object, 8, center, 0);
-  fn_8022765C(center, center, first);
-  fn_80227264(center, center, 0.5f);
+  Vec3Add(center, center, first);
+  Vec3Scale(center, center, 0.5f);
   PlyrPoseGetBoneTransform(object, 26, first, 0);
-  fn_802276B4(delta, first, center);
-  fn_80227CC0(center, center);
-  fn_80227CC0(delta, delta);
+  Vec3Sub(delta, first, center);
+  Vec3Mat34Mul(center, center);
+  Vec3Mat34Mul(delta, delta);
   delta[2] = 0.0f;
   fn_801CFC14(object->mUnknown36, &direction.mY, &direction.mX);
-  float width = fabsf(fn_802276E8(&direction, axis));
+  float width = fabsf(Vec2DotProduct(&direction, axis));
   if (!(width >= 0.65f))
     width = 0.65f;
-  float length = fn_802270D4(delta);
+  float length = Vec3Magnitude(delta);
   Point2_t forward, backward;
   if (!(length >= 0.4f)) {
     if (!(length <= 0.2f)) {
-      fn_80227264(delta, delta, 1.0f / length);
+      Vec3Scale(delta, delta, 1.0f / length);
       float t = (length - 0.2f) * 5.0f;
       float f = width + t * -width + t * 0.4f;
       float b = width + t * (0.85f - width);
@@ -203,7 +211,7 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
     } else {
       delta[0] += axis->mX * (0.2f - length);
       delta[1] += axis->mY * (0.2f - length);
-      fn_802271F0(delta, delta);
+      Vec3Normalize(delta, delta);
       forward.mX = delta[0] * width;
       forward.mY = delta[1] * width;
       backward.mX = -delta[0] * width;
@@ -214,14 +222,14 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
     forward.mY = delta[1];
     backward.mX = 0.0f;
     backward.mY = 0.0f;
-    fn_80227264(delta, delta, 1.0f / length);
+    Vec3Scale(delta, delta, 1.0f / length);
     backward.mX = -(delta[0] * 0.85f);
     backward.mY = -(delta[1] * 0.85f);
   }
   // FAKEMATCH: reused local; the side vector reuses direction instead of a local of its own
   direction.mX = delta[1];
   direction.mY = -delta[0];
-  fn_80227248(&direction, &direction, width);
+  Vec2Scale(&direction, &direction, width);
   object->mUnknown4256.mColor[0] = color[0];
   object->mUnknown4256.mColor[1] = color[1];
   object->mUnknown4256.mColor[2] = color[2];
@@ -236,40 +244,40 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
   object->mUnknown4256.mPoints[3][1] = center[1] - direction.mY + backward.mY;
   if (LevelGetData()) {
     unsigned int value =
-        object->mUnknown4968 * lbl_803EA436 + object->mUnknown4969;
-    int enabled = (value & 1) ? lbl_803EA438 : !lbl_803EA438;
+        object->mUnknown4968 * _PlyrObjs_uTeamSize + object->mUnknown4969;
+    int enabled = (value & 1) ? _PlyrObjs_bShadowPhase : !_PlyrObjs_bShadowPhase;
     if (enabled) {
       object->mUnknown4256.mUnknown672 = 0;
-      fn_8003BDF0(object, axis, angle);
+      PlyrObjsClipShadowToLevel(object, axis, angle);
     }
   }
 }
-void fn_8003BDF0(Object_8003DEC4 *object, Point2_t *axis, int angle) {
+void PlyrObjsClipShadowToLevel(Object_8003DEC4 *object, Point2_t *axis, int angle) {
   Region_8003BDF0 *regions = LevelGetData();
   if (!regions)
     return;
   float first[4], center[4];
   PlyrPoseGetBoneTransform(object, 4, first, 0);
   PlyrPoseGetBoneTransform(object, 8, center, 0);
-  fn_8022765C(center, center, first);
-  fn_80227264(center, center, 0.5f);
+  Vec3Add(center, center, first);
+  Vec3Scale(center, center, 0.5f);
   PlyrPoseGetBoneTransform(object, 26, first, 0);
   first[2] = (first[2] + center[2]) * 0.5f;
   float radius = fabsf(1.0f / fn_801CFD28(angle)) * first[2];
   Projection_8003BA10 *p = &object->mUnknown4256;
-  radius += fn_8022781C(p->mPoints[0], p->mPoints[2]);
+  radius += Vec2Distance(p->mPoints[0], p->mPoints[2]);
   for (unsigned char i = 0; i < regions->mUnknown128; ++i) {
     Point2_t a, b, mid;
     LevelGetQuadBase(regions->mUnknown132[i], &a, &b);
     float scale = LevelGetQuadHeight(regions->mUnknown132[i]);
     mid.mX = (a.mX + b.mX) * 0.5f;
     mid.mY = (a.mY + b.mY) * 0.5f;
-    float extent = fn_8022781C(&mid, &a);
-    if (!(fn_8022781C(&mid, center) >= radius + extent))
-      fn_8003BFCC(object, center, axis, &a, &b, angle, scale);
+    float extent = Vec2Distance(&mid, &a);
+    if (!(Vec2Distance(&mid, center) >= radius + extent))
+      PlyrObjsClipShadowQuad(object, center, axis, &a, &b, angle, scale);
   }
 }
-void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
+void PlyrObjsClipShadowQuad(Object_8003DEC4 *object, float *center, Point2_t *axis,
                  Point2_t *a, Point2_t *b, int angle, float scale) {
   float position[3];
   float points[3][3];
@@ -286,8 +294,8 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
   position[2] = center[2];
   original.mX = position[0];
   original.mY = position[1];
-  fn_80227690(&shifted, &original, axis);
-  if (fn_8003C97C(&original, &shifted, a, b, &t, &u) && t > 0.0f)
+  Vec2Sub(&shifted, &original, axis);
+  if (PlyrObjsIntersectLines(&original, &shifted, a, b, &t, &u) && t > 0.0f)
     return;
   unsigned char i = 0;
   float height = fn_801CFD28(angle);
@@ -301,11 +309,11 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
   shiftedA.mY = a->mY;
   shiftedB.mX = b->mX;
   shiftedB.mY = b->mY;
-  fn_8022732C(&shiftedA, axis, shift);
-  fn_8022732C(&shiftedB, axis, shift);
+  Vec2ScaleAcc(&shiftedA, axis, shift);
+  Vec2ScaleAcc(&shiftedB, axis, shift);
   float minimum = 1000000.0f, maximum = -1000000.0f;
   for (; i < 4; ++i) {
-    if (fn_8003C97C(&shiftedA, &shiftedB, (Point2_t *)p->mPoints[i],
+    if (PlyrObjsIntersectLines(&shiftedA, &shiftedB, (Point2_t *)p->mPoints[i],
                     (Point2_t *)p->mPoints[(i + 1) % 4], &t, &u) &&
         !(u <= 0.0f) && !(u >= 1.0f)) {
       if (!(t >= minimum))
@@ -327,9 +335,9 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
     original.mY = p->mPoints[i][1];
     shifted.mX = p->mPoints[i][0];
     shifted.mY = p->mPoints[i][1];
-    fn_8022732C(&shifted, axis, -scale / height);
+    Vec2ScaleAcc(&shifted, axis, -scale / height);
     unsigned char count = 0;
-    if (fn_8003C97C(&original, &shifted, a, b, &t, &u) && !(t >= 1.0f) &&
+    if (PlyrObjsIntersectLines(&original, &shifted, a, b, &t, &u) && !(t >= 1.0f) &&
         !(u <= 0.0f) && !(u >= 1.0f)) {
       if (!(t <= 0.0f))
         accepted = 1;
@@ -340,50 +348,50 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
       out->mPairs[out->mCount].mY = p->mPairs[i].mY;
       ++out->mCount;
     }
-    if (fn_8003C97C((Point2_t *)p->mPoints[i],
+    if (PlyrObjsIntersectLines((Point2_t *)p->mPoints[i],
                     (Point2_t *)p->mPoints[(i + 1) % 4], &shiftedA, &shiftedB,
                     &t, &u) &&
         !(t <= 0.0f) && !(t >= 1.0f) && !(u <= 0.0f) && !(u >= 1.0f)) {
       accepted = 1;
-      fn_80227930(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
-      fn_80227904(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
+      Vec3Lerp(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
+      Vec2Lerp(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
       parameters[count] = t;
       count = 1;
     }
-    if (fn_8003C97C((Point2_t *)p->mPoints[i],
+    if (PlyrObjsIntersectLines((Point2_t *)p->mPoints[i],
                     (Point2_t *)p->mPoints[(i + 1) % 4], &startA, &endA,
                     &t, &u) &&
         !(t <= 0.0f) && !(t >= 1.0f)) {
       if (!(u <= 0.0f))
         accepted = 1;
       if (u < 1.0f) {
-        fn_80227930(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
-        fn_80227904(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
+        Vec3Lerp(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
+        Vec2Lerp(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
         parameters[count] = t;
         ++count;
       } else if (!(minimum > 0.0f)) {
         points[count][0] = shiftedA.mX;
         points[count][1] = shiftedA.mY;
-        fn_8003C8C8(p, &shiftedA, (float *)&pairs[count]);
+        PlyrObjsShadowGetUV(p, &shiftedA, (float *)&pairs[count]);
         parameters[count] = t;
         ++count;
       }
     }
-    if (fn_8003C97C((Point2_t *)p->mPoints[i],
+    if (PlyrObjsIntersectLines((Point2_t *)p->mPoints[i],
                     (Point2_t *)p->mPoints[(i + 1) % 4], &startB, &endB,
                     &t, &u) &&
         !(t <= 0.0f) && !(t >= 1.0f)) {
       if (!(u <= 0.0f))
         accepted = 1;
       if (u < 1.0f) {
-        fn_80227930(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
-        fn_80227904(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
+        Vec3Lerp(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
+        Vec2Lerp(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
         parameters[count] = t;
         ++count;
       } else if (!(maximum < 1.0f)) {
         points[count][0] = shiftedB.mX;
         points[count][1] = shiftedB.mY;
-        fn_8003C8C8(p, &shiftedB, (float *)&pairs[count]);
+        PlyrObjsShadowGetUV(p, &shiftedB, (float *)&pairs[count]);
         parameters[count] = t;
         ++count;
       }
@@ -410,31 +418,31 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
   for (i = 0; i < out->mCount; ++i) {
     original.mX = out->mPoints[i][0];
     original.mY = out->mPoints[i][1];
-    fn_80227690(&shifted, out->mPoints[i], axis);
-    if (fn_8003C97C(&original, &shifted, a, b, &t, &u)) {
-      fn_80227904(out->mPoints[i], &shifted, &original, t);
+    Vec2Sub(&shifted, out->mPoints[i], axis);
+    if (PlyrObjsIntersectLines(&original, &shifted, a, b, &t, &u)) {
+      Vec2Lerp(out->mPoints[i], &shifted, &original, t);
       out->mPoints[i][2] = t * height * 1.4f;
     }
   }
   ++p->mUnknown672;
 }
-void fn_8003C8C8(void *record, Point2_t *offset, float *parameters) {
+void PlyrObjsShadowGetUV(void *record, Point2_t *offset, float *parameters) {
   struct View {
     unsigned char pad[16];
     float points[4][3];
   };
   View *p = (View *)record;
   Point2_t line;
-  fn_80227690(&line, p->points[0], p->points[3]);
-  fn_80227638(&line, offset, &line);
-  fn_8003C97C((Point2_t *)p->points[0], (Point2_t *)p->points[1],
+  Vec2Sub(&line, p->points[0], p->points[3]);
+  Vec2Add(&line, offset, &line);
+  PlyrObjsIntersectLines((Point2_t *)p->points[0], (Point2_t *)p->points[1],
               offset, &line, parameters, 0);
-  fn_80227690(&line, p->points[1], p->points[0]);
-  fn_80227638(&line, offset, &line);
-  fn_8003C97C((Point2_t *)p->points[1], (Point2_t *)p->points[2],
+  Vec2Sub(&line, p->points[1], p->points[0]);
+  Vec2Add(&line, offset, &line);
+  PlyrObjsIntersectLines((Point2_t *)p->points[1], (Point2_t *)p->points[2],
               offset, &line, parameters + 1, 0);
 }
-int fn_8003C97C(Point2_t *a, Point2_t *b, Point2_t *c,
+int PlyrObjsIntersectLines(Point2_t *a, Point2_t *b, Point2_t *c,
                 Point2_t *d, float *t, float *u) {
   float ax = a->mX, ay = a->mY, cx0 = c->mX, cy0 = c->mY;
   float dy = b->mY - ay, cx = d->mX - cx0;
@@ -448,11 +456,11 @@ int fn_8003C97C(Point2_t *a, Point2_t *b, Point2_t *c,
     *u = ((ax - cx0) * dy + (cy0 - ay) * dx) / -determinant;
   return 1;
 }
-int fn_8003CA20() {
+int PlyrObjsUpdateShadows() {
   MatPush();
-  fn_80236384(0);
+  LLLightGetProjectorMatrix(0);
   MatLoad();
-  unsigned int value = fn_80236398(0);
+  unsigned int value = LLLightGetProjectorColor(0);
   float color[4];
   color[0] = (float)(value & 255) * 0.0078125f;
   color[1] = (float)((value >> 8) & 255) * 0.0078125f;
@@ -462,9 +470,9 @@ int fn_8003CA20() {
   vector[0] = 0.0f;
   vector[1] = 0.0f;
   vector[2] = 1.0f;
-  fn_80227C2C(vector, vector);
+  Vec3Mat33Mul(vector, vector);
   vector[2] = 0.0f;
-  float length = fn_802270D4(vector);
+  float length = Vec3Magnitude(vector);
   if (!(length >= 0.0001f)) {
     vector[0] = 0.0f;
     vector[1] = 1.0f;
@@ -475,26 +483,26 @@ int fn_8003CA20() {
   angleVector[1] = vector[1];
   angleVector[2] = 1.0f;
   int angle = Vec3GetAngle(angleVector, vector);
-  fn_80227264(vector, vector, 1.0f / length);
-  for (int i = 0; i < lbl_803EA434; ++i)
-    fn_8003BA10(lbl_803EA430[i], color, (Point2_t *)vector, angle);
+  Vec3Scale(vector, vector, 1.0f / length);
+  for (int i = 0; i < _PlyrObjs_uNumPlayers; ++i)
+    PlyrObjsBuildShadow(_PlyrObjs_ppPlayers[i], color, (Point2_t *)vector, angle);
   MatPop();
-  lbl_803EA438 = !lbl_803EA438;
+  _PlyrObjs_bShadowPhase = !_PlyrObjs_bShadowPhase;
   return 0;
 }
-int fn_8003CBFC() {
-  fn_801A3FFC();
+int PlyrObjsDrawShadowQuads() {
+  PlyrRenderDrawShadows();
   return 0;
 }
-int fn_8003CC20() {
-  fn_801A42D4();
+int PlyrObjsDrawShadowClips() {
+  PlyrRenderDrawClippedShadows();
   return 0;
 }
-int fn_8003CC44() {
-  fn_801A45CC();
+int PlyrObjsDrawTrails() {
+  PlyrRenderDrawTrails();
   return 0;
 }
-void fn_8003CC68(AnimSkeleton_t *skeleton) {
+void PlyrObjsInitBodySkelPose(AnimSkeleton_t *skeleton) {
   unsigned short values[64][3] = {
       {65518, 0, 0},
       {65469, 65453, 65493},
@@ -568,7 +576,7 @@ void fn_8003CC68(AnimSkeleton_t *skeleton) {
   }
 }
 
-void fn_8003CD1C(AnimSkeleton_t *skeleton) {
+void PlyrObjsInitSkel19Pose(AnimSkeleton_t *skeleton) {
   unsigned short values[19][3] = {
       {56480, 0, 0}, {8698, 0, 0},          {0, 0, 0}, {62991, 0, 0},
       {0, 0, 0},     {43390, 0, 0},         {0, 0, 0}, {40775, 5152, 0},
@@ -583,7 +591,7 @@ void fn_8003CD1C(AnimSkeleton_t *skeleton) {
   }
 }
 
-void fn_8003CDF8(AnimSkeleton_t *skeleton) {
+void PlyrObjsInitSkel5Pose(AnimSkeleton_t *skeleton) {
   unsigned short values[5][3] = {
       {0, 0, 0},           {64403, 64991, 18297},
       {64403, 544, 47238}, {24448, 65257, 65414},
@@ -596,9 +604,9 @@ void fn_8003CDF8(AnimSkeleton_t *skeleton) {
   }
 }
 
-void fn_8003CEB0(BitStream_t *stream) {
-  for (unsigned int i = 0; i < lbl_803EA434; ++i) {
-    Object_8003DEC4 *object = lbl_803EA430[i];
+void PlyrObjsWriteState(BitStream_t *stream) {
+  for (unsigned int i = 0; i < _PlyrObjs_uNumPlayers; ++i) {
+    Object_8003DEC4 *object = _PlyrObjs_ppPlayers[i];
     PlyrPoseWriteState(object, stream);
     fn_80191068(stream, object->mUnknown5188.mUnknown568, 1);
     fn_80191068(stream, (unsigned long long)object->mUnknown5188.mUnknown56C,
@@ -609,10 +617,10 @@ void fn_8003CEB0(BitStream_t *stream) {
                 4);
   }
 }
-void fn_8003CF88(BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream_t *d,
+void PlyrObjsReadState(BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream_t *d,
                  float t) {
-  for (unsigned int i = 0; i < lbl_803EA434; ++i) {
-    Object_8003DEC4 *object = lbl_803EA430[i];
+  for (unsigned int i = 0; i < _PlyrObjs_uNumPlayers; ++i) {
+    Object_8003DEC4 *object = _PlyrObjs_ppPlayers[i];
     PlyrPoseReadState(object, a, b, c, d, t);
     object->mUnknown972 = LevelFindArea(object->mUnknown4);
     fn_80190F18(b, 1);
@@ -631,7 +639,7 @@ void fn_8003CF88(BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream_t *d,
       fn_80190F18(c, 12);
   }
 }
-void fn_8003D0C8(int mode) {
+void PlyrObjsInitStateTables(int mode) {
   if (mode)
     fn_800B4D7C();
   else
@@ -648,71 +656,71 @@ static inline void ZeroRoot(AnimSkeleton_t *skeleton) {
   float *root = (float *)((char *)skeleton + 16);
   root[0] = root[1] = root[2] = 0.0f;
 }
-void fn_8003D12C() {
+void PlyrObjsLoadSkeletons() {
   // FAKEMATCH: local that only aliases the global gAnimData
   AnimData *anim = &gAnimData;
-  lbl_803EA41C = ResLoad(anim->GetArchive(), 57, 1);
-  CharRelocateSkeleton(lbl_803EA41C);
-  fn_8003CC68(lbl_803EA41C);
-  lbl_802CCD98[0] = (short)lbl_803EA41C->mUnknown1040[15][0] * 16;
-  lbl_802CCD98[1] = (short)lbl_803EA41C->mUnknown1040[15][1] * 16;
-  lbl_802CCD98[2] = (short)lbl_803EA41C->mUnknown1040[15][2] * 16;
-  lbl_802CCD8C[0] = (short)lbl_803EA41C->mUnknown1040[21][0] * 16;
-  lbl_802CCD8C[1] = (short)lbl_803EA41C->mUnknown1040[21][1] * 16;
-  lbl_802CCD8C[2] = (short)lbl_803EA41C->mUnknown1040[21][2] * 16;
-  lbl_803EA420[0] = ResLoad(anim->GetArchive(), 58, 1);
-  CharRelocateSkeleton(lbl_803EA420[0]);
-  ZeroRoot(lbl_803EA420[0]);
-  lbl_803EA420[1] = ResLoad(anim->GetArchive(), 59, 1);
-  CharRelocateSkeleton(lbl_803EA420[1]);
-  ZeroRoot(lbl_803EA420[1]);
-  CharSkelMirrorRest(lbl_803EA420[0], lbl_803EA420[1]);
-  lbl_803EA428 = ResLoad(anim->GetArchive(), 61, 1);
-  CharRelocateSkeleton(lbl_803EA428);
-  fn_8003CD1C(lbl_803EA428);
-  ZeroRoot(lbl_803EA428);
-  lbl_803EA42C = ResLoad(anim->GetArchive(), 62, 1);
-  CharRelocateSkeleton(lbl_803EA42C);
-  fn_8003CDF8(lbl_803EA42C);
-  ZeroRoot(lbl_803EA42C);
+  _PlyrObjs_pBodySkel = ResLoad(anim->GetArchive(), 57, 1);
+  CharRelocateSkeleton(_PlyrObjs_pBodySkel);
+  PlyrObjsInitBodySkelPose(_PlyrObjs_pBodySkel);
+  _PlyrObjs_aiBone15Offset[0] = (short)_PlyrObjs_pBodySkel->mUnknown1040[15][0] * 16;
+  _PlyrObjs_aiBone15Offset[1] = (short)_PlyrObjs_pBodySkel->mUnknown1040[15][1] * 16;
+  _PlyrObjs_aiBone15Offset[2] = (short)_PlyrObjs_pBodySkel->mUnknown1040[15][2] * 16;
+  _PlyrObjs_aiBone21Offset[0] = (short)_PlyrObjs_pBodySkel->mUnknown1040[21][0] * 16;
+  _PlyrObjs_aiBone21Offset[1] = (short)_PlyrObjs_pBodySkel->mUnknown1040[21][1] * 16;
+  _PlyrObjs_aiBone21Offset[2] = (short)_PlyrObjs_pBodySkel->mUnknown1040[21][2] * 16;
+  _PlyrObjs_apMirrorSkels[0] = ResLoad(anim->GetArchive(), 58, 1);
+  CharRelocateSkeleton(_PlyrObjs_apMirrorSkels[0]);
+  ZeroRoot(_PlyrObjs_apMirrorSkels[0]);
+  _PlyrObjs_apMirrorSkels[1] = ResLoad(anim->GetArchive(), 59, 1);
+  CharRelocateSkeleton(_PlyrObjs_apMirrorSkels[1]);
+  ZeroRoot(_PlyrObjs_apMirrorSkels[1]);
+  CharSkelMirrorRest(_PlyrObjs_apMirrorSkels[0], _PlyrObjs_apMirrorSkels[1]);
+  _PlyrObjs_pSkel19 = ResLoad(anim->GetArchive(), 61, 1);
+  CharRelocateSkeleton(_PlyrObjs_pSkel19);
+  PlyrObjsInitSkel19Pose(_PlyrObjs_pSkel19);
+  ZeroRoot(_PlyrObjs_pSkel19);
+  _PlyrObjs_pSkel5 = ResLoad(anim->GetArchive(), 62, 1);
+  CharRelocateSkeleton(_PlyrObjs_pSkel5);
+  PlyrObjsInitSkel5Pose(_PlyrObjs_pSkel5);
+  ZeroRoot(_PlyrObjs_pSkel5);
 }
-void fn_8003D2E0() {
+void PlyrObjsInitLimbChains() {
   fn_800AF630(gAnimData.GetArchive(), 60, 1, 32);
-  fn_800AF790(0, lbl_803EA41C, "low_torso", "neckhi", 0);
-  fn_800AF790(1, lbl_803EA41C, "lshoulder", "lwrist", 1);
-  fn_800AF790(2, lbl_803EA41C, "rshoulder", "rwrist", 1);
+  fn_800AF790(0, _PlyrObjs_pBodySkel, "low_torso", "neckhi", 0);
+  fn_800AF790(1, _PlyrObjs_pBodySkel, "lshoulder", "lwrist", 1);
+  fn_800AF790(2, _PlyrObjs_pBodySkel, "rshoulder", "rwrist", 1);
 }
-int fn_8003D378(int owner, int mode) {
+int PlyrObjsCreatePlayers(int owner, int mode) {
   // FAKEMATCH: dead initializer; result is set from SysGetLastError before any read
   int result = 0;
   Object_8008044C object;
   ResTrackPause();
-  lbl_803EA430 = (Object_8003DEC4 **)fn_801D2B7C(lbl_803EA434 * 4, 0, 0);
+  _PlyrObjs_ppPlayers = (Object_8003DEC4 **)fn_801D2B7C(_PlyrObjs_uNumPlayers * 4, 0, 0);
   result = SysGetLastError();
-  if (lbl_803EA430) {
+  if (_PlyrObjs_ppPlayers) {
     PlayerCursorOpen(&object, 0, mode ? 0x54415453 : 0x454D4147);
-    fn_8003D958();
+    PlyrObjsSetHeadSkeletons();
     unsigned int order[14], keys[14];
     Creation_8003D378 init;
     init.mInit.mUnknown00 = 0;
     init.mInit.mUnknown02 = 1;
-    init.mInit.mUnknown04 = (int)lbl_803EA41C;
-    ((AnimSkeleton_t **)init.mInit.mUnknown08)[0] = lbl_803EA420[0];
-    ((AnimSkeleton_t **)init.mInit.mUnknown08)[1] = lbl_803EA420[1];
-    init.mInit.mUnknown10 = (int)lbl_803EA428;
-    init.mInit.mUnknown14 = (int)lbl_803EA42C;
+    init.mInit.mUnknown04 = (int)_PlyrObjs_pBodySkel;
+    ((AnimSkeleton_t **)init.mInit.mUnknown08)[0] = _PlyrObjs_apMirrorSkels[0];
+    ((AnimSkeleton_t **)init.mInit.mUnknown08)[1] = _PlyrObjs_apMirrorSkels[1];
+    init.mInit.mUnknown10 = (int)_PlyrObjs_pSkel19;
+    init.mInit.mUnknown14 = (int)_PlyrObjs_pSkel5;
     fn_8015EE74();
     unsigned int i, j;
-    for (i = 0; i < lbl_803EA434; ++i) {
+    for (i = 0; i < _PlyrObjs_uNumPlayers; ++i) {
       unsigned char team;
       if (mode)
         team = 27;
       else
-        team = i / lbl_803EA436;
-      PlayerDbSeekId(&object, lbl_802CCDA4[i], 0);
+        team = i / _PlyrObjs_uTeamSize;
+      PlayerDbSeekId(&object, _PlyrObjs_aiDefaultPlayerIds[i], 0);
       char name[28];
       int hasName = PlayerDbGetNameKey(&object, name, 27);
-      PlayerLookLoadForPlayer(i, i, team, lbl_802CCDA4[i]);
+      PlayerLookLoadForPlayer(i, i, team, _PlyrObjs_aiDefaultPlayerIds[i]);
       order[i] = i;
       int a = PlayerLookGetHatModel(i), b = PlayerLookGetSlot1Model(i);
       PlayerHeadIds_t ids;
@@ -730,8 +738,8 @@ int fn_8003D378(int owner, int mode) {
       fn_8015F298(i, c);
     }
     fn_8015EF10();
-    for (i = 0; i < lbl_803EA434; ++i)
-      for (j = i + 1; j < lbl_803EA434; ++j) {
+    for (i = 0; i < _PlyrObjs_uNumPlayers; ++i)
+      for (j = i + 1; j < _PlyrObjs_uNumPlayers; ++j) {
         if (keys[i] > keys[j]) {
           unsigned int key = keys[i];
           keys[i] = keys[j];
@@ -741,16 +749,16 @@ int fn_8003D378(int owner, int mode) {
           order[j] = index;
         }
       }
-    for (j = 0; j < lbl_803EA434; ++j) {
+    for (j = 0; j < _PlyrObjs_uNumPlayers; ++j) {
       i = order[j];
       if (mode)
         init.mUnknown57 = 27;
       else
-        init.mUnknown57 = i / lbl_803EA436;
-      init.mUnknown58 = i % lbl_803EA436;
+        init.mUnknown57 = i / _PlyrObjs_uTeamSize;
+      init.mUnknown58 = i % _PlyrObjs_uTeamSize;
       init.mUnknown59 = i;
       init.mUnknown5A = i;
-      init.mInit.mUnknown18 = lbl_802CCDA4[i];
+      init.mInit.mUnknown18 = _PlyrObjs_aiDefaultPlayerIds[i];
       PlayerDbSeekId(&object, init.mInit.mUnknown18, 0);
       PlayerDbGetNickname(&object, init.mUnknown38, 31);
       if (!mode)
@@ -785,18 +793,18 @@ int fn_8003D378(int owner, int mode) {
       fn_80082138(&object, &block);
       FaceMorphBuildWeights(&block, &init.mUnknown5C);
       if (owner) {
-        lbl_803EA430[i] =
+        _PlyrObjs_ppPlayers[i] =
             (Object_8003DEC4 *)ObjNewInList(owner, 0, 0, &init);
-        ObjSetPriority(owner, lbl_803EA430[i], 10);
-        lbl_803EA430[i]->mUnknown988 =
+        ObjSetPriority(owner, _PlyrObjs_ppPlayers[i], 10);
+        _PlyrObjs_ppPlayers[i]->mUnknown988 =
             PlyrNameTagNew(init.mUnknown57 * 7 + init.mUnknown58);
-        PlyrNameTagSetText(lbl_803EA430[i]->mUnknown988, " ");
+        PlyrNameTagSetText(_PlyrObjs_ppPlayers[i]->mUnknown988, " ");
       } else {
-        lbl_803EA430[i] = (Object_8003DEC4 *)ObjNew(0, 0, &init);
-        lbl_803EA430[i]->mUnknown988 = 0;
+        _PlyrObjs_ppPlayers[i] = (Object_8003DEC4 *)ObjNew(0, 0, &init);
+        _PlyrObjs_ppPlayers[i]->mUnknown988 = 0;
       }
-      if (lbl_803EA410 && lbl_803EA414) {
-        Object_8003DEC4 *player = lbl_803EA430[i];
+      if (_PlyrObjs_pHandleA && _PlyrObjs_pHandleB) {
+        Object_8003DEC4 *player = _PlyrObjs_ppPlayers[i];
         player->mUnknown4256.mUnknown672 = 0;
         player->mUnknown4256.mPairs[0].mX = 0.0f;
         player->mUnknown4256.mPairs[0].mY = 0.0f;
@@ -823,10 +831,10 @@ int fn_8003D378(int owner, int mode) {
   ResTrackResume();
   return result;
 }
-void fn_8003D958() {
-  fn_8015F484(lbl_803EA41C, lbl_803EA420, lbl_803EA428, lbl_803EA42C);
+void PlyrObjsSetHeadSkeletons() {
+  fn_8015F484(_PlyrObjs_pBodySkel, _PlyrObjs_apMirrorSkels, _PlyrObjs_pSkel19, _PlyrObjs_pSkel5);
 }
-void fn_8003D988(int value, int *out, int mode) {
+void PlyrObjsResolveTeamIds(int value, int *out, int mode) {
   Object_8008044C object;
   Desc_8008044C desc;
   unsigned int i;
@@ -834,49 +842,49 @@ void fn_8003D988(int value, int *out, int mode) {
     desc.mUnknown4 = 1;
     desc.mUnknown8 = value;
     PlayerCursorOpen(&object, &desc, 0x454D4147);
-    for (i = 0; i < lbl_803EA436; ++i) {
+    for (i = 0; i < _PlyrObjs_uTeamSize; ++i) {
       PlayerDbSeekOriginalId(&object, out[i], 0);
       out[i] = PlayerDbGetId(&object);
     }
     fn_8008056C(&object);
   } else {
-    for (i = 0; i < lbl_803EA436; ++i)
+    for (i = 0; i < _PlyrObjs_uTeamSize; ++i)
       out[i] = 332;
   }
 }
-int fn_8003DA8C() { return 13; }
-int fn_8003DA94(int count, int owner, int mode) {
-  ObjNewType_(29, 20, 1, fn_8003BA00, fn_8003BA08);
+int PlyrObjsGetStreamBits() { return 13; }
+int PlyrObjsCreate(int count, int owner, int mode) {
+  ObjNewType_(29, 20, 1, PlyrObjsShadowAdd, PlyrObjsShadowDelete);
   if (owner) {
-    ObjSetListObjFunc(owner, 29, 0, fn_8003CBFC);
-    lbl_803EA410 = ObjNewInList(owner, 29, 0, 0);
-    ObjSetPriority(owner, lbl_803EA410, 2);
+    ObjSetListObjFunc(owner, 29, 0, PlyrObjsDrawShadowQuads);
+    _PlyrObjs_pHandleA = ObjNewInList(owner, 29, 0, 0);
+    ObjSetPriority(owner, _PlyrObjs_pHandleA, 2);
   }
-  ObjNewType_(30, 20, 1, fn_8003BA00, fn_8003BA08);
+  ObjNewType_(30, 20, 1, PlyrObjsShadowAdd, PlyrObjsShadowDelete);
   if (owner) {
-    ObjSetListObjFunc(owner, 30, 0, fn_8003CC20);
-    lbl_803EA414 = ObjNewInList(owner, 30, 0, 0);
-    ObjSetPriority(owner, lbl_803EA414, 7);
+    ObjSetListObjFunc(owner, 30, 0, PlyrObjsDrawShadowClips);
+    _PlyrObjs_pHandleB = ObjNewInList(owner, 30, 0, 0);
+    ObjSetPriority(owner, _PlyrObjs_pHandleB, 7);
   }
-  ObjNewType_(27, 20, 1, fn_8003BA04, fn_8003BA0C);
+  ObjNewType_(27, 20, 1, PlyrObjsTrailAdd, PlyrObjsTrailDelete);
   if (owner) {
-    ObjSetListObjFunc(owner, 27, 0, fn_8003CC44);
-    lbl_803EA418 = ObjNewInList(owner, 27, 0, 0);
-    ObjSetPriority(owner, lbl_803EA418, 13);
+    ObjSetListObjFunc(owner, 27, 0, PlyrObjsDrawTrails);
+    _PlyrObjs_pHandleC = ObjNewInList(owner, 27, 0, 0);
+    ObjSetPriority(owner, _PlyrObjs_pHandleC, 13);
   }
   PlayerObjAddObjType(owner, 0, count);
-  lbl_803EA436 = (unsigned int)count >> 1;
-  lbl_803EA434 = count;
-  fn_8003D0C8(mode);
+  _PlyrObjs_uTeamSize = (unsigned int)count >> 1;
+  _PlyrObjs_uNumPlayers = count;
+  PlyrObjsInitStateTables(mode);
   PlyrStatesRegister(0, mode);
-  fn_8003D12C();
-  fn_8003D2E0();
-  PlayerObjRenderInit((int)lbl_803EA41C, (int)lbl_803EA420);
+  PlyrObjsLoadSkeletons();
+  PlyrObjsInitLimbChains();
+  PlayerObjRenderInit((int)_PlyrObjs_pBodySkel, (int)_PlyrObjs_apMirrorSkels);
   PlayerLookOpen();
-  fn_8003D988(0, lbl_802CCDA4, mode);
-  fn_8003D988(1, lbl_802CCDA4 + lbl_803EA436, mode);
+  PlyrObjsResolveTeamIds(0, _PlyrObjs_aiDefaultPlayerIds, mode);
+  PlyrObjsResolveTeamIds(1, _PlyrObjs_aiDefaultPlayerIds + _PlyrObjs_uTeamSize, mode);
   PlaTexCacheStart();
-  int result = fn_8003D378(owner, mode);
+  int result = PlyrObjsCreatePlayers(owner, mode);
   if (!mode) {
     PlaTexCacheLoadAllNow();
     if (fn_800A3420() == 3)
@@ -887,38 +895,38 @@ int fn_8003DA94(int count, int owner, int mode) {
     PlaTexCacheCloseArchive();
   return result;
 }
-int fn_8003DCC0(int owner) {
+int PlyrObjsDestroy(int owner) {
   // FAKEMATCH: dead initializer; result is set from ObjDelType(27) before any read
   int result = 0;
-  if (lbl_803EA410) {
-    ObjRemoveFromList(owner, lbl_803EA410);
-    VptTrashObject(lbl_803EA410);
+  if (_PlyrObjs_pHandleA) {
+    ObjRemoveFromList(owner, _PlyrObjs_pHandleA);
+    VptTrashObject(_PlyrObjs_pHandleA);
     VptFlushObjectTrash();
-    lbl_803EA410 = 0;
+    _PlyrObjs_pHandleA = 0;
   }
-  if (lbl_803EA414) {
-    ObjRemoveFromList(owner, lbl_803EA414);
-    VptTrashObject(lbl_803EA414);
+  if (_PlyrObjs_pHandleB) {
+    ObjRemoveFromList(owner, _PlyrObjs_pHandleB);
+    VptTrashObject(_PlyrObjs_pHandleB);
     VptFlushObjectTrash();
-    lbl_803EA414 = 0;
+    _PlyrObjs_pHandleB = 0;
   }
-  if (lbl_803EA418) {
-    ObjRemoveFromList(owner, lbl_803EA418);
-    VptTrashObject(lbl_803EA418);
+  if (_PlyrObjs_pHandleC) {
+    ObjRemoveFromList(owner, _PlyrObjs_pHandleC);
+    VptTrashObject(_PlyrObjs_pHandleC);
     VptFlushObjectTrash();
-    lbl_803EA418 = 0;
+    _PlyrObjs_pHandleC = 0;
   }
-  if (lbl_803EA430) {
-    for (int i = 0; i < lbl_803EA434; ++i) {
+  if (_PlyrObjs_ppPlayers) {
+    for (int i = 0; i < _PlyrObjs_uNumPlayers; ++i) {
       if (owner) {
-        PlyrNameTagDelete(lbl_803EA430[i]->mUnknown988);
-        ObjRemoveFromList(owner, lbl_803EA430[i]);
+        PlyrNameTagDelete(_PlyrObjs_ppPlayers[i]->mUnknown988);
+        ObjRemoveFromList(owner, _PlyrObjs_ppPlayers[i]);
       }
-      VptTrashObject(lbl_803EA430[i]);
+      VptTrashObject(_PlyrObjs_ppPlayers[i]);
     }
     VptFlushObjectTrash();
-    fn_801D2BD0(lbl_803EA430);
-    lbl_803EA430 = 0;
+    fn_801D2BD0(_PlyrObjs_ppPlayers);
+    _PlyrObjs_ppPlayers = 0;
   }
   PlayerObjRenderShutdown();
   fn_800AF71C();
@@ -931,48 +939,48 @@ int fn_8003DCC0(int owner) {
   ObjDelType(29);
   ObjDelType(30);
   result = ObjDelType(27);
-  lbl_803EA434 = 0;
+  _PlyrObjs_uNumPlayers = 0;
   PlaTexCacheStop();
   PlayerLookClose();
   if (FELoopIsMainFEActive() && PlaTexCacheGetArchive())
     PlaTexCacheCloseArchive();
   return result;
 }
-void fn_8003DE74(int side, int *values) {
+void PlyrObjsSetTeamIds(int side, int *values) {
   int offset = side ? 7 : 0;
   for (int i = 0; i < 7; ++i)
-    lbl_802CCDA4[offset + i] = values[i];
+    _PlyrObjs_aiDefaultPlayerIds[offset + i] = values[i];
 }
-int fn_8003DEB4() { return lbl_803EA434; }
-int fn_8003DEBC() { return 7; }
-Object_8003DEC4 *fn_8003DEC4(int index) {
+int PlyrObjsGetCount() { return _PlyrObjs_uNumPlayers; }
+int PlyrObjsGetPerTeam() { return 7; }
+Object_8003DEC4 *PlyrObjsGet(int index) {
   Object_8003DEC4 *result = 0;
-  if (lbl_803EA430)
-    result = lbl_803EA430[index];
+  if (_PlyrObjs_ppPlayers)
+    result = _PlyrObjs_ppPlayers[index];
   return result;
 }
-Object_8003DEC4 *fn_8003DEE4(int value) {
+Object_8003DEC4 *PlyrObjsFindByKey(int value) {
   Object_8003DEC4 *result = 0;
-  for (unsigned char i = 0; i < lbl_803EA434; ++i)
-    if (lbl_803EA430[i]->mUnknown4956 == value) {
-      result = lbl_803EA430[i];
+  for (unsigned char i = 0; i < _PlyrObjs_uNumPlayers; ++i)
+    if (_PlyrObjs_ppPlayers[i]->mUnknown4956 == value) {
+      result = _PlyrObjs_ppPlayers[i];
       break;
     }
   return result;
 }
-Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index) {
+Object_8003DEC4 *PlyrObjsGetBySide(int side, unsigned char index) {
   Object_8003DEC4 *result = 0;
-  if (lbl_803EA430)
-    result = fn_8003DEC4(side * 7 + index);
+  if (_PlyrObjs_ppPlayers)
+    result = PlyrObjsGet(side * 7 + index);
   return result;
 }
-Object_8003DEC4 *fn_8003DF7C(Point2_t *point, float *distance) {
+Object_8003DEC4 *PlyrObjsFindNearest(Point2_t *point, float *distance) {
   float value = 10000.0f;
   Object_8003DEC4 *result = 0;
-  if (lbl_803EA430)
-    for (unsigned int i = 0; i < lbl_803EA434; ++i) {
-      Object_8003DEC4 *player = lbl_803EA430[i];
-      float current = fn_8022781C(player->mUnknown4, point);
+  if (_PlyrObjs_ppPlayers)
+    for (unsigned int i = 0; i < _PlyrObjs_uNumPlayers; ++i) {
+      Object_8003DEC4 *player = _PlyrObjs_ppPlayers[i];
+      float current = Vec2Distance(player->mUnknown4, point);
       if (!(current >= value)) {
         result = player;
         value = current;
@@ -982,9 +990,9 @@ Object_8003DEC4 *fn_8003DF7C(Point2_t *point, float *distance) {
     *distance = value;
   return result;
 }
-AnimSkeleton_t *fn_8003E028() { return lbl_803EA41C; }
-AnimSkeleton_t *fn_8003E030() { return lbl_803EA428; }
-void fn_8003E038(Block_80170E64 *object, int *reference) {
+AnimSkeleton_t *PlyrObjsGetBodySkeleton() { return _PlyrObjs_pBodySkel; }
+AnimSkeleton_t *PlyrObjsGetSkel19() { return _PlyrObjs_pSkel19; }
+void PlyrObjsGetPlayerRef(Block_80170E64 *object, int *reference) {
   fn_8009BD48(reference, 0, 0, 0);
   if (object)
     for (unsigned int team = 0; team < 2; ++team)
@@ -995,33 +1003,33 @@ void fn_8003E038(Block_80170E64 *object, int *reference) {
           *reference = player->mId;
       }
 }
-Object_80039F5C *fn_8003E0C8(Block_80170E64 *object) {
+Object_80039F5C *PlyrObjsFindPlayer(Block_80170E64 *object) {
   struct {
     unsigned char mBytes[3];
     unsigned char mKind;
   } reference;
   int *key = (int *)&reference;
   Object_80039F5C *result = 0;
-  fn_8003E038(object, key);
+  PlyrObjsGetPlayerRef(object, key);
   if (reference.mKind == 1)
     result = fn_8009BCE8(key);
   return result;
 }
-void fn_8003E118() {
-  int size = PlyrPoseGetStreamBits(0) + fn_8003DA8C();
-  fn_80030ACC(fn_8003CEB0, fn_8003CF88, size * lbl_803EA434, "Players");
+void PlyrObjsRegisterState() {
+  int size = PlyrPoseGetStreamBits(0) + PlyrObjsGetStreamBits();
+  ReplayRegisterChannel(PlyrObjsWriteState, PlyrObjsReadState, size * _PlyrObjs_uNumPlayers, "Players");
 }
-void fn_8003E174(int a) { fn_801A4688(a); }
-void fn_8003E194(int index, int value) {
-  Object_8003DEC4 *object = fn_8003DEC4(index);
+void PlyrObjsSetDrawFlag(int a) { PlyrRenderSetHideFlagged(a); }
+void PlyrObjsSetBodyType(int index, int value) {
+  Object_8003DEC4 *object = PlyrObjsGet(index);
   if (value == 7)
     value = 2;
   object->mUnknown1016 = value;
   object->mUnknown1020 = fn_8015E440(0, value);
   fn_80234A14(&object->mBytes992[172], 1);
 }
-void fn_8003E1F0() {
-  fn_801A3514();
-  fn_8003CA20();
+void PlyrObjsDrawShadows() {
+  PlyrRenderNewFrame();
+  PlyrObjsUpdateShadows();
 }
 }

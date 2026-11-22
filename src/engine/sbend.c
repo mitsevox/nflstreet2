@@ -21,7 +21,7 @@ int SNDpitchbend(int handle, int value)
             record->m68 = value;
             record->m8A = 0;
             iSNDcalcpitch(index);
-            fn_80274B50(index);
+            SNDPLATFORM_setpitch(index);
         }
     }
     return handle;

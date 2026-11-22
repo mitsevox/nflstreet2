@@ -5,19 +5,21 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/llmatrix.h"
 
-extern unsigned char lbl_803EBCB4;
-extern MatStack_t *lbl_803EBCB8;
-extern unsigned int lbl_803EBCBC;
+static unsigned char _Mat_ModuleActive = 0;
 
-void fn_802277DC(float *pOut, float *pA, float *pB);
-void fn_802271F0(float *pOut, float *p);
+/* The matrix stacks MatInit allocates, and their number. */
+static MatStack_t *_Mat_pStacks = 0;
+static unsigned int _Mat_NumStacks = 0;
+
+void Vec3CrossProduct(float *pOut, float *pA, float *pB);
+void Vec3Normalize(float *pOut, float *p);
 int Vec3GetAngle(float *pA, float *pB);
 
 int MatDelStack(unsigned int index);
 
 MatStack_t *MatGetStackPtrFromIndex(unsigned int index)
 {
-    return index < lbl_803EBCBC ? &lbl_803EBCB8[index] : 0;
+    return index < _Mat_NumStacks ? &_Mat_pStacks[index] : 0;
 }
 
 int MatInit(int numStacks)
@@ -26,18 +28,18 @@ int MatInit(int numStacks)
     int count;
     int i;
 
-    if (!lbl_803EBCB4) {
+    if (!_Mat_ModuleActive) {
         count = numStacks + 8;
-        lbl_803EBCB8 = fn_801D2BB0(1, count * sizeof(MatStack_t), 0, 0);
-        if (lbl_803EBCB8) {
+        _Mat_pStacks = fn_801D2BB0(1, count * sizeof(MatStack_t), 0, 0);
+        if (_Mat_pStacks) {
             for (i = 0; i < count; i++) {
-                lbl_803EBCB8[i].mDepth = 0;
-                lbl_803EBCB8[i].mTop = 0;
-                lbl_803EBCB8[i].mpMatrices = 0;
+                _Mat_pStacks[i].mDepth = 0;
+                _Mat_pStacks[i].mTop = 0;
+                _Mat_pStacks[i].mpMatrices = 0;
             }
-            lbl_803EBCBC = count;
+            _Mat_NumStacks = count;
             MatLLInit();
-            lbl_803EBCB4 = 1;
+            _Mat_ModuleActive = 1;
         } else {
             result = SysGetLastError();
         }
@@ -53,16 +55,16 @@ int MatShutdown(void)
     int result = 0;
     unsigned int i;
 
-    if (lbl_803EBCB4) {
-        for (i = 0; i < lbl_803EBCBC; i++) {
-            if (lbl_803EBCB8[i].mDepth) {
+    if (_Mat_ModuleActive) {
+        for (i = 0; i < _Mat_NumStacks; i++) {
+            if (_Mat_pStacks[i].mDepth) {
                 MatDelStack(i);
             }
         }
-        result = fn_801D2BD0(lbl_803EBCB8);
-        lbl_803EBCB8 = 0;
-        lbl_803EBCBC = 0;
-        lbl_803EBCB4 = 0;
+        result = fn_801D2BD0(_Mat_pStacks);
+        _Mat_pStacks = 0;
+        _Mat_NumStacks = 0;
+        _Mat_ModuleActive = 0;
     } else {
         result = 0x50002;
     }
@@ -109,7 +111,7 @@ void MatRotVecToVec(float *pFrom, float *pTo)
 {
     float axis[4];
 
-    fn_802277DC(axis, pFrom, pTo);
-    fn_802271F0(axis, axis);
+    Vec3CrossProduct(axis, pFrom, pTo);
+    Vec3Normalize(axis, axis);
     MatRotAxis(axis, Vec3GetAngle(pFrom, pTo));
 }

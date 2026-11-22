@@ -8,10 +8,10 @@
 #include "game/Point2.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include <math.h>
 #include "game/fn_8009D990.h"
-#include "game/fn_8013AD94.h"
+#include "game/BallPhysics.h"
 #include "game/PenaltySituation.h"
 struct PenaltyKindInfo_t {
   unsigned short mUnknown0, mUnknown2;
@@ -81,7 +81,7 @@ void fn_800B260C(short);
 float fn_800B2618(int);
 int fn_801CFE40(float, float);
 int MathAngleDiff(int, int);
-void fn_80227690(void *, void *, void *);
+void Vec2Sub(void *, void *, void *);
 int BallStateGet(void *, int *);
 int fn_80177C38(void);
 void PenaltyApplyDiscipline(float *, Object_80039F5C *, int);
@@ -99,7 +99,7 @@ int fn_800BA6F8(void);
 int fn_801787A0(void);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 int CharSkelGetJointByName(void *p, const char *pName);
-float fn_802270A4(void *);
+float Vec2Magnitude(void *);
 void PenaltyApplyDiscipline(float *value, Object_80039F5C *, int) {
   unsigned int factor = 127;
   float normalized = (float)factor * 0.003921568859368563f;
@@ -589,7 +589,7 @@ int PenaltyCanFoulInState(Object_80039F5C *player) {
   case 24:
     if ((unsigned char)player->mUnknown361[24] == 3)
       result = 1;
-    else if (fn_802372EC(0, 15) < (unsigned int)fn_800B2600())
+    else if (SyncRandGetRange(0, 15) < (unsigned int)fn_800B2600())
       result = 1;
     break;
   case 2:
@@ -716,7 +716,7 @@ int PenaltySkipInterference(Ball_t *ball, Object_80039F5C *player) {
     reject = 1;
   if (!reject && fn_801783AC(12) == 1)
     reject = 1;
-  if (!reject && fn_8013AD94(ball) != 1)
+  if (!reject && BallGetSpinMode(ball) != 1)
     reject = 1;
   if (!reject && fn_80177C38())
     reject = 1;
@@ -734,9 +734,9 @@ int PenaltySkipInterferenceAt(Object_80039F5C *a, Object_80039F5C *b, Vector_800
 }
 int PenaltyIsPlayingBall(Object_80039F5C *a, Object_80039F5C *b, void *) {
   Point2_t toPlayer, fromPlayer, toBall;
-  fn_80227690(&toPlayer, &b->mMotion.mPos, &a->mMotion.mPos);
+  Vec2Sub(&toPlayer, &b->mMotion.mPos, &a->mMotion.mPos);
   int toward = fn_801CFE40(toPlayer.mY, toPlayer.mX);
-  fn_80227690(&fromPlayer, &a->mMotion.mPos, &b->mMotion.mPos);
+  Vec2Sub(&fromPlayer, &a->mMotion.mPos, &b->mMotion.mPos);
   int away = fn_801CFE40(fromPlayer.mY, fromPlayer.mX);
   Vector_80039F5C point;
   BallGetLandingPoint(BallGetCurrent(), &point);
@@ -756,7 +756,7 @@ int PenaltyIsPlayingBall(Object_80039F5C *a, Object_80039F5C *b, void *) {
           point.mY = state->mUnknown4.mY;
         }
       }
-      fn_80227690(&toBall, &point, &b->mMotion.mPos);
+      Vec2Sub(&toBall, &point, &b->mMotion.mPos);
       int direction = fn_801CFE40(toBall.mY, toBall.mX);
       if (MathAngleDiff(away, direction) > 0x200000)
         reject = 1;
@@ -944,10 +944,10 @@ void PenaltyCheckGrounding(Object_80039F5C *player) {
   for (unsigned char i = 0; i <= 2; i++) {
     Point2_t delta;
     unsigned short index = PlayBookGetReceiver(player->mIdBytes[2], i, 0);
-    fn_80227690(&delta,
+    Vec2Sub(&delta,
                 &PlyrGet(player->mIdBytes[2], index)->mMotion.mPos,
                 &ball);
-    if (fn_802270A4(&delta) < 4.0f) {
+    if (Vec2Magnitude(&delta) < 4.0f) {
       near = 1;
       break;
     }
@@ -971,11 +971,11 @@ void PenaltyCheckPassInterference(void) {
   if (PenaltySkipInterferenceAt(carrier, tackler, pos))
     return;
   Point2_t delta;
-  fn_80227690(&delta, &pos, &carrier->mMotion.mPos);
-  float carrierDistance = fn_802270A4(&delta);
+  Vec2Sub(&delta, &pos, &carrier->mMotion.mPos);
+  float carrierDistance = Vec2Magnitude(&delta);
   int carrierAngle = fn_801CFE40(delta.mY, delta.mX);
-  fn_80227690(&delta, &pos, &tackler->mMotion.mPos);
-  float tacklerDistance = fn_802270A4(&delta);
+  Vec2Sub(&delta, &pos, &tackler->mMotion.mPos);
+  float tacklerDistance = Vec2Magnitude(&delta);
   int tacklerAngle = fn_801CFE40(delta.mY, delta.mX);
   if (!(carrierDistance >= 4.0f))
     PenaltyPickInterferenceNear(carrier, tackler, carrierDistance, &ballPos,
@@ -989,13 +989,13 @@ void PenaltyRollPassPlayFoul(Object_80039F5C *player) {
     return;
   float chance = 450.0f;
   PenaltyApplyFrequency(&chance, 0, 10000.0f);
-  if (fn_802372EC(0, 10000) < (unsigned int)chance)
+  if (SyncRandGetRange(0, 10000) < (unsigned int)chance)
     fn_800B2370(player, 0, 0, 1.0f);
 }
 int PenaltyRollFacemask(void) {
   float chance = 2000.0f;
   PenaltyApplyFrequency(&chance, 2, 10000.0f);
-  if (!fn_801787A0() && (float)fn_802372EC(0, 10000) < chance)
+  if (!fn_801787A0() && (float)SyncRandGetRange(0, 10000) < chance)
     return 1;
   return 0;
 }
@@ -1005,13 +1005,13 @@ void PenaltyRollRoughing(Object_80039F5C *player) {
   float chance = 75.0f;
   PenaltyApplyFrequency(&chance, 9, 100.0f);
   PenaltyApplyDiscipline(&chance, player, 9);
-  if (!((float)fn_802372EC(0, 100) >= chance))
+  if (!((float)SyncRandGetRange(0, 100) >= chance))
     fn_800B2370(player, 12, 0, 1.0f);
 }
 int PenaltyRollTackleFoul(void) {
   float chance = 2300.0f;
   PenaltyApplyFrequency(&chance, 0, 10000.0f);
-  if (fn_800AD9B4() == 3 && (float)fn_802372EC(0, 10000) < chance)
+  if (fn_800AD9B4() == 3 && (float)SyncRandGetRange(0, 10000) < chance)
     return 1;
   return 0;
 }

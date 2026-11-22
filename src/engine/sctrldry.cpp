@@ -18,7 +18,7 @@ int SNDCTRL_drylevel(int handle, int level)
                 short voice = rec->m4[i];
 
                 lbl_803A6C24.m1CC[voice].m5F = level;
-                fn_80274924(voice);
+                SndHalSetDry(voice);
             }
         }
     }

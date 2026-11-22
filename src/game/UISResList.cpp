@@ -14,7 +14,7 @@ struct UISResListDesc {
 extern "C" {
 int MainFEGroupIsFirstStart(void *p);
 int DbCursorGetValue(DbCursor *pObject, int key);
-void fn_80083E1C(DbCursor *pObject, int a);
+void TeamDbOpenQuery(DbCursor *pObject, int a);
 void *UIGLibraryInit(UISResListDesc *pDesc);
 void UIGLibrarySetDevice(void *pList, int index, const char *pName, int a, int b);
 void UIGLibrarySet(void *pList, int index, const char *pName, int a, int b, int c);
@@ -110,14 +110,14 @@ void UISResListAddInGame(void)
     UIGLibraryPreloadItem(pList, 1, 14);
     UIGLibraryPreloadItem(pList, 1, 15);
     UIGLibraryPreloadItem(pList, 7, 4);
-    fn_80083E1C(&cursor, 0);
-    if (fn_80084034(&cursor, GameInfoGet(0), 0)) {
+    TeamDbOpenQuery(&cursor, 0);
+    if (TeamDbSeekId(&cursor, GameInfoGet(0), 0)) {
         first = DbCursorGetValue(&cursor, 0x4C474C54);
     }
-    if (fn_80084034(&cursor, GameInfoGet(1), 0)) {
+    if (TeamDbSeekId(&cursor, GameInfoGet(1), 0)) {
         second = DbCursorGetValue(&cursor, 0x4C474C54);
     }
-    fn_80083F68(&cursor);
+    TeamDbClose(&cursor);
     UIGLibraryPreloadItem(pList, 4, first);
     if (second != first) {
         UIGLibraryPreloadItem(pList, 4, second);

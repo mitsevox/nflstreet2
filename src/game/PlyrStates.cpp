@@ -14,7 +14,7 @@
 #include "game/PlayBookTeam.h"
 #include <string.h>
 #include "game/fn_80178D18.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 #include "game/fn_800B65A0.h"
 #include "game/Record_800B15FC.h"
 #include "game/Input_800B6D34.h"
@@ -97,10 +97,10 @@ int AnimSeqHasOpcode(AnimSeq_t *, AnimScript_t *, unsigned short);
 float AnimSeqGetOpcodeTime(AnimScript_t *, int);
 
 float AnimSeqGetTime(AnimSeq_t *);
-int fn_800E6AC8(Object_80039F5C *, int);
+int PlyrEngageTryShed(Object_80039F5C *, int);
 int fn_8011EC68(Object_80039F5C *, Object_80039F5C *);
-float fn_8022781C(void *, void *);
-int fn_800E815C(Object_80039F5C *, int, int);
+float Vec2Distance(void *, void *);
+int PlyrTackleStart(Object_80039F5C *, int, int);
 int fn_800F0490(int, State_80039F5C *, int);
 void fn_800F05E4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
 int fn_801CFE40(float, float);
@@ -232,21 +232,21 @@ int PlyrEngageUpdate(Object_80039F5C *p)
         if (ball) {
             int lower = ball->mMotion.mPos.mY + 2.0f > p->mMotion.mPos.mY;
             if (!ball->mUnknown2914 && !(ball->mFlags & 0x8000)) {
-                if (fn_800E6AC8(p, 8)) {
+                if (PlyrEngageTryShed(p, 8)) {
                     s->mUnknownCByte = 1;
                     return 0;
                 }
             } else if (!ball->mUnknown2914 || !lower) {
-                if (fn_800E6AC8(p, 4)) {
+                if (PlyrEngageTryShed(p, 4)) {
                     s->mUnknownCByte = 1;
                     return 0;
                 }
-            } else if (!(fn_8022781C(&p->mMotion.mPos, &ball->mMotion.mPos) > 5.0f)) {
+            } else if (!(Vec2Distance(&p->mMotion.mPos, &ball->mMotion.mPos) > 5.0f)) {
                 Object_80039F5C *linked = fn_8009BCE8(&p->mUnknown1036);
                 if (linked) {
                     p->mUnknown344 = 1;
                     linked->mUnknown344 = 1;
-                    if (fn_800E6AC8(p, 5)) {
+                    if (PlyrEngageTryShed(p, 5)) {
                         s->mUnknownCByte = 1;
                         return 0;
                     }
@@ -266,7 +266,7 @@ int PlyrEngageUpdate(Object_80039F5C *p)
             PlyrEngageReleaseControl(p);
             PlyrCollideRemoveExempt(p, other);
             s->mUnknown8Bytes[0] = 1;
-            if (fn_800E815C(p, 2, 0))
+            if (PlyrTackleStart(p, 2, 0))
                 fn_800F0490(0, p->mpState, 32);
             p->mFlags &= ~4;
         }
@@ -405,37 +405,37 @@ void fn_800B76E8(void);
 void fn_800B78DC(void);
 void fn_800B7E60(void);
 void fn_800B7F88(void);
-void fn_800DFCEC(void);
-void fn_800DFD90(void);
-void fn_800DFED0(void);
-void fn_800E0574(void);
-void fn_800E05C0(void);
-void fn_800E068C(void);
-void fn_800E0850(void);
-void fn_800E0AD8(void);
-void fn_800E0E8C(void);
-void fn_800E13E4(void);
-void fn_800E1438(void);
-void fn_800E1544(void);
-void fn_800E4494(void);
-void fn_800E459C(void);
-void fn_800E4EE4(void);
-void fn_800E513C(void);
-void fn_800E6F48(void);
-void fn_800E705C(void);
-void fn_800E7330(void);
-void fn_800E8420(void);
-void fn_800E8554(void);
-void fn_800E86E4(void);
-void fn_800E8740(void);
-void fn_800E8748(void);
-void fn_800E8BE8(void);
-void fn_800E8E04(void);
-void fn_800E9E18(void);
-void fn_800E9FC0(void);
-void fn_800E9FD8(void);
-void fn_800EA1D0(void);
-void fn_800EA1D8(void);
+void PlayerActionCharAnimEnter(void);
+void PlayerActionCharAnimExit(void);
+void PlayerActionCharAnimUpdate(void);
+void PlayerActionDropBallEnter(void);
+void PlayerActionDropBallUpdate(void);
+void PlayerActionDropBallExit(void);
+void PlayerActionCatchEnter(void);
+void PlayerActionCatchUpdate(void);
+void PlayerActionCatchExit(void);
+void PlayerActionDiveEnter(void);
+void PlayerActionDiveUpdate(void);
+void PlayerActionDiveExit(void);
+void PlyrAlignEnter(void);
+void PlyrAlignUpdate(void);
+void PlyrAlignExit(void);
+void PlyrAlignInput(void);
+void PlyrWaitEnter(void);
+void PlyrWaitUpdate(void);
+void PlyrWaitInput(void);
+void PlyrTackleEnter(void);
+void PlyrTackleUpdate(void);
+void PlyrTackleExit(void);
+void PlyrTackleNotify(void);
+void PlyrTackleInput(void);
+void PlyrTurnEnter(void);
+void PlyrTurnUpdate(void);
+void CarrierMomentumEnter(void);
+void CarrierMomentumExit(void);
+void CarrierMomentumUpdate(void);
+void CarrierMomentumNotify(void);
+void CarrierMomentumInput(void);
 void LooseBallEnter(void);
 void LooseBallExit(void);
 void LooseBallUpdate(void);
@@ -512,7 +512,7 @@ void fn_8010D090(void);
 void fn_8010D6D4(void);
 void fn_8010D734(void);
 void fn_8010F43C(void);
-void fn_8010F654(void);
+void PlyrTrackTargetUpdate(void);
 void fn_8010FB10(void);
 void fn_8010FB4C(void);
 void fn_8010FC40(void);
@@ -589,13 +589,13 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_800FD2AC, (void *)fn_800FD3F0, (void *)fn_800FD41C, (void *)fn_800B7E60, (void *)fn_800FD650, (void *)fn_800FD708}},
     {{(void *)fn_800FD2AC, (void *)fn_800FD3F0, (void *)fn_800FD580, (void *)fn_800B76E8, (void *)fn_800FD650, (void *)fn_800FD708}},
     {{(void *)fn_800F2AA0, (void *)fn_800F2C14, (void *)fn_800F2B8C, (void *)fn_800B7F34, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800E8BE8, (void *)fn_800F0900, (void *)fn_800E8E04, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
+    {{(void *)PlyrTurnEnter, (void *)fn_800F0900, (void *)PlyrTurnUpdate, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
     {{(void *)fn_800FDA58, (void *)fn_800F0900, (void *)fn_800FDAC8, (void *)fn_800FDFD8, (void *)fn_800FF538, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_8010FC40, (void *)fn_800F0900, (void *)fn_8010FD8C, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800E9E18, (void *)fn_800E9FC0, (void *)fn_800E9FD8, (void *)fn_800EA1D8, (void *)fn_800EA1D0, 0}},
+    {{(void *)CarrierMomentumEnter, (void *)CarrierMomentumExit, (void *)CarrierMomentumUpdate, (void *)CarrierMomentumInput, (void *)CarrierMomentumNotify, 0}},
     {{(void *)TurnToPlayEnter, (void *)TurnToPlayExit, (void *)TurnToPlayUpdate, (void *)TurnToPlayInput, (void *)TurnToPlayNotify, 0}},
-    {{(void *)fn_800E8420, (void *)fn_800E86E4, (void *)fn_800E8554, (void *)fn_800E8748, (void *)fn_800E8740, 0}},
+    {{(void *)PlyrTackleEnter, (void *)PlyrTackleExit, (void *)PlyrTackleUpdate, (void *)PlyrTackleInput, (void *)PlyrTackleNotify, 0}},
     {{(void *)HuddleMoveEnter, (void *)fn_800F0900, (void *)HuddleMoveUpdate, (void *)fn_800F08F8, (void *)fn_800FF538, 0}},
     {{(void *)HuddleMoveAltEnter, (void *)fn_800F0900, (void *)HuddleMoveAltUpdate, (void *)fn_800F08F8, (void *)fn_800FF538, 0}},
     {{(void *)fn_80101CB4, (void *)fn_80102470, (void *)fn_801021C0, (void *)fn_80102664, (void *)fn_800F0908, 0}},
@@ -611,12 +611,12 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_80105898, (void *)fn_80106794, (void *)fn_80105AF4, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)fn_80105DF0}},
     {{(void *)HandoffEnter, (void *)HandoffExit, (void *)HandoffUpdate, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)HandoffMirrorMessage}},
     {{(void *)fn_8010CAE8, (void *)fn_800F0900, (void *)fn_8010CB58, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)fn_800FD708}},
-    {{(void *)fn_800E0850, (void *)fn_800E0E8C, (void *)fn_800E0AD8, (void *)fn_800B7F88, (void *)fn_800F0908, 0}},
+    {{(void *)PlayerActionCatchEnter, (void *)PlayerActionCatchExit, (void *)PlayerActionCatchUpdate, (void *)fn_800B7F88, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)DirectedRunEnter, (void *)fn_800F0900, (void *)DirectedRunUpdate, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_800FD708}},
     {{(void *)fn_80133C50, (void *)fn_80134370, (void *)fn_80133EE8, (void *)fn_801343AC, (void *)fn_800F0908, 0}},
     {{(void *)PlyrEngageEnter, (void *)PlyrEngageExit, (void *)PlyrEngageUpdate, (void *)PlyrEngageInput, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8010F43C, (void *)fn_8010FB10, (void *)fn_8010F654, (void *)fn_8010FB4C, (void *)fn_800F0908, 0}},
+    {{(void *)fn_8010F43C, (void *)fn_8010FB10, (void *)PlyrTrackTargetUpdate, (void *)fn_8010FB4C, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F23EC, (void *)fn_800F0900, (void *)fn_800F24D8, (void *)fn_800F268C, (void *)fn_800F0908, 0}},
     {{(void *)fn_801108D4, (void *)fn_800F0900, (void *)fn_801109A4, (void *)fn_80110B00, (void *)fn_800F0908, 0}},
     {{(void *)CarrierMoveEnter, (void *)CarrierMoveExit, (void *)CarrierMoveUpdate, (void *)CarrierMoveInput, (void *)fn_800F0908, 0}},
@@ -625,23 +625,23 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_80116B98, (void *)fn_800F0900, (void *)fn_80116C34, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_801170A0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800E4494, (void *)fn_800E4EE4, (void *)fn_800E459C, (void *)fn_800E513C, (void *)fn_800F0908, 0}},
+    {{(void *)PlyrAlignEnter, (void *)PlyrAlignExit, (void *)PlyrAlignUpdate, (void *)PlyrAlignInput, (void *)fn_800F0908, 0}},
     {{(void *)fn_80111104, (void *)fn_801112D8, (void *)fn_801111E8, (void *)fn_80111314, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F6158, (void *)fn_800F6790, (void *)fn_800F6370, (void *)fn_8010FB4C, (void *)fn_800F0908, (void *)fn_800F67CC}},
     {{(void *)fn_800F0900, (void *)fn_800F0900, (void *)fn_800F0900, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800E0574, (void *)fn_800E068C, (void *)fn_800E05C0, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800DFCEC, (void *)fn_800DFD90, (void *)fn_800DFED0, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800E6F48, (void *)fn_800F0900, (void *)fn_800E705C, (void *)fn_800E7330, (void *)fn_800F0908, 0}},
+    {{(void *)PlayerActionDropBallEnter, (void *)PlayerActionDropBallExit, (void *)PlayerActionDropBallUpdate, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
+    {{(void *)PlayerActionCharAnimEnter, (void *)PlayerActionCharAnimExit, (void *)PlayerActionCharAnimUpdate, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
+    {{(void *)PlyrWaitEnter, (void *)fn_800F0900, (void *)PlyrWaitUpdate, (void *)PlyrWaitInput, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F0C6C, (void *)fn_800F0900, (void *)fn_800F0CCC, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)fn_800F0E10}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_8010D6D4, (void *)fn_800F0900, (void *)fn_8010D734, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
     {{(void *)LooseBallEnter, (void *)LooseBallExit, (void *)LooseBallUpdate, (void *)LooseBallInput, (void *)fn_800F0908, 0}},
-    {{(void *)fn_801113DC, (void *)fn_80111580, (void *)fn_800E9FD8, (void *)fn_80111528, (void *)fn_800EA1D0, 0}},
+    {{(void *)fn_801113DC, (void *)fn_80111580, (void *)CarrierMomentumUpdate, (void *)fn_80111528, (void *)CarrierMomentumNotify, 0}},
     {{(void *)fn_80111794, (void *)fn_80111964, (void *)fn_801117F8, (void *)fn_80111974, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800FCA78, (void *)fn_800F0900, (void *)fn_800FCC24, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
@@ -677,13 +677,13 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)OptionRunEnter, (void *)OptionRunExit, (void *)OptionRunUpdate, (void *)OptionRunInput, (void *)fn_800F0908, (void *)OptionRunMirror}},
     {{(void *)fn_80118210, (void *)fn_800F0900, (void *)fn_801182C8, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_80118778}},
     {{(void *)fn_8010BA00, (void *)fn_8010BC48, (void *)fn_8010BA90, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800E13E4, (void *)fn_800E1544, (void *)fn_800E1438, (void *)fn_800B7F34, (void *)fn_800F0908, 0}},
+    {{(void *)PlayerActionDiveEnter, (void *)PlayerActionDiveExit, (void *)PlayerActionDiveUpdate, (void *)fn_800B7F34, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F4A74, (void *)fn_800F0900, (void *)fn_800F4AD4, (void *)fn_800A5DD8, (void *)fn_800F0908, 0}},
     {{(void *)fn_80125304, (void *)fn_80125494, (void *)fn_801253A8, (void *)fn_801254C8, (void *)fn_80125508, 0}},
     {{(void *)fn_80125DF0, (void *)fn_800F0900, (void *)fn_80125E20, (void *)fn_800B78DC, (void *)fn_800F0908, 0}},
 };
 PlyrStateHandlers_t _PlyrStates_aAltHandlers[2] = {
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)fn_800F08F8, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800DFCEC, (void *)fn_800DFD90, (void *)fn_800DFED0, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
+    {{(void *)PlayerActionCharAnimEnter, (void *)PlayerActionCharAnimExit, (void *)PlayerActionCharAnimUpdate, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
 };
 }

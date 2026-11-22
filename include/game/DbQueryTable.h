@@ -17,9 +17,9 @@ struct DbQueryTable {
 };
 
 extern "C" {
-int fn_801F9D70(int handle, int table, DbFilter *pFilter, unsigned short *pCount);
-int fn_801FA148(int cursor);
-int fn_801FA290(int handle, DbQueryTable *pTables, DbFilter *pFilter, DbColumnValue *pColumns);
+int TDbTblGetCount(int handle, int table, DbFilter *pFilter, unsigned short *pCount);
+int TDbQryDestroy(int cursor);
+int TDbQryGetSingleRow(int handle, DbQueryTable *pTables, DbFilter *pFilter, DbColumnValue *pColumns);
 }
 
 #endif

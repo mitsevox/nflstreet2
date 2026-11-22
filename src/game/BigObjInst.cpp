@@ -33,7 +33,7 @@ int fn_801BCCAC(void *a, void *b, int c, void *d, int e, int f);
 void fn_801BE420(void *a, void *b, void *c, BigObjInst *pObject, float d);
 void QuatFromEulerYZX(float *pOut, int x, int y, int z);
 int fn_80238278(const void *p, int size, int seed);
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 
 BigObjPool_t *_BigObjInst_pPool = 0;
 unsigned int _BigObjInst_uFrame = 0;
@@ -104,14 +104,14 @@ void BigObjInstInit(int maxObjects, int maxExtras)
     BigObjPool_t *pPool;
 
     pHandle = SyncStateRegister(0, (void **)&_BigObjInst_pPool, 16, 2, 0x626F626A);
-    fn_80238234(pHandle, BigObjPoolCreate, BigObjPoolDestroy, BigObjPoolEmptyPass, BigObjPoolCompare);
-    pPool = (BigObjPool_t *)fn_8023816C(pHandle);
+    SyncStateSetCallbacks(pHandle, BigObjPoolCreate, BigObjPoolDestroy, BigObjPoolEmptyPass, BigObjPoolCompare);
+    pPool = (BigObjPool_t *)SyncStateGetData(pHandle);
     pPool->mCount = 0;
     pPool->mMaxObjects = maxObjects;
     pPool->mExtraCount = 0;
     pPool->mMaxExtras = maxExtras;
     _BigObjInst_uFrame = 0;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 void BigObjInstShutdown(void)

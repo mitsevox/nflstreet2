@@ -30,18 +30,18 @@ void fn_80234F74(void *, int, void *, unsigned char, int);
 void fn_802353D8(void *, int);
 void fn_802353E8(void *, int);
 void fn_80235588(void *, int);
-void fn_802355E4(void *);
-void fn_80235630(void *, int);
-void fn_80235740(void *, int);
-void fn_80235764(void *, int);
-void fn_80235788(void *, int, int);
-void fn_80235C24(void *, void *);
-void fn_80235C90(void *, int, float, float, float, float);
-void fn_80235D10(void *, float);
-void fn_80235D74(void *, int);
-int fn_80235D9C(int);
-void fn_80235DB8(int);
-int fn_80236B4C(int);
+void ModelObjReset(void *);
+void ModelObjSetModel(void *, int);
+void ModelObjStoreMatrix(void *, int);
+void ModelObjDraw(void *, int);
+void ModelObjRender(void *, int, int);
+void ModelObjSetTexturesDefault(void *, void *);
+void ModelObjSetAmbientColor(void *, int, float, float, float, float);
+void ModelObjSetDepthOffset(void *, float);
+void ModelObjSetModeNop(void *, int);
+int ModelObjIsModelRes(int);
+void ModelObjRelocateModelRes(int);
+int LLLightLoadSet(int);
 
 void UISModelBind(UISModel_t *pObject, UISModelDesc_t *pDesc)
 {
@@ -49,23 +49,23 @@ void UISModelBind(UISModel_t *pObject, UISModelDesc_t *pDesc)
     pObject->mUnknown198 |= 1;
     if (pObject->mUnknown198 & 1) {
         pObject->mUnknown14 = data;
-        fn_80235DB8(data);
-        if (fn_80235D9C(pObject->mUnknown14) == 0) {
+        ModelObjRelocateModelRes(data);
+        if (ModelObjIsModelRes(pObject->mUnknown14) == 0) {
             pObject->mUnknown14 = 0;
         }
         fn_80235588(&pObject->mUnknown48, 6);
-        fn_80235630(&pObject->mUnknown48, pObject->mUnknown14);
+        ModelObjSetModel(&pObject->mUnknown48, pObject->mUnknown14);
         fn_80234DFC(pObject->mUnknown14, pObject->mUnknown18, 0, 0, "UISModel", 0);
-        fn_80235C24(&pObject->mUnknown48, pObject->mUnknown18);
+        ModelObjSetTexturesDefault(&pObject->mUnknown48, pObject->mUnknown18);
         if (FELoopIsMainFEActive()) {
             if (pObject->mUnknown1CE == 26) {
-                fn_80235D10(&pObject->mUnknown48, 15000.0f);
+                ModelObjSetDepthOffset(&pObject->mUnknown48, 15000.0f);
                 fn_802353E8(&pObject->mUnknown48, 0x4000);
             } else {
-                fn_80235D10(&pObject->mUnknown48, 0.0f);
+                ModelObjSetDepthOffset(&pObject->mUnknown48, 0.0f);
             }
         } else {
-            fn_80235D10(&pObject->mUnknown48, 20000.0f);
+            ModelObjSetDepthOffset(&pObject->mUnknown48, 20000.0f);
         }
     }
 }
@@ -97,7 +97,7 @@ void UISModelInit(UISModel_t *pObject, UISModelDesc_t *pDesc)
 void UISModelFree(UISModel_t *pObject)
 {
     if (pObject->mUnknown198 & 1) {
-        fn_802355E4(&pObject->mUnknown48);
+        ModelObjReset(&pObject->mUnknown48);
         fn_80234EA0(pObject->mUnknown18, 0);
     }
     ResBankUnload(_UISModel_pLibCache, pObject->mUnknown1CC, pObject->mUnknown1CE);
@@ -116,21 +116,21 @@ int UISModelDraw(UISModel_t *pObject, int value)
     MatScaleCol(pObject->mUnknown1C0.mX, pObject->mUnknown1C0.mY, pObject->mUnknown1C0.mZ);
     if (pObject->mUnknown198 & 1) {
         if (pObject->mUnknown1E4 == 255) {
-            fn_80235740(&pObject->mUnknown48, context);
+            ModelObjStoreMatrix(&pObject->mUnknown48, context);
             if (pObject->mUnknown1D4) {
                 fn_802353E8(&pObject->mUnknown48, 0x20000);
             }
-            fn_80235788(&pObject->mUnknown48, context, fn_80236B4C(5));
+            ModelObjRender(&pObject->mUnknown48, context, LLLightLoadSet(5));
         } else {
             GXSetCullMode(GX_CULL_FRONT);
-            fn_80235C90(&pObject->mUnknown48, context, 0.5f, 0.5f, 0.5f, 0.0f);
-            fn_80235740(&pObject->mUnknown48, context);
-            fn_80235764(&pObject->mUnknown48, context);
+            ModelObjSetAmbientColor(&pObject->mUnknown48, context, 0.5f, 0.5f, 0.5f, 0.0f);
+            ModelObjStoreMatrix(&pObject->mUnknown48, context);
+            ModelObjDraw(&pObject->mUnknown48, context);
             fn_802353D8(&pObject->mUnknown48, 0x100);
-            fn_80235C90(&pObject->mUnknown48, context, 0.5f, 0.5f, 0.5f, 0.2f);
+            ModelObjSetAmbientColor(&pObject->mUnknown48, context, 0.5f, 0.5f, 0.5f, 0.2f);
             fn_802353D8(&pObject->mUnknown48, 2);
-            fn_80235740(&pObject->mUnknown48, context);
-            fn_80235764(&pObject->mUnknown48, context);
+            ModelObjStoreMatrix(&pObject->mUnknown48, context);
+            ModelObjDraw(&pObject->mUnknown48, context);
             fn_802353E8(&pObject->mUnknown48, 0x100);
             GXSetCullMode(GX_CULL_NONE);
         }
@@ -211,7 +211,7 @@ void UISModelSetDrawMode(UISModel_t *pObject, unsigned char value)
 {
     pObject->mUnknown1E4 = value;
     if (pObject->mUnknown198 & 1) {
-        fn_80235D74(&pObject->mUnknown48, value >> 2);
+        ModelObjSetModeNop(&pObject->mUnknown48, value >> 2);
     }
 }
 }

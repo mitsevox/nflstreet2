@@ -2,9 +2,9 @@
    blend the player's animation-table entries while an action move plays. */
 #include "game/PlayerAction.h"
 
-static unsigned int lbl_803EAD1C = 0;
+static unsigned int _PlayerActionAnim_iSteerFrames = 0;
 
-extern "C" int fn_800DAEE4(Object_80039F5C *p)
+extern "C" int PlayerActionAnimGetTurnSide(Object_80039F5C *p)
 {
     int result;
     if (fn_8011F518()->mUnknown4 == 11) {
@@ -22,7 +22,7 @@ extern "C" int fn_800DAEE4(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_800DAF5C(Table_80089904 *pTable, int key, void *pContext,
+extern "C" int PlayerActionAnimDirectionPhase(Table_80089904 *pTable, int key, void *pContext,
     AnimChannel_t *pEntries, Object_80039F5C *p, int phase)
 {
     if (phase != 0) {
@@ -33,21 +33,21 @@ extern "C" int fn_800DAF5C(Table_80089904 *pTable, int key, void *pContext,
     direction.mY = (signed char)p->mUnknown1008.mUnknown2 * 0.1f;
     int angle = (direction.Heading() - p->mMotion.mFacing) & 0xFFFFFF;
     int foot = PlayerLocoGetLowerAnkle(p);
-    unsigned char side = (unsigned char)fn_800DAEE4(p);
+    unsigned char side = (unsigned char)PlayerActionAnimGetTurnSide(p);
     int index = PlayerLocoFindTableEntry(pTable, angle, foot, side);
     AnimChanStartAnim(pContext, pEntries, pTable->mEntries[index].mUnknown0,
         pTable->mEntries[index].mUnknown2, key, p, 1.0f);
     return 0;
 }
 
-extern "C" void fn_800DB074(Object_80039F5C *p, Ball_t *pBall, Record_800DB074 *pRecord)
+extern "C" void PlayerActionAnimReleasePitch(Object_80039F5C *p, Ball_t *pBall, Record_800DB074 *pRecord)
 {
     Record_8011F518 *pRecord8011F518 = fn_8011F518();
     pRecord8011F518->mUnknown8 = pRecord->mUnknown16;
     Object_80039F5C *pOther = fn_8009BCE8(&pRecord->mUnknown12);
     if (pOther) {
         Point_8017886C delta;
-        fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
+        Vec2Sub(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
         pRecord8011F518->mUnknown12 = fn_801CFE40(delta.mY, delta.mX);
     } else {
         pRecord8011F518->mUnknown12 = p->mMotion.mUnknown32;
@@ -55,7 +55,7 @@ extern "C" void fn_800DB074(Object_80039F5C *p, Ball_t *pBall, Record_800DB074 *
     fn_801061E8(p, pBall);
 }
 
-extern "C" void fn_800DB100(Object_80039F5C *p, Ball_t *pBall, Record_800DB074 *pRecord)
+extern "C" void PlayerActionAnimAdjustToss(Object_80039F5C *p, Ball_t *pBall, Record_800DB074 *pRecord)
 {
     Vector_80039F5C ball;
     Vector_80039F5C joint;
@@ -79,7 +79,7 @@ extern "C" void fn_800DB100(Object_80039F5C *p, Ball_t *pBall, Record_800DB074 *
     delta.mY = pRecord->mUnknown8 - ball.mZ;
     delta.mY = delta.mY < 0.0f ? 0.0f : delta.mY;
     int angle = delta.Heading();
-    pRequest->mUnknown10 = angle + fn_802372EC(0, 0xE38E3);
+    pRequest->mUnknown10 = angle + SyncRandGetRange(0, 0xE38E3);
     float value = pRequest->mUnknownC;
     if (value == 0.0f) {
         value = pRequest->mUnknown10 * 2.3841858e-07f;
@@ -101,7 +101,7 @@ extern "C" void fn_800DB100(Object_80039F5C *p, Ball_t *pBall, Record_800DB074 *
     }
 }
 
-extern "C" void fn_800DB308(Object_80039F5C *p, float *pOut)
+extern "C" void PlayerActionAnimGetReleaseTime(Object_80039F5C *p, float *pOut)
 {
     float value = 12.0f;
     unsigned short kind = fn_801BE648(p->mpUnknown792);
@@ -122,27 +122,27 @@ extern "C" void fn_800DB308(Object_80039F5C *p, float *pOut)
     }
 }
 
-extern "C" void fn_800DB40C(Record_800DB074 *pRecord, Object_80039F5C *p, Ball_t *pBall)
+extern "C" void PlayerActionAnimArmPitch(Record_800DB074 *pRecord, Object_80039F5C *p, Ball_t *pBall)
 {
-    fn_800DB308(p, &pRecord->mUnknown20);
+    PlayerActionAnimGetReleaseTime(p, &pRecord->mUnknown20);
     if (fn_80105FF8(p, pBall, pRecord->mUnknown20)) {
         pRecord->mUnknown1 = 1;
     }
-    pRecord->mUnknown20 += (unsigned int)fn_8023790C();
+    pRecord->mUnknown20 += (unsigned int)SyncTimeGetGameTime();
 }
 
-extern "C" void fn_800DB498(Record_800DB074 *pRecord, Object_80039F5C *p, Ball_t *pBall)
+extern "C" void PlayerActionAnimArmToss(Record_800DB074 *pRecord, Object_80039F5C *p, Ball_t *pBall)
 {
     Vector_80039F5C pos;
 
-    fn_800DB308(p, &pRecord->mUnknown20);
+    PlayerActionAnimGetReleaseTime(p, &pRecord->mUnknown20);
     pRecord->mUnknown0 = 1;
     BallGetPosition(pBall, &pos);
     pRecord->mUnknown8 = pRecord->mUnknown4 = pos.mZ;
-    pRecord->mUnknown20 += (unsigned int)fn_8023790C();
+    pRecord->mUnknown20 += (unsigned int)SyncTimeGetGameTime();
 }
 
-extern "C" void fn_800DB520(Record_800DB074 *pRecord, Object_80039F5C *p, Object_80039F5C *pOther, float value)
+extern "C" void PlayerActionAnimPitchInit(Record_800DB074 *pRecord, Object_80039F5C *p, Object_80039F5C *pOther, float value)
 {
     pRecord->mUnknown0 = 0;
     pRecord->mUnknown1 = 0;
@@ -155,25 +155,25 @@ extern "C" void fn_800DB520(Record_800DB074 *pRecord, Object_80039F5C *p, Object
         int kind = fn_801BE648(p->mpUnknown792);
         if (kind == 69 || kind == 178) {
             if (fn_8011F4F8(BallGetIndex(pBall))->mUnknownB == 1) {
-                fn_800DB498(pRecord, p, pBall);
+                PlayerActionAnimArmToss(pRecord, p, pBall);
             }
         } else if (kind == 135 || kind == 191) {
-            fn_800DB40C(pRecord, p, pBall);
+            PlayerActionAnimArmPitch(pRecord, p, pBall);
         }
     }
 }
 
-extern "C" void fn_800DB60C(Record_800DB074 *pRecord, Object_80039F5C *p)
+extern "C" void PlayerActionAnimPitchTryStart(Record_800DB074 *pRecord, Object_80039F5C *p)
 {
     if (pRecord->mUnknown0 != 1 && pRecord->mUnknown1 != 1) {
         Ball_t *pBall = BallFindHeldBy(p);
         if (pBall && fn_80106580(p, (p->mFlags >> 14) & 1)) {
-            fn_800DB40C(pRecord, p, pBall);
+            PlayerActionAnimArmPitch(pRecord, p, pBall);
         }
     }
 }
 
-extern "C" void fn_800DB688(Record_800DB074 *pRecord, Object_80039F5C *p)
+extern "C" void PlayerActionAnimTossUpdate(Record_800DB074 *pRecord, Object_80039F5C *p)
 {
     int done = 0;
 
@@ -181,9 +181,9 @@ extern "C" void fn_800DB688(Record_800DB074 *pRecord, Object_80039F5C *p)
         Ball_t *pBall = BallFindHeldBy(p);
         if (!pBall) {
             pRecord->mUnknown0 = 0;
-        } else if (pRecord->mUnknown20 <= (unsigned int)fn_8023790C()) {
+        } else if (pRecord->mUnknown20 <= (unsigned int)SyncTimeGetGameTime()) {
             if (p->mFlags & 0x1000) {
-                fn_800DB100(p, pBall, pRecord);
+                PlayerActionAnimAdjustToss(p, pBall, pRecord);
                 p->mFlags &= ~0x3000;
                 pRecord->mUnknown0 = 0;
             }
@@ -203,7 +203,7 @@ extern "C" void fn_800DB688(Record_800DB074 *pRecord, Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_800DB7A4(Record_800DB074 *pRecord, Object_80039F5C *p)
+extern "C" void PlayerActionAnimPitchUpdate(Record_800DB074 *pRecord, Object_80039F5C *p)
 {
     int done = 0;
 
@@ -214,9 +214,9 @@ extern "C" void fn_800DB7A4(Record_800DB074 *pRecord, Object_80039F5C *p)
             if (!pBall) {
                 pRecord->mUnknown1 = 0;
             } else {
-                if (pRecord->mUnknown20 <= (unsigned int)fn_8023790C()) {
+                if (pRecord->mUnknown20 <= (unsigned int)SyncTimeGetGameTime()) {
                     done = 1;
-                    fn_800DB074(p, pBall, pRecord);
+                    PlayerActionAnimReleasePitch(p, pBall, pRecord);
                     p->mFlags &= ~0x3000;
                     pRecord->mUnknown1 = 0;
                 } else if (!fn_80106618(p)) {
@@ -241,7 +241,7 @@ static void PlayerActionAnimSetSpeedRatio(Record_800DB074 *pRecord, float value)
 }
 }
 
-extern "C" void fn_800DB8B4(Record_800DB60C *pRecord, Object_80039F5C *p)
+extern "C" void PlayerActionAnimAiConsiderPitch(Record_800DB60C *pRecord, Object_80039F5C *p)
 {
     int allow = 1;
     int failed = 0;
@@ -259,11 +259,11 @@ extern "C" void fn_800DB8B4(Record_800DB60C *pRecord, Object_80039F5C *p)
     if (!(fn_8012506C(p, 3) <= 65.0f)) {
         allow = 0;
     }
-    unsigned int roll = (unsigned int)fn_802372EC(0, 255);
+    unsigned int roll = (unsigned int)SyncRandGetRange(0, 255);
     if (roll > (unsigned int)fn_800ACFA8(p)) {
         failed = 1;
     }
-    if (failed && (unsigned int)fn_802372EC(0, 100) < (unsigned int)lbl_803EAD19) {
+    if (failed && (unsigned int)SyncRandGetRange(0, 100) < (unsigned int)lbl_803EAD19) {
         allow = allow == 0;
     }
     Point_8017886C point;
@@ -312,11 +312,11 @@ extern "C" void fn_800DB8B4(Record_800DB60C *pRecord, Object_80039F5C *p)
         fn_8011F5AC(0);
     }
     if (allow) {
-        fn_800DB60C(pRecord, p);
+        PlayerActionAnimPitchTryStart(pRecord, p);
     }
 }
 
-extern "C" int fn_800DBAF0(Object_80039F5C *p)
+extern "C" int PlayerActionAnimIsPitchArmed(Object_80039F5C *p)
 {
     Record_800DB60C *pRecord = 0;
     switch (p->mpState->mId) {
@@ -338,7 +338,7 @@ extern "C" int fn_800DBAF0(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_800DBB74(Object_80039F5C *p, unsigned char *pOut)
+extern "C" int PlayerActionAnimIsAiPasser(Object_80039F5C *p, unsigned char *pOut)
 {
     int result;
 
@@ -371,9 +371,9 @@ extern "C" void PlayerActionAnimSteerPassReady(Object_80039F5C *p, int angle, fl
     }
     if (fn_801BE648(p->mpUnknown792) != 217 || value > 0.0f) {
         if (value <= 0.0f) {
-            lbl_803EAD1C++;
+            _PlayerActionAnim_iSteerFrames++;
             if (MathAngleDiff(p->mMotion.mFacing, dir) > 0x400000) {
-                if (lbl_803EAD1C > 15) {
+                if (_PlayerActionAnim_iSteerFrames > 15) {
                     int base = 0x800000;
                     if (p->mUnknown2913 == 0) {
                         base = 0;
@@ -406,7 +406,7 @@ extern "C" void PlayerActionAnimSteerPassReady(Object_80039F5C *p, int angle, fl
             }
             angle = -0x400000;
         } else {
-            lbl_803EAD1C = 0;
+            _PlayerActionAnim_iSteerFrames = 0;
         }
         result = PlayerActionAnimIsPassReady(p);
         if (result == 1 && p->mUnknown512.mUnknown15 != 1) {
@@ -496,7 +496,7 @@ extern "C" int PlayerActionAnimIsPassReady(Object_80039F5C *p)
                     && (PassIconsAreShown() || !(p->mFlags & 0x400))))
             && (fn_8011F1CC() || fn_8011F1F4())
             && mode == 3 && p->mpState->mId != 1 && p->mUnknown512.mUnknown15 != 1) {
-            if (!fn_800DBB74(p, &flag)) {
+            if (!PlayerActionAnimIsAiPasser(p, &flag)) {
                 if (!PassIconsWereShown()) {
                     result = 1;
                 } else if (PassIconsAreShown() == 1) {
@@ -519,7 +519,7 @@ extern "C" int PlayerActionAnimIsPassReady(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_800DC21C(Object_80039F5C *p)
+extern "C" int PlayerActionAnimIsPassPending(Object_80039F5C *p)
 {
     int result = 0;
     unsigned char flag;
@@ -532,7 +532,7 @@ extern "C" int fn_800DC21C(Object_80039F5C *p)
             || ((p->mUnknown2914 == 1 || p->mUnknown2914 == 3) && fn_8011F2C4()
                 && (PassIconsAreShown() || !(p->mFlags & 0x400))))
         && fn_8011F1CC() && mode == 3 && p->mpState->mId != 1 && p->mpState->mId != 91) {
-        if (!fn_800DBB74(p, &flag)) {
+        if (!PlayerActionAnimIsAiPasser(p, &flag)) {
             if (!PlayerActionAnimIsPassReady(p)) {
                 result = 1;
             }
@@ -597,12 +597,12 @@ extern "C" int PlayerActionAnimFacingCallback(List_800DC36C *pList, unsigned sho
     return 0;
 }
 
-extern "C" void fn_800DC578(void)
+extern "C" void PlayerActionAnimResetSteerFrames(void)
 {
-    lbl_803EAD1C = 0;
+    _PlayerActionAnim_iSteerFrames = 0;
 }
 
-extern "C" int fn_800DC584(Object_80039F5C *p, Record_800DC584 *pRecord)
+extern "C" int PlayerActionAnimSetTurnAngle(Object_80039F5C *p, Record_800DC584 *pRecord)
 {
     PlyrMoveCmd_t *pBlock = &p->mUnknown512;
     int delta = MathAngleDiff(pBlock->mUnknown4, pBlock->mUnknown8);
@@ -620,7 +620,7 @@ extern "C" int fn_800DC584(Object_80039F5C *p, Record_800DC584 *pRecord)
     return result;
 }
 
-extern "C" float fn_800DC61C(Object_801BBD5C *pObject, Object_80039F5C *p)
+extern "C" float PlayerActionAnimGetSignedSpeed(Object_801BBD5C *pObject, Object_80039F5C *p)
 {
     float value = p->mMotion.mUnknown28;
     if (MathAngleDiff((p->mMotion.mUnknown32 - p->mMotion.mFacing) & 0xFFFFFF, pObject->mUnknown20) > 0x400000) {
@@ -629,24 +629,24 @@ extern "C" float fn_800DC61C(Object_801BBD5C *pObject, Object_80039F5C *p)
     return value;
 }
 
-extern "C" int fn_800DC674(Object_801BBD5C *pObject, Object_80039F5C *p)
+extern "C" int PlayerActionAnimFindSpeedSample(Object_801BBD5C *pObject, Object_80039F5C *p)
 {
-    return PlayerLocoFindSampleIndex(pObject, fn_800DC61C(pObject, p));
+    return PlayerLocoFindSampleIndex(pObject, PlayerActionAnimGetSignedSpeed(pObject, p));
 }
 
-extern "C" float fn_800DC6A8(Object_801BBD5C *pObject, Object_80039F5C *p, int index, void *pA, int b)
+extern "C" float PlayerActionAnimUpdateSpeedBlend(Object_801BBD5C *pObject, Object_80039F5C *p, int index, void *pA, int b)
 {
-    return PlayerLocoUpdateBlendWeights(index, pA, pObject, b, fn_800DC61C(pObject, p));
+    return PlayerLocoUpdateBlendWeights(index, pA, pObject, b, PlayerActionAnimGetSignedSpeed(pObject, p));
 }
 
-extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode)
+extern "C" int PlayerActionAnimTurnPhase(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode)
 {
     Record_800DC6F4 *pRecord = (Record_800DC6F4 *)fn_801BE60C(p->mpUnknown792, key);
     switch (mode) {
     case 0: {
         fn_801BE760(p->mpUnknown792, key, 1);
         fn_8009BD60(p);
-        pRecord->mUnknown8 = fn_800DC584(p, (Record_800DC584 *)pRecord);
+        pRecord->mUnknown8 = PlayerActionAnimSetTurnAngle(p, (Record_800DC584 *)pRecord);
         if (p->mIdBytes[3] != 1) {
             pRecord->mUnknown10 = 2;
             pRecord->mUnknown9 = 2;
@@ -679,7 +679,7 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
     case 1:
         break;
     case 2: {
-        int direction = fn_800DC584(p, (Record_800DC584 *)pRecord);
+        int direction = PlayerActionAnimSetTurnAngle(p, (Record_800DC584 *)pRecord);
         if (direction != pRecord->mUnknown8) {
             if (pRecord->mUnknown4 != -1 && p->mpUnknown800[pRecord->mUnknown4].mUnknown8 == key) {
                 AnimChanStopAnim((AnimHeader_t *)pA, pEntries, pRecord->mUnknown4);
@@ -748,7 +748,7 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
     return 0;
 }
 
-extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode)
+extern "C" int PlayerActionAnimSpeedBlendPhase(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode)
 {
     Record_800DCC14 *pRecord = (Record_800DCC14 *)fn_801BE60C(p->mpUnknown792, key);
     Object_801BBD5C *pObject;
@@ -757,11 +757,11 @@ extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA,
     case 0: {
         fn_801BE760(p->mpUnknown792, key, 1);
         pObject = AnimFileGetStateData(key, p->mpUnknown796->mUnknown2);
-        index = fn_800DC674(pObject, p);
+        index = PlayerActionAnimFindSpeedSample(pObject, p);
         pRecord->mUnknown4 = 1.0f;
         PlayerLocoStartBlendPair((LocoBlendSet_t *)pObject, (Block_801BE60C *)pRecord, p, (unsigned char)pTable->mEntries[index].mUnknown0, (signed char)index, key, (FEPlyrModel_t *)pA, pEntries);
         pRecord->mUnknown12 = index;
-        fn_800DC6A8(pObject, p, index, pRecord, (int)pEntries);
+        PlayerActionAnimUpdateSpeedBlend(pObject, p, index, pRecord, (int)pEntries);
         pRecord->mUnknown16 = 0;
         break;
     }
@@ -773,7 +773,7 @@ extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA,
         }
         pObject = AnimFileGetStateData(key, p->mpUnknown796->mUnknown2);
         if (pRecord->mUnknown16 <= 0) {
-            index = fn_800DC674(pObject, p);
+            index = PlayerActionAnimFindSpeedSample(pObject, p);
             if (index != pRecord->mUnknown12) {
                 pRecord->mUnknown12 = index;
                 pRecord->mUnknown16 = 8;
@@ -788,13 +788,13 @@ extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA,
             pRecord->mUnknown16 = 0;
             pRecord->mUnknown4 = 1.0f;
         }
-        fn_800DC6A8(pObject, p, pRecord->mUnknown12, pRecord, (int)pEntries);
+        PlayerActionAnimUpdateSpeedBlend(pObject, p, pRecord->mUnknown12, pRecord, (int)pEntries);
         break;
     }
     return 0;
 }
 
-extern "C" int fn_800DCE2C(Object_80039F5C *p, unsigned char *pInfo)
+extern "C" int PlayerActionAnimScoreReaction(Object_80039F5C *p, unsigned char *pInfo)
 {
     Point_8017886C point;
     point = fn_80177FE0();
@@ -808,7 +808,7 @@ extern "C" int fn_800DCE2C(Object_80039F5C *p, unsigned char *pInfo)
     case 5: chance = 5; break;
     default: chance = 0; break;
     }
-    if ((unsigned int)fn_802372EC(0, 100) < chance) {
+    if ((unsigned int)SyncRandGetRange(0, 100) < chance) {
         unsigned char role = p->mUnknown2914;
         int check = 0;
         if (fn_80177F70()) {
@@ -906,7 +906,7 @@ extern "C" int fn_800DCE2C(Object_80039F5C *p, unsigned char *pInfo)
     return result;
 }
 
-extern "C" int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode)
+extern "C" int PlayerActionAnimReactionPhase(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode)
 {
     Record_800DD2E8 *pRecord = (Record_800DD2E8 *)fn_801BE60C(p->mpUnknown792, key);
     int found = 0;
@@ -944,9 +944,9 @@ extern "C" int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA,
             for (int i = 0; i < pTable->mCount; ++i) {
                 unsigned char *pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
                 if (pInfo[5] == type) {
-                    int value = fn_800DCE2C(p, pInfo + 4);
+                    int value = PlayerActionAnimScoreReaction(p, pInfo + 4);
                     if (value >= score && value > 0) {
-                        if (score != value || (unsigned int)fn_802372EC(0, 100) <= 49) {
+                        if (score != value || (unsigned int)SyncRandGetRange(0, 100) <= 49) {
                             if (score != value) score = value;
                             chosen = i;
                         }
@@ -977,7 +977,7 @@ extern "C" int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA,
     return 0;
 }
 
-extern "C" int fn_800DD5E4(Object_80039F5C *p)
+extern "C" int PlayerActionAnimIsReactionAlt(Object_80039F5C *p)
 {
     int result = 0;
     unsigned short key = fn_801BE648(p->mpUnknown792);
@@ -987,7 +987,7 @@ extern "C" int fn_800DD5E4(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_800DD648(Object_80039F5C *p)
+extern "C" int PlayerActionAnimGetReactionKind(Object_80039F5C *p)
 {
     unsigned short key = fn_801BE648(p->mpUnknown792);
     if (key >= 85 && key <= 86) {
@@ -996,7 +996,7 @@ extern "C" int fn_800DD648(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *p, unsigned int mode)
+extern "C" int PlayerActionAnimDepthPhase(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *p, unsigned int mode)
 {
     if (mode == 0) {
         fn_8009BD60(p);
@@ -1013,7 +1013,7 @@ extern "C" int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pA,
     return 0;
 }
 
-extern "C" int fn_800DD780(Object_80039F5C *p, int value, unsigned short key)
+extern "C" int PlayerActionAnimIsVariantFree(Object_80039F5C *p, int value, unsigned short key)
 {
     int result = 1;
     if (InGameIsPlaying()) {
@@ -1032,11 +1032,11 @@ extern "C" int fn_800DD780(Object_80039F5C *p, int value, unsigned short key)
     return result;
 }
 
-extern "C" int fn_800DD830(void *p, int value) {
+extern "C" int PlayerActionAnimVariantAllowed(void *p, int value) {
     return 1;
 }
 
-extern "C" int fn_800DD838(Object_80039F5C *p)
+extern "C" int PlayerActionAnimGetIdleMask(Object_80039F5C *p)
 {
     int result = p->mUnknown1008Word;
     if (result == -1) {
@@ -1078,7 +1078,7 @@ extern "C" int fn_800DD838(Object_80039F5C *p)
     return result;
 }
 
-extern "C" void fn_800DD92C(Table_80089904 *pTable, unsigned short a, unsigned char value)
+extern "C" void PlayerActionAnimLoadVariantList(Table_80089904 *pTable, unsigned short a, unsigned char value)
 {
     unsigned char values[4];
     values[0] = value;
@@ -1088,12 +1088,12 @@ extern "C" void fn_800DD92C(Table_80089904 *pTable, unsigned short a, unsigned c
     AnimFileGetStateAnimList(a, pTable->mEntries[fn_8009C56C(pTable, values)].mUnknown2 & 0x7FFF, pTable);
 }
 
-extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, void *pA, void *pB,
+extern "C" void PlayerActionAnimStartVariant(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, void *pA, void *pB,
                             Object_80039F5C *pOther, Record_800DDCE4 *pRecord, int mask)
 {
     unsigned short weights[32];
     int total = 0;
-    fn_800DD92C(pTable, p->mpUnknown796->mUnknown2, pRecord->mUnknown12);
+    PlayerActionAnimLoadVariantList(pTable, p->mpUnknown796->mUnknown2, pRecord->mUnknown12);
     for (int i = 0; i < pTable->mCount; ++i) {
         unsigned char *pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
         int weight;
@@ -1118,15 +1118,15 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
             case 7: break;
             }
         }
-        if (pInfo[6] != 1 && !fn_800DD830(p, pInfo[6])) weight = 0;
+        if (pInfo[6] != 1 && !PlayerActionAnimVariantAllowed(p, pInfo[6])) weight = 0;
         weights[i] = weight;
         total += weight;
     }
-    unsigned short chosen = fn_802372EC(0, pTable->mCount);
+    unsigned short chosen = SyncRandGetRange(0, pTable->mCount);
     if (chosen >= pTable->mCount) chosen = pTable->mCount - 1;
     int i = 0;
     while (i < pTable->mCount) {
-        if (fn_800DD780(p, (unsigned char)chosen, key)) {
+        if (PlayerActionAnimIsVariantFree(p, (unsigned char)chosen, key)) {
             unsigned char *pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
             pRecord->mUnknown8 = pInfo[5];
             pRecord->mUnknown9 = pInfo[7] == 2;
@@ -1137,7 +1137,7 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
         ++i;
     }
     if (i == pTable->mCount) {
-        chosen = fn_802372EC(0, i);
+        chosen = SyncRandGetRange(0, i);
         if (chosen >= pTable->mCount) {
             unsigned char *pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
             chosen = pTable->mCount - 1;
@@ -1146,7 +1146,7 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
             *((unsigned char *)pRecord + 16) = chosen;
         }
     }
-    fn_802372EC(0, total);
+    SyncRandGetRange(0, total);
     unsigned short old = pRecord->mUnknown14;
     AnimChannel_t *pEntries = (AnimChannel_t *)pB;
     if (old != 0xFFFF && !FELoopIsMainFEActive()) {
@@ -1164,7 +1164,7 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
     }
 }
 
-extern "C" void fn_800DDCE4(Object_80039F5C *p, Record_800DDCE4 *pRecord)
+extern "C" void PlayerActionAnimApplyVariantFlag(Object_80039F5C *p, Record_800DDCE4 *pRecord)
 {
     if (p->mIdBytes[3] == 1) {
         if (pRecord->mUnknown9) {
@@ -1175,7 +1175,7 @@ extern "C" void fn_800DDCE4(Object_80039F5C *p, Record_800DDCE4 *pRecord)
     }
 }
 
-extern "C" int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *p, unsigned int mode)
+extern "C" int PlayerActionAnimIdlePhase(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *p, unsigned int mode)
 {
     Record_800DDCE4 *pRecord = (Record_800DDCE4 *)fn_801BE60C(p->mpUnknown792, key);
     int mask;
@@ -1188,7 +1188,7 @@ extern "C" int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pA,
         pRecord->mUnknown8 = 0;
         pRecord->mUnknown10 = 0;
         pRecord->mUnknown12 = 1;
-        mask = pRecord->mUnknown4 = fn_800DD838(p);
+        mask = pRecord->mUnknown4 = PlayerActionAnimGetIdleMask(p);
         fn_801BE760(p->mpUnknown792, key, 1);
         pRecord->mUnknown13 = 1;
         break;
@@ -1199,7 +1199,7 @@ extern "C" int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pA,
         if (key == fn_801BE648(p->mpUnknown792) && (p->mFlags & 4)) {
             pRecord->mUnknown13 = 1;
         }
-        fn_800DDCE4(p, pRecord);
+        PlayerActionAnimApplyVariantFlag(p, pRecord);
         break;
     case 3:
         if (p->mIdBytes[3] == 1) {
@@ -1208,12 +1208,12 @@ extern "C" int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pA,
         break;
     }
     if (pRecord->mUnknown13) {
-        fn_800DD994(pTable, p, key, pA, pB, p, pRecord, mask);
+        PlayerActionAnimStartVariant(pTable, p, key, pA, pB, p, pRecord, mask);
     }
     return 0;
 }
 
-extern "C" void fn_800DDE6C(Object_80039F5C *p)
+extern "C" void PlayerActionAnimSetTurnKeys(Object_80039F5C *p)
 {
     fn_8009BD60(p);
     if (p->mIdBytes[3] != 1 && BallFindHeldBy(p)) {
@@ -1230,7 +1230,7 @@ extern "C" void fn_800DDE6C(Object_80039F5C *p)
     }
 }
 
-extern "C" int fn_800DDEE4(unsigned char *pA, unsigned char *pB)
+extern "C" int PlayerActionAnimKeysMatch(unsigned char *pA, unsigned char *pB)
 {
     unsigned char i;
     int result = 1;
@@ -1248,7 +1248,7 @@ template <class T> static inline T _Max(T a, T b)
     return a < b ? b : a;
 }
 
-extern "C" unsigned short fn_800DDF34(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, int *pAngle, float *pTime, float *pRate)
+extern "C" unsigned short PlayerActionAnimFindTurnEntry(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, int *pAngle, float *pTime, float *pRate)
 {
     int facing = p->mMotion.mFacing & 0xFFFFFF;
     int desired = p->mUnknown512.mUnknown8 & 0xFFFFFF;
@@ -1261,10 +1261,10 @@ extern "C" unsigned short fn_800DDF34(Table_80089904 *pTable, Object_80039F5C *p
     unsigned int chosen = 0;
     for (unsigned int i = 0; i < pTable->mCount; i++) {
         Info_800DDF34 *pInfo = (Info_800DDF34 *)pTable->mEntries[i].mpInfo;
-        if (fn_800DDEE4(pInfo->mUnknown4, (unsigned char *)&p->mUnknown1008) &&
+        if (PlayerActionAnimKeysMatch(pInfo->mUnknown4, (unsigned char *)&p->mUnknown1008) &&
             difference >= pInfo->mUnknown16 && difference <= pInfo->mUnknown20 &&
             ((direction > 0 && pInfo->mUnknown12 > 0) || (direction < 0 && pInfo->mUnknown12 < 0))) {
-            if (!pChosen || (unsigned int)fn_802372EC(0, 100) <= 49) {
+            if (!pChosen || (unsigned int)SyncRandGetRange(0, 100) <= 49) {
                 pChosen = pInfo;
                 chosen = i;
             }
@@ -1289,7 +1289,7 @@ extern "C" unsigned short fn_800DDF34(Table_80089904 *pTable, Object_80039F5C *p
     return chosen;
 }
 
-extern "C" int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode)
+extern "C" int PlayerActionAnimTurnInPlacePhase(Table_80089904 *pTable, unsigned short key, void *pA, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode)
 {
     Record_800DE19C *pRecord = (Record_800DE19C *)fn_801BE60C(p->mpUnknown792, key);
     switch (mode) {
@@ -1297,14 +1297,14 @@ extern "C" int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pA,
         fn_801BE760(p->mpUnknown792, key, 1);
         if (p->mIdBytes[3] == 1) {
             if (key == 100) {
-                fn_800DDE6C(p);
+                PlayerActionAnimSetTurnKeys(p);
             }
         } else {
-            fn_800DDE6C(p);
+            PlayerActionAnimSetTurnKeys(p);
         }
         int angle;
         float time, rate;
-        int index = fn_800DDF34(pTable, p, key, &angle, &time, &rate);
+        int index = PlayerActionAnimFindTurnEntry(pTable, p, key, &angle, &time, &rate);
         int entry = AnimChanStartAnim(pA, pEntries, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, key, p, 1.0f);
         pRecord->mUnknown0 = entry;
         AnimSeqSetSpeed(&pEntries[entry].mUnknown4C, MathInverse(rate));
@@ -1328,7 +1328,7 @@ extern "C" int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pA,
     return 0;
 }
 
-extern "C" int fn_800DE364(unsigned int id)
+extern "C" int PlayerActionAnimIsFlaggedKey(unsigned int id)
 {
     int result = 1;
     switch (id) {
@@ -1349,7 +1349,7 @@ extern "C" int fn_800DE364(unsigned int id)
     return result;
 }
 
-extern "C" void fn_800DE3B0(Block_800DE3B0 *pBlock, Object_80039F5C *p, Command_800DE3B0 *pCommand)
+extern "C" void PlayerActionAnimSetupAlign(Block_800DE3B0 *pBlock, Object_80039F5C *p, Command_800DE3B0 *pCommand)
 {
     int desired = fn_801CFE40(pCommand->mUnknown0.mUnknown4, pCommand->mUnknown0.mUnknown0) & 0xFFFFFF;
     State_800DE3B0 *pState = (State_800DE3B0 *)p->mUnknown1160.mUnknown12;
@@ -1368,15 +1368,15 @@ extern "C" void fn_800DE3B0(Block_800DE3B0 *pBlock, Object_80039F5C *p, Command_
     pBlock->mUnknown4.mUnknown0 = pCommand->mUnknownC.mUnknown0;
     pBlock->mUnknown4.mUnknown4 = pCommand->mUnknownC.mUnknown4;
     if (pState->mUnknown12 == 1) {
-        fn_80227690(&pBlock->mUnknownC, &pBlock->mUnknown4, &p->mMotion);
+        Vec2Sub(&pBlock->mUnknownC, &pBlock->mUnknown4, &p->mMotion);
         pBlock->mUnknown14 = desired;
     } else {
-        fn_80227690(&pBlock->mUnknownC, &p->mMotion, &old);
+        Vec2Sub(&pBlock->mUnknownC, &p->mMotion, &old);
         pBlock->mUnknown14 = original;
     }
 }
 
-extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
+extern "C" void PlayerActionAnimFindAlignTarget(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
 {
     Table_80089904 *pTable = fn_801BE72C(p->mpUnknown796->mUnknown2, fn_801BE648(p->mpUnknown792));
     Entry_800DE51C *pFallback = 0;
@@ -1456,11 +1456,11 @@ extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
         int angle;
         pBlock->mUnknown1C = 0;
         fn_800CEDA4(pFallback, &point, &angle, p, pBlock->mUnknown1F);
-        fn_800DEAB0(p, pBlock, fallbackKey, &point, angle, pFallback);
+        PlayerActionAnimBuildAlignCommand(p, pBlock, fallbackKey, &point, angle, pFallback);
     }
 }
 
-extern "C" void fn_800DE910(Object_80039F5C *p, Block_800DE3B0 *pBlock)
+extern "C" void PlayerActionAnimBlendAlign(Object_80039F5C *p, Block_800DE3B0 *pBlock)
 {
     AnimChannel_t *pEntry = &p->mpUnknown800[pBlock->mUnknown1D];
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -1471,10 +1471,10 @@ extern "C" void fn_800DE910(Object_80039F5C *p, Block_800DE3B0 *pBlock)
         pEntry->mUnknownC = pBlock->mUnknown14;
     }
     Pair_802270A4 delta;
-    fn_80227384(&delta, p->mUnknown552, -pEntry->mUnknownC);
-    fn_80227638(&pBlock->mUnknownC, &delta, &pBlock->mUnknownC);
-    fn_80227384(&delta, &pBlock->mUnknownC, pBlock->mUnknown14);
-    fn_80227638(&delta, &delta, &pBlock->mUnknown4);
+    Vec2Rotate(&delta, p->mUnknown552, -pEntry->mUnknownC);
+    Vec2Add(&pBlock->mUnknownC, &delta, &pBlock->mUnknownC);
+    Vec2Rotate(&delta, &pBlock->mUnknownC, pBlock->mUnknown14);
+    Vec2Add(&delta, &delta, &pBlock->mUnknown4);
     pMotion->mPos.mX = (delta.mUnknown0 - pMotion->mPos.mX) * pBlock->mUnknown0 + pMotion->mPos.mX;
     pMotion->mPos.mY = (delta.mUnknown4 - pMotion->mPos.mY) * pBlock->mUnknown0 + pMotion->mPos.mY;
     int desired = (pBlock->mUnknown14 + pEntry->mUnknown1C) & 0xFFFFFF;
@@ -1488,7 +1488,7 @@ extern "C" void fn_800DE910(Object_80039F5C *p, Block_800DE3B0 *pBlock)
     }
 }
 
-extern "C" void fn_800DEAB0(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key, void *pData, int angle, Entry_800DE51C *pRecord)
+extern "C" void PlayerActionAnimBuildAlignCommand(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key, void *pData, int angle, Entry_800DE51C *pRecord)
 {
     int active = fn_801BE648(p->mpUnknown792);
     unsigned char table[3048];
@@ -1498,18 +1498,18 @@ extern "C" void fn_800DEAB0(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key,
         AnimFileGetStateAnimList(1, key, (Table_80089904 *)table);
         fn_800CEE74(&command.command, p, fn_8009BCE8(&p->mUnknown336), pData, angle, (unsigned short)key, pBlock->mUnknown1F);
         fn_800CE804(&command.command, (Table_80089904 *)table, 0);
-        fn_800DE3B0(pBlock, p, &command.view);
+        PlayerActionAnimSetupAlign(pBlock, p, &command.view);
         break;
     case 195: case 196: case 197: case 210: case 224: case 228: case 229: case 230: case 235: case 237:
         AnimFileGetStateAnimList(1, key, (Table_80089904 *)table);
         fn_800CEE74(&command.command, p, 0, 0, 0, (unsigned short)key, pBlock->mUnknown1F);
         fn_800CE804(&command.command, (Table_80089904 *)table, pRecord->mUnknown0);
-        fn_800DE3B0(pBlock, p, &command.view);
+        PlayerActionAnimSetupAlign(pBlock, p, &command.view);
         break;
     }
 }
 
-extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock)
+extern "C" void PlayerActionAnimUpdatePairAlign(Object_80039F5C *p, Block_800DE3B0 *pBlock)
 {
     State_800DE3B0 *pState = (State_800DE3B0 *)p->mUnknown1160.mUnknown12;
     AnimChannel_t *pEntry = &p->mpUnknown800[pBlock->mUnknown1D];
@@ -1533,23 +1533,23 @@ extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock)
         Point_8017886C delta;
         --pBlock->mUnknown3E;
         if (pState->mUnknown12 == 1) {
-            fn_80227384(&rotated, &pBlock->mUnknownC, pBlock->mUnknown38);
-            fn_80227690(&delta, &rotated, &pBlock->mUnknownC);
-            fn_80227638(&pBlock->mUnknown4, &pBlock->mUnknown4, &delta);
+            Vec2Rotate(&rotated, &pBlock->mUnknownC, pBlock->mUnknown38);
+            Vec2Sub(&delta, &rotated, &pBlock->mUnknownC);
+            Vec2Add(&pBlock->mUnknown4, &pBlock->mUnknown4, &delta);
             pBlock->mUnknownC = rotated;
             pBlock->mUnknown14 += pBlock->mUnknown38;
         } else {
-            fn_80227690(&delta, &pBlock->mUnknown4, &point);
-            fn_80227384(&rotated, &delta, pBlock->mUnknown38);
-            fn_80227690(&delta, &rotated, &delta);
-            fn_80227638(&pBlock->mUnknown4, &pBlock->mUnknown4, &delta);
-            fn_80227384(&rotated, &pBlock->mUnknownC, pBlock->mUnknown38);
-            fn_80227690(&delta, &rotated, &pBlock->mUnknownC);
+            Vec2Sub(&delta, &pBlock->mUnknown4, &point);
+            Vec2Rotate(&rotated, &delta, pBlock->mUnknown38);
+            Vec2Sub(&delta, &rotated, &delta);
+            Vec2Add(&pBlock->mUnknown4, &pBlock->mUnknown4, &delta);
+            Vec2Rotate(&rotated, &pBlock->mUnknownC, pBlock->mUnknown38);
+            Vec2Sub(&delta, &rotated, &pBlock->mUnknownC);
             pBlock->mUnknownC = rotated;
-            fn_80227638(&p->mMotion, &p->mMotion, &delta);
+            Vec2Add(&p->mMotion, &p->mMotion, &delta);
             if (index != 0xFFFF) {
-                fn_80227638(&pOther->mMotion, &pOther->mMotion, &delta);
-                fn_800DF134(pOther, delta, 0, pBlock->mUnknown18);
+                Vec2Add(&pOther->mMotion, &pOther->mMotion, &delta);
+                PlayerActionAnimShiftPartner(pOther, delta, 0, pBlock->mUnknown18);
             }
         }
         p->mMotion.mFacing = (p->mMotion.mFacing + pBlock->mUnknown38) & 0xFFFFFF;
@@ -1558,39 +1558,39 @@ extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock)
             Point_8017886C delta;
             Pair_802270A4 rotated;
             Point_8017886C offset;
-            fn_80227690(&delta, &pOther->mMotion, &p->mMotion);
-            fn_80227384(&rotated, &delta, pBlock->mUnknown38);
-            fn_80227638(&pOther->mMotion, &rotated, &p->mMotion);
+            Vec2Sub(&delta, &pOther->mMotion, &p->mMotion);
+            Vec2Rotate(&rotated, &delta, pBlock->mUnknown38);
+            Vec2Add(&pOther->mMotion, &rotated, &p->mMotion);
             pOther->mMotion.mFacing = (pOther->mMotion.mFacing + pBlock->mUnknown38) & 0xFFFFFF;
             pOtherEntry->mUnknownC = (pOtherEntry->mUnknownC + pBlock->mUnknown38) & 0xFFFFFF;
-            fn_80227690(&delta, &pOtherBlock->mUnknown4, &p->mMotion);
-            fn_80227384(&rotated, &delta, pBlock->mUnknown38);
-            fn_80227690(&offset, &rotated, &delta);
-            fn_800DF134(pOther, offset, pBlock->mUnknown38, pBlock->mUnknown18);
+            Vec2Sub(&delta, &pOtherBlock->mUnknown4, &p->mMotion);
+            Vec2Rotate(&rotated, &delta, pBlock->mUnknown38);
+            Vec2Sub(&offset, &rotated, &delta);
+            PlayerActionAnimShiftPartner(pOther, offset, pBlock->mUnknown38, pBlock->mUnknown18);
         }
     } else if (pBlock->mUnknown3E == 0) {
         --pBlock->mUnknown3E;
         if (pState->mUnknown12 == 1) {
             Pair_802270A4 rotated;
             Point_8017886C delta;
-            fn_80227384(&rotated, (char *)pEntry + 36, pState->mUnknown1C);
-            fn_80227690(&delta, &p->mMotion, &pState->mUnknown14);
-            fn_80227690(&delta, &delta, &rotated);
-            fn_80227638(&pBlock->mUnknown4, &pBlock->mUnknown4, &delta);
-            fn_80227690(&pBlock->mUnknownC, &point, &pBlock->mUnknown4);
+            Vec2Rotate(&rotated, (char *)pEntry + 36, pState->mUnknown1C);
+            Vec2Sub(&delta, &p->mMotion, &pState->mUnknown14);
+            Vec2Sub(&delta, &delta, &rotated);
+            Vec2Add(&pBlock->mUnknown4, &pBlock->mUnknown4, &delta);
+            Vec2Sub(&pBlock->mUnknownC, &point, &pBlock->mUnknown4);
         } else {
-            fn_80227690(&pBlock->mUnknownC, &point, &pBlock->mUnknown4);
+            Vec2Sub(&pBlock->mUnknownC, &point, &pBlock->mUnknown4);
         }
         pBlock->mUnknownC.mUnknown0 /= (float)pBlock->mUnknown3F;
         pBlock->mUnknownC.mUnknown4 /= (float)pBlock->mUnknown3F;
     }
     if (pBlock->mUnknown3E < 0 && pBlock->mUnknown3F > 0) {
         --pBlock->mUnknown3F;
-        fn_80227638(&pBlock->mUnknown4, &pBlock->mUnknown4, &pBlock->mUnknownC);
-        fn_80227638(&p->mMotion, &p->mMotion, &pBlock->mUnknownC);
+        Vec2Add(&pBlock->mUnknown4, &pBlock->mUnknown4, &pBlock->mUnknownC);
+        Vec2Add(&p->mMotion, &p->mMotion, &pBlock->mUnknownC);
         if (index != 0xFFFF) {
-            fn_80227638(&pOther->mMotion, &pOther->mMotion, &pBlock->mUnknownC);
-            fn_800DF134(pOther, *(Point_8017886C *)&pBlock->mUnknownC, 0, pBlock->mUnknown18);
+            Vec2Add(&pOther->mMotion, &pOther->mMotion, &pBlock->mUnknownC);
+            PlayerActionAnimShiftPartner(pOther, *(Point_8017886C *)&pBlock->mUnknownC, 0, pBlock->mUnknown18);
         }
     }
     if (pBlock->mUnknown3F == 0) {
@@ -1609,7 +1609,7 @@ extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock)
     }
 }
 
-extern "C" void fn_800DF134(Object_80039F5C *p, Point_8017886C offset, int angle, int key)
+extern "C" void PlayerActionAnimShiftPartner(Object_80039F5C *p, Point_8017886C offset, int angle, int key)
 {
     if (key == fn_801BE648(p->mpUnknown792)) {
         Block_801BE60C *pRecord = fn_801BE60C(p->mpUnknown792, key);
@@ -1625,7 +1625,7 @@ extern "C" void fn_800DF134(Object_80039F5C *p, Point_8017886C offset, int angle
     }
 }
 
-extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pData, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode)
+extern "C" int PlayerActionAnimGenericPhase(Table_80089904 *pTable, unsigned short key, void *pData, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode)
 {
     Block_800DE3B0 *pBlock = (Block_800DE3B0 *)fn_801BE60C(p->mpUnknown792, key);
     switch (mode) {
@@ -1635,7 +1635,7 @@ extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pDa
         int second = p->mUnknown1008.mUnknown2 | (p->mUnknown1011 << 8);
         pBlock->mUnknown1D = AnimChanStartAnim(pData, pEntries, second, first, key, p, 1.0f);
         pBlock->mUnknown18 = key;
-        if (fn_800DE364(key)) p->mFlags |= 512;
+        if (PlayerActionAnimIsFlaggedKey(key)) p->mFlags |= 512;
         switch (key) {
         case 49: case 50: case 51: case 52: case 53: case 54: case 55:
         case 59: case 60:
@@ -1668,7 +1668,7 @@ extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pDa
             break;
         }
         }
-        fn_800DE51C(p, pBlock, first);
+        PlayerActionAnimFindAlignTarget(p, pBlock, first);
         if (pBlock->mUnknown1F) {
             AnimChannel_t *pEntry = &pEntries[pBlock->mUnknown1D];
             AnimChanSetMirrored(pEntry, !AnimChanIsMirrored(pEntry));
@@ -1687,13 +1687,13 @@ extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pDa
                     pBlock->mUnknown4.mUnknown0 = -pBlock->mUnknown4.mUnknown0;
                     pBlock->mUnknown4.mUnknown4 = -pBlock->mUnknown4.mUnknown4;
                     pBlock->mUnknown14 = (pBlock->mUnknown14 + 0x800000) & 0xFFFFFF;
-                } else if (key == 181 || key == 186) fn_800DF654(p, (Block_801BE60C *)pBlock);
+                } else if (key == 181 || key == 186) PlayerActionAnimMirrorAlign(p, (Block_801BE60C *)pBlock);
             }
-            if (key == 181 || key == 186) fn_800DEC10(p, pBlock);
-            if (pBlock->mUnknown1C) fn_800DE910(p, pBlock);
+            if (key == 181 || key == 186) PlayerActionAnimUpdatePairAlign(p, pBlock);
+            if (pBlock->mUnknown1C) PlayerActionAnimBlendAlign(p, pBlock);
             if (fn_801BE648(p->mpUnknown792) == 94 || fn_801BE648(p->mpUnknown792) == 95 || fn_801BE648(p->mpUnknown792) == 234) AnimMomentumUpdateLinked(&pBlock->mUnknown20, p);
             else AnimMomentumUpdate(&pBlock->mUnknown20, p);
-        } else if (!fn_800DE364(fn_801BE648(p->mpUnknown792))) p->mFlags &= ~512;
+        } else if (!PlayerActionAnimIsFlaggedKey(fn_801BE648(p->mpUnknown792))) p->mFlags &= ~512;
         switch (key) {
         case 172: case 173:
             if (p->mFlags & 4) fn_800C854C(p, key, pBlock->mUnknown3C);
@@ -1702,13 +1702,13 @@ extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pDa
         break;
     case 1: case 3:
         pBlock->mUnknown1C = 0;
-        if (key == fn_801BE648(p->mpUnknown792) || !fn_800DE364(fn_801BE648(p->mpUnknown792))) p->mFlags &= ~512;
+        if (key == fn_801BE648(p->mpUnknown792) || !PlayerActionAnimIsFlaggedKey(fn_801BE648(p->mpUnknown792))) p->mFlags &= ~512;
         break;
     }
     return 0;
 }
 
-extern "C" void fn_800DF654(Object_80039F5C *p, Block_801BE60C *pRecord)
+extern "C" void PlayerActionAnimMirrorAlign(Object_80039F5C *p, Block_801BE60C *pRecord)
 {
     Block_800DF654 *pBlock = (Block_800DF654 *)p->mUnknown1160.mUnknown12;
     pRecord->mUnknown4 = -pRecord->mUnknown4;

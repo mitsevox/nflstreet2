@@ -69,18 +69,18 @@ int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_8014F4D8(Class_80148A58 *p, Object_80039F5C *pPlayer, int kind, int value);
 void fn_8009D8CC(int index);
 int fn_801783AC(int bit);
-unsigned int fn_802372EC(int a, int b);
-float fn_8022785C(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
+unsigned int SyncRandGetRange(int a, int b);
+float Vec3Distance(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
 void PauseBlock(void);
-int fn_8005BE5C(int value);
+int InGameOverlayOpen(int value);
 void fn_800B9654(void *p, float dt);
 void fn_800B9998(void *p);
 void fn_801488D4(Object_80039F5C *p, Object_80039F5C *pOther);
 void PlyrMgrClearStates(void);
 void fn_8014D67C(void);
-void fn_8005BF5C(void);
+void InGameOverlayShow(void);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
-int fn_8005BFD4(void);
+int InGameOverlayGetState(void);
 void fn_800AD910(int a, float b);
 void ClockRuleEndPeriod(void);
 
@@ -224,7 +224,7 @@ void fn_8014EA90(State_802A1F90 *p, float dt)
             for (unsigned short i = 0; i <= 5; i++) {
                 Object_80039F5C *pOther = PlyrFindById(fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown0);
                 unsigned int value = fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown4;
-                if (pOther != pPlayer && (value < best || (value == best && fn_802372EC(0, 100) > 50))) {
+                if (pOther != pPlayer && (value < best || (value == best && SyncRandGetRange(0, 100) > 50))) {
                     p->mpUnknown4 = pOther;
                     best = value;
                 }
@@ -238,7 +238,7 @@ void fn_8014EA90(State_802A1F90 *p, float dt)
                 float best = 3.4028235e38f;
                 for (unsigned short i = 0; i <= 4; i++) {
                     Object_80039F5C *pOther = PlyrGet(0, i);
-                    float distance = fn_8022785C(&pOther->mMotion.mPos, &pos);
+                    float distance = Vec3Distance(&pOther->mMotion.mPos, &pos);
                     if (distance < best) {
                         p->mpUnknown4 = pOther;
                         best = distance;
@@ -253,7 +253,7 @@ void fn_8014EA90(State_802A1F90 *p, float dt)
         }
         if (p->mUnknown12) {
             PauseBlock();
-            fn_8005BE5C(2);
+            InGameOverlayOpen(2);
         }
     }
     fn_800B9654(p, dt);
@@ -267,7 +267,7 @@ void fn_8014EC74(State_802A1F90 *p)
         if (p->mUnknown12) {
             PlyrMgrClearStates();
             fn_8014D67C();
-            fn_8005BF5C();
+            InGameOverlayShow();
         }
     } else {
         PlyrMgrClearStates();
@@ -283,7 +283,7 @@ void fn_8014EC74(State_802A1F90 *p)
 
 int fn_8014ED30(State_802A1F90 *p)
 {
-    if (!p->mUnknown12 || fn_8005BFD4() == 1) {
+    if (!p->mUnknown12 || InGameOverlayGetState() == 1) {
         return 1;
     }
     return 0;

@@ -23,13 +23,13 @@ int SNDSTRM_status(int stream, SndStreamStatus_t *status)
     if (status->mRequests != 0) {
         request = (SndStreamRequest_t *)channel->mRequests.mpFirst;
         status->mFirstId = request->mId;
-        if (channel->mPlayRate != 0) {
+        if (channel->mFormat.mRate != 0) {
             bytes = SNDPKTPLAY_framesoutstanding(channel->mBuffer);
-            status->mBuffered = bytes * 1000 / channel->mPlayRate;
+            status->mBuffered = bytes * 1000 / channel->mFormat.mRate;
             if (status->mBuffered == 0) {
                 request = SNDSTRMI_getrequestptr(status->mFirstId);
                 if (request->mDataRate != 0) {
-                    bytes = fn_801F75C4(channel->mpTap);
+                    bytes = STREAM_gettable(channel->mpTap);
                     if (bytes > 4000000) {
                         bytes = 4000000;
                     }

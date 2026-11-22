@@ -74,15 +74,15 @@ int SNDSTRM_setazimuth(int stream, int speaker, float azimuth)
                 for (i = 0; i < record->m23; i++) {
                     index = record->m4[i];
                     lbl_803A6C24.m1CC[index].m1C = pans[i] << 8;
-                    fn_80274960(index);
+                    SndHalSetPan(index);
                 }
             } else {
-                const unsigned char *pans = lbl_802C1FF8[channel->mChannels - 1];
+                const unsigned char *pans = lbl_802C1FF8[channel->mFormat.mChannels - 1];
 
                 for (i = 0; i < record->m23; i++) {
                     index = record->m4[i];
                     lbl_803A6C24.m1CC[index].m1C = pan + (pans[i] << 8);
-                    fn_80274960(index);
+                    SndHalSetPan(index);
                 }
             }
         } else {
@@ -97,7 +97,7 @@ int SNDSTRM_setazimuth(int stream, int speaker, float azimuth)
                 } else {
                     dst->m1C = pan;
                 }
-                fn_80274960(index);
+                SndHalSetPan(index);
             }
         }
     }

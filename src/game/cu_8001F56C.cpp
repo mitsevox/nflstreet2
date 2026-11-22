@@ -36,17 +36,17 @@ int EATraxDbGetSongId(DbCursor *pObject);
 void EATraxDbGetArtist(DbCursor *pObject, char *pText, int length);
 void EATraxDbGetTitle(DbCursor *pObject, char *pText, int length);
 void EATraxDbGetAlbum(DbCursor *pObject, char *pText, int length);
-void fn_8008352C(DbCursor *pObject, void *pQuery);
-void fn_800835D0(DbCursor *pObject);
-void fn_80083644(DbCursor *pObject);
-int fn_80083664(DbCursor *pObject);
-int fn_80083684(DbCursor *pObject);
-void fn_800836A4(DbCursor *pObject, int a, int b, int c);
-int fn_800837D8(DbCursor *pObject);
-int fn_80083804(DbCursor *pObject);
-int fn_8008382C(DbCursor *pObject);
-void fn_80083854(DbCursor *pObject);
-void fn_80083934(DbCursor *pObject, int a, int b, int c);
+void PlaylistDbOpen(DbCursor *pObject, void *pQuery);
+void PlaylistDbRemoveStationEntries(DbCursor *pObject);
+void PlaylistDbClose(DbCursor *pObject);
+int PlaylistDbFirst(DbCursor *pObject);
+int PlaylistDbNext(DbCursor *pObject);
+void PlaylistDbFindEntry(DbCursor *pObject, int a, int b, int c);
+int PlaylistDbGetIstx(DbCursor *pObject);
+int PlaylistDbGetStationId(DbCursor *pObject);
+int PlaylistDbGetSongId(DbCursor *pObject);
+void PlaylistDbDeleteRow(DbCursor *pObject);
+void PlaylistDbAddEntry(DbCursor *pObject, int a, int b, int c);
 }
 
 static void *lbl_803EBA90 = (void *)-1;
@@ -65,29 +65,29 @@ void fn_8001F56C(void)
         lbl_803EBA94->mEntries[i].mUnknown4 = -1;
         lbl_803EBA94->mEntries[i].mState = 3;
     }
-    fn_8008352C(&cursor, 0);
+    PlaylistDbOpen(&cursor, 0);
     i = 0;
-    fn_800835D0(&cursor);
+    PlaylistDbRemoveStationEntries(&cursor);
     EATraxDbOpen(&table);
     lbl_803EBA94->mCount = 40;
-    if (fn_80083664(&cursor)) {
+    if (PlaylistDbFirst(&cursor)) {
         do {
             lbl_803EBA94->mEntries[i].mState = 0;
-            if (fn_800837D8(&cursor) == 0) {
-                fn_80083804(&cursor);
-                fn_8008382C(&cursor);
+            if (PlaylistDbGetIstx(&cursor) == 0) {
+                PlaylistDbGetStationId(&cursor);
+                PlaylistDbGetSongId(&cursor);
                 lbl_803EBA94->mEntries[i].mUnknown0 = 1;
                 lbl_803EBA94->mEntries[i].mUnknown4 = 0;
             } else {
                 lbl_803EBA94->mEntries[i].mUnknown0 = 0;
-                EATraxDbFindSong(&table, fn_8008382C(&cursor), &lbl_803EBA94->mEntries[i].mUnknown4);
+                EATraxDbFindSong(&table, PlaylistDbGetSongId(&cursor), &lbl_803EBA94->mEntries[i].mUnknown4);
             }
             i++;
             lbl_803EBA94->mCount--;
-        } while (fn_80083684(&cursor));
+        } while (PlaylistDbNext(&cursor));
     }
     EATraxDbClose(&table);
-    fn_80083644(&cursor);
+    PlaylistDbClose(&cursor);
 }
 
 void fn_8001F704(void)
@@ -97,7 +97,7 @@ void fn_8001F704(void)
     int changed = 0;
     unsigned char i;
 
-    fn_8008352C(&cursor, 0);
+    PlaylistDbOpen(&cursor, 0);
     EATraxDbOpen(&table);
     for (i = 0; i <= 20; i++) {
         int state = lbl_803EBA94->mEntries[i].mState;
@@ -115,16 +115,16 @@ void fn_8001F704(void)
                 value = 0;
             }
             if (lbl_803EBA94->mEntries[i].mState == 1) {
-                fn_800836A4(&cursor, found, 0, value);
-                fn_80083854(&cursor);
+                PlaylistDbFindEntry(&cursor, found, 0, value);
+                PlaylistDbDeleteRow(&cursor);
             } else {
-                fn_80083934(&cursor, found, 0, value);
+                PlaylistDbAddEntry(&cursor, found, 0, value);
             }
             changed = 1;
         }
     }
     EATraxDbClose(&table);
-    fn_80083644(&cursor);
+    PlaylistDbClose(&cursor);
     if (changed) {
         SndgMusicReshuffle();
     }

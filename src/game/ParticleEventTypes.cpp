@@ -5,7 +5,7 @@
 #include "game/Object_8003DEC4.h"
 #include "game/Ball.h"
 #include "engine/llquat.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 
 extern "C" {
 void DivotOnFootstep(Object_80039F5C *pPlayer, Vector_80039F5C *pPos, int foot0);
@@ -25,7 +25,7 @@ void MatScale(float a);
 void MatStore(float m[4][4]);
 void MatGetPos(Vector_80039F5C *pOut);
 void MatGetRotByOrder(QuatEulerAngles_t *pOut, int a);
-int fn_80227594(float *pA, float *pB, float tolerance);
+int Vec2Equal(float *pA, float *pB, float tolerance);
 }
 
 extern "C" void ParticleEventGetJoint(Object_8003DEC4 *pBody, int index, Vector_80039F5C *pPos, QuatEulerAngles_t *pAngles)
@@ -56,8 +56,8 @@ extern "C" void ParticleEventFootstep(ParticleEvent_t *pEvent)
     if (fn_800A8444(0) || fn_800A8444(1) || pos.mZ >= 0.09f || speed <= 0.05f) {
         return;
     }
-    if ((pEvent->mUnknown14 == 8 && !fn_80227594(pPlayer->mUnknown1016, &pos.mX, 0.5f))
-        || (pEvent->mUnknown14 == 4 && !fn_80227594(pPlayer->mUnknown1024, &pos.mX, 0.5f))) {
+    if ((pEvent->mUnknown14 == 8 && !Vec2Equal(pPlayer->mUnknown1016, &pos.mX, 0.5f))
+        || (pEvent->mUnknown14 == 4 && !Vec2Equal(pPlayer->mUnknown1024, &pos.mX, 0.5f))) {
         if (pEvent->mUnknown14 == 8) {
             pPlayer->mUnknown1016[0] = pos.mX;
             pPlayer->mUnknown1016[1] = pos.mY;
@@ -217,7 +217,7 @@ extern "C" void ParticleEventBallBounce(ParticleEvent_t *pEvent)
     pos.mY = (*pMatrix)[1][3];
     pos.mZ = (*pMatrix)[2][3];
     BallGetVelocity((Ball_t *)pEvent->mUnknown10, &velocity);
-    speed = fn_802270D4(&velocity);
+    speed = Vec3Magnitude(&velocity);
     if (pos.mZ < 0.15f && ((Ball_t *)pEvent->mUnknown10)->mState.mState == 5 && speed > 0.06f
         && pEvent->mUnknown18 == 0) {
         pSource = (ParticleSource_t *)((Ball_t *)pEvent->mUnknown10)->mpUnknown00->mUnknown660;

@@ -2,16 +2,16 @@
    which offensive and defensive plays are in the user's playbook, and which teams are hidden. */
 
 #include "game/DbCursor.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/QueryStatus.h"
 
 extern "C" {
-int fn_801FA844(int a, void *b, void *c, unsigned long long key, QueryResult *pValue, QueryResult *pResult);
+int TDbQryColStats(int a, void *b, void *c, unsigned long long key, QueryResult *pValue, QueryResult *pResult);
 int DbCursorGetValue(DbCursor *pObject, int key);
-int fn_8022F358(int index);
-int fn_8022F384(int a);
-int fn_8022F3D4(int handle);
-int fn_8022F4BC(void);
+int DbUserGetId(int index);
+int DbUserFindIndex(int a);
+int DbUserGetDb(int handle);
+int DbUserGetCurrent(void);
 }
 
 static int _Playbook_aTables[2] = { 0x504F5355, 0x50445355 };
@@ -20,7 +20,7 @@ extern "C" {
 
 void LogoLockOpen(DbCursor *pObject, signed char db)
 {
-    DbCursorOpen(pObject, 0x474C4B4C, 0x4C474C54, 0, 0, fn_8022F3D4(fn_8022F358(db)));
+    DbCursorOpen(pObject, 0x474C4B4C, 0x4C474C54, 0, 0, DbUserGetDb(DbUserGetId(db)));
 }
 
 void LogoLockClose(DbCursor *pObject)
@@ -43,7 +43,7 @@ int LogoIsNew(int a)
     unsigned char result = 0;
     DbCursor cursor;
 
-    LogoLockOpen(&cursor, fn_8022F384(fn_8022F4BC()));
+    LogoLockOpen(&cursor, DbUserFindIndex(DbUserGetCurrent()));
     if (DbCursorFindInt(&cursor, 0x4C474C54, a, 0, 0)) {
         result = DbCursorGetInt(&cursor, 0x574E5247) != 0;
     }
@@ -55,7 +55,7 @@ void LogoClearNew(int a)
 {
     DbCursor cursor;
 
-    LogoLockOpen(&cursor, fn_8022F384(fn_8022F4BC()));
+    LogoLockOpen(&cursor, DbUserFindIndex(DbUserGetCurrent()));
     if (DbCursorFindInt(&cursor, 0x4C474C54, a, 0, 0)) {
         DbCursorSetInt(&cursor, 0x574E5247, 0);
     }
@@ -66,7 +66,7 @@ void LogoUnlock(int a)
 {
     DbCursor cursor;
 
-    LogoLockOpen(&cursor, fn_8022F384(fn_8022F4BC()));
+    LogoLockOpen(&cursor, DbUserFindIndex(DbUserGetCurrent()));
     if (DbCursorFindInt(&cursor, 0x4C474C54, a, 0, 0)) {
         DbCursorSetInt(&cursor, 0x4B4C474C, 0);
     }
@@ -78,7 +78,7 @@ int PlaybookGetMaxOrder(DbCursor *pObject)
     QueryResult result;
     QueryResult value;
 
-    fn_801FA844(pObject->mUnknown4, pObject->mUnknown20, 0,
+    TDbQryColStats(pObject->mUnknown4, pObject->mUnknown20, 0,
                 ((unsigned long long)(unsigned int)pObject->mUnknown8 << 32) | 0x58505355,
                 &value, &result);
     return value.mUnknown4;
@@ -86,7 +86,7 @@ int PlaybookGetMaxOrder(DbCursor *pObject)
 
 void PlaybookOpen(DbCursor *pObject, signed char db, int index)
 {
-    int handle = fn_8022F3D4(fn_8022F358(db));
+    int handle = DbUserGetDb(DbUserGetId(db));
     DbCursorOpen(pObject, _Playbook_aTables[index], 0x44505355, 0, 0, handle);
 }
 
@@ -99,7 +99,7 @@ void PlaybookUnlockPlay(int index, int a)
 {
     DbCursor cursor;
 
-    PlaybookOpen(&cursor, fn_8022F384(fn_8022F4BC()), index);
+    PlaybookOpen(&cursor, DbUserFindIndex(DbUserGetCurrent()), index);
     if (DbCursorFindValue(&cursor, 0x44505355, a, 0, 0)) {
         DbCursorSetValue(&cursor, 0x58505355, PlaybookGetMaxOrder(&cursor) + 1);
     }
@@ -133,12 +133,12 @@ void PlaybookResetOrder(signed char db, int index)
     int row;
 
     table = index == 0 ? 0x504F5355 : 0x50445355;
-    fn_8022F3D4(fn_8022F358(db));
+    DbUserGetDb(DbUserGetId(db));
     query.mUnknown0 = 0;
     query.mUnknown4 = 0;
     query.mUnknown8 = -1;
     query.mUnknown12 = 0;
-    int status = fn_801FCE10(0, "use 'TATS' declare \x8a fastcursor for select 'XPSU' into \x85 from \x8c\n",
+    int status = TDbCompilePerformOp(0, "use 'TATS' declare \x8a fastcursor for select 'XPSU' into \x85 from \x8c\n",
                              &query, &value, table);
     if (status == 0) {
         PlaybookOpen(&cursor, db, index);
@@ -146,7 +146,7 @@ void PlaybookResetOrder(signed char db, int index)
         while (open && fetched && row) {
             query.mUnknown4 = i++;
             if (query.mUnknown0 && QUERY_STATUS_ACCEPTED(status) == 1 && status != 0x15) {
-                status = fn_801FCE10(0, "fetch from \x8a\n", &query);
+                status = TDbCompilePerformOp(0, "fetch from \x8a\n", &query);
                 if (QUERY_STATUS_ACCEPTED(status) == 1 && status != 0x15) {
                     DbCursorSetValue(&cursor, 0x58505355, value);
                     row = DbCursorNext(&cursor);
@@ -160,13 +160,13 @@ void PlaybookResetOrder(signed char db, int index)
         PlaybookClose(&cursor);
     }
     if (query.mUnknown0) {
-        fn_801FCFA0(&query);
+        TDbSQLDestroyCursor(&query);
     }
 }
 
 void TeamLockOpen(DbCursor *pObject, int db)
 {
-    DbCursorOpen(pObject, 0x4D45544C, 0x44494754, 0, 0, fn_8022F3D4(fn_8022F358(db)));
+    DbCursorOpen(pObject, 0x4D45544C, 0x44494754, 0, 0, DbUserGetDb(DbUserGetId(db)));
 }
 
 void TeamLockClose(DbCursor *pObject)

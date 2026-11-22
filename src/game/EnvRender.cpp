@@ -52,16 +52,16 @@ void fn_802353D8(Object_80235588 *p, int flags);
 void fn_802353F8(Object_80235588 *p, int flags);
 void fn_80235510(Object_80235588 *p, int a);
 void fn_80235588(Object_80235588 *p, int a);
-void fn_802355E4(Object_80235588 *p);
-void fn_80235630(Object_80235588 *p, int handle);
-void fn_80235740(Object_80235588 *p, int handle);
-void fn_80235764(Object_80235588 *p, int handle);
-void fn_80235B6C(Object_80235588 *p, void *pElement, int a);
-void fn_80235C48(Object_80235588 *p, int a);
-void fn_80235C90(Object_80235588 *p, int a, float b, float c, float d, float e);
-void fn_80235D0C(Object_80235588 *p, int a);
-void fn_80235D10(Object_80235588 *p, float a);
-void fn_80235D78(Vector_80039F5C *p);
+void ModelObjReset(Object_80235588 *p);
+void ModelObjSetModel(Object_80235588 *p, int handle);
+void ModelObjStoreMatrix(Object_80235588 *p, int handle);
+void ModelObjDraw(Object_80235588 *p, int handle);
+void ModelObjSetTextures(Object_80235588 *p, void *pElement, int a);
+void ModelObjSetParamNop(Object_80235588 *p, int a);
+void ModelObjSetAmbientColor(Object_80235588 *p, int a, float b, float c, float d, float e);
+void ModelObjSetFlagsNop(Object_80235588 *p, int a);
+void ModelObjSetDepthOffset(Object_80235588 *p, float a);
+void ModelObjSetEyePos(Vector_80039F5C *p);
 void LLFogSetViewport(Viewport_t *p);
 void LLFogSetType(int a);
 void LLFogSetRange(float a, float b);
@@ -94,13 +94,13 @@ void EnvSkyInit(EnvSkyObj_t *pInstance)
     char *pElement = pInstance->mUnknown18;
 
     fn_80235588(pLayer, 0);
-    fn_80235630(pLayer, handle);
-    fn_80235B6C(pLayer, pElement, 1);
+    ModelObjSetModel(pLayer, handle);
+    ModelObjSetTextures(pLayer, pElement, 1);
     fn_802353F8(pLayer, 0);
     fn_802353D8(pLayer, 0x400008);
     fn_80235588(&pInstance->mUnknown108, 0);
-    fn_80235630(&pInstance->mUnknown108, handle);
-    fn_80235B6C(&pInstance->mUnknown108, pElement, 1);
+    ModelObjSetModel(&pInstance->mUnknown108, handle);
+    ModelObjSetTextures(&pInstance->mUnknown108, pElement, 1);
     fn_802353F8(&pInstance->mUnknown108, 0x2000000);
     fn_802353D8(&pInstance->mUnknown108, 0x40020A);
     EnvApplyFog();
@@ -117,17 +117,17 @@ void EnvSkyDraw(EnvSkyObj_t *pInstance, int unused)
     int handle = ConGetCurrentContext();
 
     TMRenderReset();
-    fn_80235C90(&pInstance->mUnknown48, 0, 0.5f, 0.5f, 0.5f, 0.51f);
-    fn_80235C90(&pInstance->mUnknown48, 1, 0.5f, 0.5f, 0.5f, 0.51f);
-    fn_80235C90(&pInstance->mUnknown108, 0, 0.5f, 0.5f, 0.5f, 0.51f);
-    fn_80235C90(&pInstance->mUnknown108, 1, 0.5f, 0.5f, 0.5f, 0.51f);
+    ModelObjSetAmbientColor(&pInstance->mUnknown48, 0, 0.5f, 0.5f, 0.5f, 0.51f);
+    ModelObjSetAmbientColor(&pInstance->mUnknown48, 1, 0.5f, 0.5f, 0.5f, 0.51f);
+    ModelObjSetAmbientColor(&pInstance->mUnknown108, 0, 0.5f, 0.5f, 0.5f, 0.51f);
+    ModelObjSetAmbientColor(&pInstance->mUnknown108, 1, 0.5f, 0.5f, 0.5f, 0.51f);
     MatSetStack(VptGetMatrixStack());
     MatPush();
     MatTranslate(&pInstance->mUnknown4);
-    fn_80235740(&pInstance->mUnknown48, handle);
-    fn_80235764(&pInstance->mUnknown48, handle);
-    fn_80235740(&pInstance->mUnknown108, handle);
-    fn_80235764(&pInstance->mUnknown108, handle);
+    ModelObjStoreMatrix(&pInstance->mUnknown48, handle);
+    ModelObjDraw(&pInstance->mUnknown48, handle);
+    ModelObjStoreMatrix(&pInstance->mUnknown108, handle);
+    ModelObjDraw(&pInstance->mUnknown108, handle);
     MatSetStack(VptGetMatrixStack());
     MatPop();
 }
@@ -205,89 +205,89 @@ void EnvLayersInit(EnvObj *pObject)
     unsigned int i;
 
     fn_80235588(&pObject->mUnknown24[2], 6);
-    fn_80235630(&pObject->mUnknown24[2], pObject->mUnknown20);
-    fn_80235B6C(&pObject->mUnknown24[2], pObject->mUnknownE64, 1);
-    fn_80235C48(&pObject->mUnknown24[2], 4);
+    ModelObjSetModel(&pObject->mUnknown24[2], pObject->mUnknown20);
+    ModelObjSetTextures(&pObject->mUnknown24[2], pObject->mUnknownE64, 1);
+    ModelObjSetParamNop(&pObject->mUnknown24[2], 4);
     fn_802353D8(&pObject->mUnknown24[2], 0x303);
-    fn_80235D0C(&pObject->mUnknown24[2], 0x60);
+    ModelObjSetFlagsNop(&pObject->mUnknown24[2], 0x60);
     fn_802353F8(&pObject->mUnknown24[2], 0);
 
     fn_80235588(&pObject->mUnknown24[5], 6);
-    fn_80235630(&pObject->mUnknown24[5], pObject->mUnknown20);
-    fn_80235B6C(&pObject->mUnknown24[5], pObject->mUnknownE64, 1);
-    fn_80235C48(&pObject->mUnknown24[5], 4);
+    ModelObjSetModel(&pObject->mUnknown24[5], pObject->mUnknown20);
+    ModelObjSetTextures(&pObject->mUnknown24[5], pObject->mUnknownE64, 1);
+    ModelObjSetParamNop(&pObject->mUnknown24[5], 4);
     fn_802353D8(&pObject->mUnknown24[5], 0x303);
-    fn_80235D0C(&pObject->mUnknown24[5], 0x60);
+    ModelObjSetFlagsNop(&pObject->mUnknown24[5], 0x60);
     fn_802353F8(&pObject->mUnknown24[5], 0x200);
 
     fn_80235588(&pObject->mUnknown24[6], 6);
-    fn_80235630(&pObject->mUnknown24[6], pObject->mUnknown20);
-    fn_80235B6C(&pObject->mUnknown24[6], pObject->mUnknownE64, 1);
-    fn_80235C48(&pObject->mUnknown24[6], 4);
+    ModelObjSetModel(&pObject->mUnknown24[6], pObject->mUnknown20);
+    ModelObjSetTextures(&pObject->mUnknown24[6], pObject->mUnknownE64, 1);
+    ModelObjSetParamNop(&pObject->mUnknown24[6], 4);
     fn_802353D8(&pObject->mUnknown24[6], 0x303);
-    fn_80235D0C(&pObject->mUnknown24[6], 0x60);
+    ModelObjSetFlagsNop(&pObject->mUnknown24[6], 0x60);
     fn_802353F8(&pObject->mUnknown24[6], 0x400);
 
     fn_80235588(&pObject->mUnknown24[3], 6);
-    fn_80235630(&pObject->mUnknown24[3], pObject->mUnknown20);
-    fn_80235B6C(&pObject->mUnknown24[3], pObject->mUnknownE64, 1);
-    fn_80235C48(&pObject->mUnknown24[3], 4);
-    fn_80235D0C(&pObject->mUnknown24[3], 0x10);
+    ModelObjSetModel(&pObject->mUnknown24[3], pObject->mUnknown20);
+    ModelObjSetTextures(&pObject->mUnknown24[3], pObject->mUnknownE64, 1);
+    ModelObjSetParamNop(&pObject->mUnknown24[3], 4);
+    ModelObjSetFlagsNop(&pObject->mUnknown24[3], 0x10);
     fn_802353F8(&pObject->mUnknown24[3], 1);
-    fn_80235D10(&pObject->mUnknown24[3], 1.0f);
+    ModelObjSetDepthOffset(&pObject->mUnknown24[3], 1.0f);
     fn_802353D8(&pObject->mUnknown24[3], 0x303);
 
     fn_80235588(&pObject->mUnknown24[0], 6);
-    fn_80235630(&pObject->mUnknown24[0], pObject->mUnknown20);
-    fn_80235B6C(&pObject->mUnknown24[0], pObject->mUnknownE64, 1);
-    fn_80235C48(&pObject->mUnknown24[0], 4);
-    fn_80235D0C(&pObject->mUnknown24[0], 0x60);
+    ModelObjSetModel(&pObject->mUnknown24[0], pObject->mUnknown20);
+    ModelObjSetTextures(&pObject->mUnknown24[0], pObject->mUnknownE64, 1);
+    ModelObjSetParamNop(&pObject->mUnknown24[0], 4);
+    ModelObjSetFlagsNop(&pObject->mUnknown24[0], 0x60);
     fn_802353F8(&pObject->mUnknown24[0], 0x2000000);
     fn_802353D8(&pObject->mUnknown24[0], 0x303);
 
     fn_80235588(&pObject->mUnknown24[4], 6);
-    fn_80235630(&pObject->mUnknown24[4], pObject->mUnknown20);
-    fn_80235B6C(&pObject->mUnknown24[4], pObject->mUnknownE64, 1);
-    fn_80235C48(&pObject->mUnknown24[4], 4);
-    fn_80235D0C(&pObject->mUnknown24[4], 0x60);
+    ModelObjSetModel(&pObject->mUnknown24[4], pObject->mUnknown20);
+    ModelObjSetTextures(&pObject->mUnknown24[4], pObject->mUnknownE64, 1);
+    ModelObjSetParamNop(&pObject->mUnknown24[4], 4);
+    ModelObjSetFlagsNop(&pObject->mUnknown24[4], 0x60);
     fn_802353F8(&pObject->mUnknown24[4], 0x4000000);
     fn_802353D8(&pObject->mUnknown24[4], 0x303);
 
     fn_80235588(&pObject->mUnknown24[1], 6);
-    fn_80235630(&pObject->mUnknown24[1], pObject->mUnknown20);
-    fn_80235B6C(&pObject->mUnknown24[1], pObject->mUnknownE64, 1);
-    fn_80235C48(&pObject->mUnknown24[1], 4);
-    fn_80235D0C(&pObject->mUnknown24[1], 0x60);
+    ModelObjSetModel(&pObject->mUnknown24[1], pObject->mUnknown20);
+    ModelObjSetTextures(&pObject->mUnknown24[1], pObject->mUnknownE64, 1);
+    ModelObjSetParamNop(&pObject->mUnknown24[1], 4);
+    ModelObjSetFlagsNop(&pObject->mUnknown24[1], 0x60);
     fn_802353F8(&pObject->mUnknown24[1], 0x2000);
     fn_802353D8(&pObject->mUnknown24[1], 0x800303);
 
     fn_80235588(&pObject->mUnknown24[7], 6);
-    fn_80235630(&pObject->mUnknown24[7], pObject->mUnknown20);
-    fn_80235B6C(&pObject->mUnknown24[7], pObject->mUnknownE64, 1);
-    fn_80235C48(&pObject->mUnknown24[7], 4);
+    ModelObjSetModel(&pObject->mUnknown24[7], pObject->mUnknown20);
+    ModelObjSetTextures(&pObject->mUnknown24[7], pObject->mUnknownE64, 1);
+    ModelObjSetParamNop(&pObject->mUnknown24[7], 4);
     fn_802353F8(&pObject->mUnknown24[7], 0x10000000);
     fn_802353D8(&pObject->mUnknown24[7], 0x100502);
 
     fn_80235588(&pObject->mUnknown24[8], 6);
-    fn_80235630(&pObject->mUnknown24[8], pObject->mUnknown20);
-    fn_80235B6C(&pObject->mUnknown24[8], pObject->mUnknownE64, 1);
-    fn_80235C48(&pObject->mUnknown24[8], 4);
+    ModelObjSetModel(&pObject->mUnknown24[8], pObject->mUnknown20);
+    ModelObjSetTextures(&pObject->mUnknown24[8], pObject->mUnknownE64, 1);
+    ModelObjSetParamNop(&pObject->mUnknown24[8], 4);
     fn_802353F8(&pObject->mUnknown24[8], 0x20000000);
     fn_802353D8(&pObject->mUnknown24[8], 0x20050A);
 
     for (i = 0; i < 9; i++) {
-        fn_80235C90(&pObject->mUnknown24[i], 0, 1.0f, 1.0f, 1.0f, 0.51f);
-        fn_80235C90(&pObject->mUnknown24[i], 1, 1.0f, 1.0f, 1.0f, 0.51f);
+        ModelObjSetAmbientColor(&pObject->mUnknown24[i], 0, 1.0f, 1.0f, 1.0f, 0.51f);
+        ModelObjSetAmbientColor(&pObject->mUnknown24[i], 1, 1.0f, 1.0f, 1.0f, 0.51f);
     }
     for (i = 0; i < 10; i++) {
         fn_80235588(&pObject->mUnknown6E4[i], 6);
-        fn_80235630(&pObject->mUnknown6E4[i], pObject->mUnknown20);
-        fn_80235B6C(&pObject->mUnknown6E4[i], pObject->mUnknownE64, 1);
-        fn_80235C48(&pObject->mUnknown6E4[i], 4);
+        ModelObjSetModel(&pObject->mUnknown6E4[i], pObject->mUnknown20);
+        ModelObjSetTextures(&pObject->mUnknown6E4[i], pObject->mUnknownE64, 1);
+        ModelObjSetParamNop(&pObject->mUnknown6E4[i], 4);
         fn_80235510(&pObject->mUnknown6E4[i], i + 7);
         fn_802353D8(&pObject->mUnknown6E4[i], 0x24050A);
-        fn_80235C90(&pObject->mUnknown6E4[i], 0, 1.0f, 1.0f, 1.0f, 0.51f);
-        fn_80235C90(&pObject->mUnknown6E4[i], 1, 1.0f, 1.0f, 1.0f, 0.51f);
+        ModelObjSetAmbientColor(&pObject->mUnknown6E4[i], 0, 1.0f, 1.0f, 1.0f, 0.51f);
+        ModelObjSetAmbientColor(&pObject->mUnknown6E4[i], 1, 1.0f, 1.0f, 1.0f, 0.51f);
     }
     pObject->mUnknown14 = 0;
 }
@@ -297,10 +297,10 @@ void EnvLayersFree(EnvObj *pObject)
     unsigned int i;
 
     for (i = 0; i < 9; i++) {
-        fn_802355E4(&pObject->mUnknown24[i]);
+        ModelObjReset(&pObject->mUnknown24[i]);
     }
     for (i = 0; i < 10; i++) {
-        fn_802355E4(&pObject->mUnknown6E4[i]);
+        ModelObjReset(&pObject->mUnknown6E4[i]);
     }
 }
 
@@ -313,24 +313,24 @@ int EnvDrawOverlay(EnvObjOverlay *pOwner)
     MatSetStack(VptGetMatrixStack());
     MatPush();
     MatTranslate(&pObject->mUnknown4);
-    fn_80235D78(&((EnvViewport *)VptManagerGetCurrentCamera(0))->mUnknown4);
+    ModelObjSetEyePos(&((EnvViewport *)VptManagerGetCurrentCamera(0))->mUnknown4);
     if (ScreenTintIsActive(1) == 0) {
-        fn_80235740(&pObject->mUnknown24[0], handle);
-        fn_80235764(&pObject->mUnknown24[0], handle);
-        fn_80235740(&pObject->mUnknown24[8], handle);
-        fn_80235764(&pObject->mUnknown24[8], handle);
+        ModelObjStoreMatrix(&pObject->mUnknown24[0], handle);
+        ModelObjDraw(&pObject->mUnknown24[0], handle);
+        ModelObjStoreMatrix(&pObject->mUnknown24[8], handle);
+        ModelObjDraw(&pObject->mUnknown24[8], handle);
     }
     if (fn_800A262C()) {
-        fn_80235C90(&pObject->mUnknown24[6], 0, 1.0f, 1.0f, 1.0f, alpha);
-        fn_80235C90(&pObject->mUnknown24[6], 1, 1.0f, 1.0f, 1.0f, alpha);
-        fn_80235740(&pObject->mUnknown24[6], handle);
-        fn_80235764(&pObject->mUnknown24[6], handle);
+        ModelObjSetAmbientColor(&pObject->mUnknown24[6], 0, 1.0f, 1.0f, 1.0f, alpha);
+        ModelObjSetAmbientColor(&pObject->mUnknown24[6], 1, 1.0f, 1.0f, 1.0f, alpha);
+        ModelObjStoreMatrix(&pObject->mUnknown24[6], handle);
+        ModelObjDraw(&pObject->mUnknown24[6], handle);
     }
     if (fn_800A26C4()) {
-        fn_80235C90(&pObject->mUnknown24[5], 0, 1.0f, 1.0f, 1.0f, alpha);
-        fn_80235C90(&pObject->mUnknown24[5], 1, 1.0f, 1.0f, 1.0f, alpha);
-        fn_80235740(&pObject->mUnknown24[5], handle);
-        fn_80235764(&pObject->mUnknown24[5], handle);
+        ModelObjSetAmbientColor(&pObject->mUnknown24[5], 0, 1.0f, 1.0f, 1.0f, alpha);
+        ModelObjSetAmbientColor(&pObject->mUnknown24[5], 1, 1.0f, 1.0f, 1.0f, alpha);
+        ModelObjStoreMatrix(&pObject->mUnknown24[5], handle);
+        ModelObjDraw(&pObject->mUnknown24[5], handle);
     }
     MatSetStack(VptGetMatrixStack());
     MatPop();
@@ -345,37 +345,37 @@ int EnvDraw(EnvObj *pObject)
     MatSetStack(VptGetMatrixStack());
     MatPush();
     MatTranslate(&pObject->mUnknown4);
-    fn_80235D78(&((EnvViewport *)VptManagerGetCurrentCamera(0))->mUnknown4);
-    fn_80235740(&pObject->mUnknown24[4], handle);
-    fn_80235764(&pObject->mUnknown24[4], handle);
-    fn_80235740(&pObject->mUnknown24[1], handle);
-    fn_80235764(&pObject->mUnknown24[1], handle);
-    fn_80235740(&pObject->mUnknown24[2], handle);
-    fn_80235764(&pObject->mUnknown24[2], handle);
-    fn_80235D10(&pObject->mUnknown24[3], _EnvRender_fLayer3Value);
-    fn_80235740(&pObject->mUnknown24[3], handle);
-    fn_80235764(&pObject->mUnknown24[3], handle);
+    ModelObjSetEyePos(&((EnvViewport *)VptManagerGetCurrentCamera(0))->mUnknown4);
+    ModelObjStoreMatrix(&pObject->mUnknown24[4], handle);
+    ModelObjDraw(&pObject->mUnknown24[4], handle);
+    ModelObjStoreMatrix(&pObject->mUnknown24[1], handle);
+    ModelObjDraw(&pObject->mUnknown24[1], handle);
+    ModelObjStoreMatrix(&pObject->mUnknown24[2], handle);
+    ModelObjDraw(&pObject->mUnknown24[2], handle);
+    ModelObjSetDepthOffset(&pObject->mUnknown24[3], _EnvRender_fLayer3Value);
+    ModelObjStoreMatrix(&pObject->mUnknown24[3], handle);
+    ModelObjDraw(&pObject->mUnknown24[3], handle);
     if (!fn_800A262C()) {
-        fn_80235C90(&pObject->mUnknown24[6], 0, 1.0f, 1.0f, 1.0f, 0.51f);
-        fn_80235C90(&pObject->mUnknown24[6], 1, 1.0f, 1.0f, 1.0f, 0.51f);
-        fn_80235740(&pObject->mUnknown24[6], handle);
-        fn_80235764(&pObject->mUnknown24[6], handle);
+        ModelObjSetAmbientColor(&pObject->mUnknown24[6], 0, 1.0f, 1.0f, 1.0f, 0.51f);
+        ModelObjSetAmbientColor(&pObject->mUnknown24[6], 1, 1.0f, 1.0f, 1.0f, 0.51f);
+        ModelObjStoreMatrix(&pObject->mUnknown24[6], handle);
+        ModelObjDraw(&pObject->mUnknown24[6], handle);
     }
     if (!fn_800A26C4()) {
-        fn_80235C90(&pObject->mUnknown24[5], 0, 1.0f, 1.0f, 1.0f, 0.51f);
-        fn_80235C90(&pObject->mUnknown24[5], 1, 1.0f, 1.0f, 1.0f, 0.51f);
-        fn_80235740(&pObject->mUnknown24[5], handle);
-        fn_80235764(&pObject->mUnknown24[5], handle);
+        ModelObjSetAmbientColor(&pObject->mUnknown24[5], 0, 1.0f, 1.0f, 1.0f, 0.51f);
+        ModelObjSetAmbientColor(&pObject->mUnknown24[5], 1, 1.0f, 1.0f, 1.0f, 0.51f);
+        ModelObjStoreMatrix(&pObject->mUnknown24[5], handle);
+        ModelObjDraw(&pObject->mUnknown24[5], handle);
     }
     if (ScreenTintIsActive(1) != 0) {
-        fn_80235740(&pObject->mUnknown24[0], handle);
-        fn_80235764(&pObject->mUnknown24[0], handle);
-        fn_80235740(&pObject->mUnknown24[8], handle);
-        fn_80235764(&pObject->mUnknown24[8], handle);
+        ModelObjStoreMatrix(&pObject->mUnknown24[0], handle);
+        ModelObjDraw(&pObject->mUnknown24[0], handle);
+        ModelObjStoreMatrix(&pObject->mUnknown24[8], handle);
+        ModelObjDraw(&pObject->mUnknown24[8], handle);
     }
     for (i = 0; i < 10; i++) {
-        fn_80235740(&pObject->mUnknown6E4[i], handle);
-        fn_80235764(&pObject->mUnknown6E4[i], handle);
+        ModelObjStoreMatrix(&pObject->mUnknown6E4[i], handle);
+        ModelObjDraw(&pObject->mUnknown6E4[i], handle);
     }
     MatSetStack(VptGetMatrixStack());
     MatPop();

@@ -309,3 +309,9 @@
 0x80261328	adampreddy	First exact body (__kernel_cosf) in original PR #1342, landed through this integration PR.
 0x801FBFEC	lifewillbeokay,adampreddy	First exact (_TDbIOLoadDatabase) through this integration PR: the body from original PR #1333 (lifewillbeokay) with the _TDbMemNotifyEnd closing-event form from original PR #1361 (adampreddy), which made it exact.
 0x801FC5FC	lifewillbeokay,adampreddy	First exact (_TDbIOSaveDatabase) through this integration PR: the body from original PR #1333 (lifewillbeokay) with the _TDbMemNotifyEnd closing-event form from original PR #1361 (adampreddy), which made it exact.
+0x80260C14	mitsevox	First exact (atanf) in original PR #1381, integrated with adampreddy's stack.
+0x80260E24	mitsevox	First exact (ceilf) in original PR #1379, integrated with adampreddy's stack.
+0x80260EE8	mitsevox	First exact (cosf) in original PR #1381, integrated with adampreddy's stack.
+0x80260FE8	mitsevox	First exact (floorf) in original PR #1379, integrated with adampreddy's stack.
+0x802610B0	mitsevox	First exact (sinf) in original PR #1381, integrated with adampreddy's stack.
+0x8026118C	mitsevox	First exact (tanf) in original PR #1379, integrated with adampreddy's stack.

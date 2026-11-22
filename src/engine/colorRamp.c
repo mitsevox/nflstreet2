@@ -41,10 +41,10 @@ static void fn_801E05F8(Vec3_801DE1E0 *pOut, Vec3_801DE1E0 *pA, Vec3_801DE1E0 *p
         pOut->z = pA->z;
         break;
     case 1:
-        fn_80227930(pOut, pB, pA, t);
+        Vec3Lerp(pOut, pB, pA, t);
         break;
     case 2:
-        fn_80227930(pOut, pB, pA, -fn_801CFB94((int)(t * 8388608.0f)) * 0.5f + 0.5f);
+        Vec3Lerp(pOut, pB, pA, -fn_801CFB94((int)(t * 8388608.0f)) * 0.5f + 0.5f);
         break;
     }
 }

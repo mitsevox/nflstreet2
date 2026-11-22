@@ -12,7 +12,7 @@
 #include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include <string.h>
-#include "game/fn_8022781C.h"
+#include "game/Vec2Distance.h"
 #include "game/fn_80178D18.h"
 
 
@@ -54,8 +54,8 @@ float fn_80178A2C(void);
 int fn_801783AC(int bit);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
-void fn_80227690(void *pOut, void *pA, void *pB);
-float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
+float Vec2DotProduct(Point_8017886C *pA, Point_8017886C *pB);
 float SyncRandGetFloat(int stream);
 }
 
@@ -151,7 +151,7 @@ extern "C" int OptionRunIsThreat(Object_80039F5C *p, Object_80039F5C *pOther)
         result = 0;
     }
     if (result) {
-        fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
+        Vec2Sub(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
         if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), pOther->mMotion.mFacing) > 0x400000) {
             result = 0;
         }
@@ -214,9 +214,9 @@ extern "C" int OptionRunDecide(Object_80039F5C *p, OptionRunControl_t *pControl)
             Point_8017886C toOther;
             Point_8017886C toTarget;
 
-            fn_80227690(&toOther, &pOther->mMotion.mPos, &p->mMotion.mPos);
-            fn_80227690(&toTarget, &pTarget->mMotion.mPos, &p->mMotion.mPos);
-            if (fn_802276E8(&toOther, &toTarget) > 0.0f) {
+            Vec2Sub(&toOther, &pOther->mMotion.mPos, &p->mMotion.mPos);
+            Vec2Sub(&toTarget, &pTarget->mMotion.mPos, &p->mMotion.mPos);
+            if (Vec2DotProduct(&toOther, &toTarget) > 0.0f) {
                 result = 4;
             } else if (target < 30.0f && fn_801066D0(p, pTarget, 9) &&
                        OptionRunCanPitchTo(p, &pTarget->mMotion.mPos, 0)) {
@@ -398,7 +398,7 @@ extern "C" void OptionRunFacePartner(Object_80039F5C *p, OptionRunControl_t *pCo
     if (pTarget != 0) {
         Point_8017886C delta;
 
-        fn_80227690(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
+        Vec2Sub(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
         fn_801CFE40(delta.mY, delta.mX);
     }
 }
@@ -603,7 +603,7 @@ extern "C" int OptionRunCanPitchTo(Object_80039F5C *p, Vector_80039F5C *pPos, Ob
         if (!(fabsf(pPos->mX) >= fabsf(fn_80178A08())) && !(fabsf(pPos->mX) >= fabsf(pOther->mMotion.mPos.mX))
             && !(fabsf(pPos->mX) >= _OptionRun_fMinWidth))
             allowed = 0;
-        if (!(fn_8022781C(&p->mMotion.mPos, &pOther->mMotion.mPos) >= _OptionRun_fMinPartnerDist))
+        if (!(Vec2Distance(&p->mMotion.mPos, &pOther->mMotion.mPos) >= _OptionRun_fMinPartnerDist))
             allowed = 0;
         if (MathAngleDiff(pOther->mMotion.mFacing, 0xC00000) < (int)(_OptionRun_fFacingLimitDeg * (16777216.0f / 360.0f)))
             allowed = 0;

@@ -262,7 +262,7 @@ int _TDbTblDestroy(TDbTable_t *pTable)
 {
     TDbQuery_t *pQuery;
 
-    for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
+    for (pQuery = _tDbQueries; pQuery != 0; pQuery = pQuery->mNext) {
         if (pQuery->mState == 3) {
             unsigned int j;
 
@@ -332,7 +332,7 @@ int _TDbTblInsertRow(TDbTable_t *pTable, TDbLitRef_t *pValues, TDbResult_8020AD1
         return 0x31;
     }
     pResult->mCount = err;
-    fn_8020A540();
+    _TDbQryClearModFlags();
     if (pTable->mFlags & 1) {
         pResult->mErr = 0x1E;
         return 0x1E;
@@ -369,9 +369,9 @@ int _TDbTblInsertRow(TDbTable_t *pTable, TDbLitRef_t *pValues, TDbResult_8020AD1
         if (err == 0) {
             TDbQuery_t *pQuery;
 
-            for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
-                if (pQuery->mState == 3 && fn_80205880(pTable, 0xFF, pQuery->mSource.mQIdx) != 0) {
-                    fn_80205A10(pQuery->mSource.mQIdx, &pQuery->mCur);
+            for (pQuery = _tDbQueries; pQuery != 0; pQuery = pQuery->mNext) {
+                if (pQuery->mState == 3 && _TDbQryCheckQIdxUsage(pTable, 0xFF, pQuery->mSource.mQIdx) != 0) {
+                    _TDbQryRebuildQIdx(pQuery->mSource.mQIdx, &pQuery->mCur);
                 }
             }
             pTable->mFlags |= 4;
@@ -414,7 +414,7 @@ int _TDbTblInsertRow(TDbTable_t *pTable, TDbLitRef_t *pValues, TDbResult_8020AD1
     }
     pTable->mFlags &= ~1;
     if (err == 0) {
-        fn_8020A5A8();
+        _TDbQryCallTriggers();
     }
     pResult->mCount = err == 0;
     pResult->mUnknown08 = 0;
@@ -574,7 +574,7 @@ int _TDbTblRowCopyTrig(TDbTable_t *pSrc, TDbTable_t *pDst, TDbResult_8020AD1C *p
             _tDbMemAllocInfoCallback(pEvent);
         }
     }
-    fn_8020A540();
+    _TDbQryClearModFlags();
     for (rec = 0; rec < pSrc->mRowCount; rec++) {
         int bReused;
 
@@ -645,7 +645,7 @@ int _TDbTblRowCopyTrig(TDbTable_t *pSrc, TDbTable_t *pDst, TDbResult_8020AD1C *p
     }
     pDst->mFlags &= ~1;
     if (pResult->mCount != 0) {
-        fn_8020A5A8();
+        _TDbQryCallTriggers();
     }
     pResult->mErr = err;
     return err;

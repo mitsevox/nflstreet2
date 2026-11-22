@@ -13,7 +13,7 @@ struct LightDirRecord {
 extern "C" {
 
 void *fn_800A342C(void);
-void fn_802271F0(float *pOut, float *pIn);
+void Vec3Normalize(float *pOut, float *pIn);
 
 void LightDirUpdate(void)
 {
@@ -39,6 +39,6 @@ void LightDirSetOppositeLevelFlat(LightDirRecord *pObject)
     pObject->mDir.mY = -((Vector_80039F5C *)fn_800A342C())->mY;
     pObject->mDir.mZ = -((Vector_80039F5C *)fn_800A342C())->mZ;
     pObject->mDir.mZ = 0.0f;
-    fn_802271F0(&pObject->mDir.mX, &pObject->mDir.mX);
+    Vec3Normalize(&pObject->mDir.mX, &pObject->mDir.mX);
 }
 }

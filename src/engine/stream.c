@@ -1,3 +1,5 @@
+/* Streaming file reader: queues file and memory requests into ring buffers, splits the data into chunks
+   for each tap, and serves the sound streams and movies that read through it. */
 #include "engine/sound.h"
 #include "engine/system.h"
 
@@ -85,23 +87,25 @@ extern void FileUnlockAsyncRequestList(void);
 extern void FileDebugProcess(void);
 extern int FileHostCheckActive(void);
 
-extern Lock_801F8014 lbl_8039B3D8;
+/* Held around each async read submission so the reads of all streams queue in order. */
+static Lock_801F8014 _Stream_SeekReadCS;
 
-extern unsigned int lbl_803ECFA0;
+/* The id of the last request handed out, counted in steps of 0x100 and never 0. */
+static unsigned int requestidcounter;
 
-static void fn_801F6410(Stream_801F5DA4 *s, int priority);
-static void fn_801F6540(Stream_801F5DA4 *s, int priority);
-void fn_801F7208(StreamTap_801F5DA4 *h);
-StreamChunk_801F5D84 *fn_801F73D4(StreamTap_801F5DA4 *h);
-void fn_801F74D4(StreamTap_801F5DA4 *h, StreamChunk_801F5D84 *c);
-void fn_801F6C78(StreamTap_801F5DA4 *h, int state);
+static void startnextrequest(Stream_801F5DA4 *s, int priority);
+static void restartstream(Stream_801F5DA4 *s, int priority);
+void STREAM_kill(StreamTap_801F5DA4 *h);
+StreamChunk_801F5D84 *STREAM_get(StreamTap_801F5DA4 *h);
+void STREAM_release(StreamTap_801F5DA4 *h, StreamChunk_801F5D84 *c);
+void STREAM_setgreedystate(StreamTap_801F5DA4 *h, int state);
 
-static unsigned int fn_801F5D84(unsigned int value)
+static unsigned int getint(unsigned int value)
 {
     return (value >> 24) | ((value >> 8) & 0xFF00) | ((value << 8) & 0xFF0000) | (value << 24);
 }
 
-static int fn_801F5DA4(StreamTap_801F5DA4 *h, Stream_801F5DA4 **ps, StreamTap_801F5DA4 **pt)
+static int validatehandle(StreamTap_801F5DA4 *h, Stream_801F5DA4 **ps, StreamTap_801F5DA4 **pt)
 {
     Stream_801F5DA4 *s;
 
@@ -117,7 +121,7 @@ static int fn_801F5DA4(StreamTap_801F5DA4 *h, Stream_801F5DA4 **ps, StreamTap_80
     return 0;
 }
 
-static int fn_801F5DE4(char *pStart, char *pEnd, char *p)
+static int inbetween(char *pStart, char *pEnd, char *p)
 {
     if (pStart <= pEnd) {
         return p >= pStart && p < pEnd;
@@ -125,7 +129,7 @@ static int fn_801F5DE4(char *pStart, char *pEnd, char *p)
     return p >= pStart || p < pEnd;
 }
 
-static void fn_801F5E24(Stream_801F5DA4 *s, int size)
+static void decbufferusage(Stream_801F5DA4 *s, int size)
 {
     int used;
     int newUsed;
@@ -143,7 +147,7 @@ static void fn_801F5E24(Stream_801F5DA4 *s, int size)
     }
 }
 
-static StreamRequest_801F5EA4 *fn_801F5EA4(Stream_801F5DA4 *s)
+static StreamRequest_801F5EA4 *getfreerequest(Stream_801F5DA4 *s)
 {
     StreamRequest_801F5EA4 *req = 0;
 
@@ -151,17 +155,17 @@ static StreamRequest_801F5EA4 *fn_801F5EA4(Stream_801F5DA4 *s)
     if (s->pFree) {
         req = s->pFree;
         s->pFree = req->pNext;
-        lbl_803ECFA0 += 0x100;
-        if (lbl_803ECFA0 == 0) {
-            lbl_803ECFA0 = 0x100;
+        requestidcounter += 0x100;
+        if (requestidcounter == 0) {
+            requestidcounter = 0x100;
         }
-        req->mID = (req->mID & 0xFF) | lbl_803ECFA0;
+        req->mID = (req->mID & 0xFF) | requestidcounter;
     }
     _StreamMUTEX_unlock(s->pMutex);
     return req;
 }
 
-static void fn_801F5F28(Stream_801F5DA4 *s, StreamRequest_801F5EA4 *req)
+static void queuerequest(Stream_801F5DA4 *s, StreamRequest_801F5EA4 *req)
 {
     req->mState = 1;
     req->pNext = 0;
@@ -179,7 +183,7 @@ static void fn_801F5F28(Stream_801F5DA4 *s, StreamRequest_801F5EA4 *req)
     _StreamMUTEX_unlock(s->pMutex);
 }
 
-static StreamRequest_801F5EA4 *fn_801F5FA4(Stream_801F5DA4 *s, int id)
+static StreamRequest_801F5EA4 *locaterequest(Stream_801F5DA4 *s, int id)
 {
     int index = id & 0xFF;
     StreamRequest_801F5EA4 *req;
@@ -197,7 +201,7 @@ static StreamRequest_801F5EA4 *fn_801F5FA4(Stream_801F5DA4 *s, int id)
     return req;
 }
 
-static void fn_801F5FF4(Stream_801F5DA4 *s, StreamRequest_801F5EA4 *req)
+static void freerequest(Stream_801F5DA4 *s, StreamRequest_801F5EA4 *req)
 {
     if (req == s->pFirst) {
         s->pFirst = req->pNext;
@@ -217,9 +221,9 @@ static void fn_801F5FF4(Stream_801F5DA4 *s, StreamRequest_801F5EA4 *req)
     s->pFree = req;
 }
 
-static int fn_801F6074(Stream_801F5DA4 *s, StreamChunk_801F5D84 *c)
+static int filterchunk(Stream_801F5DA4 *s, StreamChunk_801F5D84 *c)
 {
-    unsigned int id = fn_801F5D84(c->mID);
+    unsigned int id = getint(c->mID);
     StreamFilter_801F6074 *f;
     int i;
 
@@ -232,7 +236,7 @@ static int fn_801F6074(Stream_801F5DA4 *s, StreamChunk_801F5D84 *c)
     return -2;
 }
 
-static int fn_801F60F0(Stream_801F5DA4 *s)
+static int parsechunks(Stream_801F5DA4 *s)
 {
     StreamRequest_801F5EA4 *req = s->pCurrent;
     StreamChunk_801F5D84 *c;
@@ -245,25 +249,25 @@ static int fn_801F60F0(Stream_801F5DA4 *s)
 
     while (s->pWrite - s->pHead > 7) {
         c = (StreamChunk_801F5D84 *)s->pHead;
-        size = fn_801F5D84(c->mSize);
+        size = getint(c->mSize);
         if (size & 0xFF000000) {
             size = 8;
-            c->mID = fn_801F5D84(req->mEndMarker);
-            c->mSize = fn_801F5D84(8);
+            c->mID = getint(req->mEndMarker);
+            c->mSize = getint(8);
         }
         if ((unsigned int)(s->pHead + size) > (unsigned int)s->pWrite) {
             break;
         }
-        if (fn_801F5D84(c->mID) == req->mEndMarker) {
+        if (getint(c->mID) == req->mEndMarker) {
             pad = (int)s->pHead & 31;
             size = ((size + pad + 31) & ~31) - pad;
         }
-        tap = fn_801F6074(s, c);
+        tap = filterchunk(s, c);
         if (tap < 0) {
             _StreamMUTEX_lock(s->pMutex);
             cancelled = req->mState == 4;
             if (!cancelled) {
-                c->mID = fn_801F5D84(CHUNK_SKIP);
+                c->mID = getint(CHUNK_SKIP);
                 s->pHead += size;
             }
             _StreamMUTEX_unlock(s->pMutex);
@@ -272,7 +276,7 @@ static int fn_801F60F0(Stream_801F5DA4 *s)
                (the target holds the 0 in r25 from 0x801F6190 to the store at 0x801F6210). */
             int greedyState = 0;
 
-            c->mSize = fn_801F5D84(size | (tap << 24));
+            c->mSize = getint(size | (tap << 24));
             _StreamMUTEX_lock(s->pMutex);
             cancelled = req->mState == 4;
             if (!cancelled) {
@@ -291,21 +295,21 @@ static int fn_801F60F0(Stream_801F5DA4 *s)
             _StreamMUTEX_unlock(s->pMutex);
         }
         if (cancelled) {
-            if (fn_801F5D84(c->mID) != req->mEndMarker) {
+            if (getint(c->mID) != req->mEndMarker) {
                 pad = (int)s->pHead & 31;
                 size = ((size + pad + 31) & ~31) - pad;
-                c->mSize = fn_801F5D84(size | (tap << 24));
+                c->mSize = getint(size | (tap << 24));
             }
             return 0;
         }
-        if (fn_801F5D84(c->mID) == req->mEndMarker) {
+        if (getint(c->mID) == req->mEndMarker) {
             return 1;
         }
     }
     return 0;
 }
 
-static void fn_801F62F0(Stream_801F5DA4 *s)
+static void readcallback(Stream_801F5DA4 *s)
 {
     StreamRequest_801F5EA4 *req = s->pCurrent;
     int end;
@@ -318,27 +322,27 @@ static void fn_801F62F0(Stream_801F5DA4 *s)
     }
     s->mFilePos += s->mReadSize;
     s->pWrite += s->mReadSize;
-    found = fn_801F60F0(s);
+    found = parsechunks(s);
     if (req->mState == 4) {
-        fn_801F6410(s, s->mGreedyPriority);
+        startnextrequest(s, s->mGreedyPriority);
     } else if (end || found) {
         _StreamMUTEX_lock(s->pMutex);
         if (req->mState != 4) {
             req->mState = 3;
         }
         _StreamMUTEX_unlock(s->pMutex);
-        fn_801F6410(s, s->mGreedyPriority);
+        startnextrequest(s, s->mGreedyPriority);
     } else {
-        fn_801F6540(s, s->mGreedyPriority - 1);
+        restartstream(s, s->mGreedyPriority - 1);
     }
 }
 
-static void fn_801F63EC(int a, int b, void *pContext)
+static void _StreamReadCallback(int a, int b, void *pContext)
 {
-    fn_801F62F0(pContext);
+    readcallback(pContext);
 }
 
-static void fn_801F6410(Stream_801F5DA4 *s, int priority)
+static void startnextrequest(Stream_801F5DA4 *s, int priority)
 {
     int idle;
     StreamRequest_801F5EA4 *req;
@@ -375,15 +379,15 @@ static void fn_801F6410(Stream_801F5DA4 *s, int priority)
                 s->mFileSize = req->mFileSize;
                 s->mFileOffset = req->mFileOffset;
                 s->mFileHandle = req->mFileHandle;
-                fn_801F6540(s, s->mGreedyPriority);
+                restartstream(s, s->mGreedyPriority);
                 return;
             }
         }
-        fn_801F6540(s, priority);
+        restartstream(s, priority);
     }
 }
 
-static void fn_801F6540(Stream_801F5DA4 *s, int priority)
+static void restartstream(Stream_801F5DA4 *s, int priority)
 {
     StreamChunk_801F5D84 *c;
     StreamRequest_801F5EA4 *req;
@@ -392,10 +396,10 @@ static void fn_801F6540(Stream_801F5DA4 *s, int priority)
 
     while (s->pTail != s->pHead) {
         c = (StreamChunk_801F5D84 *)s->pTail;
-        if (fn_801F5D84(c->mID) == CHUNK_WRAP) {
+        if (getint(c->mID) == CHUNK_WRAP) {
             s->pTail = s->pWrap;
-        } else if (fn_801F5D84(c->mID) == CHUNK_SKIP) {
-            s->pTail += fn_801F5D84(c->mSize);
+        } else if (getint(c->mID) == CHUNK_SKIP) {
+            s->pTail += getint(c->mSize);
         } else {
             break;
         }
@@ -406,10 +410,10 @@ static void fn_801F6540(Stream_801F5DA4 *s, int priority)
         if (req->pNext == 0 || req->pNext->mState == 1) {
             break;
         }
-        if (fn_801F5DE4(s->pTail, s->pWrite, req->pNext->pStart - 1)) {
+        if (inbetween(s->pTail, s->pWrite, req->pNext->pStart - 1)) {
             break;
         }
-        fn_801F5FF4(s, req);
+        freerequest(s, req);
     }
     _StreamMUTEX_unlock(s->pMutex);
     if ((unsigned int)s->pTail > (unsigned int)s->pWrite) {
@@ -434,11 +438,11 @@ static void fn_801F6540(Stream_801F5DA4 *s, int priority)
             }
             memcpy(s->pWrap, s->pHead, len);
             c = (StreamChunk_801F5D84 *)s->pHead;
-            c->mID = fn_801F5D84(CHUNK_WRAP);
-            c->mSize = fn_801F5D84(8);
+            c->mID = getint(CHUNK_WRAP);
+            c->mSize = getint(8);
             s->pHead = s->pWrap;
             s->pWrite = s->pWrap + len;
-            if (fn_801F5D84(((StreamChunk_801F5D84 *)s->pTail)->mID) == CHUNK_WRAP) {
+            if (getint(((StreamChunk_801F5D84 *)s->pTail)->mID) == CHUNK_WRAP) {
                 s->pTail = s->pWrap;
                 avail = s->pBufferEnd - s->pWrite - 32;
             } else {
@@ -460,17 +464,17 @@ static void fn_801F6540(Stream_801F5DA4 *s, int priority)
         }
         memcpy(s->pWrite, req->pMem, s->mReadSize);
         req->pMem += s->mReadSize;
-        fn_801F62F0(s);
+        readcallback(s);
     } else {
         s->mReadSize = s->mBlockSize;
         if ((unsigned int)(s->mFilePos + s->mBlockSize) > s->mFileSize) {
             s->mReadSize = s->mFileSize - s->mFilePos;
         }
         FileLockAsyncRequestList();
-        fn_801F8014(&lbl_8039B3D8);
+        fn_801F8014(&_Stream_SeekReadCS);
         FileSeek(s->mFileHandle, s->mFileOffset + s->mFilePos, 0);
-        s->mReadHandle = FileReadAsync(s->mFileHandle, s->pWrite, s->mReadSize, priority, fn_801F63EC, s);
-        fn_801F809C(&lbl_8039B3D8);
+        s->mReadHandle = FileReadAsync(s->mFileHandle, s->pWrite, s->mReadSize, priority, _StreamReadCallback, s);
+        fn_801F809C(&_Stream_SeekReadCS);
         FileUnlockAsyncRequestList();
     }
 }
@@ -481,7 +485,7 @@ int STREAM_overhead(int numRequests, int numFilters, int numTaps)
            numTaps * sizeof(StreamTap_801F5DA4) + 32;
 }
 
-StreamTap_801F5DA4 *fn_801F687C(int numRequests, int numFilters, int numTaps, void *pMem, int memSize)
+StreamTap_801F5DA4 *STREAM_create(int numRequests, int numFilters, int numTaps, void *pMem, int memSize)
 {
     Stream_801F5DA4 *s = pMem;
     int bufferSize = memSize - STREAM_overhead(numRequests, numFilters, numTaps);
@@ -555,13 +559,13 @@ StreamTap_801F5DA4 *fn_801F687C(int numRequests, int numFilters, int numTaps, vo
     return s->pTaps;
 }
 
-void fn_801F6AC8(StreamTap_801F5DA4 *h, int index, unsigned int mask, unsigned int value, int tap)
+void STREAM_setfilter(StreamTap_801F5DA4 *h, int index, unsigned int mask, unsigned int value, int tap)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
     StreamFilter_801F6074 *f;
 
-    if (fn_801F5DA4(h, &s, &t) == 0 && index > 0 && index <= s->mNumFilters &&
+    if (validatehandle(h, &s, &t) == 0 && index > 0 && index <= s->mNumFilters &&
         (index != s->mNumFilters || (mask | value) == 0) && (tap > 0 || tap == -1 || tap == -2) &&
         tap <= s->mNumTaps && s->mState == 0) {
         f = &s->pFilters[index - 1];
@@ -571,13 +575,13 @@ void fn_801F6AC8(StreamTap_801F5DA4 *h, int index, unsigned int mask, unsigned i
     }
 }
 
-void fn_801F6B84(StreamTap_801F5DA4 *h)
+void STREAM_destroy(StreamTap_801F5DA4 *h)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
 
-    if (fn_801F5DA4(h, &s, &t) == 0) {
-        fn_801F7208(h);
+    if (validatehandle(h, &s, &t) == 0) {
+        STREAM_kill(h);
         while (s->mState == 1) {
             if (FileHostCheckActive()) {
                 FileDebugProcess();
@@ -588,27 +592,27 @@ void fn_801F6B84(StreamTap_801F5DA4 *h)
     }
 }
 
-void fn_801F6C04(StreamTap_801F5DA4 *h, int level)
+void STREAM_setgreedylevel(StreamTap_801F5DA4 *h, int level)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
     int old;
 
-    if (fn_801F5DA4(h, &s, &t) == 0) {
+    if (validatehandle(h, &s, &t) == 0) {
         old = s->mGreedyLevel;
         s->mGreedyLevel = level;
         if ((s->mUsed < old) != (s->mUsed < level)) {
-            fn_801F6C78(h, s->mUsed < level);
+            STREAM_setgreedystate(h, s->mUsed < level);
         }
     }
 }
 
-void fn_801F6C78(StreamTap_801F5DA4 *h, int state)
+void STREAM_setgreedystate(StreamTap_801F5DA4 *h, int state)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
 
-    if (fn_801F5DA4(h, &s, &t) == 0) {
+    if (validatehandle(h, &s, &t) == 0) {
         s->mGreedyState = state;
         if (state && s->mState == 1) {
             s->mReadHandle = FileRePrioritizeAsync(s->mReadHandle, s->mGreedyPriority);
@@ -616,18 +620,18 @@ void fn_801F6C78(StreamTap_801F5DA4 *h, int state)
     }
 }
 
-StreamTap_801F5DA4 *fn_801F6CE8(StreamTap_801F5DA4 *h, int tap)
+StreamTap_801F5DA4 *STREAM_taphandle(StreamTap_801F5DA4 *h, int tap)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
 
-    if (fn_801F5DA4(h, &s, &t) != 0 || tap <= 0 || tap > s->mNumTaps) {
+    if (validatehandle(h, &s, &t) != 0 || tap <= 0 || tap > s->mNumTaps) {
         return 0;
     }
     return &s->pTaps[tap - 1];
 }
 
-int fn_801F6D54(StreamTap_801F5DA4 *h, SndFileDesc_t *pFile, int offset, unsigned int endMarker)
+int STREAM_queuefile(StreamTap_801F5DA4 *h, SndFileDesc_t *pFile, int offset, unsigned int endMarker)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
@@ -638,10 +642,10 @@ int fn_801F6D54(StreamTap_801F5DA4 *h, SndFileDesc_t *pFile, int offset, unsigne
     if (((char *)pFile)[0] == 'A' && ((char *)pFile)[1] == 'E' && ((char *)pFile)[2] == 'M' && ((char *)pFile)[3] == 'S') {
         pFile = SndAemsDerefrenceFileDesc((const char *)pFile);
     }
-    if (fn_801F5DA4(h, &s, &t) != 0) {
+    if (validatehandle(h, &s, &t) != 0) {
         return 0;
     }
-    req = fn_801F5EA4(s);
+    req = getfreerequest(s);
     if (req == 0) {
         return 0;
     }
@@ -651,7 +655,7 @@ int fn_801F6D54(StreamTap_801F5DA4 *h, SndFileDesc_t *pFile, int offset, unsigne
     ResGetStreamInfo(pFile->pRes, pFile->mIndex, &req->mFileSize, &req->mFileOffset, &req->mFileHandle);
     req->mUnk2C = offset;
     req->mEndMarker = endMarker;
-    fn_801F5F28(s, req);
+    queuerequest(s, req);
     _StreamMUTEX_lock(s->pMutex);
     state = s->mState;
     if (state == 0) {
@@ -660,15 +664,15 @@ int fn_801F6D54(StreamTap_801F5DA4 *h, SndFileDesc_t *pFile, int offset, unsigne
     _StreamMUTEX_unlock(s->pMutex);
     if (state == 0) {
         if (s->mGreedyState) {
-            fn_801F6410(s, s->mGreedyPriority);
+            startnextrequest(s, s->mGreedyPriority);
         } else {
-            fn_801F6410(s, s->mPriority);
+            startnextrequest(s, s->mPriority);
         }
     }
     return req->mID;
 }
 
-int fn_801F6E9C(StreamTap_801F5DA4 *h, char *pMem, int size, unsigned int endMarker)
+int STREAM_queuemem(StreamTap_801F5DA4 *h, char *pMem, int size, unsigned int endMarker)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
@@ -676,27 +680,27 @@ int fn_801F6E9C(StreamTap_801F5DA4 *h, char *pMem, int size, unsigned int endMar
     StreamChunk_801F5D84 *c;
     int state;
 
-    if (fn_801F5DA4(h, &s, &t) != 0) {
+    if (validatehandle(h, &s, &t) != 0) {
         return 0;
     }
-    req = fn_801F5EA4(s);
+    req = getfreerequest(s);
     if (req == 0) {
         return 0;
     }
     if (size == 0) {
-        for (c = (StreamChunk_801F5D84 *)pMem; fn_801F5D84(c->mID) != endMarker;) {
-            int chunkSize = fn_801F5D84(c->mSize);
+        for (c = (StreamChunk_801F5D84 *)pMem; getint(c->mID) != endMarker;) {
+            int chunkSize = getint(c->mSize);
 
             size += chunkSize;
             c = (StreamChunk_801F5D84 *)((char *)c + chunkSize);
         }
-        size += fn_801F5D84(c->mSize);
+        size += getint(c->mSize);
     }
     req->pMem = pMem;
     req->mUnk2C = size;
     req->mEndMarker = endMarker;
     req->mType = 1;
-    fn_801F5F28(s, req);
+    queuerequest(s, req);
     _StreamMUTEX_lock(s->pMutex);
     state = s->mState;
     if (state == 0) {
@@ -704,12 +708,12 @@ int fn_801F6E9C(StreamTap_801F5DA4 *h, char *pMem, int size, unsigned int endMar
     }
     _StreamMUTEX_unlock(s->pMutex);
     if (state == 0) {
-        fn_801F6410(s, 0);
+        startnextrequest(s, 0);
     }
     return req->mID;
 }
 
-void fn_801F6FA0(StreamTap_801F5DA4 *h, int id)
+void STREAM_cancelrequest(StreamTap_801F5DA4 *h, int id)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
@@ -723,16 +727,16 @@ void fn_801F6FA0(StreamTap_801F5DA4 *h, int id)
     unsigned int size;
     unsigned int tap;
 
-    if (fn_801F5DA4(h, &s, &t) != 0) {
+    if (validatehandle(h, &s, &t) != 0) {
         return;
     }
     _StreamMUTEX_lock(s->pMutex);
-    req = fn_801F5FA4(s, id);
+    req = locaterequest(s, id);
     if (req == 0 || req->mState == 4) {
         skip = 1;
     } else if (req->mState == 1) {
         skip = 1;
-        fn_801F5FF4(s, req);
+        freerequest(s, req);
     } else {
         req->mState = 4;
         pTail = s->pTail;
@@ -753,31 +757,31 @@ void fn_801F6FA0(StreamTap_801F5DA4 *h, int id)
         for (i = 0; i < s->mNumTaps; i++) {
             t = &s->pTaps[i];
             if (t->mBytes > 0) {
-                if (fn_801F5DE4(pTail, pFrom, t->pRead)) {
+                if (inbetween(pTail, pFrom, t->pRead)) {
                     tap = t->mIndex << 24;
                     c = (StreamChunk_801F5D84 *)pFrom;
                     while ((char *)c != pTo) {
-                        if (fn_801F5D84(c->mID) == CHUNK_WRAP) {
+                        if (getint(c->mID) == CHUNK_WRAP) {
                             c = (StreamChunk_801F5D84 *)s->pWrap;
                         } else {
-                            size = fn_801F5D84(c->mSize) & 0xFFFFFF;
-                            if ((fn_801F5D84(c->mSize) & 0xFF000000) == tap) {
+                            size = getint(c->mSize) & 0xFFFFFF;
+                            if ((getint(c->mSize) & 0xFF000000) == tap) {
                                 _StreamMUTEX_lock(s->pMutex);
                                 t->mBytes -= size;
                                 _StreamMUTEX_unlock(s->pMutex);
-                                fn_801F5E24(s, size);
-                                c->mID = fn_801F5D84(CHUNK_SKIP);
-                                c->mSize = fn_801F5D84(size);
+                                decbufferusage(s, size);
+                                c->mID = getint(CHUNK_SKIP);
+                                c->mSize = getint(size);
                             }
                             c = (StreamChunk_801F5D84 *)((char *)c + size);
                         }
                     }
                 } else {
-                    if (fn_801F5DE4(pFrom, pTo, t->pRead)) {
+                    if (inbetween(pFrom, pTo, t->pRead)) {
                         do {
-                            c = fn_801F73D4(t);
-                            fn_801F74D4(t, c);
-                        } while (t->mBytes > 0 && fn_801F5DE4(pFrom, pTo, t->pRead));
+                            c = STREAM_get(t);
+                            STREAM_release(t, c);
+                        } while (t->mBytes > 0 && inbetween(pFrom, pTo, t->pRead));
                     }
                 }
             }
@@ -785,7 +789,7 @@ void fn_801F6FA0(StreamTap_801F5DA4 *h, int id)
     }
 }
 
-void fn_801F7208(StreamTap_801F5DA4 *h)
+void STREAM_kill(StreamTap_801F5DA4 *h)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
@@ -795,28 +799,28 @@ void fn_801F7208(StreamTap_801F5DA4 *h)
     int i;
     StreamRequest_801F5EA4 *req;
 
-    if (fn_801F5DA4(h, &s, &t) != 0 || (req = s->pLast) == 0) {
+    if (validatehandle(h, &s, &t) != 0 || (req = s->pLast) == 0) {
         return;
     }
     while (req->mState == 1 || req->mState == 2) {
-        fn_801F6FA0(h, req->mID);
+        STREAM_cancelrequest(h, req->mID);
         req = s->pLast;
     }
     while (s->pFirst != s->pCurrent) {
-        fn_801F5FF4(s, s->pFirst);
+        freerequest(s, s->pFirst);
     }
     s->pCurrent->mState = 4;
     for (i = 0; i < s->mNumTaps; i++) {
         s->pTaps[i].mBytes = 0;
     }
-    fn_801F5E24(s, s->mUsed);
+    decbufferusage(s, s->mUsed);
     for (c = (StreamChunk_801F5D84 *)s->pTail; (char *)c != s->pHead;) {
-        if (fn_801F5D84(c->mID) == CHUNK_WRAP) {
+        if (getint(c->mID) == CHUNK_WRAP) {
             c = (StreamChunk_801F5D84 *)s->pWrap;
         } else {
-            size = fn_801F5D84(c->mSize) & 0xFFFFFF;
-            c->mID = fn_801F5D84(CHUNK_SKIP);
-            c->mSize = fn_801F5D84(size);
+            size = getint(c->mSize) & 0xFFFFFF;
+            c->mID = getint(CHUNK_SKIP);
+            c->mSize = getint(size);
             c = (StreamChunk_801F5D84 *)((char *)c + size);
         }
     }
@@ -830,14 +834,14 @@ void fn_801F7208(StreamTap_801F5DA4 *h)
                 pad = 0;
             }
             c = (StreamChunk_801F5D84 *)(s->pHead - size);
-            c->mSize = fn_801F5D84(size + pad);
+            c->mSize = getint(size + pad);
             s->pHead += pad;
         }
         s->mState = 0;
     }
 }
 
-StreamChunk_801F5D84 *fn_801F73D4(StreamTap_801F5DA4 *h)
+StreamChunk_801F5D84 *STREAM_get(StreamTap_801F5DA4 *h)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
@@ -847,26 +851,26 @@ StreamChunk_801F5D84 *fn_801F73D4(StreamTap_801F5DA4 *h)
     int left;
     unsigned int tap;
 
-    if (fn_801F5DA4(h, &s, &t) != 0) {
+    if (validatehandle(h, &s, &t) != 0) {
         return 0;
     }
     if (t->mBytes == 0) {
         return 0;
     }
     c = (StreamChunk_801F5D84 *)t->pRead;
-    size = fn_801F5D84(c->mSize) & 0xFFFFFF;
-    c->mSize = fn_801F5D84(size);
+    size = getint(c->mSize) & 0xFFFFFF;
+    c->mSize = getint(size);
     _StreamMUTEX_lock(s->pMutex);
     left = t->mBytes -= size;
     _StreamMUTEX_unlock(s->pMutex);
     if (left > 0) {
         tap = t->mIndex << 24;
         pNext = (StreamChunk_801F5D84 *)((char *)c + size);
-        while ((fn_801F5D84(pNext->mSize) & 0xFF000000) != tap) {
-            if (fn_801F5D84(pNext->mID) == CHUNK_WRAP) {
+        while ((getint(pNext->mSize) & 0xFF000000) != tap) {
+            if (getint(pNext->mID) == CHUNK_WRAP) {
                 pNext = (StreamChunk_801F5D84 *)s->pWrap;
             } else {
-                size = fn_801F5D84(pNext->mSize) & 0xFFFFFF;
+                size = getint(pNext->mSize) & 0xFFFFFF;
                 pNext = (StreamChunk_801F5D84 *)((char *)pNext + size);
             }
         }
@@ -875,18 +879,18 @@ StreamChunk_801F5D84 *fn_801F73D4(StreamTap_801F5DA4 *h)
     return c;
 }
 
-void fn_801F74D4(StreamTap_801F5DA4 *h, StreamChunk_801F5D84 *c)
+void STREAM_release(StreamTap_801F5DA4 *h, StreamChunk_801F5D84 *c)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
     int state;
 
-    if (fn_801F5DA4(h, &s, &t) != 0 || (char *)c < s->pWrap || (char *)c > s->pBufferEnd - 8 ||
-        fn_801F5D84(c->mID) == CHUNK_SKIP) {
+    if (validatehandle(h, &s, &t) != 0 || (char *)c < s->pWrap || (char *)c > s->pBufferEnd - 8 ||
+        getint(c->mID) == CHUNK_SKIP) {
         return;
     }
-    c->mID = fn_801F5D84(CHUNK_SKIP);
-    fn_801F5E24(s, fn_801F5D84(c->mSize));
+    c->mID = getint(CHUNK_SKIP);
+    decbufferusage(s, getint(c->mSize));
     _StreamMUTEX_lock(s->pMutex);
     state = s->mState;
     if (state == 2) {
@@ -895,63 +899,63 @@ void fn_801F74D4(StreamTap_801F5DA4 *h, StreamChunk_801F5D84 *c)
     _StreamMUTEX_unlock(s->pMutex);
     if (state == 2) {
         if (s->mGreedyState) {
-            fn_801F6540(s, s->mGreedyPriority);
+            restartstream(s, s->mGreedyPriority);
         } else {
-            fn_801F6540(s, s->mPriority);
+            restartstream(s, s->mPriority);
         }
     }
 }
 
-int fn_801F75C4(StreamTap_801F5DA4 *h)
+int STREAM_gettable(StreamTap_801F5DA4 *h)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
 
-    if (fn_801F5DA4(h, &s, &t) != 0) {
+    if (validatehandle(h, &s, &t) != 0) {
         return 0;
     }
     return t->mBytes;
 }
 
-int fn_801F7604(StreamTap_801F5DA4 *h)
+int STREAM_state(StreamTap_801F5DA4 *h)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
 
-    if (fn_801F5DA4(h, &s, &t) != 0) {
+    if (validatehandle(h, &s, &t) != 0) {
         return 0;
     }
     return s->mState;
 }
 
-int fn_801F7644(StreamTap_801F5DA4 *h)
+int STREAM_isendofstream(StreamTap_801F5DA4 *h)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
 
-    if (fn_801F5DA4(h, &s, &t) != 0) {
+    if (validatehandle(h, &s, &t) != 0) {
         return 0;
     }
     return s->mState == 0 && t->mBytes == 0;
 }
 
-int fn_801F76A0(StreamTap_801F5DA4 *h)
+int STREAM_buffersize(StreamTap_801F5DA4 *h)
 {
     Stream_801F5DA4 *s;
     StreamTap_801F5DA4 *t;
 
-    if (fn_801F5DA4(h, &s, &t) != 0) {
+    if (validatehandle(h, &s, &t) != 0) {
         return 0;
     }
     return s->pBufferEnd - s->pBuffer;
 }
 
-void fn_801F76E8(void)
+void StreamInit(void)
 {
-    fn_801F7FA8(&lbl_8039B3D8);
+    fn_801F7FA8(&_Stream_SeekReadCS);
 }
 
-void fn_801F7710(void)
+void StreamShutdown(void)
 {
-    fn_801F80D0(&lbl_8039B3D8);
+    fn_801F80D0(&_Stream_SeekReadCS);
 }

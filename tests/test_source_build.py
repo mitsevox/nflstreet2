@@ -3,6 +3,7 @@
 import copy
 import hashlib
 import json
+import shutil
 import struct
 import sys
 import tempfile
@@ -13,6 +14,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 import source_build as sb
+import toolchain
 
 
 def synthetic_dol():
@@ -586,7 +588,7 @@ class CommonStorage(Fixture):
     def test_map_rows_are_checked_when_the_manifest_loads(self):
         cases = [
             ("rows need symbol, start and end",[{"symbol": "g_Shared", "start": "0x80005010"}]),
-            ("compiled COMMON name", [{"symbol": "lbl_80005010", "start": "0x80005010", "end": "0x80005018"}]),
+            ("compiled COMMON or file-static name", [{"symbol": "lbl_80005010", "start": "0x80005010", "end": "0x80005018"}]),
             ("duplicate storage symbol", [{"symbol": "g_Shared", "start": "0x80005010", "end": "0x80005018"},
                                           {"symbol": "g_Shared", "start": "0x80005020", "end": "0x80005028"}]),
             ("not inside one data section", [{"symbol": "g_Shared", "start": "0x80003120", "end": "0x80003128"}]),
@@ -612,6 +614,190 @@ class CommonStorage(Fixture):
         binary = bytearray(self.binary)
         binary[0x150:0x154] = bytes(4)  # .data2 0x80004010-0x80004014
         sb.check_storage(units, {(0x80004010, 0x80004014)}, sb.target_sections(bytes(binary), TARGET, {}))
+
+
+def bss(size, align=4, name=".bss"):
+    return {"name": name, "type": sb.SHT_NOBITS, "flags": sb.SHF_ALLOC | sb.SHF_WRITE, "size": size, "align": align}
+
+
+class FileStaticStorage(Fixture):
+    """File statics of an uninitialized section that the storage map places one by one, where the
+    target interleaves them with other storage (owner ruling of 2026-11-20 on #1368, q1 and q5)."""
+
+    # write_object's symbol indices: 1 the file, 2-4 the section symbols of .text, .rodata and
+    # .bss (section indices 1-3), then these from 5.
+    STATICS = [{"name": "Unit_Function", "value": 0, "shndx": 1, "type": sb.STT_FUNC, "size": 8},
+               {"name": "s_First", "value": 0, "size": 4, "shndx": 3, "bind": sb.STB_LOCAL},
+               {"name": "s_Second", "value": 4, "size": 4, "shndx": 3, "bind": sb.STB_LOCAL,
+                "type": sb.STT_OBJECT}]
+    ROWS = [{"symbol": "s_First", "start": "0x80005010", "end": "0x80005014"},
+            {"symbol": "s_Second", "start": "0x80005024", "end": "0x80005028"}]
+    # SDA21 references: s_First, s_Second + 2 and the section symbol + 4 (inside s_Second).
+    RELOCATIONS = [(0, 6, 109, 0), (4, 7, 109, 2), (6, 4, 109, 4)]
+
+    def storage_manifest(self, rows=None):
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"][0]["storage"] = copy.deepcopy(rows if rows is not None else self.ROWS)
+        return manifest
+
+    def storage(self, rows=None):
+        return self.load(self.storage_manifest(rows))[0][0]["storage"]
+
+    def derive(self, storage=None, symbols=None, relocations=None, section=None, relocation_type=4):
+        """Derive the link object; return (native bytes, derived bytes, statics map)."""
+        with tempfile.TemporaryDirectory() as temporary:
+            native = Path(temporary) / "unit.o"
+            sb.write_object(native, [text(8), rodata(4), section or bss(8)],
+                            symbols if symbols is not None else self.STATICS)
+            with_relocations(native, 1, relocations if relocations is not None else self.RELOCATIONS)
+            if relocation_type != 4:
+                data = bytearray(native.read_bytes())
+                shoff, count = struct.unpack_from(">I", data, 32)[0], struct.unpack_from(">H", data, 48)[0]
+                struct.pack_into(">I", data, shoff + (count - 1) * 40 + 4, relocation_type)
+                native.write_bytes(bytes(data))
+            derived = Path(temporary) / "unit.common.o"
+            statics = sb.common_object(native.read_bytes(), storage or self.storage(), derived, "src/unit.c")
+            return native.read_bytes(), derived.read_bytes(), statics
+
+    def test_mapped_statics_are_redirected_and_the_section_allocates_nothing(self):
+        native, derived, statics = self.derive()
+        self.assertEqual(statics, {"s_First": ".bss", "s_Second": ".bss"})
+        self.assertEqual(relocations(derived), [(0, "__storage_80005010", 109, 0), (4, "__storage_80005024", 109, 2),
+                                                (6, "__storage_80005024", 109, 0)])
+        native_sections, native_symbols = sb.read_elf(native)
+        sections, symbols = sb.read_elf(derived)
+        self.assertEqual([(s["size"], s["align"]) for s in sections if s["name"] == ".bss"], [(0, 1)])
+        self.assertEqual([(s["name"], s["data"]) for s in sections if s["type"] == sb.SHT_PROGBITS],
+                         [(s["name"], s["data"]) for s in native_sections if s["type"] == sb.SHT_PROGBITS])
+        mapped = {s["name"]: s for s in symbols if s["name"].startswith(("s_", "__storage_"))}
+        self.assertEqual({name: (s["shndx"], s["value"], s["size"], s["bind"]) for name, s in mapped.items()},
+                         {"s_First": (sb.SHN_ABS, 0x80005010, 4, sb.STB_LOCAL),
+                          "s_Second": (sb.SHN_ABS, 0x80005024, 4, sb.STB_LOCAL),
+                          "__storage_80005010": (sb.SHN_UNDEF, 0, 0, sb.STB_GLOBAL),
+                          "__storage_80005024": (sb.SHN_UNDEF, 0, 0, sb.STB_GLOBAL)})
+        self.assertEqual([s for s in symbols if s["name"] not in mapped],
+                         [s for s in native_symbols if s["name"] not in mapped])
+        # The map defines each static's reference at its target start in the original bytes;
+        # the static's own name stays private to the unit.
+        units, externals, _ = self.load(self.storage_manifest())
+        units[0]["statics"] = statics
+        pieces, defined, resolved = sb.plan(self.sections, units, {"src/unit.c": (sections, symbols)}, externals)
+        self.assertEqual({name: value for name, value in defined.items() if name.startswith("__storage_")},
+                         {"__storage_80005010": (0x80005010, "src/unit.c"),
+                          "__storage_80005024": (0x80005024, "src/unit.c")})
+        self.assertNotIn("s_First", defined)
+        self.assertEqual(pieces[".bss"], [{"start": 0x80005000, "end": 0x80005040, "symbols": [
+            {"name": "__storage_80005010", "value": 0x10}, {"name": "__storage_80005024", "value": 0x24}]}])
+        self.assertEqual(resolved, {})
+        # Storage earns no linked-byte credit: the unit's ranges are its configured sections only.
+        self.assertEqual([entry["section"] for entry in units[0]["sections"]], [".text", ".rodata"])
+
+    def test_statics_and_common_symbols_share_one_map(self):
+        symbols = self.STATICS + [{"name": "g_Shared", "value": 4, "size": 8, "shndx": sb.SHN_COMMON}]
+        rows = self.ROWS + [{"symbol": "g_Shared", "start": "0x80005018", "end": "0x80005020"}]
+        _, derived, statics = self.derive(self.storage(rows), symbols)
+        self.assertEqual(sorted(statics), ["s_First", "s_Second"])
+        shared = next(s for s in sb.read_elf(derived)[1] if s["name"] == "g_Shared")
+        self.assertEqual((shared["shndx"], shared["value"], shared["size"]), (sb.SHN_UNDEF, 0, 0))
+
+    def test_a_map_without_statics_keeps_the_common_only_object(self):
+        native, derived, statics = self.derive(
+            self.storage([{"symbol": "g_Shared", "start": "0x80005018", "end": "0x80005020"}]),
+            [{"name": "g_Shared", "value": 4, "size": 8, "shndx": sb.SHN_COMMON}], relocations=[])
+        self.assertEqual(statics, {})
+        self.assertEqual(len(native), len(derived))
+
+    def test_static_rows_must_agree_with_the_compiled_object(self):
+        moved = copy.deepcopy(self.ROWS)
+        cases = [
+            # Its compiled size, and its compiled alignment (offset 4 in the section: 4 bytes).
+            ("differs from its compiled size or alignment", [self.ROWS[0], dict(self.ROWS[1], end="0x80005030")]),
+            ("differs from its compiled size or alignment", [self.ROWS[0], dict(self.ROWS[1], start="0x80005022",
+                                                                                end="0x80005026")]),
+            # Every other symbol of the section must be mapped too.
+            ("file static s_Second in .bss has no placement", [self.ROWS[0]]),
+            # A name that is neither COMMON nor a file static of an uninitialized section.
+            ("not a compiled COMMON symbol or file static: Unit_Function",
+             moved + [{"symbol": "Unit_Function", "start": "0x80005030", "end": "0x80005038"}]),
+            ("not a compiled COMMON symbol or file static: s_Missing",
+             moved + [{"symbol": "s_Missing", "start": "0x80005030", "end": "0x80005034"}]),
+        ]
+        for message, rows in cases:
+            with self.subTest(message=message), self.assertRaisesRegex(ValueError, message):
+                self.derive(self.storage(rows))
+        # A global object, a local in initialized data, and a name defined twice are not file statics;
+        # nor are a sized symbol of another type (a function) in .bss, a size-0 label in .bss, and an
+        # object that runs past the end of its section.
+        for symbols in ([dict(self.STATICS[1], bind=sb.STB_GLOBAL), self.STATICS[2]],
+                        [dict(self.STATICS[1], shndx=2), self.STATICS[2]],
+                        [self.STATICS[1], self.STATICS[2], dict(self.STATICS[2], value=0)],
+                        [dict(self.STATICS[1], type=sb.STT_FUNC), self.STATICS[2]],
+                        [dict(self.STATICS[1], size=0), self.STATICS[2]],
+                        [self.STATICS[1], dict(self.STATICS[2], value=6)]):
+            with self.subTest(symbols=symbols), self.assertRaisesRegex(ValueError, "not a compiled COMMON symbol"):
+                self.derive(symbols=symbols, relocations=[])
+        # The alignment rule uses the section's alignment at offset 0.
+        aligned = [dict(self.ROWS[0], start="0x80005008", end="0x8000500C"), self.ROWS[1]]
+        self.derive(self.storage(aligned), section=bss(8, align=8))
+        with self.assertRaisesRegex(ValueError, "differs from its compiled size or alignment"):
+            self.derive(self.storage([dict(self.ROWS[0], start="0x80005014", end="0x80005018"), self.ROWS[1]]),
+                        section=bss(8, align=8))
+
+    def test_every_reference_resolves_through_the_map(self):
+        for relocations in ([(0, 6, 109, 4)],      # past the end of s_First
+                            [(0, 7, 109, -2)],     # before s_Second, through its symbol
+                            [(0, 4, 109, 8)]):     # the section symbol past the last static
+            with self.subTest(relocations=relocations), \
+                    self.assertRaisesRegex(ValueError, "a relocation reaches .bss outside its mapped file statics"):
+                self.derive(relocations=relocations)
+        with self.assertRaisesRegex(ValueError, "explicit-addend relocations"):
+            self.derive(relocation_type=9)
+
+    def test_plan_checks_where_a_static_is_placed(self):
+        _, derived, statics = self.derive()
+        objects = {"src/unit.c": sb.read_elf(derived)}
+        # The mapped section has no configured range of its own.
+        manifest = self.storage_manifest()
+        manifest["units"][0]["sections"].append(
+            {"section": ".bss", "placement": ".bss", "start": "0x80005030", "end": "0x80005038"})
+        units, externals, _ = self.load(manifest)
+        units[0]["statics"] = statics
+        with self.assertRaisesRegex(ValueError, "placed by the storage map .file static s_First. and cannot also"):
+            sb.plan(self.sections, units, objects, externals)
+        # A static lies in the uninitialized target section of its compiled section's name.
+        units, externals, _ = self.load(self.storage_manifest(
+            [dict(self.ROWS[0], start="0x80004010", end="0x80004014"), self.ROWS[1]]))
+        units[0]["statics"] = statics
+        with self.assertRaisesRegex(ValueError, "must lie in the uninitialized target section .bss, not .data2"):
+            sb.plan(self.sections, units, objects, externals)
+        units, externals, _ = self.load(self.storage_manifest())
+        units[0]["statics"] = statics
+        units[0]["storage"]["s_First"] = (0x90000000, 0x90000004)  # past load_manifest: in no target section
+        with self.assertRaisesRegex(ValueError, "uninitialized target section .bss, not outside every target"):
+            sb.plan(self.sections, units, objects, externals)
+        units, externals, _ = self.load(self.storage_manifest())
+        units[0]["statics"] = {"s_First": ".sbss", "s_Second": ".bss"}
+        with self.assertRaisesRegex(ValueError, "must lie in the uninitialized target section .sbss, not .bss"):
+            sb.plan(self.sections, units, objects, externals)
+        # A reference name is unique: another unit's definition of it is refused.
+        manifest = self.storage_manifest()
+        manifest["externals"] = {"__storage_80005010": {"address": "0x80005010", "evidence": "x"}}
+        units, externals, _ = self.load(manifest)
+        units[0]["statics"] = statics
+        with self.assertRaisesRegex(ValueError, "__storage_80005010 is already defined"):
+            sb.plan(self.sections, units, objects, externals)
+
+    def test_manifest_and_evidence_checks_cover_statics(self):
+        with self.assertRaisesRegex(ValueError, "compiled COMMON or file-static name"):
+            self.load(self.storage_manifest([{"symbol": "__storage_80005010", "start": "0x80005010",
+                                              "end": "0x80005014"}]))
+        with self.assertRaisesRegex(ValueError, "overlap"):
+            self.load(self.storage_manifest([self.ROWS[0], dict(self.ROWS[1], start="0x80005010", end="0x80005014",
+                                                                symbol="s_Second")]))
+        units, _, _ = self.load(self.storage_manifest())
+        sb.check_storage(units, {(0x80005010, 0x80005014), (0x80005024, 0x80005028)}, self.sections)
+        with self.assertRaisesRegex(ValueError, "storage s_Second 0x80005024-0x80005028 does not equal an evidence"):
+            sb.check_storage(units, {(0x80005010, 0x80005014)}, self.sections)
 
 
 class KeptLocals(Fixture):
@@ -933,12 +1119,11 @@ class Holdouts(Fixture):
                 self.held(manifest)
         with self.assertRaisesRegex(ValueError, "duplicate holdout"):
             self.held(self.held_manifest(functions=("b", "0x80003118")))
-        for key in ("folded", "kept_locals"):
-            manifest = self.held_manifest()
-            value = "0x80003130" if key == "folded" else "0x80003110"
-            manifest["units"][0][key] = {"symbols": {"x": value}, "evidence": "x"}
-            with self.subTest(key=key), self.assertRaisesRegex(ValueError, f"cannot be combined with {key}"):
-                self.held(manifest)
+        # folded stays refused; kept_locals may go with holdouts (test_holdouts_may_keep_a_local_of_a_linked_run).
+        manifest = self.held_manifest()
+        manifest["units"][0]["folded"] = {"symbols": {"x": "0x80003130"}, "evidence": "x"}
+        with self.assertRaisesRegex(ValueError, "cannot be combined with folded"):
+            self.held(manifest)
         # The runs are the unit's .text.
         manifest = self.held_manifest()
         for entry in manifest["units"][0]["sections"][:2]:
@@ -1057,6 +1242,93 @@ class Holdouts(Fixture):
         with self.assertRaisesRegex(ValueError, "holdout b is already defined elsewhere"):
             sb.plan(self.sections, [unit, caller], objects, {"Other": 0x80003104, "b": 0x80003100})
 
+    def kept_manifest(self, symbols=None):
+        manifest = self.held_manifest()
+        manifest["units"][0]["kept_locals"] = {"symbols": symbols or {"c": "0x80003120"},
+                                               "evidence": "another file's references resolve to this copy"}
+        return manifest
+
+    def test_holdouts_may_keep_a_local_of_a_linked_run(self):
+        # The local function c of the second run is the one copy another file's references use
+        # (kept_locals); b stays a holdout. Only this combination is allowed: folded stays refused.
+        units, _, _ = self.held(self.kept_manifest())
+        self.assertEqual((units[0]["kept_locals"], units[0]["holdouts"]), ({"c": 0x80003120}, [self.B]))
+        unit = dict(units[0], object=self.native())
+        sb.link_object(unit, {"c"})
+        self.assertEqual(unit["link_object"].suffixes[-2:], [".kept", ".o"])
+        sections, symbols = sb.read_elf(unit["link_object"].read_bytes())
+        run_c = next(s["index"] for s in sections if s["name"] == ".text.holdout_run_80003120")
+        named = [(s["name"], s["bind"], s["type"], s["shndx"], s["value"], s["size"]) for s in symbols
+                 if s["name"] in ("c", sb.folded_reference("c"))]
+        # The run's untyped local stays; its global copy and the folded alias are typed functions.
+        self.assertEqual(named, [("c", sb.STB_LOCAL, 0, run_c, 0, 8),
+                                 ("c", sb.STB_GLOBAL, sb.STT_FUNC, run_c, 0, 8),
+                                 (sb.folded_reference("c"), sb.STB_GLOBAL, sb.STT_FUNC, run_c, 0, 8)])
+        caller = {"source": "src/other.c", "sections": [], "holdouts": None}
+        objects = {"src/unit.c": (sections, symbols),
+                   "src/other.c": ([], [{"name": "c", "value": 0, "size": 0, "bind": sb.STB_GLOBAL,
+                                         "type": 0, "shndx": sb.SHN_UNDEF}])}
+        _, defined, resolved = sb.plan(self.sections, [unit, caller], objects, {"Other": 0x80003104})
+        self.assertEqual(defined["c"], (0x80003120, "src/unit.c"))
+        self.assertNotIn("c", resolved)
+        # The inventory lists c once.
+        self.assertEqual([f for f in sb.compiled_functions(unit, (sections, symbols)) if f["symbol"] == "c"],
+                         [{"symbol": "c", "address": "0x80003120", "size": 8}])
+        manifest = self.kept_manifest()
+        manifest["units"][0]["folded"] = {"symbols": {"x": "0x80003130"}, "evidence": "x"}
+        with self.assertRaisesRegex(ValueError, "holdouts cannot be combined with folded"):
+            self.held(manifest)
+
+    def test_holdouts_may_keep_a_table_of_a_whole_data_section(self):
+        # The other half of the real use (_vt.10FchrCursor): a local object of .rodata, which a
+        # holdouts unit links whole, is kept with its global copy and folded alias typed as objects.
+        table = {"name": "Table", "value": 0, "size": 8, "shndx": 4, "type": sb.STT_OBJECT, "bind": sb.STB_LOCAL}
+        units, _, _ = self.held(self.kept_manifest({"c": "0x80003120", "Table": "0x80004008"}))
+        unit = dict(units[0], object=self.native(self.SYMBOLS + [table]))
+        sb.link_object(unit, {"c", "Table"})
+        sections, symbols = sb.read_elf(unit["link_object"].read_bytes())
+        rodata_index = next(s["index"] for s in sections if s["name"] == ".rodata")
+        named = [(s["name"], s["bind"], s["type"], s["shndx"], s["value"], s["size"]) for s in symbols
+                 if s["name"] in ("Table", sb.folded_reference("Table"))]
+        self.assertEqual(named, [("Table", sb.STB_LOCAL, sb.STT_OBJECT, rodata_index, 0, 8),
+                                 ("Table", sb.STB_GLOBAL, sb.STT_OBJECT, rodata_index, 0, 8),
+                                 (sb.folded_reference("Table"), sb.STB_GLOBAL, sb.STT_OBJECT, rodata_index, 0, 8)])
+        _, defined, _ = sb.plan(self.sections, [unit], {"src/unit.c": (sections, symbols)}, {"Other": 0x80003104})
+        self.assertEqual(defined["Table"], (0x80004008, "src/unit.c"))
+        # A kept table at another address than its placement is refused.
+        units, _, _ = self.held(self.kept_manifest({"c": "0x80003120", "Table": "0x8000400C"}))
+        unit = dict(units[0], object=self.native(self.SYMBOLS + [table]))
+        sb.link_object(unit, {"c", "Table"})
+        with self.assertRaises(ValueError):
+            sb.plan(self.sections, [unit], {"src/unit.c": sb.read_elf(unit["link_object"].read_bytes())},
+                    {"Other": 0x80003104})
+
+    def test_a_kept_local_is_never_a_holdout(self):
+        # Inside the holdout's range: refused when the manifest loads, before anything compiles.
+        with self.assertRaisesRegex(ValueError, "kept local b lies in holdout b 0x80003118-0x80003120; "
+                                                "a kept copy must be in a linked run"):
+            self.held(self.kept_manifest({"b": "0x80003118"}))
+        with self.assertRaisesRegex(ValueError, "kept local Label lies in holdout b"):
+            self.held(self.kept_manifest({"Label": "0x8000311C"}))
+        # Outside every range of the unit.
+        with self.assertRaisesRegex(ValueError, "kept local c lies outside the unit's sections"):
+            self.held(self.kept_manifest({"c": "0x80003130"}))
+        # The derived object no longer defines a holdout's symbols, so keep_object cannot keep one,
+        # and outside a run an untyped local is not a function.
+        units, _, _ = self.held(self.kept_manifest())
+        unit = dict(units[0], object=self.native(), kept_locals={"b": 0x80003120})
+        with self.assertRaisesRegex(ValueError, "Kept local b is not one local function"):
+            sb.link_object(unit)
+        held = Path(tempfile.mkdtemp()) / "unit.holdouts.o"
+        self.addCleanup(shutil.rmtree, held.parent)
+        sb.holdout_object(self.native().read_bytes(), units[0], held)
+        with self.assertRaisesRegex(ValueError, "Kept local c is not one local function"):
+            sb.keep_object(held.read_bytes(), {"c": 0x80003120}, held.with_suffix(".kept.o"))
+        # A global function of a run is not a local of the unit.
+        unit = dict(units[0], object=self.native(), kept_locals={"a": 0x80003110})
+        with self.assertRaisesRegex(ValueError, "Kept local a is not one local function"):
+            sb.link_object(unit)
+
     def test_compiled_layout_must_fill_the_runs(self):
         units, _, _ = self.held()
         # A holdout keeps its registered extent whatever its compiled size.
@@ -1105,6 +1377,52 @@ class Holdouts(Fixture):
         with patch.object(sb, "link_holdout") as linked:
             sb.check_holdouts(unit, *args[1:])
             linked.assert_not_called()
+
+    def test_a_lone_holdout_link_resolves_mapped_file_statics_to_their_rows(self):
+        # The holdout b (lis r3 / addi r3 to a file static of .sbss) is linked alone at its target
+        # start by the real linker. The static must resolve to its storage row, or an exact holdout
+        # would read as different and pass the "is exact" refusal by default.
+        compilers = toolchain.recorded("compilers")
+        compiler = compilers / "ProDG/3.9.3" if compilers else sb.ROOT / "build/toolchain/ProDG/3.9.3"
+        wrapper = toolchain.recorded("wibo") or sb.ROOT / "build/toolchain/wibo"
+        if not ((compiler / "ngcld.exe").is_file() and wrapper.is_file()):
+            self.skipTest("The pinned linker is installed by build.py configure")
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        native = Path(temporary.name) / "unit.o"
+        code = bytes.fromhex("3c60000038630000")
+        sb.write_object(native, [dict(text(8), name=".text.a"), dict(text(8), name=".text.b", data=code),
+                                 dict(text(8), name=".text.c"), rodata(8), bss(8, name=".sbss")],
+                        [{"name": "a", "value": 0, "size": 8, "shndx": 1, "type": sb.STT_FUNC},
+                         {"name": "b", "value": 0, "size": 8, "shndx": 2, "type": sb.STT_FUNC},
+                         {"name": "c", "value": 0, "size": 8, "shndx": 3, "type": sb.STT_FUNC,
+                          "bind": sb.STB_LOCAL},
+                         {"name": "s_Static", "value": 0, "size": 4, "shndx": 5, "bind": sb.STB_LOCAL,
+                          "type": sb.STT_OBJECT}])
+        # Symbols: 1 the file, 2-6 the section symbols, 7 a, 8 b, 9 c, 10 s_Static (ADDR16_HA, ADDR16_LO).
+        with_relocations(native, 2, ((2, 10, 6, 0), (6, 10, 4, 0)))
+        binary = bytearray(self.binary)
+        binary[0x118:0x120] = bytes.fromhex("3c60800038635010")  # lis r3, 0x8000; addi r3, r3, 0x5010
+
+        def check(row_start):
+            manifest = self.held_manifest()
+            end = f"0x{int(row_start, 16) + 4:08X}"
+            manifest["units"][0]["storage"] = [{"symbol": "s_Static", "start": row_start, "end": end}]
+            unit = dict(self.held(manifest)[0][0], object=native)
+            sb.link_object(unit)
+            self.assertEqual(unit["statics"], {"s_Static": ".sbss"})
+            build = Path(temporary.name) / f"build_{row_start}"
+            with patch.object(sb, "BUILD", build):
+                sb.check_holdouts(unit, TARGET, self.sections, bytes(binary), {}, compiler, wrapper)
+            elf = build / "holdouts/src_unit_c_b/linked.elf"
+            placed = next(s for s in sb.read_elf(elf.read_bytes())[0] if s.get("data") and s["addr"] == 0x80003118)
+            return placed["data"][:8]
+
+        # The row the target encodes: the lone link is exact, so the holdout is refused.
+        with self.assertRaisesRegex(ValueError, "holdout b 0x80003118 is exact; link it"):
+            check("0x80005010")
+        # Another row: the static resolves there, the bytes differ, and the holdout is accepted.
+        self.assertEqual(check("0x80005024"), bytes.fromhex("3c60800038635024"))
 
     # Read-only data directly after the unit's code (follows), as for any unit.
     def following_manifest(self, start="0x80003128", end="0x80003130", **held):
@@ -1228,13 +1546,22 @@ class Holdouts(Fixture):
             with self.subTest(name=name), self.assertRaisesRegex(ValueError, f"discarded function {name} has a "
                                                                              "target range"):
                 self.held(self.discarded_manifest((name,)))
-        # folded and kept_locals stay refused next to discarded functions.
-        for key in ("folded", "kept_locals"):
-            manifest = self.discarded_manifest()
-            value = "0x80003130" if key == "folded" else "0x80003110"
-            manifest["units"][0][key] = {"symbols": {"x": value}, "evidence": "x"}
-            with self.subTest(key=key), self.assertRaisesRegex(ValueError, f"cannot be combined with {key}"):
-                self.held(manifest)
+        # folded stays refused next to discarded functions; a kept local in a run is allowed.
+        manifest = self.discarded_manifest()
+        manifest["units"][0]["folded"] = {"symbols": {"x": "0x80003130"}, "evidence": "x"}
+        with self.assertRaisesRegex(ValueError, "cannot be combined with folded"):
+            self.held(manifest)
+        # kept_locals next to discarded functions loads. "x" is no compiled symbol: this checks
+        # manifest loading only (test_holdouts_may_keep_a_local_of_a_linked_run accepts a real one).
+        manifest = self.discarded_manifest()
+        manifest["units"][0]["kept_locals"] = {"symbols": {"x": "0x80003110"}, "evidence": "x"}
+        self.assertEqual(self.held(manifest)[0][0]["kept_locals"], {"x": 0x80003110})
+        # A discarded function cannot be kept: the derived object no longer defines it.
+        manifest = self.discarded_manifest()
+        manifest["units"][0]["kept_locals"] = {"symbols": {"z": "0x80003110"}, "evidence": "x"}
+        unit = dict(self.held(manifest)[0][0], object=self.discarded_native())
+        with self.assertRaisesRegex(ValueError, "Kept local z is not one local function"):
+            sb.link_object(unit)
 
     def test_derived_object_drops_discarded_functions(self):
         units, _, _ = self.held(self.discarded_manifest())

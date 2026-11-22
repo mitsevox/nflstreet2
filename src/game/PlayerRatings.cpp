@@ -45,7 +45,7 @@ void PlayerDbReadRatings(Object_8008044C *pObject, int *pValues)
         pColumns[i].Set(pObject->mUnknown8, _PlayerDb_aRatingColumns[i], 0);
     }
     columns[10].SetEnd();
-    fn_801FA228(pObject->mUnknown0, 0, 0, pColumns);
+    TDbQryRetrieve(pObject->mUnknown0, 0, 0, pColumns);
     for (i = 0; i < 10; i++) {
         pValues[i] = pColumns[i].mValue;
     }

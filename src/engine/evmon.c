@@ -2,9 +2,9 @@
    as 'evmo' blocks in the state registry or allocated directly, with the
    listener callbacks run on each posted event. */
 
-#include "engine/Object_80237EE8.h"
-#include "engine/Desc_80238424.h"
-#include "engine/fn_80238680.h"
+#include "engine/SyncStateGroup.h"
+#include "engine/EvMonDesc.h"
+#include "engine/EvMonAddListener.h"
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/gx/GXPixel.h>
 #include <dolphin/os/OSCache.h>
@@ -20,132 +20,132 @@
 #include "engine/llmemory.h"
 #include "engine/dslist.h"
 
-typedef struct Entry_8023850C {
-    unsigned int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    unsigned int mUnknown12;
-    AudmonEventFn_t mpUnknown16[1];
-} Entry_8023850C;
+typedef struct EvMon_t {
+    unsigned int mNumRecords;
+    int mNumPosted;
+    int mRecordSize;
+    unsigned int mNumListeners;
+    AudmonEventFn_t mpListeners[1];
+} EvMon_t;
 
-typedef struct Table_802382F0 {
-    int mUnknown0;
-    int mUnknown4;
-    Entry_8023850C **mppUnknown8;
-} Table_802382F0;
+typedef struct EvMonTable_t {
+    int mCount;
+    int mCapacity;
+    EvMon_t **mppMonitors;
+} EvMonTable_t;
 
-extern Table_802382F0 lbl_803A3A14;
-extern unsigned char lbl_803EC140;
-extern void *fn_8023816C(void *pHandle);
+static EvMonTable_t _EvMon_Table;
+static unsigned char _EvMon_bInit = 0;
+extern void *SyncStateGetData(void *pHandle);
 
-void fn_802382CC(int *p, const Desc_80238424 *q)
+void EvMonInitHeader(EvMon_t *p, const EvMonDesc_t *q)
 {
-    p[0] = q->mUnknown0;
-    p[1] = 0;
-    p[2] = q->mUnknown4;
-    p[3] = q->mUnknown8;
+    p->mNumRecords = q->mNumRecords;
+    p->mNumPosted = 0;
+    p->mRecordSize = q->mRecordSize;
+    p->mNumListeners = q->mNumListeners;
 }
 
-void fn_802382F0(int count)
+void EvMonInit(int count)
 {
-    lbl_803A3A14.mUnknown0 = 0;
-    lbl_803A3A14.mUnknown4 = count;
-    lbl_803A3A14.mppUnknown8 = fn_801D2B7C(count * 4, 0, 0);
-    MemFill((char *)lbl_803A3A14.mppUnknown8, count * 4, 0, 4);
-    lbl_803EC140 = 1;
+    _EvMon_Table.mCount = 0;
+    _EvMon_Table.mCapacity = count;
+    _EvMon_Table.mppMonitors = fn_801D2B7C(count * 4, 0, 0);
+    MemFill((char *)_EvMon_Table.mppMonitors, count * 4, 0, 4);
+    _EvMon_bInit = 1;
 }
 
-void fn_80238358(void)
+void EvMonShutdown(void)
 {
-    fn_801D2BD0(lbl_803A3A14.mppUnknown8);
-    lbl_803EC140 = 0;
+    fn_801D2BD0(_EvMon_Table.mppMonitors);
+    _EvMon_bInit = 0;
 }
 
-int EvMonCreate(const Desc_80238424 *pDesc)
+int EvMonCreate(const EvMonDesc_t *pDesc)
 {
-    int index = lbl_803A3A14.mUnknown0;
-    int size = pDesc->mUnknown0 * pDesc->mUnknown4 + 16 + pDesc->mUnknown8 * 4;
-    void *pHandle = SyncStateRegister(0, (void **)&lbl_803A3A14.mppUnknown8[index], size, 0, 0x65766D6F);
-    fn_802382CC(fn_8023816C(pHandle), pDesc);
-    fn_802381E0(pHandle);
-    lbl_803A3A14.mUnknown0++;
+    int index = _EvMon_Table.mCount;
+    int size = pDesc->mNumRecords * pDesc->mRecordSize + 16 + pDesc->mNumListeners * 4;
+    void *pHandle = SyncStateRegister(0, (void **)&_EvMon_Table.mppMonitors[index], size, 0, 0x65766D6F);
+    EvMonInitHeader(SyncStateGetData(pHandle), pDesc);
+    SyncStateCommit(pHandle);
+    _EvMon_Table.mCount++;
     return index;
 }
 
-void fn_80238420(int index)
+void EvMonDestroy(int index)
 {
 }
 
-int fn_80238424(const Desc_80238424 *pDesc)
+int EvMonAlloc(const EvMonDesc_t *pDesc)
 {
-    int index = lbl_803A3A14.mUnknown0;
-    int size = pDesc->mUnknown0 * pDesc->mUnknown4 + 16 + pDesc->mUnknown8 * 4;
-    lbl_803A3A14.mppUnknown8[index] = fn_801D2B7C(size, 0, 0);
-    memset(lbl_803A3A14.mppUnknown8[index], 0, size);
-    fn_802382CC((int *)lbl_803A3A14.mppUnknown8[index], pDesc);
-    lbl_803A3A14.mUnknown0++;
+    int index = _EvMon_Table.mCount;
+    int size = pDesc->mNumRecords * pDesc->mRecordSize + 16 + pDesc->mNumListeners * 4;
+    _EvMon_Table.mppMonitors[index] = fn_801D2B7C(size, 0, 0);
+    memset(_EvMon_Table.mppMonitors[index], 0, size);
+    EvMonInitHeader(_EvMon_Table.mppMonitors[index], pDesc);
+    _EvMon_Table.mCount++;
     return index;
 }
 
-void fn_802384C4(int index)
+void EvMonFree(int index)
 {
-    fn_801D2BD0(lbl_803A3A14.mppUnknown8[index]);
-    lbl_803A3A14.mppUnknown8[index] = 0;
+    fn_801D2BD0(_EvMon_Table.mppMonitors[index]);
+    _EvMon_Table.mppMonitors[index] = 0;
 }
 
-void *fn_8023850C(int index)
+void *EvMonGetCurrentRecord(int index)
 {
-    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
-    return (char *)p + 16 + p->mUnknown12 * 4 + p->mUnknown8 * p->mUnknown4;
+    EvMon_t *p = _EvMon_Table.mppMonitors[index];
+    return (char *)p + 16 + p->mNumListeners * 4 + p->mRecordSize * p->mNumPosted;
 }
 
-void *fn_80238540(int index, int item)
+void *EvMonGetRecord(int index, int item)
 {
-    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
-    return (char *)p + 16 + p->mUnknown12 * 4 + p->mUnknown8 * item;
+    EvMon_t *p = _EvMon_Table.mppMonitors[index];
+    return (char *)p + 16 + p->mNumListeners * 4 + p->mRecordSize * item;
 }
 
 void EvMonFire(int index, int advance)
 {
-    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
+    EvMon_t *p = _EvMon_Table.mppMonitors[index];
     unsigned int i;
-    for (i = 0; i < p->mUnknown12; i++) {
-        AudmonEventFn_t callback = p->mpUnknown16[i];
+    for (i = 0; i < p->mNumListeners; i++) {
+        AudmonEventFn_t callback = p->mpListeners[i];
         if (callback != 0) {
-            callback(fn_8023850C(index));
+            callback(EvMonGetCurrentRecord(index));
         }
     }
     if (advance != 0) {
-        p->mUnknown4++;
+        p->mNumPosted++;
     }
 }
 
-unsigned int fn_80238604(int index)
+unsigned int EvMonGetCount(int index)
 {
-    return lbl_803A3A14.mppUnknown8[index]->mUnknown4;
+    return _EvMon_Table.mppMonitors[index]->mNumPosted;
 }
 
-void fn_8023861C(int index)
+void EvMonClear(int index)
 {
-    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
-    MemFill((char *)p + 16 + p->mUnknown12 * 4, p->mUnknown0 * p->mUnknown8, 0, 4);
-    p->mUnknown4 = 0;
+    EvMon_t *p = _EvMon_Table.mppMonitors[index];
+    MemFill((char *)p + 16 + p->mNumListeners * 4, p->mNumRecords * p->mRecordSize, 0, 4);
+    p->mNumPosted = 0;
 }
 
-void fn_80238680(int index, AudmonEventFn_t callback)
+void EvMonAddListener(int index, AudmonEventFn_t callback)
 {
-    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
+    EvMon_t *p = _EvMon_Table.mppMonitors[index];
     unsigned int i;
-    for (i = 0; i < p->mUnknown12 && ((AudmonEventFn_t *)p)[i + 4] != 0; i++) {
+    for (i = 0; i < p->mNumListeners && ((AudmonEventFn_t *)p)[i + 4] != 0; i++) {
     }
     ((AudmonEventFn_t *)p)[i + 4] = callback;
 }
 
-void fn_802386DC(int index, AudmonEventFn_t callback)
+void EvMonRemoveListener(int index, AudmonEventFn_t callback)
 {
-    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
+    EvMon_t *p = _EvMon_Table.mppMonitors[index];
     unsigned int i;
-    for (i = 0; i < p->mUnknown12 && ((AudmonEventFn_t *)p)[i + 4] != callback; i++) {
+    for (i = 0; i < p->mNumListeners && ((AudmonEventFn_t *)p)[i + 4] != callback; i++) {
     }
     ((AudmonEventFn_t *)p)[i + 4] = 0;
 }

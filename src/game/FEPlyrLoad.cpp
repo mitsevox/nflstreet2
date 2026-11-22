@@ -55,14 +55,14 @@ struct FEPlyrLoadState_t {
 
 extern "C" {
 void FESndUpdate(int a);
-void fn_8003E194(int index, int value);
+void PlyrObjsSetBodyType(int index, int value);
 void PlyrSwitchSet(int player, int key, int value);
 void PlaTexCacheWaitReads(void);
 void PlaTexCacheSetFace(int index, const char *pName, int a);
 void PlaTexCacheSetCapFace(int index, int a, int b, int c, int d);
 void PlaTexCacheDiscardRequests(void);
-void fn_801A46E0(Object_8003DEC4 *pPlayer, int id, Callback_8015F958 pCallback);
-void fn_801A472C(void);
+void PlyrHeadSetModel(Object_8003DEC4 *pPlayer, int id, Callback_8015F958 pCallback);
+void PlyrHeadProcessModel(void);
 void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 void fn_80233C7C(void *p);
 void fn_80234A14(void *p, int a);
@@ -146,7 +146,7 @@ extern "C" void FEPlyrLoadStartNextPart(void)
         return;
     }
     pEntry = &pState->mEntries[index];
-    pPlayer = fn_8003DEC4(index);
+    pPlayer = PlyrObjsGet(index);
     if (!(pEntry->mUnknownFA & 0x1F)) {
         return;
     }
@@ -158,7 +158,7 @@ extern "C" void FEPlyrLoadStartNextPart(void)
         fn_8015F958(pPlayer->mUnknown4970, &pEntry->mUnknown4, pPlayer, FEPlyrLoadHeadDone);
     } else if ((pEntry->mUnknownFA & 0x8) && !(pEntry->mUnknownFA & 0x100)) {
         pEntry->mUnknownFA |= 0x100;
-        fn_801A46E0(pPlayer, pEntry->mUnknownC, FEPlyrLoadFaceDone);
+        PlyrHeadSetModel(pPlayer, pEntry->mUnknownC, FEPlyrLoadFaceDone);
     } else if ((pEntry->mUnknownFA & 0x1) && !(pEntry->mUnknownFA & 0x20)) {
         pEntry->mUnknownFA |= 0x20;
         fn_8015FB38(pPlayer->mUnknown4970, pEntry->mUnknownE8, pPlayer, FEPlyrLoadHatDone);
@@ -193,8 +193,8 @@ extern "C" void FEPlyrLoadBegin(int index)
     pEntry->mUnknownF8 = 0;
     pEntry->mUnknownF9 = 0;
     pEntry->mUnknownFA = 0x1F;
-    pPlayer = fn_8003DEC4(index);
-    fn_8003E194(index, PlayerLookGetBodyType(pPlayer->mUnknown4971));
+    pPlayer = PlyrObjsGet(index);
+    PlyrObjsSetBodyType(index, PlayerLookGetBodyType(pPlayer->mUnknown4971));
     PlayerLookGetFeatures(pPlayer->mUnknown4971, &block);
     FaceMorphBuildWeights(&block, &values);
     if (strlen(pName)) {
@@ -330,7 +330,7 @@ extern "C" void FEPlyrLoadWait(int wait)
         while (pEntry->mUnknownFA & 0x3E0) {
             fn_8015FE4C();
             count++;
-            fn_801A472C();
+            PlyrHeadProcessModel();
             if (count > 4) {
                 count = 0;
                 if (wait) {
@@ -368,7 +368,7 @@ extern "C" void FEPlyrLoadShutdown(void)
         if (pEntry->mUnknownFA & 0x3E0) {
             while (pEntry->mUnknownFA & 0x3E0) {
                 fn_8015FE4C();
-                fn_801A472C();
+                PlyrHeadProcessModel();
             }
         } else if (pEntry->mUnknownF8) {
             PlaTexCacheWaitReads();
@@ -389,7 +389,7 @@ extern "C" void FEPlyrLoadReset(int wait)
     _FEPlyrLoad_pState->mQueueCount = 0;
     FEPlyrLoadWait(wait);
     for (i = 0; i < 2; i++) {
-        _FEPlyrLoad_pState->mpPlayers[i] = fn_8003DEC4(i);
+        _FEPlyrLoad_pState->mpPlayers[i] = PlyrObjsGet(i);
         _FEPlyrLoad_pState->mUnknown244[i] = 0.0f;
         _FEPlyrLoad_pState->mUnknown24F[i] = 0;
         _FEPlyrLoad_pState->mUnknown251[i] = 0;
@@ -422,7 +422,7 @@ extern "C" void FEPlyrLoadUpdate(void)
     }
     FEPlyrLoadStartNextPart();
     fn_8015FE4C();
-    fn_801A472C();
+    PlyrHeadProcessModel();
     for (i = 0; i < 2; i++) {
         pState = _FEPlyrLoad_pState;
         pEntry = &pState->mEntries[i];
@@ -467,7 +467,7 @@ extern "C" void FEPlyrLoadUpdate(void)
     if (current != 2) {
         i = current;
         if (_FEPlyrLoad_pState->mEntries[i].mUnknownFA == 0 && _FEPlyrLoad_pState->mEntries[i].mUnknownF8 == 0) {
-            pPlayer = fn_8003DEC4(i);
+            pPlayer = PlyrObjsGet(i);
             _FEPlyrLoad_pState->mEntries[i].mUnknownF8 = 1;
             if (strlen(_FEPlyrLoad_pState->mEntries[i].mUnknownFE)) {
                 PlaTexCacheSetFace(pPlayer->mUnknown4971, _FEPlyrLoad_pState->mEntries[i].mUnknownFE, 0);
@@ -501,7 +501,7 @@ extern "C" void FEPlyrLoadRequest(int index, const char *pName, unsigned char pr
         return;
     }
     pEntry = &_FEPlyrLoad_pState->mEntries[index];
-    pPlayer = fn_8003DEC4(index);
+    pPlayer = PlyrObjsGet(index);
     if (!GameInfoGet(2)) {
         team = pPlayer->mUnknown4968 == GameInfoGet(0);
     } else {
@@ -578,7 +578,7 @@ extern "C" void FEPlyrLoadFinish(int index)
         return;
     }
     pEntry->mUnknownF9 = 1;
-    PlyrTexRequestNameplate(fn_8003DEC4(current));
+    PlyrTexRequestNameplate(PlyrObjsGet(current));
     _FEPlyrLoad_pState->mCurrent = 2;
     if (!pEntry->mUnknownFC && pEntry->mUnknownFD) {
         _FEPlyrLoad_pState->mUnknown251[current] = 1;

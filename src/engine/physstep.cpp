@@ -1,11 +1,12 @@
 /* Rigid-body physics stepping: the sleep controller that puts resting bodies to sleep and wakes
    them when they move, and the explicit Euler integrator over a system's state. */
 
+#include <math.h>
+
 #include "engine/rigidbody.h"
 #include "engine/TibNew.h"
 
 extern "C" {
-float fn_80260B1C(float x);
 float fn_801E8DBC(void *pEnd, void *pStart);
 }
 
@@ -89,12 +90,12 @@ void SleepController::UpdateSleepState(RigidBody *pBody, float dt)
                 time = 0.0f;
             }
         } else {
-            speedSq = fn_80227120(&pBody->mAngularVelocity);
+            speedSq = Vec3MagnitudeSqr(&pBody->mAngularVelocity);
             maxSpeed = mMaxSpeed;
             if (speedSq > maxSpeed * maxSpeed) {
                 target = maxSpeed * 0.95f;
-                float speed = fn_80260B1C(speedSq);
-                fn_80227264(&vel, &pBody->mAngularMomentum, target / speed);
+                float speed = sqrtf(speedSq);
+                Vec3Scale(&vel, &pBody->mAngularMomentum, target / speed);
                 SetBodyAngularMomentum(pBody, &vel);
             }
         }
@@ -110,8 +111,8 @@ void SleepController::UpdateSleepState(RigidBody *pBody, float dt)
 int SleepController::IsBodyResting(RigidBody *pBody)
 {
     float limit = pBody->mRestLimit;
-    float linearSq = fn_80227120(&pBody->mLinearVelocity);
-    float angularSq = fn_80227120(&pBody->mAngularVelocity);
+    float linearSq = Vec3MagnitudeSqr(&pBody->mLinearVelocity);
+    float angularSq = Vec3MagnitudeSqr(&pBody->mAngularVelocity);
 
     if (linearSq <= limit && angularSq <= limit) {
         return 1;

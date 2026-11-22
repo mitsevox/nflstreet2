@@ -6,7 +6,7 @@
 #include "game/Ball.h"
 #include "game/ResLoad.h"
 #include "game/fn_800B65A0.h"
-#include "game/fn_8013AD94.h"
+#include "game/BallPhysics.h"
 
 struct BallMarkerObj_t {
     unsigned char mUnknown00[4];
@@ -33,8 +33,9 @@ struct BallMarkerTable_t {
     BallMarkerObj_t *mpObject;
 };
 
+static BallMarkerTable_t _BallMarker_Table = {0};
+
 extern "C" {
-extern BallMarkerTable_t lbl_802E989C;
 int fn_800BA6F8(void);
 int fn_800BA864(void);
 int fn_800C47C4(void);
@@ -59,14 +60,14 @@ void ObjSetPriority(int handle, BallMarkerObj_t *pObject, int a);
 void TMRenderBindTexture(int a, int b, int c);
 void fn_802353D8(void *p, int flags);
 void fn_80235588(void *p, int a);
-void fn_802355E4(void *p);
-void fn_80235630(void *p, int a);
-void fn_8023570C(void *p, const char *pName);
-void fn_80235740(void *p, int a);
-void fn_80235764(void *p, int a);
-void fn_80235C48(void *p, int a);
-void fn_80235C90(void *p, int a, float b, float c, float d, float e);
-void fn_80235DB8(int a);
+void ModelObjReset(void *p);
+void ModelObjSetModel(void *p, int a);
+void ModelObjSetShader(void *p, const char *pName);
+void ModelObjStoreMatrix(void *p, int a);
+void ModelObjDraw(void *p, int a);
+void ModelObjSetParamNop(void *p, int a);
+void ModelObjSetAmbientColor(void *p, int a, float b, float c, float d, float e);
+void ModelObjRelocateModelRes(int a);
 void BallMarkerObjInit(BallMarkerObj_t *pObject, int *pArgs);
 void BallMarkerObjFree(BallMarkerObj_t *pObject);
 int BallMarkerObjDraw(BallMarkerObj_t *pObject);
@@ -75,7 +76,7 @@ int BallMarkerObjDraw(BallMarkerObj_t *pObject);
 // is shown, and a scale that grows with the ball's height.
 void BallMarkerUpdateEntry(int index)
 {
-    BallMarkerEntry_t *pEntry = &lbl_802E989C.mEntries[index];
+    BallMarkerEntry_t *pEntry = &_BallMarker_Table.mEntries[index];
     Ball_t *pBall;
 
     pEntry->mEnabled = 0;
@@ -85,7 +86,7 @@ void BallMarkerUpdateEntry(int index)
         BallGetPosition(pBall, &pEntry->mPosition);
         pEntry->mEnabled = 1;
     } else if ((fn_801486A0() == 1 || fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF)
-               && fn_8013AD94(pBall) != 0 && BallGetLandingPoint(pBall, &pEntry->mPosition) != 0) {
+               && BallGetSpinMode(pBall) != 0 && BallGetLandingPoint(pBall, &pEntry->mPosition) != 0) {
         pEntry->mEnabled = 1;
     }
     pEntry->mPosition.mZ = 0.0f;
@@ -131,22 +132,22 @@ void BallMarkerCreate(int handle)
     BallMarkerRegister(handle);
     desc = data;
     if (fn_801486A0() == 1) {
-        lbl_802E989C.mCount = 3;
+        _BallMarker_Table.mCount = 3;
     } else {
-        lbl_802E989C.mCount = 1;
+        _BallMarker_Table.mCount = 1;
     }
-    lbl_802E989C.mpObject = (BallMarkerObj_t *)ObjNewInList(handle, 18, 0, &desc);
-    ObjSetPriority(handle, lbl_802E989C.mpObject, 3);
+    _BallMarker_Table.mpObject = (BallMarkerObj_t *)ObjNewInList(handle, 18, 0, &desc);
+    ObjSetPriority(handle, _BallMarker_Table.mpObject, 3);
 }
 
 void BallMarkerDestroy(int handle)
 {
-    if (lbl_802E989C.mpObject != 0) {
-        ObjRemoveFromList(handle, lbl_802E989C.mpObject);
-        VptTrashObject((int)lbl_802E989C.mpObject);
-        lbl_802E989C.mpObject = 0;
+    if (_BallMarker_Table.mpObject != 0) {
+        ObjRemoveFromList(handle, _BallMarker_Table.mpObject);
+        VptTrashObject((int)_BallMarker_Table.mpObject);
+        _BallMarker_Table.mpObject = 0;
     }
-    lbl_802E989C.mCount = 0;
+    _BallMarker_Table.mCount = 0;
     BallMarkerUnregister();
 }
 
@@ -156,18 +157,18 @@ void BallMarkerObjInit(BallMarkerObj_t *pObject, int *pArgs)
     pObject->mpUnknown14 = (void *)pArgs[0];
     pObject->mUnknownD8 = ResLoad(pObject->mpUnknown14, 10, 1);
     BallMarkerUpdateEntry(0);
-    pObject->mUnknown10C = lbl_802E989C.mEntries[0].mEnabled;
-    fn_80235DB8(pObject->mUnknownD8);
+    pObject->mUnknown10C = _BallMarker_Table.mEntries[0].mEnabled;
+    ModelObjRelocateModelRes(pObject->mUnknownD8);
     fn_80235588(pObject->mUnknown18, 6);
-    fn_80235630(pObject->mUnknown18, pObject->mUnknownD8);
-    fn_80235C48(pObject->mUnknown18, 3);
+    ModelObjSetModel(pObject->mUnknown18, pObject->mUnknownD8);
+    ModelObjSetParamNop(pObject->mUnknown18, 3);
     fn_802353D8(pObject->mUnknown18, 0x400008);
-    fn_8023570C(pObject->mUnknown18, "Flat");
+    ModelObjSetShader(pObject->mUnknown18, "Flat");
 }
 
 void BallMarkerObjFree(BallMarkerObj_t *pObject)
 {
-    fn_802355E4(pObject->mUnknown18);
+    ModelObjReset(pObject->mUnknown18);
     if (pObject->mUnknownD8 != 0) {
         ResUnLoad(pObject->mpUnknown14, 10);
     }
@@ -178,24 +179,24 @@ int BallMarkerObjDraw(BallMarkerObj_t *pObject)
     if (pObject->mUnknownD8 != 0 && pObject->mUnknown10C != 0) {
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
         TMRenderBindTexture(0, 0, 0);
-        for (unsigned int i = 0; i < lbl_802E989C.mCount; i++) {
-            if (lbl_802E989C.mEntries[i].mEnabled != 0) {
+        for (unsigned int i = 0; i < _BallMarker_Table.mCount; i++) {
+            if (_BallMarker_Table.mEntries[i].mEnabled != 0) {
                 if (fn_801486A0() == 1 && BallGetCurrentIndex() == i) {
-                    fn_80235C90(pObject->mUnknown18, ConGetCurrentContext(),
+                    ModelObjSetAmbientColor(pObject->mUnknown18, ConGetCurrentContext(),
                                0.341796875f, 0.0f, 0.0f, 1.0f);
                 } else {
-                    fn_80235C90(pObject->mUnknown18, ConGetCurrentContext(),
+                    ModelObjSetAmbientColor(pObject->mUnknown18, ConGetCurrentContext(),
                                0.390625f, 0.19921875f, 0.0f, 1.0f);
                 }
                 MatSetStack(VptGetMatrixStack());
                 MatPush();
-                MatTranslate(&lbl_802E989C.mEntries[i].mPosition);
+                MatTranslate(&_BallMarker_Table.mEntries[i].mPosition);
                 MatRotX(0x400000);
-                MatScale(lbl_802E989C.mEntries[i].mScale);
-                fn_80235740(pObject->mUnknown18, ConGetCurrentContext());
+                MatScale(_BallMarker_Table.mEntries[i].mScale);
+                ModelObjStoreMatrix(pObject->mUnknown18, ConGetCurrentContext());
                 MatSetStack(VptGetMatrixStack());
                 MatPop();
-                fn_80235764(pObject->mUnknown18, ConGetCurrentContext());
+                ModelObjDraw(pObject->mUnknown18, ConGetCurrentContext());
             }
         }
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
@@ -205,11 +206,11 @@ int BallMarkerObjDraw(BallMarkerObj_t *pObject)
 
 void BallMarkerUpdate(void)
 {
-    if (lbl_802E989C.mpObject != 0) {
-        lbl_802E989C.mpObject->mUnknown10C = 0;
-        for (unsigned int i = 0; i < lbl_802E989C.mCount; i++) {
+    if (_BallMarker_Table.mpObject != 0) {
+        _BallMarker_Table.mpObject->mUnknown10C = 0;
+        for (unsigned int i = 0; i < _BallMarker_Table.mCount; i++) {
             BallMarkerUpdateEntry(i);
-            lbl_802E989C.mpObject->mUnknown10C |= lbl_802E989C.mEntries[i].mEnabled;
+            _BallMarker_Table.mpObject->mUnknown10C |= _BallMarker_Table.mEntries[i].mEnabled;
         }
     }
 }

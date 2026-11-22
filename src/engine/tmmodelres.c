@@ -4,9 +4,10 @@
 #include "engine/tmlib.h"
 #include "game/fn_801D2B7C.h"
 
-extern int lbl_803ECFC4;
-extern TMChunkDef_t *lbl_803ECFC8;
-extern unsigned int lbl_803ECFCC;
+/* The chunk type capacity, the chunk definitions and how many are registered. */
+static int _TMModelRes_NumChunkTypes;
+static TMChunkDef_t *_TMModelRes_pChunkDefList;
+static unsigned int _TMModelRes_nChunks;
 
 static TMChunkDef_t *_TMModelResGetChunkDef(int tag)
 {
@@ -14,9 +15,9 @@ static TMChunkDef_t *_TMModelResGetChunkDef(int tag)
     unsigned int i;
 
     pDef = 0;
-    for (i = 0; i < lbl_803ECFCC; i++) {
-        if (lbl_803ECFC8[i].mTag == tag) {
-            pDef = &lbl_803ECFC8[i];
+    for (i = 0; i < _TMModelRes_nChunks; i++) {
+        if (_TMModelRes_pChunkDefList[i].mTag == tag) {
+            pDef = &_TMModelRes_pChunkDefList[i];
             break;
         }
     }
@@ -43,22 +44,22 @@ static void _TMModelResRelocateChunk(TMChunk_t *pChunk, TMChunkDef_t *pDef, TMMo
 
 void TMModelResInit(int maxChunkTypes)
 {
-    lbl_803ECFC4 = maxChunkTypes;
-    lbl_803ECFC8 = fn_801D2B7C(maxChunkTypes * sizeof(TMChunkDef_t), 0, 0);
-    lbl_803ECFCC = 0;
+    _TMModelRes_NumChunkTypes = maxChunkTypes;
+    _TMModelRes_pChunkDefList = fn_801D2B7C(maxChunkTypes * sizeof(TMChunkDef_t), 0, 0);
+    _TMModelRes_nChunks = 0;
 }
 
 void TMModelResAddChunkType(int tag, TMChunkRelocFunc_t relocate, int version)
 {
-    lbl_803ECFC8[lbl_803ECFCC].mTag = tag;
-    lbl_803ECFC8[lbl_803ECFCC].mVersion = version;
-    lbl_803ECFC8[lbl_803ECFCC].mRelocate = relocate;
-    lbl_803ECFCC++;
+    _TMModelRes_pChunkDefList[_TMModelRes_nChunks].mTag = tag;
+    _TMModelRes_pChunkDefList[_TMModelRes_nChunks].mVersion = version;
+    _TMModelRes_pChunkDefList[_TMModelRes_nChunks].mRelocate = relocate;
+    _TMModelRes_nChunks++;
 }
 
 void TMModelResShutdown(void)
 {
-    fn_801D2BD0(lbl_803ECFC8);
+    fn_801D2BD0(_TMModelRes_pChunkDefList);
 }
 
 void *TMModelResRelocatePtr(void *p, void *pOldBase, void *pNewBase)

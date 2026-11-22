@@ -5,8 +5,8 @@
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/Row_8007BC34.h"
-#include "game/fn_801FCE10.h"
-#include "game/fn_802372EC.h"
+#include "game/TDbCompilePerformOp.h"
+#include "game/SyncRandGetRange.h"
 
 
 extern "C" {
@@ -26,8 +26,8 @@ unsigned int fn_80229CFC(int category, int *pValues, int a);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
-int fn_8022F358(int index);
-int fn_8022F3D4(int handle);
+int DbUserGetId(int index);
+int DbUserGetDb(int handle);
 
 int fn_80082280(Object_8008044C *pObject);
 int fn_8008257C(int count, unsigned int *pOut);
@@ -294,7 +294,7 @@ int fn_8008257C(int count, unsigned int *pOut)
         int db = UserProfileGetSelected(pad);
 
         if (db != -1) {
-            int handle = fn_8022F3D4(fn_8022F358((signed char)db));
+            int handle = DbUserGetDb(DbUserGetId((signed char)db));
             DbTableCursor cursor;
 
             cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
@@ -318,7 +318,7 @@ void fn_80082688(int db)
         mask |= 1 << i;
     }
     {
-        int handle = fn_8022F3D4(fn_8022F358(db));
+        int handle = DbUserGetDb(DbUserGetId(db));
         DbTableCursor cursor;
 
         cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
@@ -329,7 +329,7 @@ void fn_80082688(int db)
 void fn_8008274C(int db)
 {
     int mask = 0;
-    int handle = fn_8022F3D4(fn_8022F358(db));
+    int handle = DbUserGetDb(DbUserGetId(db));
     DbTableCursor cursor;
 
     cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
@@ -379,13 +379,13 @@ void fn_800828FC(void)
     lbl_8030BC88.mUnknown4 = 0;
     lbl_8030BC88.mUnknown8 = -1;
     lbl_8030BC88.mUnknown12 = 0;
-    fn_801FCE10(&result, "declare \x8a cursor for select 'ANFP' from 'MNFS'\n", &lbl_8030BC88);
+    TDbCompilePerformOp(&result, "declare \x8a cursor for select 'ANFP' from 'MNFS'\n", &lbl_8030BC88);
     lbl_803EA7DC = result.mUnknown0;
     lbl_8030BC98.mUnknown0 = 0;
     lbl_8030BC98.mUnknown4 = 0;
     lbl_8030BC98.mUnknown8 = -1;
     lbl_8030BC98.mUnknown12 = 0;
-    fn_801FCE10(&result, "declare \x8a cursor for select 'ANLP' from 'MNLS'\n", &lbl_8030BC98);
+    TDbCompilePerformOp(&result, "declare \x8a cursor for select 'ANLP' from 'MNLS'\n", &lbl_8030BC98);
     lbl_803EA7E0 = result.mUnknown0;
     lbl_803EA7D8 = 1;
 }
@@ -393,10 +393,10 @@ void fn_800828FC(void)
 void fn_800829D8(void)
 {
     if (lbl_8030BC98.mUnknown0) {
-        fn_801FCFA0(&lbl_8030BC98);
+        TDbSQLDestroyCursor(&lbl_8030BC98);
     }
     if (lbl_8030BC88.mUnknown0) {
-        fn_801FCFA0(&lbl_8030BC88);
+        TDbSQLDestroyCursor(&lbl_8030BC88);
     }
     SndgMusicPumpFrame(0);
     DbFileTblDestroy(0, 0x4D4E4653);
@@ -421,7 +421,7 @@ int fn_80082AE4(int a, int b)
     return PlayerRecordCreate(b, a, 1, -1);
 }
 
-void fn_80082B18(Record_80082B18 *pRecord)
+void PlayerRecordSetDefaults(Record_80082B18 *pRecord)
 {
     pRecord->mUnknown00 = 0x7FFF;
     pRecord->mUnknown04 = 0;
@@ -460,8 +460,6 @@ void fn_80082B18(Record_80082B18 *pRecord)
     pRecord->mUnknown10C = 0x55;
     pRecord->mUnknown110 = 0x1A0;
     pRecord->mUnknown114 = 3;
-    pRecord->mUnknown9C = 0x7F;
-    pRecord->mUnknownA4 = 7;
     pRecord->mUnknownE4 = 0x7F;
     pRecord->mUnknownE8 = 0x7F;
     pRecord->mUnknownEC = 0x7F;
@@ -486,15 +484,17 @@ void fn_80082B18(Record_80082B18 *pRecord)
     pRecord->mUnknown90 = 0x7F;
     pRecord->mUnknown94 = 0x7F;
     pRecord->mUnknown98 = 0x7F;
+    pRecord->mUnknown9C = 0x7F;
     pRecord->mUnknownA0 = 0;
+    pRecord->mUnknownA4 = 7;
     pRecord->mUnknownA8 = 0;
     pRecord->mUnknownAC = 0;
     pRecord->mUnknownB0 = 0;
     pRecord->mUnknownB4 = 0;
-    pRecord->mUnknown28 = 0xF;
-    pRecord->mUnknownC0 = 0;
     pRecord->mUnknownB8 = 0;
     pRecord->mUnknownBC = 0;
+    pRecord->mUnknownC0 = 0;
+    pRecord->mUnknown28 = 0xF;
 }
 
 /* Fetches a randomly chosen first and last name through the two name cursors
@@ -506,10 +506,10 @@ void fn_80082C64(Record_80082B18 *pRecord)
     char *pUpper = pRecord->mUnknown0C;
     unsigned int i;
 
-    lbl_8030BC88.mUnknown4 = fn_802372EC(0, lbl_803EA7DC);
-    fn_801FCE10(0, "fetch from \x8a 'ANFP' into \x88\n", &lbl_8030BC88, pFirst);
-    lbl_8030BC98.mUnknown4 = fn_802372EC(0, lbl_803EA7E0);
-    fn_801FCE10(0, "fetch from \x8a 'ANLP' into \x88\n", &lbl_8030BC98, pLast);
+    lbl_8030BC88.mUnknown4 = SyncRandGetRange(0, lbl_803EA7DC);
+    TDbCompilePerformOp(0, "fetch from \x8a 'ANFP' into \x88\n", &lbl_8030BC88, pFirst);
+    lbl_8030BC98.mUnknown4 = SyncRandGetRange(0, lbl_803EA7E0);
+    TDbCompilePerformOp(0, "fetch from \x8a 'ANLP' into \x88\n", &lbl_8030BC98, pLast);
     for (i = 0; i < 15; i++) {
         if (pLast) {
             pUpper[i] = toupper(pLast[i]);
@@ -521,16 +521,16 @@ void fn_80082D30(Record_80082B18 *pRecord)
 {
     QueryCursor cursor;
     QueryResult result;
-    unsigned int skin = fn_802372EC(0, 12);
+    unsigned int skin = SyncRandGetRange(0, 12);
 
     pRecord->mUnknown28 = skin;
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    fn_801FCE10(&result, "use 'TATS' declare \x8a cursor for select * from 'ECAF' where 'IKSP' = \x85\n", &cursor, skin);
-    cursor.mUnknown4 = fn_802372EC(0, result.mUnknown0);
-    fn_801FCE10(0,
+    TDbCompilePerformOp(&result, "use 'TATS' declare \x8a cursor for select * from 'ECAF' where 'IKSP' = \x85\n", &cursor, skin);
+    cursor.mUnknown4 = SyncRandGetRange(0, result.mUnknown0);
+    TDbCompilePerformOp(0,
                 "fetch from \x8a 'CFRP' into \x82 and 'THLP' into \x82 and 'PTEP' into \x82 and 'XELP' into \x82 "
                 "and 'HFFP' into \x82 and 'BEFP' into \x82 and 'AEFP' into \x82 and 'OMFP' into \x82 and 'PLFP' "
                 "into \x82 and 'CJFP' into \x82 and 'YEFP' into \x82 and 'ONFP' into \x82 and 'RAHP' into \x82 "
@@ -540,7 +540,7 @@ void fn_80082D30(Record_80082B18 *pRecord)
                 &pRecord->mUnknown4C, &pRecord->mUnknown50, &pRecord->mUnknown54, &pRecord->mUnknown58,
                 &pRecord->mUnknown5C, &pRecord->mUnknown60, &pRecord->mUnknown64, &pRecord->mUnknown68);
     if (cursor.mUnknown0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
 }
 
@@ -554,13 +554,13 @@ void fn_80082E48(Record_80082B18 *pRecord)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    fn_801FCE10(&result,
+    TDbCompilePerformOp(&result,
                 "use 'TATS' declare \x8a cursor for select * from 'YALP' inner join 'MAET' on 'YALP'.'DIGT' = "
                 "'MAET'.'DIGT' where 'YALP'.'OPBP' = \x85 and 'MAET'.'PYTT' = \x82\n",
                 &cursor, pRecord->mUnknown14, 0);
     count = result.mUnknown0;
-    cursor.mUnknown4 = fn_802372EC(0, count);
-    fn_801FCE10(0,
+    cursor.mUnknown4 = SyncRandGetRange(0, count);
+    TDbCompilePerformOp(0,
                 "fetch from \x8a 'TAHP' into \x82 and 'ROHP' into \x82 and 'RWEP' into \x82 and 'APSP' into \x82 "
                 "and 'TRSP' into \x82 and 'TNPP' into \x82 and 'RAUP' into \x82 and 'LULP' into \x82 and 'WBEP' "
                 "into \x82 and 'DNHP' into \x82 and 'DHRP' into \x82 and 'TRWP' into \x82 and 'LWLP' into \x82 "
@@ -573,8 +573,8 @@ void fn_80082E48(Record_80082B18 *pRecord)
                 &pRecord->mUnknown9C, &pRecord->mUnknownA0, &pRecord->mUnknownA4, &pRecord->mUnknownA8,
                 &pRecord->mUnknownAC, &pRecord->mUnknownB0, &pRecord->mUnknownB4, &pRecord->mUnknownB8,
                 &pRecord->mUnknownBC, &pRecord->mUnknownC0, &pRecord->mUnknown1C, &pRecord->mUnknown20);
-    cursor.mUnknown4 = fn_802372EC(0, count);
-    fn_801FCE10(0,
+    cursor.mUnknown4 = SyncRandGetRange(0, count);
+    TDbCompilePerformOp(0,
                 "fetch from \x8a 'DPSP' into \x82 and 'IGAP' into \x82 and 'MUJP' into \x82 and 'HTCP' into \x82 "
                 "and 'KTBP' into \x82 and 'KATP' into \x82 and 'SSPP' into \x82 and 'KLBP' into \x82 and 'VOCP' "
                 "into \x82 and 'TFDP' into \x82 and 'PMIP' into \x82 and 'NSPP' into \x82 and 'LECP' into \x82 "
@@ -587,9 +587,9 @@ void fn_80082E48(Record_80082B18 *pRecord)
                 &pRecord->mUnknownF4, &pRecord->mUnknownF8, &pRecord->mUnknownFC, &pRecord->mUnknown100,
                 &pRecord->mUnknown104, &pRecord->mUnknown108, &pRecord->mUnknown10C, &pRecord->mUnknown110,
                 &pRecord->mUnknown114, &pRecord->mUnknown118, &pRecord->mUnknown11C);
-    pRecord->mUnknown18 = fn_802372EC(0, 100);
+    pRecord->mUnknown18 = SyncRandGetRange(0, 100);
     if (cursor.mUnknown0) {
-        fn_801FCFA0(&cursor);
+        TDbSQLDestroyCursor(&cursor);
     }
 }
 
@@ -631,7 +631,7 @@ void fn_80083070(Record_80082B18 *pRecord)
 
 void fn_8008318C(int handle, Record_80082B18 *pRecord, int team, int offset)
 {
-    fn_801FCE10(0,
+    TDbCompilePerformOp(0,
                 "use 'TATS' insert into \x8c set 'DIGP' = \x82 and 'DIOP' = \x82 and 'ANFP' = \x88 and 'ANLP' = "
                 "\x88 and 'DIGT' = \x82 and 'ITGT' = \x82 and 'YTRP' = \x82 and 'SOPP' = \x82 and 'OPBP' = \x82 "
                 "and 'NEJP' = \x82 and 'RVOP' = \x82 and 'EGAP' = \x82 and 'CFRP' = \x82 and 'XELP' = \x82 and "

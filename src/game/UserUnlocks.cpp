@@ -17,8 +17,8 @@ extern "C" {
 void ChecksumCRC32Begin(void);
 void ChecksumCRC32Update(void *pData, unsigned int size);
 void ChecksumCRC32End(unsigned int *pResult);
-int fn_8022F358(int index);
-int fn_8022F3D4(int a);
+int DbUserGetId(int index);
+int DbUserGetDb(int a);
 
 void UserInfoOpen(DbCursor *pCursor, int db);
 void UserInfoClose(DbCursor *pCursor);
@@ -44,7 +44,7 @@ extern "C" {
 
 void UserInfoOpen(DbCursor *pCursor, int db)
 {
-    DbCursorOpen(pCursor, 0x464E4955, 0x41434955, 0, 0, fn_8022F3D4(db));
+    DbCursorOpen(pCursor, 0x464E4955, 0x41434955, 0, 0, DbUserGetDb(db));
 }
 
 void UserInfoClose(DbCursor *pCursor)
@@ -113,7 +113,7 @@ void UserInfoSpendPoints(int db, int value)
 
 void UnlockStatusOpen(DbCursor *pCursor, int index)
 {
-    UnlockStatusOpenDb(pCursor, fn_8022F358(index));
+    UnlockStatusOpenDb(pCursor, DbUserGetId(index));
 }
 
 void UnlockStatusOpenDb(DbCursor *pCursor, int db)
@@ -122,7 +122,7 @@ void UnlockStatusOpenDb(DbCursor *pCursor, int db)
 
     keys[0].Set(0x53544653, 0x49434655, 0);
     keys[1].Set(-1, -1, 3);
-    DbCursorOpen(pCursor, 0x43465355, 0x49434655, keys, 0, fn_8022F3D4(db));
+    DbCursorOpen(pCursor, 0x43465355, 0x49434655, keys, 0, DbUserGetDb(db));
 }
 
 void UnlockStatusClose(DbCursor *pCursor)

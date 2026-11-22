@@ -10,7 +10,7 @@
 
 extern "C" {
 int fn_8007BF14(int index);
-int fn_801FA290(int handle, DbQueryTable *pTables, DbFilter *pFilter,
+int TDbQryGetSingleRow(int handle, DbQueryTable *pTables, DbFilter *pFilter,
                 DbColumnValue *pColumns);
 void PlayerDbReadRatings(Object_8008044C *pObject, int *pValues);
 void PlayerGearSumBonuses(PlayerGear_t *pInfo, short *pValues);
@@ -68,7 +68,7 @@ void PlayerGearSumBonuses(PlayerGear_t *pInfo, short *pValues)
             }
             left.Set(6, ((unsigned long long)0x52414547 << 32) | 0x44494547, 3, pInfo->mValues[i]);
             right.Set(6, ((unsigned long long)0x52414547 << 32) | 0x49545247, 2, result);
-            if (fn_801FA290(0x54415453, tables, 0, _PlayerGearRatings_aBonusColumns) != 0x17) {
+            if (TDbQryGetSingleRow(0x54415453, tables, 0, _PlayerGearRatings_aBonusColumns) != 0x17) {
                 for (j = 0; j < 10; j++) {
                     pValues[j] += _PlayerGearRatings_aBonusColumns[j].mValue;
                 }

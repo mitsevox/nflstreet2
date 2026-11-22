@@ -26,8 +26,8 @@ void MatPop(void);
 void MatCatSlot(int a);
 Mtx44Ptr MatGetCurMatrixPtr(void);
 void GXLoadPosMtxImm(Mtx44 m, int a);
-void fn_80227490(float *pOut, float *pIn, int a, int b, int c);
-void fn_8022765C(float *pOut, float *pA, float *pB);
+void Vec3RotateZYX(float *pOut, float *pIn, int a, int b, int c);
+void Vec3Add(float *pOut, float *pA, float *pB);
 int GlibGetScreenWidth(void);
 int GlibGetScreenHeight(void);
 }
@@ -118,8 +118,8 @@ void _FieldMarkerDrawBeam(FieldMarkerBeam_t *p, float *position, int angle)
     vertex[0] = _FieldMarker_aBeamCorners[0][0] + p->mUnknown8;
     vertex[1] = _FieldMarker_aBeamCorners[0][1];
     vertex[2] = _FieldMarker_aBeamCorners[0][2];
-    fn_80227490(vertex, vertex, angle, 0, 0);
-    fn_8022765C(transformed, position, vertex);
+    Vec3RotateZYX(vertex, vertex, angle, 0, 0);
+    Vec3Add(transformed, position, vertex);
     GXPosition3f32(transformed[0], transformed[1], transformed[2]);
     GXColor4u8(color.r, color.g, color.b, color.a);
     GXTexCoord2f32(_FieldMarker_aBeamUVs[0][0], _FieldMarker_aBeamUVs[0][1]);
@@ -127,8 +127,8 @@ void _FieldMarkerDrawBeam(FieldMarkerBeam_t *p, float *position, int angle)
     vertex[0] = _FieldMarker_aBeamCorners[1][0] + p->mUnknown8;
     vertex[1] = _FieldMarker_aBeamCorners[1][1];
     vertex[2] = _FieldMarker_aBeamCorners[1][2];
-    fn_80227490(vertex, vertex, angle, 0, 0);
-    fn_8022765C(transformed, position, vertex);
+    Vec3RotateZYX(vertex, vertex, angle, 0, 0);
+    Vec3Add(transformed, position, vertex);
     GXPosition3f32(transformed[0], transformed[1], transformed[2]);
     GXColor4u8(color.r, color.g, color.b, color.a);
     GXTexCoord2f32(_FieldMarker_aBeamUVs[1][0], _FieldMarker_aBeamUVs[1][1]);
@@ -136,8 +136,8 @@ void _FieldMarkerDrawBeam(FieldMarkerBeam_t *p, float *position, int angle)
     vertex[0] = _FieldMarker_aBeamCorners[2][0] * p->mUnknown0 + p->mUnknown8;
     vertex[1] = _FieldMarker_aBeamCorners[2][1];
     vertex[2] = _FieldMarker_aBeamCorners[2][2];
-    fn_80227490(vertex, vertex, angle, 0, 0);
-    fn_8022765C(transformed, position, vertex);
+    Vec3RotateZYX(vertex, vertex, angle, 0, 0);
+    Vec3Add(transformed, position, vertex);
     GXPosition3f32(transformed[0], transformed[1], transformed[2]);
     GXColor4u8(color.r, color.g, color.b, color.a);
     GXTexCoord2f32(_FieldMarker_aBeamUVs[2][0], _FieldMarker_aBeamUVs[2][1]);
@@ -145,8 +145,8 @@ void _FieldMarkerDrawBeam(FieldMarkerBeam_t *p, float *position, int angle)
     vertex[0] = _FieldMarker_aBeamCorners[3][0] * p->mUnknown0 + p->mUnknown8;
     vertex[1] = _FieldMarker_aBeamCorners[3][1];
     vertex[2] = _FieldMarker_aBeamCorners[3][2];
-    fn_80227490(vertex, vertex, angle, 0, 0);
-    fn_8022765C(transformed, position, vertex);
+    Vec3RotateZYX(vertex, vertex, angle, 0, 0);
+    Vec3Add(transformed, position, vertex);
     GXPosition3f32(transformed[0], transformed[1], transformed[2]);
     GXColor4u8(color.r, color.g, color.b, color.a);
     GXTexCoord2f32(_FieldMarker_aBeamUVs[3][0], _FieldMarker_aBeamUVs[3][1]);
@@ -231,7 +231,7 @@ void FieldMarkerDrawArrows(void)
                 vertex[2] = gFieldMarkerArrows[i].mUnknownC * _FieldMarker_aArrowVerts[j][2];
             else
                 vertex[2] = _FieldMarker_aArrowVerts[j][2];
-            fn_8022765C(vertex, vertex, gFieldMarkerArrows[i].mPosition);
+            Vec3Add(vertex, vertex, gFieldMarkerArrows[i].mPosition);
             unsigned char alpha = (unsigned char)((unsigned int)color.a * gFieldMarkerArrows[i].mUnknown10);
             GXPosition3f32(vertex[0], vertex[1], vertex[2]);
             GXColor4u8(color.r, color.g, color.b, alpha);

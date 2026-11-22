@@ -17,7 +17,7 @@ void AnimScaleFixed(short *pOut, short *pA, int count, short *pOffset, short *pS
 float fn_801BE5D0(void *p, unsigned short index);
 void Orient3Lerp(int *pOut, int *pA, int *pB, float t);
 void OrientLerpAngle(int *pOut, int a, int b, float t);
-void fn_80227930(float *pOut, float *pA, float *pB, float t);
+void Vec3Lerp(float *pOut, float *pA, float *pB, float t);
 
 void DynObjChildRefreshFrame(DynObjChild *p)
 {
@@ -200,7 +200,7 @@ void BigObjAnimBlendPose(BigObjPhysics_t *unused, BigObj_t *pObject, int blend, 
         if (pContext != 0) {
             pPair = &pContext->mUnknown4;
         }
-        fn_80227930(pPose->mUnknown8, pose.mUnknown8, pPose->mUnknown8, weight);
+        Vec3Lerp(pPose->mUnknown8, pose.mUnknown8, pPose->mUnknown8, weight);
         OrientLerpAngle(&pPose->mUnknown32, pose.mUnknown32, pPose->mUnknown32, weight);
         if (pContext != 0) {
             AnimLerpFixedScaled(pPose->mUnknown48, pose.mUnknown48, pPose->mUnknown48, (int)(weight * 4095.0f), values,

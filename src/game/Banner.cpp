@@ -18,7 +18,7 @@ struct BannerSet_t {
 };
 
 extern "C" {
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 }
 
@@ -54,8 +54,8 @@ void BannerAlloc(void)
     unsigned int i;
     unsigned int j;
 
-    fn_80238234(pHandle, 0, 0, 0, BannerCompare);
-    pSet = (BannerSet_t *)fn_8023816C(pHandle);
+    SyncStateSetCallbacks(pHandle, 0, 0, 0, BannerCompare);
+    pSet = (BannerSet_t *)SyncStateGetData(pHandle);
     for (i = 0; i <= 5; i++) {
         pSet->mEntries[i].mUnknown0 = 0;
         pSet->mEntries[i].mUnknown2 = 0;
@@ -66,7 +66,7 @@ void BannerAlloc(void)
             strcpy(pSet->mEntries[i].mText[j], "");
         }
     }
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
 }
 
 void BannerClearAll(void)

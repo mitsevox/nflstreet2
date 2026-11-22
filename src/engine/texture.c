@@ -55,21 +55,24 @@ typedef struct TexFileType_t {
 } TexFileType_t;
 
 extern TexChunk_t *GlibFindChunk(void *pStream, int id, int endId, int flags);
-extern char lbl_802B1BC4[];
-extern char lbl_802B1BCC[];
 
 extern unsigned char Glib_TexBitsPerPixel[];
 extern unsigned int Glib_TexPalEntries[];
 extern unsigned char Glib_PalBitsPerPixel[7];
 extern TexFileType_t _Tex_RawFileType;
 extern TexFileType_t _Tex_MipmapFileType;
-extern unsigned char lbl_803EBEB8;
-extern int lbl_803EBEC0;
-extern TexFileType_t **lbl_803EBEC4;
-extern int lbl_803EBEC8;
-extern void **lbl_803EBECC;
-extern int lbl_803ECFBC;
-extern int lbl_803ECFC0;
+static unsigned char _Tex_ModuleActive = 0;
+
+/* The heap texture images and palettes are allocated from (shared with lltextur.c). */
+int _Tex_ImageHeap = 1;
+
+/* The registered file types and effect types, their counts and capacities. */
+static int _Tex_NumFileTypes = 0;
+static TexFileType_t **_Tex_pFileTypes = 0;
+static int _Tex_NumEffectTypes = 0;
+static void **_Tex_pEffectTypes = 0;
+static int _Tex_MaxFileTypes;
+static int _Tex_MaxEffectTypes;
 
 void *TexDecompressTexture(TexFileImage_t *pImage, void *pDst);
 int TexCreateEmpty(Texture_t *pTex, unsigned short width, unsigned short height, unsigned short format, unsigned short tlutFormat);
@@ -194,17 +197,17 @@ int TexInit(int heap, int count, int unknown)
 {
     int err = 0;
 
-    if (lbl_803EBEB8 == 0) {
+    if (_Tex_ModuleActive == 0) {
         int capacity = count + 2;
 
-        lbl_803EBEBC = heap;
-        lbl_803ECFBC = capacity;
-        lbl_803EBEC0 = 0;
-        lbl_803EBEC4 = fn_801D2BB0(1, capacity * 4, 0, 0);
-        lbl_803ECFC0 = capacity;
-        lbl_803EBEC8 = 0;
-        lbl_803EBECC = fn_801D2BB0(1, capacity * 4, 0, 0);
-        lbl_803EBEB8 = 1;
+        _Tex_ImageHeap = heap;
+        _Tex_MaxFileTypes = capacity;
+        _Tex_NumFileTypes = 0;
+        _Tex_pFileTypes = fn_801D2BB0(1, capacity * 4, 0, 0);
+        _Tex_MaxEffectTypes = capacity;
+        _Tex_NumEffectTypes = 0;
+        _Tex_pEffectTypes = fn_801D2BB0(1, capacity * 4, 0, 0);
+        _Tex_ModuleActive = 1;
         TexAddConversionType(&_Tex_RawFileType);
         TexAddConversionType(&_Tex_MipmapFileType);
     } else {
@@ -218,16 +221,16 @@ int TexShutdown(void)
 {
     int err = 0;
 
-    if (lbl_803EBEB8 != 0) {
-        if (lbl_803EBEC4 != 0) {
-            fn_801D2BD0(lbl_803EBEC4);
-            lbl_803EBEC4 = 0;
+    if (_Tex_ModuleActive != 0) {
+        if (_Tex_pFileTypes != 0) {
+            fn_801D2BD0(_Tex_pFileTypes);
+            _Tex_pFileTypes = 0;
         }
-        if (lbl_803EBECC != 0) {
-            fn_801D2BD0(lbl_803EBECC);
-            lbl_803EBECC = 0;
+        if (_Tex_pEffectTypes != 0) {
+            fn_801D2BD0(_Tex_pEffectTypes);
+            _Tex_pEffectTypes = 0;
         }
-        lbl_803EBEB8 = 0;
+        _Tex_ModuleActive = 0;
     } else {
         err = 0x100002;
     }
@@ -237,8 +240,8 @@ int TexShutdown(void)
 
 void TexAddConversionType(TexFileType_t *pHandler)
 {
-    lbl_803EBEC4[lbl_803EBEC0] = pHandler;
-    lbl_803EBEC0++;
+    _Tex_pFileTypes[_Tex_NumFileTypes] = pHandler;
+    _Tex_NumFileTypes++;
 }
 
 int TexCreate(void *pSrc, Texture_t *pTex)
@@ -246,8 +249,8 @@ int TexCreate(void *pSrc, Texture_t *pTex)
     int result = 0;
     unsigned int i;
 
-    for (i = 0; i < lbl_803EBEC0; i++) {
-        TexFileType_t *pHandler = lbl_803EBEC4[i];
+    for (i = 0; i < _Tex_NumFileTypes; i++) {
+        TexFileType_t *pHandler = _Tex_pFileTypes[i];
 
         if (*(int *)pSrc == pHandler->mId) {
             result = pHandler->mpLoad(pSrc, pTex);
@@ -268,7 +271,7 @@ int TexCreateEmpty(Texture_t *pTex, unsigned short width, unsigned short height,
     pTex->mpPalette = 0;
     if (tlutFormat != 3 && Glib_TexPalEntries[format] != 0) {
         size = (Glib_TexPalEntries[format] * Glib_PalBitsPerPixel[tlutFormat]) >> 3;
-        pTex->mpPalette = fn_801D2BB0(lbl_803EBEBC, size, 0, 0);
+        pTex->mpPalette = fn_801D2BB0(_Tex_ImageHeap, size, 0, 0);
         if (pTex->mpPalette != 0) {
             MemFill(pTex->mpPalette, size, 0, 1);
         } else {
@@ -278,7 +281,7 @@ int TexCreateEmpty(Texture_t *pTex, unsigned short width, unsigned short height,
     if (err == 0) {
         pTex->mFormat = format;
         size = (width * height * Glib_TexBitsPerPixel[format]) >> 3;
-        pTex->mpImage = fn_801D2BB0(lbl_803EBEBC, size, 0, 0);
+        pTex->mpImage = fn_801D2BB0(_Tex_ImageHeap, size, 0, 0);
         if (pTex->mpImage != 0) {
             MemFill(pTex->mpImage, size, 0, 1);
             pTex->mTlutFormat = tlutFormat;
@@ -301,8 +304,8 @@ int TexUpdateFrame(void *pSrc, Texture_t *pTex, int flags)
     int result = 0x100003;
     unsigned int i;
 
-    for (i = 0; i < lbl_803EBEC0; i++) {
-        TexFileType_t *pHandler = lbl_803EBEC4[i];
+    for (i = 0; i < _Tex_NumFileTypes; i++) {
+        TexFileType_t *pHandler = _Tex_pFileTypes[i];
 
         if (*(int *)pSrc == pHandler->mId) {
             result = pHandler->mpInit(pTex, pSrc, flags);
@@ -336,7 +339,7 @@ void TexMipmapRelocate(void *p)
     if (pFile->mFlags & 1) {
         return;
     }
-    if (memcmp(pFile, lbl_802B1BC4, 4) == 0) {
+    if (memcmp(pFile, "MMAP", 4) == 0) {
         if (pFile->mVersion != 2) {
             pFile->mpMaterials = 0;
             pFile->mpTextures = 0;
@@ -364,7 +367,7 @@ void TexMipmapRelocate(void *p)
 
             pPalette->mpUnknown8 = pPalette->mpUnknown8 + (int)pFile;
         }
-    } else if (memcmp(pFile, lbl_802B1BCC, 4) == 0) {
+    } else if (memcmp(pFile, "CMMP", 4) == 0) {
         pFile->mpMaterials = (TexFileMaterial_t *)((int)pFile->mpMaterials + (int)pFile);
         pFile->mpTextures = (TexFileImage_t *)((int)pFile->mpTextures + (int)pFile);
         pFile->mpPalettes = (TexFilePalette_t *)((int)pFile->mpPalettes + (int)pFile);
@@ -429,7 +432,7 @@ TexFileImage_t *TexGetTextureByIndex(void *p, unsigned short index)
     TexFileHeader_t *pFile = p;
     TexFileImage_t *pImage;
 
-    if (pFile->mVersion <= 1 && memcmp(pFile, lbl_802B1BCC, 4) != 0) {
+    if (pFile->mVersion <= 1 && memcmp(pFile, "CMMP", 4) != 0) {
         unsigned int i;
 
         pImage = pFile->mpTextures;
@@ -455,7 +458,7 @@ TexFilePalette_t *TexGetPaletteByIndex(void *p, unsigned short index)
     TexFileHeader_t *pFile = p;
     TexFilePalette_t *pPalette = 0;
 
-    if (pFile->mVersion <= 1 && memcmp(pFile, lbl_802B1BCC, 4) != 0) {
+    if (pFile->mVersion <= 1 && memcmp(pFile, "CMMP", 4) != 0) {
         unsigned int i;
         unsigned char *pNext = (unsigned char *)pFile->mpPalettes;
 
@@ -488,7 +491,7 @@ void *TexDecompressTexture(TexFileImage_t *pImage, void *pDst)
         size = pImage->mWidth * pImage->mHeight * 2;
     }
     if (pDst == 0) {
-        pDst = fn_801D2BB0(lbl_803EBEBC, size, 0, 0);
+        pDst = fn_801D2BB0(_Tex_ImageHeap, size, 0, 0);
     }
     if (pImage->mType == 0) {
         memcpy(pDst, pImage->mpUnknownC, size);

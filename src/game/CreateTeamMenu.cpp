@@ -11,15 +11,15 @@ MenuScreen *CreatePlayerGetMenu(void);
 void CreatePlayerSetPoints(int value);
 int LogoIsNew(int a);
 void LogoClearNew(int a);
-void fn_80084180(DbCursor *pObject, int value);
-int fn_800841AC(DbCursor *pObject);
-int fn_800841D8(DbCursor *pObject);
-int fn_80084204(DbCursor *pObject);
-void fn_80084230(DbCursor *pObject, unsigned char value);
-void fn_8008425C(DbCursor *pObject, unsigned char value);
-void fn_80084288(DbCursor *pObject, unsigned char value);
-void fn_800842B4(DbCursor *pObject, char *pText, int length);
-void fn_80084470(DbCursor *pObject, int value);
+void TeamDbSetLogo(DbCursor *pObject, int value);
+int TeamDbGetColor1(DbCursor *pObject);
+int TeamDbGetColor2(DbCursor *pObject);
+int TeamDbGetColor3(DbCursor *pObject);
+void TeamDbSetColor1(DbCursor *pObject, unsigned char value);
+void TeamDbSetColor2(DbCursor *pObject, unsigned char value);
+void TeamDbSetColor3(DbCursor *pObject, unsigned char value);
+void TeamDbSetName(DbCursor *pObject, char *pText, int length);
+void TeamDbSetCtdl(DbCursor *pObject, int value);
 DbCursor *EditMenuGetTeamCursor(void);
 void EditMenuSetHeading(const char *pText);
 void EditMenuSetItemName(const char *pText);
@@ -108,9 +108,9 @@ static void _CreateTeamNameFromLogo()
 {
     char buffer[24];
 
-    LogoListFind(&_CreateTeam_sLogoCursor, fn_80084158(EditMenuGetTeamCursor()), 0);
+    LogoListFind(&_CreateTeam_sLogoCursor, TeamDbGetLogo(EditMenuGetTeamCursor()), 0);
     LogoListGetName(&_CreateTeam_sLogoCursor, buffer, 21);
-    fn_800842B4(EditMenuGetTeamCursor(), buffer, 18);
+    TeamDbSetName(EditMenuGetTeamCursor(), buffer, 18);
     EditMenuSetName(buffer);
 }
 
@@ -122,7 +122,7 @@ void CreateTeamMenu::Enter(int a, int *pCount, int *pValue)
         _CreateTeamOpen();
     }
     MenuListScreen::Enter(a, pCount, pValue);
-    fn_80083F88(EditMenuGetTeamCursor(), buffer, 18);
+    TeamDbGetName(EditMenuGetTeamCursor(), buffer, 18);
     EditMenuSetName(buffer);
     EditMenuSetHeading("");
     EditMenuSetItemName("");
@@ -221,7 +221,7 @@ void CreateTeamOptionList::Enter(int a, int *pCount, int *pValue)
 {
     switch (mUnknown8) {
     case 6:
-        if (fn_80084438(EditMenuGetTeamCursor())) {
+        if (TeamDbGetCtdl(EditMenuGetTeamCursor())) {
             *pValue = 1;
         } else {
             *pValue = 0;
@@ -229,12 +229,12 @@ void CreateTeamOptionList::Enter(int a, int *pCount, int *pValue)
         *pCount = 2;
         break;
     case 1:
-        if (fn_80084438(EditMenuGetTeamCursor())) {
+        if (TeamDbGetCtdl(EditMenuGetTeamCursor())) {
             EditMenuSetItemLogo(-1);
         } else {
             EditMenuSetItemLogo(0);
         }
-        LogoListFind(&_CreateTeam_sLogoCursor, fn_80084158(EditMenuGetTeamCursor()), pValue);
+        LogoListFind(&_CreateTeam_sLogoCursor, TeamDbGetLogo(EditMenuGetTeamCursor()), pValue);
         *pCount = DbCursorGetRowCount(&_CreateTeam_sLogoCursor);
         break;
     case 7:
@@ -252,16 +252,16 @@ int CreateTeamOptionList::Leave(int a, int b, void **ppResult)
         switch (mUnknown8) {
         case 6:
             if (a == 0) {
-                fn_80084470(EditMenuGetTeamCursor(), 0);
+                TeamDbSetCtdl(EditMenuGetTeamCursor(), 0);
             } else {
-                fn_80084470(EditMenuGetTeamCursor(), 1);
+                TeamDbSetCtdl(EditMenuGetTeamCursor(), 1);
             }
             break;
         case 1:
             DbCursorSeek(&_CreateTeam_sLogoCursor, a);
             value = LogoListGetId(&_CreateTeam_sLogoCursor);
             LogoClearNew(value - 45);
-            fn_80084180(EditMenuGetTeamCursor(), value);
+            TeamDbSetLogo(EditMenuGetTeamCursor(), value);
             if (_CreateTeam_bNameFromLogo) {
                 _CreateTeamNameFromLogo();
             }
@@ -271,9 +271,9 @@ int CreateTeamOptionList::Leave(int a, int b, void **ppResult)
             break;
         }
     }
-    value = fn_80084158(EditMenuGetTeamCursor());
+    value = TeamDbGetLogo(EditMenuGetTeamCursor());
     EditMenuSetLogo(4, value);
-    if (fn_80084438(EditMenuGetTeamCursor())) {
+    if (TeamDbGetCtdl(EditMenuGetTeamCursor())) {
         EditMenuSetLogoHandle(-1);
     } else {
         EditMenuSetLogoHandle(0);
@@ -324,15 +324,15 @@ void CreateTeamEditor::GetColor(int a, int *pResult)
 {
     switch (a) {
     case 3:
-        *pResult = fn_800841AC(EditMenuGetTeamCursor());
+        *pResult = TeamDbGetColor1(EditMenuGetTeamCursor());
         EditMenuSetColorPick(0);
         break;
     case 4:
-        *pResult = fn_800841D8(EditMenuGetTeamCursor());
+        *pResult = TeamDbGetColor2(EditMenuGetTeamCursor());
         EditMenuSetColorPick(1);
         break;
     case 5:
-        *pResult = fn_80084204(EditMenuGetTeamCursor());
+        *pResult = TeamDbGetColor3(EditMenuGetTeamCursor());
         EditMenuSetColorPick(2);
         break;
     }
@@ -344,13 +344,13 @@ void CreateTeamEditor::EndColor(int a, int b, int c)
     if (b == 0) {
         switch (a) {
         case 3:
-            fn_80084230(EditMenuGetTeamCursor(), c);
+            TeamDbSetColor1(EditMenuGetTeamCursor(), c);
             break;
         case 4:
-            fn_8008425C(EditMenuGetTeamCursor(), c);
+            TeamDbSetColor2(EditMenuGetTeamCursor(), c);
             break;
         case 5:
-            fn_80084288(EditMenuGetTeamCursor(), c);
+            TeamDbSetColor3(EditMenuGetTeamCursor(), c);
             break;
         }
     }
@@ -362,7 +362,7 @@ void CreateTeamEditor::GetText(int a, int *pResult, MenuArg_t text)
     char buffer[24];
 
     if (a == 2) {
-        fn_80083F88(EditMenuGetTeamCursor(), buffer, 18);
+        TeamDbGetName(EditMenuGetTeamCursor(), buffer, 18);
         strnzcpy(pParams->mpText, buffer, pParams->mLength + 1);
         *pResult = 3;
     }
@@ -374,8 +374,8 @@ void CreateTeamEditor::SetText(int a, MenuArg_t text)
     char buffer[24];
 
     if (a == 2) {
-        fn_800842B4(EditMenuGetTeamCursor(), pParams->mpText, pParams->mLength);
-        fn_80083F88(EditMenuGetTeamCursor(), buffer, 18);
+        TeamDbSetName(EditMenuGetTeamCursor(), pParams->mpText, pParams->mLength);
+        TeamDbGetName(EditMenuGetTeamCursor(), buffer, 18);
         EditMenuSetName(buffer);
         _CreateTeam_bNameFromLogo = 0;
     }

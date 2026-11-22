@@ -20,7 +20,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/SyncStateRegister.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
@@ -142,8 +142,8 @@ void CamGameResumeAll(void);
 CollideSet_t *StatcollGetSet(void);
 int fn_801486A0(void);
 int fn_801650DC(PlayBookPlay_t *pRecord);
-void fn_8016F7F8(void);
-int fn_8016FAD8(float *pOut);
+void ScrmSpotUpdate(void);
+int ScrmSpotGetFirstHit(float *pOut);
 void ClockRuleInit(void);
 void ClockRuleShutdown(void);
 void ClockRuleUpdate(unsigned int value);
@@ -162,7 +162,7 @@ int fn_8022B7A4(int handle, int tag, int *pValue);
 int fn_8022B8C8(int handle, int tag, int value);
 void fn_8022BAB4(int handle, int a, int b, int c);
 void fn_8022BD30(int handle, int a, int b);
-void *fn_8023816C(void *pHandle);
+void *SyncStateGetData(void *pHandle);
 }
 
 extern "C" {
@@ -644,13 +644,13 @@ int Class_802A5630::GetScore(int team)
 extern "C" void fn_801779D8(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EB444, sizeof(ScrmState), 0, 0x73637275);
-    ScrmState *pState = (ScrmState *)fn_8023816C(pHandle);
+    ScrmState *pState = (ScrmState *)SyncStateGetData(pHandle);
 
     int resume = 0;
 
     GameModeTypeGet();
     if (resume) {
-        fn_801FCE10(0, "select 'SRSG' into \x89 from 'NIBG'\n", pState);
+        TDbCompilePerformOp(0, "select 'SRSG' into \x89 from 'NIBG'\n", pState);
     }
     pState->mUnknown08 = 0.0f;
     pState->mUnknown0C.mX = 0.0f;
@@ -659,7 +659,7 @@ extern "C" void fn_801779D8(void)
     if (ChallengeIsActive()) {
         pState->mUnknown3C = ChalGetCurrent()->mUnknown1AC;
         pState->mUnknown3E = ChalGetCurrent()->mUnknown1A8;
-        fn_801FCE10(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n", pState->mUnknown3E, pState->mUnknown3C);
+        TDbCompilePerformOp(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n", pState->mUnknown3E, pState->mUnknown3C);
         pState->mUnknown30 = ChalGetCurrent()->mUnknown1C1;
     } else {
         pState->mUnknown30 = 1;
@@ -690,7 +690,7 @@ extern "C" void fn_801779D8(void)
     pState->mUnknownA4 = 0.0f;
     pState->mUnknownA8 = 0.0f;
     pState->mUnknownAC = 0.0f;
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
     fn_80178F20(0);
     ClockRuleInit();
     fn_80179150();
@@ -712,7 +712,7 @@ extern "C" void fn_80177B7C(int a)
 
 extern "C" void fn_80177BCC(float value)
 {
-    fn_8016F7F8();
+    ScrmSpotUpdate();
     ClockRuleUpdate(value);
     PenaltyCheckPassInterference();
 }
@@ -1847,7 +1847,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                         Object_80039F5C *p = fn_8009BCE8(&receiver);
 
                         fn_80093C3C(1, 5, fn_8009BCE8(&receiver));
-                        ReplayEventAdd(lbl_803EA368, 0x16, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+                        ReplayEventAdd(gpReplay, 0x16, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                         if (!scored) {
                             fn_8017937C(receiver, 0x6B736C67, 1);
                             fn_801794B4(receiver, 0x6B737374, 1);
@@ -2228,7 +2228,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
     case 0x61797567:
         result = 2;
         fn_80179874(id, startY, ballY, sideX);
-        if (fn_8016FAD8(&toGo)) {
+        if (ScrmSpotGetFirstHit(&toGo)) {
             fn_8017937C(id, 0x68797567, (int)(ballY - toGo));
         }
         if (ballY > fn_80178A2C() && mode != 6) {

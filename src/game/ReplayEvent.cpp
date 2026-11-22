@@ -1,7 +1,7 @@
-/* Replay events: the replay object (lbl_803EA368) keeps a list of 60 game
+/* Replay events: the replay object (gpReplay) keeps a list of 60 game
    events (an event id, the elapsed count when it happened, a position, a
    facing value and the player involved). Game code records events here as
-   plays happen, and the replay code in src/game/cu_8002B8F8.cpp asks whether
+   plays happen, and the replay code in src/game/Replay.cpp asks whether
    an event happened inside the recorded window and where. */
 #include "game/ReplayEvent.h"
 
@@ -13,11 +13,11 @@ struct ReplayEventCode_t {
 };
 
 extern "C" {
-int fn_8002D0AC(Type_803EA368 *p);
-int fn_8002D0D0(Type_803EA368 *p);
-int fn_8002D158(Type_803EA368 *p);
+int ReplayIsRecording(Type_803EA368 *p);
+int ReplayGetLength(Type_803EA368 *p);
+int ReplayGetStartFrame(Type_803EA368 *p);
 int fn_8011F1A4(void);
-int fn_8023790C(void);
+int SyncTimeGetGameTime(void);
 }
 
 /* The address of event slot i's position, &p->mEvents[i].mPos. */
@@ -95,7 +95,7 @@ void ReplayEventAdd(Type_803EA368 *p, int id, Object_80039F5C *pObject, Vector_8
         }
         p->mEvents[i].mId = id;
         p->mEvents[i].mpObject = pObject;
-        p->mEvents[i].mUnknown04 = fn_8023790C();
+        p->mEvents[i].mUnknown04 = SyncTimeGetGameTime();
         if (id == 0x34) {
             p->mEvents[i].mUnknown04 -= 6;
         }
@@ -162,13 +162,13 @@ int ReplayEventInWindow(Type_803EA368 *p, int id)
     } else {
         i = ReplayEventFind(p, id);
         if (i < 60) {
-            if (fn_8002D0AC(p)) {
-                result = fn_8002D158(p) <= p->mEvents[i].mUnknown04;
+            if (ReplayIsRecording(p)) {
+                result = ReplayGetStartFrame(p) <= p->mEvents[i].mUnknown04;
             } else {
                 int inside = 0;
 
-                if (fn_8002D158(p) <= p->mEvents[i].mUnknown04) {
-                    inside = fn_8002D158(p) + fn_8002D0D0(p) >= p->mEvents[i].mUnknown04;
+                if (ReplayGetStartFrame(p) <= p->mEvents[i].mUnknown04) {
+                    inside = ReplayGetStartFrame(p) + ReplayGetLength(p) >= p->mEvents[i].mUnknown04;
                 }
                 result = inside;
             }
@@ -180,7 +180,7 @@ int ReplayEventInWindow(Type_803EA368 *p, int id)
 void ReplayEventAddPlayer(Object_80039F5C *p)
 {
     if (fn_8011F1A4() || !p->mUnknown2914) {
-        ReplayEventAdd(lbl_803EA368, 0x13, p, &p->mMotion.mPos, 0);
+        ReplayEventAdd(gpReplay, 0x13, p, &p->mMotion.mPos, 0);
     }
 }
 
@@ -197,7 +197,7 @@ void ReplayEventAddForCode(Object_80039F5C *p, int code)
         i++;
     }
     if (event != 0xFFFF) {
-        ReplayEventAdd(lbl_803EA368, event, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+        ReplayEventAdd(gpReplay, event, p, &p->mMotion.mPos, &p->mMotion.mFacing);
     }
 }
 }

@@ -11,7 +11,7 @@
 #include "game/fn_8009D990.h"
 
 #include "game/SndgPathfinder.h"
-#include "game/cu_8002B8F8.h"
+#include "game/Replay.h"
 #include "game/GameCamera.h"
 #include "game/SndgHandles.h"
 #include "game/Object_8017886C.h"
@@ -25,7 +25,7 @@
 #include "game/ResLoad.h"
 #include "game/fn_801F40F4.h"
 #include "game/LevelSurface.h"
-#include "game/fn_802270D4.h"
+#include "game/Vec3Magnitude.h"
 
 void *operator new(unsigned int size, int unknown);
 
@@ -475,17 +475,17 @@ extern char lbl_802EC000[];
 extern char lbl_802EC00C[];
 
 int abs(int value);
-int fn_8002D060(void *p);
-int fn_8002D0AC(void *p);
-void fn_800300D4(void *pStream, float *pValues, int bits, float scale);
-void fn_80030490(void *pStream, float *pValues, int bits, float scale);
-void fn_80030ACC(void (*write)(void *), void (*read)(void *, void *, void *, void *, float), int size,
+int ReplayIsShowing(void *p);
+int ReplayIsRecording(void *p);
+void ReplayReadPacked2(void *pStream, float *pValues, int bits, float scale);
+void ReplayWritePacked2(void *pStream, float *pValues, int bits, float scale);
+void ReplayRegisterChannel(void (*write)(void *), void (*read)(void *, void *, void *, void *, float), int size,
                  const char *pName);
 int ReplayCursorGetPos(float *pValue);
 void SndgCrowdSetVolume(unsigned char value);
-void fn_8006F850(AudmonEvent_t *pEvent);
-void fn_80070C40(AudmonEvent_t *pEvent);
-void fn_800717E0(Vector_80039F5C *pPos);
+void SndgEventProcess(AudmonEvent_t *pEvent);
+void SndgEventProcessInPlay(AudmonEvent_t *pEvent);
+void SndgEventPlayVariant18(Vector_80039F5C *pPos);
 int SndgEventGetSurfaceHitSfx(int a, int b);
 void SndgMusicUpdate(void);
 void SndgMusicSetVolume(int value);
@@ -552,7 +552,7 @@ int fn_801784C4(void);
 unsigned long long fn_80190F18(void *pStream, int bits);
 void fn_80191068(void *pStream, unsigned long long value, int bits);
 void fn_801B2F18(void (*a)(int, int), void (*b)(int, int), void (*c)(int, int));
-void fn_801B3084(int flags, const char *pName, int value);
+void PATH_setvariable(int flags, const char *pName, int value);
 void *DSNewListNode(void *pool);
 void *DSGetListNode(void *pool, void *item);
 void DSDelListNode(void *pool, void *item);
@@ -593,10 +593,10 @@ int SndAemsLoadBank(void *pData, int b, int c);
 void SndAemsUnloadBank(int handle);
 int SysGetSystemTime(void);
 int Vec3GetAngle(Vector_80039F5C *a, Vector_80039F5C *b);
-int fn_802275D8(Vector_80039F5C *a, Vector_80039F5C *b, float eps);
-void fn_80227690(void *pOut, void *a, void *b);
-float fn_8022785C(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
-unsigned int fn_802372EC(int a, int b);
+int Vec3Equal(Vector_80039F5C *a, Vector_80039F5C *b, float eps);
+void Vec2Sub(void *pOut, void *a, void *b);
+float Vec3Distance(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
+unsigned int SyncRandGetRange(int a, int b);
 void SndgReplayReadEntry(SndgReplaySfx_t *pEntry, void *pStream0, void *pStream1, void *pStream2, void *pStream3,
                  float unknown);
 void SndgAmbAllocObjects(void);
@@ -743,7 +743,7 @@ void SndgSpchSetPlayFlags(int flags);
 void SndgSpchClearPlayFlags(int flags);
 int SndgSpchGetPlayFlags(void);
 
-void fn_80071748(int unknown);
+void SndgEventUpdatePatch(int unknown);
 void SpchIGUpdate(void);
 void SpchIGUpdateFrontEnd(void);
 void OptAudioUpdate(int unknown);
@@ -981,7 +981,7 @@ SndgAramRegion_t gSndgAramRegions[20] = {
     { 18, 0xffd800, 0x1000000 },
     { -1, 0xFFFFFFFF, 0xFFFFFFFF },
 };
-SndgUpdateFn _Sndg_apfnIGUpdate[] = { SndgChannelsUpdate, SndgSituationUpdate, (SndgUpdateFn)SpchIGUpdate, fn_80071748, SndgReplayUpdate, OptAudioUpdate, 0 };
+SndgUpdateFn _Sndg_apfnIGUpdate[] = { SndgChannelsUpdate, SndgSituationUpdate, (SndgUpdateFn)SpchIGUpdate, SndgEventUpdatePatch, SndgReplayUpdate, OptAudioUpdate, 0 };
 
 SndgConfig_t gSndgIGConfig = { 18, 1, _Sndg_aSfxTable, gSndgAramRegions, _Sndg_aIGResources, _Sndg_apfnIGUpdate };
 
@@ -1126,43 +1126,43 @@ extern "C" void SndgAmbStartStadiumTrack(void)
 
     switch (level) {
     case 0:
-        fn_801B3084(0x2000000, "Ambnum", 2);
+        PATH_setvariable(0x2000000, "Ambnum", 2);
         break;
     case 1:
-        fn_801B3084(0x2000000, "Ambnum", 4);
+        PATH_setvariable(0x2000000, "Ambnum", 4);
         break;
     case 3:
-        fn_801B3084(0x2000000, "Ambnum", 6);
+        PATH_setvariable(0x2000000, "Ambnum", 6);
         break;
     case 2:
-        fn_801B3084(0x2000000, "Ambnum", 1);
+        PATH_setvariable(0x2000000, "Ambnum", 1);
         break;
     case 4:
-        fn_801B3084(0x2000000, "Ambnum", 7);
+        PATH_setvariable(0x2000000, "Ambnum", 7);
         break;
     case 9:
-        fn_801B3084(0x2000000, "Ambnum", 3);
+        PATH_setvariable(0x2000000, "Ambnum", 3);
         break;
     case 5:
-        fn_801B3084(0x2000000, "Ambnum", 5);
+        PATH_setvariable(0x2000000, "Ambnum", 5);
         break;
     case 6:
-        fn_801B3084(0x2000000, "Ambnum", 8);
+        PATH_setvariable(0x2000000, "Ambnum", 8);
         break;
     case 7:
-        fn_801B3084(0x2000000, "Ambnum", 9);
+        PATH_setvariable(0x2000000, "Ambnum", 9);
         break;
     case 8:
-        fn_801B3084(0x2000000, "Ambnum", 10);
+        PATH_setvariable(0x2000000, "Ambnum", 10);
         break;
     case 11:
-        fn_801B3084(0x2000000, "Ambnum", 11);
+        PATH_setvariable(0x2000000, "Ambnum", 11);
         break;
     case 10:
-        fn_801B3084(0x2000000, "Ambnum", 12);
+        PATH_setvariable(0x2000000, "Ambnum", 12);
         break;
     default:
-        fn_801B3084(0x2000000, "Ambnum", 1);
+        PATH_setvariable(0x2000000, "Ambnum", 1);
         break;
     }
     _SndgAmb_uTrackLevel = _SndgAmb_aLevelTrackVolume[level];
@@ -1275,7 +1275,7 @@ extern "C" float SndgAmbCameraDistance(Vector_80039F5C *pPos)
         position.mX = -position.mX;
         position.mY = -position.mY;
     }
-    return fn_8022785C(&position, pPos);
+    return Vec3Distance(&position, pPos);
 }
 
 #define MIN(a, b) ((a) <= (b) ? (a) : (b))
@@ -1302,7 +1302,7 @@ extern "C" int SndgAmbType4CalcParams(Sound0 *pEntry, void *pObject, int index, 
     height = position.mZ;
     BallGetLandingPoint((Ball_t *)pObject, &other);
     result = 1;
-    distance = fn_8022785C(&position, &other);
+    distance = Vec3Distance(&position, &other);
     if (init) {
         _SndgAmb_afType4Range[index] = distance;
         if (fn_800A8444(fn_80178308()) == 0) {
@@ -2114,7 +2114,7 @@ extern "C" int SndgSfxPlayVolume(int index, Vector_80039F5C *pPos, unsigned char
     pEntry = &_Sndg_sState.mC[index];
     now = SysGetSystemTime();
     if (SndPatchOver(pEntry->m14) != 0 || (unsigned int)(index - 0x72) <= 30 ||
-        now - pEntry->m10 > fn_802372EC(1, 15) + 10) {
+        now - pEntry->m10 > SyncRandGetRange(1, 15) + 10) {
         SndFillPatchOpts(&params);
         params.mVolume = c;
         SndgChannelSetPatchOpts(pEntry->mD, pPos, &params);
@@ -2179,11 +2179,11 @@ extern "C" void SndgCalcPan(Vector_80039F5C *a, Vector_80039F5C *b, int angle, u
     Vec2 delta;
     int rot;
 
-    fn_80227690(&delta, b, a);
+    Vec2Sub(&delta, b, a);
     rot = (fn_801CFE40(delta.y, delta.x) - angle + 0x400000) & 0xFFFFFF;
     *pOut0 = -(((rot - 0x400000) & 0xFFFFFF) / 256);
 
-    fn_802276B4(&dir, b, a);
+    Vec3Sub(&dir, b, a);
     flat.mX = dir.mX;
     flat.mY = dir.mY;
     flat.mZ = 0.0f;
@@ -2239,8 +2239,8 @@ extern "C" void SndgHandleBallEvent(AudmonEvent_t *p)
     case 0x20: {
         Vector_80039F5C vec;
         BallGetVelocity((Ball_t *)p->mUnknown10.mpObject, &vec);
-        if (fn_802270D4(&vec) > 0.42f) {
-            fn_800717E0(&p->mPos);
+        if (Vec3Magnitude(&vec) > 0.42f) {
+            SndgEventPlayVariant18(&p->mPos);
         }
         SndgAmbObjCreate(4, (unsigned char)p->mUnknown18, &p->mPos, p->mUnknown10.mpObject);
         break;
@@ -2273,14 +2273,14 @@ extern "C" void SndgHandleBallEvent(AudmonEvent_t *p)
 extern "C" void SndgHandleEvent(AudmonEvent_t *p)
 {
     SndgHandleBallEvent(p);
-    fn_8006F850(p);
-    fn_80070C40(p);
+    SndgEventProcess(p);
+    SndgEventProcessInPlay(p);
     SndgSituationHandleEvent(p);
 }
 
 extern "C" void SndgListenerUpdate(SndgListener_t *src)
 {
-    if (fn_8002D060(lbl_803EA368) == 0) {
+    if (ReplayIsShowing(gpReplay) == 0) {
         GameCamera_t *obj = CamGameGetCamera(CamGameGetCurrentSlot());
         int angle;
 
@@ -2311,8 +2311,8 @@ extern "C" void SndgCenterPanNear(Vector_80039F5C *origin, Vector_80039F5C *pos,
     float dist;
     short scale;
 
-    fn_802276B4(&delta, pos, origin);
-    dist = fn_802270D4(&delta);
+    Vec3Sub(&delta, pos, origin);
+    dist = Vec3Magnitude(&delta);
     if (dist < 5.0f) {
         scale = (short)(dist * 51.0f);
         *span = (*span * scale) / 255;
@@ -2433,13 +2433,13 @@ extern "C" unsigned char SndgListenerAttenuate(SndgListener_t *src, Vector_80039
     if (src->mParams) {
         float level = volume;
 
-        if (pos && !fn_802275D8(pos, &_Sndg_vNoPosition, 1e-7f)) {
+        if (pos && !Vec3Equal(pos, &_Sndg_vNoPosition, 1e-7f)) {
             Vector_80039F5C delta;
             float dist;
             SndgFalloff_t *params;
 
-            fn_802276B4(&delta, pos, &src->mOrigin);
-            dist = fn_802270D4(&delta);
+            Vec3Sub(&delta, pos, &src->mOrigin);
+            dist = Vec3Magnitude(&delta);
             params = src->mParams;
             if (dist > params->mDistance && params->mFactor > 0.0f) {
                 float t = (dist + (1.0f - params->mFactor) * (params->mDistance - dist)) / params->mDistance;
@@ -2527,7 +2527,7 @@ extern "C" void SndgChannelUpdatePan(int idx)
         unsigned short pan;
         short span;
 
-        if (!fn_802275D8(&e->mPosition, &_Sndg_vNoPosition, 1e-7f)) {
+        if (!Vec3Equal(&e->mPosition, &_Sndg_vNoPosition, 1e-7f)) {
             SndgCalcPan(&e->mSource.mOrigin, &e->mPosition, e->mSource.mAngle, &pan, &span);
             SndgCenterPanNear(&e->mSource.mOrigin, &e->mPosition, &pan, &span);
         } else {
@@ -2847,7 +2847,7 @@ extern "C" int SndgReplayFindFreeSlot(void)
 {
     unsigned int i;
 
-    if (lbl_803EA368->mUnknownD94 & 0x10000) {
+    if (gpReplay->mUnknownD94 & 0x10000) {
         return 0;
     }
     for (i = 0; i < 128; i++) {
@@ -2884,7 +2884,7 @@ extern "C" void SndgReplayPlayEntry(SndgReplaySfx_t *pEntry)
 extern "C" void SndgReplayWriteEntry(SndgReplaySfx_t *pEntry, void *pStream)
 {
     fn_80191068(pStream, pEntry->mId, 8);
-    fn_80030490(pStream, &pEntry->mPos.mX, 8, 1.0f);
+    ReplayWritePacked2(pStream, &pEntry->mPos.mX, 8, 1.0f);
     fn_80191068(pStream, pEntry->mUnknown12, 8);
     fn_80191068(pStream, pEntry->mFlags, 1);
 }
@@ -2898,23 +2898,23 @@ extern "C" void SndgReplayReadEntry(SndgReplaySfx_t *pEntry, void *pStream0, voi
     pEntry->mId = fn_80190F18(pStream1, 8);
     pPos = &pEntry->mPos;
     pPos->mX = pPos->mY = pPos->mZ = 0.0f;
-    fn_800300D4(pStream1, &pPos->mX, 8, 1.0f);
+    ReplayReadPacked2(pStream1, &pPos->mX, 8, 1.0f);
     pEntry->mUnknown12 = fn_80190F18(pStream1, 8);
     pEntry->mFlags = (unsigned char)fn_80190F18(pStream1, 1);
 
     fn_80190F18(pStream0, 8);
-    fn_800300D4(pStream0, pos, 8, 1.0f);
+    ReplayReadPacked2(pStream0, pos, 8, 1.0f);
     fn_80190F18(pStream0, 8);
     fn_80190F18(pStream0, 1);
     if (pStream2) {
         fn_80190F18(pStream2, 8);
-        fn_800300D4(pStream2, pos, 8, 1.0f);
+        ReplayReadPacked2(pStream2, pos, 8, 1.0f);
         fn_80190F18(pStream2, 8);
         fn_80190F18(pStream2, 1);
     }
     if (pStream3) {
         fn_80190F18(pStream3, 8);
-        fn_800300D4(pStream3, pos, 8, 1.0f);
+        ReplayReadPacked2(pStream3, pos, 8, 1.0f);
         fn_80190F18(pStream3, 8);
         fn_80190F18(pStream3, 1);
     }
@@ -2948,12 +2948,12 @@ extern "C" void SndgReplayReadFrame(void *pStream0, void *pStream1, void *pStrea
     if (pStream3) {
         fn_80190F18(pStream3, 4);
     }
-    frames = lbl_803EA368->mUnknownD74 - lbl_803EA368->mUnknownD70;
+    frames = gpReplay->mUnknownD74 - gpReplay->mUnknownD70;
     half = frames / 2;
     parity = frames % 2;
     for (i = 0; i < 12; i++) {
         SndgReplayReadEntry(&entry, pStream0, pStream1, pStream2, pStream3, unknown);
-        if ((parity != _SndgReplay_iLastFrameParity || half != _SndgReplay_iLastHalfFrame) && i < count && fn_8002D060(lbl_803EA368)) {
+        if ((parity != _SndgReplay_iLastFrameParity || half != _SndgReplay_iLastHalfFrame) && i < count && ReplayIsShowing(gpReplay)) {
             SndgReplayPlayEntry(&entry);
         }
     }
@@ -2989,7 +2989,7 @@ extern "C" void SndgReplayShutdown(void)
 
 extern "C" void SndgReplayRegister(void)
 {
-    fn_80030ACC(SndgReplayWriteFrame, SndgReplayReadFrame, SndgReplayGetFrameSize(), "Sounds");
+    ReplayRegisterChannel(SndgReplayWriteFrame, SndgReplayReadFrame, SndgReplayGetFrameSize(), "Sounds");
 }
 
 extern "C" int SndgReplayGetFrameSize(void)
@@ -2999,7 +2999,7 @@ extern "C" int SndgReplayGetFrameSize(void)
 
 extern "C" void SndgReplayQueueEntry(SndgReplaySfx_t *pEntry)
 {
-    if (fn_8002D0AC(lbl_803EA368) && _SndgReplay_pQueue->mCount < 12) {
+    if (ReplayIsRecording(gpReplay) && _SndgReplay_pQueue->mCount < 12) {
         _SndgReplay_pQueue->mEntries[_SndgReplay_pQueue->mCount] = *pEntry;
         if (fn_801784C4()) {
             _SndgReplay_pQueue->mEntries[_SndgReplay_pQueue->mCount].mPos.mX = -_SndgReplay_pQueue->mEntries[_SndgReplay_pQueue->mCount].mPos.mX;
@@ -3036,11 +3036,11 @@ extern "C" void SndgReplayReset(void)
 
 extern "C" void SndgReplayUpdate(int unknown)
 {
-    Type_803EA368 *p = lbl_803EA368;
+    Type_803EA368 *p = gpReplay;
     int rate;
     unsigned int i;
 
-    if (!fn_8002D060(p)) {
+    if (!ReplayIsShowing(p)) {
         SndgReplayStopAll();
         return;
     }
@@ -3233,7 +3233,7 @@ extern "C" void SndgSpchHandleEvent(AudmonEvent_t *pEvent)
                 case 0x65:
                     SpchIGSetStruggleCarrier(pEvent->mUnknown10.mValue);
                     SpchIGSetStruggleTackler(pEvent->mUnknown14);
-                    if (fn_802372EC(1, 2)) {
+                    if (SyncRandGetRange(1, 2)) {
                         SpchIGSayStruggleCarrier();
                     } else {
                         SpchIGSayStruggleTackler();

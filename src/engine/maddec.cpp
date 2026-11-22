@@ -28,7 +28,6 @@ static int madchroma[2][64];
 static unsigned char clipbiastbl[512];
 int idctinput[64];
 
-#if defined(DECOMP_COMPARE)
 static const MadCode_t encodetbl1[95] = {
     {2, 65024, 0, 0x8000},
     {3, 1, 0, 0xC000},
@@ -257,7 +256,6 @@ static const MadCode_t encodetbl2[128] = {
     {9, 31745, 0, 0x1B00},
     {9, 32767, 0, 0x1B80},
 };
-#endif
 
 static const int quanttbl[64] = {
     8, 16, 19, 22, 26, 27, 29, 34,
@@ -283,7 +281,6 @@ int idctprescale[64] = {
 
 void madinit(void);
 
-#if defined(DECOMP_COMPARE)
 void madinit(void)
 {
     int i;
@@ -368,7 +365,6 @@ void madinit(void)
     }
     initflag = 1;
 }
-#endif
 
 void maddiscardbits(int count)
 {

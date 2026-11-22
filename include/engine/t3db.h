@@ -1,7 +1,7 @@
 #ifndef ENGINE_T3DB_H
 #define ENGINE_T3DB_H
 
-#include "engine/fn_801F8D60.h"
+#include "engine/TDbCreate.h"
 #include "engine/t3db_index.h"
 
 #define TDB_COLUMN_ROW 0xFE
@@ -276,9 +276,9 @@ extern void (*_tDbMemAllocInfoCallback)(TDbMemEvent_t *pEvent);
 extern unsigned int crc32_table[256];
 extern TDbMemPool_t lbl_803E9654;
 extern TDbMemPool_t _tDbIndexPool;
-extern int (*lbl_803EBE74)(const char *a, const char *b, int size);
+extern int (*TDbStrncmp)(const char *a, const char *b, int size);
 extern void *_tDbGlobalMemoryHeapID;
-extern TDbQuery_t *lbl_803EBE90;
+extern TDbQuery_t *_tDbQueries;
 
 void _TDbIOInitCRCTable(void);
 int _TDbIOWriteBuffer(TDbIOStream_t *pStream, void *pData, unsigned int size);
@@ -312,21 +312,21 @@ int _TDbExprPrepare(TDbExpr_t *pSrc, TDbExpr_t **ppDst, TDbTable_t **ppTables, i
                 int flags);
 void _TDbExprFree(TDbExpr_t *pExpr);
 int _TDbExprFindTableCol(TDbExpr_t *pExpr, unsigned long long column);
-void fn_80205C44(TDbTable_t *pTable, int row);
-void fn_8020651C(TDbTable_t *pTable, int row);
-void fn_80206668(TDbIndex_t *pIndex, TDbIdxNode_t *pOld, TDbIdxNode_t *pNew);
-unsigned int fn_80206708(TDbIndex_t *pIndex, TDbStmt_80205754 *pStmt, unsigned int table, int column,
+void _TDbQryQIdxRowDelete(TDbTable_t *pTable, int row);
+void _TDbQryQueryDeleteFix(TDbTable_t *pTable, int row);
+void _TDbQryQueryDeleteFixEx(TDbIndex_t *pIndex, TDbIdxNode_t *pOld, TDbIdxNode_t *pNew);
+unsigned int _TDbQryScoreIndexComplex(TDbIndex_t *pIndex, TDbStmt_80205754 *pStmt, unsigned int table, int column,
                          TDbExpr_t *pExpr);
-unsigned int fn_802067D4(TDbIndex_t *pIndex, TDbExpr_t *pExpr, TDbIdxColumnDef_t *pCols,
+unsigned int _TDbQryScoreIndex(TDbIndex_t *pIndex, TDbExpr_t *pExpr, TDbIdxColumnDef_t *pCols,
                          TDbExpr_t **ppSeek);
-int fn_802069BC(TDbTable_t *pTable, TDbIdxColumnDef_t *pCols, TDbExpr_t *pFilter,
+int _TDbQryCreateTIdx(TDbTable_t *pTable, TDbIdxColumnDef_t *pCols, TDbExpr_t *pFilter,
                 TDbIndex_t **ppIndex);
-void fn_80206C9C(TDbQIdx_80205880 *pQIdx, TDbIdxNode_t **ppNode);
-void fn_80206E4C(TDbQIdx_80205880 *pQIdx);
-int fn_802075F4(TDbStmt_80205754 *pStmt, unsigned int t);
-int fn_80207988(TDbStmt_80205754 *pStmt, unsigned int t);
-void fn_80207DB4(TDbStmt_80205754 *pStmt);
-int fn_80208094(TDbStmt_80205754 *pStmt);
+void _TDbQryCreateQIdxKey(TDbQIdx_80205880 *pQIdx, TDbIdxNode_t **ppNode);
+void _TDbQryFreeQIdx(TDbQIdx_80205880 *pQIdx);
+int _TDbQrySyncStart(TDbStmt_80205754 *pStmt, unsigned int t);
+int _TDbQrySyncSkip(TDbStmt_80205754 *pStmt, unsigned int t);
+void _TDbQryPrepFree(TDbStmt_80205754 *pStmt);
+int _TDbQryPrepComplex(TDbStmt_80205754 *pStmt);
 unsigned char _TDbTblResolveColRef(TDbTable_t *pTable, int id);
 int TDbExtMemAlloc(void *pHeap, int size, void *ppMem);
 void TDbExtMemFree(void *pHeap, void *pMem, int size);

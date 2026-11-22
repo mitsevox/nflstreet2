@@ -2,11 +2,11 @@
 
 #include <dolphin/os.h>
 
-extern int lbl_803EC590;
-extern OSCond lbl_803ED4BC;
+static int _GBAFan_iState = 0;
+static OSCond _GBAFan_ServiceCond;
 
 void GBAFanServiceLink(void)
 {
-    if (lbl_803EC590 != 0)
-        OSSignalCond(&lbl_803ED4BC);
+    if (_GBAFan_iState != 0)
+        OSSignalCond(&_GBAFan_ServiceCond);
 }

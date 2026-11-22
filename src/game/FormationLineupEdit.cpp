@@ -1,7 +1,7 @@
 /* Formation lineup editing: deletes, stores and swaps the user's per-formation lineups, copies a
    team's lineups between the user and base tables when the depth chart is committed or cancelled,
    refills them from one list, remaps player ids for two teams and clears both tables. */
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/DepthChartSide.h"
 
 extern "C" {
@@ -18,13 +18,13 @@ int FormationLineupCommitTeam(int team);
 
 int FormationLineupDeleteUser(int formation, int team)
 {
-    return fn_801FCE10(0, "use 'EMAG' delete from 'ULMF' where ( 'NMRF' = \x85 and 'DIGT' = \x82 )\n", formation, team) == 0;
+    return TDbCompilePerformOp(0, "use 'EMAG' delete from 'ULMF' where ( 'NMRF' = \x85 and 'DIGT' = \x82 )\n", formation, team) == 0;
 }
 
 int FormationLineupStoreUser(int formation, int team, int *pValues)
 {
     FormationLineupDeleteUser(formation, team);
-    return fn_801FCE10(0, "use 'EMAG' insert into 'ULMF' set 'NMRF' = \x85 and 'DIGT' = \x82 and 'ZBQF' = \x85 and 'ZBRF' = \x85 and 'FRWF' = \x85 and 'BRWF' = \x85 and 'LLOF' = \x85 and 'CLOF' = \x85 and 'RLOF' = \x85 and 'LLDF' = \x85 and 'RLDF' = \x85 and 'FBLF' = \x85 and 'BBLF' = \x85 and 'LBDF' = \x85 and 'CBDF' = \x85 and 'RBDF' = \x85\n", formation, team,
+    return TDbCompilePerformOp(0, "use 'EMAG' insert into 'ULMF' set 'NMRF' = \x85 and 'DIGT' = \x82 and 'ZBQF' = \x85 and 'ZBRF' = \x85 and 'FRWF' = \x85 and 'BRWF' = \x85 and 'LLOF' = \x85 and 'CLOF' = \x85 and 'RLOF' = \x85 and 'LLDF' = \x85 and 'RLDF' = \x85 and 'FBLF' = \x85 and 'BBLF' = \x85 and 'LBDF' = \x85 and 'CBDF' = \x85 and 'RBDF' = \x85\n", formation, team,
                       pValues[0], pValues[1], pValues[2], pValues[3],
                       pValues[4], pValues[5], pValues[6], pValues[7],
                       pValues[8], pValues[9], pValues[10], pValues[11],
@@ -58,17 +58,17 @@ int FormationLineupSwapAllUser(int a, int team, int first, int second)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'OFLP' into \x85 from 'ILMF' where 'FOSI' = \x83 and 'DIBP' = \x85 order by 'OFLP' asc\n", &cursor, &formation, a, mode);
+    TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'OFLP' into \x85 from 'ILMF' where 'FOSI' = \x83 and 'DIBP' = \x85 order by 'OFLP' asc\n", &cursor, &formation, a, mode);
     int success = 1;
     int status = 0;
     for (int index = 0; status == 0; index++) {
         cursor.mUnknown4 = index;
-        status = fn_801FCE10(0, "fetch from \x8a\n", &cursor);
+        status = TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
         if (status == 0) {
             success = success && FormationLineupSwapUser(formation, team, first, second);
         }
     }
-    if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+    if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);
     return success;
 }
 
@@ -117,19 +117,19 @@ void FormationLineupRemapTeams(int firstTeam, DepthChartSide_t *pFirst, int seco
 
 int FormationLineupCommitTeam(int team)
 {
-    fn_801FCE10(0, "use 'EMAG' delete from 'BLMF' where ( 'DIGT' = \x85 )\n", team);
-    return fn_801FCE10(0, "use 'EMAG' insert into 'BLMF' * select * from 'ULMF' where ( 'DIGT' = \x85 )\n", team);
+    TDbCompilePerformOp(0, "use 'EMAG' delete from 'BLMF' where ( 'DIGT' = \x85 )\n", team);
+    return TDbCompilePerformOp(0, "use 'EMAG' insert into 'BLMF' * select * from 'ULMF' where ( 'DIGT' = \x85 )\n", team);
 }
 
 int FormationLineupRevertTeam(int team)
 {
-    fn_801FCE10(0, "use 'EMAG' delete from 'ULMF' where ( 'DIGT' = \x85 )\n", team);
-    return fn_801FCE10(0, "use 'EMAG' insert into 'ULMF' * select * from 'BLMF' where ( 'DIGT' = \x85 )\n", team);
+    TDbCompilePerformOp(0, "use 'EMAG' delete from 'ULMF' where ( 'DIGT' = \x85 )\n", team);
+    return TDbCompilePerformOp(0, "use 'EMAG' insert into 'ULMF' * select * from 'BLMF' where ( 'DIGT' = \x85 )\n", team);
 }
 
 int FormationLineupFillTeam(int team, int *pValues)
 {
-    fn_801FCE10(0, "use 'EMAG' delete from 'ULMF' where ( 'DIGT' = \x85 )\n", team);
+    TDbCompilePerformOp(0, "use 'EMAG' delete from 'ULMF' where ( 'DIGT' = \x85 )\n", team);
     int count = FormationCountForPlaybook(0);
     for (int i = 0; i < count; i++) {
         FormationLineupStoreUser(FormationGetByIndex(i, 0), team, pValues);

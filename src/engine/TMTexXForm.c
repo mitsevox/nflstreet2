@@ -4,7 +4,8 @@
 
 extern int stricmp(const char *pA, const char *pB);
 
-extern TMTexXformDef_t *lbl_803EBF18;
+/* The transform table TMTexXformFind searches; nothing in this build sets it. */
+static TMTexXformDef_t *_TMTexXform_pDef = 0;
 
 void TMTexXformRelocateChunk(TMTexXformDef_t *pDef, void *pOldBase, void *pNewBase)
 {
@@ -19,7 +20,7 @@ void TMTexXformRelocateChunk(TMTexXformDef_t *pDef, void *pOldBase, void *pNewBa
 
 int TMTexXformFind(const char *pName)
 {
-    TMTexXformDef_t *pDef = lbl_803EBF18;
+    TMTexXformDef_t *pDef = _TMTexXform_pDef;
     TMTexXformEntry_t *pEntries;
     unsigned int i;
 

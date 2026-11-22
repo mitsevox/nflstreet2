@@ -11,9 +11,9 @@ extern "C" {
 int GlibGetTvMode(void);
 void FileDebugProcess(void);
 void SndService(void);
-void *fn_801F73D4(void *pStream);
-void fn_801F74D4(void *pStream, void *pHeader);
-int fn_801F7644(void *pStream);
+void *STREAM_get(void *pStream);
+void STREAM_release(void *pStream, void *pHeader);
+int STREAM_isendofstream(void *pStream);
 int SndEnabled(void);
 void SNDplaysetdef(void *pConfig);
 int SNDSTRM_overheadtap(int a, int b);
@@ -55,8 +55,8 @@ void _MovieRcmpProcessAudio(MovieRcmpAudioInfo_t *pAudio)
         if (pAudio->mHandle >= 0) {
             SndService();
         } else {
-            while ((pHeader = fn_801F73D4(pAudio->mpStream)) != 0) {
-                fn_801F74D4(pAudio->mpStream, pHeader);
+            while ((pHeader = STREAM_get(pAudio->mpStream)) != 0) {
+                STREAM_release(pAudio->mpStream, pHeader);
             }
         }
     }
@@ -77,7 +77,7 @@ void _MovieRcmpGetChunk(RcmpDecoder *pDecoder, MovieRcmpInfo_t **ppStreamer, Rcm
 
     *ppChunk = 0;
     do {
-        pHeader = (unsigned char *)fn_801F73D4(pStream);
+        pHeader = (unsigned char *)STREAM_get(pStream);
         if (MovieRcmpHandleChunk(pInfo, pHeader) == 0) {
             return;
         }
@@ -132,14 +132,14 @@ void _MovieRcmpGetChunk(RcmpDecoder *pDecoder, MovieRcmpInfo_t **ppStreamer, Rcm
                 }
                 return;
             }
-            fn_801F74D4(pStream, pHeader);
+            STREAM_release(pStream, pHeader);
         }
-    } while (fn_801F7644(pStream) == 0);
+    } while (STREAM_isendofstream(pStream) == 0);
 }
 
 void _MovieRcmpReleaseChunk(RcmpDecoder *pDecoder, MovieRcmpInfo_t **ppStreamer, RcmpChunk_t *pChunk)
 {
-    fn_801F74D4((*ppStreamer)->mpVideo->mpStream, pChunk->mpHeader);
+    STREAM_release((*ppStreamer)->mpVideo->mpStream, pChunk->mpHeader);
     if (pChunk != 0) {
         lbl_80399100.mFree(pChunk);
     }

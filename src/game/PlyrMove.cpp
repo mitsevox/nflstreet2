@@ -34,7 +34,7 @@ int fn_80178308(void);
 float fn_801CFB18(int angle);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
-void fn_80227690(void *pOut, void *pA, void *pB);
+void Vec2Sub(void *pOut, void *pA, void *pB);
 }
 
 static unsigned short _PlyrMove_uHoldFrames = 30;
@@ -151,7 +151,7 @@ void PlyrMovePickSideType(Object_80039F5C *p)
         if (pOther && distance < 2.0f && !(pOther->mFlags & 0x800) && fn_8011E9B4(pOther)) {
             int angle;
 
-            fn_80227690(delta, &pOther->mMotion, &p->mMotion);
+            Vec2Sub(delta, &pOther->mMotion, &p->mMotion);
             angle = fn_801CFE40(delta[1], delta[0]);
             if (distance < 2.0f - MathAngleDiff(angle, p->mMotion.mFacing) / 3495253.0f &&
                 fn_80124714(p, pOther, 0)) {

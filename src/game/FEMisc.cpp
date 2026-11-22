@@ -12,10 +12,10 @@ static char _FEMisc_szHelpText[81] = "";
 
 extern "C" {
 
-int fn_80061C44(void);
-int fn_80061CAC(void);
-int fn_8005F910(void);
-int fn_8005F938(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int StoryTournamentIsActive(void);
+int StoryTournamentIsComplete(void);
+int StoryEventsIsNewStory(void);
+int StoryEventsHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int UserProfileFindIndex(int a);
 int GauntletGetCurrentTeam(int a);
 void GauntletStatsOpen(DbCursor *pObject, int a);
@@ -24,8 +24,8 @@ int GauntletStatsGet(DbCursor *pObject, int index);
 void EditMenuBegin(int mode, int value);
 int EditMenuIsOpen(void);
 int EditMenuGetMode(void);
-int fn_8022F384(int a);
-int fn_8022F4BC(void);
+int DbUserFindIndex(int a);
+int DbUserGetCurrent(void);
 
 /* Posts message 0x80000006 with the text when it differs from the last
    text posted. */
@@ -47,7 +47,7 @@ void FEMiscSetHelpText(const char *pText)
 
 int FEMiscIsTeamUnset(void)
 {
-    return GauntletGetCurrentTeam(UserProfileFindIndex(fn_8022F4BC())) == 0x3FF;
+    return GauntletGetCurrentTeam(UserProfileFindIndex(DbUserGetCurrent())) == 0x3FF;
 }
 
 /* Reads sixteen values of the current entry; element 6 is the sum of
@@ -57,7 +57,7 @@ void FEMiscGetStats(int *pValues)
     DbCursor object;
     int total;
 
-    GauntletStatsOpen(&object, (signed char)fn_8022F384(fn_8022F4BC()));
+    GauntletStatsOpen(&object, (signed char)DbUserFindIndex(DbUserGetCurrent()));
     pValues[0] = GauntletStatsGet(&object, 0);
     pValues[1] = GauntletStatsGet(&object, 1);
     pValues[2] = GauntletStatsGet(&object, 14);
@@ -99,7 +99,7 @@ int FEMiscHandleFunction(unsigned int id, MenuArg_t *pArgs, int unused, int *pRe
 {
     switch (id) {
     case 0x173:
-        if (fn_8005F910()) {
+        if (StoryEventsIsNewStory()) {
             *pResult = 1;
             if (!EditMenuIsOpen()) {
                 EditMenuBegin(3, 0x3FF);
@@ -111,14 +111,14 @@ int FEMiscHandleFunction(unsigned int id, MenuArg_t *pArgs, int unused, int *pRe
         }
         break;
     case 0x148:
-        if (fn_80061C44()) {
+        if (StoryTournamentIsActive()) {
             *pResult = 1;
         } else {
             *pResult = 0;
         }
         break;
     case 0x14E:
-        if (fn_80061CAC()) {
+        if (StoryTournamentIsComplete()) {
             *pResult = 1;
         } else {
             *pResult = 0;
@@ -126,7 +126,7 @@ int FEMiscHandleFunction(unsigned int id, MenuArg_t *pArgs, int unused, int *pRe
         break;
     case 0x146:
     case 0x16E:
-        fn_8005F938(id, pArgs, unused, pResult);
+        StoryEventsHandleMessage(id, pArgs, unused, pResult);
         break;
     default:
         return 0;

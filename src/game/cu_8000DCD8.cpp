@@ -247,7 +247,7 @@ void EditMenuSetName(char *pText);
 void EditMenuSetView(int a);
 void EditMenuShowPlayers(void);
 void EditMenuHidePlayers(void);
-int fn_8022F4BC(void);
+int DbUserGetCurrent(void);
 }
 
 static const int lbl_8000F590[] = {
@@ -282,8 +282,8 @@ static const PlayerLayout_t lbl_8000F5EC[] = {
 
 static int lbl_803EB948 = -1;
 static int lbl_803EB94C = 0;
-static int lbl_803ECE30;
-static int lbl_803ECE34;
+static int _Appear_iSavedHairStyle;
+static int _Appear_iLastItem;
 static Record_8036AD78 lbl_8036AD78;
 
 static void fn_8000E70C();
@@ -345,7 +345,7 @@ void Class_8000F500::GetItem(int id, MenuEntry_t *pOut)
 
         pOut->mUnknown40 = 0;
         fn_8008731C(mUnknown8, id, &item, &price, pOut->mName, 22);
-        if (!fn_8008736C(mUnknown8, item) || UserInfoGetPoints(fn_8022F4BC()) < price) {
+        if (!fn_8008736C(mUnknown8, item) || UserInfoGetPoints(DbUserGetCurrent()) < price) {
             pOut->mUnknown30 = 0;
         } else {
             pOut->mUnknown30 = 1;
@@ -396,7 +396,7 @@ void Class_8000F540::Enter(int a, int *pCount, int *pOut)
         FEPlyrLoadSetScaleRamp(0);
     }
     *pCount = 7;
-    *pOut = lbl_803ECE34;
+    *pOut = _Appear_iLastItem;
 }
 
 void Class_8000F540::GetItem(int id, MenuEntry_t *pOut)
@@ -462,7 +462,7 @@ int Class_8000F540::Leave(int a, int b, void **pOut)
 
         switch (a) {
         case 0:
-            lbl_803ECE34 = a;
+            _Appear_iLastItem = a;
             pItems = fn_8000ED34();
             result = 1;
             *pOut = pItems;
@@ -470,7 +470,7 @@ int Class_8000F540::Leave(int a, int b, void **pOut)
             fn_8000EC44()->mUnknown4 = 22;
             break;
         case 1:
-            lbl_803ECE34 = a;
+            _Appear_iLastItem = a;
             pItems = fn_8000ED34();
             result = 1;
             *pOut = pItems;
@@ -478,27 +478,27 @@ int Class_8000F540::Leave(int a, int b, void **pOut)
             fn_8000EC44()->mUnknown4 = 18;
             break;
         case 2:
-            lbl_803ECE34 = 2;
+            _Appear_iLastItem = 2;
             result = 1;
             *pOut = fn_8000ED64();
             break;
         case 4:
-            lbl_803ECE34 = 4;
+            _Appear_iLastItem = 4;
             result = 1;
             *pOut = fn_8000ED8C();
             break;
         case 5:
-            lbl_803ECE34 = a;
+            _Appear_iLastItem = a;
             result = 1;
             *pOut = fn_8000EDB4();
             break;
         case 6:
-            lbl_803ECE34 = a;
+            _Appear_iLastItem = a;
             result = 1;
             *pOut = fn_8000EDDC();
             break;
         case 3:
-            lbl_803ECE34 = a;
+            _Appear_iLastItem = a;
             result = 1;
             *pOut = fn_8000EE04();
             break;
@@ -741,7 +741,7 @@ static void fn_8000E784(Record_8036AD78 *pOut)
     pOut->mUnknown0[11] = record.mValues[11];
     pOut->mUnknown0[12] = record.mValues[12];
     pOut->mUnknown0[13] = record.mValues[13];
-    lbl_803ECE30 = PlayerDbGetHairStyle(EditMenuGetPlayerCursor());
+    _Appear_iSavedHairStyle = PlayerDbGetHairStyle(EditMenuGetPlayerCursor());
 }
 
 static void fn_8000E834(Record_8036AD78 *pRecord)
@@ -752,8 +752,8 @@ static void fn_8000E834(Record_8036AD78 *pRecord)
     for (i = 0; i <= 13; i++) {
         FEPlyrSetPairSlot(i, pRecord->mUnknown0[i]);
     }
-    PlayerLookSetHair(0, lbl_803ECE30);
-    PlayerLookSetHair(1, lbl_803ECE30);
+    PlayerLookSetHair(0, _Appear_iSavedHairStyle);
+    PlayerLookSetHair(1, _Appear_iSavedHairStyle);
     for (i = 0; i <= 2; i++) {
         PlayerLookSetPartVariant(0, i, 0);
         PlayerLookSetPartVariant(1, i, 0);
@@ -826,22 +826,22 @@ static void fn_8000E8FC(int index, int value)
     FEPlyrRequestSwap();
 }
 
-Class_8000F540 *fn_8000EB3C()
+extern "C" Class_8000F540 *fn_8000EB3C()
 {
     return fn_8000EE2C();
 }
 
-unsigned int fn_8000EB5C()
+extern "C" unsigned int fn_8000EB5C()
 {
-    return UserInfoGetPoints(fn_8022F4BC());
+    return UserInfoGetPoints(DbUserGetCurrent());
 }
 
-int fn_8000EB80()
+extern "C" int fn_8000EB80()
 {
     return fn_8000EC44()->mUnknown0;
 }
 
-void fn_8000EBA4(int id)
+extern "C" void fn_8000EBA4(int id)
 {
     int item;
     int price;
@@ -850,15 +850,15 @@ void fn_8000EBA4(int id)
     fn_8008731C(fn_8000EC44()->mUnknown4, id, &item, &price, buffer, 8);
     fn_8000EC44()->mUnknown8 = 1;
     fn_80087600(fn_8000EC44()->mUnknown4, item);
-    UserInfoSpendPoints(fn_8022F4BC(), price);
+    UserInfoSpendPoints(DbUserGetCurrent(), price);
 }
 
-unsigned char fn_8000EC14()
+extern "C" unsigned char fn_8000EC14()
 {
     return fn_8000EC44()->mUnknown8;
 }
 
-int fn_8000EC38()
+extern "C" int fn_8000EC38()
 {
     return lbl_803EB948 | 0x40000;
 }

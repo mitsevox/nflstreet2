@@ -1,27 +1,33 @@
 /* Partial source for model, level-of-detail and render wrappers over the TM renderer, not yet cut into their files. */
 
-#include "engine/fn_801F8D60.h"
+#include "engine/TDbCreate.h"
 #include "engine/tdbext.h"
 #include "engine/dbutil.h"
-#include "engine/fn_801F9134.h"
+#include "engine/TDbLoad.h"
 
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXTev.h>
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
-#include <string.h>
-#include "engine/Funcs_802FB3BC.h"
-#include "game/fn_8022F478.h"
+#include <stddef.h>
+
+/* The fill routine is declared with an unsigned long size, as src/engine/PJoyDrvr.c does: the
+   type differs from GCC's built-in memset, so constant clears stay ordinary calls (no crclr). */
+void *memcpy(void *dest, const void *src, size_t num);
+void *memset(void *dest, int ch, unsigned long count);
+int strcmp(const char *s1, const char *s2);
+#include "engine/DbNiomModeFuncs.h"
+#include "game/DbUserSetCurrent.h"
 #include "game/fn_80233CBC.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "engine/texfile.h"
 #include "game/Object_80233EAC.h"
 #include "game/Object_80235588.h"
 #include "game/QueryStatus.h"
 
-#include "engine/Entry_802FB300.h"
+#include "engine/DbUserEntry.h"
 
-#include "engine/Handlers_802294D8.h"
+#include "engine/DbNiomHandlers.h"
 #include "game/Request_802329F0.h"
 
 typedef struct Block_80233588 {
@@ -30,9 +36,8 @@ typedef struct Block_80233588 {
     int mUnknown8;
 } Block_80233588;
 
-extern Handlers_802294D8 lbl_802FB38C;
-int fn_80233588(Block_80233588 *p);
-int fn_802336BC(void);
+int DbManagerCreateGameDb(Block_80233588 *p);
+int DbManagerInitHook(void);
 
 typedef struct Block_802336C4 {
     void *mpUnknown0;
@@ -130,6 +135,34 @@ typedef struct Array_8023491C {
     float *mpUnknown4;
     int mUnknown8;
 } Array_8023491C;
+
+/* 16-byte bone record of the skeleton 0x802338D4 walks: position, then the parent index. */
+typedef struct Bone_802338D4 {
+    float mPos[3];
+    short mParent;
+    short mUnknown14;
+} Bone_802338D4;
+
+typedef struct Skeleton_802338D4 {
+    char mUnknown0[6];
+    unsigned short mNumBones;
+    char mUnknown8[8];
+    Bone_802338D4 mBones[1];
+} Skeleton_802338D4;
+
+/* Pose block of 0x802338D4 (AnimPose_t's +0x30 angle triples and +0x34 matrices). */
+typedef struct Pose_802338D4 {
+    char mUnknown0[48];
+    short *mpAngles;
+    Mtx44 *mpMatrices;
+} Pose_802338D4;
+
+/* 0x90-byte block cleared by 0x802349CC; three floats at +0x80 start at 1. */
+typedef struct Block_802349CC {
+    char mUnknown0[128];
+    float mScale[3];
+    char mUnknown140[4];
+} Block_802349CC;
 
 typedef struct Part_80234A30 {
     int mUnknown0;
@@ -239,22 +272,20 @@ extern char lbl_802B7128[];
 extern char lbl_802B7130[];
 extern char lbl_802B7154[];
 extern char lbl_802B715C[];
-extern Entry_802FB300 lbl_802FB300[];
+extern const float lbl_802B7168[];
+extern const float lbl_802B7170[];
+extern DbUserEntry_t _DbUser_aEntries[];
 extern Entry_802FB310 lbl_802FB310[];
-extern int lbl_802FB398[];
-extern int lbl_802FB3A4[];
-extern int lbl_802FB3B0[];
-extern Funcs_802FB3BC lbl_802FB3BC;
-extern Funcs_802FB3BC lbl_802FB3D0;
-extern Funcs_802FB3BC lbl_802FB3E4;
-extern int lbl_802FB3F8[];
+extern unsigned int lbl_802FB3F8[];
+extern Box_80234070 lbl_802FB418;
+extern unsigned int lbl_803A2628[8];
 extern void *lbl_803A2648[];
 extern Table_803E96E8 lbl_803E96E8;
-extern int lbl_803EC0C8;
-extern char *lbl_803EC0CC;
-extern int lbl_803EC0D0;
-extern int lbl_803EC0D4;
-extern unsigned char lbl_803EC0D8;
+extern int _DbUser_iSize;
+extern char *_DbUser_pFileName;
+extern int _DbUser_iMode;
+extern int _DbUser_iCurrent;
+extern unsigned char _DbUser_iCount;
 extern Cache_8022F8A8 *lbl_803EC0E0;
 extern int lbl_803EC0E4;
 extern int lbl_803EC0E8;
@@ -262,7 +293,7 @@ extern int lbl_803EC0F0;
 extern void *lbl_803EC0F4;
 extern int lbl_803ED020;
 extern int lbl_803ED024;
-extern const int lbl_803ED6E4[2];
+extern const int _DbUser_aDbIds[2];
 
 double fabs(double);
 
@@ -278,15 +309,15 @@ extern int ResLoad(void *pData, int index, int a);
 extern int ResCopyToBuffer(void *pArchive, int id, void *pDest);
 extern int ResUnLoad(void *pData, int index);
 extern int ResIsLoaded(void *pData, int index);
-extern int fn_801F9014(int handle);
-extern int fn_801F91AC(int handle, int a, int b);
-extern int fn_801F9430(int a, int *pTable4, int *pTable8);
-extern int fn_801F9574(void);
-extern int fn_801F9980(int handle, int *pTable);
-extern int fn_801F9A90(int handle, int table);
-extern int fn_801F9D0C(int handle, int table, int a);
-extern int fn_801FA68C(void *pCallback, int tag);
-extern int fn_801FA740(int tag);
+extern int TDbExists(int handle);
+extern int TDbSave(int handle, int a, int b);
+extern int TDbTblDefaultDbPush(int a, int *pTable4, int *pTable8);
+extern int TDbTblDefaultDbPop(void);
+extern int TDbTblFindUnusedId(int handle, int *pTable);
+extern int TDbTblExists(int handle, int table);
+extern int TDbTblInfoSetPersistent(int handle, int table, int a);
+extern int TDbRegisterHandler(void *pCallback, int tag);
+extern int TDbUnregisterHandler(int tag);
 extern void LLTexCopyFlush(void *pDst, void *pSrc, unsigned int size);
 extern void TMModelResRelocate(void *p);
 extern void *TMModelResGetChunk(void *p, unsigned int tag, void *pOut);
@@ -334,16 +365,16 @@ extern void TMBlendBindModel(void *p);
 extern void TMBlendGeomAll(void);
 extern Range_80216190 *TMSwapGetState(Group_803E96E8 *pGroup, int a, int key);
 extern int TMSwapGetGeomRefs(List_80233BE4 *pList, short *pOut, unsigned int index, int value);
-extern int fn_802293A8(void);
-extern void fn_802293B0(void);
-extern int fn_8022942C(void);
-extern void fn_80229434(void);
-extern int fn_80229554(void);
-extern int fn_802296B4(int a, int b);
-extern void fn_80229718(Funcs_802FB3BC *pFuncs);
-extern void fn_80229744(void);
-extern int fn_80229760(void **ppData, void *p);
-extern int fn_80229788(int a, int b);
+extern int DbOcmtModuleInit(void);
+extern void DbOcmtModuleShutdown(void);
+extern int DbOptionsModuleInit(void);
+extern void DbOptionsModuleShutdown(void);
+extern int DbNiomEndMode(void);
+extern int DbNiomReadOnce(int a, int b);
+extern void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs);
+extern void DbNiomClearModeFuncs(void);
+extern int DbNiomModeLoad(void **ppData, void *p);
+extern int DbNiomModeReset(int a, int b);
 extern int fn_802299FC(void);
 extern int fn_80229A70(void);
 extern int fn_80229E88(void);
@@ -363,31 +394,33 @@ extern void fn_8022DB08(void);
 extern int fn_8022DB20(void);
 extern int fn_8022DBF4(int a);
 extern int fn_8022DC38(int a);
-extern int fn_8022E28C(int a, int b, unsigned char *p, int *pA, int *pB);
-extern int fn_8022E484(void);
+extern int DbRunUpdateChain(int a, int b, unsigned char *p, int *pA, int *pB);
+extern int DbRunLoadChain(void);
 extern int fn_8022E9A4(void);
 extern void fn_8022E9C4(void);
 extern int fn_8022E9E4(void);
-extern int fn_8022EA74(void);
-extern void fn_8022EA7C(void);
-extern int fn_8022ED50(int a, int b, int c);
-extern signed char fn_8022F384(int key);
-extern int fn_8022F3D4(int key);
+extern int DbEvasModuleInit(void);
+extern void DbEvasModuleShutdown(void);
+extern int DbTatsCopyAllTables(int a, int b, int c);
+extern signed char DbUserFindIndex(int key);
+extern int DbUserGetDb(int key);
 extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
 extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int f);
-extern void fn_802349CC(void *p);
+void ScaleBlockReset(Block_802349CC *pBlock);
 extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
 extern void LLCacheLockedEnable(void);
+extern void fn_801CFC58(int angle, void *pTable, float *pSin, float *pCos);
+extern unsigned char lbl_803E9288[];
 
 void fn_8023123C(void *p, int mode, unsigned char *pDone);
-int fn_80232DE0(void);
-int fn_80232EB4(void);
-int fn_80232EF4(void);
-int fn_802331BC(void);
-void fn_802334F0(int mode, Funcs_802FB3BC *pFuncs);
-int fn_80233604(void **ppData, void *p);
-int fn_80233660(int a, int b);
-int fn_80233694(void);
+int DbManagerEnterMode0(void);
+int DbManagerEnterMode1(void);
+int DbManagerMode1Leave(void);
+int DbManagerMode2Leave(void);
+void DbManagerGetModeFuncs(int mode, DbNiomModeFuncs_t *pFuncs);
+int DbManagerLoadGameDb(void **ppData, void *p);
+int DbManagerSaveGameDb(int a, int b);
+int DbManagerDestroyGameDb(void);
 int fn_80233BE4(short *pOut, Model_80233BE4 *pModel, Values_80233C7C *pValues);
 void fn_80233C7C(Values_80233C7C *pValues);
 float fn_80234070(Box_80234070 *pBox);
@@ -532,14 +565,14 @@ void fn_80234DFC(int a, Sprite_80234DFC *pSprite, int c, int d, const char *pNam
 
 
 /* prototypes of the db functions in 0x8022F428-0x802355E4 (dbuser.c to cu_802336C4.c) */
-int fn_8022F428(int key);
-int fn_8022F478(int value);
-int fn_8022F488(int value);
-int fn_8022F4BC(void);
-int fn_8022F4C4(void);
-int fn_8022F53C(int a);
-int fn_8022F744(void);
-int fn_8022F794(int value, char *pName);
+int DbUserFindIdByDb(int key);
+int DbUserSetCurrent(int value);
+int DbUserSelect(int value);
+int DbUserGetCurrent(void);
+int DbUserOpenDatabases(void);
+int DbUserPostLoad(int a);
+int DbUserCloseDatabases(void);
+int DbUserSetName(int value, char *pName);
 unsigned short fn_8022F80C(void);
 Cache_8022F8A8 *fn_8022F858(unsigned short id);
 Cache_8022F8A8 *fn_8022F880(int key);
@@ -552,41 +585,41 @@ int fn_802311C8(int handle);
 void fn_80231208(void);
 int fn_80231A84(void);
 int fn_80231A8C(const char *pWhere, int b, int c, int d, int e, struct QueryCursor *pCursor);
-int fn_802328A8(void);
-void fn_80232950(void);
-int fn_80232998(void);
-int fn_802329D0(void);
-int fn_802329F0(struct Request_802329F0 *p);
-int fn_80232A98(void);
-int fn_80232AF8(void **ppData, void *p);
-int fn_80232B8C(int a, int b);
-int fn_80232DE0(void);
-int fn_80232E20(void);
-int fn_80232E70(void);
-int fn_80232E78(void);
-int fn_80232E80(void);
-int fn_80232EAC(void);
-int fn_80232EB4(void);
-int fn_80232EF4(void);
-int fn_80232F44(void);
-int fn_80232F4C(void);
-int fn_80232F54(void);
-int fn_80232F74(void);
-int fn_80232FD4(int *pRecord0, int *pRecord1);
-int fn_802331BC(void);
-int fn_80233344(void);
-int fn_8023334C(int a, int b);
-int fn_80233454(void);
-int fn_802334C4(void);
-void fn_802334F0(int mode, Funcs_802FB3BC *pFuncs);
-int fn_80233568(int a, int b, unsigned char *pDone);
-int fn_80233578(void);
-int fn_80233580(void);
-int fn_80233588(Block_80233588 *p);
-int fn_80233604(void **ppData, void *p);
-int fn_80233660(int a, int b);
-int fn_80233694(void);
-int fn_802336BC(void);
+int DbManagerInitModules(void);
+void DbManagerShutdownModules(void);
+int DbManagerPushGameDb(void);
+int DbManagerPopGameDb(void);
+int DbManagerInit(struct Request_802329F0 *p);
+int DbManagerShutdown(void);
+int DbManagerLoad(void **ppData, void *p);
+int DbManagerSave(int a, int b);
+int DbManagerEnterMode0(void);
+int DbManagerMode0Leave(void);
+int DbManagerMode0Load(void);
+int DbManagerMode0Save(void);
+int DbManagerMode0Finish(void);
+int DbManagerMode0Abort(void);
+int DbManagerEnterMode1(void);
+int DbManagerMode1Leave(void);
+int DbManagerMode1Load(void);
+int DbManagerMode1Save(void);
+int DbManagerMode1Finish(void);
+int DbManagerMode1Abort(void);
+int DbManagerEnterMode2(int *pRecord0, int *pRecord1);
+int DbManagerMode2Leave(void);
+int DbManagerMode2Load(void);
+int DbManagerMode2Save(int a, int b);
+int DbManagerMode2Finish(void);
+int DbManagerMode2Abort(void);
+void DbManagerGetModeFuncs(int mode, DbNiomModeFuncs_t *pFuncs);
+int DbManagerResultAccept(int a, int b, unsigned char *pDone);
+int DbManagerResultRecord(void);
+int DbManagerResultFinish(void);
+int DbManagerCreateGameDb(Block_80233588 *p);
+int DbManagerLoadGameDb(void **ppData, void *p);
+int DbManagerSaveGameDb(int a, int b);
+int DbManagerDestroyGameDb(void);
+int DbManagerInitHook(void);
 void fn_802336C4(Block_802336C4 *pBlock, void *pSource, int a);
 void fn_80233728(Block_802336C4 *pBlock);
 void fn_80233760(Block_802336C4 *pBlock, short *pValues, int count);
@@ -612,7 +645,7 @@ void fn_802341AC(void);
 void fn_802341B8(void);
 void fn_802341C4(void *p);
 void fn_802341E8(void *p);
-void fn_8023424C(Instance_8023424C *p, int *pCounts, Box_80234070 *pClip);
+void fn_8023424C(Instance_8023424C *p, unsigned int *pCounts, Box_80234070 *pClip);
 int fn_80234394(Instance_8023424C **ppList, unsigned int count, int key);
 void fn_802345BC(void *p);
 void fn_802345C4(void *pSource, int count);
@@ -724,6 +757,69 @@ void fn_80233850(Model_802337D4 *pModel, Joints_802337D4 *pJoints, void *pPose, 
             TMClusterObjAllocMatrices(pJoints, pSkeleton[1]);
             TMClusterObjSynthesizeMatricesSlerp(pJoints, pBones, pSkeleton, pPose, pFlags);
         }
+    }
+}
+
+/* Builds the local matrix of one bone from its three angles and position and
+   concatenates it with the parent's matrix (as in src/engine/tmclusterobj.c). */
+static inline void _BuildBoneMatrix(Mtx44 *pParent, Mtx44 *pOut, int rx, int ry, int rz,
+                                    float *pPos)
+{
+    float sx, cx, sy, cy, sz, cz;
+    float sxsy, cxsy;
+    Mtx44 mtx;
+
+    fn_801CFC58(rx, lbl_803E9288, &sx, &cx);
+    fn_801CFC58(ry, lbl_803E9288, &sy, &cy);
+    fn_801CFC58(rz, lbl_803E9288, &sz, &cz);
+    cxsy = cx * sy;
+    sxsy = sx * sy;
+    mtx[0][3] = pPos[0];
+    mtx[1][3] = pPos[1];
+    mtx[2][3] = pPos[2];
+    mtx[0][0] = cz * cy;
+    mtx[1][0] = sz * cy;
+    mtx[2][0] = -sy;
+    mtx[0][1] = -sz * cx + cz * sxsy;
+    mtx[1][1] = cz * cx + sz * sxsy;
+    mtx[2][1] = cy * sx;
+    mtx[0][2] = sz * sx + cz * cxsy;
+    mtx[1][2] = -cz * sx + sz * cxsy;
+    mtx[2][2] = cy * cx;
+    PSMTXConcat(*pParent, mtx, *pOut);
+}
+
+/* Builds every bone matrix of pPose under the current matrix, into the locked-cache buffer
+   pCache when given (then copied to the pose's matrices) or into the pose's matrices. */
+void fn_802338D4(Pose_802338D4 *pPose, Skeleton_802338D4 *pSkeleton, Mtx44 *pCache)
+{
+    Mtx44 *pMatrices = pCache;
+    short *pAngles;
+    Mtx44 root;
+    unsigned int i;
+
+    if (pMatrices == 0) {
+        pMatrices = pPose->mpMatrices;
+    }
+    pAngles = pPose->mpAngles;
+    if (pCache != 0) {
+        LLCacheLockedEnable();
+        if (LCQueueLength() != 0) {
+            LCQueueWait(0);
+        }
+    }
+    MatStore(root);
+    _BuildBoneMatrix(&root, &pMatrices[0], pAngles[0], pAngles[1], pAngles[2],
+                     pSkeleton->mBones[0].mPos);
+    for (i = 1; i < pSkeleton->mNumBones; i++) {
+        _BuildBoneMatrix(&pMatrices[pSkeleton->mBones[i].mParent], &pMatrices[i], pAngles[i * 3],
+                         pAngles[i * 3 + 1], pAngles[i * 3 + 2], pSkeleton->mBones[i].mPos);
+    }
+    if (pCache != 0) {
+        DCFlushRange(pPose->mpMatrices, i * sizeof(Mtx44));
+        LCStoreData(pPose->mpMatrices, pCache, i * sizeof(Mtx44));
+    } else {
+        DCStoreRange(pMatrices, i * sizeof(Mtx44));
     }
 }
 
@@ -975,7 +1071,7 @@ void fn_802341E8(void *p)
     }
 }
 
-void fn_8023424C(Instance_8023424C *p, int *pCounts, Box_80234070 *pClip)
+void fn_8023424C(Instance_8023424C *p, unsigned int *pCounts, Box_80234070 *pClip)
 {
     Box_80234070 box;
     float ndc[3];
@@ -1025,6 +1121,48 @@ int fn_80234394(Instance_8023424C **ppList, unsigned int count, int key)
         return 1;
     }
     return 0;
+}
+
+/* Rates every registered instance (clipped to the screen box when mode is 1), then moves
+   instances down one detail level while a level holds more than its budget plus what the
+   level above left unused. */
+void ModelLodBalance(int mode)
+{
+    Box_80234070 *pClip;
+    unsigned int i;
+    unsigned int level;
+
+    if (mode == 1) {
+        pClip = &lbl_802FB418;
+    } else {
+        pClip = 0;
+    }
+    memset(lbl_803A2628, 0, sizeof(lbl_803A2628));
+    for (i = 0; i < lbl_803EC0F0; i++) {
+        fn_8023424C(lbl_803A2648[i], lbl_803A2628, pClip);
+    }
+    for (level = 0; level <= 6; level++) {
+        if (level == 0) {
+            if (lbl_803A2628[level] > lbl_802FB3F8[level]) {
+                do {
+                    if (!fn_80234394((Instance_8023424C **)lbl_803A2648, lbl_803EC0F0, level)) {
+                        break;
+                    }
+                    lbl_803A2628[level]--;
+                    lbl_803A2628[level + 1]++;
+                } while (lbl_803A2628[level] > lbl_802FB3F8[level]);
+            }
+        } else {
+            while (lbl_803A2628[level] > lbl_802FB3F8[level]
+                                             + (lbl_802FB3F8[level - 1] - lbl_803A2628[level - 1])) {
+                if (!fn_80234394((Instance_8023424C **)lbl_803A2648, lbl_803EC0F0, level)) {
+                    break;
+                }
+                lbl_803A2628[level]--;
+                lbl_803A2628[level + 1]++;
+            }
+        }
+    }
 }
 
 void fn_802345BC(void *p)
@@ -1134,6 +1272,18 @@ void fn_80234908(void)
     lbl_803ED020 = 0;
 }
 
+/* Allocates count zeroed floats for pArray. */
+void FloatArrayAlloc(Array_8023491C *pArray, unsigned int count)
+{
+    unsigned int i;
+
+    pArray->mUnknown0 = count;
+    pArray->mpUnknown4 = fn_801D2B7C(count * sizeof(float), 0, 0);
+    for (i = 0; i < pArray->mUnknown0; i++) {
+        pArray->mpUnknown4[i] = lbl_802B7168[0];
+    }
+}
+
 void fn_80234994(Array_8023491C *pArray)
 {
     fn_801D2BD0(pArray->mpUnknown4);
@@ -1144,6 +1294,15 @@ void fn_802349B8(Array_8023491C *pArray, int value)
     if (pArray->mUnknown8 != value) {
         pArray->mUnknown8 = value;
     }
+}
+
+/* Clears the 0x90-byte block and sets its three scale floats +0x80..+0x88 to 1. */
+void ScaleBlockReset(Block_802349CC *pBlock)
+{
+    memset(pBlock, 0, sizeof(Block_802349CC));
+    pBlock->mScale[0] = lbl_802B7170[0];
+    pBlock->mScale[1] = lbl_802B7170[0];
+    pBlock->mScale[2] = lbl_802B7170[0];
 }
 
 void fn_80234A14(Part_80234A30 *pPart, int mask)
@@ -1186,7 +1345,7 @@ void fn_80234AD8(Part_80234A30 *pPart, Block_802336C4 *pBlock)
 
 void fn_80234AFC(void *p)
 {
-    fn_802349CC(p);
+    ScaleBlockReset(p);
 }
 
 void fn_80234B1C(void *p)

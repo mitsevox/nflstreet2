@@ -12,7 +12,7 @@
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/fn_80177FE0.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_800B65A0.h"
 
@@ -65,7 +65,7 @@ extern "C" unsigned char PlayerMoveStickVariant(Object_80039F5C *p)
 
 extern "C" unsigned char PlayerMoveRandomVariant(void)
 {
-    unsigned int i = fn_802372EC(0, 4);
+    unsigned int i = SyncRandGetRange(0, 4);
 
     if (i > 3) {
         i = 3;
@@ -204,7 +204,7 @@ extern "C" int PlayerMoveTryStartRun(Object_80039F5C *p)
                         if (!(range < lbl_803EACB4 * lbl_803EACB8)) {
                             enable = 0;
                             if (fn_800ABDA4(p->mIdBytes[2]) == 0) {
-                                enable = fn_802372EC(0, 100) < lbl_803EACBC;
+                                enable = SyncRandGetRange(0, 100) < lbl_803EACBC;
                             }
                         }
                     } else if (!(range < lbl_803EACB4)) {

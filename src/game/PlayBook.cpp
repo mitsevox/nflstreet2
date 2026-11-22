@@ -13,7 +13,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/DbCursor.h"
 #include "game/PlayBookDb.h"
-#include "game/fn_801FCE10.h"
+#include "game/TDbCompilePerformOp.h"
 #include "game/SyncStateRegister.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
@@ -21,13 +21,13 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_802372EC.h"
+#include "game/SyncRandGetRange.h"
 #include "game/PlaySet.h"
 #include "game/PlayCandidate.h"
 #include "game/Challenge.h"
 #include "game/PlayTrack.h"
 #include "game/Item_80097440.h"
-#include "game/fn_80227638.h"
+#include "game/Vec2Add.h"
 #include "game/PreSnapPhase.h"
 
 /* Allocated through SyncStateRegister under the id 'plbk' (PlayBookAlloc). */
@@ -71,8 +71,8 @@ int fn_80178E10(void);
 void fn_80179144(int a);
 void fn_8017916C(void);
 int MemFill(void *pDest, int size, int value, int width);
-void fn_801F9FA4(int tag, int index, int column);
-int fn_801FA038(int tag, int index, int column);
+void TDbIdxDestroy(int tag, int index, int column);
+int TDbIdxExists(int tag, int index, int column);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 }
 
@@ -262,10 +262,10 @@ void PlayBookOpenDatabases(int a, int b, int c, int d, int e, int f)
     } else {
         _PlayBook_pData->mUnknown4[1].mUnknown4 = _PlayBook_pData->mUnknown4[1].mUnknown0 = -1;
     }
-    fn_801FCE10(0, "use \x8c create \x8b index on 'LASP' order by 'LASP' asc\n", 0x31544250, 0x4C415350);
-    fn_801FCE10(0, "use \x8c create \x8b index on 'SYLP' order by 'LYLP' asc and 'osop' asc\n", 0x31544250, 0x4C594C50);
-    fn_801FCE10(0, "use \x8c create \x8b index on 'LASP' order by 'LASP' asc\n", 0x31444250, 0x4C415350);
-    fn_801FCE10(0, "use \x8c create \x8b index on 'SYLP' order by 'LYLP' asc and 'osop' asc\n", 0x31444250, 0x4C594C50);
+    TDbCompilePerformOp(0, "use \x8c create \x8b index on 'LASP' order by 'LASP' asc\n", 0x31544250, 0x4C415350);
+    TDbCompilePerformOp(0, "use \x8c create \x8b index on 'SYLP' order by 'LYLP' asc and 'osop' asc\n", 0x31544250, 0x4C594C50);
+    TDbCompilePerformOp(0, "use \x8c create \x8b index on 'LASP' order by 'LASP' asc\n", 0x31444250, 0x4C415350);
+    TDbCompilePerformOp(0, "use \x8c create \x8b index on 'SYLP' order by 'LYLP' asc and 'osop' asc\n", 0x31444250, 0x4C594C50);
 }
 
 void PlayBookLoadCurrentPlay(int team)
@@ -360,8 +360,8 @@ void PlayBookAlloc(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&_PlayBook_pData, sizeof(PlayBook_t), 0, 0x706C626B);
 
-    fn_80238234(pHandle, 0, 0, 0, PlayBookCompareData);
-    fn_802381E0(pHandle);
+    SyncStateSetCallbacks(pHandle, 0, 0, 0, PlayBookCompareData);
+    SyncStateCommit(pHandle);
 }
 
 void PlayBookClear(void)
@@ -424,17 +424,17 @@ void PlayBookReopen(int a, int b, int c, int d, int e, int f, int g)
 
 void PlayBookCloseDatabases(int a)
 {
-    if (!fn_801FA038(0x31544250, 0x4C415350, 0x4C415350)) {
-        fn_801F9FA4(0x31544250, 0x4C415350, 0x4C415350);
+    if (!TDbIdxExists(0x31544250, 0x4C415350, 0x4C415350)) {
+        TDbIdxDestroy(0x31544250, 0x4C415350, 0x4C415350);
     }
-    if (!fn_801FA038(0x31544250, 0x53594C50, 0x4C594C50)) {
-        fn_801F9FA4(0x31544250, 0x53594C50, 0x4C594C50);
+    if (!TDbIdxExists(0x31544250, 0x53594C50, 0x4C594C50)) {
+        TDbIdxDestroy(0x31544250, 0x53594C50, 0x4C594C50);
     }
-    if (!fn_801FA038(0x31444250, 0x4C415350, 0x4C415350)) {
-        fn_801F9FA4(0x31444250, 0x4C415350, 0x4C415350);
+    if (!TDbIdxExists(0x31444250, 0x4C415350, 0x4C415350)) {
+        TDbIdxDestroy(0x31444250, 0x4C415350, 0x4C415350);
     }
-    if (!fn_801FA038(0x31444250, 0x53594C50, 0x4C594C50)) {
-        fn_801F9FA4(0x31444250, 0x53594C50, 0x4C594C50);
+    if (!TDbIdxExists(0x31444250, 0x53594C50, 0x4C594C50)) {
+        TDbIdxDestroy(0x31444250, 0x53594C50, 0x4C594C50);
     }
     if (_PlayBook_pData->mUnknown4[0].mUnknown4 != -1) {
         PlayBookDbClose(0x31444250, PlaybookSideGetLoaded(1));
@@ -853,7 +853,7 @@ void PlayCallFillSituation(short *p)
     }
     float line = fn_80178298();
     p[2] = (int)(line - fn_80177FE0().mY);
-    p[5] = fn_802372EC(0, 100);
+    p[5] = SyncRandGetRange(0, 100);
     p[8] = *(unsigned short *)((char *)PlayBookGetFormation(offense) + 26);
     p[9] = 0;
     p[13] = p[12] = 50;
@@ -1301,7 +1301,7 @@ int fn_80178308(void);
 float fn_80178A5C(void);
 int GameTextGetAwayTeam(void);
 int GameTextGetHomeTeam(void);
-void *fn_8023816C(void);
+void *SyncStateGetData(void);
 }
 
 static PlayTrack_t *_PlayTrack_pData = 0;
@@ -1656,7 +1656,7 @@ void PlayTrackWeightDefense(int team, PlayCandidate_t *pList, unsigned int count
     float result6Rate = PlayTrackRateResult6(opponent);
 
     int key = team == 0 ? GameTextGetHomeTeam() : GameTextGetAwayTeam();
-    if (fn_801FCE10(0, "select 'ZBMT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &rating, key) != 0)
+    if (TDbCompilePerformOp(0, "select 'ZBMT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &rating, key) != 0)
         rating = 50;
     PlayBookGetDatabase(team);
 
@@ -1768,7 +1768,7 @@ void PlayTrackGetRatingBias(int team, float *pA, float *pB)
     float value;
 
     int id = fn_800C8744(team);
-    if (fn_801FCE10(0, "select 'PRMT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &rating, id) != 0)
+    if (TDbCompilePerformOp(0, "select 'PRMT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &rating, id) != 0)
         rating = 50;
 
     *pA = 0.0f;
@@ -1789,17 +1789,17 @@ void PlayTrackInit(void)
     // FAKEMATCH: never-set flag; keeps the PNIG/STPG query strings in .rodata (owner-accepted 2026-11-14)
     int resume = 0;
     void *pHandle = SyncStateRegister(0, (void **)&_PlayTrack_pData, sizeof(PlayTrack_t), 0, 0x7074726B);
-    memset(fn_8023816C(), 0, sizeof(PlayTrack_t));
+    memset(SyncStateGetData(), 0, sizeof(PlayTrack_t));
     if (resume) {
         int found;
 
-        fn_801FCE10(0, "select 'PNIG' into \x82 from 'FNIG'\n", &found);
+        TDbCompilePerformOp(0, "select 'PNIG' into \x82 from 'FNIG'\n", &found);
         resume = found;
     }
     if (resume) {
-        fn_801FCE10(0, "select 'STPG' into \x89 from 'NIBG'\n", _PlayTrack_pData);
+        TDbCompilePerformOp(0, "select 'STPG' into \x89 from 'NIBG'\n", _PlayTrack_pData);
     }
-    fn_802381E0(pHandle);
+    SyncStateCommit(pHandle);
     PlayTrackRegister();
 }
 
@@ -2223,7 +2223,7 @@ int PlayAutoFlip(int team)
         break;
     }
 
-    if (fn_802372EC(0, 100) < chance) {
+    if (SyncRandGetRange(0, 100) < chance) {
         flipped = 1;
         pObject->mUnknown8.mUnknownF ^= 1;
     }
@@ -2255,7 +2255,7 @@ static unsigned char _PlayRoute_bTurn = 10;
 extern "C" {
 extern unsigned char gGameTextPlayArtShift;
 State_8011F4EC *fn_8011F4EC(void);
-void fn_80227538(Point_8017886C *pOut, int angle, float magnitude);
+void Vec2FromAngle(Point_8017886C *pOut, int angle, float magnitude);
 int fn_801CFE40(float y, float x);
 
 void PlayBookGetZoneCenter(int zone, Point_8017886C *pOut)
@@ -2305,8 +2305,8 @@ void PlayBookRouteApplyTurn(int heading, Point_8017886C *pPos)
     default:
         goto done;
     }
-    fn_80227538(&step, turn, scale);
-    fn_80227638(pPos, pPos, &step);
+    Vec2FromAngle(&step, turn, scale);
+    Vec2Add(pPos, pPos, &step);
 done:
     _PlayRoute_bTurn = 10;
 }
@@ -2320,8 +2320,8 @@ void PlayBookRouteAddStep(unsigned char *pArgs, PlayRoute_t *pRoute)
     // FAKEMATCH: Xbox does not clear the step; the clear forms the 0.0f pool word
     step.mX = step.mY = 0.0f;
     PlayBookRouteApplyTurn(heading, &pRoute->mCur);
-    fn_80227538(&step, heading, (float)(distance & 7) * (1.0f / 7.0f) + (float)(distance >> 3));
-    fn_80227638(&pRoute->mCur, &pRoute->mCur, &step);
+    Vec2FromAngle(&step, heading, (float)(distance & 7) * (1.0f / 7.0f) + (float)(distance >> 3));
+    Vec2Add(&pRoute->mCur, &pRoute->mCur, &step);
     pRoute->mKind = 2;
     pRoute->mPoints[pRoute->mCount].mType = 0;
     pRoute->mPoints[pRoute->mCount].mPos = pRoute->mCur;
