@@ -11,8 +11,8 @@ struct DynObjSkeletonRef;
 struct DynObj;
 struct BigObj_t;
 struct BigObjInst;
-struct Instance_8004DA0C;
-struct Cache_8004E16C;
+struct DynObjModelInstance_t;
+struct DynObjSkeletonCache_t;
 
 struct DynObjTexLib { unsigned char mUnknown0[0x28]; };
 
@@ -50,8 +50,8 @@ struct DynObj {
     int mUnknownF4; int mUnknownF8;
     unsigned char mUnknownFC; unsigned char mUnknownFD[3]; DynObjTexHeader *mpUnknown100;
     DynObjTexLib mUnknown104;
-    union { DynObjInstance *mpUnknown12C; Instance_8004DA0C *mpRender12C; };
-    union { DynObjSkeletonRef *mpUnknown130; Cache_8004E16C *mpSkeleton130; }; unsigned char mUnknown134[4]; unsigned char mUnknown138;
+    union { DynObjInstance *mpUnknown12C; DynObjModelInstance_t *mpRender12C; };
+    union { DynObjSkeletonRef *mpUnknown130; DynObjSkeletonCache_t *mpSkeleton130; }; unsigned char mUnknown134[4]; unsigned char mUnknown138;
     unsigned char mUnknown139[3]; int mUnknown13C;
     union {
         struct { unsigned char mUnknown140; unsigned char mUnknown141[11]; };
