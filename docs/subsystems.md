@@ -45,8 +45,6 @@ NFL Street 2's own code: the front end, game modes, gameplay, replay and the ren
 
 ## Libraries and EA engine (`src/engine/`, `src/Common/`)
 
-`crc32.c` compares memory and computes checksums used by the game state checks.
-
 Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2005's file list matches much of it by size and order. Built with SN ProDG.
 
 | Range | What it does in the game | Known files | Rungs 0/1/2/3/4 | Unlinked | Held |
@@ -67,7 +65,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 
 ## Nintendo SDK and runtimes (`src/dolphin/`, `src/engine/`)
 
-`spktplay.c` controls packet-based sample playback in the EA sound library.
+`srender.c` selects compatible output modes for sound patches. `spktplay.c` controls packet-based sample playback in the EA sound library.
 
 - `src/dolphin/dvd/dvdFatal.c` (0x80242018-0x80242048) dispatches the DVD driver's fatal-message callback. The 48-byte wrapper, retained messages and pointers, and callback slot are linked. The FIFA Soccer 2005 and UEFA Champions League 2004–05 link maps place the wrapper between the same disk-ID and boot-file helpers.
 - `src/engine/ef_pow.c` (0x80260428-0x80260B1C) provides single-precision powers for game math and decimal attribute parsing. The 1,780-byte routine and its two native constant pools are linked. The matching-size NASCAR 2005 function corroborates the provisional historical file boundaries.
