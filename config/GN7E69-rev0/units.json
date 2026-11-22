@@ -1333,14 +1333,6 @@
       "address": "0x80275F80",
       "evidence": "evidence.tsv function and name rows for 0x80275F80 (MIX_playinit, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks."
     },
-    "sndpps": {
-      "address": "0x803B5060",
-      "evidence": "evidence.tsv data and name rows for 0x803B5060 (sndpps, the 900-byte .bss of the comparison-only src/engine/spktplay.c; storage not claimed); read by name from the linked src/engine/spktctoh.c."
-    },
-    "SNDPKTPLAY_framesoutstanding": {
-      "address": "0x802791D0",
-      "evidence": "evidence.tsv function/name rows for 0x802791D0; registered in the comparison-only src/engine/spktplay.c, which keeps its original bytes until the whole file can be linked; called by name from src/engine/sststat.c and src/engine/stretch.c."
-    },
     "SFILTER_add": {
       "address": "0x80279D90",
       "evidence": "evidence.tsv function/name rows for 0x80279D90; registered in the comparison-only src/engine/sfilter.c, which keeps its original bytes until the whole file can be linked; called by name from src/engine/smixer.c, src/engine/smixfilt.c, src/engine/smixhip.c and src/engine/smixptch.c."
@@ -1348,14 +1340,6 @@
     "SFILTER_remove": {
       "address": "0x80279DF8",
       "evidence": "evidence.tsv function/name rows for 0x80279DF8; registered in the comparison-only src/engine/sfilter.c, which keeps its original bytes until the whole file can be linked; called by name from src/engine/smixhip.c."
-    },
-    "SNDPKTPLAYI_freeframes": {
-      "address": "0x8027952C",
-      "evidence": "evidence.tsv function/name rows for 0x8027952C (SNDPKTPLAYI_freeframes in src/engine/spktplay.c, comparison only until linked); the linked src/engine/supmutpf.c calls it by name."
-    },
-    "SNDPKTPLAY_overhead": {
-      "address": "0x80278AC8",
-      "evidence": "evidence.tsv function/name rows for 0x80278AC8 (SNDPKTPLAY_overhead in src/engine/spktplay.c, comparison only until linked); the linked src/engine/sstovrhd.c calls it by name (integration of c16c and c16g)."
     },
     "gInGameGroup": {
       "address": "0x803068B4",
@@ -1393,17 +1377,9 @@
       "address": "0x802796DC",
       "evidence": "evidence.tsv function and name rows for 0x802796DC (SNDI_validrendermode, srender.c, registered in comparisons.json, original bytes linked); called by SNDPKTPLAY_start (spktplay.c comparison, c19 wave)."
     },
-    "SNDPKTPLAYI_get": {
-      "address": "0x802792F0",
-      "evidence": "evidence.tsv function and name rows for 0x802792F0 (SNDPKTPLAYI_get, spktplay.c, registered in comparisons.json, original bytes linked); called by the linked src/engine/suppf.c and src/engine/supmutpf.c (c18 wave)."
-    },
     "SNDI_aztospkrvol": {
       "address": "0x80277A60",
       "evidence": "evidence.tsv function and name rows for 0x80277A60 (SNDI_aztospkrvol, satospkr.c, registered in comparisons.json, original bytes linked); called by name from the src/engine/snddrv.c comparison bodies (c18 wave)."
-    },
-    "SNDPKTPLAYI_flushcallbackdata": {
-      "address": "0x80279598",
-      "evidence": "evidence.tsv function and name rows for 0x80279598 (SNDPKTPLAYI_flushcallbackdata, spktplay.c, registered in comparisons.json, original bytes linked); called by name from the src/engine/snddrv.c comparison bodies (c18 wave)."
     },
     "_Q24Path11IPathToReal.realimp": {
       "address": "0x803EBB60",
@@ -23122,6 +23098,46 @@
           "end": "0x802C209C"
         }
       ]
+    },
+    {
+      "source": "src/engine/spktplay.c",
+      "profile": "sound_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x80278A68-0x80279648 (src/engine/spktplay.c), its function and name rows, the data rows 0x802C20A0-0x802C20B0 and 0x803B5060-0x803B53E4, and the sound_cxx compiler row 0x80276DE4-0x8027CF9C. Thirteen functions and both data sections link. Only SNDPKTPLAY_start keeps original code and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80278A68",
+          "end": "0x80278BF0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80279048",
+          "end": "0x80279648"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C20A0",
+          "end": "0x802C20B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803B5060",
+          "end": "0x803B53E4"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "SNDPKTPLAY_start",
+            "evidence": "evidence.tsv source-form 0x80278BF0-0x80279048"
+          }
+        ],
+        "evidence": "evidence.tsv source-form 0x80278BF0-0x80279048 records the measured remaining register differences and forms tried."
+      }
     },
     {
       "source": "src/engine/spktctoh.c",

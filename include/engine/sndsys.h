@@ -59,45 +59,45 @@ typedef struct Parser_8027823C {
 
 /* A submitted packet: its frame count (31 bits) and last flag, and one data pointer per channel. */
 typedef struct SndPacket_t {
-    int m0;
-    unsigned int m4 : 31;
-    unsigned int m4b : 1;
-    int m8;
-    void *mC[6];
+    int unk_0x0;
+    unsigned int mFrames : 31;
+    unsigned int mLast : 1;
+    int unk_0x8;
+    void *mChannelData[6];
 } SndPacket_t;
 
 /* One queued packet of a player (32 bytes from +0x7C): its id, the packet's count and flag, the
    channel data pointers. */
 typedef struct SndPacketEntry_t {
-    int m0;
-    int m4 : 31;
-    int m4b : 1;
-    void *m8[6];
+    int mPacketId;
+    int mFrames : 31;
+    int mLast : 1;
+    void *mChannelData[6];
 } SndPacketEntry_t;
 
 typedef struct SndPacketPlayer_t {
     // FAKEMATCH: the packet-queue members are volatile for the target's re-reads and access order
-    int m0;
-    volatile int m4;
-    volatile unsigned int m8;
-    volatile unsigned int mC;
-    volatile unsigned int m10[6];
-    volatile short m28[6];
-    volatile short m34[6];
-    volatile short m40;
-    signed char m42;
-    unsigned char mUnknown43;
-    volatile short m44;
-    volatile short m46;
-    volatile int m48;
-    volatile int m4C;
-    void *m50;
-    void (*m54)(int value, void *context);
-    void (*m58)(int index, int value, void *context);
-    void *m5C;
-    Info_80274464 m60;
-    void *m64[6];
-    SndPacketEntry_t m7C[1];
+    int mVoiceHandle;
+    volatile int mNextPacketId;
+    volatile unsigned int mRetiredPackets;
+    volatile unsigned int mConsumedPackets;
+    volatile unsigned int mChannelConsumedPackets[6];
+    volatile short mChannelReadIndex[6];
+    volatile short mChannelQueuedPackets[6];
+    volatile short mQueueCapacity;
+    signed char mHighChannel;
+    unsigned char unk_0x43;
+    volatile short mRetireIndex;
+    volatile short mWriteIndex;
+    volatile int mQueuedFrames;
+    volatile int mActiveFrames;
+    void *mVoiceMemory;
+    void (*mReleaseCallback)(int value, void *context);
+    void (*mFramesDoneCallback)(int index, int value, void *context);
+    void *mCallbackContext;
+    Info_80274464 mFormat;
+    void *mChannelBuffers[6];
+    SndPacketEntry_t mEntries[1];
 } SndPacketPlayer_t;
 
 /* A patch header (256 bytes; SNDPKTPLAY_start builds one on its stack): channel count +0x3 and the
@@ -111,15 +111,15 @@ typedef struct SndPatchHeader_t {
 } SndPatchHeader_t;
 
 typedef struct SndPacketEvent_t {
-    unsigned short m0;
-    unsigned short m2;
-    int m4;
+    unsigned short mKind;
+    unsigned short mPlayerIndex;
+    int mValue;
 } SndPacketEvent_t;
 
 typedef struct SndPacketPlayers_t {
-    int m0;
-    SndPacketEvent_t m4[96];
-    SndPacketPlayer_t *m304[32];
+    int mEventCount;
+    SndPacketEvent_t mEvents[96];
+    SndPacketPlayer_t *mPlayers[32];
 } SndPacketPlayers_t;
 
 typedef struct Struct_803B53EC {
