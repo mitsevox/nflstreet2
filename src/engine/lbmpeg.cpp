@@ -4,6 +4,36 @@
 
 #include "engine/sndlib.h"
 
+namespace Snd {
+
+static inline bool DetectMMX()
+{
+    return false;
+}
+
+// FAKEMATCH: Reserve the dynamically initialized flag in the target's initialized data section.
+int MPEGuse_MMX __attribute__((section(".data"))) = DetectMMX();
+
+static const short tabsel_123[2][3][16] = {
+    {
+        {0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0},
+        {0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 0},
+        {0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0},
+    },
+    {
+        {0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256, 0},
+        {0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0},
+        {0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0},
+    },
+};
+
+}
+
+const unsigned short CMpegBase::sSampleRateTable[9] = {
+    44100, 48000, 32000,
+    22050, 24000, 16000,
+    11025, 12000, 8000,
+};
 
 void CMpegBase::Seek(unsigned char *data)
 {
@@ -81,7 +111,7 @@ int CMpegBase::ProcessHeader(unsigned int header)
         channels = 1;
     }
     m44 = channels;
-    rate = lbl_802B7A98[m3D];
+    rate = sSampleRateTable[m3D];
     m4 = rate;
     m0 = rate;
     if (m3C == 0) {
@@ -89,7 +119,7 @@ int CMpegBase::ProcessHeader(unsigned int header)
     }
     lsf = m37;
     layer = m14;
-    mC = lbl_802B7AF0[lsf][layer - 1][m3C];
+    mC = Snd::tabsel_123[lsf][layer - 1][m3C];
     if (layer == 1) {
         m10 = (mC * 12000 / (int)rate + m3E) * 4 - 4;
     } else {

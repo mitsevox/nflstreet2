@@ -339,6 +339,20 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler row 0x80236F78-0x80238258 (engine_c_fastmath_nobuiltin): engine_c_fastmath plus -fno-builtin for the synchronised-state files syncrand.c, synctime.c and syncstate.c, which call memset and memcpy with constant sizes as ordinary prototyped calls and compare floats without the IEEE cror of plain -O2."
+    },
+    "sound_cxx_data_sections": {
+      "flags": [
+        "-O2",
+        "-G0",
+        "-fno-strength-reduce",
+        "-mps-float",
+        "-fdata-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "language": "c++",
+      "evidence": "The sound_cxx defaults plus ProDG 3.9.3 -fdata-sections separate native MPEG tables for placement on both sides of the vtable (evidence.tsv compiler row for lbmpeg.cpp)."
     }
   },
   "externals": {
@@ -1349,34 +1363,6 @@
     "iSPCH_GetSampleParmAddr": {
       "address": "0x801B22B0",
       "evidence": "evidence.tsv function/name rows for 0x801B22B0 (target extent, related name); exact in the src/engine/spchrule.c comparison, called by the src/engine/spchpick.c comparison; the file is not linked."
-    },
-    "_._9CMpegBase": {
-      "address": "0x80271640",
-      "evidence": "evidence.tsv function and name rows for 0x80271640 (CMpegBase::~CMpegBase, src/engine/lbmpeg.cpp, comparison only); the destructor of src/engine/mpegl3base.cpp calls it (bl at 0x80271BBC)."
-    },
-    "ProcessHeader__9CMpegBaseUi": {
-      "address": "0x80271740",
-      "evidence": "evidence.tsv function and name rows for 0x80271740 (CMpegBase::ProcessHeader, src/engine/lbmpeg.cpp, comparison only); the vtable 0x802C19A8 of src/engine/mpegl3base.cpp inherits it (word at 0x802C19BC)."
-    },
-    "Open__9CMpegBasePUc": {
-      "address": "0x80271A0C",
-      "evidence": "evidence.tsv function and name rows for 0x80271A0C (CMpegBase::Open, src/engine/lbmpeg.cpp, comparison only); the vtable 0x802C19A8 of src/engine/mpegl3base.cpp inherits it (word at 0x802C19C4)."
-    },
-    "Close__9CMpegBase": {
-      "address": "0x80271AD0",
-      "evidence": "evidence.tsv function and name rows for 0x80271AD0 (CMpegBase::Close, src/engine/lbmpeg.cpp, comparison only); the vtable 0x802C19A8 of src/engine/mpegl3base.cpp inherits it (word at 0x802C19CC)."
-    },
-    "Seek__9CMpegBasePUc": {
-      "address": "0x80271624",
-      "evidence": "evidence.tsv function and name rows for 0x80271624 (CMpegBase::Seek, src/engine/lbmpeg.cpp, comparison only); the vtable 0x802C19A8 of src/engine/mpegl3base.cpp inherits it (word at 0x802C19D4)."
-    },
-    "OpenLayer__9CMpegBase": {
-      "address": "0x8027199C",
-      "evidence": "evidence.tsv function and name rows for 0x8027199C (CMpegBase::OpenLayer, src/engine/lbmpeg.cpp, comparison only); the vtable 0x802C19A8 of src/engine/mpegl3base.cpp inherits it (word at 0x802C19DC)."
-    },
-    "_3Snd.MPEGuse_MMX": {
-      "address": "0x80300044",
-      "evidence": "evidence.tsv data and name rows for 0x80300044 (Snd::MPEGuse_MMX, a .data word read by OpenSynth of src/engine/lbmpeg.cpp; no file defines it yet, its initializer form is open)."
     },
     "MIX_audioslice": {
       "address": "0x802763E0",
@@ -5690,6 +5676,49 @@
           "placement": ".data3",
           "start": "0x802B7A88",
           "end": "0x802B7A98"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/lbmpeg.cpp",
+      "profile": "sound_cxx_data_sections",
+      "evidence": "The lbmpeg.cpp unit, data, compiler and source-form rows describe the 13 functions, two sample/bit-rate tables, base virtual table, MMX flag and the native constructor-list entry.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80271624",
+          "end": "0x80271B74"
+        },
+        {
+          "section": ".rodata._9CMpegBase.sSampleRateTable",
+          "placement": ".data3",
+          "start": "0x802B7A98",
+          "end": "0x802B7AAA"
+        },
+        {
+          "section": ".gnu.linkonce.d._vt.9CMpegBase",
+          "placement": ".data3",
+          "start": "0x802B7AB0",
+          "end": "0x802B7AF0"
+        },
+        {
+          "section": ".rodata._3Snd.tabsel_123",
+          "placement": ".data3",
+          "start": "0x802B7AF0",
+          "end": "0x802B7BB0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300044",
+          "end": "0x80300048"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B54",
+          "end": "0x80289B58"
         }
       ]
     },
