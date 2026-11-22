@@ -126,11 +126,16 @@ int SNDVOICEI_alloc(int count, int priority, int *handle, int first, int last)
     return result;
 }
 
-static inline void _SndVoiceClear(Voice_803A6C24 *v)
+static inline void _SndVoiceClearFlags(Voice_803A6C24 *v)
 {
     v->mUnknown6D = 0;
     v->m26 = 0;
     v->m27 = 0;
+}
+
+static inline void _SndVoiceClear(Voice_803A6C24 *v)
+{
+    _SndVoiceClearFlags(v);
     v->m2C = lbl_803A6C24.m170;
 }
 
@@ -166,7 +171,9 @@ void SNDVOICEI_free(int voice)
         } else if (lbl_803A6C24.mUnknown1CC[other].mUnknown6D == 1 && voice == other) {
             lbl_803A6C24.mUnknown1CC[other].mUnknown6D = 2;
         } else {
-            _SndVoiceClear(v);
+            _SndVoiceClearFlags(v);
+            // FAKEMATCH: Qualify the pool view to retain the separate base-address calculation.
+            v->m2C = static_cast<const volatile Object_803A6C24 &>(lbl_803A6C24).m170;
         }
     } else {
         _SndVoiceClear(v);

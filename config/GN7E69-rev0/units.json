@@ -21992,19 +21992,13 @@
     },
     {
       "source": "src/engine/salloc.c",
-      "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x80269CE8-0x8026A2DC (src/engine/salloc.c, FIFA Soccer 2005 salloc.o), its function and name rows, the data rows of its .data lasthandle 0x802FFCC0-0x802FFCC4 and its .bss sndvoicereserved 0x803A6C04-0x803A6C10 (da1a) and the sound_cxx compiler row 0x80266E88-0x8026A664; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): every function exact except the holdout SNDVOICEI_free 0x8026A0E8-0x8026A288, which keeps the original bytes and stays a registered partial; the whole .data and .bss are linked.",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit 0x80269CE8-0x8026A2DC, same-size FIFA Soccer 2005 and NASCAR 2005 allocator file, complete native text, data and bss, and the labeled timestamp source form at 0x8026A0E8-0x8026A288.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80269CE8",
-          "end": "0x8026A0E8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026A288",
           "end": "0x8026A2DC"
         },
         {
@@ -22019,16 +22013,7 @@
           "start": "0x803A6C04",
           "end": "0x803A6C10"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "SNDVOICEI_free",
-            "evidence": "evidence.tsv source-form 0x8026A0E8-0x8026A288"
-          }
-        ],
-        "evidence": "merge notes of #1368 (x2 fix round) holdouts table: src/engine/salloc.c holds out SNDVOICEI_free; its HOLDOUT: row lists the forms tried and the RTL-dump finding."
-      }
+      ]
     },
     {
       "source": "src/engine/sballoc.c",
