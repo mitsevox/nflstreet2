@@ -35061,32 +35061,6 @@
       ]
     },
     {
-      "source": "src/engine/mpegl3base.cpp",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80271B74-0x80271BD4 (src/engine/mpegl3base.cpp, GoldenEye: Rogue Agent and Medal of Honor: European Assault mpegl3base.cpp), the compiler and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of its destructor; the vtable 0x802C19A8 is this file's. Draft comparison only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80271B74",
-          "end": "0x80271BD4"
-        },
-        {
-          "section": ".gnu.linkonce.d._vt.15CMpegLayer3Base",
-          "placement": ".data3",
-          "start": "0x802C19A8",
-          "end": "0x802C19E8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_._15CMpegLayer3Base",
-          "start": "0x80271B74",
-          "end": "0x80271BD4"
-        }
-      ]
-    },
-    {
       "source": "src/engine/srender.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x802796DC-0x80279798 (src/engine/srender.c), the sound_cxx compiler rows and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",

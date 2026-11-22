@@ -66,7 +66,7 @@ public:
 class CMpegLayer3Base : public CMpegBase {
 public:
     unsigned char mUnknown54[0x15C];
-    void *m1B0;
+    void *mpWorkBuffer;
 
     virtual ~CMpegLayer3Base();
 };

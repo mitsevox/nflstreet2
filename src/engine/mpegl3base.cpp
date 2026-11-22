@@ -1,12 +1,11 @@
-/* MPEG-audio layer-3 decoder base class, derived from the MPEG-audio decoder base: only its
-   destructor, which releases the layer-3 work buffer, remains in this build. */
+/* Releases the MPEG Layer III decoder's work buffer when the sound library destroys the decoder. */
 
 #include "engine/sndlib.h"
-
+#include "engine/sndutil.h"
 
 CMpegLayer3Base::~CMpegLayer3Base()
 {
-    if (m1B0 != 0) {
-        lbl_803B53E8(m1B0);
+    if (mpWorkBuffer != 0) {
+        Snd::CODADelete(mpWorkBuffer);
     }
 }

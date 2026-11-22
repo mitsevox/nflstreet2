@@ -23970,6 +23970,25 @@
           "end": "0x802AECB4"
         }
       ]
+    },
+    {
+      "source": "src/engine/mpegl3base.cpp",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x80271B74-0x80271BD4, the destructor function and name rows, and the data and name rows for the native vtable at 0x802C19A8.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80271B74",
+          "end": "0x80271BD4"
+        },
+        {
+          "section": ".gnu.linkonce.d._vt.15CMpegLayer3Base",
+          "placement": ".data3",
+          "start": "0x802C19A8",
+          "end": "0x802C19E8"
+        }
+      ]
     }
   ]
 }
