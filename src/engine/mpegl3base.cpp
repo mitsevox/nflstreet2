@@ -1157,6 +1157,7 @@ const float CMpegLayer3Base::sAntiAliasCoefficients[2][8] = {
     },
 };
 
+// FAKEMATCH: Group the retained stereo literals so their measured order survives compilation.
 const float CMpegLayer3Base::sStereoFactors[6] = {
     1.0f, 0.707106769f, 1.0f, 0.0f, 0.707106769f, 1.0f,
 };
@@ -1174,6 +1175,7 @@ extern const unsigned char reorderMap[6][10] = {
 
 }
 
+// FAKEMATCH: Group the retained inverse-transform literals as a read-only array.
 const float CMpegLayer3Base::sImdctFactors[37] = {
     0.0f, 0.5f, 0.866025388f, 1.93185163f, 0.707106769f, 0.517638087f, 0.504314482f, 0.541196108f,
     0.630236208f, 0.821339786f, 1.30656302f, 3.8306489f, -0.793353319f, -0.60876143f, -0.923879504f, -0.382683426f,
