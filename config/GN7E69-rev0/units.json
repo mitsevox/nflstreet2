@@ -241,6 +241,20 @@
       "language": "c++",
       "evidence": "evidence.tsv compiler rows 0x802714A8-0x8027CF9C (sound_cxx): the sound files sdspmix.c, snddrv.c, slinklst.c, saramman.c and supmutpf.c carry NASCAR 2005's .c names, and NASCAR's symbols for every function of those files are C++-mangled (SNDDRV_DSPMixerSetAuxBus__FP6_AXVPBUsi in sdspmix.c, SNDPLATFORM_stop__Fi in snddrv.c, SNDLINKI_push__FP11SNDLINKLISTP11SNDLINKNODE in slinklst.c, SNDARAM_alloc__Fi in saramman.c, SFILTER_unpackmtpf__FPviT0T0i in supmutpf.c), so the original build compiled them as C++. -O2 -G0 are measured on the former files src/engine/cu_802714A8.cpp and src/engine/cu_80276DE4.cpp (their compiler rows): no r13 or r2 access in the range, and default -G8 would turn absolute word accesses into SDA relocations. -fno-strength-reduce (owner ruling of 2026-11-14, per-profile flag): the target recomputes loop indexes on every pass (mulli r3,r31,88 in 0x80271EC4; slwi/lfsx at 0x80279BD4/0x80279BD8) and the flag turns no exact function of the range inexact. The neutral .cpp files of the same range use this profile too. -mps-float (SN's paired-single float switch): evidence.tsv compiler row 0x80266E88-0x8027D3AC; it gives the target frame of every sound function that saves floating-point registers (8 bytes per saved register above the locals) and changes nothing else."
     },
+    "sound_cxx_data_sections": {
+      "flags": [
+        "-O2",
+        "-G0",
+        "-fno-strength-reduce",
+        "-mps-float",
+        "-fdata-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "language": "c++",
+      "evidence": "evidence.tsv compiler row 0x80271B74-0x80271BD4. The existing sound_cxx flags reproduce the destructor. ProDG 3.9.3 -fdata-sections emits the codec tables as individual native sections, preserving the target order on both sides of the interleaved vtable when linking the unchanged compiler object."
+    },
     "path_cxx": {
       "flags": [
         "-O2",
@@ -23999,8 +24013,8 @@
     },
     {
       "source": "src/engine/mpegl3base.cpp",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80271B74-0x80271BD4, the destructor function and name rows, and the data and name rows for the native vtable at 0x802C19A8.",
+      "profile": "sound_cxx_data_sections",
+      "evidence": "evidence.tsv provisional unit row 0x80271B74-0x80271BD4, the destructor and its native vtable, MPEG Layer III table rows 0x802B9270-0x802C1D80, and the relocated quarter-power pointer at 0x80300048.",
       "sections": [
         {
           "section": ".text",
@@ -24009,10 +24023,94 @@
           "end": "0x80271BD4"
         },
         {
+          "section": ".rodata._15CMpegLayer3Base.slen",
+          "placement": ".data3",
+          "start": "0x802B9270",
+          "end": "0x802B9290"
+        },
+        {
+          "section": ".rodata._9CMpegBase.sNumSfbBlock",
+          "placement": ".data3",
+          "start": "0x802B9290",
+          "end": "0x802B92D8"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sTwoToNegativeQuarterPower",
+          "placement": ".data3",
+          "start": "0x802B92D8",
+          "end": "0x802B96D8"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sToPowerOf4over3",
+          "placement": ".data3",
+          "start": "0x802B96D8",
+          "end": "0x802C1714"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sfBandIndex",
+          "placement": ".data3",
+          "start": "0x802C1714",
+          "end": "0x802C187C"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sAntiAliasCoefficients",
+          "placement": ".data3",
+          "start": "0x802C187C",
+          "end": "0x802C18BC"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sStereoFactors",
+          "placement": ".data3",
+          "start": "0x802C18BC",
+          "end": "0x802C18D4"
+        },
+        {
+          "section": ".rodata._3Snd.reorderMap",
+          "placement": ".data3",
+          "start": "0x802C18D4",
+          "end": "0x802C1910"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sImdctFactors",
+          "placement": ".data3",
+          "start": "0x802C1910",
+          "end": "0x802C19A4"
+        },
+        {
           "section": ".gnu.linkonce.d._vt.15CMpegLayer3Base",
           "placement": ".data3",
           "start": "0x802C19A8",
           "end": "0x802C19E8"
+        },
+        {
+          "section": ".rodata._3Snd.pretab",
+          "placement": ".data3",
+          "start": "0x802C19E8",
+          "end": "0x802C1A00"
+        },
+        {
+          "section": ".rodata._3Snd.TAN12",
+          "placement": ".data3",
+          "start": "0x802C1A00",
+          "end": "0x802C1A40"
+        },
+        {
+          "section": ".rodata._3Snd.io",
+          "placement": ".data3",
+          "start": "0x802C1A40",
+          "end": "0x802C1B40"
+        },
+        {
+          "section": ".rodata._3Snd.win",
+          "placement": ".data3",
+          "start": "0x802C1B40",
+          "end": "0x802C1D80"
+        },
+        {
+          "section": ".data._15CMpegLayer3Base.spTwoToNegativeQuarterPower2",
+          "placement": ".data4",
+          "start": "0x80300048",
+          "end": "0x8030004C"
         }
       ]
     }
