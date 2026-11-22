@@ -8167,19 +8167,13 @@
     },
     {
       "source": "src/game/BallPhysics.cpp",
-      "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x801394B0-0x8013B874 (src/game/BallPhysics.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801394B0-0x8013B874, its exact function extents, its data rows, and the BallResetPhysics overwritten zero store source-form row. The complete unit matches with the existing game_cpp profile.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801394B0",
-          "end": "0x8013ABE0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8013AC28",
           "end": "0x8013B874"
         },
         {
@@ -8195,16 +8189,66 @@
           "end": "0x803EB1C4"
         }
       ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "BallResetPhysics",
-            "evidence": "evidence.tsv source-form 0x8013ABE0-0x8013AC28"
-          }
-        ],
-        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
-      },
       "link_roots": {
+        "symbols": [
+          "BallIsOverField",
+          "BallIsOnGround",
+          "BallIsUnsupported",
+          "BallApplyGravity",
+          "BallApplySideSpin",
+          "BallGetBounceForce",
+          "BallVecAddScaled",
+          "BallVecJitter",
+          "BallApplyGroundFriction",
+          "BallSpinToQuat",
+          "BallUpdateRotation",
+          "BallClampToWorld",
+          "BallFlipPosition",
+          "BallFlipRotation",
+          "BallStepFree",
+          "BallGetRestitution",
+          "BallGetFriction",
+          "BallStartSpin",
+          "BallRecordBounce",
+          "BallSyncModel",
+          "BallApplyContactForce",
+          "BallStepDefault",
+          "BallStepGroundContact",
+          "BallFollowHolder",
+          "BallStepMotion",
+          "BallRestAtAngles",
+          "BallClearPassFlag",
+          "BallSolveFallToHeight",
+          "BallPredictLanding",
+          "BallGetHeightAtTime",
+          "BallResetPhysics",
+          "BallLaunchToTarget",
+          "BallLaunchWithVelocity",
+          "BallIsContactRaised",
+          "BallGetSpinMode",
+          "BallSetSpinMode",
+          "BallPlayerHandsFree",
+          "BallCanPlayerTouch",
+          "BallStateHeldEnter",
+          "BallStatePassEnter",
+          "BallStatePassExit",
+          "BallStateLooseExit",
+          "BallStateStepTimed",
+          "BallStateStopVelocity",
+          "BallStatePassMove",
+          "BallStateDeadEnter",
+          "BallStateHeldExit",
+          "BallStatePassHitGround",
+          "BallStateLooseHitGround",
+          "BallStatePitchHitGround",
+          "BallStateHandoffTouch",
+          "BallStateLooseTouch",
+          "BallStatePassTouch",
+          "BallStatePitchTouch",
+          "BallStatePlacedMove",
+          "BallStatePlacedUpdate",
+          "BallStatePlacedTouch"
+        ],
         "discarded": [
           "BallGetWindDrift",
           "BallApplyWindForce",
@@ -8213,7 +8257,7 @@
           "BallAddClampedE0",
           "BallIsSettled"
         ],
-        "evidence": "evidence.tsv linker rows of the file-static functions of src/game/BallPhysics.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
+        "evidence": "The unit's exact target function rows identify all 57 entry points retained by the target. The six named file-static functions have no target extents. Their static literals survive at native offsets as recorded in evidence.tsv linker rows 0x8029FFF8-0x802A009C."
       }
     },
     {

@@ -6,6 +6,7 @@
 
 #include "game/Ball.h"
 #include "game/BigObj.h"
+#include "game/BigObjInst.h"
 #include "game/Object_8017886C.h"
 #include "game/Record_800B15FC.h"
 #include "game/AudmonEvent.h"
@@ -18,26 +19,16 @@
 /* One of the four 100-byte records that the player object's +792 pointer
    holds (see include/game/fn_801BE60C.h). */
 struct PlyrAnimRecord_t {
-    char mUnknown0[4];
+    char unk_0x0[4];
     unsigned short mKey;
     unsigned short mState;
-    char mUnknown8[92];
-};
-
-/* Returned by BallModelGetLinkedObj for the ball's block. */
-struct BallLinkedObj_t {
-    int mUnknown0;
-    int mUnknown4;
-    float mUnknown8;
-    float mUnknownC;
-    char mUnknown10[16];
-    int mUnknown20;
+    char unk_0x8[92];
 };
 
 extern float gFrameTimeScale;
 
 extern "C" {
-BallLinkedObj_t *BallModelGetLinkedObj(Block_80170E64 *pBlock);
+BigObjInst *BallModelGetLinkedObj(Block_80170E64 *pBlock);
 BigObj_t *BigObjGet(int index);
 float fn_800A33D0(void);
 int fn_800A33DC(void);
@@ -756,6 +747,8 @@ void BallResetPhysics(Ball_t *pBall)
 {
     fn_800A33DC();
     fn_800A33D0();
+    // FAKEMATCH: The overwritten zero store recovers the register allocation for both scales.
+    pBall->mState.mUnknownE8 = 0.0f;
     pBall->mState.mUnknownE8 = 1.2f;
     pBall->mState.mUnknownEC = 1.35f;
 }
@@ -1102,7 +1095,7 @@ void BallStatePlacedUpdate(Ball_t *pBall, float dt)
     Vector_80039F5C pos;
     int angles[3];
     Quat_801EB488 turn;
-    BallLinkedObj_t *pPlace = BallModelGetLinkedObj(BallGetModel(BallGetCurrent()));
+    BigObjInst *pPlace = BallModelGetLinkedObj(BallGetModel(BallGetCurrent()));
     BigObj_t *pObject = BigObjGet(pPlace->mUnknown4);
     short *pRot = pObject->mpUnknown220;
 
@@ -1111,10 +1104,10 @@ void BallStatePlacedUpdate(Ball_t *pBall, float dt)
     angles[2] = pRot[2] << 8;
     MatPushUnit();
     pos.mX = pPlace->mUnknown8;
-    pos.mY = pPlace->mUnknownC;
+    pos.mY = pPlace->mUnknown12;
     pos.mZ = 0.0f;
     MatTranslate(&pos);
-    MatRotZ((pPlace->mUnknown20 + 0x400000) & 0xFFFFFF);
+    MatRotZ((pPlace->mUnknown32 + 0x400000) & 0xFFFFFF);
     MatRotX(0x400000);
     MatTranslate(pObject->mUnknown180);
     MatRotY(pObject->mUnknown204);
