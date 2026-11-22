@@ -2,6 +2,8 @@
    from rotation matrices and Euler angles, rotating vectors, and spherical interpolation, used by
    animation blending and camera and player orientation. */
 
+#include <math.h>
+
 #include "engine/AnimChannel.h"
 #include "engine/llmatrix.h"
 #include "engine/vec.h"
@@ -21,7 +23,6 @@ typedef struct QuatMatrix_t {
 static const unsigned char Quat_NextTraceIndex[3] = { 1, 2, 0 };
 
 double fabs(double x);
-float fn_80260B1C(float x);
 void fn_801CFC14(int angle, float *pSin, float *pCos);
 void fn_801CFCD0(int *pAngles, float *pSin, float *pCos);
 float fn_801CFB74(float x);
@@ -40,7 +41,7 @@ void QuatIdentity(Quat_t *q)
 
 float QuatLength(Quat_t *q)
 {
-    return fn_80260B1C(q->x * q->x + q->y * q->y + q->z * q->z + q->w * q->w);
+    return sqrtf(q->x * q->x + q->y * q->y + q->z * q->z + q->w * q->w);
 }
 
 float QuatInvLength(Quat_t *q)
@@ -153,7 +154,7 @@ void QuatFromMatrix(float *q, QuatMatrix_t *m)
 
     trace = m->mElements[0] + m->mElements[5] + m->mElements[10] + 1.0f;
     if (!(trace <= 1e-07f)) {
-        s = fn_80260B1C(trace);
+        s = sqrtf(trace);
         q[3] = s * 0.5f;
         s = 0.5f / s;
         q[0] = (m->mElements[9] - m->mElements[6]) * s;
@@ -166,7 +167,7 @@ void QuatFromMatrix(float *q, QuatMatrix_t *m)
         }
         j = Quat_NextTraceIndex[i];
         k = Quat_NextTraceIndex[j];
-        s = fn_80260B1C(m->mElements[i * 4 + i] - m->mElements[j * 4 + j] + m->mElements[k * 4 + k] + 1.0f);
+        s = sqrtf(m->mElements[i * 4 + i] - m->mElements[j * 4 + j] + m->mElements[k * 4 + k] + 1.0f);
         q[i] = s * 0.5f;
         s = 0.5f / s;
         q[3] = (m->mElements[k * 4 + j] - m->mElements[j * 4 + k]) * s;
@@ -229,7 +230,7 @@ void QuatToEuler(QuatEulerAngles_t *pOut, float *pRot)
     float yy = y * y;
     float zz = z * z;
     float sinY = (x * z - w * y) * -2.0f;
-    float cosY = fn_80260B1C(1.0f - sinY * sinY);
+    float cosY = sqrtf(1.0f - sinY * sinY);
     float sinX;
     float cosX;
     float sinZ;
@@ -264,7 +265,7 @@ void QuatToEulerYZX(Triple_801BCA74 *pOut, Quat_t *q)
     float yy = y * y;
     float zz = z * z;
     float sinZ = (x * y + w * z) * 2.0f;
-    float cosZ = fn_80260B1C(1.0f - sinZ * sinZ);
+    float cosZ = sqrtf(1.0f - sinZ * sinZ);
     float sinX;
     float cosX;
     float sinY;

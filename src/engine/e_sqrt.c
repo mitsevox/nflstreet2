@@ -1,4 +1,4 @@
-/* Partial source for the floating-point range 0x8025FBD4-0x80260B1C (neutral file name). */
+/* Computes the double-precision square root used by T3DB filter expressions. */
 
 /*
  * ====================================================
@@ -22,14 +22,14 @@ typedef union
     u_int32_t msw;
     u_int32_t lsw;
   } parts;
-} ieee_double_shape_type;
+} DoubleSqrtBits_t;
 
-#define EXTRACT_WORDS(ix0,ix1,d) do { ieee_double_shape_type ew_u; ew_u.value = (d); (ix0) = ew_u.parts.msw; (ix1) = ew_u.parts.lsw; } while (0)
-#define INSERT_WORDS(d,ix0,ix1) do { ieee_double_shape_type iw_u; iw_u.parts.msw = (ix0); iw_u.parts.lsw = (ix1); (d) = iw_u.value; } while (0)
+#define EXTRACT_WORDS(ix0,ix1,d) do { DoubleSqrtBits_t ew_u; ew_u.value = (d); (ix0) = ew_u.parts.msw; (ix1) = ew_u.parts.lsw; } while (0)
+#define INSERT_WORDS(d,ix0,ix1) do { DoubleSqrtBits_t iw_u; iw_u.parts.msw = (ix0); iw_u.parts.lsw = (ix1); (d) = iw_u.value; } while (0)
 
 static const double one = 1.0, tiny = 1.0e-300;
 
-double fn_8025FBD4(double x)
+double sqrt(double x)
 {
 	double z;
 	int32_t sign = (int)0x80000000;

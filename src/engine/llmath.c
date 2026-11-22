@@ -1,7 +1,8 @@
 /* Low-level math helpers: angle-table init and guarded reciprocals. */
 
+#include <math.h>
+
 void fn_801CF998(void);
-float fn_80260B1C(float x);
 
 void MathLLInit(void)
 {
@@ -10,7 +11,7 @@ void MathLLInit(void)
 
 float MathInvSqrt(float x)
 {
-    float s = fn_80260B1C(x);
+    float s = sqrtf(x);
     float result;
 
     if (!(s <= 1e-07f)) {

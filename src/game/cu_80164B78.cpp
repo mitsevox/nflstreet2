@@ -16,7 +16,6 @@ extern "C" PlayArtVertex_t lbl_8031D2B8[], lbl_8031D308[];
 
 extern "C" {
 void fn_802271A4(void *, void *);
-float fn_80260B1C(float);
 
 extern int lbl_802E9964[];
 extern PlayArtVertex_t lbl_802E98FC[];
@@ -367,7 +366,7 @@ void fn_80166110(PlayArtVertex_t *points, PlayArtVertex_t *out, int width, int l
     PlayArtVertex_t direction;
     direction.mY = points[0].mY - points[1].mY;
     direction.mX = points[0].mX - points[1].mX;
-    float magnitude = fn_80260B1C(direction.mX * direction.mX + direction.mY * direction.mY);
+    float magnitude = sqrtf(direction.mX * direction.mX + direction.mY * direction.mY);
     if (magnitude != 0.0f) {direction.mX /= magnitude; direction.mY /= magnitude;}
     PlayArtVertex_t side;
     side.mX = -direction.mY;
