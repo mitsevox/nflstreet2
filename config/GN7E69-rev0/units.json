@@ -10121,7 +10121,7 @@
             "evidence": "evidence.tsv source-form 0x80050F14-0x8005122C"
           }
         ],
-        "evidence": "fd1a merge notes (swarm fd1 tracking table): src/game/DynObj.cpp holds out 29 functions."
+        "evidence": "fd1a merge notes (swarm fd1 tracking table) and the fd1 fix round (PR #1394): src/game/DynObj.cpp holds out the 20 functions listed here, each with its HOLDOUT: source-form row in evidence.tsv."
       }
     },
     {
