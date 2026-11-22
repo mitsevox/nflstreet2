@@ -1,4 +1,4 @@
-/* Reads a playing voice's programmed volume for the sound stream controls. */
+/* Reads the programmed volume for a sound handle. */
 
 #include "engine/cu_802714A8.h"
 #include "engine/sndvoice.h"
