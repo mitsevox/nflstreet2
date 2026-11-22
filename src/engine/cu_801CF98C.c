@@ -13,7 +13,6 @@ float fn_802610B0(float x);
 float fn_8025FDE8(float x);
 float fn_80260034(float x);
 float fn_80260C14(float x);
-float fn_8026118C(float x);
 
 float fn_801CF98C(void)
 {
@@ -79,7 +78,7 @@ void fn_801CFCD0(int *pAngles, float *pSin, float *pCos)
 
 float fn_801CFD28(int angle)
 {
-    return fn_8026118C((float)angle * 3.7450703e-07f);
+    return tanf((float)angle * 3.7450703e-07f);
 }
 
 int fn_801CFD78(float x)

@@ -2614,7 +2614,10 @@ address	size	sibling_name	how	sibling_file	unit
 0x8025FB68	108	eh_context_static	size	libgcc2.c	libgcc2.c
 0x8025FBD4	532	sqrt	name	e_sqrt.c	e_sqrt.c
 0x80260B1C	248	sqrtf	name	ef_sqrt.c	ef_sqrt.c
+0x80260E24	196	ceilf	name	sf_ceil.c	sf_ceil.c
 0x80260FC4	36	fabsf	name	sf_fabs.c	sf_fabs.c
+0x80260FE8	200	floorf	name	sf_floor.c	sf_floor.c
+0x8026118C	128	tanf	name	sf_tan.c	sf_tan.c
 0x8026120C	284	scalbnf	name	sf_scalbn.c	sf_scalbn.c
 0x80261328	236	__kernel_cosf	name	kf_cos.c	kf_cos.c
 0x80261414	172	__kernel_sinf	name	kf_sin.c	kf_sin.c

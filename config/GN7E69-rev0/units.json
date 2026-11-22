@@ -16386,6 +16386,25 @@
       ]
     },
     {
+      "source": "src/engine/sf_ceil.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional whole-file row 0x80260E24-0x80260EE8, exact function and small-data placements, and engine_c compiler row at 0x80260E24. The placement includes both four-byte probe operands at 0x803EC454-0x803EC45C.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260E24",
+          "end": "0x80260EE8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC454",
+          "end": "0x803EC45C"
+        }
+      ]
+    },
+    {
       "source": "src/engine/e_sqrt.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8025FBD4-0x8025FDE8, the sqrt function/name/compiler/source-form/type/field rows, and data/name rows for one and tiny at 0x803EDDC8-0x803EDDD8.",
@@ -16433,6 +16452,25 @@
           "placement": ".text",
           "start": "0x80260FC4",
           "end": "0x80260FE8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sf_floor.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80260FE8-0x802610B0, exact function and .sdata extents, names, word-access type, source and compiler.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260FE8",
+          "end": "0x802610B0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC460",
+          "end": "0x803EC468"
         }
       ]
     },
@@ -17179,6 +17217,25 @@
           "placement": ".bss",
           "start": "0x80362A14",
           "end": "0x80362A20"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sf_tan.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional sf_tan.c unit row, exact tanf function and _Tan_fZero data rows, callee ABI, source-form, type and field rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026118C",
+          "end": "0x8026120C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC46C",
+          "end": "0x803EC470"
         }
       ]
     },
