@@ -202,8 +202,10 @@ struct Bank_801B3480 {
     unsigned int *mUnknown3C;
     Node_801B3FE0 *mUnknown40[24];
     unsigned char mUnknownA0[32];
-    Sequence_801B84E4 *mUnknownC0[16];
-    unsigned char mUnknown100[4096];
+    enum { kEventPoolBytes = 4096 };
+    // The last scanned slot shares the first bytes of the event pool.
+    Sequence_801B84E4 *mUnknownC0[17];
+    unsigned char mEventPoolTail[kEventPoolBytes - sizeof(Sequence_801B84E4 *)];
     int mUnknown1100;
 };
 
