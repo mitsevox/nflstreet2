@@ -65,7 +65,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 
 - `src/engine/smemman.c` (0x8026B520-0x8026B898) constrains, initializes, allocates from and frees the sound heap.
 - `src/engine/sbadd.c` (0x8026A40C-0x8026A664) adds sound banks and dispatches their user-data callbacks.
-- `src/engine/sfilter.c` (0x80279D90-0x80279E74) inserts and removes filters in the sound mixer's priority-ordered chains.
+- `src/engine/spat2hdr.c` (0x8026C3F4-0x8026C910) reads sample format and playback settings from a tagged sound-bank patch.
 
 | Range | What it does in the game | Known files | Rungs 0/1/2/3/4 | Unlinked | Held |
 | --- | --- | --- | --- | --- | --- |
