@@ -63,6 +63,10 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 
 ## Nintendo SDK and runtimes (`src/dolphin/`, `src/engine/`)
 
+- `src/engine/modelobj.c` (0x802355E4-0x80235DD8) manages render objects for game models, including their ambient color.
+- `src/engine/sbadd.c` (0x8026A40C-0x8026A664) adds sound banks and dispatches their user-data callbacks.
+- `src/engine/sfilter.c` (0x80279D90-0x80279E74) inserts and removes filters in the sound mixer's priority-ordered chains.
+
 | Range | What it does in the game | Known files | Rungs 0/1/2/3/4 | Unlinked | Held |
 | --- | --- | --- | --- | --- | --- |
 | 0x80003100-0x800034A0 | Boot: `.init` code, including the `.init` part of `__ppc_eabi_init.c` (0x80003468-0x8000348C); that file's `.text` (0x8023E818-0x8023E920) is counted in the SDK row | `cu_80003100` | 1/0/0/1/0 | 1 KiB | no |
