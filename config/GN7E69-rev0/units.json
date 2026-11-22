@@ -22951,6 +22951,25 @@
       ]
     },
     {
+      "source": "src/engine/sgetpvol.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit, function and name rows at 0x802781A8, data row 0x802C2030-0x802C203C, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C. One exact function and its literal pool.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802781A8",
+          "end": "0x8027823C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2030",
+          "end": "0x802C203C"
+        }
+      ]
+    },
+    {
       "source": "src/engine/sgettag.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x8027823C-0x80278328 (src/engine/sgettag.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
