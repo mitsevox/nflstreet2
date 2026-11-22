@@ -1103,11 +1103,11 @@ void BallStatePlacedUpdate(Ball_t *pBall, float dt)
     angles[1] = pRot[1] << 8;
     angles[2] = pRot[2] << 8;
     MatPushUnit();
-    pos.mX = pPlace->mUnknown8;
-    pos.mY = pPlace->mUnknown12;
+    pos.mX = pPlace->mState.mUnknown0;
+    pos.mY = pPlace->mState.mUnknown4;
     pos.mZ = 0.0f;
     MatTranslate(&pos);
-    MatRotZ((pPlace->mUnknown32 + 0x400000) & 0xFFFFFF);
+    MatRotZ((pPlace->mState.mUnknown24 + 0x400000) & 0xFFFFFF);
     MatRotX(0x400000);
     MatTranslate(pObject->mUnknown180);
     MatRotY(pObject->mUnknown204);
