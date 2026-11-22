@@ -21,6 +21,10 @@ Evidence records and the test and build commands with their results, per target.
 
 Fake matches: `none`, or each `// FAKEMATCH:` site this PR adds (function and what is fake), so reviewers can check that each is labeled in source and in `evidence.tsv` and leaves the logic unchanged (CONTRIBUTING.md, Matching integrity).
 
+## Owner questions
+
+`none`, or only what no written rule or listed ruling covers (CONTRIBUTING.md, Matching integrity and Already decided; AGENTS.md; config README), each naming the rules checked.
+
 ## Review
 
 - Reviewed revision: full commit SHA
