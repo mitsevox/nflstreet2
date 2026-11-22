@@ -149,6 +149,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x8025F088	0x8025F0A8	libgcc2.c	1	1	1	1	0	-	-
 0x8025FABC	0x8025FAF8	libgcc2.c	1	1	1	1	0	-	-
 0x8025FAF8	0x8025FBD4	libgcc2.c	4	4	4	0	4	-	eabi.asm
+0x80260EE8	0x80260FC4	sf_cos.c	1	1	1	1	0	-	-
 0x80260FC4	0x80260FE8	sf_fabs.c	1	1	1	1	0	-	-
 0x802610B0	0x8026118C	sf_sin.c	1	1	1	1	0	-	-
 0x8026120C	0x80261328	sf_scalbn.c	1	1	1	1	0	-	-

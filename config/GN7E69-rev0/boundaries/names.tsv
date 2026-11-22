@@ -2614,6 +2614,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x8025FB68	108	eh_context_static	size	libgcc2.c	libgcc2.c
 0x8025FBD4	532	sqrt	gap	e_sqrt.c	-
 0x80260B1C	248	sqrtf	gap	ef_sqrt.c	-
+0x80260EE8	220	cosf	name	sf_cos.c	sf_cos.c
 0x80260FC4	36	fabsf	name	sf_fabs.c	sf_fabs.c
 0x802610B0	220	sinf	name	sf_sin.c	sf_sin.c
 0x8026120C	284	scalbnf	name	sf_scalbn.c	sf_scalbn.c

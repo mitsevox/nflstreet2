@@ -372,10 +372,6 @@
       "address": "0x801CBC50",
       "evidence": "evidence.tsv external row for 0x801CBC50 (__12FlowManagerC); descriptive name."
     },
-    "cosf": {
-      "address": "0x80260EE8",
-      "evidence": "evidence.tsv GXLight external cosf: target branch at 0x8024F6B0 and related SDK source call/prototype."
-    },
     "sprintf": {
       "address": "0x801C2E18",
       "evidence": "evidence.tsv external row sprintf: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
@@ -16386,6 +16382,31 @@
           "placement": ".text",
           "start": "0x80261A24",
           "end": "0x80261A58"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sf_cos.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional sf_cos.c unit row, exact cosf function and both scalar data rows, kernel and reducer ABI, layout, matching profile and source-form evidence.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260EE8",
+          "end": "0x80260FC4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC45C",
+          "end": "0x803EC460"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDF3C",
+          "end": "0x803EDF40"
         }
       ]
     },
