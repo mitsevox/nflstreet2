@@ -9596,7 +9596,7 @@
           "end": "0x8004E468"
         },
         {
-          "symbol": "fn_8004E468",
+          "symbol": "IgnorePair__20PhysCollisionHandlerP9RigidBodyT1",
           "start": "0x8004E468",
           "end": "0x8004E4D0"
         },
@@ -9611,17 +9611,17 @@
           "end": "0x8004ED44"
         },
         {
-          "symbol": "fn_8004ED44",
+          "symbol": "OnContacts__20PhysCollisionHandlerfP9RigidBodyT2UiP11BodyContact",
           "start": "0x8004ED44",
           "end": "0x8004EE18"
         },
         {
-          "symbol": "fn_8004EE18",
+          "symbol": "OnImpulse__20PhysCollisionHandlerP9RigidBodyUiT1UiP13Vec3_801DE1E0N25",
           "start": "0x8004EE18",
           "end": "0x8004F20C"
         },
         {
-          "symbol": "fn_8004F20C",
+          "symbol": "ApplyForces__13PhysBodyGroupPv",
           "start": "0x8004F20C",
           "end": "0x8004F2D0"
         },
@@ -9666,9 +9666,19 @@
           "end": "0x800504EC"
         },
         {
+          "symbol": "fn_800504EC",
+          "start": "0x800504EC",
+          "end": "0x800508A0"
+        },
+        {
           "symbol": "fn_800508A0",
           "start": "0x800508A0",
           "end": "0x80050960"
+        },
+        {
+          "symbol": "fn_80050960",
+          "start": "0x80050960",
+          "end": "0x80050964"
         },
         {
           "symbol": "fn_80050964",
@@ -9689,6 +9699,16 @@
           "symbol": "fn_80050F14",
           "start": "0x80050F14",
           "end": "0x8005122C"
+        },
+        {
+          "symbol": "fn_8005122C",
+          "start": "0x8005122C",
+          "end": "0x80051308"
+        },
+        {
+          "symbol": "fn_80051308",
+          "start": "0x80051308",
+          "end": "0x8005164C"
         },
         {
           "symbol": "fn_8005164C",
@@ -9741,14 +9761,9 @@
           "end": "0x80051D0C"
         },
         {
-          "symbol": "fn_80051DB4",
-          "start": "0x80051DB4",
-          "end": "0x80051DBC"
-        },
-        {
-          "symbol": "fn_8005122C",
-          "start": "0x8005122C",
-          "end": "0x80051308"
+          "symbol": "__static_initialization_and_destruction_0",
+          "start": "0x80051D0C",
+          "end": "0x80051D60"
         },
         {
           "symbol": "_._11PhysicsTime",
@@ -9756,9 +9771,14 @@
           "end": "0x80051D94"
         },
         {
-          "symbol": "__static_initialization_and_destruction_0",
-          "start": "0x80051D0C",
-          "end": "0x80051D60"
+          "symbol": "_._13PhysBodyGroup",
+          "start": "0x80051D94",
+          "end": "0x80051DB4"
+        },
+        {
+          "symbol": "AfterStep__13PhysBodyGroupii",
+          "start": "0x80051DB4",
+          "end": "0x80051DBC"
         },
         {
           "symbol": "_GLOBAL_.I.fn_8004A2F4",
