@@ -355,17 +355,22 @@ int _TDbIOReadTableNew(TDbDatabase_t *pDb, TDbIOTableHdr_t *pHdr, int id,
                 if ((pTable->mFlags & 0x60) && err == 0 && pTable->mExtraSize != 0) {
                     err = TDbExtMemAlloc(pDb->mHeap, pTable->mExtraSize, &pTable->mExtraData);
                     if (err == 0) {
-                        err = _TDbIOReadBuffer(pStream, pTable->mExtraData, pTable->mExtraSize);
-                        if (err == 0) {
-                            if (pTable->mExtraSize & 7) {
-                                err = pStream->mDevice->mSeek(pStream->mHandle, 8 - (pTable->mExtraSize & 7));
-                                memset(pad, 0, sizeof(pad));
-                                pStream->mOffset += 8 - (pTable->mExtraSize & 7);
-                                pStream->mCrcA = _TDbIOCRC32(pad, 8 - (pTable->mExtraSize & 7), pStream->mCrcA);
-                                pStream->mCrcB = _TDbIOCRC32(pad, 8 - (pTable->mExtraSize & 7), pStream->mCrcB);
-                            }
+                        int readStatus = _TDbIOReadBuffer(pStream, pTable->mExtraData, pTable->mExtraSize);
+                        if (readStatus != 0) {
+                            err = readStatus;
+                            goto freeExtraData;
                         }
-                        if (err != 0) {
+                        err = readStatus;
+                        if (pTable->mExtraSize & 7) {
+                            err = pStream->mDevice->mSeek(pStream->mHandle, 8 - (pTable->mExtraSize & 7));
+                            memset(pad, 0, sizeof(pad));
+                            pStream->mOffset += 8 - (pTable->mExtraSize & 7);
+                            pStream->mCrcA = _TDbIOCRC32(pad, 8 - (pTable->mExtraSize & 7), pStream->mCrcA);
+                            pStream->mCrcB = _TDbIOCRC32(pad, 8 - (pTable->mExtraSize & 7), pStream->mCrcB);
+                        }
+                        /* FAKEMATCH: complement the status and zero to keep the two cleanup tests separate. */
+                        if (~(unsigned int)err != ~0U) {
+                        freeExtraData:
                             TDbExtMemFree(pDb->mHeap, pTable->mExtraData, pTable->mExtraSize);
                         }
                     }
