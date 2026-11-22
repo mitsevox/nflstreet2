@@ -63,7 +63,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 
 ## Nintendo SDK and runtimes (`src/dolphin/`, `src/engine/`)
 
-- `src/engine/dbtatscopy.c` (0x8022EBF0-0x8022EF14) manages a second copy of the TATS database and copies its tables for game setup.
+- `src/engine/smemman.c` (0x8026B520-0x8026B898) constrains, initializes, allocates from and frees the sound heap.
 - `src/engine/sbadd.c` (0x8026A40C-0x8026A664) adds sound banks and dispatches their user-data callbacks.
 - `src/engine/sfilter.c` (0x80279D90-0x80279E74) inserts and removes filters in the sound mixer's priority-ordered chains.
 
