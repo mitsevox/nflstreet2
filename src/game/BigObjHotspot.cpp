@@ -69,8 +69,8 @@ int fn_800AD9B4(void);
 Object_80039F5C *BallGetCurrentHolder(void);
 int fn_801486A0(void);
 int fn_80177C38(void);
-void fn_8004CBEC(void *, float, BigObjInst *, BigObj_t *);
-void fn_8004E090(BigObj_t *, int, int);
+void BigObjEmitParticles(void *, float, BigObjInst *, BigObj_t *);
+void DynObjSetPartState(BigObj_t *, int, int);
 void InGameSetLegendsUnlocked(int);
 void AudmonEventPostId(int, void *, int, int, int, int);
 void TeamUnlock(int, int);
@@ -157,11 +157,11 @@ int HotspotClassifyPlay(HotspotPlay_t *pPlay)
     } else if (type == 228 || type == 229) {
         if (!fn_80177C38()) {
             if (fn_801784C4()) {
-                if (1.5f - pObject->mUnknown472->mUnknown12 <= fn_80177FE0().mY) {
+                if (1.5f - pObject->mUnknown472->mState.mUnknown4 <= fn_80177FE0().mY) {
                     goto done;
                 }
             } else {
-                if (pObject->mUnknown472->mUnknown12 + 1.5f <= fn_80177FE0().mY) {
+                if (pObject->mUnknown472->mState.mUnknown4 + 1.5f <= fn_80177FE0().mY) {
                     goto done;
                 }
             }
@@ -293,9 +293,9 @@ void HotspotCapture(HotspotPlay_t *pPlay)
         TMTexLibReplaceTexture(pObject->mUnknown300->mpUnknown0->mpUnknown324, pObject->mUnknown300->mpUnknown0->mUnknown332, 1, &_Hotspot_aLogo[1].mImage, 1, 1);
     }
     if (_Hotspot_aSlot[i].mTeam == 0) {
-        fn_8004E090(pObject, 0, 0);
+        DynObjSetPartState(pObject, 0, 0);
     } else {
-        fn_8004E090(pObject, 0, 1);
+        DynObjSetPartState(pObject, 0, 1);
     }
     pObject->mUnknown232_31 = 1;
     Object_80039F5C *pPlayer = fn_8009BCE8(pRef);
@@ -399,7 +399,7 @@ int BigObjHotspotFrameUpdate(BigObjInst *pInst, BigObj_t *pOwner, int mode)
                         }
                     }
                     if ((unsigned int)(play.mKind - 3) > 1) {
-                        fn_8004CBEC(pNode->mUnknown128, 1.0f, pOwner->mUnknown472, pOwner);
+                        BigObjEmitParticles(pNode->mUnknown128, 1.0f, pOwner->mUnknown472, pOwner);
                         HotspotCapture(&play);
                     }
                 }
@@ -429,7 +429,7 @@ void HotspotFrameTouch(BigObj_t *pObject, Object_80039F5C *pPlayer)
                 TutorialSetMoveDone(44, 1);
             }
         }
-        fn_8004CBEC(pNode->mUnknown128, 1.0f, pObject->mUnknown472, pObject);
+        BigObjEmitParticles(pNode->mUnknown128, 1.0f, pObject->mUnknown472, pObject);
         if ((unsigned int)(play.mKind - 3) <= 1) {
             HotspotQueuePlay(&play);
         } else {
@@ -482,7 +482,7 @@ void HotspotFramePlayEffect(BigObj_t *pObject, int index, int apply)
         pNode = pNode->mpNext;
     }
     if (apply) {
-        fn_8004CBEC(pNode->mUnknown128, 1.0f, pObject->mUnknown472, pObject);
+        BigObjEmitParticles(pNode->mUnknown128, 1.0f, pObject->mUnknown472, pObject);
     }
 }
 }

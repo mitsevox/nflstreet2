@@ -259,7 +259,7 @@ void CamPlayProcess(GameCamera_t *camera)
         BallGetPosition(BallGetCurrent(),&velocity);
         float bound = lbl_802DC718[camera->mUnknown9C].mUnknown8;
         velocity.mX = velocity.mX < -bound ? -bound : (velocity.mX > bound ? bound : velocity.mX);
-    } else velocity.mX = velocity.mZ = velocity.mY = 0.0f;
+    } else velocity.mX = velocity.mY = velocity.mZ = 0.0f;
     fn_80177FE0();
     CamPresetSetEaseRates(camera,0);
     switch (camera->mUnknownA0) {
@@ -302,6 +302,7 @@ void CamPlayProcess(GameCamera_t *camera)
     apply:
         if (gameMode != 2) CamPlayPanWithBall(&point,&angles,&velocity,camera->mUnknown9C,camera->mUnknownA0);
         if (fn_801486A0() == 0) {
+            CamPlayAngles_t unused; // FAKEMATCH: unused local (compiled-out debug filler) gives the target's frame slots
             Vec3Add(&point,&point,&lbl_802DC718[camera->mUnknown9C].mUnknown24);
             ANGLES_FROM_DEGREES(offset, lbl_802DC718[camera->mUnknown9C].mUnknown30);
             Orient3Add(&angles,&angles,&offset);
@@ -390,7 +391,11 @@ void CamPlayGetPosLimits(int index, unsigned int mode, float *a, float *b)
     case 2: case 3: case 5: alternate = 1; break;
     }
     float *pa = lbl_802DC718[index].mUnknownC;
-    float *pb = lbl_802DC718[index].mUnknown14[alternate];
+    /* FAKEMATCH: the target adds the pair offset and the row offset before
+       the table base ((alternate * 8 + index * 0x6C) + &mUnknown14); every
+       array-index form adds the row offset to the base first. */
+    float *pb = (float *)((char *)lbl_802DC718[0].mUnknown14 +
+                          (alternate * sizeof(lbl_802DC718[0].mUnknown14[0]) + index * sizeof(CamPlayDef_t)));
     a[0] = pa[0];
     a[1] = pa[1];
     b[0] = pb[0];

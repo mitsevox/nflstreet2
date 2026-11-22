@@ -95,9 +95,9 @@ void fn_80234B88(DynObjPacket *); void fn_80234BF4(void *, DynObjPacket *, int);
 void fn_80234CA4(DynObjPacket *, void *); void fn_80234CF0(DynObjPacket *, int, DynObjContext *);
 void fn_80234DC0(DynObjPacket *, int); unsigned int fn_80234D4C(float *, void *, void *, void *);
 void Vec3Mat33Mul(void *, void *); void Vec3Normalize(void *, void *); float Vec3DotProduct(void *, void *);
-int fn_8004D5B8(int, const char *, char *, int); void fn_8004D498(int);
-int fn_8004D4B0(int, const char *); int fn_8004D508(int, const char *);
-void fn_8004E090(DynObj *, int, int);
+int ObjParseGetString(int, const char *, char *, int); void ObjParseRewind(int);
+int ObjParseFindPath(int, const char *); int ObjParseFindChild(int, const char *);
+void DynObjSetPartState(DynObj *, int, int);
 int ResFindIndexByName(void *, const char *);
 int DynObjIsFacingAway(DynObj *); int DynObjChildIsFacingAway(DynObjChild *);
 int DynObjDrawChild(DynObjChild *, int);
@@ -227,13 +227,13 @@ void DynObjChildPickFrame(DynObjChild *p,DynObj *owner)
 void DynObjRenderInit(void *data,int handle,DynObj *p)
 {
     char name[256],behavior[128];
-    fn_8004D5B8(handle,"tideRef",name,256);
+    ObjParseGetString(handle,"tideRef",name,256);
     int index=DynObjFindCache(name),hasBehavior=0;
     p->mpUnknown12C=static_cast<DynObjInstance *>(fn_801D2B7C(0x110,0,0));
     memset(p->mpUnknown12C,0,0x110);
     DynObjInstance *s=p->mpUnknown12C;DynObjSkeletonRef *skel=p->mpUnknown130;
-    fn_8004D498(handle);fn_8004D4B0(handle,"render");
-    if(fn_8004D508(handle,"clut"))hasBehavior=fn_8004D5B8(handle,"tideRef",behavior,128);
+    ObjParseRewind(handle);ObjParseFindPath(handle,"render");
+    if(ObjParseFindChild(handle,"clut"))hasBehavior=ObjParseGetString(handle,"tideRef",behavior,128);
     if(index!=-1) {s->mpUnknown0=_DynObj_apCaches[index];s->mpUnknown0->mUnknown138++;}
     else {
         _DynObj_apCaches[_DynObj_uNumCaches]=static_cast<DynObjCache *>(fn_801D2B7C(0x174,0,0));
@@ -268,8 +268,8 @@ void DynObjRenderInit(void *data,int handle,DynObj *p)
         fn_80233BB8(s->mUnknownFC,0x100,1);fn_80233BDC(s->mUnknownFC,skel->mpUnknown0);
         fn_80234CA4(&s->mUnknownC,s->mUnknownFC);
     } else fn_80233BB8(s->mUnknownFC,0,1);
-    fn_8004E090(p,0,0);p->mUnknownE8.mWord=1;
-    if(fn_8004D5B8(handle,"tideEnvMapRef",name,256))p->mUnknownE8.mWord=2;
+    DynObjSetPartState(p,0,0);p->mUnknownE8.mWord=1;
+    if(ObjParseGetString(handle,"tideEnvMapRef",name,256))p->mUnknownE8.mWord=2;
     p->mUnknown14=DynObjDraw;LightTrackerReset(&s->mUnknown108);
 }
 void DynObjRenderShutdown(DynObj *p)

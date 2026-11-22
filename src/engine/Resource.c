@@ -92,9 +92,9 @@ extern void *FileReadAsync(int handle, void *pBuffer, int size, int priority,
 extern int ResLooseFileExists(ResFile_t *pRes, int index);
 extern void *memmove(void *pDst, const void *pSrc, unsigned int size);
 
-extern Lock_801F8014 _Res_sAsyncCountLock;
-extern Lock_801F8014 _Res_sResourceLock;
-extern void *_Res_pResourceFileList;
+Lock_801F8014 _Res_sAsyncCountLock;
+Lock_801F8014 _Res_sResourceLock;
+void *_Res_pResourceFileList;
 
 extern unsigned int strlen(const char *s);
 extern char *strcpy(char *pDst, const char *pSrc);
@@ -440,7 +440,6 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
     }
     if (pRes->mState != 2 && pRes->mState != 3) {
         ResTrackLoadInfo_t track;
-        ResTrackLoadDone_t done;
         int result;
 
         if (_Res_bCachingEnabled != 0 && pRes->mCacheHandle >= 0) {
@@ -508,13 +507,13 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
                     request.pUser = 0;
                     request.pRes = pRes;
                     request.mIndex = index;
-                    request.mDiskSize = compressedSize;
-                    request.mFullSize = size;
-                    request.pBuffer = (void *)*pBuffer;
                     request.mHeap = 1;
                     request.mNoStore = 0;
                     request.mCache = 0;
                     request.mTime = 0;
+                    request.mFullSize = size;
+                    request.mDiskSize = compressedSize;
+                    request.pBuffer = (void *)*pBuffer;
                     _ResBlockLoadCompFileAsync(file, compressedSize, 100, 0, &request);
                     FileAsyncWaitStream(file);
                 }
@@ -559,9 +558,13 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
         if (_Res_bCachingEnabled != 0 && cache != 0) {
             fn_801F318C(pRes, index, originalOffset, (void *)*pBuffer, size);
         }
-        done.pRes = pRes;
-        done.mIndex = index;
-        ResTrackResource(3, &done);
+        {
+            ResTrackLoadDone_t done;
+
+            done.pRes = pRes;
+            done.mIndex = index;
+            ResTrackResource(3, &done);
+        }
     } else if (pRes->mState == 2) {
         address = pRes->mBaseAddr + pRes->mBaseOffset + _ResGetBlockOffset(pRes, index);
         if (codec != 0) {
@@ -677,8 +680,8 @@ static int _ResLoadResAsync(ResFile_t *pRes, unsigned int index, void *pBuffer, 
 
     prevSize = 0;
     size = 0;
-    pReq = fn_801D2BB0(1, sizeof(ResRequest_t), 0, 0);
     err = 0;
+    pReq = fn_801D2BB0(1, sizeof(ResRequest_t), 0, 0);
     if (pReq != 0) {
         pReq->pCallback = pDone;
         pReq->pUser = pUser;
@@ -799,14 +802,16 @@ static int _ResLoadResAsync(ResFile_t *pRes, unsigned int index, void *pBuffer, 
             } else {
                 pRead = FileReadAsync(file, pBuffer, prevSize, priority, _ResAsyncCallbackFunc, pReq);
             }
+            if (pRead == 0) {
+                err = SysGetLastError();
+            }
         } else {
             pReq->pBuffer = pBuffer;
             pReq->mDiskSize = size;
             pReq->mFullSize = size;
-            pRead = FileReadAsync(file, pBuffer, size, priority, _ResAsyncCallbackFunc, pReq);
-        }
-        if (pRead == 0) {
-            err = SysGetLastError();
+            if (FileReadAsync(file, pBuffer, size, priority, _ResAsyncCallbackFunc, pReq) == 0) {
+                err = SysGetLastError();
+            }
         }
     } else {
         err = SysGetLastError();
@@ -822,6 +827,7 @@ static unsigned int _ResLockRes(ResFile_t *pRes, int index)
 {
     if (!(pRes->pFlags[index] & 4)) {
         if (!(pRes->pFlags[index] & 8)) {
+            pRes->pAddrs[index] = pRes->pAddrs[index]; /* FAKEMATCH: no-op store keeps the target's pFlags reload (lwz r10,0x78(r31)) in this arm */
             pRes->pFlags[index] |= 4;
         } else {
             pRes->mNumLocked++;
@@ -837,6 +843,7 @@ static unsigned int _ResUnlockRes(ResFile_t *pRes, int index)
     if (pRes->pFlags[index] & 4) {
         if (pRes->pFlags[index] & 1) {
             if (!(pRes->pFlags[index] & 8)) {
+                pRes->pAddrs[index] = pRes->pAddrs[index]; /* FAKEMATCH: no-op store keeps the target's pFlags reload (lwz r11,0x78(r3)) and its two tails */
                 pRes->pFlags[index] &= ~4;
             } else {
                 pRes->mNumLocked--;
@@ -1420,10 +1427,11 @@ ResFile_t *ResOpenRam(ResFile_t *pParent, unsigned int index, int heap, int mode
             pRes->mFile = -1;
             if (mode != 1) {
                 pRes->mState = 3;
+                pRes->mMode = mode;
             } else {
                 pRes->mState = 2;
+                pRes->mMode = 1;
             }
-            pRes->mMode = mode;
             pRes->mBaseAddr = ResLoad(pParent, index, heap);
             pRes->pExtra = pParent;
             pRes->mIndex = index;

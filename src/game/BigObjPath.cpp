@@ -25,13 +25,13 @@ struct BigObjPathed_t {
 
 extern "C" {
 int BigObjGetCount(void);
-void fn_8004D498(int handle);
-int fn_8004D4B0(int handle, const char *pName);
-int fn_8004D508(int handle, const char *pName);
-int fn_8004D5B8(int handle, const char *pKey, char *pText, int size);
-float fn_8004D624(int handle, const char *pKey);
-int fn_8004D84C(int handle);
-void fn_8004D860(int handle, int value);
+void ObjParseRewind(int handle);
+int ObjParseFindPath(int handle, const char *pName);
+int ObjParseFindChild(int handle, const char *pName);
+int ObjParseGetString(int handle, const char *pKey, char *pText, int size);
+float ObjParseGetFloat(int handle, const char *pKey);
+int ObjParseGetCursor(int handle);
+void ObjParseSetCursor(int handle, int value);
 int BigObjGetNameNumber(BigObj_t *pObject);
 int fn_801784C4(void);
 void QuatSlerp(float *pOut, float *pA, float *pB, float t);
@@ -52,14 +52,14 @@ void BigObjPathNodeLoad(int handle, BigObjInst *pObject)
 {
     BigObjPathNode_t *pData = (BigObjPathNode_t *)fn_801D2B7C(sizeof(BigObjPathNode_t), 0, 0);
     pObject->mUnknown420 = pData;
-    int saved = fn_8004D84C(handle);
-    fn_8004D508(handle, "pathnode");
-    fn_8004D5B8(handle, "nextnode", pData->mUnknown40, 32);
-    pData->mUnknown4 = fn_8004D624(handle, "speed");
-    fn_8004D498(handle);
-    fn_8004D4B0(handle, "object");
-    fn_8004D5B8(handle, "name", pData->mUnknown8, 32);
-    fn_8004D860(handle, saved);
+    int saved = ObjParseGetCursor(handle);
+    ObjParseFindChild(handle, "pathnode");
+    ObjParseGetString(handle, "nextnode", pData->mUnknown40, 32);
+    pData->mUnknown4 = ObjParseGetFloat(handle, "speed");
+    ObjParseRewind(handle);
+    ObjParseFindPath(handle, "object");
+    ObjParseGetString(handle, "name", pData->mUnknown8, 32);
+    ObjParseSetCursor(handle, saved);
     pData->mUnknown0 = 0;
 }
 
@@ -91,16 +91,16 @@ void BigObjPathedLoad(int handle, BigObjInst *pObject)
     int i;
     BigObjPathed_t *pData = (BigObjPathed_t *)fn_801D2B7C(sizeof(BigObjPathed_t), 0, 0);
     pObject->mUnknown420 = pData;
-    int saved = fn_8004D84C(handle);
-    fn_8004D508(handle, "pathnode");
-    fn_8004D5B8(handle, "name", name, 32);
+    int saved = ObjParseGetCursor(handle);
+    ObjParseFindChild(handle, "pathnode");
+    ObjParseGetString(handle, "name", name, 32);
     for (i = 0; i < BigObjGetCount(); i++) {
         BigObjInst *pOther = BigObjInstGet(i);
         if (pOther->mUnknown188 == 3 && strcmp(((BigObjPathNode_t *)pOther->mUnknown420)->mUnknown8, name) == 0) {
             pData->mUnknown8 = BigObjGet(i);
         }
     }
-    fn_8004D860(handle, saved);
+    ObjParseSetCursor(handle, saved);
     pData->mUnknown12 = 0;
     pData->mUnknown0 = 0;
     pData->mUnknown4 = 0;
@@ -113,9 +113,9 @@ int BigObjPathedUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode)
     BigObjPathNode_t *pNode;
     int done = 0;
 
-    pos.mX = pObject->mUnknown8;
-    pos.mY = pObject->mUnknown12;
-    pos.mZ = pObject->mUnknown16;
+    pos.mX = pObject->mState.mUnknown0;
+    pos.mY = pObject->mState.mUnknown4;
+    pos.mZ = pObject->mState.mUnknown8;
     if (fn_801784C4()) {
         pos.mX = -pos.mX;
         pos.mY = -pos.mY;
@@ -129,36 +129,36 @@ int BigObjPathedUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode)
         } else {
             pData->mUnknown0 = pData->mUnknown8;
             BigObjInst *pMover = pOwner->mUnknown472;
-            float *pVelocity = &pMover->mUnknown48;
+            float *pVelocity = &pMover->mState.mUnknown40;
             pVelocity[2] = 0.0f;
             pVelocity[1] = 0.0f;
-            pMover->mUnknown48 = 0.0f;
+            pMover->mState.mUnknown40 = 0.0f;
         }
         pNode = (BigObjPathNode_t *)pData->mUnknown0->mUnknown472->mUnknown420;
         pData->mUnknown4 = pNode->mUnknown0;
         if (!pData->mUnknown4) {
             pData->mUnknown0 = pData->mUnknown8;
             BigObjInst *pMover = pOwner->mUnknown472;
-            float *pVelocity = &pMover->mUnknown48;
+            float *pVelocity = &pMover->mState.mUnknown40;
             pVelocity[2] = 0.0f;
             pVelocity[1] = 0.0f;
-            pMover->mUnknown48 = 0.0f;
+            pMover->mState.mUnknown40 = 0.0f;
             pNode = (BigObjPathNode_t *)pData->mUnknown0->mUnknown472->mUnknown420;
             pData->mUnknown4 = pNode->mUnknown0;
         }
         float step[3];
-        float *pFrom = &pData->mUnknown0->mUnknown472->mUnknown8;
-        Vec3Sub(step, &pData->mUnknown4->mUnknown472->mUnknown8, pFrom);
-        pOwner->mUnknown472->mUnknown8 = pFrom[0];
-        pOwner->mUnknown472->mUnknown12 = pFrom[1];
-        pOwner->mUnknown472->mUnknown16 = pFrom[2];
+        float *pFrom = &pData->mUnknown0->mUnknown472->mState.mUnknown0;
+        Vec3Sub(step, &pData->mUnknown4->mUnknown472->mState.mUnknown0, pFrom);
+        pOwner->mUnknown472->mState.mUnknown0 = pFrom[0];
+        pOwner->mUnknown472->mState.mUnknown4 = pFrom[1];
+        pOwner->mUnknown472->mState.mUnknown8 = pFrom[2];
         float time = Vec3Magnitude(step) / pNode->mUnknown4;
         float rate = gFrameTimeScale * 60.0f;
         pData->mUnknown16 = pData->mUnknown12 = (int)(time * rate);
         Vec3Scale(step, step, 1.0f / (float)pData->mUnknown12);
-        pOwner->mUnknown472->mUnknown48 = step[0];
-        pOwner->mUnknown472->mUnknown52 = step[1];
-        pOwner->mUnknown472->mUnknown56 = step[2];
+        pOwner->mUnknown472->mState.mUnknown40 = step[0];
+        pOwner->mUnknown472->mState.mUnknown44 = step[1];
+        pOwner->mUnknown472->mState.mUnknown48 = step[2];
         pOwner->mRot.mX = pData->mUnknown0->mRot.mX;
         pOwner->mRot.mY = pData->mUnknown0->mRot.mY;
         pOwner->mRot.mZ = pData->mUnknown0->mRot.mZ;
@@ -167,9 +167,9 @@ int BigObjPathedUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode)
         pData->mUnknown12--;
         float t = (float)pData->mUnknown12 / (float)pData->mUnknown16;
         BigObjInst *pMover = pOwner->mUnknown472;
-        Vec3Add(&pMover->mUnknown8, &pMover->mUnknown8, &pMover->mUnknown48);
-        QuatSlerp(&pOwner->mUnknown472->mUnknown96, &pData->mUnknown0->mUnknown472->mUnknown96,
-                    &pData->mUnknown4->mUnknown472->mUnknown96, t);
+        Vec3Add(&pMover->mState.mUnknown0, &pMover->mState.mUnknown0, &pMover->mState.mUnknown40);
+        QuatSlerp(&pOwner->mUnknown472->mState.mUnknown88, &pData->mUnknown0->mUnknown472->mState.mUnknown88,
+                    &pData->mUnknown4->mUnknown472->mState.mUnknown88, t);
         pNode = (BigObjPathNode_t *)pData->mUnknown0->mUnknown472->mUnknown420;
     }
     if (!done && pObject->mUnknown308 != 0 && BigObjInstGetFrame() % 9 == pObject->mUnknown310) {

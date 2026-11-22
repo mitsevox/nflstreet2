@@ -41,7 +41,7 @@ public:
 /* A group of rigid bodies stepped as one system by its integrator. */
 class BodyGroup : public WorldSystem {
 public:
-    BodyGroup(int count);
+    BodyGroup(int count = 142);
     virtual int GetState(float *pState);
     virtual int SetState(float *pState);
     virtual int GetDerivative(void *pStart, float *pRate);

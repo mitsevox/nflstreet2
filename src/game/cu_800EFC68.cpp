@@ -1399,7 +1399,7 @@ void DivotSkipNextSteps(Object_80039F5C *p);
 }
 
 extern "C" {
-void fn_80051B88(Object_800B26B0 *pMotion, float value);
+void PhysPushObjects(Object_800B26B0 *pMotion, float value);
 }
 
 struct State_800FDAC8 {
@@ -9683,7 +9683,7 @@ extern "C" void fn_800FD978(Object_80039F5C *p)
         fn_800FF6D8(p);
     }
     DivotSkipNextSteps(p);
-    fn_80051B88(&p->mMotion, 1.25f);
+    PhysPushObjects(&p->mMotion, 1.25f);
 }
 
 extern "C" int fn_800FDA58(Object_80039F5C *p)

@@ -1,7 +1,7 @@
 /* Dynamic colour tables: the operations of a "dynclut" data block, each
    setting, blending or scaling a range of colour-table entries from palette
    colours or from other entries of the same table. */
-#include "game/DynClut_80044F20.h"
+#include "game/PlaDynClutOps.h"
 #include "game/fn_801D2B7C.h"
 #include <dolphin/gx/GXManage.h>
 
@@ -40,16 +40,18 @@ static inline void UnpackColor(const unsigned short *pData, int index, PaletteCo
 static inline void PackColor(unsigned short *pData, int index, unsigned int r, unsigned int g,
                              unsigned int b, int format)
 {
+    unsigned short *p = &pData[index];
+
     switch (format) {
     case 2:
-        if (pData[index] & 0x8000) {
-            pData[index] = (pData[index] & 0x8000) | ((r << 7) & 0x7C00) | ((g << 2) & 0x3E0) | (b >> 3);
+        if (*p & 0x8000) {
+            *p = (*p & 0x8000) | ((r << 7) & 0x7C00) | ((g << 2) & 0x3E0) | (b >> 3);
         } else {
-            pData[index] = (pData[index] & 0xF000) | ((r << 4) & 0xF00) | (g & 0xF0) | (b >> 4);
+            *p = (*p & 0xF000) | ((r << 4) & 0xF00) | (g & 0xF0) | (b >> 4);
         }
         break;
     case 1:
-        pData[index] = ((r << 8) & 0xF800) | ((g << 3) & 0x7E0) | (b >> 3);
+        *p = ((r << 8) & 0xF800) | ((g << 3) & 0x7E0) | (b >> 3);
         break;
     }
 }
@@ -105,7 +107,7 @@ static inline void BlendRange(unsigned short *pData, int format, const ColorEntr
 }
 
 extern "C" {
-void fn_80044F20(void *pData, PlaDynClutEntry_t *pEntry)
+void PlaDynClutParseOps(void *pData, PlaDynClutEntry_t *pEntry)
 {
     void *pNode;
     void *pFirst;
@@ -131,7 +133,7 @@ void fn_80044F20(void *pData, PlaDynClutEntry_t *pEntry)
     }
 }
 
-ColorPalette *fn_80045020(PlaDynClutPalettes_t *pPalettes, int colorNum)
+ColorPalette *PlaDynClutFindPalette(PlaDynClutPalettes_t *pPalettes, int colorNum)
 {
     ColorPalette *pPalette = 0;
 
@@ -144,9 +146,9 @@ ColorPalette *fn_80045020(PlaDynClutPalettes_t *pPalettes, int colorNum)
     return pPalette;
 }
 
-void fn_80045084(void *p, State_80045084 *pState)
+void PlaDynClutBeginTable(void *p, PlaDynClutTable_t *pState)
 {
-    const State_80045084 *pSource = (const State_80045084 *)p;
+    const PlaDynClutTable_t *pSource = (const PlaDynClutTable_t *)p;
 
     pState->mUnknown0 = pSource->mUnknown0;
     pState->mFormat = pSource->mFormat;
@@ -154,24 +156,24 @@ void fn_80045084(void *p, State_80045084 *pState)
     pState->mpData = pSource->mpData;
 }
 
-void fn_800450A8(void *p, State_80045084 *pState)
+void PlaDynClutEndTable(void *p, PlaDynClutTable_t *pState)
 {
     DCStoreRange(pState->mpData, pState->mSize);
     GXFlush();
 }
 
-void fn_800450D8(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_t *pPalettes)
+void PlaDynClutSetRange(ColorEntry *pEntry, PlaDynClutTable_t *pState, PlaDynClutPalettes_t *pPalettes)
 {
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
-    PaletteColor color = fn_80045020(pPalettes, pEntry->mColor)->mColors[pEntry->mLevel];
+    PaletteColor color = PlaDynClutFindPalette(pPalettes, pEntry->mColor)->mColors[pEntry->mLevel];
 
     for (int i = pEntry->mFrom; i <= pEntry->mTo; i++) {
         PackColor(pData, i, &color, format);
     }
 }
 
-void PlaDynClutFillRange(ColorEntry *pEntry, State_80045084 *pState)
+void PlaDynClutFillRange(ColorEntry *pEntry, PlaDynClutTable_t *pState)
 {
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
@@ -183,7 +185,7 @@ void PlaDynClutFillRange(ColorEntry *pEntry, State_80045084 *pState)
     }
 }
 
-void fn_800452F8(ColorEntry *pEntry, State_80045084 *pState)
+void PlaDynClutBlendRange(ColorEntry *pEntry, PlaDynClutTable_t *pState)
 {
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
@@ -195,29 +197,29 @@ void fn_800452F8(ColorEntry *pEntry, State_80045084 *pState)
     BlendRange(pData, format, pEntry, &from, &to);
 }
 
-void fn_80045524(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_t *pPalettes)
+void PlaDynClutBlendPaletteToEnd(ColorEntry *pEntry, PlaDynClutTable_t *pState, PlaDynClutPalettes_t *pPalettes)
 {
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
     PaletteColor to;
-    PaletteColor from = fn_80045020(pPalettes, pEntry->mColor)->mColors[pEntry->mLevel];
+    PaletteColor from = PlaDynClutFindPalette(pPalettes, pEntry->mColor)->mColors[pEntry->mLevel];
 
     UnpackColor(pData, pEntry->mTo, &to, format);
     BlendRange(pData, format, pEntry, &from, &to);
 }
 
-void fn_80045714(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_t *pPalettes)
+void PlaDynClutBlendStartToPalette(ColorEntry *pEntry, PlaDynClutTable_t *pState, PlaDynClutPalettes_t *pPalettes)
 {
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
     PaletteColor from;
-    PaletteColor to = fn_80045020(pPalettes, pEntry->mColor)->mColors[pEntry->mLevel];
+    PaletteColor to = PlaDynClutFindPalette(pPalettes, pEntry->mColor)->mColors[pEntry->mLevel];
 
     UnpackColor(pData, pEntry->mFrom, &from, format);
     BlendRange(pData, format, pEntry, &from, &to);
 }
 
-void fn_80045904(ColorEntry *pEntry, State_80045084 *pState)
+void PlaDynClutBlendSourceToEnd(ColorEntry *pEntry, PlaDynClutTable_t *pState)
 {
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
@@ -229,7 +231,7 @@ void fn_80045904(ColorEntry *pEntry, State_80045084 *pState)
     BlendRange(pData, format, pEntry, &from, &to);
 }
 
-void fn_80045B30(ColorEntry *pEntry, State_80045084 *pState)
+void PlaDynClutBlendStartToSource(ColorEntry *pEntry, PlaDynClutTable_t *pState)
 {
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
@@ -241,12 +243,12 @@ void fn_80045B30(ColorEntry *pEntry, State_80045084 *pState)
     BlendRange(pData, format, pEntry, &from, &to);
 }
 
-void fn_80045D5C(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_t *pPalettes)
+void PlaDynClutScaleRange(ColorEntry *pEntry, PlaDynClutTable_t *pState, PlaDynClutPalettes_t *pPalettes)
 {
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
     PaletteColor color;
-    PaletteColor scale = fn_80045020(pPalettes, pEntry->mColor)->mColors[pEntry->mLevel];
+    PaletteColor scale = PlaDynClutFindPalette(pPalettes, pEntry->mColor)->mColors[pEntry->mLevel];
 
     UnpackColor(pData, pEntry->mColor, &color, format);
     for (int i = pEntry->mFrom; i <= pEntry->mTo; i++) {
@@ -255,32 +257,32 @@ void fn_80045D5C(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_
     }
 }
 
-void fn_80045F64(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_t *pPalettes)
+void PlaDynClutApplyOp(ColorEntry *pEntry, PlaDynClutTable_t *pState, PlaDynClutPalettes_t *pPalettes)
 {
     switch (pEntry->mMode) {
     case 0:
-        fn_800450D8(pEntry, pState, pPalettes);
+        PlaDynClutSetRange(pEntry, pState, pPalettes);
         break;
     case 1:
         PlaDynClutFillRange(pEntry, pState);
         break;
     case 2:
-        fn_800452F8(pEntry, pState);
+        PlaDynClutBlendRange(pEntry, pState);
         break;
     case 3:
-        fn_80045524(pEntry, pState, pPalettes);
+        PlaDynClutBlendPaletteToEnd(pEntry, pState, pPalettes);
         break;
     case 4:
-        fn_80045714(pEntry, pState, pPalettes);
+        PlaDynClutBlendStartToPalette(pEntry, pState, pPalettes);
         break;
     case 5:
-        fn_80045904(pEntry, pState);
+        PlaDynClutBlendSourceToEnd(pEntry, pState);
         break;
     case 6:
-        fn_80045B30(pEntry, pState);
+        PlaDynClutBlendStartToSource(pEntry, pState);
         break;
     case 7:
-        fn_80045D5C(pEntry, pState, pPalettes);
+        PlaDynClutScaleRange(pEntry, pState, pPalettes);
         break;
     }
 }

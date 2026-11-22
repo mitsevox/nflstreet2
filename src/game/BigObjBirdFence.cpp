@@ -12,9 +12,9 @@ struct BigObjFenceLinks_t {
 };
 
 extern "C" {
-void fn_8004AF84(BigObjPhysics_t *pExtra);
-void fn_8004CBEC(void *p, float value, BigObjInst *pObject, BigObj_t *pItem);
-void fn_8004E090(BigObj_t *pItem, int a, int b);
+void BigObjAnimClearFlags(BigObjPhysics_t *pExtra);
+void BigObjEmitParticles(void *p, float value, BigObjInst *pObject, BigObj_t *pItem);
+void DynObjSetPartState(BigObj_t *pItem, int a, int b);
 BigObj_t *BigObjFindLinkedByGroup(int key);
 void BigObjClearFlag(BigObj_t *pItem);
 void BigObjSetFlag(BigObj_t *pItem);
@@ -32,7 +32,7 @@ char *strupr(char *pText);
 
 static inline void StartAnim(BigObjInst *pObject, unsigned short key, float value)
 {
-    fn_8004AF84(pObject->mUnknown428);
+    BigObjAnimClearFlags(pObject->mUnknown428);
     BigObjPhysics_t *pExtra = pObject->mUnknown428;
     fn_801BE068(pExtra->mUnknown1300, pExtra->mUnknown48, pExtra->mUnknown60, key, value, pObject);
 }
@@ -47,23 +47,23 @@ int BigObjBirdUpdate(BigObjInst *pObject, BigObj_t *pItem, int mode)
             StartAnim(pObject, pObject->mUnknown196, 1.0f);
         }
     } else if (mode == 2) {
-        pObject->mUnknown8 = pObject->mUnknown112;
-        pObject->mUnknown12 = pObject->mUnknown116;
-        pObject->mUnknown16 = pObject->mUnknown120;
-        pObject->mUnknown96 = pObject->mUnknown124;
-        pObject->mUnknown100 = pObject->mUnknown128;
-        pObject->mUnknown104 = pObject->mUnknown132;
-        pObject->mUnknown108 = pObject->mUnknown136;
-        pObject->mUnknown32 = pObject->mUnknown140;
-        pExtra->mUnknown56 = pObject->mUnknown140;
+        pObject->mState.mUnknown0 = pObject->mState.mUnknown104;
+        pObject->mState.mUnknown4 = pObject->mState.mUnknown108;
+        pObject->mState.mUnknown8 = pObject->mState.mUnknown112;
+        pObject->mState.mUnknown88 = pObject->mState.mUnknown116;
+        pObject->mState.mUnknown92 = pObject->mState.mUnknown120;
+        pObject->mState.mUnknown96 = pObject->mState.mUnknown124;
+        pObject->mState.mUnknown100 = pObject->mState.mUnknown128;
+        pObject->mState.mUnknown24 = pObject->mState.mUnknown132;
+        pExtra->mUnknown56 = pObject->mState.mUnknown132;
         if (pObject->mUnknown196 != -1 &&
             fn_801BE648(pObject->mUnknown428->mUnknown1300) != pObject->mUnknown196) {
             StartAnim(pObject, pObject->mUnknown196, 1.0f);
         }
-        fn_8004E090(pItem, 0, 0);
+        DynObjSetPartState(pItem, 0, 0);
         pItem->mUnknown232_31 = 1;
-        if (pObject->mUnknown144 != -1) {
-            BigObjSetFlag(BigObjFindLinkedByGroup(pObject->mUnknown144));
+        if (pObject->mState.mGroup != -1) {
+            BigObjSetFlag(BigObjFindLinkedByGroup(pObject->mState.mGroup));
         } else {
             BigObjSetFlag(pItem);
         }
@@ -75,8 +75,8 @@ int BigObjBirdUpdate(BigObjInst *pObject, BigObj_t *pItem, int mode)
         }
         if (pObject->mUnknown380 &&
             fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196) {
-            if (pObject->mUnknown144 != -1) {
-                BigObjClearFlag(BigObjFindLinkedByGroup(pObject->mUnknown144));
+            if (pObject->mState.mGroup != -1) {
+                BigObjClearFlag(BigObjFindLinkedByGroup(pObject->mState.mGroup));
             } else {
                 BigObjClearFlag(pItem);
             }
@@ -97,13 +97,13 @@ int BigObjBirdUpdate(BigObjInst *pObject, BigObj_t *pItem, int mode)
                         StartAnim(pObject, pNode->mId, 1.0f);
                     }
                     if (pNode->mUnknown104 != -1 && pNode->mUnknown108 != -1) {
-                        fn_8004E090(pItem, pNode->mUnknown104, pNode->mUnknown108);
+                        DynObjSetPartState(pItem, pNode->mUnknown104, pNode->mUnknown108);
                     }
                     if (pNode->mUnknown92) {
                         AudmonEventPostId(pNode->mUnknown92, &pos, pObject->mUnknown376, (unsigned int)value,
                                     pObject->mUnknown381, 0);
                     }
-                    fn_8004CBEC(pNode->mUnknown128, value, pObject, pItem);
+                    BigObjEmitParticles(pNode->mUnknown128, value, pObject, pItem);
                     break;
                 }
             }
@@ -213,7 +213,7 @@ int BigObjFenceUpdate(BigObjInst *pObject, BigObj_t *pItem, int mode)
                             fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196) {
                             BigObjFenceSwing(pItem, pNode);
                         }
-                        fn_8004CBEC(pNode->mUnknown128, pObject->mUnknown372, pObject, pItem);
+                        BigObjEmitParticles(pNode->mUnknown128, pObject->mUnknown372, pObject, pItem);
                     }
                     if (pNode->mUnknown92) {
                         AudmonEventPostId(pNode->mUnknown92, &pos, pObject->mUnknown376, (unsigned int)value,
