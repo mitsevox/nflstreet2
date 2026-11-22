@@ -1064,14 +1064,6 @@
       "address": "0x80081440",
       "evidence": "evidence.tsv function and name rows for 0x80081440 (exact in comparisons.json; precedes the holdout 0x800814BC of src/game/PlayerGearRatings.cpp, so its original bytes stay linked)."
     },
-    "BigObjDefaultUpdate": {
-      "address": "0x800400CC",
-      "evidence": "evidence.tsv function and name rows for 0x800400CC (exact in comparisons.json; precedes the holdout 0x800400D4 of src/game/BigObj.cpp, so its original bytes stay linked)."
-    },
-    "BigObjLinkGroup": {
-      "address": "0x800400D4",
-      "evidence": "evidence.tsv function and name rows for 0x800400D4 (documented holdout of src/game/BigObj.cpp: draft registered in comparisons.json, original bytes linked)."
-    },
     "CamInterpUpdateEaseInOut": {
       "address": "0x8013CC7C",
       "evidence": "evidence.tsv function and name rows for 0x8013CC7C (documented holdout of src/game/camreplay.cpp: draft registered in comparisons.json, original bytes and pool 0x802A00F8-0x802A0108 linked)."
@@ -18474,7 +18466,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80040154",
+          "start": "0x800400CC",
           "end": "0x80041210"
         },
         {
@@ -24917,12 +24909,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80140DB4",
-          "end": "0x8014106C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801410F4",
           "end": "0x8014116C"
         },
         {
@@ -24961,10 +24947,6 @@
           {
             "function": "CamPlayProcess",
             "evidence": "evidence.tsv source-form 0x80140708-0x80140DB4"
-          },
-          {
-            "function": "CamPlayGetPosLimits",
-            "evidence": "evidence.tsv source-form 0x8014106C-0x801410F4"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
