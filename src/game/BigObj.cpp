@@ -29,27 +29,27 @@ void ReplayRegisterChannel(void (*pSave)(BitStream_t *pStream),
                                BitStream_t *pStream3, float t),
                  int size, const char *pName);
 void BallModelSetLinkedObj(Block_80170E64 *pBlock, BigObjInst *pLinked);
-void fn_8004AA34(AnimPose_t *pPose, BitStream_t *pStream, unsigned int count);
-void fn_8004ABF4(BigObj_t *pObject, BigObjInst *pLinked, BitStream_t *pStream0, BitStream_t *pStream1,
+void BigObjAnimWritePose(AnimPose_t *pPose, BitStream_t *pStream, unsigned int count);
+void BigObjAnimReplayBlend(BigObj_t *pObject, BigObjInst *pLinked, BitStream_t *pStream0, BitStream_t *pStream1,
                  BitStream_t *pStream2, BitStream_t *pStream3, float t);
-void fn_8004AF84(BigObjPhysics_t *pExtra);
-void fn_8004CBE8(void);
-void fn_8004D0F4(int handle);
-void fn_8004D118(int handle);
-void fn_8004D144(BigObjDesc_t *pDesc, int handle, int first);
-int fn_8004D3A8(void *pData, char *pName);
-void fn_8004D798(void);
-void fn_8004D818(void);
-void fn_8004DC88(void *pData, int model, BigObj_t *pObject);
-void fn_8004DF68(BigObj_t *pObject);
-void fn_8004DFDC(void);
-void fn_8004E018(void);
-void fn_8004E0CC(BigObj_t *pObject, int a, int b);
-void fn_8004E320(void);
-void fn_8004E358(void);
-void fn_8004F754(int model, BigObj_t *pObject, int index);
-void fn_800504EC(void);
-void fn_80051308(void);
+void BigObjAnimClearFlags(BigObjPhysics_t *pExtra);
+void BigObjEffectsUpdate(void);
+void DynObjChildInit(int handle);
+void DynObjChildShutdown(int handle);
+void DynObjChildSpawn(BigObjDesc_t *pDesc, int handle, int first);
+int ObjParseOpen(void *pData, char *pName);
+void ObjParseInit(void);
+void ObjParseShutdown(void);
+void DynObjParseRender(void *pData, int model, BigObj_t *pObject);
+void DynObjShutdown(BigObj_t *pObject);
+void DynObjModelCacheReset(void);
+void DynObjModelCacheFree(void);
+void DynObjSetPart(BigObj_t *pObject, int a, int b);
+void DynObjSkeletonCacheReset(void);
+void DynObjSkeletonCacheFree(void);
+void PhysLoadObject(int model, BigObj_t *pObject, int index);
+void PhysInit(void);
+void PhysShutdown(void);
 void HotspotReset(void);
 void fn_800B2A14(float *pPos, unsigned char *pAngles);
 int FileSetMemAllocFlags(int value);
@@ -124,7 +124,7 @@ void BigObjSave(BitStream_t *pStream)
 
         if (pObject->mUnknown300 != 0) {
             if (BigObjGetItemSkeleton(pObject) != 0) {
-                fn_8004AA34(&pObject->mUnknown172, pStream, pObject->mUnknown172.mUnknown4 - 1);
+                BigObjAnimWritePose(&pObject->mUnknown172, pStream, pObject->mUnknown172.mUnknown4 - 1);
             }
             fn_80191068(pStream, pObject->mUnknown232_31, 1);
             fn_80191068(pStream, pObject->mUnknown300->mUnknown40, 8);
@@ -152,8 +152,8 @@ void BigObjLoad(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStre
             unsigned char value;
 
             if (BigObjGetItemSkeleton(pObject) != 0) {
-                fn_8004AF84(pObject->mUnknown472->mUnknown428);
-                fn_8004ABF4(pObject, BigObjInstGet(i), pStream0, pStream1, pStream2, pStream3, t);
+                BigObjAnimClearFlags(pObject->mUnknown472->mUnknown428);
+                BigObjAnimReplayBlend(pObject, BigObjInstGet(i), pStream0, pStream1, pStream2, pStream3, t);
             }
             bit = ReadBitStream(pStream1, 1);
             ReadBitStream(pStream0, 1);
@@ -164,7 +164,7 @@ void BigObjLoad(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStre
             }
             value = ReadBitStream(pStream1, 8);
             ReadBitStream(pStream0, 8);
-            fn_8004E0CC(pObject, 0, value);
+            DynObjSetPart(pObject, 0, value);
             ReplayReadPacked3(pStream1, &pos1.mX, 17, 256.0f);
             ReplayReadPacked3(pStream0, &pos0.mX, 17, 256.0f);
             if (Vec3Distance(&pos0, &pos1) > 15.0f) {
@@ -223,10 +223,10 @@ void BigObjSetupBigObjects(int count, int handle)
     _BigObj_uMax = count;
     _BigObj_uCount = 0;
     _BigObj_pModelFile = ResOpenDevice("objmodel.dat", 44);
-    fn_8004DFDC();
-    fn_8004E320();
-    fn_800504EC();
-    fn_8004D0F4(handle);
+    DynObjModelCacheReset();
+    DynObjSkeletonCacheReset();
+    PhysInit();
+    DynObjChildInit(handle);
 }
 
 void BigObjShutdownObjects(int handle)
@@ -248,10 +248,10 @@ void BigObjShutdownObjects(int handle)
         _BigObj_apObjects = 0;
     }
     BigObjReleasePool();
-    fn_8004E018();
-    fn_8004E358();
-    fn_80051308();
-    fn_8004D118(handle);
+    DynObjModelCacheFree();
+    DynObjSkeletonCacheFree();
+    PhysShutdown();
+    DynObjChildShutdown(handle);
     ResClose(_BigObj_pModelFile);
 }
 
@@ -307,7 +307,7 @@ void BigObjItemInit(BigObj_t *pObject, BigObjDesc_t *pDesc)
 
 void BigObjItemRelease(BigObj_t *pObject)
 {
-    fn_8004DF68(pObject);
+    DynObjShutdown(pObject);
 }
 
 int BigObjItemUpdate(BigObj_t *pObject)
@@ -324,19 +324,19 @@ void BigObjCreate(BigObjDesc_t *pDesc, int handle)
 {
     BigObjInst *pLinked;
 
-    pDesc->mUnknown168 = fn_8004D3A8(pDesc->mUnknown160, pDesc->mName);
+    pDesc->mUnknown168 = ObjParseOpen(pDesc->mUnknown160, pDesc->mName);
     if (pDesc->mUnknown168 == -1) {
         return;
     }
     _BigObj_apObjects[_BigObj_uCount] = ObjNewInList(handle, 28, 0, pDesc);
     ObjSetPriority(handle, _BigObj_apObjects[_BigObj_uCount], 6);
-    fn_8004DC88(pDesc->mUnknown164, pDesc->mUnknown168, _BigObj_apObjects[_BigObj_uCount]);
+    DynObjParseRender(pDesc->mUnknown164, pDesc->mUnknown168, _BigObj_apObjects[_BigObj_uCount]);
     if (strstr(pDesc->mName, "CROWD") != 0) {
         _BigObj_apObjects[_BigObj_uCount]->mUnknown232_27 = 1;
     }
     _BigObj_apObjects[_BigObj_uCount]->mUnknown472 = BigObjInstCreate((void *)pDesc->mUnknown168, &pDesc->mUnknown132);
     _BigObj_apObjects[_BigObj_uCount]->mUnknown472->mUnknown4 = _BigObj_uCount;
-    fn_8004F754(pDesc->mUnknown168, _BigObj_apObjects[_BigObj_uCount], _BigObj_uCount);
+    PhysLoadObject(pDesc->mUnknown168, _BigObj_apObjects[_BigObj_uCount], _BigObj_uCount);
     _BigObj_apObjects[_BigObj_uCount]->mUnknown472->mUnknown144 = pDesc->mUnknown172;
     _BigObj_apObjects[_BigObj_uCount]->mUnknown472->mUnknown148 = pDesc->mUnknown180;
     memset(_BigObj_apObjects[_BigObj_uCount]->mUnknown472->mUnknown152, 0, 32);
@@ -388,7 +388,7 @@ void BigObjCreateAnimBall(int handle)
         FileSetMemAllocFlags(saved1);
     }
     desc.mUnknown164 = _BigObj_pModelFile;
-    fn_8004D798();
+    ObjParseInit();
     strcpy(desc.mName, "OBJDEF_ANIMBALL");
     desc.mUnknown132.mUnknown12 = 0.0f;
     desc.mUnknown132.mUnknown8 = 0.0f;
@@ -402,7 +402,7 @@ void BigObjCreateAnimBall(int handle)
     index = _BigObj_uCount;
     BigObjCreate(&desc, handle);
     BallModelSetLinkedObj(BallGetModel(BallGetCurrent()), BigObjGet(index)->mUnknown472);
-    fn_8004D818();
+    ObjParseShutdown();
     ResClose(desc.mUnknown160);
 }
 
@@ -423,7 +423,7 @@ void BigObjAddAllObjects(int handle)
         FileSetMemAllocFlags(saved1);
     }
     desc.mUnknown164 = _BigObj_pModelFile;
-    fn_8004D798();
+    ObjParseInit();
     pLevel = LevelGetData();
     for (i = 0; i < pLevel->mUnknown88; i++) {
         pEntry = &pLevel->mUnknown92[i];
@@ -473,11 +473,11 @@ void BigObjAddAllObjects(int handle)
         desc.mUnknown132.mUnknown20 = pEntry->mUnknown0[4];
         desc.mUnknown132.mUnknown24 = pEntry->mUnknown0[5];
         desc.mUnknown176 = pEntry->mUnknown32;
-        fn_8004D144(&desc, handle, first);
+        DynObjChildSpawn(&desc, handle, first);
     }
-    fn_8004D818();
+    ObjParseShutdown();
     ResClose(desc.mUnknown160);
-    fn_8004CBE8();
+    BigObjEffectsUpdate();
 }
 
 unsigned short BigObjGetCount(void)

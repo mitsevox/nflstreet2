@@ -43,9 +43,9 @@ void FieldArrowInit(int a);
 void FieldArrowShutdown(void);
 void EnvObjAddObjType(int a);
 void PlyrNameTagReadTextColor(void);
-void fn_8004A9FC(void);
-void fn_8004FF8C(void);
-void fn_800502C0(void);
+void BigObjAnimRegisterHandlers(void);
+void PhysAddPlayers(void);
+void PhysAddBall(void);
 int LevelGetObjectCount(void);
 void SndgReplayInit(void);
 void SndgReplayShutdown(void);
@@ -297,7 +297,7 @@ int Ball::Init()
     }
     BallsStart(mode);
     BallsCreateModels(GameObjList::GetListHandle());
-    fn_800502C0();
+    PhysAddBall();
     BigObjCreateAnimBall(GameObjList::GetListHandle());
     return 1;
 }
@@ -345,7 +345,7 @@ int BigObj::Init()
     BigObjInstInit(104, 10);
     ResTrackLabel("BObjInfoStateInitFinish");
     ResTrackLabel("GenObjSetupAnimationsStart");
-    fn_8004A9FC();
+    BigObjAnimRegisterHandlers();
     ResTrackLabel("GenObjSetupAnimationsFinish");
     ResTrackLabel("BigObjAddAllObjectsStart");
     BigObjAddAllObjects(GameObjList::GetListHandle());
@@ -981,7 +981,7 @@ int Plyr::Init()
     ResTrackLabel("PlaStateInitFinish");
     PlyrMgrEmptyPass();
     PlyrRenderSetViewport(GameVpt::GetViewport());
-    fn_8004FF8C();
+    PhysAddPlayers();
     return 1;
 }
 

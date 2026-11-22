@@ -1702,11 +1702,11 @@
     },
     "ModelObjSetAmbientColor": {
       "address": "0x80235C90",
-      "evidence": "evidence.tsv function and name rows for 0x80235C90 (ModelObjSetAmbientColor, a registered holdout of src/engine/modelobj.c, original bytes linked); called by name from src/game/BallMarker.cpp, src/game/EnvObj.cpp, src/game/EnvRender.cpp, src/game/FldObj.cpp, src/game/ReplayCursor.cpp, src/game/UISModel.cpp, src/game/cu_8004A2F4.cpp, src/game/PlyrStars.cpp (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x80235C90 (ModelObjSetAmbientColor, a registered holdout of src/engine/modelobj.c, original bytes linked); called by name from src/game/BallMarker.cpp, src/game/EnvObj.cpp, src/game/EnvRender.cpp, src/game/FldObj.cpp, src/game/ReplayCursor.cpp, src/game/UISModel.cpp, src/game/DynObj.cpp, src/game/PlyrStars.cpp (n1e naming wave)."
     },
     "XmlFindInElement": {
       "address": "0x80216BFC",
-      "evidence": "evidence.tsv function and name rows for 0x80216BFC (XmlFindInElement, a registered holdout of src/engine/xmlread.c, original bytes linked); called by name from src/game/Divot.cpp, src/game/PlaDynClutOps.cpp, src/game/cu_8004A2F4.cpp (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x80216BFC (XmlFindInElement, a registered holdout of src/engine/xmlread.c, original bytes linked); called by name from src/game/Divot.cpp, src/game/PlaDynClutOps.cpp, src/game/DynObj.cpp (n1e naming wave)."
     },
     "StoryTournamentGetTeamName": {
       "address": "0x80060948",
@@ -9947,9 +9947,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8004A2F4.cpp",
+      "source": "src/game/DynObj.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/cu_8004A2F4.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .bss (0x803084B8-0x8030865C), .ctors and .dtors words; linked with holdouts (owner ruling of 2026-11-20): 92 of 121 functions exact, the holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/DynObj.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .bss (0x803084B8-0x8030865C), .ctors and .dtors words; linked with holdouts (owner ruling of 2026-11-20): 92 of 121 functions exact, the holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -10111,67 +10111,67 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8004AA34",
+            "function": "BigObjAnimWritePose",
             "evidence": "evidence.tsv source-form 0x8004AA34-0x8004ABF4"
           },
           {
-            "function": "fn_8004ABF4",
+            "function": "BigObjAnimReplayBlend",
             "evidence": "evidence.tsv source-form 0x8004ABF4-0x8004AD3C"
           },
           {
-            "function": "fn_8004BD20",
+            "function": "BigObjParseSwapEvent",
             "evidence": "evidence.tsv source-form 0x8004BD20-0x8004C204"
           },
           {
-            "function": "fn_8004C518",
+            "function": "BigObjParseEvents",
             "evidence": "evidence.tsv source-form 0x8004C518-0x8004C5E0"
           },
           {
-            "function": "fn_8004C844",
+            "function": "BigObjHit",
             "evidence": "evidence.tsv source-form 0x8004C844-0x8004CAA8"
           },
           {
-            "function": "fn_8004CAA8",
+            "function": "BigObjHitStatic",
             "evidence": "evidence.tsv source-form 0x8004CAA8-0x8004CB98"
           },
           {
-            "function": "fn_8004CBEC",
+            "function": "BigObjEmitParticles",
             "evidence": "evidence.tsv source-form 0x8004CBEC-0x8004CE6C"
           },
           {
-            "function": "fn_8004CEE8",
+            "function": "DynObjChildFollow",
             "evidence": "evidence.tsv source-form 0x8004CEE8-0x8004CFCC"
           },
           {
-            "function": "fn_8004D144",
+            "function": "DynObjChildSpawn",
             "evidence": "evidence.tsv source-form 0x8004D144-0x8004D2F8"
           },
           {
-            "function": "fn_8004D3A8",
+            "function": "ObjParseOpen",
             "evidence": "evidence.tsv source-form 0x8004D3A8-0x8004D498"
           },
           {
-            "function": "fn_8004D65C",
+            "function": "ObjParseGetMatrix",
             "evidence": "evidence.tsv source-form 0x8004D65C-0x8004D6F4"
           },
           {
-            "function": "fn_8004DA0C",
+            "function": "DynObjLoadModel",
             "evidence": "evidence.tsv source-form 0x8004DA0C-0x8004DC08"
           },
           {
-            "function": "fn_8004DC88",
+            "function": "DynObjParseRender",
             "evidence": "evidence.tsv source-form 0x8004DC88-0x8004DF68"
           },
           {
-            "function": "fn_8004E16C",
+            "function": "DynObjLoadSkeleton",
             "evidence": "evidence.tsv source-form 0x8004E16C-0x8004E2B4"
           },
           {
-            "function": "fn_8004E4D0",
+            "function": "PhysPushPlayer",
             "evidence": "evidence.tsv source-form 0x8004E4D0-0x8004EA80"
           },
           {
-            "function": "fn_8004EA80",
+            "function": "PhysHitBall",
             "evidence": "evidence.tsv source-form 0x8004EA80-0x8004ED44"
           },
           {
@@ -10179,55 +10179,55 @@
             "evidence": "evidence.tsv source-form 0x8004EE18-0x8004F20C"
           },
           {
-            "function": "fn_8004F2D0",
+            "function": "PhysAddCapsule",
             "evidence": "evidence.tsv source-form 0x8004F2D0-0x8004F3A4"
           },
           {
-            "function": "fn_8004F56C",
+            "function": "PhysSetShapeNames",
             "evidence": "evidence.tsv source-form 0x8004F56C-0x8004F710"
           },
           {
-            "function": "fn_8004F754",
+            "function": "PhysLoadObject",
             "evidence": "evidence.tsv source-form 0x8004F754-0x8004FF8C"
           },
           {
-            "function": "fn_8004FF8C",
+            "function": "PhysAddPlayers",
             "evidence": "evidence.tsv source-form 0x8004FF8C-0x800502C0"
           },
           {
-            "function": "fn_800502C0",
+            "function": "PhysAddBall",
             "evidence": "evidence.tsv source-form 0x800502C0-0x800504EC"
           },
           {
-            "function": "fn_800504EC",
+            "function": "PhysInit",
             "evidence": "evidence.tsv source-form 0x800504EC-0x800508A0"
           },
           {
-            "function": "fn_800508A0",
+            "function": "PhysUpdateBallRest",
             "evidence": "evidence.tsv source-form 0x800508A0-0x80050960"
           },
           {
-            "function": "fn_80050964",
+            "function": "PhysUpdatePlayers",
             "evidence": "evidence.tsv source-form 0x80050964-0x80050CCC"
           },
           {
-            "function": "fn_80050DA0",
+            "function": "PhysUpdateObjects",
             "evidence": "evidence.tsv source-form 0x80050DA0-0x80050F14"
           },
           {
-            "function": "fn_80050F14",
+            "function": "PhysDebugDraw",
             "evidence": "evidence.tsv source-form 0x80050F14-0x8005122C"
           },
           {
-            "function": "fn_800518E0",
+            "function": "PhysPlayerHitObject",
             "evidence": "evidence.tsv source-form 0x800518E0-0x80051B3C"
           },
           {
-            "function": "fn_80051B88",
+            "function": "PhysPushObjects",
             "evidence": "evidence.tsv source-form 0x80051B88-0x80051D0C"
           }
         ],
-        "evidence": "fd1a merge notes (swarm fd1 tracking table): src/game/cu_8004A2F4.cpp holds out 29 functions."
+        "evidence": "fd1a merge notes (swarm fd1 tracking table): src/game/DynObj.cpp holds out 29 functions."
       }
     },
     {

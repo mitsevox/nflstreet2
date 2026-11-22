@@ -1,7 +1,7 @@
 #ifndef GAME_BIGOBJNODE_H
 #define GAME_BIGOBJNODE_H
 
-/* Emitter record allocated per "particle" block of fn_8004BD20 and linked
+/* Emitter record allocated per "particle" block of BigObjParseSwapEvent and linked
    through mpNext from +128 of its node. */
 struct Emitter_8004BD20 {
     int mUnknown0;

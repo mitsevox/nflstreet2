@@ -21,11 +21,11 @@ struct BigObjPool_t {
 extern "C" {
 int BigObjSyncFromInst(BigObjInst *pObject, int index);
 int BigObjHasSkeleton(int index);
-void fn_8004A8C4(BigObjPhysics_t *pExtra, BigObj_t *pItem, int a);
-void fn_8004A8E8(BigObj_t *pItem, void *a, int b, void *c);
-void fn_8004A908(BigObjInst *pObject, int index);
-void fn_8004C684(void *pOwner, BigObjInst *pObject);
-void fn_8004C7B8(BigObjInst *pObject);
+void BigObjAnimBlend(BigObjPhysics_t *pExtra, BigObj_t *pItem, int a);
+void BigObjAnimBlendRoot(BigObj_t *pItem, void *a, int b, void *c);
+void BigObjAnimInitObject(BigObjInst *pObject, int index);
+void BigObjParseBehavior(void *pOwner, BigObjInst *pObject);
+void BigObjFreeEvents(BigObjInst *pObject);
 void AnimChanProcess(void *a, void *b, float c, BigObjInst *pObject);
 int AnimMotCreateWeightList(void *a, void *b, void *c);
 int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
@@ -58,7 +58,7 @@ int BigObjPoolDestroy(void *p, int value)
     unsigned short i;
 
     for (i = 0; i < pPool->mMaxObjects; i++) {
-        fn_8004C7B8(&pPool->mObjects[i]);
+        BigObjFreeEvents(&pPool->mObjects[i]);
     }
     fn_801D2BD0(pPool->mObjects);
     pPool->mObjects = 0;
@@ -129,7 +129,7 @@ BigObjInst *BigObjInstCreate(void *pOwner, BigObjPlacement_t *pDesc)
         pObject->mUnknown428 = 0;
     }
     pObject->mUnknown0 = pDesc->mUnknown0;
-    fn_8004A908(pObject, _BigObjInst_pPool->mCount);
+    BigObjAnimInitObject(pObject, _BigObjInst_pPool->mCount);
     pObject->mUnknown8 = pDesc->mUnknown4;
     pObject->mUnknown12 = pDesc->mUnknown8;
     pObject->mUnknown16 = pDesc->mUnknown12;
@@ -147,7 +147,7 @@ BigObjInst *BigObjInstCreate(void *pOwner, BigObjPlacement_t *pDesc)
     pObject->mUnknown132 = pObject->mUnknown104;
     pObject->mUnknown136 = pObject->mUnknown108;
     pObject->mUnknown140 = pObject->mUnknown32;
-    fn_8004C684(pOwner, pObject);
+    BigObjParseBehavior(pOwner, pObject);
     if (pObject->mUnknown184 != 0) {
         pObject->mUnknown184(pObject, BigObjGet(_BigObjInst_pPool->mCount), 0);
     }
@@ -184,11 +184,11 @@ int BigObjInstSimulateAll(float dt)
             fn_801BE420(pExtra->mUnknown1300, pExtra->mUnknown48, pExtra->mUnknown60, pObject, dt);
             AnimChanProcess(pExtra->mUnknown48, pExtra->mUnknown60, dt, pObject);
             a = AnimMotCreateWeightList(pExtra->mUnknown48, pExtra->mUnknown60, pExtra->mUnknown1300);
-            fn_8004A8C4(pExtra, BigObjGet(i), a);
+            BigObjAnimBlend(pExtra, BigObjGet(i), a);
             pExtra->mUnknown32 = fn_801BCA74(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown36, 0xFFFF, 1);
             pExtra->mUnknown33 = fn_801BCCAC(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown40,
                                              fn_801BE648(pObject->mUnknown428->mUnknown1300), 1);
-            fn_8004A8E8(BigObjGet(i), pExtra->mUnknown60, pExtra->mUnknown52, pExtra->mUnknown1300);
+            BigObjAnimBlendRoot(BigObjGet(i), pExtra->mUnknown60, pExtra->mUnknown52, pExtra->mUnknown1300);
         }
     }
     return 0;

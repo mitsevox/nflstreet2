@@ -69,7 +69,7 @@ void ReplayWritePacked4(void *pStream, float *pValues, int bits, float scale);
 void ReplayRegisterChannel(void (*pWrite)(BitStream_t *),
                  void (*pRead)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float), int size,
                  const char *pName);
-int fn_8004CB98(int index);
+int BigObjEffectSlotCount(int index);
 void fn_800A3170(void);
 void fn_800A3450(void);
 int fn_800A34C8(int index);
@@ -213,7 +213,7 @@ void ParticleSysLoadEffects(void)
         }
     }
     for (i = 12; i <= 19; i++) {
-        id = fn_8004CB98(i);
+        id = BigObjEffectSlotCount(i);
         if (id != 0) {
             ParticleSysLoadEffect(i, id);
         }

@@ -9149,9 +9149,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8004A2F4.cpp",
+      "source": "src/game/DynObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0–0x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/cu_8004A2F4.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names. Static initializer 0x80051D0C and its .ctors/.dtors stubs 0x80051DBC/0x80051DE8 are registered from the file's definition of the Time_801E8C78 object 0x803084B8 (.bss 0x803084B8-0x803084C4) with the .ctors word 0x80289A84 and .dtors word 0x80289BC4.",
+      "evidence": "evidence.tsv unit row src/game/DynObj.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0–0x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/DynObj.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names. Static initializer 0x80051D0C and its .ctors/.dtors stubs 0x80051DBC/0x80051DE8 are registered from the file's definition of the Time_801E8C78 object 0x803084B8 (.bss 0x803084B8-0x803084C4) with the .ctors word 0x80289A84 and .dtors word 0x80289BC4.",
       "sections": [
         {
           "section": ".text",
@@ -9186,412 +9186,412 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8004A2F4",
+          "symbol": "BigObjAnimReadPose",
           "start": "0x8004A2F4",
           "end": "0x8004A474"
         },
         {
-          "symbol": "fn_8004A474",
+          "symbol": "BigObjAnimPlayVariant",
           "start": "0x8004A474",
           "end": "0x8004A4F0"
         },
         {
-          "symbol": "fn_8004A4F0",
+          "symbol": "BigObjAnimPlayMatchedVariant",
           "start": "0x8004A4F0",
           "end": "0x8004A56C"
         },
         {
-          "symbol": "fn_8004A56C",
+          "symbol": "BigObjAnimOnVariant",
           "start": "0x8004A56C",
           "end": "0x8004A5AC"
         },
         {
-          "symbol": "fn_8004A5AC",
+          "symbol": "BigObjAnimOnMatchedVariant",
           "start": "0x8004A5AC",
           "end": "0x8004A5EC"
         },
         {
-          "symbol": "fn_8004A5EC",
+          "symbol": "BigObjAnimOnSequence",
           "start": "0x8004A5EC",
           "end": "0x8004A680"
         },
         {
-          "symbol": "fn_8004A680",
+          "symbol": "BigObjAnimPoseFromSkeleton",
           "start": "0x8004A680",
           "end": "0x8004A6EC"
         },
         {
-          "symbol": "fn_8004A6EC",
+          "symbol": "BigObjAnimPickVariant",
           "start": "0x8004A6EC",
           "end": "0x8004A7A8"
         },
         {
-          "symbol": "fn_8004A7A8",
+          "symbol": "BigObjAnimPickMatchedVariant",
           "start": "0x8004A7A8",
           "end": "0x8004A870"
         },
         {
-          "symbol": "fn_8004A870",
+          "symbol": "BigObjAnimInitHandlers",
           "start": "0x8004A870",
           "end": "0x8004A8C4"
         },
         {
-          "symbol": "fn_8004A8C4",
+          "symbol": "BigObjAnimBlend",
           "start": "0x8004A8C4",
           "end": "0x8004A8E8"
         },
         {
-          "symbol": "fn_8004A8E8",
+          "symbol": "BigObjAnimBlendRoot",
           "start": "0x8004A8E8",
           "end": "0x8004A908"
         },
         {
-          "symbol": "fn_8004A908",
+          "symbol": "BigObjAnimInitObject",
           "start": "0x8004A908",
           "end": "0x8004A9FC"
         },
         {
-          "symbol": "fn_8004A9FC",
+          "symbol": "BigObjAnimRegisterHandlers",
           "start": "0x8004A9FC",
           "end": "0x8004AA34"
         },
         {
-          "symbol": "fn_8004AA34",
+          "symbol": "BigObjAnimWritePose",
           "start": "0x8004AA34",
           "end": "0x8004ABF4"
         },
         {
-          "symbol": "fn_8004ABF4",
+          "symbol": "BigObjAnimReplayBlend",
           "start": "0x8004ABF4",
           "end": "0x8004AD3C"
         },
         {
-          "symbol": "fn_8004AD3C",
+          "symbol": "BigObjAnimLoadResident",
           "start": "0x8004AD3C",
           "end": "0x8004AF84"
         },
         {
-          "symbol": "fn_8004AF84",
+          "symbol": "BigObjAnimClearFlags",
           "start": "0x8004AF84",
           "end": "0x8004AF94"
         },
         {
-          "symbol": "fn_8004AF94",
+          "symbol": "BigObjAnimRestart",
           "start": "0x8004AF94",
           "end": "0x8004B020"
         },
         {
-          "symbol": "fn_8004B020",
+          "symbol": "BigObjFindNameId",
           "start": "0x8004B020",
           "end": "0x8004B088"
         },
         {
-          "symbol": "fn_8004B088",
+          "symbol": "BigObjRestoreState",
           "start": "0x8004B088",
           "end": "0x8004B1A0"
         },
         {
-          "symbol": "fn_8004B1A0",
+          "symbol": "BigObjKeepInBounds",
           "start": "0x8004B1A0",
           "end": "0x8004B354"
         },
         {
-          "symbol": "fn_8004B354",
+          "symbol": "BigObjOnAnimEvent",
           "start": "0x8004B354",
           "end": "0x8004BA44"
         },
         {
-          "symbol": "fn_8004BA44",
+          "symbol": "BigObjParseAnimEvent",
           "start": "0x8004BA44",
           "end": "0x8004BD20"
         },
         {
-          "symbol": "fn_8004BD20",
+          "symbol": "BigObjParseSwapEvent",
           "start": "0x8004BD20",
           "end": "0x8004C204"
         },
         {
-          "symbol": "fn_8004C204",
+          "symbol": "BigObjFindPartId",
           "start": "0x8004C204",
           "end": "0x8004C270"
         },
         {
-          "symbol": "fn_8004C270",
+          "symbol": "BigObjFindSwapState",
           "start": "0x8004C270",
           "end": "0x8004C2FC"
         },
         {
-          "symbol": "fn_8004C2FC",
+          "symbol": "BigObjFindEmotionState",
           "start": "0x8004C2FC",
           "end": "0x8004C368"
         },
         {
-          "symbol": "fn_8004C368",
+          "symbol": "BigObjFindTypeId",
           "start": "0x8004C368",
           "end": "0x8004C3D4"
         },
         {
-          "symbol": "fn_8004C3D4",
+          "symbol": "BigObjFindBehaviorId",
           "start": "0x8004C3D4",
           "end": "0x8004C440"
         },
         {
-          "symbol": "fn_8004C440",
+          "symbol": "BigObjFindEventType",
           "start": "0x8004C440",
           "end": "0x8004C4AC"
         },
         {
-          "symbol": "fn_8004C4AC",
+          "symbol": "BigObjFindSoundId",
           "start": "0x8004C4AC",
           "end": "0x8004C518"
         },
         {
-          "symbol": "fn_8004C518",
+          "symbol": "BigObjParseEvents",
           "start": "0x8004C518",
           "end": "0x8004C5E0"
         },
         {
-          "symbol": "fn_8004C5E0",
+          "symbol": "BigObjEffectSlotAcquire",
           "start": "0x8004C5E0",
           "end": "0x8004C684"
         },
         {
-          "symbol": "fn_8004C684",
+          "symbol": "BigObjParseBehavior",
           "start": "0x8004C684",
           "end": "0x8004C7B8"
         },
         {
-          "symbol": "fn_8004C7B8",
+          "symbol": "BigObjFreeEvents",
           "start": "0x8004C7B8",
           "end": "0x8004C844"
         },
         {
-          "symbol": "fn_8004C844",
+          "symbol": "BigObjHit",
           "start": "0x8004C844",
           "end": "0x8004CAA8"
         },
         {
-          "symbol": "fn_8004CAA8",
+          "symbol": "BigObjHitStatic",
           "start": "0x8004CAA8",
           "end": "0x8004CB98"
         },
         {
-          "symbol": "fn_8004CB98",
+          "symbol": "BigObjEffectSlotCount",
           "start": "0x8004CB98",
           "end": "0x8004CBB0"
         },
         {
-          "symbol": "fn_8004CBB0",
+          "symbol": "BigObjEffectSlotsReset",
           "start": "0x8004CBB0",
           "end": "0x8004CBE8"
         },
         {
-          "symbol": "fn_8004CBE8",
+          "symbol": "BigObjEffectsUpdate",
           "start": "0x8004CBE8",
           "end": "0x8004CBEC"
         },
         {
-          "symbol": "fn_8004CBEC",
+          "symbol": "BigObjEmitParticles",
           "start": "0x8004CBEC",
           "end": "0x8004CE6C"
         },
         {
-          "symbol": "fn_8004CE6C",
+          "symbol": "BigObjUpdatePartTimers",
           "start": "0x8004CE6C",
           "end": "0x8004CEE8"
         },
         {
-          "symbol": "fn_8004CEE8",
+          "symbol": "DynObjChildFollow",
           "start": "0x8004CEE8",
           "end": "0x8004CFCC"
         },
         {
-          "symbol": "fn_8004CFCC",
+          "symbol": "DynObjChildCreateList",
           "start": "0x8004CFCC",
           "end": "0x8004D068"
         },
         {
-          "symbol": "fn_8004D068",
+          "symbol": "DynObjChildDestroyList",
           "start": "0x8004D068",
           "end": "0x8004D0F4"
         },
         {
-          "symbol": "fn_8004D0F4",
+          "symbol": "DynObjChildInit",
           "start": "0x8004D0F4",
           "end": "0x8004D118"
         },
         {
-          "symbol": "fn_8004D118",
+          "symbol": "DynObjChildShutdown",
           "start": "0x8004D118",
           "end": "0x8004D144"
         },
         {
-          "symbol": "fn_8004D144",
+          "symbol": "DynObjChildSpawn",
           "start": "0x8004D144",
           "end": "0x8004D2F8"
         },
         {
-          "symbol": "fn_8004D2F8",
+          "symbol": "DynObjChildUpdate",
           "start": "0x8004D2F8",
           "end": "0x8004D334"
         },
         {
-          "symbol": "fn_8004D334",
+          "symbol": "ObjParseFind",
           "start": "0x8004D334",
           "end": "0x8004D3A8"
         },
         {
-          "symbol": "fn_8004D3A8",
+          "symbol": "ObjParseOpen",
           "start": "0x8004D3A8",
           "end": "0x8004D498"
         },
         {
-          "symbol": "fn_8004D498",
+          "symbol": "ObjParseRewind",
           "start": "0x8004D498",
           "end": "0x8004D4B0"
         },
         {
-          "symbol": "fn_8004D4B0",
+          "symbol": "ObjParseFindPath",
           "start": "0x8004D4B0",
           "end": "0x8004D508"
         },
         {
-          "symbol": "fn_8004D508",
+          "symbol": "ObjParseFindChild",
           "start": "0x8004D508",
           "end": "0x8004D560"
         },
         {
-          "symbol": "fn_8004D560",
+          "symbol": "ObjParseNext",
           "start": "0x8004D560",
           "end": "0x8004D5B8"
         },
         {
-          "symbol": "fn_8004D5B8",
+          "symbol": "ObjParseGetString",
           "start": "0x8004D5B8",
           "end": "0x8004D5F0"
         },
         {
-          "symbol": "fn_8004D5F0",
+          "symbol": "ObjParseGetInt",
           "start": "0x8004D5F0",
           "end": "0x8004D624"
         },
         {
-          "symbol": "fn_8004D624",
+          "symbol": "ObjParseGetFloat",
           "start": "0x8004D624",
           "end": "0x8004D65C"
         },
         {
-          "symbol": "fn_8004D65C",
+          "symbol": "ObjParseGetMatrix",
           "start": "0x8004D65C",
           "end": "0x8004D6F4"
         },
         {
-          "symbol": "fn_8004D6F4",
+          "symbol": "ObjParseGetFloats",
           "start": "0x8004D6F4",
           "end": "0x8004D728"
         },
         {
-          "symbol": "fn_8004D728",
+          "symbol": "ObjParseGetVector",
           "start": "0x8004D728",
           "end": "0x8004D798"
         },
         {
-          "symbol": "fn_8004D798",
+          "symbol": "ObjParseInit",
           "start": "0x8004D798",
           "end": "0x8004D818"
         },
         {
-          "symbol": "fn_8004D818",
+          "symbol": "ObjParseShutdown",
           "start": "0x8004D818",
           "end": "0x8004D84C"
         },
         {
-          "symbol": "fn_8004D84C",
+          "symbol": "ObjParseGetCursor",
           "start": "0x8004D84C",
           "end": "0x8004D860"
         },
         {
-          "symbol": "fn_8004D860",
+          "symbol": "ObjParseSetCursor",
           "start": "0x8004D860",
           "end": "0x8004D874"
         },
         {
-          "symbol": "fn_8004D874",
+          "symbol": "DynObjDrawModel",
           "start": "0x8004D874",
           "end": "0x8004D994"
         },
         {
-          "symbol": "fn_8004D994",
+          "symbol": "DynObjFindModel",
           "start": "0x8004D994",
           "end": "0x8004DA0C"
         },
         {
-          "symbol": "fn_8004DA0C",
+          "symbol": "DynObjLoadModel",
           "start": "0x8004DA0C",
           "end": "0x8004DC08"
         },
         {
-          "symbol": "fn_8004DC08",
+          "symbol": "DynObjFreeModel",
           "start": "0x8004DC08",
           "end": "0x8004DC88"
         },
         {
-          "symbol": "fn_8004DC88",
+          "symbol": "DynObjParseRender",
           "start": "0x8004DC88",
           "end": "0x8004DF68"
         },
         {
-          "symbol": "fn_8004DF68",
+          "symbol": "DynObjShutdown",
           "start": "0x8004DF68",
           "end": "0x8004DFDC"
         },
         {
-          "symbol": "fn_8004DFDC",
+          "symbol": "DynObjModelCacheReset",
           "start": "0x8004DFDC",
           "end": "0x8004E018"
         },
         {
-          "symbol": "fn_8004E018",
+          "symbol": "DynObjModelCacheFree",
           "start": "0x8004E018",
           "end": "0x8004E090"
         },
         {
-          "symbol": "fn_8004E090",
+          "symbol": "DynObjSetPartState",
           "start": "0x8004E090",
           "end": "0x8004E0CC"
         },
         {
-          "symbol": "fn_8004E0CC",
+          "symbol": "DynObjSetPart",
           "start": "0x8004E0CC",
           "end": "0x8004E0F4"
         },
         {
-          "symbol": "fn_8004E0F4",
+          "symbol": "DynObjFindSkeleton",
           "start": "0x8004E0F4",
           "end": "0x8004E16C"
         },
         {
-          "symbol": "fn_8004E16C",
+          "symbol": "DynObjLoadSkeleton",
           "start": "0x8004E16C",
           "end": "0x8004E2B4"
         },
         {
-          "symbol": "fn_8004E2B4",
+          "symbol": "DynObjFreeSkeleton",
           "start": "0x8004E2B4",
           "end": "0x8004E320"
         },
         {
-          "symbol": "fn_8004E320",
+          "symbol": "DynObjSkeletonCacheReset",
           "start": "0x8004E320",
           "end": "0x8004E358"
         },
         {
-          "symbol": "fn_8004E358",
+          "symbol": "DynObjSkeletonCacheFree",
           "start": "0x8004E358",
           "end": "0x8004E3CC"
         },
         {
-          "symbol": "fn_8004E3CC",
+          "symbol": "DynObjGetRootAngles",
           "start": "0x8004E3CC",
           "end": "0x8004E468"
         },
@@ -9601,12 +9601,12 @@
           "end": "0x8004E4D0"
         },
         {
-          "symbol": "fn_8004E4D0",
+          "symbol": "PhysPushPlayer",
           "start": "0x8004E4D0",
           "end": "0x8004EA80"
         },
         {
-          "symbol": "fn_8004EA80",
+          "symbol": "PhysHitBall",
           "start": "0x8004EA80",
           "end": "0x8004ED44"
         },
@@ -9626,137 +9626,137 @@
           "end": "0x8004F2D0"
         },
         {
-          "symbol": "fn_8004F2D0",
+          "symbol": "PhysAddCapsule",
           "start": "0x8004F2D0",
           "end": "0x8004F3A4"
         },
         {
-          "symbol": "fn_8004F3A4",
+          "symbol": "PhysAddBox",
           "start": "0x8004F3A4",
           "end": "0x8004F4B4"
         },
         {
-          "symbol": "fn_8004F4B4",
+          "symbol": "PhysAddSphere",
           "start": "0x8004F4B4",
           "end": "0x8004F56C"
         },
         {
-          "symbol": "fn_8004F56C",
+          "symbol": "PhysSetShapeNames",
           "start": "0x8004F56C",
           "end": "0x8004F710"
         },
         {
-          "symbol": "fn_8004F710",
+          "symbol": "PhysFreeShapeNames",
           "start": "0x8004F710",
           "end": "0x8004F754"
         },
         {
-          "symbol": "fn_8004F754",
+          "symbol": "PhysLoadObject",
           "start": "0x8004F754",
           "end": "0x8004FF8C"
         },
         {
-          "symbol": "fn_8004FF8C",
+          "symbol": "PhysAddPlayers",
           "start": "0x8004FF8C",
           "end": "0x800502C0"
         },
         {
-          "symbol": "fn_800502C0",
+          "symbol": "PhysAddBall",
           "start": "0x800502C0",
           "end": "0x800504EC"
         },
         {
-          "symbol": "fn_800504EC",
+          "symbol": "PhysInit",
           "start": "0x800504EC",
           "end": "0x800508A0"
         },
         {
-          "symbol": "fn_800508A0",
+          "symbol": "PhysUpdateBallRest",
           "start": "0x800508A0",
           "end": "0x80050960"
         },
         {
-          "symbol": "fn_80050960",
+          "symbol": "PhysDebugLine",
           "start": "0x80050960",
           "end": "0x80050964"
         },
         {
-          "symbol": "fn_80050964",
+          "symbol": "PhysUpdatePlayers",
           "start": "0x80050964",
           "end": "0x80050CCC"
         },
         {
-          "symbol": "fn_80050CCC",
+          "symbol": "PhysUpdateBall",
           "start": "0x80050CCC",
           "end": "0x80050DA0"
         },
         {
-          "symbol": "fn_80050DA0",
+          "symbol": "PhysUpdateObjects",
           "start": "0x80050DA0",
           "end": "0x80050F14"
         },
         {
-          "symbol": "fn_80050F14",
+          "symbol": "PhysDebugDraw",
           "start": "0x80050F14",
           "end": "0x8005122C"
         },
         {
-          "symbol": "fn_8005122C",
+          "symbol": "PhysUpdate",
           "start": "0x8005122C",
           "end": "0x80051308"
         },
         {
-          "symbol": "fn_80051308",
+          "symbol": "PhysShutdown",
           "start": "0x80051308",
           "end": "0x8005164C"
         },
         {
-          "symbol": "fn_8005164C",
+          "symbol": "PhysIsBall",
           "start": "0x8005164C",
           "end": "0x80051680"
         },
         {
-          "symbol": "fn_80051680",
+          "symbol": "PhysIsPlayer",
           "start": "0x80051680",
           "end": "0x800516B4"
         },
         {
-          "symbol": "fn_800516B4",
+          "symbol": "PhysSetBodyPose",
           "start": "0x800516B4",
           "end": "0x800516E4"
         },
         {
-          "symbol": "fn_800516E4",
+          "symbol": "PhysSleepBody",
           "start": "0x800516E4",
           "end": "0x80051724"
         },
         {
-          "symbol": "fn_80051724",
+          "symbol": "PhysApplyImpulse",
           "start": "0x80051724",
           "end": "0x80051810"
         },
         {
-          "symbol": "fn_80051810",
+          "symbol": "PhysDampLinear",
           "start": "0x80051810",
           "end": "0x80051880"
         },
         {
-          "symbol": "fn_80051880",
+          "symbol": "PhysDampAngular",
           "start": "0x80051880",
           "end": "0x800518E0"
         },
         {
-          "symbol": "fn_800518E0",
+          "symbol": "PhysPlayerHitObject",
           "start": "0x800518E0",
           "end": "0x80051B3C"
         },
         {
-          "symbol": "fn_80051B3C",
+          "symbol": "PhysSetObjectPosition",
           "start": "0x80051B3C",
           "end": "0x80051B88"
         },
         {
-          "symbol": "fn_80051B88",
+          "symbol": "PhysPushObjects",
           "start": "0x80051B88",
           "end": "0x80051D0C"
         },
@@ -9781,12 +9781,12 @@
           "end": "0x80051DBC"
         },
         {
-          "symbol": "_GLOBAL_.I.fn_8004A2F4",
+          "symbol": "_GLOBAL_.I.BigObjAnimReadPose",
           "start": "0x80051DBC",
           "end": "0x80051DE8"
         },
         {
-          "symbol": "_GLOBAL_.D.fn_8004A2F4",
+          "symbol": "_GLOBAL_.D.BigObjAnimReadPose",
           "start": "0x80051DE8",
           "end": "0x80051E14"
         }
