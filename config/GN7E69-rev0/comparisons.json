@@ -10082,9 +10082,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80044F20.cpp",
+      "source": "src/game/PlaDynClutOps.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x80044F20-0x80046004 (src/game/cu_80044F20.cpp), its compiler, type and source-form rows, the 13 target-exact function boundaries (6 bodies exact, 7 partial) and the exact .rodata data row 0x8028D568-0x8028D588. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80044F20-0x80046004 (src/game/PlaDynClutOps.cpp), its compiler, type and source-form rows, the 13 target-exact function boundaries (6 bodies exact, 7 partial) and the exact .rodata data row 0x8028D568-0x8028D588. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -10101,27 +10101,27 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80044F20",
+          "symbol": "PlaDynClutParseOps",
           "start": "0x80044F20",
           "end": "0x80045020"
         },
         {
-          "symbol": "fn_80045020",
+          "symbol": "PlaDynClutFindPalette",
           "start": "0x80045020",
           "end": "0x80045084"
         },
         {
-          "symbol": "fn_80045084",
+          "symbol": "PlaDynClutBeginTable",
           "start": "0x80045084",
           "end": "0x800450A8"
         },
         {
-          "symbol": "fn_800450A8",
+          "symbol": "PlaDynClutEndTable",
           "start": "0x800450A8",
           "end": "0x800450D8"
         },
         {
-          "symbol": "fn_800450D8",
+          "symbol": "PlaDynClutSetRange",
           "start": "0x800450D8",
           "end": "0x800451D0"
         },
@@ -10131,37 +10131,37 @@
           "end": "0x800452F8"
         },
         {
-          "symbol": "fn_800452F8",
+          "symbol": "PlaDynClutBlendRange",
           "start": "0x800452F8",
           "end": "0x80045524"
         },
         {
-          "symbol": "fn_80045524",
+          "symbol": "PlaDynClutBlendPaletteToEnd",
           "start": "0x80045524",
           "end": "0x80045714"
         },
         {
-          "symbol": "fn_80045714",
+          "symbol": "PlaDynClutBlendStartToPalette",
           "start": "0x80045714",
           "end": "0x80045904"
         },
         {
-          "symbol": "fn_80045904",
+          "symbol": "PlaDynClutBlendSourceToEnd",
           "start": "0x80045904",
           "end": "0x80045B30"
         },
         {
-          "symbol": "fn_80045B30",
+          "symbol": "PlaDynClutBlendStartToSource",
           "start": "0x80045B30",
           "end": "0x80045D5C"
         },
         {
-          "symbol": "fn_80045D5C",
+          "symbol": "PlaDynClutScaleRange",
           "start": "0x80045D5C",
           "end": "0x80045F64"
         },
         {
-          "symbol": "fn_80045F64",
+          "symbol": "PlaDynClutApplyOp",
           "start": "0x80045F64",
           "end": "0x80046004"
         }

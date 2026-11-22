@@ -1710,7 +1710,7 @@
     },
     "XmlFindInElement": {
       "address": "0x80216BFC",
-      "evidence": "evidence.tsv function and name rows for 0x80216BFC (XmlFindInElement, a registered holdout of src/engine/xmlread.c, original bytes linked); called by name from src/game/Divot.cpp, src/game/cu_80044F20.cpp, src/game/cu_8004A2F4.cpp (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x80216BFC (XmlFindInElement, a registered holdout of src/engine/xmlread.c, original bytes linked); called by name from src/game/Divot.cpp, src/game/PlaDynClutOps.cpp, src/game/cu_8004A2F4.cpp (n1e naming wave)."
     },
     "StoryTournamentGetTeamName": {
       "address": "0x80060948",
@@ -18780,6 +18780,60 @@
           "end": "0x803078D4"
         }
       ]
+    },
+    {
+      "source": "src/game/PlaDynClutOps.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x80044F20-0x80046004 (src/game/PlaDynClutOps.cpp) and the exact .rodata data row 0x8028D568-0x8028D588; linked with holdouts (owner ruling of 2026-11-20): 7 of 13 functions exact, the six blend/scale handlers keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80044F20",
+          "end": "0x800452F8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80045F64",
+          "end": "0x80046004"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D568",
+          "end": "0x8028D588"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "PlaDynClutBlendRange",
+            "evidence": "evidence.tsv source-form 0x800452F8-0x80045524"
+          },
+          {
+            "function": "PlaDynClutBlendPaletteToEnd",
+            "evidence": "evidence.tsv source-form 0x80045524-0x80045714"
+          },
+          {
+            "function": "PlaDynClutBlendStartToPalette",
+            "evidence": "evidence.tsv source-form 0x80045714-0x80045904"
+          },
+          {
+            "function": "PlaDynClutBlendSourceToEnd",
+            "evidence": "evidence.tsv source-form 0x80045904-0x80045B30"
+          },
+          {
+            "function": "PlaDynClutBlendStartToSource",
+            "evidence": "evidence.tsv source-form 0x80045B30-0x80045D5C"
+          },
+          {
+            "function": "PlaDynClutScaleRange",
+            "evidence": "evidence.tsv source-form 0x80045D5C-0x80045F64"
+          }
+        ],
+        "evidence": "fd1a merge notes (swarm fd1 tracking table): src/game/PlaDynClutOps.cpp holds out PlaDynClutBlendRange, PlaDynClutBlendPaletteToEnd, PlaDynClutBlendStartToPalette, PlaDynClutBlendSourceToEnd, PlaDynClutBlendStartToSource, PlaDynClutScaleRange."
+      }
     },
     {
       "source": "src/game/PenaltyRules.cpp",
