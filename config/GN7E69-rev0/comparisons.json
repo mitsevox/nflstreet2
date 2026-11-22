@@ -34961,37 +34961,6 @@
       ]
     },
     {
-      "source": "src/engine/sstautov.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row for src/engine/sstautov.c; draft comparison.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026E774",
-          "end": "0x8026EA80"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B7948",
-          "end": "0x802B7960"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "StreamFader__3SndPv",
-          "start": "0x8026E774",
-          "end": "0x8026E8FC"
-        },
-        {
-          "symbol": "SNDSTRM_autovol",
-          "start": "0x8026E8FC",
-          "end": "0x8026EA80"
-        }
-      ]
-    },
-    {
       "source": "src/engine/pathsnd.c",
       "profile": "path_cxx",
       "evidence": "evidence.tsv provisional unit row 0x8027D3AC-0x8027ED6C (src/engine/pathsnd.c), its compiler and source-form rows, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",

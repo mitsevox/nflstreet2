@@ -2,6 +2,8 @@
    volume over a time, through faders linked on the stream fader list, and the fader callback
    that steps a slot's volume and applies it to the stream's voice. */
 
+#include <stddef.h>
+
 #include "engine/sndstrm.h"
 
 namespace Snd {
@@ -9,7 +11,6 @@ namespace Snd {
 void StreamFader(void *context)
 {
     SndStreamSpeaker_t *sp;
-    SndStreamChannel_t *channel;
     Record_803A6DF0 *record;
     Record_803A6DF0 *dst;
     int voice;
@@ -31,8 +32,9 @@ void StreamFader(void *context)
         sp->mVolume = sp->mTarget;
         sp->mStep = 0.0f;
     }
-    offset = sp->mIndex * sizeof(SndStreamSpeaker_t) + 316;
-    channel = (SndStreamChannel_t *)((char *)sp - offset);
+    offset = sp->mIndex * sizeof(SndStreamSpeaker_t) + offsetof(SndStreamChannel_t, mSpeakers);
+    // FAKEMATCH: Volatile keeps the speaker offset separate from the voice field load.
+    const volatile SndStreamChannel_t *channel = (SndStreamChannel_t *)((char *)sp - offset);
     voice = SNDVOICEI_get(channel->mVoice);
     if (voice >= 0) {
         record = &lbl_803A6C24.m1CC[voice];

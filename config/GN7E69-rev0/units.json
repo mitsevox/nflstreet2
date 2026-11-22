@@ -22345,6 +22345,25 @@
       ]
     },
     {
+      "source": "src/engine/sstautov.c",
+      "profile": "sound_cxx",
+      "evidence": "Complete sstautov.c unit row 0x8026E774-0x8026EA80, its two function and name rows, its source-form row, and the literal-pool data row 0x802B7948-0x802B7960. Both functions and the whole native .rodata section link exactly under sound_cxx.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026E774",
+          "end": "0x8026EA80"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7948",
+          "end": "0x802B7960"
+        }
+      ]
+    },
+    {
       "source": "src/engine/sstcrtap.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x8026EA80-0x8026EAC0 (src/engine/sstcrtap.c), its function and name rows, and the sound_cxx compiler row 0x8026E4C0-0x80270494; every function exact, promoted from comparison-only. No owned .data or .bss.",
