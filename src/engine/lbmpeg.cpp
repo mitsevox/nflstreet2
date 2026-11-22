@@ -3,6 +3,7 @@
    keeps the read position for the layer decoders derived from it. */
 
 #include "engine/sndlib.h"
+#include "engine/sndutil.h"
 
 namespace Snd {
 
@@ -54,14 +55,14 @@ CMpegBase::~CMpegBase()
 void CMpegBase::OpenSynth()
 {
     if (Snd::MPEGuse_MMX == 0) {
-        m4C = lbl_803B53E4(m44 * 0x900);
+        m4C = Snd::CODANew(m44 * 0x900);
         memset(m4C, 0, m44 * 0x900);
     }
 }
 
 void CMpegBase::CloseSynth()
 {
-    lbl_803B53E8(m4C);
+    Snd::CODADelete(m4C);
 }
 
 int CMpegBase::ProcessHeader(unsigned int header)
@@ -143,7 +144,7 @@ int CMpegBase::GetHeader()
     if (p == 0) {
         header = m48;
     } else {
-        header = (p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3];
+        header = (static_cast<unsigned int>(p[0]) << 24) | (p[1] << 16) | (p[2] << 8) | p[3];
     }
     if (ProcessHeader(header) == -1) {
         return -1;
