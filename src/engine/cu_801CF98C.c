@@ -11,7 +11,6 @@ float fn_801CF944(float *pTable, float angle, float scale);
 float fn_80260428(float x, float y);
 float fn_8025FDE8(float x);
 float fn_80260034(float x);
-float fn_80260C14(float x);
 float fn_8026118C(float x);
 
 float fn_801CF98C(void)
@@ -98,7 +97,7 @@ int fn_801CFDD0(float x)
 
 int fn_801CFE08(float x)
 {
-    return fn_80260C14(x) * 2670176.8f;
+    return atanf(x) * 2670176.8f;
 }
 
 int fn_801CFE40(float y, float x)

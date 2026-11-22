@@ -307,6 +307,16 @@
       ],
       "evidence": "evidence.tsv compiler row 0x801CE1F8-0x801CEC90 (engine_c_nogcse), the one file src/engine/llglib.c: engine_c's -O2 plus -fno-gcse (per-file profile, owner baseline of 2026-11-14: per-file flags allowed, no per-function options). In GlibLLInit 0x801CE2F4 the target forms the frame-buffer table address pMode->mpXfb (r31+0x54) separately in each block that indexes it (addi r9,r31,0x54 at 0x801CE508 for VISetNextFrameBuffer; addi r30,r31,0x54 at 0x801CE67C for the two GXCopyDisp calls); with global CSE the compiler hoists one copy to the top of the function and keeps it in a second saved register (stmw r27, 0x40-byte frame). The flag is not given to engine_c because it changes src/engine/list.c (DSAddListNode 0x801C6AA4), src/engine/Font.c (fn_801CD63C) and src/engine/llsystem.c (fn_801F8248, fn_801F8574)."
     },
+    "engine_c_nobuiltin": {
+      "flags": [
+        "-O2",
+        "-fno-builtin"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler row 0x80260C14-0x80260E24: engine_c with builtins disabled for src/engine/sf_atan.c. The target calls the linked fabsf at 0x80260CD0 and retains the sign and magnitude across that call."
+    },
     "engine_c_fastmath_nobuiltin": {
       "flags": [
         "-O2",
@@ -16420,6 +16430,31 @@
           "placement": ".text",
           "start": "0x80260FC4",
           "end": "0x80260FE8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sf_atan.c",
+      "profile": "engine_c_nobuiltin",
+      "evidence": "evidence.tsv provisional unit row at 0x80260C14, exact function and constant extents, ABI, named compiler profile and source form.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260C14",
+          "end": "0x80260E24"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC440",
+          "end": "0x803EC454"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDEE4",
+          "end": "0x803EDF38"
         }
       ]
     },

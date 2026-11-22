@@ -7,6 +7,7 @@ float tanf(float);
 extern float sinf(float);
 extern float cosf(float);
 extern float acosf(float);
+extern float atanf(float);
 extern float atan2f(float, float);
 
 #endif // _DOLPHIN_CMATH_H_

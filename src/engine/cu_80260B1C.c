@@ -1,4 +1,4 @@
-/* Partial source for the floating-point range 0x80260B1C-0x80260FC4 (neutral file name). */
+/* Comparison source for the single-precision square root. */
 
 /*
  * ====================================================
