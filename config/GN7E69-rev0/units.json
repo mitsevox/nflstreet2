@@ -9909,7 +9909,7 @@
     {
       "source": "src/game/DynObj.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/DynObj.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .bss (0x803084B8-0x8030865C), .ctors and .dtors words; linked with holdouts (owner ruling of 2026-11-20): 101 of 121 functions exact, the holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/DynObj.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .bss (0x803084B8-0x8030865C), .ctors and .dtors words; linked with holdouts (owner ruling of 2026-11-20): 103 of 121 functions exact, the holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -9927,12 +9927,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8004C204",
-          "end": "0x8004C518"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8004C5E0",
           "end": "0x8004C844"
         },
         {
@@ -9945,12 +9939,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8004CE6C",
-          "end": "0x8004CEE8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8004CFCC",
           "end": "0x8004D144"
         },
         {
@@ -10049,10 +10037,6 @@
             "evidence": "evidence.tsv source-form 0x8004BD20-0x8004C204"
           },
           {
-            "function": "BigObjParseEvents",
-            "evidence": "evidence.tsv source-form 0x8004C518-0x8004C5E0"
-          },
-          {
             "function": "BigObjHit",
             "evidence": "evidence.tsv source-form 0x8004C844-0x8004CAA8"
           },
@@ -10063,10 +10047,6 @@
           {
             "function": "BigObjEmitParticles",
             "evidence": "evidence.tsv source-form 0x8004CBEC-0x8004CE6C"
-          },
-          {
-            "function": "DynObjChildFollow",
-            "evidence": "evidence.tsv source-form 0x8004CEE8-0x8004CFCC"
           },
           {
             "function": "DynObjChildSpawn",
@@ -10121,7 +10101,7 @@
             "evidence": "evidence.tsv source-form 0x80050F14-0x8005122C"
           }
         ],
-        "evidence": "fd1a merge notes (swarm fd1 tracking table) and the fd1 fix round (PR #1394): src/game/DynObj.cpp holds out the 20 functions listed here, each with its HOLDOUT: source-form row in evidence.tsv."
+        "evidence": "fd1a merge notes (swarm fd1 tracking table) and the fd1 fix round (PR #1394): src/game/DynObj.cpp holds out the 18 functions listed here, each with its HOLDOUT: source-form row in evidence.tsv."
       }
     },
     {

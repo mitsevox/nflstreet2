@@ -8759,9 +8759,9 @@ extern "C" void fn_80090BDC(void)
     for (i = 0; i < BigObjGetCount(); i++) {
         BigObjInst *pObject = BigObjInstGet(i);
 
-        pos[0] = pObject->mUnknown8;
-        pos[1] = pObject->mUnknown12;
-        pos[2] = pObject->mUnknown16;
+        pos[0] = pObject->mState.mUnknown0;
+        pos[1] = pObject->mState.mUnknown4;
+        pos[2] = pObject->mState.mUnknown8;
         if (pos[0] >= lo[0] && pos[0] <= hi[0] && pos[1] >= lo[1] && pos[1] <= hi[1]) {
             float margin = 2.0f * (SyncRandGetRange(0, 50) * 0.05f + 1.0f);
 
@@ -9007,19 +9007,19 @@ extern "C" void fn_80091578(Character_80093BCC *pCharacter, Entry_80091644 *pEnt
 
     fn_80091EC0(pCharacter, fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4), pCharacter->mUnknown14[0],
                 &pos, &angle);
-    fn_800B267C((Object_800B26B0 *)&pBall->mUnknown8);
+    fn_800B267C((Object_800B26B0 *)&pBall->mState.mUnknown0);
     if (fn_801784C4() != 0) {
         angle = (angle + 0x800000) & 0xFFFFFF;
-        pBall->mUnknown8 = -pos.mX;
-        pBall->mUnknown12 = -pos.mY;
-        pBall->mUnknown16 = pos.mZ;
-        pBall->mUnknown32 = angle;
+        pBall->mState.mUnknown0 = -pos.mX;
+        pBall->mState.mUnknown4 = -pos.mY;
+        pBall->mState.mUnknown8 = pos.mZ;
+        pBall->mState.mUnknown24 = angle;
         pBall->mUnknown428->mUnknown56 = angle;
     } else {
-        pBall->mUnknown8 = pos.mX;
-        pBall->mUnknown12 = pos.mY;
-        pBall->mUnknown16 = pos.mZ;
-        pBall->mUnknown32 = angle;
+        pBall->mState.mUnknown0 = pos.mX;
+        pBall->mState.mUnknown4 = pos.mY;
+        pBall->mState.mUnknown8 = pos.mZ;
+        pBall->mState.mUnknown24 = angle;
         pBall->mUnknown428->mUnknown56 = angle;
     }
 }

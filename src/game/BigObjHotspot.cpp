@@ -157,11 +157,11 @@ int HotspotClassifyPlay(HotspotPlay_t *pPlay)
     } else if (type == 228 || type == 229) {
         if (!fn_80177C38()) {
             if (fn_801784C4()) {
-                if (1.5f - pObject->mUnknown472->mUnknown12 <= fn_80177FE0().mY) {
+                if (1.5f - pObject->mUnknown472->mState.mUnknown4 <= fn_80177FE0().mY) {
                     goto done;
                 }
             } else {
-                if (pObject->mUnknown472->mUnknown12 + 1.5f <= fn_80177FE0().mY) {
+                if (pObject->mUnknown472->mState.mUnknown4 + 1.5f <= fn_80177FE0().mY) {
                     goto done;
                 }
             }

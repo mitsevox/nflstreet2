@@ -87,12 +87,6 @@ static unsigned short _BigObj_uMax;
 static unsigned short _BigObj_uLinkedStart;
 static void *_BigObj_pModelFile;
 
-/* BigObjInst seen from its position at +8, as far as the group id. */
-struct BigObjInstFromPos_t {
-    char mUnknown0[136];
-    int mGroup;
-};
-
 extern "C" {
 int BigObjDefaultUpdate(BigObj_t *pObject)
 {
@@ -106,14 +100,10 @@ void BigObjLinkGroup(BigObj_t *pObject, unsigned int count)
     BigObjInst *pLinked = pObject->mUnknown472;
     unsigned int n = 0;
     unsigned int i;
-    /* FAKEMATCH: the target reads the group id at +0x88 from a pointer it
-       holds to +8 of the instance (addi r31,r9,8; lwz r0,0x88(r31)); no
-       known member of BigObjInst starts a structure there, so the id is
-       read through this view of the instance from +8. */
-    BigObjInstFromPos_t *pFromPos = (BigObjInstFromPos_t *)&pLinked->mUnknown8;
+    BigObjInstState_t *pState = &pLinked->mState;
 
     for (i = 0; i < count; i++) {
-        if (_BigObj_apObjects[i]->mUnknown472->mUnknown144 == pFromPos->mGroup) {
+        if (_BigObj_apObjects[i]->mUnknown472->mState.mGroup == pState->mGroup) {
             if (n < 8) {
                 pLinked->mUnknown152[n++] = _BigObj_apObjects[i];
                 _BigObj_apObjects[i]->mUnknown472->mUnknown152[0] = pObject;
@@ -346,7 +336,7 @@ void BigObjCreate(BigObjDesc_t *pDesc, int handle)
     _BigObj_apObjects[_BigObj_uCount]->mUnknown472 = BigObjInstCreate((void *)pDesc->mUnknown168, &pDesc->mUnknown132);
     _BigObj_apObjects[_BigObj_uCount]->mUnknown472->mUnknown4 = _BigObj_uCount;
     PhysLoadObject(pDesc->mUnknown168, _BigObj_apObjects[_BigObj_uCount], _BigObj_uCount);
-    _BigObj_apObjects[_BigObj_uCount]->mUnknown472->mUnknown144 = pDesc->mUnknown172;
+    _BigObj_apObjects[_BigObj_uCount]->mUnknown472->mState.mGroup = pDesc->mUnknown172;
     _BigObj_apObjects[_BigObj_uCount]->mUnknown472->mUnknown148 = pDesc->mUnknown180;
     memset(_BigObj_apObjects[_BigObj_uCount]->mUnknown472->mUnknown152, 0, 32);
     _BigObj_apObjects[_BigObj_uCount]->mUnknown308 = pDesc->mUnknown176;
@@ -358,28 +348,28 @@ void BigObjSyncFromInst(BigObjInst *pLinked, int index)
 {
     BigObj_t *pObject = _BigObj_apObjects[index];
 
-    if (pLinked->mUnknown428 != 0 && (pLinked->mUnknown428->mUnknown32 != 0 || pLinked->mUnknown428->mUnknown33 != 0)) {
-        fn_800B2A14(&pLinked->mUnknown8, &pLinked->mUnknown428->mUnknown32);
+    if (pLinked->mUnknown428 != 0 && (pLinked->mUnknown428->mSpin.mUnknown0 != 0 || pLinked->mUnknown428->mSpin.mUnknown1 != 0)) {
+        fn_800B2A14(&pLinked->mState.mUnknown0, &pLinked->mUnknown428->mSpin.mUnknown0);
         QuatEulerAngles_t angles;
-        QuatToEuler(&angles, &pLinked->mUnknown96);
-        angles.mUnknown8 = pLinked->mUnknown32 + 0x400000;
+        QuatToEuler(&angles, &pLinked->mState.mUnknown88);
+        angles.mUnknown8 = pLinked->mState.mUnknown24 + 0x400000;
         QuatFromEuler(&pObject->mRot, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
     } else {
-        pObject->mRot.mX = pLinked->mUnknown96;
-        pObject->mRot.mY = pLinked->mUnknown100;
-        pObject->mRot.mZ = pLinked->mUnknown104;
-        pObject->mRot.mW = pLinked->mUnknown108;
+        pObject->mRot.mX = pLinked->mState.mUnknown88;
+        pObject->mRot.mY = pLinked->mState.mUnknown92;
+        pObject->mRot.mZ = pLinked->mState.mUnknown96;
+        pObject->mRot.mW = pLinked->mState.mUnknown100;
     }
-    pObject->mPos.mX = pLinked->mUnknown8;
-    pObject->mPos.mY = pLinked->mUnknown12;
-    pObject->mPos.mZ = pLinked->mUnknown16;
+    pObject->mPos.mX = pLinked->mState.mUnknown0;
+    pObject->mPos.mY = pLinked->mState.mUnknown4;
+    pObject->mPos.mZ = pLinked->mState.mUnknown8;
     if (pLinked->mUnknown428 != 0) {
-        pLinked->mUnknown428->mUnknown56 = pLinked->mUnknown32;
+        pLinked->mUnknown428->mUnknown56 = pLinked->mState.mUnknown24;
     }
-    if (Vec2Equal(&pObject->mUnknown336, &pLinked->mUnknown8, 0.05f) == 0) {
-        pObject->mUnknown332 = LevelFindArea(&pLinked->mUnknown8);
-        pObject->mUnknown336 = pLinked->mUnknown8;
-        pObject->mUnknown340 = pLinked->mUnknown12;
+    if (Vec2Equal(&pObject->mUnknown336, &pLinked->mState.mUnknown0, 0.05f) == 0) {
+        pObject->mUnknown332 = LevelFindArea(&pLinked->mState.mUnknown0);
+        pObject->mUnknown336 = pLinked->mState.mUnknown0;
+        pObject->mUnknown340 = pLinked->mState.mUnknown4;
     }
 }
 
@@ -600,7 +590,7 @@ BigObj_t *BigObjFindLinkedByGroup(int key)
     for (i = _BigObj_uLinkedStart; i < _BigObj_uCount; i++) {
         BigObj_t *pObject = _BigObj_apObjects[i];
 
-        if (pObject->mUnknown472->mUnknown144 == key) {
+        if (pObject->mUnknown472->mState.mGroup == key) {
             return pObject;
         }
     }

@@ -3,12 +3,19 @@
 
 #include "game/Object_80039F5C.h"
 
+/* The spin and follow settings at +32 of BigObjPhysics_t: a spin flag, a
+   follow flag and the angle step per update (DynObjChildFollow holds a
+   pointer to it). */
+struct BigObjSpin_t {
+    unsigned char mUnknown0;
+    unsigned char mUnknown1;
+    char mUnknown2[2];
+    int mUnknown4;
+};
+
 struct BigObjPhysics_t {
     char mUnknown0[32];
-    unsigned char mUnknown32;
-    unsigned char mUnknown33;
-    char mUnknown34[2];
-    union { char mUnknown36[4]; int mWord36; };
+    BigObjSpin_t mSpin;
     char mUnknown40[8];
     char mUnknown48[2];
     unsigned short mUnknown50;
@@ -47,21 +54,22 @@ struct BigObjHit_t {
     char mUnknown6[2];
 };
 
-typedef int (*BigObjBehaviorFunc)(BigObjInst *pObject, BigObj_t *pOwner, int mode);
-
-struct BigObjInst {
-    int mUnknown0;
-    int mUnknown4;
+/* The state block at +8 of BigObjInst: the position first, the heading
+   angle at +0x18 and the group id at +0x88 (BigObjLinkGroup and
+   DynObjChildFollow hold a pointer to it). */
+struct BigObjInstState_t {
+    float mUnknown0;
+    float mUnknown4;
     float mUnknown8;
-    float mUnknown12;
-    float mUnknown16;
-    char mUnknown20[12];
-    int mUnknown32;
-    char mUnknown36[12];
+    char mUnknown12[12];
+    int mUnknown24;
+    char mUnknown28[12];
+    float mUnknown40;
+    float mUnknown44;
     float mUnknown48;
-    float mUnknown52;
-    float mUnknown56;
-    char mUnknown60[36];
+    char mUnknown52[36];
+    float mUnknown88;
+    float mUnknown92;
     float mUnknown96;
     float mUnknown100;
     float mUnknown104;
@@ -71,10 +79,16 @@ struct BigObjInst {
     float mUnknown120;
     float mUnknown124;
     float mUnknown128;
-    float mUnknown132;
-    float mUnknown136;
-    int mUnknown140;
-    int mUnknown144;
+    int mUnknown132;
+    int mGroup;
+};
+
+typedef int (*BigObjBehaviorFunc)(BigObjInst *pObject, BigObj_t *pOwner, int mode);
+
+struct BigObjInst {
+    int mUnknown0;
+    int mUnknown4;
+    BigObjInstState_t mState;
     unsigned short mUnknown148;
     char mUnknown150[2];
     BigObj_t *mUnknown152[8];

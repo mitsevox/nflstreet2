@@ -551,21 +551,21 @@ void BigObjRestoreState(BigObj_t *pObject)
     BigObjFlags_t *pFlags;
     BigObjNode_t *pNode;
 
-    pObject->mUnknown472->mUnknown8 = pObject->mUnknown472->mUnknown112;
-    pObject->mUnknown472->mUnknown12 = pObject->mUnknown472->mUnknown116;
-    pObject->mUnknown472->mUnknown16 = pObject->mUnknown472->mUnknown120;
-    pObject->mUnknown472->mUnknown96 = pObject->mUnknown472->mUnknown124;
-    pObject->mUnknown472->mUnknown100 = pObject->mUnknown472->mUnknown128;
-    pObject->mUnknown472->mUnknown104 = pObject->mUnknown472->mUnknown132;
-    pObject->mUnknown472->mUnknown108 = pObject->mUnknown472->mUnknown136;
-    pObject->mUnknown472->mUnknown32 = pObject->mUnknown472->mUnknown140;
+    pObject->mUnknown472->mState.mUnknown0 = pObject->mUnknown472->mState.mUnknown104;
+    pObject->mUnknown472->mState.mUnknown4 = pObject->mUnknown472->mState.mUnknown108;
+    pObject->mUnknown472->mState.mUnknown8 = pObject->mUnknown472->mState.mUnknown112;
+    pObject->mUnknown472->mState.mUnknown88 = pObject->mUnknown472->mState.mUnknown116;
+    pObject->mUnknown472->mState.mUnknown92 = pObject->mUnknown472->mState.mUnknown120;
+    pObject->mUnknown472->mState.mUnknown96 = pObject->mUnknown472->mState.mUnknown124;
+    pObject->mUnknown472->mState.mUnknown100 = pObject->mUnknown472->mState.mUnknown128;
+    pObject->mUnknown472->mState.mUnknown24 = pObject->mUnknown472->mState.mUnknown132;
     if (pObject->mUnknown472->mUnknown428) {
-        pObject->mUnknown472->mUnknown428->mUnknown56 = pObject->mUnknown472->mUnknown140;
+        pObject->mUnknown472->mUnknown428->mUnknown56 = pObject->mUnknown472->mState.mUnknown132;
     }
     BigObjSetFlag(pObject);
     pFlags = pObject->mUnknown476;
     if (pFlags && pFlags->mUnknown20 != -1) {
-        PhysSetBodyPose(pFlags->mUnknown20, &pObject->mUnknown472->mUnknown112, &pObject->mUnknown472->mUnknown124);
+        PhysSetBodyPose(pFlags->mUnknown20, &pObject->mUnknown472->mState.mUnknown104, &pObject->mUnknown472->mState.mUnknown116);
         PhysSleepBody(pFlags->mUnknown20);
     }
     for (pNode = pObject->mUnknown472->mUnknown312; pNode; pNode = pNode->mpNext) {
@@ -577,35 +577,35 @@ void BigObjRestoreState(BigObj_t *pObject)
 
 void BigObjKeepInBounds(BigObj_t *pObject)
 {
-    float y = fabsf(pObject->mUnknown472->mUnknown12);
+    float y = fabsf(pObject->mUnknown472->mState.mUnknown4);
     int outY = y > fn_80178A44() + lbl_803EA4E8;
-    float x = fabsf(pObject->mUnknown472->mUnknown8);
+    float x = fabsf(pObject->mUnknown472->mState.mUnknown0);
     int outX = x > fn_80178A08() + lbl_803EA4E8;
 
     if (outX || outY) {
         Vector_80039F5C pos;
 
-        pos.mX = pObject->mUnknown472->mUnknown8;
-        pos.mY = pObject->mUnknown472->mUnknown12;
-        pos.mZ = pObject->mUnknown472->mUnknown16;
+        pos.mX = pObject->mUnknown472->mState.mUnknown0;
+        pos.mY = pObject->mUnknown472->mState.mUnknown4;
+        pos.mZ = pObject->mUnknown472->mState.mUnknown8;
         if (outX) {
             float margin = lbl_803EA4F0 * SyncRandGetFloat(0);
 
-            pos.mX = pObject->mUnknown472->mUnknown8 < 0.0f ? lbl_803EA4EC - fn_80178A08() + margin
+            pos.mX = pObject->mUnknown472->mState.mUnknown0 < 0.0f ? lbl_803EA4EC - fn_80178A08() + margin
                                                                  : fn_80178A08() - (lbl_803EA4EC + margin);
         }
         if (outY) {
             float margin = lbl_803EA4F0 * SyncRandGetFloat(0);
 
-            pos.mY = pObject->mUnknown472->mUnknown12 < 0.0f ? lbl_803EA4EC - fn_80178A44() + margin
+            pos.mY = pObject->mUnknown472->mState.mUnknown4 < 0.0f ? lbl_803EA4EC - fn_80178A44() + margin
                                                                  : fn_80178A44() - (lbl_803EA4EC + margin);
         }
-        pObject->mUnknown472->mUnknown8 = pos.mX;
-        pObject->mUnknown472->mUnknown12 = pos.mY;
-        pObject->mUnknown472->mUnknown16 = pos.mZ;
+        pObject->mUnknown472->mState.mUnknown0 = pos.mX;
+        pObject->mUnknown472->mState.mUnknown4 = pos.mY;
+        pObject->mUnknown472->mState.mUnknown8 = pos.mZ;
         BigObjSetFlag(pObject);
         if (pObject->mUnknown476 && pObject->mUnknown476->mUnknown20 != -1) {
-            PhysSetBodyPose(pObject->mUnknown476->mUnknown20, &pos.mX, &pObject->mUnknown472->mUnknown96);
+            PhysSetBodyPose(pObject->mUnknown476->mUnknown20, &pos.mX, &pObject->mUnknown472->mState.mUnknown88);
         }
     }
 }
@@ -635,12 +635,12 @@ int BigObjOnAnimEvent(BigObjInst *pObject, BigObj_t *pOwner, int mode)
             Point_8017886C center;
             Point_8017886C offset;
 
-            from.mX = pObject->mUnknown8;
-            from.mY = pObject->mUnknown12;
-            from.mZ = pObject->mUnknown16;
-            to.mX = pObject->mUnknown8;
-            to.mY = pObject->mUnknown12;
-            to.mZ = pObject->mUnknown16;
+            from.mX = pObject->mState.mUnknown0;
+            from.mY = pObject->mState.mUnknown4;
+            from.mZ = pObject->mState.mUnknown8;
+            to.mX = pObject->mState.mUnknown0;
+            to.mY = pObject->mState.mUnknown4;
+            to.mZ = pObject->mState.mUnknown8;
             if (fn_801784C4()) {
                 from.mX = -from.mX;
                 from.mY = -from.mY;
@@ -662,10 +662,10 @@ int BigObjOnAnimEvent(BigObjInst *pObject, BigObj_t *pOwner, int mode)
                         to.mX = -to.mX;
                         to.mY = -to.mY;
                     }
-                    pObject->mUnknown8 = to.mX;
-                    pObject->mUnknown12 = to.mY;
-                    pObject->mUnknown16 = to.mZ;
-                    PhysSetObjectPosition(pOwner, &pObject->mUnknown8);
+                    pObject->mState.mUnknown0 = to.mX;
+                    pObject->mState.mUnknown4 = to.mY;
+                    pObject->mState.mUnknown8 = to.mZ;
+                    PhysSetObjectPosition(pOwner, &pObject->mState.mUnknown0);
                 }
             }
         }
@@ -711,7 +711,7 @@ int BigObjOnAnimEvent(BigObjInst *pObject, BigObj_t *pOwner, int mode)
                     if (pNode->mId != -1 && fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196) {
                         pExtra->mUnknown1704 = pObject->mUnknown424;
                         pExtra->mUnknown1705 = lbl_803EA4DC[(((fn_801CFE40(pObject->mUnknown352, pObject->mUnknown348) -
-                                                               (pObject->mUnknown32 + 0x400000)) &
+                                                               (pObject->mState.mUnknown24 + 0x400000)) &
                                                               0xFFFFFF) +
                                                              0x100000) >>
                                                                 21 &
@@ -761,9 +761,9 @@ int BigObjOnAnimEvent(BigObjInst *pObject, BigObj_t *pOwner, int mode)
         } else {
             Vector_80039F5C pos;
 
-            pos.mX = pObject->mUnknown8;
-            pos.mY = pObject->mUnknown12;
-            pos.mZ = pObject->mUnknown16;
+            pos.mX = pObject->mState.mUnknown0;
+            pos.mY = pObject->mState.mUnknown4;
+            pos.mZ = pObject->mState.mUnknown8;
             if (fn_801784C4()) {
                 pos.mX = -pos.mX;
                 pos.mY = -pos.mY;
@@ -1074,19 +1074,21 @@ void BigObjParseEvents(int handle, BigObjInst *pObject)
     char text[32];
 
     ObjParseFindChild(handle, "event");
-    while (ObjParseGetString(handle, "type", text, 32)) {
-        switch (BigObjFindEventType(text)) {
-        case 1:
-            BigObjParseAnimEvent(handle, pObject);
-            break;
-        case 2:
-            BigObjParseSwapEvent(handle, pObject);
-            break;
-        case 3:
-            BigObjParseSwapEvent(handle, pObject);
-            break;
-        }
-        ObjParseNext(handle);
+    if (ObjParseGetString(handle, "type", text, 32)) {
+        do {
+            switch (BigObjFindEventType(text)) {
+            case 1:
+                BigObjParseAnimEvent(handle, pObject);
+                break;
+            case 2:
+                BigObjParseSwapEvent(handle, pObject);
+                break;
+            case 3:
+                BigObjParseSwapEvent(handle, pObject);
+                break;
+            }
+            ObjParseNext(handle);
+        } while (ObjParseGetString(handle, "type", text, 32));
     }
 }
 
@@ -1384,15 +1386,15 @@ void BigObjEmitParticles(void *pData, float time, BigObjInst *pObject, BigObj_t 
             } else {
                 QuatFromEuler(&rotation, (int)(p->mUnknown24[2] * 46603.3789f),
                             (int)(p->mUnknown24[1] * 46603.3789f), (int)(p->mUnknown24[0] * 46603.3789f));
-                QuatMultiply(&rotation, &rotation, &pObject->mUnknown96);
+                QuatMultiply(&rotation, &rotation, &pObject->mState.mUnknown88);
                 MatPushUnit();
                 MatRotQuat(&rotation);
                 Vector_80039F5C offset;
                 Vec3Mat33Mul(&offset, p->mUnknown12);
                 MatPop();
-                position.mX = pObject->mUnknown8;
-                position.mY = pObject->mUnknown12;
-                position.mZ = pObject->mUnknown16;
+                position.mX = pObject->mState.mUnknown0;
+                position.mY = pObject->mState.mUnknown4;
+                position.mZ = pObject->mState.mUnknown8;
                 Vec3Add(&position, &position, &offset);
             }
             ParticlesSpawnAt(p->mUnknown0, &position.mX, &rotation.mX, (ParticleSource_t *)pOwner->mUnknown332);
@@ -1427,17 +1429,19 @@ void DynObjChildFollow(DynObjChild *p)
     BigObjInst *pObject = p->mpObject54;
     BigObjPhysics_t *pExtra = pObject->mUnknown428;
     if (pExtra) {
-        if (pExtra->mUnknown32) {
-            p->mAngle4C = (p->mAngle4C + pExtra->mWord36) & 0xFFFFFF;
+        Vector_80039F5C delta;
+        BigObjSpin_t *pSpin = &pExtra->mSpin;
+        BigObjInstState_t *pState = &pObject->mState;
+        if (pSpin->mUnknown0) {
             QuatEulerAngles_t angles;
+            p->mAngle4C = (p->mAngle4C + pSpin->mUnknown4) & 0xFFFFFF;
             QuatToEuler(&angles, &p->mRotation3C.mX);
             angles.mUnknown8 = p->mAngle4C + 0x400000;
             QuatFromEuler(&p->mRotation3C, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
         }
-        int angle = MathAngleDiff(p->mAngle4C, pObject->mUnknown32);
-        if (pExtra->mUnknown33) {
-            Vector_80039F5C delta;
-            Vec3Sub(&delta, &pObject->mUnknown8, pObject->mUnknown20);
+        int angle = MathAngleDiff(p->mAngle4C, pState->mUnknown24);
+        if (pSpin->mUnknown1) {
+            Vec3Sub(&delta, &pState->mUnknown0, pState->mUnknown12);
             Vec3RotateZYX(&delta, &delta, angle, 0, 0);
             Vec3Add(&p->mUnknown30, &p->mUnknown30, &delta);
         }
@@ -2232,8 +2236,8 @@ void PhysLoadObject(int handle, BigObj_t *pObject, int objectIndex)
     if (ObjParseFindPath(handle, "physics")) mass = ObjParseGetFloat(handle, "mass");
     ObjParseRewind(handle);
     if (ObjParseFindPath(handle, "collision")) {
-        Vector_80039F5C *pPos = (Vector_80039F5C *)&pState->mUnknown8;
-        void *pRot = &pState->mUnknown96;
+        Vector_80039F5C *pPos = (Vector_80039F5C *)&pState->mState.mUnknown0;
+        void *pRot = &pState->mState.mUnknown88;
         lbl_80308B0C[lbl_803EA520] = pPos;
         pState->mUnknown408 = ObjParseGetFloat(handle, "aeroConst");
         pState->mUnknown412 = ObjParseGetFloat(handle, "spinDamp");

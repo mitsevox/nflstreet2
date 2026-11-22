@@ -47,23 +47,23 @@ int BigObjBirdUpdate(BigObjInst *pObject, BigObj_t *pItem, int mode)
             StartAnim(pObject, pObject->mUnknown196, 1.0f);
         }
     } else if (mode == 2) {
-        pObject->mUnknown8 = pObject->mUnknown112;
-        pObject->mUnknown12 = pObject->mUnknown116;
-        pObject->mUnknown16 = pObject->mUnknown120;
-        pObject->mUnknown96 = pObject->mUnknown124;
-        pObject->mUnknown100 = pObject->mUnknown128;
-        pObject->mUnknown104 = pObject->mUnknown132;
-        pObject->mUnknown108 = pObject->mUnknown136;
-        pObject->mUnknown32 = pObject->mUnknown140;
-        pExtra->mUnknown56 = pObject->mUnknown140;
+        pObject->mState.mUnknown0 = pObject->mState.mUnknown104;
+        pObject->mState.mUnknown4 = pObject->mState.mUnknown108;
+        pObject->mState.mUnknown8 = pObject->mState.mUnknown112;
+        pObject->mState.mUnknown88 = pObject->mState.mUnknown116;
+        pObject->mState.mUnknown92 = pObject->mState.mUnknown120;
+        pObject->mState.mUnknown96 = pObject->mState.mUnknown124;
+        pObject->mState.mUnknown100 = pObject->mState.mUnknown128;
+        pObject->mState.mUnknown24 = pObject->mState.mUnknown132;
+        pExtra->mUnknown56 = pObject->mState.mUnknown132;
         if (pObject->mUnknown196 != -1 &&
             fn_801BE648(pObject->mUnknown428->mUnknown1300) != pObject->mUnknown196) {
             StartAnim(pObject, pObject->mUnknown196, 1.0f);
         }
         DynObjSetPartState(pItem, 0, 0);
         pItem->mUnknown232_31 = 1;
-        if (pObject->mUnknown144 != -1) {
-            BigObjSetFlag(BigObjFindLinkedByGroup(pObject->mUnknown144));
+        if (pObject->mState.mGroup != -1) {
+            BigObjSetFlag(BigObjFindLinkedByGroup(pObject->mState.mGroup));
         } else {
             BigObjSetFlag(pItem);
         }
@@ -75,8 +75,8 @@ int BigObjBirdUpdate(BigObjInst *pObject, BigObj_t *pItem, int mode)
         }
         if (pObject->mUnknown380 &&
             fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196) {
-            if (pObject->mUnknown144 != -1) {
-                BigObjClearFlag(BigObjFindLinkedByGroup(pObject->mUnknown144));
+            if (pObject->mState.mGroup != -1) {
+                BigObjClearFlag(BigObjFindLinkedByGroup(pObject->mState.mGroup));
             } else {
                 BigObjClearFlag(pItem);
             }
