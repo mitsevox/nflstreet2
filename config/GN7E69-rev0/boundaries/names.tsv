@@ -2133,7 +2133,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x80241D88	284	ErrorCode2Num	size	dvderror.c	-
 0x80241EA4	124	__DVDStoreErrorCode	size	dvderror.c	-
 0x80241F20	248	DVDCompareDiskID	name	dvderror.c	-
-0x80242018	48	__DVDPrintFatalMessage	size	dvderror.c	-
+0x80242018	48	__DVDPrintFatalMessage	name	dvderror.c	-
 0x80242048	216	cb	name	fstload.c	-
 0x80242120	360	__fstLoad	name	fstload.c	-
 0x80242288	64	__DVDInitWA	name	fstload.c	-

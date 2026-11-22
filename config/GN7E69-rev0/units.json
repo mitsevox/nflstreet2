@@ -474,10 +474,6 @@
       "address": "0x803EC2C0",
       "evidence": "Complete BFBB CARDMount native retained operand resolved against original target; source name corroborated by pinned donor declaration and actual call/access context."
     },
-    "__DVDPrintFatalMessage": {
-      "address": "0x80242018",
-      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
-    },
     "__ArenaLo": {
       "address": "0x803FE4E0",
       "evidence": "Original OSInit lis/addi pair at 0x80238C20/0x80238C24: lis r3,0x8040 plus signed low displacement forms 0x803FE4E0; no storage definition claimed. Corrects the former +0x10000 address error."
@@ -5179,6 +5175,37 @@
           "placement": ".text",
           "start": "0x80241F20",
           "end": "0x80242018"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/dvd/dvdFatal.c",
+      "profile": "dolphin_dvd_release",
+      "evidence": "evidence.tsv unit row 0x80242018-0x80242048 and function, name, compiler and data rows. The one retained dispatcher, eight diagnostic strings, two initialized pointers and the callback word are native. Trailing string alignment is separate.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80242018",
+          "end": "0x80242048"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FD428",
+          "end": "0x802FD855"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC1D8",
+          "end": "0x803EC1E0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED170",
+          "end": "0x803ED174"
         }
       ]
     },
