@@ -2,7 +2,7 @@
 
 #include "engine/sndsys.h"
 
-/* Release-build form of the library's assertion check: compiles to an empty statement. */
+/* Release-style assertion form for the vacant-slot branch. */
 #define SND_ASSERT(e) do { } while (0)
 
 extern "C" {
