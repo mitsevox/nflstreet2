@@ -87,8 +87,13 @@ static unsigned short _BigObj_uMax;
 static unsigned short _BigObj_uLinkedStart;
 static void *_BigObj_pModelFile;
 
+/* BigObjInst seen from its position at +8, as far as the group id. */
+struct BigObjInstFromPos_t {
+    char mUnknown0[136];
+    int mGroup;
+};
+
 extern "C" {
-#if defined(DECOMP_COMPARE)
 int BigObjDefaultUpdate(BigObj_t *pObject)
 {
     return 0;
@@ -101,9 +106,14 @@ void BigObjLinkGroup(BigObj_t *pObject, unsigned int count)
     BigObjInst *pLinked = pObject->mUnknown472;
     unsigned int n = 0;
     unsigned int i;
+    /* FAKEMATCH: the target reads the group id at +0x88 from a pointer it
+       holds to +8 of the instance (addi r31,r9,8; lwz r0,0x88(r31)); no
+       known member of BigObjInst starts a structure there, so the id is
+       read through this view of the instance from +8. */
+    BigObjInstFromPos_t *pFromPos = (BigObjInstFromPos_t *)&pLinked->mUnknown8;
 
     for (i = 0; i < count; i++) {
-        if (_BigObj_apObjects[i]->mUnknown472->mUnknown144 == pLinked->mUnknown144) {
+        if (_BigObj_apObjects[i]->mUnknown472->mUnknown144 == pFromPos->mGroup) {
             if (n < 8) {
                 pLinked->mUnknown152[n++] = _BigObj_apObjects[i];
                 _BigObj_apObjects[i]->mUnknown472->mUnknown152[0] = pObject;
@@ -113,7 +123,6 @@ void BigObjLinkGroup(BigObj_t *pObject, unsigned int count)
         }
     }
 }
-#endif
 
 void BigObjSave(BitStream_t *pStream)
 {
