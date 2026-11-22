@@ -23,7 +23,7 @@ int SNDSTRM_fxlevel(int stream, int bus, int level)
             dst = lbl_803A6C24.m1CC + lbl_803A6C24.m1CC[voice].m4[i];
             dst->m64[bus] = channel->mpFxLevels[bus];
         }
-        fn_80278070(channel->mVoice, bus, level);
+        SNDfxlevel(channel->mVoice, bus, level);
     }
     return 0;
 }

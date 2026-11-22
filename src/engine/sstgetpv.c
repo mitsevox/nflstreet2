@@ -15,7 +15,7 @@ int SNDSTRM_getprogvol(int stream)
     if (channel == 0) {
         return -8;
     }
-    vol = fn_802781A8(channel->mVoice);
+    vol = SNDCTRL_getprogvol(channel->mVoice);
     if (vol < 0) {
         level = channel->mSpeakers[0].mVolume * 127.0f;
         if (!(level < 0.0f)) {

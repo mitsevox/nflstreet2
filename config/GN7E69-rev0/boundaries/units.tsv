@@ -193,7 +193,8 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x8026EF88	0x8026F19C	sstrstat.c	1	1	1	1	0	-	-
 0x8026F19C	0x8026F1E8	sstsetgl.c	1	1	1	1	0	-	-
 0x802755E0	0x802763E0	smixer.c	15	14	16	9	5	-	-
-0x80277520	0x802775EC	s3dlow.c	1	1	1	1	0	-	-
+0x80276820	0x80276868	smixfram.c	1	1	1	1	0	-	-
+0x80276938	0x80276A84	smixlowp.c	1	1	1	1	0	-	-
 0x80279D90	0x80279E74	sfilter.c	2	2	2	2	0	-	-
 0x8027A8A4	0x8027A8EC	sinitxa.c	1	1	1	1	0	-	-
 0x8027A8EC	0x8027A91C	smixc.c	1	1	1	1	0	-	-

@@ -23084,6 +23084,25 @@
       ]
     },
     {
+      "source": "src/engine/smixlowp.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit, function and name rows for MIX_setlowpass at 0x80276938-0x80276A84 and .rodata row 0x802C1EB0-0x802C1EC8; the existing sound_cxx profile reproduces the whole function and literal pool.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80276938",
+          "end": "0x80276A84"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C1EB0",
+          "end": "0x802C1EC8"
+        }
+      ]
+    },
+    {
       "source": "src/engine/smixptch.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x80276A84-0x80276B40 (src/engine/smixptch.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",
@@ -23183,6 +23202,25 @@
           "placement": ".text",
           "start": "0x80278128",
           "end": "0x802781A8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sgetpvol.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit, function and name rows at 0x802781A8, data row 0x802C2030-0x802C203C, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C. One exact function and its literal pool.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802781A8",
+          "end": "0x8027823C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2030",
+          "end": "0x802C203C"
         }
       ]
     },
@@ -24023,6 +24061,25 @@
           "placement": ".text",
           "start": "0x80278000",
           "end": "0x80278070"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sfxlevel.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit, function and name rows at 0x80278070, the .rodata row 0x802C2020-0x802C2030, and the sound_cxx compiler rows for 0x802714A8-0x8027CF9C. The complete native code and constants are linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80278070",
+          "end": "0x80278128"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2020",
+          "end": "0x802C2030"
         }
       ]
     },

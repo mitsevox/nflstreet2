@@ -279,6 +279,8 @@ float SNDI_sin(float x);
 void calcFIRCoeffs(SndFirState_t *state, int type);
 void SNDI_fir8init(SndFirState_t *state);
 void SNDI_fir8(SndFirState_t *state, int count, float *in, float *out);
+int SFILTER_createLPFRC(Node_80279D90 *node);
+void SFILTER_modifyLPFRC(Node_80279D90 *node, int *params);
 int SFILTER_unpackxalf(Node_80279D90 *node, int count, float *a, float *b, int flag);
 int SFILTER_unpackxapf(Node_80279D90 *node, int count, float *a, float *b, int flag);
 int SFILTER_unpackpf(Node_80279D90 *node, int count, float *a, float *b, int flag);

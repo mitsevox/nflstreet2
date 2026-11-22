@@ -2717,13 +2717,8 @@ address	size	sibling_name	how	sibling_file	unit
 0x80276278	256	MIX_stop	name	smixer.c	smixer.c
 0x80276378	52	SNDMIX_setdrygain	name	smixer.c	smixer.c
 0x802763AC	52	SNDMIX_setwetgain	name	smixer.c	smixer.c
-0x80277240	64	SFILTER_createLPFRC__FP10LPFRCSTATE	gap	sflpf.c	-
-0x802774C8	88	SNDplaysetdef	gap	splysdef.c	-
-0x80277520	204	SND3dpos	name	s3dlow.c	s3dlow.c
-0x80277A60	156	iSNDserverremoveclient__FPFv_v	gap	ssysserv.c	-
-0x80277AFC	64	SNDSYS_entercritical	gap	sserver.c	-
-0x80277E38	140	iSNDdetunetolinear__Fi	gap	sclcptch.c	-
-0x80277EC4	212	iSNDcalcpitch__Fi	gap	sclcptch.c	-
+0x80276820	72	MIX_getframe	name	smixfram.c	smixfram.c
+0x80276938	332	MIX_setlowpass	name	smixlowp.c	smixlowp.c
 0x80279D90	104	SFILTER_add	name	sfilter.c	sfilter.c
 0x80279DF8	124	SFILTER_remove	name	sfilter.c	sfilter.c
 0x8027A3B0	64	SFILTER_timestretchsetratio__FP16TIMESTRETCHSTATEi	gap	stretch.c	-
