@@ -340,7 +340,7 @@
       "include_dirs": [
         "include/libc"
       ],
-      "evidence": "evidence.tsv compiler row 0x80260C14-0x80260E24: engine_c with builtins disabled for src/engine/sf_atan.c. The target calls the linked fabsf at 0x80260CD0 and retains the sign and magnitude across that call."
+      "evidence": "engine_c with builtins disabled, whole file, for src/engine/sf_atan.c (evidence.tsv compiler row 0x80260C14-0x80260E24) and src/engine/ef_asin.c (compiler row 0x80260034-0x80260260). Both targets call the linked fabsf instead of expanding it inline (0x80260CD0 in atanf)."
     },
     "engine_c_fastmath_nobuiltin": {
       "flags": [
@@ -1791,6 +1791,10 @@
     "ScaleBlockReset": {
       "address": "0x802349CC",
       "evidence": "evidence.tsv function/name rows for 0x802349CC (target extent, inferred name); called from other files while its own file is unlinked."
+    },
+    "sqrtf": {
+      "address": "0x80260B1C",
+      "evidence": "evidence.tsv sqrtf external row. Both arccosine calls and the arcsine call target the original square-root entry."
     }
   },
   "units": [
@@ -17191,6 +17195,31 @@
       ]
     },
     {
+      "source": "src/engine/ef_acos.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional ef_acos.c unit, exact acosf and both scalar pool extents, external sqrtf ABI, type, field and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025FDE8",
+          "end": "0x80260034"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC324",
+          "end": "0x803EC36C"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDDD8",
+          "end": "0x803EDE10"
+        }
+      ]
+    },
+    {
       "source": "src/engine/sf_cos.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional sf_cos.c unit row, exact cosf function and both scalar data rows, kernel and reducer ABI, layout, matching profile and source-form evidence.",
@@ -17282,6 +17311,50 @@
           "placement": ".text",
           "start": "0x80260FC4",
           "end": "0x80260FE8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/ef_asin.c",
+      "profile": "engine_c_nobuiltin",
+      "evidence": "evidence.tsv provisional whole-file ef_asin.c unit at 0x80260034, exact .text, function/field/name rows, and exact .sdata and .sdata2 pools.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260034",
+          "end": "0x80260260"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC36C",
+          "end": "0x803EC3AC"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDE10",
+          "end": "0x803EDE4C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/ef_fmod.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80260260-0x80260428, exact function and constant extents, names, ABI, compiler and source form.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260260",
+          "end": "0x80260428"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDE4C",
+          "end": "0x803EDE58"
         }
       ]
     },

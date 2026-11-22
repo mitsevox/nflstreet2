@@ -2628,6 +2628,9 @@ address	size	sibling_name	how	sibling_file	unit
 0x80260C14	528	atanf	name	sf_atan.c	sf_atan.c
 0x80260E24	196	ceilf	name	sf_ceil.c	sf_ceil.c
 0x80260EE8	220	cosf	name	sf_cos.c	sf_cos.c
+0x8025FDE8	588	acosf	name	ef_acos.c	ef_acos.c
+0x80260034	556	asinf	name	ef_asin.c	ef_asin.c
+0x80260260	456	fmodf	name	ef_fmod.c	ef_fmod.c
 0x80260FC4	36	fabsf	name	sf_fabs.c	sf_fabs.c
 0x80260FE8	200	floorf	name	sf_floor.c	sf_floor.c
 0x802610B0	220	sinf	name	sf_sin.c	sf_sin.c

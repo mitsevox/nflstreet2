@@ -39,6 +39,7 @@ float sqrtf(float x);
 float fabsf(float x);
 float ceilf(float x);
 float floorf(float x);
+float fmodf(float x, float y);
 #ifdef __cplusplus
 }
 #endif

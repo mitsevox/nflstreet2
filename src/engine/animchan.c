@@ -4,10 +4,10 @@
  * per state, stops, counts and delays channels by state, and steps each channel's sequence
  * and weight every frame.
  */
+#include <math.h>
 #include "engine/animchan.h"
 #include "engine/animemot.h"
 
-float fn_80260260(float x, float y);
 void AnimChanSetWeightFunction(AnimChannel_t *pChannel, int type, float a, void *pSource, float b);
 int AnimChanStart(AnimChannel_t *pChannel, AnimScript_t *pAnim, void *pUser);
 
@@ -156,7 +156,7 @@ void AnimChanSwitchAnim(AnimHeader_t *pList, AnimChannel_t *pChannels, int index
         if (pChannels[index].mUnknown4C.mUnknown1A == 0xFFFF)
             pChannels[index].mUnknown4C.mUnknown1A = AnimSeqGetNumFrames(pChannels[index].mUnknown4C.mpUnknown0);
         length = pChannels[index].mUnknown4C.mUnknown4 * (unsigned int)pChannels[index].mUnknown4C.mUnknown1A;
-        time = fn_80260260(pChannels[index].mUnknown4C.mUnknown8, length);
+        time = fmodf(pChannels[index].mUnknown4C.mUnknown8, length);
         result = AnimChanStart(&pChannels[index], AnimFileGetAnimation(AnimFileGetPtrFromSlot(slot), anim), pUser);
         if (result != 1) {
             pChannels[index].mUnknown4C.mUnknown1A = AnimSeqGetNumFrames(pChannels[index].mUnknown4C.mpUnknown0);

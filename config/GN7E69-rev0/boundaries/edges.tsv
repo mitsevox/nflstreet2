@@ -163,6 +163,10 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x802610B0	0x802610B0	0x802610B0	alignment	0	0	sf_floor.c	sf_sin.c
 .text	0x8026118C	0x8026118C	0x8026118C	alignment	0	0	sf_sin.c	sf_tan.c
 .text	-	0x8026120C	0x8026120C	open	-	-	sf_tan.c	sf_scalbn.c
+.text	-	0x8025FBD4	0x8025FDE8	open	-	-	libgcc2.c	ef_acos.c
+.text	0x80260034	0x80260034	0x80260034	alignment	0	0	ef_acos.c	ef_asin.c
+.text	-	0x80260260	0x80260260	open	-	-	ef_asin.c	ef_fmod.c
+.text	-	0x80260428	0x80260FC4	open	-	-	ef_fmod.c	sf_fabs.c
 .text	-	0x80261328	0x80261328	open	-	-	sf_scalbn.c	kf_cos.c
 .text	0x80261414	0x80261414	0x80261414	alignment	0	0	kf_cos.c	kf_sin.c
 .text	0x802614C0	0x802614C0	0x802614C0	alignment	0	0	kf_sin.c	kf_tan.c
@@ -258,6 +262,7 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .sdata	-	0x803EC45C	0x803EC45C	thin	0	2/1	sf_ceil.c	sf_cos.c
 .sdata	-	0x803EC468	0x803EC468	thin	0	2/1	sf_floor.c	sf_sin.c
 .sdata	-	0x803EC46C	0x803EC46C	thin	0	1/1	sf_sin.c	sf_tan.c
+.sdata	-	0x803EC36C	0x803EC36C	data	0	18/16	ef_acos.c	ef_asin.c
 .sdata	-	0x803EC4A4	0x803EC4A4	data	0	9/7	kf_cos.c	kf_sin.c
 .sdata	-	0x803EC4C0	0x803EC4C0	data	0	7/6	kf_sin.c	kf_tan.c
 .sdata	-	0x803EC4E0	0x803EC4E0	data	0	6/11	kf_tan.c	ef_rem_pio2.c

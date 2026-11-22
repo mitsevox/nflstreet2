@@ -6,6 +6,7 @@ float tanf(float);
 
 extern float sinf(float);
 extern float cosf(float);
+extern float asinf(float);
 extern float acosf(float);
 extern float atanf(float);
 extern float atan2f(float, float);
