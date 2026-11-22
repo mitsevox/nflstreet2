@@ -1,5 +1,5 @@
-/* Low-level vector math: 2D/3D vector length, normalise, scale, rotate, compare, add, subtract, dot and
-   cross products, distance, interpolation and matrix transforms on float arrays. */
+/* 2D and 3D vector operations for gameplay, collision and rendering. Computes lengths and distances,
+   projects points onto segments, and scales, rotates, interpolates and transforms vectors. */
 
 #include <math.h>
 
@@ -216,7 +216,16 @@ float Vec3DotProduct(float *pA, float *pB)
     return pA[0] * pB[0] + pA[1] * pB[1] + pA[2] * pB[2];
 }
 
-#if defined(DECOMP_COMPARE)
+float Vec3CosAngle(float *pA, float *pB)
+{
+    float len;
+    float inv;
+
+    len = sqrtf(pA[0] * pA[0] + pA[1] * pA[1] + pA[2] * pA[2]);
+    len *= sqrtf(pB[0] * pB[0] + pB[1] * pB[1] + pB[2] * pB[2]);
+    inv = 1.0f / len;
+    return pA[0] * pB[0] * inv + pA[1] * pB[1] * inv + pA[2] * pB[2] * inv;
+}
 
 void Vec3CrossProduct(float *pOut, float *pA, float *pB)
 {
@@ -281,6 +290,96 @@ void Vec3Lerp(float *pOut, float *pA, float *pB, float t)
     pOut[2] = (pA[2] - z) * t + z;
 }
 
+/* FAKEMATCH: retain the unused angle and blend literals between cosine and segment projection. */
+static const float _Vec_afAngleAndBlendLiterals[] = {
+    1.0f, 3.1415927f, 6.2831855f, -3.1415927f, 0.0f, 0.5f, 0.0f
+};
+
+void Vec3ClosestPointOnSegment(float *pA, float *pB, float *pP, float *pOut, float *pDistSq, float *pT)
+{
+    float dx;
+    float dy;
+    float dz;
+    float ex;
+    float ey;
+    float ez;
+
+    if (pA[0] == pB[0] && pA[1] == pB[1] && pA[2] == pB[2]) {
+        *pT = 0.0f;
+        pOut[0] = pA[0];
+        pOut[1] = pA[1];
+        pOut[2] = pA[2];
+    } else {
+        ex = pA[0] - pB[0];
+        ey = pA[1] - pB[1];
+        ez = pA[2] - pB[2];
+        *pT = ((pA[0] - pP[0]) * ex + (pA[1] - pP[1]) * ey + (pA[2] - pP[2]) * ez) / (ex * ex + ey * ey + ez * ez);
+        if (*pT < 0.0f) {
+            *pT = 0.0f;
+            pOut[0] = pA[0];
+            pOut[1] = pA[1];
+            pOut[2] = pA[2];
+        } else if (*pT > 1.0f) {
+            *pT = 1.0f;
+            pOut[0] = pB[0];
+            pOut[1] = pB[1];
+            pOut[2] = pB[2];
+        } else {
+            pOut[0] = pA[0] + *pT * (pB[0] - pA[0]);
+            pOut[1] = pA[1] + *pT * (pB[1] - pA[1]);
+            pOut[2] = pA[2] + *pT * (pB[2] - pA[2]);
+        }
+    }
+    dx = pOut[0] - pP[0];
+    dy = pOut[1] - pP[1];
+    dz = pOut[2] - pP[2];
+    *pDistSq = dx * dx + dy * dy + dz * dz;
+}
+
+float Vec3DistanceSqrToSegment(float *pA, float *pB, float *pP)
+{
+    float aPoint[3];
+    float ex;
+    float ey;
+    float ez;
+    float t;
+    float dx;
+    float dy;
+    float dz;
+
+    if (pA[0] == pB[0] && pA[1] == pB[1] && pA[2] == pB[2]) {
+        aPoint[0] = pA[0];
+        aPoint[1] = pA[1];
+        aPoint[2] = pA[2];
+    } else {
+        float lengthSquared;
+
+        ex = pA[0] - pB[0];
+        ey = pA[1] - pB[1];
+        ez = pA[2] - pB[2];
+        lengthSquared = ex * ex + ey * ey + ez * ez;
+        t = ((pA[0] - pP[0]) * ex + (pA[1] - pP[1]) * ey + (pA[2] - pP[2]) * ez) / lengthSquared;
+        if (t > 1.0f) {
+            t = 1.0f;
+        }
+        if (t < 0.0f) {
+            t = 0.0f;
+        }
+        aPoint[0] = pA[0] + t * (pB[0] - pA[0]);
+        aPoint[1] = pA[1] + t * (pB[1] - pA[1]);
+        aPoint[2] = pA[2] + t * (pB[2] - pA[2]);
+    }
+    dx = aPoint[0] - pP[0];
+    dy = aPoint[1] - pP[1];
+    dz = aPoint[2] - pP[2];
+    return dx * dx + dy * dy + dz * dz;
+}
+
+/* FAKEMATCH: retain the unused blend literals between segment distance and matrix transforms. */
+static const float _Vec_afBlendLiterals[] = {
+    1.0f, 0.0f, 0.5f, 0.0f, 1.0f
+};
+
 void Vec3Mat33Mul(float *pOut, float *p)
 {
     float m[4][4];
@@ -313,6 +412,23 @@ void Vec3Mat34Mul(float *pOut, float *p)
     pOut[2] = m[2][0] * x + m[2][1] * y + m[2][2] * z + m[2][3];
 }
 
+void Vec3Mat44Mul(float *pOut, float *pV)
+{
+    float m[4][4];
+    float x;
+    float y;
+    float z;
+
+    MatStore(m);
+    x = pV[0];
+    y = pV[1];
+    z = pV[2];
+    pOut[0] = m[0][0] * x + m[0][1] * y + m[0][2] * z + m[0][3];
+    pOut[1] = m[1][0] * x + m[1][1] * y + m[1][2] * z + m[1][3];
+    pOut[2] = m[2][0] * x + m[2][1] * y + m[2][2] * z + m[2][3];
+    pOut[3] = m[3][0] * x + m[3][1] * y + m[3][2] * z + 1.0f;
+}
+
 void Vec4Mat44Mul(float *pOut, float *p)
 {
     float m[4][4];
@@ -331,5 +447,3 @@ void Vec4Mat44Mul(float *pOut, float *p)
     pOut[2] = m[2][0] * x + m[2][1] * y + m[2][2] * z + m[2][3] * w;
     pOut[3] = m[3][0] * x + m[3][1] * y + m[3][2] * z + m[3][3] * w;
 }
-
-#endif

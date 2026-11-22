@@ -1546,58 +1546,6 @@
       "address": "0x801B6D9C",
       "evidence": "evidence.tsv function and name rows for 0x801B6D9C (PATH library function defined by the comparison source src/engine/pathnode.c, not yet linked; called from src/engine/pathaction.c)."
     },
-    "Vec3CrossProduct": {
-      "address": "0x802277DC",
-      "evidence": "evidence.tsv function and name rows for 0x802277DC (Vec3CrossProduct, registered in comparisons.json, original bytes linked); called by name from src/engine/matrix.c, src/engine/physconstraint.cpp, src/engine/physshape.cpp, src/engine/psysEmitter.c, src/engine/rigidbody.cpp, src/game/BallPlace.cpp, src/game/LevelMesh.cpp, src/game/ParticleSys.cpp, src/game/PlyrCollide.cpp (n1e naming wave)."
-    },
-    "Vec2Distance": {
-      "address": "0x8022781C",
-      "evidence": "evidence.tsv function and name rows for 0x8022781C (Vec2Distance, registered in comparisons.json, original bytes linked); called by name from src/game/BigObj.cpp, src/game/FieldLines.cpp, src/game/Handoff.cpp, src/game/LooseBall.cpp, src/game/OptionRun.cpp, src/game/PlayerActionStates.cpp, src/game/PlyrMgr.cpp, src/game/PlyrObjs.cpp, src/game/PlyrStates.cpp, src/game/Possession.cpp, src/game/Pursue.cpp, src/game/RouteRun.cpp, src/game/Replay.cpp, src/game/cu_8008E978.cpp, src/game/PlyrTackle.cpp, src/game/cu_800EFC68.cpp, src/game/PlayArtRender.cpp (n1e naming wave)."
-    },
-    "Vec3Distance": {
-      "address": "0x8022785C",
-      "evidence": "evidence.tsv function and name rows for 0x8022785C (Vec3Distance, registered in comparisons.json, original bytes linked); called by name from src/game/BigObj.cpp, src/game/LooseBall.cpp, src/game/PlyrMgr.cpp, src/game/SndgPathfinder.cpp, src/game/SpchIGMissedCatch.cpp, src/game/Replay.cpp, src/game/cu_800EFC68.cpp (n1e naming wave)."
-    },
-    "Vec2DistanceSqr": {
-      "address": "0x80227890",
-      "evidence": "evidence.tsv function and name rows for 0x80227890 (Vec2DistanceSqr, registered in comparisons.json, original bytes linked); called by name from src/game/CarrierRun.cpp, src/game/Divot.cpp, src/game/cu_8008E978.cpp, src/game/cu_800EFC68.cpp (n1e naming wave)."
-    },
-    "Vec3DistanceSqr": {
-      "address": "0x802278D0",
-      "evidence": "evidence.tsv function and name rows for 0x802278D0 (Vec3DistanceSqr, registered in comparisons.json, original bytes linked); called by name from src/game/BallCollide.cpp, src/game/Divot.cpp, src/game/Possession.cpp (n1e naming wave)."
-    },
-    "Vec2Lerp": {
-      "address": "0x80227904",
-      "evidence": "evidence.tsv function and name rows for 0x80227904 (Vec2Lerp, registered in comparisons.json, original bytes linked); called by name from src/game/PlyrObjs.cpp, src/game/cu_800EFC68.cpp (n1e naming wave)."
-    },
-    "Vec3Lerp": {
-      "address": "0x80227930",
-      "evidence": "evidence.tsv function and name rows for 0x80227930 (Vec3Lerp, registered in comparisons.json, original bytes linked); called by name from src/engine/psysEmitter.c, src/game/AnimBlend.cpp, src/game/ArrowDraw.cpp, src/game/BallCollide.cpp, src/game/BallModel.cpp, src/game/BigObj.cpp, src/game/BigObjAnim.cpp, src/game/CollideContacts.cpp, src/game/Divot.cpp, src/game/PlyrMgr.cpp, src/game/PlyrObjs.cpp, src/game/PlyrPose.cpp, src/game/camball.cpp, src/game/camreplay.cpp, src/game/Replay.cpp, src/game/cu_800EFC68.cpp, src/game/camplay.cpp, src/game/PlyrRender.cpp (n1e naming wave)."
-    },
-    "Vec3Mat33Mul": {
-      "address": "0x80227C2C",
-      "evidence": "evidence.tsv function and name rows for 0x80227C2C (Vec3Mat33Mul, registered in comparisons.json, original bytes linked); called by name from src/engine/lllight.c, src/engine/physconstraint.cpp, src/engine/physshape.cpp, src/engine/psysEmitter.c, src/engine/rigidbody.cpp, src/game/Ball.cpp, src/game/CollideBounce.cpp, src/game/DynObjRender.cpp, src/game/GlowTrail.cpp, src/game/LightTracker.cpp, src/game/ParticleRender.cpp, src/game/PlyrObjs.cpp, src/game/camcurve.cpp, src/game/cu_8008E978.cpp (n1e naming wave)."
-    },
-    "Vec3Mat34Mul": {
-      "address": "0x80227CC0",
-      "evidence": "evidence.tsv function and name rows for 0x80227CC0 (Vec3Mat34Mul, registered in comparisons.json, original bytes linked); called by name from src/engine/camfocus.c, src/engine/physaabb.cpp, src/engine/physconstraint.cpp, src/engine/physshape.cpp, src/game/BallRest.cpp, src/game/ParticleRender.cpp, src/game/PlyrMgr.cpp, src/game/PlyrObjs.cpp, src/game/Weather.cpp, src/game/cammain.cpp, src/game/cu_8008E978.cpp, src/game/camplay.cpp (n1e naming wave)."
-    },
-    "Vec3ClosestPointOnSegment": {
-      "address": "0x80227970",
-      "evidence": "evidence.tsv function and name rows for 0x80227970 (Vec3ClosestPointOnSegment, registered in comparisons.json, original bytes linked); called by name from src/game/BallCollide.cpp, src/game/RouteRun.cpp, src/game/cu_8008E978.cpp, src/game/cu_800EFC68.cpp (n1e naming wave)."
-    },
-    "Vec3DistanceSqrToSegment": {
-      "address": "0x80227B04",
-      "evidence": "evidence.tsv function and name rows for 0x80227B04 (Vec3DistanceSqrToSegment, registered in comparisons.json, original bytes linked); called by name from src/game/PlayerActionStates.cpp, src/game/cu_8008E978.cpp (n1e naming wave)."
-    },
-    "Vec3Mat44Mul": {
-      "address": "0x80227D6C",
-      "evidence": "evidence.tsv function and name rows for 0x80227D6C (Vec3Mat44Mul, registered in comparisons.json, original bytes linked); called by name from src/game/GlowTrail.cpp (n1e naming wave)."
-    },
-    "Vec4Mat44Mul": {
-      "address": "0x80227E40",
-      "evidence": "evidence.tsv function and name rows for 0x80227E40 (Vec4Mat44Mul, registered in comparisons.json, original bytes linked); called by name from src/game/PlyrNameTag.cpp, src/game/PlyrStars.cpp (n1e naming wave)."
-    },
     "SNDPLATFORM_outputcaps": {
       "address": "0x802733A0",
       "evidence": "evidence.tsv function and name rows for 0x802733A0 (SNDPLATFORM_outputcaps, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/ssysinit.c (n1e naming wave)."
@@ -1625,10 +1573,6 @@
     "FontDrawText": {
       "address": "0x801CD3E4",
       "evidence": "evidence.tsv function and name rows for 0x801CD3E4 (FontDrawText, a registered holdout of src/engine/Font.c, original bytes linked); called by name from src/engine/cu_801CDB5C.c (n1e naming wave)."
-    },
-    "Vec3CosAngle": {
-      "address": "0x8022772C",
-      "evidence": "evidence.tsv function and name rows for 0x8022772C (Vec3CosAngle, registered in comparisons.json, original bytes linked); called by name from src/engine/cu_801C3EFC.c, src/engine/cu_8022772C.c (n1e naming wave)."
     },
     "MemCAsyncOpen": {
       "address": "0x801D4A3C",
@@ -21265,13 +21209,19 @@
     {
       "source": "src/engine/llvector.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv linker row 0x802270A4-0x8022772C for the unchanged native contribution from src/engine/llvector.c; existing function/type/compiler evidence and larger-file ownership remain in force. This is a linked native range, not a claim that its original source file is complete or closed.",
+      "evidence": "evidence.tsv whole-file unit row 0x802270A4-0x80227F14 and linker row 0x802270A4-0x80227F14, the .rodata rows at 0x802B2078-0x802B20C0, and the function, name and source-form rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802270A4",
-          "end": "0x8022772C"
+          "end": "0x80227F14"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B2078",
+          "end": "0x802B20C0"
         }
       ]
     },
