@@ -3,6 +3,7 @@
    their volume, pitch, send levels, pause, play and stop. */
 
 #include <string.h>
+#include "engine/sndvoice.h"
 #include "engine/system.h"
 
 typedef struct Record_8027D9FC {
@@ -152,7 +153,6 @@ int SNDSTRM_modifyhold(int handle, int value);
 int STREAM_overhead(int count, int filters, int taps);
 int SNDvol(int handle, int value);
 int SNDCTRL_drylevel(int handle, int value);
-int fn_80278070(int handle, int a, int b);
 int SNDpitchmult(int handle, int value);
 int SNDBANK_asyncloadmem(int *handle, void *data);
 int SNDBANK_asyncloadmemdone(void);
@@ -305,7 +305,7 @@ int Object_8027DAE4::vfn_17(int a, int b)
     int result = 0;
     if (status == 0) {
         SNDSYS_entercritical();
-        result = fn_80278070(m124, a, b);
+        result = SNDfxlevel(m124, a, b);
         SNDSYS_leavecritical();
         m8 = b;
         m101 = b;

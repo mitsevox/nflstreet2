@@ -23810,6 +23810,25 @@
       ]
     },
     {
+      "source": "src/engine/sfxlevel.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit, function and name rows at 0x80278070, the .rodata row 0x802C2020-0x802C2030, and the sound_cxx compiler rows for 0x802714A8-0x8027CF9C. The complete native code and constants are linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80278070",
+          "end": "0x80278128"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2020",
+          "end": "0x802C2030"
+        }
+      ]
+    },
+    {
       "source": "src/engine/sfhpffir8.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x80279C38-0x80279D90 (src/engine/sfhpffir8.c), its three function and name rows, the data row of its .rodata double 0x802C21B8-0x802C21C0, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, completed in the c17 wave and linked.",
