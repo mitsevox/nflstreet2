@@ -4,6 +4,7 @@
 # Text edges: class data, calls, alignment, claimed or open (low-high: the open range).
 # Data edges: class data, thin, mixed or conflict; crossing_data holds misplaced items, crossing_calls owned items left/right.
 section	address	low	high	class	crossing_data	crossing_calls	left	right
+.text	-	0x800817CC	0x801AD57C	open	-	-	src/game/PlayerGearRatings.cpp	FSasync.c
 .text	0x801ADDB4	0x801ADDB4	0x801ADDB4	alignment	0	1	FSasync.c	sndvd.c
 .text	0x801AE3E4	0x801AE3E4	0x801AE3E4	alignment	0	0	sndvd.c	spchevnt.c
 .text	0x801AF60C	0x801AF60C	0x801AF60C	at-or-before	5	5	spchevnt.c	spchinit.c
