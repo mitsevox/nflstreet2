@@ -10,7 +10,6 @@ extern float lbl_802F7B0C[9];
 float fn_801CF944(float *pTable, float angle, float scale);
 float fn_80260428(float x, float y);
 float fn_802610B0(float x);
-float fn_8025FDE8(float x);
 float fn_80260034(float x);
 float fn_80260C14(float x);
 float fn_8026118C(float x);
@@ -84,12 +83,12 @@ float fn_801CFD28(int angle)
 
 int fn_801CFD78(float x)
 {
-    return fn_8025FDE8(x) * 2670176.8f;
+    return acosf(x) * 2670176.8f;
 }
 
 float fn_801CFDB0(float x)
 {
-    return fn_8025FDE8(x);
+    return acosf(x);
 }
 
 int fn_801CFDD0(float x)
