@@ -440,74 +440,6 @@
       "address": "0x800355FC",
       "evidence": "evidence.tsv external row for 0x800355FC (fn_800355FC__8PlayBook)."
     },
-    "ResetPlaySpot__11ScrmRuleSet": {
-      "address": "0x8017767C",
-      "evidence": "evidence.tsv external row for 0x8017767C (ResetPlaySpot__11ScrmRuleSet)."
-    },
-    "ResetGame__11ScrmRuleSeti": {
-      "address": "0x80177768",
-      "evidence": "evidence.tsv external row for 0x80177768 (ResetGame__11ScrmRuleSeti)."
-    },
-    "GetScoreLimit__11ScrmRuleSet": {
-      "address": "0x80177410",
-      "evidence": "evidence.tsv external row for 0x80177410 (GetScoreLimit__11ScrmRuleSet)."
-    },
-    "AwardWin__11ScrmRuleSeti": {
-      "address": "0x801774C0",
-      "evidence": "evidence.tsv external row for 0x801774C0 (AwardWin__11ScrmRuleSeti)."
-    },
-    "IsNearWin__11ScrmRuleSeti": {
-      "address": "0x8017755C",
-      "evidence": "evidence.tsv external row for 0x8017755C (IsNearWin__11ScrmRuleSeti)."
-    },
-    "IsOpponentNearWin__11ScrmRuleSeti": {
-      "address": "0x80177600",
-      "evidence": "evidence.tsv external row for 0x80177600 (IsOpponentNearWin__11ScrmRuleSeti)."
-    },
-    "GetScoreType__11ScrmRuleSet": {
-      "address": "0x80177638",
-      "evidence": "evidence.tsv external row for 0x80177638 (GetScoreType__11ScrmRuleSet)."
-    },
-    "GetScore__11ScrmRuleSeti": {
-      "address": "0x80177640",
-      "evidence": "evidence.tsv external row for 0x80177640 (GetScore__11ScrmRuleSeti)."
-    },
-    "GetGameTime__11ScrmRuleSet": {
-      "address": "0x80177674",
-      "evidence": "evidence.tsv external row for 0x80177674 (GetGameTime__11ScrmRuleSet)."
-    },
-    "GetTeamSize__11ScrmRuleSet": {
-      "address": "0x801776D0",
-      "evidence": "evidence.tsv external row for 0x801776D0 (GetTeamSize__11ScrmRuleSet)."
-    },
-    "AllowsPrediction__11ScrmRuleSet": {
-      "address": "0x80177720",
-      "evidence": "evidence.tsv external row for 0x80177720 (AllowsPrediction__11ScrmRuleSet)."
-    },
-    "GetGoalLimit__11ScrmRuleSet": {
-      "address": "0x8017CAFC",
-      "evidence": "evidence.tsv external row for 0x8017CAFC (GetGoalLimit__11ScrmRuleSet)."
-    },
-    "GetGoalTotal__11ScrmRuleSeti": {
-      "address": "0x8017CB04",
-      "evidence": "evidence.tsv external row for 0x8017CB04 (GetGoalTotal__11ScrmRuleSeti)."
-    },
-    "GetGoalCount__11ScrmRuleSeti": {
-      "address": "0x8017CB0C",
-      "evidence": "evidence.tsv external row for 0x8017CB0C (GetGoalCount__11ScrmRuleSeti)."
-    },
-    "EndPlay__11ScrmRuleSet": {
-      "address": "0x801777FC",
-      "evidence": "evidence.tsv external row for 0x801777FC (EndPlay__11ScrmRuleSet)."
-    },
-    "PlaceBallForDrive__11ScrmRuleSeti": {
-      "address": "0x8017894C",
-      "evidence": "evidence.tsv external row for 0x8017894C (PlaceBallForDrive__11ScrmRuleSeti)."
-    },
-    "IsWinAwarded__11ScrmRuleSet": {
-      "address": "0x8017766C",
-      "evidence": "evidence.tsv external row for 0x8017766C (IsWinAwarded__11ScrmRuleSet)."
-    },
     "__fixunssfdi": {
       "address": "0x8025E850",
       "evidence": "evidence.tsv external row for 0x8025E850 (__fixunssfdi)."
@@ -11464,7 +11396,7 @@
           "_._10FchrCursor": "0x80083454",
           "_vt.10FchrCursor": "0x802938C0"
         },
-        "evidence": "evidence.tsv source-form row CreatePlayerMenu FchrCursor linkage and data row 0x8000A2B8-0x8000A360: the implicit destructor and vtable of FchrCursor are local to both this file and src/game/cu_80081CDC.cpp; the target keeps only the latter's destructor 0x80083454, this file's references resolve to 0x80083454 and 0x802938C0, and its vtable copy stays unreferenced in place."
+        "evidence": "evidence.tsv source-form row CreatePlayerMenu FchrCursor linkage and data row 0x8000A2B8-0x8000A360: the implicit destructor and vtable of FchrCursor are local to both this file and src/game/cu_80081CDC.cpp; the target keeps only the latter's destructor 0x80083454, this file's references resolve to 0x80083454 and 0x802938C0, and its vtable copy stays unreferenced in place. src/game/cu_80081CDC.cpp is linked and keeps those two copies (its kept_locals), so the folded references resolve to its kept copies through __folded_<name>."
       }
     },
     {
@@ -25226,6 +25158,296 @@
           }
         ],
         "evidence": "merge notes of #1370 (w1) holdouts table: src/engine/pathevent.c holds out PATHI_serviceevent; its HOLDOUT: row evidence.tsv source-form 0x801B64C0-0x801B6578 lists the forms tried and the RTL-dump finding."
+      }
+    },
+    {
+      "source": "src/game/cu_80176F18.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x80176F18-0x8017CB40 for src/game/cu_80176F18.cpp, its exact function extents, the exact data rows of its .rodata, .sdata, .bss and .ctors, and the exact .sbss data rows 0x803ECB24-0x803ECB28, 0x803ECB28-0x803ECB2C and 0x803ECB34-0x803ECB38 of the storage map; linked with holdouts (owner ruling of 2026-11-20). Its three .sbss file statics are placed one by one by the storage map (owner ruling of 2026-11-20 on #1368, questions 1 and 5: https://github.com/mitsevox/nflstreet2/pull/1368#issuecomment-7048591206), because the target interleaves them with src/game/Possession.cpp's words 0x803ECB2C and 0x803ECB30; the two discarded file-static functions keep only their constant pools.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80176F18",
+          "end": "0x80179F2C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8017B83C",
+          "end": "0x8017CB40"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A5578",
+          "end": "0x802A57A0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB440",
+          "end": "0x803EB45C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80361F88",
+          "end": "0x80362598"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AF0",
+          "end": "0x80289AF4"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_Drive_ScrimmageRules",
+          "start": "0x803ECB24",
+          "end": "0x803ECB28"
+        },
+        {
+          "symbol": "_Drive_AltScrimmageRules",
+          "start": "0x803ECB28",
+          "end": "0x803ECB2C"
+        },
+        {
+          "symbol": "_Drive_pPlayResult",
+          "start": "0x803ECB34",
+          "end": "0x803ECB38"
+        }
+      ],
+      "link_roots": {
+        "discarded": [
+          "IsShortOfLineToGain",
+          "RoundToNearestInt"
+        ],
+        "evidence": "evidence.tsv linker rows 0x802A55E8-0x802A55EC (IsShortOfLineToGain) and 0x802A55F0-0x802A55F8 (RoundToNearestInt): file-static functions SN's linker discarded whose constant pools remain, with their Xbox and PS2 counterparts."
+      },
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80179F2C",
+            "evidence": "evidence.tsv source-form 0x80179F2C-0x8017B83C"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (t1 holdout table)"
+      }
+    },
+    {
+      "source": "src/game/cu_8000DCD8.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x8000DCD8-0x8000F870 for src/game/cu_8000DCD8.cpp, its exact function extents, the data row 0x8000EE78-0x8000F870 of the .rodata that follows the code, the exact data rows 0x803EB948-0x803EB950 (.sdata) and 0x8036AD78-0x8036ADB0 (its own .bss object), and the exact data rows of its storage map: the COMMON function-local statics 0x8036AD28-0x8036AD78 (.bss) and its .sbss 0x803ECDE0-0x803ECE38, where the target interleaves the eight guard words and two file statics with the COMMON sInstance objects (source-form row cu_8000DCD8 storage layout). The .sbss file statics are placed one by one by the storage map (owner ruling of 2026-11-20 on #1368, questions 1 and 5: https://github.com/mitsevox/nflstreet2/pull/1368#issuecomment-7048591206); linked with holdouts (owner ruling of 2026-11-20), the one holdout keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8000DCD8",
+          "end": "0x8000DFB0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8000E07C",
+          "end": "0x8000EE78"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x8000EE78",
+          "end": "0x8000F870",
+          "follows": ".text"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB948",
+          "end": "0x803EB950"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036AD78",
+          "end": "0x8036ADB0"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_17fn_8000EC44__Fv.0.sRecord",
+          "start": "0x8036AD28",
+          "end": "0x8036AD64"
+        },
+        {
+          "symbol": "_17fn_8000ED34__Fv.0.sInstance",
+          "start": "0x8036AD64",
+          "end": "0x8036AD78"
+        },
+        {
+          "symbol": "_.tmp_0.69",
+          "start": "0x803ECDE0",
+          "end": "0x803ECDE4"
+        },
+        {
+          "symbol": "_.tmp_1.124",
+          "start": "0x803ECDE4",
+          "end": "0x803ECDE8"
+        },
+        {
+          "symbol": "_17fn_8000ED64__Fv.0.sInstance",
+          "start": "0x803ECDE8",
+          "end": "0x803ECDF0"
+        },
+        {
+          "symbol": "_.tmp_2.134",
+          "start": "0x803ECDF0",
+          "end": "0x803ECDF4"
+        },
+        {
+          "symbol": "_17fn_8000ED8C__Fv.0.sInstance",
+          "start": "0x803ECDF4",
+          "end": "0x803ECDFC"
+        },
+        {
+          "symbol": "_.tmp_3.144",
+          "start": "0x803ECDFC",
+          "end": "0x803ECE00"
+        },
+        {
+          "symbol": "_17fn_8000EDB4__Fv.0.sInstance",
+          "start": "0x803ECE00",
+          "end": "0x803ECE08"
+        },
+        {
+          "symbol": "_.tmp_4.151",
+          "start": "0x803ECE08",
+          "end": "0x803ECE0C"
+        },
+        {
+          "symbol": "_17fn_8000EDDC__Fv.0.sInstance",
+          "start": "0x803ECE0C",
+          "end": "0x803ECE14"
+        },
+        {
+          "symbol": "_.tmp_5.158",
+          "start": "0x803ECE14",
+          "end": "0x803ECE18"
+        },
+        {
+          "symbol": "_17fn_8000EE04__Fv.0.sInstance",
+          "start": "0x803ECE18",
+          "end": "0x803ECE20"
+        },
+        {
+          "symbol": "_.tmp_6.165",
+          "start": "0x803ECE20",
+          "end": "0x803ECE24"
+        },
+        {
+          "symbol": "_17fn_8000EE2C__Fv.0.sInstance",
+          "start": "0x803ECE24",
+          "end": "0x803ECE2C"
+        },
+        {
+          "symbol": "_.tmp_7.172",
+          "start": "0x803ECE2C",
+          "end": "0x803ECE30"
+        },
+        {
+          "symbol": "_Appear_iSavedHairStyle",
+          "start": "0x803ECE30",
+          "end": "0x803ECE34"
+        },
+        {
+          "symbol": "_Appear_iLastItem",
+          "start": "0x803ECE34",
+          "end": "0x803ECE38"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "Enter__14Class_8000F540iPiT2",
+            "evidence": "evidence.tsv source-form 0x8000DFB0-0x8000E07C"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (t1 holdout table; the HOLDOUT: row is x1a's)"
+      }
+    },
+    {
+      "source": "src/game/cu_80081CDC.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv bounded unit row for src/game/cu_80081CDC.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes, and keeping its FchrCursor destructor and vtable for src/game/CreatePlayerMenu.cpp's folded references (kept_locals with holdouts, t1 tool change).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80081CDC",
+          "end": "0x80082688"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008274C",
+          "end": "0x800827EC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80082864",
+          "end": "0x800834CC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80292E38",
+          "end": "0x80293968"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7D8",
+          "end": "0x803EA7E4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BC2C",
+          "end": "0x8030BC58"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AB0",
+          "end": "0x80289AB4"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BF0",
+          "end": "0x80289BF4"
+        }
+      ],
+      "kept_locals": {
+        "symbols": {
+          "_._10FchrCursor": "0x80083454",
+          "_vt.10FchrCursor": "0x802938C0"
+        },
+        "evidence": "evidence.tsv source-form rows cu_80081CDC FchrCursor destructor and CreatePlayerMenu FchrCursor linkage: under -fno-weak the implicit FchrCursor destructor and vtable are local to this file and to src/game/CreatePlayerMenu.cpp, and the target keeps only this file's copies, the destructor 0x80083454 and the vtable 0x802938C0, for both files' references; CreatePlayerMenu.cpp's folded map resolves to them through __folded_<name>."
+      },
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80082688",
+            "evidence": "evidence.tsv source-form 0x80082688-0x8008274C"
+          },
+          {
+            "function": "fn_800827EC",
+            "evidence": "evidence.tsv source-form 0x800827EC-0x80082864"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (t1 holdout table)"
       }
     }
   ]
