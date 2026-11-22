@@ -1313,26 +1313,6 @@
       "address": "0x8037E0B4",
       "evidence": "evidence.tsv data/name rows for 0x8037E0B4 (target extent, related name); speech-library storage, original-owned."
     },
-    "SNDMEMI_constrain": {
-      "address": "0x8026B520",
-      "evidence": "evidence.tsv function and name rows for SNDMEMI_constrain 0x8026B520; the draft src/engine/smemman.c is registered in comparisons.json (one of its five functions, SNDMEMI_allocz, differs), so the original provider stays linked and linked callers resolve this name to it."
-    },
-    "SNDMEMI_init": {
-      "address": "0x8026B54C",
-      "evidence": "evidence.tsv function and name rows for SNDMEMI_init 0x8026B54C; the draft src/engine/smemman.c is registered in comparisons.json (one of its five functions, SNDMEMI_allocz, differs), so the original provider stays linked and linked callers resolve this name to it."
-    },
-    "SNDMEMI_restore": {
-      "address": "0x8026B5B4",
-      "evidence": "evidence.tsv function and name rows for SNDMEMI_restore 0x8026B5B4; the draft src/engine/smemman.c is registered in comparisons.json (one of its five functions, SNDMEMI_allocz, differs), so the original provider stays linked and linked callers resolve this name to it."
-    },
-    "SNDMEMI_allocz": {
-      "address": "0x8026B5D4",
-      "evidence": "evidence.tsv function and name rows for SNDMEMI_allocz 0x8026B5D4; the draft src/engine/smemman.c is registered in comparisons.json (one of its five functions, SNDMEMI_allocz, differs), so the original provider stays linked and linked callers resolve this name to it."
-    },
-    "SNDMEMI_free": {
-      "address": "0x8026B7D8",
-      "evidence": "evidence.tsv function and name rows for SNDMEMI_free 0x8026B7D8; the draft src/engine/smemman.c is registered in comparisons.json (one of its five functions, SNDMEMI_allocz, differs), so the original provider stays linked and linked callers resolve this name to it."
-    },
     "MIX_playinit": {
       "address": "0x80275F80",
       "evidence": "evidence.tsv function and name rows for 0x80275F80 (MIX_playinit, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks."
@@ -22252,6 +22232,19 @@
       ]
     },
     {
+      "source": "src/engine/sbadd.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026A40C-0x8026A664 (src/engine/sbadd.c), its function and name rows, the callback source-form row and the sound_cxx compiler row 0x80266E88-0x8027D3AC. Both functions are exact; the object owns only .text.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026A40C",
+          "end": "0x8026A664"
+        }
+      ]
+    },
+    {
       "source": "src/engine/sballoc.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x8026A664-0x8026A6E8 (src/engine/sballoc.c), its function and name rows, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
@@ -22416,6 +22409,19 @@
           "placement": ".text",
           "start": "0x8026B4D8",
           "end": "0x8026B520"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/smemman.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026B520-0x8026B898 (src/engine/smemman.c), its function, name, type, field and source-form rows, and the sound_cxx compiler row 0x8026A664-0x8026D200. All five functions exact; no owned data sections.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026B520",
+          "end": "0x8026B898"
         }
       ]
     },
@@ -23962,6 +23968,19 @@
           "placement": ".data4",
           "start": "0x802FFCD4",
           "end": "0x802FFDD4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/spat2hdr.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026C3F4-0x8026C910 (src/engine/spat2hdr.c), the function and name rows of SNDI_patchtohdr and the sound_cxx compiler row; the one function is exact and the file owns no data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026C3F4",
+          "end": "0x8026C910"
         }
       ]
     },

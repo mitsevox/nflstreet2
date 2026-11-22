@@ -1,5 +1,6 @@
 /* Partial source of the sound library's module bank registration (saemsamb.c). */
 
+struct BankVer_t;
 
 extern "C" {
 typedef struct Object_803A6BCC {
@@ -31,7 +32,7 @@ typedef struct SndAemsModuleBank_t {
 
 int fn_80269484(void);
 void fn_802694AC(SndAemsModuleBank_t *bank, void *modules, char *name, int arg);
-int fn_8026A4D4(int *pHandle, void *pData);
+int SNDbankadd(int *handle, BankVer_t *bank);
 int SNDbankheadersize(int bank);
 int SNDbankheadercopy(void *dst, int bank);
 int SNDbankremove(int bank);
@@ -54,14 +55,14 @@ int SNDAEMS_addmodulebank(SndAemsModuleBank_t *data, char *name, int arg,
     }
     data->mHandle = fn_80269484();
     if (data->mBankOffsetA != 0) {
-        resultA = fn_8026A4D4(&data->mBankA, (char *)data + data->mBankOffsetA);
+        resultA = SNDbankadd(&data->mBankA, (BankVer_t *)((char *)data + data->mBankOffsetA));
         if (resultA < 0) {
             result = resultA;
             goto fail;
         }
     }
     if (data->mBankOffsetB != 0) {
-        resultB = fn_8026A4D4(&data->mBankB, (char *)data + data->mBankOffsetB);
+        resultB = SNDbankadd(&data->mBankB, (BankVer_t *)((char *)data + data->mBankOffsetB));
         if (resultB < 0) {
             result = resultB;
             goto fail;

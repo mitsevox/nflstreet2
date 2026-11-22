@@ -11,6 +11,8 @@
 #include "engine/sndstrm.h"
 #include "engine/ssys.h"
 
+struct BankVer_t;
+
 struct SndSeqInfo_t {
     ResFile_t *pRes;
     unsigned int mIndex;
@@ -120,7 +122,7 @@ void SNDSYS_linkmaincpumixer(void);
 int fn_802692B8(int handle);
 int fn_802697D8(void *pData, char *pName, int b, void *(*pAlloc)(void *, int, int));
 int SNDautovol(int handle, int time, int vol);
-void fn_8026A4D4(int *pHandle, void *pData);
+int SNDbankadd(int *handle, BankVer_t *bank);
 int SNDBANK_asyncloadmem(int *pHandle, void *pData);
 int SNDBANK_asyncloadmemdone(void);
 int SNDBANK_play(int handle, int a, void *b);
@@ -278,7 +280,7 @@ static SndBankInfo_t *_SndLoadBank(void *pRes, unsigned int index, unsigned int 
     ResCopyToBuffer((ResFile_t *)pRes, index, pData);
     SndSetHeap(_Snd_ModuleInfo.pBankTable, pBank->mBank);
     DCFlushRange(pData, length);
-    fn_8026A4D4(&pBank->mHandle, pData);
+    SNDbankadd(&pBank->mHandle, (BankVer_t *)pData);
     pBank->mLoaded = 1;
     pBank->mState = 0;
     if (!(pBank->mFlags & 2)) {

@@ -34298,26 +34298,6 @@
       ]
     },
     {
-      "source": "src/engine/sbadd.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8026A40C-0x8026A664 (src/engine/sbadd.c); draft comparisons only, original assembly remains linked. Part of the former src/engine/cu_80266A2C.c (split by c16a).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026A40C",
-          "end": "0x8026A664"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8026A40C",
-          "start": "0x8026A40C",
-          "end": "0x8026A4D4"
-        }
-      ]
-    },
-    {
       "source": "src/engine/spchrule.c",
       "profile": "speech_cxx",
       "evidence": "evidence.tsv provisional unit row 0x801B1CFC-0x801B23A0 (src/engine/spchrule.c), the speech_cxx compiler row and the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through external labels.",
@@ -34811,46 +34791,6 @@
           "symbol": "fn_802855EC",
           "start": "0x802855EC",
           "end": "0x802856D8"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/smemman.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026B520-0x8026B898 (src/engine/smemman.c) and its function rows; draft comparison only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026B520",
-          "end": "0x8026B898"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SNDMEMI_constrain",
-          "start": "0x8026B520",
-          "end": "0x8026B54C"
-        },
-        {
-          "symbol": "SNDMEMI_init",
-          "start": "0x8026B54C",
-          "end": "0x8026B5B4"
-        },
-        {
-          "symbol": "SNDMEMI_restore",
-          "start": "0x8026B5B4",
-          "end": "0x8026B5D4"
-        },
-        {
-          "symbol": "SNDMEMI_allocz",
-          "start": "0x8026B5D4",
-          "end": "0x8026B7D8"
-        },
-        {
-          "symbol": "SNDMEMI_free",
-          "start": "0x8026B7D8",
-          "end": "0x8026B898"
         }
       ]
     },

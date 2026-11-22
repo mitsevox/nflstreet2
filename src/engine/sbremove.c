@@ -36,7 +36,7 @@ int SNDbankremove(int bank)
             cursor += 4;
             do {
                 more = fn_80270E04(&cursor, &info);
-                fn_8026A40C(&info, 2);
+                SNDBANKI_userdatacallback(&info, 2);
             } while (more != 0);
         }
     }

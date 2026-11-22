@@ -223,7 +223,7 @@ int SNDBANKI_playpatch(BankVer_t *bank, void *patch, int bank_index, int patch_i
                 goto fail;
             }
             handles[count++] = result;
-            fn_8026A40C(&tag, 1);
+            SNDBANKI_userdatacallback(&tag, 1);
         }
     } while (more != 0);
 

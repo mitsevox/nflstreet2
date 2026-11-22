@@ -79,7 +79,7 @@ int SNDSYSI_init(void *memory, int size, int unused)
     SNDSYS_leavecritical();
     lbl_80300028 = 1.0f;
     lbl_803A6C24.m170 = 0;
-    lbl_803A6C24.m16E = 0;
+    lbl_803A6C24.mBankUserDataCallbackCount = 0;
     lbl_803A6C24.m16A = 0;
     lbl_803A6C24.m16B = 0;
     result = SNDPLATFORM_init(0);
@@ -102,14 +102,14 @@ int SNDSYS_restore(void)
     if (!Snd::System::IsInited()) {
         return -14;
     }
-    if (lbl_803A6C24.m18C[10] != 0) {
-        lbl_803A6C24.m18C[10]();
+    if (lbl_803A6C24.m1B4[0] != 0) {
+        lbl_803A6C24.m1B4[0]();
     }
-    if (lbl_803A6C24.m18C[11] != 0) {
-        lbl_803A6C24.m18C[11]();
+    if (lbl_803A6C24.m1B4[1] != 0) {
+        lbl_803A6C24.m1B4[1]();
     }
-    if (lbl_803A6C24.m18C[12] != 0) {
-        lbl_803A6C24.m18C[12]();
+    if (lbl_803A6C24.m1B4[2] != 0) {
+        lbl_803A6C24.m1B4[2]();
     }
     if (lbl_803A6C24.m1C8 != 0) {
         lbl_803A6C24.m1C8();
