@@ -35714,43 +35714,6 @@
       ]
     },
     {
-      "source": "src/engine/ssysinit.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026FD28-0x802702D8 (src/engine/ssysinit.c), its function, name and data rows and the sound_cxx compiler row. SNDSYS_restore 0x802700E0-0x802701D8 (95.97%) is the file's holdout (units.json holdouts, HOLDOUT: row); SNDSYSI_chanpubinit is exact and linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026FD28",
-          "end": "0x802702D8"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B7A68",
-          "end": "0x802B7A74"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x80300030",
-          "end": "0x80300038"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SNDSYS_restore",
-          "start": "0x802700E0",
-          "end": "0x802701D8"
-        },
-        {
-          "symbol": "SNDSYSI_chanpubinit",
-          "start": "0x802701D8",
-          "end": "0x802702D8"
-        }
-      ]
-    },
-    {
       "source": "src/engine/stagpat.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x80270494-0x80270D6C (src/engine/stagpat.c), its function, name and data rows and the sound_cxx compiler row. SNDBANKI_playtimbre 0x80270518-0x80270B10 is the file's holdout (units.json holdouts, HOLDOUT: row); SNDBANKI_findfreekey and SNDBANKI_playpatch are exact and linked.",

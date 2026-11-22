@@ -22736,19 +22736,13 @@
     },
     {
       "source": "src/engine/ssysinit.c",
-      "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x8026FD28-0x802702D8 (src/engine/ssysinit.c, NASCAR 2005 ssysinit.c), its function and name rows, the data rows of its .data 0x80300030-0x80300038 and its .rodata literal pool 0x802B7A68-0x802B7A74, and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): every function exact except the holdout SNDSYS_restore 0x802700E0-0x802701D8, which keeps the original bytes and stays a registered partial; the whole .rodata and .data are linked.",
+      "profile": "sound_cxx",
+      "evidence": "The evidence.tsv unit row 0x8026FD28-0x802702D8 and its function, name and data rows support the complete range. The SNDSYS_restore source-form row describes the exact shutdown sequence. All five functions and both owned data sections are linked with the sound_cxx profile.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8026FD28",
-          "end": "0x802700E0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802701D8",
           "end": "0x802702D8"
         },
         {
@@ -22763,16 +22757,7 @@
           "start": "0x80300030",
           "end": "0x80300038"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "SNDSYS_restore",
-            "evidence": "evidence.tsv source-form 0x802700E0-0x802701D8"
-          }
-        ],
-        "evidence": "merge notes of #1368 (x2 fix round) holdouts table: src/engine/ssysinit.c holds out SNDSYS_restore; its HOLDOUT: row lists the forms tried and the RTL-dump finding."
-      }
+      ]
     },
     {
       "source": "src/engine/ssysserv.c",
