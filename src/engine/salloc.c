@@ -9,7 +9,7 @@ extern "C" {
 /* The voices SNDVOICEI_alloc has picked for the request in progress. */
 short sndvoicereserved[6];
 
-void SNDstop(int handle);
+int SNDstop(int handle);
 
 int SNDVOICEI_isreserved(int value, int count)
 {
@@ -24,7 +24,7 @@ int SNDVOICEI_isreserved(int value, int count)
 
 int SNDVOICEI_alloc(int count, int priority, int *handle, int first, int last)
 {
-    static int lasthandle = 0;
+    static unsigned int lasthandle = 0;
     int result = -9;
     int found = 0;
     int i;
@@ -39,7 +39,7 @@ int SNDVOICEI_alloc(int count, int priority, int *handle, int first, int last)
         sndvoicereserved[i] = -1;
     }
     lasthandle += 256;
-    if (lasthandle < 0) {
+    if ((lasthandle & 0x80000000u) != 0) {
         lasthandle = 0;
     }
     for (i = found; i < count; i++) {
