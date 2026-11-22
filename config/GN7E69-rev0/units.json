@@ -992,10 +992,6 @@
       "address": "0x801E8C78",
       "evidence": "Target constructor initializes u32+0/f32+4 and vptr+8; inferred class contract."
     },
-    "_vt.11PhysicsTime": {
-      "address": "0x8028DD58",
-      "evidence": "evidence.tsv external row for 0x8028DD58 (_vt.11PhysicsTime, the PhysicsTime vtable in the game rodata) and source-form row 0x801E92D0 (include/engine/phystime.h #pragma interface); src/engine/physworld.cpp references it from the inlined destructors of PhysicsWorld::Step."
-    },
     "fn_801E8D14__11PhysicsTimef": {
       "address": "0x801E8D14",
       "evidence": "Target member increments u32+0/f32+4 with f1 delta; inferred member contract."
@@ -9949,6 +9945,290 @@
           "end": "0x802CFBCC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8004A2F4.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/cu_8004A2F4.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .bss (0x803084B8-0x8030865C), .ctors and .dtors words; linked with holdouts (owner ruling of 2026-11-20): 92 of 121 functions exact, the holdouts keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004A2F4",
+          "end": "0x8004AA34"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004AD3C",
+          "end": "0x8004BD20"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004C204",
+          "end": "0x8004C518"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004C5E0",
+          "end": "0x8004C844"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004CB98",
+          "end": "0x8004CBEC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004CE6C",
+          "end": "0x8004CEE8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004CFCC",
+          "end": "0x8004D144"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004D2F8",
+          "end": "0x8004D3A8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004D498",
+          "end": "0x8004D65C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004D6F4",
+          "end": "0x8004DA0C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004DC08",
+          "end": "0x8004DC88"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004DF68",
+          "end": "0x8004E16C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004E2B4",
+          "end": "0x8004E4D0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004ED44",
+          "end": "0x8004EE18"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004F20C",
+          "end": "0x8004F2D0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004F3A4",
+          "end": "0x8004F56C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004F710",
+          "end": "0x8004F754"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80050960",
+          "end": "0x80050964"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80050CCC",
+          "end": "0x80050DA0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005122C",
+          "end": "0x800518E0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80051B3C",
+          "end": "0x80051B88"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80051D0C",
+          "end": "0x80051E14"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D7A0",
+          "end": "0x8028DD70"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803084B8",
+          "end": "0x8030865C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A84",
+          "end": "0x80289A88"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BC4",
+          "end": "0x80289BC8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8004AA34",
+            "evidence": "evidence.tsv source-form 0x8004AA34-0x8004ABF4"
+          },
+          {
+            "function": "fn_8004ABF4",
+            "evidence": "evidence.tsv source-form 0x8004ABF4-0x8004AD3C"
+          },
+          {
+            "function": "fn_8004BD20",
+            "evidence": "evidence.tsv source-form 0x8004BD20-0x8004C204"
+          },
+          {
+            "function": "fn_8004C518",
+            "evidence": "evidence.tsv source-form 0x8004C518-0x8004C5E0"
+          },
+          {
+            "function": "fn_8004C844",
+            "evidence": "evidence.tsv source-form 0x8004C844-0x8004CAA8"
+          },
+          {
+            "function": "fn_8004CAA8",
+            "evidence": "evidence.tsv source-form 0x8004CAA8-0x8004CB98"
+          },
+          {
+            "function": "fn_8004CBEC",
+            "evidence": "evidence.tsv source-form 0x8004CBEC-0x8004CE6C"
+          },
+          {
+            "function": "fn_8004CEE8",
+            "evidence": "evidence.tsv source-form 0x8004CEE8-0x8004CFCC"
+          },
+          {
+            "function": "fn_8004D144",
+            "evidence": "evidence.tsv source-form 0x8004D144-0x8004D2F8"
+          },
+          {
+            "function": "fn_8004D3A8",
+            "evidence": "evidence.tsv source-form 0x8004D3A8-0x8004D498"
+          },
+          {
+            "function": "fn_8004D65C",
+            "evidence": "evidence.tsv source-form 0x8004D65C-0x8004D6F4"
+          },
+          {
+            "function": "fn_8004DA0C",
+            "evidence": "evidence.tsv source-form 0x8004DA0C-0x8004DC08"
+          },
+          {
+            "function": "fn_8004DC88",
+            "evidence": "evidence.tsv source-form 0x8004DC88-0x8004DF68"
+          },
+          {
+            "function": "fn_8004E16C",
+            "evidence": "evidence.tsv source-form 0x8004E16C-0x8004E2B4"
+          },
+          {
+            "function": "fn_8004E4D0",
+            "evidence": "evidence.tsv source-form 0x8004E4D0-0x8004EA80"
+          },
+          {
+            "function": "fn_8004EA80",
+            "evidence": "evidence.tsv source-form 0x8004EA80-0x8004ED44"
+          },
+          {
+            "function": "OnImpulse__20PhysCollisionHandlerP9RigidBodyUiT1UiP13Vec3_801DE1E0N25",
+            "evidence": "evidence.tsv source-form 0x8004EE18-0x8004F20C"
+          },
+          {
+            "function": "fn_8004F2D0",
+            "evidence": "evidence.tsv source-form 0x8004F2D0-0x8004F3A4"
+          },
+          {
+            "function": "fn_8004F56C",
+            "evidence": "evidence.tsv source-form 0x8004F56C-0x8004F710"
+          },
+          {
+            "function": "fn_8004F754",
+            "evidence": "evidence.tsv source-form 0x8004F754-0x8004FF8C"
+          },
+          {
+            "function": "fn_8004FF8C",
+            "evidence": "evidence.tsv source-form 0x8004FF8C-0x800502C0"
+          },
+          {
+            "function": "fn_800502C0",
+            "evidence": "evidence.tsv source-form 0x800502C0-0x800504EC"
+          },
+          {
+            "function": "fn_800504EC",
+            "evidence": "evidence.tsv source-form 0x800504EC-0x800508A0"
+          },
+          {
+            "function": "fn_800508A0",
+            "evidence": "evidence.tsv source-form 0x800508A0-0x80050960"
+          },
+          {
+            "function": "fn_80050964",
+            "evidence": "evidence.tsv source-form 0x80050964-0x80050CCC"
+          },
+          {
+            "function": "fn_80050DA0",
+            "evidence": "evidence.tsv source-form 0x80050DA0-0x80050F14"
+          },
+          {
+            "function": "fn_80050F14",
+            "evidence": "evidence.tsv source-form 0x80050F14-0x8005122C"
+          },
+          {
+            "function": "fn_800518E0",
+            "evidence": "evidence.tsv source-form 0x800518E0-0x80051B3C"
+          },
+          {
+            "function": "fn_80051B88",
+            "evidence": "evidence.tsv source-form 0x80051B88-0x80051D0C"
+          }
+        ],
+        "evidence": "fd1a merge notes (swarm fd1 tracking table): src/game/cu_8004A2F4.cpp holds out 29 functions."
+      }
     },
     {
       "source": "src/game/CollideContacts.cpp",

@@ -1501,7 +1501,11 @@ void fn_8004D144(BigObjDesc_t *pDesc, int handle, int first)
     DynObjChildRefreshFrame(p);
 }
 
-int fn_8004D2F8(DynObjChild *p) { if (p->mpOwner50) fn_8004CEE8(p); return 0; }
+int fn_8004D2F8(DynObjChild *p) {
+    if (!p->mpOwner50) return 0;
+    fn_8004CEE8(p);
+    return 0;
+}
 
 int fn_8004D334(const char *pName)
 {
@@ -1530,15 +1534,21 @@ int fn_8004D3A8(void *pData, char *pName)
 void fn_8004D498(int handle) { lbl_803EA4F8[handle].mpCursor = lbl_803EA4F8[handle].mpData; }
 int fn_8004D4B0(int handle, const char *pKey) {
     void *p = XmlFindPath(lbl_803EA4F8[handle].mpCursor, pKey);
-    lbl_803EA4F8[handle].mpCursor = p; return p != 0;
+    lbl_803EA4F8[handle].mpCursor = p;
+    if (p) return 1;
+    return 0;
 }
 int fn_8004D508(int handle, const char *pKey) {
     void *p = XmlFindInElement(lbl_803EA4F8[handle].mpCursor, pKey);
-    lbl_803EA4F8[handle].mpCursor = p; return p != 0;
+    lbl_803EA4F8[handle].mpCursor = p;
+    if (p) return 1;
+    return 0;
 }
 int fn_8004D560(int handle) {
     void *p = XmlFindNext(lbl_803EA4F8[handle].mpCursor);
-    lbl_803EA4F8[handle].mpCursor = p; return p != 0;
+    lbl_803EA4F8[handle].mpCursor = p;
+    if (p) return 1;
+    return 0;
 }
 int fn_8004D5B8(int handle, const char *pKey, char *pText, int size) {
     return XmlGetAttrString(lbl_803EA4F8[handle].mpCursor, pKey, pText, size, "");
@@ -1556,8 +1566,10 @@ unsigned char fn_8004D6F4(int handle, const char *pKey, float *pValues, int coun
 }
 int fn_8004D728(int handle, const char *pKey, float *pValues) {
     float values[3];
-    if (!XmlGetAttrFloats(lbl_803EA4F8[handle].mpCursor, pKey, values, 3)) return 0;
-    pValues[0] = values[0]; pValues[2] = values[2]; pValues[1] = values[1]; return 1;
+    if (XmlGetAttrFloats(lbl_803EA4F8[handle].mpCursor, pKey, values, 3)) {
+        pValues[0] = values[0]; pValues[1] = values[1]; pValues[2] = values[2]; return 1;
+    }
+    return 0;
 }
 void fn_8004D798(void) {
     lbl_803EC7D4 = 0;
@@ -1580,9 +1592,8 @@ int fn_8004D874(DynObj *p, int mode)
     else flag = p->mUnknownE8.mBytes[3] & 1;
     if (flag) {
         int context = ConGetCurrentContext();
-        BigObjInst *pPose = (BigObjInst *)p->mpUnknown1D8;
-        if (p->mFlagF0) DynObjSetAnimPalFrame(p, (int)pPose->mUnknown200.mStep);
-        if (pPose->mUnknown224 == 1) DynObjScrollUVs(p, &pPose->mUnknown224);
+        if (p->mFlagF0) DynObjSetAnimPalFrame(p, (int)((BigObjInst *)p->mpUnknown1D8)->mUnknown200.mStep);
+        if (((BigObjInst *)p->mpUnknown1D8)->mUnknown224 == 1) DynObjScrollUVs(p, &((BigObjInst *)p->mpUnknown1D8)->mUnknown224);
         int index = VptGetMatrixStack();
         Object_80235588 *pRender = &pInstance->mRender;
         MatSetStack(index); MatPush();
@@ -1908,17 +1919,18 @@ void fn_8004E3CC(BigObj_t *pObject, int *pAngles)
     if (pSkeleton) {
         int index = CharSkelGetJointByName(pSkeleton, "main");
         if (index == -1) index = CharSkelGetJointByName(pSkeleton, "Main");
-        short *p = &pObject->mpUnknown220[index * 3];
-        pAngles[0] = p[0] << 8;
-        pAngles[1] = p[1] << 8;
-        pAngles[2] = p[2] << 8;
+        pAngles[0] = pObject->mpUnknown220[index * 3] << 8;
+        pAngles[1] = pObject->mpUnknown220[index * 3 + 1] << 8;
+        pAngles[2] = pObject->mpUnknown220[index * 3 + 2] << 8;
     }
 }
 }
 
 int PhysCollisionHandler::IgnorePair(RigidBody *pA, RigidBody *pB)
 {
-    if (!(((Metadata_8004ED44 *)pA->mpOwner)->mUnknown2 & 1) || !(((Metadata_8004ED44 *)pB->mpOwner)->mUnknown2 & 1)) return 1;
+    Metadata_8004ED44 *a = (Metadata_8004ED44 *)pA->mpOwner;
+    Metadata_8004ED44 *b = (Metadata_8004ED44 *)pB->mpOwner;
+    if (!(a->mUnknown2 & 1) || !(b->mUnknown2 & 1)) return 1;
     if (pA->mState == 2 || pB->mState == 2 || pA->mState == 1 || pB->mState == 1) return 0;
     return 1;
 }
@@ -2054,16 +2066,16 @@ void fn_8004EA80(Vector_80039F5C *pImpulse)
 int PhysCollisionHandler::OnContacts(float step, RigidBody *pA, RigidBody *pB, unsigned int count,
                                      BodyContact *pContacts)
 {
-    unsigned char a = ((Metadata_8004ED44 *)pA->mpOwner)->mKind;
-    unsigned char b = ((Metadata_8004ED44 *)pB->mpOwner)->mKind;
-    if (a == 1 && b == 1) return 3;
-    if (a != 6 && b != 6) {
-        if (a == 1) {
-            if (b == 2 || b == 4) fn_8004E4D0(pA, 0, pB, pContacts[0].mShapeB, count, pContacts, step);
+    Metadata_8004ED44 *a = (Metadata_8004ED44 *)pA->mpOwner;
+    Metadata_8004ED44 *b = (Metadata_8004ED44 *)pB->mpOwner;
+    if (a->mKind == 1 && b->mKind == 1) return 3;
+    if (a->mKind != 6 && b->mKind != 6) {
+        if (a->mKind == 1) {
+            if (b->mKind == 2 || b->mKind == 4) fn_8004E4D0(pA, 0, pB, pContacts[0].mShapeB, count, pContacts, step);
             return 2;
         }
-        if (b == 1) {
-            if (a == 2 || a == 4) fn_8004E4D0(pB, 0, pA, pContacts[0].mShapeA, count, pContacts, step);
+        if (b->mKind == 1) {
+            if (a->mKind == 2 || a->mKind == 4) fn_8004E4D0(pB, 0, pA, pContacts[0].mShapeA, count, pContacts, step);
             return 1;
         }
     }
@@ -2113,7 +2125,8 @@ void PhysBodyGroup::ApplyForces(void *pStart)
         RigidBody *p = lbl_80308D0C[i];
         if (p->mState == 2) {
             Vector_80039F5C force;
-            force.mX = force.mY = 0.0f;
+            force.mX = 0.0f;
+            force.mY = 0.0f;
             force.mZ = -((1.0f / p->mInvMass) * 10.73f);
             ClearBodyForces(p);
             AddBodyForceAtPoint(p, &force, (Vector_80039F5C *)&p->mPosition);
@@ -2187,8 +2200,8 @@ void fn_8004F710(Metadata_8004ED44 *p)
 {
     if (p->mNames) {
         fn_801D2BD0(p->mNames);
-        p->mCount = 0;
         p->mNames = 0;
+        p->mCount = 0;
     }
 }
 void fn_8004F754(int handle, BigObj_t *pObject, int objectIndex)
@@ -2565,7 +2578,9 @@ void fn_80050CCC(void)
 {
     Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C zero;
-    zero.mX = zero.mY = zero.mZ = 0.0f;
+    zero.mX = 0.0f;
+    zero.mY = 0.0f;
+    zero.mZ = 0.0f;
     Vector_80039F5C velocity, position;
     RigidBody *pBody = lbl_803EC7E0;
     BallGetVelocity(pBall, &velocity);
@@ -2690,11 +2705,13 @@ void fn_80051308(void)
         delete lbl_80308F44[i];
     }
     pNode = lbl_803EA514->FirstNode();
-    while ((pBody = lbl_803EA514->NextBody(&pNode)) != 0) {
+    pBody = lbl_803EA514->NextBody(&pNode);
+    while (pBody) {
         lbl_803EA514->RemoveBody(pBody);
         pNode = lbl_803EA514->FirstNode();
         delete pBody->mpShapes;
         delete pBody;
+        pBody = lbl_803EA514->NextBody(&pNode);
     }
     delete lbl_803EA518;
     delete lbl_803EA50C;
@@ -2716,7 +2733,6 @@ void fn_80051308(void)
     while (lbl_803EA528) {
         delete lbl_8030883C[--lbl_803EA528];
     }
-    lbl_803EA530 = 0;
     lbl_803EA518 = 0;
     lbl_803EA514 = 0;
     lbl_803EA50C = 0;
@@ -2727,6 +2743,7 @@ void fn_80051308(void)
     lbl_803EA520 = 0;
     lbl_803EA524 = 0;
     lbl_803EA52C = 0;
+    lbl_803EA530 = 0;
 }
 
 unsigned char fn_8005164C(int type)
