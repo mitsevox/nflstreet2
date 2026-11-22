@@ -8474,44 +8474,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8001D0F4.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8001D0F4.cpp, the function rows 0x8001D0F4-0x8001D1BC, the data row 0x8001D1BC-0x8001D2D8 (data_8001D1BC) and the data rows 0x802F4504-0x802F4598. Draft comparison only: the source does not reproduce the unreferenced tail 0x8001D2AC-0x8001D2D8 (six strings of functions discarded from this build, whose Xbox prototype counterparts 0x179250 and 0x179310 (the users of \"/\", \"%d_%d\" and \"%s %d\") call Xbox library code, and one zero word), so the .rodata from 0x8001D2AC differs (see the source-form row cu_8001D0F4 unreproduced strings), and the unit stays unlinked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8001D0F4",
-          "end": "0x8001D1BC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".text",
-          "start": "0x8001D1BC",
-          "end": "0x8001D2D8",
-          "follows": ".text"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802F4504",
-          "end": "0x802F4598"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8001D0F4",
-          "start": "0x8001D0F4",
-          "end": "0x8001D180"
-        },
-        {
-          "symbol": "fn_8001D180",
-          "start": "0x8001D180",
-          "end": "0x8001D1BC"
-        }
-      ]
-    },
-    {
       "source": "src/game/Replay.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8002B8F8-0x80030D50 (src/game/Replay.cpp), its compiler, source-form, name, type and linker rows, the 117 function extents 0x8002B960-0x80030D50 and the .rodata row 0x8028A9C8-0x8028AC28, whose 608 bytes the source reproduces (the 4/3 through the FAKEMATCH stand-in of source-form row 0x8028AC24). The five discarded file-static functions are compiled, not registered or measured. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
@@ -32236,37 +32198,6 @@
       ]
     },
     {
-      "source": "src/game/PlayerGearRatings.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80081440-0x800817CC (src/game/PlayerGearRatings.cpp), its exact function rows 0x80081440-0x800816C4, the exact .data row 0x802D6A28-0x802D6AD8 (measured slice) and the source-form rows. Draft comparison of 0x80081440 (exact) and 0x800814BC (partial) behind DECOMP_COMPARE; the original bytes of 0x80081440-0x800816C4 and of the .data table remain linked, while 0x800816C4-0x800817CC is linked from source in units.json; the full .text placement is kept for relocation.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80081440",
-          "end": "0x800817CC"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802D6A28",
-          "end": "0x802D6AD8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PlayerGearGetScaledBonuses",
-          "start": "0x80081440",
-          "end": "0x800814BC"
-        },
-        {
-          "symbol": "PlayerGearSumBonuses",
-          "start": "0x800814BC",
-          "end": "0x800816C4"
-        }
-      ]
-    },
-    {
       "source": "src/game/GameOptions.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8007F12C-0x8007FA48 (src/game/GameOptions.cpp) and the source-form rows from 0x8007F12C. Documented holdout at the start of .text: 0x8007F12C-0x8007F298 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (0x8007F19C is near-miss; 0x8007F12C and 0x8007F174 are exact and precede it); the rest of the file is linked through units.json",
@@ -35355,32 +35286,6 @@
           "symbol": "Close__9CMpegBase",
           "start": "0x80271AD0",
           "end": "0x80271B20"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/mpegl3base.cpp",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80271B74-0x80271BD4 (src/engine/mpegl3base.cpp, GoldenEye: Rogue Agent and Medal of Honor: European Assault mpegl3base.cpp), the compiler and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of its destructor; the vtable 0x802C19A8 is this file's. Draft comparison only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80271B74",
-          "end": "0x80271BD4"
-        },
-        {
-          "section": ".gnu.linkonce.d._vt.15CMpegLayer3Base",
-          "placement": ".data3",
-          "start": "0x802C19A8",
-          "end": "0x802C19E8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_._15CMpegLayer3Base",
-          "start": "0x80271B74",
-          "end": "0x80271BD4"
         }
       ]
     },

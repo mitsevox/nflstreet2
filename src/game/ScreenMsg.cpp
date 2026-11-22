@@ -10,8 +10,8 @@
 extern "C" {
 int MsgFrontEndDispatch(int module, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int MsgStreetEventDispatch(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
-int fn_8001D0F4(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
-int fn_8001D180(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
+int MsgStoryModeDispatch(int screen, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
+int MsgGauntletDispatch(int screen, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int MsgMemCardDispatch(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int MsgTeamDispatch(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int MsgOptionsDispatch(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
@@ -461,7 +461,7 @@ extern "C" void ScreenMsgDispatch(unsigned int id, int group, int screen, int co
         handled = MsgStreetEventDispatch(screen, id, pArgs, count, pResult);
         break;
     case 11:
-        handled = fn_8001D180(screen, id, pArgs, count, pResult);
+        handled = MsgGauntletDispatch(screen, id, pArgs, count, pResult);
         break;
     case 6:
         handled = MsgMemCardDispatch(screen, id, pArgs, count, pResult);
@@ -482,7 +482,7 @@ extern "C" void ScreenMsgDispatch(unsigned int id, int group, int screen, int co
         handled = TutorialScreenMsg(screen, id, pArgs, count, pResult);
         break;
     case 12:
-        handled = fn_8001D0F4(screen, id, pArgs, count, pResult);
+        handled = MsgStoryModeDispatch(screen, id, pArgs, count, pResult);
         break;
     case 8:
         handled = MsgTeamDispatch(screen, id, pArgs, count, pResult);

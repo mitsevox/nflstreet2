@@ -61,14 +61,27 @@ public:
     int GetHeader();
     int CloseLayer();
     void Reset();
+
+    static const unsigned char sNumSfbBlock[6][3][4];
 };
+
+struct MpegScaleFactorBandIndex_t;
 
 class CMpegLayer3Base : public CMpegBase {
 public:
     unsigned char mUnknown54[0x15C];
-    void *m1B0;
+    void *mpWorkBuffer;
 
     virtual ~CMpegLayer3Base();
+
+    static const unsigned char slen[2][16];
+    static const float sTwoToNegativeQuarterPower[256];
+    static const float *spTwoToNegativeQuarterPower2;
+    static const float sToPowerOf4over3[8207];
+    static const MpegScaleFactorBandIndex_t sfBandIndex[6];
+    static const float sAntiAliasCoefficients[2][8];
+    static const float sStereoFactors[6];
+    static const float sImdctFactors[37];
 };
 
 struct SndDrvMixChannel_t {

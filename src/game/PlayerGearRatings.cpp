@@ -1,7 +1,6 @@
-/* Player gear rating bonuses. Looks up the rating bonuses of each piece of
-   gear a player wears in the gear database tables, sums them, and gives
-   them on their own, rescaled to 0..255, or added to the player's ratings
-   and clamped to the 1..99 rating range. */
+/* Reads and sums the rating bonuses of the gear a player wears. Returns
+   them raw or scaled by 255/99, or adds them to the player's ratings
+   before clamping to 1..99. */
 #include <string.h>
 
 #include "game/DbCursor.h"
@@ -11,11 +10,10 @@
 extern "C" {
 int fn_8007BF14(int index);
 int TDbQryGetSingleRow(int handle, DbQueryTable *pTables, DbFilter *pFilter,
-                DbColumnValue *pColumns);
+                       DbColumnValue *pColumns);
 void PlayerDbReadRatings(Object_8008044C *pObject, int *pValues);
 void PlayerGearSumBonuses(PlayerGear_t *pInfo, short *pValues);
 
-#if defined(DECOMP_COMPARE)
 static DbColumnValue _PlayerGearRatings_aBonusColumns[11] = {
     { 0, 0x50495247, 0x4C474147, 0 },
     { 0, 0x50495247, 0x504D4A47, 0 },
@@ -29,6 +27,13 @@ static DbColumnValue _PlayerGearRatings_aBonusColumns[11] = {
     { 0, 0x50495247, 0x43544447, 0 },
     { 0, -1, -1, 0 },
 };
+
+static inline void _PlayerGearRatingsSetFilter(DbFilter &filter, int operation,
+                                              long long column, int valueKind, int value)
+{
+    filter.SetUnknown32(6, column, valueKind, operation);
+    filter.mUnknown16.mValue.mInt = value;
+}
 
 void PlayerGearGetScaledBonuses(Object_8008044C *pObject, short *pValues)
 {
@@ -59,15 +64,18 @@ void PlayerGearSumBonuses(PlayerGear_t *pInfo, short *pValues)
     join.Set(6, ((unsigned long long)0x50495247 << 32) | 0x594B5047, 6);
     join.mUnknown16.mValue.mLong = ((unsigned long long)0x52414547 << 32) | 0x594B5047;
     filter.Set(11, &left, &right);
+    const long long gearIdColumn = ((unsigned long long)0x52414547 << 32) | 0x44494547;
+    const long long gearTypeColumn = ((unsigned long long)0x52414547 << 32) | 0x49545247;
     for (i = 0; i < 14; i++) {
         if (i != 7) {
-            int result = fn_8007BF14(i);
+            int gearType = fn_8007BF14(i);
 
+            // Slot 7 supplies the fallback gear ID when slot 6 is empty.
             if (i == 6 && pInfo->mValues[6] == 0) {
                 i = 7;
             }
-            left.Set(6, ((unsigned long long)0x52414547 << 32) | 0x44494547, 3, pInfo->mValues[i]);
-            right.Set(6, ((unsigned long long)0x52414547 << 32) | 0x49545247, 2, result);
+            _PlayerGearRatingsSetFilter(left, 0x10003, gearIdColumn, 3, pInfo->mValues[i]);
+            _PlayerGearRatingsSetFilter(right, 0x10003, gearTypeColumn, 2, gearType);
             if (TDbQryGetSingleRow(0x54415453, tables, 0, _PlayerGearRatings_aBonusColumns) != 0x17) {
                 for (j = 0; j < 10; j++) {
                     pValues[j] += _PlayerGearRatings_aBonusColumns[j].mValue;
@@ -76,8 +84,6 @@ void PlayerGearSumBonuses(PlayerGear_t *pInfo, short *pValues)
         }
     }
 }
-
-#endif
 
 void PlayerAddGearRatings(Object_8008044C *pObject, PlayerGear_t *pInfo, int *pValues)
 {

@@ -365,6 +365,20 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler rows 0x802614C0-0x802616D4 and 0x802616D4-0x80261A24: ProDG 3.9.3 cc1 with -msafe-sda places the observed conversion biases and operands in small data; -G 1024 permits the reducer's indexed small-data tables and also matches the tangent kernel with its explicit table placement. The C front end retains both files' read-only scalar definitions. -fno-builtin preserves each target fabsf call."
+    },
+    "sound_cxx_data_sections": {
+      "flags": [
+        "-O2",
+        "-G0",
+        "-fno-strength-reduce",
+        "-mps-float",
+        "-fdata-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "language": "c++",
+      "evidence": "evidence.tsv compiler row 0x80271B74-0x80271BD4. The existing sound_cxx flags reproduce the destructor. ProDG 3.9.3 -fdata-sections emits the codec tables as individual native sections, preserving the target order on both sides of the interleaved vtable when linking the unchanged compiler object."
     }
   },
   "externals": {
@@ -1051,14 +1065,6 @@
     "StatcollBlockInit": {
       "address": "0x80143F40",
       "evidence": "evidence.tsv function and name rows for 0x80143F40 (documented holdout of src/game/Statcoll.cpp: draft registered in comparisons.json, original bytes linked)."
-    },
-    "PlayerGearSumBonuses": {
-      "address": "0x800814BC",
-      "evidence": "evidence.tsv function and name rows for 0x800814BC (documented holdout of src/game/PlayerGearRatings.cpp: draft registered in comparisons.json, original bytes linked)."
-    },
-    "PlayerGearGetScaledBonuses": {
-      "address": "0x80081440",
-      "evidence": "evidence.tsv function and name rows for 0x80081440 (exact in comparisons.json; precedes the holdout 0x800814BC of src/game/PlayerGearRatings.cpp, so its original bytes stay linked)."
     },
     "BigObjDefaultUpdate": {
       "address": "0x800400CC",
@@ -10483,6 +10489,32 @@
       ]
     },
     {
+      "source": "src/game/MsgStoryGauntlet.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8001D0F4-0x8001D2D8 (src/game/MsgStoryGauntlet.cpp), its function, data and source-form rows",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8001D0F4",
+          "end": "0x8001D1BC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x8001D1BC",
+          "end": "0x8001D2D8",
+          "follows": ".text"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4504",
+          "end": "0x802F4598"
+        }
+      ]
+    },
+    {
       "source": "src/game/MsgMemCardDispatch.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8001D2D8-0x8001D314 (src/game/MsgMemCardDispatch.cpp) and its source-form rows.",
@@ -18760,13 +18792,19 @@
     {
       "source": "src/game/PlayerGearRatings.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80081440-0x800817CC (src/game/PlayerGearRatings.cpp), and its source-form rows. Linked from source: .text 0x800816C4-0x800817CC; 0x80081440-0x800816C4 and the .data table 0x802D6A28-0x802D6AD8 are a draft comparison behind DECOMP_COMPARE (config/GN7E69-rev0/comparisons.json) whose original bytes remain linked.",
+      "evidence": "evidence.tsv unit row 0x80081440-0x800817CC, function and name rows for the five gear-rating functions, and the bonus-column data row 0x802D6A28-0x802D6AD8. The source-form row for PlayerGearSumBonuses records the filter setup.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800816C4",
+          "start": "0x80081440",
           "end": "0x800817CC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6A28",
+          "end": "0x802D6AD8"
         }
       ]
     },
@@ -25482,6 +25520,109 @@
           "placement": ".data3",
           "start": "0x802AECAC",
           "end": "0x802AECB4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/mpegl3base.cpp",
+      "profile": "sound_cxx_data_sections",
+      "evidence": "evidence.tsv provisional unit row 0x80271B74-0x80271BD4, the destructor and its native vtable, MPEG Layer III table rows 0x802B9270-0x802C1D80, and the relocated quarter-power pointer at 0x80300048.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80271B74",
+          "end": "0x80271BD4"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.slen",
+          "placement": ".data3",
+          "start": "0x802B9270",
+          "end": "0x802B9290"
+        },
+        {
+          "section": ".rodata._9CMpegBase.sNumSfbBlock",
+          "placement": ".data3",
+          "start": "0x802B9290",
+          "end": "0x802B92D8"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sTwoToNegativeQuarterPower",
+          "placement": ".data3",
+          "start": "0x802B92D8",
+          "end": "0x802B96D8"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sToPowerOf4over3",
+          "placement": ".data3",
+          "start": "0x802B96D8",
+          "end": "0x802C1714"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sfBandIndex",
+          "placement": ".data3",
+          "start": "0x802C1714",
+          "end": "0x802C187C"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sAntiAliasCoefficients",
+          "placement": ".data3",
+          "start": "0x802C187C",
+          "end": "0x802C18BC"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sStereoFactors",
+          "placement": ".data3",
+          "start": "0x802C18BC",
+          "end": "0x802C18D4"
+        },
+        {
+          "section": ".rodata._3Snd.reorderMap",
+          "placement": ".data3",
+          "start": "0x802C18D4",
+          "end": "0x802C1910"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sImdctFactors",
+          "placement": ".data3",
+          "start": "0x802C1910",
+          "end": "0x802C19A4"
+        },
+        {
+          "section": ".gnu.linkonce.d._vt.15CMpegLayer3Base",
+          "placement": ".data3",
+          "start": "0x802C19A8",
+          "end": "0x802C19E8"
+        },
+        {
+          "section": ".rodata._3Snd.pretab",
+          "placement": ".data3",
+          "start": "0x802C19E8",
+          "end": "0x802C1A00"
+        },
+        {
+          "section": ".rodata._3Snd.TAN12",
+          "placement": ".data3",
+          "start": "0x802C1A00",
+          "end": "0x802C1A40"
+        },
+        {
+          "section": ".rodata._3Snd.io",
+          "placement": ".data3",
+          "start": "0x802C1A40",
+          "end": "0x802C1B40"
+        },
+        {
+          "section": ".rodata._3Snd.win",
+          "placement": ".data3",
+          "start": "0x802C1B40",
+          "end": "0x802C1D80"
+        },
+        {
+          "section": ".data._15CMpegLayer3Base.spTwoToNegativeQuarterPower2",
+          "placement": ".data4",
+          "start": "0x80300048",
+          "end": "0x8030004C"
         }
       ]
     },
