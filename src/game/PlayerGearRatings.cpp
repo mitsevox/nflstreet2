@@ -1,6 +1,6 @@
-/* Reads and sums the rating bonuses of the gear a player wears. These
-   bonuses can be scaled by 255/99 for display or added to the player's
-   ratings, which are then clamped to 1..99. */
+/* Reads and sums the rating bonuses of the gear a player wears. Returns
+   them raw or scaled by 255/99, or adds them to the player's ratings
+   before clamping to 1..99. */
 #include <string.h>
 
 #include "game/DbCursor.h"
