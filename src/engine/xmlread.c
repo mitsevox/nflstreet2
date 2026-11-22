@@ -1,5 +1,6 @@
 /* Small markup reader: finds elements by dotted path in a loaded text file and reads their string, integer
    and float attributes for the game's data files. */
+#include "cmath.h"
 #include "engine/tmlib.h"
 
 static unsigned char _Xml_aHexValue[256] = {
@@ -20,7 +21,6 @@ static unsigned char _Xml_aHexValue[256] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
-extern float fn_80260428(float x, float y);
 
 const unsigned char *_XmlDecodeEntity(const unsigned char *p, unsigned char *pOut)
 {
@@ -558,7 +558,7 @@ float XmlGetAttrFloat(const unsigned char *p, const unsigned char *pName, float 
 
         p++;
         while (*p >= '0' && *p <= '9') {
-            value += (*p++ & 0xF) / fn_80260428(10.0f, n++);
+            value += (*p++ & 0xF) / powf(10.0f, n++);
         }
     }
     if ((p[0] | 0x20) == 't' && (p[1] | 0x20) == 'r' && (p[2] | 0x20) == 'u' && (p[3] | 0x20) == 'e') {
@@ -614,7 +614,7 @@ int XmlGetAttrFloats(const unsigned char *p, const unsigned char *pName, float *
 
             p++;
             while (*p >= '0' && *p <= '9') {
-                value += (*p++ & 0xF) / fn_80260428(10.0f, n++);
+                value += (*p++ & 0xF) / powf(10.0f, n++);
             }
         }
         if ((p[0] | 0x20) == 't' && (p[1] | 0x20) == 'r' && (p[2] | 0x20) == 'u' && (p[3] | 0x20) == 'e') {

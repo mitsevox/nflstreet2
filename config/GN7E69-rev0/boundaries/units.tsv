@@ -12,6 +12,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801B1A3C	0x801B1CFC	spchrand.c	5	5	5	0	5	-	-
 0x801B1CFC	0x801B23A0	spchrule.c	16	16	17	1	15	-	spchsamp.c,sptick.c,sputil.c,author.cpp
 0x801B23A0	0x801B2AD4	spchbank.c	17	17	18	12	5	-	-
+0x801B5E5C	0x801B6780	src/engine/pathevent.c	10	0	-	0	0	provisional	-
 0x801B8C18	0x801B9CAC	smemhigh.cpp	40	40	42	38	2	-	sdata.c
 0x801B9D00	0x801B9F00	anim.c	11	11	11	11	0	-	-
 0x801B9F00	0x801BA784	animchan.c	17	13	13	13	0	-	-
@@ -158,6 +159,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x8025FDE8	0x80260034	ef_acos.c	1	1	1	1	0	-	-
 0x80260034	0x80260260	ef_asin.c	1	1	1	1	0	-	-
 0x80260260	0x80260428	ef_fmod.c	1	1	1	1	0	-	-
+0x80260428	0x80260B1C	ef_pow.c	1	1	1	1	0	-	-
 0x80260B1C	0x80260C14	ef_sqrt.c	1	1	1	1	0	-	-
 0x80260C14	0x80260E24	sf_atan.c	1	1	1	1	0	-	-
 0x80260E24	0x80260EE8	sf_ceil.c	1	1	1	1	0	-	-

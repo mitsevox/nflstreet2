@@ -9,7 +9,7 @@ extern "C" {
 /* The voices SNDVOICEI_alloc has picked for the request in progress. */
 short sndvoicereserved[6];
 
-void SNDstop(int handle);
+int SNDstop(int handle);
 
 int SNDVOICEI_isreserved(int value, int count)
 {
@@ -24,7 +24,7 @@ int SNDVOICEI_isreserved(int value, int count)
 
 int SNDVOICEI_alloc(int count, int priority, int *handle, int first, int last)
 {
-    static int lasthandle = 0;
+    static unsigned int lasthandle = 0;
     int result = -9;
     int found = 0;
     int i;
@@ -39,7 +39,7 @@ int SNDVOICEI_alloc(int count, int priority, int *handle, int first, int last)
         sndvoicereserved[i] = -1;
     }
     lasthandle += 256;
-    if (lasthandle < 0) {
+    if ((lasthandle & 0x80000000u) != 0) {
         lasthandle = 0;
     }
     for (i = found; i < count; i++) {
@@ -126,11 +126,16 @@ int SNDVOICEI_alloc(int count, int priority, int *handle, int first, int last)
     return result;
 }
 
-static inline void _SndVoiceClear(Voice_803A6C24 *v)
+static inline void _SndVoiceClearFlags(Voice_803A6C24 *v)
 {
     v->mUnknown6D = 0;
     v->m26 = 0;
     v->m27 = 0;
+}
+
+static inline void _SndVoiceClear(Voice_803A6C24 *v)
+{
+    _SndVoiceClearFlags(v);
     v->m2C = lbl_803A6C24.m170;
 }
 
@@ -166,7 +171,9 @@ void SNDVOICEI_free(int voice)
         } else if (lbl_803A6C24.mUnknown1CC[other].mUnknown6D == 1 && voice == other) {
             lbl_803A6C24.mUnknown1CC[other].mUnknown6D = 2;
         } else {
-            _SndVoiceClear(v);
+            _SndVoiceClearFlags(v);
+            // FAKEMATCH: Qualify the pool view to retain the separate base-address calculation.
+            v->m2C = static_cast<const volatile Object_803A6C24 &>(lbl_803A6C24).m170;
         }
     } else {
         _SndVoiceClear(v);

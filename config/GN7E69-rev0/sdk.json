@@ -996,7 +996,7 @@
       "name": "src/dolphin/dvd/dvdidutils.c",
       "source": "src/dolphin/dvd/dvdidutils.c",
       "library": "DVD",
-      "evidence": "Related complete donor disk-ID comparator occupies target248-byte function; adjacent48-byte indirect callback has unresolved source ownership and is excluded from this provisional file mapping.",
+      "evidence": "The related donor disk-ID comparator occupies the complete 248-byte target function. The adjacent indirect callback is attributed to dvdFatal.c by its own unit evidence.",
       "sections": [
         {
           "section": ".text",
@@ -1004,7 +1004,50 @@
           "end": "0x80242018",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Actual prologue at80241F20 and return at80242014 bound248-byte comparator; independent next prologue80242018 starts an unowned48-byte callback. Related donor file does not establish callback ownership. Original archive edges remain provisional."
+          "evidence": "The prologue at 0x80241F20 and return at 0x80242014 bound the 248-byte comparator. The separate dvdFatal.c callback starts at 0x80242018. Historical file edges remain provisional."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/dvd/dvdFatal.c",
+      "source": "src/dolphin/dvd/dvdFatal.c",
+      "library": "DVD",
+      "evidence": "evidence.tsv dvdFatal.c unit and data rows. FIFA Soccer 2005 and UEFA Champions League 2004-05 place the same 48-byte dispatcher between the disk-ID and boot-file units. The linked native object accounts for all four ranges.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80242018",
+          "end": "0x80242048",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "The direct DVD core call enters the 48-byte wrapper; its final return precedes the separate fstload.c callback."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FD428",
+          "end": "0x802FD855",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Eight retained messages immediately follow the preceding DVD error data. Three alignment bytes after the last terminator precede the boot-file data.",
+          "object_seed": true
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC1D8",
+          "end": "0x803EC1E0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Two retained initialized pointers resolve to the first two messages in this unit's .data4 range.",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED170",
+          "end": "0x803ED174",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Four-byte callback slot exclusively read by the dispatcher. It follows the DVD core's .sbss and is allocated by the reconstructed native object.",
+          "object_seed": true
         }
       ]
     },
@@ -3103,22 +3146,6 @@
           "end_boundary": "provisional",
           "evidence": "AXOut 80287AC0 loads a halfword from SDA-relative 803EC5C0; its value 0x1EC0 is stored as DSP task IRAM length at 80287ACC. BFBB DSPCode.c declares the corresponding length as u16.",
           "object_seed": true
-        }
-      ]
-    },
-    {
-      "name": "sdk/unassigned/80242018",
-      "source": null,
-      "library": "unassigned",
-      "evidence": "Original48-byte indirect callback follows the disk-ID comparator. Source-file and subsystem ownership are unresolved; no reconstructed source or identity credit.",
-      "sections": [
-        {
-          "section": ".text",
-          "start": "0x80242018",
-          "end": "0x80242048",
-          "start_boundary": "exact",
-          "end_boundary": "exact",
-          "evidence": "Actual prologue80242018 and return80242044 enclose a nullable indirect call through803ED170; caller8023F6B0. Adjacent donor comparator ends80242018 and does not establish callback source ownership."
         }
       ]
     }

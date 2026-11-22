@@ -12,7 +12,8 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x801B1A3C	0x801B1A3C	0x801B1A3C	at-or-before	1	4	spchpick.c	spchrand.c
 .text	0x801B1CFC	0x801B1CFC	0x801B1CFC	alignment	0	0	spchrand.c	spchrule.c
 .text	0x801B23A0	0x801B23A0	0x801B23A0	alignment	0	0	spchrule.c	spchbank.c
-.text	-	0x801B2AD4	0x801B8C18	open	-	-	spchbank.c	smemhigh.cpp
+.text	-	0x801B2AD4	0x801B5E5C	open	-	-	spchbank.c	src/engine/pathevent.c
+.text	-	0x801B6780	0x801B8C18	open	-	-	src/engine/pathevent.c	smemhigh.cpp
 .text	-	0x801B9CAC	0x801B9D00	open	-	-	smemhigh.cpp	anim.c
 .text	0x801B9F00	0x801B9F00	0x801B9F00	alignment	0	8	anim.c	animchan.c
 .text	0x801BA784	0x801BA784	0x801BA784	calls	0	5	animchan.c	animemot.c
@@ -158,7 +159,8 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	-	0x8025FDE8	0x8025FDE8	open	-	-	e_sqrt.c	ef_acos.c
 .text	0x80260034	0x80260034	0x80260034	alignment	0	0	ef_acos.c	ef_asin.c
 .text	-	0x80260260	0x80260260	open	-	-	ef_asin.c	ef_fmod.c
-.text	-	0x80260428	0x80260B1C	open	-	-	ef_fmod.c	ef_sqrt.c
+.text	-	0x80260428	0x80260428	open	-	-	ef_fmod.c	ef_pow.c
+.text	0x80260B1C	0x80260B1C	0x80260B1C	alignment	0	1	ef_pow.c	ef_sqrt.c
 .text	0x80260C14	0x80260C14	0x80260C14	alignment	0	0	ef_sqrt.c	sf_atan.c
 .text	0x80260E24	0x80260E24	0x80260E24	alignment	0	0	sf_atan.c	sf_ceil.c
 .text	0x80260EE8	0x80260EE8	0x80260EE8	alignment	0	0	sf_ceil.c	sf_cos.c
