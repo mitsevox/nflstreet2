@@ -27,7 +27,7 @@ struct BigObjPhysics_t {
 struct BigObj_t;
 struct BigObjInst;
 struct BigObjNode_t;
-/* Timed cycle at +200 that fn_8004B354 advances: an active flag, two
+/* Timed cycle at +200 that BigObjOnAnimEvent advances: an active flag, two
    durations, the current step, the elapsed time and the phase. */
 struct BigObjCycle_t {
     unsigned char mActive;
@@ -40,7 +40,7 @@ struct BigObjCycle_t {
 };
 
 /* Recent hit at +384 of BigObjInst (three entries): the time from
-   0x800289A8 and the hit type, kept by fn_8004C844 to drop repeats. */
+   0x800289A8 and the hit type, kept by BigObjHit to drop repeats. */
 struct BigObjHit_t {
     unsigned int mTime;
     unsigned short mType;

@@ -25,13 +25,13 @@ struct BigObjPathed_t {
 
 extern "C" {
 int BigObjGetCount(void);
-void fn_8004D498(int handle);
-int fn_8004D4B0(int handle, const char *pName);
-int fn_8004D508(int handle, const char *pName);
-int fn_8004D5B8(int handle, const char *pKey, char *pText, int size);
-float fn_8004D624(int handle, const char *pKey);
-int fn_8004D84C(int handle);
-void fn_8004D860(int handle, int value);
+void ObjParseRewind(int handle);
+int ObjParseFindPath(int handle, const char *pName);
+int ObjParseFindChild(int handle, const char *pName);
+int ObjParseGetString(int handle, const char *pKey, char *pText, int size);
+float ObjParseGetFloat(int handle, const char *pKey);
+int ObjParseGetCursor(int handle);
+void ObjParseSetCursor(int handle, int value);
 int BigObjGetNameNumber(BigObj_t *pObject);
 int fn_801784C4(void);
 void QuatSlerp(float *pOut, float *pA, float *pB, float t);
@@ -52,14 +52,14 @@ void BigObjPathNodeLoad(int handle, BigObjInst *pObject)
 {
     BigObjPathNode_t *pData = (BigObjPathNode_t *)fn_801D2B7C(sizeof(BigObjPathNode_t), 0, 0);
     pObject->mUnknown420 = pData;
-    int saved = fn_8004D84C(handle);
-    fn_8004D508(handle, "pathnode");
-    fn_8004D5B8(handle, "nextnode", pData->mUnknown40, 32);
-    pData->mUnknown4 = fn_8004D624(handle, "speed");
-    fn_8004D498(handle);
-    fn_8004D4B0(handle, "object");
-    fn_8004D5B8(handle, "name", pData->mUnknown8, 32);
-    fn_8004D860(handle, saved);
+    int saved = ObjParseGetCursor(handle);
+    ObjParseFindChild(handle, "pathnode");
+    ObjParseGetString(handle, "nextnode", pData->mUnknown40, 32);
+    pData->mUnknown4 = ObjParseGetFloat(handle, "speed");
+    ObjParseRewind(handle);
+    ObjParseFindPath(handle, "object");
+    ObjParseGetString(handle, "name", pData->mUnknown8, 32);
+    ObjParseSetCursor(handle, saved);
     pData->mUnknown0 = 0;
 }
 
@@ -91,16 +91,16 @@ void BigObjPathedLoad(int handle, BigObjInst *pObject)
     int i;
     BigObjPathed_t *pData = (BigObjPathed_t *)fn_801D2B7C(sizeof(BigObjPathed_t), 0, 0);
     pObject->mUnknown420 = pData;
-    int saved = fn_8004D84C(handle);
-    fn_8004D508(handle, "pathnode");
-    fn_8004D5B8(handle, "name", name, 32);
+    int saved = ObjParseGetCursor(handle);
+    ObjParseFindChild(handle, "pathnode");
+    ObjParseGetString(handle, "name", name, 32);
     for (i = 0; i < BigObjGetCount(); i++) {
         BigObjInst *pOther = BigObjInstGet(i);
         if (pOther->mUnknown188 == 3 && strcmp(((BigObjPathNode_t *)pOther->mUnknown420)->mUnknown8, name) == 0) {
             pData->mUnknown8 = BigObjGet(i);
         }
     }
-    fn_8004D860(handle, saved);
+    ObjParseSetCursor(handle, saved);
     pData->mUnknown12 = 0;
     pData->mUnknown0 = 0;
     pData->mUnknown4 = 0;

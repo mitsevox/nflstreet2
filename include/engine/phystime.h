@@ -8,6 +8,7 @@ class PhysicsTime {
 public:
     PhysicsTime();
     virtual ~PhysicsTime() {}
+    void fn_801E8CA0(float time);
     void fn_801E8D14(float delta);
 
     unsigned int mIntegral;
