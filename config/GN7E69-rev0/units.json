@@ -4486,7 +4486,7 @@
     {
       "source": "src/engine/dbmanager.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x802328A8-0x802336C4 (src/engine/dbmanager.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdout, whose range keeps the original bytes. The file compiles no data sections of its own (its strings and tables are external labels).",
+      "evidence": "evidence.tsv provisional unit row 0x802328A8-0x802336C4 (src/engine/dbmanager.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdout, whose range keeps the original bytes. The SQL strings (.rodata 0x802B6E10-0x802B7120) and handler and mode tables (.data 0x802FB38C-0x802FB3F8) link from this file.",
       "sections": [
         {
           "section": ".text",

@@ -19889,7 +19889,7 @@
     {
       "source": "src/engine/dbmanager.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x802328A8-0x802336C4 (src/engine/dbmanager.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802328A8-0x802336C4 (src/engine/dbmanager.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c). The whole native unit includes the linked SQL strings and handler and mode tables, and compares the mode-2 leave routine whose original bytes remain linked.",
       "sections": [
         {
           "section": ".text",

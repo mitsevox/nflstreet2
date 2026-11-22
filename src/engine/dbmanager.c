@@ -1,4 +1,4 @@
-/* Partial source: starts and stops every game-database module and runs the game-mode steps over the database tables. */
+/* Starts and stops the game-database modules and runs the game-mode steps over their tables. */
 
 #include "engine/TDbCreate.h"
 #include "engine/tdbext.h"
@@ -24,13 +24,13 @@
 #include "engine/DbNiomHandlers.h"
 #include "game/Request_802329F0.h"
 
-typedef struct Block_80233588 {
-    int mUnknown0;
-    char *mpUnknown4;
-    int mUnknown8;
-} Block_80233588;
+typedef struct DbManagerCreateArgs_t {
+    int mSize;
+    char *mpResourceName;
+    int mResourceId;
+} DbManagerCreateArgs_t;
 
-int DbManagerCreateGameDb(Block_80233588 *p);
+int DbManagerCreateGameDb(DbManagerCreateArgs_t *p);
 int DbManagerInitHook(void);
 
 typedef struct Block_802336C4 {
@@ -558,7 +558,7 @@ void DbManagerGetModeFuncs(int mode, DbNiomModeFuncs_t *pFuncs);
 int DbManagerResultAccept(int a, int b, unsigned char *pDone);
 int DbManagerResultRecord(void);
 int DbManagerResultFinish(void);
-int DbManagerCreateGameDb(Block_80233588 *p);
+int DbManagerCreateGameDb(DbManagerCreateArgs_t *p);
 int DbManagerLoadGameDb(void **ppData, void *p);
 int DbManagerSaveGameDb(int a, int b);
 int DbManagerDestroyGameDb(void);
@@ -711,7 +711,7 @@ int DbManagerInit(struct Request_802329F0 *p)
 {
     int result;
     DbNiomSetHandlers(&_DbManager_Handlers);
-    result = DbManagerCreateGameDb((Block_80233588 *)&p->mSize);
+    result = DbManagerCreateGameDb((DbManagerCreateArgs_t *)&p->mSize);
     if (result == 0) {
         result = DbManagerPushGameDb();
         if (result == 0) {
@@ -1108,14 +1108,14 @@ int DbManagerResultFinish(void)
     return 0;
 }
 
-int DbManagerCreateGameDb(Block_80233588 *p)
+int DbManagerCreateGameDb(DbManagerCreateArgs_t *p)
 {
-    int err = TDbCreate(0x454D4147, p->mUnknown0);
+    int err = TDbCreate(0x454D4147, p->mSize);
 
     if (err != 0) {
         return err;
     }
-    err = TDbExtLoadFromResource(0x454D4147, p->mpUnknown4, p->mUnknown8, 3);
+    err = TDbExtLoadFromResource(0x454D4147, p->mpResourceName, p->mResourceId, 3);
     if (err != 0) {
         return err;
     }
