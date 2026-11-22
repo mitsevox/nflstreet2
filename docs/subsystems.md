@@ -12,7 +12,7 @@ The executable by area: what each address range does in the game, which file nam
 
 ## Game code (`src/game/`)
 
-`Statcoll.cpp` handles the game-statistics stream callbacks.
+`Statcoll.cpp` handles the game-state callbacks for the collision set.
 
 NFL Street 2's own code: the front end, game modes, gameplay, replay and the rendering of players and the field. Built with SN ProDG 3.9.3, mostly C++, organised as Tiburon `Module` subclasses (each has `Init`, `Shutdown`, `GetDependencies`, `GetLinks` and `GetName`).
 
