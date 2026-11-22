@@ -193,8 +193,9 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	-	0x8026EDC4	0x8026EF88	open	-	-	sstlowp.c	sstrstat.c
 .text	-	0x8026F19C	0x8026F19C	open	-	-	sstrstat.c	sstsetgl.c
 .text	-	0x8026F1E8	0x802755E0	open	-	-	sstsetgl.c	smixer.c
-.text	-	0x802763E0	0x80277520	open	-	-	smixer.c	s3dlow.c
-.text	-	0x802775EC	0x80279D90	open	-	-	s3dlow.c	sfilter.c
+.text	-	0x802763E0	0x80276820	open	-	-	smixer.c	smixfram.c
+.text	-	0x80276868	0x80276938	open	-	-	smixfram.c	smixlowp.c
+.text	-	0x80276A84	0x80279D90	open	-	-	smixlowp.c	sfilter.c
 .text	-	0x80279E74	0x8027A8A4	open	-	-	sfilter.c	sinitxa.c
 .text	-	0x8027A8EC	0x8027A8EC	open	-	-	sinitxa.c	smixc.c
 .text	-	0x8027A91C	0x8027BAFC	open	-	-	smixc.c	eaxadecf.cpp
