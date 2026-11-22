@@ -4,6 +4,12 @@
 #include <string.h>
 #include "engine/pathlib.h"
 
+static inline unsigned char *_PATHI_eventpoolbytes(Bank_801B3480 *bank)
+{
+    return reinterpret_cast<unsigned char *>(bank) +
+        (offsetof(Bank_801B3480, mUnknownC0) + 16 * sizeof(Sequence_801B84E4 *));
+}
+
 extern "C" int PATHI_addevent(int flags, Sequence_801B84E4 *sequence)
 {
     // FAKEMATCH: unused string local; emits the unreferenced "%s  %s" that starts the target .rodata
@@ -90,8 +96,8 @@ extern "C" int PATH_event(int flags, unsigned int id)
 extern "C" Sequence_801B84E4 *PATHI_copyevent(Sequence_801B84E4 *event)
 {
     int size = event->mUnknownF * 12 + 20;
-    unsigned char *end = lbl_803EBB28->mUnknown100 + sizeof(lbl_803EBB28->mUnknown100);
-    unsigned char *free = lbl_803EBB28->mUnknown100;
+    unsigned char *end = _PATHI_eventpoolbytes(lbl_803EBB28) + Bank_801B3480::kEventPoolBytes;
+    unsigned char *free = _PATHI_eventpoolbytes(lbl_803EBB28);
     for (int i = 0; i < 16; ++i) {
         Sequence_801B84E4 *queued = lbl_803EBB28->mUnknownC0[i];
         if ((unsigned char *)queued >= free && (unsigned char *)queued < end)
@@ -113,8 +119,8 @@ extern "C" void PATHI_releaseevent(int index, int reason)
     Sequence_801B84E4 *event = bank->mUnknownC0[index];
     int size = event->mUnknownF * 12 + 20;
     SequenceHeader_801B6210 saved = *(SequenceHeader_801B6210 *)event;
-    unsigned char *free = bank->mUnknown100;
-    unsigned char *end = bank->mUnknown100 + sizeof(bank->mUnknown100);
+    unsigned char *free = _PATHI_eventpoolbytes(bank);
+    unsigned char *end = free + Bank_801B3480::kEventPoolBytes;
     int pooled = (unsigned char *)event >= free && (unsigned char *)event < end;
     if (pooled) {
         memcpy(event, (unsigned char *)event + size, end - (unsigned char *)event);
@@ -172,7 +178,10 @@ extern "C" int PATHI_serviceevent(int index)
     if (p->mUnknown8 > lbl_803EBB3C)
         return 0;
     unsigned int i = p->mUnknown10;
-    Event_801B845C *entry = &p->mUnknown14[i];
+    // The packed actions immediately follow the sequence header.
+    // FAKEMATCH: Integer address addition reproduces ProDG's indexed add operand order.
+    Event_801B845C *entry = reinterpret_cast<Event_801B845C *>(
+        i * sizeof(Event_801B845C) + reinterpret_cast<unsigned long long>(p->mUnknown14));
     for (; i < p->mUnknownF; ++entry, ++i) {
         if ((entry->mUnknown4 & 0x10000) || fn_801B7880(p, entry)) {
             ++count;

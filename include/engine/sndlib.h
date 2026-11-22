@@ -15,6 +15,8 @@
 #include "engine/sndvoice.h"
 
 class CMpegBase {
+    static const unsigned short sSampleRateTable[9];
+
 public:
     unsigned int m0;
     unsigned int m4;
@@ -271,8 +273,6 @@ extern int MPEGuse_MMX;
 }
 
 extern "C" {
-extern const unsigned short lbl_802B7A98[];
-extern const short lbl_802B7AF0[2][3][16];
 extern unsigned short SNDDRV_dolbypl2balances[256][4];
 extern State_803A8D60 lbl_803A8D60;
 extern int sndmixwritelog;

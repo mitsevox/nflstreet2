@@ -8,6 +8,7 @@
 #include "engine/IAllocator.h"
 #include "engine/csis.h"
 #include "engine/sevent.h"
+#include "engine/sndstrm.h"
 #include "engine/ssys.h"
 
 struct SndSeqInfo_t {
@@ -134,7 +135,6 @@ int fn_8026E280(SndPatchOpts_t *pOpts, int a, int b, void *pBuffer, int size);
 void fn_8026E2A8(int handle);
 int fn_8026E364(int handle, int a, void *b);
 int fn_8026E388(int handle);
-void fn_8026E8FC(int handle, int a, int b);
 int SNDSTRM_fxlevel(int handle, int a, int b);
 int SNDSTRM_getprogvol(int handle);
 int SNDSTRM_setazimuth(int stream, int speaker, float azimuth);
@@ -693,7 +693,7 @@ void SndStreamAutoVol(SndStream_t *pStream, int a, int b)
 {
     if (SND_READY()) {
         SND_LOCK();
-        fn_8026E8FC(pStream->mHandle, a, b);
+        SNDSTRM_autovol(pStream->mHandle, a, b);
         SND_UNLOCK();
     }
 }

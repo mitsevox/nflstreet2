@@ -3,7 +3,38 @@
    keeps the read position for the layer decoders derived from it. */
 
 #include "engine/sndlib.h"
+#include "engine/sndutil.h"
 
+namespace Snd {
+
+static inline bool DetectMMX()
+{
+    return false;
+}
+
+// FAKEMATCH: Reserve the dynamically initialized flag in the target's initialized data section.
+int MPEGuse_MMX __attribute__((section(".data"))) = DetectMMX();
+
+static const short tabsel_123[2][3][16] = {
+    {
+        {0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0},
+        {0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 0},
+        {0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0},
+    },
+    {
+        {0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256, 0},
+        {0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0},
+        {0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0},
+    },
+};
+
+}
+
+const unsigned short CMpegBase::sSampleRateTable[9] = {
+    44100, 48000, 32000,
+    22050, 24000, 16000,
+    11025, 12000, 8000,
+};
 
 void CMpegBase::Seek(unsigned char *data)
 {
@@ -24,14 +55,14 @@ CMpegBase::~CMpegBase()
 void CMpegBase::OpenSynth()
 {
     if (Snd::MPEGuse_MMX == 0) {
-        m4C = lbl_803B53E4(m44 * 0x900);
+        m4C = Snd::CODANew(m44 * 0x900);
         memset(m4C, 0, m44 * 0x900);
     }
 }
 
 void CMpegBase::CloseSynth()
 {
-    lbl_803B53E8(m4C);
+    Snd::CODADelete(m4C);
 }
 
 int CMpegBase::ProcessHeader(unsigned int header)
@@ -81,7 +112,7 @@ int CMpegBase::ProcessHeader(unsigned int header)
         channels = 1;
     }
     m44 = channels;
-    rate = lbl_802B7A98[m3D];
+    rate = sSampleRateTable[m3D];
     m4 = rate;
     m0 = rate;
     if (m3C == 0) {
@@ -89,7 +120,7 @@ int CMpegBase::ProcessHeader(unsigned int header)
     }
     lsf = m37;
     layer = m14;
-    mC = lbl_802B7AF0[lsf][layer - 1][m3C];
+    mC = Snd::tabsel_123[lsf][layer - 1][m3C];
     if (layer == 1) {
         m10 = (mC * 12000 / (int)rate + m3E) * 4 - 4;
     } else {
@@ -113,7 +144,7 @@ int CMpegBase::GetHeader()
     if (p == 0) {
         header = m48;
     } else {
-        header = (p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3];
+        header = (static_cast<unsigned int>(p[0]) << 24) | (p[1] << 16) | (p[2] << 8) | p[3];
     }
     if (ProcessHeader(header) == -1) {
         return -1;

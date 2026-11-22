@@ -96,6 +96,7 @@ extern float lbl_80300028;
 extern const signed char SNDSTRMIspeakerchannel[6][6];
 
 int SNDSTRM_setvol(int stream, int speaker, float vol);
+int SNDSTRM_autovol(int stream, int time, int vol);
 
 SndStreamChannel_t *fn_8026D610(int index);
 int fn_8026DE00(void *opts, int a, int b, void *data, int c, int d, int tap);
