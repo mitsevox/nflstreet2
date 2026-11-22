@@ -21003,13 +21003,13 @@
     {
       "source": "src/engine/cu_8025FBD4.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8025FBD4-0x80260B1C (src/engine/cu_8025FBD4.c), its compiler, source-form, type, function and name rows and the exact .sdata2 data row 0x803EDDC8-0x803EDDD8. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8025FBD4-0x8025FDE8 (src/engine/cu_8025FBD4.c), its compiler, source-form, type, function and name rows and the exact .sdata2 data row 0x803EDDC8-0x803EDDD8. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8025FBD4",
-          "end": "0x80260B1C"
+          "end": "0x8025FDE8"
         },
         {
           "section": ".sdata2",
