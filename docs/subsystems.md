@@ -12,6 +12,8 @@ The executable by area: what each address range does in the game, which file nam
 
 ## Game code (`src/game/`)
 
+`Statcoll.cpp` handles the game-statistics stream callbacks.
+
 NFL Street 2's own code: the front end, game modes, gameplay, replay and the rendering of players and the field. Built with SN ProDG 3.9.3, mostly C++, organised as Tiburon `Module` subclasses (each has `Init`, `Shutdown`, `GetDependencies`, `GetLinks` and `GetName`).
 
 | Range | What it does in the game | Known files | Rungs 0/1/2/3/4 | Unlinked | Held |
@@ -43,6 +45,8 @@ NFL Street 2's own code: the front end, game modes, gameplay, replay and the ren
 
 ## Libraries and EA engine (`src/engine/`, `src/Common/`)
 
+`crc32.c` compares memory and computes checksums used by the game state checks.
+
 Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2005's file list matches much of it by size and order. Built with SN ProDG.
 
 | Range | What it does in the game | Known files | Rungs 0/1/2/3/4 | Unlinked | Held |
@@ -62,6 +66,8 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 | 0x802176E8-0x8023873C | UIStudio menu engine; the UI graphics libraries (UIGLibraries.c, the reference-counted table of texture, font and movie items the menus draw from, 0x8021DE9C-0x8021EFD8; texture nodes, fonts, display lists and movies in UIGTextureNode.c, LLUIGTextureNode.c, UIGFont.c, uigdisplist.c, UIGFmv.c and LLUIGFmv.c, 0x80221314-0x80221BF0 and 0x80225D90-0x80226F9C); the vector library (module flag and vector angle in vector.c, 2D/3D vector math in llvector.c, 0x80226F9C-0x80227F14); viewports, the screen rectangles each 3D view is drawn into, with their GX set-up and deferred deletion of render objects (0x80227F14-0x80228E44); the VRAM block table; the game database: loaders for its T3DB databases (the 'TATS' database from template.dat, the team database file, the 'EVAS' and per-user databases, tables loaded from a named file), the shared random stream and allocator of the database code, the table query modules the database manager starts and stops, a cache of open table handles and the player statistics queries; then model, level-of-detail and render wrappers over the TM renderer, ending with the scene lights, distance fog and locked-cache switch (lllight.c, llfog.c, llcache.c, 0x80235DD8-0x80236F78) and the state registry the game's synchronised random streams, clock and event monitors register in (syncrand.c, synctime.c, syncstate.c, crc32.c, evmon.c, 0x80236F78-0x8023873C) | `src/Common/UIStudio/UIStudio.c`, `UISEvent.c`, `cu_8021A438`, `UIGLibraries.c`, `cu_8021EFD8`, `UIGTextureNode.c`, `LLUIGTextureNode.c`, `cu_80221BF0`, `cu_80222EC4`, `cu_80223B00`, `cu_80223FF4`, `lluigvertex.c`, `UIGFont.c`, `uigdisplist.c`, `UIGFmv.c`, `LLUIGFmv.c`, `vector.c`, `llvector.c` (26-function exact prefix linked; tail comparisons remain), `viewport.c`, `llviewpt.c`, `vram.c`, `dbtats.c`, `dblock.c`, `dbteams.c`, `dbocmt.c`, `dboptions.c`, `dbniom.c`, `cu_802297D8`, `dbutil.c`, `cu_8022C9A8`, `dbevas.c`, `dbtatscopy.c`, `dbfile.c`, `dbuser.c`, `dbcache.c`, `cu_802311C8`, `dbmanager.c`, `cu_802336C4`, `modelobj.c` (linked with 1 holdout), `lllight.c`, `llfog.c`, `llcache.c`, `syncrand.c`, `synctime.c`, `syncstate.c`, `crc32.c`, `evmon.c`| 0/7/3/6/2 | 94 KiB | no |
 
 ## Nintendo SDK and runtimes (`src/dolphin/`, `src/engine/`)
+
+`spktplay.c` controls packet-based sample playback in the EA sound library.
 
 - `src/dolphin/dvd/dvdFatal.c` (0x80242018-0x80242048) dispatches the DVD driver's fatal-message callback. The 48-byte wrapper, retained messages and pointers, and callback slot are linked. The FIFA Soccer 2005 and UEFA Champions League 2004–05 link maps place the wrapper between the same disk-ID and boot-file helpers.
 - `src/engine/ef_pow.c` (0x80260428-0x80260B1C) provides single-precision powers for game math and decimal attribute parsing. The 1,780-byte routine and its two native constant pools are linked. The matching-size NASCAR 2005 function corroborates the provisional historical file boundaries.
