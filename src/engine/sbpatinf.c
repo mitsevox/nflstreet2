@@ -12,7 +12,7 @@ int SNDBANK_patchinfo(int bank, int patch, SndSampleFormat_t *format, SndSampleA
         return -8;
     }
     SNDSYS_entercritical();
-    fn_8026C3F4(lbl_803A6C24.m1D0[bank].m0, p, format, attr, desc, 0);
+    SNDI_patchtohdr(lbl_803A6C24.m1D0[bank].m0, (unsigned char *)p, format, attr, (SndSampleDesc_t *)desc, 0);
     for (i = 0; i < format->mChannels; i++) {
         if (attr->m18[i] != 0) {
             SNDMEMI_free(attr->m18[i]);

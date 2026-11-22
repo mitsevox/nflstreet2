@@ -26,8 +26,13 @@ typedef struct SndSampleAttr_t {
     short mC[6];
     void *m18[6];
     int m30[6];
-    int m48[4];
-    int m58[4];
+    unsigned char *mDataBlocks[4];
+    unsigned int mDataBlockSizes[4];
 } SndSampleAttr_t;
+
+typedef struct SndSampleDesc_t {
+    unsigned int mFrames;
+    unsigned int mChannelData[6];
+} SndSampleDesc_t;
 
 #endif

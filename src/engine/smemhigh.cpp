@@ -10,7 +10,7 @@ int SNDMEM_gethighwater(void)
     SndMemPool_t *p;
 
     p = lbl_803A6C24.m1D4;
-    return (p->m8 - p->m10) * 100 / p->m8;
+    return (p->mHeapSize - p->mLowWaterFreeBytes) * 100 / p->mHeapSize;
 }
 
 }
