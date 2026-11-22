@@ -827,7 +827,7 @@ static unsigned int _ResLockRes(ResFile_t *pRes, int index)
 {
     if (!(pRes->pFlags[index] & 4)) {
         if (!(pRes->pFlags[index] & 8)) {
-            pRes->pAddrs[index] = pRes->pAddrs[index];
+            pRes->pAddrs[index] = pRes->pAddrs[index]; /* FAKEMATCH: no-op store keeps the target's pFlags reload (lwz r10,0x78(r31)) in this arm */
             pRes->pFlags[index] |= 4;
         } else {
             pRes->mNumLocked++;
@@ -843,7 +843,7 @@ static unsigned int _ResUnlockRes(ResFile_t *pRes, int index)
     if (pRes->pFlags[index] & 4) {
         if (pRes->pFlags[index] & 1) {
             if (!(pRes->pFlags[index] & 8)) {
-                pRes->pAddrs[index] = pRes->pAddrs[index];
+                pRes->pAddrs[index] = pRes->pAddrs[index]; /* FAKEMATCH: no-op store keeps the target's pFlags reload (lwz r11,0x78(r3)) and its two tails */
                 pRes->pFlags[index] &= ~4;
             } else {
                 pRes->mNumLocked--;

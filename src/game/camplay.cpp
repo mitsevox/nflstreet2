@@ -302,7 +302,7 @@ void CamPlayProcess(GameCamera_t *camera)
     apply:
         if (gameMode != 2) CamPlayPanWithBall(&point,&angles,&velocity,camera->mUnknown9C,camera->mUnknownA0);
         if (fn_801486A0() == 0) {
-            CamPlayAngles_t unused;
+            CamPlayAngles_t unused; // FAKEMATCH: unused local (compiled-out debug filler) gives the target's frame slots
             Vec3Add(&point,&point,&lbl_802DC718[camera->mUnknown9C].mUnknown24);
             ANGLES_FROM_DEGREES(offset, lbl_802DC718[camera->mUnknown9C].mUnknown30);
             Orient3Add(&angles,&angles,&offset);
