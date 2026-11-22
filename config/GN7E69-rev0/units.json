@@ -319,6 +319,16 @@
       ],
       "evidence": "evidence.tsv compiler row 0x801CE1F8-0x801CEC90 (engine_c_nogcse), the one file src/engine/llglib.c: engine_c's -O2 plus -fno-gcse (per-file profile, owner baseline of 2026-11-14: per-file flags allowed, no per-function options). In GlibLLInit 0x801CE2F4 the target forms the frame-buffer table address pMode->mpXfb (r31+0x54) separately in each block that indexes it (addi r9,r31,0x54 at 0x801CE508 for VISetNextFrameBuffer; addi r30,r31,0x54 at 0x801CE67C for the two GXCopyDisp calls); with global CSE the compiler hoists one copy to the top of the function and keeps it in a second saved register (stmw r27, 0x40-byte frame). The flag is not given to engine_c because it changes src/engine/list.c (DSAddListNode 0x801C6AA4), src/engine/Font.c (fn_801CD63C) and src/engine/llsystem.c (fn_801F8248, fn_801F8574)."
     },
+    "engine_c_nobuiltin": {
+      "flags": [
+        "-O2",
+        "-fno-builtin"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler row 0x80260C14-0x80260E24: engine_c with builtins disabled for src/engine/sf_atan.c. The target calls the linked fabsf at 0x80260CD0 and retains the sign and magnitude across that call."
+    },
     "engine_c_fastmath_nobuiltin": {
       "flags": [
         "-O2",
@@ -383,10 +393,6 @@
     "__12FlowManagerC": {
       "address": "0x801CBC50",
       "evidence": "evidence.tsv external row for 0x801CBC50 (__12FlowManagerC); descriptive name."
-    },
-    "cosf": {
-      "address": "0x80260EE8",
-      "evidence": "evidence.tsv GXLight external cosf: target branch at 0x8024F6B0 and related SDK source call/prototype."
     },
     "sprintf": {
       "address": "0x801C2E18",
@@ -1259,10 +1265,6 @@
     "spchlibauthor": {
       "address": "0x802F4794",
       "evidence": "evidence.tsv data/name rows for 0x802F4794 (target extent, related name); speech-library storage, original-owned."
-    },
-    "GBAFanServiceLink": {
-      "address": "0x802857D8",
-      "evidence": "evidence.tsv function/name rows for 0x802857D8 (target extent, related name); src/engine/gbafan.c is comparison-only, so src/engine/PJoyDrvr.c calls the original bytes."
     },
     "PerJoyDriverPollPADs": {
       "address": "0x801E26FC",
@@ -17138,6 +17140,88 @@
       ]
     },
     {
+      "source": "src/engine/sf_cos.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional sf_cos.c unit row, exact cosf function and both scalar data rows, kernel and reducer ABI, layout, matching profile and source-form evidence.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260EE8",
+          "end": "0x80260FC4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC45C",
+          "end": "0x803EC460"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDF3C",
+          "end": "0x803EDF40"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sf_ceil.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional whole-file row 0x80260E24-0x80260EE8, exact function and small-data placements, and engine_c compiler row at 0x80260E24. The placement includes both four-byte probe operands at 0x803EC454-0x803EC45C.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260E24",
+          "end": "0x80260EE8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC454",
+          "end": "0x803EC45C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/e_sqrt.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8025FBD4-0x8025FDE8, the sqrt function/name/compiler/source-form/type/field rows, and data/name rows for one and tiny at 0x803EDDC8-0x803EDDD8.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025FBD4",
+          "end": "0x8025FDE8"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDDC8",
+          "end": "0x803EDDD8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/ef_sqrt.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80260B1C-0x80260C14, exact sqrtf function and 0x803EDEDC-0x803EDEE4 .sdata2, plus name, compiler, source-form and layout rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260B1C",
+          "end": "0x80260C14"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDEDC",
+          "end": "0x803EDEE4"
+        }
+      ]
+    },
+    {
       "source": "src/engine/fabsf.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional whole-file row 0x80260FC4-0x80260FE8, exact function extent, inferred name/ABI/type fields and unchanged compiler profile; no static data. Remaining survey bytes stay original.",
@@ -17147,6 +17231,50 @@
           "placement": ".text",
           "start": "0x80260FC4",
           "end": "0x80260FE8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sf_atan.c",
+      "profile": "engine_c_nobuiltin",
+      "evidence": "evidence.tsv provisional unit row at 0x80260C14, exact function and constant extents, ABI, named compiler profile and source form.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260C14",
+          "end": "0x80260E24"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC440",
+          "end": "0x803EC454"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDEE4",
+          "end": "0x803EDF38"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sf_floor.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80260FE8-0x802610B0, exact function and .sdata extents, names, word-access type, source and compiler.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260FE8",
+          "end": "0x802610B0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC460",
+          "end": "0x803EC468"
         }
       ]
     },
@@ -17893,6 +18021,25 @@
           "placement": ".bss",
           "start": "0x80362A14",
           "end": "0x80362A20"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sf_tan.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional sf_tan.c unit row, exact tanf function and _Tan_fZero data rows, callee ABI, source-form, type and field rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026118C",
+          "end": "0x8026120C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC46C",
+          "end": "0x803EC470"
         }
       ]
     },
@@ -19668,6 +19815,25 @@
           "placement": ".text",
           "start": "0x8023E818",
           "end": "0x8023E920"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sf_sin.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional sf_sin.c unit row, exact sinf function, four-byte positive zero operand, and type, field, external and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802610B0",
+          "end": "0x8026118C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC468",
+          "end": "0x803EC46C"
         }
       ]
     },
@@ -21692,6 +21858,25 @@
       ]
     },
     {
+      "source": "src/engine/dbsavethread.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80285A24-0x80285A90, the compiler, function, name and layout rows, and the local OSThread data row at 0x803BA580.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80285A24",
+          "end": "0x80285A90"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803BA580",
+          "end": "0x803BA898"
+        }
+      ]
+    },
+    {
       "source": "src/engine/animfile.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BAD98-0x801BC65C (src/engine/animfile.c), its compiler, function, name, data, type and source-form rows; all 35 functions exact (two through labeled fake-match forms), promoted from comparison-only, with the file's .sdata 0x803EBB88-0x803EBB98 (_AnimFile_ResFile, _AnimFile_RelocateBigFileFunc, _AnimFile_FreeFunc, _AnimFile_bResSync) and its .sbss 0x803ED5F0-0x803ED610 (the eight buffer-table statics).",
@@ -23320,6 +23505,31 @@
           "symbol": "_state",
           "start": "0x803E990C",
           "end": "0x803EA28C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/gbafan.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x802857D8-0x80285808 (src/engine/gbafan.c), the function and name rows, the compiler row and the data/name rows for the .sdata state and .sbss condition. Promoted with both file statics.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802857D8",
+          "end": "0x80285808"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC590",
+          "end": "0x803EC594"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED4BC",
+          "end": "0x803ED4C4"
         }
       ]
     },

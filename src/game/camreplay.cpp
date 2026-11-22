@@ -4,6 +4,9 @@
    records: each frame it places the camera by the record's view mode,
    aims it at the ball, a tracked player or a script point, and eases its
    angles and field of view; at the end of a record it moves to the next. */
+
+#include <math.h>
+
 #include "game/GameOptions.h"
 #include <string.h>
 #include "game/Vec3Magnitude.h"
@@ -104,7 +107,6 @@ void Vec3RotateXYZ(float *pOut, float *pIn, int a0, int a1, int a2);
 void Vec3RotateZYX(float *pOut, float *pIn, int a0, int a1, int a2);
 void Vec3Add(float *pOut, float *pA, float *pB);
 void Vec3Lerp(float *pOut, float *pA, float *pB, float t);
-float fn_80260B1C(float x);
 
 void CamReplayInit(CamReplayCamera_t *pCamera);
 void CamReplayUninit(CamReplayCamera_t *pCamera);
@@ -578,8 +580,8 @@ extern "C" void CamReplayOrbitPos(Record_8002E7C0 *pRecord, float *pOrigin, floa
     }
     yaw = (int)(t * yawTo + (1.0f - t) * yawFrom);
 
-    pitchFrom = fn_801CFE40(from[2], fn_80260B1C(from[0] * from[0] + from[1] * from[1])) & 0xffffff;
-    pitchTo = fn_801CFE40(to[2], fn_80260B1C(to[0] * to[0] + to[1] * to[1])) & 0xffffff;
+    pitchFrom = fn_801CFE40(from[2], sqrtf(from[0] * from[0] + from[1] * from[1])) & 0xffffff;
+    pitchTo = fn_801CFE40(to[2], sqrtf(to[0] * to[0] + to[1] * to[1])) & 0xffffff;
     pitch = (int)(t * pitchTo + (1.0f - t) * pitchFrom - pitchFrom);
 
     Vec3RotateXYZ(v, from, 0, 0, -yawFrom);

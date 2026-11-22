@@ -1,11 +1,12 @@
 /* Rigid-body physics stepping: the sleep controller that puts resting bodies to sleep and wakes
    them when they move, and the explicit Euler integrator over a system's state. */
 
+#include <math.h>
+
 #include "engine/rigidbody.h"
 #include "engine/TibNew.h"
 
 extern "C" {
-float fn_80260B1C(float x);
 float fn_801E8DBC(void *pEnd, void *pStart);
 }
 
@@ -93,7 +94,7 @@ void SleepController::UpdateSleepState(RigidBody *pBody, float dt)
             maxSpeed = mMaxSpeed;
             if (speedSq > maxSpeed * maxSpeed) {
                 target = maxSpeed * 0.95f;
-                float speed = fn_80260B1C(speedSq);
+                float speed = sqrtf(speedSq);
                 Vec3Scale(&vel, &pBody->mAngularMomentum, target / speed);
                 SetBodyAngularMomentum(pBody, &vel);
             }

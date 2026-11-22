@@ -33,8 +33,8 @@ typedef struct DbUserAsync_t {
 extern int TDbSave(int handle, int a, int b);
 extern void TDbLoadAsync(DbUserAsync_t *pReq, void (*pStart)(void *pJob), int a, int b);
 extern void TDbSaveAsync(DbUserAsync_t *pReq, void (*pStart)(void *pJob), int a, int b);
-extern void fn_80285A24(void *pJob);
-extern void fn_80285A8C(void);
+extern void DbSaveThreadStart(void *pJob);
+extern void DbSaveThreadOnComplete(void);
 
 signed char DbUserFindIndex(int key);
 int DbUserFindIdByDb(int key);
@@ -261,8 +261,8 @@ int DbUserLoad(DbUserSaveRequest_t *pRequest, void *pOps)
         _DbUser_LoadJob.mUnknown8 = pRequest->mUnknown0;
         _DbUser_LoadJob.mTarget = pRequest->mTarget;
         _DbUser_LoadJob.mpOps = pOps;
-        _DbUser_LoadJob.mpDone = fn_80285A8C;
-        TDbLoadAsync(&_DbUser_LoadJob, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
+        _DbUser_LoadJob.mpDone = DbSaveThreadOnComplete;
+        TDbLoadAsync(&_DbUser_LoadJob, DbSaveThreadStart, pRequest->mUnknown4, pRequest->mUnknown8);
     } else {
         result = DbUserPostLoad(TDbLoad(DbUserGetDb(DbUserGetCurrent()), pRequest->mTarget, 0, (int)pOps));
     }
@@ -279,8 +279,8 @@ int DbUserSave(DbUserSaveRequest_t *pRequest, void *pOps)
         _DbUser_SaveJob.mUnknown8 = pRequest->mUnknown0;
         _DbUser_SaveJob.mTarget = pRequest->mTarget;
         _DbUser_SaveJob.mpOps = pOps;
-        _DbUser_SaveJob.mpDone = fn_80285A8C;
-        TDbSaveAsync(&_DbUser_SaveJob, fn_80285A24, pRequest->mUnknown4, pRequest->mUnknown8);
+        _DbUser_SaveJob.mpDone = DbSaveThreadOnComplete;
+        TDbSaveAsync(&_DbUser_SaveJob, DbSaveThreadStart, pRequest->mUnknown4, pRequest->mUnknown8);
     } else {
         result = TDbSave(DbUserGetDb(DbUserGetCurrent()), pRequest->mTarget, (int)pOps);
     }

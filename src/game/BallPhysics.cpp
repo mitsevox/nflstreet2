@@ -75,7 +75,6 @@ void Vec2Scale(void *pOut, void *p, float scale);
 void Vec2ScaleAcc(void *pPoint, void *pVelocity, float scale);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 unsigned int SyncTimeGetGameTime(void);
-float fn_80260B1C(float x);
 void BallStateChange(Ball_t *pBall, int state, int arg);
 int BallStateGet(Ball_t *pBall, int *pArg);
 int fn_800A3444(void);
@@ -716,7 +715,8 @@ void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_800
 
     t *= 112495.65f;
     t = t < 0.0f ? 0.0f : t;
-    t = vz * 335.40372f + fn_80260B1C(t);
+    t = sqrtf(t);
+    t = vz * 335.40372f + t;
     if (t > 0.0f) {
         Vec2Scale(&pos, &pBall->mState.mUnknown70, 0.5f * t * t);
         Vec2ScaleAcc(&pos, &pBall->mState.mUnknown54, t);

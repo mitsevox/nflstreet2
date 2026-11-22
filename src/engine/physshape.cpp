@@ -10,7 +10,6 @@
 extern "C" {
 float Vec3Magnitude(void *pV);
 void Vec3Sub(void *pOut, void *pA, void *pB);
-float fn_80260B1C(float x);
 float fn_801CFB74(float x);
 float fn_801CFBF4(float x);
 void DispatchCollisionDebugLine(Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB, int red, int green,
@@ -857,7 +856,7 @@ float BoxShape::ClosestSurfacePoint(Vec3_801DE1E0 *pPoint, float (*pMatrix)[4],
     Vec3Add(&best, &best, &mCenter);
     MatLoad((float *)pMatrix);
     Vec3Mat34Mul(pOut, &best);
-    bestDist = fn_80260B1C(bestDist);
+    bestDist = sqrtf(bestDist);
     MatPop();
     return bestDist;
 }
@@ -881,7 +880,7 @@ static int _ShapeCollideSphereSphere(CollisionShape *pA, float (*pMatrixA)[4], C
     Vec3Sub(&offset, &centerB, &centerA);
     distSq = Vec3MagnitudeSqr(&offset);
     if (distSq < (pSphereA->mRadius + pSphereB->mRadius) * (pSphereA->mRadius + pSphereB->mRadius)) {
-        float dist = fn_80260B1C(distSq);
+        float dist = sqrtf(distSq);
 
         if (dist > 1e-8f) {
             if (pSphereA->mRadius <= pSphereB->mRadius) {
@@ -1193,7 +1192,7 @@ static int _ShapeCollideCapsuleCapsule(CollisionShape *pA, float (*pMatrixA)[4],
         if (distSq < (pCapsuleA->mRadius + pCapsuleB->mRadius)
                          * (pCapsuleA->mRadius + pCapsuleB->mRadius)) {
             if (paramA > 0.0f && paramA < 1.0f && paramB > 0.0f && paramB < 1.0f) {
-                float dist = fn_80260B1C(distSq);
+                float dist = sqrtf(distSq);
 
                 if (dist > 1e-8f) {
                     if (pCapsuleA->mRadius < pCapsuleB->mRadius) {

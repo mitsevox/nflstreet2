@@ -1,6 +1,8 @@
 /* Camera mode that plays camera moves stored as animation curves of a character or of a
    playback clip. */
 
+#include <math.h>
+
 #include "game/GameCamera.h"
 #include "game/cammain.h"
 #include "game/Class_80297B90.h"
@@ -36,7 +38,7 @@ void Vec3Scale(void *,void *,float);
 void Vec3Mat33Mul(void *,void *);
 void Vec2Rotate(void *,void *,int);
 void Vec3RotateZYX(void *,void *,int,int,int);
-int fn_801CFE40(float,float); float fn_80260B1C(float);
+int fn_801CFE40(float,float);
 void CamCurveOffsetPosition(float,float,float,Vector_80039F5C *,CamCurveState_t *,Actor_801C009C *);
 void CamCurveConvertAngles(CamCurveAngles_t *,CamCurveState_t *,Actor_801C009C *,int,int,int);
 CamCurveActorEntry_t *CamCurveGetActorEntry(GameCamera_t *);
@@ -149,7 +151,7 @@ extern "C" void CamCurveApplyActorCurves(GameCamera_t *camera, Actor_801C009C *a
     MatPushUnit(); MatRotZ(0x400000); Vec3Mat33Mul(&direction,&direction); MatPop();
     angles.mY=0;
     angles.mZ=fn_801CFE40(direction.mY,direction.mX);
-    float horizontal=fn_80260B1C(direction.mX*direction.mX+direction.mY*direction.mY);
+    float horizontal=sqrtf(direction.mX*direction.mX+direction.mY*direction.mY);
     angles.mX=fn_801CFE40(-direction.mZ,horizontal);
     Vec3RotateZYX(&up,&up,-angles.mZ,0,0); Vec3RotateZYX(&up,&up,0,0,-angles.mX);
     angles.mY=fn_801CFE40(up.mZ,up.mX)-0x400000;

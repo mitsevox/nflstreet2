@@ -2,6 +2,8 @@
  * rotation/translation/scale builders the game uses to place players, the ball,
  * cameras and effects, plus sixteen saved matrix slots. */
 
+#include <math.h>
+
 #include "engine/matrix.h"
 #include "engine/llmatrix.h"
 
@@ -10,7 +12,6 @@ static MatMatrix_t _LLMatrix_SlotArray[16];
 
 void PSMTXConcat(float *pA, float *pB, float *pDst);
 void QuatToMatrix(float *pMatrix, float *pQuat);
-float fn_80260B1C(float x);
 void fn_801CFC14(int angle, float *pSin, float *pCos);
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
@@ -405,7 +406,7 @@ void MatGetRotFromMatrixZYX(int *pAngles, float *pMatrix)
     if (!(t <= 1.0f)) {
         t = 1.0f;
     }
-    cy = fn_80260B1C(1.0f - t);
+    cy = sqrtf(1.0f - t);
     if (!(cy <= 1e-07f)) {
         inv = MathInverse(cy);
         sx = pMatrix[9] * inv;
@@ -437,7 +438,7 @@ void MatGetRotFromMatrixYZX(int *pAngles, float *pMatrix)
     if (!(t <= 1.0f)) {
         t = 1.0f;
     }
-    cz = fn_80260B1C(1.0f - t);
+    cz = sqrtf(1.0f - t);
     if (!(cz <= 1e-06f)) {
         inv = 1.0f / cz;
         sx = -pMatrix[6] * inv;
