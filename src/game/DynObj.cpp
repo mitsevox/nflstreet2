@@ -411,7 +411,7 @@ void BigObjAnimWritePose(AnimPose_t *pPose, BitStream_t *pStream, unsigned int c
     }
     bits = 0;
     for (i = 0; i < rest; i++) {
-        bits |= (unsigned long long)(pValue[i] >> 4) << (rest - (i + 1)) * 12;
+        bits |= (unsigned long long)(pValue[i] >> 4) << (rest - 1 - i) * 12;
     }
     fn_80191068(pStream, bits, rest * 12);
     ReplayWritePacked3(pStream, pPose->mUnknown8, 16, 512.0f);
@@ -1480,11 +1480,16 @@ void DynObjChildSpawn(BigObjDesc_t *pDesc, int handle, int first)
     p->mUnknown14.mX = pDesc->mUnknown132.mUnknown4;
     p->mUnknown14.mY = pDesc->mUnknown132.mUnknown8;
     p->mUnknown14.mZ = pDesc->mUnknown132.mUnknown12;
-    p->mUnknown30 = p->mUnknown14;
+    p->mUnknown30.mX = p->mUnknown14.mX;
+    p->mUnknown30.mY = p->mUnknown14.mY;
+    p->mUnknown30.mZ = p->mUnknown14.mZ;
     QuatFromEulerYZX(&p->mRotation3C, (int)(pDesc->mUnknown132.mUnknown20 * 46603.3789f),
                 (int)(pDesc->mUnknown132.mUnknown24 * 46603.3789f),
                 (int)(pDesc->mUnknown132.mUnknown16 * 46603.3789f));
-    p->mUnknown20 = p->mRotation3C;
+    p->mUnknown20.mX = p->mRotation3C.mX;
+    p->mUnknown20.mY = p->mRotation3C.mY;
+    p->mUnknown20.mZ = p->mRotation3C.mZ;
+    p->mUnknown20.mW = p->mRotation3C.mW;
     p->mpOwner50 = 0;
     p->mAngle4C = (int)((pDesc->mUnknown132.mUnknown24 - 90.0f) * 46603.3789f);
     p->mpOwner50 = BigObjFindByKey(pDesc->mUnknown176, first);
@@ -1561,9 +1566,12 @@ int ObjParseGetInt(int handle, const char *pKey) { return XmlGetAttrInt(lbl_803E
 float ObjParseGetFloat(int handle, const char *pKey) { return XmlGetAttrFloat(lbl_803EA4F8[handle].mpCursor, pKey, 0.0f); }
 int ObjParseGetMatrix(int handle, const char *pKey, float *pValues) {
     float values[9];
-    if (!XmlGetAttrFloats(lbl_803EA4F8[handle].mpCursor, pKey, values, 9)) return 0;
-    for (int i = 0; i < 9; i++) pValues[i + i / 3] = values[i];
-    return 1;
+    int i = 0;
+    if (XmlGetAttrFloats(lbl_803EA4F8[handle].mpCursor, pKey, values, 9)) {
+        for (; i < 9; i++) pValues[i + i / 3] = values[i];
+        return 1;
+    }
+    return 0;
 }
 unsigned char ObjParseGetFloats(int handle, const char *pKey, float *pValues, int count) {
     return XmlGetAttrFloats(lbl_803EA4F8[handle].mpCursor, pKey, pValues, count);
@@ -1625,7 +1633,10 @@ void DynObjLoadModel(void *pData, int handle, BigObj_t *pObject)
     p->mpRender12C = (Instance_8004DA0C *)fn_801D2B7C(196, 0, 0);
     memset(p->mpRender12C, 0, 196);
     Instance_8004DA0C *pInstance = p->mpRender12C;
-    if (index == -1) {
+    if (index != -1) {
+        pInstance->mpCache = lbl_8030869C[index];
+        pInstance->mpCache->mReferences++;
+    } else {
         lbl_8030869C[lbl_803EA4FC] = (Cache_8004DA0C *)fn_801D2B7C(320, 0, 0);
         memset(lbl_8030869C[lbl_803EA4FC], 0, 320);
         pInstance->mpCache = lbl_8030869C[lbl_803EA4FC++];
@@ -1636,9 +1647,6 @@ void DynObjLoadModel(void *pData, int handle, BigObj_t *pObject)
         pInstance->mpCache->mHandle = ResLoad(pData, pInstance->mpCache->mId, 1);
         ModelObjRelocateModelRes(pInstance->mpCache->mHandle);
         fn_80234DCC(pInstance->mpCache->mHandle, pInstance->mpCache->mUnknown260, "Objects", 3);
-    } else {
-        pInstance->mpCache = lbl_8030869C[index];
-        pInstance->mpCache->mReferences++;
     }
     Object_80235588 *pRender = &pInstance->mRender;
     fn_80235588(pRender, 6);
@@ -1871,27 +1879,30 @@ void DynObjLoadSkeleton(void *pData, int handle, BigObj_t *pObject)
 {
     DynObj *p = (DynObj *)pObject;
     char name[256];
-    if (!ObjParseFindChild(handle, "skeleton") || !ObjParseGetString(handle, "tideRef", name, 256)) {
-        p->mpSkeleton130 = 0;
-    } else {
+    Cache_8004E16C *pCache;
+    int ok = ObjParseFindChild(handle, "skeleton");
+    if (ok) ok = ObjParseGetString(handle, "tideRef", name, 256);
+    if (ok) {
         int index = DynObjFindSkeleton(name);
-        if (index == -1) {
+        if (index != -1) {
+            pCache = lbl_802D4974[index];
+            pCache->mReferences++;
+            p->mpSkeleton130 = pCache;
+        } else {
             lbl_802D4974[lbl_803EA4FE] = (Cache_8004E16C *)fn_801D2B7C(272, 0, 0);
             memset(lbl_802D4974[lbl_803EA4FE], 0, 272);
-            Cache_8004E16C *pCache = lbl_802D4974[lbl_803EA4FE++];
+            pCache = lbl_802D4974[lbl_803EA4FE++];
             p->mpSkeleton130 = pCache;
             strcpy(pCache->mName, name);
             pCache->mpArchive = pData;
-            pCache->mReferences = 1;
             pCache->mId = ResFindIndexByName((int)pData, name);
+            pCache->mReferences = 1;
             pCache->mHandle = ResLoad(pData, pCache->mId, 1);
             DebugPrintf("Loading Object Skeleton\n");
             CharRelocateSkeleton(pCache->mHandle);
-        } else {
-            Cache_8004E16C *pCache = lbl_802D4974[index];
-            pCache->mReferences++;
-            p->mpSkeleton130 = pCache;
         }
+    } else {
+        p->mpSkeleton130 = (Cache_8004E16C *)ok; // FAKEMATCH: ok is 0 here; storing it keeps the target's stw r3 of the failed call's result
     }
 }
 void DynObjFreeSkeleton(BigObj_t *pObject)
@@ -2169,8 +2180,7 @@ void PhysAddSphere(int handle, ShapeCollection *pSet, BigObjInst *pObject,
 void PhysSetShapeNames(Metadata_8004ED44 *p, char (*pNames)[32], unsigned int count)
 {
     p->mCount = count;
-    if (!count) p->mNames = 0;
-    else {
+    if (count) {
         unsigned char map[20];
         char *unique[20];
         unsigned char names = 1;
@@ -2198,6 +2208,8 @@ void PhysSetShapeNames(Metadata_8004ED44 *p, char (*pNames)[32], unsigned int co
             pText += strlen(unique[i]) + 1;
         }
         for (i = 0; i < count; i++) p->mNames[i] = unique[map[i]];
+    } else {
+        p->mNames = 0;
     }
 }
 void PhysFreeShapeNames(Metadata_8004ED44 *p)
@@ -2519,8 +2531,7 @@ void PhysUpdateBallRest(void)
     if (lbl_803EA530) {
         Ball_t *pBall = BallGetCurrent();
         if (fn_800AD9B4() == 3 && fn_80178508(&pBall->mState.mPos, 0, 1) > 2) {
-            unsigned int previous = lbl_803EA530++;
-            if (!((float)previous <= gFrameTimeScale * 45.0f)) {
+            if (!((float)lbl_803EA530++ <= gFrameTimeScale * 45.0f)) {
                 lbl_803EA530 = 0;
                 fn_80178370();
             }
@@ -2606,14 +2617,16 @@ void PhysUpdateObjects(void)
         if (!pBody) continue;
         Metadata_8004ED44 *pMetadata = ((Metadata_8004ED44 *)pBody->mpOwner);
         if (pMetadata->mKind == 3) {
-            lbl_80308B0C[i]->mX = pBody->mPosition.x;
-            lbl_80308B0C[i]->mY = pBody->mPosition.y;
-            lbl_80308B0C[i]->mZ = pBody->mPosition.z;
+            Vec3_801DE1E0 *pPos = &pBody->mPosition;
+            lbl_80308B0C[i]->mX = pPos->x;
+            lbl_80308B0C[i]->mY = pPos->y;
+            lbl_80308B0C[i]->mZ = pPos->z;
             GetBodyOrientation(pBody, (Quat_801EB488 *)((char *)lbl_80308B0C[i] + 88));
         } else if (BigObjGetItemSkeleton(pMetadata->mpObject)) {
             int angles[3];
-            Quat_801EB488 rotation, oldRotation;
+            Quat_801EB488 rotation;
             Vector_80039F5C position;
+            Quat_801EB488 oldRotation;
             DynObjGetRootAngles(pMetadata->mpObject, angles);
             angles[2] = (*(int *)((char *)lbl_80308B0C[i] + 24) + 0x400000) & 0xFFFFFF;
             QuatFromEuler(&rotation, angles[2], angles[1], angles[0]);
@@ -2816,29 +2829,35 @@ void PhysDampAngular(BigObj_t *pOwner, float value)
 }
 void PhysPlayerHitObject(Object_80039F5C *pPlayer)
 {
-    Vector_80039F5C position = pPlayer->mMotion.mPos;
+    Vector_80039F5C position;
     int ownerIndex = 142;
     int nearestIndex = 142;
     unsigned int shapeIndex = 0;
     float nearest = 3.4028234663852886e+38f;
+    position.mX = pPlayer->mMotion.mPos.mX;
+    position.mY = pPlayer->mMotion.mPos.mY;
+    position.mZ = pPlayer->mMotion.mPos.mZ;
     if (fn_801784C4()) { position.mX = -position.mX; position.mY = -position.mY; }
     Vector_80039F5C point;
     for (unsigned int i = 0; i < (unsigned int)lbl_803EA524; i++) {
-        Metadata_8004ED44 *pMetadata = &lbl_80308F64[i];
-        if (pMetadata->mKind == 4 || pMetadata->mKind == 2) {
-            RigidBody *pBody = lbl_80308D0C[(short)pMetadata->mUnknown20];
+        if (lbl_80308F64[i].mKind == 4 || lbl_80308F64[i].mKind == 2) {
+            RigidBody *pBody = lbl_80308D0C[(short)lbl_80308F64[i].mUnknown20];
             unsigned int count = pBody->mpShapes->mCount;
             for (unsigned int j = 0; j < count; j++) {
                 if (!(nearest <= 0.75f)) {
                     CollisionShape *pShape = pBody->mpShapes->GetShape(j);
                     Vector_80039F5C delta, normal, direction;
-                    if (pShape->mType == 2) {
+                    switch (pShape->mType) {
+                    case 2:
                         ((BoxShape *)pShape)->ClosestSurfacePoint((Vec3_801DE1E0 *)&position, pBody->mTransform, (Vec3_801DE1E0 *)&delta, (Vec3_801DE1E0 *)&point);
-                    } else if (pShape->mType == 1) {
+                        break;
+                    case 1: {
                         ((CapsuleShape *)pShape)->GetWorldSegment(pBody->mTransform, (Vec3_801DE1E0 *)&delta, (Vec3_801DE1E0 *)&normal, (Vec3_801DE1E0 *)&direction);
                         Vec3Normalize(&direction, &direction);
                         unsigned char hit;
                         ((CapsuleShape *)pShape)->ClosestSurfacePoint((Vec3_801DE1E0 *)&position, (Vec3_801DE1E0 *)&delta, (Vec3_801DE1E0 *)&normal, (Vec3_801DE1E0 *)&direction, (Vec3_801DE1E0 *)&point, &hit);
+                        break;
+                    }
                     }
                     float distance = Vec3Distance(&position, &point);
                     if (!(distance >= nearest)) {
@@ -2848,15 +2867,14 @@ void PhysPlayerHitObject(Object_80039F5C *pPlayer)
                     }
                 }
             }
-        } else if (pMetadata->mKind == 1 && PlyrObjsFindPlayer(pMetadata->mpBlock) == pPlayer) {
+        } else if (lbl_80308F64[i].mKind == 1 && PlyrObjsFindPlayer(lbl_80308F64[i].mpBlock) == pPlayer) {
             ownerIndex = i;
         }
     }
     if (nearestIndex != 142 && ownerIndex != 142) {
-        Metadata_8004ED44 *pHit = &lbl_80308F64[nearestIndex];
         Vector_80039F5C zero;
         zero.mX = zero.mY = zero.mZ = 0.0f;
-        BigObjHit(pHit->mpObject, &point.mX, &zero.mX, pHit->mNames[shapeIndex],
+        BigObjHit(lbl_80308F64[nearestIndex].mpObject, &point.mX, &zero.mX, lbl_80308F64[nearestIndex].mNames[shapeIndex],
                    lbl_80308F64[ownerIndex].mType, (Hitter_8004C844 *)pPlayer);
     }
 }
@@ -2874,8 +2892,15 @@ void PhysPushObjects(Point_8017886C *pCenter, float radius)
     for (unsigned int i = 0; i < (unsigned int)lbl_803EA520; i++) {
         RigidBody *pBody = lbl_80308D0C[i];
         if (!pBody || ((Metadata_8004ED44 *)pBody->mpOwner)->mKind != 3) continue;
-        Vector_80039F5C from = *(Vector_80039F5C *)&pBody->mPosition;
-        Vector_80039F5C position = from;
+        Vec3_801DE1E0 *pPos = &pBody->mPosition;
+        Vector_80039F5C position;
+        Vector_80039F5C from;
+        from.mX = pPos->x;
+        from.mY = pPos->y;
+        from.mZ = pPos->z;
+        position.mX = from.mX;
+        position.mY = from.mY;
+        position.mZ = from.mZ;
         if (fn_801784C4()) { from.mX = -from.mX; from.mY = -from.mY; }
         Point_8017886C offset;
         Vec2Sub(&offset, &from, pCenter);

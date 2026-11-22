@@ -9915,7 +9915,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8004A2F4",
-          "end": "0x8004AA34"
+          "end": "0x8004ABF4"
         },
         {
           "section": ".text",
@@ -9963,30 +9963,12 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8004D498",
-          "end": "0x8004D65C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8004D6F4",
-          "end": "0x8004DA0C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8004DC08",
           "end": "0x8004DC88"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8004DF68",
-          "end": "0x8004E16C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8004E2B4",
           "end": "0x8004E4D0"
         },
         {
@@ -10016,31 +9998,19 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80050960",
+          "start": "0x800508A0",
           "end": "0x80050964"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80050CCC",
-          "end": "0x80050DA0"
+          "end": "0x80050F14"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8005122C",
-          "end": "0x800518E0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80051B3C",
-          "end": "0x80051B88"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80051D0C",
           "end": "0x80051E14"
         },
         {
@@ -10070,10 +10040,6 @@
       ],
       "holdouts": {
         "functions": [
-          {
-            "function": "BigObjAnimWritePose",
-            "evidence": "evidence.tsv source-form 0x8004AA34-0x8004ABF4"
-          },
           {
             "function": "BigObjAnimReplayBlend",
             "evidence": "evidence.tsv source-form 0x8004ABF4-0x8004AD3C"
@@ -10111,20 +10077,8 @@
             "evidence": "evidence.tsv source-form 0x8004D3A8-0x8004D498"
           },
           {
-            "function": "ObjParseGetMatrix",
-            "evidence": "evidence.tsv source-form 0x8004D65C-0x8004D6F4"
-          },
-          {
-            "function": "DynObjLoadModel",
-            "evidence": "evidence.tsv source-form 0x8004DA0C-0x8004DC08"
-          },
-          {
             "function": "DynObjParseRender",
             "evidence": "evidence.tsv source-form 0x8004DC88-0x8004DF68"
-          },
-          {
-            "function": "DynObjLoadSkeleton",
-            "evidence": "evidence.tsv source-form 0x8004E16C-0x8004E2B4"
           },
           {
             "function": "PhysPushPlayer",
@@ -10163,28 +10117,12 @@
             "evidence": "evidence.tsv source-form 0x800504EC-0x800508A0"
           },
           {
-            "function": "PhysUpdateBallRest",
-            "evidence": "evidence.tsv source-form 0x800508A0-0x80050960"
-          },
-          {
             "function": "PhysUpdatePlayers",
             "evidence": "evidence.tsv source-form 0x80050964-0x80050CCC"
           },
           {
-            "function": "PhysUpdateObjects",
-            "evidence": "evidence.tsv source-form 0x80050DA0-0x80050F14"
-          },
-          {
             "function": "PhysDebugDraw",
             "evidence": "evidence.tsv source-form 0x80050F14-0x8005122C"
-          },
-          {
-            "function": "PhysPlayerHitObject",
-            "evidence": "evidence.tsv source-form 0x800518E0-0x80051B3C"
-          },
-          {
-            "function": "PhysPushObjects",
-            "evidence": "evidence.tsv source-form 0x80051B88-0x80051D0C"
           }
         ],
         "evidence": "fd1a merge notes (swarm fd1 tracking table): src/game/DynObj.cpp holds out 29 functions."
