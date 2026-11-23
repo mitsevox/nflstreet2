@@ -287,15 +287,15 @@ int SFILTER_unpackpf(Node_80279D90 *node, int count, float *a, float *b, int fla
 
 /* Defined in another file of the library. */
 void SNDPKTPLAYI_freeframes(int index, int channel, int value);
-void SFILTER_unpackmtpfinit(Node_80279D90 *node, Params_80275F80 *params);
-void SFILTER_unpackfinit(Node_80279D90 *node, Params_80275F80 *params);
-void SFILTER_unpacklfinit(Node_80279D90 *node, Params_80275F80 *params);
-void SFILTER_unpackmtfinit(Node_80279D90 *node, Params_80275F80 *params);
-void SFILTER_unpackmtlfinit(Node_80279D90 *node, Params_80275F80 *params);
-void SFILTER_unpackpfinit(Node_80279D90 *node, Params_80275F80 *params);
-void SFILTER_unpackxafinit(Node_80279D90 *node, Params_80275F80 *params);
-void SFILTER_unpackxalfinit(Node_80279D90 *node, Params_80275F80 *params);
-void SFILTER_unpackxapfinit(Node_80279D90 *node, Params_80275F80 *params);
+void SFILTER_unpackmtpfinit(Node_80279D90 *node, SndUnpackInitParams_t *params);
+void SFILTER_unpackfinit(Node_80279D90 *node, SndUnpackInitParams_t *params);
+void SFILTER_unpacklfinit(Node_80279D90 *node, SndUnpackInitParams_t *params);
+void SFILTER_unpackmtfinit(Node_80279D90 *node, SndUnpackInitParams_t *params);
+void SFILTER_unpackmtlfinit(Node_80279D90 *node, SndUnpackInitParams_t *params);
+void SFILTER_unpackpfinit(Node_80279D90 *node, SndUnpackInitParams_t *params);
+void SFILTER_unpackxafinit(Node_80279D90 *node, SndUnpackInitParams_t *params);
+void SFILTER_unpackxalfinit(Node_80279D90 *node, SndUnpackInitParams_t *params);
+void SFILTER_unpackxapfinit(Node_80279D90 *node, SndUnpackInitParams_t *params);
 
 }
 

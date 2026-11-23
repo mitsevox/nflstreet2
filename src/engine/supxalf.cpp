@@ -92,7 +92,7 @@ void SFILTER_unpackxalfrestore(Node_80279D90 *node)
     }
 }
 
-void SFILTER_unpackxalfinit(Node_80279D90 *node, Params_80275F80 *params)
+void SFILTER_unpackxalfinit(Node_80279D90 *node, SndUnpackInitParams_t *params)
 {
     Decoder_8027B7B0 *decoder;
 

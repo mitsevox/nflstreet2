@@ -13,10 +13,10 @@ extern "C" void PATH_volume(int flags, signed char volume)
     const char *header = "%s  %s";
 
     int acquired;
-    if (++lbl_803EBB24 == 1 && lbl_803EBB38)
+    if (++pflock == 1 && inited)
         acquired = 1;
     else {
-        --lbl_803EBB24;
+        --pflock;
         acquired = 0;
     }
     if (acquired) {
@@ -25,11 +25,11 @@ extern "C" void PATH_volume(int flags, signed char volume)
         if (volume < 0)
             volume = 0;
         if (flags == -1)
-            lbl_803EBB3A = volume;
+            volscale = volume;
         for (int i = 0; i < 4; ++i) {
             if (PATHI_switchproject(i, flags)) {
                 for (int j = 0; j < 24; ++j) {
-                    PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
+                    PathTrack_t *p = pfstate->mUnknown40[j];
                     // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0, as in pathcontrol.c
                     if (p && ((((unsigned int)flags >> j) ^ 1) & 1) == 0) {
                         p->mUnknown2 = volume;
@@ -39,33 +39,33 @@ extern "C" void PATH_volume(int flags, signed char volume)
                 }
             }
         }
-        lbl_803EBB28 = 0;
-        --lbl_803EBB24;
+        pfstate = 0;
+        --pflock;
     }
 }
 
 extern "C" void PATH_fade(int flags, int a, int b, int c)
 {
     int acquired;
-    if (++lbl_803EBB24 == 1 && lbl_803EBB38)
+    if (++pflock == 1 && inited)
         acquired = 1;
     else {
-        --lbl_803EBB24;
+        --pflock;
         acquired = 0;
     }
     if (acquired) {
         for (int i = 0; i < 4; ++i) {
             if (PATHI_switchproject(i, flags)) {
                 for (int j = 0; j < 24; ++j) {
-                    PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
+                    PathTrack_t *p = pfstate->mUnknown40[j];
                     // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0, as in pathcontrol.c
                     if (p && ((((unsigned int)flags >> j) ^ 1) & 1) == 0)
                         PATHI_fade(p, a, b, c);
                 }
             }
         }
-        lbl_803EBB28 = 0;
-        --lbl_803EBB24;
+        pfstate = 0;
+        --pflock;
     }
 }
 
@@ -78,7 +78,7 @@ extern "C" void fn_801B4824(PathTrack_t *p, int value)
 
 extern "C" void PATHI_fade(PathTrack_t *p, int a, int b, int c)
 {
-    p->mUnknown10 = lbl_803EBB3C;
+    p->mUnknown10 = gPathMilliseconds;
     p->mUnknown19 = c;
     p->mUnknown14 = b;
     p->mUnknown18 = (float)p->mUnknown100->GetVolume();
@@ -88,7 +88,7 @@ extern "C" void PATHI_fade(PathTrack_t *p, int a, int b, int c)
 
 extern "C" void fn_801B4960(PathTrack_t *p, int a, int b, int c)
 {
-    p->mUnknown1C = lbl_803EBB3C;
+    p->mUnknown1C = gPathMilliseconds;
     p->mUnknown20 = b;
     p->mUnknown25 = c;
     p->mUnknown24 = p->mUnknown100->GetFXSendLevel(0);
@@ -97,7 +97,7 @@ extern "C" void fn_801B4960(PathTrack_t *p, int a, int b, int c)
 
 extern "C" void fn_801B49C4(PathTrack_t *p, int a, int b, int c)
 {
-    p->mUnknown28 = lbl_803EBB3C;
+    p->mUnknown28 = gPathMilliseconds;
     p->mUnknown2C = b;
     p->mUnknown31 = c;
     p->mUnknown30 = p->mUnknown100->GetDryLevel();
@@ -112,7 +112,7 @@ extern "C" void PATHI_setfadevolume(PathTrack_t *p)
     curve.mTime = p->mUnknown14;
     curve.mShape = p->mUnknown19;
     curve.mRising = delta >= 0.0f;
-    float t = (float)(lbl_803EBB3C - p->mUnknown10) / (float)curve.mTime;
+    float t = (float)(gPathMilliseconds - p->mUnknown10) / (float)curve.mTime;
     if (!(t < 1.0f)) {
         p->mUnknown100->vfn_13((signed char)p->mUnknown3 * (signed char)p->mUnknown2 / 100);
         p->mUnknown10 = 0;
@@ -152,7 +152,7 @@ extern "C" void PATHI_setsfxfadevolume(PathTrack_t *p)
     curve.mTime = p->mUnknown20;
     curve.mShape = p->mUnknown25;
     curve.mRising = delta >= 0.0f;
-    float t = (float)(lbl_803EBB3C - p->mUnknown1C) / (float)curve.mTime;
+    float t = (float)(gPathMilliseconds - p->mUnknown1C) / (float)curve.mTime;
     if (!(t < 1.0f)) {
         p->mUnknown100->vfn_17(p->mUnknown8.bits.mUnknown1, p->mUnknown26);
         p->mUnknown24 = -1;
@@ -191,7 +191,7 @@ extern "C" void PATHI_setdrylevelfadevolume(PathTrack_t *p)
     curve.mTime = p->mUnknown2C;
     curve.mShape = p->mUnknown31;
     curve.mRising = delta >= 0.0f;
-    float t = (float)(lbl_803EBB3C - p->mUnknown28) / (float)curve.mTime;
+    float t = (float)(gPathMilliseconds - p->mUnknown28) / (float)curve.mTime;
     if (!(t < 1.0f)) {
         p->mUnknown100->vfn_15(p->mUnknown32);
         p->mUnknown30 = -1;

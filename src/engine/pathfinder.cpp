@@ -8,7 +8,6 @@
 #include "engine/Resource.h"
 #include "engine/sound.h"
 #include "engine/pathfinder.h"
-#include "engine/fn_801B3234.h"
 #include "engine/IAllocator.h"
 
 extern "C" {
@@ -65,6 +64,7 @@ void PATH_pause(int a, unsigned char b);
 int PATH_status(int id, PathfinderStatus_t *pInfo);
 void PATH_stop(int a);
 int PATH_event(int id, int a);
+void *PATHI_gettrackimp(int flags);
 void fn_8027D3AC(void);
 void fn_8027ECD8(void *p, int b);
 extern "C++" void PATH_vectortoreal5(void);
@@ -282,7 +282,7 @@ void PathfinderStop(int a)
 
 void PathfinderSetStreamValue(int a, int b)
 {
-    void *p = PATHI_findnodedata(a);
+    void *p = PATHI_gettrackimp(a);
 
     if (p) {
         fn_8027ECD8(p, b);

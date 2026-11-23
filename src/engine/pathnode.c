@@ -8,13 +8,13 @@ extern "C" int fn_801B6780(int index)
     // FAKEMATCH: unused string local; emits the unreferenced "%s  %s" that starts the target .rodata
     const char *header = "%s  %s";
 
-    if (index < 0 || index >= lbl_803EBB28->mUnknown18->mUnknown12)
+    if (index < 0 || index >= pfstate->mUnknown18->mUnknown12)
         return 0;
-    Record_801B6780 *p = (Record_801B6780 *)((unsigned char *)lbl_803EBB28->mUnknown18 + lbl_803EBB28->mUnknown1C[index] * 4);
+    Record_801B6780 *p = (Record_801B6780 *)((unsigned char *)pfstate->mUnknown18 + pfstate->mUnknown1C[index] * 4);
     int result = 0;
     int value = p->mUnknown0;
     if (value > 0)
-        result = lbl_803EBB28->mUnknown3C[(value - 1) * 2];
+        result = pfstate->mUnknown3C[(value - 1) * 2];
     return result;
 }
 
@@ -60,11 +60,11 @@ extern "C" int PATHI_choosesynchtime(int index, const FindNode_801B6A18 &find, c
     if (find.mUnknown8 < 0)
         return 1;
     Entry_801B63F0 *node;
-    if (index < 0 || index > lbl_803EBB28->mUnknown18->mUnknown12)
+    if (index < 0 || index > pfstate->mUnknown18->mUnknown12)
         node = 0;
     else
-        node = (Entry_801B63F0 *)((unsigned char *)lbl_803EBB28->mUnknown18 + lbl_803EBB28->mUnknown1C[index] * 4);
-    PathStreamRecord_t *record = (PathStreamRecord_t *)lbl_803EBB28->mUnknown3C + node->mUnknown0;
+        node = (Entry_801B63F0 *)((unsigned char *)pfstate->mUnknown18 + pfstate->mUnknown1C[index] * 4);
+    PathStreamRecord_t *record = (PathStreamRecord_t *)pfstate->mUnknown3C + node->mUnknown0;
     float length = (float)record[-1].mDuration;
     unsigned int free = node->mUnknownC >> 31;
     if (node->mUnknown4 & 0xF00)
@@ -92,7 +92,7 @@ extern "C" int PATHI_choosesynchtime(int index, const FindNode_801B6A18 &find, c
         break;
     }
     if (time)
-        time += lbl_803EBB3C;
+        time += gPathMilliseconds;
     return result;
 }
 
@@ -135,7 +135,7 @@ extern "C" int PATHI_nextnode(int index, int value, int advance)
     if (index < 0 || !(node = PATHI_getnode(index)))
         return -1;
     Record_801B6D20 *branches = (Record_801B6D20 *)((unsigned char *)node + 16);
-    PathTrack_t *track = lbl_803EBB28->mUnknown40[node->mBits0.mTrack];
+    PathTrack_t *track = pfstate->mUnknown40[node->mBits0.mTrack];
     if (track->mUnknown6 == index) {
         int loop = track->mUnknown8.bits.mLoop;
         if (node->mBits0.mLoop > 0 && advance) {
@@ -166,15 +166,15 @@ extern "C" int PATHI_enternode(int track, int index, int value, int advance)
     Entry_801B63F0 *node = PATHI_getnode(index);
     if (!node)
         return -1;
-    PathTrack_t *p = lbl_803EBB28->mUnknown40[node->mBits0.mTrack];
+    PathTrack_t *p = pfstate->mUnknown40[node->mBits0.mTrack];
     while (node->mUnknown0 <= 0) {
         if (advance) {
             if (node->mUnknown0 == 0) {
                 p->mUnknown34 = (unsigned int *)node;
                 if (node->mBits4.mKind == 1)
                     value = PATHI_random() & 127;
-                if (lbl_803EBB34)
-                    lbl_803EBB34(lbl_803EBB28->mUnknown14, index);
+                if (eventaction)
+                    eventaction(pfstate->mUnknown14, index);
             } else if (node->mUnknown0 == -1) {
                 if (node->mBits0.mLoop && p->mUnknown6 != index) {
                     p->mUnknown6 = index;
@@ -185,13 +185,13 @@ extern "C" int PATHI_enternode(int track, int index, int value, int advance)
             else if (node->mUnknown0 == -3) {
                 Entry_801B63F0 *event = PATHI_findevent(node->mUnknownC >> 8);
                 if (event)
-                    PATHI_addevent(lbl_803EBB28->mUnknown14 | 0xF0000000, PATHI_copyevent((Sequence_801B84E4 *)event));
+                    PATHI_addevent(pfstate->mUnknown14 | 0xF0000000, PATHI_copyevent((Sequence_801B84E4 *)event));
             }
         }
         index = PATHI_nextnode(index, value, advance);
         if (index < 0 || (index = (short)fn_801B7178(track, index)) < 0) {
-            if (lbl_803EBB34 && advance && track >= 0)
-                lbl_803EBB34(lbl_803EBB28->mUnknown14, index);
+            if (eventaction && advance && track >= 0)
+                eventaction(pfstate->mUnknown14, index);
             return -1;
         }
         node = PATHI_getnode(index);
@@ -207,14 +207,14 @@ extern "C" int fn_801B7178(int index, int value)
     if (index < 0)
         return value;
     Entry_801B63F0 *p = 0;
-    if (index <= lbl_803EBB28->mUnknown18->mUnknown12)
-        p = (Entry_801B63F0 *)((unsigned char *)lbl_803EBB28->mUnknown18 + lbl_803EBB28->mUnknown1C[index] * 4);
+    if (index <= pfstate->mUnknown18->mUnknown12)
+        p = (Entry_801B63F0 *)((unsigned char *)pfstate->mUnknown18 + pfstate->mUnknown1C[index] * 4);
     int key = (p->mUnknown4 >> 20) & 255;
     if (key) {
-        unsigned int end = lbl_803EBB28->mUnknown30[key];
-        unsigned int start = lbl_803EBB28->mUnknown30[key - 1];
+        unsigned int end = pfstate->mUnknown30[key];
+        unsigned int start = pfstate->mUnknown30[key - 1];
         int count = end - start;
-        int *words = (int *)lbl_803EBB28->mUnknown18 + start;
+        int *words = (int *)pfstate->mUnknown18 + start;
         for (int i = 0; i < count; ++i) {
             int word = words[i];
             if (value == word >> 16)
@@ -226,8 +226,8 @@ extern "C" int fn_801B7178(int index, int value)
 
 extern "C" void PATHI_seeknextnode(int index)
 {
-    int queued = lbl_803EBB28->mUnknown1100;
-    PathTrack_t *p = lbl_803EBB28->mUnknown40[index];
+    int queued = pfstate->mUnknown1100;
+    PathTrack_t *p = pfstate->mUnknown40[index];
     int next = -1;
     if (p->mUnknown4 < 0)
         return;
@@ -242,8 +242,8 @@ extern "C" void PATHI_seeknextnode(int index)
         next = p->mUnknown4;
     } else if (p->mUnknown4 >= 0) {
         next = PATHI_nextnode(p->mUnknown4, p->mUnknown1, 1);
-        if (lbl_803EBB34 && next < 0)
-            lbl_803EBB34(lbl_803EBB28->mUnknown14, next);
+        if (eventaction && next < 0)
+            eventaction(pfstate->mUnknown14, next);
     }
     if (next >= 0)
         next = PATHI_enternode(p->mUnknown4, next, p->mUnknown1, 1);
@@ -251,7 +251,7 @@ extern "C" void PATHI_seeknextnode(int index)
     p->mUnknown8.bits.mUnknown7 = next >= 0 ? beat : -1;
     int result = PATHI_queuenode(p);
     if (result < 0 && result != -9999) {
-        lbl_803EBB28->mUnknown1100 = queued;
+        pfstate->mUnknown1100 = queued;
         *p = saved;
     }
 }
@@ -261,8 +261,8 @@ extern "C" int PATHI_queuenode(PathTrack_t *p)
     PathTrack_t *master = 0;
     int beats = 0;
     unsigned int length = 0;
-    if (lbl_803EBB28->mUnknown0 >= 0)
-        master = lbl_803EBB28->mUnknown40[lbl_803EBB28->mUnknown0];
+    if (pfstate->mUnknown0 >= 0)
+        master = pfstate->mUnknown40[pfstate->mUnknown0];
     if (p->mUnknown4 < 0) {
         p->mUnknown34 = 0;
         p->mUnknown8.bits.mUnknown7 = -1;
@@ -272,7 +272,7 @@ extern "C" int PATHI_queuenode(PathTrack_t *p)
     }
     Entry_801B63F0 *node = PATHI_getnode(p->mUnknown4);
     p->mUnknown34 = (unsigned int *)PATHI_getnode((unsigned short)node->mUnknown8);
-    length = ((PathStreamRecord_t *)lbl_803EBB28->mUnknown3C)[node->mUnknown0 - 1].mDuration;
+    length = ((PathStreamRecord_t *)pfstate->mUnknown3C)[node->mUnknown0 - 1].mDuration;
     p->mUnknown3C = length;
     p->mUnknown38 = length;
     if ((unsigned char)node->mUnknown4)
@@ -294,7 +294,7 @@ extern "C" int PATHI_queuenode(PathTrack_t *p)
             PATHI_beatinfo(master, &info);
         if (p->mUnknown8.bits.mUnknown7 < 0 && (((Entry_801B63F0 *)p->mUnknown34)->mUnknown8 & 12) && slave) {
             p->mUnknown8.bits.mUnknown7 = PATHI_choosesynchtime(p->mUnknown4, *(FindNode_801B6A18 *)p->mUnknown34, info, p->mUnknown40);
-            if (lbl_803EBB40 & 1)
+            if (debugchannels & 1)
                 PATHI_printf("JUST SET nextbeattime %d nodebeat %d\n", p->mUnknown40, p->mUnknown8.bits.mUnknown7);
             return 0;
         }
@@ -303,7 +303,7 @@ extern "C" int PATHI_queuenode(PathTrack_t *p)
         p->mUnknown40 = 0;
         beats = p->mUnknown8.bits.mUnknown7;
         if (sync && info.mUnknown10)
-            p->mUnknown40 = info.mUnknown10 + lbl_803EBB3C;
+            p->mUnknown40 = info.mUnknown10 + gPathMilliseconds;
         if (!bar || p->mUnknown8.bits.mUnknown7++ >= (int)(node->mBits4.mBeats * (unsigned char)node->mUnknown4))
             p->mUnknown8.bits.mUnknown7 = 0;
         if (bar)

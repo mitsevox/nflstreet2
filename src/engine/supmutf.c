@@ -39,7 +39,7 @@ void SFILTER_unpackmtfrestore(Node_80279D90 *node)
     }
 }
 
-void SFILTER_unpackmtfinit(Node_80279D90 *node, Params_80275F80 *params)
+void SFILTER_unpackmtfinit(Node_80279D90 *node, SndUnpackInitParams_t *params)
 {
     SndMtSampleUnpackFilter_t *decoder;
     Snd::MTFSTATE format;

@@ -78,7 +78,7 @@ void SFILTER_unpackmtpfrestore(Node_80279D90 *node)
     }
 }
 
-void SFILTER_unpackmtpfinit(Node_80279D90 *node, Params_80275F80 *params)
+void SFILTER_unpackmtpfinit(Node_80279D90 *node, SndUnpackInitParams_t *params)
 {
     SndMtUnpackFilter_t *decoder;
 

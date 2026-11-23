@@ -44,7 +44,7 @@ int SFILTER_unpackpf(Node_80279D90 *node, int count, float *a, float *b, int fla
     return decoder->mPendingCount;
 }
 
-void SFILTER_unpackpfinit(Node_80279D90 *node, Params_80275F80 *params)
+void SFILTER_unpackpfinit(Node_80279D90 *node, SndUnpackInitParams_t *params)
 {
     SndPcmPacketUnpackFilter_t *decoder;
 

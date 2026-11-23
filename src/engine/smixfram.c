@@ -5,7 +5,7 @@
 
 int MIX_getframe(int index)
 {
-    Record_803B5010 *record = &sndmix.m1DC[index];
+    SndMixVoice_t *record = &sndmix.m1DC[index];
 
     if (record->m44 != 0) {
         return record->m44(record->m48);

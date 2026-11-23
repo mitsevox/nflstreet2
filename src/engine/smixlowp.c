@@ -5,7 +5,7 @@
 
 void MIX_setlowpass(int index, float cutoff)
 {
-    Record_803B5010 *record = &sndmix.m1DC[index];
+    SndMixVoice_t *record = &sndmix.m1DC[index];
     int params[3];
 
     if (!(cutoff >= 1.0f)) {

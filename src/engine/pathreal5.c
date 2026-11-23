@@ -3,6 +3,7 @@
    engine, plus the base Path::IPathToReal setters for its message and print callbacks. */
 
 #include "engine/system.h"
+#include "engine/pathreal.h"
 
 extern "C" {
 
@@ -16,24 +17,6 @@ void SndSetServiceCallback(void (*callback)(int a, int b));
 }
 
 namespace Path {
-
-class IPathToReal {
-public:
-    void (*mAbortMessageFunc)(const char *format, ...);
-    int (*mDebugPrintFunc)(const char *format, ...);
-    int (*mLogPrintFunc)(const char *format, ...);
-
-    virtual ~IPathToReal() {}
-    virtual void SetAbortMessageFunc(void (*func)(const char *format, ...)) { mAbortMessageFunc = func; }
-    virtual void SetDebugPrintFunc(int (*func)(const char *format, ...)) { mDebugPrintFunc = func; }
-    virtual void SetLogPrintFunc(int (*func)(const char *format, ...)) { mLogPrintFunc = func; }
-    virtual int GetMilliseconds() = 0;
-    virtual int GetMinStreamBufferSize(int channels) = 0;
-    virtual int LoadFile(char *name, int &size, int flags) = 0;
-    virtual int LoadFileDone(int handle, char *&data) = 0;
-
-    static IPathToReal *realimp;
-};
 
 class PathToReal5 : public IPathToReal {
 public:

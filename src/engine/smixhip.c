@@ -4,7 +4,7 @@
 
 void MIX_sethighpass(int index, int value)
 {
-    Record_803B5010 *record = &sndmix.m1DC[index];
+    SndMixVoice_t *record = &sndmix.m1DC[index];
     Node_80279D90 *node;
     Params_80279D0C params;
 

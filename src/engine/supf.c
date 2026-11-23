@@ -36,7 +36,7 @@ int SFILTER_unpackf(Node_80279D90 *node, int count, float *a, float *b, int flag
     return 1;
 }
 
-void SFILTER_unpackfinit(Node_80279D90 *node, Params_80275F80 *params)
+void SFILTER_unpackfinit(Node_80279D90 *node, SndUnpackInitParams_t *params)
 {
     SndPcmUnpackFilter_t *decoder;
 

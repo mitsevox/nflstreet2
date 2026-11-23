@@ -65,7 +65,7 @@ void SFILTER_unpackxapfrestore(Node_80279D90 *node)
     }
 }
 
-void SFILTER_unpackxapfinit(Node_80279D90 *node, Params_80275F80 *params)
+void SFILTER_unpackxapfinit(Node_80279D90 *node, SndUnpackInitParams_t *params)
 {
     Decoder_8027BA6C *decoder;
 
