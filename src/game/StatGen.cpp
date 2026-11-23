@@ -1,10 +1,17 @@
 /* Stat generator module support: creates the clock-seeded random-number
    stream the StatGen module uses while it runs and deletes it when the
-   module shuts down. */
+   module shuts down, and holds the record of the game the stat generator
+   simulates (its simulation functions are not linked into this build). */
 #include "game/StatGen.h"
 #include "engine/rand.h"
 
 static void *_StatGen_pRandomStream = 0;
+
+typedef struct StatGenGame_t {
+    unsigned char unk_0x0[0x27D4];
+} StatGenGame_t;
+
+StatGenGame_t _StatGen_sGame;
 
 void StatGenCreateRandomStream(void)
 {

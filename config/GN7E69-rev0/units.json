@@ -1557,7 +1557,7 @@
     {
       "source": "src/game/StatGen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x80003C94-0x80003CF0 (src/game/StatGen.cpp), its function and name rows and its .sdata data row 0x803EB8D8-0x803EB8DC; every function and data placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv provisional unit row 0x80003C94-0x80003CF0 (src/game/StatGen.cpp), its function and name rows and its .sdata data row 0x803EB8D8-0x803EB8DC; every function and data placement exact, promoted from comparison-only; .bss data row 0x80367590-0x80369D64 (_StatGen_sGame, the simulated-game record whose users the linker discards).",
       "sections": [
         {
           "section": ".text",
@@ -1570,6 +1570,12 @@
           "placement": ".data5",
           "start": "0x803EB8D8",
           "end": "0x803EB8DC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80367590",
+          "end": "0x80369D64"
         }
       ]
     },
