@@ -43966,7 +43966,7 @@ type	-	-	FontKernTable_t	inferred	-	-	The kerning table (count +0, then FontKern
 field	-	-	FontHeader_t.mMagic (+0x00, s32)	inferred	-	-	lwz r0,0(r4) at 0x801CCBF0 in FontProcessFontFile, compared with 'FNTG' 0x464E5447 (lis/ori at 0x801CCBE4/0x801CCBE8); otherwise error 0x110003.
 field	-	-	FontHeader_t.mUnk4 (+0x04, 6 bytes)	inferred	-	-	No load or store found in Font.c or LLFont.c; unknown.
 field	-	-	FontHeader_t.mNumGlyphs (+0x0A, u16)	inferred	-	-	lhz r10,10(r9) at 0x801CCAE8 in _FontLookupGlyph (r9 = Font_t.mpHeader, lwz at 0x801CCADC): the bound of the direct index (cmplw at 0x801CCAEC) and the count of the binary search.
-field	-	-	FontHeader_t.mFlags (+0x0C, u32)	inferred	-	-	Not read by Font.c; LLFont.c reads it: lwz r0,12(r9) at 0x801CDBC8 (FontLLRenderText) and at 0x801CE044 (FontLLCreateFont), each tested with andi. 4 (0x801CDBCC, 0x801CE048) to choose the C4 palette texture.
+field	-	-	FontHeader_t.mFlags (+0x0C, u32)	inferred	-	-	Not read by Font.c; LLFont.c reads it: lwz r0,12(r9) at 0x801CDBC8 (FontLLRenderText) and at 0x801CE044 (FontLLUploadTextures), each tested with andi. 4 (0x801CDBCC, 0x801CE048). In FontLLRenderText the bit selects the two-pass outline render; in FontLLUploadTextures it selects the GXInitTexObjCI path with format 8 (C4 palette texture).
 field	-	-	FontHeader_t.mUnk10 (+0x10, 3 bytes)	inferred	-	-	No load or store found; unknown.
 field	-	-	FontHeader_t.mHeight (+0x13, u8)	inferred	-	-	lbz r3,19(r9) at 0x801CD794 (FontGetDescent returns it) and lbz r17,19(r9) at 0x801CD448 (FontDrawText's line advance).
 field	-	-	FontHeader_t.mGlyphOffset (+0x14, s32)	inferred	-	-	lwz r0,20(r3) at 0x801CD1A4 in FontCreateFont, added to the header address and stored as Font_t.mpGlyphs (stw at 0x801CD1AC).
@@ -44022,7 +44022,7 @@ field	-	-	Font_t.mpGlyphs (+0x08, pointer)	inferred	-	-	stw r0,8(r31) at 0x801CD
 field	-	-	Font_t.mpKern (+0x0C, pointer)	inferred	-	-	stw r0,12(r31) at 0x801CD1CC (header + kerning offset +0x18, lwz r0,24(r3) at 0x801CD1BC) or stw r30,12(r31) at 0x801CD1D4 (0 when the offset is 0); lwz r10,12(r3) at 0x801CCB5C in _FontGetKernAmount, tested against 0.
 field	-	-	Font_t.mpTex (+0x10, pointer)	inferred	-	-	stw r9,16(r31) at 0x801CD1B8 (header + texture offset +0x1C, lwz r9,28(r3) at 0x801CD1B0); lwz r8,16(r3) at 0x801CD880 in _FontLLSetupGlyph, which reads the texture width lhz r0,4(r8) at 0x801CD888.
 field	-	-	Font_t.mUnk14 (+0x14, 4 bytes)	inferred	-	-	No load or store found; cleared only by FontCreateFont's memset of the 0x28-byte instance.
-field	-	-	Font_t.mpTexObj (+0x18, pointer)	inferred	-	-	stw r3,24(r31) at 0x801CE040 (FontLLCreateFont stores the 0x20-byte allocation of fn_801D2B7C); lwz r3,24(r31) at 0x801CDBF8 passed to GXLoadTexObj 0x802505A8.
+field	-	-	Font_t.mpTexObj (+0x18, pointer)	inferred	-	-	stw r3,24(r31) at 0x801CE040 (FontLLUploadTextures stores the 0x20-byte allocation of fn_801D2B7C); lwz r3,24(r31) at 0x801CDBF8 passed to GXLoadTexObj 0x802505A8.
 field	-	-	Font_t.mUnk1C (+0x1C, 12 bytes)	inferred	-	-	No load or store found; cleared only by the memset. Size 0x28: the allocation size li r4,40 at 0x801CD170.
 field	-	-	FontQuad_t.mX (+0x00, s32)	inferred	-	-	stw r9,-20(r29) at 0x801CD500 in FontDrawText (pen x + glyph x offset); lwz r0,0(r5) at 0x801CD7A4 in _FontLLSetupGlyph.
 field	-	-	FontQuad_t.mY (+0x04, s32)	inferred	-	-	stw r0,-16(r29) at 0x801CD510 (line y + glyph y offset); lwz r0,4(r5) at 0x801CD82C.
