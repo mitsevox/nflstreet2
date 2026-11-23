@@ -1,3 +1,5 @@
+/* Rebuilds the story team list after the player saves a team. */
+
 #include "game/fn_801D2B7C.h"
 #include "game/TDbCompilePerformOp.h"
 
@@ -8,7 +10,6 @@ int DbUserGetDb(int a);
 int DbUserGetCurrent(void);
 int SyncRandGetIntRange(int stream, int low, int high);
 
-/* Rebuilds the story team list after a team is saved. */
 void SstlRebuildForTeam(int teamId)
 {
     QueryCursor cursor;
