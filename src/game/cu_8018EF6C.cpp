@@ -8,10 +8,8 @@ int DbUserGetDb(int a);
 int DbUserGetCurrent(void);
 int SyncRandGetIntRange(int stream, int low, int high);
 
-/* Rebuilds 'LTSS' from 'CTNR' in a shuffled row order; the entry whose
-   'CTNR' row index equals the 'LGLT' value selected from 'METS' for the
-   argument is moved to the end. */
-void fn_8018EF6C(int key)
+/* Rebuilds the story team list after a team is saved. */
+void SstlRebuildForTeam(int teamId)
 {
     QueryCursor cursor;
     char name[40];
@@ -22,7 +20,10 @@ void fn_8018EF6C(int key)
     DbFileTblLoad(0, 0x43544E52);
     TDbCompilePerformOp(0, "select count(*) into \x82 from 'CTNR'\n", &count);
     int *pOrder = (int *)fn_801D2B7C(count * 4, 0, 0);
-    for (int i = 0; i < count; i++) pOrder[i] = i;
+    int *pRow = pOrder;
+    for (int i = 0; i < count; ++i, ++pRow) {
+        *pRow = i;
+    }
     for (int i = 0; i < count * 8; i++) {
         int a = SyncRandGetIntRange(1, 0, count - 1);
         int b = SyncRandGetIntRange(1, 0, count - 1);
@@ -32,7 +33,7 @@ void fn_8018EF6C(int key)
     }
 
     int handle = DbUserGetDb(DbUserGetCurrent());
-    TDbCompilePerformOp(0, "use \x8c select 'LGLT' into \x82 from 'METS' where 'DIGT' = \x82\n", handle, &value, key);
+    TDbCompilePerformOp(0, "use \x8c select 'LGLT' into \x82 from 'METS' where 'DIGT' = \x82\n", handle, &value, teamId);
     int last = count - 1;
     for (int i = 0; i < count && last >= 0; i++) {
         if (pOrder[i] == value) {

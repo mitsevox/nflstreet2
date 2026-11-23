@@ -121,7 +121,7 @@ void StorySetDevPoints(int a, int b);
 int StoryStartNew(void);
 void StorySetNew(int index, int value);
 void StorySetIndexedFlag(int a, int b, int c);
-void fn_8018EF6C(int a);
+void SstlRebuildForTeam(int teamId);
 int GauntletGetCurrentTeam(int a);
 void GauntletReset(int a);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
@@ -858,7 +858,7 @@ void EditMenuSaveTeam(void)
 {
     if (EditMenuIsStoryTeam()) {
         if (EditMenuGetMode() == 3) {
-            fn_8018EF6C(_EditMenu_iTeam);
+            SstlRebuildForTeam(_EditMenu_iTeam);
             StorySetNew(_EditMenu_cTeamSlot, 0);
         }
         StorySetDevPoints(_EditMenu_cTeamSlot, CreatePlayerGetPoints());

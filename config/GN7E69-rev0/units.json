@@ -1029,6 +1029,10 @@
       "address": "0x8018EB20",
       "evidence": "evidence.tsv function/name rows for 0x8018EB20 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
     },
+    "SstlRebuildForTeam": {
+      "address": "0x8018EF6C",
+      "evidence": "evidence.tsv function/name rows at 0x8018EF6C; EditMenuSaveTeam calls the original bytes at 0x80182990."
+    },
     "MemCardFilesFindNameOnPort": {
       "address": "0x8002A86C",
       "evidence": "evidence.tsv function/name rows for 0x8002A86C (target extent, inferred name); the documented holdout of src/game/MemCardFiles.cpp keeps its original bytes until its draft in comparisons.json is linked."
