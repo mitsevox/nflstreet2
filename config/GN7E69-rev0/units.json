@@ -4325,7 +4325,22 @@
     {
       "source": "src/engine/dbocmt.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80229270-0x8022942C (src/engine/dbocmt.c), its function, name and data rows, the compiler and source-form rows of the range it was split from and the source-form rows 0x80229270-0x802293A8 and 0x802B2240-0x802B2267 (FAKEMATCH); every function exact, complete .text and .rodata 0x802B2138-0x802B227C (its query literals) linked. The 'LRTC' queries 0x802B227C-0x802B231C after it keep their original bytes (rule 8, data row 0x802B227C).",
+      "evidence": "evidence.tsv provisional unit row 0x80229270-0x8022942C (src/engine/dbocmt.c), its function, name and data rows, the compiler and source-form rows of the range it was split from, the source-form row 0x80229270-0x802293A8 and the linker rows 0x802B2240-0x802B2268 and 0x802B227C-0x802B231C; every kept function exact, complete .text and .rodata 0x802B2138-0x802B231C (its query literals, with those of the three discarded functions) linked.",
+      "link_roots": {
+        "symbols": [
+          "DbOcmtRenumber",
+          "DbOcmtModuleInit",
+          "DbOcmtModuleShutdown",
+          "DbOcmtInsert",
+          "DbOcmtClear"
+        ],
+        "discarded": [
+          "DbOcmtDelete",
+          "DbLrtcSetUser",
+          "DbLrtcClearUser"
+        ],
+        "evidence": "evidence.tsv linker rows 0x802B2240-0x802B2268 and 0x802B227C-0x802B231C: the target keeps the five listed functions (the dispatcher 0x802328A8/0x80232950 calls the init/shutdown stubs, the game calls the insert and clear functions, DbOcmtInsert calls DbOcmtRenumber); DbOcmtDelete, DbLrtcSetUser and DbLrtcClearUser have no code in the target while their query strings remain in .rodata."
+      },
       "sections": [
         {
           "section": ".text",
@@ -4337,14 +4352,27 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B2138",
-          "end": "0x802B227C"
+          "end": "0x802B231C"
         }
       ]
     },
     {
       "source": "src/engine/dboptions.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8022942C-0x80229470 (src/engine/dboptions.c), its function, name and data rows and the compiler and source-form rows of the range it was split from; every function exact, complete .text and .rodata 0x802B231C-0x802B2338 (its query literal) linked. The 'TPOS'/'TPOG' queries 0x802B2338-0x802B238C after it keep their original bytes (rule 8, data row 0x802B2338).",
+      "evidence": "evidence.tsv provisional unit row 0x8022942C-0x80229470 (src/engine/dboptions.c), its function, name and data rows, the compiler and source-form rows of the range it was split from and the linker row 0x802B2338-0x802B238C; every kept function exact, complete .text and .rodata 0x802B231C-0x802B238C (its query literals, with those of the three discarded setters) linked.",
+      "link_roots": {
+        "symbols": [
+          "DbOptionsModuleInit",
+          "DbOptionsModuleShutdown",
+          "DbOptionsSetTpom"
+        ],
+        "discarded": [
+          "DbOptionsSetTpos",
+          "DbOptionsSetTposString",
+          "DbOptionsSetTpog"
+        ],
+        "evidence": "evidence.tsv linker row 0x802B2338-0x802B238C: the target keeps the three listed functions (the dispatcher 0x802328A8/0x80232950 calls the init/shutdown stubs, the game calls DbOptionsSetTpom); the three 'TPOS'/'TPOG' setters have no code in the target while their query strings remain in .rodata."
+      },
       "sections": [
         {
           "section": ".text",
@@ -4356,7 +4384,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B231C",
-          "end": "0x802B2338"
+          "end": "0x802B238C"
         }
       ]
     },
@@ -4441,7 +4469,40 @@
     {
       "source": "src/engine/dbuser.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8022EFDC-0x8022F80C (src/engine/dbuser.c), its function, name, data, type and field rows, the compiler and source-form rows of the range it was split from and the source-form row 0x8022F1BC-0x8022F53C; every function exact, complete .text, .rodata 0x802B5D64-0x802B5DD4 (its query literals), .data 0x802FB300-0x802FB310, .sdata 0x803EC0C8-0x803EC0DC, .sdata2 0x803ED6E4-0x803ED6EC and .bss 0x803A25F0-0x803A2628 linked. The 'FNIU' queries 0x802B5DD4-0x802B6038 after it keep their original bytes (rule 8, data row 0x802B5DD4).",
+      "evidence": "evidence.tsv provisional unit row 0x8022EFDC-0x8022F80C (src/engine/dbuser.c), its function, name, data, type and field rows, the compiler and source-form rows of the range it was split from and the source-form row 0x8022F1BC-0x8022F53C; every function exact, complete .text, .rodata 0x802B5D64-0x802B6038 (its query literals, with those of the six discarded functions, linker row 0x802B5DD4-0x802B6038), .data 0x802FB300-0x802FB310, .sdata 0x803EC0C8-0x803EC0DC, .sdata2 0x803ED6E4-0x803ED6EC and .bss 0x803A25F0-0x803A2628 linked.",
+      "link_roots": {
+        "symbols": [
+          "DbUserNewId",
+          "DbUserFindIndex",
+          "DbUserInit",
+          "DbUserShutdown",
+          "DbUserCreate",
+          "DbUserFindIdByDb",
+          "DbUserSetCurrent",
+          "DbUserGetCurrent",
+          "DbUserGetDb",
+          "DbUserDelete",
+          "DbUserReset",
+          "DbUserGetCount",
+          "DbUserGetId",
+          "DbUserSelect",
+          "DbUserOpenDatabases",
+          "DbUserPostLoad",
+          "DbUserLoad",
+          "DbUserSave",
+          "DbUserCloseDatabases",
+          "DbUserSetName"
+        ],
+        "discarded": [
+          "DbUserGetName",
+          "DbUserEarnTokens",
+          "DbUserSpendTokens",
+          "DbUserGetTokens",
+          "DbUserGetTokensSpent",
+          "DbUserGetTokensEarned"
+        ],
+        "evidence": "evidence.tsv linker row 0x802B5DD4-0x802B6038: the target keeps the twenty listed functions, all reached from outside the unit or from each other; the six name and token functions after DbUserSetName have no code in the target while their query strings remain in .rodata."
+      },
       "sections": [
         {
           "section": ".text",
@@ -4453,7 +4514,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B5D64",
-          "end": "0x802B5DD4"
+          "end": "0x802B6038"
         },
         {
           "section": ".data",

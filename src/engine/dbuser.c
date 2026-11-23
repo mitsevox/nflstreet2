@@ -1,7 +1,7 @@
 /* The user-profile databases: up to two per-user databases with their
    'FNIU' user-info table - create, delete and reset a user, find users by id
    or database, pick the current user, and load and save a user's database
-   for the memory card. */
+   for the memory card; read and write a user's name and token counts. */
 
 #include "engine/dbutil.h"
 #include "engine/tdbext.h"
@@ -311,4 +311,84 @@ int DbUserSetName(int value, char *pName)
     }
     DbUserSetCurrent(old);
     return err;
+}
+
+int DbUserGetName(int value, char *pName)
+{
+    int err = 0;
+    int old = DbUserSetCurrent(value);
+
+    if (DbUserGetDb(DbUserGetCurrent()) != -1) {
+        err = TDbCompilePerformOp(0, "use \x8c select 'nuSP' into \x88 from 'FNIU'\n", DbUserGetDb(DbUserGetCurrent()), pName);
+    }
+    DbUserSetCurrent(old);
+    return err;
+}
+
+int DbUserEarnTokens(int value, unsigned int count)
+{
+    unsigned int tokens;
+    unsigned int earned;
+
+    if (count != 0) {
+        DbUserSetCurrent(value);
+        if (DbUserGetDb(DbUserGetCurrent()) != -1) {
+            TDbCompilePerformOp(0, "use \x8c select COL_USER_INFO_NUMTOKENS into \x82 and COL_USER_INFO_NUMTOKENSEARNED into \x82 from 'FNIU'\n",
+                                DbUserGetDb(DbUserGetCurrent()), &tokens, &earned);
+            tokens = tokens < ~count ? tokens + count : 0xFFFFFFFF;
+            earned = earned < ~count ? earned + count : 0xFFFFFFFF;
+            return TDbCompilePerformOp(0, "use \x8c update 'FNIU' set COL_USER_INFO_NUMTOKENS = \x82 and COL_USER_INFO_NUMTOKENSEARNED = \x82\n",
+                                       DbUserGetDb(DbUserGetCurrent()), tokens, earned);
+        }
+    }
+    return 0;
+}
+
+int DbUserSpendTokens(int value, unsigned int count)
+{
+    unsigned int tokens;
+    unsigned int spent;
+
+    if (count != 0) {
+        DbUserSetCurrent(value);
+        if (DbUserGetDb(DbUserGetCurrent()) != -1) {
+            TDbCompilePerformOp(0, "use \x8c select COL_USER_INFO_NUMTOKENS into \x82 and COL_USER_INFO_NUMTOKENSSPENT into \x82 from 'FNIU'\n",
+                                DbUserGetDb(DbUserGetCurrent()), &tokens, &spent);
+            tokens = tokens > count ? tokens - count : 0;
+            spent = spent < ~count ? spent + count : 0xFFFFFFFF;
+            return TDbCompilePerformOp(0, "use \x8c update 'FNIU' set COL_USER_INFO_NUMTOKENS = \x82 and COL_USER_INFO_NUMTOKENSSPENT = \x82\n",
+                                       DbUserGetDb(DbUserGetCurrent()), tokens, spent);
+        }
+    }
+    return 0;
+}
+
+int DbUserGetTokens(int value, unsigned int *pTokens)
+{
+    DbUserSetCurrent(value);
+    if (DbUserGetDb(DbUserGetCurrent()) != -1) {
+        return TDbCompilePerformOp(0, "use \x8c select COL_USER_INFO_NUMTOKENS into \x82 from 'FNIU'\n",
+                                   DbUserGetDb(DbUserGetCurrent()), pTokens);
+    }
+    return 0;
+}
+
+int DbUserGetTokensSpent(int value, unsigned int *pSpent)
+{
+    DbUserSetCurrent(value);
+    if (DbUserGetDb(DbUserGetCurrent()) != -1) {
+        return TDbCompilePerformOp(0, "use \x8c select COL_USER_INFO_NUMTOKENSSPENT into \x82 from 'FNIU'\n",
+                                   DbUserGetDb(DbUserGetCurrent()), pSpent);
+    }
+    return 0;
+}
+
+int DbUserGetTokensEarned(int value, unsigned int *pEarned)
+{
+    DbUserSetCurrent(value);
+    if (DbUserGetDb(DbUserGetCurrent()) != -1) {
+        return TDbCompilePerformOp(0, "use \x8c select COL_USER_INFO_NUMTOKENSEARNED into \x82 from 'FNIU'\n",
+                                   DbUserGetDb(DbUserGetCurrent()), pEarned);
+    }
+    return 0;
 }

@@ -1,5 +1,6 @@
-/* The game database's 'OCMT' table: inserts rows, keeps their 'olsl' order
-   numbers consecutive and clears the table; start/stop stubs of its module. */
+/* The game database's 'OCMT' table: inserts and deletes rows, keeps their 'olsl' order
+   numbers consecutive and clears the table; start/stop stubs of its module; and the
+   'LRTC' table that records which user owns a controller slot. */
 
 #include "game/TDbCompilePerformOp.h"
 #include "game/QueryStatus.h"
@@ -64,10 +65,37 @@ int DbOcmtInsert(int a, int b)
     return err;
 }
 
-// FAKEMATCH: the target keeps this query between the insert and clear queries but no kept code uses it; an unused static keeps it in place.
-static const char _DbOcmt_szDeleteQuery[] = "delete from 'OCMT' where ('digl' = \x82)\n";
+int DbOcmtDelete(int digl)
+{
+    int err = TDbCompilePerformOp(0, "delete from 'OCMT' where ('digl' = \x82)\n", digl);
+
+    if (err == 0) {
+        err = DbOcmtRenumber();
+    }
+    return err;
+}
 
 int DbOcmtClear(void)
 {
     return TDbCompilePerformOp(0, "delete from 'OCMT'\n");
+}
+
+int DbLrtcSetUser(int digl, int user)
+{
+    unsigned short count;
+    int err = TDbCompilePerformOp(0, "select count(*) into \x81 from 'LRTC' where ('digl' = \x82)\n", &count, digl);
+
+    if (err == 0) {
+        if (count != 0) {
+            err = TDbCompilePerformOp(0, "update 'LRTC' set 'DIGU' = \x82 where ('digl' = \x82)\n", user, digl);
+        } else {
+            err = TDbCompilePerformOp(0, "insert into 'LRTC' set 'digl' = \x82 and 'DIGU' = \x82\n", digl, user);
+        }
+    }
+    return err;
+}
+
+int DbLrtcClearUser(int digl)
+{
+    return TDbCompilePerformOp(0, "update 'LRTC' set 'DIGU' = \x82 where ('digl' = \x82)\n", -1, digl);
 }
