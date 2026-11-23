@@ -26505,7 +26505,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802AF4B0",
-          "end": "0x802AF4D4"
+          "end": "0x802AF4D8"
         },
         {
           "section": ".bss",
