@@ -9,7 +9,7 @@ extern int FileClose(int handle);
 extern int FileExistsFileDevice(const char *pName, int device);
 extern int FileGetLength(int handle);
 
-extern char lbl_803E933C[];
+char _ResLooseFile_PathName[255];
 
 static void _ResLooseFileGetName(ResFile_t *pFile, int index)
 {
@@ -25,7 +25,7 @@ static void _ResLooseFileGetName(ResFile_t *pFile, int index)
     for (p = name; *p == ' '; p++) {
         *p = '0';
     }
-    sprintf(lbl_803E933C, "%s%s\\%s", "looseres\\", pFile->pName, name);
+    sprintf(_ResLooseFile_PathName, "%s%s\\%s", "looseres\\", pFile->pName, name);
     _ResLooseFile_PrevRes = pFile;
     _ResLooseFile_PrevIndex = index;
 }
@@ -33,7 +33,7 @@ static void _ResLooseFileGetName(ResFile_t *pFile, int index)
 int ResLooseFileExists(ResFile_t *pFile, int index)
 {
     _ResLooseFileGetName(pFile, index);
-    return FileExistsFileDevice(lbl_803E933C, 0x2C) == 0;
+    return FileExistsFileDevice(_ResLooseFile_PathName, 0x2C) == 0;
 }
 
 int ResLooseFileGetSize(ResFile_t *pFile, unsigned int index, unsigned int *pSize)
@@ -42,8 +42,8 @@ int ResLooseFileGetSize(ResFile_t *pFile, unsigned int index, unsigned int *pSiz
     int handle;
 
     _ResLooseFileGetName(pFile, index);
-    if (FileExistsFileDevice(lbl_803E933C, 0x2C) == 0) {
-        handle = FileOpenFileDevice(lbl_803E933C, 0x2C);
+    if (FileExistsFileDevice(_ResLooseFile_PathName, 0x2C) == 0) {
+        handle = FileOpenFileDevice(_ResLooseFile_PathName, 0x2C);
         if (handle >= 0) {
             *pSize = FileGetLength(handle);
             FileClose(handle);
@@ -61,8 +61,8 @@ int ResLooseFileOpen(ResFile_t *pFile, int index)
     int handle;
 
     _ResLooseFileGetName(pFile, index);
-    if (FileExistsFileDevice(lbl_803E933C, 0x2C) == 0) {
-        handle = FileOpenFileDevice(lbl_803E933C, 0x2C);
+    if (FileExistsFileDevice(_ResLooseFile_PathName, 0x2C) == 0) {
+        handle = FileOpenFileDevice(_ResLooseFile_PathName, 0x2C);
     } else {
         handle = -1;
     }

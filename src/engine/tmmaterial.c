@@ -5,7 +5,7 @@
 
 extern int DSGetNodeHandlerStat(Pool_801C750C *pPool, int a);
 
-extern Pool_801C750C *lbl_803E96C4[9];
+Pool_801C750C *_TMMaterial_pTexNodes[9];
 /* The material selected last. */
 static TMMaterial_t *_TMMaterial_pSelect = 0;
 
@@ -38,11 +38,11 @@ static void _TMMaterialAllocTexState(TMMaterial_t *pMaterial)
     }
     if (numTextures > 0) {
         for (numParms = numTextures; numParms <= 8; numParms++) {
-            if (lbl_803E96C4[numParms] != 0 && DSGetNodeHandlerStat(lbl_803E96C4[numParms], 0) != 0) {
+            if (_TMMaterial_pTexNodes[numParms] != 0 && DSGetNodeHandlerStat(_TMMaterial_pTexNodes[numParms], 0) != 0) {
                 break;
             }
         }
-        pParms = DSNewNode(lbl_803E96C4[numParms]);
+        pParms = DSNewNode(_TMMaterial_pTexNodes[numParms]);
         memset(pParms, 0, numParms * sizeof(TMMaterialTexState_t));
         if (pMaterial->mNumParms > 0) {
             memcpy(pParms, pMaterial->mpParms,
@@ -52,7 +52,7 @@ static void _TMMaterialAllocTexState(TMMaterial_t *pMaterial)
         }
     }
     if (pMaterial->mNumParms > 0) {
-        DSDelNode(lbl_803E96C4[pMaterial->mNumParms], pMaterial->mpParms);
+        DSDelNode(_TMMaterial_pTexNodes[pMaterial->mNumParms], pMaterial->mpParms);
     }
     pMaterial->mNumParms = numParms;
     pMaterial->mpParms = pParms;
@@ -62,10 +62,10 @@ void TMMaterialInit(int *pPoolSizes)
 {
     int i;
 
-    memset(lbl_803E96C4, 0, sizeof(lbl_803E96C4));
+    memset(_TMMaterial_pTexNodes, 0, sizeof(_TMMaterial_pTexNodes));
     for (i = 0; i <= 8; i++) {
         if (pPoolSizes[i] > 0) {
-            lbl_803E96C4[i] = DSNewNodeHandler(1, pPoolSizes[i], (i + 1) * sizeof(TMMaterialTexState_t), 0);
+            _TMMaterial_pTexNodes[i] = DSNewNodeHandler(1, pPoolSizes[i], (i + 1) * sizeof(TMMaterialTexState_t), 0);
         }
     }
 }

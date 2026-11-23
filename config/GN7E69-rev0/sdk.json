@@ -1619,6 +1619,15 @@
       "evidence": "Coherent pinned BFBB April 2003 C functions corroborate callback/DMA/stream/rate/SRC behavior. All twenty bodies over the complete mapped range, including the twelve-byte flag-clear AIReset and the eighty-eight-byte stack-switch assembly routine __AICallbackStackSwitch, are exact and linked in the source build.",
       "sections": [
         {
+          "section": ".bss",
+          "start": "0x803A58D0",
+          "end": "0x803A5900",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "The global profile (STRUCT_TIMELOG, 48 bytes) of dolsdk2004 src/ai/ai.c, unreferenced by retained code (evidence.tsv data row 0x803A58D0)."
+        },
+        {
           "section": ".data4",
           "start": "0x802FDDE8",
           "end": "0x802FDE2C",
@@ -1639,11 +1648,11 @@
         {
           "section": ".sbss",
           "start": "0x803ED308",
-          "end": "0x803ED348",
+          "end": "0x803ED358",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "Neutral typedextent corroborated by originaloperand accesses and complete coherentBFBB native allocation. six4bytecallback/stack/flags plusfive8bytetimingvalues, including original savedstackcell; no additional archiveextent/padding."
+          "evidence": "Neutral typedextent corroborated by originaloperand accesses and complete coherentBFBB native allocation. six4bytecallback/stack/flags plusfive8bytetimingvalues, including original savedstackcell; no additional archiveextent/padding. Extended 2026-11-23 to 0x803ED358: the OSTime globals __ai_src_time_end/__ai_src_time_start of dolsdk2004 src/ai/ai.c follow the statics (evidence.tsv data row 0x803ED348)."
         },
         {
           "section": ".text",
@@ -2189,6 +2198,24 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 1 uniquely located function anchors in this interval; target has a function entry at 0x80252334, previous instruction is blr, and previous interval ends at 0x802523A4 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A5F30",
+          "end": "0x803A6504",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Statics DisplayListFifo and __savedGXdata of dolsdk2004 src/gx/GXDisplayList.c, used only by the discarded GXBeginDisplayList/GXEndDisplayList (evidence.tsv data and linker rows 0x803A5F30)."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3B8",
+          "end": "0x803ED3BC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Static OldCPUFifo of dolsdk2004 src/gx/GXDisplayList.c (evidence.tsv data row 0x803ED3B8)."
         }
       ]
     },
@@ -2750,7 +2777,7 @@
       "name": "src/dolphin/dsp/dsp_task.c",
       "source": "src/dolphin/dsp/dsp_task.c",
       "library": "DSP",
-      "evidence": "Original Handler1060bytes at85DC8 and accepted four helpers1120bytes at861EC..8664C. Source unit partial; unmatched Handler and original SBSS remain opaque. Retained five-function pattern/order corroborates full mapped interval.",
+      "evidence": "Original Handler1060bytes at85DC8 and accepted four helpers1120bytes at861EC..8664C. Source unit partial; unmatched Handler keeps original bytes; .sbss (t0-t2 and the six __DSP_* globals) linked from source. Retained five-function pattern/order corroborates full mapped interval.",
       "sections": [
         {
           "section": ".data4",
@@ -2766,7 +2793,16 @@
           "end": "0x8028664C",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Original Handler1060bytes at85DC8 and accepted four helpers1120bytes at861EC..8664C. Source unit partial; unmatched Handler and original SBSS remain opaque. Retained five-function pattern/order corroborates full mapped interval."
+          "evidence": "Original Handler1060bytes at85DC8 and accepted four helpers1120bytes at861EC..8664C. Source unit partial; unmatched Handler keeps original bytes; .sbss (t0-t2 and the six __DSP_* globals) linked from source. Retained five-function pattern/order corroborates full mapped interval."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED4E8",
+          "end": "0x803ED50C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Statics t0-t2 and the six __DSP_* task globals of dolsdk2004 src/dsp/dsp_task.c (evidence.tsv data row 0x803ED4E8)."
         }
       ]
     },
