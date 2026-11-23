@@ -34009,7 +34009,7 @@
     {
       "source": "src/engine/sfir.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80279E74-0x8027A21C (src/engine/sfir.c), the sound_cxx compiler rows and the function and name rows of every registered function and the data rows of its .rodata 0x802C21C0-0x802C21F0. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80279E74-0x8027A21C (src/engine/sfir.c), the sound_cxx compiler rows, the function, name and source-form rows of calcFIRCoeffs, and the data row of its .rodata 0x802C21C0-0x802C21F0. The high-pass normalization branches follow the target shape. Coefficient address allocation and later scheduling still differ; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
