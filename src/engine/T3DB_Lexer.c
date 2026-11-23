@@ -121,8 +121,10 @@ char *T3DB_Lexer_Number(TDbLexer_t *pLexer, char *p)
         p++;
         multiplier = 1;
         c = *++p;
-        while ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') ||
-               (c >= 'a' && c <= 'f')) {
+        if (c < '0' || c > '9') {
+            goto check_hex_letter;
+        }
+        for (;;) {
             value *= multiplier;
             multiplier = 16;
             if (c >= '0' && c <= '9') {
@@ -133,6 +135,13 @@ char *T3DB_Lexer_Number(TDbLexer_t *pLexer, char *p)
                 value += c - 'a' + 10;
             }
             c = *++p;
+            if (c >= '0' && c <= '9') {
+                continue;
+            }
+check_hex_letter:
+            if ((c < 'A' || c > 'F') && (c < 'a' || c > 'f')) {
+                break;
+            }
         }
     } else {
         value = 0;
