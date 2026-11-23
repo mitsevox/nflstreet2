@@ -5006,7 +5006,7 @@
           "OSGetTick",
           "__OSGetSystemTime"
         ],
-        "evidence": "The target keeps this file's three functions at 0x8023E794-0x8023E818 (called from outside the file); OSTicksToCalendarTime and its static helpers have no code in the target, while their month tables YearDays and LeapYearDays remain in .data 0x802FCC90-0x802FCCF0 (data rows), so SN's linker discarded the unreferenced functions."
+        "evidence": "The target keeps this file's three functions at 0x8023E794-0x8023E818 (called from outside the file); OSTicksToCalendarTime and its static helpers have no code in the target, while their month tables YearDays and LeapYearDays remain in .data 0x802FCC90-0x802FCCF0 (evidence.tsv linker row 0x802FCC90), so SN's linker discarded the unreferenced functions."
       },
       "sections": [
         {
@@ -14953,7 +14953,7 @@
     {
       "source": "src/engine/camfree.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C3CE8-0x801C3EFC (src/engine/camfree.c) and its data rows; every function exact, promoted from comparison-only.  .data 0x802F4890-0x802F489C: the camera type record gCamFreeFloatFuncs (evidence.tsv data row).",
+      "evidence": "evidence.tsv unit row 0x801C3CE8-0x801C3EFC (src/engine/camfree.c) and its data rows; every function exact, promoted from comparison-only.  .data 0x802F4890-0x802F489C: the camera type record CamFreeFloatDef (evidence.tsv data row).",
       "sections": [
         {
           "section": ".text",
@@ -16915,7 +16915,7 @@
     {
       "source": "src/engine/camfocus.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C3A44-0x801C3CE8, all eight function/name rows, source-form and field records, and native .rodata data row 0x802AF0C4-0x802AF0DC. Complete source on unchanged engine_c profile.  .data 0x802F4884-0x802F4890: the camera type record gCamFocusFuncs (evidence.tsv data row).",
+      "evidence": "evidence.tsv provisional unit row 0x801C3A44-0x801C3CE8, all eight function/name rows, source-form and field records, and native .rodata data row 0x802AF0C4-0x802AF0DC. Complete source on unchanged engine_c profile.  .data 0x802F4884-0x802F4890: the camera type record CamFocusDef (evidence.tsv data row).",
       "sections": [
         {
           "section": ".text",

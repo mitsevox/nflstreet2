@@ -753,6 +753,15 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Target stable TBU/TBL/TBU64-bit readE794, tick readE7AC, unique __OSGetSystemTimeE7B4 native anchor endingE818. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        },
+        {
+          "start": "0x802FCC90",
+          "end": "0x802FCCF0",
+          "section": ".data4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "YearDays and LeapYearDays of the discarded OSTicksToCalendarTime, rebuilt so the file owns them (evidence.tsv linker row 0x802FCC90); the linked unit reproduces these bytes.",
+          "object_seed": true
         }
       ]
     },

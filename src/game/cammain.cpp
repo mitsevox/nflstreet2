@@ -32,8 +32,8 @@ struct CamTypeDefEntry_t {
 };
 
 extern "C" {
-extern CamFuncs_t gCamFocusFuncs;
-extern CamFuncs_t gCamFreeFloatFuncs;
+extern CamFuncs_t CamFocusDef;
+extern CamFuncs_t CamFreeFloatDef;
 extern CamTypeDef_t _Replay_CamType;
 extern char lbl_8031BDD4[];
 
@@ -76,8 +76,8 @@ CamTypeDef_t _CamMain_Type = { CamMainInit, CamMainUninit, CamMainUpdate };
 int _CamMain_BaseTypes[19] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 4, 4, 4, 0 };
 
 CamTypeDefEntry_t _CamMainTypeDefs[5] = {
-    { &gCamFreeFloatFuncs, 0x8C, 0 },
-    { &gCamFocusFuncs, 0x94, 0 },
+    { &CamFreeFloatDef, 0x8C, 0 },
+    { &CamFocusDef, 0x94, 0 },
     { &_CamMain_Type, 0xF58, 0 },
     { &_Replay_CamType, 0xF60, 0 },
     { 0, 0, 0 },
