@@ -131,7 +131,6 @@ PlayBookFormation_t *PlayBookGetFormation(int team);
 Point_8017886C fn_80177FE0(void);
 }
 
-#if defined(DECOMP_COMPARE)
 extern "C" int TurnToPlayPickVariant(Object_80039F5C *p) {
     if (fn_80178A68((Point_8017886C *)&p->mMotion.mPos) < _Handoff_fTurnCloseRange)
         return 5;
@@ -298,7 +297,6 @@ extern "C" void TurnToPlayStartAnim(Object_80039F5C *p, int kind, int flag) {
     if (flag)
         p->mFlags |= 0x1000;
 }
-#endif
 
 extern "C" int TurnToPlayEnter(Object_80039F5C *p) {
     TurnToPlayBlock_t *state = (TurnToPlayBlock_t *)&p->mUnknown336;
@@ -731,7 +729,7 @@ extern "C" int HandoffSteer(Object_80039F5C *p, Object_80039F5C *pOther, Handoff
     return result;
 }
 
-extern "C" void HandoffSteerClear(Object_80039F5C *p, Object_80039F5C *pOther, HandoffBlock_t *state) {
+static void _HandoffSteerClear(Object_80039F5C *p, Object_80039F5C *pOther, HandoffBlock_t *state) {
     if (p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
         Point_8017886C delta;
         Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);

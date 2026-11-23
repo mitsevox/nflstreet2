@@ -1067,27 +1067,11 @@
     },
     "_Handoff_fTurnCloseRange": {
       "address": "0x803EADE4",
-      "evidence": "evidence.tsv data and name rows for 0x803EADE4 (.sdata data of the holdout of src/game/Handoff.cpp; storage not claimed by the unit, original bytes)."
+      "evidence": "evidence.tsv data and name rows for 0x803EADE4 (original .sdata used by TurnToPlayPickVariant; storage is unclaimed)."
     },
     "_Handoff_auTurnDirections": {
       "address": "0x803EADE8",
-      "evidence": "evidence.tsv data and name rows for 0x803EADE8 (.sdata data of the holdout of src/game/Handoff.cpp; storage not claimed by the unit, original bytes)."
-    },
-    "TurnToPlayPickVariant": {
-      "address": "0x800EC76C",
-      "evidence": "evidence.tsv function and name rows for 0x800EC76C (documented holdout of src/game/Handoff.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4 stay original bytes with it)."
-    },
-    "TurnToPlayPickAnim": {
-      "address": "0x800EC840",
-      "evidence": "evidence.tsv function and name rows for 0x800EC840 (documented holdout of src/game/Handoff.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4 stay original bytes with it)."
-    },
-    "TurnToPlayPickDirection": {
-      "address": "0x800EC870",
-      "evidence": "evidence.tsv function and name rows for 0x800EC870 (documented holdout of src/game/Handoff.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4 stay original bytes with it)."
-    },
-    "TurnToPlayStartAnim": {
-      "address": "0x800EC9E4",
-      "evidence": "evidence.tsv function and name rows for 0x800EC9E4 (documented holdout of src/game/Handoff.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4 stay original bytes with it)."
+      "evidence": "evidence.tsv data and name rows for 0x803EADE8 (original .sdata used by the TurnToPlayPickDirection holdout; storage is unclaimed)."
     },
     "CarrierRunHasDefenderAhead": {
       "address": "0x8012CE60",
@@ -19478,52 +19462,31 @@
     },
     {
       "source": "src/game/Handoff.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800EC76C-0x800EF224 (src/game/Handoff.cpp), its function, name and data rows, the .rodata data row 0x8029DE78-0x8029DF40, the .sdata data rows 0x803EADF4-0x803EAE00 and the linker row 0x8029DED0-0x8029DEE4 of the discarded HandoffSteerClear; 0x800ECC64-0x800EF224 is linked, the documented holdout 0x800EC76C-0x800ECC64 (TurnToPlayPickVariant, TurnToPlayPickAnim, TurnToPlayPickDirection and TurnToPlayStartAnim, with the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4) keeps its original bytes and stays a comparison.",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x800EC76C-0x800EF224, the whole native .rodata data row 0x8029DE70-0x8029DF40, and the .sdata data rows 0x803EADF4-0x803EAE00 for src/game/Handoff.cpp. Two linked text runs surround the 372-byte TurnToPlayPickDirection holdout. The earlier .sdata at 0x803EADE4-0x803EADF4 retains original storage.",
       "link_roots": {
-        "symbols": [
-          "TurnToPlayEnter",
-          "TurnToPlayUpdate",
-          "TurnToPlayExit",
-          "TurnToPlayNotify",
-          "TurnToPlayInput",
-          "HandoffPickSide",
-          "HandoffIsMirrored",
-          "HandoffStartAnim",
-          "HandoffTryPairAnim",
-          "HandoffSteer",
-          "HandoffGiveBall",
-          "HandoffEnter",
-          "HandoffUpdate",
-          "HandoffExit",
-          "HandoffMirrorMessage",
-          "HandoffIsStarting",
-          "HuddleArrive",
-          "HuddleSetSpot",
-          "HuddleMoveEnter",
-          "HuddleMoveUpdate",
-          "HuddleMoveAltEnter",
-          "HuddleGetSpot",
-          "HuddleMoveAltUpdate",
-          "HuddleHoldUpdate",
-          "HuddleHoldExit"
-        ],
         "discarded": [
-          "HandoffSteerClear"
+          "_HandoffSteerClear__FP15Object_80039F5CT0P14HandoffBlock_t"
         ],
-        "evidence": "evidence.tsv linker row 0x8029DED0-0x8029DEE4: the target keeps every listed function, all reached from the state handler table or from each other; HandoffSteerClear has no code in the target, while its literal pool remains in the unit's rodata."
+        "evidence": "evidence.tsv linker row 0x8029DED0-0x8029DEE4: _HandoffSteerClear has native local linkage and no references. Its code has no target extent and its literal pool is retained."
       },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800ECC64",
+          "start": "0x800EC76C",
+          "end": "0x800EC870"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800EC9E4",
           "end": "0x800EF224"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029DE78",
+          "start": "0x8029DE70",
           "end": "0x8029DF40"
         },
         {
@@ -19532,7 +19495,16 @@
           "start": "0x803EADF4",
           "end": "0x803EAE00"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "TurnToPlayPickDirection",
+            "evidence": "evidence.tsv source-form 0x800EC870-0x800EC9E4"
+          }
+        ],
+        "evidence": "evidence.tsv source-form row 0x800EC870-0x800EC9E4 records the remaining call argument schedule and shared subtraction tail."
+      }
     },
     {
       "source": "src/game/PlayerLocoAnim.cpp",
