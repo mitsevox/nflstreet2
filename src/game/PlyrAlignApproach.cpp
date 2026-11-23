@@ -1,3 +1,5 @@
+/* Selects approach commands and advances lane movement during player alignment. */
+
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/AudmonEvent.h"
@@ -6,21 +8,18 @@
 #include "game/fn_801BE60C.h"
 #include <math.h>
 
-struct State_800E2FE4 {
-  unsigned char mUnknown0, mUnknown1, mUnknown2, mUnknown3;
-  Point_8017886C mUnknown4[2];
-  unsigned short mUnknown14;
-  unsigned char mUnknown16[8];
-  unsigned short mUnknown1E;
-  unsigned char mUnknown20[4];
-  int mUnknown24;
-  unsigned char mUnknown28[16];
-  int mUnknown38;
-  unsigned char mUnknown3C[16];
-  unsigned char mUnknown4C, mUnknown4D;
-};
-struct Animation_800E2FE4 {
-  void *mUnknown0, *mUnknown4, *mUnknown8;
+struct PlyrAlignApproachState_t {
+  unsigned char unk_0x0, unk_0x1, unk_0x2, unk_0x3;
+  Point_8017886C mLaneTargets[2];
+  unsigned short mLaneTargetIndex;
+  unsigned char unk_0x16[8];
+  unsigned short mLanePhase;
+  unsigned char unk_0x20[4];
+  int unk_0x24;
+  unsigned char unk_0x28[16];
+  int mLaneApproachHeading;
+  unsigned char unk_0x3C[16];
+  unsigned char unk_0x4C, unk_0x4D;
 };
 extern "C" {
 extern float lbl_803EAD38, lbl_803EAD3C, lbl_803EAD40, lbl_803EAD44,
@@ -34,7 +33,7 @@ int fn_800CB580(Object_80039F5C *, int *, Point_8017886C, int, int);
 int fn_800CBB00(Object_80039F5C *, int, Point_8017886C, int, int);
 void PlayerReleaseJointCtrls(Object_80039F5C *);
 int PlayerActionIsFacingPoint(Object_80039F5C *, Point_8017886C *, float);
-void PlyrAlignStartShuffle(Object_80039F5C *, State_800E2FE4 *, int, float);
+void PlyrAlignStartShuffle(Object_80039F5C *, PlyrAlignApproachState_t *, int, float);
 void fn_800C89F0(Object_80039F5C *, int, int, int, float);
 int fn_80178320(void);
 int fn_80178308(void);
@@ -43,8 +42,8 @@ int PlayerActionIsNearLine(Object_80039F5C *);
 void PlayerPathStartSideAnim(Object_80039F5C *, int, int);
 int PlayerPathIsLaneClear(Object_80039F5C *, Point_8017886C *);
 
-void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
-  State_800E2FE4 *state = (State_800E2FE4 *)&player->mUnknown336;
+void PlyrAlignMoveToTarget(Object_80039F5C *player, Point_8017886C *target, int angle) {
+  PlyrAlignApproachState_t *state = (PlyrAlignApproachState_t *)&player->mUnknown336;
   Point_8017886C goal;
   Point_8017886C delta;
   goal = fn_80177FFC(player->mIdBytes[2]);
@@ -54,16 +53,16 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
   int direction = fn_801CFE40(delta.mY, delta.mX);
   if (!(player->mMotion.mUnknown28 <= 0.006f)) {
     int beyond = target->mY > goal.mY + 2.0f;
-    if (!state->mUnknown24) {
+    if (!state->unk_0x24) {
       if (fn_800CB708(player, &value, *target, angle, beyond)) {
         fn_800CBB00(player, value, *target, angle, beyond);
-        state->mUnknown4C = 1;
+        state->unk_0x4C = 1;
         return;
       }
     }
   }
-  if ((!(distance <= 0.65f) && !state->mUnknown24) ||
-      (!(distance <= lbl_803EAD44) && state->mUnknown24) || state->mUnknown3) {
+  if ((!(distance <= 0.65f) && !state->unk_0x24) ||
+      (!(distance <= lbl_803EAD44) && state->unk_0x24) || state->unk_0x3) {
     PlayerReleaseJointCtrls(player);
     int facing = fn_801CFE40(delta.mY, delta.mX);
     if (PlayerActionIsFacingPoint(player, target, distance)) {
@@ -71,9 +70,9 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
                   fabsf(player->mMotion.mPos.mX - target->mX));
       return;
     }
-    if (state->mUnknown3)
+    if (state->unk_0x3)
       return;
-    if (state->mUnknown24) {
+    if (state->unk_0x24) {
       float strength = 0.72f;
       if (!(distance > lbl_803EAD3C))
         strength = (distance / lbl_803EAD3C) * strength;
@@ -104,7 +103,7 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
           int option = 0;
           if (player->mFlags & 0x40000)
             option = 1;
-          if (!state->mUnknown24) {
+          if (!state->unk_0x24) {
             if (fn_800CB580(player, &value, *target, direction, option))
               goto selected;
             if (option) {
@@ -117,7 +116,7 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
       }
     selected: {
         fn_800CBB00(player, value, *target, direction, 0);
-        state->mUnknown4D = 1;
+        state->unk_0x4D = 1;
         return;
       }
     rest:
@@ -174,9 +173,9 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
       return;
     }
     int limit = 0x38E38;
-    if (!state->mUnknown24)
+    if (!state->unk_0x24)
       limit = 0xE38E3;
-    if (!state->mUnknown3 &&
+    if (!state->unk_0x3 &&
         MathAngleDiff(player->mMotion.mFacing, angle) > limit) {
       player->mUnknown512.mUnknown8 = angle;
       player->mUnknown512.mUnknown14 = 1;
@@ -195,19 +194,19 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
       fn_801BE068(player->mpUnknown792, player->mpUnknown796,
                   player->mpUnknown800, 85, 1.0f, player);
     }
-    state->mUnknown1 = 0;
+    state->unk_0x1 = 0;
   }
 }
-void fn_800E36DC(Object_80039F5C *player) {
-  State_800E2FE4 *state = (State_800E2FE4 *)&player->mUnknown336;
+void PlyrAlignUpdateLane(Object_80039F5C *player) {
+  PlyrAlignApproachState_t *state = (PlyrAlignApproachState_t *)&player->mUnknown336;
   Point_8017886C delta;
-  switch (state->mUnknown1E) {
+  switch (state->mLanePhase) {
   case 0: {
-    Vec2Sub(&delta, &state->mUnknown4[state->mUnknown14],
+    Vec2Sub(&delta, &state->mLaneTargets[state->mLaneTargetIndex],
                 &player->mMotion.mPos);
     Vec2Magnitude(&delta);
     fn_801CFE40(delta.mY, delta.mX);
-    state->mUnknown1E = 2;
+    state->mLanePhase = 2;
     break;
   }
   case 3: {
@@ -219,19 +218,19 @@ void fn_800E36DC(Object_80039F5C *player) {
     if (player->mFlags & 4) {
       player->mFlags &= ~4u;
       change = 1;
-    } else if (PlayerPathIsLaneClear(player, &state->mUnknown4[state->mUnknown14]) != 1 ||
+    } else if (PlayerPathIsLaneClear(player, &state->mLaneTargets[state->mLaneTargetIndex]) != 1 ||
                !(player->mMotion.mPos.mY >=
-                 state->mUnknown4[state->mUnknown14].mY + 0.3f))
+                 state->mLaneTargets[state->mLaneTargetIndex].mY + 0.3f))
       change = 1;
     if (change == 1) {
       PlayerPathStartSideAnim(player, 8, 1);
-      state->mUnknown1E = 1;
+      state->mLanePhase = 1;
     }
     break;
   }
   case 2: {
-    if (PlayerPathIsLaneClear(player, &state->mUnknown4[state->mUnknown14]) == 1) {
-      Vec2Sub(&delta, &state->mUnknown4[state->mUnknown14],
+    if (PlayerPathIsLaneClear(player, &state->mLaneTargets[state->mLaneTargetIndex]) == 1) {
+      Vec2Sub(&delta, &state->mLaneTargets[state->mLaneTargetIndex],
                   &player->mMotion.mPos);
       float distance = Vec2Magnitude(&delta);
       int direction = fn_801CFE40(delta.mY, delta.mX);
@@ -241,7 +240,7 @@ void fn_800E36DC(Object_80039F5C *player) {
               fn_80177FFC(player->mIdBytes[2]).mY + 0.15625f +
                   lbl_803EAD38 * 0.5f)) {
           PlayerPathStartSideAnim(player, 1, 2);
-          state->mUnknown1E = 1;
+          state->mLanePhase = 1;
         } else {
           player->mUnknown512.mUnknown15 = 28;
           player->mUnknown512.mUnknown14 = 1;
@@ -255,13 +254,13 @@ void fn_800E36DC(Object_80039F5C *player) {
         Point_8017886C offset;
         point.mY -= 5.0f;
         Vec2Sub(&offset, &point, &player->mMotion.mPos);
-        state->mUnknown38 = fn_801CFE40(offset.mY, offset.mX);
+        state->mLaneApproachHeading = fn_801CFE40(offset.mY, offset.mX);
         PlayerPathStartSideAnim(player, 1, 2);
-        state->mUnknown1E = 1;
+        state->mLanePhase = 1;
       }
     } else {
       PlayerPathStartSideAnim(player, 1, 1);
-      state->mUnknown1E = 1;
+      state->mLanePhase = 1;
     }
     break;
   }
@@ -272,7 +271,7 @@ void fn_800E36DC(Object_80039F5C *player) {
     }
     break;
   }
-  switch (state->mUnknown1E) {
+  switch (state->mLanePhase) {
   case 2:
   case 3:
     AudmonEventPostId(119, &player->mMotion.mPos, player->mId, 0, 0, 0);

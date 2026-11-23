@@ -1600,6 +1600,10 @@
     "FEPlyrPoseTransitionCallback": {
       "address": "0x80089E70",
       "evidence": "evidence.tsv function and name rows for the registered FEPlyrPoseTransitions.cpp holdout; event slot 214 in src/game/cu_8008E978.cpp points to the original code."
+    },
+    "PlyrAlignMoveToTarget": {
+      "address": "0x800E2FE4",
+      "evidence": "evidence.tsv function and name rows for the PlyrAlignApproach.cpp holdout, called by PlyrAlignUpdate in src/game/PlyrTackle.cpp."
     }
   },
   "units": [
@@ -3207,6 +3211,34 @@
           "end": "0x803EC5EC"
         }
       ]
+    },
+    {
+      "source": "src/game/PlyrAlignApproach.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x800E2FE4-0x800E3A34, its literal rows and documented leading holdout. The exact lane routine and the full native literal pool link.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E36DC",
+          "end": "0x800E3A34"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DB28",
+          "end": "0x8029DB70"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "PlyrAlignMoveToTarget",
+            "evidence": "evidence.tsv source-form 0x800E2FE4-0x800E36DC"
+          }
+        ],
+        "evidence": "merge notes of the pull request linking the exact player alignment lane routine"
+      }
     },
     {
       "source": "src/game/PlayerPathHelpers.cpp",

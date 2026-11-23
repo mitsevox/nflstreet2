@@ -840,8 +840,8 @@ extern "C" int PlayerActionAnimIsReactionAlt(Object_80039F5C *p);
 extern "C" void PlayerActionAlignDefender(Object_80039F5C *p);
 extern "C" int fn_8009F780(void);
 extern "C" int PlyrAlignIsFree(Object_80039F5C *p);
-extern "C" void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle);
-extern "C" void fn_800E36DC(Object_80039F5C *player);
+extern "C" void PlyrAlignMoveToTarget(Object_80039F5C *player, Point_8017886C *target, int angle);
+extern "C" void PlyrAlignUpdateLane(Object_80039F5C *player);
 extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p);
 extern "C" void PlayerReleaseFlaggedJointCtrls(Object_80039F5C *p);
 extern "C" Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float length, float width,
@@ -898,7 +898,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
         Vec2Sub(&delta, &target, &p->mMotion.mPos);
         if (Vec2Magnitude(&delta) > 0.5f && !pState->mUnknown36) {
             if (PlyrAlignIsFree(p)) {
-                fn_800E2FE4(p, &target, 0xC00000);
+                PlyrAlignMoveToTarget(p, &target, 0xC00000);
             }
         } else if (MathAngleDiff(p->mMotion.mFacing, 0xC00000) > 0x71C71) {
             p->mUnknown512.mUnknown14 = 1;
@@ -931,7 +931,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
         } else if (pState->mUnknown1 == 1) {
             if ((signed char)--pState->mUnknown2 <= 0) {
                 pState->mUnknown2 = 0;
-                fn_800E2FE4(p, &target, heading);
+                PlyrAlignMoveToTarget(p, &target, heading);
                 if (pState->mUnknown76 || pState->mUnknown77) {
                     return 0;
                 }
@@ -942,7 +942,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
                 if (!pState->mUnknown22[0]) {
                     PlayerActionPickLaneTarget(p);
                 }
-                fn_800E36DC(p);
+                PlyrAlignUpdateLane(p);
             }
         }
     } else {

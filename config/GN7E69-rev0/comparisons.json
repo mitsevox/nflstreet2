@@ -11394,9 +11394,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800E2FE4.cpp",
+      "source": "src/game/PlyrAlignApproach.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv player-state and bounded literal rows for cu_800E2FE4; original assembly linked.",
+      "evidence": "evidence.tsv provisional unit row 0x800E2FE4-0x800E3A34, its exact literal extent and HOLDOUT source-form row 0x800E2FE4-0x800E36DC. The approach-command routine is the sole comparison. Its code stays original while the lane routine and full native literal pool link from source.",
       "sections": [
         {
           "section": ".text",
@@ -11413,14 +11413,9 @@
       ],
       "functions": [
         {
-          "symbol": "fn_800E2FE4",
+          "symbol": "PlyrAlignMoveToTarget",
           "start": "0x800E2FE4",
           "end": "0x800E36DC"
-        },
-        {
-          "symbol": "fn_800E36DC",
-          "start": "0x800E36DC",
-          "end": "0x800E3A34"
         }
       ]
     },
