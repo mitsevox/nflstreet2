@@ -202,16 +202,17 @@ const unsigned char *_XmlSkipElement(const unsigned char *p)
     } else {
         int depth = 1;
 
-        for (p++; depth > 0 && *p != 0;) {
+        for (p++; *p != 0 && depth > 0;) {
             if (*p == '<') {
                 if (p[1] != '/') {
                     depth++;
                 } else {
                     depth--;
                 }
-                do {
-                    p++;
-                } while (*p != 0 && *p != '>' && *p != '/');
+                for (++p; *p != 0; ++p) {
+                    if (*p == '>' || *p == '/')
+                        break;
+                }
                 if (*p != '>') {
                     continue;
                 }
@@ -348,8 +349,8 @@ const unsigned char *XmlFindChild(const unsigned char *p, const unsigned char *p
 
 const unsigned char *XmlFindInElement(const unsigned char *p, const unsigned char *pPath)
 {
-    const unsigned char *pResult = 0;
     const unsigned char *pEnd = 0;
+    const unsigned char *pResult = 0;
     const unsigned char *q;
     int depth;
     int i;
@@ -374,16 +375,24 @@ const unsigned char *XmlFindInElement(const unsigned char *p, const unsigned cha
         }
         if (pEnd == 0) {
             depth = 0;
-            for (q = p; *q != 0; q++) {
-                if (*q == '<' && q[1] != '?' && q[1] != '!') {
-                    if (q[1] != '/') {
-                        depth++;
-                    } else if (--depth == 0) {
-                        pEnd = q;
-                        break;
-                    }
-                }
-            }
+            q = p;
+            goto checkText;
+        openTag:
+            ++depth;
+        nextText:
+            ++q;
+        checkText:
+            if (*q == 0)
+                goto scanDone;
+            if (*q != '<' || q[1] == '?' || q[1] == '!')
+                goto nextText;
+            if (q[1] != '/')
+                goto openTag;
+            if (--depth != 0)
+                goto nextText;
+            pEnd = q;
+        scanDone:
+            ;
         } else if (p > pEnd) {
             break;
         }
