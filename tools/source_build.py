@@ -2103,6 +2103,21 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                             "matched": size if identical else 0, "status": status})
             if entry.get("follows") is not None:
                 entries[-1]["follows"] = entry["follows"]
+        # A storage row places one of the unit's compiled symbols (COMMON or a file static) at its
+        # evidenced extent outside the unit's contiguous ranges; plan() and the final link put it
+        # there and the complete executable is verified, so the extent is linked data of the unit,
+        # credited as its own .bss is (owner ruling of 2026-11-23). The extents are listed apart
+        # from `sections`, whose placements other tools resolve compiled sections by name.
+        stored = []
+        for name, (start, end) in sorted((unit.get("storage") or {}).items(), key=lambda item: item[1]):
+            section = next(s for s in sections if s["kind"] != "code" and s["start"] <= start < end <= s["end"])
+            size = end - start
+            totals["data"]["linked"] += size
+            totals["data"]["matched"] += size if identical else 0
+            stored.append({"symbol": name, "placement": section["name"], "kind": "data",
+                           "start": f"0x{start:08X}", "end": f"0x{end:08X}",
+                           "linked": size, "matched": size if identical else 0,
+                           "status": "matched" if identical else "unverified"})
         measured.append({"source": unit["source"], "compile_path": unit["compile_path"],
                          "source_sha256": sha256(unit["path"]),
                          "profile": unit["profile"], "flags": unit["flags"],
@@ -2124,6 +2139,7 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                          "native_object_sha256": unit.get("native_object_sha256"),
                          "link_object_sha256": unit.get("link_object_sha256"),
                          "status": "matched" if identical else "unverified", "sections": entries,
+                         "storage_extents": stored,
                          "functions": compiled_functions(unit, objects[unit["source"]])})
     return {"schema": 1, "target": "GN7E69-rev0", "target_sha1": target["sha1"],
             "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),

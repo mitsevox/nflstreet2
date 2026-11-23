@@ -79,15 +79,15 @@ def main():
     parser.add_argument('--source-report', type=Path, default=ROOT / 'build/source/report.json')
     parser.add_argument('--comparison-report', type=Path)
     args = parser.parse_args()
+    import progress
     comparison_site = None
     if args.comparison_report is not None:
-        import progress
         comparison_site = progress.report(
             (args.source_report.parent / 'main.dol').read_bytes(),
             json.loads(args.site.read_text())['revision'], args.source_report,
             ROOT / 'build/analysis', args.comparison_report)
     count = verify(ROOT, json.loads(args.site.read_text()), json.loads(args.decomp.read_text()),
-                   json.loads(args.source_report.read_text())['units'], comparison_site)
+                   progress.measured_units(args.source_report), comparison_site)
     print(f'Both progress maps cover {count} current candidate groupings; source credit is unchanged.')
 
 

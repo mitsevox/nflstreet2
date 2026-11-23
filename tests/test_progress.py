@@ -189,6 +189,51 @@ class SourceReportTests(ProgressBase):
         with self.assertRaisesRegex(ValueError, "differ from the unit manifest"):
             progress.report(self.binary, "a" * 40, self.report_path)
 
+    def write_storage(self, rows, extents):
+        """Give the unit a storage map in the manifest and measured storage extents in the report."""
+        manifest_path = self.root / "config/GN7E69-rev0/units.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest["units"][0]["storage"] = rows
+        manifest_path.write_text(json.dumps(manifest))
+        self.source_report["manifest_sha256"] = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+        self.source_report["units"][0]["storage_extents"] = extents
+        size = sum(int(e["end"], 16) - int(e["start"], 16) for e in extents)
+        self.source_report["totals"]["data"] = {"linked": 4 + size, "matched": 4 + size}
+        self.save()
+
+    def test_storage_extents_count_as_linked_data_of_their_unit(self):
+        # Owner ruling of 2026-11-23: an extent the storage map places is linked data of the unit.
+        self.write_source()
+        row = {"symbol": "gBuffer", "start": "0x8000500C", "end": "0x80005010"}
+        self.write_storage([row], [dict(row, placement=".bss", kind="data", linked=4, matched=4, status="matched")])
+        data = progress.report(self.binary, "a" * 40, self.report_path)
+        self.assertEqual(data["measures"]["data"], {"total": 48, "linked": 8, "matched": 8})
+        unit = next(item for item in data["files"] if item.get("source") == "src/unit.c" and item["kind"] == "data")
+        self.assertEqual((unit["size"], unit["linked"]), (8, 8))
+
+    def test_storage_extents_must_equal_the_manifest_rows(self):
+        row = {"symbol": "gBuffer", "start": "0x8000500C", "end": "0x80005010"}
+        extent = dict(row, placement=".bss", kind="data", linked=4, matched=4, status="matched")
+        for rows, extents in (([row], []), ([], [extent]),
+                              ([row], [dict(extent, symbol="gOther")]),
+                              ([row], [dict(extent, end="0x80005014", linked=8, matched=8)])):
+            self.write_source()
+            self.write_storage(rows, extents)
+            with self.assertRaisesRegex(ValueError, "storage differs from the unit manifest"):
+                progress.report(self.binary, "a" * 40, self.report_path)
+
+    def test_storage_extents_must_be_verified_and_not_overlap(self):
+        row = {"symbol": "gBuffer", "start": "0x8000500C", "end": "0x80005010"}
+        self.write_source()
+        self.write_storage([row], [dict(row, placement=".bss", kind="data", linked=4, matched=0, status="unverified")])
+        with self.assertRaisesRegex(ValueError, "unverified range"):
+            progress.report(self.binary, "a" * 40, self.report_path)
+        row = {"symbol": "gBuffer", "start": "0x80005008", "end": "0x8000500C"}
+        self.write_source()
+        self.write_storage([row], [dict(row, placement=".bss", kind="data", linked=4, matched=4, status="matched")])
+        with self.assertRaisesRegex(ValueError, "overlap"):
+            progress.report(self.binary, "a" * 40, self.report_path)
+
     def test_read_only_data_after_code_counts_in_its_code_section_without_functions(self):
         self.write_source()
         follower = {"section": ".rodata", "placement": ".init", "start": "0x8000310C", "end": "0x80003110",
