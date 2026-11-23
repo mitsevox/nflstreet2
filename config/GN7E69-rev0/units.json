@@ -1245,10 +1245,6 @@
       "address": "0x80279DF8",
       "evidence": "evidence.tsv function/name/source-form rows for 0x80279DF8; registered holdout of src/engine/sfilter.c. Its original code stays linked; called by src/engine/smixhip.c."
     },
-    "gInGameGroup": {
-      "address": "0x803068B4",
-      "evidence": "evidence.tsv data and name rows for 0x803068B4 (gInGameGroup, defined in the comparison-only src/game/InGameGroup.cpp, original bytes); the linked src/game/gsflowman.cpp returns its address."
-    },
     "calcFIRCoeffs": {
       "address": "0x80279E74",
       "evidence": "evidence.tsv function and name rows for 0x80279E74 (calcFIRCoeffs, sfir.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/sfhpffir8.c (SFILTER_modifyHPFFIR8)."
@@ -4150,6 +4146,70 @@
           "end": "0x80289B9C"
         }
       ]
+    },
+    {
+      "source": "src/game/InGameGroup.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x800325E8-0x80032EE8 and native data rows. Both exact code runs, the .ctors/.dtors words and all module and stage storage are placed. The generated initializer keeps its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800325E8",
+          "end": "0x80032790"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80032E70",
+          "end": "0x80032EE8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028ACE0",
+          "end": "0x8028AD70"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCBBC",
+          "end": "0x802CCBF4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803068B4",
+          "end": "0x80306B34"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC680",
+          "end": "0x803EC688"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A5C",
+          "end": "0x80289A60"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B9C",
+          "end": "0x80289BA0"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "__static_initialization_and_destruction_0",
+            "evidence": "evidence.tsv source-form 0x80032790-0x80032E70"
+          }
+        ],
+        "evidence": "merge notes of the pull request linking the exact InGameGroup.cpp functions"
+      }
     },
     {
       "source": "src/game/gsflowman.cpp",

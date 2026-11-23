@@ -32448,7 +32448,7 @@
     {
       "source": "src/game/InGameGroup.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800325E8-0x80032EE8 (src/game/InGameGroup.cpp), its function and data rows, and the source-form row 0x80032790-0x80032E70: nine of the ten functions exact; the static initializer 0x80032790 is the documented partial (owner ruling of 2026-11-14 on #1349 question 2), so original bytes stay linked.",
+      "evidence": "evidence.tsv provisional unit row 0x800325E8-0x80032EE8, data rows and HOLDOUT source-form row 0x80032790-0x80032E70. Only the static initializer remains a comparison; the two code runs, native data and ctor/dtor entries link.",
       "sections": [
         {
           "section": ".text",
@@ -32495,54 +32495,9 @@
       ],
       "functions": [
         {
-          "symbol": "GSGetGroupName__11InGameGroup",
-          "start": "0x800325E8",
-          "end": "0x800325F4"
-        },
-        {
-          "symbol": "GSGetStageList__11InGameGroup",
-          "start": "0x800325F4",
-          "end": "0x80032600"
-        },
-        {
-          "symbol": "GSGetTransitionList__11InGameGroup",
-          "start": "0x80032600",
-          "end": "0x8003260C"
-        },
-        {
-          "symbol": "GSGetStageModuleList__11InGameGroupi",
-          "start": "0x8003260C",
-          "end": "0x80032658"
-        },
-        {
-          "symbol": "GSProcess__11InGameGroup",
-          "start": "0x80032658",
-          "end": "0x80032728"
-        },
-        {
-          "symbol": "GSTransition__11InGameGroupii",
-          "start": "0x80032728",
-          "end": "0x80032790"
-        },
-        {
           "symbol": "__static_initialization_and_destruction_0",
           "start": "0x80032790",
           "end": "0x80032E70"
-        },
-        {
-          "symbol": "_._11InGameGroup",
-          "start": "0x80032E70",
-          "end": "0x80032E90"
-        },
-        {
-          "symbol": "_GLOBAL_.I._InGameGroup_aStages",
-          "start": "0x80032E90",
-          "end": "0x80032EBC"
-        },
-        {
-          "symbol": "_GLOBAL_.D._InGameGroup_aStages",
-          "start": "0x80032EBC",
-          "end": "0x80032EE8"
         }
       ]
     },
