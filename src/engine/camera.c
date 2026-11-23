@@ -6,12 +6,6 @@
 #include "game/CamAddCameraToViewport.h"
 #include "engine/llmatrix.h"
 
-typedef struct CamFuncs_t {
-    void (*mpAdd)(Cam_t *pCam);
-    void (*mpDelete)(Cam_t *pCam);
-    void (*mpProcess)(Viewport_t *pViewport, Cam_t *pCam);
-} CamFuncs_t;
-
 typedef struct CamType_t {
     CamFuncs_t *mpFuncs;
     unsigned int mSize;

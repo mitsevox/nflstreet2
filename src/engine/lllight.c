@@ -19,39 +19,7 @@
 #include "engine/list.h"
 #include "engine/llmemory.h"
 #include "engine/dslist.h"
-
-typedef struct LLLight_t {
-    unsigned int mUnknown0;
-    float mUnknown4[3];
-    float mUnknown16[4];
-    void (*mpUnknown32)(struct LLLight_t *pLight);
-    float mUnknown36[3];
-} LLLight_t;
-
-/* 32-byte entry at +0x14 of LLLightScene_t. */
-typedef struct LLLightProjector_t {
-    unsigned int mUnknown0;
-    float mUnknown4[4];
-    int mUnknown20;
-    float mUnknown24;
-    float mUnknown28;
-} LLLightProjector_t;
-
-typedef struct LLLightScene_t {
-    unsigned int mUnknown0;
-    LLLight_t *mpUnknown4;
-    unsigned int mUnknown8;
-    char *mpUnknown12;
-    unsigned int mUnknown16;
-    LLLightProjector_t mUnknown20[4];
-    float mUnknown148[4];
-} LLLightScene_t;
-
-/* 20-byte record of a 100-byte light-set reference block. */
-typedef struct LLLightSetRef_t {
-    int mUnknown0;
-    float mUnknown4[4];
-} LLLightSetRef_t;
+#include "engine/lllight.h"
 
 typedef struct LLLightSet_t {
     unsigned int mUnknown0;

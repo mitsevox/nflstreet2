@@ -11216,7 +11216,7 @@
     {
       "source": "src/game/LevelLights.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019B43C-0x8019B644 (src/game/LevelLights.cpp) and its two .sdata rows.",
+      "evidence": "evidence.tsv unit row 0x8019B43C-0x8019B644 (src/game/LevelLights.cpp) and its two .sdata rows. .data 0x802EE9F8-0x802F2574: the level light scene tables (evidence.tsv data rows).",
       "sections": [
         {
           "section": ".text",
@@ -11229,6 +11229,12 @@
           "placement": ".data5",
           "start": "0x803EB7B8",
           "end": "0x803EB7C0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EE9F8",
+          "end": "0x802F2574"
         }
       ]
     },
@@ -14886,7 +14892,7 @@
     {
       "source": "src/engine/camfree.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C3CE8-0x801C3EFC (src/engine/camfree.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C3CE8-0x801C3EFC (src/engine/camfree.c) and its data rows; every function exact, promoted from comparison-only.  .data 0x802F4890-0x802F489C: the camera type record gCamFreeFloatFuncs (evidence.tsv data row).",
       "sections": [
         {
           "section": ".text",
@@ -14899,6 +14905,12 @@
           "placement": ".data3",
           "start": "0x802AF0DC",
           "end": "0x802AF0EC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4890",
+          "end": "0x802F489C"
         }
       ]
     },
@@ -16842,7 +16854,7 @@
     {
       "source": "src/engine/camfocus.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C3A44-0x801C3CE8, all eight function/name rows, source-form and field records, and native .rodata data row 0x802AF0C4-0x802AF0DC. Complete source on unchanged engine_c profile.",
+      "evidence": "evidence.tsv provisional unit row 0x801C3A44-0x801C3CE8, all eight function/name rows, source-form and field records, and native .rodata data row 0x802AF0C4-0x802AF0DC. Complete source on unchanged engine_c profile.  .data 0x802F4884-0x802F4890: the camera type record gCamFocusFuncs (evidence.tsv data row).",
       "sections": [
         {
           "section": ".text",
@@ -16855,6 +16867,12 @@
           "placement": ".data3",
           "start": "0x802AF0C4",
           "end": "0x802AF0DC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4884",
+          "end": "0x802F4890"
         }
       ]
     },
