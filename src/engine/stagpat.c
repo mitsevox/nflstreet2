@@ -146,7 +146,7 @@ int SNDBANKI_playtimbre(int bank_index, int patch_index, BankVer_t *bank, SndPla
             ch->m69 = tag->m1B;
             ch->m6B = rec->m6B;
             ch->m7C = tag->m2C;
-            fn_80278598(index);
+            iSNDcalcvol(index);
             if (i == 5) {
                 ch->m4E = 1;
             } else {

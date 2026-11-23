@@ -23251,6 +23251,25 @@
       ]
     },
     {
+      "source": "src/engine/slib.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit, function, name and sound_cxx compiler rows at 0x80278598 and data row 0x802C2040-0x802C2060. One exact function and its native literal pool.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80278598",
+          "end": "0x80278700"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2040",
+          "end": "0x802C2060"
+        }
+      ]
+    },
+    {
       "source": "src/engine/slowpass.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x8027882C-0x80278894 (src/engine/slowpass.c), its function and name rows, and the sound_cxx compiler row 0x802714A8-0x8027CF9C; every function exact, promoted from comparison-only.",

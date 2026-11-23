@@ -5,8 +5,6 @@
 
 extern "C" {
 
-void fn_80278598(int index);
-
 int SNDvol(int id, int value)
 {
     int handle;
@@ -31,7 +29,7 @@ int SNDvol(int id, int value)
                 pVoice->m30 = 0.0f;
                 if (pVoice->m38 != level) {
                     pVoice->m38 = level;
-                    fn_80278598(voice);
+                    iSNDcalcvol(voice);
                     changed = 1;
                     SndHalSetVol(voice);
                 }

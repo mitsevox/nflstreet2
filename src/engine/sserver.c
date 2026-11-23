@@ -103,7 +103,7 @@ void SNDSYSI_100hzserver(void)
             voice->m3C = ((env->m4 << 16) - voice->m40) / voice->m44;
         }
         if (changed) {
-            fn_80278598(i);
+            iSNDcalcvol(i);
             SndHalSetVol(i);
         }
     }

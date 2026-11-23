@@ -44,7 +44,6 @@ int SNDBANKI_playpatch(BankVer_t *bank, void *patch, int bank_index, int patch_i
 void SndHalSetDry(int index);
 void iSNDcalcpitch(int index);
 int fn_80270E04(char **cursor, Struct_80270E04 *out);
-void fn_80278598(int index);
 int SNDstop(int handle);
 int SNDI_validrendermode(int *modeCursor, const SNDIPATCHHEADER *header);
 void SNDI_patchtohdr(BankVer_t *bank, unsigned char *patch, SndSampleFormat_t *format, SndSampleAttr_t *attr,
