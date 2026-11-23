@@ -261,7 +261,7 @@ int iSPCH_FindEventSlot(unsigned int priority, int channel)
             goto done;
         }
     }
-    now = fn_801B2368();
+    now = SPCHEXT_gettick();
     for (i = 0; i <= 15; i++) {
         unsigned int limit = gVoxEvents.mVoices[i].mItem->mUnknown2;
         // FAKEMATCH: the never-set skip test (declaration above)
@@ -307,7 +307,7 @@ int iSPCH_AddEvent(int *event)
                 if (iSPCH_Rand(100, -1) <= level) {
                     int voice = iSPCH_FindEventSlot(item->mUnknown4, channel);
                     if (voice >= 0) {
-                        unsigned int now = fn_801B2368();
+                        unsigned int now = SPCHEXT_gettick();
                         if (now == gLastTick) {
                             gLastSubTick++;
                         } else {
@@ -382,7 +382,7 @@ int iSPCH_EventInFollowGroup(int id, SpchFollowData_t *list)
 
 int iSPCH_ChooseEventSearch(SpchFollowData_t *list, int channel)
 {
-    unsigned int now = fn_801B2368() + gPreLoadTicks;
+    unsigned int now = SPCHEXT_gettick() + gPreLoadTicks;
     int best = -1;
     int bestPriority = 0;
     unsigned int bestAge = (unsigned int)-1;

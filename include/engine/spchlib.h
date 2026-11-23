@@ -208,14 +208,14 @@ extern unsigned int seedX[6];
 extern unsigned short gRandArray[32][2];
 extern int gRandArrayIndex;
 unsigned int iSPCH_EACrandom(void);
-int fn_801B22E0(VoxBankHdr_t *, int, int *, int *);
+int iSPCH_GetSampleSizeData(VoxBankHdr_t *, int, int *, int *);
 int fn_801B05E4(Work_801B10AC *, unsigned char *);
 char *iSPCH_GetSampleParmAddr(VoxBankHdr_t *, int);
 int iSPCH_FindBank(unsigned int, int *);
 int iSPCH_FindSubBank(unsigned int, unsigned int, int *);
 int iSPCH_TestSubBankBounds(int, unsigned int);
 
-unsigned int fn_801B2368(void);
+unsigned int SPCHEXT_gettick(void);
 int iSPCH_Rand(int count, int category);
 void fn_801B10D8(int channel);
 int fn_801B1864(int voice);

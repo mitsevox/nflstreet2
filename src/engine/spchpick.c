@@ -323,7 +323,7 @@ int fn_801B0208(unsigned char *p, Work_801B10AC *work)
         int index = work->mEntries[i].mUnknown4;
         VoxBankHdr_t *record = gVoxBanks[index].mUnknown4;
         int a, b;
-        if (fn_801B22E0(record, work->mValues[work->mEntries[i].mUnknownA], &a, &b)) {
+        if (iSPCH_GetSampleSizeData(record, work->mValues[work->mEntries[i].mUnknownA], &a, &b)) {
             total += b;
         }
     }

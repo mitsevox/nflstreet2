@@ -241,6 +241,20 @@
       "language": "c++",
       "evidence": "evidence.tsv compiler row 0x801AE3E4-0x801B2AD4 (speech_cxx): the speech library files carry NASCAR 2005's .c names (spchevnt.c, spchpick.c, spchrand.c), and NASCAR's symbols for those files are C++-mangled for 11 of 46, 36 of 67 and 3 of 5 functions, the rest unmangled as extern \"C\" declarations would be (iSPCH_SearchEventDat__FP7VoxDatai in spchevnt.c, iSPCH_EACseedrandom__FUi in spchrand.c), so the original build compiled them as C++; the two neutral .cpp files of the range use it too. -O2 -fno-weak -ffast-math are game_cpp's, measured on the former single file src/engine/cu_801AE3E4.cpp: C++ front end for its gcc 2.95 virtual calls, default -G 8 for its r13 small-data accesses. -fno-strength-reduce (owner-approved per-profile flag, 2026-11-14): the target's speech loops index arrays afresh each iteration (slwi/lwzx, bottom test) where -O2 forms pointer increments or CTR counters; with the flag 13 more registered functions of the five files compile exact and none of the others changes."
     },
+    "speech_cxx_holdouts": {
+      "flags": [
+        "-O2",
+        "-fno-weak",
+        "-ffast-math",
+        "-fno-strength-reduce",
+        "-ffunction-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "language": "c++",
+      "evidence": "speech_cxx plus the owner-approved named function-sections form for holdouts (config README, Holdouts). See evidence.tsv compiler row 0x801B1CFC-0x801B23A0: the flag enables selection of the two exact code runs."
+    },
     "sound_cxx": {
       "flags": [
         "-O2",
@@ -1261,10 +1275,6 @@
       "address": "0x803EBB0C",
       "evidence": "evidence.tsv data/name rows for 0x803EBB0C (target extent, related name); speech-library storage, original-owned."
     },
-    "iSPCH_GetSampleParmAddr": {
-      "address": "0x801B22B0",
-      "evidence": "evidence.tsv function/name rows for 0x801B22B0 (target extent, related name); exact in the src/engine/spchrule.c comparison, called by the src/engine/spchpick.c comparison; the file is not linked."
-    },
     "MIX_audioslice": {
       "address": "0x802763E0",
       "evidence": "evidence.tsv function and name rows for 0x802763E0 (MIX_audioslice, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks (c18 wave)."
@@ -1560,6 +1570,10 @@
     "PATHI_seeknextnode": {
       "address": "0x801B721C",
       "evidence": "evidence.tsv function/name rows for PATHI_seeknextnode at 0x801B721C. Original-owned code used by PATHI_serviceproject, call at 0x801B397C."
+    },
+    "iSPCH_GetSampleSizeData": {
+      "address": "0x801B22E0",
+      "evidence": "evidence.tsv source-form 0x801B22E0-0x801B2368; original sample-size code retained as the only spchrule.c holdout. Called by the speech pick comparison."
     }
   },
   "units": [
@@ -17160,6 +17174,34 @@
         }
       ],
       "evidence": "evidence.tsv unit row 0x801B1A3C-0x801B1CFC (src/engine/spchrand.c), its function, name and source-form rows, the data rows of its own storage (seedX .data 0x802F477C-0x802F4794, gRandArray .bss 0x8037E794-0x8037E814, gRandArrayIndex .sdata 0x803EBB20-0x803EBB24) and the speech_cxx compiler row; all five functions match the target, promoted from comparison-only."
+    },
+    {
+      "source": "src/engine/spchrule.c",
+      "profile": "speech_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x801B1CFC-0x801B23A0 and its name and function records. Fifteen routines link from the speech rule source. The 136-byte sample size helper keeps the original bytes. This source has no allocated data section.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B1CFC",
+          "end": "0x801B22E0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B2368",
+          "end": "0x801B23A0"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "iSPCH_GetSampleSizeData",
+            "evidence": "evidence.tsv source-form 0x801B22E0-0x801B2368"
+          }
+        ],
+        "evidence": "evidence.tsv source-form 0x801B22E0-0x801B2368 records the remaining status register and store ordering differences."
+      }
     },
     {
       "source": "src/engine/pathinit.c",
