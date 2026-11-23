@@ -221,13 +221,19 @@ struct Struct_80270E04 {
     unsigned short m54;
     unsigned short m56;
     int m58;
-    unsigned char mUnknown5C[4];
+    unsigned int mLoopStart;
     int m60;
     int *m64;
     int m68;
-    unsigned char mUnknown6C[0x50];
+    int mOtherChannelOffsets[5];
+    int mChannelRelativeOffsets[6];
+    unsigned char *mChannelDataBlocks[6];
+    unsigned short mChannelDataBlockSizes[6];
     unsigned short mBC[6];
-    unsigned char mUnknownC8[0x38];
+    unsigned char *mAdpcmCoefficients[6];
+    struct Loop_80273DF8 *mAdpcmLoopState[6];
+    char *mTimbreStart;
+    unsigned char unk_0xFC[4];
 };
 
 struct Struct_802753AC {
