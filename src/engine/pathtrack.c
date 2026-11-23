@@ -30,7 +30,7 @@ extern "C" int PATH_createstreamtrack(int flags, PathfinderTrackData_t *data, in
     return result;
 }
 
-extern "C" Class_801B44BC *PATH_createstreamimp(int flags, int a, float b)
+extern "C" IPathTrack *PATH_createstreamimp(int flags, int a, float b)
 {
     int acquired;
     if (++lbl_803EBB24 == 1 && lbl_803EBB38)
@@ -43,7 +43,7 @@ extern "C" Class_801B44BC *PATH_createstreamimp(int flags, int a, float b)
         return 0;
     if (!PATHI_switchvoice(flags))
         return 0;
-    Class_801B44BC *track = 0;
+    IPathTrack *track = 0;
     PathTrack_t *p = PATHI_gettrackptr(flags);
     if (p) {
         int rate = PATHI_bytesperms(p->mUnknown0);
@@ -82,7 +82,7 @@ extern "C" int PATH_createbanktrack(int flags, PathfinderTrackData_t *data, int 
     return result;
 }
 
-extern "C" Class_801B44BC *PATH_createbankobject(int flags)
+extern "C" IPathTrack *PATH_createbankobject(int flags)
 {
     int acquired;
     if (++lbl_803EBB24 == 1 && lbl_803EBB38)
@@ -95,7 +95,7 @@ extern "C" Class_801B44BC *PATH_createbankobject(int flags)
         return 0;
     if (!PATHI_switchvoice(flags))
         return 0;
-    Class_801B44BC *track = 0;
+    IPathTrack *track = 0;
     PathTrack_t *p = PATHI_gettrackptr(flags);
     if (p) {
         lbl_803EBB64->vfn_03(&track, p->mUnknown104);
@@ -255,7 +255,7 @@ extern "C" int PATHI_dispatchtrackstate(int state)
     return i;
 }
 
-Class_801B44BC::Class_801B44BC()
+IPathTrack::IPathTrack()
 {
     mUnknown0 = 0;
     mUnknown4 = 0;
@@ -272,11 +272,11 @@ Class_801B44BC::Class_801B44BC()
     mUnknown58 = -1;
 }
 
-Class_801B44BC::~Class_801B44BC()
+IPathTrack::~IPathTrack()
 {
 }
 
-int Class_801B44BC::GetNumSubBanks()
+int IPathTrack::GetNumSubBanks()
 {
     PathTrackInfo_t *p = mUnknown5C;
     int result;
@@ -287,44 +287,44 @@ int Class_801B44BC::GetNumSubBanks()
     return result;
 }
 
-int Class_801B44BC::GetMaxSubBanks()
+int IPathTrack::GetMaxSubBanks()
 { return mUnknown60; }
 
-PathSubBankState_t *Class_801B44BC::GetSubBankPtr(int index)
+PathSubBankState_t *IPathTrack::GetSubBankPtr(int index)
 { return 0; }
 
-PathSubBankState_t *Class_801B44BC::GetAvailSubBankPtr()
+PathSubBankState_t *IPathTrack::GetAvailSubBankPtr()
 { return 0; }
 
-int Class_801B44BC::AddSubBank(int index, char *data)
+int IPathTrack::AddSubBank(int index, char *data)
 { return -8; }
 
-int Class_801B44BC::AddSubBankDone(int index)
+int IPathTrack::AddSubBankDone(int index)
 { return -8; }
 
-int Class_801B44BC::DetachSubBankHeader(int index, int header)
+int IPathTrack::DetachSubBankHeader(int index, int header)
 { return -8; }
 
-int Class_801B44BC::RemoveSubBank(int index)
+int IPathTrack::RemoveSubBank(int index)
 { return -8; }
 
-void Class_801B44BC::SetTrackInfo(PathTrackInfo_t *p)
+void IPathTrack::SetTrackInfo(PathTrackInfo_t *p)
 { mUnknown5C = p; }
 
-int Class_801B44BC::GetVolume()
+int IPathTrack::GetVolume()
 { return mUnknown10; }
 
-int Class_801B44BC::GetDryLevel()
+int IPathTrack::GetDryLevel()
 { return mUnknownC; }
 
-int Class_801B44BC::GetFXSendLevel(int value)
+int IPathTrack::GetFXSendLevel(int value)
 { return mUnknown8; }
 
-int Class_801B44BC::GetHandle()
+int IPathTrack::GetHandle()
 { return mUnknown0; }
 
-int Class_801B44BC::GetPlayOpts()
+int IPathTrack::GetPlayOpts()
 { return mUnknown20; }
 
-void Class_801B44BC::SetFilePath(PathTrackFile_t *path)
+void IPathTrack::SetFilePath(PathTrackFile_t *path)
 {}

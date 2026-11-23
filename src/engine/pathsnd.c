@@ -28,7 +28,7 @@ typedef struct Record_8027E2D0 {
     unsigned char mUnknown20[4];
 } Record_8027E2D0;
 
-struct Class_801B44BC {
+struct IPathTrack {
     int m0;
     unsigned char mUnknown4[4];
     int m8;
@@ -43,7 +43,7 @@ struct Class_801B44BC {
     int m58;
     unsigned char mUnknown5C[8];
     Record_8027E2D0 *m64;
-    virtual ~Class_801B44BC();
+    virtual ~IPathTrack();
     virtual void vfn_02();
     virtual void vfn_03();
     virtual int vfn_04();
@@ -80,7 +80,7 @@ struct Class_801B44BC {
     virtual int vfn_35();
 };
 
-struct Object_8027D6E8 : Class_801B44BC {
+struct Object_8027D6E8 : IPathTrack {
     virtual ~Object_8027D6E8();
     Record_8027D9FC m6C;
     Record_8027EC7C m7C;

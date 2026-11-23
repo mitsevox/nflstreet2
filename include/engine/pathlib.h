@@ -35,9 +35,9 @@ struct PathTrackFile_t {
     int mUnknown4;
 };
 
-class Class_801B44BC {
+class IPathTrack {
 public:
-    virtual ~Class_801B44BC();
+    virtual ~IPathTrack();
     virtual void SetTrackInfo(PathTrackInfo_t *p);
     virtual void vfn_03() = 0;
     virtual void vfn_04() = 0;
@@ -71,7 +71,7 @@ public:
     virtual int DetachSubBankHeader(int index, int header);
     virtual int RemoveSubBank(int index);
 
-    Class_801B44BC();
+    IPathTrack();
 
     int mUnknown0;
     int mUnknown4;
@@ -168,7 +168,7 @@ struct PathTrack_t {
     unsigned int mUnknownF4;
     int mUnknownF8;
     int mUnknownFC;
-    Class_801B44BC *mUnknown100;
+    IPathTrack *mUnknown100;
     unsigned short mUnknown104;
     unsigned char mUnknown106[2];
     int mUnknown108;
@@ -324,8 +324,8 @@ struct PathfinderTrackData_t;
 class Class_803EBB64 {
 public:
     virtual ~Class_803EBB64();
-    virtual int vfn_02(Class_801B44BC **track, int a, float b, int c) = 0;
-    virtual int vfn_03(Class_801B44BC **track, int a) = 0;
+    virtual int vfn_02(IPathTrack **track, int a, float b, int c) = 0;
+    virtual int vfn_03(IPathTrack **track, int a) = 0;
 };
 
 extern "C" {
@@ -409,8 +409,8 @@ int PATH_addmapfile(PathMapHeader_t *map);
 int PATH_destroy(int flags);
 int PATH_setvariable(int flags, const char *name, int value);
 int PATHI_bytesperms(int index);
-Class_801B44BC *PATH_createstreamimp(int flags, int a, float b);
-Class_801B44BC *PATH_createbankobject(int flags);
+IPathTrack *PATH_createstreamimp(int flags, int a, float b);
+IPathTrack *PATH_createbankobject(int flags);
 void PATH_volume(int flags, signed char volume);
 void PATH_fade(int flags, int a, int b, int c);
 void PATHI_fade(PathTrack_t *p, int a, int b, int c);
