@@ -7,6 +7,7 @@
    started with, and the eased vectors and values the scripted cameras use. */
 
 #include "engine/camfocus.h"
+#include "engine/camera.h"
 #include "engine/viewport.h"
 #include "game/GameCamera.h"
 #include "game/CamEaseVec.h"
@@ -31,8 +32,8 @@ struct CamTypeDefEntry_t {
 };
 
 extern "C" {
-extern char lbl_802F4884[];
-extern char lbl_802F4890[];
+extern CamFuncs_t CamFocusDef;
+extern CamFuncs_t CamFreeFloatDef;
 extern CamTypeDef_t _Replay_CamType;
 extern char lbl_8031BDD4[];
 
@@ -75,8 +76,8 @@ CamTypeDef_t _CamMain_Type = { CamMainInit, CamMainUninit, CamMainUpdate };
 int _CamMain_BaseTypes[19] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 4, 4, 4, 0 };
 
 CamTypeDefEntry_t _CamMainTypeDefs[5] = {
-    { lbl_802F4890, 0x8C, 0 },
-    { lbl_802F4884, 0x94, 0 },
+    { &CamFreeFloatDef, 0x8C, 0 },
+    { &CamFocusDef, 0x94, 0 },
     { &_CamMain_Type, 0xF58, 0 },
     { &_Replay_CamType, 0xF60, 0 },
     { 0, 0, 0 },

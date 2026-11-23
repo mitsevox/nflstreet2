@@ -435,3 +435,157 @@ static void cbForSeekAsync(s32 result, DVDCommandBlock* block)
         (fileInfo->callback)(result, fileInfo);
     }
 }
+
+BOOL DVDOpenDir(const char* dirName, DVDDir* dir)
+{
+    s32 entry;
+    char currentDir[128];
+
+    entry = DVDConvertPathToEntrynum(dirName);
+
+    if (entry < 0)
+    {
+        DVDGetCurrentDir(currentDir, 128);
+        OSReport("Warning: DVDOpenDir(): file '%s' was not found under %s.\n", dirName, currentDir);
+        return FALSE;
+    }
+
+    if (!entryIsDir(entry))
+    {
+        return FALSE;
+    }
+
+    dir->entryNum = (u32)entry;
+    dir->location = (u32)entry + 1;
+    dir->next = nextDir(entry);
+
+    return TRUE;
+}
+
+BOOL DVDPrepareStreamAsync(DVDFileInfo* fileInfo, u32 length, u32 offset, DVDCallback callback)
+{
+    u32 start;
+
+    start = fileInfo->startAddr + offset;
+
+    if (start % (32 * 1024) != 0)
+    {
+        OSPanic(__FILE__, __LINE__,
+                "DVDPrepareStreamAsync(): Specified start address (filestart(0x%x) + offset(0x%x)) is not 32KB aligned",
+                fileInfo->startAddr, offset);
+    }
+
+    if (length == 0)
+    {
+        length = fileInfo->length - offset;
+    }
+
+    if (length % (32 * 1024) != 0)
+    {
+        OSPanic(__FILE__, __LINE__,
+                "DVDPrepareStreamAsync(): Specified length (0x%x) is not a multiple of 32768(32*1024)",
+                length);
+    }
+
+    if (!((offset < fileInfo->length) && (offset + length <= fileInfo->length)))
+    {
+        OSPanic(__FILE__, __LINE__,
+                "DVDPrepareStreamAsync(): The area specified (offset(0x%x), length(0x%x)) is out of the file",
+                offset, length);
+    }
+
+    fileInfo->callback = callback;
+    return DVDPrepareStreamAbsAsync(&(fileInfo->cb), length, fileInfo->startAddr + offset,
+                                    cbForPrepareStreamAsync);
+}
+
+static void cbForPrepareStreamAsync(s32 result, DVDCommandBlock* block)
+{
+    DVDFileInfo* fileInfo;
+
+    fileInfo = (DVDFileInfo*)((char*)block - offsetof(DVDFileInfo, cb));
+
+    if (fileInfo->callback)
+    {
+        (fileInfo->callback)(result, fileInfo);
+    }
+}
+
+s32 DVDPrepareStream(DVDFileInfo* fileInfo, u32 length, u32 offset)
+{
+    BOOL result;
+    DVDCommandBlock* block;
+    s32 state;
+    BOOL enabled;
+    s32 retVal;
+    u32 start;
+
+    start = fileInfo->startAddr + offset;
+
+    if (start % (32 * 1024) != 0)
+    {
+        OSPanic(__FILE__, __LINE__,
+                "DVDPrepareStream(): Specified start address (filestart(0x%x) + offset(0x%x)) is not 32KB aligned",
+                fileInfo->startAddr, offset);
+    }
+
+    if (length == 0)
+    {
+        length = fileInfo->length - offset;
+    }
+
+    if (length % (32 * 1024) != 0)
+    {
+        OSPanic(__FILE__, __LINE__,
+                "DVDPrepareStream(): Specified length (0x%x) is not a multiple of 32768(32*1024)",
+                length);
+    }
+
+    if (!((offset < fileInfo->length) && (offset + length <= fileInfo->length)))
+    {
+        OSPanic(__FILE__, __LINE__,
+                "DVDPrepareStream(): The area specified (offset(0x%x), length(0x%x)) is out of the file",
+                offset, length);
+    }
+
+    block = &(fileInfo->cb);
+    result = DVDPrepareStreamAbsAsync(block, length, start, cbForPrepareStreamSync);
+
+    if (result == FALSE)
+    {
+        return -1;
+    }
+
+    enabled = OSDisableInterrupts();
+
+    while (1)
+    {
+        state = ((volatile DVDCommandBlock*)block)->state;
+
+        if (state == DVD_STATE_END)
+        {
+            retVal = 0;
+            break;
+        }
+        if (state == DVD_STATE_FATAL_ERROR)
+        {
+            retVal = DVD_RESULT_FATAL_ERROR;
+            break;
+        }
+        if (state == DVD_STATE_CANCELED)
+        {
+            retVal = DVD_RESULT_CANCELED;
+            break;
+        }
+
+        OSSleepThread(&__DVDThreadQueue);
+    }
+
+    OSRestoreInterrupts(enabled);
+    return retVal;
+}
+
+static void cbForPrepareStreamSync(s32 result, DVDCommandBlock* block)
+{
+    OSWakeupThread(&__DVDThreadQueue);
+}

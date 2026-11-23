@@ -2,6 +2,7 @@
 
 #include "engine/SysSetLastErrorFunc.h"
 
+char Math_ModuleID[] = "MATH.LIB";
 static unsigned char _Math_ModuleActive = 0;
 
 void MathLLInit(void);

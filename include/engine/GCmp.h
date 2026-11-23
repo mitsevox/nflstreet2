@@ -17,6 +17,29 @@ typedef struct GCmpBuffer_t {
     unsigned char mUnknown19[7];
 } GCmpBuffer_t;
 
+typedef void *(*GCmpCodecInitFunc_t)(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst);
+typedef int (*GCmpCodecRunFunc_t)(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState);
+typedef void (*GCmpCodecEndFunc_t)(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState);
+
+/* 40-byte codec descriptor registered through GCmpRegisterType; each codec file
+   defines its own. */
+typedef struct GCmpCodec_t {
+    unsigned int mTag;
+    unsigned int mFlags;
+    GCmpCodecInitFunc_t mpEncodeInit;
+    GCmpCodecRunFunc_t mpEncodeRun;
+    GCmpCodecEndFunc_t mpEncodeEnd;
+    GCmpCodecInitFunc_t mpDecodeInit;
+    GCmpCodecRunFunc_t mpDecodeRun;
+    GCmpCodecEndFunc_t mpDecodeEnd;
+    int (*mpStartup)(void);
+    int (*mpShutdown)(void);
+} GCmpCodec_t;
+
+extern GCmpCodec_t GCmpTypeHuffman;
+extern GCmpCodec_t GCmpTypeRLE;
+extern GCmpCodec_t GCmpTypeNONE;
+
 int GCmpRead(GCmpBuffer_t *pBuffer, void *pOut, unsigned int size);
 int GCmpWrite(GCmpBuffer_t *pBuffer, void *pIn, unsigned int size);
 void GCmpDecompress(int codec, GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst);

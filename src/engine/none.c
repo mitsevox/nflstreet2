@@ -41,3 +41,10 @@ int _NONEDecProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 void _NONEDecStop(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
 {
 }
+
+GCmpCodec_t GCmpTypeNONE = {
+    'NONE', 1,
+    _NONECoStart, (GCmpCodecRunFunc_t)_NONECoProcess, _NONECoStop,
+    _NONEDecStart, (GCmpCodecRunFunc_t)_NONEDecProcess, _NONEDecStop,
+    0, 0
+};

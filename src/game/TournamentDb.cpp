@@ -16,6 +16,18 @@ static unsigned char _Tournament_bDraftPoolOpen = 0;
 static int _Tournament_iDbHandle = -1;
 
 extern "C" {
+int TournamentDbQueryDraftPoolCount(int ptfd)
+{
+    int count;
+    int total = 0;
+    int result = TDbCompilePerformOp(0, "select count(*) into \x85 from 'PDFN' where 'PTFD' = \x85\n", &count, ptfd);
+
+    if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
+        total = count;
+    }
+    return total;
+}
+
 int TournamentDbQueryDraftPool(int ptfd, int *pList, int max)
 {
     QueryCursor cursor;
@@ -243,6 +255,18 @@ int TournamentDbQueryTeamList(int *pList)
     return count;
 }
 
+int TournamentGetDraftPoolCount1(void)
+{
+    int result;
+
+    if (!_Tournament_bDraftPoolOpen) {
+        result = 0;
+    } else {
+        result = TournamentDbQueryDraftPoolCount(1);
+    }
+    return result;
+}
+
 int TournamentGetDraftPool1(int *pList, int max)
 {
     int result;
@@ -251,6 +275,18 @@ int TournamentGetDraftPool1(int *pList, int max)
         result = -1;
     } else {
         result = TournamentDbQueryDraftPool(1, pList, max);
+    }
+    return result;
+}
+
+int TournamentGetDraftPoolCount0(void)
+{
+    int result;
+
+    if (!_Tournament_bDraftPoolOpen) {
+        result = 0;
+    } else {
+        result = TournamentDbQueryDraftPoolCount(0);
     }
     return result;
 }

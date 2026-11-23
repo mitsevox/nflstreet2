@@ -61,6 +61,7 @@ extern unsigned int Glib_TexPalEntries[];
 extern unsigned char Glib_PalBitsPerPixel[7];
 extern TexFileType_t _Tex_RawFileType;
 extern TexFileType_t _Tex_MipmapFileType;
+static char _Tex_ModuleID[] = "TEXTURE.LIB";
 static unsigned char _Tex_ModuleActive = 0;
 
 /* The heap texture images and palettes are allocated from (shared with lltextur.c). */

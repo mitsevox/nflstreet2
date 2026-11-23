@@ -1167,10 +1167,6 @@
       "address": "0x803ECEA4",
       "evidence": "evidence.tsv data/name rows for 0x803ECEA4 (target extent, related name); speech-library storage, original-owned."
     },
-    "spchlibauthor": {
-      "address": "0x802F4794",
-      "evidence": "evidence.tsv data/name rows for 0x802F4794 (target extent, related name); speech-library storage, original-owned."
-    },
     "PerJoyDriverPollPADs": {
       "address": "0x801E26FC",
       "evidence": "evidence.tsv function and name rows for 0x801E26FC (PerJoyDriverPollPADs in src/engine/PJoyDrvr.c, a comparison-only file); the linked src/engine/llperiph.c calls it and registers it as a callback, so it resolves to the original bytes."
@@ -1893,7 +1889,7 @@
     {
       "source": "src/engine/system.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801F77DC-0x801F7DF4 (src/engine/system.c), its compiler, function, name, data, type and source-form rows; every function exact and the file-owned .sdata linked; the file defines the _Sys_TimerList, _Sys_CallbackList and _SysCS COMMON globals and the unit's storage map places each at its exact data row.",
+      "evidence": "evidence.tsv unit row 0x801F77DC-0x801F7DF4 (src/engine/system.c), its compiler, function, name, data, type and source-form rows; every function exact and the file-owned .sdata linked; the file defines the _Sys_TimerList, _Sys_CallbackList and _SysCS COMMON globals and the unit's storage map places each at its exact data row. Its .data is the module id string _Sys_ModuleID (data row 0x802F953C).",
       "sections": [
         {
           "section": ".text",
@@ -1906,6 +1902,12 @@
           "placement": ".data5",
           "start": "0x803EBE30",
           "end": "0x803EBE4C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F953C",
+          "end": "0x802F9548"
         }
       ],
       "storage": [
@@ -4959,13 +4961,27 @@
     {
       "source": "src/dolphin/os/OSTime.c",
       "profile": "dolphin_release",
-      "evidence": "sdk.json unit src/dolphin/os/OSTime.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "evidence": "sdk.json unit src/dolphin/os/OSTime.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only. Its .data is the month tables of the discarded OSTicksToCalendarTime (linker row 0x802FCC90).",
+      "link_roots": {
+        "symbols": [
+          "OSGetTime",
+          "OSGetTick",
+          "__OSGetSystemTime"
+        ],
+        "evidence": "The target keeps this file's three functions at 0x8023E794-0x8023E818 (called from outside the file); OSTicksToCalendarTime and its static helpers have no code in the target, while their month tables YearDays and LeapYearDays remain in .data 0x802FCC90-0x802FCCF0 (evidence.tsv linker row 0x802FCC90), so SN's linker discarded the unreferenced functions."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8023E794",
           "end": "0x8023E818"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FCC90",
+          "end": "0x802FCCF0"
         }
       ]
     },
@@ -4997,7 +5013,7 @@
     {
       "source": "src/dolphin/dvd/dvdfs.c",
       "profile": "dolphin_dvd_release",
-      "evidence": "sdk.json unit src/dolphin/dvd/dvdfs.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "evidence": "sdk.json unit src/dolphin/dvd/dvdfs.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only. Its .data also holds the strings of the discarded DVDOpenDir, DVDPrepareStreamAsync and DVDPrepareStream (linker row 0x802FCE94).",
       "link_roots": {
         "symbols": [
           "__DVDFSInit",
@@ -5020,7 +5036,7 @@
           "section": ".data",
           "placement": ".data4",
           "start": "0x802FCD08",
-          "end": "0x802FCE93"
+          "end": "0x802FD0F7"
         },
         {
           "section": ".sdata",
@@ -5282,7 +5298,7 @@
     {
       "source": "src/dolphin/gx/GXMisc.c",
       "profile": "dolphin_release",
-      "evidence": "sdk.json unit src/dolphin/gx/GXMisc.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "evidence": "sdk.json unit src/dolphin/gx/GXMisc.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only. Its .data is the strings of the discarded GXCompressZ16 and GXDecompressZ16 (linker row 0x802FE2F8).",
       "link_roots": {
         "symbols": [
           "GXSetMisc",
@@ -5322,6 +5338,12 @@
           "placement": ".sbss",
           "start": "0x803ED3A0",
           "end": "0x803ED3B4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FE2F8",
+          "end": "0x802FE34B"
         }
       ]
     },
@@ -7167,7 +7189,7 @@
     {
       "source": "src/dolphin/os/OSAlarm.c",
       "profile": "dolphin_release",
-      "evidence": "sdk.json unit src/dolphin/os/OSAlarm.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "evidence": "sdk.json unit src/dolphin/os/OSAlarm.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only. Its .data is the five report strings of the linker-discarded OSCheckAlarmQueue (linker row 0x802FBA60).",
       "link_roots": {
         "symbols": [
           "OSInitAlarm",
@@ -7190,6 +7212,12 @@
           "placement": ".sbss",
           "start": "0x803ED078",
           "end": "0x803ED080"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FBA60",
+          "end": "0x802FBC48"
         }
       ]
     },
@@ -8704,7 +8732,7 @@
     {
       "source": "src/game/TournamentDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80086194-0x80086C10 (src/game/TournamentDb.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80086194-0x80086C10 (src/game/TournamentDb.cpp), its data rows and the linker row 0x802946AC-0x802946E4 (the draft-pool count string at the head of the unit's .rodata).",
       "link_roots": {
         "symbols": [
           "TournamentDbQueryDraftPool",
@@ -8733,11 +8761,14 @@
           "TournamentOpen"
         ],
         "discarded": [
+          "TournamentDbQueryDraftPoolCount",
+          "TournamentGetDraftPoolCount1",
+          "TournamentGetDraftPoolCount0",
           "DeleteLtfnRow",
           "SelectPtfnRow",
           "ListPtfnByMunt"
         ],
-        "evidence": "evidence.tsv linker rows 0x802948CC-0x80294918, 0x802949C0-0x80294A0C and 0x80294A60-0x80294AB4: the target keeps every listed function, all reached from outside the unit or from each other; three query functions have no code in the target, while their strings remain in the unit's rodata."
+        "evidence": "evidence.tsv linker rows 0x802946AC-0x802946E4, 0x802948CC-0x80294918, 0x802949C0-0x80294A0C and 0x80294A60-0x80294AB4: the target keeps every listed function, all reached from outside the unit or from each other; the draft-pool count function with its two wrappers and three query functions have no code in the target, while their strings remain in the unit's rodata."
       },
       "sections": [
         {
@@ -8749,7 +8780,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802946E4",
+          "start": "0x802946AC",
           "end": "0x80294B38"
         },
         {
@@ -11223,7 +11254,7 @@
     {
       "source": "src/game/LevelLights.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019B43C-0x8019B644 (src/game/LevelLights.cpp) and its two .sdata rows.",
+      "evidence": "evidence.tsv unit row 0x8019B43C-0x8019B644 (src/game/LevelLights.cpp) and its two .sdata rows. .data 0x802EE9F8-0x802F2574: the level light scene tables (evidence.tsv data rows).",
       "sections": [
         {
           "section": ".text",
@@ -11236,6 +11267,12 @@
           "placement": ".data5",
           "start": "0x803EB7B8",
           "end": "0x803EB7C0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EE9F8",
+          "end": "0x802F2574"
         }
       ]
     },
@@ -14690,7 +14727,7 @@
     {
       "source": "src/engine/anim.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/anim.c), its function rows and the compiler row 0x801B9D00-0x801C1D84; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBB78-0x803EBB88, .bss 0x8037E840-0x8037E858, .sbss 0x803ECEB4-0x803ECEB8, each with its evidence.tsv data rows.",
+      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/anim.c), its function rows and the compiler row 0x801B9D00-0x801C1D84; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBB78-0x803EBB88, .bss 0x8037E840-0x8037E858, .sbss 0x803ECEB4-0x803ECEB8, each with its evidence.tsv data rows. Its .data is the module id string _Anim_ModuleID (data row 0x802F4840).",
       "sections": [
         {
           "section": ".text",
@@ -14715,6 +14752,12 @@
           "placement": ".sbss",
           "start": "0x803ECEB4",
           "end": "0x803ECEB8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4840",
+          "end": "0x802F484C"
         }
       ]
     },
@@ -14776,7 +14819,7 @@
     {
       "source": "src/engine/AnimSequencer.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BFEF8-0x801BFFA8 (src/engine/AnimSequencer.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBBAC-0x803EBBB4, each with its evidence.tsv data rows.",
+      "evidence": "evidence.tsv unit row 0x801BFEF8-0x801BFFA8 (src/engine/AnimSequencer.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBBAC-0x803EBBB4, each with its evidence.tsv data rows. Its .data is the module id string _AnimSequencer_ModuleID (data row 0x802F485C).",
       "sections": [
         {
           "section": ".text",
@@ -14789,6 +14832,12 @@
           "placement": ".data5",
           "start": "0x803EBBAC",
           "end": "0x803EBBB4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F485C",
+          "end": "0x802F4870"
         }
       ]
     },
@@ -14916,7 +14965,7 @@
     {
       "source": "src/engine/camfree.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C3CE8-0x801C3EFC (src/engine/camfree.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C3CE8-0x801C3EFC (src/engine/camfree.c) and its data rows; every function exact, promoted from comparison-only.  .data 0x802F4890-0x802F489C: the camera type record CamFreeFloatDef (evidence.tsv data row).",
       "sections": [
         {
           "section": ".text",
@@ -14929,6 +14978,12 @@
           "placement": ".data3",
           "start": "0x802AF0DC",
           "end": "0x802AF0EC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4890",
+          "end": "0x802F489C"
         }
       ]
     },
@@ -15130,7 +15185,7 @@
     {
       "source": "src/engine/maths.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CEF48-0x801CEFF0 (src/engine/maths.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBCB0-0x803EBCB4, each with its evidence.tsv data rows.",
+      "evidence": "evidence.tsv unit row 0x801CEF48-0x801CEFF0 (src/engine/maths.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBCB0-0x803EBCB4, each with its evidence.tsv data rows. Its .data is the module id string Math_ModuleID (data row 0x802F7AC4).",
       "sections": [
         {
           "section": ".text",
@@ -15143,6 +15198,12 @@
           "placement": ".data5",
           "start": "0x803EBCB0",
           "end": "0x803EBCB4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7AC4",
+          "end": "0x802F7AD0"
         }
       ]
     },
@@ -15347,7 +15408,7 @@
     {
       "source": "src/engine/sort.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801F5100-0x801F524C (src/engine/sort.c) and its data rows (da1a: the .sdata 0x803EBE20-0x803EBE24, _Sort_ModuleActive); every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801F5100-0x801F524C (src/engine/sort.c) and its data rows (da1a: the .sdata 0x803EBE20-0x803EBE24, _Sort_ModuleActive); every function exact, promoted from comparison-only. Its .data is the module id string Sort_ModuleID (data row 0x802F9530).",
       "sections": [
         {
           "section": ".text",
@@ -15360,6 +15421,12 @@
           "placement": ".data5",
           "start": "0x803EBE20",
           "end": "0x803EBE24"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9530",
+          "end": "0x802F953C"
         }
       ],
       "storage": [
@@ -15710,7 +15777,26 @@
     {
       "source": "src/engine/tmtexture.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80212234-0x802126C0 (src/engine/tmtexture.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x80212234-0x802126C0 (src/engine/tmtexture.c), its data rows and the linker row 0x802B1C28-0x802B1C38; every kept function exact, promoted from comparison-only; .rodata 0x802B1C10-0x802B1C38 includes the two strings of the discarded TMTextureGetTexName.",
+      "link_roots": {
+        "symbols": [
+          "TMTextureSetFilter",
+          "TMTextureSetFilterParm",
+          "TMTextureSetWrap",
+          "TMTextureSetWrapParm",
+          "TMTextureTexNew",
+          "TMTextureSetTexData",
+          "TMTextureTexDelete",
+          "TMTextureClutNew",
+          "TMTextureClutDelete",
+          "TMTextureMakeNullTexture",
+          "TMTextureSetTexName"
+        ],
+        "discarded": [
+          "TMTextureGetTexName"
+        ],
+        "evidence": "evidence.tsv linker row 0x802B1C28-0x802B1C38: the target keeps the eleven listed functions (the whole .text range 0x80212234-0x802126C0 is their compiled code); TMTextureGetTexName has no code in the target while its two strings remain in .rodata."
+      },
       "sections": [
         {
           "section": ".text",
@@ -15722,7 +15808,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B1C10",
-          "end": "0x802B1C28"
+          "end": "0x802B1C38"
         }
       ],
       "storage": [
@@ -16447,39 +16533,57 @@
     {
       "source": "src/engine/huff.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8027FB2C-0x802802A0 (src/engine/huff.c) and its function and name rows; every function exact.",
+      "evidence": "evidence.tsv unit row 0x8027FB2C-0x802802A0 (src/engine/huff.c) and its function and name rows; every function exact. Its .data is the HUFF codec descriptor GCmpTypeHuffman (data row 0x803018C8).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8027FB2C",
           "end": "0x802802A0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803018C8",
+          "end": "0x803018F0"
         }
       ]
     },
     {
       "source": "src/engine/rle.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x802802A0-0x80280504 (src/engine/rle.c) and its function and name rows; every function exact.",
+      "evidence": "evidence.tsv unit row 0x802802A0-0x80280504 (src/engine/rle.c) and its function and name rows; every function exact. Its .data is the RLE1 codec descriptor GCmpTypeRLE (data row 0x803018F0).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802802A0",
           "end": "0x80280504"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803018F0",
+          "end": "0x80301918"
         }
       ]
     },
     {
       "source": "src/engine/none.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80280504-0x802805C4 (src/engine/none.c) and its function and name rows; every function exact.",
+      "evidence": "evidence.tsv unit row 0x80280504-0x802805C4 (src/engine/none.c) and its function and name rows; every function exact. Its .data is the NONE codec descriptor GCmpTypeNONE (data row 0x80301918).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80280504",
           "end": "0x802805C4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80301918",
+          "end": "0x80301940"
         }
       ]
     },
@@ -16524,7 +16628,7 @@
     {
       "source": "src/engine/texture.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8020DB34-0x8020E7EC (src/engine/texture.c), its function and name rows; every function and allocated placement exact, promoted from comparison-only. It owns and links its data (da1c): .data 0x802F9BF0-0x802F9C08, .rodata 0x802B1BC4-0x802B1BD4, .sdata 0x803EBEB8-0x803EBED0, .sbss 0x803ECFBC-0x803ECFC4, each with its evidence.tsv data rows.",
+      "evidence": "evidence.tsv provisional unit row 0x8020DB34-0x8020E7EC (src/engine/texture.c), its function and name rows; every function and allocated placement exact, promoted from comparison-only. It owns and links its data (da1c): .data 0x802F9BF0-0x802F9C08, .rodata 0x802B1BC4-0x802B1BD4, .sdata 0x803EBEB8-0x803EBED0, .sbss 0x803ECFBC-0x803ECFC4, each with its evidence.tsv data rows. Its .data starts with the module id string _Tex_ModuleID (data row 0x802F9BE4).",
       "sections": [
         {
           "section": ".text",
@@ -16535,7 +16639,7 @@
         {
           "section": ".data",
           "placement": ".data4",
-          "start": "0x802F9BF0",
+          "start": "0x802F9BE4",
           "end": "0x802F9C08"
         },
         {
@@ -16731,13 +16835,34 @@
     {
       "source": "src/engine/dbfile.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8022EF14-0x8022EFDC (src/engine/dbfile.c), its four function/name rows, the .sdata data row 0x803EC0C0-0x803EC0C4 and its engine_c compiler row. Complete source file linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8022EF14-0x8022EFDC (src/engine/dbfile.c), its four function/name rows, the .sdata data row 0x803EC0C0-0x803EC0C4, its engine_c compiler row and the linker row 0x802B5D0C-0x802B5D64. Complete source file linked: .text, .rodata 0x802B5D0C-0x802B5D64 (the query literals of the four discarded functions) and .sdata.",
+      "link_roots": {
+        "symbols": [
+          "DbFileInit",
+          "DbFileShutdown",
+          "DbFileTblLoad",
+          "DbFileTblDestroy"
+        ],
+        "discarded": [
+          "DbFileTblLoadList",
+          "DbFileTblDestroyList",
+          "DbFileTblLoadSelected",
+          "DbFileTblDestroySelected"
+        ],
+        "evidence": "evidence.tsv linker row 0x802B5D0C-0x802B5D64: the target keeps the four listed functions (DbGame calls DbFileInit and DbFileShutdown, the game calls DbFileTblLoad and DbFileTblDestroy); the four list and selected-table functions have no code in the target while the two query strings of the selected-table pair remain in .rodata."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8022EF14",
           "end": "0x8022EFDC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B5D0C",
+          "end": "0x802B5D64"
         },
         {
           "section": ".sdata",
@@ -16889,7 +17014,7 @@
     {
       "source": "src/engine/camfocus.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C3A44-0x801C3CE8, all eight function/name rows, source-form and field records, and native .rodata data row 0x802AF0C4-0x802AF0DC. Complete source on unchanged engine_c profile.",
+      "evidence": "evidence.tsv provisional unit row 0x801C3A44-0x801C3CE8, all eight function/name rows, source-form and field records, and native .rodata data row 0x802AF0C4-0x802AF0DC. Complete source on unchanged engine_c profile.  .data 0x802F4884-0x802F4890: the camera type record CamFocusDef (evidence.tsv data row).",
       "sections": [
         {
           "section": ".text",
@@ -16902,6 +17027,12 @@
           "placement": ".data3",
           "start": "0x802AF0C4",
           "end": "0x802AF0DC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4884",
+          "end": "0x802F4890"
         }
       ]
     },
@@ -17257,6 +17388,19 @@
       "evidence": "evidence.tsv unit row 0x801B1A3C-0x801B1CFC (src/engine/spchrand.c), its function, name and source-form rows, the data rows of its own storage (seedX .data 0x802F477C-0x802F4794, gRandArray .bss 0x8037E794-0x8037E814, gRandArrayIndex .sdata 0x803EBB20-0x803EBB24) and the speech_cxx compiler row; all five functions match the target, promoted from comparison-only."
     },
     {
+      "source": "src/engine/spchauthor.cpp",
+      "profile": "speech_cxx",
+      "evidence": "evidence.tsv unit row 0x802F4794-0x802F47D0 (src/engine/spchauthor.cpp) and the data and name rows of spchlibauthor: a code-less file whose whole .data is the speech library's author string.",
+      "sections": [
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4794",
+          "end": "0x802F47D0"
+        }
+      ]
+    },
+    {
       "source": "src/engine/spchrule.c",
       "profile": "speech_cxx_holdouts",
       "evidence": "evidence.tsv unit row 0x801B1CFC-0x801B23A0 and its name and function records. Fifteen routines link from the speech rule source. The 136-byte sample size helper keeps the original bytes. This source has no allocated data section.",
@@ -17287,7 +17431,7 @@
     {
       "source": "src/engine/pathinit.c",
       "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B2AD4-0x801B343C, source-form, linker and data rows. All thirteen routines, the allocator storage, the PATH library's small data 0x803EBB24-0x803EBB6C and project table 0x802F47D0-0x802F47E0 (data rows for both runs), the constructor pointer and the constant pool link. SN retention discards the unused helper body. The PATHAUTHOR string 0x802F47E0-0x802F481C keeps its original bytes (its data row).",
+      "evidence": "evidence.tsv unit row 0x801B2AD4-0x801B343C, source-form, linker and data rows. All thirteen routines, the allocator storage, the PATH library's small data 0x803EBB24-0x803EBB6C and project table 0x802F47D0-0x802F47E0 (data rows for both runs), the constructor pointer and the constant pool link. SN retention discards the unused helper body. The PATHAUTHOR string 0x802F47E0-0x802F481C is src/engine/pathauthor.cpp's.",
       "sections": [
         {
           "section": ".text",
@@ -17345,6 +17489,19 @@
           "PATHI_bytesperms"
         ]
       }
+    },
+    {
+      "source": "src/engine/pathauthor.cpp",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x802F47E0-0x802F481C (src/engine/pathauthor.cpp) and the data and name rows of pathlibauthor: a code-less file whose whole .data is the PATH library's author string.",
+      "sections": [
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F47E0",
+          "end": "0x802F481C"
+        }
+      ]
     },
     {
       "source": "src/engine/vprintf.c",
@@ -22273,7 +22430,7 @@
     {
       "source": "src/engine/sound.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801F3524-0x801F5034 (src/engine/sound.cpp), its compiler, function and name rows, the data rows for .rodata 0x802B1A18-0x802B1AA8, .bss 0x8039AE8C-0x8039AEE0 and .sbss 0x803ECF80-0x803ECF8C, and the linker row for the folded allocator copies. All functions and the file's data are linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801F3524-0x801F5034 (src/engine/sound.cpp), its compiler, function and name rows, the data rows for .rodata 0x802B1A18-0x802B1AA8, .bss 0x8039AE8C-0x8039AEE0 and .sbss 0x803ECF80-0x803ECF8C, and the linker row for the folded allocator copies. All functions and the file's data are linked. Its .data is the module id string _Snd_ModuleID (data row 0x802F9524).",
       "sections": [
         {
           "section": ".text",
@@ -22298,6 +22455,12 @@
           "placement": ".bss",
           "start": "0x8039AE8C",
           "end": "0x8039AEE0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9524",
+          "end": "0x802F9530"
         }
       ],
       "link_roots": {
@@ -22385,7 +22548,7 @@
     {
       "source": "src/engine/spchinit.c",
       "profile": "speech_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x801AF60C-0x801AF75C (src/engine/spchinit.c), its function and name rows and the speech_cxx compiler row; all four functions match the target, promoted from comparison-only. The file defines no data; the speech-library state it initializes (the leading speech data runs, taken to be a data-only spchdata.c's) and the SPCHAUTHOR string spchlibauthor (owned by a file linked after spchrand.c) are referenced through externals (external row 0x801AE3E4-0x801B2AD4, spchlibauthor data row).",
+      "evidence": "evidence.tsv provisional unit row 0x801AF60C-0x801AF75C (src/engine/spchinit.c), its function and name rows and the speech_cxx compiler row; all four functions match the target, promoted from comparison-only. The file defines no data; the speech-library state it initializes (the leading speech data runs, taken to be a data-only spchdata.c's) are referenced through externals (external row 0x801AE3E4-0x801B2AD4), and the SPCHAUTHOR string spchlibauthor is defined by src/engine/spchauthor.cpp (spchlibauthor data row).",
       "sections": [
         {
           "section": ".text",
@@ -23331,6 +23494,19 @@
           "placement": ".bss",
           "start": "0x803B4E20",
           "end": "0x803B4E34"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sndauthor.cpp",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80300E9C-0x80300EDC (src/engine/sndauthor.cpp) and the data and name rows of sndlibauthor: a code-less file whose whole .data is the sound library's author string.",
+      "sections": [
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300E9C",
+          "end": "0x80300EDC"
         }
       ]
     },

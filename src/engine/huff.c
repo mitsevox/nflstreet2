@@ -233,3 +233,10 @@ void _HuffDecStop(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, HuffState_t *pState)
     _DestroyTree(pState->mpRoot);
     fn_801D2BD0(pState);
 }
+
+GCmpCodec_t GCmpTypeHuffman = {
+    'HUFF', 1,
+    (GCmpCodecInitFunc_t)_HuffCoStart, (GCmpCodecRunFunc_t)_HuffCoProcess, (GCmpCodecEndFunc_t)_HuffCoStop,
+    (GCmpCodecInitFunc_t)_HuffDecStart, (GCmpCodecRunFunc_t)_HuffDecProcess, (GCmpCodecEndFunc_t)_HuffDecStop,
+    0, 0
+};

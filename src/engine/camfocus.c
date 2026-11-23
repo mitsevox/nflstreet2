@@ -139,3 +139,9 @@ void CamFocusWarpToDest(void *camera)
         pCam->mAngleSpeed[1] = 0;
     }
 }
+
+CamFuncs_t CamFocusDef = {
+    (void (*)(Cam_t *))CamFocusAdd,
+    (void (*)(Cam_t *))CamFocusDelete,
+    (void (*)(Viewport_t *, Cam_t *))CamFocusUpdate,
+};

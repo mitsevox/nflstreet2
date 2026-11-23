@@ -105,3 +105,9 @@ void CamFreeMoveAngle(CamFree_t *pCam, int x, int y, int z)
     pCam->mDestAngle[1] = y;
     pCam->mDestAngle[2] = z;
 }
+
+CamFuncs_t CamFreeFloatDef = {
+    (void (*)(Cam_t *))CamFreeFloatAdd,
+    (void (*)(Cam_t *))CamFreeFloatDelete,
+    (void (*)(Viewport_t *, Cam_t *))CamFreeFloatUpdate,
+};

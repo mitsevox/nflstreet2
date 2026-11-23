@@ -281,6 +281,15 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Initializer at39348 installs DecrementerExceptionHandler399A8; create at39394 clears alarm fields; InsertAlarm, SetAlarm, CancelAlarm, callback and exception handler anchors. Duplicate exception-handler bytes at3BA10 are interrupt handler, not alarm. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        },
+        {
+          "start": "0x802FBA60",
+          "end": "0x802FBC48",
+          "section": ".data4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "OSCheckAlarmQueue report strings of the discarded OSCheckAlarmQueue, rebuilt so the file owns them (evidence.tsv linker row for OSAlarm.c); the linked unit reproduces these bytes.",
+          "object_seed": true
         }
       ]
     },
@@ -744,6 +753,15 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Target stable TBU/TBL/TBU64-bit readE794, tick readE7AC, unique __OSGetSystemTimeE7B4 native anchor endingE818. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        },
+        {
+          "start": "0x802FCC90",
+          "end": "0x802FCCF0",
+          "section": ".data4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "YearDays and LeapYearDays of the discarded OSTicksToCalendarTime, rebuilt so the file owns them (evidence.tsv linker row 0x802FCC90); the linked unit reproduces these bytes.",
+          "object_seed": true
         }
       ]
     },
@@ -849,11 +867,11 @@
         },
         {
           "start": "0x802FCD08",
-          "end": "0x802FCE93",
+          "end": "0x802FD0F7",
           "section": ".data4",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
+          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional. Extended to 0x802FD0F7 by the strings of the discarded DVDOpenDir, DVDPrepareStreamAsync and DVDPrepareStream (evidence.tsv linker row 0x802FCE94).",
           "object_seed": true
         },
         {
@@ -1970,6 +1988,15 @@
           "start_boundary": "exact",
           "end_boundary": "exact",
           "evidence": "Actual original operands bind TokenCB pointer+0, DrawDoneCB pointer+4, DrawDone u8+8 and aligned OSThreadQueue two pointers+12. Complete native20 allocation; natural alignment, no invented padding. NOBITS placement, linked in the source build; no initialized bytes. Seed the independently proven complete20-byte native allocation; do not extend it to neighboring inferred DTK labels.",
+          "object_seed": true
+        },
+        {
+          "start": "0x802FE2F8",
+          "end": "0x802FE34B",
+          "section": ".data4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "File name and panic strings of the discarded GXCompressZ16 and GXDecompressZ16, rebuilt so the file owns them (evidence.tsv linker row for GXMisc.c); the linked unit reproduces these bytes.",
           "object_seed": true
         }
       ]
