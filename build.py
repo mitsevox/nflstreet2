@@ -70,6 +70,8 @@ def build(target):
     print(f"{path}: OK")
     # The done rule's count: linked, descriptive file name, every function and label named with evidence.
     run("tools/files_closed.py")
+    # Which unmapped data each file refers to, and the ranges no file refers to.
+    run("tools/data_owners.py")
 
 
 def check(target):

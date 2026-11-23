@@ -86,8 +86,9 @@ def main():
             (args.source_report.parent / 'main.dol').read_bytes(),
             json.loads(args.site.read_text())['revision'], args.source_report,
             ROOT / 'build/analysis', args.comparison_report)
+    import progress
     count = verify(ROOT, json.loads(args.site.read_text()), json.loads(args.decomp.read_text()),
-                   json.loads(args.source_report.read_text())['units'], comparison_site)
+                   progress.measured_units(args.source_report), comparison_site)
     print(f'Both progress maps cover {count} current candidate groupings; source credit is unchanged.')
 
 
