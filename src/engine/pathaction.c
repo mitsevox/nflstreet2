@@ -45,7 +45,7 @@ extern "C" int fn_801B84E4(Event_801B845C *p, Sequence_801B84E4 *sequence)
     return 1;
 }
 
-extern "C" int fn_801B8580(Node_801B3FE0 *p)
+extern "C" int fn_801B8580(PathTrack_t *p)
 {
     if (!p)
         return 0;
@@ -65,7 +65,7 @@ extern "C" int fn_801B8580(Node_801B3FE0 *p)
     return p->mUnknown110;
 }
 
-extern "C" int PATHI_getvalue(int id, int kind, Node_801B3FE0 *p, Sequence_801B84E4 *event)
+extern "C" int PATHI_getvalue(int id, int kind, PathTrack_t *p, Sequence_801B84E4 *event)
 {
     int value = id;
     TrackStatus_801B864C status;
@@ -164,7 +164,7 @@ extern "C" int PATHI_getvalue(int id, int kind, Node_801B3FE0 *p, Sequence_801B8
     return value;
 }
 
-extern "C" void PATHI_setvalue(int id, int kind, int value, Node_801B3FE0 *p, Sequence_801B84E4 *event)
+extern "C" void PATHI_setvalue(int id, int kind, int value, PathTrack_t *p, Sequence_801B84E4 *event)
 {
     if (kind == 2)
         lbl_803EBB28->mUnknown2C[id].mValue = value;
@@ -209,7 +209,7 @@ extern "C" void PATHI_setvalue(int id, int kind, int value, Node_801B3FE0 *p, Se
             p->mUnknownC = value;
             break;
         case 10:
-            fn_801B4334(p, value);
+            PATHI_selectprojecttrack(p, value);
             break;
         case 12:
             p->mUnknown8.bits.flag20 = value != 0;

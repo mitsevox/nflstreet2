@@ -29,7 +29,7 @@ extern "C" void PATH_volume(int flags, signed char volume)
         for (int i = 0; i < 4; ++i) {
             if (fn_801B3480(i, flags)) {
                 for (int j = 0; j < 24; ++j) {
-                    Node_801B3FE0 *p = lbl_803EBB28->mUnknown40[j];
+                    PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
                     // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0, as in pathcontrol.c
                     if (p && ((((unsigned int)flags >> j) ^ 1) & 1) == 0) {
                         p->mUnknown2 = volume;
@@ -57,7 +57,7 @@ extern "C" void PATH_fade(int flags, int a, int b, int c)
         for (int i = 0; i < 4; ++i) {
             if (fn_801B3480(i, flags)) {
                 for (int j = 0; j < 24; ++j) {
-                    Node_801B3FE0 *p = lbl_803EBB28->mUnknown40[j];
+                    PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
                     // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0, as in pathcontrol.c
                     if (p && ((((unsigned int)flags >> j) ^ 1) & 1) == 0)
                         PATHI_fade(p, a, b, c);
@@ -69,42 +69,42 @@ extern "C" void PATH_fade(int flags, int a, int b, int c)
     }
 }
 
-extern "C" void fn_801B4824(Node_801B3FE0 *p, int value)
+extern "C" void fn_801B4824(PathTrack_t *p, int value)
 {
     p->mUnknown3 = value;
     if (p->mUnknown1A & 0x80)
         p->mUnknown100->vfn_13((signed char)value * (signed char)p->mUnknown2 / 100);
 }
 
-extern "C" void PATHI_fade(Node_801B3FE0 *p, int a, int b, int c)
+extern "C" void PATHI_fade(PathTrack_t *p, int a, int b, int c)
 {
     p->mUnknown10 = lbl_803EBB3C;
     p->mUnknown19 = c;
     p->mUnknown14 = b;
-    p->mUnknown18 = (float)p->mUnknown100->fn_801B45A4();
+    p->mUnknown18 = (float)p->mUnknown100->GetVolume();
     p->mUnknown1A = a;
     p->mUnknown3 = (float)a;
 }
 
-extern "C" void fn_801B4960(Node_801B3FE0 *p, int a, int b, int c)
+extern "C" void fn_801B4960(PathTrack_t *p, int a, int b, int c)
 {
     p->mUnknown1C = lbl_803EBB3C;
     p->mUnknown20 = b;
     p->mUnknown25 = c;
-    p->mUnknown24 = p->mUnknown100->fn_801B45B4(0);
+    p->mUnknown24 = p->mUnknown100->GetFXSendLevel(0);
     p->mUnknown26 = a;
 }
 
-extern "C" void fn_801B49C4(Node_801B3FE0 *p, int a, int b, int c)
+extern "C" void fn_801B49C4(PathTrack_t *p, int a, int b, int c)
 {
     p->mUnknown28 = lbl_803EBB3C;
     p->mUnknown2C = b;
     p->mUnknown31 = c;
-    p->mUnknown30 = p->mUnknown100->fn_801B45AC();
+    p->mUnknown30 = p->mUnknown100->GetDryLevel();
     p->mUnknown32 = a;
 }
 
-extern "C" void PATHI_setfadevolume(Node_801B3FE0 *p)
+extern "C" void PATHI_setfadevolume(PathTrack_t *p)
 {
     FadeCurve_801B4A24 curve;
     float delta = (float)p->mUnknown1A - (float)p->mUnknown18;
@@ -144,7 +144,7 @@ extern "C" void PATHI_setfadevolume(Node_801B3FE0 *p)
     }
 }
 
-extern "C" void PATHI_setsfxfadevolume(Node_801B3FE0 *p)
+extern "C" void PATHI_setsfxfadevolume(PathTrack_t *p)
 {
     FadeCurve_801B4A24 curve;
     float delta = (float)p->mUnknown26 - (float)p->mUnknown24;
@@ -183,7 +183,7 @@ extern "C" void PATHI_setsfxfadevolume(Node_801B3FE0 *p)
     }
 }
 
-extern "C" void PATHI_setdrylevelfadevolume(Node_801B3FE0 *p)
+extern "C" void PATHI_setdrylevelfadevolume(PathTrack_t *p)
 {
     FadeCurve_801B4A24 curve;
     float delta = (float)p->mUnknown32 - (float)p->mUnknown30;

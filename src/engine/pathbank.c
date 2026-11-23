@@ -5,7 +5,7 @@
 #include <string.h>
 #include "engine/pathlib.h"
 
-extern "C" int PATHI_loadbank(Node_801B3FE0 *p, int index)
+extern "C" int PATHI_loadbank(PathTrack_t *p, int index)
 {
     // FAKEMATCH: unused string local; emits the unreferenced "%s  %s" that starts the target .rodata
     const char *header = "%s  %s";
@@ -15,17 +15,17 @@ extern "C" int PATHI_loadbank(Node_801B3FE0 *p, int index)
             PATHI_printf("( %.8s )  PATH_createbankimp not called yet\n", p->mUnknownD0);
         return -14;
     }
-    if (index >= p->mUnknown100->fn_801B4548()) {
+    if (index >= p->mUnknown100->GetNumSubBanks()) {
         if (lbl_803EBB40 & 0x100)
             PATHI_printf("( %.8s )  PATH_loadbank no subbank %d\n", p->mUnknownD0, index);
         return -8;
     }
-    if (p->mUnknown100->fn_801B456C(index)) {
+    if (p->mUnknown100->GetSubBankPtr(index)) {
         if (lbl_803EBB40 & 0x100)
             PATHI_printf("( %.8s )  PATH_loadbank already loaded subbank %d\n", p->mUnknownD0, index);
         return -18;
     }
-    Data_801B4548 *info = PATHI_trackinfo(p->mUnknown0);
+    PathTrackInfo_t *info = PATHI_trackinfo(p->mUnknown0);
     PathSubBankInfo_t *table = (PathSubBankInfo_t *)(info + 1);
     PathSubBankInfo_t *sub = table;
     sub += index;
@@ -35,14 +35,14 @@ extern "C" int PATHI_loadbank(Node_801B3FE0 *p, int index)
     if (sub && info && info->mUnknown6)
         unload = 1;
     int full = 0;
-    if ((info->mUnknown8 && (a > info->mUnknown8 || b > info->mUnknown8)) || !p->mUnknown100->fn_801B4574())
+    if ((info->mUnknown8 && (a > info->mUnknown8 || b > info->mUnknown8)) || !p->mUnknown100->GetAvailSubBankPtr())
         full = 1;
     if (unload && full) {
         if (info->mUnknown6 == 2) {
             unsigned int best = 0x7FFFFFFF;
             int victim = -1;
-            for (int i = 0; i < p->mUnknown100->fn_801B4564(); ++i) {
-                PathSubBankState_t *entry = p->mUnknown100->fn_801B456C(i);
+            for (int i = 0; i < p->mUnknown100->GetMaxSubBanks(); ++i) {
+                PathSubBankState_t *entry = p->mUnknown100->GetSubBankPtr(i);
                 if (entry && entry->mInfo.mEvictionOrder <= best) {
                     best = entry->mInfo.mEvictionOrder;
                     victim = i;
@@ -58,29 +58,29 @@ extern "C" int PATHI_loadbank(Node_801B3FE0 *p, int index)
     if (!result) {
         p->mUnknown108 += sub->mSizeA;
         p->mUnknown10C += sub->mSizeB;
-        PathSubBankState_t *entry = p->mUnknown100->fn_801B456C(index);
+        PathSubBankState_t *entry = p->mUnknown100->GetSubBankPtr(index);
         if (entry)
             entry->mInfo = *sub;
     }
     return result;
 }
 
-extern "C" int PATHI_subbankready(Node_801B3FE0 *p, int index)
+extern "C" int PATHI_subbankready(PathTrack_t *p, int index)
 {
     PathSubBankState_t *entry;
-    if (index < 0 || index >= p->mUnknown100->fn_801B4548() ||
-        !(entry = p->mUnknown100->fn_801B456C(index)) || !entry->mpData)
+    if (index < 0 || index >= p->mUnknown100->GetNumSubBanks() ||
+        !(entry = p->mUnknown100->GetSubBankPtr(index)) || !entry->mpData)
         return -8;
     if (p->mUnknownF8) {
         if (!lbl_803EBB60->vfn_08(p->mUnknownF4, entry->mpData))
             return -18;
-        p->mUnknownFC = p->mUnknown100->fn_801B457C(index, entry->mpData);
+        p->mUnknownFC = p->mUnknown100->AddSubBank(index, entry->mpData);
         p->mUnknownF8 = 0;
     }
     if (p->mUnknownF0 >= 0) {
-        if (!p->mUnknown100->fn_801B4584(index))
+        if (!p->mUnknown100->AddSubBankDone(index))
             return -18;
-        p->mUnknown100->fn_801B458C(index, p->mUnknownFC);
+        p->mUnknown100->DetachSubBankHeader(index, p->mUnknownFC);
         p->mUnknownFC = 0;
         p->mUnknownF0 = -1;
     }
@@ -89,16 +89,16 @@ extern "C" int PATHI_subbankready(Node_801B3FE0 *p, int index)
     return 0;
 }
 
-extern "C" int PATHI_loadbankdata(Node_801B3FE0 *p, int index, int size)
+extern "C" int PATHI_loadbankdata(PathTrack_t *p, int index, int size)
 {
-    if (index < 0 || index >= p->mUnknown100->fn_801B4548())
+    if (index < 0 || index >= p->mUnknown100->GetNumSubBanks())
         return -8;
     if (p->mUnknownF0 >= 0)
         return -18;
-    PathSubBankState_t *entry = p->mUnknown100->fn_801B456C(index);
+    PathSubBankState_t *entry = p->mUnknown100->GetSubBankPtr(index);
     if (entry)
         return -18;
-    entry = p->mUnknown100->fn_801B4574();
+    entry = p->mUnknown100->GetAvailSubBankPtr();
     if (!entry)
         return -18;
     entry->mReady = 0;
@@ -116,27 +116,27 @@ extern "C" int PATHI_loadbankdata(Node_801B3FE0 *p, int index, int size)
     return 0;
 }
 
-extern "C" int PATHI_unloadbank(Node_801B3FE0 *p, int index)
+extern "C" int PATHI_unloadbank(PathTrack_t *p, int index)
 {
-    if (index < 0 || index >= p->mUnknown100->fn_801B4548())
+    if (index < 0 || index >= p->mUnknown100->GetNumSubBanks())
         return -8;
-    PathSubBankState_t *entry = p->mUnknown100->fn_801B456C(index);
+    PathSubBankState_t *entry = p->mUnknown100->GetSubBankPtr(index);
     if (!entry)
         return -8;
     PathSubBankState_t saved = *entry;
     PATHI_stop(p);
-    int result = p->mUnknown100->fn_801B4594(index);
+    int result = p->mUnknown100->RemoveSubBank(index);
     p->mUnknown108 -= saved.mInfo.mSizeA;
     p->mUnknown10C -= saved.mInfo.mSizeB;
     return result;
 }
 
-extern "C" int PATHI_unloadmostneglectedsubbank(Node_801B3FE0 *p)
+extern "C" int PATHI_unloadmostneglectedsubbank(PathTrack_t *p)
 {
     int best = 0x07FFFFFF;
     int index = -1;
-    for (int i = 0; i < p->mUnknown100->fn_801B4564(); ++i) {
-        PathSubBankState_t *entry = p->mUnknown100->fn_801B456C(i);
+    for (int i = 0; i < p->mUnknown100->GetMaxSubBanks(); ++i) {
+        PathSubBankState_t *entry = p->mUnknown100->GetSubBankPtr(i);
         if (entry && entry->mEvictionPriority >= 0 && entry->mEvictionPriority < best) {
             best = entry->mEvictionPriority;
             index = i;

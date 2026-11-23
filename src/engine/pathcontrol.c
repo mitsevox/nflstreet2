@@ -21,7 +21,7 @@ extern "C" int PATH_control(int flags, int value)
         for (int i = 0; i < 4; ++i) {
             if (fn_801B3480((unsigned char)i, flags)) {
                 for (int j = 0; j < 24; ++j) {
-                    Node_801B3FE0 *p = lbl_803EBB28->mUnknown40[j];
+                    PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
                     // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0; == 1 drops the target xori
                     if (p && ((((unsigned int)flags >> j) ^ 1) & 1) == 0)
                         p->mUnknown1 = value;
@@ -49,7 +49,7 @@ extern "C" void PATH_pause(int flags, unsigned char value)
         for (int i = 0; i < 4; ++i) {
             if (fn_801B3480((unsigned char)i, flags)) {
                 for (int j = 0; j < 24; ++j) {
-                    Node_801B3FE0 *p = lbl_803EBB28->mUnknown40[j];
+                    PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
                     // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0; == 1 drops the target xori
                     if (p && ((((unsigned int)flags >> j) ^ 1) & 1) == 0) {
                         p->mUnknown100->vfn_05(value);
@@ -75,7 +75,7 @@ extern "C" int PATH_status(int flags, PathfinderStatus_t *info)
     if (!acquired)
         return -18;
     int result = -8;
-    Node_801B3FE0 *p = fn_801B4174(flags);
+    PathTrack_t *p = PATHI_gettrackptr(flags);
     if (p && fn_801B34DC(flags))
         result = PATHI_status(p, info);
     lbl_803EBB28 = 0;
@@ -83,7 +83,7 @@ extern "C" int PATH_status(int flags, PathfinderStatus_t *info)
     return result;
 }
 
-extern "C" int PATHI_status(Node_801B3FE0 *p, void *info)
+extern "C" int PATHI_status(PathTrack_t *p, void *info)
 {
     int result;
     if (p->mUnknown100)
@@ -106,7 +106,7 @@ extern "C" void PATH_stop(int flags)
         for (int i = 0; i < 4; ++i) {
             if (fn_801B3480(i, flags)) {
                 for (int j = 0; j < 24; ++j) {
-                    Node_801B3FE0 *p = lbl_803EBB28->mUnknown40[j];
+                    PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
                     // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0; == 1 drops the target xori
                     if (p && ((((unsigned int)flags >> j) ^ 1) & 1) == 0)
                         PATHI_stop(p);
@@ -118,7 +118,7 @@ extern "C" void PATH_stop(int flags)
     }
 }
 
-extern "C" int PATHI_stop(Node_801B3FE0 *p)
+extern "C" int PATHI_stop(PathTrack_t *p)
 {
     p->mUnknown100->vfn_04();
     p->mUnknown4 = -1;

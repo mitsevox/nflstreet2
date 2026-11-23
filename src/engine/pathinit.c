@@ -44,7 +44,7 @@ extern "C" int PATH_shutdown(void)
     if (!lbl_803EBB38)
         return -14;
     PATH_destroy(0x0F000000);
-    if (fn_801B42C0(0x0F000000) == 0) {
+    if (PATHI_countprojecttracks(0x0F000000) == 0) {
         SNDSYS_entercritical();
         delete lbl_803EBB64;
         delete lbl_803EBB60;
@@ -157,7 +157,7 @@ extern "C" int PATH_destroy(int flags)
     for (int i = 0; i < 4; ++i) {
         if (fn_801B3480((unsigned char)i, flags)) {
             for (int j = 0; j < 24; ++j) {
-                Node_801B3FE0 *p = lbl_803EBB28->mUnknown40[j];
+                PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
                 // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0, as in pathcontrol.c; == 1 drops the target xori
                 if (p && ((((unsigned int)flags >> j) ^ 1) & 1) == 0) {
                     lbl_803EBB28->mUnknown40[j] = 0;
@@ -168,7 +168,7 @@ extern "C" int PATH_destroy(int flags)
                     PATHI_memfree(p);
                 }
             }
-            if (fn_801B42C0(0x01000000 << i) == 0) {
+            if (PATHI_countprojecttracks(0x01000000 << i) == 0) {
                 PATHI_memfree(lbl_803EBB28);
                 lbl_802F47D0[i] = 0;
             }
@@ -220,7 +220,7 @@ extern "C" int PATH_setvariable(int flags, const char *name, int value)
 
 extern "C" void *PATHI_findnodedata(int flags)
 {
-    Node_801B3FE0 *p = fn_801B4174(flags);
+    PathTrack_t *p = PATHI_gettrackptr(flags);
     if (!p)
         return 0;
     return p->mUnknown100;
@@ -230,13 +230,13 @@ extern "C" int PATHI_bytesperms(int index)
 {
     float best = 0.0f;
     PathStreamRecord_t *end = 0;
-    Data_801B4548 *info = PATHI_trackinfo(index);
+    PathTrackInfo_t *info = PATHI_trackinfo(index);
     if (!info)
         return 0;
     PathStreamRecord_t *p = (PathStreamRecord_t *)lbl_803EBB28->mUnknown3C + info->mUnknown0;
     ++index;
     if (index < lbl_803EBB28->mUnknown18->mUnknownD) {
-        Data_801B4548 *next = PATHI_trackinfo(index);
+        PathTrackInfo_t *next = PATHI_trackinfo(index);
         if (next)
             end = (PathStreamRecord_t *)lbl_803EBB28->mUnknown3C + next->mUnknown0;
     } else

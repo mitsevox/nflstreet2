@@ -30224,7 +30224,7 @@
     {
       "source": "src/engine/pathtrack.c",
       "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B3AD0-0x801B45D0 (src/engine/pathtrack.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
+      "evidence": "evidence.tsv unit row 0x801B3AD0-0x801B45D0 and the three HOLDOUT source-form rows. Twenty-five exact bodies and the original complete native read-only section link through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -30241,57 +30241,12 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801B3AD0",
-          "start": "0x801B3AD0",
-          "end": "0x801B3B7C"
-        },
-        {
-          "symbol": "PATH_createstreamimp",
-          "start": "0x801B3B7C",
-          "end": "0x801B3D28"
-        },
-        {
-          "symbol": "fn_801B3D28",
-          "start": "0x801B3D28",
-          "end": "0x801B3DD8"
-        },
-        {
-          "symbol": "PATH_createbankobject",
-          "start": "0x801B3DD8",
-          "end": "0x801B3F6C"
-        },
-        {
-          "symbol": "fn_801B3F6C",
-          "start": "0x801B3F6C",
-          "end": "0x801B3FE0"
-        },
-        {
           "symbol": "PATHI_inittrack",
           "start": "0x801B3FE0",
           "end": "0x801B4174"
         },
         {
-          "symbol": "fn_801B4174",
-          "start": "0x801B4174",
-          "end": "0x801B421C"
-        },
-        {
-          "symbol": "fn_801B421C",
-          "start": "0x801B421C",
-          "end": "0x801B42C0"
-        },
-        {
-          "symbol": "fn_801B42C0",
-          "start": "0x801B42C0",
-          "end": "0x801B4334"
-        },
-        {
-          "symbol": "fn_801B4334",
-          "start": "0x801B4334",
-          "end": "0x801B43CC"
-        },
-        {
-          "symbol": "fn_801B43CC",
+          "symbol": "PATHI_dispatchtrackstate",
           "start": "0x801B43CC",
           "end": "0x801B44BC"
         },
@@ -30299,86 +30254,6 @@
           "symbol": "__14Class_801B44BC",
           "start": "0x801B44BC",
           "end": "0x801B4514"
-        },
-        {
-          "symbol": "_._14Class_801B44BC",
-          "start": "0x801B4514",
-          "end": "0x801B4548"
-        },
-        {
-          "symbol": "fn_801B4548__14Class_801B44BC",
-          "start": "0x801B4548",
-          "end": "0x801B4564"
-        },
-        {
-          "symbol": "fn_801B4564__14Class_801B44BC",
-          "start": "0x801B4564",
-          "end": "0x801B456C"
-        },
-        {
-          "symbol": "fn_801B456C__14Class_801B44BCi",
-          "start": "0x801B456C",
-          "end": "0x801B4574"
-        },
-        {
-          "symbol": "fn_801B4574__14Class_801B44BC",
-          "start": "0x801B4574",
-          "end": "0x801B457C"
-        },
-        {
-          "symbol": "fn_801B457C__14Class_801B44BCiPc",
-          "start": "0x801B457C",
-          "end": "0x801B4584"
-        },
-        {
-          "symbol": "fn_801B4584__14Class_801B44BCi",
-          "start": "0x801B4584",
-          "end": "0x801B458C"
-        },
-        {
-          "symbol": "fn_801B458C__14Class_801B44BCii",
-          "start": "0x801B458C",
-          "end": "0x801B4594"
-        },
-        {
-          "symbol": "fn_801B4594__14Class_801B44BCi",
-          "start": "0x801B4594",
-          "end": "0x801B459C"
-        },
-        {
-          "symbol": "fn_801B459C__14Class_801B44BCP13Data_801B4548",
-          "start": "0x801B459C",
-          "end": "0x801B45A4"
-        },
-        {
-          "symbol": "fn_801B45A4__14Class_801B44BC",
-          "start": "0x801B45A4",
-          "end": "0x801B45AC"
-        },
-        {
-          "symbol": "fn_801B45AC__14Class_801B44BC",
-          "start": "0x801B45AC",
-          "end": "0x801B45B4"
-        },
-        {
-          "symbol": "fn_801B45B4__14Class_801B44BCi",
-          "start": "0x801B45B4",
-          "end": "0x801B45BC"
-        },
-        {
-          "symbol": "fn_801B45BC__14Class_801B44BC",
-          "start": "0x801B45BC",
-          "end": "0x801B45C4"
-        },
-        {
-          "symbol": "fn_801B45C4__14Class_801B44BC",
-          "start": "0x801B45C4",
-          "end": "0x801B45CC"
-        },
-        {
-          "symbol": "fn_801B45CC__14Class_801B44BCP17PathName_801B3FE0",
-          "start": "0x801B45CC",
-          "end": "0x801B45D0"
         }
       ]
     },

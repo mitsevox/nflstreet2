@@ -13,7 +13,7 @@ struct PathSubBankInfo_t {
     int mSizeB;
 };
 
-struct Data_801B4548 {
+struct PathTrackInfo_t {
     unsigned int mUnknown0;
     unsigned short mUnknown4;
     unsigned short mUnknown6;
@@ -30,7 +30,7 @@ struct PathSubBankState_t {
     int mEvictionPriority;
 };
 
-struct PathName_801B3FE0 {
+struct PathTrackFile_t {
     void *mUnknown0;
     int mUnknown4;
 };
@@ -38,7 +38,7 @@ struct PathName_801B3FE0 {
 class Class_801B44BC {
 public:
     virtual ~Class_801B44BC();
-    virtual void fn_801B459C(Data_801B4548 *p);
+    virtual void SetTrackInfo(PathTrackInfo_t *p);
     virtual void vfn_03() = 0;
     virtual void vfn_04() = 0;
     virtual void vfn_05(int value) = 0;
@@ -48,28 +48,28 @@ public:
     virtual int vfn_09(int index) = 0;
     virtual void vfn_10() = 0;
     virtual int vfn_11(int node, int offset, int beats, int a, unsigned int length) = 0;
-    virtual int fn_801B45A4();
+    virtual int GetVolume();
     virtual void vfn_13(int value) = 0;
-    virtual int fn_801B45AC();
+    virtual int GetDryLevel();
     virtual void vfn_15(int value) = 0;
-    virtual int fn_801B45B4(int value);
+    virtual int GetFXSendLevel(int value);
     virtual void vfn_17(int send, int value) = 0;
     virtual int vfn_18() = 0;
     virtual void vfn_19(int value) = 0;
-    virtual int fn_801B45BC();
-    virtual int fn_801B45C4();
+    virtual int GetHandle();
+    virtual int GetPlayOpts();
     virtual void vfn_22(const char *name) = 0;
-    virtual void fn_801B45CC(PathName_801B3FE0 *path);
+    virtual void SetFilePath(PathTrackFile_t *path);
     virtual void vfn_24() = 0;
     virtual void vfn_25() = 0;
-    virtual int fn_801B4548();
-    virtual int fn_801B4564();
-    virtual PathSubBankState_t *fn_801B456C(int index);
-    virtual PathSubBankState_t *fn_801B4574();
-    virtual int fn_801B457C(int index, char *data);
-    virtual int fn_801B4584(int index);
-    virtual int fn_801B458C(int index, int header);
-    virtual int fn_801B4594(int index);
+    virtual int GetNumSubBanks();
+    virtual int GetMaxSubBanks();
+    virtual PathSubBankState_t *GetSubBankPtr(int index);
+    virtual PathSubBankState_t *GetAvailSubBankPtr();
+    virtual int AddSubBank(int index, char *data);
+    virtual int AddSubBankDone(int index);
+    virtual int DetachSubBankHeader(int index, int header);
+    virtual int RemoveSubBank(int index);
 
     Class_801B44BC();
 
@@ -84,7 +84,7 @@ public:
     int mUnknown20;
     unsigned char mUnknown24[52];
     int mUnknown58;
-    Data_801B4548 *mUnknown5C;
+    PathTrackInfo_t *mUnknown5C;
     int mUnknown60;
     int mUnknown64;
 };
@@ -123,7 +123,7 @@ struct PathStreamRecord_t {
     unsigned int mDuration;
 };
 
-struct Node_801B3FE0 {
+struct PathTrack_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
     unsigned char mUnknown2;
@@ -160,7 +160,7 @@ struct Node_801B3FE0 {
     unsigned int mUnknown40;
     unsigned char mUnknown44[8];
     int mUnknown4C;
-    PathName_801B3FE0 mUnknown50;
+    PathTrackFile_t mUnknown50;
     unsigned char mUnknown58[120];
     char mUnknownD0[32];
     int mUnknownF0;
@@ -200,7 +200,7 @@ struct Bank_801B3480 {
     int *mUnknown34;
     void *mUnknown38;
     unsigned int *mUnknown3C;
-    Node_801B3FE0 *mUnknown40[24];
+    PathTrack_t *mUnknown40[24];
     unsigned char mUnknownA0[32];
     enum { kEventPoolBytes = 4096 };
     // The last scanned slot shares the first bytes of the event pool.
@@ -366,25 +366,25 @@ int fn_801B3568(void);
 void fn_801B39B8(int mode);
 void fn_801B3A88(void);
 void fn_801B3AAC(void);
-int fn_801B3AD0(int flags, PathfinderTrackData_t *data, int value);
-int fn_801B3D28(int flags, PathfinderTrackData_t *data, int value);
-int fn_801B3F6C(int flags, PathfinderTrackData_t *data);
-Node_801B3FE0 *fn_801B4174(unsigned int flags);
-void fn_801B421C(void);
-int fn_801B42C0(unsigned int flags);
-void fn_801B4334(Node_801B3FE0 *p, int state);
-int fn_801B43CC(int state);
-void fn_801B4824(Node_801B3FE0 *p, int value);
-void fn_801B4960(Node_801B3FE0 *p, int a, int b, int c);
-void fn_801B49C4(Node_801B3FE0 *p, int a, int b, int c);
-int PATHI_unloadbank(Node_801B3FE0 *p, int index);
-int PATHI_unloadmostneglectedsubbank(Node_801B3FE0 *p);
+int PATH_createstreamtrack(int flags, PathfinderTrackData_t *data, int value);
+int PATH_createbanktrack(int flags, PathfinderTrackData_t *data, int value);
+int PATHI_createtrack(int flags, PathfinderTrackData_t *data);
+PathTrack_t *PATHI_gettrackptr(unsigned int flags);
+void PATHI_updatemastertrack(void);
+int PATHI_countprojecttracks(unsigned int flags);
+void PATHI_selectprojecttrack(PathTrack_t *p, int state);
+int PATHI_dispatchtrackstate(int state);
+void fn_801B4824(PathTrack_t *p, int value);
+void fn_801B4960(PathTrack_t *p, int a, int b, int c);
+void fn_801B49C4(PathTrack_t *p, int a, int b, int c);
+int PATHI_unloadbank(PathTrack_t *p, int index);
+int PATHI_unloadmostneglectedsubbank(PathTrack_t *p);
 int PATH_control(int flags, int value);
 void PATH_pause(int flags, unsigned char value);
 int PATH_status(int flags, PathfinderStatus_t *info);
-int PATHI_status(Node_801B3FE0 *p, void *info);
+int PATHI_status(PathTrack_t *p, void *info);
 void PATH_stop(int flags);
-int PATHI_stop(Node_801B3FE0 *p);
+int PATHI_stop(PathTrack_t *p);
 void PATHI_printf(const char *format, ...);
 int PATHI_addevent(int flags, Sequence_801B84E4 *sequence);
 void PATHI_removeevent(Sequence_801B84E4 *p);
@@ -392,15 +392,15 @@ void PATHI_seteventfilter(Entry_801B63F0 *p, int value);
 void PATHI_clearalleventfilters(void);
 int PATHI_serviceevent(int index);
 int fn_801B6780(int index);
-int fn_801B6CB4(Node_801B3FE0 *p);
+int fn_801B6CB4(PathTrack_t *p);
 int fn_801B6D20(int count, int value, Record_801B6D20 *entries);
 int fn_801B7178(int index, int value);
 unsigned int PATHI_random(void);
 Event_801B845C *fn_801B845C(Event_801B845C *p, int state, Event_801B845C *end);
 int fn_801B84E4(Event_801B845C *p, Sequence_801B84E4 *sequence);
-int fn_801B8580(Node_801B3FE0 *p);
-int PATHI_getvalue(int id, int kind, Node_801B3FE0 *p, Sequence_801B84E4 *event);
-void PATHI_setvalue(int id, int kind, int value, Node_801B3FE0 *p, Sequence_801B84E4 *event);
+int fn_801B8580(PathTrack_t *p);
+int PATHI_getvalue(int id, int kind, PathTrack_t *p, Sequence_801B84E4 *event);
+void PATHI_setvalue(int id, int kind, int value, PathTrack_t *p, Sequence_801B84E4 *event);
 extern unsigned char lbl_803EBB3A;
 extern int lbl_803EBB44;
 void PATH_setallocator(Allocator *allocator, const AllocParams &params);
@@ -412,32 +412,32 @@ Class_801B44BC *PATH_createstreamimp(int flags, int a, float b);
 Class_801B44BC *PATH_createbankobject(int flags);
 void PATH_volume(int flags, signed char volume);
 void PATH_fade(int flags, int a, int b, int c);
-void PATHI_fade(Node_801B3FE0 *p, int a, int b, int c);
-void PATHI_setfadevolume(Node_801B3FE0 *p);
-void PATHI_setsfxfadevolume(Node_801B3FE0 *p);
-void PATHI_setdrylevelfadevolume(Node_801B3FE0 *p);
-int PATHI_loadbank(Node_801B3FE0 *p, int index);
-int PATHI_subbankready(Node_801B3FE0 *p, int index);
-int PATHI_loadbankdata(Node_801B3FE0 *p, int index, int size);
+void PATHI_fade(PathTrack_t *p, int a, int b, int c);
+void PATHI_setfadevolume(PathTrack_t *p);
+void PATHI_setsfxfadevolume(PathTrack_t *p);
+void PATHI_setdrylevelfadevolume(PathTrack_t *p);
+int PATHI_loadbank(PathTrack_t *p, int index);
+int PATHI_subbankready(PathTrack_t *p, int index);
+int PATHI_loadbankdata(PathTrack_t *p, int index, int size);
 int PATH_event(int flags, unsigned int id);
 Sequence_801B84E4 *PATHI_copyevent(Sequence_801B84E4 *event);
 void PATHI_releaseevent(int index, int reason);
 int PATHI_serviceeventqueue(void);
 int PATHI_eventtakespriority(int index);
-int PATHI_beatinfo(Node_801B3FE0 *p, BeatInfo_801B67F8 *info);
+int PATHI_beatinfo(PathTrack_t *p, BeatInfo_801B67F8 *info);
 int PATHI_calcwaitbeat(int a, int b, int c, BeatInfo_801B67F8 *info);
 int PATHI_nextnode(int index, int value, int advance);
 int PATHI_enternode(int track, int index, int value, int advance);
 void PATHI_seeknextnode(int index);
-int PATHI_queuenode(Node_801B3FE0 *p);
+int PATHI_queuenode(PathTrack_t *p);
 int PATHI_choosesynchtime(int index, const FindNode_801B6A18 &find, const BeatInfo_801B67F8 &info, unsigned int &time);
 }
 
-static inline Data_801B4548 *PATHI_trackinfo(int index)
+static inline PathTrackInfo_t *PATHI_trackinfo(int index)
 {
-    Data_801B4548 *info = 0;
+    PathTrackInfo_t *info = 0;
     if (index >= 0 && index < lbl_803EBB28->mUnknown18->mUnknownD)
-        info = (Data_801B4548 *)((char *)lbl_803EBB28->mUnknown18 + lbl_803EBB28->mUnknown34[index] * 4);
+        info = (PathTrackInfo_t *)((char *)lbl_803EBB28->mUnknown18 + lbl_803EBB28->mUnknown34[index] * 4);
     return info;
 }
 

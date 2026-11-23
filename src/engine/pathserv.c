@@ -68,14 +68,14 @@ extern "C" void fn_801B39B8(int mode)
         if (acquired) {
             lbl_803EBB3B = mode;
             lbl_803EBB3C = fn_801B343C();
-            fn_801B43CC(0);
+            PATHI_dispatchtrackstate(0);
             for (unsigned char i = 0; i < 4; ++i) {
                 if (fn_801B3480(i, 0xFFFFFFFF)) {
-                    fn_801B421C();
+                    PATHI_updatemastertrack();
                     fn_801B3724();
                 }
             }
-            fn_801B43CC(1);
+            PATHI_dispatchtrackstate(1);
             lbl_803EBB28 = 0;
             --lbl_803EBB24;
         }

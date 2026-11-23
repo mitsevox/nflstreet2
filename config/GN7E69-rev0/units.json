@@ -1361,14 +1361,6 @@
       "address": "0x801AD380",
       "evidence": "evidence.tsv name row SNDVDWriteNoDMA_next 0x801AD380 (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801AD380; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
     },
-    "PATH_createbankobject": {
-      "address": "0x801B3DD8",
-      "evidence": "evidence.tsv function and name rows for 0x801B3DD8 (PATH library function defined by the comparison source of its PATH file, not yet linked; called from src/engine/pathfinder.cpp)."
-    },
-    "PATH_createstreamimp": {
-      "address": "0x801B3B7C",
-      "evidence": "evidence.tsv function and name rows for 0x801B3B7C (PATH library function defined by the comparison source of its PATH file, not yet linked; called from src/engine/pathfinder.cpp)."
-    },
     "PATH_fade": {
       "address": "0x801B4728",
       "evidence": "evidence.tsv function and name rows for 0x801B4728 (PATH library function defined by the comparison source of its PATH file, not yet linked; called from src/engine/pathfinder.cpp)."
@@ -25938,6 +25930,54 @@
           "ScrmDefenseIsStillNearLine"
         ],
         "evidence": "evidence.tsv linker rows of the file-static functions of src/game/Scrimmage.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
+      }
+    },
+    {
+      "source": "src/engine/pathtrack.c",
+      "profile": "path_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x801B3AD0-0x801B45D0 and data row 0x802AEA60-0x802AEB90. Twenty-five exact routines and complete native read-only data link; the track initializer, track state dispatcher and base-class constructor keep original code.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B3AD0",
+          "end": "0x801B3FE0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B4174",
+          "end": "0x801B43CC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B4514",
+          "end": "0x801B45D0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEA60",
+          "end": "0x802AEB90"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "PATHI_inittrack",
+            "evidence": "evidence.tsv source-form 0x801B3FE0-0x801B4174"
+          },
+          {
+            "function": "PATHI_dispatchtrackstate",
+            "evidence": "evidence.tsv source-form 0x801B43CC-0x801B44BC"
+          },
+          {
+            "function": "__14Class_801B44BC",
+            "evidence": "evidence.tsv source-form 0x801B44BC-0x801B4514"
+          }
+        ],
+        "evidence": "merge notes of the pull request linking the exact pathtrack.c functions"
       }
     },
     {

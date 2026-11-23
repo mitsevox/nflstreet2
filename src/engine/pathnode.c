@@ -18,7 +18,7 @@ extern "C" int fn_801B6780(int index)
     return result;
 }
 
-extern "C" int PATHI_beatinfo(Node_801B3FE0 *p, BeatInfo_801B67F8 *info)
+extern "C" int PATHI_beatinfo(PathTrack_t *p, BeatInfo_801B67F8 *info)
 {
     PathStatus_801B67F8 status;
     if (p->mUnknown4 < 0)
@@ -96,7 +96,7 @@ extern "C" int PATHI_choosesynchtime(int index, const FindNode_801B6A18 &find, c
     return result;
 }
 
-extern "C" int fn_801B6CB4(Node_801B3FE0 *p)
+extern "C" int fn_801B6CB4(PathTrack_t *p)
 {
     int sum = 0;
     for (int i = 0; ; ++i) {
@@ -135,7 +135,7 @@ extern "C" int PATHI_nextnode(int index, int value, int advance)
     if (index < 0 || !(node = PATHI_getnode(index)))
         return -1;
     Record_801B6D20 *branches = (Record_801B6D20 *)((unsigned char *)node + 16);
-    Node_801B3FE0 *track = lbl_803EBB28->mUnknown40[node->mBits0.mTrack];
+    PathTrack_t *track = lbl_803EBB28->mUnknown40[node->mBits0.mTrack];
     if (track->mUnknown6 == index) {
         int loop = track->mUnknown8.bits.mLoop;
         if (node->mBits0.mLoop > 0 && advance) {
@@ -166,7 +166,7 @@ extern "C" int PATHI_enternode(int track, int index, int value, int advance)
     Entry_801B63F0 *node = PATHI_getnode(index);
     if (!node)
         return -1;
-    Node_801B3FE0 *p = lbl_803EBB28->mUnknown40[node->mBits0.mTrack];
+    PathTrack_t *p = lbl_803EBB28->mUnknown40[node->mBits0.mTrack];
     while (node->mUnknown0 <= 0) {
         if (advance) {
             if (node->mUnknown0 == 0) {
@@ -227,11 +227,11 @@ extern "C" int fn_801B7178(int index, int value)
 extern "C" void PATHI_seeknextnode(int index)
 {
     int queued = lbl_803EBB28->mUnknown1100;
-    Node_801B3FE0 *p = lbl_803EBB28->mUnknown40[index];
+    PathTrack_t *p = lbl_803EBB28->mUnknown40[index];
     int next = -1;
     if (p->mUnknown4 < 0)
         return;
-    Node_801B3FE0 saved = *p;
+    PathTrack_t saved = *p;
     Entry_801B63F0 *node = PATHI_getnode(p->mUnknown4);
     signed char beat = -1;
     if (p->mUnknown8.bits.flag10)
@@ -256,9 +256,9 @@ extern "C" void PATHI_seeknextnode(int index)
     }
 }
 
-extern "C" int PATHI_queuenode(Node_801B3FE0 *p)
+extern "C" int PATHI_queuenode(PathTrack_t *p)
 {
-    Node_801B3FE0 *master = 0;
+    PathTrack_t *master = 0;
     int beats = 0;
     unsigned int length = 0;
     if (lbl_803EBB28->mUnknown0 >= 0)
