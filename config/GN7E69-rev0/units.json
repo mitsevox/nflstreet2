@@ -17215,7 +17215,7 @@
         "discarded": [
           "_PathRoundToUnsigned__Fi"
         ],
-        "evidence": "evidence.tsv pathinit.c fake-match forms (0x801B2AD4-0x801B343C). The unused local contributes literals and has no target function body."
+        "evidence": "evidence.tsv linker row 0x802AEA20-0x802AEA38 and pathinit.c fake-match forms. The native pool stays and the file-static stand-in has no target code."
       },
       "holdouts": {
         "functions": [
