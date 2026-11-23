@@ -1265,10 +1265,6 @@
       "address": "0x8037E0B4",
       "evidence": "evidence.tsv data/name rows for 0x8037E0B4 (target extent, related name); speech-library storage, original-owned."
     },
-    "MIX_playinit": {
-      "address": "0x80275F80",
-      "evidence": "evidence.tsv function and name rows for 0x80275F80 (MIX_playinit, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks."
-    },
     "SFILTER_add": {
       "address": "0x80279D90",
       "evidence": "evidence.tsv function/name rows for 0x80279D90; registered in the comparison-only src/engine/sfilter.c, which keeps its original bytes until the whole file can be linked; called by name from src/engine/smixer.c, src/engine/smixfilt.c, src/engine/smixhip.c and src/engine/smixptch.c."
@@ -1304,10 +1300,6 @@
     "iSPCH_GetSampleParmAddr": {
       "address": "0x801B22B0",
       "evidence": "evidence.tsv function/name rows for 0x801B22B0 (target extent, related name); exact in the src/engine/spchrule.c comparison, called by the src/engine/spchpick.c comparison; the file is not linked."
-    },
-    "MIX_audioslice": {
-      "address": "0x802763E0",
-      "evidence": "evidence.tsv function and name rows for 0x802763E0 (MIX_audioslice, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks (c18 wave)."
     },
     "SNDI_validrendermode": {
       "address": "0x802796DC",
@@ -24775,20 +24767,14 @@
     },
     {
       "source": "src/engine/smixer.c",
-      "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x802755E0-0x80276798 (src/engine/smixer.c), its compiler rows and the data rows of its data sections (.rodata, and the .bss 0x803B4E34-0x803B5044: sndmix, sndmixwritelog, MIXoutputfn, the FAKEMATCH word _Mix_iUnused and the seven mixer hooks, da1a); linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 2 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x802755E0-0x80276798 (src/engine/smixer.c), its compiler rows and the data rows for .rodata 0x802C1E1C-0x802C1EAC and .bss 0x803B4E34-0x803B5044. All sixteen functions and both data sections come from the untouched ProDG compiler object.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802755E0",
-          "end": "0x80275F80"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80276194",
-          "end": "0x802763E0"
+          "end": "0x80276798"
         },
         {
           "section": ".rodata",
@@ -24802,20 +24788,7 @@
           "start": "0x803B4E34",
           "end": "0x803B5044"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "MIX_playinit",
-            "evidence": "evidence.tsv source-form 0x80275F80-0x80276194"
-          },
-          {
-            "function": "MIX_audioslice",
-            "evidence": "evidence.tsv source-form 0x802763E0-0x80276798"
-          }
-        ],
-        "evidence": "merge notes of the x1 wave (lane x1d) holdouts table; each HOLDOUT: row lists the forms tried and the RTL-dump finding."
-      }
+      ]
     },
     {
       "source": "src/engine/Font.c",
