@@ -19,8 +19,7 @@ def export(dol, revision, source_report, analysis_dir, comparison_report, closed
     site = progress.report(dol.read_bytes(), revision, source_report,
                            analysis_dir, comparison_report)
     decomp = decomp_report.objdiff_report(site)
-    build = json.loads(source_report.read_text())
-    check_progress_maps.verify(ROOT, site, decomp, build['units'], site)
+    check_progress_maps.verify(ROOT, site, decomp, progress.measured_units(source_report), site)
     if closed_rows is not None:
         mark_closed(decomp, closed_rows)
     return site, decomp

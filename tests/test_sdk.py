@@ -152,6 +152,19 @@ class CompilerReporting(unittest.TestCase):
             self.assertEqual(result["compilers"], {"prodg": "3.9.3", "mwcc": "GC/1.2.5n"})
             self.assertEqual(result["profile_compilers"], {"sdk_vm": "GC/1.3"})
             self.assertEqual(result["units"][1]["compiler"], {"family": "mwcc", "version": "GC/1.3"})
+            self.assertEqual([unit["storage_extents"] for unit in result["units"]], [[], []])
+            # A storage map's extents are reported apart from the configured sections, counted as
+            # linked data (owner ruling of 2026-11-23).
+            bss = next(section for section in sections if section["kind"] == "bss")
+            units[0]["storage"] = {"gValue": (bss["start"], bss["start"] + 4)}
+            with patch.object(source_build, "ROOT", root):
+                result = source_build.measure(target, sections, units, b"{}", binary, True, {}, objects)
+            self.assertEqual(result["units"][0]["storage_extents"], [{
+                "symbol": "gValue", "placement": bss["name"], "kind": "data",
+                "start": f"0x{bss['start']:08X}", "end": f"0x{bss['start'] + 4:08X}",
+                "linked": 4, "matched": 4, "status": "matched"}])
+            self.assertEqual(len(result["units"][0]["sections"]), 1)
+            self.assertEqual(result["totals"]["data"], {"linked": 4, "matched": 4})
 
 
 class NativeCompiler(unittest.TestCase):

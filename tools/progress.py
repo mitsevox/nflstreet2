@@ -25,6 +25,19 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def linked_extents(unit):
+    """A measured unit's linked extents: its configured ranges, then the extents its storage map
+    places (COMMON symbols and mapped file statics), which are linked data of the unit (owner
+    ruling of 2026-11-23). Storage extents carry their `symbol` and no compiled section name."""
+    return unit["sections"] + list(unit.get("storage_extents", []))
+
+
+def measured_units(source_report):
+    """The source-build report's units with their storage extents among their linked extents."""
+    units = json.loads(source_report.read_text())["units"] if source_report and source_report.exists() else []
+    return [dict(unit, sections=linked_extents(unit)) for unit in units]
+
+
 def source_ranges(target, source_report):
     """Validate the source-build report against the current tree; return its matched ranges."""
     source = ROOT / "src"
@@ -61,13 +74,18 @@ def source_ranges(target, source_report):
                     for s in configured_unit["sections"]]
         if claimed != expected:
             raise ValueError(f"Source unit {unit['source']} ranges differ from the unit manifest")
+        # Storage extents (source_build.measure) must be exactly the manifest's storage rows.
+        stored = sorted((s["symbol"], int(s["start"], 16), int(s["end"], 16)) for s in unit.get("storage_extents", []))
+        if stored != sorted((row["symbol"], int(row["start"], 16), int(row["end"], 16))
+                            for row in configured_unit.get("storage") or []):
+            raise ValueError(f"Source unit {unit['source']} storage differs from the unit manifest")
         for path, expected in [(unit["source"], unit["source_sha256"])] + sorted(unit["dependencies"].items()):
             if not (ROOT / path).is_file() or digest(ROOT / path) != expected:
                 raise ValueError(f"Measured source-build report is stale for {path}")
             measured.add(path)
         if unit.get("status") != "matched" or not unit["sections"]:
             raise ValueError(f"Source unit {unit['source']} is not verified")
-        for section in unit["sections"]:
+        for section in linked_extents(unit):
             start, end = int(section["start"], 16), int(section["end"], 16)
             size = end - start
             if section.get("status") != "matched" or section["kind"] not in totals or size <= 0 \
@@ -233,7 +251,7 @@ def function_inventory(target, ranges, analysis_dir, compiled=(), data_spans=(),
 
 def source_map(sections, source_report, functions):
     """Expose measured source ownership; unclaimed bytes remain explicitly unmapped."""
-    units = json.loads(source_report.read_text())["units"] if source_report and source_report.exists() else []
+    units = measured_units(source_report)
     for section in sections:
         left = int(section["address"], 16)
         right = left + section["size"]
@@ -257,7 +275,7 @@ def source_map(sections, source_report, functions):
 
 def file_map(sections, source_report, functions, ownership=()):
     """Partition mapped ownership while crediting only verified compiled-source ranges."""
-    units = json.loads(source_report.read_text())["units"] if source_report and source_report.exists() else []
+    units = measured_units(source_report)
     files = {}
     unknown = []
     for section in sections:
@@ -500,9 +518,7 @@ def report(binary, revision, source_report=None, analysis_dir=None, comparison_r
         raise ValueError("Function candidates fall outside executable sections")
     ownership = sdk_map.load(ROOT, source_build.target_sections(binary, target, {})) \
         if (ROOT / sdk_map.MAP_PATH).exists() else []
-    measured_units = json.loads(source_report.read_text())["units"] \
-        if source_report and source_report.exists() else []
-    ownership += game_map.load(ROOT, sections, ownership + measured_units)
+    ownership += game_map.load(ROOT, sections, ownership + measured_units(source_report))
     data = {"schema": 1, "revision": revision,
             "built_at": datetime.now(timezone.utc).isoformat(),
             "target": "GN7E69-rev0", "target_sha1": target["sha1"],
