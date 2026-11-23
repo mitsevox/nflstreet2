@@ -8730,7 +8730,7 @@
     {
       "source": "src/game/TournamentDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80086194-0x80086C10 (src/game/TournamentDb.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80086194-0x80086C10 (src/game/TournamentDb.cpp), its data rows and the linker row 0x802946AC-0x802946E4 (the draft-pool count string at the head of the unit's .rodata).",
       "link_roots": {
         "symbols": [
           "TournamentDbQueryDraftPool",
@@ -8759,11 +8759,14 @@
           "TournamentOpen"
         ],
         "discarded": [
+          "TournamentDbQueryDraftPoolCount",
+          "TournamentGetDraftPoolCount1",
+          "TournamentGetDraftPoolCount0",
           "DeleteLtfnRow",
           "SelectPtfnRow",
           "ListPtfnByMunt"
         ],
-        "evidence": "evidence.tsv linker rows 0x802948CC-0x80294918, 0x802949C0-0x80294A0C and 0x80294A60-0x80294AB4: the target keeps every listed function, all reached from outside the unit or from each other; three query functions have no code in the target, while their strings remain in the unit's rodata."
+        "evidence": "evidence.tsv linker rows 0x802946AC-0x802946E4, 0x802948CC-0x80294918, 0x802949C0-0x80294A0C and 0x80294A60-0x80294AB4: the target keeps every listed function, all reached from outside the unit or from each other; the draft-pool count function with its two wrappers and three query functions have no code in the target, while their strings remain in the unit's rodata."
       },
       "sections": [
         {
@@ -8775,7 +8778,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802946E4",
+          "start": "0x802946AC",
           "end": "0x80294B38"
         },
         {
@@ -15680,7 +15683,26 @@
     {
       "source": "src/engine/tmtexture.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80212234-0x802126C0 (src/engine/tmtexture.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x80212234-0x802126C0 (src/engine/tmtexture.c), its data rows and the linker row 0x802B1C28-0x802B1C38; every kept function exact, promoted from comparison-only; .rodata 0x802B1C10-0x802B1C38 includes the two strings of the discarded TMTextureGetTexName.",
+      "link_roots": {
+        "symbols": [
+          "TMTextureSetFilter",
+          "TMTextureSetFilterParm",
+          "TMTextureSetWrap",
+          "TMTextureSetWrapParm",
+          "TMTextureTexNew",
+          "TMTextureSetTexData",
+          "TMTextureTexDelete",
+          "TMTextureClutNew",
+          "TMTextureClutDelete",
+          "TMTextureMakeNullTexture",
+          "TMTextureSetTexName"
+        ],
+        "discarded": [
+          "TMTextureGetTexName"
+        ],
+        "evidence": "evidence.tsv linker row 0x802B1C28-0x802B1C38: the target keeps the eleven listed functions (the whole .text range 0x80212234-0x802126C0 is their compiled code); TMTextureGetTexName has no code in the target while its two strings remain in .rodata."
+      },
       "sections": [
         {
           "section": ".text",
@@ -15692,7 +15714,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B1C10",
-          "end": "0x802B1C28"
+          "end": "0x802B1C38"
         }
       ]
     },
@@ -16675,13 +16697,34 @@
     {
       "source": "src/engine/dbfile.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8022EF14-0x8022EFDC (src/engine/dbfile.c), its four function/name rows, the .sdata data row 0x803EC0C0-0x803EC0C4 and its engine_c compiler row. Complete source file linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8022EF14-0x8022EFDC (src/engine/dbfile.c), its four function/name rows, the .sdata data row 0x803EC0C0-0x803EC0C4, its engine_c compiler row and the linker row 0x802B5D0C-0x802B5D64. Complete source file linked: .text, .rodata 0x802B5D0C-0x802B5D64 (the query literals of the four discarded functions) and .sdata.",
+      "link_roots": {
+        "symbols": [
+          "DbFileInit",
+          "DbFileShutdown",
+          "DbFileTblLoad",
+          "DbFileTblDestroy"
+        ],
+        "discarded": [
+          "DbFileTblLoadList",
+          "DbFileTblDestroyList",
+          "DbFileTblLoadSelected",
+          "DbFileTblDestroySelected"
+        ],
+        "evidence": "evidence.tsv linker row 0x802B5D0C-0x802B5D64: the target keeps the four listed functions (DbGame calls DbFileInit and DbFileShutdown, the game calls DbFileTblLoad and DbFileTblDestroy); the four list and selected-table functions have no code in the target while the two query strings of the selected-table pair remain in .rodata."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8022EF14",
           "end": "0x8022EFDC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B5D0C",
+          "end": "0x802B5D64"
         },
         {
           "section": ".sdata",

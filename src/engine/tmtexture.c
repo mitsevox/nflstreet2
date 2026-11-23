@@ -114,3 +114,11 @@ void TMTextureMakeNullTexture(TMTexture_t *pTexture)
 void TMTextureSetTexName(TMTexture_t *pTexture, const char *pName)
 {
 }
+
+const char *TMTextureGetTexName(TMTexture_t *pTexture)
+{
+    if (pTexture != 0) {
+        return "TEXTURE";
+    }
+    return "<NULL>";
+}
