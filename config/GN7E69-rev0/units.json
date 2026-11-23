@@ -393,6 +393,10 @@
     }
   },
   "externals": {
+    "ColorRampEval": {
+      "address": "0x801E0844",
+      "evidence": "evidence.tsv function, related name, and holdout rows at 0x801E0844. The particle update calls the original-byte ColorRampEval provider."
+    },
     "FontLLUploadPalettes": {
       "address": "0x801CDE98",
       "evidence": "evidence.tsv function/name and holdout rows at 0x801CDE98. Font.c calls the original-byte FontLLUploadPalettes provider."
@@ -26568,6 +26572,40 @@
           }
         ],
         "evidence": "LLFont.c holdout covering FontLLUploadPalettes. The complete body remains under the unchanged engine_c comparison profile."
+      }
+    },
+    {
+      "source": "src/engine/colorRamp.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv colorRamp.c unit, names, types, readonly data and compiler rows. Links nine exact functions and all readonly data under the existing holdouts mechanism. ColorRampEval keeps its original target bytes and remains a measured comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E052C",
+          "end": "0x801E0844"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E0984",
+          "end": "0x801E0A1C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1140",
+          "end": "0x802B114C"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "ColorRampEval",
+            "evidence": "evidence.tsv source-form 0x801E0844-0x801E0984"
+          }
+        ],
+        "evidence": "colorRamp.c holdout covering ColorRampEval. Its complete body remains under the unchanged engine_c comparison profile."
       }
     }
   ]

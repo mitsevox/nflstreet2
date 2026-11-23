@@ -4,25 +4,25 @@
 #include "engine/vec.h"
 
 /* Colour ramp key (16 bytes). */
-typedef struct RampNode_801E052C {
+typedef struct ColorRampNode_t {
     float mT;
     Vec3_801DE1E0 mColor;
-} RampNode_801E052C;
+} ColorRampNode_t;
 
 /* Colour ramp (0x288 bytes): sorted key pointers into a fixed key pool. */
-typedef struct Ramp_801E052C {
+typedef struct ColorRamp_t {
     unsigned short mCount;
     int mInterp;
-    RampNode_801E052C *mpNodes[32];
-    RampNode_801E052C mPool[32];
-} Ramp_801E052C;
+    ColorRampNode_t *mpNodes[32];
+    ColorRampNode_t mPool[32];
+} ColorRamp_t;
 
 /* Colour ramp as stored in a parameter file: keys inline after the header. */
-typedef struct RampParm_801E071C {
+typedef struct ColorRampParms_t {
     unsigned short mCount;
     int mInterp;
-    RampNode_801E052C mNodes[32];
-} RampParm_801E071C;
+    ColorRampNode_t mNodes[32];
+} ColorRampParms_t;
 
 /* Emitter shape parameters (0x48 bytes at +0xF4 of a particle system). */
 typedef struct EmitterLine_t {
@@ -133,7 +133,7 @@ typedef struct PartObj_801DE1E0 {
     Vec3_801DE1E0 mUnknown064;
     Vec3_801DE1E0 mUnknown070;
     Vec4_801DE1E0 mUnknown07C;
-    Ramp_801E052C *mpUnknown08C;
+    ColorRamp_t *mpUnknown08C;
     float mUnknown090;
     float mUnknown094;
     float mUnknown098;
@@ -200,7 +200,7 @@ typedef struct PartObj_801DE1E0 {
 /* Particle system template as loaded from a parameter file. */
 typedef struct Template_801DE1E0 {
     PartObj_801DE1E0 mObj;
-    Ramp_801E052C mRamp;
+    ColorRamp_t mRamp;
 } Template_801DE1E0;
 
 /* Calls between the files of the particle library. */
@@ -210,6 +210,6 @@ void EmitterInitParms(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
 void PsysColInitParms(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
 void PsysColPrecalcDependantVals(PartObj_801DE1E0 *pObj);
 void PsysColCalcCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle);
-Ramp_801E052C *fn_801E098C(Ramp_801E052C *pSrc, Ramp_801E052C *pDst);
+ColorRamp_t *ColorRampCopy(ColorRamp_t *pSrc, ColorRamp_t *pDst);
 
 #endif

@@ -108,7 +108,7 @@ void ObjDelList(void *pList);
 PartObj_801DE1E0 *ObjNew(unsigned char heap, int a, Template_801DE1E0 *pTemplate);
 int ObjAddToList(void *pList, void *pObj);
 void fn_801DF3E4(unsigned char *pSrc, unsigned char *pDst, unsigned int size, int noSwap);
-unsigned int fn_801E0844(Ramp_801E052C *pRamp, float t, Vec3_801DE1E0 *pColor, unsigned int start);
+unsigned int ColorRampEval(ColorRamp_t *pRamp, float t, Vec3_801DE1E0 *pColor, unsigned int start);
 
 void fn_801DD730(PartObj_801DE1E0 *pObj, unsigned short count, int step, int steps, float dt);
 static void fn_801DDFB0(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float dt);
@@ -709,7 +709,7 @@ unsigned short fn_801DECFC(unsigned short count, Template_801DE1E0 *pTemplate)
     lbl_8039ADAC.mpPools[index].mUsed = 0;
     lbl_8039ADAC.mpUsed[index] = 1;
     lbl_8039ADAC.mpPools[index].mTemplate = *pTemplate;
-    fn_801E098C(&pTemplate->mRamp, &lbl_8039ADAC.mpPools[index].mTemplate.mRamp);
+    ColorRampCopy(&pTemplate->mRamp, &lbl_8039ADAC.mpPools[index].mTemplate.mRamp);
     return index;
 }
 
@@ -774,7 +774,7 @@ void PSysRenderCalcParticleColor(Vec4_801DE1E0 *pColor, PartObj_801DE1E0 *pObj, 
     float fadeOut;
 
     if (pObj->mUnknown03D && pObj->mpUnknown08C) {
-        pParticle->mUnknown39 = fn_801E0844(pObj->mpUnknown08C, pParticle->mAgeRatio, (Vec3_801DE1E0 *)pColor,
+        pParticle->mUnknown39 = ColorRampEval(pObj->mpUnknown08C, pParticle->mAgeRatio, (Vec3_801DE1E0 *)pColor,
                                             pParticle->mUnknown39);
     } else {
         pColor->x = pObj->mUnknown07C.x;

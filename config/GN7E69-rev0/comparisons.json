@@ -27383,7 +27383,7 @@
     {
       "source": "src/engine/colorRamp.c",
       "profile": "engine_c",
-      "evidence": "E3 lane draft of colorRamp.c over 0x801E052C-0x801E0A1C (NASCAR 2005 symbol-table size/order match; see the colorRamp.c name rows); evidence.tsv function rows and the compiler row for this range, plus exact data rows 0x802B1140-0x802B1148. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv whole-file unit, function, compiler and literal rows. ColorRampEval is a measured holdout at 0x801E0844-0x801E0984. The remaining nine functions and all 12 readonly bytes link in the original build.",
       "sections": [
         {
           "section": ".text",
@@ -27400,52 +27400,52 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801E052C",
+          "symbol": "_colorRampInsertIndex",
           "start": "0x801E052C",
           "end": "0x801E05B0"
         },
         {
-          "symbol": "fn_801E05B0",
+          "symbol": "_colorRampAppend",
           "start": "0x801E05B0",
           "end": "0x801E05F8"
         },
         {
-          "symbol": "fn_801E05F8",
+          "symbol": "_colorRampInterp",
           "start": "0x801E05F8",
           "end": "0x801E06B0"
         },
         {
-          "symbol": "fn_801E06B0",
+          "symbol": "_colorRampCopyNode",
           "start": "0x801E06B0",
           "end": "0x801E06DC"
         },
         {
-          "symbol": "fn_801E06DC",
+          "symbol": "ColorRampInit",
           "start": "0x801E06DC",
           "end": "0x801E071C"
         },
         {
-          "symbol": "fn_801E071C",
+          "symbol": "ColorRampInitParms",
           "start": "0x801E071C",
           "end": "0x801E079C"
         },
         {
-          "symbol": "fn_801E079C",
+          "symbol": "ColorRampInsertColor",
           "start": "0x801E079C",
           "end": "0x801E0844"
         },
         {
-          "symbol": "fn_801E0844",
+          "symbol": "ColorRampEval",
           "start": "0x801E0844",
           "end": "0x801E0984"
         },
         {
-          "symbol": "fn_801E0984",
+          "symbol": "ColorRampSetInterp",
           "start": "0x801E0984",
           "end": "0x801E098C"
         },
         {
-          "symbol": "fn_801E098C",
+          "symbol": "ColorRampCopy",
           "start": "0x801E098C",
           "end": "0x801E0A1C"
         }

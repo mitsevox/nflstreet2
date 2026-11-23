@@ -1,13 +1,14 @@
+/* Builds and samples the color ramps used over a particle's lifetime. */
 #include "engine/particleLib.h"
 
 float fn_801CFB94(int angle);
 
-void fn_801E0984(Ramp_801E052C *pRamp, int interp);
-unsigned short fn_801E079C(Ramp_801E052C *pRamp, float t, Vec3_801DE1E0 *pColor);
+void ColorRampSetInterp(ColorRamp_t *pRamp, int interp);
+unsigned short ColorRampInsertColor(ColorRamp_t *pRamp, float t, Vec3_801DE1E0 *pColor);
 
-static void fn_801E052C(Ramp_801E052C *pRamp, unsigned short index, float t, Vec3_801DE1E0 *pColor)
+static void _colorRampInsertIndex(ColorRamp_t *pRamp, unsigned short index, float t, Vec3_801DE1E0 *pColor)
 {
-    RampNode_801E052C *pNode = pRamp->mpNodes[pRamp->mCount];
+    ColorRampNode_t *pNode = pRamp->mpNodes[pRamp->mCount];
     unsigned short i;
 
     for (i = pRamp->mCount; i > index; i--) {
@@ -21,7 +22,7 @@ static void fn_801E052C(Ramp_801E052C *pRamp, unsigned short index, float t, Vec
     pRamp->mCount++;
 }
 
-static void fn_801E05B0(Ramp_801E052C *pRamp, float t, Vec3_801DE1E0 *pColor)
+static void _colorRampAppend(ColorRamp_t *pRamp, float t, Vec3_801DE1E0 *pColor)
 {
     unsigned short count = pRamp->mCount;
 
@@ -32,7 +33,7 @@ static void fn_801E05B0(Ramp_801E052C *pRamp, float t, Vec3_801DE1E0 *pColor)
     pRamp->mCount++;
 }
 
-static void fn_801E05F8(Vec3_801DE1E0 *pOut, Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB, unsigned int interp, float t)
+static void _colorRampInterp(Vec3_801DE1E0 *pOut, Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB, unsigned int interp, float t)
 {
     switch (interp) {
     case 0:
@@ -49,7 +50,7 @@ static void fn_801E05F8(Vec3_801DE1E0 *pOut, Vec3_801DE1E0 *pA, Vec3_801DE1E0 *p
     }
 }
 
-static RampNode_801E052C *fn_801E06B0(RampNode_801E052C *pSrc, RampNode_801E052C *pDst)
+static ColorRampNode_t *_colorRampCopyNode(ColorRampNode_t *pSrc, ColorRampNode_t *pDst)
 {
     pDst->mT = pSrc->mT;
     pDst->mColor.x = pSrc->mColor.x;
@@ -58,7 +59,7 @@ static RampNode_801E052C *fn_801E06B0(RampNode_801E052C *pSrc, RampNode_801E052C
     return pDst;
 }
 
-void fn_801E06DC(Ramp_801E052C *pRamp)
+void ColorRampInit(ColorRamp_t *pRamp)
 {
     unsigned short i;
 
@@ -69,18 +70,18 @@ void fn_801E06DC(Ramp_801E052C *pRamp)
     }
 }
 
-void fn_801E071C(Ramp_801E052C *pRamp, RampParm_801E071C *pParm)
+void ColorRampInitParms(ColorRamp_t *pRamp, ColorRampParms_t *pParm)
 {
     unsigned short i;
 
-    fn_801E06DC(pRamp);
-    fn_801E0984(pRamp, pParm->mInterp);
+    ColorRampInit(pRamp);
+    ColorRampSetInterp(pRamp, pParm->mInterp);
     for (i = 0; i < pParm->mCount; i++) {
-        fn_801E079C(pRamp, pParm->mNodes[i].mT, &pParm->mNodes[i].mColor);
+        ColorRampInsertColor(pRamp, pParm->mNodes[i].mT, &pParm->mNodes[i].mColor);
     }
 }
 
-unsigned short fn_801E079C(Ramp_801E052C *pRamp, float t, Vec3_801DE1E0 *pColor)
+unsigned short ColorRampInsertColor(ColorRamp_t *pRamp, float t, Vec3_801DE1E0 *pColor)
 {
     int inserted = 0;
     unsigned short i;
@@ -89,49 +90,74 @@ unsigned short fn_801E079C(Ramp_801E052C *pRamp, float t, Vec3_801DE1E0 *pColor)
         if (t >= pRamp->mpNodes[i]->mT) {
             continue;
         }
-        fn_801E052C(pRamp, i, t, pColor);
+        _colorRampInsertIndex(pRamp, i, t, pColor);
         inserted = 1;
         break;
     }
     if (!inserted) {
-        fn_801E05B0(pRamp, t, pColor);
+        _colorRampAppend(pRamp, t, pColor);
     }
     return i;
 }
 
-unsigned int fn_801E0844(Ramp_801E052C *pRamp, float t, Vec3_801DE1E0 *pColor, unsigned int start)
+unsigned int ColorRampEval(ColorRamp_t *pRamp, float t, Vec3_801DE1E0 *pColor, unsigned int start)
 {
     int found = 0;
-    RampNode_801E052C *pNode = 0;
-    RampNode_801E052C *pPrev;
+    ColorRampNode_t *pNode = 0;
+    ColorRampNode_t *pPrev;
     unsigned int i;
+    ColorRampNode_t **nodes;
+    float blue;
+    unsigned int interp;
 
-    for (i = start; i < pRamp->mCount; i++) {
-        pNode = pRamp->mpNodes[i];
+    i = start;
+    if (i < pRamp->mCount) {
+        nodes = &pRamp->mpNodes[0];
+        pNode = nodes[start];
+        goto check_key;
+
+prev_color:
+        pColor->x = pNode[-1].mColor.x;
+        pColor->y = pNode[-1].mColor.y;
+        blue = pNode[-1].mColor.z;
+        goto store_blue;
+
+interpolate:
+        interp = pRamp->mInterp;
+        if (interp == 0) {
+            goto prev_color;
+        }
+        pPrev = pRamp->mpNodes[i - 1];
+        _colorRampInterp(pColor, &pPrev->mColor, &pNode->mColor, interp,
+                    (t - pPrev->mT) / (pNode->mT - pPrev->mT));
+        goto complete;
+
+step:
+        ++i;
+        if (i >= pRamp->mCount) {
+            goto complete;
+        }
+        pNode = nodes[i];
+check_key:
         if (t >= pNode->mT) {
-            continue;
+            goto step;
         }
+
         found = 1;
-        if (i == 0) {
-            pColor->x = pNode->mColor.x;
-            pColor->y = pNode->mColor.y;
-            pColor->z = pNode->mColor.z;
-        } else if (pRamp->mInterp == 0) {
-            pColor->x = pNode[-1].mColor.x;
-            pColor->y = pNode[-1].mColor.y;
-            pColor->z = pNode[-1].mColor.z;
-        } else {
-            pPrev = pRamp->mpNodes[i - 1];
-            fn_801E05F8(pColor, &pPrev->mColor, &pNode->mColor, pRamp->mInterp,
-                        (t - pPrev->mT) / (pNode->mT - pPrev->mT));
+        if (i != 0) {
+            goto interpolate;
         }
-        break;
+        pColor->x = pNode->mColor.x;
+        pColor->y = pNode->mColor.y;
+        blue = pNode->mColor.z;
+store_blue:
+        pColor->z = blue;
     }
+
+complete:
     if (!found) {
         if (pNode == 0) {
-            pColor->z = 0.0f;
-            pColor->x = 0.0f;
-            pColor->y = 0.0f;
+            pColor->z = pColor->y = pColor->x = 0.0f;
         } else {
             pColor->x = pNode->mColor.x;
             pColor->y = pNode->mColor.y;
@@ -141,20 +167,20 @@ unsigned int fn_801E0844(Ramp_801E052C *pRamp, float t, Vec3_801DE1E0 *pColor, u
     return i;
 }
 
-void fn_801E0984(Ramp_801E052C *pRamp, int interp)
+void ColorRampSetInterp(ColorRamp_t *pRamp, int interp)
 {
     pRamp->mInterp = interp;
 }
 
-Ramp_801E052C *fn_801E098C(Ramp_801E052C *pSrc, Ramp_801E052C *pDst)
+ColorRamp_t *ColorRampCopy(ColorRamp_t *pSrc, ColorRamp_t *pDst)
 {
     unsigned short i;
 
-    fn_801E06DC(pDst);
+    ColorRampInit(pDst);
     pDst->mInterp = pSrc->mInterp;
     pDst->mCount = pSrc->mCount;
     for (i = 0; i < pDst->mCount; i++) {
-        pDst->mpNodes[i] = fn_801E06B0(pSrc->mpNodes[i], &pDst->mPool[i]);
+        pDst->mpNodes[i] = _colorRampCopyNode(pSrc->mpNodes[i], &pDst->mPool[i]);
     }
     return pDst;
 }
