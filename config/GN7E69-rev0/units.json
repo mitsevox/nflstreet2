@@ -25981,6 +25981,25 @@
       ]
     },
     {
+      "source": "src/engine/pathbank.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B51AC-0x801B59B0, compiler and source-form rows, and data row 0x802AEC08-0x802AECAC. All five bodies and the complete native read-only section are exact; the only runtime storage used is owned elsewhere.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B51AC",
+          "end": "0x801B59B0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEC08",
+          "end": "0x802AECAC"
+        }
+      ]
+    },
+    {
       "source": "src/engine/pathcontrol.c",
       "profile": "path_cxx",
       "evidence": "evidence.tsv unit row 0x801B59B0-0x801B5E10 (src/engine/pathcontrol.c), its compiler, function, name and source-form rows: all six functions exact; .rodata 0x802AECAC-0x802AECB4 is the file's unreferenced \"%s  %s\" string, defined by the file; the file has no other data (the PATH globals it uses stay original-owned).",

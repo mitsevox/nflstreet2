@@ -290,10 +290,10 @@ int Class_801B44BC::fn_801B4548()
 int Class_801B44BC::fn_801B4564()
 { return mUnknown60; }
 
-Record_801B58F0 *Class_801B44BC::fn_801B456C(int index)
+PathSubBankState_t *Class_801B44BC::fn_801B456C(int index)
 { return 0; }
 
-Record_801B58F0 *Class_801B44BC::fn_801B4574()
+PathSubBankState_t *Class_801B44BC::fn_801B4574()
 { return 0; }
 
 int Class_801B44BC::fn_801B457C(int index, char *data)

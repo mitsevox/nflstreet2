@@ -7,10 +7,10 @@
 #include "engine/fn_801B3234.h"
 #include "engine/csis.h"
 
-struct SubBank_801B51AC {
-    unsigned int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
+struct PathSubBankInfo_t {
+    unsigned int mEvictionOrder;
+    int mSizeA;
+    int mSizeB;
 };
 
 struct Data_801B4548 {
@@ -21,13 +21,13 @@ struct Data_801B4548 {
     unsigned char mUnknownC[4];
 };
 
-struct Record_801B58F0 {
-    SubBank_801B51AC mUnknown0;
-    int mUnknownC;
-    int mUnknown10;
+struct PathSubBankState_t {
+    PathSubBankInfo_t mInfo;
+    int mIndex;
+    int mReady;
     unsigned char mUnknown14[8];
-    char *mUnknown1C;
-    int mUnknown20;
+    char *mpData;
+    int mEvictionPriority;
 };
 
 struct PathName_801B3FE0 {
@@ -64,8 +64,8 @@ public:
     virtual void vfn_25() = 0;
     virtual int fn_801B4548();
     virtual int fn_801B4564();
-    virtual Record_801B58F0 *fn_801B456C(int index);
-    virtual Record_801B58F0 *fn_801B4574();
+    virtual PathSubBankState_t *fn_801B456C(int index);
+    virtual PathSubBankState_t *fn_801B4574();
     virtual int fn_801B457C(int index, char *data);
     virtual int fn_801B4584(int index);
     virtual int fn_801B458C(int index, int header);
@@ -377,8 +377,8 @@ int fn_801B43CC(int state);
 void fn_801B4824(Node_801B3FE0 *p, int value);
 void fn_801B4960(Node_801B3FE0 *p, int a, int b, int c);
 void fn_801B49C4(Node_801B3FE0 *p, int a, int b, int c);
-int fn_801B57C0(Node_801B3FE0 *p, int index);
-int fn_801B58F0(Node_801B3FE0 *p);
+int PATHI_unloadbank(Node_801B3FE0 *p, int index);
+int PATHI_unloadmostneglectedsubbank(Node_801B3FE0 *p);
 int PATH_control(int flags, int value);
 void PATH_pause(int flags, unsigned char value);
 int PATH_status(int flags, PathfinderStatus_t *info);
