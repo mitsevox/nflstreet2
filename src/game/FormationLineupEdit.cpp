@@ -46,7 +46,6 @@ int FormationLineupSwapUser(int formation, int team, int first, int second)
 
 extern const char _FormationLineup_szSelectUserQuery[] = "use 'EMAG' select 'ZBQF' into \x85 and 'ZBRF' into \x85 and 'FRWF' into \x85 and 'BRWF' into \x85 and 'LLOF' into \x85 and 'CLOF' into \x85 and 'RLOF' into \x85 and 'LLDF' into \x85 and 'RLDF' into \x85 and 'FBLF' into \x85 and 'BBLF' into \x85 and 'LBDF' into \x85 and 'CBDF' into \x85 and 'RBDF' into \x85 from 'ULMF' where 'DIGT' = \x82 and 'NMRF' = \x85\n";
 
-#if defined(DECOMP_COMPARE)
 /* Continue fetching after a failed swap, without attempting further swaps. */
 int FormationLineupSwapAllUser(int a, int team, int first, int second)
 {
@@ -147,5 +146,4 @@ int FormationLineupReset(void)
     FormationLineupClearBase();
     return 1;
 }
-#endif
 }

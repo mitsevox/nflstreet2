@@ -3033,7 +3033,7 @@
     {
       "source": "src/game/FormationLineupEdit.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open unit row, exact per-function boundaries and data slice 0x802943DC-0x80294568. First three functions and native rodata prefix are linked; comparison preserves the remaining eight whole functions and measures only the evidenced unlinked literal slice. No excluded mismatches or completed-original-file claim.",
+      "evidence": "evidence.tsv provisional unit row 0x800857D0-0x80085D7C and HOLDOUT source-form row 0x8008593C-0x80085A34. Compile the whole file with its base game_cpp profile for the one documented holdout. Its original code remains in the executable; both exact code runs and the full literal pool link through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -3053,41 +3053,6 @@
           "symbol": "FormationLineupSwapAllUser",
           "start": "0x8008593C",
           "end": "0x80085A34"
-        },
-        {
-          "symbol": "FormationLineupApplyUser",
-          "start": "0x80085A34",
-          "end": "0x80085A7C"
-        },
-        {
-          "symbol": "FormationLineupClearAll",
-          "start": "0x80085A7C",
-          "end": "0x80085AA0"
-        },
-        {
-          "symbol": "FormationLineupRemapTeams",
-          "start": "0x80085AA0",
-          "end": "0x80085BE4"
-        },
-        {
-          "symbol": "FormationLineupCommitTeam",
-          "start": "0x80085BE4",
-          "end": "0x80085C3C"
-        },
-        {
-          "symbol": "FormationLineupRevertTeam",
-          "start": "0x80085C3C",
-          "end": "0x80085C94"
-        },
-        {
-          "symbol": "FormationLineupFillTeam",
-          "start": "0x80085C94",
-          "end": "0x80085D54"
-        },
-        {
-          "symbol": "FormationLineupReset",
-          "start": "0x80085D54",
-          "end": "0x80085D7C"
         }
       ]
     },

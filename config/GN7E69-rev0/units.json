@@ -1175,35 +1175,7 @@
     },
     "FormationLineupSwapAllUser": {
       "address": "0x8008593C",
-      "evidence": "evidence.tsv function and name rows for 0x8008593C (comparison-only function of src/game/FormationLineupEdit.cpp, documented partial, original bytes)."
-    },
-    "FormationLineupApplyUser": {
-      "address": "0x80085A34",
-      "evidence": "evidence.tsv function and name rows for 0x80085A34 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
-    },
-    "FormationLineupClearAll": {
-      "address": "0x80085A7C",
-      "evidence": "evidence.tsv function and name rows for 0x80085A7C (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
-    },
-    "FormationLineupRemapTeams": {
-      "address": "0x80085AA0",
-      "evidence": "evidence.tsv function and name rows for 0x80085AA0 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
-    },
-    "FormationLineupCommitTeam": {
-      "address": "0x80085BE4",
-      "evidence": "evidence.tsv function and name rows for 0x80085BE4 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
-    },
-    "FormationLineupRevertTeam": {
-      "address": "0x80085C3C",
-      "evidence": "evidence.tsv function and name rows for 0x80085C3C (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
-    },
-    "FormationLineupFillTeam": {
-      "address": "0x80085C94",
-      "evidence": "evidence.tsv function and name rows for 0x80085C94 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
-    },
-    "FormationLineupReset": {
-      "address": "0x80085D54",
-      "evidence": "evidence.tsv function and name rows for 0x80085D54 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+      "evidence": "evidence.tsv function and name rows for 0x8008593C, the documented holdout of src/game/FormationLineupEdit.cpp keeping its original bytes."
     },
     "gExtVecs": {
       "address": "0x802F4750",
@@ -21323,8 +21295,8 @@
     },
     {
       "source": "src/game/FormationLineupEdit.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded record-update group and exact linked prefix/data rows; remaining eight functions are preserved in-place for comparison. Original-file edges remain open.",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x800857D0-0x80085D7C, exact function extents and data rows. Both code runs and the whole native literal pool link; the one documented holdout keeps original code.",
       "sections": [
         {
           "section": ".text",
@@ -21333,12 +21305,27 @@
           "end": "0x8008593C"
         },
         {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80085A34",
+          "end": "0x80085D7C"
+        },
+        {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80294150",
-          "end": "0x802943DC"
+          "end": "0x80294568"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "FormationLineupSwapAllUser",
+            "evidence": "evidence.tsv source-form 0x8008593C-0x80085A34"
+          }
+        ],
+        "evidence": "merge notes of the pull request linking the exact FormationLineupEdit.cpp functions"
+      }
     },
     {
       "source": "src/game/Main.cpp",
