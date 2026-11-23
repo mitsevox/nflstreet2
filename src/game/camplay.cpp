@@ -314,9 +314,14 @@ void CamPlayProcess(GameCamera_t *camera)
         } else if (!GameOptionsGet(18) && !fn_800BA6F8() && fn_800AD9B4() == 3 && camera->mUnknownA0 == 1) {
             int side = fn_80178320();
             Object_80039F5C *player = PlyrGet(side,*fn_8012078C()->mpUnknown4);
-            if (player && velocity.mY > player->mMotion.mPos.mY) {
-                float adjustment = (velocity.mY-player->mMotion.mPos.mY)*0.5f;
-                point.mY -= adjustment < 0.0f ? 0.0f : (adjustment > 10.0f ? 10.0f : adjustment);
+            if (player) {
+                float adjustment = player->mMotion.mPos.mY;
+                float ballY = velocity.mY;
+                if (ballY > adjustment) {
+                    adjustment = (ballY - adjustment) * 0.5f;
+                    float cameraY = point.mY;
+                    point.mY = cameraY - (adjustment < 0.0f ? 0.0f : (adjustment > 10.0f ? 10.0f : adjustment));
+                }
             }
         }
         CamPlayApplyJitter(camera,&point);

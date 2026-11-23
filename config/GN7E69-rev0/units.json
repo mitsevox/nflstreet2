@@ -1179,10 +1179,6 @@
       "address": "0x801DA52C",
       "evidence": "evidence.tsv function/name rows for 0x801DA52C; the documented holdout 0x801DA52C-0x801DA7E8 at the start of src/engine/maddec.cpp, which keeps its original bytes until its draft in comparisons.json is linked; called by 0x801DABE0."
     },
-    "LLTexPadToPow2": {
-      "address": "0x8020E7EC",
-      "evidence": "evidence.tsv function and name rows for 0x8020E7EC (documented holdout 0x8020E7EC-0x8020E9D0 at the start of src/engine/lltextur.c: draft registered in comparisons.json, original bytes). Called by ResTexture.cpp."
-    },
     "FormationLineupSwapAllUser": {
       "address": "0x8008593C",
       "evidence": "evidence.tsv function and name rows for 0x8008593C, the documented holdout of src/game/FormationLineupEdit.cpp keeping its original bytes."
@@ -20890,12 +20886,12 @@
     {
       "source": "src/engine/lltextur.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8020E7EC-0x8020EA18 (src/engine/lltextur.c), its function, name and source-form rows; 0x8020E9D0-0x8020EA18 is linked (no data); the documented holdout LLTexPadToPow2 0x8020E7EC-0x8020E9D0 at the start of .text keeps its original bytes and stays a comparison.",
+      "evidence": "evidence.tsv provisional unit row 0x8020E7EC-0x8020EA18 (src/engine/lltextur.c) and its compiler, function, name and source-form rows; both functions link from the native object. No allocated data sections.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8020E9D0",
+          "start": "0x8020E7EC",
           "end": "0x8020EA18"
         }
       ]
@@ -21685,6 +21681,50 @@
           "end": "0x803EBDE0"
         }
       ]
+    },
+    {
+      "source": "src/engine/rescache.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row 0x801F2E54-0x801F3308 and native initialized data rows; four exact functions link with two documented holdouts.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F2E54",
+          "end": "0x801F2EE0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F30CC",
+          "end": "0x801F318C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B19A4",
+          "end": "0x802B19AC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBDE0",
+          "end": "0x803EBDE8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "ResCacheOpen",
+            "evidence": "evidence.tsv source-form 0x801F2EE0-0x801F30CC"
+          },
+          {
+            "function": "ResCacheWrite",
+            "evidence": "evidence.tsv source-form 0x801F318C-0x801F3308"
+          }
+        ],
+        "evidence": "PR #1401 merge notes; the two original instruction ranges remain linked and their source is registered for comparison."
+      }
     },
     {
       "source": "src/dolphin/vm/VM.c",

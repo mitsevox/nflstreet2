@@ -28664,43 +28664,35 @@
     {
       "source": "src/engine/rescache.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F2E54-0x801F3308 (src/engine/rescache.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "evidence": "evidence.tsv provisional unit row 0x801F2E54-0x801F3308, owned data rows and ResCacheOpen and ResCacheWrite HOLDOUT: source-form rows; exact functions and both initialized data sections link from the same source file.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801F2E54",
           "end": "0x801F3308"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B19A4",
+          "end": "0x802B19AC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBDE0",
+          "end": "0x803EBDE8"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801F2E54",
-          "start": "0x801F2E54",
-          "end": "0x801F2ED8"
-        },
-        {
-          "symbol": "fn_801F2ED8",
-          "start": "0x801F2ED8",
-          "end": "0x801F2EE0"
-        },
-        {
-          "symbol": "fn_801F2EE0",
+          "symbol": "ResCacheOpen",
           "start": "0x801F2EE0",
           "end": "0x801F30CC"
         },
         {
-          "symbol": "fn_801F30CC",
-          "start": "0x801F30CC",
-          "end": "0x801F3104"
-        },
-        {
-          "symbol": "fn_801F3104",
-          "start": "0x801F3104",
-          "end": "0x801F318C"
-        },
-        {
-          "symbol": "fn_801F318C",
+          "symbol": "ResCacheWrite",
           "start": "0x801F318C",
           "end": "0x801F3308"
         }
@@ -29759,26 +29751,6 @@
           "symbol": "_TDbTblFillColHeader",
           "start": "0x8020B564",
           "end": "0x8020B710"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/lltextur.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8020E7EC-0x8020EA18 (src/engine/lltextur.c), its compiler row, the source-form rows and the exact function rows. Documented holdout at the start of .text: LLTexPadToPow2 0x8020E7EC-0x8020E9D0 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes; LLTexCopyFlush after it is linked through units.json.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8020E7EC",
-          "end": "0x8020EA18"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "LLTexPadToPow2",
-          "start": "0x8020E7EC",
-          "end": "0x8020E9D0"
         }
       ]
     },
