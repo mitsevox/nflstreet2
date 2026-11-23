@@ -689,7 +689,8 @@ class FileStaticStorage(Fixture):
         self.assertEqual(pieces[".bss"], [{"start": 0x80005000, "end": 0x80005040, "symbols": [
             {"name": "__storage_80005010", "value": 0x10}, {"name": "__storage_80005024", "value": 0x24}]}])
         self.assertEqual(resolved, {})
-        # Storage earns no linked-byte credit: the unit's ranges are its configured sections only.
+        # Storage stays out of the unit's configured sections; the build reports it as storage_extents,
+        # which count as the unit's linked data (owner ruling of 2026-11-23, see the config README).
         self.assertEqual([entry["section"] for entry in units[0]["sections"]], [".text", ".rodata"])
 
     def test_statics_and_common_symbols_share_one_map(self):

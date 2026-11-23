@@ -29,7 +29,7 @@ def linked_extents(unit):
     """A measured unit's linked extents: its configured ranges, then the extents its storage map
     places (COMMON symbols and mapped file statics), which are linked data of the unit (owner
     ruling of 2026-11-23). Storage extents carry their `symbol` and no compiled section name."""
-    return unit["sections"] + [dict(extent, storage=True) for extent in unit.get("storage_extents", [])]
+    return unit["sections"] + list(unit.get("storage_extents", []))
 
 
 def measured_units(source_report):

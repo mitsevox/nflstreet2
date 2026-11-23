@@ -1,7 +1,11 @@
 """Tests for tools/data_owners.py: which data addresses a function's instructions form."""
+import contextlib
+import io
 from pathlib import Path
 import sys
+import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
@@ -42,6 +46,36 @@ class FunctionReferences(unittest.TestCase):
     def test_unreadable_word_forgets_every_lis(self):
         words = [d_form(15, 3, 0, 0x8030), None, d_form(32, 4, 3, 0)]
         self.assertEqual(self.references(words), [])
+
+    def test_ra_zero_is_the_literal_zero(self):
+        words = [d_form(15, 0, 0, 0x8030), d_form(14, 3, 0, 0x10),       # lis r0; li r3,0x10
+                 d_form(32, 4, 0, 0x20)]                                 # lwz r4,0x20(0)
+        self.assertEqual(self.references(words), [])
+
+    def test_addis_lmw_calls_and_paired_single_updates_forget_registers(self):
+        cases = [
+            [d_form(15, 3, 0, 0x8030), d_form(15, 3, 4, 1), d_form(32, 5, 3, 0)],     # addis r3,r4,1
+            [d_form(15, 30, 0, 0x8030), d_form(46, 29, 1, 8), d_form(32, 5, 30, 0)],  # lmw r29: r30 too
+            [d_form(15, 3, 0, 0x8030), (18 << 26) | 0x100 | 1, d_form(32, 5, 3, 0)],  # bl clobbers r3
+            [d_form(15, 3, 0, 0x8030), (57 << 26) | (1 << 21) | (3 << 16) | 8, d_form(32, 5, 3, 0)],  # psq_lu
+        ]
+        for words in cases:
+            self.assertEqual(self.references(words), [], words)
+        # A callee-saved register survives a call.
+        words = [d_form(15, 31, 0, 0x8030), (18 << 26) | 0x100 | 1, d_form(32, 5, 31, 4)]
+        self.assertEqual(self.references(words), [0x80300004])
+
+
+class Output(unittest.TestCase):
+    def test_output_outside_the_repository(self):
+        with tempfile.TemporaryDirectory() as folder, patch.object(data_owners, 'analyse', return_value=[]):
+            path = Path(folder) / 'owners.tsv'
+            printed = io.StringIO()
+            with patch.object(sys, 'argv', ['data_owners.py', '--output', str(path)]), \
+                    contextlib.redirect_stdout(printed):
+                data_owners.main()
+            self.assertTrue(path.is_file())
+            self.assertIn(f'Per-range detail: {path.resolve()}', printed.getvalue())
 
 
 if __name__ == '__main__':

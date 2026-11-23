@@ -13,14 +13,16 @@ before it links, and lists the ranges no file work will reach.
 The ranges are the report's `Unmapped / <section>` extents (build/<target>/report.json), cut into
 pieces at every address something refers to. A reference is an absolute address formed in a
 function by `lis` and a later displacement (addi, ori or a load or store through that register),
-an r13 or r2 small-data displacement, or a pointer word in a loaded data section. The scan follows
+an r13 or r2 small-data displacement, or a pointer word in a loaded data section (a word that
+points at itself is ignored). Only whole functions the report lists are scanned. The scan follows
 no branches, so it is a guide for reading the code, not evidence: an object addressed only through
 a register base it does not see (an array element, a member of a larger object) shows as part of
 the piece before it, and a stale `lis` can name a false user.
 
 Each piece gets a status:
 - `pending`: at least one user is a function or data word of a file that is not wholly linked
-  (a candidate unit, a file linked with holdouts, or unmapped code); it moves with that file.
+  (a candidate unit, a file linked with holdouts, or unmapped code), or a data word in unmapped
+  data or in no unit; it moves with that file.
 - `linked-only`: every user is in a wholly linked file; that file already decided to leave it
   (an extern, an asset kept out of Git) or the piece is a member of a larger object.
 - `orphan`: nothing refers to it: the data of a linker-discarded function, padding, or an object
@@ -40,7 +42,9 @@ TARGET = "GN7E69-rev0"
 LOADS_GPR = {32, 33, 34, 35, 40, 41, 42, 43, 46}       # lwz lwzu lbz lbzu lhz lhzu lha lhau lmw
 STORES = {36, 37, 38, 39, 44, 45, 47}                  # stw stwu stb stbu sth sthu stmw
 FLOAT = {48, 49, 50, 51, 52, 53, 54, 55}               # lfs lfsu lfd lfdu stfs stfsu stfd stfdu
-ADDI, ORI, LIS = 14, 24, 15
+ADDI, ORI, LIS, LMW = 14, 24, 15, 46
+UPDATE_FORMS = {33, 35, 41, 43, 37, 39, 45, 49, 51, 53, 55}
+VOLATILE = (0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
 
 
 def dol_segments(binary):
@@ -72,23 +76,40 @@ def function_references(words, start, sda_bases):
         op, rd, ra = word >> 26, (word >> 21) & 31, (word >> 16) & 31
         immediate = word & 0xFFFF
         signed = immediate - 0x10000 if immediate & 0x8000 else immediate
-        if op == LIS and ra == 0:
-            high[rd] = immediate << 16
+        if op == LIS:
+            # lis rD,imm (addis rD,0,imm) sets an address high half; addis from a register does not.
+            if ra == 0:
+                high[rd] = immediate << 16
+            else:
+                high.pop(rd, None)
             continue
         if op in (ADDI, ORI) or op in LOADS_GPR or op in STORES or op in FLOAT:
             base_register = rd if op == ORI else ra      # ori rA, rS, imm: the source is rS
-            if base_register in sda_bases:
+            if op != ORI and ra == 0:
+                base = None                              # rA = 0 means the literal 0, not r0
+            elif base_register in sda_bases:
                 base = sda_bases[base_register]
             else:
                 base = high.get(base_register)
             if base is not None:
                 found.append((start + index * 4, (base + (immediate if op == ORI else signed)) & 0xFFFFFFFF))
             # The written register no longer holds a `lis` value.
-            written = ra if op == ORI else rd
-            if op in (ADDI, ORI) or op in LOADS_GPR:
-                high.pop(written, None)
-            if op in (33, 35, 41, 43, 37, 39, 45, 49, 51, 53, 55):  # update forms rewrite rA
+            if op == ORI:
                 high.pop(ra, None)
+            elif op == LMW:
+                for register in range(rd, 32):
+                    high.pop(register, None)
+            elif op in (ADDI,) or op in LOADS_GPR:
+                high.pop(rd, None)
+            if op in UPDATE_FORMS:
+                high.pop(ra, None)
+        elif op in (56, 57, 60, 61):
+            if op in (57, 61):                           # psq_lu, psq_stu rewrite rA
+                high.pop(ra, None)
+        elif op == 18:
+            if word & 1:                                 # bl: a call clobbers the volatile registers
+                for register in VOLATILE:
+                    high.pop(register, None)
         elif op == 31 or op in (7, 8, 12, 13, 20, 21, 23, 25, 26, 27, 28, 29):
             # Register-writing arithmetic and logic: forget the destination conservatively.
             high.pop(ra if op in (20, 21, 23, 25, 26, 27, 28, 29) else rd, None)
@@ -219,7 +240,8 @@ def main():
         return
     write(pieces, args.output)
     print(summary(pieces))
-    print(f"Per-range detail: {args.output.relative_to(ROOT)}")
+    output = args.output.resolve()
+    print(f"Per-range detail: {output.relative_to(ROOT) if output.is_relative_to(ROOT) else output}")
 
 
 if __name__ == "__main__":
