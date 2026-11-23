@@ -242,7 +242,7 @@ typedef struct Params_80275F80 {
     int (*m28)(Node_80279D90 *node);
 } Params_80275F80;
 
-typedef struct Struct_803B4E34 {
+typedef struct SndSoftwareMixerState_t {
     Setup_80272EC4 m0;
     unsigned short mC;
     unsigned char mE;
@@ -263,7 +263,7 @@ typedef struct Struct_803B4E34 {
     Record_803B5010 *m1DC;
     void (*m1E0)(int count, float *src, float *dst, float gain);
     void (*m1E4)(int count, short *src, float *dst);
-} Struct_803B4E34;
+} SndSoftwareMixerState_t;
 
 /* A client of the variable-rate timer of sserver.c (a stream volume fade of sstautov.c and
    sstvol.c): linked on Snd::gVariableTimerList and called with its context on every new tick. */
@@ -316,7 +316,7 @@ extern void *(*lbl_803B53E4)(int size);
 extern void (*lbl_803B53E8)(void *p);
 extern int (*lbl_80301000)(void *dst, void *src, int size);
 extern Struct_803A6C24 lbl_803A6C24;
-extern Struct_803B4E34 sndmix;
+extern SndSoftwareMixerState_t sndmix;
 
 int SNDI_memcpy(void *dst, void *src, int size);
 

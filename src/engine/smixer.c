@@ -14,7 +14,7 @@ int SNDMIXI_volramp(Record_803B5010 *record);
 
 /* The mixer state: the setup, the filter-chain creators and sizes, the bus buffers, the voice records
    and the mix and decode functions. */
-Struct_803B4E34 sndmix;
+SndSoftwareMixerState_t sndmix;
 int sndmixwritelog;
 /* Called with the output buffers after each audio slice while the sound system's flag +0x234 is set. */
 void (*MIXoutputfn)(void **outputs, int count);

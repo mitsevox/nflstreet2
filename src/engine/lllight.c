@@ -307,6 +307,7 @@ int _LLLightLoadSetScaled(LLLightSet_t *pSet, float r, float g, float b)
 
     for (i = 0; i < pSet->mUnknown0; i++) {
         if (r != 1.0f || g != 1.0f || b != 1.0f) {
+            /* FAKEMATCH: Keep the equivalent index-first address expression for the target add order. */
             light = *(i + pSet->mUnknown8);
             GXGetLightColor(&light, &color);
             rValue = color.r * r;
