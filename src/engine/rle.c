@@ -110,3 +110,10 @@ int _RLEDecProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 void _RLEDecStop(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
 {
 }
+
+GCmpCodec_t GCmpTypeRLE = {
+    'RLE1', 1,
+    _RLECoStart, (GCmpCodecRunFunc_t)_RLECoProcess, _RLECoStop,
+    _RLEDecStart, (GCmpCodecRunFunc_t)_RLEDecProcess, _RLEDecStop,
+    0, 0
+};

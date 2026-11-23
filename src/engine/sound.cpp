@@ -102,6 +102,8 @@ struct SndModuleInfo_t {
 
 typedef int (*SndTraverseFn_t)(void *pNode, void *pKey, void *pOut);
 
+static char _Snd_ModuleID[] = "SOUND.LIB";
+
 static IAllocator *pIAllocator;
 
 static SndModuleInfo_t _Snd_ModuleInfo;

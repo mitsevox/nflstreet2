@@ -8,6 +8,7 @@
 
 typedef int (*AnimUserOpcodeCallback_t)(void *pUser, int op, unsigned int state);
 
+static char _Anim_ModuleID[] = "ANIM.LIB";
 static unsigned char _Anim_ModuleActive = 0;
 static AnimUserOpcodeCallback_t _Anim_pUserOpcodeCallback = 0;
 static AnimUserOpcodeCallback_t _Anim_pUserOpcodeSkipCallback = 0;

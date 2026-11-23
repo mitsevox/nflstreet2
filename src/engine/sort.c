@@ -10,6 +10,8 @@ typedef struct SortInterface_t {
 } SortInterface_t;
 
 extern SortInterface_t lbl_803E943C[2];
+char Sort_ModuleID[] = "SORT.LIB";
+
 /* Set by SortInit, cleared by SortShutdown. */
 static unsigned char _Sort_ModuleActive = 0;
 

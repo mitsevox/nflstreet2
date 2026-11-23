@@ -1931,7 +1931,7 @@
     {
       "source": "src/engine/system.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801F77DC-0x801F7DF4 (src/engine/system.c), its compiler, function, name, data, type and source-form rows; every function exact and the file-owned .sdata linked; the file defines the _Sys_TimerList, _Sys_CallbackList and _SysCS COMMON globals and the unit's storage map places each at its exact data row.",
+      "evidence": "evidence.tsv unit row 0x801F77DC-0x801F7DF4 (src/engine/system.c), its compiler, function, name, data, type and source-form rows; every function exact and the file-owned .sdata linked; the file defines the _Sys_TimerList, _Sys_CallbackList and _SysCS COMMON globals and the unit's storage map places each at its exact data row. Its .data is the module id string _Sys_ModuleID (data row 0x802F953C).",
       "sections": [
         {
           "section": ".text",
@@ -1944,6 +1944,12 @@
           "placement": ".data5",
           "start": "0x803EBE30",
           "end": "0x803EBE4C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F953C",
+          "end": "0x802F9548"
         }
       ],
       "storage": [
@@ -14637,7 +14643,7 @@
     {
       "source": "src/engine/anim.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/anim.c), its function rows and the compiler row 0x801B9D00-0x801C1D84; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBB78-0x803EBB88, .bss 0x8037E840-0x8037E858, .sbss 0x803ECEB4-0x803ECEB8, each with its evidence.tsv data rows.",
+      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/anim.c), its function rows and the compiler row 0x801B9D00-0x801C1D84; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBB78-0x803EBB88, .bss 0x8037E840-0x8037E858, .sbss 0x803ECEB4-0x803ECEB8, each with its evidence.tsv data rows. Its .data is the module id string _Anim_ModuleID (data row 0x802F4840).",
       "sections": [
         {
           "section": ".text",
@@ -14662,6 +14668,12 @@
           "placement": ".sbss",
           "start": "0x803ECEB4",
           "end": "0x803ECEB8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4840",
+          "end": "0x802F484C"
         }
       ]
     },
@@ -14706,7 +14718,7 @@
     {
       "source": "src/engine/AnimSequencer.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BFEF8-0x801BFFA8 (src/engine/AnimSequencer.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBBAC-0x803EBBB4, each with its evidence.tsv data rows.",
+      "evidence": "evidence.tsv unit row 0x801BFEF8-0x801BFFA8 (src/engine/AnimSequencer.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBBAC-0x803EBBB4, each with its evidence.tsv data rows. Its .data is the module id string _AnimSequencer_ModuleID (data row 0x802F485C).",
       "sections": [
         {
           "section": ".text",
@@ -14719,6 +14731,12 @@
           "placement": ".data5",
           "start": "0x803EBBAC",
           "end": "0x803EBBB4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F485C",
+          "end": "0x802F4870"
         }
       ]
     },
@@ -15060,7 +15078,7 @@
     {
       "source": "src/engine/maths.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CEF48-0x801CEFF0 (src/engine/maths.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBCB0-0x803EBCB4, each with its evidence.tsv data rows.",
+      "evidence": "evidence.tsv unit row 0x801CEF48-0x801CEFF0 (src/engine/maths.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sdata 0x803EBCB0-0x803EBCB4, each with its evidence.tsv data rows. Its .data is the module id string Math_ModuleID (data row 0x802F7AC4).",
       "sections": [
         {
           "section": ".text",
@@ -15073,6 +15091,12 @@
           "placement": ".data5",
           "start": "0x803EBCB0",
           "end": "0x803EBCB4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7AC4",
+          "end": "0x802F7AD0"
         }
       ]
     },
@@ -15270,7 +15294,7 @@
     {
       "source": "src/engine/sort.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801F5100-0x801F524C (src/engine/sort.c) and its data rows (da1a: the .sdata 0x803EBE20-0x803EBE24, _Sort_ModuleActive); every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801F5100-0x801F524C (src/engine/sort.c) and its data rows (da1a: the .sdata 0x803EBE20-0x803EBE24, _Sort_ModuleActive); every function exact, promoted from comparison-only. Its .data is the module id string Sort_ModuleID (data row 0x802F9530).",
       "sections": [
         {
           "section": ".text",
@@ -15283,6 +15307,12 @@
           "placement": ".data5",
           "start": "0x803EBE20",
           "end": "0x803EBE24"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9530",
+          "end": "0x802F953C"
         }
       ]
     },
@@ -16330,39 +16360,57 @@
     {
       "source": "src/engine/huff.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8027FB2C-0x802802A0 (src/engine/huff.c) and its function and name rows; every function exact.",
+      "evidence": "evidence.tsv unit row 0x8027FB2C-0x802802A0 (src/engine/huff.c) and its function and name rows; every function exact. Its .data is the HUFF codec descriptor GCmpTypeHuffman (data row 0x803018C8).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8027FB2C",
           "end": "0x802802A0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803018C8",
+          "end": "0x803018F0"
         }
       ]
     },
     {
       "source": "src/engine/rle.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x802802A0-0x80280504 (src/engine/rle.c) and its function and name rows; every function exact.",
+      "evidence": "evidence.tsv unit row 0x802802A0-0x80280504 (src/engine/rle.c) and its function and name rows; every function exact. Its .data is the RLE1 codec descriptor GCmpTypeRLE (data row 0x803018F0).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802802A0",
           "end": "0x80280504"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803018F0",
+          "end": "0x80301918"
         }
       ]
     },
     {
       "source": "src/engine/none.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80280504-0x802805C4 (src/engine/none.c) and its function and name rows; every function exact.",
+      "evidence": "evidence.tsv unit row 0x80280504-0x802805C4 (src/engine/none.c) and its function and name rows; every function exact. Its .data is the NONE codec descriptor GCmpTypeNONE (data row 0x80301918).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80280504",
           "end": "0x802805C4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80301918",
+          "end": "0x80301940"
         }
       ]
     },
@@ -16407,7 +16455,7 @@
     {
       "source": "src/engine/texture.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8020DB34-0x8020E7EC (src/engine/texture.c), its function and name rows; every function and allocated placement exact, promoted from comparison-only. It owns and links its data (da1c): .data 0x802F9BF0-0x802F9C08, .rodata 0x802B1BC4-0x802B1BD4, .sdata 0x803EBEB8-0x803EBED0, .sbss 0x803ECFBC-0x803ECFC4, each with its evidence.tsv data rows.",
+      "evidence": "evidence.tsv provisional unit row 0x8020DB34-0x8020E7EC (src/engine/texture.c), its function and name rows; every function and allocated placement exact, promoted from comparison-only. It owns and links its data (da1c): .data 0x802F9BF0-0x802F9C08, .rodata 0x802B1BC4-0x802B1BD4, .sdata 0x803EBEB8-0x803EBED0, .sbss 0x803ECFBC-0x803ECFC4, each with its evidence.tsv data rows. Its .data starts with the module id string _Tex_ModuleID (data row 0x802F9BE4).",
       "sections": [
         {
           "section": ".text",
@@ -16418,7 +16466,7 @@
         {
           "section": ".data",
           "placement": ".data4",
-          "start": "0x802F9BF0",
+          "start": "0x802F9BE4",
           "end": "0x802F9C08"
         },
         {
@@ -22156,7 +22204,7 @@
     {
       "source": "src/engine/sound.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801F3524-0x801F5034 (src/engine/sound.cpp), its compiler, function and name rows, the data rows for .rodata 0x802B1A18-0x802B1AA8, .bss 0x8039AE8C-0x8039AEE0 and .sbss 0x803ECF80-0x803ECF8C, and the linker row for the folded allocator copies. All functions and the file's data are linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801F3524-0x801F5034 (src/engine/sound.cpp), its compiler, function and name rows, the data rows for .rodata 0x802B1A18-0x802B1AA8, .bss 0x8039AE8C-0x8039AEE0 and .sbss 0x803ECF80-0x803ECF8C, and the linker row for the folded allocator copies. All functions and the file's data are linked. Its .data is the module id string _Snd_ModuleID (data row 0x802F9524).",
       "sections": [
         {
           "section": ".text",
@@ -22181,6 +22229,12 @@
           "placement": ".bss",
           "start": "0x8039AE8C",
           "end": "0x8039AEE0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9524",
+          "end": "0x802F9530"
         }
       ],
       "link_roots": {

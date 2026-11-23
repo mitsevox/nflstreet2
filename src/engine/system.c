@@ -39,6 +39,7 @@ extern int DSTraverseList(void *pPool, int start, void *pKey, void *pOut, int (*
 extern int DateGetNumDaysInYear(int year);
 extern int DateGetNumDaysInMonth(int month, int year);
 
+static char _Sys_ModuleID[] = "SYSTEM.LIB";
 static unsigned char _Sys_ModuleActive = 0;
 static int _Sys_LastError = 0;
 static void *_Sys_ErrorList = 0;

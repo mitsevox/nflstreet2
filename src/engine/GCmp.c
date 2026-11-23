@@ -4,24 +4,6 @@
 
 #include "engine/GCmp.h"
 
-typedef void *(*GCmpCodecInitFunc_t)(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst);
-typedef int (*GCmpCodecRunFunc_t)(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState);
-typedef void (*GCmpCodecEndFunc_t)(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState);
-
-/* 40-byte codec descriptor registered through GCmpRegisterType. */
-typedef struct GCmpCodec_t {
-    unsigned int mTag;
-    unsigned int mFlags;
-    GCmpCodecInitFunc_t mpEncodeInit;
-    GCmpCodecRunFunc_t mpEncodeRun;
-    GCmpCodecEndFunc_t mpEncodeEnd;
-    GCmpCodecInitFunc_t mpDecodeInit;
-    GCmpCodecRunFunc_t mpDecodeRun;
-    GCmpCodecEndFunc_t mpDecodeEnd;
-    int (*mpStartup)(void);
-    int (*mpShutdown)(void);
-} GCmpCodec_t;
-
 /* 28-byte stream record allocated by GCmpStart and GCmpBlockStart. */
 typedef struct GCmpStream_t {
     GCmpBuffer_t *mpSrc;
@@ -49,9 +31,6 @@ static unsigned char _GCmpModuleActive = 0;
 static int _GCmpNumTypes = 0;
 static GCmpCodec_t **_GCmpTypes;
 static char _GCmp_szLabel[32] = "GCMP.LIB";
-extern GCmpCodec_t lbl_803018C8;
-extern GCmpCodec_t lbl_803018F0;
-extern GCmpCodec_t lbl_80301918;
 extern GCmpCodec_t lbl_80301940;
 extern GCmpCodec_t lbl_80301968;
 
@@ -63,9 +42,9 @@ int GCmpInit(int count)
     if (_GCmpModuleActive == 0) {
         _GCmpNumTypes = count + 6;
         _GCmpTypes = fn_801D2BB0(1, _GCmpNumTypes * 4, 0, 0);
-        GCmpRegisterType(0, &lbl_80301918);
-        GCmpRegisterType(1, &lbl_803018F0);
-        GCmpRegisterType(2, &lbl_803018C8);
+        GCmpRegisterType(0, &GCmpTypeNONE);
+        GCmpRegisterType(1, &GCmpTypeRLE);
+        GCmpRegisterType(2, &GCmpTypeHuffman);
         GCmpRegisterType(3, &lbl_80301940);
         GCmpRegisterType(5, &lbl_80301968);
         _GCmpTypes[4] = 0;

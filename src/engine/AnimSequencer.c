@@ -5,6 +5,7 @@
 #include "engine/AnimSeqCamera.h"
 #include "engine/SysSetLastErrorFunc.h"
 
+static char _AnimSequencer_ModuleID[] = "ANIMSEQUENCER.LIB";
 static unsigned char _AnimSequencer_ModuleActive = 0;
 
 /* Sequencer ticks per second of animation time. */
