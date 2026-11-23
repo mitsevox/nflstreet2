@@ -7,11 +7,12 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/tmlib.h"
 
-#if defined(DECOMP_COMPARE)
+/* Pad the image on the right and bottom while preserving the copied rows. */
 void LLTexPadToPow2(Texture_t *pTex)
 {
-    int bpp;
-    int size;
+    short bpp;
+    int imageSize;
+    unsigned int paddedSize;
     unsigned char *pImage;
     unsigned short width;
     unsigned short height;
@@ -44,29 +45,28 @@ void LLTexPadToPow2(Texture_t *pTex)
         bpp = 0;
         break;
     }
-    size = (pTex->mWidth * pTex->mHeight * bpp) >> 3;
-    pImage = fn_801D2BB0(_Tex_ImageHeap, size, 4, 0);
-    memcpy(pImage, pTex->mpImage, size);
+    imageSize = (pTex->mWidth * pTex->mHeight * bpp) >> 3;
+    pImage = fn_801D2BB0(_Tex_ImageHeap, imageSize, 4, 0);
+    memcpy(pImage, pTex->mpImage, imageSize);
     fn_801D2BD0(pTex->mpImage);
     pTex->mpImage = pImage;
     for (width = 1; width < pTex->mWidth; width <<= 1) {
     }
     for (height = 1; height < pTex->mHeight; height <<= 1) {
     }
-    srcPitch = (pTex->mWidth * bpp) >> 3;
+    srcPitch = (pTex->mWidth * bpp) / 8;
     dstPitch = width * bpp / 8;
-    size = height * dstPitch;
-    pDst = fn_801D2BB0(_Tex_ImageHeap, size, 0, 0);
-    MemFill(pDst, size, 0, 1);
+    paddedSize = height * dstPitch;
+    pDst = fn_801D2BB0(_Tex_ImageHeap, paddedSize, 0, 0);
+    MemFill(pDst, paddedSize, 0, 1);
     for (y = 0; y < pTex->mHeight; y++) {
         memcpy(pDst + y * dstPitch, pTex->mpImage + y * srcPitch, srcPitch);
     }
     fn_801D2BD0(pTex->mpImage);
-    pTex->mWidth = width;
     pTex->mpImage = pDst;
+    pTex->mWidth = width;
     pTex->mHeight = height;
 }
-#endif
 
 void LLTexCopyFlush(void *pDst, void *pSrc, unsigned int size)
 {

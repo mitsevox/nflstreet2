@@ -30112,26 +30112,6 @@
       ]
     },
     {
-      "source": "src/engine/lltextur.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8020E7EC-0x8020EA18 (src/engine/lltextur.c), its compiler row, the source-form rows and the exact function rows. Documented holdout at the start of .text: LLTexPadToPow2 0x8020E7EC-0x8020E9D0 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes; LLTexCopyFlush after it is linked through units.json.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8020E7EC",
-          "end": "0x8020EA18"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "LLTexPadToPow2",
-          "start": "0x8020E7EC",
-          "end": "0x8020E9D0"
-        }
-      ]
-    },
-    {
       "source": "src/engine/xmlread.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 (src/engine/xmlread.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1D10-0x802B1D40. 12 bodies, partials: 0x802166F0, 0x80216BFC. Comparison only; original assembly stays linked.",
