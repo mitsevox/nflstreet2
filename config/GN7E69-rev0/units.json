@@ -1289,10 +1289,6 @@
       "address": "0x802796DC",
       "evidence": "evidence.tsv function and name rows for 0x802796DC (SNDI_validrendermode, srender.c, registered in comparisons.json, original bytes linked); called by SNDPKTPLAY_start (spktplay.c comparison, c19 wave)."
     },
-    "SNDI_aztospkrvol": {
-      "address": "0x80277A60",
-      "evidence": "evidence.tsv function and name rows for 0x80277A60 (SNDI_aztospkrvol, satospkr.c, registered in comparisons.json, original bytes linked); called by name from the src/engine/snddrv.c comparison bodies (c18 wave)."
-    },
     "_Q24Path11IPathToReal.realimp": {
       "address": "0x803EBB60",
       "evidence": "evidence.tsv external row for 0x803EBB60 (Path::IPathToReal::realimp, GoldenEye symbol); its storage stays in the open PATH library files (src/engine/pathinit.c and its neighbours); src/engine/pathreal5.c references it by name."
@@ -1320,18 +1316,6 @@
     "gLastSubTick": {
       "address": "0x803ECEB0",
       "evidence": "evidence.tsv data/name rows for 0x803ECEB0 (target extent, related name); speech-library storage, original-owned."
-    },
-    "SNDI_spkrconfig": {
-      "address": "0x80277B3C",
-      "evidence": "evidence.tsv function and name rows for SNDI_spkrconfig 0x80277B3C; the draft src/engine/satospkr.c is registered in comparisons.json (SNDI_precalcaztospkrvol differs), so the original provider stays linked and linked callers (src/engine/ssysinit.c) resolve this name to it."
-    },
-    "SNDI_precalcaztospkrvol": {
-      "address": "0x80277658",
-      "evidence": "evidence.tsv function and name rows for SNDI_precalcaztospkrvol 0x80277658; the draft src/engine/satospkr.c is registered in comparisons.json (this function differs), so the original provider stays linked and linked callers (src/engine/ssysinit.c) resolve this name to it."
-    },
-    "SNDI_freespkrtable": {
-      "address": "0x80277AFC",
-      "evidence": "evidence.tsv function and name rows for SNDI_freespkrtable 0x80277AFC; the draft src/engine/satospkr.c is registered in comparisons.json (SNDI_precalcaztospkrvol differs), so the original provider stays linked and linked callers (src/engine/ssysinit.c) resolve this name to it."
     },
     "SNQueryData": {
       "address": "0x801ACB9C",
@@ -26657,6 +26641,31 @@
         ],
         "evidence": "colorRamp.c holdout covering ColorRampEval. Its complete body remains under the unchanged engine_c comparison profile."
       }
+    },
+    {
+      "source": "src/engine/satospkr.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv satospkr.c unit, compiler, source-form, function, name and data rows. The whole sound_cxx object links five exact functions, the native 88-byte .rodata and the 28-byte speaker-table .bss.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802775EC",
+          "end": "0x80277CF0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C1F10",
+          "end": "0x802C1F68"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803B5044",
+          "end": "0x803B5060"
+        }
+      ]
     }
   ]
 }

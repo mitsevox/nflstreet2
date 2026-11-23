@@ -1,43 +1,39 @@
-/* Azimuth to speaker gains (satospkr.c): the speaker layout setup and the table that turns a voice's
-   azimuth into per-speaker volumes: equal-power gains between the two speakers that enclose each of
-   256 azimuth steps. Names from the GoldenEye: Rogue Agent, Medal of Honor: European Assault and
-   NASCAR 2005 symbol sets (satospkr.c, SNDGAINPAIR). */
+/* Sets up the speaker layout and turns a voice's azimuth into per-speaker volumes.
+   The table stores equal-power gains between the speakers that enclose each of 256 azimuths. */
 
 #include "engine/sndsys.h"
 
 extern "C" {
 
 typedef struct SndGainPair_t {
-    float m0;
-    float m4;
+    float mFirstGain;
+    float mSecondGain;
 } SndGainPair_t;
 
 extern float lbl_803A7714[5];
 extern unsigned char lbl_803A7728;
-extern void *lbl_803B5044;
-extern unsigned char *lbl_803B5048[6];
+static void *sndaztospkr_buf;
+static unsigned char *sndaztospkr[6];
 
-void SNDI_equalpower(SndGainPair_t *pair, float a, float b, float azimuth)
+void SNDI_equalpower(SndGainPair_t *pair, float firstAngle, float secondAngle, float azimuth)
 {
-    float angle = (azimuth * 0.017453294f - b * 0.017453294f) / (a * 0.017453294f - b * 0.017453294f) * 1.5707964f;
+    float angle = (azimuth * 0.017453294f - secondAngle * 0.017453294f) /
+                  (firstAngle * 0.017453294f - secondAngle * 0.017453294f) * 1.5707964f;
 
-    pair->m0 = SNDI_sin(angle);
-    pair->m4 = SNDI_cos(angle);
+    pair->mFirstGain = SNDI_sin(angle);
+    pair->mSecondGain = SNDI_cos(angle);
 }
 
-static inline int SNDI_gain(float x)
+static inline int _SNDIRoundSpeakerGain(float level)
 {
-    float v = x * 255.0f;
-
-    if (!(v < 0.0f)) {
-        v += 0.5f;
-    } else {
-        v -= 0.5f;
-    }
-    return v;
+    float gain = level * 255.0f;
+    return (int)(!(gain < 0.0f) ? gain + 0.5f : gain - 0.5f);
 }
 
-#define STORE(dst, x) dst = SNDI_gain(x);
+#define STORE_SPEAKER_GAIN(dst, level) { \
+    int converted = _SNDIRoundSpeakerGain(level); \
+    (dst) = converted; \
+}
 
 void SNDI_precalcaztospkrvol(void)
 {
@@ -47,45 +43,47 @@ void SNDI_precalcaztospkrvol(void)
     int i;
 
     SNDSYS_entercritical();
-    lbl_803B5044 = SNDMEMI_allocz(lbl_803A6C24.m1C.m23 << 8);
+    sndaztospkr_buf = SNDMEMI_allocz(lbl_803A6C24.m1C.m23 << 8);
     SNDSYS_leavecritical();
     for (i = 0; i < lbl_803A6C24.m1C.m23; i++) {
-        lbl_803B5048[i] = (unsigned char *)lbl_803B5044 + (i << 8);
+        sndaztospkr[i] = (unsigned char *)sndaztospkr_buf + (i << 8);
     }
     for (az = 0; az < 256; az++) {
         angle = (unsigned int)((az << 8) & 0xFFFF) * 0.005493164f;
         if (lbl_803A6C24.m1C.m23 == 1) {
-            lbl_803B5048[0][az] = 127;
+            sndaztospkr[0][az] = 127;
             continue;
         }
         for (i = 0; i < lbl_803A6C24.m1C.m23; i++) {
-            lbl_803B5048[i][az] = 0;
+            sndaztospkr[i][az] = 0;
         }
         if (!(angle > lbl_803A7714[0])) {
             if (lbl_803A6C24.m1C.m23 > 4) {
                 SNDI_equalpower(&pair, lbl_803A7714[0], lbl_803A7714[1], angle);
-                STORE(lbl_803B5048[0][az], pair.m0);
-                STORE(lbl_803B5048[1][az], pair.m4);
+                STORE_SPEAKER_GAIN(sndaztospkr[0][az], pair.mFirstGain);
+                STORE_SPEAKER_GAIN(sndaztospkr[1][az], pair.mSecondGain);
             } else {
                 SNDI_equalpower(&pair, lbl_803A7714[0], lbl_803A7714[lbl_803A6C24.m1C.m23 - 1] - 360.0f, angle);
-                STORE(lbl_803B5048[0][az], pair.m0);
-                STORE(lbl_803B5048[lbl_803A6C24.m1C.m23 - 1][az], pair.m4);
+                STORE_SPEAKER_GAIN(sndaztospkr[0][az], pair.mFirstGain);
+                STORE_SPEAKER_GAIN(sndaztospkr[lbl_803A6C24.m1C.m23 - 1][az], pair.mSecondGain);
             }
         } else if (!(angle < lbl_803A7714[lbl_803A6C24.m1C.m23 - 1])) {
             SNDI_equalpower(&pair, lbl_803A7714[0], lbl_803A7714[lbl_803A6C24.m1C.m23 - 1] - 360.0f, angle - 360.0f);
-            STORE(lbl_803B5048[0][az], pair.m0);
-            STORE(lbl_803B5048[lbl_803A6C24.m1C.m23 - 1][az], pair.m4);
+            STORE_SPEAKER_GAIN(sndaztospkr[0][az], pair.mFirstGain);
+            STORE_SPEAKER_GAIN(sndaztospkr[lbl_803A6C24.m1C.m23 - 1][az], pair.mSecondGain);
         } else {
             for (i = 0; i < lbl_803A6C24.m1C.m23; i++) {
                 if (!(angle < lbl_803A7714[i]) && !(angle > lbl_803A7714[i + 1])) {
                     SNDI_equalpower(&pair, lbl_803A7714[i], lbl_803A7714[i + 1], angle);
-                    STORE(lbl_803B5048[i][az], pair.m0);
-                    STORE(lbl_803B5048[i + 1][az], pair.m4);
+                    STORE_SPEAKER_GAIN(sndaztospkr[i][az], pair.mFirstGain);
+                    STORE_SPEAKER_GAIN(sndaztospkr[i + 1][az], pair.mSecondGain);
                 }
             }
         }
     }
 }
+
+#undef STORE_SPEAKER_GAIN
 
 void SNDI_aztospkrvol(int azimuth, float *levels)
 {
@@ -93,7 +91,7 @@ void SNDI_aztospkrvol(int azimuth, float *levels)
     int i;
 
     for (i = 0; i < lbl_803A6C24.m1C.m23; i++) {
-        levels[i] = (unsigned int)lbl_803B5048[i][index] * 0.003921569f;
+        levels[i] = (unsigned int)sndaztospkr[i][index] * 0.003921569f;
     }
     if (lbl_803A772C == 3) {
         levels[5] = 0.0f;
@@ -103,8 +101,8 @@ void SNDI_aztospkrvol(int azimuth, float *levels)
 void SNDI_freespkrtable(void)
 {
     SNDSYS_entercritical();
-    if (lbl_803B5048 != 0) {
-        SNDMEMI_free(lbl_803B5044);
+    if (sndaztospkr != 0) {
+        SNDMEMI_free(sndaztospkr_buf);
     }
     SNDSYS_leavecritical();
 }

@@ -32317,52 +32317,6 @@
       ]
     },
     {
-      "source": "src/engine/satospkr.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x802775EC-0x80277CF0 (src/engine/satospkr.c), the sound_cxx compiler rows and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802775EC",
-          "end": "0x80277CF0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802C1F10",
-          "end": "0x802C1F64"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SNDI_equalpower",
-          "start": "0x802775EC",
-          "end": "0x80277658"
-        },
-        {
-          "symbol": "SNDI_precalcaztospkrvol",
-          "start": "0x80277658",
-          "end": "0x80277A60"
-        },
-        {
-          "symbol": "SNDI_aztospkrvol",
-          "start": "0x80277A60",
-          "end": "0x80277AFC"
-        },
-        {
-          "symbol": "SNDI_freespkrtable",
-          "start": "0x80277AFC",
-          "end": "0x80277B3C"
-        },
-        {
-          "symbol": "SNDI_spkrconfig",
-          "start": "0x80277B3C",
-          "end": "0x80277CF0"
-        }
-      ]
-    },
-    {
       "source": "src/engine/stpparse.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x80270E04-0x802714A8, function and name rows of SNDI_parsetimbre, snddefaultenvelope data row 0x8030003C-0x80300044 and the sound_cxx compiler row.",
