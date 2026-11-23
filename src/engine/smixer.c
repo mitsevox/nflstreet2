@@ -1,6 +1,5 @@
 /* Software mixer (smixer.c): creates and destroys the main-CPU mixer, starts, plays and stops voices
-   through their filter chains, ramps and sets their dry and wet gains and mixes each audio slice.
-   Names from the GoldenEye: Rogue Agent and Medal of Honor: European Assault symbol sets (smixer.c). */
+   through their filter chains, ramps their dry and wet gains and mixes each audio slice. */
 
 #include "engine/sndlib.h"
 #include "engine/sndutil.h"
@@ -15,7 +14,7 @@ int SNDMIXI_volramp(Record_803B5010 *record);
 
 /* The mixer state: the setup, the filter-chain creators and sizes, the bus buffers, the voice records
    and the mix and decode functions. */
-Struct_803B4E34 sndmix;
+SndSoftwareMixerState_t sndmix;
 int sndmixwritelog;
 /* Called with the output buffers after each audio slice while the sound system's flag +0x234 is set. */
 void (*MIXoutputfn)(void **outputs, int count);
@@ -261,9 +260,9 @@ void MIX_playinit(int index, int type, int mode, int a, int b, void *data, int c
     if (sndmix.m18[kind][table] != 0) {
         record->m48 = (Node_80279D90 *)SNDMEMI_allocz(sndmix.m60[kind][table]);
         params.m0 = a;
-        params.m24 = k;
         params.m4 = b;
         params.m8 = c;
+        params.m24 = k;
         params.mC = d;
         params.m10 = e;
         params.m14 = f;
@@ -356,15 +355,15 @@ void MIX_audioslice(void **outputs, int count)
     int i;
     int j;
 
-    for (i = 0; i < lbl_8030002C; i++) {
-        if (sndmix.m14[i] != 0 && sndmix.m100[i] != 0.0f) {
-            MIXI_interpolateto0(&sndmix.m100[i], sndfx.m0[i]);
+    for (j = 0; j < lbl_8030002C; j++) {
+        if (sndmix.m14[j] != 0 && sndmix.m100[j] != 0.0f) {
+            MIXI_interpolateto0(&sndmix.m100[j], sndfx.m0[j]);
         }
     }
-    for (i = 0; i < sndmix.m0.m9; i++) {
-        memset(sndmix.mD0[i], 0, count * 4);
-        if (sndmix.mE8[i] != 0.0f) {
-            MIXI_interpolateto0(&sndmix.mE8[i], (float *)sndmix.mD0[i]);
+    for (j = 0; j < sndmix.m0.m9; j++) {
+        memset(sndmix.mD0[j], 0, count * 4);
+        if (sndmix.mE8[j] != 0.0f) {
+            MIXI_interpolateto0(&sndmix.mE8[j], (float *)sndmix.mD0[j]);
         }
     }
     for (i = 0; i < sndmix.m0.m8; i++) {
@@ -403,12 +402,12 @@ void MIX_audioslice(void **outputs, int count)
     if (sndmix.m10 != 0) {
         sndmix.m10(count);
     }
-    for (i = 0; i < sndmix.m0.m9; i++) {
-        if (sndmix.m11C[i] != 0) {
-            sndmix.m11C[i]->m0(sndmix.m11C[i], count, (float *)sndmix.mD0[i], (float *)sndmix.mB0[0], 0);
-            sndmix.m104[i]->m0(sndmix.m104[i], count, (float *)sndmix.mB0[0], (float *)outputs[i], 0);
+    for (j = 0; j < sndmix.m0.m9; j++) {
+        if (sndmix.m11C[j] != 0) {
+            sndmix.m11C[j]->m0(sndmix.m11C[j], count, (float *)sndmix.mD0[j], (float *)sndmix.mB0[0], 0);
+            sndmix.m104[j]->m0(sndmix.m104[j], count, (float *)sndmix.mB0[0], (float *)outputs[j], 0);
         } else {
-            sndmix.m104[i]->m0(sndmix.m104[i], count, (float *)sndmix.mD0[i], (float *)outputs[i], 0);
+            sndmix.m104[j]->m0(sndmix.m104[j], count, (float *)sndmix.mD0[j], (float *)outputs[j], 0);
         }
     }
     if (lbl_803A6E58 != 0) {

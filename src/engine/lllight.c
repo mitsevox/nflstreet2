@@ -301,18 +301,30 @@ int _LLLightLoadSetScaled(LLLightSet_t *pSet, float r, float g, float b)
     unsigned int i;
     GXLightObj light;
     GXColor color;
-    unsigned int value;
+    unsigned int rValue;
+    unsigned int gValue;
+    unsigned int bValue;
 
     for (i = 0; i < pSet->mUnknown0; i++) {
         if (r != 1.0f || g != 1.0f || b != 1.0f) {
-            light = pSet->mUnknown8[i];
+            /* FAKEMATCH: Keep the equivalent index-first address expression for the target add order. */
+            light = *(i + pSet->mUnknown8);
             GXGetLightColor(&light, &color);
-            value = color.r * r;
-            color.r = value > 255 ? 255 : value;
-            value = color.g * g;
-            color.g = value > 255 ? 255 : value;
-            value = color.b * b;
-            color.b = value > 255 ? 255 : value;
+            rValue = color.r * r;
+            if (rValue > 255) {
+                rValue = 255;
+            }
+            color.r = rValue;
+            gValue = color.g * g;
+            if (gValue > 255) {
+                gValue = 255;
+            }
+            color.g = gValue;
+            bValue = color.b * b;
+            if (bValue > 255) {
+                bValue = 255;
+            }
+            color.b = bValue;
             GXInitLightColor(&light, color);
             GXLoadLightObjImm(&light, (GXLightID)(1 << i));
         } else {

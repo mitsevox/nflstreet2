@@ -1087,34 +1087,6 @@
       "address": "0x803EADE8",
       "evidence": "evidence.tsv data and name rows for 0x803EADE8 (original .sdata used by the TurnToPlayPickDirection holdout; storage is unclaimed)."
     },
-    "CarrierRunHasDefenderAhead": {
-      "address": "0x8012CE60",
-      "evidence": "evidence.tsv function and name rows for 0x8012CE60 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
-    },
-    "CarrierRunCountRetreat": {
-      "address": "0x8012CEF4",
-      "evidence": "evidence.tsv function and name rows for 0x8012CEF4 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
-    },
-    "CarrierRunAddSideCosts": {
-      "address": "0x8012CFA0",
-      "evidence": "evidence.tsv function and name rows for 0x8012CFA0 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
-    },
-    "CarrierRunCanUseSideline": {
-      "address": "0x8012D1E4",
-      "evidence": "evidence.tsv function and name rows for 0x8012D1E4 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
-    },
-    "CarrierRunSteerToSideline": {
-      "address": "0x8012D258",
-      "evidence": "evidence.tsv function and name rows for 0x8012D258 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
-    },
-    "CarrierRunPickHeading": {
-      "address": "0x8012D4FC",
-      "evidence": "evidence.tsv function and name rows for 0x8012D4FC (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
-    },
-    "CarrierRunAvoidPlayer": {
-      "address": "0x8012D8A8",
-      "evidence": "evidence.tsv function and name rows for 0x8012D8A8 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
-    },
     "gPlayerPositionAbbrevs": {
       "address": "0x802EA294",
       "evidence": "evidence.tsv data and name rows for 0x802EA294 (26 position-name pointers in the .data of a file that is not yet a unit, used here only by the discarded GameTextShowRosterFill of src/game/GameText.cpp; storage not claimed by any unit)."
@@ -1243,10 +1215,6 @@
       "address": "0x8037E0B4",
       "evidence": "evidence.tsv data/name rows for 0x8037E0B4 (target extent, related name); speech-library storage, original-owned."
     },
-    "MIX_playinit": {
-      "address": "0x80275F80",
-      "evidence": "evidence.tsv function and name rows for 0x80275F80 (MIX_playinit, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks."
-    },
     "SFILTER_remove": {
       "address": "0x80279DF8",
       "evidence": "evidence.tsv function/name/source-form rows for 0x80279DF8; registered holdout of src/engine/sfilter.c. Its original code stays linked; called by src/engine/smixhip.c."
@@ -1270,10 +1238,6 @@
     "gBankCount": {
       "address": "0x803EBB0C",
       "evidence": "evidence.tsv data/name rows for 0x803EBB0C (target extent, related name); speech-library storage, original-owned."
-    },
-    "MIX_audioslice": {
-      "address": "0x802763E0",
-      "evidence": "evidence.tsv function and name rows for 0x802763E0 (MIX_audioslice, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks (c18 wave)."
     },
     "SNDI_validrendermode": {
       "address": "0x802796DC",
@@ -19870,9 +19834,15 @@
     },
     {
       "source": "src/game/CarrierRun.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8012CE60-0x80130494 (src/game/CarrierRun.cpp), its function, name and data rows; 0x8012DDCC-0x80130494 is linked with the .rodata 0x8029FA20-0x8029FB20, the .data 0x802DB05C-0x802DB074 and the .sdata 0x803EB118-0x803EB128; the documented holdout 0x8012CE60-0x8012DDCC (with its pool 0x8029F9A0-0x8029FA20) keeps its original bytes and stays a comparison.",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8012CE60-0x80130494 (src/game/CarrierRun.cpp), function, name and data rows; whole readonly pool and initialized data.",
       "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012CE60",
+          "end": "0x8012D8A8"
+        },
         {
           "section": ".text",
           "placement": ".text",
@@ -19882,7 +19852,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029FA20",
+          "start": "0x8029F9A0",
           "end": "0x8029FB20"
         },
         {
@@ -19897,7 +19867,16 @@
           "start": "0x803EB118",
           "end": "0x803EB128"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "CarrierRunAvoidPlayer",
+            "evidence": "evidence.tsv source-form 0x8012D8A8-0x8012DDCC"
+          }
+        ],
+        "evidence": "Holdout and merge notes of PR #1402."
+      }
     },
     {
       "source": "src/game/PlayerCut.cpp",
@@ -25054,20 +25033,14 @@
     },
     {
       "source": "src/engine/smixer.c",
-      "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x802755E0-0x80276798 (src/engine/smixer.c), its compiler rows and the data rows of its data sections (.rodata, and the .bss 0x803B4E34-0x803B5044: sndmix, sndmixwritelog, MIXoutputfn, the FAKEMATCH word _Mix_iUnused and the seven mixer hooks, da1a); linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 2 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x802755E0-0x80276798 (src/engine/smixer.c), its compiler rows and the data rows for .rodata 0x802C1E1C-0x802C1EAC and .bss 0x803B4E34-0x803B5044. All sixteen functions and both data sections come from the untouched ProDG compiler object.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802755E0",
-          "end": "0x80275F80"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80276194",
-          "end": "0x802763E0"
+          "end": "0x80276798"
         },
         {
           "section": ".rodata",
@@ -25081,20 +25054,7 @@
           "start": "0x803B4E34",
           "end": "0x803B5044"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "MIX_playinit",
-            "evidence": "evidence.tsv source-form 0x80275F80-0x80276194"
-          },
-          {
-            "function": "MIX_audioslice",
-            "evidence": "evidence.tsv source-form 0x802763E0-0x80276798"
-          }
-        ],
-        "evidence": "merge notes of the x1 wave (lane x1d) holdouts table; each HOLDOUT: row lists the forms tried and the RTL-dump finding."
-      }
+      ]
     },
     {
       "source": "src/engine/Font.c",

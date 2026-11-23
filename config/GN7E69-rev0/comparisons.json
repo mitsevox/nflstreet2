@@ -30546,19 +30546,19 @@
     {
       "source": "src/game/CarrierRun.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8012CE60-0x80130494 (src/game/CarrierRun.cpp) and the source-form rows from 0x8012CE60. Documented holdout at the start of .text: 0x8012CE60-0x8012DDCC is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes with its pool 0x8029F9A0-0x8029FA20 (0x8012D8A8 is near-miss; the six functions before it are exact); the rest of the file is linked through units.json",
+      "evidence": "evidence.tsv source-form 0x8012D8A8-0x8012DDCC documents the original-byte function holdout.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8012CE60",
+          "start": "0x8012D8A8",
           "end": "0x8012DDCC"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029F9A0",
-          "end": "0x8029FA20"
+          "end": "0x8029FB20"
         },
         {
           "section": ".data",
@@ -30574,36 +30574,6 @@
         }
       ],
       "functions": [
-        {
-          "symbol": "CarrierRunHasDefenderAhead",
-          "start": "0x8012CE60",
-          "end": "0x8012CEF4"
-        },
-        {
-          "symbol": "CarrierRunCountRetreat",
-          "start": "0x8012CEF4",
-          "end": "0x8012CFA0"
-        },
-        {
-          "symbol": "CarrierRunAddSideCosts",
-          "start": "0x8012CFA0",
-          "end": "0x8012D1E4"
-        },
-        {
-          "symbol": "CarrierRunCanUseSideline",
-          "start": "0x8012D1E4",
-          "end": "0x8012D258"
-        },
-        {
-          "symbol": "CarrierRunSteerToSideline",
-          "start": "0x8012D258",
-          "end": "0x8012D4FC"
-        },
-        {
-          "symbol": "CarrierRunPickHeading",
-          "start": "0x8012D4FC",
-          "end": "0x8012D8A8"
-        },
         {
           "symbol": "CarrierRunAvoidPlayer",
           "start": "0x8012D8A8",
@@ -31980,113 +31950,6 @@
           "symbol": "__static_initialization_and_destruction_0",
           "start": "0x80032790",
           "end": "0x80032E70"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/smixer.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x802755E0-0x80276798 (src/engine/smixer.c), the sound_cxx compiler rows and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802755E0",
-          "end": "0x80276798"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802C1E1C",
-          "end": "0x802C1EAC"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803B4E34",
-          "end": "0x803B5044"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "MIXI_interpolateto0",
-          "start": "0x802755E0",
-          "end": "0x80275780"
-        },
-        {
-          "symbol": "MIXI_interpolatemix",
-          "start": "0x80275780",
-          "end": "0x80275948"
-        },
-        {
-          "symbol": "SNDMIX_setmasterlowpass",
-          "start": "0x80275948",
-          "end": "0x8027594C"
-        },
-        {
-          "symbol": "SNDMIXI_volramp",
-          "start": "0x8027594C",
-          "end": "0x80275B7C"
-        },
-        {
-          "symbol": "SNDI_New",
-          "start": "0x80275B7C",
-          "end": "0x80275B9C"
-        },
-        {
-          "symbol": "SNDI_Delete",
-          "start": "0x80275B9C",
-          "end": "0x80275BBC"
-        },
-        {
-          "symbol": "MIX_create",
-          "start": "0x80275BBC",
-          "end": "0x80275E7C"
-        },
-        {
-          "symbol": "MIX_destroy",
-          "start": "0x80275E7C",
-          "end": "0x80275F54"
-        },
-        {
-          "symbol": "MIX_reset",
-          "start": "0x80275F54",
-          "end": "0x80275F80"
-        },
-        {
-          "symbol": "MIX_playinit",
-          "start": "0x80275F80",
-          "end": "0x80276194"
-        },
-        {
-          "symbol": "MIX_play",
-          "start": "0x80276194",
-          "end": "0x80276238"
-        },
-        {
-          "symbol": "MIXI_stop",
-          "start": "0x80276238",
-          "end": "0x80276278"
-        },
-        {
-          "symbol": "MIX_stop",
-          "start": "0x80276278",
-          "end": "0x80276378"
-        },
-        {
-          "symbol": "SNDMIX_setdrygain",
-          "start": "0x80276378",
-          "end": "0x802763AC"
-        },
-        {
-          "symbol": "SNDMIX_setwetgain",
-          "start": "0x802763AC",
-          "end": "0x802763E0"
-        },
-        {
-          "symbol": "MIX_audioslice",
-          "start": "0x802763E0",
-          "end": "0x80276798"
         }
       ]
     },
