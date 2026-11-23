@@ -551,7 +551,7 @@ int fn_80178348(void);
 int fn_801784C4(void);
 unsigned long long fn_80190F18(void *pStream, int bits);
 void fn_80191068(void *pStream, unsigned long long value, int bits);
-void fn_801B2F18(void (*a)(int, int), void (*b)(int, int), void (*c)(int, int));
+void PATH_seteventcallbacks(void (*a)(int, int), void (*b)(int, int), void (*c)(int, int));
 void PATH_setvariable(int flags, const char *pName, int value);
 void *DSNewListNode(void *pool);
 void *DSGetListNode(void *pool, void *item);
@@ -2612,7 +2612,7 @@ int SndgPathfinder::Init()
         desc.mHeap = 1;
         desc.mCount = 3;
         PathfinderInit(&desc);
-        fn_801B2F18(SndgPathCallList0, SndgPathCallList1, SndgPathCallList2);
+        PATH_seteventcallbacks(SndgPathCallList0, SndgPathCallList1, SndgPathCallList2);
     }
     return 1;
 }

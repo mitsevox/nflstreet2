@@ -89,7 +89,7 @@ public:
     int mUnknown64;
 };
 
-struct Header_801B2CDC {
+struct PathMapHeader_t {
     unsigned int mUnknown0;
     unsigned int mUnknown4;
     unsigned char mUnknown8[2];
@@ -113,14 +113,14 @@ struct Header_801B2CDC {
     int mUnknown38;
 };
 
-struct Name_801B3084 {
-    char mUnknown0[16];
-    int mUnknown10;
+struct PathMapVariable_t {
+    char mName[16];
+    int mValue;
 };
 
-struct Record_801B3268 {
-    unsigned int mUnknown0;
-    unsigned int mUnknown4;
+struct PathStreamRecord_t {
+    unsigned int mByteOffset;
+    unsigned int mDuration;
 };
 
 struct Node_801B3FE0 {
@@ -190,12 +190,12 @@ struct Bank_801B3480 {
     int mUnknownC;
     int mUnknown10;
     unsigned int mUnknown14;
-    Header_801B2CDC *mUnknown18;
+    PathMapHeader_t *mUnknown18;
     short *mUnknown1C;
     void *mUnknown20;
     short *mUnknown24;
     void *mUnknown28;
-    Name_801B3084 *mUnknown2C;
+    PathMapVariable_t *mUnknown2C;
     unsigned int *mUnknown30;
     int *mUnknown34;
     void *mUnknown38;
@@ -329,7 +329,7 @@ public:
 
 extern "C" {
 extern Allocator *lbl_803EBB68;
-extern AllocParams lbl_8037E814;
+extern AllocParams gPathAllocatorParams;
 extern void (*lbl_803EBB2C)(int, int);
 extern void (*lbl_803EBB30)(int, int);
 extern void (*lbl_803EBB34)(int, int);
@@ -354,11 +354,11 @@ extern Class_803EBB64 *lbl_803EBB64;
 int PATH_destroy(int flags);
 void SNDSYS_entercritical(void);
 void SNDSYS_leavecritical(void);
-int fn_801B2AD4(void);
-int fn_801B2B58(void);
-void *fn_801B2C40(int size);
-void fn_801B2C94(void *p);
-void fn_801B2F18(void (*a)(int, int), void (*b)(int, int), void (*c)(int, int));
+int PATHI_init(void);
+int PATH_shutdown(void);
+void *PATHI_memalloc(int size);
+void PATHI_memfree(void *p);
+void PATH_seteventcallbacks(void (*a)(int, int), void (*b)(int, int), void (*c)(int, int));
 unsigned int fn_801B343C(void);
 unsigned int fn_801B3480(unsigned int index, unsigned int flags);
 int fn_801B34DC(unsigned int flags);
@@ -404,7 +404,7 @@ void PATHI_setvalue(int id, int kind, int value, Node_801B3FE0 *p, Sequence_801B
 extern unsigned char lbl_803EBB3A;
 extern int lbl_803EBB44;
 void PATH_setallocator(Allocator *allocator, const AllocParams &params);
-int PATH_addmapfile(Header_801B2CDC *map);
+int PATH_addmapfile(PathMapHeader_t *map);
 int PATH_destroy(int flags);
 int PATH_setvariable(int flags, const char *name, int value);
 int PATHI_bytesperms(int index);

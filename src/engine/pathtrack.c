@@ -135,7 +135,7 @@ extern "C" int PATHI_inittrack(int flags, PathfinderTrackData_t *data)
         ;
     if (bank->mUnknown40[track])
         return -13;
-    Node_801B3FE0 *p = (Node_801B3FE0 *)fn_801B2C40(sizeof(Node_801B3FE0));
+    Node_801B3FE0 *p = (Node_801B3FE0 *)PATHI_memalloc(sizeof(Node_801B3FE0));
     if (!p)
         return -108;
     memset(p, 0, sizeof(Node_801B3FE0));

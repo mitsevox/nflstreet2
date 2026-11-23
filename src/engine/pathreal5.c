@@ -6,8 +6,8 @@
 
 extern "C" {
 
-void *fn_801B2C40(int size);
-void fn_801B2C94(void *p);
+void *PATHI_memalloc(int size);
+void PATHI_memfree(void *p);
 void fn_801B3A88(void);
 int STREAM_overhead(int count, int filters, int taps);
 int DebugPrintf(const char *format, ...);
@@ -70,12 +70,12 @@ void PathToReal5::TaskService(int a, int b)
 
 void *PathToReal5::operator new(unsigned int size)
 {
-    return fn_801B2C40(size);
+    return PATHI_memalloc(size);
 }
 
 void PathToReal5::operator delete(void *p)
 {
-    fn_801B2C94(p);
+    PATHI_memfree(p);
 }
 
 PathToReal5::PathToReal5()

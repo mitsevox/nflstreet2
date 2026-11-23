@@ -64,8 +64,8 @@ extern "C" int PATHI_choosesynchtime(int index, const FindNode_801B6A18 &find, c
         node = 0;
     else
         node = (Entry_801B63F0 *)((unsigned char *)lbl_803EBB28->mUnknown18 + lbl_803EBB28->mUnknown1C[index] * 4);
-    Record_801B3268 *record = (Record_801B3268 *)lbl_803EBB28->mUnknown3C + node->mUnknown0;
-    float length = (float)record[-1].mUnknown4;
+    PathStreamRecord_t *record = (PathStreamRecord_t *)lbl_803EBB28->mUnknown3C + node->mUnknown0;
+    float length = (float)record[-1].mDuration;
     unsigned int free = node->mUnknownC >> 31;
     if (node->mUnknown4 & 0xF00)
         length /= (float)(((node->mUnknown4 >> 8) & 15) * (unsigned char)node->mUnknown4);
@@ -272,7 +272,7 @@ extern "C" int PATHI_queuenode(Node_801B3FE0 *p)
     }
     Entry_801B63F0 *node = PATHI_getnode(p->mUnknown4);
     p->mUnknown34 = (unsigned int *)PATHI_getnode((unsigned short)node->mUnknown8);
-    length = ((Record_801B3268 *)lbl_803EBB28->mUnknown3C)[node->mUnknown0 - 1].mUnknown4;
+    length = ((PathStreamRecord_t *)lbl_803EBB28->mUnknown3C)[node->mUnknown0 - 1].mDuration;
     p->mUnknown3C = length;
     p->mUnknown38 = length;
     if ((unsigned char)node->mUnknown4)

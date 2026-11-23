@@ -70,7 +70,7 @@ extern "C" int PATHI_getvalue(int id, int kind, Node_801B3FE0 *p, Sequence_801B8
     int value = id;
     TrackStatus_801B864C status;
     if (kind == 2)
-        value = lbl_803EBB28->mUnknown2C[id].mUnknown10;
+        value = lbl_803EBB28->mUnknown2C[id].mValue;
     else if (kind == 1) {
         switch (id) {
         case 1:
@@ -167,7 +167,7 @@ extern "C" int PATHI_getvalue(int id, int kind, Node_801B3FE0 *p, Sequence_801B8
 extern "C" void PATHI_setvalue(int id, int kind, int value, Node_801B3FE0 *p, Sequence_801B84E4 *event)
 {
     if (kind == 2)
-        lbl_803EBB28->mUnknown2C[id].mUnknown10 = value;
+        lbl_803EBB28->mUnknown2C[id].mValue = value;
     else if (kind == 1) {
         switch (id) {
         case 1:

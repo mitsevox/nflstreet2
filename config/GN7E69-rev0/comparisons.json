@@ -30130,7 +30130,7 @@
     {
       "source": "src/engine/pathinit.c",
       "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B2AD4-0x801B343C (src/engine/pathinit.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked. The allocator-configuration object (.bss 0x8037E814) and its .ctors word 0x80289B40 belong here: the static-initialization pair 0x801B33DC-0x801B343C ends the file.",
+      "evidence": "evidence.tsv unit row 0x801B2AD4-0x801B343C and HOLDOUT source-form row 0x801B2AD4-0x801B2B58. Only PATHI_init remains a comparison; the exact code run and native allocator parameters, constructor pointer, and constants link.",
       "sections": [
         {
           "section": ".text",
@@ -30159,69 +30159,9 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801B2AD4",
+          "symbol": "PATHI_init",
           "start": "0x801B2AD4",
           "end": "0x801B2B58"
-        },
-        {
-          "symbol": "fn_801B2B58",
-          "start": "0x801B2B58",
-          "end": "0x801B2C18"
-        },
-        {
-          "symbol": "PATH_setallocator",
-          "start": "0x801B2C18",
-          "end": "0x801B2C40"
-        },
-        {
-          "symbol": "fn_801B2C40",
-          "start": "0x801B2C40",
-          "end": "0x801B2C94"
-        },
-        {
-          "symbol": "fn_801B2C94",
-          "start": "0x801B2C94",
-          "end": "0x801B2CDC"
-        },
-        {
-          "symbol": "PATH_addmapfile",
-          "start": "0x801B2CDC",
-          "end": "0x801B2F18"
-        },
-        {
-          "symbol": "fn_801B2F18",
-          "start": "0x801B2F18",
-          "end": "0x801B2F28"
-        },
-        {
-          "symbol": "PATH_destroy",
-          "start": "0x801B2F28",
-          "end": "0x801B3084"
-        },
-        {
-          "symbol": "PATH_setvariable",
-          "start": "0x801B3084",
-          "end": "0x801B3234"
-        },
-        {
-          "symbol": "PATHI_findnodedata",
-          "start": "0x801B3234",
-          "end": "0x801B3268"
-        },
-        {
-          "symbol": "PATHI_bytesperms",
-          "start": "0x801B3268",
-          "end": "0x801B33DC"
-        },
-        {
-          "symbol": "__static_initialization_and_destruction_0",
-          "start": "0x801B33DC",
-          "end": "0x801B3410"
-        },
-        {
-          "symbol": "_GLOBAL_.I.fn_801B2AD4",
-          "start": "0x801B3410",
-          "end": "0x801B343C"
         }
       ]
     },

@@ -51,7 +51,7 @@ TiburonIAllocator13Impl *_Pathfinder_pAllocator = 0;
 unsigned char _Pathfinder_bInit = 0;
 
 void PATH_setallocator(TiburonIAllocator13Impl *pAllocator, TagValuePair *pConfig);
-int fn_801B2B58(void);
+int PATH_shutdown(void);
 int PATH_addmapfile(int a);
 int PATH_destroy(int id);
 int fn_801B3AD0(int id, PathfinderTrackData_t *pData, int a);
@@ -144,7 +144,7 @@ void PathfinderShutdown(void)
         }
         DSDelList(_Pathfinder_State.mpPool0);
     }
-    fn_801B2B58();
+    PATH_shutdown();
     if (_Pathfinder_pAllocator) {
         delete _Pathfinder_pAllocator;
     }
