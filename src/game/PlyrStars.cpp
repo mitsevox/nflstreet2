@@ -566,21 +566,21 @@ int PlyrStarProjectOffscreen(Vector_80039F5C *input, Vector_80039F5C *out, int *
             ratio = 1.0f / point.mW;
         point.mX *= ratio;
         point.mY *= ratio;
-        float a = Vec3Magnitude((Vector_80039F5C *)&original) - 10.25f;
-        a *= 0.11111111f;
+        float scaleBlend = Vec3Magnitude((Vector_80039F5C *)&original) - 10.25f;
+        scaleBlend *= 0.11111111f;
         Vec2_t pair;
         pair.mX = point.mX;
         pair.mY = point.mY;
         float b = (Vec2Magnitude(&pair) - 1.0f) * 0.5f;
         if (!(original.mZ >= 0.0f))
-            b = a;
+            b = scaleBlend;
         else if (!(original.mZ > 1.0f))
-            b = b * original.mZ + a * (1.0f - original.mZ);
+            b = b * original.mZ + scaleBlend * (1.0f - original.mZ);
         if (!(b >= 0.0f))
             b = 0.0f;
         if (!(b <= 1.0f))
             b = 1.0f;
-        float alpha = 1.0f - b;
+        scaleBlend = 1.0f - b;
         if (!(point.mW >= 0.0f)) {
             point.mX = -point.mX;
             point.mY = -0.9f;
@@ -612,7 +612,7 @@ int PlyrStarProjectOffscreen(Vector_80039F5C *input, Vector_80039F5C *out, int *
             out->mY = 3.0f;
         if (!(out->mY >= -3.0f))
             out->mY = -3.0f;
-        float amount = alpha * 0.75f + 0.25f;
+        float amount = scaleBlend * 0.75f + 0.25f;
         if (!(amount >= 0.25f))
             amount = 0.25f;
         if (!(amount <= 1.0f))
