@@ -1241,13 +1241,9 @@
       "address": "0x80275F80",
       "evidence": "evidence.tsv function and name rows for 0x80275F80 (MIX_playinit, smixer.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/slinkmix.c, which installs it in the mixer hooks."
     },
-    "SFILTER_add": {
-      "address": "0x80279D90",
-      "evidence": "evidence.tsv function/name rows for 0x80279D90; registered in the comparison-only src/engine/sfilter.c, which keeps its original bytes until the whole file can be linked; called by name from src/engine/smixer.c, src/engine/smixfilt.c, src/engine/smixhip.c and src/engine/smixptch.c."
-    },
     "SFILTER_remove": {
       "address": "0x80279DF8",
-      "evidence": "evidence.tsv function/name rows for 0x80279DF8; registered in the comparison-only src/engine/sfilter.c, which keeps its original bytes until the whole file can be linked; called by name from src/engine/smixhip.c."
+      "evidence": "evidence.tsv function/name/source-form rows for 0x80279DF8; registered holdout of src/engine/sfilter.c. Its original code stays linked; called by src/engine/smixhip.c."
     },
     "gInGameGroup": {
       "address": "0x803068B4",
@@ -23411,6 +23407,28 @@
           "end": "0x80279C38"
         }
       ]
+    },
+    {
+      "source": "src/engine/sfilter.c",
+      "profile": "sound_cxx_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x80279D90-0x80279E74, function and name rows, and sound_cxx compiler and source-form rows. SFILTER_add links exactly; SFILTER_remove remains a measured holdout. This file emits no native data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80279D90",
+          "end": "0x80279DF8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "SFILTER_remove",
+            "evidence": "evidence.tsv source-form 0x80279DF8-0x80279E74"
+          }
+        ],
+        "evidence": "evidence.tsv source-form 0x80279DF8-0x80279E74 describes the loop shape difference."
+      }
     },
     {
       "source": "src/engine/sfir8.c",

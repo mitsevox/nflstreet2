@@ -32764,7 +32764,7 @@
     {
       "source": "src/engine/sfilter.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80279D90-0x80279E74 (src/engine/sfilter.c), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "evidence": "Registers only SFILTER_remove, the partial whose original bytes remain linked. See the unit row and holdout source-form row in evidence.tsv. SFILTER_add links from untouched compiler instructions through the approved holdout profile.",
       "sections": [
         {
           "section": ".text",
@@ -32774,11 +32774,6 @@
         }
       ],
       "functions": [
-        {
-          "symbol": "SFILTER_add",
-          "start": "0x80279D90",
-          "end": "0x80279DF8"
-        },
         {
           "symbol": "SFILTER_remove",
           "start": "0x80279DF8",
