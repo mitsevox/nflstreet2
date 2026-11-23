@@ -991,18 +991,6 @@
       "address": "0x802CC670",
       "evidence": "evidence.tsv external row 0x802CC670: destructor table formed by lis/addi at 0x8023E8BC/0x8023E8C0 in exit; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
     },
-    "_AnimCache_nCaches": {
-      "address": "0x803ED618",
-      "evidence": "evidence.tsv data/name rows for 0x803ED618 (target extent, related name)."
-    },
-    "_AnimCache_MemoryHeap": {
-      "address": "0x803ED61C",
-      "evidence": "evidence.tsv data/name rows for 0x803ED61C (target extent, related name)."
-    },
-    "_AnimCache_pCaches": {
-      "address": "0x803ED620",
-      "evidence": "evidence.tsv data/name rows for 0x803ED620 (target extent, related name)."
-    },
     "iSPCH_EACrandom": {
       "address": "0x801B1934",
       "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x801B1934; original-owned provider, no added storage or body."
@@ -14680,6 +14668,23 @@
           "start": "0x803EBBA8",
           "end": "0x803EBBAC"
         }
+      ],
+      "storage": [
+        {
+          "symbol": "_AnimCache_nCaches",
+          "start": "0x803ED618",
+          "end": "0x803ED61C"
+        },
+        {
+          "symbol": "_AnimCache_MemoryHeap",
+          "start": "0x803ED61C",
+          "end": "0x803ED620"
+        },
+        {
+          "symbol": "_AnimCache_pCaches",
+          "start": "0x803ED620",
+          "end": "0x803ED624"
+        }
       ]
     },
     {
@@ -16307,6 +16312,18 @@
           "placement": ".data5",
           "start": "0x803EBD50",
           "end": "0x803EBD54"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_Obj_NumTypes",
+          "start": "0x803ED640",
+          "end": "0x803ED644"
+        },
+        {
+          "symbol": "_Obj_pTypeList",
+          "start": "0x803ED644",
+          "end": "0x803ED648"
         }
       ]
     },

@@ -20,8 +20,8 @@ extern void DSDelNode(void *pPool, void *pElement);
 extern void *memset(void *pDst, int value, unsigned int size);
 
 static unsigned char _Obj_ModuleActive = 0;
-extern int lbl_803ED640;
-extern ObjType_t *lbl_803ED644;
+int _Obj_NumTypes;
+ObjType_t *_Obj_pTypeList;
 
 void ObjDel(Obj_t *pObj);
 int ObjDelType(int type);
@@ -131,9 +131,9 @@ int _ObjNewTypeList(int count)
         for (i = 0; i < count; i++) {
             pTypes[i].mSize = 0;
         }
-        lbl_803ED640 = count;
+        _Obj_NumTypes = count;
         result = 1;
-        lbl_803ED644 = pTypes;
+        _Obj_pTypeList = pTypes;
     }
     return result;
 }
@@ -142,10 +142,10 @@ void _ObjDelTypeList(void)
 {
     unsigned char i;
 
-    for (i = 0; i < lbl_803ED640; i++) {
+    for (i = 0; i < _Obj_NumTypes; i++) {
         ObjDelType(i);
     }
-    fn_801D2BD0(lbl_803ED644);
+    fn_801D2BD0(_Obj_pTypeList);
 }
 
 int _ObjDelListTraverseFunc(void *pNode, void *pContext)
@@ -191,7 +191,7 @@ int ObjShutdown(void)
 
 int ObjNewType_(int type, int size, int count, ObjNewFunc_t pNew, ObjDelFunc_t pDel)
 {
-    ObjType_t *pType = &lbl_803ED644[type];
+    ObjType_t *pType = &_Obj_pTypeList[type];
     int err = 0;
 
     pType->mSize = size;
@@ -208,7 +208,7 @@ int ObjNewType_(int type, int size, int count, ObjNewFunc_t pNew, ObjDelFunc_t p
 
 int ObjDelType(int type)
 {
-    ObjType_t *pType = &lbl_803ED644[type];
+    ObjType_t *pType = &_Obj_pTypeList[type];
     int err = 0;
 
     if (pType->mSize != 0) {
@@ -225,7 +225,7 @@ ObjList_t *ObjNewList(int a, int b, int c, ObjInsertFunc_t pInsert, ObjFindFunc_
                               int funcCount, int unknown10, int step)
 {
     ObjList_t *pList;
-    int size = funcCount * lbl_803ED640 * sizeof(ObjFunc_t);
+    int size = funcCount * _Obj_NumTypes * sizeof(ObjFunc_t);
 
     pList = fn_801D2BB0(a, size + sizeof(ObjList_t), 0, 0);
     if (pList != 0) {
@@ -271,14 +271,14 @@ Obj_t *ObjNew(int type, int subType, int arg)
 {
     Obj_t *pObj;
 
-    pObj = DSNewNode(lbl_803ED644[type].mpPool);
+    pObj = DSNewNode(_Obj_pTypeList[type].mpPool);
     if (pObj != 0) {
-        memset(pObj, 0, lbl_803ED644[type].mSize);
+        memset(pObj, 0, _Obj_pTypeList[type].mSize);
         pObj->mType = type;
         pObj->mSubType = subType;
         pObj->mPriority = 2;
-        if (lbl_803ED644[type].mNew != 0) {
-            lbl_803ED644[type].mNew(pObj, arg);
+        if (_Obj_pTypeList[type].mNew != 0) {
+            _Obj_pTypeList[type].mNew(pObj, arg);
         }
     }
     return pObj;
@@ -311,10 +311,10 @@ Obj_t *ObjNewInList(ObjList_t *pList, int type, int subType, int arg)
 
 void ObjDel(Obj_t *pObj)
 {
-    if (lbl_803ED644[pObj->mType].mDel != 0) {
-        lbl_803ED644[pObj->mType].mDel(pObj);
+    if (_Obj_pTypeList[pObj->mType].mDel != 0) {
+        _Obj_pTypeList[pObj->mType].mDel(pObj);
     }
-    DSDelNode(lbl_803ED644[pObj->mType].mpPool, pObj);
+    DSDelNode(_Obj_pTypeList[pObj->mType].mpPool, pObj);
 }
 
 void ObjRemoveFromList(ObjList_t *pList, Obj_t *pObj)
