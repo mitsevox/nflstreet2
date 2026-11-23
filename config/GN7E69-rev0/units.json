@@ -4999,7 +4999,7 @@
           "section": ".data",
           "placement": ".data4",
           "start": "0x802FCD08",
-          "end": "0x802FCE93"
+          "end": "0x802FD0F7"
         },
         {
           "section": ".sdata",
@@ -7134,7 +7134,7 @@
     {
       "source": "src/dolphin/os/OSAlarm.c",
       "profile": "dolphin_release",
-      "evidence": "sdk.json unit src/dolphin/os/OSAlarm.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "evidence": "sdk.json unit src/dolphin/os/OSAlarm.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only. Its .data is the five report strings of the linker-discarded OSCheckAlarmQueue (data row 0x802FBA60).",
       "link_roots": {
         "symbols": [
           "OSInitAlarm",
@@ -7157,6 +7157,12 @@
           "placement": ".sbss",
           "start": "0x803ED078",
           "end": "0x803ED080"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FBA60",
+          "end": "0x802FBC48"
         }
       ]
     },

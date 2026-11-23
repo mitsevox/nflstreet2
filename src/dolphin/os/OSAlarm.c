@@ -221,3 +221,25 @@ asm void DecrementerExceptionHandler(register __OSException exception, register 
     stwu r1, -8(r1)
     b DecrementerExceptionCallback
 }
+
+#define ASSERTREPORT(line, cond)                                                \
+    if (!(cond))                                                                \
+    {                                                                           \
+        OSReport("OSCheckAlarmQueue: Failed " #cond " in %d", line);            \
+        return FALSE;                                                           \
+    }
+
+BOOL OSCheckAlarmQueue(void)
+{
+    OSAlarm* alarm;
+
+    ASSERTREPORT(__LINE__, AlarmQueue.head == NULL && AlarmQueue.tail == NULL || AlarmQueue.head != NULL && AlarmQueue.tail != NULL);
+    ASSERTREPORT(__LINE__, AlarmQueue.head == NULL || AlarmQueue.head->prev == NULL);
+    ASSERTREPORT(__LINE__, AlarmQueue.tail == NULL || AlarmQueue.tail->next == NULL);
+    for (alarm = AlarmQueue.head; alarm; alarm = alarm->next)
+    {
+        ASSERTREPORT(__LINE__, alarm->next == NULL || alarm->next->prev == alarm);
+        ASSERTREPORT(__LINE__, alarm->next != NULL || AlarmQueue.tail == alarm);
+    }
+    return TRUE;
+}
