@@ -4,12 +4,10 @@
 #include "engine/sndlib.h"
 #include "engine/sndutil.h"
 
-extern int lbl_803A6E58;
-
 extern "C" {
 void MIXI_interpolateto0(float *last, float *dst);
 void MIXI_interpolatemix(float *src, float *dst, float from, float to);
-int SNDMIXI_volramp(Record_803B5010 *record);
+int SNDMIXI_volramp(SndMixVoice_t *record);
 }
 
 /* The mixer state: the setup, the filter-chain creators and sizes, the bus buffers, the voice records
@@ -79,7 +77,7 @@ void SNDMIX_setmasterlowpass(float value)
 {
 }
 
-int SNDMIXI_volramp(Record_803B5010 *record)
+int SNDMIXI_volramp(SndMixVoice_t *record)
 {
     int i;
 
@@ -158,11 +156,11 @@ void MIX_create(Setup_80272EC4 *setup)
     if (sndmix.m0.m8 != 0) {
         float *p;
 
-        sndmix.m1DC = (Record_803B5010 *)SNDMEMI_allocz(
-            sndmix.m0.m8 * sizeof(Record_803B5010) + lbl_8030002C * sizeof(float) * sndmix.m0.m8 +
+        sndmix.m1DC = (SndMixVoice_t *)SNDMEMI_allocz(
+            sndmix.m0.m8 * sizeof(SndMixVoice_t) + lbl_8030002C * sizeof(float) * sndmix.m0.m8 +
             lbl_8030002C * sizeof(float) * sndmix.m0.m8);
         memset(sndmix.m1DC, 0,
-               sndmix.m0.m8 * sizeof(Record_803B5010) + lbl_8030002C * sizeof(float) * sndmix.m0.m8 +
+               sndmix.m0.m8 * sizeof(SndMixVoice_t) + lbl_8030002C * sizeof(float) * sndmix.m0.m8 +
             lbl_8030002C * sizeof(float) * sndmix.m0.m8);
         p = (float *)&sndmix.m1DC[sndmix.m0.m8];
         for (i = 0; i < sndmix.m0.m8; i++) {
@@ -223,8 +221,8 @@ void MIX_reset(void)
 void MIX_playinit(int index, int type, int mode, int a, int b, void *data, int c, int d, int e, int f, int g, int h,
                  int k, int slot)
 {
-    Record_803B5010 *record = &sndmix.m1DC[index];
-    Params_80275F80 params;
+    SndMixVoice_t *record = &sndmix.m1DC[index];
+    SndUnpackInitParams_t params;
     int table = 0;
     int kind;
 
@@ -291,7 +289,7 @@ void MIX_playinit(int index, int type, int mode, int a, int b, void *data, int c
 
 void MIX_play(int index)
 {
-    Record_803B5010 *record = &sndmix.m1DC[index];
+    SndMixVoice_t *record = &sndmix.m1DC[index];
     int i;
 
     record->m1 = 0;
@@ -313,7 +311,7 @@ void MIXI_stop(int index)
 
 void MIX_stop(int index)
 {
-    Record_803B5010 *record = &sndmix.m1DC[index];
+    SndMixVoice_t *record = &sndmix.m1DC[index];
     Node_80279D90 *next;
     int i;
 
@@ -348,7 +346,7 @@ void SNDMIX_setwetgain(int index, int slot, float value)
 
 void MIX_audioslice(void **outputs, int count)
 {
-    Record_803B5010 *record;
+    SndMixVoice_t *record;
     int done;
     int left;
     int n;
@@ -410,7 +408,7 @@ void MIX_audioslice(void **outputs, int count)
             sndmix.m104[j]->m0(sndmix.m104[j], count, (float *)sndmix.mD0[j], (float *)outputs[j], 0);
         }
     }
-    if (lbl_803A6E58 != 0) {
+    if (lbl_803A6C24.m234 != 0) {
         MIXoutputfn(outputs, count);
     }
 }

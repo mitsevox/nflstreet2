@@ -11,17 +11,17 @@ extern "C" int PATHI_loadbank(PathTrack_t *p, int index)
     const char *header = "%s  %s";
 
     if (!p->mUnknown100) {
-        if (lbl_803EBB40 & 0x100)
+        if (debugchannels & 0x100)
             PATHI_printf("( %.8s )  PATH_createbankimp not called yet\n", p->mUnknownD0);
         return -14;
     }
     if (index >= p->mUnknown100->GetNumSubBanks()) {
-        if (lbl_803EBB40 & 0x100)
+        if (debugchannels & 0x100)
             PATHI_printf("( %.8s )  PATH_loadbank no subbank %d\n", p->mUnknownD0, index);
         return -8;
     }
     if (p->mUnknown100->GetSubBankPtr(index)) {
-        if (lbl_803EBB40 & 0x100)
+        if (debugchannels & 0x100)
             PATHI_printf("( %.8s )  PATH_loadbank already loaded subbank %d\n", p->mUnknownD0, index);
         return -18;
     }
@@ -72,7 +72,7 @@ extern "C" int PATHI_subbankready(PathTrack_t *p, int index)
         !(entry = p->mUnknown100->GetSubBankPtr(index)) || !entry->mpData)
         return -8;
     if (p->mUnknownF8) {
-        if (!lbl_803EBB60->vfn_08(p->mUnknownF4, entry->mpData))
+        if (!Path::IPathToReal::realimp->LoadFileDone(p->mUnknownF4, entry->mpData))
             return -18;
         p->mUnknownFC = p->mUnknown100->AddSubBank(index, entry->mpData);
         p->mUnknownF8 = 0;
@@ -106,7 +106,7 @@ extern "C" int PATHI_loadbankdata(PathTrack_t *p, int index, int size)
     char name[512] = "";
     sprintf(name, "%.*s%d.mus", strlen((char *)&p->mUnknown50) - 4, (char *)&p->mUnknown50, index);
     int handle = 0xBEDFACED;
-    entry->mpData = (char *)lbl_803EBB60->vfn_07(name, handle, size);
+    entry->mpData = (char *)Path::IPathToReal::realimp->LoadFile(name, handle, size);
     if (!entry->mpData)
         return -39;
     p->mUnknownF0 = index;

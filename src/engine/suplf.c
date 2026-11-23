@@ -34,7 +34,7 @@ int SFILTER_unpacklf(Node_80279D90 *node, int count, float *a, float *b, int fla
     return 1;
 }
 
-void SFILTER_unpacklfinit(Node_80279D90 *node, Params_80275F80 *params)
+void SFILTER_unpacklfinit(Node_80279D90 *node, SndUnpackInitParams_t *params)
 {
     SndPcmLoopUnpackFilter_t *decoder;
 

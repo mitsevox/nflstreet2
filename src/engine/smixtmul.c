@@ -4,7 +4,7 @@
 
 void MIX_settimemult(int index, int value)
 {
-    Record_803B5010 *record = &sndmix.m1DC[index];
+    SndMixVoice_t *record = &sndmix.m1DC[index];
 
     if (record->m4C != 0) {
         SFILTER_timestretchsetratio(record->m4C, value);

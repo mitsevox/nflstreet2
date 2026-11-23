@@ -5,7 +5,7 @@
 
 void MIX_filteradd(int index, int slot, Desc_80276798 *desc)
 {
-    Record_803B5010 *record = &sndmix.m1DC[index];
+    SndMixVoice_t *record = &sndmix.m1DC[index];
     Node_80279D90 *node = (Node_80279D90 *)SNDMEMI_allocz(desc->m4);
 
     desc->mC(node, desc->m0, slot);

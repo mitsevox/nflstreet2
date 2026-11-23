@@ -210,7 +210,7 @@ typedef struct Desc_80276798 {
     void (*m14)(Node_80279D90 *node);
 } Desc_80276798;
 
-typedef struct Record_803B5010 {
+typedef struct SndMixVoice_t {
     unsigned char m0;
     unsigned char m1;
     unsigned char mUnknown2[2];
@@ -226,9 +226,9 @@ typedef struct Record_803B5010 {
     Node_80279D90 *m50;
     Node_80279D90 *m54;
     Node_80279D90 *m58;
-} Record_803B5010;
+} SndMixVoice_t;
 
-typedef struct Params_80275F80 {
+typedef struct SndUnpackInitParams_t {
     int m0;
     int m4;
     int m8;
@@ -240,7 +240,7 @@ typedef struct Params_80275F80 {
     int m20;
     int m24;
     int (*m28)(Node_80279D90 *node);
-} Params_80275F80;
+} SndUnpackInitParams_t;
 
 typedef struct SndSoftwareMixerState_t {
     Setup_80272EC4 m0;
@@ -249,7 +249,7 @@ typedef struct SndSoftwareMixerState_t {
     unsigned char mUnknownF;
     void (*m10)(int count);
     int *m14;
-    void (*m18[6][3])(Node_80279D90 *node, Params_80275F80 *params);
+    void (*m18[6][3])(Node_80279D90 *node, SndUnpackInitParams_t *params);
     int m60[6][3];
     void *mA8[2];
     int *mB0[2];
@@ -260,7 +260,7 @@ typedef struct SndSoftwareMixerState_t {
     Node_80279D90 *m104[6];
     Node_80279D90 *m11C[6];
     Node_80279D90 m134[6];
-    Record_803B5010 *m1DC;
+    SndMixVoice_t *m1DC;
     void (*m1E0)(int count, float *src, float *dst, float gain);
     void (*m1E4)(int count, short *src, float *dst);
 } SndSoftwareMixerState_t;

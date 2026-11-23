@@ -70,7 +70,7 @@ extern "C" int PATHI_getvalue(int id, int kind, PathTrack_t *p, Sequence_801B84E
     int value = id;
     TrackStatus_801B864C status;
     if (kind == 2)
-        value = lbl_803EBB28->mUnknown2C[id].mValue;
+        value = pfstate->mUnknown2C[id].mValue;
     else if (kind == 1) {
         switch (id) {
         case 1:
@@ -142,7 +142,7 @@ extern "C" int PATHI_getvalue(int id, int kind, PathTrack_t *p, Sequence_801B84E
             value = (unsigned short)PATHI_random();
             break;
         case 19:
-            value = lbl_803EBB60->vfn_05();
+            value = Path::IPathToReal::realimp->GetMilliseconds();
             break;
         case 20:
             PATHI_status(p, &status);
@@ -167,7 +167,7 @@ extern "C" int PATHI_getvalue(int id, int kind, PathTrack_t *p, Sequence_801B84E
 extern "C" void PATHI_setvalue(int id, int kind, int value, PathTrack_t *p, Sequence_801B84E4 *event)
 {
     if (kind == 2)
-        lbl_803EBB28->mUnknown2C[id].mValue = value;
+        pfstate->mUnknown2C[id].mValue = value;
     else if (kind == 1) {
         switch (id) {
         case 1:

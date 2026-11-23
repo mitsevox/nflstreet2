@@ -9,18 +9,18 @@ extern "C" unsigned int PATH_milliseconds(void)
     const char *header = "%s  %s";
 
     unsigned int result = 0;
-    if (lbl_803EBB60)
-        result = lbl_803EBB60->vfn_05();
+    if (Path::IPathToReal::realimp)
+        result = Path::IPathToReal::realimp->GetMilliseconds();
     return result;
 }
 
 extern "C" unsigned int PATHI_switchproject(unsigned int index, unsigned int flags)
 {
-    if (index <= 3 && lbl_802F47D0[index] && lbl_802F47D0[index]->mUnknown18) {
-        unsigned int value = lbl_802F47D0[index]->mUnknown14;
+    if (index <= 3 && pfstates[index] && pfstates[index]->mUnknown18) {
+        unsigned int value = pfstates[index]->mUnknown14;
         unsigned int mask = flags & 0xF0000000;
         if ((!mask || (value & mask)) && ((value & 0x0F000000) & flags)) {
-            lbl_803EBB28 = lbl_802F47D0[index];
+            pfstate = pfstates[index];
             return value;
         }
     }
@@ -45,12 +45,12 @@ extern "C" int PATHI_sortprojects(void)
 {
     int i = 0;
     for (; i < 4; ++i) {
-        if (lbl_802F47D0[i]) {
+        if (pfstates[i]) {
             for (int j = i + 1; j < 4; ++j) {
-                if (lbl_802F47D0[j] && lbl_802F47D0[i]->mUnknown14 > lbl_802F47D0[j]->mUnknown14) {
-                    Bank_801B3480 temp = *lbl_802F47D0[i];
-                    *lbl_802F47D0[i] = *lbl_802F47D0[j];
-                    *lbl_802F47D0[j] = temp;
+                if (pfstates[j] && pfstates[i]->mUnknown14 > pfstates[j]->mUnknown14) {
+                    PathProject_t temp = *pfstates[i];
+                    *pfstates[i] = *pfstates[j];
+                    *pfstates[j] = temp;
                 }
             }
         }
@@ -60,18 +60,18 @@ extern "C" int PATHI_sortprojects(void)
 
 extern "C" void PATHI_serviceproject(void)
 {
-    int bankMode = lbl_803EBB3B == 66;
+    int bankMode = bankservice == 66;
     unsigned int period;
     if (bankMode)
-        period = lbl_803EBB28->mUnknown10;
+        period = pfstate->mUnknown10;
     else
-        period = lbl_803EBB28->mUnknownC;
+        period = pfstate->mUnknownC;
     if (!bankMode)
         PATHI_serviceeventqueue();
 
     unsigned int halfPeriod = period >> 1;
     for (unsigned int index = 0; index < 24; ++index) {
-        PathTrack_t *track = lbl_803EBB28->mUnknown40[index];
+        PathTrack_t *track = pfstate->mUnknown40[index];
         if (!track || !track->mUnknown100)
             continue;
 
@@ -85,12 +85,12 @@ extern "C" void PATHI_serviceproject(void)
                 PATHI_setdrylevelfadevolume(track);
         }
 
-        if (track->mPauseTime && track->mPauseTime <= lbl_803EBB3C + halfPeriod) {
+        if (track->mPauseTime && track->mPauseTime <= gPathMilliseconds + halfPeriod) {
             track->mUnknown100->vfn_05(1);
             track->mPauseTime = 0;
             track->mUnknown8.word |= 0x40;
         }
-        if (track->mResumeTime && track->mResumeTime <= lbl_803EBB3C + halfPeriod) {
+        if (track->mResumeTime && track->mResumeTime <= gPathMilliseconds + halfPeriod) {
             track->mUnknown100->vfn_05(0);
             track->mResumeTime = 0;
             track->mUnknown8.word &= ~0x40;
@@ -113,7 +113,7 @@ extern "C" void PATHI_serviceproject(void)
 
         int remaining = fn_801B6CB4(track);
         if (track->mUnknown40) {
-            if (track->mUnknown40 > lbl_803EBB3C - track->mUnknown8.halves.high)
+            if (track->mUnknown40 > gPathMilliseconds - track->mUnknown8.halves.high)
                 continue;
         } else if (remaining > track->mUnknown8.halves.high) {
             continue;
@@ -130,17 +130,17 @@ extern "C" void PATHI_serviceproject(void)
 
 extern "C" void PATHI_service(int mode)
 {
-    if (!lbl_803EBB39) {
+    if (!paused) {
         int acquired;
-        if (++lbl_803EBB24 == 1 && lbl_803EBB38)
+        if (++pflock == 1 && inited)
             acquired = 1;
         else {
-            --lbl_803EBB24;
+            --pflock;
             acquired = 0;
         }
         if (acquired) {
-            lbl_803EBB3B = mode;
-            lbl_803EBB3C = PATH_milliseconds();
+            bankservice = mode;
+            gPathMilliseconds = PATH_milliseconds();
             PATHI_dispatchtrackstate(0);
             for (unsigned char i = 0; i < 4; ++i) {
                 if (PATHI_switchproject(i, 0xFFFFFFFF)) {
@@ -149,8 +149,8 @@ extern "C" void PATHI_service(int mode)
                 }
             }
             PATHI_dispatchtrackstate(1);
-            lbl_803EBB28 = 0;
-            --lbl_803EBB24;
+            pfstate = 0;
+            --pflock;
         }
     }
 }

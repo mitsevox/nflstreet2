@@ -1251,10 +1251,6 @@
       "address": "0x802796DC",
       "evidence": "evidence.tsv function and name rows for 0x802796DC (SNDI_validrendermode, srender.c, registered in comparisons.json, original bytes linked); called by SNDPKTPLAY_start (spktplay.c comparison, c19 wave)."
     },
-    "_Q24Path11IPathToReal.realimp": {
-      "address": "0x803EBB60",
-      "evidence": "evidence.tsv external row for 0x803EBB60 (Path::IPathToReal::realimp, GoldenEye symbol); its storage stays in the open PATH library files (src/engine/pathinit.c and its neighbours); src/engine/pathreal5.c references it by name."
-    },
     "SpchInit": {
       "address": "0x801F5B30",
       "evidence": "evidence.tsv function/name rows for 0x801F5B30 (src/engine/Speech.cpp, comparison only); original-owned until Speech.cpp links."
@@ -17174,7 +17170,7 @@
     {
       "source": "src/engine/pathinit.c",
       "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B2AD4-0x801B343C, source-form, linker and data rows. All thirteen routines and the complete native allocator storage, constructor pointer and constant pool link. SN retention discards the unused helper body.",
+      "evidence": "evidence.tsv unit row 0x801B2AD4-0x801B343C, source-form, linker and data rows. All thirteen routines, the allocator storage, the PATH library's small data 0x803EBB24-0x803EBB6C and project table 0x802F47D0-0x802F47E0 (data rows for both runs), the constructor pointer and the constant pool link. SN retention discards the unused helper body. The PATHAUTHOR string 0x802F47E0-0x802F481C keeps its original bytes (its data row).",
       "sections": [
         {
           "section": ".text",
@@ -17199,6 +17195,18 @@
           "placement": ".data3",
           "start": "0x802AEA18",
           "end": "0x802AEA58"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F47D0",
+          "end": "0x802F47E0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBB24",
+          "end": "0x803EBB6C"
         }
       ],
       "link_roots": {
@@ -17216,7 +17224,7 @@
           "PATH_addmapfile",
           "PATH_seteventcallbacks",
           "PATH_setvariable",
-          "PATHI_findnodedata",
+          "PATHI_gettrackimp",
           "PATHI_bytesperms"
         ]
       }

@@ -4,8 +4,8 @@
 /* Shared declarations of the PATH interactive-music library files (pathinit.c .. pathaction.c):
    the track, bank, node and event records they share and the library entry points. */
 
-#include "engine/fn_801B3234.h"
 #include "engine/csis.h"
+#include "engine/pathreal.h"
 
 struct PathSubBankInfo_t {
     unsigned int mEvictionOrder;
@@ -184,7 +184,7 @@ struct Record_801B6D20 {
 
 struct Sequence_801B84E4;
 
-struct Bank_801B3480 {
+struct PathProject_t {
     int mUnknown0;
     unsigned int mUnknown4;
     unsigned int mUnknown8;
@@ -208,19 +208,6 @@ struct Bank_801B3480 {
     Sequence_801B84E4 *mUnknownC0[17];
     unsigned char mEventPoolTail[kEventPoolBytes - sizeof(Sequence_801B84E4 *)];
     int mUnknown1100;
-};
-
-class Class_803EBB60 {
-public:
-    virtual ~Class_803EBB60();
-    virtual void vfn_02() = 0;
-    virtual void vfn_03() = 0;
-    virtual void vfn_04() = 0;
-    virtual unsigned int vfn_05() = 0;
-    virtual int vfn_06(int channels) = 0;
-    virtual int vfn_07(char *name, int &size, int flags) = 0;
-    virtual int vfn_08(int handle, char *&data) = 0;
-    unsigned char mUnknown0[12];
 };
 
 struct Event_801B845C {
@@ -321,37 +308,27 @@ struct Record_801B6780 {
 };
 struct PathfinderTrackData_t;
 
-class Class_803EBB64 {
-public:
-    virtual ~Class_803EBB64();
-    virtual int vfn_02(IPathTrack **track, int a, float b, int c) = 0;
-    virtual int vfn_03(IPathTrack **track, int a) = 0;
-};
-
 extern "C" {
-extern Allocator *lbl_803EBB68;
 extern AllocParams gPathAllocatorParams;
-extern void (*lbl_803EBB2C)(int, int);
-extern void (*lbl_803EBB30)(int, int);
-extern void (*lbl_803EBB34)(int, int);
-extern int lbl_803EBB24;
-extern Bank_801B3480 *lbl_803EBB28;
-extern unsigned char lbl_803EBB38;
-extern unsigned char lbl_803EBB39;
-extern unsigned char lbl_803EBB3B;
-extern unsigned int lbl_803EBB3C;
-extern int lbl_803EBB40;
-extern int lbl_803EBB48;
-extern int lbl_803EBB4C;
-extern int lbl_803EBB50;
-extern int lbl_803EBB54;
-extern Bank_801B3480 *lbl_802F47D0[4];
-extern Class_803EBB60 *lbl_803EBB60;
+extern void (*songprogress)(int, int);
+extern void (*eventrelease)(int, int);
+extern void (*eventaction)(int, int);
+extern int pflock;
+extern PathProject_t *pfstate;
+extern unsigned char inited;
+extern unsigned char paused;
+extern unsigned char bankservice;
+extern unsigned int gPathMilliseconds;
+extern int debugchannels;
+extern int timercalls;
+extern int timertimespent;
+extern int taskcalls;
+extern int tasktimespent;
+extern PathProject_t *pfstates[4];
 void PATHI_serviceproject(void);
 int PATHI_inittrack(int flags, PathfinderTrackData_t *data);
 int fn_801B7880(Sequence_801B84E4 *p, Event_801B845C *entry);
 extern unsigned int seedPATH[6];
-extern Class_803EBB64 *lbl_803EBB64;
 int PATH_destroy(int flags);
 void SNDSYS_entercritical(void);
 void SNDSYS_leavecritical(void);
@@ -371,6 +348,7 @@ int PATH_createstreamtrack(int flags, PathfinderTrackData_t *data, int value);
 int PATH_createbanktrack(int flags, PathfinderTrackData_t *data, int value);
 int PATHI_createtrack(int flags, PathfinderTrackData_t *data);
 PathTrack_t *PATHI_gettrackptr(unsigned int flags);
+void *PATHI_gettrackimp(int flags);
 void PATHI_updatemastertrack(void);
 int PATHI_countprojecttracks(unsigned int flags);
 void PATHI_selectprojecttrack(PathTrack_t *p, int state);
@@ -402,8 +380,8 @@ int fn_801B84E4(Event_801B845C *p, Sequence_801B84E4 *sequence);
 int fn_801B8580(PathTrack_t *p);
 int PATHI_getvalue(int id, int kind, PathTrack_t *p, Sequence_801B84E4 *event);
 void PATHI_setvalue(int id, int kind, int value, PathTrack_t *p, Sequence_801B84E4 *event);
-extern unsigned char lbl_803EBB3A;
-extern int lbl_803EBB44;
+extern unsigned char volscale;
+extern int defaultfxbus;
 void PATH_setallocator(Allocator *allocator, const AllocParams &params);
 int PATH_addmapfile(PathMapHeader_t *map);
 int PATH_destroy(int flags);
@@ -437,16 +415,16 @@ int PATHI_choosesynchtime(int index, const FindNode_801B6A18 &find, const BeatIn
 static inline PathTrackInfo_t *PATHI_trackinfo(int index)
 {
     PathTrackInfo_t *info = 0;
-    if (index >= 0 && index < lbl_803EBB28->mUnknown18->mUnknownD)
-        info = (PathTrackInfo_t *)((char *)lbl_803EBB28->mUnknown18 + lbl_803EBB28->mUnknown34[index] * 4);
+    if (index >= 0 && index < pfstate->mUnknown18->mUnknownD)
+        info = (PathTrackInfo_t *)((char *)pfstate->mUnknown18 + pfstate->mUnknown34[index] * 4);
     return info;
 }
 
 static inline Entry_801B63F0 *PATHI_findevent(int key)
 {
-    int i = lbl_803EBB28->mUnknown18->mUnknownF;
+    int i = pfstate->mUnknown18->mUnknownF;
     while (--i >= 0) {
-        Entry_801B63F0 *entry = (Entry_801B63F0 *)((unsigned char *)lbl_803EBB28->mUnknown18 + lbl_803EBB28->mUnknown24[i] * 4);
+        Entry_801B63F0 *entry = (Entry_801B63F0 *)((unsigned char *)pfstate->mUnknown18 + pfstate->mUnknown24[i] * 4);
         if ((int)(entry->mUnknownC >> 8) == key)
             return entry;
     }
@@ -456,10 +434,10 @@ static inline Entry_801B63F0 *PATHI_findevent(int key)
 static inline Entry_801B63F0 *PATHI_getnode(int index)
 {
     Entry_801B63F0 *node;
-    if (index < 0 || index > lbl_803EBB28->mUnknown18->mUnknown12)
+    if (index < 0 || index > pfstate->mUnknown18->mUnknown12)
         node = 0;
     else
-        node = (Entry_801B63F0 *)((unsigned char *)lbl_803EBB28->mUnknown18 + lbl_803EBB28->mUnknown1C[index] * 4);
+        node = (Entry_801B63F0 *)((unsigned char *)pfstate->mUnknown18 + pfstate->mUnknown1C[index] * 4);
     return node;
 }
 

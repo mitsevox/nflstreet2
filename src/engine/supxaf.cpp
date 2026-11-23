@@ -40,7 +40,7 @@ void SFILTER_unpackxafrestore(Node_80279D90 *node)
     }
 }
 
-void SFILTER_unpackxafinit(Node_80279D90 *node, Params_80275F80 *params)
+void SFILTER_unpackxafinit(Node_80279D90 *node, SndUnpackInitParams_t *params)
 {
     SndXaUnpackFilter_t *decoder;
 
