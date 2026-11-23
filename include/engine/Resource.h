@@ -111,11 +111,11 @@ int fn_801F1B6C(ResFile_t *pRes);
 void ResTrackResource(unsigned int type, void *pData);
 
 /* rescache.c */
-void fn_801F2ED8(int mode);
-void fn_801F2EE0(ResFile_t *pRes, char *pName);
-void fn_801F30CC(ResFile_t *pRes);
-void fn_801F3104(ResFile_t *pRes);
-void fn_801F318C(ResFile_t *pRes, int index, int offset, void *pData, int size);
+void ResCacheSetDevice(int mode);
+void ResCacheOpen(ResFile_t *pRes, char *pName);
+void ResCacheClose(ResFile_t *pRes);
+void ResCacheUpdateState(ResFile_t *pRes);
+void ResCacheWrite(ResFile_t *pRes, int index, int offset, void *pData, int size);
 
 /* resloosefile.c */
 int ResLooseFileGetSize(ResFile_t *pRes, unsigned int index, unsigned int *pSize);

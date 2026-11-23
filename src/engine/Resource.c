@@ -310,7 +310,7 @@ static void _ResAsyncCallbackFunc(int result, int arg, void *pArg)
             codec = 0;
         }
         if (_Res_bCachingEnabled != 0 && pReq->pRes->mCacheHandle >= 0 && pReq->mCache != 0) {
-            fn_801F318C(pReq->pRes, pReq->mIndex, pReq->mFileOffset, pReq->pBuffer, pReq->mDiskSize);
+            ResCacheWrite(pReq->pRes, pReq->mIndex, pReq->mFileOffset, pReq->pBuffer, pReq->mDiskSize);
         }
         if (codec != 0 && GCmpIsBlockCodec(codec) == 0) {
             memset((void *)&src, 0, 0x1C);
@@ -483,7 +483,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
                     if (FileReadCallback(file, pCompressed, compressedSize, 0) < (int)compressedSize) {
                         return SysGetLastError();
                     }
-                    fn_801F318C(pRes, index, originalOffset, src.pData, compressedSize);
+                    ResCacheWrite(pRes, index, originalOffset, src.pData, compressedSize);
                     cache = 0;
                     pDecomp = GCmpBlockStart(codec, 1, &src, &dst);
                     position = 0;
@@ -530,7 +530,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
                     return SysGetLastError();
                 }
                 if (_Res_bCachingEnabled != 0 && cache != 0) {
-                    fn_801F318C(pRes, index, originalOffset, src.pData, compressedSize);
+                    ResCacheWrite(pRes, index, originalOffset, src.pData, compressedSize);
                     cache = 0;
                 }
                 if (pRes->pName == 0) {
@@ -556,7 +556,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
             err = SysGetLastError();
         }
         if (_Res_bCachingEnabled != 0 && cache != 0) {
-            fn_801F318C(pRes, index, originalOffset, (void *)*pBuffer, size);
+            ResCacheWrite(pRes, index, originalOffset, (void *)*pBuffer, size);
         }
         {
             ResTrackLoadDone_t done;
@@ -1285,7 +1285,7 @@ int ResInit(int maxResources)
         _Res_pBlockLoadBuffer = fn_801D2BB0(1, 0x8000, _Res_uMemAllocFlags, 0);
         _Res_bModuleActive = 1;
         _Res_bCachingEnabled = 0;
-        fn_801F2ED8(0);
+        ResCacheSetDevice(0);
         fn_801F809C(&_Res_sResourceLock);
     } else {
         err = 0xF0001;
@@ -1359,7 +1359,7 @@ ResFile_t *ResOpenDevice(char *pName, int mode)
                 goto done;
             }
             if (_Res_bCachingEnabled != 0) {
-                fn_801F2EE0(pRes, pName);
+                ResCacheOpen(pRes, pName);
             }
             DSAddListNode(_Res_pResourceFileList, pRes, 0);
         }
@@ -1541,9 +1541,9 @@ int ResClose(ResFile_t *pRes)
                 }
             } else {
                 if (_Res_bCachingEnabled != 0 && pRes->mCacheHandle >= 0) {
-                    fn_801F3104(pRes);
+                    ResCacheUpdateState(pRes);
                     if (close) {
-                        fn_801F30CC(pRes);
+                        ResCacheClose(pRes);
                     }
                 }
                 if (flush == 1 && pRes->unk_0x21 == 0) {
