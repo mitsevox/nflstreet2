@@ -10,7 +10,7 @@
 
 extern "C" {
 
-extern unsigned char lbl_80300E9C;
+extern char sndlibauthor[];
 extern float lbl_80300028;
 extern int lbl_8030002C;
 extern unsigned char lbl_803A7728;
@@ -57,7 +57,7 @@ int SNDSYSI_init(void *memory, int size, int unused)
 {
     int result;
 
-    lbl_80300E9C = 'S';
+    sndlibauthor[0] = 'S';
     if (lbl_803A6C24.m168 != 0) {
         return 0;
     }

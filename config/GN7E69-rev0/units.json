@@ -1211,10 +1211,6 @@
       "address": "0x803ECEA4",
       "evidence": "evidence.tsv data/name rows for 0x803ECEA4 (target extent, related name); speech-library storage, original-owned."
     },
-    "spchlibauthor": {
-      "address": "0x802F4794",
-      "evidence": "evidence.tsv data/name rows for 0x802F4794 (target extent, related name); speech-library storage, original-owned."
-    },
     "PerJoyDriverPollPADs": {
       "address": "0x801E26FC",
       "evidence": "evidence.tsv function and name rows for 0x801E26FC (PerJoyDriverPollPADs in src/engine/PJoyDrvr.c, a comparison-only file); the linked src/engine/llperiph.c calls it and registers it as a callback, so it resolves to the original bytes."
@@ -17188,6 +17184,19 @@
       "evidence": "evidence.tsv unit row 0x801B1A3C-0x801B1CFC (src/engine/spchrand.c), its function, name and source-form rows, the data rows of its own storage (seedX .data 0x802F477C-0x802F4794, gRandArray .bss 0x8037E794-0x8037E814, gRandArrayIndex .sdata 0x803EBB20-0x803EBB24) and the speech_cxx compiler row; all five functions match the target, promoted from comparison-only."
     },
     {
+      "source": "src/engine/spchauthor.cpp",
+      "profile": "speech_cxx",
+      "evidence": "evidence.tsv unit row 0x802F4794-0x802F47D0 (src/engine/spchauthor.cpp) and the data and name rows of spchlibauthor: a code-less file whose whole .data is the speech library's author string.",
+      "sections": [
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4794",
+          "end": "0x802F47D0"
+        }
+      ]
+    },
+    {
       "source": "src/engine/spchrule.c",
       "profile": "speech_cxx_holdouts",
       "evidence": "evidence.tsv unit row 0x801B1CFC-0x801B23A0 and its name and function records. Fifteen routines link from the speech rule source. The 136-byte sample size helper keeps the original bytes. This source has no allocated data section.",
@@ -17218,7 +17227,7 @@
     {
       "source": "src/engine/pathinit.c",
       "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B2AD4-0x801B343C, source-form, linker and data rows. All thirteen routines, the allocator storage, the PATH library's small data 0x803EBB24-0x803EBB6C and project table 0x802F47D0-0x802F47E0 (data rows for both runs), the constructor pointer and the constant pool link. SN retention discards the unused helper body. The PATHAUTHOR string 0x802F47E0-0x802F481C keeps its original bytes (its data row).",
+      "evidence": "evidence.tsv unit row 0x801B2AD4-0x801B343C, source-form, linker and data rows. All thirteen routines, the allocator storage, the PATH library's small data 0x803EBB24-0x803EBB6C and project table 0x802F47D0-0x802F47E0 (data rows for both runs), the constructor pointer and the constant pool link. SN retention discards the unused helper body. The PATHAUTHOR string 0x802F47E0-0x802F481C is src/engine/pathauthor.cpp's.",
       "sections": [
         {
           "section": ".text",
@@ -17276,6 +17285,19 @@
           "PATHI_bytesperms"
         ]
       }
+    },
+    {
+      "source": "src/engine/pathauthor.cpp",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x802F47E0-0x802F481C (src/engine/pathauthor.cpp) and the data and name rows of pathlibauthor: a code-less file whose whole .data is the PATH library's author string.",
+      "sections": [
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F47E0",
+          "end": "0x802F481C"
+        }
+      ]
     },
     {
       "source": "src/engine/vprintf.c",
@@ -22322,7 +22344,7 @@
     {
       "source": "src/engine/spchinit.c",
       "profile": "speech_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x801AF60C-0x801AF75C (src/engine/spchinit.c), its function and name rows and the speech_cxx compiler row; all four functions match the target, promoted from comparison-only. The file defines no data; the speech-library state it initializes (the leading speech data runs, taken to be a data-only spchdata.c's) and the SPCHAUTHOR string spchlibauthor (owned by a file linked after spchrand.c) are referenced through externals (external row 0x801AE3E4-0x801B2AD4, spchlibauthor data row).",
+      "evidence": "evidence.tsv provisional unit row 0x801AF60C-0x801AF75C (src/engine/spchinit.c), its function and name rows and the speech_cxx compiler row; all four functions match the target, promoted from comparison-only. The file defines no data; the speech-library state it initializes (the leading speech data runs, taken to be a data-only spchdata.c's) are referenced through externals (external row 0x801AE3E4-0x801B2AD4), and the SPCHAUTHOR string spchlibauthor is defined by src/engine/spchauthor.cpp (spchlibauthor data row).",
       "sections": [
         {
           "section": ".text",
@@ -23268,6 +23290,19 @@
           "placement": ".bss",
           "start": "0x803B4E20",
           "end": "0x803B4E34"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sndauthor.cpp",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80300E9C-0x80300EDC (src/engine/sndauthor.cpp) and the data and name rows of sndlibauthor: a code-less file whose whole .data is the sound library's author string.",
+      "sections": [
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80300E9C",
+          "end": "0x80300EDC"
         }
       ]
     },
