@@ -30174,7 +30174,7 @@
     {
       "source": "src/engine/pathserv.c",
       "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, header-string data row and HOLDOUT source-form rows. Six exact bodies and the native .rodata link. The sort and reconstructed project service keep their original bytes.",
+      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, complete native data row and HOLDOUT 0x801B3568-0x801B3724. Only the integer-return sort remains a comparison.",
       "sections": [
         {
           "section": ".text",
@@ -30194,11 +30194,6 @@
           "symbol": "PATHI_sortprojects",
           "start": "0x801B3568",
           "end": "0x801B3724"
-        },
-        {
-          "symbol": "PATHI_serviceproject",
-          "start": "0x801B3724",
-          "end": "0x801B39B8"
         }
       ]
     },

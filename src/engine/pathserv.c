@@ -75,9 +75,7 @@ extern "C" void PATHI_serviceproject(void)
         if (!track || !track->mUnknown100)
             continue;
 
-        int active = track->mUnknown4 >= 0;
-        if (active && !track->mUnknown34)
-            active = 0;
+        unsigned char active = track->mUnknown4 >= 0 && track->mUnknown34 != 0;
         if (active) {
             if (!(track->mUnknown19 & 0x80))
                 PATHI_setfadevolume(track);

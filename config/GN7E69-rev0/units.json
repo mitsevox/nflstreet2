@@ -25955,7 +25955,7 @@
     {
       "source": "src/engine/pathserv.c",
       "profile": "path_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, its name and source-form rows, and data row 0x802AEA58-0x802AEA60. Six exact service routines and the complete native header string link while the sort and per-project service retain original code.",
+      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, name, source-form and data rows. Seven exact routines and complete native header string link. Only the integer-return project sort retains original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -25966,7 +25966,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801B39B8",
+          "start": "0x801B3724",
           "end": "0x801B3AD0"
         },
         {
@@ -25981,10 +25981,6 @@
           {
             "function": "PATHI_sortprojects",
             "evidence": "evidence.tsv source-form 0x801B3568-0x801B3724"
-          },
-          {
-            "function": "PATHI_serviceproject",
-            "evidence": "evidence.tsv source-form 0x801B3724-0x801B39B8"
           }
         ],
         "evidence": "merge notes of the pull request linking the exact pathserv.c functions"
