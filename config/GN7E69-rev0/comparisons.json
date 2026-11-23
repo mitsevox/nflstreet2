@@ -34009,7 +34009,7 @@
     {
       "source": "src/engine/sfir.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80279E74-0x8027A21C (src/engine/sfir.c), the sound_cxx compiler rows, the function, name and source-form rows of calcFIRCoeffs, and the data row of its .rodata 0x802C21C0-0x802C21F0. The high-pass normalization branches follow the target shape. Coefficient address allocation and later scheduling still differ; original bytes remain linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80279E74-0x8027A21C (src/engine/sfir.c), the sound_cxx compiler rows, the function, name and source-form rows of calcFIRCoeffs, and the data row of its .rodata 0x802C21C0-0x802C21F0. The sinc loops, window and center update match. The final normalization uses a direct center load where the target indexes the coefficient array. The executable uses the original bytes.",
       "sections": [
         {
           "section": ".text",

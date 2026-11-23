@@ -8,13 +8,13 @@ extern "C" {
 
 void calcFIRCoeffs(SndFirState_t *state, int type)
 {
-    int half = 4;
+    const int center = 4;
+    int half = center;
     int i;
     float w;
     float t;
     float s;
     float sum;
-    float step;
 
     if ((unsigned int)type - 3u <= 1u && !(state->m34 <= 0.8f)) {
         state->m34 = 0.8f;
@@ -44,14 +44,14 @@ void calcFIRCoeffs(SndFirState_t *state, int type)
         }
         break;
     }
-    step = 0.7853982f;
+    w = 0.7853982f;
     sum = 0.0f;
     for (i = 0; i <= half; i++) {
         if (type == 2 || type == 4) {
-            state->m20[i] *= 0.54f - SNDI_cos(step * (float)i) * 0.46f;
+            state->m20[i] *= 0.54f - SNDI_cos(w * (float)i) * 0.46f;
             sum += state->m20[i];
         } else if (type == 3) {
-            state->m20[i] *= SNDI_cos(step * (float)i) * 0.46f - 0.54f;
+            state->m20[i] *= SNDI_cos(w * (float)i) * 0.46f - 0.54f;
             sum = (i & 1) == 0 ? sum + state->m20[i] : sum - state->m20[i];
         }
     }
@@ -59,7 +59,9 @@ void calcFIRCoeffs(SndFirState_t *state, int type)
         state->m20[half] += 1.0f;
         sum += 1.0f;
     }
-    sum = sum + sum - state->m20[half];
+    t = state->m20[center];
+    sum += sum;
+    sum -= t;
     if (!(sum >= 0.0f)) {
         sum = -sum;
     }
