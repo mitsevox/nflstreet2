@@ -1,5 +1,5 @@
-/* PATH sample banks (pathbank.c): loads a track sample bank and its sub-banks, reports when a
-   sub-bank is ready and unloads banks, dropping the least recently used sub-bank first. */
+/* Loads and unloads PATH sample banks, reports sub-bank readiness, and chooses eviction
+   candidates by the bank's configured order or priority. */
 
 #include <stdio.h>
 #include <string.h>
