@@ -96,12 +96,12 @@ int FontResetRenderState(void);
 int FontSetRenderColor(int which, FontColor_t color);
 void FontDrawText(Font_t *pFont, const char *pText, unsigned int flags, float maxWidth,
                  FontQuad_t *pQuads, unsigned int *pCount);
-int fn_801CDB5C(Font_t *pFont, const char *pText, unsigned int flags, float maxWidth, float *pPos);
-void fn_801CDD18(void);
-void fn_801CDE98(void **ppTlut0, void **ppTlut1, void **ppTlut2);
-void fn_801CDFE4(void *pTlut0, void *pTlut1, void *pTlut2);
-void fn_801CDFE8(Font_t *pFont, void *pTlut0, void *pTlut1, void *pTlut2, int a);
-void fn_801CE108(Font_t *pFont);
-void fn_801CE134(Font_t *pFont);
+int FontLLRenderText(Font_t *pFont, const char *pText, unsigned int flags, float maxWidth, float *pPos);
+void FontLLRenderBegin(void);
+void FontLLUploadPalettes(void **ppTlut0, void **ppTlut1, void **ppTlut2);
+void FontLLReleasePalettes(void *pTlut0, void *pTlut1, void *pTlut2);
+void FontLLUploadTextures(Font_t *pFont, void *pTlut0, void *pTlut1, void *pTlut2, int a);
+void FontLLReleaseTextures(Font_t *pFont);
+void FontLLCreateFont(Font_t *pFont);
 
 #endif

@@ -1,4 +1,4 @@
-/* Low-level font rendering: per-string draw with optional shadow pass, GX state setup, palettes and textures. */
+/* Draws text and its shadows with GX glyph quads, outline palettes and font textures. */
 
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXGeometry.h>
@@ -15,35 +15,35 @@
 #include "engine/llmatrix.h"
 #include "engine/viewport.h"
 
-typedef struct FontTexInfo_801CDB5C {
+typedef struct FontTexInfo_t {
     unsigned short mWidth;
     unsigned short mHeight;
-    int mUnk4;
-    int mUnk8;
+    int unk_0x4;
+    int unk_0x8;
     void *mpImage;
-    unsigned char mUnk10[0x10];
-} FontTexInfo_801CDB5C;
+    unsigned char unk_0x10[0x10];
+} FontTexInfo_t;
 
-extern unsigned short lbl_80383D20[16];
-extern unsigned short lbl_80383D40[16];
-extern GXTlutObj lbl_80383D60;
-extern GXTlutObj lbl_80383D80;
+static unsigned short _LLFontOutsideOutlinePal[16] __attribute__((aligned(32)));
+static unsigned short _LLFontInsideOutlinePal[16] __attribute__((aligned(32)));
+static GXTlutObj _LLFontOutsideOutlineObj __attribute__((aligned(32)));
+static GXTlutObj _LLFontInsideOutlineObj __attribute__((aligned(32)));
 extern FontRenderState_t lbl_803E7600;
 extern FontQuad_t lbl_803E763C[];
 
 /* The four corners of one glyph quad: positions, then texture coordinates. */
-typedef struct FontVerts_801CD79C {
+typedef struct FontQuadVerts_t {
     float mPos[4][4];
     float mUV[4][4];
-} FontVerts_801CD79C;
+} FontQuadVerts_t;
 
 /* FAKEMATCH: invented unused static; its body exists only for its unsigned int-to-float bias in .rodata */
-static float FontLLTexelToUV(unsigned int texel, float size)
+static float _FontLLTexelToUV(unsigned int texel, float size)
 {
     return texel / size;
 }
 
-static void _FontLLSetupGlyph(Font_t *pFont, FontVerts_801CD79C *pVerts, FontQuad_t *pQuad)
+static void _FontLLSetupGlyph(Font_t *pFont, FontQuadVerts_t *pVerts, FontQuad_t *pQuad)
 {
     float texWidth;
     float texHeight;
@@ -73,7 +73,7 @@ static void _FontLLSetupGlyph(Font_t *pFont, FontVerts_801CD79C *pVerts, FontQua
 }
 
 /* FAKEMATCH: the four vertices go through a file-static inline helper; written inline the function does not match */
-static inline void _FontLLSendQuad(FontVerts_801CD79C *pVerts, GXColor *pColor)
+static inline void _FontLLSendQuad(FontQuadVerts_t *pVerts, GXColor *pColor)
 {
     GXPosition3f32(pVerts->mPos[0][0], pVerts->mPos[0][1], pVerts->mPos[0][2]);
     GXColor4u8(pColor->r, pColor->g, pColor->b, pColor->a);
@@ -92,7 +92,7 @@ static inline void _FontLLSendQuad(FontVerts_801CD79C *pVerts, GXColor *pColor)
 static int _FontLLRender(int state, Font_t *pFont, FontQuad_t *pQuads, unsigned int count,
                        FontColor_t *pColor, int unused)
 {
-    FontVerts_801CD79C verts;
+    FontQuadVerts_t verts;
     GXColor color;
     unsigned int i;
 
@@ -109,7 +109,7 @@ static int _FontLLRender(int state, Font_t *pFont, FontQuad_t *pQuads, unsigned 
     return state;
 }
 
-int fn_801CDB5C(Font_t *pFont, const char *pText, unsigned int flags, float maxWidth, float *pPos)
+int FontLLRenderText(Font_t *pFont, const char *pText, unsigned int flags, float maxWidth, float *pPos)
 {
     FontQuad_t *pQuads = lbl_803E763C;
     float mtx[4][4];
@@ -126,10 +126,10 @@ int fn_801CDB5C(Font_t *pFont, const char *pText, unsigned int flags, float maxW
         GXLoadPosMtxImm(mtx, 0);
         if (pFont->mpHeader->mFlags & 4) {
             lbl_803E7600.mFlags |= 0x40;
-            GXLoadTlut(&lbl_80383D60, 0);
+            GXLoadTlut(&_LLFontOutsideOutlineObj, 0);
             GXLoadTexObj(pFont->mpTexObj, 0);
             state = _FontLLRender(0, pFont, pQuads, count, &lbl_803E7600.mShadowColor, 0);
-            GXLoadTlut(&lbl_80383D80, 0);
+            GXLoadTlut(&_LLFontInsideOutlineObj, 0);
             GXLoadTexObj(pFont->mpTexObj, 0);
             _FontLLRender(state, pFont, pQuads, count, &lbl_803E7600.mColor, 0);
         } else {
@@ -152,7 +152,7 @@ int fn_801CDB5C(Font_t *pFont, const char *pText, unsigned int flags, float maxW
     return 0;
 }
 
-void fn_801CDD18(void)
+void FontLLRenderBegin(void)
 {
     GXClearVtxDesc();
     GXSetVtxDesc(9, 1);
@@ -177,37 +177,37 @@ void fn_801CDD18(void)
     GXSetAlphaCompare(4, 0, 0, 4, 0);
 }
 
-void fn_801CDE98(void **ppTlut0, void **ppTlut1, void **ppTlut2)
+void FontLLUploadPalettes(void **ppTlut0, void **ppTlut1, void **ppTlut2)
 {
     unsigned int levels = 8;
     unsigned int i;
     unsigned int j;
 
     for (i = 0; i < levels; i++) {
-        lbl_80383D20[i] = ((i * 0xFF / (levels - 1)) << 8) | 0xFF;
+        _LLFontOutsideOutlinePal[i] = ((i * 0xFF / (levels - 1)) << 8) | 0xFF;
     }
     for (; i < 16; i++) {
-        lbl_80383D20[i] = 0xFFFF;
+        _LLFontOutsideOutlinePal[i] = 0xFFFF;
     }
-    DCFlushRange(lbl_80383D20, sizeof(lbl_80383D20));
-    GXInitTlutObj(&lbl_80383D60, lbl_80383D20, 0, 16);
+    DCFlushRange(_LLFontOutsideOutlinePal, sizeof(_LLFontOutsideOutlinePal));
+    GXInitTlutObj(&_LLFontOutsideOutlineObj, _LLFontOutsideOutlinePal, 0, 16);
     for (i = 0; i < levels; i++) {
-        lbl_80383D40[i] = 0;
+        _LLFontInsideOutlinePal[i] = 0;
     }
     for (j = 0; i < 16; i++, j++) {
-        lbl_80383D40[i] = ((j * 0xFF / (levels - 1)) << 8) | 0xFF;
+        _LLFontInsideOutlinePal[i] = ((j * 0xFF / (levels - 1)) << 8) | 0xFF;
     }
-    DCFlushRange(lbl_80383D40, sizeof(lbl_80383D40));
-    GXInitTlutObj(&lbl_80383D80, lbl_80383D40, 0, 16);
+    DCFlushRange(_LLFontInsideOutlinePal, sizeof(_LLFontInsideOutlinePal));
+    GXInitTlutObj(&_LLFontInsideOutlineObj, _LLFontInsideOutlinePal, 0, 16);
 }
 
-void fn_801CDFE4(void *pTlut0, void *pTlut1, void *pTlut2)
+void FontLLReleasePalettes(void *pTlut0, void *pTlut1, void *pTlut2)
 {
 }
 
-void fn_801CDFE8(Font_t *pFont, void *pTlut0, void *pTlut1, void *pTlut2, int a)
+void FontLLUploadTextures(Font_t *pFont, void *pTlut0, void *pTlut1, void *pTlut2, int a)
 {
-    FontTexInfo_801CDB5C info;
+    FontTexInfo_t info;
 
     info.mWidth = pFont->mpTex->mWidth;
     info.mHeight = pFont->mpTex->mHeight;
@@ -223,13 +223,13 @@ void fn_801CDFE8(Font_t *pFont, void *pTlut0, void *pTlut1, void *pTlut2, int a)
     }
 }
 
-void fn_801CE108(Font_t *pFont)
+void FontLLReleaseTextures(Font_t *pFont)
 {
     if (pFont->mpTexObj) {
         fn_801D2BD0(pFont->mpTexObj);
     }
 }
 
-void fn_801CE134(Font_t *pFont)
+void FontLLCreateFont(Font_t *pFont)
 {
 }

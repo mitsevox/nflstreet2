@@ -29750,9 +29750,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CDB5C.c",
+      "source": "src/engine/LLFont.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CD79C-0x801CE138 (src/engine/cu_801CDB5C.c), its compiler and type rows, exact function rows, the exact data row for its .rodata 0x802AF4B0-0x802AF4D4 and linker row 0x802AF4B0-0x802AF4B8 (discarded FontLLTexelToUV). Draft comparisons only; the render state 0x803E7600, the quad buffer 0x803E763C, the TLUT tables 0x80383D20/0x80383D40 and objects 0x80383D60/0x80383D80, and the matrix/GX/heap helpers stay external; original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x801CD79C-0x801CE138 and its function, name, compiler and data rows. FontLLUploadPalettes remains a measured holdout at 0x801CDE98-0x801CDFE4. The other eight functions and both data sections are linked.",
       "sections": [
         {
           "section": ".text",
@@ -29765,6 +29765,12 @@
           "placement": ".data3",
           "start": "0x802AF4B0",
           "end": "0x802AF4D4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80383D20",
+          "end": "0x80383DA0"
         }
       ],
       "functions": [
@@ -29779,43 +29785,43 @@
           "end": "0x801CDB5C"
         },
         {
-          "symbol": "fn_801CDB5C",
+          "symbol": "FontLLRenderText",
           "start": "0x801CDB5C",
           "end": "0x801CDD18"
         },
         {
-          "symbol": "fn_801CDD18",
+          "symbol": "FontLLRenderBegin",
           "start": "0x801CDD18",
           "end": "0x801CDE98"
         },
         {
-          "symbol": "fn_801CDE98",
+          "symbol": "FontLLUploadPalettes",
           "start": "0x801CDE98",
           "end": "0x801CDFE4"
         },
         {
-          "symbol": "fn_801CDFE4",
+          "symbol": "FontLLReleasePalettes",
           "start": "0x801CDFE4",
           "end": "0x801CDFE8"
         },
         {
-          "symbol": "fn_801CDFE8",
+          "symbol": "FontLLUploadTextures",
           "start": "0x801CDFE8",
           "end": "0x801CE108"
         },
         {
-          "symbol": "fn_801CE108",
+          "symbol": "FontLLReleaseTextures",
           "start": "0x801CE108",
           "end": "0x801CE134"
         },
         {
-          "symbol": "fn_801CE134",
+          "symbol": "FontLLCreateFont",
           "start": "0x801CE134",
           "end": "0x801CE138"
         }
       ],
       "discarded": [
-        "FontLLTexelToUV"
+        "_FontLLTexelToUV"
       ]
     },
     {

@@ -47,7 +47,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801CB5D4	0x801CBC1C	filemc.c	11	10	10	10	0	-	-
 0x801CBC1C	0x801CBC50	filehost.c	8	7	7	7	0	-	-
 0x801CCA64	0x801CD79C	Font.c	24	23	23	23	0	-	-
-0x801CD79C	0x801CE138	LLFont.c	9	9	9	2	7	-	-
+0x801CD79C	0x801CE138	LLFont.c	9	9	9	9	0	-	-
 0x801CE138	0x801CE1E8	glib.c	2	2	3	2	0	-	-
 0x801CE1F8	0x801CEC90	llglib.c	39	35	36	35	0	-	-
 0x801CEC90	0x801CEE54	llrender.c	8	7	8	7	0	-	-

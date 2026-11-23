@@ -393,6 +393,10 @@
     }
   },
   "externals": {
+    "FontLLUploadPalettes": {
+      "address": "0x801CDE98",
+      "evidence": "evidence.tsv function/name and holdout rows at 0x801CDE98. Font.c calls the original-byte FontLLUploadPalettes provider."
+    },
     "gPlayerLooks": {
       "address": "0x803078E8",
       "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
@@ -1407,7 +1411,7 @@
     },
     "FontDrawText": {
       "address": "0x801CD3E4",
-      "evidence": "evidence.tsv function and name rows for 0x801CD3E4 (FontDrawText, a registered holdout of src/engine/Font.c, original bytes linked); called by name from src/engine/cu_801CDB5C.c (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x801CD3E4 (FontDrawText, a registered holdout of src/engine/Font.c, original bytes linked); called by name from src/engine/LLFont.c (n1e naming wave)."
     },
     "MemCAsyncOpen": {
       "address": "0x801D4A3C",
@@ -26479,6 +26483,52 @@
           "end": "0x803EE3C4"
         }
       ]
+    },
+    {
+      "source": "src/engine/LLFont.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv LLFont.c unit, names, types, data and compiler rows. All eight exact functions and the entire .rodata and .bss link with the existing holdouts mechanism. FontLLUploadPalettes stays a measured comparison and its original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CD79C",
+          "end": "0x801CDE98"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CDFE4",
+          "end": "0x801CE138"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF4B0",
+          "end": "0x802AF4D4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80383D20",
+          "end": "0x80383DA0"
+        }
+      ],
+      "link_roots": {
+        "discarded": [
+          "_FontLLTexelToUV"
+        ],
+        "evidence": "evidence.tsv linker and FAKEMATCH source-form rows at 0x802AF4B0-0x802AF4B8. The discarded helper retains the unused unsigned-conversion constant at its native offset."
+      },
+      "holdouts": {
+        "functions": [
+          {
+            "function": "FontLLUploadPalettes",
+            "evidence": "evidence.tsv source-form 0x801CDE98-0x801CDFE4"
+          }
+        ],
+        "evidence": "LLFont.c holdout covering FontLLUploadPalettes. The complete body remains under the unchanged engine_c comparison profile."
+      }
     }
   ]
 }

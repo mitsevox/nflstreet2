@@ -22,8 +22,8 @@ int UISGetFont(int a, int b);
 void FontResetRenderState(void);
 int FontSetRenderColor(int index, NameTagColor_t value);
 void FontClearRenderFlags(int a);
-int fn_801CDB5C(int a, const char *b, int c, float d, float *pPosition);
-void fn_801CDD18(void);
+int FontLLRenderText(int a, const char *b, int c, float d, float *pPosition);
+void FontLLRenderBegin(void);
 int GlibRenderGetBin(int index);
 void GlibRenderSelectBin(int a);
 void MatSetStack(int a);
@@ -97,7 +97,7 @@ int PlyrNameTagDraw(PlyrNameTag_t *pInstance)
                 FontSetRenderColor(0, value);
             }
             FontClearRenderFlags(32);
-            fn_801CDD18();
+            FontLLRenderBegin();
             MatGetSlot(1, saved);
             MatGetSlot(1, matrix);
             matrix[2][0] = 0.0f;
@@ -111,7 +111,7 @@ int PlyrNameTagDraw(PlyrNameTag_t *pInstance)
             offset[1] = 0.0f;
             offset[2] = 0.0f;
             MatTranslate(offset);
-            fn_801CDB5C(pInstance->mUnknown20, pInstance->mpUnknown24, 1, 0.0f, pInstance->mUnknown4);
+            FontLLRenderText(pInstance->mUnknown20, pInstance->mpUnknown24, 1, 0.0f, pInstance->mUnknown4);
             MatPop();
             MatSetSlot(1, saved);
             LLFogEnable(state);

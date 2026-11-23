@@ -464,40 +464,40 @@ static void _FileDisplayErrorString(FileFontPos_t *pPos, unsigned int status)
     switch (status) {
     case 5:
         pPos->y = -40.0f;
-        fn_801CDB5C(_FileErrorFont, "The Disc Cover is open.", 1, 0.0f, &pPos->x);
+        FontLLRenderText(_FileErrorFont, "The Disc Cover is open.", 1, 0.0f, &pPos->x);
         pPos->y = 0.0f;
-        fn_801CDB5C(_FileErrorFont, "If you want to continue the game,", 1, 0.0f, &pPos->x);
+        FontLLRenderText(_FileErrorFont, "If you want to continue the game,", 1, 0.0f, &pPos->x);
         pPos->y = 40.0f;
-        fn_801CDB5C(_FileErrorFont, "please close the Disc Cover.", 1, 0.0f, &pPos->x);
+        FontLLRenderText(_FileErrorFont, "please close the Disc Cover.", 1, 0.0f, &pPos->x);
         break;
     case 4:
     case 6:
         pPos->y = -40.0f;
-        fn_801CDB5C(_FileErrorFont, "Please insert the", 1, 0.0f, &pPos->x);
+        FontLLRenderText(_FileErrorFont, "Please insert the", 1, 0.0f, &pPos->x);
         pPos->y = 0.0f;
         if (_File_strGameName) {
-            fn_801CDB5C(_FileErrorFont, _File_strGameName, 1, 0.0f, &pPos->x);
+            FontLLRenderText(_FileErrorFont, _File_strGameName, 1, 0.0f, &pPos->x);
         } else {
-            fn_801CDB5C(_FileErrorFont, "appropriate", 1, 0.0f, &pPos->x);
+            FontLLRenderText(_FileErrorFont, "appropriate", 1, 0.0f, &pPos->x);
         }
         pPos->y = 40.0f;
-        fn_801CDB5C(_FileErrorFont, "Game Disc.", 1, 0.0f, &pPos->x);
+        FontLLRenderText(_FileErrorFont, "Game Disc.", 1, 0.0f, &pPos->x);
         break;
     case 11:
         pPos->y = -40.0f;
-        fn_801CDB5C(_FileErrorFont, "The Game Disc could not be read.", 1, 0.0f, &pPos->x);
+        FontLLRenderText(_FileErrorFont, "The Game Disc could not be read.", 1, 0.0f, &pPos->x);
         pPos->y = 0.0f;
-        fn_801CDB5C(_FileErrorFont, "Please read the Nintendo GameCube\260", 1, 0.0f, &pPos->x);
+        FontLLRenderText(_FileErrorFont, "Please read the Nintendo GameCube\260", 1, 0.0f, &pPos->x);
         pPos->y = 40.0f;
-        fn_801CDB5C(_FileErrorFont, "Instruction Booklet for more information.", 1, 0.0f, &pPos->x);
+        FontLLRenderText(_FileErrorFont, "Instruction Booklet for more information.", 1, 0.0f, &pPos->x);
         break;
     case -1:
         pPos->y = -40.0f;
-        fn_801CDB5C(_FileErrorFont, "An error has occurred.", 1, 0.0f, &pPos->x);
+        FontLLRenderText(_FileErrorFont, "An error has occurred.", 1, 0.0f, &pPos->x);
         pPos->y = 0.0f;
-        fn_801CDB5C(_FileErrorFont, "Turn the power off and refer to the Nintendo GameCube\260", 1, 0.0f, &pPos->x);
+        FontLLRenderText(_FileErrorFont, "Turn the power off and refer to the Nintendo GameCube\260", 1, 0.0f, &pPos->x);
         pPos->y = 40.0f;
-        fn_801CDB5C(_FileErrorFont, "Instruction Booklet for further instructions.", 1, 0.0f, &pPos->x);
+        FontLLRenderText(_FileErrorFont, "Instruction Booklet for further instructions.", 1, 0.0f, &pPos->x);
         break;
     }
 }
@@ -559,15 +559,15 @@ void FileAsyncCheckError(void)
             current = DVDGetDriveStatus();
             FontResetRenderState();
             FontSetRenderColor(0, _File_FontColor);
-            fn_801CDD18();
+            FontLLRenderBegin();
             _FileDisplayErrorString(&pos, status);
             GlibSwapBuffers();
         } while (current == status);
         FontResetRenderState();
         FontSetRenderColor(0, _File_FontColor);
-        fn_801CDD18();
+        FontLLRenderBegin();
         pos.y = 0.0f;
-        fn_801CDB5C(_FileErrorFont, "Loading...", 1, 0.0f, &pos.x);
+        FontLLRenderText(_FileErrorFont, "Loading...", 1, 0.0f, &pos.x);
         GlibSwapBuffers();
         MatPop();
         SysSetSystemTime(level);

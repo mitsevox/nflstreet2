@@ -551,7 +551,7 @@ void UIGLibTextDraw(Text_80221BF0 *pText)
         FontSetShadowOffset(pText->unk_0C[0], pText->unk_0C[1], pText->unk_0C[2]);
     }
     if (fn_80220CE4() != 2) {
-        fn_801CDD18();
+        FontLLRenderBegin();
         fn_80220CDC(2);
     }
     fn_80220CFC(2);
@@ -577,7 +577,7 @@ void UIGLibTextDraw(Text_80221BF0 *pText)
         pLine = pString + pRange->unk_00;
         Saved = pString[pRange->unk_02];
         pString[pRange->unk_02] = '\0';
-        fn_801CDB5C(pItem->pFont, pLine, pText->Flags & 0xF, 0.0f, Pos);
+        FontLLRenderText(pItem->pFont, pLine, pText->Flags & 0xF, 0.0f, Pos);
         pText->pBuffer->pText[pRange->unk_02] = Saved;
         Pos[1] += LineHeight;
     }

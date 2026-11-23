@@ -212,7 +212,7 @@ int FontAddFont(void *pFile, int id)
         error = 0x110002;
     } else {
         if (_Font_State.mNumFonts == 0) {
-            fn_801CDE98(&_Font_State.mpPalette0, &_Font_State.mpPalette1, &_Font_State.mpPalette2);
+            FontLLUploadPalettes(&_Font_State.mpPalette0, &_Font_State.mpPalette1, &_Font_State.mpPalette2);
         }
         if (!(pEntry = DSNewListNode(_Font_State.mpList))) {
             error = SysGetLastError();
@@ -245,7 +245,7 @@ int FontAddFontFromBuffer(void *pFile, int id, FontHeader_t *pData)
         error = 0x110002;
     } else {
         if (_Font_State.mNumFonts == 0) {
-            fn_801CDE98(&_Font_State.mpPalette0, &_Font_State.mpPalette1, &_Font_State.mpPalette2);
+            FontLLUploadPalettes(&_Font_State.mpPalette0, &_Font_State.mpPalette1, &_Font_State.mpPalette2);
         }
         if (!(pEntry = DSNewListNode(_Font_State.mpList))) {
             error = SysGetLastError();
@@ -285,7 +285,7 @@ int FontRemoveFont(int id)
             error = 0x110004;
         }
         if (_Font_State.mNumFonts == 0) {
-            fn_801CDFE4(_Font_State.mpPalette0, _Font_State.mpPalette1, _Font_State.mpPalette2);
+            FontLLReleasePalettes(_Font_State.mpPalette0, _Font_State.mpPalette1, _Font_State.mpPalette2);
         }
     }
     SysSetLastErrorFunc(error);
@@ -314,7 +314,7 @@ Font_t *FontCreateFont(int id)
         } else {
             pFont->mpKern = 0;
         }
-        fn_801CE134(pFont);
+        FontLLCreateFont(pFont);
     } else {
         error = 0x110004;
     }
@@ -324,7 +324,7 @@ Font_t *FontCreateFont(int id)
 
 void FontUploadTextures(Font_t *pFont, int a)
 {
-    fn_801CDFE8(pFont, _Font_State.mpPalette0, _Font_State.mpPalette1, _Font_State.mpPalette2, a);
+    FontLLUploadTextures(pFont, _Font_State.mpPalette0, _Font_State.mpPalette1, _Font_State.mpPalette2, a);
 }
 
 int FontDestroyFont(Font_t *pFont)
@@ -334,7 +334,7 @@ int FontDestroyFont(Font_t *pFont)
     if (!Font_ModuleActive) {
         error = 0x110002;
     } else {
-        fn_801CE108(pFont);
+        FontLLReleaseTextures(pFont);
         error = fn_801D2BD0(pFont);
     }
     SysSetLastErrorFunc(error);
