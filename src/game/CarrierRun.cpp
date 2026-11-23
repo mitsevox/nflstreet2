@@ -241,7 +241,6 @@ static inline T _CarrierRunClamp(T value, T low, T high)
 typedef int (*CarrierRunMoveTest_t)(Object_80039F5C *, Object_80039F5C *, float, int, int, int);
 extern const CarrierRunMoveTest_t _CarrierRun_apMoveTests[7];
 
-#if defined(DECOMP_COMPARE)
 extern "C" int CarrierRunHasDefenderAhead(Object_80039F5C *p)
 {
     int result = fn_800ABDA4(p->mIdBytes[2]) == 0;
@@ -600,14 +599,13 @@ extern "C" void CarrierRunAvoidPlayer(Object_80039F5C *p, OptionRunControl_t *co
         angle = 0x400000;
     }
     fn_801CFB18(angle);
-    if (control->mUnknown40 < 0.72f
+    limit = 0.72f;
+    if (control->mUnknown40 < limit
         || (MathAngleDiff(direction, motion->mFacing) <= 0xE38E2
             && ((other->mId >> 8) & 0xFF) == p->mIdBytes[2] && other->mId == p->mUnknown560.mUnknown44)) {
         control->mUnknown52 = 0;
     }
 }
-
-#endif
 
 extern "C" void CarrierRunKeepInBounds(Object_80039F5C *p, OptionRunControl_t *control, int)
 {

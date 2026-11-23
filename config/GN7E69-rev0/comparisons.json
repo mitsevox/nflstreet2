@@ -31226,19 +31226,19 @@
     {
       "source": "src/game/CarrierRun.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8012CE60-0x80130494 (src/game/CarrierRun.cpp) and the source-form rows from 0x8012CE60. Documented holdout at the start of .text: 0x8012CE60-0x8012DDCC is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes with its pool 0x8029F9A0-0x8029FA20 (0x8012D8A8 is near-miss; the six functions before it are exact); the rest of the file is linked through units.json",
+      "evidence": "evidence.tsv source-form 0x8012D8A8-0x8012DDCC documents the original-byte function holdout.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8012CE60",
+          "start": "0x8012D8A8",
           "end": "0x8012DDCC"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029F9A0",
-          "end": "0x8029FA20"
+          "end": "0x8029FB20"
         },
         {
           "section": ".data",
@@ -31254,36 +31254,6 @@
         }
       ],
       "functions": [
-        {
-          "symbol": "CarrierRunHasDefenderAhead",
-          "start": "0x8012CE60",
-          "end": "0x8012CEF4"
-        },
-        {
-          "symbol": "CarrierRunCountRetreat",
-          "start": "0x8012CEF4",
-          "end": "0x8012CFA0"
-        },
-        {
-          "symbol": "CarrierRunAddSideCosts",
-          "start": "0x8012CFA0",
-          "end": "0x8012D1E4"
-        },
-        {
-          "symbol": "CarrierRunCanUseSideline",
-          "start": "0x8012D1E4",
-          "end": "0x8012D258"
-        },
-        {
-          "symbol": "CarrierRunSteerToSideline",
-          "start": "0x8012D258",
-          "end": "0x8012D4FC"
-        },
-        {
-          "symbol": "CarrierRunPickHeading",
-          "start": "0x8012D4FC",
-          "end": "0x8012D8A8"
-        },
         {
           "symbol": "CarrierRunAvoidPlayer",
           "start": "0x8012D8A8",
