@@ -41,7 +41,7 @@ extern "C" Class_801B44BC *PATH_createstreamimp(int flags, int a, float b)
     }
     if (!acquired)
         return 0;
-    if (!fn_801B34DC(flags))
+    if (!PATHI_switchvoice(flags))
         return 0;
     Class_801B44BC *track = 0;
     PathTrack_t *p = PATHI_gettrackptr(flags);
@@ -93,7 +93,7 @@ extern "C" Class_801B44BC *PATH_createbankobject(int flags)
     }
     if (!acquired)
         return 0;
-    if (!fn_801B34DC(flags))
+    if (!PATHI_switchvoice(flags))
         return 0;
     Class_801B44BC *track = 0;
     PathTrack_t *p = PATHI_gettrackptr(flags);
@@ -114,7 +114,7 @@ extern "C" Class_801B44BC *PATH_createbankobject(int flags)
 
 extern "C" int PATHI_createtrack(int flags, PathfinderTrackData_t *data)
 {
-    if (!fn_801B34DC(flags))
+    if (!PATHI_switchvoice(flags))
         return -8;
     int result = PATHI_inittrack(flags, data);
     if (result < 0)
@@ -240,7 +240,7 @@ extern "C" int PATHI_dispatchtrackstate(int state)
 {
     int i = 0;
     for (; i < 4; ++i) {
-        if (lbl_802F47D0[i] && fn_801B3480(i, 0xFFFFFFFF)) {
+        if (lbl_802F47D0[i] && PATHI_switchproject(i, 0xFFFFFFFF)) {
             for (int j = 0; j < 24; ++j) {
                 PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
                 if (p && !(p->mUnknown8.word & 0x40) && p->mUnknown100) {

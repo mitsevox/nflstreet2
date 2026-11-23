@@ -8,7 +8,7 @@ extern "C" {
 
 void *PATHI_memalloc(int size);
 void PATHI_memfree(void *p);
-void fn_801B3A88(void);
+void PATHI_servicetask(void);
 int STREAM_overhead(int count, int filters, int taps);
 int DebugPrintf(const char *format, ...);
 void SndSetServiceCallback(void (*callback)(int a, int b));
@@ -65,7 +65,7 @@ namespace Path {
 
 void PathToReal5::TaskService(int a, int b)
 {
-    fn_801B3A88();
+    PATHI_servicetask();
 }
 
 void *PathToReal5::operator new(unsigned int size)

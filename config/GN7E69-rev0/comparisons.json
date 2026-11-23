@@ -30174,50 +30174,31 @@
     {
       "source": "src/engine/pathserv.c",
       "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0 (src/engine/pathserv.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
+      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, header-string data row and HOLDOUT source-form rows. Six exact bodies and the native .rodata link. The sort and reconstructed project service keep their original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B343C",
           "end": "0x801B3AD0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEA58",
+          "end": "0x802AEA60"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801B343C",
-          "start": "0x801B343C",
-          "end": "0x801B3480"
-        },
-        {
-          "symbol": "fn_801B3480",
-          "start": "0x801B3480",
-          "end": "0x801B34DC"
-        },
-        {
-          "symbol": "fn_801B34DC",
-          "start": "0x801B34DC",
-          "end": "0x801B3568"
-        },
-        {
-          "symbol": "fn_801B3568",
+          "symbol": "PATHI_sortprojects",
           "start": "0x801B3568",
           "end": "0x801B3724"
         },
         {
-          "symbol": "fn_801B39B8",
-          "start": "0x801B39B8",
-          "end": "0x801B3A88"
-        },
-        {
-          "symbol": "fn_801B3A88",
-          "start": "0x801B3A88",
-          "end": "0x801B3AAC"
-        },
-        {
-          "symbol": "fn_801B3AAC",
-          "start": "0x801B3AAC",
-          "end": "0x801B3AD0"
+          "symbol": "PATHI_serviceproject",
+          "start": "0x801B3724",
+          "end": "0x801B39B8"
         }
       ]
     },

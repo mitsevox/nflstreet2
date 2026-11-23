@@ -72,7 +72,7 @@ extern "C" int PATH_event(int flags, unsigned int id)
     Sequence_801B84E4 *copy = 0;
     id &= 0x00FFFFFF;
     for (unsigned int i = 0; i < 4; ++i) {
-        if (fn_801B3480((unsigned char)i, flags) &&
+        if (PATHI_switchproject((unsigned char)i, flags) &&
             (voices & (0x01000000 << lbl_803EBB28->mUnknown18->mUnknownC))) {
             Entry_801B63F0 *event = PATHI_findevent(id);
             if (event) {

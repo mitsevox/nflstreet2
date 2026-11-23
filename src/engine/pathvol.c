@@ -27,7 +27,7 @@ extern "C" void PATH_volume(int flags, signed char volume)
         if (flags == -1)
             lbl_803EBB3A = volume;
         for (int i = 0; i < 4; ++i) {
-            if (fn_801B3480(i, flags)) {
+            if (PATHI_switchproject(i, flags)) {
                 for (int j = 0; j < 24; ++j) {
                     PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
                     // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0, as in pathcontrol.c
@@ -55,7 +55,7 @@ extern "C" void PATH_fade(int flags, int a, int b, int c)
     }
     if (acquired) {
         for (int i = 0; i < 4; ++i) {
-            if (fn_801B3480(i, flags)) {
+            if (PATHI_switchproject(i, flags)) {
                 for (int j = 0; j < 24; ++j) {
                     PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
                     // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0, as in pathcontrol.c

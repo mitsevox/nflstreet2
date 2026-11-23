@@ -19,7 +19,7 @@ extern "C" int PATH_control(int flags, int value)
         return -18;
     if ((unsigned int)value <= 127) {
         for (int i = 0; i < 4; ++i) {
-            if (fn_801B3480((unsigned char)i, flags)) {
+            if (PATHI_switchproject((unsigned char)i, flags)) {
                 for (int j = 0; j < 24; ++j) {
                     PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
                     // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0; == 1 drops the target xori
@@ -47,7 +47,7 @@ extern "C" void PATH_pause(int flags, unsigned char value)
         if (flags == -1)
             lbl_803EBB39 = value;
         for (int i = 0; i < 4; ++i) {
-            if (fn_801B3480((unsigned char)i, flags)) {
+            if (PATHI_switchproject((unsigned char)i, flags)) {
                 for (int j = 0; j < 24; ++j) {
                     PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
                     // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0; == 1 drops the target xori
@@ -76,7 +76,7 @@ extern "C" int PATH_status(int flags, PathfinderStatus_t *info)
         return -18;
     int result = -8;
     PathTrack_t *p = PATHI_gettrackptr(flags);
-    if (p && fn_801B34DC(flags))
+    if (p && PATHI_switchvoice(flags))
         result = PATHI_status(p, info);
     lbl_803EBB28 = 0;
     --lbl_803EBB24;
@@ -104,7 +104,7 @@ extern "C" void PATH_stop(int flags)
     }
     if (acquired) {
         for (int i = 0; i < 4; ++i) {
-            if (fn_801B3480(i, flags)) {
+            if (PATHI_switchproject(i, flags)) {
                 for (int j = 0; j < 24; ++j) {
                     PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
                     // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0; == 1 drops the target xori

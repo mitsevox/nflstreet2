@@ -1580,6 +1580,22 @@
     "PlyrAlignMoveToTarget": {
       "address": "0x800E2FE4",
       "evidence": "evidence.tsv function and name rows for the PlyrAlignApproach.cpp holdout, called by PlyrAlignUpdate in src/game/PlyrTackle.cpp."
+    },
+    "PATHI_setfadevolume": {
+      "address": "0x801B4A24",
+      "evidence": "evidence.tsv function/name rows for PATHI_setfadevolume at 0x801B4A24. Original-owned code used by PATHI_serviceproject, call at 0x801B37D8."
+    },
+    "PATHI_setsfxfadevolume": {
+      "address": "0x801B4CE4",
+      "evidence": "evidence.tsv function/name rows for PATHI_setsfxfadevolume at 0x801B4CE4. Original-owned code used by PATHI_serviceproject, call at 0x801B37EC."
+    },
+    "PATHI_setdrylevelfadevolume": {
+      "address": "0x801B4F50",
+      "evidence": "evidence.tsv function/name rows for PATHI_setdrylevelfadevolume at 0x801B4F50. Original-owned code used by PATHI_serviceproject, call at 0x801B3800."
+    },
+    "PATHI_seeknextnode": {
+      "address": "0x801B721C",
+      "evidence": "evidence.tsv function/name rows for PATHI_seeknextnode at 0x801B721C. Original-owned code used by PATHI_serviceproject, call at 0x801B397C."
     }
   },
   "units": [
@@ -25934,6 +25950,44 @@
           "ScrmDefenseIsStillNearLine"
         ],
         "evidence": "evidence.tsv linker rows of the file-static functions of src/game/Scrimmage.cpp that the target linker discarded (comparisons.json discarded); only their pools remain"
+      }
+    },
+    {
+      "source": "src/engine/pathserv.c",
+      "profile": "path_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, its name and source-form rows, and data row 0x802AEA58-0x802AEA60. Six exact service routines and the complete native header string link while the sort and per-project service retain original code.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B343C",
+          "end": "0x801B3568"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B39B8",
+          "end": "0x801B3AD0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEA58",
+          "end": "0x802AEA60"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "PATHI_sortprojects",
+            "evidence": "evidence.tsv source-form 0x801B3568-0x801B3724"
+          },
+          {
+            "function": "PATHI_serviceproject",
+            "evidence": "evidence.tsv source-form 0x801B3724-0x801B39B8"
+          }
+        ],
+        "evidence": "merge notes of the pull request linking the exact pathserv.c functions"
       }
     },
     {

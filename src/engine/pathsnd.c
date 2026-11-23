@@ -143,7 +143,7 @@ struct Object_8027E518 : Object_8027D6E8 {
 extern "C" {
 
 void *PATHI_memalloc(int size);
-void fn_801B3A88(void);
+void PATHI_servicetask(void);
 void SNDSYS_entercritical(void);
 void SNDSYS_leavecritical(void);
 int SNDSTRM_pitchmult(int handle, int value);

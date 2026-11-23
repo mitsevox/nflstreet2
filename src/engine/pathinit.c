@@ -112,7 +112,7 @@ extern "C" int PATH_addmapfile(PathMapHeader_t *map)
             memset(lbl_802F47D0[slot], 0, sizeof(Bank_801B3480));
             lbl_802F47D0[slot]->mUnknown18 = map;
             lbl_802F47D0[slot]->mUnknown14 = (0x10000000 << count) | (0x01000000 << voice);
-            fn_801B3480(slot, lbl_802F47D0[slot]->mUnknown14);
+            PATHI_switchproject(slot, lbl_802F47D0[slot]->mUnknown14);
             lbl_803EBB28->mUnknown1C = (short *)((char *)map + lbl_803EBB28->mUnknown18->mUnknown14);
             lbl_803EBB28->mUnknown20 = (char *)map + lbl_803EBB28->mUnknown18->mUnknown18;
             lbl_803EBB28->mUnknown24 = (short *)((char *)map + lbl_803EBB28->mUnknown18->mUnknown1C);
@@ -155,7 +155,7 @@ extern "C" int PATH_destroy(int flags)
         return 0;
     int count = 0;
     for (int i = 0; i < 4; ++i) {
-        if (fn_801B3480((unsigned char)i, flags)) {
+        if (PATHI_switchproject((unsigned char)i, flags)) {
             for (int j = 0; j < 24; ++j) {
                 PathTrack_t *p = lbl_803EBB28->mUnknown40[j];
                 // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0, as in pathcontrol.c; == 1 drops the target xori
@@ -174,7 +174,7 @@ extern "C" int PATH_destroy(int flags)
             }
         }
     }
-    fn_801B3568();
+    PATHI_sortprojects();
     lbl_803EBB28 = 0;
     --lbl_803EBB24;
     return count;
