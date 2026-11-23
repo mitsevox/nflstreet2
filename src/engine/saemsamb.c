@@ -1,25 +1,10 @@
 /* Registers AEMS sound-module banks and initializes the sound module player's shared state. */
 
+#include "engine/sndaems_state.h"
+
 struct BankVer_t;
 
 extern "C" {
-
-struct SndAemsTimerClient_t;
-struct SndAemsModuleBankLink_t;
-
-struct SndAemsState_t {
-    SndAemsTimerClient_t *mpTimerClients;
-    SndAemsModuleBankLink_t *mpModuleBanks;
-    unsigned char unk_0x8[0x20];
-    int unk_0x28;
-    int unk_0x2C;
-    void (*mpBeforeAddBank)(void);
-    void (*mpBeforeRemoveBank)(void);
-
-    SndAemsState_t() : mpTimerClients(0), mpModuleBanks(0), unk_0x28(0), unk_0x2C(0) {}
-};
-
-extern SndAemsState_t sndaems;
 
 typedef struct SndAemsModuleBank_t {
     unsigned char unk_0x0[0x14];

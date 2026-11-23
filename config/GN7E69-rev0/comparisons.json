@@ -33207,7 +33207,7 @@
     {
       "source": "src/engine/saemsamb.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x802697D8-0x802699F4, the sound_cxx compiler row, constructor and sndaems data rows and the source-form row for the unresolved branch in SNDAEMS_addmodulebank. The two generated functions and the constructor word are exact as comparisons; original bytes remain linked.",
+      "evidence": "evidence.tsv provisional unit and source-form rows 0x802697D8-0x80269990, sound_cxx and constructor and sndaems data rows. Compares the one non-exact add function that retains original bytes. The linked native initializer and wrapper provide the original .ctors entry and BSS state.",
       "sections": [
         {
           "section": ".text",
@@ -33233,16 +33233,6 @@
           "symbol": "SNDAEMS_addmodulebank",
           "start": "0x802697D8",
           "end": "0x80269990"
-        },
-        {
-          "symbol": "__static_initialization_and_destruction_0",
-          "start": "0x80269990",
-          "end": "0x802699C8"
-        },
-        {
-          "symbol": "_GLOBAL_.I.SNDAEMS_addmodulebank",
-          "start": "0x802699C8",
-          "end": "0x802699F4"
         }
       ]
     },

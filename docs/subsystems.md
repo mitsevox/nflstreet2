@@ -65,6 +65,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 
 - `src/dolphin/dvd/dvdFatal.c` (0x80242018-0x80242048) dispatches the DVD driver's fatal-message callback. The 48-byte wrapper, retained messages and pointers, and callback slot are linked. The FIFA Soccer 2005 and UEFA Champions League 2004–05 link maps place the wrapper between the same disk-ID and boot-file helpers.
 - `src/engine/ef_pow.c` (0x80260428-0x80260B1C) provides single-precision powers for game math and decimal attribute parsing. The 1,780-byte routine and its two native constant pools are linked. The matching-size NASCAR 2005 function corroborates the provisional historical file boundaries.
+- `src/engine/saemsamb.c` (0x802697D8-0x802699F4) registers AEMS module banks and initializes the shared timer and bank state. The native initializer, constructor entry and state storage are linked. The module-bank add function remains a holdout.
 - `src/engine/salloc.c` (0x80269CE8-0x8026A2DC) reserves, allocates, releases and looks up voices in the sound system. All four routines and the native handle and scratch storage are linked.
 
 - `src/engine/smemman.c` (0x8026B520-0x8026B898) constrains, initializes, allocates from and frees the sound heap. All five functions are linked.

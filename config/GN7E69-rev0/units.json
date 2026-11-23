@@ -24212,6 +24212,40 @@
       ]
     },
     {
+      "source": "src/engine/saemsamb.c",
+      "profile": "sound_cxx_holdouts",
+      "evidence": "evidence.tsv unit, function, name, data and source-form rows for saemsamb.c, with the sound_cxx compiler row. The native static initializer and wrapper, constructor word and 56 bytes of module state are linked. SNDAEMS_addmodulebank is a measured holdout and keeps its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80269990",
+          "end": "0x802699F4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6BCC",
+          "end": "0x803A6C04"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B4C",
+          "end": "0x80289B50"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "SNDAEMS_addmodulebank",
+            "evidence": "evidence.tsv source-form 0x802697D8-0x80269990"
+          }
+        ],
+        "evidence": "evidence.tsv source-form 0x802697D8-0x80269990 records the measured branch difference."
+      }
+    },
+    {
       "source": "src/engine/saemstimupdt.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x80269C70-0x80269CE8 (src/engine/saemstimupdt.c), its function and name rows, and the sound_cxx compiler row; every function exact, promoted from comparison-only.",

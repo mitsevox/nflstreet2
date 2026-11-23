@@ -2,6 +2,8 @@
    player. While the module state is locked it only counts the missed tick; otherwise it calls
    every client on the module's timer list with its context. */
 
+#include "engine/sndaems_state.h"
+
 extern "C" {
 
 typedef struct SndAemsTimerClient_t {
@@ -11,26 +13,16 @@ typedef struct SndAemsTimerClient_t {
     void *mpContext;
 } SndAemsTimerClient_t;
 
-typedef struct SndAemsTimerState_t {
-    SndAemsTimerClient_t *mpClients;
-    unsigned char unk_0x4[5];
-    unsigned char mMissedTicks;
-    unsigned char unk_0xA[2];
-    int mLocked;
-} SndAemsTimerState_t;
-
-extern SndAemsTimerState_t lbl_803A6BCC;
-
 void SNDAEMSI_timerupdate(void *unused)
 {
-    SndAemsTimerState_t *state = &lbl_803A6BCC;
+    SndAemsState_t *state = &sndaems;
     SndAemsTimerClient_t *client;
 
     if (state->mLocked != 0) {
         state->mMissedTicks++;
         return;
     }
-    client = lbl_803A6BCC.mpClients;
+    client = sndaems.mpTimerClients;
     while (client != 0) {
         register SndAemsTimerClient_t *next asm("r0") = client->mpNext;
         register void *arg asm("r3") = (void *)client->mpCallback;
