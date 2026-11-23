@@ -798,11 +798,11 @@ int fn_801787A0(void);
 }
 
 extern "C" {
-int fn_80238258(const void *pA, const void *pB, unsigned int size);
+int SyncStateCompareBytes(const void *pA, const void *pB, unsigned int size);
 }
 
 extern "C" {
-int fn_80238278(const void *p, int size, int seed);
+int Crc32Update(const void *p, int size, int seed);
 }
 
 extern "C" {
@@ -4478,10 +4478,10 @@ extern "C" int fn_800F0E2C(void *p, void *q) {
     if (pOther != 0) {
         result = 0;
         result |= pRecord->mCount != pOther->mCount;
-        result |= fn_80238258(pRecord->mpEntries, pOther->mpEntries, pRecord->mCount * 116);
+        result |= SyncStateCompareBytes(pRecord->mpEntries, pOther->mpEntries, pRecord->mCount * 116);
     } else {
-        result = fn_80238278(pRecord, 8, 0);
-        result = fn_80238278(pRecord->mpEntries, pRecord->mCount * 116, result);
+        result = Crc32Update(pRecord, 8, 0);
+        result = Crc32Update(pRecord->mpEntries, pRecord->mCount * 116, result);
     }
     return result;
 }
@@ -23616,7 +23616,7 @@ int fn_8011EFD4(void *p, void *q)
         result = (pState->mUnknown4 != pOther->mUnknown4) | (pState->mUnknown0 != pOther->mUnknown0);
         result |= memcmp(&pState->mUnknown8, &pOther->mUnknown8, sizeof(pState->mUnknown8));
     } else {
-        result = fn_80238278(pState, 576 + pState->mUnknown572 * sizeof(Record_8011F4F8), 0);
+        result = Crc32Update(pState, 576 + pState->mUnknown572 * sizeof(Record_8011F4F8), 0);
     }
     return result;
 }
@@ -23918,27 +23918,27 @@ int fn_8011F71C(void *p, void *q)
         result |= pLookup->mUnknown18 != pOther->mUnknown18;
         result |= pLookup->mUnknown19 != pOther->mUnknown19;
         result |= pLookup->mUnknown20 != pOther->mUnknown20;
-        result |= fn_80238258(pLookup->mpUnknown0 + ((char *)pLookup - (char *)lbl_803EB09C),
+        result |= SyncStateCompareBytes(pLookup->mpUnknown0 + ((char *)pLookup - (char *)lbl_803EB09C),
                               pOther->mpUnknown0 + ((char *)pOther - (char *)lbl_803EB09C),
                               pLookup->mUnknown16);
-        result |= fn_80238258(pLookup->mpUnknown4 + ((char *)pLookup - (char *)lbl_803EB09C),
+        result |= SyncStateCompareBytes(pLookup->mpUnknown4 + ((char *)pLookup - (char *)lbl_803EB09C),
                               pOther->mpUnknown4 + ((char *)pOther - (char *)lbl_803EB09C),
                               pLookup->mUnknown16);
-        result |= fn_80238258((char *)pLookup->mpUnknown8 + ((char *)pLookup - (char *)lbl_803EB09C),
+        result |= SyncStateCompareBytes((char *)pLookup->mpUnknown8 + ((char *)pLookup - (char *)lbl_803EB09C),
                               (char *)pOther->mpUnknown8 + ((char *)pOther - (char *)lbl_803EB09C),
                               pLookup->mUnknown16 * sizeof(Entry_8011FBE0));
-        result |= fn_80238258((char *)pLookup->mpUnknown12 + ((char *)pLookup - (char *)lbl_803EB09C),
+        result |= SyncStateCompareBytes((char *)pLookup->mpUnknown12 + ((char *)pLookup - (char *)lbl_803EB09C),
                               (char *)pOther->mpUnknown12 + ((char *)pOther - (char *)lbl_803EB09C),
                               pLookup->mUnknown16 * sizeof(int));
     } else {
-        result = fn_80238278(pLookup, sizeof(Lookup_8012078C), 0);
-        result = fn_80238278(pLookup->mpUnknown0 + ((char *)pLookup - (char *)lbl_803EB09C),
+        result = Crc32Update(pLookup, sizeof(Lookup_8012078C), 0);
+        result = Crc32Update(pLookup->mpUnknown0 + ((char *)pLookup - (char *)lbl_803EB09C),
                              pLookup->mUnknown16, result);
-        result = fn_80238278(pLookup->mpUnknown4 + ((char *)pLookup - (char *)lbl_803EB09C),
+        result = Crc32Update(pLookup->mpUnknown4 + ((char *)pLookup - (char *)lbl_803EB09C),
                              pLookup->mUnknown16, result);
-        result = fn_80238278((char *)pLookup->mpUnknown8 + ((char *)pLookup - (char *)lbl_803EB09C),
+        result = Crc32Update((char *)pLookup->mpUnknown8 + ((char *)pLookup - (char *)lbl_803EB09C),
                              pLookup->mUnknown16 * sizeof(Entry_8011FBE0), result);
-        result = fn_80238278((char *)pLookup->mpUnknown12 + ((char *)pLookup - (char *)lbl_803EB09C),
+        result = Crc32Update((char *)pLookup->mpUnknown12 + ((char *)pLookup - (char *)lbl_803EB09C),
                              pLookup->mUnknown16 * sizeof(int), result);
     }
     return result;

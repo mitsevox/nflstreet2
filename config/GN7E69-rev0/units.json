@@ -26619,6 +26619,25 @@
           "end": "0x803B5060"
         }
       ]
+    },
+    {
+      "source": "src/engine/crc32.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv crc32.c unit, function/name, compiler, source-form and data rows. Both functions and the complete native 1,024-byte reflected lookup table are exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80238258",
+          "end": "0x802382CC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FB464",
+          "end": "0x802FB864"
+        }
+      ]
     }
   ]
 }

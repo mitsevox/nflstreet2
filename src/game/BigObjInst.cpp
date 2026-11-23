@@ -32,7 +32,7 @@ int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
 int fn_801BCCAC(void *a, void *b, int c, void *d, int e, int f);
 void fn_801BE420(void *a, void *b, void *c, BigObjInst *pObject, float d);
 void QuatFromEulerYZX(float *pOut, int x, int y, int z);
-int fn_80238278(const void *p, int size, int seed);
+int Crc32Update(const void *p, int size, int seed);
 void *SyncStateGetData(void *pHandle);
 
 BigObjPool_t *_BigObjInst_pPool = 0;
@@ -91,7 +91,7 @@ int BigObjPoolCompare(void *p, void *q)
         for (i = 0; i < pPool->mMaxObjects; i++) {
         }
     } else {
-        result = fn_80238278(pPool, 16, 0);
+        result = Crc32Update(pPool, 16, 0);
         for (i = 0; i < pPool->mMaxObjects; i++) {
         }
     }

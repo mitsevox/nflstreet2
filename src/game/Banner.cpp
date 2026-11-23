@@ -19,7 +19,7 @@ struct BannerSet_t {
 
 extern "C" {
 void *SyncStateGetData(void *pHandle);
-int fn_80238258(const void *pA, const void *pB, unsigned int size);
+int SyncStateCompareBytes(const void *pA, const void *pB, unsigned int size);
 }
 
 static BannerSet_t *_Banner_pSet;
@@ -39,7 +39,7 @@ int BannerCompare(void *p, void *q)
     if (pB != 0) {
         /* Only the fields before the text are compared. */
         for (i = 0; i <= 5; i++) {
-            result |= fn_80238258(&pA->mEntries[i], &pB->mEntries[i], 16);
+            result |= SyncStateCompareBytes(&pA->mEntries[i], &pB->mEntries[i], 16);
         }
     } else {
         return 0;

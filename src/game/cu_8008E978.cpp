@@ -298,7 +298,7 @@ struct Timer_8009D338 {
 };
 
 extern "C" {
-int fn_80238278(const void *p, int size, int seed);
+int Crc32Update(const void *p, int size, int seed);
 }
 
 extern "C" {
@@ -600,7 +600,7 @@ int PerGetDeviceStatus(int a);
 }
 
 extern "C" {
-int fn_80238258(const void *pA, const void *pB, unsigned int size);
+int SyncStateCompareBytes(const void *pA, const void *pB, unsigned int size);
 }
 
 extern "C" {
@@ -9338,7 +9338,7 @@ extern "C" int fn_80092168(void *p, void *q)
     if (pOther != 0) {
         result = memcmp(&pBlock->mUnknown80, &pOther->mUnknown80, sizeof(Block_800920EC));
     } else {
-        result = fn_80238278(&pBlock->mUnknown80, sizeof(Block_800920EC), 0);
+        result = Crc32Update(&pBlock->mUnknown80, sizeof(Block_800920EC), 0);
     }
     return result;
 }
@@ -13664,9 +13664,9 @@ extern "C" int fn_8009B5E8(void *p, void *q)
     int result;
 
     if (q != 0) {
-        result = fn_80238258(p, q, sizeof(Block_8009B720));
+        result = SyncStateCompareBytes(p, q, sizeof(Block_8009B720));
     } else {
-        result = fn_80238278(&((Block_8009B720 *)p)->mUnknown4, sizeof(Block_8009B5E8), 0);
+        result = Crc32Update(&((Block_8009B720 *)p)->mUnknown4, sizeof(Block_8009B5E8), 0);
     }
     return result;
 }
@@ -14061,7 +14061,7 @@ extern "C" int fn_8009C220(void *pA, void *pB)
     PoseCompare_8009C220 *pOther = (PoseCompare_8009C220 *)pB;
     int result = 0;
     for (int i = 0; i < 3; i++) {
-        result |= fn_80238258(&p[i], &pOther[i], 20);
+        result |= SyncStateCompareBytes(&p[i], &pOther[i], 20);
         if (p[i].mpUnknown20 && pOther[i].mpUnknown20) {
             result |= p[i].mpUnknown20->mX != pOther[i].mpUnknown20->mX;
             result |= p[i].mpUnknown20->mY != pOther[i].mpUnknown20->mY;
@@ -14075,7 +14075,7 @@ extern "C" int fn_8009C220(void *pA, void *pB)
 
 extern "C" int fn_8009C328(Object_80039F5C *pA, Object_80039F5C *pB)
 {
-    int result = fn_80238258(pA, pB, 0x310);
+    int result = SyncStateCompareBytes(pA, pB, 0x310);
 
     return result | fn_8009C220(pA->mUnknown816, pB->mUnknown816);
 }
@@ -23217,8 +23217,8 @@ extern "C" int fn_800AFAD4(void *p, void *q)
     if (pOther != 0) {
         result = memcmp(pBlock->mpUnknown4, pOther->mpUnknown4, DSGetListMemSize(0, pBlock->mUnknown0, 4));
     } else {
-        result = fn_80238278(pBlock, 4, 0);
-        result = fn_80238278(pBlock->mpUnknown4, DSGetListMemSize(0, pBlock->mUnknown0, 4), result);
+        result = Crc32Update(pBlock, 4, 0);
+        result = Crc32Update(pBlock->mpUnknown4, DSGetListMemSize(0, pBlock->mUnknown0, 4), result);
     }
     return result;
 }
@@ -23766,12 +23766,12 @@ extern "C" int fn_800B0C70(void *p, void *q)
     int j;
 
     if (q != 0) {
-        result = fn_80238258(p, q, sizeof(Block_800B0CFC));
+        result = SyncStateCompareBytes(p, q, sizeof(Block_800B0CFC));
     } else {
-        result = fn_80238278(&pBlock->mUnknown2D0, 22, 0);
+        result = Crc32Update(&pBlock->mUnknown2D0, 22, 0);
         for (i = 0; i <= 1; i++) {
             for (j = 0; j < 5; j++) {
-                result = fn_80238278(pBlock->mEntries[i][j].mUnknown28, 31, result);
+                result = Crc32Update(pBlock->mEntries[i][j].mUnknown28, 31, result);
             }
         }
     }
@@ -24183,9 +24183,9 @@ extern "C" int fn_800B19E8(void *p, void *q)
     int result;
 
     if (pOther != 0) {
-        result = fn_80238258(&pBlock->mUnknown4, &pOther->mUnknown4, sizeof(State_800B19E8));
+        result = SyncStateCompareBytes(&pBlock->mUnknown4, &pOther->mUnknown4, sizeof(State_800B19E8));
     } else {
-        result = fn_80238278(&pBlock->mUnknown4, sizeof(State_800B19E8), 0);
+        result = Crc32Update(&pBlock->mUnknown4, sizeof(State_800B19E8), 0);
     }
     return result;
 }
@@ -25847,13 +25847,13 @@ extern "C" int fn_800B530C(void *p, void *q)
 
     if (pOther != 0) {
         result |= pBlock->mCount != pOther->mCount;
-        result |= fn_80238258(pBlock->mpEntries, pOther->mpEntries, pBlock->mCount * sizeof(Entry_800B5224));
+        result |= SyncStateCompareBytes(pBlock->mpEntries, pOther->mpEntries, pBlock->mCount * sizeof(Entry_800B5224));
         result |= pBlock->mUnknown5 != pOther->mUnknown5;
         result |= pBlock->mUnknown6[0] != pOther->mUnknown6[0];
         result |= pBlock->mUnknown6[1] != pOther->mUnknown6[1];
     } else {
-        result = fn_80238278(pBlock, sizeof(Block_800B62D8), 0);
-        result = fn_80238278(pBlock->mpEntries, pBlock->mCount * sizeof(Entry_800B5224), result);
+        result = Crc32Update(pBlock, sizeof(Block_800B62D8), 0);
+        result = Crc32Update(pBlock->mpEntries, pBlock->mCount * sizeof(Entry_800B5224), result);
     }
     return result;
 }
@@ -27308,9 +27308,9 @@ extern "C" int fn_800B898C(void *p, void *q)
     int result;
 
     if (q != 0) {
-        result = fn_80238258(p, q, sizeof(Block_800B95B4));
+        result = SyncStateCompareBytes(p, q, sizeof(Block_800B95B4));
     } else {
-        result = fn_80238278(p, sizeof(Block_800B95B4), 0);
+        result = Crc32Update(p, sizeof(Block_800B95B4), 0);
     }
     return result;
 }
@@ -30477,7 +30477,7 @@ extern "C" int fn_800BF45C(void *p, void *q)
     if (pOther == 0) {
         return 0;
     }
-    return fn_80238258(pBlock, pOther, 72) | fn_80238258(&pBlock->mUnknown98, &pOther->mUnknown98, 48);
+    return SyncStateCompareBytes(pBlock, pOther, 72) | SyncStateCompareBytes(&pBlock->mUnknown98, &pOther->mUnknown98, 48);
 }
 
 extern "C" void fn_800BF4B8(void)
@@ -34881,7 +34881,7 @@ extern "C" int fn_800C92CC(void *p, void *q)
             }
         }
     } else {
-        result = fn_80238278(pBlock, sizeof(Block_800C9D6C), 0);
+        result = Crc32Update(pBlock, sizeof(Block_800C9D6C), 0);
     }
     return result;
 }

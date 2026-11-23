@@ -271,8 +271,8 @@ void fn_8017C9E4(unsigned short team, int value);
 void fn_8017CA10(unsigned short team, int value);
 void fn_8017CA68(int team, int value);
 unsigned short fn_801BE648(void *p);
-int fn_80238258(const void *pA, const void *pB, unsigned int size);
-int fn_80238278(const void *p, int size, int seed);
+int SyncStateCompareBytes(const void *pA, const void *pB, unsigned int size);
+int Crc32Update(const void *p, int size, int seed);
 
 int PlayerMoveGetKind(Object_80039F5C *p);
 void StyleTrackerTraceEvent(int a);
@@ -1376,9 +1376,9 @@ extern "C" int StyleTrackerDestroyState(void *p, int value) {
 
 extern "C" int StyleTrackerCompareState(void *p, void *q) {
     if (q == 0) {
-        return fn_80238278(p, sizeof(StyleTrackerState_t), 0);
+        return Crc32Update(p, sizeof(StyleTrackerState_t), 0);
     }
-    return fn_80238258(p, q, sizeof(StyleTrackerState_t));
+    return SyncStateCompareBytes(p, q, sizeof(StyleTrackerState_t));
 }
 
 extern "C" int StyleTrackerSaveState(void *p, void *pBuffer) {

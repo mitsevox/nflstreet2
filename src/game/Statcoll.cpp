@@ -17,7 +17,7 @@ struct StatcollState_t {
 };
 
 extern "C" {
-int fn_80238278(const void *p, int size, int seed);
+int Crc32Update(const void *p, int size, int seed);
 
 static int _Statcoll_iUnused = 0;
 static StatcollState_t *_Statcoll_pState;
@@ -69,13 +69,13 @@ int StatcollBlockCompare(void *p, void *q)
             result |= memcmp(pState->mpValues, pOther->mpValues, pSet->mUnknown4 * 4);
         }
     } else {
-        result = fn_80238278(pState, sizeof(StatcollState_t), 0);
+        result = Crc32Update(pState, sizeof(StatcollState_t), 0);
         if (pState->mpValues != 0) {
-            result = fn_80238278(pSet, sizeof(CollideSet_t), result);
-            result = fn_80238278(pSet->mpUnknown0, pSet->mUnknown4 * sizeof(CollideObject_t), result);
-            result = fn_80238278(pSet->mpUnknown14[0], pSet->mUnknownC * sizeof(CollideShape_t), result);
-            result = fn_80238278(pSet->mpUnknown14[1], pSet->mUnknownC * sizeof(CollideShape_t), result);
-            result = fn_80238278(pState->mpValues, pSet->mUnknown4 * 4, result);
+            result = Crc32Update(pSet, sizeof(CollideSet_t), result);
+            result = Crc32Update(pSet->mpUnknown0, pSet->mUnknown4 * sizeof(CollideObject_t), result);
+            result = Crc32Update(pSet->mpUnknown14[0], pSet->mUnknownC * sizeof(CollideShape_t), result);
+            result = Crc32Update(pSet->mpUnknown14[1], pSet->mUnknownC * sizeof(CollideShape_t), result);
+            result = Crc32Update(pState->mpValues, pSet->mUnknown4 * 4, result);
         }
     }
     return result;

@@ -20584,31 +20584,6 @@
       ]
     },
     {
-      "source": "src/engine/crc32.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80238258-0x802382CC (src/engine/crc32.c, split from the former cu_802355E4 chunk in s1), its function, name and source-form rows. Complete reconstructed functions are measured; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80238258",
-          "end": "0x802382CC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80238258",
-          "start": "0x80238258",
-          "end": "0x80238278"
-        },
-        {
-          "symbol": "fn_80238278",
-          "start": "0x80238278",
-          "end": "0x802382CC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_8025E148.c",
       "profile": "engine_cpp_nosda",
       "evidence": "evidence.tsv provisional unit row 0x8025E148-0x8025FBD4 (src/engine/cu_8025E148.c), its compiler, source-form, function and name rows and the exact data rows 0x802B7268-0x802B72B0 (.rodata), 0x802FF4A8-0x802FF4B0 (.data) and 0x803A6A08-0x803A6A28 (.bss). Draft comparisons only; original assembly remains linked.",

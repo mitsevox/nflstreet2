@@ -42,7 +42,7 @@ typedef struct SyncTimeSave_t {
 static SyncTime_t *_SyncTime_pState = 0;
 static int _SyncTime_iStep = 1;
 extern void *SyncStateGetData(void *pHandle);
-extern int fn_80238278(const void *p, int size, int seed);
+extern int Crc32Update(const void *p, int size, int seed);
 int SyncTimeSaveState(void *p, void *pBuffer);
 void SyncTimeSetTime(unsigned int time);
 void SyncTimeCounterInit(void);
@@ -86,8 +86,8 @@ int SyncTimeCompareState(void *p, void *q)
         result |= pA->mTime != pB->mTime;
         result |= SyncTimeCounterGetTicks(pA->mpCounter) != SyncTimeCounterGetTicks(pB->mpCounter);
     } else {
-        result = fn_80238278(pA, sizeof(SyncTime_t), 0);
-        result = fn_80238278(pA->mpCounter, sizeof(SyncTimeCounter_t), result);
+        result = Crc32Update(pA, sizeof(SyncTime_t), 0);
+        result = Crc32Update(pA->mpCounter, sizeof(SyncTimeCounter_t), result);
     }
     return result;
 }

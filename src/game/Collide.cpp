@@ -16,7 +16,7 @@ struct CollideTypeReg_t {
 
 extern "C" {
 int fn_80178320(void);
-int fn_80238258(const void *pA, const void *pB, unsigned int size);
+int SyncStateCompareBytes(const void *pA, const void *pB, unsigned int size);
 }
 
 static CollideTypeReg_t _Collide_aTypes[8];
@@ -267,7 +267,7 @@ extern "C" void CollideTestPair(CollideObject_t *pA, CollideObject_t *pB)
 
 extern "C" int CollideCompareObjects(CollideObject_t *pA, CollideObject_t *pB, CollideObject_t *pBase)
 {
-    int result = fn_80238258(pA, pB, 32);
+    int result = SyncStateCompareBytes(pA, pB, 32);
     int i;
 
     result |= pA->mUnknown2F != pB->mUnknown2F;
@@ -275,9 +275,9 @@ extern "C" int CollideCompareObjects(CollideObject_t *pA, CollideObject_t *pB, C
     result |= pA->mUnknown2E != pB->mUnknown2E;
     result |= pA->mUnknown28 != pB->mUnknown28;
     for (i = 0; i < pA->mUnknown2F; i++) {
-        result |= fn_80238258((char *)&pA->mpUnknown20[i] + ((char *)pA - (char *)pBase),
+        result |= SyncStateCompareBytes((char *)&pA->mpUnknown20[i] + ((char *)pA - (char *)pBase),
                               (char *)&pB->mpUnknown20[i] + ((char *)pB - (char *)pBase), sizeof(CollideShape_t));
-        result |= fn_80238258((char *)&pA->mpUnknown24[i] + ((char *)pA - (char *)pBase),
+        result |= SyncStateCompareBytes((char *)&pA->mpUnknown24[i] + ((char *)pA - (char *)pBase),
                               (char *)&pB->mpUnknown24[i] + ((char *)pB - (char *)pBase), sizeof(CollideShape_t));
     }
     return result;

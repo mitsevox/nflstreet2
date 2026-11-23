@@ -50,8 +50,8 @@ void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void Vec3Add(float *pOut, float *pA, float *pB);
 void Vec3Mat33Mul(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void *SyncStateGetData(void *pHandle);
-int fn_80238258(const void *pA, const void *pB, unsigned int size);
-int fn_80238278(const void *p, int size, int seed);
+int SyncStateCompareBytes(const void *pA, const void *pB, unsigned int size);
+int Crc32Update(const void *p, int size, int seed);
 }
 
 static BallBlock_t *_Ball_pSet = 0;
@@ -127,13 +127,13 @@ int BallBlockCompare(void *p, void *q)
                                       (CollideObject_t *)((char *)pBallB->mState.mpRecord + ((char *)pB - (char *)_Ball_pSet)),
                                       pBallA->mState.mpRecord);
                 result |= pBallA->mpUnknown00 != pBallB->mpUnknown00;
-                result |= fn_80238258(&pBallA->mState.mFlags, &pBallB->mState.mFlags, sizeof(BallState_t) - 4);
+                result |= SyncStateCompareBytes(&pBallA->mState.mFlags, &pBallB->mState.mFlags, sizeof(BallState_t) - 4);
             }
         }
     } else {
-        result = fn_80238278(pA, sizeof(BallBlockHeader_t), 0);
+        result = Crc32Update(pA, sizeof(BallBlockHeader_t), 0);
         for (i = 0; i < pA->mHeader.mCount; i++) {
-            result = fn_80238278(&pA->mEntries[i].mState, sizeof(BallState_t), result);
+            result = Crc32Update(&pA->mEntries[i].mState, sizeof(BallState_t), result);
         }
     }
     return result;

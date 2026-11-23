@@ -73,7 +73,7 @@ void fn_8017916C(void);
 int MemFill(void *pDest, int size, int value, int width);
 void TDbIdxDestroy(int tag, int index, int column);
 int TDbIdxExists(int tag, int index, int column);
-int fn_80238258(const void *pA, const void *pB, unsigned int size);
+int SyncStateCompareBytes(const void *pA, const void *pB, unsigned int size);
 }
 
 static PlayBook_t *_PlayBook_pData;
@@ -146,7 +146,7 @@ int PlayBookCompareData(void *p, void *q)
     if (q == 0) {
         return 0;
     }
-    return fn_80238258(p, q, sizeof(PlayBook_t));
+    return SyncStateCompareBytes(p, q, sizeof(PlayBook_t));
 }
 
 void PlayBookSetupTeam(int team, int kind)
