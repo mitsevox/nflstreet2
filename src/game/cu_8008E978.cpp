@@ -1714,7 +1714,7 @@ int PlayerLocoCyclePhase(Table_80089904 *pTable, unsigned short key, void *pReco
 }
 
 extern "C" {
-int fn_80089E70(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
+int FEPlyrPoseTransitionCallback(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 }
 
@@ -25681,7 +25681,7 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[146] = PlayerActionAnimGenericPhase;
     lbl_8030FB60[62] = PlayerActionAnimGenericPhase;
     lbl_8030FB60[63] = PlayerActionAnimGenericPhase;
-    lbl_8030FB60[214] = fn_80089E70;
+    lbl_8030FB60[214] = FEPlyrPoseTransitionCallback;
     lbl_8030FB60[161] = PlayerActionAnimGenericPhase;
     lbl_8030FB60[144] = fn_800CBBAC;
     lbl_8030FB60[10] = (Handler_800B4D7C)fn_80093D20;
@@ -25708,7 +25708,7 @@ extern "C" void fn_800B4D7C(void)
     lbl_8030FB60[82] = PlayerActionAnimIdlePhase;
     lbl_8030FB60[74] = PlayerLocoCyclePhase;
     lbl_8030FB60[10] = (Handler_800B4D7C)fn_80093D20;
-    lbl_8030FB60[214] = fn_80089E70;
+    lbl_8030FB60[214] = FEPlyrPoseTransitionCallback;
 }
 
 extern "C" void PlyrLoadDbRecord(QueryCursor cursor, int index, void *pData)

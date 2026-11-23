@@ -1596,6 +1596,10 @@
     "fn_801E8CA0__11PhysicsTimef": {
       "address": "0x801E8CA0",
       "evidence": "Target member stores the f1 time as whole ticks u32+0 (fctiwz) and the remaining fraction f32+4; called by 0x800504EC on the time object 0x803084B8; inferred member contract."
+    },
+    "FEPlyrPoseTransitionCallback": {
+      "address": "0x80089E70",
+      "evidence": "evidence.tsv function and name rows for the registered FEPlyrPoseTransitions.cpp holdout; event slot 214 in src/game/cu_8008E978.cpp points to the original code."
     }
   },
   "units": [
@@ -8690,6 +8694,58 @@
           "end": "0x803EA808"
         }
       ]
+    },
+    {
+      "source": "src/game/FEPlyrPoseTransitions.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x8008977C-0x8008A274 (src/game/FEPlyrPoseTransitions.cpp) and its exact function and data rows. Link two code runs and every native data section with one documented holdout.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008977C",
+          "end": "0x80089E70"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008A20C",
+          "end": "0x8008A274"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80295228",
+          "end": "0x80295230"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6EA0",
+          "end": "0x802D6F24"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA820",
+          "end": "0x803EA830"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BD80",
+          "end": "0x8030BDD4"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "FEPlyrPoseTransitionCallback",
+            "evidence": "evidence.tsv source-form 0x80089E70-0x8008A20C"
+          }
+        ],
+        "evidence": "merge notes of the pull request linking the exact front-end pose transition routines"
+      }
     },
     {
       "source": "src/game/CAPPortrait.cpp",

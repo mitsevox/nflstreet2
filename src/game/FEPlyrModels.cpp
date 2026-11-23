@@ -63,8 +63,8 @@ void PlyrPoseBlendRawEntries(Object_8003DEC4 *pObject, int a, unsigned int b);
 void PlyrPoseSetBlend(Object_8003DEC4 *pObject, int a);
 void PlyrPoseUpdate(Object_8003DEC4 *pObject);
 void PlayerLookSetGear(int index, int a, int b);
-void fn_80089A84(FEPlyrModel_t *pRecord, unsigned int a);
-void fn_8008A248(void);
+void FEPlyrQueuePoseTransition(FEPlyrModel_t *pRecord, unsigned int a);
+void FEPlyrResetPoseTransitions(void);
 void fn_8008FCB4(int a);
 void fn_8008FD88(int a);
 void fn_8008FE60(void);
@@ -458,7 +458,7 @@ void FEPlyrSetPose(int index, unsigned int value)
     } else {
         _FEPlyr_pScene->mUnknown20 &= ~1;
     }
-    fn_80089A84(pRecord, value);
+    FEPlyrQueuePoseTransition(pRecord, value);
     _FEPlyrSetHoldFlag(index, 1);
 }
 
@@ -652,7 +652,7 @@ void FEPlyrPlayPairAnim(void)
     FEPlyrPlayAnim(_FEPlyr_iBackIndex, 214, 0);
     FEPlyrSetPose(_FEPlyr_iFrontIndex, 2);
     FEPlyrSetPose(_FEPlyr_iBackIndex, 2);
-    fn_8008A248();
+    FEPlyrResetPoseTransitions();
     fn_801BE068(pFirst->mUnknown792, pFirst->mUnknown796, pFirst->mUnknown800, 214, 1.0f, pFirst);
     fn_801BE068(pSecond->mUnknown792, pSecond->mUnknown796, pSecond->mUnknown800, 214, 1.0f, pSecond);
 }
