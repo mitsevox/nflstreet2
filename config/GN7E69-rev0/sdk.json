@@ -2777,7 +2777,7 @@
       "name": "src/dolphin/dsp/dsp_task.c",
       "source": "src/dolphin/dsp/dsp_task.c",
       "library": "DSP",
-      "evidence": "Original Handler1060bytes at85DC8 and accepted four helpers1120bytes at861EC..8664C. Source unit partial; unmatched Handler and original SBSS remain opaque. Retained five-function pattern/order corroborates full mapped interval.",
+      "evidence": "Original Handler1060bytes at85DC8 and accepted four helpers1120bytes at861EC..8664C. Source unit partial; unmatched Handler keeps original bytes; .sbss (t0-t2 and the six __DSP_* globals) linked from source. Retained five-function pattern/order corroborates full mapped interval.",
       "sections": [
         {
           "section": ".data4",
@@ -2793,7 +2793,7 @@
           "end": "0x8028664C",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Original Handler1060bytes at85DC8 and accepted four helpers1120bytes at861EC..8664C. Source unit partial; unmatched Handler and original SBSS remain opaque. Retained five-function pattern/order corroborates full mapped interval."
+          "evidence": "Original Handler1060bytes at85DC8 and accepted four helpers1120bytes at861EC..8664C. Source unit partial; unmatched Handler keeps original bytes; .sbss (t0-t2 and the six __DSP_* globals) linked from source. Retained five-function pattern/order corroborates full mapped interval."
         },
         {
           "section": ".sbss",

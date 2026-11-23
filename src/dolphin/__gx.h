@@ -251,6 +251,7 @@ typedef struct __GXFifoObj
 } __GXFifoObj;
 
 void __GXFifoInit(void);
+void __GXSaveCPUFifoAux(__GXFifoObj* realFifo);
 
 #ifdef __cplusplus
 }
