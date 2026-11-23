@@ -8,7 +8,8 @@ extern "C" {
 int SNDI_validrendermode(int *modeCursor, const SNDIPATCHHEADER *header)
 {
     int result = 0;
-    // FAKEMATCH: reuse the index for the first mask and keep the branch-local cursor reloads.
+    // FAKEMATCH: reuse the index, retain the cursor reloads, and test each group
+    // against its lowest bit so the mask and comparison stay separate.
     int index = *modeCursor;
 
     while (index < lbl_803A6C24.m1C.m28) {
@@ -20,7 +21,7 @@ int SNDI_validrendermode(int *modeCursor, const SNDIPATCHHEADER *header)
         patchFlags = index;
         index &= 0x70C;
         result = lbl_803A6C24.m1C.m2A[candidate] & 0x70C;
-        if (index != 0 && (result &= patchFlags) == 0) {
+        if (index >= 0x4 && (result &= patchFlags) == 0) {
             index = *(volatile int *)modeCursor;
             goto advance;
         }
@@ -29,7 +30,7 @@ int SNDI_validrendermode(int *modeCursor, const SNDIPATCHHEADER *header)
         request = patchFlags & 0x60;
         caps = lbl_803A6C24.m1C.m2A[index];
         caps &= 0x60;
-        if (request != 0) {
+        if (request >= 0x20) {
             caps &= patchFlags;
             result |= caps;
             if (caps == 0) {
