@@ -1061,7 +1061,7 @@
     },
     "CamInterpUpdateEaseInOut": {
       "address": "0x8013CC7C",
-      "evidence": "evidence.tsv function and name rows for 0x8013CC7C (documented holdout of src/game/camreplay.cpp: draft registered in comparisons.json, original bytes and pool 0x802A00F8-0x802A0108 linked)."
+      "evidence": "evidence.tsv source-form 0x8013CC7C-0x8013CD58; original code stays in place and its literal pool now links with src/game/camreplay.cpp."
     },
     "GameOptionsCloseCursor": {
       "address": "0x8007F174",
@@ -18632,8 +18632,8 @@
     },
     {
       "source": "src/game/camreplay.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8013CC7C-0x8013E514 (src/game/camreplay.cpp; the linked unit starts at 0x8013CD58) and its data rows.",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8013CC7C-0x8013E514 and full .rodata data row 0x802A00F8-0x802A01C0. The linked text suffix starts at 0x8013CD58; CamInterpUpdateEaseInOut remains the measured prefix holdout.",
       "sections": [
         {
           "section": ".text",
@@ -18644,7 +18644,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802A0108",
+          "start": "0x802A00F8",
           "end": "0x802A01C0"
         },
         {
@@ -18671,7 +18671,16 @@
           "start": "0x8031B6A0",
           "end": "0x8031B6AC"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "CamInterpUpdateEaseInOut",
+            "evidence": "evidence.tsv source-form 0x8013CC7C-0x8013CD58"
+          }
+        ],
+        "evidence": "evidence.tsv source-form 0x8013CC7C-0x8013CD58 records the fixed split calculation and remaining code discrepancies."
+      }
     },
     {
       "source": "src/game/camshot.cpp",

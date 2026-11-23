@@ -30235,7 +30235,7 @@
     {
       "source": "src/game/camreplay.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv function row 0x8013CC7C-0x8013CD58, data row 0x802A00F8-0x802A0108 and the fn_8013CC7C source-form row; the remaining placements are the accepted unit 0x8013CD58-0x8013E514 and its data rows. Draft comparison only; the original bytes of 0x8013CC7C and its pool remain linked.",
+      "evidence": "evidence.tsv source-form 0x8013CC7C-0x8013CD58, whole native literal section 0x802A00F8-0x802A01C0, and provisional unit row 0x8013CC7C-0x8013E514. The 220-byte original code range stays in the executable.",
       "sections": [
         {
           "section": ".text",

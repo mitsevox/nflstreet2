@@ -133,17 +133,17 @@ static unsigned char _CamReplay_bTrackedPlayer;
 static int _CamReplay_iTrackedId;
 static float _CamReplay_vTarget[3];
 
-#if defined(DECOMP_COMPARE)
 /* accelerate to mid-way, then decelerate (peak speed 2 over the split point 0.5). */
 extern "C" void CamInterpUpdateEaseInOut(CamInterp_t *pInterp, int steps)
 {
     float split = 0.5f;
-    float speed = 2.0f;
 
     while (steps--) {
         if (pInterp->mValue != pInterp->mTarget) {
             pInterp->mTime += pInterp->mRate;
             if (pInterp->mTime < 1.0f) {
+                // FAKEMATCH: compute the peak through the fixed split to preserve the literal pool.
+                float speed = split * (2.0f / split);
                 float t = pInterp->mTime;
                 float ease;
                 if (t < split) {
@@ -160,7 +160,6 @@ extern "C" void CamInterpUpdateEaseInOut(CamInterp_t *pInterp, int steps)
         }
     }
 }
-#endif
 
 extern "C" void CamInterpUpdateSine(CamInterp_t *pInterp, int steps)
 {
