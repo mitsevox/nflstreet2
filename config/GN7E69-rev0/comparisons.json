@@ -30285,7 +30285,7 @@
     {
       "source": "src/game/PlyrMgr.cpp",
       "profile": "game_cpp",
-      "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
+      "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials. PlyrRouteShow now links from exact source through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -30502,11 +30502,6 @@
           "symbol": "PlyrFindNearest",
           "start": "0x8003A130",
           "end": "0x8003A1EC"
-        },
-        {
-          "symbol": "PlyrRouteShow",
-          "start": "0x8003A1EC",
-          "end": "0x8003A394"
         }
       ]
     },

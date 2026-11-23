@@ -971,6 +971,7 @@ extern "C" Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, 
     return pBest;
 }
 
+/* Shows or hides a player's route arrow at the formation or live position. */
 extern "C" void PlyrRouteShow(int on, int team, int index)
 {
     Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[index + team * _PlyrMgr_pManager->mPerTeam].mObject;
@@ -987,9 +988,8 @@ extern "C" void PlyrRouteShow(int on, int team, int index)
 
             offset = fn_80177FE0();
             if (fn_80178308() == ((p->mId >> 8) & 0xFF)) {
+                pos.mX = (pPlay->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
                 Point_8017886C *pPos = &pos;
-
-                pPos->mX = (pPlay->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
                 pPos->mY = (pPlay->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
                 Vec2Add(pPos, pPos, &offset);
             } else {

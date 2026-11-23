@@ -18839,7 +18839,7 @@
     {
       "source": "src/game/PlyrMgr.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8003830C-0x8003AEA8 (src/game/PlyrMgr.cpp): the whole file is linked with holdouts (owner ruling of 2026-11-20); its two holdouts keep their original bytes and its .rodata 0x8028CFA0-0x8028D070 is linked whole.",
+      "evidence": "evidence.tsv unit row 0x8003830C-0x8003AEA8. PlyrRouteShow links with the two adjacent runs. PlyrUpdateControlFlag keeps its original bytes. The whole native data sections remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -18851,12 +18851,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8003977C",
-          "end": "0x8003A1EC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8003A394",
           "end": "0x8003AEA8"
         },
         {
@@ -18883,13 +18877,9 @@
           {
             "function": "PlyrUpdateControlFlag",
             "evidence": "evidence.tsv source-form 0x8003962C-0x8003977C"
-          },
-          {
-            "function": "PlyrRouteShow",
-            "evidence": "evidence.tsv source-form 0x8003A1EC-0x8003A394"
           }
         ],
-        "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
+        "evidence": "evidence.tsv source-form 0x8003962C-0x8003977C records the boundary with the shared PreSnap return declaration."
       }
     },
     {
