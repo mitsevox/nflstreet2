@@ -2,7 +2,7 @@
  * Loads game-database tables from a named file. DbGame gives it the file name when the game
  * database starts and takes it back when it stops; the game then loads a database's tables from
  * that file through the file I/O device, and destroys tables it no longer needs, one at a time,
- * from a list of table ids, or for every table a list table flags.
+ * from a list of table ids, or for every table that a list table flags.
  */
 #include "engine/dbfile.h"
 #include "engine/dbutil.h"
