@@ -9,7 +9,7 @@ typedef struct SortInterface_t {
     unsigned char bActive;
 } SortInterface_t;
 
-extern SortInterface_t lbl_803E943C[2];
+SortInterface_t _Sort_Interface[2];
 /* Set by SortInit, cleared by SortShutdown. */
 static unsigned char _Sort_ModuleActive = 0;
 
@@ -18,7 +18,7 @@ static void _SortInitInterface(void)
     unsigned int i;
 
     for (i = 0; i < 2; i++) {
-        lbl_803E943C[i].bActive = 0;
+        _Sort_Interface[i].bActive = 0;
     }
 }
 
@@ -54,11 +54,11 @@ int SortShutdown(void)
 void SortArray(int type, void *pBase, unsigned int count, int size, int (*pCompare)(void *, void *),
                  void (*pSwap)(void *, void *), void *pTemp, int flags)
 {
-    lbl_803E943C[type].pSort(pBase, count, size, pCompare, pSwap, pTemp, flags);
+    _Sort_Interface[type].pSort(pBase, count, size, pCompare, pSwap, pTemp, flags);
 }
 
 void SortAddSortType(int type, SortFunc_t pSort)
 {
-    lbl_803E943C[type].pSort = pSort;
-    lbl_803E943C[type].bActive = 1;
+    _Sort_Interface[type].pSort = pSort;
+    _Sort_Interface[type].bActive = 1;
 }

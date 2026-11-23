@@ -415,10 +415,6 @@
       "address": "0x801CDE98",
       "evidence": "evidence.tsv function/name and holdout rows at 0x801CDE98. Font.c calls the original-byte FontLLUploadPalettes provider."
     },
-    "Font_RenderState": {
-      "address": "0x803E7600",
-      "evidence": "evidence.tsv data and related name rows for 0x803E7600: the font render state Font.c sets and LLFont.c reads, COMMON .bss that keeps its original bytes (no storage entry places it)."
-    },
     "gModelObjEyePos": {
       "address": "0x802FB458",
       "evidence": "evidence.tsv data and name rows for 0x802FB458: the eye-position vector modelobj.c writes and cu_802336C4.c reads; unlinked .data whose owner is open, original bytes."
@@ -439,33 +435,9 @@
       "address": "0x8021C8B4",
       "evidence": "evidence.tsv function/name rows for 0x8021C8B4 (target extent, related name)."
     },
-    "__DSP_curr_task": {
-      "address": "0x803ED508",
-      "evidence": "Target SDA-relative instructions and pinned SDK global layouts; original storage remains linked because native alignment not accepted."
-    },
-    "__DSP_first_task": {
-      "address": "0x803ED504",
-      "evidence": "Target SDA-relative instructions and pinned SDK global layouts; original storage remains linked because native alignment not accepted."
-    },
-    "__DSP_last_task": {
-      "address": "0x803ED500",
-      "evidence": "Target SDA-relative instructions and pinned SDK global layouts; original storage remains linked because native alignment not accepted."
-    },
     "__pure_virtual": {
       "address": "0x8025F088",
       "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
-    },
-    "__DSP_rude_task": {
-      "address": "0x803ED4F8",
-      "evidence": "evidence.tsv DSP init external records: target operands and pinned BFBB reference role."
-    },
-    "__DSP_tmp_task": {
-      "address": "0x803ED4FC",
-      "evidence": "evidence.tsv DSP init external records: target operands and pinned BFBB reference role."
-    },
-    "__DSP_rude_task_pending": {
-      "address": "0x803ED4F4",
-      "evidence": "evidence.tsv DSP init external records: target operands and pinned BFBB reference role."
     },
     "_._12FlowManagerC": {
       "address": "0x801CBC9C",
@@ -1030,10 +1002,6 @@
     "_AnimCache_pCaches": {
       "address": "0x803ED620",
       "evidence": "evidence.tsv data/name rows for 0x803ED620 (target extent, related name)."
-    },
-    "_ResStream_Lock": {
-      "address": "0x803D4F98",
-      "evidence": "evidence.tsv data/name rows for 0x803D4F98 (target extent, inferred name)."
     },
     "iSPCH_EACrandom": {
       "address": "0x801B1934",
@@ -5997,7 +5965,13 @@
           "section": ".sbss",
           "placement": ".sbss",
           "start": "0x803ED308",
-          "end": "0x803ED348"
+          "end": "0x803ED358"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A58D0",
+          "end": "0x803A5900"
         }
       ]
     },
@@ -6083,6 +6057,12 @@
           "placement": ".data4",
           "start": "0x80302548",
           "end": "0x80302683"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED4E8",
+          "end": "0x803ED50C"
         }
       ]
     },
@@ -12262,8 +12242,26 @@
           "placement": ".text",
           "start": "0x80252334",
           "end": "0x802523A4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5F30",
+          "end": "0x803A6504"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3B8",
+          "end": "0x803ED3BC"
         }
-      ]
+      ],
+      "link_roots": {
+        "symbols": [
+          "GXCallDisplayList"
+        ],
+        "evidence": "The target keeps GXCallDisplayList at the placed range. GXBeginDisplayList and GXEndDisplayList have no code anywhere in the target's .init/.text, so the linker drops them as the original link did; their static data (DisplayListFifo and __savedGXdata in .bss 0x803A5F30-0x803A6504, OldCPUFifo in .sbss 0x803ED3B8-0x803ED3BC) remains (evidence.tsv data rows)."
+      }
     },
     {
       "source": "src/dolphin/os/OSMutex.c",
@@ -15239,6 +15237,13 @@
           "start": "0x803EBDE8",
           "end": "0x803EBDF0"
         }
+      ],
+      "storage": [
+        {
+          "symbol": "_ResLooseFile_PathName",
+          "start": "0x803E933C",
+          "end": "0x803E943B"
+        }
       ]
     },
     {
@@ -15283,6 +15288,13 @@
           "placement": ".data5",
           "start": "0x803EBE20",
           "end": "0x803EBE24"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_Sort_Interface",
+          "start": "0x803E943C",
+          "end": "0x803E944C"
         }
       ]
     },
@@ -15489,6 +15501,13 @@
           "start": "0x803EBEE0",
           "end": "0x803EBEE4"
         }
+      ],
+      "storage": [
+        {
+          "symbol": "_TMMaterial_pTexNodes",
+          "start": "0x803E96C4",
+          "end": "0x803E96E8"
+        }
       ]
     },
     {
@@ -15632,6 +15651,13 @@
           "placement": ".data3",
           "start": "0x802B1C10",
           "end": "0x802B1C28"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_TMTexture_NullData",
+          "start": "0x803E9780",
+          "end": "0x803E9880"
         }
       ]
     },
@@ -16255,6 +16281,13 @@
           "placement": ".data5",
           "start": "0x803EBBC0",
           "end": "0x803EBBD0"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_ResStream_Lock",
+          "start": "0x803D4F98",
+          "end": "0x803D4FB8"
         }
       ]
     },
@@ -25100,6 +25133,13 @@
           "placement": ".bss",
           "start": "0x80383CD0",
           "end": "0x80383D18"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "Font_RenderState",
+          "start": "0x803E7600",
+          "end": "0x803E763C"
         }
       ]
     },

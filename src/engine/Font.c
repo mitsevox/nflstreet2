@@ -39,7 +39,7 @@ unsigned char Font_ModuleActive = 0;
 static Lock_801F8014 _Font_CS;
 static FontState_t _Font_State;
 
-extern FontRenderState_t Font_RenderState;
+FontRenderState_t Font_RenderState;
 
 static int _FontSearchFontNum(FontEntry_t *pEntry, int *pId, FontEntry_t **ppResult);
 

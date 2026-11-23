@@ -87,6 +87,7 @@ typedef struct FontRenderState_t {
     FontColor_t mColor;
     FontColor_t mShadowColor;
     float mShadowOffset[3];
+    unsigned char unk_0x30[0xC];
 } FontRenderState_t;
 
 int FontAddFontFromBuffer(void *pFile, int id, FontHeader_t *pData);
