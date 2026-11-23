@@ -1473,10 +1473,6 @@
       "address": "0x8022ED50",
       "evidence": "evidence.tsv function and name rows for 0x8022ED50 (DbTatsCopyAllTables, a registered holdout of src/engine/dbtatscopy.c, original bytes linked); called by name from src/engine/cu_802297D8.c, src/engine/cu_8022C9A8.c, src/engine/cu_802311C8.c, src/engine/cu_802336C4.c, src/engine/dbcache.c, src/engine/dbevas.c, src/engine/dbmanager.c, src/engine/dbniom.c, src/engine/dbocmt.c, src/engine/dboptions.c, src/engine/dbuser.c (n1e naming wave)."
     },
-    "ModelObjSetAmbientColor": {
-      "address": "0x80235C90",
-      "evidence": "evidence.tsv function and name rows for 0x80235C90 (ModelObjSetAmbientColor, a registered holdout of src/engine/modelobj.c, original bytes linked); called by name from src/game/BallMarker.cpp, src/game/EnvObj.cpp, src/game/EnvRender.cpp, src/game/FldObj.cpp, src/game/ReplayCursor.cpp, src/game/UISModel.cpp, src/game/DynObj.cpp, src/game/PlyrStars.cpp (n1e naming wave)."
-    },
     "XmlFindInElement": {
       "address": "0x80216BFC",
       "evidence": "evidence.tsv function and name rows for 0x80216BFC (XmlFindInElement, a registered holdout of src/engine/xmlread.c, original bytes linked); called by name from src/game/Divot.cpp, src/game/PlaDynClutOps.cpp, src/game/DynObj.cpp (n1e naming wave)."
@@ -4497,19 +4493,13 @@
     },
     {
       "source": "src/engine/modelobj.c",
-      "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x802355E4-0x80235DD8 (src/engine/modelobj.c), its function, name and source-form rows and the data row 0x802B7198-0x802B71B0 of its whole .rodata; linked with holdouts (owner ruling of 2026-11-20): 16 of 17 functions exact, the holdout fn_80235C90 keeps the original bytes. It owns and links its data (da1c): .rodata 0x802B7198-0x802B71B0, .sdata 0x803EC0F8-0x803EC0FC, each with its evidence.tsv data rows.",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x802355E4-0x80235DD8, function, name and source-form rows. All 17 functions link. The native .rodata 0x802B7198-0x802B71B0 and .sdata 0x803EC0F8-0x803EC0FC link whole, as recorded by their data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802355E4",
-          "end": "0x80235C90"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80235D0C",
           "end": "0x80235DD8"
         },
         {
@@ -4524,16 +4514,7 @@
           "start": "0x803EC0F8",
           "end": "0x803EC0FC"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "ModelObjSetAmbientColor",
-            "evidence": "evidence.tsv source-form 0x80235C90-0x80235D0C"
-          }
-        ],
-        "evidence": "w1b merge notes (swarm w1 tracking table): src/engine/modelobj.c holds out fn_80235C90 only."
-      }
+      ]
     },
     {
       "source": "src/engine/lllight.c",

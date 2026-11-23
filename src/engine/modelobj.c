@@ -19,15 +19,15 @@
 #include "engine/llmemory.h"
 #include "engine/dslist.h"
 
-typedef struct Library_80235B6C {
-    unsigned int mUnknown0;
-} Library_80235B6C;
+typedef struct ModelObjMaterialDefs_t {
+    unsigned int mNumMaterials;
+} ModelObjMaterialDefs_t;
 
-typedef struct Element_80235B6C {
-    char mUnknown0[40];
-    int mUnknown40;
-    Library_80235B6C *mpUnknown44;
-} Element_80235B6C;
+typedef struct ModelObjTextureElement_t {
+    char unk_0x0[40];
+    int unk_0x28;
+    ModelObjMaterialDefs_t *mpMaterialDefs;
+} ModelObjTextureElement_t;
 
 extern float lbl_802FB458[3];
 extern void TMModelResRelocate(void *p);
@@ -214,9 +214,9 @@ void ModelObjRender(Object_80235588 *p, int handle, int lightMask)
     }
 }
 
-void ModelObjSetTextures(Object_80235588 *p, Element_80235B6C *pElement, int a)
+void ModelObjSetTextures(Object_80235588 *p, ModelObjTextureElement_t *pElement, int a)
 {
-    Library_80235B6C *pLibrary;
+    ModelObjMaterialDefs_t *pMaterialDefs;
 
     if (p->mpUnknown88 != pElement) {
         if (p->mpUnknown88 != 0) {
@@ -224,13 +224,13 @@ void ModelObjSetTextures(Object_80235588 *p, Element_80235B6C *pElement, int a)
         }
         if (pElement != 0) {
             TMTexLibRegistryReset();
-            if (pElement->mUnknown40 != 0) {
+            if (pElement->unk_0x28 != 0) {
                 TMTexLibRegister("model", pElement);
             }
-            pLibrary = pElement->mpUnknown44;
-            if (pLibrary != 0) {
-                TMMaterialListAlloc(p->mUnknown92, pLibrary->mUnknown0);
-                TMMaterialListSetMatDefs(p->mUnknown92, pLibrary);
+            pMaterialDefs = pElement->mpMaterialDefs;
+            if (pMaterialDefs != 0) {
+                TMMaterialListAlloc(p->mUnknown92, pMaterialDefs->mNumMaterials);
+                TMMaterialListSetMatDefs(p->mUnknown92, pMaterialDefs);
             } else {
                 TMMaterialListAlloc(p->mUnknown92, 0);
             }
@@ -240,7 +240,7 @@ void ModelObjSetTextures(Object_80235588 *p, Element_80235B6C *pElement, int a)
     }
 }
 
-void ModelObjSetTexturesDefault(Object_80235588 *p, Element_80235B6C *pElement)
+void ModelObjSetTexturesDefault(Object_80235588 *p, ModelObjTextureElement_t *pElement)
 {
     ModelObjSetTextures(p, pElement, 0);
 }
@@ -257,11 +257,12 @@ void ModelObjSetFixedDepth(int a, Object_80235588 *p, float value)
 
 void ModelObjSetAmbientColor(Object_80235588 *p, int unused, float r, float g, float b, float a)
 {
-    p->mUnknown0 |= 0x20000;
     p->mUnknown76[0] = (unsigned char)(r * 255.0f);
     p->mUnknown76[1] = (unsigned char)(g * 255.0f);
     p->mUnknown76[2] = (unsigned char)(b * 255.0f);
     p->mUnknown76[3] = (unsigned char)(a * 255.0f);
+    /* Enable the ambient override used by ModelObjRender. */
+    p->mUnknown0 |= 0x20000;
 }
 
 void ModelObjSetFlagsNop(Object_80235588 *p, int a)
