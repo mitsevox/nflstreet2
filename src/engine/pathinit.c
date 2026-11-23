@@ -22,13 +22,13 @@ extern "C" int PATHI_init(void)
         lbl_802F47D0[i] = 0;
     lbl_803EBB38 = 1;
     lbl_803EBB40 = 256;
-    --lbl_803EBB24;
     lbl_803EBB28 = 0;
     lbl_803EBB39 = 0;
     lbl_803EBB54 = 0;
     lbl_803EBB50 = 0;
     lbl_803EBB4C = 0;
     lbl_803EBB48 = 0;
+    --lbl_803EBB24;
     return 0;
 }
 

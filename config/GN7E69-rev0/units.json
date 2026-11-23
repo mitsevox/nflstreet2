@@ -17199,13 +17199,13 @@
     },
     {
       "source": "src/engine/pathinit.c",
-      "profile": "path_cxx_holdouts",
-      "evidence": "evidence.tsv unit 0x801B2AD4-0x801B343C and .bss, .ctors and .rodata data rows. The twelve exact code bodies and their complete native data sections link; PATHI_init keeps its original code.",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B2AD4-0x801B343C, source-form, linker and data rows. All thirteen routines and the complete native allocator storage, constructor pointer and constant pool link. SN retention discards the unused helper body.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801B2B58",
+          "start": "0x801B2AD4",
           "end": "0x801B343C"
         },
         {
@@ -17231,16 +17231,20 @@
         "discarded": [
           "_PathRoundToUnsigned__Fi"
         ],
-        "evidence": "evidence.tsv linker row 0x802AEA20-0x802AEA38 and pathinit.c fake-match forms. The native pool stays and the file-static stand-in has no target code."
-      },
-      "holdouts": {
-        "functions": [
-          {
-            "function": "PATHI_init",
-            "evidence": "evidence.tsv source-form 0x801B2AD4-0x801B2B58"
-          }
-        ],
-        "evidence": "merge notes of the pull request linking the exact pathinit.c functions"
+        "evidence": "evidence.tsv linker row 0x801B2AD4-0x801B343C: original PATH startup retention and discarded constant-pool helper.",
+        "symbols": [
+          "PATHI_init",
+          "PATH_shutdown",
+          "PATH_destroy",
+          "PATH_setallocator",
+          "PATHI_memalloc",
+          "PATHI_memfree",
+          "PATH_addmapfile",
+          "PATH_seteventcallbacks",
+          "PATH_setvariable",
+          "PATHI_findnodedata",
+          "PATHI_bytesperms"
+        ]
       }
     },
     {

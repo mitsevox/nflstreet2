@@ -30134,44 +30134,6 @@
       ]
     },
     {
-      "source": "src/engine/pathinit.c",
-      "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B2AD4-0x801B343C and HOLDOUT source-form row 0x801B2AD4-0x801B2B58. Only PATHI_init remains a comparison; the exact code run and native allocator parameters, constructor pointer, and constants link.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B2AD4",
-          "end": "0x801B343C"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8037E814",
-          "end": "0x8037E820"
-        },
-        {
-          "section": ".ctors",
-          "placement": ".data2",
-          "start": "0x80289B40",
-          "end": "0x80289B44"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEA18",
-          "end": "0x802AEA58"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PATHI_init",
-          "start": "0x801B2AD4",
-          "end": "0x801B2B58"
-        }
-      ]
-    },
-    {
       "source": "src/engine/pathserv.c",
       "profile": "path_cxx",
       "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, complete native data row and HOLDOUT 0x801B3568-0x801B3724. Only the integer-return sort remains a comparison.",
