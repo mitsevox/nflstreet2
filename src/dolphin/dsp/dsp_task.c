@@ -2,6 +2,14 @@
 #include "__dsp.h"
 #include "dolphin/hw_regs.h"
 
+static u32 t0, t1, t2;
+
+DSPTaskInfo* __DSP_curr_task;
+DSPTaskInfo* __DSP_first_task;
+DSPTaskInfo* __DSP_last_task;
+DSPTaskInfo* __DSP_tmp_task;
+DSPTaskInfo* __DSP_rude_task;
+BOOL __DSP_rude_task_pending;
 
 void __DSPHandler(__OSInterrupt, OSContext* context)
 {

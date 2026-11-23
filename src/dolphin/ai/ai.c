@@ -17,6 +17,20 @@ static OSTime min_wait;
 static OSTime max_wait;
 static OSTime buffer;
 
+typedef struct
+{
+    OSTime t_start;
+    OSTime t1;
+    OSTime t2;
+    OSTime t3;
+    OSTime t4;
+    OSTime t_end;
+} STRUCT_TIMELOG;
+
+STRUCT_TIMELOG profile;
+OSTime __ai_src_time_start;
+OSTime __ai_src_time_end;
+
 void __AISHandler(s16 interrupt, OSContext* context);
 void __AIDHandler(s16 interrupt, OSContext* context);
 extern void __AICallbackStackSwitch(AIDCallback cb);

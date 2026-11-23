@@ -14,9 +14,9 @@ typedef struct AnimCacheObjType_t {
     AnimCacheStateInfo_t *mPairsB;
 } AnimCacheObjType_t;
 
-extern unsigned int _AnimCache_nCaches;
-extern int _AnimCache_MemoryHeap;
-extern AnimCacheObjType_t *_AnimCache_pCaches;
+unsigned int _AnimCache_nCaches;
+int _AnimCache_MemoryHeap;
+AnimCacheObjType_t *_AnimCache_pCaches;
 static unsigned char _AnimCache_Initialized = 0;
 
 void AnimCacheClearObjectType(unsigned int index);

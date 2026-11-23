@@ -6,7 +6,7 @@
 #include <dolphin/os/OSCache.h>
 #include "engine/tmlib.h"
 
-extern unsigned int lbl_803E9780[64];
+unsigned int _TMTexture_NullData[64];
 
 void TMTextureSetFilter(TMTexture_t *pTexture, int minFilter, int magFilter, float lodBias, unsigned char bBiasClamp, unsigned char bEdgeLod, int maxAniso)
 {
@@ -106,9 +106,9 @@ void TMTextureMakeNullTexture(TMTexture_t *pTexture)
     int i;
 
     for (i = 0; i < 64; i++) {
-        lbl_803E9780[i] = 0xFFFFFFFF;
+        _TMTexture_NullData[i] = 0xFFFFFFFF;
     }
-    TMTextureTexNew(pTexture, lbl_803E9780, 8, 8, GX_TF_I8, 0, 0, 0);
+    TMTextureTexNew(pTexture, _TMTexture_NullData, 8, 8, GX_TF_I8, 0, 0, 0);
 }
 
 void TMTextureSetTexName(TMTexture_t *pTexture, const char *pName)
