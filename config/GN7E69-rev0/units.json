@@ -4938,13 +4938,27 @@
     {
       "source": "src/dolphin/os/OSTime.c",
       "profile": "dolphin_release",
-      "evidence": "sdk.json unit src/dolphin/os/OSTime.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "evidence": "sdk.json unit src/dolphin/os/OSTime.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only. Its .data is the month tables of the discarded OSTicksToCalendarTime (linker row 0x802FCC90).",
+      "link_roots": {
+        "symbols": [
+          "OSGetTime",
+          "OSGetTick",
+          "__OSGetSystemTime"
+        ],
+        "evidence": "The target keeps this file's three functions at 0x8023E794-0x8023E818 (called from outside the file); OSTicksToCalendarTime and its static helpers have no code in the target, while their month tables YearDays and LeapYearDays remain in .data 0x802FCC90-0x802FCCF0 (data rows), so SN's linker discarded the unreferenced functions."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8023E794",
           "end": "0x8023E818"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FCC90",
+          "end": "0x802FCCF0"
         }
       ]
     },
@@ -4976,7 +4990,7 @@
     {
       "source": "src/dolphin/dvd/dvdfs.c",
       "profile": "dolphin_dvd_release",
-      "evidence": "sdk.json unit src/dolphin/dvd/dvdfs.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "evidence": "sdk.json unit src/dolphin/dvd/dvdfs.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only. Its .data also holds the strings of the discarded DVDOpenDir, DVDPrepareStreamAsync and DVDPrepareStream (linker row 0x802FCE94).",
       "link_roots": {
         "symbols": [
           "__DVDFSInit",
@@ -5261,7 +5275,7 @@
     {
       "source": "src/dolphin/gx/GXMisc.c",
       "profile": "dolphin_release",
-      "evidence": "sdk.json unit src/dolphin/gx/GXMisc.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "evidence": "sdk.json unit src/dolphin/gx/GXMisc.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only. Its .data is the strings of the discarded GXCompressZ16 and GXDecompressZ16 (linker row 0x802FE2F8).",
       "link_roots": {
         "symbols": [
           "GXSetMisc",
@@ -5301,6 +5315,12 @@
           "placement": ".sbss",
           "start": "0x803ED3A0",
           "end": "0x803ED3B4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FE2F8",
+          "end": "0x802FE34B"
         }
       ]
     },
@@ -7134,7 +7154,7 @@
     {
       "source": "src/dolphin/os/OSAlarm.c",
       "profile": "dolphin_release",
-      "evidence": "sdk.json unit src/dolphin/os/OSAlarm.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only. Its .data is the five report strings of the linker-discarded OSCheckAlarmQueue (data row 0x802FBA60).",
+      "evidence": "sdk.json unit src/dolphin/os/OSAlarm.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only. Its .data is the five report strings of the linker-discarded OSCheckAlarmQueue (linker row 0x802FBA60).",
       "link_roots": {
         "symbols": [
           "OSInitAlarm",
