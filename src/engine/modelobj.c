@@ -29,7 +29,7 @@ typedef struct ModelObjTextureElement_t {
     ModelObjMaterialDefs_t *mpMaterialDefs;
 } ModelObjTextureElement_t;
 
-extern float lbl_802FB458[3];
+extern float gModelObjEyePos[3];
 extern void TMModelResRelocate(void *p);
 extern void TMModelReset(void *p);
 extern void TMModelBindModelRes(void *p, void *pData);
@@ -123,8 +123,8 @@ void ModelObjRender(Object_80235588 *p, int handle, int lightMask)
     GXBool zUpdate = 1;
 
     if (_ModelObj_bRenderEnabled != 0 && p->mpUnknown84 != 0) {
-        /* FAKEMATCH: the target stores red with the initializer word and the other three
-           bytes through a pointer register (addi r9,r1,12); the original form is not known. */
+        // FAKEMATCH: the target stores red with the initializer word and the other three
+        // bytes through a pointer register (addi r9,r1,12); the original form is not known.
         GXColor color = {128};
         GXColor *pColor = &color;
 
@@ -285,9 +285,9 @@ void ModelObjSetModeNop(Object_80235588 *p, int a)
 
 void ModelObjSetEyePos(float *p)
 {
-    lbl_802FB458[0] = p[0];
-    lbl_802FB458[1] = p[1];
-    lbl_802FB458[2] = p[2];
+    gModelObjEyePos[0] = p[0];
+    gModelObjEyePos[1] = p[1];
+    gModelObjEyePos[2] = p[2];
 }
 
 int ModelObjIsModelRes(unsigned int *p)

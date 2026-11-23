@@ -415,6 +415,14 @@
       "address": "0x801CDE98",
       "evidence": "evidence.tsv function/name and holdout rows at 0x801CDE98. Font.c calls the original-byte FontLLUploadPalettes provider."
     },
+    "Font_RenderState": {
+      "address": "0x803E7600",
+      "evidence": "evidence.tsv data and related name rows for 0x803E7600: the font render state Font.c sets and LLFont.c reads, COMMON .bss that keeps its original bytes (no storage entry places it)."
+    },
+    "gModelObjEyePos": {
+      "address": "0x802FB458",
+      "evidence": "evidence.tsv data and name rows for 0x802FB458: the eye-position vector modelobj.c writes and cu_802336C4.c reads; unlinked .data whose owner is open, original bytes."
+    },
     "gPlayerLooks": {
       "address": "0x803078E8",
       "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."

@@ -28,7 +28,7 @@ static unsigned short _LLFontOutsideOutlinePal[16] __attribute__((aligned(32)));
 static unsigned short _LLFontInsideOutlinePal[16] __attribute__((aligned(32)));
 static GXTlutObj _LLFontOutsideOutlineObj __attribute__((aligned(32)));
 static GXTlutObj _LLFontInsideOutlineObj __attribute__((aligned(32)));
-extern FontRenderState_t lbl_803E7600;
+extern FontRenderState_t Font_RenderState;
 extern FontQuad_t lbl_803E763C[];
 
 /* The four corners of one glyph quad: positions, then texture coordinates. */
@@ -125,26 +125,26 @@ int FontLLRenderText(Font_t *pFont, const char *pText, unsigned int flags, float
         MatStore(mtx[0]);
         GXLoadPosMtxImm(mtx, 0);
         if (pFont->mpHeader->mFlags & 4) {
-            lbl_803E7600.mFlags |= 0x40;
+            Font_RenderState.mFlags |= 0x40;
             GXLoadTlut(&_LLFontOutsideOutlineObj, 0);
             GXLoadTexObj(pFont->mpTexObj, 0);
-            state = _FontLLRender(0, pFont, pQuads, count, &lbl_803E7600.mShadowColor, 0);
+            state = _FontLLRender(0, pFont, pQuads, count, &Font_RenderState.mShadowColor, 0);
             GXLoadTlut(&_LLFontInsideOutlineObj, 0);
             GXLoadTexObj(pFont->mpTexObj, 0);
-            _FontLLRender(state, pFont, pQuads, count, &lbl_803E7600.mColor, 0);
+            _FontLLRender(state, pFont, pQuads, count, &Font_RenderState.mColor, 0);
         } else {
             GXLoadTexObj(pFont->mpTexObj, 0);
-            if (lbl_803E7600.mFlags & 0x10) {
+            if (Font_RenderState.mFlags & 0x10) {
                 MatPush();
-                MatTranslate(lbl_803E7600.mShadowOffset);
+                MatTranslate(Font_RenderState.mShadowOffset);
                 MatStore(mtx[0]);
                 GXLoadPosMtxImm(mtx, 0);
-                state = _FontLLRender(0, pFont, pQuads, count, &lbl_803E7600.mShadowColor, 0);
+                state = _FontLLRender(0, pFont, pQuads, count, &Font_RenderState.mShadowColor, 0);
                 MatPop();
                 MatStore(mtx[0]);
                 GXLoadPosMtxImm(mtx, 0);
             }
-            _FontLLRender(state, pFont, pQuads, count, &lbl_803E7600.mColor, 0);
+            _FontLLRender(state, pFont, pQuads, count, &Font_RenderState.mColor, 0);
         }
         MatPop();
         SysSetLastErrorFunc(0);

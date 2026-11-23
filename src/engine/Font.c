@@ -39,10 +39,7 @@ unsigned char Font_ModuleActive = 0;
 static Lock_801F8014 _Font_CS;
 static FontState_t _Font_State;
 
-extern FontRenderState_t lbl_803E7600;
-
-void *memset();
-
+extern FontRenderState_t Font_RenderState;
 
 static int _FontSearchFontNum(FontEntry_t *pEntry, int *pId, FontEntry_t **ppResult);
 
@@ -343,18 +340,18 @@ int FontDestroyFont(Font_t *pFont)
 
 int FontResetRenderState(void)
 {
-    lbl_803E7600.mFlags = 0;
-    lbl_803E7600.mColor.r = 1.0f;
-    lbl_803E7600.mColor.g = 1.0f;
-    lbl_803E7600.mColor.b = 1.0f;
-    lbl_803E7600.mColor.a = 1.0f;
-    lbl_803E7600.mShadowColor.r = 0.0f;
-    lbl_803E7600.mShadowColor.g = 0.0f;
-    lbl_803E7600.mShadowColor.b = 0.0f;
-    lbl_803E7600.mShadowColor.a = 0.5f;
-    lbl_803E7600.mShadowOffset[0] = 3.0f;
-    lbl_803E7600.mShadowOffset[1] = 3.0f;
-    lbl_803E7600.mShadowOffset[2] = 1.0f;
+    Font_RenderState.mFlags = 0;
+    Font_RenderState.mColor.r = 1.0f;
+    Font_RenderState.mColor.g = 1.0f;
+    Font_RenderState.mColor.b = 1.0f;
+    Font_RenderState.mColor.a = 1.0f;
+    Font_RenderState.mShadowColor.r = 0.0f;
+    Font_RenderState.mShadowColor.g = 0.0f;
+    Font_RenderState.mShadowColor.b = 0.0f;
+    Font_RenderState.mShadowColor.a = 0.5f;
+    Font_RenderState.mShadowOffset[0] = 3.0f;
+    Font_RenderState.mShadowOffset[1] = 3.0f;
+    Font_RenderState.mShadowOffset[2] = 1.0f;
     return 0;
 }
 
@@ -365,10 +362,10 @@ int FontSetRenderColor(int which, FontColor_t color)
 
     switch (which) {
     case 0:
-        pDst = &lbl_803E7600.mColor;
+        pDst = &Font_RenderState.mColor;
         break;
     case 1:
-        pDst = &lbl_803E7600.mShadowColor;
+        pDst = &Font_RenderState.mShadowColor;
         break;
     default:
         error = 0x110005;
@@ -385,21 +382,21 @@ done:
 
 int FontSetRenderFlags(unsigned int flags)
 {
-    lbl_803E7600.mFlags |= flags;
+    Font_RenderState.mFlags |= flags;
     return 0;
 }
 
 int FontClearRenderFlags(unsigned int flags)
 {
-    lbl_803E7600.mFlags &= ~flags;
+    Font_RenderState.mFlags &= ~flags;
     return 0;
 }
 
 int FontSetShadowOffset(float x, float y, float z)
 {
-    lbl_803E7600.mShadowOffset[0] = x;
-    lbl_803E7600.mShadowOffset[1] = y;
-    lbl_803E7600.mShadowOffset[2] = z;
+    Font_RenderState.mShadowOffset[0] = x;
+    Font_RenderState.mShadowOffset[1] = y;
+    Font_RenderState.mShadowOffset[2] = z;
     return 0;
 }
 
