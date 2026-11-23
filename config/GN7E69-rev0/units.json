@@ -1373,10 +1373,6 @@
       "address": "0x801FCFA0",
       "evidence": "evidence.tsv function and name rows for 0x801FCFA0 (TDbSQLDestroyCursor, a registered holdout of src/engine/T3DB_Compiler.c, original bytes linked); called by name from src/engine/dbmanager.c, src/engine/dbocmt.c, src/engine/dbtatscopy.c, src/game/ChalGameSetup.cpp, src/game/Cheat.cpp, src/game/CreateTeamDb.cpp, src/game/CreditsTable.cpp, src/game/ExpLevel.cpp, src/game/FormationLineup.cpp, src/game/GameText.cpp, src/game/InGameScreens.cpp, src/game/PlayBookDb.cpp, src/game/ProfileUnlocks.cpp, src/game/Records.cpp, src/game/StevTable.cpp, src/game/StoryEvents.cpp, src/game/StoryTeam.cpp, src/game/TournamentDb.cpp, src/game/TutorialLesson.cpp, src/game/TeamDb.cpp, src/game/cu_8008E978.cpp (n1e naming wave)."
     },
-    "FontDrawText": {
-      "address": "0x801CD3E4",
-      "evidence": "evidence.tsv function and name rows for 0x801CD3E4 (FontDrawText, a registered holdout of src/engine/Font.c, original bytes linked); called by name from src/engine/LLFont.c (n1e naming wave)."
-    },
     "MemCAsyncOpen": {
       "address": "0x801D4A3C",
       "evidence": "evidence.tsv function and name rows for 0x801D4A3C (MemCAsyncOpen, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/cu_801D5D30.c (n1e naming wave)."
@@ -24989,19 +24985,13 @@
     },
     {
       "source": "src/engine/Font.c",
-      "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801CCA64-0x801CD79C (src/engine/Font.c), its compiler rows and the data rows of its data sections; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 1 non-exact functions keep the original bytes and stay registered partials in comparisons.json. It owns and links its data (da1c): .rodata 0x802AF490-0x802AF4B0, .sdata 0x803EBC58-0x803EBC5C, .bss 0x80383CD0-0x80383D18, each with its evidence.tsv data rows.",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801CCA64-0x801CD79C, the compiler, type, data, function and name rows, and the FontDrawText glyph layout source-form row. The untouched engine_c object links all 24 functions, 32 bytes of .rodata, 4 bytes of .sdata and 72 bytes of .bss at their target extents.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801CCA64",
-          "end": "0x801CD3E4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CD63C",
           "end": "0x801CD79C"
         },
         {
@@ -25022,16 +25012,7 @@
           "start": "0x80383CD0",
           "end": "0x80383D18"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "FontDrawText",
-            "evidence": "evidence.tsv source-form 0x801CD3E4-0x801CD63C"
-          }
-        ],
-        "evidence": "merge notes of the x1 wave (lane x1d) holdouts table; each HOLDOUT: row lists the forms tried and the RTL-dump finding."
-      }
+      ]
     },
     {
       "source": "src/engine/xmlread.c",

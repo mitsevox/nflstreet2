@@ -403,18 +403,18 @@ int FontSetShadowOffset(float x, float y, float z)
     return 0;
 }
 
+/* Lays out glyph quads and applies each line's horizontal alignment. */
 void FontDrawText(Font_t *pFont, const char *pText, unsigned int flags, float maxWidth,
                  FontQuad_t *pQuads, unsigned int *pCount)
 {
     int error = 0;
-    int kern;
+    unsigned char kern;
     int lineHeight;
     unsigned int len;
     unsigned int i;
     unsigned int count;
     unsigned int j;
     int y;
-    int nextY;
     int x;
     int prev;
     unsigned char c;
@@ -433,48 +433,52 @@ void FontDrawText(Font_t *pFont, const char *pText, unsigned int flags, float ma
         y = 0;
         count = 0;
         i = 0;
-        pQuad = pQuads;
-        while (i < len) {
-            j = count;
-            prev = -1;
-            x = 0;
-            nextY = y + lineHeight;
-            while (i < len) {
-                if (pText[i] == '\n') {
-                    i++;
-                    break;
-                }
-                if (!(maxWidth <= 0.0f) && !((float)x <= maxWidth)) {
-                    break;
-                }
-                c = pText[i];
-                if (pGlyph = _FontLookupGlyph(pFont, c)) {
-                    if (prev != -1 && kern) {
-                        x += _FontGetKernAmount(pFont, prev, c);
+        if (i < len) {
+            pQuad = pQuads;
+            do {
+                j = count;
+                prev = -1;
+                x = 0;
+                while (i < len) {
+                    if (pText[i] == '\n') {
+                        i++;
+                        break;
                     }
-                    pQuad->mX = x + pGlyph->mOffsetX;
-                    pQuad->mY = y + pGlyph->mOffsetY;
-                    pQuad->mWidth = pGlyph->mWidth;
-                    pQuad->mHeight = pGlyph->mHeight;
-                    pQuad->mU = pGlyph->mU;
-                    pQuad->mV = pGlyph->mV;
-                    pQuad++;
-                    count++;
-                    x += pGlyph->mAdvance;
+                    if (!(maxWidth <= 0.0f) && !((float)x <= maxWidth)) {
+                        break;
+                    }
+                    c = pText[i];
+                    if (pGlyph = _FontLookupGlyph(pFont, c)) {
+                        if (prev != -1 && kern) {
+                            x += _FontGetKernAmount(pFont, prev, c);
+                        }
+                        {
+                            FontQuad_t *pDest = pQuad++;
+                            count++;
+                            pDest->mX = x + pGlyph->mOffsetX;
+                            pDest->mY = y + pGlyph->mOffsetY;
+                            pDest->mWidth = pGlyph->mWidth;
+                            pDest->mHeight = pGlyph->mHeight;
+                            pDest->mU = pGlyph->mU;
+                            pDest->mV = pGlyph->mV;
+                        }
+                        x += pGlyph->mAdvance;
+                    }
+                    prev = c;
+                    i++;
                 }
-                prev = c;
-                i++;
-            }
-            if (flags & 1) {
-                for (; j < count; j++) {
-                    pQuads[j].mX -= x / 2;
+                if (flags & 1) {
+                    int halfWidth = x / 2;
+                    for (; j < count; j++) {
+                        pQuads[j].mX -= halfWidth;
+                    }
+                } else if (flags & 2) {
+                    for (; j < count; j++) {
+                        pQuads[j].mX -= x;
+                    }
                 }
-            } else if (flags & 2) {
-                for (; j < count; j++) {
-                    pQuads[j].mX -= x;
-                }
-            }
-            y = nextY;
+                y += lineHeight;
+            } while (i < len);
         }
         *pCount = count;
     }
