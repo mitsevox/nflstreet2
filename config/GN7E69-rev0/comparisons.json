@@ -30162,7 +30162,7 @@
     {
       "source": "src/engine/pathtrack.c",
       "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B3AD0-0x801B45D0 and the three HOLDOUT source-form rows. Twenty-five exact bodies and the original complete native read-only section link through units.json.",
+      "evidence": "evidence.tsv unit row 0x801B3AD0-0x801B45D0 and two HOLDOUT source-form rows. Twenty-six exact bodies, including the base constructor, and the complete native read-only section link through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -30187,11 +30187,6 @@
           "symbol": "PATHI_dispatchtrackstate",
           "start": "0x801B43CC",
           "end": "0x801B44BC"
-        },
-        {
-          "symbol": "__14Class_801B44BC",
-          "start": "0x801B44BC",
-          "end": "0x801B4514"
         }
       ]
     },

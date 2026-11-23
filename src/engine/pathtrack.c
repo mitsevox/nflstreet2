@@ -264,12 +264,12 @@ Class_801B44BC::Class_801B44BC()
     mUnknown10 = 127;
     mUnknown14 = 1;
     mUnknown18 = 0;
-    mUnknown58 = -1;
-    mUnknown1C = 1;
     mUnknown5C = 0;
     mUnknown20 = 0;
     mUnknown64 = 0;
     mUnknown60 = 0;
+    mUnknown1C = 1;
+    mUnknown58 = -1;
 }
 
 Class_801B44BC::~Class_801B44BC()

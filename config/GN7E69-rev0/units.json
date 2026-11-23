@@ -25993,7 +25993,7 @@
     {
       "source": "src/engine/pathtrack.c",
       "profile": "path_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x801B3AD0-0x801B45D0 and data row 0x802AEA60-0x802AEB90. Twenty-five exact routines and complete native read-only data link; the track initializer, track state dispatcher and base-class constructor keep original code.",
+      "evidence": "evidence.tsv unit row 0x801B3AD0-0x801B45D0 and data row 0x802AEA60-0x802AEB90. Twenty-six exact routines and complete native read-only data link; the track initializer and track-state dispatcher retain original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -26010,7 +26010,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801B4514",
+          "start": "0x801B44BC",
           "end": "0x801B45D0"
         },
         {
@@ -26029,10 +26029,6 @@
           {
             "function": "PATHI_dispatchtrackstate",
             "evidence": "evidence.tsv source-form 0x801B43CC-0x801B44BC"
-          },
-          {
-            "function": "__14Class_801B44BC",
-            "evidence": "evidence.tsv source-form 0x801B44BC-0x801B4514"
           }
         ],
         "evidence": "merge notes of the pull request linking the exact pathtrack.c functions"
