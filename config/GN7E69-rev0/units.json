@@ -23238,6 +23238,19 @@
       ]
     },
     {
+      "source": "src/engine/sgparse.cpp",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80278328-0x80278530 (src/engine/sgparse.cpp), the function and name rows of SNDI_patchtohdrgen and the sound_cxx compiler row; all 520 code bytes match and the file owns no data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80278328",
+          "end": "0x80278530"
+        }
+      ]
+    },
+    {
       "source": "src/engine/shipass.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x80278530-0x80278598 (src/engine/shipass.c), its function and name row; no owned data, and the sound_cxx compiler rows 0x802714A8-0x8027CF9C; every function exact, split from the former comparison files src/engine/cu_802753F0.cpp / cu_80276DE4.cpp and promoted.",

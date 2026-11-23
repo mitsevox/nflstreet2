@@ -48,6 +48,8 @@ int SNDstop(int handle);
 int SNDI_validrendermode(int *modeCursor, const SNDIPATCHHEADER *header);
 void SNDI_patchtohdr(BankVer_t *bank, unsigned char *patch, SndSampleFormat_t *format, SndSampleAttr_t *attr,
                      SndSampleDesc_t *desc, unsigned char *isStream);
+void SNDI_patchtohdrgen(void *unused, unsigned char *patch, SndSampleFormat_t *format, SndSampleAttr_t *attr,
+                       SndSampleDesc_t *desc);
 
 int SNDBANKI_alloc(void);
 void *SNDBANKI_getppatch(BankVer_t *bank, int patch);

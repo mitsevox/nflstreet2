@@ -8,8 +8,6 @@ extern "C" {
 
 int SNDI_gettag(Parser_8027823C *tag);
 int SND_attrsetdef(SndSampleAttr_t *attr);
-void fn_80278328(void *unused, unsigned char *patch, SndSampleFormat_t *format, SndSampleAttr_t *attr,
-                 SndSampleDesc_t *desc);
 
 void SNDI_patchtohdr(BankVer_t *bank, unsigned char *patch, SndSampleFormat_t *format, SndSampleAttr_t *attr,
                      SndSampleDesc_t *desc, unsigned char *isStream)
@@ -25,7 +23,7 @@ void SNDI_patchtohdr(BankVer_t *bank, unsigned char *patch, SndSampleFormat_t *f
     memset(desc, 0, sizeof(*desc));
     if (!(patch[0] == 'P' && patch[1] == 'T') &&
         patch[0] == 'G' && patch[1] == 'S' && patch[2] == 'T' && patch[3] == 'R') {
-        fn_80278328(0, patch, format, attr, desc);
+        SNDI_patchtohdrgen(0, patch, format, attr, desc);
         if (isStream) {
             *isStream = 1;
         }
