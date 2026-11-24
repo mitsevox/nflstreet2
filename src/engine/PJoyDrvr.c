@@ -18,8 +18,8 @@ typedef struct PerJoyData_t {
     char mPad0F;
 } PerJoyData_t;
 
-int _PerJoy_aiMotorCommand[4];
-PADStatus _PerJoy_aPadStatus[4];
+extern int _PerJoy_aiMotorCommand[4];
+extern PADStatus _PerJoy_aPadStatus[4];
 
 void *memset();
 void *memcpy();

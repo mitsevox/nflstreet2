@@ -1442,6 +1442,38 @@
     "iSPCH_GetSampleSizeData": {
       "address": "0x801B22E0",
       "evidence": "evidence.tsv source-form 0x801B22E0-0x801B2368; original sample-size code retained as the only spchrule.c holdout. Called by the speech pick comparison."
+    },
+    "_PerJoyDriverInit": {
+      "address": "0x801E1D44",
+      "evidence": "evidence.tsv function/name rows for _PerJoyDriverInit; PJoyDrvr.c remains comparison-only and resolves to original instructions."
+    },
+    "_PerJoyDriverShutdown": {
+      "address": "0x801E1E34",
+      "evidence": "evidence.tsv function/name rows for _PerJoyDriverShutdown; PJoyDrvr.c remains comparison-only and resolves to original instructions."
+    },
+    "_PerJoyDriverPoll": {
+      "address": "0x801E1E50",
+      "evidence": "evidence.tsv function/name rows for _PerJoyDriverPoll; PJoyDrvr.c remains comparison-only and resolves to original instructions."
+    },
+    "_PerJoyDriverGetData": {
+      "address": "0x801E25DC",
+      "evidence": "evidence.tsv function/name rows for _PerJoyDriverGetData; PJoyDrvr.c remains comparison-only and resolves to original instructions."
+    },
+    "_PerJoyDriverSendData": {
+      "address": "0x801E2658",
+      "evidence": "evidence.tsv function/name rows for _PerJoyDriverSendData; PJoyDrvr.c remains comparison-only and resolves to original instructions."
+    },
+    "PerJoyDriverPollPADs": {
+      "address": "0x801E26FC",
+      "evidence": "evidence.tsv function/name rows for PerJoyDriverPollPADs; PJoyDrvr.c remains comparison-only and resolves to original instructions."
+    },
+    "_PerJoy_aiMotorCommand": {
+      "address": "0x8039ADE4",
+      "evidence": "evidence.tsv data/name rows for _PerJoy_aiMotorCommand; external array retains original storage."
+    },
+    "_PerJoy_aPadStatus": {
+      "address": "0x803E92CC",
+      "evidence": "evidence.tsv data/name rows for _PerJoy_aPadStatus; external array retains original storage."
     }
   },
   "units": [
@@ -27012,52 +27044,6 @@
           }
         ],
         "evidence": "The original StopModuleList range stays linked and its full source remains a registered partial."
-      }
-    },
-    {
-      "source": "src/engine/PJoyDrvr.c",
-      "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv PJoyDrvr.c unit, compiler, data/name and _PerJoyDriverPoll HOLDOUT source-form rows. Five exact functions, the complete 64-byte literal pool and two mapped COMMON arrays link; the poll retains its original bytes.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801E1D44",
-          "end": "0x801E1E50"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801E25DC",
-          "end": "0x801E274C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B11C0",
-          "end": "0x802B1200"
-        }
-      ],
-      "storage": [
-        {
-          "symbol": "_PerJoy_aiMotorCommand",
-          "start": "0x8039ADE4",
-          "end": "0x8039ADF4"
-        },
-        {
-          "symbol": "_PerJoy_aPadStatus",
-          "start": "0x803E92CC",
-          "end": "0x803E92FC"
-        }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "_PerJoyDriverPoll",
-            "evidence": "evidence.tsv source-form 0x801E1E50-0x801E25DC"
-          }
-        ],
-        "evidence": "The original 1932-byte poll keeps its instructions and remains a measured partial; the other five functions and all native data link."
       }
     },
     {
