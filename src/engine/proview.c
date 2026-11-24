@@ -1,3 +1,8 @@
+/* SN Systems libsn host link (libsn.a proview.o): the EXI channel 2 connection to the
+   development host (init, interrupts, query, read and write of packets, the byte and word
+   transfers) and the DMA and polled transfer steps the host-file code uses. Hand-written
+   assembly. */
+
 #include "dolphin/os.h"
 #include "dolphin/os/OSInterrupt.h"
 
@@ -12,11 +17,6 @@ __OSInterruptHandler _SN_Callback = 0;
 unsigned char *_SN_pInterruptFlag = 0;
 unsigned char _SN_InterruptFlag = 0;
 SNReadConfig_t _SN_ReadConfig = {0, 0, 0, 0};
-
-/* SN Systems libsn host link (libsn.a proview.o): the EXI channel 2 connection to the
-   development host (init, interrupts, query, read and write of packets, the byte and word
-   transfers) and the DMA and polled transfer steps the host-file code uses. Hand-written
-   assembly. */
 
 asm(
 "    .section \".text\"\n"
