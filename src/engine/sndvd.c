@@ -1,4 +1,6 @@
-#include <dolphin/os.h>
+/* Emulates DVD commands through the host file server and a DABR data-breakpoint handler. */
+#include "engine/sndvd.h"
+#include "engine/FSasync.h"
 
 #define DI_CMDBUF0 (*(volatile u32 *)0xCC006008)
 #define DI_CMDBUF1 (*(volatile u32 *)0xCC00600C)
@@ -8,80 +10,100 @@
 #define DI_CR (*(volatile u32 *)0xCC00601C)
 #define DI_IMMBUF (*(volatile u32 *)0xCC006020)
 
-extern int lbl_802CC5E0;
-extern int lbl_802CC600;
-extern u8 lbl_802CC620[32];
-extern u32 lbl_802CC640;
-extern int lbl_802CC644;
-extern int lbl_802CC648;
-extern int lbl_802CC64C;
-extern u8 lbl_802CC650;
-extern u8 lbl_802CC651;
+int g_hDVD = 0;
+
+// FAKEMATCH: Comparisons reference COMMON objects at their final addresses;
+// the normal build defines and verifies their native storage.
+#ifdef DECOMP_COMPARE
+extern int g_nDvdAudioCfg;
+extern u8 g_aBuffer[32];
+extern u32 g_nDvdError;
+extern int g_nDvdCurrOffset;
+extern int g_nDvdReadLength;
+extern int g_nBaseOffset;
+extern u8 g_nEmuState;
+extern u8 g_nLidState;
+#else
+int g_nDvdAudioCfg;
+u8 g_aBuffer[32] ATTRIBUTE_ALIGN(32);
+u32 g_nDvdError;
+int g_nDvdCurrOffset;
+int g_nDvdReadLength;
+int g_nBaseOffset;
+u8 g_nEmuState;
+u8 g_nLidState;
+#endif
+
 extern int lbl_802C2A5C;
 
-extern void fn_801ADF64(__OSException exception, OSContext *context);
-extern int PCreadAsyncInit(int handle, u8 *buf, u32 size, void (*callback)(int result), int offset, int mode);
+extern void DSIExcHandler(__OSException exception, OSContext *context);
 
-void fn_801ADDB4(void)
+void DisDvdBP(void)
 {
     u32 value = 0;
 
     asm volatile("lwz 3,%0\n\tmtspr 1013,3\n\tisync" : : "m"(value) : "r3");
 }
 
-void fn_801ADDD4(void)
+void EnaDvdBP(void)
 {
     u32 value = 0xCC00601E;
 
     asm volatile("lwz 3,%0\n\tmtspr 1013,3\n\tisync" : : "m"(value) : "r3");
 }
 
-void fn_801ADDF8(void *dst)
+void ForceDvdTcIrq(void *dst)
 {
-    fn_801ADDB4();
+    DisDvdBP();
     DI_CMDBUF0 = 0x12000000;
     DI_CMDBUF1 = 0;
     DI_CMDBUF2 = 0x20;
     DI_LENGTH = 0x20;
     DI_MAR = (u32)dst;
     DI_CR = 3;
-    fn_801ADDD4();
+    EnaDvdBP();
 }
 
-void fn_801ADE80(void)
+void ForceDvdDeIrq(void)
 {
-    fn_801ADDB4();
+    DisDvdBP();
     DI_CMDBUF0 = 0;
     DI_CR = 1;
-    fn_801ADDD4();
+    EnaDvdBP();
 }
 
-void fn_801ADEC4(int result)
+void DvdCallback(int result)
 {
     int size;
 
     size = (result + 31) & ~31;
-    if (size == lbl_802CC648) {
-        lbl_802CC640 = 0;
-        lbl_802CC644 += size;
-        fn_801ADDF8(lbl_802CC620);
+    if (size == g_nDvdReadLength) {
+        g_nDvdError = 0;
+        g_nDvdCurrOffset += size;
+        ForceDvdTcIrq(g_aBuffer);
     } else {
-        lbl_802CC644 = -1;
-        lbl_802CC640 = 0x31100;
-        fn_801ADE80();
+        g_nDvdCurrOffset = -1;
+        g_nDvdError = 0x31100;
+        ForceDvdDeIrq();
     }
 }
 
-u32 fn_801ADF44(int offset)
+u32 CheckSeekOffset(int offset)
 {
     if (offset >= 0x57060000)
         return 0x52100;
     return 0;
 }
 
-asm(".globl fn_801ADF64\n"
-    ".type fn_801ADF64,@function\n"
-    "fn_801ADF64:\n"
+// FAKEMATCH: Give the hand-written exception symbols separate input sections
+// for whole-function retention; comparisons keep the contiguous exception block.
+asm(
+#ifndef DECOMP_COMPARE
+    ".section .text.DSIExcHandler,\"ax\"\n"
+#endif
+    ".globl DSIExcHandler\n"
+    ".type DSIExcHandler,@function\n"
+    "DSIExcHandler:\n"
     "\tmfdsisr 5\n"
     "\trlwinm. 5,5,10,31,31\n"
     "\tbeq 1f\n"
@@ -105,7 +127,7 @@ asm(".globl fn_801ADF64\n"
     "\tstw 0,448(4)\n"
     "\tmfdsisr 5\n"
     "\tmfdar 6\n"
-    "\tb fn_801AE018\n"
+    "\tb DSIHandler\n"
     "1:\n"
     "\tlwz 3,128(4)\n"
     "\tmtcrf 255,3\n"
@@ -123,19 +145,22 @@ asm(".globl fn_801ADF64\n"
     "\tlwz 5,20(4)\n"
     "\tlwz 4,16(4)\n"
     "\tb fn_801ABF48\n"
-    ".size fn_801ADF64,.-fn_801ADF64\n"
+    ".size DSIExcHandler,.-DSIExcHandler\n"
     "\n"
-    ".globl fn_801AE004\n"
-    ".type fn_801AE004,@function\n"
-    "fn_801AE004:\n"
+#ifndef DECOMP_COMPARE
+    ".section .text.DSIHandlerZeroEntry,\"ax\"\n"
+#endif
+    ".globl DSIHandlerZeroEntry\n"
+    ".type DSIHandlerZeroEntry,@function\n"
+    "DSIHandlerZeroEntry:\n"
     "\tli 3,0\n"
     "\tli 4,0\n"
     "\tli 5,0\n"
     "\tli 6,0\n"
-    "\tbl fn_801AE018\n"
-    ".size fn_801AE004,.-fn_801AE004\n");
+    "\tbl DSIHandler\n"
+    ".size DSIHandlerZeroEntry,.-DSIHandlerZeroEntry\n");
 
-void fn_801AE018(int unused, OSContext *context, u32 dsisr, u32 dar)
+void DSIHandler(int unused, OSContext *context, u32 dsisr, u32 dar)
 {
     u32 regs[10];
     u32 insn;
@@ -153,101 +178,101 @@ void fn_801AE018(int unused, OSContext *context, u32 dsisr, u32 dar)
         for (i = 0; i < 10; i++)
             regs[i] = *(u32 *)((0x0C006000 + i * 4) | 0xC0000000);
         command = regs[2] >> 16;
-        offset = lbl_802CC64C + (regs[3] << 2);
+        offset = g_nBaseOffset + (regs[3] << 2);
         switch (command) {
         case 0x1200:
-            fn_801ADDF8((void *)regs[5]);
+            ForceDvdTcIrq((void *)regs[5]);
             break;
         case 0xA800:
             if (regs[6] == 0) {
-                fn_801ADDF8(lbl_802CC620);
+                ForceDvdTcIrq(g_aBuffer);
             } else {
-                lbl_802CC640 = fn_801ADF44(offset);
-                if (lbl_802CC640 == 0) {
-                    lbl_802CC648 = regs[6];
-                    if (PCreadAsyncInit(lbl_802CC5E0, (u8 *)regs[5], regs[6], fn_801ADEC4, offset, 1) == -1)
-                        lbl_802CC640 = 0x31100;
+                g_nDvdError = CheckSeekOffset(offset);
+                if (g_nDvdError == 0) {
+                    g_nDvdReadLength = regs[6];
+                    if (PCreadAsyncInit(g_hDVD, (u8 *)regs[5], regs[6], DvdCallback, offset, 1) == -1)
+                        g_nDvdError = 0x31100;
                 }
             }
-            if (lbl_802CC640)
-                fn_801ADE80();
+            if (g_nDvdError)
+                ForceDvdDeIrq();
             break;
         case 0xE000:
-            DI_IMMBUF = lbl_802CC640;
-            lbl_802CC640 &= 0xFF000000;
-            fn_801ADDF8(lbl_802CC620);
+            DI_IMMBUF = g_nDvdError;
+            g_nDvdError &= 0xFF000000;
+            ForceDvdTcIrq(g_aBuffer);
             break;
         case 0xE100:
         case 0xE200:
         case 0xE401:
-            if (lbl_802CC600)
+            if (g_nDvdAudioCfg)
                 goto passthrough;
         case 0xAB00:
         case 0xE300:
-            fn_801ADDF8(lbl_802CC620);
+            ForceDvdTcIrq(g_aBuffer);
             break;
         default:
             OSReport("Unknown DVD cmd (%08X)\n", regs[2]);
             asm volatile(".long 1");
-            lbl_802CC640 = 0x52000;
-            fn_801ADE80();
+            g_nDvdError = 0x52000;
+            ForceDvdDeIrq();
             break;
         }
     } else {
     passthrough:
-        fn_801ADDB4();
+        DisDvdBP();
         *(u32 *)addr = context->gpr[(insn >> 21) & 0x1F];
-        fn_801ADDD4();
+        EnaDvdBP();
     }
     context->srr0 += 4;
     OSLoadContext(context);
 }
 
-void fn_801AE28C(int id)
+void SNDVDEmuInit(int id)
 {
     if (id == -0x8000) {
-        lbl_802CC5E0 = id;
+        g_hDVD = id;
         lbl_802C2A5C = 0;
     }
 }
 
-void fn_801AE2AC(void)
+void SNDVDEmuInitDSIHandler(void)
 {
-    if (lbl_802CC5E0 == -0x8000) {
-        lbl_802CC600 = 0;
-        lbl_802CC640 = 0;
-        lbl_802CC644 = -1;
-        lbl_802CC64C = 0;
-        lbl_802CC651 = 1;
-        lbl_802CC650 = 1;
-        fn_801ADDD4();
-        __OSSetExceptionHandler(__OS_EXCEPTION_DSI, fn_801ADF64);
+    if (g_hDVD == -0x8000) {
+        g_nDvdAudioCfg = 0;
+        g_nDvdError = 0;
+        g_nDvdCurrOffset = -1;
+        g_nBaseOffset = 0;
+        g_nLidState = 1;
+        g_nEmuState = 1;
+        EnaDvdBP();
+        __OSSetExceptionHandler(__OS_EXCEPTION_DSI, DSIExcHandler);
     }
 }
 
-u32 fn_801AE328(int request)
+u32 SNDVDEmuControl(int request)
 {
     u32 result = 0;
 
-    if (lbl_802CC5E0 != -0x8000)
+    if (g_hDVD != -0x8000)
         return 0;
     switch (request) {
     case 0:
-        lbl_802CC651 = 0;
+        g_nLidState = 0;
         break;
     case 1:
-        lbl_802CC651 = 1;
+        g_nLidState = 1;
         break;
     case 2:
-        lbl_802CC650 = 0;
-        fn_801ADDB4();
+        g_nEmuState = 0;
+        DisDvdBP();
         result = 0x80000000;
         break;
     case 3:
-        lbl_802CC650 = 1;
-        fn_801ADDD4();
+        g_nEmuState = 1;
+        EnaDvdBP();
         result = 0x80000000;
         break;
     }
-    return result | (lbl_802CC650 << 8) | lbl_802CC651;
+    return result | (g_nEmuState << 8) | g_nLidState;
 }

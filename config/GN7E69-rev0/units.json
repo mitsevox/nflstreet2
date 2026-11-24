@@ -429,6 +429,17 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler row 0x801F5760-0x801F5D84; speech_frontend_cpp plus the established named function-sections holdout mechanism. No per-function compiler option."
+    },
+    "engine_cpp_nosda_holdouts": {
+      "flags": [
+        "-O2",
+        "-G0",
+        "-ffunction-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv sndvd.c compiler/source-form row. Existing whole-file engine_cpp_nosda (-O2 -G0) plus named function-sections holdout mechanism; no per-function compiler override. Hand-written exception entry/stub use corresponding separate input sections only in normal builds; comparison builds keep contiguous flat text. Instruction content is unchanged and verified against target."
     }
   },
   "externals": {
@@ -27219,6 +27230,88 @@
           }
         ],
         "evidence": "Complete628-byte writer remains original after distinct query-scope/lifetime/declaration/store/helper hypotheses and ProDG RTL analysis; direct natural source retained."
+      }
+    },
+    {
+      "source": "src/engine/sndvd.c",
+      "profile": "engine_cpp_nosda_holdouts",
+      "evidence": "evidence.tsv sndvd.c whole related unit, hardware assembly source forms, labeled section/storage comparison mechanism and DSIHandler HOLDOUT. Eleven exact functions plus complete native initialized/COMMON objects link, no fabricated padding.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801ADDB4",
+          "end": "0x801AE018"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AE28C",
+          "end": "0x801AE3E4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEA00",
+          "end": "0x802AEA18"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC5E0",
+          "end": "0x802CC5E4"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "g_nDvdAudioCfg",
+          "start": "0x802CC600",
+          "end": "0x802CC604"
+        },
+        {
+          "symbol": "g_aBuffer",
+          "start": "0x802CC620",
+          "end": "0x802CC640"
+        },
+        {
+          "symbol": "g_nDvdError",
+          "start": "0x802CC640",
+          "end": "0x802CC644"
+        },
+        {
+          "symbol": "g_nDvdCurrOffset",
+          "start": "0x802CC644",
+          "end": "0x802CC648"
+        },
+        {
+          "symbol": "g_nDvdReadLength",
+          "start": "0x802CC648",
+          "end": "0x802CC64C"
+        },
+        {
+          "symbol": "g_nBaseOffset",
+          "start": "0x802CC64C",
+          "end": "0x802CC650"
+        },
+        {
+          "symbol": "g_nEmuState",
+          "start": "0x802CC650",
+          "end": "0x802CC651"
+        },
+        {
+          "symbol": "g_nLidState",
+          "start": "0x802CC651",
+          "end": "0x802CC652"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "DSIHandler",
+            "evidence": "evidence.tsv source-form 0x801AE018-0x801AE28C"
+          }
+        ],
+        "evidence": "Full628-byte command handler retains original code after natural source/profile forms and RTL investigation; no instruction workaround is retained."
       }
     }
   ]

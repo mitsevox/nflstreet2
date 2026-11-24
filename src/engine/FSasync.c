@@ -4,6 +4,7 @@
    host PC. */
 
 #include <dolphin/os.h>
+#include "engine/FSasync.h"
 
 #define EXI2_CPR (*(volatile u32 *)0xCC006828)
 #define EXI2_CR (*(volatile u32 *)0xCC006834)
@@ -28,7 +29,6 @@ typedef struct FSResult_t {
     int mResult;
 } FSResult_t;
 
-typedef void (*FSCallback_t)(int result);
 
 volatile int g_nRWasyncPhase = 0;
 FSCallback_t g_FSCBFunc = 0;

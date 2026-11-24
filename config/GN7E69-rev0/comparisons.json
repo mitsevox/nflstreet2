@@ -25727,7 +25727,7 @@
     {
       "source": "src/engine/sndvd.c",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801ADDB4-0x801AE3E4 (src/engine/sndvd.c), function rows, data row 0x802AEA00-0x802AEA18, compiler and source-form rows. State globals 0x802CC5E0-0x802CC651 and 0x802C2A5C stay external. Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv sndvd.c whole unit, complete native data objects and DSIHandler HOLDOUT. Eleven exact functions956bytes and complete82owneddata bytes link; full628-byte command handler remains original. Comparison-only COMMON declarations and flat assembly section layout are labeled and disclosed; complete normal native storage is verified.",
       "sections": [
         {
           "section": ".text",
@@ -25740,68 +25740,19 @@
           "placement": ".data3",
           "start": "0x802AEA00",
           "end": "0x802AEA18"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC5E0",
+          "end": "0x802CC5E4"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801ADDB4",
-          "start": "0x801ADDB4",
-          "end": "0x801ADDD4"
-        },
-        {
-          "symbol": "fn_801ADDD4",
-          "start": "0x801ADDD4",
-          "end": "0x801ADDF8"
-        },
-        {
-          "symbol": "fn_801ADDF8",
-          "start": "0x801ADDF8",
-          "end": "0x801ADE80"
-        },
-        {
-          "symbol": "fn_801ADE80",
-          "start": "0x801ADE80",
-          "end": "0x801ADEC4"
-        },
-        {
-          "symbol": "fn_801ADEC4",
-          "start": "0x801ADEC4",
-          "end": "0x801ADF44"
-        },
-        {
-          "symbol": "fn_801ADF44",
-          "start": "0x801ADF44",
-          "end": "0x801ADF64"
-        },
-        {
-          "symbol": "fn_801ADF64",
-          "start": "0x801ADF64",
-          "end": "0x801AE004"
-        },
-        {
-          "symbol": "fn_801AE004",
-          "start": "0x801AE004",
-          "end": "0x801AE018"
-        },
-        {
-          "symbol": "fn_801AE018",
+          "symbol": "DSIHandler",
           "start": "0x801AE018",
           "end": "0x801AE28C"
-        },
-        {
-          "symbol": "fn_801AE28C",
-          "start": "0x801AE28C",
-          "end": "0x801AE2AC"
-        },
-        {
-          "symbol": "fn_801AE2AC",
-          "start": "0x801AE2AC",
-          "end": "0x801AE328"
-        },
-        {
-          "symbol": "fn_801AE328",
-          "start": "0x801AE328",
-          "end": "0x801AE3E4"
         }
       ]
     },
