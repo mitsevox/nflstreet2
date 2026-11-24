@@ -1,6 +1,8 @@
 #ifndef ENGINE_CU_802714A8_H
 #define ENGINE_CU_802714A8_H
 
+#include "engine/saramman.h"
+
 typedef struct Params_803A6C40 {
     unsigned char mUnknown0[4];
     unsigned int m4;
@@ -336,8 +338,6 @@ void SNDPKTPLAYI_freeframes(int index, int channel, int value);
 void fn_802797F4(void *(*alloc)(int size));
 void fn_80279800(void (*release)(void *p));
 int fn_8027980C(int (*copy)(void *dst, void *src, int size));
-void fn_8027986C(unsigned int start, unsigned int length);
-void fn_802798C0(void);
 void SFILTER_ft24_32init(Node_80279D90 *node);
 int SFILTER_createHPFFIR8(Node_80279D90 *node);
 void SFILTER_add(Node_80279D90 **list, Node_80279D90 *node);

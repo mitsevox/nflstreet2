@@ -1,6 +1,8 @@
 #ifndef ENGINE_SNDLIB_H
 #define ENGINE_SNDLIB_H
 
+#include "engine/saramman.h"
+
 /* Declarations shared by the files of the sound range 0x802714A8-0x80276B7C:
    lbmpeg.cpp, mpegl3base.cpp, sdspmix.c, snddrv.c, sfxrevc.c, slinkmix.c, smixer.c, smixfilt.c, smixfram.c,
    smixhip.c, smixptch.c and smixtmul.c. */
@@ -315,7 +317,6 @@ void *SNDDRV_thread(void *arg);
 int SNDPLATFORM_init(int mode);
 void SndHalSetDry(int index);
 void SNDI_aztospkrvol(unsigned short angle, float *levels);
-void fn_8027981C(int count);
 
 void SNDVOICEI_free(int value);
 void *SNDMEMI_allocz(int size);
@@ -325,8 +326,6 @@ void SNDSYS_leavecritical(void);
 void SNDSYS_linkmaincpumixer(void);
 int MIX_getframe(int index);
 void MIX_sethighpass(int index, int value);
-void *fn_80279960(int size);
-void fn_80279B24(void *p);
 void SFILTER_modifyHPFFIR8(Node_80279D90 *node, Params_80279D0C *params);
 void SFILTER_remove(Node_80279D90 **list, Node_80279D90 *node);
 void SFILTER_rsfinit(Node_80279D90 *node, int a, int b);

@@ -25240,35 +25240,31 @@
     {
       "source": "src/engine/saramman.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8027981C-0x80279BC0 (src/engine/saramman.c), the sound_cxx compiler row 0x802714A8-0x8027CF9C, the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv saramman.c unit, state data/types and the SNDARAM_alloc/free HOLDOUT rows. All six bodies are reconstructed; the first four and native state link, the two allocator loops remain registered partials.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8027981C",
           "end": "0x80279BC0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803B53EC",
+          "end": "0x803B53FC"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_8027981C",
-          "start": "0x8027981C",
-          "end": "0x8027986C"
+          "symbol": "SNDARAM_alloc",
+          "start": "0x80279960",
+          "end": "0x80279B24"
         },
         {
-          "symbol": "fn_8027986C",
-          "start": "0x8027986C",
-          "end": "0x802798C0"
-        },
-        {
-          "symbol": "fn_802798C0",
-          "start": "0x802798C0",
-          "end": "0x80279910"
-        },
-        {
-          "symbol": "fn_80279910",
-          "start": "0x80279910",
-          "end": "0x80279960"
+          "symbol": "SNDARAM_free",
+          "start": "0x80279B24",
+          "end": "0x80279BC0"
         }
       ]
     },

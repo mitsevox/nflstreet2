@@ -1,6 +1,8 @@
 #ifndef ENGINE_SNDSYS_H
 #define ENGINE_SNDSYS_H
 
+#include "engine/saramman.h"
+
 /* Declarations shared by the files of the sound range 0x80276B7C-0x8027D3AC: stretch.c, s3dlow.c,
    sattrdef.c, sbend.c, sclcptch.c, sctlfilt.c, sgetdata.c, sgettag.c, shipass.c, slinklst.c,
    slowpass.c, smemhigh.cpp, SNDI_cos.c, SNDI_sin.c, spktctoh.c, spktplay.c, sreallocbuf.cpp,
@@ -118,13 +120,6 @@ typedef struct SndPacketPlayers_t {
     SndPacketPlayer_t *mPlayers[32];
 } SndPacketPlayers_t;
 
-typedef struct Struct_803B53EC {
-    unsigned short m0;
-    unsigned short m2;
-    unsigned int m4;
-    unsigned int m8;
-    void *mC;
-} Struct_803B53EC;
 
 typedef struct SndFirState_t {
     float m0[8];
@@ -259,7 +254,6 @@ typedef struct Decoder_8027BA6C {
 extern "C" {
 
 extern SndPacketPlayers_t sndpps;
-extern Struct_803B53EC lbl_803B53EC;
 extern unsigned char sndcents[];
 extern int lbl_803A772C;
 

@@ -27059,6 +27059,38 @@
         ],
         "evidence": "The original 1932-byte poll keeps its instructions and remains a measured partial; the other five functions and all native data link."
       }
+    },
+    {
+      "source": "src/engine/saramman.c",
+      "profile": "sound_cxx_holdouts",
+      "evidence": "evidence.tsv saramman.c unit, compiler, state and HOLDOUT source-form rows. Four exact functions (324 bytes) and the native 16-byte state link; alloc/free keep original instructions.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027981C",
+          "end": "0x80279960"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803B53EC",
+          "end": "0x803B53FC"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "SNDARAM_alloc",
+            "evidence": "evidence.tsv source-form 0x80279960-0x80279B24"
+          },
+          {
+            "function": "SNDARAM_free",
+            "evidence": "evidence.tsv source-form 0x80279B24-0x80279BC0"
+          }
+        ],
+        "evidence": "Both gap-search/insertion and remove/compaction bodies remain measured partials after source-form and RTL investigation; the four prefix functions and complete native state link."
+      }
     }
   ]
 }

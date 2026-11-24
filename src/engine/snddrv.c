@@ -466,8 +466,8 @@ int SNDPLATFORM_init(int mode)
             if (count > lbl_803A6C24.m1C.m12) {
                 count = lbl_803A6C24.m1C.m12;
             }
-            fn_8027981C(lbl_803A6C24.m1C.m8 + (count + 2));
-            fn_8027986C(lbl_803A6C24.m1C.m38, lbl_803A6C24.m1C.m3C);
+            SNDARAM_init(lbl_803A6C24.m1C.m8 + (count + 2));
+            SNDARAM_setpool(lbl_803A6C24.m1C.m38, lbl_803A6C24.m1C.m3C);
         }
         lbl_803A8D60.m1404 = SNDPLATFORM_memalloc(0, 1280);
         lbl_803A8D60.m1408 = (u32)lbl_803A8D60.m1404 >> 1;
@@ -518,7 +518,7 @@ int SNDPLATFORM_restore(int flag)
         SNDDRV_restoremixer();
     }
     if (flag == 0) {
-        fn_802798C0();
+        SNDARAM_restore();
     }
     while (lbl_803A6C24.m169 != 0) {
         SNDSYS_leavecritical();
@@ -1096,13 +1096,13 @@ void *SNDPLATFORM_memalloc(int unused, int size)
     if (lbl_803A6C24.mB8 != 0) {
         return lbl_803A6C24.mB8(size);
     }
-    return fn_80279960(size);
+    return SNDARAM_alloc(size);
 }
 
 int SNDPLATFORM_memfree(int unused, void *p)
 {
     if (lbl_803A6C24.mBC == 0) {
-        fn_80279B24(p);
+        SNDARAM_free(p);
     } else {
         lbl_803A6C24.mBC(p);
     }
@@ -1117,7 +1117,7 @@ int SNDPLATFORM_memlimits(u32 start, u32 end)
     if (end == (u32)-1) {
         end = lbl_803A6C24.m1C.m38 + lbl_803A6C24.m1C.m3C;
     }
-    fn_8027986C(start, end - start);
+    SNDARAM_setpool(start, end - start);
     return 0;
 }
 
