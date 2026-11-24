@@ -59,14 +59,14 @@ void fn_80220DA4(Float32 *pMul, Float32 *pScale)
     if (!(pNext->unk_00[3] > 0.0f)) {
         pNext->unk_00[3] = 0.0f;
     }
-    pNext->unk_20.r = fn_80220DA4_ToByte(pNext->unk_00[0] * 255.0f);
-    pNext->unk_20.g = fn_80220DA4_ToByte(pNext->unk_00[1] * 255.0f);
-    pNext->unk_20.b = fn_80220DA4_ToByte(pNext->unk_00[2] * 255.0f);
-    pNext->unk_20.a = fn_80220DA4_ToByte(pNext->unk_00[3] * 255.0f);
-    pNext->unk_24.r = fn_80220DA4_ToByte(pNext->unk_00[4] * 255.0f);
-    pNext->unk_24.g = fn_80220DA4_ToByte(pNext->unk_00[5] * 255.0f);
-    pNext->unk_24.b = fn_80220DA4_ToByte(pNext->unk_00[6] * 255.0f);
-    pNext->unk_24.a = fn_80220DA4_ToByte(pNext->unk_00[7] * 255.0f);
+    pNext->mMaterialColor.r = fn_80220DA4_ToByte(pNext->unk_00[0] * 255.0f);
+    pNext->mMaterialColor.g = fn_80220DA4_ToByte(pNext->unk_00[1] * 255.0f);
+    pNext->mMaterialColor.b = fn_80220DA4_ToByte(pNext->unk_00[2] * 255.0f);
+    pNext->mMaterialColor.a = fn_80220DA4_ToByte(pNext->unk_00[3] * 255.0f);
+    pNext->mLightColor.r = fn_80220DA4_ToByte(pNext->unk_00[4] * 255.0f);
+    pNext->mLightColor.g = fn_80220DA4_ToByte(pNext->unk_00[5] * 255.0f);
+    pNext->mLightColor.b = fn_80220DA4_ToByte(pNext->unk_00[6] * 255.0f);
+    pNext->mLightColor.a = fn_80220DA4_ToByte(pNext->unk_00[7] * 255.0f);
     lbl_803ED00C++;
     lbl_803EBF50++;
     fn_80220CFC(0);

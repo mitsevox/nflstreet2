@@ -208,8 +208,8 @@ void fn_80220988(void)
     ColorWord_80220988 Light;
 
     pColor = fn_80220D34();
-    Mat.Color = pColor->unk_20;
-    Light.Color = pColor->unk_24;
+    Mat.Color = pColor->mMaterialColor;
+    Light.Color = pColor->mLightColor;
     if (Mat.Value != lbl_803ECFF0 || Light.Value != lbl_803ECFF4) {
         GXSetChanMatColor(GX_COLOR0A0, Mat.Color);
         GXInitLightColor(&lbl_803E9880, Light.Color);
