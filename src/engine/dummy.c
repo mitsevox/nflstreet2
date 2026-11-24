@@ -4,7 +4,7 @@
 #include <dolphin/exi.h>
 #include "engine/dummy.h"
 
-extern int fn_801AC9C8(int fd, void *buf, int len);
+extern int PCwrite(int fd, void *buf, int len);
 
 int __sn_serialp(void *buf, int len)
 {
@@ -24,7 +24,7 @@ int _write(int fd, void *buf, int len)
         return __sn_serialp(buf, len);
     if (fd == 0)
         return -1;
-    return fn_801AC9C8(fd, buf, len);
+    return PCwrite(fd, buf, len);
 }
 
 int write(int fd, void *buf, int len)

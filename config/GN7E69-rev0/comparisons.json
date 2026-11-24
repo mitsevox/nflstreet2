@@ -25585,31 +25585,6 @@
       ]
     },
     {
-      "source": "src/engine/fileserver.c",
-      "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AC6B0-0x801ACA00 (src/engine/fileserver.c), linker row 0x801AC6A8-0x801AC6B0, assembly row 0x801AC6B0-0x801ACA00, compiler row 0x801AC6B0-0x801AD424, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; the twelve file-server entries 0x801AC9A0-0x801AC9F8 (provisional/open rows that say not to count them independently) and 0x801AC8B0, whose lis/ori pairs address the twelve entries (a registered function may not reference an unregistered same-file function), stay in the asm source without a comparison entry. Hand-written libsn runtime as top-level asm. Comparison-only; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801AC6B0",
-          "end": "0x801ACA00"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801AC6B0",
-          "start": "0x801AC6B0",
-          "end": "0x801AC8B0"
-        },
-        {
-          "symbol": "fn_801AC974",
-          "start": "0x801AC974",
-          "end": "0x801AC9A0"
-        }
-      ]
-    },
-    {
       "source": "src/engine/sndvd.c",
       "profile": "sndvd_native_c",
       "evidence": "evidence.tsv sndvd.c whole unit, native data sections, labeled hardware-assembly input sections and DSIHandler HOLDOUT. Eleven exact functions956bytes and complete82native data bytes link. All9state objects have identical definitions in both builds; ordinary -fdata-sections maps every native section whole, with no COMMON/storage map, data omission or fake padding. Full628-byte handler stays original/partial.",

@@ -27333,6 +27333,61 @@
           "end": "0x802CC580"
         }
       ]
+    },
+    {
+      "source": "src/engine/fileserver.c",
+      "profile": "engine_cpp_nosda",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AC6B0",
+          "end": "0x801ACA00"
+        },
+        {
+          "section": ".data.snFSRequestCodes",
+          "placement": ".data4",
+          "start": "0x802CC440",
+          "end": "0x802CC45C"
+        },
+        {
+          "section": ".data.snFSCommandHandlers",
+          "placement": ".data4",
+          "start": "0x802CC45C",
+          "end": "0x802CC4AC"
+        },
+        {
+          "section": ".data.snFSRequestPacket",
+          "placement": ".data4",
+          "start": "0x802CC4C0",
+          "end": "0x802CC4D8"
+        },
+        {
+          "section": ".data.snFSErrorFlag",
+          "placement": ".data4",
+          "start": "0x802CC4D8",
+          "end": "0x802CC4DC"
+        },
+        {
+          "section": ".data.snFSReadError",
+          "placement": ".data4",
+          "start": "0x802CC4DC",
+          "end": "0x802CC4F7"
+        },
+        {
+          "section": ".data.snFSBadCommand",
+          "placement": ".data4",
+          "start": "0x802CC4F8",
+          "end": "0x802CC510"
+        },
+        {
+          "section": ".data.snFSUnavailableMessage",
+          "placement": ".data4",
+          "start": "0x802CC511",
+          "end": "0x802CC547"
+        }
+      ],
+      "evidence": "evidence.tsv fileserver.c unit/assembly/source-form rows: complete848-byte native text,15native function symbols with unchanged extents, twelve trailing return words retained in the full text, and seven native data objects totaling241bytes. Both file edges and existing veneer function edges retain provisional/open grades. No derived object or boundary alteration."
     }
   ]
 }
