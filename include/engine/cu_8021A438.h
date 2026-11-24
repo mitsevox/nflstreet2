@@ -66,11 +66,11 @@ typedef struct UIGNode_t {
 } UIGNode_t;
 
 /* 40-byte element of the array that fn_80220D34 returns a pointer into. */
-typedef struct Color_80223C4C {
+typedef struct UIGMaterialColorState_t {
     Float32 unk_00[8]; /* 0x00 */
-    GXColor unk_20; /* 0x20 */
-    GXColor unk_24; /* 0x24 */
-} Color_80223C4C;
+    GXColor mMaterialColor; /* 0x20 */
+    GXColor mLightColor; /* 0x24 */
+} UIGMaterialColorState_t;
 
 #ifdef __cplusplus
 extern "C" {

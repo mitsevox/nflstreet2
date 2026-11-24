@@ -38,7 +38,7 @@ typedef struct Transform_80221198 {
 
 extern GXLightObj lbl_803E9880;
 extern unsigned short *lbl_803EBF48;
-extern Color_80223C4C *lbl_803EBF50;
+extern UIGMaterialColorState_t *lbl_803EBF50;
 extern Int32 lbl_803EBF54;
 extern Int32 lbl_803EBF58;
 extern Uint8 lbl_803EBF5C;
@@ -203,7 +203,7 @@ void fn_8021F984(UIGNode_t *pNode, Int32 Item)
 
 void fn_80220988(void)
 {
-    Color_80223C4C *pColor;
+    UIGMaterialColorState_t *pColor;
     ColorWord_80220988 Mat;
     ColorWord_80220988 Light;
 

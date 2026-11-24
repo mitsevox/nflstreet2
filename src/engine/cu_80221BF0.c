@@ -499,7 +499,7 @@ void UIGLibTextDraw(Text_80221BF0 *pText)
     Rgba_802227B0 Color0;
     Rgba_802227B0 Color1;
     UIGFontItem_t *pItem;
-    Color_80223C4C *pScale;
+    UIGMaterialColorState_t *pScale;
     Palette_80220B4C *pPalette;
     Range_80221D30 *pRange;
     Uint32 Align;

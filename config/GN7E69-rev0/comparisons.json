@@ -32562,31 +32562,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_80223B00.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80223B00-0x80223FF4 (src/engine/cu_80223B00.c), its function and name rows and the file compiler row. Draft comparisons only; original assembly remains linked. The draft bodies use no compiled static data; 0x80223B00 and 0x80223E28, the users of the .rodata 0x802B1FF8-0x802B2004, have no body here.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80223B00",
-          "end": "0x80223FF4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80223C4C",
-          "start": "0x80223C4C",
-          "end": "0x80223CB8"
-        },
-        {
-          "symbol": "fn_80223CB8",
-          "start": "0x80223CB8",
-          "end": "0x80223E28"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_80223FF4.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/cu_80223FF4.c), its function and name rows and the file compiler row. Draft comparisons only; original assembly remains linked. The draft bodies use no compiled static data; 0x80223FF4 and 0x8022482C, the users of the .rodata 0x802B2008-0x802B204C, have no body here.",

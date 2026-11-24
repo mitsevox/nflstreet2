@@ -27572,6 +27572,31 @@
           "end": "0x803A0400"
         }
       ]
+    },
+    {
+      "source": "src/engine/uigcurverender.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv complete four-function UI curve renderer, native literal and material/light colour sections. Every function and native byte matches without holdouts or storage transformation.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80223B00",
+          "end": "0x80223FF4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1FF8",
+          "end": "0x802B2004"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF68",
+          "end": "0x803EBF70"
+        }
+      ]
     }
   ]
 }

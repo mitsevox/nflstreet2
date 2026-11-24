@@ -523,7 +523,7 @@ void TMRenderDisable32BitIndirectCluts(void);
 void TMRenderInit(void);
 void TMRenderShutdown(void);
 void TMRenderSetDefaultTexture(TMTexture_t *pTexture);
-void TMRenderReset(void);
+#include "engine/TMRenderReset.h"
 void TMRenderBeginFrame(void);
 void TMRenderBeginViewport(void);
 void TMRenderEndFrame(void);

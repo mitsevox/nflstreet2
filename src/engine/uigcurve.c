@@ -19,6 +19,7 @@
 #include "engine/llmatrix.h"
 #include "engine/cu_8021A438.h"
 #include "engine/uigcurve.h"
+#include "engine/uigcurverender.h"
 #include "engine/viewport.h"
 #include "engine/sound.h"
 #include "engine/texture.h"
@@ -32,7 +33,6 @@ UIGCurvePoint_t _UIGCurve_aSamples[101];
 
 void _UIGCurveRelocate(UIGNode_t *pNode);
 void _UIGCurveUnrelocate(UIGNode_t *pNode);
-void fn_80223B00(UIGNode_t *pNode, Int32 a);
 
 void _UIGCurveEvaluate(UIGCurvePoint_t *pPoints, int count, float t, UIGCurvePoint_t *pOut)
 {
@@ -325,7 +325,7 @@ void _UIGCurveDraw(UIGNode_t *pNode)
     if (Item != 0 && (pNode->Flags & 0x10) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
         fn_80220C4C(pNode->unk_0A, pNode->unk_08, Item);
     }
-    fn_80223B00(pNode, Item);
+    UIGCurveRender(pNode, Item);
     if (Item != 0 && (pNode->Flags & 0x10) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
         fn_80220CA4(pNode->unk_0A, pNode->unk_08, Item);
     }

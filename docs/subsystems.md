@@ -134,3 +134,5 @@ Update a row in the PR that changes it: a new file name, a link that moves a fil
 - `src/engine/llsystem.c` (0x801F7DF4-0x801F8878) supplies the platform timers, recursive locks, real-time clock and reset handling. Twenty-two exact functions and88native data bytes link; the complete timer-start and calendar-initialization functions remain measured holdouts. Both historical file edges stay provisional.
 
 - `src/engine/uigcurve.c` (0x80222EC4-0x80223B00) builds UI curve ribbons and manages curve-node messages/resources. Ten exact functions and1664native data bytes link; the complete440-byte offset builder remains measured. Historical file and scratch end edges stay provisional.
+
+- `src/engine/uigcurverender.c` (0x80223B00-0x80223FF4) renders UI curve strips through GX. All four functions,1268native code bytes,12literal bytes and8colour-state bytes link exactly. Both historical file edges remain provisional.

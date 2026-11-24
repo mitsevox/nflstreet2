@@ -260,9 +260,9 @@ void fn_80225AAC(UIGNode_t *pNode, Int32 a, Int32 Item)
 
 void fn_80225AE4(void)
 {
-    Color_80223C4C *pColor = fn_80220D34();
-    GXColor MatColor = pColor->unk_20;
-    GXColor LightColor = pColor->unk_24;
+    UIGMaterialColorState_t *pColor = fn_80220D34();
+    GXColor MatColor = pColor->mMaterialColor;
+    GXColor LightColor = pColor->mLightColor;
 
     GXSetChanMatColor(GX_COLOR0A0, MatColor);
     GXInitLightColor(&lbl_803E9880, LightColor);
