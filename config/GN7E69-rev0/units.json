@@ -404,6 +404,31 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler row 0x80260428-0x80260B1C: ProDG 3.9.3 cc1 at -O2 emits the retained scalar declarations, -msafe-sda places generated operands including the signed conversion bias in small data, and -fno-builtin keeps the target fabsf call."
+    },
+    "speech_frontend_cpp": {
+      "flags": [
+        "-O2",
+        "-fno-weak",
+        "-ffast-math",
+        "-fno-implement-inlines"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler row 0x801F5760-0x801F5D84: per-file Speech.cpp game_cpp plus -fno-implement-inlines. All fifteen target bodies and complete data are represented; default game_cpp additionally emits unreferenced out-of-line constructor/operator-new copies absent from this target file. This flag suppresses only those inline copies, retaining inlined allocation/initialization in SpchInit and all fourteen exact functions. Original flags are not recovered; this is the best-evidence whole-unit profile, not a per-function override."
+    },
+    "speech_frontend_cpp_holdouts": {
+      "flags": [
+        "-O2",
+        "-fno-weak",
+        "-ffast-math",
+        "-fno-implement-inlines",
+        "-ffunction-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler row 0x801F5760-0x801F5D84; speech_frontend_cpp plus the established named function-sections holdout mechanism. No per-function compiler option."
     }
   },
   "externals": {
@@ -1154,10 +1179,6 @@
     "SNDI_validrendermode": {
       "address": "0x802796DC",
       "evidence": "evidence.tsv function and name rows for 0x802796DC (SNDI_validrendermode, srender.c, registered in comparisons.json, original bytes linked); called by SNDPKTPLAY_start (spktplay.c comparison, c19 wave)."
-    },
-    "SpchInit": {
-      "address": "0x801F5B30",
-      "evidence": "evidence.tsv function/name rows for 0x801F5B30 (src/engine/Speech.cpp, comparison only); original-owned until Speech.cpp links."
     },
     "gVoxEvents": {
       "address": "0x8037E0F4",
@@ -27118,6 +27139,58 @@
           }
         ],
         "evidence": "Complete 236-byte directory writer is measured partial after natural branch/assert forms and ProDG RTL investigation; remaining fourteen bodies exact."
+      }
+    },
+    {
+      "source": "src/engine/Speech.cpp",
+      "profile": "speech_frontend_cpp_holdouts",
+      "evidence": "evidence.tsv Speech.cpp unit, per-file inline-emission compiler basis, complete native-data extents and _Spch_AddEvent HOLDOUT; fourteen exact functions plus all1320data bytes link.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F5760",
+          "end": "0x801F58B8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F5B30",
+          "end": "0x801F5D84"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1AA8",
+          "end": "0x802B1AD0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBE28",
+          "end": "0x803EBE2C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF8C",
+          "end": "0x803ECFA0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039AEF0",
+          "end": "0x8039B3D8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "_Spch_AddEvent__Fiie",
+            "evidence": "evidence.tsv source-form 0x801F58B8-0x801F5B30"
+          }
+        ],
+        "evidence": "The complete632-byte event-wrapper retains original code after natural zero/counter/varargs forms and ProDG RTL loop/register-allocation investigation."
       }
     }
   ]

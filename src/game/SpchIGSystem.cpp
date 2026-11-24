@@ -13,19 +13,9 @@
 #include "game/SyncRandGetRange.h"
 #include "game/Object_80039F5C.h"
 #include "engine/spchevnt.h"
+#include "engine/Speech.h"
 
-/* Block passed to SpchInit; its first word holds SpchIGSampleRequest. */
-struct SpchIGInitParams_t {
-    int (*mpUnknown0)(struct SpchIGSampleRequest_t *);
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-    int mUnknown10;
-    int mUnknown14;
-    int mUnknown18;
-    int mUnknown1C;
-    int mUnknown20;
-};
+typedef SpchInitParams_t SpchIGInitParams_t;
 
 /* Record passed to SpchIGSampleRequest. */
 struct SpchIGSampleRequest_t {
@@ -37,11 +27,7 @@ struct SpchIGSampleRequest_t {
     int mUnknown10;
 };
 
-struct SpchIGEventInfo_t {
-    unsigned short mId;
-    char mUnknown2[1];
-    unsigned char mUnknown3;
-};
+typedef SpchEventKey_t SpchIGEventInfo_t;
 
 struct SpchIGChannel_t {
     int mUnknown0;
@@ -86,13 +72,6 @@ void *ResOpenRam(void *pData, int a, int b, int c);
 void SndPurgeStream(int handle);
 void SndStreamSetPitchMult(int handle, int a);
 void SndSetMasterVol(int a, int b);
-void SpchInit(SpchIGInitParams_t *pParams);
-void fn_801F5C34(void);
-void fn_801F5C6C(void *a, int b, void *c, int d);
-void fn_801F5C94(void *pData, int a, int b);
-void fn_801F5CCC(int (*pA)(void), void (*pB)(void));
-void fn_801F5CEC(int (*pFunc)(SpchIGEventInfo_t *));
-void fn_801F5D0C(void);
 
 int SpchIGSampleRequest(SpchIGSampleRequest_t *pRecord);
 int SpchIGGetNearestOpponent(int side);
@@ -120,11 +99,11 @@ static int _SpchIG_iBankCount;
 static SpchIGState_t _SpchIG_sState;
 static unsigned short _SpchIG_aBankRemap[386];
 
-static SpchIGInitParams_t _SpchIG_sInitParams = { SpchIGSampleRequest, 0, 24000, 16, 1, 4084, 0, 0, 0 };
+static SpchIGInitParams_t _SpchIG_sInitParams = { SpchIGSampleRequest, 0, 24000, 16, 1, 4084, 0, 0, 0, 0 };
 
-extern "C" void SpchIGLoadBank(void *a, int b, void *c, int d)
+extern "C" int SpchIGLoadBank(void *a, int b, void *c, int d)
 {
-    fn_801F5C6C(a, b, c, d);
+    return SpchLoadBank((ResFile_t *)a, b);
 }
 
 extern "C" int SpchIGGetEventSpeaker(int side, unsigned int id)
@@ -345,12 +324,12 @@ extern "C" int SpchIGSampleRequest(SpchIGSampleRequest_t *pRecord)
     return _SpchIG_sState.mSlots[pRecord->mUnknown10].mUnknown4;
 }
 
-extern "C" int SpchIGStubQuery(void)
+extern "C" int SpchIGStubQuery(SpchEventKey_t *, int, int, int)
 {
     return 0;
 }
 
-extern "C" void SpchIGStubNotify(void)
+extern "C" void SpchIGStubNotify(SpchEventKey_t *, int, int, int)
 {
 }
 
@@ -363,11 +342,11 @@ extern "C" void SpchIGLoadChatData(SpchIGInitParams_t *pParams, int unused)
     _SpchIG_sState.mpUnknown4 = ResOpenDevice(lbl_802EBE04, 44);
     _SpchIG_sState.mpUnknown8 = ResOpenRam(_SpchIG_sState.mpUnknown4, 0, 1, 1);
     SpchInit(pParams);
-    fn_801F5CEC(SpchIGCanPlayEvent);
+    SpchSetRuleCallbacks(SpchIGCanPlayEvent);
     _SpchIG_sState.mUnknown0 = pParams->mUnknown14;
-    fn_801F5C94(_SpchIG_sState.mpUnknown4, 1, 0);
-    fn_801F5C94(_SpchIG_sState.mpUnknown4, 2, 1);
-    fn_801F5C94(_SpchIG_sState.mpUnknown4, 3, 2);
+    SpchLoadEventDB((ResFile_t *)_SpchIG_sState.mpUnknown4, 1, 0);
+    SpchLoadEventDB((ResFile_t *)_SpchIG_sState.mpUnknown4, 2, 1);
+    SpchLoadEventDB((ResFile_t *)_SpchIG_sState.mpUnknown4, 3, 2);
     for (i = 0; i < 895; i++) {
         SpchIGLoadBank(_SpchIG_sState.mpUnknown8, i, _SpchIG_sState.mpUnknown4, i + 4);
     }
@@ -388,7 +367,7 @@ extern "C" void SpchIGStart(void)
 {
     _SpchIG_sInitParams.mUnknown4 = (_SpchIG_sInitParams.mUnknown4 + 1) & 0x7FFFFFFF;
     SpchIGLoadChatData(&_SpchIG_sInitParams, 1);
-    fn_801F5CCC(SpchIGStubQuery, SpchIGStubNotify);
+    SpchInitRuleCallbacks(SpchIGStubQuery, SpchIGStubNotify);
     SndgSpchClearPlayFlags(127);
     AudmonEventAddListener(SndgSpchHandleEvent);
     _SpchIG_bActive = 1;
@@ -482,8 +461,8 @@ extern "C" void SpchIGStop(void)
     _SpchIG_bActive = 0;
     _SpchIG_bTutorial = 0;
     AudmonEventRemoveListener(SndgSpchHandleEvent);
-    fn_801F5D0C();
-    fn_801F5C34();
+    SpchClearEventQueue();
+    SpchShutdown();
     if (_SpchIG_sState.mpUnknown8 != 0) {
         ResClose(_SpchIG_sState.mpUnknown8);
         _SpchIG_sState.mpUnknown8 = 0;

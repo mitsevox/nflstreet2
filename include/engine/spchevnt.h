@@ -2,6 +2,11 @@
 #define ENGINE_SPCHEVNT_H
 
 /* Declarations of src/engine/spchevnt.c used by several game units. */
+struct SpchEventKey_t {
+    unsigned short mId;
+    unsigned char mUnknown2;
+    unsigned char mUnknown3;
+};
 extern "C" {
 extern int (*gSPCH_AddEvent)(int, int, ...);
 

@@ -9,6 +9,7 @@
 #include <stdarg.h>
 
 #include "engine/spchevnt.h"
+#include "engine/Speech.h"
 #include "engine/VoxDatHeader.h"
 
 struct Entry_801AF84C {
@@ -94,12 +95,6 @@ struct Channel_801B118C {
     ChannelEntry_801B118C mEntries[12];
 };
 
-struct SpchEventKey_t {
-    unsigned short mId;
-    unsigned char mUnknown2;
-    unsigned char mUnknown3;
-};
-
 union EventWord_801AFBD8 {
     int mWord;
     SpchEventKey_t mKey;
@@ -174,14 +169,12 @@ struct SpchCallbacks_t {
 
 /* The three words the game's speech set-up stores through SPCH_GetExtVecs (0x801F5BC4). */
 struct SpchExtVecs_t {
-    void *mVecs[3];
+    void (*mpAbortMessage)(const char *pFormat, ...);
+    void *mpUnknown4;
+    unsigned int (*mpGetTick)(int unused);
 };
 
-class SpchAllocator {
-public:
-    virtual void *vfn_01(int size, int align, int flags);
-    virtual void vfn_02(void *p);
-};
+typedef EA::Allocator::IAllocator SpchAllocator;
 
 extern "C" {
 extern SpchCallbacks_t gCallbacks;
@@ -239,6 +232,17 @@ VoxEvent_t *iSPCH_FindEvent(SpchEventKey_t *key);
 int iSPCH_AddEvent(int *event);
 void iSPCH_InitCsis(VoxDat_t *bank);
 SpchExtVecs_t *SPCH_GetExtVecs(void);
+void SPCH_SetAllocator(SpchAllocator *allocator);
+int SPCH_GetSampleDataRate(int a, int b, int mode);
+int SPCH_Init(int a, int b, int c);
+void SPCH_Deinit(void);
+int SPCH_GetBankPtrMemSize(int count);
+void SPCH_InitBankMem(int count, VoxBankSlot_t *slots);
+int SPCH_AddBank(VoxBankHdr_t *bank);
+int SPCH_AddEventDB(char *data, unsigned int key);
+void SPCH_ClearEventQueue(void);
+void SPCH_InitRuleCallbacks(SpchRuleTestFunc_t pTest, SpchRuleNotifyFunc_t pNotify);
+void SPCH_SetRuleCallback(SpchRuleCallbackFunc_t pCallback);
 
 /* Defined in another file of the library. */
 int iSPCH_GetDatID(SpchEventKey_t *key, int *out);

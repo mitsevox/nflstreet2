@@ -28619,8 +28619,8 @@
     },
     {
       "source": "src/engine/Speech.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801F5760-0x801F5D84 (src/engine/Speech.cpp), its compiler row, function and name rows, the type/field rows of EA::Allocator::TiburonIAllocatorImpl, SpchLog_t and SpchInitParams_t, and the exact data rows .rodata 0x802B1AA8-0x802B1AD0 (class table), .sdata 0x803EBE28-0x803EBE2C, .sbss 0x803ECF8C-0x803ECFA0 and .bss 0x8039AEF0-0x8039B3D8. Draft comparisons only; original assembly remains linked. Holdout _Spch_AddEvent 0x801F58B8 (95.06%, mr r8,r30 counter initialization, see the compiler row) is mid-file, so the file cannot link until it matches.",
+      "profile": "speech_frontend_cpp",
+      "evidence": "evidence.tsv Speech.cpp whole unit, complete native data and _Spch_AddEvent HOLDOUT row. Fourteen exact functions and all native data link; event-wrapper original code stays measured partial.",
       "sections": [
         {
           "section": ".text",
@@ -28655,79 +28655,9 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801F5760__FPCce",
-          "start": "0x801F5760",
-          "end": "0x801F57AC"
-        },
-        {
-          "symbol": "fn_801F57AC__Fv",
-          "start": "0x801F57AC",
-          "end": "0x801F57CC"
-        },
-        {
-          "symbol": "fn_801F57CC__Fv",
-          "start": "0x801F57CC",
-          "end": "0x801F5828"
-        },
-        {
-          "symbol": "fn_801F5828__FiiiPUi",
-          "start": "0x801F5828",
-          "end": "0x801F58B8"
-        },
-        {
-          "symbol": "fn_801F58B8__Fiie",
+          "symbol": "_Spch_AddEvent__Fiie",
           "start": "0x801F58B8",
           "end": "0x801F5B30"
-        },
-        {
-          "symbol": "SpchInit",
-          "start": "0x801F5B30",
-          "end": "0x801F5C34"
-        },
-        {
-          "symbol": "fn_801F5C34",
-          "start": "0x801F5C34",
-          "end": "0x801F5C6C"
-        },
-        {
-          "symbol": "fn_801F5C6C",
-          "start": "0x801F5C6C",
-          "end": "0x801F5C94"
-        },
-        {
-          "symbol": "fn_801F5C94",
-          "start": "0x801F5C94",
-          "end": "0x801F5CCC"
-        },
-        {
-          "symbol": "fn_801F5CCC",
-          "start": "0x801F5CCC",
-          "end": "0x801F5CEC"
-        },
-        {
-          "symbol": "fn_801F5CEC",
-          "start": "0x801F5CEC",
-          "end": "0x801F5D0C"
-        },
-        {
-          "symbol": "fn_801F5D0C",
-          "start": "0x801F5D0C",
-          "end": "0x801F5D2C"
-        },
-        {
-          "symbol": "Allocate__Q32EA9Allocator21TiburonIAllocatorImplUiUii",
-          "start": "0x801F5D2C",
-          "end": "0x801F5D58"
-        },
-        {
-          "symbol": "Deallocate__Q32EA9Allocator21TiburonIAllocatorImplPv",
-          "start": "0x801F5D58",
-          "end": "0x801F5D7C"
-        },
-        {
-          "symbol": "MaxAlloc__CQ32EA9Allocator21TiburonIAllocatorImpl",
-          "start": "0x801F5D7C",
-          "end": "0x801F5D84"
         }
       ]
     },

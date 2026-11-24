@@ -2,6 +2,7 @@
    tutorials and other popups), holds the game state, camera, rumble and audio
    while it is up, and puts everything back when it closes. */
 
+#include "engine/Speech.h"
 #include "game/PadInput.h"
 #include "game/PauseMenu.h"
 #include "game/AudmonEvent.h"
@@ -116,7 +117,6 @@ void RumbleShutdown(void);
 void RumbleEnable(int a);
 unsigned char RumbleIsEnabled(void);
 int ScreenTransGetMode(void);
-void fn_801F5D0C(void);
 void fn_802195E4(void *p, unsigned short a, unsigned short b);
 }
 
@@ -144,7 +144,7 @@ void PauseEnterAudio(void)
 {
     SndgEventSetSfx5Volume(0);
     SndgEventSetSfx34Volume();
-    fn_801F5D0C();
+    SpchClearEventQueue();
     SpchIGPauseChannel(0);
     SpchIGPauseChannel(1);
     SpchIGPauseChannel(2);

@@ -3,6 +3,9 @@
    filters and logs the events the game adds. */
 
 #include <stddef.h>
+#include <string.h>
+#include "engine/Speech.h"
+#include "engine/spchlib.h"
 #include <stdarg.h>
 #include "engine/Resource.h"
 #include "engine/system.h"
@@ -10,13 +13,6 @@
 
 namespace EA {
 namespace Allocator {
-
-class IAllocator {
-public:
-    virtual void *Allocate(unsigned int size, unsigned int align, int flags) = 0;
-    virtual void Deallocate(void *p) = 0;
-    virtual unsigned int MaxAlloc() const = 0;
-};
 
 class TiburonIAllocatorImpl : public IAllocator {
 public:
@@ -32,23 +28,6 @@ public:
 
 }
 }
-
-struct SpchExtVecs_t {
-    void *mVecs[3];
-};
-
-struct SpchInitParams_t {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-    int mUnknown10;
-    int mUnknown14;
-    unsigned char mUnknown18;
-    unsigned char mUnknown19;
-    int (*mpUnknown1C)(unsigned int id);
-    void *mpUnknown20;
-};
 
 struct SpchLogEvent_t {
     int mId;
@@ -71,44 +50,16 @@ static int (*_Spch_pPassFunction)(unsigned int id);
 static void *_Spch_pNameFunction;
 static unsigned char bVerboseLogging;
 
-extern "C" {
-extern int (*gSPCH_AddEvent)(int, int, ...);
-
-int SPCH_AddEventV(int id, int count, ...);
-int SPCH_GetSampleDataRate(int a, int b, int mode);
-void SPCH_SetAllocator(EA::Allocator::TiburonIAllocatorImpl *pAllocator);
-int SPCH_Init(int a, int b, int c);
-int SPCH_GetBankPtrMemSize(int numBanks);
-void SPCH_InitBankMem(int numBanks, void *pMem);
-SpchExtVecs_t *SPCH_GetExtVecs(void);
-void SpchInit(SpchInitParams_t *pParams);
-
-void *memset(void *dst, int value, size_t n);
-void SPCH_ClearEventQueue(void);
-void SPCH_InitRuleCallbacks(int (*pA)(void), void (*pB)(void));
-void SPCH_SetRuleCallback(void *pFunc);
-void SPCH_Deinit(void);
-void SPCH_AddBank(void *pData);
-void SPCH_AddEventDB(void *pData, int a);
-
-void fn_801F5C34(void);
-void fn_801F5C6C(ResFile_t *pRes, unsigned int index);
-void fn_801F5C94(ResFile_t *pRes, unsigned int index, int a);
-void fn_801F5CCC(int (*pA)(void), void (*pB)(void));
-void fn_801F5CEC(void *pFunc);
-void fn_801F5D0C(void);
-}
-
-static void fn_801F5760(const char *pFormat, ...)
+static void _Spch_AbortMessage(const char *pFormat, ...)
 {
 }
 
-static int fn_801F57AC(void)
+static unsigned int _Spch_GetTick(int unused)
 {
     return SysGetSystemTime();
 }
 
-static void fn_801F57CC(void)
+static void _SpchLogReset(void)
 {
     unsigned int i;
 
@@ -119,7 +70,7 @@ static void fn_801F57CC(void)
     }
 }
 
-static void fn_801F5828(int type, int time, int numArgs, unsigned int *pArgs)
+static void _SpchLogAddEvent(int type, int time, int numArgs, unsigned int *pArgs)
 {
     SpchLogEvent_t *pEvent;
     int i;
@@ -139,7 +90,7 @@ static void fn_801F5828(int type, int time, int numArgs, unsigned int *pArgs)
     _SpchLog_EventLog.mCount += (_SpchLog_EventLog.mCount < 8);
 }
 
-static int fn_801F58B8(int id, int numArgs, ...)
+static int _Spch_AddEvent(int id, int numArgs, ...)
 {
     va_list args;
     unsigned int argv[36];
@@ -157,7 +108,7 @@ static int fn_801F58B8(int id, int numArgs, ...)
                              argv[15], argv[16], argv[17], argv[18], argv[19], argv[20], argv[21], argv[22],
                              argv[23], argv[24], argv[25], argv[26], argv[27], argv[28], argv[29], argv[30],
                              argv[31], argv[32], argv[33], argv[34], argv[35]);
-        fn_801F5828(id, result, numArgs, argv);
+        _SpchLogAddEvent(id, result, numArgs, argv);
     }
     return result;
 }
@@ -170,25 +121,25 @@ void SpchInit(SpchInitParams_t *pParams)
     dataSize = SPCH_GetSampleDataRate(pParams->mUnknown8, pParams->mUnknownC, pParams->mUnknown10);
     pIAllocator = new EA::Allocator::TiburonIAllocatorImpl(1);
     SPCH_SetAllocator(pIAllocator);
-    SPCH_Init(pParams->mUnknown0, pParams->mUnknown4, dataSize);
+    SPCH_Init((int)pParams->mpSampleRequest, pParams->mUnknown4, dataSize);
     pBankMem = fn_801D2B7C(SPCH_GetBankPtrMemSize(pParams->mUnknown14), 0, 0);
-    SPCH_InitBankMem(pParams->mUnknown14, pBankMem);
+    SPCH_InitBankMem(pParams->mUnknown14, (VoxBankSlot_t *)pBankMem);
     _pSpch_BankMem = pBankMem;
     SpchExtVecs_t *pVecs = SPCH_GetExtVecs();
-    pVecs->mVecs[0] = (void *)fn_801F5760;
-    pVecs->mVecs[1] = 0;
-    pVecs->mVecs[2] = (void *)fn_801F57AC;
-    fn_801F57CC();
+    pVecs->mpAbortMessage = _Spch_AbortMessage;
+    pVecs->mpUnknown4 = 0;
+    pVecs->mpGetTick = _Spch_GetTick;
+    _SpchLogReset();
     _Spch_pPassFunction = pParams->mpUnknown1C;
     _Spch_pNameFunction = pParams->mpUnknown20;
     if (pParams->mUnknown18) {
-        gSPCH_AddEvent = fn_801F58B8;
+        gSPCH_AddEvent = _Spch_AddEvent;
     }
     bVerboseLogging = pParams->mUnknown19;
     _Spch_Active = 1;
 }
 
-void fn_801F5C34(void)
+extern "C" void SpchShutdown(void)
 {
     SPCH_Deinit();
     fn_801D2BD0(pIAllocator);
@@ -196,27 +147,27 @@ void fn_801F5C34(void)
     _Spch_Active = 0;
 }
 
-void fn_801F5C6C(ResFile_t *pRes, unsigned int index)
+extern "C" int SpchLoadBank(ResFile_t *pRes, unsigned int index)
 {
-    SPCH_AddBank((void *)ResLoad(pRes, index, 1));
+    return SPCH_AddBank((VoxBankHdr_t *)ResLoad(pRes, index, 1));
 }
 
-void fn_801F5C94(ResFile_t *pRes, unsigned int index, int a)
+extern "C" int SpchLoadEventDB(ResFile_t *pRes, unsigned int index, unsigned int a)
 {
-    SPCH_AddEventDB((void *)ResLoad(pRes, index, 1), a);
+    return SPCH_AddEventDB((char *)ResLoad(pRes, index, 1), a);
 }
 
-void fn_801F5CCC(int (*pA)(void), void (*pB)(void))
+extern "C" void SpchInitRuleCallbacks(SpchRuleTestFunc_t pA, SpchRuleNotifyFunc_t pB)
 {
     SPCH_InitRuleCallbacks(pA, pB);
 }
 
-void fn_801F5CEC(void *pFunc)
+extern "C" void SpchSetRuleCallbacks(SpchRuleCallbackFunc_t pFunc)
 {
     SPCH_SetRuleCallback(pFunc);
 }
 
-void fn_801F5D0C(void)
+extern "C" void SpchClearEventQueue(void)
 {
     SPCH_ClearEventQueue();
 }

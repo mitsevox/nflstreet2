@@ -228,8 +228,8 @@ int iSPCH_GetSampleSizeData(VoxBankHdr_t *bank, int sample, int *pStart, int *pS
 unsigned int SPCHEXT_gettick(void)
 {
     unsigned int tick = 0;
-    if (gExtVecs.mVecs[2]) {
-        tick = ((unsigned int (*)(int))gExtVecs.mVecs[2])(0);
+    if (gExtVecs.mpGetTick) {
+        tick = gExtVecs.mpGetTick(0);
     }
     return tick;
 }

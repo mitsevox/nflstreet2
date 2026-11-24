@@ -602,7 +602,7 @@ void *iSPCH_MemAlloc(int size)
     void *p = 0;
 
     if (gSPCH_Allocator) {
-        p = gSPCH_Allocator->vfn_01(size, 4, -1);
+        p = gSPCH_Allocator->Allocate(size, 4, -1);
     }
     return p;
 }
@@ -610,7 +610,7 @@ void *iSPCH_MemAlloc(int size)
 void iSPCH_MemFree(void *p)
 {
     if (gSPCH_Allocator) {
-        gSPCH_Allocator->vfn_02(p);
+        gSPCH_Allocator->Deallocate(p);
     }
 }
 
