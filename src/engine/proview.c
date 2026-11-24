@@ -1,3 +1,18 @@
+#include "dolphin/os.h"
+#include "dolphin/os/OSInterrupt.h"
+
+typedef struct SNReadConfig_t {
+    unsigned int mBlockShift;
+    unsigned int mBlockSize;
+    unsigned int mRemainderMask;
+    unsigned int mWordMask;
+} SNReadConfig_t;
+
+__OSInterruptHandler _SN_Callback = 0;
+unsigned char *_SN_pInterruptFlag = 0;
+unsigned char _SN_InterruptFlag = 0;
+SNReadConfig_t _SN_ReadConfig = {0, 0, 0, 0};
+
 /* SN Systems libsn host link (libsn.a proview.o): the EXI channel 2 connection to the
    development host (init, interrupts, query, read and write of packets, the byte and word
    transfers) and the DMA and polled transfer steps the host-file code uses. Hand-written
@@ -20,15 +35,15 @@ asm(
 "    addi    31,4,0\n"
 "    addi    30,3,0\n"
 "    bl      OSDisableInterrupts\n"
-"    lis     0,lbl_802CC568@h\n"
-"    ori     0,0,lbl_802CC568@l\n"
-"    lis     4,lbl_802CC564@h\n"
-"    ori     4,4,lbl_802CC564@l\n"
+"    lis     0,_SN_InterruptFlag@h\n"
+"    ori     0,0,_SN_InterruptFlag@l\n"
+"    lis     4,_SN_pInterruptFlag@h\n"
+"    ori     4,4,_SN_pInterruptFlag@l\n"
 "    stw     0,0(4)\n"
 "    stw     4,0(30)\n"
 "    addi    30,3,0\n"
-"    lis     3,lbl_802CC560@h\n"
-"    ori     3,3,lbl_802CC560@l\n"
+"    lis     3,_SN_Callback@h\n"
+"    ori     3,3,_SN_Callback@l\n"
 "    stw     31,0(3)\n"
 "    lis     3,1\n"
 "    ori     3,3,0x8000\n"
@@ -83,8 +98,8 @@ asm(
 "    subf    5,4,5\n"
 "    cmpwi   5,0\n"
 "    bne     .L_801ACA60\n"
-"    lis     3,lbl_802CC570@h\n"
-"    ori     3,3,lbl_802CC570@l\n"
+"    lis     3,_SN_ReadConfig@h\n"
+"    ori     3,3,_SN_ReadConfig@l\n"
 "    stw     6,0(3)\n"
 "    li      5,1\n"
 "    slw     5,5,6\n"
@@ -204,8 +219,8 @@ asm(
 "    bl      SNWiggleSelect\n"
 "    li      3,2\n"
 "    bl      SNWrite8\n"
-"    lis     3,lbl_802CC570@h\n"
-"    ori     3,3,lbl_802CC570@l\n"
+"    lis     3,_SN_ReadConfig@h\n"
+"    ori     3,3,_SN_ReadConfig@l\n"
 "    lwz     4,0(3)\n"
 "    srw     28,31,4\n"
 "    cmpwi   28,0\n"
@@ -226,8 +241,8 @@ asm(
 "    cmpwi   3,0xff\n"
 "    beq     .L_801ACCB0\n"
 "    bl      SNWiggleSelect\n"
-"    lis     5,lbl_802CC570@h\n"
-"    ori     5,5,lbl_802CC570@l\n"
+"    lis     5,_SN_ReadConfig@h\n"
+"    ori     5,5,_SN_ReadConfig@l\n"
 "    lwz     5,4(5)\n"
 "    lis     29,-0x3400\n"
 "    stw     30,0x682c(29)\n"
@@ -239,8 +254,8 @@ asm(
 "    addi    28,28,-1\n"
 "    cmpwi   28,0\n"
 "    bne     .L_801ACCA0\n"
-"    lis     5,lbl_802CC570@h\n"
-"    ori     5,5,lbl_802CC570@l\n"
+"    lis     5,_SN_ReadConfig@h\n"
+"    ori     5,5,_SN_ReadConfig@l\n"
 "    lwz     5,8(5)\n"
 "    and.    28,31,5\n"
 "    beq     .L_801ACDAC\n"
@@ -256,8 +271,8 @@ asm(
 "    cmpwi   3,0xff\n"
 "    beq     .L_801ACD1C\n"
 "    bl      SNWiggleSelect\n"
-"    lis     5,lbl_802CC570@h\n"
-"    ori     5,5,lbl_802CC570@l\n"
+"    lis     5,_SN_ReadConfig@h\n"
+"    ori     5,5,_SN_ReadConfig@l\n"
 "    lwz     5,0xc(5)\n"
 "    and     29,31,5\n"
 "    andi.   29,29,0xffe0\n"
@@ -458,14 +473,14 @@ asm(
 "    li      0,0x1000\n"
 "    lis     5,-0x3400\n"
 "    stw     0,0x3000(5)\n"
-"    lis     5,lbl_802CC560@h\n"
-"    ori     5,5,lbl_802CC560@l\n"
+"    lis     5,_SN_Callback@h\n"
+"    ori     5,5,_SN_Callback@l\n"
 "    lwz     5,0(5)\n"
 "    cmpwi   5,0\n"
 "    beq     .L_801ACFC4\n"
 "    mtlr    5\n"
-"    lis     5,lbl_802CC568@h\n"
-"    ori     5,5,lbl_802CC568@l\n"
+"    lis     5,_SN_InterruptFlag@h\n"
+"    ori     5,5,_SN_InterruptFlag@l\n"
 "    li      0,1\n"
 "    stb     0,0(5)\n"
 "    blrl\n"

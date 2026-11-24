@@ -452,6 +452,17 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv sndvd.c source forms: sndvd_native_c plus the named whole-file function-sections holdout mechanism. No COMMON storage map, kept_locals or per-function options. DECOMP_COMPARE only guards two input-section directives for existing hardware assembly; all state definitions are identical in both builds."
+    },
+    "proview_native_c": {
+      "flags": [
+        "-O2",
+        "-G0",
+        "-fdata-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler/source-form proview.c: whole-file -O2 -G0 -fdata-sections leaves the existing hardware assembly instructions unchanged and emits four real initialized state objects as separate ordinary native sections. No COMMON map or function option. Original data packaging is not recovered."
     }
   },
   "externals": {
@@ -1222,38 +1233,6 @@
     "gLastSubTick": {
       "address": "0x803ECEB0",
       "evidence": "evidence.tsv data/name rows for 0x803ECEB0 (target extent, related name); speech-library storage, original-owned."
-    },
-    "SNQueryData": {
-      "address": "0x801ACB9C",
-      "evidence": "evidence.tsv name row SNQueryData 0x801ACB9C (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801ACB9C; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
-    },
-    "SNRead": {
-      "address": "0x801ACC24",
-      "evidence": "evidence.tsv name row SNRead 0x801ACC24 (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801ACC24; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
-    },
-    "SNWrite": {
-      "address": "0x801ACDE0",
-      "evidence": "evidence.tsv name row SNWrite 0x801ACDE0 (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801ACDE0; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
-    },
-    "SNDVDRead_init": {
-      "address": "0x801AD11C",
-      "evidence": "evidence.tsv name row SNDVDRead_init 0x801AD11C (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801AD11C; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
-    },
-    "SNDVDReadAsync_next": {
-      "address": "0x801AD16C",
-      "evidence": "evidence.tsv name row SNDVDReadAsync_next 0x801AD16C (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801AD16C; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
-    },
-    "SNDVDReadSync_next": {
-      "address": "0x801AD1DC",
-      "evidence": "evidence.tsv name row SNDVDReadSync_next 0x801AD1DC (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801AD1DC; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
-    },
-    "SNDVDWrite_init": {
-      "address": "0x801AD244",
-      "evidence": "evidence.tsv name row SNDVDWrite_init 0x801AD244 (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801AD244; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
-    },
-    "SNDVDWriteNoDMA_next": {
-      "address": "0x801AD380",
-      "evidence": "evidence.tsv name row SNDVDWriteNoDMA_next 0x801AD380 (libsn proview.o label, NASCAR 2005 and FIFA 2005) and function row 0x801AD380; defined in src/engine/proview.c (comparison only, original assembly remains linked) and called from the linked src/engine/FSasync.c."
     },
     "PATH_fade": {
       "address": "0x801B4728",
@@ -27317,6 +27296,43 @@
         ],
         "evidence": "Full628-byte command handler retains original code after natural source/profile forms and RTL investigation; no instruction workaround is retained."
       }
+    },
+    {
+      "source": "src/engine/proview.c",
+      "profile": "proview_native_c",
+      "evidence": "evidence.tsv complete proview.c unit, assembly, compiler, native-state and source-form rows. All23 assembly entries and all2596native text bytes link as one whole section; original provisional internal edges remain unchanged. Four ordinary native initialized sections own25bytes; gap569-56F remains unowned. No COMMON/storage map.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801ACA00",
+          "end": "0x801AD424"
+        },
+        {
+          "section": ".data._SN_Callback",
+          "placement": ".data4",
+          "start": "0x802CC560",
+          "end": "0x802CC564"
+        },
+        {
+          "section": ".data._SN_pInterruptFlag",
+          "placement": ".data4",
+          "start": "0x802CC564",
+          "end": "0x802CC568"
+        },
+        {
+          "section": ".data._SN_InterruptFlag",
+          "placement": ".data4",
+          "start": "0x802CC568",
+          "end": "0x802CC569"
+        },
+        {
+          "section": ".data._SN_ReadConfig",
+          "placement": ".data4",
+          "start": "0x802CC570",
+          "end": "0x802CC580"
+        }
+      ]
     }
   ]
 }
