@@ -27419,7 +27419,7 @@
     {
       "source": "src/engine/PJoyDrvr.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv PJoyDrvr.c unit/data/name rows and _PerJoyDriverPoll HOLDOUT row. Only the poll remains partial. The diagnostic .bss envelope positions the two named storage extents; no intervening bytes are owned or credited. Linked storage owns exactly 16+48 bytes.",
+      "evidence": "evidence.tsv PJoyDrvr.c six function/name rows, full poll partial and literal pool. Comparison only: five exact functions, one partial; original code and both external arrays remain linked. Data placement is unresolved; no COMMON storage map is used.",
       "sections": [
         {
           "section": ".text",
@@ -27432,31 +27432,38 @@
           "placement": ".data3",
           "start": "0x802B11C0",
           "end": "0x802B1200"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8039ADE4",
-          "end": "0x803E92FC"
         }
       ],
       "functions": [
         {
+          "symbol": "_PerJoyDriverInit",
+          "start": "0x801E1D44",
+          "end": "0x801E1E34"
+        },
+        {
+          "symbol": "_PerJoyDriverShutdown",
+          "start": "0x801E1E34",
+          "end": "0x801E1E50"
+        },
+        {
           "symbol": "_PerJoyDriverPoll",
           "start": "0x801E1E50",
           "end": "0x801E25DC"
-        }
-      ],
-      "storage": [
-        {
-          "symbol": "_PerJoy_aiMotorCommand",
-          "start": "0x8039ADE4",
-          "end": "0x8039ADF4"
         },
         {
-          "symbol": "_PerJoy_aPadStatus",
-          "start": "0x803E92CC",
-          "end": "0x803E92FC"
+          "symbol": "_PerJoyDriverGetData",
+          "start": "0x801E25DC",
+          "end": "0x801E2658"
+        },
+        {
+          "symbol": "_PerJoyDriverSendData",
+          "start": "0x801E2658",
+          "end": "0x801E26FC"
+        },
+        {
+          "symbol": "PerJoyDriverPollPADs",
+          "start": "0x801E26FC",
+          "end": "0x801E274C"
         }
       ]
     },
