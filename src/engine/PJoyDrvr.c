@@ -4,6 +4,7 @@
 
 #include "engine/periph.h"
 #include "dolphin/pad.h"
+#include "dolphin/si.h"
 
 /* Per-port pad state kept in the low-level driver data block (16 bytes). */
 typedef struct PerJoyData_t {
@@ -17,18 +18,16 @@ typedef struct PerJoyData_t {
     char mPad0F;
 } PerJoyData_t;
 
-extern int lbl_8039ADE4[4];
-extern PADStatus lbl_803E92CC[4];
+int _PerJoy_aiMotorCommand[4];
+PADStatus _PerJoy_aPadStatus[4];
 
 void *memset();
 void *memcpy();
 int MemFill(void *p, unsigned int size, int value, int flags);
-int fn_8025D574(unsigned int port);
 void *PerSystemGetLLDriverData(unsigned int port);
 unsigned long PerSizeofPerDataT(void);
 unsigned long PerGetDataSize(void);
-int fn_8028572C(int port);
-void fn_802465BC(void *pStatus);
+int GetState_GFLink(int port);
 void GBAFanServiceLink(void);
 
 int _PerJoyDriverInit(PerDevice_t *pDevice, unsigned char *pPort)
@@ -39,9 +38,9 @@ int _PerJoyDriverInit(PerDevice_t *pDevice, unsigned char *pPort)
     int result = 0;
     unsigned int i;
 
-    MemFill(lbl_8039ADE4, sizeof(lbl_8039ADE4), 0, 1);
+    MemFill(_PerJoy_aiMotorCommand, sizeof(_PerJoy_aiMotorCommand), 0, 1);
     port = *pPort;
-    status = fn_8025D574(port);
+    status = SIProbe(port);
     if (status != 8 && status != 0x80 && status != 0x40) {
         pJoy = PerSystemGetLLDriverData(port);
         memset(pJoy, 0, sizeof(PerJoyData_t));
@@ -95,7 +94,7 @@ int _PerJoyDriverPoll(PerDevice_t *pDevice, int (*pCounter)(unsigned int))
     typeHi = type >> 16;
     typeLo = type & 0xFFFF;
     state = pJoy->mUnknown04;
-    if (lbl_803E92CC[port].err != PAD_ERR_NONE && lbl_803E92CC[port].err != PAD_ERR_TRANSFER) {
+    if (_PerJoy_aPadStatus[port].err != PAD_ERR_NONE && _PerJoy_aPadStatus[port].err != PAD_ERR_TRANSFER) {
         state = 0;
         pJoy->mUnknown0C = 0;
     }
@@ -107,14 +106,14 @@ int _PerJoyDriverPoll(PerDevice_t *pDevice, int (*pCounter)(unsigned int))
     switch (state) {
     case 0:
         if (pJoy->mUnknown0C == 0) {
-            int probe = fn_8025D574(port);
+            int probe = SIProbe(port);
             if (probe != 0x80 && probe != 8 && probe != 0x40) {
                 pJoy->mUnknown08 = probe;
                 pJoy->mUnknown0C = 1;
             }
         }
-        if (lbl_803E92CC[port].err == PAD_ERR_NO_CONTROLLER) {
-            if (pJoy->mUnknown08 == RES_WIRELESS_LITE && fn_8028572C(port) != 0) {
+        if (_PerJoy_aPadStatus[port].err == PAD_ERR_NO_CONTROLLER) {
+            if (pJoy->mUnknown08 == RES_WIRELESS_LITE && GetState_GFLink(port) != 0) {
                 pDevice->mStatus = 1;
                 typeLo |= 0x800;
                 state = 2;
@@ -128,7 +127,7 @@ int _PerJoyDriverPoll(PerDevice_t *pDevice, int (*pCounter)(unsigned int))
                 typeHi = 0;
                 typeLo = 0;
             }
-        } else if (lbl_803E92CC[port].err == PAD_ERR_NONE) {
+        } else if (_PerJoy_aPadStatus[port].err == PAD_ERR_NONE) {
             pJoy->mUnknown0D[0] = 0;
             state = 1;
             pDevice->mStatus = 2;
@@ -147,8 +146,8 @@ int _PerJoyDriverPoll(PerDevice_t *pDevice, int (*pCounter)(unsigned int))
         }
         break;
     case 1:
-        if (lbl_803E92CC[port].err == PAD_ERR_NONE) {
-            unsigned short buttons = lbl_803E92CC[port].button;
+        if (_PerJoy_aPadStatus[port].err == PAD_ERR_NONE) {
+            unsigned short buttons = _PerJoy_aPadStatus[port].button;
             float x;
             float y;
             float sum;
@@ -175,18 +174,18 @@ int _PerJoyDriverPoll(PerDevice_t *pDevice, int (*pCounter)(unsigned int))
                 }
             }
 
-            if (lbl_803E92CC[port].stickX < 0) {
-                x = -lbl_803E92CC[port].stickX;
+            if (_PerJoy_aPadStatus[port].stickX < 0) {
+                x = -_PerJoy_aPadStatus[port].stickX;
                 xPositive = 0;
             } else {
-                x = lbl_803E92CC[port].stickX;
+                x = _PerJoy_aPadStatus[port].stickX;
                 xPositive = 1;
             }
-            if (lbl_803E92CC[port].stickY > 0) {
-                y = lbl_803E92CC[port].stickY;
+            if (_PerJoy_aPadStatus[port].stickY > 0) {
+                y = _PerJoy_aPadStatus[port].stickY;
                 yNegative = 0;
             } else {
-                y = -lbl_803E92CC[port].stickY;
+                y = -_PerJoy_aPadStatus[port].stickY;
                 yNegative = 1;
             }
             sum = x + y;
@@ -213,22 +212,22 @@ int _PerJoyDriverPoll(PerDevice_t *pDevice, int (*pCounter)(unsigned int))
             ((signed char *)pDevice->mpData)[9] = out;
 
             axis = 2;
-            value = (float)lbl_803E92CC[port].substickX * (127.0 / 29.0);
+            value = (float)_PerJoy_aPadStatus[port].substickX * (127.0 / 29.0);
             out = (signed char)(value < -127 ? -127 : (value > 127 ? 127 : value));
             ((signed char *)pDevice->mpData)[axis + 8] = out;
             axis++;
-            value = (float)-lbl_803E92CC[port].substickY * (127.0 / 29.0);
+            value = (float)-_PerJoy_aPadStatus[port].substickY * (127.0 / 29.0);
             out = (signed char)(value < -127 ? -127 : (value > 127 ? 127 : value));
             ((signed char *)pDevice->mpData)[axis + 8] = out;
             axis++;
-            value = ((float)lbl_803E92CC[port].triggerLeft - 76.0f) * (127.0 / 70.0);
+            value = ((float)_PerJoy_aPadStatus[port].triggerLeft - 76.0f) * (127.0 / 70.0);
             out = (signed char)(value < -128 ? -128 : (value > 127 ? 127 : value));
             ((signed char *)pDevice->mpData)[axis + 8] = out;
             if (out > -120) {
                 ((PerData_t *)pDevice->mpData)->mUnknown08[Per_MaxAxis] |= Per_BtnMask[6];
             }
             axis++;
-            value = ((float)lbl_803E92CC[port].triggerRight - 76.0f) * (127.0 / 70.0);
+            value = ((float)_PerJoy_aPadStatus[port].triggerRight - 76.0f) * (127.0 / 70.0);
             out = (signed char)(value < -128 ? -128 : (value > 127 ? 127 : value));
             ((signed char *)pDevice->mpData)[axis + 8] = out;
             if (out > -120) {
@@ -236,13 +235,13 @@ int _PerJoyDriverPoll(PerDevice_t *pDevice, int (*pCounter)(unsigned int))
             }
             axis++;
             out = 127;
-            if (lbl_803E92CC[port].analogA == 0) {
+            if (_PerJoy_aPadStatus[port].analogA == 0) {
                 out = -128;
             }
             ((signed char *)pDevice->mpData)[axis + 8] = out;
             axis++;
             out = 127;
-            if (lbl_803E92CC[port].analogB == 0) {
+            if (_PerJoy_aPadStatus[port].analogB == 0) {
                 out = -128;
             }
             ((signed char *)pDevice->mpData)[axis + 8] = out;
@@ -283,11 +282,11 @@ int _PerJoyDriverSendData(PerDevice_t *pDevice, unsigned char *pBuffer)
         if (pDevice->mType & 0x200) {
             pJoy->mUnknown0E[0] = pBuffer[9] != 0 ? pBuffer[9] : pBuffer[8];
             if (pJoy->mUnknown0E[0] != 0) {
-                lbl_8039ADE4[port] = 1;
+                _PerJoy_aiMotorCommand[port] = 1;
             } else {
-                lbl_8039ADE4[port] = 0;
+                _PerJoy_aiMotorCommand[port] = 0;
             }
-            PADControlMotor(port, lbl_8039ADE4[port]);
+            PADControlMotor(port, _PerJoy_aiMotorCommand[port]);
         }
         result = 1;
     }
@@ -296,8 +295,8 @@ int _PerJoyDriverSendData(PerDevice_t *pDevice, unsigned char *pBuffer)
 
 void PerJoyDriverPollPADs(void)
 {
-    MemFill(lbl_803E92CC, sizeof(lbl_803E92CC), 0, 1);
-    PADRead(lbl_803E92CC);
-    fn_802465BC(lbl_803E92CC);
+    MemFill(_PerJoy_aPadStatus, sizeof(_PerJoy_aPadStatus), 0, 1);
+    PADRead(_PerJoy_aPadStatus);
+    PADClamp(_PerJoy_aPadStatus);
     GBAFanServiceLink();
 }

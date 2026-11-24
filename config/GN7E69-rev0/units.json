@@ -1123,10 +1123,6 @@
       "address": "0x803ECEA4",
       "evidence": "evidence.tsv data/name rows for 0x803ECEA4 (target extent, related name); speech-library storage, original-owned."
     },
-    "PerJoyDriverPollPADs": {
-      "address": "0x801E26FC",
-      "evidence": "evidence.tsv function and name rows for 0x801E26FC (PerJoyDriverPollPADs in src/engine/PJoyDrvr.c, a comparison-only file); the linked src/engine/llperiph.c calls it and registers it as a callback, so it resolves to the original bytes."
-    },
     "gEventDats": {
       "address": "0x8037E0B4",
       "evidence": "evidence.tsv data/name rows for 0x8037E0B4 (target extent, related name); speech-library storage, original-owned."
@@ -27016,6 +27012,52 @@
           }
         ],
         "evidence": "The original StopModuleList range stays linked and its full source remains a registered partial."
+      }
+    },
+    {
+      "source": "src/engine/PJoyDrvr.c",
+      "profile": "engine_c_fastmath_holdouts",
+      "evidence": "evidence.tsv PJoyDrvr.c unit, compiler, data/name and _PerJoyDriverPoll HOLDOUT source-form rows. Five exact functions, the complete 64-byte literal pool and two mapped COMMON arrays link; the poll retains its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E1D44",
+          "end": "0x801E1E50"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E25DC",
+          "end": "0x801E274C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B11C0",
+          "end": "0x802B1200"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_PerJoy_aiMotorCommand",
+          "start": "0x8039ADE4",
+          "end": "0x8039ADF4"
+        },
+        {
+          "symbol": "_PerJoy_aPadStatus",
+          "start": "0x803E92CC",
+          "end": "0x803E92FC"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "_PerJoyDriverPoll",
+            "evidence": "evidence.tsv source-form 0x801E1E50-0x801E25DC"
+          }
+        ],
+        "evidence": "The original 1932-byte poll keeps its instructions and remains a measured partial; the other five functions and all native data link."
       }
     }
   ]
