@@ -1,3 +1,6 @@
+/* Builds the curved ribbons in UI screens and manages their curve-node messages,
+   library resources and display-list references. */
+
 #include <math.h>
 
 #include <dolphin/gx/GXBump.h>
@@ -15,42 +18,41 @@
 #include "engine/Font.h"
 #include "engine/llmatrix.h"
 #include "engine/cu_8021A438.h"
+#include "engine/uigcurve.h"
 #include "engine/viewport.h"
 #include "engine/sound.h"
 #include "engine/texture.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 
-/* Partial source for the engine range 0x80222EC4-0x80223B00 (neutral file
-   name): curve helpers and the first node update path. Functions without a
-   body here keep their original bytes. */
 
-extern Point_80222EC4 lbl_8039FDB8[];
-extern Point_80222EC4 lbl_803A00D8[];
 
-void fn_80223AA0(Node_80223874 *pNode);
-void fn_80223AD0(Node_80223874 *pNode);
-void fn_80223B00(Node_80223874 *pNode, Int32 a);
+UIGCurvePoint_t _UIGCurve_aControlPoints[100];
+UIGCurvePoint_t _UIGCurve_aSamples[101];
 
-void fn_80222EC4(Point_80222EC4 *pPoints, int count, float t, Point_80222EC4 *pOut)
+void _UIGCurveRelocate(UIGNode_t *pNode);
+void _UIGCurveUnrelocate(UIGNode_t *pNode);
+void fn_80223B00(UIGNode_t *pNode, Int32 a);
+
+void _UIGCurveEvaluate(UIGCurvePoint_t *pPoints, int count, float t, UIGCurvePoint_t *pOut)
 {
     int i;
     int j;
 
     for (j = 0; j < count; j++) {
-        lbl_8039FDB8[j] = pPoints[j];
+        _UIGCurve_aControlPoints[j] = pPoints[j];
     }
     for (i = 1; i < count; i++) {
         for (j = 0; j < count - i; j++) {
-            lbl_8039FDB8[j].mX = (1.0f - t) * lbl_8039FDB8[j].mX + t * lbl_8039FDB8[j + 1].mX;
-            lbl_8039FDB8[j].mY = (1.0f - t) * lbl_8039FDB8[j].mY + t * lbl_8039FDB8[j + 1].mY;
+            _UIGCurve_aControlPoints[j].mX = (1.0f - t) * _UIGCurve_aControlPoints[j].mX + t * _UIGCurve_aControlPoints[j + 1].mX;
+            _UIGCurve_aControlPoints[j].mY = (1.0f - t) * _UIGCurve_aControlPoints[j].mY + t * _UIGCurve_aControlPoints[j + 1].mY;
         }
     }
-    *pOut = lbl_8039FDB8[0];
+    *pOut = _UIGCurve_aControlPoints[0];
 }
 
 
-void fn_80222F8C(Point_80222EC4 *pPoints, int count, Point_80222EC4 *pOut, int numOut)
+void _UIGCurveSample(UIGCurvePoint_t *pPoints, int count, UIGCurvePoint_t *pOut, int numOut)
 {
     float step;
     float t;
@@ -60,16 +62,16 @@ void fn_80222F8C(Point_80222EC4 *pPoints, int count, Point_80222EC4 *pOut, int n
     t = step;
     pOut[0] = pPoints[0];
     for (i = 1; i < numOut - 1; i++, t += step) {
-        fn_80222EC4(pPoints, count, t, &pOut[i]);
+        _UIGCurveEvaluate(pPoints, count, t, &pOut[i]);
     }
     pOut[numOut - 1] = pPoints[count - 1];
 }
 
-void fn_8022306C(Point_80222EC4 *pA, Point_80222EC4 *pB, Point_80222EC4 *pLeft, Point_80222EC4 *pRight,
-                 float width, Point_80222EC4 *pDir, int useDir)
+void _UIGCurveBuildOffset(UIGCurvePoint_t *pA, UIGCurvePoint_t *pB, UIGCurvePoint_t *pLeft, UIGCurvePoint_t *pRight,
+                 float width, UIGCurvePoint_t *pDir, int useDir)
 {
-    Point_80222EC4 normal;
-    Point_80222EC4 offset;
+    UIGCurvePoint_t normal;
+    UIGCurvePoint_t offset;
     float len;
     float dx;
     float dy;
@@ -109,9 +111,9 @@ void fn_8022306C(Point_80222EC4 *pA, Point_80222EC4 *pB, Point_80222EC4 *pLeft, 
 }
 
 
-void UIGCurveBuildStrip(int numPoints, Point_80222EC4 *pPoints, float *pWidths, Point_80222EC4 *pOut, int numOut)
+void UIGCurveBuildStrip(int numPoints, UIGCurvePoint_t *pPoints, float *pWidths, UIGCurvePoint_t *pOut, int numOut)
 {
-    Point_80222EC4 dir;
+    UIGCurvePoint_t dir;
     float stepA;
     float stepB;
     float width;
@@ -120,10 +122,10 @@ void UIGCurveBuildStrip(int numPoints, Point_80222EC4 *pPoints, float *pWidths, 
 
     stepA = (pWidths[1] - pWidths[0]) / (numOut / 2);
     stepB = (pWidths[2] - pWidths[1]) / (numOut / 2);
-    fn_80222F8C(pPoints, numPoints, lbl_803A00D8, numOut);
-    lbl_803A00D8[numOut].mX = lbl_803A00D8[numOut - 2].mX;
-    lbl_803A00D8[numOut].mY = lbl_803A00D8[numOut - 2].mY;
-    fn_8022306C(&lbl_803A00D8[0], &lbl_803A00D8[1], &pOut[0], &pOut[1], pWidths[0], &dir, 0);
+    _UIGCurveSample(pPoints, numPoints, _UIGCurve_aSamples, numOut);
+    _UIGCurve_aSamples[numOut].mX = _UIGCurve_aSamples[numOut - 2].mX;
+    _UIGCurve_aSamples[numOut].mY = _UIGCurve_aSamples[numOut - 2].mY;
+    _UIGCurveBuildOffset(&_UIGCurve_aSamples[0], &_UIGCurve_aSamples[1], &pOut[0], &pOut[1], pWidths[0], &dir, 0);
     width = pWidths[0];
     j = 2;
     for (i = 1; i < numOut - 1; i++, j += 2) {
@@ -132,14 +134,14 @@ void UIGCurveBuildStrip(int numPoints, Point_80222EC4 *pPoints, float *pWidths, 
         } else {
             width += stepB;
         }
-        fn_8022306C(&lbl_803A00D8[i], &lbl_803A00D8[i + 1], &pOut[j], &pOut[j + 1], width, &dir, 1);
+        _UIGCurveBuildOffset(&_UIGCurve_aSamples[i], &_UIGCurve_aSamples[i + 1], &pOut[j], &pOut[j + 1], width, &dir, 1);
     }
-    fn_8022306C(&lbl_803A00D8[numOut - 1], &lbl_803A00D8[numOut], &pOut[j + 1], &pOut[j], pWidths[2], 0, 0);
+    _UIGCurveBuildOffset(&_UIGCurve_aSamples[numOut - 1], &_UIGCurve_aSamples[numOut], &pOut[j + 1], &pOut[j], pWidths[2], 0, 0);
 }
 
-Point_80222EC4 UIGCurveGetPoint(Point_80222EC4 *pPoints, int unused, int index)
+UIGCurvePoint_t UIGCurveGetPoint(UIGCurvePoint_t *pPoints, int unused, int index)
 {
-    Point_80222EC4 result;
+    UIGCurvePoint_t result;
 
     if (index == 1) {
         result.mX = ((pPoints[index - 1].mX + pPoints[index + 1].mX) * 0.5f + pPoints[index].mX) * 0.5f;
@@ -149,28 +151,23 @@ Point_80222EC4 UIGCurveGetPoint(Point_80222EC4 *pPoints, int unused, int index)
     return pPoints[index];
 }
 
-typedef union NodeArg_80223460 {
-    Int32 i;
-    Float32 f;
-    void *p;
-    Int16 s[2];
-} NodeArg_80223460;
 
-void fn_80223874(Node_80223874 *pNode);
-void fn_802239D0(Node_80223874 *pNode);
-void fn_80223A40(Node_80223874 *pNode);
 
-void UIGCurveObjAction(Node_80223874 *pNode, Uint32 msg, int nArgs, NodeArg_80223460 *pArgs)
+void _UIGCurveDraw(UIGNode_t *pNode);
+void _UIGCurveLoad(UIGNode_t *pNode);
+void _UIGCurveUnload(UIGNode_t *pNode);
+
+void UIGCurveObjAction(UIGNode_t *pNode, Uint32 msg, int nArgs, UIGCurveArg_t *pArgs)
 {
     switch (msg) {
     case -1:
-        fn_802239D0(pNode);
+        _UIGCurveLoad(pNode);
         break;
     case -2:
-        fn_80223874(pNode);
+        _UIGCurveDraw(pNode);
         break;
     case -3:
-        fn_80223A40(pNode);
+        _UIGCurveUnload(pNode);
         break;
     /* FAKEMATCH: the empty case -4 leaves no compare in the target; it only moves the decision
        tree's root to 10 as in the target */
@@ -213,7 +210,7 @@ void UIGCurveObjAction(Node_80223874 *pNode, Uint32 msg, int nArgs, NodeArg_8022
         Uint32 index = pArgs[0].i;
 
         if (index <= 2 && nArgs == 4) {
-            Point_80222EC4 pt = UIGCurveGetPoint(pNode->u.c.unk_18, 3, index);
+            UIGCurvePoint_t pt = UIGCurveGetPoint(pNode->u.c.unk_18, 3, index);
 
             *(Float32 *)pArgs[1].p = pt.mX;
             *(Float32 *)pArgs[2].p = pt.mY;
@@ -307,7 +304,7 @@ void UIGCurveObjAction(Node_80223874 *pNode, Uint32 msg, int nArgs, NodeArg_8022
     }
 }
 
-void fn_80223874(Node_80223874 *pNode)
+void _UIGCurveDraw(UIGNode_t *pNode)
 {
     UIGLibrary_t *pObject;
     Int32 Item = 0;
@@ -334,7 +331,7 @@ void fn_80223874(Node_80223874 *pNode)
     }
 }
 
-void fn_802239D0(Node_80223874 *pNode)
+void _UIGCurveLoad(UIGNode_t *pNode)
 {
     UIGLibrary_t *pObject;
 
@@ -346,10 +343,10 @@ void fn_802239D0(Node_80223874 *pNode)
     }
     pNode->unk_0C = pNode->unk_04;
     pNode->unk_0E = pNode->unk_06;
-    fn_80223AA0(pNode);
+    _UIGCurveRelocate(pNode);
 }
 
-void fn_80223A40(Node_80223874 *pNode)
+void _UIGCurveUnload(UIGNode_t *pNode)
 {
     UIGLibrary_t *pObject;
 
@@ -359,17 +356,17 @@ void fn_80223A40(Node_80223874 *pNode)
             UIGLibraryUnLoadItem(pObject, pNode->unk_06, pNode->unk_04);
         }
     }
-    fn_80223AD0(pNode);
+    _UIGCurveUnrelocate(pNode);
 }
 
-void fn_80223AA0(Node_80223874 *pNode)
+void _UIGCurveRelocate(UIGNode_t *pNode)
 {
     if (pNode->Flags & 0x8000) {
         UIGDispListRelocate(&pNode->u.List);
     }
 }
 
-void fn_80223AD0(Node_80223874 *pNode)
+void _UIGCurveUnrelocate(UIGNode_t *pNode)
 {
     if (pNode->Flags & 0x8000) {
         UIGDispListUnrelocate(&pNode->u.List);

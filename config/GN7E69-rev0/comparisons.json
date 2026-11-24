@@ -26553,82 +26553,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_80222EC4.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80222EC4-0x80223B00 (src/engine/cu_80222EC4.c), its function and name rows and the file compiler row. Draft comparisons only; original assembly remains linked. The bodies of 0x80222EC4-0x80223874 compile with their literal pools 0x802B1FC0-0x802B1FF0 (exact data row 0x802B1FC0-0x802B1FF4).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80222EC4",
-          "end": "0x80223B00"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1FC0",
-          "end": "0x802B1FF4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80222EC4",
-          "start": "0x80222EC4",
-          "end": "0x80222F8C"
-        },
-        {
-          "symbol": "fn_80222F8C",
-          "start": "0x80222F8C",
-          "end": "0x8022306C"
-        },
-        {
-          "symbol": "fn_8022306C",
-          "start": "0x8022306C",
-          "end": "0x80223224"
-        },
-        {
-          "symbol": "UIGCurveBuildStrip",
-          "start": "0x80223224",
-          "end": "0x802233DC"
-        },
-        {
-          "symbol": "UIGCurveGetPoint",
-          "start": "0x802233DC",
-          "end": "0x80223460"
-        },
-        {
-          "symbol": "UIGCurveObjAction",
-          "start": "0x80223460",
-          "end": "0x80223874"
-        },
-        {
-          "symbol": "fn_80223874",
-          "start": "0x80223874",
-          "end": "0x802239D0"
-        },
-        {
-          "symbol": "fn_802239D0",
-          "start": "0x802239D0",
-          "end": "0x80223A40"
-        },
-        {
-          "symbol": "fn_80223A40",
-          "start": "0x80223A40",
-          "end": "0x80223AA0"
-        },
-        {
-          "symbol": "fn_80223AA0",
-          "start": "0x80223AA0",
-          "end": "0x80223AD0"
-        },
-        {
-          "symbol": "fn_80223AD0",
-          "start": "0x80223AD0",
-          "end": "0x80223B00"
-        }
-      ]
-    },
-    {
       "source": "src/engine/t3db_io.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv whole-file unit, function, data, type and source-form rows; complete bodies compared at full original extents under the unchanged engine_c_fastmath profile. Remaining partials stay measured and their original bytes linked.",
@@ -33475,6 +33399,38 @@
           "symbol": "_._15CollisionSystem",
           "start": "0x801E8444",
           "end": "0x801E8478"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/uigcurve.c",
+      "profile": "uigcurve_native_c",
+      "evidence": "evidence.tsv whole uigcurve.c unit and HOLDOUT _UIGCurveBuildOffset source-form row; all eleven functions remain represented by the linked unit plus this complete 440-byte comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80222EC4",
+          "end": "0x80223B00"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1FC0",
+          "end": "0x802B1FF8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039FDB8",
+          "end": "0x803A0400"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "_UIGCurveBuildOffset",
+          "start": "0x8022306C",
+          "end": "0x80223224"
         }
       ]
     }

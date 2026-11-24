@@ -24,7 +24,7 @@
    path (small-data colours 0x803EBF70/0x803EBF74). Functions without a
    body here keep their original bytes. */
 
-typedef void Callback_8022482C(Node_80223874 *pNode, Int32 Index, Float32 *pCoord);
+typedef void Callback_8022482C(UIGNode_t *pNode, Int32 Index, Float32 *pCoord);
 
 extern GXColor lbl_803EBF70;
 extern GXColor lbl_803EBF74;
@@ -36,18 +36,18 @@ extern GXColor lbl_803A1400[];
 void TMRenderReset(void);
 void GXLoadLightObjImm(GXLightObj *pLight, GXLightID Light);
 
-void fn_80225958(Node_80223874 *pNode, Int32 Item);
-void fn_8022482C(Node_80223874 *pNode, Float32 (*pCoords)[2], GXColor *pColors, Int32 *pSize,
+void fn_80225958(UIGNode_t *pNode, Int32 Item);
+void fn_8022482C(UIGNode_t *pNode, Float32 (*pCoords)[2], GXColor *pColors, Int32 *pSize,
                  Int32 Count, Callback_8022482C *pVertex, Callback_8022482C *pEnd);
-void fn_80225AAC(Node_80223874 *pNode, Int32 a, Int32 Item);
+void fn_80225AAC(UIGNode_t *pNode, Int32 a, Int32 Item);
 void fn_80225B50(Uint32 Flags);
-void LLUIGVertexSend(Node_80223874 *pNode, Int32 Index, Float32 *pCoord);
-void LLUIGVertexEnd(Node_80223874 *pNode, Int32 Index, Float32 *pCoord);
-void fn_80225928(Node_80223874 *pNode);
-void fn_802258F8(Node_80223874 *pNode);
+void LLUIGVertexSend(UIGNode_t *pNode, Int32 Index, Float32 *pCoord);
+void LLUIGVertexEnd(UIGNode_t *pNode, Int32 Index, Float32 *pCoord);
+void fn_80225928(UIGNode_t *pNode);
+void fn_802258F8(UIGNode_t *pNode);
 void fn_80225AE4(void);
 
-void fn_8022479C(Node_80223874 *pNode)
+void fn_8022479C(UIGNode_t *pNode)
 {
     UIGLibrary_t *pObject;
 
@@ -62,12 +62,12 @@ void fn_8022479C(Node_80223874 *pNode)
     fn_80225928(pNode);
 }
 
-void fn_8022480C(Node_80223874 *pNode)
+void fn_8022480C(UIGNode_t *pNode)
 {
     fn_802258F8(pNode);
 }
 
-void fn_802254F8(Node_80223874 *pNode)
+void fn_802254F8(UIGNode_t *pNode)
 {
     UIGLibrary_t *pObject;
     Int32 Item = 0;
@@ -94,7 +94,7 @@ void fn_802254F8(Node_80223874 *pNode)
     }
 }
 
-void fn_80225654(Node_80223874 *pNode, Uint32 Action, Int32 a, void *pData)
+void fn_80225654(UIGNode_t *pNode, Uint32 Action, Int32 a, void *pData)
 {
     Int16 First;
     Int16 Second;
@@ -194,21 +194,21 @@ void fn_80225654(Node_80223874 *pNode, Uint32 Action, Int32 a, void *pData)
     }
 }
 
-void fn_802258F8(Node_80223874 *pNode)
+void fn_802258F8(UIGNode_t *pNode)
 {
     if (pNode->Flags & 0x8000) {
         UIGDispListUnrelocate(&pNode->u.List);
     }
 }
 
-void fn_80225928(Node_80223874 *pNode)
+void fn_80225928(UIGNode_t *pNode)
 {
     if (pNode->Flags & 0x8000) {
         UIGDispListRelocate(&pNode->u.List);
     }
 }
 
-void fn_80225958(Node_80223874 *pNode, Int32 Item)
+void fn_80225958(UIGNode_t *pNode, Int32 Item)
 {
     Int32 bTex = 0;
     Int32 Count;
@@ -246,7 +246,7 @@ void fn_80225958(Node_80223874 *pNode, Int32 Item)
     }
 }
 
-void fn_80225AAC(Node_80223874 *pNode, Int32 a, Int32 Item)
+void fn_80225AAC(UIGNode_t *pNode, Int32 a, Int32 Item)
 {
     Int32 First = 0;
     Int32 Second = 0;

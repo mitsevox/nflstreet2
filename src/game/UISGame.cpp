@@ -12,6 +12,7 @@
 #include "game/CamAddCameraToViewport.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/viewporttypes.h"
+#include "engine/uigcurve.h"
 
 extern "C" {
 #include "engine/viewport.h"
@@ -129,7 +130,6 @@ void fn_80220CFC(int a);
 void fn_80220D04(void);
 void fn_802212C8(void);
 void UIGLibTextObjAction(void);
-void UIGCurveObjAction(void);
 void fn_80225654(void);
 void LLLightAttachViewport(Viewport_t *pObject);
 void LLLightDetachViewport(Viewport_t *pObject);
@@ -194,7 +194,7 @@ void UISGameSetCallbacks(void *p)
     fn_80218ACC(p, UISGameRepeatResetCB);
     fn_80218AD4(p, 0, fn_8021EFD8);
     fn_80218AD4(p, 1, UISSoundObjAction);
-    fn_80218AD4(p, 2, UIGCurveObjAction);
+    fn_80218AD4(p, 2, (void (*)(void))UIGCurveObjAction);
     fn_80218AD4(p, 3, UISViewObjAction);
     fn_80218AD4(p, 4, fn_80225654);
     fn_80218AD4(p, 5, UISTextTableAction);

@@ -52,14 +52,14 @@ extern UIGLibrary_t *lbl_803ED004;
 extern Int32 lbl_803ED008;
 extern Int32 lbl_803ED00C;
 
-void fn_8021F8DC(Node_80223874 *pNode);
-void fn_8021F954(Node_80223874 *pNode);
-void fn_8021F984(Node_80223874 *pNode, Int32 Item);
-void fn_8021FB30(Node_80223874 *pNode);
-void fn_80220310(Node_80223874 *pNode);
+void fn_8021F8DC(UIGNode_t *pNode);
+void fn_8021F954(UIGNode_t *pNode);
+void fn_8021F984(UIGNode_t *pNode, Int32 Item);
+void fn_8021FB30(UIGNode_t *pNode);
+void fn_80220310(UIGNode_t *pNode);
 void fn_80220988(void);
 void fn_80220A08(void);
-void fn_80220AD0(Node_80223874 *pNode, Int32 a, Int32 Item);
+void fn_80220AD0(UIGNode_t *pNode, Int32 a, Int32 Item);
 Int32 fn_80220BFC(Int32 a, Int32 b);
 void fn_80220D3C(void);
 void GXLoadLightObjImm(GXLightObj *pLight, GXLightID Light);
@@ -67,7 +67,7 @@ void TMRenderReset(void);
 void fn_80221198(void *p);
 void fn_80221294(void *p);
 
-void fn_8021F550(Node_80223874 *pNode)
+void fn_8021F550(UIGNode_t *pNode)
 {
     UIGLibrary_t *pObject;
 
@@ -82,7 +82,7 @@ void fn_8021F550(Node_80223874 *pNode)
     fn_8021F8DC(pNode);
 }
 
-void fn_8021F5C0(Node_80223874 *pNode)
+void fn_8021F5C0(UIGNode_t *pNode)
 {
     UIGLibrary_t *pObject;
     Int32 Item = 0;
@@ -109,7 +109,7 @@ void fn_8021F5C0(Node_80223874 *pNode)
     }
 }
 
-void fn_8021F71C(Node_80223874 *pNode)
+void fn_8021F71C(UIGNode_t *pNode)
 {
     UIGLibrary_t *pObject;
 
@@ -122,7 +122,7 @@ void fn_8021F71C(Node_80223874 *pNode)
     fn_8021F954(pNode);
 }
 
-void fn_8021F8DC(Node_80223874 *pNode)
+void fn_8021F8DC(UIGNode_t *pNode)
 {
     Int32 i;
 
@@ -138,14 +138,14 @@ void fn_8021F8DC(Node_80223874 *pNode)
     }
 }
 
-void fn_8021F954(Node_80223874 *pNode)
+void fn_8021F954(UIGNode_t *pNode)
 {
     if (pNode->Flags & 0x8000) {
         UIGDispListUnrelocate(&pNode->u.List);
     }
 }
 
-void fn_8021F984(Node_80223874 *pNode, Int32 Item)
+void fn_8021F984(UIGNode_t *pNode, Int32 Item)
 {
     Uint16 Flags;
     Int32 Mode;
@@ -233,7 +233,7 @@ void fn_80220A08(void)
     lbl_803ECFF4 = lbl_803ECFF0 = 0x12345678;
 }
 
-void fn_80220AD0(Node_80223874 *pNode, Int32 a, Int32 Item)
+void fn_80220AD0(UIGNode_t *pNode, Int32 a, Int32 Item)
 {
     Int32 First = 0;
     Int32 Second = 0;
