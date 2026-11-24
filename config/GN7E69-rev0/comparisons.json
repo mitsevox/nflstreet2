@@ -25726,8 +25726,8 @@
     },
     {
       "source": "src/engine/sndvd.c",
-      "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv sndvd.c whole unit, complete native data objects and DSIHandler HOLDOUT. Eleven exact functions956bytes and complete82owneddata bytes link; full628-byte command handler remains original. Comparison-only COMMON declarations and flat assembly section layout are labeled and disclosed; complete normal native storage is verified.",
+      "profile": "sndvd_native_c",
+      "evidence": "evidence.tsv sndvd.c whole unit, native data sections, labeled hardware-assembly input sections and DSIHandler HOLDOUT. Eleven exact functions956bytes and complete82native data bytes link. All9state objects have identical definitions in both builds; ordinary -fdata-sections maps every native section whole, with no COMMON/storage map, data omission or fake padding. Full628-byte handler stays original/partial.",
       "sections": [
         {
           "section": ".text",
@@ -25742,10 +25742,58 @@
           "end": "0x802AEA18"
         },
         {
-          "section": ".data",
+          "section": ".data.g_hDVD",
           "placement": ".data4",
           "start": "0x802CC5E0",
           "end": "0x802CC5E4"
+        },
+        {
+          "section": ".data.g_nDvdAudioCfg",
+          "placement": ".data4",
+          "start": "0x802CC600",
+          "end": "0x802CC604"
+        },
+        {
+          "section": ".data.g_aBuffer",
+          "placement": ".data4",
+          "start": "0x802CC620",
+          "end": "0x802CC640"
+        },
+        {
+          "section": ".data.g_nDvdError",
+          "placement": ".data4",
+          "start": "0x802CC640",
+          "end": "0x802CC644"
+        },
+        {
+          "section": ".data.g_nDvdCurrOffset",
+          "placement": ".data4",
+          "start": "0x802CC644",
+          "end": "0x802CC648"
+        },
+        {
+          "section": ".data.g_nDvdReadLength",
+          "placement": ".data4",
+          "start": "0x802CC648",
+          "end": "0x802CC64C"
+        },
+        {
+          "section": ".data.g_nBaseOffset",
+          "placement": ".data4",
+          "start": "0x802CC64C",
+          "end": "0x802CC650"
+        },
+        {
+          "section": ".data.g_nEmuState",
+          "placement": ".data4",
+          "start": "0x802CC650",
+          "end": "0x802CC651"
+        },
+        {
+          "section": ".data.g_nLidState",
+          "placement": ".data4",
+          "start": "0x802CC651",
+          "end": "0x802CC652"
         }
       ],
       "functions": [

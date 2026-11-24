@@ -430,16 +430,28 @@
       ],
       "evidence": "evidence.tsv compiler row 0x801F5760-0x801F5D84; speech_frontend_cpp plus the established named function-sections holdout mechanism. No per-function compiler option."
     },
-    "engine_cpp_nosda_holdouts": {
+    "sndvd_native_c": {
       "flags": [
         "-O2",
         "-G0",
+        "-fdata-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv sndvd.c native data sections/compiler row. Whole-file existing -O2 -G0 plus -fdata-sections emits each explicitly zero-initialized state object as its ordinary separate native data section, matching nine evidenced original addresses without a derived-object COMMON map or padding. Original initializer spelling/flags are not recovered. All12 code bodies must retain native bytes and relocation destinations."
+    },
+    "sndvd_native_c_holdouts": {
+      "flags": [
+        "-O2",
+        "-G0",
+        "-fdata-sections",
         "-ffunction-sections"
       ],
       "include_dirs": [
         "include/libc"
       ],
-      "evidence": "evidence.tsv sndvd.c compiler/source-form row. Existing whole-file engine_cpp_nosda (-O2 -G0) plus named function-sections holdout mechanism; no per-function compiler override. Hand-written exception entry/stub use corresponding separate input sections only in normal builds; comparison builds keep contiguous flat text. Instruction content is unchanged and verified against target."
+      "evidence": "evidence.tsv sndvd.c source forms: sndvd_native_c plus the named whole-file function-sections holdout mechanism. No COMMON storage map, kept_locals or per-function options. DECOMP_COMPARE only guards two input-section directives for existing hardware assembly; all state definitions are identical in both builds."
     }
   },
   "externals": {
@@ -27234,8 +27246,8 @@
     },
     {
       "source": "src/engine/sndvd.c",
-      "profile": "engine_cpp_nosda_holdouts",
-      "evidence": "evidence.tsv sndvd.c whole related unit, hardware assembly source forms, labeled section/storage comparison mechanism and DSIHandler HOLDOUT. Eleven exact functions plus complete native initialized/COMMON objects link, no fabricated padding.",
+      "profile": "sndvd_native_c_holdouts",
+      "evidence": "evidence.tsv sndvd.c whole unit, native data sections, labeled hardware-assembly input sections and DSIHandler HOLDOUT. Eleven exact functions956bytes and complete82native data bytes link. All9state objects have identical definitions in both builds; ordinary -fdata-sections maps every native section whole, with no COMMON/storage map, data omission or fake padding. Full628-byte handler stays original/partial.",
       "sections": [
         {
           "section": ".text",
@@ -27256,50 +27268,56 @@
           "end": "0x802AEA18"
         },
         {
-          "section": ".data",
+          "section": ".data.g_hDVD",
           "placement": ".data4",
           "start": "0x802CC5E0",
           "end": "0x802CC5E4"
-        }
-      ],
-      "storage": [
+        },
         {
-          "symbol": "g_nDvdAudioCfg",
+          "section": ".data.g_nDvdAudioCfg",
+          "placement": ".data4",
           "start": "0x802CC600",
           "end": "0x802CC604"
         },
         {
-          "symbol": "g_aBuffer",
+          "section": ".data.g_aBuffer",
+          "placement": ".data4",
           "start": "0x802CC620",
           "end": "0x802CC640"
         },
         {
-          "symbol": "g_nDvdError",
+          "section": ".data.g_nDvdError",
+          "placement": ".data4",
           "start": "0x802CC640",
           "end": "0x802CC644"
         },
         {
-          "symbol": "g_nDvdCurrOffset",
+          "section": ".data.g_nDvdCurrOffset",
+          "placement": ".data4",
           "start": "0x802CC644",
           "end": "0x802CC648"
         },
         {
-          "symbol": "g_nDvdReadLength",
+          "section": ".data.g_nDvdReadLength",
+          "placement": ".data4",
           "start": "0x802CC648",
           "end": "0x802CC64C"
         },
         {
-          "symbol": "g_nBaseOffset",
+          "section": ".data.g_nBaseOffset",
+          "placement": ".data4",
           "start": "0x802CC64C",
           "end": "0x802CC650"
         },
         {
-          "symbol": "g_nEmuState",
+          "section": ".data.g_nEmuState",
+          "placement": ".data4",
           "start": "0x802CC650",
           "end": "0x802CC651"
         },
         {
-          "symbol": "g_nLidState",
+          "section": ".data.g_nLidState",
+          "placement": ".data4",
           "start": "0x802CC651",
           "end": "0x802CC652"
         }

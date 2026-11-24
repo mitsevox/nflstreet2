@@ -12,27 +12,14 @@
 
 int g_hDVD = 0;
 
-// FAKEMATCH: Comparisons reference COMMON objects at their final addresses;
-// the normal build defines and verifies their native storage.
-#ifdef DECOMP_COMPARE
-extern int g_nDvdAudioCfg;
-extern u8 g_aBuffer[32];
-extern u32 g_nDvdError;
-extern int g_nDvdCurrOffset;
-extern int g_nDvdReadLength;
-extern int g_nBaseOffset;
-extern u8 g_nEmuState;
-extern u8 g_nLidState;
-#else
-int g_nDvdAudioCfg;
-u8 g_aBuffer[32] ATTRIBUTE_ALIGN(32);
-u32 g_nDvdError;
-int g_nDvdCurrOffset;
-int g_nDvdReadLength;
-int g_nBaseOffset;
-u8 g_nEmuState;
-u8 g_nLidState;
-#endif
+int g_nDvdAudioCfg = 0;
+u8 g_aBuffer[32] ATTRIBUTE_ALIGN(32) = {0};
+u32 g_nDvdError = 0;
+int g_nDvdCurrOffset = 0;
+int g_nDvdReadLength = 0;
+int g_nBaseOffset = 0;
+u8 g_nEmuState = 0;
+u8 g_nLidState = 0;
 
 extern int lbl_802C2A5C;
 
