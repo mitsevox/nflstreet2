@@ -5,7 +5,7 @@
 #include "game/fn_8021D7B8.h"
 #include "game/EditMenu.h"
 
-/* lbl_8036AD78: fourteen words copied from the record filled by fn_800817CC. */
+/* lbl_8036AD78: fourteen words copied from the record filled by PlayerDbReadGear. */
 struct Record_8036AD78 {
     int mUnknown0[14];
 };
@@ -726,7 +726,7 @@ static void fn_8000E784(Record_8036AD78 *pOut)
 {
     PlayerGear_t record;
 
-    fn_800817CC(EditMenuGetPlayerCursor(), &record);
+    PlayerDbReadGear(EditMenuGetPlayerCursor(), &record);
     pOut->mUnknown0[0] = record.mValues[0];
     pOut->mUnknown0[1] = record.mValues[1];
     pOut->mUnknown0[2] = record.mValues[2];

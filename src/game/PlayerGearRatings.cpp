@@ -40,7 +40,7 @@ void PlayerGearGetScaledBonuses(Object_8008044C *pObject, short *pValues)
     PlayerGear_t info;
     int i;
 
-    fn_800817CC(pObject, &info);
+    PlayerDbReadGear(pObject, &info);
     PlayerGearSumBonuses(&info, pValues);
     for (i = 0; i < 10; i++) {
         pValues[i] = pValues[i] * 255 / 99;
@@ -102,7 +102,7 @@ void PlayerGetGearBonuses(Object_8008044C *pObject, short *pValues)
 {
     PlayerGear_t info;
 
-    fn_800817CC(pObject, &info);
+    PlayerDbReadGear(pObject, &info);
     PlayerGearSumBonuses(&info, pValues);
 }
 
@@ -110,7 +110,7 @@ void PlayerGetGearRatings(Object_8008044C *pObject, int *pValues)
 {
     PlayerGear_t info;
 
-    fn_800817CC(pObject, &info);
+    PlayerDbReadGear(pObject, &info);
     PlayerAddGearRatings(pObject, &info, pValues);
 }
 

@@ -27192,6 +27192,34 @@
         ],
         "evidence": "The complete632-byte event-wrapper retains original code after natural zero/counter/varargs forms and ProDG RTL loop/register-allocation investigation."
       }
+    },
+    {
+      "source": "src/game/PlayerGearRecords.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv whole800817CC-80081C10 provisional unit, native table extent and RTL-backed writer HOLDOUT. Exact reader and complete data link; no artificial source split.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800817CC",
+          "end": "0x8008199C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6898",
+          "end": "0x802D68D0"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "PlayerDbWriteGear",
+            "evidence": "evidence.tsv source-form 0x8008199C-0x80081C10"
+          }
+        ],
+        "evidence": "Complete628-byte writer remains original after distinct query-scope/lifetime/declaration/store/helper hypotheses and ProDG RTL analysis; direct natural source retained."
+      }
     }
   ]
 }

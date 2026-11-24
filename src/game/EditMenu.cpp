@@ -817,7 +817,7 @@ void EditMenuGetGearNames(int *pCount, MenuArg_t *pList)
         fn_8007BA48(&query);
         seen = 0;
         PlayerDbSeekId(EditMenuGetPlayerCursor(), CreatePlayerGetPlayerId(), 0);
-        fn_800817CC(EditMenuGetPlayerCursor(), &info);
+        PlayerDbReadGear(EditMenuGetPlayerCursor(), &info);
         for (i = 0; i < 14; i++) {
             type = fn_8007BF14(i);
             fn_8007BB84(&query, type, info.mValues[i], 0);

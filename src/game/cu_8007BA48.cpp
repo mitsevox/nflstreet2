@@ -22,7 +22,6 @@ void CreateTeamPlayerCursorClose(DbCursor *pCursor);
 }
 
 extern "C" {
-void fn_8008199C(Object_8008044C *pObject, PlayerGear_t *pInfo);
 }
 
 static int sColumnTags[33] = {
@@ -257,7 +256,7 @@ void fn_8007BF60(int id)
             CreateTeamPlayerCursorOpen(&teams, index);
             if (DbCursorFirst(&teams)) {
                 do {
-                    fn_800817CC((Object_8008044C *)&teams, &record);
+                    PlayerDbReadGear((Object_8008044C *)&teams, &record);
                     for (i = 0; i < 14; i++) {
                         int type = fn_8007BF14(i);
 
@@ -267,7 +266,7 @@ void fn_8007BF60(int id)
                             }
                         }
                     }
-                    fn_8008199C((Object_8008044C *)&teams, &record);
+                    PlayerDbWriteGear((Object_8008044C *)&teams, &record);
                 } while (DbCursorNext(&teams));
             }
             CreateTeamPlayerCursorClose(&teams);

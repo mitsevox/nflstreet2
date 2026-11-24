@@ -24,7 +24,7 @@ int PlayerDbGetBoostedRating(Object_8008044C *pObject, int index)
     short values[10];
     PlayerGear_t info;
 
-    fn_800817CC(pObject, &info);
+    PlayerDbReadGear(pObject, &info);
     PlayerGearSumBonuses(&info, values);
     value += values[index];
     return value == 0 ? 1 : (value > 99 ? 99 : value);

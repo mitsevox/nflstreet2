@@ -29,7 +29,7 @@ struct Desc_8008044C {
     int mUnknown12;
 };
 
-/* Row filled by fn_800817CC: bytes +0x00 to +0x0D and the 14 words at +0x10.
+/* Row filled by PlayerDbReadGear: bytes +0x00 to +0x0D and the 14 words at +0x10.
    PlayerLook_t (include/game/PlayerLookRecord.h) holds one at +0x20. */
 struct PlayerGear_t {
     unsigned char mUnknown00;
@@ -61,7 +61,8 @@ int PlayerDbGetPybt(Object_8008044C *pObject);
 int PlayerDbGetHeight(Object_8008044C *pObject);
 int PlayerDbGetPbpo(Object_8008044C *pObject);
 void PlayerGetGearRatings(Object_8008044C *pObject, int *pValues);
-void fn_800817CC(Object_8008044C *pObject, PlayerGear_t *pInfo);
+int PlayerDbReadGear(Object_8008044C *pObject, PlayerGear_t *pInfo);
+void PlayerDbWriteGear(Object_8008044C *pObject, PlayerGear_t *pInfo);
 void fn_80081F50(Object_8008044C *pObject, unsigned char side, int a);
 }
 

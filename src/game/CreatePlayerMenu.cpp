@@ -92,7 +92,6 @@ int PlayerDbGetPjen(Object_8008044C *pObject);
 void PlayerDbSetPjen(Object_8008044C *pObject, int value);
 int PlayerDbGetRating(Object_8008044C *pObject, int index);
 void PlayerDbSetRating(Object_8008044C *pObject, int index, int value);
-void fn_8008199C(Object_8008044C *pObject, PlayerGear_t *pInfo);
 int fn_80081E3C(Object_8008044C *pObject);
 void fn_80081E64(Object_8008044C *pObject, char *pBuffer, int size);
 void fn_80081E98(Object_8008044C *pObject, char *pBuffer, int size);
@@ -1592,7 +1591,7 @@ void CreatePlayerSkinOptionList::Enter(int a, int *pCount, int *pOut)
         PlayerGear_t info;
         int key;
 
-        fn_800817CC(EditMenuGetPlayerCursor(), &info);
+        PlayerDbReadGear(EditMenuGetPlayerCursor(), &info);
         TattooTableOpen(&cursor, type);
         key = fn_80087B5C(type);
         fn_80087A78(key, &cursor, _CreatePlayerGetTattoo(&info, type), pOut);
@@ -1605,7 +1604,7 @@ int CreatePlayerSkinOptionList::Leave(int a, int b, void **pOut)
 {
     PlayerGear_t info;
 
-    fn_800817CC(EditMenuGetPlayerCursor(), &info);
+    PlayerDbReadGear(EditMenuGetPlayerCursor(), &info);
     int type = _CreatePlayer_aSkinParts[mUnknown8];
 
     if (b == 0) {
@@ -1619,7 +1618,7 @@ int CreatePlayerSkinOptionList::Leave(int a, int b, void **pOut)
             fn_80087A30(fn_80087B5C(type), &cursor);
             _CreatePlayerSetTattoo(&info, type, TattooTableGetId(&cursor));
             TattooTableClose(&cursor);
-            fn_8008199C(EditMenuGetPlayerCursor(), &info);
+            PlayerDbWriteGear(EditMenuGetPlayerCursor(), &info);
         }
     } else {
         if (type == 3) {

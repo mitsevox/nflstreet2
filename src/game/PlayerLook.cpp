@@ -656,7 +656,7 @@ extern "C" void PlayerLookLoad(int index, int unused, int id, unsigned char flag
     gPlayerLooks[index].mUnknown6A = TeamDbGetLogo(&cursor);
     gPlayerLooks[index].mUnknown68 = TeamDbGetCtdl(&cursor);
     TeamDbClose(&cursor);
-    fn_800817CC(&_PlayerLook_sPlayerCursor, &gPlayerLooks[index].mInfo);
+    PlayerDbReadGear(&_PlayerLook_sPlayerCursor, &gPlayerLooks[index].mInfo);
     if (CheatFlagsIsSet(47) && !GameModeTypeGet()) {
         PlayerLookRandomizeGear(index);
     }

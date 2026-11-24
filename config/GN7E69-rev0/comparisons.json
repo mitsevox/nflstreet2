@@ -11420,9 +11420,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800817CC.cpp",
+      "source": "src/game/PlayerGearRecords.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv Info row access, column tags and measured source-form rows; original assembly remains linked.",
+      "evidence": "evidence.tsv PlayerGearRecords.cpp whole provisional unit and writer HOLDOUT. Reader464bytes and complete native56-byte table link; complete628-byte writer remains original and measured partial.",
       "sections": [
         {
           "section": ".text",
@@ -11439,12 +11439,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_800817CC",
-          "start": "0x800817CC",
-          "end": "0x8008199C"
-        },
-        {
-          "symbol": "fn_8008199C",
+          "symbol": "PlayerDbWriteGear",
           "start": "0x8008199C",
           "end": "0x80081C10"
         }
