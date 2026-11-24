@@ -49,7 +49,7 @@ static SysTimer_t *_Sys_SystemTimer = 0;
 static unsigned int _Sys_uVSyncCounter = 0;
 void *_Sys_TimerList;
 void *_Sys_CallbackList;
-Lock_801F8014 _SysCS;
+SysCriticalSection_t _SysCS;
 
 SysTimer_t *SysAllocTimer(void *pFunc, int a);
 void SysFreeTimer(SysTimer_t *pTimer);
@@ -84,11 +84,11 @@ int SysInit(SysInitParams_t *pParms)
 
         // FAKEMATCH: compiled-out assert; its empty do-while keeps i = 0 ahead of the first call
         SYS_ASSERT(pParms != NULL);
-        err = fn_801F7E90();
+        err = SysInitPlatform();
         _Sys_ModuleActive = 1;
         _Sys_TimerList = DSNewList(1, 0, pParms->mNumTimers, sizeof(SysTimer_t), 0, 0);
         _Sys_SystemTimer = SysAllocTimer(0, 3);
-        fn_801F7EF8(_Sys_SystemTimer);
+        SysStartTimer(_Sys_SystemTimer);
         _Sys_CallbackList = DSNewList(1, 0, pParms->mNumCallbacks + 4, sizeof(SysCallback_t), _SysInsertByPriorityCallback, 0);
         _Sys_NumThreads = pParms->mNumThreads;
         _Sys_ThreadIndexList = DSNewList(1, 0, pParms->mNumThreads, sizeof(SysThreadIndex_t), 0, 0);
@@ -108,7 +108,7 @@ int SysInit(SysInitParams_t *pParms)
             }
             _Sys_ErrorList = pPool;
         }
-        fn_801F7FA8(&_SysCS);
+        SysInitCriticalSectionFunc(&_SysCS);
     } else {
         err = 0x20001;
     }
@@ -146,8 +146,8 @@ int SysShutdown(void)
             _Sys_ErrorList = 0;
             DSDelList(p);
         }
-        err = fn_801F7ED0();
-        fn_801F80D0(&_SysCS);
+        err = SysShutdownPlatform();
+        SysShutdownCriticalSectionFunc(&_SysCS);
         _Sys_ModuleActive = 0;
     } else {
         err = 0x20002;
@@ -209,7 +209,7 @@ SysTimer_t *SysAllocTimer(void *pFunc, int a)
 
 void SysFreeTimer(SysTimer_t *pTimer)
 {
-    fn_801F7F60(pTimer);
+    SysStopTimer(pTimer);
     DSDelListNode(_Sys_TimerList, pTimer);
 }
 
@@ -220,8 +220,8 @@ int SysSetLastErrorFunc(int err)
 
     if (_Sys_ErrorList) {
         pError = 0;
-        threadID = fn_801F81D4();
-        fn_801F8014(&_SysCS);
+        threadID = SysGetThreadID();
+        SysEnterCriticalSectionFunc(&_SysCS);
         DSTraverseList(_Sys_ErrorList, 0, (void *)threadID, &pError, _SysTraverseErrorList, 1);
         if (pError) {
             if (pError->mError == SYS_ERROR_UNUSED) {
@@ -229,7 +229,7 @@ int SysSetLastErrorFunc(int err)
             }
             pError->mError = err;
         }
-        fn_801F809C(&_SysCS);
+        SysExitCriticalSectionFunc(&_SysCS);
     } else {
         _Sys_LastError = err;
     }
@@ -245,13 +245,13 @@ int SysGetLastError(void)
     if (_Sys_ErrorList) {
         pError = 0;
         err = 0;
-        threadID = fn_801F81D4();
-        fn_801F8014(&_SysCS);
+        threadID = SysGetThreadID();
+        SysEnterCriticalSectionFunc(&_SysCS);
         DSTraverseList(_Sys_ErrorList, 0, (void *)threadID, &pError, _SysTraverseErrorList, 1);
         if (pError && pError->mError != SYS_ERROR_UNUSED) {
             err = pError->mError;
         }
-        fn_801F809C(&_SysCS);
+        SysExitCriticalSectionFunc(&_SysCS);
         return err;
     }
     return _Sys_LastError;

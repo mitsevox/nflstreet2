@@ -9,7 +9,7 @@
 extern int FileSeek(int handle, int offset, unsigned int whence);
 extern int FileWriteCallback(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
 extern int FileGetPosition(int handle);
-extern Lock_801F8014 _Res_sResourceLock;
+extern SysCriticalSection_t _Res_sResourceLock;
 extern unsigned char _Res_bModuleActive;
 static int _ProcPatchHashBlock(ResFile_t *pWrite);
 static int _ProcPatchDirBlock(ResFile_t *pWrite);
@@ -47,7 +47,7 @@ int ResWriteResourceIgnoreCompression(ResFile_t *pWrite, char *pName, void *pDat
     unsigned short index;
 
     dst.mpData = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
         goto done;
@@ -119,7 +119,7 @@ done:
     if (dst.mpData != 0) {
         fn_801D2BD0(dst.mpData);
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return size;
 }

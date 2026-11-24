@@ -2,7 +2,7 @@
 #include "engine/Memory.h"
 #include "engine/llmemory.h"
 #include <string.h>
-#include "engine/fn_801F8014.h"
+#include "engine/SysCriticalSection.h"
 
 typedef struct MemRange_801D134C {
     char *mpStart;
@@ -50,7 +50,7 @@ extern MemRange_801D134C lbl_80384BC0[16];
 extern void (*lbl_803EBCEC)(void);
 extern int (*lbl_803EBCF0)(int a, void *pAddr);
 extern int (*lbl_803EBCF4)(int ident, int flags, const char *pMessage, int d);
-extern Lock_801F8014 lbl_803E92AC;
+extern SysCriticalSection_t lbl_803E92AC;
 extern const char lbl_802AF9BC[];
 extern const char lbl_802AF628[];
 
@@ -590,7 +590,7 @@ int fn_801D2054(Struct_801D2054 *pParams)
 {
     int result = 0;
 
-    fn_801F7FA8(&lbl_803E92AC);
+    SysInitCriticalSectionFunc(&lbl_803E92AC);
     lbl_803EBCC8 = 0;
     lbl_803EBCCC = 0;
     lbl_803EBCD4 = fn_801D2050;
@@ -614,7 +614,7 @@ int fn_801D20C8(void)
     lbl_803EBCC8 = 0;
     lbl_803EBCCC = 0;
     lbl_803EBCDC = 0;
-    fn_801F80D0(&lbl_803E92AC);
+    SysShutdownCriticalSectionFunc(&lbl_803E92AC);
     return 0;
 }
 
@@ -819,10 +819,10 @@ int fn_801D3148(int a, void *pAddr)
     if (pHeap->mDebug) {
         fn_801D2874(a, pAddr);
     }
-    fn_801F8014(&lbl_803E92AC);
+    SysEnterCriticalSectionFunc(&lbl_803E92AC);
     pTail = ((void ***)pAddr)[-1];
     size = (char *)pTail - (char *)*pTail - 4;
-    fn_801F809C(&lbl_803E92AC);
+    SysExitCriticalSectionFunc(&lbl_803E92AC);
     return size;
 }
 

@@ -4,7 +4,7 @@
 
 #include "engine/periph.h"
 #include "engine/SysSetLastErrorFunc.h"
-#include "engine/fn_801F8014.h"
+#include "engine/SysCriticalSection.h"
 #include "game/fn_801D2B7C.h"
 
 unsigned char Per_ModuleActive = 0;
@@ -20,7 +20,7 @@ unsigned int Per_NumDevices;
 
 static int (*_Per_SeqFunction)();
 static unsigned long _Per_DataTSize;
-static Lock_801F8014 _Per_CS;
+static SysCriticalSection_t _Per_CS;
 
 int MemFill(void *p, unsigned int size, int value, int flags);
 int PerIsActive(void);
@@ -124,8 +124,8 @@ int PerInit(PerInitParms_t *pDesc)
     int err;
 
     if (Per_ModuleActive == 0) {
-        fn_801F7FA8(&_Per_CS);
-        fn_801F8014(&_Per_CS);
+        SysInitCriticalSectionFunc(&_Per_CS);
+        SysEnterCriticalSectionFunc(&_Per_CS);
         err = _PerCreateDeviceArray(pDesc->mNumDevices, pDesc->mUnknown04, pDesc->mUnknown08);
         if (err == 0) {
             err = _PerCreateDriverList(pDesc->mppDrivers);
@@ -139,7 +139,7 @@ int PerInit(PerInitParms_t *pDesc)
                 }
             }
         }
-        fn_801F809C(&_Per_CS);
+        SysExitCriticalSectionFunc(&_Per_CS);
     } else {
         err = 0x180001;
     }
@@ -152,13 +152,13 @@ int PerShutdown(void)
     int err = 0;
 
     if (Per_ModuleActive) {
-        fn_801F8014(&_Per_CS);
+        SysEnterCriticalSectionFunc(&_Per_CS);
         PerReleaseDevices();
         PerSystemShutdown();
         _PerDestroyDeviceArray();
         _PerDestroyDriverList();
-        fn_801F809C(&_Per_CS);
-        fn_801F80D0(&_Per_CS);
+        SysExitCriticalSectionFunc(&_Per_CS);
+        SysShutdownCriticalSectionFunc(&_Per_CS);
         Per_ModuleActive = 0;
     } else {
         err = 0x180002;

@@ -1,3 +1,4 @@
+#include "engine/system.h"
 /* Soundtrack music player (the FMSndgMusic module): keeps a shuffled play order of the
    soundtrack songs from the database, plays them on the music path-finder track, posts the
    game's music moods (mode changes) to that track, fades, pauses and resumes it, ramps its
@@ -54,11 +55,6 @@ struct SndgMusicState_t {
     char mUnknown12B[5];
 };
 
-/* The calendar helper writes all twelve bytes, including its final word. */
-struct SndgMusicClock_t {
-    char mUnknown0[12];
-};
-
 struct PathfinderStatus_t {
     int mUnknown0;
     char mUnknown4[44];
@@ -99,8 +95,7 @@ void GlibVsync(int a);
 void *ResOpenDevice(const char *pName, int flags);
 void ResClose(void *p);
 int SndEnabled(void);
-unsigned long long SysTimeToMilliseconds(SndgMusicClock_t *p);
-void fn_801F81F4(SndgMusicClock_t *p);
+unsigned long long SysTimeToMilliseconds(SysTime_t *p);
 void fn_80219650(void *p, unsigned short *a, unsigned short *b);
 
 static unsigned int _SndgMusic_uVolume = 100;
@@ -502,8 +497,8 @@ void SndgMusicShutdown(void)
 void SndgMusicUpdate(void)
 {
     if (SndEnabled()) {
-        SndgMusicClock_t calendar;
-        fn_801F81F4(&calendar);
+        SysTime_t calendar;
+        SysCopyRealTimeClock(&calendar);
         unsigned long long now = SysTimeToMilliseconds(&calendar);
         if (_SndgMusic_pState->mUnknown0 && now > _SndgMusic_pState->mUnknown0) {
             SndgMusicState_t *p = _SndgMusic_pState;
@@ -601,8 +596,8 @@ void SndgMusicFadeOut(unsigned int delay, int wait)
 {
     if (SndEnabled() && _SndgMusic_pState->mUnknown123 && !_SndgMusic_pState->mUnknown124) {
         SndgMusicExitMode(0);
-        SndgMusicClock_t calendar;
-        fn_801F81F4(&calendar);
+        SysTime_t calendar;
+        SysCopyRealTimeClock(&calendar);
         _SndgMusic_pState->mUnknown8 = SysTimeToMilliseconds(&calendar) + delay;
         if (_SndgMusic_pState->mUnknown122 || _SndgMusic_pState->mUnknown128) {
             SndgPathFadeTrack(0x11000001, 0, delay);
@@ -728,8 +723,8 @@ void SndgMusicRampCutoff(int value, unsigned int duration)
             }
         } else {
             p->mUnknown10 = (value < p->mUnknown18 ? p->mUnknown18 - value : value - p->mUnknown18) / duration;
-            SndgMusicClock_t calendar;
-            fn_801F81F4(&calendar);
+            SysTime_t calendar;
+            SysCopyRealTimeClock(&calendar);
             _SndgMusic_pState->mUnknown0 = SysTimeToMilliseconds(&calendar);
         }
     }

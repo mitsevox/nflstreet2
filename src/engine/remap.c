@@ -2,13 +2,13 @@
    axes, and RemapCheckEntry turns the current pad input into a float value for one action. */
 
 #include "engine/SysSetLastErrorFunc.h"
-#include "engine/fn_801F8014.h"
+#include "engine/SysCriticalSection.h"
 #include "engine/remap.h"
 #include "game/fn_801D2B7C.h"
 
 static unsigned char _Remap_ModuleActive = 0;
 
-static Lock_801F8014 _Remap_CS;
+static SysCriticalSection_t _Remap_CS;
 
 /* The table geometry RemapInit was given and the table block it allocated. */
 static unsigned int _Remap_NumTables;
@@ -28,8 +28,8 @@ int RemapInit(unsigned int numTables, unsigned int numEntries, unsigned int numI
     int err = 0;
 
     if (_Remap_ModuleActive == 0) {
-        fn_801F7FA8(&_Remap_CS);
-        fn_801F8014(&_Remap_CS);
+        SysInitCriticalSectionFunc(&_Remap_CS);
+        SysEnterCriticalSectionFunc(&_Remap_CS);
         _Remap_NumTables = numTables;
         _Remap_NumEntries = numEntries;
         _Remap_NumInputs = numInputs;
@@ -47,7 +47,7 @@ int RemapInit(unsigned int numTables, unsigned int numEntries, unsigned int numI
         } else {
             _Remap_ModuleActive = 1;
         }
-        fn_801F809C(&_Remap_CS);
+        SysExitCriticalSectionFunc(&_Remap_CS);
     } else {
         err = 0x180001;
     }
@@ -60,12 +60,12 @@ int RemapShutdown(void)
     int err = 0;
 
     if (_Remap_ModuleActive != 0) {
-        fn_801F8014(&_Remap_CS);
+        SysEnterCriticalSectionFunc(&_Remap_CS);
         if (_pRemap_TableArray != 0) {
             fn_801D2BD0(_pRemap_TableArray);
         }
-        fn_801F809C(&_Remap_CS);
-        fn_801F80D0(&_Remap_CS);
+        SysExitCriticalSectionFunc(&_Remap_CS);
+        SysShutdownCriticalSectionFunc(&_Remap_CS);
         _Remap_ModuleActive = 0;
     } else {
         err = 0x180002;

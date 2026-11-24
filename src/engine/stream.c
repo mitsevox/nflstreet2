@@ -88,7 +88,7 @@ extern void FileDebugProcess(void);
 extern int FileHostCheckActive(void);
 
 /* Held around each async read submission so the reads of all streams queue in order. */
-static Lock_801F8014 _Stream_SeekReadCS;
+static SysCriticalSection_t _Stream_SeekReadCS;
 
 /* The id of the last request handed out, counted in steps of 0x100 and never 0. */
 static unsigned int requestidcounter;
@@ -471,10 +471,10 @@ static void restartstream(Stream_801F5DA4 *s, int priority)
             s->mReadSize = s->mFileSize - s->mFilePos;
         }
         FileLockAsyncRequestList();
-        fn_801F8014(&_Stream_SeekReadCS);
+        SysEnterCriticalSectionFunc(&_Stream_SeekReadCS);
         FileSeek(s->mFileHandle, s->mFileOffset + s->mFilePos, 0);
         s->mReadHandle = FileReadAsync(s->mFileHandle, s->pWrite, s->mReadSize, priority, _StreamReadCallback, s);
-        fn_801F809C(&_Stream_SeekReadCS);
+        SysExitCriticalSectionFunc(&_Stream_SeekReadCS);
         FileUnlockAsyncRequestList();
     }
 }
@@ -952,10 +952,10 @@ int STREAM_buffersize(StreamTap_801F5DA4 *h)
 
 void StreamInit(void)
 {
-    fn_801F7FA8(&_Stream_SeekReadCS);
+    SysInitCriticalSectionFunc(&_Stream_SeekReadCS);
 }
 
 void StreamShutdown(void)
 {
-    fn_801F80D0(&_Stream_SeekReadCS);
+    SysShutdownCriticalSectionFunc(&_Stream_SeekReadCS);
 }

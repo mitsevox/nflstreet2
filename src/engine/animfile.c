@@ -103,7 +103,7 @@ static int _AnimFile_NumVirtBuffers;
 static AnimFileRequest_t *_AnimFile_DefaultUserDataBuffer;
 
 int ResSync(int a);
-void fn_801F81AC(void);
+void SysReleaseTimeFunc(void);
 int ResGetSize(void *pArchive, int id);
 int ResCopyToBuffer(void *pArchive, int id, void *pDest);
 AnimFileFormat_t *ResLoadAsync(void *pArchive, int id, int heap, int arg,
@@ -165,7 +165,7 @@ static int _AnimFileUnloadFileUnloadBySlot(int slot)
                     if (_AnimFile_bResSync)
                         ResSync(0);
                     else
-                        fn_801F81AC();
+                        SysReleaseTimeFunc();
                 }
             }
         } else if (slot < _AnimFile_NumResBuffers + _AnimFile_NumDynBuffers) {
@@ -174,7 +174,7 @@ static int _AnimFileUnloadFileUnloadBySlot(int slot)
                     if (_AnimFile_bResSync)
                         ResSync(0);
                     else
-                        fn_801F81AC();
+                        SysReleaseTimeFunc();
                 }
             }
         } else {
@@ -183,7 +183,7 @@ static int _AnimFileUnloadFileUnloadBySlot(int slot)
                     if (_AnimFile_bResSync)
                         ResSync(0);
                     else
-                        fn_801F81AC();
+                        SysReleaseTimeFunc();
                 }
             }
         }
@@ -381,7 +381,7 @@ int AnimFileLoadSeqDynamicAsync(unsigned short slot, int id, AnimFileBigInfo_t *
                 if (_AnimFile_bResSync)
                     ResSync(0);
                 else
-                    fn_801F81AC();
+                    SysReleaseTimeFunc();
                 if (FileHostCheckActive())
                     FileDebugProcess();
             }

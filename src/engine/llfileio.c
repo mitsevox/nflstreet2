@@ -23,7 +23,7 @@ typedef struct FileFontPos_t {
 } FileFontPos_t;
 #include "engine/dslist.h"
 #include "engine/SysSetLastErrorFunc.h"
-#include "engine/fn_801F8014.h"
+#include "engine/SysCriticalSection.h"
 #include "game/fn_801D2B7C.h"
 #include <string.h>
 #include "engine/llglib.h"
@@ -31,12 +31,12 @@ typedef struct FileFontPos_t {
 #include "engine/viewport.h"
 
 extern FileStreamInfo_t *File_StreamInfo;
-extern Lock_801F8014 *File_HandleInUseCS;
+extern SysCriticalSection_t *File_HandleInUseCS;
 extern int File_uMemFlags;
 extern void *File_pAsyncRequestList;
-extern Lock_801F8014 File_AsyncRequestListCS;
+extern SysCriticalSection_t File_AsyncRequestListCS;
 extern FileInitParms_t File_InitParms;
-extern Lock_801F8014 File_AsyncThreadActiveCS;
+extern SysCriticalSection_t File_AsyncThreadActiveCS;
 extern unsigned char lbl_802F4AC0[];
 
 unsigned char ModuleLoaded = 1;
@@ -51,7 +51,7 @@ static char *_File_DstFilename;
 static int _File_Infos;
 static Font_t *_FileErrorFont;
 
-void fn_801F8768(void);
+void SysCheckReset(void);
 int SysGetSystemTime(void);
 void SysSetSystemTime(int level);
 void FileCreateAbsoluteFileName(char *pDst, const char *pPath, const char *pName, int flags);
@@ -212,7 +212,7 @@ static int _FileStartIO(int devType)
     int found = 0;
     FileAsyncRequest_t *pAsync;
 
-    fn_801F8014(&File_AsyncRequestListCS);
+    SysEnterCriticalSectionFunc(&File_AsyncRequestListCS);
     for (pAsync = DSGetListNode(File_pAsyncRequestList, 0); pAsync; pAsync = DSNextListNode(File_pAsyncRequestList, pAsync)) {
         if (File_StreamInfo[pAsync->mHandle].mDevType == devType && pAsync->mState == 0) {
             found = 1;
@@ -222,7 +222,7 @@ static int _FileStartIO(int devType)
     if (found) {
         _FileStartAsyncRequest(pAsync);
     }
-    fn_801F809C(&File_AsyncRequestListCS);
+    SysExitCriticalSectionFunc(&File_AsyncRequestListCS);
     return found;
 }
 
@@ -235,7 +235,7 @@ void _FileProcessRequestFinish(FileAsyncRequest_t *pAsync)
     if (pAsync->mpStep) {
         done = pAsync->mpStep(pAsync->mSize, 0, pAsync->mpReq);
     }
-    fn_801F8014(&File_AsyncRequestListCS);
+    SysEnterCriticalSectionFunc(&File_AsyncRequestListCS);
     if (done) {
         pAsync->mState = 2;
         pAsync->mpReq->mpAsync = 0;
@@ -252,15 +252,15 @@ void _FileProcessRequestFinish(FileAsyncRequest_t *pAsync)
     if (!busy) {
         _FileStartIO(devType);
     }
-    fn_801F809C(&File_AsyncRequestListCS);
+    SysExitCriticalSectionFunc(&File_AsyncRequestListCS);
 }
 
 static void _FileCDVDCallback(int result)
 {
-    fn_801F8014(&File_AsyncRequestListCS);
+    SysEnterCriticalSectionFunc(&File_AsyncRequestListCS);
     _File_CDVDCheck = 1;
     _FileProcessRequestFinish(_pFile_CurRequest);
-    fn_801F809C(&File_AsyncRequestListCS);
+    SysExitCriticalSectionFunc(&File_AsyncRequestListCS);
 }
 
 int FileOpenhDevice(const char *pName, int device, const char *pPrefix)
@@ -374,7 +374,7 @@ int FilePerformWrite(int handle, int pos, void *pBuffer, int size)
     int result = 0;
     int error;
 
-    fn_801F8014(&File_HandleInUseCS[handle]);
+    SysEnterCriticalSectionFunc(&File_HandleInUseCS[handle]);
     error = 0;
     switch (File_StreamInfo[handle].mDevType) {
     case 1:
@@ -394,7 +394,7 @@ int FilePerformWrite(int handle, int pos, void *pBuffer, int size)
         }
         break;
     }
-    fn_801F809C(&File_HandleInUseCS[handle]);
+    SysExitCriticalSectionFunc(&File_HandleInUseCS[handle]);
     if (error) {
         result = -1;
     }
@@ -408,8 +408,8 @@ int FileQueueAsyncRequest(FileAsyncRequest_t *pAsync)
     int busy = 0;
     FileAsyncRequest_t *pNode;
 
-    fn_801F8014(&File_AsyncRequestListCS);
-    fn_801F8014(&File_AsyncThreadActiveCS);
+    SysEnterCriticalSectionFunc(&File_AsyncRequestListCS);
+    SysEnterCriticalSectionFunc(&File_AsyncThreadActiveCS);
     DSAddListNode(File_pAsyncRequestList, pAsync, 0);
     for (pNode = DSGetListNode(File_pAsyncRequestList, 0); pNode; pNode = DSNextListNode(File_pAsyncRequestList, pNode)) {
         if (pNode->mState == 1) {
@@ -423,8 +423,8 @@ int FileQueueAsyncRequest(FileAsyncRequest_t *pAsync)
             _FileStartIO(device);
         }
     }
-    fn_801F809C(&File_AsyncThreadActiveCS);
-    fn_801F809C(&File_AsyncRequestListCS);
+    SysExitCriticalSectionFunc(&File_AsyncThreadActiveCS);
+    SysExitCriticalSectionFunc(&File_AsyncRequestListCS);
     SysSetLastErrorFunc(0);
     return 0;
 }
@@ -436,10 +436,10 @@ void FileAsyncWaitStream(int handle)
     FileAsyncRequest_t *pNext;
 
     do {
-        fn_801F8768();
+        SysCheckReset();
         busy = 0;
         FileAsyncCheckError();
-        fn_801F8014(&File_AsyncRequestListCS);
+        SysEnterCriticalSectionFunc(&File_AsyncRequestListCS);
         for (pAsync = DSGetListNode(File_pAsyncRequestList, 0); pAsync; pAsync = pNext) {
             pNext = DSNextListNode(File_pAsyncRequestList, pAsync);
             if (pAsync->mHandle == handle && pAsync->mState != 2) {
@@ -450,7 +450,7 @@ void FileAsyncWaitStream(int handle)
         if (busy) {
             FileDebugProcess();
         }
-        fn_801F809C(&File_AsyncRequestListCS);
+        SysExitCriticalSectionFunc(&File_AsyncRequestListCS);
     } while (busy);
 }
 
@@ -554,7 +554,7 @@ void FileAsyncCheckError(void)
         MatScaleCol(0.0014705883f, -0.002232143f, 1.0f);
         do {
             if (status != -1) {
-                fn_801F8768();
+                SysCheckReset();
             }
             current = DVDGetDriveStatus();
             FontResetRenderState();
@@ -592,7 +592,7 @@ void FileDebugProcess(void)
     int found = 0;
     FileAsyncRequest_t *pAsync;
 
-    fn_801F8014(&File_AsyncRequestListCS);
+    SysEnterCriticalSectionFunc(&File_AsyncRequestListCS);
     for (pAsync = DSGetListNode(File_pAsyncRequestList, 0); pAsync; pAsync = DSNextListNode(File_pAsyncRequestList, pAsync)) {
         if (pAsync->mState == 1) {
             if (File_StreamInfo[pAsync->mHandle].mDevType == 4) {
@@ -608,7 +608,7 @@ void FileDebugProcess(void)
     if (!found && pFirst && pFirst->mState == 0 && File_StreamInfo[pFirst->mHandle].mDevType == 4) {
         _FileStartIO(4);
     }
-    fn_801F809C(&File_AsyncRequestListCS);
+    SysExitCriticalSectionFunc(&File_AsyncRequestListCS);
 }
 
 void FileLLInit(FileInitParms_t *pConfig)
@@ -651,7 +651,7 @@ void FileLLShutdown(void)
 
 int FileHostCheckActive(void)
 {
-    fn_801F8768();
+    SysCheckReset();
     FileAsyncCheckError();
     return _File_HostActive;
 }

@@ -1,3 +1,4 @@
+#include "engine/system.h"
 /* Console start-up: the intro movies, the progressive-scan display prompt, the reset button while the front end runs, and the layout of the memory pools. */
 
 #include <dolphin/vi.h>
@@ -52,9 +53,6 @@ void STREAM_setfilter(int a, int b, int c, int d, int e);
 void STREAM_destroy(int a);
 int STREAM_taphandle(int a, int b);
 int STREAM_queuefile(int a, struct MovieStreamDesc_t *pDesc, int b, int c);
-int fn_801F8758(int a);
-void fn_801F8768(void);
-void fn_801F87FC(int a);
 int fn_80219044(void *p, int a, int b, int c, struct Entry_80219044 **ppEntries);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
@@ -215,15 +213,15 @@ void BootRemoveResetCallback(void)
 
 void BootHandleReset(void)
 {
-    int previous = fn_801F8758(1);
+    int previous = SysEnableReset(1);
 
     if (previous && !MemCardUIIsResetLocked() && _Boot_bResetPressed) {
         if (!OSGetResetButtonState()) {
-            fn_801F87FC(0);
+            SysResetSystem(0);
             _Boot_bResetPressed = 0;
         }
     }
-    fn_801F8758(previous);
+    SysEnableReset(previous);
 }
 
 /* Sets the base (+12) and size (+16) words of the eight memory records. */
@@ -305,7 +303,7 @@ static void _BootCheckMovieAbort(int a)
 static int _BootMovieCallback(int a)
 {
     _BootCheckMovieAbort(a != 0);
-    fn_801F8768();
+    SysCheckReset();
     return _Boot_bMovieAbort == 0;
 }
 

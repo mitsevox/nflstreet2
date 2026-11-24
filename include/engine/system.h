@@ -2,7 +2,7 @@
 #define ENGINE_SYSTEM_H
 
 #include "engine/SysSetLastErrorFunc.h"
-#include "engine/fn_801F8014.h"
+#include "engine/SysCriticalSection.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,17 +40,27 @@ void _StreamMUTEX_free(struct OSMutex *pMutex);
 void _StreamMUTEX_lock(struct OSMutex *pMutex);
 void _StreamMUTEX_unlock(struct OSMutex *pMutex);
 
+typedef int (*SysResetCallback_t)(int resetRequested);
+
 /* llsystem.c */
-int fn_801F7E90(void);
-int fn_801F7ED0(void);
-int fn_801F7EF8(SysTimer_t *pTimer);
-int fn_801F7F60(SysTimer_t *pTimer);
-void fn_801F80E8(struct OSMutex **ppMutex);
-int fn_801F8128(struct OSMutex **ppMutex);
-void fn_801F8150(struct OSMutex **ppMutex);
-void fn_801F8174(struct OSMutex **ppMutex);
-void fn_801F81AC(void);
-int fn_801F81D4(void);
+int SysInitPlatform(void);
+int SysShutdownPlatform(void);
+int SysStartTimer(SysTimer_t *pTimer);
+int SysStopTimer(SysTimer_t *pTimer);
+void SysInitSemaphore(struct OSMutex **ppMutex);
+int SysLockSemaphore(struct OSMutex **ppMutex);
+void SysUnlockSemaphore(struct OSMutex **ppMutex);
+void SysShutdownSemaphore(struct OSMutex **ppMutex);
+void SysReleaseTimeFunc(void);
+int SysGetThreadID(void);
+void SysCopyRealTimeClock(SysTime_t *pTime);
+void SysInitRealTimeClock(void);
+void SysUpdateRealTimeClock(void);
+int SysEnableReset(int enable);
+void SysCheckReset(void);
+void SysResetSystem(int forceMenu);
+void SysHotResetSystem(void);
+SysResetCallback_t SysSetResetCallback(SysResetCallback_t callback);
 
 #ifdef __cplusplus
 }

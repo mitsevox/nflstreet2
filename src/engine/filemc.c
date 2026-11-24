@@ -1,3 +1,4 @@
+#include "engine/system.h"
 /* Memory-card file device of the low-level file layer: opens or creates one save file on a
    GameCube memory card and reads, writes and seeks it through one cached 8 KB sector. */
 
@@ -8,8 +9,6 @@
 unsigned char FileMCWorkArea[0xA000];
 static FileMCInfo_t _FileMCCurrentInfo;
 
-void fn_801F8758(int a);
-void fn_801F8768(void);
 void *memset();
 void *memcpy();
 
@@ -80,7 +79,7 @@ int FileMCOpen(int chan, int unused, const char *pName, int unused2, int create,
                 CARDDelete(chan, pName);
                 result = CARDCreate(chan, pName, (size + 0x1FFF) & ~0x1FFF, &_FileMCCurrentInfo.mFileInfo);
                 if (result == 0) {
-                    fn_801F8758(0);
+                    SysEnableReset(0);
                     fileNo = CARDGetFileNo(&_FileMCCurrentInfo.mFileInfo);
                     result = CARDGetStatus(chan, fileNo, &_FileMCCurrentInfo.mStat);
                     // FAKEMATCH: setter order (as in memorycard.c) and the reset order mChan, mSector, mPos, mDirty chosen by testing
@@ -108,7 +107,7 @@ int FileMCOpen(int chan, int unused, const char *pName, int unused2, int create,
                 if (fileNo < 127) {
                     result = CARDFastOpen(chan, fileNo, &_FileMCCurrentInfo.mFileInfo);
                     if (result == 0) {
-                        fn_801F8758(0);
+                        SysEnableReset(0);
                         fileNo = CARDGetFileNo(&_FileMCCurrentInfo.mFileInfo);
                         result = CARDGetStatus(chan, fileNo, &_FileMCCurrentInfo.mStat);
                         // FAKEMATCH: reset order mChan, mSector, mPos, mDirty chosen by testing
@@ -134,7 +133,7 @@ void FileMCClose(int fileNo)
     CARDClose(&_FileMCCurrentInfo.mFileInfo);
     CARDUnmount(_FileMCCurrentInfo.mChan);
     _FileMCCurrentInfo.mChan = -1;
-    fn_801F8758(1);
+    SysEnableReset(1);
 }
 
 int FileMCSeek(int fileNo, unsigned int offset, int whence)
@@ -195,7 +194,7 @@ unsigned int FileMCRead(int fileNo, unsigned char *pDst, unsigned int size)
                 size = 0;
             }
         }
-        fn_801F8768();
+        SysCheckReset();
     }
     return total;
 }
@@ -228,7 +227,7 @@ unsigned int FileMCWrite(int fileNo, unsigned char *pSrc, unsigned int size)
                 return 0;
             }
         }
-        fn_801F8768();
+        SysCheckReset();
     }
     return total;
 }

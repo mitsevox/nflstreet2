@@ -92,8 +92,8 @@ extern void *FileReadAsync(int handle, void *pBuffer, int size, int priority,
 extern int ResLooseFileExists(ResFile_t *pRes, int index);
 extern void *memmove(void *pDst, const void *pSrc, unsigned int size);
 
-Lock_801F8014 _Res_sAsyncCountLock;
-Lock_801F8014 _Res_sResourceLock;
+SysCriticalSection_t _Res_sAsyncCountLock;
+SysCriticalSection_t _Res_sResourceLock;
 void *_Res_pResourceFileList;
 
 extern unsigned int strlen(const char *s);
@@ -345,9 +345,9 @@ static void _ResAsyncCallbackFunc(int result, int arg, void *pArg)
     track.pRes = pRes;
     track.mIndex = index;
     ResTrackResource(3, &track);
-    fn_801F8014(&_Res_sAsyncCountLock);
+    SysEnterCriticalSectionFunc(&_Res_sAsyncCountLock);
     _Res_iAsyncLoadCount--;
-    fn_801F809C(&_Res_sAsyncCountLock);
+    SysExitCriticalSectionFunc(&_Res_sAsyncCountLock);
 }
 
 static int _ResGetBaseBlockSize(unsigned int tag, int count)
@@ -390,7 +390,7 @@ static inline void _ResWaitForLoad(ResFile_t *pRes, unsigned int index, int type
             if (FileHostCheckActive() != 0) {
                 FileAsyncWaitStream(pRes->mFile);
             } else {
-                fn_801F81AC();
+                SysReleaseTimeFunc();
             }
         }
     }
@@ -691,9 +691,9 @@ static int _ResLoadResAsync(ResFile_t *pRes, unsigned int index, void *pBuffer, 
         pReq->mIndex = index;
         pReq->mCache = 0;
         pReq->mTime = 0;
-        fn_801F8014(&_Res_sAsyncCountLock);
+        SysEnterCriticalSectionFunc(&_Res_sAsyncCountLock);
         _Res_iAsyncLoadCount++;
-        fn_801F809C(&_Res_sAsyncCountLock);
+        SysExitCriticalSectionFunc(&_Res_sAsyncCountLock);
         if (_Res_bLooseFileSupport != 0 && ResLooseFileGetSize(pRes, index, &size) != 0) {
             pReq->pBuffer = pBuffer;
             pReq->mDiskSize = size;
@@ -1278,15 +1278,15 @@ int ResInit(int maxResources)
         GCmpInit(0);
     }
     if (_Res_bModuleActive == 0) {
-        fn_801F7FA8(&_Res_sResourceLock);
-        fn_801F7FA8(&_Res_sAsyncCountLock);
-        fn_801F8014(&_Res_sResourceLock);
+        SysInitCriticalSectionFunc(&_Res_sResourceLock);
+        SysInitCriticalSectionFunc(&_Res_sAsyncCountLock);
+        SysEnterCriticalSectionFunc(&_Res_sResourceLock);
         _Res_pResourceFileList = DSNewList(1, 1, maxResources, 0xA4, _ResFileInsertFunc, 0);
         _Res_pBlockLoadBuffer = fn_801D2BB0(1, 0x8000, _Res_uMemAllocFlags, 0);
         _Res_bModuleActive = 1;
         _Res_bCachingEnabled = 0;
         ResCacheSetDevice(0);
-        fn_801F809C(&_Res_sResourceLock);
+        SysExitCriticalSectionFunc(&_Res_sResourceLock);
     } else {
         err = 0xF0001;
     }
@@ -1305,7 +1305,7 @@ int ResShutdown(void)
 
     err = 0;
     if (_Res_bModuleActive != 0) {
-        fn_801F8014(&_Res_sResourceLock);
+        SysEnterCriticalSectionFunc(&_Res_sResourceLock);
         pNext = DSGetListNode(_Res_pResourceFileList, 0);
         while (pNext != 0) {
             pRes = pNext;
@@ -1315,9 +1315,9 @@ int ResShutdown(void)
         }
         DSDelList(_Res_pResourceFileList);
         fn_801D2BD0(_Res_pBlockLoadBuffer);
-        fn_801F809C(&_Res_sResourceLock);
-        fn_801F80D0(&_Res_sResourceLock);
-        fn_801F80D0(&_Res_sAsyncCountLock);
+        SysExitCriticalSectionFunc(&_Res_sResourceLock);
+        SysShutdownCriticalSectionFunc(&_Res_sResourceLock);
+        SysShutdownCriticalSectionFunc(&_Res_sAsyncCountLock);
         _Res_bModuleActive = 0;
     } else {
         err = 0xF0002;
@@ -1335,7 +1335,7 @@ ResFile_t *ResOpenDevice(char *pName, int mode)
     int err;
 
     pRes = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     err = 0;
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
@@ -1375,7 +1375,7 @@ done:
             _Res_pErrorCallback(pName, err);
         }
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return pRes;
 }
@@ -1392,7 +1392,7 @@ ResFile_t *ResOpenRam(ResFile_t *pParent, unsigned int index, int heap, int mode
     unsigned int value;
 
     pRes = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     err = 0;
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
@@ -1458,7 +1458,7 @@ done:
         DSDelListNode(_Res_pResourceFileList, pRes);
         pRes = 0;
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return pRes;
 }
@@ -1474,7 +1474,7 @@ int ResClose(ResFile_t *pRes)
     err = 0;
     close = 1;
     flush = 1;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes->pName == 0) {
@@ -1594,7 +1594,7 @@ int ResClose(ResFile_t *pRes)
             err = 0xF0005;
         }
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return err;
 }
@@ -1607,7 +1607,7 @@ unsigned int ResLoad(ResFile_t *pRes, unsigned int index, int heap)
 
     buffer = 0;
     err = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -1636,7 +1636,7 @@ unsigned int ResLoad(ResFile_t *pRes, unsigned int index, int heap)
             buffer = _ResLockRes(pRes, index);
         }
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return buffer;
 }
@@ -1649,7 +1649,7 @@ unsigned int ResLoadAsync(ResFile_t *pRes, unsigned int index, int heap, int a, 
     int err;
 
     buffer = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     err = 0;
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
@@ -1683,7 +1683,7 @@ unsigned int ResLoadAsync(ResFile_t *pRes, unsigned int index, int heap, int a, 
             _ResWaitForLoad(pRes, index, 1);
         }
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return buffer;
 }
@@ -1693,7 +1693,7 @@ unsigned int ResLoadToBuffer(ResFile_t *pRes, unsigned int index, void *pBuffer)
     unsigned int buffer = (unsigned int)pBuffer;
     int err;
 
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -1717,7 +1717,7 @@ unsigned int ResLoadToBuffer(ResFile_t *pRes, unsigned int index, void *pBuffer)
             err = 0xF0007;
         }
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return buffer;
 }
@@ -1730,7 +1730,7 @@ int ResWriteFromBuffer(ResFile_t *pRes, unsigned int index, void *pBuffer)
     int err;
 
     err = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -1752,7 +1752,7 @@ int ResWriteFromBuffer(ResFile_t *pRes, unsigned int index, void *pBuffer)
             }
         }
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return err;
 }
@@ -1765,7 +1765,7 @@ unsigned int ResLoadAsyncToBuffer(ResFile_t *pRes, unsigned int index, int heap,
     unsigned int size;
     int err;
 
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -1794,7 +1794,7 @@ unsigned int ResLoadAsyncToBuffer(ResFile_t *pRes, unsigned int index, int heap,
             _ResWaitForLoad(pRes, index, 1);
         }
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return (unsigned int)pBuffer;
 }
@@ -1807,7 +1807,7 @@ unsigned int ResCopyAsyncToBuffer(ResFile_t *pRes, unsigned int index, int heap,
     unsigned int size;
     int err;
 
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -1836,7 +1836,7 @@ unsigned int ResCopyAsyncToBuffer(ResFile_t *pRes, unsigned int index, int heap,
             _ResWaitForLoad(pRes, index, 1);
         }
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return (unsigned int)pBuffer;
 }
@@ -1851,7 +1851,7 @@ int ResCopyToBuffer(ResFile_t *pRes, unsigned int index, void *pBuffer)
     int err;
 
     err = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -1874,7 +1874,7 @@ int ResCopyToBuffer(ResFile_t *pRes, unsigned int index, void *pBuffer)
             err = _ResLoadRes(pRes, index, &buffer);
         }
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return err;
 }
@@ -1884,7 +1884,7 @@ int ResUnLoad(ResFile_t *pRes, unsigned int index)
     int err;
 
     err = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -1910,7 +1910,7 @@ int ResUnLoad(ResFile_t *pRes, unsigned int index)
             }
         }
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return err;
 }
@@ -1932,7 +1932,7 @@ int ResLoadAll(ResFile_t *pRes, int heap, int bulk)
     int result;
     int err = 0;
 
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -2067,7 +2067,7 @@ int ResLoadAll(ResFile_t *pRes, int heap, int bulk)
         }
     }
 done:
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return err;
 }
@@ -2079,7 +2079,7 @@ int ResUnLoadAll(ResFile_t *pRes)
     int err;
 
     err = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -2109,7 +2109,7 @@ int ResUnLoadAll(ResFile_t *pRes)
             pRes->mNumLocked = 0;
         }
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return err;
 }
@@ -2124,7 +2124,7 @@ int ResFindIndexByName(ResFile_t *pRes, char *pName)
 
     pHash = pRes->pHash;
     index = -1;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     err = 0;
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
@@ -2172,7 +2172,7 @@ int ResFindIndexByName(ResFile_t *pRes, char *pName)
         }
     }
 done:
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return index;
 }
@@ -2187,7 +2187,7 @@ unsigned int ResGetSize(ResFile_t *pRes, unsigned int index)
     prevSize = 0;
     size = 0;
     err = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -2197,7 +2197,7 @@ unsigned int ResGetSize(ResFile_t *pRes, unsigned int index)
     } else if (_Res_bLooseFileSupport == 0 || ResLooseFileGetSize(pRes, index, &size) == 0) {
         _ResGetDirInfo(pRes, index, &offset, &prevSize, &size);
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return size;
 }
@@ -2209,7 +2209,7 @@ int ResGetNumResources(ResFile_t *pRes)
 
     count = 0;
     err = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -2217,7 +2217,7 @@ int ResGetNumResources(ResFile_t *pRes)
     } else {
         count = pRes->mNumRes;
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return count;
 }
@@ -2229,7 +2229,7 @@ int ResIsLoaded(ResFile_t *pRes, unsigned int index)
 
     err = 0;
     loaded = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -2239,7 +2239,7 @@ int ResIsLoaded(ResFile_t *pRes, unsigned int index)
     } else if (pRes->pFlags[index] & 2) {
         loaded = 1;
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return loaded;
 }
@@ -2251,7 +2251,7 @@ int ResIsLoading(ResFile_t *pRes, unsigned int index)
 
     err = 0;
     loading = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -2261,7 +2261,7 @@ int ResIsLoading(ResFile_t *pRes, unsigned int index)
     } else if (pRes->pFlags[index] & 0x10) {
         loading = 1;
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return loading;
 }
@@ -2278,7 +2278,7 @@ int ResSync(int noWait)
             if (_Res_pLoopingCallback != 0 && elapsed > 0x4650) {
                 _Res_pLoopingCallback(2);
             }
-            fn_801F81AC();
+            SysReleaseTimeFunc();
         }
         ResCallTimedAsync(-1);
     }
@@ -2333,7 +2333,7 @@ int ResGetStreamInfo(ResFile_t *pRes, unsigned int index, unsigned int *pSize, u
     int err;
 
     err = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -2347,7 +2347,7 @@ int ResGetStreamInfo(ResFile_t *pRes, unsigned int index, unsigned int *pSize, u
         *pOffset = offset + pRes->mBaseOffset;
         *pFile = pRes->mFile;
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return err;
 }
@@ -2362,9 +2362,9 @@ void ResSetFlags(ResFile_t *pRes, unsigned int flags)
     } else if (pRes == 0) {
         err = 0xF0005;
     } else {
-        fn_801F8014(&_Res_sResourceLock);
+        SysEnterCriticalSectionFunc(&_Res_sResourceLock);
         pRes->mFlags |= flags;
-        fn_801F809C(&_Res_sResourceLock);
+        SysExitCriticalSectionFunc(&_Res_sResourceLock);
     }
     SysSetLastErrorFunc(err);
 }
@@ -2379,9 +2379,9 @@ void ResClearFlags(ResFile_t *pRes, unsigned int flags)
     } else if (pRes == 0) {
         err = 0xF0005;
     } else {
-        fn_801F8014(&_Res_sResourceLock);
+        SysEnterCriticalSectionFunc(&_Res_sResourceLock);
         pRes->mFlags &= ~flags;
-        fn_801F809C(&_Res_sResourceLock);
+        SysExitCriticalSectionFunc(&_Res_sResourceLock);
     }
     SysSetLastErrorFunc(err);
 }
@@ -2393,7 +2393,7 @@ void ResCallTimedAsync(unsigned int time)
     ResAsyncEvent_t event;
     int index;
 
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (time != -1) {
         _Res_uTimedAsyncTick = time;
     }
@@ -2421,7 +2421,7 @@ void ResCallTimedAsync(unsigned int time)
         pReq->pCallback(pReq->pRes, pReq->mIndex, pReq->pBuffer, pReq->mError, pReq->pUser);
         fn_801D2BD0(pReq);
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
 }
 
 void ResUnprotect(ResFile_t *pRes, int index)
@@ -2436,7 +2436,7 @@ int ResGetAlignment(ResFile_t *pRes)
 
     alignment = 0;
     err = 0;
-    fn_801F8014(&_Res_sResourceLock);
+    SysEnterCriticalSectionFunc(&_Res_sResourceLock);
     if (_Res_bModuleActive == 0) {
         err = 0xF0002;
     } else if (pRes == 0) {
@@ -2444,7 +2444,7 @@ int ResGetAlignment(ResFile_t *pRes)
     } else {
         alignment = pRes->mAlignment;
     }
-    fn_801F809C(&_Res_sResourceLock);
+    SysExitCriticalSectionFunc(&_Res_sResourceLock);
     SysSetLastErrorFunc(err);
     return alignment;
 }

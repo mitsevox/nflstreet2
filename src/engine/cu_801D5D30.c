@@ -1,3 +1,4 @@
+#include "engine/system.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/memorycard.h"
 #include <string.h>
@@ -88,7 +89,6 @@ extern const char lbl_802AFF18[];
 extern void *memset();
 extern int memcmp(const void *pA, const void *pB, unsigned int count);
 extern int sprintf(char *pBuffer, const char *pFormat, ...);
-extern void fn_801F8758(int value);
 
 void fn_801D5D30(int state);
 int fn_801D673C(int port);
@@ -143,7 +143,7 @@ void fn_801D5E08(const char *pName, char *pOut)
 
 void fn_801D6294(int result)
 {
-    fn_801F8758(1);
+    SysEnableReset(1);
     if (result == -2) {
         lbl_803EBD0C = result;
         lbl_803EBD10 = 1;

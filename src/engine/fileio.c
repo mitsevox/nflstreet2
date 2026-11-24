@@ -7,7 +7,7 @@
 #include "engine/fileio.h"
 #include "engine/dslist.h"
 #include "engine/SysSetLastErrorFunc.h"
-#include "engine/fn_801F8014.h"
+#include "engine/SysCriticalSection.h"
 #include "game/fn_801D2B7C.h"
 #include <string.h>
 
@@ -22,7 +22,7 @@ static unsigned int _File_uMaxFilesOpenedAtOnce = 0;
 unsigned char File_ModuleActive = 0;
 char File_ModuleID[] = "FileIO";
 FileStreamInfo_t *File_StreamInfo = 0;
-Lock_801F8014 *File_HandleInUseCS = 0;
+SysCriticalSection_t *File_HandleInUseCS = 0;
 static int _File_DefaultDevice = 0;
 
 static FilevDevicePath_t _File_DefaultvDevicePath = { { 4 }, { "" }, 1 };
@@ -34,13 +34,13 @@ int File_uMemFlags = 0;
 void *File_pFileRequestList;
 void *File_pAsyncRequestList;
 unsigned char File_AsyncFileCopy;
-Lock_801F8014 File_RequestListCS;
-Lock_801F8014 File_AsyncRequestListCS;
+SysCriticalSection_t File_RequestListCS;
+SysCriticalSection_t File_AsyncRequestListCS;
 FileInitParms_t File_InitParms;
 unsigned char File_AsyncThreadActive[9];
-Lock_801F8014 File_AsyncThreadActiveCS;
+SysCriticalSection_t File_AsyncThreadActiveCS;
 
-void fn_801F81AC(void);
+void SysReleaseTimeFunc(void);
 int MemFill(void *pDest, int size, int value, int width);
 int FileQueueAsyncRequest(FileAsyncRequest_t *pAsync);
 void FileAsyncWaitStream(int handle);
@@ -70,22 +70,22 @@ static FileRequest_t *_GetNewFileRequest(void)
     FileRequest_t *pReq;
 
     for (;;) {
-        fn_801F8014(&File_RequestListCS);
+        SysEnterCriticalSectionFunc(&File_RequestListCS);
         pReq = DSNewNode(File_pFileRequestList);
-        fn_801F809C(&File_RequestListCS);
+        SysExitCriticalSectionFunc(&File_RequestListCS);
         if (pReq) {
             break;
         }
-        fn_801F81AC();
+        SysReleaseTimeFunc();
     }
     return pReq;
 }
 
 static void _DeleteFileRequestNode(FileRequest_t *pReq)
 {
-    fn_801F8014(&File_RequestListCS);
+    SysEnterCriticalSectionFunc(&File_RequestListCS);
     DSDelNode(File_pFileRequestList, pReq);
-    fn_801F809C(&File_RequestListCS);
+    SysExitCriticalSectionFunc(&File_RequestListCS);
 }
 
 FileAsyncRequest_t *_FileGetAsyncRequest(void)
@@ -93,13 +93,13 @@ FileAsyncRequest_t *_FileGetAsyncRequest(void)
     FileAsyncRequest_t *pAsync;
 
     for (;;) {
-        fn_801F8014(&File_AsyncRequestListCS);
+        SysEnterCriticalSectionFunc(&File_AsyncRequestListCS);
         pAsync = DSNewListNode(File_pAsyncRequestList);
-        fn_801F809C(&File_AsyncRequestListCS);
+        SysExitCriticalSectionFunc(&File_AsyncRequestListCS);
         if (pAsync) {
             break;
         }
-        fn_801F81AC();
+        SysReleaseTimeFunc();
     }
     return pAsync;
 }
@@ -228,15 +228,15 @@ int FileInit(FileInitParms_t *pConfig)
         for (i = 0; i < 9; i++) {
             File_AsyncThreadActive[i] = 0;
         }
-        fn_801F7FA8(&File_AsyncThreadActiveCS);
+        SysInitCriticalSectionFunc(&File_AsyncThreadActiveCS);
         for (j = 0; j < File_InitParms.mNumFiles; j++) {
-            fn_801F7FA8(&File_HandleInUseCS[j]);
+            SysInitCriticalSectionFunc(&File_HandleInUseCS[j]);
         }
         File_pAsyncRequestList = DSNewList(1, 0, 0x40, sizeof(FileAsyncRequest_t), (int (*)(void *, void *))_FileRequestInsertFunc, 0);
-        fn_801F7FA8(&File_AsyncRequestListCS);
+        SysInitCriticalSectionFunc(&File_AsyncRequestListCS);
         File_AsyncFileCopy = 0;
         File_pFileRequestList = DSNewNodeHandler(1, 0x40, sizeof(FileRequest_t), 0);
-        fn_801F7FA8(&File_RequestListCS);
+        SysInitCriticalSectionFunc(&File_RequestListCS);
         FileLLInit(&File_InitParms);
         _File_uNumOpenFiles = 0;
         File_uMemFlags = 0;
@@ -259,13 +259,13 @@ int FileShutdown(void)
             if (i >= 0 && i < File_InitParms.mNumFiles && File_StreamInfo[i].mInUse) {
                 FileAsyncWaitStream(i);
             }
-            fn_801F80D0(&File_HandleInUseCS[i]);
+            SysShutdownCriticalSectionFunc(&File_HandleInUseCS[i]);
         }
         DSDelList(File_pAsyncRequestList);
-        fn_801F80D0(&File_AsyncRequestListCS);
-        fn_801F80D0(&File_AsyncThreadActiveCS);
+        SysShutdownCriticalSectionFunc(&File_AsyncRequestListCS);
+        SysShutdownCriticalSectionFunc(&File_AsyncThreadActiveCS);
         DSDelNodeHandler(File_pFileRequestList);
-        fn_801F80D0(&File_RequestListCS);
+        SysShutdownCriticalSectionFunc(&File_RequestListCS);
         fn_801D2BD0(File_StreamInfo);
         fn_801D2BD0(File_HandleInUseCS);
         File_StreamInfo = 0;
@@ -507,7 +507,7 @@ FileRequest_t *FileWriteAsync(int handle, char *pBuffer, int size, int priority,
 FileRequest_t *FileRePrioritizeAsync(FileRequest_t *pReq, int priority)
 {
     if (pReq) {
-        fn_801F8014(&File_AsyncRequestListCS);
+        SysEnterCriticalSectionFunc(&File_AsyncRequestListCS);
         if (pReq->mpAsync) {
             pReq->mPriority = priority;
             if (pReq->mpAsync->mState == 0) {
@@ -518,7 +518,7 @@ FileRequest_t *FileRePrioritizeAsync(FileRequest_t *pReq, int priority)
                 pReq->mpAsync->mPriority = priority;
             }
         }
-        fn_801F809C(&File_AsyncRequestListCS);
+        SysExitCriticalSectionFunc(&File_AsyncRequestListCS);
     }
     return pReq;
 }
@@ -556,12 +556,12 @@ int FileSetDefaultDevice(int device)
 
 void FileLockAsyncRequestList(void)
 {
-    fn_801F8014(&File_AsyncRequestListCS);
+    SysEnterCriticalSectionFunc(&File_AsyncRequestListCS);
 }
 
 void FileUnlockAsyncRequestList(void)
 {
-    fn_801F809C(&File_AsyncRequestListCS);
+    SysExitCriticalSectionFunc(&File_AsyncRequestListCS);
 }
 
 int FileSetMemAllocFlags(int flags)

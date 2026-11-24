@@ -130,3 +130,5 @@ Update a row in the PR that changes it: a new file name, a link that moves a fil
 - `src/engine/proview.c` (0x801ACA00-0x801AD424) supplies the libsn EXI host link: all23 hardware assembly entries and25native state bytes link whole. Three internal entry edges retain provisional grades; original file edges remain provisional.
 
 - `src/engine/fileserver.c` (0x801AC6B0-0x801ACA00) dispatches debugger host-file requests and activates twelve patchable PC entry slots. All848native text bytes and241native data bytes link; twelve trailing return words retain their existing untyped ownership and veneer edges stay provisional/open.
+
+- `src/engine/llsystem.c` (0x801F7DF4-0x801F8878) supplies the platform timers, recursive locks, real-time clock and reset handling. Twenty-two exact functions and88native data bytes link; the complete timer-start and calendar-initialization functions remain measured holdouts. Both historical file edges stay provisional.

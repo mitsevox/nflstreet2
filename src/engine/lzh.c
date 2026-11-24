@@ -4,7 +4,7 @@
    stream callback and one reading from memory. */
 
 #include <dolphin/os.h>
-#include "engine/fn_801F8014.h"
+#include "engine/SysCriticalSection.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/lzh.h"
 
@@ -70,9 +70,9 @@ extern int lbl_803ED4A4;
 extern unsigned char *lbl_803ED4A8;
 extern int lbl_803ED4AC;
 extern unsigned char *lbl_803ED4B0;
-extern Lock_801F8014 lbl_803B53FC;
-extern Lock_801F8014 lbl_803B541C;
-extern Lock_801F8014 lbl_803B543C;
+extern SysCriticalSection_t lbl_803B53FC;
+extern SysCriticalSection_t lbl_803B541C;
+extern SysCriticalSection_t lbl_803B543C;
 
 int fn_80282800(void);
 int fn_802828BC(void);
@@ -93,9 +93,9 @@ int fn_802821E8(void)
         lbl_803EC584 = 1;
         lbl_803ED424 = 0;
         lbl_803ED430 = 0;
-        fn_801F7FA8(&lbl_803B53FC);
-        fn_801F7FA8(&lbl_803B541C);
-        fn_801F7FA8(&lbl_803B543C);
+        SysInitCriticalSectionFunc(&lbl_803B53FC);
+        SysInitCriticalSectionFunc(&lbl_803B541C);
+        SysInitCriticalSectionFunc(&lbl_803B543C);
         lbl_803ED440 = 0;
         return 0;
     }
@@ -105,9 +105,9 @@ int fn_802821E8(void)
 int fn_80282260(void)
 {
     if (lbl_803EC584 != 0 && lbl_803ED424 == 0 && lbl_803ED430 == 0) {
-        fn_801F80D0(&lbl_803B53FC);
-        fn_801F80D0(&lbl_803B541C);
-        fn_801F80D0(&lbl_803B543C);
+        SysShutdownCriticalSectionFunc(&lbl_803B53FC);
+        SysShutdownCriticalSectionFunc(&lbl_803B541C);
+        SysShutdownCriticalSectionFunc(&lbl_803B543C);
         lbl_803EC584 = 0;
         return 0;
     }
@@ -117,7 +117,7 @@ int fn_80282260(void)
 int fn_802822E0(void)
 {
     unsigned short i;
-    fn_801F8014(&lbl_803B53FC);
+    SysEnterCriticalSectionFunc(&lbl_803B53FC);
     lbl_803ED424 = 1;
     lbl_803ED440 = fn_801D2BB0(1, 0x8000, 0, 0);
     lbl_803ED448 = fn_801D2BB0(1, 0x7FFA, 0, 0);
@@ -155,7 +155,7 @@ void fn_8028243C(void)
     fn_801D2BD0(lbl_803ED440);
     lbl_803ED440 = 0;
     lbl_803ED424 = 0;
-    fn_801F809C(&lbl_803B53FC);
+    SysExitCriticalSectionFunc(&lbl_803B53FC);
 }
 
 int fn_802824A8(Struct_803ED474 *a, Struct_803ED474 *b)
@@ -163,7 +163,7 @@ int fn_802824A8(Struct_803ED474 *a, Struct_803ED474 *b)
     if (a->mUnknown18 != 0 && b->mUnknown18 != 0) {
         return fn_8028257C(a, b);
     }
-    fn_801F8014(&lbl_803B53FC);
+    SysEnterCriticalSectionFunc(&lbl_803B53FC);
     lbl_803ED47E = 0;
     lbl_803ED424 = 2;
     lbl_803ED43C = 0;
@@ -186,7 +186,7 @@ int fn_802824A8(Struct_803ED474 *a, Struct_803ED474 *b)
 
 int fn_8028257C(Struct_803ED474 *a, Struct_803ED474 *b)
 {
-    fn_801F8014(&lbl_803B541C);
+    SysEnterCriticalSectionFunc(&lbl_803B541C);
     lbl_803ED430 = 2;
     lbl_803ED49C = lbl_803ED4A0 = 0;
     lbl_803ED434 = fn_80284030;
@@ -203,14 +203,14 @@ void fn_802825C8(Struct_803ED474 *a, Struct_803ED474 *b, int mode)
             lbl_803ED440 = 0;
         }
         lbl_803ED424 = 0;
-        fn_801F809C(&lbl_803B53FC);
+        SysExitCriticalSectionFunc(&lbl_803B53FC);
     }
 }
 
 void fn_80282624(Struct_803ED474 *a, Struct_803ED474 *b, int mode)
 {
     lbl_803ED430 = 0;
-    fn_801F809C(&lbl_803B541C);
+    SysExitCriticalSectionFunc(&lbl_803B541C);
 }
 
 int fn_80282654(Struct_803ED474 *a, Struct_803ED474 *b, int mode)
@@ -426,14 +426,14 @@ void fn_80282D70(void)
             a[n].mUnknown00++;
         }
     }
-    fn_801F8014(&lbl_803B543C);
+    SysEnterCriticalSectionFunc(&lbl_803B543C);
     fn_80284968(&lbl_802C2848);
     fn_80284AEC(&lbl_802C2848);
     fn_80284DD0(&lbl_802C2848);
     fn_80284968(&lbl_802C2854);
     fn_80284AEC(&lbl_802C2854);
     fn_80284DD0(&lbl_802C2854);
-    fn_801F809C(&lbl_803B543C);
+    SysExitCriticalSectionFunc(&lbl_803B543C);
     fn_8028490C(&lbl_802C2848);
     fn_8028490C(&lbl_802C2854);
     lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
@@ -498,7 +498,7 @@ int fn_802830F0(void)
         return 1;
     }
     if ((unsigned char)fn_80283E48(1) == 0) {
-        fn_801F8014(&lbl_803B543C);
+        SysEnterCriticalSectionFunc(&lbl_803B543C);
         lbl_803ED460 = fn_80283E48;
         fn_80284D1C(&lbl_802C2848);
         fn_80284DD0(&lbl_802C2848);
@@ -508,7 +508,7 @@ int fn_802830F0(void)
         fn_80284DD0(&lbl_802C2854);
         fn_80284E70(&lbl_802C2854);
         fn_80284F78(&lbl_802C2854);
-        fn_801F809C(&lbl_803B543C);
+        SysExitCriticalSectionFunc(&lbl_803B543C);
         lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04 - lbl_803ED488;
         if (lbl_803ED422 != 0) {
             lbl_803ED428 = fn_80283660;
@@ -896,7 +896,7 @@ int fn_80284030(void)
 {
     if (!(unsigned char)fn_80284700(1))
     {
-        fn_801F8014(&lbl_803B543C);
+        SysEnterCriticalSectionFunc(&lbl_803B543C);
         lbl_803ED460 = fn_80284700;
         fn_80284D1C(&lbl_802C2860);
         fn_80284DD0(&lbl_802C2860);
@@ -906,7 +906,7 @@ int fn_80284030(void)
         fn_80284DD0(&lbl_802C286C);
         fn_80284E70(&lbl_802C286C);
         fn_80284F78(&lbl_802C286C);
-        fn_801F809C(&lbl_803B543C);
+        SysExitCriticalSectionFunc(&lbl_803B543C);
         lbl_803ED434 = fn_8028410C;
         return 0;
     }

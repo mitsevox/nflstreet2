@@ -3,6 +3,7 @@
 #include "game/Module.h"
 #include "game/MemPoolDesc.h"
 #include "engine/MemExtern.h"
+#include "engine/system.h"
 #include <dolphin/__vm.h>
 
 /* Argument of fn_801D2054. */
@@ -33,8 +34,6 @@ int fn_801D2570(int id);
 void fn_801D277C(int a);
 int SysInit(SysInitParams_t *pDesc);
 int SysShutdown(void);
-void fn_801F8248(void);
-int fn_801F8868(int (*pCallback)());
 }
 
 static MemInitParams_t _Sys_MemInitParams = { "memory.log" };
@@ -42,7 +41,7 @@ static void *sDependencies[] = { 0 };
 Sys gSys;
 
 extern "C" {
-static int _SysCanReset()
+static int _SysCanReset(int resetRequested)
 {
     return !MemCardUIIsResetLocked();
 }
@@ -76,8 +75,8 @@ int Sys::Init()
     fn_801D277C(1);
     SysInitParams_t desc(1, 0, 1);
     SysInit(&desc);
-    fn_801F8248();
-    fn_801F8868(_SysCanReset);
+    SysInitRealTimeClock();
+    SysSetResetCallback(_SysCanReset);
     return 1;
 }
 

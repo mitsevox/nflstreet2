@@ -92,7 +92,7 @@ void UISGamePresentFrame(void);
 void FESndUpdate(int a);
 void GameTextShowBusyDialog(int show, const char *pText, int a, int b);
 
-void fn_801F87FC(int a);
+void SysResetSystem(int a);
 int GameModeTypeIsSpecial(void);
 void MsgNameEntryGetName(char *pDest, int length);
 int fn_801C2D88(char *pDest, int length, const char *pFormat, ...);
@@ -761,7 +761,7 @@ void GameTextRequestReset(void)
 void GameTextServiceReset(void)
 {
     if (_GameText_bResetRequested == 1) {
-        fn_801F87FC(1);
+        SysResetSystem(1);
     }
     _GameText_bResetRequested = 0;
 }

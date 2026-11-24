@@ -36,7 +36,7 @@ int MemCGetDeviceChanges(int *pA, int *pB);
 int MemCUnMountAlt(int slot);
 char *strncpy(char *pDst, const char *pSrc, int size);
 int SysGetSystemTime(void);
-void fn_801F8838(void);
+void SysHotResetSystem(void);
 void FeatClearEAGameSaves(void);
 void FeatSetEAGameSave(short a);
 void FeatGetEAGameCode(short a, char *pBuf);
@@ -371,7 +371,7 @@ void MemCardUIResetGame(void)
 
 void MemCardUIReturnToMenu(void)
 {
-    fn_801F8838();
+    SysHotResetSystem();
 }
 
 int MemCardUIIsNameFree(int a, const char *pName)

@@ -4,7 +4,7 @@
 #include "engine/Font.h"
 #include "engine/dslist.h"
 #include "engine/SysSetLastErrorFunc.h"
-#include "engine/fn_801F8014.h"
+#include "engine/SysCriticalSection.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/ResLoad.h"
@@ -36,7 +36,7 @@ typedef struct FontState_t {
 unsigned char Font_ModuleActive = 0;
 
 /* The font library's lock and its state (fonts loaded, their list, heap and palettes). */
-static Lock_801F8014 _Font_CS;
+static SysCriticalSection_t _Font_CS;
 static FontState_t _Font_State;
 
 FontRenderState_t Font_RenderState;
@@ -129,8 +129,8 @@ int FontInit(FontParams_t *pParams)
     int error = 0;
 
     if (!Font_ModuleActive) {
-        fn_801F7FA8(&_Font_CS);
-        fn_801F8014(&_Font_CS);
+        SysInitCriticalSectionFunc(&_Font_CS);
+        SysEnterCriticalSectionFunc(&_Font_CS);
         _Font_State.mNumFonts = 0;
         _Font_State.mpList = DSNewList(pParams->mHeap, 0, pParams->mMaxFonts, sizeof(FontEntry_t), 0, 0);
         _Font_State.mUnk10 = pParams->mUnk4;
@@ -142,7 +142,7 @@ int FontInit(FontParams_t *pParams)
         _Font_State.mpBuffer = fn_801D2BB0(_Font_State.mHeap, 0x100, 0, 0);
         FontResetRenderState();
         Font_ModuleActive = 1;
-        fn_801F809C(&_Font_CS);
+        SysExitCriticalSectionFunc(&_Font_CS);
     } else {
         error = 0x110001;
     }
@@ -155,10 +155,10 @@ int FontShutdown(void)
     int error = 0;
 
     if (Font_ModuleActive) {
-        fn_801F8014(&_Font_CS);
+        SysEnterCriticalSectionFunc(&_Font_CS);
         DSDelList(_Font_State.mpList);
-        fn_801F809C(&_Font_CS);
-        fn_801F80D0(&_Font_CS);
+        SysExitCriticalSectionFunc(&_Font_CS);
+        SysShutdownCriticalSectionFunc(&_Font_CS);
         Font_ModuleActive = 0;
         fn_801D2BD0(_Font_State.mpBuffer);
         memset(&_Font_State, 0, sizeof(FontState_t));

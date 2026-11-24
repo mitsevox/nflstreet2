@@ -1,7 +1,7 @@
 /* Controller context: channels of mapped input buffers, processed through dead-zone entry tables into callbacks. */
 
 #include "engine/SysSetLastErrorFunc.h"
-#include "engine/fn_801F8014.h"
+#include "engine/SysCriticalSection.h"
 #include "game/fn_801D2B7C.h"
 #include <string.h>
 
@@ -38,7 +38,7 @@ static unsigned int _Con_NumChannels;
 static unsigned int _Con_DataSize;
 static char *_pCon_Data;
 
-static Lock_801F8014 _Context_CS;
+static SysCriticalSection_t _Context_CS;
 
 extern int lbl_803ED624;
 
@@ -130,8 +130,8 @@ int ConInit(unsigned int count, int size)
     unsigned int i;
 
     if (!_Context_ModuleActive) {
-        fn_801F7FA8(&_Context_CS);
-        fn_801F8014(&_Context_CS);
+        SysInitCriticalSectionFunc(&_Context_CS);
+        SysEnterCriticalSectionFunc(&_Context_CS);
         _Con_pMsgFunc = 0;
         _Con_NumChannels = count;
         _pCon_Channel = fn_801D2BB0(1, count * sizeof(ConChannel_t), 0, 0);
@@ -158,7 +158,7 @@ int ConInit(unsigned int count, int size)
                 _Context_ModuleActive = 1;
             }
         }
-        fn_801F809C(&_Context_CS);
+        SysExitCriticalSectionFunc(&_Context_CS);
     } else {
         error = 0x1A0001;
     }
@@ -171,12 +171,12 @@ int ConShutdown(void)
     int error = 0;
 
     if (_Context_ModuleActive) {
-        fn_801F8014(&_Context_CS);
+        SysEnterCriticalSectionFunc(&_Context_CS);
         fn_801D2BD0(_pCon_Data);
         fn_801D2BD0(_pCon_Channel);
         _pCon_Channel = 0;
-        fn_801F809C(&_Context_CS);
-        fn_801F80D0(&_Context_CS);
+        SysExitCriticalSectionFunc(&_Context_CS);
+        SysShutdownCriticalSectionFunc(&_Context_CS);
         _Context_ModuleActive = 0;
     } else {
         error = 0x1A0002;

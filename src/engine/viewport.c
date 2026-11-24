@@ -33,7 +33,7 @@ extern int MatDelStack(unsigned int a);
 extern void ObjProcessListFunc(int handle, int a, int b);
 extern void SysSetLastErrorFunc(int err);
 extern int SysGetLastError(void);
-extern void fn_801F8768(void);
+extern void SysCheckReset(void);
 
 static unsigned char _Vpt_ModuleActive = 0;
 static void *_Vpt_ViewportList = 0;
@@ -254,7 +254,7 @@ void VptProcessObjectList(Viewport_t *pObject)
 void VptProcessViewports(void)
 {
     FileAsyncCheckError();
-    fn_801F8768();
+    SysCheckReset();
     if (!_Vpt_IsProcessing) {
         GlibSetUpRender();
         _Vpt_IsProcessing = 1;

@@ -5,7 +5,7 @@
 
 #include "game/fn_801D2B7C.h"
 #include "engine/ResCopyAsyncToBuffer.h"
-#include "engine/fn_801F8014.h"
+#include "engine/SysCriticalSection.h"
 
 typedef struct ResStreamRequest_t {
     void *mArchive;
@@ -31,7 +31,7 @@ typedef struct ResStream_t {
     volatile unsigned char mState;
 } ResStream_t;
 
-Lock_801F8014 _ResStream_Lock;
+SysCriticalSection_t _ResStream_Lock;
 static int _ResStream_iNumStreams = 0;
 static ResStream_t *_ResStream_pStreams = 0;
 static unsigned char _ResStream_bShutdown = 0;
@@ -43,21 +43,21 @@ void ResStreamStartNextRead(ResStream_t *loader);
 
 void ResStreamRemoveRequest(ResStream_t *loader, int index)
 {
-    fn_801F8014(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     for (index++; index < loader->mRequestCount; index++)
         loader->mRequests[index - 1] = loader->mRequests[index];
     loader->mRequests[loader->mRequestCount - 1].mState = 0;
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
 }
 
 int ResStreamFindBuffer(ResStream_t *loader, void *buffer)
 {
     int i;
 
-    fn_801F8014(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     for (i = 0; i < loader->mBufferCount && loader->mBuffers[i] != buffer; i++)
         ;
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
     return i;
 }
 
@@ -76,7 +76,7 @@ int ResStreamCreate(ResStream_t *loader, int heap, int count, int size, int a,
     int result = 0;
     int i;
 
-    fn_801F8014(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     memset(loader, 0, sizeof(ResStream_t));
     loader->mSlotStates = fn_801D2B7C(count, 0, 0);
     if (loader->mSlotStates == 0)
@@ -119,7 +119,7 @@ fail:
         if (loader->mRequests != 0)
             fn_801D2BD0(loader->mRequests);
     }
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
     return result;
 }
 
@@ -127,24 +127,24 @@ void ResStreamReadDone(int a, int b, int c, int d, ResStream_t *loader)
 {
     ResStreamRequest_t request;
 
-    fn_801F8014(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     request = loader->mRequests[0];
     ResStreamRemoveRequest(loader, 0);
     if (!(request.mState & 4)) {
         loader->mSlotStates[request.mSlot] |= 1;
         if (loader->mCallback != 0) {
-            fn_801F809C(&_ResStream_Lock);
+            SysExitCriticalSectionFunc(&_ResStream_Lock);
             loader->mCallback(loader->mId, c, request.mContext);
-            fn_801F8014(&_ResStream_Lock);
+            SysEnterCriticalSectionFunc(&_ResStream_Lock);
         }
     }
     loader->mState &= ~2;
     loader->mSlotStates[request.mSlot] &= ~2;
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
     ResStreamStartNextRead(loader);
-    fn_801F8014(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     _ResStream_iNumPending--;
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
 }
 
 void ResStreamStartNextRead(ResStream_t *loader)
@@ -153,7 +153,7 @@ void ResStreamStartNextRead(ResStream_t *loader)
     int slot = 0;
     int issue = 0;
 
-    fn_801F8014(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     if ((loader->mState & 1) && !(loader->mState & 2)) {
         request = loader->mRequests;
         if (request->mState == 1) {
@@ -167,7 +167,7 @@ void ResStreamStartNextRead(ResStream_t *loader)
             }
         }
     }
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
     if (issue)
         ResCopyAsyncToBuffer(request->mArchive, request->mId, loader->mHeap, loader->mBuffers[slot],
                     loader->mUnknown24, ResStreamReadDone, loader);
@@ -177,7 +177,7 @@ void ResStreamDestroy(ResStream_t *loader)
 {
     int i;
 
-    fn_801F8014(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     for (i = 0; i < loader->mBufferCount; i++) {
         if (!(loader->mState & 8) || !(loader->mSlotStates[i] & 4))
             fn_801D2BD0(loader->mBuffers[i]);
@@ -189,15 +189,15 @@ void ResStreamDestroy(ResStream_t *loader)
     fn_801D2BD0(loader->mRequests);
     loader->mRequests = 0;
     loader->mState = 0;
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
 }
 
 void ResStreamInit(int count)
 {
     int i;
 
-    fn_801F7FA8(&_ResStream_Lock);
-    fn_801F8014(&_ResStream_Lock);
+    SysInitCriticalSectionFunc(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     _ResStream_bShutdown = 0;
     _ResStream_iNumPending = 0;
     _ResStream_iNumStreams = count;
@@ -205,7 +205,7 @@ void ResStreamInit(int count)
     memset(_ResStream_pStreams, 0, count * sizeof(ResStream_t));
     for (i = 0; i < count; i++)
         _ResStream_pStreams[i].mState = 0;
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
 }
 
 void ResStreamShutdown(void)
@@ -215,7 +215,7 @@ void ResStreamShutdown(void)
     _ResStream_bShutdown = 1;
     for (;;) {
         if (_ResStream_iNumPending == 0) {
-            fn_801F8014(&_ResStream_Lock);
+            SysEnterCriticalSectionFunc(&_ResStream_Lock);
             for (i = 0; i < _ResStream_iNumStreams; i++) {
                 if (_ResStream_pStreams[i].mState)
                     ResStreamDestroy(&_ResStream_pStreams[i]);
@@ -224,8 +224,8 @@ void ResStreamShutdown(void)
             _ResStream_bShutdown = 0;
             _ResStream_iNumStreams = 0;
             _ResStream_pStreams = 0;
-            fn_801F809C(&_ResStream_Lock);
-            fn_801F80D0(&_ResStream_Lock);
+            SysExitCriticalSectionFunc(&_ResStream_Lock);
+            SysShutdownCriticalSectionFunc(&_ResStream_Lock);
             return;
         }
     }
@@ -235,14 +235,14 @@ int ResStreamOpen(int heap, int count, int size, int a, ResStreamCallback_t call
 {
     int i;
 
-    fn_801F8014(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     for (i = 0; i < _ResStream_iNumStreams && _ResStream_pStreams[i].mState != 0; i++)
         ;
     if (i < _ResStream_iNumStreams && ResStreamCreate(&_ResStream_pStreams[i], heap, count, size, a, callback))
         _ResStream_pStreams[i].mId = i;
     else
         i = -1;
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
     return i;
 }
 
@@ -251,7 +251,7 @@ void ResStreamQueueRead(int id, void *archive, int index, void *context)
     ResStream_t *loader = 0;
     int queued = 0;
 
-    fn_801F8014(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     if (!_ResStream_bShutdown) {
         int i;
 
@@ -267,7 +267,7 @@ void ResStreamQueueRead(int id, void *archive, int index, void *context)
             loader->mRequests[i].mState |= 1;
         }
     }
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
     if (queued)
         ResStreamStartNextRead(loader);
 }
@@ -277,7 +277,7 @@ void ResStreamCancelReads(int id)
     ResStream_t *loader;
     int i;
 
-    fn_801F8014(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     loader = &_ResStream_pStreams[id];
     for (i = 0; i < loader->mRequestCount; i++) {
         if (loader->mRequests[i].mState) {
@@ -290,7 +290,7 @@ void ResStreamCancelReads(int id)
             }
         }
     }
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
 }
 
 void ResStreamHoldBuffer(int id, void *buffer)
@@ -298,12 +298,12 @@ void ResStreamHoldBuffer(int id, void *buffer)
     ResStream_t *loader;
     int slot;
 
-    fn_801F8014(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     loader = &_ResStream_pStreams[id];
     slot = ResStreamFindBuffer(loader, buffer);
     if (slot < loader->mBufferCount)
         loader->mSlotStates[slot] |= 4;
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
 }
 
 void ResStreamReleaseBuffer(int id, void *buffer)
@@ -312,14 +312,14 @@ void ResStreamReleaseBuffer(int id, void *buffer)
     int released = 0;
     int slot;
 
-    fn_801F8014(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     loader = &_ResStream_pStreams[id];
     slot = ResStreamFindBuffer(loader, buffer);
     if (slot < loader->mBufferCount) {
         released = 1;
         loader->mSlotStates[slot] &= ~4;
     }
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
     if (released)
         ResStreamStartNextRead(loader);
 }
@@ -329,11 +329,11 @@ void ResStreamReleaseAllBuffers(int id)
     ResStream_t *loader;
     int i;
 
-    fn_801F8014(&_ResStream_Lock);
+    SysEnterCriticalSectionFunc(&_ResStream_Lock);
     loader = &_ResStream_pStreams[id];
     for (i = 0; i < loader->mBufferCount; i++)
         loader->mSlotStates[i] &= ~4;
-    fn_801F809C(&_ResStream_Lock);
+    SysExitCriticalSectionFunc(&_ResStream_Lock);
     ResStreamStartNextRead(loader);
 }
 
@@ -344,15 +344,15 @@ void ResStreamClose(int id)
     for (;;) {
         if ((loader->mState & 2) || (loader->mState & 4))
             continue;
-        fn_801F8014(&_ResStream_Lock);
+        SysEnterCriticalSectionFunc(&_ResStream_Lock);
         if (loader->mRequests[0].mState == 0) {
             loader->mState &= ~1;
             ResStreamDestroy(loader);
-            fn_801F809C(&_ResStream_Lock);
+            SysExitCriticalSectionFunc(&_ResStream_Lock);
             break;
         }
         if (loader->mRequests[0].mState == 1 && ResStreamFindFreeBuffer(loader) >= loader->mBufferCount)
             ResStreamCancelReads(id);
-        fn_801F809C(&_ResStream_Lock);
+        SysExitCriticalSectionFunc(&_ResStream_Lock);
     }
 }

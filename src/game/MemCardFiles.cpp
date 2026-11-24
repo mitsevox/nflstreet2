@@ -79,7 +79,7 @@ void fn_801D6754(int);
 void fn_801D676C(SaveComment *);
 void fn_801D6760(int);
 int MemCardUIIsNameFree(int, const char *);
-void fn_801F81AC(void);
+void SysReleaseTimeFunc(void);
 
 unsigned int MemCardFilesGetFileSize(int type);
 int MemCardFilesComputeChecksum(int type, int index);
@@ -631,7 +631,7 @@ void MemCardFilesMakeName(int type, char *name, int unique)
 
 void MemCardFilesIdle(void)
 {
-    fn_801F81AC();
+    SysReleaseTimeFunc();
 }
 
 int MemCardFilesGetTotalSize(void)

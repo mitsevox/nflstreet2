@@ -28716,8 +28716,8 @@
     },
     {
       "source": "src/engine/llsystem.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F7DF4-0x801F8878 (src/engine/llsystem.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "profile": "llsystem_c_data",
+      "evidence": "evidence.tsv llsystem.c complete unit and two HOLDOUT source-form rows. Only the two complete unfinished functions are registered; all22 other functions and all88 native data bytes link. The base comparison profile differs from the linked holdouts profile solely by -ffunction-sections. No function or data slice is omitted.",
       "sections": [
         {
           "section": ".text",
@@ -28730,128 +28730,78 @@
           "placement": ".data3",
           "start": "0x802B1AD0",
           "end": "0x802B1AEC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039B418",
+          "end": "0x8039B43C"
+        },
+        {
+          "section": ".sdata._Sys_CriticalSectionCount",
+          "placement": ".data5",
+          "start": "0x803EBE50",
+          "end": "0x803EBE54"
+        },
+        {
+          "section": ".sdata._Sys_MainThreadID",
+          "placement": ".data5",
+          "start": "0x803EBE54",
+          "end": "0x803EBE58"
+        },
+        {
+          "section": ".sdata._Sys_ClockVsyncTicks",
+          "placement": ".data5",
+          "start": "0x803EBE58",
+          "end": "0x803EBE5C"
+        },
+        {
+          "section": ".sdata._Sys_ClockUnixSeconds",
+          "placement": ".data5",
+          "start": "0x803EBE5C",
+          "end": "0x803EBE60"
+        },
+        {
+          "section": ".sdata._Sys_PreviousResetState",
+          "placement": ".data5",
+          "start": "0x803EBE60",
+          "end": "0x803EBE61"
+        },
+        {
+          "section": ".sdata._Sys_ResetEnabled",
+          "placement": ".data5",
+          "start": "0x803EBE61",
+          "end": "0x803EBE62"
+        },
+        {
+          "section": ".sdata._Sys_ResetPending",
+          "placement": ".data5",
+          "start": "0x803EBE62",
+          "end": "0x803EBE63"
+        },
+        {
+          "section": ".sdata._Sys_ResetCallback",
+          "placement": ".data5",
+          "start": "0x803EBE64",
+          "end": "0x803EBE68"
+        },
+        {
+          "section": ".sdata._Sys_MutexNeedsInit",
+          "placement": ".data5",
+          "start": "0x803EBE68",
+          "end": "0x803EBE69"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801F7DF4",
-          "start": "0x801F7DF4",
-          "end": "0x801F7E18"
-        },
-        {
-          "symbol": "fn_801F7E18",
-          "start": "0x801F7E18",
-          "end": "0x801F7E90"
-        },
-        {
-          "symbol": "fn_801F7E90",
-          "start": "0x801F7E90",
-          "end": "0x801F7ED0"
-        },
-        {
-          "symbol": "fn_801F7ED0",
-          "start": "0x801F7ED0",
-          "end": "0x801F7EF8"
-        },
-        {
-          "symbol": "fn_801F7EF8",
+          "symbol": "SysStartTimer",
           "start": "0x801F7EF8",
           "end": "0x801F7F60"
         },
         {
-          "symbol": "fn_801F7F60",
-          "start": "0x801F7F60",
-          "end": "0x801F7FA8"
-        },
-        {
-          "symbol": "fn_801F7FA8",
-          "start": "0x801F7FA8",
-          "end": "0x801F8014"
-        },
-        {
-          "symbol": "fn_801F8014",
-          "start": "0x801F8014",
-          "end": "0x801F809C"
-        },
-        {
-          "symbol": "fn_801F809C",
-          "start": "0x801F809C",
-          "end": "0x801F80D0"
-        },
-        {
-          "symbol": "fn_801F80D0",
-          "start": "0x801F80D0",
-          "end": "0x801F80E8"
-        },
-        {
-          "symbol": "fn_801F80E8",
-          "start": "0x801F80E8",
-          "end": "0x801F8128"
-        },
-        {
-          "symbol": "fn_801F8128",
-          "start": "0x801F8128",
-          "end": "0x801F8150"
-        },
-        {
-          "symbol": "fn_801F8150",
-          "start": "0x801F8150",
-          "end": "0x801F8174"
-        },
-        {
-          "symbol": "fn_801F8174",
-          "start": "0x801F8174",
-          "end": "0x801F81AC"
-        },
-        {
-          "symbol": "fn_801F81AC",
-          "start": "0x801F81AC",
-          "end": "0x801F81D4"
-        },
-        {
-          "symbol": "fn_801F81D4",
-          "start": "0x801F81D4",
-          "end": "0x801F81F4"
-        },
-        {
-          "symbol": "fn_801F81F4",
-          "start": "0x801F81F4",
-          "end": "0x801F8248"
-        },
-        {
-          "symbol": "fn_801F8248",
+          "symbol": "SysInitRealTimeClock",
           "start": "0x801F8248",
           "end": "0x801F8574"
-        },
-        {
-          "symbol": "fn_801F8574",
-          "start": "0x801F8574",
-          "end": "0x801F8758"
-        },
-        {
-          "symbol": "fn_801F8758",
-          "start": "0x801F8758",
-          "end": "0x801F8768"
-        },
-        {
-          "symbol": "fn_801F8768",
-          "start": "0x801F8768",
-          "end": "0x801F87FC"
-        },
-        {
-          "symbol": "fn_801F87FC",
-          "start": "0x801F87FC",
-          "end": "0x801F8838"
-        },
-        {
-          "symbol": "fn_801F8838",
-          "start": "0x801F8838",
-          "end": "0x801F8868"
-        },
-        {
-          "symbol": "fn_801F8868",
-          "start": "0x801F8868",
-          "end": "0x801F8878"
         }
       ]
     },

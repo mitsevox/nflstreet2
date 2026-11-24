@@ -344,7 +344,7 @@
       "include_dirs": [
         "include/libc"
       ],
-      "evidence": "evidence.tsv compiler row 0x801CE1F8-0x801CEC90 (engine_c_nogcse), the one file src/engine/llglib.c: engine_c's -O2 plus -fno-gcse (per-file profile, owner baseline of 2026-11-14: per-file flags allowed, no per-function options). In GlibLLInit 0x801CE2F4 the target forms the frame-buffer table address pMode->mpXfb (r31+0x54) separately in each block that indexes it (addi r9,r31,0x54 at 0x801CE508 for VISetNextFrameBuffer; addi r30,r31,0x54 at 0x801CE67C for the two GXCopyDisp calls); with global CSE the compiler hoists one copy to the top of the function and keeps it in a second saved register (stmw r27, 0x40-byte frame). The flag is not given to engine_c because it changes src/engine/list.c (DSAddListNode 0x801C6AA4), src/engine/Font.c (fn_801CD63C) and src/engine/llsystem.c (fn_801F8248, fn_801F8574)."
+      "evidence": "evidence.tsv compiler row 0x801CE1F8-0x801CEC90 (engine_c_nogcse), the one file src/engine/llglib.c: engine_c's -O2 plus -fno-gcse (per-file profile, owner baseline of 2026-11-14: per-file flags allowed, no per-function options). In GlibLLInit 0x801CE2F4 the target forms the frame-buffer table address pMode->mpXfb (r31+0x54) separately in each block that indexes it (addi r9,r31,0x54 at 0x801CE508 for VISetNextFrameBuffer; addi r30,r31,0x54 at 0x801CE67C for the two GXCopyDisp calls); with global CSE the compiler hoists one copy to the top of the function and keeps it in a second saved register (stmw r27, 0x40-byte frame). The flag is not given to engine_c because it changes src/engine/list.c (DSAddListNode 0x801C6AA4), src/engine/Font.c (fn_801CD63C) and src/engine/llsystem.c (SysInitRealTimeClock, SysUpdateRealTimeClock)."
     },
     "engine_c_nobuiltin": {
       "flags": [
@@ -463,6 +463,29 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler/source-form proview.c: whole-file -O2 -G0 -fdata-sections leaves the existing hardware assembly instructions unchanged and emits four real initialized state objects as separate ordinary native sections. No COMMON map or function option. Original data packaging is not recovered."
+    },
+    "llsystem_c_data": {
+      "flags": [
+        "-O2",
+        "-fno-common",
+        "-fdata-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler/source-form llsystem.c: whole-file -O2 with -fno-common emits the two actual global BSS objects natively instead of COMMON; -fdata-sections emits nine initialized SDA objects separately, without assigning their intervening zero gaps. All original scalar/global access forms and retained code bytes must remain exact. No storage map or per-function option; original flags not recovered."
+    },
+    "llsystem_c_holdouts": {
+      "flags": [
+        "-O2",
+        "-fno-common",
+        "-fdata-sections",
+        "-ffunction-sections"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv llsystem.c compiler row and two HOLDOUT source-form rows; same whole-file flags as llsystem_c_data plus -ffunction-sections for the existing documented holdouts mechanism. Original SysStartTimer and SysInitRealTimeClock bytes remain linked."
     }
   },
   "externals": {
@@ -27388,6 +27411,110 @@
         }
       ],
       "evidence": "evidence.tsv fileserver.c unit/assembly/source-form rows: complete848-byte native text,15native function symbols with unchanged extents, twelve trailing return words retained in the full text, and seven native data objects totaling241bytes. Both file edges and existing veneer function edges retain provisional/open grades. No derived object or boundary alteration."
+    },
+    {
+      "source": "src/engine/llsystem.c",
+      "profile": "llsystem_c_holdouts",
+      "evidence": "evidence.tsv llsystem.c complete unit, names, layouts, native storage and compiler rows. Three code runs link22 exact functions; two complete registered partials retain original code. Whole native readonly28B, BSS36B and nine initialized SDA objects24B link without a storage map. All24functions and owned data are named; both historical file edges remain provisional.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F7DF4",
+          "end": "0x801F7EF8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F7F60",
+          "end": "0x801F8248"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F8574",
+          "end": "0x801F8878"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1AD0",
+          "end": "0x802B1AEC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039B418",
+          "end": "0x8039B43C"
+        },
+        {
+          "section": ".sdata._Sys_CriticalSectionCount",
+          "placement": ".data5",
+          "start": "0x803EBE50",
+          "end": "0x803EBE54"
+        },
+        {
+          "section": ".sdata._Sys_MainThreadID",
+          "placement": ".data5",
+          "start": "0x803EBE54",
+          "end": "0x803EBE58"
+        },
+        {
+          "section": ".sdata._Sys_ClockVsyncTicks",
+          "placement": ".data5",
+          "start": "0x803EBE58",
+          "end": "0x803EBE5C"
+        },
+        {
+          "section": ".sdata._Sys_ClockUnixSeconds",
+          "placement": ".data5",
+          "start": "0x803EBE5C",
+          "end": "0x803EBE60"
+        },
+        {
+          "section": ".sdata._Sys_PreviousResetState",
+          "placement": ".data5",
+          "start": "0x803EBE60",
+          "end": "0x803EBE61"
+        },
+        {
+          "section": ".sdata._Sys_ResetEnabled",
+          "placement": ".data5",
+          "start": "0x803EBE61",
+          "end": "0x803EBE62"
+        },
+        {
+          "section": ".sdata._Sys_ResetPending",
+          "placement": ".data5",
+          "start": "0x803EBE62",
+          "end": "0x803EBE63"
+        },
+        {
+          "section": ".sdata._Sys_ResetCallback",
+          "placement": ".data5",
+          "start": "0x803EBE64",
+          "end": "0x803EBE68"
+        },
+        {
+          "section": ".sdata._Sys_MutexNeedsInit",
+          "placement": ".data5",
+          "start": "0x803EBE68",
+          "end": "0x803EBE69"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "SysStartTimer",
+            "evidence": "evidence.tsv source-form 0x801F7EF8-0x801F7F60"
+          },
+          {
+            "function": "SysInitRealTimeClock",
+            "evidence": "evidence.tsv source-form 0x801F8248-0x801F8574"
+          }
+        ],
+        "evidence": "llsystem.c complete timer-start and calendar-initialization holdouts are listed for tracking in the merge notes."
+      }
     }
   ]
 }

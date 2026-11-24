@@ -1,3 +1,4 @@
+/* Implements GameCube system timers, recursive locks, the real-time clock and reset handling. */
 #include <dolphin/os.h>
 #include <dolphin/vi.h>
 #include <dolphin/gx.h>
@@ -5,41 +6,35 @@
 #include <dolphin/ai.h>
 #include <math.h>
 #include "engine/system.h"
+#include "engine/llglib.h"
 #include "game/fn_801D2B7C.h"
 
-typedef int (*SysResetCallback_801F8868)(void);
-
-extern void GlibEnableVIRetraceCallback(int a);
 extern void FileAsyncCheckError(void);
-extern void LCDisable(void);
 extern int GlibGetTvMode(void);
 extern int DateIsYearLeap(int year);
 extern int DateGetNumDaysInYear(int year);
 extern int DateGetNumDaysInMonth(int month, int year);
 
-extern int lbl_803EBE50;
-extern int lbl_803EBE54;
-extern unsigned char lbl_803EBE60;
-extern unsigned char lbl_803EBE61;
-extern unsigned char lbl_803EBE62;
-extern SysResetCallback_801F8868 lbl_803EBE64;
-extern unsigned char lbl_803EBE68;
-extern unsigned int lbl_803EBE58;
-extern unsigned int lbl_803EBE5C;
-extern OSMutex lbl_8039B418;
-extern SysTime_t lbl_8039B430;
+int _Sys_CriticalSectionCount = 0;
+int _Sys_MainThreadID = 1;
+unsigned char _Sys_PreviousResetState = 0;
+unsigned char _Sys_ResetEnabled = 1;
+unsigned char _Sys_ResetPending = 0;
+SysResetCallback_t _Sys_ResetCallback = 0;
+unsigned char _Sys_MutexNeedsInit = 1;
+unsigned int _Sys_ClockVsyncTicks = 0;
+unsigned int _Sys_ClockUnixSeconds = 0;
+OSMutex _Sys_CriticalSectionMutex;
+SysTime_t _Sys_RealTimeClock;
 
-void fn_801F8574(void);
-void fn_801F8768(void);
-void fn_801F87FC(int code);
 
-static void fn_801F7DF4(u32 retraceCount)
+static void _SysVIPreRetraceCallback(u32 retraceCount)
 {
     SysIncSystemTime();
-    fn_801F8574();
+    SysUpdateRealTimeClock();
 }
 
-static void fn_801F7E18(void)
+static void _SysSetupReset(void)
 {
     GlibEnableVIRetraceCallback(0);
     LCDisable();
@@ -55,21 +50,21 @@ static void fn_801F7E18(void)
     VIWaitForRetrace();
 }
 
-int fn_801F7E90(void)
+int SysInitPlatform(void)
 {
-    lbl_803EBE54 = fn_801F81D4();
-    OSSetThreadPriority((OSThread *)lbl_803EBE54, 22);
-    VISetPreRetraceCallback(fn_801F7DF4);
+    _Sys_MainThreadID = SysGetThreadID();
+    OSSetThreadPriority((OSThread *)_Sys_MainThreadID, 22);
+    VISetPreRetraceCallback(_SysVIPreRetraceCallback);
     return 0;
 }
 
-int fn_801F7ED0(void)
+int SysShutdownPlatform(void)
 {
     VISetPreRetraceCallback(0);
     return 0;
 }
 
-int fn_801F7EF8(SysTimer_t *pTimer)
+int SysStartTimer(SysTimer_t *pTimer)
 {
     if (!(pTimer->mFlags & 4)) {
         if (pTimer->pFunc == 0) {
@@ -99,7 +94,7 @@ int fn_801F7EF8(SysTimer_t *pTimer)
     return 0;
 }
 
-int fn_801F7F60(SysTimer_t *pTimer)
+int SysStopTimer(SysTimer_t *pTimer)
 {
     if (pTimer->mFlags & 4) {
         if (pTimer->mFlags & 2) {
@@ -112,49 +107,49 @@ int fn_801F7F60(SysTimer_t *pTimer)
     return 0;
 }
 
-void fn_801F7FA8(Lock_801F8014 *pSection)
+void SysInitCriticalSectionFunc(SysCriticalSection_t *pSection)
 {
-    if (lbl_803EBE68) {
-        lbl_803EBE68 = 0;
-        OSInitMutex(&lbl_8039B418);
+    if (_Sys_MutexNeedsInit) {
+        _Sys_MutexNeedsInit = 0;
+        OSInitMutex(&_Sys_CriticalSectionMutex);
     }
-    lbl_803EBE50++;
+    _Sys_CriticalSectionCount++;
     OSInitMutex(&pSection->mMutex);
-    pSection->mOwner = fn_801F81D4();
+    pSection->mOwner = SysGetThreadID();
     pSection->mCount = 0;
 }
 
-void fn_801F8014(Lock_801F8014 *pSection)
+void SysEnterCriticalSectionFunc(SysCriticalSection_t *pSection)
 {
     int owner;
 
-    OSLockMutex(&lbl_8039B418);
+    OSLockMutex(&_Sys_CriticalSectionMutex);
     owner = pSection->mOwner;
-    if (owner != fn_801F81D4() || pSection->mCount == 0) {
-        OSUnlockMutex(&lbl_8039B418);
+    if (owner != SysGetThreadID() || pSection->mCount == 0) {
+        OSUnlockMutex(&_Sys_CriticalSectionMutex);
         OSLockMutex(&pSection->mMutex);
-        pSection->mOwner = fn_801F81D4();
+        pSection->mOwner = SysGetThreadID();
         pSection->mCount++;
     } else {
         pSection->mCount++;
-        OSUnlockMutex(&lbl_8039B418);
+        OSUnlockMutex(&_Sys_CriticalSectionMutex);
     }
 }
 
-void fn_801F809C(Lock_801F8014 *pSection)
+void SysExitCriticalSectionFunc(SysCriticalSection_t *pSection)
 {
     if (--pSection->mCount == 0) {
         OSUnlockMutex(&pSection->mMutex);
     }
 }
 
-void fn_801F80D0(Lock_801F8014 *pSection)
+void SysShutdownCriticalSectionFunc(SysCriticalSection_t *pSection)
 {
     pSection->mOwner = 0;
-    lbl_803EBE50--;
+    _Sys_CriticalSectionCount--;
 }
 
-void fn_801F80E8(OSMutex **ppMutex)
+void SysInitSemaphore(OSMutex **ppMutex)
 {
     OSMutex *pMutex = fn_801D2B7C(sizeof(OSMutex), 0, 0);
 
@@ -162,44 +157,44 @@ void fn_801F80E8(OSMutex **ppMutex)
     OSInitMutex(pMutex);
 }
 
-int fn_801F8128(OSMutex **ppMutex)
+int SysLockSemaphore(OSMutex **ppMutex)
 {
     OSLockMutex(*ppMutex);
     return 1;
 }
 
-void fn_801F8150(OSMutex **ppMutex)
+void SysUnlockSemaphore(OSMutex **ppMutex)
 {
     OSUnlockMutex(*ppMutex);
 }
 
-void fn_801F8174(OSMutex **ppMutex)
+void SysShutdownSemaphore(OSMutex **ppMutex)
 {
     fn_801D2BD0(*ppMutex);
     *ppMutex = 0;
 }
 
-void fn_801F81AC(void)
+void SysReleaseTimeFunc(void)
 {
-    fn_801F8768();
+    SysCheckReset();
     FileAsyncCheckError();
     OSYieldThread();
 }
 
-int fn_801F81D4(void)
+int SysGetThreadID(void)
 {
     return (int)OSGetCurrentThread();
 }
 
-void fn_801F81F4(SysTime_t *pTime)
+void SysCopyRealTimeClock(SysTime_t *pTime)
 {
     unsigned char enabled = OSDisableInterrupts();
 
-    *pTime = lbl_8039B430;
+    *pTime = _Sys_RealTimeClock;
     OSRestoreInterrupts(enabled);
 }
 
-void fn_801F8248(void)
+void SysInitRealTimeClock(void)
 {
     unsigned char aDays[13] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
     long long secs;
@@ -212,67 +207,67 @@ void fn_801F8248(void)
 
     secs = OSTicksToSeconds(OSGetTime());
     enabled = OSDisableInterrupts();
-    lbl_8039B430.mSeconds = secs % 60;
-    lbl_8039B430.mMinutes = (long long)floorf(secs * (1.0f / 60.0f)) % 60;
-    lbl_8039B430.mHours = (long long)floorf(secs * (1.0f / 3600.0f)) % 24;
+    _Sys_RealTimeClock.mSeconds = secs % 60;
+    _Sys_RealTimeClock.mMinutes = (long long)floorf(secs * (1.0f / 60.0f)) % 60;
+    _Sys_RealTimeClock.mHours = (long long)floorf(secs * (1.0f / 3600.0f)) % 24;
     days = floorf(secs * (1.0f / 86400.0f));
-    lbl_8039B430.mYear = 0;
+    _Sys_RealTimeClock.mYear = 0;
     daysInYear = 366;
     while (days >= daysInYear) {
         days -= daysInYear;
-        lbl_8039B430.mYear++;
-        daysInYear = DateIsYearLeap(lbl_8039B430.mYear) ? 366 : 365;
+        _Sys_RealTimeClock.mYear++;
+        daysInYear = DateIsYearLeap(_Sys_RealTimeClock.mYear) ? 366 : 365;
     }
-    lbl_8039B430.mYear += 2000;
-    aDays[2] = DateIsYearLeap(lbl_8039B430.mYear) ? 29 : 28;
+    _Sys_RealTimeClock.mYear += 2000;
+    aDays[2] = DateIsYearLeap(_Sys_RealTimeClock.mYear) ? 29 : 28;
     month = 1;
     while (days >= aDays[month]) {
         days -= aDays[month++];
     }
-    lbl_8039B430.mMonth = month;
-    lbl_8039B430.mDays = days + 1;
-    lbl_8039B430.mHundredths = 0;
-    lbl_803EBE58 = 0;
-    lbl_803EBE5C = 0;
-    for (year = 1970; year < lbl_8039B430.mYear; year++) {
-        lbl_803EBE5C += DateGetNumDaysInYear(year) * 86400;
+    _Sys_RealTimeClock.mMonth = month;
+    _Sys_RealTimeClock.mDays = days + 1;
+    _Sys_RealTimeClock.mHundredths = 0;
+    _Sys_ClockVsyncTicks = 0;
+    _Sys_ClockUnixSeconds = 0;
+    for (year = 1970; year < _Sys_RealTimeClock.mYear; year++) {
+        _Sys_ClockUnixSeconds += DateGetNumDaysInYear(year) * 86400;
     }
-    for (m = 1; m < lbl_8039B430.mMonth; m++) {
-        lbl_803EBE5C += DateGetNumDaysInMonth(m, lbl_8039B430.mYear) * 86400;
+    for (m = 1; m < _Sys_RealTimeClock.mMonth; m++) {
+        _Sys_ClockUnixSeconds += DateGetNumDaysInMonth(m, _Sys_RealTimeClock.mYear) * 86400;
     }
-    lbl_803EBE5C = lbl_803EBE5C + (lbl_8039B430.mDays - 1) * 86400 + lbl_8039B430.mHours * 3600 + lbl_8039B430.mMinutes * 60 + lbl_8039B430.mSeconds;
+    _Sys_ClockUnixSeconds = _Sys_ClockUnixSeconds + (_Sys_RealTimeClock.mDays - 1) * 86400 + _Sys_RealTimeClock.mHours * 3600 + _Sys_RealTimeClock.mMinutes * 60 + _Sys_RealTimeClock.mSeconds;
     OSRestoreInterrupts(enabled);
 }
 
-void fn_801F8574(void)
+void SysUpdateRealTimeClock(void)
 {
     unsigned char enabled = OSDisableInterrupts();
     unsigned int ms;
     unsigned int days;
 
-    lbl_803EBE58++;
+    _Sys_ClockVsyncTicks++;
     switch (GlibGetTvMode()) {
     case 1:
-        ms = lbl_803EBE58 * 20;
+        ms = _Sys_ClockVsyncTicks * 20;
         break;
     case 0:
     default:
-        ms = lbl_803EBE58 * 1000 / 60;
+        ms = _Sys_ClockVsyncTicks * 1000 / 60;
         break;
     }
-    lbl_8039B430.mHundredths = ms / 10;
+    _Sys_RealTimeClock.mHundredths = ms / 10;
     if (ms > 999) {
-        lbl_803EBE58 = 0;
-        lbl_803EBE5C++;
-        lbl_8039B430.mHundredths = 0;
-        if (++lbl_8039B430.mSeconds > 59) {
-            lbl_8039B430.mSeconds = 0;
-            if (++lbl_8039B430.mMinutes > 59) {
-                lbl_8039B430.mMinutes = 0;
-                if (++lbl_8039B430.mHours > 23) {
-                    lbl_8039B430.mHours = 0;
-                    lbl_8039B430.mDays++;
-                    switch (lbl_8039B430.mMonth) {
+        _Sys_ClockVsyncTicks = 0;
+        _Sys_ClockUnixSeconds++;
+        _Sys_RealTimeClock.mHundredths = 0;
+        if (++_Sys_RealTimeClock.mSeconds > 59) {
+            _Sys_RealTimeClock.mSeconds = 0;
+            if (++_Sys_RealTimeClock.mMinutes > 59) {
+                _Sys_RealTimeClock.mMinutes = 0;
+                if (++_Sys_RealTimeClock.mHours > 23) {
+                    _Sys_RealTimeClock.mHours = 0;
+                    _Sys_RealTimeClock.mDays++;
+                    switch (_Sys_RealTimeClock.mMonth) {
                     case 4:
                     case 6:
                     case 9:
@@ -280,7 +275,7 @@ void fn_801F8574(void)
                         days = 30;
                         break;
                     case 2:
-                        days = DateIsYearLeap(lbl_8039B430.mYear) ? 29 : 28;
+                        days = DateIsYearLeap(_Sys_RealTimeClock.mYear) ? 29 : 28;
                         break;
                     case 1:
                     case 3:
@@ -295,11 +290,11 @@ void fn_801F8574(void)
                         days = 31;
                         break;
                     }
-                    if (lbl_8039B430.mDays > days) {
-                        lbl_8039B430.mDays = 1;
-                        if (++lbl_8039B430.mMonth > 12) {
-                            lbl_8039B430.mMonth = 1;
-                            lbl_8039B430.mYear++;
+                    if (_Sys_RealTimeClock.mDays > days) {
+                        _Sys_RealTimeClock.mDays = 1;
+                        if (++_Sys_RealTimeClock.mMonth > 12) {
+                            _Sys_RealTimeClock.mMonth = 1;
+                            _Sys_RealTimeClock.mYear++;
                         }
                     }
                 }
@@ -309,50 +304,50 @@ void fn_801F8574(void)
     OSRestoreInterrupts(enabled);
 }
 
-unsigned char fn_801F8758(unsigned char enable)
+int SysEnableReset(int enable)
 {
-    unsigned char previous = lbl_803EBE61;
+    unsigned char previous = _Sys_ResetEnabled;
 
-    lbl_803EBE61 = enable;
+    _Sys_ResetEnabled = enable;
     return previous;
 }
 
-void fn_801F8768(void)
+void SysCheckReset(void)
 {
     unsigned char pressed = OSGetResetButtonState();
 
-    if (lbl_803EBE62 || (!pressed && lbl_803EBE60)) {
+    if (_Sys_ResetPending || (!pressed && _Sys_PreviousResetState)) {
         int reset = 1;
 
-        if (lbl_803EBE64) {
-            reset = lbl_803EBE64();
+        if (_Sys_ResetCallback) {
+            reset = _Sys_ResetCallback(1);
         }
-        if (reset && lbl_803EBE61) {
-            fn_801F87FC(0);
-            lbl_803EBE62 = 0;
+        if (reset && _Sys_ResetEnabled) {
+            SysResetSystem(0);
+            _Sys_ResetPending = 0;
         } else {
-            lbl_803EBE62 = 1;
+            _Sys_ResetPending = 1;
         }
     }
-    lbl_803EBE60 = pressed;
+    _Sys_PreviousResetState = pressed;
 }
 
-void fn_801F87FC(int code)
+void SysResetSystem(int code)
 {
-    fn_801F7E18();
+    _SysSetupReset();
     OSResetSystem(0, 1, code);
 }
 
-void fn_801F8838(void)
+void SysHotResetSystem(void)
 {
-    fn_801F7E18();
+    _SysSetupReset();
     OSResetSystem(1, 1, 1);
 }
 
-SysResetCallback_801F8868 fn_801F8868(SysResetCallback_801F8868 pCallback)
+SysResetCallback_t SysSetResetCallback(SysResetCallback_t pCallback)
 {
-    SysResetCallback_801F8868 pPrevious = lbl_803EBE64;
+    SysResetCallback_t pPrevious = _Sys_ResetCallback;
 
-    lbl_803EBE64 = pCallback;
+    _Sys_ResetCallback = pCallback;
     return pPrevious;
 }

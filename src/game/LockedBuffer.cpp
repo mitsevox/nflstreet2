@@ -1,6 +1,6 @@
 /* A heap buffer guarded by a lock, freed on destruction. */
 #include "game/fn_801D2B7C.h"
-#include "engine/fn_801F8014.h"
+#include "engine/SysCriticalSection.h"
 
 /* Buffer owned by LockedBuffer; FreeBuffer releases it. */
 struct LockedBufferData {
@@ -18,7 +18,7 @@ public:
     void FreeBuffer();
 
     LockedBufferData mBuffer;
-    Lock_801F8014 mLock;
+    SysCriticalSection_t mLock;
 };
 
 LockedBuffer::~LockedBuffer()
@@ -26,12 +26,12 @@ LockedBuffer::~LockedBuffer()
     if (mBuffer.IsOpen()) {
         FreeBuffer();
     }
-    fn_801F80D0(&mLock);
+    SysShutdownCriticalSectionFunc(&mLock);
 }
 
 void LockedBuffer::FreeBuffer()
 {
-    fn_801F8014(&mLock);
+    SysEnterCriticalSectionFunc(&mLock);
     if (mBuffer.IsOpen()) {
         fn_801D2BD0(mBuffer.mpData);
         mBuffer.mUnknown8 = 0;
@@ -39,5 +39,5 @@ void LockedBuffer::FreeBuffer()
         mBuffer.mpData = 0;
         mBuffer.mUnknownC = 0;
     }
-    fn_801F809C(&mLock);
+    SysExitCriticalSectionFunc(&mLock);
 }

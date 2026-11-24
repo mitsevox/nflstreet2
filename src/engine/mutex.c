@@ -10,21 +10,21 @@ struct OSMutex *_StreamMUTEX_alloc(void)
 {
     struct OSMutex *pMutex;
 
-    fn_801F80E8(&pMutex);
+    SysInitSemaphore(&pMutex);
     return pMutex;
 }
 
 void _StreamMUTEX_free(struct OSMutex *pMutex)
 {
-    fn_801F8174(&pMutex);
+    SysShutdownSemaphore(&pMutex);
 }
 
 void _StreamMUTEX_lock(struct OSMutex *pMutex)
 {
-    fn_801F8128(&pMutex);
+    SysLockSemaphore(&pMutex);
 }
 
 void _StreamMUTEX_unlock(struct OSMutex *pMutex)
 {
-    fn_801F8150(&pMutex);
+    SysUnlockSemaphore(&pMutex);
 }
