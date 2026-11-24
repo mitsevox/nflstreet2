@@ -80,7 +80,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801EC1B4	0x801EC650	remap.c	5	4	4	4	0	-	-
 0x801EC650	0x801F1538	Resource.c	50	48	48	47	1	-	-
 0x801F1538	0x801F17E0	terfhash.c	3	3	3	3	0	-	-
-0x801F17E0	0x801F2310	reswrite.c	15	15	15	0	15	-	-
+0x801F17E0	0x801F2310	reswrite.c	15	15	15	14	1	-	-
 0x801F284C	0x801F2E54	resquickload.c	11	11	11	11	0	-	-
 0x801F2E54	0x801F3308	rescache.c	6	6	6	6	0	-	-
 0x801F3308	0x801F34C0	resloosefile.c	4	4	4	4	0	-	-
@@ -89,7 +89,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801F5100	0x801F524C	sort.c	5	5	5	5	0	-	-
 0x801F524C	0x801F5458	bubble.c	3	3	3	3	0	-	-
 0x801F5458	0x801F5760	quick.c	4	4	4	4	0	-	-
-0x801F5760	0x801F5D84	Speech.cpp	15	14	15	1	12	-	-
+0x801F5760	0x801F5D84	Speech.cpp	15	14	15	7	7	-	-
 0x801F5D84	0x801F7738	stream.c	33	33	33	33	0	-	-
 0x801F7738	0x801F77DC	mutex.c	5	5	5	5	0	-	-
 0x801F77DC	0x801F7D34	system.c	13	13	13	13	0	-	-
