@@ -28563,7 +28563,7 @@
     {
       "source": "src/engine/reswrite.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F17E0-0x801F2310 (src/engine/reswrite.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "evidence": "evidence.tsv reswrite.c unit, compiler and _ProcPatchDirBlock HOLDOUT row. All fifteen functions have named bodies; fourteen link, the complete directory writer remains measured partial.",
       "sections": [
         {
           "section": ".text",
@@ -28574,79 +28574,9 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801F17E0",
-          "start": "0x801F17E0",
-          "end": "0x801F1838"
-        },
-        {
-          "symbol": "fn_801F1838",
-          "start": "0x801F1838",
-          "end": "0x801F1B44"
-        },
-        {
-          "symbol": "fn_801F1B44",
-          "start": "0x801F1B44",
-          "end": "0x801F1B6C"
-        },
-        {
-          "symbol": "fn_801F1B6C",
-          "start": "0x801F1B6C",
-          "end": "0x801F1C48"
-        },
-        {
-          "symbol": "fn_801F1C48",
-          "start": "0x801F1C48",
-          "end": "0x801F1CD4"
-        },
-        {
-          "symbol": "fn_801F1CD4",
-          "start": "0x801F1CD4",
-          "end": "0x801F1CF8"
-        },
-        {
-          "symbol": "fn_801F1CF8",
-          "start": "0x801F1CF8",
-          "end": "0x801F1D20"
-        },
-        {
-          "symbol": "fn_801F1D20",
-          "start": "0x801F1D20",
-          "end": "0x801F1F30"
-        },
-        {
-          "symbol": "fn_801F1F30",
+          "symbol": "_ProcPatchDirBlock",
           "start": "0x801F1F30",
           "end": "0x801F201C"
-        },
-        {
-          "symbol": "fn_801F201C",
-          "start": "0x801F201C",
-          "end": "0x801F2120"
-        },
-        {
-          "symbol": "fn_801F2120",
-          "start": "0x801F2120",
-          "end": "0x801F21B4"
-        },
-        {
-          "symbol": "fn_801F21B4",
-          "start": "0x801F21B4",
-          "end": "0x801F21E4"
-        },
-        {
-          "symbol": "fn_801F21E4",
-          "start": "0x801F21E4",
-          "end": "0x801F2244"
-        },
-        {
-          "symbol": "fn_801F2244",
-          "start": "0x801F2244",
-          "end": "0x801F2294"
-        },
-        {
-          "symbol": "fn_801F2294",
-          "start": "0x801F2294",
-          "end": "0x801F2310"
         }
       ]
     },

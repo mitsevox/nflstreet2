@@ -1553,7 +1553,7 @@ int ResClose(ResFile_t *pRes)
                     err = ResUnLoadAll(pRes);
                 }
                 if (pRes->unk_0x21 != 0) {
-                    err = fn_801F1B6C(pRes);
+                    err = _ResCloseWrite(pRes);
                 }
                 if (close == 1) {
                     if (pRes->pSlots != 0) {

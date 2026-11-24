@@ -42,6 +42,7 @@ extern GCmpCodec_t GCmpTypeNONE;
 
 int GCmpRead(GCmpBuffer_t *pBuffer, void *pOut, unsigned int size);
 int GCmpWrite(GCmpBuffer_t *pBuffer, void *pIn, unsigned int size);
+void GCmpCompress(int codec, GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst);
 void GCmpDecompress(int codec, GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst);
 
 #endif

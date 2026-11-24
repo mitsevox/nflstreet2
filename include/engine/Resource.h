@@ -98,6 +98,8 @@ int ResGetStreamInfo(ResFile_t *pRes, unsigned int index, unsigned int *pSize, u
 int ResGetMemAllocFlags(void);
 
 /* terfhash.c */
+int ProcBuildHashTable(int type, unsigned int count, char **ppStrings, int *pHashes, unsigned int **ppParams,
+                       int *pParamSize);
 int ProcHashHSH1(char *pString, unsigned int length, unsigned int *pParams);
 int ProcHashHSH2(unsigned char *pData, unsigned int length, unsigned int *pParams);
 
@@ -105,7 +107,10 @@ int ProcHashHSH2(unsigned char *pData, unsigned int length, unsigned int *pParam
 int HashString(char *pString, int multiplier);
 
 /* reswrite.c */
-int fn_801F1B6C(ResFile_t *pRes);
+int ResWriteResource(ResFile_t *pWrite, char *pName, void *pData, unsigned int size, int codec);
+int ResWriteResourceIgnoreCompression(ResFile_t *pWrite, char *pName, void *pData, unsigned int size,
+                                      int codec, int precompressed, unsigned int compressedSize);
+int _ResCloseWrite(ResFile_t *pRes);
 
 /* ResTracker.c */
 void ResTrackResource(unsigned int type, void *pData);

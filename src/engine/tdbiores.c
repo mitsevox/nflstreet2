@@ -36,7 +36,6 @@ typedef struct TDbIOResWriteFile_t {
 } TDbIOResWriteFile_t;
 
 extern int ResWriteFromBuffer(void *pArchive, int id, void *pData);
-extern int fn_801F1B44(int a, int b, void *pData, unsigned int size, int e);
 
 static void _EnterReadState(TDbIOResFile_t *pFile);
 static void _EnterWriteState(TDbIOResFile_t *pFile);
@@ -209,7 +208,7 @@ static int _IOWrite_Close(void *pHandle)
     if (pFile == 0 || pFile->mpData == 0 || pFile->mState != 2) {
         return 3;
     }
-    if (fn_801F1B44(pFile->mDesc.mUnknown00, pFile->mDesc.mUnknown08, pFile->mpData, pFile->mSize, pFile->mDesc.mUnknown04) == 0 && pFile->mSize != 0) {
+    if (ResWriteResource((ResFile_t *)pFile->mDesc.mUnknown00, (char *)pFile->mDesc.mUnknown08, pFile->mpData, pFile->mSize, pFile->mDesc.mUnknown04) == 0 && pFile->mSize != 0) {
         err = 0x24;
     }
     fn_801D2BD0(pFile->mpData);
