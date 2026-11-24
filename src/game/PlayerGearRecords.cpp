@@ -1,3 +1,4 @@
+/* Reads and writes a player's gear columns and look bytes through the database cursor. */
 #include "game/Object_8008044C.h"
 #include "game/DbCursor.h"
 #include "game/DbQuery.h"
