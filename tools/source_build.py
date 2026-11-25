@@ -27,10 +27,12 @@ BUILD = ROOT / "build" / "source"
 NEUTRAL = re.compile(r"(?:fn|lbl)_([0-9A-F]{8})")
 SAFE_PATH = re.compile(r"[A-Za-z0-9_./+-]+")
 LINKER_SYMBOLS = {"__start", "_SDA_BASE_", "_SDA2_BASE_"}
-# SN's ngcld defines _f_<section> and _e_<section> at the first and last byte of each output
-# section; start-up code that clears .bss and .sbss names them. A configured external of that form
-# is given to the linker as an absolute symbol, like the out-of-image addresses, and owns no bytes.
-LINKER_BOUNDARY = re.compile(r"_[fe]_[A-Za-z0-9_]+")
+# SN's ngcld defines _f_<section> at the start of each output section and _e_<section> one past
+# its last object; start-up code that clears .bss and .sbss names them. A configured external of
+# that form is given to the linker as an absolute symbol, like the out-of-image addresses, and owns
+# no bytes. It must name a target section .<section>: _f_ at its start, _e_ after its start and at
+# most at its end (linker_bound).
+LINKER_BOUNDARY = re.compile(r"_([fe])_([A-Za-z0-9_]+)")
 # The entry symbol is defined by the link script unless a linked unit (the start-up code) defines
 # it; that definition must lie at the target's entry address.
 ENTRY_SYMBOL = "__start"
@@ -1405,9 +1407,32 @@ def kept_fold(units, unit, name, value, defined, externals):
     return (other.get("kept_locals") or {}).get(name[len(folded_reference("")):]) == value
 
 
+def linker_bound(name, value, sections):
+    """Whether `name` at `value` is an SN section bound: _f_<s> at the start of target section .<s>,
+    _e_<s> after that start and at most at its end. A name of that form anywhere else is refused."""
+    match = LINKER_BOUNDARY.fullmatch(name)
+    if not match:
+        return False
+    section = next((s for s in sections if s["name"] == "." + match[2]), None)
+    if section is None or not (value == section["start"] if match[1] == "f"
+                               else section["start"] < value <= section["end"]):
+        raise ValueError(f"External {name} at 0x{value:08X} is not a bound of a target section .{match[2]}")
+    return True
+
+
 def linker_absolute(name, value, sections, externals):
     """Whether external `name` is given to the linker as an absolute symbol (see link_script)."""
-    return name in externals and (outside_image(sections, value) or bool(LINKER_BOUNDARY.fullmatch(name)))
+    if name not in externals:
+        return False
+    return linker_bound(name, value, sections) if LINKER_BOUNDARY.fullmatch(name) else outside_image(sections, value)
+
+
+def check_entry(defined, target):
+    """A unit that defines the entry symbol must place it at the target's entry address."""
+    entry = defined.get(ENTRY_SYMBOL)
+    if entry is not None and entry[0] != address(target["entry"]):
+        raise ValueError(f"{entry[1]}: {ENTRY_SYMBOL} is placed at 0x{entry[0]:08X}, not at the entry {target['entry']}")
+    return entry is not None
 
 
 def outside_image(sections, value):
@@ -1892,10 +1917,7 @@ def build(original, manifest_path, report_path, cache=None):
     script = BUILD / "link.ld"
     absolute = {name: value for name, value in resolved.items()
                 if linker_absolute(name, value, sections, externals)}
-    entry = defined.get(ENTRY_SYMBOL)
-    if entry is not None and entry[0] != address(target["entry"]):
-        raise ValueError(f"{entry[1]}: {ENTRY_SYMBOL} is placed at 0x{entry[0]:08X}, not at the entry {target['entry']}")
-    script.write_text(link_script(target, sections, pieces, absolute, entry_defined=entry is not None))
+    script.write_text(link_script(target, sections, pieces, absolute, entry_defined=check_entry(defined, target)))
     elf, output = BUILD / "main.elf", BUILD / "main.dol"
     linker_flags = []
     if strip_unused:

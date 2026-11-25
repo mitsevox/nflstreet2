@@ -278,16 +278,30 @@ class Placement(Fixture):
         # SN's _f_<section>/_e_<section> bounds own no bytes, so one may equal a unit's first byte;
         # any other external there still has to name that unit's own symbol.
         manifest = copy.deepcopy(self.manifest)
-        manifest["externals"] = {"_f_init": {"address": "0x80003110", "evidence": "x"},
+        manifest["externals"] = {"_e_init": {"address": "0x80003110", "evidence": "x"},
+                                 "_f_init": {"address": "0x80003100", "evidence": "x"},
                                  "Inside": {"address": "0x80003110", "evidence": "x"}}
-        pieces, _, resolved = self.plan(self.objects(symbols=[{"name": "_f_init", "value": 0, "shndx": 0}]),
+        pieces, _, resolved = self.plan(self.objects(symbols=[{"name": "_e_init", "value": 0, "shndx": 0},
+                                                              {"name": "_f_init", "value": 0, "shndx": 0}]),
                                         manifest)
-        self.assertEqual(resolved["_f_init"], 0x80003110)
-        self.assertFalse(any(s["name"] == "_f_init" for p in pieces[".init"] for s in p.get("symbols", ())))
-        self.assertTrue(sb.linker_absolute("_f_init", 0x80003110, self.sections, sb.load_manifest(
-            manifest, self.sections, "3.9.3")[1]))
+        self.assertEqual((resolved["_e_init"], resolved["_f_init"]), (0x80003110, 0x80003100))
+        self.assertFalse(any(s["name"] in ("_e_init", "_f_init")
+                             for p in pieces[".init"] for s in p.get("symbols", ())))
         with self.assertRaisesRegex(ValueError, "inside source unit"):
             self.plan(self.objects(symbols=[{"name": "Inside", "value": 0, "shndx": 0}]), manifest)
+
+    def test_only_real_section_bounds_are_linker_absolute(self):
+        # A bound must name a target section: _f_ exactly at its start, _e_ after it and at most at its end.
+        for name, value in (("_e_anything", "0x80003114"), ("_f_bogus", "0x80004010"),
+                            ("_f_init", "0x80003110"), ("_e_bss", "0x80005000"), ("_e_bss", "0x80005044"),
+                            ("_f_data2", "0x80004004")):
+            manifest = copy.deepcopy(self.manifest)
+            manifest["externals"] = {name: {"address": value, "evidence": "x"}}
+            with self.subTest(name=name, value=value), \
+                    self.assertRaisesRegex(ValueError, "not a bound of a target section"):
+                self.plan(self.objects(symbols=[{"name": name, "value": 0, "shndx": 0}]), manifest)
+        self.assertTrue(sb.linker_bound("_e_bss", 0x80005040, self.sections))
+        self.assertFalse(sb.linker_bound("Helper", 0x80005000, self.sections))
 
     def test_start_up_code_may_define_the_entry_symbol(self):
         symbols = [{"name": "__start", "value": 0, "shndx": 1, "type": 2},
@@ -302,6 +316,11 @@ class Placement(Fixture):
         self.assertIn("_SDA_BASE_ = 0x80008000;", script)
         with self.assertRaisesRegex(ValueError, "already defined"):
             self.plan(self.objects(symbols=[{"name": "_SDA_BASE_", "value": 0, "shndx": 1, "type": 2}]))
+        # A unit-defined entry symbol must sit at the target's entry address.
+        self.assertTrue(sb.check_entry({"__start": (0x80003100, "src/unit.c")}, TARGET))
+        self.assertFalse(sb.check_entry({}, TARGET))
+        with self.assertRaisesRegex(ValueError, "not at the entry"):
+            sb.check_entry(defined, TARGET)
 
     def test_definitions_cannot_collide_or_misstate_addresses(self):
         with self.assertRaisesRegex(ValueError, "neutral label fn_80003100"):
