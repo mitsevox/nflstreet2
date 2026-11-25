@@ -25341,7 +25341,7 @@
     {
       "source": "src/game/StoryTeamList.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional comparison slice 0x8018EF6C-0x8018F1F0 and the SstlRebuildForTeam function, name and source-form rows. The ordinary index-fill loop improves the pinned-profile comparison from 90.31677% to 91.72050%, with 39 differing aligned instruction words out of 161. All 272 query bytes at 0x802AB254-0x802AB364 remain byte-identical. The neighboring slices probably share an original file; the original executable bytes stay linked.",
+      "evidence": "evidence.tsv provisional comparison slice 0x8018EF6C-0x8018F1F0 and the SstlRebuildForTeam function, name and source-form rows. The ordinary index-fill loop improved the pinned-profile comparison from 90.31677% to 91.72050%, and one function-scope loop counter shared by the fill and swap loops to 92.39751%. All 272 query bytes at 0x802AB254-0x802AB364 remain byte-identical. The neighboring slices probably share an original file; the original executable bytes stay linked.",
       "sections": [
         {
           "section": ".text",
