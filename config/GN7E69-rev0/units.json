@@ -1748,6 +1748,31 @@
       ]
     },
     {
+      "source": "src/game/PassBlock.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801327F4-0x801344A0 (src/game/PassBlock.cpp) and its function, name and data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801327F4",
+          "end": "0x801344A0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FC28",
+          "end": "0x8029FD38"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB158",
+          "end": "0x803EB164"
+        }
+      ]
+    },
+    {
       "source": "src/game/PlayerMove.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800D0474-0x800D0D48 (src/game/PlayerMove.cpp) and its function rows; every function exact. Code and .rodata linked on researched edges; its .sdata bytes 0x803EACAB-0x803EACC0 stay original bytes because the .sdata object edge is unresolved.",

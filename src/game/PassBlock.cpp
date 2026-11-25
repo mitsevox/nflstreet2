@@ -1,3 +1,9 @@
+/* Pass-blocking state of an offensive player (entry 31 of the player state handler table).
+   Early in the play the blocker drops back toward a spot off the line, facing a defender that
+   comes close; it then protects the ball holder, or the nearest receiver still at the line,
+   by squaring up to the defender it is assigned to, deciding when to stay in front of it and
+   when to cut it off, and without a defender takes a pocket spot by its lineup slot. */
+
 #include <math.h>
 #include "game/Object_80039F5C.h"
 #include "game/Input_800B6D34.h"
@@ -5,25 +11,20 @@
 #include <string.h>
 #include "game/Ball.h"
 
-struct Aim_801327F4 {
-    char mUnknown0[8];
-    float mUnknown8;
-    int mUnknownC, mUnknown10;
-};
-
-struct Mode_80133C50 {
+/* Player block at +336 in the pass-blocking state. */
+struct PassBlockControl_t {
     float mUnknown0, mUnknown4, mUnknown8;
     int mUnknownC, mUnknown10, mUnknown14;
     unsigned char mUnknown18, mUnknown19, mUnknown1A, mUnknown1B;
 };
 
 extern "C" {
-void PlyrSteerAroundBlocker(Object_80039F5C *, Object_80039F5C *, Aim_801327F4 *);
+void PlyrSteerAroundBlocker(Object_80039F5C *, Object_80039F5C *, PassBlockControl_t *);
 int fn_8011E3F4(Object_80039F5C *);
 int fn_80124B1C(Object_80039F5C *, Object_80039F5C *, int, float, float);
 Object_80039F5C *fn_80124C28(Object_80039F5C *, float *, int, float, float, int);
 
-extern float lbl_803EB158, lbl_803EB15C, gPlyrMoveFwdSpeed;
+extern float gPlyrMoveFwdSpeed;
 unsigned int fn_8011E188(void);
 void fn_8011E3EC(Object_80039F5C *, int);
 void fn_8011E1BC(Object_80039F5C *, Object_80039F5C *, int, int);
@@ -35,13 +36,12 @@ int fn_8010A2DC(Object_80039F5C *, int, short);
 int fn_80178C9C(void);
 int fn_800BA6F8(void);
 int fn_800BAA24(void);
-void fn_80133044(Object_80039F5C *, Object_80039F5C *, Mode_80133C50 *, Point_8017886C);
+void PassBlockSteer(Object_80039F5C *, Object_80039F5C *, PassBlockControl_t *, Point_8017886C);
 int fn_8011E8A4(Object_80039F5C *);
 int fn_800B7E60(Object_80039F5C *);
 int fn_800B7F34(Object_80039F5C *);
 void fn_800B6E68(Object_80039F5C *, Input_800B6D34 *);
 
-extern unsigned char lbl_803EB160;
 void fn_8011E240(Object_80039F5C *);
 float fn_80178A08(void);
 int fn_801CFE40(float, float);
@@ -61,9 +61,13 @@ int fn_80178320(void);
 unsigned int SyncRandGetRange(unsigned int, unsigned int);
 unsigned char PlayBookGetReceiver(int, unsigned char, unsigned char *);
 
+float _PassBlock_fDropDepth = 0.0f;
+float _PassBlock_fDropDepthPerWidth = 0.6f;
+unsigned char _PassBlock_cFaceOffsetDeg = 0;
+
 static inline int AngleSub(int a, int b) { return (a - b) & 0xFFFFFF; }
 
-void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, Point_8017886C point)
+void PassBlockDropBack(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl_t *aim, Point_8017886C point)
 {
     Object_800B26B0 *motion = &p->mMotion;
     float delta[2];
@@ -79,9 +83,9 @@ void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, 
                 &other->mMotion.mUnknown40, motion->mUnknown28,
                 other->mMotion.mUnknown28, other->mMotion.mUnknown32, distance);
             if (AngleSub(motion->mFacing, angle) > 0x800000)
-                aim->mUnknownC = (0xC00000 - (int)((float)(int)lbl_803EB160 * 46603.37890625f)) & 0xFFFFFF;
+                aim->mUnknownC = (0xC00000 - (int)((float)(int)_PassBlock_cFaceOffsetDeg * 46603.37890625f)) & 0xFFFFFF;
             else
-                aim->mUnknownC = (0xC00000 + (int)((float)(int)lbl_803EB160 * 46603.37890625f)) & 0xFFFFFF;
+                aim->mUnknownC = (0xC00000 + (int)((float)(int)_PassBlock_cFaceOffsetDeg * 46603.37890625f)) & 0xFFFFFF;
             aim->mUnknown8 = other->mMotion.mUnknown28 != 0.0f ? 1.25f : 0.4f;
         }
     }
@@ -96,7 +100,7 @@ void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, 
     }
 }
 
-int fn_80132A4C(Object_80039F5C *p, Object_80039F5C *ball, Object_80039F5C *other,
+int PassBlockShouldEngage(Object_80039F5C *p, Object_80039F5C *ball, Object_80039F5C *other,
                Point_8017886C reference, Vector_80039F5C location, int angle, int otherAngle, float distance)
 {
     float delta[2];
@@ -133,7 +137,7 @@ int fn_80132A4C(Object_80039F5C *p, Object_80039F5C *ball, Object_80039F5C *othe
     return result;
 }
 
-void fn_80132C84(Object_80039F5C *p, Object_80039F5C *ball, Mode_80133C50 *s, Vector_80039F5C location, Point_8017886C point)
+void PassBlockFormPocket(Object_80039F5C *p, Object_80039F5C *ball, PassBlockControl_t *s, Vector_80039F5C location, Point_8017886C point)
 {
     Vector_80039F5C *pos = &p->mMotion.mPos;
     if (fn_8011F32C()) {
@@ -196,7 +200,7 @@ void fn_80132C84(Object_80039F5C *p, Object_80039F5C *ball, Mode_80133C50 *s, Ve
     else s->mUnknown8 = 0.0f;
 }
 
-void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, Point_8017886C point)
+void PassBlockSteer(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl_t *s, Point_8017886C point)
 {
     Object_800B26B0 *motion = &p->mMotion;
     float distance;
@@ -270,7 +274,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
         int otherAngle = fn_801CFE40(delta[1], delta[0]);
         Vec2Sub(delta, &motion->mPos, reference);
         int angle = fn_801CFE40(delta[1], delta[0]);
-        if ((s->mUnknown1B & 1) == 0 && fn_80132A4C(p, ball, other, point, location, angle, otherAngle, distance)) {
+        if ((s->mUnknown1B & 1) == 0 && PassBlockShouldEngage(p, ball, other, point, location, angle, otherAngle, distance)) {
             s->mUnknown10 = toward;
             if (other->mUnknown1032 == 4 && MathAngleDiff(toward, motion->mFacing) <= 0x11C71C &&
                 MathAngleDiff(other->mMotion.mFacing, motion->mFacing) > 0x71C71B) goto finish;
@@ -334,13 +338,13 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
             s->mUnknown19 = 2;
         }
     } else if (ball) {
-        fn_80132C84(p, ball, s, location, point);
+        PassBlockFormPocket(p, ball, s, location, point);
     }
 finish:
-    PlyrSteerAroundBlocker(p, ball, (Aim_801327F4 *)s);
+    PlyrSteerAroundBlocker(p, ball, s);
 }
 
-void fn_80133920(Object_80039F5C *p, Object_80039F5C *other)
+void PassBlockLeanIntoDefender(Object_80039F5C *p, Object_80039F5C *other)
 {
     if (other) {
         float delta[2];
@@ -356,7 +360,7 @@ void fn_80133920(Object_80039F5C *p, Object_80039F5C *other)
     }
 }
 
-void PlyrSteerAroundBlocker(Object_80039F5C *p, Object_80039F5C *, Aim_801327F4 *aim)
+void PlyrSteerAroundBlocker(Object_80039F5C *p, Object_80039F5C *, PassBlockControl_t *aim)
 {
     Object_80039F5C *target;
     Object_80039F5C *other = fn_8009BCE8(&p->mUnknown1036);
@@ -396,7 +400,7 @@ void PlyrSteerAroundBlocker(Object_80039F5C *p, Object_80039F5C *, Aim_801327F4 
     }
 }
 
-void fn_80133BB4(Object_80039F5C *p, Object_80039F5C *other)
+void PassBlockFlagDefenderAtLine(Object_80039F5C *p, Object_80039F5C *other)
 {
     if (other && fn_801783AC(13) && !fn_801783AC(0) && !BallGetCurrentHolder() && fn_8011F2F8()) {
         if (!(other->mMotion.mPos.mY - fn_80177FE0().mY >= 2.5f))
@@ -404,9 +408,9 @@ void fn_80133BB4(Object_80039F5C *p, Object_80039F5C *other)
     }
 }
 
-int fn_80133C50(Object_80039F5C *p)
+int PassBlockEnter(Object_80039F5C *p)
 {
-    Mode_80133C50 *s = (Mode_80133C50 *)&p->mUnknown336;
+    PassBlockControl_t *s = (PassBlockControl_t *)&p->mUnknown336;
     int *pRole = &p->mUnknown1032;
     int count = p->mpState->mUnknown1;
     float fraction = (float)(count & 31) * 0.032258063554763794f;
@@ -429,8 +433,8 @@ int fn_80133C50(Object_80039F5C *p)
     if (fn_8011E188() <= 14) {
         s->mUnknown1A = 1;
         if (!(values.mY - p->mMotion.mPos.mY >= 2.0f)) {
-            float limit = p->mMotion.mPos.mY - lbl_803EB158;
-            limit -= fabsf(p->mMotion.mPos.mX - fn_80177FE0().mX) * lbl_803EB15C;
+            float limit = p->mMotion.mPos.mY - _PassBlock_fDropDepth;
+            limit -= fabsf(p->mMotion.mPos.mX - fn_80177FE0().mX) * _PassBlock_fDropDepthPerWidth;
             s->mUnknown4 = limit;
             s->mUnknown10 = p->mMotion.mFacing;
             s->mUnknownC = AngleSub(p->mMotion.mFacing, 0x800000);
@@ -465,11 +469,11 @@ int fn_80133C50(Object_80039F5C *p)
     return 0;
 }
 
-int fn_80133EE8(Object_80039F5C *p)
+int PassBlockUpdate(Object_80039F5C *p)
 {
     int apply = 0;
     Object_80039F5C *ball = BallGetCurrentHolder();
-    Mode_80133C50 *s = (Mode_80133C50 *)&p->mUnknown336;
+    PassBlockControl_t *s = (PassBlockControl_t *)&p->mUnknown336;
     Block_8011E240 *block = &p->mBlock1032;
     int result = 0;
     Message_800F01CC message;
@@ -518,14 +522,14 @@ int fn_80133EE8(Object_80039F5C *p)
         if (block->mUnknown0 != 4 && block->mUnknown0 != 7) {
             if (ball && (ball->mFlags & 0x8000)) s->mUnknown1A = 0;
             if (s->mUnknown1A && !(p->mMotion.mPos.mY <= s->mUnknown4))
-                fn_801327F4(p, other, (Aim_801327F4 *)s, point);
+                PassBlockDropBack(p, other, s, point);
             else if (!fn_80178C9C() || (fn_800BA6F8() && fn_800BAA24() == 1)) {
                 s->mUnknown8 = 0.0f;
                 s->mUnknown10 = s->mUnknownC = p->mMotion.mFacing;
             } else
-                fn_80133044(p, other, s, point);
-            fn_80133920(p, other);
-            fn_80133BB4(p, other);
+                PassBlockSteer(p, other, s, point);
+            PassBlockLeanIntoDefender(p, other);
+            PassBlockFlagDefenderAtLine(p, other);
         } else
             s->mUnknown4 = 99999.0f;
         if ((unsigned int)(p->mUnknown2914 - 1) <= 1 && block->mUnknown0 == 2) {
@@ -557,14 +561,14 @@ int fn_80133EE8(Object_80039F5C *p)
     return result;
 }
 
-int fn_80134370(Object_80039F5C *p)
+int PassBlockExit(Object_80039F5C *p)
 {
     fn_8011E3EC(p, 0);
     fn_8011E240(p);
     return 1;
 }
 
-int fn_801343AC(Object_80039F5C *p)
+int PassBlockInput(Object_80039F5C *p)
 {
     int result = 0;
     if (fn_8011E8A4(p))
