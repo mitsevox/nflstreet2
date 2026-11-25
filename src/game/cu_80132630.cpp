@@ -35,7 +35,7 @@ int fn_8010A2DC(Object_80039F5C *, int, short);
 int fn_80178C9C(void);
 int fn_800BA6F8(void);
 int fn_800BAA24(void);
-void fn_80133044(Object_80039F5C *, Object_80039F5C *, Mode_80133C50 *, float *);
+void fn_80133044(Object_80039F5C *, Object_80039F5C *, Mode_80133C50 *, Point_8017886C);
 int fn_8011E8A4(Object_80039F5C *);
 int fn_800B7E60(Object_80039F5C *);
 int fn_800B7F34(Object_80039F5C *);
@@ -61,10 +61,9 @@ int fn_80178320(void);
 unsigned int SyncRandGetRange(unsigned int, unsigned int);
 unsigned char PlayBookGetReceiver(int, unsigned char, unsigned char *);
 
-void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, Point_8017886C *pTarget)
+void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, Point_8017886C point)
 {
     Object_800B26B0 *motion = &p->mMotion;
-    Point_8017886C point = *pTarget;
     float delta[2];
     aim->mUnknown8 = 0.4f;
     int fallback = 1;
@@ -96,43 +95,47 @@ void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, 
 }
 
 int fn_80132A4C(Object_80039F5C *p, Object_80039F5C *ball, Object_80039F5C *other,
-               float *point, Vector_80039F5C *location, int angle, int otherAngle, float distance)
+               Point_8017886C *point, Vector_80039F5C *location, int angle, int otherAngle, float distance)
 {
-    float reference[2] = {point[0], point[1]};
+    Point_8017886C reference = *point;
     float delta[2];
+    int result = 0;
+    Vector_80039F5C *pos = &p->mMotion.mPos;
+    Vector_80039F5C *otherPos = &other->mMotion.mPos;
     int reverse = (angle + 0x800000) & 0xFFFFFF;
-    Vec2Sub(delta, &other->mMotion.mPos, &p->mMotion.mPos);
-    if (MathAngleDiff(reverse, fn_801CFE40(delta[1], delta[0])) <= 0x471C72)
-        return 0;
-    if (ball && !(ball->mFlags & 0x8000) && !(p->mMotion.mPos.mY + 1.0f >= location->mY) &&
-        !(other->mMotion.mPos.mY + 1.0f >= location->mY)) {
-        float a = Vec2Distance(location, &p->mMotion.mPos);
-        float b = Vec2Distance(location, &other->mMotion.mPos);
-        if (a < b) return 1;
-    }
-    if (p->mMotion.mPos.mY <= reference[1] - 9.0f || p->mMotion.mPos.mY >= other->mMotion.mPos.mY + 1.0f)
-        return 0;
-    if (!(other->mMotion.mPos.mY > reference[1]) && !(distance < 3.5f) && !fn_8011F32C())
-        return 0;
-    if (ball) {
-        if (!(ball->mMotion.mPos.mY <= reference[1] - 3.5f) &&
-            (ball->mMotion.mUnknown32 & 0xFFFFFF) > 0x800000)
-            return 1;
-    } else {
-        Object_80039F5C *entry = BallGetCurrentTarget();
-        if (entry) {
-            Vec2Sub(delta, &other->mMotion.mPos, &entry->mMotion.mPos);
-            otherAngle = fn_801CFE40(delta[1], delta[0]);
-            Vec2Sub(delta, &p->mMotion.mPos, &entry->mMotion.mPos);
-            angle = fn_801CFE40(delta[1], delta[0]);
+    Vec2Sub(delta, otherPos, pos);
+    if (MathAngleDiff(reverse, fn_801CFE40(delta[1], delta[0])) > 0x471C72) {
+        if (ball && !(ball->mFlags & 0x8000) && !(pos->mY + 1.0f >= location->mY) &&
+            !(otherPos->mY + 1.0f >= location->mY) &&
+            Vec2Distance(location, pos) < Vec2Distance(location, otherPos)) {
+            result = 1;
+        } else if (!(pos->mY <= reference.mY - 9.0f) && !(pos->mY >= otherPos->mY + 1.0f) &&
+                   (otherPos->mY > reference.mY || distance < 3.5f || fn_8011F32C())) {
+            if (ball && !(ball->mMotion.mPos.mY <= reference.mY - 3.5f) &&
+                (ball->mMotion.mUnknown32 & 0xFFFFFF) > 0x800000) {
+                result = 1;
+            } else {
+                if (!ball) {
+                    Object_80039F5C *entry = BallGetCurrentTarget();
+                    if (entry) {
+                        Vec2Sub(delta, otherPos, &entry->mMotion.mPos);
+                        otherAngle = fn_801CFE40(delta[1], delta[0]);
+                        Vec2Sub(delta, pos, &entry->mMotion.mPos);
+                        angle = fn_801CFE40(delta[1], delta[0]);
+                    }
+                }
+                int limit = 0x11C71C;
+                if (MathAngleDiff(angle, otherAngle) < limit) result = 1;
+            }
         }
     }
-    return MathAngleDiff(angle, otherAngle) < 0x11C71C;
+    return result;
 }
 
-void fn_80132C84(Object_80039F5C *p, Object_80039F5C *ball, Mode_80133C50 *s, float *location, float *values)
+void fn_80132C84(Object_80039F5C *p, Object_80039F5C *ball, Mode_80133C50 *s, float *location, Point_8017886C *values)
 {
-    float point[2] = {values[0], values[1]};
+    Point_8017886C point = *values;
+    Vector_80039F5C *pos = &p->mMotion.mPos;
     if (fn_8011F32C()) {
         s->mUnknown10 = 0x400000;
         s->mUnknown8 = 0.0f;
@@ -141,43 +144,45 @@ void fn_80132C84(Object_80039F5C *p, Object_80039F5C *ball, Mode_80133C50 *s, fl
     float x;
     if (!(location[0] >= 6.0f - fn_80178A08()))
         x = 6.0f - fn_80178A08();
-    else if (location[0] > fn_80178A08() - 6.0f)
-        x = fn_80178A08() - 6.0f;
-    else
+    else if (!(location[0] > fn_80178A08() - 6.0f))
         x = location[0];
+    else
+        x = fn_80178A08() - 6.0f;
     location[0] = x;
     float target[2];
-    unsigned int kind = p->mUnknown2914;
-    if (kind - 5 <= 4) {
-        int n = kind - 7;
+    int n = p->mUnknown2914;
+    if ((unsigned int)(n - 5) <= 4) {
+        n -= 7;
         target[0] = x + (float)n * 2.0f;
         int magnitude = n < 0 ? -n : n;
         target[1] = location[1] + (3.0f - (float)magnitude);
-        if (!(target[1] <= point[1]) && (ball->mMotion.mUnknown32 & 0xFFFFFF) > 0x800000)
-            target[1] = p->mMotion.mPos.mY;
+        if (!(target[1] <= point.mY) && (ball->mMotion.mUnknown32 & 0xFFFFFF) > 0x800000)
+            target[1] = pos->mY;
     } else if (s->mUnknown1B & 1) {
         target[0] = x;
-        target[1] = p->mMotion.mPos.mY;
+        target[1] = pos->mY;
     } else if (ball && (ball->mFlags & 0x8000)) {
-        target[0] = !(p->mMotion.mPos.mX >= x) ? x - 2.0f : x + 2.0f;
+        target[0] = x;
+        if (!(pos->mX >= x)) target[0] = x - 2.0f;
+        else target[0] = x + 2.0f;
         target[1] = location[1] + 2.0f;
     } else {
-        target[0] = point[0];
-        target[1] = point[1] - 4.5f;
-        if (!(p->mMotion.mPos.mX >= point[0])) {
-            if (!(p->mMotion.mPos.mY <= location[1] + 0.5f)) {
+        target[0] = point.mX;
+        target[1] = point.mY - 4.5f;
+        if (!(pos->mX >= point.mX)) {
+            if (!(pos->mY <= location[1] + 0.5f)) {
                 target[0] -= 0.6666666865348816f;
                 target[1] -= 0.5f;
             } else target[0] -= 2.0f;
         } else {
-            if (!(p->mMotion.mPos.mY <= location[1] + 0.5f)) {
+            if (!(pos->mY <= location[1] + 0.5f)) {
                 target[0] += 0.6666666865348816f;
                 target[1] -= 0.5f;
             } else target[0] += 2.0f;
         }
     }
     s->mUnknown10 = 0x400000;
-    Vec2Sub(target, target, &p->mMotion.mPos);
+    Vec2Sub(target, target, pos);
     s->mUnknownC = fn_801CFE40(target[1], target[0]) & 0xFFFFFF;
     float distance = Vec2Magnitude(target);
     if (!(distance <= 3.0f)) {
@@ -191,9 +196,8 @@ void fn_80132C84(Object_80039F5C *p, Object_80039F5C *ball, Mode_80133C50 *s, fl
     else s->mUnknown8 = 0.0f;
 }
 
-void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, float *values)
+void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, Point_8017886C point)
 {
-    float point[2] = {values[0], values[1]};
     s->mUnknown4 = 99999.0f;
     --s->mUnknown19;
     if (!(s->mUnknown19 & 0x80)) return;
@@ -209,7 +213,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
             unsigned char index = PlayBookGetReceiver(p->mIdBytes[2], i, &active);
             if (index != 255 && active) {
                 Object_80039F5C *candidate = PlyrGet(p->mIdBytes[2], index);
-                if (candidate->mMotion.mPos.mY < point[1] + 2.5f || candidate == ball) {
+                if (candidate->mMotion.mPos.mY < point.mY + 2.5f || candidate == ball) {
                     float distance = Vec2Distance(&p->mMotion.mPos, &candidate->mMotion.mPos);
                     if (!(distance >= nearest)) {
                         ball = candidate;
@@ -226,10 +230,10 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
             location = ball->mMotion.mPos;
             reference[0] = location.mX;
             reference[1] = location.mY;
-            if (fn_8011E188() <= 59) reference[1] = point[1] - 8.0f;
+            if (fn_8011E188() <= 59) reference[1] = point.mY - 8.0f;
         } else {
-            location.mX = !(ball->mMotion.mPos.mX >= 0.0f) ? point[0] - 3.0f : point[0] + 3.0f;
-            location.mY = point[1];
+            location.mX = !(ball->mMotion.mPos.mX >= 0.0f) ? point.mX - 3.0f : point.mX + 3.0f;
+            location.mY = point.mY;
             reference[0] = location.mX;
             reference[1] = location.mY;
         }
@@ -241,7 +245,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
         reference[1] = location.mY;
     }
     if (other && p->mUnknown1032 == 3 &&
-        (other->mMotion.mUnknown44 > gPlyrMoveFwdSpeed * 0.5f || other->mMotion.mPos.mY - point[1] > 3.0f ||
+        (other->mMotion.mUnknown44 > gPlyrMoveFwdSpeed * 0.5f || other->mMotion.mPos.mY - point.mY > 3.0f ||
          fabsf(s->mUnknown0 - p->mMotion.mPos.mX) > 1.5f || (short)p->mUnknown1134 > 60)) {
         if (!fn_8011E3F4(p)) {
             fn_8011E240(p);
@@ -261,7 +265,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
         int otherAngle = fn_801CFE40(delta[1], delta[0]);
         Vec2Sub(delta, &p->mMotion.mPos, reference);
         int angle = fn_801CFE40(delta[1], delta[0]);
-        if (!(s->mUnknown1B & 1) && fn_80132A4C(p, ball, other, point, &location, angle, otherAngle, distance)) {
+        if (!(s->mUnknown1B & 1) && fn_80132A4C(p, ball, other, &point, &location, angle, otherAngle, distance)) {
             s->mUnknown10 = toward;
             if (other->mUnknown1032 == 4 && MathAngleDiff(toward, p->mMotion.mFacing) <= 0x11C71C &&
                 MathAngleDiff(other->mMotion.mFacing, p->mMotion.mFacing) > 0x71C71B) goto finish;
@@ -284,7 +288,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
                         s->mUnknown8 = 1.0f;
                         goto finish;
                     }
-                    if (!(other->mMotion.mPos.mY >= point[1])) s->mUnknown8 = distance * 0.08f + 0.7200000286102295f;
+                    if (!(other->mMotion.mPos.mY >= point.mY)) s->mUnknown8 = distance * 0.08f + 0.7200000286102295f;
                     else s->mUnknown8 = distance * 0.07428571581840515f + 0.14f;
                     goto finish;
                 }
@@ -327,7 +331,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
         }
     } else if (ball) {
         float location2[2] = {location.mX, location.mY};
-        fn_80132C84(p, ball, s, location2, point);
+        fn_80132C84(p, ball, s, location2, &point);
     }
 finish:
     PlyrSteerAroundBlocker(p, ball, (Aim_801327F4 *)s);
@@ -461,66 +465,68 @@ int fn_80133C50(Object_80039F5C *p)
 
 int fn_80133EE8(Object_80039F5C *p)
 {
+    int result = 0;
     Object_80039F5C *ball = BallGetCurrentHolder();
     Mode_80133C50 *s = (Mode_80133C50 *)&p->mUnknown336;
-    int post = 0;
+    Block_8011E240 *block = &p->mBlock1032;
+    int apply = 0;
+    Message_800F01CC message;
     if (p == ball) {
         fn_8011E3EC(p, 0);
         fn_8011E240(p);
-        post = 1;
-    } else {
-        if (fn_8009FB60(p)) return 1;
-        if (p->mIdBytes[2] == fn_80178320()) {
-            fn_8011E3EC(p, 0);
-            fn_8011E240(p);
-            post = 2;
-        } else if ((fn_8011F524() && !fn_8011F2C4()) || fn_801783AC(0) || fn_801787A0()) {
-            if (p->mUnknown1032 != 4 && p->mUnknown1032 != 7) {
-                fn_8011E3EC(p, 0);
-                fn_8011E240(p);
-            }
-            post = 33;
-        }
-    }
-    if (post) {
-        Message_800F01CC message;
         memset(&message, 0, 4);
-        message.mId = post;
+        message.mId = 1;
         fn_800F053C(0, p->mpState, &message, p);
         return 1;
     }
-    int result = 0;
-    if (fn_801787A0()) {
-        if ((p->mUnknown1032 != 4 && p->mUnknown1032 != 7) || SyncRandGetRange(0, 100) <= 9) {
+    if (fn_8009FB60(p)) return 1;
+    if (p->mIdBytes[2] == fn_80178320()) {
+        fn_8011E3EC(p, 0);
+        fn_8011E240(p);
+        memset(&message, 0, 4);
+        message.mId = 2;
+        fn_800F053C(0, p->mpState, &message, p);
+        return 1;
+    }
+    if ((fn_8011F524() && !fn_8011F2C4()) || fn_801783AC(0) || fn_801787A0()) {
+        if (block->mUnknown0 != 4 && block->mUnknown0 != 7) {
             fn_8011E3EC(p, 0);
             fn_8011E240(p);
         }
-    } else if (!p->mUnknown1032) {
+        memset(&message, 0, 4);
+        message.mId = 33;
+        fn_800F053C(0, p->mpState, &message, p);
+        return 1;
+    }
+    if (fn_801787A0()) {
+        if ((block->mUnknown0 != 4 && block->mUnknown0 != 7) || SyncRandGetRange(0, 100) <= 9) {
+            fn_8011E3EC(p, 0);
+            fn_8011E240(p);
+        }
+    } else if (!block->mUnknown0) {
         fn_8011E240(p);
         fn_8011E1BC(p, 0, 0, 1);
         fn_8011E3EC(p, 1);
     }
     fn_8010A2DC(p, 0, -1);
     if (!(p->mFlags & 0x4000)) {
-        Point_8017886C point = fn_80177FE0();
-        float values[2] = {point.mX, point.mY};
-        Object_80039F5C *other = fn_8009BCE8(&p->mUnknown1036);
-        if (p->mUnknown1032 != 4 && p->mUnknown1032 != 7) {
+        Point_8017886C point;
+        point = fn_80177FE0();
+        Object_80039F5C *other = fn_8009BCE8(&block->mUnknown4);
+        if (block->mUnknown0 != 4 && block->mUnknown0 != 7) {
             if (ball && (ball->mFlags & 0x8000)) s->mUnknown1A = 0;
             if (s->mUnknown1A && !(p->mMotion.mPos.mY <= s->mUnknown4))
-                fn_801327F4(p, other, (Aim_801327F4 *)s, &point);
+                fn_801327F4(p, other, (Aim_801327F4 *)s, point);
             else if (!fn_80178C9C() || (fn_800BA6F8() && fn_800BAA24() == 1)) {
                 s->mUnknown8 = 0.0f;
-                s->mUnknown10 = p->mMotion.mFacing;
-                s->mUnknownC = p->mMotion.mFacing;
+                s->mUnknown10 = s->mUnknownC = p->mMotion.mFacing;
             } else
-                fn_80133044(p, other, s, values);
+                fn_80133044(p, other, s, point);
             fn_80133920(p, other);
             fn_80133BB4(p, other);
         } else
             s->mUnknown4 = 99999.0f;
-        int apply = 0;
-        if ((unsigned int)(p->mUnknown2914 - 1) > 1 || p->mUnknown1032 != 2 ||
+        if ((unsigned int)(p->mUnknown2914 - 1) > 1 || block->mUnknown0 != 2 ||
             !(fabsf(other->mMotion.mPos.mY - p->mMotion.mPos.mY) >= 5.0f)) apply = 1;
         if (apply) {
             p->mUnknown512.mUnknown14 = 3;
@@ -535,14 +541,11 @@ int fn_80133EE8(Object_80039F5C *p)
     }
     if (s->mUnknown18) {
         --s->mUnknown14;
-        p->mpState->mUnknown1 = (int)((float)s->mUnknown14 * 0.01666666753590107f * 32.0f);
+        float seconds = (float)s->mUnknown14 / 60.0f;
+        p->mpState->mUnknown1 = (int)(seconds * 32.0f);
         if (s->mUnknown14 > 0 && !p->mpState->mUnknown1) p->mpState->mUnknown1 = 1;
-        int end = s->mUnknown14 <= 0;
-        if (!end && (p->mFlags & 0x4000)) {
-            Point_8017886C point = fn_80177FE0();
-            if (!(p->mMotion.mPos.mY <= point.mY)) end = 1;
-        }
-        if (end) {
+        if (s->mUnknown14 <= 0 ||
+            ((p->mFlags & 0x4000) && !(p->mMotion.mPos.mY <= fn_80177FE0().mY))) {
             fn_8011E3EC(p, 0);
             result = 1;
             fn_8011E240(p);
