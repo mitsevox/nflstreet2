@@ -33408,6 +33408,57 @@
           "end": "0x80223224"
         }
       ]
+    },
+    {
+      "source": "src/engine/yuvconv.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801DB900-0x801DC9C8, function and name rows of the six yuvconv functions, the luty/lutcb/lutcr data rows and the engine_c compiler row. YUV_convert_RGBA is exact; yuvtoRGBA32_C, yuvtoRGB32_C and yuvtoA32_C differ only in the scheduling of the first luty lookup (hoisted above the chroma struct copies) and the registers that follow; YUV_convert and YUV_convert_noscale keep more values live in the target (x and y spilled, line address recomputed per pass).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801DB900",
+          "end": "0x801DC9C8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7CA0",
+          "end": "0x802F94A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "YUV_convert",
+          "start": "0x801DB900",
+          "end": "0x801DBEB4"
+        },
+        {
+          "symbol": "YUV_convert_noscale",
+          "start": "0x801DBEB4",
+          "end": "0x801DC1C4"
+        },
+        {
+          "symbol": "yuvtoRGB32_C",
+          "start": "0x801DC1C4",
+          "end": "0x801DC42C"
+        },
+        {
+          "symbol": "yuvtoA32_C",
+          "start": "0x801DC42C",
+          "end": "0x801DC584"
+        },
+        {
+          "symbol": "yuvtoRGBA32_C",
+          "start": "0x801DC584",
+          "end": "0x801DC86C"
+        },
+        {
+          "symbol": "YUV_convert_RGBA",
+          "start": "0x801DC86C",
+          "end": "0x801DC9C8"
+        }
+      ]
     }
   ]
 }

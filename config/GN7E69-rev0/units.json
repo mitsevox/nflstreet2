@@ -510,6 +510,18 @@
     }
   },
   "externals": {
+    "YUV_convert": {
+      "address": "0x801DB900",
+      "evidence": "evidence.tsv function and related name rows at 0x801DB900. render.c calls the original-byte YUV_convert provider (yuvconv.c is a registered comparison)."
+    },
+    "YUV_convert_noscale": {
+      "address": "0x801DBEB4",
+      "evidence": "evidence.tsv function and name rows at 0x801DBEB4. render.c calls the original-byte YUV_convert_noscale provider (yuvconv.c is a registered comparison)."
+    },
+    "YUV_convert_RGBA": {
+      "address": "0x801DC86C",
+      "evidence": "evidence.tsv function and related name rows at 0x801DC86C. LLUIGFmv.c calls the original-byte YUV_convert_RGBA provider (yuvconv.c is a registered comparison)."
+    },
     "ColorRampEval": {
       "address": "0x801E0844",
       "evidence": "evidence.tsv function, related name, and holdout rows at 0x801E0844. The particle update calls the original-byte ColorRampEval provider."
