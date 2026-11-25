@@ -525,8 +525,9 @@ int fn_80133EE8(Object_80039F5C *p)
             fn_80133BB4(p, other);
         } else
             s->mUnknown4 = 99999.0f;
-        if ((unsigned int)(p->mUnknown2914 - 1) > 1 || block->mUnknown0 != 2 ||
-            !(fabsf(other->mMotion.mPos.mY - p->mMotion.mPos.mY) >= 5.0f)) apply = 1;
+        if ((unsigned int)(p->mUnknown2914 - 1) <= 1 && block->mUnknown0 == 2) {
+            if (!(fabsf(other->mMotion.mPos.mY - p->mMotion.mPos.mY) >= 5.0f)) apply = 1;
+        } else apply = 1;
         if (apply) {
             p->mUnknown512.mUnknown14 = 3;
             p->mUnknown512.mUnknown4 = s->mUnknownC & 0xFFFFFF;
