@@ -27,6 +27,13 @@ BUILD = ROOT / "build" / "source"
 NEUTRAL = re.compile(r"(?:fn|lbl)_([0-9A-F]{8})")
 SAFE_PATH = re.compile(r"[A-Za-z0-9_./+-]+")
 LINKER_SYMBOLS = {"__start", "_SDA_BASE_", "_SDA2_BASE_"}
+# SN's ngcld defines _f_<section> and _e_<section> at the first and last byte of each output
+# section; start-up code that clears .bss and .sbss names them. A configured external of that form
+# is given to the linker as an absolute symbol, like the out-of-image addresses, and owns no bytes.
+LINKER_BOUNDARY = re.compile(r"_[fe]_[A-Za-z0-9_]+")
+# The entry symbol is defined by the link script unless a linked unit (the start-up code) defines
+# it; that definition must lie at the target's entry address.
+ENTRY_SYMBOL = "__start"
 LINK_TIMEOUT = 600
 # A unit with holdouts compiles each function into its own section, so a holdout's code can be
 # left out of the link while every other function keeps its bytes (holdout_object). The flag
@@ -1289,7 +1296,7 @@ def plan(sections, units, objects, externals):
                 raise ValueError(f"{unit['source']}: {symbol['name']} is defined outside a placed section")
             final = by_index[symbol["shndx"]]["start"] + symbol["value"]
             name = symbol["name"]
-            if name in defined or name in externals or name in LINKER_SYMBOLS:
+            if name in defined or name in externals or (name in LINKER_SYMBOLS and name != ENTRY_SYMBOL):
                 raise ValueError(f"{unit['source']}: symbol {name} is already defined elsewhere")
             match = NEUTRAL.fullmatch(name)
             if match and int(match[1], 16) != final:
@@ -1350,6 +1357,9 @@ def plan(sections, units, objects, externals):
                     raise ValueError(f"{unit['source']}: folded reference {name} is ambiguous")
             elif name in defined:
                 continue
+            elif name in LINKER_SYMBOLS and name != ENTRY_SYMBOL:
+                # _SDA_BASE_ and _SDA2_BASE_ are defined by the link script (link_script).
+                continue
             elif name in held:
                 value = held[name]
             elif name in externals:
@@ -1360,6 +1370,8 @@ def plan(sections, units, objects, externals):
                 raise ValueError(f"{unit['source']}: unresolved symbol {name}")
             resolved[name] = value
     for name, value in sorted(resolved.items()):
+        if linker_absolute(name, value, sections, externals):
+            continue
         owner = None
         for section in sections:
             items = pieces[section["name"]]
@@ -1393,13 +1405,18 @@ def kept_fold(units, unit, name, value, defined, externals):
     return (other.get("kept_locals") or {}).get(name[len(folded_reference("")):]) == value
 
 
+def linker_absolute(name, value, sections, externals):
+    """Whether external `name` is given to the linker as an absolute symbol (see link_script)."""
+    return name in externals and (outside_image(sections, value) or bool(LINKER_BOUNDARY.fullmatch(name)))
+
+
 def outside_image(sections, value):
     """Whether an address lies before or after every target section (not in a gap between them)."""
     return value < min(s["start"] for s in sections) or value > max(s["end"] for s in sections)
 
 
-def link_script(target, sections, pieces, absolute=None):
-    lines = ["ENTRY(__start)", "SECTIONS {", f"__start = {target['entry']};",
+def link_script(target, sections, pieces, absolute=None, entry_defined=False):
+    lines = ["ENTRY(__start)", "SECTIONS {"] + ([] if entry_defined else [f"__start = {target['entry']};"]) + [
              f"_SDA_BASE_ = {target['sda_base']};", f"_SDA2_BASE_ = {target['sda2_base']};"]
     lines += [f"{name} = 0x{value:08X};" for name, value in sorted((absolute or {}).items())]
     for section in sections:
@@ -1874,8 +1891,11 @@ def build(original, manifest_path, report_path, cache=None):
     check_basenames(inputs)
     script = BUILD / "link.ld"
     absolute = {name: value for name, value in resolved.items()
-                if name in externals and outside_image(sections, value)}
-    script.write_text(link_script(target, sections, pieces, absolute))
+                if linker_absolute(name, value, sections, externals)}
+    entry = defined.get(ENTRY_SYMBOL)
+    if entry is not None and entry[0] != address(target["entry"]):
+        raise ValueError(f"{entry[1]}: {ENTRY_SYMBOL} is placed at 0x{entry[0]:08X}, not at the entry {target['entry']}")
+    script.write_text(link_script(target, sections, pieces, absolute, entry_defined=entry is not None))
     elf, output = BUILD / "main.elf", BUILD / "main.dol"
     linker_flags = []
     if strip_unused:

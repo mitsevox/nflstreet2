@@ -274,6 +274,35 @@ class Placement(Fixture):
         pieces, _, _ = self.plan(self.objects(symbols=[{"name": "lbl_80004020", "value": 0, "shndx": 0}]))
         self.assertEqual(pieces[".data2"][-1]["symbols"], [{"name": "lbl_80004020", "value": 0x14}])
 
+    def test_linker_section_bounds_are_absolute_even_at_a_source_unit(self):
+        # SN's _f_<section>/_e_<section> bounds own no bytes, so one may equal a unit's first byte;
+        # any other external there still has to name that unit's own symbol.
+        manifest = copy.deepcopy(self.manifest)
+        manifest["externals"] = {"_f_init": {"address": "0x80003110", "evidence": "x"},
+                                 "Inside": {"address": "0x80003110", "evidence": "x"}}
+        pieces, _, resolved = self.plan(self.objects(symbols=[{"name": "_f_init", "value": 0, "shndx": 0}]),
+                                        manifest)
+        self.assertEqual(resolved["_f_init"], 0x80003110)
+        self.assertFalse(any(s["name"] == "_f_init" for p in pieces[".init"] for s in p.get("symbols", ())))
+        self.assertTrue(sb.linker_absolute("_f_init", 0x80003110, self.sections, sb.load_manifest(
+            manifest, self.sections, "3.9.3")[1]))
+        with self.assertRaisesRegex(ValueError, "inside source unit"):
+            self.plan(self.objects(symbols=[{"name": "Inside", "value": 0, "shndx": 0}]), manifest)
+
+    def test_start_up_code_may_define_the_entry_symbol(self):
+        symbols = [{"name": "__start", "value": 0, "shndx": 1, "type": 2},
+                   {"name": "_SDA_BASE_", "value": 0, "shndx": 0}]
+        _, defined, resolved = self.plan(self.objects(symbols=symbols))
+        self.assertEqual(defined["__start"], (0x80003110, "src/unit.c"))
+        self.assertNotIn("_SDA_BASE_", resolved)
+        script = sb.link_script(TARGET, self.sections, {s["name"]: [] for s in self.sections},
+                                entry_defined=True)
+        self.assertNotIn("__start =", script)
+        self.assertIn("ENTRY(__start)", script)
+        self.assertIn("_SDA_BASE_ = 0x80008000;", script)
+        with self.assertRaisesRegex(ValueError, "already defined"):
+            self.plan(self.objects(symbols=[{"name": "_SDA_BASE_", "value": 0, "shndx": 1, "type": 2}]))
+
     def test_definitions_cannot_collide_or_misstate_addresses(self):
         with self.assertRaisesRegex(ValueError, "neutral label fn_80003100"):
             self.plan(self.objects(symbols=[{"name": "fn_80003100", "value": 0, "shndx": 1}]))
