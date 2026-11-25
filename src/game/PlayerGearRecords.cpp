@@ -38,30 +38,33 @@ extern "C" int PlayerDbReadGear(Object_8008044C *object, PlayerGear_t *info)
     return result;
 }
 
+static inline void _PlayerGearWriteColumns(Object_8008044C *object, DbExpression *pExpression, DbColumnValue *list)
+{
+    DbQueryResult result;
+    DbTableRef tables[2];
+    DbColumnValue key[2];
+    key[0].Set(-1, object->mUnknown12, 0);
+    key[1].SetEnd();
+    TDbQryRetrieve(object->mUnknown0, 0, 0, key);
+    unsigned int table = object->mUnknown8;
+    unsigned int keyColumn = object->mUnknown12;
+    pExpression->Set(((unsigned long long)table << 32) | keyColumn, 0x10003, key[0].mValue);
+    tables[0].Set(object->mUnknown8);
+    tables[1].Set(-1);
+    TDbQrySetFirstRow(object->mUnknown4, tables, pExpression, list, &result, 0);
+}
+
 extern "C" void PlayerDbWriteGear(Object_8008044C *object, PlayerGear_t *info)
 {
     DbColumnValue columns[15];
     DbColumnValue *list = columns;
+    DbExpression expression;
     for (int i = 0; i < 14; ++i) {
         columns[i].mValue = info->mValues[i];
         columns[i].Set(0x59414C50, _PlayerGear_aColumnTags[i]);
     }
     columns[14].SetEnd();
-    {
-        DbExpression expression;
-        DbColumnValue key[2];
-        key[0].Set(-1, object->mUnknown12, 0);
-        key[1].SetEnd();
-        TDbQryRetrieve(object->mUnknown0, 0, 0, key);
-        unsigned int table = object->mUnknown8;
-        unsigned int keyColumn = object->mUnknown12;
-        expression.Set(((unsigned long long)table << 32) | keyColumn, 0x10003, key[0].mValue);
-        DbTableRef tables[2];
-        tables[0].Set(object->mUnknown8);
-        tables[1].Set(-1);
-        DbQueryResult result;
-        TDbQrySetFirstRow(object->mUnknown4, tables, &expression, list, &result, 0);
-    }
+    _PlayerGearWriteColumns(object, &expression, list);
     DbCursorSetInt(object, 0x4C554C50, info->mUnknown00);
     DbCursorSetInt(object, 0x4C574C50, info->mUnknown01);
     DbCursorSetInt(object, 0x524F4850, info->mUnknown02);
