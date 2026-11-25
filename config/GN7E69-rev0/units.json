@@ -4334,6 +4334,25 @@
       ]
     },
     {
+      "source": "src/game/IdctPairedSingle.c",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801AA2FC-0x801AA634 (src/game/IdctPairedSingle.c), its function, name, data and source-form rows; the whole file is linked: the paired-single IDCT routines 0x801AA2FC-0x801AA634 and the cosine table 0x802F3B40-0x802F3B60.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AA2FC",
+          "end": "0x801AA634"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F3B40",
+          "end": "0x802F3B60"
+        }
+      ]
+    },
+    {
       "source": "src/engine/dbocmt.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80229270-0x8022942C (src/engine/dbocmt.c), its function, name and data rows, the compiler and source-form rows of the range it was split from, the source-form row 0x80229270-0x802293A8 and the linker rows 0x802B2240-0x802B2268 and 0x802B227C-0x802B231C; every kept function exact, complete .text and .rodata 0x802B2138-0x802B231C (its query literals, with those of the three discarded functions) linked.",

@@ -82,7 +82,7 @@ int SNDI_parsetimbre(char **cursor, SNDIPATCHHEADER *header)
     patchValues[0x24] = 0;
     patchValues[0x25] = 1;
     sampleValues[0x85 - 0x80] = 0;
-    sampleValues[0x86 - 0x80] = 0;
+    sampleValues[0x86 - 0x80] = -1;
     sampleValues[0x88 - 0x80] = 0;
     sampleValues[0x9C - 0x80] = 0;
     sampleValues[0x89 - 0x80] = 0;
