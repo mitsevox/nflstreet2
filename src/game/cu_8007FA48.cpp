@@ -51,15 +51,20 @@ extern "C" int fn_8007FA48(int table, int column, int *out, unsigned short *coun
     unsigned short filled = 0;
     while (result == 0 && filled < *count) {
         result = TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
-        if (result != 0) break;
-        if (row > previous + 1) {
-            next = previous + 1;
-            while (result == 0 && next < row && filled < *count && next <= 0x7F14) {
-                out[filled++] = next++;
+        if (result == 0) {
+            if (row > previous + 1) {
+                next = previous + 1;
+                for (;;) {
+                    if (result != 0 || next >= row || filled >= *count || next > 0x7F14) goto gap_done;
+                    out[filled] = next;
+                    filled++;
+                    next++;
+                }
+            gap_done:;
             }
+            if (next > row) high = next; else high = row;
+            previous = row;
         }
-        high = next > row ? next : row;
-        previous = row;
     }
     int valid = 0;
     if (result == 0 || result == 23 || result == 21 || result == 20) valid = 1;
@@ -68,8 +73,14 @@ extern "C" int fn_8007FA48(int table, int column, int *out, unsigned short *coun
         else result = 0;
     } else if (cursor.mUnknown0 != 0) TDbSQLDestroyCursor(&cursor);
     if (result == 0 && filled < *count) {
-        next = high == 0x7FFF ? 0 : high + 1;
-        while (filled < *count && next <= 0x7F14) out[filled++] = next++;
+        if (high == 0x7FFF) next = 0; else next = high + 1;
+        for (;;) {
+            if (filled >= *count || next > 0x7F14) goto fill_done;
+            out[filled] = next;
+            filled++;
+            next++;
+        }
+    fill_done:;
     }
     *count = filled;
     return result;
