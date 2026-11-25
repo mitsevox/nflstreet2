@@ -61,6 +61,8 @@ int fn_80178320(void);
 unsigned int SyncRandGetRange(unsigned int, unsigned int);
 unsigned char PlayBookGetReceiver(int, unsigned char, unsigned char *);
 
+static inline int AngleSub(int a, int b) { return (a - b) & 0xFFFFFF; }
+
 void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, Point_8017886C point)
 {
     Object_800B26B0 *motion = &p->mMotion;
@@ -76,7 +78,7 @@ void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, 
             int angle = fn_80120794(motion, &other->mMotion,
                 &other->mMotion.mUnknown40, motion->mUnknown28,
                 other->mMotion.mUnknown28, other->mMotion.mUnknown32, distance);
-            if (((motion->mFacing - angle) & 0xFFFFFF) > 0x800000)
+            if (AngleSub(motion->mFacing, angle) > 0x800000)
                 aim->mUnknownC = (0xC00000 - (int)((float)(int)lbl_803EB160 * 46603.37890625f)) & 0xFFFFFF;
             else
                 aim->mUnknownC = (0xC00000 + (int)((float)(int)lbl_803EB160 * 46603.37890625f)) & 0xFFFFFF;
@@ -90,7 +92,7 @@ void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, 
         delta[1] = point.mY - 9.0f;
         Vec2Sub(delta, &motion->mPos, delta);
         aim->mUnknown10 = fn_801CFE40(delta[1], delta[0]);
-        aim->mUnknownC = (aim->mUnknown10 - 0x800000) & 0xFFFFFF;
+        aim->mUnknownC = AngleSub(aim->mUnknown10, 0x800000);
     }
 }
 
@@ -315,10 +317,9 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
                 int reverse = angle + 0x800000;
                 int gap = MathAngleDiff(reverse, toward);
                 if (gap < MathAngleDiff(s->mUnknownC, toward)) {
-                    int base = toward - 0x800000;
-                    if (((angle - base) & 0xFFFFFF) <= 0x7FFFFF && ((s->mUnknownC - toward) & 0xFFFFFF) <= 0x7FFFFF)
+                    if (AngleSub(angle, toward - 0x800000) <= 0x7FFFFF && AngleSub(s->mUnknownC, toward) <= 0x7FFFFF)
                         s->mUnknownC = toward + (MathAngleDiff(reverse, toward) * 3) / 4;
-                    else if (((angle - base) & 0xFFFFFF) > 0x800000 && ((s->mUnknownC - toward) & 0xFFFFFF) > 0x800000)
+                    else if (AngleSub(angle, toward - 0x800000) > 0x800000 && AngleSub(s->mUnknownC, toward) > 0x800000)
                         s->mUnknownC = toward - (MathAngleDiff(reverse, toward) * 3) / 4;
                 }
             }
@@ -384,7 +385,7 @@ void PlyrSteerAroundBlocker(Object_80039F5C *p, Object_80039F5C *, Aim_801327F4 
                 if (MathAngleDiff(angle, aim->mUnknownC) <= 0x271C70) {
                     float amount = distance * 0.4444444477558136f;
                     int turn;
-                    if (((angle - aim->mUnknownC) & 0xFFFFFF) > 0x800000)
+                    if (AngleSub(angle, aim->mUnknownC) > 0x800000)
                         turn = (int)((1.0f - amount) * 3495253.0f);
                     else
                         turn = (int)-((1.0f - amount) * 3495253.0f);
@@ -432,7 +433,7 @@ int fn_80133C50(Object_80039F5C *p)
             limit -= fabsf(p->mMotion.mPos.mX - fn_80177FE0().mX) * lbl_803EB15C;
             s->mUnknown4 = limit;
             s->mUnknown10 = p->mMotion.mFacing;
-            s->mUnknownC = (p->mMotion.mFacing - 0x800000) & 0xFFFFFF;
+            s->mUnknownC = AngleSub(p->mMotion.mFacing, 0x800000);
         } else {
             if (fn_8011F32C())
                 s->mUnknown4 = p->mMotion.mPos.mY;
