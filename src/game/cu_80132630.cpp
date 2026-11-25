@@ -427,9 +427,7 @@ int fn_80133C50(Object_80039F5C *p)
         s->mUnknown1A = 1;
         if (!(values.mY - p->mMotion.mPos.mY >= 2.0f)) {
             float limit = p->mMotion.mPos.mY - lbl_803EB158;
-            Point_8017886C current = fn_80177FE0();
-            float side = fabsf(p->mMotion.mPos.mX - current.mX);
-            limit -= side * lbl_803EB15C;
+            limit -= fabsf(p->mMotion.mPos.mX - fn_80177FE0().mX) * lbl_803EB15C;
             s->mUnknown4 = limit;
             s->mUnknown10 = p->mMotion.mFacing;
             s->mUnknownC = (p->mMotion.mFacing - 0x800000) & 0xFFFFFF;
@@ -466,11 +464,11 @@ int fn_80133C50(Object_80039F5C *p)
 
 int fn_80133EE8(Object_80039F5C *p)
 {
-    int result = 0;
+    int apply = 0;
     Object_80039F5C *ball = BallGetCurrentHolder();
     Mode_80133C50 *s = (Mode_80133C50 *)&p->mUnknown336;
     Block_8011E240 *block = &p->mBlock1032;
-    int apply = 0;
+    int result = 0;
     Message_800F01CC message;
     if (p == ball) {
         fn_8011E3EC(p, 0);
