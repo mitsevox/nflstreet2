@@ -646,10 +646,6 @@
       "address": "0x81780000",
       "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
     },
-    "EnableMetroTRKInterrupts": {
-      "address": "0x801AA7B8",
-      "evidence": "Original complete OSInit call instruction0x80238E70 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
     "GXSetGPMetric": {
       "address": "0x8025295C",
       "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
@@ -27404,6 +27400,163 @@
           "end": "0x802CC580"
         }
       ]
+    },
+    {
+      "source": "src/engine/ppcdown.c",
+      "profile": "engine_cpp_nosda",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AA640",
+          "end": "0x801AC6B0"
+        },
+        {
+          "section": ".data.snInMonitor",
+          "placement": ".data4",
+          "start": "0x802C2A50",
+          "end": "0x802C2A54"
+        },
+        {
+          "section": ".data.SN_ISI",
+          "placement": ".data4",
+          "start": "0x802C2A58",
+          "end": "0x802C2A5C"
+        },
+        {
+          "section": ".data.SN_DSI",
+          "placement": ".data4",
+          "start": "0x802C2A5C",
+          "end": "0x802C2A60"
+        },
+        {
+          "section": ".data.SN_ALIGNMENT",
+          "placement": ".data4",
+          "start": "0x802C2A60",
+          "end": "0x802C2A64"
+        },
+        {
+          "section": ".data.SN_BUFFERED_TTY",
+          "placement": ".data4",
+          "start": "0x802C2A64",
+          "end": "0x802C2A68"
+        },
+        {
+          "section": ".data.SN_FPE",
+          "placement": ".data4",
+          "start": "0x802C2A68",
+          "end": "0x802C2A6C"
+        },
+        {
+          "section": ".data.bConnected",
+          "placement": ".data4",
+          "start": "0x802C2A6C",
+          "end": "0x802C2A70"
+        },
+        {
+          "section": ".data.snCommAmcExi2",
+          "placement": ".data4",
+          "start": "0x802C2A70",
+          "end": "0x802C2A8C"
+        },
+        {
+          "section": ".data.snCommDB",
+          "placement": ".data4",
+          "start": "0x802C2A8C",
+          "end": "0x802C2AA8"
+        },
+        {
+          "section": ".data.snCommProView",
+          "placement": ".data4",
+          "start": "0x802C2AA8",
+          "end": "0x802C2AC4"
+        },
+        {
+          "section": ".data.snPPCHaltSignature",
+          "placement": ".data4",
+          "start": "0x802C2AC4",
+          "end": "0x802C2ADC"
+        },
+        {
+          "section": ".data.snCommandHandlers",
+          "placement": ".data4",
+          "start": "0x802C2AE0",
+          "end": "0x802C2B30"
+        },
+        {
+          "section": ".data.snStoppedPacket",
+          "placement": ".data4",
+          "start": "0x802C2B30",
+          "end": "0x802C2B38"
+        },
+        {
+          "section": ".data.snIntModeMessage",
+          "placement": ".data4",
+          "start": "0x802C2B38",
+          "end": "0x802C2B4B"
+        },
+        {
+          "section": ".data.snCmdReadError",
+          "placement": ".data4",
+          "start": "0x802C2B4C",
+          "end": "0x802C2B64"
+        },
+        {
+          "section": ".data.snBadCommand",
+          "placement": ".data4",
+          "start": "0x802C2B65",
+          "end": "0x802C2B7A"
+        },
+        {
+          "section": ".data.snWaitMessage",
+          "placement": ".data4",
+          "start": "0x802C2B7B",
+          "end": "0x802C2B84"
+        },
+        {
+          "section": ".data.snPauseMessage",
+          "placement": ".data4",
+          "start": "0x802C2B85",
+          "end": "0x802C2B9B"
+        },
+        {
+          "section": ".data.snPatchVectorError",
+          "placement": ".data4",
+          "start": "0x802C2B9C",
+          "end": "0x802C2BC1"
+        },
+        {
+          "section": ".data.snCommsErrorMessage",
+          "placement": ".data4",
+          "start": "0x802C2BC2",
+          "end": "0x802C2BCF"
+        },
+        {
+          "section": ".data.snDebugStack",
+          "placement": ".data4",
+          "start": "0x802C2BE0",
+          "end": "0x802C3C00"
+        },
+        {
+          "section": ".data.snDebugState",
+          "placement": ".data4",
+          "start": "0x802C3C00",
+          "end": "0x802CC308"
+        },
+        {
+          "section": ".data.snOSVectorCopy",
+          "placement": ".data4",
+          "start": "0x802CC308",
+          "end": "0x802CC40C"
+        },
+        {
+          "section": ".data.snDriveInfo",
+          "placement": ".data4",
+          "start": "0x802CC420",
+          "end": "0x802CC440"
+        }
+      ],
+      "evidence": "evidence.tsv ppcdown.c unit, assembly, compiler and source-form rows: the complete 0x2070-byte native text with all 47 assembly function symbols at their existing extents, and 24 native data objects (the .data objects 0x802C2A50-0x802C2BCF and the zero-initialized monitor stack, state block, OS vector copy and drive-inquiry buffer 0x802C2BE0-0x802CC440), each with its data and name rows. Zero words 0x802C2A54, 0x802C2ADC and 0x802CC40C-0x802CC420 and the string padding bytes stay unassigned. Both file edges keep their provisional grades."
     },
     {
       "source": "src/engine/fileserver.c",
