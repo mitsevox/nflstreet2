@@ -198,6 +198,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
 {
     Object_800B26B0 *motion = &p->mMotion;
     float distance;
+    Object_80039F5C *candidate;
     Vector_80039F5C location;
     s->mUnknown4 = 99999.0f;
     --s->mUnknown19;
@@ -213,7 +214,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
             unsigned char active;
             unsigned char index = PlayBookGetReceiver(p->mIdBytes[2], i, &active);
             if (index != 255 && active) {
-                Object_80039F5C *candidate = PlyrGet(p->mIdBytes[2], index);
+                candidate = PlyrGet(p->mIdBytes[2], index);
                 if (candidate->mMotion.mPos.mY < point.mY + 2.5f || candidate == ball) {
                     distance = Vec2Distance(&motion->mPos, &candidate->mMotion.mPos);
                     if (!(distance >= nearest)) {
@@ -225,20 +226,23 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
         }
     }
     float reference[2];
-    if (ball && (fn_801783AC(0) || !(ball->mFlags & 0x8000))) {
-        location = ball->mMotion.mPos;
-        reference[0] = location.mX;
-        reference[1] = location.mY;
-        if (fn_8011E188() <= 59) reference[1] = point.mY - 8.0f;
-    } else {
-        if (ball) {
-            location.mX = !(ball->mMotion.mPos.mX >= 0.0f) ? point.mX - 3.0f : point.mX + 3.0f;
-            location.mY = point.mY;
+    if (ball) {
+        if (fn_801783AC(0) || !(ball->mFlags & 0x8000)) {
+            location = ball->mMotion.mPos;
+            reference[0] = location.mX;
+            reference[1] = location.mY;
+            if (fn_8011E188() <= 59) reference[1] = point.mY - 8.0f;
         } else {
-            ball = BallGetCurrentTarget();
-            if (ball) location = ball->mMotion.mPos;
-            else BallGetPosition(BallGetCurrent(), &location);
+            if (!(ball->mMotion.mPos.mX >= 0.0f)) location.mX = point.mX - 3.0f;
+            else location.mX = point.mX + 3.0f;
+            location.mY = point.mY;
+            reference[0] = location.mX;
+            reference[1] = location.mY;
         }
+    } else {
+        ball = BallGetCurrentTarget();
+        if (ball) location = ball->mMotion.mPos;
+        else BallGetPosition(BallGetCurrent(), &location);
         reference[0] = location.mX;
         reference[1] = location.mY;
     }
@@ -263,7 +267,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
         int otherAngle = fn_801CFE40(delta[1], delta[0]);
         Vec2Sub(delta, &motion->mPos, reference);
         int angle = fn_801CFE40(delta[1], delta[0]);
-        if (!(s->mUnknown1B & 1) && fn_80132A4C(p, ball, other, point, location, angle, otherAngle, distance)) {
+        if ((s->mUnknown1B & 1) == 0 && fn_80132A4C(p, ball, other, point, location, angle, otherAngle, distance)) {
             s->mUnknown10 = toward;
             if (other->mUnknown1032 == 4 && MathAngleDiff(toward, motion->mFacing) <= 0x11C71C &&
                 MathAngleDiff(other->mMotion.mFacing, motion->mFacing) > 0x71C71B) goto finish;
@@ -299,8 +303,8 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
             goto finish;
         }
         float interceptionDistance;
-        Object_80039F5C *interceptor = fn_80124C28(p, &interceptionDistance, 0x2E38E3, distance, 0.2f, s->mUnknownC);
-        if (!interceptor || interceptor == other) {
+        candidate = fn_80124C28(p, &interceptionDistance, 0x2E38E3, distance, 0.2f, s->mUnknownC);
+        if (!candidate || candidate == other) {
             Vec2Sub(delta, &location, &motion->mPos);
             float ownDistance = Vec2Magnitude(delta);
             Vec2Sub(delta, &other->mMotion.mPos, &location);
