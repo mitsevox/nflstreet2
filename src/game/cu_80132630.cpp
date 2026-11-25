@@ -408,7 +408,8 @@ int fn_80133C50(Object_80039F5C *p)
     int *pRole = &p->mUnknown1032;
     int count = p->mpState->mUnknown1;
     float fraction = (float)(count & 31) * 0.032258063554763794f;
-    s->mUnknown14 = (int)(fraction * 60.0f) + (count >> 5) * 60;
+    s->mUnknown14 = (count >> 5) * 60;
+    s->mUnknown14 += (int)(fraction * 60.0f);
     if (s->mUnknown14 == 0)
         s->mUnknown18 = 0;
     else
