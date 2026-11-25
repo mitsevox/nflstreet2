@@ -131,9 +131,8 @@ int fn_80132A4C(Object_80039F5C *p, Object_80039F5C *ball, Object_80039F5C *othe
     return result;
 }
 
-void fn_80132C84(Object_80039F5C *p, Object_80039F5C *ball, Mode_80133C50 *s, float *location, Point_8017886C *values)
+void fn_80132C84(Object_80039F5C *p, Object_80039F5C *ball, Mode_80133C50 *s, Vector_80039F5C location, Point_8017886C point)
 {
-    Point_8017886C point = *values;
     Vector_80039F5C *pos = &p->mMotion.mPos;
     if (fn_8011F32C()) {
         s->mUnknown10 = 0x400000;
@@ -141,20 +140,20 @@ void fn_80132C84(Object_80039F5C *p, Object_80039F5C *ball, Mode_80133C50 *s, fl
         return;
     }
     float x;
-    if (!(location[0] >= 6.0f - fn_80178A08()))
+    if (!(location.mX >= 6.0f - fn_80178A08()))
         x = 6.0f - fn_80178A08();
-    else if (!(location[0] > fn_80178A08() - 6.0f))
-        x = location[0];
+    else if (!(location.mX > fn_80178A08() - 6.0f))
+        x = location.mX;
     else
         x = fn_80178A08() - 6.0f;
-    location[0] = x;
+    location.mX = x;
     float target[2];
     int n = p->mUnknown2914;
     if ((unsigned int)(n - 5) <= 4) {
         n -= 7;
         target[0] = x + (float)n * 2.0f;
         int magnitude = n < 0 ? -n : n;
-        target[1] = location[1] + (3.0f - (float)magnitude);
+        target[1] = location.mY + (3.0f - (float)magnitude);
         if (!(target[1] <= point.mY) && (ball->mMotion.mUnknown32 & 0xFFFFFF) > 0x800000)
             target[1] = pos->mY;
     } else if (s->mUnknown1B & 1) {
@@ -164,17 +163,17 @@ void fn_80132C84(Object_80039F5C *p, Object_80039F5C *ball, Mode_80133C50 *s, fl
         target[0] = x;
         if (!(pos->mX >= x)) target[0] = x - 2.0f;
         else target[0] = x + 2.0f;
-        target[1] = location[1] + 2.0f;
+        target[1] = location.mY + 2.0f;
     } else {
         target[0] = point.mX;
         target[1] = point.mY - 4.5f;
         if (!(pos->mX >= point.mX)) {
-            if (!(pos->mY <= location[1] + 0.5f)) {
+            if (!(pos->mY <= location.mY + 0.5f)) {
                 target[0] -= 0.6666666865348816f;
                 target[1] -= 0.5f;
             } else target[0] -= 2.0f;
         } else {
-            if (!(pos->mY <= location[1] + 0.5f)) {
+            if (!(pos->mY <= location.mY + 0.5f)) {
                 target[0] += 0.6666666865348816f;
                 target[1] -= 0.5f;
             } else target[0] += 2.0f;
@@ -199,6 +198,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
 {
     Object_800B26B0 *motion = &p->mMotion;
     float distance;
+    Vector_80039F5C location;
     s->mUnknown4 = 99999.0f;
     --s->mUnknown19;
     if (!(s->mUnknown19 & 0x80)) return;
@@ -224,24 +224,21 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
             }
         }
     }
-    Vector_80039F5C location;
     float reference[2];
-    if (ball) {
-        if (fn_801783AC(0) || !(ball->mFlags & 0x8000)) {
-            location = ball->mMotion.mPos;
-            reference[0] = location.mX;
-            reference[1] = location.mY;
-            if (fn_8011E188() <= 59) reference[1] = point.mY - 8.0f;
-        } else {
+    if (ball && (fn_801783AC(0) || !(ball->mFlags & 0x8000))) {
+        location = ball->mMotion.mPos;
+        reference[0] = location.mX;
+        reference[1] = location.mY;
+        if (fn_8011E188() <= 59) reference[1] = point.mY - 8.0f;
+    } else {
+        if (ball) {
             location.mX = !(ball->mMotion.mPos.mX >= 0.0f) ? point.mX - 3.0f : point.mX + 3.0f;
             location.mY = point.mY;
-            reference[0] = location.mX;
-            reference[1] = location.mY;
+        } else {
+            ball = BallGetCurrentTarget();
+            if (ball) location = ball->mMotion.mPos;
+            else BallGetPosition(BallGetCurrent(), &location);
         }
-    } else {
-        ball = BallGetCurrentTarget();
-        if (ball) location = ball->mMotion.mPos;
-        else BallGetPosition(BallGetCurrent(), &location);
         reference[0] = location.mX;
         reference[1] = location.mY;
     }
@@ -331,8 +328,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
             s->mUnknown19 = 2;
         }
     } else if (ball) {
-        float location2[2] = {location.mX, location.mY};
-        fn_80132C84(p, ball, s, location2, &point);
+        fn_80132C84(p, ball, s, location, point);
     }
 finish:
     PlyrSteerAroundBlocker(p, ball, (Aim_801327F4 *)s);
