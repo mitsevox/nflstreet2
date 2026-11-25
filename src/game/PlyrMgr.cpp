@@ -625,7 +625,8 @@ extern "C" void PlyrUpdateControlFlag(Object_80039F5C *p, int flag)
         value = 1;
     }
     pState[28] = value;
-    if (flag == 0 && (lbl_803EABA4->fn_800C0420(0) || lbl_803EABA4->fn_800C0420(1))
+    // FAKEMATCH: the unsigned char casts give the target's clrlwi after each call; the result is 0 or 1 either way.
+    if (flag == 0 && ((unsigned char)lbl_803EABA4->fn_800C0420(0) || (unsigned char)lbl_803EABA4->fn_800C0420(1))
         && (fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF) && PlyrStarGetRingsShown() == 1
         && (((PlyrModelView_t *)p->mpUnknown4)->mFlags & 1) && PassIconsAreShown() && fn_80178308() == p->mIdBytes[2]) {
         unsigned char i;

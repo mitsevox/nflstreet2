@@ -30978,7 +30978,7 @@ int PreSnapPhase::fn_800C0414()
     return lbl_803EABA8->mUnknown40;
 }
 
-unsigned char PreSnapPhase::fn_800C0420(int index)
+int PreSnapPhase::fn_800C0420(int index)
 {
     return lbl_803EABA8->mSlots[index].mUnknown0 == 4;
 }

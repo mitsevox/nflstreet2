@@ -26,7 +26,7 @@ public:
     void fn_800C02EC(short value);
     void fn_800C02F8(int value);
     int fn_800C0414();
-    unsigned char fn_800C0420(int index);
+    int fn_800C0420(int index);
     unsigned char fn_800C043C(int index);
     int fn_800C0458();
 };

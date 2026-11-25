@@ -19151,19 +19151,13 @@
     },
     {
       "source": "src/game/PlyrMgr.cpp",
-      "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8003830C-0x8003AEA8. PlyrRouteShow links with the two adjacent runs. PlyrUpdateControlFlag keeps its original bytes. The whole native data sections remain linked.",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8003830C-0x8003AEA8; the whole file is linked: all 54 functions exact, with the native .rodata, .data and .sdata sections.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8003830C",
-          "end": "0x8003962C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8003977C",
           "end": "0x8003AEA8"
         },
         {
@@ -19184,16 +19178,7 @@
           "start": "0x803EA3F0",
           "end": "0x803EA3FC"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "PlyrUpdateControlFlag",
-            "evidence": "evidence.tsv source-form 0x8003962C-0x8003977C"
-          }
-        ],
-        "evidence": "evidence.tsv source-form 0x8003962C-0x8003977C records the boundary with the shared PreSnap return declaration."
-      }
+      ]
     },
     {
       "source": "src/game/PlyrRender.cpp",
