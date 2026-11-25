@@ -15,7 +15,7 @@ void fn_8007BA88(DbCursor *pCursor, int value);
 void fn_8007BB04(DbCursor *pCursor);
 int fn_8007BBFC(DbCursor *pCursor, int key, int *pResult);
 int PlayerRecordCreate(int a, int b, int mode, int c);
-void fn_80080138(int a, int b, int mode);
+void PlayerRecordCopyTeam(int a, int b, int mode);
 int fn_8008058C(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
 void fn_80080874(int which);
 int PlayerDbGetId(Object_8008044C *pObject);
@@ -268,12 +268,12 @@ int fn_80082414(int index)
 
 void fn_80082534(int a, int b)
 {
-    fn_80080138(a, b, 0);
+    PlayerRecordCopyTeam(a, b, 0);
 }
 
 void fn_80082558(int a, int b)
 {
-    fn_80080138(a, b, 1);
+    PlayerRecordCopyTeam(a, b, 1);
 }
 
 }

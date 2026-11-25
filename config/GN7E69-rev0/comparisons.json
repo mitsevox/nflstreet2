@@ -11352,7 +11352,7 @@
           "end": "0x80080138"
         },
         {
-          "symbol": "fn_80080138",
+          "symbol": "PlayerRecordCopyTeam",
           "start": "0x80080138",
           "end": "0x8008040C"
         },

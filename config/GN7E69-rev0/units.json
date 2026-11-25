@@ -1442,6 +1442,10 @@
       "address": "0x8007FC70",
       "evidence": "evidence.tsv function/name rows for 0x8007FC70 (target extent, inferred name); called from other files while its own file is unlinked."
     },
+    "PlayerRecordCopyTeam": {
+      "address": "0x80080138",
+      "evidence": "evidence.tsv function/name rows for 0x80080138 (target extent, inferred name); called from other files while its own file is unlinked."
+    },
     "UIGLibTextObjAction": {
       "address": "0x80222220",
       "evidence": "evidence.tsv function/name rows for 0x80222220 (target extent, inferred name); called from other files while its own file is unlinked."
