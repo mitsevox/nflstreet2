@@ -198,6 +198,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
 {
     Object_800B26B0 *motion = &p->mMotion;
     float distance;
+    float nearest;
     Object_80039F5C *candidate;
     Vector_80039F5C location;
     s->mUnknown4 = 99999.0f;
@@ -209,7 +210,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
     s->mUnknown19 = (255 - scaled) >> 6;
     Object_80039F5C *ball = BallGetCurrentHolder();
     if (s->mUnknown1B & 1) {
-        float nearest = 999.0f;
+        nearest = 999.0f;
         for (unsigned char i = 0; i <= 2; ++i) {
             unsigned char active;
             unsigned char index = PlayBookGetReceiver(p->mIdBytes[2], i, &active);
@@ -306,10 +307,10 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, P
         candidate = fn_80124C28(p, &interceptionDistance, 0x2E38E3, distance, 0.2f, s->mUnknownC);
         if (!candidate || candidate == other) {
             Vec2Sub(delta, &location, &motion->mPos);
-            float ownDistance = Vec2Magnitude(delta);
+            nearest = Vec2Magnitude(delta);
             Vec2Sub(delta, &other->mMotion.mPos, &location);
             s->mUnknown8 = 0.7200000286102295f;
-            if (!(distance <= ownDistance) && !(distance >= Vec2Magnitude(delta)) &&
+            if (!(distance <= nearest) && !(distance >= Vec2Magnitude(delta)) &&
                 MathAngleDiff(otherAngle, angle) <= 0x5FFFFF) {
                 int reverse = angle + 0x800000;
                 int gap = MathAngleDiff(reverse, toward);
