@@ -1,3 +1,6 @@
+/* MAD video decoder inverse DCT: turns one 8x8 block of decoded picture coefficients back
+   into pixel values, a column pass then a row pass in 16.16 fixed point. */
+
 #include "engine/maddec.h"
 
 extern "C" {
