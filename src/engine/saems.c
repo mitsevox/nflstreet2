@@ -1,5 +1,7 @@
-/* Partial source of the sound library's module player (saems.c): the module state updaters,
-   bank and play-option setters, bank players and the Csis module callbacks. */
+/* The sound library's AEMS module player (saems.c): the AEMS audio-effect modules that drive the
+   game's sound effects (counters, random pickers, triggers, envelopes, tables, delay lines, math
+   and player modules), the per-voice bank and play-option setters they feed, the bank players,
+   the Csis class callbacks that create module instances, and the module bank registry. */
 
 #include "engine/sndaems.h"
 #include "engine/sndvoice.h"
