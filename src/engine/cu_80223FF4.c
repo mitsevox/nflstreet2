@@ -19,10 +19,11 @@
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 
-/* Partial source for the engine range 0x80223FF4-0x80225CBC (neutral file
-   name): curve strip geometry and the second node update and render set-up
-   path (small-data colours 0x803EBF70/0x803EBF74). Functions without a
-   body here keep their original bytes. */
+/* UI graphics arc node: the menu shape that draws a filled or ring-shaped
+   ellipse arc (start and end angle, radii, centre, segment count, two
+   colours blended along the arc) as a GX triangle fan or strip, with its
+   load, unload, update and action handlers. Functions without a body here
+   keep their original bytes. */
 
 typedef void Callback_8022482C(UIGNode_t *pNode, Int32 Index, Float32 *pCoord);
 
