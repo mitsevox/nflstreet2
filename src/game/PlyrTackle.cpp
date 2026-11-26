@@ -1216,14 +1216,15 @@ void PlyrAlignReset(Object_80039F5C *p)
     if (pInfo->mUnknown5 == 0) {
         fn_800FBB70();
     }
-    PlayBookFormation_t *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
+    // FAKEMATCH: one pointer local is reused for the formation record so its register is shared with the info record's (r28), as the target allocates them; logic unchanged.
+    pInfo = (Record_8011F4E0 *)PlayBookGetFormation(p->mIdBytes[2]);
     pMessage = fn_800AEE20(p);
     if (pMessage == 0) {
-        if (pTeam->mUnknown8.mUnknownF == 0) {
+        if (((PlayBookFormation_t *)pInfo)->mUnknown8.mUnknownF == 0) {
             pMessage = (Message_800F01CC *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]),
                 (p->mId >> 8) & 255, (p->mId >> 16) & 255);
         } else {
-            unsigned char index = PlaySetGetEntry(pTeam, p->mIdBytes[1], 0)->mUnknownB;
+            unsigned char index = PlaySetGetEntry((PlayBookFormation_t *)pInfo, p->mIdBytes[1], 0)->mUnknownB;
             pMessage = (Message_800F01CC *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
         }
     }

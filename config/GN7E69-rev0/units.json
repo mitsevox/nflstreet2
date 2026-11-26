@@ -3256,7 +3256,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800E579C",
+          "start": "0x800E55B8",
           "end": "0x800E5EA4"
         },
         {
@@ -3339,10 +3339,6 @@
           {
             "function": "PlyrAlignInput",
             "evidence": "evidence.tsv source-form 0x800E513C-0x800E55B8"
-          },
-          {
-            "function": "PlyrAlignReset",
-            "evidence": "evidence.tsv source-form 0x800E55B8-0x800E579C"
           },
           {
             "function": "PlyrEngageAiWinsShed",
