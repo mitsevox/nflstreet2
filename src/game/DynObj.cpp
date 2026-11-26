@@ -1581,8 +1581,8 @@ struct DynObjModelInstance_t {
 };
 
 extern "C" {
-DynObjChild **_DynObjChild_apList = 0;
-ObjParseFile_t *_ObjParse_aFiles = 0;
+DynObjChild **_DynObjChild_ppList = 0;
+ObjParseFile_t *_ObjParse_pFiles = 0;
 unsigned short _DynObjChild_uCount;
 unsigned short _DynObjChild_uMax;
 int _ObjParse_iFileCount;
@@ -1729,8 +1729,8 @@ void DynObjChildCreateList(int handle, int count)
 {
     ObjNewType_(31, 112, count, 0, 0);
     if (handle) ObjSetListObjFunc(handle, 31, 0, DynObjChildUpdate);
-    _DynObjChild_apList = (DynObjChild **)fn_801D2B7C(count * 4, 0, 0);
-    memset(_DynObjChild_apList, 0, count * 4);
+    _DynObjChild_ppList = (DynObjChild **)fn_801D2B7C(count * 4, 0, 0);
+    memset(_DynObjChild_ppList, 0, count * 4);
     SysGetLastError();
     _DynObjChild_uCount = 0;
     _DynObjChild_uMax = count;
@@ -1738,14 +1738,14 @@ void DynObjChildCreateList(int handle, int count)
 
 void DynObjChildDestroyList(int handle)
 {
-    if (_DynObjChild_apList) {
+    if (_DynObjChild_ppList) {
         for (unsigned short i = 0; i < _DynObjChild_uCount; i++) {
-            ObjRemoveFromList(handle, _DynObjChild_apList[i]);
-            VptTrashObject(_DynObjChild_apList[i]);
+            ObjRemoveFromList(handle, _DynObjChild_ppList[i]);
+            VptTrashObject(_DynObjChild_ppList[i]);
         }
         VptFlushObjectTrash();
-        fn_801D2BD0(_DynObjChild_apList);
-        _DynObjChild_apList = 0;
+        fn_801D2BD0(_DynObjChild_ppList);
+        _DynObjChild_ppList = 0;
     }
 }
 
@@ -1755,7 +1755,7 @@ void DynObjChildShutdown(int handle) { DynObjChildDestroyList(handle); VptFlushO
 void DynObjChildSpawn(BigObjDesc_t *pDesc, int handle, int first)
 {
     DynObjChild *p = ObjNewInList(handle, 31, 0, pDesc);
-    _DynObjChild_apList[_DynObjChild_uCount] = p;
+    _DynObjChild_ppList[_DynObjChild_uCount] = p;
     LightTrackerReset(&p->mTracker60);
     p->mWord68 = 0;
     p->mUnknown14.mX = pDesc->mUnknown132.mUnknown4;
@@ -1801,7 +1801,7 @@ int DynObjChildUpdate(DynObjChild *p) {
 int ObjParseFind(const char *pName)
 {
     for (int i = 0; i < _ObjParse_iFileCount; i++)
-        if (strcmp(pName, _ObjParse_aFiles[i].mName) == 0) return i;
+        if (strcmp(pName, _ObjParse_pFiles[i].mName) == 0) return i;
     return -1;
 }
 
@@ -1811,72 +1811,72 @@ int ObjParseOpen(void *pData, char *pName)
     if (id == -1) return -1;
     int index = ObjParseFind(pName);
     if (index == -1) {
-        strcpy(_ObjParse_aFiles[_ObjParse_iFileCount].mName, pName);
+        strcpy(_ObjParse_pFiles[_ObjParse_iFileCount].mName, pName);
         void *p = ResLoadToBuffer(pData, id, _ObjParse_pBufferNext);
-        _ObjParse_aFiles[_ObjParse_iFileCount].mpData = p;
-        _ObjParse_aFiles[_ObjParse_iFileCount].mpCursor = p;
+        _ObjParse_pFiles[_ObjParse_iFileCount].mpData = p;
+        _ObjParse_pFiles[_ObjParse_iFileCount].mpCursor = p;
         _ObjParse_pBufferNext = _ObjParse_pBufferNext + ResGetSize(pData, id) + 4;
-        _ObjParse_aFiles[_ObjParse_iFileCount].mId = id;
+        _ObjParse_pFiles[_ObjParse_iFileCount].mId = id;
         index = _ObjParse_iFileCount++;
-    } else _ObjParse_aFiles[index].mpCursor = _ObjParse_aFiles[index].mpData;
+    } else _ObjParse_pFiles[index].mpCursor = _ObjParse_pFiles[index].mpData;
     return index;
 }
 
-void ObjParseRewind(int handle) { _ObjParse_aFiles[handle].mpCursor = _ObjParse_aFiles[handle].mpData; }
+void ObjParseRewind(int handle) { _ObjParse_pFiles[handle].mpCursor = _ObjParse_pFiles[handle].mpData; }
 int ObjParseFindPath(int handle, const char *pKey) {
-    void *p = XmlFindPath(_ObjParse_aFiles[handle].mpCursor, pKey);
-    _ObjParse_aFiles[handle].mpCursor = p;
+    void *p = XmlFindPath(_ObjParse_pFiles[handle].mpCursor, pKey);
+    _ObjParse_pFiles[handle].mpCursor = p;
     if (p) return 1;
     return 0;
 }
 int ObjParseFindChild(int handle, const char *pKey) {
-    void *p = XmlFindInElement(_ObjParse_aFiles[handle].mpCursor, pKey);
-    _ObjParse_aFiles[handle].mpCursor = p;
+    void *p = XmlFindInElement(_ObjParse_pFiles[handle].mpCursor, pKey);
+    _ObjParse_pFiles[handle].mpCursor = p;
     if (p) return 1;
     return 0;
 }
 int ObjParseNext(int handle) {
-    void *p = XmlFindNext(_ObjParse_aFiles[handle].mpCursor);
-    _ObjParse_aFiles[handle].mpCursor = p;
+    void *p = XmlFindNext(_ObjParse_pFiles[handle].mpCursor);
+    _ObjParse_pFiles[handle].mpCursor = p;
     if (p) return 1;
     return 0;
 }
 int ObjParseGetString(int handle, const char *pKey, char *pText, int size) {
-    return XmlGetAttrString(_ObjParse_aFiles[handle].mpCursor, pKey, pText, size, "");
+    return XmlGetAttrString(_ObjParse_pFiles[handle].mpCursor, pKey, pText, size, "");
 }
-int ObjParseGetInt(int handle, const char *pKey) { return XmlGetAttrInt(_ObjParse_aFiles[handle].mpCursor, pKey, 0); }
-float ObjParseGetFloat(int handle, const char *pKey) { return XmlGetAttrFloat(_ObjParse_aFiles[handle].mpCursor, pKey, 0.0f); }
+int ObjParseGetInt(int handle, const char *pKey) { return XmlGetAttrInt(_ObjParse_pFiles[handle].mpCursor, pKey, 0); }
+float ObjParseGetFloat(int handle, const char *pKey) { return XmlGetAttrFloat(_ObjParse_pFiles[handle].mpCursor, pKey, 0.0f); }
 int ObjParseGetMatrix(int handle, const char *pKey, float *pValues) {
     float values[9];
     int i = 0;
-    if (XmlGetAttrFloats(_ObjParse_aFiles[handle].mpCursor, pKey, values, 9)) {
+    if (XmlGetAttrFloats(_ObjParse_pFiles[handle].mpCursor, pKey, values, 9)) {
         for (; i < 9; i++) pValues[i + i / 3] = values[i];
         return 1;
     }
     return 0;
 }
 unsigned char ObjParseGetFloats(int handle, const char *pKey, float *pValues, int count) {
-    return XmlGetAttrFloats(_ObjParse_aFiles[handle].mpCursor, pKey, pValues, count);
+    return XmlGetAttrFloats(_ObjParse_pFiles[handle].mpCursor, pKey, pValues, count);
 }
 int ObjParseGetVector(int handle, const char *pKey, float *pValues) {
     float values[3];
-    if (XmlGetAttrFloats(_ObjParse_aFiles[handle].mpCursor, pKey, values, 3)) {
+    if (XmlGetAttrFloats(_ObjParse_pFiles[handle].mpCursor, pKey, values, 3)) {
         pValues[0] = values[0]; pValues[1] = values[1]; pValues[2] = values[2]; return 1;
     }
     return 0;
 }
 void ObjParseInit(void) {
     _ObjParse_iFileCount = 0;
-    _ObjParse_aFiles = (ObjParseFile_t *)fn_801D2B7C(0x4B60, 4, 0);
-    memset(_ObjParse_aFiles, 0, 0x4B60);
+    _ObjParse_pFiles = (ObjParseFile_t *)fn_801D2B7C(0x4B60, 4, 0);
+    memset(_ObjParse_pFiles, 0, 0x4B60);
     _ObjParse_pBuffer = fn_801D2B7C(0x18000, 4, 0);
     memset(_ObjParse_pBuffer, 0, 0x18000);
     _ObjParse_pBufferNext = (char *)_ObjParse_pBuffer;
     BigObjEffectSlotsReset();
 }
-void ObjParseShutdown(void) { fn_801D2BD0(_ObjParse_aFiles); _ObjParse_aFiles = 0; fn_801D2BD0(_ObjParse_pBuffer); }
-int ObjParseGetCursor(int handle) { return (int)_ObjParse_aFiles[handle].mpCursor; }
-void ObjParseSetCursor(int handle, int position) { _ObjParse_aFiles[handle].mpCursor = (void *)position; }
+void ObjParseShutdown(void) { fn_801D2BD0(_ObjParse_pFiles); _ObjParse_pFiles = 0; fn_801D2BD0(_ObjParse_pBuffer); }
+int ObjParseGetCursor(int handle) { return (int)_ObjParse_pFiles[handle].mpCursor; }
+void ObjParseSetCursor(int handle, int position) { _ObjParse_pFiles[handle].mpCursor = (void *)position; }
 
 int DynObjDrawModel(DynObj *p, int mode)
 {

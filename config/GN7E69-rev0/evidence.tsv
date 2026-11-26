@@ -46976,7 +46976,7 @@ data	0x802CFD98	0x802CFDA4	_BigObj_apResetFuncs	inferred	exact	exact	Three .data
 name	0x802CFD98	-	_BigObj_apResetFuncs	inferred	-	-	Reset functions per reset mode (none, BigObjRestoreState, BigObjKeepInBounds).
 data	0x802CFDA4	0x802CFE34	_BigObj_aEventTypeNames	inferred	exact	exact	BigObjShortNameId_t[4] of src/game/DynObj.cpp .data: NONE 0, IDLE 1, COLLIDE 2, TRIGGER 3 (target bytes); searched by BigObjFindEventType 0x8004C440.
 name	0x802CFDA4	-	_BigObj_aEventTypeNames	inferred	-	-	Event type names (NONE, IDLE, COLLIDE, TRIGGER) that BigObjFindEventType searches.
-data	0x802CFE34	0x802D14C8	_BigObj_aEmotionStates	inferred	exact	exact	BigObjNameId_t[85] (68 bytes each) of src/game/DynObj.cpp .data: NONE -1 then the ANIM_STATE_ names (ANIM_STATE_POLEIDLE 0 ...) with their state ids (target bytes); searched by BigObjFindEmotionState 0x8004C2FC. The original-byte 0x800A1738 also forms 0x802D0014, inside entry 26.
+data	0x802CFE34	0x802D14C8	_BigObj_aEmotionStates	inferred	exact	exact	BigObjNameId_t[85] (68 bytes each) of src/game/DynObj.cpp .data: NONE -1 then the ANIM_STATE_ names (ANIM_STATE_POLEIDLE 0 ...) with their state ids (target bytes); searched by BigObjFindEmotionState 0x8004C2FC. data_owners.tsv lists fn_800A1738 as a user of 0x802D0014 (entry 7 +4); that is a scanner false positive: it pairs lis r31,0x802D at 0x800A18A4 with lfs f13,0x14(r31) at 0x800A18F8, but the lis path returns after stw r0,0x7C64(r31) at 0x800A1A40 and r31 at 0x800A18F8 is still the argument (mr r31,r3 at 0x800A1748); fn_800A1738 only forms 0x802D7C64.
 name	0x802CFE34	-	_BigObj_aEmotionStates	inferred	-	-	Animation state name table (ANIM_STATE_POLEIDLE ...) that BigObjFindEmotionState searches.
 data	0x802D14C8	0x802D1D48	_BigObj_aPartNames	inferred	exact	exact	BigObjNameId_t[32] of src/game/DynObj.cpp .data, starting NONE 100 (target bytes); searched by BigObjFindPartId 0x8004C204.
 name	0x802D14C8	-	_BigObj_aPartNames	inferred	-	-	Part name table that BigObjFindPartId searches.
@@ -47024,10 +47024,10 @@ data	0x803EA4EC	0x803EA4F0	_BigObj_fBoundsInset	inferred	exact	exact	.sdata floa
 name	0x803EA4EC	-	_BigObj_fBoundsInset	inferred	-	-	Distance inside the field limit that an off-field object is put back at.
 data	0x803EA4F0	0x803EA4F4	_BigObj_fBoundsJitter	inferred	exact	exact	.sdata float 2.0 of src/game/DynObj.cpp, used only by BigObjKeepInBounds: the scale of the SyncRandGetFloat term added to the inset (lfs at 0x8004B24C, 0x8004B2A8).
 name	0x803EA4F0	-	_BigObj_fBoundsJitter	inferred	-	-	Range of the random extra inset when an object is put back on the field.
-data	0x803EA4F4	0x803EA4F8	_DynObjChild_apList	inferred	exact	exact	.sdata pointer, initial 0, of src/game/DynObj.cpp: DynObjChildCreateList allocates the child object array, DynObjChildSpawn appends to it, DynObjChildDestroyList frees it.
-name	0x803EA4F4	-	_DynObjChild_apList	inferred	-	-	Array of spawned child objects.
-data	0x803EA4F8	0x803EA4FC	_ObjParse_aFiles	inferred	exact	exact	.sdata pointer, initial 0, of src/game/DynObj.cpp: ObjParseInit allocates and clears the 0x4B60-byte file table, ObjParseOpen fills entries, every ObjParse accessor indexes it by handle; ObjParseShutdown frees it.
-name	0x803EA4F8	-	_ObjParse_aFiles	inferred	-	-	Table of open object definition files (name, data, cursor, resource id) indexed by parse handle.
+data	0x803EA4F4	0x803EA4F8	_DynObjChild_ppList	inferred	exact	exact	.sdata pointer, initial 0, of src/game/DynObj.cpp: DynObjChildCreateList allocates the child object array, DynObjChildSpawn appends to it, DynObjChildDestroyList frees it.
+name	0x803EA4F4	-	_DynObjChild_ppList	inferred	-	-	Array of spawned child objects.
+data	0x803EA4F8	0x803EA4FC	_ObjParse_pFiles	inferred	exact	exact	.sdata pointer, initial 0, of src/game/DynObj.cpp: ObjParseInit allocates and clears the 0x4B60-byte file table, ObjParseOpen fills entries, every ObjParse accessor indexes it by handle; ObjParseShutdown frees it.
+name	0x803EA4F8	-	_ObjParse_pFiles	inferred	-	-	Table of open object definition files (name, data, cursor, resource id) indexed by parse handle.
 data	0x803EA4FC	0x803EA4FE	_DynObj_uModelCount	inferred	exact	exact	.sdata halfword, initial 0, of src/game/DynObj.cpp: number of entries of the model cache 0x8030869C, advanced by DynObjLoadModel and reset by DynObjModelCacheReset.
 name	0x803EA4FC	-	_DynObj_uModelCount	inferred	-	-	Number of cached models.
 data	0x803EA4FE	0x803EA500	_DynObj_uSkeletonCount	inferred	exact	exact	.sdata halfword, initial 0, of src/game/DynObj.cpp: number of entries of the skeleton cache 0x802D4974, advanced by DynObjLoadSkeleton and reset by DynObjSkeletonCacheReset.
