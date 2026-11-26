@@ -15544,6 +15544,13 @@
           "start": "0x8037F860",
           "end": "0x8037F880"
         }
+      ],
+      "storage": [
+        {
+          "symbol": "_Con_CurrentContext",
+          "start": "0x803ED624",
+          "end": "0x803ED628"
+        }
       ]
     },
     {
@@ -17175,6 +17182,13 @@
           "placement": ".text",
           "start": "0x801E1A20",
           "end": "0x801E1D44"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "Per_LLDriverData",
+          "start": "0x803ED664",
+          "end": "0x803ED668"
         }
       ]
     },

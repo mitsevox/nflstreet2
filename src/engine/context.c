@@ -40,7 +40,7 @@ static char *_pCon_Data;
 
 static SysCriticalSection_t _Context_CS;
 
-extern int lbl_803ED624;
+int _Con_CurrentContext;
 
 int MemFill(void *pDest, int size, int value, int width);
 
@@ -362,5 +362,5 @@ unsigned int ConGetChannelInfo(unsigned int channel, unsigned int type)
 
 int ConGetCurrentContext(void)
 {
-    return lbl_803ED624;
+    return _Con_CurrentContext;
 }
