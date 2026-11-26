@@ -8482,7 +8482,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8007BF60",
+            "function": "GearDbUpgradeItem",
             "evidence": "evidence.tsv source-form 0x8007BF60-0x8007C46C"
           }
         ],

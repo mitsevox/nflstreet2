@@ -166,13 +166,13 @@ void ChalOpenProgress(DbCursor *pObject, int value);
 void ChalReadMedalGoal(int id, ChalMedalGoal_t *pInfo);
 int ChalHasMedalGoal(Challenge_t *pRecord);
 
-int fn_8007BB4C(DbCursor *pCursor, int key, int *pResult);
-void fn_8007BA48(DbCursor *pCursor);
-void fn_8007BB04(DbCursor *pCursor);
-void fn_8007BE20(DbCursor *pCursor, char *pBuffer, int size);
-int fn_8007C46C(int key);
-int fn_8007C538(int id);
-int fn_8007C690(DbCursor *pCursor, short *pOut);
+int GearDbSeekKey(DbCursor *pCursor, int key, int *pResult);
+void GearDbOpen(DbCursor *pCursor);
+void GearDbClose(DbCursor *pCursor);
+void GearDbGetName(DbCursor *pCursor, char *pBuffer, int size);
+int GearDbGetCurrentKey(int key);
+int GearDbIsItemUnlocked(int id);
+int GearDbReadBoosts(DbCursor *pCursor, short *pOut);
 void GameOptionsSet(int a, int b);
 int fn_800A2178(void);
 int fn_800A7E40(unsigned char side);
@@ -651,7 +651,7 @@ int ChalGetProgress(int id, int *pA, int *pB)
 
                 ChalFindRecord(pCursor, id, 0);
                 ChalReadRecord(pCursor, &record, 1);
-                if (record.mUnknown1F4[0].mId == 8 && !fn_8007C538(record.mUnknown1F4[0].mUnknown4)) {
+                if (record.mUnknown1F4[0].mId == 8 && !GearDbIsItemUnlocked(record.mUnknown1F4[0].mUnknown4)) {
                     result = 0;
                 }
             }
@@ -788,7 +788,7 @@ int ChalGetGearReward(int id)
     int gear = 0;
 
     if (TDbCompilePerformOp(0, "use 'TATS' select 'GGHC' into \x85 from 'GUHC' where 'IGHC' = \x84\n", &gear, id) == 0) {
-        gear = fn_8007C46C(gear);
+        gear = GearDbGetCurrentKey(gear);
     } else {
         gear = 0;
     }
@@ -985,12 +985,12 @@ void ChalFormatGearReward(char *pBuffer, int size, int id)
     strnzcpy(pBuffer, "", size);
     gear = ChalGetGearReward(id);
     if (gear) {
-        fn_8007BA48(&cursor);
-        if (fn_8007BB4C(&cursor, gear, &key)) {
+        GearDbOpen(&cursor);
+        if (GearDbSeekKey(&cursor, gear, &key)) {
             int count;
 
-            fn_8007BE20(&cursor, name, 64);
-            count = fn_8007C690(&cursor, modifiers);
+            GearDbGetName(&cursor, name, 64);
+            count = GearDbReadBoosts(&cursor, modifiers);
             strncat(pBuffer, name, size);
             if (count) {
                 signed char i;
@@ -1018,7 +1018,7 @@ void ChalFormatGearReward(char *pBuffer, int size, int id)
         } else {
             strncat(pBuffer, "Unknown Gear Type", size);
         }
-        fn_8007BB04(&cursor);
+        GearDbClose(&cursor);
     } else {
         strncat(pBuffer, "Unknown Gear Type", size);
     }

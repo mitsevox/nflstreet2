@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "game/PlayerLookRecord.h"
-#include "game/Row_8007BC34.h"
+#include "game/GearDb.h"
 #include "game/PlaTex.h"
 
 static char *_PlaTex_apBodyTypeNames[4] = {"HEAVY", "MUSCULAR", "ATHLETIC", "ATHLETIC"};
@@ -25,9 +25,9 @@ static char _PlaTex_aaBodyPartNames[16][15] = {
 extern "C" {
 extern unsigned char gPlayerLookColorRemap[18];
 
-int PlaTexFindDynClut(Row_8007BC34 *pRow);
-int fn_8007BF14(int index);
-int fn_8007C67C(Row_8007BC34 *pRow);
+int PlaTexFindDynClut(GearRow_t *pRow);
+int GearDbGetSlotType(int index);
+int GearDbIsNumberItem(GearRow_t *pRow);
 int PlaDynClutFind(char *pName);
 int PlaTexCacheFindTexture(char *pName);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
@@ -66,7 +66,7 @@ void PlaTexApplyAwayColors(unsigned char *pColors, unsigned char flag)
     }
 }
 
-void PlaTexBuildPartIds(Row_8007BC34 *pRow, PlayerLook_t *pRecord, int *pIds, int *pPalettes, int slot)
+void PlaTexBuildPartIds(GearRow_t *pRow, PlayerLook_t *pRecord, int *pIds, int *pPalettes, int slot)
 {
     char name[82];
     char number[4];
@@ -74,7 +74,7 @@ void PlaTexBuildPartIds(Row_8007BC34 *pRow, PlayerLook_t *pRecord, int *pIds, in
     int i;
 
     palette = PlaTexFindDynClut(pRow);
-    if (fn_8007BF14(slot) == 6) {
+    if (GearDbGetSlotType(slot) == 6) {
         if (pRow->mUnknown52[10]) {
             int id;
 
@@ -145,9 +145,9 @@ int PlaTexIsAwayPart(int part)
     return part == 9;
 }
 
-int PlaTexIsNumberItem(Row_8007BC34 *pRow)
+int PlaTexIsNumberItem(GearRow_t *pRow)
 {
-    return fn_8007C67C(pRow);
+    return GearDbIsNumberItem(pRow);
 }
 
 void PlaTexBuildDefaultIds(int *pIds, PlayerLook_t *pRecord)
@@ -169,7 +169,7 @@ void PlaTexBuildDefaultIds(int *pIds, PlayerLook_t *pRecord)
     }
 }
 
-int PlaTexFindDynClut(Row_8007BC34 *pRow)
+int PlaTexFindDynClut(GearRow_t *pRow)
 {
     char name[47];
     int palette = -1;
