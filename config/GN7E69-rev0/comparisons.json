@@ -21683,27 +21683,33 @@
       ]
     },
     {
-      "source": "src/game/cu_80164B78.cpp",
+      "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp",
-      "evidence": "Target surveyed grouping and complete25-body/fullreadonly/storage/context evidence. Original source boundaries unknown; complete scratch target context retained without native storage definitions, unrepresented and uncredited, no padding.",
+      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp). Draft comparisons of the unlinked functions 0x80164B78-0x80166110 behind DECOMP_COMPARE; the linked head 0x80164568-0x80164B78 keeps its units.json placement and the original bytes stay linked for the drafts.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80164B78",
-          "end": "0x80167094"
+          "start": "0x80164568",
+          "end": "0x80166110"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802A4624",
-          "end": "0x802A4908"
+          "start": "0x802A4610",
+          "end": "0x802A4850"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB3B0",
+          "end": "0x803EB3B8"
         },
         {
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8031D2B8",
-          "end": "0x8031D360"
+          "end": "0x8031D370"
         }
       ],
       "functions": [
@@ -21811,7 +21817,34 @@
           "symbol": "fn_801660A0",
           "start": "0x801660A0",
           "end": "0x80166110"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayArt.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80166110-0x80167910 (src/game/PlayArt.cpp). Draft comparisons of the unlinked functions 0x80166110-0x80167094 behind DECOMP_COMPARE; the linked tail 0x80167094-0x80167910 keeps its units.json placement and the original bytes stay linked for the drafts.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80166110",
+          "end": "0x80167910"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4850",
+          "end": "0x802A4908"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031D38C",
+          "end": "0x8036167C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_80166110",
           "start": "0x80166110",

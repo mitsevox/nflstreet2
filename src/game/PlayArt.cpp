@@ -8,6 +8,17 @@
 #include "game/fn_800B65A0.h"
 
 #include "game/PlayArtPlayer.h"
+#include <math.h>
+#include "game/Object_80039F5C.h"
+#include "game/PlayBookDb.h"
+#include "game/PlayBookGetPlay.h"
+#include "game/PlaySet.h"
+#include "game/fn_800F06F4.h"
+#include "game/Message_800F01CC.h"
+#include "game/State_803EB098.h"
+#include "game/DbQueryTable.h"
+#include "game/TDbCompilePerformOp.h"
+#include "game/QueryStatus.h"
 
 static PlayArtPlayer_t _PlayArt_aPlayers[9][11];
 static unsigned char _PlayArt_aFlip[3][9];
@@ -163,3 +174,243 @@ void PlayArtResetTeam(int group)
     memset(_PlayArt_aStates[group], 0, sizeof(_PlayArt_aStates[group]));
 }
 }
+
+#if defined(DECOMP_COMPARE)
+extern "C" PlayArtVertex_t lbl_8031D2B8[], lbl_8031D308[];
+
+extern "C" {
+void Vec2Normalize(void *, void *);
+void fn_80165F78(PlayArtVertex_t *, PlayArtVertex_t *, int, int);
+void fn_801660A0(PlayArtVertex_t *, PlayArtVertex_t *, int);
+
+extern int lbl_802E9964[];
+extern PlayArtVertex_t lbl_802E98FC[];
+extern unsigned char lbl_802E98E0[][4], lbl_802E98F0[][3];
+extern unsigned char lbl_803EB3BB,lbl_803EB3BF,lbl_803EB3C3,lbl_803EB3C7,lbl_803EB3CB,lbl_803EB3CF;
+extern unsigned char lbl_803EB3D3,lbl_803EB3D7,lbl_803EB3DB,lbl_803EB3DF,lbl_803EB3E3,lbl_803EB3E7;
+extern unsigned char lbl_803EB3EB,lbl_803EB3EF,lbl_803EB3F3,lbl_803EB3F7,lbl_803EB3FB,lbl_803EB3FF,lbl_803EB403,lbl_803EB407,lbl_803EB40B;
+int fn_80177F70(void);
+int PauseIsOpen(void);
+void Vec2Add(void *, void *, void *);
+float Vec2Distance(void *, void *);
+int _TDbQrySelect(int, DbQueryTable *, DbFilter *, void *, int *, QueryResult *);
+int fn_801C2E18(char *, const char *, ...);
+int DbTextToTag(const char *);
+int fn_80178308(void);
+unsigned int fn_80178D18(int);
+int fn_80178D70(int);
+PlayBookFormation_t *PlayBookGetFormation(int);
+Record_8011F4E0 *fn_8011F4E0(void);
+Message_800F01CC *fn_800AEE20(Object_80039F5C *);
+void fn_800AEF74(Object_80039F5C *, Message_800F01CC *);
+void fn_800F0910(int, Message_800F01CC *);
+int fn_800AD9B4(void);
+int fn_801650DC(PlayBookPlay_t *);
+void fn_80164CE4(PlayBookPlay_t *, Object_80039F5C *, int);
+
+void fn_80166110(PlayArtVertex_t *points, PlayArtVertex_t *out, int width, int length)
+{
+    PlayArtVertex_t direction;
+    direction.mY = points[0].mY - points[1].mY;
+    direction.mX = points[0].mX - points[1].mX;
+    float magnitude = sqrtf(direction.mX * direction.mX + direction.mY * direction.mY);
+    if (magnitude != 0.0f) {direction.mX /= magnitude; direction.mY /= magnitude;}
+    PlayArtVertex_t side;
+    side.mX = -direction.mY;
+    side.mY = -direction.mX;
+    side.mX = side.mX * 0.5f * (float)width;
+    side.mY = side.mY * 0.5f * (float)width;
+    out[0].mX = points[0].mX + side.mX;
+    direction.mX = direction.mX * 0.5f * (float)length;
+    out[0].mY = points[0].mY - side.mY;
+    direction.mY = direction.mY * 0.5f * (float)length;
+    out[1].mX = points[0].mX - side.mX;
+    out[2].mX = out[0].mX + direction.mX;
+    out[2].mY = out[0].mY + direction.mY;
+    out[3].mX = out[1].mX + direction.mX;
+    out[1].mY = points[0].mY + side.mY;
+    out[3].mY = out[1].mY + direction.mY;
+}
+
+int PlayArtAddQuad(PlayArtVertex_t *out, int count, int, PlayArtVertex_t *quad)
+{
+    out[count++] = quad[0];
+    out[count++] = quad[1];
+    out[count++] = quad[3];
+    out[count++] = quad[2];
+    return count;
+}
+
+int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void *arrowBuffer,
+                void *kindBuffer, void *colorBuffer, int extend)
+{
+    PlayArtVertex_t *vertices = (PlayArtVertex_t *)vertexBuffer;
+    PlayArtVertex_t (*arrows)[4] = (PlayArtVertex_t (*)[4])arrowBuffer;
+    int *kinds = (int *)kindBuffer, *colors = (int *)colorBuffer;
+    PlayArtVertex_t starts[12], ends[13], controls[3], strip[20];
+    memset(controls, 0, 24);
+    int drawn = 0;
+    int count = 0;
+    memset(strip, 0, 160);
+    for (int i = 0; i <= 11; ++i) {
+        PlayArtStep_t *step = &record->mUnknown1C[i];
+        int arrowKind = step->mUnknown14;
+        kinds[i] = arrowKind;
+        colors[i] = step->mUnknown20;
+        int width = lbl_802E9964[step->mUnknown1C];
+        if (record->mUnknown4Word) {
+            int link = step->mUnknown18 == 15 ? i : step->mUnknown18;
+            if (!i) {starts[0].mX = record->mUnknown8; starts[0].mY = record->mUnknownC;}
+            else if (link == i) starts[i] = ends[i];
+            else starts[i] = ends[link+1];
+        }
+        int stop = 0;
+        PlayArtVertex_t zero = {0.0f, 0.0f};
+        if (step->mUnknown10 == 1) {
+            controls[0] = starts[i];
+            Vec2Add(&controls[1], &step->mUnknown0, starts);
+            Vec2Add(&controls[2], &step->mUnknown8, starts);
+            if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
+            if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
+            if (controls[2].mX < 4.0f) controls[2].mX = 4.0f; else if (!(controls[2].mX <= 116.0f)) controls[2].mX = 116.0f;
+            if (controls[2].mY < 4.0f) controls[2].mY = 4.0f; else if (!(controls[2].mY <= 96.0f)) controls[2].mY = 96.0f;
+            ends[i+1] = controls[2];
+            int samples = (int)(Vec2Distance(&controls[0], &controls[1]) * 0.175f + 2.0f);
+            if (samples > 8) samples = 8;
+            fn_80165F78(controls, strip, samples, width);
+            for (int j = 0; j < samples; ++j) {
+                vertices[count] = strip[j*2];
+                vertices[count+1] = strip[j*2+1];
+                count += 2;
+            }
+            drawn = 1;
+        } else if (step->mUnknown10 == 0) {
+            controls[0] = starts[i];
+            Vec2Add(&controls[1], &step->mUnknown0, starts);
+            if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
+            if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
+            ends[i+1] = controls[1];
+            fn_801660A0(controls, strip, width);
+            count = PlayArtAddQuad(vertices, count, capacity, strip);
+            if (fabsf(controls[0].mX - controls[1].mX) != zero.mX || fabsf(controls[0].mY - controls[1].mY) != zero.mY) drawn = 1;
+        } else if (step->mUnknown10 == 2) {
+            for (int j = 0; j < 2; ++j) {
+                controls[0] = starts[i];
+                if (!j) Vec2Add(&controls[1], &step->mUnknown0, starts);
+                else Vec2Add(&controls[1], &step->mUnknown8, starts);
+                if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
+                if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
+                ends[i+1] = controls[1];
+                fn_801660A0(controls, strip, width);
+                count = PlayArtAddQuad(vertices, count, capacity, strip);
+                if (fabsf(controls[0].mX - controls[1].mX) != zero.mX || fabsf(controls[0].mY - controls[1].mY) != zero.mY) drawn = 1;
+            }
+        } else if (step->mUnknown10 == -1) stop = 1;
+        if (arrowKind) {
+            if (!drawn && extend) {
+                controls[1] = starts[i];
+                starts[i].mY -= 8.0f;
+                controls[0] = starts[i];
+                if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
+                if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
+                ends[i+1] = controls[1];
+                fn_801660A0(controls, strip, width);
+                count = PlayArtAddQuad(vertices, count, capacity, strip);
+            }
+            PlayArtVertex_t axis[2];
+            if (step->mUnknown10 == 1) {axis[0] = controls[2]; axis[1] = controls[1];}
+            else {axis[0] = ends[i+1]; axis[1] = starts[i];}
+            if (fabsf(axis[0].mX - axis[1].mX) == 0.0f && fabsf(axis[0].mY - axis[1].mY) == 0.0f) {
+                axis[1].mX += 1.0f;
+                axis[1].mY += 1.0f;
+            }
+            if ((unsigned int)(step->mUnknown14 - 3) < 3) {
+                float x = lbl_802E98FC[kinds[i]].mX * 0.5f;
+                float y = lbl_802E98FC[kinds[i]].mY * 0.5f;
+                arrows[i][0].mX = axis[0].mX - x;
+                arrows[i][2].mX = axis[0].mX - x;
+                arrows[i][3].mY = axis[0].mY - y;
+                arrows[i][1].mY = axis[0].mY + y;
+                arrows[i][3].mX = axis[0].mX + x;
+                arrows[i][0].mY = axis[0].mY + y;
+                arrows[i][1].mX = axis[0].mX + x;
+                arrows[i][2].mY = axis[0].mY - y;
+            } else {
+                fn_80166110(axis, strip, (int)lbl_802E98FC[kinds[i]].mX, (int)lbl_802E98FC[kinds[i]].mY);
+                for (int j = 0; j < 4; ++j) arrows[i][j] = strip[j];
+            }
+        }
+        if (stop) break;
+    }
+    return count;
+}
+
+void fn_80166BE8(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *entry, int team, int index, unsigned char)
+{
+    unsigned char r = 130, g = 130, b = 130;
+    unsigned char secondaryR = 231, secondaryG = 217, secondaryB = 50;
+    unsigned char primaryR, primaryG, primaryB;
+    if (!fn_80177F70() && !PauseIsOpen()) {
+        primaryR = lbl_803EB3D3; primaryG = lbl_803EB3D7; primaryB = lbl_803EB3DB;
+    } else {
+        void *queue = fn_80164EC8(record, team, (unsigned short)index);
+        int found = 0;
+        for (unsigned char i = 0; i < 4; ++i) {
+            if (fn_800F06F4(0, queue, lbl_802E98E0[i][3], 0xFFFF) != 0xFFFF) {
+                secondaryR = lbl_802E98F0[i][0]; secondaryG = lbl_802E98F0[i][1]; secondaryB = lbl_802E98F0[i][2];
+                found = 1;
+                break;
+            }
+        }
+        if (!found) secondaryR = secondaryG = secondaryB = 255;
+        unsigned int kind = entry->mUnknown14Word;
+        int inherited = 1;
+        if (kind >= 5 && kind <= 9) {r = lbl_803EB3BB;g = lbl_803EB3C3;b = lbl_803EB3BF; inherited = 0;}
+        else if (kind >= 10 && kind <= 15) {r = lbl_803EB3DF;g = lbl_803EB3E3;b = lbl_803EB3E7; inherited = 0;}
+        else if (kind >= 16 && kind <= 18) {r = lbl_803EB3C7;g = lbl_803EB3CB;b = lbl_803EB3CF; inherited = 0;}
+        primaryR = r; primaryG = g; primaryB = b;
+        if (inherited) {
+            unsigned int play = record->mUnknown14;
+            int base = 0;
+            int select = 0;
+            if (play == 21) {
+                if (kind >= 19 && kind <= 20) {primaryR = lbl_803EB3D3;primaryG = lbl_803EB3D7;primaryB = lbl_803EB3DB;}
+                else base = 1;
+            } else if (play == 11 || play == 37) {if (!kind) base = 1;}
+            else if ((play >= 1 && play <= 5) || play == 38) select = 1;
+            else if (play >= 12 && play <= 18) {
+                primaryR = lbl_803EB3D3;primaryG = lbl_803EB3D7;primaryB = lbl_803EB3DB;
+                if (record->mUnknownC != index) base = 1;
+            }
+            if (select) {
+                int matched = 0;
+                for (unsigned char i = 0; i < 3; ++i) {
+                    if (record->mUnknown1C[i][0] == index) {
+                        int highlight = !kind;
+                        if (kind) highlight = fn_800F06F4(0, queue, 19, 0xFFFF) != 0xFFFF || fn_800F06F4(0, queue, 21, 0xFFFF) != 0xFFFF;
+                        if (highlight) {
+                            if (!i) {primaryR = lbl_803EB3EB;primaryG = lbl_803EB3EF;primaryB = lbl_803EB3F3;}
+                            else if (i == 1) {primaryR = lbl_803EB3F7;primaryG = lbl_803EB3FB;primaryB = lbl_803EB3FF;}
+                            else {primaryR = lbl_803EB403;primaryG = lbl_803EB407;primaryB = lbl_803EB40B;}
+                        } else base = 1;
+                        matched = 1;
+                        break;
+                    }
+                }
+                if (!matched) base = 1;
+            }
+            if (base) {primaryR = lbl_803EB3BB;primaryG = lbl_803EB3C3;primaryB = lbl_803EB3BF;}
+        }
+    }
+    state->mUnknown2020[index].r = primaryR;
+    state->mUnknown2020[index].g = primaryG;
+    state->mUnknown2020[index].b = primaryB;
+    state->mUnknown2020[index].a = 255;
+    state->mUnknown204C[index].r = secondaryR;
+    state->mUnknown204C[index].g = secondaryG;
+    state->mUnknown204C[index].b = secondaryB;
+    state->mUnknown204C[index].a = 255;
+}
+
+}
+#endif
