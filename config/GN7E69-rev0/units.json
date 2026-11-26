@@ -1132,15 +1132,19 @@
     },
     "MemCAsyncOpen": {
       "address": "0x801D4A3C",
-      "evidence": "evidence.tsv function and name rows for 0x801D4A3C (MemCAsyncOpen, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/cu_801D5D30.c (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x801D4A3C (MemCAsyncOpen, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/memcardmgr.c (n1e naming wave)."
     },
     "MemCAsyncDelete": {
       "address": "0x801D4FF4",
-      "evidence": "evidence.tsv function and name rows for 0x801D4FF4 (MemCAsyncDelete, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/cu_801D5D30.c (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x801D4FF4 (MemCAsyncDelete, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/memcardmgr.c (n1e naming wave)."
     },
     "MemCAsyncPoll": {
       "address": "0x801D5840",
-      "evidence": "evidence.tsv function and name rows for 0x801D5840 (MemCAsyncPoll, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/cu_801D5D30.c (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x801D5840 (MemCAsyncPoll, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/memcardmgr.c (n1e naming wave)."
+    },
+    "MemCardMgrGetSlotInfo": {
+      "address": "0x801D6B74",
+      "evidence": "evidence.tsv function and name rows for 0x801D6B74 (MemCardMgrGetSlotInfo, exact in the registered comparison src/engine/memcardmgr.c, original bytes linked); called by name from src/game/MemCardUI.cpp, MemCardFiles.cpp, MemCardCallbacks.cpp and MsgMemCardLoad.cpp (wave e2 lane e2b)."
     },
     "SNDPLATFORM_packetplay": {
       "address": "0x80274464",

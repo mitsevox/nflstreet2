@@ -151,7 +151,7 @@ int MemCardUIFindNthFile(int a, int count)
     int i;
 
     for (i = 0; i < fn_801D6B14(a); i++) {
-        if (fn_801D6B74((signed char)i, a, 0, 0, 0, 0, 0) != 0) {
+        if (MemCardMgrGetSlotInfo((signed char)i, a, 0, 0, 0, 0, 0) != 0) {
             count--;
         }
         if (count < 0) {
@@ -244,7 +244,7 @@ void MemCardUIDeleteFile(int a, int index)
     char name[32];
 
     fn_801D6754(a);
-    fn_801D6B74((signed char)index, a, name, 32, 0, -1, 0);
+    MemCardMgrGetSlotInfo((signed char)index, a, name, 32, 0, -1, 0);
     fn_801D6C70((signed char)index, a, other, 32);
     fn_801D67E4(name, other);
     fn_801D6838(index);
@@ -269,7 +269,7 @@ int MemCardUILoadFile(int a, int index)
     char name[32];
 
     fn_801D6754(a);
-    if (fn_801D6B74((signed char)index, a, name, 32, 0, -1, 0) != 0) {
+    if (MemCardMgrGetSlotInfo((signed char)index, a, name, 32, 0, -1, 0) != 0) {
         fn_801D6C70((signed char)index, a, other, 32);
         fn_801D67E4(name, other);
         fn_801D6838(index);
@@ -289,7 +289,7 @@ int MemCardUISelectFile(int a, int index)
     int result = 0;
 
     fn_801D6754(a);
-    fn_801D6B74((signed char)index, a, name, 32, 0, -1, 0);
+    MemCardMgrGetSlotInfo((signed char)index, a, name, 32, 0, -1, 0);
     fn_801D6C70((signed char)index, a, other, 32);
     fn_801D67E4(0, other);
     fn_801D6838(index);
@@ -310,7 +310,7 @@ int MemCardUISelectMarkedFile(int a, int index)
     int result = fn_801D6DA8(index, a);
 
     if (result != 0) {
-        fn_801D6B74((signed char)index, a, name, 17, 0, 0, 0);
+        MemCardMgrGetSlotInfo((signed char)index, a, name, 17, 0, 0, 0);
         fn_801D67E4(name, 0);
     }
     return result;
@@ -394,7 +394,7 @@ int MemCardUISaveFile(int a, int index, int b)
         ok = fn_801D6CF4("Options", 1, &flag) >= 0;
     } else if (MemCardFilesIsSlotSaved(a, b) != 0) {
         ok = fn_801D6CF4(path, a, &flag) >= 0;
-    } else if (fn_801D6B74((signed char)index, a, 0, 0, 0, -1, &flag) == 0 || flag != 0) {
+    } else if (MemCardMgrGetSlotInfo((signed char)index, a, 0, 0, 0, -1, &flag) == 0 || flag != 0) {
         MemCardFilesMakeName(a, path, 0);
     }
     fn_801D689C(path, "GN7E-69", (signed char)index, a, name, 32);
@@ -411,7 +411,7 @@ int MemCardUISaveOverFile(int a, int index, int b)
     int result;
 
     MemCardFilesSetSaveTarget(a, b);
-    result = fn_801D6B74((signed char)index, a, name, 32, 0, -1, 0);
+    result = MemCardMgrGetSlotInfo((signed char)index, a, name, 32, 0, -1, 0);
     if (result != 0) {
         fn_801D6C70((signed char)index, a, other, 32);
         fn_801D67E4(name, other);
@@ -448,7 +448,7 @@ int MemCardUICheckSaveSpace(int a, int b, int *pError)
     }
     if (ok) {
         for (i = 0; i < fn_801D6B14(a); i++) {
-            if (fn_801D6B74((signed char)i, a, 0, 0, 0, 0, 0) == 0) {
+            if (MemCardMgrGetSlotInfo((signed char)i, a, 0, 0, 0, 0, 0) == 0) {
                 break;
             }
         }

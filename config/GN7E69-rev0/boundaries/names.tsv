@@ -871,7 +871,6 @@ address	size	sibling_name	how	sibling_file	unit
 0x801D5764	124	MemCFormatCardType	name	memorycard.c	-
 0x801D57E0	68	MemCFormatPort	name	memorycard.c	-
 0x801D5840	1264	MemCAsyncPoll	name	memorycard.c	-
-0x801D5D30	8	MemCSetDeviceChangeCallback	gap	memorycard.c	-
 0x801D86B4	44	_MovieRcmpAllocMem__FPCciiii	name	moviercmp.cpp	moviercmp.cpp
 0x801D86E0	36	_MovieRcmpFreeMem__FPv	name	moviercmp.cpp	moviercmp.cpp
 0x801D8704	108	_MovieRcmpProcessAudio__FP20MovieRcmpAudioInfo_t	name	moviercmp.cpp	moviercmp.cpp

@@ -25926,9 +25926,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801D5D30.c",
+      "source": "src/engine/memcardmgr.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D5D30-0x801D86B4 (src/engine/cu_801D5D30.c) and its function rows. Draft comparisons only; original assembly remains linked. Strings and the .data/.sdata state stay extern (lbl_); fn_801D5EC0, fn_801D6180, fn_801D6B74, fn_801D6F58 and fn_801D84DC have no draft yet.",
+      "evidence": "evidence.tsv compiler row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c) and its function rows. Draft comparisons only; original assembly remains linked. Strings and the .data/.sdata state stay extern (lbl_); fn_801D6F58 (the 5272-byte card state machine) has no draft yet.",
       "sections": [
         {
           "section": ".text",
@@ -25952,6 +25952,16 @@
           "symbol": "fn_801D5E08",
           "start": "0x801D5E08",
           "end": "0x801D5EC0"
+        },
+        {
+          "symbol": "MemCardMgrBuildSlotTables",
+          "start": "0x801D5EC0",
+          "end": "0x801D6180"
+        },
+        {
+          "symbol": "MemCardMgrUpdateProbe",
+          "start": "0x801D6180",
+          "end": "0x801D6294"
         },
         {
           "symbol": "fn_801D6294",
@@ -26134,6 +26144,11 @@
           "end": "0x801D6B74"
         },
         {
+          "symbol": "MemCardMgrGetSlotInfo",
+          "start": "0x801D6B74",
+          "end": "0x801D6C70"
+        },
+        {
           "symbol": "fn_801D6C70",
           "start": "0x801D6C70",
           "end": "0x801D6CB8"
@@ -26207,6 +26222,11 @@
           "symbol": "fn_801D84B8",
           "start": "0x801D84B8",
           "end": "0x801D84DC"
+        },
+        {
+          "symbol": "MemCardMgrFormatDate",
+          "start": "0x801D84DC",
+          "end": "0x801D85A8"
         },
         {
           "symbol": "fn_801D85A8",
