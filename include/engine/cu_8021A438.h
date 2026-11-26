@@ -84,8 +84,8 @@ extern "C" {
 #endif
 
 /* src/engine/UIGColorStyle.c and src/engine/uigrender.c */
-Int32 fn_80220B4C(Int32 a, Int32 b);
-void fn_80220BE0(void);
+Int32 UIGCSGetColorStyle(Int32 a, Int32 b);
+void UIGCSResetColorStyleCache(void);
 void UIGRenderSwapPalette(Int32 a, Int32 b, Int32 c);
 void UIGRenderRestorePalette(Int32 a, Int32 b, Int32 c);
 void UIGRenderSetActive(Int32 a);

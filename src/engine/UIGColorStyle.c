@@ -22,12 +22,12 @@
    can recolour their corners and glyphs by palette index; and resets that
    cache. The lookup is a documented holdout and keeps its original bytes. */
 
-static Int32 lbl_803ECFFC;
-static Int32 lbl_803ED000;
-static UIGLibrary_t *lbl_803ED004;
-static Int32 lbl_803ED008;
+static Uint32 _UIGColorStyle_uCacheFile;
+static Uint32 _UIGColorStyle_uCacheItem;
+static UIGLibrary_t *_UIGColorStyle_pCacheLibrary;
+static Int32 _UIGColorStyle_pCacheColorStyle;
 
-Int32 fn_80220B4C(Int32 a, Int32 b)
+Int32 UIGCSGetColorStyle(Int32 a, Int32 b)
 {
     UIGLibrary_t *pObject;
 
@@ -36,22 +36,22 @@ Int32 fn_80220B4C(Int32 a, Int32 b)
     pObject = UIGLibraryGetGlobal(1);
     Result = 0;
     if (pObject != NULL) {
-        Result = lbl_803ED008;
-        if (Result == 0 || lbl_803ED004 != pObject || lbl_803ECFFC != a || lbl_803ED000 != b) {
+        Result = _UIGColorStyle_pCacheColorStyle;
+        if (Result == 0 || _UIGColorStyle_pCacheLibrary != pObject || _UIGColorStyle_uCacheFile != a || _UIGColorStyle_uCacheItem != b) {
             Result = UIGLibraryLoadItem(pObject, a, b);
-            lbl_803ED004 = pObject;
-            lbl_803ECFFC = a;
-            lbl_803ED000 = b;
-            lbl_803ED008 = Result;
+            _UIGColorStyle_pCacheLibrary = pObject;
+            _UIGColorStyle_uCacheFile = a;
+            _UIGColorStyle_uCacheItem = b;
+            _UIGColorStyle_pCacheColorStyle = Result;
         }
     }
     return Result;
 }
 
-void fn_80220BE0(void)
+void UIGCSResetColorStyleCache(void)
 {
-    lbl_803ED008 = 0;
-    lbl_803ECFFC = -1;
-    lbl_803ED004 = NULL;
-    lbl_803ED000 = -1;
+    _UIGColorStyle_pCacheColorStyle = 0;
+    _UIGColorStyle_uCacheFile = -1;
+    _UIGColorStyle_pCacheLibrary = NULL;
+    _UIGColorStyle_uCacheItem = -1;
 }

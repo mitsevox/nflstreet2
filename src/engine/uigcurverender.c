@@ -139,7 +139,7 @@ void _UIGCurveEmitStrip(UIGNode_t *pNode, UIGCurvePoint_t *pPoints, UIGCurvePoin
     bTex = (Uint8)pNode->Flags & 2;
     memcpy(&color, pNode->u.c.unk_14, sizeof(color));
     if (pNode->unk_0A != -1 && pNode->unk_08 != -1) {
-        pPalette = (UIGCurvePalette_t *)fn_80220B4C(pNode->unk_0A, pNode->unk_08);
+        pPalette = (UIGCurvePalette_t *)UIGCSGetColorStyle(pNode->unk_0A, pNode->unk_08);
         if (pPalette != 0) {
             if (color.r > pPalette->mCount) color.r = pPalette->mCount - 1;
             color = pPalette->mColors[color.r];

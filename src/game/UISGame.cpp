@@ -124,7 +124,7 @@ void UIGLibraryShutdown(void *p);
 void *UIGLibraryGetGlobal(int index);
 void UIGLibraryProcess(void *p);
 void UIGLibrarySetLoadFlagsFunc(void (*pCallback)());
-void fn_8021EFD8(void);
+void UIGImageNodeObjAction(void);
 void UIGRenderSetActive(int a);
 void UIGRenderSetLast(int a);
 void UIGRenderReset(void);
@@ -192,7 +192,7 @@ void UISGameSetCallbacks(void *p)
     fn_80218AA8(p, ScreenMsgDispatch);
     fn_80218ABC(p, UISGameDrawDone);
     fn_80218ACC(p, UISGameRepeatResetCB);
-    fn_80218AD4(p, 0, fn_8021EFD8);
+    fn_80218AD4(p, 0, UIGImageNodeObjAction);
     fn_80218AD4(p, 1, UISSoundObjAction);
     fn_80218AD4(p, 2, (void (*)(void))UIGCurveObjAction);
     fn_80218AD4(p, 3, UISViewObjAction);

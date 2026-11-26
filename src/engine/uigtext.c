@@ -71,7 +71,7 @@ typedef struct UIGFontItem_t {
     Int32 unk_04;   /* 0x04 */
 } UIGFontItem_t;
 
-/* Colour table that fn_80220B4C returns: a count byte, then colour entries. */
+/* Colour table that UIGCSGetColorStyle returns: a count byte, then colour entries. */
 typedef struct UIGTextPalette_t {
     Uint8 Count;    /* 0x00 */
     Uint8 unk_01[3];
@@ -540,7 +540,7 @@ void UIGLibTextDraw(UIGText_t *pText)
     Color0 = pText->unk_18;
     Color1 = pText->unk_1C;
     if (pText->unk_05 != -1 && pText->unk_04 != -1) {
-        pPalette = (UIGTextPalette_t *)fn_80220B4C(pText->unk_05, pText->unk_04);
+        pPalette = (UIGTextPalette_t *)UIGCSGetColorStyle(pText->unk_05, pText->unk_04);
         if (pPalette != NULL) {
             ClampIndex(&Color0, pPalette);
             ClampIndex(&Color1, pPalette);

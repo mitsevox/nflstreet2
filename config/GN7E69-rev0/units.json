@@ -28565,15 +28565,15 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8021F984",
+            "function": "UIGImageNodeRender",
             "evidence": "evidence.tsv source-form 0x8021F984-0x8021FB30"
           },
           {
-            "function": "fn_8021FB30",
+            "function": "UIGImageNodeSendTextured",
             "evidence": "evidence.tsv source-form 0x8021FB30-0x80220310"
           },
           {
-            "function": "fn_80220310",
+            "function": "UIGImageNodeSendColored",
             "evidence": "evidence.tsv source-form 0x80220310-0x80220988"
           }
         ],
@@ -28601,7 +28601,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_80220B4C",
+            "function": "UIGCSGetColorStyle",
             "evidence": "evidence.tsv source-form 0x80220B4C-0x80220BE0"
           }
         ],

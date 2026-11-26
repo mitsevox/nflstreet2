@@ -30719,72 +30719,72 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8021EFD8",
+          "symbol": "UIGImageNodeObjAction",
           "start": "0x8021EFD8",
           "end": "0x8021F550"
         },
         {
-          "symbol": "fn_8021F550",
+          "symbol": "UIGImageNodeLoad",
           "start": "0x8021F550",
           "end": "0x8021F5C0"
         },
         {
-          "symbol": "fn_8021F5C0",
+          "symbol": "UIGImageNodeDraw",
           "start": "0x8021F5C0",
           "end": "0x8021F71C"
         },
         {
-          "symbol": "fn_8021F71C",
+          "symbol": "UIGImageNodeUnLoad",
           "start": "0x8021F71C",
           "end": "0x8021F77C"
         },
         {
-          "symbol": "fn_8021F77C",
+          "symbol": "UIGImageNodeLerpByte",
           "start": "0x8021F77C",
           "end": "0x8021F82C"
         },
         {
-          "symbol": "fn_8021F82C",
+          "symbol": "UIGImageNodeLerpShort",
           "start": "0x8021F82C",
           "end": "0x8021F8DC"
         },
         {
-          "symbol": "fn_8021F8DC",
+          "symbol": "UIGImageNodePrepare",
           "start": "0x8021F8DC",
           "end": "0x8021F954"
         },
         {
-          "symbol": "fn_8021F954",
+          "symbol": "UIGImageNodeRelease",
           "start": "0x8021F954",
           "end": "0x8021F984"
         },
         {
-          "symbol": "fn_8021F984",
+          "symbol": "UIGImageNodeRender",
           "start": "0x8021F984",
           "end": "0x8021FB30"
         },
         {
-          "symbol": "fn_8021FB30",
+          "symbol": "UIGImageNodeSendTextured",
           "start": "0x8021FB30",
           "end": "0x80220310"
         },
         {
-          "symbol": "fn_80220310",
+          "symbol": "UIGImageNodeSendColored",
           "start": "0x80220310",
           "end": "0x80220988"
         },
         {
-          "symbol": "fn_80220988",
+          "symbol": "UIGImageNodeSetColors",
           "start": "0x80220988",
           "end": "0x80220A08"
         },
         {
-          "symbol": "fn_80220A08",
+          "symbol": "UIGImageNodeSetupGX",
           "start": "0x80220A08",
           "end": "0x80220AD0"
         },
         {
-          "symbol": "fn_80220AD0",
+          "symbol": "UIGImageNodeSetClamp",
           "start": "0x80220AD0",
           "end": "0x80220B4C"
         }
@@ -30810,12 +30810,12 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80220B4C",
+          "symbol": "UIGCSGetColorStyle",
           "start": "0x80220B4C",
           "end": "0x80220BE0"
         },
         {
-          "symbol": "fn_80220BE0",
+          "symbol": "UIGCSResetColorStyleCache",
           "start": "0x80220BE0",
           "end": "0x80220BFC"
         }

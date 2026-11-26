@@ -26,38 +26,38 @@
    original bytes. */
 
 /* A colour that is also compared as one word. */
-typedef union ColorWord_80220988 {
+typedef union UIGImageNodeColorWord_t {
     GXColor Color;
     Uint32 Value;
-} ColorWord_80220988;
+} UIGImageNodeColorWord_t;
 
 extern GXLightObj lbl_803E9880;
 
-static Float32 lbl_802F9FA0[4][4] = {
+static Float32 _UIGImageNode_afTexMtx[4][4] = {
     { 1.0f, 0.0f, 0.0f, 0.0f },
     { 0.0f, 1.0f, 0.0f, 0.0f },
     { 0.0f, 0.0f, 0.0f, 1.0f },
     { 0.0f, 0.0f, 0.0f, 1.0f },
 };
-static Uint32 lbl_803ECFF0;
-static Uint32 lbl_803ECFF4;
-static Int32 lbl_803ECFF8;
+static Uint32 _UIGImageNode_uMatColor;
+static Uint32 _UIGImageNode_uLightColor;
+static Int32 _UIGImageNode_iChannelMode;
 
-void fn_8021F8DC(UIGNode_t *pNode);
-void fn_8021F954(UIGNode_t *pNode);
-void fn_8021F984(UIGNode_t *pNode, Int32 Item);
-void fn_8021FB30(UIGNode_t *pNode);
-void fn_80220310(UIGNode_t *pNode);
-void fn_80220988(void);
-void fn_80220A08(void);
-void fn_80220AD0(UIGNode_t *pNode, Int32 a, Int32 Item);
+void UIGImageNodePrepare(UIGNode_t *pNode);
+void UIGImageNodeRelease(UIGNode_t *pNode);
+void UIGImageNodeRender(UIGNode_t *pNode, Int32 Item);
+void UIGImageNodeSendTextured(UIGNode_t *pNode);
+void UIGImageNodeSendColored(UIGNode_t *pNode);
+void UIGImageNodeSetColors(void);
+void UIGImageNodeSetupGX(void);
+void UIGImageNodeSetClamp(UIGNode_t *pNode, Int32 a, Int32 Item);
 void GXLoadLightObjImm(GXLightObj *pLight, GXLightID Light);
 void TMRenderReset(void);
-void fn_8021F550(UIGNode_t *pNode);
-void fn_8021F5C0(UIGNode_t *pNode);
-void fn_8021F71C(UIGNode_t *pNode);
-Uint8 fn_8021F77C(Uint32 a, Uint32 b, Uint32 c, Uint32 d, Float32 s, Float32 t);
-Int16 fn_8021F82C(Int16 a, Int16 b, Int16 c, Int16 d, Float32 s, Float32 t);
+void UIGImageNodeLoad(UIGNode_t *pNode);
+void UIGImageNodeDraw(UIGNode_t *pNode);
+void UIGImageNodeUnLoad(UIGNode_t *pNode);
+Uint8 UIGImageNodeLerpByte(Uint32 a, Uint32 b, Uint32 c, Uint32 d, Float32 s, Float32 t);
+Int16 UIGImageNodeLerpShort(Int16 a, Int16 b, Int16 c, Int16 d, Float32 s, Float32 t);
 
 /* Colour table of a palette library item: a count, then the colours. */
 typedef struct UIGNodePalette_t {
@@ -73,7 +73,7 @@ typedef struct UIGNodeVertex_t {
     Int16 Pos[3];           /* 0x08 */
 } UIGNodeVertex_t;
 
-void fn_8021EFD8(UIGNode_t *pNode, Uint32 Msg, Int32 Unused, void *pData, void *pOut)
+void UIGImageNodeObjAction(UIGNode_t *pNode, Uint32 Msg, Int32 Unused, void *pData, void *pOut)
 {
     UIGLibrary_t *pObject;
     Int32 i;
@@ -82,13 +82,13 @@ void fn_8021EFD8(UIGNode_t *pNode, Uint32 Msg, Int32 Unused, void *pData, void *
 
     switch (Msg) {
     case -1:
-        fn_8021F550(pNode);
+        UIGImageNodeLoad(pNode);
         break;
     case -2:
-        fn_8021F5C0(pNode);
+        UIGImageNodeDraw(pNode);
         return;
     case -3:
-        fn_8021F71C(pNode);
+        UIGImageNodeUnLoad(pNode);
         break;
     case -4:
         if (pNode->Flags & 2) {
@@ -263,7 +263,7 @@ void fn_8021EFD8(UIGNode_t *pNode, Uint32 Msg, Int32 Unused, void *pData, void *
     pNode->Flags |= 0x4000;
 }
 
-void fn_8021F550(UIGNode_t *pNode)
+void UIGImageNodeLoad(UIGNode_t *pNode)
 {
     UIGLibrary_t *pObject;
 
@@ -275,10 +275,10 @@ void fn_8021F550(UIGNode_t *pNode)
     }
     pNode->unk_0C = pNode->unk_04;
     pNode->unk_0E = pNode->unk_06;
-    fn_8021F8DC(pNode);
+    UIGImageNodePrepare(pNode);
 }
 
-void fn_8021F5C0(UIGNode_t *pNode)
+void UIGImageNodeDraw(UIGNode_t *pNode)
 {
     UIGLibrary_t *pObject;
     Int32 Item = 0;
@@ -299,13 +299,13 @@ void fn_8021F5C0(UIGNode_t *pNode)
     if (Item != 0 && (pNode->Flags & 0x10) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
         UIGRenderSwapPalette(pNode->unk_0A, pNode->unk_08, Item);
     }
-    fn_8021F984(pNode, Item);
+    UIGImageNodeRender(pNode, Item);
     if (Item != 0 && (pNode->Flags & 0x10) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
         UIGRenderRestorePalette(pNode->unk_0A, pNode->unk_08, Item);
     }
 }
 
-void fn_8021F71C(UIGNode_t *pNode)
+void UIGImageNodeUnLoad(UIGNode_t *pNode)
 {
     UIGLibrary_t *pObject;
 
@@ -315,10 +315,10 @@ void fn_8021F71C(UIGNode_t *pNode)
             UIGLibraryUnLoadItem(pObject, pNode->unk_06, pNode->unk_04);
         }
     }
-    fn_8021F954(pNode);
+    UIGImageNodeRelease(pNode);
 }
 
-Uint8 fn_8021F77C(Uint32 a, Uint32 b, Uint32 c, Uint32 d, Float32 s, Float32 t)
+Uint8 UIGImageNodeLerpByte(Uint32 a, Uint32 b, Uint32 c, Uint32 d, Float32 s, Float32 t)
 {
     Float32 lo = a + (Int32)(b - a) * s;
     Float32 hi = d + (Int32)(c - d) * s;
@@ -326,7 +326,7 @@ Uint8 fn_8021F77C(Uint32 a, Uint32 b, Uint32 c, Uint32 d, Float32 s, Float32 t)
     return lo + (hi - lo) * t;
 }
 
-Int16 fn_8021F82C(Int16 a, Int16 b, Int16 c, Int16 d, Float32 s, Float32 t)
+Int16 UIGImageNodeLerpShort(Int16 a, Int16 b, Int16 c, Int16 d, Float32 s, Float32 t)
 {
     Float32 lo = a + (b - a) * s;
     Float32 hi = d + (c - d) * s;
@@ -334,7 +334,7 @@ Int16 fn_8021F82C(Int16 a, Int16 b, Int16 c, Int16 d, Float32 s, Float32 t)
     return lo + (hi - lo) * t;
 }
 
-void fn_8021F8DC(UIGNode_t *pNode)
+void UIGImageNodePrepare(UIGNode_t *pNode)
 {
     Int32 i;
 
@@ -350,14 +350,14 @@ void fn_8021F8DC(UIGNode_t *pNode)
     }
 }
 
-void fn_8021F954(UIGNode_t *pNode)
+void UIGImageNodeRelease(UIGNode_t *pNode)
 {
     if (pNode->Flags & 0x8000) {
         UIGDispListUnrelocate(&pNode->u.List);
     }
 }
 
-void fn_8021F984(UIGNode_t *pNode, Int32 Item)
+void UIGImageNodeRender(UIGNode_t *pNode, Int32 Item)
 {
     Uint16 Flags;
     Int32 Mode;
@@ -370,24 +370,24 @@ void fn_8021F984(UIGNode_t *pNode, Int32 Item)
     Flags = pNode->Flags;
     TMRenderReset();
     Mode = Flags & 3;
-    fn_80220A08();
-    lbl_803ECFF8 = -1;
-    fn_80220988();
-    if (Mode != lbl_803ECFF8) {
+    UIGImageNodeSetupGX();
+    _UIGImageNode_iChannelMode = -1;
+    UIGImageNodeSetColors();
+    if (Mode != _UIGImageNode_iChannelMode) {
         bTexture = Flags & 2;
         LLUIGSetColorChannel(Mode == 2 ? 0 : 1);
         LLUIGSetTexturing(bTexture);
-        lbl_803ECFF8 = Mode;
+        _UIGImageNode_iChannelMode = Mode;
     }
     GXSetCullMode((Flags & 4) ? GX_CULL_BACK : GX_CULL_NONE);
     GXLoadPosMtxImm((f32 (*)[4])MatGetCurMatrixPtr(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     if (pNode->Flags & 2) {
-        lbl_802F9FA0[0][0] = ((UIGTexNode_t *)Item)->unk_30;
-        lbl_802F9FA0[1][1] = ((UIGTexNode_t *)Item)->unk_34;
-        GXLoadTexMtxImm(lbl_802F9FA0, GX_TEXMTX0, GX_MTX2x4);
+        _UIGImageNode_afTexMtx[0][0] = ((UIGTexNode_t *)Item)->unk_30;
+        _UIGImageNode_afTexMtx[1][1] = ((UIGTexNode_t *)Item)->unk_34;
+        GXLoadTexMtxImm(_UIGImageNode_afTexMtx, GX_TEXMTX0, GX_MTX2x4);
         if (!(pNode->Flags & 0x8000)) {
-            fn_80220AD0(pNode, 0, Item);
+            UIGImageNodeSetClamp(pNode, 0, Item);
         }
         bTex = LLUIGTexNodeRegisterObj((Texture_t *)Item);
     }
@@ -400,9 +400,9 @@ void fn_8021F984(UIGNode_t *pNode, Int32 Item)
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         }
         if (pNode->Flags & 2) {
-            fn_8021FB30(pNode);
+            UIGImageNodeSendTextured(pNode);
         } else {
-            fn_80220310(pNode);
+            UIGImageNodeSendColored(pNode);
         }
     }
     GXSetCullMode(GX_CULL_NONE);
@@ -413,20 +413,20 @@ void fn_8021F984(UIGNode_t *pNode, Int32 Item)
     }
 }
 
-static inline void SendTexVertex(UIGNodeVertex_t *pV)
+static inline void _UIGImageNodeSendTexVertex(UIGNodeVertex_t *pV)
 {
     GXPosition3s16(pV->Pos[0], pV->Pos[1], pV->Pos[2]);
     GXColor4u8(pV->Color.r, pV->Color.g, pV->Color.b, pV->Color.a);
     GXTexCoord2s16(pV->St[0], pV->St[1]);
 }
 
-static inline void SendColorVertex(UIGNodeVertex_t *pV)
+static inline void _UIGImageNodeSendColorVertex(UIGNodeVertex_t *pV)
 {
     GXPosition3s16(pV->Pos[0], pV->Pos[1], pV->Pos[2]);
     GXColor4u8(pV->Color.r, pV->Color.g, pV->Color.b, pV->Color.a);
 }
 
-void fn_8021FB30(UIGNode_t *pNode)
+void UIGImageNodeSendTextured(UIGNode_t *pNode)
 {
     UIGNodeVertex_t aVtx[8];
     Float32 aS[4];
@@ -440,7 +440,7 @@ void fn_8021FB30(UIGNode_t *pNode)
     UIGRenderGetColorState();
     pQuad = &pNode->u.v.Quad;
     if (pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        pPalette = (UIGNodePalette_t *)fn_80220B4C(pNode->unk_0A, pNode->unk_08);
+        pPalette = (UIGNodePalette_t *)UIGCSGetColorStyle(pNode->unk_0A, pNode->unk_08);
     }
     for (i = 0; i < 4; i++) {
         aVtx[i].Color = pQuad->Colors[i];
@@ -472,37 +472,37 @@ void fn_8021FB30(UIGNode_t *pNode)
         aT[2] = T + 0.5f;
         aT[3] = T + 0.5f;
         for (i = 0; i < 4; i++) {
-            aVtx[i + 4].Color.r = fn_8021F77C(aVtx[0].Color.r, aVtx[1].Color.r, aVtx[2].Color.r, aVtx[3].Color.r, aS[i], aT[i]);
-            aVtx[i + 4].Color.g = fn_8021F77C(aVtx[0].Color.g, aVtx[1].Color.g, aVtx[2].Color.g, aVtx[3].Color.g, aS[i], aT[i]);
-            aVtx[i + 4].Color.b = fn_8021F77C(aVtx[0].Color.b, aVtx[1].Color.b, aVtx[2].Color.b, aVtx[3].Color.b, aS[i], aT[i]);
-            aVtx[i + 4].Color.a = fn_8021F77C(aVtx[0].Color.a, aVtx[1].Color.a, aVtx[2].Color.a, aVtx[3].Color.a, aS[i], aT[i]);
-            aVtx[i + 4].St[0] = fn_8021F82C(aVtx[0].St[0], aVtx[1].St[0], aVtx[2].St[0], aVtx[3].St[0], aS[i], aT[i]);
-            aVtx[i + 4].St[1] = fn_8021F82C(aVtx[0].St[1], aVtx[1].St[1], aVtx[2].St[1], aVtx[3].St[1], aS[i], aT[i]);
-            aVtx[i + 4].Pos[0] = fn_8021F82C(aVtx[0].Pos[0], aVtx[1].Pos[0], aVtx[2].Pos[0], aVtx[3].Pos[0], aS[i], aT[i]);
-            aVtx[i + 4].Pos[1] = fn_8021F82C(aVtx[0].Pos[1], aVtx[1].Pos[1], aVtx[2].Pos[1], aVtx[3].Pos[1], aS[i], aT[i]);
-            aVtx[i + 4].Pos[2] = fn_8021F82C(aVtx[0].Pos[2], aVtx[1].Pos[2], aVtx[2].Pos[2], aVtx[3].Pos[2], aS[i], aT[i]);
+            aVtx[i + 4].Color.r = UIGImageNodeLerpByte(aVtx[0].Color.r, aVtx[1].Color.r, aVtx[2].Color.r, aVtx[3].Color.r, aS[i], aT[i]);
+            aVtx[i + 4].Color.g = UIGImageNodeLerpByte(aVtx[0].Color.g, aVtx[1].Color.g, aVtx[2].Color.g, aVtx[3].Color.g, aS[i], aT[i]);
+            aVtx[i + 4].Color.b = UIGImageNodeLerpByte(aVtx[0].Color.b, aVtx[1].Color.b, aVtx[2].Color.b, aVtx[3].Color.b, aS[i], aT[i]);
+            aVtx[i + 4].Color.a = UIGImageNodeLerpByte(aVtx[0].Color.a, aVtx[1].Color.a, aVtx[2].Color.a, aVtx[3].Color.a, aS[i], aT[i]);
+            aVtx[i + 4].St[0] = UIGImageNodeLerpShort(aVtx[0].St[0], aVtx[1].St[0], aVtx[2].St[0], aVtx[3].St[0], aS[i], aT[i]);
+            aVtx[i + 4].St[1] = UIGImageNodeLerpShort(aVtx[0].St[1], aVtx[1].St[1], aVtx[2].St[1], aVtx[3].St[1], aS[i], aT[i]);
+            aVtx[i + 4].Pos[0] = UIGImageNodeLerpShort(aVtx[0].Pos[0], aVtx[1].Pos[0], aVtx[2].Pos[0], aVtx[3].Pos[0], aS[i], aT[i]);
+            aVtx[i + 4].Pos[1] = UIGImageNodeLerpShort(aVtx[0].Pos[1], aVtx[1].Pos[1], aVtx[2].Pos[1], aVtx[3].Pos[1], aS[i], aT[i]);
+            aVtx[i + 4].Pos[2] = UIGImageNodeLerpShort(aVtx[0].Pos[2], aVtx[1].Pos[2], aVtx[2].Pos[2], aVtx[3].Pos[2], aS[i], aT[i]);
         }
     }
     if (pNode->Flags & 8) {
-        SendTexVertex(&aVtx[0]);
-        SendTexVertex(&aVtx[4]);
-        SendTexVertex(&aVtx[1]);
-        SendTexVertex(&aVtx[5]);
-        SendTexVertex(&aVtx[2]);
-        SendTexVertex(&aVtx[6]);
-        SendTexVertex(&aVtx[3]);
-        SendTexVertex(&aVtx[7]);
-        SendTexVertex(&aVtx[0]);
-        SendTexVertex(&aVtx[4]);
+        _UIGImageNodeSendTexVertex(&aVtx[0]);
+        _UIGImageNodeSendTexVertex(&aVtx[4]);
+        _UIGImageNodeSendTexVertex(&aVtx[1]);
+        _UIGImageNodeSendTexVertex(&aVtx[5]);
+        _UIGImageNodeSendTexVertex(&aVtx[2]);
+        _UIGImageNodeSendTexVertex(&aVtx[6]);
+        _UIGImageNodeSendTexVertex(&aVtx[3]);
+        _UIGImageNodeSendTexVertex(&aVtx[7]);
+        _UIGImageNodeSendTexVertex(&aVtx[0]);
+        _UIGImageNodeSendTexVertex(&aVtx[4]);
     } else {
-        SendTexVertex(&aVtx[0]);
-        SendTexVertex(&aVtx[1]);
-        SendTexVertex(&aVtx[2]);
-        SendTexVertex(&aVtx[3]);
+        _UIGImageNodeSendTexVertex(&aVtx[0]);
+        _UIGImageNodeSendTexVertex(&aVtx[1]);
+        _UIGImageNodeSendTexVertex(&aVtx[2]);
+        _UIGImageNodeSendTexVertex(&aVtx[3]);
     }
 }
 
-void fn_80220310(UIGNode_t *pNode)
+void UIGImageNodeSendColored(UIGNode_t *pNode)
 {
     UIGNodeVertex_t aVtx[8];
     Float32 aS[4];
@@ -516,7 +516,7 @@ void fn_80220310(UIGNode_t *pNode)
     UIGRenderGetColorState();
     pQuad = &pNode->u.v.Quad;
     if (pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        pPalette = (UIGNodePalette_t *)fn_80220B4C(pNode->unk_0A, pNode->unk_08);
+        pPalette = (UIGNodePalette_t *)UIGCSGetColorStyle(pNode->unk_0A, pNode->unk_08);
     }
     for (i = 0; i < 4; i++) {
         aVtx[i].Color = pQuad->Colors[i];
@@ -546,53 +546,53 @@ void fn_80220310(UIGNode_t *pNode)
         aT[2] = T + 0.5f;
         aT[3] = T + 0.5f;
         for (i = 0; i < 4; i++) {
-            aVtx[i + 4].Color.r = fn_8021F77C(aVtx[0].Color.r, aVtx[1].Color.r, aVtx[2].Color.r, aVtx[3].Color.r, aS[i], aT[i]);
-            aVtx[i + 4].Color.g = fn_8021F77C(aVtx[0].Color.g, aVtx[1].Color.g, aVtx[2].Color.g, aVtx[3].Color.g, aS[i], aT[i]);
-            aVtx[i + 4].Color.b = fn_8021F77C(aVtx[0].Color.b, aVtx[1].Color.b, aVtx[2].Color.b, aVtx[3].Color.b, aS[i], aT[i]);
-            aVtx[i + 4].Color.a = fn_8021F77C(aVtx[0].Color.a, aVtx[1].Color.a, aVtx[2].Color.a, aVtx[3].Color.a, aS[i], aT[i]);
-            aVtx[i + 4].Pos[0] = fn_8021F82C(aVtx[0].Pos[0], aVtx[1].Pos[0], aVtx[2].Pos[0], aVtx[3].Pos[0], aS[i], aT[i]);
-            aVtx[i + 4].Pos[1] = fn_8021F82C(aVtx[0].Pos[1], aVtx[1].Pos[1], aVtx[2].Pos[1], aVtx[3].Pos[1], aS[i], aT[i]);
-            aVtx[i + 4].Pos[2] = fn_8021F82C(aVtx[0].Pos[2], aVtx[1].Pos[2], aVtx[2].Pos[2], aVtx[3].Pos[2], aS[i], aT[i]);
+            aVtx[i + 4].Color.r = UIGImageNodeLerpByte(aVtx[0].Color.r, aVtx[1].Color.r, aVtx[2].Color.r, aVtx[3].Color.r, aS[i], aT[i]);
+            aVtx[i + 4].Color.g = UIGImageNodeLerpByte(aVtx[0].Color.g, aVtx[1].Color.g, aVtx[2].Color.g, aVtx[3].Color.g, aS[i], aT[i]);
+            aVtx[i + 4].Color.b = UIGImageNodeLerpByte(aVtx[0].Color.b, aVtx[1].Color.b, aVtx[2].Color.b, aVtx[3].Color.b, aS[i], aT[i]);
+            aVtx[i + 4].Color.a = UIGImageNodeLerpByte(aVtx[0].Color.a, aVtx[1].Color.a, aVtx[2].Color.a, aVtx[3].Color.a, aS[i], aT[i]);
+            aVtx[i + 4].Pos[0] = UIGImageNodeLerpShort(aVtx[0].Pos[0], aVtx[1].Pos[0], aVtx[2].Pos[0], aVtx[3].Pos[0], aS[i], aT[i]);
+            aVtx[i + 4].Pos[1] = UIGImageNodeLerpShort(aVtx[0].Pos[1], aVtx[1].Pos[1], aVtx[2].Pos[1], aVtx[3].Pos[1], aS[i], aT[i]);
+            aVtx[i + 4].Pos[2] = UIGImageNodeLerpShort(aVtx[0].Pos[2], aVtx[1].Pos[2], aVtx[2].Pos[2], aVtx[3].Pos[2], aS[i], aT[i]);
         }
     }
     if (pNode->Flags & 8) {
-        SendColorVertex(&aVtx[0]);
-        SendColorVertex(&aVtx[4]);
-        SendColorVertex(&aVtx[1]);
-        SendColorVertex(&aVtx[5]);
-        SendColorVertex(&aVtx[2]);
-        SendColorVertex(&aVtx[6]);
-        SendColorVertex(&aVtx[3]);
-        SendColorVertex(&aVtx[7]);
-        SendColorVertex(&aVtx[0]);
-        SendColorVertex(&aVtx[4]);
+        _UIGImageNodeSendColorVertex(&aVtx[0]);
+        _UIGImageNodeSendColorVertex(&aVtx[4]);
+        _UIGImageNodeSendColorVertex(&aVtx[1]);
+        _UIGImageNodeSendColorVertex(&aVtx[5]);
+        _UIGImageNodeSendColorVertex(&aVtx[2]);
+        _UIGImageNodeSendColorVertex(&aVtx[6]);
+        _UIGImageNodeSendColorVertex(&aVtx[3]);
+        _UIGImageNodeSendColorVertex(&aVtx[7]);
+        _UIGImageNodeSendColorVertex(&aVtx[0]);
+        _UIGImageNodeSendColorVertex(&aVtx[4]);
     } else {
-        SendColorVertex(&aVtx[0]);
-        SendColorVertex(&aVtx[1]);
-        SendColorVertex(&aVtx[2]);
-        SendColorVertex(&aVtx[3]);
+        _UIGImageNodeSendColorVertex(&aVtx[0]);
+        _UIGImageNodeSendColorVertex(&aVtx[1]);
+        _UIGImageNodeSendColorVertex(&aVtx[2]);
+        _UIGImageNodeSendColorVertex(&aVtx[3]);
     }
 }
 
-void fn_80220988(void)
+void UIGImageNodeSetColors(void)
 {
     UIGMaterialColorState_t *pColor;
-    ColorWord_80220988 Mat;
-    ColorWord_80220988 Light;
+    UIGImageNodeColorWord_t Mat;
+    UIGImageNodeColorWord_t Light;
 
     pColor = UIGRenderGetColorState();
     Mat.Color = pColor->mMaterialColor;
     Light.Color = pColor->mLightColor;
-    if (Mat.Value != lbl_803ECFF0 || Light.Value != lbl_803ECFF4) {
+    if (Mat.Value != _UIGImageNode_uMatColor || Light.Value != _UIGImageNode_uLightColor) {
         GXSetChanMatColor(GX_COLOR0A0, Mat.Color);
         GXInitLightColor(&lbl_803E9880, Light.Color);
         GXLoadLightObjImm(&lbl_803E9880, GX_LIGHT7);
-        lbl_803ECFF0 = Mat.Value;
-        lbl_803ECFF4 = Light.Value;
+        _UIGImageNode_uMatColor = Mat.Value;
+        _UIGImageNode_uLightColor = Light.Value;
     }
 }
 
-void fn_80220A08(void)
+void UIGImageNodeSetupGX(void)
 {
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -603,10 +603,10 @@ void fn_80220A08(void)
     GXSetZCompLoc(GX_FALSE);
     GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_GREATER, 0);
-    lbl_803ECFF4 = lbl_803ECFF0 = 0x12345678;
+    _UIGImageNode_uLightColor = _UIGImageNode_uMatColor = 0x12345678;
 }
 
-void fn_80220AD0(UIGNode_t *pNode, Int32 a, Int32 Item)
+void UIGImageNodeSetClamp(UIGNode_t *pNode, Int32 a, Int32 Item)
 {
     Int32 First = 0;
     Int32 Second = 0;
