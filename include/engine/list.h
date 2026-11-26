@@ -51,21 +51,21 @@ typedef struct LinkList_t {
     LinkNode_t *mpTail;
 } LinkList_t;
 
-typedef struct SplayNode_801C7684 {
+typedef struct SplayNode_t {
     unsigned int mFlags;
     int mUnused;
-    struct SplayNode_801C7684 *mpLeft;
-    struct SplayNode_801C7684 *mpRight;
-} SplayNode_801C7684;
+    struct SplayNode_t *mpLeft;
+    struct SplayNode_t *mpRight;
+} SplayNode_t;
 
-typedef struct SplayTree_801C7684 {
+typedef struct SplayTree_t {
     DSList_t mBase;
-    SplayNode_801C7684 mNil;
-    SplayNode_801C7684 *mpFirst;
-    SplayNode_801C7684 *mpLast;
-    SplayNode_801C7684 *mpNil;
-    SplayNode_801C7684 *mpRoot;
-} SplayTree_801C7684;
+    SplayNode_t mNil;
+    SplayNode_t *mpFirst;
+    SplayNode_t *mpLast;
+    SplayNode_t *mpNil;
+    SplayNode_t *mpRoot;
+} SplayTree_t;
 
 /* Threaded binary tree node: flag bits 0x1/0x2 mark the left/right link as a thread,
    0x4/0x8 first/last in order, 0x10/0x20 left/right child of the parent. */

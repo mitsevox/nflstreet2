@@ -28519,19 +28519,19 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801C77DC",
+            "function": "_DSListGetSplayPrev",
             "evidence": "evidence.tsv source-form 0x801C77DC-0x801C7810"
           },
           {
-            "function": "fn_801C7810",
+            "function": "_DSListGetSplayNext",
             "evidence": "evidence.tsv source-form 0x801C7810-0x801C7844"
           },
           {
-            "function": "fn_801C7844",
+            "function": "_DSListSplay",
             "evidence": "evidence.tsv source-form 0x801C7844-0x801C7A34"
           },
           {
-            "function": "fn_801C7A98",
+            "function": "_DSListAddSplayNode",
             "evidence": "evidence.tsv source-form 0x801C7A98-0x801C7C1C"
           }
         ],
