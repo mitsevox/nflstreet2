@@ -230,8 +230,8 @@ void MsgStreetEventSetupApplyOptions(StreetEventSetup_t *pState)
             rounds = 20;
             break;
         }
-        fn_80148A58()->vfn_07(0, type);
-        fn_80148A58()->vfn_07(1, rounds);
+        MiniGameGetCurrent()->vfn_07(0, type);
+        MiniGameGetCurrent()->vfn_07(1, rounds);
         break;
     }
     case 3:

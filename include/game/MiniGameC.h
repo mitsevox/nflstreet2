@@ -1,9 +1,7 @@
 #ifndef GAME_MINIGAMEC_H
 #define GAME_MINIGAMEC_H
 
-/* Object returned by fn_80148A58; its vtable pointer is at offset 0x18,
-   after 24 bytes of data. Only the vtable slots called through are given
-   signatures; the others are placeholders. */
+/* MiniGameC, the base class of the six mini-game modes, and its depth-chart state. */
 struct Object_80039F5C;
 struct AutoDepthPlayer_t;
 
@@ -36,16 +34,16 @@ public:
     virtual int vfn_08(int a);
     virtual const float *vfn_09(int a) { return 0; }
     virtual void vfn_10(int value, int *list, int *ids);
-    virtual void vfn_11(int value, int *list, int *ids, unsigned int count, int b);
+    virtual void AutoFillDepthChart(int value, int *list, int *ids, unsigned int count, int b);
     virtual void vfn_12() { GameStatsUpdateRecords(); }
-    virtual int vfn_13();
+    virtual int IsWinnerUserTeam();
     virtual void vfn_14() {}
     virtual void vfn_15();
     virtual void vfn_16(const int *pKinds);
     virtual void vfn_17(const int *pKinds);
-    virtual void vfn_18(int a, unsigned char index, char *pText, unsigned char length);
+    virtual void GetPlayerAwardsText(int a, unsigned char index, char *pText, unsigned char length);
     virtual void vfn_19(int team, int column, char *pText, int length);
-    virtual void vfn_20(int team, unsigned char index, int kind, char *pFirst, unsigned char firstLength,
+    virtual void GetPlayerStatText(int team, unsigned char index, int kind, char *pFirst, unsigned char firstLength,
                         char *pSecond, unsigned char secondLength)
     {
         pSecond[0] = 0;
@@ -57,8 +55,8 @@ public:
     virtual int vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count);
     virtual int vfn_24(int team, unsigned int tag);
     virtual unsigned char vfn_25(int team, int index);
-    virtual int vfn_26(int team, int index, Object_80039F5C *pPlayer, int kind);
-    virtual int vfn_27(int team, int index, int value);
+    virtual int CheckAward(int team, int index, Object_80039F5C *pPlayer, int kind);
+    virtual int PlayerHasAward(int team, int index, int value);
     virtual unsigned char vfn_28(int index);
     virtual const char *vfn_29(int kind);
     virtual int vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer);
@@ -79,6 +77,6 @@ public:
     };
 };
 
-extern "C" MiniGameC *fn_80148A58(void);
+extern "C" MiniGameC *MiniGameGetCurrent(void);
 
 #endif

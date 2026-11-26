@@ -192,7 +192,7 @@ int MsgGameStreetEventHasOpenSlot(void)
             break;
         case 1:
             for (unsigned int i = 0; i <= 3; i++) {
-                fn_80152940(fn_80148A58(), i, &info);
+                fn_80152940(MiniGameGetCurrent(), i, &info);
                 if (info.mUnknown20 == 0xFF) {
                     result = 1;
                     break;
@@ -214,7 +214,7 @@ int MsgGameStreetEventHasOpenSlot(void)
 int MsgGameStreetEventCheckSide(void)
 {
     if (fn_801486A0() != 15) {
-        return fn_80148A58()->vfn_13();
+        return MiniGameGetCurrent()->IsWinnerUserTeam();
     }
     return fn_800B65A0(fn_80178AE0()) != 0xFF;
 }

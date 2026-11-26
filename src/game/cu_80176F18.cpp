@@ -1289,7 +1289,7 @@ extern "C" void fn_80178CD8(int a)
 
 extern "C" unsigned int fn_80178D18(int team)
 {
-    MiniGameC *p = fn_80148A58();
+    MiniGameC *p = MiniGameGetCurrent();
     if (p != 0) {
         return p->vfn_04(team);
     }
@@ -1298,7 +1298,7 @@ extern "C" unsigned int fn_80178D18(int team)
 
 extern "C" int fn_80178D70(int team)
 {
-    MiniGameC *p = fn_80148A58();
+    MiniGameC *p = MiniGameGetCurrent();
     if (p != 0) {
         return p->vfn_05(team);
     }
@@ -1307,7 +1307,7 @@ extern "C" int fn_80178D70(int team)
 
 extern "C" unsigned int fn_80178DC8(void)
 {
-    MiniGameC *p = fn_80148A58();
+    MiniGameC *p = MiniGameGetCurrent();
     if (p != 0) {
         return p->vfn_06();
     }

@@ -2617,7 +2617,7 @@ int MsgTeamSelectInit(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         *pFlag = 1;
     }
     if (fn_801485D4()) {
-        fn_80148AF8(fn_80148A58());
+        fn_80148AF8(MiniGameGetCurrent());
     }
 
     switch (mode) {

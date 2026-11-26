@@ -678,7 +678,7 @@
       "address": "0x80190EF0",
       "evidence": "evidence.tsv external row 0x80190EF0 (CloseBitStream__FP11BitStream_t), name row 0x80190EF0 and type row BitStream_t."
     },
-    "__14Block_80156400": {
+    "__23MiniGameQuickStrikeData": {
       "address": "0x80156400",
       "evidence": "evidence.tsv external row for 0x80156400 (__14Block_80156400); descriptive name."
     },
@@ -742,7 +742,7 @@
       "address": "0x802A2560",
       "evidence": "evidence.tsv external row for 0x802A2560 (_vt.14Class_802A2560)."
     },
-    "_vt.14Block_802A21E8": {
+    "_vt.16MiniGame4On4Data": {
       "address": "0x802A21E8",
       "evidence": "evidence.tsv external row for 0x802A21E8 (_vt.14Block_802A21E8)."
     },
@@ -774,7 +774,7 @@
       "address": "0x802A2200",
       "evidence": "evidence.tsv external row for 0x802A2200 (_vt.14Class_802A2200)."
     },
-    "_vt.14Block_8014F104": {
+    "_vt.24MiniGameCrushCarrierData": {
       "address": "0x802A1EF8",
       "evidence": "evidence.tsv external row for 0x802A1EF8 (_vt.14Block_8014F104)."
     },
@@ -802,7 +802,7 @@
       "address": "0x802A1F10",
       "evidence": "evidence.tsv external row for 0x802A1F10 (_vt.14Class_802A1F10)."
     },
-    "_vt.15Record_8014F104": {
+    "_vt.25MiniGameCrushCarrierScore": {
       "address": "0x802A1F78",
       "evidence": "evidence.tsv external row for 0x802A1F78 (_vt.15Record_8014F104)."
     },
@@ -1425,6 +1425,22 @@
     "_e_sbss": {
       "address": "0x803ED681",
       "evidence": "Linker-defined end of .sbss: __start forms it with lis/ori at 0x80003134-0x80003164 and passes the span to memset; no object storage claimed."
+    },
+    "MiniGameGetCurrent": {
+      "address": "0x80148A58",
+      "evidence": "evidence.tsv external row for 0x80148A58 (MiniGameGetCurrent)."
+    },
+    "MiniGameBenchPlayer": {
+      "address": "0x80148814",
+      "evidence": "evidence.tsv external row for 0x80148814 (MiniGameBenchPlayer)."
+    },
+    "MiniGameReloadPlayer": {
+      "address": "0x80149040",
+      "evidence": "evidence.tsv external row for 0x80149040 (MiniGameReloadPlayer)."
+    },
+    "MiniGameOpenFieldGetPlayerColor": {
+      "address": "0x80155130",
+      "evidence": "evidence.tsv external row for 0x80155130 (MiniGameOpenFieldGetPlayerColor)."
     }
   },
   "units": [

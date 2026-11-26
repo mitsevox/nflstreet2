@@ -583,7 +583,7 @@ void StoryEventsSetupTeams(void)
 void StoryEventsSetupMatch(void)
 {
     if (fn_801485D4()) {
-        fn_80148AF8(fn_80148A58());
+        fn_80148AF8(MiniGameGetCurrent());
     }
     StoryEventsSetupTeams();
     AutoDepthSetRateCallback(0);
@@ -659,9 +659,9 @@ void StoryEventsStartEvent(void)
             if (type == 2) {
                 enable = 0;
             }
-            fn_80148A58()->vfn_07(0, enable);
+            MiniGameGetCurrent()->vfn_07(0, enable);
             type = _StoryEvents_pEvent->mPes[3];
-            fn_80148A58()->vfn_07(1, type);
+            MiniGameGetCurrent()->vfn_07(1, type);
             break;
         }
         }

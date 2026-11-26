@@ -1188,13 +1188,13 @@ void MsgTeamPickInitState(void)
         MsgTeamPickInitSevenCaptains();
         break;
     case 3:
-        MsgTeamPickInitTwoTeams(fn_80148A58()->vfn_05(fn_80178308()));
+        MsgTeamPickInitTwoTeams(MiniGameGetCurrent()->vfn_05(fn_80178308()));
         break;
     case 2:
         MsgTeamPickInitPairedCaptains();
         break;
     case 4:
-        MsgTeamPickInitTwoTeams(fn_80148A58()->vfn_05(0));
+        MsgTeamPickInitTwoTeams(MiniGameGetCurrent()->vfn_05(0));
         break;
     default:
         MsgTeamPickInitTwoTeams(7);
@@ -1236,7 +1236,7 @@ int MsgTeamPickInit(int *pController, int *pCount)
     }
 
     if (fn_801485D4()) {
-        fn_80148AF8(fn_80148A58());
+        fn_80148AF8(MiniGameGetCurrent());
     }
     PlayerCursorOpen(&_MsgTeamPick_PlayerCursor, 0, 0x54415453);
     TeamDbOpen(&_MsgTeamPick_TeamCursor, 0, 0x54415453);

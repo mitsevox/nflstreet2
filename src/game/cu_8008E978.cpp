@@ -1410,7 +1410,7 @@ void HudPost3AOff(void);
 }
 
 extern "C" {
-void fn_80148814(Object_80039F5C *p);
+void MiniGameBenchPlayer(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -10458,7 +10458,7 @@ extern "C" int fn_800944A4(int kind)
 {
     int result = 1;
 
-    if ((fn_801485D4() != 0 && fn_80148A58()->mUnknown8[12] == 0) || fn_80178AE0() != 2 || ChallengeIsActive() != 0) {
+    if ((fn_801485D4() != 0 && MiniGameGetCurrent()->mUnknown8[12] == 0) || fn_80178AE0() != 2 || ChallengeIsActive() != 0) {
         result = 0;
     } else if (kind != 14) {
         if ((kind == 1 && fn_80177F7C() != 4) || lbl_802D79D8[kind] == 0) {
@@ -16692,7 +16692,7 @@ extern "C" void fn_800A1C74(Object_8017886C *result,Object_8017886C *input)
         if(result->mUnknown18&0x2000 || fn_800B2314()&1)fn_8009BA9C((int)result);
         else ReplayHandleCommand(gpReplay,3,0);
         HudSetDown();
-        if(fn_801486A0()!=15)fn_80148A58()->vfn_14();
+        if(fn_801486A0()!=15)MiniGameGetCurrent()->vfn_14();
         lbl_802D7C64[0].mUnknown4=1;
     }
 }
@@ -20117,7 +20117,7 @@ extern "C" void fn_800A9854(void)
                     fn_800F053C(0, p->mpState, &message, p);
                 }
             } else {
-                fn_80148814(p);
+                MiniGameBenchPlayer(p);
             }
         }
     }
@@ -20144,7 +20144,7 @@ extern "C" void fn_800A9854(void)
                     fn_800F053C(0, p->mpState, &message, p);
                 }
             } else {
-                fn_80148814(p);
+                MiniGameBenchPlayer(p);
             }
         }
     }
@@ -20466,7 +20466,7 @@ extern "C" void fn_800AA348(Entry_800AA80C *pEntries, int index)
                 value = fn_8015264C(lbl_8031BDD4);
                 break;
             case 0:
-                value = fn_8014F448(fn_80148A58());
+                value = fn_8014F448(MiniGameGetCurrent());
                 break;
             }
             fn_8009604C(0, value);
@@ -28745,7 +28745,7 @@ extern "C" void fn_800BB694(int index, unsigned int kind, float value)
     } else {
         lbl_803EAB94 = 1;
     }
-    if ((pMode = fn_80148A58()) == 0 || pMode->vfn_21() != 0) {
+    if ((pMode = MiniGameGetCurrent()) == 0 || pMode->vfn_21() != 0) {
         for (i = 0; i < BigObjGetCount(); i++) {
             BigObj_t *pObject = BigObjGet(i);
 
@@ -28973,14 +28973,14 @@ extern "C" void fn_800BBF18(void)
     int i;
 
     if (playing == 0 && lbl_803EC98C->mUnknownC != -1
-        && ((pMode = fn_80148A58()) == 0 || pMode->vfn_21() != 0)) {
+        && ((pMode = MiniGameGetCurrent()) == 0 || pMode->vfn_21() != 0)) {
         fn_80096D14(lbl_803EC98C->mUnknown8);
         lbl_803EC98C->mUnknown8 = lbl_803EC98C->mUnknownC;
         lbl_803EC98C->mUnknownC = -1;
         playing = fn_80096B1C(lbl_803EC98C->mUnknown8);
     }
     if (playing != 0 && lbl_803EC98C->mUnknownC == -1 && lbl_803EC98C->mUnknown4 % 60 == 0
-        && ((pMode = fn_80148A58()) == 0 || pMode->vfn_21() != 0)) {
+        && ((pMode = MiniGameGetCurrent()) == 0 || pMode->vfn_21() != 0)) {
         for (i = 0; i < BigObjGetCount(); i++) {
             BigObj_t *pObject = BigObjGet(i);
 
@@ -29007,7 +29007,7 @@ extern "C" void fn_800BBF18(void)
             fn_800BAF7C();
         }
         PauseUnblock();
-        if ((pMode = fn_80148A58()) == 0 || pMode->vfn_21() != 0) {
+        if ((pMode = MiniGameGetCurrent()) == 0 || pMode->vfn_21() != 0) {
             for (i = 0; i < BigObjGetCount(); i++) {
                 BigObj_t *pObject = BigObjGet(i);
 
@@ -29049,7 +29049,7 @@ extern "C" void fn_800BC190(int index, int value)
         sides[0] = index & 1;
     }
     if (fn_801485D4() != 0) {
-        unsigned int mode = fn_80148A58()->vfn_05(0);
+        unsigned int mode = MiniGameGetCurrent()->vfn_05(0);
 
         if (mode <= 2) {
             lbl_803EAB98 = 0;

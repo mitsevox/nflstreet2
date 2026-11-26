@@ -180,7 +180,7 @@ int DepthChartCancel(int group)
 void DepthChartAutoFill(int group, int *list, int value)
 {
     if (fn_801485D4()) {
-        fn_80148A58()->vfn_10(value, list, _DepthChart_aCommitted[group]);
+        MiniGameGetCurrent()->vfn_10(value, list, _DepthChart_aCommitted[group]);
     } else {
         AutoDepthFillChart(value, list, _DepthChart_aCommitted[group]);
     }
@@ -191,7 +191,7 @@ void DepthChartAutoFill(int group, int *list, int value)
 void DepthChartAutoFillEx(int group, int *list, int value, int a, int b)
 {
     if (fn_801485D4()) {
-        fn_80148A58()->vfn_11(value, list, _DepthChart_aCommitted[group], a, b);
+        MiniGameGetCurrent()->AutoFillDepthChart(value, list, _DepthChart_aCommitted[group], a, b);
     } else {
         AutoDepthFillChart(value, list, _DepthChart_aCommitted[group]);
     }
