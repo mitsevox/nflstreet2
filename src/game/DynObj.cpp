@@ -2018,7 +2018,7 @@ struct PhysBodyOwner_t {
     Block_80170E64 *mpBlock;
     unsigned short mUnknown16;
     unsigned short mType;
-    unsigned short mUnknown20;
+    short mUnknown20;
     short mUnknown22;
 };
 
@@ -2579,7 +2579,7 @@ void PhysLoadObject(int handle, BigObj_t *pObject, int objectIndex)
             _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown16 = objectIndex;
             _Phys_aBodyOwners[_Phys_iBodyCount].mType = _Phys_iBodyCount;
             _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown22 = -1;
-            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = 0xFFFF;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = -1;
             pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &_Phys_aBodyOwners[_Phys_iBodyCount], mass,
                                       ObjParseGetFloat(handle, "dThres"));
             if (ObjParseGetVector(handle, "iVel", &initial.mX)) SetBodyLinearVelocity(pBody, &initial);
@@ -2608,7 +2608,7 @@ void PhysLoadObject(int handle, BigObj_t *pObject, int objectIndex)
             _Phys_aBodyOwners[_Phys_iBodyCount].mType = _Phys_iBodyCount;
             _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown16 = objectIndex;
             _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown22 = -1;
-            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = 0xFFFF;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = -1;
             pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &_Phys_aBodyOwners[_Phys_iBodyCount], mass, 2.0f);
             velocity.mX = 0.0f;
             velocity.mY = 0.0f;
@@ -2675,7 +2675,7 @@ void PhysAddPlayers(void)
             _Phys_aBodyOwners[_Phys_iBodyCount].mKind = 1;
             _Phys_aBodyOwners[_Phys_iBodyCount].mpObject = 0;
             _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown2 = 1;
-            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = 0xFFFF;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = -1;
             _Phys_aBodyOwners[_Phys_iBodyCount].mType = _Phys_iBodyCount;
             _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown22 = slot;
             RigidBody *pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &_Phys_aBodyOwners[_Phys_iBodyCount], mass, 0.4f);
@@ -2716,7 +2716,7 @@ void PhysAddBall(void)
     _Phys_aBodyOwners[_Phys_iBodyCount].mKind = 6;
     _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown22 = -1;
     _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown2 = 1;
-    _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = 0xFFFF;
+    _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = -1;
     _Phys_aBodyOwners[_Phys_iBodyCount].mType = _Phys_iBodyCount;
     RigidBody *pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &_Phys_aBodyOwners[_Phys_iBodyCount], mass, 0.4f);
     velocity.mZ = velocity.mY = velocity.mX = 0.0f;
@@ -2760,7 +2760,7 @@ void PhysInit(void)
     _Phys_aBodyOwners[_Phys_iBodyCount].mKind = 0;
     _Phys_aBodyOwners[_Phys_iBodyCount].mType = _Phys_iBodyCount;
     _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown22 = -1;
-    _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = 0xFFFF;
+    _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = -1;
     _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown2 = 1;
     RigidBody *pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pShapes, &_Phys_aBodyOwners[_Phys_iBodyCount], 0.0f, 0.4f);
     position.mX = 0.0f;
