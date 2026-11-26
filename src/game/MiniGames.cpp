@@ -122,7 +122,7 @@ struct Score_801531C4 {
 class Record_8005CE10 {
 public:
     Record_8005CE10() : mOrdinal(0), mEvent(11), mPlayer(32767), mConversion(11), mOther(32767), mFlag(0) {}
-    virtual ~Record_8005CE10();
+    virtual ~Record_8005CE10() {}
     unsigned int mOrdinal;
     unsigned int mEvent;
     int mPlayer;
@@ -510,7 +510,6 @@ public:
     int mUnknown0;
     unsigned int mUnknown4;
     unsigned char mUnknown8;
-    char mUnknown9[3];
     unsigned int mUnknown12[10];
 };
 
@@ -646,7 +645,7 @@ public:
     virtual void AssignControlledPlayers();
 
     Block_80170E64 *mpUnknown4[2][2];
-    unsigned char mUnknown20[2][2];
+    signed char mUnknown20[2][2];
 };
 
 class Class_802A1B18 : public Class_80297B50 {
@@ -833,7 +832,7 @@ int fn_800C1E40(void);
 void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_801486A8(void);
-void fn_801487C0(int team, unsigned char begin);
+void fn_801487C0(int team, int begin);
 void BallResetToSpot(void);
 void PlayBookSetFormationType(int team, int kind);
 int PlayCallScriptRunOffense(int mode);
@@ -954,6 +953,10 @@ int fn_8009D9A8(int index);
 void PlyrMgrResetAll(void);
 void fn_801527E0(Class_802A2918 *p, int value);
 void fn_80151010(Class_802A1D20 *p);
+void ResetBallsAndFieldPositions(Class_802A1D20 *p);
+void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d);
+void SndgEventSetCrowdCycle(int value);
+void OSReport(const char *pMessage, ...);
 void RefreshFourPlayerScoreRows(Class_802A1D20 *p);
 void fn_80151BCC(Class_802A2918 *p);
 void fn_80151D9C(Class_802A2918 *p);
@@ -998,7 +1001,6 @@ extern int lbl_803EB2F4;
 void PlayBookLoadAudibles(int team);
 extern int lbl_802DEB78[];
 char *strcpy(char *pDest, const char *pSource);
-extern const float lbl_802A3000[][8];
 extern int lbl_802DEB08[];
 extern int lbl_802DEB40[];
 int fn_80178EA0(int team);
@@ -1114,7 +1116,7 @@ void fn_801486A8(void)
     }
 }
 
-void fn_801487C0(int team, unsigned char begin)
+void fn_801487C0(int team, int begin)
 {
     for (unsigned char index = begin; index < 7; ++index) {
         fn_80148814(PlyrGet(team, index));
@@ -2796,6 +2798,76 @@ void Class_802A2C90::vfn_10(int value, int *pList, int *pIds)
 
 void Class_802A2C90::vfn_11(int value, int *list, int *ids, unsigned int count, int b)
 {
+    mState.mpRecords = lbl_802DE6BC;
+    AutoDepthFillChart(value, list, ids);
+    mState.mpRecords = lbl_802DE41C;
+    int first = list[0];
+    int offense;
+    switch (b) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+        offense = 1;
+        break;
+    case 9:
+    case 10:
+    case 11:
+    case 13:
+        offense = 0;
+        break;
+    default:
+        b = 3;
+        offense = 1;
+        break;
+    }
+    unsigned char i;
+    int values[4];
+    if (offense) {
+        for (i = 0; i <= 6; i++) {
+            if (ids[i] == first) {
+                switch (i) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                default:
+                    ids[i] = ids[b];
+                    ids[b] = first;
+                    break;
+                }
+            }
+        }
+        fn_8014BC98(list, ids, count);
+        values[0] = ids[0];
+        values[1] = ids[2];
+        values[2] = ids[3];
+        values[3] = ids[1];
+        fn_8014BED8(values, ids, 4);
+    } else {
+        for (i = 7; i <= 13; i++) {
+            if (ids[i] == first) {
+                switch (i) {
+                case 9:
+                case 10:
+                case 11:
+                case 13:
+                    break;
+                default:
+                    ids[i] = ids[b];
+                    ids[b] = first;
+                    break;
+                }
+            }
+        }
+        fn_8014BED8(list, ids, count);
+        values[0] = ids[11];
+        values[1] = ids[9];
+        values[2] = ids[13];
+        values[3] = ids[10];
+        fn_8014BC98(values, ids, 4);
+    }
 }
 
 extern "C" {
@@ -2887,6 +2959,16 @@ extern "C" {
 
 void fn_8014D024(unsigned short index)
 {
+    for (; index != 0; index--) {
+        if (fn_8014F104(fn_80148A58())->mpUnknown34[index].mUnknown4 >
+            fn_8014F104(fn_80148A58())->mpUnknown34[index - 1].mUnknown4) {
+            Record_8014F104 temp = fn_8014F104(fn_80148A58())->mpUnknown34[index];
+            fn_8014F104(fn_80148A58())->mpUnknown34[index] = fn_8014F104(fn_80148A58())->mpUnknown34[index - 1];
+            fn_8014F104(fn_80148A58())->mpUnknown34[index - 1] = temp;
+        } else {
+            break;
+        }
+    }
 }
 
 void fn_8014D210(Object_80039F5C *p, int kind, int value)
@@ -4355,7 +4437,7 @@ void Class_802A1D20::OnExit()
 extern "C" {
 
 // Reset the balls and keep the three random field positions at least four units apart.
-void ResetBallsAndFieldPositions(void)
+void ResetBallsAndFieldPositions(Class_802A1D20 *p)
 {
     unsigned int count = BallsGetCount();
     Table_8015005C *pTable = fn_801530FC();
@@ -4402,6 +4484,100 @@ void ResetBallsAndFieldPositions(void)
 
 void fn_80151010(Class_802A1D20 *p)
 {
+    fn_801527E0(&lbl_8031BDD4, 1);
+    ResetBallsAndFieldPositions(p);
+    Point_8017886C origin = fn_80177FE0();
+    unsigned int count = BallsGetCount();
+    memset(p->mUnknown5, 0, 3);
+    unsigned char first = SyncRandGetRange(0, 3);
+    unsigned int players = fn_801530FC()->mUnknown119;
+    unsigned int i;
+    unsigned char ball;
+    Message_800F01CC message;
+    for (i = 0; i < players; i++) {
+        Object_80039F5C *pPlayer = PlyrGet(0, i);
+        if (i == first) {
+            ball = 0;
+        } else if (i == 0) {
+            ball = first;
+        } else {
+            ball = i;
+        }
+        Ball_t *pBall = BallGet(ball);
+        BallSetVisible(pBall, 1);
+        BallGiveToPlayer(pBall, pPlayer);
+        fn_80153168(&lbl_8031BDD4, ball, 0);
+        pPlayer->mMotion.mPos.mX = -((float)players * 0.5f * 2.0f) + (float)i * 2.0f;
+        pPlayer->mMotion.mPos.mY = origin.mY;
+        if (pPlayer->mUnknown2913 == 0) {
+            pPlayer->mMotion.mFacing = 0;
+        } else {
+            pPlayer->mMotion.mFacing = 0x800000;
+            pPlayer->mMotion.mPos.mX = pPlayer->mMotion.mPos.mX + 0.5f;
+        }
+        fn_800EFE60(0, pPlayer->mpState, pPlayer);
+        memset(&message, 0, 4);
+        message.mId = 51;
+        float delay = (signed char)SyncRandGetRange(0, 15) * (1.0f / 60.0f);
+        if (p->mUnknown8 == 1) {
+            if (p->mUnknown9 == 1) {
+                message.mUnknown1[0] = (int)((delay + 1.5f) * 32.0f);
+            } else {
+                message.mUnknown1[0] = (int)((delay + 0.4f) * 32.0f);
+            }
+        } else {
+            message.mUnknown1[0] = (int)((delay + 2.0f) * 32.0f);
+        }
+        fn_800F053C(0, pPlayer->mpState, &message, pPlayer);
+        fn_801024FC(pPlayer, 8, 15, 5, 0);
+        memset(&message, 0, 4);
+        message.mId = 62;
+        message.mUnknown1[0] = 0;
+        message.mUnknown1[1] = 0;
+        fn_800F03D8(0, pPlayer->mpState, &message, pPlayer);
+        if (pPlayer->mUnknown2913 == 0) {
+            pPlayer->mUnknown512.mUnknown0 = 1.0f;
+            pPlayer->mUnknown512.mUnknown14 = 3;
+            pPlayer->mUnknown512.mUnknown8 = 0;
+            pPlayer->mUnknown512.mUnknown4 = 0xC38E39;
+        } else {
+            pPlayer->mUnknown512.mUnknown0 = 1.0f;
+            pPlayer->mUnknown512.mUnknown14 = 3;
+            pPlayer->mUnknown512.mUnknown8 = 0x800000;
+            pPlayer->mUnknown512.mUnknown4 = 0xBC71C7;
+        }
+    }
+    p->mUnknown4 += players;
+    if (p->mUnknown4 > 2) {
+        p->mUnknown4 = 0;
+        SndgEventSetCrowdCycle(1);
+    }
+    Vector_80039F5C offField = {2048.0f, 2048.0f, 0.0f};
+    for (; i < count; i++) {
+        if (i == first) {
+            ball = 0;
+        } else {
+            ball = i;
+        }
+        Ball_t *pBall = BallGet(ball);
+        BallSetVisible(pBall, 0);
+        BallSetPosition(pBall, &offField);
+        fn_80153168(&lbl_8031BDD4, ball, 1);
+    }
+    unsigned int total = fn_801530FC()->mCount;
+    for (i = 0; i < total; i++) {
+        Object_80039F5C *pPlayer = PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0);
+        if (fn_801530FC()->mEntries[i].mUnknown12 == 0xFF &&
+            fn_800F06F4(0, pPlayer->mpState, 95, 0xFFFF) == 0xFFFF) {
+            memset(&message, 0, 4);
+            message.mId = 95;
+            fn_800F03D8(0, pPlayer->mpState, &message, pPlayer);
+        }
+    }
+    CamGameSetModeAll(12);
+    CamGameSelectCamera(0);
+    CamGameSetFocusAll(7, BallGetCurrentIndex());
+    p->mUnknown9 = 0;
 }
 
 // Clear eliminated players' rows; show each remaining player's current round total.
@@ -4876,7 +5052,7 @@ void Class_802A2918::vfn_12()
 
 extern "C" {
 
-Object_80039F5C *fn_8015264C(void)
+Object_80039F5C *fn_8015264C(Class_802A2918 *p)
 {
     return PlyrFindById(lbl_8031BDD4.mpUnknown1C->mpUnknown36->mEntries[0].mUnknown0);
 }
@@ -5033,7 +5209,85 @@ int Class_802A2918::vfn_30(int kind, int team, int index, Object_80039F5C *pPlay
 
 int Class_802A2918::vfn_26(int team, int index, Object_80039F5C *pPlayer, int kind)
 {
-    return 0;
+    int result = 0;
+    MiniGameSlotInfo_t info;
+
+    if (team == 1 && (unsigned int)index <= 3) {
+        fn_80152940(this, index, &info);
+        Object_80039F5C *pSlotPlayer = info.mpObject;
+        if (pSlotPlayer != 0) {
+            switch (kind) {
+            case 27:
+                {
+                    int ok = pSlotPlayer != fn_8015264C(this) && vfn_31(27, 1, index, pSlotPlayer, 1, 0);
+                    result = ok;
+                }
+                break;
+            case 28:
+                {
+                    int ok = !vfn_27(1, index, 30) && vfn_31(28, 1, index, pSlotPlayer, 3, 0);
+                    result = ok;
+                }
+                break;
+            case 29:
+                result = vfn_30(29, 1, index, pSlotPlayer) == 0;
+                break;
+            case 30:
+                {
+                    int ok = info.mUnknown16 == 0 && (unsigned int)info.mUnknown12 > 2;
+                    result = ok;
+                }
+                break;
+            case 31:
+                result = vfn_31(31, 1, index, pSlotPlayer, 1, 0);
+                break;
+            case 32:
+                result = vfn_31(32, 1, index, pSlotPlayer, 1, 0);
+                break;
+            case 17:
+                {
+                    int ok = vfn_31(17, 1, index, pSlotPlayer, 1, 0) &&
+                             (unsigned int)info.mUnknown4 >= (unsigned int)RecordsGetValue(23);
+                    result = ok;
+                }
+                break;
+            case 18:
+                {
+                    int ok = !vfn_27(1, index, 33) && !vfn_27(1, index, 19) &&
+                             vfn_31(18, 1, index, pSlotPlayer, 1, 0);
+                    result = ok;
+                }
+                break;
+            case 33:
+                {
+                    int ok = vfn_31(18, 1, index, pSlotPlayer, 1, 0) && mpUnknown1C->mpUnknown36->mUnknown126;
+                    result = ok;
+                }
+                break;
+            case 19:
+                if (vfn_31(19, 1, index, pSlotPlayer, 1, 0)) {
+                    MiniGameSlotInfo_t other;
+                    unsigned int i;
+                    result = 1;
+                    for (i = 0; i <= 3; i++) {
+                        if (index == i) {
+                            continue;
+                        }
+                        fn_80152940(this, i, &other);
+                        if ((unsigned int)info.mUnknown4 < (unsigned int)(other.mUnknown4 * 2)) {
+                            result = 0;
+                            break;
+                        }
+                    }
+                }
+                break;
+            default:
+                result = Class_80148A58::vfn_26(team, index, pSlotPlayer, kind);
+                break;
+            }
+        }
+    }
+    return result;
 }
 
 int Class_802A2918::vfn_05(int team)
@@ -5352,8 +5606,8 @@ void Class_802A1B58::AssignControlledPlayers()
     PreSnapPhase::AssignControlledPlayers();
     int team = fn_80178308();
     unsigned char kind = PortDbCountSidePlayers(team);
-    int first = fn_800B65A0(team);
-    int second = fn_800B65D0(team);
+    unsigned char first = fn_800B65A0(team);
+    unsigned char second = fn_800B65D0(team);
     Object_80039F5C *p0 = PlyrGet(team, 0);
     Object_80039F5C *p1 = PlyrGet(team, 1);
 
@@ -5394,6 +5648,10 @@ void Class_802A1B58::AssignControlledPlayers()
         fn_800B6714(p0, first);
         fn_800B6714(p1, second);
         fn_800B65C0(team, first);
+    }
+    if (0) {
+        OSReport("%s, %s", p0->mUnknown2927, p1->mUnknown2927);
+        OSReport("%s-%s, %s", p0->mUnknown2927, p1->mUnknown2927, p0->mUnknown2927);
     }
 }
 
@@ -5617,6 +5875,12 @@ void Class_802A27F0::vfn_07(int kind, int value)
         break;
     }
 }
+
+static const float lbl_802A3000[3][8] = {
+    {10.0f, 10.0f, 0.0f, -10.0f, -5.0f, 85.0f, 200.0f, 85.0f},
+    {-5.0f, -10.0f, 0.0f, 10.0f, 10.0f, 85.0f, 200.0f, 85.0f},
+    {-5.0f, -6.0f, -8.0f, -6.0f, -5.0f, 85.0f, 200.0f, 85.0f},
+};
 
 const float * Class_802A27F0::vfn_09(int index)
 {
