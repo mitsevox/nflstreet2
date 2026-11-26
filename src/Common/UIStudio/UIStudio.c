@@ -42,6 +42,9 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
                   UISControlStateT *pControlState);
 Int32 fn_8021D9D4(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID);
 void *memmove(void *dst, const void *src, Uint32 n);
+int sprintf(char *s, const char *format, ...);
+Uint8 fn_8021A060(UISInfoT *pInfo);
+UISControlStateT *fn_8021D37C(UISScreenT *pScreen, UISControlStateT *pControlInfo);
 
 /* Runs the screen's static objects that have not run yet, then every action
    function under control Control and the controls it links to. */
@@ -531,8 +534,9 @@ Int32 fn_8021861C(UISScreenDataT *pNewBase)
 Uint32 fn_802188A0(Uint32 NumScreens, Uint32 NumActionFncs, Uint32 NumRateFncs, Uint32 Num40,
                    Uint32 NumA, Uint32 NumB)
 {
-    return (NumScreens + 1) * 20 + (NumActionFncs * 4 + sizeof(UISInfoT)) +
-           NumRateFncs * sizeof(UISRateFncT) + Num40 * 40 + (NumA + NumB) * 4;
+    return sizeof(UISInfoT) + (NumScreens + 1) * sizeof(UISScreenT) +
+           NumActionFncs * sizeof(UISPluginT) + NumRateFncs * sizeof(UISRateFncT) +
+           Num40 * sizeof(UISScreenRefT) + (NumB + NumA) * sizeof(Int32);
 }
 
 /* Sets the studio up in the block at pInfo (fn_802188A0 bytes): the header, then
@@ -640,9 +644,12 @@ void fn_80218ACC(UISInfoT *pInfo, UISScreenActivatedFncT *pScreenActivatedFnc)
 }
 
 /* Installs action function pFnc at index Fnc. */
-void fn_80218AD4(UISInfoT *pInfo, Int32 Fnc, UISActionFncT *pFnc)
+void fn_80218AD4(UISInfoT *pInfo, Uint32 Fnc, UISActionFncT *pFnc)
 {
-    pInfo->ActionFncs[Fnc].pFnc = pFnc;
+    UISPluginT *pPlugin;
+
+    pPlugin = &pInfo->ActionFncs[Fnc];
+    pPlugin->pFnc = pFnc;
     pInfo->NumActionFncs++;
 }
 
@@ -1140,26 +1147,150 @@ void fn_80219A54(UISInfoT *pInfo, Int32 Arg1)
 void *fn_80219AF8(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint16 ObjectID)
 {
     void *pObject;
-    Int32 Screen;
     UISScreenT *pScreen;
-    UISScreenDataT *pData;
-    UISObjectRefT *pRef;
+    Int32 Screen;
     Uint32 Object;
+    UISObjectRefT *pRef;
 
     pObject = 0;
     Screen = fn_8021C5EC(pInfo, GroupID, ScreenID);
     if (Screen < pInfo->NumScreens) {
         pScreen = &pInfo->Screens[Screen];
-        pData = pScreen->pData;
-        for (Object = 0; Object < pData->NumObjects; Object++) {
-            pRef = &pData->pObjects[Object];
+        for (Object = 0; Object < pScreen->pData->NumObjects; Object++) {
+            pRef = &pScreen->pData->pObjects[Object];
             if (pRef->ID == ObjectID) {
-                pObject = pRef->pOffset != 0 ? (Uint8 *)pData + *pRef->pOffset : 0;
+                pObject = pRef->pOffset != 0 ? (Uint8 *)pScreen->pData + *pRef->pOffset : 0;
                 break;
             }
         }
     }
     return pObject;
+}
+
+/* Switches (bActivate) the control whose state block is ControlInfo on or off
+   and runs its scripts for event -6 (on) or -7 (off), then those its parent
+   control has for it. Switching one on first switches off the sibling that is
+   on. The scripts get iDir and the block's place in the table TableEntry (a
+   count, a word, then file offsets; -1 when it is not there). */
+void fn_80219BA0(UISInfoT *pInfo, Int32 bActivate, Int16 iDir, Int32 ControlInfo,
+                 Int32 TableEntry, Uint16 ScreenID, Uint16 GroupID)
+{
+    UISControlStateT *pControlInfo;
+    Int32 *pTableEntry;
+    Uint32 Control;
+    UISScreenT *pScreen;
+    UISControlT *pParent;
+    UISControlT *pTarget;
+    UISControlT *pCheck;
+    UISControlStateT *pOldEnabled;
+    Int32 nSlot;
+    Int32 nEvent;
+    Uint32 Screen;
+    Uint32 NumControls;
+    UISControlItemT *pMap;
+    Int32 Map;
+    Int32 pcEvent;
+    Int32 aArgs[2];
+
+    pControlInfo = (UISControlStateT *)ControlInfo;
+    pTableEntry = (Int32 *)TableEntry;
+    nSlot = -1;
+    Screen = fn_8021C5EC(pInfo, GroupID, ScreenID);
+    pTarget = 0;
+    if (Screen >= pInfo->NumScreens) {
+        return;
+    }
+    pScreen = &pInfo->Screens[Screen];
+    nEvent = bActivate == 1 ? -6 : -7;
+    Control = pScreen->pData->NumControls;
+    while (Control-- != 0) {
+        pCheck = &pScreen->pData->pControls[Control];
+        if (pCheck->pState == pControlInfo) {
+            pTarget = pCheck;
+            break;
+        }
+    }
+    pParent = 0;
+    NumControls = pScreen->pData->NumControls;
+    while (NumControls-- != 0) {
+        pCheck = &pScreen->pData->pControls[NumControls];
+        for (Map = 0; Map < (Int32)pCheck->NumItems; Map++) {
+            pMap = &pCheck->pItems[Map];
+            if (!(pMap->Flags & 0xC000) && (pMap->Flags & 0x2FFF) == (Int16)Control) {
+                pParent = pCheck;
+                break;
+            }
+        }
+    }
+    if (bActivate == 1) {
+        pOldEnabled = fn_8021D37C(pScreen, pControlInfo);
+        if (pOldEnabled != 0) {
+            fn_80219BA0(pInfo, 0, 0, (Int32)pOldEnabled, 0, ScreenID, GroupID);
+        }
+    }
+    pcEvent = fn_8021C654(pTarget, nEvent);
+    pTarget->pState->bEnabled = bActivate;
+    if (pTableEntry != 0) {
+        nSlot = pTableEntry[0];
+        while (nSlot-- != 0) {
+            if ((UISControlStateT *)(pTableEntry[nSlot + 2] + (Uint32)pScreen->pData) ==
+                pControlInfo) {
+                break;
+            }
+        }
+    }
+    aArgs[0] = iDir;
+    aArgs[1] = nSlot;
+    if (pcEvent != 0) {
+        fn_8021C760(pInfo, pScreen, pTarget->pState, &pInfo->RunState, pcEvent, 2, aArgs, 0, 0, 0,
+                    0, 0);
+    }
+    if (pParent != 0) {
+        pcEvent = fn_8021C6A8(pParent, (Uint16)Control, nEvent);
+        if (pcEvent != 0) {
+            fn_8021C760(pInfo, pScreen, pParent->pState, &pInfo->RunState, pcEvent, 2, aArgs, 0,
+                        0, 0, 0, 0);
+        }
+    }
+}
+
+/* Activates (bActivate) a screen. With no modal screen up, the current screen
+   first gets event -5; then, unless the studio is shutting down, the screen
+   becomes current, its first control is enabled, the game hears of it and it
+   gets event -4. A screen waiting to be unloaded is refused with a warning. */
+void fn_80219E18(UISInfoT *pInfo, Int32 bActivate, Uint16 GroupID, Uint16 ScreenID)
+{
+    char strBuffer[512];
+    UISScreenT *pScreen;
+    Uint32 Screen;
+
+    if (pInfo->NumScreenRefs == 0) {
+        pInfo->Flags |= 2;
+        fn_80219854(pInfo, &pInfo->RunState, 0, -5, 0, 0, 0);
+        pInfo->Flags &= ~2;
+    }
+    if (bActivate && !fn_8021A060(pInfo)) {
+        Screen = fn_8021C5EC(pInfo, GroupID, ScreenID);
+        if (Screen < pInfo->NumScreens) {
+            pScreen = &pInfo->Screens[Screen];
+            if (pScreen->bWaitingToBeUnloaded == 0) {
+                pScreen->pData->pControls[0].pState->bEnabled = 1;
+                pInfo->ActiveScreen = Screen;
+                if (pInfo->pScreenActivatedFnc != 0) {
+                    pInfo->pScreenActivatedFnc(pScreen->GroupID, pScreen->ScreenID);
+                }
+                pInfo->Flags |= 2;
+                fn_80219854(pInfo, &pInfo->RunState, 0, -4, 0, 0, 0);
+                pInfo->Flags &= ~2;
+            } else {
+                sprintf(strBuffer,
+                        "Attempting to activate screen (Group ID: %d, Screen ID: %d) which is "
+                        "waiting to be unloaded.\n",
+                        GroupID, ScreenID);
+                RuntimeErrorFnc(0, __FILE__, 3116, strBuffer);
+            }
+        }
+    }
 }
 
 void fn_80219F84(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Type, void *pNode, Int32 bValue)

@@ -1,0 +1,64 @@
++ tools/baseline.py --original /home/reborn/ns2/wt-c13f/orig/GN7E69-rev0/sys/main.dol
+[32m INFO[0m Loading /home/reborn/ns2/wt-c13f/build/baseline/config.yml
+[32m INFO[0m Loading and analyzing 1 module (using 1 thread)
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain[1m}[0m[2m:[0m Failed to locate _rom_copy_info
+[32m INFO[0m Initial analysis completed in 0.029s (found 0 functions)
+[32m INFO[0m Rebuilding relocations and splitting
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m[1mtracker[0m[2m:[0m Failed to locate function symbol @ 0:0x80003100
+[32m INFO[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Writing updated /home/reborn/ns2/wt-c13f/build/baseline/symbols.txt
+[32m INFO[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Writing updated /home/reborn/ns2/wt-c13f/build/baseline/splits.txt
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Unknown section .data6
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Unknown section .data5
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Unknown section .data4
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Unknown section .data3
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Unknown section .data2
+[32m INFO[0m Splitting completed in 0.734s (wrote 9 objects)
+[32m INFO[0m Total time: 0.767s
+Baseline verified: 3171840 bytes, SHA-1 3561e946e9ff785b68692f87d2ba85d81fd2dcf4
+Original objects only; reconstructed source and progress are not validated by this check.
++ tools/baseline.py --original /home/reborn/ns2/wt-c13f/orig/GN7E69-rev0/sys/main.dol --sn-linker /home/reborn/ns2/wt-c13f/build/toolchain/ProDG/3.9.3/ngcld.exe --wrapper /home/reborn/ns2/wt-c13f/build/toolchain/wibo
+[32m INFO[0m Loading /home/reborn/ns2/wt-c13f/build/baseline/config.yml
+[32m INFO[0m Loading and analyzing 1 module (using 1 thread)
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain[1m}[0m[2m:[0m Failed to locate _rom_copy_info
+[32m INFO[0m Initial analysis completed in 0.018s (found 0 functions)
+[32m INFO[0m Rebuilding relocations and splitting
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m[1mtracker[0m[2m:[0m Failed to locate function symbol @ 0:0x80003100
+[32m INFO[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Writing updated /home/reborn/ns2/wt-c13f/build/baseline/symbols.txt
+[32m INFO[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Writing updated /home/reborn/ns2/wt-c13f/build/baseline/splits.txt
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Unknown section .data6
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Unknown section .data5
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Unknown section .data4
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Unknown section .data3
+[33m WARN[0m [1mmodule[0m[1m{[0m[3mname[0m[2m=[0mmain [3mid[0m[2m=[0m0[1m}[0m[2m:[0m Unknown section .data2
+[32m INFO[0m Splitting completed in 0.693s (wrote 9 objects)
+[32m INFO[0m Total time: 0.714s
+Baseline verified: 3171840 bytes, SHA-1 3561e946e9ff785b68692f87d2ba85d81fd2dcf4
+Original objects only; reconstructed source and progress are not validated by this check.
++ -m unittest discover -s tests
+........................../home/reborn/ns2/wt-c13f/tools/boundaries.py:138: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp4bd19eem/symbols.tsv' mode='r' encoding='UTF-8'>
+  rows = list(csv.DictReader(open(path, newline=''), delimiter='\t'))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....................................................................[32m INFO[0m Writing to /tmp/tmppxbxqh6h/build/matching/candidates/0/data-rodata/diff.json
+...[32m INFO[0m Writing to /tmp/tmpqtg46yt7/build/matching/candidates/0/0/diff.json
+..[32m INFO[0m Writing to /tmp/tmpg_dfut6g/build/matching/candidates/0/data-rodata-80100000/diff.json
+.[32m INFO[0m Writing to /tmp/tmpj7jvvw5c/build/matching/candidates/0/data-rodata-80100000/diff.json
+[32m INFO[0m Writing to /tmp/tmpj7jvvw5c/build/matching/candidates/0/data-rodata-80100014/diff.json
+....[32m INFO[0m Writing to /tmp/tmptvuxzgkl/build/matching/candidates/0/data-rodata-80100000/diff.json
+..[32m INFO[0m Writing to /tmp/tmp3fi2so1x/build/matching/candidates/0/data-rodata-80100000/diff.json
+.[32m INFO[0m Writing to /tmp/tmpxd__9bis/build/matching/candidates/0/data-rodata-80100000/diff.json
+.[32m INFO[0m Writing to /tmp/tmpnpovry4l/build/matching/candidates/0/0/diff.json
+...[32m INFO[0m Writing to /tmp/tmpyd_g1pym/build/matching/candidates/0/0/diff.json
+[32m INFO[0m Writing to /tmp/tmpyd_g1pym/build/matching/candidates/0/1/diff.json
+.............................[32m INFO[0m Writing to /tmp/tmpw89uy3fk/diff.json
+[32m INFO[0m Writing to /tmp/tmpw89uy3fk/diff.json
+[32m INFO[0m Writing to /tmp/tmpw89uy3fk/diff.json
+.........................................................................................................................................................................................s.......
+----------------------------------------------------------------------
+Ran 333 tests in 28.308s
+
+OK (skipped=1)
++ tools/boundaries.py --check --target GN7E69-rev0
+boundaries: claim src/engine/memchr.c takes functions a proposal holds (memchr.c); skipped
+boundaries: claim src/engine/copysignf.c takes functions a proposal holds (sf_copysign.c); skipped
+boundaries: claim src/engine/fabsf.c takes functions a proposal holds (sf_fabs.c); skipped
+boundaries: committed tables are current
