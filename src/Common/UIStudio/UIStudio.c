@@ -367,11 +367,12 @@ static void _ParseRateFncs(UISInfoT *pInfo, Uint32 MS)
     UISRunStateT *pStackInfo;
     Float32 fAcel;
     Int32 iElapse;
-    Float32 ReturnParam;
+    UISParamT ReturnParam;
     Int32 RateParams[3];
     Uint32 nParam;
     Float32 *pfModVal;
     Float32 newVal;
+    Float32 toTarg;
     Int32 pEndRateFncPC;
 
     fAcel = 0.0f;
@@ -380,6 +381,7 @@ static void _ParseRateFncs(UISInfoT *pInfo, Uint32 MS)
     pInfo->Flags |= 4;
     NumRateFncs = pInfo->NumRateFncs;
     for (RateFnc = 0; RateFnc < NumRateFncs; RateFnc++) {
+        iElapse = MS;
         pRateFnc = &pInfo->RateFncs[RateFnc];
         if (pRateFnc->State != UISRATE_ACTIVE) {
             continue;
@@ -388,7 +390,7 @@ static void _ParseRateFncs(UISInfoT *pInfo, Uint32 MS)
         if (pRateFnc->MSRate == 0) {
             continue;
         }
-        pRateFnc->MSCount += MS;
+        pRateFnc->MSCount += iElapse;
         iElapse = pRateFnc->MSCount - pRateFnc->MSLastCount;
         while (iElapse >= (Int32)pRateFnc->MSRate) {
             iElapse -= pRateFnc->MSRate;
@@ -397,7 +399,7 @@ static void _ParseRateFncs(UISInfoT *pInfo, Uint32 MS)
                 if (pRateFnc->State != UISRATE_ACTIVE) {
                     break;
                 }
-                ReturnParam = 1.0f;
+                ReturnParam.fValue = 1.0f;
                 RateParams[0] = pRateFnc->RateFncID;
                 RateParams[1] = pRateFnc->MSLastCount;
                 if (pRateFnc->AnimationData.iType == 0) {
@@ -408,22 +410,22 @@ static void _ParseRateFncs(UISInfoT *pInfo, Uint32 MS)
                 }
                 fn_8021C760(pInfo, pScreen, (UISControlStateT *)pRateFnc->pControlInfo, pStackInfo,
                             (Int32)pRateFnc->pFnc, nParam, RateParams, 0, 0, 0, -1,
-                            (Int32 *)&ReturnParam);
-                fAcel = ReturnParam;
+                            &ReturnParam.iValue);
+                fAcel = ReturnParam.fValue;
             } else {
                 fAcel = 1.0f;
             }
             if (pRateFnc->AnimationData.iType != 0) {
+                newVal = 0.0f;
                 pfModVal = UISGetActionPtrValue(pRateFnc->AnimationData.iType,
                                                 pRateFnc->AnimationData.pSubControlInfo);
+                toTarg = pRateFnc->AnimationData.fStepValue;
                 if (fAcel < 0.0f) {
                     fAcel = 1.0f;
                 }
-                newVal = pRateFnc->AnimationData.fStepValue * fAcel + *pfModVal;
-                if ((pRateFnc->AnimationData.fStepValue > 0.0f &&
-                     newVal < pRateFnc->AnimationData.fEndValue) ||
-                    (pRateFnc->AnimationData.fStepValue < 0.0f &&
-                     newVal > pRateFnc->AnimationData.fEndValue)) {
+                newVal = toTarg * fAcel + *pfModVal;
+                if ((toTarg > 0.0f && newVal < pRateFnc->AnimationData.fEndValue) ||
+                    (toTarg < 0.0f && newVal > pRateFnc->AnimationData.fEndValue)) {
                     *pfModVal = newVal;
                 } else {
                     *pfModVal = pRateFnc->AnimationData.fEndValue;
@@ -463,7 +465,6 @@ Int32 PatchScrData(UISScreenDataT *pNewBase)
     Uint32 Map;
     UISControlItemT *pMap;
     Uint32 *pPatch;
-    UISObjectRefT *pRef;
 
     if ((Uint32)pNewBase->pControls < (Uint32)pNewBase) {
         pNewBase->pControls = (UISControlT *)((Uint32)pNewBase + (Uint32)pNewBase->pControls);
@@ -507,21 +508,21 @@ Int32 PatchScrData(UISScreenDataT *pNewBase)
             (Uint32 *)((Uint32)pNewBase + (Uint32)pNewBase->pStringPatchTable);
         Control = pNewBase->NumPatchStrings;
         while (Control-- != 0) {
-            pPatch = (Uint32 *)((Uint32)pNewBase + pNewBase->pStringPatchTable[Control]);
-            if (*pPatch < pNewBase->NumStrings) {
-                *pPatch = (Uint32)&pNewBase->pStrings[*pPatch];
+            UISStringT **patchAddr;
+
+            patchAddr = (UISStringT **)((Uint32)pNewBase + pNewBase->pStringPatchTable[Control]);
+            if ((Uint32)*patchAddr < pNewBase->NumStrings) {
+                *patchAddr = &pNewBase->pStrings[(Uint32)*patchAddr];
             } else {
-                *pPatch = 0;
+                *patchAddr = 0;
             }
         }
         pNewBase->pObjects = (UISObjectRefT *)((Uint32)pNewBase + (Uint32)pNewBase->pObjects);
         Map = pNewBase->NumObjects;
         while (Map-- != 0) {
-            pRef = &pNewBase->pObjects[Map];
-            if (pRef->pOffset != 0) {
-                pRef->pOffset = *(Int32 *)((Uint32)pNewBase + (Uint32)pRef->pOffset) != 0
-                                    ? (Int32 *)((Uint32)pNewBase + (Uint32)pRef->pOffset)
-                                    : 0;
+            if (pNewBase->pObjects[Map].pOffset != 0) {
+                pPatch = (Uint32 *)((Uint32)pNewBase + (Uint32)pNewBase->pObjects[Map].pOffset);
+                pNewBase->pObjects[Map].pOffset = *pPatch != 0 ? (Int32 *)pPatch : 0;
             }
         }
         return 1;
