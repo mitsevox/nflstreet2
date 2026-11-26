@@ -30442,27 +30442,27 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801C20F0",
+          "symbol": "_WriteInt",
           "start": "0x801C20F0",
           "end": "0x801C21D0"
         },
         {
-          "symbol": "fn_801C21D0",
+          "symbol": "_WriteFloat",
           "start": "0x801C21D0",
           "end": "0x801C2428"
         },
         {
-          "symbol": "fn_801C2428",
+          "symbol": "_WriteSci",
           "start": "0x801C2428",
           "end": "0x801C2728"
         },
         {
-          "symbol": "fn_801C2728",
+          "symbol": "_WriteHex",
           "start": "0x801C2728",
           "end": "0x801C27D0"
         },
         {
-          "symbol": "fn_801C27D0",
+          "symbol": "_WriteString",
           "start": "0x801C27D0",
           "end": "0x801C289C"
         },
