@@ -371,7 +371,6 @@ static int _InGameScreens_iOverlayScreen = 3;
 static unsigned char _InGameScreens_bResetPending = 0;
 static unsigned char _InGameScreens_bLegendsUnlocked = 0;
 
-
 void GameStatsGather(void)
 {
     for (int i = 0; i <= 20; ++i) {
