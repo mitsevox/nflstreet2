@@ -37,6 +37,8 @@ static inline int _DbOccpAccepted(int err)
     return 0;
 }
 
+#define DBOCCP_KEY(table, col) (((unsigned long long)(unsigned int)(table) << 32) | (unsigned int)(col))
+
 static inline unsigned long long _DbOccpKey(unsigned int table, unsigned int col)
 {
     return ((unsigned long long)table << 32) | col;
@@ -104,13 +106,21 @@ static inline void _DbOccpSetSubCol(TDbExpr_t *pExpr, int op, TDbExpr_t *pSub, u
 }
 
 /* float sub-expression op float */
+typedef union DbOccpFloatBits {
+    float f;
+    unsigned int u;
+} DbOccpFloatBits;
+
 static inline void _DbOccpSetSubFloat(TDbExpr_t *pExpr, int op, TDbExpr_t *pSub, float value)
 {
+    DbOccpFloatBits v;
+
+    v.f = value;
     pExpr->mOp = op;
     pExpr->mLeft.mType = TDB_TYPE_EXPR_FLOAT;
     pExpr->mLeft.mValue.p = pSub;
     pExpr->mRight.mType = TDB_TYPE_FLOAT;
-    pExpr->mRight.mValue.f = value;
+    pExpr->mRight.mValue.u = v.u;
 }
 
 int DbOccpModuleInit(int db)
@@ -207,6 +217,8 @@ int DbOccpQueryPassing(const char *pWhere, int b, int orderTable, int orderCol, 
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
+            if (_DbOccpAccepted(err)) {
+            }
         }
     }
     return err;
@@ -231,7 +243,7 @@ int DbOccpQueryRushing(const char *pWhere, int b, int orderTable, int orderCol, 
                               "where 'FOGP'.'taug' != 0 and \x8f\n",
                               table, pWhere);
     if (_DbOccpAccepted(err)) {
-        aKeys[0] = _DbOccpKey(table, 0x63736370);
+        aKeys[0] = DBOCCP_KEY(table, 0x63736370);
         _DbOccpSetTrunc(&aTerms[0], &scale);
         _DbOccpSetSubFloat(&scale, 0x40010, &ratio, 10.0f);
         _DbOccpSetColCol(&ratio, 0x100018, _DbOccpKey(table, 0x61797567), _DbOccpKey(table, 0x74617567));
@@ -242,6 +254,8 @@ int DbOccpQueryRushing(const char *pWhere, int b, int orderTable, int orderCol, 
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
+            if (_DbOccpAccepted(err)) {
+            }
         }
     }
     return err;
@@ -268,11 +282,11 @@ int DbOccpQueryReceiving(const char *pWhere, int b, int orderTable, int orderCol
                               "('FOGP'.'accg' > 0 or 'FOGP'.'rdcg' > 0) and \x8f\n",
                               table, pWhere);
     if (_DbOccpAccepted(err)) {
-        aKeys[0] = _DbOccpKey(table, 0x61726370);
+        aKeys[0] = DBOCCP_KEY(table, 0x61726370);
         _DbOccpSetTrunc(&aTerms[0], &scale0);
         _DbOccpSetSubFloat(&scale0, 0x40010, &ratio0, 10.0f);
         _DbOccpSetColCol(&ratio0, 0x100018, _DbOccpKey(table, 0x61796367), _DbOccpKey(table, 0x61636367));
-        aKeys[1] = _DbOccpKey(table, 0x63726370);
+        aKeys[1] = DBOCCP_KEY(table, 0x63726370);
         _DbOccpSetTrunc(&aTerms[1], &scale1);
         _DbOccpSetSubFloat(&scale1, 0x40010, &ratio1, 10.0f);
         _DbOccpSetColCol(&ratio1, 0x100018, _DbOccpKey(table, 0x63796367), _DbOccpKey(table, 0x61636367));
@@ -283,6 +297,8 @@ int DbOccpQueryReceiving(const char *pWhere, int b, int orderTable, int orderCol
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
+            if (_DbOccpAccepted(err)) {
+            }
         }
     }
     return err;
@@ -329,11 +345,11 @@ int DbOccpQueryDefense(const char *pWhere, int b, int orderTable, int orderCol, 
                               "'YALP'.'DIGP' where \x8f\n",
                               table, pWhere);
     if (_DbOccpAccepted(err)) {
-        aKeys[0] = _DbOccpKey(table, 0x61696370);
+        aKeys[0] = DBOCCP_KEY(table, 0x61696370);
         _DbOccpSetTrunc(&aTerms[0], &scale);
         _DbOccpSetSubFloat(&scale, 0x40010, &ratio, 10.0f);
         _DbOccpSetColCol(&ratio, 0x100018, _DbOccpKey(table, 0x79697367), _DbOccpKey(table, 0x6E697367));
-        aKeys[1] = _DbOccpKey(table, 0x74646370);
+        aKeys[1] = DBOCCP_KEY(table, 0x74646370);
         _DbOccpSetColCol(&aTerms[1], 0x4000D, _DbOccpKey(table, 0x74697367), _DbOccpKey(table, 0x74666C67));
         aKeys[2] = -1;
         _DbOccpSetTable(&aTables[0], table, 2, 0);
@@ -342,6 +358,8 @@ int DbOccpQueryDefense(const char *pWhere, int b, int orderTable, int orderCol, 
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
+            if (_DbOccpAccepted(err)) {
+            }
         }
     }
     return err;
@@ -369,10 +387,10 @@ int DbOccpQueryKicking(const char *pWhere, int b, int orderTable, int orderCol, 
                               "!= 0 or 'IKGP'.'knkg' != 0) and \x8f\n",
                               table, pWhere);
     if (_DbOccpAccepted(err)) {
-        aKeys[0] = _DbOccpKey(table, 0x70666370);
+        aKeys[0] = DBOCCP_KEY(table, 0x70666370);
         _DbOccpSetSubCol(&aTerms[0], 0x4000F, &made0, _DbOccpKey(table, 0x61666B67));
         _DbOccpSetColInt(&made0, 0x40010, _DbOccpKey(table, 0x6D666B67), 100);
-        aKeys[1] = _DbOccpKey(table, 0x70786370);
+        aKeys[1] = DBOCCP_KEY(table, 0x70786370);
         _DbOccpSetSubCol(&aTerms[1], 0x4000F, &made1, _DbOccpKey(table, 0x61656B67));
         _DbOccpSetColInt(&made1, 0x40010, _DbOccpKey(table, 0x6D656B67), 100);
         aKeys[2] = -1;
@@ -382,6 +400,8 @@ int DbOccpQueryKicking(const char *pWhere, int b, int orderTable, int orderCol, 
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
+            if (_DbOccpAccepted(err)) {
+            }
         }
     }
     return err;
@@ -408,11 +428,11 @@ int DbOccpQueryPunting(const char *pWhere, int b, int orderTable, int orderCol, 
                               "'IKGP'.'tapg' != 0 and \x8f\n",
                               table, pWhere);
     if (_DbOccpAccepted(err)) {
-        aKeys[0] = _DbOccpKey(table, 0x61756370);
+        aKeys[0] = DBOCCP_KEY(table, 0x61756370);
         _DbOccpSetTrunc(&aTerms[0], &scale0);
         _DbOccpSetSubFloat(&scale0, 0x40010, &ratio0, 10.0f);
         _DbOccpSetColCol(&ratio0, 0x100018, _DbOccpKey(table, 0x61797067), _DbOccpKey(table, 0x74617067));
-        aKeys[1] = _DbOccpKey(table, 0x6E756370);
+        aKeys[1] = DBOCCP_KEY(table, 0x6E756370);
         _DbOccpSetTrunc(&aTerms[1], &scale1);
         _DbOccpSetSubFloat(&scale1, 0x40010, &ratio1, 10.0f);
         _DbOccpSetColCol(&ratio1, 0x100018, _DbOccpKey(table, 0x796E7067), _DbOccpKey(table, 0x74617067));
@@ -423,6 +443,8 @@ int DbOccpQueryPunting(const char *pWhere, int b, int orderTable, int orderCol, 
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
+            if (_DbOccpAccepted(err)) {
+            }
         }
     }
     return err;
@@ -449,11 +471,11 @@ int DbOccpQueryReturns(const char *pWhere, int b, int orderTable, int orderCol, 
                               "where \x8f\n",
                               table, pWhere);
     if (_DbOccpAccepted(err)) {
-        aKeys[0] = _DbOccpKey(table, 0x616B6370);
+        aKeys[0] = DBOCCP_KEY(table, 0x616B6370);
         _DbOccpSetTrunc(&aTerms[0], &scale0);
         _DbOccpSetSubFloat(&scale0, 0x40010, &ratio0, 10.0f);
         _DbOccpSetColCol(&ratio0, 0x100018, _DbOccpKey(table, 0x796B7267), _DbOccpKey(table, 0x616B7267));
-        aKeys[1] = _DbOccpKey(table, 0x61706370);
+        aKeys[1] = DBOCCP_KEY(table, 0x61706370);
         _DbOccpSetTrunc(&aTerms[1], &scale1);
         _DbOccpSetSubFloat(&scale1, 0x40010, &ratio1, 10.0f);
         _DbOccpSetColCol(&ratio1, 0x100018, _DbOccpKey(table, 0x79707267), _DbOccpKey(table, 0x61707267));
@@ -464,6 +486,8 @@ int DbOccpQueryReturns(const char *pWhere, int b, int orderTable, int orderCol, 
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
+            if (_DbOccpAccepted(err)) {
+            }
         }
     }
     return err;
