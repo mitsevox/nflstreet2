@@ -1204,7 +1204,6 @@ MiniGameC *MiniGameGetCurrent(void)
 
 } /* extern "C" */
 
-
 MiniGameC::MiniGameC()
 {
     mUnknown0 = 2;
@@ -2102,7 +2101,6 @@ char *lbl_803EB2CC = "Turnover TD";
 unsigned char lbl_803EB2D0 = 0;
 unsigned char lbl_803EB2D1 = 0;
 
-
 MiniGame2MinuteC::MiniGame2MinuteC()
 {
     mState.mCount = 14;
@@ -2630,7 +2628,6 @@ void MiniGame4On4PreGameC::OnUpdate(float dt)
         PreGamePhase::OnUpdate(dt);
     }
 }
-
 
 Record_80148C4C lbl_802DE41C[14] = {
     {0, {0, 0, 6, 0, 2, 0, 10, 0, 0, 0}, 0},
@@ -3683,7 +3680,6 @@ int fn_8014EDBC(void)
 
 } /* extern "C" */
 
-
 MiniGameCrushCarrierC::MiniGameCrushCarrierC()
 {
     mState.mCount = 1;
@@ -4141,7 +4137,6 @@ void MiniGameJumpBallRulesC::AwardWin(int value)
     }
     fn_801502B4(this);
 }
-
 
 extern "C" void fn_801502B4(void *p)
 {
@@ -4675,7 +4670,6 @@ void MiniGameJumpBallGameEndC::vfn_09()
 {
     fn_8021956C(gUISMainInfo, 3, 19, 1);
 }
-
 
 MiniGameJumpBallC::MiniGameJumpBallC()
 {
@@ -5776,7 +5770,6 @@ void MiniGameOpenFieldGameEndC::vfn_09()
 {
     fn_8021956C(gUISMainInfo, 3, 20, 1);
 }
-
 
 MiniGameOpenFieldC::MiniGameOpenFieldC()
 {
