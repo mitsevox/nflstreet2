@@ -172,12 +172,12 @@ typedef struct TDbPool_803E9654 {
     char mUnk0[0x1C];
 } TDbPool_803E9654;
 
-extern TDbDefault_803E944C lbl_803E944C[];
-extern TDbDefault_803E944C lbl_803E95DC[15];
-extern TDbPool_803E9654 lbl_803E9654;
-extern TDbPool_803E9654 lbl_803E9670;
-extern TDbPool_803E9654 lbl_803E968C;
-extern TDbPool_803E9654 _tDbIndexPool;
+TDbDefault_803E944C _tDbDefaultDbStack[50];
+TDbDefault_803E944C _tDbQryCallbackNames[15];
+TDbPool_803E9654 _tDbGlobalExprPool;
+TDbPool_803E9654 _tDbQryMem;
+TDbPool_803E9654 _tDbQrySearchMem;
+TDbPool_803E9654 _tDbIndexPool;
 
 extern unsigned int strlen(const char *s);
 extern int strncmp(const char *a, const char *b, unsigned int n);
@@ -299,12 +299,12 @@ static int _TDbTblDefaultDbFind(int tbl)
     fallback = 0;
     while (i != 0) {
         i--;
-        if (tbl == lbl_803E944C[i].mTbl) {
-            db = lbl_803E944C[i].mDb;
+        if (tbl == _tDbDefaultDbStack[i].mTbl) {
+            db = _tDbDefaultDbStack[i].mDb;
             break;
         }
-        if (fallback == 0 && lbl_803E944C[i].mTbl == 0) {
-            fallback = lbl_803E944C[i].mDb;
+        if (fallback == 0 && _tDbDefaultDbStack[i].mTbl == 0) {
+            fallback = _tDbDefaultDbStack[i].mDb;
         }
     }
     if (db == 0) {
@@ -393,23 +393,23 @@ int TDbInit(TDbInitParms_801F8A0C *pParms)
     int i;
 
     for (i = 0; i < 15; i++) {
-        lbl_803E95DC[i].mDb = 0;
-        lbl_803E95DC[i].mTbl = 0;
+        _tDbQryCallbackNames[i].mDb = 0;
+        _tDbQryCallbackNames[i].mTbl = 0;
     }
     _tDbDefaultDbStackUsed = 0;
     _tDbDatabaseList = 0;
     err = TDbExtMemInit(-1, pParms->mHeapSize, &_tDbGlobalMemoryHeapID);
     if (err == 0) {
         Notify_801F8A54(err, -1, -1);
-        err = _TDbMemPoolInit(&lbl_803E9654, _tDbGlobalMemoryHeapID, 0x28, pParms->mPool0Max, pParms->mPool0Grow);
+        err = _TDbMemPoolInit(&_tDbGlobalExprPool, _tDbGlobalMemoryHeapID, 0x28, pParms->mPool0Max, pParms->mPool0Grow);
         if (err == 0) {
-            if (_TDbMemPoolInit(&lbl_803E9670, _tDbGlobalMemoryHeapID, 0x1C, pParms->mPool1Max, pParms->mPool1Grow) == 0) {
-                if (_TDbMemPoolInit(&lbl_803E968C, _tDbGlobalMemoryHeapID, 0x134, pParms->mPool2Max, pParms->mPool2Grow) == 0) {
+            if (_TDbMemPoolInit(&_tDbQryMem, _tDbGlobalMemoryHeapID, 0x1C, pParms->mPool1Max, pParms->mPool1Grow) == 0) {
+                if (_TDbMemPoolInit(&_tDbQrySearchMem, _tDbGlobalMemoryHeapID, 0x134, pParms->mPool2Max, pParms->mPool2Grow) == 0) {
                     goto pools_done;
                 }
-                _TDbMemPoolDeinit(&lbl_803E9670);
+                _TDbMemPoolDeinit(&_tDbQryMem);
             }
-            _TDbMemPoolDeinit(&lbl_803E9654);
+            _TDbMemPoolDeinit(&_tDbGlobalExprPool);
         pools_done:
             err = _TDbMemPoolInit(&_tDbIndexPool, _tDbGlobalMemoryHeapID, 0x54, pParms->mIdxMax, pParms->mIdxGrow);
         }
@@ -439,10 +439,10 @@ void TDbShutdown(void)
         while (_tDbDatabaseList != 0) {
             TDbDestroy(_tDbDatabaseList->mId);
         }
-        _TDbMemPoolDeinit(&lbl_803E9670);
-        _TDbMemPoolDeinit(&lbl_803E9654);
+        _TDbMemPoolDeinit(&_tDbQryMem);
+        _TDbMemPoolDeinit(&_tDbGlobalExprPool);
         _TDbMemPoolDeinit(&_tDbIndexPool);
-        _TDbMemPoolDeinit(&lbl_803E968C);
+        _TDbMemPoolDeinit(&_tDbQrySearchMem);
         TDbExtMemShutdown(_tDbGlobalMemoryHeapID);
         _tDbDefaultDbStackUsed = -1;
     }
@@ -702,8 +702,8 @@ int TDbTblDefaultDbPush(int db, int *pTbls, int *pDbs)
         err = 5;
     } else {
         if ((unsigned int)_tDbDefaultDbStackUsed < 50) {
-            lbl_803E944C[_tDbDefaultDbStackUsed].mDb = db;
-            lbl_803E944C[_tDbDefaultDbStackUsed].mTbl = 0;
+            _tDbDefaultDbStack[_tDbDefaultDbStackUsed].mDb = db;
+            _tDbDefaultDbStack[_tDbDefaultDbStackUsed].mTbl = 0;
             _tDbDefaultDbStackUsed++;
             if (pTbls != 0 && pDbs != 0) {
                 for (; pDbs[i] != -1 && pTbls[i] != -1; i++) {
@@ -711,8 +711,8 @@ int TDbTblDefaultDbPush(int db, int *pTbls, int *pDbs)
                         err = 2;
                         break;
                     }
-                    lbl_803E944C[_tDbDefaultDbStackUsed + i].mDb = pDbs[i];
-                    lbl_803E944C[_tDbDefaultDbStackUsed + i].mTbl = pTbls[i];
+                    _tDbDefaultDbStack[_tDbDefaultDbStackUsed + i].mDb = pDbs[i];
+                    _tDbDefaultDbStack[_tDbDefaultDbStackUsed + i].mTbl = pTbls[i];
                 }
             }
         } else {
@@ -737,7 +737,7 @@ int TDbTblDefaultDbPop(void)
         n = i;
         do {
             i--;
-            if (lbl_803E944C[i].mTbl == 0) {
+            if (_tDbDefaultDbStack[i].mTbl == 0) {
                 n = i;
                 err = 0;
                 break;
@@ -757,8 +757,8 @@ int TDbTblDefaultDbGet(void)
     i = _tDbDefaultDbStackUsed;
     while (i != 0) {
         i--;
-        if (lbl_803E944C[i].mTbl == 0) {
-            db = lbl_803E944C[i].mDb;
+        if (_tDbDefaultDbStack[i].mTbl == 0) {
+            db = _tDbDefaultDbStack[i].mDb;
             break;
         }
     }
@@ -1405,7 +1405,7 @@ int TDbRegisterHandler(int db, int tbl)
 
     err = 0;
     for (i = 0; i < 15; i++) {
-        if (tbl == lbl_803E95DC[i].mTbl) {
+        if (tbl == _tDbQryCallbackNames[i].mTbl) {
             err = 0xA;
             break;
         }
@@ -1414,9 +1414,9 @@ int TDbRegisterHandler(int db, int tbl)
         return err;
     }
     for (i = 0; i < 15; i++) {
-        if (lbl_803E95DC[i].mTbl == 0) {
-            lbl_803E95DC[i].mDb = db;
-            lbl_803E95DC[i].mTbl = tbl;
+        if (_tDbQryCallbackNames[i].mTbl == 0) {
+            _tDbQryCallbackNames[i].mDb = db;
+            _tDbQryCallbackNames[i].mTbl = tbl;
             break;
         }
     }
@@ -1431,9 +1431,9 @@ int TDbUnregisterHandler(int tbl)
     unsigned int i;
 
     for (i = 0; i < 15; i++) {
-        if (tbl == lbl_803E95DC[i].mTbl) {
-            lbl_803E95DC[i].mDb = 0;
-            lbl_803E95DC[i].mTbl = 0;
+        if (tbl == _tDbQryCallbackNames[i].mTbl) {
+            _tDbQryCallbackNames[i].mDb = 0;
+            _tDbQryCallbackNames[i].mTbl = 0;
             break;
         }
     }

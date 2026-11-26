@@ -274,7 +274,7 @@ typedef struct TDbIOIndexPart_t {
 
 extern void (*_tDbMemAllocInfoCallback)(TDbMemEvent_t *pEvent);
 extern unsigned int crc32_table[256];
-extern TDbMemPool_t lbl_803E9654;
+extern TDbMemPool_t _tDbGlobalExprPool;
 extern TDbMemPool_t _tDbIndexPool;
 extern int (*TDbStrncmp)(const char *a, const char *b, int size);
 extern void *_tDbGlobalMemoryHeapID;
