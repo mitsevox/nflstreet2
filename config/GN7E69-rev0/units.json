@@ -1569,7 +1569,7 @@
             "evidence": "evidence.tsv source-form 0x8015BCAC-0x8015BED4"
           }
         ],
-        "evidence": "x1f/x2d merge notes (swarm x1/x2 tracking tables): src/game/RouteArrow.cpp holds out fn_8015A818, fn_8015B344, fn_8015BCAC."
+        "evidence": "x1f/x2d merge notes (swarm x1/x2 tracking tables): src/game/RouteArrow.cpp holds out RouteArrowAddCommand (0x8015B344) and RouteArrowBuild (0x8015BCAC); RouteArrowAddBlockPath (0x8015A818) is linked since wave p1 lane f."
       }
     },
     {
@@ -14239,7 +14239,7 @@
     {
       "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and data rows 0x802A4610-0x802A4624, 0x802A4624-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes; every data section linked whole.",
+      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and data rows 0x802A4610-0x802A4624, 0x802A4624-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes; every data section linked whole.",
       "sections": [
         {
           "section": ".text",

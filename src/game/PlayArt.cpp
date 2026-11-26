@@ -80,6 +80,7 @@ void PlayArtSetPlayerColors(PlayArtPlay_t *record, PlayArtState_t *state, PlayAr
         }
         if (inherited) {
             switch ((unsigned int)entry->mUnknown14Word) {
+            // FAKEMATCH: the 10-15 body is written twice (10-12, 13-15); it only shapes the compare tree (root 12)
             case 10: case 11: case 12:
                 r = (unsigned char)lbl_803EB3DC; g = (unsigned char)lbl_803EB3E0; b = (unsigned char)lbl_803EB3E4;
                 inherited = 0;
@@ -147,7 +148,6 @@ void PlayArtSetPlayerColors(PlayArtPlay_t *record, PlayArtState_t *state, PlayAr
                 }
                 break;
             // FAKEMATCH: no-op cases 23-35 and 36 (a dead store keeps its label apart); they only shape the compare tree
-
             case 23: case 24: case 25: case 26: case 27: case 28:
             case 29: case 30: case 31: case 32: case 33: case 34: case 35:
                 break;

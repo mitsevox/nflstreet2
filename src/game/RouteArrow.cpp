@@ -229,7 +229,6 @@ void RouteArrowAddBlockPath(RouteArrow_t *p, unsigned char *pCommand, Vector_800
                     break;
                 }
             } while (++i < count);
-
         }
     }
     float dx = pPlayer->mMotion.mPos.mX - origin.mX;
@@ -257,7 +256,6 @@ void RouteArrowAddBlockPath(RouteArrow_t *p, unsigned char *pCommand, Vector_800
     Vec2Sub(&delta, &target, pPoint);
     length = Vec2Magnitude(&delta);
     angle = MathArcTan2(delta.mY, delta.mX);
-
     if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
     RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
 }
@@ -451,7 +449,6 @@ int RouteArrowAddCommand(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F
         Vec2Sub(&target, &target, &point);
         angle = MathArcTan2(target.mY, target.mX);
         length = Vec2Magnitude(&target);
-
         RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
         p->mbMotion = 1;
         break;
