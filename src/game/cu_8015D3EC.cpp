@@ -1134,6 +1134,21 @@ int fn_8015F5BC(const char *pName)
     return id;
 }
 
+// FAKEMATCH: linker-discarded user of the unreferenced .rodata string at 0x802A3FA4, modelled on fn_8015F5BC; only its string reaches the target.
+static int _PlayerHeadFindCapModel(int cap, const char *pName)
+{
+    char name[43];
+    int id;
+
+    name[0] = 0;
+    fn_801C2D88(name, sizeof(name), "HEAD_MODEL_CAP%02d_%s_2700", cap, pName);
+    id = ResFindIndexByName(lbl_803ECAD8, name);
+    if (id == -1) {
+        id = 0x1D8;
+    }
+    return id;
+}
+
 void fn_8015F638(int style, int shape, int hat, int *pIds)
 {
     DbCursor cursor;

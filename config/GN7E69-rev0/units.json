@@ -1886,6 +1886,104 @@
       }
     },
     {
+      "source": "src/game/cu_8015D3EC.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/cu_8015D3EC.cpp), its function rows and the data rows 0x802A3F10-0x802A4010, 0x802DF180-0x802E32B0, 0x803EB330-0x803EB364; linked with holdouts (owner ruling of 2026-11-20), the five holdouts keeping their original bytes; every data section linked whole.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015D4E0",
+          "end": "0x8015D550"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015D68C",
+          "end": "0x8015DA80"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015DD3C",
+          "end": "0x8015E0B8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015E1F0",
+          "end": "0x8015F484"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015F5BC",
+          "end": "0x8015FFA8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A3F10",
+          "end": "0x802A4010"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DF180",
+          "end": "0x802E32B0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB330",
+          "end": "0x803EB364"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031C098",
+          "end": "0x8031C864"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA6C",
+          "end": "0x803ECAE8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8015D3EC",
+            "evidence": "evidence.tsv source-form 0x8015D3EC-0x8015D4E0"
+          },
+          {
+            "function": "fn_8015D550",
+            "evidence": "evidence.tsv source-form 0x8015D550-0x8015D68C"
+          },
+          {
+            "function": "fn_8015DA80",
+            "evidence": "evidence.tsv source-form 0x8015DA80-0x8015DD3C"
+          },
+          {
+            "function": "fn_8015E0B8",
+            "evidence": "evidence.tsv source-form 0x8015E0B8-0x8015E1F0"
+          },
+          {
+            "function": "fn_8015F484",
+            "evidence": "evidence.tsv source-form 0x8015F484-0x8015F5BC"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (close files round 2, lane 5, holdouts table)"
+      },
+      "link_roots": {
+        "discarded": [
+          "_PlayerHeadFindCapModel"
+        ],
+        "evidence": "evidence.tsv linker row cu_8015D3EC discarded cap head model lookup"
+      }
+    },
+    {
       "source": "src/game/Loading.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80193FB0-0x80194B6C (src/game/Loading.cpp) and its data rows.",
