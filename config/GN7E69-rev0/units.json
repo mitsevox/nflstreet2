@@ -25772,7 +25772,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80055B2C",
+          "start": "0x80055584",
           "end": "0x8005740C"
         },
         {
@@ -25850,10 +25850,6 @@
       ],
       "holdouts": {
         "functions": [
-          {
-            "function": "GameStatsGather",
-            "evidence": "evidence.tsv source-form 0x80055584-0x80055B2C"
-          },
           {
             "function": "InGamePlayCallClose",
             "evidence": "evidence.tsv source-form 0x8005740C-0x800577DC"
