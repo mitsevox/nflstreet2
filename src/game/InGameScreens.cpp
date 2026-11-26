@@ -2376,7 +2376,7 @@ void InGameLeaderGetName(int team,int *pId,char *pFirst,int firstSize,char *pLas
     PlayerDbGetFirstName(&_InGameScreens_LeaderCursor,first,12); strncpy(pFirst,first,firstSize);
     PlayerDbGetLastName(&_InGameScreens_LeaderCursor,last,15); strncpy(pLast,last,lastSize);
 }
-void InGameLeaderClose(void) {fn_8008056C(&_InGameScreens_LeaderCursor);}
+void InGameLeaderClose(void) {PlayerCursorClose(&_InGameScreens_LeaderCursor);}
 void InGameLeaderOpen(int team)
 {
     Desc_8008044C desc;

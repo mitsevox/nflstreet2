@@ -178,7 +178,7 @@ void StoryTournamentCloseDbs(void)
         _StoryTournament_State.mOpen = 0;
     }
     ExpLevelClose();
-    fn_8008056C(_StoryTournament_pPlayerDb);
+    PlayerCursorClose(_StoryTournament_pPlayerDb);
     _StoryTournament_pPlayerDb = 0;
     StevClose();
     UserStatsClose(_StoryTournament_pUserStats);

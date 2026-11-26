@@ -29034,7 +29034,7 @@ extern "C" void fn_800BC190(int index, int value)
             lbl_803EAB9C = 0;
         }
     }
-    fn_8008040C(&reader, 0);
+    PlayerCursorOpenDefault(&reader, 0);
     for (i = 0; i < pActor->mUnknown4; i++) {
         int position = fn_80096440(AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown0);
 
@@ -29045,7 +29045,7 @@ extern "C" void fn_800BC190(int index, int value)
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mUnknown2912 = fn_80081E3C(&reader);
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mUnknown2920 = PlayerDbGetPybt(&reader);
     }
-    fn_8008056C(&reader);
+    PlayerCursorClose(&reader);
     lbl_803EC98C->mpUnknown10[index].mSlots[i].mUnknown0 = 31;
 }
 

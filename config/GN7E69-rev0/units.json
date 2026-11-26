@@ -19507,15 +19507,15 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8007FA48",
+            "function": "PlayerRecordFindFreeIds",
             "evidence": "evidence.tsv source-form 0x8007FA48-0x8007FC70"
           },
           {
-            "function": "fn_80080084",
+            "function": "PlayerRecordWriteById",
             "evidence": "evidence.tsv source-form 0x80080084-0x80080138"
           },
           {
-            "function": "fn_8008058C",
+            "function": "PlayerQueryOpen",
             "evidence": "evidence.tsv source-form 0x8008058C-0x8008079C"
           }
         ],

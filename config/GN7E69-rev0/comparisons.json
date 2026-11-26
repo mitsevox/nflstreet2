@@ -11312,7 +11312,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8007FA48",
+          "symbol": "PlayerRecordFindFreeIds",
           "start": "0x8007FA48",
           "end": "0x8007FC70"
         },
@@ -11322,12 +11322,12 @@
           "end": "0x8007FE04"
         },
         {
-          "symbol": "fn_8007FE04",
+          "symbol": "PlayerCursorOpenAll",
           "start": "0x8007FE04",
           "end": "0x8007FE40"
         },
         {
-          "symbol": "fn_8007FE40",
+          "symbol": "PlayerCursorOpenByTeam",
           "start": "0x8007FE40",
           "end": "0x8007FEB8"
         },
@@ -11337,17 +11337,17 @@
           "end": "0x8007FF30"
         },
         {
-          "symbol": "fn_8007FF30",
+          "symbol": "PlayerCursorOpenByPrty",
           "start": "0x8007FF30",
           "end": "0x8007FFA8"
         },
         {
-          "symbol": "fn_8007FFA8",
+          "symbol": "PlayerCursorOpenByTeamAndId",
           "start": "0x8007FFA8",
           "end": "0x80080084"
         },
         {
-          "symbol": "fn_80080084",
+          "symbol": "PlayerRecordWriteById",
           "start": "0x80080084",
           "end": "0x80080138"
         },
@@ -11357,7 +11357,7 @@
           "end": "0x8008040C"
         },
         {
-          "symbol": "fn_8008040C",
+          "symbol": "PlayerCursorOpenDefault",
           "start": "0x8008040C",
           "end": "0x8008044C"
         },
@@ -11367,27 +11367,27 @@
           "end": "0x8008056C"
         },
         {
-          "symbol": "fn_8008056C",
+          "symbol": "PlayerCursorClose",
           "start": "0x8008056C",
           "end": "0x8008058C"
         },
         {
-          "symbol": "fn_8008058C",
+          "symbol": "PlayerQueryOpen",
           "start": "0x8008058C",
           "end": "0x8008079C"
         },
         {
-          "symbol": "fn_8008079C",
+          "symbol": "PlayerQueryFetch",
           "start": "0x8008079C",
           "end": "0x8008082C"
         },
         {
-          "symbol": "fn_8008082C",
+          "symbol": "PlayerQuerySetRow",
           "start": "0x8008082C",
           "end": "0x80080874"
         },
         {
-          "symbol": "fn_80080874",
+          "symbol": "PlayerQueryClose",
           "start": "0x80080874",
           "end": "0x800808F8"
         }

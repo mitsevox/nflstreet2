@@ -698,7 +698,7 @@ extern "C" void PlayerLookClose(void)
 {
     GearDbClose(&_PlayerLook_sGearCursor);
     fn_80081D24();
-    fn_8008056C(&_PlayerLook_sPlayerCursor);
+    PlayerCursorClose(&_PlayerLook_sPlayerCursor);
 }
 
 extern "C" void PlayerLookSetName(int index, const char *pName)
@@ -726,7 +726,7 @@ extern "C" void PlayerLookLoadBonuses(int index, int unused, int id)
     Object_8008044C cursor;
     int i;
 
-    fn_8008040C(&cursor, 0);
+    PlayerCursorOpenDefault(&cursor, 0);
     gPlayerLookBonuses[index].mId = id;
     if (PlayerDbSeekId(&cursor, id, 0)) {
         PlayerGearGetScaledBonuses(&cursor, gPlayerLookBonuses[index].mValues);
@@ -735,7 +735,7 @@ extern "C" void PlayerLookLoadBonuses(int index, int unused, int id)
             gPlayerLookBonuses[index].mValues[i] = 0;
         }
     }
-    fn_8008056C(&cursor);
+    PlayerCursorClose(&cursor);
 }
 
 extern "C" void PlayerLookSetGear(int player, int slot, int value)

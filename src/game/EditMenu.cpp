@@ -453,7 +453,7 @@ void EditMenuReloadTeam(void)
     Desc_8008044C desc;
     int status;
 
-    fn_8008056C(&gEditMenuPlayerCursor);
+    PlayerCursorClose(&gEditMenuPlayerCursor);
     if (EditMenuIsStoryTeam()) {
         fn_8018C48C(0x54415453);
         if (StoryTeamExists(_EditMenu_cTeamSlot)) {
@@ -1285,7 +1285,7 @@ void EditMenuEnd(void)
 {
     if (_EditMenu_bActive) {
         TeamDbClose(&gEditMenuTeamCursor);
-        fn_8008056C(&gEditMenuPlayerCursor);
+        PlayerCursorClose(&gEditMenuPlayerCursor);
         if (EditMenuIsStoryTeam()) {
             fn_8018C48C(0x54415453);
             if (MsgGameGetSetupState() == 1 && EditMenuGetMode() == 3) {

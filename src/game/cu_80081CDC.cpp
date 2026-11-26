@@ -16,8 +16,8 @@ void GearDbClose(DbCursor *pCursor);
 int GearDbSeekId(DbCursor *pCursor, int key, int *pResult);
 int PlayerRecordCreate(int a, int b, int mode, int c);
 void PlayerRecordCopyTeam(int a, int b, int mode);
-int fn_8008058C(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
-void fn_80080874(int which);
+int PlayerQueryOpen(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
+void PlayerQueryClose(int which);
 int PlayerDbGetId(Object_8008044C *pObject);
 void SndgMusicPumpFrame(int a);
 int UserProfileGetSelected(unsigned char index);
@@ -239,8 +239,8 @@ int fn_80082414(int index)
 
     switch (index) {
     case 0:
-        result = fn_8008058C(0, 0, 0, -1, -1, -1, 0);
-        fn_80080874(0);
+        result = PlayerQueryOpen(0, 0, 0, -1, -1, -1, 0);
+        PlayerQueryClose(0);
         return result;
     case 1: {
         int count = fn_80082864();
@@ -259,7 +259,7 @@ int fn_80082414(int index)
         desc.mUnknown0 = 0;
         PlayerCursorOpen(&cursor, &desc, 0x54415453);
         result = DbCursorGetRowCount((DbCursor *)&cursor);
-        fn_8008056C(&cursor);
+        PlayerCursorClose(&cursor);
         return result;
     }
     }
@@ -362,7 +362,7 @@ int fn_80082864(void)
     desc.mUnknown0 = 0;
     PlayerCursorOpen(&cursor, &desc, 0x54415453);
     count = DbCursorGetRowCount((DbCursor *)&cursor);
-    fn_8008056C(&cursor);
+    PlayerCursorClose(&cursor);
     return count;
 }
 

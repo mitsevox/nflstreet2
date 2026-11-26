@@ -179,7 +179,7 @@ void AutoDepthBuild(int value, int *list, AutoDepthPlayer_t **pRecords)
         _AutoDepth_pRateFunc(&(*records)[i], values, &first);
         SndService();
     }
-    fn_8008056C(&second);
+    PlayerCursorClose(&second);
     TstrDbClose(&first);
 }
 
