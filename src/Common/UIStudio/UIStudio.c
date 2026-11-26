@@ -462,8 +462,6 @@ Int32 PatchScrData(UISScreenDataT *pNewBase)
     UISNodeEntryT *pObj;
     Uint32 Map;
     UISControlItemT *pMap;
-    Uint32 Str;
-    Uint32 Patch;
     Uint32 *pPatch;
     UISObjectRefT *pRef;
 
@@ -500,16 +498,16 @@ Int32 PatchScrData(UISScreenDataT *pNewBase)
             }
         }
         pNewBase->pStrings = (UISStringT *)((Uint32)pNewBase + (Uint32)pNewBase->pStrings);
-        Str = pNewBase->NumStrings;
-        while (Str-- != 0) {
-            pNewBase->pStrings[Str].pText =
-                (char *)((Uint32)pNewBase + (Uint32)pNewBase->pStrings[Str].pText);
+        Map = pNewBase->NumStrings;
+        while (Map-- != 0) {
+            pNewBase->pStrings[Map].pText =
+                (char *)((Uint32)pNewBase + (Uint32)pNewBase->pStrings[Map].pText);
         }
         pNewBase->pStringPatchTable =
             (Uint32 *)((Uint32)pNewBase + (Uint32)pNewBase->pStringPatchTable);
-        Patch = pNewBase->NumPatchStrings;
-        while (Patch-- != 0) {
-            pPatch = (Uint32 *)((Uint32)pNewBase + pNewBase->pStringPatchTable[Patch]);
+        Control = pNewBase->NumPatchStrings;
+        while (Control-- != 0) {
+            pPatch = (Uint32 *)((Uint32)pNewBase + pNewBase->pStringPatchTable[Control]);
             if (*pPatch < pNewBase->NumStrings) {
                 *pPatch = (Uint32)&pNewBase->pStrings[*pPatch];
             } else {
@@ -517,9 +515,9 @@ Int32 PatchScrData(UISScreenDataT *pNewBase)
             }
         }
         pNewBase->pObjects = (UISObjectRefT *)((Uint32)pNewBase + (Uint32)pNewBase->pObjects);
-        Control = pNewBase->NumObjects;
-        while (Control-- != 0) {
-            pRef = &pNewBase->pObjects[Control];
+        Map = pNewBase->NumObjects;
+        while (Map-- != 0) {
+            pRef = &pNewBase->pObjects[Map];
             if (pRef->pOffset != 0) {
                 pRef->pOffset = *(Int32 *)((Uint32)pNewBase + (Uint32)pRef->pOffset) != 0
                                     ? (Int32 *)((Uint32)pNewBase + (Uint32)pRef->pOffset)
