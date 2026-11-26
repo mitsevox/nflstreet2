@@ -42,6 +42,7 @@ extern float lbl_803EAD0C;
 extern float lbl_803EAD10;
 }
 
+// FAKEMATCH: invented unused static; its body exists only for its int-to-float double and 1.0f in .rodata
 extern "C" {
 static float _StrippedFramesToTime(int frames)
 {
@@ -49,6 +50,7 @@ static float _StrippedFramesToTime(int frames)
 }
 }
 
+// FAKEMATCH: invented unused static; its body exists only for its two blank-name strings in .rodata
 extern "C" {
 static void _StrippedPrintBlankName(int wide)
 {
@@ -108,6 +110,7 @@ extern "C" void fn_800D77F0(void)
     ReplayRegisterChannel(fn_800D760C, fn_800D7708, 448, "Animations");
 }
 
+// FAKEMATCH: invented unused static around the two target strings; its body exists only for them in .rodata
 extern "C" {
 static void _StrippedCheckDownOpcodes(int anim, int hasPosition, int hasDown, int hasUp)
 {
@@ -187,6 +190,7 @@ extern "C" unsigned char fn_800D78C4(Object_80039F5C *p, unsigned short id)
     return result;
 }
 
+// FAKEMATCH: invented unused static; its body exists only for its eight-float table in .rodata
 extern "C" {
 static float _StrippedGetHoldWeight(int index)
 {
