@@ -4,7 +4,7 @@
 
 #include <string.h>
 
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/FELoop.h"
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
@@ -188,7 +188,7 @@ void fn_800A2F3C(int a);
 int fn_800A3444(void);
 int fn_801485D4(void);
 int fn_801486A0(void);
-void fn_80148AF8(Class_80148A58 *pObject);
+void fn_80148AF8(MiniGameC *pObject);
 int GameModeTypeIsSpecial(void);
 void PositionAbbrevFormat(int a, char *pText);
 int fn_80178308(void);
@@ -2617,7 +2617,7 @@ int MsgTeamSelectInit(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         *pFlag = 1;
     }
     if (fn_801485D4()) {
-        fn_80148AF8(fn_80148A58());
+        fn_80148AF8(MiniGameGetCurrent());
     }
 
     switch (mode) {

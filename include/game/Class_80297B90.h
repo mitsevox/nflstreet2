@@ -7,7 +7,7 @@ class Class_80297B90 {
 public:
     virtual void vfn_01();
     virtual void vfn_02();
-    virtual void vfn_03();
+    virtual void vfn_03(float dt);
     virtual void vfn_04(float dt);
     virtual void vfn_05();
     virtual void vfn_06();
