@@ -668,6 +668,85 @@ void fn_80231208(void)
     lbl_803EC0E4 = 0;
 }
 
+/* Column list element of TDbQryUpdateWithHandler (src/engine/t3db.c TDbCol_801F9718). */
+typedef struct StatsCol_t {
+    int mValue;
+    int mTable;
+    int mCol;
+    int mIdx;
+} StatsCol_t;
+
+typedef struct StatsTableRef_t {
+    int mId;
+    int mJoinType;
+    void *mpExpr;
+} StatsTableRef_t;
+
+extern char lbl_802B6058[];
+extern char lbl_802B61E4[];
+extern int TDbQryUpdateWithHandler(int db, StatsTableRef_t *pTables, void *pWhere, int tag, StatsCol_t *pCols,
+                                   int id, void *pRes, int cb);
+
+static inline void _StatsSetCol(StatsCol_t *pCol, int table, int col)
+{
+    pCol->mValue = 0;
+    pCol->mTable = table;
+    pCol->mCol = col;
+}
+
+static inline void _StatsSetColEnd(StatsCol_t *pCol)
+{
+    pCol->mCol = -1;
+    pCol->mTable = -1;
+    pCol->mValue = 0;
+}
+
+static inline void _StatsSetTable(StatsTableRef_t *pRef, int id, int join, void *pExpr)
+{
+    pRef->mpExpr = pExpr;
+    pRef->mId = id;
+    pRef->mJoinType = join;
+}
+
+/* 1 when a query status counts as success (0, 23, 21 or 20). */
+static inline int _StatsAccepted(int err)
+{
+    if (err == 0 || err == 23 || err == 21 || err == 20) {
+        return 1;
+    }
+    return 0;
+}
+
+int fn_8023133C(const char *pWhere, int b, int c, int d, int e, struct QueryCursor *pCursor)
+{
+    StatsCol_t aCols[11];
+    StatsTableRef_t aTables[2];
+    int table;
+    int err;
+
+    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    err = TDbCompilePerformOp(0, lbl_802B6058, table, pWhere);
+    if (_StatsAccepted(err)) {
+        _StatsSetCol(&aCols[0], table, 0x74616167);
+        _StatsSetCol(&aCols[1], table, 0x61796167);
+        _StatsSetCol(&aCols[2], table, 0x6D636167);
+        _StatsSetCol(&aCols[3], table, 0x64746167);
+        _StatsSetCol(&aCols[4], table, 0x6E696167);
+        _StatsSetCol(&aCols[5], table, 0x72706370);
+        _StatsSetCol(&aCols[6], table, 0x70706370);
+        _StatsSetCol(&aCols[7], table, 0x74706370);
+        _StatsSetCol(&aCols[8], table, 0x79706370);
+        _StatsSetColEnd(&aCols[9]);
+        _StatsSetTable(&aTables[0], table, 2, 0);
+        _StatsSetTable(&aTables[1], -1, 2, 0);
+        err = TDbQryUpdateWithHandler(0, aTables, 0, lbl_803EC0E4, aCols, 2, 0, 0);
+        if (_StatsAccepted(err)) {
+            err = TDbCompilePerformOp(0, lbl_802B61E4, pCursor, table, c, d, e);
+        }
+    }
+    return err;
+}
+
 int fn_80231A84(void)
 {
     return 3;
