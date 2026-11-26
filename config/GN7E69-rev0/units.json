@@ -13256,12 +13256,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80090244",
-          "end": "0x80090390"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800904D4",
           "end": "0x80090558"
         },
         {
@@ -13610,10 +13604,6 @@
           {
             "function": "fn_8008FF44",
             "evidence": "evidence.tsv source-form 0x8008FF44-0x80090244"
-          },
-          {
-            "function": "fn_80090390",
-            "evidence": "evidence.tsv source-form 0x80090390-0x800904D4"
           },
           {
             "function": "fn_80090558",

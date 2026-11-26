@@ -11973,7 +11973,7 @@
           "end": "0x80090390"
         },
         {
-          "symbol": "fn_80090390",
+          "symbol": "AnimSeqDynSlotAcquire",
           "start": "0x80090390",
           "end": "0x800904D4"
         },

@@ -5481,7 +5481,7 @@ extern "C" void fn_80090284(int *pData);
 
 extern "C" void fn_8009036C(int *p);
 
-extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot);
+extern "C" int AnimSeqDynSlotAcquire(Params_80092E54 *pRequest, int *pSlot);
 
 extern "C" int fn_800904D4(Params_80092E54 *pRequest, void *pData, int size);
 
@@ -8565,7 +8565,7 @@ extern "C" void fn_8009036C(int *p)
     fn_80094454(*p);
 }
 
-extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot)
+extern "C" int AnimSeqDynSlotAcquire(Params_80092E54 *pRequest, int *pSlot)
 {
     Actor_801C009C *pActor = fn_80093BAC(pRequest->mUnknown0, pRequest->mUnknown4);
     int load = 1;
@@ -8577,12 +8577,13 @@ extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot)
             if (lbl_8030C164[i].mUnknown8 == pRequest->mUnknown0) {
                 load = 0;
                 lbl_8030C164[i].mUnknown4++;
+                pRequest->mUnknownD8.mWord = i;
             } else {
                 load = 0;
                 AnimFileCopyBigFileInfo(pActor, fn_80093BAC(lbl_8030C164[i].mUnknown8, lbl_8030C164[i].mUnknownC));
                 lbl_8030C164[i].mUnknown4++;
+                pRequest->mUnknownD8.mWord = i;
             }
-            pRequest->mUnknownD8.mWord = i;
             break;
         }
     }
@@ -9793,7 +9794,7 @@ extern "C" int fn_80092E54(Params_80092E54 *pParams, void *pBuffer, int size)
         if (pBuffer != 0) {
             started = fn_800904D4(pParams, pBuffer, size);
         } else {
-            started = fn_80090390(pParams, &slot);
+            started = AnimSeqDynSlotAcquire(pParams, &slot);
         }
         if (started) {
             *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[slot] = *pParams;
@@ -9837,7 +9838,7 @@ extern "C" int fn_8009313C(Params_80092E54 *pRequest)
 
     if (slot != invalid) {
         fn_80093BAC(pRequest->mUnknown0, pRequest->mUnknown4);
-        if (fn_80096074(pRequest, 0) && fn_80090390(pRequest, &slot)) {
+        if (fn_80096074(pRequest, 0) && AnimSeqDynSlotAcquire(pRequest, &slot)) {
             unsigned char found;
 
             fn_80093C70(pRequest, 0x42414C4C /* 'BALL' */, 0, &found);
