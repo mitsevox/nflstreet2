@@ -826,8 +826,8 @@ int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, Info_8027
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
     int i;
 
-    record->m14 = 0;
     record->m20 = info->m0;
+    record->m14 = 0;
     snddrv.m0[index].m1C = stream;
     record->m23 = info->m2;
     if (record->m24 & 4) {
