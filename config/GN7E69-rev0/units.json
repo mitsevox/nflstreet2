@@ -9205,7 +9205,7 @@
     {
       "source": "src/game/MiniGames.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x80148424-0x801564DC (src/game/MiniGames.cpp), its function extents, the data row 0x802A0568-0x802A3078 (.rodata) and the file's .data, .sdata, .bss, .sbss and .ctors/.dtors placements; linked with holdouts (owner ruling of 2026-11-20), each of the 25 holdouts keeping its original bytes; the Record_8005CE10 destructor and vtable copies folded into src/game/InGameScreens.cpp's kept copies and the three unreferenced implicit constructors discarded (owner ruling of 2026-11-26, PR #1459; linker rows MiniGames Record_8005CE10 fold and MiniGames discarded constructors).",
+      "evidence": "evidence.tsv unit row 0x80148424-0x801564DC (src/game/MiniGames.cpp), its function extents, the data row 0x802A0568-0x802A3078 (.rodata) and the file's .data, .sdata, .bss, .sbss and .ctors/.dtors placements; linked with holdouts (owner ruling of 2026-11-20), each of the 16 holdouts keeping its original bytes; the Record_8005CE10 destructor and vtable copies folded into src/game/InGameScreens.cpp's kept copies and the three unreferenced implicit constructors discarded (owner ruling of 2026-11-26, PR #1459; linker rows MiniGames Record_8005CE10 fold and MiniGames discarded constructors).",
       "sections": [
         {
           "section": ".text",
