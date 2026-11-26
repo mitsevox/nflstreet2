@@ -13508,12 +13508,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800C3610",
-          "end": "0x800C38C4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800C39E0",
           "end": "0x800C3BEC"
         },
         {
@@ -13798,10 +13792,6 @@
           {
             "function": "fn_800C34B0",
             "evidence": "evidence.tsv source-form 0x800C34B0-0x800C3610"
-          },
-          {
-            "function": "fn_800C38C4",
-            "evidence": "evidence.tsv source-form 0x800C38C4-0x800C39E0"
           },
           {
             "function": "fn_800C3BEC",

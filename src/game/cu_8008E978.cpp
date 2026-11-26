@@ -7647,7 +7647,7 @@ extern "C" void fn_800C3678(void);
 
 extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int index, Command_800CEE74 *pRecord, Vector_80039F5C *pPoint, int angle);
 
-extern "C" void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key);
+extern "C" void PlayerActionAnimStartStateAlign(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key);
 
 extern "C" void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag);
 
@@ -32388,7 +32388,7 @@ extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int
     return result;
 }
 
-extern "C" void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key)
+extern "C" void PlayerActionAnimStartStateAlign(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key)
 {
     Entry_800DE51C *pRecord = 0;
     Table_80089904 *pTable = fn_801BE72C(p->mpUnknown796->mUnknown2, fn_801BE648(p->mpUnknown792));
@@ -32398,7 +32398,7 @@ extern "C" void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key)
     for (i = 0; i < pTable->mCount; i++) {
         Table_800DE51C *pRecords = (Table_800DE51C *)AnimFileGetStateData(fn_801BE648(p->mpUnknown792), p->mpUnknown796->mUnknown2);
 
-        if (pRecords->mEntries[i].mUnknown2 == 1 && pRecords->mEntries[i].mUnknown0 == (key & ~0x8000)) {
+        if (pRecords->mEntries[i].mUnknown2 == 1 && (pRecords->mEntries + i)->mUnknown0 == (key & ~0x8000)) {
             pRecord = &pRecords->mEntries[i];
             break;
         }
@@ -32442,7 +32442,7 @@ extern "C" int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA,
                                          index & 0x7FFF, key, p, 1.0f);
         pBlock->mUnknown18 = key;
         p->mFlags |= 0x200;
-        fn_800C38C4(p, pBlock, index);
+        PlayerActionAnimStartStateAlign(p, pBlock, index);
         if (pBlock->mUnknown1F) {
             AnimChannel_t *pEntry = &pEntries[pBlock->mUnknown1D];
 
