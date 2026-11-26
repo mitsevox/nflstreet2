@@ -80,8 +80,8 @@ struct IPathTrack {
     virtual int vfn_35();
 };
 
-struct Object_8027D6E8 : IPathTrack {
-    virtual ~Object_8027D6E8();
+struct PathTrackSnd : IPathTrack {
+    virtual ~PathTrackSnd();
     Record_8027D9FC m6C;
     Record_8027EC7C m7C;
     unsigned char mFC;
@@ -96,8 +96,8 @@ struct Object_8027D6E8 : IPathTrack {
     virtual int vfn_05(int flag);
 };
 
-struct Object_8027DAE4 : Object_8027D6E8 {
-    virtual ~Object_8027DAE4();
+struct PathTrackSndBank : PathTrackSnd {
+    virtual ~PathTrackSndBank();
     unsigned char mUnknown118[0xC];
     int m124;
     virtual int vfn_13(int value);
@@ -121,8 +121,8 @@ typedef struct Record_8027EAC0 {
     unsigned char mUnknownC[8];
 } Record_8027EAC0;
 
-struct Object_8027E518 : Object_8027D6E8 {
-    virtual ~Object_8027E518();
+struct PathTrackSndStream : PathTrackSnd {
+    virtual ~PathTrackSndStream();
     int m118;
     int m11C;
     Record_8027EAC0 *m120;
@@ -137,8 +137,15 @@ struct Object_8027E518 : Object_8027D6E8 {
     virtual int vfn_09(int index);
     virtual int vfn_04(void);
     virtual void vfn_23(Record_8027EC7C *record);
+    void SetLowPass(int value);
 };
 
+/* The PATH-to-sound interface object; its table 0x802C2730 holds the track creators. */
+struct PathToSnd {
+    virtual ~PathToSnd();
+    virtual int CreateStreamTrack(IPathTrack **track, int a, float b, int c);
+    virtual int CreateBankTrack(IPathTrack **track, int count);
+};
 
 extern "C" {
 
@@ -164,13 +171,17 @@ int fn_8026E388(int handle);
 void PATHI_memfree(void *p);
 int SNDSTRM_lowpass(int handle, int value);
 void *fn_8027DAA4(int size);
-void *fn_8027DAE4(void *mem, int count);
+IPathTrack *fn_8027DAE4(void *mem, int count);
 
-int fn_8027D588(void *self, void **track, int count)
+}
+
+int PathToSnd::CreateBankTrack(IPathTrack **track, int count)
 {
     *track = fn_8027DAE4(fn_8027DAA4(308), count);
     return 0;
 }
+
+extern "C" {
 
 void *fn_8027D5CC(int size)
 {
@@ -182,24 +193,24 @@ void fn_8027D5EC(void *p)
     PATHI_memfree(p);
 }
 
-int fn_8027D960(Object_8027D6E8 *p)
+int fn_8027D960(PathTrackSnd *p)
 {
     return p->m38;
 }
 
-int fn_8027D968(Object_8027D6E8 *p)
+int fn_8027D968(PathTrackSnd *p)
 {
     return p->m54;
 }
 
-int fn_8027D970(Object_8027D6E8 *p)
+int fn_8027D970(PathTrackSnd *p)
 {
     return p->m10;
 }
 
 }
 
-int Object_8027D6E8::vfn_13(int value)
+int PathTrackSnd::vfn_13(int value)
 {
     int current;
     if ((unsigned int)value > 127) {
@@ -214,24 +225,24 @@ int Object_8027D6E8::vfn_13(int value)
 
 extern "C" {
 
-int fn_8027D9EC(Object_8027D6E8 *p)
+int fn_8027D9EC(PathTrackSnd *p)
 {
     return 0;
 }
 
-int fn_8027D9F4(Object_8027D6E8 *p)
+int fn_8027D9F4(PathTrackSnd *p)
 {
     return 0;
 }
 
-void fn_8027D9FC(Object_8027D6E8 *p, Record_8027D9FC *record)
+void fn_8027D9FC(PathTrackSnd *p, Record_8027D9FC *record)
 {
     p->m6C = *record;
 }
 
 }
 
-int Object_8027D6E8::vfn_05(int flag)
+int PathTrackSnd::vfn_05(int flag)
 {
     int arg = 0;
     int value = 0;
@@ -262,7 +273,7 @@ void fn_8027DAC4(void *p)
 
 }
 
-int Object_8027DAE4::vfn_34(int key, int data)
+int PathTrackSndBank::vfn_34(int key, int data)
 {
     Record_8027E2D0 *record;
 
@@ -280,9 +291,9 @@ int Object_8027DAE4::vfn_34(int key, int data)
     return 0;
 }
 
-int Object_8027DAE4::vfn_13(int value)
+int PathTrackSndBank::vfn_13(int value)
 {
-    int status = Object_8027D6E8::vfn_13(value);
+    int status = PathTrackSnd::vfn_13(value);
     int result = 0;
     if (status == 0) {
         SNDSYS_entercritical();
@@ -294,7 +305,7 @@ int Object_8027DAE4::vfn_13(int value)
     return result;
 }
 
-int Object_8027DAE4::vfn_15(int value)
+int PathTrackSndBank::vfn_15(int value)
 {
     int status = fn_8027D9EC(this);
     int result = 0;
@@ -308,7 +319,7 @@ int Object_8027DAE4::vfn_15(int value)
     return result;
 }
 
-int Object_8027DAE4::vfn_17(int a, int b)
+int PathTrackSndBank::vfn_17(int a, int b)
 {
     int status = fn_8027D9F4(this);
     int result = 0;
@@ -322,7 +333,7 @@ int Object_8027DAE4::vfn_17(int a, int b)
     return result;
 }
 
-int Object_8027DAE4::vfn_19(int value)
+int PathTrackSndBank::vfn_19(int value)
 {
     int result;
     SNDSYS_entercritical();
@@ -335,7 +346,7 @@ int Object_8027DAE4::vfn_19(int value)
 
 extern "C" {
 
-int fn_8027E0AC(Object_8027DAE4 *p, int index)
+int fn_8027E0AC(PathTrackSndBank *p, int index)
 {
     if (index == 0) {
         return p->m58;
@@ -345,7 +356,7 @@ int fn_8027E0AC(Object_8027DAE4 *p, int index)
 
 }
 
-int Object_8027DAE4::vfn_04(void)
+int PathTrackSndBank::vfn_04(void)
 {
     int result;
     SNDSYS_entercritical();
@@ -358,7 +369,7 @@ int Object_8027DAE4::vfn_04(void)
     return result;
 }
 
-int Object_8027DAE4::vfn_30(int key, void *data)
+int PathTrackSndBank::vfn_30(int key, void *data)
 {
     int result = -8;
     Record_8027E2D0 *record = vfn_28(key);
@@ -368,7 +379,7 @@ int Object_8027DAE4::vfn_30(int key, void *data)
     return result;
 }
 
-int Object_8027DAE4::vfn_31(int key)
+int PathTrackSndBank::vfn_31(int key)
 {
     int result = 0;
     Record_8027E2D0 *record = vfn_28(key);
@@ -378,7 +389,7 @@ int Object_8027DAE4::vfn_31(int key)
     return result;
 }
 
-Record_8027E2D0 *Object_8027DAE4::vfn_28(int key)
+Record_8027E2D0 *PathTrackSndBank::vfn_28(int key)
 {
     int i;
     Record_8027E2D0 *record;
@@ -391,7 +402,7 @@ Record_8027E2D0 *Object_8027DAE4::vfn_28(int key)
     return 0;
 }
 
-Record_8027E2D0 *Object_8027DAE4::vfn_29(void)
+Record_8027E2D0 *PathTrackSndBank::vfn_29(void)
 {
     int i;
     Record_8027E2D0 *record;
@@ -404,7 +415,7 @@ Record_8027E2D0 *Object_8027DAE4::vfn_29(void)
     return 0;
 }
 
-int Object_8027DAE4::vfn_33(int key)
+int PathTrackSndBank::vfn_33(int key)
 {
     int result = 0;
     Record_8027E2D0 *record = vfn_28(key);
@@ -419,7 +430,7 @@ int Object_8027DAE4::vfn_33(int key)
     return result;
 }
 
-int Object_8027DAE4::vfn_32(int key, int mode)
+int PathTrackSndBank::vfn_32(int key, int mode)
 {
     int result = -8;
     void *data;
@@ -450,7 +461,7 @@ void fn_8027E4F8(void *p)
 
 }
 
-int Object_8027E518::vfn_34(int value, int a)
+int PathTrackSndStream::vfn_34(int value, int a)
 {
     if (m0 >= 0) {
         return -18;
@@ -461,7 +472,7 @@ int Object_8027E518::vfn_34(int value, int a)
     return 0;
 }
 
-int Object_8027E518::vfn_35(void)
+int PathTrackSndStream::vfn_35(void)
 {
     int value = m0;
     if (value < 0) {
@@ -472,7 +483,7 @@ int Object_8027E518::vfn_35(void)
     return value;
 }
 
-int Object_8027E518::vfn_15(int value)
+int PathTrackSndStream::vfn_15(int value)
 {
     int result = 0;
     if (fn_8027D9EC(this) == 0) {
@@ -484,7 +495,7 @@ int Object_8027E518::vfn_15(int value)
     return result;
 }
 
-int Object_8027E518::vfn_17(int a, int b)
+int PathTrackSndStream::vfn_17(int a, int b)
 {
     int result = 0;
     if (fn_8027D9F4(this) == 0) {
@@ -496,12 +507,12 @@ int Object_8027E518::vfn_17(int a, int b)
     return result;
 }
 
-int Object_8027E518::vfn_25(int value)
+int PathTrackSndStream::vfn_25(int value)
 {
     return SNDSTRM_modifyhold(m120->m4, value);
 }
 
-int Object_8027E518::vfn_19(int value)
+int PathTrackSndStream::vfn_19(int value)
 {
     int result;
     SNDSYS_entercritical();
@@ -514,7 +525,7 @@ int Object_8027E518::vfn_19(int value)
 
 extern "C" {
 
-void fn_8027EAB4(Object_8027E518 *p, int a, int b)
+void fn_8027EAB4(PathTrackSndStream *p, int a, int b)
 {
     p->m124 = a;
     p->m128 = b;
@@ -522,7 +533,7 @@ void fn_8027EAB4(Object_8027E518 *p, int a, int b)
 
 }
 
-int Object_8027E518::vfn_09(int index)
+int PathTrackSndStream::vfn_09(int index)
 {
     Record_8027EAC0 *record;
     if (index < 0) {
@@ -537,7 +548,7 @@ int Object_8027E518::vfn_09(int index)
     return -8;
 }
 
-int Object_8027E518::vfn_04(void)
+int PathTrackSndStream::vfn_04(void)
 {
     int result;
     SNDSYS_entercritical();
@@ -548,35 +559,35 @@ int Object_8027E518::vfn_04(void)
     return result;
 }
 
-void Object_8027E518::vfn_23(Record_8027EC7C *record)
+void PathTrackSndStream::vfn_23(Record_8027EC7C *record)
 {
     m7C = *record;
 }
 
-extern "C" {
-
-void fn_8027ECD8(Object_8027E518 *p, int value)
+void PathTrackSndStream::SetLowPass(int value)
 {
     SNDSYS_entercritical();
-    SNDSTRM_lowpass(p->m0, value);
+    SNDSTRM_lowpass(m0, value);
     SNDSYS_leavecritical();
 }
 
-void fn_8027ED4C(Object_8027D6E8 *p)
+extern "C" {
+
+void fn_8027ED4C(PathTrackSnd *p)
 {
     p->m1C = 1;
 }
 
-void fn_8027ED58(Object_8027D6E8 *p)
+void fn_8027ED58(PathTrackSnd *p)
 {
 }
 
-int fn_8027ED5C(Object_8027D6E8 *p)
+int fn_8027ED5C(PathTrackSnd *p)
 {
     return -1;
 }
 
-int fn_8027ED64(Object_8027D6E8 *p)
+int fn_8027ED64(PathTrackSnd *p)
 {
     return p->m114;
 }

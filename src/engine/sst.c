@@ -118,9 +118,8 @@ void SNDSTRMI_startstream(SndStreamChannel_t *channel)
     unsigned int i;
     int voice;
 
-    // FAKEMATCH: volatile store keeps the target's reload of the voice handle just stored
-    *(volatile int *)&channel->mVoice = SNDPKTPLAY_start(channel->mBuffer, &channel->mFormat,
-                                                         &channel->mAttr, channel->unk_0xEC);
+    channel->mVoice = SNDPKTPLAY_start(channel->mBuffer, &channel->mFormat, &channel->mAttr,
+                                       channel->unk_0xEC);
     voice = SNDVOICEI_get(channel->mVoice);
     for (i = 0; i < channel->mFormat.mChannels; i++) {
         int j = 0;
@@ -499,8 +498,7 @@ found:
     for (i = 0; i < numRequests; i++) {
         SNDLINKI_push(&channel->mFreeRequests, &requests[i].mLink);
     }
-    // FAKEMATCH: volatile store keeps the target's reload of the packet player index just stored
-    *(volatile int *)&channel->mBuffer =
+    channel->mBuffer =
         SNDPKTPLAY_create(SNDSTRMI_releasecallback, SNDSTRMI_framescallback, channel, player,
                           SNDPKTPLAY_overhead(numPackets));
     if (channel->mBuffer < 0) {
@@ -659,8 +657,8 @@ int SNDSTRM_purge(int stream)
             SNDLINKI_push(&channel->mFreeRequests, link);
         }
     } while (link != 0);
-    channel->mState = 0;
     channel->mpCurrent = 0;
+    channel->mState = 0;
     memset(&channel->mFormat, 0, sizeof(SndSampleFormat_t));
     memset(&channel->mQueueFormat, 0, sizeof(SndSampleFormat_t));
     memset(&channel->mAttr, 0, sizeof(SndSampleAttr_t));

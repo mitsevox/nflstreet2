@@ -31191,7 +31191,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8027D588",
+          "symbol": "CreateBankTrack__9PathToSndPP10IPathTracki",
           "start": "0x8027D588",
           "end": "0x8027D5CC"
         },
@@ -31221,7 +31221,7 @@
           "end": "0x8027D978"
         },
         {
-          "symbol": "vfn_13__15Object_8027D6E8i",
+          "symbol": "vfn_13__12PathTrackSndi",
           "start": "0x8027D978",
           "end": "0x8027D9EC"
         },
@@ -31241,7 +31241,7 @@
           "end": "0x8027DA24"
         },
         {
-          "symbol": "vfn_05__15Object_8027D6E8i",
+          "symbol": "vfn_05__12PathTrackSndi",
           "start": "0x8027DA24",
           "end": "0x8027DAA4"
         },
@@ -31256,27 +31256,27 @@
           "end": "0x8027DAE4"
         },
         {
-          "symbol": "vfn_34__15Object_8027DAE4ii",
+          "symbol": "vfn_34__16PathTrackSndBankii",
           "start": "0x8027DC14",
           "end": "0x8027DCB4"
         },
         {
-          "symbol": "vfn_13__15Object_8027DAE4i",
+          "symbol": "vfn_13__16PathTrackSndBanki",
           "start": "0x8027DF34",
           "end": "0x8027DF94"
         },
         {
-          "symbol": "vfn_15__15Object_8027DAE4i",
+          "symbol": "vfn_15__16PathTrackSndBanki",
           "start": "0x8027DF94",
           "end": "0x8027DFF4"
         },
         {
-          "symbol": "vfn_17__15Object_8027DAE4ii",
+          "symbol": "vfn_17__16PathTrackSndBankii",
           "start": "0x8027DFF4",
           "end": "0x8027E05C"
         },
         {
-          "symbol": "vfn_19__15Object_8027DAE4i",
+          "symbol": "vfn_19__16PathTrackSndBanki",
           "start": "0x8027E05C",
           "end": "0x8027E0AC"
         },
@@ -31286,37 +31286,37 @@
           "end": "0x8027E0C4"
         },
         {
-          "symbol": "vfn_04__15Object_8027DAE4",
+          "symbol": "vfn_04__16PathTrackSndBank",
           "start": "0x8027E1B0",
           "end": "0x8027E21C"
         },
         {
-          "symbol": "vfn_30__15Object_8027DAE4iPv",
+          "symbol": "vfn_30__16PathTrackSndBankiPv",
           "start": "0x8027E21C",
           "end": "0x8027E27C"
         },
         {
-          "symbol": "vfn_31__15Object_8027DAE4i",
+          "symbol": "vfn_31__16PathTrackSndBanki",
           "start": "0x8027E27C",
           "end": "0x8027E2D0"
         },
         {
-          "symbol": "vfn_28__15Object_8027DAE4i",
+          "symbol": "vfn_28__16PathTrackSndBanki",
           "start": "0x8027E2D0",
           "end": "0x8027E348"
         },
         {
-          "symbol": "vfn_29__15Object_8027DAE4",
+          "symbol": "vfn_29__16PathTrackSndBank",
           "start": "0x8027E348",
           "end": "0x8027E3BC"
         },
         {
-          "symbol": "vfn_33__15Object_8027DAE4i",
+          "symbol": "vfn_33__16PathTrackSndBanki",
           "start": "0x8027E3BC",
           "end": "0x8027E448"
         },
         {
-          "symbol": "vfn_32__15Object_8027DAE4ii",
+          "symbol": "vfn_32__16PathTrackSndBankii",
           "start": "0x8027E448",
           "end": "0x8027E4D8"
         },
@@ -31331,32 +31331,32 @@
           "end": "0x8027E518"
         },
         {
-          "symbol": "vfn_34__15Object_8027E518ii",
+          "symbol": "vfn_34__18PathTrackSndStreamii",
           "start": "0x8027E660",
           "end": "0x8027E690"
         },
         {
-          "symbol": "vfn_35__15Object_8027E518",
+          "symbol": "vfn_35__18PathTrackSndStream",
           "start": "0x8027E690",
           "end": "0x8027E6BC"
         },
         {
-          "symbol": "vfn_15__15Object_8027E518i",
+          "symbol": "vfn_15__18PathTrackSndStreami",
           "start": "0x8027E97C",
           "end": "0x8027E9D8"
         },
         {
-          "symbol": "vfn_17__15Object_8027E518ii",
+          "symbol": "vfn_17__18PathTrackSndStreamii",
           "start": "0x8027E9D8",
           "end": "0x8027EA3C"
         },
         {
-          "symbol": "vfn_25__15Object_8027E518i",
+          "symbol": "vfn_25__18PathTrackSndStreami",
           "start": "0x8027EA3C",
           "end": "0x8027EA64"
         },
         {
-          "symbol": "vfn_19__15Object_8027E518i",
+          "symbol": "vfn_19__18PathTrackSndStreami",
           "start": "0x8027EA64",
           "end": "0x8027EAB4"
         },
@@ -31366,22 +31366,22 @@
           "end": "0x8027EAC0"
         },
         {
-          "symbol": "vfn_09__15Object_8027E518i",
+          "symbol": "vfn_09__18PathTrackSndStreami",
           "start": "0x8027EAC0",
           "end": "0x8027EB04"
         },
         {
-          "symbol": "vfn_04__15Object_8027E518",
+          "symbol": "vfn_04__18PathTrackSndStream",
           "start": "0x8027EC1C",
           "end": "0x8027EC7C"
         },
         {
-          "symbol": "vfn_23__15Object_8027E518P15Record_8027EC7C",
+          "symbol": "vfn_23__18PathTrackSndStreamP15Record_8027EC7C",
           "start": "0x8027EC7C",
           "end": "0x8027ECD8"
         },
         {
-          "symbol": "fn_8027ECD8",
+          "symbol": "SetLowPass__18PathTrackSndStreami",
           "start": "0x8027ECD8",
           "end": "0x8027ED18"
         },

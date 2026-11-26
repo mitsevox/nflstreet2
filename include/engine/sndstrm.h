@@ -13,7 +13,7 @@
 typedef struct SndStreamRequest_t {
     SndLinkNode_t mLink;
     int mData;
-    int mId;
+    volatile int mId;
     unsigned int mDataRate;
     volatile unsigned int unk_0x14;
     volatile unsigned int unk_0x18;
@@ -45,11 +45,11 @@ typedef struct SndStreamTapSend_t {
 /* One stream channel, found through the channel table by its index. */
 typedef struct SndStreamChannel_t {
     void *mpTap;
-    int mVoice;
-    int mBuffer;
-    int mNextId;
-    unsigned char mState;
-    signed char mSharedTap;
+    volatile int mVoice;
+    volatile int mBuffer;
+    volatile int mNextId;
+    volatile unsigned char mState;
+    volatile signed char mSharedTap;
     unsigned char mPanned;
     unsigned char unk_0x13;
     SndSampleFormat_t mFormat;
