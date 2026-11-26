@@ -10454,7 +10454,7 @@
     {
       "source": "src/game/DynObj.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/DynObj.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .bss (0x803084B8-0x8030865C), .ctors and .dtors words; linked with holdouts (owner ruling of 2026-11-20): 109 of 121 functions exact, the holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/DynObj.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .data (0x802CFBCC-0x802D4B14, the big-object name and function tables and the skeleton cache), .sdata (0x803EA4D0-0x803EA53C), .bss (0x803084B8-0x80309CB4), .sbss (0x803EC7D0-0x803EC7E8), .ctors and .dtors words, each data object with its data row; linked with holdouts (owner ruling of 2026-11-20): 109 of 121 functions exact, the holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -10526,7 +10526,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x803084B8",
-          "end": "0x8030865C"
+          "end": "0x80309CB4"
         },
         {
           "section": ".ctors",
@@ -10539,6 +10539,24 @@
           "placement": ".data2",
           "start": "0x80289BC4",
           "end": "0x80289BC8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CFBCC",
+          "end": "0x802D4B14"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA4D0",
+          "end": "0x803EA53C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC7D0",
+          "end": "0x803EC7E8"
         }
       ],
       "holdouts": {

@@ -9018,7 +9018,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x803084B8",
-          "end": "0x8030865C"
+          "end": "0x80309CB4"
         },
         {
           "section": ".ctors",
@@ -9031,6 +9031,24 @@
           "placement": ".data2",
           "start": "0x80289BC4",
           "end": "0x80289BC8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CFBCC",
+          "end": "0x802D4B14"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA4D0",
+          "end": "0x803EA53C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC7D0",
+          "end": "0x803EC7E8"
         }
       ],
       "functions": [
@@ -9630,12 +9648,12 @@
           "end": "0x80051DBC"
         },
         {
-          "symbol": "_GLOBAL_.I.BigObjAnimReadPose",
+          "symbol": "_GLOBAL_.I._BigObjAnim_sHandlerSet",
           "start": "0x80051DBC",
           "end": "0x80051DE8"
         },
         {
-          "symbol": "_GLOBAL_.D.BigObjAnimReadPose",
+          "symbol": "_GLOBAL_.D._BigObjAnim_sHandlerSet",
           "start": "0x80051DE8",
           "end": "0x80051E14"
         }

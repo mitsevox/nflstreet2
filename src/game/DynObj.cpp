@@ -103,18 +103,13 @@ struct BigObjAnimHandlerSet_t {
 
 extern "C" {
 extern float gFrameTimeScale;
-extern BigObjAnimHandlerSet_t lbl_803EA4D0;
-extern unsigned char lbl_803EA4DC[8];
-extern BigObjInst *lbl_803EA4E4;
-extern BigObjNameId_t lbl_802D47DC[];
-extern BigObjNameId_t lbl_802D48A8[];
-extern BigObjNameId_t lbl_802CFE34[85];
-extern BigObjShortNameId_t lbl_802CFBCC[8];
-extern BigObjShortNameId_t lbl_802CFD2C[3];
-extern BigObjShortNameId_t lbl_802CFDA4[4];
-extern BigObjNameId_t lbl_802D14C8[32];
-extern BigObjSwapStateName_t lbl_802D1D48[63];
-extern BigObjSoundNameId_t lbl_802D3DC4[38];
+extern BigObjAnimHandlerFunc _BigObjAnim_aHandlers[102];
+BigObjAnimHandlerSet_t _BigObjAnim_sHandlerSet = {102, _BigObjAnim_aHandlers};
+unsigned char _BigObjHit_uRumbleMax = 0xFF;
+unsigned char _BigObjHit_uRumbleMin = 0x50;
+unsigned short _BigObjHit_uRumbleTime = 20;
+unsigned char _BigObj_aOctantStates[8] = {9, 5, 6, 7, 1, 2, 3, 4};
+BigObjInst *_BigObj_pAnimPalObject = 0;
 /* Hitter passed to BigObjHit: an id word, a sound channel byte (0xFF for
    none) and the two floats whose product is the hit strength. */
 struct BigObjHitter_t {
@@ -129,17 +124,11 @@ struct BigObjHitter_t {
 
 typedef void (*BigObjLoaderFunc)(int handle, BigObjInst *pObject);
 
-extern BigObjBehaviorFunc lbl_802CFCEC[8];
-extern BigObjLoaderFunc lbl_802CFD0C[8];
-extern void (*lbl_802CFD98[3])(BigObj_t *pOwner);
-extern int lbl_8030865C[8];
-extern unsigned char lbl_803EA4D8;
-extern unsigned char lbl_803EA4D9;
-extern unsigned short lbl_803EA4DA;
-extern int lbl_8030867C[8];
-extern float lbl_803EA4E8;
-extern float lbl_803EA4EC;
-extern float lbl_803EA4F0;
+int _BigObj_aiEffectTypes[8];
+int _BigObj_aiEffectUsers[8];
+float _BigObj_fBoundsMargin = 1.0f;
+float _BigObj_fBoundsInset = 1.0f;
+float _BigObj_fBoundsJitter = 2.0f;
 
 void ReplayReadPacked3(void *pStream, float *pValues, int bits, float scale);
 void ReplayWritePacked3(void *pStream, float *pValues, int bits, float scale);
@@ -198,6 +187,290 @@ int MathArcTan2(float y, float x);
 void Vec2Scale(void *pOut, void *p, float scale);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 float SyncRandGetFloat(int stream);
+
+struct DynObjSkeletonCache_t;
+int BigObjOnAnimEvent(BigObjInst *pObject, BigObj_t *pOwner, int mode);
+int BigObjPathedUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode);
+int BigObjPathNodeUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode);
+int BigObjBirdUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode);
+int BigObjFenceUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode);
+int BigObjHotspotSponsorUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode);
+int BigObjHotspotFrameUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode);
+void BigObjPathedLoad(int handle, BigObjInst *pObject);
+void BigObjPathNodeLoad(int handle, BigObjInst *pObject);
+void BigObjRestoreState(BigObj_t *pObject);
+void BigObjKeepInBounds(BigObj_t *pObject);
+
+BigObjShortNameId_t _BigObj_aTypeNames[8] = {
+    {"NONE", 0},
+    {"BASIC", 1},
+    {"PATHED_OBJECT", 2},
+    {"PATHNODE", 3},
+    {"BIRD", 4},
+    {"FENCE", 5},
+    {"HOTSPOT_SPONSOR", 6},
+    {"HOTSPOT_FRAME", 7},
+};
+BigObjBehaviorFunc _BigObj_apUpdateFuncs[8] = {
+    0,
+    BigObjOnAnimEvent,
+    BigObjPathedUpdate,
+    BigObjPathNodeUpdate,
+    BigObjBirdUpdate,
+    BigObjFenceUpdate,
+    BigObjHotspotSponsorUpdate,
+    BigObjHotspotFrameUpdate,
+};
+BigObjLoaderFunc _BigObj_apLoadFuncs[8] = {0, 0, BigObjPathedLoad, BigObjPathNodeLoad, 0, 0, 0, 0};
+BigObjShortNameId_t _BigObj_aResetNames[3] = {
+    {"NONE", 0},
+    {"START_POS", 1},
+    {"ON_FIELD_IF_OFF_FIELD", 2},
+};
+void (*_BigObj_apResetFuncs[3])(BigObj_t *pOwner) = {0, BigObjRestoreState, BigObjKeepInBounds};
+BigObjShortNameId_t _BigObj_aEventTypeNames[4] = {
+    {"NONE", 0},
+    {"IDLE", 1},
+    {"COLLIDE", 2},
+    {"TRIGGER", 3},
+};
+BigObjNameId_t _BigObj_aEmotionStates[85] = {
+    {"NONE", -1},
+    {"ANIM_STATE_POLEIDLE", 0},
+    {"ANIM_STATE_POLECOLLIDE", 1},
+    {"ANIM_STATE_TREEIDLE", 2},
+    {"ANIM_STATE_TREECOLLIDE", 3},
+    {"ANIM_STATE_CARDRIVINGLOOP", 4},
+    {"ANIM_STATE_BRONCROWDSTANDIDLES", 52},
+    {"ANIM_STATE_BRONCROWDSITIDLES", 38},
+    {"ANIM_STATE_BENCHIDLE", 6},
+    {"ANIM_STATE_BENCHCOLLIDE", 7},
+    {"ANIM_STATE_BENCHCOLLIDELEFT", 23},
+    {"ANIM_STATE_BENCHCOLLIDERIGHT", 24},
+    {"ANIM_STATE_PIGEONWALKA", 25},
+    {"ANIM_STATE_PIGEONWALKB", 26},
+    {"ANIM_STATE_PIGEONWALKC", 27},
+    {"ANIM_STATE_PIGEONWALKD", 28},
+    {"ANIM_STATE_PIGEONFLYA", 29},
+    {"ANIM_STATE_PIGEONFLYB", 30},
+    {"ANIM_STATE_PIGEONFLYC", 31},
+    {"ANIM_STATE_PIGEONFLYD", 32},
+    {"ANIM_STATE_FENCEIDLE", 16},
+    {"ANIM_STATE_FENCECOLLIDELEFT", 17},
+    {"ANIM_STATE_FENCECOLLIDERIGHT", 19},
+    {"ANIM_STATE_GATEIDLE", 20},
+    {"ANIM_STATE_GATECOLLIDELEFT", 21},
+    {"ANIM_STATE_GATECOLLIDERIGHT", 22},
+    {"ANIM_STATE_SEAGULLSHADOWA", 40},
+    {"ANIM_STATE_SEAGULLSHADOWB", 41},
+    {"ANIM_STATE_SEAGULLSHADOWC", 42},
+    {"ANIM_STATE_SEAGULLSHADOWD", 43},
+    {"ANIM_STATE_SEAGULLSHADOWE", 44},
+    {"ANIM_STATE_SEAGULLWALKA", 45},
+    {"ANIM_STATE_SEAGULLWALKB", 46},
+    {"ANIM_STATE_SEAGULLWALKC", 47},
+    {"ANIM_STATE_SEAGULLWALKD", 48},
+    {"ANIM_STATE_SEAGULLFLYA", 49},
+    {"ANIM_STATE_SEAGULLFLYB", 50},
+    {"ANIM_STATE_SEAGULLFLYC", 51},
+    {"ANIM_STATE_SEAGULLFLYD", 53},
+    {"ANIM_STATE_ROOFFANIDLE", 56},
+    {"ANIM_STATE_ACVENTIDLE", 55},
+    {"ANIM_STATE_ROOSTERIDLE", 57},
+    {"ANIM_STATE_ROOSTERFLY", 58},
+    {"ANIM_STATE_DOGIDLE", 59},
+    {"ANIM_STATE_DOGATTACK", 60},
+    {"ANIM_STATE_WAREFANSPINIDLES", 61},
+    {"ANIM_STATE_WAREFENCEIDLE", 62},
+    {"ANIM_STATE_WAREFENCECOLLIDELEFT", 63},
+    {"ANIM_STATE_WAREFENCECOLLIDERIGHT", 64},
+    {"ANIM_STATE_WARERATA", 65},
+    {"ANIM_STATE_WARERATB", 66},
+    {"ANIM_STATE_WARERATC", 67},
+    {"ANIM_STATE_WARERATD", 68},
+    {"ANIM_STATE_CAG_CROWDGROUP01_IDLE", 69},
+    {"ANIM_STATE_CAG_CROWDGROUP02_IDLE", 70},
+    {"ANIM_STATE_CAG_CROWDGROUP03_IDLE", 71},
+    {"ANIM_STATE_DTP_CROWDGROUP01_IDLE", 72},
+    {"ANIM_STATE_DTP_CROWDGROUP02_IDLE", 73},
+    {"ANIM_STATE_DTP_CROWDGROUP03_IDLE", 74},
+    {"ANIM_STATE_CEN_CROWDGROUP01_IDLE", 75},
+    {"ANIM_STATE_CEN_CROWDGROUP02_IDLE", 76},
+    {"ANIM_STATE_CEN_CROWDGROUP03_IDLE", 77},
+    {"ANIM_STATE_STR_CROWDGROUP01_IDLE", 81},
+    {"ANIM_STATE_STR_CROWDGROUP02_IDLE", 82},
+    {"ANIM_STATE_STR_CROWDGROUP03_IDLE", 83},
+    {"ANIM_STATE_REC_CROWDGROUP01_IDLE", 84},
+    {"ANIM_STATE_REC_CROWDGROUP02_IDLE", 85},
+    {"ANIM_STATE_EAR_CROWDGROUP01_IDLE", 78},
+    {"ANIM_STATE_EAR_CROWDGROUP02_IDLE", 79},
+    {"ANIM_STATE_EAR_CROWDGROUP03_IDLE", 80},
+    {"ANIM_STATE_TRN_CROWDGROUP01_IDLE", 86},
+    {"ANIM_STATE_TRN_CROWDGROUP02_IDLE", 87},
+    {"ANIM_STATE_TRN_CROWDGROUP03_IDLE", 88},
+    {"ANIM_STATE_ALL_CROWDGROUP01_IDLE", 89},
+    {"ANIM_STATE_ALL_CROWDGROUP02_IDLE", 90},
+    {"ANIM_STATE_ALL_CROWDGROUP03_IDLE", 91},
+    {"ANIM_STATE_IRT_CROWDGROUP01_IDLE", 92},
+    {"ANIM_STATE_IRT_CROWDGROUP02_IDLE", 93},
+    {"ANIM_STATE_IRT_CROWDGROUP03_IDLE", 94},
+    {"ANIM_STATE_CON_CROWDGROUP01_IDLE", 95},
+    {"ANIM_STATE_CON_CROWDGROUP02_IDLE", 96},
+    {"ANIM_STATE_CON_CROWDGROUP03_IDLE", 97},
+    {"ANIM_STATE_LEG_CROWDGROUP01_IDLE", 98},
+    {"ANIM_STATE_LEG_CROWDGROUP02_IDLE", 99},
+    {"ANIM_STATE_LEG_CROWDGROUP03_IDLE", 100},
+};
+BigObjNameId_t _BigObj_aPartNames[32] = {
+    {"NONE", -1},
+    {"Bron_GarbageCan", 0},
+    {"Bron_FireHydrant", 0},
+    {"Bron_Pigeon", 0},
+    {"AQA_Oildrum01", 0},
+    {"Lati_Melons", 0},
+    {"Lati_Oranges", 0},
+    {"BEAC_Seagull", 0},
+    {"Junk_Oildrum", 0},
+    {"Junk_crate", 0},
+    {"ROOF_bucket01", 0},
+    {"ROOF_bucket02", 0},
+    {"Lati_Rooster", 0},
+    {"Ware_Oildrum", 0},
+    {"Ware_crate", 0},
+    {"LEGE_GarbageCan", 0},
+    {"Obj_Trash02", 0},
+    {"Obj_Trash03", 0},
+    {"Obj_Trash04", 0},
+    {"Obj_Trash05", 0},
+    {"Obj_Trash06", 0},
+    {"Obj_Trash07", 0},
+    {"Obj_Trash08", 0},
+    {"Obj_Barre01", 0},
+    {"Obj_Barre02", 0},
+    {"Obj_Barre03", 0},
+    {"Obj_Barre04", 0},
+    {"Obj_Barre05", 0},
+    {"Obj_Barre06", 0},
+    {"Obj_Barre07", 0},
+    {"Obj_Barre08", 0},
+    {"Obj_Barre09", 0},
+};
+BigObjSwapStateName_t _BigObj_aSwapStates[63] = {
+    {"NONE", "NONE", -1},
+    {"Bron_GarbageCan", "Normal", 0},
+    {"Bron_GarbageCan", "Damaged", 1},
+    {"Bron_FireHydrant", "Closed", 0},
+    {"Bron_FireHydrant", "Open", 1},
+    {"Bron_Pigeon", "Normal", 0},
+    {"Bron_Pigeon", "Flying", 1},
+    {"AQA_Oildrum01", "Normal", 0},
+    {"AQA_Oildrum01", "Damaged", 1},
+    {"Lati_Melons", "Normal", 0},
+    {"Lati_Melons", "Damaged", 1},
+    {"Lati_Oranges", "Normal", 0},
+    {"Lati_Oranges", "Damaged", 1},
+    {"BEAC_Seagull", "Normal", 0},
+    {"BEAC_Seagull", "Flying", 1},
+    {"Junk_Oildrum", "Normal", 0},
+    {"Junk_Oildrum", "Damaged", 1},
+    {"Junk_crate", "Normal", 0},
+    {"Junk_crate", "Damaged", 1},
+    {"ROOF_bucket01", "Normal", 0},
+    {"ROOF_bucket01", "Damaged", 1},
+    {"ROOF_bucket02", "Normal", 0},
+    {"ROOF_bucket02", "Damaged", 1},
+    {"Lati_Rooster", "Normal", 0},
+    {"Lati_Rooster", "Flying", 1},
+    {"Ware_Oildrum", "Normal", 0},
+    {"Ware_Oildrum", "Damaged", 1},
+    {"Ware_crate", "Normal", 0},
+    {"Ware_crate", "Damaged", 1},
+    {"LEGE_GarbageCan", "Normal", 0},
+    {"LEGE_GarbageCan", "Damaged", 1},
+    {"Obj_Barre01", "Normal", 0},
+    {"Obj_Barre01", "Damaged", 1},
+    {"Obj_Barre02", "Normal", 0},
+    {"Obj_Barre02", "Damaged", 1},
+    {"Obj_Barre03", "Normal", 0},
+    {"Obj_Barre03", "Damaged", 1},
+    {"Obj_Barre04", "Normal", 0},
+    {"Obj_Barre04", "Damaged", 1},
+    {"Obj_Barre05", "Normal", 0},
+    {"Obj_Barre05", "Damaged", 1},
+    {"Obj_Barre06", "Normal", 0},
+    {"Obj_Barre06", "Damaged", 1},
+    {"Obj_Barre07", "Normal", 0},
+    {"Obj_Barre07", "Damaged", 1},
+    {"Obj_Barre08", "Normal", 0},
+    {"Obj_Barre08", "Damaged", 1},
+    {"Obj_Barre09", "Normal", 0},
+    {"Obj_Barre09", "Damaged", 1},
+    {"Obj_Trash02", "Normal", 0},
+    {"Obj_Trash02", "Damaged", 1},
+    {"Obj_Trash03", "Normal", 0},
+    {"Obj_Trash03", "Damaged", 1},
+    {"Obj_Trash04", "Normal", 0},
+    {"Obj_Trash04", "Damaged", 1},
+    {"Obj_Trash05", "Normal", 0},
+    {"Obj_Trash05", "Damaged", 1},
+    {"Obj_Trash06", "Normal", 0},
+    {"Obj_Trash06", "Damaged", 1},
+    {"Obj_Trash07", "Normal", 0},
+    {"Obj_Trash07", "Damaged", 1},
+    {"Obj_Trash08", "Normal", 0},
+    {"Obj_Trash08", "Damaged", 1},
+};
+BigObjSoundNameId_t _BigObj_aSoundNames[38] = {
+    {"NONE", 0},
+    {"Hit_Barrel", 62},
+    {"Hit_Chainlink_Fence", 63},
+    {"Hit_Cone", 64},
+    {"Hit_Container", 65},
+    {"Hit_Grass", 66},
+    {"Hit_Iron_Fence", 67},
+    {"Hit_Metal_Large_Object", 68},
+    {"Hit_Metal_Small_Object", 69},
+    {"Hit_Pipe", 70},
+    {"Hit_Player", 71},
+    {"Hit_Sand", 72},
+    {"Hit_Solid_Wall", 73},
+    {"Hit_Tire", 74},
+    {"Hit_Tree", 75},
+    {"Hit_Wire", 76},
+    {"Hit_Wood", 77},
+    {"Hit_Wood_Fence", 78},
+    {"Idle_Bus", 79},
+    {"Idle_Truck", 80},
+    {"Idle_Vehicle", 81},
+    {"Idle_Police", 82},
+    {"Idle_GolfCart", 83},
+    {"Idle_IdleTruck", 84},
+    {"Idle_LargeFan", 86},
+    {"Idle_ACUnit", 87},
+    {"Idle_Subway", 85},
+    {"Hit_Fence", 63},
+    {"Hit_ChainlinkFence", 63},
+    {"Hit_Pipes", 70},
+    {"Hit_Wall", 73},
+    {"Hit_Metal_LargeObject", 68},
+    {"Hit_Metal_SmallObject", 69},
+    {"Hit_Metal", 69},
+    {"Hit_Wood_Box", 77},
+    {"Hit_Can", 62},
+    {"Hit_Crowd", 71},
+    {"Idle_Train", 85},
+};
+BigObjNameId_t _BigObj_aTravelDims[3] = {
+    {"U", 0},
+    {"V", 1},
+    {"NULL", -1},
+};
+BigObjNameId_t _BigObj_aStepTypes[3] = {
+    {"FULL_FRAME", 0},
+    {"INC_FRAME", 1},
+    {"NULL", -1},
+};
+DynObjSkeletonCache_t *_DynObj_apSkeletonCache[104] = {0};
 
 BigObjAnimHandlerFunc _BigObjAnim_aHandlers[102];
 
@@ -389,7 +662,7 @@ void BigObjAnimInitObject(BigObjInst *pObject, int index)
 void BigObjAnimRegisterHandlers(void)
 {
     BigObjAnimInitHandlers(_BigObjAnim_aHandlers, 102);
-    fn_801BE030(10, &lbl_803EA4D0);
+    fn_801BE030(10, &_BigObjAnim_sHandlerSet);
 }
 
 void BigObjAnimWritePose(AnimPose_t *pPose, BitStream_t *pStream, unsigned int count)
@@ -578,9 +851,9 @@ void BigObjRestoreState(BigObj_t *pObject)
 void BigObjKeepInBounds(BigObj_t *pObject)
 {
     float y = fabsf(pObject->mUnknown472->mState.mUnknown4);
-    int outY = y > fn_80178A44() + lbl_803EA4E8;
+    int outY = y > fn_80178A44() + _BigObj_fBoundsMargin;
     float x = fabsf(pObject->mUnknown472->mState.mUnknown0);
-    int outX = x > fn_80178A08() + lbl_803EA4E8;
+    int outX = x > fn_80178A08() + _BigObj_fBoundsMargin;
 
     if (outX || outY) {
         Vector_80039F5C pos;
@@ -589,16 +862,16 @@ void BigObjKeepInBounds(BigObj_t *pObject)
         pos.mY = pObject->mUnknown472->mState.mUnknown4;
         pos.mZ = pObject->mUnknown472->mState.mUnknown8;
         if (outX) {
-            float margin = lbl_803EA4F0 * SyncRandGetFloat(0);
+            float margin = _BigObj_fBoundsJitter * SyncRandGetFloat(0);
 
-            pos.mX = pObject->mUnknown472->mState.mUnknown0 < 0.0f ? lbl_803EA4EC - fn_80178A08() + margin
-                                                                 : fn_80178A08() - (lbl_803EA4EC + margin);
+            pos.mX = pObject->mUnknown472->mState.mUnknown0 < 0.0f ? _BigObj_fBoundsInset - fn_80178A08() + margin
+                                                                 : fn_80178A08() - (_BigObj_fBoundsInset + margin);
         }
         if (outY) {
-            float margin = lbl_803EA4F0 * SyncRandGetFloat(0);
+            float margin = _BigObj_fBoundsJitter * SyncRandGetFloat(0);
 
-            pos.mY = pObject->mUnknown472->mState.mUnknown4 < 0.0f ? lbl_803EA4EC - fn_80178A44() + margin
-                                                                 : fn_80178A44() - (lbl_803EA4EC + margin);
+            pos.mY = pObject->mUnknown472->mState.mUnknown4 < 0.0f ? _BigObj_fBoundsInset - fn_80178A44() + margin
+                                                                 : fn_80178A44() - (_BigObj_fBoundsInset + margin);
         }
         pObject->mUnknown472->mState.mUnknown0 = pos.mX;
         pObject->mUnknown472->mState.mUnknown4 = pos.mY;
@@ -710,7 +983,7 @@ int BigObjOnAnimEvent(BigObjInst *pObject, BigObj_t *pOwner, int mode)
                 if (!pObject->mUnknown381) {
                     if (pNode->mId != -1 && fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196) {
                         pExtra->mUnknown1704 = pObject->mUnknown424;
-                        pExtra->mUnknown1705 = lbl_803EA4DC[(((MathArcTan2(pObject->mUnknown352, pObject->mUnknown348) -
+                        pExtra->mUnknown1705 = _BigObj_aOctantStates[(((MathArcTan2(pObject->mUnknown352, pObject->mUnknown348) -
                                                                (pObject->mState.mUnknown24 + 0x400000)) &
                                                               0xFFFFFF) +
                                                              0x100000) >>
@@ -846,9 +1119,9 @@ void BigObjParseAnimEvent(int handle, BigObjInst *pObject)
         pObject->mUnknown292 = pObject->mUnknown272 * pObject->mUnknown276;
         ObjParseGetFloats(handle, "rate", pObject->mUnknown228, pObject->mUnknown292);
         ObjParseGetString(handle, "travelDim", text, 64);
-        pObject->mUnknown300 = BigObjFindNameId(text, lbl_802D47DC);
+        pObject->mUnknown300 = BigObjFindNameId(text, _BigObj_aTravelDims);
         ObjParseGetString(handle, "stepType", text, 64);
-        pObject->mUnknown304 = BigObjFindNameId(text, lbl_802D48A8);
+        pObject->mUnknown304 = BigObjFindNameId(text, _BigObj_aStepTypes);
         pObject->mUnknown296 = 0.0f;
         pObject->mUnknown280 = 0;
         pObject->mUnknown284 = 0;
@@ -962,7 +1235,7 @@ void BigObjParseSwapEvent(int handle, BigObjInst *pObject)
         pNode->mUnknown88 = 4;
         pNode->mUnknown76 = ObjParseGetFloat(handle, "delay");
         pNode->mUnknown72 = ObjParseGetFloat(handle, "rate");
-        lbl_803EA4E4 = pObject;
+        _BigObj_pAnimPalObject = pObject;
     } else {
         pNode->mUnknown68 = 0;
     }
@@ -988,9 +1261,9 @@ int BigObjFindPartId(const char *pName)
 {
     int i;
 
-    for (i = 0; i < sizeof(lbl_802D14C8) / sizeof(lbl_802D14C8[0]); i++) {
-        if (strcmp(pName, lbl_802D14C8[i].mName) == 0) {
-            return lbl_802D14C8[i].mId;
+    for (i = 0; i < sizeof(_BigObj_aPartNames) / sizeof(_BigObj_aPartNames[0]); i++) {
+        if (strcmp(pName, _BigObj_aPartNames[i].mName) == 0) {
+            return _BigObj_aPartNames[i].mId;
         }
     }
     return -1;
@@ -1000,10 +1273,10 @@ int BigObjFindSwapState(const char *pName, const char *pState)
 {
     int i;
 
-    for (i = 0; i < sizeof(lbl_802D1D48) / sizeof(lbl_802D1D48[0]); i++) {
-        if (strcmp(pName, lbl_802D1D48[i].mName) == 0 &&
-            strcmp(pState, lbl_802D1D48[i].mState) == 0) {
-            return lbl_802D1D48[i].mId;
+    for (i = 0; i < sizeof(_BigObj_aSwapStates) / sizeof(_BigObj_aSwapStates[0]); i++) {
+        if (strcmp(pName, _BigObj_aSwapStates[i].mName) == 0 &&
+            strcmp(pState, _BigObj_aSwapStates[i].mState) == 0) {
+            return _BigObj_aSwapStates[i].mId;
         }
     }
     return -1;
@@ -1013,9 +1286,9 @@ int BigObjFindEmotionState(const char *pName)
 {
     int i;
 
-    for (i = 0; i < sizeof(lbl_802CFE34) / sizeof(lbl_802CFE34[0]); i++) {
-        if (strcmp(pName, lbl_802CFE34[i].mName) == 0) {
-            return lbl_802CFE34[i].mId;
+    for (i = 0; i < sizeof(_BigObj_aEmotionStates) / sizeof(_BigObj_aEmotionStates[0]); i++) {
+        if (strcmp(pName, _BigObj_aEmotionStates[i].mName) == 0) {
+            return _BigObj_aEmotionStates[i].mId;
         }
     }
     return -1;
@@ -1025,9 +1298,9 @@ int BigObjFindTypeId(const char *pName)
 {
     int i;
 
-    for (i = 0; i < sizeof(lbl_802CFBCC) / sizeof(lbl_802CFBCC[0]); i++) {
-        if (strcmp(pName, lbl_802CFBCC[i].mName) == 0) {
-            return lbl_802CFBCC[i].mId;
+    for (i = 0; i < sizeof(_BigObj_aTypeNames) / sizeof(_BigObj_aTypeNames[0]); i++) {
+        if (strcmp(pName, _BigObj_aTypeNames[i].mName) == 0) {
+            return _BigObj_aTypeNames[i].mId;
         }
     }
     return 0;
@@ -1037,9 +1310,9 @@ int BigObjFindBehaviorId(const char *pName)
 {
     int i;
 
-    for (i = 0; i < sizeof(lbl_802CFD2C) / sizeof(lbl_802CFD2C[0]); i++) {
-        if (strcmp(pName, lbl_802CFD2C[i].mName) == 0) {
-            return lbl_802CFD2C[i].mId;
+    for (i = 0; i < sizeof(_BigObj_aResetNames) / sizeof(_BigObj_aResetNames[0]); i++) {
+        if (strcmp(pName, _BigObj_aResetNames[i].mName) == 0) {
+            return _BigObj_aResetNames[i].mId;
         }
     }
     return 0;
@@ -1049,9 +1322,9 @@ int BigObjFindEventType(const char *pName)
 {
     int i;
 
-    for (i = 0; i < sizeof(lbl_802CFDA4) / sizeof(lbl_802CFDA4[0]); i++) {
-        if (strcmp(pName, lbl_802CFDA4[i].mName) == 0) {
-            return lbl_802CFDA4[i].mId;
+    for (i = 0; i < sizeof(_BigObj_aEventTypeNames) / sizeof(_BigObj_aEventTypeNames[0]); i++) {
+        if (strcmp(pName, _BigObj_aEventTypeNames[i].mName) == 0) {
+            return _BigObj_aEventTypeNames[i].mId;
         }
     }
     return 0;
@@ -1061,9 +1334,9 @@ unsigned short BigObjFindSoundId(const char *pName)
 {
     int i;
 
-    for (i = 0; i < sizeof(lbl_802D3DC4) / sizeof(lbl_802D3DC4[0]); i++) {
-        if (strcmp(pName, lbl_802D3DC4[i].mName) == 0) {
-            return lbl_802D3DC4[i].mId;
+    for (i = 0; i < sizeof(_BigObj_aSoundNames) / sizeof(_BigObj_aSoundNames[0]); i++) {
+        if (strcmp(pName, _BigObj_aSoundNames[i].mName) == 0) {
+            return _BigObj_aSoundNames[i].mId;
         }
     }
     return 0;
@@ -1099,17 +1372,17 @@ int BigObjEffectSlotAcquire(int type)
     int result = 21;
 
     for (i = 0; i < 8; i++) {
-        if (type == lbl_8030865C[i]) {
-            lbl_8030867C[i]++;
+        if (type == _BigObj_aiEffectTypes[i]) {
+            _BigObj_aiEffectUsers[i]++;
             return i + 12;
         }
-        if (lbl_8030865C[i] == -1 && slot == 8) {
+        if (_BigObj_aiEffectTypes[i] == -1 && slot == 8) {
             slot = i;
         }
     }
     if (result == 21 && slot < 8) {
-        lbl_8030865C[slot] = type;
-        lbl_8030867C[slot] = 1;
+        _BigObj_aiEffectTypes[slot] = type;
+        _BigObj_aiEffectUsers[slot] = 1;
         result = slot + 12;
     }
     return result;
@@ -1127,23 +1400,23 @@ void BigObjParseBehavior(int handle, BigObjInst *pObject)
     hasType = ObjParseGetString(handle, "type", type, 32);
     hasReset = ObjParseGetString(handle, "reset", reset, 32);
     pObject->mUnknown188 = 0;
-    pObject->mUnknown184 = lbl_802CFCEC[pObject->mUnknown188];
+    pObject->mUnknown184 = _BigObj_apUpdateFuncs[pObject->mUnknown188];
     pObject->mUnknown196 = -1;
     pObject->mUnknown424 = 1;
     pObject->mUnknown312 = 0;
     pObject->mUnknown420 = 0;
-    lbl_803EA4E4 = 0;
+    _BigObj_pAnimPalObject = 0;
     if (hasType) {
         pObject->mUnknown188 = BigObjFindTypeId(type);
-        pObject->mUnknown184 = lbl_802CFCEC[pObject->mUnknown188];
-        if (lbl_802CFD0C[pObject->mUnknown188]) {
-            lbl_802CFD0C[pObject->mUnknown188](handle, pObject);
+        pObject->mUnknown184 = _BigObj_apUpdateFuncs[pObject->mUnknown188];
+        if (_BigObj_apLoadFuncs[pObject->mUnknown188]) {
+            _BigObj_apLoadFuncs[pObject->mUnknown188](handle, pObject);
         }
         BigObjParseEvents(handle, pObject);
     }
     pObject->mUnknown192 = 0;
     if (hasReset) {
-        pObject->mUnknown192 = lbl_802CFD98[BigObjFindBehaviorId(reset)];
+        pObject->mUnknown192 = _BigObj_apResetFuncs[BigObjFindBehaviorId(reset)];
     }
     pObject->mUnknown380 = 0;
 }
@@ -1227,14 +1500,14 @@ void BigObjHit(BigObj_t *pItem, float *pPos, float *pDir, const char *pName, int
         pObject->mUnknown376 = pHitter->mId;
         scale = pObject->mUnknown372 * (1.0f / 70.0f);
         if (pHitter->mChannel != 0xFF) {
-            int hi = lbl_803EA4D8;
-            int lo = lbl_803EA4D9;
+            int hi = _BigObjHit_uRumbleMax;
+            int lo = _BigObjHit_uRumbleMin;
             float volume = (hi - lo) * scale + lo;
 
             if (volume > hi) {
                 volume = hi;
             }
-            RumbleStart(pHitter->mChannel, (unsigned char)(int)volume, lbl_803EA4DA);
+            RumbleStart(pHitter->mChannel, (unsigned char)(int)volume, _BigObjHit_uRumbleTime);
         }
     } else {
         pObject->mUnknown376 = 0;
@@ -1268,7 +1541,7 @@ void BigObjHitStatic(BigObj_t *pItem, float *pPos, float *pDir, const char *pNam
 
 int BigObjEffectSlotCount(int type)
 {
-    return lbl_8030867C[type - 12];
+    return _BigObj_aiEffectUsers[type - 12];
 }
 
 void BigObjEffectSlotsReset(void)
@@ -1276,8 +1549,8 @@ void BigObjEffectSlotsReset(void)
     int i;
 
     for (i = 0; i < 8; i++) {
-        lbl_8030867C[i] = 0;
-        lbl_8030865C[i] = -1;
+        _BigObj_aiEffectUsers[i] = 0;
+        _BigObj_aiEffectTypes[i] = -1;
     }
 }
 
@@ -1308,15 +1581,15 @@ struct DynObjModelInstance_t {
 };
 
 extern "C" {
-extern DynObjChild **lbl_803EA4F4;
-extern ObjParseFile_t *lbl_803EA4F8;
-extern unsigned short lbl_803EC7D0;
-extern unsigned short lbl_803EC7D2;
-extern int lbl_803EC7D4;
-extern void *lbl_803EC7D8;
-extern char *lbl_803EC7DC;
-extern unsigned short lbl_803EA4FC;
-extern DynObjModelCache_t *lbl_8030869C[];
+DynObjChild **_DynObjChild_apList = 0;
+ObjParseFile_t *_ObjParse_aFiles = 0;
+unsigned short _DynObjChild_uCount;
+unsigned short _DynObjChild_uMax;
+int _ObjParse_iFileCount;
+void *_ObjParse_pBuffer;
+char *_ObjParse_pBufferNext;
+unsigned short _DynObj_uModelCount = 0;
+DynObjModelCache_t *_DynObj_apModelCache[104];
 extern void *gpReplay;
 void QuatFromEuler(Quat_801EB488 *, int, int, int);
 void QuatFromEulerYZX(Quat_801EB488 *, int, int, int);
@@ -1456,23 +1729,23 @@ void DynObjChildCreateList(int handle, int count)
 {
     ObjNewType_(31, 112, count, 0, 0);
     if (handle) ObjSetListObjFunc(handle, 31, 0, DynObjChildUpdate);
-    lbl_803EA4F4 = (DynObjChild **)fn_801D2B7C(count * 4, 0, 0);
-    memset(lbl_803EA4F4, 0, count * 4);
+    _DynObjChild_apList = (DynObjChild **)fn_801D2B7C(count * 4, 0, 0);
+    memset(_DynObjChild_apList, 0, count * 4);
     SysGetLastError();
-    lbl_803EC7D0 = 0;
-    lbl_803EC7D2 = count;
+    _DynObjChild_uCount = 0;
+    _DynObjChild_uMax = count;
 }
 
 void DynObjChildDestroyList(int handle)
 {
-    if (lbl_803EA4F4) {
-        for (unsigned short i = 0; i < lbl_803EC7D0; i++) {
-            ObjRemoveFromList(handle, lbl_803EA4F4[i]);
-            VptTrashObject(lbl_803EA4F4[i]);
+    if (_DynObjChild_apList) {
+        for (unsigned short i = 0; i < _DynObjChild_uCount; i++) {
+            ObjRemoveFromList(handle, _DynObjChild_apList[i]);
+            VptTrashObject(_DynObjChild_apList[i]);
         }
         VptFlushObjectTrash();
-        fn_801D2BD0(lbl_803EA4F4);
-        lbl_803EA4F4 = 0;
+        fn_801D2BD0(_DynObjChild_apList);
+        _DynObjChild_apList = 0;
     }
 }
 
@@ -1482,7 +1755,7 @@ void DynObjChildShutdown(int handle) { DynObjChildDestroyList(handle); VptFlushO
 void DynObjChildSpawn(BigObjDesc_t *pDesc, int handle, int first)
 {
     DynObjChild *p = ObjNewInList(handle, 31, 0, pDesc);
-    lbl_803EA4F4[lbl_803EC7D0] = p;
+    _DynObjChild_apList[_DynObjChild_uCount] = p;
     LightTrackerReset(&p->mTracker60);
     p->mWord68 = 0;
     p->mUnknown14.mX = pDesc->mUnknown132.mUnknown4;
@@ -1514,7 +1787,7 @@ void DynObjChildSpawn(BigObjDesc_t *pDesc, int handle, int first)
         }
     }
     p->mpUnknown58 = LevelFindArea(&pDesc->mUnknown132.mUnknown4);
-    lbl_803EC7D0++;
+    _DynObjChild_uCount++;
     p->mUnknown6C = 0;
     DynObjChildRefreshFrame(p);
 }
@@ -1527,8 +1800,8 @@ int DynObjChildUpdate(DynObjChild *p) {
 
 int ObjParseFind(const char *pName)
 {
-    for (int i = 0; i < lbl_803EC7D4; i++)
-        if (strcmp(pName, lbl_803EA4F8[i].mName) == 0) return i;
+    for (int i = 0; i < _ObjParse_iFileCount; i++)
+        if (strcmp(pName, _ObjParse_aFiles[i].mName) == 0) return i;
     return -1;
 }
 
@@ -1538,72 +1811,72 @@ int ObjParseOpen(void *pData, char *pName)
     if (id == -1) return -1;
     int index = ObjParseFind(pName);
     if (index == -1) {
-        strcpy(lbl_803EA4F8[lbl_803EC7D4].mName, pName);
-        void *p = ResLoadToBuffer(pData, id, lbl_803EC7DC);
-        lbl_803EA4F8[lbl_803EC7D4].mpData = p;
-        lbl_803EA4F8[lbl_803EC7D4].mpCursor = p;
-        lbl_803EC7DC = lbl_803EC7DC + ResGetSize(pData, id) + 4;
-        lbl_803EA4F8[lbl_803EC7D4].mId = id;
-        index = lbl_803EC7D4++;
-    } else lbl_803EA4F8[index].mpCursor = lbl_803EA4F8[index].mpData;
+        strcpy(_ObjParse_aFiles[_ObjParse_iFileCount].mName, pName);
+        void *p = ResLoadToBuffer(pData, id, _ObjParse_pBufferNext);
+        _ObjParse_aFiles[_ObjParse_iFileCount].mpData = p;
+        _ObjParse_aFiles[_ObjParse_iFileCount].mpCursor = p;
+        _ObjParse_pBufferNext = _ObjParse_pBufferNext + ResGetSize(pData, id) + 4;
+        _ObjParse_aFiles[_ObjParse_iFileCount].mId = id;
+        index = _ObjParse_iFileCount++;
+    } else _ObjParse_aFiles[index].mpCursor = _ObjParse_aFiles[index].mpData;
     return index;
 }
 
-void ObjParseRewind(int handle) { lbl_803EA4F8[handle].mpCursor = lbl_803EA4F8[handle].mpData; }
+void ObjParseRewind(int handle) { _ObjParse_aFiles[handle].mpCursor = _ObjParse_aFiles[handle].mpData; }
 int ObjParseFindPath(int handle, const char *pKey) {
-    void *p = XmlFindPath(lbl_803EA4F8[handle].mpCursor, pKey);
-    lbl_803EA4F8[handle].mpCursor = p;
+    void *p = XmlFindPath(_ObjParse_aFiles[handle].mpCursor, pKey);
+    _ObjParse_aFiles[handle].mpCursor = p;
     if (p) return 1;
     return 0;
 }
 int ObjParseFindChild(int handle, const char *pKey) {
-    void *p = XmlFindInElement(lbl_803EA4F8[handle].mpCursor, pKey);
-    lbl_803EA4F8[handle].mpCursor = p;
+    void *p = XmlFindInElement(_ObjParse_aFiles[handle].mpCursor, pKey);
+    _ObjParse_aFiles[handle].mpCursor = p;
     if (p) return 1;
     return 0;
 }
 int ObjParseNext(int handle) {
-    void *p = XmlFindNext(lbl_803EA4F8[handle].mpCursor);
-    lbl_803EA4F8[handle].mpCursor = p;
+    void *p = XmlFindNext(_ObjParse_aFiles[handle].mpCursor);
+    _ObjParse_aFiles[handle].mpCursor = p;
     if (p) return 1;
     return 0;
 }
 int ObjParseGetString(int handle, const char *pKey, char *pText, int size) {
-    return XmlGetAttrString(lbl_803EA4F8[handle].mpCursor, pKey, pText, size, "");
+    return XmlGetAttrString(_ObjParse_aFiles[handle].mpCursor, pKey, pText, size, "");
 }
-int ObjParseGetInt(int handle, const char *pKey) { return XmlGetAttrInt(lbl_803EA4F8[handle].mpCursor, pKey, 0); }
-float ObjParseGetFloat(int handle, const char *pKey) { return XmlGetAttrFloat(lbl_803EA4F8[handle].mpCursor, pKey, 0.0f); }
+int ObjParseGetInt(int handle, const char *pKey) { return XmlGetAttrInt(_ObjParse_aFiles[handle].mpCursor, pKey, 0); }
+float ObjParseGetFloat(int handle, const char *pKey) { return XmlGetAttrFloat(_ObjParse_aFiles[handle].mpCursor, pKey, 0.0f); }
 int ObjParseGetMatrix(int handle, const char *pKey, float *pValues) {
     float values[9];
     int i = 0;
-    if (XmlGetAttrFloats(lbl_803EA4F8[handle].mpCursor, pKey, values, 9)) {
+    if (XmlGetAttrFloats(_ObjParse_aFiles[handle].mpCursor, pKey, values, 9)) {
         for (; i < 9; i++) pValues[i + i / 3] = values[i];
         return 1;
     }
     return 0;
 }
 unsigned char ObjParseGetFloats(int handle, const char *pKey, float *pValues, int count) {
-    return XmlGetAttrFloats(lbl_803EA4F8[handle].mpCursor, pKey, pValues, count);
+    return XmlGetAttrFloats(_ObjParse_aFiles[handle].mpCursor, pKey, pValues, count);
 }
 int ObjParseGetVector(int handle, const char *pKey, float *pValues) {
     float values[3];
-    if (XmlGetAttrFloats(lbl_803EA4F8[handle].mpCursor, pKey, values, 3)) {
+    if (XmlGetAttrFloats(_ObjParse_aFiles[handle].mpCursor, pKey, values, 3)) {
         pValues[0] = values[0]; pValues[1] = values[1]; pValues[2] = values[2]; return 1;
     }
     return 0;
 }
 void ObjParseInit(void) {
-    lbl_803EC7D4 = 0;
-    lbl_803EA4F8 = (ObjParseFile_t *)fn_801D2B7C(0x4B60, 4, 0);
-    memset(lbl_803EA4F8, 0, 0x4B60);
-    lbl_803EC7D8 = fn_801D2B7C(0x18000, 4, 0);
-    memset(lbl_803EC7D8, 0, 0x18000);
-    lbl_803EC7DC = (char *)lbl_803EC7D8;
+    _ObjParse_iFileCount = 0;
+    _ObjParse_aFiles = (ObjParseFile_t *)fn_801D2B7C(0x4B60, 4, 0);
+    memset(_ObjParse_aFiles, 0, 0x4B60);
+    _ObjParse_pBuffer = fn_801D2B7C(0x18000, 4, 0);
+    memset(_ObjParse_pBuffer, 0, 0x18000);
+    _ObjParse_pBufferNext = (char *)_ObjParse_pBuffer;
     BigObjEffectSlotsReset();
 }
-void ObjParseShutdown(void) { fn_801D2BD0(lbl_803EA4F8); lbl_803EA4F8 = 0; fn_801D2BD0(lbl_803EC7D8); }
-int ObjParseGetCursor(int handle) { return (int)lbl_803EA4F8[handle].mpCursor; }
-void ObjParseSetCursor(int handle, int position) { lbl_803EA4F8[handle].mpCursor = (void *)position; }
+void ObjParseShutdown(void) { fn_801D2BD0(_ObjParse_aFiles); _ObjParse_aFiles = 0; fn_801D2BD0(_ObjParse_pBuffer); }
+int ObjParseGetCursor(int handle) { return (int)_ObjParse_aFiles[handle].mpCursor; }
+void ObjParseSetCursor(int handle, int position) { _ObjParse_aFiles[handle].mpCursor = (void *)position; }
 
 int DynObjDrawModel(DynObj *p, int mode)
 {
@@ -1628,8 +1901,8 @@ int DynObjDrawModel(DynObj *p, int mode)
 
 int DynObjFindModel(const char *pName)
 {
-    for (int i = 0; i < lbl_803EA4FC; i++)
-        if (strcmp(pName, lbl_8030869C[i]->mName) == 0) return i;
+    for (int i = 0; i < _DynObj_uModelCount; i++)
+        if (strcmp(pName, _DynObj_apModelCache[i]->mName) == 0) return i;
     return -1;
 }
 
@@ -1643,12 +1916,12 @@ void DynObjLoadModel(void *pData, int handle, BigObj_t *pObject)
     memset(p->mpRender12C, 0, 196);
     DynObjModelInstance_t *pInstance = p->mpRender12C;
     if (index != -1) {
-        pInstance->mpCache = lbl_8030869C[index];
+        pInstance->mpCache = _DynObj_apModelCache[index];
         pInstance->mpCache->mReferences++;
     } else {
-        lbl_8030869C[lbl_803EA4FC] = (DynObjModelCache_t *)fn_801D2B7C(320, 0, 0);
-        memset(lbl_8030869C[lbl_803EA4FC], 0, 320);
-        pInstance->mpCache = lbl_8030869C[lbl_803EA4FC++];
+        _DynObj_apModelCache[_DynObj_uModelCount] = (DynObjModelCache_t *)fn_801D2B7C(320, 0, 0);
+        memset(_DynObj_apModelCache[_DynObj_uModelCount], 0, 320);
+        pInstance->mpCache = _DynObj_apModelCache[_DynObj_uModelCount++];
         pInstance->mpCache->mReferences = 1;
         strcpy(pInstance->mpCache->mName, name);
         pInstance->mpCache->mpArchive = pData;
@@ -1799,31 +2072,30 @@ public:
 };
 
 extern "C" {
-extern unsigned short lbl_803EA4FE;
-extern DynObjSkeletonCache_t *lbl_802D4974[];
-extern CollisionShape *lbl_8030883C[];
-extern CollisionShape *lbl_80308AD4[];
-extern Vector_80039F5C *lbl_80308B0C[];
-extern RigidBody *lbl_80308D0C[];
-extern RigidBody *lbl_80308F0C[];
-extern PointConstraint *lbl_80308F44[];
-extern PhysBodyOwner_t lbl_80308F64[];
-extern ContactSystem *lbl_803EA500;
-extern SleepController *lbl_803EA504;
-extern PhysCollisionHandler *lbl_803EA508;
-extern PhysicsWorld *lbl_803EA50C;
-extern Integrator *lbl_803EA510;
-extern CollisionShape *lbl_803EA518;
+unsigned short _DynObj_uSkeletonCount = 0;
+CollisionShape *_Phys_apObjectShapes[166];
+CollisionShape *_Phys_apPlayerShapes[14];
+Vector_80039F5C *_Phys_apObjectPositions[128];
+RigidBody *_Phys_apObjectBodies[128];
+RigidBody *_Phys_apPlayerBodies[14];
+PointConstraint *_Phys_apConstraints[8];
+PhysBodyOwner_t _Phys_aBodyOwners[142];
+ContactSystem *_Phys_pContacts = 0;
+SleepController *_Phys_pSleep = 0;
+PhysCollisionHandler *_Phys_pCollisionHandler = 0;
+PhysicsWorld *_Phys_pWorld = 0;
+Integrator *_Phys_pIntegrator = 0;
+PhysBodyGroup *_Phys_pBodyGroup = 0;
+CollisionShape *_Phys_pGroundShape = 0;
 extern PhysicsTime _Phys_sTime;
-extern PhysBodyGroup *lbl_803EA514;
-extern CollisionShape *lbl_803EA51C;
-extern int lbl_803EA520;
-extern int lbl_803EA524;
-extern int lbl_803EA528;
-extern int lbl_803EA52C;
-extern unsigned int lbl_803EA530;
-extern RigidBody *lbl_803EC7E0;
-extern RigidBody *lbl_803EC7E4;
+CollisionShape *_Phys_pBallShape = 0;
+int _Phys_iObjectCount = 0;
+int _Phys_iBodyCount = 0;
+int _Phys_iShapeCount = 0;
+int _Phys_iConstraintCount = 0;
+unsigned int _Phys_uBallHitTimer = 0;
+RigidBody *_Phys_pBallBody;
+RigidBody *_Phys_pGroundBody;
 void DynObjRenderShutdown(DynObj *);
 void DynObjCacheReset(void); void DynObjCacheFree(void); void DynObjFreeAnimPal(DynObj *);
 int DebugPrintf(const char *, ...);
@@ -1858,16 +2130,16 @@ void DynObjShutdown(BigObj_t *pObject)
 }
 void DynObjModelCacheReset(void)
 {
-    lbl_803EA4FC = 0;
-    memset(lbl_8030869C, 0, 0x1A0);
+    _DynObj_uModelCount = 0;
+    memset(_DynObj_apModelCache, 0, 0x1A0);
     DynObjCacheReset();
 }
 void DynObjModelCacheFree(void)
 {
     DynObjCacheFree();
-    for (unsigned int i = 0; i < lbl_803EA4FC; i++) fn_801D2BD0(lbl_8030869C[i]);
-    memset(lbl_8030869C, 0, 0x1A0);
-    lbl_803EA4FC = 0;
+    for (unsigned int i = 0; i < _DynObj_uModelCount; i++) fn_801D2BD0(_DynObj_apModelCache[i]);
+    memset(_DynObj_apModelCache, 0, 0x1A0);
+    _DynObj_uModelCount = 0;
 }
 void DynObjSetPartState(BigObj_t *p, int index, int value)
 {
@@ -1880,8 +2152,8 @@ void DynObjSetPart(BigObj_t *p, int index, int value)
 }
 int DynObjFindSkeleton(const char *pName)
 {
-    for (int i = 0; i < lbl_803EA4FE; i++)
-        if (strcmp(pName, lbl_802D4974[i]->mName) == 0) return i;
+    for (int i = 0; i < _DynObj_uSkeletonCount; i++)
+        if (strcmp(pName, _DynObj_apSkeletonCache[i]->mName) == 0) return i;
     return -1;
 }
 void DynObjLoadSkeleton(void *pData, int handle, BigObj_t *pObject)
@@ -1894,13 +2166,13 @@ void DynObjLoadSkeleton(void *pData, int handle, BigObj_t *pObject)
     if (ok) {
         int index = DynObjFindSkeleton(name);
         if (index != -1) {
-            pCache = lbl_802D4974[index];
+            pCache = _DynObj_apSkeletonCache[index];
             pCache->mReferences++;
             p->mpSkeleton130 = pCache;
         } else {
-            lbl_802D4974[lbl_803EA4FE] = (DynObjSkeletonCache_t *)fn_801D2B7C(272, 0, 0);
-            memset(lbl_802D4974[lbl_803EA4FE], 0, 272);
-            pCache = lbl_802D4974[lbl_803EA4FE++];
+            _DynObj_apSkeletonCache[_DynObj_uSkeletonCount] = (DynObjSkeletonCache_t *)fn_801D2B7C(272, 0, 0);
+            memset(_DynObj_apSkeletonCache[_DynObj_uSkeletonCount], 0, 272);
+            pCache = _DynObj_apSkeletonCache[_DynObj_uSkeletonCount++];
             p->mpSkeleton130 = pCache;
             strcpy(pCache->mName, name);
             pCache->mpArchive = pData;
@@ -1928,14 +2200,14 @@ void DynObjFreeSkeleton(BigObj_t *pObject)
 }
 void DynObjSkeletonCacheReset(void)
 {
-    lbl_803EA4FE = 0;
-    memset(lbl_802D4974, 0, 0x1A0);
+    _DynObj_uSkeletonCount = 0;
+    memset(_DynObj_apSkeletonCache, 0, 0x1A0);
 }
 void DynObjSkeletonCacheFree(void)
 {
-    for (unsigned int i = 0; i < lbl_803EA4FE; i++) fn_801D2BD0(lbl_802D4974[i]);
-    memset(lbl_802D4974, 0, 0x1A0);
-    lbl_803EA4FE = 0;
+    for (unsigned int i = 0; i < _DynObj_uSkeletonCount; i++) fn_801D2BD0(_DynObj_apSkeletonCache[i]);
+    memset(_DynObj_apSkeletonCache, 0, 0x1A0);
+    _DynObj_uSkeletonCount = 0;
 }
 void DynObjGetRootAngles(BigObj_t *pObject, int *pAngles)
 {
@@ -2071,7 +2343,7 @@ void PhysHitBall(Vector_80039F5C *pImpulse)
         if (!(fabsf(impulse.mX) >= 0.05f) && !(fabsf(impulse.mY) >= 0.05f) && !(impulse.mZ <= 0.0f)) {
             impulse.mX += pBall->mState.mUnknown54.mX;
             impulse.mY += pBall->mState.mUnknown54.mY;
-            if (fn_80178508(&pBall->mState.mPos, 0, 1) > 2 && !lbl_803EA530) lbl_803EA530 = 1;
+            if (fn_80178508(&pBall->mState.mPos, 0, 1) > 2 && !_Phys_uBallHitTimer) _Phys_uBallHitTimer = 1;
         }
         if (!(impulse.mX * pBall->mState.mUnknown54.mX >= 0.0f)) position.mX = pBall->mState.mUnknown28.mX;
         else impulse.mX = 0.0f;
@@ -2144,8 +2416,8 @@ void PhysCollisionHandler::OnImpulse(RigidBody *pA, unsigned int indexA, RigidBo
 
 void PhysBodyGroup::ApplyForces(void *pStart)
 {
-    for (unsigned int i = 0; i < (unsigned int)lbl_803EA520; i++) {
-        RigidBody *p = lbl_80308D0C[i];
+    for (unsigned int i = 0; i < (unsigned int)_Phys_iObjectCount; i++) {
+        RigidBody *p = _Phys_apObjectBodies[i];
         if (p->mState == 2) {
             Vector_80039F5C force;
             force.mX = 0.0f;
@@ -2163,8 +2435,8 @@ void PhysAddCapsule(int handle, ShapeCollection *pSet, BigObjInst *pObject,
 {
     float y = pA->mY; pA->mY = -pA->mZ; pA->mZ = y;
     y = pB->mY; pB->mY = -pB->mZ; pB->mZ = y;
-    lbl_8030883C[lbl_803EA528] = new (0) CapsuleShape((Vec3_801DE1E0 *)pA, (Vec3_801DE1E0 *)pB, friction, bounce, radius);
-    pSet->AddShape(lbl_8030883C[lbl_803EA528++]);
+    _Phys_apObjectShapes[_Phys_iShapeCount] = new (0) CapsuleShape((Vec3_801DE1E0 *)pA, (Vec3_801DE1E0 *)pB, friction, bounce, radius);
+    pSet->AddShape(_Phys_apObjectShapes[_Phys_iShapeCount++]);
 }
 void PhysAddBox(int handle, ShapeCollection *pSet, BigObjInst *pObject,
                  Vector_80039F5C *pA, Vector_80039F5C *pB, float friction, float bounce)
@@ -2174,16 +2446,16 @@ void PhysAddBox(int handle, ShapeCollection *pSet, BigObjInst *pObject,
     Vector_80039F5C center;
     Vec3Add(&center, pA, pB);
     Vec3Scale(&center, &center, 0.5f);
-    lbl_8030883C[lbl_803EA528] = new (0) BoxShape((Vec3_801DE1E0 *)&center, friction, bounce,
+    _Phys_apObjectShapes[_Phys_iShapeCount] = new (0) BoxShape((Vec3_801DE1E0 *)&center, friction, bounce,
                                      fabsf(pA->mX - center.mX), fabsf(pA->mY - center.mY), fabsf(pA->mZ - center.mZ));
-    pSet->AddShape(lbl_8030883C[lbl_803EA528++]);
+    pSet->AddShape(_Phys_apObjectShapes[_Phys_iShapeCount++]);
 }
 void PhysAddSphere(int handle, ShapeCollection *pSet, BigObjInst *pObject,
                  Vector_80039F5C *pPoint, float friction, float bounce, float radius)
 {
     float y = pPoint->mY; pPoint->mY = -pPoint->mZ; pPoint->mZ = y;
-    lbl_8030883C[lbl_803EA528] = new (0) SphereShape((Vec3_801DE1E0 *)pPoint, friction, bounce, radius);
-    pSet->AddShape(lbl_8030883C[lbl_803EA528++]);
+    _Phys_apObjectShapes[_Phys_iShapeCount] = new (0) SphereShape((Vec3_801DE1E0 *)pPoint, friction, bounce, radius);
+    pSet->AddShape(_Phys_apObjectShapes[_Phys_iShapeCount++]);
 }
 void PhysSetShapeNames(PhysBodyOwner_t *p, char (*pNames)[32], unsigned int count)
 {
@@ -2244,7 +2516,7 @@ void PhysLoadObject(int handle, BigObj_t *pObject, int objectIndex)
         Vector_80039F5C inertia, velocity, acceleration, initial;
         float matrix[16];
         char type[32];
-        lbl_80308B0C[lbl_803EA520] = pPos;
+        _Phys_apObjectPositions[_Phys_iObjectCount] = pPos;
         pState->mUnknown408 = ObjParseGetFloat(handle, "aeroConst");
         pState->mUnknown412 = ObjParseGetFloat(handle, "spinDamp");
         pState->mUnknown382 = ObjParseGetInt(handle, "helpOffGround");
@@ -2285,7 +2557,7 @@ void PhysLoadObject(int handle, BigObj_t *pObject, int objectIndex)
                 }
                 count++;
             } while (ObjParseNext(handle));
-            PhysSetShapeNames(&lbl_80308F64[lbl_803EA524], names, count);
+            PhysSetShapeNames(&_Phys_aBodyOwners[_Phys_iBodyCount], names, count);
         }
         ObjParseRewind(handle);
         RigidBody *pBody;
@@ -2300,15 +2572,15 @@ void PhysLoadObject(int handle, BigObj_t *pObject, int objectIndex)
                 inertia.mZ = 0.6640654802322388f;
             }
             mass = ObjParseGetFloat(handle, "mass");
-            if (!(mass <= 0.0f)) lbl_80308F64[lbl_803EA524].mKind = 3;
-            else lbl_80308F64[lbl_803EA524].mKind = 4;
-            lbl_80308F64[lbl_803EA524].mpObject = pObject;
-            lbl_80308F64[lbl_803EA524].mUnknown2 = 1;
-            lbl_80308F64[lbl_803EA524].mUnknown16 = objectIndex;
-            lbl_80308F64[lbl_803EA524].mType = lbl_803EA524;
-            lbl_80308F64[lbl_803EA524].mUnknown22 = -1;
-            lbl_80308F64[lbl_803EA524].mUnknown20 = 0xFFFF;
-            pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &lbl_80308F64[lbl_803EA524], mass,
+            if (!(mass <= 0.0f)) _Phys_aBodyOwners[_Phys_iBodyCount].mKind = 3;
+            else _Phys_aBodyOwners[_Phys_iBodyCount].mKind = 4;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mpObject = pObject;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown2 = 1;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown16 = objectIndex;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mType = _Phys_iBodyCount;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown22 = -1;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = 0xFFFF;
+            pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &_Phys_aBodyOwners[_Phys_iBodyCount], mass,
                                       ObjParseGetFloat(handle, "dThres"));
             if (ObjParseGetVector(handle, "iVel", &initial.mX)) SetBodyLinearVelocity(pBody, &initial);
             else {
@@ -2330,14 +2602,14 @@ void PhysLoadObject(int handle, BigObj_t *pObject, int objectIndex)
             inertia.mX = 0.6640654802322388f;
             inertia.mY = 1.3281309604644775f;
             inertia.mZ = 0.6640654802322388f;
-            lbl_80308F64[lbl_803EA524].mKind = 5;
-            lbl_80308F64[lbl_803EA524].mpObject = pObject;
-            lbl_80308F64[lbl_803EA524].mUnknown2 = 1;
-            lbl_80308F64[lbl_803EA524].mType = lbl_803EA524;
-            lbl_80308F64[lbl_803EA524].mUnknown16 = objectIndex;
-            lbl_80308F64[lbl_803EA524].mUnknown22 = -1;
-            lbl_80308F64[lbl_803EA524].mUnknown20 = 0xFFFF;
-            pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &lbl_80308F64[lbl_803EA524], mass, 2.0f);
+            _Phys_aBodyOwners[_Phys_iBodyCount].mKind = 5;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mpObject = pObject;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown2 = 1;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mType = _Phys_iBodyCount;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown16 = objectIndex;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown22 = -1;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = 0xFFFF;
+            pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &_Phys_aBodyOwners[_Phys_iBodyCount], mass, 2.0f);
             velocity.mX = 0.0f;
             velocity.mY = 0.0f;
             velocity.mZ = 0.0f;
@@ -2350,24 +2622,24 @@ void PhysLoadObject(int handle, BigObj_t *pObject, int objectIndex)
         float damping = ObjParseGetFloat(handle, "rollDamp");
         if (damping == 0.0f) damping = 4.0f;
         pBody->mUnknown04C = damping;
-        lbl_803EA514->AddBody(pBody);
-        lbl_80308D0C[lbl_803EA520] = pBody;
-        pObject->mUnknown476 = (BigObjFlags_t *)&lbl_80308F64[lbl_803EA524];
-        lbl_80308F64[lbl_803EA524].mUnknown20 = lbl_803EA520;
+        _Phys_pBodyGroup->AddBody(pBody);
+        _Phys_apObjectBodies[_Phys_iObjectCount] = pBody;
+        pObject->mUnknown476 = (BigObjFlags_t *)&_Phys_aBodyOwners[_Phys_iBodyCount];
+        _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = _Phys_iObjectCount;
         if (ObjParseFindPath(handle, "physics") && ObjParseFindChild(handle, "constraint")) {
             do {
                 Vec3_801DE1E0 local, world;
                 ObjParseGetVector(handle, "location", &local.x);
                 float y = local.y; local.y = -local.z; local.z = y;
                 Vec3Add(&world, &local, pPos);
-                int index = lbl_803EA52C;
-                lbl_80308F44[index] = new (0) PointConstraint(pBody, lbl_803EC7E4, &local, &world);
-                lbl_803EA50C->AddConstraint(lbl_80308F44[lbl_803EA52C]);
-                lbl_803EA52C++;
+                int index = _Phys_iConstraintCount;
+                _Phys_apConstraints[index] = new (0) PointConstraint(pBody, _Phys_pGroundBody, &local, &world);
+                _Phys_pWorld->AddConstraint(_Phys_apConstraints[_Phys_iConstraintCount]);
+                _Phys_iConstraintCount++;
             } while (ObjParseNext(handle));
         }
-        lbl_803EA520++;
-        lbl_803EA524++;
+        _Phys_iObjectCount++;
+        _Phys_iBodyCount++;
     }
 }
 
@@ -2395,17 +2667,17 @@ void PhysAddPlayers(void)
             a.mY = height * 0.5f;
             b.mX = b.mZ = 0.0f;
             b.mY = -a.mY;
-            lbl_80308AD4[slot] = new (0) CapsuleShape((Vec3_801DE1E0 *)&a, (Vec3_801DE1E0 *)&b, 0.5f, 0.6f, radius);
+            _Phys_apPlayerShapes[slot] = new (0) CapsuleShape((Vec3_801DE1E0 *)&a, (Vec3_801DE1E0 *)&b, 0.5f, 0.6f, radius);
             ShapeCollection *pSet = new (0) ShapeCollection(1, 1);
-            pSet->AddShape(lbl_80308AD4[slot]);
-            lbl_80308F64[lbl_803EA524].mpBlock = pBlock;
-            lbl_80308F64[lbl_803EA524].mKind = 1;
-            lbl_80308F64[lbl_803EA524].mpObject = 0;
-            lbl_80308F64[lbl_803EA524].mUnknown2 = 1;
-            lbl_80308F64[lbl_803EA524].mUnknown20 = 0xFFFF;
-            lbl_80308F64[lbl_803EA524].mType = lbl_803EA524;
-            lbl_80308F64[lbl_803EA524].mUnknown22 = slot;
-            RigidBody *pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &lbl_80308F64[lbl_803EA524], mass, 0.4f);
+            pSet->AddShape(_Phys_apPlayerShapes[slot]);
+            _Phys_aBodyOwners[_Phys_iBodyCount].mpBlock = pBlock;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mKind = 1;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mpObject = 0;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown2 = 1;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = 0xFFFF;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mType = _Phys_iBodyCount;
+            _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown22 = slot;
+            RigidBody *pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &_Phys_aBodyOwners[_Phys_iBodyCount], mass, 0.4f);
             velocity.mZ = velocity.mY = velocity.mX = 0.0f;
             force.mZ = force.mY = force.mX = 0.0f;
             QuatFromEuler(&rotation, 0, 0, 0);
@@ -2413,9 +2685,9 @@ void PhysAddPlayers(void)
             position.mZ += 5.0f;
             SetBodyMotionState(pBody, 1);
             SetBodyAngularMomentum(pBody, (Vec3_801DE1E0 *)&velocity); SetBodyLinearMomentum(pBody, &force);
-            lbl_803EA514->AddBody(pBody);
-            lbl_80308F0C[slot] = pBody;
-            lbl_803EA524++;
+            _Phys_pBodyGroup->AddBody(pBody);
+            _Phys_apPlayerBodies[slot] = pBody;
+            _Phys_iBodyCount++;
         }
     }
     PlayerCursorClose(&query);
@@ -2435,17 +2707,17 @@ void PhysAddBall(void)
     inertia.mZ = mass * radius * radius * 0.5f;
     center.mX = center.mY = center.mZ = 0.0f;
     center2.mX = center2.mY = center2.mZ = 0.0f;
-    lbl_803EA51C = new (0) SphereShape((Vec3_801DE1E0 *)&center, 0.1f, 1.0f, 0.15f);
+    _Phys_pBallShape = new (0) SphereShape((Vec3_801DE1E0 *)&center, 0.1f, 1.0f, 0.15f);
     ShapeCollection *pSet = new (0) ShapeCollection(1, 1);
-    pSet->AddShape(lbl_803EA51C);
-    lbl_80308F64[lbl_803EA524].mpBlock = 0;
-    lbl_80308F64[lbl_803EA524].mpObject = 0;
-    lbl_80308F64[lbl_803EA524].mKind = 6;
-    lbl_80308F64[lbl_803EA524].mUnknown22 = -1;
-    lbl_80308F64[lbl_803EA524].mUnknown2 = 1;
-    lbl_80308F64[lbl_803EA524].mUnknown20 = 0xFFFF;
-    lbl_80308F64[lbl_803EA524].mType = lbl_803EA524;
-    RigidBody *pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &lbl_80308F64[lbl_803EA524], mass, 0.4f);
+    pSet->AddShape(_Phys_pBallShape);
+    _Phys_aBodyOwners[_Phys_iBodyCount].mpBlock = 0;
+    _Phys_aBodyOwners[_Phys_iBodyCount].mpObject = 0;
+    _Phys_aBodyOwners[_Phys_iBodyCount].mKind = 6;
+    _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown22 = -1;
+    _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown2 = 1;
+    _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = 0xFFFF;
+    _Phys_aBodyOwners[_Phys_iBodyCount].mType = _Phys_iBodyCount;
+    RigidBody *pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pSet, &_Phys_aBodyOwners[_Phys_iBodyCount], mass, 0.4f);
     velocity.mZ = velocity.mY = velocity.mX = 0.0f;
     force.mZ = force.mY = force.mX = 0.0f;
     SetBodyPosition(pBody, (Vec3_801DE1E0 *)&position);
@@ -2453,21 +2725,21 @@ void PhysAddBall(void)
     SetBodyOrientation(pBody, (Vec4_801DE1E0 *)&rotation);
     SetBodyMotionState(pBody, 1);
     SetBodyAngularMomentum(pBody, (Vec3_801DE1E0 *)&velocity); SetBodyLinearMomentum(pBody, &force);
-    lbl_803EA514->AddBody(pBody);
-    lbl_803EC7E0 = pBody;
-    lbl_803EA530 = 0;
-    lbl_803EA524++;
+    _Phys_pBodyGroup->AddBody(pBody);
+    _Phys_pBallBody = pBody;
+    _Phys_uBallHitTimer = 0;
+    _Phys_iBodyCount++;
 }
 
 void PhysInit(void)
 {
-    lbl_803EA52C = 0;
-    lbl_803EA520 = 0;
-    lbl_803EA524 = 0;
-    lbl_803EA528 = 0;
-    memset(lbl_80308F64, 0, sizeof(PhysBodyOwner_t) * 142);
+    _Phys_iConstraintCount = 0;
+    _Phys_iObjectCount = 0;
+    _Phys_iBodyCount = 0;
+    _Phys_iShapeCount = 0;
+    memset(_Phys_aBodyOwners, 0, sizeof(PhysBodyOwner_t) * 142);
     _Phys_sTime.fn_801E8CA0(0.0f);
-    lbl_803EA514 = new (0) PhysBodyGroup;
+    _Phys_pBodyGroup = new (0) PhysBodyGroup;
     Vector_80039F5C center;
     center.mX = center.mY = center.mZ = 0.0f;
     Vector_80039F5C position;
@@ -2480,42 +2752,42 @@ void PhysInit(void)
     inertia.mX = (sizeY * sizeY + sizeZ * sizeZ) * mass * (1.0f / 12.0f);
     inertia.mY = (sizeX * sizeX + sizeZ * sizeZ) * mass * (1.0f / 12.0f);
     inertia.mZ = (sizeX * sizeX + sizeY * sizeY) * mass * (1.0f / 12.0f);
-    lbl_803EA518 = new (0) BoxShape((Vec3_801DE1E0 *)&center, 0.85f, 0.4f, 300.0f, 300.0f, 1.0f);
+    _Phys_pGroundShape = new (0) BoxShape((Vec3_801DE1E0 *)&center, 0.85f, 0.4f, 300.0f, 300.0f, 1.0f);
     ShapeCollection *pShapes = new (0) ShapeCollection(1, 3);
-    pShapes->AddShape(lbl_803EA518);
-    lbl_80308F64[lbl_803EA524].mpObject = 0;
-    lbl_80308F64[lbl_803EA524].mKind = 0;
-    lbl_80308F64[lbl_803EA524].mType = lbl_803EA524;
-    lbl_80308F64[lbl_803EA524].mUnknown22 = -1;
-    lbl_80308F64[lbl_803EA524].mUnknown20 = 0xFFFF;
-    lbl_80308F64[lbl_803EA524].mUnknown2 = 1;
-    RigidBody *pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pShapes, &lbl_80308F64[lbl_803EA524], 0.0f, 0.4f);
+    pShapes->AddShape(_Phys_pGroundShape);
+    _Phys_aBodyOwners[_Phys_iBodyCount].mpObject = 0;
+    _Phys_aBodyOwners[_Phys_iBodyCount].mKind = 0;
+    _Phys_aBodyOwners[_Phys_iBodyCount].mType = _Phys_iBodyCount;
+    _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown22 = -1;
+    _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown20 = 0xFFFF;
+    _Phys_aBodyOwners[_Phys_iBodyCount].mUnknown2 = 1;
+    RigidBody *pBody = new (0) RigidBody((Vec3_801DE1E0 *)&inertia, pShapes, &_Phys_aBodyOwners[_Phys_iBodyCount], 0.0f, 0.4f);
     position.mX = 0.0f;
     position.mY = 0.0f;
     position.mZ = -1.0f;
     QuatFromEuler(&rotation, 0, 0, 0);
     SetBodyPosition(pBody, (Vec3_801DE1E0 *)&position);
     SetBodyOrientation(pBody, (Vec4_801DE1E0 *)&rotation);
-    lbl_803EA514->AddBody(pBody);
-    lbl_803EC7E4 = pBody;
-    lbl_803EA524++;
-    lbl_803EA510 = new (0) EulerIntegrator(lbl_803EA514, 1846);
-    lbl_803EA514->SetIntegrator(lbl_803EA510);
-    lbl_803EA508 = new (0) PhysCollisionHandler;
-    lbl_803EA500 = new (0) ContactSystem(142, 128, 0.3f, 0.002f, lbl_803EA508);
+    _Phys_pBodyGroup->AddBody(pBody);
+    _Phys_pGroundBody = pBody;
+    _Phys_iBodyCount++;
+    _Phys_pIntegrator = new (0) EulerIntegrator(_Phys_pBodyGroup, 1846);
+    _Phys_pBodyGroup->SetIntegrator(_Phys_pIntegrator);
+    _Phys_pCollisionHandler = new (0) PhysCollisionHandler;
+    _Phys_pContacts = new (0) ContactSystem(142, 128, 0.3f, 0.002f, _Phys_pCollisionHandler);
     {
         Vec3_801DE1E0 max = {1000.0f, 1000.0f, 1000.0f};
         Vec3_801DE1E0 min = {-1000.0f, -1000.0f, 0.0f};
-        lbl_803EA500->SetCorrectionLimits(&min, &max);
+        _Phys_pContacts->SetCorrectionLimits(&min, &max);
     }
-    lbl_803EA504 = new (0) SleepController(3.0f, 10.0f, 0);
-    lbl_803EA50C = new (0) PhysicsWorld(1, 8, lbl_803EA500, lbl_803EA504);
-    lbl_803EA50C->AddGroup(lbl_803EA514);
+    _Phys_pSleep = new (0) SleepController(3.0f, 10.0f, 0);
+    _Phys_pWorld = new (0) PhysicsWorld(1, 8, _Phys_pContacts, _Phys_pSleep);
+    _Phys_pWorld->AddGroup(_Phys_pBodyGroup);
     {
         PhysicsTime next;
         next = _Phys_sTime;
         next.fn_801E8D14(1.0f / 60.0f);
-        lbl_803EA50C->Step(&_Phys_sTime, &next);
+        _Phys_pWorld->Step(&_Phys_sTime, &next);
         _Phys_sTime = next;
     }
 }
@@ -2532,18 +2804,19 @@ float Vec3Distance(void *, void *);
 void fn_80178370(void);
 void PhysDebugLine(Vec3_801DE1E0 *, Vec3_801DE1E0 *, int, int, int);
 int fn_800AD9B4(void);
-extern unsigned int lbl_803EA538;
+unsigned char _Phys_bFrozen = 0;
+unsigned int _Phys_uDebugDraw = 0;
 
 void PhysUpdateBallRest(void)
 {
-    if (lbl_803EA530) {
+    if (_Phys_uBallHitTimer) {
         Ball_t *pBall = BallGetCurrent();
         if (fn_800AD9B4() == 3 && fn_80178508(&pBall->mState.mPos, 0, 1) > 2) {
-            if (!((float)lbl_803EA530++ <= gFrameTimeScale * 45.0f)) {
-                lbl_803EA530 = 0;
+            if (!((float)_Phys_uBallHitTimer++ <= gFrameTimeScale * 45.0f)) {
+                _Phys_uBallHitTimer = 0;
                 fn_80178370();
             }
-        } else lbl_803EA530 = 0;
+        } else _Phys_uBallHitTimer = 0;
     }
 }
 
@@ -2555,7 +2828,7 @@ void PhysUpdatePlayers(void)
 {
     for (unsigned int team = 0; team < 2; team++) {
         for (unsigned int index = 0; index < 7; index++) {
-            RigidBody *pBody = lbl_80308F0C[index + team * 7];
+            RigidBody *pBody = _Phys_apPlayerBodies[index + team * 7];
             Object_80039F5C *pPlayer = PlyrObjsFindPlayer(((PhysBodyOwner_t *)pBody->mpOwner)->mpBlock);
             Vector_80039F5C velocity, direction;
             Quat_801EB488 rotation, oldRotation;
@@ -2607,7 +2880,7 @@ void PhysUpdateBall(void)
     zero.mY = 0.0f;
     zero.mZ = 0.0f;
     Vector_80039F5C velocity, position;
-    RigidBody *pBody = lbl_803EC7E0;
+    RigidBody *pBody = _Phys_pBallBody;
     BallGetVelocity(pBall, &velocity);
     Vec3Scale(&velocity, &velocity, 60.0f);
     BallGetPosition(pBall, &position);
@@ -2622,26 +2895,26 @@ void PhysUpdateBall(void)
 
 void PhysUpdateObjects(void)
 {
-    for (unsigned int i = 0; i < (unsigned int)lbl_803EA520; i++) {
-        RigidBody *pBody = lbl_80308D0C[i];
+    for (unsigned int i = 0; i < (unsigned int)_Phys_iObjectCount; i++) {
+        RigidBody *pBody = _Phys_apObjectBodies[i];
         if (!pBody) continue;
         PhysBodyOwner_t *pMetadata = ((PhysBodyOwner_t *)pBody->mpOwner);
         if (pMetadata->mKind == 3) {
             Vec3_801DE1E0 *pPos = &pBody->mPosition;
-            lbl_80308B0C[i]->mX = pPos->x;
-            lbl_80308B0C[i]->mY = pPos->y;
-            lbl_80308B0C[i]->mZ = pPos->z;
-            GetBodyOrientation(pBody, (Quat_801EB488 *)((char *)lbl_80308B0C[i] + 88));
+            _Phys_apObjectPositions[i]->mX = pPos->x;
+            _Phys_apObjectPositions[i]->mY = pPos->y;
+            _Phys_apObjectPositions[i]->mZ = pPos->z;
+            GetBodyOrientation(pBody, (Quat_801EB488 *)((char *)_Phys_apObjectPositions[i] + 88));
         } else if (BigObjGetItemSkeleton(pMetadata->mpObject)) {
             int angles[3];
             Quat_801EB488 rotation;
             Vector_80039F5C position;
             Quat_801EB488 oldRotation;
             DynObjGetRootAngles(pMetadata->mpObject, angles);
-            angles[2] = (*(int *)((char *)lbl_80308B0C[i] + 24) + 0x400000) & 0xFFFFFF;
+            angles[2] = (*(int *)((char *)_Phys_apObjectPositions[i] + 24) + 0x400000) & 0xFFFFFF;
             QuatFromEuler(&rotation, angles[2], angles[1], angles[0]);
-            position.mX = lbl_80308B0C[i]->mX;
-            position.mY = lbl_80308B0C[i]->mY;
+            position.mX = _Phys_apObjectPositions[i]->mX;
+            position.mY = _Phys_apObjectPositions[i]->mY;
             position.mZ = pMetadata->mpObject->mUnknown172.mUnknown8[1];
             GetBodyOrientation(pBody, &oldRotation);
             if (!Vec3Equal(&position, &pBody->mPosition, 0.01f) ||
@@ -2659,40 +2932,40 @@ void PhysDebugDraw(void)
     MatSetStack(renderState);
     MatPushUnit();
     Collision_pDebugLineProc = PhysDebugLine;
-    BodyGroupNode *pNode = lbl_803EA514->FirstNode();
+    BodyGroupNode *pNode = _Phys_pBodyGroup->FirstNode();
     RigidBody *pBody;
-    for (pBody = lbl_803EA514->NextBody(&pNode); pBody != 0; pBody = lbl_803EA514->NextBody(&pNode)) {
+    for (pBody = _Phys_pBodyGroup->NextBody(&pNode); pBody != 0; pBody = _Phys_pBodyGroup->NextBody(&pNode)) {
         ShapeCollection *pShapes = pBody->mpShapes;
         if (!pShapes) continue;
         if ((unsigned int)pBody->mState <= 1) {
             switch (index % 7) {
             case 0:
-                if (lbl_803EA538 & 1) pShapes->DrawShapes(pBody->mTransform, 250, 0, 0);
-                if (lbl_803EA538 & 2) pShapes->DrawBounds(250, 0, 0, 1);
+                if (_Phys_uDebugDraw & 1) pShapes->DrawShapes(pBody->mTransform, 250, 0, 0);
+                if (_Phys_uDebugDraw & 2) pShapes->DrawBounds(250, 0, 0, 1);
                 break;
             case 1:
-                if (lbl_803EA538 & 1) pShapes->DrawShapes(pBody->mTransform, 0, 250, 0);
-                if (lbl_803EA538 & 2) pShapes->DrawBounds(0, 250, 0, 1);
+                if (_Phys_uDebugDraw & 1) pShapes->DrawShapes(pBody->mTransform, 0, 250, 0);
+                if (_Phys_uDebugDraw & 2) pShapes->DrawBounds(0, 250, 0, 1);
                 break;
             case 2:
-                if (lbl_803EA538 & 1) pShapes->DrawShapes(pBody->mTransform, 0, 0, 250);
-                if (lbl_803EA538 & 2) pShapes->DrawBounds(0, 0, 250, 1);
+                if (_Phys_uDebugDraw & 1) pShapes->DrawShapes(pBody->mTransform, 0, 0, 250);
+                if (_Phys_uDebugDraw & 2) pShapes->DrawBounds(0, 0, 250, 1);
                 break;
             case 3:
-                if (lbl_803EA538 & 1) pShapes->DrawShapes(pBody->mTransform, 250, 250, 250);
-                if (lbl_803EA538 & 2) pShapes->DrawBounds(250, 250, 250, 1);
+                if (_Phys_uDebugDraw & 1) pShapes->DrawShapes(pBody->mTransform, 250, 250, 250);
+                if (_Phys_uDebugDraw & 2) pShapes->DrawBounds(250, 250, 250, 1);
                 break;
             case 4:
-                if (lbl_803EA538 & 1) pShapes->DrawShapes(pBody->mTransform, 250, 250, 0);
-                if (lbl_803EA538 & 2) pShapes->DrawBounds(250, 250, 0, 1);
+                if (_Phys_uDebugDraw & 1) pShapes->DrawShapes(pBody->mTransform, 250, 250, 0);
+                if (_Phys_uDebugDraw & 2) pShapes->DrawBounds(250, 250, 0, 1);
                 break;
             case 5:
-                if (lbl_803EA538 & 1) pShapes->DrawShapes(pBody->mTransform, 0, 250, 250);
-                if (lbl_803EA538 & 2) pShapes->DrawBounds(0, 250, 250, 1);
+                if (_Phys_uDebugDraw & 1) pShapes->DrawShapes(pBody->mTransform, 0, 250, 250);
+                if (_Phys_uDebugDraw & 2) pShapes->DrawBounds(0, 250, 250, 1);
                 break;
             default:
-                if (lbl_803EA538 & 1) pShapes->DrawShapes(pBody->mTransform, 250, 0, 250);
-                if (lbl_803EA538 & 2) pShapes->DrawBounds(250, 0, 250, 1);
+                if (_Phys_uDebugDraw & 1) pShapes->DrawShapes(pBody->mTransform, 250, 0, 250);
+                if (_Phys_uDebugDraw & 2) pShapes->DrawBounds(250, 0, 250, 1);
                 break;
             }
             index++;
@@ -2703,21 +2976,20 @@ void PhysDebugDraw(void)
 }
 
 PhysicsTime _Phys_sTime;
-extern unsigned char lbl_803EA534;
 
 void PhysUpdate(float dt)
 {
     PhysicsTime next;
     PhysUpdatePlayers();
     PhysUpdateBall();
-    if (!lbl_803EA534) {
+    if (!_Phys_bFrozen) {
         next = _Phys_sTime;
         next.fn_801E8D14(dt * (1.0f / 60.0f));
-        lbl_803EA50C->Step(&_Phys_sTime, &next);
+        _Phys_pWorld->Step(&_Phys_sTime, &next);
         _Phys_sTime = next;
     }
     PhysUpdateBallRest();
-    if (lbl_803EA538) PhysDebugDraw();
+    if (_Phys_uDebugDraw) PhysDebugDraw();
     PhysUpdateObjects();
 }
 
@@ -2726,83 +2998,83 @@ void PhysShutdown(void)
     BodyGroupNode *pNode;
     RigidBody *pBody;
 
-    lbl_803EA50C->RemoveGroup(lbl_803EA514);
-    for (unsigned int i = 0; i < lbl_803EA52C; i++) {
-        lbl_803EA50C->RemoveConstraint(lbl_80308F44[i]);
-        delete lbl_80308F44[i];
+    _Phys_pWorld->RemoveGroup(_Phys_pBodyGroup);
+    for (unsigned int i = 0; i < _Phys_iConstraintCount; i++) {
+        _Phys_pWorld->RemoveConstraint(_Phys_apConstraints[i]);
+        delete _Phys_apConstraints[i];
     }
-    pNode = lbl_803EA514->FirstNode();
-    pBody = lbl_803EA514->NextBody(&pNode);
+    pNode = _Phys_pBodyGroup->FirstNode();
+    pBody = _Phys_pBodyGroup->NextBody(&pNode);
     while (pBody) {
-        lbl_803EA514->RemoveBody(pBody);
-        pNode = lbl_803EA514->FirstNode();
+        _Phys_pBodyGroup->RemoveBody(pBody);
+        pNode = _Phys_pBodyGroup->FirstNode();
         delete pBody->mpShapes;
         delete pBody;
-        pBody = lbl_803EA514->NextBody(&pNode);
+        pBody = _Phys_pBodyGroup->NextBody(&pNode);
     }
-    delete lbl_803EA518;
-    delete lbl_803EA50C;
-    delete lbl_803EA514;
-    delete lbl_803EA510;
-    delete lbl_803EA500;
-    delete lbl_803EA508;
-    delete lbl_803EA504;
+    delete _Phys_pGroundShape;
+    delete _Phys_pWorld;
+    delete _Phys_pBodyGroup;
+    delete _Phys_pIntegrator;
+    delete _Phys_pContacts;
+    delete _Phys_pCollisionHandler;
+    delete _Phys_pSleep;
     for (int i = 0; i < 14; i++) {
-        delete lbl_80308AD4[i];
+        delete _Phys_apPlayerShapes[i];
     }
-    delete lbl_803EA51C;
-    while (lbl_803EA520) {
-        lbl_803EA520--;
+    delete _Phys_pBallShape;
+    while (_Phys_iObjectCount) {
+        _Phys_iObjectCount--;
     }
-    while (lbl_803EA524) {
-        PhysFreeShapeNames(&lbl_80308F64[--lbl_803EA524]);
+    while (_Phys_iBodyCount) {
+        PhysFreeShapeNames(&_Phys_aBodyOwners[--_Phys_iBodyCount]);
     }
-    while (lbl_803EA528) {
-        delete lbl_8030883C[--lbl_803EA528];
+    while (_Phys_iShapeCount) {
+        delete _Phys_apObjectShapes[--_Phys_iShapeCount];
     }
-    lbl_803EA518 = 0;
-    lbl_803EA514 = 0;
-    lbl_803EA50C = 0;
-    lbl_803EA510 = 0;
-    lbl_803EA508 = 0;
-    lbl_803EA500 = 0;
-    lbl_803EA504 = 0;
-    lbl_803EA520 = 0;
-    lbl_803EA524 = 0;
-    lbl_803EA52C = 0;
-    lbl_803EA530 = 0;
+    _Phys_pGroundShape = 0;
+    _Phys_pBodyGroup = 0;
+    _Phys_pWorld = 0;
+    _Phys_pIntegrator = 0;
+    _Phys_pCollisionHandler = 0;
+    _Phys_pContacts = 0;
+    _Phys_pSleep = 0;
+    _Phys_iObjectCount = 0;
+    _Phys_iBodyCount = 0;
+    _Phys_iConstraintCount = 0;
+    _Phys_uBallHitTimer = 0;
 }
 
 unsigned char PhysIsBall(int type)
 {
     unsigned char result = 0;
-    if ((unsigned int)type < (unsigned int)lbl_803EA524) {
-        result = lbl_80308F64[type].mKind == 6;
+    if ((unsigned int)type < (unsigned int)_Phys_iBodyCount) {
+        result = _Phys_aBodyOwners[type].mKind == 6;
     }
     return result;
 }
 int PhysIsPlayer(int type)
 {
     int result = 0;
-    if ((unsigned int)type < (unsigned int)lbl_803EA524) {
-        result = lbl_80308F64[type].mKind == 1;
+    if ((unsigned int)type < (unsigned int)_Phys_iBodyCount) {
+        result = _Phys_aBodyOwners[type].mKind == 1;
     }
     return result;
 }
 void PhysSetBodyPose(int id, float *pA, float *pB)
 {
-    SetBodyPose(lbl_80308D0C[id], (Vec3_801DE1E0 *)pA, (Vec4_801DE1E0 *)pB);
+    SetBodyPose(_Phys_apObjectBodies[id], (Vec3_801DE1E0 *)pA, (Vec4_801DE1E0 *)pB);
 }
 void PhysSleepBody(int id)
 {
-    RigidBody *pBody = lbl_80308D0C[id];
+    RigidBody *pBody = _Phys_apObjectBodies[id];
     if (pBody->mState) SetBodyMotionState(pBody, 3);
 }
 void PhysApplyImpulse(BigObj_t *pOwner, float *p)
 {
     BigObjFlags_t *pFlags = pOwner->mUnknown476;
     if (pFlags) {
-        RigidBody *pBody = lbl_80308D0C[pFlags->mUnknown20];
+        RigidBody *pBody = _Phys_apObjectBodies[pFlags->mUnknown20];
         Vector_80039F5C *pPos = (Vector_80039F5C *)&pBody->mPosition;
         if (pPos->mZ < 1.0f && p[2] < 0.0f) {
             Vector_80039F5C velocity;
@@ -2820,7 +3092,7 @@ void PhysDampLinear(BigObj_t *pOwner, float value)
 {
     BigObjFlags_t *pFlags = pOwner->mUnknown476;
     if (pFlags) {
-        RigidBody *pBody = lbl_80308D0C[pFlags->mUnknown20];
+        RigidBody *pBody = _Phys_apObjectBodies[pFlags->mUnknown20];
         Vector_80039F5C impulse;
         Vec3Scale(&impulse, &pBody->mLinearVelocity, -value);
         impulse.mZ = 0.0f;
@@ -2831,7 +3103,7 @@ void PhysDampAngular(BigObj_t *pOwner, float value)
 {
     BigObjFlags_t *pFlags = pOwner->mUnknown476;
     if (pFlags) {
-        RigidBody *pBody = lbl_80308D0C[pFlags->mUnknown20];
+        RigidBody *pBody = _Phys_apObjectBodies[pFlags->mUnknown20];
         Vector_80039F5C velocity;
         Vec3Scale(&velocity, &pBody->mAngularMomentum, -value);
         ApplyBodyAngularImpulse(pBody, &velocity);
@@ -2849,9 +3121,9 @@ void PhysPlayerHitObject(Object_80039F5C *pPlayer)
     position.mZ = pPlayer->mMotion.mPos.mZ;
     if (fn_801784C4()) { position.mX = -position.mX; position.mY = -position.mY; }
     Vector_80039F5C point;
-    for (unsigned int i = 0; i < (unsigned int)lbl_803EA524; i++) {
-        if (lbl_80308F64[i].mKind == 4 || lbl_80308F64[i].mKind == 2) {
-            RigidBody *pBody = lbl_80308D0C[(short)lbl_80308F64[i].mUnknown20];
+    for (unsigned int i = 0; i < (unsigned int)_Phys_iBodyCount; i++) {
+        if (_Phys_aBodyOwners[i].mKind == 4 || _Phys_aBodyOwners[i].mKind == 2) {
+            RigidBody *pBody = _Phys_apObjectBodies[(short)_Phys_aBodyOwners[i].mUnknown20];
             unsigned int count = pBody->mpShapes->mCount;
             for (unsigned int j = 0; j < count; j++) {
                 if (!(nearest <= 0.75f)) {
@@ -2877,15 +3149,15 @@ void PhysPlayerHitObject(Object_80039F5C *pPlayer)
                     }
                 }
             }
-        } else if (lbl_80308F64[i].mKind == 1 && PlyrObjsFindPlayer(lbl_80308F64[i].mpBlock) == pPlayer) {
+        } else if (_Phys_aBodyOwners[i].mKind == 1 && PlyrObjsFindPlayer(_Phys_aBodyOwners[i].mpBlock) == pPlayer) {
             ownerIndex = i;
         }
     }
     if (nearestIndex != 142 && ownerIndex != 142) {
         Vector_80039F5C zero;
         zero.mX = zero.mY = zero.mZ = 0.0f;
-        BigObjHit(lbl_80308F64[nearestIndex].mpObject, &point.mX, &zero.mX, lbl_80308F64[nearestIndex].mNames[shapeIndex],
-                   lbl_80308F64[ownerIndex].mType, (BigObjHitter_t *)pPlayer);
+        BigObjHit(_Phys_aBodyOwners[nearestIndex].mpObject, &point.mX, &zero.mX, _Phys_aBodyOwners[nearestIndex].mNames[shapeIndex],
+                   _Phys_aBodyOwners[ownerIndex].mType, (BigObjHitter_t *)pPlayer);
     }
 }
 
@@ -2893,14 +3165,14 @@ void PhysSetObjectPosition(BigObj_t *pOwner, float *pPos)
 {
     BigObjFlags_t *pFlags = pOwner->mUnknown476;
     if (pFlags) {
-        RigidBody *pBody = lbl_80308D0C[pFlags->mUnknown20];
+        RigidBody *pBody = _Phys_apObjectBodies[pFlags->mUnknown20];
         if (pBody->mState) SetBodyPosition(pBody, (Vec3_801DE1E0 *)pPos);
     }
 }
 void PhysPushObjects(Point_8017886C *pCenter, float radius)
 {
-    for (unsigned int i = 0; i < (unsigned int)lbl_803EA520; i++) {
-        RigidBody *pBody = lbl_80308D0C[i];
+    for (unsigned int i = 0; i < (unsigned int)_Phys_iObjectCount; i++) {
+        RigidBody *pBody = _Phys_apObjectBodies[i];
         if (!pBody || ((PhysBodyOwner_t *)pBody->mpOwner)->mKind != 3) continue;
         Vec3_801DE1E0 *pPos = &pBody->mPosition;
         Vector_80039F5C position;
