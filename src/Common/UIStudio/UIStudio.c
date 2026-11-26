@@ -1,8 +1,12 @@
-#include "UIStudio/UIStudio.h"
+/* UIStudio.c (EA's name, from its __FILE__ string): the core of EA's UI Studio library, the
+   runtime behind every front-end and in-game menu screen. It loads, activates and unloads the
+   screens of the UIStudio group files, runs the scripts and events sent to them, ticks their
+   rate functions and draws their objects.
 
-/* Partial source for the UI Studio core file (0x802176E8-0x8021A068).
-   Functions of this file without a body here are declared only; their
-   original bytes are not replaced. */
+   Partial source (0x802176E8-0x8021A068). Functions of this file without a body here are
+   declared only; their original bytes are not replaced. */
+
+#include "UIStudio/UIStudio.h"
 
 Int32 fn_802178E4(void *pNodeArg, void **ppNode, Int32 Type, void *pNode);
 void fn_80217A7C(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Value, Int32 Type, void *pNode,
