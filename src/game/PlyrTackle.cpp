@@ -646,9 +646,11 @@ void PlyrAlignCheckSpot(Object_80039F5C *p)
         PlayBookPosition_t *pEntry = PlaySetGetEntry(pTeam, pOther->mIdBytes[1], 0);
         Point_8017886C point;
         point.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
-        point.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
+        // FAKEMATCH: the pointer taken between the two stores gives the target's late addi of &point (0x800E3D3C) and its use for the y store and the Vec2Add arguments.
+        Point_8017886C *pPoint = &point;
+        pPoint->mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
 
-        Vec2Add(&point, &point, &origin);
+        Vec2Add(pPoint, pPoint, &origin);
     }
     Point_8017886C target;
     int angle;
