@@ -306,7 +306,7 @@ int DbThcdBeginGame(int home, int away, int mode, int arg)
     return 0;
 }
 
-int DbThcdResumeGame(int home, int away, int homeScore, int awayScore)
+int DbThcdResumeGame(int home, int away, int homeCshg, int awayCsag)
 {
     return 0;
 }
