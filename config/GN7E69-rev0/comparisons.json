@@ -31853,7 +31853,13 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B7910",
-          "end": "0x802B7914"
+          "end": "0x802B7938"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFFFC",
+          "end": "0x80300020"
         }
       ],
       "functions": [
@@ -31861,6 +31867,11 @@
           "symbol": "StreamRemoveFaders__3SndP18SndStreamChannel_t",
           "start": "0x8026D200",
           "end": "0x8026D278"
+        },
+        {
+          "symbol": "SNDSTRMI_startstream__FP18SndStreamChannel_t",
+          "start": "0x8026D278",
+          "end": "0x8026D53C"
         },
         {
           "symbol": "SNDSTRMI_calcdatarate__FP17SndSampleFormat_t",
@@ -31893,14 +31904,39 @@
           "end": "0x8026D790"
         },
         {
+          "symbol": "SNDSTRMI_parseheader__FiP16SndStreamChunk_t",
+          "start": "0x8026D790",
+          "end": "0x8026D9CC"
+        },
+        {
+          "symbol": "SNDSTRMI_parsedata__FP18SndStreamChannel_tP16SndStreamChunk_t",
+          "start": "0x8026D9CC",
+          "end": "0x8026DAE4"
+        },
+        {
           "symbol": "SNDSTRMI_parsechunk__FiP16SndStreamChunk_t",
           "start": "0x8026DAE4",
           "end": "0x8026DB5C"
         },
         {
+          "symbol": "SNDSTRMI_isheld__FP18SndStreamChannel_t",
+          "start": "0x8026DB5C",
+          "end": "0x8026DC38"
+        },
+        {
+          "symbol": "SNDSTRMI_service__Fv",
+          "start": "0x8026DC38",
+          "end": "0x8026DDB8"
+        },
+        {
           "symbol": "SNDSTRMI_numcreated__Fv",
           "start": "0x8026DDB8",
           "end": "0x8026DE00"
+        },
+        {
+          "symbol": "fn_8026DE00",
+          "start": "0x8026DE00",
+          "end": "0x8026E160"
         },
         {
           "symbol": "SNDSTRMI_queue__FiiPcii",

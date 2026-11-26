@@ -18,7 +18,7 @@ typedef struct SndStreamRequest_t {
     volatile unsigned int unk_0x14;
     volatile unsigned int unk_0x18;
     volatile unsigned int unk_0x1C;
-    int mHold;
+    volatile int mHold;
     unsigned char mActive;
     unsigned char unk_0x25[3];
 } SndStreamRequest_t;
