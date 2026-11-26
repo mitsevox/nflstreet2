@@ -7663,9 +7663,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8001F56C.cpp",
+      "source": "src/game/MsgEATrax.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8001F56C-0x8001FFE4 (src/game/cu_8001F56C.cpp), its function rows, the data rows data_8001FFD8 and 0x803EBA90-0x803EBA98, the type row and the source-form row 0x8001F56C-0x8001FFE4.",
+      "evidence": "evidence.tsv unit row 0x8001F56C-0x8001FFE4 (src/game/MsgEATrax.cpp), its function rows, the data rows data_8001FFD8 and 0x803EBA90-0x803EBA98, the type row and the source-form row 0x8001F56C-0x8001FFE4.",
       "sections": [
         {
           "section": ".text",
@@ -7689,62 +7689,62 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8001F56C",
+          "symbol": "MsgEATraxLoadPlaylist",
           "start": "0x8001F56C",
           "end": "0x8001F704"
         },
         {
-          "symbol": "fn_8001F704",
+          "symbol": "MsgEATraxSavePlaylist",
           "start": "0x8001F704",
           "end": "0x8001F850"
         },
         {
-          "symbol": "fn_8001F850",
+          "symbol": "MsgEATraxGetCategory",
           "start": "0x8001F850",
           "end": "0x8001F900"
         },
         {
-          "symbol": "fn_8001F900",
+          "symbol": "MsgEATraxGetFreeSlots",
           "start": "0x8001F900",
           "end": "0x8001F90C"
         },
         {
-          "symbol": "fn_8001F90C",
+          "symbol": "MsgEATraxGetSongInfo",
           "start": "0x8001F90C",
           "end": "0x8001FA90"
         },
         {
-          "symbol": "fn_8001FA90",
+          "symbol": "MsgEATraxGetSongNames",
           "start": "0x8001FA90",
           "end": "0x8001FB3C"
         },
         {
-          "symbol": "fn_8001FB3C",
+          "symbol": "MsgEATraxPlaySong",
           "start": "0x8001FB3C",
           "end": "0x8001FBE8"
         },
         {
-          "symbol": "fn_8001FBE8",
+          "symbol": "MsgEATraxStopSong",
           "start": "0x8001FBE8",
           "end": "0x8001FC08"
         },
         {
-          "symbol": "fn_8001FC08",
+          "symbol": "MsgEATraxToggleSong",
           "start": "0x8001FC08",
           "end": "0x8001FD48"
         },
         {
-          "symbol": "fn_8001FD48",
+          "symbol": "MsgEATraxEnter",
           "start": "0x8001FD48",
           "end": "0x8001FDB8"
         },
         {
-          "symbol": "fn_8001FDB8",
+          "symbol": "MsgEATraxExit",
           "start": "0x8001FDB8",
           "end": "0x8001FE10"
         },
         {
-          "symbol": "fn_8001FE10",
+          "symbol": "MsgEATraxHandleMessage",
           "start": "0x8001FE10",
           "end": "0x8001FFD8"
         }
