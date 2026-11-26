@@ -990,7 +990,7 @@ void _LZMDecStop(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
 
 GCmpCodec_t GCmpTypeLZM = {
     'LZM1', 1,
-    (GCmpCodecInitFunc_t)_LZMCoStart, (GCmpCodecRunFunc_t)_LZMCoProcess, (GCmpCodecEndFunc_t)_LZMCoStop,
-    (GCmpCodecInitFunc_t)_LZMDecStart, (GCmpCodecRunFunc_t)_LZMDecProcess, (GCmpCodecEndFunc_t)_LZMDecStop,
+    _LZMCoStart, _LZMCoProcess, _LZMCoStop,
+    _LZMDecStart, _LZMDecProcess, _LZMDecStop,
     0, 0
 };

@@ -22948,7 +22948,7 @@
             "evidence": "evidence.tsv source-form 0x801E47B8-0x801E4D40"
           }
         ],
-        "evidence": "w1a merge notes (swarm w1 tracking table): src/engine/physshape.cpp holds out SphereShape::TestPoint, BoxShape::SegmentHits and SphereShape::Draw."
+        "evidence": "w1a merge notes (swarm w1 tracking table), updated by the merge notes of the wave p1 lane p1g pull request (SphereShape::Draw now exact): src/engine/physshape.cpp holds out SphereShape::TestPoint and BoxShape::SegmentHits."
       }
     },
     {
