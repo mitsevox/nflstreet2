@@ -638,7 +638,7 @@ int fn_800C1180(Object_80039F5C *p);
 }
 
 extern "C" {
-float fn_800CA9B4(int kind, Object_80039F5C *p);
+float PlayerGetActionScale(int kind, Object_80039F5C *p);
 }
 
 extern "C" {
@@ -4801,8 +4801,8 @@ extern "C" void fn_800F1858(Object_80039F5C *p) {
         }
         speed = 1.0f;
         if (fn_800CA5CC(p, 1, 1) != 0) {
-            a *= fn_800CA9B4(1, p);
-            b *= fn_800CA9B4(0, p);
+            a *= PlayerGetActionScale(1, p);
+            b *= PlayerGetActionScale(0, p);
         }
         if (pRatings[4] > 85) {
             short excess = pRatings[4] - 85;
@@ -4861,8 +4861,8 @@ extern "C" void fn_800F1C68(Object_80039F5C *p) {
             float speed = 1.0f;
 
             if (fn_800CA5CC(p, 1, 1) != 0) {
-                a = fn_800CA9B4(1, p) * a;
-                b = fn_800CA9B4(0, p) * b;
+                a = PlayerGetActionScale(1, p) * a;
+                b = PlayerGetActionScale(0, p) * b;
             }
             if (pRatings[4] > 85) {
                 short excess = pRatings[4] - 85;
@@ -17234,8 +17234,8 @@ extern "C" void fn_801104E4(Object_80039F5C *p, Block_8011067C *pBlock)
     short rating;
 
     if (fn_800CA5CC(p, 1, 1)) {
-        scale *= fn_800CA9B4(3, p);
-        fn_800CA9B4(2, p);
+        scale *= PlayerGetActionScale(3, p);
+        PlayerGetActionScale(2, p);
     }
     pBlock->mUnknown16 = 1.0f;
     pBlock->mUnknown20 = 1.0f;
@@ -20859,12 +20859,12 @@ extern "C" void fn_801187CC(Object_80039F5C *p, Object_80039F5C *pOther)
 extern "C" void fn_80118894(Record_80118894 *pA, Record_80118894 *pB, int a, int b, Object_80039F5C *pPlayerA, Object_80039F5C *pPlayerB)
 {
     if (a != 0) {
-        pA->mUnknown64 *= fn_800CA9B4(9, pPlayerA);
-        pA->mUnknown76 *= fn_800CA9B4(9, pPlayerA);
+        pA->mUnknown64 *= PlayerGetActionScale(9, pPlayerA);
+        pA->mUnknown76 *= PlayerGetActionScale(9, pPlayerA);
     }
     if (b != 0) {
-        pB->mUnknown64 *= fn_800CA9B4(9, pPlayerB);
-        pB->mUnknown76 *= fn_800CA9B4(9, pPlayerB);
+        pB->mUnknown64 *= PlayerGetActionScale(9, pPlayerB);
+        pB->mUnknown76 *= PlayerGetActionScale(9, pPlayerB);
     }
 }
 

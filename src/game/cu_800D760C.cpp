@@ -16,7 +16,7 @@ void fn_800D7A4C(Object_80039F5C *p, Block_801BE60C *pBlock);
 void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *pState);
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
 int fn_800CA5CC(Object_80039F5C *p, int kind, int apply);
-float fn_800CA9B4(int kind, Object_80039F5C *p);
+float PlayerGetActionScale(int kind, Object_80039F5C *p);
 void AnimMomentumInit(AnimMomentum_t *p, AnimMomentumActor_t *pOther, int entry);
 void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOther);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
@@ -195,7 +195,7 @@ extern "C" int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRe
             scale = lbl_803EAD08;
         }
         if (fn_800CA5CC(p, 3, 1)) {
-            scale *= fn_800CA9B4(pState->mUnknown5 == 3 ? 11 : 10, p);
+            scale *= PlayerGetActionScale(pState->mUnknown5 == 3 ? 11 : 10, p);
         }
         pBlock->mUnknown8 = scale;
         for (int i = 0; i != 11; i++) {

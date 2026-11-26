@@ -7885,7 +7885,7 @@ extern "C" Table_800CA8EC *fn_800CA8EC(void);
 
 extern "C" void fn_800CA8F4(Object_80039F5C *p);
 
-extern "C" float fn_800CA9B4(int kind, Object_80039F5C *p);
+extern "C" float PlayerGetActionScale(int kind, Object_80039F5C *p);
 
 extern "C" int fn_800CAA6C(int value);
 
@@ -9137,6 +9137,7 @@ extern "C" void fn_800919F0(int index)
     for (; i < pActor->mUnknown4; i++) {
         switch (AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown20) {
         case 0x434F494E:
+        case 0x48454C4D:
             break;
         case 0x42414C4C:
             if (BallsExist()) {
@@ -33152,7 +33153,7 @@ extern "C" int fn_800C52C8(Object_80039F5C *p, Object_80039F5C *pOther, int valu
     scale = rating * 0.00078431377f + 0.05f;
     scale = scale < 0.05f ? 0.05f : (scale > 0.25f ? 0.25f : scale);
     if (useModifier) {
-        scale *= fn_800CA9B4(5, p);
+        scale *= PlayerGetActionScale(5, p);
     }
     return value * scale;
 }
@@ -33299,10 +33300,10 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
                 stripChance = 50;
             }
             if (mode == 2 && fromBehind) {
-                stripChance = stripChance * fn_800CA9B4(5, p);
+                stripChance = stripChance * PlayerGetActionScale(5, p);
             }
             if (fn_800CA5CC(pOther, 9, 0)) {
-                stripChance = stripChance * fn_800CA9B4(7, pOther);
+                stripChance = stripChance * PlayerGetActionScale(7, pOther);
             }
             if (fn_800C53D8(p)) {
                 stripChance = lbl_803EAC0C * 100.0f;
@@ -33605,10 +33606,10 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
                 }
                 scale = 0.0f;
                 if (fn_800CA5CC(pTarget, 9, 0)) {
-                    scale = fn_800CA9B4(7, pTarget) - 1.0f;
+                    scale = PlayerGetActionScale(7, pTarget) - 1.0f;
                 }
                 if (fn_800CA5CC(p, 10, 0)) {
-                    scale -= fn_800CA9B4(8, p) - 1.0f;
+                    scale -= PlayerGetActionScale(8, p) - 1.0f;
                 }
                 chance = chance + chance * scale;
                 if (!fn_800C53D8(p)) {
@@ -35507,7 +35508,7 @@ extern "C" void fn_800CA8F4(Object_80039F5C *p)
     }
 }
 
-extern "C" float fn_800CA9B4(int kind, Object_80039F5C *p)
+extern "C" float PlayerGetActionScale(int kind, Object_80039F5C *p)
 {
     float scale = lbl_802DA69C[kind];
 
@@ -35522,6 +35523,11 @@ extern "C" float fn_800CA9B4(int kind, Object_80039F5C *p)
             scale *= 0.33333334f;
         }
         break;
+    // FAKEMATCH: the target's tree needs a 0-4 range and three more no-op nodes above 6 (pivot at 6); which kinds 7-12 they were cannot be read from the bytes
+    case 0:case 1:case 2:case 3:case 4:break;
+    case 7:break;
+    case 9:break;
+    case 11:break;
     }
     return scale;
 }

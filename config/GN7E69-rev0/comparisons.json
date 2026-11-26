@@ -18446,7 +18446,7 @@
           "end": "0x800CA9B4"
         },
         {
-          "symbol": "fn_800CA9B4",
+          "symbol": "PlayerGetActionScale",
           "start": "0x800CA9B4",
           "end": "0x800CAA6C"
         },

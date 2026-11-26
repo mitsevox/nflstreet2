@@ -498,7 +498,7 @@ int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 }
 
 extern "C" {
-float fn_800CA9B4(int kind, Object_80039F5C *p);
+float PlayerGetActionScale(int kind, Object_80039F5C *p);
 }
 
 extern "C" {
@@ -1471,7 +1471,7 @@ int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800
         defense = 0;
     }
     if (fn_800CA5CC(p, 4, 1)) {
-        offense = (int)(offense * fn_800CA9B4(6, p));
+        offense = (int)(offense * PlayerGetActionScale(6, p));
     }
     if (p->mFlags & 0x400) {
         offense = (int)(offense * 1.05f);
