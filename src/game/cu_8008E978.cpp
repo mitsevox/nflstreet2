@@ -33371,6 +33371,21 @@ extern "C" void fn_800C5B20(Object_80039F5C *p, int value)
     }
 }
 
+static inline int _ContactNotFlag800(Object_80039F5C *p)
+{
+    return !(p->mFlags & 0x800);
+}
+
+static inline int _ContactStateNot14(Object_80039F5C *p)
+{
+    return p->mUnknown344Word != 14;
+}
+
+static inline int _ContactPlayKindNot8(void)
+{
+    return fn_8011F518()->mUnknown4 != 8;
+}
+
 extern "C" int fn_800C5BF0(Object_80039F5C *p, int value)
 {
     State_80039F5C *pState = p->mpState;
@@ -33437,18 +33452,18 @@ extern "C" int fn_800C5BF0(Object_80039F5C *p, int value)
             if (value == 7 || value == 24) {
                 result = 0;
             } else {
-                result = p->mUnknown344Word != 14;
+                result = _ContactStateNot14(p);
             }
             break;
         case 25:
             if (value == 7 || value == 24) {
                 result = 0;
             } else {
-                result = fn_8011F518()->mUnknown4 != 8;
+                result = _ContactPlayKindNot8();
             }
             break;
         default:
-            result = !(p->mFlags & 0x800);
+            result = _ContactNotFlag800(p);
             break;
         }
     }
