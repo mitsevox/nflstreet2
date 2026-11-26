@@ -1217,7 +1217,7 @@ extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p)
             }
             if (PlayerActionFindGap(p, count, values, &value, -direction, target.mX) == 1) {
                 pGoal[next].mX = value;
-                (&pBlock->mUnknown22)[next] = 1;
+                pBlock->mGoalFound[next] = 1;
             }
         } else {
             pBlock->mUnknown22 = 1;
