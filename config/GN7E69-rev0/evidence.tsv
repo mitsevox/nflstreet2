@@ -27538,7 +27538,7 @@ name	0x8022E484	-	DbRunLoadChain	inferred	-	-	Called from 0x8023348C: reads four
 name	0x8022D14C	-	DbUslpFilterNone	inferred	-	-	Returns 0 for any player; DbUslpModuleInit and DbUslpResetFilter1 install it as the first player filter 0x803EC048.
 name	0x8022D154	-	DbUslpModuleInit	inferred	-	-	Stores DbUslpAllocNodes and DbUslpAllocEntries in 0x803EC050/0x803EC05C, resets the cursor 0x803A25E0, installs DbUslpFilterNone and clears the second filter; returns 0. One of the module init functions the database dispatcher 0x802328A8 calls.
 name	0x8022D1B8	-	DbUslpModuleShutdown	inferred	-	-	Releases and clears the node and entry arrays and the entry count 0x803EC060, clears both filters and resets the cursor 0x803A25E0; returns 0. The dispatcher's shutdown side of DbUslpModuleInit.
-name	0x8022D23C	-	DbUslpResetFilter1	inferred	-	-	Stores DbUslpFilterNone in the first player filter 0x803EC048 and returns 0; SubDepthChart.cpp calls it before filling a team's slots.
+name	0x8022D23C	-	DbUslpResetFilter1	inferred	-	-	Stores DbUslpFilterNone in the first player filter 0x803EC048 and returns 0; SubDepthShutdown (SubDepthChart.cpp) calls it together with DbUslpSetFilter2(0), putting both filters back to their start-up state.
 name	0x8022D250	-	DbUslpSetFilter1	inferred	-	-	Stores its function argument in the first player filter 0x803EC048 and returns 0.
 name	0x8022D25C	-	DbUslpSetFilter2	inferred	-	-	Stores its function argument in the second player filter 0x803EC04C and returns 0; SubDepthChart.cpp clears it.
 name	0x8022D3AC	-	DbUslpFinish	inferred	-	-	Calls DbUslpClearLists and DbUslpCloseSlotCursor and returns 0; SubDepthChart.cpp calls it after the slots are read.
