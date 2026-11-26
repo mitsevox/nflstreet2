@@ -5816,6 +5816,12 @@
           "end": "0x80285AE8"
         },
         {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803019B8",
+          "end": "0x803024C2"
+        },
+        {
           "section": ".sdata",
           "placement": ".data5",
           "start": "0x803EC5A8",
