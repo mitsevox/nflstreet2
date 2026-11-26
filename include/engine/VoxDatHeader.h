@@ -15,7 +15,7 @@ typedef struct VoxDatHeader_t {
 extern "C" {
 #endif
 
-void fn_801AFABC(VoxDatHeader_t *p, int *a, int *b);
+void SPCH_GetEventDatInfo(VoxDatHeader_t *p, int *a, int *b);
 
 #ifdef __cplusplus
 }

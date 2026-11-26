@@ -537,11 +537,11 @@ void SPCH_PlayLastEvent(unsigned int channel)
             int voice = gVoxEvents.mCurrent[channel];
             int started;
 
-            fn_801B10D8(channel);
-            started = fn_801B1864(voice);
+            iSPCH_ClearSentenceChoiceChannel(channel);
+            started = iSPCH_ChooseSingleSentence(voice);
             iSPCH_ClearEvent(voice);
             if (started) {
-                fn_801B1380(channel);
+                iSPCH_PlayChosen(channel);
             }
         }
     }
@@ -554,8 +554,8 @@ int SPCH_Play(unsigned int channel)
 
     if (gSPCHPlayStatus == 0) {
         gSPCHPlayStatus = 1;
-        if (fn_801B1368(channel) || SPCH_Choose(channel)) {
-            result = fn_801B1380(channel);
+        if (iSPCH_OneChosen(channel) || SPCH_Choose(channel)) {
+            result = iSPCH_PlayChosen(channel);
         }
     }
     gSPCHPlayStatus = 0;
@@ -577,8 +577,8 @@ int SPCH_Choose(unsigned int channel)
             }
             key = *(SpchEventKey_t *)gVoxEvents.mVoices[voice].mEvent;
             if (iSPCH_Callback_EventRule(&key) == 1) {
-                fn_801B10D8(channel);
-                started = fn_801B1864(voice);
+                iSPCH_ClearSentenceChoiceChannel(channel);
+                started = iSPCH_ChooseSingleSentence(voice);
                 if (!started) {
                     iSPCH_ClearEvent(voice);
                 }

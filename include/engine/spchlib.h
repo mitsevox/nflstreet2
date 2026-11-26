@@ -12,21 +12,21 @@
 #include "engine/Speech.h"
 #include "engine/VoxDatHeader.h"
 
-struct Entry_801AF84C {
-    unsigned int mUnknown0;
-    unsigned char mUnknown4;
-    unsigned char mUnknown5;
-    unsigned char mUnknown6;
-    unsigned char mUnknown7;
+struct SpchPhraseParm_t {
+    unsigned int mMask;
+    unsigned char mEventParm;
+    unsigned char mRuleIndex;
+    unsigned char mMatchParm;
+    unsigned char unk_0x7;
 };
 
-struct Record_801AF75C {
-    unsigned char mUnknown0[2];
-    unsigned char mUnknown2;
-    unsigned char mUnknown3;
-    signed char mUnknown4;
-    unsigned char mUnknown5[3];
-    Entry_801AF84C mEntries[1];
+struct SpchPhrase_t {
+    unsigned char mBankIdBytes[2];
+    unsigned char mEventParm;
+    unsigned char mBankMode;
+    signed char mParmCount;
+    unsigned char unk_0x5[3];
+    SpchPhraseParm_t mEntries[1];
 };
 
 struct VoxBankHdr_t {
@@ -41,14 +41,14 @@ struct VoxBankHdr_t {
     unsigned char mRows[1];
 };
 
-struct Result_801AFD04 {
-    int mUnknown0;
-    short mUnknown4;
-    short mUnknown6;
+struct SpchPhraseBankView_t {
+    int mHandle;
+    short mBankIndex;
+    short mSubBank;
 };
 
-struct Buffer_801AFF74 {
-    unsigned char mUnknown0[145];
+struct SpchValidPicksView_t {
+    unsigned char unk_0x0[145];
     unsigned char mCount;
     unsigned char mValues[200];
 };
@@ -58,44 +58,44 @@ struct VoxBankSlot_t {
     VoxBankHdr_t *mUnknown4;
 };
 
-struct WorkEntry_801B0B18 {
-    int mUnknown0;
-    short mUnknown4;
-    short mUnknown6;
-    unsigned char mUnknown8;
-    unsigned char mUnknown9;
-    unsigned char mUnknownA;
-    unsigned char mUnknownB;
+struct SpchPhrasePick_t {
+    int mHandle;
+    short mBankIndex;
+    short mSubBank;
+    unsigned char mFirst;
+    unsigned char mCount;
+    unsigned char mCurrent;
+    unsigned char mReady;
 };
 
-struct Work_801B10AC {
-    WorkEntry_801B0B18 mEntries[12];
-    unsigned char mUnknown90;
+struct SpchSentencePick_t {
+    SpchPhrasePick_t mEntries[12];
+    unsigned char mPhraseCount;
     unsigned char mCount;
     unsigned char mValues[200];
 };
 
-struct ChannelEntry_801B118C {
-    int mUnknown0;
-    short mUnknown4;
-    short mUnknown6;
-    unsigned short mUnknown8;
-    unsigned char mUnknownA;
-    unsigned char mUnknownB;
+struct SpchChosenSample_t {
+    int mHandle;
+    short mBankIndex;
+    short mSubBank;
+    unsigned short mSample;
+    unsigned char unk_0xA;
+    unsigned char unk_0xB;
 };
 
-struct Channel_801B118C {
-    int mUnknown0;
-    int mUnknown4;
-    unsigned char mUnknown8;
-    unsigned char mUnknown9;
-    unsigned char mUnknownA;
-    unsigned char mUnknownB;
-    void *mUnknownC;
-    ChannelEntry_801B118C mEntries[12];
+struct SpchEventChoice_t {
+    int mEvent;
+    int mSentence;
+    unsigned char mSentenceIndex;
+    unsigned char mReady;
+    unsigned char mPhraseCount;
+    unsigned char unk_0xB;
+    void *mParameters;
+    SpchChosenSample_t mEntries[12];
 };
 
-union EventWord_801AFBD8 {
+union SpchEventParm_t {
     int mWord;
     SpchEventKey_t mKey;
     unsigned short mHalfwords[2];
@@ -195,14 +195,14 @@ extern int gUniqueBankHandle;
 extern int gNumBanks;
 extern int gBankCount;
 extern VoxBankSlot_t *gVoxBanks;
-extern int lbl_802F475C[8];
-extern Channel_801B118C lbl_8037E294[8];
+extern int _SpchPick_iWeightMultipliers[8];
+extern SpchEventChoice_t gEventChoice[8];
 extern unsigned int seedX[6];
 extern unsigned short gRandArray[32][2];
 extern int gRandArrayIndex;
 unsigned int iSPCH_EACrandom(void);
 int iSPCH_GetSampleSizeData(VoxBankHdr_t *, int, int *, int *);
-int fn_801B05E4(Work_801B10AC *, unsigned char *);
+int iSPCH_TestMatchParms(SpchSentencePick_t *, unsigned char *);
 char *iSPCH_GetSampleParmAddr(VoxBankHdr_t *, int);
 int iSPCH_FindBank(unsigned int, int *);
 int iSPCH_FindSubBank(unsigned int, unsigned int, int *);
@@ -210,13 +210,13 @@ int iSPCH_TestSubBankBounds(int, unsigned int);
 
 unsigned int SPCHEXT_gettick(void);
 int iSPCH_Rand(int count, int category);
-void fn_801B10D8(int channel);
-int fn_801B1864(int voice);
-int fn_801B1380(int channel);
-int fn_801B1368(unsigned int channel);
+void iSPCH_ClearSentenceChoiceChannel(int channel);
+int iSPCH_ChooseSingleSentence(int voice);
+int iSPCH_PlayChosen(int channel);
+int iSPCH_OneChosen(unsigned int channel);
 void iSPCH_InitRandom(int seed);
-void fn_801B118C(void);
-void fn_801B192C(int a);
+void iSPCH_InitSentenceChoice(void);
+void SPCH_SetPreLoadTicks(int a);
 void iSPCH_InitBanks(void);
 void iSPCH_DisposeBanks(void);
 

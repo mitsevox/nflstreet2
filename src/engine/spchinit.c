@@ -33,8 +33,8 @@ int SPCH_Init(int a, int b, int c)
         gSPCH_AddEvent = SPCH_AddEventV;
         gGameNum = b;
         iSPCH_InitRandom(b);
-        fn_801B118C();
-        fn_801B192C(0);
+        iSPCH_InitSentenceChoice();
+        SPCH_SetPreLoadTicks(0);
         for (i = 0; i <= 7; i++) {
             gFilterSetting[i] = 0;
         }

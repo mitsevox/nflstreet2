@@ -1094,10 +1094,6 @@
       "address": "0x802CC670",
       "evidence": "evidence.tsv external row 0x802CC670: destructor table formed by lis/addi at 0x8023E8BC/0x8023E8C0 in exit; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
     },
-    "iSPCH_EACrandom": {
-      "address": "0x801B1934",
-      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x801B1934; original-owned provider, no added storage or body."
-    },
     "__udivdi3": {
       "address": "0x8025F0A8",
       "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long /10 in integer formatter resolves __udivdi3; corresponding target call at0x80265404 reaches0x8025F0A8 with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
@@ -1477,6 +1473,10 @@
     "_e_sbss": {
       "address": "0x803ED681",
       "evidence": "Linker-defined end of .sbss: __start forms it with lis/ori at 0x80003134-0x80003164 and passes the span to memset; no object storage claimed."
+    },
+    "gClearCycle": {
+      "address": "0x803EBB14",
+      "evidence": "evidence.tsv data/name rows for gClearCycle; original-owned speech-library small data."
     }
   },
   "units": [
@@ -28216,6 +28216,138 @@
           "end": "0x803EBF70"
         }
       ]
+    },
+    {
+      "source": "src/engine/spchpick.c",
+      "profile": "speech_cxx_holdouts",
+      "evidence": "evidence.tsv provisional spchpick.c unit 0x801AF75C-0x801B1A3C; all67 functions and all32 initialized/1280 BSS bytes reconstructed. Twelve documented holdouts retain original code; all other code links through the existing owner-approved named profile.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AF75C",
+          "end": "0x801AFA14"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AFA70",
+          "end": "0x801AFD04"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AFDFC",
+          "end": "0x801AFEE8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AFF74",
+          "end": "0x801B0050"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B01E8",
+          "end": "0x801B0208"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B029C",
+          "end": "0x801B0474"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B04D4",
+          "end": "0x801B05E4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B07A0",
+          "end": "0x801B08DC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B0A18",
+          "end": "0x801B0D5C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B10AC",
+          "end": "0x801B1934"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F475C",
+          "end": "0x802F477C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037E294",
+          "end": "0x8037E794"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "VoxEvent_GetSentenceParmMask",
+            "evidence": "evidence.tsv HOLDOUT source-form 0x801AFA14-0x801AFA70"
+          },
+          {
+            "function": "iSPCH_GetPhraseBank",
+            "evidence": "evidence.tsv HOLDOUT source-form 0x801AFD04-0x801AFDFC"
+          },
+          {
+            "function": "iSPCH_SampleExists",
+            "evidence": "evidence.tsv HOLDOUT source-form 0x801AFEE8-0x801AFF74"
+          },
+          {
+            "function": "iSPCH_ChooseSamples",
+            "evidence": "evidence.tsv HOLDOUT source-form 0x801B0050-0x801B01E8"
+          },
+          {
+            "function": "iSPCH_SentenceLength",
+            "evidence": "evidence.tsv HOLDOUT source-form 0x801B0208-0x801B029C"
+          },
+          {
+            "function": "iSPCH_ShortRuleStatus",
+            "evidence": "evidence.tsv HOLDOUT source-form 0x801B0474-0x801B04D4"
+          },
+          {
+            "function": "iSPCH_TestMatchParms",
+            "evidence": "evidence.tsv HOLDOUT source-form 0x801B05E4-0x801B07A0"
+          },
+          {
+            "function": "iSPCH_RandomizeSentencePicks",
+            "evidence": "evidence.tsv HOLDOUT source-form 0x801B08DC-0x801B0974"
+          },
+          {
+            "function": "iSPCH_IterateChoice",
+            "evidence": "evidence.tsv HOLDOUT source-form 0x801B0974-0x801B0A18"
+          },
+          {
+            "function": "iSPCH_ConstantRuleSet",
+            "evidence": "evidence.tsv HOLDOUT source-form 0x801B0D5C-0x801B0EA4"
+          },
+          {
+            "function": "iSPCH_MakeSampleRequests",
+            "evidence": "evidence.tsv HOLDOUT source-form 0x801B0EA4-0x801B10AC"
+          },
+          {
+            "function": "iSPCH_EACrandom",
+            "evidence": "evidence.tsv HOLDOUT source-form 0x801B1934-0x801B1A3C"
+          }
+        ],
+        "evidence": "PR1447 merge notes list all12 full measured partials; existing owner holdouts ruling2026-11-20. Entire native data sections kept."
+      }
     }
   ]
 }
