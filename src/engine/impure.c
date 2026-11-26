@@ -10,6 +10,7 @@ static Reent_802622DC impure_data = {
   &impure_data.mFiles[1],
   &impure_data.mFiles[2],
   "",
+  0,
   "C",
   "",
   1

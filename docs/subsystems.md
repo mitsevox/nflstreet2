@@ -103,6 +103,8 @@ Update a row in the PR that changes it: a new file name, a link that moves a fil
 - `src/engine/ef_fmod.c` (0x80260260-0x80260428) wraps a channel’s current time within its animation period. The file links 456 code bytes and 12 bytes of data. Both historical file edges are provisional.
 - `src/engine/math_support.c` (0x80265D2C-0x80266640): the complete four-function numeric runtime used for rounding, signed remainder and logarithms in formatted output, 2,324 code bytes and 224 read-only bytes; separated from the multi-file survey `cu_802645AC`. File edges provisional.
 
+- `src/engine/locale.c` (0x80265CFC-0x80265D2C): the C locale accessors `_localeconv_r` and `localeconv`, the fixed `lconv` record, `__mb_cur_max` and the LC_CTYPE buffers and locale names of the discarded `setlocale`; split from `vfiprintf.c` as NASCAR 2005's locale.c member. File edges provisional.
+
 - `src/engine/impure.c` (no code; .data 0x802FF4D8-0x802FF7DC): the code-less C library file of the 772-byte reentrancy block `impure_data` (standard-stream records, "C" locale name, random seed, exit registrations), its "C" string (.rodata 0x802B77A8) and the pointer `_impure_ptr` (.sdata 0x803EC56C) that vprintf, atexit, the formatters and the multibyte converter read; linked between `math_support.c` and `mbtowc_r.c`, as NASCAR 2005 lists it. File edges provisional.
 
 - `mbtowc_r.c` (`0x80266640-0x8026696C`) is the complete one-function locale-selected multibyte converter after `math_support.c`: Shift-JIS/EUC-JP byte pairs and the JIS conversion-state machine. All812 code bytes and888 native data bytes are linked; both source-file edges remain provisional.

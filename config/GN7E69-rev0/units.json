@@ -5108,13 +5108,25 @@
     {
       "source": "src/dolphin/os/OSLink.c",
       "profile": "dolphin_release",
-      "evidence": "sdk.json unit src/dolphin/os/OSLink.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "evidence": "sdk.json unit src/dolphin/os/OSLink.c and its evidence.tsv function/data rows; the retained __OSModuleInit exact, and the .data 0x802FC420-0x802FC46F of the discarded linker functions (data row 0x802FC420) linked; promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "__OSModuleInit"
+        ],
+        "evidence": "evidence.tsv data row 0x802FC420-0x802FC46F: the target keeps only __OSModuleInit (0x8023BA60-0x8023BA78, the whole .text range); the module linker functions are not retained, while their two OSReport strings remain in .data."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8023BA60",
           "end": "0x8023BA78"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FC420",
+          "end": "0x802FC46F"
         }
       ]
     },
@@ -12556,7 +12568,7 @@
           "section": ".sdata",
           "placement": ".data5",
           "start": "0x803EC2D0",
-          "end": "0x803EC2D4"
+          "end": "0x803EC308"
         },
         {
           "section": ".sbss",
@@ -18583,19 +18595,19 @@
     {
       "source": "src/engine/vfiprintf.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv whole second-vfprintf.c grouping0x802645AC-0x80265D2C, four exact function/name/ABI rows, exact172 initialized data bytes and provisional128-byte staging allocation, type/field/compiler/source-form records. All functions and native sections are replaced together.",
+      "evidence": "evidence.tsv whole second-vfprintf.c grouping0x802645AC-0x80265D2C, four exact function/name/ABI rows, exact172 initialized data bytes and provisional128-byte staging allocation, type/field/compiler/source-form records. All functions and native sections are replaced together. The locale accessors _localeconv_r and localeconv and the fixed record that followed them moved to src/engine/locale.c (its unit row).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802645AC",
-          "end": "0x80265D2C"
+          "end": "0x80265CFC"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B7608",
-          "end": "0x802B76AC"
+          "end": "0x802B7674"
         },
         {
           "section": ".bss",
@@ -18608,6 +18620,42 @@
           "placement": ".data5",
           "start": "0x803EC550",
           "end": "0x803EC558"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/locale.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80265CFC-0x80265D2C (src/engine/locale.c), its function, name, data and linker rows; the two kept functions exact, .rodata 0x802B7674-0x802B76C8 (lconv, its strings and the discarded setlocale's locale names) and .sdata 0x803EC558-0x803EC56C (__mb_cur_max, lc_ctype, last_lc_ctype) linked.",
+      "link_roots": {
+        "symbols": [
+          "_localeconv_r",
+          "localeconv"
+        ],
+        "discarded": [
+          "_setlocale_r",
+          "setlocale"
+        ],
+        "evidence": "evidence.tsv linker row 0x802B76AC-0x802B76C8: the target keeps _localeconv_r and localeconv (0x80265CFC-0x80265D2C, the whole .text range); _setlocale_r and setlocale have no code in the target while their locale-name strings remain in .rodata and their two static buffers in .sdata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80265CFC",
+          "end": "0x80265D2C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7674",
+          "end": "0x802B76C8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC558",
+          "end": "0x803EC56C"
         }
       ]
     },

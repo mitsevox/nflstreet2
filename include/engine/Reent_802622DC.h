@@ -29,7 +29,8 @@ typedef struct Reent_802622DC
   RuntimeFile_t *mStdin;
   RuntimeFile_t *mStdout;
   RuntimeFile_t *mStderr;
-  char mUnknown10[36];
+  char mUnknown10[32];
+  int mCurrentCategory;
   const char *mLocaleName;
   char mUnknown38[32];
   unsigned int mRandNext;
