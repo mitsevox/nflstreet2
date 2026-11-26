@@ -13158,7 +13158,7 @@
           "end": "0x8009C630"
         },
         {
-          "symbol": "fn_8009C630",
+          "symbol": "PlayerAnimSlotFindValue",
           "start": "0x8009C630",
           "end": "0x8009C684"
         },

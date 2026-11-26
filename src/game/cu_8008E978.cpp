@@ -3858,6 +3858,11 @@ struct Animation_8009C630 {
     char mUnknown84[16];
 };
 
+/* The four animation records the player's +792 collection holds. */
+struct AnimSlots_8009C630 {
+    Animation_8009C630 mEntries[4];
+};
+
 extern "C" {
 int fn_8011F2C4(void);
 }
@@ -5955,7 +5960,7 @@ extern "C" int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues)
 
 extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short, void *, void *, Object_80039F5C *, unsigned int), unsigned int count);
 
-extern "C" float fn_8009C630(Object_80039F5C *p, int id);
+extern "C" float PlayerAnimSlotFindValue(Object_80039F5C *p, int id);
 
 extern "C" int fn_8009C684(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int b, int c);
 
@@ -8285,11 +8290,11 @@ extern "C" int PlayerAnimUserOpcodeCallback(void *object,int event,unsigned int 
     case 0xC011:fn_800ADD04(0);result=1;break;
     case 0xC012:AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();result=1;break;
     case 0xC003:
-        if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(fn_8009C630(p,key)<=lbl_803EA8B8))
+        if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(PlayerAnimSlotFindValue(p,key)<=lbl_803EA8B8))
             p->mFlags|=0x1000;
         result=1;break;
     case 0xC018:
-        if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(fn_8009C630(p,key)<=lbl_803EA8B4))
+        if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(PlayerAnimSlotFindValue(p,key)<=lbl_803EA8B4))
             p->mFlags|=0x2000;
         result=1;break;
     case 0xC01F:case 0xC023:case 0xD004:AnimSeqGetOpcodeParameter();result=1;break;
@@ -14190,12 +14195,14 @@ extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short,
     }
 }
 
-extern "C" float fn_8009C630(Object_80039F5C *p, int id)
+extern "C" float PlayerAnimSlotFindValue(Object_80039F5C *p, int id)
 {
     float result = 0.0f;
     for (unsigned int i = 0; i <= 3; i++) {
-        if (((Animation_8009C630 *)p->mpUnknown792)[i].mUnknown4 == id) {
-            result = ((Animation_8009C630 *)p->mpUnknown792)[i].mUnknown80;
+        Animation_8009C630 *pRec = &((AnimSlots_8009C630 *)p->mpUnknown792)->mEntries[i];
+
+        if (pRec->mUnknown4 == id) {
+            result = ((AnimSlots_8009C630 *)p->mpUnknown792)->mEntries[i].mUnknown80;
             break;
         }
     }
