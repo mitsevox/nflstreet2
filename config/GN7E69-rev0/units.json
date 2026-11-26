@@ -1130,18 +1130,6 @@
       "address": "0x8013CC7C",
       "evidence": "evidence.tsv source-form 0x8013CC7C-0x8013CD58; original code stays in place and its literal pool now links with src/game/camreplay.cpp."
     },
-    "GameOptionsCloseCursor": {
-      "address": "0x8007F174",
-      "evidence": "evidence.tsv function/name rows for 0x8007F174; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "GameOptionsOpenCursor": {
-      "address": "0x8007F12C",
-      "evidence": "evidence.tsv function/name rows for 0x8007F12C; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "GameOptionsWriteRecord": {
-      "address": "0x8007F19C",
-      "evidence": "evidence.tsv function/name rows for 0x8007F19C; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
-    },
     "PlyrSwapStateData": {
       "address": "0x80148424",
       "evidence": "evidence.tsv function/name/source-form rows for 0x80148424; src/game/cu_80148424.cpp is exact but stays a comparison (probable fragment of the cu_801485B4 grouping), so its original bytes stay linked and the comparison of src/game/cu_801485B4.cpp resolves the call here."
@@ -19390,9 +19378,15 @@
     },
     {
       "source": "src/game/GameOptions.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007F12C-0x8007FA48 (src/game/GameOptions.cpp), its function, name and data rows; 0x8007F298-0x8007FA48 and all of the file's data are linked, the documented holdout 0x8007F12C-0x8007F298 (the cursor open/close wrappers and the record writer) keeps its original bytes and stays a comparison.",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8007F12C-0x8007FA48 (src/game/GameOptions.cpp), its function, name and data rows; linked with holdouts (owner ruling of 2026-11-20), the one holdout GameOptionsWriteRecord keeping its original bytes.",
       "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007F12C",
+          "end": "0x8007F19C"
+        },
         {
           "section": ".text",
           "placement": ".text",
@@ -19435,7 +19429,16 @@
           "start": "0x80289BEC",
           "end": "0x80289BF0"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "GameOptionsWriteRecord",
+            "evidence": "evidence.tsv source-form 0x8007F19C-0x8007F298"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (round 2 lane 2 holdout table)"
+      }
     },
     {
       "source": "src/game/PlyrNameTag.cpp",

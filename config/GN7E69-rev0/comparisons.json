@@ -29545,7 +29545,7 @@
     {
       "source": "src/game/GameOptions.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007F12C-0x8007FA48 (src/game/GameOptions.cpp) and the source-form rows from 0x8007F12C. Documented holdout at the start of .text: 0x8007F12C-0x8007F298 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (0x8007F19C is near-miss; 0x8007F12C and 0x8007F174 are exact and precede it); the rest of the file is linked through units.json",
+      "evidence": "evidence.tsv unit row 0x8007F12C-0x8007FA48 (src/game/GameOptions.cpp) and the source-form rows from 0x8007F12C. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact GameOptionsWriteRecord stays registered here as its partial (source-form row 0x8007F19C-0x8007F298), and the exact GameOptionsOpenCursor and GameOptionsCloseCursor before it are linked.",
       "sections": [
         {
           "section": ".text",
