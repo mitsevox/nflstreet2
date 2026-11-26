@@ -2557,7 +2557,7 @@ struct State_80113C20 {
     unsigned char mUnknown68;
 };
 
-/* The bytes at player +336 as fn_80113E74 updates them; +32 is the block
+/* The bytes at player +336 as PlyrHitImpactUpdate updates them; +32 is the block
    passed to PlayerActionAnimPitchUpdate and PlayerActionAnimAiConsiderPitch. */
 struct State_80113E74 {
     int mRef;
@@ -2583,7 +2583,7 @@ struct State_80113E74 {
     unsigned char mUnknown68;
 };
 
-/* The bytes at +336 of the player that fn_80113E74's reference names. */
+/* The bytes at +336 of the player that PlyrHitImpactUpdate's reference names. */
 struct Other_80113E74 {
     char mUnknown0[4];
     unsigned int mUnknown4;
@@ -18922,7 +18922,7 @@ extern "C" int fn_80113C20(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_80113E74(Object_80039F5C *p)
+extern "C" int PlyrHitImpactUpdate(Object_80039F5C *p)
 {
     int result = 0;
     State_80113E74 *state = (State_80113E74 *)&p->mUnknown336;
@@ -18934,7 +18934,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
     Vector_80039F5C hand;
     Point_8017886C aim;
     Ball_t *pBall;
-    int allowed;
+    unsigned char allowed;
     float speed;
 
     if (pOther != 0) {
@@ -19010,6 +19010,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
                     if (pRecord->mUnknownB == 1) {
                         int angle;
                         float scale;
+                        float ratio;
                         Object_80039F5C *pTarget;
 
                         aim.mX = 0.2f;
@@ -19018,11 +19019,11 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
                         angle = aim.Heading();
                         pRecord->mUnknown10 = angle + SyncRandGetRange(0, 0xE38E3);
                         pRecord->mUnknown8 = (pRecord->mUnknown8 - 5) / 3 + 5;
-                        pRecord->mUnknownC = state->mUnknown4 / (gPlyrMoveFwdSpeed * 100621.12f);
-                        if (pRecord->mUnknownC == 0.0f) {
-                            float spread = pRecord->mUnknown10 / 4194304.0f;
-
-                            pRecord->mUnknownC = spread * 0.5f + 0.5f;
+                        ratio = state->mUnknown4 / (gPlyrMoveFwdSpeed * 100621.12f);
+                        pRecord->mUnknownC = ratio;
+                        if (ratio == 0.0f) {
+                            ratio = pRecord->mUnknown10 / 4194304.0f;
+                            pRecord->mUnknownC = ratio * 0.5f + 0.5f;
                         }
                         scale = pRecord->mUnknownC / 3.0f;
                         pRecord->mUnknown0 -= pRecord->mUnknown0 * scale;
@@ -19093,15 +19094,18 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
                 fn_801BE648(p->mpUnknown792) != 238) {
                 PossTryFumble(p, pOther);
             }
+            state->mUnknown26--;
+        } else {
+            state->mUnknown26--;
         }
-        state->mUnknown26--;
         if (state->mUnknown26 < 0) {
             fn_800CE674(pAnim);
         }
     }
     if (state->mUnknown59 == 0 && pOtherState != 0 && state->mUnknown20 != 0xFF && pOtherState->mUnknown4 != 0xFF) {
-        speed = pOtherState->mUnknown8 < state->mUnknown4 ? state->mUnknown4 : pOtherState->mUnknown8;
-        AudmonEventPostId(37, &p->mMotion.mPos, p->mId, (unsigned int)speed, state->mUnknown20, pOtherState->mUnknown4);
+        AudmonEventPostId(37, &p->mMotion.mPos, p->mId,
+                          (unsigned int)(pOtherState->mUnknown8 < state->mUnknown4 ? state->mUnknown4 : pOtherState->mUnknown8),
+                          state->mUnknown20, pOtherState->mUnknown4);
         state->mUnknown59 = 1;
         fn_800A3B58(p, 1, 1);
         speed = pOtherState->mUnknown8 < state->mUnknown4 ? state->mUnknown4 : pOtherState->mUnknown8;
@@ -19111,9 +19115,10 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
     }
     if (fn_801787A0() != 0 && p->mIdBytes[3] == 1 && (p->mFlags & 0x1000)) {
         p->mFlags &= ~0x1000;
-        pBall = BallFindHeldBy(p);
-        if (pBall != 0) {
-            BallReleaseStill(pBall, 5, 0);
+        Ball_t *pHeld = BallFindHeldBy(p);
+
+        if (pHeld != 0) {
+            BallReleaseStill(pHeld, 5, 0);
         }
     }
     if (p->mUnknown9[0] != 1) {
@@ -19133,13 +19138,13 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
         }
     }
     if ((p->mFlags & 4) && state->mUnknown56 != 1 && state->mUnknown56 != 4) {
-        result = 1;
         p->mFlags &= ~0x0409280C;
         PlyrCollideRemoveExempt(p, fn_8009BCE8(&state->mRef));
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         StyleTrackerFinishHurdle(p);
+        result = 1;
     }
     return result;
 }
