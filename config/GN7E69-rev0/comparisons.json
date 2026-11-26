@@ -19355,7 +19355,7 @@
     {
       "source": "src/engine/dboccp.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x802311C8-0x802328A8 (src/engine/dboccp.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802311C8-0x802328A8 (src/engine/dboccp.c), its function and name rows and the compiler and source-form rows of the ranges it was split from (src/engine/cu_80229270.c and src/engine/cu_8022F428.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -19450,8 +19450,8 @@
         }
       ],
       "discarded": [
-        "DbOccpUpdateTeamHandler",
-        "DbOccpUpdatePasserRatings"
+        "_DbOccpUpdateTeamHandler",
+        "_DbOccpUpdatePasserRatings"
       ]
     },
     {

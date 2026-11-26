@@ -154,7 +154,7 @@ void DbOccpUpdateHandler(TDbCol_801F9718 *pCols, int mode, unsigned char *pDone)
 }
 
 /* Discarded: the handler of the second statistics table, never registered. */
-void DbOccpUpdateTeamHandler(TDbCol_801F9718 *pCols, int mode, unsigned char *pDone)
+static void _DbOccpUpdateTeamHandler(TDbCol_801F9718 *pCols, int mode, unsigned char *pDone)
 {
     int att;
     int plays;
@@ -218,6 +218,7 @@ int DbOccpQueryPassing(const char *pWhere, int b, int orderTable, int orderCol, 
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
             if (_DbOccpAccepted(err)) {
+                /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
         }
     }
@@ -255,6 +256,7 @@ int DbOccpQueryRushing(const char *pWhere, int b, int orderTable, int orderCol, 
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
             if (_DbOccpAccepted(err)) {
+                /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
         }
     }
@@ -298,6 +300,7 @@ int DbOccpQueryReceiving(const char *pWhere, int b, int orderTable, int orderCol
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
             if (_DbOccpAccepted(err)) {
+                /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
         }
     }
@@ -321,6 +324,7 @@ int DbOccpQueryBlocking(const char *pWhere, int b, int orderTable, int orderCol,
                               "\x8f order by \x8c.\x8c \x8e\n",
                               pCursor, table, pWhere, orderTable, orderCol, orderDir);
     if (_DbOccpAccepted(err)) {
+        /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
     }
     return err;
 }
@@ -359,6 +363,7 @@ int DbOccpQueryDefense(const char *pWhere, int b, int orderTable, int orderCol, 
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
             if (_DbOccpAccepted(err)) {
+                /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
         }
     }
@@ -401,6 +406,7 @@ int DbOccpQueryKicking(const char *pWhere, int b, int orderTable, int orderCol, 
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
             if (_DbOccpAccepted(err)) {
+                /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
         }
     }
@@ -444,6 +450,7 @@ int DbOccpQueryPunting(const char *pWhere, int b, int orderTable, int orderCol, 
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
             if (_DbOccpAccepted(err)) {
+                /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
         }
     }
@@ -487,6 +494,7 @@ int DbOccpQueryReturns(const char *pWhere, int b, int orderTable, int orderCol, 
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
             if (_DbOccpAccepted(err)) {
+                /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
         }
     }
@@ -494,7 +502,7 @@ int DbOccpQueryReturns(const char *pWhere, int b, int orderTable, int orderCol, 
 }
 
 /* Discarded: recomputes the stored passer rating of every row of a statistics table. */
-int DbOccpUpdatePasserRatings(int tbl, int colAtt, int colYds, int colComp, int colTd, int colInts)
+static int _DbOccpUpdatePasserRatings(int tbl, int colAtt, int colYds, int colComp, int colTd, int colInts)
 {
     struct QueryCursor cursor;
     int id;

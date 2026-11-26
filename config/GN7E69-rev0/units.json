@@ -4704,7 +4704,7 @@
     {
       "source": "src/engine/dboccp.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x802311C8-0x802328A8 (src/engine/dboccp.c), its function, name, data and linker rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes. The file's .rodata 0x802B6038-0x802B6E10 (its query literals and float pools, with those of the two discarded functions), .data 0x802FB368-0x802FB38C (the query table) and .sdata 0x803EC0E4-0x803EC0EC (handler tag and database handle) link from this file.",
+      "evidence": "evidence.tsv provisional unit row 0x802311C8-0x802328A8 (src/engine/dboccp.c), its function, name, data and linker rows and the compiler and source-form rows of the ranges it was split from (src/engine/cu_80229270.c and src/engine/cu_8022F428.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes. The file's .rodata 0x802B6038-0x802B6E10 (its query literals and float pools, with those of the two discarded functions), .data 0x802FB368-0x802FB38C (the query table) and .sdata 0x803EC0E4-0x803EC0EC (handler tag and database handle) link from this file.",
       "sections": [
         {
           "section": ".text",
@@ -4782,10 +4782,10 @@
       },
       "link_roots": {
         "discarded": [
-          "DbOccpUpdateTeamHandler",
-          "DbOccpUpdatePasserRatings"
+          "_DbOccpUpdateTeamHandler",
+          "_DbOccpUpdatePasserRatings"
         ],
-        "evidence": "evidence.tsv linker rows 0x802B6048-0x802B6058 and 0x802B6D08-0x802B6DC4: functions SN linker discarded; only their pools and literals remain"
+        "evidence": "evidence.tsv linker rows 0x802B6048-0x802B6058 and 0x802B6D08-0x802B6DC4: file-static functions SN's linker discarded; only their pools and literals remain"
       }
     },
     {
