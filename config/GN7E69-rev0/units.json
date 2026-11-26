@@ -14619,13 +14619,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800F6C90",
-          "end": "0x800F6E30"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800F70D0",
-          "end": "0x800F722C"
+          "end": "0x800F7314"
         },
         {
           "section": ".text",
@@ -14903,14 +14897,6 @@
           {
             "function": "fn_800F6B2C",
             "evidence": "evidence.tsv source-form 0x800F6B2C-0x800F6C90"
-          },
-          {
-            "function": "fn_800F6E30",
-            "evidence": "evidence.tsv source-form 0x800F6E30-0x800F70D0"
-          },
-          {
-            "function": "fn_800F722C",
-            "evidence": "evidence.tsv source-form 0x800F722C-0x800F7314"
           },
           {
             "function": "fn_800F7314",

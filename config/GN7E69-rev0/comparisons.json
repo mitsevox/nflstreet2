@@ -3951,7 +3951,7 @@
           "end": "0x800F6E30"
         },
         {
-          "symbol": "fn_800F6E30",
+          "symbol": "AssignSteerLateralToTarget",
           "start": "0x800F6E30",
           "end": "0x800F70D0"
         },
@@ -3961,7 +3961,7 @@
           "end": "0x800F722C"
         },
         {
-          "symbol": "fn_800F722C",
+          "symbol": "AssignSteerLateralByGap",
           "start": "0x800F722C",
           "end": "0x800F7314"
         },
