@@ -13648,7 +13648,7 @@
           "end": "0x800A042C"
         },
         {
-          "symbol": "OnEnter__13LivePlayPhase",
+          "symbol": "OnEnter__13LivePlayPhasef",
           "start": "0x800A042C",
           "end": "0x800A050C"
         },
@@ -14943,7 +14943,7 @@
           "end": "0x800AAD58"
         },
         {
-          "symbol": "vfn_03__14Class_80297B90",
+          "symbol": "vfn_03__14Class_80297B90f",
           "start": "0x800AAD58",
           "end": "0x800AAE20"
         },
@@ -16188,7 +16188,7 @@
           "end": "0x800B3718"
         },
         {
-          "symbol": "vfn_03__14Class_80297B50",
+          "symbol": "vfn_03__14Class_80297B50f",
           "start": "0x800B3718",
           "end": "0x800B3AF4"
         },
@@ -16218,7 +16218,7 @@
           "end": "0x800B4020"
         },
         {
-          "symbol": "vfn_05__14Class_80297B50",
+          "symbol": "vfn_05__14Class_80297B50f",
           "start": "0x800B4020",
           "end": "0x800B40D8"
         },
@@ -17203,7 +17203,7 @@
           "end": "0x800BC5DC"
         },
         {
-          "symbol": "OnEnter__12PreGamePhase",
+          "symbol": "OnEnter__12PreGamePhasef",
           "start": "0x800BC5DC",
           "end": "0x800BC83C"
         },
@@ -20814,15 +20814,57 @@
       ]
     },
     {
-      "source": "src/game/cu_80148424.cpp",
+      "source": "src/game/MiniGames.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form rows; one complete byte-identical body, kept comparison-only because its file is probably a fragment of the unresolved cu_801485B4 grouping; original assembly remains linked.",
+      "evidence": "evidence.tsv unit row for src/game/MiniGames.cpp (merged from the comparison fragments of candidate cu_801485B4); draft comparisons; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80148424",
-          "end": "0x801485B4"
+          "end": "0x801564DC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0568",
+          "end": "0x802A3078"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DDC20",
+          "end": "0x802DEBD0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB2A8",
+          "end": "0x803EB300"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031BD10",
+          "end": "0x8031BEE4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA24",
+          "end": "0x803ECA2C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AE0",
+          "end": "0x80289AE4"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C18",
+          "end": "0x80289C1C"
         }
       ],
       "functions": [
@@ -20830,6 +20872,1856 @@
           "symbol": "PlyrSwapStateData",
           "start": "0x80148424",
           "end": "0x801485B4"
+        },
+        {
+          "symbol": "fn_801485B4",
+          "start": "0x801485B4",
+          "end": "0x801485C0"
+        },
+        {
+          "symbol": "fn_801485C0",
+          "start": "0x801485C0",
+          "end": "0x801485D4"
+        },
+        {
+          "symbol": "fn_801485D4",
+          "start": "0x801485D4",
+          "end": "0x801485EC"
+        },
+        {
+          "symbol": "fn_801485EC",
+          "start": "0x801485EC",
+          "end": "0x801485F4"
+        },
+        {
+          "symbol": "fn_801485F4",
+          "start": "0x801485F4",
+          "end": "0x80148644"
+        },
+        {
+          "symbol": "fn_80148644",
+          "start": "0x80148644",
+          "end": "0x80148698"
+        },
+        {
+          "symbol": "fn_80148698",
+          "start": "0x80148698",
+          "end": "0x801486A0"
+        },
+        {
+          "symbol": "fn_801486A0",
+          "start": "0x801486A0",
+          "end": "0x801486A8"
+        },
+        {
+          "symbol": "MiniGameLineUpPlayers",
+          "start": "0x801486A8",
+          "end": "0x801487C0"
+        },
+        {
+          "symbol": "MiniGameBenchPlayersFrom",
+          "start": "0x801487C0",
+          "end": "0x80148814"
+        },
+        {
+          "symbol": "MiniGameBenchPlayer",
+          "start": "0x80148814",
+          "end": "0x801488D4"
+        },
+        {
+          "symbol": "fn_801488D4",
+          "start": "0x801488D4",
+          "end": "0x80148A58"
+        },
+        {
+          "symbol": "MiniGameGetCurrent",
+          "start": "0x80148A58",
+          "end": "0x80148A98"
+        },
+        {
+          "symbol": "__9MiniGameC",
+          "start": "0x80148A98",
+          "end": "0x80148AD0"
+        },
+        {
+          "symbol": "vfn_03__9MiniGameC",
+          "start": "0x80148AD0",
+          "end": "0x80148AD8"
+        },
+        {
+          "symbol": "vfn_04__9MiniGameCi",
+          "start": "0x80148AD8",
+          "end": "0x80148AE0"
+        },
+        {
+          "symbol": "vfn_05__9MiniGameCi",
+          "start": "0x80148AE0",
+          "end": "0x80148AE8"
+        },
+        {
+          "symbol": "vfn_06__9MiniGameC",
+          "start": "0x80148AE8",
+          "end": "0x80148AF0"
+        },
+        {
+          "symbol": "vfn_08__9MiniGameCi",
+          "start": "0x80148AF0",
+          "end": "0x80148AF8"
+        },
+        {
+          "symbol": "fn_80148AF8",
+          "start": "0x80148AF8",
+          "end": "0x80148B44"
+        },
+        {
+          "symbol": "vfn_10__9MiniGameCiPiT2",
+          "start": "0x80148B44",
+          "end": "0x80148B70"
+        },
+        {
+          "symbol": "AutoFillDepthChart__9MiniGameCiPiT2Uii",
+          "start": "0x80148B70",
+          "end": "0x80148B9C"
+        },
+        {
+          "symbol": "IsWinnerUserTeam__9MiniGameC",
+          "start": "0x80148B9C",
+          "end": "0x80148BF0"
+        },
+        {
+          "symbol": "vfn_15__9MiniGameC",
+          "start": "0x80148BF0",
+          "end": "0x80148C4C"
+        },
+        {
+          "symbol": "vfn_23__9MiniGameCP17AutoDepthPlayer_tUi",
+          "start": "0x80148C4C",
+          "end": "0x80148CA0"
+        },
+        {
+          "symbol": "vfn_24__9MiniGameCiUi",
+          "start": "0x80148CA0",
+          "end": "0x80148D20"
+        },
+        {
+          "symbol": "fn_80148D20",
+          "start": "0x80148D20",
+          "end": "0x80148DFC"
+        },
+        {
+          "symbol": "fn_80148DFC",
+          "start": "0x80148DFC",
+          "end": "0x80149014"
+        },
+        {
+          "symbol": "fn_80149014__9MiniGameC",
+          "start": "0x80149014",
+          "end": "0x80149040"
+        },
+        {
+          "symbol": "MiniGameReloadPlayer",
+          "start": "0x80149040",
+          "end": "0x80149154"
+        },
+        {
+          "symbol": "vfn_16__9MiniGameCPCi",
+          "start": "0x80149154",
+          "end": "0x801492C4"
+        },
+        {
+          "symbol": "vfn_17__9MiniGameCPCi",
+          "start": "0x801492C4",
+          "end": "0x801493E0"
+        },
+        {
+          "symbol": "GetPlayerAwardsText__9MiniGameCiUcPcUc",
+          "start": "0x801493E0",
+          "end": "0x80149518"
+        },
+        {
+          "symbol": "vfn_19__9MiniGameCiiPci",
+          "start": "0x80149518",
+          "end": "0x80149588"
+        },
+        {
+          "symbol": "vfn_25__9MiniGameCii",
+          "start": "0x80149588",
+          "end": "0x801495E0"
+        },
+        {
+          "symbol": "CheckAward__9MiniGameCiiP15Object_80039F5Ci",
+          "start": "0x801495E0",
+          "end": "0x801498EC"
+        },
+        {
+          "symbol": "PlayerHasAward__9MiniGameCiii",
+          "start": "0x801498EC",
+          "end": "0x8014993C"
+        },
+        {
+          "symbol": "vfn_29__9MiniGameCi",
+          "start": "0x8014993C",
+          "end": "0x80149998"
+        },
+        {
+          "symbol": "vfn_28__9MiniGameCi",
+          "start": "0x80149998",
+          "end": "0x801499A8"
+        },
+        {
+          "symbol": "vfn_30__9MiniGameCiiiP15Object_80039F5C",
+          "start": "0x801499A8",
+          "end": "0x80149DA4"
+        },
+        {
+          "symbol": "vfn_31__9MiniGameCiiiP15Object_80039F5Cii",
+          "start": "0x80149DA4",
+          "end": "0x80149F40"
+        },
+        {
+          "symbol": "vfn_32__9MiniGameCii",
+          "start": "0x80149F40",
+          "end": "0x8014A1B8"
+        },
+        {
+          "symbol": "vfn_33__9MiniGameCii",
+          "start": "0x8014A1B8",
+          "end": "0x8014A5B4"
+        },
+        {
+          "symbol": "vfn_34__9MiniGameCiiii",
+          "start": "0x8014A5B4",
+          "end": "0x8014A6A0"
+        },
+        {
+          "symbol": "fn_8014A6A0",
+          "start": "0x8014A6A0",
+          "end": "0x8014A8D8"
+        },
+        {
+          "symbol": "MiniGameDepthEnsureStarters",
+          "start": "0x8014A8D8",
+          "end": "0x8014AACC"
+        },
+        {
+          "symbol": "IsTimed__25MiniGame2MinuteScrmRulesC",
+          "start": "0x8014AACC",
+          "end": "0x8014AAD4"
+        },
+        {
+          "symbol": "IsWinAwarded__25MiniGame2MinuteScrmRulesC",
+          "start": "0x8014AAD4",
+          "end": "0x8014AADC"
+        },
+        {
+          "symbol": "GetGameTime__25MiniGame2MinuteScrmRulesC",
+          "start": "0x8014AADC",
+          "end": "0x8014AAE4"
+        },
+        {
+          "symbol": "ResetPlaySpot__25MiniGame2MinuteScrmRulesC",
+          "start": "0x8014AAE4",
+          "end": "0x8014AB58"
+        },
+        {
+          "symbol": "GetScoreLimit__25MiniGame2MinuteScrmRulesC",
+          "start": "0x8014AB58",
+          "end": "0x8014AB64"
+        },
+        {
+          "symbol": "GetWinner__25MiniGame2MinuteScrmRulesC",
+          "start": "0x8014AB64",
+          "end": "0x8014ABE4"
+        },
+        {
+          "symbol": "ResetGame__25MiniGame2MinuteScrmRulesCi",
+          "start": "0x8014ABE4",
+          "end": "0x8014AC0C"
+        },
+        {
+          "symbol": "AwardWin__25MiniGame2MinuteScrmRulesCi",
+          "start": "0x8014AC0C",
+          "end": "0x8014AC88"
+        },
+        {
+          "symbol": "OnEnter__23MiniGame2MinutePreGameCf",
+          "start": "0x8014AC88",
+          "end": "0x8014AD24"
+        },
+        {
+          "symbol": "OnUpdate__23MiniGame2MinutePreGameCf",
+          "start": "0x8014AD24",
+          "end": "0x8014AD70"
+        },
+        {
+          "symbol": "ShowIntroScreen__23MiniGame2MinutePreGameC",
+          "start": "0x8014AD70",
+          "end": "0x8014ADB0"
+        },
+        {
+          "symbol": "vfn_03__23MiniGame2MinuteGameEndCf",
+          "start": "0x8014ADB0",
+          "end": "0x8014AE58"
+        },
+        {
+          "symbol": "vfn_08__23MiniGame2MinuteGameEndC",
+          "start": "0x8014AE58",
+          "end": "0x8014AE84"
+        },
+        {
+          "symbol": "vfn_09__23MiniGame2MinuteGameEndC",
+          "start": "0x8014AE84",
+          "end": "0x8014AEB4"
+        },
+        {
+          "symbol": "vfn_03__24MiniGame2MinutePlayCallCf",
+          "start": "0x8014AEB4",
+          "end": "0x8014AF24"
+        },
+        {
+          "symbol": "vfn_04__24MiniGame2MinutePlayCallCf",
+          "start": "0x8014AF24",
+          "end": "0x8014B028"
+        },
+        {
+          "symbol": "vfn_05__24MiniGame2MinutePlayCallCf",
+          "start": "0x8014B028",
+          "end": "0x8014B0C8"
+        },
+        {
+          "symbol": "vfn_06__24MiniGame2MinutePlayCallC",
+          "start": "0x8014B0C8",
+          "end": "0x8014B0D0"
+        },
+        {
+          "symbol": "OnEnter__23MiniGame2MinutePrePlayCf",
+          "start": "0x8014B0D0",
+          "end": "0x8014B178"
+        },
+        {
+          "symbol": "OnUpdate__23MiniGame2MinutePrePlayCf",
+          "start": "0x8014B178",
+          "end": "0x8014B1C8"
+        },
+        {
+          "symbol": "OnEnter__26MiniGame2MinuteDuringPlayCf",
+          "start": "0x8014B1C8",
+          "end": "0x8014B210"
+        },
+        {
+          "symbol": "OnUpdate__26MiniGame2MinuteDuringPlayCf",
+          "start": "0x8014B210",
+          "end": "0x8014B2CC"
+        },
+        {
+          "symbol": "GetResultText__24MiniGame2MinutePostPlayCPc",
+          "start": "0x8014B2CC",
+          "end": "0x8014B350"
+        },
+        {
+          "symbol": "OnUpdate__24MiniGame2MinutePostPlayCf",
+          "start": "0x8014B350",
+          "end": "0x8014B38C"
+        },
+        {
+          "symbol": "Finish__24MiniGame2MinutePostPlayCf",
+          "start": "0x8014B38C",
+          "end": "0x8014B498"
+        },
+        {
+          "symbol": "__16MiniGame2MinuteC",
+          "start": "0x8014B498",
+          "end": "0x8014B4E8"
+        },
+        {
+          "symbol": "_._16MiniGame2MinuteC",
+          "start": "0x8014B4E8",
+          "end": "0x8014B528"
+        },
+        {
+          "symbol": "vfn_01__16MiniGame2MinuteC",
+          "start": "0x8014B528",
+          "end": "0x8014B7D4"
+        },
+        {
+          "symbol": "vfn_02__16MiniGame2MinuteC",
+          "start": "0x8014B7D4",
+          "end": "0x8014B890"
+        },
+        {
+          "symbol": "vfn_08__16MiniGame2MinuteCi",
+          "start": "0x8014B890",
+          "end": "0x8014B898"
+        },
+        {
+          "symbol": "vfn_05__16MiniGame2MinuteCi",
+          "start": "0x8014B898",
+          "end": "0x8014B8D4"
+        },
+        {
+          "symbol": "vfn_10__16MiniGame2MinuteCiPiT2",
+          "start": "0x8014B8D4",
+          "end": "0x8014B930"
+        },
+        {
+          "symbol": "AutoFillDepthChart__16MiniGame2MinuteCiPiT2Uii",
+          "start": "0x8014B930",
+          "end": "0x8014BA20"
+        },
+        {
+          "symbol": "fn_8014BA20",
+          "start": "0x8014BA20",
+          "end": "0x8014BB4C"
+        },
+        {
+          "symbol": "vfn_32__16MiniGame2MinuteCii",
+          "start": "0x8014BB4C",
+          "end": "0x8014BC40"
+        },
+        {
+          "symbol": "vfn_33__16MiniGame2MinuteCii",
+          "start": "0x8014BC40",
+          "end": "0x8014BC88"
+        },
+        {
+          "symbol": "vfn_21__16MiniGame2MinuteC",
+          "start": "0x8014BC88",
+          "end": "0x8014BC90"
+        },
+        {
+          "symbol": "fn_8014BC90",
+          "start": "0x8014BC90",
+          "end": "0x8014BC98"
+        },
+        {
+          "symbol": "fn_8014BC98",
+          "start": "0x8014BC98",
+          "end": "0x8014BED8"
+        },
+        {
+          "symbol": "fn_8014BED8",
+          "start": "0x8014BED8",
+          "end": "0x8014C118"
+        },
+        {
+          "symbol": "vfn_03__21MiniGame4On4PlayCallCf",
+          "start": "0x8014C118",
+          "end": "0x8014C150"
+        },
+        {
+          "symbol": "GetTeamSize__22MiniGame4On4ScrmRulesC",
+          "start": "0x8014C150",
+          "end": "0x8014C158"
+        },
+        {
+          "symbol": "AllowsPrediction__22MiniGame4On4ScrmRulesC",
+          "start": "0x8014C158",
+          "end": "0x8014C160"
+        },
+        {
+          "symbol": "OnEnter__21MiniGame4On4PostPlayCf",
+          "start": "0x8014C160",
+          "end": "0x8014C188"
+        },
+        {
+          "symbol": "ShowResultText__21MiniGame4On4PostPlayC",
+          "start": "0x8014C188",
+          "end": "0x8014C214"
+        },
+        {
+          "symbol": "OnUpdate__21MiniGame4On4PostPlayCf",
+          "start": "0x8014C214",
+          "end": "0x8014C278"
+        },
+        {
+          "symbol": "OnEnter__23MiniGame4On4DuringPlayCf",
+          "start": "0x8014C278",
+          "end": "0x8014C308"
+        },
+        {
+          "symbol": "OnUpdate__23MiniGame4On4DuringPlayCf",
+          "start": "0x8014C308",
+          "end": "0x8014C4C0"
+        },
+        {
+          "symbol": "OnEnter__20MiniGame4On4PrePlayCf",
+          "start": "0x8014C4C0",
+          "end": "0x8014C528"
+        },
+        {
+          "symbol": "OnEnter__20MiniGame4On4PreGameCf",
+          "start": "0x8014C528",
+          "end": "0x8014C5AC"
+        },
+        {
+          "symbol": "OnUpdate__20MiniGame4On4PreGameCf",
+          "start": "0x8014C5AC",
+          "end": "0x8014C630"
+        },
+        {
+          "symbol": "__13MiniGame4On4C",
+          "start": "0x8014C630",
+          "end": "0x8014C690"
+        },
+        {
+          "symbol": "vfn_01__13MiniGame4On4C",
+          "start": "0x8014C690",
+          "end": "0x8014C808"
+        },
+        {
+          "symbol": "ShowIntroScreen__20MiniGame4On4PreGameC",
+          "start": "0x8014C808",
+          "end": "0x8014C868"
+        },
+        {
+          "symbol": "HideIntroScreen__20MiniGame4On4PreGameC",
+          "start": "0x8014C868",
+          "end": "0x8014C8AC"
+        },
+        {
+          "symbol": "vfn_03__20MiniGame4On4GameEndCf",
+          "start": "0x8014C8AC",
+          "end": "0x8014C954"
+        },
+        {
+          "symbol": "vfn_08__20MiniGame4On4GameEndC",
+          "start": "0x8014C954",
+          "end": "0x8014C980"
+        },
+        {
+          "symbol": "vfn_09__20MiniGame4On4GameEndC",
+          "start": "0x8014C980",
+          "end": "0x8014C9B0"
+        },
+        {
+          "symbol": "vfn_02__13MiniGame4On4C",
+          "start": "0x8014C9B0",
+          "end": "0x8014CA78"
+        },
+        {
+          "symbol": "vfn_06__13MiniGame4On4C",
+          "start": "0x8014CA78",
+          "end": "0x8014CA80"
+        },
+        {
+          "symbol": "vfn_04__13MiniGame4On4Ci",
+          "start": "0x8014CA80",
+          "end": "0x8014CA88"
+        },
+        {
+          "symbol": "vfn_05__13MiniGame4On4Ci",
+          "start": "0x8014CA88",
+          "end": "0x8014CA90"
+        },
+        {
+          "symbol": "vfn_03__13MiniGame4On4C",
+          "start": "0x8014CA90",
+          "end": "0x8014CA98"
+        },
+        {
+          "symbol": "vfn_08__13MiniGame4On4Ci",
+          "start": "0x8014CA98",
+          "end": "0x8014CAD4"
+        },
+        {
+          "symbol": "vfn_10__13MiniGame4On4CiPiT2",
+          "start": "0x8014CAD4",
+          "end": "0x8014CB30"
+        },
+        {
+          "symbol": "AutoFillDepthChart__13MiniGame4On4CiPiT2Uii",
+          "start": "0x8014CB30",
+          "end": "0x8014CCE8"
+        },
+        {
+          "symbol": "fn_8014CCE8",
+          "start": "0x8014CCE8",
+          "end": "0x8014CF44"
+        },
+        {
+          "symbol": "vfn_14__13MiniGame4On4C",
+          "start": "0x8014CF44",
+          "end": "0x8014CF80"
+        },
+        {
+          "symbol": "vfn_32__13MiniGame4On4Cii",
+          "start": "0x8014CF80",
+          "end": "0x8014CFDC"
+        },
+        {
+          "symbol": "vfn_33__13MiniGame4On4Cii",
+          "start": "0x8014CFDC",
+          "end": "0x8014D014"
+        },
+        {
+          "symbol": "vfn_07__13MiniGame4On4Cii",
+          "start": "0x8014D014",
+          "end": "0x8014D024"
+        },
+        {
+          "symbol": "MiniGameCrushCarrierSortScoreUp",
+          "start": "0x8014D024",
+          "end": "0x8014D210"
+        },
+        {
+          "symbol": "fn_8014D210",
+          "start": "0x8014D210",
+          "end": "0x8014D298"
+        },
+        {
+          "symbol": "fn_8014D298",
+          "start": "0x8014D298",
+          "end": "0x8014D67C"
+        },
+        {
+          "symbol": "PlaceSixPlayerFormation",
+          "start": "0x8014D67C",
+          "end": "0x8014D948"
+        },
+        {
+          "symbol": "RefreshSixPlayerScoreRows",
+          "start": "0x8014D948",
+          "end": "0x8014DA20"
+        },
+        {
+          "symbol": "fn_8014DA20__28MiniGameCrushCarrierPreGameC",
+          "start": "0x8014DA20",
+          "end": "0x8014DA90"
+        },
+        {
+          "symbol": "fn_8014DA90__21MiniGameCrushCarrierC",
+          "start": "0x8014DA90",
+          "end": "0x8014DB24"
+        },
+        {
+          "symbol": "vfn_03__28MiniGameCrushCarrierGameEndCf",
+          "start": "0x8014DB24",
+          "end": "0x8014DBCC"
+        },
+        {
+          "symbol": "vfn_08__28MiniGameCrushCarrierGameEndC",
+          "start": "0x8014DBCC",
+          "end": "0x8014DBF8"
+        },
+        {
+          "symbol": "vfn_09__28MiniGameCrushCarrierGameEndC",
+          "start": "0x8014DBF8",
+          "end": "0x8014DC28"
+        },
+        {
+          "symbol": "GetWinner__26MiniGameCrushCarrierRulesC",
+          "start": "0x8014DC28",
+          "end": "0x8014DC5C"
+        },
+        {
+          "symbol": "GetGameTime__26MiniGameCrushCarrierRulesC",
+          "start": "0x8014DC5C",
+          "end": "0x8014DC7C"
+        },
+        {
+          "symbol": "ResetGame__26MiniGameCrushCarrierRulesCi",
+          "start": "0x8014DC7C",
+          "end": "0x8014DD04"
+        },
+        {
+          "symbol": "ResetPlaySpot__26MiniGameCrushCarrierRulesC",
+          "start": "0x8014DD04",
+          "end": "0x8014DD2C"
+        },
+        {
+          "symbol": "AwardWin__26MiniGameCrushCarrierRulesCi",
+          "start": "0x8014DD2C",
+          "end": "0x8014DDCC"
+        },
+        {
+          "symbol": "OnEnter__28MiniGameCrushCarrierPreGameCf",
+          "start": "0x8014DDCC",
+          "end": "0x8014E220"
+        },
+        {
+          "symbol": "EnterFirstPhase__28MiniGameCrushCarrierPreGameCf",
+          "start": "0x8014E220",
+          "end": "0x8014E244"
+        },
+        {
+          "symbol": "OnExit__28MiniGameCrushCarrierPreGameC",
+          "start": "0x8014E244",
+          "end": "0x8014E290"
+        },
+        {
+          "symbol": "OnUpdate__28MiniGameCrushCarrierPreGameCf",
+          "start": "0x8014E290",
+          "end": "0x8014E2DC"
+        },
+        {
+          "symbol": "ShowIntroScreen__28MiniGameCrushCarrierPreGameC",
+          "start": "0x8014E2DC",
+          "end": "0x8014E31C"
+        },
+        {
+          "symbol": "AssignControlledPlayers__28MiniGameCrushCarrierPrePlayC",
+          "start": "0x8014E31C",
+          "end": "0x8014E3B4"
+        },
+        {
+          "symbol": "OnEnter__28MiniGameCrushCarrierPrePlayCf",
+          "start": "0x8014E3B4",
+          "end": "0x8014E48C"
+        },
+        {
+          "symbol": "OnUpdate__28MiniGameCrushCarrierPrePlayCf",
+          "start": "0x8014E48C",
+          "end": "0x8014E534"
+        },
+        {
+          "symbol": "OnEnter__31MiniGameCrushCarrierDuringPlayCf",
+          "start": "0x8014E534",
+          "end": "0x8014E7D4"
+        },
+        {
+          "symbol": "OnUpdate__31MiniGameCrushCarrierDuringPlayCf",
+          "start": "0x8014E7D4",
+          "end": "0x8014EA90"
+        },
+        {
+          "symbol": "OnEnter__29MiniGameCrushCarrierPostPlayCf",
+          "start": "0x8014EA90",
+          "end": "0x8014EC74"
+        },
+        {
+          "symbol": "OnExit__29MiniGameCrushCarrierPostPlayC",
+          "start": "0x8014EC74",
+          "end": "0x8014ED30"
+        },
+        {
+          "symbol": "IsFinished__29MiniGameCrushCarrierPostPlayCi",
+          "start": "0x8014ED30",
+          "end": "0x8014ED70"
+        },
+        {
+          "symbol": "Finish__29MiniGameCrushCarrierPostPlayCf",
+          "start": "0x8014ED70",
+          "end": "0x8014EDBC"
+        },
+        {
+          "symbol": "fn_8014EDBC",
+          "start": "0x8014EDBC",
+          "end": "0x8014EDC4"
+        },
+        {
+          "symbol": "__21MiniGameCrushCarrierC",
+          "start": "0x8014EDC4",
+          "end": "0x8014EE1C"
+        },
+        {
+          "symbol": "vfn_01__21MiniGameCrushCarrierC",
+          "start": "0x8014EE1C",
+          "end": "0x8014EFC0"
+        },
+        {
+          "symbol": "vfn_02__21MiniGameCrushCarrierC",
+          "start": "0x8014EFC0",
+          "end": "0x8014F104"
+        },
+        {
+          "symbol": "fn_8014F104",
+          "start": "0x8014F104",
+          "end": "0x8014F10C"
+        },
+        {
+          "symbol": "vfn_05__21MiniGameCrushCarrierCi",
+          "start": "0x8014F10C",
+          "end": "0x8014F120"
+        },
+        {
+          "symbol": "vfn_10__21MiniGameCrushCarrierCiPiT2",
+          "start": "0x8014F120",
+          "end": "0x8014F168"
+        },
+        {
+          "symbol": "AutoFillDepthChart__21MiniGameCrushCarrierCiPiT2Uii",
+          "start": "0x8014F168",
+          "end": "0x8014F19C"
+        },
+        {
+          "symbol": "vfn_12__21MiniGameCrushCarrierC",
+          "start": "0x8014F19C",
+          "end": "0x8014F36C"
+        },
+        {
+          "symbol": "IsWinnerUserTeam__21MiniGameCrushCarrierC",
+          "start": "0x8014F36C",
+          "end": "0x8014F3DC"
+        },
+        {
+          "symbol": "fn_8014F3DC",
+          "start": "0x8014F3DC",
+          "end": "0x8014F3E4"
+        },
+        {
+          "symbol": "fn_8014F3E4",
+          "start": "0x8014F3E4",
+          "end": "0x8014F448"
+        },
+        {
+          "symbol": "fn_8014F448",
+          "start": "0x8014F448",
+          "end": "0x8014F474"
+        },
+        {
+          "symbol": "fn_8014F474",
+          "start": "0x8014F474",
+          "end": "0x8014F4D8"
+        },
+        {
+          "symbol": "fn_8014F4D8",
+          "start": "0x8014F4D8",
+          "end": "0x8014F57C"
+        },
+        {
+          "symbol": "CheckAward__21MiniGameCrushCarrierCiiP15Object_80039F5Ci",
+          "start": "0x8014F57C",
+          "end": "0x8014FBB4"
+        },
+        {
+          "symbol": "vfn_30__21MiniGameCrushCarrierCiiiP15Object_80039F5C",
+          "start": "0x8014FBB4",
+          "end": "0x8014FDD0"
+        },
+        {
+          "symbol": "vfn_31__21MiniGameCrushCarrierCiiiP15Object_80039F5Cii",
+          "start": "0x8014FDD0",
+          "end": "0x8014FF2C"
+        },
+        {
+          "symbol": "vfn_21__21MiniGameCrushCarrierC",
+          "start": "0x8014FF2C",
+          "end": "0x8014FF34"
+        },
+        {
+          "symbol": "fn_8014FF34",
+          "start": "0x8014FF34",
+          "end": "0x8014FFC4"
+        },
+        {
+          "symbol": "fn_8014FFC4",
+          "start": "0x8014FFC4",
+          "end": "0x8015005C"
+        },
+        {
+          "symbol": "fn_8015005C",
+          "start": "0x8015005C",
+          "end": "0x8015013C"
+        },
+        {
+          "symbol": "fn_8015013C",
+          "start": "0x8015013C",
+          "end": "0x801501CC"
+        },
+        {
+          "symbol": "GetWinner__22MiniGameJumpBallRulesC",
+          "start": "0x801501CC",
+          "end": "0x801501F0"
+        },
+        {
+          "symbol": "AwardWin__22MiniGameJumpBallRulesCi",
+          "start": "0x801501F0",
+          "end": "0x801502B4"
+        },
+        {
+          "symbol": "fn_801502B4",
+          "start": "0x801502B4",
+          "end": "0x8015034C"
+        },
+        {
+          "symbol": "ResetGame__22MiniGameJumpBallRulesCi",
+          "start": "0x8015034C",
+          "end": "0x8015037C"
+        },
+        {
+          "symbol": "EndPlay__22MiniGameJumpBallRulesC",
+          "start": "0x8015037C",
+          "end": "0x801503BC"
+        },
+        {
+          "symbol": "OnEnter__24MiniGameJumpBallPreGameCf",
+          "start": "0x801503BC",
+          "end": "0x80150710"
+        },
+        {
+          "symbol": "OnUpdate__24MiniGameJumpBallPreGameCf",
+          "start": "0x80150710",
+          "end": "0x8015076C"
+        },
+        {
+          "symbol": "OnExit__24MiniGameJumpBallPreGameC",
+          "start": "0x8015076C",
+          "end": "0x801507E0"
+        },
+        {
+          "symbol": "ShowIntroScreen__24MiniGameJumpBallPreGameC",
+          "start": "0x801507E0",
+          "end": "0x80150820"
+        },
+        {
+          "symbol": "HideIntroScreen__24MiniGameJumpBallPreGameC",
+          "start": "0x80150820",
+          "end": "0x80150824"
+        },
+        {
+          "symbol": "EnterFirstPhase__24MiniGameJumpBallPreGameCf",
+          "start": "0x80150824",
+          "end": "0x80150848"
+        },
+        {
+          "symbol": "OnEnter__24MiniGameJumpBallPrePlayCf",
+          "start": "0x80150848",
+          "end": "0x80150984"
+        },
+        {
+          "symbol": "OnUpdate__24MiniGameJumpBallPrePlayCf",
+          "start": "0x80150984",
+          "end": "0x801509D4"
+        },
+        {
+          "symbol": "AssignControlledPlayers__24MiniGameJumpBallPrePlayC",
+          "start": "0x801509D4",
+          "end": "0x80150A70"
+        },
+        {
+          "symbol": "SetupCamera__24MiniGameJumpBallPrePlayC",
+          "start": "0x80150A70",
+          "end": "0x80150A74"
+        },
+        {
+          "symbol": "OnEnter__27MiniGameJumpBallDuringPlayCf",
+          "start": "0x80150A74",
+          "end": "0x80150AC4"
+        },
+        {
+          "symbol": "OnUpdate__27MiniGameJumpBallDuringPlayCf",
+          "start": "0x80150AC4",
+          "end": "0x80150DFC"
+        },
+        {
+          "symbol": "OnExit__27MiniGameJumpBallDuringPlayC",
+          "start": "0x80150DFC",
+          "end": "0x80150E1C"
+        },
+        {
+          "symbol": "ResetBallsAndFieldPositions",
+          "start": "0x80150E1C",
+          "end": "0x80151010"
+        },
+        {
+          "symbol": "MiniGameJumpBallStartRound",
+          "start": "0x80151010",
+          "end": "0x801514AC"
+        },
+        {
+          "symbol": "RefreshFourPlayerScoreRows",
+          "start": "0x801514AC",
+          "end": "0x80151598"
+        },
+        {
+          "symbol": "IsFinished__25MiniGameJumpBallPostPlayCi",
+          "start": "0x80151598",
+          "end": "0x801515D0"
+        },
+        {
+          "symbol": "OnExit__25MiniGameJumpBallPostPlayC",
+          "start": "0x801515D0",
+          "end": "0x80151628"
+        },
+        {
+          "symbol": "Finish__25MiniGameJumpBallPostPlayCf",
+          "start": "0x80151628",
+          "end": "0x80151680"
+        },
+        {
+          "symbol": "SetupCamera__25MiniGameJumpBallPostPlayC",
+          "start": "0x80151680",
+          "end": "0x80151684"
+        },
+        {
+          "symbol": "GetBusy__25MiniGameJumpBallPostPlayCf",
+          "start": "0x80151684",
+          "end": "0x801516A8"
+        },
+        {
+          "symbol": "vfn_03__24MiniGameJumpBallGameEndCf",
+          "start": "0x801516A8",
+          "end": "0x80151798"
+        },
+        {
+          "symbol": "vfn_08__24MiniGameJumpBallGameEndC",
+          "start": "0x80151798",
+          "end": "0x801517C4"
+        },
+        {
+          "symbol": "vfn_09__24MiniGameJumpBallGameEndC",
+          "start": "0x801517C4",
+          "end": "0x801517F4"
+        },
+        {
+          "symbol": "__17MiniGameJumpBallC",
+          "start": "0x801517F4",
+          "end": "0x80151858"
+        },
+        {
+          "symbol": "vfn_01__17MiniGameJumpBallC",
+          "start": "0x80151858",
+          "end": "0x80151A28"
+        },
+        {
+          "symbol": "vfn_02__17MiniGameJumpBallC",
+          "start": "0x80151A28",
+          "end": "0x80151B20"
+        },
+        {
+          "symbol": "fn_80151B20",
+          "start": "0x80151B20",
+          "end": "0x80151BCC"
+        },
+        {
+          "symbol": "fn_80151BCC",
+          "start": "0x80151BCC",
+          "end": "0x80151CCC"
+        },
+        {
+          "symbol": "fn_80151CCC",
+          "start": "0x80151CCC",
+          "end": "0x80151D9C"
+        },
+        {
+          "symbol": "fn_80151D9C",
+          "start": "0x80151D9C",
+          "end": "0x80152068"
+        },
+        {
+          "symbol": "fn_80152068",
+          "start": "0x80152068",
+          "end": "0x801520C4"
+        },
+        {
+          "symbol": "fn_801520C4",
+          "start": "0x801520C4",
+          "end": "0x8015228C"
+        },
+        {
+          "symbol": "fn_8015228C",
+          "start": "0x8015228C",
+          "end": "0x80152400"
+        },
+        {
+          "symbol": "vfn_10__17MiniGameJumpBallCiPiT2",
+          "start": "0x80152400",
+          "end": "0x80152448"
+        },
+        {
+          "symbol": "AutoFillDepthChart__17MiniGameJumpBallCiPiT2Uii",
+          "start": "0x80152448",
+          "end": "0x8015247C"
+        },
+        {
+          "symbol": "vfn_12__17MiniGameJumpBallC",
+          "start": "0x8015247C",
+          "end": "0x8015264C"
+        },
+        {
+          "symbol": "fn_8015264C",
+          "start": "0x8015264C",
+          "end": "0x8015267C"
+        },
+        {
+          "symbol": "IsWinnerUserTeam__17MiniGameJumpBallC",
+          "start": "0x8015267C",
+          "end": "0x801526EC"
+        },
+        {
+          "symbol": "fn_801526EC",
+          "start": "0x801526EC",
+          "end": "0x801527B8"
+        },
+        {
+          "symbol": "fn_801527B8",
+          "start": "0x801527B8",
+          "end": "0x801527E0"
+        },
+        {
+          "symbol": "fn_801527E0",
+          "start": "0x801527E0",
+          "end": "0x8015286C"
+        },
+        {
+          "symbol": "fn_8015286C",
+          "start": "0x8015286C",
+          "end": "0x8015289C"
+        },
+        {
+          "symbol": "vfn_23__17MiniGameJumpBallCP17AutoDepthPlayer_tUi",
+          "start": "0x8015289C",
+          "end": "0x801528E0"
+        },
+        {
+          "symbol": "fn_801528E0",
+          "start": "0x801528E0",
+          "end": "0x80152940"
+        },
+        {
+          "symbol": "fn_80152940",
+          "start": "0x80152940",
+          "end": "0x801529C0"
+        },
+        {
+          "symbol": "fn_801529C0",
+          "start": "0x801529C0",
+          "end": "0x80152A54"
+        },
+        {
+          "symbol": "vfn_30__17MiniGameJumpBallCiiiP15Object_80039F5C",
+          "start": "0x80152A54",
+          "end": "0x80152B98"
+        },
+        {
+          "symbol": "CheckAward__17MiniGameJumpBallCiiP15Object_80039F5Ci",
+          "start": "0x80152B98",
+          "end": "0x80152FFC"
+        },
+        {
+          "symbol": "vfn_05__17MiniGameJumpBallCi",
+          "start": "0x80152FFC",
+          "end": "0x80153044"
+        },
+        {
+          "symbol": "vfn_21__17MiniGameJumpBallC",
+          "start": "0x80153044",
+          "end": "0x8015304C"
+        },
+        {
+          "symbol": "vfn_22__17MiniGameJumpBallCi",
+          "start": "0x8015304C",
+          "end": "0x801530FC"
+        },
+        {
+          "symbol": "fn_801530FC",
+          "start": "0x801530FC",
+          "end": "0x8015310C"
+        },
+        {
+          "symbol": "fn_8015310C",
+          "start": "0x8015310C",
+          "end": "0x80153168"
+        },
+        {
+          "symbol": "fn_80153168",
+          "start": "0x80153168",
+          "end": "0x80153174"
+        },
+        {
+          "symbol": "GetScoreLimit__23MiniGameOpenFieldRulesC",
+          "start": "0x80153174",
+          "end": "0x801531C4"
+        },
+        {
+          "symbol": "GetWinner__23MiniGameOpenFieldRulesC",
+          "start": "0x801531C4",
+          "end": "0x801531F0"
+        },
+        {
+          "symbol": "IsNearWin__23MiniGameOpenFieldRulesCi",
+          "start": "0x801531F0",
+          "end": "0x80153270"
+        },
+        {
+          "symbol": "IsOpponentNearWin__23MiniGameOpenFieldRulesCi",
+          "start": "0x80153270",
+          "end": "0x801532E0"
+        },
+        {
+          "symbol": "GetScoreType__23MiniGameOpenFieldRulesC",
+          "start": "0x801532E0",
+          "end": "0x801532E8"
+        },
+        {
+          "symbol": "GetScore__23MiniGameOpenFieldRulesCi",
+          "start": "0x801532E8",
+          "end": "0x80153328"
+        },
+        {
+          "symbol": "GetGoalLimit__23MiniGameOpenFieldRulesC",
+          "start": "0x80153328",
+          "end": "0x80153354"
+        },
+        {
+          "symbol": "GetGoalTotal__23MiniGameOpenFieldRulesCi",
+          "start": "0x80153354",
+          "end": "0x80153394"
+        },
+        {
+          "symbol": "GetGoalCount__23MiniGameOpenFieldRulesCi",
+          "start": "0x80153394",
+          "end": "0x801533D4"
+        },
+        {
+          "symbol": "vfn_22__23MiniGameOpenFieldRulesCi",
+          "start": "0x801533D4",
+          "end": "0x80153414"
+        },
+        {
+          "symbol": "AllowsAudibles__23MiniGameOpenFieldRulesC",
+          "start": "0x80153414",
+          "end": "0x801534D4"
+        },
+        {
+          "symbol": "ResetPlaySpot__23MiniGameOpenFieldRulesC",
+          "start": "0x801534D4",
+          "end": "0x80153700"
+        },
+        {
+          "symbol": "ResetGame__23MiniGameOpenFieldRulesCi",
+          "start": "0x80153700",
+          "end": "0x801537A0"
+        },
+        {
+          "symbol": "OnEnter__25MiniGameOpenFieldPreGameCf",
+          "start": "0x801537A0",
+          "end": "0x80153844"
+        },
+        {
+          "symbol": "AwardWin__23MiniGameOpenFieldRulesCi",
+          "start": "0x80153844",
+          "end": "0x801538C8"
+        },
+        {
+          "symbol": "OnExit__25MiniGameOpenFieldPreGameC",
+          "start": "0x801538C8",
+          "end": "0x80153910"
+        },
+        {
+          "symbol": "OnUpdate__25MiniGameOpenFieldPreGameCf",
+          "start": "0x80153910",
+          "end": "0x8015395C"
+        },
+        {
+          "symbol": "ShowIntroScreen__25MiniGameOpenFieldPreGameC",
+          "start": "0x8015395C",
+          "end": "0x8015399C"
+        },
+        {
+          "symbol": "HideIntroScreen__25MiniGameOpenFieldPreGameC",
+          "start": "0x8015399C",
+          "end": "0x801539A0"
+        },
+        {
+          "symbol": "OnEnter__25MiniGameOpenFieldPrePlayCf",
+          "start": "0x801539A0",
+          "end": "0x80153BBC"
+        },
+        {
+          "symbol": "AssignControlledPlayers__25MiniGameOpenFieldPrePlayC",
+          "start": "0x80153BBC",
+          "end": "0x80153DB8"
+        },
+        {
+          "symbol": "vfn_03__26MiniGameOpenFieldPlayCallCf",
+          "start": "0x80153DB8",
+          "end": "0x80153DBC"
+        },
+        {
+          "symbol": "vfn_04__26MiniGameOpenFieldPlayCallCf",
+          "start": "0x80153DBC",
+          "end": "0x80153EA8"
+        },
+        {
+          "symbol": "vfn_05__26MiniGameOpenFieldPlayCallCf",
+          "start": "0x80153EA8",
+          "end": "0x80153F14"
+        },
+        {
+          "symbol": "OnEnter__28MiniGameOpenFieldDuringPlayCf",
+          "start": "0x80153F14",
+          "end": "0x80153F54"
+        },
+        {
+          "symbol": "OnUpdate__28MiniGameOpenFieldDuringPlayCf",
+          "start": "0x80153F54",
+          "end": "0x80154028"
+        },
+        {
+          "symbol": "OnExit__28MiniGameOpenFieldDuringPlayC",
+          "start": "0x80154028",
+          "end": "0x80154050"
+        },
+        {
+          "symbol": "GetResultText__26MiniGameOpenFieldPostPlayCPc",
+          "start": "0x80154050",
+          "end": "0x80154110"
+        },
+        {
+          "symbol": "vfn_03__25MiniGameOpenFieldGameEndCf",
+          "start": "0x80154110",
+          "end": "0x801541B8"
+        },
+        {
+          "symbol": "vfn_08__25MiniGameOpenFieldGameEndC",
+          "start": "0x801541B8",
+          "end": "0x801541E4"
+        },
+        {
+          "symbol": "vfn_09__25MiniGameOpenFieldGameEndC",
+          "start": "0x801541E4",
+          "end": "0x80154214"
+        },
+        {
+          "symbol": "__18MiniGameOpenFieldC",
+          "start": "0x80154214",
+          "end": "0x8015426C"
+        },
+        {
+          "symbol": "vfn_01__18MiniGameOpenFieldC",
+          "start": "0x8015426C",
+          "end": "0x80154468"
+        },
+        {
+          "symbol": "vfn_02__18MiniGameOpenFieldC",
+          "start": "0x80154468",
+          "end": "0x80154520"
+        },
+        {
+          "symbol": "vfn_05__18MiniGameOpenFieldCi",
+          "start": "0x80154520",
+          "end": "0x80154528"
+        },
+        {
+          "symbol": "vfn_07__18MiniGameOpenFieldCii",
+          "start": "0x80154528",
+          "end": "0x80154588"
+        },
+        {
+          "symbol": "vfn_09__18MiniGameOpenFieldCi",
+          "start": "0x80154588",
+          "end": "0x801545D4"
+        },
+        {
+          "symbol": "vfn_10__18MiniGameOpenFieldCiPiT2",
+          "start": "0x801545D4",
+          "end": "0x80154638"
+        },
+        {
+          "symbol": "AutoFillDepthChart__18MiniGameOpenFieldCiPiT2Uii",
+          "start": "0x80154638",
+          "end": "0x801548EC"
+        },
+        {
+          "symbol": "vfn_35__18MiniGameOpenFieldCii",
+          "start": "0x801548EC",
+          "end": "0x80154A88"
+        },
+        {
+          "symbol": "vfn_14__18MiniGameOpenFieldC",
+          "start": "0x80154A88",
+          "end": "0x80154AB8"
+        },
+        {
+          "symbol": "CheckAward__18MiniGameOpenFieldCiiP15Object_80039F5Ci",
+          "start": "0x80154AB8",
+          "end": "0x80154F70"
+        },
+        {
+          "symbol": "vfn_30__18MiniGameOpenFieldCiiiP15Object_80039F5C",
+          "start": "0x80154F70",
+          "end": "0x80154FC0"
+        },
+        {
+          "symbol": "fn_80154FC0",
+          "start": "0x80154FC0",
+          "end": "0x80155004"
+        },
+        {
+          "symbol": "GetPlayerStatText__18MiniGameOpenFieldCiUciPcUcT4Uc",
+          "start": "0x80155004",
+          "end": "0x80155128"
+        },
+        {
+          "symbol": "fn_80155128",
+          "start": "0x80155128",
+          "end": "0x80155130"
+        },
+        {
+          "symbol": "MiniGameOpenFieldGetPlayerColor",
+          "start": "0x80155130",
+          "end": "0x801551F0"
+        },
+        {
+          "symbol": "vfn_21__18MiniGameOpenFieldC",
+          "start": "0x801551F0",
+          "end": "0x801551F8"
+        },
+        {
+          "symbol": "GetScoreLimit__25MiniGameQuickStrikeRulesC",
+          "start": "0x801551F8",
+          "end": "0x801552C4"
+        },
+        {
+          "symbol": "PlaceBallForDrive__25MiniGameQuickStrikeRulesCi",
+          "start": "0x801552C4",
+          "end": "0x80155384"
+        },
+        {
+          "symbol": "GetWinner__25MiniGameQuickStrikeRulesC",
+          "start": "0x80155384",
+          "end": "0x8015538C"
+        },
+        {
+          "symbol": "AwardWin__25MiniGameQuickStrikeRulesCi",
+          "start": "0x8015538C",
+          "end": "0x80155394"
+        },
+        {
+          "symbol": "IsNearWin__25MiniGameQuickStrikeRulesCi",
+          "start": "0x80155394",
+          "end": "0x8015539C"
+        },
+        {
+          "symbol": "ResetPlaySpot__25MiniGameQuickStrikeRulesC",
+          "start": "0x8015539C",
+          "end": "0x80155588"
+        },
+        {
+          "symbol": "ResetGame__25MiniGameQuickStrikeRulesCi",
+          "start": "0x80155588",
+          "end": "0x801555C4"
+        },
+        {
+          "symbol": "OnEnter__27MiniGameQuickStrikePreGameCf",
+          "start": "0x801555C4",
+          "end": "0x80155640"
+        },
+        {
+          "symbol": "OnUpdate__27MiniGameQuickStrikePreGameCf",
+          "start": "0x80155640",
+          "end": "0x8015568C"
+        },
+        {
+          "symbol": "ShowIntroScreen__27MiniGameQuickStrikePreGameC",
+          "start": "0x8015568C",
+          "end": "0x801556CC"
+        },
+        {
+          "symbol": "HideIntroScreen__27MiniGameQuickStrikePreGameC",
+          "start": "0x801556CC",
+          "end": "0x801556D0"
+        },
+        {
+          "symbol": "fn_801556D0",
+          "start": "0x801556D0",
+          "end": "0x8015576C"
+        },
+        {
+          "symbol": "vfn_03__27MiniGameQuickStrikeGameEndCf",
+          "start": "0x8015576C",
+          "end": "0x801557E0"
+        },
+        {
+          "symbol": "vfn_08__27MiniGameQuickStrikeGameEndC",
+          "start": "0x801557E0",
+          "end": "0x8015580C"
+        },
+        {
+          "symbol": "vfn_09__27MiniGameQuickStrikeGameEndC",
+          "start": "0x8015580C",
+          "end": "0x8015583C"
+        },
+        {
+          "symbol": "vfn_01__20MiniGameQuickStrikeC",
+          "start": "0x8015583C",
+          "end": "0x801558FC"
+        },
+        {
+          "symbol": "vfn_02__20MiniGameQuickStrikeC",
+          "start": "0x801558FC",
+          "end": "0x801559B8"
+        },
+        {
+          "symbol": "vfn_08__20MiniGameQuickStrikeCi",
+          "start": "0x801559B8",
+          "end": "0x80155A7C"
+        },
+        {
+          "symbol": "fn_80155A7C",
+          "start": "0x80155A7C",
+          "end": "0x80155BF4"
+        },
+        {
+          "symbol": "fn_80155BF4",
+          "start": "0x80155BF4",
+          "end": "0x80155C44"
+        },
+        {
+          "symbol": "fn_80155C44",
+          "start": "0x80155C44",
+          "end": "0x80155CF0"
+        },
+        {
+          "symbol": "fn_80155CF0",
+          "start": "0x80155CF0",
+          "end": "0x80155D38"
+        },
+        {
+          "symbol": "fn_80155D38",
+          "start": "0x80155D38",
+          "end": "0x80155D7C"
+        },
+        {
+          "symbol": "fn_80155D7C",
+          "start": "0x80155D7C",
+          "end": "0x80155E28"
+        },
+        {
+          "symbol": "__static_initialization_and_destruction_0",
+          "start": "0x80155E28",
+          "end": "0x80155F48"
+        },
+        {
+          "symbol": "vfn_07__9MiniGameCii",
+          "start": "0x80155F48",
+          "end": "0x80155F4C"
+        },
+        {
+          "symbol": "vfn_09__9MiniGameCi",
+          "start": "0x80155F4C",
+          "end": "0x80155F54"
+        },
+        {
+          "symbol": "vfn_12__9MiniGameC",
+          "start": "0x80155F54",
+          "end": "0x80155F74"
+        },
+        {
+          "symbol": "vfn_14__9MiniGameC",
+          "start": "0x80155F74",
+          "end": "0x80155F78"
+        },
+        {
+          "symbol": "GetPlayerStatText__9MiniGameCiUciPcUcT4Uc",
+          "start": "0x80155F78",
+          "end": "0x80155F88"
+        },
+        {
+          "symbol": "vfn_21__9MiniGameC",
+          "start": "0x80155F88",
+          "end": "0x80155F90"
+        },
+        {
+          "symbol": "vfn_22__9MiniGameCi",
+          "start": "0x80155F90",
+          "end": "0x80155F98"
+        },
+        {
+          "symbol": "_._13MiniGame4On4C",
+          "start": "0x80155F98",
+          "end": "0x80155FCC"
+        },
+        {
+          "symbol": "_._21MiniGameCrushCarrierC",
+          "start": "0x80155FCC",
+          "end": "0x80156000"
+        },
+        {
+          "symbol": "_._20MiniGameQuickStrikeC",
+          "start": "0x80156000",
+          "end": "0x80156034"
+        },
+        {
+          "symbol": "_._17MiniGameJumpBallC",
+          "start": "0x80156034",
+          "end": "0x80156068"
+        },
+        {
+          "symbol": "_._23MiniGame2MinutePrePlayC",
+          "start": "0x80156068",
+          "end": "0x8015609C"
+        },
+        {
+          "symbol": "AllowsAudibles__25MiniGame2MinuteScrmRulesC",
+          "start": "0x8015609C",
+          "end": "0x801560A4"
+        },
+        {
+          "symbol": "vfn_06__23MiniGame2MinuteGameEndC",
+          "start": "0x801560A4",
+          "end": "0x801560A8"
+        },
+        {
+          "symbol": "vfn_07__23MiniGame2MinuteGameEndC",
+          "start": "0x801560A8",
+          "end": "0x801560AC"
+        },
+        {
+          "symbol": "vfn_10__23MiniGame2MinuteGameEndC",
+          "start": "0x801560AC",
+          "end": "0x801560B4"
+        },
+        {
+          "symbol": "vfn_11__23MiniGame2MinuteGameEndC",
+          "start": "0x801560B4",
+          "end": "0x801560BC"
+        },
+        {
+          "symbol": "_._20MiniGame4On4PrePlayC",
+          "start": "0x801560BC",
+          "end": "0x801560F0"
+        },
+        {
+          "symbol": "vfn_06__20MiniGame4On4GameEndC",
+          "start": "0x801560F0",
+          "end": "0x801560F4"
+        },
+        {
+          "symbol": "vfn_07__20MiniGame4On4GameEndC",
+          "start": "0x801560F4",
+          "end": "0x801560F8"
+        },
+        {
+          "symbol": "vfn_10__20MiniGame4On4GameEndC",
+          "start": "0x801560F8",
+          "end": "0x80156100"
+        },
+        {
+          "symbol": "vfn_11__20MiniGame4On4GameEndC",
+          "start": "0x80156100",
+          "end": "0x80156108"
+        },
+        {
+          "symbol": "_._16MiniGame4On4Data",
+          "start": "0x80156108",
+          "end": "0x80156148"
+        },
+        {
+          "symbol": "GetScoreLimit__26MiniGameCrushCarrierRulesC",
+          "start": "0x80156148",
+          "end": "0x80156154"
+        },
+        {
+          "symbol": "IsNearWin__26MiniGameCrushCarrierRulesCi",
+          "start": "0x80156154",
+          "end": "0x8015615C"
+        },
+        {
+          "symbol": "GetScoreType__26MiniGameCrushCarrierRulesC",
+          "start": "0x8015615C",
+          "end": "0x80156164"
+        },
+        {
+          "symbol": "GetScore__26MiniGameCrushCarrierRulesCi",
+          "start": "0x80156164",
+          "end": "0x8015616C"
+        },
+        {
+          "symbol": "IsTimed__26MiniGameCrushCarrierRulesC",
+          "start": "0x8015616C",
+          "end": "0x80156174"
+        },
+        {
+          "symbol": "AllowsAudibles__26MiniGameCrushCarrierRulesC",
+          "start": "0x80156174",
+          "end": "0x8015617C"
+        },
+        {
+          "symbol": "HideIntroScreen__28MiniGameCrushCarrierPreGameC",
+          "start": "0x8015617C",
+          "end": "0x80156180"
+        },
+        {
+          "symbol": "_._28MiniGameCrushCarrierPrePlayC",
+          "start": "0x80156180",
+          "end": "0x801561B4"
+        },
+        {
+          "symbol": "ReleaseHeldBalls__28MiniGameCrushCarrierPrePlayC",
+          "start": "0x801561B4",
+          "end": "0x801561B8"
+        },
+        {
+          "symbol": "_._29MiniGameCrushCarrierPostPlayC",
+          "start": "0x801561B8",
+          "end": "0x801561EC"
+        },
+        {
+          "symbol": "ShowResultText__29MiniGameCrushCarrierPostPlayC",
+          "start": "0x801561EC",
+          "end": "0x801561F0"
+        },
+        {
+          "symbol": "UpdateCue__29MiniGameCrushCarrierPostPlayCf",
+          "start": "0x801561F0",
+          "end": "0x801561F4"
+        },
+        {
+          "symbol": "IsHeld__29MiniGameCrushCarrierPostPlayCf",
+          "start": "0x801561F4",
+          "end": "0x801561FC"
+        },
+        {
+          "symbol": "GetBusy__29MiniGameCrushCarrierPostPlayCf",
+          "start": "0x801561FC",
+          "end": "0x80156204"
+        },
+        {
+          "symbol": "_._25MiniGameCrushCarrierScore",
+          "start": "0x80156204",
+          "end": "0x80156238"
+        },
+        {
+          "symbol": "vfn_06__28MiniGameCrushCarrierGameEndC",
+          "start": "0x80156238",
+          "end": "0x8015623C"
+        },
+        {
+          "symbol": "vfn_07__28MiniGameCrushCarrierGameEndC",
+          "start": "0x8015623C",
+          "end": "0x80156240"
+        },
+        {
+          "symbol": "vfn_10__28MiniGameCrushCarrierGameEndC",
+          "start": "0x80156240",
+          "end": "0x80156248"
+        },
+        {
+          "symbol": "vfn_11__28MiniGameCrushCarrierGameEndC",
+          "start": "0x80156248",
+          "end": "0x80156250"
+        },
+        {
+          "symbol": "_._24MiniGameCrushCarrierData",
+          "start": "0x80156250",
+          "end": "0x8015629C"
+        },
+        {
+          "symbol": "_._22MiniGameJumpBallRulesC",
+          "start": "0x8015629C",
+          "end": "0x801562D0"
+        },
+        {
+          "symbol": "GetScoreLimit__22MiniGameJumpBallRulesC",
+          "start": "0x801562D0",
+          "end": "0x801562DC"
+        },
+        {
+          "symbol": "IsNearWin__22MiniGameJumpBallRulesCi",
+          "start": "0x801562DC",
+          "end": "0x801562E4"
+        },
+        {
+          "symbol": "GetScore__22MiniGameJumpBallRulesCi",
+          "start": "0x801562E4",
+          "end": "0x801562EC"
+        },
+        {
+          "symbol": "IsTimed__22MiniGameJumpBallRulesC",
+          "start": "0x801562EC",
+          "end": "0x80156308"
+        },
+        {
+          "symbol": "GetGameTime__22MiniGameJumpBallRulesC",
+          "start": "0x80156308",
+          "end": "0x80156314"
+        },
+        {
+          "symbol": "AllowsAudibles__22MiniGameJumpBallRulesC",
+          "start": "0x80156314",
+          "end": "0x8015631C"
+        },
+        {
+          "symbol": "_._24MiniGameJumpBallPreGameC",
+          "start": "0x8015631C",
+          "end": "0x80156350"
+        },
+        {
+          "symbol": "_._24MiniGameJumpBallPrePlayC",
+          "start": "0x80156350",
+          "end": "0x80156384"
+        },
+        {
+          "symbol": "vfn_06__24MiniGameJumpBallGameEndC",
+          "start": "0x80156384",
+          "end": "0x80156388"
+        },
+        {
+          "symbol": "vfn_07__24MiniGameJumpBallGameEndC",
+          "start": "0x80156388",
+          "end": "0x8015638C"
+        },
+        {
+          "symbol": "vfn_10__24MiniGameJumpBallGameEndC",
+          "start": "0x8015638C",
+          "end": "0x80156394"
+        },
+        {
+          "symbol": "vfn_11__24MiniGameJumpBallGameEndC",
+          "start": "0x80156394",
+          "end": "0x8015639C"
+        },
+        {
+          "symbol": "_._25MiniGameOpenFieldPrePlayC",
+          "start": "0x8015639C",
+          "end": "0x801563D0"
+        },
+        {
+          "symbol": "vfn_06__25MiniGameOpenFieldGameEndC",
+          "start": "0x801563D0",
+          "end": "0x801563D4"
+        },
+        {
+          "symbol": "vfn_07__25MiniGameOpenFieldGameEndC",
+          "start": "0x801563D4",
+          "end": "0x801563D8"
+        },
+        {
+          "symbol": "vfn_10__25MiniGameOpenFieldGameEndC",
+          "start": "0x801563D8",
+          "end": "0x801563E0"
+        },
+        {
+          "symbol": "vfn_11__25MiniGameOpenFieldGameEndC",
+          "start": "0x801563E0",
+          "end": "0x801563E8"
+        },
+        {
+          "symbol": "vfn_06__27MiniGameQuickStrikeGameEndC",
+          "start": "0x801563E8",
+          "end": "0x801563EC"
+        },
+        {
+          "symbol": "vfn_07__27MiniGameQuickStrikeGameEndC",
+          "start": "0x801563EC",
+          "end": "0x801563F0"
+        },
+        {
+          "symbol": "vfn_10__27MiniGameQuickStrikeGameEndC",
+          "start": "0x801563F0",
+          "end": "0x801563F8"
+        },
+        {
+          "symbol": "vfn_11__27MiniGameQuickStrikeGameEndC",
+          "start": "0x801563F8",
+          "end": "0x80156400"
+        },
+        {
+          "symbol": "__23MiniGameQuickStrikeData",
+          "start": "0x80156400",
+          "end": "0x80156484"
+        },
+        {
+          "symbol": "_GLOBAL_.I.PlyrSwapStateData",
+          "start": "0x80156484",
+          "end": "0x801564B0"
+        },
+        {
+          "symbol": "_GLOBAL_.D.PlyrSwapStateData",
+          "start": "0x801564B0",
+          "end": "0x801564DC"
         }
       ]
     },
@@ -21463,3050 +23355,6 @@
       ]
     },
     {
-      "source": "src/game/cu_801485B4.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #748; thirteen complete leading control/setup bodies inside retained provisional cu_801485B4 survey group. Original file boundaries and remaining source ownership unresolved. Full target function ranges and complete 32-byte literal context measured; original assembly stays linked. No promotion or header edits.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801485B4",
-          "end": "0x80148A98"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A0568",
-          "end": "0x802A0588"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801485B4",
-          "start": "0x801485B4",
-          "end": "0x801485C0"
-        },
-        {
-          "symbol": "fn_801485C0",
-          "start": "0x801485C0",
-          "end": "0x801485D4"
-        },
-        {
-          "symbol": "fn_801485D4",
-          "start": "0x801485D4",
-          "end": "0x801485EC"
-        },
-        {
-          "symbol": "fn_801485EC",
-          "start": "0x801485EC",
-          "end": "0x801485F4"
-        },
-        {
-          "symbol": "fn_801485F4",
-          "start": "0x801485F4",
-          "end": "0x80148644"
-        },
-        {
-          "symbol": "fn_80148644",
-          "start": "0x80148644",
-          "end": "0x80148698"
-        },
-        {
-          "symbol": "fn_80148698",
-          "start": "0x80148698",
-          "end": "0x801486A0"
-        },
-        {
-          "symbol": "fn_801486A0",
-          "start": "0x801486A0",
-          "end": "0x801486A8"
-        },
-        {
-          "symbol": "fn_801486A8",
-          "start": "0x801486A8",
-          "end": "0x801487C0"
-        },
-        {
-          "symbol": "fn_801487C0",
-          "start": "0x801487C0",
-          "end": "0x80148814"
-        },
-        {
-          "symbol": "fn_80148814",
-          "start": "0x80148814",
-          "end": "0x801488D4"
-        },
-        {
-          "symbol": "fn_801488D4",
-          "start": "0x801488D4",
-          "end": "0x80148A58"
-        },
-        {
-          "symbol": "fn_80148A58",
-          "start": "0x80148A58",
-          "end": "0x80148A98"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80149014.cpp",
-      "profile": "game_cpp",
-      "evidence": "Complete 23 target functions; query literal starts at target 0x802A0588. Full shared 0x802A0568-0x802A11F4 readonly context remains measured once: numeric prefix 0x802A0568-0x802A0588 by cu_801485B4.cpp, 0x802A0588-0x802A0B50 by this fragment and 0x802A0B50-0x802A11F4 (literal origin of fn_8014AC88) by cu_8014AB64.cpp. Native query bytes relocate at their evidenced address; unresolved trailing context remains visible. Original file ownership unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80149014",
-          "end": "0x8014AB64"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A0588",
-          "end": "0x802A0B50"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80149014",
-          "start": "0x80149014",
-          "end": "0x80149040"
-        },
-        {
-          "symbol": "fn_80149040",
-          "start": "0x80149040",
-          "end": "0x80149154"
-        },
-        {
-          "symbol": "fn_80149154",
-          "start": "0x80149154",
-          "end": "0x801492C4"
-        },
-        {
-          "symbol": "fn_801492C4",
-          "start": "0x801492C4",
-          "end": "0x801493E0"
-        },
-        {
-          "symbol": "fn_801493E0",
-          "start": "0x801493E0",
-          "end": "0x80149518"
-        },
-        {
-          "symbol": "fn_80149518",
-          "start": "0x80149518",
-          "end": "0x80149588"
-        },
-        {
-          "symbol": "fn_80149588",
-          "start": "0x80149588",
-          "end": "0x801495E0"
-        },
-        {
-          "symbol": "fn_801495E0",
-          "start": "0x801495E0",
-          "end": "0x801498EC"
-        },
-        {
-          "symbol": "fn_801498EC",
-          "start": "0x801498EC",
-          "end": "0x8014993C"
-        },
-        {
-          "symbol": "fn_8014993C",
-          "start": "0x8014993C",
-          "end": "0x80149998"
-        },
-        {
-          "symbol": "fn_80149998",
-          "start": "0x80149998",
-          "end": "0x801499A8"
-        },
-        {
-          "symbol": "fn_801499A8",
-          "start": "0x801499A8",
-          "end": "0x80149DA4"
-        },
-        {
-          "symbol": "fn_80149DA4",
-          "start": "0x80149DA4",
-          "end": "0x80149F40"
-        },
-        {
-          "symbol": "fn_80149F40",
-          "start": "0x80149F40",
-          "end": "0x8014A1B8"
-        },
-        {
-          "symbol": "fn_8014A1B8",
-          "start": "0x8014A1B8",
-          "end": "0x8014A5B4"
-        },
-        {
-          "symbol": "fn_8014A5B4",
-          "start": "0x8014A5B4",
-          "end": "0x8014A6A0"
-        },
-        {
-          "symbol": "fn_8014A6A0",
-          "start": "0x8014A6A0",
-          "end": "0x8014A8D8"
-        },
-        {
-          "symbol": "fn_8014A8D8",
-          "start": "0x8014A8D8",
-          "end": "0x8014AACC"
-        },
-        {
-          "symbol": "fn_8014AACC",
-          "start": "0x8014AACC",
-          "end": "0x8014AAD4"
-        },
-        {
-          "symbol": "fn_8014AAD4",
-          "start": "0x8014AAD4",
-          "end": "0x8014AADC"
-        },
-        {
-          "symbol": "fn_8014AADC",
-          "start": "0x8014AADC",
-          "end": "0x8014AAE4"
-        },
-        {
-          "symbol": "fn_8014AAE4",
-          "start": "0x8014AAE4",
-          "end": "0x8014AB58"
-        },
-        {
-          "symbol": "fn_8014AB58",
-          "start": "0x8014AB58",
-          "end": "0x8014AB64"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014AB64.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The widened provisional comparison hull includes only explicit whole functions; shared target literal |^Done at802A0B74 gives the source-grouping reason. Existing readonly target context802A0B50\u2013802A0CE0 remains unchanged. Complete natural native pool grows84 to104 bytes and is compared without clipping against400 target bytes. Done pools correctly at native+0x24; new Jump Ball Battle native+0x54 resolves802A0BA4, differing from actual802A130C. No data exactness, original-unit or adjacent-storage ownership claim.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014AB64",
-          "end": "0x80150820"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A0B50",
-          "end": "0x802A0CE0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014AB64",
-          "start": "0x8014AB64",
-          "end": "0x8014ABE4"
-        },
-        {
-          "symbol": "fn_8014ABE4",
-          "start": "0x8014ABE4",
-          "end": "0x8014AC0C"
-        },
-        {
-          "symbol": "fn_8014AC0C",
-          "start": "0x8014AC0C",
-          "end": "0x8014AC88"
-        },
-        {
-          "symbol": "fn_8014AC88",
-          "start": "0x8014AC88",
-          "end": "0x8014AD24"
-        },
-        {
-          "symbol": "fn_8014AD24",
-          "start": "0x8014AD24",
-          "end": "0x8014AD70"
-        },
-        {
-          "symbol": "fn_8014AD70",
-          "start": "0x8014AD70",
-          "end": "0x8014ADB0"
-        },
-        {
-          "symbol": "fn_8014ADB0",
-          "start": "0x8014ADB0",
-          "end": "0x8014AE58"
-        },
-        {
-          "symbol": "fn_8014AE58",
-          "start": "0x8014AE58",
-          "end": "0x8014AE84"
-        },
-        {
-          "symbol": "fn_8014AE84",
-          "start": "0x8014AE84",
-          "end": "0x8014AEB4"
-        },
-        {
-          "symbol": "fn_8014AEB4",
-          "start": "0x8014AEB4",
-          "end": "0x8014AF24"
-        },
-        {
-          "symbol": "fn_8014AF24",
-          "start": "0x8014AF24",
-          "end": "0x8014B028"
-        },
-        {
-          "symbol": "fn_8014B028",
-          "start": "0x8014B028",
-          "end": "0x8014B0C8"
-        },
-        {
-          "symbol": "fn_8014B0C8",
-          "start": "0x8014B0C8",
-          "end": "0x8014B0D0"
-        },
-        {
-          "symbol": "fn_8014B0D0",
-          "start": "0x8014B0D0",
-          "end": "0x8014B178"
-        },
-        {
-          "symbol": "fn_8014B178",
-          "start": "0x8014B178",
-          "end": "0x8014B1C8"
-        },
-        {
-          "symbol": "fn_8014B1C8",
-          "start": "0x8014B1C8",
-          "end": "0x8014B210"
-        },
-        {
-          "symbol": "fn_8014B210",
-          "start": "0x8014B210",
-          "end": "0x8014B2CC"
-        },
-        {
-          "symbol": "fn_8014B2CC",
-          "start": "0x8014B2CC",
-          "end": "0x8014B350"
-        },
-        {
-          "symbol": "fn_8014B350",
-          "start": "0x8014B350",
-          "end": "0x8014B38C"
-        },
-        {
-          "symbol": "fn_8014B38C",
-          "start": "0x8014B38C",
-          "end": "0x8014B498"
-        },
-        {
-          "symbol": "fn_801507E0",
-          "start": "0x801507E0",
-          "end": "0x80150820"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014B890.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #782; nine complete bodies 0x8014B890-0x8014BC98 inside the retained provisional cu_801485B4 survey group: seven entries of the vtable 0x802A2DB8 installed by the constructor 0x8014B498, the stats query fn_8014BA20 (called from 0x8005C8AC) and fn_8014BC90 (called from 0x8014C238, 0x8014CAA8). No initialized data referenced. Excluded: the constructor/destructor 0x8014B498/0x8014B4E8 and the vtable entries fn_8014B528/fn_8014B7D4, which store state-object vtable addresses inline. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014B890",
-          "end": "0x8014BC98"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014B890",
-          "start": "0x8014B890",
-          "end": "0x8014B898"
-        },
-        {
-          "symbol": "fn_8014B898",
-          "start": "0x8014B898",
-          "end": "0x8014B8D4"
-        },
-        {
-          "symbol": "fn_8014B8D4",
-          "start": "0x8014B8D4",
-          "end": "0x8014B930"
-        },
-        {
-          "symbol": "fn_8014B930",
-          "start": "0x8014B930",
-          "end": "0x8014BA20"
-        },
-        {
-          "symbol": "fn_8014BA20",
-          "start": "0x8014BA20",
-          "end": "0x8014BB4C"
-        },
-        {
-          "symbol": "fn_8014BB4C",
-          "start": "0x8014BB4C",
-          "end": "0x8014BC40"
-        },
-        {
-          "symbol": "fn_8014BC40",
-          "start": "0x8014BC40",
-          "end": "0x8014BC88"
-        },
-        {
-          "symbol": "fn_8014BC88",
-          "start": "0x8014BC88",
-          "end": "0x8014BC90"
-        },
-        {
-          "symbol": "fn_8014BC90",
-          "start": "0x8014BC90",
-          "end": "0x8014BC98"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014BC98.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #784; thirteen complete bodies 0x8014BC98-0x8014C630 inside the retained provisional cu_801485B4 survey group, after the cu_8014B890.cpp fragment: the order-list helpers fn_8014BC98/fn_8014BED8 (called from 0x8014CB08-0x8014CCD0) and eleven bodies whose addresses are held by the .rodata dispatch tables 0x802A22D4-0x802A24B4. Native literals start at 0x802A0CE0 (5.0f loaded by fn_8014C528); readonly context 0x802A0CE0-0x802A0DC8 is measured here, including the unresolved trailing context after the native 12-byte emission (follow-up #791 measures 0x802A0E70-0x802A11F4 with src/game/cu_8014E220.cpp). Original file boundaries and nominal identity unresolved; the constructor 0x8014C630, the vtable entry 0x8014C690 and later bodies excluded; original bytes stay linked. Newly reconstructed cu_8014D210 measures the adjacent suffix 0x802A0DC8-0x802A0E70; the full previous 400-byte context remains covered, with foreign bytes unresolved.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014BC98",
-          "end": "0x8014C630"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A0CE0",
-          "end": "0x802A0DC8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014BC98",
-          "start": "0x8014BC98",
-          "end": "0x8014BED8"
-        },
-        {
-          "symbol": "fn_8014BED8",
-          "start": "0x8014BED8",
-          "end": "0x8014C118"
-        },
-        {
-          "symbol": "fn_8014C118",
-          "start": "0x8014C118",
-          "end": "0x8014C150"
-        },
-        {
-          "symbol": "fn_8014C150",
-          "start": "0x8014C150",
-          "end": "0x8014C158"
-        },
-        {
-          "symbol": "fn_8014C158",
-          "start": "0x8014C158",
-          "end": "0x8014C160"
-        },
-        {
-          "symbol": "fn_8014C160",
-          "start": "0x8014C160",
-          "end": "0x8014C188"
-        },
-        {
-          "symbol": "fn_8014C188",
-          "start": "0x8014C188",
-          "end": "0x8014C214"
-        },
-        {
-          "symbol": "fn_8014C214",
-          "start": "0x8014C214",
-          "end": "0x8014C278"
-        },
-        {
-          "symbol": "fn_8014C278",
-          "start": "0x8014C278",
-          "end": "0x8014C308"
-        },
-        {
-          "symbol": "fn_8014C308",
-          "start": "0x8014C308",
-          "end": "0x8014C4C0"
-        },
-        {
-          "symbol": "fn_8014C4C0",
-          "start": "0x8014C4C0",
-          "end": "0x8014C528"
-        },
-        {
-          "symbol": "fn_8014C528",
-          "start": "0x8014C528",
-          "end": "0x8014C5AC"
-        },
-        {
-          "symbol": "fn_8014C5AC",
-          "start": "0x8014C5AC",
-          "end": "0x8014C630"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014C868.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issues #786 and #1025; seventeen complete bodies in 0x8014C808-0x8014D024 inside the retained provisional cu_801485B4 survey group, after the cu_8014BC98.cpp fragment: four handler bodies held by the .rodata dispatch tables 0x802A2200 and 0x802A2490, eleven entries of the vtable 0x802A2C90 installed by the constructor 0x8014C630, and the stats query fn_8014CCE8 (called from 0x8005CB68). fn_8014CB30 (0x8014CB30-0x8014CCE8) remains outside this fragment and unregistered on this base, under separate claim #976. Issue #1025 adds complete slot 6 of table 0x802A2490, 0x8014C808-0x8014C868. Title 0x802A0CEC, shared button text 0x802A0B74 and format pointer word 0x803EB2B8 remain external original-owned in their existing full measured contexts; no readonly ownership transfer or new native pool. No initialized data of its own. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014C808",
-          "end": "0x8014D024"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014C808",
-          "start": "0x8014C808",
-          "end": "0x8014C868"
-        },
-        {
-          "symbol": "fn_8014C868",
-          "start": "0x8014C868",
-          "end": "0x8014C8AC"
-        },
-        {
-          "symbol": "fn_8014C8AC",
-          "start": "0x8014C8AC",
-          "end": "0x8014C954"
-        },
-        {
-          "symbol": "fn_8014C954",
-          "start": "0x8014C954",
-          "end": "0x8014C980"
-        },
-        {
-          "symbol": "fn_8014C980",
-          "start": "0x8014C980",
-          "end": "0x8014C9B0"
-        },
-        {
-          "symbol": "fn_8014C9B0",
-          "start": "0x8014C9B0",
-          "end": "0x8014CA78"
-        },
-        {
-          "symbol": "fn_8014CA78",
-          "start": "0x8014CA78",
-          "end": "0x8014CA80"
-        },
-        {
-          "symbol": "fn_8014CA80",
-          "start": "0x8014CA80",
-          "end": "0x8014CA88"
-        },
-        {
-          "symbol": "fn_8014CA88",
-          "start": "0x8014CA88",
-          "end": "0x8014CA90"
-        },
-        {
-          "symbol": "fn_8014CA90",
-          "start": "0x8014CA90",
-          "end": "0x8014CA98"
-        },
-        {
-          "symbol": "fn_8014CA98",
-          "start": "0x8014CA98",
-          "end": "0x8014CAD4"
-        },
-        {
-          "symbol": "fn_8014CAD4",
-          "start": "0x8014CAD4",
-          "end": "0x8014CB30"
-        },
-        {
-          "symbol": "fn_8014CCE8",
-          "start": "0x8014CCE8",
-          "end": "0x8014CF44"
-        },
-        {
-          "symbol": "fn_8014CF44",
-          "start": "0x8014CF44",
-          "end": "0x8014CF80"
-        },
-        {
-          "symbol": "fn_8014CF80",
-          "start": "0x8014CF80",
-          "end": "0x8014CFDC"
-        },
-        {
-          "symbol": "fn_8014CFDC",
-          "start": "0x8014CFDC",
-          "end": "0x8014D014"
-        },
-        {
-          "symbol": "fn_8014D014",
-          "start": "0x8014D014",
-          "end": "0x8014D024"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014D210.cpp",
-      "profile": "game_cpp",
-      "evidence": "Bounded comparison-only fragment of four complete bodies inside the larger provisional candidate cu_801485B4. fn_8014D210 is held by no data word and is called from 0x8014D5FC and 0x8014D63C (fn_8014D298) and 0x8014E934 (fn_8014E7D4 of src/game/cu_8014E534.cpp). fn_8014D298 is no bl target and no data word holds it; fn_8014DDCC forms its address (lis/addi at 0x8014DE18/0x8014DE20) and registers it with 0x800D7604 (bl at 0x8014DE24), which stores it in the .sdata word 0x803EACC0; the invoker 0x800D1B3C-0x800D1B78 tests that pointer and calls it with r3-r9 (blrl at 0x800D1B78), as the existing StyleAwardCallback and _StyleTracker_pAwardCallback rows record. Its parameter list follows the register-compatible StyleAwardCallback view. Start: 0x8014D024 (its 56-byte record swap copies a record with a vtable pointer at +52, table 0x802A1F78) is not claimed; the preceding src/game/cu_8014C868.cpp ends at 0x8014D024. Adds 0x8014D948-0x8014DA20, called from 0x8014E9A4, which submits the six score rows. Adds the complete placement helper 0x8014D67C-0x8014D948, called from 0x8014E27C and 0x8014ECC0, filling the former internal gap. End: 0x8014DA20 begins the next registered fragment. Both shared strings remain external original-owned: 0x802A05C8 inside the readonly context of src/game/cu_80149014.cpp and 0x802A0DDC used by several score-formatting bodies. Native conversion doubles are measured against 0x802A0DC8-0x802A0DD8 within the full 168-byte context ending at 0x802A0E70; numeric pool ordering and trailing foreign context remain unresolved, as the data row records. Other numeric literals remain external original-owned. Original signatures and file boundaries remain unresolved; original assembly remains linked. Unchanged game_cpp profile; inferred names, layouts and source forms have separate evidence rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014D210",
-          "end": "0x8014DA20"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A0DC8",
-          "end": "0x802A0E70"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014D210",
-          "start": "0x8014D210",
-          "end": "0x8014D298"
-        },
-        {
-          "symbol": "fn_8014D298",
-          "start": "0x8014D298",
-          "end": "0x8014D67C"
-        },
-        {
-          "symbol": "PlaceSixPlayerFormation",
-          "start": "0x8014D67C",
-          "end": "0x8014D948"
-        },
-        {
-          "symbol": "RefreshSixPlayerScoreRows",
-          "start": "0x8014D948",
-          "end": "0x8014DA20"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014DA20.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #788; ten complete bodies 0x8014DA20-0x8014DDCC inside the retained provisional cu_801485B4 survey group: the helpers fn_8014DA20 (called from 0x8014E1C0) and fn_8014DA90 (called from 0x8014F020) and eight handler bodies held by the .rodata dispatch tables 0x802A1F10 and 0x802A2130. No initialized data of its own. Excluded: 0x8014D948 (its literals 0x802A05C8 and 0x802A0DDC lie in readonly context measured by other fragments) and the code before it, and 0x8014DDCC onward. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014DA20",
-          "end": "0x8014DDCC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014DA20",
-          "start": "0x8014DA20",
-          "end": "0x8014DA90"
-        },
-        {
-          "symbol": "fn_8014DA90",
-          "start": "0x8014DA90",
-          "end": "0x8014DB24"
-        },
-        {
-          "symbol": "fn_8014DB24",
-          "start": "0x8014DB24",
-          "end": "0x8014DBCC"
-        },
-        {
-          "symbol": "fn_8014DBCC",
-          "start": "0x8014DBCC",
-          "end": "0x8014DBF8"
-        },
-        {
-          "symbol": "fn_8014DBF8",
-          "start": "0x8014DBF8",
-          "end": "0x8014DC28"
-        },
-        {
-          "symbol": "fn_8014DC28",
-          "start": "0x8014DC28",
-          "end": "0x8014DC5C"
-        },
-        {
-          "symbol": "fn_8014DC5C",
-          "start": "0x8014DC5C",
-          "end": "0x8014DC7C"
-        },
-        {
-          "symbol": "fn_8014DC7C",
-          "start": "0x8014DC7C",
-          "end": "0x8014DD04"
-        },
-        {
-          "symbol": "fn_8014DD04",
-          "start": "0x8014DD04",
-          "end": "0x8014DD2C"
-        },
-        {
-          "symbol": "fn_8014DD2C",
-          "start": "0x8014DD2C",
-          "end": "0x8014DDCC"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014E220.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issues #791 and #1025; seven complete handler bodies in 0x8014E220-0x8014E534 inside the retained provisional cu_801485B4 survey group, held by the .rodata dispatch tables 0x802A20C8 (PreGamePhase-derived) and 0x802A2058 (PreSnapPhase-derived). Issue #1025 adds complete slot 6 at 0x8014E2DC-0x8014E31C; shared button text 0x802A0B74 and pointer word 0x803EB2D4 remain external original-owned. Native literal 2.5f at 0x802A0E70 (fn_8014E244); readonly context 0x802A0E70-0x802A0E88 is measured here, including the naturally emitted title Crush the Carrier after the existing float (follow-up #805 measures 0x802A0E88-0x802A11F4 with src/game/cu_8014E534.cpp). Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014E220",
-          "end": "0x8014E534"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A0E70",
-          "end": "0x802A0E88"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014E220",
-          "start": "0x8014E220",
-          "end": "0x8014E244"
-        },
-        {
-          "symbol": "fn_8014E244",
-          "start": "0x8014E244",
-          "end": "0x8014E290"
-        },
-        {
-          "symbol": "fn_8014E290",
-          "start": "0x8014E290",
-          "end": "0x8014E2DC"
-        },
-        {
-          "symbol": "fn_8014E2DC",
-          "start": "0x8014E2DC",
-          "end": "0x8014E31C"
-        },
-        {
-          "symbol": "fn_8014E31C",
-          "start": "0x8014E31C",
-          "end": "0x8014E3B4"
-        },
-        {
-          "symbol": "fn_8014E3B4",
-          "start": "0x8014E3B4",
-          "end": "0x8014E48C"
-        },
-        {
-          "symbol": "fn_8014E48C",
-          "start": "0x8014E48C",
-          "end": "0x8014E534"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014E534.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #805; seven complete bodies 0x8014E534-0x8014EDC4 inside the retained provisional cu_801485B4 survey group: slots 3 and 4 of the .rodata dispatch table 0x802A2020 (LivePlayPhase-derived), slots 3, 5, 13 and 14 of the table 0x802A1F90 (PostPlayPhase-derived), and the .sdata getter 0x8014EDBC. Native literals \"Catch %s %s\" at 0x802A0E88 (fn_8014E534) and FLT_MAX at 0x802A0E94 (fn_8014EA90); readonly context 0x802A0E88-0x802A11F4 is measured here, including the unresolved trailing context after the native 16-byte emission. Original file boundaries and nominal identity unresolved; 0x8014EDC4 and later code excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014E534",
-          "end": "0x8014EDC4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A0E88",
-          "end": "0x802A11F4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014E534",
-          "start": "0x8014E534",
-          "end": "0x8014E7D4"
-        },
-        {
-          "symbol": "fn_8014E7D4",
-          "start": "0x8014E7D4",
-          "end": "0x8014EA90"
-        },
-        {
-          "symbol": "fn_8014EA90",
-          "start": "0x8014EA90",
-          "end": "0x8014EC74"
-        },
-        {
-          "symbol": "fn_8014EC74",
-          "start": "0x8014EC74",
-          "end": "0x8014ED30"
-        },
-        {
-          "symbol": "fn_8014ED30",
-          "start": "0x8014ED30",
-          "end": "0x8014ED70"
-        },
-        {
-          "symbol": "fn_8014ED70",
-          "start": "0x8014ED70",
-          "end": "0x8014EDBC"
-        },
-        {
-          "symbol": "fn_8014EDBC",
-          "start": "0x8014EDBC",
-          "end": "0x8014EDC4"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014F104.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issues #809/#1126; eleven complete bodies inside the retained provisional cu_801485B4 grouping. Fills the existing 0x8014F19C-0x8014F36C slot-12 gap of table 0x802A2B68 (word 0x802A2BCC); existing ten bodies and full native comparisons retained. Five query strings at 0x802A0E98, 0x802A0F24, 0x802A0F34, 0x802A0F74 and 0x802A1074 stay external original-owned within the existing readonly context measured by src/game/cu_8014E534.cpp. No data placement changes here. Canonical query/record declarations reused; original names and file boundaries unresolved. Original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014F104",
-          "end": "0x8014F57C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014F104",
-          "start": "0x8014F104",
-          "end": "0x8014F10C"
-        },
-        {
-          "symbol": "fn_8014F10C",
-          "start": "0x8014F10C",
-          "end": "0x8014F120"
-        },
-        {
-          "symbol": "fn_8014F120",
-          "start": "0x8014F120",
-          "end": "0x8014F168"
-        },
-        {
-          "symbol": "fn_8014F168",
-          "start": "0x8014F168",
-          "end": "0x8014F19C"
-        },
-        {
-          "symbol": "fn_8014F19C",
-          "start": "0x8014F19C",
-          "end": "0x8014F36C"
-        },
-        {
-          "symbol": "fn_8014F36C",
-          "start": "0x8014F36C",
-          "end": "0x8014F3DC"
-        },
-        {
-          "symbol": "fn_8014F3DC",
-          "start": "0x8014F3DC",
-          "end": "0x8014F3E4"
-        },
-        {
-          "symbol": "fn_8014F3E4",
-          "start": "0x8014F3E4",
-          "end": "0x8014F448"
-        },
-        {
-          "symbol": "fn_8014F448",
-          "start": "0x8014F448",
-          "end": "0x8014F474"
-        },
-        {
-          "symbol": "fn_8014F474",
-          "start": "0x8014F474",
-          "end": "0x8014F4D8"
-        },
-        {
-          "symbol": "fn_8014F4D8",
-          "start": "0x8014F4D8",
-          "end": "0x8014F57C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014F57C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Three complete member bodies of the class whose vtable 0x802A2B68 the constructor 0x8014EDC4 stores at +0x18, inside the retained provisional cu_801485B4 survey group: slot 26 (0x8014F57C, word 0x802A2C3C), slot 30 (0x8014FBB4, word 0x802A2C5C) and slot 21 (0x8014FF2C, word 0x802A2C14). Slot 31 (0x8014FDD0-0x8014FF2C) is not registered because its body does not yet match. No literal or data word is referenced, so no other range is registered. Original file boundaries and nominal identity unresolved; 0x8014FF34 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014F57C",
-          "end": "0x8014FF34"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014F57C",
-          "start": "0x8014F57C",
-          "end": "0x8014FBB4"
-        },
-        {
-          "symbol": "fn_8014FBB4",
-          "start": "0x8014FBB4",
-          "end": "0x8014FDD0"
-        },
-        {
-          "symbol": "fn_8014FF2C",
-          "start": "0x8014FF2C",
-          "end": "0x8014FF34"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8015005C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #815; six complete bodies inside the retained provisional cu_801485B4 survey group that use the same score table: the helpers 0x8015005C (move an entry up while its score, +10 plus twice +8, exceeds the entry before it) and 0x8015013C (increment the +8 or +10 halfword of the entry whose word +0 matches an id, then call 0x8015005C), and slots 2, 3, 11 and 19 (0x801501CC, 0x801501F0, 0x8015034C, 0x8015037C) of the table 0x802A1E38. The helper 0x801502B4-0x8015034C is not registered because its body does not yet match. No literal is loaded; the global lbl_8031BDD4 is referenced as an extern, so no other range is registered. Original file boundaries and nominal identity unresolved; 0x8014FFC4-0x8015005C and 0x801503BC onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015005C",
-          "end": "0x801503BC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8015005C",
-          "start": "0x8015005C",
-          "end": "0x8015013C"
-        },
-        {
-          "symbol": "fn_8015013C",
-          "start": "0x8015013C",
-          "end": "0x801501CC"
-        },
-        {
-          "symbol": "fn_801501CC",
-          "start": "0x801501CC",
-          "end": "0x801501F0"
-        },
-        {
-          "symbol": "fn_801501F0",
-          "start": "0x801501F0",
-          "end": "0x801502B4"
-        },
-        {
-          "symbol": "fn_8015034C",
-          "start": "0x8015034C",
-          "end": "0x8015037C"
-        },
-        {
-          "symbol": "fn_8015037C",
-          "start": "0x8015037C",
-          "end": "0x801503BC"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80150710.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issues #817 and #1021; complete handler 0x80150710-0x8015076C and slot 5 body 0x8015076C-0x801507E0 in retained provisional cu_801485B4 grouping. Slot 6 at 0x801507E0-0x80150820 is measured in cu_8014AB64.cpp to reuse its established shared literal pool naturally. Original source boundaries and identity unresolved; partial comparisons retain original linked bytes.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80150710",
-          "end": "0x80150848"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80150710",
-          "start": "0x80150710",
-          "end": "0x8015076C"
-        },
-        {
-          "symbol": "fn_8015076C",
-          "start": "0x8015076C",
-          "end": "0x801507E0"
-        },
-        {
-          "symbol": "fn_80150820",
-          "start": "0x80150820",
-          "end": "0x80150824"
-        },
-        {
-          "symbol": "fn_80150824",
-          "start": "0x80150824",
-          "end": "0x80150848"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80150848.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #819; five complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 4, 5, 10 and 11 of the table 0x802A1D58 (derived from the engine table 0x80297CE8, include/game/PreSnapPhase.h; words 0x802A1D7C, 0x802A1D84, 0x802A1DAC and 0x802A1DB4) at 0x80150848, 0x80150984, 0x801509D4 and 0x80150A70, and slot 3 of the table 0x802A1D20 (derived from the engine table 0x80297AB8, include/game/LivePlayPhase.h; word 0x802A1D3C) at 0x80150A74. The .rodata slice 0x802A1320-0x802A1334 holds the four literals of fn_80150848, which no other code loads; the compiled section is 24 bytes, so its four trailing alignment bytes extend past the slice and are measured as a size difference. The global lbl_8031BDD4 is referenced as an extern. Original file boundaries and nominal identity unresolved; 0x801503BC-0x80150710, 0x8015076C-0x80150820 and 0x80150AC4 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80150848",
-          "end": "0x80150AC4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A1320",
-          "end": "0x802A1334"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80150848",
-          "start": "0x80150848",
-          "end": "0x80150984"
-        },
-        {
-          "symbol": "fn_80150984",
-          "start": "0x80150984",
-          "end": "0x801509D4"
-        },
-        {
-          "symbol": "fn_801509D4",
-          "start": "0x801509D4",
-          "end": "0x80150A70"
-        },
-        {
-          "symbol": "fn_80150A70",
-          "start": "0x80150A70",
-          "end": "0x80150A74"
-        },
-        {
-          "symbol": "fn_80150A74",
-          "start": "0x80150A74",
-          "end": "0x80150AC4"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80151598.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #821; eight complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 13, 5, 14, 8 and 12 of the table 0x802A1C98 (derived from the engine table 0x80297C60, include/game/PostPlayPhase.h; words 0x802A1D04, 0x802A1CC4, 0x802A1D0C, 0x802A1CDC and 0x802A1CFC) at 0x80151598, 0x801515D0, 0x80151628, 0x80151680 and 0x80151684, and slots 3, 8 and 9 of the table 0x802A1C30 (derived from the engine table 0x80297B90, include/game/Class_80297B90.h; words 0x802A1C4C, 0x802A1C74 and 0x802A1C7C) at 0x801516A8, 0x80151798 and 0x801517C4. No literal is loaded; the .data table 0x802DEA78, the .sdata word 0x803EB688 and the global lbl_8031BDD4 are referenced as externs, so no other range is registered. Original file boundaries and nominal identity unresolved; 0x80150AC4-0x80151598 and 0x801517F4 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80151598",
-          "end": "0x801517F4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80151598",
-          "start": "0x80151598",
-          "end": "0x801515D0"
-        },
-        {
-          "symbol": "fn_801515D0",
-          "start": "0x801515D0",
-          "end": "0x80151628"
-        },
-        {
-          "symbol": "fn_80151628",
-          "start": "0x80151628",
-          "end": "0x80151680"
-        },
-        {
-          "symbol": "fn_80151680",
-          "start": "0x80151680",
-          "end": "0x80151684"
-        },
-        {
-          "symbol": "fn_80151684",
-          "start": "0x80151684",
-          "end": "0x801516A8"
-        },
-        {
-          "symbol": "fn_801516A8",
-          "start": "0x801516A8",
-          "end": "0x80151798"
-        },
-        {
-          "symbol": "fn_80151798",
-          "start": "0x80151798",
-          "end": "0x801517C4"
-        },
-        {
-          "symbol": "fn_801517C4",
-          "start": "0x801517C4",
-          "end": "0x801517F4"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801531C4.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #823; ten complete slot bodies of the table 0x802A1930 (derived from the rule-set table 0x802A56E8, include/game/ScrmRuleSet.h) inside the retained provisional cu_801485B4 survey group: slot 2 (0x801531C4, word 0x802A1944), slots 4 and 5 (0x801531F0 and 0x80153270, words 0x802A1954 and 0x802A195C), slots 6 and 7 (0x801532E0 and 0x801532E8, words 0x802A1964 and 0x802A196C), slot 16 (0x80153328, word 0x802A19B4), slots 17 and 18 (0x80153354 and 0x80153394, words 0x802A19BC and 0x802A19C4), the extra slot 22 (0x801533D4, word 0x802A19E4) and slot 14 (0x80153414, word 0x802A19A4). No literal or data word is referenced, so no other range is registered. Original file boundaries and nominal identity unresolved; slot 1 (0x80153174) and 0x801534D4 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801531C4",
-          "end": "0x801534D4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801531C4",
-          "start": "0x801531C4",
-          "end": "0x801531F0"
-        },
-        {
-          "symbol": "fn_801531F0",
-          "start": "0x801531F0",
-          "end": "0x80153270"
-        },
-        {
-          "symbol": "fn_80153270",
-          "start": "0x80153270",
-          "end": "0x801532E0"
-        },
-        {
-          "symbol": "fn_801532E0",
-          "start": "0x801532E0",
-          "end": "0x801532E8"
-        },
-        {
-          "symbol": "fn_801532E8",
-          "start": "0x801532E8",
-          "end": "0x80153328"
-        },
-        {
-          "symbol": "fn_80153328",
-          "start": "0x80153328",
-          "end": "0x80153354"
-        },
-        {
-          "symbol": "fn_80153354",
-          "start": "0x80153354",
-          "end": "0x80153394"
-        },
-        {
-          "symbol": "fn_80153394",
-          "start": "0x80153394",
-          "end": "0x801533D4"
-        },
-        {
-          "symbol": "fn_801533D4",
-          "start": "0x801533D4",
-          "end": "0x80153414"
-        },
-        {
-          "symbol": "fn_80153414",
-          "start": "0x80153414",
-          "end": "0x801534D4"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80153844.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issues #1022 and #1116 and the prior fragment claim; evidence.tsv retains complete function extents and provisional source grouping. Adds slots 4 and 10 of table 0x802A1B58 (words 0x802A1B7C and 0x802A1BAC), 0x801539A0-0x80153DB8, in the existing normal source file. Measures the entire native readonly slice against 0x802A1588-0x802A15B0, including the Playoff Round! literal at 0x802A15A0. Shared button text at 0x802A0B74 and pointer word 0x803EB2F0 remain external original-owned. Existing five bodies and complete comparisons retained. Original nominal class identity, member spelling and original file boundaries remain unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80153844",
-          "end": "0x80153DB8"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A1588",
-          "end": "0x802A15B0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80153844",
-          "start": "0x80153844",
-          "end": "0x801538C8"
-        },
-        {
-          "symbol": "fn_801538C8",
-          "start": "0x801538C8",
-          "end": "0x80153910"
-        },
-        {
-          "symbol": "fn_80153910",
-          "start": "0x80153910",
-          "end": "0x8015395C"
-        },
-        {
-          "symbol": "fn_8015395C",
-          "start": "0x8015395C",
-          "end": "0x8015399C"
-        },
-        {
-          "symbol": "fn_8015399C",
-          "start": "0x8015399C",
-          "end": "0x801539A0"
-        },
-        {
-          "symbol": "fn_801539A0",
-          "start": "0x801539A0",
-          "end": "0x80153BBC"
-        },
-        {
-          "symbol": "fn_80153BBC",
-          "start": "0x80153BBC",
-          "end": "0x80153DB8"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80153DB8.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #827; six complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 3, 4 and 5 of the table 0x802A1B18 (derived from the engine table 0x80297B50, include/game/Class_80297B50.h; 0x80153DB8, 0x80153DBC and 0x80153EA8, words 0x802A1B34, 0x802A1B3C and 0x802A1B44) and slots 3, 4 and 5 of the table 0x802A1AE0 (derived from the engine table 0x80297AB8, include/game/LivePlayPhase.h; 0x80153F14, 0x80153F54 and 0x80154028, words 0x802A1AFC, 0x802A1B04 and 0x802A1B0C). The .rodata slice 0x802A15C4-0x802A15DC holds their literals (0.0f and 18.0f of fn_80153EA8, the string of fn_80153F54); the .sdata word 0x803EB2F4 is referenced as an extern. Original file boundaries and nominal identity unresolved; 0x80153BBC-0x80153DB8 and 0x80154050 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80153DB8",
-          "end": "0x80154050"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A15C4",
-          "end": "0x802A15DC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80153DB8",
-          "start": "0x80153DB8",
-          "end": "0x80153DBC"
-        },
-        {
-          "symbol": "fn_80153DBC",
-          "start": "0x80153DBC",
-          "end": "0x80153EA8"
-        },
-        {
-          "symbol": "fn_80153EA8",
-          "start": "0x80153EA8",
-          "end": "0x80153F14"
-        },
-        {
-          "symbol": "fn_80153F14",
-          "start": "0x80153F14",
-          "end": "0x80153F54"
-        },
-        {
-          "symbol": "fn_80153F54",
-          "start": "0x80153F54",
-          "end": "0x80154028"
-        },
-        {
-          "symbol": "fn_80154028",
-          "start": "0x80154028",
-          "end": "0x80154050"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80154050.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #829; four complete slot bodies inside the retained provisional cu_801485B4 survey group: slot 9 of the table 0x802A1A58 (derived from the engine table 0x80297C60, include/game/PostPlayPhase.h; 0x80154050, word 0x802A1AA4) and slots 3, 8 and 9 of the table 0x802A19F0 (derived from the engine table 0x80297B90, include/game/Class_80297B90.h; 0x80154110, 0x801541B8 and 0x801541E4, words 0x802A1A0C, 0x802A1A34 and 0x802A1A3C). The .rodata slice 0x802A15DC-0x802A15F8 holds the two character-array initializers of fn_80154050; the .data table 0x802DEB78 and the .sdata word 0x803EB688 are referenced as externs. Original file boundaries and nominal identity unresolved; 0x80154214 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80154050",
-          "end": "0x80154214"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A15DC",
-          "end": "0x802A15F8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80154050",
-          "start": "0x80154050",
-          "end": "0x80154110"
-        },
-        {
-          "symbol": "fn_80154110",
-          "start": "0x80154110",
-          "end": "0x801541B8"
-        },
-        {
-          "symbol": "fn_801541B8",
-          "start": "0x801541B8",
-          "end": "0x801541E4"
-        },
-        {
-          "symbol": "fn_801541E4",
-          "start": "0x801541E4",
-          "end": "0x80154214"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80152FFC.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #831; three complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 5, 21 and 22 of the table 0x802A2918 (derived from Class_80148A58, include/game/Class_80148A58.h, whose base table is 0x802A2EE0; 0x80152FFC, 0x80153044 and 0x8015304C, words 0x802A2944, 0x802A29C4 and 0x802A29CC). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80152B98-0x80152FFC and 0x801530FC onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80152FFC",
-          "end": "0x801530FC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80152FFC",
-          "start": "0x80152FFC",
-          "end": "0x80153044"
-        },
-        {
-          "symbol": "fn_80153044",
-          "start": "0x80153044",
-          "end": "0x8015304C"
-        },
-        {
-          "symbol": "fn_8015304C",
-          "start": "0x8015304C",
-          "end": "0x801530FC"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80154520.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issues #833/#1084; four complete slot bodies 5, 7, 9 and 10 of table 0x802A27F0, inside retained provisional cu_801485B4 grouping. Full native output measured; canonical base view retained. External data tables remain original-owned. Original file/member identities unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80154520",
-          "end": "0x80154638"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80154520",
-          "start": "0x80154520",
-          "end": "0x80154528"
-        },
-        {
-          "symbol": "fn_80154528",
-          "start": "0x80154528",
-          "end": "0x80154588"
-        },
-        {
-          "symbol": "fn_80154588",
-          "start": "0x80154588",
-          "end": "0x801545D4"
-        },
-        {
-          "symbol": "fn_801545D4",
-          "start": "0x801545D4",
-          "end": "0x80154638"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80154638.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issues #835/#1084; complete slots 11 and 35 of table 0x802A27F0 inside retained provisional cu_801485B4 grouping. Format string 0x802A15FC-0x802A1604 measured in full; shared empty text 0x802A05C8 and permutation tables remain original-owned externals. Original file/member identities unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80154638",
-          "end": "0x80154A88"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A15FC",
-          "end": "0x802A1604"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80154638",
-          "start": "0x80154638",
-          "end": "0x801548EC"
-        },
-        {
-          "symbol": "fn_801548EC",
-          "start": "0x801548EC",
-          "end": "0x80154A88"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80154A88.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #837; two complete slot bodies of the table 0x802A27F0 (derived from Class_80148A58, include/game/Class_80148A58.h, whose base table is 0x802A2EE0) inside the retained provisional cu_801485B4 survey group: slot 14 (0x80154A88, word 0x802A2864) and slot 26 (0x80154AB8, word 0x802A28C4). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; slot 35 (0x801548EC) before the range and 0x80154F70 onward (from src/game/cu_80154F70.cpp) excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80154A88",
-          "end": "0x80154F70"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80154A88",
-          "start": "0x80154A88",
-          "end": "0x80154AB8"
-        },
-        {
-          "symbol": "fn_80154AB8",
-          "start": "0x80154AB8",
-          "end": "0x80154F70"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80155F48.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #839; seven complete default slot bodies of the base table 0x802A2EE0 (Class_80148A58, include/game/Class_80148A58.h) inside the retained provisional cu_801485B4 survey group: slots 7, 9, 12, 14, 20, 21 and 22 (0x80155F48-0x80155F90, words 0x802A2F1C, 0x802A2F2C, 0x802A2F44, 0x802A2F54, 0x802A2F84, 0x802A2F8C and 0x802A2F94), which derived tables also hold. One call target is external; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80155E28 before the range and 0x80155F98 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80155F48",
-          "end": "0x80155F98"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80155F48",
-          "start": "0x80155F48",
-          "end": "0x80155F4C"
-        },
-        {
-          "symbol": "fn_80155F4C",
-          "start": "0x80155F4C",
-          "end": "0x80155F54"
-        },
-        {
-          "symbol": "fn_80155F54",
-          "start": "0x80155F54",
-          "end": "0x80155F74"
-        },
-        {
-          "symbol": "fn_80155F74",
-          "start": "0x80155F74",
-          "end": "0x80155F78"
-        },
-        {
-          "symbol": "fn_80155F78",
-          "start": "0x80155F78",
-          "end": "0x80155F88"
-        },
-        {
-          "symbol": "fn_80155F88",
-          "start": "0x80155F88",
-          "end": "0x80155F90"
-        },
-        {
-          "symbol": "fn_80155F90",
-          "start": "0x80155F90",
-          "end": "0x80155F98"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80156384.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #840; twelve complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 6, 7, 10 and 11 of the tables 0x802A1C30 (0x80156384-0x80156394), 0x802A19F0 (0x801563D0-0x801563E0) and 0x802A1860 (0x801563E8-0x801563F8), each derived from the engine table 0x80297B90 (include/game/Class_80297B90.h). The destructor 0x8015639C inside the range is not registered. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80156350 before the range is src/game/cu_8015631C.cpp and 0x80156400 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80156384",
-          "end": "0x80156400"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80156384",
-          "start": "0x80156384",
-          "end": "0x80156388"
-        },
-        {
-          "symbol": "fn_80156388",
-          "start": "0x80156388",
-          "end": "0x8015638C"
-        },
-        {
-          "symbol": "fn_8015638C",
-          "start": "0x8015638C",
-          "end": "0x80156394"
-        },
-        {
-          "symbol": "fn_80156394",
-          "start": "0x80156394",
-          "end": "0x8015639C"
-        },
-        {
-          "symbol": "fn_801563D0",
-          "start": "0x801563D0",
-          "end": "0x801563D4"
-        },
-        {
-          "symbol": "fn_801563D4",
-          "start": "0x801563D4",
-          "end": "0x801563D8"
-        },
-        {
-          "symbol": "fn_801563D8",
-          "start": "0x801563D8",
-          "end": "0x801563E0"
-        },
-        {
-          "symbol": "fn_801563E0",
-          "start": "0x801563E0",
-          "end": "0x801563E8"
-        },
-        {
-          "symbol": "fn_801563E8",
-          "start": "0x801563E8",
-          "end": "0x801563EC"
-        },
-        {
-          "symbol": "fn_801563EC",
-          "start": "0x801563EC",
-          "end": "0x801563F0"
-        },
-        {
-          "symbol": "fn_801563F0",
-          "start": "0x801563F0",
-          "end": "0x801563F8"
-        },
-        {
-          "symbol": "fn_801563F8",
-          "start": "0x801563F8",
-          "end": "0x80156400"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801562D0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #844; six complete slot bodies of the table 0x802A1E38 (derived from the rule-set table 0x802A56E8, include/game/ScrmRuleSet.h) inside the retained provisional cu_801485B4 survey group: slots 1, 4, 7, 8, 9 and 14 (0x801562D0-0x8015631C, words 0x802A1E44, 0x802A1E5C, 0x802A1E74, 0x802A1E7C, 0x802A1E84 and 0x802A1EAC). The .bss object 0x8031BDD4 is referenced as an extern. Original file boundaries and nominal identity unresolved; 0x8015629C before the range is src/game/cu_8015629C.cpp and 0x8015631C is src/game/cu_8015631C.cpp; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801562D0",
-          "end": "0x8015631C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801562D0",
-          "start": "0x801562D0",
-          "end": "0x801562DC"
-        },
-        {
-          "symbol": "fn_801562DC",
-          "start": "0x801562DC",
-          "end": "0x801562E4"
-        },
-        {
-          "symbol": "fn_801562E4",
-          "start": "0x801562E4",
-          "end": "0x801562EC"
-        },
-        {
-          "symbol": "fn_801562EC",
-          "start": "0x801562EC",
-          "end": "0x80156308"
-        },
-        {
-          "symbol": "fn_80156308",
-          "start": "0x80156308",
-          "end": "0x80156314"
-        },
-        {
-          "symbol": "fn_80156314",
-          "start": "0x80156314",
-          "end": "0x8015631C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80156148.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #846; six complete slot bodies of the table 0x802A2130 (derived from the rule-set table 0x802A56E8, include/game/ScrmRuleSet.h) inside the retained provisional cu_801485B4 survey group: slots 1, 4, 6, 7, 8 and 14 (0x80156148-0x80156174, words 0x802A213C, 0x802A2154, 0x802A2164, 0x802A216C, 0x802A2174 and 0x802A21A4). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80156108 before the range and 0x8015617C onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80156148",
-          "end": "0x8015617C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80156148",
-          "start": "0x80156148",
-          "end": "0x80156154"
-        },
-        {
-          "symbol": "fn_80156154",
-          "start": "0x80156154",
-          "end": "0x8015615C"
-        },
-        {
-          "symbol": "fn_8015615C",
-          "start": "0x8015615C",
-          "end": "0x80156164"
-        },
-        {
-          "symbol": "fn_80156164",
-          "start": "0x80156164",
-          "end": "0x8015616C"
-        },
-        {
-          "symbol": "fn_8015616C",
-          "start": "0x8015616C",
-          "end": "0x80156174"
-        },
-        {
-          "symbol": "fn_80156174",
-          "start": "0x80156174",
-          "end": "0x8015617C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801561EC.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #847; four complete slot bodies of the table 0x802A1F90 (State_802A1F90 of src/game/cu_8014E534.cpp, derived from the engine table 0x80297C60, include/game/PostPlayPhase.h) inside the retained provisional cu_801485B4 survey group: slots 7, 10, 11 and 12 (0x801561EC-0x801561FC, words 0x802A1FCC, 0x802A1FE4, 0x802A1FEC and 0x802A1FF4). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801561B8 before the range and 0x80156204 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801561EC",
-          "end": "0x80156204"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801561EC",
-          "start": "0x801561EC",
-          "end": "0x801561F0"
-        },
-        {
-          "symbol": "fn_801561F0",
-          "start": "0x801561F0",
-          "end": "0x801561F4"
-        },
-        {
-          "symbol": "fn_801561F4",
-          "start": "0x801561F4",
-          "end": "0x801561FC"
-        },
-        {
-          "symbol": "fn_801561FC",
-          "start": "0x801561FC",
-          "end": "0x80156204"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8015609C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #848; five complete slot bodies inside the retained provisional cu_801485B4 survey group: slot 14 of the table 0x802A2560 (derived from the rule-set table 0x802A56E8, include/game/ScrmRuleSet.h; 0x8015609C, word 0x802A25D4) and slots 6, 7, 10 and 11 of the table 0x802A24F8 (derived from the engine table 0x80297B90, include/game/Class_80297B90.h; 0x801560A4-0x801560B4, words 0x802A252C, 0x802A2534, 0x802A254C and 0x802A2554). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80156068 before the range is src/game/cu_80156068.cpp and 0x801560BC is src/game/cu_801560BC.cpp; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015609C",
-          "end": "0x801560BC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8015609C",
-          "start": "0x8015609C",
-          "end": "0x801560A4"
-        },
-        {
-          "symbol": "fn_801560A4",
-          "start": "0x801560A4",
-          "end": "0x801560A8"
-        },
-        {
-          "symbol": "fn_801560A8",
-          "start": "0x801560A8",
-          "end": "0x801560AC"
-        },
-        {
-          "symbol": "fn_801560AC",
-          "start": "0x801560AC",
-          "end": "0x801560B4"
-        },
-        {
-          "symbol": "fn_801560B4",
-          "start": "0x801560B4",
-          "end": "0x801560BC"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801560F0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #857; four complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 6, 7, 10 and 11 of the table 0x802A2200 (derived from the engine table 0x80297B90, include/game/Class_80297B90.h; 0x801560F0, 0x801560F4, 0x801560F8 and 0x80156100, words 0x802A2234, 0x802A223C, 0x802A2254 and 0x802A225C). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801560BC before the range is src/game/cu_801560BC.cpp and 0x80156108 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801560F0",
-          "end": "0x80156108"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801560F0",
-          "start": "0x801560F0",
-          "end": "0x801560F4"
-        },
-        {
-          "symbol": "fn_801560F4",
-          "start": "0x801560F4",
-          "end": "0x801560F8"
-        },
-        {
-          "symbol": "fn_801560F8",
-          "start": "0x801560F8",
-          "end": "0x80156100"
-        },
-        {
-          "symbol": "fn_80156100",
-          "start": "0x80156100",
-          "end": "0x80156108"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80156238.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #858; four complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 6, 7, 10 and 11 of the table 0x802A1F10 (derived from the engine table 0x80297B90, include/game/Class_80297B90.h; 0x80156238, 0x8015623C, 0x80156240 and 0x80156248, words 0x802A1F44, 0x802A1F4C, 0x802A1F64 and 0x802A1F6C). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80156204 before the range and 0x80156250 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80156238",
-          "end": "0x80156250"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80156238",
-          "start": "0x80156238",
-          "end": "0x8015623C"
-        },
-        {
-          "symbol": "fn_8015623C",
-          "start": "0x8015623C",
-          "end": "0x80156240"
-        },
-        {
-          "symbol": "fn_80156240",
-          "start": "0x80156240",
-          "end": "0x80156248"
-        },
-        {
-          "symbol": "fn_80156248",
-          "start": "0x80156248",
-          "end": "0x80156250"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8015617C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #861; two complete slot bodies inside the retained provisional cu_801485B4 survey group: slot 7 of the table 0x802A20C8 (PreGamePhase layout, include/game/PreGamePhase.h; 0x8015617C, word 0x802A2104) and slot 9 of the table 0x802A2058 (PreSnapPhase layout, include/game/PreSnapPhase.h; 0x801561B4, word 0x802A20A4). The destructor 0x80156180-0x801561B4 between them is not registered. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80156174 before the range and 0x801561B8 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015617C",
-          "end": "0x801561B8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8015617C",
-          "start": "0x8015617C",
-          "end": "0x80156180"
-        },
-        {
-          "symbol": "fn_801561B4",
-          "start": "0x801561B4",
-          "end": "0x801561B8"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80155384.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #863; three complete slot bodies of the table 0x802A17A8 (derived from the rule-set table 0x802A56E8, include/game/ScrmRuleSet.h) inside the retained provisional cu_801485B4 survey group: slots 2, 3 and 4 (0x80155384, 0x8015538C and 0x80155394; words 0x802A17BC, 0x802A17C4 and 0x802A17CC). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801552C4 before the range and 0x8015539C onward (from src/game/cu_8015539C.cpp) excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80155384",
-          "end": "0x8015539C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80155384",
-          "start": "0x80155384",
-          "end": "0x8015538C"
-        },
-        {
-          "symbol": "fn_8015538C",
-          "start": "0x8015538C",
-          "end": "0x80155394"
-        },
-        {
-          "symbol": "fn_80155394",
-          "start": "0x80155394",
-          "end": "0x8015539C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80155640.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issues #1022 and the prior fragment claim; evidence.tsv retains complete function extents and provisional source grouping. Adds slot 6 of table 0x802A18C8 (word 0x802A18FC), 0x8015568C-0x801556CC, in its normal source file. Measures the entire native readonly slice 0x802A1790-0x802A17A0; shared button text at 0x802A0B74 and pointer word 0x803EB2F8 stay external original-owned. Existing bodies and complete comparisons retained. Original nominal class identity, member spelling and original file boundaries remain unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80155640",
-          "end": "0x801556D0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A1790",
-          "end": "0x802A17A0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80155640",
-          "start": "0x80155640",
-          "end": "0x8015568C"
-        },
-        {
-          "symbol": "fn_8015568C",
-          "start": "0x8015568C",
-          "end": "0x801556CC"
-        },
-        {
-          "symbol": "fn_801556CC",
-          "start": "0x801556CC",
-          "end": "0x801556D0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801551F0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #867; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 21 of the table 0x802A27F0 of src/game/cu_80154520.cpp (derived from Class_80148A58, include/game/Class_80148A58.h; 0x801551F0-0x801551F8, word 0x802A289C). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80155130 before the range and 0x801551F8 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801551F0",
-          "end": "0x801551F8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801551F0",
-          "start": "0x801551F0",
-          "end": "0x801551F8"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80155588.cpp",
-      "profile": "game_cpp",
-      "evidence": "Bounded two-function comparison-only fragment within retained provisional cu_801485B4. Existing rule-set slot11 fn_80155588 (issue #869, table802A17A8 word802A1804) is preserved; issue #1082 adds fn_801555C4, slot3 of the separate table802A18C8 at word802A18E4, derived from the engine table80297BF8. Source grouping does not assert the two callbacks share a nominal class. Start follows cu_8015539C; end precedes cu_80155640. Complete18.0f literal802A178C-802A1790 is measured. Globals803EB2FC/FD stay external original-owned. Original file edges and signature spelling remain unresolved. Original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80155588",
-          "end": "0x80155640"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A178C",
-          "end": "0x802A1790"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80155588",
-          "start": "0x80155588",
-          "end": "0x801555C4"
-        },
-        {
-          "symbol": "fn_801555C4",
-          "start": "0x801555C4",
-          "end": "0x80155640"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80155128.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #871; two complete non-virtual functions inside the retained provisional cu_801485B4 survey group (0x80155128-0x801551F0). Both are reached only by direct calls (0x80155128 from 13 sites 0x801531D4-0x801545A8, 0x80155130 from 0x8005C1CC and from 0x80154984, 0x801549EC, 0x80154A3C inside slot 35 of the table 0x802A27F0); no data word holds either address. They read member +28 of the object returned by fn_80148A58 or passed by that slot, named through the file-local Class_802A27F0 layout of src/game/cu_80154A88.cpp. Calls fn_800B65A0 and fn_80039F5C through their headers and 0x8007AFDC as an extern; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80155004-0x80155128 before the range and 0x801551F0 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80155128",
-          "end": "0x801551F0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80155128",
-          "start": "0x80155128",
-          "end": "0x80155130"
-        },
-        {
-          "symbol": "fn_80155130",
-          "start": "0x80155130",
-          "end": "0x801551F0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801551F8.cpp",
-      "profile": "game_cpp",
-      "evidence": "Bounded two-function comparison-only fragment within retained provisional cu_801485B4. Existing slot 1 fn_801551F8 (issue #873, table word802A17B4) is preserved; issue #1082 adds slot20 fn_801552C4 (table word802A184C) of the same rule-set table802A17A8. Adjacent fn_801551F0 and fn_80155384 remain separate existing fragments; these are reconstruction extents, not recovered file edges. Full readonly context802A1770-802A178C includes0.5f, internal double alignment, conversion bias and10/18/1 floats. Native.rodata has four extra trailing alignment bytes, retained in full comparison and not claimed as original storage. Byte globals803EB2FC/FD remain external original-owned. Original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801551F8",
-          "end": "0x80155384"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A1770",
-          "end": "0x802A178C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801551F8",
-          "start": "0x801551F8",
-          "end": "0x801552C4"
-        },
-        {
-          "symbol": "fn_801552C4",
-          "start": "0x801552C4",
-          "end": "0x80155384"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80155A7C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #874; six complete non-virtual functions inside the retained provisional cu_801485B4 survey group (0x80155A7C-0x80155E28). All are reached only by direct calls (0x80155A7C from 0x8015572C, 0x80155BF4 from 0x80155754, 0x80155C44 from 0x8005CE80, 0x80155CF0 from 0x8005CDDC, 0x80155D38 from 0x8005D25C and 0x80155C64, 0x80155D7C from 0x801555AC and 0x80155614); no data word holds any of them. All but 0x80155CF0 use the 192-byte block at +28 of the object, named through the file-local Class_802A2A40 (the table 0x802A2A40 whose slot 1, 0x8015583C, allocates that block). Calls fn_800C8744 and 0x801787DC (registered by src/game/cu_80176F18.cpp) as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801559B8 before the range and 0x80155E28 onward excluded; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80155A7C",
-          "end": "0x80155E28"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80155A7C",
-          "start": "0x80155A7C",
-          "end": "0x80155BF4"
-        },
-        {
-          "symbol": "fn_80155BF4",
-          "start": "0x80155BF4",
-          "end": "0x80155C44"
-        },
-        {
-          "symbol": "fn_80155C44",
-          "start": "0x80155C44",
-          "end": "0x80155CF0"
-        },
-        {
-          "symbol": "fn_80155CF0",
-          "start": "0x80155CF0",
-          "end": "0x80155D38"
-        },
-        {
-          "symbol": "fn_80155D38",
-          "start": "0x80155D38",
-          "end": "0x80155D7C"
-        },
-        {
-          "symbol": "fn_80155D7C",
-          "start": "0x80155D7C",
-          "end": "0x80155E28"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801556D0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #876; one callback and three complete slot bodies inside the retained provisional cu_801485B4 survey group: the callback 0x801556D0 (address formed only by lis/addi at 0x801558C0/0x801558C4 in slot 1 of the table 0x802A2A40 and passed to 0x8017CAC0; calls 0x80155A7C and 0x80155BF4 of src/game/cu_80155A7C.cpp and 0x80178348) and slots 3, 8 and 9 of the table 0x802A1860 of src/game/cu_80156384.cpp (derived from the engine table 0x80297B90, include/game/Class_80297B90.h; 0x8015576C, 0x801557E0 and 0x8015580C, words 0x802A187C, 0x802A18A4 and 0x802A18AC). Calls fn_8021D7B8 through its header, 0x80064EFC through include/game/PauseMenu.h (src/game/PauseMenu.cpp), slot 12 of the fn_80148A58 object through include/game/Class_80148A58.h, and 0x800AAD58 and 0x8021956C as externs; reads the .sdata pointer 0x803EB688 as an extern. No literal or data word is owned. Original file boundaries and nominal identity unresolved; 0x801556D0 follows src/game/cu_80155640.cpp and 0x8015583C starts src/game/cu_8015583C.cpp; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801556D0",
-          "end": "0x8015583C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801556D0",
-          "start": "0x801556D0",
-          "end": "0x8015576C"
-        },
-        {
-          "symbol": "fn_8015576C",
-          "start": "0x8015576C",
-          "end": "0x801557E0"
-        },
-        {
-          "symbol": "fn_801557E0",
-          "start": "0x801557E0",
-          "end": "0x8015580C"
-        },
-        {
-          "symbol": "fn_8015580C",
-          "start": "0x8015580C",
-          "end": "0x8015583C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801559B8.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #878; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 8 of the table 0x802A2A40 (Class_80148A58-derived, include/game/Class_80148A58.h; 0x801559B8-0x80155A7C, word 0x802A2A84). Calls 0x80177F70, 0x80178308, 0x80178320 and 0x801787DC (registered by src/game/cu_80176F18.cpp) and 0x80237260 as externs. The .rodata slice 0x802A17A0-0x802A17A8 holds its 0.5f and 0.7f literals. Original file boundaries and nominal identity unresolved; 0x801558FC before the range is src/game/cu_8015583C.cpp and 0x80155A7C starts src/game/cu_80155A7C.cpp; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801559B8",
-          "end": "0x80155A7C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A17A0",
-          "end": "0x802A17A8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801559B8",
-          "start": "0x801559B8",
-          "end": "0x80155A7C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8015583C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #881; two complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 1 and 2 of the table 0x802A2A40 (Class_80148A58-derived, include/game/Class_80148A58.h; 0x8015583C-0x801558FC and 0x801558FC-0x801559B8, words 0x802A2A4C and 0x802A2A54). Slot 1 allocates the 192-byte block through __nw__FUii and constructs it with 0x80156400 (external __14Block_80156400); slot 2 deletes it through __builtin_delete after destroying its six 28-byte records through their virtual destructor. Calls 0x8017CAC0 and 0x80178F20 (registered by src/game/cu_80176F18.cpp), 0x800BC51C (src/game/cu_8008E978.cpp), 0x80155588 (src/game/cu_80155588.cpp), fn_8007F828 and fn_8007F6F8 through their headers, and 0x800AACB8 as an extern; forms the address of fn_801556D0 of src/game/cu_801556D0.cpp. No literal or data word is owned. Original file boundaries and nominal identity unresolved; 0x8015583C follows src/game/cu_801556D0.cpp and 0x801559B8 starts src/game/cu_801559B8.cpp; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015583C",
-          "end": "0x801559B8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8015583C",
-          "start": "0x8015583C",
-          "end": "0x801558FC"
-        },
-        {
-          "symbol": "fn_801558FC",
-          "start": "0x801558FC",
-          "end": "0x801559B8"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801530FC.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #883; four complete functions inside the retained provisional cu_801485B4 survey group: 0x801530FC (returns word +36 of the object held at +28 of the .bss object 0x8031BDD4), 0x8015310C and 0x80153168 (flag bytes from +44 of that object, passed in r3 by their callers), and slot 1 of the table 0x802A1930 of src/game/cu_801531C4.cpp (0x80153174, word 0x802A193C). Calls fn_801383C8 through include/game/Ball.h and 0x801787DC (registered by src/game/cu_80176F18.cpp); reads lbl_8031BDD4 as an extern (not claimed). No literal or data word is owned. Original file boundaries and nominal identity unresolved; 0x80152FFC-0x801530FC is src/game/cu_80152FFC.cpp and 0x801531C4 starts src/game/cu_801531C4.cpp; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801530FC",
-          "end": "0x801531C4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801530FC",
-          "start": "0x801530FC",
-          "end": "0x8015310C"
-        },
-        {
-          "symbol": "fn_8015310C",
-          "start": "0x8015310C",
-          "end": "0x80153168"
-        },
-        {
-          "symbol": "fn_80153168",
-          "start": "0x80153168",
-          "end": "0x80153174"
-        },
-        {
-          "symbol": "fn_80153174",
-          "start": "0x80153174",
-          "end": "0x801531C4"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8015264C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #885; two complete functions inside the retained provisional cu_801485B4 survey group: 0x8015264C (returns 0x8003AC84 of the id word of entry 0 of the table reached through word +28 of the .bss object 0x8031BDD4) and slot 13 of the table 0x802A2918 of src/game/cu_80152FFC.cpp (0x8015267C, word 0x802A2984). Calls GameModeTypeGet through include/game/GameModeType.h, and 0x8003AC84 and 0x801529C0 as externs; reads lbl_8031BDD4 as an extern (not claimed). No literal or data word is owned. Original file boundaries and nominal identity unresolved; 0x8015247C-0x8015264C before and 0x801526EC onward are not claimed; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015264C",
-          "end": "0x801526EC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8015264C",
-          "start": "0x8015264C",
-          "end": "0x8015267C"
-        },
-        {
-          "symbol": "fn_8015267C",
-          "start": "0x8015267C",
-          "end": "0x801526EC"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8015539C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue 888; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 10 of the table 0x802A17A8 of src/game/cu_80155384.cpp (derived from the rule-set table 0x802A56E8, include/game/ScrmRuleSet.h; 0x8015539C-0x80155588, word 0x802A17FC). Calls the base slot 0x8017767C through its declaration ScrmRuleSet::ResetPlaySpot, fn_8017886C through include/game/Object_8017886C.h and 0x80177F70, 0x80177F88, 0x80178308, 0x80178320, 0x80178348, 0x801787DC, 0x80178CD8 and 0x80178E94 (registered by src/game/cu_80176F18.cpp) as externs; writes the .sdata byte 0x803EB2FC as an extern (not claimed). No literal or data word is owned. Original file boundaries and nominal identity unresolved; 0x8015539C follows src/game/cu_80155384.cpp and 0x80155588 starts src/game/cu_80155588.cpp; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015539C",
-          "end": "0x80155588"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8015539C",
-          "start": "0x8015539C",
-          "end": "0x80155588"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80154F70.cpp",
-      "profile": "game_cpp",
-      "evidence": "Bounded three-function comparison-only fragment within retained provisional cu_801485B4. Prior slots 30/player lookup (80154F70,80154FC0; issue #890) are preserved; issue #1082 adds complete slot 20 fn_80155004, held at 802A2894 of table 802A27F0. Start remains after cu_80154A88; end is the existing fn_80155128 entry. Complete readonly strings 802A1604-802A1610 are measured, while shared format 802A0DDC and .sbss pair 803ECA24 stay external original-owned. Original file edges, class identity and signature spelling remain unresolved. Original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80154F70",
-          "end": "0x80155128"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A1604",
-          "end": "0x802A1610"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80154F70",
-          "start": "0x80154F70",
-          "end": "0x80154FC0"
-        },
-        {
-          "symbol": "fn_80154FC0",
-          "start": "0x80154FC0",
-          "end": "0x80155004"
-        },
-        {
-          "symbol": "fn_80155004",
-          "start": "0x80155004",
-          "end": "0x80155128"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80153700.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #894; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 11 of the table 0x802A1930 of src/game/cu_801531C4.cpp (derived from the rule-set table 0x802A56E8, include/game/ScrmRuleSet.h; 0x80153700-0x801537A0, word 0x802A198C). Calls the base slot 0x80177768 through its declaration ScrmRuleSet::ResetGame, fn_80148A58 through its header and memset through <string.h>, 0x80155128 (src/game/cu_80155128.cpp) and 0x800D7520 (src/game/StyleTracker.cpp) as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; slot 10 (0x801534D4) before the range is src/game/cu_801534D4.cpp and 0x801537A0 is src/game/cu_801537A0.cpp; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80153700",
-          "end": "0x801537A0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80153700",
-          "start": "0x80153700",
-          "end": "0x801537A0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80152400.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issues #896/#1126; three complete slot bodies inside retained provisional cu_801485B4: slots 10, 11 and 12 of table 0x802A2918 (words 0x802A296C, 0x802A2974 and 0x802A297C). Adds complete 0x8015247C-0x8015264C body in the existing file; both old bodies retained. Entire native readonly output measured against 0x802A1424-0x802A14EC, containing the new cursor and update query strings. Shared strings at 0x802A0F24/0x802A0F34/0x802A0F74 stay external original-owned in the readonly context of src/game/cu_8014E534.cpp. Original names and file boundaries unresolved; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80152400",
-          "end": "0x8015264C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A1424",
-          "end": "0x802A14EC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80152400",
-          "start": "0x80152400",
-          "end": "0x80152448"
-        },
-        {
-          "symbol": "fn_80152448",
-          "start": "0x80152448",
-          "end": "0x8015247C"
-        },
-        {
-          "symbol": "fn_8015247C",
-          "start": "0x8015247C",
-          "end": "0x8015264C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801527E0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #898; two complete functions inside the retained provisional cu_801485B4 survey group: 0x801527E0 (called from 0x801508A8 in src/game/cu_80150848.cpp and from 0x80151058, with r3 = 0x8031BDD4 at 0x801508A4) and 0x8015286C (called from 0x800C9A14 and 0x800F2F04), both on the Class_802A2918 object of src/game/cu_80152FFC.cpp. Calls 0x801530FC (src/game/cu_801530FC.cpp), 0x801487C0 and 0x80148814 (src/game/cu_801485B4.cpp) and 0x8003AC84 as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801527B8 before and 0x8015289C onward are not claimed; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801527E0",
-          "end": "0x8015289C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801527E0",
-          "start": "0x801527E0",
-          "end": "0x8015286C"
-        },
-        {
-          "symbol": "fn_8015286C",
-          "start": "0x8015286C",
-          "end": "0x8015289C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80152940.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issues #903/#1112; two complete record helpers 0x80152940-0x80152A54 plus slot-30 statistic query 0x80152A54-0x80152B98 (table 0x802A2918, word 0x802A2A0C). Existing record constructor, player and base-query contracts retained. No data owned; full native output measured. Original file/member identities remain unresolved inside cu_801485B4; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80152940",
-          "end": "0x80152B98"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80152940",
-          "start": "0x80152940",
-          "end": "0x801529C0"
-        },
-        {
-          "symbol": "fn_801529C0",
-          "start": "0x801529C0",
-          "end": "0x80152A54"
-        },
-        {
-          "symbol": "fn_80152A54",
-          "start": "0x80152A54",
-          "end": "0x80152B98"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801527B8.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #906; one complete function inside the retained provisional cu_801485B4 survey group: 0x801527B8, called only from 0x8013BEB4 (src/game/cammain.cpp, with r3 = 0x8031BDD4 from lis -32718 / addi -16940 at 0x8013BEA8/0x8013BEB0 and r4 = the output vector), copies the 12 bytes at +80 of the table reached through member +28 and its word +36 of the Class_802A2918 object of src/game/cu_80152FFC.cpp to r4. Calls nothing; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801526EC before is not claimed and 0x801527E0 onward is src/game/cu_801527E0.cpp; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801527B8",
-          "end": "0x801527E0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801527B8",
-          "start": "0x801527B8",
-          "end": "0x801527E0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801526EC.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #908; one complete function inside the retained provisional cu_801485B4 survey group: 0x801526EC, called only from 0x80150368 (fn_8015034C of src/game/cu_8015005C.cpp, with r3 = 0x8031BDD4 from lis -32718 / addi -16940 at 0x80150360/0x80150364), resets the table reached through member +28 and its word +36 of the Class_802A2918 object of src/game/cu_80152FFC.cpp and calls 0x80039F5C (src/game/PlyrMgr.cpp) for team 1, indices 0-3. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801526EC follows fn_8015267C of src/game/cu_8015264C.cpp and 0x801527B8 onward is src/game/cu_801527B8.cpp; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801526EC",
-          "end": "0x801527B8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801526EC",
-          "start": "0x801526EC",
-          "end": "0x801527B8"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801528E0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #910; one complete function inside the retained provisional cu_801485B4 survey group: 0x801528E0, called only from 0x800F486C (fn_800F4838 of src/game/cu_800F0960.cpp, with r3 = 0x8031BDD4 from lis -32718 / addi -16940 at 0x800F4858/0x800F4864 and r4 = the output point), stores 0.0f and fn_80177FE0().mY + 20.0f + 10.0f to the point. Calls 0x80177FE0 (include/game/fn_80177FE0.h) as an extern. The .rodata slice 0x802A14EC-0x802A14F8 holds its 0.0f, 20.0f and 10.0f literals. Original file boundaries and nominal identity unresolved; 0x8015289C before is not claimed and 0x80152940 onward is src/game/cu_80152940.cpp; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801528E0",
-          "end": "0x80152940"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A14EC",
-          "end": "0x802A14F8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801528E0",
-          "start": "0x801528E0",
-          "end": "0x80152940"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8015289C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #912; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 23 of the table 0x802A2918 of src/game/cu_80152FFC.cpp (0x8015289C-0x801528E0, word 0x802A29D4), replacing the base entry 0x80148C4C of the table 0x802A2EE0 of Class_80148A58. Calls nothing; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; src/game/cu_801527E0.cpp ends at 0x8015289C and 0x801528E0 onward is src/game/cu_801528E0.cpp; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015289C",
-          "end": "0x801528E0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8015289C",
-          "start": "0x8015289C",
-          "end": "0x801528E0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80150DFC.cpp",
-      "profile": "game_cpp",
-      "evidence": "Bounded comparison-only fragment of three complete bodies inside the larger provisional candidate cu_801485B4. fn_80150DFC is slot 5 of the table 0x802A1D20 of src/game/cu_80150848.cpp (word 0x802A1D4C, the only data word holding it), replacing the base entry 0x800A05E8 (base word 0x80297AE4) of the table 0x80297AB8; it is not called directly. Start: 0x80150AC4-0x80150DFC (slot 4 of the same table, word 0x802A1D44, ending with the blr at 0x80150DF8) is not claimed. Adds 0x801514AC-0x80151598, called at 0x80150D94 by the same class's slot-4 update. Adds the complete ball/field-position setup helper 0x80150E1C-0x80151010, called from 0x80151064. The gap 0x80151010-0x801514AC remains unreconstructed; the next registered fragment starts at 0x80151598. Shared format 0x802A0DDC and empty string 0x802A05C8 remain external original-owned. Native conversion bias and three floats are measured against 0x802A1358-0x802A136C; all 24 native bytes, including trailing alignment, remain measured against that 20-byte target range. The original-owned origin floats at 0x802A134C/1350 remain external. The setup loop demonstrates three points at table +92 through +115, refining the provisional table view without changing the existing four-entry accesses. Original class identity, signatures and file boundaries remain unresolved; original assembly remains linked. Unchanged game_cpp profile; inferred names, layouts and source forms have separate evidence rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80150DFC",
-          "end": "0x80151598"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A1358",
-          "end": "0x802A136C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80150DFC",
-          "start": "0x80150DFC",
-          "end": "0x80150E1C"
-        },
-        {
-          "symbol": "ResetBallsAndFieldPositions",
-          "start": "0x80150E1C",
-          "end": "0x80151010"
-        },
-        {
-          "symbol": "RefreshFourPlayerScoreRows",
-          "start": "0x801514AC",
-          "end": "0x80151598"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801537A0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #916; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 3 of the table 0x802A1BC8 of src/game/cu_80153844.cpp (0x801537A0-0x80153844, word 0x802A1BE4), replacing the base entry 0x800BC5DC of the table 0x80297BF8 (include/game/PreGamePhase.h). Calls the base entry 0x800BC5DC (OnEnter__12PreGamePhase), entries 14 and 35 of the fn_80148A58 object and the registered functions 0x80178D70, 0x8017E094, 0x8017DC08, 0x800A8738 and 0x80157514. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801537A0",
-          "end": "0x80153844"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801537A0",
-          "start": "0x801537A0",
-          "end": "0x80153844"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801534D4.cpp",
-      "profile": "game_cpp",
-      "evidence": "One complete slot body inside the retained provisional cu_801485B4 survey group: slot 10 of the table 0x802A1930 of src/game/cu_801531C4.cpp (derived from the rule-set table 0x802A56E8, include/game/ScrmRuleSet.h; 0x801534D4-0x80153700, word 0x802A1984). Calls the base slot 0x8017767C through its declaration ScrmRuleSet::ResetPlaySpot, fn_80148A58 and fn_8017886C through their headers, slot 35 of the fn_80148A58 object, 0x80155128 (src/game/cu_80155128.cpp), 0x800948E4, 0x8008593C (src/game/FormationLineupEdit.cpp), 0x80178D70 (include/game/fn_80178D18.h) and 0x80177E6C, 0x80178308, 0x80178320, 0x8017833C, 0x80178348, 0x80178360 and 0x80178CD8 (src/game/cu_80176F18.cpp) as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801534D4",
-          "end": "0x80153700"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801534D4",
-          "start": "0x801534D4",
-          "end": "0x80153700"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80148A98.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #925; the complete base constructor 0x80148A98-0x80148AD0 of Class_80148A58 (include/game/Class_80148A58.h, base table 0x802A2EE0) inside the retained provisional cu_801485B4 survey group, excluded by the claims #748 and #811 on either side. It stores the table at +24 (resolved through the _vt.14Class_80148A58 external) and initializes the data members at +0 to +20. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80148A98",
-          "end": "0x80148AD0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__14Class_80148A58",
-          "start": "0x80148A98",
-          "end": "0x80148AD0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014B498.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #927; the complete constructor 0x8014B498-0x8014B4E8 and destructor 0x8014B4E8-0x8014B528 (slot 35, called directly by the static destroy path) of the Class_80148A58-derived class of the table 0x802A2DB8 inside the retained provisional cu_801485B4 survey group. It calls the base constructor 0x80148A98 (__14Class_80148A58, src/game/cu_80148A98.cpp), stores the table at +24 (resolved through the _vt.14Class_802A2DB8 external) and initializes members, including the .data record array 0x802DE130 (an extern). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014B498",
-          "end": "0x8014B528"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__14Class_802A2DB8",
-          "start": "0x8014B498",
-          "end": "0x8014B4E8"
-        },
-        {
-          "symbol": "_._14Class_802A2DB8",
-          "start": "0x8014B4E8",
-          "end": "0x8014B528"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014C630.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #927; the complete constructor 0x8014C630-0x8014C690 of the Class_80148A58-derived class of the table 0x802A2C90 inside the retained provisional cu_801485B4 survey group. It calls the base constructor 0x80148A98 (__14Class_80148A58, src/game/cu_80148A98.cpp), stores the table at +24 (resolved through the _vt.14Class_802A2C90 external) and initializes members, including the .data record array 0x802DE41C (an extern). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014C630",
-          "end": "0x8014C690"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__14Class_802A2C90",
-          "start": "0x8014C630",
-          "end": "0x8014C690"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014EDC4.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #927; the complete constructor 0x8014EDC4-0x8014EE1C of the Class_80148A58-derived class of the table 0x802A2B68 inside the retained provisional cu_801485B4 survey group. It calls the base constructor 0x80148A98 (__14Class_80148A58, src/game/cu_80148A98.cpp), stores the table at +24 (resolved through the _vt.14Class_802A2B68 external) and initializes members, including the .data record array 0x802DE99C (an extern). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014EDC4",
-          "end": "0x8014EE1C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__14Class_802A2B68",
-          "start": "0x8014EDC4",
-          "end": "0x8014EE1C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801517F4.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #927; the complete constructor 0x801517F4-0x80151858 of the Class_80148A58-derived class of the table 0x802A2918 inside the retained provisional cu_801485B4 survey group. It calls the base constructor 0x80148A98 (__14Class_80148A58, src/game/cu_80148A98.cpp), stores the table at +24 (resolved through the _vt.14Class_802A2918 external) and initializes members, including the .data record array 0x802DEA18 (an extern). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801517F4",
-          "end": "0x80151858"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__14Class_802A2918",
-          "start": "0x801517F4",
-          "end": "0x80151858"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80154214.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #927; the complete constructor 0x80154214-0x8015426C of the Class_80148A58-derived class of the table 0x802A27F0 inside the retained provisional cu_801485B4 survey group. It calls the base constructor 0x80148A98 (__14Class_80148A58, src/game/cu_80148A98.cpp), stores the table at +24 (resolved through the _vt.14Class_802A27F0 external) and initializes members, including the .data record array 0x802DEAA8 (an extern). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80154214",
-          "end": "0x8015426C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__14Class_802A27F0",
-          "start": "0x80154214",
-          "end": "0x8015426C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014B7D4.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #929; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 2 of the table 0x802A2DB8 (0x8014B7D4-0x8014B890, word 0x802A2DCC), which releases the block that the pointer at +28 of the object points to. Calls 0x8007F6F8 (include/game/GameOptions.h), 0x800BC51C, 0x800B3644, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8, 0x80178F20 and __builtin_delete; the table 0x80297CE8 is referenced through the existing _vt.12PreSnapPhase external. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014B7D4",
-          "end": "0x8014B890"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014B7D4",
-          "start": "0x8014B7D4",
-          "end": "0x8014B890"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014B528.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #931; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 1 of the table 0x802A2DB8 (0x8014B528-0x8014B7D4, word 0x802A2DC4), which allocates the 60-byte block held at +28 of the object, sets up its seven state objects and fills its 2x3 id words. Calls __nw__FUii, 0x8007F828 and 0x8007F6F8 (include/game headers), 0x800BC51C, 0x800B3644, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8, 0x8014ABE4, 0x80178F20, 0x8008040C, 0x8003B560, 0x800809FC, 0x800808F8 and 0x8008056C; the seven state tables are referenced through new _vt.* externals. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014B528",
-          "end": "0x8014B7D4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014B528",
-          "start": "0x8014B528",
-          "end": "0x8014B7D4"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014C690.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #933; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 1 of the table 0x802A2C90 (0x8014C690-0x8014C808, word 0x802A2C9C), which allocates the 44-byte block held at +28 of the object and sets up its seven state objects. Calls __nw__FUii, 0x8007F828 and 0x8007F6F8 (include/game headers), 0x800BC51C, 0x800B3644, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8, 0x80177768 and 0x80178F20; the block table 0x802A21E8 and the seven state tables are referenced through new _vt.* externals. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014C690",
-          "end": "0x8014C808"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014C690",
-          "start": "0x8014C690",
-          "end": "0x8014C808"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014EE1C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #935; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 1 of the table 0x802A2B68 (0x8014EE1C-0x8014EFC0, word 0x802A2B74), which allocates the 124-byte block held at +28 of the object, its six-element record array at block +0x34, and sets up its six state objects. Calls __nw__FUii, __vn__FUii, memset, 0x80178F20, 0x800BC51C, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8, 0x8007F828 and 0x8007F6F8; writes the .sdata word 0x803EB2E0; the block, record and six state tables are referenced through new _vt.* externals. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014EE1C",
-          "end": "0x8014EFC0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014EE1C",
-          "start": "0x8014EE1C",
-          "end": "0x8014EFC0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80151858.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #937; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 1 of the table 0x802A2918 (0x80151858-0x80151A28, word 0x802A2924), which allocates the 40-byte block held at +28 of the object and its 128-byte table, initializes the table and sets up the six state objects. Calls 0x80149014, __nw__FUii, 0x80238174, 0x8023816C, 0x801D2B7C, memset, 0x8007F828, 0x8007F6F8, 0x802381E0, 0x80178F20, 0x800BC51C, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8 and 0x8016306C; the six state tables are referenced through new _vt.* externals. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80151858",
-          "end": "0x80151A28"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80151858",
-          "start": "0x80151858",
-          "end": "0x80151A28"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8015426C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #939; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 1 of the table 0x802A27F0 (0x8015426C-0x80154468, word 0x802A27FC), which allocates the 56-byte block held at +28 of the object and its 36-byte score block, initializes both and sets up the seven state objects. The .rodata slice 0x802A15F8-0x802A15FC holds its 18.0f literal. Calls 0x80149014, __nw__FUii, 0x80238174, 0x8023816C, 0x801D2B7C, memset, 0x802381E0, 0x800BC51C, 0x800BFAB4, 0x800B3644, 0x800A039C, 0x800B9598, 0x800AACB8, 0x80178F20, 0x80178A2C, 0x80178E88, 0x8007F828 and 0x8007F6F8; the seven state tables are referenced through new _vt.* externals. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015426C",
-          "end": "0x80154468"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A15F8",
-          "end": "0x802A15FC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8015426C",
-          "start": "0x8015426C",
-          "end": "0x80154468"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80154468.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #956; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 2 of the table 0x802A27F0 (0x80154468-0x80154520, word 0x802A2804), which releases the block that the pointer at +28 of the object points to and its score block. Calls 0x800BC51C, 0x800BFAB4, 0x800B3644, 0x800A039C, 0x800B9598, 0x800AACB8, 0x8007F6F8 (include/game/GameOptions.h), 0x80178F20, 0x80149014, 0x801D2BD0 (include/game/fn_801D2B7C.h), __builtin_delete and 0x800A8738; the table 0x80297CE8 is referenced through the existing _vt.12PreSnapPhase external. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80154468",
-          "end": "0x80154520"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80154468",
-          "start": "0x80154468",
-          "end": "0x80154520"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80151A28.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issues #961/#1112; complete release callback 0x80151A28-0x80151B20 and score comparison helper 0x80151B20-0x80151BCC, inside retained provisional cu_801485B4 grouping. Canonical base and existing score table/class views reused. No data owned; full native output measured; original bytes stay linked and original file/member identities remain unresolved.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80151A28",
-          "end": "0x80151BCC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80151A28",
-          "start": "0x80151A28",
-          "end": "0x80151B20"
-        },
-        {
-          "symbol": "fn_80151B20",
-          "start": "0x80151B20",
-          "end": "0x80151BCC"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014EFC0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #963; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 2 of the table 0x802A2B68 (0x8014EFC0-0x8014F104, word 0x802A2B7C), which releases the record array and the 124-byte block that the pointer at +28 of the object points to, both through their virtual destructors. Calls 0x800A8738, 0x8007F6F8 (include/game/GameOptions.h), 0x8005FC7C, 0x8014FF34, 0x8006088C, 0x80149014, 0x8014DA90, 0x800D7604, 0x80178F20, 0x800BC51C, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8 and the new __builtin_vec_delete external (0x801D3C40). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014EFC0",
-          "end": "0x8014F104"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014EFC0",
-          "start": "0x8014EFC0",
-          "end": "0x8014F104"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80151CCC.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #965; one complete function inside the retained provisional cu_801485B4 survey group: 0x80151CCC-0x80151D9C, called from 0x8015028C (fn_801501F0 of src/game/cu_8015005C.cpp) and 0x80151F6C, which marks one entry of the table-0x802A2918 object's 128-byte table, decrements its two counts and updates the players. Calls 0x8003AC84, 0x800B6658, 0x80039F5C (include/game/Object_80039F5C.h), 0x801488D4, 0x80148814 and 0x8017E094. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80151CCC",
-          "end": "0x80151D9C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80151CCC",
-          "start": "0x80151CCC",
-          "end": "0x80151D9C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80151D9C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #967; one complete function inside the retained provisional cu_801485B4 survey group: 0x80151D9C-0x80152068, called only from 0x80150DB4 with the .bss object 0x8031BDD4, which ends a round of the table-0x802A2918 object: it announces sudden death, or eliminates the trailing entries through 0x80151CCC (src/game/cu_80151CCC.cpp) and either finishes through 0x801502B4 or starts the next round and resets the per-round scores. Owns the .rodata strings 0x802A13AC-0x802A13E8 it forms. Original file boundaries and nominal identity unresolved; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The comparison code-placement hull expands only to locate the new body in the same retained survey grouping; only explicit whole-function ranges are measured.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801502B4",
-          "end": "0x80152068"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A13AC",
-          "end": "0x802A13E8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801502B4",
-          "start": "0x801502B4",
-          "end": "0x8015034C"
-        },
-        {
-          "symbol": "fn_80151D9C",
-          "start": "0x80151D9C",
-          "end": "0x80152068"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80151BCC.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #969; one complete function inside the retained provisional cu_801485B4 survey group: 0x80151BCC-0x80151CCC, called only from 0x80150DA4 with the .bss object 0x8031BDD4, which lowers the Y position of the team-0 players to the point Y returned by 0x80177FFC(0) and raises the Y position of each table entry's player to 5.0 above the point Y returned by 0x80177FFC(1). Owns the .rodata literal 0x802A13A8-0x802A13AC. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80151BCC",
-          "end": "0x80151CCC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A13A8",
-          "end": "0x802A13AC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80151BCC",
-          "start": "0x80151BCC",
-          "end": "0x80151CCC"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80152068.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issues #971/#1114; complete vector-output helper 0x80152068-0x801520C4 and two complete ball-selection helpers 0x801520C4-0x80152400 inside retained provisional cu_801485B4 group. Existing player, ball and vector declarations reused. Directly referenced readonly literals occupy 0x802A13E8-0x802A1424; complete native data including any end padding is measured. Original file boundaries and nominal identities unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80152068",
-          "end": "0x80152400"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A13E8",
-          "end": "0x802A1424"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80152068",
-          "start": "0x80152068",
-          "end": "0x801520C4"
-        },
-        {
-          "symbol": "fn_801520C4",
-          "start": "0x801520C4",
-          "end": "0x8015228C"
-        },
-        {
-          "symbol": "fn_8015228C",
-          "start": "0x8015228C",
-          "end": "0x80152400"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80148D20.cpp",
-      "profile": "game_cpp",
-      "evidence": "Claim #974; two complete functions inside the retained provisional cu_801485B4 survey group: 0x80148D20-0x80149014, the update and select callbacks whose addresses fn_80148AF8 passes to 0x8003EBC4 and 0x8003EBE4 in place of the defaults AutoDepthRatePlayer and AutoDepthPickBest. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80148D20",
-          "end": "0x80149014"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80148D20",
-          "start": "0x80148D20",
-          "end": "0x80148DFC"
-        },
-        {
-          "symbol": "fn_80148DFC",
-          "start": "0x80148DFC",
-          "end": "0x80149014"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80156068.cpp",
-      "profile": "game_cpp",
-      "evidence": "One complete destructor body inside the retained provisional cu_801485B4 survey group (0x80156068-0x8015609C): the destructor of the PreSnapPhase-derived table 0x802A26D8 (slot 1, word 0x802A26E4). The body is an empty destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. The original destructor was inline (the teardown 0x8014B7D4 stores 0x80297CE8 at +8 at 0x8014B86C and calls 0x801D3C18 at 0x8014B870 without calling it); the out-of-line definition is a stand-in for the emitted copy, accepted by the owner strictly as a comparison-only emitted-copy representation; actual inline class/vtable context must be recovered before promotion or reconstructed caller use. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80156068",
-          "end": "0x8015609C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_._14Class_802A26D8",
-          "start": "0x80156068",
-          "end": "0x8015609C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801560BC.cpp",
-      "profile": "game_cpp",
-      "evidence": "One complete destructor body inside the retained provisional cu_801485B4 survey group (0x801560BC-0x801560F0): the destructor of the PreSnapPhase-derived table 0x802A23E0 (slot 1, word 0x802A23EC). The body is an empty destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. The original destructor was inline (the Block_802A21E8 destructor 0x80156108 stores 0x80297CE8 at +8 at 0x8015612C without calling it); the out-of-line definition is a stand-in for the emitted copy, accepted by the owner strictly as a comparison-only emitted-copy representation; actual inline class/vtable context must be recovered before promotion or reconstructed caller use. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801560BC",
-          "end": "0x801560F0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_._14Class_802A23E0",
-          "start": "0x801560BC",
-          "end": "0x801560F0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8015629C.cpp",
-      "profile": "game_cpp",
-      "evidence": "One complete destructor body inside the retained provisional cu_801485B4 survey group (0x8015629C-0x801562D0): the destructor of the ScrmRuleSet-derived table 0x802A1E38 (slot 22, word 0x802A1EEC). The body is an empty destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. The original destructor was inline (the teardown 0x80151A28 stores 0x802A1E38 at +32 at 0x80151AF0 and calls 0x801D3C18 at 0x80151B00 without calling it); the out-of-line definition is a stand-in for the emitted copy, accepted by the owner strictly as a comparison-only emitted-copy representation; actual inline class/vtable context must be recovered before promotion or reconstructed caller use. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015629C",
-          "end": "0x801562D0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_._14Class_802A1E38",
-          "start": "0x8015629C",
-          "end": "0x801562D0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8015631C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Two complete destructor bodies inside the retained provisional cu_801485B4 survey group (0x8015631C-0x80156384): the destructor of the PreGamePhase-derived table 0x802A1DC8 (slot 12, word 0x802A1E2C); the destructor of the PreSnapPhase-derived table 0x802A1D58 (slot 1, word 0x802A1D64). Each body is an empty destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. The original destructors were inline (the teardown 0x80151A28 stores 0x80297CE8 at +8 at 0x80151AF8 and 0x802A1DC8 at +0 at 0x80151AFC and calls 0x801D3C18 at 0x80151B00 without calling either); the out-of-line definitions are a stand-in for the emitted copies, accepted by the owner strictly as a comparison-only emitted-copy representation; actual inline class/vtable context must be recovered before promotion or reconstructed caller use. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015631C",
-          "end": "0x80156384"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_._14Class_802A1DC8",
-          "start": "0x8015631C",
-          "end": "0x80156350"
-        },
-        {
-          "symbol": "_._14Class_802A1D58",
-          "start": "0x80156350",
-          "end": "0x80156384"
-        }
-      ]
-    },
-    {
       "source": "src/engine/snddrv.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), the sound_cxx compiler row and the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
@@ -24812,81 +23660,6 @@
           "symbol": "SNDARAM_free",
           "start": "0x80279B24",
           "end": "0x80279BC0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80148AD0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #811; twelve complete unregistered base-class helpers between the excluded constructor80148A98 and callback80148D20 inside the provisional cu801485B4 survey grouping. Reuses canonical class, player and callback declarations. No literal or defined storage; original code remains linked. Original source-file identity and larger grouping ownership unresolved.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80148AD0",
-          "end": "0x80148D20"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80148AD0",
-          "start": "0x80148AD0",
-          "end": "0x80148AD8"
-        },
-        {
-          "symbol": "fn_80148AD8",
-          "start": "0x80148AD8",
-          "end": "0x80148AE0"
-        },
-        {
-          "symbol": "fn_80148AE0",
-          "start": "0x80148AE0",
-          "end": "0x80148AE8"
-        },
-        {
-          "symbol": "fn_80148AE8",
-          "start": "0x80148AE8",
-          "end": "0x80148AF0"
-        },
-        {
-          "symbol": "fn_80148AF0",
-          "start": "0x80148AF0",
-          "end": "0x80148AF8"
-        },
-        {
-          "symbol": "fn_80148AF8",
-          "start": "0x80148AF8",
-          "end": "0x80148B44"
-        },
-        {
-          "symbol": "fn_80148B44",
-          "start": "0x80148B44",
-          "end": "0x80148B70"
-        },
-        {
-          "symbol": "fn_80148B70",
-          "start": "0x80148B70",
-          "end": "0x80148B9C"
-        },
-        {
-          "symbol": "fn_80148B9C",
-          "start": "0x80148B9C",
-          "end": "0x80148BF0"
-        },
-        {
-          "symbol": "fn_80148BF0",
-          "start": "0x80148BF0",
-          "end": "0x80148C4C"
-        },
-        {
-          "symbol": "fn_80148C4C",
-          "start": "0x80148C4C",
-          "end": "0x80148CA0"
-        },
-        {
-          "symbol": "fn_80148CA0",
-          "start": "0x80148CA0",
-          "end": "0x80148D20"
         }
       ]
     },
@@ -28527,92 +27300,6 @@
           "symbol": "XmlGetAttrFloats",
           "start": "0x8021743C",
           "end": "0x802176E8"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014FDD0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #1021; two complete whole-function bodies in retained provisional cu_801485B4 grouping. Natural partial comparisons; no original translation-unit claim, no linked promotion. Source shares identical established Record_8014F104/Block_8014F104/Class_802A2B68 header views with unchanged F104/F57C consumers.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014FDD0",
-          "end": "0x8014FFC4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014FDD0",
-          "start": "0x8014FDD0",
-          "end": "0x8014FF2C"
-        },
-        {
-          "symbol": "fn_8014FF34",
-          "start": "0x8014FF34",
-          "end": "0x8014FFC4"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8014FFC4.cpp",
-      "profile": "game_cpp",
-      "evidence": "Issue #1021; complete coordinate helper at existing whole-function extent. Original source grouping unresolved; natural constants 6,20,40 map to target readonly 802A12BC\u2013802A12C8. Partial comparison only; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8014FFC4",
-          "end": "0x8015005C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A12BC",
-          "end": "0x802A12C8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8014FFC4",
-          "start": "0x8014FFC4",
-          "end": "0x8015005C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80155F98.cpp",
-      "profile": "game_cpp",
-      "evidence": "Four complete slot-35 destructor bodies inside the retained provisional cu_801485B4 survey group: the destructors of the Class_80148A58-derived tables 0x802A2C90, 0x802A2B68, 0x802A2A40 and 0x802A2918 (0x80155F98-0x80156068; words 0x802A2DAC, 0x802A2C84, 0x802A2B5C and 0x802A2A34). Each stores its own table at +24 and calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; the table addresses resolve through the _vt externals. The original destructors were inline (the static destroy path 0x80155E28 only stores the tables); the out-of-line definitions are a stand-in for the emitted copies, accepted by the owner strictly as a comparison-only emitted-copy representation; actual inline class/vtable context must be recovered before promotion or reconstructed caller use. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80155F98",
-          "end": "0x80156068"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_._14Class_802A2C90",
-          "start": "0x80155F98",
-          "end": "0x80155FCC"
-        },
-        {
-          "symbol": "_._14Class_802A2B68",
-          "start": "0x80155FCC",
-          "end": "0x80156000"
-        },
-        {
-          "symbol": "_._14Class_802A2A40",
-          "start": "0x80156000",
-          "end": "0x80156034"
-        },
-        {
-          "symbol": "_._14Class_802A2918",
-          "start": "0x80156034",
-          "end": "0x80156068"
         }
       ]
     },

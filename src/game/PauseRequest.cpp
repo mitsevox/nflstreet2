@@ -2,7 +2,7 @@
    request so that the pause manager opens the in-game pause screen for that
    pad. */
 
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/PauseMenu.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800B65A0.h"
@@ -58,8 +58,8 @@ int PauseRequestIsAllowed(int a)
     int result = 0;
 
     if ((fn_800B65A0(fn_80178308()) == 0xFF && fn_800B65A0(fn_80178320()) == 0xFF) || fn_800B6644(a) != 0xFF || a == 8) {
-        if (fn_80148A58()) {
-            result = fn_80148A58()->vfn_22(a);
+        if (MiniGameGetCurrent()) {
+            result = MiniGameGetCurrent()->vfn_22(a);
         } else {
             result = 1;
         }
