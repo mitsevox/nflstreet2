@@ -1396,18 +1396,12 @@
     {
       "source": "src/game/SndgEvents.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row of src/game/SndgEvents.cpp (0x8006F810-0x80071C3C) and the data row 0x80290B58-0x80290BC8 of its whole .rodata (pools and the two constant tables); linked with holdouts (owner ruling of 2026-11-20): 35 of 37 functions exact, the two holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/game/SndgEvents.cpp (0x8006F810-0x80071C3C) and the data row 0x80290B58-0x80290BC8 of its whole .rodata (pools and the two constant tables); linked with holdouts (owner ruling of 2026-11-20): 36 of 37 functions exact, the holdout keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8006F810",
-          "end": "0x8006F850"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80070C40",
           "end": "0x80071BDC"
         },
         {
@@ -1426,15 +1420,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "SndgEventProcess",
-            "evidence": "evidence.tsv source-form 0x8006F850-0x80070C40"
-          },
-          {
             "function": "SndgEventGetSurfaceSfx",
             "evidence": "evidence.tsv source-form 0x80071BDC-0x80071C2C"
           }
         ],
-        "evidence": "x1f merge notes (swarm x1 tracking table): src/game/SndgEvents.cpp holds out fn_8006F850 and fn_80071BDC."
+        "evidence": "x1f merge notes (swarm x1 tracking table): src/game/SndgEvents.cpp holds out fn_8006F850 and fn_80071BDC; wave p1 lane p1e made SndgEventProcess (fn_8006F850) exact, leaving SndgEventGetSurfaceSfx (fn_80071BDC)."
       }
     },
     {
