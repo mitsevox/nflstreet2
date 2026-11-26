@@ -10469,7 +10469,7 @@
             "evidence": "evidence.tsv source-form 0x800504EC-0x800508A0"
           }
         ],
-        "evidence": "fd1a merge notes (swarm fd1 tracking table) and the fd1 fix round (PR #1394): src/game/DynObj.cpp holds out the 16 functions listed here, each with its HOLDOUT: source-form row in evidence.tsv."
+        "evidence": "fd1a merge notes (swarm fd1 tracking table) and the fd1 fix round (PR #1394): src/game/DynObj.cpp holds out the 12 functions listed here, each with its HOLDOUT: source-form row in evidence.tsv (16 until round 3 lane 2, PR #1451, made BigObjHitStatic, DynObjChildSpawn, DynObjParseRender and PhysUpdatePlayers exact and linked them)."
       }
     },
     {
