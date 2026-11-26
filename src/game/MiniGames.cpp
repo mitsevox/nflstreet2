@@ -6181,9 +6181,9 @@ int fn_80155130(Class_80148A58 *p, int team, unsigned char index)
             Rules_801531C4 *pRules = static_cast<Class_802A27F0 *>(p)->mpUnknown1C;
 
             if (pRules->mUnknown4.mpUnknown4[team][index] != pPlayer->mpUnknown4) {
-                color = pRules->mUnknown4.mUnknown20[team][index ^ 1];
+                color = (unsigned char)pRules->mUnknown4.mUnknown20[team][index ^ 1];
             } else {
-                color = pRules->mUnknown4.mUnknown20[team][index];
+                color = (unsigned char)pRules->mUnknown4.mUnknown20[team][index];
             }
         } else {
             color = fn_800B65A0(team);
