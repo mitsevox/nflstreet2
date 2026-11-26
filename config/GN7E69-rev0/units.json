@@ -4277,9 +4277,9 @@
       }
     },
     {
-      "source": "src/game/cu_80086C10.cpp",
+      "source": "src/game/StoreDb.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x80086C10-0x80087BE4 (src/game/cu_80086C10.cpp), its function, name and data rows and the linker row of the discarded StoreGetStringById; linked with holdouts (owner ruling of 2026-11-20), the seven holdouts keeping their original bytes.",
+      "evidence": "evidence.tsv unit row 0x80086C10-0x80087BE4 (src/game/StoreDb.cpp), its function, name and data rows and the linker row of the discarded StoreGetStringById; linked with holdouts (owner ruling of 2026-11-20), the seven holdouts keeping their original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -4327,31 +4327,31 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_80086D0C",
+            "function": "StoreGetItem",
             "evidence": "evidence.tsv source-form 0x80086D0C-0x80087128"
           },
           {
-            "function": "fn_80087128",
+            "function": "StoreCountItems",
             "evidence": "evidence.tsv source-form 0x80087128-0x800872E8"
           },
           {
-            "function": "fn_8008736C",
+            "function": "StoreIsItemLocked",
             "evidence": "evidence.tsv source-form 0x8008736C-0x80087460"
           },
           {
-            "function": "fn_80087460",
+            "function": "StoreIsItemNew",
             "evidence": "evidence.tsv source-form 0x80087460-0x8008754C"
           },
           {
-            "function": "fn_8008754C",
+            "function": "StoreClearItemNew",
             "evidence": "evidence.tsv source-form 0x8008754C-0x80087600"
           },
           {
-            "function": "fn_80087600",
+            "function": "StoreUnlockItem",
             "evidence": "evidence.tsv source-form 0x80087600-0x800876C0"
           },
           {
-            "function": "fn_8008775C",
+            "function": "StoreTeamCreate",
             "evidence": "evidence.tsv source-form 0x8008775C-0x80087880"
           }
         ],

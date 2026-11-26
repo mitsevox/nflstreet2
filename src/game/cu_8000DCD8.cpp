@@ -231,13 +231,13 @@ void HairListOpen(DbCursor *pObject);
 void HairListClose(DbCursor *pObject);
 int PlayerDbGetId(Object_8008044C *pObject);
 int PlayerDbGetHairStyle(Object_8008044C *pObject);
-int fn_800872E8(int a);
-int fn_8008731C(int a, int id, int *pOut1, int *pOut2, char *pBuffer, int size);
-int fn_8008736C(int a, int b);
-void fn_80087600(int a, int b);
-int fn_800876C0(void);
-int fn_80087704(void);
-int fn_80087BA0(int index);
+int StoreGetItemCount(int a);
+int StoreGetItemByRow(int a, int id, int *pOut1, int *pOut2, char *pBuffer, int size);
+int StoreIsItemLocked(int a, int b);
+void StoreUnlockItem(int a, int b);
+int StoreClose(void);
+int StoreOpen(void);
+int StoreGetTattooLocation(int index);
 unsigned int UserInfoGetPoints(int a);
 void UserInfoSpendPoints(int a, int b);
 Object_8008044C *EditMenuGetPlayerCursor(void);
@@ -295,11 +295,11 @@ static void fn_8000E8FC(int index, int value);
 void Class_8000F500::Enter(int a, int *pCount, int *pOut)
 {
     fn_8000EC44()->mUnknown0 = -1;
-    fn_80087704();
+    StoreOpen();
     fn_8000E70C();
     fn_8000E784(&lbl_8036AD78);
     lbl_803EB94C = GearDbFindIdByGbst(9, "MANNEQUINSHIRTPADS");
-    *pCount = fn_800872E8(mUnknown8);
+    *pCount = StoreGetItemCount(mUnknown8);
     if (*pCount == 0) {
         mUnknown16 = 1;
         *pCount = 1;
@@ -318,7 +318,7 @@ int Class_8000F500::Leave(int a, int b, void **pOut)
     fn_8000E834(&lbl_8036AD78);
     FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
     FEPlyrRequestSwap();
-    fn_800876C0();
+    StoreClose();
     fn_8000EC44()->mUnknown0 = 0;
     EditMenuMovePlayers(0);
     lbl_803EB948 = result;
@@ -344,8 +344,8 @@ void Class_8000F500::GetItem(int id, MenuEntry_t *pOut)
         int price;
 
         pOut->mUnknown40 = 0;
-        fn_8008731C(mUnknown8, id, &item, &price, pOut->mName, 22);
-        if (!fn_8008736C(mUnknown8, item) || UserInfoGetPoints(DbUserGetCurrent()) < price) {
+        StoreGetItemByRow(mUnknown8, id, &item, &price, pOut->mName, 22);
+        if (!StoreIsItemLocked(mUnknown8, item) || UserInfoGetPoints(DbUserGetCurrent()) < price) {
             pOut->mUnknown30 = 0;
         } else {
             pOut->mUnknown30 = 1;
@@ -361,9 +361,9 @@ void Class_8000F500::Highlight(int id)
         int item;
         int price;
 
-        fn_8008731C(mUnknown8, id, &item, &price, 0, 0);
+        StoreGetItemByRow(mUnknown8, id, &item, &price, 0, 0);
         fn_8000E8FC(mUnknown8, item);
-        if (fn_8008736C(mUnknown8, item)) {
+        if (StoreIsItemLocked(mUnknown8, item)) {
             if (price == 0) {
                 fn_8000EC44()->mUnknown0 = -2;
             } else {
@@ -380,7 +380,7 @@ void Class_8000F540::Enter(int a, int *pCount, int *pOut)
 {
     MenuListScreen::Enter(a, pCount, pOut);
     fn_8000EC44()->mUnknown0 = 0;
-    fn_80087704();
+    StoreOpen();
     if (a == 1) {
         int value;
 
@@ -817,8 +817,8 @@ static void fn_8000E8FC(int index, int value)
             PlayerLookSetGear(1, 10, 0);
         case 20:
         case 21:
-            PlayerLookSetPartVariant(0, fn_80087BA0(index), value);
-            PlayerLookSetPartVariant(1, fn_80087BA0(index), value);
+            PlayerLookSetPartVariant(0, StoreGetTattooLocation(index), value);
+            PlayerLookSetPartVariant(1, StoreGetTattooLocation(index), value);
             break;
         }
     }
@@ -847,9 +847,9 @@ extern "C" void fn_8000EBA4(int id)
     int price;
     char buffer[8];
 
-    fn_8008731C(fn_8000EC44()->mUnknown4, id, &item, &price, buffer, 8);
+    StoreGetItemByRow(fn_8000EC44()->mUnknown4, id, &item, &price, buffer, 8);
     fn_8000EC44()->mUnknown8 = 1;
-    fn_80087600(fn_8000EC44()->mUnknown4, item);
+    StoreUnlockItem(fn_8000EC44()->mUnknown4, item);
     UserInfoSpendPoints(DbUserGetCurrent(), price);
 }
 

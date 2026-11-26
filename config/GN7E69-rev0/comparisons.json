@@ -11611,7 +11611,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80086C10.cpp",
+      "source": "src/game/StoreDb.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u201380087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
@@ -11642,112 +11642,112 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80086C10",
+          "symbol": "StoreTeamAddPlayer",
           "start": "0x80086C10",
           "end": "0x80086CE8"
         },
         {
-          "symbol": "fn_80086CE8",
+          "symbol": "StoreGetCategory",
           "start": "0x80086CE8",
           "end": "0x80086D0C"
         },
         {
-          "symbol": "fn_80086D0C",
+          "symbol": "StoreGetItem",
           "start": "0x80086D0C",
           "end": "0x80087128"
         },
         {
-          "symbol": "fn_80087128",
+          "symbol": "StoreCountItems",
           "start": "0x80087128",
           "end": "0x800872E8"
         },
         {
-          "symbol": "fn_800872E8",
+          "symbol": "StoreGetItemCount",
           "start": "0x800872E8",
           "end": "0x8008731C"
         },
         {
-          "symbol": "fn_8008731C",
+          "symbol": "StoreGetItemByRow",
           "start": "0x8008731C",
           "end": "0x8008736C"
         },
         {
-          "symbol": "fn_8008736C",
+          "symbol": "StoreIsItemLocked",
           "start": "0x8008736C",
           "end": "0x80087460"
         },
         {
-          "symbol": "fn_80087460",
+          "symbol": "StoreIsItemNew",
           "start": "0x80087460",
           "end": "0x8008754C"
         },
         {
-          "symbol": "fn_8008754C",
+          "symbol": "StoreClearItemNew",
           "start": "0x8008754C",
           "end": "0x80087600"
         },
         {
-          "symbol": "fn_80087600",
+          "symbol": "StoreUnlockItem",
           "start": "0x80087600",
           "end": "0x800876C0"
         },
         {
-          "symbol": "fn_800876C0",
+          "symbol": "StoreClose",
           "start": "0x800876C0",
           "end": "0x80087704"
         },
         {
-          "symbol": "fn_80087704",
+          "symbol": "StoreOpen",
           "start": "0x80087704",
           "end": "0x8008775C"
         },
         {
-          "symbol": "fn_8008775C",
+          "symbol": "StoreTeamCreate",
           "start": "0x8008775C",
           "end": "0x80087880"
         },
         {
-          "symbol": "fn_80087880",
+          "symbol": "StoreTeamDelete",
           "start": "0x80087880",
           "end": "0x800878D8"
         },
         {
-          "symbol": "fn_800878D8",
+          "symbol": "StoreGetRowItemId",
           "start": "0x800878D8",
           "end": "0x80087938"
         },
         {
-          "symbol": "fn_80087938",
+          "symbol": "StoreFindUnlockedRow",
           "start": "0x80087938",
           "end": "0x800879E8"
         },
         {
-          "symbol": "fn_800879E8",
+          "symbol": "StoreIsRowItemNew",
           "start": "0x800879E8",
           "end": "0x80087A30"
         },
         {
-          "symbol": "fn_80087A30",
+          "symbol": "StoreClearRowItemNew",
           "start": "0x80087A30",
           "end": "0x80087A78"
         },
         {
-          "symbol": "fn_80087A78",
+          "symbol": "StoreGetUnlockedOrdinal",
           "start": "0x80087A78",
           "end": "0x80087B00"
         },
         {
-          "symbol": "fn_80087B00",
+          "symbol": "StoreCountUnlocked",
           "start": "0x80087B00",
           "end": "0x80087B5C"
         },
         {
-          "symbol": "fn_80087B5C",
+          "symbol": "StoreTattooLocationToKind",
           "start": "0x80087B5C",
           "end": "0x80087BA0"
         },
         {
-          "symbol": "fn_80087BA0",
+          "symbol": "StoreGetTattooLocation",
           "start": "0x80087BA0",
           "end": "0x80087BE4"
         }

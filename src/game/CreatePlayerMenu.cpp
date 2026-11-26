@@ -99,12 +99,12 @@ int fn_80082280(Object_8008044C *pObject);
 void fn_800822A8(Object_8008044C *pObject, int value);
 int fn_800822D4(Object_8008044C *pObject);
 void fn_80082308(Object_8008044C *pObject, int value);
-int fn_80087938(int table, DbCursor *pObject, int index, int *pResult);
-int fn_800879E8(int table, DbCursor *pObject);
-void fn_80087A30(int table, DbCursor *pObject);
-int fn_80087A78(int table, DbCursor *pObject, int value, int *pIndex);
-int fn_80087B00(int table, DbCursor *pObject);
-int fn_80087B5C(int type);
+int StoreFindUnlockedRow(int table, DbCursor *pObject, int index, int *pResult);
+int StoreIsRowItemNew(int table, DbCursor *pObject);
+void StoreClearRowItemNew(int table, DbCursor *pObject);
+int StoreGetUnlockedOrdinal(int table, DbCursor *pObject, int value, int *pIndex);
+int StoreCountUnlocked(int table, DbCursor *pObject);
+int StoreTattooLocationToKind(int type);
 void FEPlyrLoadInvalidate(int index);
 void fn_8015F638(int a, int b, int c, int *pResult);
 int PlaTexCacheGetCapFaceId(int a);
@@ -1361,8 +1361,8 @@ void CreatePlayerHairOptionList::Enter(int a, int *pCount, int *pOut)
     _CreatePlayer_sFacialHairCursor.OpenFchrTable();
     switch (mUnknown8) {
     case 0:
-        fn_80087A78(0x12, &_CreatePlayer_sHairCursor, PlayerDbGetHairStyle(EditMenuGetPlayerCursor()), pOut);
-        *pCount = fn_80087B00(0x12, &_CreatePlayer_sHairCursor);
+        StoreGetUnlockedOrdinal(0x12, &_CreatePlayer_sHairCursor, PlayerDbGetHairStyle(EditMenuGetPlayerCursor()), pOut);
+        *pCount = StoreCountUnlocked(0x12, &_CreatePlayer_sHairCursor);
         break;
     case 1:
         *pOut = PlayerDbGetHairColor(EditMenuGetPlayerCursor());
@@ -1388,8 +1388,8 @@ int CreatePlayerHairOptionList::Leave(int a, int b, void **pOut)
     if (b == 0) {
         switch (mUnknown8) {
         case 0:
-            fn_80087938(0x12, &_CreatePlayer_sHairCursor, a, 0);
-            fn_80087A30(0x12, &_CreatePlayer_sHairCursor);
+            StoreFindUnlockedRow(0x12, &_CreatePlayer_sHairCursor, a, 0);
+            StoreClearRowItemNew(0x12, &_CreatePlayer_sHairCursor);
             PlayerDbSetHairStyle(EditMenuGetPlayerCursor(), HairListGetId(&_CreatePlayer_sHairCursor));
             break;
         case 1:
@@ -1446,7 +1446,7 @@ void CreatePlayerHairOptionList::Highlight(int index)
 {
     switch (mUnknown8) {
     case 0:
-        fn_80087938(0x12, &_CreatePlayer_sHairCursor, index, 0);
+        StoreFindUnlockedRow(0x12, &_CreatePlayer_sHairCursor, index, 0);
         _CreatePlayerSetHair(HairListGetId(&_CreatePlayer_sHairCursor));
         break;
     case 1:
@@ -1480,8 +1480,8 @@ void CreatePlayerHairOptionList::GetItem(int index, MenuEntry_t *pOut)
 
     switch (mUnknown8) {
     case 0:
-        fn_80087938(0x12, &_CreatePlayer_sHairCursor, index, 0);
-        pOut->mUnknown40 = fn_800879E8(0x12, &_CreatePlayer_sHairCursor);
+        StoreFindUnlockedRow(0x12, &_CreatePlayer_sHairCursor, index, 0);
+        pOut->mUnknown40 = StoreIsRowItemNew(0x12, &_CreatePlayer_sHairCursor);
         HairListGetName(&_CreatePlayer_sHairCursor, name, 26);
         strnzcpy(pOut->mName, name, 22);
         break;
@@ -1593,9 +1593,9 @@ void CreatePlayerSkinOptionList::Enter(int a, int *pCount, int *pOut)
 
         PlayerDbReadGear(EditMenuGetPlayerCursor(), &info);
         TattooTableOpen(&cursor, type);
-        key = fn_80087B5C(type);
-        fn_80087A78(key, &cursor, _CreatePlayerGetTattoo(&info, type), pOut);
-        *pCount = fn_80087B00(fn_80087B5C(type), &cursor);
+        key = StoreTattooLocationToKind(type);
+        StoreGetUnlockedOrdinal(key, &cursor, _CreatePlayerGetTattoo(&info, type), pOut);
+        *pCount = StoreCountUnlocked(StoreTattooLocationToKind(type), &cursor);
         TattooTableClose(&cursor);
     }
 }
@@ -1614,8 +1614,8 @@ int CreatePlayerSkinOptionList::Leave(int a, int b, void **pOut)
             DbCursor cursor;
 
             TattooTableOpen(&cursor, type);
-            fn_80087938(fn_80087B5C(type), &cursor, a, 0);
-            fn_80087A30(fn_80087B5C(type), &cursor);
+            StoreFindUnlockedRow(StoreTattooLocationToKind(type), &cursor, a, 0);
+            StoreClearRowItemNew(StoreTattooLocationToKind(type), &cursor);
             _CreatePlayerSetTattoo(&info, type, TattooTableGetId(&cursor));
             TattooTableClose(&cursor);
             PlayerDbWriteGear(EditMenuGetPlayerCursor(), &info);
@@ -1650,7 +1650,7 @@ void CreatePlayerSkinOptionList::Highlight(int index)
         int value;
 
         TattooTableOpen(&cursor, type);
-        fn_80087938(fn_80087B5C(type), &cursor, index, 0);
+        StoreFindUnlockedRow(StoreTattooLocationToKind(type), &cursor, index, 0);
         value = TattooTableGetId(&cursor);
         TattooTableClose(&cursor);
         PlayerLookSetPartVariant(0, type, value);
@@ -1670,8 +1670,8 @@ void CreatePlayerSkinOptionList::GetItem(int index, MenuEntry_t *pOut)
         DbCursor cursor;
 
         TattooTableOpen(&cursor, type);
-        fn_80087938(fn_80087B5C(type), &cursor, index, 0);
-        pOut->mUnknown40 = fn_800879E8(fn_80087B5C(type), &cursor);
+        StoreFindUnlockedRow(StoreTattooLocationToKind(type), &cursor, index, 0);
+        pOut->mUnknown40 = StoreIsRowItemNew(StoreTattooLocationToKind(type), &cursor);
         TattooTableGetName(&cursor, pOut->mName, 22);
         TattooTableGetId(&cursor);
         TattooTableClose(&cursor);

@@ -90,8 +90,8 @@ void PlayerAddGearRatings(Object_8008044C *pObject, PlayerGear_t *pInfo, int *pV
 void PlayerGetGearBonuses(Object_8008044C *pObject, short *pValues);
 void fn_80082534(int a, int b);
 void fn_80082558(int a, int b);
-int fn_8008775C(void);
-void fn_80087880(int a);
+int StoreTeamCreate(void);
+void StoreTeamDelete(int a);
 void PositionAbbrevFormat(int a, char *pText);
 int ColorPickCellToIndex(int a, int b);
 void ColorPickIndexToCell(int value, int *pQuotient, int *pRemainder);
@@ -1263,7 +1263,7 @@ void EditMenuBegin(int mode, int value)
         EditMenuSetChanged();
         break;
     case 2:
-        _EditMenu_iTeam = fn_8008775C();
+        _EditMenu_iTeam = StoreTeamCreate();
         break;
     default:
         if (CreateTeamExists(_EditMenu_cTeamSlot)) {
@@ -1293,7 +1293,7 @@ void EditMenuEnd(void)
             }
         } else if (!EditMenuIsPlayerCopy()) {
             if (_EditMenu_iMode == 2) {
-                fn_80087880(_EditMenu_iTeam);
+                StoreTeamDelete(_EditMenu_iTeam);
             } else {
                 fn_8018C48C(0x54415453);
             }
