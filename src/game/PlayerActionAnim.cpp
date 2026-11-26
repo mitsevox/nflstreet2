@@ -794,6 +794,33 @@ extern "C" int PlayerActionAnimSpeedBlendPhase(Table_80089904 *pTable, unsigned 
     return 0;
 }
 
+static inline int _PlayerActionAnimIsReactionValid(Object_80039F5C *p, unsigned char kind, unsigned char role, Point_8017886C *pPoint)
+{
+    switch (kind) {
+    // FAKEMATCH: the empty case 1 leaves no compare in this switch of the target (it tests 2, 3 and 7);
+    // it only shapes the compare tree (ble after the 2 test) and changes no result
+    case 1:
+        break;
+    case 2:
+        if (role == 7 || role == 24 || p->mMotion.mPos.mX < pPoint->mX + 0.25f ||
+            p->mMotion.mPos.mY < pPoint->mY - 3.0f) return 1;
+        return 0;
+    case 3:
+        if (role == 7 || role == 24 || p->mMotion.mPos.mX < pPoint->mX + 0.25f ||
+            !(p->mMotion.mPos.mY >= pPoint->mY - 3.0f)) return 0;
+        break;
+    case 7:
+    {
+        int valid = 0;
+        if (!(p->mMotion.mPos.mY - pPoint->mY >= 2.5f)) {
+            valid = fabsf(p->mMotion.mPos.mX - pPoint->mX) > 9.0f;
+        }
+        return valid;
+    }
+    }
+    return 1;
+}
+
 extern "C" int PlayerActionAnimScoreReaction(Object_80039F5C *p, unsigned char *pInfo)
 {
     Point_8017886C point;
@@ -876,31 +903,7 @@ extern "C" int PlayerActionAnimScoreReaction(Object_80039F5C *p, unsigned char *
         }
         if (check == 1) {
             fn_80178308();
-            int valid = 1;
-            switch (pInfo[2]) {
-            // FAKEMATCH: the empty case 1 leaves no compare in this switch of the target (it tests 2, 3 and 7);
-            // it only shapes the compare tree (ble after the 2 test) and changes no result
-            case 1:
-                break;
-            case 2:
-                if (role != 7 && role != 24 && !(p->mMotion.mPos.mX < point.mX + 0.25f) &&
-                    !(p->mMotion.mPos.mY < point.mY - 3.0f)) valid = 0;
-                break;
-            case 3:
-                if (role == 7 || role == 24 || p->mMotion.mPos.mX < point.mX + 0.25f) {
-                    valid = 0;
-                } else if (!(p->mMotion.mPos.mY >= point.mY - 3.0f)) {
-                    valid = 0;
-                }
-                break;
-            case 7:
-                valid = 0;
-                if (!(p->mMotion.mPos.mY - point.mY >= 2.5f)) {
-                    valid = fabsf(p->mMotion.mPos.mX - point.mX) > 9.0f;
-                }
-                break;
-            }
-            if (!valid) result = 0;
+            if (!_PlayerActionAnimIsReactionValid(p, pInfo[2], role, &point)) result = 0;
         }
     }
     return result;
@@ -1390,7 +1393,9 @@ extern "C" void PlayerActionAnimFindAlignTarget(Object_80039F5C *p, Block_800DE3
             if (!pRecords->mEntries[j].mUnknown2) {
                 pChosen = &pRecords->mEntries[j];
                 if (pChosen->mUnknown0 == id) break;
-            } else if (pRecords->mEntries[j].mUnknown2 == 1 && pRecords->mEntries[j].mUnknown0 == id) {
+            } else if (pRecords->mEntries[j].mUnknown2 == 1) {
+                Entry_800DE51C *pEntry = &pRecords->mEntries[j];
+                if (pEntry->mUnknown0 != id) continue;
                 fallbackKey = key;
                 for (signed char k = 0; k < pRecords->mCount; k++) {
                     if (!pRecords->mEntries[k].mUnknown2) pFallback = &pRecords->mEntries[k];
