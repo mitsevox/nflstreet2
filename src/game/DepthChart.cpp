@@ -25,7 +25,7 @@ int fn_800B4A18(int a, int b, int c);
 int fn_801485D4(void);
 int GameTextGetAwayTeam(void);
 int GameTextGetHomeTeam(void);
-int fn_8022D874(int tag, int a, int b, int c);
+int DbThcdSetSlotPlayer(int tag, int a, int b, int c);
 }
 
 static Object_8008044C _DepthChart_sPlayerCursor;
@@ -319,7 +319,7 @@ void DepthChartSave(void)
         ids[1] = GameTextGetAwayTeam();
         for (group = 0; group <= 1; group++) {
             for (i = 0; i <= 13; i++) {
-                fn_8022D874(0x54484344, ids[group], _DepthChart_aCommitted[group][i], i);
+                DbThcdSetSlotPlayer(0x54484344, ids[group], _DepthChart_aCommitted[group][i], i);
             }
         }
     }

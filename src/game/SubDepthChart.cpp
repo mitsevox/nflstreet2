@@ -6,13 +6,13 @@ extern "C" {
 int fn_80177F70(void);
 float fn_80178298(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
-int fn_8022D23C(void);
-int fn_8022D25C(int value);
-int fn_8022D2F4(unsigned short handle, unsigned short a, unsigned char b, unsigned char *pPairs, int c);
-int fn_8022D3AC(void);
-short fn_8022D3D4(unsigned char index);
+int DbUslpResetFilter1(void);
+int DbUslpSetFilter2(int value);
+int DbUslpFillSlots(unsigned short handle, unsigned short a, unsigned char b, unsigned char *pPairs, int c);
+int DbUslpFinish(void);
+short DbUslpGetSlotPlayer(unsigned char index);
 int DbOpenDepthChartCursor(int a, int b, int mode);
-int fn_8022D540(void);
+int DbCloseDepthChartCursor(void);
 int fn_8022E558(void);
 int fn_8022E560(void);
 
@@ -38,8 +38,8 @@ void SubDepthInit(void)
 
 void SubDepthShutdown(void)
 {
-    fn_8022D23C();
-    fn_8022D25C(0);
+    DbUslpResetFilter1();
+    DbUslpSetFilter2(0);
 }
 
 void SubDepthSetTeam(int team)
@@ -73,17 +73,17 @@ void SubDepthWriteTeam(int team, PlayBookFormation_t *pTeam)
         handle = fn_8022E560();
     }
     DbOpenDepthChartCursor(handle, 0x3FF, 1);
-    fn_8022D2F4(handle, pTeam->mUnknown8.mUnknown4, pTeam->mUnknown4, &pairs[0][0], 1);
+    DbUslpFillSlots(handle, pTeam->mUnknown8.mUnknown4, pTeam->mUnknown4, &pairs[0][0], 1);
 }
 
 void SubDepthRelease(void)
 {
-    fn_8022D540();
-    fn_8022D3AC();
+    DbCloseDepthChartCursor();
+    DbUslpFinish();
 }
 
 short SubDepthGetEntry(unsigned char index)
 {
-    return fn_8022D3D4(index);
+    return DbUslpGetSlotPlayer(index);
 }
 }

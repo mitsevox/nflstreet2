@@ -147,10 +147,10 @@ void *UIGLibraryGetGlobal(int index);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
-void fn_8022DC7C(int a);
-void fn_8022DCB0(int a);
-void fn_8022DCE4(int a);
-void fn_8022DD18(int a);
+void DbFnigSetHomeOffPlaybook(int a);
+void DbFnigSetHomeDefPlaybook(int a);
+void DbFnigSetAwayOffPlaybook(int a);
+void DbFnigSetAwayDefPlaybook(int a);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
 int DbUserFindIndex(int a);
@@ -1290,10 +1290,10 @@ void MsgTeamPickShutdown(void)
                     digp[_MsgTeamPick_pPool[i].mTeam][_MsgTeamPick_pPool[i].mSlot] = _MsgTeamPick_pPool[i].mId;
                 }
             }
-            fn_8022DC7C(0);
-            fn_8022DCB0(0);
-            fn_8022DCE4(0);
-            fn_8022DD18(0);
+            DbFnigSetHomeOffPlaybook(0);
+            DbFnigSetHomeDefPlaybook(0);
+            DbFnigSetAwayOffPlaybook(0);
+            DbFnigSetAwayDefPlaybook(0);
             for (int team = 0; team < 8; team++) {
                 StoryTournamentSetTeamPlayers(_MsgTeamPick_aiTournamentTeam[team], digp[team]);
             }
@@ -1318,10 +1318,10 @@ void MsgTeamPickShutdown(void)
             GameInfoSet(1, _MsgTeamPick_aiSavedTeam[1]);
             fn_8022A508(0, _MsgTeamPick_aiSavedTeam[0], _MsgTeamPick_aiSavedTeam[0], 6, -1);
             fn_8022A508(1, _MsgTeamPick_aiSavedTeam[1], _MsgTeamPick_aiSavedTeam[1], 6, -1);
-            fn_8022DC7C(0);
-            fn_8022DCB0(0);
-            fn_8022DCE4(0);
-            fn_8022DD18(0);
+            DbFnigSetHomeOffPlaybook(0);
+            DbFnigSetHomeDefPlaybook(0);
+            DbFnigSetAwayOffPlaybook(0);
+            DbFnigSetAwayDefPlaybook(0);
             for (unsigned char team = 0; team <= 1; team++) {
                 for (unsigned char j = 0; j <= 6; j++) {
                     PlayerDbSeekId(&_MsgTeamPick_PlayerCursor, records[team].mUnknown[j], 0);

@@ -27,7 +27,7 @@ void DriveLogSetHold(int value);
 int DriveLogGetPlayerNum(int id);
 int fn_801787DC(int a);
 void fn_8017C344(unsigned short team, int play);
-int fn_8022DDB4(int tag, void *data);
+int DbFnigWriteBlock(int tag, void *data);
 }
 
 ScoringLog_t gScoringLog;
@@ -35,13 +35,13 @@ ScoringLog_t gScoringLog;
 extern "C" void ScoringLogInit(void)
 {
     gScoringLog.mCount = 0;
-    fn_8022DDB4(0x4D535347, &gScoringLog);
+    DbFnigWriteBlock(0x4D535347, &gScoringLog);
 }
 
 extern "C" void ScoringLogReset(void)
 {
     gScoringLog.mCount = 0;
-    fn_8022DDB4(0x4D535347, &gScoringLog);
+    DbFnigWriteBlock(0x4D535347, &gScoringLog);
 }
 
 extern "C" void ScoringLogAddScore(int a, short b, int c, int d)
@@ -64,7 +64,7 @@ extern "C" void ScoringLogAddScore(int a, short b, int c, int d)
         }
         gScoringLog.mRecords[gScoringLog.mCount].mUnknown0F = 13;
         gScoringLog.mCount++;
-        fn_8022DDB4(0x4D535347, &gScoringLog);
+        DbFnigWriteBlock(0x4D535347, &gScoringLog);
     }
 }
 
@@ -77,6 +77,6 @@ extern "C" void ScoringLogSetConversion(int a, int b, int c, int d)
         gScoringLog.mRecords[gScoringLog.mCount - 1].mUnknown0C = DriveLogGetPlayerNum(d);
         gScoringLog.mRecords[gScoringLog.mCount - 1].mUnknown11 = fn_801787DC(1);
         gScoringLog.mRecords[gScoringLog.mCount - 1].mUnknown12 = fn_801787DC(0);
-        fn_8022DDB4(0x4D535347, &gScoringLog);
+        DbFnigWriteBlock(0x4D535347, &gScoringLog);
     }
 }

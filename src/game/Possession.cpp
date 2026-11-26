@@ -224,7 +224,7 @@ int DriveLogGetPlayerNum(int id);
 int fn_80177C38(void);
 void fn_8017C298(unsigned short a, short b);
 void fn_8017C2F0(unsigned short a);
-int fn_8022DDB4(int tag, void *data);
+int DbFnigWriteBlock(int tag, void *data);
 }
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
@@ -2126,7 +2126,7 @@ void DriveLogEndDrive(void)
     value = DriveLogGetElapsed();
     _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1E0 = value;
     _DriveLog_aiElapsed[_DriveLog_iCurrent] = value;
-    fn_8022DDB4(0x4D534447, &_DriveLog_aLogs[_DriveLog_iCurrent]);
+    DbFnigWriteBlock(0x4D534447, &_DriveLog_aLogs[_DriveLog_iCurrent]);
 }
 
 void DriveLogUpdateTeam(void)
@@ -2139,7 +2139,7 @@ void DriveLogUpdateTeam(void)
         _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1E4 = team;
         fn_8017C298(team, (short)fn_80177FE0().mY);
     }
-    fn_8022DDB4(0x4D534447, &_DriveLog_aLogs[_DriveLog_iCurrent]);
+    DbFnigWriteBlock(0x4D534447, &_DriveLog_aLogs[_DriveLog_iCurrent]);
 }
 
 void DriveLogAddPlay(int type, short a, short b, int c, int d)
@@ -2160,7 +2160,7 @@ void DriveLogAddPlay(int type, short a, short b, int c, int d)
             _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1E8++;
         }
         _DriveLog_aLogs[_DriveLog_iCurrent].mCount++;
-        fn_8022DDB4(0x4D534447, &_DriveLog_aLogs[_DriveLog_iCurrent]);
+        DbFnigWriteBlock(0x4D534447, &_DriveLog_aLogs[_DriveLog_iCurrent]);
     }
 }
 
@@ -2296,7 +2296,7 @@ void DriveLogSetHold(int value)
 
     if (pLog->mUnknown1EB == 0) {
         pLog->mUnknown1EB = value;
-        fn_8022DDB4(0x4D534447, pLog);
+        DbFnigWriteBlock(0x4D534447, pLog);
     }
 }
 
