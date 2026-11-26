@@ -781,10 +781,10 @@ extern "C" int PlayerActionRollAlignChange(Object_80039F5C *p)
     }
     PlayBookFormation_t *pObject = PlayBookGetFormation(p->mIdBytes[2]);
     if (pObject->mUnknown8.mUnknownF == 0) {
-        pRecord = (Record_800E1778 *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
+        pRecord = (Record_800E1778 *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
     } else {
         unsigned char index = PlaySetGetEntry(pObject, p->mIdBytes[1], 0)->mUnknownB;
-        pRecord = (Record_800E1778 *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
+        pRecord = (Record_800E1778 *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
     }
     if ((pRecord->mUnknown0 & ~0x80) == 85) {
         chance = 0;
@@ -1159,7 +1159,7 @@ extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p)
         target.mY = fn_80177FFC(p->mIdBytes[2]).mY + 1.0f;
         if (!(target.mY <= p->mMotion.mPos.mY)) target.mY = p->mMotion.mPos.mY;
     }
-    Record_800E2ABC *pRecord = (Record_800E2ABC *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
+    Record_800E2ABC *pRecord = (Record_800E2ABC *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
     if ((pRecord->mUnknown4 & ~0x80) == 30) {
         Point_8017886C velocity;
         float value = (float)(pRecord->mUnknown5 >> 3) + (float)(pRecord->mUnknown5 & 7) * 0.1428571492433548f;

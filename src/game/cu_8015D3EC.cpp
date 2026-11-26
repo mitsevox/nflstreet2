@@ -1165,7 +1165,7 @@ void fn_8015F638(int style, int shape, int hat, int *pIds)
     pIds[1] = pIds[0] + 1;
 }
 
-void fn_8015F6E8(const char *pName, int style, int shape, int hat, PlayerHeadIds_t *pIds)
+void PlayerHeadGetHairModels(const char *pName, int style, int shape, int hat, PlayerHeadIds_t *pIds)
 {
     char name[62];
     char *p;

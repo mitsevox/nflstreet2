@@ -155,7 +155,7 @@ int fn_80082280(Object_8008044C *pObject);
 int fn_800822D4(Object_8008044C *pObject);
 void TeamDbGetColors(DbCursor *pObject, void *pBuffer);
 void ParticleTrailReset(ParticleTrailSet_t *pObject);
-void fn_8015F6E8(const char *pName, int b, int c, int d, PlayerHeadIds_t *pIds);
+void PlayerHeadGetHairModels(const char *pName, int b, int c, int d, PlayerHeadIds_t *pIds);
 void PlyrSwitchSet(int player, int key, int value);
 void PlaTexCacheSetSlot(int index, int slot, int id, int palette, int d);
 int PlaTexCacheFindTexture(char *pName);
@@ -1165,7 +1165,7 @@ extern "C" void PlayerLookSetSwitchFlagsB(int index, unsigned char value)
 extern "C" void PlayerLookGetHeadIds(int index, const char *pName, PlayerHeadIds_t *pIds)
 {
     PlayerLookGetHeadType(index);
-    fn_8015F6E8(pName, PlayerLookGetHair(index), PlayerLookGetHeadType(index), PlayerLookHasHat(index), pIds);
+    PlayerHeadGetHairModels(pName, PlayerLookGetHair(index), PlayerLookGetHeadType(index), PlayerLookHasHat(index), pIds);
 }
 
 extern "C" void PlayerLookHideSwitch28(void)

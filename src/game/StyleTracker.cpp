@@ -251,7 +251,7 @@ void fn_800AE7F0(int a, int b, Object_80039F5C *p);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
 void TutorialSetMoveDone(int a, int b);
-int fn_801650DC(PlayBookPlay_t *pRecord);
+int PlayAlignHasSlots(PlayBookPlay_t *pRecord);
 int fn_80177C38(void);
 int fn_80177F70(void);
 int fn_80177F7C(void);
@@ -1571,7 +1571,7 @@ extern "C" void StyleTrackerOnTackle(Object_80039F5C *p, float a) {
     if (p != 0) {
         StyleTrackerFinishStiffArm(0);
         if (fn_80177C38() == 0) {
-            if (fn_801650DC(PlayBookGetPlay(fn_80178348())) != 0 && fn_801783AC(0) == 0 &&
+            if (PlayAlignHasSlots(PlayBookGetPlay(fn_80178348())) != 0 && fn_801783AC(0) == 0 &&
                 a <= fn_80177FE0().mY && (p->mFlags & 0x10000000)) {
                 if (StyleTrackerIsCurrentActorUserControlled() != 0) {
                     _StyleTracker_pState->mUserQbStop = 1;

@@ -43,8 +43,8 @@ float SyncRandGetFloat(int stream);
 
 }
 
-static PlayArtVertex_t lbl_8031D2B8[10];
-static PlayArtVertex_t lbl_8031D308[11];
+static PlayArtVertex_t _PlayAlign_aCurveWork[10];
+static PlayArtVertex_t _PlayAlign_aCurveSamples[11];
 
 static const char *_PlayAlign_apSetNames[4];
 
@@ -235,10 +235,10 @@ Message_800F01CC *fn_800AEE20(Object_80039F5C *);
 void fn_800AEF74(Object_80039F5C *, Message_800F01CC *);
 void fn_800F0910(int, Message_800F01CC *);
 int fn_800AD9B4(void);
-int fn_801650DC(PlayBookPlay_t *);
-void fn_80164CE4(PlayBookPlay_t *, Object_80039F5C *, int);
+int PlayAlignHasSlots(PlayBookPlay_t *);
+void PlayAlignIssuePlayerRoute(PlayBookPlay_t *, Object_80039F5C *, int);
 
-unsigned char fn_80164B78(void)
+unsigned char PlayAlignGetKeyPlayer(void)
 {
     Object_80039F5C *selected = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
     if (selected == PlyrGet(fn_80178308(), 0)) {
@@ -247,22 +247,22 @@ unsigned char fn_80164B78(void)
         if (i < n) do {
             Object_80039F5C *p = PlyrGet(fn_80178308(), i);
             PlayBookPlay_t *record = PlayBookGetPlay(fn_80178308());
-            void *queue = fn_80164EC8(record, fn_80178308(), p->mIdBytes[1]);
+            void *queue = PlayAlignGetRoute(record, fn_80178308(), p->mIdBytes[1]);
             if (fn_800F06F4(0, queue, 18, 0xFFFF) != 0xFFFF) {selected = p; break;}
         } while (++i < n);
     }
     return selected->mIdBytes[1];
 }
 
-void fn_80164C4C(PlayBookFormation_t *object, PlayBookPlay_t *record, int team, int)
+void PlayAlignIssueTeamRoutes(PlayBookFormation_t *object, PlayBookPlay_t *record, int team, int)
 {
     int remap = object->mUnknown8.mUnknownF == 1 && (object->mUnknown8.mUnknown14 & 1) && (record->mUnknown18 & 1);
     int count = fn_80178D70(team);
     for (int i = 0; i < count; ++i)
-        fn_80164CE4(record, PlyrGet(team, (unsigned short)i), remap);
+        PlayAlignIssuePlayerRoute(record, PlyrGet(team, (unsigned short)i), remap);
 }
 
-void fn_80164CE4(PlayBookPlay_t *record, Object_80039F5C *p, int remap)
+void PlayAlignIssuePlayerRoute(PlayBookPlay_t *record, Object_80039F5C *p, int remap)
 {
     short count = 0;
     if (fn_8011F4E0()->mUnknown6 && (unsigned int)(p->mUnknown2914 - 17) <= 1) remap = !remap;
@@ -271,7 +271,7 @@ void fn_80164CE4(PlayBookPlay_t *record, Object_80039F5C *p, int remap)
     else index = PlaySetGetEntry(PlayBookGetFormation(p->mIdBytes[2]), p->mIdBytes[1], 0)->mUnknownB;
     Message_800F01CC *queue = fn_800AEE20(p);
     if (!queue) {
-        queue = (Message_800F01CC *)fn_80164EC8(record, p->mIdBytes[2], index);
+        queue = (Message_800F01CC *)PlayAlignGetRoute(record, p->mIdBytes[2], index);
         int end;
         do {
             end = queue->mId >> 7;
@@ -289,12 +289,12 @@ void fn_80164CE4(PlayBookPlay_t *record, Object_80039F5C *p, int remap)
     }
 }
 
-int fn_80164E30(PlayBookPlay_t *record, PlayBookFormation_t *object, Object_80039F5C *p, int kind)
+int PlayAlignRouteHasCommand(PlayBookPlay_t *record, PlayBookFormation_t *object, Object_80039F5C *p, int kind)
 {
     unsigned char index;
     if (object->mUnknown8.mUnknownF) index = PlaySetGetEntry(object, p->mIdBytes[1], 0)->mUnknownB;
     else index = p->mIdBytes[1];
-    Message_800F01CC *queue = (Message_800F01CC *)fn_80164EC8(record, p->mIdBytes[2], index);
+    Message_800F01CC *queue = (Message_800F01CC *)PlayAlignGetRoute(record, p->mIdBytes[2], index);
     for (;;) {
         int end = queue->mId >> 7;
         int id = queue->mId;
@@ -305,22 +305,22 @@ int fn_80164E30(PlayBookPlay_t *record, PlayBookFormation_t *object, Object_8003
     }
 }
 
-void *fn_80164EC8(void *record, int, unsigned short index)
+void *PlayAlignGetRoute(void *record, int, unsigned short index)
 {
     return (unsigned char *)record + 56 + index * 40;
 }
 
-unsigned char fn_80164ED8(PlayBookFormation_t *object, PlayBookPlay_t *record, int slot, unsigned char *out, int remap)
+unsigned char PlayAlignGetSlotPlayer(PlayBookFormation_t *object, PlayBookPlay_t *record, int slot, unsigned char *out, int remap)
 {
     unsigned char index = 255;
     unsigned char (*slots)[4] = 0;
     int override = 0;
-    if (fn_801650DC(record)) {
+    if (PlayAlignHasSlots(record)) {
         int mode = fn_800AD9B4();
         slots = record->mUnknown1C;
         index = slots[slot][0];
         Object_80039F5C *p = PlyrGet(fn_80178308(), index);
-        if (mode == 2 && !p->mUnknown2914) {index = fn_80164B78(); override = 1;}
+        if (mode == 2 && !p->mUnknown2914) {index = PlayAlignGetKeyPlayer(); override = 1;}
     }
     if (out) {
         if (slots && !override) {
@@ -337,10 +337,10 @@ unsigned char fn_80164ED8(PlayBookFormation_t *object, PlayBookPlay_t *record, i
     return index;
 }
 
-void fn_80165000(PlayBookFormation_t *object, PlayBookPlay_t *record, int index, unsigned char value, int remap)
+void PlayAlignSetSlotValue(PlayBookFormation_t *object, PlayBookPlay_t *record, int index, unsigned char value, int remap)
 {
     unsigned char i;
-    if (fn_801650DC(record)) {
+    if (PlayAlignHasSlots(record)) {
         unsigned char (*slots)[4] = record->mUnknown1C;
         if (remap == 1) index = PlaySetGetEntry(object, index, 0)->mUnknownB;
         for (i = 0; i <= 2; ++i) {
@@ -352,9 +352,9 @@ void fn_80165000(PlayBookFormation_t *object, PlayBookPlay_t *record, int index,
     }
 }
 
-int fn_80165098(PlayBookPlay_t *record) {if (record->mUnknown14 == 2 || record->mUnknown14 == 17) return 1; return 0;}
+int PlayAlignIsPlayType2Or17(PlayBookPlay_t *record) {if (record->mUnknown14 == 2 || record->mUnknown14 == 17) return 1; return 0;}
 
-int fn_801650BC(PlayBookPlay_t *record)
+int PlayAlignIsPlayType11To18(PlayBookPlay_t *record)
 {
     switch ((unsigned int)record->mUnknown14) {
     case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18:
@@ -363,7 +363,7 @@ int fn_801650BC(PlayBookPlay_t *record)
     return 0;
 }
 
-int fn_801650DC(PlayBookPlay_t *record)
+int PlayAlignHasSlots(PlayBookPlay_t *record)
 {
     switch ((unsigned int)record->mUnknown14) {
     case 1: case 2: case 3: case 4: case 5:
@@ -372,12 +372,12 @@ int fn_801650DC(PlayBookPlay_t *record)
     return 0;
 }
 
-int fn_801650FC(PlayBookPlay_t *record) {return record->mUnknown14 == 21;}
+int PlayAlignIsPlayType21(PlayBookPlay_t *record) {return record->mUnknown14 == 21;}
 
-void fn_80165110(PlayArtPlay_t *record, int force)
+void PlayAlignSwapOuterSlots(PlayArtPlay_t *record, int force)
 {
     int swap = 0;
-    if (fn_801650DC((PlayBookPlay_t *)record)) {
+    if (PlayAlignHasSlots((PlayBookPlay_t *)record)) {
         PlayBookFormation_t *object = PlayBookGetFormation(fn_80178308());
         for (unsigned char i = 0; i <= 2; ++i) {
             unsigned char index = *record->mUnknown1C[i];
@@ -395,7 +395,7 @@ void fn_80165110(PlayArtPlay_t *record, int force)
     }
 }
 
-int fn_801651E0(void *handle, int, signed char, int id, PlayArtPlayer_t *records)
+int PlayAlignLoadSetPlayers(void *handle, int, signed char, int id, PlayArtPlayer_t *records)
 {
     DbFilter filter;
     DbQueryTable tables[2] = {{0x50544553}, {-1}};
@@ -436,7 +436,7 @@ int fn_801651E0(void *handle, int, signed char, int id, PlayArtPlayer_t *records
     return 1;
 }
 
-int fn_80165464(void *handle, int, int id, PlayArtPlayer_t *records)
+int PlayAlignLoadPlayRoutes(void *handle, int, int id, PlayArtPlayer_t *records)
 {
     DbFilter play, route;
     DbQueryTable plays[2] = {{0x53594C50}, {-1}};
@@ -478,7 +478,7 @@ int fn_80165464(void *handle, int, int id, PlayArtPlayer_t *records)
     return 1;
 }
 
-int fn_80165770(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *)
+int PlayAlignBuildSlotRects(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *)
 {
     int result = 1;
     switch (record->mUnknown14) {
@@ -511,7 +511,7 @@ int fn_80165770(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *)
     return result;
 }
 
-int fn_80165890(void *handle, PlayArtPlayer_t *records, int first, unsigned char count)
+int PlayAlignLoadRouteSteps(void *handle, PlayArtPlayer_t *records, int first, unsigned char count)
 {
     for (unsigned int i = first; i < count; ++i) {
         PlayArtPlayer_t *record = &records[i];
@@ -551,30 +551,30 @@ int fn_80165890(void *handle, PlayArtPlayer_t *records, int first, unsigned char
     return 1;
 }
 
-void fn_80165C50(PlayArtVertex_t *points, int count, float t, PlayArtVertex_t *out)
+void PlayArtCurvePoint(PlayArtVertex_t *points, int count, float t, PlayArtVertex_t *out)
 {
     int i, j;
-    for (i = 0; i < count; ++i) lbl_8031D2B8[i] = *points++;
+    for (i = 0; i < count; ++i) _PlayAlign_aCurveWork[i] = *points++;
     for (j = 1; j < count; ++j)
         for (i = 0; i < count - j; ++i) {
-            lbl_8031D2B8[i].mX = (1.0f - t) * lbl_8031D2B8[i].mX + t * lbl_8031D2B8[i+1].mX;
-            lbl_8031D2B8[i].mY = (1.0f - t) * lbl_8031D2B8[i].mY + t * lbl_8031D2B8[i+1].mY;
+            _PlayAlign_aCurveWork[i].mX = (1.0f - t) * _PlayAlign_aCurveWork[i].mX + t * _PlayAlign_aCurveWork[i+1].mX;
+            _PlayAlign_aCurveWork[i].mY = (1.0f - t) * _PlayAlign_aCurveWork[i].mY + t * _PlayAlign_aCurveWork[i+1].mY;
         }
-    *out = lbl_8031D2B8[0];
+    *out = _PlayAlign_aCurveWork[0];
 }
 
-void fn_80165D18(PlayArtVertex_t *points, int count, PlayArtVertex_t *out, int samples)
+void PlayArtSampleCurve(PlayArtVertex_t *points, int count, PlayArtVertex_t *out, int samples)
 {
     int i;
     float t;
     float step = 1.0f / (float)(samples - 1);
     out[0] = points[0];
     for (i = 1, t = step; i < samples - 1; ++i, t += step)
-        fn_80165C50(points, count, t, out + i);
+        PlayArtCurvePoint(points, count, t, out + i);
     out[samples-1] = points[count-1];
 }
 
-void fn_80165DF8(PlayArtVertex_t *a, PlayArtVertex_t *b, PlayArtVertex_t *left, PlayArtVertex_t *right,
+void PlayArtStripEdge(PlayArtVertex_t *a, PlayArtVertex_t *b, PlayArtVertex_t *left, PlayArtVertex_t *right,
                 int width, PlayArtVertex_t *prior, int average)
 {
     PlayArtVertex_t normal;
@@ -607,25 +607,25 @@ void fn_80165DF8(PlayArtVertex_t *a, PlayArtVertex_t *b, PlayArtVertex_t *left, 
     }
 }
 
-void fn_80165F78(PlayArtVertex_t *control, PlayArtVertex_t *out, int samples, int width)
+void PlayArtBuildCurveStrip(PlayArtVertex_t *control, PlayArtVertex_t *out, int samples, int width)
 {
     PlayArtVertex_t prior;
     int i;
     int n = 2;
 
-    fn_80165D18(control, 3, lbl_8031D308, samples);
-    lbl_8031D308[samples].mX = lbl_8031D308[samples-2].mX;
-    lbl_8031D308[samples].mY = lbl_8031D308[samples-2].mY;
-    fn_80165DF8(&lbl_8031D308[0], &lbl_8031D308[1], &out[0], &out[1], width, &prior, 0);
+    PlayArtSampleCurve(control, 3, _PlayAlign_aCurveSamples, samples);
+    _PlayAlign_aCurveSamples[samples].mX = _PlayAlign_aCurveSamples[samples-2].mX;
+    _PlayAlign_aCurveSamples[samples].mY = _PlayAlign_aCurveSamples[samples-2].mY;
+    PlayArtStripEdge(&_PlayAlign_aCurveSamples[0], &_PlayAlign_aCurveSamples[1], &out[0], &out[1], width, &prior, 0);
     for (i = 1; i < samples - 1; ++i, n += 2)
-        fn_80165DF8(&lbl_8031D308[i], &lbl_8031D308[i+1], &out[n], &out[n+1], width, &prior, 1);
-    fn_80165DF8(&lbl_8031D308[samples-1], &lbl_8031D308[samples], &out[n+1], &out[n], width, 0, 0);
+        PlayArtStripEdge(&_PlayAlign_aCurveSamples[i], &_PlayAlign_aCurveSamples[i+1], &out[n], &out[n+1], width, &prior, 1);
+    PlayArtStripEdge(&_PlayAlign_aCurveSamples[samples-1], &_PlayAlign_aCurveSamples[samples], &out[n+1], &out[n], width, 0, 0);
 }
 
-void fn_801660A0(PlayArtVertex_t *points, PlayArtVertex_t *out, int width)
+void PlayArtBuildSegmentStrip(PlayArtVertex_t *points, PlayArtVertex_t *out, int width)
 {
-    fn_80165DF8(&points[0], &points[1], &out[0], &out[1], width, 0, 0);
-    fn_80165DF8(&points[1], &points[0], &out[2], &out[3], width, 0, 0);
+    PlayArtStripEdge(&points[0], &points[1], &out[0], &out[1], width, 0, 0);
+    PlayArtStripEdge(&points[1], &points[0], &out[2], &out[3], width, 0, 0);
 }
 
 }

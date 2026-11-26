@@ -141,7 +141,7 @@ void CamGameSuspendAll(void);
 void CamGameResumeAll(void);
 CollideSet_t *StatcollGetSet(void);
 int fn_801486A0(void);
-int fn_801650DC(PlayBookPlay_t *pRecord);
+int PlayAlignHasSlots(PlayBookPlay_t *pRecord);
 void ScrmSpotUpdate(void);
 int ScrmSpotGetFirstHit(float *pOut);
 void ClockRuleInit(void);
@@ -1452,7 +1452,7 @@ extern "C" void fn_8017916C(void)
 
 extern "C" int fn_80179244(void)
 {
-    return fn_801650DC(PlayBookGetPlay(fn_80178348()));
+    return PlayAlignHasSlots(PlayBookGetPlay(fn_80178348()));
 }
 
 extern "C" void fn_8017926C(int handle, int tag, int value, int kind)

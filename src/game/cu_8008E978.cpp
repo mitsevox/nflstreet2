@@ -1583,7 +1583,7 @@ void PlayBookClearLoadFlags(int mode);
 }
 
 extern "C" {
-void fn_80165110(PlayBookPlay_t *pRecord, int a);
+void PlayAlignSwapOuterSlots(PlayBookPlay_t *pRecord, int a);
 }
 
 extern "C" {
@@ -2519,7 +2519,7 @@ unsigned int ResGetSize(void *pRes, unsigned int index);
 }
 
 extern "C" {
-int fn_80164E30(PlayBookPlay_t *pRecord, PlayBookFormation_t *pObject, Object_80039F5C *p, int value);
+int PlayAlignRouteHasCommand(PlayBookPlay_t *pRecord, PlayBookFormation_t *pObject, Object_80039F5C *p, int value);
 }
 
 extern "C" {
@@ -15919,11 +15919,11 @@ extern "C" int fn_8009FE24(Object_80039F5C *p)
 
         if (pRecord == 0) {
             if (pObject->mUnknown8.mUnknownF == 0) {
-                pRecord = (Message_800F01CC *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
+                pRecord = (Message_800F01CC *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
             } else {
                 unsigned char index = PlaySetGetEntry(pObject, p->mIdBytes[1], 0)->mUnknownB;
 
-                pRecord = (Message_800F01CC *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
+                pRecord = (Message_800F01CC *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
             }
         }
         if ((pRecord->mId & ~0x80) == 22 && (pRecord->mUnknown1[1] & 8)) {
@@ -22822,7 +22822,7 @@ extern "C" Object_80039F5C *fn_800AEBA0(void)
                 } else {
                     index = pCandidates[i]->mIdBytes[1];
                 }
-                if (fn_800AE9F8((unsigned char (*)[4])fn_80164EC8(PlayBookGetPlay(team), team, index))) {
+                if (fn_800AE9F8((unsigned char (*)[4])PlayAlignGetRoute(PlayBookGetPlay(team), team, index))) {
                     if ((unsigned int)pCandidates[i]->mRatings[7] > best) {
                         best = pCandidates[i]->mRatings[7];
                         p = pCandidates[i];
@@ -23355,7 +23355,7 @@ extern "C" int fn_800AFF88(Object_80039F5C *p)
     PlayBookFormation_t *pObject = PlayBookGetFormation(p->mIdBytes[2]);
 
     for (; i <= 3; i++) {
-        if (fn_80164E30(pRecord, pObject, p, lbl_803EAB10[i]) == 1) {
+        if (PlayAlignRouteHasCommand(pRecord, pObject, p, lbl_803EAB10[i]) == 1) {
             return 0;
         }
     }
@@ -24803,7 +24803,7 @@ extern "C" void fn_800B2E54(void)
     }
     PlayBookLoadCurrentPlay((unsigned char)team);
     if (PlayBookGetFormation((unsigned char)team)->mUnknown8.mUnknownF != 0) {
-        fn_80165110(PlayBookGetPlay((unsigned char)team), 0);
+        PlayAlignSwapOuterSlots(PlayBookGetPlay((unsigned char)team), 0);
     }
     team = fn_80178320();
     if (fn_800BA6F8() != 0) {

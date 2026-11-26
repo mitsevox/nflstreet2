@@ -5,7 +5,7 @@
 
 extern "C" {
 PlayBookPlay_t *PlayBookGetPlay(int team);
-void *fn_80164EC8(void *pRecord, int team, unsigned short index);
+void *PlayAlignGetRoute(void *pRecord, int team, unsigned short index);
 }
 
 #endif

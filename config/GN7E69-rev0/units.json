@@ -14098,27 +14098,27 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_80164CE4",
+            "function": "PlayAlignIssuePlayerRoute",
             "evidence": "evidence.tsv source-form 0x80164CE4-0x80164E30"
           },
           {
-            "function": "fn_80164ED8",
+            "function": "PlayAlignGetSlotPlayer",
             "evidence": "evidence.tsv source-form 0x80164ED8-0x80165000"
           },
           {
-            "function": "fn_80165000",
+            "function": "PlayAlignSetSlotValue",
             "evidence": "evidence.tsv source-form 0x80165000-0x80165098"
           },
           {
-            "function": "fn_80165110",
+            "function": "PlayAlignSwapOuterSlots",
             "evidence": "evidence.tsv source-form 0x80165110-0x801651E0"
           },
           {
-            "function": "fn_80165464",
+            "function": "PlayAlignLoadPlayRoutes",
             "evidence": "evidence.tsv source-form 0x80165464-0x80165770"
           },
           {
-            "function": "fn_80165890",
+            "function": "PlayAlignLoadRouteSteps",
             "evidence": "evidence.tsv source-form 0x80165890-0x80165C50"
           }
         ],

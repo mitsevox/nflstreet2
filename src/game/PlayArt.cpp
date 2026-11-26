@@ -26,13 +26,13 @@ static PlayArtState_t _PlayArt_aStates[3][9];
 extern "C" float lbl_802E992C[][2];
 
 extern "C" {
-int fn_801651E0(void *, int, signed char, int, PlayArtPlayer_t *);
-int fn_80165464(void *, int, int, PlayArtPlayer_t *);
-int fn_80165890(void *, PlayArtPlayer_t *, int, unsigned char);
-void fn_80165110(PlayArtPlay_t *, int);
+int PlayAlignLoadSetPlayers(void *, int, signed char, int, PlayArtPlayer_t *);
+int PlayAlignLoadPlayRoutes(void *, int, int, PlayArtPlayer_t *);
+int PlayAlignLoadRouteSteps(void *, PlayArtPlayer_t *, int, unsigned char);
+void PlayAlignSwapOuterSlots(PlayArtPlay_t *, int);
 void fn_80166BE8(PlayArtPlay_t *, PlayArtState_t *, PlayArtPlayer_t *, int, int, unsigned char);
 int fn_8016631C(PlayArtPlayer_t *, int, void *, void *, void *, void *, int);
-int fn_80165770(PlayArtPlay_t *, PlayArtState_t *, PlayArtPlayer_t *);
+int PlayAlignBuildSlotRects(PlayArtPlay_t *, PlayArtState_t *, PlayArtPlayer_t *);
 PlayBookTeam_t *PlayBookGetTeam(int);
 void UISGameSetDrawMode(int);
 int GameModeTypeIsSpecial(void);
@@ -47,7 +47,7 @@ void PlayArtRenderUnloadTextures(void);
 
 void PlayArtReadPositions(void *p, unsigned char *input, void *, int a, int b, signed char c, int group, int index)
 {
-    fn_801651E0(p, a, c, b, _PlayArt_aPlayers[index]);
+    PlayAlignLoadSetPlayers(p, a, c, b, _PlayArt_aPlayers[index]);
     for (int i = 0; i < 11; ++i) {
         _PlayArt_aStates[group][index].mUnknown2078[i] = input[i * 0x28 + 0x8F];
     }
@@ -55,7 +55,7 @@ void PlayArtReadPositions(void *p, unsigned char *input, void *, int a, int b, s
 
 void PlayArtReadRoutes(void *p, void *, int a, int b, int, int index)
 {
-    fn_80165464(p, a, b, _PlayArt_aPlayers[index]);
+    PlayAlignLoadPlayRoutes(p, a, b, _PlayArt_aPlayers[index]);
 }
 
 void PlayArtBuild(void *p, PlayArtPlay_t *object, int, int, int, int group, int index, int first, unsigned char count, void *)
@@ -67,13 +67,13 @@ void PlayArtBuild(void *p, PlayArtPlay_t *object, int, int, int, int group, int 
         used = 0;
     else
         used = state->mUnknown940[first];
-    fn_80165890(p, _PlayArt_aPlayers[index], first, count);
+    PlayAlignLoadRouteSteps(p, _PlayArt_aPlayers[index], first, count);
     int flag = 1;
     if (object->mUnknown14 <= 36)
         flag = object->mUnknown14 <= 30;
     state->mUnknown2083 = flag;
     if (_PlayArt_aFlip[group][index]) {
-        fn_80165110(object, 1);
+        PlayAlignSwapOuterSlots(object, 1);
     }
     int i;
     for (i = first; i < count; ++i) {
@@ -97,7 +97,7 @@ void PlayArtBuild(void *p, PlayArtPlay_t *object, int, int, int, int group, int 
         remaining -= size;
     }
     state->mUnknown940[i] = used;
-    fn_80165770(object, state, _PlayArt_aPlayers[index]);
+    PlayAlignBuildSlotRects(object, state, _PlayArt_aPlayers[index]);
 }
 
 void PlayArtDraw(int code, float x, float y, float, float)
@@ -176,12 +176,12 @@ void PlayArtResetTeam(int group)
 }
 
 #if defined(DECOMP_COMPARE)
-extern "C" PlayArtVertex_t lbl_8031D2B8[], lbl_8031D308[];
+extern "C" PlayArtVertex_t _PlayAlign_aCurveWork[], _PlayAlign_aCurveSamples[];
 
 extern "C" {
 void Vec2Normalize(void *, void *);
-void fn_80165F78(PlayArtVertex_t *, PlayArtVertex_t *, int, int);
-void fn_801660A0(PlayArtVertex_t *, PlayArtVertex_t *, int);
+void PlayArtBuildCurveStrip(PlayArtVertex_t *, PlayArtVertex_t *, int, int);
+void PlayArtBuildSegmentStrip(PlayArtVertex_t *, PlayArtVertex_t *, int);
 
 extern int lbl_802E9964[];
 extern PlayArtVertex_t lbl_802E98FC[];
@@ -205,8 +205,8 @@ Message_800F01CC *fn_800AEE20(Object_80039F5C *);
 void fn_800AEF74(Object_80039F5C *, Message_800F01CC *);
 void fn_800F0910(int, Message_800F01CC *);
 int fn_800AD9B4(void);
-int fn_801650DC(PlayBookPlay_t *);
-void fn_80164CE4(PlayBookPlay_t *, Object_80039F5C *, int);
+int PlayAlignHasSlots(PlayBookPlay_t *);
+void PlayAlignIssuePlayerRoute(PlayBookPlay_t *, Object_80039F5C *, int);
 
 void fn_80166110(PlayArtVertex_t *points, PlayArtVertex_t *out, int width, int length)
 {
@@ -277,7 +277,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
             ends[i+1] = controls[2];
             int samples = (int)(Vec2Distance(&controls[0], &controls[1]) * 0.175f + 2.0f);
             if (samples > 8) samples = 8;
-            fn_80165F78(controls, strip, samples, width);
+            PlayArtBuildCurveStrip(controls, strip, samples, width);
             for (int j = 0; j < samples; ++j) {
                 vertices[count] = strip[j*2];
                 vertices[count+1] = strip[j*2+1];
@@ -290,7 +290,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
             if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
             if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
             ends[i+1] = controls[1];
-            fn_801660A0(controls, strip, width);
+            PlayArtBuildSegmentStrip(controls, strip, width);
             count = PlayArtAddQuad(vertices, count, capacity, strip);
             if (fabsf(controls[0].mX - controls[1].mX) != zero.mX || fabsf(controls[0].mY - controls[1].mY) != zero.mY) drawn = 1;
         } else if (step->mUnknown10 == 2) {
@@ -301,7 +301,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
                 if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
                 if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
                 ends[i+1] = controls[1];
-                fn_801660A0(controls, strip, width);
+                PlayArtBuildSegmentStrip(controls, strip, width);
                 count = PlayArtAddQuad(vertices, count, capacity, strip);
                 if (fabsf(controls[0].mX - controls[1].mX) != zero.mX || fabsf(controls[0].mY - controls[1].mY) != zero.mY) drawn = 1;
             }
@@ -314,7 +314,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
                 if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
                 if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
                 ends[i+1] = controls[1];
-                fn_801660A0(controls, strip, width);
+                PlayArtBuildSegmentStrip(controls, strip, width);
                 count = PlayArtAddQuad(vertices, count, capacity, strip);
             }
             PlayArtVertex_t axis[2];
@@ -355,7 +355,7 @@ void fn_80166BE8(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *
         r = lbl_803EB3D3; g = lbl_803EB3D7; b = lbl_803EB3DB;
     } else {
         int inherited = 1;
-        void *queue = fn_80164EC8(record, (unsigned char)team, (unsigned short)index);
+        void *queue = PlayAlignGetRoute(record, (unsigned char)team, (unsigned short)index);
         for (unsigned char i = 0; i <= 3; ++i) {
             if (fn_800F06F4(0, queue, lbl_802E98E0[i][3], 0xFFFF) != 0xFFFF) {
                 secondaryR = lbl_802E98F0[i][0];

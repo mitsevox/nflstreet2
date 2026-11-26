@@ -21182,7 +21182,7 @@
           "end": "0x8015F6E8"
         },
         {
-          "symbol": "fn_8015F6E8",
+          "symbol": "PlayerHeadGetHairModels",
           "start": "0x8015F6E8",
           "end": "0x8015F82C"
         },
@@ -21717,107 +21717,107 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80164B78",
+          "symbol": "PlayAlignGetKeyPlayer",
           "start": "0x80164B78",
           "end": "0x80164C4C"
         },
         {
-          "symbol": "fn_80164C4C",
+          "symbol": "PlayAlignIssueTeamRoutes",
           "start": "0x80164C4C",
           "end": "0x80164CE4"
         },
         {
-          "symbol": "fn_80164CE4",
+          "symbol": "PlayAlignIssuePlayerRoute",
           "start": "0x80164CE4",
           "end": "0x80164E30"
         },
         {
-          "symbol": "fn_80164E30",
+          "symbol": "PlayAlignRouteHasCommand",
           "start": "0x80164E30",
           "end": "0x80164EC8"
         },
         {
-          "symbol": "fn_80164EC8",
+          "symbol": "PlayAlignGetRoute",
           "start": "0x80164EC8",
           "end": "0x80164ED8"
         },
         {
-          "symbol": "fn_80164ED8",
+          "symbol": "PlayAlignGetSlotPlayer",
           "start": "0x80164ED8",
           "end": "0x80165000"
         },
         {
-          "symbol": "fn_80165000",
+          "symbol": "PlayAlignSetSlotValue",
           "start": "0x80165000",
           "end": "0x80165098"
         },
         {
-          "symbol": "fn_80165098",
+          "symbol": "PlayAlignIsPlayType2Or17",
           "start": "0x80165098",
           "end": "0x801650BC"
         },
         {
-          "symbol": "fn_801650BC",
+          "symbol": "PlayAlignIsPlayType11To18",
           "start": "0x801650BC",
           "end": "0x801650DC"
         },
         {
-          "symbol": "fn_801650DC",
+          "symbol": "PlayAlignHasSlots",
           "start": "0x801650DC",
           "end": "0x801650FC"
         },
         {
-          "symbol": "fn_801650FC",
+          "symbol": "PlayAlignIsPlayType21",
           "start": "0x801650FC",
           "end": "0x80165110"
         },
         {
-          "symbol": "fn_80165110",
+          "symbol": "PlayAlignSwapOuterSlots",
           "start": "0x80165110",
           "end": "0x801651E0"
         },
         {
-          "symbol": "fn_801651E0",
+          "symbol": "PlayAlignLoadSetPlayers",
           "start": "0x801651E0",
           "end": "0x80165464"
         },
         {
-          "symbol": "fn_80165464",
+          "symbol": "PlayAlignLoadPlayRoutes",
           "start": "0x80165464",
           "end": "0x80165770"
         },
         {
-          "symbol": "fn_80165770",
+          "symbol": "PlayAlignBuildSlotRects",
           "start": "0x80165770",
           "end": "0x80165890"
         },
         {
-          "symbol": "fn_80165890",
+          "symbol": "PlayAlignLoadRouteSteps",
           "start": "0x80165890",
           "end": "0x80165C50"
         },
         {
-          "symbol": "fn_80165C50",
+          "symbol": "PlayArtCurvePoint",
           "start": "0x80165C50",
           "end": "0x80165D18"
         },
         {
-          "symbol": "fn_80165D18",
+          "symbol": "PlayArtSampleCurve",
           "start": "0x80165D18",
           "end": "0x80165DF8"
         },
         {
-          "symbol": "fn_80165DF8",
+          "symbol": "PlayArtStripEdge",
           "start": "0x80165DF8",
           "end": "0x80165F78"
         },
         {
-          "symbol": "fn_80165F78",
+          "symbol": "PlayArtBuildCurveStrip",
           "start": "0x80165F78",
           "end": "0x801660A0"
         },
         {
-          "symbol": "fn_801660A0",
+          "symbol": "PlayArtBuildSegmentStrip",
           "start": "0x801660A0",
           "end": "0x80166110"
         }

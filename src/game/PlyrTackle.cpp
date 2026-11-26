@@ -1057,7 +1057,7 @@ extern "C" int PlyrAlignExit(Object_80039F5C *p)
 {
     State_800E4EE4 *pState = (State_800E4EE4 *)&p->mUnknown336;
     Record_800E4EE4 *pRecord =
-        (Record_800E4EE4 *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
+        (Record_800E4EE4 *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
 
     if ((pRecord->mUnknown0 & ~0x80) == 48 && fn_800AD9B4() == 3 && (pRecord->mUnknown4 & ~0x80) == 30) {
         Point_8017886C delta;
@@ -1218,11 +1218,11 @@ void PlyrAlignReset(Object_80039F5C *p)
     pMessage = fn_800AEE20(p);
     if (pMessage == 0) {
         if (pTeam->mUnknown8.mUnknownF == 0) {
-            pMessage = (Message_800F01CC *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]),
+            pMessage = (Message_800F01CC *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]),
                 (p->mId >> 8) & 255, (p->mId >> 16) & 255);
         } else {
             unsigned char index = PlaySetGetEntry(pTeam, p->mIdBytes[1], 0)->mUnknownB;
-            pMessage = (Message_800F01CC *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
+            pMessage = (Message_800F01CC *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
         }
     }
     switch (pMessage->mId & ~0x80) {
@@ -1257,10 +1257,10 @@ extern "C" int PlyrAlignIsFree(Object_80039F5C *p) {
     PlayBookFormation_t *pObject = PlayBookGetFormation(p->mIdBytes[2]);
 
     if (pObject->mUnknown8.mUnknownF == 0) {
-        pRecord = fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
+        pRecord = PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
     } else {
         unsigned char index = PlaySetGetEntry(pObject, p->mIdBytes[1], 0)->mUnknownB;
-        pRecord = fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
+        pRecord = PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
     }
     if (fn_800F06F4(0, pRecord, 48, 0xFFFF) != 0xFFFF && fn_800F06F4(0, pRecord, 30, 0xFFFF) != 0xFFFF) {
         result = 0;

@@ -1009,7 +1009,7 @@ extern "C" void PlyrRouteShow(int on, int team, int index)
                 } else {
                     entry = index;
                 }
-                pRecord = fn_80164EC8(PlayBookGetPlay((unsigned char)team), (unsigned char)team, entry);
+                pRecord = PlayAlignGetRoute(PlayBookGetPlay((unsigned char)team), (unsigned char)team, entry);
             } else {
                 flip = 0;
             }

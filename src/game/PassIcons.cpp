@@ -46,7 +46,7 @@ static int _PassIconIsEligible(Object_80039F5C *pPlayer)
                 Object_80039F5C *pOther = PlyrGet(1, i);
                 if (pOther != 0) {
                     PlayBookPlay_t *pRecord = PlayBookGetPlay(fn_80178308());
-                    void *pResult = fn_80164EC8(pRecord, fn_80178308(), i);
+                    void *pResult = PlayAlignGetRoute(pRecord, fn_80178308(), i);
                     if (fn_800F06F4(0, pResult, 0x12, 0xFFFF) != 0xFFFF && pPlayer == pOther
                         && pPlayer->mUnknown2914 == 0) {
                         result = 0;

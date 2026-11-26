@@ -1,7 +1,7 @@
 #ifndef GAME_PLAYERLOOK_H
 #define GAME_PLAYERLOOK_H
 
-/* Model ids written by fn_8015F6E8. */
+/* Model ids written by PlayerHeadGetHairModels. */
 struct PlayerHeadIds_t {
     int mUnknown0;
     int mUnknown4;

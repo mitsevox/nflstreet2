@@ -57,8 +57,8 @@ int fn_800BA6F8(void);
 QueryCursor fn_800C0750(int index, unsigned short *pValues);
 void fn_800C07C4(QueryCursor cursor);
 void fn_800C07F0(QueryCursor cursor, int index, unsigned short *pValues);
-int fn_80164ED8(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int index, unsigned char *pOut, unsigned char flag);
-int fn_80165000(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int index, unsigned char *pOut, unsigned char flag);
+int PlayAlignGetSlotPlayer(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int index, unsigned char *pOut, unsigned char flag);
+int PlayAlignSetSlotValue(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int index, unsigned char *pOut, unsigned char flag);
 void PlayArtSetFlip(signed char team, int a, int b);
 void PlayBookOffsetSpots(Vec2_t *pPoints, int count);
 int PlayAutoFlip(int team);
@@ -733,7 +733,7 @@ int PlayBookGetReceiver(int team, int index, unsigned char *pOut)
     PlayBookPlay_t *pRecord = PlayBookGetPlay(team);
     PlayBookFormation_t *pObject = PlayBookGetFormation(team);
 
-    return fn_80164ED8(pObject, pRecord, index, pOut, pObject->mUnknown8.mUnknownF);
+    return PlayAlignGetSlotPlayer(pObject, pRecord, index, pOut, pObject->mUnknown8.mUnknownF);
 }
 
 int PlayBookSetReceiverOption(int team, int index, unsigned char *pOut)
@@ -741,7 +741,7 @@ int PlayBookSetReceiverOption(int team, int index, unsigned char *pOut)
     PlayBookPlay_t *pRecord = PlayBookGetPlay(team);
     PlayBookFormation_t *pObject = PlayBookGetFormation(team);
 
-    return fn_80165000(pObject, pRecord, index, pOut, pObject->mUnknown8.mUnknownF);
+    return PlayAlignSetSlotValue(pObject, pRecord, index, pOut, pObject->mUnknown8.mUnknownF);
 }
 
 int PlayBookGetDatabase(int team)
