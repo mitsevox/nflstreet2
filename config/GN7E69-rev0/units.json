@@ -13256,12 +13256,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80090244",
-          "end": "0x80090390"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800904D4",
           "end": "0x80090558"
         },
         {
@@ -13286,12 +13280,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80095FD8",
-          "end": "0x80096954"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80096A24",
           "end": "0x800975EC"
         },
         {
@@ -13322,12 +13310,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8009C328",
-          "end": "0x8009C630"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8009C684",
           "end": "0x8009C7B4"
         },
         {
@@ -13612,10 +13594,6 @@
             "evidence": "evidence.tsv source-form 0x8008FF44-0x80090244"
           },
           {
-            "function": "fn_80090390",
-            "evidence": "evidence.tsv source-form 0x80090390-0x800904D4"
-          },
-          {
             "function": "fn_80090558",
             "evidence": "evidence.tsv source-form 0x80090558-0x80090BDC"
           },
@@ -13630,10 +13608,6 @@
           {
             "function": "fn_800955D8",
             "evidence": "evidence.tsv source-form 0x800955D8-0x80095FD8"
-          },
-          {
-            "function": "fn_80096954",
-            "evidence": "evidence.tsv source-form 0x80096954-0x80096A24"
           },
           {
             "function": "fn_800975EC",
@@ -13666,10 +13640,6 @@
           {
             "function": "fn_8009C220",
             "evidence": "evidence.tsv source-form 0x8009C220-0x8009C328"
-          },
-          {
-            "function": "fn_8009C630",
-            "evidence": "evidence.tsv source-form 0x8009C630-0x8009C684"
           },
           {
             "function": "fn_8009C7B4",

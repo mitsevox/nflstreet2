@@ -276,7 +276,7 @@ struct Cell_80094B34 {
     signed short mValue : 13;
 };
 
-/* Block allocated by fn_80096954 with fn_801D2B7C (112 bytes). */
+/* Block allocated by AnimPlaybackSysInit with fn_801D2B7C (112 bytes). */
 struct Block_80096954 {
     Table_80093BAC *mpUnknown0[2];
     void *mpUnknown8;
@@ -3858,6 +3858,11 @@ struct Animation_8009C630 {
     char mUnknown84[16];
 };
 
+/* The four animation records the player's +792 collection holds. */
+struct AnimSlots_8009C630 {
+    Animation_8009C630 mEntries[4];
+};
+
 extern "C" {
 int fn_8011F2C4(void);
 }
@@ -5481,7 +5486,7 @@ extern "C" void fn_80090284(int *pData);
 
 extern "C" void fn_8009036C(int *p);
 
-extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot);
+extern "C" int AnimSeqDynSlotAcquire(Params_80092E54 *pRequest, int *pSlot);
 
 extern "C" int fn_800904D4(Params_80092E54 *pRequest, void *pData, int size);
 
@@ -5725,7 +5730,7 @@ extern "C" int fn_8009679C(unsigned int index);
 
 extern "C" void fn_80096850(int index, Point_8017886C *pOut, int *pFlag);
 
-extern "C" void fn_80096954(void *pData);
+extern "C" void AnimPlaybackSysInit(void *pData);
 
 extern "C" void fn_80096A24(void);
 
@@ -5955,7 +5960,7 @@ extern "C" int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues)
 
 extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short, void *, void *, Object_80039F5C *, unsigned int), unsigned int count);
 
-extern "C" float fn_8009C630(Object_80039F5C *p, int id);
+extern "C" float PlayerAnimSlotFindValue(Object_80039F5C *p, int id);
 
 extern "C" int fn_8009C684(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int b, int c);
 
@@ -8114,14 +8119,14 @@ extern "C" void fn_8008E978(Object_80039F5C *p)
 extern "C" void fn_8008E9B0(Object_80039F5C *p)
 {
     unsigned short key=fn_801BE648(p->mpUnknown792);
-    PlyrMoveCmd_t *current=&p->mUnknown512;
     PlyrMoveCmd_t *next=&p->mUnknown528;
+    PlyrMoveCmd_t *current=&p->mUnknown512;
     int difference=MathAngleDiff(current->mUnknown4,current->mUnknown8);
     if(difference<=0x2E38E2 || current->mUnknown0==0.0f) {
         key=74; next->mUnknown14=1;
         next->mUnknown4=current->mUnknown4;
         next->mUnknown8=current->mUnknown8;
-        next->mUnknown0=current->mUnknown0;
+        p->mUnknown528.mUnknown0=p->mUnknown512.mUnknown0;
     } else if(difference<=0x56C16B && !(p->mUnknown492>gPlyrMoveSideSpeed)) {
         key=160;
         float speed=gPlyrMoveSideSpeed*0.18f/gPlyrMoveSideSpeed;
@@ -8136,7 +8141,7 @@ extern "C" void fn_8008E9B0(Object_80039F5C *p)
         next->mUnknown14=1;
         next->mUnknown4=current->mUnknown4;
         next->mUnknown8=current->mUnknown8;
-        next->mUnknown0=current->mUnknown0;
+        p->mUnknown528.mUnknown0=p->mUnknown512.mUnknown0;
     }
     if(!PlayerMoveAnimCheckReverse(p,key) && fn_801BE648(p->mpUnknown792)!=key)
         fn_801BE068(p->mpUnknown792,p->mpUnknown796,p->mpUnknown800,key,1.0f,p);
@@ -8285,11 +8290,11 @@ extern "C" int PlayerAnimUserOpcodeCallback(void *object,int event,unsigned int 
     case 0xC011:fn_800ADD04(0);result=1;break;
     case 0xC012:AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();result=1;break;
     case 0xC003:
-        if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(fn_8009C630(p,key)<=lbl_803EA8B8))
+        if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(PlayerAnimSlotFindValue(p,key)<=lbl_803EA8B8))
             p->mFlags|=0x1000;
         result=1;break;
     case 0xC018:
-        if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(fn_8009C630(p,key)<=lbl_803EA8B4))
+        if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(PlayerAnimSlotFindValue(p,key)<=lbl_803EA8B4))
             p->mFlags|=0x2000;
         result=1;break;
     case 0xC01F:case 0xC023:case 0xD004:AnimSeqGetOpcodeParameter();result=1;break;
@@ -8565,7 +8570,7 @@ extern "C" void fn_8009036C(int *p)
     fn_80094454(*p);
 }
 
-extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot)
+extern "C" int AnimSeqDynSlotAcquire(Params_80092E54 *pRequest, int *pSlot)
 {
     Actor_801C009C *pActor = fn_80093BAC(pRequest->mUnknown0, pRequest->mUnknown4);
     int load = 1;
@@ -8577,12 +8582,13 @@ extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot)
             if (lbl_8030C164[i].mUnknown8 == pRequest->mUnknown0) {
                 load = 0;
                 lbl_8030C164[i].mUnknown4++;
+                pRequest->mUnknownD8.mWord = i;
             } else {
                 load = 0;
                 AnimFileCopyBigFileInfo(pActor, fn_80093BAC(lbl_8030C164[i].mUnknown8, lbl_8030C164[i].mUnknownC));
                 lbl_8030C164[i].mUnknown4++;
+                pRequest->mUnknownD8.mWord = i;
             }
-            pRequest->mUnknownD8.mWord = i;
             break;
         }
     }
@@ -9793,7 +9799,7 @@ extern "C" int fn_80092E54(Params_80092E54 *pParams, void *pBuffer, int size)
         if (pBuffer != 0) {
             started = fn_800904D4(pParams, pBuffer, size);
         } else {
-            started = fn_80090390(pParams, &slot);
+            started = AnimSeqDynSlotAcquire(pParams, &slot);
         }
         if (started) {
             *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[slot] = *pParams;
@@ -9837,7 +9843,7 @@ extern "C" int fn_8009313C(Params_80092E54 *pRequest)
 
     if (slot != invalid) {
         fn_80093BAC(pRequest->mUnknown0, pRequest->mUnknown4);
-        if (fn_80096074(pRequest, 0) && fn_80090390(pRequest, &slot)) {
+        if (fn_80096074(pRequest, 0) && AnimSeqDynSlotAcquire(pRequest, &slot)) {
             unsigned char found;
 
             fn_80093C70(pRequest, 0x42414C4C /* 'BALL' */, 0, &found);
@@ -11654,7 +11660,7 @@ extern "C" void fn_80096850(int index, Point_8017886C *pOut, int *pFlag)
     *pFlag = 0;
 }
 
-extern "C" void fn_80096954(void *pData)
+extern "C" void AnimPlaybackSysInit(void *pData)
 {
     unsigned int i;
 
@@ -11663,9 +11669,13 @@ extern "C" void fn_80096954(void *pData)
     AnimSeqncrRelocateSeqFile((struct AnimSeqncrFile_t *)lbl_803EA920->mpUnknown0[0]);
     lbl_803EA920->mpUnknown8 = pData;
     for (i = 0; i < 2; i++) {
+        Playback_80096DA8 *pEntry;
+
         memset(&lbl_803EA920->mUnknown10[i], 0, sizeof(Playback_80096DA8));
-        lbl_803EA920->mUnknown10[i].mUnknown2A = 0xFFFF;
-        lbl_803EA920->mUnknown10[i].mUnknown28 = 0xFFFF;
+        // FAKEMATCH: &mUnknown10[i] spelled as integer arithmetic (offset + block, then +0x10) for the target's address order
+        pEntry = (Playback_80096DA8 *)(i * sizeof(Playback_80096DA8) + (unsigned int)lbl_803EA920 + 0x10);
+        pEntry->mUnknown28 = 0xFFFF;
+        pEntry->mUnknown2A = 0xFFFF;
         lbl_803EA920->mUnknown10[i].mUnknown0 = -1;
         lbl_8030C2A8[i].mUnknown0 = 0;
         lbl_8030C2A8[i].mUnknown4 = 0;
@@ -14189,12 +14199,14 @@ extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short,
     }
 }
 
-extern "C" float fn_8009C630(Object_80039F5C *p, int id)
+extern "C" float PlayerAnimSlotFindValue(Object_80039F5C *p, int id)
 {
     float result = 0.0f;
     for (unsigned int i = 0; i <= 3; i++) {
-        if (((Animation_8009C630 *)p->mpUnknown792)[i].mUnknown4 == id) {
-            result = ((Animation_8009C630 *)p->mpUnknown792)[i].mUnknown80;
+        Animation_8009C630 *pRec = &((AnimSlots_8009C630 *)p->mpUnknown792)->mEntries[i];
+
+        if (pRec->mUnknown4 == id) {
+            result = ((AnimSlots_8009C630 *)p->mpUnknown792)->mEntries[i].mUnknown80;
             break;
         }
     }

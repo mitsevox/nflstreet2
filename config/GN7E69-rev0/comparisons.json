@@ -11973,7 +11973,7 @@
           "end": "0x80090390"
         },
         {
-          "symbol": "fn_80090390",
+          "symbol": "AnimSeqDynSlotAcquire",
           "start": "0x80090390",
           "end": "0x800904D4"
         },
@@ -12583,7 +12583,7 @@
           "end": "0x80096954"
         },
         {
-          "symbol": "fn_80096954",
+          "symbol": "AnimPlaybackSysInit",
           "start": "0x80096954",
           "end": "0x80096A24"
         },
@@ -13158,7 +13158,7 @@
           "end": "0x8009C630"
         },
         {
-          "symbol": "fn_8009C630",
+          "symbol": "PlayerAnimSlotFindValue",
           "start": "0x8009C630",
           "end": "0x8009C684"
         },
